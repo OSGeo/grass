@@ -11253,20 +11253,24 @@ msgid "USLE Soil Erodibility Factor (K)"
 msgstr ""
 
 #: ../raster/r.uslek/main.c:58
+#, fuzzy
 msgid "Name of the Soil sand fraction map [0.0-1.0]"
-msgstr ""
+msgstr "출력할 래스터맵"
 
 #: ../raster/r.uslek/main.c:62
+#, fuzzy
 msgid "Name of the Soil clay fraction map [0.0-1.0]"
-msgstr ""
+msgstr "출력할 래스터맵"
 
 #: ../raster/r.uslek/main.c:66
+#, fuzzy
 msgid "Name of the Soil silt fraction map [0.0-1.0]"
-msgstr ""
+msgstr "출력할 래스터맵"
 
 #: ../raster/r.uslek/main.c:70
+#, fuzzy
 msgid "Name of the Soil Organic Matter map [0.0-1.0]"
-msgstr ""
+msgstr "출력할 래스터맵"
 
 #: ../raster/r.uslek/main.c:74
 #, fuzzy
@@ -17446,8 +17450,9 @@ msgid "Writing output map"
 msgstr "출력할 래스터맵"
 
 #: ../raster/r.grow.distance/main.c:121
+#, fuzzy
 msgid "Generates a raster map layer of distance to features in input layer."
-msgstr ""
+msgstr "출력할 래스터맵"
 
 #: ../raster/r.grow.distance/main.c:131 ../raster/r.grow/main.c:147
 msgid "Metric"
@@ -24677,8 +24682,9 @@ msgid "Categories of points on terminals (layer is specified by nlayer)"
 msgstr ""
 
 #: ../vector/v.net.steiner/main.c:388
+#, fuzzy
 msgid "Number of steiner points (-1 for all possible)"
-msgstr ""
+msgstr "출력할 래스터맵"
 
 #: ../vector/v.net.steiner/main.c:447
 msgid "Not enough terminals (< 2)"
@@ -25953,217 +25959,237 @@ msgid "Unable to set isosurface (%d) attribute (%d) of volume %d"
 msgstr "출력할 래스터맵"
 
 #, fuzzy
-#~ msgid "Name of .dmrc settings file"
+msgid "Name of .dmrc settings file"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Number of seconds to pause between slides"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Enter raster map to display in 1st frame"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Enter command to execute in 1st frame"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Enter raster map to display in 2nd frame"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Enter command to execute in 2nd frame"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Vector map to display thematically"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Vector map type"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Raster to remove"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "3d raster to remove"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Vector to remove"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Region to remove"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Label to remove"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Group to remove"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Name for output grid3D volume"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Unable to find data map"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Unable to find clump map"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Name of the vector points map with x,y locations"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "RGB raster map <%s> not found"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Vector cell map <%s> not found"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "%s map <%s> not found"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Category file for <%s> not updated"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Category file for <%s> updated"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Unable to find stop vector <%s>"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Raster output map <%s> not found (no start_points given)"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Vector map <%s> is not in user mapset and cannot be updated"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Network input map <%s> not found"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "No raster or vector map displayed"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Unable to open file: <%s>"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Unable to delete layer/category [%d/%d] line %d"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Unable to write line %d"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Unable to delete line %d"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Cannot read category file of raster map <%s>"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "%s: unable to open %s"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Cannot describe table <%s>"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Unable to open database %s by driver %s"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Unable to open driver <%s>"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "input raster map"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Cannot open raster map <%s> in <%s>"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Cannot read category file of raster map <%s> in <%s>"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Print raster map title only"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Cannot rewrite line %d"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Cannot snap lines %d,%d"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "%d lines modified"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Creating vector grid..."
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Parameter <%s> not set"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Table to be imported"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Unable to create output raster map <%s>"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Cannot drop table: %s"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Cannot create table <%s>"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Unalbe to open vector map <%s>"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Open raster map %s in %s = %d"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "Input vector map <%s> not found."
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+msgid "%s: o_open_file: raster map %s not found"
+msgstr "출력할 래스터맵"
+
+#, fuzzy
+#~ msgid "Type of thematic display"
 #~ msgstr "출력할 래스터맵"
 
 #, fuzzy
-#~ msgid "Number of seconds to pause between slides"
+#~ msgid "Name of terrain raster map (DEM)"
 #~ msgstr "출력할 래스터맵"
 
 #, fuzzy
-#~ msgid "Enter raster map to display in 1st frame"
+#~ msgid "Base raster map <%s> not found"
 #~ msgstr "출력할 래스터맵"
 
 #, fuzzy
-#~ msgid "Enter command to execute in 1st frame"
+#~ msgid "Vector map <%s> not found in the current mapset"
 #~ msgstr "출력할 래스터맵"
 
 #, fuzzy
-#~ msgid "Enter raster map to display in 2nd frame"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Enter command to execute in 2nd frame"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Vector map to display thematically"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Vector map type"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Raster to remove"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "3d raster to remove"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Vector to remove"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Region to remove"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Label to remove"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Group to remove"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Name for output grid3D volume"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Unable to find data map"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Unable to find clump map"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Name of the vector points map with x,y locations"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "RGB raster map <%s> not found"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Vector cell map <%s> not found"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "%s map <%s> not found"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Category file for <%s> not updated"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Category file for <%s> updated"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Unable to find stop vector <%s>"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Raster output map <%s> not found (no start_points given)"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Vector map <%s> is not in user mapset and cannot be updated"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Network input map <%s> not found"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "No raster or vector map displayed"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Unable to open file: <%s>"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Unable to delete layer/category [%d/%d] line %d"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Unable to write line %d"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Unable to delete line %d"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Cannot read category file of raster map <%s>"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "%s: unable to open %s"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Cannot describe table <%s>"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Unable to open database %s by driver %s"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Unable to open driver <%s>"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "input raster map"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Cannot open raster map <%s> in <%s>"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Cannot read category file of raster map <%s> in <%s>"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Print raster map title only"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Cannot rewrite line %d"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Cannot snap lines %d,%d"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "%d lines modified"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Creating vector grid..."
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Parameter <%s> not set"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Table to be imported"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Unable to create output raster map <%s>"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Cannot drop table: %s"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Cannot create table <%s>"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Unalbe to open vector map <%s>"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Open raster map %s in %s = %d"
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Input vector map <%s> not found."
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "%s: o_open_file: raster map %s not found"
+#~ msgid "Erasing monitors..."
 #~ msgstr "출력할 래스터맵"

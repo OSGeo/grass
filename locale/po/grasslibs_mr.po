@@ -509,9 +509,9 @@ msgid "Unable to get list tables in database <%s>"
 msgstr "%s उघडता आले नाही"
 
 #: ../lib/db/dbmi_client/copy_tab.c:157
-#, c-format
+#, fuzzy, c-format
 msgid "Table <%s> already exists in database <%s>"
-msgstr ""
+msgstr "%s उघडता आले नाही"
 
 #: ../lib/db/dbmi_client/copy_tab.c:199 ../lib/db/dbmi_client/copy_tab.c:276
 #: ../lib/db/dbmi_client/table.c:110
@@ -1734,7 +1734,7 @@ msgstr "%s उघडता आले नाही"
 #: ../lib/vector/Vlib/write.c:148
 #, fuzzy
 msgid "Unable to write feature (negative offset)"
-msgstr "%s उघडता आले नाही"
+msgstr "temp फाइल उघडता आली नाही"
 
 #: ../lib/vector/Vlib/write.c:181
 #, fuzzy
@@ -1988,9 +1988,9 @@ msgid "G3d_openCellNew: error in G3d_malloc"
 msgstr ""
 
 #: ../lib/g3d/g3dopen.c:229
-#, c-format
+#, fuzzy, c-format
 msgid "map <%s> is not in the current mapset"
-msgstr ""
+msgstr "temp फाइल उघडता आली नाही"
 
 #: ../lib/g3d/g3dopen.c:239
 msgid "G3d_openCellNew: could not open file"
@@ -2247,9 +2247,9 @@ msgid "'%s/%s' was found in more mapsets (also found in <%s>)"
 msgstr ""
 
 #: ../lib/gis/find_file.c:82
-#, c-format
+#, fuzzy, c-format
 msgid "Using <%s@%s>"
-msgstr ""
+msgstr "%s उघडता आले नाही"
 
 #: ../lib/gis/quant_io.c:89
 #, c-format
@@ -4254,177 +4254,184 @@ msgid "Unable to define new light"
 msgstr "%s उघडता आले नाही"
 
 #, fuzzy
-#~ msgid "Cannot describe table <%s>"
-#~ msgstr "temp फाइल उघडता आली नाही"
+msgid "Cannot describe table <%s>"
+msgstr "temp फाइल उघडता आली नाही"
 
 #, fuzzy
-#~ msgid "Cannot read topo for line [%d]"
-#~ msgstr "temp फाइल उघडता आली नाही"
+msgid "Cannot read topo for line [%d]"
+msgstr "temp फाइल उघडता आली नाही"
 
-#~ msgid "Hit RETURN to cancel request\n"
-#~ msgstr "विनंती रद्द करण्यासाठी RETURN बटण दाबा\n"
+msgid "Hit RETURN to cancel request\n"
+msgstr "विनंती रद्द करण्यासाठी RETURN बटण दाबा\n"
 
-#~ msgid "Cannot open temp file"
-#~ msgstr "temp फाइल उघडता आली नाही"
+msgid "Cannot open temp file"
+msgstr "temp फाइल उघडता आली नाही"
 
-#~ msgid "hit RETURN to continue -->"
-#~ msgstr "पुढे जाण्यासाठी RETURN टाइप करा -->"
+msgid "hit RETURN to continue -->"
+msgstr "पुढे जाण्यासाठी RETURN टाइप करा -->"
 
-#~ msgid "one moment...\n"
-#~ msgstr "क्षणभर थांबा...\n"
+msgid "one moment...\n"
+msgstr "क्षणभर थांबा...\n"
 
-#~ msgid "No help available for command [%s]\n"
-#~ msgstr "[%s] या कमांडसाठी कोणतीही मदत उपलब्ध नाही\n"
+msgid "No help available for command [%s]\n"
+msgstr "[%s] या कमांडसाठी कोणतीही मदत उपलब्ध नाही\n"
 
-#~ msgid "%s not found"
-#~ msgstr "%s मिळाले नाही"
+msgid "%s not found"
+msgstr "%s मिळाले नाही"
 
-#~ msgid "ERROR in reading %s"
-#~ msgstr "%s वाचताना त्रुटी"
+msgid "ERROR in reading %s"
+msgstr "%s वाचताना त्रुटी"
 
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "Please specify projection name\n"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "कृपया प्रोजेक्शनचे नाव द्या\n"
+msgid ""
+"\n"
+"\n"
+"Please specify projection name\n"
+msgstr ""
+"\n"
+"\n"
+"कृपया प्रोजेक्शनचे नाव द्या\n"
 
-#~ msgid "Enter 'list' for the list of available projections\n"
-#~ msgstr "उपलब्ध प्रोजेक्शनची यादी पाहण्यासाठी 'list' टाइप करा\n"
+msgid "Enter 'list' for the list of available projections\n"
+msgstr "उपलब्ध प्रोजेक्शनची यादी पाहण्यासाठी 'list' टाइप करा\n"
 
-#~ msgid "with titles"
-#~ msgstr "शिर्षकांसह"
+msgid "with titles"
+msgstr "शिर्षकांसह"
 
-#~ msgid "(no title)"
-#~ msgstr "(शिर्षक विरहित)"
+msgid "(no title)"
+msgstr "(शिर्षक विरहित)"
 
-#~ msgid "Enter a new %s file name"
-#~ msgstr "एक नवीन %s फाइलचे नाव द्या"
+msgid "Enter a new %s file name"
+msgstr "एक नवीन %s फाइलचे नाव द्या"
 
-#~ msgid "a list %s"
-#~ msgstr "%s यादी"
+msgid "a list %s"
+msgstr "%s यादी"
 
-#~ msgid ""
-#~ "\n"
-#~ "** %s - not found **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "** %s - मिळाली नाही **\n"
-
-#, fuzzy
-#~ msgid "Cannot get field info"
-#~ msgstr "temp फाइल उघडता आली नाही"
+msgid ""
+"\n"
+"** %s - not found **\n"
+msgstr ""
+"\n"
+"** %s - मिळाली नाही **\n"
 
 #, fuzzy
-#~ msgid "Cannot open database"
-#~ msgstr "temp फाइल उघडता आली नाही"
+msgid "Cannot get field info"
+msgstr "temp फाइल उघडता आली नाही"
 
 #, fuzzy
-#~ msgid "Cannot open database <%s> by driver <%s>"
-#~ msgstr "temp फाइल उघडता आली नाही"
+msgid "Cannot open database"
+msgstr "temp फाइल उघडता आली नाही"
 
 #, fuzzy
-#~ msgid "Cannot get column info"
-#~ msgstr "सध्याची विंडो = %p\n"
+msgid "Cannot open database <%s> by driver <%s>"
+msgstr "temp फाइल उघडता आली नाही"
 
 #, fuzzy
-#~ msgid "Cannot open existing vector map <%s>"
-#~ msgstr "temp फाइल उघडता आली नाही"
+msgid "Cannot get column info"
+msgstr "सध्याची विंडो = %p\n"
 
 #, fuzzy
-#~ msgid "Can't open directory %s"
-#~ msgstr "temp फाइल उघडता आली नाही"
+msgid "Cannot open existing vector map <%s>"
+msgstr "temp फाइल उघडता आली नाही"
 
 #, fuzzy
-#~ msgid "current window = %p"
-#~ msgstr "सध्याची विंडो = %p\n"
+msgid "Can't open directory %s"
+msgstr "temp फाइल उघडता आली नाही"
 
 #, fuzzy
-#~ msgid "Flag: window set? %d"
-#~ msgstr "निशाणी: विंडो सेट?  %d\n"
+msgid "current window = %p"
+msgstr "सध्याची विंडो = %p\n"
 
 #, fuzzy
-#~ msgid "Pre/post compressed data buffer %p"
-#~ msgstr "compressed_buf चा आकार %d\n"
+msgid "Flag: window set? %d"
+msgstr "निशाणी: विंडो सेट?  %d\n"
 
 #, fuzzy
-#~ msgid "sizeof compressed_buf %d"
-#~ msgstr "compressed_buf चा आकार %d\n"
+msgid "Pre/post compressed data buffer %p"
+msgstr "compressed_buf चा आकार %d\n"
 
 #, fuzzy
-#~ msgid "sizeof work_buf %d"
-#~ msgstr "work_buf चा आकार %d\n"
+msgid "sizeof compressed_buf %d"
+msgstr "compressed_buf चा आकार %d\n"
 
 #, fuzzy
-#~ msgid "sizeof null_buf %d"
-#~ msgstr "null_buf चा आकार %d\n"
+msgid "sizeof work_buf %d"
+msgstr "work_buf चा आकार %d\n"
 
 #, fuzzy
-#~ msgid "sizeof mask_buf %d"
-#~ msgstr "mask_buf चा आकार %d\n"
+msgid "sizeof null_buf %d"
+msgstr "null_buf चा आकार %d\n"
 
 #, fuzzy
-#~ msgid "Histogram request %d"
-#~ msgstr "हिस्टोग्रामसाठी विनंती  %d\n"
+msgid "sizeof mask_buf %d"
+msgstr "mask_buf चा आकार %d\n"
 
 #, fuzzy
-#~ msgid "G_dump: file #%d"
-#~ msgstr "G_dump: फाइल #%d\n"
+msgid "Histogram request %d"
+msgstr "हिस्टोग्रामसाठी विनंती  %d\n"
 
 #, fuzzy
-#~ msgid "open mode = %d"
-#~ msgstr "उघडण्याची पद्धत = %d\n"
+msgid "G_dump: file #%d"
+msgstr "G_dump: फाइल #%d\n"
 
 #, fuzzy
-#~ msgid "Cell header %p"
-#~ msgstr "सेल शिर्षक %p\n"
+msgid "open mode = %d"
+msgstr "उघडण्याची पद्धत = %d\n"
 
 #, fuzzy
-#~ msgid "Cell stats %p"
-#~ msgstr "सेल आकडेवारी %p\n"
+msgid "Cell header %p"
+msgstr "सेल शिर्षक %p\n"
 
 #, fuzzy
-#~ msgid "Range structure %p"
-#~ msgstr "रांगाची रचना %p\n"
+msgid "Cell stats %p"
+msgstr "सेल आकडेवारी %p\n"
 
 #, fuzzy
-#~ msgid "float Range structure %p"
-#~ msgstr "रांगाची रचना %p\n"
+msgid "Range structure %p"
+msgstr "रांगाची रचना %p\n"
 
 #, fuzzy
-#~ msgid "want histogram?  %d"
-#~ msgstr "हिस्टोग्राम हवा आहे काय?  %d\n"
+msgid "float Range structure %p"
+msgstr "रांगाची रचना %p\n"
 
 #, fuzzy
-#~ msgid "File row addresses %p"
-#~ msgstr "फाइलमधील ओळींचा पत्ता %p\n"
+msgid "want histogram?  %d"
+msgstr "हिस्टोग्राम हवा आहे काय?  %d\n"
 
 #, fuzzy
-#~ msgid "Decompressed data buffer %s"
-#~ msgstr "compressed_buf चा आकार %d\n"
+msgid "File row addresses %p"
+msgstr "फाइलमधील ओळींचा पत्ता %p\n"
 
 #, fuzzy
-#~ msgid "Temporary name for NEW files %s"
-#~ msgstr "नवीन फाइलसाठी तात्पुरते नाव %s\n"
+msgid "Decompressed data buffer %s"
+msgstr "compressed_buf चा आकार %d\n"
 
 #, fuzzy
-#~ msgid "Temporary name for NEW NULL files %s"
-#~ msgstr "नवीन नल-फाइलसाठी तात्पुरते नाव %s\n"
+msgid "Temporary name for NEW files %s"
+msgstr "नवीन फाइलसाठी तात्पुरते नाव %s\n"
 
 #, fuzzy
-#~ msgid "Mapset of open file %s"
-#~ msgstr "उघडलेल्या फाइलचे नाव %s\n"
+msgid "Temporary name for NEW NULL files %s"
+msgstr "नवीन नल-फाइलसाठी तात्पुरते नाव %s\n"
 
 #, fuzzy
-#~ msgid "G_dump: end"
-#~ msgstr "G_dump: फाइल #%d\n"
+msgid "Mapset of open file %s"
+msgstr "उघडलेल्या फाइलचे नाव %s\n"
 
 #, fuzzy
-#~ msgid "Current window not settable"
-#~ msgstr "सध्याची विंडो = %p\n"
+msgid "G_dump: end"
+msgstr "G_dump: फाइल #%d\n"
 
 #, fuzzy
-#~ msgid "Not able to open cellfile for [%s]"
-#~ msgstr "उघडलेल्या फाइलचे नाव %s\n"
+msgid "Current window not settable"
+msgstr "सध्याची विंडो = %p\n"
+
+#, fuzzy
+msgid "Not able to open cellfile for [%s]"
+msgstr "उघडलेल्या फाइलचे नाव %s\n"
+
+#, fuzzy
+#~ msgid "Unable to open temporary file"
+#~ msgstr "%s उघडता आले नाही"
+
+#~ msgid " The raster map %s@%s is empty"
+#~ msgstr "%s@%s हा रास्टर नकाशा रिक्त आहे"

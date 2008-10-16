@@ -3802,6 +3802,7 @@ msgid "2nd order"
 msgstr "Segundo orden"
 
 #: ../gui/tcltk/gis.m/georect.tcl:1016
+#, fuzzy
 msgid "polynomial transformation  (rasters only). Requires 6+ GCPs."
 msgstr ""
 "transformación polinomial  (sólo rásters). Requiere 6 o más puntos de "
@@ -4623,3 +4624,991 @@ msgstr "Añadir nuevo"
 #: ../visualization/nviz/scripts/panel_animation.tcl:275
 msgid "Test"
 msgstr "Test"
+
+#, fuzzy
+#~ msgid "X Windows not available"
+#~ msgstr "GhostScript no disponible"
+
+#, fuzzy
+#~ msgid "Start/select display monitor x0"
+#~ msgstr "Abrir nuevo monitor"
+
+#, fuzzy
+#~ msgid "Start/select display monitor x1"
+#~ msgstr "Abrir nuevo monitor"
+
+#, fuzzy
+#~ msgid "Start/select display monitor x2"
+#~ msgstr "Abrir nuevo monitor"
+
+#, fuzzy
+#~ msgid "Start/select display monitor x3"
+#~ msgstr "Abrir nuevo monitor"
+
+#, fuzzy
+#~ msgid "Start/select display monitor x4"
+#~ msgstr "Abrir nuevo monitor"
+
+#, fuzzy
+#~ msgid "Start/select display monitor x5"
+#~ msgstr "Abrir nuevo monitor"
+
+#, fuzzy
+#~ msgid "Start/select display monitor x6"
+#~ msgstr "Abrir nuevo monitor"
+
+#, fuzzy
+#~ msgid "     show data"
+#~ msgstr "mostrar datos"
+
+#, fuzzy
+#~ msgid "Graduate colors: preset color schemes"
+#~ msgstr "Colores graduados: preestablecer esquemas de color"
+
+#, fuzzy
+#~ msgid "create graphic legend"
+#~ msgstr "Mapa ráster para la leyenda"
+
+#, fuzzy
+#~ msgid "    select monitor for legend"
+#~ msgstr "fuente del título de la leyenda"
+
+#, fuzzy
+#~ msgid "Labels name:"
+#~ msgstr "Archivo de etiquetas:"
+
+#, fuzzy
+#~ msgid "remove all frames"
+#~ msgstr "Quitar todos los marcos"
+
+#, fuzzy
+#~ msgid "geodetic grid"
+#~ msgstr "cuadrícula geodésica"
+
+#, fuzzy
+#~ msgid " grid color "
+#~ msgstr "color de cuadrícula "
+
+#, fuzzy
+#~ msgid " grid color"
+#~ msgstr "color de cuadrícula "
+
+#, fuzzy
+#~ msgid "     "
+#~ msgstr "    "
+
+#, fuzzy
+#~ msgid "draw grid border"
+#~ msgstr "dibujar borde de la cuadrícula "
+
+#, fuzzy
+#~ msgid "draw border text"
+#~ msgstr "dibujar texto del borde "
+
+#, fuzzy
+#~ msgid " border & text color"
+#~ msgstr "color de borde "
+
+#, fuzzy
+#~ msgid "Raster map for legend:"
+#~ msgstr "Mapa ráster para la leyenda"
+
+#, fuzzy
+#~ msgid "Display legend in monitor: "
+#~ msgstr "Mostrar escala y flecha de Norte"
+
+#, fuzzy
+#~ msgid "Text color: "
+#~ msgstr "color de texto "
+
+#, fuzzy
+#~ msgid "do not show cat labels"
+#~ msgstr "no mostrar etiquetas"
+
+#, fuzzy
+#~ msgid "skip cats with no labels"
+#~ msgstr "ignorar categorías sin etiquetas"
+
+#, fuzzy
+#~ msgid "draw smooth gradient"
+#~ msgstr "Dibujar gradiente suavizado (fp mapas)"
+
+#, fuzzy
+#~ msgid "flip legend"
+#~ msgstr "Limpiar leyenda"
+
+#, fuzzy
+#~ msgid "Raster name:"
+#~ msgstr "Mapa ráster: "
+
+#, fuzzy
+#~ msgid " thin legend by "
+#~ msgstr "invertir leyenda"
+
+#, fuzzy
+#~ msgid "Raster to drape over 1st map:"
+#~ msgstr "Mapa ráster para sobreponer al mapa base"
+
+#, fuzzy
+#~ msgid "  show attribute columns"
+#~ msgstr "mostrar columnas de atributos"
+
+#, fuzzy
+#~ msgid "    chart outline color:"
+#~ msgstr "\tcolor de borde del gráfico:"
+
+#, fuzzy
+#~ msgid "Aggregate ASCII xyz data into raster grid"
+#~ msgstr "Agregar ASCII XYZ"
+
+#, fuzzy
+#~ msgid "ASCII GRID (includes GRASS ASCII)"
+#~ msgstr "Puntos ASCII o vectorial ASCII de GRASS"
+
+#, fuzzy
+#~ msgid "ESRI Arc/Info ASCII grid"
+#~ msgstr "Cuadrícula ASCII de ESRI"
+
+#, fuzzy
+#~ msgid "SRTM hgt files"
+#~ msgstr "HGT de SRTM"
+
+#, fuzzy
+#~ msgid "Terra ASTER HDF files"
+#~ msgstr "Terra ASTER"
+
+#, fuzzy
+#~ msgid "Various formats using OGR"
+#~ msgstr "Varios formatos que usan OGR"
+
+#, fuzzy
+#~ msgid "ASCII points file or GRASS ASCII vector file"
+#~ msgstr "Puntos ASCII o vectorial ASCII de GRASS"
+
+#, fuzzy
+#~ msgid "Import old GRASS vector format"
+#~ msgstr "Importar mapa vectorial"
+
+#, fuzzy
+#~ msgid "DXF file"
+#~ msgstr "&Archivo"
+
+#, fuzzy
+#~ msgid "ESRI e00 format"
+#~ msgstr "ESRI e00"
+
+#, fuzzy
+#~ msgid "Matlab and MapGen files"
+#~ msgstr "Matlab y MapGen"
+
+#, fuzzy
+#~ msgid "ASCII 3D file"
+#~ msgstr "ASCII 3D"
+
+#, fuzzy
+#~ msgid "Vis5D file"
+#~ msgstr "Vis5D"
+
+#, fuzzy
+#~ msgid "Export"
+#~ msgstr "Salir"
+
+#, fuzzy
+#~ msgid "ESRI ARC/INFO ASCII grid"
+#~ msgstr "Cuadrícula ASCII de ESRI"
+
+#, fuzzy
+#~ msgid "Binary file"
+#~ msgstr "Binario"
+
+#, fuzzy
+#~ msgid "MPEG-1 animations"
+#~ msgstr "Reproducir animación"
+
+#, fuzzy
+#~ msgid "PNG image (not georeferenced)"
+#~ msgstr "Ruta de archivo georreferenciado"
+
+#, fuzzy
+#~ msgid "VRML file"
+#~ msgstr "VRML"
+
+#, fuzzy
+#~ msgid "ASCII vector or point file/old GRASS ASCII vector file"
+#~ msgstr "Puntos ASCII o vectorial ASCII de GRASS"
+
+#, fuzzy
+#~ msgid "POV-Ray format"
+#~ msgstr "POV-Ray"
+
+#, fuzzy
+#~ msgid "Copy maps"
+#~ msgstr "Copiar tabla"
+
+#, fuzzy
+#~ msgid "List maps"
+#~ msgstr "Listar tablas"
+
+#, fuzzy
+#~ msgid "Rename maps"
+#~ msgstr "Cambiar nombre"
+
+#, fuzzy
+#~ msgid "Remove maps"
+#~ msgstr "Eliminar tabla"
+
+#, fuzzy
+#~ msgid "Raster to vector map"
+#~ msgstr "Ráster a vectorial"
+
+#, fuzzy
+#~ msgid "Raster map series to volume"
+#~ msgstr "Series ráster a volúmenes"
+
+#, fuzzy
+#~ msgid "Raster 2.5D map to volume"
+#~ msgstr "Ráster 2.5D a volumen"
+
+#, fuzzy
+#~ msgid "Vector to vector"
+#~ msgstr "Ráster a vectorial"
+
+#, fuzzy
+#~ msgid "Vector lines to points"
+#~ msgstr "Símbolo de punto vectorial"
+
+#, fuzzy
+#~ msgid "Vector 3D points to volume voxels"
+#~ msgstr "Vectorial a volumen"
+
+#, fuzzy
+#~ msgid "Sites (GRASS 5.x) to vector"
+#~ msgstr "Puntos ('sites' de GRASS 5.x) a vectores"
+
+#, fuzzy
+#~ msgid "Volumes to raster map series"
+#~ msgstr "Volumen a series ráster"
+
+#, fuzzy
+#~ msgid "Groups"
+#~ msgstr "Incrementar"
+
+#, fuzzy
+#~ msgid "Create new group file"
+#~ msgstr "Crear directorio de mapas"
+
+#, fuzzy
+#~ msgid "Open group file"
+#~ msgstr "Abrir archivo"
+
+#, fuzzy
+#~ msgid "Save group file"
+#~ msgstr "Guardar el entorno de trabajo"
+
+#, fuzzy
+#~ msgid "Save group file as name"
+#~ msgstr "nombre de grupo"
+
+#, fuzzy
+#~ msgid "Close group"
+#~ msgstr "Cerrar"
+
+#, fuzzy
+#~ msgid "Save display to image file"
+#~ msgstr "Guardar objetos visualizados en nuevo vectorial "
+
+#, fuzzy
+#~ msgid "Save displays to multiple graphic file formats"
+#~ msgstr "Exportar pantalla a fichero gráfico (png, tiff, ...)"
+
+#, fuzzy
+#~ msgid "Save map to Postscript file"
+#~ msgstr "Guardar perfil en archivo EPS"
+
+#, fuzzy
+#~ msgid "Print to default printer"
+#~ msgstr "Imprimir en impresora LPR"
+
+#, fuzzy
+#~ msgid "print"
+#~ msgstr "Imprimir"
+
+#, fuzzy
+#~ msgid "Access other mapsets in current location"
+#~ msgstr "Crear nuevo directorio de mapas en la localización seleccionada"
+
+#, fuzzy
+#~ msgid "Show current GRASS environment settings"
+#~ msgstr "Mostrar versión de GRASS"
+
+#, fuzzy
+#~ msgid "Set GRASS environment settings"
+#~ msgstr "Entorno de trabajo de GRASS"
+
+#, fuzzy
+#~ msgid "Create/edit projection information for current location"
+#~ msgstr "Proyección para la localización actual"
+
+#, fuzzy
+#~ msgid "Show projection information and create projection files"
+#~ msgstr ""
+#~ "Definir localización usando la proyección contenida en archivo "
+#~ "georreferenciado"
+
+#, fuzzy
+#~ msgid "Text"
+#~ msgstr "Test"
+
+#, fuzzy
+#~ msgid "Select default text font"
+#~ msgstr "Seleccionar fuente de etiqueta"
+
+#, fuzzy
+#~ msgid "Select default freetype text font"
+#~ msgstr "seleccionar fuente para texto"
+
+#, fuzzy
+#~ msgid "X-monitor displays"
+#~ msgstr "Líneas a visualizar"
+
+#, fuzzy
+#~ msgid "Configure xmonitor displays"
+#~ msgstr "Líneas a visualizar"
+
+#, fuzzy
+#~ msgid "Compress/decompress raster file"
+#~ msgstr "Comprimir/descomprimir"
+
+#, fuzzy
+#~ msgid "Manage boundary definitions"
+#~ msgstr "Administrar información de categoría"
+
+#, fuzzy
+#~ msgid "Manage null values"
+#~ msgstr "incluir valores nulos"
+
+#, fuzzy
+#~ msgid "Manage timestamps for files"
+#~ msgstr "Administrar hora en volúmenes grid3D"
+
+#, fuzzy
+#~ msgid "Resample (change resolution)"
+#~ msgstr "Volver a muestrear usando tensión spline"
+
+#, fuzzy
+#~ msgid "Resample using nearest neighbor method"
+#~ msgstr "Volver a muestrear utilizando el vecino más próximo"
+
+#, fuzzy
+#~ msgid "Resample using various interpolation methods"
+#~ msgstr "Volver a muestrear utilizando varios métodos"
+
+#, fuzzy
+#~ msgid "Resample using regularized spline with tension method"
+#~ msgstr "Volver a muestrear usando tensión spline"
+
+#, fuzzy
+#~ msgid "Support file creation and maintenance"
+#~ msgstr "Soportar mantenimiento de archivos"
+
+#, fuzzy
+#~ msgid "Reproject raster from other location"
+#~ msgstr "Muestrear mapa ráster en localizaciones de puntos"
+
+#, fuzzy
+#~ msgid "Generate tiling for other projection"
+#~ msgstr "Generar área para la región actual"
+
+#, fuzzy
+#~ msgid "Create raster buffers"
+#~ msgstr "Crear etiquetas"
+
+#, fuzzy
+#~ msgid "Create raster MASK"
+#~ msgstr "Crear perfil de mapa ráster"
+
+#, fuzzy
+#~ msgid "Solar irradiance and daily irradiation"
+#~ msgstr "Irradiación solar e irradiación"
+
+#, fuzzy
+#~ msgid "Calculate cumulative movement costs between locales"
+#~ msgstr "Costes acumulados de movimientos"
+
+#, fuzzy
+#~ msgid "Profile analysis"
+#~ msgstr "Análisis del terreno"
+
+#, fuzzy
+#~ msgid "Shaded relief map"
+#~ msgstr "Relieve sombreado"
+
+#, fuzzy
+#~ msgid "Visibility/line of sight"
+#~ msgstr "Red de visibilidad"
+
+#, fuzzy
+#~ msgid "Grow areas"
+#~ msgstr "áreas"
+
+#, fuzzy
+#~ msgid "Thin linear features"
+#~ msgstr "Elementos más próximos"
+
+#, fuzzy
+#~ msgid "Depressionless elevation map and flowline map"
+#~ msgstr "Mapa sin depresiones y líneas de flujos"
+
+#, fuzzy
+#~ msgid "Flow accumulation for massive grids"
+#~ msgstr "Acumulación de flujos"
+
+#, fuzzy
+#~ msgid "Generate flow lines for raster map"
+#~ msgstr "Crear perfil de mapa ráster"
+
+#, fuzzy
+#~ msgid "Analyze landscape characteristics"
+#~ msgstr "Analizar paisaje"
+
+#, fuzzy
+#~ msgid "Analyze landscape patch characteristics"
+#~ msgstr "Analizar parcelas del paisaje"
+
+#, fuzzy
+#~ msgid "Output landscape patch information"
+#~ msgstr "Administrar información de categoría"
+
+#, fuzzy
+#~ msgid "Generate least-cost spread paths"
+#~ msgstr "Rutas de propagación de menor coste"
+
+#, fuzzy
+#~ msgid "Simulate anisotropic spread phenomena"
+#~ msgstr "Simulación de propagación anisotrópica"
+
+#, fuzzy
+#~ msgid "Reclassify categories using rules"
+#~ msgstr "Reclasificar usando archivo de reglas"
+
+#, fuzzy
+#~ msgid "Reclassify categories using rules file"
+#~ msgstr "Reclasificar usando archivo de reglas"
+
+#, fuzzy
+#~ msgid "Recode categories using rules file (create new map)"
+#~ msgstr "Volver a codificar usando archivo de reglas"
+
+#, fuzzy
+#~ msgid "Rescale categories (create new map)"
+#~ msgstr "    intervalo entre categorías (mapas enteros)"
+
+#, fuzzy
+#~ msgid "Generate concentric circles around points"
+#~ msgstr "Generar áreas a partir de puntos"
+
+#, fuzzy
+#~ msgid "Generate random raster cells"
+#~ msgstr "Generar celdas aleatorias"
+
+#, fuzzy
+#~ msgid "Generate random cells and vector points from raster map"
+#~ msgstr "Celdas aleatorias y puntos vectoriales"
+
+#, fuzzy
+#~ msgid "Generate fractal surface"
+#~ msgstr "Generar superficies"
+
+#, fuzzy
+#~ msgid "Generate gaussian deviates surface"
+#~ msgstr "Superficie gaussiana derivada"
+
+#, fuzzy
+#~ msgid "Generate plane"
+#~ msgstr "Generar puntos"
+
+#, fuzzy
+#~ msgid "Generate random deviates surface"
+#~ msgstr "Superficie derivada aleatoria"
+
+#, fuzzy
+#~ msgid "Generate random surface with spatial dependence"
+#~ msgstr "Superficie aleatoria con dependencia espacial"
+
+#, fuzzy
+#~ msgid "Generate vector contour lines"
+#~ msgstr "Generar puntos a lo largo de líneas"
+
+#, fuzzy
+#~ msgid "Bilinear interpolation from raster points"
+#~ msgstr "Bilineal a partir de puntos ráster"
+
+#, fuzzy
+#~ msgid "Interpolation from raster contours"
+#~ msgstr "Interpolar volúmenes a partir de puntos vectoriales"
+
+#, fuzzy
+#~ msgid "Inverse distance weighted interpolation from vector points"
+#~ msgstr "Interpolar volúmenes a partir de puntos vectoriales"
+
+#, fuzzy
+#~ msgid "Manage category labels and values"
+#~ msgstr "Cambiar valores de categorías y etiquetas"
+
+#, fuzzy
+#~ msgid "Range of all category values"
+#~ msgstr "Rango de valores de categoría"
+
+#, fuzzy
+#~ msgid "Sum all cell category values"
+#~ msgstr "Sumar valores de categoría de celdas"
+
+#, fuzzy
+#~ msgid "Summary statistics for clumped cells (works with r.clump)"
+#~ msgstr "Estadísticas de celdas reunidas (funciona con r.clump)"
+
+#, fuzzy
+#~ msgid "Univariate statistics (script version)"
+#~ msgstr "Estadística univariada"
+
+#, fuzzy
+#~ msgid "Sample values along transects"
+#~ msgstr "Muestrear transectos"
+
+#, fuzzy
+#~ msgid "Sample values along transects (use azimuth, distance)"
+#~ msgstr "Muestrear transectos (rumbo/distancia)"
+
+#, fuzzy
+#~ msgid "Linear regression between 2 maps"
+#~ msgstr "Regresión lineal"
+
+#, fuzzy
+#~ msgid "Mutual category occurences (coincidence)"
+#~ msgstr "Ocurrencias de categorías mutuas"
+
+#, fuzzy
+#~ msgid "Create/rebuild topology"
+#~ msgstr "Crear/reconstruir topología: "
+
+#, fuzzy
+#~ msgid "Clean vector files"
+#~ msgstr "Limpiar vectorial"
+
+#, fuzzy
+#~ msgid "Add missing centroids"
+#~ msgstr "Añadir centroides"
+
+#, fuzzy
+#~ msgid "Split polylines into segments"
+#~ msgstr "Dividir polilíneas"
+
+#, fuzzy
+#~ msgid "Create lines parallel to existing lines"
+#~ msgstr "Generar puntos a lo largo de líneas"
+
+#, fuzzy
+#~ msgid "Dissolve common boundaries"
+#~ msgstr "Disolver contornos"
+
+#, fuzzy
+#~ msgid "Convert vector feature types"
+#~ msgstr "Convertir tipos objetos"
+
+#, fuzzy
+#~ msgid "Convert 2D vector to 3D by sampling raster"
+#~ msgstr "Crear vectorial 3D sobre ráster"
+
+#, fuzzy
+#~ msgid "Extrude 2D vector into 3D vector"
+#~ msgstr "Extrudir vectorial 3D"
+
+#, fuzzy
+#~ msgid "Create text label file for vector features"
+#~ msgstr ""
+#~ "Crear etiquetas PostScript para objetos vectoriales a partir de archivo v."
+#~ "labels"
+
+#, fuzzy
+#~ msgid "Reproject vector from other location"
+#~ msgstr "Proyección para la localización actual"
+
+#, fuzzy
+#~ msgid "Rectify and georeference vector map"
+#~ msgstr "Georreferenciar vectorial"
+
+#, fuzzy
+#~ msgid "Query by attributes"
+#~ msgstr "Consultar con atributos"
+
+#, fuzzy
+#~ msgid "Query by map features"
+#~ msgstr "Valores de las categorías para la consulta"
+
+#, fuzzy
+#~ msgid "Create vector buffers"
+#~ msgstr "Crear vectorial 3D sobre ráster"
+
+#, fuzzy
+#~ msgid "Linear referencing for vectors"
+#~ msgstr "Referencia lineal"
+
+#, fuzzy
+#~ msgid "Overlay/combine 2 vector maps"
+#~ msgstr "Visualizar mapas vectoriales"
+
+#, fuzzy
+#~ msgid "Patch multiple maps (combine)"
+#~ msgstr "Parchear (combinar)"
+
+#, fuzzy
+#~ msgid "Generate area feature for extent of current region"
+#~ msgstr "Generar área para la región actual"
+
+#, fuzzy
+#~ msgid "Generate rectangular vector grid"
+#~ msgstr "Crear/reemplazar grupo de vectoriales"
+
+#, fuzzy
+#~ msgid "Attach, delete, or report categories"
+#~ msgstr "Gestionar o informar de categorías"
+
+#, fuzzy
+#~ msgid "Reclassify features using rules file"
+#~ msgstr "Reclasificar usando archivo de reglas"
+
+#, fuzzy
+#~ msgid "Work with vector points"
+#~ msgstr "IDW a partir de puntos vectoriales"
+
+#, fuzzy
+#~ msgid "Generate points from database with x/y coordinates"
+#~ msgstr "Generar puntos a partir de una base de datos"
+
+#, fuzzy
+#~ msgid "Random location perturbations of points"
+#~ msgstr "Celdas aleatorias y puntos vectoriales"
+
+#, fuzzy
+#~ msgid "Generate convex hull for point set"
+#~ msgstr "Generar áreas a partir de puntos"
+
+#, fuzzy
+#~ msgid "Generate Delaunay triangles for point set"
+#~ msgstr "Generar áreas a partir de puntos"
+
+#, fuzzy
+#~ msgid "Generate Voronoi diagram/Thiessen polygons for point set"
+#~ msgstr "Diagrama de Voronoi/polígonos de Thiessen"
+
+#, fuzzy
+#~ msgid "Sample raster maps"
+#~ msgstr "Animar mapas ráster"
+
+#, fuzzy
+#~ msgid "Report areas for vector attribute categories"
+#~ msgstr "Consultar tabla de atributos de un vectorial"
+
+#, fuzzy
+#~ msgid "Create/edit imagery group"
+#~ msgstr "Crear/editar grupo"
+
+#, fuzzy
+#~ msgid "Target imagery group"
+#~ msgstr "Grupo objetivo"
+
+#, fuzzy
+#~ msgid "Mosaic up to 4 adjacent images"
+#~ msgstr "Hacer mosaico de imágenes"
+
+#, fuzzy
+#~ msgid ""
+#~ "Transform RGB (Red/Green/Blue) color image to HIS (Hue/Intensity/"
+#~ "Saturation)"
+#~ msgstr ""
+#~ "Mostrar 3 mapas ráster como canales Rojo/Verde/Azul o de Tonalidad/"
+#~ "Intensidad/Saturación"
+
+#, fuzzy
+#~ msgid "Non-interactive input for supervised classification (MLC)"
+#~ msgstr "Clasificación supervisada de entrada interactiva"
+
+#, fuzzy
+#~ msgid "Non-interactive input for supervised classification (SMAP)"
+#~ msgstr "Clasificación supervisada de entrada interactiva"
+
+#, fuzzy
+#~ msgid "Zero edge crossing detection"
+#~ msgstr "Detección de bordes"
+
+#, fuzzy
+#~ msgid "User defined matrix/convolving filter"
+#~ msgstr "Filtro de matriz/"
+
+#, fuzzy
+#~ msgid "Canonical component"
+#~ msgstr "Componentes principales"
+
+#, fuzzy
+#~ msgid "Principal component"
+#~ msgstr "Componentes principales"
+
+#, fuzzy
+#~ msgid "Fast Fourier Transform"
+#~ msgstr "Fast Fourier"
+
+#, fuzzy
+#~ msgid "Inverse Fast Fourier Transform"
+#~ msgstr "Fast Fourier inversa"
+
+#, fuzzy
+#~ msgid "Range of image values"
+#~ msgstr "Rango de valores de categoría"
+
+#, fuzzy
+#~ msgid "Bit pattern comparison for ID of low quality pixels"
+#~ msgstr "Comparación de patrón de bit"
+
+#, fuzzy
+#~ msgid "Optimum index factor for LandSat TM"
+#~ msgstr "OIF para LandSat TM"
+
+#, fuzzy
+#~ msgid "Create 2D raster cross section from grid3d volume"
+#~ msgstr "Sección transversal a partir de volumen"
+
+#, fuzzy
+#~ msgid "Interpolate volume from vector points using splines"
+#~ msgstr "Interpolar volúmenes a partir de puntos vectoriales"
+
+#, fuzzy
+#~ msgid "Display information about grid3D volume"
+#~ msgstr "Importar volúmenes grid3D"
+
+#, fuzzy
+#~ msgid "Add columns to table"
+#~ msgstr "Añadir columnas"
+
+#, fuzzy
+#~ msgid "Change values in a column"
+#~ msgstr "Cambiar valores"
+
+#, fuzzy
+#~ msgid "Execute SQL statement"
+#~ msgstr "Sentencia SQL"
+
+#, fuzzy
+#~ msgid "red (RGB) or hue (HIS):"
+#~ msgstr "rojo (RGB) o tonalidad (HIS): "
+
+#, fuzzy
+#~ msgid "green (RGB) or intensity (HIS):"
+#~ msgstr "verde (RGB) o intensidad (HIS): "
+
+#, fuzzy
+#~ msgid "blue (RGB) or saturation (HIS):"
+#~ msgstr "azul (RGB) o saturación (HIS): "
+
+#, fuzzy
+#~ msgid "     coordinate type"
+#~ msgstr "tipo de vectorial"
+
+#, fuzzy
+#~ msgid "  align text with coordinate point"
+#~ msgstr "     alinear texto con punto coordinado  "
+
+#, fuzzy
+#~ msgid "     text rotation (degrees counterclockwise)"
+#~ msgstr "     rotación de texto (grados)"
+
+#, fuzzy
+#~ msgid "height in pixels instead of %"
+#~ msgstr "     altura del texto en píxels"
+
+#, fuzzy
+#~ msgid "Welcome to the GRASS GIS manager"
+#~ msgstr "Bienvenido a GRASS GIS"
+
+#, fuzzy
+#~ msgid "Display active layers in current region"
+#~ msgstr "Iniciar NVIZ usando las capas activas en la región actual"
+
+#, fuzzy
+#~ msgid "Display active layers in default region"
+#~ msgstr "Visualizar capas activas"
+
+#, fuzzy
+#~ msgid "Display active layers in saved region setting"
+#~ msgstr "Mostrar los ajustes de la región"
+
+#, fuzzy
+#~ msgid "Fly through path for NVIZ"
+#~ msgstr "Crear trayectoria de vuelo para NVIZ"
+
+#, fuzzy
+#~ msgid "Zoom"
+#~ msgstr "Acercar"
+
+#, fuzzy
+#~ msgid "Query map (select map first)"
+#~ msgstr "Digitalizar mapa (seleccionar o crear nuevo mapa primero)"
+
+#, fuzzy
+#~ msgid "Geographical position"
+#~ msgstr "coordenadas geográficas"
+
+#, fuzzy
+#~ msgid "Print raster & vector maps using ps.map"
+#~ msgstr "Imprimir mapas ráster y vectoriales en archivo EPS"
+
+#, fuzzy
+#~ msgid "Add legend"
+#~ msgstr "Limpiar leyenda"
+
+#, fuzzy
+#~ msgid "Add paint labels layer (from directory paint/labels)"
+#~ msgstr "Añadir capa de etiquetas ráster (usar archivo de v.labels)"
+
+#, fuzzy
+#~ msgid "Add freetype text layer"
+#~ msgstr "Añadir capa de texto"
+
+#, fuzzy
+#~ msgid "Create or select display frame"
+#~ msgstr "crear y seleccionar marco"
+
+#, fuzzy
+#~ msgid "Vector name:"
+#~ msgstr "Mapa vectorial:"
+
+#, fuzzy
+#~ msgid "Display:"
+#~ msgstr "Visualizar: "
+
+#, fuzzy
+#~ msgid "shapes"
+#~ msgstr "Formas "
+
+#, fuzzy
+#~ msgid "categories"
+#~ msgstr "Categorías"
+
+#, fuzzy
+#~ msgid "topology"
+#~ msgstr "Topología "
+
+#, fuzzy
+#~ msgid "line directions"
+#~ msgstr "Direcciones de línea "
+
+#, fuzzy
+#~ msgid "            "
+#~ msgstr "    fuente de la etiqueta       "
+
+#, fuzzy
+#~ msgid "faces"
+#~ msgstr "Caras "
+
+#, fuzzy
+#~ msgid "color"
+#~ msgstr "  color "
+
+#, fuzzy
+#~ msgid "  "
+#~ msgstr "    "
+
+#, fuzzy
+#~ msgid "random colors"
+#~ msgstr "Colores aleatorios "
+
+#, fuzzy
+#~ msgid " size"
+#~ msgstr "tamaño:"
+
+#, fuzzy
+#~ msgid " align with pt"
+#~ msgstr "  anchura de línea"
+
+#, fuzzy
+#~ msgid "     layer for labels"
+#~ msgstr "     Capa para etiquetas"
+
+#, fuzzy
+#~ msgid " attribute col for labels"
+#~ msgstr "   Columna de atributos para las etiquetas"
+
+#, fuzzy
+#~ msgid "Query vectors: "
+#~ msgstr "Crear áreas de influencia de vectoriales"
+
+#, fuzzy
+#~ msgid " query cat values"
+#~ msgstr "Valores de las categorías para la consulta"
+
+#, fuzzy
+#~ msgid "SQL query"
+#~ msgstr "Usar consulta SQL"
+
+#, fuzzy
+#~ msgid "     SQL where statement"
+#~ msgstr "Sentencia SQL"
+
+#, fuzzy
+#~ msgid "edit attributes (form mode)"
+#~ msgstr "Actualizar atributos de puntos a partir de áreas"
+
+#, fuzzy
+#~ msgid " Background color: "
+#~ msgstr "Color de fondo:"
+
+#, fuzzy
+#~ msgid "no background color"
+#~ msgstr "\tcolor de fondo "
+
+#, fuzzy
+#~ msgid " "
+#~ msgstr "\t "
+
+#, fuzzy
+#~ msgid "display N. arrow only "
+#~ msgstr "Mostrar Norte sólo"
+
+#, fuzzy
+#~ msgid "line scale instead of bar scale "
+#~ msgstr "línea de escala en vez de barra"
+
+#, fuzzy
+#~ msgid "Text options: color"
+#~ msgstr "Opciones del texto: fuente "
+
+#, fuzzy
+#~ msgid "Paper format"
+#~ msgstr "Mapas para animación"
+
+#, fuzzy
+#~ msgid "height:"
+#~ msgstr "  altura:"
+
+#, fuzzy
+#~ msgid "right:"
+#~ msgstr " derecho:"
+
+#, fuzzy
+#~ msgid "top:"
+#~ msgstr " superior:"
+
+#, fuzzy
+#~ msgid "bottom:"
+#~ msgstr " inferior:"
+
+#, fuzzy
+#~ msgid "PS file:"
+#~ msgstr "Archivo de etiquetas:"
+
+#, fuzzy
+#~ msgid "Printer:"
+#~ msgstr "Puntero"
+
+#, fuzzy
+#~ msgid "Script file:"
+#~ msgstr "Archivo de scripts de salida "

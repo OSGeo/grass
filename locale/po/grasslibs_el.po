@@ -587,9 +587,9 @@ msgid "Unable to open select cursor: '%s'"
 msgstr "Αδυναμία ανοίγματος καταλόγου συστήματος '%s'"
 
 #: ../lib/db/dbmi_client/copy_tab.c:231
-#, fuzzy, c-format
+#, c-format
 msgid "Column <%s> is not integer"
-msgstr "Ο διανυσματικός χάρτης <%s> δεν βρέθηκε"
+msgstr ""
 
 #: ../lib/db/dbmi_client/copy_tab.c:248
 #, fuzzy, c-format
@@ -725,9 +725,9 @@ msgid "Attempt to delete isle from dead area"
 msgstr ""
 
 #: ../lib/vector/diglib/plus_area.c:304
-#, fuzzy, c-format
+#, c-format
 msgid "Attempt to delete not registered isle %d from area %d"
-msgstr "Προσπάθεια ανάγνωσης τοπογραφίας για κενή (dead) επιφάνεια (%d)"
+msgstr ""
 
 #: ../lib/vector/diglib/plus_area.c:342
 msgid "Attempt to delete dead area"
@@ -771,7 +771,7 @@ msgstr "Αδυναμία ανάγνωσης γραμμής %d"
 #: ../lib/vector/diglib/plus.c:308
 #, fuzzy
 msgid "Unable to read topo for areas"
-msgstr "Αδυναμία ανάγνωσης head αρχείου"
+msgstr "Αδυναμία ανάγνωσης των περιοχών"
 
 #: ../lib/vector/diglib/plus.c:313
 #, fuzzy, c-format
@@ -1013,11 +1013,9 @@ msgid "Unable to open history file for vector map <%s>"
 msgstr "Αδυναμία ανοίγματος του ιστορικού του διανυσματικού χάρτη <%s>"
 
 #: ../lib/vector/Vlib/open.c:531
-#, fuzzy, c-format
+#, c-format
 msgid "%s is not in the current mapset (%s)"
 msgstr ""
-"Ο διανυσματικός χάρτης που δεν ανήκει στο τρέχον mapset δεν μπορεί να "
-"ανοίξει για ενημέρωση"
 
 #: ../lib/vector/Vlib/open.c:540 ../lib/vector/Vlib/map.c:176
 #: ../lib/vector/Vlib/map.c:313
@@ -1864,7 +1862,7 @@ msgstr ""
 #: ../lib/vector/Vlib/write.c:239
 #, fuzzy, c-format
 msgid "Unable to feature %d from vector map <%s>"
-msgstr "Αδυναμία ανοίγματος του ιστορικού του διανυσματικού χάρτη <%s>"
+msgstr "Αδυναμία δημιουργίας διανυσματικού χάρτη <%s>"
 
 #: ../lib/vector/Vlib/write.c:265
 #, fuzzy, c-format
@@ -2121,7 +2119,7 @@ msgstr ""
 #: ../lib/g3d/g3drange.c:72
 #, fuzzy, c-format
 msgid "Unable to open range file for [%s in %s]"
-msgstr "Αδυναμία ανοίγματος του χάρτη raster <%s>"
+msgstr "Αδυναμία ανοίγματος αρχείου για εγγραφή <%s>"
 
 #: ../lib/g3d/g3drange.c:78 ../lib/g3d/g3drange.c:88
 #, fuzzy, c-format
@@ -2254,11 +2252,9 @@ msgid ""
 msgstr ""
 
 #: ../lib/gis/opencell.c:228
-#, fuzzy, c-format
+#, c-format
 msgid "Raster map <%s@%s> is in different zone (%d) than current region (%d)"
 msgstr ""
-"Ο διανυσματικός χάρτης που δεν ανήκει στο τρέχον mapset δεν μπορεί να "
-"ανοίξει για ενημέρωση"
 
 #: ../lib/gis/opencell.c:235
 #, c-format
@@ -3043,9 +3039,8 @@ msgid "Run quietly"
 msgstr ""
 
 #: ../lib/gis/parser.c:1976
-#, fuzzy
 msgid "Unable to spawn the 'wish' program"
-msgstr "Αδυναμία ανοίγματος καταλόγου συστήματος '%s'"
+msgstr ""
 
 #: ../lib/gis/parser.c:1995
 msgid "Unable to determine program name"
@@ -3679,9 +3674,9 @@ msgid "Error while writing video frame"
 msgstr "Σφάλμα κατά την εγγραφή του χάρτη"
 
 #: ../lib/ogsf/gsd_img_mpeg.c:298
-#, fuzzy, c-format
+#, c-format
 msgid "Opening MPEG stream <%s>..."
-msgstr "Φόρτωση του raster χάρτη <%s> στη μνήμη"
+msgstr ""
 
 #: ../lib/ogsf/gsd_img_mpeg.c:306
 msgid "Unable to deduce output format from file extension: using MPEG"
@@ -3852,11 +3847,9 @@ msgid "Vector map <%s> loaded (%d points)"
 msgstr "Ο διανυσματικός χάρτης <%s> δεν βρέθηκε"
 
 #: ../lib/ogsf/GS2.c:1638
-#, fuzzy, c-format
+#, c-format
 msgid "Raster map <%s> is outside of current region. Load failed."
 msgstr ""
-"Ο διανυσματικός χάρτης που δεν ανήκει στο τρέχον mapset δεν μπορεί να "
-"ανοίξει για ενημέρωση"
 
 #: ../lib/ogsf/GS2.c:1716 ../lib/ogsf/GS2.c:1722 ../lib/ogsf/GS2.c:1730
 #: ../lib/ogsf/GS2.c:1739 ../lib/ogsf/GS2.c:1747 ../lib/ogsf/GS2.c:1757
@@ -4218,7 +4211,7 @@ msgstr ""
 #: ../lib/cairodriver/Graph.c:81
 #, fuzzy
 msgid "Unable to obtain visual"
-msgstr "Αδυναμία ανοίγματος καταλόγου συστήματος '%s'"
+msgstr "Αδυναμία διαγραφής αρχείου '%s'"
 
 #: ../lib/cairodriver/Graph.c:86
 #, fuzzy
@@ -4365,141 +4358,138 @@ msgstr ""
 msgid "Unable to define new light"
 msgstr "Αδυναμία εύρεσης σημείου στο πολύγωνο"
 
-#~ msgid "Cannot describe table <%s>"
-#~ msgstr "Αδυναμία περιγραφής πίνακα <%s>"
+msgid "Cannot describe table <%s>"
+msgstr "Αδυναμία περιγραφής πίνακα <%s>"
 
-#~ msgid "Unknown command: %d last: %d"
-#~ msgstr "Άγνωστη εντολή: %d last: %d"
+msgid "Unknown command: %d last: %d"
+msgstr "Άγνωστη εντολή: %d last: %d"
 
-#~ msgid "Monitor: get_command: Premature EOF"
-#~ msgstr "Monitor: get_command: Premature EOF"
+msgid "Monitor: get_command: Premature EOF"
+msgstr "Monitor: get_command: Premature EOF"
 
-#~ msgid "Graphics driver [%s] started"
-#~ msgstr "Εκκίνηση του οδηγού κάρτας γραφικών [%s]"
+msgid "Graphics driver [%s] started"
+msgstr "Εκκίνηση του οδηγού κάρτας γραφικών [%s]"
 
-#~ msgid "ERROR %s from graphics driver.\n"
-#~ msgstr "ΣΦΑΛΜΑ %s από τον οδηγός κάρτας γραφικών.\n"
+msgid "ERROR %s from graphics driver.\n"
+msgstr "ΣΦΑΛΜΑ %s από τον οδηγός κάρτας γραφικών.\n"
 
-#~ msgid "Unable to allocate memory\n"
-#~ msgstr "Αδυναμία κατανομής (allocate) μνήμης\n"
+msgid "Unable to allocate memory\n"
+msgstr "Αδυναμία κατανομής (allocate) μνήμης\n"
 
-#~ msgid "ERROR - eof from graphics monitor.\n"
-#~ msgstr "ΣΦΑΛΜΑ - eof από την οθόνη γραφικών.\n"
+msgid "ERROR - eof from graphics monitor.\n"
+msgstr "ΣΦΑΛΜΑ - eof από την οθόνη γραφικών.\n"
 
-#~ msgid "Warning - no response from graphics monitor <%s>.\n"
-#~ msgstr "Προσοχή - καμία απόκριση από την οθόνη γραφικών <%s>.\n"
+msgid "Warning - no response from graphics monitor <%s>.\n"
+msgstr "Προσοχή - καμία απόκριση από την οθόνη γραφικών <%s>.\n"
 
-#~ msgid "Check to see if the mouse is still active.\n"
-#~ msgstr "Δοκιμάστε αν τον ποντίκι (mouse) αποκρίνεται.\n"
+msgid "Check to see if the mouse is still active.\n"
+msgstr "Δοκιμάστε αν τον ποντίκι (mouse) αποκρίνεται.\n"
 
-#~ msgid "ERROR - no response from graphics monitor <%s>.\n"
-#~ msgstr "ΣΦΑΛΜΑ - καμία απόκριση απο την οθόνη γραφικών <%s>.\n"
+msgid "ERROR - no response from graphics monitor <%s>.\n"
+msgstr "ΣΦΑΛΜΑ - καμία απόκριση απο την οθόνη γραφικών <%s>.\n"
 
-#~ msgid "No graphics monitor has been selected for output."
-#~ msgstr "Δεν έχει επιλογή καμία οθόνη γραφικών ως έξοδος."
+msgid "No graphics monitor has been selected for output."
+msgstr "Δεν έχει επιλογή καμία οθόνη γραφικών ως έξοδος."
 
-#~ msgid "Please run \"d.mon\" to select a graphics monitor."
-#~ msgstr ""
-#~ "Παρακαλώ εκτελέστε την εντολή \"d.mon\" για να επιλέξετε οθόνη γραφικών."
+msgid "Please run \"d.mon\" to select a graphics monitor."
+msgstr ""
+"Παρακαλώ εκτελέστε την εντολή \"d.mon\" για να επιλέξετε οθόνη γραφικών."
 
-#~ msgid "Failed to get socket name for monitor <%s>."
-#~ msgstr "Αδυναμία λήψης ονόματος από την οθόνη <%s>."
+msgid "Failed to get socket name for monitor <%s>."
+msgstr "Αδυναμία λήψης ονόματος από την οθόνη <%s>."
 
-#~ msgid "No socket to connect to for monitor <%s>."
-#~ msgstr "Δεν υπάρχει σύνδεση του socket για σύνδεση στην οθόνη <%s>."
+msgid "No socket to connect to for monitor <%s>."
+msgstr "Δεν υπάρχει σύνδεση του socket για σύνδεση στην οθόνη <%s>."
 
-#~ msgid "Socket is already in use or not accepting connections."
-#~ msgstr "Το socket χρησιμοποιήται ήδη και δεν δέχεται άλλες συνδέσεις."
+msgid "Socket is already in use or not accepting connections."
+msgstr "Το socket χρησιμοποιήται ήδη και δεν δέχεται άλλες συνδέσεις."
 
-#~ msgid "Use d.mon to select a monitor"
-#~ msgstr "Χρησιμοποιήστε την εντολή  d.mon για να επιλέξετε οθόνη"
+msgid "Use d.mon to select a monitor"
+msgstr "Χρησιμοποιήστε την εντολή  d.mon για να επιλέξετε οθόνη"
 
-#~ msgid "Probably program error."
-#~ msgstr "Πιθανό λάθος του προγράμματος."
+msgid "Probably program error."
+msgstr "Πιθανό λάθος του προγράμματος."
 
-#~ msgid "Connect attempt timed out."
-#~ msgstr "Η προσπάθεια σύνδεσης απέτυχε (timed out)."
+msgid "Connect attempt timed out."
+msgstr "Η προσπάθεια σύνδεσης απέτυχε (timed out)."
 
-#~ msgid "Probably an error with the server."
-#~ msgstr "Πιθανό πρόβλημα με τον διακομιστή (server)."
+msgid "Probably an error with the server."
+msgstr "Πιθανό πρόβλημα με τον διακομιστή (server)."
 
-#~ msgid "Connection failed."
-#~ msgstr "Σφάλμα σύνδεσης."
-
-#, fuzzy
-#~ msgid "Cannot read topo for nodes"
-#~ msgstr "Αδυναμία ανάγνωσης της γραμμής [%d]"
+msgid "Connection failed."
+msgstr "Σφάλμα σύνδεσης."
 
 #, fuzzy
-#~ msgid "Cannot read topo for node [%d]"
-#~ msgstr "Αδυναμία ανάγνωσης της γραμμής [%d]"
+msgid "Cannot read topo for nodes"
+msgstr "Αδυναμία ανάγνωσης της γραμμής [%d]"
 
 #, fuzzy
-#~ msgid "Cannot read topo for lines"
-#~ msgstr "Αδυναμία ανάγνωσης της γραμμής [%d]"
-
-#~ msgid "Cannot read topo for line [%d]"
-#~ msgstr "Αδυναμία ανάγνωσης της γραμμής [%d]"
+msgid "Cannot read topo for node [%d]"
+msgstr "Αδυναμία ανάγνωσης της γραμμής [%d]"
 
 #, fuzzy
-#~ msgid "Cannot read topo for areas"
-#~ msgstr "Αδυναμία ανάγνωσης των περιοχών"
+msgid "Cannot read topo for lines"
+msgstr "Αδυναμία ανάγνωσης της γραμμής [%d]"
+
+msgid "Cannot read topo for line [%d]"
+msgstr "Αδυναμία ανάγνωσης της γραμμής [%d]"
 
 #, fuzzy
-#~ msgid "Cannot read topo for area [%d]"
-#~ msgstr "Αδυναμία ανάγνωσης της γραμμής [%d]"
+msgid "Cannot read topo for areas"
+msgstr "Αδυναμία ανάγνωσης των περιοχών"
 
 #, fuzzy
-#~ msgid "Cannot read topo for isles"
-#~ msgstr "Αδυναμία ανάγνωσης της γραμμής [%d]"
+msgid "Cannot read topo for area [%d]"
+msgstr "Αδυναμία ανάγνωσης της γραμμής [%d]"
 
 #, fuzzy
-#~ msgid "Cannot read topo for isle [%d]"
-#~ msgstr "Αδυναμία ανάγνωσης της γραμμής [%d]"
+msgid "Cannot read topo for isles"
+msgstr "Αδυναμία ανάγνωσης της γραμμής [%d]"
 
 #, fuzzy
-#~ msgid "Unable to open vector map <%s> on topology level %d"
-#~ msgstr "Αδυναμία αντιγραφής διανυσματικού χάρτη <%s> σε <%s>"
+msgid "Cannot read topo for isle [%d]"
+msgstr "Αδυναμία ανάγνωσης της γραμμής [%d]"
 
 #, fuzzy
-#~ msgid "BUG (delete_area_cats_from_cidx): Area %d does not exist"
-#~ msgstr "BUG (Vect_build_sidx_from_topo): η επιφάνεια δεν υπάρχει"
+msgid "Unable to open vector map <%s> on topology level %d"
+msgstr "Αδυναμία αντιγραφής διανυσματικού χάρτη <%s> σε <%s>"
 
 #, fuzzy
-#~ msgid "BUG (add_area_cats_to_cidx): Area %d does not exist"
-#~ msgstr "BUG (Vect_build_sidx_from_topo): η επιφάνεια δεν υπάρχει"
+msgid "BUG (delete_area_cats_from_cidx): Area %d does not exist"
+msgstr "BUG (Vect_build_sidx_from_topo): η επιφάνεια δεν υπάρχει"
 
 #, fuzzy
-#~ msgid "Registering lines: "
-#~ msgstr "Εγγραφή σημείων"
+msgid "BUG (add_area_cats_to_cidx): Area %d does not exist"
+msgstr "BUG (Vect_build_sidx_from_topo): η επιφάνεια δεν υπάρχει"
 
 #, fuzzy
-#~ msgid "Unable to rewrite line %d"
-#~ msgstr "Αδυναμία ανάγνωσης γραμμής %d"
+msgid "Registering lines: "
+msgstr "Εγγραφή σημείων"
 
 #, fuzzy
-#~ msgid ""
-#~ "Unable to delete line %d, vector map <%s> is not opened on topo level 2"
-#~ msgstr ""
-#~ "Αδυναμία ανοίγματος διανυσματικού χάρτη <%s> στο τοπολογικό επίπεδο %d"
+msgid "Unable to rewrite line %d"
+msgstr "Αδυναμία ανάγνωσης γραμμής %d"
 
 #, fuzzy
-#~ msgid ""
-#~ "Unable to delete line %d, vector map <%s> is not opened in 'write' mode"
-#~ msgstr ""
-#~ "Αδυναμία σύνδεσης βάσης δεδομένων, ο χάρτης δεν είναι ανοικτός σε "
-#~ "κατάσταση εγγραφής (WRITE mode)"
+msgid "Unable to delete line %d, vector map <%s> is not opened on topo level 2"
+msgstr "Αδυναμία ανοίγματος διανυσματικού χάρτη <%s> στο τοπολογικό επίπεδο %d"
 
 #, fuzzy
-#~ msgid "Unable to delete line %d from vector map <%s>"
-#~ msgstr "Αδυναμία δημιουργίας διανυσματικού χάρτη <%s>"
+msgid "Unable to delete line %d, vector map <%s> is not opened in 'write' mode"
+msgstr ""
+"Αδυναμία σύνδεσης βάσης δεδομένων, ο χάρτης δεν είναι ανοικτός σε κατάσταση "
+"εγγραφής (WRITE mode)"
 
 #, fuzzy
-#~ msgid "Output name '%s' is not valid rast name."
-#~ msgstr "Το εξαγώμενο όνομα του διανυσματικού χάρτη <%s> δεν είναι επιτρεπτό"
+msgid "Unable to delete line %d from vector map <%s>"
+msgstr "Αδυναμία δημιουργίας διανυσματικού χάρτη <%s>"
 
 #, fuzzy
-#~ msgid "Output map '%s' is used as input"
-#~ msgstr ""
-#~ "Ο εξαγόμενος διανυσματικός χάρτης <%s> χρησιμοποιείται για εισαγωγή "
-#~ "δεδομένων."
+msgid "Output name '%s' is not valid rast name."
+msgstr "Το εξαγώμενο όνομα του διανυσματικού χάρτη <%s> δεν είναι επιτρεπτό"
+
+#, fuzzy
+msgid "Output map '%s' is used as input"
+msgstr ""
+"Ο εξαγόμενος διανυσματικός χάρτης <%s> χρησιμοποιείται για εισαγωγή "
+"δεδομένων."

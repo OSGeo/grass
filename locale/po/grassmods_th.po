@@ -5648,12 +5648,12 @@ msgstr "ชื่อของแผนที่ผลลัพธ์"
 #: ../imagery/i.vi/main.c:133
 #, fuzzy
 msgid "Name of the chan5 channel surface reflectance map"
-msgstr "ชื่อของ แผนที่  critical shear stress เชิงภาพ"
+msgstr "ชื่อของแผนที่ผลลัพธ์"
 
 #: ../imagery/i.vi/main.c:140
 #, fuzzy
 msgid "Name of the chan7 channel surface reflectance map"
-msgstr "ชื่อของ แผนที่  critical shear stress เชิงภาพ"
+msgstr "ชื่อของแผนที่ผลลัพธ์"
 
 #: ../imagery/i.vi/main.c:306 ../imagery/i.albedo/main.c:389
 #: ../raster/r.los/main.c:382 ../raster/r.texture/main.c:333
@@ -8747,7 +8747,7 @@ msgstr "สร้างตารางสีสำหรับ  <%s ใน %s>..
 #: ../raster/r.external/main.c:339
 #, fuzzy, c-format
 msgid "Setting grey color table for <%s> (data range)"
-msgstr "สร้างตารางสำหรับ <%s> ปรับปรุงแล้ว"
+msgstr "สร้างตารางสีสำหรับ  <%s ใน %s>..."
 
 #: ../raster/r.external/main.c:353
 #, fuzzy, c-format
@@ -9779,7 +9779,7 @@ msgstr "กำลังอ่าน %s ..."
 #: ../raster/r.what/main.c:335
 #, fuzzy, c-format
 msgid "Error reading <%s>"
-msgstr "ข้อผิดพลาดขณะอ่าน '%s' แผนที่"
+msgstr "ผิดพลาด ขณะอ่านแผนที่เชิงภาพ [%s]."
 
 #: ../raster/r.sum/main.c:46
 msgid "Sums up the raster cell values."
@@ -11546,13 +11546,14 @@ msgid "Name of the Soil sand fraction map [0.0-1.0]"
 msgstr "ชื่อของ แผนที่ความสูง เชิงภาพ"
 
 #: ../raster/r.uslek/main.c:62
+#, fuzzy
 msgid "Name of the Soil clay fraction map [0.0-1.0]"
-msgstr ""
+msgstr "ชื่อของ แผนที่ความสูง เชิงภาพ"
 
 #: ../raster/r.uslek/main.c:66
 #, fuzzy
 msgid "Name of the Soil silt fraction map [0.0-1.0]"
-msgstr "ชื่อของแผนที่ผลลัพธ์"
+msgstr "ชื่อของ แผนที่ความสูง เชิงภาพ"
 
 #: ../raster/r.uslek/main.c:70
 #, fuzzy
@@ -11644,7 +11645,7 @@ msgstr "%s: ข้อผิดพลาดขณะเขียน ไฟล์�
 #: ../raster/r.thin/io.c:126
 #, fuzzy, c-format
 msgid "%s: Error reading from raster map <%s>"
-msgstr "%s: ข้อผิดพลาดขณะอ่าน แผนที่เชิงภาพ <%s> ในชุดแผนที่ <%s>"
+msgstr "ผิดพลาด ขณะอ่านแผนที่เชิงภาพ [%s]."
 
 #: ../raster/r.thin/io.c:168
 #, c-format
@@ -16904,8 +16905,9 @@ msgid "Raster map calculator."
 msgstr "แผนที่เชิงภาพ ที่จะวางตัว"
 
 #: ../raster/r.mapcalc/main.c:119
+#, fuzzy
 msgid "Expression to evaluate"
-msgstr ""
+msgstr "ค่า Eigen:"
 
 #: ../raster/r.mapcalc/main.c:123
 #, fuzzy
@@ -16915,7 +16917,7 @@ msgstr "ไฟล์ ที่มี reclass rules"
 #: ../raster/r.mapcalc/main.c:148
 #, fuzzy
 msgid "parse error"
-msgstr "%d ปรับปรุง ผิดพลาด"
+msgstr "ตัวแปร"
 
 #: ../raster/r.mapcalc/main.c:157
 msgid "Floating point error(s) occured in the calculation"
@@ -17881,7 +17883,7 @@ msgstr "แผนที่ Pattern ควรจะเป็น แผนที�
 #: ../raster/r.statistics2/main.c:185
 #, fuzzy, c-format
 msgid "Unable to read range of base map <%s>"
-msgstr "ไม่สามารถ อ่าน ช่วง ของ แผนที่ %s"
+msgstr "ไม่สามารถอ่าน ช่วง fp สำหรับแผนที่เชิงภาพ <%s>"
 
 #: ../raster/r.statistics2/main.c:249
 msgid "First pass"
@@ -26615,1747 +26617,1792 @@ msgstr "ไม่สามารถอ่านจาก stdin"
 msgid "Unable to set isosurface (%d) attribute (%d) of volume %d"
 msgstr "ไม่สามารถเลือก จุดรายละเอียด จาก <%s>"
 
-#~ msgid ""
-#~ "Optional where condition (without WHERE key word), e.g.:\n"
-#~ "\t\tobec = 'Liptakov'"
-#~ msgstr ""
-#~ "เงื่อนไข where condition (ปราศจาก คำเฉพาะ WHERE ), e.g.:\n"
-#~ "\t\tobec = 'Liptakov'"
+msgid ""
+"Optional where condition (without WHERE key word), e.g.:\n"
+"\t\tobec = 'Liptakov'"
+msgstr ""
+"เงื่อนไข where condition (ปราศจาก คำเฉพาะ WHERE ), e.g.:\n"
+"\t\tobec = 'Liptakov'"
 
-#~ msgid "Illegal output file name"
-#~ msgstr "ชื่อไฟล์ผลลัพธ์ ไม่ถูกต้อง"
+msgid "Illegal output file name"
+msgstr "ชื่อไฟล์ผลลัพธ์ ไม่ถูกต้อง"
 
-#~ msgid "Display manager for GRASS"
-#~ msgstr "ตัวจัดการแสดงผล สำหรับ GRASS"
+msgid "Display manager for GRASS"
+msgstr "ตัวจัดการแสดงผล สำหรับ GRASS"
 
-#~ msgid "Name of .dmrc settings file"
-#~ msgstr "ไฟล์กำหนด ชื่อของ  .dmrc"
+msgid "Name of .dmrc settings file"
+msgstr "ไฟล์กำหนด ชื่อของ  .dmrc"
 
-#~ msgid "Selects/starts specified monitor at specified size"
-#~ msgstr "เลือก/เริ่มต้น จอที่ระบุ ในขนาดที่กำหนด"
+msgid "Selects/starts specified monitor at specified size"
+msgstr "เลือก/เริ่มต้น จอที่ระบุ ในขนาดที่กำหนด"
 
-#~ msgid "Width in pixels of new display monitor"
-#~ msgstr "ความกว้างในหน่วย pixel ของจอแสดงผล"
+msgid "Width in pixels of new display monitor"
+msgstr "ความกว้างในหน่วย pixel ของจอแสดงผล"
 
-#~ msgid "Height in pixels of new display monitor"
-#~ msgstr "ความสูงในหน่วย pixel ของจอแสดงผล"
+msgid "Height in pixels of new display monitor"
+msgstr "ความสูงในหน่วย pixel ของจอแสดงผล"
 
-#~ msgid "Moves displayed maps to another monitor"
-#~ msgstr "ย้ายการแสดงแผนที่ ไปที่จออื่น"
+msgid "Moves displayed maps to another monitor"
+msgstr "ย้ายการแสดงแผนที่ ไปที่จออื่น"
 
-#~ msgid "clear target monitor before moving"
-#~ msgstr "ล้างจอเป้าหมายก่อนย้าย"
+msgid "clear target monitor before moving"
+msgstr "ล้างจอเป้าหมายก่อนย้าย"
 
-#~ msgid "stay with source monitor"
-#~ msgstr "ใช้จอเริ่มต้น"
+msgid "stay with source monitor"
+msgstr "ใช้จอเริ่มต้น"
 
-#~ msgid "kill source monitor after moving"
-#~ msgstr "ปิดอเริ่มต้น หลังจากย้าย"
+msgid "kill source monitor after moving"
+msgstr "ปิดอเริ่มต้น หลังจากย้าย"
 
-#~ msgid "Target monitor"
-#~ msgstr "จอเป้าหมาย"
+msgid "Target monitor"
+msgstr "จอเป้าหมาย"
 
-#~ msgid "Source monitor"
-#~ msgstr "จอเริ่มต้น"
+msgid "Source monitor"
+msgstr "จอเริ่มต้น"
 
-#~ msgid "Export display monitor to a GpsDrive compatible backdrop image"
-#~ msgstr "ส่งออกหน้าจอ ไปที่ GpsDrive ที่ใช้กับภาพแบบ backdrop"
+msgid "Export display monitor to a GpsDrive compatible backdrop image"
+msgstr "ส่งออกหน้าจอ ไปที่ GpsDrive ที่ใช้กับภาพแบบ backdrop"
 
-#~ msgid "display, export, GPS"
-#~ msgstr "แสดง, ส่งออก, จีพีเอส"
+msgid "display, export, GPS"
+msgstr "แสดง, ส่งออก, จีพีเอส"
 
-#~ msgid "name for new map image (lives in ~/.gpsdrive)"
-#~ msgstr "ชื่อของภาพแผนที่ใหม่(อยู่ใน ~/.gpsdrive)"
+msgid "name for new map image (lives in ~/.gpsdrive)"
+msgstr "ชื่อของภาพแผนที่ใหม่(อยู่ใน ~/.gpsdrive)"
 
-#~ msgid "Make JPEG instead of PNG image"
-#~ msgstr "สร้าง JPEG แทนที่จะเป็น PNG"
+msgid "Make JPEG instead of PNG image"
+msgstr "สร้าง JPEG แทนที่จะเป็น PNG"
 
-#~ msgid "Saves active display monitor to PNG file in home directory"
-#~ msgstr "บันทึก จอที่กำลังแสดงผล ไปเป็น  PNG ไฟล์ ใน home directory"
+msgid "Saves active display monitor to PNG file in home directory"
+msgstr "บันทึก จอที่กำลังแสดงผล ไปเป็น  PNG ไฟล์ ใน home directory"
 
-#~ msgid "Resolution of output file (single=1, double=2, quad=4)"
-#~ msgstr "ความละเอียดของไฟล์ผลลัพธ์ (single=1, double=2, quad=4)"
+msgid "Resolution of output file (single=1, double=2, quad=4)"
+msgstr "ความละเอียดของไฟล์ผลลัพธ์ (single=1, double=2, quad=4)"
 
-#~ msgid "Saves the contents of the active display monitor to a graphics file."
-#~ msgstr "บันทึกเนื้อหาของจอแสดงผลที่ใช้งานไปที่ไฟล์ภาพ"
+msgid "Saves the contents of the active display monitor to a graphics file."
+msgstr "บันทึกเนื้อหาของจอแสดงผลที่ใช้งานไปที่ไฟล์ภาพ"
 
-#~ msgid "Dimensions of output file versus current window size"
-#~ msgstr "มิติ ของไฟล์ผลลัพธ์ เทียบกับขนาดหน้าต่างปัจจุบัน"
+msgid "Dimensions of output file versus current window size"
+msgstr "มิติ ของไฟล์ผลลัพธ์ เทียบกับขนาดหน้าต่างปัจจุบัน"
 
-#~ msgid "(same=1, double size=2, quadruple size=4)"
-#~ msgstr "(เท่าเดิม=1, สองเท่า ขนาด=2, สี่เท่า ขนาด=4)"
+msgid "(same=1, double size=2, quadruple size=4)"
+msgstr "(เท่าเดิม=1, สองเท่า ขนาด=2, สี่เท่า ขนาด=4)"
 
-#~ msgid "Width and height of output image (overrides resolution setting)"
-#~ msgstr "กว้าง และ สูง ของภาพผลลัพธ์ (เขียนทับการกำหนดความละเอียด)"
+msgid "Width and height of output image (overrides resolution setting)"
+msgstr "กว้าง และ สูง ของภาพผลลัพธ์ (เขียนทับการกำหนดความละเอียด)"
 
-#~ msgid "Compression for PNG files"
-#~ msgstr "การบีบอัดสำหรับไฟล์ PNG"
+msgid "Compression for PNG files"
+msgstr "การบีบอัดสำหรับไฟล์ PNG"
 
-#~ msgid "(0=none, 1=fastest, 9=most; lossless, only time vs. filesize)"
-#~ msgstr "(0=none, 1=fastest, 9=most; lossless, only time vs. filesize)"
+msgid "(0=none, 1=fastest, 9=most; lossless, only time vs. filesize)"
+msgstr "(0=none, 1=fastest, 9=most; lossless, only time vs. filesize)"
 
-#~ msgid "File size/quality for JPEG files"
-#~ msgstr "ไฟล์ ขนาด/คุณภาพ สำหรับไฟล์  JPEG"
+msgid "File size/quality for JPEG files"
+msgstr "ไฟล์ ขนาด/คุณภาพ สำหรับไฟล์  JPEG"
 
-#~ msgid "(10=smallest/worst, 100=largest/best)"
-#~ msgstr "(10=smallest/worst, 100=largest/best)"
+msgid "(10=smallest/worst, 100=largest/best)"
+msgstr "(10=smallest/worst, 100=largest/best)"
 
-#~ msgid "Paper size for PostScript output"
-#~ msgstr "ขนาดกระดาษ สำหรับ ผลลัพธ์  PostScript "
+msgid "Paper size for PostScript output"
+msgstr "ขนาดกระดาษ สำหรับ ผลลัพธ์  PostScript "
 
-#~ msgid "PostScript"
-#~ msgstr "PostScript"
+msgid "PostScript"
+msgstr "PostScript"
 
-#~ msgid "PostScript level (only limits functionality!)"
-#~ msgstr "ระดับ ของ PostScript (จำกัดเฉพาะ functionality!)"
+msgid "PostScript level (only limits functionality!)"
+msgstr "ระดับ ของ PostScript (จำกัดเฉพาะ functionality!)"
 
-#~ msgid "Set background color to black (white default)"
-#~ msgstr "กำหนดสีฉากหลังเป็นสีดำ (ค่าตั้งต้น สีขาว)"
+msgid "Set background color to black (white default)"
+msgstr "กำหนดสีฉากหลังเป็นสีดำ (ค่าตั้งต้น สีขาว)"
 
-#~ msgid "Set transparent background"
-#~ msgstr "กำหนด สีฉากหลังเป็นแบบโปร่งแสง"
+msgid "Set transparent background"
+msgstr "กำหนด สีฉากหลังเป็นแบบโปร่งแสง"
 
-#~ msgid "Use the Cario driver to render images"
-#~ msgstr "ใช้ตัวขับ Cario เพื่อสร้างภาพ"
+msgid "Use the Cario driver to render images"
+msgstr "ใช้ตัวขับ Cario เพื่อสร้างภาพ"
 
-#~ msgid "Set paper orientation to landscape (for PostScript output)"
-#~ msgstr "กำหนดการวางตัวของกระดาษ เป็นแบบ landscape (สำหรับผลลัพธ์ PostScript)"
+msgid "Set paper orientation to landscape (for PostScript output)"
+msgstr "กำหนดการวางตัวของกระดาษ เป็นแบบ landscape (สำหรับผลลัพธ์ PostScript)"
 
-#~ msgid "Displays a raster map and its legend on a graphics window"
-#~ msgstr "แสดง แผนที่เชิงภาพ และ สัญลักษณ์ บนหน้าต่างแสดงผล"
+msgid "Displays a raster map and its legend on a graphics window"
+msgstr "แสดง แผนที่เชิงภาพ และ สัญลักษณ์ บนหน้าต่างแสดงผล"
 
-#~ msgid "omit entries with missing label"
-#~ msgstr "ข้ามทั้งหมด ด้วย แถบข้อความ ที่หายไป"
+msgid "omit entries with missing label"
+msgstr "ข้ามทั้งหมด ด้วย แถบข้อความ ที่หายไป"
 
-#~ msgid "Number of lines to appear in the legend"
-#~ msgstr "จำนวนบรรทัดที่จะปรากฎ ใน สัญลักษณ์"
+msgid "Number of lines to appear in the legend"
+msgstr "จำนวนบรรทัดที่จะปรากฎ ใน สัญลักษณ์"
 
-#~ msgid "Redraws the current display frame in the GRASS monitor"
-#~ msgstr "วาดกรอบแสดงผล ในจอ GRASS ใหม่"
+msgid "Redraws the current display frame in the GRASS monitor"
+msgstr "วาดกรอบแสดงผล ในจอ GRASS ใหม่"
 
 #, fuzzy
-#~ msgid "Redraw all frames"
-#~ msgstr "บันทึกกรอบทั้งหมด"
+msgid "Redraw all frames"
+msgstr "บันทึกกรอบทั้งหมด"
 
-#~ msgid "Resizes active display monitor"
-#~ msgstr "ปรับขนาดของจอแสดงผล ที่กำลังทำงาน"
+msgid "Resizes active display monitor"
+msgstr "ปรับขนาดของจอแสดงผล ที่กำลังทำงาน"
 
-#~ msgid "New width for window"
-#~ msgstr "ความกว้าง ใหม่ ของหน้าต่าง"
+msgid "New width for window"
+msgstr "ความกว้าง ใหม่ ของหน้าต่าง"
 
-#~ msgid "New height for window"
-#~ msgstr "ความสูง ใหม่ ของหน้าต่าง"
+msgid "New height for window"
+msgstr "ความสูง ใหม่ ของหน้าต่าง"
 
-#~ msgid "Slide show of GRASS raster/vector maps."
-#~ msgstr "Slide show ของ GRASS raster/vector maps."
+msgid "Slide show of GRASS raster/vector maps."
+msgstr "Slide show ของ GRASS raster/vector maps."
 
-#~ msgid "display, slideshow"
-#~ msgstr "แสดง, slideshow"
+msgid "display, slideshow"
+msgstr "แสดง, slideshow"
 
-#~ msgid "Show vector maps rather than raster maps"
-#~ msgstr "แสดง แผนที่เชิงเส้น มากกว่า แผนที่เชิงภาพ"
+msgid "Show vector maps rather than raster maps"
+msgstr "แสดง แผนที่เชิงเส้น มากกว่า แผนที่เชิงภาพ"
 
-#~ msgid "Map prefix. Specify character(s) to view selected maps only"
-#~ msgstr "คำนำหน้าแผนที่ ระบุตัวอักษรเพื่อแสดงแผนที่ที่เลือกเท่านั้น"
+msgid "Map prefix. Specify character(s) to view selected maps only"
+msgstr "คำนำหน้าแผนที่ ระบุตัวอักษรเพื่อแสดงแผนที่ที่เลือกเท่านั้น"
 
-#~ msgid "Map number show across the monitor"
-#~ msgstr "จำนวนแผนที่ ที่แสดง ตามแนวขวาง บนจอ"
+msgid "Map number show across the monitor"
+msgstr "จำนวนแผนที่ ที่แสดง ตามแนวขวาง บนจอ"
 
-#~ msgid "Map number show down the monitor"
-#~ msgstr "จำนวนแผนที่ ที่แสดง ตามแนวตั้ง บนจอ"
+msgid "Map number show down the monitor"
+msgstr "จำนวนแผนที่ ที่แสดง ตามแนวตั้ง บนจอ"
 
-#~ msgid "Mapsets to use. Specify multiple mapsets comma separated"
-#~ msgstr "ชุดแผนที่ ที่จะใช้ การระบุหลายชุดแผนที่ให้ใช้  ',' คั่น"
+msgid "Mapsets to use. Specify multiple mapsets comma separated"
+msgstr "ชุดแผนที่ ที่จะใช้ การระบุหลายชุดแผนที่ให้ใช้  ',' คั่น"
 
-#~ msgid "Number of seconds to pause between slides"
-#~ msgstr "จำนวน วินาที ระหว่าง slide"
+msgid "Number of seconds to pause between slides"
+msgstr "จำนวน วินาที ระหว่าง slide"
 
+msgid ""
+"Divides active display into two frames & displays maps/executes commands in "
+"each frame."
+msgstr "แยก จอแสดงผลออกเป็น 2 กรอบ & แสดงแผนที่/คำสั่งทำงานในแต่ละกรอบ"
+
+msgid "Enter raster map to display in 1st frame"
+msgstr "แสดงแผนที่เชิงภาพในกรอบที่ 1"
+
+msgid "Enter command to execute in 1st frame"
+msgstr "แสดง คำสั่งทำงาน ในกรอบที่ 1"
+
+msgid "Enter raster map to display in 2nd frame"
+msgstr "แสดงแผนที่เชิงภาพในกรอบที่ 2"
+
+msgid "Enter command to execute in 2nd frame"
+msgstr "แสดง คำสั่งทำงาน ในกรอบที่ 2"
+
+msgid "How to split display"
+msgstr "จะตัดจออย่างไร"
+
+msgid "Displays thematic vectormap"
+msgstr "แสดง thematic vectormap"
+
+msgid "display, legend"
+msgstr "แสดง, สัญลักษณ์"
+
+msgid "Vector map to display thematically"
+msgstr "แผนที่เชิงเส้นที่แสดง  thematically"
+
+msgid "Theme_prefs"
+msgstr "Theme_prefs"
+
+msgid "Vector map type"
+msgstr "ชนิด แผนที่เชิงเส้น"
+
+msgid "Attribute column to use for thematic display (must be numeric)"
+msgstr "column ที่จะใช้ทำ  thematic (ต้องเป็นตัวเลข)"
+
+msgid "Type of thematic display"
+msgstr "ชนิดการแสดงผล  thematic"
+
+msgid "Thematic divisions of data for display"
+msgstr "การแบ่งข้อมูล Thematic เพื่อแสดงผล"
+
+msgid ""
+"Break points for custom breaks option. Separate values by spaces. (0 10 20 "
+"30 ...)"
+msgstr "Break points สำหรับ เงื่อนไขกำหนดเอง คั่น ค่าด้วยช่องว่าง  (0 10 20 30 ...)"
+
+msgid "Layer to use for thematic display"
+msgstr "ชั้นข้อมูลที่จะใช้แสดง  thematic"
+
+msgid "Points"
+msgstr "จุด"
+
+msgid "Vector point icon for point data"
+msgstr " icon เชิงเส้น สำหรับข้อมูล จุด"
+
+msgid ""
+"Icon size for point data (minimum icon size/line width for graduated points/"
+"lines)"
+msgstr "ขนาดของ  icon (ขนาดเล็กสุด size/line ความหนาเพื่อแบ่ง points/lines)"
+
+msgid "Maximum icon size/line width for graduated points and lines"
+msgstr "ขนาดใหญ่สุด size/line ความหนาเพื่อแบ่ง points และ lines"
+
+msgid "Number of classes for interval theme (integer)"
+msgstr "จำนวน classes สำหรับการแบ่งช่วง (จำนวนเต็ม)"
+
+msgid ""
+"Color scheme for graduated color mapping (select 'single_color' for "
+"graduated point/line display)"
+msgstr "แบบสีสำหรับ ไล่สีแผนที่(เลือก 'single_color'สำหรับแบ่ง point/line เพื่อแสดงผล)"
+
+msgid ""
+"Color for graduated points map (grass named color or R:G:B triplet). Set "
+"color scheme to single color."
+msgstr "สีสำหรับแบ่ง แผนที่แบบจุด (ชื่อสีของ grass  หรือ R:G:B ). กำหนดแบบสีเป็นแบบสีเดียว"
+
+msgid ""
+"Color for graduated lines or point/area outlines (grass named color or R:G:B "
+"triplet). Set color scheme to single color."
+msgstr ""
+"สีสำหรับแบ่ง แผนที่แบบเส้น หรือ เส้นขอบ จุด/พื้นที่  (ชื่อสีของ grass  หรือ R:G:B ). "
+"กำหนดแบบสีเป็นแบบสีเดียว"
+
+msgid ""
+"Beginning color for custom color gradient. Must be expressed as R:G:B "
+"triplet."
+msgstr "สีเริ่มต้น สำหรับ สีกำหนดเอง ต้องอยู่ในรูปแบบ  R:G:B"
+
+msgid ""
+"Ending color for custom color gradient. Must be expressed as R:G:B triplet"
+msgstr "สีปลาย สำหรับ สีกำหนดเอง ต้องอยู่ในรูปแบบ  R:G:B"
+
+msgid "Misc"
+msgstr "อื่นๆ"
+
+msgid "Select x11 display monitor for legend"
+msgstr "เลือก จอแสดงผล  x11 สำหรับ สัญลักษณ์"
+
+msgid "Save thematic map commands to group file for GIS Manager"
+msgstr "บันทึกคำสั่ง แผนที่  thematic ไปที่ไฟล์ กลุ่ม สำหรับตัวจัดการ GIS"
+
+msgid ""
+"Root for the name of psmap instruction files to be in current directory (if "
+"not set, no psmap instruction files will be created)"
+msgstr ""
+"Root สำหรับชื่อของไฟล์  psmap instruction จะต้องอยู่ใน  directory (ถ้าไม่ได้กำหนด, "
+"จะไม่มีการสร้างไฟล์ psmap instruction)"
+
+msgid "Name of group file where thematic map commands will be saved"
+msgstr "ชื่อของไฟล์กลุ่ม ที่จะบันทึกคำสั่ง แผนที่ thematic"
+
+msgid "Create graphic legend in x11 display monitor"
+msgstr "สร้างสัญลักษณ์ในจอแสดงผล  x11"
+
+msgid "Only draw fills (no outlines) for areas and points"
+msgstr "เติมสีเท่านั้น (ไม่มีเส้นขอบ) สำหรับรูปปิดและจุด"
+
+msgid "Update color values to GRASSRGB column in attribute table"
+msgstr "ปรับปรุงค่าสีไปเป็น column GRASSRGB ในตาราง"
+
+msgid "Output legend for GIS Manager (for scripting use only)"
+msgstr "สัญลักษณ์ผลลัพธ์ สำหรับตัวจัดการ GIS (ใช้กับ scripting เท่านั้น)"
+
+msgid "Use math notation brackets in legend"
+msgstr "ใช้ปีกกาหมายเหตุ ในสัญลักษณ์"
+
+msgid "Apply regular expressions and wildcards to g.list"
+msgstr "ใช้ regular expressions และ wildcards กับ g.list"
+
+msgid "Mapset(s) to list (default: current mapset search path)"
+msgstr "แสดงรายการ ชุดแผนที่  (ค่าตั้งต้น: ใน path ของชุดแผนที่ที่กำลังทำงาน)"
+
+msgid "Output separator (default: newline)"
+msgstr "ตัวคั่น (ค่าตั้งต้น:  newline)"
+
+msgid "Apply regular expressions and wildcards to g.remove"
+msgstr "ใช้ regular expressions และ  wildcards กับ g.remove"
+
+msgid "Raster to remove"
+msgstr "ภาพ ที่จะเอาออก"
+
+msgid "3d raster to remove"
+msgstr "ภาพ 3d ที่จะเอาออก"
+
+msgid "Vector to remove"
+msgstr "ข้อมูลเชิงเส้น ที่จะเอาออก"
+
+msgid "Region to remove"
+msgstr "ขอบเขต ที่จะเอาออก"
+
+msgid "Label to remove"
+msgstr "แถบข้อความ ที่จะเอาออก"
+
+msgid "3dview to remove"
+msgstr "3dview  ที่จะเอาออก"
+
+msgid "Group to remove"
+msgstr "กลุ่ม ที่จะเอาออก"
+
+msgid ""
+"displays spectral response at user specified locations in group or images"
+msgstr "แสดง spectral response ที่ผู้ใช้กำหนด ตำแหน่งใน กลุ่ม หรือ ภาพ"
+
+msgid "imagery, raster, multispectral"
+msgstr "ภาพ, แผนที่เชิงภาพ, multispectral"
+
+msgid "group input"
+msgstr "กลุ่มผลลัพธ์"
+
+msgid "raster input maps"
+msgstr "แผนที่เชิงภาพที่จะนำเข้า"
+
+msgid "write output to PNG image"
+msgstr "เขียบผลลัพธ์แบบ  PNG"
+
+msgid "Use image list and not group"
+msgstr "ใช้รายการภาพ ไม่มีกลุ่ม"
+
+msgid "Select multiple points"
+msgstr "เลือกหลายจุด"
+
+msgid "label with coordinates instead of numbering"
+msgstr "แถบข้อความ ของค่าพิกัด แทนที่จะเป็นตัวเลข"
+
+msgid "Keep band numbers instead of using band color names."
+msgstr "เก็บจำนวน band แทนที่จะใช้ชื่อสี"
+
+msgid "Calculate new raster map from a r.mapcalc expression."
+msgstr "คำนวน แผนที่เชิงภาพใหม่ จาก ชุดคำสั่ง  r.mapcalc"
+
+msgid "A"
+msgstr "A"
+
+msgid "B"
+msgstr "B"
+
+msgid "C"
+msgstr "C"
+
+msgid "D"
+msgstr "D"
+
+msgid "E"
+msgstr "E"
+
+msgid "F"
+msgstr "F"
+
+msgid "Formula (e.g. A-B or A*C+B)"
+msgstr "สูตร (e.g. A-B or A*C+B)"
+
+msgid "Show help"
+msgstr "แสดง ความช่วยเหลือ"
+
+msgid "Expert mode (enter a set of r.mapcalc expressions)"
+msgstr "โหมดผู้เชี่ยวชาญ (ใส่ชุดคำสั่ง r.mapcalc)"
+
+msgid "Do not overwrite existing map"
+msgstr "อยู่เขียนทับ แผนที่ที่มีอยู่แล้ว"
+
+msgid "Exports GRASS raster into GDAL supported formats."
+msgstr "ส่งออก แผนที่เชิงภาพ GRASS ไปที่ รูปแบบ ที่ GDAL รองรับ"
+
+msgid "Region sensitive output"
+msgstr "ผลลัพธ์ Region sensitive"
+
+msgid ""
+"Creation option to the output format driver. Multiple options may be listed"
+msgstr "สร้างเงื่อนไขสำหรับ ตัวขับรูปแบบผลลัพธ์ อาจต้องใช้หลายเงื่อนไข"
+
+msgid "Output field seperator"
+msgstr "ตัวคั่น field ของผลลัพธ์"
+
+msgid "calculates univariate statistics from a GRASS raster map"
+msgstr "คำนวน  univariate statistics จาก แผนที่เชิงภาพ ของ GRASS"
+
+msgid "extended statistics (quartiles and percentile)"
+msgstr "extended statistics (quartiles and percentile)"
+
+msgid "Percentile to calculate (requires -e flag)"
+msgstr "Percentile ที่จะคำนวน (ต้องการ -e flag)"
+
+msgid "Calculates new grid3D volume from r3.mapcalc expression."
+msgstr "คำนวนค่า grid3D ใหม่ จาก ประโยค  r3.mapcalc"
+
+msgid "A (grid3D file)"
+msgstr "A  (grid3D ไฟล์)"
+
+msgid "B (grid3D file)"
+msgstr "B  (grid3D ไฟล์)"
+
+msgid "C (grid3D file)"
+msgstr "C  (grid3D ไฟล์)"
+
+msgid "D (grid3D file)"
+msgstr "D  (grid3D ไฟล์)"
+
+msgid "E (grid3D file)"
+msgstr "E  (grid3D ไฟล์)"
+
+msgid "F (grid3D file)"
+msgstr "F  (grid3D ไฟล์)"
+
+msgid "Name for output grid3D volume"
+msgstr "ชื่อผลลัพธ์ ค่า grid3D"
+
+msgid "Expert mode (enter a set of r3.mapcalc expressions)"
+msgstr "โหมดผู้เชี่ยวชาญ (ใส่ชุดประโยค r3.mapcalc)"
+
+msgid "%s: [%s] not found"
+msgstr "ไม่พบ %s: [%s]"
+
+msgid "GIS Coincidence Tabulation Facility\n"
+msgstr "GIS Coincidence Tabulation Facility\n"
+
+msgid ""
+"This utility will allow you to compare the coincidence of two map layers\n"
+msgstr "เครื่องมือนี้จะทำให้คุณเปรียบเที่ยบ ความสอดคล้อง ของ 2 ชั้นข้อมูล\n"
+
+msgid "The report can be made in one of 8 units."
+msgstr "สามารถสร้าง 1 รายงาน ของ 8 รายงาน"
+
+msgid "Please choose a unit by entering one of the following letter codes:"
+msgstr "โปรดเลือกหน่วย โดยใส่ 1 รหัสตัวอักษร ตามรายการนี้"
+
+msgid "     'c': cells"
+msgstr "     'c': cells"
+
+msgid "     'p': percent cover of region"
+msgstr "     'p': percent cover of region"
+
+msgid "     'x': percent of '%s' category (column)"
+msgstr "     'x': percent of '%s' category (column)"
+
+msgid "     'y': percent of '%s' category (row)"
+msgstr "     'y': percent of '%s' category (row)"
+
+msgid "     'a': acres"
+msgstr "     'a': acres"
+
+msgid "     'h': hectares"
+msgstr "     'h': hectares"
+
+msgid "     'k': square kilometers"
+msgstr "     'k': ตาราง กิโลเมตร"
+
+msgid "     'm': square miles\n"
+msgstr "     'm': square miles\n"
+
+msgid "     'Q': quit"
+msgstr "     'Q': ออก"
+
+msgid "Do you wish to save this report in a file? (y/n) [n] "
+msgstr "คุณต้องการบันทึก รายงานนี้ลงไฟล์หรือไม่? (y/n) [n] "
+
+msgid ""
+"Enter the file name or path\n"
+"> "
+msgstr ""
+"ใส่ชื่อไฟล์ หรือ path\n"
+"> "
+
+msgid "'%s' being saved\n"
+msgstr "'%s' จะถูกบันทึก\n"
+
+msgid ""
+"Do you wish to print this report (requires Unix lpr command)? (y/n) [n] "
+msgstr "คุณต้องการจะพิมพ์รายงาน หรือไม่ (ต้องการคำสั่ง  Unix lpr)? (y/n) [n] "
+
+msgid ""
+"Do you wish it printed in 80 or 132 columns?\n"
+"> "
+msgstr ""
+"คุณต้องการจะพิมพ์รายงานแบบ 80 หรือ 132 columns?\n"
+"> "
+
+msgid ""
+"Do you wish to run this report with a different unit of measure? (y/n) [y] "
+msgstr "คุณต้องการให้ รายงาน ทำงาน ด้วย หน่วยวัดที่แตกต่าง หรือไม่? (y/n) [y] "
+
+msgid "Interactively select End-Points"
+msgstr "เลือก End-Points แบบ โต้ตอบ"
+
+msgid "Use mouse to select Start Point\n"
+msgstr "ใช้ เม้าส์ เพื่อเลือก จุดเริ่มต้น\n"
+
+msgid ""
+"\n"
+"Use mouse to draw profile line\n"
+msgstr ""
+"\n"
+"ใช้ เม้าส์ เพื่อเลือก วาดเส้น profile\n"
+
+msgid "Buttons:\n"
+msgstr "ปุ่ม:\n"
+
+msgid "Left:   Mark next point\n"
+msgstr "ซ้าย:   กำหนดจุดต่อไป\n"
+
+msgid "Middle: Mark next point\n"
+msgstr "กลาง:   กำหนดจุดต่อไป\n"
+
+msgid ""
+"Right:  Finish profile and exit\n"
+"\n"
+msgstr "ขวา:   กำหนดจุดจบ และ ออก\n"
+
+msgid "elevin raster map <%s> not found"
+msgstr "ไม่พบ แผนที่เชิงภาพ elevin <%s>"
+
+msgid "aspin raster map <%s> not found"
+msgstr "ไม่พบ แผนที่เชิงภาพ aspin <%s>"
+
+msgid "linkein raster map <%s> not found"
+msgstr "ไม่พบ แผนที่เชิงภาพ linkein <%s>"
+
+msgid "albedo raster map <%s> not found"
+msgstr "ไม่พบ แผนที่เชิงภาพ albedo <%s>"
+
+msgid "latin raster map <%s> not found"
+msgstr "ไม่พบ แผนที่เชิงภาพ latin <%s>"
+
+msgid "coefbh raster map <%s> not found"
+msgstr "ไม่พบ แผนที่เชิงภาพ coefbh <%s>"
+
+msgid "coefdh raster map <%s> not found"
+msgstr "ไม่พบ แผนที่เชิงภาพ coefdh <%s>"
+
+msgid "No clump map specified and MASK not set."
+msgstr "ไม่ได้ระบุ แผนที่ clump และยังไม่ได้กำหนด MASK"
+
+msgid "Unable to find data map"
+msgstr "ไม่สามารถหา ข้อมูลแผนที่"
+
+msgid "Unable to find clump map"
+msgstr "ไม่สามารถหา แผนที่ clump"
+
+msgid "Memory allocation error"
+msgstr "การกำหนด หน่วยความจำผิดพลาด"
+
+msgid "Saving new map"
+msgstr "กำลังบันทึก แผนที่"
+
+msgid "Cell area: %f"
+msgstr "Cell area: %f"
+
+#, fuzzy
+msgid "Terrain raster map (DEM)"
+msgstr "แผนที่เชิงภาพ Terrain (DEM)"
+
+msgid "Output raster map with lake"
+msgstr "แผนที่เชิงภาพ ผลลัพธ์ ที่มี  lake"
+
+msgid "Cannot write lake raster map <%s>!"
+msgstr "ไม่สามารถ อ่าน แผนที่เชิงภาพ  lake <%s>!"
+
+msgid "Terrain raster map <%s> not found!"
+msgstr "ไม่พบ แผนที่เชิงภาพ Terrain <%s>!"
+
+msgid "Cannot open terrain raster map <%s@%s>!"
+msgstr "ไม่สามารถเปิด แผนที่เชิงภาพ Terrain <%s@%s>!"
+
+msgid "Seed map <%s> not found!"
+msgstr "ไม่พบ แผนที่ Seed <%s>!"
+
+msgid "Cannot open seed map <%s@%s>!"
+msgstr "ไม่สามารถเปิด แผนที่ Seed <%s@%s>!"
+
+msgid "Failure to allocate memory for row pointers"
+msgstr "กำหนด หน่วยความจำ ล้มเหลว สำหรับ row pointers"
+
+msgid "Loading maps: "
+msgstr "กำลังอ่านแผนที่: "
+
+msgid "Error reading terrain raster map. Probably broken file."
+msgstr "ข้อผิดพลาด ขณะอ่าน แผนที่เชิงภาพ terrain. บางทีอาจเกิดจากไฟล์"
+
+msgid "Error reading seed raster map. Probably broken file."
+msgstr "ข้อผิดพลาด ขณะอ่าน แผนที่เชิงภาพ seed. บางทีอาจเกิดจากไฟล์"
+
+msgid "Cannot write lake raster map <%s@%s>!"
+msgstr "ไม่สามารถเขียน แผนที่เชิงภาพ lake <%s@%s>!"
+
+msgid ""
+"Starting lake filling at level of %8.4f in %d passes. \n"
+"Percent done:"
+msgstr ""
+"เริ่มต้นเติม lake ที่ระดับ %8.4f ใน %d . \n"
+"เปอร์ฌซ็นต์ ที่ทำแล้ว:"
+
+msgid "Pass: %d\n"
+msgstr "ผ่าน: %d\n"
+
+msgid "Error writing color file for <%s@%s>!"
+msgstr "ผิดพลาด ขณะ เขียน ไฟล์สี สำหรับ <%s@%s>!"
+
+msgid "All done."
+msgstr "ทำทั้งหมดแล้ว"
+
+msgid "%s: base raster map not found"
+msgstr "%s: ไม่พบแผนที่เชิงภาพฐาน"
+
+msgid "%s: cover raster map not found"
+msgstr "%s: ไม่พบแผนที่เชิงภาพ cover"
+
+msgid "%s: base map and output map must be different"
+msgstr "%s: แผนที่เชิงฐาน และ แผนผลลัพธ์  จะต้องแตกต่างกัน"
+
+msgid "Name of the vector points map with x,y locations"
+msgstr "ชื่อของ แผนที่จุด เชิงภาพ กับตำแนหน่ง  x,y"
+
+msgid "Number of time iterations (sec.)"
+msgstr "เวลาของการวนซ้ำ (วินาที)"
+
+msgid "Multiscale simulation"
+msgstr "การจำลองแบบ Multiscale"
+
+msgid "Running MAY 10 version"
+msgstr "กำลังทำงาน รุ่น MAY 10"
+
+msgid "Name of the elevation raster map, same units as N,E: [m] or [ft] "
+msgstr "ชื่อของ แผนที่ความสูงเชิงภาพ, หน่วยเหมือนกับ N,E: [เมตร] หรือ [ฟุต] "
+
+msgid "Name of the x-derivatives raster map [m/m] or [ft/ft]"
+msgstr "ชื่อของ แผนที่  x-derivatives เชิงภาพ, [เมตร/เมตร] หรือ [ฟุต/ฟุต] "
+
+msgid "Name of the y-derivatives raster map [m/m] or [ft/ft]"
+msgstr "ชื่อของ แผนที่  y-derivatives เชิงภาพ, [เมตร/เมตร] หรือ [ฟุต/ฟุต] "
+
+msgid "Calculates <simple> index on a raster map"
+msgstr "คำนวน <ตัวอย่าง> ดัชนีบนแผนที่เชิงภาพ"
+
+msgid "raster, landscape structure analysis, job launcher"
+msgstr "แผนที่เชิงภาพ, landscape structure analysis, job launcher"
+
+msgid "Quietly"
+msgstr "อย่างเงียบ"
+
+msgid "Bilinear interpolation utility for raster map layers."
+msgstr "เครื่องมือ Bilinear interpolation สำหรับ ชั้นข้อมูลแผนที่เชิงภาพ"
+
+msgid ""
+"Specific input value to be assigned to the north and/or south poles for "
+"longitude-latitude grids"
+msgstr "ค่าที่ใส่จะถูกใช้เป็น ค่าแกน เหนือ และ/หรือ ใต้ สำหรับกริด แลต-ลอง"
+
+msgid "This module is deprecated. Please use 'r.resamp.interp' instead."
+msgstr "โมดูล คือ  deprecated โปรดใช้  'r.resamp.interp' แทน"
+
+msgid "Illegal output file name <%s>"
+msgstr "ชื่อไฟล์ผลลัพธ์ ไม่ถูกต้อง <%s>"
+
+msgid ""
+"The '-q' flag is superseded and will be removed in future. Please use '--"
+"quiet' instead"
+msgstr "ใช้  '-q' แทน และจะถูกนำออกในอนาคต. โปรดใช้ '--quiet' แทน"
+
+msgid "Base map and output map <%s> must be different"
+msgstr "แผนที่ฐาน และ แผนที่ผลลัพธ์ <%s> จะต้องมีความแตกต่าง"
+
+msgid "Not enough memory for zero_array_cell"
+msgstr "หน่วยความจำ ไม่พอ สำหรับ zero_array_cell"
+
+msgid "Not enough disk space -- cannot write files"
+msgstr "หน่วยความจำ ไม่พอ -- ไม่สามารถเขียนไฟล์ได้"
+
+msgid "Raster input maps(s)"
+msgstr "แผนที่เชิงภาพ เพื่อนำเข้า"
+
+msgid "Output file name"
+msgstr "ชื่อไฟล์ ผลลัพธ์"
+
+msgid "%s: can't read fp range for [%s]"
+msgstr "%s: ไม่สามารถอ่านช่วง fp สำหรับ [%s]"
+
+msgid ""
+"Not enough data columns. Incorrect delimiter or column number?\n"
+"[%s]"
+msgstr ""
+"จำนวน column ไม่พอ. จุดทศนิยม หรือ จำนวน columnr?\n"
+"[%s]"
+
+msgid ""
+"Raster map [%s] already exists.\n"
+"Please try another."
+msgstr ""
+"แผนที่เชิงภาพ [%s] มีอยู่แล้ว.\n"
+"โปรดลองอันอื่น"
+
+msgid "Path to rules file"
+msgstr "Path ของไฟล์ rules"
+
+msgid "Enter rules interactively"
+msgstr "ใส่ rule แบบโต้ตอบ"
+
+msgid ""
+"Interactive mode is incompatible with \"color\", \"rules\", and \"raster\" "
+"options"
+msgstr "โหมดโต้ตอบ ใช้ไม่ได้กับเงื่อนไข  \"color\", \"rules\", และ \"raster\""
+
+msgid "RGB raster map <%s> not found"
+msgstr "ไม่พบ แผนที่เชิงภาพ RGB <%s>"
+
+msgid "Cannot create RGB data, please provide three maps [r,g,b]"
+msgstr "ไม่สามารถสร้าง ข้อมูล RGB , โปรดใส่ แผนที่  [r,g,b]"
+
+msgid "Vector cell map <%s> not found"
+msgstr "ไม่พบ แผนที่ Vector cell <%s>"
+
+msgid "Cannot create vector data, please provide three maps [x,y,z]"
+msgstr "ไม่สามารถสร้าง ข้อมูลแผนที่เชิงเส้น , โปรดใส่ แผนที่  [x,y,z]"
+
+msgid "Which raster map needs a color table"
+msgstr "แผนที่เชิงภาพไหน ต้องการ ตารางสี"
+
+msgid "Edit header for [%s]\n"
+msgstr "แก้ไข header สำหรับ [%s]\n"
+
+msgid "[%s] cannot be found!"
+msgstr "ไม่พบ [%s]!"
+
+msgid "For what layer shall the header file be edited? "
+msgstr "ชั้นข้อมูลไหน ที่จะแก้ไข header ไฟล์"
+
+msgid "[%s] is a reclass of [%s] - cannot edit header! Run support on [%s]."
+msgstr "[%s] คือ reclass ของ [%s] - ไม่สามารแก้ไข header! สั่ง support กับ [%s]."
+
+msgid "[%s] is a reclass of [%s in %s] - cannot edit header!"
+msgstr "[%s] คือ reclass ของ [%s ใน %s] - ไม่สามารแก้ไข header!"
+
+msgid "Cannot open raster map [%s]!"
+msgstr "ไม่สามารถเปิด แผนที่เชิงภาพ [%s]!"
+
+msgid "Raster file [%s] is empty."
+msgstr "ไฟล์แผนที่เชิงภาพ [%s] ว่างเปล่า."
+
+msgid "cellhd compression: %d\n"
+msgstr "การบีบอัด cellhd : %d\n"
+
+msgid "3.0 compression %sindicated\n"
+msgstr "3.0 compression %sindicated\n"
+
+msgid "Pre 3.0 compression %sindicated\n"
+msgstr "Pre 3.0 compression %sindicated\n"
+
+msgid "[%s] appears to be compressed. Is it? "
+msgstr "[%s] มันถูกบีบอัด. ใช่ไหมt? "
+
+msgid "Please indicate the type of compression:\n"
+msgstr "โปรดระบุ ชนิดของการบีบอัด:\n"
+
+msgid "  1. Pre 3.0 compression\n"
+msgstr "  1. Pre 3.0 compression\n"
+
+msgid "  2. 3.0 compression\n"
+msgstr "  2. 3.0 compression\n"
+
+msgid "The header for [%s] says the file is not compressed. "
+msgstr "Header lesiy[ [%s] บอกว่าไฟล์ไม่ได้ถูกบีบอัด. "
+
+msgid "The file appears to be compressed.\n"
+msgstr "ไฟล์ถูกบีบอัด\n"
+
+msgid "Most likely the header is wrong, but I want you to decide.\n"
+msgstr "ดูเหมือนว่า  header ผิด, คุณต้องระบุ.\n"
+
+msgid "The header for [%s] says the file is compressed. "
+msgstr "Header สำหรับ [%s] บอกว่าไฟล์ถูกบีบอัด. "
+
+msgid "The file does NOT appear to be compressed.\n"
+msgstr "ไฟล์ไม่ได้ถูกบีบอัด\n"
+
+msgid ""
+"Header indicates %d row%s in the raster map, but the actual file format "
+"indicates %d row%s"
+msgstr "Header ชี้ไปที่ %d row%s ในแผนที่เชิงภาพ, แต่ รปแบบของไฟล์  ชี้ไปที่  %d row%s"
+
+msgid "Unable to write header for [%s]."
+msgstr "ไม่สามารถเขียน header สำหรับ [%s]."
+
+msgid "Header for raster map [%s] updated."
+msgstr "Header สำหรับแผนที่เชิงภาพ [%s] ถูกปรับปรุงแล้ว"
+
+msgid ""
+"\n"
+"hit RETURN to continue -->"
+msgstr ""
+"\n"
+"กด RETURN เพื่อทำงานต่อ -->"
+
+msgid "Please enter the following information for [%s]:"
+msgstr "โปรดใส่ ข้อมูลสำหรับ [%s]:"
+
+msgid "        Number of rows"
+msgstr "        จำนวนของ rows"
+
+msgid "        Number of cols"
+msgstr "        จำนวนของ cols"
+
+msgid "        Floating point map"
+msgstr "        แผนที่ Floating point"
+
+msgid "rows * cols * bytes per cell must be same as file size (%lu)"
+msgstr "rows * cols * bytes ต่อ cell ต้องมีขนาดเท่าไฟล์ (%lu)"
+
+msgid "If you need help figuring them out, just hit ESC"
+msgstr "ถ้าคุณต้องการ ความช่วยเหลือ, เพียงกด ESC"
+
+msgid "** Negative values not allowed!"
+msgstr "** ไม่รับค่าลบ!"
+
+msgid "** Positive values only please!"
+msgstr "** รับค่าบวกเท่านั้น!"
+
+msgid "Which raster map needs an updated history? "
+msgstr "แผนที่เชิงภาพไหนที่ต้องการปรับปรุงประวัติ? "
+
+msgid "Raster file [%s] not found. Exiting."
+msgstr "ไม่พบแผนที่เชิงภาพ [%s] กำลังออก"
+
+msgid "History file for [%s] updated."
+msgstr "ไฟล์ ประวัติ สำหรับ [%s] ถูกปรับปรุงแล้ว"
+
+msgid "History file for [%s] not updated."
+msgstr "ไฟล์ ประวัติ สำหรับ [%s] ไม่ได้ถูกปรับปรุง"
+
+msgid ""
+"\n"
+"Hit RETURN to continue -->"
+msgstr ""
+"\n"
+"กด RETURN เพื่อดำเนินการต่อ -->"
+
+msgid "Edit header for [%s]? "
+msgstr "แก้ไข header สำหรับ [%s]? "
+
+msgid ""
+"\n"
+"NOTE: [%s] is a reclass of [%s in %s]"
+msgstr ""
+"\n"
+"NOTE: [%s] เป็น reclass ของ [%s ใน %s]"
+
+msgid "Canceling from edit header."
+msgstr "กำลังยกเลิกจากการแก้ไข  header"
+
+msgid "Edit the category file for [%s]? "
+msgstr "แก้ไข ไฟล์หมวดหมู่สำหรับ  [%s]? "
+
+msgid "Create/Update the color table for [%s]? "
+msgstr "สร้าง/ปรับปรุง ตารางสีสำหรับ [%s]? "
+
+msgid "Edit the history file for [%s]? "
+msgstr "แก้ไข ไฟล์ประวัติสำหรับ [%s]? "
+
+msgid ""
+"\n"
+"The null file for [%s] may indicate that some cells contain\n"
+" no data. If the null file for [%s] doesn't exist, zero cells in\n"
+" it are treated by GRASS application programs as no data."
+msgstr ""
+"\n"
+"Null ไฟล์ สำหรับ [%s] อาจะชี้ว่าบาง cell มี\n"
+"no data. ถ้า Null ไฟล์ สำหรับ [%s] ไม่มีอยู่, 0 cells ใน\n"
+"มันจะถูกตีความโดย GRASS ว่าเป็น no data."
+
+msgid ""
+"\n"
+"Do you want to create/reset the null file for [%s] so that null cell values "
+"are considered valid data? "
+msgstr ""
+"\n"
+"คุณต้องการ สร้าง/ล้าง Null ไฟล์สำหรับ [%s] ดังนั้น ค่า Null cell จะตีว่าเป็นข้อมูล? "
+
+msgid ""
+"\n"
+"Do you want to delete the null file for [%s]\n"
+"(all zero cells will then be considered no data)? "
+msgstr ""
+"\n"
+"คุณต้องการที่จะลบ Null ไฟล์ สำหรับ [%s]\n"
+"หรือไม่(0 cell ทั้งหมด จะตีความเป็นข้อมูล)? "
+
+msgid "Which vector map needs updated categories?"
+msgstr "แผนที่เชิงเส้นไหนที่ต้องการ ปรับปรุง หมวดหมู่?"
+
+msgid "Which raster map needs updated categories?"
+msgstr "แผนที่เชิงภาพไหนที่ต้องการ ปรับปรุง หมวดหมู่?"
+
+msgid "%s map <%s> not found"
+msgstr "ไม่พบ %s แผนที่ <%s> "
+
+msgid "Category file for <%s> not updated"
+msgstr "ไฟล์หมวดหมู่สำหรับ <%s> ไม่ได้ถูกปรับปรุง"
+
+msgid "Category file for <%s> updated"
+msgstr "ไฟลืหมวดหมู่ สำหรับ  <%s> ปรับปรุงแล้ว"
+
+msgid "Title, in quotes"
+msgstr "ชื่อเรื่อง, in quotes"
+
+msgid "Quiet - Do not show progress"
+msgstr "แบบเงียบ - ไม่ต้องแสดงการทำงาน"
+
+msgid "Suppress single crossing error messages"
+msgstr "ข้อผิดพลาด Suppress single crossing"
+
+msgid ""
+"The '-q' and '-n' flag is superseded and will be removed in future. Please "
+"use '--quiet' instead."
+msgstr "'-q' และ '-n' คือ การแทรก และจะถูกนำออกในอนาคต. โปรดใช้ '--quiet' แทน"
+
+msgid "Unable to find starting vector <%s> "
+msgstr "ไม่สามารถหา starting vector <%s> "
+
+msgid "Unable to find stop vector <%s>"
+msgstr "ไม่สามารถหา stop vector <%s>"
+
+msgid "Raster output map <%s> not found (no start_points given)"
+msgstr "ไม่พบ แผนที่ผลลัพธ์เชิงภาพ <%s> (ไม่ได้ระบุ start_points)"
+
+msgid "Memory allocation error on reading start points from raster map %s"
+msgstr "กำรกำหนดหน่วยความจำ ผิดพลาด ขณะอ่าน start points จาก แผนที่เชิงภาพ %s"
+
+msgid "Apply filter only to zero data values"
+msgstr "ใช้ filterเฉพาะ ค่าข้อมูลที่เป็น 0"
+
+msgid "G_put_raster_row failed (file system full?)"
+msgstr "G_put_raster_row ล้มเหลว (ไฟล์ระบบเต็ม?)"
+
+msgid "Run verbosly"
+msgstr "ทำงานแบบแสดง รายละเอียด"
+
+msgid "Run VERBOSELY"
+msgstr "ทำงาน แบบแสดงรายละเอียด"
+
+msgid "Cell file not found"
+msgstr "ไม่พบ Cell ไฟล์"
+
+msgid "Threshold distance set to %g map units (based on 2D resolution)"
+msgstr "กำหนดระยะ Threshold ไปที่  %g หน่วยแผนที่ (ขึ้นอยู่กับความละเอียด 2มิติ)"
+
+msgid "Vector map <%s> not found in the current mapset"
+msgstr "ไม่พบแผนที่เชิงเส้น <%s> ในชุดแผนที่ปัจจุบัน"
+
+msgid "Cannot execute: %s"
+msgstr "ไม่สามารถทำงาน: %s"
+
+msgid "Cannot link table: %s"
+msgstr "ไม่สามารถเชื่อมตาราง: %s"
+
+msgid "DXF input file"
+msgstr "ไฟล์ DXF ที่นำเข้า"
+
+msgid "Cannot open dxf file <%s>"
+msgstr "ไม่สามารถเปิด dxf ไฟล์ <%s>"
+
+#, fuzzy
+msgid "Use output= option to change vector map name"
+msgstr "ใช้เงื่อนไข output= เพื่อเปลี่ยนชื่อ แผนที่เชิงเส้น"
+
+msgid "Conversion of <%s> to vector map:"
+msgstr "การแปลงของ <%s> ไปเป็นแผนที่เชิงเส้น:"
+
+msgid "Vector map <%s> is not in user mapset and cannot be updated"
+msgstr "แผนที่เชิงเส้น <%s> ไม่อยู่ในชุดแผนที่ของผู้ใช้ และไม่สามารถปรับปรุงได้"
+
+msgid "Do not print polyline info"
+msgstr "ไม่ต้องแสดง ข้อมูล polyline"
+
+msgid "Network input map <%s> not found"
+msgstr "ไม่พบ แผนที่ Network ที่จะนำเข้า  <%s>"
+
+msgid "ask_transform_coor():  Leaving session.. \n"
+msgstr "ask_transform_coor():  Leaving session.. \n"
+
+msgid " Number of points that have been entered: %d\n"
+msgstr "จำนวนของจุดที่ต้องใส่: %d\n"
+
+msgid "Please answer yes or no"
+msgstr "โปรดตอบ yes หรือ no"
+
+msgid "Quiet; No chatter"
+msgstr "แบบเงียบ; ไม่ต้องพล่าม"
+
+msgid "Hilight color for text"
+msgstr "สีเน้นสำหรับตัวอักษร"
+
+msgid "Line: %d\n"
+msgstr "เส้น: %d\n"
+
+msgid "Insufficent memory for allocation of data structure"
+msgstr "หน่วยความจำไม่พอสำหรับ กำหนดโครงสร้างข้อมูล"
+
+msgid "imagery group"
+msgstr "กลุ่ม ภาพ"
+
+msgid "imagery subgroup"
+msgstr "กลุ่มย่อย ภาพ"
+
+msgid "output raster map"
+msgstr "แผนที่เชิงภาพผลลัพธ์"
+
+msgid "Name of input raster map(s)"
+msgstr "ชื่อของแผนที่เชิงภาพ ที่จะนำเข้า"
+
+msgid "Output file extension (inputfile(s) + extension)"
+msgstr "Extension ของไฟล์ผลลัพธ์  (inputfile(s) + extension)"
+
+msgid "name=%s\n"
+msgstr "ชื่อ=%s\n"
+
+msgid "mapset=%s\n"
+msgstr "ชุดแผนที่=%s\n"
+
+msgid "fullname=%s\n"
+msgstr "ชื่อเต็ม=%s\n"
+
+msgid "usage: %s file [prompt %%x %%y]\n"
+msgstr "วิธีใช้: %s ไฟล์ [prompt %%x %%y]\n"
+
+msgid "Illegal file name for real part: %s"
+msgstr "ชื่อไฟล์ real partไม่ถูกต้อง: %s"
+
+msgid "Illegal file name for imaginary part: %s"
+msgstr "ชื่อไฟล์ imaginary part ไม่ถูกต้อง: %s"
+
+msgid "** Can't read signature file <%s> **"
+msgstr "** ไม่สามารถ อ่นไฟล์  singature <%s> **"
+
+msgid ""
+"\n"
+"<%s> -- illegal result signature file name"
+msgstr ""
+"\n"
+"<%s> -- ชื่อไฟล์ signature ผลลัพธ์ ไม่ถูกต้อง"
+
+msgid "Illegal group name <%s>"
+msgstr "ชื่อกลุ่ม ไม่ถูกต้อง <%s>"
+
+msgid "Illegal signature file name <%s>"
+msgstr "ชื่อไฟล์ signature ไม่ถูกต้อง <%s>"
+
+msgid "visualization"
+msgstr "การมองเห็น"
+
+msgid "Raster file(s) for Elevation"
+msgstr "ไฟล์แผนที่เชิงภาพ สำหรับ ค่าความสูง"
+
+msgid "Raster file(s) for Color"
+msgstr "ไฟล์แผนที่เชิงภาพ สำหรับ ค่าสี"
+
+msgid "Current window not settable"
+msgstr "กำหนดหน้าต่างไม่ได้"
+
+msgid "Can't clear current graphics window"
+msgstr "ไม่สามารถ ล้าง หน้าต่างที่กำลังทำงาน"
+
+msgid "Cannot use current window"
+msgstr "ไม่สามารถใช้หน้าต่างที่กำลังทำงานอยู่ได้"
+
+msgid ""
+"Generates and displays simple graphics on map layers drawn in the active "
+"graphics monitor display frame."
+msgstr "สร้าง และ แสดง ตัวอย่าง ภาพ บนชั้นข้อมูลแผนที่ ในกรอบจอแสดงผลที่ทำงานอยู่"
+
+msgid ""
+"Unix file containg graphing instructions, if not given reads from standard "
+"input"
+msgstr "ไฟล์ Unix ประกอบด้วยภาพ วิธีทำ,ถ้าไม่ต้องการอ่านจากการนำเข้ามาตรฐาน"
+
+msgid ""
+"Color to draw with, either a standard GRASS color or R:G:B triplet "
+"(separated by colons)"
+msgstr "สีที่จะวาด, สีมาตรฐานของ GRASS หรือ  R:G:B triplet (แยกด้วย :)"
+
+msgid "Don't add to list of commands in monitor"
+msgstr "ไม่ต้อง เพิ่มรายการคำสั่งของ หน้าจอ"
+
+msgid "No current frame"
+msgstr "ไม่มีกรอบปัจจุบัน"
+
+msgid "Current frame not available"
+msgstr "กรอบปัจจุบัน ยังใช้ไม่ได้"
+
+msgid "%s: 'is_null_value()' got NULL pointer!"
+msgstr "%s: 'is_null_value()'  ผลลัพธ์เป็น NULL pointer!"
+
+msgid "%s: 'is_null_value()' got negative column index"
+msgstr "%s: 'is_null_value()' ผลลัพธ์ของ column index เป็นค่าลบ"
+
+msgid "%s: 'is_null_value()' Unknown RASTER_MAP_TYPE '%d'"
+msgstr "%s: 'is_null_value()' ไม่ทราบ RASTER_MAP_TYPE '%d'"
+
+msgid "Error reading raster map"
+msgstr "ข้อผิดพลาดขณะอ่านข้อมูลเชิงภาพ"
+
+msgid "Interactive profile plotting utility with optional output."
+msgstr "ใช้ profile plotting utility ด้วยเงื่อนไข ส่งออก"
+
+msgid "Optional display raster"
+msgstr "เงื่อนไขการแสดงภาพ"
+
+msgid "Output profile data to file(s) with prefix 'name'"
+msgstr "ผลลัพธ์ของรายละเอียดจะเขียนลง ไฟล์ ด้วยคำนำหน้า 'name'"
+
+msgid "Display raster [%s] not found. Using profile raster."
+msgstr "ไม่พบภาพ [%s] . ใช้รายละเอียดข้อมูลภาพ"
+
+msgid ""
+"\n"
+"\n"
+"Use mouse to choose action"
+msgstr ""
+"\n"
+"\n"
+"ใช้ เม้าส์เพื่อเลือก คำสั่ง"
+
+msgid "Use 'd.frame -e' to remove left over frames"
+msgstr "ช้  'd.frame -e' เพื่อล้างภาพในกรอบ"
+
+msgid "Error opening cell-file"
+msgstr "ข้อผิดพลาดขณะเปิด cell-file"
+
+msgid "Error reading from cell-file"
+msgstr "ข้อผิดพลาดขณะอ่าน cell-file"
+
+msgid "Mysterious window inconsistancy error"
+msgstr "เกิดข้อผิดพลาดแบบประหลาดกับหน้าต่าง"
+
+msgid "%s: Couldn't open raster <%s@%s>"
+msgstr "%s: ไม่สามารถเปิดภาพ <%s@%s>"
+
+msgid "one moment ..."
+msgstr "รอสักครู่ ..."
+
+msgid " Middle: toggle flash color\n"
+msgstr "กลาง: เปลี่ยนสี กระพริบ \n"
+
+msgid "Enable flashing (slower)"
+msgstr "ใช้ flashing (ช้าลง)"
+
+msgid "No raster map exists in current window"
+msgstr "ไม่มีแผนที่เชิงเส้นในหน้าต่างที่กำลังทำงาน"
+
+msgid "No current window"
+msgstr "ไม่มี หน้าต่าง ที่กำลังทำงาน"
+
+msgid "Current window not available"
+msgstr "ไม่สามารถใช้ หน้าต่างนี้ได้"
+
+msgid "Getting screen window"
+msgstr "อ่าน หน้าต่างแสดงผล"
+
+msgid "Error in calculating conversions"
+msgstr "เกิดข้อผิดพลาด ระหว่างการแปลงค่า"
+
+msgid "No current graphics window"
+msgstr "ไม่มีการกำหนด หน้าต่างแสดงผล ปัจจุบัน"
+
+msgid "Current graphics window not available"
+msgstr "หน้าต่างแสดงผล ปัจจุบัน ใช้ไม่ได้"
+
+msgid "Setting graphics window"
+msgstr "กำหนดหน้าต่างแสดงผล"
+
+msgid "Can't set current graphics window"
+msgstr "ไม่สามารถกำหนด หน้าต่างแสดงผล"
+
+msgid "Getting graphics window coordinates"
+msgstr "อ่านค่าพิกัดจากหน้าต่างแสดงผล"
+
+msgid "value [%.0f,%.0f] out of range [0-100]"
+msgstr "ค่า  [%.0f,%.0f] อยู่นอกช่วง [0-100]"
+
+msgid "Font name or pathname of TTF file"
+msgstr "ชื่อ หรือ ของแบบตัวอักษร ของไฟล์  TTF"
+
+msgid "Setting release of FreeType"
+msgstr "กำหนด รุ่นของ FreeType"
+
+msgid "Display number of colors"
+msgstr "แสดง จำนวนสี"
+
+msgid "Use mouse to size & place legend"
+msgstr "ใช้ เม้าส์เพื่อกำหนด ขนาด และ ตำแหน่งให้กับ สัญลักษณ์"
+
+msgid "Creates a list of commands for recreating screen graphics."
+msgstr "สร้างรายการ คำสั่ง สำหรับจอแสดงผล"
+
+msgid "Name of frame(s) to save"
+msgstr "ชื่อของกรอบ ที่จะบันทึก"
+
+msgid ""
+"List of object numbers to remove which are displayed after \"#\". -1 for the "
+"last object."
+msgstr "รายการ จำนวนของวัตถุที่จะเอาออก ที่แสดงหลัง  \"#\". -1 สำหรับวัตถุสุดท้าย"
+
+msgid ""
+"List of object numbers to move (\"from\" to \"to\"). remove= option will be "
+"done first, if any."
+msgstr ""
+"รายการ จำนวนของวัตถุที่จะย้าย (\"from\" ถึง \"to\"). เงื่อนไข remove= จะกระทำก่อนถ้ามี"
+
+msgid "Save current frame"
+msgstr "บันทึกกรอบที่กำลังทำงาน"
+
+msgid "Save all the frames"
+msgstr "บันทึกกรอบทั้งหมด"
+
+msgid "Only map objects without extra header and tailer"
+msgstr "วัตถุแผนทีเท่านั้น ไม่มี หัว และ ท้าย"
+
+msgid "Unknown item type in pad: %s"
+msgstr "ไม่ทราบชนิดหัวข้อในสมุด: %s"
+
+msgid "Rendering method for filled polygons"
+msgstr "วิธีแสดงภาพสำหรับรูปปิดทึบ"
+
+msgid ""
+"g;use the libgis render functions (features: clipping);r;use the raster "
+"graphics library functions (features: polylines);d;use the display library "
+"basic functions (features: polylines);c;use the display library clipping "
+"functions (features: clipping);l;use the display library culling functions "
+"(features: culling, polylines)"
+msgstr ""
+"g;use the libgis render functions (features: clipping);r;use the raster "
+"graphics library functions (features: polylines);d;use the display library "
+"basic functions (features: polylines);c;use the display library clipping "
+"functions (features: clipping);l;use the display library culling functions "
+"(features: culling, polylines)"
+
+msgid ""
+"Don't add to list of vectors and commands in monitor (it won't be drawn if "
+"the monitor is refreshed)"
+msgstr ""
+"อย่าเพิ่มไปที่รายการ ชั้นข้อมูลเชิงเส้น หรือ คำสั่ง ในหน้าจอ (มันอาจจะไม่ถูกเขียนถ้าจอแสดงผลใหม่)"
+
+msgid "No raster map exists in the current window"
+msgstr "ไม่มีแผนที่เชิงภาพ ในหน้าต่างที่กำลังทำงาน"
+
+msgid ""
+"Creates and displays a menu within the active frame on the graphics monitor."
+msgstr "สร้าง และ แสดง ตัวอย่าง เมนู ในกรอบจอแสดงผลที่ทำงานอยู่"
+
+msgid "Sets the color of the menu background"
+msgstr "กำหนด สีหลัง ของเมนู"
+
+msgid "Sets the color of the menu text"
+msgstr "กำหนด สีอักษร ของเมนู"
+
+msgid "Sets the color dividing lines of text"
+msgstr "กำหนด สีคั่นบรรทัด ของตัวอักษร"
+
+msgid "Sets the menu text size (in percent)"
+msgstr "กำหนด ขนาดตัวอักษร ของเมนู"
+
+msgid "Menu must contain a title and at least one option"
+msgstr "เมนูจะต้องประกอบด้วย หัวข้อ และ เงื่อนไขอย่างน้อย 1 เงื่อนไข"
+
+msgid ""
+"Draws text in the graphics monitor's active display frame using TrueType "
+"fonts."
+msgstr "เขียน ตัวอักษร ในกรอบจอแสดงผลโดยใช้แบบตัวอักษร  TrueType "
+
+msgid "Screen position (percentage, [0,0] is bottom left)"
+msgstr "ตำแหน่งบนหน้าจอ  (เปอร์เซ็นต์, [0,0] คือ ซ้ายล่าง)"
+
+msgid "Path to TrueType font (including file name)"
+msgstr "Path ของ แบบตัวอักษรแบบ TrueType  (รวมชื่อไฟล์)"
+
+msgid "Height of letters (in percent of available frame height)"
+msgstr "ความสูงของตัวอักษร (เป็นเปอร์เซ็นต์ของความสูงของกรอบ)"
+
+msgid "Either text or -c should be given"
+msgstr "ต้องระบุ text หรือ -c "
+
+msgid "Choose only one coordinate system for placement"
+msgstr "เลือกเพียง 1 ระบบค่าพิกัดสำหรับระบุตำแหน่ง"
+
+msgid "No font selected"
+msgstr "ยังไม่ได้เลือกแบบตัวอักษร"
+
+msgid "Invalid font: %s"
+msgstr "แบบตัวอักษรไม่ถูกต้อง: %s"
+
+msgid "Unable to create text conversion context"
+msgstr "ไม่สามารถสร้างเนื้อหาการแปลงตัวอักษร"
+
+msgid "Text conversion error"
+msgstr "การแปลงตัวอักษรผิดพลาด"
+
+msgid "Unable to write the temporary file"
+msgstr "ไม่สามารถเขียนไฟล์ชั่วคราวได้"
+
+msgid "No predefined font"
+msgstr "ไม่มีการระบุแบบตัวอักษร"
+
+msgid "%s: Unable to read font"
+msgstr "%s: ไม่สามารถอ่านแบบตัวอักษร"
+
+msgid "%s: Unable to read FreeType definition file; use the default"
+msgstr "%s: ไม่สามารถอ่านไฟล์ นิยามของ แบบตัวอักษร  FreeType;ใช้ตัวตั้งต้น"
+
+msgid "%s: No FreeType definition file"
+msgstr "%s: ไมมีไฟล์ นิยามของ FreeType "
+
+msgid "%s: Unable to read FreeType definition file"
+msgstr "%s: ไม่สามารถอ่านไฟล์ นิยามของ แบบตัวอักษร  FreeType"
+
+msgid "Don't add to list of rasters and commands in monitor"
+msgstr "อย่าเพิ่มไปที่ รายการภาพ และ คำสั่ง ในจอ"
+
+msgid "One mouse click only"
+msgstr "กดเมาส์เพียงครั้งเดียว"
+
+msgid "Use mouse to interactively place scale"
+msgstr "ใช้ เมาส์เพื่อกำหนดตำแหน่ง มาตราส่วน"
+
+msgid "Use mouse to interactively place text"
+msgstr "ใช้เม้าส์เพื่อกำหนดตำแหน่ง ตัวอักษร"
+
+msgid "Click!\n"
+msgstr "กด!\n"
+
+msgid " Left:    Place text here\n"
+msgstr "ซ้าย:    วางตัวอักษรที่นี่\n"
+
+msgid " Right:   Quit\n"
+msgstr "ขวา:   ออก\n"
+
+msgid "Just redraw given maps using default colors"
+msgstr "วาดแผนที่ใหม่ ใช้สีตั้งต้น"
+
+msgid "ERROR: can not get \"list\" items"
+msgstr "ข้อผิดพลาด: ไม่สามารถอ่าน หัวข้อ \"list\""
+
+msgid "-j flag forced"
+msgstr "บังคับใช้ -j"
+
+msgid "No map is displayed in GRASS monitor"
+msgstr "ไม่มีแผนที่อสดงในจอ GRASS"
+
+msgid "Interactively select route"
+msgstr "ให้เลือกเส้นทาง"
+
+msgid "You must select more than one point"
+msgstr "คุณต้องเลือกมากกว่า 1จุด"
+
+msgid "You must select at least four points"
+msgstr "คุณต้องเลือกอย่างน้อย 4 จุด"
+
+msgid "No raster or vector map displayed"
+msgstr "ไม่มีแผนที่ ทั้งเชิงภาพและเส้น แสดง"
+
+msgid "To establish and control use of a graphics display monitor."
+msgstr "เพื่อ สร้างและควบคุม การใช้จอแสดงผล"
+
+msgid "Name of graphics monitor to start"
+msgstr "ชื่อของจอแสดงผลที่จะ เริ่ม"
+
+msgid "Name of graphics monitor to stop"
+msgstr "ชื่อของจอแสดงผลที่จะ หยุด"
+
+msgid "Name of graphics monitor to select"
+msgstr "ชื่อของจอแสดงผลที่จะ เลือก"
+
+msgid "Name of graphics monitor to unlock"
+msgstr "ชื่อของจอแสดงผลที่จะ unlock"
+
+msgid "List all monitors"
+msgstr "แสดงรายการ หน้าจอ ทั้งหมด"
+
+msgid "List all monitors (with current status)"
+msgstr "แสดงรายการ หน้าจอ ทั้งหมด (และ สถานะ)"
+
+msgid "Print name of currently selected monitor"
+msgstr "แสดงชื่อของ หน้าจอ ที่ถูกเลือกให้ทำงาน"
+
+msgid "Release currently selected monitor"
+msgstr "ยกเลิก หน้าจอ ที่ถูกเลือกให้ทำงาน"
+
+msgid "Do not automatically select when starting"
+msgstr "อย่าเลือกแบบ อัตโนมัติ เมื่อเริ่มต้นการทำงาน"
+
+msgid "Problem selecting %s. Will try once more"
+msgstr "เกิดปัญหาในการกำหนดค่า %s. จะลองใหม่อีกครั้ง"
+
+msgid "Usage:  %s monitor_name"
+msgstr "วิธีใช้: %s ชื่อจอแสดงผล"
+
+msgid "No such monitor as <%s>"
+msgstr "<%s> ไม่ใช่จอแสดงผล"
+
+msgid "%s: -%c unrecognized option"
+msgstr "%s: -%c เงื่อนไขไม่ถูกต้อง"
+
+msgid "Monitor <%s> released"
+msgstr "ใช้จอแสดงผล <%s>"
+
+msgid "Monitor <%s> in use by another user"
+msgstr "จอแสดงผล <%s> ถูกใช้โดยผู้อื่น"
+
+msgid "Failed testing lock mechanism"
+msgstr "การปลดกลไก ล้มเหลว"
+
+msgid "Usage:  %s [-fv] [name]"
+msgstr "วิธีใช้:  %s [-fv] [ชื่อ]"
+
+msgid "Usage: %s [-f] monitor_name"
+msgstr "วิธีใช้: %s [-f] ชื่อจอแสดงผล"
+
+msgid "Monitor '%s' terminated"
+msgstr "จอแสดงผล  '%s' ถูกยกเลิก"
+
+msgid "Error - Monitor '%s' was not running"
+msgstr "ข้อผิดพลาด - จอแสดงผล '%s' ไม่ทำงาน"
+
+msgid "Error - Monitor '%s' in use by another user"
+msgstr "ข้อผิดพลาด -  จอแสดงผล '%s'  ถูกใช้โดยผู้อื่น"
+
+msgid "Error - Locking mechanism failed"
+msgstr "ข้อผิดพลาด - การล็อคกลไกล้มเหลว"
+
+msgid "Error choosing frame [%s]\n"
+msgstr "เลือกกรอบผิด  [%s]\n"
+
+msgid ""
+"\n"
+"Buttons:\n"
+msgstr ""
+"\n"
+"ปุ่ม:\n"
+
+msgid "Left:   Select frame\n"
+msgstr "ซ้าย:   เลือกกรอบ\n"
+
+msgid "Middle: Keep original frame\n"
+msgstr "กลาง:เก็บค่ากรอบเดิม\n"
+
+msgid "Right:  Accept frame\n"
+msgstr "ขวา:  ยอมรับกรอบ\n"
+
+msgid "Manages display frames on the user's graphics monitor."
+msgstr "จัดการกรอบแสดงผล บนหน้าจอของผู้ใช้"
+
+msgid "Create a new frame"
+msgstr "สร้าง กรอบใหม่"
+
+msgid "Select a frame"
+msgstr "เลือก กรอบ"
+
+msgid "Print name of current frame"
+msgstr "แสดงชื่อ ของกรอบ"
+
+msgid "Print names of all frames"
+msgstr "แสดงชื่อ ของกรอบ ทั้งหมด"
+
+msgid "List map names displayed in GRASS monitor"
+msgstr "แสดง รายการชื่อแผนที่ ใน จอ  GRASS"
+
+msgid "Debugging output"
+msgstr "แสดง การตรวจสอบ"
+
+msgid "Frame to be created/selected"
+msgstr "กรอบที่จะ  สร้าง/เลือก"
+
+msgid "bottom,top,left,right"
+msgstr "ล่าง,บน,ซ้าย,ขวา"
+
+msgid "Where to place the frame, values in percent (implies -c)"
+msgstr "ที่ ที่จะวางกรอบ, ค่าเป็น เปอร์เซ็นต์  (implies -c)"
+
+msgid ""
+"\n"
+"Mouse Buttons:"
+msgstr ""
+"\n"
+"ปุ่มเม้าส์:"
+
+msgid "Left:   Select From\n"
+msgstr "ซ้าย:   เลือก จุดเริ่มต้น\n"
+
+msgid "Middle: Select To\n"
+msgstr "กลาง:   เลือก จุดปลายทาง\n"
+
+msgid ""
+"Right:  Quit\n"
+"\n"
+msgstr ""
+"ขวา:  ออก\n"
+"\n"
+
+msgid "Monitor: interactive command in redraw"
+msgstr "จอ: คำสั่งตอบโต้ในการวาดใหม่"
+
+msgid "found %d visuals of type TrueColor"
+msgstr "พบ %d การมองเห็นแบบสีจริง"
+
+msgid "searching for highest bit depth"
+msgstr "การค้นหา bit depth ที่สูงสุด"
+
+msgid "selected %d bit depth"
+msgstr "เลือก %d bit depth"
+
+msgid "using default visual which is %s"
+msgstr "ใช้ค่าตั้งต้นของการมองเห็น ที่เป็น %s"
+
+msgid "Monitor: waitpid: expected %d but got %d"
+msgstr "จอ: waitpid: คาดว่าเป็น %d แต่เป็น %d"
+
+msgid "Monitor: XGetWMName failed"
+msgstr "จอ: XGetWMName ล้มเหลว"
+
+msgid "Monitor: XGetWMName: bad result"
+msgstr "จอ: XGetWMName: ผลลัพธ์ไม่ดี"
+
+msgid ""
+"\n"
+"\n"
+"WARNING!  A projection file already exists for this location\n"
+msgstr ""
+"\n"
+"\n"
+"คำเตือน!  ไฟล์ projectionมีอยู่แล้วสำหรับ location\n"
+
+msgid "Would you still like to overwrite the current projection information "
+msgstr "คุณต้องการเขียนทับ current projection information "
+
+msgid "The projection information will not be updated."
+msgstr "ข้อมูล Projection จะไม่ถูกปรับปรุง"
+
+msgid "Enable interactive prompting (for command-line use only)"
+msgstr "เปิดการใช้งานแบบโต้ตอบ (สำหรับการใช้คำสั่งเท่านั้น)"
+
+msgid "Raster map to zoom into"
+msgstr "แผนที่เชิงภาพ ที่จะขยาย"
+
+msgid "Save the current region to region definition file"
+msgstr "บันทึกขอบเขตปัจจุบันไปที่ไฟล์กำหนดขอบเขต"
+
+msgid "<%s> is an illegal region name"
+msgstr "<%s> ชือ่ขอบเขตไม่ถูกต้อง"
+
+msgid "No LatLong information for XY-Projection"
+msgstr "ไม่มีข้อมูล แลต/ลอง สำหรับ  XY-Projection"
+
+#, fuzzy
+msgid "Erasing monitors ..."
+msgstr "กำลังลบหน้าจอ ..."
+
+msgid "Could not open input file <%s>."
+msgstr "ไม่สามารถเปิดไฟล์  <%s>"
+
+msgid "No such monitor as '%s'"
+msgstr " '%s' ไม่ใช่จอแสดงผล"
+
+msgid "Error - No such monitor as '%s'"
+msgstr "ข้อผิดพลาด -  '%s' ไม่ใช่จอแสดงผล"
+
+msgid ""
+"\a\n"
+"** The following raster maps in subgroup [%s] do not exist:"
+msgstr ""
+"\a\n"
+"**แผนที่เชิงภาพ ในกลุ่มย่อย [%s] ไม่มี:"
+
+msgid "       %s"
+msgstr "       %s"
+
+msgid "Removing files from group"
+msgstr "กำลังเอาไฟล์ออกจาก กลุ่ม"
+
+msgid "Adding files to group [%s]"
+msgstr "กำลังเพิ่มไฟล์เข้าไปใน กลุ่ม  [%s]"
+
+msgid "Adding files to subgroup [%s]"
+msgstr "กำลังเพิ่มไฟล์เข้าไปใน กลุ่มย่อย  [%s]"
+
+msgid "Skipping [%s]..."
+msgstr "กำลังข้าม [%s]..."
+
+msgid "Writing group REF"
+msgstr "กำลังเขียน กลุ่ม REF"
+
+msgid "Writing subgroup REF"
+msgstr "กำลังเขียน กลุ่มย่อย REF"
+
+msgid "Found file <%s@%s> in group."
+msgstr "พบไฟล์ <%s@%s> ในกลุ่ม"
+
+msgid "Found file <%s@%s> in subgroup."
+msgstr "พบไฟล์ <%s@%s> ในกลุ่มย่อย"
+
+msgid "Unable to open file: <%s>"
+msgstr "ไม่สามารถเปิดไฟล์: <%s>"
+
+msgid "Multiplier"
+msgstr "ตัวคูณ"
+
+msgid "Over-riding projection check."
+msgstr "ยกเลิกการตรวจสอบ projection"
+
+msgid ""
+"Projection of input dataset and current location appear to match.\n"
+"Proceeding with import...\n"
+msgstr ""
+"Projection ของ ชุดข้อมูลที่จะนำเข้า และ ตำแหน่งปัจจุบัน สอดคล้องกัน \n"
+"ดำเนินการนำเข้า...\n"
+
+msgid "permission denied\n"
+msgstr "ไม่อนุญาติ\n"
+
+msgid "not found\n"
+msgstr "ไม่พบ\n"
+
+msgid "%s: percent complete: "
+msgstr "%s: เปอร์เซ็นต์ ที่ สำเร็จ: "
+
+msgid "Raster map not found."
+msgstr "ไม่พบ แผนที่เชิงภาพ"
+
+msgid "%s: can't read range for [%s]"
+msgstr "%s: ไม่สามารถอ่านช่วง  สำหรับ [%s]"
+
+msgid "Raster file [%s] not found"
+msgstr "ไม่พบ ไฟล์ แผนที่เชิงภาพ [%s]"
+
+msgid "It was not possible writing in <%s>."
+msgstr "เป็นไปไม้ได้ที่จะเขียนใน <%s>."
+
+msgid "\rRemoved vertices: %5d"
+msgstr "\rจุดหัก ที่เอาออก: %5d"
+
+msgid "\rDuplicate area centroids: %5d"
+msgstr "\rจุดศูนย์ถ่วง ของ area ที่ซ้ำ: %5d"
+
+msgid ""
+"Finds the nearest element in vector 'to' for elements in vector 'from'. "
+"Various information about this relation may be uploaded to the attribute "
+"table of input vector 'from' or printed to stdout."
+msgstr ""
+"หา element ที่ใกล้ที่สุด ในแผนที่เชิงภาพ  'to' สำหรับ elements ใน แผนที่เชิงภาพ  'from'."
+"ข้อมูลทั้งหลายเกี่ยวกับ ความสัมพันธ์ อาจจะ uploaded ไปที่ ตารางรายละเอียด "
+"ของแผนที่เชิงเส้นที่นำเข้า  'from' หรือแสดง ไปที่ stdout."
+
+msgid "Cannot create table: '%s'"
+msgstr "ไม่สามารถสร้างตาราง: '%s'"
+
+msgid "defaulting to nearest neighbor sampling"
+msgstr "ค่าตั้งต้น ถึง neighbor sampling ที่ใกล้ที่สุด"
+
+msgid "Unable to connect line id %d to line %d"
+msgstr "ไม่สามารถเชื่อมเส้น  id %d ไปที่เส้น %d"
+
+msgid ""
+"Unable to connect line id %d to line %d because of threshold distance. Run v."
+"edit with other threshold distance value."
+msgstr ""
+"ไม่สามารถเชื่อมเส้น  id %d ไปที่เส้น %d เพราะว่า ระยะ  threshold. ใช้คำสั่ง v.edit "
+"ด้วยค่าระยะ threshold อื่น."
+
+msgid "Unable to get category list <%s>, editing terminated"
+msgstr "ไม่สามารถอ่าน รายการหมวดหมู่ <%s>, ยกเลิกการแก้ไข"
+
+msgid "Unable to delete layer/category [%d/%d] line %d"
+msgstr "ไม่สามารถ ลบ ชั้นข้อมูล/หมวดหมู่ [%d/%d] บรรทัด %d"
+
+msgid "Unable to write line %d"
+msgstr "ไม่สามารถเขียน บรรทัด %d"
+
+msgid "Unable to delete line %d"
+msgstr "ไม่สามารถเขียน ลบ %d"
+
+msgid "Only %d lines found, at least two needed"
+msgstr "พบ %d เส้น, ต้องการอย่างน้อย 2"
+
+msgid "Unknown query tool '%s'"
+msgstr "ไม่ทราบ เครื่องมือการค้นหา  '%s'"
+
+msgid ""
+"If 'list', 'file' and 'where' options are not specified, all features of "
+"given type and layer are extracted. Categories are not changed in that case."
+msgstr ""
+"ถ้าเงื่อนไข 'list', 'file' และ 'where' ไม่ได้ระบุ, ข้อมูลทั้งหมดของ ชนิดที่ระบุและชั้นข้อมูล "
+"จะถูกสกัดออกมา. หมวดหมู่จะไม่ถูกเปลี่ยนแปลงในกรณีนี้."
+
+msgid "No layer database connection"
+msgstr "ไม่มี ชั้นข้อมูล จากฐานข้อมูล เชื่อมต่อ"
+
+msgid "Load categories from the database (table = %s, db = %s)."
+msgstr "อ่าน หมวดหมู่จากฐานข้อมูล (table = %s, db = %s)."
+
+msgid "%d categories loaded from the database"
+msgstr "%d อ่าน หมวดหมู่จากฐานข้อมูล"
+
+msgid "Done"
+msgstr "ทำงานแล้ว"
+
+msgid "Cannot open OGR data source '%s'"
+msgstr "ไม่สามารถเปิด แหล่งข้อมูล OGR  '%s'"
+
+msgid "Cannot create layer"
+msgstr "ไม่สามารถ สร้างชั้นข้อมูล"
+
+msgid "Vector map <%s> in location <%s> in mapset <%s> not available"
+msgstr "แผนที่เชิงเส้น <%s> ในตำแหน่ง <%s> ในชุดแผนที่ <%s> ใช้งานไม่ได้"
+
+msgid ""
+"Load values from vector to database. For uploaded/printed category values '-"
+"1' is used for 'no category' and 'null'/'-' if category cannot be found or "
+"multiple categories were found."
+msgstr ""
+"อ่านค่าจากข้อมูลเชิงเส้นไปที่ฐานข้อมูล. สำหรับ ปรับปรุง/แสดง ค่าหมวดหมู่  '-1' ใช้สำหรับ 'no "
+"category' และ 'null'/'-' ถ้าไม่พบหมวดหมู่ หรือ พบหลายหมวดหมู่."
+
+msgid "Column(s)"
+msgstr "Column(s)"
+
+msgid "Column type [%d] not supported"
+msgstr "ชนิดของ Column [%d] ไม่รองรับ"
+
+#~ msgid "display, export"
+#~ msgstr "แสดง, ส่งออก"
+
+#~ msgid "Name for output file (do NOT add extension)"
+#~ msgstr "ชื่อของไฟล์ผลลัพธ์  (ไม่ต้องใส่ นามสกุล)"
+
+#~ msgid "Images"
+#~ msgstr "ภาพ"
+
+#~ msgid "Data type"
+#~ msgstr "ชนิดข้อมูล"
+
+#~ msgid "slopein raster map <%s> not found"
+#~ msgstr "ไม่พบ แผนที่เชิงภาพ slopein <%s>"
+
+#~ msgid "%s: Error reading from raster map <%s> in mapset <%s>"
+#~ msgstr "%s: ข้อผิดพลาดขณะอ่าน แผนที่เชิงภาพ <%s> ในชุดแผนที่ <%s>"
+
+#~ msgid "Base raster map <%s> not found"
+#~ msgstr "ไม่พบ แผนที่เชิงภาพ ฐาน <%s>"
+
+#~ msgid "Color table for <%s> updated"
+#~ msgstr "สร้างตารางสำหรับ <%s> ปรับปรุงแล้ว"
+
+#~ msgid "Error reading raster map [%s]."
+#~ msgstr "ผิดพลาด ขณะอ่านแผนที่เชิงภาพ [%s]."
+
+#, fuzzy
+#~ msgid "Option <%s>: <%s> exists."
+#~ msgstr "เงื่อนไข <%s>: <%s> ออก."
+
+#~ msgid "Setting map window"
+#~ msgstr "การกำหนด หน้าต่างแผนที่"
+
+#, fuzzy
 #~ msgid ""
-#~ "Divides active display into two frames & displays maps/executes commands "
-#~ "in each frame."
-#~ msgstr "แยก จอแสดงผลออกเป็น 2 กรอบ & แสดงแผนที่/คำสั่งทำงานในแต่ละกรอบ"
-
-#~ msgid "Enter raster map to display in 1st frame"
-#~ msgstr "แสดงแผนที่เชิงภาพในกรอบที่ 1"
-
-#~ msgid "Enter command to execute in 1st frame"
-#~ msgstr "แสดง คำสั่งทำงาน ในกรอบที่ 1"
-
-#~ msgid "Enter raster map to display in 2nd frame"
-#~ msgstr "แสดงแผนที่เชิงภาพในกรอบที่ 2"
-
-#~ msgid "Enter command to execute in 2nd frame"
-#~ msgstr "แสดง คำสั่งทำงาน ในกรอบที่ 2"
-
-#~ msgid "How to split display"
-#~ msgstr "จะตัดจออย่างไร"
-
-#~ msgid "Displays thematic vectormap"
-#~ msgstr "แสดง thematic vectormap"
-
-#~ msgid "display, legend"
-#~ msgstr "แสดง, สัญลักษณ์"
-
-#~ msgid "Vector map to display thematically"
-#~ msgstr "แผนที่เชิงเส้นที่แสดง  thematically"
-
-#~ msgid "Theme_prefs"
-#~ msgstr "Theme_prefs"
-
-#~ msgid "Vector map type"
-#~ msgstr "ชนิด แผนที่เชิงเส้น"
-
-#~ msgid "Attribute column to use for thematic display (must be numeric)"
-#~ msgstr "column ที่จะใช้ทำ  thematic (ต้องเป็นตัวเลข)"
-
-#~ msgid "Type of thematic display"
-#~ msgstr "ชนิดการแสดงผล  thematic"
-
-#~ msgid "Thematic divisions of data for display"
-#~ msgstr "การแบ่งข้อมูล Thematic เพื่อแสดงผล"
-
-#~ msgid ""
-#~ "Break points for custom breaks option. Separate values by spaces. (0 10 "
-#~ "20 30 ...)"
-#~ msgstr "Break points สำหรับ เงื่อนไขกำหนดเอง คั่น ค่าด้วยช่องว่าง  (0 10 20 30 ...)"
-
-#~ msgid "Layer to use for thematic display"
-#~ msgstr "ชั้นข้อมูลที่จะใช้แสดง  thematic"
-
-#~ msgid "Points"
-#~ msgstr "จุด"
-
-#~ msgid "Vector point icon for point data"
-#~ msgstr " icon เชิงเส้น สำหรับข้อมูล จุด"
-
-#~ msgid ""
-#~ "Icon size for point data (minimum icon size/line width for graduated "
-#~ "points/lines)"
-#~ msgstr "ขนาดของ  icon (ขนาดเล็กสุด size/line ความหนาเพื่อแบ่ง points/lines)"
-
-#~ msgid "Maximum icon size/line width for graduated points and lines"
-#~ msgstr "ขนาดใหญ่สุด size/line ความหนาเพื่อแบ่ง points และ lines"
-
-#~ msgid "Number of classes for interval theme (integer)"
-#~ msgstr "จำนวน classes สำหรับการแบ่งช่วง (จำนวนเต็ม)"
-
-#~ msgid ""
-#~ "Color scheme for graduated color mapping (select 'single_color' for "
-#~ "graduated point/line display)"
-#~ msgstr "แบบสีสำหรับ ไล่สีแผนที่(เลือก 'single_color'สำหรับแบ่ง point/line เพื่อแสดงผล)"
-
-#~ msgid ""
-#~ "Color for graduated points map (grass named color or R:G:B triplet). Set "
-#~ "color scheme to single color."
+#~ "d;use the display library basic functions (features: polylines);c;use the "
+#~ "display library clipping functions (features: clipping);l;use the display "
+#~ "library culling functions (features: culling, polylines)"
 #~ msgstr ""
-#~ "สีสำหรับแบ่ง แผนที่แบบจุด (ชื่อสีของ grass  หรือ R:G:B ). กำหนดแบบสีเป็นแบบสีเดียว"
-
-#~ msgid ""
-#~ "Color for graduated lines or point/area outlines (grass named color or R:"
-#~ "G:B triplet). Set color scheme to single color."
-#~ msgstr ""
-#~ "สีสำหรับแบ่ง แผนที่แบบเส้น หรือ เส้นขอบ จุด/พื้นที่  (ชื่อสีของ grass  หรือ R:G:B ). "
-#~ "กำหนดแบบสีเป็นแบบสีเดียว"
-
-#~ msgid ""
-#~ "Beginning color for custom color gradient. Must be expressed as R:G:B "
-#~ "triplet."
-#~ msgstr "สีเริ่มต้น สำหรับ สีกำหนดเอง ต้องอยู่ในรูปแบบ  R:G:B"
-
-#~ msgid ""
-#~ "Ending color for custom color gradient. Must be expressed as R:G:B triplet"
-#~ msgstr "สีปลาย สำหรับ สีกำหนดเอง ต้องอยู่ในรูปแบบ  R:G:B"
-
-#~ msgid "Misc"
-#~ msgstr "อื่นๆ"
-
-#~ msgid "Select x11 display monitor for legend"
-#~ msgstr "เลือก จอแสดงผล  x11 สำหรับ สัญลักษณ์"
-
-#~ msgid "Save thematic map commands to group file for GIS Manager"
-#~ msgstr "บันทึกคำสั่ง แผนที่  thematic ไปที่ไฟล์ กลุ่ม สำหรับตัวจัดการ GIS"
-
-#~ msgid ""
-#~ "Root for the name of psmap instruction files to be in current directory "
-#~ "(if not set, no psmap instruction files will be created)"
-#~ msgstr ""
-#~ "Root สำหรับชื่อของไฟล์  psmap instruction จะต้องอยู่ใน  directory (ถ้าไม่ได้กำหนด, "
-#~ "จะไม่มีการสร้างไฟล์ psmap instruction)"
-
-#~ msgid "Name of group file where thematic map commands will be saved"
-#~ msgstr "ชื่อของไฟล์กลุ่ม ที่จะบันทึกคำสั่ง แผนที่ thematic"
-
-#~ msgid "Create graphic legend in x11 display monitor"
-#~ msgstr "สร้างสัญลักษณ์ในจอแสดงผล  x11"
-
-#~ msgid "Only draw fills (no outlines) for areas and points"
-#~ msgstr "เติมสีเท่านั้น (ไม่มีเส้นขอบ) สำหรับรูปปิดและจุด"
-
-#~ msgid "Update color values to GRASSRGB column in attribute table"
-#~ msgstr "ปรับปรุงค่าสีไปเป็น column GRASSRGB ในตาราง"
-
-#~ msgid "Output legend for GIS Manager (for scripting use only)"
-#~ msgstr "สัญลักษณ์ผลลัพธ์ สำหรับตัวจัดการ GIS (ใช้กับ scripting เท่านั้น)"
-
-#~ msgid "Use math notation brackets in legend"
-#~ msgstr "ใช้ปีกกาหมายเหตุ ในสัญลักษณ์"
-
-#~ msgid "Apply regular expressions and wildcards to g.list"
-#~ msgstr "ใช้ regular expressions และ wildcards กับ g.list"
-
-#~ msgid "Mapset(s) to list (default: current mapset search path)"
-#~ msgstr "แสดงรายการ ชุดแผนที่  (ค่าตั้งต้น: ใน path ของชุดแผนที่ที่กำลังทำงาน)"
-
-#~ msgid "Output separator (default: newline)"
-#~ msgstr "ตัวคั่น (ค่าตั้งต้น:  newline)"
-
-#~ msgid "Apply regular expressions and wildcards to g.remove"
-#~ msgstr "ใช้ regular expressions และ  wildcards กับ g.remove"
-
-#~ msgid "Raster to remove"
-#~ msgstr "ภาพ ที่จะเอาออก"
-
-#~ msgid "3d raster to remove"
-#~ msgstr "ภาพ 3d ที่จะเอาออก"
-
-#~ msgid "Vector to remove"
-#~ msgstr "ข้อมูลเชิงเส้น ที่จะเอาออก"
-
-#~ msgid "Region to remove"
-#~ msgstr "ขอบเขต ที่จะเอาออก"
-
-#~ msgid "Label to remove"
-#~ msgstr "แถบข้อความ ที่จะเอาออก"
-
-#~ msgid "3dview to remove"
-#~ msgstr "3dview  ที่จะเอาออก"
-
-#~ msgid "Group to remove"
-#~ msgstr "กลุ่ม ที่จะเอาออก"
-
-#~ msgid ""
-#~ "displays spectral response at user specified locations in group or images"
-#~ msgstr "แสดง spectral response ที่ผู้ใช้กำหนด ตำแหน่งใน กลุ่ม หรือ ภาพ"
-
-#~ msgid "imagery, raster, multispectral"
-#~ msgstr "ภาพ, แผนที่เชิงภาพ, multispectral"
-
-#~ msgid "group input"
-#~ msgstr "กลุ่มผลลัพธ์"
-
-#~ msgid "raster input maps"
-#~ msgstr "แผนที่เชิงภาพที่จะนำเข้า"
-
-#~ msgid "write output to PNG image"
-#~ msgstr "เขียบผลลัพธ์แบบ  PNG"
-
-#~ msgid "Use image list and not group"
-#~ msgstr "ใช้รายการภาพ ไม่มีกลุ่ม"
-
-#~ msgid "Select multiple points"
-#~ msgstr "เลือกหลายจุด"
-
-#~ msgid "label with coordinates instead of numbering"
-#~ msgstr "แถบข้อความ ของค่าพิกัด แทนที่จะเป็นตัวเลข"
-
-#~ msgid "Keep band numbers instead of using band color names."
-#~ msgstr "เก็บจำนวน band แทนที่จะใช้ชื่อสี"
-
-#~ msgid "Calculate new raster map from a r.mapcalc expression."
-#~ msgstr "คำนวน แผนที่เชิงภาพใหม่ จาก ชุดคำสั่ง  r.mapcalc"
-
-#~ msgid "A"
-#~ msgstr "A"
-
-#~ msgid "B"
-#~ msgstr "B"
-
-#~ msgid "C"
-#~ msgstr "C"
-
-#~ msgid "D"
-#~ msgstr "D"
-
-#~ msgid "E"
-#~ msgstr "E"
-
-#~ msgid "F"
-#~ msgstr "F"
-
-#~ msgid "Formula (e.g. A-B or A*C+B)"
-#~ msgstr "สูตร (e.g. A-B or A*C+B)"
-
-#~ msgid "Show help"
-#~ msgstr "แสดง ความช่วยเหลือ"
-
-#~ msgid "Expert mode (enter a set of r.mapcalc expressions)"
-#~ msgstr "โหมดผู้เชี่ยวชาญ (ใส่ชุดคำสั่ง r.mapcalc)"
-
-#~ msgid "Do not overwrite existing map"
-#~ msgstr "อยู่เขียนทับ แผนที่ที่มีอยู่แล้ว"
-
-#~ msgid "Exports GRASS raster into GDAL supported formats."
-#~ msgstr "ส่งออก แผนที่เชิงภาพ GRASS ไปที่ รูปแบบ ที่ GDAL รองรับ"
-
-#~ msgid "Region sensitive output"
-#~ msgstr "ผลลัพธ์ Region sensitive"
-
-#~ msgid ""
-#~ "Creation option to the output format driver. Multiple options may be "
-#~ "listed"
-#~ msgstr "สร้างเงื่อนไขสำหรับ ตัวขับรูปแบบผลลัพธ์ อาจต้องใช้หลายเงื่อนไข"
-
-#~ msgid "Output field seperator"
-#~ msgstr "ตัวคั่น field ของผลลัพธ์"
-
-#~ msgid "calculates univariate statistics from a GRASS raster map"
-#~ msgstr "คำนวน  univariate statistics จาก แผนที่เชิงภาพ ของ GRASS"
-
-#~ msgid "extended statistics (quartiles and percentile)"
-#~ msgstr "extended statistics (quartiles and percentile)"
-
-#~ msgid "Percentile to calculate (requires -e flag)"
-#~ msgstr "Percentile ที่จะคำนวน (ต้องการ -e flag)"
-
-#~ msgid "Calculates new grid3D volume from r3.mapcalc expression."
-#~ msgstr "คำนวนค่า grid3D ใหม่ จาก ประโยค  r3.mapcalc"
-
-#~ msgid "A (grid3D file)"
-#~ msgstr "A  (grid3D ไฟล์)"
-
-#~ msgid "B (grid3D file)"
-#~ msgstr "B  (grid3D ไฟล์)"
-
-#~ msgid "C (grid3D file)"
-#~ msgstr "C  (grid3D ไฟล์)"
-
-#~ msgid "D (grid3D file)"
-#~ msgstr "D  (grid3D ไฟล์)"
-
-#~ msgid "E (grid3D file)"
-#~ msgstr "E  (grid3D ไฟล์)"
-
-#~ msgid "F (grid3D file)"
-#~ msgstr "F  (grid3D ไฟล์)"
-
-#~ msgid "Name for output grid3D volume"
-#~ msgstr "ชื่อผลลัพธ์ ค่า grid3D"
-
-#~ msgid "Expert mode (enter a set of r3.mapcalc expressions)"
-#~ msgstr "โหมดผู้เชี่ยวชาญ (ใส่ชุดประโยค r3.mapcalc)"
-
-#~ msgid "%s: [%s] not found"
-#~ msgstr "ไม่พบ %s: [%s]"
-
-#~ msgid "GIS Coincidence Tabulation Facility\n"
-#~ msgstr "GIS Coincidence Tabulation Facility\n"
-
-#~ msgid ""
-#~ "This utility will allow you to compare the coincidence of two map layers\n"
-#~ msgstr "เครื่องมือนี้จะทำให้คุณเปรียบเที่ยบ ความสอดคล้อง ของ 2 ชั้นข้อมูล\n"
-
-#~ msgid "The report can be made in one of 8 units."
-#~ msgstr "สามารถสร้าง 1 รายงาน ของ 8 รายงาน"
-
-#~ msgid "Please choose a unit by entering one of the following letter codes:"
-#~ msgstr "โปรดเลือกหน่วย โดยใส่ 1 รหัสตัวอักษร ตามรายการนี้"
-
-#~ msgid "     'c': cells"
-#~ msgstr "     'c': cells"
-
-#~ msgid "     'p': percent cover of region"
-#~ msgstr "     'p': percent cover of region"
-
-#~ msgid "     'x': percent of '%s' category (column)"
-#~ msgstr "     'x': percent of '%s' category (column)"
-
-#~ msgid "     'y': percent of '%s' category (row)"
-#~ msgstr "     'y': percent of '%s' category (row)"
-
-#~ msgid "     'a': acres"
-#~ msgstr "     'a': acres"
-
-#~ msgid "     'h': hectares"
-#~ msgstr "     'h': hectares"
-
-#~ msgid "     'k': square kilometers"
-#~ msgstr "     'k': ตาราง กิโลเมตร"
-
-#~ msgid "     'm': square miles\n"
-#~ msgstr "     'm': square miles\n"
-
-#~ msgid "     'Q': quit"
-#~ msgstr "     'Q': ออก"
-
-#~ msgid "Do you wish to save this report in a file? (y/n) [n] "
-#~ msgstr "คุณต้องการบันทึก รายงานนี้ลงไฟล์หรือไม่? (y/n) [n] "
-
-#~ msgid ""
-#~ "Enter the file name or path\n"
-#~ "> "
-#~ msgstr ""
-#~ "ใส่ชื่อไฟล์ หรือ path\n"
-#~ "> "
-
-#~ msgid "'%s' being saved\n"
-#~ msgstr "'%s' จะถูกบันทึก\n"
-
-#~ msgid ""
-#~ "Do you wish to print this report (requires Unix lpr command)? (y/n) [n] "
-#~ msgstr "คุณต้องการจะพิมพ์รายงาน หรือไม่ (ต้องการคำสั่ง  Unix lpr)? (y/n) [n] "
-
-#~ msgid ""
-#~ "Do you wish it printed in 80 or 132 columns?\n"
-#~ "> "
-#~ msgstr ""
-#~ "คุณต้องการจะพิมพ์รายงานแบบ 80 หรือ 132 columns?\n"
-#~ "> "
-
-#~ msgid ""
-#~ "Do you wish to run this report with a different unit of measure? (y/n) "
-#~ "[y] "
-#~ msgstr "คุณต้องการให้ รายงาน ทำงาน ด้วย หน่วยวัดที่แตกต่าง หรือไม่? (y/n) [y] "
-
-#~ msgid "Interactively select End-Points"
-#~ msgstr "เลือก End-Points แบบ โต้ตอบ"
-
-#~ msgid "Use mouse to select Start Point\n"
-#~ msgstr "ใช้ เม้าส์ เพื่อเลือก จุดเริ่มต้น\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Use mouse to draw profile line\n"
-#~ msgstr ""
-#~ "\n"
-#~ "ใช้ เม้าส์ เพื่อเลือก วาดเส้น profile\n"
-
-#~ msgid "Buttons:\n"
-#~ msgstr "ปุ่ม:\n"
-
-#~ msgid "Left:   Mark next point\n"
-#~ msgstr "ซ้าย:   กำหนดจุดต่อไป\n"
-
-#~ msgid "Middle: Mark next point\n"
-#~ msgstr "กลาง:   กำหนดจุดต่อไป\n"
-
-#~ msgid ""
-#~ "Right:  Finish profile and exit\n"
-#~ "\n"
-#~ msgstr "ขวา:   กำหนดจุดจบ และ ออก\n"
-
-#~ msgid "elevin raster map <%s> not found"
-#~ msgstr "ไม่พบ แผนที่เชิงภาพ elevin <%s>"
-
-#~ msgid "aspin raster map <%s> not found"
-#~ msgstr "ไม่พบ แผนที่เชิงภาพ aspin <%s>"
-
-#~ msgid "linkein raster map <%s> not found"
-#~ msgstr "ไม่พบ แผนที่เชิงภาพ linkein <%s>"
-
-#~ msgid "albedo raster map <%s> not found"
-#~ msgstr "ไม่พบ แผนที่เชิงภาพ albedo <%s>"
-
-#~ msgid "latin raster map <%s> not found"
-#~ msgstr "ไม่พบ แผนที่เชิงภาพ latin <%s>"
-
-#~ msgid "coefbh raster map <%s> not found"
-#~ msgstr "ไม่พบ แผนที่เชิงภาพ coefbh <%s>"
-
-#~ msgid "coefdh raster map <%s> not found"
-#~ msgstr "ไม่พบ แผนที่เชิงภาพ coefdh <%s>"
-
-#~ msgid "No clump map specified and MASK not set."
-#~ msgstr "ไม่ได้ระบุ แผนที่ clump และยังไม่ได้กำหนด MASK"
-
-#~ msgid "Unable to find data map"
-#~ msgstr "ไม่สามารถหา ข้อมูลแผนที่"
-
-#~ msgid "Unable to find clump map"
-#~ msgstr "ไม่สามารถหา แผนที่ clump"
-
-#~ msgid "Memory allocation error"
-#~ msgstr "การกำหนด หน่วยความจำผิดพลาด"
-
-#~ msgid "Saving new map"
-#~ msgstr "กำลังบันทึก แผนที่"
-
-#~ msgid "Cell area: %f"
-#~ msgstr "Cell area: %f"
-
-#~ msgid "Terrain raster map (DEM)"
-#~ msgstr "แผนที่เชิงภาพ Terrain (DEM)"
-
-#~ msgid "Output raster map with lake"
-#~ msgstr "แผนที่เชิงภาพ ผลลัพธ์ ที่มี  lake"
-
-#~ msgid "Cannot write lake raster map <%s>!"
-#~ msgstr "ไม่สามารถ อ่าน แผนที่เชิงภาพ  lake <%s>!"
-
-#~ msgid "Terrain raster map <%s> not found!"
-#~ msgstr "ไม่พบ แผนที่เชิงภาพ Terrain <%s>!"
-
-#~ msgid "Cannot open terrain raster map <%s@%s>!"
-#~ msgstr "ไม่สามารถเปิด แผนที่เชิงภาพ Terrain <%s@%s>!"
-
-#~ msgid "Seed map <%s> not found!"
-#~ msgstr "ไม่พบ แผนที่ Seed <%s>!"
-
-#~ msgid "Cannot open seed map <%s@%s>!"
-#~ msgstr "ไม่สามารถเปิด แผนที่ Seed <%s@%s>!"
-
-#~ msgid "Failure to allocate memory for row pointers"
-#~ msgstr "กำหนด หน่วยความจำ ล้มเหลว สำหรับ row pointers"
-
-#~ msgid "Loading maps: "
-#~ msgstr "กำลังอ่านแผนที่: "
-
-#~ msgid "Error reading terrain raster map. Probably broken file."
-#~ msgstr "ข้อผิดพลาด ขณะอ่าน แผนที่เชิงภาพ terrain. บางทีอาจเกิดจากไฟล์"
-
-#~ msgid "Error reading seed raster map. Probably broken file."
-#~ msgstr "ข้อผิดพลาด ขณะอ่าน แผนที่เชิงภาพ seed. บางทีอาจเกิดจากไฟล์"
-
-#~ msgid "Cannot write lake raster map <%s@%s>!"
-#~ msgstr "ไม่สามารถเขียน แผนที่เชิงภาพ lake <%s@%s>!"
-
-#~ msgid ""
-#~ "Starting lake filling at level of %8.4f in %d passes. \n"
-#~ "Percent done:"
-#~ msgstr ""
-#~ "เริ่มต้นเติม lake ที่ระดับ %8.4f ใน %d . \n"
-#~ "เปอร์ฌซ็นต์ ที่ทำแล้ว:"
-
-#~ msgid "Pass: %d\n"
-#~ msgstr "ผ่าน: %d\n"
-
-#~ msgid "Error writing color file for <%s@%s>!"
-#~ msgstr "ผิดพลาด ขณะ เขียน ไฟล์สี สำหรับ <%s@%s>!"
-
-#~ msgid "All done."
-#~ msgstr "ทำทั้งหมดแล้ว"
-
-#~ msgid "%s: base raster map not found"
-#~ msgstr "%s: ไม่พบแผนที่เชิงภาพฐาน"
-
-#~ msgid "%s: cover raster map not found"
-#~ msgstr "%s: ไม่พบแผนที่เชิงภาพ cover"
-
-#~ msgid "%s: base map and output map must be different"
-#~ msgstr "%s: แผนที่เชิงฐาน และ แผนผลลัพธ์  จะต้องแตกต่างกัน"
-
-#~ msgid "Name of the vector points map with x,y locations"
-#~ msgstr "ชื่อของ แผนที่จุด เชิงภาพ กับตำแนหน่ง  x,y"
-
-#~ msgid "Number of time iterations (sec.)"
-#~ msgstr "เวลาของการวนซ้ำ (วินาที)"
-
-#~ msgid "Multiscale simulation"
-#~ msgstr "การจำลองแบบ Multiscale"
-
-#~ msgid "Running MAY 10 version"
-#~ msgstr "กำลังทำงาน รุ่น MAY 10"
-
-#~ msgid "Name of the elevation raster map, same units as N,E: [m] or [ft] "
-#~ msgstr "ชื่อของ แผนที่ความสูงเชิงภาพ, หน่วยเหมือนกับ N,E: [เมตร] หรือ [ฟุต] "
-
-#~ msgid "Name of the x-derivatives raster map [m/m] or [ft/ft]"
-#~ msgstr "ชื่อของ แผนที่  x-derivatives เชิงภาพ, [เมตร/เมตร] หรือ [ฟุต/ฟุต] "
-
-#~ msgid "Name of the y-derivatives raster map [m/m] or [ft/ft]"
-#~ msgstr "ชื่อของ แผนที่  y-derivatives เชิงภาพ, [เมตร/เมตร] หรือ [ฟุต/ฟุต] "
-
-#~ msgid "Calculates <simple> index on a raster map"
-#~ msgstr "คำนวน <ตัวอย่าง> ดัชนีบนแผนที่เชิงภาพ"
-
-#~ msgid "raster, landscape structure analysis, job launcher"
-#~ msgstr "แผนที่เชิงภาพ, landscape structure analysis, job launcher"
-
-#~ msgid "Quietly"
-#~ msgstr "อย่างเงียบ"
-
-#~ msgid "Bilinear interpolation utility for raster map layers."
-#~ msgstr "เครื่องมือ Bilinear interpolation สำหรับ ชั้นข้อมูลแผนที่เชิงภาพ"
-
-#~ msgid ""
-#~ "Specific input value to be assigned to the north and/or south poles for "
-#~ "longitude-latitude grids"
-#~ msgstr "ค่าที่ใส่จะถูกใช้เป็น ค่าแกน เหนือ และ/หรือ ใต้ สำหรับกริด แลต-ลอง"
-
-#~ msgid "This module is deprecated. Please use 'r.resamp.interp' instead."
-#~ msgstr "โมดูล คือ  deprecated โปรดใช้  'r.resamp.interp' แทน"
-
-#~ msgid "Illegal output file name <%s>"
-#~ msgstr "ชื่อไฟล์ผลลัพธ์ ไม่ถูกต้อง <%s>"
-
-#~ msgid ""
-#~ "The '-q' flag is superseded and will be removed in future. Please use '--"
-#~ "quiet' instead"
-#~ msgstr "ใช้  '-q' แทน และจะถูกนำออกในอนาคต. โปรดใช้ '--quiet' แทน"
-
-#~ msgid "Base map and output map <%s> must be different"
-#~ msgstr "แผนที่ฐาน และ แผนที่ผลลัพธ์ <%s> จะต้องมีความแตกต่าง"
-
-#~ msgid "Not enough memory for zero_array_cell"
-#~ msgstr "หน่วยความจำ ไม่พอ สำหรับ zero_array_cell"
-
-#~ msgid "Not enough disk space -- cannot write files"
-#~ msgstr "หน่วยความจำ ไม่พอ -- ไม่สามารถเขียนไฟล์ได้"
-
-#~ msgid "Raster input maps(s)"
-#~ msgstr "แผนที่เชิงภาพ เพื่อนำเข้า"
-
-#~ msgid "Output file name"
-#~ msgstr "ชื่อไฟล์ ผลลัพธ์"
-
-#~ msgid "%s: can't read fp range for [%s]"
-#~ msgstr "%s: ไม่สามารถอ่านช่วง fp สำหรับ [%s]"
-
-#~ msgid ""
-#~ "Not enough data columns. Incorrect delimiter or column number?\n"
-#~ "[%s]"
-#~ msgstr ""
-#~ "จำนวน column ไม่พอ. จุดทศนิยม หรือ จำนวน columnr?\n"
-#~ "[%s]"
-
-#~ msgid ""
-#~ "Raster map [%s] already exists.\n"
-#~ "Please try another."
-#~ msgstr ""
-#~ "แผนที่เชิงภาพ [%s] มีอยู่แล้ว.\n"
-#~ "โปรดลองอันอื่น"
-
-#~ msgid "Path to rules file"
-#~ msgstr "Path ของไฟล์ rules"
-
-#~ msgid "Enter rules interactively"
-#~ msgstr "ใส่ rule แบบโต้ตอบ"
-
-#~ msgid ""
-#~ "Interactive mode is incompatible with \"color\", \"rules\", and \"raster"
-#~ "\" options"
-#~ msgstr "โหมดโต้ตอบ ใช้ไม่ได้กับเงื่อนไข  \"color\", \"rules\", และ \"raster\""
-
-#~ msgid "RGB raster map <%s> not found"
-#~ msgstr "ไม่พบ แผนที่เชิงภาพ RGB <%s>"
-
-#~ msgid "Cannot create RGB data, please provide three maps [r,g,b]"
-#~ msgstr "ไม่สามารถสร้าง ข้อมูล RGB , โปรดใส่ แผนที่  [r,g,b]"
-
-#~ msgid "Vector cell map <%s> not found"
-#~ msgstr "ไม่พบ แผนที่ Vector cell <%s>"
-
-#~ msgid "Cannot create vector data, please provide three maps [x,y,z]"
-#~ msgstr "ไม่สามารถสร้าง ข้อมูลแผนที่เชิงเส้น , โปรดใส่ แผนที่  [x,y,z]"
-
-#~ msgid "Which raster map needs a color table"
-#~ msgstr "แผนที่เชิงภาพไหน ต้องการ ตารางสี"
-
-#~ msgid "Edit header for [%s]\n"
-#~ msgstr "แก้ไข header สำหรับ [%s]\n"
-
-#~ msgid "[%s] cannot be found!"
-#~ msgstr "ไม่พบ [%s]!"
-
-#~ msgid "For what layer shall the header file be edited? "
-#~ msgstr "ชั้นข้อมูลไหน ที่จะแก้ไข header ไฟล์"
-
-#~ msgid "[%s] is a reclass of [%s] - cannot edit header! Run support on [%s]."
-#~ msgstr "[%s] คือ reclass ของ [%s] - ไม่สามารแก้ไข header! สั่ง support กับ [%s]."
-
-#~ msgid "[%s] is a reclass of [%s in %s] - cannot edit header!"
-#~ msgstr "[%s] คือ reclass ของ [%s ใน %s] - ไม่สามารแก้ไข header!"
-
-#~ msgid "Cannot open raster map [%s]!"
-#~ msgstr "ไม่สามารถเปิด แผนที่เชิงภาพ [%s]!"
-
-#~ msgid "Raster file [%s] is empty."
-#~ msgstr "ไฟล์แผนที่เชิงภาพ [%s] ว่างเปล่า."
-
-#~ msgid "cellhd compression: %d\n"
-#~ msgstr "การบีบอัด cellhd : %d\n"
-
-#~ msgid "3.0 compression %sindicated\n"
-#~ msgstr "3.0 compression %sindicated\n"
-
-#~ msgid "Pre 3.0 compression %sindicated\n"
-#~ msgstr "Pre 3.0 compression %sindicated\n"
-
-#~ msgid "[%s] appears to be compressed. Is it? "
-#~ msgstr "[%s] มันถูกบีบอัด. ใช่ไหมt? "
-
-#~ msgid "Please indicate the type of compression:\n"
-#~ msgstr "โปรดระบุ ชนิดของการบีบอัด:\n"
-
-#~ msgid "  1. Pre 3.0 compression\n"
-#~ msgstr "  1. Pre 3.0 compression\n"
-
-#~ msgid "  2. 3.0 compression\n"
-#~ msgstr "  2. 3.0 compression\n"
-
-#~ msgid "The header for [%s] says the file is not compressed. "
-#~ msgstr "Header lesiy[ [%s] บอกว่าไฟล์ไม่ได้ถูกบีบอัด. "
-
-#~ msgid "The file appears to be compressed.\n"
-#~ msgstr "ไฟล์ถูกบีบอัด\n"
-
-#~ msgid "Most likely the header is wrong, but I want you to decide.\n"
-#~ msgstr "ดูเหมือนว่า  header ผิด, คุณต้องระบุ.\n"
-
-#~ msgid "The header for [%s] says the file is compressed. "
-#~ msgstr "Header สำหรับ [%s] บอกว่าไฟล์ถูกบีบอัด. "
-
-#~ msgid "The file does NOT appear to be compressed.\n"
-#~ msgstr "ไฟล์ไม่ได้ถูกบีบอัด\n"
-
-#~ msgid ""
-#~ "Header indicates %d row%s in the raster map, but the actual file format "
-#~ "indicates %d row%s"
-#~ msgstr "Header ชี้ไปที่ %d row%s ในแผนที่เชิงภาพ, แต่ รปแบบของไฟล์  ชี้ไปที่  %d row%s"
-
-#~ msgid "Unable to write header for [%s]."
-#~ msgstr "ไม่สามารถเขียน header สำหรับ [%s]."
-
-#~ msgid "Header for raster map [%s] updated."
-#~ msgstr "Header สำหรับแผนที่เชิงภาพ [%s] ถูกปรับปรุงแล้ว"
-
-#~ msgid ""
-#~ "\n"
-#~ "hit RETURN to continue -->"
-#~ msgstr ""
-#~ "\n"
-#~ "กด RETURN เพื่อทำงานต่อ -->"
-
-#~ msgid "Please enter the following information for [%s]:"
-#~ msgstr "โปรดใส่ ข้อมูลสำหรับ [%s]:"
-
-#~ msgid "        Number of rows"
-#~ msgstr "        จำนวนของ rows"
-
-#~ msgid "        Number of cols"
-#~ msgstr "        จำนวนของ cols"
-
-#~ msgid "        Floating point map"
-#~ msgstr "        แผนที่ Floating point"
-
-#~ msgid "rows * cols * bytes per cell must be same as file size (%lu)"
-#~ msgstr "rows * cols * bytes ต่อ cell ต้องมีขนาดเท่าไฟล์ (%lu)"
-
-#~ msgid "If you need help figuring them out, just hit ESC"
-#~ msgstr "ถ้าคุณต้องการ ความช่วยเหลือ, เพียงกด ESC"
-
-#~ msgid "** Negative values not allowed!"
-#~ msgstr "** ไม่รับค่าลบ!"
-
-#~ msgid "** Positive values only please!"
-#~ msgstr "** รับค่าบวกเท่านั้น!"
-
-#~ msgid "Which raster map needs an updated history? "
-#~ msgstr "แผนที่เชิงภาพไหนที่ต้องการปรับปรุงประวัติ? "
-
-#~ msgid "Raster file [%s] not found. Exiting."
-#~ msgstr "ไม่พบแผนที่เชิงภาพ [%s] กำลังออก"
-
-#~ msgid "History file for [%s] updated."
-#~ msgstr "ไฟล์ ประวัติ สำหรับ [%s] ถูกปรับปรุงแล้ว"
-
-#~ msgid "History file for [%s] not updated."
-#~ msgstr "ไฟล์ ประวัติ สำหรับ [%s] ไม่ได้ถูกปรับปรุง"
-
-#~ msgid ""
-#~ "\n"
-#~ "Hit RETURN to continue -->"
-#~ msgstr ""
-#~ "\n"
-#~ "กด RETURN เพื่อดำเนินการต่อ -->"
-
-#~ msgid "Edit header for [%s]? "
-#~ msgstr "แก้ไข header สำหรับ [%s]? "
-
-#~ msgid ""
-#~ "\n"
-#~ "NOTE: [%s] is a reclass of [%s in %s]"
-#~ msgstr ""
-#~ "\n"
-#~ "NOTE: [%s] เป็น reclass ของ [%s ใน %s]"
-
-#~ msgid "Canceling from edit header."
-#~ msgstr "กำลังยกเลิกจากการแก้ไข  header"
-
-#~ msgid "Edit the category file for [%s]? "
-#~ msgstr "แก้ไข ไฟล์หมวดหมู่สำหรับ  [%s]? "
-
-#~ msgid "Create/Update the color table for [%s]? "
-#~ msgstr "สร้าง/ปรับปรุง ตารางสีสำหรับ [%s]? "
-
-#~ msgid "Edit the history file for [%s]? "
-#~ msgstr "แก้ไข ไฟล์ประวัติสำหรับ [%s]? "
-
-#~ msgid ""
-#~ "\n"
-#~ "The null file for [%s] may indicate that some cells contain\n"
-#~ " no data. If the null file for [%s] doesn't exist, zero cells in\n"
-#~ " it are treated by GRASS application programs as no data."
-#~ msgstr ""
-#~ "\n"
-#~ "Null ไฟล์ สำหรับ [%s] อาจะชี้ว่าบาง cell มี\n"
-#~ "no data. ถ้า Null ไฟล์ สำหรับ [%s] ไม่มีอยู่, 0 cells ใน\n"
-#~ "มันจะถูกตีความโดย GRASS ว่าเป็น no data."
-
-#~ msgid ""
-#~ "\n"
-#~ "Do you want to create/reset the null file for [%s] so that null cell "
-#~ "values are considered valid data? "
-#~ msgstr ""
-#~ "\n"
-#~ "คุณต้องการ สร้าง/ล้าง Null ไฟล์สำหรับ [%s] ดังนั้น ค่า Null cell จะตีว่าเป็นข้อมูล? "
-
-#~ msgid ""
-#~ "\n"
-#~ "Do you want to delete the null file for [%s]\n"
-#~ "(all zero cells will then be considered no data)? "
-#~ msgstr ""
-#~ "\n"
-#~ "คุณต้องการที่จะลบ Null ไฟล์ สำหรับ [%s]\n"
-#~ "หรือไม่(0 cell ทั้งหมด จะตีความเป็นข้อมูล)? "
-
-#~ msgid "Which vector map needs updated categories?"
-#~ msgstr "แผนที่เชิงเส้นไหนที่ต้องการ ปรับปรุง หมวดหมู่?"
-
-#~ msgid "Which raster map needs updated categories?"
-#~ msgstr "แผนที่เชิงภาพไหนที่ต้องการ ปรับปรุง หมวดหมู่?"
-
-#~ msgid "%s map <%s> not found"
-#~ msgstr "ไม่พบ %s แผนที่ <%s> "
-
-#~ msgid "Category file for <%s> not updated"
-#~ msgstr "ไฟล์หมวดหมู่สำหรับ <%s> ไม่ได้ถูกปรับปรุง"
-
-#~ msgid "Category file for <%s> updated"
-#~ msgstr "ไฟลืหมวดหมู่ สำหรับ  <%s> ปรับปรุงแล้ว"
-
-#~ msgid "Title, in quotes"
-#~ msgstr "ชื่อเรื่อง, in quotes"
-
-#~ msgid "Quiet - Do not show progress"
-#~ msgstr "แบบเงียบ - ไม่ต้องแสดงการทำงาน"
-
-#~ msgid "Suppress single crossing error messages"
-#~ msgstr "ข้อผิดพลาด Suppress single crossing"
-
-#~ msgid ""
-#~ "The '-q' and '-n' flag is superseded and will be removed in future. "
-#~ "Please use '--quiet' instead."
-#~ msgstr "'-q' และ '-n' คือ การแทรก และจะถูกนำออกในอนาคต. โปรดใช้ '--quiet' แทน"
-
-#~ msgid "Unable to find starting vector <%s> "
-#~ msgstr "ไม่สามารถหา starting vector <%s> "
-
-#~ msgid "Unable to find stop vector <%s>"
-#~ msgstr "ไม่สามารถหา stop vector <%s>"
-
-#~ msgid "Raster output map <%s> not found (no start_points given)"
-#~ msgstr "ไม่พบ แผนที่ผลลัพธ์เชิงภาพ <%s> (ไม่ได้ระบุ start_points)"
-
-#~ msgid "Memory allocation error on reading start points from raster map %s"
-#~ msgstr "กำรกำหนดหน่วยความจำ ผิดพลาด ขณะอ่าน start points จาก แผนที่เชิงภาพ %s"
-
-#~ msgid "Apply filter only to zero data values"
-#~ msgstr "ใช้ filterเฉพาะ ค่าข้อมูลที่เป็น 0"
-
-#~ msgid "G_put_raster_row failed (file system full?)"
-#~ msgstr "G_put_raster_row ล้มเหลว (ไฟล์ระบบเต็ม?)"
-
-#~ msgid "Run verbosly"
-#~ msgstr "ทำงานแบบแสดง รายละเอียด"
-
-#~ msgid "Run VERBOSELY"
-#~ msgstr "ทำงาน แบบแสดงรายละเอียด"
-
-#~ msgid "Cell file not found"
-#~ msgstr "ไม่พบ Cell ไฟล์"
-
-#~ msgid "Threshold distance set to %g map units (based on 2D resolution)"
-#~ msgstr "กำหนดระยะ Threshold ไปที่  %g หน่วยแผนที่ (ขึ้นอยู่กับความละเอียด 2มิติ)"
-
-#~ msgid "Vector map <%s> not found in the current mapset"
-#~ msgstr "ไม่พบแผนที่เชิงเส้น <%s> ในชุดแผนที่ปัจจุบัน"
-
-#~ msgid "Cannot execute: %s"
-#~ msgstr "ไม่สามารถทำงาน: %s"
-
-#~ msgid "Cannot link table: %s"
-#~ msgstr "ไม่สามารถเชื่อมตาราง: %s"
-
-#~ msgid "DXF input file"
-#~ msgstr "ไฟล์ DXF ที่นำเข้า"
-
-#~ msgid "Cannot open dxf file <%s>"
-#~ msgstr "ไม่สามารถเปิด dxf ไฟล์ <%s>"
-
-#~ msgid "Use output= option to change vector map name"
-#~ msgstr "ใช้เงื่อนไข output= เพื่อเปลี่ยนชื่อ แผนที่เชิงเส้น"
-
-#~ msgid "Conversion of <%s> to vector map:"
-#~ msgstr "การแปลงของ <%s> ไปเป็นแผนที่เชิงเส้น:"
-
-#~ msgid "Vector map <%s> is not in user mapset and cannot be updated"
-#~ msgstr "แผนที่เชิงเส้น <%s> ไม่อยู่ในชุดแผนที่ของผู้ใช้ และไม่สามารถปรับปรุงได้"
-
-#~ msgid "Do not print polyline info"
-#~ msgstr "ไม่ต้องแสดง ข้อมูล polyline"
-
-#~ msgid "Network input map <%s> not found"
-#~ msgstr "ไม่พบ แผนที่ Network ที่จะนำเข้า  <%s>"
-
-#~ msgid "ask_transform_coor():  Leaving session.. \n"
-#~ msgstr "ask_transform_coor():  Leaving session.. \n"
-
-#~ msgid " Number of points that have been entered: %d\n"
-#~ msgstr "จำนวนของจุดที่ต้องใส่: %d\n"
-
-#~ msgid "Please answer yes or no"
-#~ msgstr "โปรดตอบ yes หรือ no"
-
-#~ msgid "Quiet; No chatter"
-#~ msgstr "แบบเงียบ; ไม่ต้องพล่าม"
-
-#~ msgid "Hilight color for text"
-#~ msgstr "สีเน้นสำหรับตัวอักษร"
-
-#~ msgid "Line: %d\n"
-#~ msgstr "เส้น: %d\n"
-
-#~ msgid "Insufficent memory for allocation of data structure"
-#~ msgstr "หน่วยความจำไม่พอสำหรับ กำหนดโครงสร้างข้อมูล"
-
-#~ msgid "imagery group"
-#~ msgstr "กลุ่ม ภาพ"
-
-#~ msgid "imagery subgroup"
-#~ msgstr "กลุ่มย่อย ภาพ"
-
-#~ msgid "output raster map"
-#~ msgstr "แผนที่เชิงภาพผลลัพธ์"
-
-#~ msgid "Name of input raster map(s)"
-#~ msgstr "ชื่อของแผนที่เชิงภาพ ที่จะนำเข้า"
-
-#~ msgid "Output file extension (inputfile(s) + extension)"
-#~ msgstr "Extension ของไฟล์ผลลัพธ์  (inputfile(s) + extension)"
-
-#~ msgid "name=%s\n"
-#~ msgstr "ชื่อ=%s\n"
-
-#~ msgid "mapset=%s\n"
-#~ msgstr "ชุดแผนที่=%s\n"
-
-#~ msgid "fullname=%s\n"
-#~ msgstr "ชื่อเต็ม=%s\n"
-
-#~ msgid "usage: %s file [prompt %%x %%y]\n"
-#~ msgstr "วิธีใช้: %s ไฟล์ [prompt %%x %%y]\n"
-
-#~ msgid "Illegal file name for real part: %s"
-#~ msgstr "ชื่อไฟล์ real partไม่ถูกต้อง: %s"
-
-#~ msgid "Illegal file name for imaginary part: %s"
-#~ msgstr "ชื่อไฟล์ imaginary part ไม่ถูกต้อง: %s"
-
-#~ msgid "** Can't read signature file <%s> **"
-#~ msgstr "** ไม่สามารถ อ่นไฟล์  singature <%s> **"
-
-#~ msgid ""
-#~ "\n"
-#~ "<%s> -- illegal result signature file name"
-#~ msgstr ""
-#~ "\n"
-#~ "<%s> -- ชื่อไฟล์ signature ผลลัพธ์ ไม่ถูกต้อง"
-
-#~ msgid "Illegal group name <%s>"
-#~ msgstr "ชื่อกลุ่ม ไม่ถูกต้อง <%s>"
-
-#~ msgid "Illegal signature file name <%s>"
-#~ msgstr "ชื่อไฟล์ signature ไม่ถูกต้อง <%s>"
-
-#~ msgid "visualization"
-#~ msgstr "การมองเห็น"
-
-#~ msgid "Raster file(s) for Elevation"
-#~ msgstr "ไฟล์แผนที่เชิงภาพ สำหรับ ค่าความสูง"
-
-#~ msgid "Raster file(s) for Color"
-#~ msgstr "ไฟล์แผนที่เชิงภาพ สำหรับ ค่าสี"
-
-#~ msgid "Current window not settable"
-#~ msgstr "กำหนดหน้าต่างไม่ได้"
-
-#~ msgid "Can't clear current graphics window"
-#~ msgstr "ไม่สามารถ ล้าง หน้าต่างที่กำลังทำงาน"
-
-#~ msgid "Cannot use current window"
-#~ msgstr "ไม่สามารถใช้หน้าต่างที่กำลังทำงานอยู่ได้"
-
-#~ msgid ""
-#~ "Generates and displays simple graphics on map layers drawn in the active "
-#~ "graphics monitor display frame."
-#~ msgstr "สร้าง และ แสดง ตัวอย่าง ภาพ บนชั้นข้อมูลแผนที่ ในกรอบจอแสดงผลที่ทำงานอยู่"
-
-#~ msgid ""
-#~ "Unix file containg graphing instructions, if not given reads from "
-#~ "standard input"
-#~ msgstr "ไฟล์ Unix ประกอบด้วยภาพ วิธีทำ,ถ้าไม่ต้องการอ่านจากการนำเข้ามาตรฐาน"
-
-#~ msgid ""
-#~ "Color to draw with, either a standard GRASS color or R:G:B triplet "
-#~ "(separated by colons)"
-#~ msgstr "สีที่จะวาด, สีมาตรฐานของ GRASS หรือ  R:G:B triplet (แยกด้วย :)"
-
-#~ msgid "Don't add to list of commands in monitor"
-#~ msgstr "ไม่ต้อง เพิ่มรายการคำสั่งของ หน้าจอ"
-
-#~ msgid "No current frame"
-#~ msgstr "ไม่มีกรอบปัจจุบัน"
-
-#~ msgid "Current frame not available"
-#~ msgstr "กรอบปัจจุบัน ยังใช้ไม่ได้"
-
-#~ msgid "%s: 'is_null_value()' got NULL pointer!"
-#~ msgstr "%s: 'is_null_value()'  ผลลัพธ์เป็น NULL pointer!"
-
-#~ msgid "%s: 'is_null_value()' got negative column index"
-#~ msgstr "%s: 'is_null_value()' ผลลัพธ์ของ column index เป็นค่าลบ"
-
-#~ msgid "%s: 'is_null_value()' Unknown RASTER_MAP_TYPE '%d'"
-#~ msgstr "%s: 'is_null_value()' ไม่ทราบ RASTER_MAP_TYPE '%d'"
-
-#~ msgid "Error reading raster map"
-#~ msgstr "ข้อผิดพลาดขณะอ่านข้อมูลเชิงภาพ"
-
-#~ msgid "Interactive profile plotting utility with optional output."
-#~ msgstr "ใช้ profile plotting utility ด้วยเงื่อนไข ส่งออก"
-
-#~ msgid "Optional display raster"
-#~ msgstr "เงื่อนไขการแสดงภาพ"
-
-#~ msgid "Output profile data to file(s) with prefix 'name'"
-#~ msgstr "ผลลัพธ์ของรายละเอียดจะเขียนลง ไฟล์ ด้วยคำนำหน้า 'name'"
-
-#~ msgid "Display raster [%s] not found. Using profile raster."
-#~ msgstr "ไม่พบภาพ [%s] . ใช้รายละเอียดข้อมูลภาพ"
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "Use mouse to choose action"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "ใช้ เม้าส์เพื่อเลือก คำสั่ง"
-
-#~ msgid "Use 'd.frame -e' to remove left over frames"
-#~ msgstr "ช้  'd.frame -e' เพื่อล้างภาพในกรอบ"
-
-#~ msgid "Error opening cell-file"
-#~ msgstr "ข้อผิดพลาดขณะเปิด cell-file"
-
-#~ msgid "Error reading from cell-file"
-#~ msgstr "ข้อผิดพลาดขณะอ่าน cell-file"
-
-#~ msgid "Mysterious window inconsistancy error"
-#~ msgstr "เกิดข้อผิดพลาดแบบประหลาดกับหน้าต่าง"
-
-#~ msgid "%s: Couldn't open raster <%s@%s>"
-#~ msgstr "%s: ไม่สามารถเปิดภาพ <%s@%s>"
-
-#~ msgid "one moment ..."
-#~ msgstr "รอสักครู่ ..."
-
-#~ msgid " Middle: toggle flash color\n"
-#~ msgstr "กลาง: เปลี่ยนสี กระพริบ \n"
-
-#~ msgid "Enable flashing (slower)"
-#~ msgstr "ใช้ flashing (ช้าลง)"
-
-#~ msgid "No raster map exists in current window"
-#~ msgstr "ไม่มีแผนที่เชิงเส้นในหน้าต่างที่กำลังทำงาน"
-
-#~ msgid "No current window"
-#~ msgstr "ไม่มี หน้าต่าง ที่กำลังทำงาน"
-
-#~ msgid "Current window not available"
-#~ msgstr "ไม่สามารถใช้ หน้าต่างนี้ได้"
-
-#~ msgid "Getting screen window"
-#~ msgstr "อ่าน หน้าต่างแสดงผล"
-
-#~ msgid "Error in calculating conversions"
-#~ msgstr "เกิดข้อผิดพลาด ระหว่างการแปลงค่า"
-
-#~ msgid "No current graphics window"
-#~ msgstr "ไม่มีการกำหนด หน้าต่างแสดงผล ปัจจุบัน"
-
-#~ msgid "Current graphics window not available"
-#~ msgstr "หน้าต่างแสดงผล ปัจจุบัน ใช้ไม่ได้"
-
-#~ msgid "Setting graphics window"
-#~ msgstr "กำหนดหน้าต่างแสดงผล"
-
-#~ msgid "Can't set current graphics window"
-#~ msgstr "ไม่สามารถกำหนด หน้าต่างแสดงผล"
-
-#~ msgid "Getting graphics window coordinates"
-#~ msgstr "อ่านค่าพิกัดจากหน้าต่างแสดงผล"
-
-#~ msgid "value [%.0f,%.0f] out of range [0-100]"
-#~ msgstr "ค่า  [%.0f,%.0f] อยู่นอกช่วง [0-100]"
-
-#~ msgid "Font name or pathname of TTF file"
-#~ msgstr "ชื่อ หรือ ของแบบตัวอักษร ของไฟล์  TTF"
-
-#~ msgid "Setting release of FreeType"
-#~ msgstr "กำหนด รุ่นของ FreeType"
-
-#~ msgid "Display number of colors"
-#~ msgstr "แสดง จำนวนสี"
-
-#~ msgid "Use mouse to size & place legend"
-#~ msgstr "ใช้ เม้าส์เพื่อกำหนด ขนาด และ ตำแหน่งให้กับ สัญลักษณ์"
-
-#~ msgid "Creates a list of commands for recreating screen graphics."
-#~ msgstr "สร้างรายการ คำสั่ง สำหรับจอแสดงผล"
-
-#~ msgid "Name of frame(s) to save"
-#~ msgstr "ชื่อของกรอบ ที่จะบันทึก"
-
-#~ msgid ""
-#~ "List of object numbers to remove which are displayed after \"#\". -1 for "
-#~ "the last object."
-#~ msgstr "รายการ จำนวนของวัตถุที่จะเอาออก ที่แสดงหลัง  \"#\". -1 สำหรับวัตถุสุดท้าย"
-
-#~ msgid ""
-#~ "List of object numbers to move (\"from\" to \"to\"). remove= option will "
-#~ "be done first, if any."
-#~ msgstr ""
-#~ "รายการ จำนวนของวัตถุที่จะย้าย (\"from\" ถึง \"to\"). เงื่อนไข remove= "
-#~ "จะกระทำก่อนถ้ามี"
-
-#~ msgid "Save current frame"
-#~ msgstr "บันทึกกรอบที่กำลังทำงาน"
-
-#~ msgid "Save all the frames"
-#~ msgstr "บันทึกกรอบทั้งหมด"
-
-#~ msgid "Only map objects without extra header and tailer"
-#~ msgstr "วัตถุแผนทีเท่านั้น ไม่มี หัว และ ท้าย"
-
-#~ msgid "Unknown item type in pad: %s"
-#~ msgstr "ไม่ทราบชนิดหัวข้อในสมุด: %s"
-
-#~ msgid "Rendering method for filled polygons"
-#~ msgstr "วิธีแสดงภาพสำหรับรูปปิดทึบ"
-
-#~ msgid ""
 #~ "g;use the libgis render functions (features: clipping);r;use the raster "
 #~ "graphics library functions (features: polylines);d;use the display "
 #~ "library basic functions (features: polylines);c;use the display library "
 #~ "clipping functions (features: clipping);l;use the display library culling "
 #~ "functions (features: culling, polylines)"
-#~ msgstr ""
-#~ "g;use the libgis render functions (features: clipping);r;use the raster "
-#~ "graphics library functions (features: polylines);d;use the display "
-#~ "library basic functions (features: polylines);c;use the display library "
-#~ "clipping functions (features: clipping);l;use the display library culling "
-#~ "functions (features: culling, polylines)"
 
-#~ msgid ""
-#~ "Don't add to list of vectors and commands in monitor (it won't be drawn "
-#~ "if the monitor is refreshed)"
-#~ msgstr ""
-#~ "อย่าเพิ่มไปที่รายการ ชั้นข้อมูลเชิงเส้น หรือ คำสั่ง ในหน้าจอ "
-#~ "(มันอาจจะไม่ถูกเขียนถ้าจอแสดงผลใหม่)"
-
-#~ msgid "No raster map exists in the current window"
-#~ msgstr "ไม่มีแผนที่เชิงภาพ ในหน้าต่างที่กำลังทำงาน"
-
-#~ msgid ""
-#~ "Creates and displays a menu within the active frame on the graphics "
-#~ "monitor."
-#~ msgstr "สร้าง และ แสดง ตัวอย่าง เมนู ในกรอบจอแสดงผลที่ทำงานอยู่"
-
-#~ msgid "Sets the color of the menu background"
-#~ msgstr "กำหนด สีหลัง ของเมนู"
-
-#~ msgid "Sets the color of the menu text"
-#~ msgstr "กำหนด สีอักษร ของเมนู"
-
-#~ msgid "Sets the color dividing lines of text"
-#~ msgstr "กำหนด สีคั่นบรรทัด ของตัวอักษร"
-
-#~ msgid "Sets the menu text size (in percent)"
-#~ msgstr "กำหนด ขนาดตัวอักษร ของเมนู"
-
-#~ msgid "Menu must contain a title and at least one option"
-#~ msgstr "เมนูจะต้องประกอบด้วย หัวข้อ และ เงื่อนไขอย่างน้อย 1 เงื่อนไข"
-
-#~ msgid ""
-#~ "Draws text in the graphics monitor's active display frame using TrueType "
-#~ "fonts."
-#~ msgstr "เขียน ตัวอักษร ในกรอบจอแสดงผลโดยใช้แบบตัวอักษร  TrueType "
-
-#~ msgid "Screen position (percentage, [0,0] is bottom left)"
-#~ msgstr "ตำแหน่งบนหน้าจอ  (เปอร์เซ็นต์, [0,0] คือ ซ้ายล่าง)"
-
-#~ msgid "Path to TrueType font (including file name)"
-#~ msgstr "Path ของ แบบตัวอักษรแบบ TrueType  (รวมชื่อไฟล์)"
-
-#~ msgid "Height of letters (in percent of available frame height)"
-#~ msgstr "ความสูงของตัวอักษร (เป็นเปอร์เซ็นต์ของความสูงของกรอบ)"
-
-#~ msgid "Either text or -c should be given"
-#~ msgstr "ต้องระบุ text หรือ -c "
-
-#~ msgid "Choose only one coordinate system for placement"
-#~ msgstr "เลือกเพียง 1 ระบบค่าพิกัดสำหรับระบุตำแหน่ง"
-
-#~ msgid "No font selected"
-#~ msgstr "ยังไม่ได้เลือกแบบตัวอักษร"
-
-#~ msgid "Invalid font: %s"
-#~ msgstr "แบบตัวอักษรไม่ถูกต้อง: %s"
-
-#~ msgid "Unable to create text conversion context"
-#~ msgstr "ไม่สามารถสร้างเนื้อหาการแปลงตัวอักษร"
-
-#~ msgid "Text conversion error"
-#~ msgstr "การแปลงตัวอักษรผิดพลาด"
-
-#~ msgid "Unable to write the temporary file"
-#~ msgstr "ไม่สามารถเขียนไฟล์ชั่วคราวได้"
-
-#~ msgid "No predefined font"
-#~ msgstr "ไม่มีการระบุแบบตัวอักษร"
-
-#~ msgid "%s: Unable to read font"
-#~ msgstr "%s: ไม่สามารถอ่านแบบตัวอักษร"
-
-#~ msgid "%s: Unable to read FreeType definition file; use the default"
-#~ msgstr "%s: ไม่สามารถอ่านไฟล์ นิยามของ แบบตัวอักษร  FreeType;ใช้ตัวตั้งต้น"
-
-#~ msgid "%s: No FreeType definition file"
-#~ msgstr "%s: ไมมีไฟล์ นิยามของ FreeType "
-
-#~ msgid "%s: Unable to read FreeType definition file"
-#~ msgstr "%s: ไม่สามารถอ่านไฟล์ นิยามของ แบบตัวอักษร  FreeType"
-
-#~ msgid "Don't add to list of rasters and commands in monitor"
-#~ msgstr "อย่าเพิ่มไปที่ รายการภาพ และ คำสั่ง ในจอ"
-
-#~ msgid "One mouse click only"
-#~ msgstr "กดเมาส์เพียงครั้งเดียว"
-
-#~ msgid "Use mouse to interactively place scale"
-#~ msgstr "ใช้ เมาส์เพื่อกำหนดตำแหน่ง มาตราส่วน"
-
-#~ msgid "Use mouse to interactively place text"
-#~ msgstr "ใช้เม้าส์เพื่อกำหนดตำแหน่ง ตัวอักษร"
-
-#~ msgid "Click!\n"
-#~ msgstr "กด!\n"
-
-#~ msgid " Left:    Place text here\n"
-#~ msgstr "ซ้าย:    วางตัวอักษรที่นี่\n"
-
-#~ msgid " Right:   Quit\n"
-#~ msgstr "ขวา:   ออก\n"
-
-#~ msgid "Just redraw given maps using default colors"
-#~ msgstr "วาดแผนที่ใหม่ ใช้สีตั้งต้น"
-
-#~ msgid "ERROR: can not get \"list\" items"
-#~ msgstr "ข้อผิดพลาด: ไม่สามารถอ่าน หัวข้อ \"list\""
-
-#~ msgid "-j flag forced"
-#~ msgstr "บังคับใช้ -j"
-
-#~ msgid "No map is displayed in GRASS monitor"
-#~ msgstr "ไม่มีแผนที่อสดงในจอ GRASS"
-
-#~ msgid "Interactively select route"
-#~ msgstr "ให้เลือกเส้นทาง"
-
-#~ msgid "You must select more than one point"
-#~ msgstr "คุณต้องเลือกมากกว่า 1จุด"
-
-#~ msgid "You must select at least four points"
-#~ msgstr "คุณต้องเลือกอย่างน้อย 4 จุด"
-
-#~ msgid "No raster or vector map displayed"
-#~ msgstr "ไม่มีแผนที่ ทั้งเชิงภาพและเส้น แสดง"
-
-#~ msgid "To establish and control use of a graphics display monitor."
-#~ msgstr "เพื่อ สร้างและควบคุม การใช้จอแสดงผล"
-
-#~ msgid "Name of graphics monitor to start"
-#~ msgstr "ชื่อของจอแสดงผลที่จะ เริ่ม"
-
-#~ msgid "Name of graphics monitor to stop"
-#~ msgstr "ชื่อของจอแสดงผลที่จะ หยุด"
-
-#~ msgid "Name of graphics monitor to select"
-#~ msgstr "ชื่อของจอแสดงผลที่จะ เลือก"
-
-#~ msgid "Name of graphics monitor to unlock"
-#~ msgstr "ชื่อของจอแสดงผลที่จะ unlock"
-
-#~ msgid "List all monitors"
-#~ msgstr "แสดงรายการ หน้าจอ ทั้งหมด"
-
-#~ msgid "List all monitors (with current status)"
-#~ msgstr "แสดงรายการ หน้าจอ ทั้งหมด (และ สถานะ)"
-
-#~ msgid "Print name of currently selected monitor"
-#~ msgstr "แสดงชื่อของ หน้าจอ ที่ถูกเลือกให้ทำงาน"
-
-#~ msgid "Release currently selected monitor"
-#~ msgstr "ยกเลิก หน้าจอ ที่ถูกเลือกให้ทำงาน"
-
-#~ msgid "Do not automatically select when starting"
-#~ msgstr "อย่าเลือกแบบ อัตโนมัติ เมื่อเริ่มต้นการทำงาน"
-
-#~ msgid "Problem selecting %s. Will try once more"
-#~ msgstr "เกิดปัญหาในการกำหนดค่า %s. จะลองใหม่อีกครั้ง"
-
-#~ msgid "Usage:  %s monitor_name"
-#~ msgstr "วิธีใช้: %s ชื่อจอแสดงผล"
-
-#~ msgid "No such monitor as <%s>"
-#~ msgstr "<%s> ไม่ใช่จอแสดงผล"
-
-#~ msgid "%s: -%c unrecognized option"
-#~ msgstr "%s: -%c เงื่อนไขไม่ถูกต้อง"
-
-#~ msgid "Monitor <%s> released"
-#~ msgstr "ใช้จอแสดงผล <%s>"
-
-#~ msgid "Monitor <%s> in use by another user"
-#~ msgstr "จอแสดงผล <%s> ถูกใช้โดยผู้อื่น"
-
-#~ msgid "Failed testing lock mechanism"
-#~ msgstr "การปลดกลไก ล้มเหลว"
-
-#~ msgid "Usage:  %s [-fv] [name]"
-#~ msgstr "วิธีใช้:  %s [-fv] [ชื่อ]"
-
-#~ msgid "Usage: %s [-f] monitor_name"
-#~ msgstr "วิธีใช้: %s [-f] ชื่อจอแสดงผล"
-
-#~ msgid "Monitor '%s' terminated"
-#~ msgstr "จอแสดงผล  '%s' ถูกยกเลิก"
-
-#~ msgid "Error - Monitor '%s' was not running"
-#~ msgstr "ข้อผิดพลาด - จอแสดงผล '%s' ไม่ทำงาน"
-
-#~ msgid "Error - Monitor '%s' in use by another user"
-#~ msgstr "ข้อผิดพลาด -  จอแสดงผล '%s'  ถูกใช้โดยผู้อื่น"
-
-#~ msgid "Error - Locking mechanism failed"
-#~ msgstr "ข้อผิดพลาด - การล็อคกลไกล้มเหลว"
-
-#~ msgid "Error choosing frame [%s]\n"
-#~ msgstr "เลือกกรอบผิด  [%s]\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Buttons:\n"
-#~ msgstr ""
-#~ "\n"
-#~ "ปุ่ม:\n"
-
-#~ msgid "Left:   Select frame\n"
-#~ msgstr "ซ้าย:   เลือกกรอบ\n"
-
-#~ msgid "Middle: Keep original frame\n"
-#~ msgstr "กลาง:เก็บค่ากรอบเดิม\n"
-
-#~ msgid "Right:  Accept frame\n"
-#~ msgstr "ขวา:  ยอมรับกรอบ\n"
-
-#~ msgid "Manages display frames on the user's graphics monitor."
-#~ msgstr "จัดการกรอบแสดงผล บนหน้าจอของผู้ใช้"
-
-#~ msgid "Create a new frame"
-#~ msgstr "สร้าง กรอบใหม่"
-
-#~ msgid "Select a frame"
-#~ msgstr "เลือก กรอบ"
-
-#~ msgid "Print name of current frame"
-#~ msgstr "แสดงชื่อ ของกรอบ"
-
-#~ msgid "Print names of all frames"
-#~ msgstr "แสดงชื่อ ของกรอบ ทั้งหมด"
-
-#~ msgid "List map names displayed in GRASS monitor"
-#~ msgstr "แสดง รายการชื่อแผนที่ ใน จอ  GRASS"
-
-#~ msgid "Debugging output"
-#~ msgstr "แสดง การตรวจสอบ"
-
-#~ msgid "Frame to be created/selected"
-#~ msgstr "กรอบที่จะ  สร้าง/เลือก"
-
-#~ msgid "bottom,top,left,right"
-#~ msgstr "ล่าง,บน,ซ้าย,ขวา"
-
-#~ msgid "Where to place the frame, values in percent (implies -c)"
-#~ msgstr "ที่ ที่จะวางกรอบ, ค่าเป็น เปอร์เซ็นต์  (implies -c)"
-
-#~ msgid ""
-#~ "\n"
-#~ "Mouse Buttons:"
-#~ msgstr ""
-#~ "\n"
-#~ "ปุ่มเม้าส์:"
-
-#~ msgid "Left:   Select From\n"
-#~ msgstr "ซ้าย:   เลือก จุดเริ่มต้น\n"
-
-#~ msgid "Middle: Select To\n"
-#~ msgstr "กลาง:   เลือก จุดปลายทาง\n"
-
-#~ msgid ""
-#~ "Right:  Quit\n"
-#~ "\n"
-#~ msgstr ""
-#~ "ขวา:  ออก\n"
-#~ "\n"
-
-#~ msgid "Monitor: interactive command in redraw"
-#~ msgstr "จอ: คำสั่งตอบโต้ในการวาดใหม่"
-
-#~ msgid "found %d visuals of type TrueColor"
-#~ msgstr "พบ %d การมองเห็นแบบสีจริง"
-
-#~ msgid "searching for highest bit depth"
-#~ msgstr "การค้นหา bit depth ที่สูงสุด"
-
-#~ msgid "selected %d bit depth"
-#~ msgstr "เลือก %d bit depth"
-
-#~ msgid "using default visual which is %s"
-#~ msgstr "ใช้ค่าตั้งต้นของการมองเห็น ที่เป็น %s"
-
-#~ msgid "Monitor: waitpid: expected %d but got %d"
-#~ msgstr "จอ: waitpid: คาดว่าเป็น %d แต่เป็น %d"
-
-#~ msgid "Monitor: XGetWMName failed"
-#~ msgstr "จอ: XGetWMName ล้มเหลว"
-
-#~ msgid "Monitor: XGetWMName: bad result"
-#~ msgstr "จอ: XGetWMName: ผลลัพธ์ไม่ดี"
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "WARNING!  A projection file already exists for this location\n"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "คำเตือน!  ไฟล์ projectionมีอยู่แล้วสำหรับ location\n"
-
-#~ msgid ""
-#~ "Would you still like to overwrite the current projection information "
-#~ msgstr "คุณต้องการเขียนทับ current projection information "
-
-#~ msgid "The projection information will not be updated."
-#~ msgstr "ข้อมูล Projection จะไม่ถูกปรับปรุง"
-
-#~ msgid "Enable interactive prompting (for command-line use only)"
-#~ msgstr "เปิดการใช้งานแบบโต้ตอบ (สำหรับการใช้คำสั่งเท่านั้น)"
-
-#~ msgid "Raster map to zoom into"
-#~ msgstr "แผนที่เชิงภาพ ที่จะขยาย"
-
-#~ msgid "Save the current region to region definition file"
-#~ msgstr "บันทึกขอบเขตปัจจุบันไปที่ไฟล์กำหนดขอบเขต"
-
-#~ msgid "<%s> is an illegal region name"
-#~ msgstr "<%s> ชือ่ขอบเขตไม่ถูกต้อง"
-
-#~ msgid "No LatLong information for XY-Projection"
-#~ msgstr "ไม่มีข้อมูล แลต/ลอง สำหรับ  XY-Projection"
-
-#~ msgid "Erasing monitors ..."
-#~ msgstr "กำลังลบหน้าจอ ..."
-
-#~ msgid "Could not open input file <%s>."
-#~ msgstr "ไม่สามารถเปิดไฟล์  <%s>"
-
-#~ msgid "No such monitor as '%s'"
-#~ msgstr " '%s' ไม่ใช่จอแสดงผล"
-
-#~ msgid "Error - No such monitor as '%s'"
-#~ msgstr "ข้อผิดพลาด -  '%s' ไม่ใช่จอแสดงผล"
-
-#~ msgid ""
-#~ "\a\n"
-#~ "** The following raster maps in subgroup [%s] do not exist:"
-#~ msgstr ""
-#~ "\a\n"
-#~ "**แผนที่เชิงภาพ ในกลุ่มย่อย [%s] ไม่มี:"
-
-#~ msgid "       %s"
-#~ msgstr "       %s"
-
-#~ msgid "Removing files from group"
-#~ msgstr "กำลังเอาไฟล์ออกจาก กลุ่ม"
-
-#~ msgid "Adding files to group [%s]"
-#~ msgstr "กำลังเพิ่มไฟล์เข้าไปใน กลุ่ม  [%s]"
-
-#~ msgid "Adding files to subgroup [%s]"
-#~ msgstr "กำลังเพิ่มไฟล์เข้าไปใน กลุ่มย่อย  [%s]"
-
-#~ msgid "Skipping [%s]..."
-#~ msgstr "กำลังข้าม [%s]..."
-
-#~ msgid "Writing group REF"
-#~ msgstr "กำลังเขียน กลุ่ม REF"
-
-#~ msgid "Writing subgroup REF"
-#~ msgstr "กำลังเขียน กลุ่มย่อย REF"
-
-#~ msgid "Found file <%s@%s> in group."
-#~ msgstr "พบไฟล์ <%s@%s> ในกลุ่ม"
-
-#~ msgid "Found file <%s@%s> in subgroup."
-#~ msgstr "พบไฟล์ <%s@%s> ในกลุ่มย่อย"
-
-#~ msgid "Unable to open file: <%s>"
-#~ msgstr "ไม่สามารถเปิดไฟล์: <%s>"
-
-#~ msgid "Multiplier"
-#~ msgstr "ตัวคูณ"
-
-#~ msgid "Over-riding projection check."
-#~ msgstr "ยกเลิกการตรวจสอบ projection"
-
-#~ msgid ""
-#~ "Projection of input dataset and current location appear to match.\n"
-#~ "Proceeding with import...\n"
-#~ msgstr ""
-#~ "Projection ของ ชุดข้อมูลที่จะนำเข้า และ ตำแหน่งปัจจุบัน สอดคล้องกัน \n"
-#~ "ดำเนินการนำเข้า...\n"
-
-#~ msgid "permission denied\n"
-#~ msgstr "ไม่อนุญาติ\n"
-
-#~ msgid "not found\n"
-#~ msgstr "ไม่พบ\n"
-
-#~ msgid "%s: percent complete: "
-#~ msgstr "%s: เปอร์เซ็นต์ ที่ สำเร็จ: "
-
-#~ msgid "Raster map not found."
-#~ msgstr "ไม่พบ แผนที่เชิงภาพ"
-
-#~ msgid "%s: can't read range for [%s]"
-#~ msgstr "%s: ไม่สามารถอ่านช่วง  สำหรับ [%s]"
-
-#~ msgid "Raster file [%s] not found"
-#~ msgstr "ไม่พบ ไฟล์ แผนที่เชิงภาพ [%s]"
-
-#~ msgid "It was not possible writing in <%s>."
-#~ msgstr "เป็นไปไม้ได้ที่จะเขียนใน <%s>."
-
-#~ msgid "\rRemoved vertices: %5d"
-#~ msgstr "\rจุดหัก ที่เอาออก: %5d"
-
-#~ msgid "\rDuplicate area centroids: %5d"
-#~ msgstr "\rจุดศูนย์ถ่วง ของ area ที่ซ้ำ: %5d"
-
-#~ msgid ""
-#~ "Finds the nearest element in vector 'to' for elements in vector 'from'. "
-#~ "Various information about this relation may be uploaded to the attribute "
-#~ "table of input vector 'from' or printed to stdout."
-#~ msgstr ""
-#~ "หา element ที่ใกล้ที่สุด ในแผนที่เชิงภาพ  'to' สำหรับ elements ใน แผนที่เชิงภาพ  "
-#~ "'from'.ข้อมูลทั้งหลายเกี่ยวกับ ความสัมพันธ์ อาจจะ uploaded ไปที่ ตารางรายละเอียด "
-#~ "ของแผนที่เชิงเส้นที่นำเข้า  'from' หรือแสดง ไปที่ stdout."
-
-#~ msgid "Cannot create table: '%s'"
-#~ msgstr "ไม่สามารถสร้างตาราง: '%s'"
-
-#~ msgid "defaulting to nearest neighbor sampling"
-#~ msgstr "ค่าตั้งต้น ถึง neighbor sampling ที่ใกล้ที่สุด"
-
-#~ msgid "Unable to connect line id %d to line %d"
-#~ msgstr "ไม่สามารถเชื่อมเส้น  id %d ไปที่เส้น %d"
-
-#~ msgid ""
-#~ "Unable to connect line id %d to line %d because of threshold distance. "
-#~ "Run v.edit with other threshold distance value."
-#~ msgstr ""
-#~ "ไม่สามารถเชื่อมเส้น  id %d ไปที่เส้น %d เพราะว่า ระยะ  threshold. ใช้คำสั่ง v.edit "
-#~ "ด้วยค่าระยะ threshold อื่น."
-
-#~ msgid "Unable to get category list <%s>, editing terminated"
-#~ msgstr "ไม่สามารถอ่าน รายการหมวดหมู่ <%s>, ยกเลิกการแก้ไข"
-
-#~ msgid "Unable to delete layer/category [%d/%d] line %d"
-#~ msgstr "ไม่สามารถ ลบ ชั้นข้อมูล/หมวดหมู่ [%d/%d] บรรทัด %d"
-
-#~ msgid "Unable to write line %d"
-#~ msgstr "ไม่สามารถเขียน บรรทัด %d"
-
-#~ msgid "Unable to delete line %d"
-#~ msgstr "ไม่สามารถเขียน ลบ %d"
-
-#~ msgid "Only %d lines found, at least two needed"
-#~ msgstr "พบ %d เส้น, ต้องการอย่างน้อย 2"
-
-#~ msgid "Unknown query tool '%s'"
-#~ msgstr "ไม่ทราบ เครื่องมือการค้นหา  '%s'"
-
-#~ msgid ""
-#~ "If 'list', 'file' and 'where' options are not specified, all features of "
-#~ "given type and layer are extracted. Categories are not changed in that "
-#~ "case."
-#~ msgstr ""
-#~ "ถ้าเงื่อนไข 'list', 'file' และ 'where' ไม่ได้ระบุ, ข้อมูลทั้งหมดของ "
-#~ "ชนิดที่ระบุและชั้นข้อมูล จะถูกสกัดออกมา. หมวดหมู่จะไม่ถูกเปลี่ยนแปลงในกรณีนี้."
-
-#~ msgid "No layer database connection"
-#~ msgstr "ไม่มี ชั้นข้อมูล จากฐานข้อมูล เชื่อมต่อ"
-
-#~ msgid "Load categories from the database (table = %s, db = %s)."
-#~ msgstr "อ่าน หมวดหมู่จากฐานข้อมูล (table = %s, db = %s)."
-
-#~ msgid "%d categories loaded from the database"
-#~ msgstr "%d อ่าน หมวดหมู่จากฐานข้อมูล"
-
-#~ msgid "Done"
-#~ msgstr "ทำงานแล้ว"
-
-#~ msgid "Cannot open OGR data source '%s'"
-#~ msgstr "ไม่สามารถเปิด แหล่งข้อมูล OGR  '%s'"
-
-#~ msgid "Cannot create layer"
-#~ msgstr "ไม่สามารถ สร้างชั้นข้อมูล"
-
-#~ msgid "Vector map <%s> in location <%s> in mapset <%s> not available"
-#~ msgstr "แผนที่เชิงเส้น <%s> ในตำแหน่ง <%s> ในชุดแผนที่ <%s> ใช้งานไม่ได้"
-
-#~ msgid ""
-#~ "Load values from vector to database. For uploaded/printed category values "
-#~ "'-1' is used for 'no category' and 'null'/'-' if category cannot be found "
-#~ "or multiple categories were found."
-#~ msgstr ""
-#~ "อ่านค่าจากข้อมูลเชิงเส้นไปที่ฐานข้อมูล. สำหรับ ปรับปรุง/แสดง ค่าหมวดหมู่  '-1' ใช้สำหรับ "
-#~ "'no category' และ 'null'/'-' ถ้าไม่พบหมวดหมู่ หรือ พบหลายหมวดหมู่."
-
-#~ msgid "Column(s)"
-#~ msgstr "Column(s)"
-
-#~ msgid "Column type [%d] not supported"
-#~ msgstr "ชนิดของ Column [%d] ไม่รองรับ"
+#, fuzzy
+#~ msgid "Invalid rendering method <%s>"
+#~ msgstr "วิธี ไม่ถูกต้อง: %s"

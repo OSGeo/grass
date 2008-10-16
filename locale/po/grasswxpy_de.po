@@ -8056,60 +8056,60 @@ msgid "No map layer selected. Operation cancelled."
 msgstr ""
 
 #, fuzzy
-#~ msgid "Cancel the command settings and ignore changes"
-#~ msgstr "Schließen"
+msgid "Cancel the command settings and ignore changes"
+msgstr "Schließen"
 
-#~ msgid ""
-#~ "This is a sample program for\n"
-#~ "GRASS command interface parsing\n"
-#~ "and automatic GUI building.\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Dies ist eine Beispielprogramm für \n"
-#~ "das Parsen von GRASS-Kommandos\n"
-#~ "und das Erstellen von GUIs\n"
-#~ "%s"
+msgid ""
+"This is a sample program for\n"
+"GRASS command interface parsing\n"
+"and automatic GUI building.\n"
+"%s"
+msgstr ""
+"Dies ist eine Beispielprogramm für \n"
+"das Parsen von GRASS-Kommandos\n"
+"und das Erstellen von GUIs\n"
+"%s"
 
-#~ msgid "About wxPython GRASS GUI"
-#~ msgstr "Über die wxPython GRASS GUI"
-
-#, fuzzy
-#~ msgid "Measuring distance ("
-#~ msgstr "gemessene Strecke:"
+msgid "About wxPython GRASS GUI"
+msgstr "Über die wxPython GRASS GUI"
 
 #, fuzzy
-#~ msgid "Multiple import formats using GDAL"
-#~ msgstr "Rasterdatenexport mit GDAL"
+msgid "Measuring distance ("
+msgstr "gemessene Strecke:"
 
 #, fuzzy
-#~ msgid "Overlay raster maps"
-#~ msgstr "Raster"
+msgid "Multiple import formats using GDAL"
+msgstr "Rasterdatenexport mit GDAL"
 
 #, fuzzy
-#~ msgid ""
-#~ "Note: User can choose from two interfaces for digitization. The simple "
-#~ "one uses v.edit command on the background. Map topology is rebuild on "
-#~ "each operation which can significantly slow-down response. The vdigit is "
-#~ "a native interface which uses v.edit functionality, but doesn't call the "
-#~ "module itself."
-#~ msgstr "Topologie."
+msgid "Overlay raster maps"
+msgstr "Raster"
 
 #, fuzzy
-#~ msgid "Adding new feature to vector map <%s> failed."
-#~ msgstr "Vektor."
+msgid ""
+"Note: User can choose from two interfaces for digitization. The simple one "
+"uses v.edit command on the background. Map topology is rebuild on each "
+"operation which can significantly slow-down response. The vdigit is a native "
+"interface which uses v.edit functionality, but doesn't call the module "
+"itself."
+msgstr "Topologie."
 
 #, fuzzy
-#~ msgid "List of categories"
-#~ msgstr "Karten auflisten"
+msgid "Adding new feature to vector map <%s> failed."
+msgstr "Vektor."
 
 #, fuzzy
-#~ msgid "Error in Attribute Table Manager"
-#~ msgstr "Tabelle"
+msgid "List of categories"
+msgstr "Karten auflisten"
 
 #, fuzzy
-#~ msgid ""
-#~ "Unable to start Nviz. The OpenGL package was not found. You can get it at "
-#~ "http://PyOpenGL.sourceforge.net. Switching back to 2D display mode.\n"
-#~ "\n"
-#~ "Details: %s"
-#~ msgstr "http://PyOpenGL.sourceforge.net. Darstellung"
+msgid "Error in Attribute Table Manager"
+msgstr "Tabelle"
+
+#, fuzzy
+msgid ""
+"Unable to start Nviz. The OpenGL package was not found. You can get it at "
+"http://PyOpenGL.sourceforge.net. Switching back to 2D display mode.\n"
+"\n"
+"Details: %s"
+msgstr "http://PyOpenGL.sourceforge.net. Darstellung"

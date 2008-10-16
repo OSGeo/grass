@@ -3778,6 +3778,7 @@ msgid "2nd order"
 msgstr "ลำดับที่ 2"
 
 #: ../gui/tcltk/gis.m/georect.tcl:1016
+#, fuzzy
 msgid "polynomial transformation  (rasters only). Requires 6+ GCPs."
 msgstr "Polynomial Transformation  (เชิงภาพเท่านั้น). ต้องการ GCP 6 จุดขึ้นไป."
 
@@ -4594,1141 +4595,1137 @@ msgstr "เพิ่มใหม่"
 msgid "Test"
 msgstr "ทดสอบ"
 
-#~ msgid "WARNING: Error creating new location"
-#~ msgstr "คำเตือน: ข้อผิดพลาดในการสร้างตำแหน่งใหม่"
+msgid "WARNING: Error creating new location"
+msgstr "คำเตือน: ข้อผิดพลาดในการสร้างตำแหน่งใหม่"
 
-#~ msgid ""
-#~ "Error creating new location from georeferenced file.  g.proj returned "
-#~ "following message:\n"
-#~ "\n"
-#~ "%s"
-#~ msgstr ""
-#~ "ข้อผิดพลาดในการสร้างตำแหน่งใหม่จาก Georeferenced ไฟล์.  g.proj "
-#~ "ส่งข้อความกลับตามนี้:\n"
-#~ "\n"
-#~ "%s"
-
-#, fuzzy
-#~ msgid "Display: rows=%d columns=%d  resolution=%g %s"
-#~ msgstr "clf'z]: rows=%d cols=%d  N-S res=%g  E-W res=%g"
+msgid ""
+"Error creating new location from georeferenced file.  g.proj returned "
+"following message:\n"
+"\n"
+"%s"
+msgstr ""
+"ข้อผิดพลาดในการสร้างตำแหน่งใหม่จาก Georeferenced ไฟล์.  g.proj ส่งข้อความกลับตามนี้:\n"
+"\n"
+"%s"
 
 #, fuzzy
-#~ msgid "cumulative length = %s\n"
-#~ msgstr "Cumulative movement costs"
-
-#~ msgid "     show data"
-#~ msgstr "     แสดงข้อมูล"
-
-#~ msgid "Graduate colors: preset color schemes"
-#~ msgstr "Graduate colors: กำหนดแบบสีไว้ก่อน"
-
-#~ msgid "create graphic legend"
-#~ msgstr "สร้างสัญลักษณ์ แบบ graphic"
-
-#~ msgid "    select monitor for legend"
-#~ msgstr "    เลือกจอแสดงผล สำหรับ สัญลักษณ์"
-
-#~ msgid "Labels name:"
-#~ msgstr " ชื่อ แถบข้อความ:"
-
-#~ msgid "remove all frames"
-#~ msgstr "ลบกรอบทั้งหมด"
-
-#~ msgid "x0"
-#~ msgstr "x0"
-
-#~ msgid "Start/select display monitor x0"
-#~ msgstr "เริ่ม/เลือกหน้าจอ x0"
-
-#~ msgid "x1"
-#~ msgstr "x1"
-
-#~ msgid "Start/select display monitor x1"
-#~ msgstr "เริ่ม/เลือกหน้าจอ x1"
-
-#~ msgid "x2"
-#~ msgstr "x2"
-
-#~ msgid "Start/select display monitor x2"
-#~ msgstr "เริ่ม/เลือกหน้าจอ x2"
-
-#~ msgid "x3"
-#~ msgstr "x3"
-
-#~ msgid "Start/select display monitor x3"
-#~ msgstr "เริ่ม/เลือกหน้าจอ x3"
-
-#~ msgid "x4"
-#~ msgstr "x4"
-
-#~ msgid "Start/select display monitor x4"
-#~ msgstr "เริ่ม/เลือกหน้าจอ x4"
-
-#~ msgid "x5"
-#~ msgstr "x5"
-
-#~ msgid "Start/select display monitor x5"
-#~ msgstr "เริ่ม/เลือกหน้าจอ x5"
-
-#~ msgid "x6"
-#~ msgstr "x6"
-
-#~ msgid "Start/select display monitor x6"
-#~ msgstr "เริ่ม/เลือกหน้าจอ x6"
-
-#~ msgid "geodetic grid"
-#~ msgstr "Geodetic กริด"
-
-#~ msgid " grid color "
-#~ msgstr "สีกริด"
-
-#~ msgid " grid color"
-#~ msgstr "สีกริด"
-
-#~ msgid "     "
-#~ msgstr "   "
-
-#~ msgid "draw grid border"
-#~ msgstr "วาดขอบกริด"
-
-#~ msgid "draw border text"
-#~ msgstr "วาดกรอบข้อความ"
-
-#~ msgid " border & text color"
-#~ msgstr "สีขอบและข้อความ"
-
-#~ msgid "Raster map for legend:"
-#~ msgstr "แผนที่แรสเตอร์สำหรับตัวบรรยาย:"
-
-#~ msgid "Display legend in monitor: "
-#~ msgstr "แสดงตัวบรรยายในหน้าจอ "
-
-#~ msgid " erase monitor before drawing legend"
-#~ msgstr "ลบหน้าจอก่อนวาดตัวบรรยาย"
-
-#~ msgid "Text color: "
-#~ msgstr "สีตัวอักษร"
-
-#~ msgid "do not show cat labels"
-#~ msgstr "ไม่ได้แสดง แถบข้อความ cat"
-
-#~ msgid "do not show cat numbers"
-#~ msgstr "ไม่ได้แสดง ตัวเลข cat"
-
-#~ msgid "skip cats with no labels"
-#~ msgstr "ข้าม cat และไม่มีแสดง แถบข้อความ"
-
-#~ msgid "draw smooth gradient"
-#~ msgstr "วาด smooth gradient"
-
-#~ msgid "flip legend"
-#~ msgstr "หมุนตัวบรรยาย"
-
-#~ msgid "place with mouse (cannot save placement with group)"
-#~ msgstr "ระบุตำแหน่งด้วย เม้าส์  (ไม่สามารถบันทึกตำแหน่งกับกลุ่ม)"
-
-#~ msgid "Raster name:"
-#~ msgstr "ชื่อแรสเตอร์:"
-
-#~ msgid "show legend in selected display monitor"
-#~ msgstr "แสดงป้ายใน จอแสดงผลที่เลือก"
-
-#~ msgid " thin legend by "
-#~ msgstr "ทำให้ ป้าย บางลง ด้วย"
-
-#~ msgid "Raster to drape over 1st map:"
-#~ msgstr "แผนที่เชิงภาพ ที่จะ  drape เหนือแผนที่แรก:"
-
-#~ msgid "show legend for drape map in monitor"
-#~ msgstr "แสดง ป้ายสำหรับ drape แผนที่ในจอแสดงผล"
-
-#~ msgid "  show attribute columns"
-#~ msgstr "แสดงคอลัมน์ข้อมูลรายละเอียด"
-
-#~ msgid "    chart outline color:"
-#~ msgstr "สีเส้นขอบแผนภูมิ:"
-
-#~ msgid "Import"
-#~ msgstr "นำเข้า"
-
-#~ msgid "Aggregate ASCII xyz data into raster grid"
-#~ msgstr "แปลงข้อมูล ASCII xyz เป็นกริดแรสเตอร์"
-
-#~ msgid "ASCII GRID (includes GRASS ASCII)"
-#~ msgstr "กริด ASCII (รวมทั้ง GRASS ASCII)"
-
-#~ msgid "Polygons and lines from ASCII file"
-#~ msgstr "รูปหลายเหลี่ยม และเส้นจากแฟ้ม ASCII"
-
-#~ msgid "Binary file (includes GTOPO30 format)"
-#~ msgstr "แฟ้ม Binary file (รวมทั้งช้อมูล GTOPO30 )"
-
-#~ msgid "ESRI Arc/Info ASCII grid"
-#~ msgstr "ข้อมูลกริด ESRI Arc/Info ASCII"
-
-#~ msgid "GRIDATB.FOR map file (TOPMODEL)"
-#~ msgstr "GRIDATB สำหรับไฟล์แผนที่ (TOPMODEL)"
-
-#~ msgid "MAT-File (v.4) array (Matlab or Octave)"
-#~ msgstr "MAT-File (v.4) array (Matlab or Octave)"
-
-#~ msgid "SPOT vegetation NDVI data sets"
-#~ msgstr "ข้อมูล SPOT vegetation NDVI"
-
-#~ msgid "SRTM hgt files"
-#~ msgstr "แฟ้มข้อมูล SRTM hgt"
-
-#~ msgid "Terra ASTER HDF files"
-#~ msgstr "แฟ้มข้อมูลTerra ASTER HDF"
-
-#~ msgid "Various formats using OGR"
-#~ msgstr "ชนิดอื่นด้วย OGR"
-
-#~ msgid "ASCII points file or GRASS ASCII vector file"
-#~ msgstr "แฟ้มข้อมูลจุด ASCII หรือแฟ้มข้อมูลเวคเตอร์ GRASS ASCII"
-
-#~ msgid "Import old GRASS vector format"
-#~ msgstr "นำเข้าข้อมูลเวคเตอร์เก่าของ GRASS "
-
-#~ msgid "DXF file"
-#~ msgstr "แฟ้มข้อมูล DXF:"
-
-#~ msgid "ESRI e00 format"
-#~ msgstr "ข้อมูลชนิด ESRI e00"
-
-#~ msgid "Garmin GPS Waypoints/Routes/Tracks"
-#~ msgstr "Garmin GPS Waypoints/Routes/Tracks"
-
-#~ msgid "GPS Waypoints/Routes/Tracks using GPSBabel"
-#~ msgstr "GPS Waypoints/Routes/Tracks ใช้ GPSBabel"
-
-#~ msgid "GEOnet Name server country files (US-NGA GNS)"
-#~ msgstr "ชื่อของ GEOnet server country ไฟล์ (US-NGA GNS)"
-
-#~ msgid "Matlab and MapGen files"
-#~ msgstr "Matlab และ MapGen ไฟล์"
-
-#~ msgid "Grid 3D"
-#~ msgstr "กริด 3D"
-
-#~ msgid "ASCII 3D file"
-#~ msgstr "แฟ้มข้อมูล ASCII 3D"
-
-#~ msgid "Vis5D file"
-#~ msgstr "แฟ้มข้อมูล Vis5D"
-
-#~ msgid "Export"
-#~ msgstr "ส่งออก"
-
-#~ msgid "ASCII grid (for GRASS, Surfer, Modflow, etc)"
-#~ msgstr "กริด ASCII (สำหรับ GRASS, Surfer, Modflow,อื่นๆ )"
-
-#~ msgid "ASCII x,y,z values of cell centers"
-#~ msgstr "ASCII x,y,z ค่าของ cell centers"
-
-#~ msgid "ESRI ARC/INFO ASCII grid"
-#~ msgstr "กริด ESRI ARC/INFO ASCII"
-
-#~ msgid "Binary file"
-#~ msgstr "แฟ้มไบนารี"
-
-#~ msgid "MPEG-1 animations"
-#~ msgstr "ภาพเคลื่อนไหว MPEG-1"
-
-#~ msgid "PNG image (not georeferenced)"
-#~ msgstr "แฟ้มภาพ PNG (not georeferenced)"
-
-#~ msgid "PPM image (24bit)"
-#~ msgstr "แฟ้มภาพ PPM (24bit)"
-
-#~ msgid "PPM image from red, green, blue raster maps"
-#~ msgstr "แฟ้มภาพ PPM จากแผนที่แรสเตอร์ red, green, blue"
-
-#~ msgid "POVray height-field"
-#~ msgstr "POVray height-field"
-
-#~ msgid "TIFF image (8/24bit)"
-#~ msgstr "แฟ้มภาพ TIFF (8/24bit)"
-
-#~ msgid "VRML file"
-#~ msgstr "แฟ้มข้อมูล VRML "
-
-#~ msgid "VTK ASCII file"
-#~ msgstr "แฟ้มข้อมูล VTK ASCII"
-
-#~ msgid "Various formats using OGR (SHAPE, MapInfo etc)"
-#~ msgstr "หลายชนิดด้วย OGR (SHAPE, MapInfo etc)"
-
-#~ msgid "DXF file (ASCII)"
-#~ msgstr "แฟ้มข้อมูล DXF (ASCII)"
-
-#~ msgid "ASCII vector or point file/old GRASS ASCII vector file"
-#~ msgstr "เวคเตอร์ ASCII หรือแฟ้มข้อมูลจุด/แฟ้มข้อมูลเวคเตอร์เก่า GRASS ASCII "
-
-#~ msgid "POV-Ray format"
-#~ msgstr "ชนิด POV-Ray"
-
-#~ msgid "Copy maps"
-#~ msgstr "คัดลอกแผนที่"
-
-#~ msgid "List maps"
-#~ msgstr "ลิสต์แผนที่"
-
-#~ msgid "List maps using expressions and 'wildcards'"
-#~ msgstr "ลิสต์แผนที่ด้วยเงื่อนไข และ'wildcards'"
-
-#~ msgid "Rename maps"
-#~ msgstr "เปลี่ยนชื่อแผนที่"
-
-#~ msgid "Remove maps"
-#~ msgstr "เอาแผนที่ออก"
-
-#~ msgid "Remove maps using expressions and 'wildcards'"
-#~ msgstr "เอาแผนที่ออกด้วยเงื่อนไขและ 'wildcards'"
-
-#~ msgid "Raster to vector map"
-#~ msgstr "จาก แรสเตอร์ เป็น เวคเตอร์"
-
-#~ msgid "Raster map series to volume"
-#~ msgstr " "
-
-#~ msgid "Raster 2.5D map to volume"
-#~ msgstr "แผนที่เชิงภาพ 2.5มิติ ไปเป็น ปริมาตร"
-
-#~ msgid "Vector to vector"
-#~ msgstr "จากเวคเตอร์เป็นเวคเตอร์"
-
-#~ msgid "Vector lines to points"
-#~ msgstr "จากเส้นเวคเตอร์เป็นจุด"
-
-#~ msgid "Vector 3D points to volume voxels"
-#~ msgstr "แผนที่เชิงเส้น 3มิติ ไปเป็น ปริมาตร Voxel"
-
-#~ msgid "Sites (GRASS 5.x) to vector"
-#~ msgstr "จาก Sites (GRASS 5.x) เป็นเวคเตอร์"
-
-#~ msgid "Volumes to raster map series"
-#~ msgstr "ปริมาตร ไปเป็น ชุอแผนที่เชิงภาพ"
-
-#~ msgid "Groups"
-#~ msgstr "กลุ่ม"
-
-#~ msgid "New"
-#~ msgstr "ใหม่"
-
-#~ msgid "Create new group file"
-#~ msgstr "สร้างแฟ้มข้อมูลกลุ่มใหม่"
-
-#~ msgid "Open group file"
-#~ msgstr "เปิดแฟ้มข้อมูลกลุ่ม"
-
-#~ msgid "Save group file"
-#~ msgstr "บันทึกแฟ้มข้อมูลกลุ่ม"
-
-#~ msgid "Save group file as name"
-#~ msgstr "บันทึกแฟ้มข้อมูลกลุ่มเป็น"
-
-#~ msgid "Close group"
-#~ msgstr "ปิด กลุ่ม"
-
-#~ msgid "Save display to image file"
-#~ msgstr "บันทึกหน้าจอเป็นแฟ้มข้อมูลภาพ"
-
-#~ msgid ""
-#~ "XWD (Save display, selected with mouse, to map.xwd in home directory )"
-#~ msgstr "XWD (บันทึกการแสดงผล, เลือกด้วยเม้าส์, ไปที่ map.xwd ใน home directory )"
-
-#~ msgid "Save displays to multiple graphic file formats"
-#~ msgstr "บันทึกหลายหน้าจอเป็นหลายแฟ้มข้อมูลภาพ"
-
-#~ msgid "Save map to Postscript file"
-#~ msgstr "บันทึกแผนที่เป็นแฟ้มข้อมูล Postscript"
-
-#~ msgid "Print to default printer"
-#~ msgstr "พิมพ์ด้วยเครื่องพิมพ์หลัก"
-
-#~ msgid "print"
-#~ msgstr "พิมพ์"
-
-#~ msgid "Exit Display Manager"
-#~ msgstr "ออกจากตัวจัดการแสดงผล "
-
-#~ msgid "Zoom to maximum extent of all displayed maps"
-#~ msgstr "ขยายไปจนถึงขอบเขตมากสุดของแผนที่ที่แสดงอยู่"
-
-#~ msgid "Access other mapsets in current location"
-#~ msgstr "เข้า mapsets อื่นใน location ปัจจุบัน "
-
-#~ msgid "Change current working session to new mapset, location, or GISDBASE"
-#~ msgstr "เปลี่ยน session ปัจจุบันที่ใช้งานอยู่ไป mapset, location, หรือ GISDBASE ใหม่ือ"
-
-#~ msgid "Modify access by other users to current mapset"
-#~ msgstr "แก้ไขการเข้าถึงโดยผู้ใช้อื่นสำหรับmapset ปัจจุบัน"
-
-#~ msgid "Show current GRASS environment settings"
-#~ msgstr "แสดงค่า GRASS environment ปัจจุบัน"
-
-#~ msgid "Set GRASS environment settings"
-#~ msgstr "ตั้งค่า GRASS environment"
-
-#~ msgid "Create/edit projection information for current location"
-#~ msgstr "สร้าง/แก้ไข projection สำหรับ location ปัจจุบัน "
-
-#~ msgid "Show projection information and create projection files"
-#~ msgstr "แสดง projection และสร้างแฟ้มข้อมูล projection "
-
-#~ msgid "Convert coordinates from one projection to another"
-#~ msgstr "แปลงพิกัดไป projection อื่นง"
-
-#~ msgid "Text"
-#~ msgstr "ข้อความ"
-
-#~ msgid "Select default text font"
-#~ msgstr "เลือกแบบอักษรหลัก"
-
-#~ msgid "Select default freetype text font"
-#~ msgstr "เลือกแบบอักษร freetype หลัก"
-
-#~ msgid "X-monitor displays"
-#~ msgstr "หน้าจอแสดงผล X"
-
-#~ msgid "Configure xmonitor displays"
-#~ msgstr "ปรับแต่งค่าหน้าจอแสดงผล X"
-
-#~ msgid "Configure frames for xmonitors"
-#~ msgstr "ปรับแต่งค่า frames หน้าจอแสดงผล X"
-
-#~ msgid "Start/restart xmonitor at specified window size"
-#~ msgstr "เริ่มต้น/เริ่มใหม่ xmonitor ตามขนาดหน้าต่างที่กำหนด"
-
-#~ msgid "Set active xmonitor to specified size"
-#~ msgstr "กำหนดขนาด xmonitor ที่ทำงาน ตามที่ได้ระบุ"
-
-#~ msgid "Display information about active xmonitor"
-#~ msgstr "แสดงข้อมูลของหน้าจอแสดงผล X ที่้ใช้งานอยู่"
-
-#~ msgid "Compress/decompress raster file"
-#~ msgstr "ย่อ/ขยายแฟ้มข้อมูลแรสเตอร์"
-
-#~ msgid "Manage boundary definitions"
-#~ msgstr "จัดการข้อกำหนด ของ  boundary"
-
-#~ msgid "Manage null values"
-#~ msgstr "จัดการค่า null "
-
-#~ msgid "Manage timestamps for files"
-#~ msgstr "จัดการ  timestamps สำหรับไฟล์"
-
-#~ msgid "Quantization for floating-point maps"
-#~ msgstr "Quantization สำหรับ แผนที่ floating-point"
-
-#~ msgid "Resample (change resolution)"
-#~ msgstr "Resample (เปลี่ยนความละเอียด)"
-
-#~ msgid "Resample using nearest neighbor method"
-#~ msgstr "Resample ใช้วิธ๊ Nearest neighbor"
-
-#~ msgid "Resample using various interpolation methods"
-#~ msgstr "Resample ใช้วิธ๊ Various interpolation"
-
-#~ msgid "Resample using regularized spline with tension method"
-#~ msgstr "Resample ใช้วิธ๊  Regularized spline ร่วมกับ Tension"
-
-#~ msgid "Support file creation and maintenance"
-#~ msgstr "สร้าง และ บำรุงรักษา Support ไฟล์"
-
-#~ msgid "Reproject raster from other location"
-#~ msgstr "Reproject แผนที่เชิงภาพจาก ตำแหน่งอื่น"
-
-#~ msgid "Generate tiling for other projection"
-#~ msgstr "สร้าง Tiling สำหรับ Projection อื่น"
-
-#~ msgid "Set colors to predefined color tables"
-#~ msgstr "กำหนดสีตั้งต้น ของ ตารางสี"
-
-#~ msgid "Set colors using color rules"
-#~ msgstr "กำหนดสีโดยใช้ กฎของสี"
-
-#~ msgid "Blend 2 color maps to produce 3 RGB files"
-#~ msgstr "ผสม 2 แผนที่สี เพื่อสร้าง 3 RGB ไฟล์"
-
-#~ msgid "Create color image from RGB files"
-#~ msgstr "สร้างแฟ้มข้อมูลภาพสีจากแฟ้มข้อมูล RGB "
-
-#~ msgid ""
-#~ "Create 3 RGB (red, green, blue) maps from 3 HIS (hue, intensity, "
-#~ "saturation) maps"
-#~ msgstr ""
-#~ "สร้างแผนที่ 3 RGB (red, green, blue) จากแผนที่ 3 HIS (hue, intensity, "
-#~ "saturation)"
-
-#~ msgid "Create raster buffers"
-#~ msgstr "สร้างพื้นที่กันชนแรสเตอร์"
-
-#~ msgid "Create raster MASK"
-#~ msgstr "สร้างแรสเตอร์ MASK"
-
-#~ msgid "Locate closest points between areas in 2 raster maps"
-#~ msgstr "หาจุดใกล้สุดระหว่างพื้นที่ใน 2 แผนที่แรสเตอร์"
-
-#~ msgid "Moving window analysis of raster cells"
-#~ msgstr "กำลังย้าย หน้าต่างวิเคราะห์ ของ cell แผนที่เชิงภาพ"
-
-#~ msgid "Analyze vector points in neighborhood of raster cells"
-#~ msgstr "วิเคราะห์ แผนที่เชิงเส้น จุด ใน  neighborhood ของ cell "
-
-#~ msgid "Function of map series (time series)"
-#~ msgstr "ฟังก์ชันของชุดข้อมูลแผนที่ (time series)"
-
-#~ msgid "Statistical calculations for cover map over base map"
-#~ msgstr "คำนวน Statistical สำหรับ แผนที่ Cover ทั่วทั้งแผนที่ฐาน"
-
-#~ msgid "Solar irradiance and daily irradiation"
-#~ msgstr "Solar irradiance และ daily irradiation"
-
-#~ msgid "Shadows map for sun position or date/time"
-#~ msgstr "แผนที่ Shadows สำหรับตำแหน่ง Sun หรือ วัน/เวลา"
-
-#~ msgid "Calculate cumulative movement costs between locales"
-#~ msgstr "คำนวน Cumulative movement costs ระหว่าง locales"
-
-#~ msgid "Profile analysis"
-#~ msgstr "Profile analysis"
-
-#~ msgid "Shaded relief map"
-#~ msgstr "แผนที่ Shaded relief"
-
-#~ msgid "Visibility/line of sight"
-#~ msgstr "Visibility/line of sight"
-
-#~ msgid "Clump small areas (statistics calculated by r.volume)"
-#~ msgstr "Clump พื้นที่เล็กๆ (statistics คำนวนโดย r.volume)"
-
-#~ msgid "Grow areas"
-#~ msgstr "Grow areas"
-
-#~ msgid "Thin linear features"
-#~ msgstr "การ ทำให้ข้อมูลเชิงเส้น บางลง"
-
-#~ msgid "Carve stream channels into elevation map using vector streams map"
-#~ msgstr "Carve stream channels ไปเป็น Elevation map โดยใช้แผนที่เชิงเส้น Streams"
-
-#~ msgid "Depressionless elevation map and flowline map"
-#~ msgstr "แผนที่ Depressionless elevation และ แผนที่ flowline"
-
-#~ msgid "Fill lake from seed point to specified level"
-#~ msgstr "เติม lake จาก จุด seed point ไปที่ ระดับที่กำหนด"
-
-#~ msgid "Flow accumulation for massive grids"
-#~ msgstr "Flow accumulation สำหรับ massive grids"
-
-#~ msgid "Generate flow lines for raster map"
-#~ msgstr "สร้าง flow lines สำหรับแผนที่เชิงภาพ"
-
-#~ msgid "SIMWE sediment erosion, transport, & deposition modeling"
-#~ msgstr "SIMWE sediment erosion, transport, & แบบจำลอง deposition"
-
-#~ msgid "Analyze landscape characteristics"
-#~ msgstr "วิเคราะห์  landscape characteristics"
-
-#~ msgid "Analyze landscape patch characteristics"
-#~ msgstr "วิเคราะห์  landscape patch characteristics"
-
-#~ msgid "Output landscape patch information"
-#~ msgstr "ผลลัพธ์ Landscape patch information"
-
-#~ msgid "Generate rate of spread (ROS) maps"
-#~ msgstr "สร้างแผนที่อัตราการขยาย (ROS)"
-
-#~ msgid "Generate least-cost spread paths"
-#~ msgstr "สร้าง  least-cost spread paths"
-
-#~ msgid "Simulate anisotropic spread phenomena"
-#~ msgstr "การจำลอง Anisotropic spread phenomena"
-
-#~ msgid "Edit category values of individual cells for displayed raster map"
-#~ msgstr "แก้ไขค่าหมวดหมู่ของ  individual cells สำหรับแสดงแผนที่เชิงภาพ"
-
-#~ msgid "Reclassify categories for areas of specified sizes"
-#~ msgstr "Reclassify หมวดหมู่ สำหรับ Areas ของขนาดที่กำหนด"
-
-#~ msgid "Reclassify categories using rules"
-#~ msgstr "Reclassify หมวดหมู่ โดยใช้กฎเกณท์"
-
-#~ msgid "Reclassify categories using rules file"
-#~ msgstr "Reclassify หมวดหมู่ โดยใช้ ไฟล์ กฎเกณท์"
-
-#~ msgid "Recode categories using rules (create new map)"
-#~ msgstr "Recode หมวดหมู่ โดยใช้ กฎเกณท์ (สร้างแผนที่ใหม่)"
-
-#~ msgid "Recode categories using rules file (create new map)"
-#~ msgstr "Recode หมวดหมู่ โดยใช้ ไฟล์ กฎเกณท์ (สร้างแผนที่ใหม่)"
-
-#~ msgid "Rescale categories (create new map)"
-#~ msgstr "Rescale หมวดหมู่ (สร้างแผนที่ใหม่)"
-
-#~ msgid "Rescale categories with equalized histogram (create new map)"
-#~ msgstr "Rescale หมวดหมู่ โดยใช้ Equalized histogram (สร้างแผนที่ใหม่)"
-
-#~ msgid "Generate concentric circles around points"
-#~ msgstr "สร้าง Concentric circles รอบๆ จุด"
-
-#~ msgid "Generate random raster cells"
-#~ msgstr "สร้างแรสเตอร์เซลล์สุ่ม"
-
-#~ msgid "Generate random cells and vector points from raster map"
-#~ msgstr "สร้างแรสเตอร์เซลล์สุ่มและจุดเวคเตอร์จากแผนที่แรสเตอร์"
-
-#~ msgid "Generate density surface using moving Gausian kernal"
-#~ msgstr "สร้าง density พื้นผิวด้วย Gausian kernal"
-
-#~ msgid "Generate fractal surface"
-#~ msgstr "สร้างพื้นผิว fractal"
-
-#~ msgid "Generate gaussian deviates surface"
-#~ msgstr "สร้างพื้นผิว gaussian deviates"
-
-#~ msgid "Generate plane"
-#~ msgstr "สร้าง ระนาบ"
-
-#~ msgid "Generate random deviates surface"
-#~ msgstr "สร้างพื้นผิวเบี่ยงเบนแบบสุ่ม"
-
-#~ msgid "Generate random surface with spatial dependence"
-#~ msgstr "สร้าง Random surface โดยใช้ Spatial dependence"
-
-#~ msgid "Generate vector contour lines"
-#~ msgstr "สร้าง เส้นชั้นความสูง"
-
-#~ msgid "Bilinear interpolation from raster points"
-#~ msgstr "Bilinear interpolation จาก จุดเชิงภาพ"
-
-#~ msgid "Inverse distance weighted interpolation from raster points"
-#~ msgstr "Inverse distance weighted interpolation จาก จุดเชิงภาพ"
-
-#~ msgid "Interpolation from raster contours"
-#~ msgstr "Interpolation จาก แผนที่เส้นชั้นความสูงเชิงภาพ"
-
-#~ msgid "Inverse distance weighted interpolation from vector points"
-#~ msgstr "Inverse distance weighted interpolation จากแผนที่เชิงเส้น จุด"
-
-#~ msgid ""
-#~ "Regularized spline tension interpolation from vector points or contours"
-#~ msgstr ""
-#~ "Regularized spline tension interpolation จากแผนที่เชิงเส้น จุด หรือ เส้นชั้นความสูง"
-
-#~ msgid "Fill NULL cells by interpolation using regularized spline tension"
-#~ msgstr "เติม NULL cells โดย interpolation ใช้ Regularized spline tension"
-
-#~ msgid "Report category labels and values"
-#~ msgstr "แสดงรายงาน แถบข้อความ หมวดหมู่ และ ค่า"
-
-#~ msgid "Range of all category values"
-#~ msgstr "ช่วงของค่าในหมวดทั้งหมด"
-
-#~ msgid "Sum all cell category values"
-#~ msgstr "รวม ค่า cell category ทั้งหมด"
-
-#~ msgid "Summary statistics for clumped cells (works with r.clump)"
-#~ msgstr "Summary statistics สำหรับ clumped cells (ใช้คำสั่ง r.clump)"
-
-#~ msgid "Univariate statistics (script version)"
-#~ msgstr "Univariate statistics (แบบ script)"
-
-#~ msgid "Sample values along transects"
-#~ msgstr "ค่าตัวอย่าง ตาม Transect"
-
-#~ msgid "Sample values along transects (use azimuth, distance)"
-#~ msgstr "ค่าตัวอย่าง ตาม Transect (ใช้ azimuth, และ ระยะทาง)"
-
-#~ msgid "Linear regression between 2 maps"
-#~ msgstr "Linear regression ระหว่าง 2 แผนที่"
-
-#~ msgid "Mutual category occurences (coincidence)"
-#~ msgstr "Mutual category occurences (สอดคล้องต้องกัน)"
-
-#~ msgid "Create/rebuild topology"
-#~ msgstr "สร้าง/ทำอีกครั้ง topology"
-
-#~ msgid "Clean vector files"
-#~ msgstr "Clean ไฟล์เชิงเส้น"
-
-#~ msgid "Add missing centroids"
-#~ msgstr "เพิ่ม จุดศูนย์ถ่วง ที่ขาด"
-
-#~ msgid "Build polylines from adjacent segments"
-#~ msgstr "สร้าง Polylines จาก ชิ้นส่วนที่ติดกัน"
-
-#~ msgid "Split polylines into segments"
-#~ msgstr "ตัด  Polylines ไปเป็น ชิ้นส่วน"
-
-#~ msgid "Create lines parallel to existing lines"
-#~ msgstr "สร้างเส้นขนาน จากเส้นที่มีอยู่แล้ว"
-
-#~ msgid "Dissolve common boundaries"
-#~ msgstr "Dissolve common boundaries"
-
-#~ msgid "Convert vector feature types"
-#~ msgstr "แปลง ชนิดข้อมูลเชิงเส้น"
-
-#~ msgid "Convert 2D vector to 3D by sampling raster"
-#~ msgstr "แปลง ข้อมูลเชิงเส้น 2มิติ ไปเป็น 3มิติ โดย sampling raster"
-
-#~ msgid "Extrude 2D vector into 3D vector"
-#~ msgstr "Extrude ข้อมูลเชิงเส้น 2มิติ ไปเป็น 3มิติ"
-
-#~ msgid "Create text label file for vector features"
-#~ msgstr "สร้าง ไฟล์ แถบข้อความ สำหรับ ข้อมูลเชิงเส้น"
-
-#~ msgid "Reproject vector from other location"
-#~ msgstr "Reproject แผนที่เชิงเส้น จาก ตำแหน่งอื่น"
-
-#~ msgid "Create new vector as link to external OGR layer"
-#~ msgstr "สร้างแผนที่เชิงเส้นใหม่ ที่เชื่อมกับ ชั้นข้อมูล OGR"
-
-#~ msgid "Set database connection for vector attributes"
-#~ msgstr "กำหนด การเชื่อมต่อฐานข้อมูล สำหรับรายละเอียดของแผนที่เชิงเส้น"
-
-#~ msgid "Rectify and georeference vector map"
-#~ msgstr "Rectify และ Georeference แผนที่เชิงเส้น"
-
-#~ msgid "Query by attributes"
-#~ msgstr "ร้องขอโดยข้อมูลลักษณะ"
-
-#~ msgid "Query by map features"
-#~ msgstr "ค้นหา โดยใข้ ข้อมูลแผนที่"
-
-#~ msgid "Create vector buffers"
-#~ msgstr "สร้างพื้นที่กันชนเวคเตอร์"
-
-#~ msgid "Linear referencing for vectors"
-#~ msgstr "การอ้างอิงเชิงเส้น สำหรับแผนที่เชิงเส้น"
-
-#~ msgid "Create linear reference system"
-#~ msgstr "สร้าง ระบบอ้างอิงตำแหน่งเชิงเส้น"
-
-#~ msgid "Create stationing from imput lines, and linear reference system"
-#~ msgstr "สร้าง  Stationing จากเส้นที่นำเข้า, และระบบอ้างอิงตำแหน่งเชิงเส้น"
-
-#~ msgid ""
-#~ "Create points/segments from input lines, linear reference system and "
-#~ "positions read from stdin"
-#~ msgstr ""
-#~ "สร้าง จุด/ชิ้นส่วน จากเส้นที่นำเข้า, ระบบอ้างอิงตำแหน่งเชิงเส้น และ ตำแหน่ง โดยอ่านจาก "
-#~ "stdin"
-
-#~ msgid ""
-#~ "Find line id and real km+offset for given points in vector map using "
-#~ "linear reference system"
-#~ msgstr "ค้น"
-
-#~ msgid "Locate nearest features to points or centroids"
-#~ msgstr "ระบุข้อมูลที่ใกล้ที่สุด ถึงจุด หรือ จุดศูนย์ถ่วง"
-
-#~ msgid "Generate Thiessen polygons around points (Voronoi diagram)"
-#~ msgstr "สร้าง Thiessen polygons รอบๆจุด (Voronoi diagram)"
-
-#~ msgid "Connect points to create Delaunay triangles"
-#~ msgstr "เชื่อมจุดเพื่อสร้าง Delaunay triangles"
-
-#~ msgid "Shortest route (visualization only)"
-#~ msgstr "เส้นทางสั้นสุด (แสดงผลเท่านั้น)"
-
-#~ msgid "Split net to bands between cost isolines"
-#~ msgstr "ตัด net ไปเป็น bands ระหว่าง Cost isolines"
-
-#~ msgid "Overlay/combine 2 vector maps"
-#~ msgstr "ซ้อนทับ/รวม 2 แผนที่เวคเตอร์"
-
-#~ msgid "Patch multiple maps (combine)"
-#~ msgstr "ปรับปรุงหลายแผนที่  (รวมเข้าด้วยกัน)"
-
-#~ msgid "Generate area feature for extent of current region"
-#~ msgstr "สร้างข้อมูล Area สำหรับ ขอบเขต ของ ขอบเขตปัจจุบัน"
-
-#~ msgid "Generate rectangular vector grid"
-#~ msgstr "ง"
-
-#~ msgid "Attach, delete, or report categories"
-#~ msgstr "แนบ, ลบ, หรือรายงานหมวดหมู่"
-
-#~ msgid "Reclassify features using rules file"
-#~ msgstr "Reclassify ข้อมูล โดยใช้ไฟล์กฎเกณท์"
-
-#~ msgid "Work with vector points"
-#~ msgstr "ทำงานกับแผนที่เชิงเส้น จุด"
-
-#~ msgid "Generate points from database with x/y coordinates"
-#~ msgstr "สร้างจุดจากฐานข้อมูลด้วย พิกัด x/y"
-
-#~ msgid "Random location perturbations of points"
-#~ msgstr "Random location perturbations ของ จุด"
-
-#~ msgid "Generate convex hull for point set"
-#~ msgstr "สร้าง Convex Hull สำหรับ ชุดของจุด"
-
-#~ msgid "Generate Delaunay triangles for point set"
-#~ msgstr "สร้าง Delaunay triangles จากชุดข้อมูลจุด"
-
-#~ msgid "Generate Voronoi diagram/Thiessen polygons for point set"
-#~ msgstr "สร้าง Voronoi diagram/Thiessen ข้อมูลหลายเหลี่ยมจากชุดข้อมูลจุด"
-
-#~ msgid "Sample raster maps"
-#~ msgstr "ตัวอย่างแผนที่แรสเตอร์ "
-
-#~ msgid "Calculate statistics for raster map overlain by vector map"
-#~ msgstr "คำนวน Statistics สำหรับ แผนที่เชิงภาพ ซ้อนทับโดย แผนที่เชิงเส้น"
-
-#~ msgid ""
-#~ "Partition points into test/training sets for k-fold cross validatation"
-#~ msgstr ""
-#~ "แบ่งส่วน ชุดของจุด ไปเป็น  ชุดของ test/training สำหรับ k-fold cross validatation"
-
-#~ msgid "Transfer attribute data from queried vector map to points"
-#~ msgstr "ถ่ายทอด ข้อมูลรายละเอียด จาก แผนที่เชิงเส้นที่เลือก ไปเป็น จุด"
-
-#~ msgid "Load vector attributes to database or create reports"
-#~ msgstr "อ่านข้อมูลรายละเอียด ข้อมูลเชิงเส้น ไปที่ ฐานข้อมูล หรือ สร้างรายงาน"
-
-#~ msgid "Report areas for vector attribute categories"
-#~ msgstr "รายงาน Areas สำหรับ รายละเอียด หมวดหมู่ ของข้อมูลเชิงเส้น"
-
-#~ msgid "Test normality of point distribution"
-#~ msgstr "ทดสอบความปกติ การกระจายของจุด"
-
-#~ msgid "Calculate stats for raster map underlying vector objects"
-#~ msgstr "คำนวน stats สำหรับแผนที่เชิงภาพ ที่อยู่ใต้ วัตถุเชิงเส้น"
-
-#~ msgid "Indices of point counts in quadrats"
-#~ msgstr "ดัชนี ของการนับจุด ใน กรอบ"
-
-#~ msgid "Create/edit imagery group"
-#~ msgstr "สร้าง/แก้ไข กลุ่มภาพ"
-
-#~ msgid "Target imagery group"
-#~ msgstr "กลุ่มภาพ เป้าหมาย"
-
-#~ msgid "Mosaic up to 4 adjacent images"
-#~ msgstr "ต่อภาพ 4 ภาพที่อยู่ติดกัน"
-
-#~ msgid ""
-#~ "Color balance and enhance color tables of multiband imagery for rgb "
-#~ "display"
-#~ msgstr "การปรับสี และ  ตาราง Enhance สี ของ ภาพ Multiband สำหรับแสดงแบบ RGB"
-
-#~ msgid ""
-#~ "Transform HIS (Hue/Intensity/Saturation) color image to RGB (Red/Green/"
-#~ "Blue)"
-#~ msgstr ""
-#~ "แปลงข้อมูลแบบผสมสีแบบความอิ่มสี HIS (Hue/Intensity/Saturation) เป็น RGB (Red/"
-#~ "Green/Blue)"
-
-#~ msgid ""
-#~ "Transform RGB (Red/Green/Blue) color image to HIS (Hue/Intensity/"
-#~ "Saturation)"
-#~ msgstr ""
-#~ "แปลงข้อมูลแบบผสมสีRGB (Red/Green/Blue) เป็น นแบบความอิ่มสี HIS (Hue/Intensity/"
-#~ "Saturation)"
-
-#~ msgid "Rectify and georeference image group"
-#~ msgstr "Rectify และ georeference กลุ่มภาพ"
-
-#~ msgid "Set ground control points (GCP's) from raster map or keyboard entry"
-#~ msgstr "กำหนด จุดควบคุมภาคพื้นดิน (GCP) จาก แผนที่เชิงภาพ หรือ จาก คีย์บอร์ด"
-
-#~ msgid "Set ground control points (GCP's) from vector map or keyboard entry"
-#~ msgstr "กำหนด จุดควบคุมภาคพื้นดิน (GCP) จาก แผนที่เชิงเส้น หรือ จาก คีย์บอร์ด"
-
-#~ msgid "Affine and Polynomial rectification (rubber sheet)"
-#~ msgstr "Affine และ  Polynomial rectification (rubber sheet)"
-
-#~ msgid "Brovey transformation and pan sharpening"
-#~ msgstr "Brovey transformation และ Pan sharpening"
-
-#~ msgid "Non-interactive input for supervised classification (MLC)"
-#~ msgstr "นำเข้าแบบไม่โต้ตอบ สำหรับ  supervised classification  (MLC)"
-
-#~ msgid "Non-interactive input for supervised classification (SMAP)"
-#~ msgstr "นำเข้าแบบไม่โต้ตอบ สำหรับ  supervised classification  (SMAP)"
-
-#~ msgid "Zero edge crossing detection"
-#~ msgstr "พบ Zero edge crossing"
-
-#~ msgid "User defined matrix/convolving filter"
-#~ msgstr "ใช้การกำหนด การกรอง matrix/convolving"
-
-#~ msgid "Canonical component"
-#~ msgstr "ส่วนประกอบ ซึ่งเป็นที่ยอมรับ"
-
-#~ msgid "Principal component"
-#~ msgstr "ส่วนประกอบ หลัก"
-
-#~ msgid "Fast Fourier Transform"
-#~ msgstr "การแปลง แบบ Fast Fourier"
-
-#~ msgid "Inverse Fast Fourier Transform"
-#~ msgstr "การแปลง แบบ Inverse Fast Fourier"
-
-#~ msgid "Range of image values"
-#~ msgstr "ช่วงของ ค่าภาพ"
-
-#~ msgid "Bit pattern comparison for ID of low quality pixels"
-#~ msgstr "แบบการเปรียบเทียบ Bit สำหรับ ID ของ pixel คุณภาพต่ำ"
-
-#~ msgid "Kappa classification accuracy assessment"
-#~ msgstr "การประเมินความน่าเชื่อถือของ Kappa classification"
-
-#~ msgid "Optimum index factor for LandSat TM"
-#~ msgstr "ดัชนีตัวคูณ ที่ดีทีสุด สำหรับ LandSat TM"
-
-#~ msgid "&Grid3D"
-#~ msgstr "&กริด3มิติ"
-
-#~ msgid "Create 3D mask for grid3D operations"
-#~ msgstr "สร้าง mask 3มิติ สำหรับ การทำงาน กริด3มิติ"
-
-#~ msgid "Create 2D raster cross section from grid3d volume"
-#~ msgstr "สร้างแผนที่รูปตัดตามขวาง เชิงภาพ 2มิติ จาก กริด3มิติ ปริมาตร"
-
-#~ msgid "Map calculator for grid3D operations"
-#~ msgstr "Map calculator สำหรับ  การทำงาน กริด3มิติ"
-
-#~ msgid "Interpolate volume from vector points using splines"
-#~ msgstr "ตีความ ปริมาตร จาก แผนที่เชิงเส้น จุด โดยใช้ spline"
-
-#~ msgid "Display information about grid3D volume"
-#~ msgstr "แสดงข้อมูลเกี่ยวกับ กริด3มิติ ปริมาตร"
-
-#~ msgid "Add columns to table"
-#~ msgstr "เพิ่มคอลัมน์ตาราง"
-
-#~ msgid "Change values in a column"
-#~ msgstr "เปลี่ยนค่าในคอลัมน์"
-
-#~ msgid "Query data (SQL select)"
-#~ msgstr "ร้องขอข้อมูล (SQL select)"
-
-#~ msgid "Execute SQL statement"
-#~ msgstr "ประมวลผลคำสั่ง SQL"
-
-#~ msgid "red (RGB) or hue (HIS):"
-#~ msgstr "red (RGB) หรือ hue (HIS):"
-
-#~ msgid "green (RGB) or intensity (HIS):"
-#~ msgstr "green (RGB) หรือ intensity (HIS):"
-
-#~ msgid "blue (RGB) or saturation (HIS):"
-#~ msgstr "blue (RGB) หรือ saturation (HIS):"
-
-#~ msgid "     (leave blank to place with mouse; position will not save)"
-#~ msgstr "     (leave blank to place with mouse; position will not save)"
-
-#~ msgid "     coordinate type"
-#~ msgstr "ชนิดพิกัด"
-
-#~ msgid "  align text with coordinate point"
-#~ msgstr "  จัดตำแหน่งข้อความด้วยจุดพิกัด"
-
-#~ msgid ""
-#~ "     (for coordinates, % is from bottom left of display, pixels from top "
-#~ "left)"
-#~ msgstr "     (สำหรับพิกัด, % จากงซ้ายล่างของจอ, พิกเซล จากซ้ายบน)"
-
-#~ msgid "     text rotation (degrees counterclockwise)"
-#~ msgstr "    หมุนข้อความ (องศา ทวนเข็มนาฬิกา)"
-
-#~ msgid "rotation in radians"
-#~ msgstr "rotation in radians"
-
-#~ msgid "height in pixels instead of %"
-#~ msgstr "ความสูงในหน่วยว พิกเแทนที่ %ซล"
-
-#~ msgid "Welcome to the GRASS GIS manager"
-#~ msgstr "ยินดีต้อนรับเข้าสู่ตัวจัดการ GRASS GIS "
-
-#~ msgid "Display active layers in current region"
-#~ msgstr "แสดงชั้นข้อมูลที่ใช้งานอยู่ในขอบเขตปัจจุบัน"
-
-#~ msgid "Display active layers in default region"
-#~ msgstr "แสดงชั้นข้อมูลที่ใช้งานอยู่ในขอบเขตหลัก"
-
-#~ msgid "Display active layers in saved region setting"
-#~ msgstr "แสดงชั้นข้อมูลที่ใช้งานอยู่ในขอบเขตที่บันทึกค่าไว้"
-
-#~ msgid "NVIZ - n dimensional visualization"
-#~ msgstr "NVIZ - การแสดงผลแบบหลายมิติ"
-
-#~ msgid "Fly through path for NVIZ"
-#~ msgstr "เส้นทางบินผ่าน สำหรับ NVIZ"
-
-#~ msgid "Zoom"
-#~ msgstr "ย่อ/ขยาย"
-
-#~ msgid "Pan and recenter"
-#~ msgstr "เลื่อน และ เปลี่ยน จุดศูนย์กลาง"
-
-#~ msgid "Query map (select map first)"
-#~ msgstr "ค้นหาแผนที่ (เลือกแผนที่ก่อน)"
-
-#~ msgid "Measure lengths and areas"
-#~ msgstr "วัดความยาวและพื้นที่"
-
-#~ msgid "Geographical position"
-#~ msgstr "ตำแหน่งทางภูมิศาสตร์"
-
-#~ msgid "Print raster & vector maps using ps.map"
-#~ msgstr "พิมพ์แรสเตอร์ และเวคเตอร์ โดย ps.map"
-
-#~ msgid "Add legend"
-#~ msgstr "เพิ่ม legend"
-
-#~ msgid "Add paint labels layer (from directory paint/labels)"
-#~ msgstr "เพิ่ม ชั้นข้อมูล แถบข้อความ (จาก directory paint/labels)"
-
-#~ msgid "Add freetype text layer"
-#~ msgstr "เพิ่มชั้นข้อมูลข้อความ freetype"
-
-#~ msgid "Create or select display frame"
-#~ msgstr "สร้าง หรือ เลือกเฟรม"
-
-#~ msgid "Vector name:"
-#~ msgstr "ชื่อเวคเตอร์:"
-
-#~ msgid "Display:"
-#~ msgstr "แสดงผล:"
-
-#~ msgid "shapes"
-#~ msgstr "รูปร่าง"
-
-#~ msgid "categories"
-#~ msgstr "หลายหมวดหมู่"
-
-#~ msgid "topology"
-#~ msgstr "topology"
-
-#~ msgid "line directions"
-#~ msgstr "ทิศทางของเส้น"
-
-#~ msgid "            "
-#~ msgstr "            "
-
-#~ msgid "faces"
-#~ msgstr "faces"
-
-#~ msgid "color"
-#~ msgstr "สี"
-
-#~ msgid "  "
-#~ msgstr "  "
-
-#~ msgid "random colors"
-#~ msgstr "สีสุ่ม"
-
-#~ msgid " size"
-#~ msgstr "ขนาด"
-
-#~ msgid " align with pt"
-#~ msgstr "วางตัว ด้วย pt"
-
-#~ msgid "     layer for labels"
-#~ msgstr "ชั้นข้อมูลสำหรับ แถบข้อความ"
-
-#~ msgid " attribute col for labels"
-#~ msgstr "คอลัมน์ข้อมูลลักษณะสำหรับ แถบข้อความ"
-
-#~ msgid "Query vectors: "
-#~ msgstr "ร้องขอข้อมูลเวคเตอร์ "
-
-#~ msgid " query cat values"
-#~ msgstr "ค้นหาค่า cat"
-
-#~ msgid "SQL query"
-#~ msgstr "การร้องขอ SQL"
-
-#~ msgid "     SQL where statement"
-#~ msgstr "     ประโยค SQL where "
-
-#~ msgid "Mouse query setup:"
-#~ msgstr "กำหนดการค้นหาด้วย เม้าส์"
-
-#~ msgid "edit attributes (form mode)"
-#~ msgstr "แก้ไขข้อมูลลักษณธ (ในแบบฟอร์ม)"
-
-#~ msgid "results as text in terminal"
-#~ msgstr "ผลลัพธ์แบบตัวอักษร ในหน้าจอ"
-
-#~ msgid "Line width for ps.map print output:"
-#~ msgstr "ความกว้างเส้นสำหรับ พิมพ์ ผลลัพธ์ จาก ps.map:"
-
-#~ msgid "Line width used for printing"
-#~ msgstr "ความกว้างเส้นสำหรับการพิมพ์"
-
-#~ msgid " Background color: "
-#~ msgstr "สีพื้นหลัง "
-
-#~ msgid "no background color"
-#~ msgstr "ไม่มีสีพื้นหลัง"
-
-#~ msgid " "
-#~ msgstr "   "
-
-#~ msgid "display N. arrow only "
-#~ msgstr "แสดง ทิศเหนือลูกศร เท่านั้น"
-
-#~ msgid "line scale instead of bar scale "
-#~ msgstr "มาตราส่วนแบบเส้น แทน มาตราส่วนแบบแท่ง"
-
-#~ msgid "Text options: color"
-#~ msgstr "ตัวเลือกข้อความ: สี"
-
-#~ msgid "Paper format"
-#~ msgstr "ชนิดกระดาษ"
-
-#~ msgid "Custom"
-#~ msgstr "กำหนดเอง"
-
-#~ msgid "height:"
-#~ msgstr "สูง:"
-
-#~ msgid "left:"
-#~ msgstr "ซ้าย:"
-
-#~ msgid "right:"
-#~ msgstr "ขวา:"
-
-#~ msgid "top:"
-#~ msgstr "บน:"
-
-#~ msgid "bottom:"
-#~ msgstr "ล่าง:"
-
-#~ msgid "PS file:"
-#~ msgstr "แฟ้มข้อมูลPS  :"
-
-#~ msgid "PDF file:"
-#~ msgstr "แฟ้มข้อมูล PDF:"
-
-#~ msgid "PNG file:"
-#~ msgstr "แฟ้มข้อมูล PNG:"
-
-#~ msgid "PNG file resolution (points/inch):"
-#~ msgstr "แฟ้มข้อมูล PNG ความละเอียด (จุด/นิ้ว):"
-
-#~ msgid "Printer:"
-#~ msgstr "เครื่องพิมพ์:"
-
-#~ msgid "Script file:"
-#~ msgstr "Script ไฟล์:"
-
-#~ msgid "Preview"
-#~ msgstr "แสดงตัวอย่าง"
+msgid "Display: rows=%d columns=%d  resolution=%g %s"
+msgstr "clf'z]: rows=%d cols=%d  N-S res=%g  E-W res=%g"
 
 #, fuzzy
-#~ msgid " width"
-#~ msgstr "กว้าง"
+msgid "cumulative length = %s\n"
+msgstr "Cumulative movement costs"
 
-#~ msgid "text color"
-#~ msgstr "สีข้อความ"
+msgid "     show data"
+msgstr "     แสดงข้อมูล"
 
-#~ msgid " text size"
-#~ msgstr "ขนาดข้อความ"
+msgid "Graduate colors: preset color schemes"
+msgstr "Graduate colors: กำหนดแบบสีไว้ก่อน"
+
+msgid "create graphic legend"
+msgstr "สร้างสัญลักษณ์ แบบ graphic"
+
+msgid "    select monitor for legend"
+msgstr "    เลือกจอแสดงผล สำหรับ สัญลักษณ์"
+
+msgid "Labels name:"
+msgstr " ชื่อ แถบข้อความ:"
+
+msgid "remove all frames"
+msgstr "ลบกรอบทั้งหมด"
+
+msgid "x0"
+msgstr "x0"
+
+msgid "Start/select display monitor x0"
+msgstr "เริ่ม/เลือกหน้าจอ x0"
+
+msgid "x1"
+msgstr "x1"
+
+msgid "Start/select display monitor x1"
+msgstr "เริ่ม/เลือกหน้าจอ x1"
+
+msgid "x2"
+msgstr "x2"
+
+msgid "Start/select display monitor x2"
+msgstr "เริ่ม/เลือกหน้าจอ x2"
+
+msgid "x3"
+msgstr "x3"
+
+msgid "Start/select display monitor x3"
+msgstr "เริ่ม/เลือกหน้าจอ x3"
+
+msgid "x4"
+msgstr "x4"
+
+msgid "Start/select display monitor x4"
+msgstr "เริ่ม/เลือกหน้าจอ x4"
+
+msgid "x5"
+msgstr "x5"
+
+msgid "Start/select display monitor x5"
+msgstr "เริ่ม/เลือกหน้าจอ x5"
+
+msgid "x6"
+msgstr "x6"
+
+msgid "Start/select display monitor x6"
+msgstr "เริ่ม/เลือกหน้าจอ x6"
+
+msgid "geodetic grid"
+msgstr "Geodetic กริด"
+
+msgid " grid color "
+msgstr "สีกริด"
+
+msgid " grid color"
+msgstr "สีกริด"
+
+msgid "     "
+msgstr "   "
+
+msgid "draw grid border"
+msgstr "วาดขอบกริด"
+
+msgid "draw border text"
+msgstr "วาดกรอบข้อความ"
+
+msgid " border & text color"
+msgstr "สีขอบและข้อความ"
+
+msgid "Raster map for legend:"
+msgstr "แผนที่แรสเตอร์สำหรับตัวบรรยาย:"
+
+msgid "Display legend in monitor: "
+msgstr "แสดงตัวบรรยายในหน้าจอ "
+
+msgid " erase monitor before drawing legend"
+msgstr "ลบหน้าจอก่อนวาดตัวบรรยาย"
+
+msgid "Text color: "
+msgstr "สีตัวอักษร"
+
+msgid "do not show cat labels"
+msgstr "ไม่ได้แสดง แถบข้อความ cat"
+
+msgid "do not show cat numbers"
+msgstr "ไม่ได้แสดง ตัวเลข cat"
+
+msgid "skip cats with no labels"
+msgstr "ข้าม cat และไม่มีแสดง แถบข้อความ"
+
+msgid "draw smooth gradient"
+msgstr "วาด smooth gradient"
+
+msgid "flip legend"
+msgstr "หมุนตัวบรรยาย"
+
+msgid "place with mouse (cannot save placement with group)"
+msgstr "ระบุตำแหน่งด้วย เม้าส์  (ไม่สามารถบันทึกตำแหน่งกับกลุ่ม)"
+
+msgid "Raster name:"
+msgstr "ชื่อแรสเตอร์:"
+
+msgid "show legend in selected display monitor"
+msgstr "แสดงป้ายใน จอแสดงผลที่เลือก"
+
+msgid " thin legend by "
+msgstr "ทำให้ ป้าย บางลง ด้วย"
+
+msgid "Raster to drape over 1st map:"
+msgstr "แผนที่เชิงภาพ ที่จะ  drape เหนือแผนที่แรก:"
+
+msgid "show legend for drape map in monitor"
+msgstr "แสดง ป้ายสำหรับ drape แผนที่ในจอแสดงผล"
+
+msgid "  show attribute columns"
+msgstr "แสดงคอลัมน์ข้อมูลรายละเอียด"
+
+msgid "    chart outline color:"
+msgstr "สีเส้นขอบแผนภูมิ:"
+
+msgid "Import"
+msgstr "นำเข้า"
+
+msgid "Aggregate ASCII xyz data into raster grid"
+msgstr "แปลงข้อมูล ASCII xyz เป็นกริดแรสเตอร์"
+
+msgid "ASCII GRID (includes GRASS ASCII)"
+msgstr "กริด ASCII (รวมทั้ง GRASS ASCII)"
+
+msgid "Polygons and lines from ASCII file"
+msgstr "รูปหลายเหลี่ยม และเส้นจากแฟ้ม ASCII"
+
+msgid "Binary file (includes GTOPO30 format)"
+msgstr "แฟ้ม Binary file (รวมทั้งช้อมูล GTOPO30 )"
+
+msgid "ESRI Arc/Info ASCII grid"
+msgstr "ข้อมูลกริด ESRI Arc/Info ASCII"
+
+msgid "GRIDATB.FOR map file (TOPMODEL)"
+msgstr "GRIDATB สำหรับไฟล์แผนที่ (TOPMODEL)"
+
+msgid "MAT-File (v.4) array (Matlab or Octave)"
+msgstr "MAT-File (v.4) array (Matlab or Octave)"
+
+msgid "SPOT vegetation NDVI data sets"
+msgstr "ข้อมูล SPOT vegetation NDVI"
+
+msgid "SRTM hgt files"
+msgstr "แฟ้มข้อมูล SRTM hgt"
+
+msgid "Terra ASTER HDF files"
+msgstr "แฟ้มข้อมูลTerra ASTER HDF"
+
+msgid "Various formats using OGR"
+msgstr "ชนิดอื่นด้วย OGR"
+
+msgid "ASCII points file or GRASS ASCII vector file"
+msgstr "แฟ้มข้อมูลจุด ASCII หรือแฟ้มข้อมูลเวคเตอร์ GRASS ASCII"
+
+msgid "Import old GRASS vector format"
+msgstr "นำเข้าข้อมูลเวคเตอร์เก่าของ GRASS "
+
+msgid "DXF file"
+msgstr "แฟ้มข้อมูล DXF:"
+
+msgid "ESRI e00 format"
+msgstr "ข้อมูลชนิด ESRI e00"
+
+msgid "Garmin GPS Waypoints/Routes/Tracks"
+msgstr "Garmin GPS Waypoints/Routes/Tracks"
+
+msgid "GPS Waypoints/Routes/Tracks using GPSBabel"
+msgstr "GPS Waypoints/Routes/Tracks ใช้ GPSBabel"
+
+msgid "GEOnet Name server country files (US-NGA GNS)"
+msgstr "ชื่อของ GEOnet server country ไฟล์ (US-NGA GNS)"
+
+msgid "Matlab and MapGen files"
+msgstr "Matlab และ MapGen ไฟล์"
+
+msgid "Grid 3D"
+msgstr "กริด 3D"
+
+msgid "ASCII 3D file"
+msgstr "แฟ้มข้อมูล ASCII 3D"
+
+msgid "Vis5D file"
+msgstr "แฟ้มข้อมูล Vis5D"
+
+msgid "Export"
+msgstr "ส่งออก"
+
+msgid "ASCII grid (for GRASS, Surfer, Modflow, etc)"
+msgstr "กริด ASCII (สำหรับ GRASS, Surfer, Modflow,อื่นๆ )"
+
+msgid "ASCII x,y,z values of cell centers"
+msgstr "ASCII x,y,z ค่าของ cell centers"
+
+msgid "ESRI ARC/INFO ASCII grid"
+msgstr "กริด ESRI ARC/INFO ASCII"
+
+msgid "Binary file"
+msgstr "แฟ้มไบนารี"
+
+msgid "MPEG-1 animations"
+msgstr "ภาพเคลื่อนไหว MPEG-1"
+
+msgid "PNG image (not georeferenced)"
+msgstr "แฟ้มภาพ PNG (not georeferenced)"
+
+msgid "PPM image (24bit)"
+msgstr "แฟ้มภาพ PPM (24bit)"
+
+msgid "PPM image from red, green, blue raster maps"
+msgstr "แฟ้มภาพ PPM จากแผนที่แรสเตอร์ red, green, blue"
+
+msgid "POVray height-field"
+msgstr "POVray height-field"
+
+msgid "TIFF image (8/24bit)"
+msgstr "แฟ้มภาพ TIFF (8/24bit)"
+
+msgid "VRML file"
+msgstr "แฟ้มข้อมูล VRML "
+
+msgid "VTK ASCII file"
+msgstr "แฟ้มข้อมูล VTK ASCII"
+
+msgid "Various formats using OGR (SHAPE, MapInfo etc)"
+msgstr "หลายชนิดด้วย OGR (SHAPE, MapInfo etc)"
+
+msgid "DXF file (ASCII)"
+msgstr "แฟ้มข้อมูล DXF (ASCII)"
+
+msgid "ASCII vector or point file/old GRASS ASCII vector file"
+msgstr "เวคเตอร์ ASCII หรือแฟ้มข้อมูลจุด/แฟ้มข้อมูลเวคเตอร์เก่า GRASS ASCII "
+
+msgid "POV-Ray format"
+msgstr "ชนิด POV-Ray"
+
+msgid "Copy maps"
+msgstr "คัดลอกแผนที่"
+
+msgid "List maps"
+msgstr "ลิสต์แผนที่"
+
+msgid "List maps using expressions and 'wildcards'"
+msgstr "ลิสต์แผนที่ด้วยเงื่อนไข และ'wildcards'"
+
+msgid "Rename maps"
+msgstr "เปลี่ยนชื่อแผนที่"
+
+msgid "Remove maps"
+msgstr "เอาแผนที่ออก"
+
+msgid "Remove maps using expressions and 'wildcards'"
+msgstr "เอาแผนที่ออกด้วยเงื่อนไขและ 'wildcards'"
+
+msgid "Raster to vector map"
+msgstr "จาก แรสเตอร์ เป็น เวคเตอร์"
+
+msgid "Raster map series to volume"
+msgstr " "
+
+msgid "Raster 2.5D map to volume"
+msgstr "แผนที่เชิงภาพ 2.5มิติ ไปเป็น ปริมาตร"
+
+msgid "Vector to vector"
+msgstr "จากเวคเตอร์เป็นเวคเตอร์"
+
+msgid "Vector lines to points"
+msgstr "จากเส้นเวคเตอร์เป็นจุด"
+
+msgid "Vector 3D points to volume voxels"
+msgstr "แผนที่เชิงเส้น 3มิติ ไปเป็น ปริมาตร Voxel"
+
+msgid "Sites (GRASS 5.x) to vector"
+msgstr "จาก Sites (GRASS 5.x) เป็นเวคเตอร์"
+
+msgid "Volumes to raster map series"
+msgstr "ปริมาตร ไปเป็น ชุอแผนที่เชิงภาพ"
+
+msgid "Groups"
+msgstr "กลุ่ม"
+
+msgid "New"
+msgstr "ใหม่"
+
+msgid "Create new group file"
+msgstr "สร้างแฟ้มข้อมูลกลุ่มใหม่"
+
+msgid "Open group file"
+msgstr "เปิดแฟ้มข้อมูลกลุ่ม"
+
+msgid "Save group file"
+msgstr "บันทึกแฟ้มข้อมูลกลุ่ม"
+
+msgid "Save group file as name"
+msgstr "บันทึกแฟ้มข้อมูลกลุ่มเป็น"
+
+msgid "Close group"
+msgstr "ปิด กลุ่ม"
+
+msgid "Save display to image file"
+msgstr "บันทึกหน้าจอเป็นแฟ้มข้อมูลภาพ"
+
+msgid "XWD (Save display, selected with mouse, to map.xwd in home directory )"
+msgstr "XWD (บันทึกการแสดงผล, เลือกด้วยเม้าส์, ไปที่ map.xwd ใน home directory )"
+
+msgid "Save displays to multiple graphic file formats"
+msgstr "บันทึกหลายหน้าจอเป็นหลายแฟ้มข้อมูลภาพ"
+
+msgid "Save map to Postscript file"
+msgstr "บันทึกแผนที่เป็นแฟ้มข้อมูล Postscript"
+
+msgid "Print to default printer"
+msgstr "พิมพ์ด้วยเครื่องพิมพ์หลัก"
+
+msgid "print"
+msgstr "พิมพ์"
+
+msgid "Exit Display Manager"
+msgstr "ออกจากตัวจัดการแสดงผล "
+
+msgid "Zoom to maximum extent of all displayed maps"
+msgstr "ขยายไปจนถึงขอบเขตมากสุดของแผนที่ที่แสดงอยู่"
+
+msgid "Access other mapsets in current location"
+msgstr "เข้า mapsets อื่นใน location ปัจจุบัน "
+
+msgid "Change current working session to new mapset, location, or GISDBASE"
+msgstr "เปลี่ยน session ปัจจุบันที่ใช้งานอยู่ไป mapset, location, หรือ GISDBASE ใหม่ือ"
+
+msgid "Modify access by other users to current mapset"
+msgstr "แก้ไขการเข้าถึงโดยผู้ใช้อื่นสำหรับmapset ปัจจุบัน"
+
+msgid "Show current GRASS environment settings"
+msgstr "แสดงค่า GRASS environment ปัจจุบัน"
+
+msgid "Set GRASS environment settings"
+msgstr "ตั้งค่า GRASS environment"
+
+msgid "Create/edit projection information for current location"
+msgstr "สร้าง/แก้ไข projection สำหรับ location ปัจจุบัน "
+
+msgid "Show projection information and create projection files"
+msgstr "แสดง projection และสร้างแฟ้มข้อมูล projection "
+
+msgid "Convert coordinates from one projection to another"
+msgstr "แปลงพิกัดไป projection อื่นง"
+
+msgid "Text"
+msgstr "ข้อความ"
+
+msgid "Select default text font"
+msgstr "เลือกแบบอักษรหลัก"
+
+msgid "Select default freetype text font"
+msgstr "เลือกแบบอักษร freetype หลัก"
+
+msgid "X-monitor displays"
+msgstr "หน้าจอแสดงผล X"
+
+msgid "Configure xmonitor displays"
+msgstr "ปรับแต่งค่าหน้าจอแสดงผล X"
+
+msgid "Configure frames for xmonitors"
+msgstr "ปรับแต่งค่า frames หน้าจอแสดงผล X"
+
+msgid "Start/restart xmonitor at specified window size"
+msgstr "เริ่มต้น/เริ่มใหม่ xmonitor ตามขนาดหน้าต่างที่กำหนด"
+
+msgid "Set active xmonitor to specified size"
+msgstr "กำหนดขนาด xmonitor ที่ทำงาน ตามที่ได้ระบุ"
+
+msgid "Display information about active xmonitor"
+msgstr "แสดงข้อมูลของหน้าจอแสดงผล X ที่้ใช้งานอยู่"
+
+msgid "Compress/decompress raster file"
+msgstr "ย่อ/ขยายแฟ้มข้อมูลแรสเตอร์"
+
+msgid "Manage boundary definitions"
+msgstr "จัดการข้อกำหนด ของ  boundary"
+
+msgid "Manage null values"
+msgstr "จัดการค่า null "
+
+msgid "Manage timestamps for files"
+msgstr "จัดการ  timestamps สำหรับไฟล์"
+
+msgid "Quantization for floating-point maps"
+msgstr "Quantization สำหรับ แผนที่ floating-point"
+
+msgid "Resample (change resolution)"
+msgstr "Resample (เปลี่ยนความละเอียด)"
+
+msgid "Resample using nearest neighbor method"
+msgstr "Resample ใช้วิธ๊ Nearest neighbor"
+
+msgid "Resample using various interpolation methods"
+msgstr "Resample ใช้วิธ๊ Various interpolation"
+
+msgid "Resample using regularized spline with tension method"
+msgstr "Resample ใช้วิธ๊  Regularized spline ร่วมกับ Tension"
+
+msgid "Support file creation and maintenance"
+msgstr "สร้าง และ บำรุงรักษา Support ไฟล์"
+
+msgid "Reproject raster from other location"
+msgstr "Reproject แผนที่เชิงภาพจาก ตำแหน่งอื่น"
+
+msgid "Generate tiling for other projection"
+msgstr "สร้าง Tiling สำหรับ Projection อื่น"
+
+msgid "Set colors to predefined color tables"
+msgstr "กำหนดสีตั้งต้น ของ ตารางสี"
+
+msgid "Set colors using color rules"
+msgstr "กำหนดสีโดยใช้ กฎของสี"
+
+msgid "Blend 2 color maps to produce 3 RGB files"
+msgstr "ผสม 2 แผนที่สี เพื่อสร้าง 3 RGB ไฟล์"
+
+msgid "Create color image from RGB files"
+msgstr "สร้างแฟ้มข้อมูลภาพสีจากแฟ้มข้อมูล RGB "
+
+msgid ""
+"Create 3 RGB (red, green, blue) maps from 3 HIS (hue, intensity, saturation) "
+"maps"
+msgstr ""
+"สร้างแผนที่ 3 RGB (red, green, blue) จากแผนที่ 3 HIS (hue, intensity, saturation)"
+
+msgid "Create raster buffers"
+msgstr "สร้างพื้นที่กันชนแรสเตอร์"
+
+msgid "Create raster MASK"
+msgstr "สร้างแรสเตอร์ MASK"
+
+msgid "Locate closest points between areas in 2 raster maps"
+msgstr "หาจุดใกล้สุดระหว่างพื้นที่ใน 2 แผนที่แรสเตอร์"
+
+msgid "Moving window analysis of raster cells"
+msgstr "กำลังย้าย หน้าต่างวิเคราะห์ ของ cell แผนที่เชิงภาพ"
+
+msgid "Analyze vector points in neighborhood of raster cells"
+msgstr "วิเคราะห์ แผนที่เชิงเส้น จุด ใน  neighborhood ของ cell "
+
+msgid "Function of map series (time series)"
+msgstr "ฟังก์ชันของชุดข้อมูลแผนที่ (time series)"
+
+msgid "Statistical calculations for cover map over base map"
+msgstr "คำนวน Statistical สำหรับ แผนที่ Cover ทั่วทั้งแผนที่ฐาน"
+
+msgid "Solar irradiance and daily irradiation"
+msgstr "Solar irradiance และ daily irradiation"
+
+msgid "Shadows map for sun position or date/time"
+msgstr "แผนที่ Shadows สำหรับตำแหน่ง Sun หรือ วัน/เวลา"
+
+msgid "Calculate cumulative movement costs between locales"
+msgstr "คำนวน Cumulative movement costs ระหว่าง locales"
+
+msgid "Profile analysis"
+msgstr "Profile analysis"
+
+msgid "Shaded relief map"
+msgstr "แผนที่ Shaded relief"
+
+msgid "Visibility/line of sight"
+msgstr "Visibility/line of sight"
+
+msgid "Clump small areas (statistics calculated by r.volume)"
+msgstr "Clump พื้นที่เล็กๆ (statistics คำนวนโดย r.volume)"
+
+msgid "Grow areas"
+msgstr "Grow areas"
+
+msgid "Thin linear features"
+msgstr "การ ทำให้ข้อมูลเชิงเส้น บางลง"
+
+msgid "Carve stream channels into elevation map using vector streams map"
+msgstr "Carve stream channels ไปเป็น Elevation map โดยใช้แผนที่เชิงเส้น Streams"
+
+msgid "Depressionless elevation map and flowline map"
+msgstr "แผนที่ Depressionless elevation และ แผนที่ flowline"
+
+msgid "Fill lake from seed point to specified level"
+msgstr "เติม lake จาก จุด seed point ไปที่ ระดับที่กำหนด"
+
+msgid "Flow accumulation for massive grids"
+msgstr "Flow accumulation สำหรับ massive grids"
+
+msgid "Generate flow lines for raster map"
+msgstr "สร้าง flow lines สำหรับแผนที่เชิงภาพ"
+
+msgid "SIMWE sediment erosion, transport, & deposition modeling"
+msgstr "SIMWE sediment erosion, transport, & แบบจำลอง deposition"
+
+msgid "Analyze landscape characteristics"
+msgstr "วิเคราะห์  landscape characteristics"
+
+msgid "Analyze landscape patch characteristics"
+msgstr "วิเคราะห์  landscape patch characteristics"
+
+msgid "Output landscape patch information"
+msgstr "ผลลัพธ์ Landscape patch information"
+
+msgid "Generate rate of spread (ROS) maps"
+msgstr "สร้างแผนที่อัตราการขยาย (ROS)"
+
+msgid "Generate least-cost spread paths"
+msgstr "สร้าง  least-cost spread paths"
+
+msgid "Simulate anisotropic spread phenomena"
+msgstr "การจำลอง Anisotropic spread phenomena"
+
+msgid "Edit category values of individual cells for displayed raster map"
+msgstr "แก้ไขค่าหมวดหมู่ของ  individual cells สำหรับแสดงแผนที่เชิงภาพ"
+
+msgid "Reclassify categories for areas of specified sizes"
+msgstr "Reclassify หมวดหมู่ สำหรับ Areas ของขนาดที่กำหนด"
+
+msgid "Reclassify categories using rules"
+msgstr "Reclassify หมวดหมู่ โดยใช้กฎเกณท์"
+
+msgid "Reclassify categories using rules file"
+msgstr "Reclassify หมวดหมู่ โดยใช้ ไฟล์ กฎเกณท์"
+
+msgid "Recode categories using rules (create new map)"
+msgstr "Recode หมวดหมู่ โดยใช้ กฎเกณท์ (สร้างแผนที่ใหม่)"
+
+msgid "Recode categories using rules file (create new map)"
+msgstr "Recode หมวดหมู่ โดยใช้ ไฟล์ กฎเกณท์ (สร้างแผนที่ใหม่)"
+
+msgid "Rescale categories (create new map)"
+msgstr "Rescale หมวดหมู่ (สร้างแผนที่ใหม่)"
+
+msgid "Rescale categories with equalized histogram (create new map)"
+msgstr "Rescale หมวดหมู่ โดยใช้ Equalized histogram (สร้างแผนที่ใหม่)"
+
+msgid "Generate concentric circles around points"
+msgstr "สร้าง Concentric circles รอบๆ จุด"
+
+msgid "Generate random raster cells"
+msgstr "สร้างแรสเตอร์เซลล์สุ่ม"
+
+msgid "Generate random cells and vector points from raster map"
+msgstr "สร้างแรสเตอร์เซลล์สุ่มและจุดเวคเตอร์จากแผนที่แรสเตอร์"
+
+msgid "Generate density surface using moving Gausian kernal"
+msgstr "สร้าง density พื้นผิวด้วย Gausian kernal"
+
+msgid "Generate fractal surface"
+msgstr "สร้างพื้นผิว fractal"
+
+msgid "Generate gaussian deviates surface"
+msgstr "สร้างพื้นผิว gaussian deviates"
+
+msgid "Generate plane"
+msgstr "สร้าง ระนาบ"
+
+msgid "Generate random deviates surface"
+msgstr "สร้างพื้นผิวเบี่ยงเบนแบบสุ่ม"
+
+msgid "Generate random surface with spatial dependence"
+msgstr "สร้าง Random surface โดยใช้ Spatial dependence"
+
+msgid "Generate vector contour lines"
+msgstr "สร้าง เส้นชั้นความสูง"
+
+msgid "Bilinear interpolation from raster points"
+msgstr "Bilinear interpolation จาก จุดเชิงภาพ"
+
+msgid "Inverse distance weighted interpolation from raster points"
+msgstr "Inverse distance weighted interpolation จาก จุดเชิงภาพ"
+
+msgid "Interpolation from raster contours"
+msgstr "Interpolation จาก แผนที่เส้นชั้นความสูงเชิงภาพ"
+
+msgid "Inverse distance weighted interpolation from vector points"
+msgstr "Inverse distance weighted interpolation จากแผนที่เชิงเส้น จุด"
+
+msgid "Regularized spline tension interpolation from vector points or contours"
+msgstr ""
+"Regularized spline tension interpolation จากแผนที่เชิงเส้น จุด หรือ เส้นชั้นความสูง"
+
+msgid "Fill NULL cells by interpolation using regularized spline tension"
+msgstr "เติม NULL cells โดย interpolation ใช้ Regularized spline tension"
+
+#, fuzzy
+msgid "Report category labels and values"
+msgstr "แสดงรายงาน แถบข้อความ หมวดหมู่ และ ค่า"
+
+msgid "Range of all category values"
+msgstr "ช่วงของค่าในหมวดทั้งหมด"
+
+msgid "Sum all cell category values"
+msgstr "รวม ค่า cell category ทั้งหมด"
+
+msgid "Summary statistics for clumped cells (works with r.clump)"
+msgstr "Summary statistics สำหรับ clumped cells (ใช้คำสั่ง r.clump)"
+
+msgid "Univariate statistics (script version)"
+msgstr "Univariate statistics (แบบ script)"
+
+msgid "Sample values along transects"
+msgstr "ค่าตัวอย่าง ตาม Transect"
+
+msgid "Sample values along transects (use azimuth, distance)"
+msgstr "ค่าตัวอย่าง ตาม Transect (ใช้ azimuth, และ ระยะทาง)"
+
+msgid "Linear regression between 2 maps"
+msgstr "Linear regression ระหว่าง 2 แผนที่"
+
+msgid "Mutual category occurences (coincidence)"
+msgstr "Mutual category occurences (สอดคล้องต้องกัน)"
+
+msgid "Create/rebuild topology"
+msgstr "สร้าง/ทำอีกครั้ง topology"
+
+msgid "Clean vector files"
+msgstr "Clean ไฟล์เชิงเส้น"
+
+msgid "Add missing centroids"
+msgstr "เพิ่ม จุดศูนย์ถ่วง ที่ขาด"
+
+msgid "Build polylines from adjacent segments"
+msgstr "สร้าง Polylines จาก ชิ้นส่วนที่ติดกัน"
+
+msgid "Split polylines into segments"
+msgstr "ตัด  Polylines ไปเป็น ชิ้นส่วน"
+
+msgid "Create lines parallel to existing lines"
+msgstr "สร้างเส้นขนาน จากเส้นที่มีอยู่แล้ว"
+
+msgid "Dissolve common boundaries"
+msgstr "Dissolve common boundaries"
+
+msgid "Convert vector feature types"
+msgstr "แปลง ชนิดข้อมูลเชิงเส้น"
+
+msgid "Convert 2D vector to 3D by sampling raster"
+msgstr "แปลง ข้อมูลเชิงเส้น 2มิติ ไปเป็น 3มิติ โดย sampling raster"
+
+msgid "Extrude 2D vector into 3D vector"
+msgstr "Extrude ข้อมูลเชิงเส้น 2มิติ ไปเป็น 3มิติ"
+
+msgid "Create text label file for vector features"
+msgstr "สร้าง ไฟล์ แถบข้อความ สำหรับ ข้อมูลเชิงเส้น"
+
+msgid "Reproject vector from other location"
+msgstr "Reproject แผนที่เชิงเส้น จาก ตำแหน่งอื่น"
+
+msgid "Create new vector as link to external OGR layer"
+msgstr "สร้างแผนที่เชิงเส้นใหม่ ที่เชื่อมกับ ชั้นข้อมูล OGR"
+
+msgid "Set database connection for vector attributes"
+msgstr "กำหนด การเชื่อมต่อฐานข้อมูล สำหรับรายละเอียดของแผนที่เชิงเส้น"
+
+msgid "Rectify and georeference vector map"
+msgstr "Rectify และ Georeference แผนที่เชิงเส้น"
+
+msgid "Query by attributes"
+msgstr "ร้องขอโดยข้อมูลลักษณะ"
+
+msgid "Query by map features"
+msgstr "ค้นหา โดยใข้ ข้อมูลแผนที่"
+
+msgid "Create vector buffers"
+msgstr "สร้างพื้นที่กันชนเวคเตอร์"
+
+msgid "Linear referencing for vectors"
+msgstr "การอ้างอิงเชิงเส้น สำหรับแผนที่เชิงเส้น"
+
+msgid "Create linear reference system"
+msgstr "สร้าง ระบบอ้างอิงตำแหน่งเชิงเส้น"
+
+msgid "Create stationing from imput lines, and linear reference system"
+msgstr "สร้าง  Stationing จากเส้นที่นำเข้า, และระบบอ้างอิงตำแหน่งเชิงเส้น"
+
+msgid ""
+"Create points/segments from input lines, linear reference system and "
+"positions read from stdin"
+msgstr ""
+"สร้าง จุด/ชิ้นส่วน จากเส้นที่นำเข้า, ระบบอ้างอิงตำแหน่งเชิงเส้น และ ตำแหน่ง โดยอ่านจาก stdin"
+
+msgid ""
+"Find line id and real km+offset for given points in vector map using linear "
+"reference system"
+msgstr "ค้น"
+
+msgid "Locate nearest features to points or centroids"
+msgstr "ระบุข้อมูลที่ใกล้ที่สุด ถึงจุด หรือ จุดศูนย์ถ่วง"
+
+msgid "Generate Thiessen polygons around points (Voronoi diagram)"
+msgstr "สร้าง Thiessen polygons รอบๆจุด (Voronoi diagram)"
+
+msgid "Connect points to create Delaunay triangles"
+msgstr "เชื่อมจุดเพื่อสร้าง Delaunay triangles"
+
+msgid "Shortest route (visualization only)"
+msgstr "เส้นทางสั้นสุด (แสดงผลเท่านั้น)"
+
+msgid "Split net to bands between cost isolines"
+msgstr "ตัด net ไปเป็น bands ระหว่าง Cost isolines"
+
+msgid "Overlay/combine 2 vector maps"
+msgstr "ซ้อนทับ/รวม 2 แผนที่เวคเตอร์"
+
+msgid "Patch multiple maps (combine)"
+msgstr "ปรับปรุงหลายแผนที่  (รวมเข้าด้วยกัน)"
+
+msgid "Generate area feature for extent of current region"
+msgstr "สร้างข้อมูล Area สำหรับ ขอบเขต ของ ขอบเขตปัจจุบัน"
+
+msgid "Generate rectangular vector grid"
+msgstr "ง"
+
+msgid "Attach, delete, or report categories"
+msgstr "แนบ, ลบ, หรือรายงานหมวดหมู่"
+
+msgid "Reclassify features using rules file"
+msgstr "Reclassify ข้อมูล โดยใช้ไฟล์กฎเกณท์"
+
+msgid "Work with vector points"
+msgstr "ทำงานกับแผนที่เชิงเส้น จุด"
+
+msgid "Generate points from database with x/y coordinates"
+msgstr "สร้างจุดจากฐานข้อมูลด้วย พิกัด x/y"
+
+msgid "Random location perturbations of points"
+msgstr "Random location perturbations ของ จุด"
+
+msgid "Generate convex hull for point set"
+msgstr "สร้าง Convex Hull สำหรับ ชุดของจุด"
+
+msgid "Generate Delaunay triangles for point set"
+msgstr "สร้าง Delaunay triangles จากชุดข้อมูลจุด"
+
+msgid "Generate Voronoi diagram/Thiessen polygons for point set"
+msgstr "สร้าง Voronoi diagram/Thiessen ข้อมูลหลายเหลี่ยมจากชุดข้อมูลจุด"
+
+msgid "Sample raster maps"
+msgstr "ตัวอย่างแผนที่แรสเตอร์ "
+
+msgid "Calculate statistics for raster map overlain by vector map"
+msgstr "คำนวน Statistics สำหรับ แผนที่เชิงภาพ ซ้อนทับโดย แผนที่เชิงเส้น"
+
+msgid "Partition points into test/training sets for k-fold cross validatation"
+msgstr ""
+"แบ่งส่วน ชุดของจุด ไปเป็น  ชุดของ test/training สำหรับ k-fold cross validatation"
+
+msgid "Transfer attribute data from queried vector map to points"
+msgstr "ถ่ายทอด ข้อมูลรายละเอียด จาก แผนที่เชิงเส้นที่เลือก ไปเป็น จุด"
+
+msgid "Load vector attributes to database or create reports"
+msgstr "อ่านข้อมูลรายละเอียด ข้อมูลเชิงเส้น ไปที่ ฐานข้อมูล หรือ สร้างรายงาน"
+
+msgid "Report areas for vector attribute categories"
+msgstr "รายงาน Areas สำหรับ รายละเอียด หมวดหมู่ ของข้อมูลเชิงเส้น"
+
+msgid "Test normality of point distribution"
+msgstr "ทดสอบความปกติ การกระจายของจุด"
+
+msgid "Calculate stats for raster map underlying vector objects"
+msgstr "คำนวน stats สำหรับแผนที่เชิงภาพ ที่อยู่ใต้ วัตถุเชิงเส้น"
+
+msgid "Indices of point counts in quadrats"
+msgstr "ดัชนี ของการนับจุด ใน กรอบ"
+
+msgid "Create/edit imagery group"
+msgstr "สร้าง/แก้ไข กลุ่มภาพ"
+
+msgid "Target imagery group"
+msgstr "กลุ่มภาพ เป้าหมาย"
+
+msgid "Mosaic up to 4 adjacent images"
+msgstr "ต่อภาพ 4 ภาพที่อยู่ติดกัน"
+
+msgid ""
+"Color balance and enhance color tables of multiband imagery for rgb display"
+msgstr "การปรับสี และ  ตาราง Enhance สี ของ ภาพ Multiband สำหรับแสดงแบบ RGB"
+
+msgid ""
+"Transform HIS (Hue/Intensity/Saturation) color image to RGB (Red/Green/Blue)"
+msgstr ""
+"แปลงข้อมูลแบบผสมสีแบบความอิ่มสี HIS (Hue/Intensity/Saturation) เป็น RGB (Red/Green/"
+"Blue)"
+
+msgid ""
+"Transform RGB (Red/Green/Blue) color image to HIS (Hue/Intensity/Saturation)"
+msgstr ""
+"แปลงข้อมูลแบบผสมสีRGB (Red/Green/Blue) เป็น นแบบความอิ่มสี HIS (Hue/Intensity/"
+"Saturation)"
+
+msgid "Rectify and georeference image group"
+msgstr "Rectify และ georeference กลุ่มภาพ"
+
+msgid "Set ground control points (GCP's) from raster map or keyboard entry"
+msgstr "กำหนด จุดควบคุมภาคพื้นดิน (GCP) จาก แผนที่เชิงภาพ หรือ จาก คีย์บอร์ด"
+
+msgid "Set ground control points (GCP's) from vector map or keyboard entry"
+msgstr "กำหนด จุดควบคุมภาคพื้นดิน (GCP) จาก แผนที่เชิงเส้น หรือ จาก คีย์บอร์ด"
+
+msgid "Affine and Polynomial rectification (rubber sheet)"
+msgstr "Affine และ  Polynomial rectification (rubber sheet)"
+
+msgid "Brovey transformation and pan sharpening"
+msgstr "Brovey transformation และ Pan sharpening"
+
+msgid "Non-interactive input for supervised classification (MLC)"
+msgstr "นำเข้าแบบไม่โต้ตอบ สำหรับ  supervised classification  (MLC)"
+
+msgid "Non-interactive input for supervised classification (SMAP)"
+msgstr "นำเข้าแบบไม่โต้ตอบ สำหรับ  supervised classification  (SMAP)"
+
+msgid "Zero edge crossing detection"
+msgstr "พบ Zero edge crossing"
+
+msgid "User defined matrix/convolving filter"
+msgstr "ใช้การกำหนด การกรอง matrix/convolving"
+
+msgid "Canonical component"
+msgstr "ส่วนประกอบ ซึ่งเป็นที่ยอมรับ"
+
+msgid "Principal component"
+msgstr "ส่วนประกอบ หลัก"
+
+msgid "Fast Fourier Transform"
+msgstr "การแปลง แบบ Fast Fourier"
+
+msgid "Inverse Fast Fourier Transform"
+msgstr "การแปลง แบบ Inverse Fast Fourier"
+
+msgid "Range of image values"
+msgstr "ช่วงของ ค่าภาพ"
+
+msgid "Bit pattern comparison for ID of low quality pixels"
+msgstr "แบบการเปรียบเทียบ Bit สำหรับ ID ของ pixel คุณภาพต่ำ"
+
+msgid "Kappa classification accuracy assessment"
+msgstr "การประเมินความน่าเชื่อถือของ Kappa classification"
+
+msgid "Optimum index factor for LandSat TM"
+msgstr "ดัชนีตัวคูณ ที่ดีทีสุด สำหรับ LandSat TM"
+
+msgid "&Grid3D"
+msgstr "&กริด3มิติ"
+
+msgid "Create 3D mask for grid3D operations"
+msgstr "สร้าง mask 3มิติ สำหรับ การทำงาน กริด3มิติ"
+
+msgid "Create 2D raster cross section from grid3d volume"
+msgstr "สร้างแผนที่รูปตัดตามขวาง เชิงภาพ 2มิติ จาก กริด3มิติ ปริมาตร"
+
+msgid "Map calculator for grid3D operations"
+msgstr "Map calculator สำหรับ  การทำงาน กริด3มิติ"
+
+msgid "Interpolate volume from vector points using splines"
+msgstr "ตีความ ปริมาตร จาก แผนที่เชิงเส้น จุด โดยใช้ spline"
+
+msgid "Display information about grid3D volume"
+msgstr "แสดงข้อมูลเกี่ยวกับ กริด3มิติ ปริมาตร"
+
+msgid "Add columns to table"
+msgstr "เพิ่มคอลัมน์ตาราง"
+
+msgid "Change values in a column"
+msgstr "เปลี่ยนค่าในคอลัมน์"
+
+msgid "Query data (SQL select)"
+msgstr "ร้องขอข้อมูล (SQL select)"
+
+msgid "Execute SQL statement"
+msgstr "ประมวลผลคำสั่ง SQL"
+
+msgid "red (RGB) or hue (HIS):"
+msgstr "red (RGB) หรือ hue (HIS):"
+
+msgid "green (RGB) or intensity (HIS):"
+msgstr "green (RGB) หรือ intensity (HIS):"
+
+msgid "blue (RGB) or saturation (HIS):"
+msgstr "blue (RGB) หรือ saturation (HIS):"
+
+msgid "     (leave blank to place with mouse; position will not save)"
+msgstr "     (leave blank to place with mouse; position will not save)"
+
+msgid "     coordinate type"
+msgstr "ชนิดพิกัด"
+
+msgid "  align text with coordinate point"
+msgstr "  จัดตำแหน่งข้อความด้วยจุดพิกัด"
+
+msgid ""
+"     (for coordinates, % is from bottom left of display, pixels from top "
+"left)"
+msgstr "     (สำหรับพิกัด, % จากงซ้ายล่างของจอ, พิกเซล จากซ้ายบน)"
+
+msgid "     text rotation (degrees counterclockwise)"
+msgstr "    หมุนข้อความ (องศา ทวนเข็มนาฬิกา)"
+
+msgid "rotation in radians"
+msgstr "rotation in radians"
+
+msgid "height in pixels instead of %"
+msgstr "ความสูงในหน่วยว พิกเแทนที่ %ซล"
+
+msgid "Welcome to the GRASS GIS manager"
+msgstr "ยินดีต้อนรับเข้าสู่ตัวจัดการ GRASS GIS "
+
+msgid "Display active layers in current region"
+msgstr "แสดงชั้นข้อมูลที่ใช้งานอยู่ในขอบเขตปัจจุบัน"
+
+msgid "Display active layers in default region"
+msgstr "แสดงชั้นข้อมูลที่ใช้งานอยู่ในขอบเขตหลัก"
+
+msgid "Display active layers in saved region setting"
+msgstr "แสดงชั้นข้อมูลที่ใช้งานอยู่ในขอบเขตที่บันทึกค่าไว้"
+
+msgid "NVIZ - n dimensional visualization"
+msgstr "NVIZ - การแสดงผลแบบหลายมิติ"
+
+msgid "Fly through path for NVIZ"
+msgstr "เส้นทางบินผ่าน สำหรับ NVIZ"
+
+msgid "Zoom"
+msgstr "ย่อ/ขยาย"
+
+msgid "Pan and recenter"
+msgstr "เลื่อน และ เปลี่ยน จุดศูนย์กลาง"
+
+msgid "Query map (select map first)"
+msgstr "ค้นหาแผนที่ (เลือกแผนที่ก่อน)"
+
+msgid "Measure lengths and areas"
+msgstr "วัดความยาวและพื้นที่"
+
+msgid "Geographical position"
+msgstr "ตำแหน่งทางภูมิศาสตร์"
+
+msgid "Print raster & vector maps using ps.map"
+msgstr "พิมพ์แรสเตอร์ และเวคเตอร์ โดย ps.map"
+
+msgid "Add legend"
+msgstr "เพิ่ม legend"
+
+msgid "Add paint labels layer (from directory paint/labels)"
+msgstr "เพิ่ม ชั้นข้อมูล แถบข้อความ (จาก directory paint/labels)"
+
+msgid "Add freetype text layer"
+msgstr "เพิ่มชั้นข้อมูลข้อความ freetype"
+
+msgid "Create or select display frame"
+msgstr "สร้าง หรือ เลือกเฟรม"
+
+msgid "Vector name:"
+msgstr "ชื่อเวคเตอร์:"
+
+msgid "Display:"
+msgstr "แสดงผล:"
+
+msgid "shapes"
+msgstr "รูปร่าง"
+
+msgid "categories"
+msgstr "หลายหมวดหมู่"
+
+msgid "topology"
+msgstr "topology"
+
+msgid "line directions"
+msgstr "ทิศทางของเส้น"
+
+msgid "            "
+msgstr "            "
+
+msgid "faces"
+msgstr "faces"
+
+msgid "color"
+msgstr "สี"
+
+msgid "  "
+msgstr "  "
+
+msgid "random colors"
+msgstr "สีสุ่ม"
+
+msgid " size"
+msgstr "ขนาด"
+
+msgid " align with pt"
+msgstr "วางตัว ด้วย pt"
+
+msgid "     layer for labels"
+msgstr "ชั้นข้อมูลสำหรับ แถบข้อความ"
+
+msgid " attribute col for labels"
+msgstr "คอลัมน์ข้อมูลลักษณะสำหรับ แถบข้อความ"
+
+msgid "Query vectors: "
+msgstr "ร้องขอข้อมูลเวคเตอร์ "
+
+msgid " query cat values"
+msgstr "ค้นหาค่า cat"
+
+msgid "SQL query"
+msgstr "การร้องขอ SQL"
+
+msgid "     SQL where statement"
+msgstr "     ประโยค SQL where "
+
+msgid "Mouse query setup:"
+msgstr "กำหนดการค้นหาด้วย เม้าส์"
+
+msgid "edit attributes (form mode)"
+msgstr "แก้ไขข้อมูลลักษณธ (ในแบบฟอร์ม)"
+
+msgid "results as text in terminal"
+msgstr "ผลลัพธ์แบบตัวอักษร ในหน้าจอ"
+
+msgid "Line width for ps.map print output:"
+msgstr "ความกว้างเส้นสำหรับ พิมพ์ ผลลัพธ์ จาก ps.map:"
+
+msgid "Line width used for printing"
+msgstr "ความกว้างเส้นสำหรับการพิมพ์"
+
+msgid " Background color: "
+msgstr "สีพื้นหลัง "
+
+msgid "no background color"
+msgstr "ไม่มีสีพื้นหลัง"
+
+msgid " "
+msgstr "   "
+
+msgid "display N. arrow only "
+msgstr "แสดง ทิศเหนือลูกศร เท่านั้น"
+
+msgid "line scale instead of bar scale "
+msgstr "มาตราส่วนแบบเส้น แทน มาตราส่วนแบบแท่ง"
+
+msgid "Text options: color"
+msgstr "ตัวเลือกข้อความ: สี"
+
+msgid "Paper format"
+msgstr "ชนิดกระดาษ"
+
+msgid "Custom"
+msgstr "กำหนดเอง"
+
+msgid "height:"
+msgstr "สูง:"
+
+msgid "left:"
+msgstr "ซ้าย:"
+
+msgid "right:"
+msgstr "ขวา:"
+
+msgid "top:"
+msgstr "บน:"
+
+msgid "bottom:"
+msgstr "ล่าง:"
+
+msgid "PS file:"
+msgstr "แฟ้มข้อมูลPS  :"
+
+msgid "PDF file:"
+msgstr "แฟ้มข้อมูล PDF:"
+
+msgid "PNG file:"
+msgstr "แฟ้มข้อมูล PNG:"
+
+msgid "PNG file resolution (points/inch):"
+msgstr "แฟ้มข้อมูล PNG ความละเอียด (จุด/นิ้ว):"
+
+msgid "Printer:"
+msgstr "เครื่องพิมพ์:"
+
+msgid "Script file:"
+msgstr "Script ไฟล์:"
+
+msgid "Preview"
+msgstr "แสดงตัวอย่าง"
+
+#, fuzzy
+msgid " width"
+msgstr "กว้าง"
+
+msgid "text color"
+msgstr "สีข้อความ"
+
+msgid " text size"
+msgstr "ขนาดข้อความ"
+
+#, fuzzy
+#~ msgid "X Windows not available"
+#~ msgstr "ไม่พบ Ghostscript"

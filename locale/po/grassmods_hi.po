@@ -6756,7 +6756,7 @@ msgstr ""
 #: ../imagery/i.albedo/main.c:166
 #, fuzzy
 msgid "At least two raster maps are required"
-msgstr "के लिए"
+msgstr "है."
 
 #: ../imagery/i.albedo/main.c:194
 #, fuzzy, c-format
@@ -9187,7 +9187,7 @@ msgstr "बनाया जा रहा है के लिए."
 #: ../raster/r.external/main.c:339
 #, fuzzy, c-format
 msgid "Setting grey color table for <%s> (data range)"
-msgstr "के लिए."
+msgstr "बनाया जा रहा है के लिए."
 
 #: ../raster/r.external/main.c:353
 #, fuzzy, c-format
@@ -12121,8 +12121,9 @@ msgid "Name of the Soil sand fraction map [0.0-1.0]"
 msgstr "का"
 
 #: ../raster/r.uslek/main.c:62
+#, fuzzy
 msgid "Name of the Soil clay fraction map [0.0-1.0]"
-msgstr ""
+msgstr "का"
 
 #: ../raster/r.uslek/main.c:66
 #, fuzzy
@@ -17736,8 +17737,9 @@ msgid "File containing expression to evaluate"
 msgstr "फ़ाइल"
 
 #: ../raster/r.mapcalc/main.c:148
+#, fuzzy
 msgid "parse error"
-msgstr ""
+msgstr "n"
 
 #: ../raster/r.mapcalc/main.c:157
 msgid "Floating point error(s) occured in the calculation"
@@ -18782,7 +18784,7 @@ msgstr "बनाया जा रहा है i n"
 #: ../raster/r.statistics2/main.c:185
 #, fuzzy, c-format
 msgid "Unable to read range of base map <%s>"
-msgstr "के लिए"
+msgstr "डाटाटाइप."
 
 #: ../raster/r.statistics2/main.c:249
 msgid "First pass"
@@ -26552,8 +26554,9 @@ msgid "Categories of points on terminals (layer is specified by nlayer)"
 msgstr ""
 
 #: ../vector/v.net.steiner/main.c:388
+#, fuzzy
 msgid "Number of steiner points (-1 for all possible)"
-msgstr ""
+msgstr "सदिश"
 
 #: ../vector/v.net.steiner/main.c:447
 #, fuzzy
@@ -27703,8 +27706,9 @@ msgstr "किनारा"
 
 #: ../visualization/nviz2/cmd/args.c:289 ../visualization/nviz2/cmd/args.c:357
 #: ../visualization/nviz2/cmd/args.c:426
+#, fuzzy
 msgid "Position"
-msgstr ""
+msgstr "नहीं n"
 
 #: ../visualization/nviz2/cmd/args.c:301
 #, fuzzy
@@ -27901,4595 +27905,4630 @@ msgid "Unable to set isosurface (%d) attribute (%d) of volume %d"
 msgstr "के लिए"
 
 #, fuzzy
-#~ msgid ""
-#~ "Optional where condition (without WHERE key word), e.g.:\n"
-#~ "\t\tobec = 'Liptakov'"
-#~ msgstr "जी n"
+msgid ""
+"Optional where condition (without WHERE key word), e.g.:\n"
+"\t\tobec = 'Liptakov'"
+msgstr "जी n"
 
 #, fuzzy
-#~ msgid "Display manager for GRASS"
-#~ msgstr "संख्या का"
+msgid "Display manager for GRASS"
+msgstr "संख्या का"
 
 #, fuzzy
-#~ msgid "Name of .dmrc settings file"
-#~ msgstr "का"
+msgid "Name of .dmrc settings file"
+msgstr "का"
 
 #, fuzzy
-#~ msgid "Moves displayed maps to another monitor"
-#~ msgstr "फ्रेम्स चालू."
+msgid "Moves displayed maps to another monitor"
+msgstr "फ्रेम्स चालू."
 
 #, fuzzy
-#~ msgid "Saves active display monitor to PNG file in home directory"
-#~ msgstr "पाठ चालू."
+msgid "Saves active display monitor to PNG file in home directory"
+msgstr "पाठ चालू."
 
 #, fuzzy
-#~ msgid "Saves the contents of the active display monitor to a graphics file."
-#~ msgstr "पाठ चालू."
+msgid "Saves the contents of the active display monitor to a graphics file."
+msgstr "पाठ चालू."
 
 #, fuzzy
-#~ msgid "Compression for PNG files"
-#~ msgstr "का."
+msgid "Compression for PNG files"
+msgstr "का."
 
 #, fuzzy
-#~ msgid "Set transparent background"
-#~ msgstr "का"
+msgid "Set transparent background"
+msgstr "का"
 
 #, fuzzy
-#~ msgid "Displays a raster map and its legend on a graphics window"
-#~ msgstr "a के लिए a का."
+msgid "Displays a raster map and its legend on a graphics window"
+msgstr "a के लिए a का."
 
 #, fuzzy
-#~ msgid "Number of lines to appear in the legend"
-#~ msgstr "का फ़िल्टर"
+msgid "Number of lines to appear in the legend"
+msgstr "का फ़िल्टर"
 
 #, fuzzy
-#~ msgid "Redraws the current display frame in the GRASS monitor"
-#~ msgstr "त्रुटि नहीं है n"
+msgid "Redraws the current display frame in the GRASS monitor"
+msgstr "त्रुटि नहीं है n"
 
 #, fuzzy
-#~ msgid "Redraw all frames"
-#~ msgstr "a"
+msgid "Redraw all frames"
+msgstr "a"
 
 #, fuzzy
-#~ msgid "Slide show of GRASS raster/vector maps."
-#~ msgstr "का"
+msgid "Slide show of GRASS raster/vector maps."
+msgstr "का"
 
 #, fuzzy
-#~ msgid "Show vector maps rather than raster maps"
-#~ msgstr "सेट जोड़ा"
+msgid "Show vector maps rather than raster maps"
+msgstr "सेट जोड़ा"
 
 #, fuzzy
-#~ msgid "Map number show down the monitor"
-#~ msgstr "संख्या का खण्ड"
+msgid "Map number show down the monitor"
+msgstr "संख्या का खण्ड"
 
 #, fuzzy
-#~ msgid "Number of seconds to pause between slides"
-#~ msgstr "का"
+msgid "Number of seconds to pause between slides"
+msgstr "का"
 
 #, fuzzy
-#~ msgid "Enter raster map to display in 1st frame"
-#~ msgstr "का a"
+msgid "Enter raster map to display in 1st frame"
+msgstr "का a"
 
 #, fuzzy
-#~ msgid "Enter raster map to display in 2nd frame"
-#~ msgstr "का a"
+msgid "Enter raster map to display in 2nd frame"
+msgstr "का a"
 
 #, fuzzy
-#~ msgid "Enter command to execute in 2nd frame"
-#~ msgstr "का a"
+msgid "Enter command to execute in 2nd frame"
+msgstr "का a"
 
 #, fuzzy
-#~ msgid "display, legend"
+msgid "display, legend"
+msgstr "गामा."
+
+#, fuzzy
+msgid "Vector map to display thematically"
+msgstr "सदिश"
+
+#, fuzzy
+msgid "Vector map type"
+msgstr "सदिश"
+
+#, fuzzy
+msgid "Attribute column to use for thematic display (must be numeric)"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Type of thematic display"
+msgstr "का"
+
+#, fuzzy
+msgid "Layer to use for thematic display"
+msgstr "के लिए."
+
+#, fuzzy
+msgid "Points"
+msgstr "फ़ॉन्ट"
+
+#, fuzzy
+msgid "Vector point icon for point data"
+msgstr "छोटा करें बिन्दु"
+
+#, fuzzy
+msgid "Number of classes for interval theme (integer)"
+msgstr "का फ़िल्टर"
+
+#, fuzzy
+msgid "Mapset(s) to list (default: current mapset search path)"
+msgstr "छापें"
+
+#, fuzzy
+msgid "Output separator (default: newline)"
+msgstr "शीर्षक"
+
+#, fuzzy
+msgid "Raster to remove"
+msgstr "Bin"
+
+#, fuzzy
+msgid "3d raster to remove"
+msgstr "Bin"
+
+#, fuzzy
+msgid "Vector to remove"
+msgstr "चालू"
+
+#, fuzzy
+msgid "Region to remove"
+msgstr "चालू"
+
+#, fuzzy
+msgid "Label to remove"
+msgstr "चालू"
+
+#, fuzzy
+msgid "3dview to remove"
+msgstr "चालू"
+
+#, fuzzy
+msgid "Group to remove"
+msgstr "चालू"
+
+#, fuzzy
+msgid "raster input maps"
+msgstr "का"
+
+#, fuzzy
+msgid "label with coordinates instead of numbering"
+msgstr "का"
+
+#, fuzzy
+msgid "Keep band numbers instead of using band color names."
+msgstr "रखें का"
+
+#, fuzzy
+msgid "Do not overwrite existing map"
+msgstr "डाटाटाइप."
+
+#, fuzzy
+msgid "Exports GRASS raster into GDAL supported formats."
+msgstr "a a."
+
+#, fuzzy
+msgid "Output field seperator"
+msgstr "फील्ड"
+
+#, fuzzy
+msgid "calculates univariate statistics from a GRASS raster map"
+msgstr "का a."
+
+#, fuzzy
+msgid "Percentile to calculate (requires -e flag)"
+msgstr "छापें"
+
+#, fuzzy
+msgid "A (grid3D file)"
+msgstr "फ़ाइलनाम "
+
+#, fuzzy
+msgid "B (grid3D file)"
+msgstr "फ़ाइलनाम "
+
+#, fuzzy
+msgid "C (grid3D file)"
+msgstr "फ़ाइलनाम "
+
+#, fuzzy
+msgid "D (grid3D file)"
+msgstr "फ़ाइलनाम "
+
+#, fuzzy
+msgid "E (grid3D file)"
+msgstr "फ़ाइलनाम "
+
+#, fuzzy
+msgid "F (grid3D file)"
+msgstr "फ़ाइलनाम "
+
+#, fuzzy
+msgid "Name for output grid3D volume"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "%s: [%s] not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid ""
+"Enter the file name or path\n"
+"> "
+msgstr "त्रुटि"
+
+#, fuzzy
+msgid "Use mouse to select Start Point\n"
+msgstr "आकार "
+
+#, fuzzy
+msgid ""
+"\n"
+"Use mouse to draw profile line\n"
+msgstr "आकार "
+
+#, fuzzy
+msgid "Buttons:\n"
+msgstr "n n"
+
+#, fuzzy
+msgid "Left:   Mark next point\n"
+msgstr "n"
+
+#, fuzzy
+msgid "elevin raster map <%s> not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "aspin raster map <%s> not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "linkein raster map <%s> not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "albedo raster map <%s> not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "latin raster map <%s> not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "coefbh raster map <%s> not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "coefdh raster map <%s> not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Unable to find data map"
+msgstr "का"
+
+#, fuzzy
+msgid "Unable to find clump map"
+msgstr "के लिए."
+
+#, fuzzy
+msgid "Terrain raster map (DEM)"
+msgstr "i n"
+
+#, fuzzy
+msgid "Output raster map with lake"
+msgstr "शीर्षक"
+
+#, fuzzy
+msgid "Cannot write lake raster map <%s>!"
+msgstr "डाटाटाइप."
+
+#, fuzzy
+msgid "Terrain raster map <%s> not found!"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Cannot open terrain raster map <%s@%s>!"
+msgstr "डाटाटाइप."
+
+#, fuzzy
+msgid "Seed map <%s> not found!"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Cannot open seed map <%s@%s>!"
+msgstr "फ़ाइल"
+
+#, fuzzy
+msgid "Failure to allocate memory for row pointers"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Loading maps: "
+msgstr "त्रुटि के लिए"
+
+#, fuzzy
+msgid "Error reading terrain raster map. Probably broken file."
+msgstr "त्रुटि."
+
+#, fuzzy
+msgid "Error reading seed raster map. Probably broken file."
+msgstr "त्रुटि."
+
+#, fuzzy
+msgid "Cannot write lake raster map <%s@%s>!"
+msgstr "डाटाटाइप."
+
+#, fuzzy
+msgid "Pass: %d\n"
+msgstr "n"
+
+#, fuzzy
+msgid "Error writing color file for <%s@%s>!"
+msgstr "त्रुटि के लिए."
+
+#, fuzzy
+msgid "All done."
+msgstr "n"
+
+#, fuzzy
+msgid "%s: base raster map not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "%s: cover raster map not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Name of the vector points map with x,y locations"
+msgstr "का"
+
+#, fuzzy
+msgid "Number of time iterations (sec.)"
+msgstr "का"
+
+#, fuzzy
+msgid "Multiscale simulation"
+msgstr "है a"
+
+#, fuzzy
+msgid "Name of the elevation raster map, same units as N,E: [m] or [ft] "
+msgstr "का मीटर्स"
+
+#, fuzzy
+msgid "Name of the x-derivatives raster map [m/m] or [ft/ft]"
+msgstr "का"
+
+#, fuzzy
+msgid "Name of the y-derivatives raster map [m/m] or [ft/ft]"
+msgstr "का"
+
+#, fuzzy
+msgid "Calculates <simple> index on a raster map"
+msgstr "a"
+
+#, fuzzy
+msgid "Bilinear interpolation utility for raster map layers."
+msgstr "द्विरेखीय के लिए."
+
+#, fuzzy
+msgid ""
+"Specific input value to be assigned to the north and/or south poles for "
+"longitude-latitude grids"
+msgstr "उत्तर दक्षिण के लिए"
+
+#, fuzzy
+msgid "This module is deprecated. Please use 'r.resamp.interp' instead."
+msgstr "स्केल है स्केल."
+
+#, fuzzy
+msgid "Illegal output file name <%s>"
+msgstr "चेतावनी."
+
+#, fuzzy
+msgid "Not enough memory for zero_array_cell"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Not enough disk space -- cannot write files"
+msgstr "डिस्क"
+
+#, fuzzy
+msgid "%s: can't read fp range for [%s]"
+msgstr "के लिए"
+
+#, fuzzy
+msgid ""
+"Raster map [%s] already exists.\n"
+"Please try another."
+msgstr "समूह."
+
+#, fuzzy
+msgid "Path to rules file"
+msgstr "का"
+
+#, fuzzy
+msgid "RGB raster map <%s> not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Vector cell map <%s> not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Which raster map needs a color table"
+msgstr "a"
+
+#, fuzzy
+msgid "Edit header for [%s]\n"
+msgstr "संपादन के लिए n"
+
+#, fuzzy
+msgid "[%s] is a reclass of [%s] - cannot edit header! Run support on [%s]."
+msgstr "है a का संपादन (_E) चालू."
+
+#, fuzzy
+msgid "[%s] is a reclass of [%s in %s] - cannot edit header!"
+msgstr "है a का संपादन (_E)!"
+
+#, fuzzy
+msgid "Raster file [%s] is empty."
+msgstr "है."
+
+#, fuzzy
+msgid "cellhd compression: %d\n"
+msgstr "n"
+
+#, fuzzy
+msgid "3.0 compression %sindicated\n"
+msgstr "n"
+
+#, fuzzy
+msgid "Pre 3.0 compression %sindicated\n"
+msgstr "n"
+
+#, fuzzy
+msgid "[%s] appears to be compressed. Is it? "
+msgstr "है "
+
+#, fuzzy
+msgid "Please indicate the type of compression:\n"
+msgstr "का n"
+
+#, fuzzy
+msgid "  1. Pre 3.0 compression\n"
+msgstr "n"
+
+#, fuzzy
+msgid "  2. 3.0 compression\n"
+msgstr "n"
+
+#, fuzzy
+msgid "The header for [%s] says the file is not compressed. "
+msgstr "के लिए है नहीं "
+
+#, fuzzy
+msgid "The file appears to be compressed.\n"
+msgstr "n"
+
+#, fuzzy
+msgid "Most likely the header is wrong, but I want you to decide.\n"
+msgstr "है n"
+
+#, fuzzy
+msgid "The header for [%s] says the file is compressed. "
+msgstr "के लिए है "
+
+#, fuzzy
+msgid "The file does NOT appear to be compressed.\n"
+msgstr "n"
+
+#, fuzzy
+msgid "Unable to write header for [%s]."
+msgstr "के लिए."
+
+#, fuzzy
+msgid "Header for raster map [%s] updated."
+msgstr "के लिए."
+
+#, fuzzy
+msgid "Please enter the following information for [%s]:"
+msgstr "के लिए:"
+
+#, fuzzy
+msgid "        Number of rows"
+msgstr "का"
+
+#, fuzzy
+msgid "        Number of cols"
+msgstr "का"
+
+#, fuzzy
+msgid "        Number of bytes per cell"
+msgstr "का बाइट्स"
+
+#, fuzzy
+msgid "        Floating point map"
+msgstr "फ्लोटिंग बिन्दु"
+
+#, fuzzy
+msgid "rows * cols * bytes per cell must be same as file size (%lu)"
+msgstr "बाइट्स आकार "
+
+#, fuzzy
+msgid "** Negative values not allowed!"
+msgstr "ऋणात्मक नहीं!"
+
+#, fuzzy
+msgid "** Positive values only please!"
+msgstr "धनात्मक!"
+
+#, fuzzy
+msgid "Raster file [%s] not found. Exiting."
+msgstr "नहीं."
+
+#, fuzzy
+msgid "History file for [%s] updated."
+msgstr "के लिए."
+
+#, fuzzy
+msgid "History file for [%s] not updated."
+msgstr "के लिए नहीं."
+
+#, fuzzy
+msgid "Edit header for [%s]? "
+msgstr "संपादन के लिए "
+
+#, fuzzy
+msgid ""
+"\n"
+"NOTE: [%s] is a reclass of [%s in %s]"
+msgstr "है a का"
+
+#, fuzzy
+msgid "Canceling from edit header."
+msgstr "संपादन (_E)."
+
+#, fuzzy
+msgid "Edit the category file for [%s]? "
+msgstr "संपादन के लिए "
+
+#, fuzzy
+msgid "Create/Update the color table for [%s]? "
+msgstr "के लिए "
+
+#, fuzzy
+msgid "Edit the history file for [%s]? "
+msgstr "संपादन के लिए "
+
+#, fuzzy
+msgid ""
+"\n"
+"The null file for [%s] may indicate that some cells contain\n"
+" no data. If the null file for [%s] doesn't exist, zero cells in\n"
+" it are treated by GRASS application programs as no data."
+msgstr ""
+"के लिए रखे हुए\n"
+" के लिए\n"
+"."
+
+#, fuzzy
+msgid ""
+"\n"
+"Do you want to create/reset the null file for [%s] so that null cell values "
+"are considered valid data? "
+msgstr "के लिए "
+
+#, fuzzy
+msgid ""
+"\n"
+"Do you want to delete the null file for [%s]\n"
+"(all zero cells will then be considered no data)? "
+msgstr "के लिए n सभी "
+
+#, fuzzy
+msgid "%s map <%s> not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Category file for <%s> not updated"
+msgstr "के लिए नहीं."
+
+#, fuzzy
+msgid "Category file for <%s> updated"
+msgstr "के लिए."
+
+#, fuzzy
+msgid "Suppress single crossing error messages"
+msgstr "एकल त्रुटि"
+
+#, fuzzy
+msgid "Unable to find starting vector <%s> "
+msgstr "का"
+
+#, fuzzy
+msgid "Unable to find stop vector <%s>"
+msgstr "के लिए."
+
+#, fuzzy
+msgid "Raster output map <%s> not found (no start_points given)"
+msgstr "नहीं प्रारंभ"
+
+#, fuzzy
+msgid "Memory allocation error on reading start points from raster map %s"
+msgstr "त्रुटि चालू प्रारंभ"
+
+#, fuzzy
+msgid "Apply filter only to zero data values"
+msgstr "लागू करें फ़िल्टर"
+
+#, fuzzy
+msgid "Error reading '%s' map"
+msgstr "त्रुटि."
+
+#, fuzzy
+msgid "Cell file not found"
+msgstr "नहीं n"
+
+#, fuzzy
+msgid "Vector map <%s> not found in the current mapset"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Threshold distance"
+msgstr "सेट इंचेस"
+
+#, fuzzy
+msgid "Cannot execute: %s"
+msgstr "चालू"
+
+#, fuzzy
+msgid "Cannot link table: %s"
+msgstr "फ़ाइल"
+
+#, fuzzy
+msgid "Cannot open dxf file <%s>"
+msgstr "फ़ाइल"
+
+#, fuzzy
+msgid "Cannot open new vector map <%s>"
+msgstr "का"
+
+#, fuzzy
+msgid "Conversion of <%s> to vector map:"
+msgstr "a a."
+
+#, fuzzy
+msgid "Vector map <%s> is not in user mapset and cannot be updated"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Do not print polyline info"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Network input map <%s> not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "ask_transform_coor():  Leaving session.. \n"
+msgstr "पूछें n"
+
+#, fuzzy
+msgid " Number of points that have been entered: %d\n"
+msgstr "का n"
+
+#, fuzzy
+msgid "Quiet; No chatter"
+msgstr "शांत नहीं"
+
+#, fuzzy
+msgid "Hilight color for text"
+msgstr "उभारें के लिए पाठ के लिए"
+
+#, fuzzy
+msgid "Line: %d\n"
+msgstr "ऊंचाई f n"
+
+#, fuzzy
+msgid "Insufficent memory for allocation of data structure"
+msgstr "के लिए का."
+
+#, fuzzy
+msgid "imagery group"
+msgstr "समूह"
+
+#, fuzzy
+msgid "Name of input raster map(s)"
+msgstr "का"
+
+#, fuzzy
+msgid "name=%s\n"
+msgstr "n"
+
+#, fuzzy
+msgid "mapset=%s\n"
+msgstr "n"
+
+#, fuzzy
+msgid "fullname=%s\n"
+msgstr "n"
+
+#, fuzzy
+msgid "usage: %s file [prompt %%x %%y]\n"
+msgstr "संकेत n"
+
+#, fuzzy
+msgid "Illegal file name for real part: %s"
+msgstr "के लिए भाग n"
+
+#, fuzzy
+msgid "Illegal file name for imaginary part: %s"
+msgstr "के लिए भाग n"
+
+#, fuzzy
+msgid ""
+"\n"
+"<%s> -- illegal result signature file name"
+msgstr "n"
+
+#, fuzzy
+msgid "Illegal group name <%s>"
+msgstr "चेतावनी."
+
+#, fuzzy
+msgid "Illegal signature file name <%s>"
+msgstr "चेतावनी."
+
+#, fuzzy
+msgid "Raster file(s) for Elevation"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Raster file(s) for Color"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Current window not settable"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Can't clear current graphics window"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Cannot use current window"
+msgstr "नहीं"
+
+#, fuzzy
+msgid ""
+"Generates and displays simple graphics on map layers drawn in the active "
+"graphics monitor display frame."
+msgstr "चालू."
+
+#, fuzzy
+msgid ""
+"Unix file containg graphing instructions, if not given reads from standard "
+"input"
+msgstr "नहीं"
+
+#, fuzzy
+msgid ""
+"Color to draw with, either a standard GRASS color or R:G:B triplet "
+"(separated by colons)"
+msgstr "a R जी"
+
+#, fuzzy
+msgid "Don't add to list of commands in monitor"
+msgstr "का"
+
+#, fuzzy
+msgid "No current frame"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Current frame not available"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Error reading raster map"
+msgstr "त्रुटि."
+
+#, fuzzy
+msgid "Output profile data to file(s) with prefix 'name'"
+msgstr "फ़ाइलनाम "
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Use mouse to choose action"
+msgstr "आकार "
+
+#, fuzzy
+msgid "Error opening cell-file"
+msgstr "त्रुटि"
+
+#, fuzzy
+msgid "Error reading from cell-file"
+msgstr "त्रुटि."
+
+#, fuzzy
+msgid "%s: Couldn't open raster <%s@%s>"
+msgstr "नहीं"
+
+#, fuzzy
+msgid " Middle: toggle flash color\n"
+msgstr "n"
+
+#, fuzzy
+msgid "No raster map exists in current window"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "No current window"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Current window not available"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Error in calculating conversions"
+msgstr "त्रुटि"
+
+#, fuzzy
+msgid "No current graphics window"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Current graphics window not available"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Can't set current graphics window"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Getting graphics window coordinates"
+msgstr "n"
+
+#, fuzzy
+msgid "value [%.0f,%.0f] out of range [0-100]"
+msgstr "का"
+
+#, fuzzy
+msgid "Font name or pathname of TTF file"
+msgstr "फ़ाइल के लिए."
+
+#, fuzzy
+msgid "Setting release of FreeType"
+msgstr "रिलीज का फ्री-टाइप n"
+
+#, fuzzy
+msgid "Display number of colors"
+msgstr "संख्या का"
+
+#, fuzzy
+msgid "Use mouse to size & place legend"
+msgstr "आकार "
+
+#, fuzzy
+msgid "Name of frame(s) to save"
+msgstr "का"
+
+#, fuzzy
+msgid "Save current frame"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Save all the frames"
+msgstr "a"
+
+#, fuzzy
+msgid "No monitor selected"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Unknown item type in pad: %s"
+msgstr "अज्ञात क़िस्म"
+
+#, fuzzy
+msgid ""
+"Don't add to list of vectors and commands in monitor (it won't be drawn if "
+"the monitor is refreshed)"
+msgstr "का है"
+
+#, fuzzy
+msgid "No raster map exists in the current window"
+msgstr "नहीं"
+
+#, fuzzy
+msgid ""
+"Creates and displays a menu within the active frame on the graphics monitor."
+msgstr "पाठ चालू."
+
+#, fuzzy
+msgid "Sets the color of the menu background"
+msgstr "का"
+
+#, fuzzy
+msgid "Sets the color of the menu text"
+msgstr "का पाठ"
+
+#, fuzzy
+msgid "Sets the color dividing lines of text"
+msgstr "का पाठ"
+
+#, fuzzy
+msgid "Sets the menu text size (in percent)"
+msgstr "पाठ आकार  संख्या"
+
+#, fuzzy
+msgid "Menu must contain a title and at least one option"
+msgstr "पर एक"
+
+#, fuzzy
+msgid ""
+"Draws text in the graphics monitor's active display frame using TrueType "
+"fonts."
+msgstr "पाठ."
+
+#, fuzzy
+msgid "Screen position (percentage, [0,0] is bottom left)"
+msgstr "का है तल बायाँ"
+
+#, fuzzy
+msgid "Height of letters (in percent of available frame height)"
+msgstr "ऊंचाई का का ऊंचाई"
+
+#, fuzzy
+msgid "Either text or -c should be given"
+msgstr "पाठ"
+
+#, fuzzy
+msgid "Choose only one coordinate system for placement"
+msgstr "एक के लिए"
+
+#, fuzzy
+msgid "No font selected"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Unable to create text conversion context"
+msgstr "पाठ"
+
+#, fuzzy
+msgid "Text conversion error"
+msgstr "त्रुटि"
+
+#, fuzzy
+msgid "No predefined font"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "%s: Unable to read FreeType definition file; use the default"
+msgstr "फ्री-टाइप"
+
+#, fuzzy
+msgid "%s: No FreeType definition file"
+msgstr "नहीं फ्री-टाइप"
+
+#, fuzzy
+msgid "%s: Unable to read FreeType definition file"
+msgstr "फ्री-टाइप"
+
+#, fuzzy
+msgid "Don't add to list of rasters and commands in monitor"
+msgstr "का"
+
+#, fuzzy
+msgid "One mouse click only"
+msgstr "एक"
+
+#, fuzzy
+msgid "Use mouse to interactively place scale"
+msgstr "स्केल"
+
+#, fuzzy
+msgid "Use mouse to interactively place text"
+msgstr "स्केल"
+
+#, fuzzy
+msgid " Left:    Place text here\n"
+msgstr "n"
+
+#, fuzzy
+msgid " Right:   Quit\n"
+msgstr "n"
+
+#, fuzzy
+msgid "ERROR: can not get \"list\" items"
+msgstr "त्रुटि नहीं n"
+
+#, fuzzy
+msgid "-j flag forced"
+msgstr "n"
+
+#, fuzzy
+msgid "No map is displayed in GRASS monitor"
+msgstr "त्रुटि नहीं है n"
+
+#, fuzzy
+msgid "You must select more than one point"
+msgstr "अधिक एक बिन्दु"
+
+#, fuzzy
+msgid "You must select at least four points"
+msgstr "पर"
+
+#, fuzzy
+msgid "No raster or vector map displayed"
+msgstr "का"
+
+#, fuzzy
+msgid "To establish and control use of a graphics display monitor."
+msgstr "का a."
+
+#, fuzzy
+msgid "Name of graphics monitor to start"
+msgstr "का प्रारंभ"
+
+#, fuzzy
+msgid "Name of graphics monitor to stop"
+msgstr "का"
+
+#, fuzzy
+msgid "Name of graphics monitor to select"
+msgstr "का"
+
+#, fuzzy
+msgid "Name of graphics monitor to unlock"
+msgstr "का"
+
+#, fuzzy
+msgid "List all monitors"
+msgstr "सभी"
+
+#, fuzzy
+msgid "List all monitors (with current status)"
+msgstr "सभी स्थिति"
+
+#, fuzzy
+msgid "Print name of currently selected monitor"
+msgstr "छापें का"
+
+#, fuzzy
+msgid "Release currently selected monitor"
+msgstr "छापें का"
+
+#, fuzzy
+msgid "Do not automatically select when starting"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "No such monitor as <%s>"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Monitor <%s> released"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Error - Locking mechanism failed"
+msgstr "त्रुटि"
+
+#, fuzzy
+msgid "Error choosing frame [%s]\n"
+msgstr "त्रुटि के लिए"
+
+#, fuzzy
+msgid ""
+"\n"
+"Buttons:\n"
+msgstr "n n"
+
+#, fuzzy
+msgid "Left:   Select frame\n"
+msgstr "a"
+
+#, fuzzy
+msgid "Right:  Accept frame\n"
+msgstr "बाहर जाएँ n"
+
+#, fuzzy
+msgid "Manages display frames on the user's graphics monitor."
+msgstr "फ्रेम्स चालू."
+
+#, fuzzy
+msgid "Create a new frame"
+msgstr "a"
+
+#, fuzzy
+msgid "Select a frame"
+msgstr "a"
+
+#, fuzzy
+msgid "Print name of current frame"
+msgstr "छापें का"
+
+#, fuzzy
+msgid "Print names of all frames"
+msgstr "छापें का"
+
+#, fuzzy
+msgid "List map names displayed in GRASS monitor"
+msgstr "त्रुटि नहीं है n"
+
+#, fuzzy
+msgid "Debugging output"
+msgstr "डिबगिंग"
+
+#, fuzzy
+msgid "Frame to be created/selected"
+msgstr "ढांचा"
+
+#, fuzzy
+msgid ""
+"\n"
+"Mouse Buttons:"
+msgstr "n n"
+
+#, fuzzy
+msgid "Left:   Select From\n"
+msgstr "a"
+
+#, fuzzy
+msgid ""
+"Right:  Quit\n"
+"\n"
+msgstr "n"
+
+#, fuzzy
+msgid "Monitor: interactive command in redraw"
+msgstr "n"
+
+#, fuzzy
+msgid "found %d visuals of type TrueColor"
+msgstr "का n"
+
+#, fuzzy
+msgid "searching for highest bit depth"
+msgstr "के लिए n"
+
+#, fuzzy
+msgid "selected %d bit depth"
+msgstr "n"
+
+#, fuzzy
+msgid "using default visual which is %s"
+msgstr "है n"
+
+#, fuzzy
+msgid "Monitor: waitpid: expected %d but got %d"
+msgstr "n"
+
+#, fuzzy
+msgid "Monitor: XGetWMName failed"
+msgstr "n"
+
+#, fuzzy
+msgid "Monitor: XGetWMName: bad result"
+msgstr "n"
+
+#, fuzzy
+msgid "Save the current region to region definition file"
+msgstr "सहेजें"
+
+#, fuzzy
+msgid "<%s> is an illegal region name"
+msgstr "है"
+
+#, fuzzy
+msgid "No LatLong information for XY-Projection"
+msgstr "है नहीं के लिए"
+
+#, fuzzy
+msgid "Erasing monitors ..."
+msgstr "n"
+
+#, fuzzy
+msgid "Could not open input file <%s>."
+msgstr "नहीं"
+
+#, fuzzy
+msgid "No such monitor as '%s'"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Error - No such monitor as '%s'"
+msgstr "नहीं"
+
+#, fuzzy
+msgid ""
+"\a\n"
+"** The following raster maps in subgroup [%s] do not exist:"
+msgstr "n नहीं:"
+
+#, fuzzy
+msgid "Removing files from group"
+msgstr "समूह"
+
+#, fuzzy
+msgid "Adding files to group [%s]"
+msgstr "समूह"
+
+#, fuzzy
+msgid "Writing group REF"
+msgstr "समूह"
+
+#, fuzzy
+msgid "Found file <%s@%s> in group."
+msgstr "समूह."
+
+#, fuzzy
+msgid "Unable to open file: <%s>"
+msgstr "का"
+
+#, fuzzy
+msgid "Multiplier"
+msgstr "के लिए ज़ेड"
+
+#, fuzzy
+msgid ""
+"Projection of input dataset and current location appear to match.\n"
+"Proceeding with import...\n"
+msgstr "का जोड़ा n"
+
+#, fuzzy
+msgid "not found\n"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Raster map not found."
+msgstr "नहीं"
+
+#, fuzzy
+msgid "%s: can't read range for [%s]"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Raster file [%s] not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "It was not possible writing in <%s>."
+msgstr "i n"
+
+#, fuzzy
+msgid "\rDuplicate area centroids: %5d"
+msgstr "के लिए n"
+
+#, fuzzy
+msgid "Cannot create table: '%s'"
+msgstr "चालू"
+
+#, fuzzy
+msgid "Unable to get category list <%s>, editing terminated"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Unable to delete layer/category [%d/%d] line %d"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Unable to write line %d"
+msgstr "बनाया जा रहा है."
+
+#, fuzzy
+msgid "Unable to delete line %d"
+msgstr "फ़ाइल"
+
+#, fuzzy
+msgid "Unknown query tool '%s'"
+msgstr "अज्ञात क़िस्म"
+
+#, fuzzy
+msgid "No layer database connection"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "%d categories loaded from the database"
+msgstr "लोड हो गया"
+
+#, fuzzy
+msgid "Done"
+msgstr "n"
+
+#, fuzzy
+msgid "Cannot open OGR data source '%s'"
+msgstr "स्रोत"
+
+#, fuzzy
+msgid "Vector map <%s> in location <%s> in mapset <%s> not available"
+msgstr "सदिश नहीं"
+
+#, fuzzy
+msgid ""
+"Load values from vector to database. For uploaded/printed category values '-"
+"1' is used for 'no category' and 'null'/'-' if category cannot be found or "
+"multiple categories were found."
+msgstr "है के लिए."
+
+#, fuzzy
+msgid "Column type [%d] not supported"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Cannot read map header for <%s>"
+msgstr "का"
+
+#, fuzzy
+msgid "Cannot read category file for <%s>"
+msgstr "संपादन के लिए "
+
+#, fuzzy
+msgid "Print;Shell Script"
+msgstr "छापें"
+
+#, fuzzy
+msgid "Creating support files for [%s]."
+msgstr "बनाया जा रहा है के लिए."
+
+#, fuzzy
+msgid "Category file for [%s] not available"
+msgstr "के लिए नहीं"
+
+#, fuzzy
+msgid "%s: <%s> raster map not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Cannot read category file of raster map <%s>"
+msgstr "संपादन के लिए "
+
+#, fuzzy
+msgid "%s - map not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "%s: Cannot open [%s]"
+msgstr "फ़ाइल"
+
+#, fuzzy
+msgid "%s not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Could not access %s layer"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Vector map %s - not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Raster map name for storing results"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Height of the viewing location"
+msgstr "ऊंचाई का"
+
+#, fuzzy
+msgid "%s: <%s> cellfile not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Cell file [%s] not found\n"
+msgstr "नहीं n"
+
+#, fuzzy
+msgid "rgb cell map [%s] not found\n"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "vector cell map [%s] not found\n"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "%s - %s not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "raster map <%s> not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "can't read header for <%s> in <%s>"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "region <%s> not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "invalid region: %s"
+msgstr "अवैध"
+
+#, fuzzy
+msgid "Creating support files"
+msgstr "बनाया जा रहा है के लिए"
+
+#, fuzzy
+msgid "%s file [%s] not found!"
+msgstr "नहीं!"
+
+#, fuzzy
+msgid "%s: %s - map not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "%s: unable to open %s"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "%s - not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "[%s] map not found."
+msgstr "नहीं"
+
+#, fuzzy
+msgid "[%s] map not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "elevation file [%s] not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "min computed slope %.4f  max computed slope %.4f"
+msgstr "ढाल ढाल"
+
+#, fuzzy
+msgid "Cannot describe table <%s>"
+msgstr "फ़ाइल"
+
+#, fuzzy
+msgid "Cannot insert values: %s"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "%s given an illegal number of points [%d]"
+msgstr "संख्या का"
+
+#, fuzzy
+msgid "Unable to open database %s by driver %s"
+msgstr "स्रोत"
+
+#, fuzzy
+msgid "No DB connection settings defined. Set with db.connect"
+msgstr "नहीं सेट"
+
+#, fuzzy
+msgid "Could not find input %s"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Could not open input"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Could not open output"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Could not find input map <%s>"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Unable to open driver <%s>"
+msgstr "के लिए."
+
+#, fuzzy
+msgid "Database connection not defined\n"
+msgstr "नहीं n"
+
+#, fuzzy
+msgid "Can't read header for <%s> in <%s>"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Can't read header for 3D raster <%s> in <%s>"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Can't write region <%s>"
+msgstr "संपादन के लिए "
+
+#, fuzzy
+msgid "<%s=%s> ** invalid input **"
+msgstr "अवैध"
+
+#, fuzzy
+msgid "No graphics device selected."
+msgstr "नहीं."
+
+#, fuzzy
+msgid "Training map [%s] not found."
+msgstr "नहीं."
+
+#, fuzzy
+msgid "%s map not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "input raster map"
+msgstr "का"
+
+#, fuzzy
+msgid "Illegal file name: %s"
+msgstr "चेतावनी."
+
+#, fuzzy
+msgid "Cannot get layer info for vector map"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Cannot open raster map <%s> in <%s>"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "cover values extracted from the category labels of the cover map"
+msgstr "कवर का कवर"
+
+#, fuzzy
+msgid "%s: %s - raster map not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "%s: ERROR reading category file for %s"
+msgstr "त्रुटि के लिए"
+
+#, fuzzy
+msgid "%s: %s - not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "%s: %s - illegal units"
+msgstr "है"
+
+#, fuzzy
+msgid "%s: %s - can't open"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Reading input map (%s)    ... "
+msgstr "छवि "
+
+#, fuzzy
+msgid "%s - ERROR reading %s"
+msgstr "त्रुटि चल रहा है..."
+
+#, fuzzy
+msgid "%s: %s - can't create raster map"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Writing output map (%s)   ... "
+msgstr "n"
+
+#, fuzzy
+msgid "%s - ERROR re-reading %s"
+msgstr "त्रुटि चल रहा है..."
+
+#, fuzzy
+msgid "%s - ERROR writing %s"
+msgstr "त्रुटि चल रहा है..."
+
+#, fuzzy
+msgid "Reading raster map... "
+msgstr "n"
+
+#, fuzzy
+msgid "Writing raster map... "
+msgstr "n"
+
+#, fuzzy
+msgid "Category list: e.g. 1,3-8,13"
+msgstr "जी 13"
+
+#, fuzzy
+msgid "Cannot read category file of raster map <%s> in <%s>"
+msgstr "संपादन के लिए "
+
+#, fuzzy
+msgid "Cannot find file %s"
+msgstr "फ़ाइल"
+
+#, fuzzy
+msgid "Cannot get header for %s"
+msgstr "का"
+
+#, fuzzy
+msgid "Cannot create raster map %s"
+msgstr "डाटाटाइप."
+
+#, fuzzy
+msgid "Cannot create vector map %s"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Cannot create raster map '%s'"
+msgstr "डाटाटाइप."
+
+#, fuzzy
+msgid "Number of raster rows to hold in memory"
+msgstr "का"
+
+#, fuzzy
+msgid "Print raster map title only"
+msgstr "छापें"
+
+#, fuzzy
+msgid "unknown type: %d"
+msgstr "अज्ञात क़िस्म"
+
+#, fuzzy
+msgid "Cannot get raster band."
+msgstr "फील्ड"
+
+#, fuzzy
+msgid "Cannot allocate buffer for reading null values."
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Cannot read GRASS raster."
+msgstr "का"
+
+#, fuzzy
+msgid "Cannot write GDAL raster."
+msgstr "डाटाटाइप."
+
+#, fuzzy
+msgid "Cannot get [%s] driver"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Couldn't set geo transform."
+msgstr "नहीं n"
+
+#, fuzzy
+msgid "Couldn't set projection."
+msgstr "नहीं n"
+
+#, fuzzy
+msgid "Cannot export [%s] raster map."
+msgstr "का"
+
+#, fuzzy
+msgid "Cannot create [%s] raster map using [%s] driver."
+msgstr "डाटाटाइप."
+
+#, fuzzy
+msgid "Cannot read header of raster map <%s>"
+msgstr "डाटाटाइप."
+
+#, fuzzy
+msgid "Cannot open TIFF file <%s>"
+msgstr "फ़ाइल"
+
+#, fuzzy
+msgid "Cannot open output map."
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Illegal file name. Please try another."
+msgstr "चेतावनी."
+
+#, fuzzy
+msgid "%s: can't open %s"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Reading raster map <%s> ..."
+msgstr "n"
+
+#, fuzzy
+msgid "memory allocation failure"
+msgstr "के लिए का"
+
+#, fuzzy
+msgid "Can't find clump map."
+msgstr "नहीं."
+
+#, fuzzy
+msgid "Output terrain only vector map name"
+msgstr "फ़ाइलनाम "
+
+#, fuzzy
+msgid "Cannot open vector map <%s> at the topological level"
+msgstr "के लिए."
+
+#, fuzzy
+msgid "Rebuilding topology ..."
+msgstr "n"
+
+#, fuzzy
+msgid "No record for cat = %d"
+msgstr "नहीं के लिए"
+
+#, fuzzy
+msgid "Removing duplicates ..."
+msgstr "के लिए n"
+
+#, fuzzy
+msgid "Attaching islands ..."
+msgstr "n"
+
+#, fuzzy
+msgid "Attaching centroids ..."
+msgstr "n"
+
+#, fuzzy
+msgid "Vector map <%s> not found in current mapset"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Error allocating memory for `lines_visited'"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "The number of lines in the input vector map is [%d]"
+msgstr "संख्या का पिक्सेल्स a"
+
+#, fuzzy
+msgid "Database connection not defined for layer <%d>"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Cannot get layer info"
+msgstr "फील्ड"
+
+#, fuzzy
+msgid "cell file [%s] not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "can't open raster map [%s]"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Cannot rewrite line %d"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Editing tool"
+msgstr "n"
+
+#, fuzzy
+msgid "Snap also to vertex (not implemented yet)"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Cannot copy line %d, editing terminated"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "No layer database connection."
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Cannot snap lines %d,%d"
+msgstr "फ़ाइल"
+
+#, fuzzy
+msgid "%d lines modified"
+msgstr "n"
+
+#, fuzzy
+msgid "Could not open ASCII file <%s>"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Print vector map region only"
+msgstr "छापें"
+
+#, fuzzy
+msgid "Cannot open vector map <%s> at topo level [%d]"
+msgstr "के लिए."
+
+#, fuzzy
+msgid "Cannot get layer info for vector map <%s>"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Rotation angle (degrees counter-clockwise from East)"
+msgstr "कोण कोण पूर्व"
+
+#, fuzzy
+msgid "Number of ROWS and COLUMNS in grid"
+msgstr "संख्या का"
+
+#, fuzzy
+msgid "Creating vector grid..."
+msgstr "बनाया जा रहा है."
+
+#, fuzzy
+msgid "Could not find vector map <%s> in current mapset"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Could not find input map <%s>."
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Parameter <%s> not set"
+msgstr "का."
+
+#, fuzzy
+msgid "Output map where segments will be written"
+msgstr "i n"
+
+#, fuzzy
+msgid "Cannot get layer information for vector map"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "<%s> cellfile not found"
+msgstr "नहीं."
+
+#, fuzzy
+msgid "Database record for cat %d not found"
+msgstr "नहीं के लिए"
+
+#, fuzzy
+msgid "Not able to open vector map <%s>"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Table name, select all from this table"
+msgstr "सभी"
+
+#, fuzzy
+msgid "output field separator"
+msgstr "फील्ड"
+
+#, fuzzy
+msgid "do not include column names in output"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "vertical output (instead of horizontal)"
+msgstr "का"
+
+#, fuzzy
+msgid "Name of existing raster map"
+msgstr "का"
+
+#, fuzzy
+msgid "Cannot find mapset for %s"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Cannot open File %s"
+msgstr "फ़ाइल"
+
+#, fuzzy
+msgid "Not able to open file for [%s]"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Label file [%s] not available"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "unable to open [%s] in [%s]"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "warning: unable to open [%s] in [%s]"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Unable to find input cell map '%s'"
+msgstr "के लिए."
+
+#, fuzzy
+msgid "Table to be imported"
+msgstr "फ़ाइल"
+
+#, fuzzy
+msgid "Unable to create raster map [%s]"
+msgstr "का a"
+
+#, fuzzy
+msgid "Unable to create output <%s>"
+msgstr "i n"
+
+#, fuzzy
+msgid "Input file [%s] not found."
+msgstr "नहीं."
+
+#, fuzzy
+msgid "Multiplier for ascii data"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Could not open temporary file: [%s]"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Could not open input file [%s]"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Unable to create output raster map <%s>"
+msgstr "के लिए."
+
+#, fuzzy
+msgid "Cannot open file for <%s>"
+msgstr "फ़ाइल"
+
+#, fuzzy
+msgid "Name of the random surface to be produced"
+msgstr "का"
+
+#, fuzzy
+msgid "%s: Unable to find raster map <%s>"
+msgstr "के लिए."
+
+#, fuzzy
+msgid "%s: Unable to open raster map <%s> in mapset <%s>"
+msgstr "के लिए."
+
+#, fuzzy
+msgid "%s:  Unable to open output raster map <%s>"
+msgstr "के लिए."
+
+#, fuzzy
+msgid "Vector <%s> could not be opened"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "No db connection for driver <%s> defined. Run db.connect."
+msgstr "नहीं सेट"
+
+#, fuzzy
+msgid ""
+"Print current map connection parameters and exit (shell script style)\n"
+"\tformat:  layer[/layer name] table key database driver"
+msgstr "छापें n"
+
+#, fuzzy
+msgid "z column name"
+msgstr "ज़ेड"
+
+#, fuzzy
+msgid "Cannot drop table: %s"
+msgstr "फ़ाइल"
+
+#, fuzzy
+msgid "Cannot open labels <%s>"
+msgstr "फ़ाइल"
+
+#, fuzzy
+msgid ""
+"OGR output datasource name. For example:\n"
+"\t\tESRI Shapefile: filename or directory for storage\n"
+"\t\tMapInfo File: filename or directory for storage"
+msgstr "n n फ़ाइल"
+
+#, fuzzy
+msgid "SVG file <%s> cannot be opened"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Querying input '%s' ... "
+msgstr "छवि "
+
+#, fuzzy
+msgid "Copying %s input lines ... "
+msgstr "का"
+
+#, fuzzy
+msgid "Cannot create table <%s>"
+msgstr "चालू"
+
+#, fuzzy
+msgid "no record for cat = %d"
+msgstr "नहीं के लिए"
+
+#, fuzzy
+msgid "cannot insert row: %s"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Cannot find line of cat %d"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Unalbe to open vector map <%s>"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Database connection not defined for layer [%d]. Use v.db.connect first"
+msgstr "नहीं के लिए."
+
+#, fuzzy
+msgid "Transforms a vector map via a set of tie points."
+msgstr "एक."
+
+#, fuzzy
+msgid "Read coordinates from standard input"
+msgstr "का"
+
+#, fuzzy
+msgid "Raster map <%s>] not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Cannot start driver '%s'."
+msgstr "प्रारंभ."
+
+#, fuzzy
+msgid "Cannot start driver <%s>."
+msgstr "प्रारंभ."
+
+#, fuzzy
+msgid "[%s] is an illegal name"
+msgstr "है"
+
+#, fuzzy
+msgid "Not able to open cellfile for [%s]"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Not able to find cellfile [%s]"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Raster map [%s] not available"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "color file for [%s] not available"
+msgstr "के लिए नहीं"
+
+#, fuzzy
+msgid "Raster file [%s] not available"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Raster map [%s] not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Unable to open raster map [%s]"
+msgstr "का a"
+
+#, fuzzy
+msgid "Vector file [%s] not available"
+msgstr "सदिश नहीं"
+
+#, fuzzy
+msgid "<%s> illegal name"
+msgstr "है"
+
+#, fuzzy
+msgid "Out of Memory!\n"
+msgstr "का n"
+
+#, fuzzy
+msgid "%s: %s - Unable to open the input raster map\n"
+msgstr "n"
+
+#, fuzzy
+msgid "Insufficent memory for allocation of data sturcture"
+msgstr "के लिए का"
+
+#, fuzzy
+msgid "%s: %s - illegal name for output raster map."
+msgstr "के लिए."
+
+#, fuzzy
+msgid "Insufficent memory for allocation of data structure."
+msgstr "के लिए का."
+
+#, fuzzy
+msgid "Exports GRASS raster data into various formats (requires GDAL)."
+msgstr "a a."
+
+#, fuzzy
+msgid "%s: <%s> not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "%s: <%s> illegal name"
+msgstr "है"
+
+#, fuzzy
+msgid "%s: Cannot open <%s>"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "could not read range file"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Filtering [%s] in [%s]"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Open raster map %s in %s = %d"
+msgstr "खोलें"
+
+#, fuzzy
+msgid "Closing raster map"
+msgstr "बनाया जा रहा है n"
+
+#, fuzzy
+msgid "Swap temp files"
+msgstr "का"
+
+#, fuzzy
+msgid "Writing [%s]"
+msgstr "n"
+
+#, fuzzy
+msgid "%s: illegal map name"
+msgstr "है"
+
+#, fuzzy
+msgid "Name of the new raster map"
+msgstr "का"
+
+#, fuzzy
+msgid "%s: <%s> illegal file name"
+msgstr "है"
+
+#, fuzzy
+msgid "can't open raster map <%s> in mapset %s"
+msgstr "के लिए."
+
+#, fuzzy
+msgid ""
+"Converts a GRASS raster map to a PPM image file at the pixel resolution of "
+"the CURRENTLY DEFINED REGION."
+msgstr "a a छवि पर का."
+
+#, fuzzy
+msgid "Mapset of input map"
+msgstr "का"
+
+#, fuzzy
+msgid "Checking location %s, mapset %s:"
+msgstr "का"
+
+#, fuzzy
+msgid "Input map [%s] in location [%s] in mapset [%s] not found."
+msgstr "समूह के लिए n"
+
+#, fuzzy
+msgid "Error writing output map"
+msgstr "का"
+
+#, fuzzy
+msgid "<%s> is illegal file name"
+msgstr "है"
+
+#, fuzzy
+msgid "[%s] is an illegal file name"
+msgstr "है"
+
+#, fuzzy
+msgid "no rules specified"
+msgstr "नहीं."
+
+#, fuzzy
+msgid "Names of existing raster maps"
+msgstr "का"
+
+#, fuzzy
+msgid "Unable to open input map <%s> in mapset <%s>"
+msgstr "के लिए n"
+
+#, fuzzy
+msgid "%s - illegal name "
+msgstr "है"
+
+#, fuzzy
+msgid "Couldn't find raster map [%s]"
+msgstr "का"
+
+#, fuzzy
+msgid "%s in %s -can't open raster map"
+msgstr "त्रुटि"
+
+#, fuzzy
+msgid "%s - can't create raster map"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Normalized"
+msgstr "सामान्य किया"
+
+#, fuzzy
+msgid "Out of memory!"
+msgstr "का"
+
+#, fuzzy
+msgid "Cell file [%s] not found"
+msgstr "नहीं n"
+
+#, fuzzy
+msgid "Error getting input null cells at row %d from %s"
+msgstr "त्रुटि पर"
+
+#, fuzzy
+msgid "[%s] file name not legal"
+msgstr "है"
+
+#, fuzzy
+msgid "[%s] file name not legal\n"
+msgstr "है"
+
+#, fuzzy
+msgid "Requested 3d raster map not found <%s>"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Could not open elevation map"
+msgstr "नहीं n"
+
+#, fuzzy
+msgid "Could not open output map"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Cannot create output map [%s]"
+msgstr "का"
+
+#, fuzzy
+msgid "Database's name couldn't be read"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Cannot open vector points map <%s>"
+msgstr "का"
+
+#, fuzzy
+msgid "Cannot create vector map <%s>"
+msgstr "के लिए"
+
+#, fuzzy
+msgid ""
+"Interpolation: No database connection for driver <%s> defined. Run db.connect"
+msgstr "नहीं सेट"
+
+#, fuzzy
+msgid "Could not find input map <%s> in current mapset."
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Vector file [%s] not available in search list"
+msgstr "सदिश नहीं"
+
+#, fuzzy
+msgid "Cannot open database <%s>"
+msgstr "स्रोत"
+
+#, fuzzy
+msgid "Cannot open table <%s>"
+msgstr "फ़ाइल"
+
+#, fuzzy
+msgid "Cannot open driver <%s>"
+msgstr "फ़ाइल"
+
+#, fuzzy
+msgid "Could not find input vector map %s"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Could not find input map '%s'."
+msgstr "नहीं."
+
+#, fuzzy
+msgid "Could not find network input map '%s'."
+msgstr "नहीं."
+
+#, fuzzy
+msgid "error opening raster map [%s]."
+msgstr "त्रुटि."
+
+#, fuzzy
+msgid "Topology is not available"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Patching file <%s@%s>"
+msgstr "n"
+
+#, fuzzy
+msgid "Column type  not supported"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Could not open vector map <%s>"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Name of output raster map"
+msgstr "का"
+
+#, fuzzy
+msgid "Database connection not defined for layer <%d>. Use v.db.connect first."
+msgstr "नहीं के लिए."
+
+#, fuzzy
+msgid "Pass [%d] of [%d]:"
+msgstr "n"
+
+#, fuzzy
+msgid "Illegal output name: '%s'"
+msgstr "चेतावनी."
+
+#, fuzzy
+msgid "Can't create output map"
+msgstr "का"
+
+#, fuzzy
+msgid "Could not close new 3d raster map"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "%s: cellfile [%s] not found."
+msgstr "नहीं."
+
+#, fuzzy
+msgid "Error reading wildcard."
+msgstr "त्रुटि."
+
+#, fuzzy
+msgid ""
+"Sets the grid color, either a standard GRASS color or R:G:B triplet "
+"(separated by colons)"
+msgstr "a R जी"
+
+#, fuzzy
+msgid "Sets the border color, either a standard GRASS color or R:G:B triplet"
+msgstr "a R जी"
+
+#, fuzzy
+msgid "Border not yet implemented for LatLong locations: border not drawn."
+msgstr "किनारा नहीं के लिए नहीं."
+
+#, fuzzy
+msgid "name for new raster map"
+msgstr "का"
+
+#, fuzzy
+msgid "Output GRASS image file"
+msgstr "छवि."
+
+#, fuzzy
+msgid "Resulting output map"
+msgstr "का"
+
+#, fuzzy
+msgid "Resulting output grid3D volume"
+msgstr "का"
+
+#, fuzzy
+msgid "name for new vector map"
+msgstr "का"
+
+#, fuzzy
+msgid "name for new vector map (omit for display to stdout)"
+msgstr "के लिए के लिए"
+
+#, fuzzy
+msgid "Input vector map"
+msgstr "का"
+
+#, fuzzy
+msgid "%s: ERROR can't open tempfile"
+msgstr "त्रुटि"
+
+#, fuzzy
+msgid "vector map <%s> not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "<%s> raster map not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "<%s> unable to open raster map"
+msgstr "का"
+
+#, fuzzy
+msgid "Cannot find vector map [%s]"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "%s - can't open raster map"
+msgstr ""
+"#-#-#-#-#  grassmods_hi.po (grassmods_hi)  #-#-#-#-#\n"
+"त्रुटि\n"
+"#-#-#-#-#  grassmods_hi.po (grassmods_hi)  #-#-#-#-#\n"
+
+#, fuzzy
+msgid "%s - raster map not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "File name of classification result"
+msgstr "फ़ाइल का"
+
+#, fuzzy
+msgid "File name of reference classes"
+msgstr "फ़ाइल का"
+
+#, fuzzy
+msgid "<%s> - illegal output file name"
+msgstr "n"
+
+#, fuzzy
+msgid "%s: <%s> reference map not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "%s: raster map not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Raster map that represents the elevation, used for the 3D information"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Problem opening input file [%s]"
+msgstr "त्रुटि"
+
+#, fuzzy
+msgid "Problem opening output file [%s]"
+msgstr "का"
+
+#, fuzzy
+msgid "can't write category file for <%s>"
+msgstr "संपादन के लिए "
+
+#, fuzzy
+msgid "%s: can't open tempfile"
+msgstr "त्रुटि"
+
+#, fuzzy
+msgid "Unable to read row %d in raster map [%s]"
+msgstr "का a"
+
+#, fuzzy
+msgid "Topographic index ln(a/tanB) map"
+msgstr "a"
+
+#, fuzzy
+msgid "ELEVATION PRODUCTS for mapset [%s] in [%s]"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "It could not be find input map <%s>"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "It could not be found input map <%s>"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Cannot find input map <%s>"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Input vector map <%s> not found."
+msgstr "नहीं."
+
+#, fuzzy
+msgid "Category ranges: e.g. 1,3-8,13"
+msgstr "जी 13"
+
+#, fuzzy
+msgid "Writing attributes ...\n"
+msgstr "छापें"
+
+#, fuzzy
+msgid "Could not open ascii file <%s>"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Could not open temp file <%s>"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Vector map <%s> not fould"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "SVG output file"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Could not find vector '%s'"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Could not find vector map %s"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Unable to get row %d from <%s>"
+msgstr "का a"
+
+#, fuzzy
+msgid "No input coordinates provided"
+msgstr "नहीं."
+
+#, fuzzy
+msgid "Pass #%d (of %d) ... "
+msgstr "n"
+
+#, fuzzy
+msgid "Keep existing color table"
+msgstr "रखें"
+
+#, fuzzy
+msgid "Name of the output walkers site file"
+msgstr "का"
+
+#, fuzzy
+msgid "Verbose mode."
+msgstr "बड़बोला."
+
+#, fuzzy
+msgid ""
+"Integer cell type.\n"
+"Writing"
+msgstr "पूर्णांक."
+
+#, fuzzy
+msgid ""
+"Float cell type.\n"
+"Writing"
+msgstr "फ्लोट."
+
+#, fuzzy
+msgid ""
+"Double cell type.\n"
+"Writing"
+msgstr "दोगुना."
+
+#, fuzzy
+msgid "%s in %s - can't read header file"
+msgstr "त्रुटि"
+
+#, fuzzy
+msgid "%s - unable to create raster map"
+msgstr "का a"
+
+#, fuzzy
+msgid "%s - unable to create category file"
+msgstr "बनाया जा रहा है."
+
+#, fuzzy
+msgid "verbose mode"
+msgstr "बड़बोला"
+
+#, fuzzy
+msgid "Vector map with points for which to modify the attribute table"
+msgstr "का के लिए संपादन (_E)"
+
+#, fuzzy
+msgid "Layer of the vector for which to modify the attribute table"
+msgstr "का के लिए संपादन (_E)"
+
+#, fuzzy
+msgid "Path to an output file"
+msgstr "का"
+
+#, fuzzy
+msgid "Name of existing raster map to be displayed"
+msgstr "का"
+
+#, fuzzy
+msgid "Database name:"
+msgstr "डाटाबेस का नामः"
+
+#, fuzzy
+msgid ""
+"ASCII file to be converted to binary vector map, if not given (or \"-\") "
+"reads from standard input"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "could not find input map <%s>"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "unable to open raster map [%s]"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "cannot get layer info for vector map"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "cannot open database %s by driver %s"
+msgstr "स्रोत"
+
+#, fuzzy
+msgid "column type not supported"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "cannot create table: %s"
+msgstr "चालू"
+
+#, fuzzy
+msgid "cannot create index"
+msgstr "फील्ड"
+
+#, fuzzy
+msgid "cannot grant privileges on table %s"
+msgstr "चालू"
+
+#, fuzzy
+msgid "column type  not supported"
+msgstr "नहीं"
+
+#, fuzzy
+msgid ""
+"Number of column used as z coordinate (first column is 1) for points mode. "
+"If 0, z coordinate is not used."
+msgstr "का ज़ेड है के लिए ज़ेड है नहीं."
+
+#, fuzzy
+msgid "Error while reading cell map."
+msgstr "त्रुटि."
+
+#, fuzzy
+msgid "Error while writing new cell map."
+msgstr "त्रुटि."
+
+#, fuzzy
+msgid "Error in opening output file <%s>"
+msgstr "का"
+
+#, fuzzy
+msgid "Unable to find input cell map <%s>"
+msgstr "के लिए."
+
+#, fuzzy
+msgid "Error in opening input file <%s>"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Unable to open cell man <%s> for input.\n"
+msgstr "के लिए n"
+
+#, fuzzy
+msgid "Unable to open cell map <%s> for output.\n"
+msgstr "के लिए n"
+
+#, fuzzy
+msgid "Unable to write color table to raster [%s]"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Cannot find map %s"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Cannot open map %s"
+msgstr "नहीं n"
+
+#, fuzzy
+msgid "Name of predefined rules file"
+msgstr "का"
+
+#, fuzzy
+msgid "R:G:B value(s) out of range [0..255]: %d:%d:%d"
+msgstr "R जी का n"
+
+#, fuzzy
+msgid "R G B value(s) out of range [0..255]: %d %d %d"
+msgstr "R जी का n"
+
+#, fuzzy
+msgid "no such value"
+msgstr "n"
+
+#, fuzzy
+msgid "%s:line %d:%s"
+msgstr "n"
+
+#, fuzzy
+msgid "bad color specification"
+msgstr "n"
+
+#, fuzzy
+msgid "%s - unknown color"
+msgstr "n"
+
+#, fuzzy
+msgid "Valid colors are:\n"
+msgstr "n"
+
+#, fuzzy
+msgid "Unable to find base map <%s>"
+msgstr "के लिए."
+
+#, fuzzy
+msgid "%s: reading category file for %s"
+msgstr "त्रुटि के लिए"
+
+#, fuzzy
+msgid "%s: unable to open raster map [%s]"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "%s: unable to create raster map [%s]"
+msgstr "का a"
+
+#, fuzzy
+msgid "Unable to open database %s with driver %s"
+msgstr "स्रोत"
+
+#, fuzzy
+msgid "%s: Unable to read raster map [%s]"
+msgstr "का a"
+
+#, fuzzy
+msgid "%s: unable to open raster map <%s>"
+msgstr "के लिए."
+
+#, fuzzy
+msgid "%s: Failed to read raster row %d"
+msgstr "i n"
+
+#, fuzzy
+msgid "Unable to read cats table for %s"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Could not open raster <%s>"
+msgstr "नहीं n"
+
+#, fuzzy
+msgid "Screen coordinates to place the legend (as percentage)"
+msgstr "स्क्रीन"
+
+#, fuzzy
+msgid ""
+"Font name (not supported interactively, see also -l flag) or path to "
+"TrueType font (including file name)"
+msgstr "फ़ॉन्ट नहीं"
+
+#, fuzzy
+msgid "%s: o_open_file: raster map %s not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "%s: o_open_file: could not open raster map %s in %s"
+msgstr "के लिए."
+
+#, fuzzy
+msgid "No record for category for [%d]"
+msgstr "नहीं के लिए"
+
+#, fuzzy
+msgid "Error reading ASCII file <%s>"
+msgstr "त्रुटि के लिए."
+
+#, fuzzy
+msgid "Error reading categories: <%s>"
+msgstr "त्रुटि के लिए."
+
+#, fuzzy
+msgid "category [%d]"
+msgstr "n"
+
+#, fuzzy
+msgid "Could not find input vector '%s'"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Failed opening output vector map '%s'"
+msgstr "का"
+
+#, fuzzy
+msgid "Do not create attribute table."
+msgstr "नहीं."
+
+#, fuzzy
+msgid "Could not find input %s\n"
+msgstr "नहीं n"
+
+#, fuzzy
+msgid "Error reading ascii file: [%s]"
+msgstr "त्रुटि के लिए."
+
+#, fuzzy
+msgid ""
+"Allows the user to interactively query a vector map layer at user-selected "
+"locations within the current geographic region"
+msgstr "a पर."
+
+#, fuzzy
+msgid "| Tool                            | Threshold     |"
+msgstr "n"
+
+#, fuzzy
+msgid "| Break                           |  "
+msgstr "n n"
+
+#, fuzzy
+msgid "| Prune                           |  "
+msgstr "n n"
+
+#, fuzzy
+msgid "%s: <%s> vector map not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Vector <%s> could not be open"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Raster <%s> could not be open."
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Interpolation()"
+msgstr "पद्धति"
+
+#, fuzzy
+msgid "Interpolation: Setting regions and boxes"
+msgstr "पद्धति"
+
+#, fuzzy
+msgid "Interpolation: nsply = %d"
+msgstr "पद्धति"
+
+#, fuzzy
+msgid "Interpolation: (%d,%d): Bilinear interpolation..."
+msgstr "संख्या का"
+
+#, fuzzy
+msgid "Interpolation: (%d,%d): Bicubic interpolation..."
+msgstr "का"
+
+#, fuzzy
+msgid "%s: Dropping <s>"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Interpolation was a success!"
+msgstr "पद्धति"
+
+#, fuzzy
+msgid "CrossCorrelation: %d points read in region. "
+msgstr "नहीं"
+
+#, fuzzy
+msgid "CrossCorrelation: It shouldn't take too long."
+msgstr "सभी"
+
+#, fuzzy
+msgid "%s -- illegal output file name"
+msgstr "n"
+
+#, fuzzy
+msgid "Sorry, with method '%s' you have to define an output map."
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Calculation time"
+msgstr "n"
+
+#, fuzzy
+msgid "Maximum number of iteration"
+msgstr "संख्या का"
+
+#, fuzzy
+msgid "Finished.\n"
+msgstr "पूर्ण n"
+
+#, fuzzy
+msgid "%s - can't read raster cellhd"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "error reading cell data"
+msgstr "त्रुटि."
+
+#, fuzzy
+msgid "Done!"
+msgstr "n"
+
+#, fuzzy
+msgid "No line found."
+msgstr "n"
+
+#, fuzzy
+msgid "Nothing Found."
+msgstr "n"
+
+#, fuzzy
+msgid "Do not build topology."
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Could not open ascii file [%s]"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "%s: Cannot open dxf file"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Conversion of [%s] to vector map ..."
+msgstr "a a."
+
+#, fuzzy
+msgid "Finished"
+msgstr "पूर्ण n"
+
+#, fuzzy
+msgid "Print the current region (shell script style)"
+msgstr "छापें"
+
+#, fuzzy
+msgid ""
+"\n"
+"Where %s is one of:\n"
+msgstr "है एक का n"
+
+#, fuzzy
+msgid "ERROR: <%s> not found\n"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "ERROR: <%s> illegal name\n"
+msgstr "है"
+
+#, fuzzy
+msgid "Cannot open toolbox: %s"
+msgstr "फ़ाइल"
+
+#, fuzzy
+msgid "Cannot open toolbox."
+msgstr "फ़ाइल"
+
+#, fuzzy
+msgid "Could not find input map <%s>\n"
+msgstr "नहीं n"
+
+#, fuzzy
+msgid "'%s' has finished the transformation of the vectors.\n"
+msgstr "पूर्ण का n"
+
+#, fuzzy
+msgid ""
+"                          CHECK MAP RESIDUALS\n"
+"\n"
+msgstr "n n"
+
+#, fuzzy
+msgid "                Current Map                  New Map\n"
+msgstr "n"
+
+#, fuzzy
+msgid ""
+" POINT      X coord    Y coord  |        X coord   Y coord    |      "
+"residuals\n"
+msgstr "n"
+
+#, fuzzy
+msgid "  Residual mean average   : %f\n"
+msgstr "f n"
+
+#, fuzzy
+msgid "Vector map(s) -- source for composite"
+msgstr "स्रोत के लिए"
+
+#, fuzzy
+msgid "New vector composite"
+msgstr "का"
+
+#, fuzzy
+msgid "Append files to existing file"
+msgstr "का."
+
+#, fuzzy
+msgid "No database updates."
+msgstr "सभी."
+
+#, fuzzy
+msgid "Adding new features to vector file ..."
+msgstr "बनाया जा रहा है."
+
+#, fuzzy
+msgid "Vector map '%s' not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Quiet operation"
+msgstr "शांत"
+
+#, fuzzy
+msgid "Display Reference Information"
+msgstr "जानकारी"
+
+#, fuzzy
+msgid "%s\n"
+msgstr "n"
+
+#, fuzzy
+msgid "output layer name"
+msgstr "ढाल फ़ाइलनाम "
+
+#, fuzzy
+msgid "Transforming data..."
+msgstr "n"
+
+#, fuzzy
+msgid ""
+"\a\n"
+"** The following raster maps in subgroup [%s] do not exist."
+msgstr "n नहीं."
+
+#, fuzzy
+msgid "The subgroup must have at least 2 files to run %s."
+msgstr "पर."
+
+#, fuzzy
+msgid "Did not find input cell map."
+msgstr "नहीं."
+
+#, fuzzy
+msgid "Warning: illegal group name <%s>."
+msgstr "चेतावनी समूह."
+
+#, fuzzy
+msgid "Warning: illegal output file name <%s>."
+msgstr "चेतावनी."
+
+#, fuzzy
+msgid "An output cell map name is required."
+msgstr "है."
+
+#, fuzzy
+msgid "The output cell map name can not be longer than 12 characters."
+msgstr "नहीं."
+
+#, fuzzy
+msgid "L: from  M: to R: quit\n"
+msgstr "R n"
+
+#, fuzzy
+msgid "g3d_to_raster: Writing %i raster maps with rows %i cols."
+msgstr "i i."
+
+#, fuzzy
+msgid ""
+"\n"
+"Done\n"
+msgstr "n"
+
+#, fuzzy
+msgid "Writing VTK VoxelData\n"
+msgstr "n"
+
+#, fuzzy
+msgid "Open vector 3d raster map %s"
+msgstr "खोलें"
+
+#, fuzzy
+msgid "Open 3d raster map %s"
+msgstr "खोलें"
+
+#, fuzzy
+msgid ""
+"OGR datasource name.\n"
+"\t\tESRI Shapefile: directory containing shapefiles\n"
+"\t\tMapInfo File: directory containing mapinfo files"
+msgstr "n n फ़ाइल"
+
+#, fuzzy
+msgid "Name of vector output file"
+msgstr "का"
+
+#, fuzzy
+msgid "Vector import complete"
+msgstr "सदिश"
+
+#, fuzzy
+msgid "centroids"
+msgstr "n"
+
+#, fuzzy
+msgid "ERROR: A line needs at least 2 points"
+msgstr "पर."
+
+#, fuzzy
+msgid "ERROR: An area needs at least 3 points"
+msgstr "पर."
+
+#, fuzzy
+msgid "Unable to create raster map for [%s]"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "raster_to_g3d: Writing %i raster maps with rows %i cols."
+msgstr "i i."
+
+#, fuzzy
+msgid "Writing g3d slice %i\n"
+msgstr "i n"
+
+#, fuzzy
+msgid "out of memory!"
+msgstr "का!"
+
+#, fuzzy
+msgid "error opening 3d raster map"
+msgstr "त्रुटि"
+
+#, fuzzy
+msgid "Done\n"
+msgstr "n"
+
+#, fuzzy
+msgid "Name for the resulting raster map"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Open Raster file %s in Mapset %s"
+msgstr "खोलें n"
+
+#, fuzzy
+msgid ""
+"elev_raster_to_g3d: Writing 3D raster map with depths %i rows %i cols %i and "
+"count %i."
+msgstr "i i."
+
+#, fuzzy
+msgid "Open 3d raster map %s\n"
+msgstr "खोलें"
+
+#, fuzzy
+msgid "Open elev raster map %s\n"
+msgstr "डाटाटाइप."
+
+#, fuzzy
+msgid "Could not open map %s\n"
+msgstr "नहीं n"
+
+#, fuzzy
+msgid "Either -i flag and/or profile parameter must be used."
+msgstr "i"
+
+#, fuzzy
+msgid "Region size is lower than minreg, nothing displayed.\n"
+msgstr "आकार  है कुछ नहीं n"
+
+#, fuzzy
+msgid "Region size is greater than maxreg, nothing displayed.\n"
+msgstr "आकार  है कुछ नहीं n"
+
+#, fuzzy
+msgid "Name for G3d raster map"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Do not rebuild and store the topology at the end"
+msgstr "नहीं पर"
+
+#, fuzzy
+msgid "QGIS vector output"
+msgstr "का"
+
+#, fuzzy
+msgid "Makes 3D trees from input point vector map"
+msgstr "का"
+
+#, fuzzy
+msgid "Diameter of the tree crown in mapunits"
+msgstr "त्रुटि"
+
+#, fuzzy
+msgid "Height of tree trunk"
+msgstr "ऊंचाई मीटर्स"
+
+#, fuzzy
+msgid "Name of the column with tree crown width"
+msgstr "का"
+
+#, fuzzy
+msgid "Name of the column with tree height"
+msgstr "का"
+
+#, fuzzy
+msgid "Name of the column with tree species"
+msgstr "का"
+
+#, fuzzy
+msgid "Horizontal variability in map units"
+msgstr "का बिन्दु"
+
+#, fuzzy
+msgid "Cannot select attributes for point #%d"
+msgstr "के लिए"
+
+#, fuzzy
+msgid ""
+"Calculate statistics for vector points within each raster cell of the "
+"current region"
+msgstr "का a के लिए सभी का."
+
+#, fuzzy
+msgid ""
+"Name of output vector points map (if not specified, the program writes to "
+"standard output)"
+msgstr "का के लिए संपादन (_E)"
+
+#, fuzzy
+msgid "Report only selected statistics"
+msgstr "का वस्तु"
+
+#, fuzzy
+msgid "Quiet mode"
+msgstr "शांत"
+
+#, fuzzy
+msgid "Print the input data extent in shell script style"
+msgstr "छापें"
+
+#, fuzzy
+msgid "done."
+msgstr "n"
+
+#, fuzzy
+msgid "name for new binary vector map (omit for display to stdout)"
+msgstr "के लिए के लिए"
+
+#, fuzzy
+msgid "Mark or search ground control points on image to be rectified."
+msgstr "चिह्नित चालू छवि."
+
+#, fuzzy
+msgid "Enter imagery group to be registered"
+msgstr "समूह"
+
+#, fuzzy
+msgid "Maximum distance"
+msgstr "आइसोसरफेस"
+
+#, fuzzy
+msgid "Right: "
+msgstr "n"
+
+#, fuzzy
+msgid "%s Pan\n"
+msgstr "n"
+
+#, fuzzy
+msgid "%s Quit\n"
+msgstr "बाहर जाएँ n"
+
+#, fuzzy
+msgid "Draw geographic grid"
+msgstr "निकालें"
+
+#, fuzzy
+msgid ""
+"3 raster maps (r,g,b) which are used to create rgb values [redmap,greenmap,"
+"bluemap]"
+msgstr "जी"
+
+#, fuzzy
+msgid "%s[%d]: No raster map specified."
+msgstr "के लिए."
+
+#, fuzzy
+msgid ""
+"GRASS module to create a fractal surface of a given fractal dimension. Uses "
+"spectral synthesis method. Can create intermediate layers showing the build "
+"up of different spectral coefficients (see Saupe, pp.106-107 for an example "
+"of this). Use this module to generate naturally looking synthetical "
+"elevation models (DEM)."
+msgstr "मॉडयूल a का a पद्धति का के लिए का मॉडयूल."
+
+#, fuzzy
+msgid "Wrong rgb map values! Values should in between 0 and 255!\n"
+msgstr "n"
+
+#, fuzzy
+msgid "Resolution of raster and raster3d maps should be equal!"
+msgstr "का के बराबर!"
+
+#, fuzzy
+msgid "The resolution of raster and raster3d maps should be equal!"
+msgstr "का के बराबर!"
+
+#, fuzzy
+msgid "top raster map not found\n"
+msgstr "नहीं n"
+
+#, fuzzy
+msgid "Compute upslope flowlines"
+msgstr "गणना करें"
+
+#, fuzzy
+msgid "The map E and N grid coordinates of a starting point"
+msgstr "का a बिन्दु"
+
+#, fuzzy
+msgid "Wrong RGB maps. RGB output not added!"
+msgstr "नहीं!"
+
+#, fuzzy
+msgid "Done.\n"
+msgstr "n"
+
+#, fuzzy
+msgid "Zooming finished.\n"
+msgstr "पूर्ण n"
+
+#, fuzzy
+msgid "name of resulting vector map"
+msgstr "का"
+
+#, fuzzy
+msgid "\"Extrudes\" flat vector object to 3D with defined height."
+msgstr "वस्तु ऊंचाई."
+
+#, fuzzy
+msgid "Column from attribute table with object height attribute"
+msgstr "वस्तु ऊंचाई"
+
+#, fuzzy
+msgid "You first need to run v.build on vector map <%s>"
+msgstr "चालू"
+
+#, fuzzy
+msgid "height of vector object"
+msgstr "ऊंचाई का वस्तु"
+
+#, fuzzy
+msgid "Either a height column or a fixed height value have to be specified"
+msgstr "a ऊंचाई a स्थिर ऊंचाई"
+
+#, fuzzy
+msgid "String column cannot be used for object heights"
+msgstr "के लिए वस्तु"
+
+#, fuzzy
+msgid "DateTime column cannot be used for object heights"
+msgstr "के लिए वस्तु"
+
+#, fuzzy
+msgid ""
+"Feature type. Possible combinations of more types: point,centroid or line,"
+"boundary."
+msgstr "विशेषता का अधिक बिन्दु."
+
+#, fuzzy
+msgid "Don't understand: [%s]\n"
+msgstr "n"
+
+#, fuzzy
+msgid "Name of existing input raster map"
+msgstr "का"
+
+#, fuzzy
+msgid "Name of existing raster map."
+msgstr "का."
+
+#, fuzzy
+msgid "Name of new raster map."
+msgstr "का."
+
+#, fuzzy
+msgid "Name of the resulting map"
+msgstr "का"
+
+#, fuzzy
+msgid "Name of input map"
+msgstr "का"
+
+#, fuzzy
+msgid "Write an Arc-Info line/polygon coverage in e00 format."
+msgstr "बहुभुज."
+
+#, fuzzy
+msgid "Mapset holding vector map to be exported (Default = current)"
+msgstr "डिफ़ॉल्ट"
+
+#, fuzzy
+msgid "Prompt user for threshold"
+msgstr "के लिए"
+
+#, fuzzy
+msgid ""
+"Set line types to:   \n"
+"             source        same as in binary vector map\n"
+"             line          lines\n"
+"             area          area edges\n"
+"             point         points (sites)\n"
+msgstr ""
+"सेट\n"
+" स्रोत\n"
+"\n"
+"\n"
+" बिन्दु n"
+
+#, fuzzy
+msgid "Output file is ASCII map"
+msgstr "है"
+
+#, fuzzy
+msgid "Copy attributes and category files"
+msgstr "नक़ल"
+
+#, fuzzy
+msgid ""
+"Converts point data in a binary GRASS vector map layer into a GRASS "
+"site_lists file."
+msgstr "बिन्दु a a."
+
+#, fuzzy
+msgid "Use Category NUMERIC data instead of attribute"
+msgstr "का"
+
+#, fuzzy
+msgid "Use Category TEXT data instead of attribute"
+msgstr "का"
+
+#, fuzzy
+msgid "Test routine for developing MIF import."
+msgstr "के लिए."
+
+#, fuzzy
+msgid "Debugging level : 0 (silent) - 3 (verbose)"
+msgstr "डिबगिंग"
+
+#, fuzzy
+msgid "Name of file where to log operations"
+msgstr "का"
+
+#, fuzzy
+msgid "Snap distance in ground units (Default = 10^-10)"
+msgstr "डिफ़ॉल्ट"
+
+#, fuzzy
+msgid "Set initial scale [1:2400]"
+msgstr "सेट स्केल"
+
+#, fuzzy
+msgid "Name of attribute to use as category"
+msgstr "का"
+
+#, fuzzy
+msgid "Allow overwrite of existing vector map with the same name"
+msgstr "का"
+
+#, fuzzy
+msgid "Force writing  polygon coverage as a line coverage"
+msgstr "बहुभुज a"
+
+#, fuzzy
+msgid "Create unique value for parts of compound object"
+msgstr "के लिए का वस्तु"
+
+#, fuzzy
+msgid "List fields of DBF file"
+msgstr "का"
+
+#, fuzzy
+msgid "new categories table title"
+msgstr "शीर्षक"
+
+#, fuzzy
+msgid "Build topology info (default) OR Edit categories"
+msgstr "संपादन"
+
+#, fuzzy
+msgid "Prompt user for threshold         (Valid only with Build option)"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Set map region from data          (Valid only with Build option)"
+msgstr "सेट"
+
+#, fuzzy
+msgid "Suppress drawing of text outlines"
+msgstr "का पाठ"
+
+#, fuzzy
+msgid "Prefix for dig or dig_ascii and dig_att output files"
+msgstr "उपसर्ग के लिए"
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Where lines and labels are one or more of:\n"
+"\n"
+msgstr "n एक अधिक का n n"
+
+#, fuzzy
+msgid ""
+"    layername1[,layername2,layername3,...]\n"
+"\n"
+msgstr "n n"
+
+#, fuzzy
+msgid ""
+"      and/or   \n"
+"\n"
+msgstr "n n"
+
+#, fuzzy
+msgid "    in_layername1:out_layername1[,inlayername2:outlayername2,.....]\n"
+msgstr "n"
+
+#, fuzzy
+msgid "angle of rotation"
+msgstr "कोण का"
+
+#, fuzzy
+msgid "provide attributes of type: const,rows,cols"
+msgstr "का"
+
+#, fuzzy
+msgid "mi(les),f(eet),me(ters),k(ilometers),a(cres),h(ectacres)"
+msgstr "f a h"
+
+#, fuzzy
+msgid "Prints information about a binary GRASS vector map layer."
+msgstr "a."
+
+#, fuzzy
+msgid "input vector map for ARC/INFO conversion"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "prefix for ARC/INFO output filenames"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "field separator"
+msgstr "फील्ड"
+
+#, fuzzy
+msgid ""
+"Interpolation and topographic analysis from given contour data in vector "
+"format to GRASS floating point raster format using regularized spline with "
+"tension."
+msgstr "बिन्दु."
+
+#, fuzzy
+msgid "Version: GRASS5.0 beta,  update: Novemebr 1999"
+msgstr "बीटा"
+
+#, fuzzy
+msgid "Authors: original version -  H.Mitasova, L.Mitas"
+msgstr "असली संस्करण एच"
+
+#, fuzzy
+msgid "Methods used in this program are described in the following papers:"
+msgstr "पद्धति प्रोग्राम:"
+
+#, fuzzy
+msgid "Mitasova, H., and  Mitas, L., 1993,"
+msgstr "एच"
+
+#, fuzzy
+msgid "Mitasova, H., and Hofierka, L., 1993"
+msgstr "एच"
+
+#, fuzzy
+msgid "Mitasova, H., Mitas, L., Brown, W.M., Gerdes, D.P., Kosinovsky, I.,"
+msgstr "एच प"
+
+#, fuzzy
+msgid "Baker, T., 1995, Modeling spatially and temporally"
+msgstr "T"
+
+#, fuzzy
+msgid "distributed phenomena: New methods and tools for GRASS GIS."
+msgstr "के लिए."
+
+#, fuzzy
+msgid "International Journal of Geographic Information Systems,V(9), No(4)."
+msgstr "का जियोग्राफिक जानकारी V नहीं."
+
+#, fuzzy
+msgid "(special issue on Integration of GIS and Environmental Modeling)"
+msgstr "चालू का"
+
+#, fuzzy
+msgid "The postscript versions of these papers are available via Internet at"
+msgstr "का पर"
+
+#, fuzzy
+msgid "Please cite these references in publications where the results of this"
+msgstr "का"
+
+#, fuzzy
+msgid "Use category data instead of attribute"
+msgstr "का"
+
+#, fuzzy
+msgid "Output z-file (elevation)"
+msgstr "ज़ेड"
+
+#, fuzzy
+msgid "Mean curvature"
+msgstr "औसत"
+
+#, fuzzy
+msgid "Min number of points for interpolation(>segmax)"
+msgstr "संख्या का के लिए"
+
+#, fuzzy
+msgid "path to GRASS database of input location"
+msgstr "का"
+
+#, fuzzy
+msgid "Automatically run \"v.support\" on newly created vector map."
+msgstr "चालू."
+
+#, fuzzy
+msgid "Type of object to extract (area, line or both)"
+msgstr "का वस्तु"
+
+#, fuzzy
+msgid "Polygon Cookie Cutter  (Boolean AND Overlay)."
+msgstr "बूलिये ओवरले."
+
+#, fuzzy
+msgid "ARC/INFO label-text file"
+msgstr "पाठ"
+
+#, fuzzy
+msgid "resultant Vector output file"
+msgstr "सदिश"
+
+#, fuzzy
+msgid "ID Number column in label-text file"
+msgstr "पाठ"
+
+#, fuzzy
+msgid "GRASS category column in label-text file"
+msgstr "पाठ"
+
+#, fuzzy
+msgid "GRASS attribute column in label-text file"
+msgstr "पाठ"
+
+#, fuzzy
+msgid "reports attribute, label, and other information about a sites file"
+msgstr "अन्य a"
+
+#, fuzzy
+msgid "Name of sites file."
+msgstr "का."
+
+#, fuzzy
+msgid "Only count sites in current window for min/max."
+msgstr "के लिए."
+
+#, fuzzy
+msgid "Show quartiles for decimal attributes"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Name of input sites map"
+msgstr "का"
+
+#, fuzzy
+msgid ""
+"Surface interpolation from sites data by Inverse Distance Weighted algorithm."
+msgstr "सतह."
+
+#, fuzzy
+msgid "Name of sites file to filter"
+msgstr "का फ़िल्टर"
+
+#, fuzzy
+msgid ""
+"Converts a GRASS site list file into an ASCII listing of site locations and "
+"their descriptions."
+msgstr "a का."
+
+#, fuzzy
+msgid "Name of input site list"
+msgstr "का"
+
+#, fuzzy
+msgid "Number of cells to surround site cell"
+msgstr "का"
+
+#, fuzzy
+msgid "Attribute field type to use for operation"
+msgstr "फील्ड के लिए"
+
+#, fuzzy
+msgid "Attribute field number to use for operation"
+msgstr "फील्ड संख्या के लिए"
+
+#, fuzzy
+msgid "Create a single-valued (0/1) raster map"
+msgstr "a एकल"
+
+#, fuzzy
+msgid "Index of attribute type (ignored for cat)"
+msgstr "का के लिए"
+
+#, fuzzy
+msgid "Output in g.gnuplot format (overrides -z and writes to stdout)"
+msgstr "जी ज़ेड"
+
+#, fuzzy
+msgid "Convert an ASCII listing of site locations into a GRASS site list file."
+msgstr "का a."
+
+#, fuzzy
+msgid "number of dimensions (default=2)"
+msgstr "संख्या का"
+
+#, fuzzy
+msgid "input field separator"
+msgstr "फील्ड"
+
+#, fuzzy
+msgid ""
+"Allows the user to re-project a sites file from one location to the current "
+"location (no datum transformation yet)."
+msgstr "a एक."
+
+#, fuzzy
+msgid "location of input sites list"
+msgstr "का"
+
+#, fuzzy
+msgid "mapset of input sites list"
+msgstr "का"
+
+#, fuzzy
+msgid "Don't prompt for Map header information"
+msgstr "संकेत के लिए"
+
+#, fuzzy
+msgid ""
+"Field type (\"string\", \"dim\", or \"decimal\") and index to use for "
+"category value (uses \"cat\" by default)"
+msgstr "फील्ड के लिए"
+
+#, fuzzy
+msgid ""
+"Allows the user to interactively change the color table of a raster map "
+"layer displayed on the graphics monitor."
+msgstr "का a चालू."
+
+#, fuzzy
+msgid ""
+"Allows the user to interactively adjust the settings (zoom  and  pan) of the "
+"current geographic region using a pointing device such as a mouse."
+msgstr "पैन का a a."
+
+#, fuzzy
+msgid ""
+"Displays text labels formatted for use with GRASS paint (p.labels, p.map) "
+"output to the active frame on the graphics monitor."
+msgstr "पाठ के लिए चालू."
+
+#, fuzzy
+msgid "Color of lines separating the colors of the color table"
+msgstr "का का"
+
+#, fuzzy
+msgid ""
+"Displays points, as icons, at user-defined locations in the active display "
+"frame on the graphics monitor."
+msgstr "प्रतीक पर चालू."
+
+#, fuzzy
+msgid "Name of existing sites file"
+msgstr "का"
+
+#, fuzzy
+msgid "Identify just one site"
+msgstr "पहचानें एक"
+
+#, fuzzy
+msgid "one mouse click only"
+msgstr "एक"
+
+#, fuzzy
+msgid "Name of a spheroid (for lat/lon coordinate conversion)"
+msgstr "का a के लिए"
+
+#, fuzzy
+msgid "Displays three-dimensional images based on raster map layers"
+msgstr "छवियाँ चालू"
+
+#, fuzzy
+msgid "The raster map used to generate the 3-d texture"
+msgstr "संरचना"
+
+#, fuzzy
+msgid "coordinates of center of view"
+msgstr "का का"
+
+#, fuzzy
+msgid "Frequency of vector lines in output"
+msgstr "आवृत्ति का"
+
+#, fuzzy
+msgid "Field of view"
+msgstr "फील्ड का"
+
+#, fuzzy
+msgid "Color of bounding box"
+msgstr "का बक्सा"
+
+#, fuzzy
+msgid ""
+"Displays  a  legend  for a raster map layer in the active frame on the "
+"graphics monitor."
+msgstr "a के लिए a चालू."
+
+#, fuzzy
+msgid "Use a subset of the map range for the legend"
+msgstr "a का के लिए"
+
+#, fuzzy
+msgid "Draw labelled vector lines to the current display device"
+msgstr "निकालें"
+
+#, fuzzy
+msgid "Name of existing vector map to draw"
+msgstr "का"
+
+#, fuzzy
+msgid ""
+"Draw all lines using either a GRASS standard color or R:G:B triplet "
+"(separated by colons)"
+msgstr "निकालें सभी a R जी"
+
+#, fuzzy
+msgid ""
+"Only draw areas with a matching category number (for constant color option "
+"only)"
+msgstr "a संख्या के लिए"
+
+#, fuzzy
+msgid "Draw lines according to a legend file (<cat> <R> <G> <B>)"
+msgstr "निकालें a<cat><R><G><B>"
+
+#, fuzzy
+msgid "Fill color -- a GRASS named color, an R:G:B triplet, or \"none\""
+msgstr "a R जी"
+
+#, fuzzy
+msgid "Line color -- a GRASS named color, an R:G:B triplet, or \"none\""
+msgstr "a R जी"
+
+#, fuzzy
+msgid "Limit to matching category number(s) (constant color option only)"
+msgstr "संख्या"
+
+#, fuzzy
+msgid "Use a legend file: (<cat> <R> <G> <B> [<R> <G> <B>])"
+msgstr "a<cat><R><G><B><R><G><B>"
+
+#, fuzzy
+msgid ""
+"Displays site markers in the active display frame on the graphics monitor."
+msgstr "चालू."
+
+#, fuzzy
+msgid "Size, in pixels, in which the icon is to be drawn"
+msgstr "पिक्सेल्स है"
+
+#, fuzzy
+msgid "Specify the type of the icon"
+msgstr "का"
+
+#, fuzzy
+msgid "Color used for the background, or \"none\""
+msgstr "के लिए"
+
+#, fuzzy
+msgid "the screen coordinates for top-left corner of label"
+msgstr "के लिए शीर्ष बायाँ का"
+
+#, fuzzy
+msgid ""
+"Interactively label sites using a string or double attribute value or the "
+"category value on the current graphics monitor."
+msgstr "a चालू."
+
+#, fuzzy
+msgid "Name of sites file"
+msgstr "का"
+
+#, fuzzy
+msgid "Type of attribute to use for labels"
+msgstr "का के लिए"
+
+#, fuzzy
+msgid "Index of attribute. Ignored when attr=cat or attr=coords."
+msgstr "का उपेक्षित."
+
+#, fuzzy
+msgid "Relative horizontal position 'left|center|right'"
+msgstr "बायाँ दायाँ"
+
+#, fuzzy
+msgid "Relative vertical position 'top|center|bottom'"
+msgstr "शीर्ष तल"
+
+#, fuzzy
+msgid "Size of text (pixels)"
+msgstr "का पाठ पिक्सेल्स"
+
+#, fuzzy
+msgid "Color desired for drawing map"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Vector category number(s) to be displayed"
+msgstr "सदिश संख्या"
+
+#, fuzzy
+msgid "Fill areas of selected polygons"
+msgstr "का"
+
+#, fuzzy
+msgid "Draws text in the active display frame on the graphics monitor."
+msgstr "पाठ चालू."
+
+#, fuzzy
+msgid "Height of letters in percent of available frame height"
+msgstr "ऊंचाई का का ऊंचाई"
+
+#, fuzzy
+msgid "Color desired for drawing text"
+msgstr "के लिए पाठ"
+
+#, fuzzy
+msgid "The screen line number on which text will begin to be drawn "
+msgstr "संख्या चालू पाठ "
+
+#, fuzzy
+msgid ""
+"Displays point graphics in the active frame on the graphics display monitor."
+msgstr "बिन्दु चालू."
+
+#, fuzzy
+msgid "Input is a UNIX file name"
+msgstr "है a"
+
+#, fuzzy
+msgid ""
+"Allows the user to establish whether a map will be displayed using its own "
+"color table or the fixed color table of the graphics monitor."
+msgstr "a स्थिर का."
+
+#, fuzzy
+msgid ""
+"Displays the rhumbline joining two user-specified points, in the active "
+"frame on the user's graphics monitor."
+msgstr "दो चालू."
+
+#, fuzzy
+msgid "Creates and modifies icons for use with ps.map."
+msgstr "प्रतीक के लिए."
+
+#, fuzzy
+msgid "scale of the output map, e.g. 1:25000 (default: 1panel)"
+msgstr "स्केल का जी"
+
+#, fuzzy
+msgid "number of copies to print"
+msgstr "संख्या का"
+
+#, fuzzy
+msgid "Selects a PostScript device for GRASS hardcopy output."
+msgstr "a के लिए."
+
+#, fuzzy
+msgid "name of PostScript painter to select"
+msgstr "का"
+
+#, fuzzy
+msgid "list all available PostScript painters"
+msgstr "सभी"
+
+#, fuzzy
+msgid "print name of currently selected PostScript painter"
+msgstr "का"
+
+#, fuzzy
+msgid ""
+"An imagery function that performs contextual image classification using "
+"sequential maximum a posteriori (SMAP) estimation."
+msgstr "फंक्शन छवि a."
+
+#, fuzzy
+msgid "Force Swapping (overrides default auto)"
+msgstr "स्वचालित"
+
+#, fuzzy
+msgid "Use \"Map Coordinates\" for coordinates"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "output prefix of the GRASS raster maps to be created."
+msgstr "का."
+
+#, fuzzy
+msgid "Number of columns to extract."
+msgstr "का."
+
+#, fuzzy
+msgid "Output 16-bit image (default 8)"
+msgstr "छवि"
+
+#, fuzzy
+msgid "maximum number of sub-signatures in any class"
+msgstr "संख्या का"
+
+#, fuzzy
+msgid "Generate statistics for i.smap from raster map layer."
+msgstr "के लिए i."
+
+#, fuzzy
+msgid "Use symbols (instead of graphics)"
+msgstr "का"
+
+#, fuzzy
+msgid "Import non-georeferenced PNG format image."
+msgstr "आयात छवि."
+
+#, fuzzy
+msgid "Create floating-point maps (0.0 - 1.0)."
+msgstr "बिन्दु."
+
+#, fuzzy
+msgid "Verbose mode on."
+msgstr "बड़बोला चालू."
+
+#, fuzzy
+msgid "Enable extend memory option: Operation is slow"
+msgstr "विस्तार दें है"
+
+#, fuzzy
+msgid "Name of an output binary map (use out=- for stdout)"
+msgstr "का के लिए"
+
+#, fuzzy
+msgid ""
+"Converts point data in a GRASS raster map layer into a GRASS site_lists file."
+msgstr "बिन्दु a a."
+
+#, fuzzy
+msgid "Output as third dimension rather than cat"
+msgstr "तृतीय"
+
+#, fuzzy
+msgid "Name of raster map."
+msgstr "का."
+
+#, fuzzy
+msgid ""
+"Creates a new binary GRASS vector (v.digit) file by extracting linear "
+"features from a thinned raster map."
+msgstr "a a."
+
+#, fuzzy
+msgid ""
+"Creates a raster map layer and site list file containing randomly located "
+"sites."
+msgstr "a."
+
+#, fuzzy
+msgid "Name of the output sites map"
+msgstr "का"
+
+#, fuzzy
+msgid "Generate sites for category zero also"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Imports a TIFF (8 or 24 bit) raster map into GRASS raster map(s)"
+msgstr "a"
+
+#, fuzzy
+msgid "Name on TIFF file to input."
+msgstr "चालू."
+
+#, fuzzy
+msgid "Bayesian expert system development program."
+msgstr "प्रोग्राम."
+
+#, fuzzy
+msgid ""
+"mi(les),me(ters),k(ilometers),a(cres),h(ectacres),c(ell_counts),p"
+"(ercent_cover)"
+msgstr "a h कवर"
+
+#, fuzzy
+msgid "name of an output file to hold the report"
+msgstr "का"
+
+#, fuzzy
+msgid "number of fp subranges to collect stats from"
+msgstr "संख्या का"
+
+#, fuzzy
+msgid "filter out all no data cells"
+msgstr "फ़िल्टर सभी"
+
+#, fuzzy
+msgid "filter out cells where all maps have no data"
+msgstr "फ़िल्टर सभी"
+
+#, fuzzy
+msgid "report for cats fp ranges (fp maps only)"
+msgstr "के लिए"
+
+#, fuzzy
+msgid ""
+"Generates an output raster map layer with contiguous areas grown by one cell "
+"(pixel)."
+msgstr "एक."
+
+#, fuzzy
+msgid ""
+"re-project a raster map from one location to the current location (no datum "
+"transformation yet)"
+msgstr "a एक"
+
+#, fuzzy
+msgid "interpolation method to use"
+msgstr "पद्धति"
+
+#, fuzzy
+msgid "resolution of output map"
+msgstr "का"
+
+#, fuzzy
+msgid "Print grid coordinates (east and north) (requires -1 flag)"
+msgstr "छापें पूर्व उत्तर"
+
+#, fuzzy
+msgid "output is the interpolation error"
+msgstr "है त्रुटि"
+
+#, fuzzy
+msgid "format for reporting the slope"
+msgstr "के लिए ढाल"
+
+#, fuzzy
+msgid "type of output aspect and slope maps"
+msgstr "का ढाल"
+
+#, fuzzy
+msgid "Output E-W slope filename"
+msgstr "प ढाल फ़ाइलनाम "
+
+#, fuzzy
+msgid "Output N-S slope filename"
+msgstr "ढाल फ़ाइलनाम "
+
+#, fuzzy
+msgid "Output partial derivative dxx filename"
+msgstr "फ़ाइलनाम "
+
+#, fuzzy
+msgid "Output partial derivative dyy filename"
+msgstr "फ़ाइलनाम "
+
+#, fuzzy
+msgid "Output partial derivative dxy filename"
+msgstr "फ़ाइलनाम "
+
+#, fuzzy
+msgid "Name of file for output (use out=- for stdout)"
+msgstr "का के लिए के लिए"
+
+#, fuzzy
+msgid ""
+"Converts raster data referenced using latitude and longitude coordinates to "
+"a UTM-referenced map layer in GRASS raster format."
+msgstr "a."
+
+#, fuzzy
+msgid ""
+"one corner latitude and longitude of the input\n"
+"format: {nw|ne|sw|se},%s,%s"
+msgstr "एक का"
+
+#, fuzzy
+msgid "resolution of the input (in arc seconds)"
+msgstr "का चाप"
+
+#, fuzzy
+msgid "Stop points site file"
+msgstr "रूकें"
+
+#, fuzzy
+msgid ""
+"Extracts area edges from a raster map layer and converts data to GRASS "
+"vector format."
+msgstr "a."
+
+#, fuzzy
+msgid "Number of values printed before wrapping a line"
+msgstr "का a"
+
+#, fuzzy
+msgid "raster map name from which to copy color table"
+msgstr "नक़ल"
+
+#, fuzzy
+msgid ""
+"\n"
+"Where color type is one of:\n"
+msgstr "है एक का n"
+
+#, fuzzy
+msgid "  aspect    (aspect oriented grey colors)\n"
+msgstr "n"
+
+#, fuzzy
+msgid "  grey      (linear grey scale)\n"
+msgstr "स्केल n"
+
+#, fuzzy
+msgid "  grey.eq   (histogram equalized grey scale)\n"
+msgstr "स्केल n"
+
+#, fuzzy
+msgid "  grey.log  (histogram logarithmic transformed grey scale)\n"
+msgstr "स्केल n"
+
+#, fuzzy
+msgid "  byg       (blue through yellow to green colors)\n"
+msgstr "n"
+
+#, fuzzy
+msgid "  byr       (blue through yellow to red colors)\n"
+msgstr "n"
+
+#, fuzzy
+msgid "  gyr       (green through yellow to red colors)\n"
+msgstr "n"
+
+#, fuzzy
+msgid "  rainbow   (rainbow color table)\n"
+msgstr "इंद्रधनुष इंद्रधनुष n"
+
+#, fuzzy
+msgid "  ramp      (color ramp)\n"
+msgstr "n"
+
+#, fuzzy
+msgid "  ryg       (red through yellow to green colors)\n"
+msgstr "n"
+
+#, fuzzy
+msgid "  random    (random color table)\n"
+msgstr "n"
+
+#, fuzzy
+msgid "  wave      (color wave)\n"
+msgstr "n"
+
+#, fuzzy
+msgid "  rules     (create new color table by rules)\n"
+msgstr "n"
+
+#, fuzzy
+msgid "method of object-based statistic"
+msgstr "पद्धति का वस्तु"
+
+#, fuzzy
+msgid "resultant raster map (not used with 'distribution')"
+msgstr "नहीं वितरण"
+
+#, fuzzy
+msgid "Northern limit of geographic region"
+msgstr "का"
+
+#, fuzzy
+msgid "Eastern limit of geographic region"
+msgstr "का"
+
+#, fuzzy
+msgid "Western limit of geographic region"
+msgstr "का"
+
+#, fuzzy
+msgid "Extend location extents based on new dataset."
+msgstr "चालू."
+
+#, fuzzy
+msgid "Maximum magnitude of random grid point offset"
+msgstr "का बिन्दु"
+
+#, fuzzy
+msgid ""
+"Outputs a raster map layer whose category values represent the application "
+"of user-specified criteria (rules statements) to other raster map layers' "
+"category values."
+msgstr "a किसका का अन्य."
+
+#, fuzzy
+msgid "Converts a PPM image file to GRASS raster map(s)."
+msgstr "a छवि."
+
+#, fuzzy
+msgid ""
+"Converts Universal Transverse Mercator (UTM) coordinates to geographic "
+"(latitude/longitude) coordinates."
+msgstr "यूनिवर्सल."
+
+#, fuzzy
+msgid "Specified zone is in the southern hemisphere"
+msgstr "है"
+
+#, fuzzy
+msgid "Input is reversed: north,east"
+msgstr "है उत्तर पूर्व"
+
+#, fuzzy
+msgid "Do not flag invalid east,north input lines as errors"
+msgstr "नहीं अवैध पूर्व उत्तर"
+
+#, fuzzy
+msgid "Flag other input lines as errors"
+msgstr "ध्वज अन्य"
+
+#, fuzzy
+msgid "Output in decimal degrees"
+msgstr "कोण"
+
+#, fuzzy
+msgid ""
+"Converts geographic coordinates to Universal Transverse Mercator (UTM) "
+"coordinates."
+msgstr "यूनिवर्सल."
+
+#, fuzzy
+msgid "Input is reversed: lat,lon"
+msgstr "है"
+
+#, fuzzy
+msgid "Do not flag invalid lon,lat input lines as errors"
+msgstr "नहीं अवैध"
+
+#, fuzzy
+msgid ""
+"Rotates elevation data extracted by either m.dted.extract or m.dmaUSGSread."
+msgstr "मी मी."
+
+#, fuzzy
+msgid "Number of bytes per cell (i.e. per data value)"
+msgstr "का बाइट्स i"
+
+#, fuzzy
+msgid ""
+"Provides a terse description of level 1 and 2 digital terrain elevation data "
+"(DTED) files produced and distributed by the Defense Mapping Agency (DMA) on "
+"1/2-inch magnetic tapes."
+msgstr "a का चालू इंच."
+
+#, fuzzy
+msgid "Name of tape drive device"
+msgstr "का"
+
+#, fuzzy
+msgid ""
+"Datum shift program. Return geographic coordinates based on a different "
+"datum that the one used to obtain the original coordinates. "
+msgstr "प्रोग्राम चालू a एक असली "
+
+#, fuzzy
+msgid "use block shift transformation (default)"
+msgstr "ब्लॉक"
+
+#, fuzzy
+msgid "use bursa wolf 3d similarity transformation (not implemented)"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "height above ellipsoid"
+msgstr "ऊंचाई"
+
+#, fuzzy
+msgid "z shift"
+msgstr "ज़ेड"
+
+#, fuzzy
+msgid "spheroid geographic coordinates to base on. "
+msgstr "बेस चालू "
+
+#, fuzzy
+msgid ""
+"Converts UTM coordinates falling within the current geographic region to "
+"geographic (latitude/longitude) coordinates. "
+msgstr "गिरता "
+
+#, fuzzy
+msgid ""
+"Flips elevation data extracted from systems that retrieve data by rows from "
+"south to north."
+msgstr "दक्षिण उत्तर."
+
+#, fuzzy
+msgid "Number of bytes per cell (ie, per data value)"
+msgstr "का बाइट्स"
+
+#, fuzzy
+msgid ""
+"Finds geographic region information for U.S. Census Bureau TIGER input data."
+msgstr "के लिए."
+
+#, fuzzy
+msgid "Filename for raw tiger data (type 1)"
+msgstr "के लिए कच्चा"
+
+#, fuzzy
+msgid "UTM zone for this county"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Name of spheroid to use"
+msgstr "का"
+
+#, fuzzy
+msgid ""
+"Provides a terse description of USGS Digital Elevation Model (DEM) data "
+"files stored on 1/2-inch magnetic tape."
+msgstr "a का चालू इंच."
+
+#, fuzzy
+msgid "Blocksize of tape data"
+msgstr "का"
+
+#, fuzzy
+msgid ""
+"Extracts digital terrain elevation data (DTED - levels 1 and 2) produced and "
+"supplied by the Defense Mapping Agency (DMA) on 1/2-inch magnetic tapes."
+msgstr "चालू इंच."
+
+#, fuzzy
+msgid "Name of header output file"
+msgstr "का"
+
+#, fuzzy
+msgid "North latitude of region to extract (format: %s)"
+msgstr "का"
+
+#, fuzzy
+msgid "South latitude of region to extract (format: %s)"
+msgstr "का"
+
+#, fuzzy
+msgid "East longitude of region to extract (format: %s)"
+msgstr "पूर्व का"
+
+#, fuzzy
+msgid "West longitude of region to extract (format: %s)"
+msgstr "पश्चिम का"
+
+#, fuzzy
+msgid "Read the entire tape in all cases"
+msgstr "सभी"
+
+#, fuzzy
+msgid ""
+"Extracts USGS Digital Elevation Model (DEM) data from 1/2-inch magnetic tape."
+msgstr "इंच."
+
+#, fuzzy
+msgid "First file to look at"
+msgstr "पर"
+
+#, fuzzy
+msgid "Last file to look at"
+msgstr "पर"
+
+#, fuzzy
+msgid "Selects a device (printer) for GRASS hardcopy output."
+msgstr "a के लिए."
+
+#, fuzzy
+msgid "list all available painters"
+msgstr "सभी"
+
+#, fuzzy
+msgid "print name of currently selected painter"
+msgstr "का"
+
+#, fuzzy
+msgid "Align region to resolution [default = align to bounds]"
+msgstr "पंक्तिबद्ध करें"
+
+#, fuzzy
+msgid "Set region to match this sites map"
+msgstr "सेट जोड़ा"
+
+#, fuzzy
+msgid "Value for the eastern edge "
+msgstr "के लिए "
+
+#, fuzzy
+msgid "Value for the western edge "
+msgstr "के लिए "
+
+#, fuzzy
+msgid "Grid resolution (both north-south and east-west)"
+msgstr "उत्तर दक्षिण पूर्व पश्चिम"
+
+#, fuzzy
+msgid "  vect   (binary vector maps)\n"
+msgstr "n"
+
+#, fuzzy
+msgid "  icon   (paint icon files)\n"
+msgstr "n"
+
+#, fuzzy
+msgid "  labels (paint label files)\n"
+msgstr "n"
+
+#, fuzzy
+msgid "  sites  (site list files)\n"
+msgstr "n"
+
+#, fuzzy
+msgid "  region (region definition files)\n"
+msgstr "n"
+
+#, fuzzy
+msgid "  group  (imagery group files)\n"
+msgstr "समूह समूह n"
+
+#, fuzzy
+msgid "  3dview (3D view parameters)\n"
+msgstr "n"
+
+#, fuzzy
+msgid "Print all, inclusive range"
+msgstr "छापें सभी"
+
+#, fuzzy
+#~ msgid "display, export"
 #~ msgstr "गामा."
 
 #, fuzzy
-#~ msgid "Vector map to display thematically"
-#~ msgstr "सदिश"
-
-#, fuzzy
-#~ msgid "Vector map type"
-#~ msgstr "सदिश"
-
-#, fuzzy
-#~ msgid "Attribute column to use for thematic display (must be numeric)"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Type of thematic display"
+#~ msgid "Name for output file (do NOT add extension)"
 #~ msgstr "का"
 
 #, fuzzy
-#~ msgid "Layer to use for thematic display"
-#~ msgstr "के लिए."
-
-#, fuzzy
-#~ msgid "Points"
-#~ msgstr "फ़ॉन्ट"
-
-#, fuzzy
-#~ msgid "Vector point icon for point data"
-#~ msgstr "छोटा करें बिन्दु"
-
-#, fuzzy
-#~ msgid "Number of classes for interval theme (integer)"
-#~ msgstr "का फ़िल्टर"
-
-#, fuzzy
-#~ msgid "Mapset(s) to list (default: current mapset search path)"
-#~ msgstr "छापें"
-
-#, fuzzy
-#~ msgid "Output separator (default: newline)"
-#~ msgstr "शीर्षक"
-
-#, fuzzy
-#~ msgid "Raster to remove"
-#~ msgstr "Bin"
-
-#, fuzzy
-#~ msgid "3d raster to remove"
-#~ msgstr "Bin"
-
-#, fuzzy
-#~ msgid "Vector to remove"
-#~ msgstr "चालू"
-
-#, fuzzy
-#~ msgid "Region to remove"
-#~ msgstr "चालू"
-
-#, fuzzy
-#~ msgid "Label to remove"
-#~ msgstr "चालू"
-
-#, fuzzy
-#~ msgid "3dview to remove"
-#~ msgstr "चालू"
-
-#, fuzzy
-#~ msgid "Group to remove"
-#~ msgstr "चालू"
-
-#, fuzzy
-#~ msgid "raster input maps"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "label with coordinates instead of numbering"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Keep band numbers instead of using band color names."
-#~ msgstr "रखें का"
-
-#, fuzzy
-#~ msgid "Do not overwrite existing map"
-#~ msgstr "डाटाटाइप."
-
-#, fuzzy
-#~ msgid "Exports GRASS raster into GDAL supported formats."
-#~ msgstr "a a."
-
-#, fuzzy
-#~ msgid "Output field seperator"
-#~ msgstr "फील्ड"
-
-#, fuzzy
-#~ msgid "calculates univariate statistics from a GRASS raster map"
-#~ msgstr "का a."
-
-#, fuzzy
-#~ msgid "Percentile to calculate (requires -e flag)"
-#~ msgstr "छापें"
-
-#, fuzzy
-#~ msgid "A (grid3D file)"
-#~ msgstr "फ़ाइलनाम "
-
-#, fuzzy
-#~ msgid "B (grid3D file)"
-#~ msgstr "फ़ाइलनाम "
-
-#, fuzzy
-#~ msgid "C (grid3D file)"
-#~ msgstr "फ़ाइलनाम "
-
-#, fuzzy
-#~ msgid "D (grid3D file)"
-#~ msgstr "फ़ाइलनाम "
-
-#, fuzzy
-#~ msgid "E (grid3D file)"
-#~ msgstr "फ़ाइलनाम "
-
-#, fuzzy
-#~ msgid "F (grid3D file)"
-#~ msgstr "फ़ाइलनाम "
-
-#, fuzzy
-#~ msgid "Name for output grid3D volume"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "%s: [%s] not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid ""
-#~ "Enter the file name or path\n"
-#~ "> "
-#~ msgstr "त्रुटि"
-
-#, fuzzy
-#~ msgid "Use mouse to select Start Point\n"
-#~ msgstr "आकार "
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "Use mouse to draw profile line\n"
-#~ msgstr "आकार "
-
-#, fuzzy
-#~ msgid "Buttons:\n"
-#~ msgstr "n n"
-
-#, fuzzy
-#~ msgid "Left:   Mark next point\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "elevin raster map <%s> not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "aspin raster map <%s> not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "linkein raster map <%s> not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "albedo raster map <%s> not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "latin raster map <%s> not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "coefbh raster map <%s> not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "coefdh raster map <%s> not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Unable to find data map"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Unable to find clump map"
-#~ msgstr "के लिए."
-
-#, fuzzy
-#~ msgid "Terrain raster map (DEM)"
-#~ msgstr "i n"
-
-#, fuzzy
-#~ msgid "Output raster map with lake"
-#~ msgstr "शीर्षक"
-
-#, fuzzy
-#~ msgid "Cannot write lake raster map <%s>!"
-#~ msgstr "डाटाटाइप."
-
-#, fuzzy
-#~ msgid "Terrain raster map <%s> not found!"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Cannot open terrain raster map <%s@%s>!"
-#~ msgstr "डाटाटाइप."
-
-#, fuzzy
-#~ msgid "Seed map <%s> not found!"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Cannot open seed map <%s@%s>!"
-#~ msgstr "फ़ाइल"
-
-#, fuzzy
-#~ msgid "Failure to allocate memory for row pointers"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Loading maps: "
-#~ msgstr "त्रुटि के लिए"
-
-#, fuzzy
-#~ msgid "Error reading terrain raster map. Probably broken file."
-#~ msgstr "त्रुटि."
-
-#, fuzzy
-#~ msgid "Error reading seed raster map. Probably broken file."
-#~ msgstr "त्रुटि."
-
-#, fuzzy
-#~ msgid "Cannot write lake raster map <%s@%s>!"
-#~ msgstr "डाटाटाइप."
-
-#, fuzzy
-#~ msgid "Pass: %d\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Error writing color file for <%s@%s>!"
-#~ msgstr "त्रुटि के लिए."
-
-#, fuzzy
-#~ msgid "All done."
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "%s: base raster map not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "%s: cover raster map not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Name of the vector points map with x,y locations"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Number of time iterations (sec.)"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Multiscale simulation"
-#~ msgstr "है a"
-
-#, fuzzy
-#~ msgid "Name of the elevation raster map, same units as N,E: [m] or [ft] "
-#~ msgstr "का मीटर्स"
-
-#, fuzzy
-#~ msgid "Name of the x-derivatives raster map [m/m] or [ft/ft]"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Name of the y-derivatives raster map [m/m] or [ft/ft]"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Calculates <simple> index on a raster map"
-#~ msgstr "a"
-
-#, fuzzy
-#~ msgid "Bilinear interpolation utility for raster map layers."
-#~ msgstr "द्विरेखीय के लिए."
-
-#, fuzzy
-#~ msgid ""
-#~ "Specific input value to be assigned to the north and/or south poles for "
-#~ "longitude-latitude grids"
-#~ msgstr "उत्तर दक्षिण के लिए"
-
-#, fuzzy
-#~ msgid "This module is deprecated. Please use 'r.resamp.interp' instead."
-#~ msgstr "स्केल है स्केल."
-
-#, fuzzy
-#~ msgid "Illegal output file name <%s>"
-#~ msgstr "चेतावनी."
-
-#, fuzzy
-#~ msgid "Not enough memory for zero_array_cell"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Not enough disk space -- cannot write files"
-#~ msgstr "डिस्क"
-
-#, fuzzy
-#~ msgid "%s: can't read fp range for [%s]"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid ""
-#~ "Raster map [%s] already exists.\n"
-#~ "Please try another."
-#~ msgstr "समूह."
-
-#, fuzzy
-#~ msgid "Path to rules file"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "RGB raster map <%s> not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Vector cell map <%s> not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Which raster map needs a color table"
-#~ msgstr "a"
-
-#, fuzzy
-#~ msgid "Edit header for [%s]\n"
-#~ msgstr "संपादन के लिए n"
-
-#, fuzzy
-#~ msgid "[%s] is a reclass of [%s] - cannot edit header! Run support on [%s]."
-#~ msgstr "है a का संपादन (_E) चालू."
-
-#, fuzzy
-#~ msgid "[%s] is a reclass of [%s in %s] - cannot edit header!"
-#~ msgstr "है a का संपादन (_E)!"
-
-#, fuzzy
-#~ msgid "Raster file [%s] is empty."
-#~ msgstr "है."
-
-#, fuzzy
-#~ msgid "cellhd compression: %d\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "3.0 compression %sindicated\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Pre 3.0 compression %sindicated\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "[%s] appears to be compressed. Is it? "
-#~ msgstr "है "
-
-#, fuzzy
-#~ msgid "Please indicate the type of compression:\n"
-#~ msgstr "का n"
-
-#, fuzzy
-#~ msgid "  1. Pre 3.0 compression\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "  2. 3.0 compression\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "The header for [%s] says the file is not compressed. "
-#~ msgstr "के लिए है नहीं "
-
-#, fuzzy
-#~ msgid "The file appears to be compressed.\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Most likely the header is wrong, but I want you to decide.\n"
-#~ msgstr "है n"
-
-#, fuzzy
-#~ msgid "The header for [%s] says the file is compressed. "
-#~ msgstr "के लिए है "
-
-#, fuzzy
-#~ msgid "The file does NOT appear to be compressed.\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Unable to write header for [%s]."
-#~ msgstr "के लिए."
-
-#, fuzzy
-#~ msgid "Header for raster map [%s] updated."
-#~ msgstr "के लिए."
-
-#, fuzzy
-#~ msgid "Please enter the following information for [%s]:"
-#~ msgstr "के लिए:"
-
-#, fuzzy
-#~ msgid "        Number of rows"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "        Number of cols"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "        Number of bytes per cell"
-#~ msgstr "का बाइट्स"
-
-#, fuzzy
-#~ msgid "        Floating point map"
-#~ msgstr "फ्लोटिंग बिन्दु"
-
-#, fuzzy
-#~ msgid "rows * cols * bytes per cell must be same as file size (%lu)"
-#~ msgstr "बाइट्स आकार "
-
-#, fuzzy
-#~ msgid "** Negative values not allowed!"
-#~ msgstr "ऋणात्मक नहीं!"
-
-#, fuzzy
-#~ msgid "** Positive values only please!"
-#~ msgstr "धनात्मक!"
-
-#, fuzzy
-#~ msgid "Raster file [%s] not found. Exiting."
-#~ msgstr "नहीं."
-
-#, fuzzy
-#~ msgid "History file for [%s] updated."
-#~ msgstr "के लिए."
-
-#, fuzzy
-#~ msgid "History file for [%s] not updated."
-#~ msgstr "के लिए नहीं."
-
-#, fuzzy
-#~ msgid "Edit header for [%s]? "
-#~ msgstr "संपादन के लिए "
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "NOTE: [%s] is a reclass of [%s in %s]"
-#~ msgstr "है a का"
-
-#, fuzzy
-#~ msgid "Canceling from edit header."
-#~ msgstr "संपादन (_E)."
-
-#, fuzzy
-#~ msgid "Edit the category file for [%s]? "
-#~ msgstr "संपादन के लिए "
-
-#, fuzzy
-#~ msgid "Create/Update the color table for [%s]? "
-#~ msgstr "के लिए "
-
-#, fuzzy
-#~ msgid "Edit the history file for [%s]? "
-#~ msgstr "संपादन के लिए "
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "The null file for [%s] may indicate that some cells contain\n"
-#~ " no data. If the null file for [%s] doesn't exist, zero cells in\n"
-#~ " it are treated by GRASS application programs as no data."
-#~ msgstr ""
-#~ "के लिए रखे हुए\n"
-#~ " के लिए\n"
-#~ "."
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "Do you want to create/reset the null file for [%s] so that null cell "
-#~ "values are considered valid data? "
-#~ msgstr "के लिए "
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "Do you want to delete the null file for [%s]\n"
-#~ "(all zero cells will then be considered no data)? "
-#~ msgstr "के लिए n सभी "
-
-#, fuzzy
-#~ msgid "%s map <%s> not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Category file for <%s> not updated"
-#~ msgstr "के लिए नहीं."
-
-#, fuzzy
-#~ msgid "Category file for <%s> updated"
-#~ msgstr "के लिए."
-
-#, fuzzy
-#~ msgid "Suppress single crossing error messages"
-#~ msgstr "एकल त्रुटि"
-
-#, fuzzy
-#~ msgid "Unable to find starting vector <%s> "
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Unable to find stop vector <%s>"
-#~ msgstr "के लिए."
-
-#, fuzzy
-#~ msgid "Raster output map <%s> not found (no start_points given)"
-#~ msgstr "नहीं प्रारंभ"
-
-#, fuzzy
-#~ msgid "Memory allocation error on reading start points from raster map %s"
-#~ msgstr "त्रुटि चालू प्रारंभ"
-
-#, fuzzy
-#~ msgid "Apply filter only to zero data values"
-#~ msgstr "लागू करें फ़िल्टर"
-
-#, fuzzy
-#~ msgid "Error reading '%s' map"
-#~ msgstr "त्रुटि."
-
-#, fuzzy
-#~ msgid "Cell file not found"
-#~ msgstr "नहीं n"
-
-#, fuzzy
-#~ msgid "Vector map <%s> not found in the current mapset"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Threshold distance"
-#~ msgstr "सेट इंचेस"
-
-#, fuzzy
-#~ msgid "Cannot execute: %s"
-#~ msgstr "चालू"
-
-#, fuzzy
-#~ msgid "Cannot link table: %s"
-#~ msgstr "फ़ाइल"
-
-#, fuzzy
-#~ msgid "Cannot open dxf file <%s>"
-#~ msgstr "फ़ाइल"
-
-#, fuzzy
-#~ msgid "Cannot open new vector map <%s>"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Conversion of <%s> to vector map:"
-#~ msgstr "a a."
-
-#, fuzzy
-#~ msgid "Vector map <%s> is not in user mapset and cannot be updated"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Do not print polyline info"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Network input map <%s> not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "ask_transform_coor():  Leaving session.. \n"
-#~ msgstr "पूछें n"
-
-#, fuzzy
-#~ msgid " Number of points that have been entered: %d\n"
-#~ msgstr "का n"
-
-#, fuzzy
-#~ msgid "Quiet; No chatter"
-#~ msgstr "शांत नहीं"
-
-#, fuzzy
-#~ msgid "Hilight color for text"
-#~ msgstr "उभारें के लिए पाठ के लिए"
-
-#, fuzzy
-#~ msgid "Line: %d\n"
-#~ msgstr "ऊंचाई f n"
-
-#, fuzzy
-#~ msgid "Insufficent memory for allocation of data structure"
-#~ msgstr "के लिए का."
-
-#, fuzzy
-#~ msgid "imagery group"
+#~ msgid "Images"
 #~ msgstr "समूह"
 
 #, fuzzy
-#~ msgid "Name of input raster map(s)"
-#~ msgstr "का"
+#~ msgid "Data type"
+#~ msgstr "विशेषता"
 
 #, fuzzy
-#~ msgid "name=%s\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "mapset=%s\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "fullname=%s\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "usage: %s file [prompt %%x %%y]\n"
-#~ msgstr "संकेत n"
-
-#, fuzzy
-#~ msgid "Illegal file name for real part: %s"
-#~ msgstr "के लिए भाग n"
-
-#, fuzzy
-#~ msgid "Illegal file name for imaginary part: %s"
-#~ msgstr "के लिए भाग n"
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "<%s> -- illegal result signature file name"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Illegal group name <%s>"
-#~ msgstr "चेतावनी."
-
-#, fuzzy
-#~ msgid "Illegal signature file name <%s>"
-#~ msgstr "चेतावनी."
-
-#, fuzzy
-#~ msgid "Raster file(s) for Elevation"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Raster file(s) for Color"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Current window not settable"
+#~ msgid "slopein raster map <%s> not found"
 #~ msgstr "नहीं"
 
 #, fuzzy
-#~ msgid "Can't clear current graphics window"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Cannot use current window"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid ""
-#~ "Generates and displays simple graphics on map layers drawn in the active "
-#~ "graphics monitor display frame."
-#~ msgstr "चालू."
-
-#, fuzzy
-#~ msgid ""
-#~ "Unix file containg graphing instructions, if not given reads from "
-#~ "standard input"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid ""
-#~ "Color to draw with, either a standard GRASS color or R:G:B triplet "
-#~ "(separated by colons)"
-#~ msgstr "a R जी"
-
-#, fuzzy
-#~ msgid "Don't add to list of commands in monitor"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "No current frame"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Current frame not available"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Error reading raster map"
+#~ msgid "%s: Error reading from raster map <%s> in mapset <%s>"
 #~ msgstr "त्रुटि."
 
 #, fuzzy
-#~ msgid "Output profile data to file(s) with prefix 'name'"
-#~ msgstr "फ़ाइलनाम "
+#~ msgid "Base raster map <%s> not found"
+#~ msgstr "नहीं"
 
 #, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "Use mouse to choose action"
-#~ msgstr "आकार "
+#~ msgid "Color table for <%s> updated"
+#~ msgstr "के लिए."
 
 #, fuzzy
-#~ msgid "Error opening cell-file"
-#~ msgstr "त्रुटि"
-
-#, fuzzy
-#~ msgid "Error reading from cell-file"
+#~ msgid "Error reading raster map [%s]."
 #~ msgstr "त्रुटि."
 
 #, fuzzy
-#~ msgid "%s: Couldn't open raster <%s@%s>"
+#~ msgid "Option <%s>: <%s> exists."
 #~ msgstr "नहीं"
 
 #, fuzzy
-#~ msgid " Middle: toggle flash color\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "No raster map exists in current window"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "No current window"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Current window not available"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Error in calculating conversions"
+#~ msgid "Use '%s' option to change vector map name"
 #~ msgstr "त्रुटि"
 
 #, fuzzy
-#~ msgid "No current graphics window"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Current graphics window not available"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Can't set current graphics window"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Getting graphics window coordinates"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "value [%.0f,%.0f] out of range [0-100]"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Font name or pathname of TTF file"
-#~ msgstr "फ़ाइल के लिए."
-
-#, fuzzy
-#~ msgid "Setting release of FreeType"
-#~ msgstr "रिलीज का फ्री-टाइप n"
-
-#, fuzzy
-#~ msgid "Display number of colors"
-#~ msgstr "संख्या का"
-
-#, fuzzy
-#~ msgid "Use mouse to size & place legend"
-#~ msgstr "आकार "
-
-#, fuzzy
-#~ msgid "Name of frame(s) to save"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Save current frame"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Save all the frames"
-#~ msgstr "a"
-
-#, fuzzy
-#~ msgid "No monitor selected"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Unknown item type in pad: %s"
-#~ msgstr "अज्ञात क़िस्म"
-
-#, fuzzy
-#~ msgid ""
-#~ "Don't add to list of vectors and commands in monitor (it won't be drawn "
-#~ "if the monitor is refreshed)"
-#~ msgstr "का है"
-
-#, fuzzy
-#~ msgid "No raster map exists in the current window"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid ""
-#~ "Creates and displays a menu within the active frame on the graphics "
-#~ "monitor."
-#~ msgstr "पाठ चालू."
-
-#, fuzzy
-#~ msgid "Sets the color of the menu background"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Sets the color of the menu text"
-#~ msgstr "का पाठ"
-
-#, fuzzy
-#~ msgid "Sets the color dividing lines of text"
-#~ msgstr "का पाठ"
-
-#, fuzzy
-#~ msgid "Sets the menu text size (in percent)"
-#~ msgstr "पाठ आकार  संख्या"
-
-#, fuzzy
-#~ msgid "Menu must contain a title and at least one option"
-#~ msgstr "पर एक"
-
-#, fuzzy
-#~ msgid ""
-#~ "Draws text in the graphics monitor's active display frame using TrueType "
-#~ "fonts."
-#~ msgstr "पाठ."
-
-#, fuzzy
-#~ msgid "Screen position (percentage, [0,0] is bottom left)"
-#~ msgstr "का है तल बायाँ"
-
-#, fuzzy
-#~ msgid "Height of letters (in percent of available frame height)"
-#~ msgstr "ऊंचाई का का ऊंचाई"
-
-#, fuzzy
-#~ msgid "Either text or -c should be given"
-#~ msgstr "पाठ"
-
-#, fuzzy
-#~ msgid "Choose only one coordinate system for placement"
-#~ msgstr "एक के लिए"
-
-#, fuzzy
-#~ msgid "No font selected"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Unable to create text conversion context"
-#~ msgstr "पाठ"
-
-#, fuzzy
-#~ msgid "Text conversion error"
-#~ msgstr "त्रुटि"
-
-#, fuzzy
-#~ msgid "No predefined font"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "%s: Unable to read FreeType definition file; use the default"
-#~ msgstr "फ्री-टाइप"
-
-#, fuzzy
-#~ msgid "%s: No FreeType definition file"
-#~ msgstr "नहीं फ्री-टाइप"
-
-#, fuzzy
-#~ msgid "%s: Unable to read FreeType definition file"
-#~ msgstr "फ्री-टाइप"
-
-#, fuzzy
-#~ msgid "Don't add to list of rasters and commands in monitor"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "One mouse click only"
-#~ msgstr "एक"
-
-#, fuzzy
-#~ msgid "Use mouse to interactively place scale"
-#~ msgstr "स्केल"
-
-#, fuzzy
-#~ msgid "Use mouse to interactively place text"
-#~ msgstr "स्केल"
-
-#, fuzzy
-#~ msgid " Left:    Place text here\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid " Right:   Quit\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "ERROR: can not get \"list\" items"
-#~ msgstr "त्रुटि नहीं n"
-
-#, fuzzy
-#~ msgid "-j flag forced"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "No map is displayed in GRASS monitor"
-#~ msgstr "त्रुटि नहीं है n"
-
-#, fuzzy
-#~ msgid "You must select more than one point"
-#~ msgstr "अधिक एक बिन्दु"
-
-#, fuzzy
-#~ msgid "You must select at least four points"
-#~ msgstr "पर"
-
-#, fuzzy
-#~ msgid "No raster or vector map displayed"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "To establish and control use of a graphics display monitor."
-#~ msgstr "का a."
-
-#, fuzzy
-#~ msgid "Name of graphics monitor to start"
-#~ msgstr "का प्रारंभ"
-
-#, fuzzy
-#~ msgid "Name of graphics monitor to stop"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Name of graphics monitor to select"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Name of graphics monitor to unlock"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "List all monitors"
-#~ msgstr "सभी"
-
-#, fuzzy
-#~ msgid "List all monitors (with current status)"
-#~ msgstr "सभी स्थिति"
-
-#, fuzzy
-#~ msgid "Print name of currently selected monitor"
-#~ msgstr "छापें का"
-
-#, fuzzy
-#~ msgid "Release currently selected monitor"
-#~ msgstr "छापें का"
-
-#, fuzzy
-#~ msgid "Do not automatically select when starting"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "No such monitor as <%s>"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Monitor <%s> released"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Error - Locking mechanism failed"
-#~ msgstr "त्रुटि"
-
-#, fuzzy
-#~ msgid "Error choosing frame [%s]\n"
-#~ msgstr "त्रुटि के लिए"
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "Buttons:\n"
-#~ msgstr "n n"
-
-#, fuzzy
-#~ msgid "Left:   Select frame\n"
-#~ msgstr "a"
-
-#, fuzzy
-#~ msgid "Right:  Accept frame\n"
-#~ msgstr "बाहर जाएँ n"
-
-#, fuzzy
-#~ msgid "Manages display frames on the user's graphics monitor."
-#~ msgstr "फ्रेम्स चालू."
-
-#, fuzzy
-#~ msgid "Create a new frame"
-#~ msgstr "a"
-
-#, fuzzy
-#~ msgid "Select a frame"
-#~ msgstr "a"
-
-#, fuzzy
-#~ msgid "Print name of current frame"
-#~ msgstr "छापें का"
-
-#, fuzzy
-#~ msgid "Print names of all frames"
-#~ msgstr "छापें का"
-
-#, fuzzy
-#~ msgid "List map names displayed in GRASS monitor"
-#~ msgstr "त्रुटि नहीं है n"
-
-#, fuzzy
-#~ msgid "Debugging output"
-#~ msgstr "डिबगिंग"
-
-#, fuzzy
-#~ msgid "Frame to be created/selected"
-#~ msgstr "ढांचा"
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "Mouse Buttons:"
-#~ msgstr "n n"
-
-#, fuzzy
-#~ msgid "Left:   Select From\n"
-#~ msgstr "a"
-
-#, fuzzy
-#~ msgid ""
-#~ "Right:  Quit\n"
-#~ "\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Monitor: interactive command in redraw"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "found %d visuals of type TrueColor"
-#~ msgstr "का n"
-
-#, fuzzy
-#~ msgid "searching for highest bit depth"
-#~ msgstr "के लिए n"
-
-#, fuzzy
-#~ msgid "selected %d bit depth"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "using default visual which is %s"
-#~ msgstr "है n"
-
-#, fuzzy
-#~ msgid "Monitor: waitpid: expected %d but got %d"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Monitor: XGetWMName failed"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Monitor: XGetWMName: bad result"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Save the current region to region definition file"
-#~ msgstr "सहेजें"
-
-#, fuzzy
-#~ msgid "<%s> is an illegal region name"
-#~ msgstr "है"
-
-#, fuzzy
-#~ msgid "No LatLong information for XY-Projection"
-#~ msgstr "है नहीं के लिए"
-
-#, fuzzy
-#~ msgid "Erasing monitors ..."
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Could not open input file <%s>."
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "No such monitor as '%s'"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Error - No such monitor as '%s'"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid ""
-#~ "\a\n"
-#~ "** The following raster maps in subgroup [%s] do not exist:"
-#~ msgstr "n नहीं:"
-
-#, fuzzy
-#~ msgid "Removing files from group"
-#~ msgstr "समूह"
-
-#, fuzzy
-#~ msgid "Adding files to group [%s]"
-#~ msgstr "समूह"
-
-#, fuzzy
-#~ msgid "Writing group REF"
-#~ msgstr "समूह"
-
-#, fuzzy
-#~ msgid "Found file <%s@%s> in group."
-#~ msgstr "समूह."
-
-#, fuzzy
-#~ msgid "Unable to open file: <%s>"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Multiplier"
-#~ msgstr "के लिए ज़ेड"
-
-#, fuzzy
-#~ msgid ""
-#~ "Projection of input dataset and current location appear to match.\n"
-#~ "Proceeding with import...\n"
-#~ msgstr "का जोड़ा n"
-
-#, fuzzy
-#~ msgid "not found\n"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Raster map not found."
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "%s: can't read range for [%s]"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Raster file [%s] not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "It was not possible writing in <%s>."
-#~ msgstr "i n"
-
-#, fuzzy
-#~ msgid "\rDuplicate area centroids: %5d"
-#~ msgstr "के लिए n"
-
-#, fuzzy
-#~ msgid "Cannot create table: '%s'"
-#~ msgstr "चालू"
-
-#, fuzzy
-#~ msgid "Unable to get category list <%s>, editing terminated"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Unable to delete layer/category [%d/%d] line %d"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Unable to write line %d"
-#~ msgstr "बनाया जा रहा है."
-
-#, fuzzy
-#~ msgid "Unable to delete line %d"
-#~ msgstr "फ़ाइल"
-
-#, fuzzy
-#~ msgid "Unknown query tool '%s'"
-#~ msgstr "अज्ञात क़िस्म"
-
-#, fuzzy
-#~ msgid "No layer database connection"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "%d categories loaded from the database"
-#~ msgstr "लोड हो गया"
-
-#, fuzzy
-#~ msgid "Done"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Cannot open OGR data source '%s'"
-#~ msgstr "स्रोत"
-
-#, fuzzy
-#~ msgid "Vector map <%s> in location <%s> in mapset <%s> not available"
-#~ msgstr "सदिश नहीं"
-
-#, fuzzy
-#~ msgid ""
-#~ "Load values from vector to database. For uploaded/printed category values "
-#~ "'-1' is used for 'no category' and 'null'/'-' if category cannot be found "
-#~ "or multiple categories were found."
-#~ msgstr "है के लिए."
-
-#, fuzzy
-#~ msgid "Column type [%d] not supported"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Cannot read map header for <%s>"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Cannot read category file for <%s>"
-#~ msgstr "संपादन के लिए "
-
-#, fuzzy
-#~ msgid "Print;Shell Script"
-#~ msgstr "छापें"
-
-#, fuzzy
-#~ msgid "Creating support files for [%s]."
-#~ msgstr "बनाया जा रहा है के लिए."
-
-#, fuzzy
-#~ msgid "Category file for [%s] not available"
-#~ msgstr "के लिए नहीं"
-
-#, fuzzy
-#~ msgid "%s: <%s> raster map not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Cannot read category file of raster map <%s>"
-#~ msgstr "संपादन के लिए "
-
-#, fuzzy
-#~ msgid "%s - map not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "%s: Cannot open [%s]"
-#~ msgstr "फ़ाइल"
-
-#, fuzzy
-#~ msgid "%s not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Could not access %s layer"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Vector map %s - not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Raster map name for storing results"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Height of the viewing location"
-#~ msgstr "ऊंचाई का"
-
-#, fuzzy
-#~ msgid "%s: <%s> cellfile not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Cell file [%s] not found\n"
-#~ msgstr "नहीं n"
-
-#, fuzzy
-#~ msgid "rgb cell map [%s] not found\n"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "vector cell map [%s] not found\n"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "%s - %s not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "raster map <%s> not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "can't read header for <%s> in <%s>"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "region <%s> not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "invalid region: %s"
+#~ msgid "Invalid rendering method <%s>"
 #~ msgstr "अवैध"
 
 #, fuzzy
-#~ msgid "Creating support files"
-#~ msgstr "बनाया जा रहा है के लिए"
-
-#, fuzzy
-#~ msgid "%s file [%s] not found!"
-#~ msgstr "नहीं!"
-
-#, fuzzy
-#~ msgid "%s: %s - map not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "%s: unable to open %s"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "%s - not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "[%s] map not found."
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "[%s] map not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "elevation file [%s] not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "min computed slope %.4f  max computed slope %.4f"
-#~ msgstr "ढाल ढाल"
-
-#, fuzzy
-#~ msgid "Cannot describe table <%s>"
-#~ msgstr "फ़ाइल"
-
-#, fuzzy
-#~ msgid "Cannot insert values: %s"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "%s given an illegal number of points [%d]"
-#~ msgstr "संख्या का"
-
-#, fuzzy
-#~ msgid "Unable to open database %s by driver %s"
-#~ msgstr "स्रोत"
-
-#, fuzzy
-#~ msgid "No DB connection settings defined. Set with db.connect"
-#~ msgstr "नहीं सेट"
-
-#, fuzzy
-#~ msgid "Could not find input %s"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Could not open input"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Could not open output"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Could not find input map <%s>"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Unable to open driver <%s>"
-#~ msgstr "के लिए."
-
-#, fuzzy
-#~ msgid "Database connection not defined\n"
-#~ msgstr "नहीं n"
-
-#, fuzzy
-#~ msgid "Can't read header for <%s> in <%s>"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Can't read header for 3D raster <%s> in <%s>"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Can't write region <%s>"
-#~ msgstr "संपादन के लिए "
-
-#, fuzzy
-#~ msgid "<%s=%s> ** invalid input **"
-#~ msgstr "अवैध"
-
-#, fuzzy
-#~ msgid "No graphics device selected."
-#~ msgstr "नहीं."
-
-#, fuzzy
-#~ msgid "Training map [%s] not found."
-#~ msgstr "नहीं."
-
-#, fuzzy
-#~ msgid "%s map not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "input raster map"
+#~ msgid "Name of the input raster map"
 #~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Illegal file name: %s"
-#~ msgstr "चेतावनी."
-
-#, fuzzy
-#~ msgid "Cannot get layer info for vector map"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Cannot open raster map <%s> in <%s>"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "cover values extracted from the category labels of the cover map"
-#~ msgstr "कवर का कवर"
-
-#, fuzzy
-#~ msgid "%s: %s - raster map not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "%s: ERROR reading category file for %s"
-#~ msgstr "त्रुटि के लिए"
-
-#, fuzzy
-#~ msgid "%s: %s - not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "%s: %s - illegal units"
-#~ msgstr "है"
-
-#, fuzzy
-#~ msgid "%s: %s - can't open"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Reading input map (%s)    ... "
-#~ msgstr "छवि "
-
-#, fuzzy
-#~ msgid "%s - ERROR reading %s"
-#~ msgstr "त्रुटि चल रहा है..."
-
-#, fuzzy
-#~ msgid "%s: %s - can't create raster map"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Writing output map (%s)   ... "
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "%s - ERROR re-reading %s"
-#~ msgstr "त्रुटि चल रहा है..."
-
-#, fuzzy
-#~ msgid "%s - ERROR writing %s"
-#~ msgstr "त्रुटि चल रहा है..."
-
-#, fuzzy
-#~ msgid "Reading raster map... "
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Writing raster map... "
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Category list: e.g. 1,3-8,13"
-#~ msgstr "जी 13"
-
-#, fuzzy
-#~ msgid "Cannot read category file of raster map <%s> in <%s>"
-#~ msgstr "संपादन के लिए "
-
-#, fuzzy
-#~ msgid "Cannot find file %s"
-#~ msgstr "फ़ाइल"
-
-#, fuzzy
-#~ msgid "Cannot get header for %s"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Cannot create raster map %s"
-#~ msgstr "डाटाटाइप."
-
-#, fuzzy
-#~ msgid "Cannot create vector map %s"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Cannot create raster map '%s'"
-#~ msgstr "डाटाटाइप."
-
-#, fuzzy
-#~ msgid "Number of raster rows to hold in memory"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Print raster map title only"
-#~ msgstr "छापें"
-
-#, fuzzy
-#~ msgid "unknown type: %d"
-#~ msgstr "अज्ञात क़िस्म"
-
-#, fuzzy
-#~ msgid "Cannot get raster band."
-#~ msgstr "फील्ड"
-
-#, fuzzy
-#~ msgid "Cannot allocate buffer for reading null values."
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Cannot read GRASS raster."
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Cannot write GDAL raster."
-#~ msgstr "डाटाटाइप."
-
-#, fuzzy
-#~ msgid "Cannot get [%s] driver"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Couldn't set geo transform."
-#~ msgstr "नहीं n"
-
-#, fuzzy
-#~ msgid "Couldn't set projection."
-#~ msgstr "नहीं n"
-
-#, fuzzy
-#~ msgid "Cannot export [%s] raster map."
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Cannot create [%s] raster map using [%s] driver."
-#~ msgstr "डाटाटाइप."
-
-#, fuzzy
-#~ msgid "Cannot read header of raster map <%s>"
-#~ msgstr "डाटाटाइप."
-
-#, fuzzy
-#~ msgid "Cannot open TIFF file <%s>"
-#~ msgstr "फ़ाइल"
-
-#, fuzzy
-#~ msgid "Cannot open output map."
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Illegal file name. Please try another."
-#~ msgstr "चेतावनी."
-
-#, fuzzy
-#~ msgid "%s: can't open %s"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Reading raster map <%s> ..."
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "memory allocation failure"
-#~ msgstr "के लिए का"
-
-#, fuzzy
-#~ msgid "Can't find clump map."
-#~ msgstr "नहीं."
-
-#, fuzzy
-#~ msgid "Output terrain only vector map name"
-#~ msgstr "त्रुटि"
-
-#, fuzzy
-#~ msgid "Cannot open vector map <%s> at the topological level"
-#~ msgstr "के लिए."
-
-#, fuzzy
-#~ msgid "Rebuilding topology ..."
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "No record for cat = %d"
-#~ msgstr "नहीं के लिए"
-
-#, fuzzy
-#~ msgid "Removing duplicates ..."
-#~ msgstr "के लिए n"
-
-#, fuzzy
-#~ msgid "Attaching islands ..."
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Attaching centroids ..."
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Vector map <%s> not found in current mapset"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Error allocating memory for `lines_visited'"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "The number of lines in the input vector map is [%d]"
-#~ msgstr "संख्या का पिक्सेल्स a"
-
-#, fuzzy
-#~ msgid "Database connection not defined for layer <%d>"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Cannot get layer info"
-#~ msgstr "फील्ड"
-
-#, fuzzy
-#~ msgid "cell file [%s] not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "can't open raster map [%s]"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Cannot rewrite line %d"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Editing tool"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Snap also to vertex (not implemented yet)"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Cannot copy line %d, editing terminated"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "No layer database connection."
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Cannot snap lines %d,%d"
-#~ msgstr "फ़ाइल"
-
-#, fuzzy
-#~ msgid "%d lines modified"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Could not open ASCII file <%s>"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Print vector map region only"
-#~ msgstr "छापें"
-
-#, fuzzy
-#~ msgid "Cannot open vector map <%s> at topo level [%d]"
-#~ msgstr "के लिए."
-
-#, fuzzy
-#~ msgid "Cannot get layer info for vector map <%s>"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Rotation angle (degrees counter-clockwise from East)"
-#~ msgstr "कोण कोण पूर्व"
-
-#, fuzzy
-#~ msgid "Number of ROWS and COLUMNS in grid"
-#~ msgstr "संख्या का"
-
-#, fuzzy
-#~ msgid "Creating vector grid..."
-#~ msgstr "बनाया जा रहा है."
-
-#, fuzzy
-#~ msgid "Could not find vector map <%s> in current mapset"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Could not find input map <%s>."
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Parameter <%s> not set"
-#~ msgstr "का."
-
-#, fuzzy
-#~ msgid "Output map where segments will be written"
-#~ msgstr "i n"
-
-#, fuzzy
-#~ msgid "Cannot get layer information for vector map"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "<%s> cellfile not found"
-#~ msgstr "नहीं."
-
-#, fuzzy
-#~ msgid "Database record for cat %d not found"
-#~ msgstr "नहीं के लिए"
-
-#, fuzzy
-#~ msgid "Not able to open vector map <%s>"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Table name, select all from this table"
-#~ msgstr "सभी"
-
-#, fuzzy
-#~ msgid "output field separator"
-#~ msgstr "फील्ड"
-
-#, fuzzy
-#~ msgid "do not include column names in output"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "vertical output (instead of horizontal)"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Name of existing raster map"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Cannot find mapset for %s"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Cannot open File %s"
-#~ msgstr "फ़ाइल"
-
-#, fuzzy
-#~ msgid "Not able to open file for [%s]"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Label file [%s] not available"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "unable to open [%s] in [%s]"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "warning: unable to open [%s] in [%s]"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Unable to find input cell map '%s'"
-#~ msgstr "के लिए."
-
-#, fuzzy
-#~ msgid "Table to be imported"
-#~ msgstr "फ़ाइल"
-
-#, fuzzy
-#~ msgid "Unable to create raster map [%s]"
-#~ msgstr "का a"
-
-#, fuzzy
-#~ msgid "Unable to create output <%s>"
-#~ msgstr "i n"
-
-#, fuzzy
-#~ msgid "Input file [%s] not found."
-#~ msgstr "नहीं."
-
-#, fuzzy
-#~ msgid "Multiplier for ascii data"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Could not open temporary file: [%s]"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Could not open input file [%s]"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Unable to create output raster map <%s>"
-#~ msgstr "के लिए."
-
-#, fuzzy
-#~ msgid "Cannot open file for <%s>"
-#~ msgstr "फ़ाइल"
-
-#, fuzzy
-#~ msgid "Name of the random surface to be produced"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "%s: Unable to find raster map <%s>"
-#~ msgstr "के लिए."
-
-#, fuzzy
-#~ msgid "%s: Unable to open raster map <%s> in mapset <%s>"
-#~ msgstr "के लिए."
-
-#, fuzzy
-#~ msgid "%s:  Unable to open output raster map <%s>"
-#~ msgstr "के लिए."
-
-#, fuzzy
-#~ msgid "Vector <%s> could not be opened"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "No db connection for driver <%s> defined. Run db.connect."
-#~ msgstr "नहीं सेट"
-
-#, fuzzy
-#~ msgid ""
-#~ "Print current map connection parameters and exit (shell script style)\n"
-#~ "\tformat:  layer[/layer name] table key database driver"
-#~ msgstr "छापें n"
-
-#, fuzzy
-#~ msgid "z column name"
-#~ msgstr "ज़ेड"
-
-#, fuzzy
-#~ msgid "Cannot drop table: %s"
-#~ msgstr "फ़ाइल"
-
-#, fuzzy
-#~ msgid "Cannot open labels <%s>"
-#~ msgstr "फ़ाइल"
-
-#, fuzzy
-#~ msgid ""
-#~ "OGR output datasource name. For example:\n"
-#~ "\t\tESRI Shapefile: filename or directory for storage\n"
-#~ "\t\tMapInfo File: filename or directory for storage"
-#~ msgstr "n n फ़ाइल"
-
-#, fuzzy
-#~ msgid "SVG file <%s> cannot be opened"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Querying input '%s' ... "
-#~ msgstr "छवि "
-
-#, fuzzy
-#~ msgid "Copying %s input lines ... "
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Cannot create table <%s>"
-#~ msgstr "चालू"
-
-#, fuzzy
-#~ msgid "no record for cat = %d"
-#~ msgstr "नहीं के लिए"
-
-#, fuzzy
-#~ msgid "cannot insert row: %s"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Cannot find line of cat %d"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Unalbe to open vector map <%s>"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid ""
-#~ "Database connection not defined for layer [%d]. Use v.db.connect first"
-#~ msgstr "नहीं के लिए."
-
-#, fuzzy
-#~ msgid "Transforms a vector map via a set of tie points."
-#~ msgstr "एक."
-
-#, fuzzy
-#~ msgid "Read coordinates from standard input"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Raster map <%s>] not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Cannot start driver '%s'."
-#~ msgstr "प्रारंभ."
-
-#, fuzzy
-#~ msgid "Cannot start driver <%s>."
-#~ msgstr "प्रारंभ."
-
-#, fuzzy
-#~ msgid "[%s] is an illegal name"
-#~ msgstr "है"
-
-#, fuzzy
-#~ msgid "Not able to open cellfile for [%s]"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Not able to find cellfile [%s]"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Raster map [%s] not available"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "color file for [%s] not available"
-#~ msgstr "के लिए नहीं"
-
-#, fuzzy
-#~ msgid "Raster file [%s] not available"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Raster map [%s] not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Unable to open raster map [%s]"
-#~ msgstr "का a"
-
-#, fuzzy
-#~ msgid "Vector file [%s] not available"
-#~ msgstr "सदिश नहीं"
-
-#, fuzzy
-#~ msgid "<%s> illegal name"
-#~ msgstr "है"
-
-#, fuzzy
-#~ msgid "Out of Memory!\n"
-#~ msgstr "का n"
-
-#, fuzzy
-#~ msgid "%s: %s - Unable to open the input raster map\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Insufficent memory for allocation of data sturcture"
-#~ msgstr "के लिए का"
-
-#, fuzzy
-#~ msgid "%s: %s - illegal name for output raster map."
-#~ msgstr "के लिए."
-
-#, fuzzy
-#~ msgid "Insufficent memory for allocation of data structure."
-#~ msgstr "के लिए का."
-
-#, fuzzy
-#~ msgid "Exports GRASS raster data into various formats (requires GDAL)."
-#~ msgstr "a a."
-
-#, fuzzy
-#~ msgid "%s: <%s> not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "%s: <%s> illegal name"
-#~ msgstr "है"
-
-#, fuzzy
-#~ msgid "%s: Cannot open <%s>"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "could not read range file"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Filtering [%s] in [%s]"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Open raster map %s in %s = %d"
-#~ msgstr "खोलें"
-
-#, fuzzy
-#~ msgid "Closing raster map"
-#~ msgstr "बनाया जा रहा है n"
-
-#, fuzzy
-#~ msgid "Swap temp files"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Writing [%s]"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "%s: illegal map name"
-#~ msgstr "है"
-
-#, fuzzy
-#~ msgid "Name of the new raster map"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "%s: <%s> illegal file name"
-#~ msgstr "है"
-
-#, fuzzy
-#~ msgid "can't open raster map <%s> in mapset %s"
-#~ msgstr "के लिए."
-
-#, fuzzy
-#~ msgid ""
-#~ "Converts a GRASS raster map to a PPM image file at the pixel resolution "
-#~ "of the CURRENTLY DEFINED REGION."
-#~ msgstr "a a छवि पर का."
-
-#, fuzzy
-#~ msgid "Mapset of input map"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Checking location %s, mapset %s:"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Input map [%s] in location [%s] in mapset [%s] not found."
-#~ msgstr "समूह के लिए n"
-
-#, fuzzy
-#~ msgid "Error writing output map"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "<%s> is illegal file name"
-#~ msgstr "है"
-
-#, fuzzy
-#~ msgid "[%s] is an illegal file name"
-#~ msgstr "है"
-
-#, fuzzy
-#~ msgid "no rules specified"
-#~ msgstr "नहीं."
-
-#, fuzzy
-#~ msgid "Names of existing raster maps"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Unable to open input map <%s> in mapset <%s>"
-#~ msgstr "के लिए n"
-
-#, fuzzy
-#~ msgid "%s - illegal name "
-#~ msgstr "है"
-
-#, fuzzy
-#~ msgid "Couldn't find raster map [%s]"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "%s in %s -can't open raster map"
-#~ msgstr "त्रुटि"
-
-#, fuzzy
-#~ msgid "%s - can't create raster map"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Normalized"
-#~ msgstr "सामान्य किया"
-
-#, fuzzy
-#~ msgid "Out of memory!"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Cell file [%s] not found"
-#~ msgstr "नहीं n"
-
-#, fuzzy
-#~ msgid "Error getting input null cells at row %d from %s"
-#~ msgstr "त्रुटि पर"
-
-#, fuzzy
-#~ msgid "[%s] file name not legal"
-#~ msgstr "है"
-
-#, fuzzy
-#~ msgid "[%s] file name not legal\n"
-#~ msgstr "है"
-
-#, fuzzy
-#~ msgid "Requested 3d raster map not found <%s>"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Could not open elevation map"
-#~ msgstr "नहीं n"
-
-#, fuzzy
-#~ msgid "Could not open output map"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Cannot create output map [%s]"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Database's name couldn't be read"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Cannot open vector points map <%s>"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Cannot create vector map <%s>"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid ""
-#~ "Interpolation: No database connection for driver <%s> defined. Run db."
-#~ "connect"
-#~ msgstr "नहीं सेट"
-
-#, fuzzy
-#~ msgid "Could not find input map <%s> in current mapset."
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Vector file [%s] not available in search list"
-#~ msgstr "सदिश नहीं"
-
-#, fuzzy
-#~ msgid "Cannot open database <%s>"
-#~ msgstr "स्रोत"
-
-#, fuzzy
-#~ msgid "Cannot open table <%s>"
-#~ msgstr "फ़ाइल"
-
-#, fuzzy
-#~ msgid "Cannot open driver <%s>"
-#~ msgstr "फ़ाइल"
-
-#, fuzzy
-#~ msgid "Could not find input vector map %s"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Could not find input map '%s'."
-#~ msgstr "नहीं."
-
-#, fuzzy
-#~ msgid "Could not find network input map '%s'."
-#~ msgstr "नहीं."
-
-#, fuzzy
-#~ msgid "error opening raster map [%s]."
-#~ msgstr "त्रुटि."
-
-#, fuzzy
-#~ msgid "Topology is not available"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Patching file <%s@%s>"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Column type  not supported"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Could not open vector map <%s>"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Name of output raster map"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid ""
-#~ "Database connection not defined for layer <%d>. Use v.db.connect first."
-#~ msgstr "नहीं के लिए."
-
-#, fuzzy
-#~ msgid "Pass [%d] of [%d]:"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Illegal output name: '%s'"
-#~ msgstr "चेतावनी."
-
-#, fuzzy
-#~ msgid "Can't create output map"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Could not close new 3d raster map"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "%s: cellfile [%s] not found."
-#~ msgstr "नहीं."
-
-#, fuzzy
-#~ msgid "Error reading wildcard."
-#~ msgstr "त्रुटि."
-
-#, fuzzy
-#~ msgid ""
-#~ "Sets the grid color, either a standard GRASS color or R:G:B triplet "
-#~ "(separated by colons)"
-#~ msgstr "a R जी"
-
-#, fuzzy
-#~ msgid ""
-#~ "Sets the border color, either a standard GRASS color or R:G:B triplet"
-#~ msgstr "a R जी"
-
-#, fuzzy
-#~ msgid "Border not yet implemented for LatLong locations: border not drawn."
-#~ msgstr "किनारा नहीं के लिए नहीं."
-
-#, fuzzy
-#~ msgid "name for new raster map"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Output GRASS image file"
-#~ msgstr "छवि."
-
-#, fuzzy
-#~ msgid "Resulting output map"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Resulting output grid3D volume"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "name for new vector map"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "name for new vector map (omit for display to stdout)"
-#~ msgstr "के लिए के लिए"
-
-#, fuzzy
-#~ msgid "Input vector map"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "%s: ERROR can't open tempfile"
-#~ msgstr "त्रुटि"
-
-#, fuzzy
-#~ msgid "vector map <%s> not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "<%s> raster map not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "<%s> unable to open raster map"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Cannot find vector map [%s]"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "%s - can't open raster map"
-#~ msgstr ""
-#~ "#-#-#-#-#  grassmods_hi.po (grassmods_hi)  #-#-#-#-#\n"
-#~ "त्रुटि\n"
-#~ "#-#-#-#-#  grassmods_hi.po (grassmods_hi)  #-#-#-#-#\n"
-
-#, fuzzy
-#~ msgid "%s - raster map not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "File name of classification result"
-#~ msgstr "फ़ाइल का"
-
-#, fuzzy
-#~ msgid "File name of reference classes"
-#~ msgstr "फ़ाइल का"
-
-#, fuzzy
-#~ msgid "<%s> - illegal output file name"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "%s: <%s> reference map not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "%s: raster map not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid ""
-#~ "Raster map that represents the elevation, used for the 3D information"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Problem opening input file [%s]"
-#~ msgstr "त्रुटि"
-
-#, fuzzy
-#~ msgid "Problem opening output file [%s]"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "can't write category file for <%s>"
-#~ msgstr "संपादन के लिए "
-
-#, fuzzy
-#~ msgid "%s: can't open tempfile"
-#~ msgstr "त्रुटि"
-
-#, fuzzy
-#~ msgid "Unable to read row %d in raster map [%s]"
-#~ msgstr "का a"
-
-#, fuzzy
-#~ msgid "Topographic index ln(a/tanB) map"
-#~ msgstr "a"
-
-#, fuzzy
-#~ msgid "ELEVATION PRODUCTS for mapset [%s] in [%s]"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "It could not be find input map <%s>"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "It could not be found input map <%s>"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Cannot find input map <%s>"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Input vector map <%s> not found."
-#~ msgstr "नहीं."
-
-#, fuzzy
-#~ msgid "Category ranges: e.g. 1,3-8,13"
-#~ msgstr "जी 13"
-
-#, fuzzy
-#~ msgid "Writing attributes ...\n"
-#~ msgstr "छापें"
-
-#, fuzzy
-#~ msgid "Could not open ascii file <%s>"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Could not open temp file <%s>"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Vector map <%s> not fould"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "SVG output file"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Could not find vector '%s'"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Could not find vector map %s"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Unable to get row %d from <%s>"
-#~ msgstr "का a"
-
-#, fuzzy
-#~ msgid "No input coordinates provided"
-#~ msgstr "नहीं."
-
-#, fuzzy
-#~ msgid "Pass #%d (of %d) ... "
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Keep existing color table"
-#~ msgstr "रखें"
-
-#, fuzzy
-#~ msgid "Name of the output walkers site file"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Verbose mode."
-#~ msgstr "बड़बोला."
-
-#, fuzzy
-#~ msgid ""
-#~ "Integer cell type.\n"
-#~ "Writing"
-#~ msgstr "पूर्णांक."
-
-#, fuzzy
-#~ msgid ""
-#~ "Float cell type.\n"
-#~ "Writing"
-#~ msgstr "फ्लोट."
-
-#, fuzzy
-#~ msgid ""
-#~ "Double cell type.\n"
-#~ "Writing"
-#~ msgstr "दोगुना."
-
-#, fuzzy
-#~ msgid "%s in %s - can't read header file"
-#~ msgstr "त्रुटि"
-
-#, fuzzy
-#~ msgid "%s - unable to create raster map"
-#~ msgstr "का a"
-
-#, fuzzy
-#~ msgid "%s - unable to create category file"
-#~ msgstr "बनाया जा रहा है."
-
-#, fuzzy
-#~ msgid "verbose mode"
-#~ msgstr "बड़बोला"
-
-#, fuzzy
-#~ msgid "Vector map with points for which to modify the attribute table"
-#~ msgstr "का के लिए संपादन (_E)"
-
-#, fuzzy
-#~ msgid "Layer of the vector for which to modify the attribute table"
-#~ msgstr "का के लिए संपादन (_E)"
-
-#, fuzzy
-#~ msgid "Path to an output file"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Name of existing raster map to be displayed"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Database name:"
-#~ msgstr "डाटाबेस का नामः"
-
-#, fuzzy
-#~ msgid ""
-#~ "ASCII file to be converted to binary vector map, if not given (or \"-\") "
-#~ "reads from standard input"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "could not find input map <%s>"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "unable to open raster map [%s]"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "cannot get layer info for vector map"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "cannot open database %s by driver %s"
-#~ msgstr "स्रोत"
-
-#, fuzzy
-#~ msgid "column type not supported"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "cannot create table: %s"
-#~ msgstr "चालू"
-
-#, fuzzy
-#~ msgid "cannot create index"
-#~ msgstr "फील्ड"
-
-#, fuzzy
-#~ msgid "cannot grant privileges on table %s"
-#~ msgstr "चालू"
-
-#, fuzzy
-#~ msgid "column type  not supported"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid ""
-#~ "Number of column used as z coordinate (first column is 1) for points "
-#~ "mode. If 0, z coordinate is not used."
-#~ msgstr "का ज़ेड है के लिए ज़ेड है नहीं."
-
-#, fuzzy
-#~ msgid "Error while reading cell map."
-#~ msgstr "त्रुटि."
-
-#, fuzzy
-#~ msgid "Error while writing new cell map."
-#~ msgstr "त्रुटि."
-
-#, fuzzy
-#~ msgid "Error in opening output file <%s>"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Unable to find input cell map <%s>"
-#~ msgstr "के लिए."
-
-#, fuzzy
-#~ msgid "Error in opening input file <%s>"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Unable to open cell man <%s> for input.\n"
-#~ msgstr "के लिए n"
-
-#, fuzzy
-#~ msgid "Unable to open cell map <%s> for output.\n"
-#~ msgstr "के लिए n"
-
-#, fuzzy
-#~ msgid "Unable to write color table to raster [%s]"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Cannot find map %s"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Cannot open map %s"
-#~ msgstr "नहीं n"
-
-#, fuzzy
-#~ msgid "Name of predefined rules file"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "R:G:B value(s) out of range [0..255]: %d:%d:%d"
-#~ msgstr "R जी का n"
-
-#, fuzzy
-#~ msgid "R G B value(s) out of range [0..255]: %d %d %d"
-#~ msgstr "R जी का n"
-
-#, fuzzy
-#~ msgid "no such value"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "%s:line %d:%s"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "bad color specification"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "%s - unknown color"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Valid colors are:\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Unable to find base map <%s>"
-#~ msgstr "के लिए."
-
-#, fuzzy
-#~ msgid "%s: reading category file for %s"
-#~ msgstr "त्रुटि के लिए"
-
-#, fuzzy
-#~ msgid "%s: unable to open raster map [%s]"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "%s: unable to create raster map [%s]"
-#~ msgstr "का a"
-
-#, fuzzy
-#~ msgid "Unable to open database %s with driver %s"
-#~ msgstr "स्रोत"
-
-#, fuzzy
-#~ msgid "%s: Unable to read raster map [%s]"
-#~ msgstr "का a"
-
-#, fuzzy
-#~ msgid "%s: unable to open raster map <%s>"
-#~ msgstr "के लिए."
-
-#, fuzzy
-#~ msgid "%s: Failed to read raster row %d"
-#~ msgstr "i n"
-
-#, fuzzy
-#~ msgid "Unable to read cats table for %s"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Could not open raster <%s>"
-#~ msgstr "नहीं n"
-
-#, fuzzy
-#~ msgid "Screen coordinates to place the legend (as percentage)"
-#~ msgstr "स्क्रीन"
-
-#, fuzzy
-#~ msgid ""
-#~ "Font name (not supported interactively, see also -l flag) or path to "
-#~ "TrueType font (including file name)"
-#~ msgstr "फ़ॉन्ट नहीं"
-
-#, fuzzy
-#~ msgid "%s: o_open_file: raster map %s not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "%s: o_open_file: could not open raster map %s in %s"
-#~ msgstr "के लिए."
-
-#, fuzzy
-#~ msgid "No record for category for [%d]"
-#~ msgstr "नहीं के लिए"
-
-#, fuzzy
-#~ msgid "Error reading ASCII file <%s>"
-#~ msgstr "त्रुटि के लिए."
-
-#, fuzzy
-#~ msgid "Error reading categories: <%s>"
-#~ msgstr "त्रुटि के लिए."
-
-#, fuzzy
-#~ msgid "category [%d]"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Could not find input vector '%s'"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Failed opening output vector map '%s'"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Do not create attribute table."
-#~ msgstr "नहीं."
-
-#, fuzzy
-#~ msgid "Could not find input %s\n"
-#~ msgstr "नहीं n"
-
-#, fuzzy
-#~ msgid "Error reading ascii file: [%s]"
-#~ msgstr "त्रुटि के लिए."
-
-#, fuzzy
-#~ msgid ""
-#~ "Allows the user to interactively query a vector map layer at user-"
-#~ "selected locations within the current geographic region"
-#~ msgstr "a पर."
-
-#, fuzzy
-#~ msgid "| Tool                            | Threshold     |"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "| Break                           |  "
-#~ msgstr "n n"
-
-#, fuzzy
-#~ msgid "| Prune                           |  "
-#~ msgstr "n n"
-
-#, fuzzy
-#~ msgid "%s: <%s> vector map not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Vector <%s> could not be open"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Raster <%s> could not be open."
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Interpolation()"
-#~ msgstr "पद्धति"
-
-#, fuzzy
-#~ msgid "Interpolation: Setting regions and boxes"
-#~ msgstr "पद्धति"
-
-#, fuzzy
-#~ msgid "Interpolation: nsply = %d"
-#~ msgstr "पद्धति"
-
-#, fuzzy
-#~ msgid "Interpolation: (%d,%d): Bilinear interpolation..."
-#~ msgstr "संख्या का"
-
-#, fuzzy
-#~ msgid "Interpolation: (%d,%d): Bicubic interpolation..."
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "%s: Dropping <s>"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Interpolation was a success!"
-#~ msgstr "पद्धति"
-
-#, fuzzy
-#~ msgid "CrossCorrelation: %d points read in region. "
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "CrossCorrelation: It shouldn't take too long."
-#~ msgstr "सभी"
-
-#, fuzzy
-#~ msgid "%s -- illegal output file name"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Sorry, with method '%s' you have to define an output map."
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Calculation time"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Maximum number of iteration"
-#~ msgstr "संख्या का"
-
-#, fuzzy
-#~ msgid "Finished.\n"
-#~ msgstr "पूर्ण n"
-
-#, fuzzy
-#~ msgid "%s - can't read raster cellhd"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "error reading cell data"
-#~ msgstr "त्रुटि."
-
-#, fuzzy
-#~ msgid "Done!"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "No line found."
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Nothing Found."
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Do not build topology."
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Could not open ascii file [%s]"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "%s: Cannot open dxf file"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Conversion of [%s] to vector map ..."
-#~ msgstr "a a."
-
-#, fuzzy
-#~ msgid "Finished"
-#~ msgstr "पूर्ण n"
-
-#, fuzzy
-#~ msgid "Print the current region (shell script style)"
-#~ msgstr "छापें"
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "Where %s is one of:\n"
-#~ msgstr "है एक का n"
-
-#, fuzzy
-#~ msgid "ERROR: <%s> not found\n"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "ERROR: <%s> illegal name\n"
-#~ msgstr "है"
-
-#, fuzzy
-#~ msgid "Cannot open toolbox: %s"
-#~ msgstr "फ़ाइल"
-
-#, fuzzy
-#~ msgid "Cannot open toolbox."
-#~ msgstr "फ़ाइल"
-
-#, fuzzy
-#~ msgid "Could not find input map <%s>\n"
-#~ msgstr "नहीं n"
-
-#, fuzzy
-#~ msgid "'%s' has finished the transformation of the vectors.\n"
-#~ msgstr "पूर्ण का n"
-
-#, fuzzy
-#~ msgid ""
-#~ "                          CHECK MAP RESIDUALS\n"
-#~ "\n"
-#~ msgstr "n n"
-
-#, fuzzy
-#~ msgid "                Current Map                  New Map\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid ""
-#~ " POINT      X coord    Y coord  |        X coord   Y coord    |      "
-#~ "residuals\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "  Residual mean average   : %f\n"
-#~ msgstr "f n"
-
-#, fuzzy
-#~ msgid "Vector map(s) -- source for composite"
-#~ msgstr "स्रोत के लिए"
-
-#, fuzzy
-#~ msgid "New vector composite"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Append files to existing file"
-#~ msgstr "का."
-
-#, fuzzy
-#~ msgid "No database updates."
-#~ msgstr "सभी."
-
-#, fuzzy
-#~ msgid "Adding new features to vector file ..."
-#~ msgstr "बनाया जा रहा है."
-
-#, fuzzy
-#~ msgid "Vector map '%s' not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Quiet operation"
-#~ msgstr "शांत"
-
-#, fuzzy
-#~ msgid "Display Reference Information"
-#~ msgstr "जानकारी"
-
-#, fuzzy
-#~ msgid "%s\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "output layer name"
-#~ msgstr "ढाल फ़ाइलनाम "
-
-#, fuzzy
-#~ msgid "Transforming data..."
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid ""
-#~ "\a\n"
-#~ "** The following raster maps in subgroup [%s] do not exist."
-#~ msgstr "n नहीं."
-
-#, fuzzy
-#~ msgid "The subgroup must have at least 2 files to run %s."
-#~ msgstr "पर."
-
-#, fuzzy
-#~ msgid "Did not find input cell map."
-#~ msgstr "नहीं."
-
-#, fuzzy
-#~ msgid "Warning: illegal group name <%s>."
-#~ msgstr "चेतावनी समूह."
-
-#, fuzzy
-#~ msgid "Warning: illegal output file name <%s>."
-#~ msgstr "चेतावनी."
-
-#, fuzzy
-#~ msgid "An output cell map name is required."
-#~ msgstr "है."
-
-#, fuzzy
-#~ msgid "The output cell map name can not be longer than 12 characters."
-#~ msgstr "नहीं."
-
-#, fuzzy
-#~ msgid "L: from  M: to R: quit\n"
-#~ msgstr "R n"
-
-#, fuzzy
-#~ msgid "g3d_to_raster: Writing %i raster maps with rows %i cols."
-#~ msgstr "i i."
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "Done\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Writing VTK VoxelData\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Open vector 3d raster map %s"
-#~ msgstr "खोलें"
-
-#, fuzzy
-#~ msgid "Open 3d raster map %s"
-#~ msgstr "खोलें"
-
-#, fuzzy
-#~ msgid ""
-#~ "OGR datasource name.\n"
-#~ "\t\tESRI Shapefile: directory containing shapefiles\n"
-#~ "\t\tMapInfo File: directory containing mapinfo files"
-#~ msgstr "n n फ़ाइल"
-
-#, fuzzy
-#~ msgid "Name of vector output file"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Vector import complete"
-#~ msgstr "सदिश"
-
-#, fuzzy
-#~ msgid "centroids"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "ERROR: A line needs at least 2 points"
-#~ msgstr "पर."
-
-#, fuzzy
-#~ msgid "ERROR: An area needs at least 3 points"
-#~ msgstr "पर."
-
-#, fuzzy
-#~ msgid "Unable to create raster map for [%s]"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "raster_to_g3d: Writing %i raster maps with rows %i cols."
-#~ msgstr "i i."
-
-#, fuzzy
-#~ msgid "Writing g3d slice %i\n"
-#~ msgstr "i n"
-
-#, fuzzy
-#~ msgid "out of memory!"
-#~ msgstr "का!"
-
-#, fuzzy
-#~ msgid "error opening 3d raster map"
-#~ msgstr "त्रुटि"
-
-#, fuzzy
-#~ msgid "Done\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Name for the resulting raster map"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Open Raster file %s in Mapset %s"
-#~ msgstr "खोलें n"
-
-#, fuzzy
-#~ msgid ""
-#~ "elev_raster_to_g3d: Writing 3D raster map with depths %i rows %i cols %i "
-#~ "and count %i."
-#~ msgstr "i i."
-
-#, fuzzy
-#~ msgid "Open 3d raster map %s\n"
-#~ msgstr "खोलें"
-
-#, fuzzy
-#~ msgid "Open elev raster map %s\n"
-#~ msgstr "डाटाटाइप."
-
-#, fuzzy
-#~ msgid "Could not open map %s\n"
-#~ msgstr "नहीं n"
-
-#, fuzzy
-#~ msgid "Either -i flag and/or profile parameter must be used."
-#~ msgstr "i"
-
-#, fuzzy
-#~ msgid "Region size is lower than minreg, nothing displayed.\n"
-#~ msgstr "आकार  है कुछ नहीं n"
-
-#, fuzzy
-#~ msgid "Region size is greater than maxreg, nothing displayed.\n"
-#~ msgstr "आकार  है कुछ नहीं n"
-
-#, fuzzy
-#~ msgid "Name for G3d raster map"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Do not rebuild and store the topology at the end"
-#~ msgstr "नहीं पर"
-
-#, fuzzy
-#~ msgid "QGIS vector output"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Makes 3D trees from input point vector map"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Diameter of the tree crown in mapunits"
-#~ msgstr "त्रुटि"
-
-#, fuzzy
-#~ msgid "Height of tree trunk"
-#~ msgstr "ऊंचाई मीटर्स"
-
-#, fuzzy
-#~ msgid "Name of the column with tree crown width"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Name of the column with tree height"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Name of the column with tree species"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Horizontal variability in map units"
-#~ msgstr "का बिन्दु"
-
-#, fuzzy
-#~ msgid "Cannot select attributes for point #%d"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid ""
-#~ "Calculate statistics for vector points within each raster cell of the "
-#~ "current region"
-#~ msgstr "का a के लिए सभी का."
-
-#, fuzzy
-#~ msgid ""
-#~ "Name of output vector points map (if not specified, the program writes to "
-#~ "standard output)"
-#~ msgstr "का के लिए संपादन (_E)"
-
-#, fuzzy
-#~ msgid "Report only selected statistics"
-#~ msgstr "का वस्तु"
-
-#, fuzzy
-#~ msgid "Quiet mode"
-#~ msgstr "शांत"
-
-#, fuzzy
-#~ msgid "Print the input data extent in shell script style"
-#~ msgstr "छापें"
-
-#, fuzzy
-#~ msgid "done."
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "name for new binary vector map (omit for display to stdout)"
-#~ msgstr "के लिए के लिए"
-
-#, fuzzy
-#~ msgid "Mark or search ground control points on image to be rectified."
-#~ msgstr "चिह्नित चालू छवि."
-
-#, fuzzy
-#~ msgid "Enter imagery group to be registered"
-#~ msgstr "समूह"
-
-#, fuzzy
-#~ msgid "Maximum distance"
-#~ msgstr "आइसोसरफेस"
-
-#, fuzzy
-#~ msgid "Right: "
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "%s Pan\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "%s Quit\n"
-#~ msgstr "बाहर जाएँ n"
-
-#, fuzzy
-#~ msgid "Draw geographic grid"
-#~ msgstr "निकालें"
-
-#, fuzzy
-#~ msgid ""
-#~ "3 raster maps (r,g,b) which are used to create rgb values [redmap,"
-#~ "greenmap,bluemap]"
-#~ msgstr "जी"
-
-#, fuzzy
-#~ msgid "%s[%d]: No raster map specified."
-#~ msgstr "के लिए."
-
-#, fuzzy
-#~ msgid ""
-#~ "GRASS module to create a fractal surface of a given fractal dimension. "
-#~ "Uses spectral synthesis method. Can create intermediate layers showing "
-#~ "the build up of different spectral coefficients (see Saupe, pp.106-107 "
-#~ "for an example of this). Use this module to generate naturally looking "
-#~ "synthetical elevation models (DEM)."
-#~ msgstr "मॉडयूल a का a पद्धति का के लिए का मॉडयूल."
-
-#, fuzzy
-#~ msgid "Wrong rgb map values! Values should in between 0 and 255!\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Resolution of raster and raster3d maps should be equal!"
-#~ msgstr "का के बराबर!"
-
-#, fuzzy
-#~ msgid "The resolution of raster and raster3d maps should be equal!"
-#~ msgstr "का के बराबर!"
-
-#, fuzzy
-#~ msgid "top raster map not found\n"
-#~ msgstr "नहीं n"
-
-#, fuzzy
-#~ msgid "Compute upslope flowlines"
-#~ msgstr "गणना करें"
-
-#, fuzzy
-#~ msgid "The map E and N grid coordinates of a starting point"
-#~ msgstr "का a बिन्दु"
-
-#, fuzzy
-#~ msgid "Wrong RGB maps. RGB output not added!"
-#~ msgstr "नहीं!"
-
-#, fuzzy
-#~ msgid "Done.\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Zooming finished.\n"
-#~ msgstr "पूर्ण n"
-
-#, fuzzy
-#~ msgid "name of resulting vector map"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "\"Extrudes\" flat vector object to 3D with defined height."
-#~ msgstr "वस्तु ऊंचाई."
-
-#, fuzzy
-#~ msgid "Column from attribute table with object height attribute"
-#~ msgstr "वस्तु ऊंचाई"
-
-#, fuzzy
-#~ msgid "You first need to run v.build on vector map <%s>"
-#~ msgstr "चालू"
-
-#, fuzzy
-#~ msgid "height of vector object"
-#~ msgstr "ऊंचाई का वस्तु"
-
-#, fuzzy
-#~ msgid "Either a height column or a fixed height value have to be specified"
-#~ msgstr "a ऊंचाई a स्थिर ऊंचाई"
-
-#, fuzzy
-#~ msgid "String column cannot be used for object heights"
-#~ msgstr "के लिए वस्तु"
-
-#, fuzzy
-#~ msgid "DateTime column cannot be used for object heights"
-#~ msgstr "के लिए वस्तु"
-
-#, fuzzy
-#~ msgid ""
-#~ "Feature type. Possible combinations of more types: point,centroid or line,"
-#~ "boundary."
-#~ msgstr "विशेषता का अधिक बिन्दु."
-
-#, fuzzy
-#~ msgid "Don't understand: [%s]\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Name of existing input raster map"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Name of existing raster map."
-#~ msgstr "का."
-
-#, fuzzy
-#~ msgid "Name of new raster map."
-#~ msgstr "का."
-
-#, fuzzy
-#~ msgid "Name of the resulting map"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Name of input map"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Write an Arc-Info line/polygon coverage in e00 format."
-#~ msgstr "बहुभुज."
-
-#, fuzzy
-#~ msgid "Mapset holding vector map to be exported (Default = current)"
-#~ msgstr "डिफ़ॉल्ट"
-
-#, fuzzy
-#~ msgid "Prompt user for threshold"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid ""
-#~ "Set line types to:   \n"
-#~ "             source        same as in binary vector map\n"
-#~ "             line          lines\n"
-#~ "             area          area edges\n"
-#~ "             point         points (sites)\n"
-#~ msgstr ""
-#~ "सेट\n"
-#~ " स्रोत\n"
-#~ "\n"
-#~ "\n"
-#~ " बिन्दु n"
-
-#, fuzzy
-#~ msgid "Output file is ASCII map"
-#~ msgstr "है"
-
-#, fuzzy
-#~ msgid "Copy attributes and category files"
-#~ msgstr "नक़ल"
-
-#, fuzzy
-#~ msgid ""
-#~ "Converts point data in a binary GRASS vector map layer into a GRASS "
-#~ "site_lists file."
-#~ msgstr "बिन्दु a a."
-
-#, fuzzy
-#~ msgid "Use Category NUMERIC data instead of attribute"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Use Category TEXT data instead of attribute"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Test routine for developing MIF import."
-#~ msgstr "के लिए."
-
-#, fuzzy
-#~ msgid "Debugging level : 0 (silent) - 3 (verbose)"
-#~ msgstr "डिबगिंग"
-
-#, fuzzy
-#~ msgid "Name of file where to log operations"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Snap distance in ground units (Default = 10^-10)"
-#~ msgstr "डिफ़ॉल्ट"
-
-#, fuzzy
-#~ msgid "Set initial scale [1:2400]"
-#~ msgstr "सेट स्केल"
-
-#, fuzzy
-#~ msgid "Name of attribute to use as category"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Allow overwrite of existing vector map with the same name"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Force writing  polygon coverage as a line coverage"
-#~ msgstr "बहुभुज a"
-
-#, fuzzy
-#~ msgid "Create unique value for parts of compound object"
-#~ msgstr "के लिए का वस्तु"
-
-#, fuzzy
-#~ msgid "List fields of DBF file"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "new categories table title"
-#~ msgstr "शीर्षक"
-
-#, fuzzy
-#~ msgid "Build topology info (default) OR Edit categories"
-#~ msgstr "संपादन"
-
-#, fuzzy
-#~ msgid "Prompt user for threshold         (Valid only with Build option)"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Set map region from data          (Valid only with Build option)"
-#~ msgstr "सेट"
-
-#, fuzzy
-#~ msgid "Suppress drawing of text outlines"
-#~ msgstr "का पाठ"
-
-#, fuzzy
-#~ msgid "Prefix for dig or dig_ascii and dig_att output files"
-#~ msgstr "उपसर्ग के लिए"
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "Where lines and labels are one or more of:\n"
-#~ "\n"
-#~ msgstr "n एक अधिक का n n"
-
-#, fuzzy
-#~ msgid ""
-#~ "    layername1[,layername2,layername3,...]\n"
-#~ "\n"
-#~ msgstr "n n"
-
-#, fuzzy
-#~ msgid ""
-#~ "      and/or   \n"
-#~ "\n"
-#~ msgstr "n n"
-
-#, fuzzy
-#~ msgid ""
-#~ "    in_layername1:out_layername1[,inlayername2:outlayername2,.....]\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "angle of rotation"
-#~ msgstr "कोण का"
-
-#, fuzzy
-#~ msgid "provide attributes of type: const,rows,cols"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "mi(les),f(eet),me(ters),k(ilometers),a(cres),h(ectacres)"
-#~ msgstr "f a h"
-
-#, fuzzy
-#~ msgid "Prints information about a binary GRASS vector map layer."
-#~ msgstr "a."
-
-#, fuzzy
-#~ msgid "input vector map for ARC/INFO conversion"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "prefix for ARC/INFO output filenames"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "field separator"
-#~ msgstr "फील्ड"
-
-#, fuzzy
-#~ msgid ""
-#~ "Interpolation and topographic analysis from given contour data in vector "
-#~ "format to GRASS floating point raster format using regularized spline "
-#~ "with tension."
-#~ msgstr "बिन्दु."
-
-#, fuzzy
-#~ msgid "Version: GRASS5.0 beta,  update: Novemebr 1999"
-#~ msgstr "बीटा"
-
-#, fuzzy
-#~ msgid "Authors: original version -  H.Mitasova, L.Mitas"
-#~ msgstr "असली संस्करण एच"
-
-#, fuzzy
-#~ msgid "Methods used in this program are described in the following papers:"
-#~ msgstr "पद्धति प्रोग्राम:"
-
-#, fuzzy
-#~ msgid "Mitasova, H., and  Mitas, L., 1993,"
-#~ msgstr "एच"
-
-#, fuzzy
-#~ msgid "Mitasova, H., and Hofierka, L., 1993"
-#~ msgstr "एच"
-
-#, fuzzy
-#~ msgid "Mitasova, H., Mitas, L., Brown, W.M., Gerdes, D.P., Kosinovsky, I.,"
-#~ msgstr "एच प"
-
-#, fuzzy
-#~ msgid "Baker, T., 1995, Modeling spatially and temporally"
-#~ msgstr "T"
-
-#, fuzzy
-#~ msgid "distributed phenomena: New methods and tools for GRASS GIS."
-#~ msgstr "के लिए."
-
-#, fuzzy
-#~ msgid "International Journal of Geographic Information Systems,V(9), No(4)."
-#~ msgstr "का जियोग्राफिक जानकारी V नहीं."
-
-#, fuzzy
-#~ msgid "(special issue on Integration of GIS and Environmental Modeling)"
-#~ msgstr "चालू का"
-
-#, fuzzy
-#~ msgid ""
-#~ "The postscript versions of these papers are available via Internet at"
-#~ msgstr "का पर"
-
-#, fuzzy
-#~ msgid ""
-#~ "Please cite these references in publications where the results of this"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Use category data instead of attribute"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Output z-file (elevation)"
-#~ msgstr "ज़ेड"
-
-#, fuzzy
-#~ msgid "Mean curvature"
-#~ msgstr "औसत"
-
-#, fuzzy
-#~ msgid "Min number of points for interpolation(>segmax)"
-#~ msgstr "संख्या का के लिए"
-
-#, fuzzy
-#~ msgid "path to GRASS database of input location"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Automatically run \"v.support\" on newly created vector map."
-#~ msgstr "चालू."
-
-#, fuzzy
-#~ msgid "Type of object to extract (area, line or both)"
-#~ msgstr "का वस्तु"
-
-#, fuzzy
-#~ msgid "Polygon Cookie Cutter  (Boolean AND Overlay)."
-#~ msgstr "बूलिये ओवरले."
-
-#, fuzzy
-#~ msgid "ARC/INFO label-text file"
-#~ msgstr "पाठ"
-
-#, fuzzy
-#~ msgid "resultant Vector output file"
-#~ msgstr "सदिश"
-
-#, fuzzy
-#~ msgid "ID Number column in label-text file"
-#~ msgstr "पाठ"
-
-#, fuzzy
-#~ msgid "GRASS category column in label-text file"
-#~ msgstr "पाठ"
-
-#, fuzzy
-#~ msgid "GRASS attribute column in label-text file"
-#~ msgstr "पाठ"
-
-#, fuzzy
-#~ msgid "reports attribute, label, and other information about a sites file"
-#~ msgstr "अन्य a"
-
-#, fuzzy
-#~ msgid "Name of sites file."
-#~ msgstr "का."
-
-#, fuzzy
-#~ msgid "Only count sites in current window for min/max."
-#~ msgstr "के लिए."
-
-#, fuzzy
-#~ msgid "Show quartiles for decimal attributes"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Name of input sites map"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid ""
-#~ "Surface interpolation from sites data by Inverse Distance Weighted "
-#~ "algorithm."
-#~ msgstr "सतह."
-
-#, fuzzy
-#~ msgid "Name of sites file to filter"
-#~ msgstr "का फ़िल्टर"
-
-#, fuzzy
-#~ msgid ""
-#~ "Converts a GRASS site list file into an ASCII listing of site locations "
-#~ "and their descriptions."
-#~ msgstr "a का."
-
-#, fuzzy
-#~ msgid "Name of input site list"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Number of cells to surround site cell"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Attribute field type to use for operation"
-#~ msgstr "फील्ड के लिए"
-
-#, fuzzy
-#~ msgid "Attribute field number to use for operation"
-#~ msgstr "फील्ड संख्या के लिए"
-
-#, fuzzy
-#~ msgid "Create a single-valued (0/1) raster map"
-#~ msgstr "a एकल"
-
-#, fuzzy
-#~ msgid "Index of attribute type (ignored for cat)"
-#~ msgstr "का के लिए"
-
-#, fuzzy
-#~ msgid "Output in g.gnuplot format (overrides -z and writes to stdout)"
-#~ msgstr "जी ज़ेड"
-
-#, fuzzy
-#~ msgid ""
-#~ "Convert an ASCII listing of site locations into a GRASS site list file."
-#~ msgstr "का a."
-
-#, fuzzy
-#~ msgid "number of dimensions (default=2)"
-#~ msgstr "संख्या का"
-
-#, fuzzy
-#~ msgid "input field separator"
-#~ msgstr "फील्ड"
-
-#, fuzzy
-#~ msgid ""
-#~ "Allows the user to re-project a sites file from one location to the "
-#~ "current location (no datum transformation yet)."
-#~ msgstr "a एक."
-
-#, fuzzy
-#~ msgid "location of input sites list"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "mapset of input sites list"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Don't prompt for Map header information"
-#~ msgstr "संकेत के लिए"
-
-#, fuzzy
-#~ msgid ""
-#~ "Field type (\"string\", \"dim\", or \"decimal\") and index to use for "
-#~ "category value (uses \"cat\" by default)"
-#~ msgstr "फील्ड के लिए"
-
-#, fuzzy
-#~ msgid ""
-#~ "Allows the user to interactively change the color table of a raster map "
-#~ "layer displayed on the graphics monitor."
-#~ msgstr "का a चालू."
-
-#, fuzzy
-#~ msgid ""
-#~ "Allows the user to interactively adjust the settings (zoom  and  pan) of "
-#~ "the current geographic region using a pointing device such as a mouse."
-#~ msgstr "पैन का a a."
-
-#, fuzzy
-#~ msgid ""
-#~ "Displays text labels formatted for use with GRASS paint (p.labels, p.map) "
-#~ "output to the active frame on the graphics monitor."
-#~ msgstr "पाठ के लिए चालू."
-
-#, fuzzy
-#~ msgid "Color of lines separating the colors of the color table"
-#~ msgstr "का का"
-
-#, fuzzy
-#~ msgid ""
-#~ "Displays points, as icons, at user-defined locations in the active "
-#~ "display frame on the graphics monitor."
-#~ msgstr "प्रतीक पर चालू."
-
-#, fuzzy
-#~ msgid "Name of existing sites file"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Identify just one site"
-#~ msgstr "पहचानें एक"
-
-#, fuzzy
-#~ msgid "one mouse click only"
-#~ msgstr "एक"
-
-#, fuzzy
-#~ msgid "Name of a spheroid (for lat/lon coordinate conversion)"
-#~ msgstr "का a के लिए"
-
-#, fuzzy
-#~ msgid "Displays three-dimensional images based on raster map layers"
-#~ msgstr "छवियाँ चालू"
-
-#, fuzzy
-#~ msgid "The raster map used to generate the 3-d texture"
-#~ msgstr "संरचना"
-
-#, fuzzy
-#~ msgid "coordinates of center of view"
-#~ msgstr "का का"
-
-#, fuzzy
-#~ msgid "Frequency of vector lines in output"
-#~ msgstr "आवृत्ति का"
-
-#, fuzzy
-#~ msgid "Field of view"
-#~ msgstr "फील्ड का"
-
-#, fuzzy
-#~ msgid "Color of bounding box"
-#~ msgstr "का बक्सा"
-
-#, fuzzy
-#~ msgid ""
-#~ "Displays  a  legend  for a raster map layer in the active frame on the "
-#~ "graphics monitor."
-#~ msgstr "a के लिए a चालू."
-
-#, fuzzy
-#~ msgid "Use a subset of the map range for the legend"
-#~ msgstr "a का के लिए"
-
-#, fuzzy
-#~ msgid "Draw labelled vector lines to the current display device"
-#~ msgstr "निकालें"
-
-#, fuzzy
-#~ msgid "Name of existing vector map to draw"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid ""
-#~ "Draw all lines using either a GRASS standard color or R:G:B triplet "
-#~ "(separated by colons)"
-#~ msgstr "निकालें सभी a R जी"
-
-#, fuzzy
-#~ msgid ""
-#~ "Only draw areas with a matching category number (for constant color "
-#~ "option only)"
-#~ msgstr "a संख्या के लिए"
-
-#, fuzzy
-#~ msgid "Draw lines according to a legend file (<cat> <R> <G> <B>)"
-#~ msgstr "निकालें a<cat><R><G><B>"
-
-#, fuzzy
-#~ msgid "Fill color -- a GRASS named color, an R:G:B triplet, or \"none\""
-#~ msgstr "a R जी"
-
-#, fuzzy
-#~ msgid "Line color -- a GRASS named color, an R:G:B triplet, or \"none\""
-#~ msgstr "a R जी"
-
-#, fuzzy
-#~ msgid "Limit to matching category number(s) (constant color option only)"
-#~ msgstr "संख्या"
-
-#, fuzzy
-#~ msgid "Use a legend file: (<cat> <R> <G> <B> [<R> <G> <B>])"
-#~ msgstr "a<cat><R><G><B><R><G><B>"
-
-#, fuzzy
-#~ msgid ""
-#~ "Displays site markers in the active display frame on the graphics monitor."
-#~ msgstr "चालू."
-
-#, fuzzy
-#~ msgid "Size, in pixels, in which the icon is to be drawn"
-#~ msgstr "पिक्सेल्स है"
-
-#, fuzzy
-#~ msgid "Specify the type of the icon"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Color used for the background, or \"none\""
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "the screen coordinates for top-left corner of label"
-#~ msgstr "के लिए शीर्ष बायाँ का"
-
-#, fuzzy
-#~ msgid ""
-#~ "Interactively label sites using a string or double attribute value or the "
-#~ "category value on the current graphics monitor."
-#~ msgstr "a चालू."
-
-#, fuzzy
-#~ msgid "Name of sites file"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Type of attribute to use for labels"
-#~ msgstr "का के लिए"
-
-#, fuzzy
-#~ msgid "Index of attribute. Ignored when attr=cat or attr=coords."
-#~ msgstr "का उपेक्षित."
-
-#, fuzzy
-#~ msgid "Relative horizontal position 'left|center|right'"
-#~ msgstr "बायाँ दायाँ"
-
-#, fuzzy
-#~ msgid "Relative vertical position 'top|center|bottom'"
-#~ msgstr "शीर्ष तल"
-
-#, fuzzy
-#~ msgid "Size of text (pixels)"
-#~ msgstr "का पाठ पिक्सेल्स"
-
-#, fuzzy
-#~ msgid "Color desired for drawing map"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Vector category number(s) to be displayed"
-#~ msgstr "सदिश संख्या"
-
-#, fuzzy
-#~ msgid "Fill areas of selected polygons"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Draws text in the active display frame on the graphics monitor."
-#~ msgstr "पाठ चालू."
-
-#, fuzzy
-#~ msgid "Height of letters in percent of available frame height"
-#~ msgstr "ऊंचाई का का ऊंचाई"
-
-#, fuzzy
-#~ msgid "Color desired for drawing text"
-#~ msgstr "के लिए पाठ"
-
-#, fuzzy
-#~ msgid "The screen line number on which text will begin to be drawn "
-#~ msgstr "संख्या चालू पाठ "
-
-#, fuzzy
-#~ msgid ""
-#~ "Displays point graphics in the active frame on the graphics display "
-#~ "monitor."
-#~ msgstr "बिन्दु चालू."
-
-#, fuzzy
-#~ msgid "Input is a UNIX file name"
-#~ msgstr "है a"
-
-#, fuzzy
-#~ msgid ""
-#~ "Allows the user to establish whether a map will be displayed using its "
-#~ "own color table or the fixed color table of the graphics monitor."
-#~ msgstr "a स्थिर का."
-
-#, fuzzy
-#~ msgid ""
-#~ "Displays the rhumbline joining two user-specified points, in the active "
-#~ "frame on the user's graphics monitor."
-#~ msgstr "दो चालू."
-
-#, fuzzy
-#~ msgid "Creates and modifies icons for use with ps.map."
-#~ msgstr "प्रतीक के लिए."
-
-#, fuzzy
-#~ msgid "scale of the output map, e.g. 1:25000 (default: 1panel)"
-#~ msgstr "स्केल का जी"
-
-#, fuzzy
-#~ msgid "number of copies to print"
-#~ msgstr "संख्या का"
-
-#, fuzzy
-#~ msgid "Selects a PostScript device for GRASS hardcopy output."
-#~ msgstr "a के लिए."
-
-#, fuzzy
-#~ msgid "name of PostScript painter to select"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "list all available PostScript painters"
-#~ msgstr "सभी"
-
-#, fuzzy
-#~ msgid "print name of currently selected PostScript painter"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid ""
-#~ "An imagery function that performs contextual image classification using "
-#~ "sequential maximum a posteriori (SMAP) estimation."
-#~ msgstr "फंक्शन छवि a."
-
-#, fuzzy
-#~ msgid "Force Swapping (overrides default auto)"
-#~ msgstr "स्वचालित"
-
-#, fuzzy
-#~ msgid "Use \"Map Coordinates\" for coordinates"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "output prefix of the GRASS raster maps to be created."
-#~ msgstr "का."
-
-#, fuzzy
-#~ msgid "Number of columns to extract."
-#~ msgstr "का."
-
-#, fuzzy
-#~ msgid "Output 16-bit image (default 8)"
-#~ msgstr "छवि"
-
-#, fuzzy
-#~ msgid "maximum number of sub-signatures in any class"
-#~ msgstr "संख्या का"
-
-#, fuzzy
-#~ msgid "Generate statistics for i.smap from raster map layer."
-#~ msgstr "के लिए i."
-
-#, fuzzy
-#~ msgid "Use symbols (instead of graphics)"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Import non-georeferenced PNG format image."
-#~ msgstr "आयात छवि."
-
-#, fuzzy
-#~ msgid "Create floating-point maps (0.0 - 1.0)."
-#~ msgstr "बिन्दु."
-
-#, fuzzy
-#~ msgid "Verbose mode on."
-#~ msgstr "बड़बोला चालू."
-
-#, fuzzy
-#~ msgid "Enable extend memory option: Operation is slow"
-#~ msgstr "विस्तार दें है"
-
-#, fuzzy
-#~ msgid "Name of an output binary map (use out=- for stdout)"
-#~ msgstr "का के लिए"
-
-#, fuzzy
-#~ msgid ""
-#~ "Converts point data in a GRASS raster map layer into a GRASS site_lists "
-#~ "file."
-#~ msgstr "बिन्दु a a."
-
-#, fuzzy
-#~ msgid "Output as third dimension rather than cat"
-#~ msgstr "तृतीय"
-
-#, fuzzy
-#~ msgid "Name of raster map."
-#~ msgstr "का."
-
-#, fuzzy
-#~ msgid ""
-#~ "Creates a new binary GRASS vector (v.digit) file by extracting linear "
-#~ "features from a thinned raster map."
-#~ msgstr "a a."
-
-#, fuzzy
-#~ msgid ""
-#~ "Creates a raster map layer and site list file containing randomly located "
-#~ "sites."
-#~ msgstr "a."
-
-#, fuzzy
-#~ msgid "Name of the output sites map"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Generate sites for category zero also"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Imports a TIFF (8 or 24 bit) raster map into GRASS raster map(s)"
-#~ msgstr "a"
-
-#, fuzzy
-#~ msgid "Name on TIFF file to input."
-#~ msgstr "चालू."
-
-#, fuzzy
-#~ msgid "Bayesian expert system development program."
-#~ msgstr "प्रोग्राम."
-
-#, fuzzy
-#~ msgid ""
-#~ "mi(les),me(ters),k(ilometers),a(cres),h(ectacres),c(ell_counts),p"
-#~ "(ercent_cover)"
-#~ msgstr "a h कवर"
-
-#, fuzzy
-#~ msgid "name of an output file to hold the report"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "number of fp subranges to collect stats from"
-#~ msgstr "संख्या का"
-
-#, fuzzy
-#~ msgid "filter out all no data cells"
-#~ msgstr "फ़िल्टर सभी"
-
-#, fuzzy
-#~ msgid "filter out cells where all maps have no data"
-#~ msgstr "फ़िल्टर सभी"
-
-#, fuzzy
-#~ msgid "report for cats fp ranges (fp maps only)"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid ""
-#~ "Generates an output raster map layer with contiguous areas grown by one "
-#~ "cell (pixel)."
-#~ msgstr "एक."
-
-#, fuzzy
-#~ msgid ""
-#~ "re-project a raster map from one location to the current location (no "
-#~ "datum transformation yet)"
-#~ msgstr "a एक"
-
-#, fuzzy
-#~ msgid "interpolation method to use"
-#~ msgstr "पद्धति"
-
-#, fuzzy
-#~ msgid "resolution of output map"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Print grid coordinates (east and north) (requires -1 flag)"
-#~ msgstr "छापें पूर्व उत्तर"
-
-#, fuzzy
-#~ msgid "output is the interpolation error"
-#~ msgstr "है त्रुटि"
-
-#, fuzzy
-#~ msgid "format for reporting the slope"
-#~ msgstr "के लिए ढाल"
-
-#, fuzzy
-#~ msgid "type of output aspect and slope maps"
-#~ msgstr "का ढाल"
-
-#, fuzzy
-#~ msgid "Output E-W slope filename"
-#~ msgstr "प ढाल फ़ाइलनाम "
-
-#, fuzzy
-#~ msgid "Output N-S slope filename"
-#~ msgstr "ढाल फ़ाइलनाम "
-
-#, fuzzy
-#~ msgid "Output partial derivative dxx filename"
-#~ msgstr "फ़ाइलनाम "
-
-#, fuzzy
-#~ msgid "Output partial derivative dyy filename"
-#~ msgstr "फ़ाइलनाम "
-
-#, fuzzy
-#~ msgid "Output partial derivative dxy filename"
-#~ msgstr "फ़ाइलनाम "
-
-#, fuzzy
-#~ msgid "Name of file for output (use out=- for stdout)"
-#~ msgstr "का के लिए के लिए"
-
-#, fuzzy
-#~ msgid ""
-#~ "Converts raster data referenced using latitude and longitude coordinates "
-#~ "to a UTM-referenced map layer in GRASS raster format."
-#~ msgstr "a."
-
-#, fuzzy
-#~ msgid ""
-#~ "one corner latitude and longitude of the input\n"
-#~ "format: {nw|ne|sw|se},%s,%s"
-#~ msgstr "एक का"
-
-#, fuzzy
-#~ msgid "resolution of the input (in arc seconds)"
-#~ msgstr "का चाप"
-
-#, fuzzy
-#~ msgid "Stop points site file"
-#~ msgstr "रूकें"
-
-#, fuzzy
-#~ msgid ""
-#~ "Extracts area edges from a raster map layer and converts data to GRASS "
-#~ "vector format."
-#~ msgstr "a."
-
-#, fuzzy
-#~ msgid "Number of values printed before wrapping a line"
-#~ msgstr "का a"
-
-#, fuzzy
-#~ msgid "raster map name from which to copy color table"
-#~ msgstr "नक़ल"
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "Where color type is one of:\n"
-#~ msgstr "है एक का n"
-
-#, fuzzy
-#~ msgid "  aspect    (aspect oriented grey colors)\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "  grey      (linear grey scale)\n"
-#~ msgstr "स्केल n"
-
-#, fuzzy
-#~ msgid "  grey.eq   (histogram equalized grey scale)\n"
-#~ msgstr "स्केल n"
-
-#, fuzzy
-#~ msgid "  grey.log  (histogram logarithmic transformed grey scale)\n"
-#~ msgstr "स्केल n"
-
-#, fuzzy
-#~ msgid "  byg       (blue through yellow to green colors)\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "  byr       (blue through yellow to red colors)\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "  gyr       (green through yellow to red colors)\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "  rainbow   (rainbow color table)\n"
-#~ msgstr "इंद्रधनुष इंद्रधनुष n"
-
-#, fuzzy
-#~ msgid "  ramp      (color ramp)\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "  ryg       (red through yellow to green colors)\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "  random    (random color table)\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "  wave      (color wave)\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "  rules     (create new color table by rules)\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "method of object-based statistic"
-#~ msgstr "पद्धति का वस्तु"
-
-#, fuzzy
-#~ msgid "resultant raster map (not used with 'distribution')"
-#~ msgstr "नहीं वितरण"
-
-#, fuzzy
-#~ msgid "Northern limit of geographic region"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Eastern limit of geographic region"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Western limit of geographic region"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Extend location extents based on new dataset."
-#~ msgstr "चालू."
-
-#, fuzzy
-#~ msgid "Maximum magnitude of random grid point offset"
-#~ msgstr "का बिन्दु"
-
-#, fuzzy
-#~ msgid ""
-#~ "Outputs a raster map layer whose category values represent the "
-#~ "application of user-specified criteria (rules statements) to other raster "
-#~ "map layers' category values."
-#~ msgstr "a किसका का अन्य."
-
-#, fuzzy
-#~ msgid "Converts a PPM image file to GRASS raster map(s)."
-#~ msgstr "a छवि."
-
-#, fuzzy
-#~ msgid ""
-#~ "Converts Universal Transverse Mercator (UTM) coordinates to geographic "
-#~ "(latitude/longitude) coordinates."
-#~ msgstr "यूनिवर्सल."
-
-#, fuzzy
-#~ msgid "Specified zone is in the southern hemisphere"
-#~ msgstr "है"
-
-#, fuzzy
-#~ msgid "Input is reversed: north,east"
-#~ msgstr "है उत्तर पूर्व"
-
-#, fuzzy
-#~ msgid "Do not flag invalid east,north input lines as errors"
-#~ msgstr "नहीं अवैध पूर्व उत्तर"
-
-#, fuzzy
-#~ msgid "Flag other input lines as errors"
-#~ msgstr "ध्वज अन्य"
-
-#, fuzzy
-#~ msgid "Output in decimal degrees"
-#~ msgstr "कोण"
-
-#, fuzzy
-#~ msgid ""
-#~ "Converts geographic coordinates to Universal Transverse Mercator (UTM) "
-#~ "coordinates."
-#~ msgstr "यूनिवर्सल."
-
-#, fuzzy
-#~ msgid "Input is reversed: lat,lon"
-#~ msgstr "है"
-
-#, fuzzy
-#~ msgid "Do not flag invalid lon,lat input lines as errors"
-#~ msgstr "नहीं अवैध"
-
-#, fuzzy
-#~ msgid ""
-#~ "Rotates elevation data extracted by either m.dted.extract or m."
-#~ "dmaUSGSread."
-#~ msgstr "मी मी."
-
-#, fuzzy
-#~ msgid "Number of bytes per cell (i.e. per data value)"
-#~ msgstr "का बाइट्स i"
-
-#, fuzzy
-#~ msgid ""
-#~ "Provides a terse description of level 1 and 2 digital terrain elevation "
-#~ "data (DTED) files produced and distributed by the Defense Mapping Agency "
-#~ "(DMA) on 1/2-inch magnetic tapes."
-#~ msgstr "a का चालू इंच."
-
-#, fuzzy
-#~ msgid "Name of tape drive device"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid ""
-#~ "Datum shift program. Return geographic coordinates based on a different "
-#~ "datum that the one used to obtain the original coordinates. "
-#~ msgstr "प्रोग्राम चालू a एक असली "
-
-#, fuzzy
-#~ msgid "use block shift transformation (default)"
-#~ msgstr "ब्लॉक"
-
-#, fuzzy
-#~ msgid "use bursa wolf 3d similarity transformation (not implemented)"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "height above ellipsoid"
-#~ msgstr "ऊंचाई"
-
-#, fuzzy
-#~ msgid "z shift"
-#~ msgstr "ज़ेड"
-
-#, fuzzy
-#~ msgid "spheroid geographic coordinates to base on. "
-#~ msgstr "बेस चालू "
-
-#, fuzzy
-#~ msgid ""
-#~ "Converts UTM coordinates falling within the current geographic region to "
-#~ "geographic (latitude/longitude) coordinates. "
-#~ msgstr "गिरता "
-
-#, fuzzy
-#~ msgid ""
-#~ "Flips elevation data extracted from systems that retrieve data by rows "
-#~ "from south to north."
-#~ msgstr "दक्षिण उत्तर."
-
-#, fuzzy
-#~ msgid "Number of bytes per cell (ie, per data value)"
-#~ msgstr "का बाइट्स"
-
-#, fuzzy
-#~ msgid ""
-#~ "Finds geographic region information for U.S. Census Bureau TIGER input "
-#~ "data."
-#~ msgstr "के लिए."
-
-#, fuzzy
-#~ msgid "Filename for raw tiger data (type 1)"
-#~ msgstr "के लिए कच्चा"
-
-#, fuzzy
-#~ msgid "UTM zone for this county"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Name of spheroid to use"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid ""
-#~ "Provides a terse description of USGS Digital Elevation Model (DEM) data "
-#~ "files stored on 1/2-inch magnetic tape."
-#~ msgstr "a का चालू इंच."
-
-#, fuzzy
-#~ msgid "Blocksize of tape data"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid ""
-#~ "Extracts digital terrain elevation data (DTED - levels 1 and 2) produced "
-#~ "and supplied by the Defense Mapping Agency (DMA) on 1/2-inch magnetic "
-#~ "tapes."
-#~ msgstr "चालू इंच."
-
-#, fuzzy
-#~ msgid "Name of header output file"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "North latitude of region to extract (format: %s)"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "South latitude of region to extract (format: %s)"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "East longitude of region to extract (format: %s)"
-#~ msgstr "पूर्व का"
-
-#, fuzzy
-#~ msgid "West longitude of region to extract (format: %s)"
-#~ msgstr "पश्चिम का"
-
-#, fuzzy
-#~ msgid "Read the entire tape in all cases"
-#~ msgstr "सभी"
-
-#, fuzzy
-#~ msgid ""
-#~ "Extracts USGS Digital Elevation Model (DEM) data from 1/2-inch magnetic "
-#~ "tape."
-#~ msgstr "इंच."
-
-#, fuzzy
-#~ msgid "First file to look at"
-#~ msgstr "पर"
-
-#, fuzzy
-#~ msgid "Last file to look at"
-#~ msgstr "पर"
-
-#, fuzzy
-#~ msgid "Selects a device (printer) for GRASS hardcopy output."
-#~ msgstr "a के लिए."
-
-#, fuzzy
-#~ msgid "list all available painters"
-#~ msgstr "सभी"
-
-#, fuzzy
-#~ msgid "print name of currently selected painter"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Align region to resolution [default = align to bounds]"
-#~ msgstr "पंक्तिबद्ध करें"
-
-#, fuzzy
-#~ msgid "Set region to match this sites map"
-#~ msgstr "सेट जोड़ा"
-
-#, fuzzy
-#~ msgid "Value for the eastern edge "
-#~ msgstr "के लिए "
-
-#, fuzzy
-#~ msgid "Value for the western edge "
-#~ msgstr "के लिए "
-
-#, fuzzy
-#~ msgid "Grid resolution (both north-south and east-west)"
-#~ msgstr "उत्तर दक्षिण पूर्व पश्चिम"
-
-#, fuzzy
-#~ msgid "  vect   (binary vector maps)\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "  icon   (paint icon files)\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "  labels (paint label files)\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "  sites  (site list files)\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "  region (region definition files)\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "  group  (imagery group files)\n"
-#~ msgstr "समूह समूह n"
-
-#, fuzzy
-#~ msgid "  3dview (3D view parameters)\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Print all, inclusive range"
-#~ msgstr "छापें सभी"
