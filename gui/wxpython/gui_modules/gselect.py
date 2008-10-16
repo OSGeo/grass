@@ -8,6 +8,8 @@ Classes:
  - TreeCrtlComboPopup
  - VectorDBInfo
  - LayerSelect
+ - DriverSelect
+ - DatabaseSelect
  - ColumnSelect
 
 (C) 2007-2008 by the GRASS Development Team This program is free
@@ -455,6 +457,33 @@ class LayerSelect(wx.Choice):
             self.SetItems(['1'])
             self.SetStringSelection('1')
 
+class DriverSelect(wx.ComboBox):
+    """
+    Creates combo box for selecting database driver.
+    """
+    def __init__(self, parent, choices, value,
+                 id=wx.ID_ANY, pos=wx.DefaultPosition,
+                 size=globalvar.DIALOG_LAYER_SIZE, **kargs):
+
+        super(DriverSelect, self).__init__(parent, id, value, pos, size,
+                                           choices, style=wx.CB_READONLY)
+        
+        self.SetName("DriverSelect")
+        
+        self.SetStringSelection(value)
+
+class DatabaseSelect(wx.TextCtrl):
+    """
+    Creates combo box for selecting database driver.
+    """
+    def __init__(self, parent, value='',
+                 id=wx.ID_ANY, pos=wx.DefaultPosition,
+                 size=globalvar.DIALOG_TEXTCTRL_SIZE, **kargs):
+        
+        super(DatabaseSelect, self).__init__(parent, id, value, pos, size)
+                               
+        self.SetName("DatabaseSelect")
+
 class TableSelect(wx.ComboBox):
     """
     Creates combo box for selecting attribute tables from the database
@@ -472,12 +501,26 @@ class TableSelect(wx.ComboBox):
         if not choices:
             self.InsertTables()
                 
-    def InsertTables(self):
+    def InsertTables(self, driver=None, database=None):
         """Insert attribute tables into combobox"""
         items = []
-        for table in gcmd.Command(['db.tables',
-                                   '-p']).ReadStdOutput():
-            items.append(table)
+        cmd = ['db.tables',
+               '-p']
+        if driver:
+            cmd.append('driver=%s' % driver)
+        if database:
+            cmd.append('database=%s' % database)
+        
+        try:
+            tableCmd = gcmd.Command(cmd)
+        except gcmd.CmdError:
+            tableCmd = None
+
+        
+        if tableCmd and \
+                tableCmd.returncode == 0:
+            for table in tableCmd.ReadStdOutput():
+                items.append(table)
             
         self.SetItems(items)
         self.SetValue('')

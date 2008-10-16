@@ -373,6 +373,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->required = NO;
 	Opt->multiple = NO;
 	Opt->description = _("Driver name");
+	Opt->gisprompt = "old_dbdriver,dbdriver,dbdriver";
 	break;
     case G_OPT_DB_DATABASE:
 	Opt->key = "database";
@@ -381,6 +382,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->required = NO;
 	Opt->multiple = NO;
 	Opt->description = _("Database name");
+	Opt->gisprompt = "old_dbname,dbname,dbname";
 	break;
     case G_OPT_DB_COLUMN:
 	Opt->key = "column";
