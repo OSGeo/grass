@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasstcl_th\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-24 17:42+0100\n"
+"POT-Creation-Date: 2008-10-11 22:08+0200\n"
 "PO-Revision-Date: 2008-01-05 15:19+0700\n"
 "Last-Translator: man <mansv68@yahoo.co.th>\n"
 "Language-Team: Thai <grass-translations@lists.osgeo.org>\n"
@@ -246,7 +246,7 @@ msgstr ""
 "\n"
 "-- ทดสอบหน่วย solute_transport integration ล้มเหลว --"
 
-#: ../lib/gpde/test/test_solute_transport.c:55
+#: ../lib/gpde/test/test_solute_transport.c:54
 msgid ""
 "\n"
 "-- solute_transport integration tests finished successfully --"
@@ -343,8 +343,8 @@ msgstr ""
 "-- ทดสอบหน่วย  Solver เสร็จสมบูรณ์ --"
 
 #: ../lib/gpde/N_solvers_classic_iter.c:57
-#: ../lib/gpde/N_solvers_classic_iter.c:94 ../lib/gpde/N_solvers.c:56
-#: ../lib/gpde/N_solvers.c:94 ../lib/gpde/N_solvers.c:161
+#: ../lib/gpde/N_solvers_classic_iter.c:94 ../lib/gpde/N_solvers.c:55
+#: ../lib/gpde/N_solvers.c:93 ../lib/gpde/N_solvers.c:160
 #: ../lib/gpde/N_solvers_krylov.c:78 ../lib/gpde/N_solvers_krylov.c:255
 #: ../lib/gpde/N_solvers_krylov.c:423 ../lib/gpde/N_solvers_krylov.c:832
 msgid "The linear equation system is not quadratic"
@@ -370,40 +370,46 @@ msgstr "Jacobi -- การวนซ้ำ %5i ผิดพลาด %g\n"
 msgid "SOR -- iteration %5i error %g\n"
 msgstr "SOR -- การวนซ้ำ %5i ผิดพลาด %g\n"
 
-#: ../lib/gpde/N_parse_options.c:59
+#: ../lib/gpde/N_parse_options.c:58
 msgid ""
 "The type of solver which should solve the symmetric linear equation system"
 msgstr "ชนิดของ solver ที่สามารถแก้ปัญหา symmetric linear equation system"
 
-#: ../lib/gpde/N_parse_options.c:71
+#: ../lib/gpde/N_parse_options.c:69
 msgid "The type of solver which should solve the linear equation system"
 msgstr "ชนิดของ solver ที่สามารถแก้ปัญหา linear equation system"
 
-#: ../lib/gpde/N_parse_options.c:80
+#: ../lib/gpde/N_parse_options.c:77
 msgid "Maximum number of iteration used to solver the linear equation system"
 msgstr "จำนวนมากสุดของ การวนรอบซ้ำ ที่ใช้ในการแก้ปัญหา linear equation system"
 
-#: ../lib/gpde/N_parse_options.c:89
+#: ../lib/gpde/N_parse_options.c:85
 msgid ""
 "Error break criteria for iterative solvers (jacobi, sor, cg or bicgstab)"
 msgstr "ผิดพลาด หยุดการวนรอบซ้ำ  (jacobi, sor, cg or bicgstab)"
 
-#: ../lib/gpde/N_parse_options.c:98
+#: ../lib/gpde/N_parse_options.c:93
 msgid ""
 "The relaxation parameter used by the jacobi and sor solver for speedup or "
 "stabilizing"
 msgstr "ค่าตัวแปรที่ใช้โดย jacobi และ sor solverเพื่อเพิ่มความเร็ว หรือ ความเสถียร"
 
-#: ../lib/gpde/N_parse_options.c:105
+#: ../lib/gpde/N_parse_options.c:100
 msgid "The calculation time in seconds"
 msgstr "เวลาในการคำนวน (วินาที)"
 
-#: ../lib/gpde/N_arrays_io.c:55
+#: ../lib/gpde/N_arrays_io.c:55 ../lib/gis/legal_name.c:94
+#: ../lib/gis/legal_name.c:97 ../lib/gis/opencell.c:967
+#: ../lib/ogsf/gsd_legend.c:238 ../lib/ogsf/Gs3.c:126 ../lib/ogsf/Gs3.c:200
+#: ../lib/ogsf/Gs3.c:284 ../lib/ogsf/Gs3.c:357 ../lib/ogsf/Gs3.c:472
+#: ../lib/ogsf/Gs3.c:568 ../lib/ogsf/Gs3.c:635 ../lib/ogsf/Gs3.c:692
+#: ../lib/ogsf/Gs3.c:761 ../lib/ogsf/Gs3.c:829 ../lib/ogsf/Gp3.c:54
 #, c-format
 msgid "Raster map <%s> not found"
 msgstr "ไม่พบแผนที่เชิงภาพ <%s> "
 
-#: ../lib/gpde/N_arrays_io.c:67
+#: ../lib/gpde/N_arrays_io.c:67 ../lib/ogsf/Gs3.c:137 ../lib/ogsf/Gs3.c:211
+#: ../lib/ogsf/Gs3.c:368 ../lib/ogsf/Gs3.c:483 ../lib/ogsf/Gs3.c:573
 #, c-format
 msgid "Unable to open raster map <%s>"
 msgstr "ไม่สามารถเปิดแผนที่เชิงภาพ <%s> "
@@ -417,84 +423,84 @@ msgstr "กำลังอ่านแผนที่เชิงภาพ <%s> 
 msgid "Could not get raster row"
 msgstr "ไม่สามารถอ่าน แถวข้อมูลเชิงภาพ"
 
-#: ../lib/gpde/N_arrays_io.c:149 ../lib/gpde/N_arrays_io.c:231
+#: ../lib/gpde/N_arrays_io.c:161 ../lib/gpde/N_arrays_io.c:243
 msgid "Unable to close input map"
 msgstr "ไม่สามารถปิดการนำเข้าแผนที่"
 
-#: ../lib/gpde/N_arrays_io.c:178
+#: ../lib/gpde/N_arrays_io.c:190
 msgid "N_array_2d * array is empty"
 msgstr "N_array_2d * กลุ่มข้อมูลว่างเปล่า"
 
-#: ../lib/gpde/N_arrays_io.c:190
+#: ../lib/gpde/N_arrays_io.c:202
 #, c-format
 msgid "Unable to create raster map <%s>"
 msgstr "ไม่สามารถสร้างแผนที่เชิงภาพ <%s> "
 
-#: ../lib/gpde/N_arrays_io.c:199
+#: ../lib/gpde/N_arrays_io.c:211
 #, c-format
 msgid "Write 2d array to raster map <%s>"
 msgstr "เขียนข้อมูล 2d ไปที่ แผนที่เชิงภาพ <%s> "
 
-#: ../lib/gpde/N_arrays_io.c:215 ../lib/gpde/N_arrays_io.c:220
-#: ../lib/gpde/N_arrays_io.c:225
-#, c-format
-msgid "Unable to write rast row %i"
+#: ../lib/gpde/N_arrays_io.c:227 ../lib/gpde/N_arrays_io.c:232
+#: ../lib/gpde/N_arrays_io.c:237
+#, fuzzy, c-format
+msgid "Unable to write raster row %i"
 msgstr "ไม่สามารถแถวของแผนที่เชิงภาพ %i"
 
-#: ../lib/gpde/N_arrays_io.c:282
+#: ../lib/gpde/N_arrays_io.c:295
 #, c-format
 msgid "Requested g3d map <%s> not found"
 msgstr "ไม่พบแผนที่ g3d <%s>"
 
-#: ../lib/gpde/N_arrays_io.c:290 ../lib/gpde/N_arrays_io.c:428
+#: ../lib/gpde/N_arrays_io.c:303 ../lib/gpde/N_arrays_io.c:445
 #, c-format
 msgid "Error opening g3d map <%s>"
 msgstr "เกิดข้อผิดพลาดระหว่างเปิด แผนที่ g3d <%s>"
 
-#: ../lib/gpde/N_arrays_io.c:318
+#: ../lib/gpde/N_arrays_io.c:331
 #, c-format
 msgid "Read g3d map <%s> into the memory"
 msgstr "อ่านแผนที่ g3d <%s> ไปเก็บไว้ในหน่วยความจำ"
 
-#: ../lib/gpde/N_arrays_io.c:371 ../lib/gpde/N_arrays_io.c:469
+#: ../lib/gpde/N_arrays_io.c:386 ../lib/gpde/N_arrays_io.c:486
 msgid "Error closing g3d file"
 msgstr "การปิดไฟล์ g3d ผิดพลาด"
 
-#: ../lib/gpde/N_arrays_io.c:430
+#: ../lib/gpde/N_arrays_io.c:447
 #, c-format
 msgid "Write 3d array to g3d map <%s>"
 msgstr "เขียน กลุ่มข้อมูล 3d ไปที่ แผนที่ g3d <%s>"
 
-#: ../lib/gpde/N_solvers.c:51
+#: ../lib/gpde/N_solvers.c:50
 msgid "The gauss elimination solver does not work with sparse matrices"
 msgstr "Gauss elimination solverไม่ทำงานกับ Sparse เมตริกซ์"
 
-#: ../lib/gpde/N_solvers.c:61
+#: ../lib/gpde/N_solvers.c:60
 msgid "Starting direct gauss elimination solver"
 msgstr "เริ่มทำงาน gauss elimination solver"
 
-#: ../lib/gpde/N_solvers.c:89
+#: ../lib/gpde/N_solvers.c:88
 msgid "The lu solver does not work with sparse matrices"
 msgstr "Lu solver ไม่ทำงานกับ Sparse เมตริกซ์"
 
-#: ../lib/gpde/N_solvers.c:99
+#: ../lib/gpde/N_solvers.c:98
 msgid "Starting direct lu decomposition solver"
 msgstr "เริ่มทำงาน  lu decomposition solver"
 
-#: ../lib/gpde/N_solvers.c:156
+#: ../lib/gpde/N_solvers.c:155
 msgid "The cholesky solver does not work with sparse matrices"
 msgstr "Cholesky solver ไม่ทำงานกับ Sparse เมตริกซ์"
 
-#: ../lib/gpde/N_solvers.c:167 ../lib/gpde/N_solvers_krylov.c:84
+#: ../lib/gpde/N_solvers.c:166 ../lib/gpde/N_solvers_krylov.c:84
 #: ../lib/gpde/N_solvers_krylov.c:261
 msgid "Matrix is not symmetric!"
 msgstr " เมตริกซ์ไม่สมมาตร"
 
-#: ../lib/gpde/N_solvers.c:171
+#: ../lib/gpde/N_solvers.c:170
 msgid "Starting cholesky decomposition solver"
 msgstr "เริ่มทำงาน  cholesky decomposition solver"
 
-#: ../lib/gpde/N_solvers.c:174 ../lib/gpde/N_solvers_krylov.c:190
+#: ../lib/gpde/N_solvers.c:173 ../lib/gpde/N_solvers_krylov.c:190
 #: ../lib/gpde/N_solvers_krylov.c:357 ../lib/gpde/N_solvers_krylov.c:481
 msgid "Unable to solve the linear equation system"
 msgstr "ไม่สามารถแก้สมการเชิงเส้นได้"
@@ -529,318 +535,410 @@ msgstr "Sparse BiCGStab -- การวนซ้ำ %i ผิดพลาด %g\
 msgid "BiCGStab -- iteration %i error  %g\n"
 msgstr "BiCGStab -- การวนซ้ำ %i ผิดพลาด %g\n"
 
-#: ../lib/db/dbmi_base/legal_dbname.c:24
+#: ../lib/db/dbmi_base/legal_dbname.c:25
 #, c-format
 msgid "Illegal table map name <%s>. May not contain '.' or 'NULL'.\n"
 msgstr "ชื่อตารางแผนที่ไม่ถูกต้อง  <%s>. อาจจะไม่มี '.' หรือ 'NULL'.\n"
 
-#: ../lib/db/dbmi_base/legal_dbname.c:30
+#: ../lib/db/dbmi_base/legal_dbname.c:33
 #, c-format
 msgid "Illegal table map name <%s>. Must start with a letter.\n"
 msgstr "ตารางชื่อแผนที่ไม่ถูกต้อง <%s>. ต้องเริ่มต้นด้วย ตัวอักษร.\n"
 
-#: ../lib/db/dbmi_base/legal_dbname.c:36
+#: ../lib/db/dbmi_base/legal_dbname.c:43
 #, c-format
 msgid "Illegal table map name <%s>. Character <%c> not allowed.\n"
 msgstr "ตารางชื่อแผนที่ไม่ถูกต้อง <%s>. ตัวอักษรนี้ <%c> ใช้ไม่ได้.\n"
 
-#: ../lib/db/dbmi_client/column.c:106
+#: ../lib/db/dbmi_client/copy_tab.c:100 ../lib/db/dbmi_client/copy_tab.c:120
+#: ../lib/db/dbmi_client/db.c:41
+#, fuzzy, c-format
+msgid "Unable to start driver <%s>"
+msgstr "ไม่สามารถระบุสภาพไฟล์ <%s>"
+
+#: ../lib/db/dbmi_client/copy_tab.c:105 ../lib/db/dbmi_client/copy_tab.c:126
+#: ../lib/db/dbmi_client/db.c:46 ../lib/db/dbmi_client/delete_tab.c:49
+#: ../lib/vector/Vlib/array.c:282 ../lib/vector/Vlib/map.c:269
+#: ../lib/vector/Vlib/map.c:404 ../lib/vector/Vlib/map.c:616
+#: ../lib/vector/Vlib/net.c:185 ../lib/vector/Vlib/net.c:355
 #, c-format
-msgid "Cannot describe table <%s>"
+msgid "Unable to open database <%s> by driver <%s>"
+msgstr "ไม่สามารถเปิดตาราง <%s> ด้วยตัวขับ <%s>"
+
+#: ../lib/db/dbmi_client/copy_tab.c:144
+#, fuzzy, c-format
+msgid "Unable to get list tables in database <%s>"
+msgstr "ไม่สามารถเปิดไฟล์ตารางรูปทรงรี: %s"
+
+#: ../lib/db/dbmi_client/copy_tab.c:157
+#, c-format
+msgid "Table <%s> already exists in database <%s>"
+msgstr ""
+
+#: ../lib/db/dbmi_client/copy_tab.c:199 ../lib/db/dbmi_client/copy_tab.c:276
+#: ../lib/db/dbmi_client/table.c:110
+#, fuzzy, c-format
+msgid "Unable to open select cursor: '%s'"
+msgstr "ไม่สามารถเปิด directory '%s' ได้"
+
+#: ../lib/db/dbmi_client/copy_tab.c:231
+#, fuzzy, c-format
+msgid "Column <%s> is not integer"
 msgstr "ไม่สามารถ บรรยายตารางนี้ได้ <%s>"
 
-#: ../lib/driver/parse_ftcap.c:33
+#: ../lib/db/dbmi_client/copy_tab.c:248
+#, fuzzy, c-format
+msgid "Column <%s> not found"
+msgstr "ไม่สามารถ บรรยายตารางนี้ได้ <%s>"
+
+#: ../lib/db/dbmi_client/copy_tab.c:251
+#, fuzzy, c-format
+msgid "Unable to create table <%s>"
+msgstr "ไม่สามารถลบตารางได้ <%s>"
+
+#: ../lib/db/dbmi_client/copy_tab.c:295
+#, fuzzy, c-format
+msgid "Unable to fetch data from table <%s>"
+msgstr "ไม่สามารถคัดลอกตารางได้ <%s>"
+
+#: ../lib/db/dbmi_client/copy_tab.c:351
+#, fuzzy, c-format
+msgid "Unknown column type (column <%s>)"
+msgstr "ไม่สามารถอ่าน ชนิดของ column ได้"
+
+#: ../lib/db/dbmi_client/select.c:279
+#, fuzzy, c-format
+msgid "Unable select records from table <%s>"
+msgstr "ไม่สามารถสร้างดัชนีสำหรับตาราง <%s> ด้วย key <%s>"
+
+#: ../lib/db/dbmi_client/delete_tab.c:44
+#, fuzzy, c-format
+msgid "Unable to open driver <%s>"
+msgstr "ไม่สามารถเปิดไฟล์ %s ได้"
+
+#: ../lib/db/dbmi_client/delete_tab.c:62
+#, fuzzy, c-format
+msgid "Unable to drop table: '%s'"
+msgstr "ไม่สามารถคัดลอกตารางได้ <%s>"
+
+#: ../lib/db/dbmi_client/column.c:110
+#, fuzzy, c-format
+msgid "Unable to describe table <%s>"
+msgstr "ไม่สามารถลบตารางได้ <%s>"
+
+#: ../lib/db/dbmi_client/table.c:46
+#, fuzzy, c-format
+msgid "Unable open database <%s> by driver <%s>"
+msgstr "ไม่สามารถเปิดตาราง <%s> ด้วยตัวขับ <%s>"
+
+#: ../lib/driver/parse_ftcap.c:32
 #, c-format
 msgid "%s: Unable to read font definition file; use the default"
 msgstr "%s: ไม่สามารถอ่านไฟลืกำหนดแบบตัวอักษณ์; ใช้ค่าตั้งต้น"
 
-#: ../lib/driver/parse_ftcap.c:39
+#: ../lib/driver/parse_ftcap.c:38
 #, c-format
 msgid "%s: No font definition file"
 msgstr "%s: ไม่มีไฟลืกำหนดแบบตัวอักษณ์"
 
-#: ../lib/driver/command.c:517
+#: ../lib/arraystats/class.c:21
+msgid "Discont algorithm currently not available because of bugs"
+msgstr ""
+
+#: ../lib/arraystats/class.c:23
 #, c-format
-msgid "Unknown command: %d last: %d"
-msgstr "ไม่รู้จักคำสั่งนี้: %d ลงท้าย: %d"
+msgid "%s: Unknown algorithm"
+msgstr ""
 
-#: ../lib/driver/command.c:559
-msgid "Monitor: get_command: Premature EOF"
-msgstr "ตรวจดู: get_command: Premature EOF"
-
-#: ../lib/driver/main.c:89
+#: ../lib/arraystats/class.c:26
 #, c-format
-msgid "Graphics driver [%s] started"
-msgstr "Graphics driver [%s] เริ่มแล้ว"
+msgid "%s: Error in classification algorithm"
+msgstr ""
 
-#: ../lib/raster/rem_io.c:43
+#: ../lib/arraystats/class.c:221
 #, c-format
-msgid "ERROR %s from graphics driver.\n"
-msgstr "ข้อผิดพลาด %s จากตัวขับจอ \n"
+msgid ""
+"There are classbreaks outside the range min-max. Number of classes reduced "
+"to %i, but using probabilities for %i classes."
+msgstr ""
 
-#: ../lib/raster/rem_io.c:172
+#: ../lib/pngdriver/Graph_set.c:72
 #, c-format
-msgid "Unable to allocate memory\n"
-msgstr "ไม่สามารถจองหน่วยความจำได้\n"
+msgid "PNG: GRASS_TRUECOLOR status: %s"
+msgstr ""
 
-#: ../lib/raster/rem_io.c:225
+#: ../lib/pngdriver/Graph_set.c:117
 #, c-format
-msgid "ERROR - eof from graphics monitor.\n"
-msgstr "ข้อผิดพลาด - EOF จากจอแสดงผล \n"
+msgid "PNG: collecting to file <%s>"
+msgstr ""
 
-#: ../lib/raster/rem_io.c:244
+#: ../lib/pngdriver/Graph_set.c:118 ../lib/cairodriver/Graph.c:172
 #, c-format
-msgid "Warning - no response from graphics monitor <%s>.\n"
-msgstr "คำเตือน - ไม่มีการตอบสนองจากจอแสดงผล <%s>.\n"
+msgid "GRASS_WIDTH=%d, GRASS_HEIGHT=%d"
+msgstr ""
 
-#: ../lib/raster/rem_io.c:246
-#, c-format
-msgid "Check to see if the mouse is still active.\n"
-msgstr "ตรวจสอบ เม้าส์ยังทำงานอยู่หรือไม่ \n"
+#: ../lib/vector/diglib/spindex.c:248
+#, fuzzy, c-format
+msgid "Unable to delete node %d from spatial index"
+msgstr "ไม่สามารถลบไฟล์  '%s'"
 
-#: ../lib/raster/rem_io.c:251
-#, c-format
-msgid "ERROR - no response from graphics monitor <%s>.\n"
-msgstr "ข้อผิดพลาด - ไม่มีการตอบสนองจากจอแสดงผล <%s>.\n"
+#: ../lib/vector/diglib/spindex.c:288
+#, fuzzy, c-format
+msgid "Unable to delete line %d from spatial index"
+msgstr "ไม่สามารถลบไฟล์  '%s'"
 
-#: ../lib/raster/io_sock.c:65
-msgid "No graphics monitor has been selected for output."
-msgstr "ไม่ได้เลือก จอแสดงผล"
+#: ../lib/vector/diglib/spindex.c:314
+#, fuzzy
+msgid "Attempt to delete sidx for dead area"
+msgstr "ตั้งใจที่จะลบ  isle จากพื้นที่"
 
-#: ../lib/raster/io_sock.c:66
-msgid "Please run \"d.mon\" to select a graphics monitor."
-msgstr "โปรดใช้คำสั่ง  \"d.mon\" เพื่อเลือก จอแสดงผล"
+#: ../lib/vector/diglib/spindex.c:327
+#, fuzzy, c-format
+msgid "Unable to delete area %d from spatial index"
+msgstr "ไม่สามารถลบไฟล์  '%s'"
 
-#: ../lib/raster/io_sock.c:75
-#, c-format
-msgid "Failed to get socket name for monitor <%s>."
-msgstr "ล้มเหลวที่จะอ่าน socket name จากจอแสดงผล <%s>."
+#: ../lib/vector/diglib/spindex.c:362
+#, fuzzy, c-format
+msgid "Unable to delete isle %d from spatial index"
+msgstr "ไม่สามารถลบไฟล์  '%s'"
 
-#: ../lib/raster/io_sock.c:85
-#, c-format
-msgid "No socket to connect to for monitor <%s>."
-msgstr "ไม่มี socketที่จะต่อกับจอแสดงผล <%s>."
-
-#: ../lib/raster/io_sock.c:105
-msgid "Socket is already in use or not accepting connections."
-msgstr "Socket ถูกใช้อยู่ หรือไม่ยอมรับการเชื่อมต่อ."
-
-#: ../lib/raster/io_sock.c:106
-msgid "Use d.mon to select a monitor"
-msgstr "ใช้คำสั่ง  d.mon เพื่อเลือก จอแสดงผล"
-
-#: ../lib/raster/io_sock.c:113
-msgid "Trying to connect to something not a socket."
-msgstr "ลองเชื่อมต่อกับอย่างอื่นที่ไม่ใช่ socket"
-
-#: ../lib/raster/io_sock.c:114
-msgid "Probably program error."
-msgstr "อาจจะเกิดจากข้อผิดพลาดของ โปรแกรม"
-
-#: ../lib/raster/io_sock.c:120
-msgid "Connect attempt timed out."
-msgstr "การเชื่อมต่อเกินเวลา"
-
-#: ../lib/raster/io_sock.c:121
-msgid "Probably an error with the server."
-msgstr "อาจจะเกิดจากข้อผิดพลาดของ เครื่องแม่ข่าย"
-
-#: ../lib/raster/io_sock.c:129
-msgid "Connection failed."
-msgstr "การเชื่อมต่อล้มเหลว"
-
-#: ../lib/vector/diglib/plus_area.c:211 ../lib/vector/diglib/plus_area.c:648
-#: ../lib/vector/diglib/plus_area.c:654
-#, c-format
-msgid "Line [%d] already has area/isle [%d] to left."
+#: ../lib/vector/diglib/plus_area.c:195 ../lib/vector/diglib/plus_area.c:651
+#: ../lib/vector/diglib/plus_area.c:659
+#, fuzzy, c-format
+msgid "Line %d already has area/isle %d to left"
 msgstr "เส้น [%d] มี area/isle อยู่ [%d] ทางซ้าย"
 
-#: ../lib/vector/diglib/plus_area.c:219
-#, c-format
-msgid "Line [%d] already has area/isle [%d] to right."
+#: ../lib/vector/diglib/plus_area.c:205
+#, fuzzy, c-format
+msgid "Line %d already has area/isle %d to right"
 msgstr "เส้น [%d] มี area/isle อยู่ [%d] ทางขวา"
 
-#: ../lib/vector/diglib/plus_area.c:302
+#: ../lib/vector/diglib/plus_area.c:287
 msgid "Attempt to delete isle from dead area"
 msgstr "ตั้งใจที่จะลบ  isle จากพื้นที่"
 
-#: ../lib/vector/diglib/plus_area.c:316
-#, c-format
-msgid "Attempt to delete not registered isle [%d] from area [%d]"
+#: ../lib/vector/diglib/plus_area.c:304
+#, fuzzy, c-format
+msgid "Attempt to delete not registered isle %d from area %d"
 msgstr "ตั้งใจที่จะลบ  isle ที่ไม่ได้ระบุ  [%d] จากพื้นที่ [%d]"
 
-#: ../lib/vector/diglib/plus_area.c:354
+#: ../lib/vector/diglib/plus_area.c:342
 msgid "Attempt to delete dead area"
 msgstr "ตั้งใจที่จะลบพื้นที่"
 
-#: ../lib/vector/diglib/plus_area.c:392
-#, c-format
-msgid "Dead centroid [%d] registered for area (bug in the library)."
+#: ../lib/vector/diglib/plus_area.c:382
+#, fuzzy, c-format
+msgid "Dead centroid %d registered for area (bug in the vector library)"
 msgstr "จุดศูนย์ถ่วง [%d] ระบุในพื้นที่ (ข้อผิดพลาดใน library)."
 
-#: ../lib/vector/diglib/plus_area.c:413
-#, c-format
-msgid "Attempt to delete area [%d] info from dead isle [%d]"
+#: ../lib/vector/diglib/plus_area.c:406
+#, fuzzy, c-format
+msgid "Attempt to delete area %d info from dead isle %d"
 msgstr "ตั้งใจที่จะลบข้อมูลพื้นที่ [%d] จาก dead isle [%d]"
 
-#: ../lib/vector/diglib/plus_area.c:741
-#, c-format
-msgid "Attempt to delete isle [%d] info from dead area [%d]"
+#: ../lib/vector/diglib/plus_area.c:749
+#, fuzzy, c-format
+msgid "Attempt to delete isle %d info from dead area %d"
 msgstr "ตั้งใจที่จะลบข้อมูล isle  [%d] จาก dead area  [%d]"
 
-#: ../lib/vector/diglib/plus.c:318
-msgid "Cannot read topo for nodes"
+#: ../lib/vector/diglib/plus.c:288
+#, fuzzy
+msgid "Unable read topology for nodes"
 msgstr "ไม่สามารถอ่าน topo สำหรับ nodes"
 
-#: ../lib/vector/diglib/plus.c:324
-#, c-format
-msgid "Cannot read topo for node [%d]"
+#: ../lib/vector/diglib/plus.c:293
+#, fuzzy, c-format
+msgid "Unable to read topology for node %d"
 msgstr "ไม่สามารถอ่าน topo สำหรับ nodes  [%d]"
 
-#: ../lib/vector/diglib/plus.c:329
-msgid "Cannot read topo for lines"
+#: ../lib/vector/diglib/plus.c:298
+#, fuzzy
+msgid "Unable read topology for lines"
 msgstr "ไม่สามารถอ่าน topo สำหรับ เส้น"
 
-#: ../lib/vector/diglib/plus.c:335
-#, c-format
-msgid "Cannot read topo for line [%d]"
-msgstr "ไม่สามารถอ่าน topo สำหรับ เส้น  [%d]"
+#: ../lib/vector/diglib/plus.c:303
+#, fuzzy, c-format
+msgid "Unable to read topology for line %d"
+msgstr "ไม่สามารถอ่าน ส่วนหัวของไฟล์ได้"
 
-#: ../lib/vector/diglib/plus.c:340
-msgid "Cannot read topo for areas"
+#: ../lib/vector/diglib/plus.c:308
+#, fuzzy
+msgid "Unable to read topo for areas"
 msgstr "ไม่สามารถอ่าน topo สำหรับ รูปปิด"
 
-#: ../lib/vector/diglib/plus.c:346
-#, c-format
-msgid "Cannot read topo for area [%d]"
+#: ../lib/vector/diglib/plus.c:313
+#, fuzzy, c-format
+msgid "Unable read topology for area %d"
 msgstr "ไม่สามารถอ่าน topo สำหรับ รูปปิด [%d]"
 
-#: ../lib/vector/diglib/plus.c:351
-msgid "Cannot read topo for isles"
+#: ../lib/vector/diglib/plus.c:318
+#, fuzzy
+msgid "Unable to read topology for isles"
 msgstr "ไม่สามารถอ่าน topo สำหรับ  isles"
 
-#: ../lib/vector/diglib/plus.c:357
-#, c-format
-msgid "Cannot read topo for isle [%d]"
+#: ../lib/vector/diglib/plus.c:323
+#, fuzzy, c-format
+msgid "Unable to read topology for isle %d"
 msgstr "ไม่สามารถอ่าน topo สำหรับ  isles [%d]"
 
-#: ../lib/vector/diglib/plus_node.c:244
-#, c-format
+#: ../lib/vector/diglib/plus.c:345 ../lib/vector/diglib/plus.c:371
+#, fuzzy
+msgid "Unable to write head to plus file"
+msgstr "ไม่สามารถอ่าน ส่วนหัวของไฟล์ได้"
+
+#: ../lib/vector/diglib/plus.c:350
+#, fuzzy
+msgid "Unable to write nodes to plus file"
+msgstr "ไม่สามารถเขียนไปที่ quant ไฟล์ได้!"
+
+#: ../lib/vector/diglib/plus.c:355
+#, fuzzy
+msgid "Unable to write lines to plus file"
+msgstr "ไม่สามารถเขียนไปที่ quant ไฟล์ได้!"
+
+#: ../lib/vector/diglib/plus.c:360
+#, fuzzy
+msgid "Unable to write areas to plus file"
+msgstr "ไม่สามารถแถวของแผนที่เชิงภาพ %i"
+
+#: ../lib/vector/diglib/plus.c:365
+#, fuzzy
+msgid "Unable to write isles to plus file"
+msgstr "ไม่สามารถแถวของแผนที่เชิงภาพ %i"
+
+#: ../lib/vector/diglib/plus_node.c:217
+#, fuzzy, c-format
 msgid ""
 "Attempt to read line angle for the line which is not connected to the node: "
-"node = [%d] line = [%d]"
+"node %d, line %d"
 msgstr "ตั้งใจที่จะอ่านด่ามุม สำหรับเส้นที่ไม่เชื่อมต่อกับ node: node = [%d] line = [%d]"
 
-#: ../lib/vector/Vlib/build.c:29 ../lib/vector/Vlib/open.c:34
-#: ../lib/vector/Vlib/close.c:36 ../lib/vector/Vlib/read.c:27
-#: ../lib/vector/Vlib/rewind.c:34 ../lib/vector/Vlib/write.c:38
+#: ../lib/vector/vedit/select.c:235
+#, fuzzy
+msgid "Unknown query tool"
+msgstr "ไม่ทราบข้อผิดพลาด"
+
+#: ../lib/vector/vedit/cats.c:66
+#, fuzzy, c-format
+msgid "Unable to set category %d for line %d"
+msgstr "ไม่สามารถอ่าน ส่วนหัวของไฟล์ได้"
+
+#: ../lib/vector/vedit/cats.c:75
+#, fuzzy, c-format
+msgid "Unable to delete layer/category %d/%d line %d"
+msgstr "ไม่สามารถลบแผนที่เชิงเส้น  <%s> ได้"
+
+#: ../lib/vector/Vlib/build.c:31 ../lib/vector/Vlib/open.c:40
+#: ../lib/vector/Vlib/close.c:38 ../lib/vector/Vlib/read.c:30
+#: ../lib/vector/Vlib/rewind.c:36 ../lib/vector/Vlib/write.c:53
+#: ../lib/vector/Vlib/write.c:59
 msgid "Requested format is not compiled in this version"
 msgstr "รูปแบบที่ต้องการยังใช้ไม่ได้ใน รุ่นนี้"
 
-#: ../lib/vector/Vlib/build.c:143
+#: ../lib/vector/Vlib/build.c:144
 #, fuzzy, c-format
 msgid "Building topology for vector map <%s>...\n"
 msgstr "โปรดสร้าง  topology ของ แผนที่เชิงเส้นใหม่ <%s@%s>"
 
-#: ../lib/vector/Vlib/build.c:156
+#: ../lib/vector/Vlib/build.c:160
 #, fuzzy
 msgid "Topology was built\n"
 msgstr "Topology ถูกสร้างแล้ว.\n"
 
-#: ../lib/vector/Vlib/build.c:168
+#: ../lib/vector/Vlib/build.c:172
 #, c-format
 msgid "Number of nodes     :   %d\n"
 msgstr "จำนวน nodes     :   %d\n"
 
-#: ../lib/vector/Vlib/build.c:169
+#: ../lib/vector/Vlib/build.c:173
 #, c-format
 msgid "Number of primitives:   %d\n"
 msgstr "จำนวน primitives:   %d\n"
 
-#: ../lib/vector/Vlib/build.c:170
+#: ../lib/vector/Vlib/build.c:174
 #, c-format
 msgid "Number of points    :   %d\n"
 msgstr "จำนวนจุด    :   %d\n"
 
-#: ../lib/vector/Vlib/build.c:171
+#: ../lib/vector/Vlib/build.c:175
 #, c-format
 msgid "Number of lines     :   %d\n"
 msgstr "จำนวนเส้น     :   %d\n"
 
-#: ../lib/vector/Vlib/build.c:172
+#: ../lib/vector/Vlib/build.c:176
 #, c-format
 msgid "Number of boundaries:   %d\n"
 msgstr "จำนวนขอบเขต:   %d\n"
 
-#: ../lib/vector/Vlib/build.c:173
+#: ../lib/vector/Vlib/build.c:177
 #, c-format
 msgid "Number of centroids :   %d\n"
 msgstr "จำนวนจุดศูนย์ถ่วง :   %d\n"
 
-#: ../lib/vector/Vlib/build.c:176
+#: ../lib/vector/Vlib/build.c:180
 #, c-format
 msgid "Number of faces     :   %d\n"
 msgstr "จำนวน faces           :   %d\n"
 
-#: ../lib/vector/Vlib/build.c:179
+#: ../lib/vector/Vlib/build.c:183
 #, c-format
 msgid "Number of kernels   :   %d\n"
 msgstr "จำนวน  kernels   :   %d\n"
 
-#: ../lib/vector/Vlib/build.c:214
+#: ../lib/vector/Vlib/build.c:223
 #, c-format
 msgid "Number of areas     :   %d\n"
 msgstr "จำนวน รูปปิด     :   %d\n"
 
-#: ../lib/vector/Vlib/build.c:215
+#: ../lib/vector/Vlib/build.c:224
 #, c-format
 msgid "Number of isles     :   %d\n"
 msgstr "จำนวน  isles     :   %d\n"
 
-#: ../lib/vector/Vlib/build.c:218
+#: ../lib/vector/Vlib/build.c:227
 #, c-format
 msgid "Number of incorrect boundaries   :   %d\n"
 msgstr "จำนวนขอบเขตที่ไม่ถูกต้อง   :   %d\n"
 
-#: ../lib/vector/Vlib/build.c:221
+#: ../lib/vector/Vlib/build.c:231
 #, c-format
 msgid "Number of centroids outside area :   %d\n"
 msgstr "จำนวนจุดศูนย์ถ่วงที่อยู่นอกพื้นที่ :   %d\n"
 
-#: ../lib/vector/Vlib/build.c:224
+#: ../lib/vector/Vlib/build.c:235
 #, c-format
 msgid "Number of duplicate centroids    :   %d\n"
 msgstr "จำนวนจุดศูนย์ถ่วงที่ซ้ำ    :   %d\n"
 
-#: ../lib/vector/Vlib/build.c:227
+#: ../lib/vector/Vlib/build.c:239
 #, c-format
 msgid "Number of areas without centroid :   %d\n"
 msgstr "จำนวน  รูปปิด ที่ไม่มี จุดศูนย์ถ่วง  :   %d\n"
 
-#: ../lib/vector/Vlib/build.c:230
+#: ../lib/vector/Vlib/build.c:244
 msgid "Number of areas     :   -\n"
 msgstr "จำนวน  รูปปิด     :   -\n"
 
-#: ../lib/vector/Vlib/build.c:231
+#: ../lib/vector/Vlib/build.c:245
 msgid "Number of isles     :   -\n"
 msgstr "จำนวน  isles     :   -\n"
 
-#: ../lib/vector/Vlib/build.c:261
+#: ../lib/vector/Vlib/build.c:274
 #, fuzzy, c-format
 msgid "Unable to open topo file for write <%s>"
 msgstr "ไม่สามารถเปิด topo ไฟล์ เพื่อเขียน <%s> ได้"
 
-#: ../lib/vector/Vlib/build.c:269
+#: ../lib/vector/Vlib/build.c:282
 #, fuzzy
 msgid "Error writing out topo file"
 msgstr "เกิดข้อผิดพลาดขณะเขียน topo ไฟล์ "
 
-#: ../lib/vector/Vlib/build.c:405
+#: ../lib/vector/Vlib/build.c:425
 #, fuzzy, c-format
 msgid "Unable open spatial index file for write <%s>"
 msgstr "ไม่สามารถเปิด  spatial inde ไฟล์ เพื่อเขียน <%s> ได้"
 
-#: ../lib/vector/Vlib/build.c:413
+#: ../lib/vector/Vlib/build.c:433
 #, fuzzy
 msgid "Error writing out spatial index file"
 msgstr "เกิดข้อผิดพลาดขณะเขียน spatial index ไฟล์ "
@@ -849,180 +947,188 @@ msgstr "เกิดข้อผิดพลาดขณะเขียน spati
 msgid "3D not supported by Vect_segment_intersection()"
 msgstr "3D ไม่รองรับด้วยคำสั่ง Vect_segment_intersection()"
 
-#: ../lib/vector/Vlib/intersect.c:265
+#: ../lib/vector/Vlib/intersect.c:322
 msgid "Vect_segment_intersection() ERROR (collinear vertical segments)"
 msgstr "Vect_segment_intersection() ข้อผิดพลาด (collinear vertical segments)"
 
-#: ../lib/vector/Vlib/intersect.c:347
+#: ../lib/vector/Vlib/intersect.c:448
 msgid "Vect_segment_intersection() ERROR (collinear non vertical segments)"
 msgstr "Vect_segment_intersection() ข้อผิดพลาด (collinear non vertical segments)"
 
-#: ../lib/vector/Vlib/open.c:93
+#: ../lib/vector/Vlib/open.c:100
 #, c-format
 msgid "Programmer requested unknown open level %d"
 msgstr "โปรแกรมเมอร์ต้องการทราบระดับที่จะเปิด %d"
 
-#: ../lib/vector/Vlib/open.c:156 ../lib/vector/Vlib/legal_vname.c:108
-#: ../lib/vector/Vlib/legal_vname.c:110 ../lib/vector/Vlib/map.c:305
+#: ../lib/vector/Vlib/open.c:168 ../lib/vector/Vlib/legal_vname.c:118
+#: ../lib/vector/Vlib/legal_vname.c:121 ../lib/vector/Vlib/map.c:326
+#: ../lib/ogsf/Gv3.c:57 ../lib/ogsf/Gp3.c:109
 #, c-format
 msgid "Vector map <%s> not found"
 msgstr "ไม่พบ ชื่อแผนที่เชิงเส้น <%s>"
 
-#: ../lib/vector/Vlib/open.c:166
+#: ../lib/vector/Vlib/open.c:179
 msgid ""
 "Vector map which is not in the current mapset cannot be opened for update"
 msgstr "แผนที่เชิงเส้นที่ไม่ได้อยู่ใน ชุอแผนที่ ที่กำลังทำงาน ไม่สามารถแก้ไขได้"
 
-#: ../lib/vector/Vlib/open.c:184
+#: ../lib/vector/Vlib/open.c:199 ../lib/ogsf/Gv3.c:63 ../lib/ogsf/Gp3.c:115
 #, c-format
 msgid "Unable to open vector map <%s>"
 msgstr "ไม่สามารถเปิดแผนที่เชิงเส้นได้ <%s>"
 
-#: ../lib/vector/Vlib/open.c:194 ../lib/vector/Vlib/open.c:254
-#: ../lib/vector/Vlib/open.c:271
-#, c-format
-msgid "Unable to open vector map <%s> on topology level %d"
+#: ../lib/vector/Vlib/open.c:211 ../lib/vector/Vlib/open.c:279
+#: ../lib/vector/Vlib/open.c:299
+#, fuzzy, c-format
+msgid ""
+"Unable to open vector map <%s> on level %d. Try to rebuild vector topology "
+"by v.build."
 msgstr "ไม่สามารถเปิดแผนที่เชิงเส้นได้ <%s> บน topology ระดับ %d"
 
-#: ../lib/vector/Vlib/open.c:195
+#: ../lib/vector/Vlib/open.c:214
 msgid "Unable to read head file"
 msgstr "ไม่สามารถอ่าน ส่วนหัวของไฟล์ได้"
 
-#: ../lib/vector/Vlib/open.c:215
+#: ../lib/vector/Vlib/open.c:236
 #, c-format
 msgid "Unable to open topology file for vector map <%s>"
 msgstr "ไม่สามารถเปิด topology ไฟล์ของ แผนที่เชิงเส้น <%s>"
 
-#: ../lib/vector/Vlib/open.c:238
+#: ../lib/vector/Vlib/open.c:262
 #, c-format
 msgid "Unable to open category index file for vector map <%s>"
 msgstr "ไม่สามารถเปิด ไฟล์หมวดดัชนี สำหรับแผนที่เชิงเส้น <%s>"
 
-#: ../lib/vector/Vlib/open.c:319 ../lib/vector/Vlib/open.c:530
+#: ../lib/vector/Vlib/open.c:353 ../lib/vector/Vlib/open.c:576
 #, c-format
 msgid "Unable to open history file for vector map <%s>"
 msgstr "ไม่สามารถเปิด ไฟล์ประวัติ สำหรับแผนที่เชิงเส้น <%s>"
 
-#: ../lib/vector/Vlib/open.c:496 ../lib/vector/Vlib/map.c:169
-#: ../lib/vector/Vlib/map.c:293
+#: ../lib/vector/Vlib/open.c:531
+#, fuzzy, c-format
+msgid "%s is not in the current mapset (%s)"
+msgstr "ไม่มีไฟล์ %s อยู่ในชุดแผนที่ปัจจุบัน\n"
+
+#: ../lib/vector/Vlib/open.c:540 ../lib/vector/Vlib/map.c:176
+#: ../lib/vector/Vlib/map.c:313
 #, c-format
 msgid "Vector map name is not SQL compliant"
 msgstr "ชื่อแผนที่เชิงเส้น ไม่ใช่ คำสั่ง SQL "
 
-#: ../lib/vector/Vlib/open.c:503 ../lib/vector/Vlib/map.c:173
-#: ../lib/vector/Vlib/map.c:297
+#: ../lib/vector/Vlib/open.c:547 ../lib/vector/Vlib/map.c:187
+#: ../lib/vector/Vlib/map.c:317
 #, c-format
 msgid "Vector map <%s> already exists and will be overwritten"
 msgstr "แผนที่เชิงเส้น <%s> มีอยู่แล้วและจะถูกเขียนทับ"
 
-#: ../lib/vector/Vlib/open.c:507 ../lib/vector/Vlib/map.c:176
+#: ../lib/vector/Vlib/open.c:552 ../lib/vector/Vlib/map.c:191
 #, c-format
 msgid "Unable to delete vector map <%s>"
 msgstr "ไม่สามารถลบแผนที่เชิงเส้น  <%s> ได้"
 
-#: ../lib/vector/Vlib/open.c:521
+#: ../lib/vector/Vlib/open.c:566
 #, c-format
 msgid "Unable to create vector map <%s>"
 msgstr "ไม่สามารถสร้างแผนที่เชิงเส้น <%s>"
 
-#: ../lib/vector/Vlib/open.c:576
+#: ../lib/vector/Vlib/open.c:622
 #, c-format
 msgid "Unable to stat file <%s>"
 msgstr "ไม่สามารถระบุสภาพไฟล์ <%s>"
 
-#: ../lib/vector/Vlib/open.c:683
+#: ../lib/vector/Vlib/open.c:731
 msgid "Size of 'coor' file differs from value saved in topology file"
 msgstr "ขนาดของ ไฟล์ 'coor' แตกต่างจากค่าที่บันทึกไว้ในไฟล์  topology"
 
-#: ../lib/vector/Vlib/open.c:694
+#: ../lib/vector/Vlib/open.c:742
 #, c-format
 msgid "Please rebuild topology for vector map <%s@%s>"
 msgstr "โปรดสร้าง  topology ของ แผนที่เชิงเส้นใหม่ <%s@%s>"
 
-#: ../lib/vector/Vlib/snap.c:119 ../lib/vector/Vlib/snap.c:159
-#: ../lib/vector/Vlib/break_polygons.c:191
-#: ../lib/vector/Vlib/break_polygons.c:198
+#: ../lib/vector/Vlib/snap.c:124 ../lib/vector/Vlib/snap.c:170
+#: ../lib/vector/Vlib/break_polygons.c:214
+#: ../lib/vector/Vlib/break_polygons.c:221
 msgid "Registering points"
 msgstr "บันทึก จุด"
 
-#: ../lib/vector/Vlib/snap.c:168
+#: ../lib/vector/Vlib/snap.c:180
 msgid "All vertices"
 msgstr "จุดหักทั้งหมด"
 
-#: ../lib/vector/Vlib/snap.c:169
+#: ../lib/vector/Vlib/snap.c:181
 msgid "Registered points"
 msgstr "จุดที่บันทึก "
 
-#: ../lib/vector/Vlib/snap.c:214
+#: ../lib/vector/Vlib/snap.c:230
 msgid "Nodes marked as anchor"
 msgstr "จุดที่ระบุเป็นจุดยึด"
 
-#: ../lib/vector/Vlib/snap.c:215
+#: ../lib/vector/Vlib/snap.c:232
 msgid "Nodes marked to be snapped"
 msgstr "จุดที่ระบุเป็นจุดดูดเข้าหา"
 
-#: ../lib/vector/Vlib/snap.c:224 ../lib/vector/Vlib/snap.c:364
+#: ../lib/vector/Vlib/snap.c:243 ../lib/vector/Vlib/snap.c:412
 msgid "Snaps"
 msgstr "ดูดเข้าหา"
 
-#: ../lib/vector/Vlib/snap.c:372
+#: ../lib/vector/Vlib/snap.c:421
 msgid "Snapped vertices"
 msgstr "ดูดเข้าหา จุดหัก"
 
-#: ../lib/vector/Vlib/snap.c:373
+#: ../lib/vector/Vlib/snap.c:423
 msgid "New vertices"
 msgstr "เพิ่ม จุดหัก"
 
-#: ../lib/vector/Vlib/close.c:126
+#: ../lib/vector/Vlib/close.c:134
 #, fuzzy, c-format
 msgid "Unable to close vector <%s>"
 msgstr "ไม่สามารถเปิดแผนที่เชิงเส้นได้ <%s>"
 
-#: ../lib/vector/Vlib/legal_vname.c:43
+#: ../lib/vector/Vlib/legal_vname.c:48
 #, c-format
 msgid "Illegal vector map name <%s>. May not contain '.' or 'NULL'."
 msgstr "ชื่อแผนที่เชิงเส้นไม่ถูกต้อง <%s>. อาจะมีอักษร '.' หรือ 'NULL' ปนอยู่"
 
-#: ../lib/vector/Vlib/legal_vname.c:49
+#: ../lib/vector/Vlib/legal_vname.c:55
 #, c-format
 msgid "Illegal vector map name <%s>. Must start with a letter."
 msgstr "ชื่อแผนที่เชิงเส้นไม่ถูกต้อง <%s>.ต้องเริ่มต้นด้วยตัวอักษร"
 
-#: ../lib/vector/Vlib/legal_vname.c:56
+#: ../lib/vector/Vlib/legal_vname.c:63
 #, c-format
 msgid "Illegal vector map name <%s>. Character '%c' not allowed."
 msgstr "ชื่อแผนที่เชิงเส้นไม่ถูกต้อง <%s>. ไม่สามารถใช้อักษร  '%c' "
 
-#: ../lib/vector/Vlib/legal_vname.c:66
+#: ../lib/vector/Vlib/legal_vname.c:70
 #, fuzzy, c-format
 msgid ""
 "Illegal vector map name <%s>. SQL keyword cannot be used as vector map name."
 msgstr "ชื่อแผนที่เชิงเส้นไม่ถูกต้อง <%s>. ไม่สามารถใช้อักษร  '%c' "
 
-#: ../lib/vector/Vlib/legal_vname.c:95 ../lib/vector/Vlib/legal_vname.c:97
+#: ../lib/vector/Vlib/legal_vname.c:101 ../lib/vector/Vlib/legal_vname.c:105
 #, c-format
 msgid "Output vector map name <%s> is not valid map name"
 msgstr "ชื่อผลลัพธ์แผนที่เชิงเส้น <%s> ไม่ถูกต้อง"
 
-#: ../lib/vector/Vlib/legal_vname.c:128 ../lib/vector/Vlib/legal_vname.c:130
+#: ../lib/vector/Vlib/legal_vname.c:142 ../lib/vector/Vlib/legal_vname.c:146
 #, c-format
 msgid "Output vector map <%s> is used as input"
 msgstr "ชื่อผลลัพธ์แผนที่เชิงเส้น <%s> ซ้ำกับชื่อข้อมูลนำเข้า"
 
-#: ../lib/vector/Vlib/cindex.c:30
+#: ../lib/vector/Vlib/cindex.c:31
 msgid "Category index is not up to date"
 msgstr "ดัชนีหมวด เก่าเกินไป"
 
-#: ../lib/vector/Vlib/cindex.c:62 ../lib/vector/Vlib/cindex.c:129
-#: ../lib/vector/Vlib/cindex.c:148 ../lib/vector/Vlib/cindex.c:171
+#: ../lib/vector/Vlib/cindex.c:61 ../lib/vector/Vlib/cindex.c:125
+#: ../lib/vector/Vlib/cindex.c:143 ../lib/vector/Vlib/cindex.c:166
 msgid "Invalid layer index (index >= number of layers)"
 msgstr "ดัชนีชั้นข้อมูลไม่ถูกต้อง (ดัชนี >= จำนวนชั้นข้อมูล)"
 
-#: ../lib/vector/Vlib/cindex.c:110
+#: ../lib/vector/Vlib/cindex.c:107
 msgid "Invalid layer index (index < 0 or index >= number of layers)"
 msgstr "ดัชนีชั้นข้อมูลไม่ถูกต้อง (ดัชนี < 0 หรือ  ดัชนี >= จำนวนชั้นข้อมูล)"
 
-#: ../lib/vector/Vlib/cindex.c:235
+#: ../lib/vector/Vlib/cindex.c:232
 msgid "Layer or category index out of range"
 msgstr "ชั้นข้อมูล หรือ หมวดดัชนี ไม่อยู่ในช่วง"
 
@@ -1030,132 +1136,137 @@ msgstr "ชั้นข้อมูล หรือ หมวดดัชนี 
 msgid "Layer index out of range"
 msgstr "ดัชนี ชั้นข้อมูล ไม่อยู่ในช่วง"
 
-#: ../lib/vector/Vlib/cindex.c:457
+#: ../lib/vector/Vlib/cindex.c:460
 #, c-format
 msgid "Unable to open cidx file <%s> for write"
 msgstr "ไม่สามารถเปิด cidx ไฟล์ <%s> สำหรับเขียนได้"
 
-#: ../lib/vector/Vlib/cindex.c:465
+#: ../lib/vector/Vlib/cindex.c:468
 #, c-format
 msgid "Error writing out category index file <%s>"
 msgstr "การเขียนผิดพลาด ไม่มีหมวดดัชนีในไฟล์ <%s>"
 
-#: ../lib/vector/Vlib/cindex.c:508
+#: ../lib/vector/Vlib/cindex.c:511
 #, c-format
 msgid "Unable to open category index file for vector map <%s@%s>"
 msgstr "ไม่สามารถเปิด ไฟล์หมวดดัชนี สำหรับแผนที่เชิงเส้น <%s@%s>"
 
-#: ../lib/vector/Vlib/clean_nodes.c:52 ../lib/vector/Vlib/clean_nodes.c:216
+#: ../lib/vector/Vlib/clean_nodes.c:54 ../lib/vector/Vlib/clean_nodes.c:250
 msgid "Modifications"
 msgstr ""
 
 #: ../lib/vector/Vlib/read.c:99
 #, fuzzy
-msgid "Vector map is not opened"
+msgid "vector map is not opened"
 msgstr "ไม่พบ ชื่อแผนที่เชิงเส้น <%s>"
 
 #: ../lib/vector/Vlib/read.c:102
 #, c-format
 msgid ""
-"Vect_read_line(): line %d is not reasonable (max line in vector map: %d)"
+"Vect_read_line(): feature id %d is not reasonable (max features in vector "
+"map <%s>: %d)"
 msgstr ""
 
-#: ../lib/vector/Vlib/dangles.c:122 ../lib/vector/Vlib/dangles.c:211
-#: ../lib/vector/Vlib/dangles.c:219
-msgid "Removed dangles"
+#: ../lib/vector/Vlib/dangles.c:173 ../lib/vector/Vlib/dangles.c:272
+#: ../lib/vector/Vlib/dangles.c:284
+msgid "Removed dangles:"
 msgstr ""
 
-#: ../lib/vector/Vlib/array.c:97
+#: ../lib/vector/Vlib/array.c:98
 #, c-format
 msgid "%d errors in category string."
 msgstr "%d ผิดพลาดในหมวดของตัวอักษร"
 
-#: ../lib/vector/Vlib/array.c:140 ../lib/vector/Vlib/array.c:255
+#: ../lib/vector/Vlib/array.c:143 ../lib/vector/Vlib/array.c:267
 #, fuzzy
 msgid "Mixed area and other type requested for vector array"
 msgstr "พื้นที่ผสม และ ชนิดอื่น ต้องการกลุ่มข้อมูลแผนที่เชิงเส้น"
 
-#: ../lib/vector/Vlib/array.c:150 ../lib/vector/Vlib/array.c:170
-#: ../lib/vector/Vlib/array.c:289 ../lib/vector/Vlib/array.c:319
+#: ../lib/vector/Vlib/array.c:153 ../lib/vector/Vlib/array.c:176
+#: ../lib/vector/Vlib/array.c:301 ../lib/vector/Vlib/array.c:334
 #, fuzzy
 msgid "Not enough space in vector array"
 msgstr "กลุ่มข้อมูลแผนที่เชิงเส้น ไม่มีที่ว่างพอ"
 
-#: ../lib/vector/Vlib/array.c:264 ../lib/vector/Vlib/map.c:227
-#: ../lib/vector/Vlib/map.c:340 ../lib/vector/Vlib/map.c:444
-#: ../lib/vector/Vlib/map.c:552 ../lib/vector/Vlib/map.c:639
-#: ../lib/vector/Vlib/net.c:170 ../lib/vector/Vlib/net.c:308
+#: ../lib/vector/Vlib/array.c:276 ../lib/vector/Vlib/map.c:241
+#: ../lib/vector/Vlib/map.c:363 ../lib/vector/Vlib/map.c:469
+#: ../lib/vector/Vlib/map.c:583 ../lib/vector/Vlib/map.c:681
+#: ../lib/vector/Vlib/net.c:179 ../lib/vector/Vlib/net.c:350
 #, c-format
 msgid "Database connection not defined for layer %d"
 msgstr "การเชื่อมต่อฐานข้อมูลไม่ได้ถูกกำหนด สำหรับชั้นข้อมูลนี้ %d"
 
-#: ../lib/vector/Vlib/array.c:270 ../lib/vector/Vlib/map.c:249
-#: ../lib/vector/Vlib/map.c:376 ../lib/vector/Vlib/map.c:578
-#: ../lib/vector/Vlib/net.c:176 ../lib/vector/Vlib/net.c:313
-#, c-format
-msgid "Unable to open database <%s> by driver <%s>"
-msgstr "ไม่สามารถเปิดตาราง <%s> ด้วยตัวขับ <%s>"
-
-#: ../lib/vector/Vlib/array.c:280
+#: ../lib/vector/Vlib/array.c:292
 #, fuzzy, c-format
 msgid "Unable to select record from table <%s> (key %s, where %s)"
 msgstr "ไม่สามารถสร้างดัชนีสำหรับตาราง <%s> ด้วย key <%s>"
 
-#: ../lib/vector/Vlib/break_polygons.c:200
+#: ../lib/vector/Vlib/break_lines.c:122
+#, c-format
+msgid "%s %5d"
+msgstr ""
+
+#: ../lib/vector/Vlib/break_lines.c:122 ../lib/vector/Vlib/break_lines.c:366
+#: ../lib/vector/Vlib/break_lines.c:387
+#, fuzzy
+msgid "Intersections:"
+msgstr "การฉายแบบอื่น"
+
+#: ../lib/vector/Vlib/break_polygons.c:223
 #, fuzzy
 msgid "All points (vertices)"
 msgstr "จุดหักทั้งหมด"
 
-#: ../lib/vector/Vlib/break_polygons.c:201
+#: ../lib/vector/Vlib/break_polygons.c:225
 #, fuzzy
 msgid "Registered points (unique coordinates)"
 msgstr "จุดที่บันทึก "
 
-#: ../lib/vector/Vlib/break_polygons.c:202
+#: ../lib/vector/Vlib/break_polygons.c:226
 #, fuzzy
 msgid "Points marked for break"
 msgstr "จุดที่ระบุเป็นจุดดูดเข้าหา"
 
-#: ../lib/vector/Vlib/break_polygons.c:208
-#: ../lib/vector/Vlib/break_polygons.c:272
-#: ../lib/vector/Vlib/break_polygons.c:292
+#: ../lib/vector/Vlib/break_polygons.c:233
+#: ../lib/vector/Vlib/break_polygons.c:310
+#: ../lib/vector/Vlib/break_polygons.c:333
 msgid "Breaks"
 msgstr ""
 
-#: ../lib/vector/Vlib/bridges.c:118 ../lib/vector/Vlib/bridges.c:191
-#: ../lib/vector/Vlib/bridges.c:197
+#: ../lib/vector/Vlib/bridges.c:121 ../lib/vector/Vlib/bridges.c:202
+#: ../lib/vector/Vlib/bridges.c:209
 msgid "Removed bridges"
 msgstr ""
 
-#: ../lib/vector/Vlib/poly.c:243
+#: ../lib/vector/Vlib/poly.c:235
 #, fuzzy
 msgid "Unable to find point in polygon"
 msgstr "ไม่สามารถค้นหา [%s] ใน [%s]"
 
-#: ../lib/vector/Vlib/poly.c:661
+#: ../lib/vector/Vlib/poly.c:649
 #, fuzzy
-msgid "Conditions failed"
+msgid "conditions failed"
 msgstr "การเชื่อมต่อล้มเหลว"
 
-#: ../lib/vector/Vlib/cats.c:46
+#: ../lib/vector/Vlib/cats.c:45
 msgid "Vect_new_cats_struct(): Out of memory"
 msgstr "Vect_new_cats_struct(): หน่วยความจำไม่พอ"
 
-#: ../lib/vector/Vlib/cats.c:135
+#: ../lib/vector/Vlib/cats.c:129
 #, c-format
 msgid "Too many categories (%d), unable to set cat %d (layer %d)"
 msgstr "หมวดหมู่มากเกินไป (%d), ไม่สามารถกำหนด cat %d (ชั้นข้อมูล %d)"
 
-#: ../lib/vector/Vlib/cats.c:398
+#: ../lib/vector/Vlib/cats.c:376
 #, c-format
 msgid "Unable to convert category string '%s' (from '%s') to category range"
 msgstr "ไม่สามารถแปลง หมวดตัวอักษร '%s' (จาก '%s') ไปอยู่ในช่วงได้"
 
 #: ../lib/vector/Vlib/sindex.c:97
-msgid "Not implemented"
+msgid "not implemented"
 msgstr ""
 
-#: ../lib/vector/Vlib/sindex.c:108
+#: ../lib/vector/Vlib/sindex.c:109
 #, fuzzy, c-format
 msgid "Unable to delete item %d from spatial index"
 msgstr "ไม่สามารถลบไฟล์  '%s'"
@@ -1170,454 +1281,468 @@ msgstr ""
 msgid "BUG (Vect_build_sidx_from_topo): node does not exist"
 msgstr ""
 
-#: ../lib/vector/Vlib/sindex.c:180
+#: ../lib/vector/Vlib/sindex.c:181
 msgid "BUG (Vect_build_sidx_from_topo): line does not exist"
 msgstr ""
 
-#: ../lib/vector/Vlib/sindex.c:198
+#: ../lib/vector/Vlib/sindex.c:200
 msgid "BUG (Vect_build_sidx_from_topo): area does not exist"
 msgstr ""
 
-#: ../lib/vector/Vlib/sindex.c:216
+#: ../lib/vector/Vlib/sindex.c:219
 msgid "BUG (Vect_build_sidx_from_topo): isle does not exist"
 msgstr ""
 
-#: ../lib/vector/Vlib/write_nat.c:38
+#: ../lib/vector/Vlib/write_nat.c:50 ../lib/vector/Vlib/write_nat.c:83
 #, c-format
-msgid "BUG (delete_area_cats_from_cidx): Area %d does not exist"
+msgid "%s: Area %d does not exist"
 msgstr ""
 
-#: ../lib/vector/Vlib/write_nat.c:60
-#, c-format
-msgid "BUG (add_area_cats_to_cidx): Area %d does not exist"
-msgstr ""
-
-#: ../lib/vector/Vlib/write_nat.c:565
+#: ../lib/vector/Vlib/write_nat.c:640
 #, fuzzy
-msgid "Attempt to delete dead line"
+msgid "Attempt to delete dead feature"
 msgstr "ตั้งใจที่จะลบพื้นที่"
 
-#: ../lib/vector/Vlib/level_two.c:217 ../lib/vector/Vlib/level_two.c:242
-#: ../lib/vector/Vlib/level_two.c:266 ../lib/vector/Vlib/level_two.c:285
-#: ../lib/vector/Vlib/level_two.c:303 ../lib/vector/Vlib/level_two.c:322
+#: ../lib/vector/Vlib/write_nat.c:885
+#, fuzzy
+msgid "Attempt to restore alive feature"
+msgstr "ตั้งใจที่จะลบพื้นที่"
+
+#: ../lib/vector/Vlib/level_two.c:210 ../lib/vector/Vlib/level_two.c:235
+#: ../lib/vector/Vlib/level_two.c:259 ../lib/vector/Vlib/level_two.c:278
+#: ../lib/vector/Vlib/level_two.c:296 ../lib/vector/Vlib/level_two.c:315
 #, fuzzy, c-format
 msgid "Vector map <%s> is not open on level >= 2"
 msgstr "ไม่พบ ชื่อแผนที่เชิงเส้น <%s>"
 
-#: ../lib/vector/Vlib/graph.c:107 ../lib/vector/Vlib/net.c:380
+#: ../lib/vector/Vlib/graph.c:110 ../lib/vector/Vlib/net.c:432
 msgid "GngFlatten error"
 msgstr "GngFlatten ผิดพลาด"
 
-#: ../lib/vector/Vlib/graph.c:137
+#: ../lib/vector/Vlib/graph.c:143
 #, fuzzy
 msgid "Unable to add network arc"
 msgstr "ไม่สามารถเพิ่ม network arc"
 
-#: ../lib/vector/Vlib/graph.c:218 ../lib/vector/Vlib/net.c:449
+#: ../lib/vector/Vlib/graph.c:231 ../lib/vector/Vlib/net.c:509
 #, c-format
 msgid "dglShortestPath error: %s"
 msgstr ""
 
-#: ../lib/vector/Vlib/build_nat.c:93
+#: ../lib/vector/Vlib/build_nat.c:96
 #, fuzzy
 msgid "Unable to add area (map closed, topo saved)"
 msgstr "ไม่สามารถเพิ่มรูปปิด (แผนที่ถูกปิด, topo ถูกบันทึก)"
 
-#: ../lib/vector/Vlib/build_nat.c:101
+#: ../lib/vector/Vlib/build_nat.c:105
 #, fuzzy
 msgid "Unable to add isle (map closed, topo saved)"
 msgstr "ไม่สามารถเพิ่ม isle (แผนที่ถูกปิด, topo ถูกบันทึก)"
 
-#: ../lib/vector/Vlib/build_nat.c:110
+#: ../lib/vector/Vlib/build_nat.c:115
 msgid "Area of size = 0.0 ignored"
 msgstr "ขนาดพื้นที่ = 0.0 ถูกตัดออก"
 
-#: ../lib/vector/Vlib/build_nat.c:147
-msgid "Request to find area outside nonexisting isle"
+#: ../lib/vector/Vlib/build_nat.c:151
+msgid "Request to find area outside nonexistent isle"
 msgstr ""
 
-#: ../lib/vector/Vlib/build_nat.c:485
-msgid "Registering lines: "
+#: ../lib/vector/Vlib/build_nat.c:510
+#, fuzzy
+msgid "Registering primitives: "
 msgstr "บันทึก บรรทัด: "
 
-#: ../lib/vector/Vlib/build_nat.c:492
+#: ../lib/vector/Vlib/build_nat.c:520
 #, fuzzy
 msgid "Unable to read vector map"
 msgstr "ไม่สามารถอ่านข้อมูลแผนที่เชิงเส้นได้ <%s%s>"
 
-#: ../lib/vector/Vlib/build_nat.c:526
+#: ../lib/vector/Vlib/build_nat.c:560
 #, fuzzy
-msgid "Primitives registered"
+msgid "primitives registered"
 msgstr "\r%d บันทึกแบบพื้นฐาน      \n"
 
-#: ../lib/vector/Vlib/build_nat.c:536
+#: ../lib/vector/Vlib/build_nat.c:561
+#, fuzzy
+msgid "vertices registered"
+msgstr "\r%d บันทึกแบบพื้นฐาน      \n"
+
+#: ../lib/vector/Vlib/build_nat.c:572
 #, fuzzy
 msgid "Building areas: "
 msgstr "สร้าง graph ..."
 
-#: ../lib/vector/Vlib/build_nat.c:553
+#: ../lib/vector/Vlib/build_nat.c:595
 #, fuzzy
-msgid "Areas built"
+msgid "areas built"
 msgstr "Graph ถูกสร้าง"
 
-#: ../lib/vector/Vlib/build_nat.c:553
-msgid "Isles built"
-msgstr ""
+#: ../lib/vector/Vlib/build_nat.c:596
+#, fuzzy
+msgid "isles built"
+msgstr "Graph ถูกสร้าง"
 
-#: ../lib/vector/Vlib/build_nat.c:561
+#: ../lib/vector/Vlib/build_nat.c:605
 msgid "Attaching islands: "
 msgstr "การแนบรูปเกาะ : "
 
-#: ../lib/vector/Vlib/build_nat.c:576
+#: ../lib/vector/Vlib/build_nat.c:622
 msgid "Attaching centroids: "
 msgstr "การแนบ จุดศูนย์ถ่วง: "
 
-#: ../lib/vector/Vlib/open_nat.c:143
+#: ../lib/vector/Vlib/open_nat.c:145
 #, c-format
 msgid ""
 "Coor files of vector map <%s@%s> is larger than it should be (%ld bytes "
 "excess)"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_nat.c:146
+#: ../lib/vector/Vlib/open_nat.c:149
 #, c-format
 msgid ""
 "Coor files of vector <%s@%s> is shorter than it should be (%ld bytes "
 "missing)."
 msgstr ""
 
-#: ../lib/vector/Vlib/build_ogr.c:257
+#: ../lib/vector/Vlib/build_ogr.c:275
 #, fuzzy, c-format
 msgid "Unable to calculate centroid for area %d"
 msgstr "ไม่สามารถคำนวนจุดศูนย์ถ่วงของรูปปิดได้ %d"
 
-#: ../lib/vector/Vlib/build_ogr.c:292 ../lib/vector/Vlib/read_ogr.c:112
-#: ../lib/vector/Vlib/read_ogr.c:285
+#: ../lib/vector/Vlib/build_ogr.c:312 ../lib/vector/Vlib/read_ogr.c:120
+#: ../lib/vector/Vlib/read_ogr.c:306
 #, fuzzy, c-format
 msgid "OGR feature type %d not supported"
 msgstr "ชนิดข้อมูล OGR  %d ไม่รองรับ)"
 
-#: ../lib/vector/Vlib/build_ogr.c:318
+#: ../lib/vector/Vlib/build_ogr.c:337
 msgid "Partial build for OGR is not supported"
 msgstr ""
 
-#: ../lib/vector/Vlib/build_ogr.c:329
+#: ../lib/vector/Vlib/build_ogr.c:348
 msgid ""
 "Random read is not supported by OGR for this layer, cannot build support"
 msgstr ""
 
-#: ../lib/vector/Vlib/build_ogr.c:336
+#: ../lib/vector/Vlib/build_ogr.c:355
 #, fuzzy
 msgid "Feature: "
 msgstr "ลักษณะข้อมูล"
 
-#: ../lib/vector/Vlib/build_ogr.c:354
+#: ../lib/vector/Vlib/build_ogr.c:373
 #, c-format
 msgid "Feature %d without geometry ignored"
 msgstr "ข้อมูล %d ไม่มีรูปร่าง ตัดออก"
 
-#: ../lib/vector/Vlib/build_ogr.c:361
+#: ../lib/vector/Vlib/build_ogr.c:380
 #, fuzzy
 msgid "OGR feature without ID ignored"
 msgstr "ข้อมูล %d ไม่มี ID ตัดออก"
 
-#: ../lib/vector/Vlib/level.c:39
+#: ../lib/vector/Vlib/level.c:38
 #, fuzzy
 msgid "Map structure was never initialized"
 msgstr "ผลลัพธ์ข้อมูลเชิงเส้น ยังไม่ได้กำหนดค่า"
 
-#: ../lib/vector/Vlib/level.c:41
+#: ../lib/vector/Vlib/level.c:40
 msgid "Map structure has been closed"
 msgstr ""
 
-#: ../lib/vector/Vlib/area.c:55
+#: ../lib/vector/Vlib/area.c:53
 #, fuzzy
-msgid "Attempt to read points of nonexisting area"
+msgid "Attempt to read points of nonexistent area"
 msgstr "ตั้งใจที่จะลบ  isle จากพื้นที่"
 
-#: ../lib/vector/Vlib/area.c:131
+#: ../lib/vector/Vlib/area.c:125
 #, fuzzy, c-format
 msgid "Unable to read line %d"
 msgstr "ไม่สามารถอ่าน ส่วนหัวของไฟล์ได้"
 
-#: ../lib/vector/Vlib/area.c:173 ../lib/vector/Vlib/area.c:205
-#: ../lib/vector/Vlib/area.c:274 ../lib/vector/Vlib/area.c:307
+#: ../lib/vector/Vlib/area.c:164 ../lib/vector/Vlib/area.c:193
+#: ../lib/vector/Vlib/area.c:257 ../lib/vector/Vlib/area.c:286
 #, fuzzy, c-format
 msgid "Attempt to read topo for dead area (%d)"
 msgstr " ตั้งใจที่จะอ่านจบบรรทัด [%d]"
 
-#: ../lib/vector/Vlib/area.c:335
+#: ../lib/vector/Vlib/area.c:313
 #, fuzzy, c-format
 msgid "Attempt to read topo for dead isle (%d)"
 msgstr " ตั้งใจที่จะอ่านจบบรรทัด [%d]"
 
-#: ../lib/vector/Vlib/open_ogr.c:54
+#: ../lib/vector/Vlib/open_ogr.c:53
 msgid "OGR format cannot be updated"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_ogr.c:66
+#: ../lib/vector/Vlib/open_ogr.c:65
 #, fuzzy, c-format
 msgid "Unable to open OGR data source '%s'"
 msgstr "ไม่สามารถเปิด directory '%s' ได้"
 
-#: ../lib/vector/Vlib/open_ogr.c:84
+#: ../lib/vector/Vlib/open_ogr.c:85
 #, fuzzy, c-format
 msgid "Unable to open layer <%s>"
 msgstr "ไม่สามารถเปิดไฟล์ %s ได้"
 
-#: ../lib/vector/Vlib/open_ogr.c:128
+#: ../lib/vector/Vlib/open_ogr.c:129
 #, fuzzy, c-format
 msgid "Unable to open fidx file for vector map <%s@%s>"
 msgstr "ไม่สามารถเปิด ไฟล์หมวดดัชนี สำหรับแผนที่เชิงเส้น <%s@%s>"
 
-#: ../lib/vector/Vlib/open_ogr.c:144
+#: ../lib/vector/Vlib/open_ogr.c:147
 #, c-format
 msgid ""
 "Feature index format version %d.%d is not supported by this release. Try to "
 "rebuild topology or upgrade GRASS."
 msgstr ""
 
-#: ../lib/vector/Vlib/open_ogr.c:148
+#: ../lib/vector/Vlib/open_ogr.c:152
 #, c-format
 msgid ""
 "Your GRASS version does not fully support feature index format %d.%d of the "
 "vector. Consider to rebuild topology or upgrade GRASS."
 msgstr ""
 
-#: ../lib/vector/Vlib/remove_areas.c:56 ../lib/vector/Vlib/remove_areas.c:168
+#: ../lib/vector/Vlib/remove_areas.c:59 ../lib/vector/Vlib/remove_areas.c:180
 msgid "Removed areas"
 msgstr ""
 
-#: ../lib/vector/Vlib/remove_areas.c:93
+#: ../lib/vector/Vlib/remove_areas.c:98
 msgid "Area is composed of dead boundary"
 msgstr ""
 
-#: ../lib/vector/Vlib/remove_duplicates.c:67
-#: ../lib/vector/Vlib/remove_duplicates.c:129
+#: ../lib/vector/Vlib/remove_duplicates.c:69
+#: ../lib/vector/Vlib/remove_duplicates.c:117
 #, fuzzy
 msgid "Duplicates"
 msgstr "Field ค่าตะวันออกซ้ำ"
 
 #: ../lib/vector/Vlib/map.c:55
 #, fuzzy
-msgid "Input vector map is not open"
+msgid "input vector map is not open"
 msgstr "ไม่พบ ชื่อแผนที่เชิงเส้น <%s>"
 
-#: ../lib/vector/Vlib/map.c:65 ../lib/vector/Vlib/map.c:78
+#: ../lib/vector/Vlib/map.c:65 ../lib/vector/Vlib/map.c:81
+#: ../lib/ogsf/Gp3.c:143
 #, fuzzy, c-format
 msgid "Unable to read vector map <%s>"
 msgstr "ไม่สามารถอ่านข้อมูลแผนที่เชิงเส้นได้ <%s%s>"
 
-#: ../lib/vector/Vlib/map.c:199 ../lib/vector/Vlib/map.c:308
+#: ../lib/vector/Vlib/map.c:180
+#, fuzzy, c-format
+msgid "Unable to find vector map <%s> in <%s>"
+msgstr "ไม่สามารถคัดลอกแผนที่เชิงเส้น  <%s> ไปเป็น <%s>"
+
+#: ../lib/vector/Vlib/map.c:211 ../lib/vector/Vlib/map.c:330
 #, c-format
 msgid "Unable to copy vector map <%s> to <%s>"
 msgstr "ไม่สามารถคัดลอกแผนที่เชิงเส้น  <%s> ไปเป็น <%s>"
 
-#: ../lib/vector/Vlib/map.c:241 ../lib/vector/Vlib/map.c:355
-#: ../lib/vector/Vlib/map.c:572 ../lib/vector/Vlib/map.c:665
+#: ../lib/vector/Vlib/map.c:258 ../lib/vector/Vlib/map.c:380
+#: ../lib/vector/Vlib/map.c:608 ../lib/vector/Vlib/map.c:715
 #, c-format
 msgid "Unable to copy table <%s>"
 msgstr "ไม่สามารถคัดลอกตารางได้ <%s>"
 
-#: ../lib/vector/Vlib/map.c:253 ../lib/vector/Vlib/map.c:380
-#: ../lib/vector/Vlib/map.c:582
+#: ../lib/vector/Vlib/map.c:274 ../lib/vector/Vlib/map.c:409
+#: ../lib/vector/Vlib/map.c:621
 #, c-format
 msgid "Unable to create index for table <%s>, key <%s>"
 msgstr "ไม่สามารถสร้างดัชนีสำหรับตาราง <%s> ด้วย key <%s>"
 
-#: ../lib/vector/Vlib/map.c:369 ../lib/vector/Vlib/map.c:462
+#: ../lib/vector/Vlib/map.c:394 ../lib/vector/Vlib/map.c:489
 #, c-format
 msgid "Unable to delete table <%s>"
 msgstr "ไม่สามารถลบตารางได้ <%s>"
 
-#: ../lib/vector/Vlib/map.c:417
+#: ../lib/vector/Vlib/map.c:443
 #, fuzzy, c-format
 msgid "Invalid vector map name <%s>"
 msgstr "ไม่สามารถอ่านข้อมูลแผนที่เชิงเส้นได้ <%s%s>"
 
-#: ../lib/vector/Vlib/map.c:433
+#: ../lib/vector/Vlib/map.c:457
 #, fuzzy, c-format
 msgid "Unable to open header file for vector map <%s>"
 msgstr "ไม่สามารถเปิด ไฟล์ประวัติ สำหรับแผนที่เชิงเส้น <%s>"
 
-#: ../lib/vector/Vlib/map.c:453
+#: ../lib/vector/Vlib/map.c:479
 #, c-format
 msgid "Unable to find table <%s> linked to vector map <%s>"
 msgstr "ไม่สามารถค้นหาตาราง <%s> ที่เชื่อมกับข้อมูลเชิงเส้น <%s>"
 
-#: ../lib/vector/Vlib/map.c:467
+#: ../lib/vector/Vlib/map.c:495
 #, fuzzy, c-format
 msgid "Table <%s> linked to vector map <%s> does not exist"
 msgstr "ไม่สามารถค้นหาตาราง <%s> ที่เชื่อมกับข้อมูลเชิงเส้น <%s>"
 
-#: ../lib/vector/Vlib/map.c:481
+#: ../lib/vector/Vlib/map.c:509
 #, c-format
 msgid "Unable to open directory '%s'"
 msgstr "ไม่สามารถเปิด directory '%s' ได้"
 
-#: ../lib/vector/Vlib/map.c:492
+#: ../lib/vector/Vlib/map.c:523
 #, c-format
 msgid "Unable to delete file '%s'"
 msgstr "ไม่สามารถลบไฟล์  '%s'"
 
-#: ../lib/vector/Vlib/map.c:509
+#: ../lib/vector/Vlib/map.c:540
 #, c-format
 msgid "Unable to rename directory '%s' to '%s'"
 msgstr "ไม่สามารถเปลี่ยนชื่อ  directory  '%s' เป็น '%s'"
 
-#: ../lib/vector/Vlib/map.c:517
+#: ../lib/vector/Vlib/map.c:548
 #, c-format
 msgid "Unable to remove directory '%s'"
 msgstr "ไม่สามารถลบ directory '%s'"
 
-#: ../lib/vector/Vlib/map.c:564 ../lib/vector/Vlib/map.c:653
+#: ../lib/vector/Vlib/map.c:599 ../lib/vector/Vlib/map.c:700
 #, c-format
 msgid "Unable to add database link for vector map <%s>"
 msgstr "ไม่สามารถเพิ่ม การเชื่อมต่อฐานข้อมูล สำหรับข้อมูลเชิงเส้น <%s>"
 
-#: ../lib/vector/Vlib/read_nat.c:146
+#: ../lib/vector/Vlib/read_nat.c:136
 #, fuzzy
 msgid "Attempt to read dead line"
 msgstr " ตั้งใจที่จะอ่านจบบรรทัด [%d]"
 
-#: ../lib/vector/Vlib/overlay.c:76
+#: ../lib/vector/Vlib/overlay.c:74
 #, fuzzy
-msgid "Unknown operator"
+msgid "unknown operator"
 msgstr "ไม่ทราบข้อผิดพลาด"
 
-#: ../lib/vector/Vlib/overlay.c:124
+#: ../lib/vector/Vlib/overlay.c:123
 msgid "Overlay: line/boundary types not supported by AND operator"
 msgstr ""
 
-#: ../lib/vector/Vlib/overlay.c:127
+#: ../lib/vector/Vlib/overlay.c:126
 msgid "Overlay: area x area types not supported by AND operator"
 msgstr ""
 
-#: ../lib/vector/Vlib/read_ogr.c:165
+#: ../lib/vector/Vlib/read_ogr.c:178
 #, fuzzy
 msgid "OGR feature without ID"
 msgstr "ข้อมูล OGR ที่ไม่มี  ID"
 
-#: ../lib/vector/Vlib/read_ogr.c:352 ../lib/vector/Vlib/read_ogr.c:359
+#: ../lib/vector/Vlib/read_ogr.c:378 ../lib/vector/Vlib/read_ogr.c:386
 #, fuzzy, c-format
 msgid "Unable to get feature geometry, FID %ld"
 msgstr "ไม่สามารถอ่านข้อมูลรูปร่าง, FID [%ld]"
 
-#: ../lib/vector/Vlib/field.c:90
+#: ../lib/vector/Vlib/field.c:89
 #, fuzzy
 msgid "Layer number must be 1 or greater"
 msgstr "ลำดับของ Field ต้องเป็น 1 หรือ มากกว่า"
 
-#: ../lib/vector/Vlib/field.c:95
+#: ../lib/vector/Vlib/field.c:94
 #, fuzzy
 msgid "Unable to add database link, map is not opened in WRITE mode"
 msgstr "ไม่สามารถเพิ่มการเชื่อมฐานข้อมูล, แผนที่ไม่ได้เปิดเพื่อ การเขียน"
 
-#: ../lib/vector/Vlib/field.c:101
+#: ../lib/vector/Vlib/field.c:100
 #, fuzzy
 msgid "Unable to add database link"
 msgstr "ไม่สามารถเพิ่มการเชื่อมฐานข้อมูล,"
 
-#: ../lib/vector/Vlib/field.c:107 ../lib/vector/Vlib/field.c:153
+#: ../lib/vector/Vlib/field.c:106 ../lib/vector/Vlib/field.c:151
 #, fuzzy
 msgid "Unable to write database links"
 msgstr "ไม่สามารถเขียนการเชื่อมฐานข้อมูล"
 
-#: ../lib/vector/Vlib/field.c:221
+#: ../lib/vector/Vlib/field.c:219
 #, fuzzy, c-format
 msgid "Layer number %d or name <%s> already exists"
 msgstr "ลำดับ Field <%d> หรือชื่อ <%s> มีอยู่แล้ว"
 
-#: ../lib/vector/Vlib/field.c:285
+#: ../lib/vector/Vlib/field.c:298
+#, fuzzy, c-format
 msgid ""
 "Default driver / database set to:\n"
-"driver: dbf\n"
-"database: $GISDBASE/$LOCATION_NAME/$MAPSET/dbf/"
+"driver: %s\n"
+"database: %s"
 msgstr ""
 "ตัวขับตั้งต้น / ฐานข้อมูลระบุไปที่ :\n"
 "ตัวขับ: dbf\n"
 "ฐานข้อมูล: $GISDBASE/$LOCATION_NAME/$MAPSET/dbf/"
 
-#: ../lib/vector/Vlib/field.c:295
+#: ../lib/vector/Vlib/field.c:305
 msgid "Default driver is not set"
 msgstr "ไม่ได้กำหนด ตัวขับตั้งต้น"
 
-#: ../lib/vector/Vlib/field.c:297
+#: ../lib/vector/Vlib/field.c:308
 msgid "Default database is not set"
 msgstr "ไม่ได้กำหนด ฐานข้อมูล ตั้งต้น"
 
-#: ../lib/vector/Vlib/field.c:352
+#: ../lib/vector/Vlib/field.c:367
 #, c-format
 msgid "Requested dblink %d, maximum link number %d"
 msgstr "ต้องการ dblink %d, จำนวนการเชื่อมมากสุด %d"
 
-#: ../lib/vector/Vlib/field.c:487
+#: ../lib/vector/Vlib/field.c:507
 #, fuzzy
 msgid "Unable to open OGR DBMI driver"
 msgstr "ไม่สามารถเปิดตัวขับ OGR DBMI "
 
-#: ../lib/vector/Vlib/field.c:516
+#: ../lib/vector/Vlib/field.c:546
 msgid ""
 "All FID tests failed. Neither 'FID' nor 'ogc_fid' nor 'ogr_fid' nor 'gid' "
 "available in OGR DB table"
 msgstr ""
 
-#: ../lib/vector/Vlib/field.c:557
+#: ../lib/vector/Vlib/field.c:601
 #, c-format
 msgid "Don't know how to read links for format %d"
 msgstr "ไม่ทราบว่าจะอ่านรูปแบบการเชื่อมต่ออย่างไร %d"
 
-#: ../lib/vector/Vlib/field.c:585
+#: ../lib/vector/Vlib/field.c:633
 #, c-format
 msgid "Error in rule on row %d in %s"
 msgstr "ผิดพลาดใน กฏ บน แถว %d ใน %s"
 
-#: ../lib/vector/Vlib/field.c:636
+#: ../lib/vector/Vlib/field.c:686
 #, fuzzy, c-format
 msgid "Unable to open vector database definition file '%s'"
 msgstr "ไม่สามารถเปิดไฟล์ datum table ได้ : %s"
 
-#: ../lib/vector/Vlib/field.c:721
+#: ../lib/vector/Vlib/field.c:774
 #, fuzzy
 msgid "Bug: attempt to update map which is not in current mapset"
 msgstr "ข้อผิดพลาด: ตั้งใจที่จะปรับปรุงแผนที่ ที่ไม่อยู่ในชุดแผนที่ที่กำลังใช้งาน"
 
-#: ../lib/vector/Vlib/net.c:119
+#: ../lib/vector/Vlib/net.c:121
 #, fuzzy
 msgid "Building graph..."
 msgstr "สร้าง graph ..."
 
-#: ../lib/vector/Vlib/net.c:155
+#: ../lib/vector/Vlib/net.c:163
 #, fuzzy
 msgid "Unable to build network graph"
 msgstr "ไม่สามารถสร้าง network graph"
 
-#: ../lib/vector/Vlib/net.c:161
+#: ../lib/vector/Vlib/net.c:169
 msgid "Forward costs column not specified"
 msgstr "Costs column ไม่ได้ระบุ"
 
-#: ../lib/vector/Vlib/net.c:167
+#: ../lib/vector/Vlib/net.c:176
 msgid "Arc field < 1"
 msgstr "Arc field < 1"
 
-#: ../lib/vector/Vlib/net.c:181 ../lib/vector/Vlib/net.c:196
-#: ../lib/vector/Vlib/net.c:318
+#: ../lib/vector/Vlib/net.c:190 ../lib/vector/Vlib/net.c:207
+#: ../lib/vector/Vlib/net.c:360
 #, fuzzy, c-format
 msgid "Column <%s> not found in table <%s>"
 msgstr "ไม่สามารถ บรรยายตารางนี้ได้ <%s>"
 
-#: ../lib/vector/Vlib/net.c:187 ../lib/vector/Vlib/net.c:202
-#: ../lib/vector/Vlib/net.c:324
+#: ../lib/vector/Vlib/net.c:196 ../lib/vector/Vlib/net.c:213
+#: ../lib/vector/Vlib/net.c:366
 #, fuzzy, c-format
 msgid "Data type of column <%s> not supported (must be numeric)"
 msgstr "ชนิดของ z column ไม่รองรับ (ต้องเป็น  integer หรือ  double)"
 
-#: ../lib/vector/Vlib/net.c:213
+#: ../lib/vector/Vlib/net.c:226
 #, fuzzy
 msgid "Registering arcs..."
 msgstr "การบันทึก arcs ..."
 
-#: ../lib/vector/Vlib/net.c:235
+#: ../lib/vector/Vlib/net.c:254
 #, c-format
 msgid ""
 "Database record for line %d (cat = %d, forward/both direction(s)) not found "
@@ -1626,60 +1751,60 @@ msgstr ""
 "ข้อมูลบรรทัดที่ %d (cat = %d, forward/both direction(s)) ไม่พบ (forward/both "
 "direction(s)  ข้ามไป)"
 
-#: ../lib/vector/Vlib/net.c:249
+#: ../lib/vector/Vlib/net.c:273
 #, c-format
 msgid ""
 "Database record for line %d (cat = %d, backword direction) not found"
 "(direction of line skipped)"
 msgstr "ข้อมูลบรรทัดที่ %d (cat = %d, backword direction) ไม่พบ ( ข้ามไป)"
 
-#: ../lib/vector/Vlib/net.c:282
+#: ../lib/vector/Vlib/net.c:322
 msgid "Cannot add network arc"
 msgstr "ไม่สามารถเพิ่ม network arc"
 
-#: ../lib/vector/Vlib/net.c:304
+#: ../lib/vector/Vlib/net.c:346
 #, fuzzy
 msgid "Setting node costs..."
 msgstr "กำหนด node costs ..."
 
-#: ../lib/vector/Vlib/net.c:353
+#: ../lib/vector/Vlib/net.c:402
 #, c-format
 msgid "Database record for node %d (cat = %d) not found (cost set to 0)"
 msgstr "ข้อมูล node %d (cat = %d) ไม่พบ (กำหนด cost เป็น 0)"
 
-#: ../lib/vector/Vlib/net.c:377
+#: ../lib/vector/Vlib/net.c:429
 #, fuzzy
 msgid "Flattening the graph..."
 msgstr "Flattening the graph ..."
 
-#: ../lib/vector/Vlib/net.c:387
+#: ../lib/vector/Vlib/net.c:439
 msgid "Graph was built"
 msgstr "Graph ถูกสร้าง"
 
-#: ../lib/vector/Vlib/net.c:525
+#: ../lib/vector/Vlib/net.c:590
 msgid "Wrong line direction in Vect_net_get_line_cost()"
 msgstr "ทิศทางผิดใน  Vect_net_get_line_cost()"
 
-#: ../lib/vector/Vlib/line.c:61
+#: ../lib/vector/Vlib/line.c:60 ../lib/ogsf/gsd_img_mpeg.c:317
 #, fuzzy
 msgid "Out of memory"
 msgstr "G_malloc: หน่วยความจำไม่พอ"
 
-#: ../lib/vector/Vlib/line.c:205 ../lib/vector/Vlib/line.c:237
+#: ../lib/vector/Vlib/line.c:199 ../lib/vector/Vlib/line.c:231
 #, fuzzy
 msgid "Index out of range in"
 msgstr "ดัชนี ชั้นข้อมูล ไม่อยู่ในช่วง"
 
-#: ../lib/vector/Vlib/line.c:522
+#: ../lib/vector/Vlib/line.c:527
 msgid "Segment outside line, no segment created"
 msgstr ""
 
-#: ../lib/vector/Vlib/header.c:100 ../lib/vector/Vlib/header.c:149
+#: ../lib/vector/Vlib/header.c:95 ../lib/vector/Vlib/header.c:143
 #, fuzzy, c-format
 msgid "Unable to open header file of vector <%s>"
 msgstr "ไม่สามารถเปิด ไฟล์ประวัติ สำหรับแผนที่เชิงเส้น <%s>"
 
-#: ../lib/vector/Vlib/header.c:156
+#: ../lib/vector/Vlib/header.c:151
 #, c-format
 msgid "Corrupted row in head: %s"
 msgstr ""
@@ -1689,57 +1814,71 @@ msgstr ""
 msgid "Unknown keyword %s in vector head"
 msgstr "ไม่ทราบชนิดของข้อมูลเชิงเส้น"
 
-#: ../lib/vector/Vlib/header.c:533 ../lib/gis/proj3.c:66
+#: ../lib/vector/Vlib/header.c:510 ../lib/gis/proj3.c:64
 msgid "Unknown projection"
 msgstr "ไม่รู้จกแบบการฉายนี้"
 
-#: ../lib/vector/Vlib/write.c:25 ../lib/vector/Vlib/write.c:29
-#: ../lib/vector/Vlib/write.c:33
+#: ../lib/vector/Vlib/write.c:27 ../lib/vector/Vlib/write.c:33
+#: ../lib/vector/Vlib/write.c:39 ../lib/vector/Vlib/write.c:46
 #, fuzzy
 msgid "for this format/level not supported"
 msgstr "Vect_write_line() สำหรับ รูปแบบ/ระดับ  ไม่รองรับ"
 
-#: ../lib/vector/Vlib/write.c:96
+#: ../lib/vector/Vlib/write.c:135
 #, fuzzy
-msgid "Unable to write line, vector map is not opened"
+msgid "Unable to write feature, vector map is not opened"
 msgstr "ไม่สามารถเขียน,แผนที่ไม่ไดถูกเปิด"
 
-#: ../lib/vector/Vlib/write.c:107
+#: ../lib/vector/Vlib/write.c:148
 #, fuzzy
-msgid "Unable to write line (negative offset)"
+msgid "Unable to write feature (negative offset)"
 msgstr "ไม่สามารถเขียน (ตำแหน่งติดลบ)"
 
-#: ../lib/vector/Vlib/write.c:143
+#: ../lib/vector/Vlib/write.c:181
 #, fuzzy
-msgid "Unable to rewrite line, vector map is not opened"
+msgid "Unable to rewrite feature, vector map is not opened"
 msgstr "ไม่สามารถเขียนใหม่,แผนที่ไม่ไดถูกเปิด"
 
-#: ../lib/vector/Vlib/write.c:154
+#: ../lib/vector/Vlib/write.c:194
 #, fuzzy, c-format
-msgid "Unable to rewrite line %d"
+msgid "Unable to rewrite feature %d"
 msgstr "ไม่สามารถลบไฟล์  '%s'"
-
-#: ../lib/vector/Vlib/write.c:201
-#, fuzzy, c-format
-msgid "Unable to delete line %d, vector map <%s> is not opened on topo level 2"
-msgstr "ไม่สามารถลบ,แผนที่ '%s ไม่ไดถูกเปิด ในระดับ 2"
-
-#: ../lib/vector/Vlib/write.c:206
-#, fuzzy, c-format
-msgid "Unable to delete line %d, vector map <%s> is not opened in 'write' mode"
-msgstr "ไม่สามารถลบ,แผนที่ '%s ไม่ไดถูกเปิด เพื่อเขียน"
 
 #: ../lib/vector/Vlib/write.c:219
 #, fuzzy, c-format
-msgid "Unable to delete line %d from vector map <%s>"
+msgid ""
+"Unable to delete feature %d, vector map <%s> is not opened on topology level"
+msgstr "ไม่สามารถลบ,แผนที่ '%s ไม่ไดถูกเปิด ในระดับ 2"
+
+#: ../lib/vector/Vlib/write.c:225
+#, fuzzy, c-format
+msgid ""
+"Unable to delete feature %d, vector map <%s> is not opened in 'write' mode"
+msgstr "ไม่สามารถลบ,แผนที่ '%s ไม่ไดถูกเปิด เพื่อเขียน"
+
+#: ../lib/vector/Vlib/write.c:239
+#, fuzzy, c-format
+msgid "Unable to feature %d from vector map <%s>"
 msgstr "ไม่สามารถลบแผนที่เชิงเส้น  <%s> ได้"
 
-#: ../lib/vask/V_support.c:58
-#, c-format
-msgid "Unable to open file %s"
-msgstr "ไม่สามารถเปิดไฟล์ %s ได้"
+#: ../lib/vector/Vlib/write.c:265
+#, fuzzy, c-format
+msgid ""
+"Unable to restore feature %d, vector map <%s> is not opened on topology level"
+msgstr "ไม่สามารถลบ,แผนที่ '%s ไม่ไดถูกเปิด ในระดับ 2"
 
-#: ../lib/proj/get_proj.c:149
+#: ../lib/vector/Vlib/write.c:271
+#, fuzzy, c-format
+msgid ""
+"Unable to restore feature %d, vector map <%s> is not opened in 'write' mode"
+msgstr "ไม่สามารถลบ,แผนที่ '%s ไม่ไดถูกเปิด เพื่อเขียน"
+
+#: ../lib/vector/Vlib/write.c:285
+#, fuzzy, c-format
+msgid "Unable to restore feature %d from vector map <%s>"
+msgstr "ไม่สามารถลบแผนที่เชิงเส้น  <%s> ได้"
+
+#: ../lib/proj/get_proj.c:148
 #, c-format
 msgid "Invalid zone %s specified"
 msgstr "ไม่ได้ระบุโซน %s"
@@ -1748,7 +1887,7 @@ msgstr "ไม่ได้ระบุโซน %s"
 msgid "Unable to initialise PROJ.4 with the following parameter list:"
 msgstr "ไม่สามารถระบุ PROJ.4 ตามรายการค่าตัวแปรที่กำหนด:"
 
-#: ../lib/proj/get_proj.c:235
+#: ../lib/proj/get_proj.c:236
 #, c-format
 msgid "The error message: %s"
 msgstr "ข้อผิดพลาด: %s"
@@ -1762,54 +1901,43 @@ msgstr "เงื่อนไขที่ระบุ มากกว่า ต�
 msgid "Unable to initialize pj cause: %s"
 msgstr "ไม่สามารถระบุ pj เพราะว่า: %s"
 
-#: ../lib/proj/get_proj.c:400
+#: ../lib/proj/get_proj.c:401
 msgid "Input Projection Parameters"
 msgstr "ค่าตัวแปรเริ่มต้นการฉายแผนที่"
 
-#: ../lib/proj/get_proj.c:402
+#: ../lib/proj/get_proj.c:404
 msgid "Input Unit Factor"
 msgstr "ค่าตัวแปรเริ่มต้นของ Unit Factor"
 
-#: ../lib/proj/get_proj.c:411
+#: ../lib/proj/get_proj.c:414
 msgid "Output Projection Parameters"
 msgstr "ค่าตัวแปรของการฉายแผนที่ผลลัพธ์"
 
-#: ../lib/proj/get_proj.c:413
+#: ../lib/proj/get_proj.c:417
 msgid "Output Unit Factor"
 msgstr "ค่าผลลัพธ์ของ Unit Factor"
 
-#: ../lib/proj/datum.c:252
-#, fuzzy
-msgid "Unable to open temporary file"
-msgstr "ไม่สามารถเปิดไฟล์ %s ได้"
-
-#: ../lib/proj/datum.c:337 ../lib/gis/get_ell_name.c:46
-#: ../lib/gis/get_datum_name.c:56 ../lib/gis/get_projname.c:51
-#, c-format
-msgid "Hit RETURN to cancel request\n"
-msgstr "กด RETURN เพื่อยกเลิกคำสั่ง\n"
-
-#: ../lib/proj/datum.c:408 ../lib/proj/datum.c:471
+#: ../lib/proj/datum.c:271 ../lib/proj/datum.c:336
 #, fuzzy, c-format
 msgid "Unable to open datum table file <%s>"
 msgstr "ไม่สามารถเปิดไฟล์ datum table ได้ : %s"
 
-#: ../lib/proj/datum.c:421 ../lib/proj/datum.c:485
+#: ../lib/proj/datum.c:284 ../lib/proj/datum.c:350
 #, fuzzy, c-format
 msgid "Error in datum table file <%s>, line %d"
 msgstr "ข้อผิดพลาดใน datum table file, บรรทัด %d"
 
-#: ../lib/proj/convert.c:107
+#: ../lib/proj/convert.c:108
 #, fuzzy
 msgid "Unable parse GRASS PROJ_INFO file"
 msgstr "ไม่สามารถอ่าน GRASS PROJ_INFO ไฟล์"
 
-#: ../lib/proj/convert.c:112
+#: ../lib/proj/convert.c:113
 #, fuzzy
 msgid "Unable get PROJ.4-style parameter string"
 msgstr "ไม่สามารถอ่น ค่าตัวแปรของ PROJ.4-style"
 
-#: ../lib/proj/convert.c:124
+#: ../lib/proj/convert.c:125
 #, fuzzy, c-format
 msgid ""
 "OGR can't parse PROJ.4-style parameter string: %s (OGR Error code was %d)"
@@ -1818,203 +1946,210 @@ msgstr ""
 "%s\n"
 "(OGR ค่าผิดพลาดคือ %d)"
 
-#: ../lib/proj/convert.c:130
+#: ../lib/proj/convert.c:131
 #, fuzzy, c-format
 msgid "OGR can't get WKT-style parameter string (OGR Error code was %d)"
 msgstr ""
 "OGR ไม่สามารถอ่านค่าตัวแปร WKT-style :\n"
 "(OGR ค่าผิดพลาดคือ %d)"
 
-#: ../lib/proj/convert.c:391
+#: ../lib/proj/convert.c:384
 msgid "No projection name! Projection parameters likely to be meaningless."
 msgstr "ไม่มีชื่อ การฉายแผนที่! ค่าตัวแปรดูเหมือนไม่ถูกต้อง"
 
-#: ../lib/proj/convert.c:428
+#: ../lib/proj/convert.c:420
 #, fuzzy, c-format
 msgid "Datum <%s> not recognised by GRASS and no parameters found"
 msgstr "Datum <%s> ไม่ยอมรับโดย GRASS และไม่พบค่าตัวแปร."
 
-#: ../lib/proj/convert.c:445
+#: ../lib/proj/convert.c:436
 #, c-format
 msgid ""
 "Datum <%s> apparently recognised by GRASS but no parameters found. You may "
 "want to look into this."
 msgstr "Datum <%s> ยอมรับโดย GRASS แต่ไม่พบค่าตัวแปร.คุณต้องตรวจสอบข้อมูลนี้"
 
-#: ../lib/proj/convert.c:450
-#, c-format
+#: ../lib/proj/convert.c:440
+#, fuzzy, c-format
 msgid ""
-"Invalid tranformation number %d; valid range is 1 to %d. Leaving datum "
+"Invalid transformation number %d; valid range is 1 to %d. Leaving datum "
 "transform parameters unspecified."
 msgstr "ไม่มีการแปลงค่า ลำดับนี้ %d;ต้องอยู่ในช่วง 1 ถึง %d.ค่าตัวแปรการแปลงค่าไม่ได้ระบุ"
 
-#: ../lib/proj/do_proj.c:105 ../lib/proj/do_proj.c:178
+#: ../lib/proj/do_proj.c:106 ../lib/proj/do_proj.c:180
 #, c-format
 msgid "pj_transform() failed: %s"
 msgstr ""
 
-#: ../lib/proj/ellipse.c:73
+#: ../lib/proj/ellipse.c:75
 #, fuzzy, c-format
 msgid "Invalid ellipsoid <%s> in file"
 msgstr "รูปวงรี  %s ไม่มีในไฟล์"
 
-#: ../lib/proj/ellipse.c:96
+#: ../lib/proj/ellipse.c:98
 msgid "No secondary ellipsoid descriptor (rf, es or b) in file"
 msgstr ""
 
-#: ../lib/proj/ellipse.c:100
+#: ../lib/proj/ellipse.c:102
 #, fuzzy
 msgid "Invalid ellipsoid descriptors (a, rf, es or b) in file"
 msgstr "รูปวงรี  %s ไม่มีในไฟล์"
 
-#: ../lib/proj/ellipse.c:114
+#: ../lib/proj/ellipse.c:115
 msgid "No ellipsoid info given in file"
 msgstr "ไม่มีข้อมูลรูปวงรี ในไฟล์"
 
-#: ../lib/proj/ellipse.c:212 ../lib/gis/get_ellipse.c:296
+#: ../lib/proj/ellipse.c:216 ../lib/gis/get_ellipse.c:283
 #, fuzzy, c-format
 msgid "Unable to open ellipsoid table file <%s>"
 msgstr "ไม่สามารถเปิดไฟล์ตารางรูปทรงรี: %s"
 
-#: ../lib/g3d/g3dparam.c:54
+#: ../lib/g3d/g3dparam.c:52
 msgid "Data type used in the output file"
 msgstr "ชนิดของข้อมูลในไฟล์ผลลัพธ์"
 
-#: ../lib/g3d/g3dparam.c:63
+#: ../lib/g3d/g3dparam.c:61
 msgid "Precision used in the output file (default, max, or 0 to 52)"
 msgstr "ค่าความแม่นยำที่จะใช้ในไฟล์ผลลัพธ์ (ค่าตั้งต้น, มากสุด, หรือ 0 ถึง 52)"
 
-#: ../lib/g3d/g3dparam.c:73
+#: ../lib/g3d/g3dparam.c:71
 msgid "The compression method used in the output file"
 msgstr "วิธีการบีบอัดที่ใช้ในไฟล์ผลลัพธ์"
 
-#: ../lib/g3d/g3dparam.c:83
+#: ../lib/g3d/g3dparam.c:81
 msgid "The dimensions of the tiles used in the output file"
 msgstr "มิติของ  tiles  ที่ใช้ในไฟล์ผลลัพธ์"
 
-#: ../lib/g3d/g3dparam.c:118
+#: ../lib/g3d/g3dparam.c:116
 msgid "G3d_getStandard3dParams: precision value invalid"
 msgstr "G3d_getStandard3dParams:ค่าความละเอียดไม่ถูกต้อง"
 
-#: ../lib/g3d/g3dparam.c:146
+#: ../lib/g3d/g3dparam.c:149
 msgid "G3d_getStandard3dParams: tile dimension value invalid"
 msgstr "G3d_getStandard3dParams: มิติของ tile ไม่ถูกต้อง"
 
-#: ../lib/g3d/g3dparam.c:171
+#: ../lib/g3d/g3dparam.c:173
 msgid "Window replacing the default"
 msgstr "หน้าต่งถูกแทนด้วยค่าตั้งต้น"
 
-#: ../lib/g3d/g3dopen.c:22
+#: ../lib/g3d/g3dcolor.c:332
+#, c-format
+msgid "mapset <%s> is not the current mapset"
+msgstr ""
+
+#: ../lib/g3d/g3dopen.c:20
 msgid "G3d_openCellOldNoHeader: error in G3d_maskOpenOld"
 msgstr "G3d_openCellOldNoHeader: ข้อผิดพลาดใน  G3d_maskOpenOld"
 
-#: ../lib/g3d/g3dopen.c:28
+#: ../lib/g3d/g3dopen.c:26
 msgid "G3d_openCellOldNoHeader: error in G3d_malloc"
 msgstr "G3d_openCellOldNoHeader: ข้อผิดพลาดใน  G3d_malloc"
 
-#: ../lib/g3d/g3dopen.c:46
+#: ../lib/g3d/g3dopen.c:37
 msgid "G3d_openCellOldNoHeader: error in G_open_old"
 msgstr "G3d_openCellOldNoHeader: ข้อผิดพลาดใน  G_open_old"
 
-#: ../lib/g3d/g3dopen.c:101
+#: ../lib/g3d/g3dopen.c:91
 msgid "G3d_openCellOld: error in G3d_openCellOldNoHeader"
 msgstr "G3d_openCellOld: ข้อผิดพลาดใน  G3d_openCellOldNoHeader"
 
-#: ../lib/g3d/g3dopen.c:106
+#: ../lib/g3d/g3dopen.c:96
 msgid "G3d_openCellOld: can't rewind file"
 msgstr "G3d_openCellOld: ไม่สามารถย้อนไฟล์กลับได้"
 
-#: ../lib/g3d/g3dopen.c:119
+#: ../lib/g3d/g3dopen.c:108
 msgid "G3d_openCellOld: error in G3d_readHeader"
 msgstr "G3d_openCellOld: ข้อผิดพลาดใน  G3d_readHeader"
 
-#: ../lib/g3d/g3dopen.c:126
+#: ../lib/g3d/g3dopen.c:116
 msgid "G3d_openCellOld: projection does not match window projection"
 msgstr "G3d_openCellOld: การฉายไม่เหมาะสมกับการฉายของหน้าต่างนี้"
 
-#: ../lib/g3d/g3dopen.c:130
+#: ../lib/g3d/g3dopen.c:120
 msgid "G3d_openCellOld: zone does not match window zone"
 msgstr "G3d_openCellOld: โซนไม่เหมาะสมกับโซนของหน้าต่างนี้"
 
-#: ../lib/g3d/g3dopen.c:142 ../lib/g3d/g3dopen.c:159
+#: ../lib/g3d/g3dopen.c:132 ../lib/g3d/g3dopen.c:149
 msgid "G3d_openCellOld: can't read header"
 msgstr "G3d_openCellOld: ไม่สามารถอ่านส่วนหัวได้"
 
-#: ../lib/g3d/g3dopen.c:148
+#: ../lib/g3d/g3dopen.c:138
 msgid "G3d_openCellOld: index does not fit into long"
 msgstr "G3d_openCellOld: ค่าดัชนี แปลงเป็นค่าแบบ  long ไม่ได้"
 
-#: ../lib/g3d/g3dopen.c:152
+#: ../lib/g3d/g3dopen.c:142
 msgid "G3d_openCellOld: error in G3d_malloc"
 msgstr "G3d_openCellOld: ข้อผิดพลาดใน  G3d_malloc"
 
-#: ../lib/g3d/g3dopen.c:179
+#: ../lib/g3d/g3dopen.c:168
 msgid "G3d_openCellOld: error in G3d_fillHeader"
 msgstr "G3d_openCellOld: ข้อผิดพลาดใน  G3d_fillHeader"
 
-#: ../lib/g3d/g3dopen.c:227
+#: ../lib/g3d/g3dopen.c:215
 msgid "G3d_openCellNew: error in G3d_maskOpenOld"
 msgstr "G3d_openCellNew: ข้อผิดพลาดใน  G3d_maskOpenOld"
 
-#: ../lib/g3d/g3dopen.c:236
+#: ../lib/g3d/g3dopen.c:224
 msgid "G3d_openCellNew: error in G3d_malloc"
 msgstr "G3d_openCellNew: ข้อผิดพลาดใน  G3d_malloc"
 
-#: ../lib/g3d/g3dopen.c:249
+#: ../lib/g3d/g3dopen.c:229
+#, fuzzy, c-format
+msgid "map <%s> is not in the current mapset"
+msgstr "ไม่มีไฟล์ %s อยู่ในชุดแผนที่ปัจจุบัน\n"
+
+#: ../lib/g3d/g3dopen.c:239
 msgid "G3d_openCellNew: could not open file"
 msgstr "G3d_openCellNew: ไม่สามารถเปิดไฟล์ได้"
 
-#: ../lib/g3d/g3dopen.c:291 ../lib/g3d/g3dopen.c:296
+#: ../lib/g3d/g3dopen.c:284 ../lib/g3d/g3dopen.c:289
 msgid "G3d_openCellNew: can't write header"
 msgstr "G3d_openCellNew: ไม่สามารถเขียนส่วนหัวได้"
 
-#: ../lib/g3d/g3dopen.c:319
+#: ../lib/g3d/g3dopen.c:312
 msgid "G3d_openCellNew: error in G3d_fillHeader"
 msgstr "G3d_openCellNew: ข้อผิดพลาดใน  G3d_fillHeader"
 
-#: ../lib/g3d/g3dhistory.c:46 ../lib/gis/history.c:134
+#: ../lib/g3d/g3dhistory.c:42 ../lib/gis/history.c:132
 #, c-format
 msgid "can't get history information for [%s] in mapset [%s]"
 msgstr "ไม่สามารถอ่านข้อมูล ประวัติสำหรับ [%s] ในชุดแผนที่  [%s]"
 
-#: ../lib/gis/get_ell_name.c:33 ../lib/gis/get_datum_name.c:67
-#: ../lib/gis/get_projname.c:39
-msgid "Cannot open temp file"
-msgstr "ไม่สามารถเปิด temp ไฟล์"
+#: ../lib/g3d/g3drange.c:72
+#, fuzzy, c-format
+msgid "Unable to open range file for [%s in %s]"
+msgstr "ไม่สามารถสร้างส่วนหัวของไฟล์สำหรับ [%s in %s]"
 
-#: ../lib/gis/get_ell_name.c:44
-#, c-format
-msgid ""
-"\n"
-"Please specify ellipsoid name\n"
-msgstr ""
-"\n"
-"โปรดระบุชื่อทรงรี\n"
+#: ../lib/g3d/g3drange.c:78 ../lib/g3d/g3drange.c:88
+#, fuzzy, c-format
+msgid "Error reading range file for [%s in %s]"
+msgstr "ไม่สามารถอ่าน range ไฟล์สำหรับ [%s ใน %s]"
 
-#: ../lib/gis/get_ell_name.c:45
-#, c-format
-msgid "Enter 'list' for the list of available ellipsoids\n"
-msgstr "ใส่ 'list' เพื่อแสดงรายการ รูปทรงรี\n"
+#: ../lib/g3d/g3drange.c:153
+#, fuzzy, c-format
+msgid "Unable to open range file for <%s>"
+msgstr "ไม่สามารถเปิด ไฟล์ประวัติ สำหรับแผนที่เชิงเส้น <%s>"
 
-#: ../lib/gis/get_ell_name.c:65
-#, c-format
-msgid ""
-"\n"
-"invalid ellipsoid\n"
-msgstr ""
-"\n"
-"รูปทรงรี ไม่ถูกต้อง\n"
+#: ../lib/gis/gdal.c:54
+#, fuzzy, c-format
+msgid "Unable to locate symbol <%s>"
+msgstr "ไม่สามารถลบตารางได้ <%s>"
 
-#: ../lib/gis/sample.c:81
+#: ../lib/gis/gdal.c:94
+#, fuzzy
+msgid "Unable to load GDAL library"
+msgstr "ไม่สามารถเพิ่ม network arc"
+
+#: ../lib/gis/sample.c:71
 #, fuzzy
 msgid "Unknown interpolation type"
 msgstr "ไม่ทราบชนิดของการแทรก"
 
-#: ../lib/gis/sample.c:467
+#: ../lib/gis/sample.c:284
 msgid "\"no data\" label found; setting to zero"
 msgstr "\"no data\" ไม่พบแถบข้อความ; กำหนดเป็น 0"
 
-#: ../lib/gis/sample.c:481
+#: ../lib/gis/sample.c:299
 #, fuzzy
 msgid "Problem reading raster map"
 msgstr "มีปัญหาในการอ่าน cell ไฟล์"
@@ -2024,236 +2159,248 @@ msgstr "มีปัญหาในการอ่าน cell ไฟล์"
 msgid "Unable to create header file for [%s]"
 msgstr "ไม่สามารถสร้างส่วนหัวของไฟล์ [%s] ได้"
 
-#: ../lib/gis/legal_name.c:38
+#: ../lib/gis/legal_name.c:39
 #, c-format
 msgid "Illegal filename.  Cannot be '.' or 'NULL'\n"
 msgstr "ชือไฟล์ไม่ถูกต้อง  ไม่สามารถใช้ '.' หรือ 'NULL'\n"
 
-#: ../lib/gis/legal_name.c:45
+#: ../lib/gis/legal_name.c:47
 #, c-format
 msgid "Illegal filename. Character <%c> not allowed.\n"
 msgstr "ชือไฟล์ไม่ถูกต้อง ตัวอักษร <%c> ใช้ไม่ได้\n"
 
-#: ../lib/gis/legal_name.c:75 ../lib/gis/legal_name.c:77
-#, c-format
-msgid "Output name '%s' is not valid rast name."
-msgstr "ชื่อไฟล์ผลลัพธ์ '%s' ไม่มีชือ่ไฟล์เชิงภาพนี้"
+#: ../lib/gis/legal_name.c:77 ../lib/gis/legal_name.c:81
+#, fuzzy, c-format
+msgid "Output raster map name <%s> is not valid map name"
+msgstr "ชื่อผลลัพธ์แผนที่เชิงเส้น <%s> ไม่ถูกต้อง"
 
-#: ../lib/gis/legal_name.c:88 ../lib/gis/legal_name.c:90
-#, c-format
-msgid "Cannot find input map '%s'"
-msgstr "ไม่พบแผนที่สำหรับนำเข้า '%s'"
+#: ../lib/gis/legal_name.c:118 ../lib/gis/legal_name.c:122
+#, fuzzy, c-format
+msgid "Output raster map <%s> is used as input"
+msgstr "ชื่อผลลัพธ์แผนที่เชิงเส้น <%s> ซ้ำกับชื่อข้อมูลนำเข้า"
 
-#: ../lib/gis/legal_name.c:109 ../lib/gis/legal_name.c:111
-#, c-format
-msgid "Output map '%s' is used as input"
-msgstr "แผนที่ผลลัพธ์ '%s'ใช้เป็นแผนที่นำเข้า"
-
-#: ../lib/gis/debug.c:68
+#: ../lib/gis/debug.c:69
 #, c-format
 msgid "Cannot open debug file '%s'"
 msgstr "ไม่สามารถเปิด debug ไฟล์ได้  '%s'"
 
-#: ../lib/gis/get_datum_name.c:53
-#, c-format
-msgid ""
-"\n"
-"Please specify datum name\n"
-msgstr ""
-"\n"
-"โปรดระบุชื่อ datum \n"
-
-#: ../lib/gis/get_datum_name.c:54
-#, c-format
-msgid "Enter 'list' for the list of available datums\n"
-msgstr "ใส่ 'list' เพื่อแสดงรายการ datums\n"
-
-#: ../lib/gis/get_datum_name.c:55
-#, c-format
-msgid "or 'custom' if you wish to enter custom parameters\n"
-msgstr "หรือ 'custom' ถ้าคุณต้องการกำหนดค่าตัวแปรเอง \n"
-
-#: ../lib/gis/get_datum_name.c:93
-#, c-format
-msgid ""
-"\n"
-"invalid datum\n"
-msgstr ""
-"\n"
-"datum ไม่ถูกต้อง\n"
-
-#: ../lib/gis/datum.c:172
+#: ../lib/gis/datum.c:160
 #, c-format
 msgid "unable to open datum table file: %s"
 msgstr "ไม่สามารถเปิดไฟล์ datum table ได้ : %s"
 
-#: ../lib/gis/datum.c:196
+#: ../lib/gis/datum.c:181
 #, c-format
 msgid "error in datum table file, line %d"
 msgstr "ข้อผิดพลาดใน datum table file, บรรทัด %d"
 
-#: ../lib/gis/list.c:116
+#: ../lib/gis/list.c:109
 #, c-format
 msgid "no %s files available in current mapset\n"
 msgstr "ไม่มีไฟล์ %s อยู่ในชุดแผนที่ปัจจุบัน\n"
 
-#: ../lib/gis/list.c:118
+#: ../lib/gis/list.c:112
 #, c-format
 msgid "no %s files available in mapset <%s>\n"
 msgstr "ไม่มีไฟล์ %s อยู่ในชุดแผนที่ <%s>\n"
 
-#: ../lib/gis/list.c:132
-#, c-format
-msgid "hit RETURN to continue -->"
-msgstr "กด RETURN เพื่อดำเนินการต่อ -->"
-
-#: ../lib/gis/list.c:184
+#: ../lib/gis/list.c:174
 #, c-format
 msgid "%s files available in mapset <%s>:\n"
 msgstr "%s ไฟล์อยู่ในชุดแผนที่ปัจจุบัน <%s>:\n"
 
-#: ../lib/gis/list.c:258
+#: ../lib/gis/list.c:245
 msgid "G_list: Unknown element type"
 msgstr "G_list: ไม่ทราบชนิดชิ้นส่วน"
 
-#: ../lib/gis/proj2.c:49
+#: ../lib/gis/proj2.c:46
 msgid "Latitude-Longitude"
 msgstr "แลตติจูด-ลองติจูด"
 
-#: ../lib/gis/proj2.c:51
+#: ../lib/gis/proj2.c:48
 msgid "Other Projection"
 msgstr "การฉายแบบอื่น"
 
-#: ../lib/gis/opencell.c:185
-#, c-format
-msgid "unable to open raster map [%s in %s]"
-msgstr "ไม่สามารถเปิดข้อมูลเชิงภาพได้ [%s ใน %s]"
+#: ../lib/gis/opencell.c:105
+#, fuzzy, c-format
+msgid "Unable to open raster map <%s@%s>"
+msgstr "ไม่สามารถเปิดแผนที่เชิงภาพ <%s> "
 
-#: ../lib/gis/opencell.c:269
-#, c-format
+#: ../lib/gis/opencell.c:174
+#, fuzzy, c-format
+msgid "Unable to find <%s@%s>"
+msgstr "ไม่สามารถค้นหา  [%s]"
+
+#: ../lib/gis/opencell.c:190
+#, fuzzy, c-format
 msgid ""
-"unable to open [%s] in [%s] since it is a reclass of [%s] in [%s] which does "
-"not exist"
+"Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@%"
+"s> which does not exist"
 msgstr "ไม่สามารถเปิด  [%s] ใน [%s] ตั้งแต่ที่มีการแบ่งกลุ่มใหม่ของ [%s] ใน [%s] ซึ่งไม่มีอยู่"
 
-#: ../lib/gis/opencell.c:292
-#, c-format
-msgid "[%s] in mapset [%s]-format field in header file invalid"
+#: ../lib/gis/opencell.c:214
+#, fuzzy, c-format
+msgid "Raster map <%s@%s>: format field in header file invalid"
 msgstr "[%s] ในชุดแผนที่ [%s]-รูปแบบของ field ในส่วนหัวไม่ถูกต้อง"
 
-#: ../lib/gis/opencell.c:301
-#, c-format
+#: ../lib/gis/opencell.c:221
+#, fuzzy, c-format
 msgid ""
-"[%s] in mapset [%s] - in different projection than current region:\n"
-" found map [%s] in: <%s>, should be <%s> "
+"Raster map <%s@%s> is in different projection than current region. Found "
+"raster map <%s@%s>, should be <%s>."
 msgstr ""
 "[%s] ในชุดแผนที่ [%s] - ในการฉายภาพที่แตกต่างจากขอบเขตปัจจุบัน:\n"
 " พบแผนที่ [%s] ใน: <%s>, ควรจะ <%s> "
 
-#: ../lib/gis/opencell.c:308
-#, c-format
-msgid "[%s] in mapset [%s] - in different zone [%d] than current region [%d]"
+#: ../lib/gis/opencell.c:228
+#, fuzzy, c-format
+msgid "Raster map <%s@%s> is in different zone (%d) than current region (%d)"
 msgstr "[%s] ชุดแผนที่ [%s] - ในโซนที่แตกต่าง [%d] จากขอบเขตปัจจุบัน [%d]"
 
-#: ../lib/gis/opencell.c:316
-#, c-format
-msgid "[%s] in [%s] - bytes per cell (%d) too large"
+#: ../lib/gis/opencell.c:235
+#, fuzzy, c-format
+msgid "Raster map <%s@%s>: bytes per cell (%d) too large"
 msgstr "[%s] ใน [%s] - bytes ต่อ cell (%d) ใหญ่เกินไป"
 
-#: ../lib/gis/opencell.c:625
+#: ../lib/gis/opencell.c:264
 #, c-format
-msgid "opencell: %s - illegal file name"
+msgid "map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"
+msgstr ""
+
+#: ../lib/gis/opencell.c:604
+#, fuzzy, c-format
+msgid "Raster map <%s> is not in the current mapset (%s)"
+msgstr "ข้อผิดพลาด: ตั้งใจที่จะปรับปรุงแผนที่ ที่ไม่อยู่ในชุดแผนที่ที่กำลังใช้งาน"
+
+#: ../lib/gis/opencell.c:611
+#, fuzzy, c-format
+msgid "<%s> is an illegal file name"
 msgstr "เปิดcell: %s - ชื่อไฟล์ไม่ถูกต้อง"
 
-#: ../lib/gis/opencell.c:718
-msgid "Can't write embedded null values for map open for random access"
+#: ../lib/gis/opencell.c:622 ../lib/gis/opencell.c:723
+msgid "G__open_raster_new(): no temp files available"
+msgstr ""
+
+#: ../lib/gis/opencell.c:692
+#, fuzzy
+msgid ""
+"Unable to write embedded null values for raster map open for random access"
 msgstr "ไม่สามารถเขียน null values สำหรับแผนที่ที่เปิดแบบสุ่ม"
 
-#: ../lib/gis/opencell.c:936 ../lib/gis/opencell.c:991
-#, c-format
-msgid "unable to find [%s] in [%s]"
+#: ../lib/gis/opencell.c:897
+msgid "G_set_fp_type(): can only be called with FCELL_TYPE or DCELL_TYPE"
+msgstr ""
+
+#: ../lib/gis/opencell.c:932 ../lib/gis/opencell.c:1020
+#, fuzzy, c-format
+msgid "Unable to find '%s' in '%s'"
 msgstr "ไม่สามารถค้นหา [%s] ใน [%s]"
 
-#: ../lib/gis/opencell.c:1043
-#, c-format
-msgid "unable to find [%s]"
+#: ../lib/gis/opencell.c:965
+#, fuzzy, c-format
+msgid "Raster map <%s> not found in mapset <%s>"
+msgstr "ไม่พบแผนที่เชิงภาพ <%s> "
+
+#: ../lib/gis/opencell.c:1026
+#, fuzzy, c-format
+msgid "Unable to find '%s'"
 msgstr "ไม่สามารถค้นหา  [%s]"
 
-#: ../lib/gis/opencell.c:1049
-#, c-format
-msgid "Unable to open %s"
+#: ../lib/gis/opencell.c:1031
+#, fuzzy, c-format
+msgid "Unable to open '%s'"
 msgstr "ไม่สามารถเปิดได้ %s"
 
-#: ../lib/gis/opencell.c:1058
-#, c-format
-msgid "invalid type: field %s in file %s "
+#: ../lib/gis/opencell.c:1041
+#, fuzzy, c-format
+msgid "Invalid type: field '%s' in file '%s'"
 msgstr "ชนิดไม่ถูกต้อง: field %sในไฟล์ %s "
 
-#: ../lib/gis/put_title.c:28
+#: ../lib/gis/opencell.c:1055
+#, fuzzy, c-format
+msgid "Raster map <%s> is not xdr: byte_order: %s"
+msgstr "ไม่พบแผนที่เชิงภาพ <%s> "
+
+#: ../lib/gis/opencell.c:1135
+msgid ""
+"G_set_quant_rules() can be called only for raster maps opened for reading"
+msgstr ""
+
+#: ../lib/gis/put_title.c:29
 #, c-format
 msgid "category information for [%s] in [%s] missing or invalid"
 msgstr "ข้อมูลการแบ่งกลุ่มสำหรับ [%s] ใน [%s] หายไป หรือ ไม่ถูกต้อง"
 
-#: ../lib/gis/put_title.c:38
+#: ../lib/gis/put_title.c:39
 #, c-format
 msgid "G_put_title - can't create a temp file"
 msgstr "G_put_title - ไม่สามารถสร้างไฟล์ชั่วคราวได้"
 
-#: ../lib/gis/put_title.c:58
+#: ../lib/gis/put_title.c:56
 #, c-format
 msgid "category information for [%s] in [%s] invalid"
 msgstr "ข้อมูลการแบ่งกลุ่มสำหรับ [%s] ใน [%s]  ไม่ถูกต้อง"
 
-#: ../lib/gis/put_title.c:66
+#: ../lib/gis/put_title.c:64
 #, c-format
 msgid "G_put_title - can't reopen temp file"
 msgstr "G_put_title - ไม่สามารถสร้างไฟล์ชั่วคราวได้อีก"
 
-#: ../lib/gis/put_title.c:75
+#: ../lib/gis/put_title.c:72
 #, c-format
 msgid "can't write category information for [%s] in [%s]"
 msgstr "ไม่สามารถเขียนข้อมูลการแบ่งกลุ่มสำหรับ [%s] ใน [%s]"
 
-#: ../lib/gis/quant_io.c:92
+#: ../lib/gis/find_file.c:74
+#, c-format
+msgid "'%s/%s' was found in more mapsets (also found in <%s>)"
+msgstr ""
+
+#: ../lib/gis/find_file.c:82
+#, c-format
+msgid "Using <%s@%s>"
+msgstr ""
+
+#: ../lib/gis/quant_io.c:89
 #, c-format
 msgid "The floating data range for %s@%s is empty"
 msgstr "ช่วงขอมูล floating สำหรับ %s@%s ว่าเปล่า"
 
-#: ../lib/gis/quant_io.c:101
+#: ../lib/gis/quant_io.c:99
 #, c-format
 msgid "The integer data range for %s@%s is empty"
 msgstr "ช่วงข้อมูล จำนวนเต็ม %s@%s ว่าเปล่า"
 
-#: ../lib/gis/quant_io.c:167
+#: ../lib/gis/quant_io.c:168
 #, c-format
 msgid "quantization file [%s] in mapset [%s] %s"
 msgstr "ไฟล์บอกจำนวน [%s] ในชุดแผนที่ [%s] %s"
 
-#: ../lib/gis/system.c:90
+#: ../lib/gis/system.c:85
 msgid "Can not create a new process!"
 msgstr "ไม่สามารถสร้างการทำงานใหม่ได้!"
 
-#: ../lib/gis/myname.c:51
+#: ../lib/gis/myname.c:50
 msgid "Unknown Location"
 msgstr "ตำแหน่งที่ไม่รู้จัก"
 
-#: ../lib/gis/color_rules.c:115
+#: ../lib/gis/color_rules.c:110
 msgid "syntax error"
 msgstr "คำสั่งผิดพลาด"
 
-#: ../lib/gis/color_rules.c:116
+#: ../lib/gis/color_rules.c:112
 msgid "R/G/B not in range 0-255"
 msgstr "ค่า R/G/B ไม่อยู่ในช่วง  0-255"
 
-#: ../lib/gis/color_rules.c:117
+#: ../lib/gis/color_rules.c:114
 msgid "invalid color name"
 msgstr "ชื่อสีผิด"
 
-#: ../lib/gis/color_rules.c:118
+#: ../lib/gis/color_rules.c:116
 msgid "percentage not in range 0-100"
 msgstr "ค่าเปอร์เซ็นต์ ไม่อยู่ในช่วง 0-100"
 
-#: ../lib/gis/color_rules.c:119
+#: ../lib/gis/color_rules.c:118
 msgid "invalid value"
 msgstr "ค่าไม่ถูกต้อง"
 
@@ -2262,344 +2409,215 @@ msgid "unknown error"
 msgstr "ไม่ทราบข้อผิดพลาด"
 
 #: ../lib/gis/color_rules.c:151
-#, c-format
-msgid "bad rule (%s): %s"
+#, fuzzy, c-format
+msgid "bad rule (%s): [%s]"
 msgstr "กฎเกณท์ไม่ดี (%s): %s"
 
-#: ../lib/gis/spawn.c:77 ../lib/gis/spawn.c:110
+#: ../lib/gis/spawn.c:80 ../lib/gis/spawn.c:112
 msgid "Too many arguments"
 msgstr "ตัวแปรมากเกินไป"
 
-#: ../lib/gis/spawn.c:132 ../lib/gis/spawn.c:385
+#: ../lib/gis/spawn.c:133 ../lib/gis/spawn.c:401
 msgid "Unable to create a new process"
 msgstr "ไม่สามารถสร้างการทำงานใหม่ได้"
 
-#: ../lib/gis/spawn.c:142 ../lib/gis/spawn.c:410
+#: ../lib/gis/spawn.c:142 ../lib/gis/spawn.c:237 ../lib/gis/spawn.c:424
 msgid "Unable to execute command"
 msgstr "ไม่สามารถทำงานคำสั่งนี้ได้"
 
-#: ../lib/gis/spawn.c:237 ../lib/gis/spawn.c:245
+#: ../lib/gis/spawn.c:262 ../lib/gis/spawn.c:270
 #, c-format
 msgid "G_spawn: unable to restore signal %d"
 msgstr "G_spawn: ไม่สามารถนำค่า %d ได้"
 
-#: ../lib/gis/spawn.c:278
+#: ../lib/gis/spawn.c:301
 #, c-format
 msgid "G_spawn: unable to reset signal %d"
 msgstr "G_spawn: ไม่สามารถกำหนดค่า %d ได้"
 
-#: ../lib/gis/spawn.c:288
+#: ../lib/gis/spawn.c:310
 #, c-format
 msgid "G_spawn: unable to ignore signal %d"
 msgstr "G_spawn: ไม่สามารถยกเลิกค่า %d ได้"
 
-#: ../lib/gis/spawn.c:299
+#: ../lib/gis/spawn.c:321
 #, c-format
 msgid "G_spawn: unable to block signal %d"
 msgstr "G_spawn: ไม่สามารถกั้นค่า %d ได้"
 
-#: ../lib/gis/spawn.c:308
+#: ../lib/gis/spawn.c:329
 #, c-format
 msgid "G_spawn: unable to unblock signal %d"
 msgstr "G_spawn: ไม่สามารถปิดการกั้นค่า %d ได้"
 
-#: ../lib/gis/spawn.c:334
+#: ../lib/gis/spawn.c:353
 #, c-format
 msgid "G_spawn: unable to open file %s"
 msgstr "G_spawn: ไม่สามารถเปิดไฟล์ %s ได้"
 
-#: ../lib/gis/spawn.c:340 ../lib/gis/spawn.c:350
+#: ../lib/gis/spawn.c:358 ../lib/gis/spawn.c:367
 #, c-format
 msgid "G_spawn: unable to duplicate descriptor %d to %d"
 msgstr "G_spawn: ไม่สามารถทำซ้ำตัวอธิบาย %d ถึง %d ได้"
 
-#: ../lib/gis/spawn.c:402
+#: ../lib/gis/spawn.c:416
 #, c-format
 msgid "Unable to change directory to %s"
 msgstr "ไม่สามารถเปลี่ยน directory ไปที่ %s ได้"
 
-#: ../lib/gis/mapset.c:41
+#: ../lib/gis/mapset.c:39
 msgid "MAPSET is not set"
 msgstr "ยังไม่ได้กำหนด ชุดแผนที่"
 
-#: ../lib/gis/mapset.c:60 ../lib/gis/gisinit.c:58
+#: ../lib/gis/mapset.c:57 ../lib/gis/gisinit.c:65
 #, c-format
 msgid "MAPSET %s not found"
 msgstr "ชุดแผนที่ %s - ไม่พบ"
 
-#: ../lib/gis/gishelp.c:49
-#, c-format
-msgid "one moment...\n"
-msgstr "โปรดรอสักครู่...\n"
-
-#: ../lib/gis/gishelp.c:54
-#, c-format
-msgid "No help available for command [%s]\n"
-msgstr "ไม่มีความช่วยเหลือสำหรับคำสั่งนี้ [%s]\n"
-
-#: ../lib/gis/make_colr.c:41
-#, c-format
-msgid " The raster map %s@%s is empty"
-msgstr "แผนที่เชิงภาพ %s@%s ว่าเปล่า"
-
-#: ../lib/gis/make_colr.c:49
-#, c-format
-msgid ""
-"\n"
-"\n"
-"Color table needed for file [%s] in mapset [%s].\n"
+#: ../lib/gis/gisinit.c:54 ../lib/gis/gisinit.c:89
+msgid "Incompatible library version for module"
 msgstr ""
-"\n"
-"\n"
-"ไฟล์นี้ต้องการดารางสี  [%s] ในชุดแผนที่ [%s].\n"
 
-#: ../lib/gis/make_colr.c:52
-#, c-format
-msgid ""
-"\n"
-"Please identify the type desired:\n"
-msgstr ""
-"\n"
-"โปรดระบุชนิดที่จะใช้:\n"
-
-#: ../lib/gis/make_colr.c:53
-#, c-format
-msgid "    1:  Random colors\n"
-msgstr "    1:  สีแบบสุ่ม\n"
-
-#: ../lib/gis/make_colr.c:54
-#, c-format
-msgid "    2:  Red, green, and blue color ramps\n"
-msgstr "    2:  แดง, เขียว, และ น้ำเงิน แบบไล่สี\n"
-
-#: ../lib/gis/make_colr.c:55
-#, c-format
-msgid "    3:  Color wave\n"
-msgstr "    3:  สีแบบ คลื่น\n"
-
-#: ../lib/gis/make_colr.c:56
-#, c-format
-msgid "    4:  Gray scale\n"
-msgstr "    4:  โทนสีเทา\n"
-
-#: ../lib/gis/make_colr.c:57
-#, c-format
-msgid "    5:  Aspect\n"
-msgstr "    5:  สีเชิงมุม\n"
-
-#: ../lib/gis/make_colr.c:58
-#, c-format
-msgid "    6:  Rainbow colors\n"
-msgstr "    6:  สีรุ้ง\n"
-
-#: ../lib/gis/make_colr.c:59
-#, c-format
-msgid "    7:  Red through yellow to green\n"
-msgstr "    7:  แดง ไล่ไป เหลือง ถึง เขียว\n"
-
-#: ../lib/gis/make_colr.c:60
-#, c-format
-msgid "    8:  Green through yellow to red\n"
-msgstr "    7:  เขียว ไล่ไป เหลือง ถึง แดง\n"
-
-#: ../lib/gis/make_colr.c:61
-#, c-format
-msgid "RETURN  quit\n"
-msgstr "RETURN  ออก\n"
-
-#: ../lib/gis/make_colr.c:82
-#, c-format
-msgid ""
-"\n"
-"%s invalid; Try again > "
-msgstr ""
-"\n"
-"%s ไม่ถูกต้อง; ลองใหม่ > "
-
-#: ../lib/gis/range.c:195
-#, c-format
-msgid "can't read f_range file for [%s in %s]"
-msgstr "ไม่สามารถอ่าน f_rangeไฟล์สำหรับ [%s ใน %s]"
-
-#: ../lib/gis/range.c:312
-#, c-format
-msgid "can't read range file for [%s in %s]"
-msgstr "ไม่สามารถอ่าน range ไฟล์สำหรับ [%s ใน %s]"
-
-#: ../lib/gis/range.c:365 ../lib/gis/range.c:416
-#, c-format
-msgid "can't write range file for [%s in %s]"
-msgstr "ไม่สามารถเขียน range ไฟล์สำหรับ [%s ใน %s]"
-
-#: ../lib/gis/gisinit.c:55
+#: ../lib/gis/gisinit.c:62
 #, c-format
 msgid "MAPSET %s - permission denied"
 msgstr "ชุดแผนที่ %s - ไม่อนุญาติ"
 
-#: ../lib/gis/gisinit.c:101
+#: ../lib/gis/gisinit.c:108
 #, fuzzy
 msgid "System not initialized. Programmer forgot to call G_gisinit()."
 msgstr "\aข้อผิดพลาด: ระบบไม่สามารถเริ่มต้น. Programmer ลืมเรียก G_gisinit()\n"
 
-#: ../lib/gis/get_row.c:47 ../lib/gis/get_row.c:939
+#: ../lib/gis/range.c:192
+#, c-format
+msgid "can't read f_range file for [%s in %s]"
+msgstr "ไม่สามารถอ่าน f_rangeไฟล์สำหรับ [%s ใน %s]"
+
+#: ../lib/gis/range.c:308
+#, c-format
+msgid "can't read range file for [%s in %s]"
+msgstr "ไม่สามารถอ่าน range ไฟล์สำหรับ [%s ใน %s]"
+
+#: ../lib/gis/range.c:359 ../lib/gis/range.c:412
+#, c-format
+msgid "can't write range file for [%s in %s]"
+msgstr "ไม่สามารถเขียน range ไฟล์สำหรับ [%s ใน %s]"
+
+#: ../lib/gis/get_row.c:46 ../lib/gis/get_row.c:1049
 #, fuzzy, c-format
 msgid "Reading raster map <%s@%s> request for row %d is outside region"
 msgstr "[%s ใน %s] -อ่านคำสั่งสำหรับ แถว %d อยู่นอกขอบเขต"
 
-#: ../lib/gis/get_row.c:315
+#: ../lib/gis/get_row.c:324
 #, c-format
 msgid "cell_values_float: xdr_float failed for index %d"
 msgstr "cell_values_float: xdr_float การทำดัชนีล้มเหลว %d"
 
-#: ../lib/gis/get_row.c:359
+#: ../lib/gis/get_row.c:365
 #, fuzzy, c-format
 msgid "cell_values_double: xdr_double failed for index %d"
 msgstr "cell_values_double: xdr_doubleการทำดัชนีล้มเหลว %d."
 
-#: ../lib/gis/get_row.c:504
+#: ../lib/gis/get_row.c:621
 #, fuzzy, c-format
 msgid "Error reading compressed map <%s@%s>, row %d"
 msgstr "ผิดพลาดในการอ่านการบีบอัดแผนที่ [%s] ในชุดแผนที่ [%s], แถว %d"
 
-#: ../lib/gis/get_row.c:507
+#: ../lib/gis/get_row.c:624
 #, fuzzy, c-format
 msgid "Error reading map <%s@%s>, row %d"
 msgstr "ผิดพลาดในการอ่านแผนที่ [%s] ในชุดแผนที่ [%s], แถว %d"
 
-#: ../lib/gis/get_row.c:919 ../lib/gis/get_row.c:925
+#: ../lib/gis/get_row.c:1031 ../lib/gis/get_row.c:1036
 #, fuzzy, c-format
 msgid "Error reading null row %d"
 msgstr "เกิดข้อผืดพลาดในการอ่านแถวเปล่า  %d"
 
-#: ../lib/gis/get_row.c:1006
+#: ../lib/gis/get_row.c:1115
 #, fuzzy
 msgid "Unable to realloc buffer"
 msgstr "ไม่สามารถกำหนด  buffer ได้"
 
-#: ../lib/gis/get_projname.c:32
-#, c-format
-msgid "%s not found"
-msgstr "%s ไม่พบ"
-
-#: ../lib/gis/get_projname.c:35
-#, c-format
-msgid "ERROR in reading %s"
-msgstr "เกิดข้อผิดพลาดในการอ่าน  %s"
-
-#: ../lib/gis/get_projname.c:49
-#, c-format
-msgid ""
-"\n"
-"\n"
-"Please specify projection name\n"
-msgstr ""
-"\n"
-"\n"
-"โปรดระบุชื่อการฉายภาพ\n"
-
-#: ../lib/gis/get_projname.c:50
-#, c-format
-msgid "Enter 'list' for the list of available projections\n"
-msgstr "ใส่ 'list' เพื่อแสดงรายการ การฉายภาพ\n"
-
-#: ../lib/gis/get_projname.c:72
-#, c-format
-msgid ""
-"\n"
-"invalid projection\n"
-msgstr ""
-"\n"
-"การฉายภาพไม่ถูกต้อง\n"
-
-#: ../lib/gis/ask_cell.c:56 ../lib/gis/ask_cell.c:75 ../lib/gis/ask_cell.c:94
-#: ../lib/gis/ask_cell.c:101
-msgid "with titles"
-msgstr "ด้วย ชื่อเรื่อง"
-
-#: ../lib/gis/ask_cell.c:113
-msgid "(no title)"
-msgstr "(ไม่มีชื่อเรื่อง)"
-
-#: ../lib/gis/ls.c:63
+#: ../lib/gis/ls.c:87
 #, c-format
 msgid "Unable to open directory %s"
 msgstr "ไม่สามารถเปิด directory %s"
 
-#: ../lib/gis/set_window.c:82
+#: ../lib/gis/set_window.c:76
 msgid ""
 "G_set_window(): projection/zone differs from that of currently open raster "
 "maps"
 msgstr "G_set_window(): การฉาย/โซน แตกต่างจากข้อมูลแผนที่เชิงภาพ"
 
-#: ../lib/gis/format.c:162
+#: ../lib/gis/format.c:157
 #, c-format
 msgid "Fail of initial read of compressed file [%s in %s]"
 msgstr "การอ่านไฟล์ที่ถูกบีบอัด ล้มเหลว [%s ใน %s]"
 
-#: ../lib/gis/put_row.c:212
+#: ../lib/gis/put_row.c:215
 #, c-format
 msgid "G_put_map_row: %s is not integer! Use G_put_[f/d]_raster_row()!"
 msgstr "G_put_map_row: %s ไม่ใช่เลขจำนวนเต็ม! ใช้ G_put_[f/d]_raster_row()!"
 
-#: ../lib/gis/put_row.c:249
+#: ../lib/gis/put_row.c:251
 #, c-format
 msgid "%s: map [%s] not open for write - request ignored"
 msgstr "%s: แผนที่ [%s] ไม่ได้ถูกเปิดเพื่อเขียน - การร้องขอถูกยกเลิก"
 
-#: ../lib/gis/put_row.c:256
+#: ../lib/gis/put_row.c:259
 #, c-format
 msgid "%s: map [%s] not open for random write - request ignored"
 msgstr "%s: แผนที่ [%s] ไม่ได้ถูกเปิดเพื่อเขียนแบบสุ่ม - การร้องขอถูกยกเลิก"
 
-#: ../lib/gis/put_row.c:263
+#: ../lib/gis/put_row.c:266
 #, c-format
 msgid "%s: map [%s] not open for sequential write - request ignored"
 msgstr "%s: แผนที่ [%s] ไม่ได้ถูกเปิดเพื่อเขียนแบบลำดับ - การร้องขอถูกยกเลิก"
 
-#: ../lib/gis/put_row.c:267
+#: ../lib/gis/put_row.c:270
 #, c-format
 msgid "%s: unopened file descriptor - request ignored"
 msgstr "%s: ไม่สามารถเปิดตัวอธิบายไฟล์ได้ - การร้องขอถูกยกเลิก"
 
-#: ../lib/gis/put_row.c:308
+#: ../lib/gis/put_row.c:310
 #, c-format
 msgid "map [%s] - unable to write row %d"
 msgstr "แผนที่ [%s] ไม่ได้ถูกเปิดเพื่อเขียนแถวได้ %d"
 
-#: ../lib/gis/put_row.c:396
+#: ../lib/gis/put_row.c:393
 #, c-format
 msgid "xdr_float failed for index %d of row %d"
 msgstr "xdr_float ล้มเหลว สำหรับดัชนี %d ของแถว %d"
 
-#: ../lib/gis/put_row.c:425
+#: ../lib/gis/put_row.c:419
 #, c-format
 msgid "xdr_double failed for index %d of row %d"
 msgstr "xdr_double ล้มเหลว สำหรับดัชนี %d ของแถว %d"
 
-#: ../lib/gis/put_row.c:769
+#: ../lib/gis/put_row.c:754
 #, c-format
 msgid "unable to find a temporary null file %s"
 msgstr "ไม่สามารถค้นหาไฟล์ชั่คราวได้ %s"
 
-#: ../lib/gis/put_row.c:790 ../lib/gis/put_row.c:796
+#: ../lib/gis/put_row.c:776 ../lib/gis/put_row.c:781
 #, c-format
 msgid "error writing null row %d"
 msgstr "การเขียนผิดพลาด ที่แถวเปล่า %d"
 
-#: ../lib/gis/history.c:184
+#: ../lib/gis/history.c:180
 #, c-format
 msgid "can't write history information for [%s]"
 msgstr "ไม่สามารถเขียนข้อมูลประวัติ สำหรับ [%s]"
 
-#: ../lib/gis/history.c:269
+#: ../lib/gis/history.c:263
 msgid "Not enough room in history file to record command line."
 msgstr "ไฟล์ประวัติเต็มไม่สามารถบันทึกคำสั่งต่อได้"
 
-#: ../lib/gis/history.c:291
+#: ../lib/gis/history.c:285
 msgid "Not enough room in history file for command line (truncated)."
 msgstr "ไฟล์ประวัติเต็มไม่สามารถบันทึกคำสั่งต่อได้(ตัดสั้น)"
 
-#: ../lib/gis/closecell.c:223
+#: ../lib/gis/closecell.c:229
 #, c-format
 msgid ""
 "closecell: can't move %s\n"
@@ -2608,12 +2626,12 @@ msgstr ""
 "ปิดcell: ไม่สามารถย้าย %s\n"
 "ไปที่ไฟล์เปล่าได้ %s"
 
-#: ../lib/gis/closecell.c:243
+#: ../lib/gis/closecell.c:251
 #, c-format
 msgid "Error writing floating point format file for map %s"
 msgstr "ข้อผิดพลาดในการเขียน floating point format file สำหรับแผนที่ %s"
 
-#: ../lib/gis/closecell.c:289
+#: ../lib/gis/closecell.c:301
 #, c-format
 msgid ""
 "closecell: can't move %s\n"
@@ -2622,57 +2640,57 @@ msgstr ""
 "ปิดcell: ไม่สามารถย้าย %s\n"
 "ไปที่ cell ไฟล์ได้ %s"
 
-#: ../lib/gis/closecell.c:343
+#: ../lib/gis/closecell.c:356
 msgid "unable to write quant file!"
 msgstr "ไม่สามารถเขียนไปที่ quant ไฟล์ได้!"
 
-#: ../lib/gis/closecell.c:391
+#: ../lib/gis/closecell.c:407
 msgid "unable to write f_format file for CELL maps"
 msgstr "ไม่สามารถเขียน  f_format ไฟล์สำหรับ CELL maps ได้"
 
-#: ../lib/gis/home.c:40
+#: ../lib/gis/home.c:39
 msgid "unable to determine user's home directory"
 msgstr "ไม่สามารถหา  home directory ของผู้ใช้"
 
-#: ../lib/gis/error.c:315
+#: ../lib/gis/error.c:257
 msgid "WARNING: "
 msgstr "คำเตือน: "
 
-#: ../lib/gis/error.c:316
+#: ../lib/gis/error.c:258
 msgid "ERROR: "
 msgstr "ข้อผิดพลาด: "
 
-#: ../lib/gis/get_cellhd.c:74 ../lib/gis/get_cellhd.c:103
+#: ../lib/gis/get_cellhd.c:71 ../lib/gis/get_cellhd.c:100
 #, fuzzy, c-format
 msgid "Unable to read header file for raster map <%s@%s>."
 msgstr "ไม่สามารถสร้างส่วนหัวของไฟล์สำหรับ [%s in %s]"
 
-#: ../lib/gis/get_cellhd.c:76
+#: ../lib/gis/get_cellhd.c:74
 #, fuzzy, c-format
 msgid " It is a reclass of raster map <%s@%s> "
 msgstr "มันได้แบ่งกลุ่มใหม่สำหรับ [%s ใน %s] "
 
-#: ../lib/gis/get_cellhd.c:79
+#: ../lib/gis/get_cellhd.c:78
 #, fuzzy, c-format
 msgid "which is missing."
 msgstr "อันที่ขาดไป"
 
-#: ../lib/gis/get_cellhd.c:81
+#: ../lib/gis/get_cellhd.c:80
 #, fuzzy, c-format
 msgid "whose header file can't be opened."
 msgstr "ไม่สามารถเปิด header ไฟล์ ได้"
 
-#: ../lib/gis/get_cellhd.c:91
+#: ../lib/gis/get_cellhd.c:88
 #, fuzzy, c-format
 msgid "Unable to open header file for raster map <%s@%s>"
 msgstr "ไม่สามารถเปิด ไฟล์หมวดดัชนี สำหรับแผนที่เชิงเส้น <%s@%s>"
 
-#: ../lib/gis/get_cellhd.c:107
+#: ../lib/gis/get_cellhd.c:105
 #, fuzzy, c-format
 msgid " It is a reclass of raster map <%s@%s> whose header file is invalid."
 msgstr "มีการแบ่งกลุ่มใหม่ของ [%s ใน %s] header file ไม่ถูกต้อง\n"
 
-#: ../lib/gis/get_cellhd.c:111
+#: ../lib/gis/get_cellhd.c:109
 #, fuzzy, c-format
 msgid " Invalid format."
 msgstr "รูปแบบไม่ถูกต้อง\n"
@@ -2682,248 +2700,260 @@ msgstr "รูปแบบไม่ถูกต้อง\n"
 msgid "category support for [%s] in mapset [%s] %s"
 msgstr "การแบ่งกลุ่มรองรับสำหรับ [%s] ในชุดแผนที่  [%s] %s"
 
-#: ../lib/gis/cats.c:424
+#: ../lib/gis/cats.c:421
 #, c-format
 msgid "category support for vector map [%s] in mapset [%s] %s"
 msgstr "การแบ่งกลุ่มรองรับสำหรับแผนที่เชิงเส้น [%s] ในชุดแผนที่  [%s] %s"
 
-#: ../lib/gis/get_ellipse.c:87
+#: ../lib/gis/get_ellipse.c:85
 #, fuzzy, c-format
 msgid "Unable to open file %s in <%s>"
 msgstr "ไม่สามารถเปิดไฟล์ได้ %s ใน %s"
 
-#: ../lib/gis/get_ellipse.c:345
+#: ../lib/gis/get_ellipse.c:333
 #, c-format
 msgid "Lines%s of ellipsoid table file <%s> are invalid"
 msgstr "บรรทัดที่ %s ไฟล์ตารางรูปทรงรี <%s> ไม่ถูกต้อง"
 
-#: ../lib/gis/get_ellipse.c:346
+#: ../lib/gis/get_ellipse.c:335
 #, c-format
 msgid "Line%s of ellipsoid table file <%s> is invalid"
 msgstr "บรรทัดที่ %s ไฟล์ตารางรูปทรงรี <%s> ไม่ถูกต้อง"
 
-#: ../lib/gis/get_ellipse.c:365 ../lib/gis/get_ellipse.c:391
+#: ../lib/gis/get_ellipse.c:355 ../lib/gis/get_ellipse.c:381
 #, fuzzy, c-format
 msgid "Invalid a: field '%s' in file %s in <%s>"
 msgstr "ไม่ถูกต้อง: field %s ในไฟล์ %s ใน %s"
 
-#: ../lib/gis/get_ellipse.c:378
+#: ../lib/gis/get_ellipse.c:368
 #, fuzzy, c-format
 msgid "Invalid ellipsoid '%s' in file %s in <%s>"
 msgstr "รูปทรงรีไม่ถูกต้อง %s ในไฟล์ %s ใน %s"
 
-#: ../lib/gis/get_ellipse.c:395
+#: ../lib/gis/get_ellipse.c:385
 #, fuzzy, c-format
 msgid "Invalid es: field '%s' in file %s in <%s>"
 msgstr "ไม่ถูกต้อง: field %s ในไฟล์ %s ใน %s"
 
-#: ../lib/gis/get_ellipse.c:409
+#: ../lib/gis/get_ellipse.c:399
 #, fuzzy, c-format
 msgid "No ellipsoid info given in file %s in <%s>"
 msgstr "ไม่มีข้อมูลรูปทรงรีในไฟล์ %s in %s"
 
-#: ../lib/gis/location.c:46
+#: ../lib/gis/location.c:44
 #, c-format
 msgid "LOCATION << %s >> not available"
 msgstr "ตำแหน่ง << %s >> ไม่มี"
 
-#: ../lib/gis/null_val.c:94
+#: ../lib/gis/null_val.c:91
 msgid "EmbedGivenNulls: wrong data type!"
 msgstr "EmbedGivenNulls:ข้อมูลผิดประเภท!"
 
-#: ../lib/gis/null_val.c:115
+#: ../lib/gis/null_val.c:112
 msgid "Null values have not been initialized. "
 msgstr "ค่า NULL ม่ใช้เป็นค่าเริ่มต้น"
 
-#: ../lib/gis/null_val.c:116
+#: ../lib/gis/null_val.c:113
 msgid "G_gisinit() must be called first. "
 msgstr "ต้องใช้คำสั่ง G_gisinit() ก่อน"
 
-#: ../lib/gis/null_val.c:117
+#: ../lib/gis/null_val.c:114
 msgid "Please advise GRASS developers of this error.\n"
 msgstr "โปรดแจ้งขอ้ผิดพลาดให้กับ ทีพัฒนา GRASS\n"
 
-#: ../lib/gis/null_val.c:231
+#: ../lib/gis/null_val.c:223
 msgid "G_set_null_value: wrong data type!"
 msgstr "G_set_null_value: ข้อมูลผิดประเภท!"
 
-#: ../lib/gis/get_projinfo.c:36 ../lib/gis/get_projinfo.c:67
+#: ../lib/gis/get_projinfo.c:33 ../lib/gis/get_projinfo.c:60
 #, c-format
 msgid "<%s> file not found for location <%s>"
 msgstr "<%s> ไม่พบไฟล์สำหรับตำแหน่ง <%s>"
 
-#: ../lib/gis/get_projinfo.c:43 ../lib/gis/get_projinfo.c:74
+#: ../lib/gis/get_projinfo.c:39 ../lib/gis/get_projinfo.c:66
 #, c-format
 msgid "ERROR in reading <%s> file for location <%s>"
 msgstr "เกิดข้อผิดพลาดในการอ่าน <%s> ไฟล์สำหรับตำแหน่ง <%s>"
 
-#: ../lib/gis/mapset_msc.c:49
+#: ../lib/gis/distance.c:160
 #, c-format
-msgid "can't make mapset element %s (%s)"
+msgid ""
+"G_distance_point_to_line_segment: shouldn't happen: code=%d P=(%f,%f) S=(%f,%"
+"f)(%f,%f)"
+msgstr ""
+
+#: ../lib/gis/mapset_msc.c:60
+#, fuzzy, c-format
+msgid "Unable to make mapset element %s (%s)"
 msgstr "ไม่สามารถสร้างส่วนประกอบของแผนที่ได้ %s (%s)"
 
-#: ../lib/gis/parser.c:345
+#: ../lib/gis/parser.c:357
 msgid "WHERE conditions of SQL statement without 'where' keyword"
 msgstr "WHERE เงื่อนไขประโยค SQL ที่ปราศจาก 'where' keyword"
 
-#: ../lib/gis/parser.c:346
+#: ../lib/gis/parser.c:358
 msgid "Example: income < 1000 and inhab >= 10000"
 msgstr "ตัวอย่าง: income < 1000 และ inhab >= 10000"
 
-#: ../lib/gis/parser.c:354
+#: ../lib/gis/parser.c:366
 msgid "Table name"
 msgstr "ชื่อตาราง"
 
-#: ../lib/gis/parser.c:362
+#: ../lib/gis/parser.c:375
 msgid "Driver name"
 msgstr "ชื่อตัวขับ"
 
-#: ../lib/gis/parser.c:370
+#: ../lib/gis/parser.c:383
 msgid "Database name"
 msgstr "ชื่อฐานข้อมูล"
 
-#: ../lib/gis/parser.c:378
+#: ../lib/gis/parser.c:391
 msgid "Name of attribute column"
 msgstr "ชื่อช่องข้อมูล"
 
-#: ../lib/gis/parser.c:386
+#: ../lib/gis/parser.c:400
 msgid "Name of attribute column(s)"
 msgstr "ชื่อช่องข้อมูล"
 
-#: ../lib/gis/parser.c:396
+#: ../lib/gis/parser.c:411
 msgid "Name of input imagery group"
 msgstr "ชื่อกลุ่มภาพ"
 
-#: ../lib/gis/parser.c:406 ../lib/gis/parser.c:431
+#: ../lib/gis/parser.c:419
+#, fuzzy
+msgid "Name of input imagery subgroup"
+msgstr "ชื่อกลุ่มภาพ"
+
+#: ../lib/gis/parser.c:429 ../lib/gis/parser.c:454
 msgid "Name of input raster map"
 msgstr "ชื่อข้อมูลเชิงภาพ"
 
-#: ../lib/gis/parser.c:415 ../lib/gis/parser.c:440
+#: ../lib/gis/parser.c:438 ../lib/gis/parser.c:463
 msgid "Name of input raster map(s)"
 msgstr "ชื่อข้อมูลเชิงภาพ"
 
-#: ../lib/gis/parser.c:423
+#: ../lib/gis/parser.c:446
 msgid "Name for output raster map"
 msgstr "ชื่อผลลัพธ์เชิงภาพ"
 
-#: ../lib/gis/parser.c:448
+#: ../lib/gis/parser.c:471
 msgid "Name of base raster map"
 msgstr "ชื่อข้อมูลฐานเชิงภาพ"
 
-#: ../lib/gis/parser.c:456
+#: ../lib/gis/parser.c:479
 msgid "Name of cover raster map"
 msgstr "ชื่อข้อมูลเชิงภาพ"
 
-#: ../lib/gis/parser.c:464
+#: ../lib/gis/parser.c:487
 msgid "Name of elevation raster map"
 msgstr "ชื่อข้อมูลความสูงเชิงภาพ"
 
-#: ../lib/gis/parser.c:473
+#: ../lib/gis/parser.c:496
 msgid "Name of elevation raster map(s)"
 msgstr "ชื่อข้อมูลความสูงเชิงภาพ"
 
-#: ../lib/gis/parser.c:483 ../lib/gis/parser.c:508
+#: ../lib/gis/parser.c:506 ../lib/gis/parser.c:531
 msgid "Name of input raster3d map"
 msgstr "ชื่อข้อมูลความสูงเชิงภาพ"
 
-#: ../lib/gis/parser.c:492 ../lib/gis/parser.c:517
+#: ../lib/gis/parser.c:515 ../lib/gis/parser.c:540
 msgid "Name of input raster3d map(s)"
 msgstr "ชื่อข้อมูลเชิงภาพ 3 มิติ"
 
-#: ../lib/gis/parser.c:500
+#: ../lib/gis/parser.c:523
 msgid "Name for output raster3d map"
 msgstr "ชื่อผลลัพธ์เชิงภาพ 3 มิติ"
 
-#: ../lib/gis/parser.c:527 ../lib/gis/parser.c:552
+#: ../lib/gis/parser.c:550 ../lib/gis/parser.c:575
 msgid "Name of input vector map"
 msgstr "ชื่อแผนที่เชิงเส้น"
 
-#: ../lib/gis/parser.c:536 ../lib/gis/parser.c:561
+#: ../lib/gis/parser.c:559 ../lib/gis/parser.c:584
 msgid "Name of input vector map(s)"
 msgstr "ชื่อแผนที่เชิงเส้น"
 
-#: ../lib/gis/parser.c:544
+#: ../lib/gis/parser.c:567
 msgid "Name for output vector map"
 msgstr "ชื่อผลลัพธ์แผนที่เชิงเส้น"
 
-#: ../lib/gis/parser.c:570
+#: ../lib/gis/parser.c:593
 msgid "Type"
 msgstr "ชนิด"
 
-#: ../lib/gis/parser.c:571
+#: ../lib/gis/parser.c:594
 msgid "Feature type(s)"
 msgstr "ลักษณะข้อมูล"
 
-#: ../lib/gis/parser.c:578
+#: ../lib/gis/parser.c:601
 msgid "Layer number"
 msgstr "จำนวนชั้นข้อมูล"
 
-#: ../lib/gis/parser.c:579
+#: ../lib/gis/parser.c:603
 msgid ""
 "A single vector map can be connected to multiple database tables. This "
 "number determines which table to use."
 msgstr ""
 "แผนที่เชิงเส้น 1 แผนที่สามารถเชื่อมต่อกับหลายตารางในฐานข้อมูล ลำดับระบุการเชื่อมต่อกับตารางใด"
 
-#: ../lib/gis/parser.c:586
+#: ../lib/gis/parser.c:610
 msgid "Category value"
 msgstr "ค่ารายละเอียด"
 
-#: ../lib/gis/parser.c:593
+#: ../lib/gis/parser.c:617
 msgid "Category values"
 msgstr "ค่ารายละเอียด"
 
-#: ../lib/gis/parser.c:594
+#: ../lib/gis/parser.c:618
 msgid "Example: 1,3,7-9,13"
 msgstr "ตัวอย่าง: 1,3,7-9,13"
 
-#: ../lib/gis/parser.c:604
+#: ../lib/gis/parser.c:628
 msgid "Name of input file"
 msgstr "ชื่อไฟล์ที่จะนำเข้า"
 
-#: ../lib/gis/parser.c:612
+#: ../lib/gis/parser.c:636
 msgid "Name for output file"
 msgstr "ชื่อไฟล์ผลลัพธ์"
 
-#: ../lib/gis/parser.c:620
+#: ../lib/gis/parser.c:644
 msgid "Field separator"
 msgstr "ตัวแยก Field"
 
-#: ../lib/gis/parser.c:631
+#: ../lib/gis/parser.c:655
 msgid "Color"
 msgstr "สี"
 
-#: ../lib/gis/parser.c:632
+#: ../lib/gis/parser.c:656
 msgid "Either a standard color name or R:G:B triplet"
 msgstr "ใส่ชื่อสีมาตรฐาน หรือ R:G:B"
 
-#: ../lib/gis/parser.c:641
+#: ../lib/gis/parser.c:665
 msgid "Background color"
 msgstr "สีฉากหลัง"
 
-#: ../lib/gis/parser.c:642
+#: ../lib/gis/parser.c:667
 msgid "Either a standard GRASS color, R:G:B triplet, or \"none\""
 msgstr "ใส่ชื่อสีมาตรฐานของ GRASS หรือ R:G:B หรือ \"none\""
 
-#: ../lib/gis/parser.c:787
+#: ../lib/gis/parser.c:811
 #, c-format
-msgid "BUG in descriptions, option %s in %s does not exist"
+msgid "BUG in descriptions, option '%s' in <%s> does not exist"
 msgstr ""
 
-#: ../lib/gis/parser.c:900
+#: ../lib/gis/parser.c:906
 msgid "Use either --quiet or --verbose flag, not both. Assuming --verbose."
 msgstr ""
 
-#: ../lib/gis/parser.c:914
+#: ../lib/gis/parser.c:920
 msgid "Use either --quiet or --verbose flag, not both. Assuming --quiet."
 msgstr ""
 
-#: ../lib/gis/parser.c:949
+#: ../lib/gis/parser.c:950
 #, c-format
 msgid "Sorry <%s> is not a valid option\n"
 msgstr "เสียใจ <%s> ไม่มีอยู่ในเงื่อนไข\n"
 
-#: ../lib/gis/parser.c:1060
+#: ../lib/gis/parser.c:1058
 #, c-format
 msgid ""
 "\n"
@@ -2932,7 +2962,7 @@ msgstr ""
 "\n"
 "คำอธิบาย:\n"
 
-#: ../lib/gis/parser.c:1067
+#: ../lib/gis/parser.c:1065
 #, c-format
 msgid ""
 "\n"
@@ -2941,7 +2971,7 @@ msgstr ""
 "\n"
 "คำเฉพาะ:\n"
 
-#: ../lib/gis/parser.c:1071
+#: ../lib/gis/parser.c:1069
 #, c-format
 msgid ""
 "\n"
@@ -2952,7 +2982,7 @@ msgstr ""
 "วิธีใช้:\n"
 " "
 
-#: ../lib/gis/parser.c:1143
+#: ../lib/gis/parser.c:1137
 #, c-format
 msgid ""
 "\n"
@@ -2961,19 +2991,19 @@ msgstr ""
 "\n"
 "ธง:\n"
 
-#: ../lib/gis/parser.c:1166 ../lib/gis/parser.c:1654 ../lib/gis/parser.c:1940
+#: ../lib/gis/parser.c:1160 ../lib/gis/parser.c:1639 ../lib/gis/parser.c:1931
 msgid "Allow output files to overwrite existing files"
 msgstr "ยอมให้เขียนทับไฟล์ที่มีอยู่แล้ว"
 
-#: ../lib/gis/parser.c:1168 ../lib/gis/parser.c:1658
+#: ../lib/gis/parser.c:1162 ../lib/gis/parser.c:1643
 msgid "Verbose module output"
 msgstr "แสดงผลแบบละเอียด"
 
-#: ../lib/gis/parser.c:1169 ../lib/gis/parser.c:1661
+#: ../lib/gis/parser.c:1163 ../lib/gis/parser.c:1646
 msgid "Quiet module output"
 msgstr "แสดงผลแบบเงียบ"
 
-#: ../lib/gis/parser.c:1175
+#: ../lib/gis/parser.c:1168
 #, c-format
 msgid ""
 "\n"
@@ -2982,82 +3012,82 @@ msgstr ""
 "\n"
 "ตัวแปร:\n"
 
-#: ../lib/gis/parser.c:1198
+#: ../lib/gis/parser.c:1191
 #, c-format
 msgid "  %*s   default: %s\n"
 msgstr "  %*s  ค่าต้งต้น: %s\n"
 
-#: ../lib/gis/parser.c:1537
+#: ../lib/gis/parser.c:1530
 msgid "NAME"
 msgstr "ชื่อ"
 
-#: ../lib/gis/parser.c:1550
+#: ../lib/gis/parser.c:1543
 msgid "KEYWORDS"
 msgstr "คำเฉพาะ"
 
-#: ../lib/gis/parser.c:1555
+#: ../lib/gis/parser.c:1548
 msgid "SYNOPSIS"
 msgstr "สาระสำคัญ"
 
-#: ../lib/gis/parser.c:1629
+#: ../lib/gis/parser.c:1616
 msgid "Flags"
 msgstr "ธง"
 
-#: ../lib/gis/parser.c:1670
+#: ../lib/gis/parser.c:1654
 msgid "Parameters"
 msgstr "ตัวแปร"
 
-#: ../lib/gis/parser.c:1711
+#: ../lib/gis/parser.c:1694
 msgid "Options"
 msgstr "เงื่อนไข"
 
-#: ../lib/gis/parser.c:1717
+#: ../lib/gis/parser.c:1700
 msgid "Default"
 msgstr "ค่าตั้งต้น"
 
-#: ../lib/gis/parser.c:1942
+#: ../lib/gis/parser.c:1933
 msgid "Allow overwrite"
 msgstr "ยอมให้เขียนทับ"
 
-#: ../lib/gis/parser.c:1950
+#: ../lib/gis/parser.c:1941
 msgid "Run with minimal output messages"
 msgstr "ทำงาน แบบแจ้งผลน้อย"
 
-#: ../lib/gis/parser.c:1952
+#: ../lib/gis/parser.c:1943
 msgid "Run quietly"
 msgstr "ทำงานเงียบ"
 
-#: ../lib/gis/parser.c:1985
+#: ../lib/gis/parser.c:1976
 #, fuzzy
-msgid "Unable to spawn wish"
+msgid "Unable to spawn the 'wish' program"
 msgstr "ไม่สามารถเปิดได้ %s"
 
-#: ../lib/gis/parser.c:2004
+#: ../lib/gis/parser.c:1995
 #, fuzzy
 msgid "Unable to determine program name"
 msgstr "ไม่สามารถหา  home directory ของผู้ใช้"
 
-#: ../lib/gis/parser.c:2059
+#: ../lib/gis/parser.c:2052
 #, c-format
 msgid "  %*s   options: "
 msgstr "  %*s   เงื่อนไข: "
 
-#: ../lib/gis/parser.c:2108 ../lib/gis/parser.c:2125
+#: ../lib/gis/parser.c:2097 ../lib/gis/parser.c:2112
 #, c-format
 msgid "Sorry, <%c> is not a valid flag\n"
 msgstr "เสียใจ, <%c> ไม่มีธง\n"
 
-#: ../lib/gis/parser.c:2180
+#: ../lib/gis/parser.c:2170
 #, c-format
 msgid "Sorry, <%s=> is ambiguous\n"
 msgstr "เสียใจ, <%s=> ไม่ชัดเจน\n"
 
-#: ../lib/gis/parser.c:2187
+#: ../lib/gis/parser.c:2176
 #, c-format
 msgid "Sorry, <%s> is not a valid parameter\n"
 msgstr "เสียใจ, <%s> ค่าตัวแปรไม่ถูกต้อง\n"
 
-#: ../lib/gis/parser.c:2272
+#: ../lib/gis/parser.c:2254
 #, c-format
 msgid ""
 "\n"
@@ -3066,12 +3096,12 @@ msgstr ""
 "\n"
 "ข้อผิดพลาด: ใส่ค่าตัวแปรผิด <%s>\n"
 
-#: ../lib/gis/parser.c:2274
+#: ../lib/gis/parser.c:2255
 #, c-format
 msgid "       Presented as: %s\n"
 msgstr "       แสดงเป็น: %s\n"
 
-#: ../lib/gis/parser.c:2277
+#: ../lib/gis/parser.c:2259
 #, c-format
 msgid ""
 "\n"
@@ -3080,12 +3110,12 @@ msgstr ""
 "\n"
 "ข้อผิดพลาด: ค่า <%s> อยู่นอกช่วงค่าตัวแปร <%s>\n"
 
-#: ../lib/gis/parser.c:2279
+#: ../lib/gis/parser.c:2261
 #, c-format
 msgid "       Legal range: %s\n"
 msgstr "      ช่วงที่ถูกต้อง: %s\n"
 
-#: ../lib/gis/parser.c:2282
+#: ../lib/gis/parser.c:2264
 #, c-format
 msgid ""
 "\n"
@@ -3094,7 +3124,21 @@ msgstr ""
 "\n"
 "ข้อผิดพลาด:ขาดค่าตัวแปร <%s>\n"
 
-#: ../lib/gis/parser.c:2442
+#: ../lib/gis/parser.c:2268
+#, fuzzy, c-format
+msgid ""
+"\n"
+"ERROR: value <%s> ambiguous for parameter <%s>\n"
+msgstr ""
+"\n"
+"ข้อผิดพลาด: ค่า <%s> อยู่นอกช่วงค่าตัวแปร <%s>\n"
+
+#: ../lib/gis/parser.c:2270
+#, fuzzy, c-format
+msgid "       valid options: %s\n"
+msgstr "เงื่อนไข: %s\n"
+
+#: ../lib/gis/parser.c:2398
 #, c-format
 msgid ""
 "\n"
@@ -3105,7 +3149,7 @@ msgstr ""
 "ข้อผิดพลาด: ต้องการค่าตัวแปร <%s> ไม่ได้กำหนด:\n"
 "    (%s).\n"
 
-#: ../lib/gis/parser.c:2545
+#: ../lib/gis/parser.c:2493
 #, c-format
 msgid ""
 "\n"
@@ -3114,131 +3158,50 @@ msgstr ""
 "\n"
 "ข้อผิดพลาด: เงื่อนไข <%s> จะต้องมีหลายค่าของ %d\n"
 
-#: ../lib/gis/parser.c:2547
+#: ../lib/gis/parser.c:2495
 #, c-format
 msgid "       You provided %d items:\n"
 msgstr "       คุณต้องใส่ %d หลายหัวข้อ:\n"
 
-#: ../lib/gis/parser.c:2602
+#: ../lib/gis/parser.c:2553
 #, c-format
 msgid "ERROR: option <%s>: <%s> exists.\n"
 msgstr "ข้อผิดพลาด: เงื่อนไข <%s>: <%s> มีอยู่\n"
 
-#: ../lib/gis/parser.c:2649
-#, c-format
-msgid ""
-"\n"
-"FLAG: Set the following flag?\n"
-msgstr ""
-"\n"
-"ธง: กำหนดค่าธง?\n"
-
-#: ../lib/gis/parser.c:2663
-#, c-format
-msgid ""
-"\n"
-"OPTION:   %s\n"
-msgstr ""
-"\n"
-"เงื่อนไข:   %s\n"
-
-#: ../lib/gis/parser.c:2664
-#, c-format
-msgid "     key: %s\n"
-msgstr "     เฉพาะ: %s\n"
-
-#: ../lib/gis/parser.c:2666
-#, c-format
-msgid "  format: %s\n"
-msgstr "  รูปแบบ: %s\n"
-
-#: ../lib/gis/parser.c:2668
-#, c-format
-msgid " default: %s\n"
-msgstr " ค่าตั้งต้น: %s\n"
-
-#: ../lib/gis/parser.c:2669
-#, c-format
-msgid "required: %s\n"
-msgstr "ต้องการ: %s\n"
-
-#: ../lib/gis/parser.c:2671
-#, c-format
-msgid "multiple: %s\n"
-msgstr "หลาย: %s\n"
-
-#: ../lib/gis/parser.c:2673
-#, c-format
-msgid " options: %s\n"
-msgstr "เงื่อนไข: %s\n"
-
-#: ../lib/gis/parser.c:2688
-#, c-format
-msgid "enter option > "
-msgstr "ใส่เงื่อนไข > "
-
-#: ../lib/gis/parser.c:2702 ../lib/gis/parser.c:2713
-msgid "   Try again? "
-msgstr "   ลองใหม่? "
-
-#: ../lib/gis/parser.c:2711
-#, c-format
-msgid "Sorry, %s is not accepted.\n"
-msgstr "เสียใจ, %s ไม่ถูกต้อง.\n"
-
-#: ../lib/gis/parser.c:2722
-#, c-format
-msgid ""
-"\n"
-"You have chosen:\n"
-"  %s\n"
-msgstr ""
-"\n"
-"คุณได้เลือก:\n"
-"  %s\n"
-
-#: ../lib/gis/parser.c:2723
-msgid "Is this correct? "
-msgstr "อย่างนี้ถูกต้องหรือไม่? "
-
-#: ../lib/gis/parser.c:2792
-msgid "to accept the default"
-msgstr "ใช้ค่าตั้งต้น"
-
-#: ../lib/gis/reclass.c:150
+#: ../lib/gis/reclass.c:143
 #, c-format
 msgid "Too many reclass categories for [%s in %s]"
 msgstr "กลุ่มมากเกินไป สำหรับ [%s in %s]"
 
-#: ../lib/gis/reclass.c:153
+#: ../lib/gis/reclass.c:146
 #, c-format
 msgid "Illegal reclass format in header file for [%s in %s]"
 msgstr "รูปแบบการจัดกลุ่มในส่วนหัวของไฟล์ไม่ถูกต้อง สำหรับ [%s ใน %s]"
 
-#: ../lib/gis/reclass.c:248
+#: ../lib/gis/reclass.c:235
 msgid "Illegal reclass request"
 msgstr "คำสั่งการจัดกลุ่มไม่ถูกต้อง"
 
-#: ../lib/gis/reclass.c:253
+#: ../lib/gis/reclass.c:240
 msgid "Illegal reclass type"
 msgstr "ชนิดการจัดกลุ่มไม่ถูกต้อง"
 
-#: ../lib/gis/reclass.c:260
+#: ../lib/gis/reclass.c:246
 #, c-format
 msgid "Unable to create header file for [%s in %s]"
 msgstr "ไม่สามารถสร้างส่วนหัวของไฟล์สำหรับ [%s in %s]"
 
-#: ../lib/gis/reclass.c:310
+#: ../lib/gis/reclass.c:294
 #, c-format
 msgid "Unable to create dependency file in [%s in %s]"
 msgstr "ไม่สามารถสร้าง  dependency  ของไฟล์สำหรับ [%s ใน %s]"
 
-#: ../lib/gis/quant_rw.c:208
+#: ../lib/gis/quant_rw.c:206
 #, c-format
 msgid "Cannot write quant rules: map %s is integer"
 msgstr "ไม่สามารถเขียนกฎของปริมาณ: แผนที่ %s คือจำนวนเต็ม"
 
-#: ../lib/gis/quant_rw.c:218
+#: ../lib/gis/quant_rw.c:215
 #, c-format
 msgid "Cannot write quant rules for map %s"
 msgstr "ไม่สามารถเขียนกฎของปริมาณสำหรับ แผนที่ %s"
@@ -3248,100 +3211,110 @@ msgstr "ไม่สามารถเขียนกฎของปริมา
 msgid "Can't read %s for [%s in %s]"
 msgstr "ไม่สามารถอ่าน %s สำหรับ [%s ใน %s]"
 
-#: ../lib/gis/raster_metadata.c:143
+#: ../lib/gis/raster_metadata.c:144
 #, c-format
 msgid "Can't create %s metadata file for [%s in %s]"
 msgstr "ไม่สามารถสร้าง %s metadata ไฟล์สำหรับ [%s ใน %s]"
 
-#: ../lib/gis/timestamp.c:298
+#: ../lib/gis/open.c:62
+#, c-format
+msgid "G__open(read): mapset <%s> doesn't match xmapset <%s>"
+msgstr ""
+
+#: ../lib/gis/open.c:84
+#, c-format
+msgid "G__open(write): xmapset <%s> != G_mapset() <%s>"
+msgstr ""
+
+#: ../lib/gis/timestamp.c:282
 #, c-format
 msgid "Can't create timestamp file for %s map %s in mapset %s"
 msgstr "ไม่สามารถสร้างการลงเวลาในไฟล์ สำหรับ %s แผนที่ %s ในชุดแผนที่ %s"
 
-#: ../lib/gis/timestamp.c:308
+#: ../lib/gis/timestamp.c:291
 #, c-format
 msgid "Invalid timestamp specified for %s map %s in mapset %s"
 msgstr "ไฟล์ลงเวลาไม่ถูกต้อง สำหรับ %s แผนที่ %s ในชุดแผนที่ %s"
 
-#: ../lib/gis/timestamp.c:332
+#: ../lib/gis/timestamp.c:313
 #, c-format
 msgid "Can't open timestamp file for %s map %s in mapset %s"
 msgstr "ไม่สามารถเปิด ไฟล์ลงเวลาได้ สำหรับ %s แผนที่ %s ในชุดแผนที่ %s"
 
-#: ../lib/gis/timestamp.c:342
+#: ../lib/gis/timestamp.c:322
 #, c-format
 msgid "Invalid timestamp file for %s map %s in mapset %s"
 msgstr "ไฟล์ลงเวลาไม่ถูกต้อง สำหรับ %s แผนที่ %s ในชุดแผนที่ %s"
 
-#: ../lib/gis/adj_cellhd.c:47 ../lib/gis/adj_cellhd.c:196
+#: ../lib/gis/adj_cellhd.c:47 ../lib/gis/adj_cellhd.c:199
 msgid "Illegal n-s resolution value"
 msgstr "ค่าความละเอียดทาง เหนือ-ใต้ ไม่ถูกต้อง"
 
-#: ../lib/gis/adj_cellhd.c:52 ../lib/gis/adj_cellhd.c:203
+#: ../lib/gis/adj_cellhd.c:51 ../lib/gis/adj_cellhd.c:205
 msgid "Illegal row value"
 msgstr "ค่าแถว ไม่ถูกต้อง"
 
-#: ../lib/gis/adj_cellhd.c:57 ../lib/gis/adj_cellhd.c:210
+#: ../lib/gis/adj_cellhd.c:55 ../lib/gis/adj_cellhd.c:211
 msgid "Illegal e-w resolution value"
 msgstr "ค่าความละเอียดทาง ออก-ตก ไม่ถูกต้อง"
 
-#: ../lib/gis/adj_cellhd.c:62 ../lib/gis/adj_cellhd.c:217
+#: ../lib/gis/adj_cellhd.c:59 ../lib/gis/adj_cellhd.c:217
 msgid "Illegal col value"
 msgstr "ค่าช่อง ไม่ถูกต้อง"
 
-#: ../lib/gis/adj_cellhd.c:81 ../lib/gis/adj_cellhd.c:248
+#: ../lib/gis/adj_cellhd.c:79 ../lib/gis/adj_cellhd.c:247
 #, c-format
 msgid "Fixing subtle input data rounding error of north boundary (%g>%g)"
 msgstr "แก้ข้อมูลค่าขอบเขตทางทิศเหนือ (%g>%g)"
 
-#: ../lib/gis/adj_cellhd.c:84 ../lib/gis/adj_cellhd.c:251
+#: ../lib/gis/adj_cellhd.c:84 ../lib/gis/adj_cellhd.c:252
 msgid "Illegal latitude for North"
 msgstr "ค่า แลตติจูด ของทิศเหนือ ไม่ถูกต้อง"
 
-#: ../lib/gis/adj_cellhd.c:89 ../lib/gis/adj_cellhd.c:256
+#: ../lib/gis/adj_cellhd.c:90 ../lib/gis/adj_cellhd.c:258
 #, c-format
 msgid "Fixing subtle input data rounding error of south boundary (%g>%g)"
 msgstr "แก้ข้อมูลค่าขอบเขตทางทิศใต้ (%g>%g)"
 
-#: ../lib/gis/adj_cellhd.c:92 ../lib/gis/adj_cellhd.c:259
+#: ../lib/gis/adj_cellhd.c:95 ../lib/gis/adj_cellhd.c:263
 msgid "Illegal latitude for South"
 msgstr "ค่า แลตติจูด ของทิศใต้ ไม่ถูกต้อง"
 
-#: ../lib/gis/adj_cellhd.c:103 ../lib/gis/adj_cellhd.c:270
+#: ../lib/gis/adj_cellhd.c:107 ../lib/gis/adj_cellhd.c:275
 #, c-format
 msgid "Fixing subtle input data rounding error of west boundary (%g>%g)"
 msgstr "แก้ข้อมูลค่าขอบเขตทางทิศตะวันตก (%g>%g)"
 
-#: ../lib/gis/adj_cellhd.c:113 ../lib/gis/adj_cellhd.c:280
+#: ../lib/gis/adj_cellhd.c:118 ../lib/gis/adj_cellhd.c:286
 #, c-format
 msgid "Fixing subtle input data rounding error of east boundary (%g>%g)"
 msgstr "แก้ข้อมูลค่าขอบเขตทางทิศตะวันออก (%g>%g)"
 
-#: ../lib/gis/adj_cellhd.c:127 ../lib/gis/adj_cellhd.c:294
+#: ../lib/gis/adj_cellhd.c:131 ../lib/gis/adj_cellhd.c:299
 msgid "North must be north of South"
 msgstr "ค่าเหนือ ต้องอยู่เหนือใต้"
 
-#: ../lib/gis/adj_cellhd.c:129 ../lib/gis/adj_cellhd.c:296
+#: ../lib/gis/adj_cellhd.c:133 ../lib/gis/adj_cellhd.c:301
 msgid "North must be larger than South"
 msgstr "ค่าเหนือ ต้องมากกว่าใต้"
 
-#: ../lib/gis/adj_cellhd.c:132 ../lib/gis/adj_cellhd.c:299
+#: ../lib/gis/adj_cellhd.c:136 ../lib/gis/adj_cellhd.c:304
 msgid "East must be larger than West"
 msgstr "ค่าออก ต้องมากกว่าตก"
 
-#: ../lib/gis/adj_cellhd.c:150 ../lib/gis/adj_cellhd.c:337
+#: ../lib/gis/adj_cellhd.c:155 ../lib/gis/adj_cellhd.c:348
 msgid "Invalid coordinates"
 msgstr "ค่าพิกัดไม่ถูกต้อง"
 
-#: ../lib/gis/adj_cellhd.c:198
+#: ../lib/gis/adj_cellhd.c:201
 msgid "Illegal n-s3 resolution value"
 msgstr "ค่าความละเอียด n-s3 ไม่ถูกต้อง"
 
-#: ../lib/gis/adj_cellhd.c:205
+#: ../lib/gis/adj_cellhd.c:207
 msgid "Illegal row3 value"
 msgstr "ค่า row3 ไม่ถูกต้อง"
 
-#: ../lib/gis/adj_cellhd.c:212
+#: ../lib/gis/adj_cellhd.c:213
 msgid "Illegal e-w3 resolution value"
 msgstr "ค่าความละเอียด e-w3 ไม่ถูกต้อง"
 
@@ -3349,175 +3322,185 @@ msgstr "ค่าความละเอียด e-w3 ไม่ถูกต้
 msgid "Illegal col3 value"
 msgstr "ค่าความละเอียด col3 ไม่ถูกต้อง"
 
-#: ../lib/gis/adj_cellhd.c:224
+#: ../lib/gis/adj_cellhd.c:223
 msgid "Illegal t-b3 resolution value"
 msgstr "ค่าความละเอียด t-b3 ไม่ถูกต้อง"
 
-#: ../lib/gis/adj_cellhd.c:229
+#: ../lib/gis/adj_cellhd.c:227
 msgid "Illegal depths value"
 msgstr "ค่าความลึก ไม่ถูกต้อง"
 
-#: ../lib/gis/adj_cellhd.c:301
+#: ../lib/gis/adj_cellhd.c:306
 msgid "Top must be larger than Bottom"
 msgstr "ค่าบน ต้องมากกว่าล่าง"
 
-#: ../lib/gis/rd_cellhd.c:136
+#: ../lib/gis/open_misc.c:45
+#, c-format
+msgid "G__open_misc(read): mapset <%s> doesn't match xmapset <%s>"
+msgstr ""
+
+#: ../lib/gis/open_misc.c:67
+#, c-format
+msgid "G__open_misc(write): xmapset <%s> != G_mapset() <%s>"
+msgstr ""
+
+#: ../lib/gis/rd_cellhd.c:134
 msgid "duplicate projection field"
 msgstr "Field การฉายซ้ำ"
 
-#: ../lib/gis/rd_cellhd.c:147
+#: ../lib/gis/rd_cellhd.c:144
 msgid "duplicate zone field"
 msgstr "Field โซนซ้ำ"
 
-#: ../lib/gis/rd_cellhd.c:157
+#: ../lib/gis/rd_cellhd.c:154
 msgid "projection field missing"
 msgstr "Field การฉายหายไป"
 
-#: ../lib/gis/rd_cellhd.c:159
+#: ../lib/gis/rd_cellhd.c:156
 msgid "zone field missing"
 msgstr "Field โซนหายไป"
 
-#: ../lib/gis/rd_cellhd.c:181
+#: ../lib/gis/rd_cellhd.c:178
 msgid "duplicate north field"
 msgstr "Field ค่าเหนือซ้ำ"
 
-#: ../lib/gis/rd_cellhd.c:190
+#: ../lib/gis/rd_cellhd.c:186
 msgid "duplicate south field"
 msgstr "Field ค่าใต้ซ้ำ"
 
-#: ../lib/gis/rd_cellhd.c:199
+#: ../lib/gis/rd_cellhd.c:194
 msgid "duplicate east field"
 msgstr "Field ค่าตะวันออกซ้ำ"
 
-#: ../lib/gis/rd_cellhd.c:208
+#: ../lib/gis/rd_cellhd.c:202
 msgid "duplicate west field"
 msgstr "Field ค่าตะวันตกซ้ำ"
 
-#: ../lib/gis/rd_cellhd.c:217
+#: ../lib/gis/rd_cellhd.c:210
 msgid "duplicate top field"
 msgstr "Field ค่าบนซ้ำ"
 
-#: ../lib/gis/rd_cellhd.c:226
+#: ../lib/gis/rd_cellhd.c:218
 msgid "duplicate bottom field"
 msgstr "Field ค่าล่างซ้ำ"
 
-#: ../lib/gis/rd_cellhd.c:235
+#: ../lib/gis/rd_cellhd.c:226
 msgid "duplicate e-w resolution field"
 msgstr "Field ค่าความละเอียด ออก-ตก ซ้ำ"
 
-#: ../lib/gis/rd_cellhd.c:246
+#: ../lib/gis/rd_cellhd.c:236
 msgid "duplicate 3D e-w resolution field"
 msgstr "Field ค่าความละเอียด  3D  ออก-ตก ซ้ำ"
 
-#: ../lib/gis/rd_cellhd.c:257
+#: ../lib/gis/rd_cellhd.c:246
 msgid "duplicate n-s resolution field"
 msgstr "Field ค่าความละเอียด เหนือ-ใต้ ซ้ำ"
 
-#: ../lib/gis/rd_cellhd.c:268
+#: ../lib/gis/rd_cellhd.c:256
 msgid "duplicate 3D n-s resolution field"
 msgstr "Field ค่าความละเอียด 3D  เหนือ-ใต้ ซ้ำ"
 
-#: ../lib/gis/rd_cellhd.c:279
+#: ../lib/gis/rd_cellhd.c:266
 msgid "duplicate t-b resolution field"
 msgstr "Field ค่าความละเอียด บน-ล่าง ซ้ำ"
 
-#: ../lib/gis/rd_cellhd.c:290
+#: ../lib/gis/rd_cellhd.c:276
 msgid "duplicate rows field"
 msgstr "Field ค่าแถว ซ้ำ"
 
-#: ../lib/gis/rd_cellhd.c:301
+#: ../lib/gis/rd_cellhd.c:286
 msgid "duplicate 3D rows field"
 msgstr "Field ค่าแถว 3D  ซ้ำ"
 
-#: ../lib/gis/rd_cellhd.c:312
+#: ../lib/gis/rd_cellhd.c:296
 msgid "duplicate cols field"
 msgstr "Field ค่าช่อง ซ้ำ"
 
-#: ../lib/gis/rd_cellhd.c:323
+#: ../lib/gis/rd_cellhd.c:306
 msgid "duplicate 3D cols field"
 msgstr "Field ค่าช่อง  3D ซ้ำ"
 
-#: ../lib/gis/rd_cellhd.c:334
+#: ../lib/gis/rd_cellhd.c:316
 msgid "duplicate depths field"
 msgstr "Field ค่าความลึก  ซ้ำ"
 
-#: ../lib/gis/rd_cellhd.c:345
+#: ../lib/gis/rd_cellhd.c:326
 msgid "duplicate format field"
 msgstr "Field รูปแบบ ซ้ำ"
 
-#: ../lib/gis/rd_cellhd.c:354
+#: ../lib/gis/rd_cellhd.c:334
 msgid "duplicate compressed field"
 msgstr "Field การบีบอัด ซ้ำ"
 
-#: ../lib/gis/rd_cellhd.c:365
+#: ../lib/gis/rd_cellhd.c:345
 msgid "north field missing"
 msgstr "field ค่าเหนือ หายไป"
 
-#: ../lib/gis/rd_cellhd.c:367
+#: ../lib/gis/rd_cellhd.c:347
 msgid "south field missing"
 msgstr "field ค่าใต้ หายไป"
 
-#: ../lib/gis/rd_cellhd.c:369
+#: ../lib/gis/rd_cellhd.c:349
 msgid "west field missing"
 msgstr "field ค่าตะวันตก หายไป"
 
-#: ../lib/gis/rd_cellhd.c:371
+#: ../lib/gis/rd_cellhd.c:351
 msgid "east field missing"
 msgstr "field ค่าตะวันออก หายไป"
 
-#: ../lib/gis/rd_cellhd.c:373
+#: ../lib/gis/rd_cellhd.c:353
 msgid "cols field missing"
 msgstr "field ค่าช่อง หายไป"
 
-#: ../lib/gis/rd_cellhd.c:375
+#: ../lib/gis/rd_cellhd.c:355
 msgid "rows field missing"
 msgstr "field ค่าแถว หายไป"
 
-#: ../lib/gis/rd_cellhd.c:386
+#: ../lib/gis/rd_cellhd.c:366
 msgid "ewres3 field missing"
 msgstr "field ค่าewres3 หายไป"
 
-#: ../lib/gis/rd_cellhd.c:388
+#: ../lib/gis/rd_cellhd.c:368
 msgid "nsres3 field missing"
 msgstr "field ค่า nsres3 หายไป"
 
-#: ../lib/gis/rd_cellhd.c:390
+#: ../lib/gis/rd_cellhd.c:370
 msgid "cols3 field missing"
 msgstr "field ค่าcols3 หายไป"
 
-#: ../lib/gis/rd_cellhd.c:392
+#: ../lib/gis/rd_cellhd.c:372
 msgid "rows3 field missing"
 msgstr "field ค่าrows3 หายไป"
 
-#: ../lib/gis/rd_cellhd.c:448
+#: ../lib/gis/rd_cellhd.c:429
 #, c-format
 msgid "line %d: <%s>"
 msgstr "บรรทัด %d: <%s>"
 
-#: ../lib/gis/auto_mask.c:66
+#: ../lib/gis/auto_mask.c:64
 msgid "Unable to open automatic MASK file"
 msgstr "ไม่สามารถเปิด MASK ไฟล์แบบ อัตโนมัติได้"
 
-#: ../lib/gis/env.c:248
+#: ../lib/gis/env.c:242
 msgid "GISRC - variable not set"
 msgstr "GISRC - ไม่ได้กำหนดค่าตัวแปล"
 
-#: ../lib/gis/env.c:279
+#: ../lib/gis/env.c:274
 #, fuzzy, c-format
 msgid "G_getenv(): Variable %s not set"
 msgstr "GISRC - ไม่ได้กำหนดค่าตัวแปล"
 
-#: ../lib/gis/env.c:305
+#: ../lib/gis/env.c:300
 #, c-format
 msgid "%s not set"
 msgstr "%s ไม่ได้กำหนดค่า"
 
-#: ../lib/gis/done_msg.c:37
+#: ../lib/gis/done_msg.c:38
 #, c-format
 msgid "%s complete. %s"
 msgstr "%s เสร็จสิ้น %s"
 
-#: ../lib/gis/get_window.c:69 ../lib/gis/get_window.c:88
+#: ../lib/gis/get_window.c:67 ../lib/gis/get_window.c:85
 #, c-format
 msgid ""
 "region for current mapset %s\n"
@@ -3526,16 +3509,16 @@ msgstr ""
 "ขอบเขตสำหรับชุดแผนที่ %s\n"
 "ทำงาน \"g.region\""
 
-#: ../lib/gis/get_window.c:124
+#: ../lib/gis/get_window.c:120
 #, c-format
 msgid "default region %s"
 msgstr "ขอบเขตตั้งต้น %s"
 
-#: ../lib/gis/get_window.c:146
+#: ../lib/gis/get_window.c:141
 msgid "is not set"
 msgstr "ไม่มีการกำหนด"
 
-#: ../lib/gis/get_window.c:156
+#: ../lib/gis/get_window.c:150
 #, c-format
 msgid ""
 "is invalid\n"
@@ -3544,40 +3527,40 @@ msgstr ""
 "ไม่ถูกต้อง\n"
 "%s"
 
-#: ../lib/gis/mask_info.c:42
+#: ../lib/gis/mask_info.c:40
 #, c-format
 msgid "<%s> in mapset <%s>"
 msgstr "<%s> ในชุดแผนที่ <%s>"
 
-#: ../lib/gis/mask_info.c:45
+#: ../lib/gis/mask_info.c:43
 msgid "none"
 msgstr "none"
 
-#: ../lib/gis/mask_info.c:48
+#: ../lib/gis/mask_info.c:46
 msgid "not known"
 msgstr "ไม่ทราบ"
 
-#: ../lib/gis/color_read.c:123
+#: ../lib/gis/color_read.c:116
 #, c-format
 msgid "color support for [%s] in mapset [%s] %s"
 msgstr "รองรับการใช้สีสำหรับ [%s] ในชุดแผนที่  [%s] %s"
 
-#: ../lib/gis/view.c:180
+#: ../lib/gis/view.c:177
 #, c-format
 msgid "Unable to open %s for writing"
 msgstr "ไม่สามารถเปิด %s เพื่อเขียนได้"
 
-#: ../lib/gis/view.c:269 ../lib/gis/view.c:486
+#: ../lib/gis/view.c:263 ../lib/gis/view.c:480
 #, c-format
 msgid "Unable to open %s for reading"
 msgstr "ไม่สามารถเปิด %s เพื่ออ่านได้"
 
-#: ../lib/gis/view.c:472
+#: ../lib/gis/view.c:466
 #, c-format
 msgid "GRASS window when view was saved:\n"
 msgstr "บันทึกหน้าต่าง GRASS เมื่อแสดงผล:\n"
 
-#: ../lib/gis/view.c:547
+#: ../lib/gis/view.c:546
 #, c-format
 msgid " Window saved in \"%s\" is completely outside of current GRASS window."
 msgstr "บันทึกหน้าต่างใน \"%s\" เสร็จเรียบร้อย"
@@ -3588,210 +3571,388 @@ msgid ""
 " Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
 msgstr "เพียง %d%% หน้าต่าง ถูกบันทึกใน \"%s\" เหลื่อมกับหน้าต่าง GRASS"
 
-#: ../lib/gis/ask.c:339
-msgid "to cancel request"
-msgstr "ยกเลิกการร้องขอ"
-
-#: ../lib/gis/ask.c:395
-#, c-format
-msgid "Enter a new %s file name"
-msgstr "ใส่ชื่อไฟล์ใหม่  %s"
-
-#: ../lib/gis/ask.c:401
-#, c-format
-msgid "Enter the name of an existing %s file"
-msgstr "ใส่ชื่อไฟล์ที่มีอยู่แล้ว  %s"
-
-#: ../lib/gis/ask.c:405
-#, c-format
-msgid "Enter %s file name"
-msgstr "ใส่ชื่อไฟล์  %s"
-
-#: ../lib/gis/ask.c:425
-#, c-format
-msgid "Enter 'list' for a list of existing %s files\n"
-msgstr "ใส่  'list' สำหรับรายการที่มีอยู่แล้ว %s ไฟล์\n"
-
-#: ../lib/gis/ask.c:428
-#, c-format
-msgid "Enter 'list -f' for "
-msgstr "ใส่  'list -f' สำหรับ"
-
-#: ../lib/gis/ask.c:430
-#, c-format
-msgid "a list %s"
-msgstr "รายการ  %s"
-
-#: ../lib/gis/ask.c:432
-#, c-format
-msgid "an extended list"
-msgstr "รายการขยาย"
-
-#: ../lib/gis/ask.c:436
-#, c-format
-msgid "Hit RETURN %s\n"
-msgstr "กด  RETURN %s\n"
-
-#: ../lib/gis/ask.c:458 ../lib/gis/ask.c:565 ../lib/gis/ask.c:587
-#, c-format
-msgid ""
-"\n"
-"** %s - not found **\n"
-msgstr ""
-"\n"
-"** %s - ไม่พบ **\n"
-
-#: ../lib/gis/ask.c:465 ../lib/gis/ask.c:551
-#, c-format
-msgid ""
-"\n"
-"** %s exists. ok to overwrite? "
-msgstr ""
-"\n"
-"** %s มีอยู่แล้ว. คุณต้องการที่จะเขียนทับหรือไม่? "
-
-#: ../lib/gis/ask.c:511
-#, c-format
-msgid ""
-"\n"
-"**<%s> illegal name **\n"
-msgstr ""
-"\n"
-"**<%s> ชื่อไม่ถูกต้อง **\n"
-
-#: ../lib/gis/ask.c:526
-#, c-format
-msgid ""
-"\n"
-"** %s - illegal request **\n"
-msgstr ""
-"\n"
-"**<%s> คำร้องขอถูกต้อง **\n"
-
-#: ../lib/gis/ask.c:541
-#, c-format
-msgid ""
-"\n"
-"** %s - exists, select another name **\n"
-msgstr ""
-"\n"
-"** %s - มีอยู่แล้ว, ให้เลือกชื่ออื่น **\n"
-
-#: ../lib/gis/ask.c:569
-msgid "ask: can't happen"
-msgstr "ถาม: ไม่สามารถเกิดขึ้นได้"
-
-#: ../lib/gis/alloc.c:42
+#: ../lib/gis/alloc.c:45
 msgid "G_malloc: out of memory"
 msgstr "G_malloc: หน่วยความจำไม่พอ"
 
-#: ../lib/gis/alloc.c:75
+#: ../lib/gis/alloc.c:79
 msgid "G_calloc: out of memory"
 msgstr "G_calloc: หน่วยความจำไม่พอ"
 
-#: ../lib/gis/alloc.c:111
+#: ../lib/gis/alloc.c:117
 msgid "G_realloc: out of memory"
 msgstr "G_realloc: หน่วยความจำไม่พอ"
 
-#: ../lib/gis/histogram.c:60
+#: ../lib/gis/histogram.c:57
 #, c-format
 msgid "Histogram for [%s in %s] missing (run r.support)"
 msgstr "Histogram สำหรับ [%s ใน %s] หายไป (ใช้คำสั่ง r.support)"
 
-#: ../lib/gis/histogram.c:68
+#: ../lib/gis/histogram.c:65
 #, c-format
 msgid "Can't read histogram for [%s in %s]"
 msgstr "ไม่สามารถอ่าน histogram สำหรับ [%s ใน %s]"
 
-#: ../lib/gis/histogram.c:79 ../lib/gis/histogram.c:89
+#: ../lib/gis/histogram.c:74 ../lib/gis/histogram.c:84
 #, c-format
 msgid "Invalid histogram file for [%s in %s]"
 msgstr "histogram ไฟล์ ไม่ถูกต้องสำหรับ [%s ใน %s]"
 
-#: ../lib/gis/histogram.c:370
+#: ../lib/gis/histogram.c:356
 #, c-format
 msgid "can't create histogram for [%s in %s]"
 msgstr "ไม่สามารถสร้าง histogram ได้ สำหรับ [%s ใน %s] "
 
-#: ../lib/imagery/fopen.c:28
+#: ../lib/imagery/fopen.c:23
 #, c-format
 msgid "Unable to create file [%s] of group [%s in %s]"
 msgstr "ไม่สามารถสร้างไฟล์ [%s] ของกลุ่ม [%s ใน %s]"
 
-#: ../lib/imagery/fopen.c:46 ../lib/imagery/fopen.c:73
+#: ../lib/imagery/fopen.c:36 ../lib/imagery/fopen.c:57
 #, c-format
 msgid "Unable to open file [%s] of group [%s in %s]"
 msgstr "ไม่สามารถเปิดไฟล์ [%s] ของกลุ่ม [%s ใน %s]"
 
-#: ../lib/imagery/fopen.c:62
+#: ../lib/imagery/fopen.c:49
 #, c-format
 msgid "Unable to find file [%s] of group [%s in %s]"
 msgstr "ไม่สามารถค้นหาไฟล์ [%s] ของกลุ่ม [%s ใน %s]"
 
-#: ../lib/imagery/fopen.c:94
+#: ../lib/imagery/fopen.c:79
 #, c-format
 msgid "Unable to create file [%s] for subgroup [%s] of group [%s in %s]"
 msgstr "ไม่สามารถสร้างไฟล์ [%s] ของกลุ่มย่อย  [%s] ของกลุ่ม [%s ใน %s]"
 
-#: ../lib/imagery/fopen.c:115 ../lib/imagery/fopen.c:145
+#: ../lib/imagery/fopen.c:101 ../lib/imagery/fopen.c:127
 #, c-format
 msgid "Unable to open file [%s] for subgroup [%s] of group [%s in %s]"
 msgstr "ไม่สามารถเปิดไฟล์ [%s] ของกลุ่มย่อย  [%s] ของกลุ่ม [%s ใน %s]"
 
-#: ../lib/imagery/fopen.c:134
+#: ../lib/imagery/fopen.c:116
 #, c-format
 msgid "Unable to find file [%s] for subgroup [%s] of group [%s in %s]"
 msgstr "ไม่สามารถค้นหาไฟล์ [%s] ของกลุ่มย่อย  [%s] ของกลุ่ม [%s ใน %s]"
 
-#: ../lib/gmath/la.c:63 ../lib/gmath/la.c:120
+#: ../lib/imagery/target.c:38
+#, fuzzy, c-format
+msgid "Unable to read target file for group [%s]"
+msgstr "ไม่สามารถสร้างส่วนหัวของไฟล์ [%s] ได้"
+
+#: ../lib/psdriver/Graph_set.c:199
+#, c-format
+msgid "PS: GRASS_TRUECOLOR status: %s"
+msgstr ""
+
+#: ../lib/psdriver/Graph_set.c:214
+#, c-format
+msgid "PS: collecting to file <%s>"
+msgstr ""
+
+#: ../lib/psdriver/Graph_set.c:215
+#, c-format
+msgid "GRASS_WIDTH=%.1f, GRASS_HEIGHT=%.1f"
+msgstr ""
+
+#: ../lib/ogsf/Gv3.c:249
+#, c-format
+msgid "No features from vector map <%s> fall within current region"
+msgstr ""
+
+#: ../lib/ogsf/Gv3.c:254
+#, fuzzy, c-format
+msgid "Vector map <%s> loaded (%d features)"
+msgstr "ไม่พบ ชื่อแผนที่เชิงเส้น <%s>"
+
+#: ../lib/ogsf/gk.c:322
+msgid "Need at least 3 keyframes for spline"
+msgstr ""
+
+#: ../lib/ogsf/gk.c:624
+msgid "Need at least 2 keyframes for interpolation"
+msgstr ""
+
+#: ../lib/ogsf/GVL2.c:249
+#, fuzzy, c-format
+msgid "Loading 3d raster map <%s>..."
+msgstr "กำลังอ่านแผนที่เชิงภาพ <%s> ไปเก็บไว้ในหน่วยความจำ"
+
+#: ../lib/ogsf/Gvl3.c:39 ../lib/ogsf/gvl_file.c:428
+#, fuzzy, c-format
+msgid "3D raster map <%s> not found"
+msgstr "ไม่พบแผนที่เชิงภาพ <%s> "
+
+#: ../lib/ogsf/gsd_img_mpeg.c:63
+#, fuzzy
+msgid "Unable to allocate stream"
+msgstr "ไม่สามารถจองหน่วยความจำได้\n"
+
+#: ../lib/ogsf/gsd_img_mpeg.c:156
+#, fuzzy
+msgid "Video codec not found"
+msgstr "ไม่พบ ชื่อแผนที่เชิงเส้น <%s>"
+
+#: ../lib/ogsf/gsd_img_mpeg.c:162
+#, fuzzy
+msgid "Unable to open codec"
+msgstr "ไม่สามารถเปิดได้ %s"
+
+#: ../lib/ogsf/gsd_img_mpeg.c:181
+#, fuzzy
+msgid "Unable to allocate picture"
+msgstr "ไม่สามารถจองหน่วยความจำได้\n"
+
+#: ../lib/ogsf/gsd_img_mpeg.c:192
+#, fuzzy
+msgid "Unable to allocate temporary picture"
+msgstr "ไม่สามารถจองหน่วยความจำได้\n"
+
+#: ../lib/ogsf/gsd_img_mpeg.c:252
+#, fuzzy
+msgid "Error while writing video frame"
+msgstr "เกิดข้อผิดพลาดขณะเขียน topo ไฟล์ "
+
+#: ../lib/ogsf/gsd_img_mpeg.c:298
+#, c-format
+msgid "Opening MPEG stream <%s>..."
+msgstr ""
+
+#: ../lib/ogsf/gsd_img_mpeg.c:306
+msgid "Unable to deduce output format from file extension: using MPEG"
+msgstr ""
+
+#: ../lib/ogsf/gsd_img_mpeg.c:310
+#, fuzzy
+msgid "Unable to find suitable output format"
+msgstr "ไม่สามารถค้นหาตาราง <%s> ที่เชื่อมกับข้อมูลเชิงเส้น <%s>"
+
+#: ../lib/ogsf/gsd_img_mpeg.c:337
+#, fuzzy
+msgid "Invalid output format parameters"
+msgstr "ค่าตัวแปรเริ่มต้นการฉายแผนที่"
+
+#: ../lib/ogsf/gsd_img_mpeg.c:351
+#, fuzzy, c-format
+msgid "Unable to open <%s>"
+msgstr "ไม่สามารถเปิดได้ %s"
+
+#: ../lib/ogsf/gsd_img_mpeg.c:361
+msgid "NVIZ has not been built with MPEG output support"
+msgstr ""
+
+#: ../lib/ogsf/gsd_img_ppm.c:53 ../lib/ogsf/gsd_img_ppm.c:96
+#: ../lib/ogsf/gsd_img_tif.c:64 ../lib/ogsf/GK2.c:219
+#, fuzzy, c-format
+msgid "Unable to open file <%s> for writing"
+msgstr "ไม่สามารถเปิด %s เพื่อเขียนได้"
+
+#: ../lib/ogsf/gsdrape.c:207
+#, fuzzy
+msgid "Unable to process vector map - out of memory"
+msgstr "ไม่สามารถอ่านข้อมูลแผนที่เชิงเส้นได้ <%s%s>"
+
+#: ../lib/ogsf/gsd_legend.c:245
+#, fuzzy, c-format
+msgid "Unable to read color file of raster map <%s>"
+msgstr "ไม่สามารถสร้างส่วนหัวของไฟล์สำหรับ [%s in %s]"
+
+#: ../lib/ogsf/gsd_legend.c:251
+#, fuzzy, c-format
+msgid "Unable to read category file of raster map <%s>"
+msgstr "ไม่สามารถสร้างส่วนหัวของไฟล์สำหรับ [%s in %s]"
+
+#: ../lib/ogsf/gsd_legend.c:268
+#, fuzzy, c-format
+msgid "Unable to read fp range of raster map <%s>"
+msgstr "ไม่สามารถสร้างแผนที่เชิงภาพ <%s> "
+
+#: ../lib/ogsf/gsd_legend.c:280
+#, fuzzy, c-format
+msgid "Unable to read range of raster map <%s>"
+msgstr "ไม่สามารถสร้างแผนที่เชิงภาพ <%s> "
+
+#: ../lib/ogsf/gsd_legend.c:294
+msgid "Range request error for legend"
+msgstr ""
+
+#: ../lib/ogsf/gsd_legend.c:384
+#, fuzzy
+msgid "Unable to show discrete FP range (use list"
+msgstr "ไม่สามารถเขียนการเชื่อมฐานข้อมูล"
+
+#: ../lib/ogsf/gsd_legend.c:500
+#, fuzzy
+msgid "Too many categories to show as discrete!"
+msgstr "กลุ่มมากเกินไป สำหรับ [%s in %s]"
+
+#: ../lib/ogsf/gsd_legend.c:502
+msgid "Try using smaller font!"
+msgstr ""
+
+#: ../lib/ogsf/Gs3.c:133 ../lib/ogsf/Gs3.c:207 ../lib/ogsf/Gs3.c:364
+#: ../lib/ogsf/Gs3.c:479 ../lib/ogsf/Gs3.c:583
+#, fuzzy
+msgid "Unable to allocate memory for a null buffer"
+msgstr "ไม่สามารถจองหน่วยความจำได้\n"
+
+#: ../lib/ogsf/Gs3.c:140 ../lib/ogsf/Gs3.c:214 ../lib/ogsf/Gs3.c:376
+#: ../lib/ogsf/Gs3.c:491 ../lib/ogsf/Gs3.c:586
+#, fuzzy, c-format
+msgid "Loading raster map <%s>..."
+msgstr "กำลังอ่านแผนที่เชิงภาพ <%s> ไปเก็บไว้ในหน่วยความจำ"
+
+#: ../lib/ogsf/Gs3.c:643
+#, c-format
+msgid "Color table range doesn't match data (mincol=%d, maxcol=%d"
+msgstr ""
+
+#: ../lib/ogsf/Gs3.c:705 ../lib/ogsf/Gs3.c:775
+#, fuzzy, c-format
+msgid "Translating colors from raster map <%s>..."
+msgstr "โปรดสร้าง  topology ของ แผนที่เชิงเส้นใหม่ <%s@%s>"
+
+#: ../lib/ogsf/Gs3.c:1012
+msgid "View not saved by this program,there may be some inconsistancies"
+msgstr ""
+
+#: ../lib/ogsf/gsds.c:109
+msgid "Maximum number of datasets exceeded"
+msgstr ""
+
+#: ../lib/ogsf/gsd_prim.c:146
+#, c-format
+msgid "Color Material: %d"
+msgstr ""
+
+#: ../lib/ogsf/gsd_prim.c:630
+#, c-format
+msgid ""
+"gsd_rot(): %c is an invalid axis specification. Rotation ignored. Please "
+"advise GRASS developers of this error"
+msgstr ""
+
+#: ../lib/ogsf/gsd_surf.c:1742
+msgid "Cut-plane points mis-match between surfaces. Check resolution(s)."
+msgstr ""
+
+#: ../lib/ogsf/gsd_label.c:58
+msgid "Max. number of labels reached!"
+msgstr ""
+
+#: ../lib/ogsf/GK2.c:275 ../lib/ogsf/GK2.c:288
+msgid "Check no. of frames requested and keyframes marked"
+msgstr ""
+
+#: ../lib/ogsf/gs_bm.c:124
+#, fuzzy
+msgid "Bitmap mismatch"
+msgstr "ภาพการบัง ถูกสร้าง"
+
+#: ../lib/ogsf/gvl_file.c:104
+msgid "Maximum number of datafiles exceeded"
+msgstr ""
+
+#: ../lib/ogsf/gvl_file.c:437
+#, fuzzy, c-format
+msgid "Unable to open 3D raster map <%s>"
+msgstr "ไม่สามารถเปิดแผนที่เชิงภาพ <%s> "
+
+#: ../lib/ogsf/gvl_file.c:443
+#, fuzzy, c-format
+msgid "Unable to read range of 3D raster map <%s>"
+msgstr "ไม่สามารถสร้างแผนที่เชิงภาพ <%s> "
+
+#: ../lib/ogsf/gvl_file.c:471
+#, fuzzy, c-format
+msgid "Unable to close 3D raster map <%s>"
+msgstr "ไม่สามารถเปิดแผนที่เชิงภาพ <%s> "
+
+#: ../lib/ogsf/trans.c:180
+msgid "Out of matrix stack space"
+msgstr ""
+
+#: ../lib/ogsf/trans.c:200
+msgid "Tried to pop an empty stack"
+msgstr ""
+
+#: ../lib/ogsf/Gp3.c:204
+#, c-format
+msgid "No points from vector map <%s> fall within current region"
+msgstr ""
+
+#: ../lib/ogsf/Gp3.c:209
+#, fuzzy, c-format
+msgid "Vector map <%s> loaded (%d points)"
+msgstr "ไม่พบ ชื่อแผนที่เชิงเส้น <%s>"
+
+#: ../lib/ogsf/GS2.c:1638
+#, c-format
+msgid "Raster map <%s> is outside of current region. Load failed."
+msgstr ""
+
+#: ../lib/ogsf/GS2.c:1716 ../lib/ogsf/GS2.c:1722 ../lib/ogsf/GS2.c:1730
+#: ../lib/ogsf/GS2.c:1739 ../lib/ogsf/GS2.c:1747 ../lib/ogsf/GS2.c:1757
+#: ../lib/ogsf/GS2.c:1805
+msgid "GS_load_att_map(): Out of memory. Unable to load map"
+msgstr ""
+
+#: ../lib/ogsf/GS2.c:1833
+#, fuzzy
+msgid "Loading failed"
+msgstr "การเชื่อมต่อล้มเหลว"
+
+#: ../lib/ogsf/GS2.c:1837
+msgid "Error finding range"
+msgstr ""
+
+#: ../lib/gmath/la.c:63 ../lib/gmath/la.c:119
 msgid "Matrix dimensions out of range"
 msgstr "มิติของเมตริกซ์ ไม่ถูกต้อง"
 
-#: ../lib/gmath/la.c:154
+#: ../lib/gmath/la.c:152
 msgid "Matrix is not initialised fully."
 msgstr "เมตริกซ์ไม่ได้กำหนดค่าตั้งต้นทั้งหมด"
 
-#: ../lib/gmath/la.c:159
+#: ../lib/gmath/la.c:157
 msgid "Unable to allocate space for matrix copy"
 msgstr "ไม่สามารถกำหนดที่ว่างสำหรับเมตริกซ์ เพื่อทำซ้ำได้"
 
-#: ../lib/gmath/la.c:251
+#: ../lib/gmath/la.c:246
 msgid "First scalar multiplier must be non-zero"
 msgstr "ค่าแรกของตัวคูณต้องไม่เป็น 0"
 
-#: ../lib/gmath/la.c:257 ../lib/gmath/la.c:265 ../lib/gmath/la.c:326
+#: ../lib/gmath/la.c:252 ../lib/gmath/la.c:260 ../lib/gmath/la.c:325
 msgid "One or both input matrices uninitialised"
 msgstr "หนึ่ง หรือ ทั้งสอง ของเมตริกซ์ ไม่ได้กำหนดค่าตั้งต้น"
 
-#: ../lib/gmath/la.c:270 ../lib/gmath/la.c:331
+#: ../lib/gmath/la.c:265 ../lib/gmath/la.c:330
 msgid "Matrix order does not match"
 msgstr "กำลังของ เมตริกซ์ ไม่ตรง"
 
-#: ../lib/gmath/la.c:276
+#: ../lib/gmath/la.c:271
 msgid "Unable to allocate space for matrix sum"
 msgstr "ไม่สามารถกำหนดที่ว่างสำหรับการบวกเมตริกซ์ ได้"
 
-#: ../lib/gmath/la.c:336
+#: ../lib/gmath/la.c:335
 msgid "Unable to allocate space for matrix product"
 msgstr "ไม่สามารถกำหนดที่ว่างสำหรับเมตริกซ์ผลลัพธ์"
 
-#: ../lib/gmath/la.c:448
+#: ../lib/gmath/la.c:447
 msgid "Input: one or both data matrices uninitialised"
 msgstr "ค่านำเข้า: หนึ่ง หรือ ทั้งสอง ของเมตริกซ์ ไม่ได้กำหนดค่าตั้งต้น"
 
-#: ../lib/gmath/la.c:453
+#: ../lib/gmath/la.c:452
 msgid "Principal matrix is not properly dimensioned"
 msgstr "มิติของเมตริกซ์หลัก ไม่ถูกต้อง"
 
-#: ../lib/gmath/la.c:458
+#: ../lib/gmath/la.c:457
 msgid "Input: you must have at least one array to solve"
 msgstr "ค่านำเข้า: คุณต้องมีอย่างน้อย 1 กลุ่มลำดับเพื่อแก้ปัญหา"
 
-#: ../lib/gmath/la.c:464
+#: ../lib/gmath/la.c:463
 msgid "Could not allocate space for solution matrix"
 msgstr "ไม่สามารถกำหนดที่ว่างสำหรับการแก้ปัญหาเมตริกซ์ ได้"
 
-#: ../lib/gmath/la.c:470 ../lib/gmath/la.c:478
+#: ../lib/gmath/la.c:469 ../lib/gmath/la.c:477
 msgid "Could not allocate space for working matrix"
 msgstr "ไม่สามารถกำหนดที่ว่างสำหรับ เมตริกซ์ที่กำลังทำงานได้"
 
@@ -3823,135 +3984,151 @@ msgstr "เมตริกซ์เป็น เมตริกซ์เดี�
 msgid "Problem in LA procedure."
 msgstr "เกิดปัญหาใน ชุดคำสั่ง LA"
 
-#: ../lib/gmath/la.c:692
+#: ../lib/gmath/la.c:690
 msgid "Element array has not been allocated"
 msgstr "ชิ้นส่วนของกลุ่มค่าไม่ได้ถูกกำหนด"
 
-#: ../lib/gmath/la.c:698
+#: ../lib/gmath/la.c:695
 msgid "Specified element is outside array bounds"
 msgstr "ชิ้นส่วนเฉพาะอยู่นอกขอบเขต"
 
-#: ../lib/gmath/la.c:754
+#: ../lib/gmath/la.c:749
 msgid "Specified matrix column index is outside range"
 msgstr "ช่องดัชนีเมตริกซ์เฉพาะอยู่นอกขอบเขต"
 
-#: ../lib/gmath/la.c:759 ../lib/gmath/la.c:801 ../lib/gmath/la.c:1125
-#: ../lib/gmath/la.c:1178 ../lib/gmath/la.c:1252
+#: ../lib/gmath/la.c:754 ../lib/gmath/la.c:795 ../lib/gmath/la.c:1108
+#: ../lib/gmath/la.c:1160 ../lib/gmath/la.c:1235
 msgid "Matrix is not initialised"
 msgstr "เมตริกซ์ไม่ได้ถูกกำหนดค่า"
 
-#: ../lib/gmath/la.c:764 ../lib/gmath/la.c:806
+#: ../lib/gmath/la.c:759 ../lib/gmath/la.c:800
 msgid "Could not allocate space for vector structure"
 msgstr "ไม่สามารถกำหนดที่ว่างสำหรับ โครงสร้างข้อมูลเชิงเส้น"
 
-#: ../lib/gmath/la.c:796
+#: ../lib/gmath/la.c:790
 msgid "Specified matrix row index is outside range"
 msgstr "แถวดัชนีเมตริกซ์อยู่นอกขอบเขต"
 
-#: ../lib/gmath/la.c:837
+#: ../lib/gmath/la.c:830
 msgid "Specified row index is outside range"
 msgstr "แถวดัชนีอยู่นอกขอบเขต"
 
-#: ../lib/gmath/la.c:842
+#: ../lib/gmath/la.c:835
 msgid "Specified column index is outside range"
 msgstr "ช่องดัชนีอยู่นอกขอบเขต"
 
-#: ../lib/gmath/la.c:862
+#: ../lib/gmath/la.c:855
 msgid "Unknown vector type."
 msgstr "ไม่ทราบชนิดของข้อมูลเชิงเส้น"
 
-#: ../lib/gmath/la.c:991
+#: ../lib/gmath/la.c:980
 msgid "Output vector is uninitialized"
 msgstr "ไม่สามารถกำหนดค่า ผลลัพธ์ข้อมูลเชิงเส้น"
 
-#: ../lib/gmath/la.c:996
+#: ../lib/gmath/la.c:985
 msgid "Vectors are not of the same type"
 msgstr "ข้อมูลเชิงเส้นไม่ใช่ชนิดเดียวกัน"
 
-#: ../lib/gmath/la.c:1001
+#: ../lib/gmath/la.c:990
 msgid "Output vector is of incorrect type"
 msgstr "ชนิดของข้อมูลผลลัพธ์เชิงเส้นไม่ถูกต้อง"
 
-#: ../lib/gmath/la.c:1006
+#: ../lib/gmath/la.c:995
 msgid "Matrices not allowed"
 msgstr "เมตริกซ์ ไม่ยอมรับ"
 
-#: ../lib/gmath/la.c:1013
+#: ../lib/gmath/la.c:1001
 msgid "Vectors have differing dimensions"
 msgstr "มิติของข้อมูลเชิงเส้นแตกต่าง"
 
-#: ../lib/gmath/la.c:1020
+#: ../lib/gmath/la.c:1007
 msgid "Output vector has incorrect dimension"
 msgstr "มิติของข้อมูลผลลัพธ์เชิงเส้นไม่ถูกต้อง"
 
-#: ../lib/gmath/la.c:1067
+#: ../lib/gmath/la.c:1053
 msgid "Vector dimensions out of range"
 msgstr "มิติของข้อมูลเชิงเส้นอยู่นอกช่วง"
 
-#: ../lib/gmath/la.c:1073
+#: ../lib/gmath/la.c:1058
 msgid "Row/column out of range"
 msgstr "แถว/ช่อง อยู่นอกช่วง"
 
-#: ../lib/gmath/la.c:1291
+#: ../lib/gmath/la.c:1273
 msgid "Vector structure is not initialised"
 msgstr "ผลลัพธ์ข้อมูลเชิงเส้น ยังไม่ได้กำหนดค่า"
 
-#: ../lib/gmath/la.c:1413 ../lib/gmath/la.c:1421 ../lib/gmath/la.c:1426
+#: ../lib/gmath/la.c:1394 ../lib/gmath/la.c:1402 ../lib/gmath/la.c:1407
 msgid "Input format error"
 msgstr "รูปแบบข้อมูลที่จะนำเข้า ผิดพลาด"
 
-#: ../lib/gmath/del2g.c:51
+#: ../lib/gmath/del2g.c:50
 msgid "    taking FFT of image..."
 msgstr "    การเอา FFT ของภาพ..."
 
-#: ../lib/gmath/del2g.c:58
-msgid "Insufficent memory for allocation of gaussian"
-msgstr "หน่วยความจำไม่พอที่จะเก็บค่า gaussian"
-
-#: ../lib/gmath/del2g.c:60
+#: ../lib/gmath/del2g.c:56
 msgid "    computing del**2 g..."
 msgstr "    กำลังคำนวน del**2 g..."
 
-#: ../lib/gmath/del2g.c:63
+#: ../lib/gmath/del2g.c:59
 msgid "    taking FFT of del**2 g..."
 msgstr "    การเอา FFT ของ del**2 g..."
 
-#: ../lib/gmath/del2g.c:67
+#: ../lib/gmath/del2g.c:63
 msgid "    multiplying transforms..."
 msgstr "    แปลงค่าแบบเพิ่มจำนวน..."
 
-#: ../lib/gmath/del2g.c:70
+#: ../lib/gmath/del2g.c:66
 msgid "    taking inverse FFT..."
 msgstr "    การเอาค่าส่วนกลับ FFT..."
 
-#: ../lib/display/tran_colr.c:132 ../lib/display/tran_colr.c:134
+#: ../lib/display/draw2.c:1109
+msgid "D_move_abs() called while path not active"
+msgstr ""
+
+#: ../lib/display/draw2.c:1128
+msgid "D_cont_abs() called while path not active"
+msgstr ""
+
+#: ../lib/display/draw2.c:1148
+msgid "D_begin() called while path active"
+msgstr ""
+
+#: ../lib/display/draw2.c:1157
+msgid "D_end() called while path not active"
+msgstr ""
+
+#: ../lib/display/draw2.c:1167
+msgid "D_close() called while path not active"
+msgstr ""
+
+#: ../lib/display/tran_colr.c:105 ../lib/display/tran_colr.c:107
 #, c-format
 msgid "[%s]: No such color"
 msgstr "[%s]: ไม่ใช่ค่าสี"
 
-#: ../lib/symbol/read.c:203
+#: ../lib/symbol/read.c:206
 #, c-format
 msgid "Cannot read symbol line coordinates: %s"
 msgstr "ไม่สามารถอ่านค่าพิกัด: %s"
 
-#: ../lib/symbol/read.c:252
+#: ../lib/symbol/read.c:254
 #, c-format
 msgid ""
 "Incorrect symbol name: '%s' (should be: group/name or group/name@mapset)"
 msgstr "ชื่อผิด: '%s' (ควรจะเป็น: group/name หรือ group/name@mapset)"
 
-#: ../lib/symbol/read.c:274
+#: ../lib/symbol/read.c:278
 #, c-format
 msgid "Cannot find/open symbol: '%s'"
 msgstr "ไม่สามารถ หา/เปิด สัญลักษณ์: '%s'"
 
-#: ../lib/symbol/read.c:358 ../lib/symbol/read.c:367 ../lib/symbol/read.c:374
-#: ../lib/symbol/read.c:383
+#: ../lib/symbol/read.c:378 ../lib/symbol/read.c:396 ../lib/symbol/read.c:406
+#: ../lib/symbol/read.c:424
 #, c-format
 msgid "Incorrect symbol color: '%s', using default."
 msgstr "สีสัญลักษณ์ผิด: '%s', ใช้ค่าตั้งต้น"
 
-#: ../lib/rst/interp_float/segmen2d.c:123
+#: ../lib/rst/interp_float/segmen2d.c:113
 msgid ""
 "taking too long to find points for interpolation--please change the region "
 "to area where your points are. Continuing calculations..."
@@ -3959,80 +4136,80 @@ msgstr ""
 "ใช้เวลานานในการหาจุดเพื่อ  interpolation--โปรดเปลี่ยนขอบเขตของพื้นที่ตามจุดที่คุณเลือก "
 "แล้วคำนวนต่อ..."
 
-#: ../lib/rst/interp_float/vinput2d.c:81
+#: ../lib/rst/interp_float/vinput2d.c:73
 msgid "Vector is not 3D"
 msgstr "ข้อมูลเชิงเส้น ไม่ใช่แบบ 3D"
 
-#: ../lib/rst/interp_float/vinput2d.c:84
+#: ../lib/rst/interp_float/vinput2d.c:76
 msgid "Loading data from attribute table ..."
 msgstr "กำลังอ่านข้อมูลจากตารางข้อมูล"
 
-#: ../lib/rst/interp_float/vinput2d.c:87
+#: ../lib/rst/interp_float/vinput2d.c:79
 msgid "Cannot get layer info"
 msgstr "ไม่สามารถอ่านรายละเอียดของชั้นข้อมูลได้"
 
-#: ../lib/rst/interp_float/vinput2d.c:94
+#: ../lib/rst/interp_float/vinput2d.c:87
 #, c-format
 msgid "Cannot open database %s"
 msgstr "ไม่สามารถเปิดฐานข้อมูลได้ %s"
 
-#: ../lib/rst/interp_float/vinput2d.c:99
+#: ../lib/rst/interp_float/vinput2d.c:92
 #, c-format
 msgid "Cannot find z column <%s> (please verify name, e.g. with v.info)"
 msgstr "ไม่สามารถหา z column <%s> (โปรดตรวจสอบชื่อ, e.g. ด้วยคำสั่ง v.info)"
 
-#: ../lib/rst/interp_float/vinput2d.c:101
+#: ../lib/rst/interp_float/vinput2d.c:95
 msgid "Column type of z column is not supported (must be integer or double)"
 msgstr "ชนิดของ z column ไม่รองรับ (ต้องเป็น  integer หรือ  double)"
 
-#: ../lib/rst/interp_float/vinput2d.c:111
+#: ../lib/rst/interp_float/vinput2d.c:106
 msgid "Cannot read column type of smooth column"
 msgstr "ไม่สามารถอ่าน ชนิดของ column ได้"
 
-#: ../lib/rst/interp_float/vinput2d.c:113
+#: ../lib/rst/interp_float/vinput2d.c:108
 msgid "Column type of smooth column (datetime) is not supported"
 msgstr "ไม่รองรับ Column ชนิด วันเวลา(datetime)"
 
-#: ../lib/rst/interp_float/vinput2d.c:115
+#: ../lib/rst/interp_float/vinput2d.c:110
 msgid "Column type of s column is not supported (must be integer or double)"
 msgstr "ชนิดของ s column ไม่รองรับ (ต้องเป็น  integer หรือ  double)"
 
-#: ../lib/rst/interp_float/vinput2d.c:125
+#: ../lib/rst/interp_float/vinput2d.c:121
 msgid "Reading lines from vector map ... "
 msgstr "กำลังอ่าน ข้อมูลจาก ข้อมูลเชิงเส้น..."
 
-#: ../lib/rst/interp_float/vinput2d.c:154
-#: ../lib/rst/interp_float/vinput2d.c:250
+#: ../lib/rst/interp_float/vinput2d.c:153
+#: ../lib/rst/interp_float/vinput2d.c:271
 #, c-format
 msgid "Database record for cat %d not found"
 msgstr "ไม่พบ ข้อมูลสำหรับแสดง %d  จากฐานข้อมูล"
 
-#: ../lib/rst/interp_float/vinput2d.c:218
+#: ../lib/rst/interp_float/vinput2d.c:234
 msgid "Reading nodes from vector map ... "
 msgstr "กำลังอ่าน  nodes จากข้อมูลเชิงเส้น"
 
-#: ../lib/rst/interp_float/vinput2d.c:288
+#: ../lib/rst/interp_float/vinput2d.c:316
 msgid "strip exists with insufficient data"
 msgstr "มี strip อยู่แต่ข้อมูลใช้ไม่ได้"
 
-#: ../lib/rst/interp_float/vinput2d.c:302
+#: ../lib/rst/interp_float/vinput2d.c:331
 #, c-format
 msgid "there are points outside specified 2D/3D region--ignored %d points"
 msgstr "ไม่มีจุดอยู่นอกขอบเขต2 D/3D --ยกเลิก %d จุด"
 
-#: ../lib/rst/interp_float/vinput2d.c:304
+#: ../lib/rst/interp_float/vinput2d.c:334
 #, c-format
 msgid "ignoring %d points -- too dense"
 msgstr "กำลังยกเลิก %d จุด -- แน่นเกินไป"
 
-#: ../lib/rst/interp_float/vinput2d.c:310
+#: ../lib/rst/interp_float/vinput2d.c:338
 #, c-format
 msgid ""
 "%d points given for interpolation (after thinning) is less than given NPMIN=%"
 "d"
 msgstr "%d จุดที่ได้จากการวนซ้ำ  (หลังจาก thinning) น้อยกว่าที่ได้จากNPMIN=%d"
 
-#: ../lib/rst/interp_float/vinput2d.c:327
+#: ../lib/rst/interp_float/vinput2d.c:356
 #, c-format
 msgid ""
 "There are less than %d points for interpolation. No segmentation is "
@@ -4041,18 +4218,530 @@ msgstr ""
 "มีจุด %d น้อยกว่าที่จะใช้ interpolation. ไม่มีชิ้นส่วนที่จำเป็น,ที่จะทำให้การทำงานเร็วขึ้น กำหนด "
 "segmax=%d (ดูคู่มือ)"
 
-#: ../lib/rst/interp_float/vinput2d.c:379
+#: ../lib/rst/interp_float/vinput2d.c:397
 msgid "some points outside of region -- will ignore..."
 msgstr "บางจุดอยู่นอกขอบเขต -- ตัดออก..."
 
-#: ../lib/rst/interp_float/input2d.c:49
+#: ../lib/rst/interp_float/input2d.c:47
 #, c-format
 msgid "Mask raster map <%s> not found"
 msgstr "การบัง ของข้อมูลเชิงภาพ <%s> ไม่พบ"
 
-#: ../lib/rst/interp_float/input2d.c:72
+#: ../lib/rst/interp_float/input2d.c:69
 msgid "Bitmap mask created"
 msgstr "ภาพการบัง ถูกสร้าง"
+
+#: ../lib/cairodriver/Raster.c:68
+msgid "Cairo_begin_scaled_raster: Failed to create surface"
+msgstr ""
+
+#: ../lib/cairodriver/Graph.c:67
+#, c-format
+msgid "Invalid Drawable XID: %s"
+msgstr ""
+
+#: ../lib/cairodriver/Graph.c:72
+#, fuzzy
+msgid "Unable to open display"
+msgstr "ไม่สามารถเปิดได้ %s"
+
+#: ../lib/cairodriver/Graph.c:76
+#, c-format
+msgid "invalid Visual XID: %s"
+msgstr ""
+
+#: ../lib/cairodriver/Graph.c:81
+#, fuzzy
+msgid "Unable to obtain visual"
+msgstr "ไม่สามารถเปิดได้ %s"
+
+#: ../lib/cairodriver/Graph.c:86
+#, fuzzy
+msgid "Unable to query drawable"
+msgstr "ไม่สามารถคัดลอกตารางได้ <%s>"
+
+#: ../lib/cairodriver/Graph.c:91
+#, fuzzy
+msgid "Failed to initialize Xlib surface"
+msgstr "ไม่สามารถระบุ pj เพราะว่า: %s"
+
+#: ../lib/cairodriver/Graph.c:145
+#, c-format
+msgid "Unknown file extension: %s"
+msgstr ""
+
+#: ../lib/cairodriver/Graph.c:170
+#, c-format
+msgid "cairo: collecting to file: %s"
+msgstr ""
+
+#: ../lib/cairodriver/Graph.c:312
+#, fuzzy
+msgid "Unknown Cairo surface type"
+msgstr "ไม่ทราบชนิดของการแทรก"
+
+#: ../lib/cairodriver/Graph.c:317
+#, fuzzy
+msgid "Failed to initialize Cairo surface"
+msgstr "ไม่สามารถระบุ pj เพราะว่า: %s"
+
+#: ../lib/cairodriver/write_ppm.c:27 ../lib/cairodriver/write_bmp.c:72
+#, fuzzy, c-format
+msgid "Cairo: unable to open output file <%s>"
+msgstr "ไม่สามารถเปิดไฟล์ datum table ได้ : %s"
+
+#: ../lib/cairodriver/write_ppm.c:34
+#, fuzzy, c-format
+msgid "Cairo: unable to open mask file <%s>"
+msgstr "G_spawn: ไม่สามารถเปิดไฟล์ %s ได้"
+
+#: ../lib/cairodriver/read_bmp.c:88 ../lib/cairodriver/read_ppm.c:28
+#, fuzzy, c-format
+msgid "Cairo: unable to open input file <%s>"
+msgstr "G_spawn: ไม่สามารถเปิดไฟล์ %s ได้"
+
+#: ../lib/cairodriver/read_bmp.c:92 ../lib/cairodriver/read_ppm.c:32
+#, fuzzy, c-format
+msgid "Cairo: invalid input file <%s>"
+msgstr "ไม่พบแผนที่สำหรับนำเข้า '%s'"
+
+#: ../lib/cairodriver/read_bmp.c:96
+#, c-format
+msgid "Cairo: Invalid BMP header for <%s>"
+msgstr ""
+
+#: ../lib/cairodriver/Text.c:48
+#, fuzzy, c-format
+msgid "Unable to convert from <%s> to UTF-8"
+msgstr "ไม่สามารถคัดลอกแผนที่เชิงเส้น  <%s> ไปเป็น <%s>"
+
+#: ../lib/cairodriver/Text.c:58
+msgid "Some characters could not be converted to UTF-8"
+msgstr ""
+
+#: ../lib/cairodriver/read_ppm.c:38
+#, c-format
+msgid "Cairo: input file has incorrect dimensions: expected: %dx%d got: %dx%d"
+msgstr ""
+
+#: ../lib/cairodriver/read_ppm.c:46
+#, fuzzy, c-format
+msgid "Cairo: unable to open input mask file <%s>"
+msgstr "ไม่สามารถเปิดไฟล์ datum table ได้ : %s"
+
+#: ../lib/cairodriver/read_ppm.c:50
+#, fuzzy, c-format
+msgid "Cairo: invalid input mask file <%s>"
+msgstr "ไม่พบแผนที่สำหรับนำเข้า '%s'"
+
+#: ../lib/cairodriver/read_ppm.c:56
+#, c-format
+msgid ""
+"Cairo: input mask file has incorrect dimensions: expected: %dx%d got: %dx%d"
+msgstr ""
+
+#: ../lib/cairodriver/Draw_bitmap.c:62
+msgid "Cairo_draw_bitmap: Failed to create source"
+msgstr ""
+
+#: ../lib/nviz/change_view.c:108
+#, c-format
+msgid "Invalid view position coordinates, using %f,%f"
+msgstr ""
+
+#: ../lib/nviz/render.c:108
+msgid "Bad server connection"
+msgstr ""
+
+#: ../lib/nviz/render.c:117
+#, fuzzy
+msgid "Unable to create rendering context"
+msgstr "ไม่สามารถสร้างการทำงานใหม่ได้"
+
+#: ../lib/nviz/position.c:50
+#, fuzzy
+msgid "Unable to set focus"
+msgstr "ไม่สามารถเปิดได้ %s"
+
+#: ../lib/nviz/nviz.c:76
+#, fuzzy, c-format
+msgid "Invalid color (%s), using \"white\" as default"
+msgstr "สีสัญลักษณ์ผิด: '%s', ใช้ค่าตั้งต้น"
+
+#: ../lib/nviz/map_obj.c:65
+msgid "Maximum surfaces loaded!"
+msgstr ""
+
+#: ../lib/nviz/map_obj.c:94
+msgid "Maximum vector line maps loaded!"
+msgstr ""
+
+#: ../lib/nviz/map_obj.c:103 ../lib/nviz/map_obj.c:134
+#, fuzzy, c-format
+msgid "Error loading vector map <%s>"
+msgstr "เกิดข้อผิดพลาดระหว่างเปิด แผนที่ g3d <%s>"
+
+#: ../lib/nviz/map_obj.c:122
+msgid "Maximum vector point maps loaded!"
+msgstr ""
+
+#: ../lib/nviz/map_obj.c:149
+msgid "Maximum volumes loaded!"
+msgstr ""
+
+#: ../lib/nviz/map_obj.c:158
+#, fuzzy, c-format
+msgid "Error loading 3d raster map <%s>"
+msgstr "เกิดข้อผิดพลาดระหว่างเปิด แผนที่ g3d <%s>"
+
+#: ../lib/nviz/map_obj.c:166
+msgid "Nviz_new_map_obj(): unsupported data type"
+msgstr ""
+
+#: ../lib/nviz/lights.c:144
+#, fuzzy
+msgid "Unable to define new light"
+msgstr "ไม่สามารถลบไฟล์  '%s'"
+
+#~ msgid "Cannot describe table <%s>"
+#~ msgstr "ไม่สามารถ บรรยายตารางนี้ได้ <%s>"
+
+#~ msgid "Unknown command: %d last: %d"
+#~ msgstr "ไม่รู้จักคำสั่งนี้: %d ลงท้าย: %d"
+
+#~ msgid "Monitor: get_command: Premature EOF"
+#~ msgstr "ตรวจดู: get_command: Premature EOF"
+
+#~ msgid "Graphics driver [%s] started"
+#~ msgstr "Graphics driver [%s] เริ่มแล้ว"
+
+#~ msgid "ERROR %s from graphics driver.\n"
+#~ msgstr "ข้อผิดพลาด %s จากตัวขับจอ \n"
+
+#~ msgid "ERROR - eof from graphics monitor.\n"
+#~ msgstr "ข้อผิดพลาด - EOF จากจอแสดงผล \n"
+
+#~ msgid "Warning - no response from graphics monitor <%s>.\n"
+#~ msgstr "คำเตือน - ไม่มีการตอบสนองจากจอแสดงผล <%s>.\n"
+
+#~ msgid "Check to see if the mouse is still active.\n"
+#~ msgstr "ตรวจสอบ เม้าส์ยังทำงานอยู่หรือไม่ \n"
+
+#~ msgid "ERROR - no response from graphics monitor <%s>.\n"
+#~ msgstr "ข้อผิดพลาด - ไม่มีการตอบสนองจากจอแสดงผล <%s>.\n"
+
+#~ msgid "No graphics monitor has been selected for output."
+#~ msgstr "ไม่ได้เลือก จอแสดงผล"
+
+#~ msgid "Please run \"d.mon\" to select a graphics monitor."
+#~ msgstr "โปรดใช้คำสั่ง  \"d.mon\" เพื่อเลือก จอแสดงผล"
+
+#~ msgid "Failed to get socket name for monitor <%s>."
+#~ msgstr "ล้มเหลวที่จะอ่าน socket name จากจอแสดงผล <%s>."
+
+#~ msgid "No socket to connect to for monitor <%s>."
+#~ msgstr "ไม่มี socketที่จะต่อกับจอแสดงผล <%s>."
+
+#~ msgid "Socket is already in use or not accepting connections."
+#~ msgstr "Socket ถูกใช้อยู่ หรือไม่ยอมรับการเชื่อมต่อ."
+
+#~ msgid "Use d.mon to select a monitor"
+#~ msgstr "ใช้คำสั่ง  d.mon เพื่อเลือก จอแสดงผล"
+
+#~ msgid "Trying to connect to something not a socket."
+#~ msgstr "ลองเชื่อมต่อกับอย่างอื่นที่ไม่ใช่ socket"
+
+#~ msgid "Probably program error."
+#~ msgstr "อาจจะเกิดจากข้อผิดพลาดของ โปรแกรม"
+
+#~ msgid "Connect attempt timed out."
+#~ msgstr "การเชื่อมต่อเกินเวลา"
+
+#~ msgid "Probably an error with the server."
+#~ msgstr "อาจจะเกิดจากข้อผิดพลาดของ เครื่องแม่ข่าย"
+
+#~ msgid "Connection failed."
+#~ msgstr "การเชื่อมต่อล้มเหลว"
+
+#~ msgid "Cannot read topo for line [%d]"
+#~ msgstr "ไม่สามารถอ่าน topo สำหรับ เส้น  [%d]"
+
+#, fuzzy
+#~ msgid "Attempt to delete dead line"
+#~ msgstr "ตั้งใจที่จะลบพื้นที่"
+
+#~ msgid "Unable to open file %s"
+#~ msgstr "ไม่สามารถเปิดไฟล์ %s ได้"
+
+#, fuzzy
+#~ msgid "Unable to open temporary file"
+#~ msgstr "ไม่สามารถเปิดไฟล์ %s ได้"
+
+#~ msgid "Hit RETURN to cancel request\n"
+#~ msgstr "กด RETURN เพื่อยกเลิกคำสั่ง\n"
+
+#~ msgid "Cannot open temp file"
+#~ msgstr "ไม่สามารถเปิด temp ไฟล์"
+
+#~ msgid ""
+#~ "\n"
+#~ "Please specify ellipsoid name\n"
+#~ msgstr ""
+#~ "\n"
+#~ "โปรดระบุชื่อทรงรี\n"
+
+#~ msgid "Enter 'list' for the list of available ellipsoids\n"
+#~ msgstr "ใส่ 'list' เพื่อแสดงรายการ รูปทรงรี\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "invalid ellipsoid\n"
+#~ msgstr ""
+#~ "\n"
+#~ "รูปทรงรี ไม่ถูกต้อง\n"
+
+#~ msgid "Output name '%s' is not valid rast name."
+#~ msgstr "ชื่อไฟล์ผลลัพธ์ '%s' ไม่มีชือ่ไฟล์เชิงภาพนี้"
+
+#~ msgid "Output map '%s' is used as input"
+#~ msgstr "แผนที่ผลลัพธ์ '%s'ใช้เป็นแผนที่นำเข้า"
+
+#~ msgid ""
+#~ "\n"
+#~ "Please specify datum name\n"
+#~ msgstr ""
+#~ "\n"
+#~ "โปรดระบุชื่อ datum \n"
+
+#~ msgid "Enter 'list' for the list of available datums\n"
+#~ msgstr "ใส่ 'list' เพื่อแสดงรายการ datums\n"
+
+#~ msgid "or 'custom' if you wish to enter custom parameters\n"
+#~ msgstr "หรือ 'custom' ถ้าคุณต้องการกำหนดค่าตัวแปรเอง \n"
+
+#~ msgid ""
+#~ "\n"
+#~ "invalid datum\n"
+#~ msgstr ""
+#~ "\n"
+#~ "datum ไม่ถูกต้อง\n"
+
+#~ msgid "hit RETURN to continue -->"
+#~ msgstr "กด RETURN เพื่อดำเนินการต่อ -->"
+
+#~ msgid "unable to open raster map [%s in %s]"
+#~ msgstr "ไม่สามารถเปิดข้อมูลเชิงภาพได้ [%s ใน %s]"
+
+#~ msgid "one moment...\n"
+#~ msgstr "โปรดรอสักครู่...\n"
+
+#~ msgid "No help available for command [%s]\n"
+#~ msgstr "ไม่มีความช่วยเหลือสำหรับคำสั่งนี้ [%s]\n"
+
+#~ msgid " The raster map %s@%s is empty"
+#~ msgstr "แผนที่เชิงภาพ %s@%s ว่าเปล่า"
+
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ "Color table needed for file [%s] in mapset [%s].\n"
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "ไฟล์นี้ต้องการดารางสี  [%s] ในชุดแผนที่ [%s].\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Please identify the type desired:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "โปรดระบุชนิดที่จะใช้:\n"
+
+#~ msgid "    1:  Random colors\n"
+#~ msgstr "    1:  สีแบบสุ่ม\n"
+
+#~ msgid "    2:  Red, green, and blue color ramps\n"
+#~ msgstr "    2:  แดง, เขียว, และ น้ำเงิน แบบไล่สี\n"
+
+#~ msgid "    3:  Color wave\n"
+#~ msgstr "    3:  สีแบบ คลื่น\n"
+
+#~ msgid "    4:  Gray scale\n"
+#~ msgstr "    4:  โทนสีเทา\n"
+
+#~ msgid "    5:  Aspect\n"
+#~ msgstr "    5:  สีเชิงมุม\n"
+
+#~ msgid "    6:  Rainbow colors\n"
+#~ msgstr "    6:  สีรุ้ง\n"
+
+#~ msgid "    7:  Red through yellow to green\n"
+#~ msgstr "    7:  แดง ไล่ไป เหลือง ถึง เขียว\n"
+
+#~ msgid "    8:  Green through yellow to red\n"
+#~ msgstr "    7:  เขียว ไล่ไป เหลือง ถึง แดง\n"
+
+#~ msgid "RETURN  quit\n"
+#~ msgstr "RETURN  ออก\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "%s invalid; Try again > "
+#~ msgstr ""
+#~ "\n"
+#~ "%s ไม่ถูกต้อง; ลองใหม่ > "
+
+#~ msgid "%s not found"
+#~ msgstr "%s ไม่พบ"
+
+#~ msgid "ERROR in reading %s"
+#~ msgstr "เกิดข้อผิดพลาดในการอ่าน  %s"
+
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ "Please specify projection name\n"
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "โปรดระบุชื่อการฉายภาพ\n"
+
+#~ msgid "Enter 'list' for the list of available projections\n"
+#~ msgstr "ใส่ 'list' เพื่อแสดงรายการ การฉายภาพ\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "invalid projection\n"
+#~ msgstr ""
+#~ "\n"
+#~ "การฉายภาพไม่ถูกต้อง\n"
+
+#~ msgid "with titles"
+#~ msgstr "ด้วย ชื่อเรื่อง"
+
+#~ msgid "(no title)"
+#~ msgstr "(ไม่มีชื่อเรื่อง)"
+
+#~ msgid ""
+#~ "\n"
+#~ "FLAG: Set the following flag?\n"
+#~ msgstr ""
+#~ "\n"
+#~ "ธง: กำหนดค่าธง?\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "OPTION:   %s\n"
+#~ msgstr ""
+#~ "\n"
+#~ "เงื่อนไข:   %s\n"
+
+#~ msgid "     key: %s\n"
+#~ msgstr "     เฉพาะ: %s\n"
+
+#~ msgid "  format: %s\n"
+#~ msgstr "  รูปแบบ: %s\n"
+
+#~ msgid " default: %s\n"
+#~ msgstr " ค่าตั้งต้น: %s\n"
+
+#~ msgid "required: %s\n"
+#~ msgstr "ต้องการ: %s\n"
+
+#~ msgid "multiple: %s\n"
+#~ msgstr "หลาย: %s\n"
+
+#~ msgid "enter option > "
+#~ msgstr "ใส่เงื่อนไข > "
+
+#~ msgid "   Try again? "
+#~ msgstr "   ลองใหม่? "
+
+#~ msgid "Sorry, %s is not accepted.\n"
+#~ msgstr "เสียใจ, %s ไม่ถูกต้อง.\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "You have chosen:\n"
+#~ "  %s\n"
+#~ msgstr ""
+#~ "\n"
+#~ "คุณได้เลือก:\n"
+#~ "  %s\n"
+
+#~ msgid "Is this correct? "
+#~ msgstr "อย่างนี้ถูกต้องหรือไม่? "
+
+#~ msgid "to accept the default"
+#~ msgstr "ใช้ค่าตั้งต้น"
+
+#~ msgid "to cancel request"
+#~ msgstr "ยกเลิกการร้องขอ"
+
+#~ msgid "Enter a new %s file name"
+#~ msgstr "ใส่ชื่อไฟล์ใหม่  %s"
+
+#~ msgid "Enter the name of an existing %s file"
+#~ msgstr "ใส่ชื่อไฟล์ที่มีอยู่แล้ว  %s"
+
+#~ msgid "Enter %s file name"
+#~ msgstr "ใส่ชื่อไฟล์  %s"
+
+#~ msgid "Enter 'list' for a list of existing %s files\n"
+#~ msgstr "ใส่  'list' สำหรับรายการที่มีอยู่แล้ว %s ไฟล์\n"
+
+#~ msgid "Enter 'list -f' for "
+#~ msgstr "ใส่  'list -f' สำหรับ"
+
+#~ msgid "a list %s"
+#~ msgstr "รายการ  %s"
+
+#~ msgid "an extended list"
+#~ msgstr "รายการขยาย"
+
+#~ msgid "Hit RETURN %s\n"
+#~ msgstr "กด  RETURN %s\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "** %s - not found **\n"
+#~ msgstr ""
+#~ "\n"
+#~ "** %s - ไม่พบ **\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "** %s exists. ok to overwrite? "
+#~ msgstr ""
+#~ "\n"
+#~ "** %s มีอยู่แล้ว. คุณต้องการที่จะเขียนทับหรือไม่? "
+
+#~ msgid ""
+#~ "\n"
+#~ "**<%s> illegal name **\n"
+#~ msgstr ""
+#~ "\n"
+#~ "**<%s> ชื่อไม่ถูกต้อง **\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "** %s - illegal request **\n"
+#~ msgstr ""
+#~ "\n"
+#~ "**<%s> คำร้องขอถูกต้อง **\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "** %s - exists, select another name **\n"
+#~ msgstr ""
+#~ "\n"
+#~ "** %s - มีอยู่แล้ว, ให้เลือกชื่ออื่น **\n"
+
+#~ msgid "ask: can't happen"
+#~ msgstr "ถาม: ไม่สามารถเกิดขึ้นได้"
+
+#~ msgid "Insufficent memory for allocation of gaussian"
+#~ msgstr "หน่วยความจำไม่พอที่จะเก็บค่า gaussian"
 
 #~ msgid "Can't read header file for [%s in %s]\n"
 #~ msgstr "ไม่สามารถอ่านส่วนหัวของไฟล์สำหรับ [%s ใน %s]\n"

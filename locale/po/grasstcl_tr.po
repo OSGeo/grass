@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasstcl_tr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-24 17:42+0100\n"
+"POT-Creation-Date: 2008-10-11 22:08+0200\n"
 "PO-Revision-Date: 2007-12-23 22:00+0200\n"
 "Last-Translator: Osman Yalçın YILMAZ\n"
 "Language-Team: TÜRKÇE <grass-translations@lists.osgeo.org>\n"
@@ -16,786 +16,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
 
-#: ../vector/v.digit/settings.tcl:63
-msgid "Add new column"
-msgstr "Yeni sütun ekle"
-
-#: ../vector/v.digit/settings.tcl:66
-msgid "Create table"
-msgstr "Tablo oluştur"
-
-#: ../vector/v.digit/settings.tcl:99
-msgid "Add command"
-msgstr "Komut ekle"
-
-#: ../vector/v.digit/settings.tcl:135
-msgid "Table successfully created"
-msgstr "Tablo başarıyla oluşturuldu"
-
-#: ../vector/v.digit/settings.tcl:151
-msgid "Settings already opened"
-msgstr "Ayarlar halihazırda açık"
-
-#: ../vector/v.digit/settings.tcl:160 ../lib/init/epsg_option.tcl:311
-#: ../gui/tcltk/gis.m/gm.tcl:430 ../gui/tcltk/gis.m/animate.tcl:536
-#: ../gui/tcltk/gis.m/dnviz.tcl:228 ../gui/tcltk/gis.m/rules.tcl:170
-msgid "OK"
-msgstr "TAMAM"
-
-#: ../vector/v.digit/settings.tcl:169
-msgid "Symbology"
-msgstr "Semboloji"
-
-#: ../vector/v.digit/settings.tcl:173 ../vector/v.digit/settings.tcl:326
-msgid "Background"
-msgstr "Artalan"
-
-#: ../vector/v.digit/settings.tcl:180
-msgid "Highlight"
-msgstr "Vurgulama"
-
-#: ../vector/v.digit/settings.tcl:187
-msgid "Point"
-msgstr "Nokta"
-
-#: ../vector/v.digit/settings.tcl:196
-msgid "Line"
-msgstr "Çizgi"
-
-#: ../vector/v.digit/settings.tcl:205
-msgid "Boundary (no area)"
-msgstr "Sınır (alan değil)"
-
-#: ../vector/v.digit/settings.tcl:213
-msgid "Boundary (1 area)"
-msgstr "Sınır (1 alan)"
-
-#: ../vector/v.digit/settings.tcl:221
-msgid "Boundary (2 areas)"
-msgstr "Sınır (2 Alan)"
-
-#: ../vector/v.digit/settings.tcl:230
-msgid "Centroid (in area)"
-msgstr "Alan merkezi (alan içinde)"
-
-#: ../vector/v.digit/settings.tcl:238
-msgid "Centroid (outside area)"
-msgstr "Alan merkezi (alan dışında)"
-
-#: ../vector/v.digit/settings.tcl:246
-msgid "Centroid (duplicate in area)"
-msgstr "Alan merkezi (alan içinde tekrarlı)"
-
-#: ../vector/v.digit/settings.tcl:255
-msgid "Node (1 line)"
-msgstr "Düğüm (1 çizgi)"
-
-#: ../vector/v.digit/settings.tcl:263
-msgid "Node (2 lines)"
-msgstr "Düğüm (2 çizgi)"
-
-#: ../vector/v.digit/settings.tcl:273
-msgid "Settings"
-msgstr "Ayarlar"
-
-#: ../vector/v.digit/settings.tcl:278
-msgid "Snapping threshold in screen pixels"
-msgstr ""
-
-#: ../vector/v.digit/settings.tcl:288
-msgid "Snapping threshold in map units"
-msgstr ""
-
-#: ../vector/v.digit/settings.tcl:305
-msgid "Line width in screen pixels"
-msgstr "Piksel olarak çizgi genişliği"
-
-#: ../vector/v.digit/settings.tcl:307
-msgid "Set line width in pixels"
-msgstr ""
-
-#: ../vector/v.digit/settings.tcl:315
-msgid "Table"
-msgstr "Tablo"
-
-#: ../vector/v.digit/toolbox.tcl:19
-msgid "Welcome to v.digit"
-msgstr "v.digit'e hoşgeldiniz"
-
-#: ../vector/v.digit/toolbox.tcl:20
-msgid "Left button"
-msgstr "Sol tuş"
-
-#: ../vector/v.digit/toolbox.tcl:21
-msgid "Middle button"
-msgstr "Orta tuş"
-
-#: ../vector/v.digit/toolbox.tcl:22
-msgid "Right button"
-msgstr "Sağ tuşu"
-
-#: ../vector/v.digit/toolbox.tcl:75
-msgid "  Layer"
-msgstr "  Katman"
-
-#: ../vector/v.digit/toolbox.tcl:79
-msgid "  Category"
-msgstr "  Kategori"
-
-#: ../vector/v.digit/toolbox.tcl:83
-msgid "  Mode "
-msgstr "  Mod "
-
-#: ../vector/v.digit/toolbox.tcl:95
-msgid "Insert new record into table"
-msgstr "Tabloya yeni kayıt gir"
-
-#: ../vector/v.digit/toolbox.tcl:112
-msgid "Digitize new point"
-msgstr "Yeni nokta sayısallaştır"
-
-#: ../vector/v.digit/toolbox.tcl:117
-msgid "Digitize new line"
-msgstr "Yeni çizgi sayısallaştır"
-
-#: ../vector/v.digit/toolbox.tcl:122
-msgid "Digitize new boundary"
-msgstr "Yeni sınır sayısallaştır"
-
-#: ../vector/v.digit/toolbox.tcl:127
-msgid "Digitize new centroid"
-msgstr "Yeni alan merkezi sayısallaştır"
-
-#: ../vector/v.digit/toolbox.tcl:133
-msgid "Move vertex"
-msgstr ""
-
-#: ../vector/v.digit/toolbox.tcl:138
-msgid "Add vertex"
-msgstr ""
-
-#: ../vector/v.digit/toolbox.tcl:143
-msgid "Remove vertex"
-msgstr ""
-
-#: ../vector/v.digit/toolbox.tcl:148
-msgid "Split line"
-msgstr "Çizgiyi parçala"
-
-#: ../vector/v.digit/toolbox.tcl:153
-msgid "Edit line/boundary"
-msgstr "Çizgi/sınırı düzelt"
-
-#: ../vector/v.digit/toolbox.tcl:158
-msgid "Move point, line, boundary, or centroid"
-msgstr "Nokta, çizgi, sınır, veya alan merkezini taşı"
-
-#: ../vector/v.digit/toolbox.tcl:163
-msgid "Delete point, line, boundary, or centroid"
-msgstr "Nokta, çizgi, sınır, veya alan merkezi sil"
-
-#: ../vector/v.digit/toolbox.tcl:174
-msgid "Redraw"
-msgstr "Yeniden çiz"
-
-#: ../vector/v.digit/toolbox.tcl:179
-msgid "Zoom in by window"
-msgstr "Pencere ile büyüt"
-
-#: ../vector/v.digit/toolbox.tcl:184
-msgid "Zoom out"
-msgstr "Küçült"
-
-#: ../vector/v.digit/toolbox.tcl:189 ../gui/tcltk/gis.m/maptool.tcl:151
-#: ../gui/tcltk/gis.m/georecttool.tcl:130
-msgid "Pan"
-msgstr "Kaydır"
-
-#: ../vector/v.digit/toolbox.tcl:194 ../gui/tcltk/gis.m/maptool.tcl:196
-msgid "Zoom to default region"
-msgstr "Varsayılan bölgeye göre göster"
-
-#: ../vector/v.digit/toolbox.tcl:207 ../gui/tcltk/gis.m/maptool.tcl:187
-msgid "Zoom to saved region"
-msgstr "Seçilen bölgeye göre göster"
-
-#: ../vector/v.digit/toolbox.tcl:213
-msgid "Display categories"
-msgstr "Kategorileri göster"
-
-#: ../vector/v.digit/toolbox.tcl:218
-msgid "Copy categories"
-msgstr "Kategorileri kopyala"
-
-#: ../vector/v.digit/toolbox.tcl:223
-msgid "Display attributes"
-msgstr "Öznitelikleri göster"
-
-#: ../vector/v.digit/toolbox.tcl:235
-msgid "Open settings"
-msgstr "Ayarları aç"
-
-#: ../vector/v.digit/toolbox.tcl:241
-msgid "Save and exit"
-msgstr "Kaydet ve çık"
-
-#: ../vector/v.digit/toolbox.tcl:252
-msgid "mouse button actions (left, middle, right)"
-msgstr "fare tuş eylemleri (sol, orta, sağ)"
-
-#: ../vector/v.digit/cats.tcl:20 ../gui/tcltk/gis.m/gmmenu.tcl:172
-msgid "Delete"
-msgstr "Sil"
-
-#: ../vector/v.digit/cats.tcl:34
-msgid "Categories already opened"
-msgstr "Kategoriler zaten açık"
-
-#: ../vector/v.digit/cats.tcl:42
-msgid "Categories"
-msgstr "Kategoriler"
-
-#: ../vector/v.digit/cats.tcl:53
-msgid "Layer:"
-msgstr "Katman:"
-
-#: ../vector/v.digit/cats.tcl:55
-msgid "   Category:"
-msgstr "    Kategori:"
-
-#: ../vector/v.digit/cats.tcl:62
-msgid "Insert new record to table"
-msgstr "Tabloya yeni kayıt gir"
-
-#: ../vector/v.digit/cats.tcl:63
-msgid "Add new"
-msgstr "Yeni ekle"
-
-#: ../lib/gtcltk/select.tcl:103
-msgid "Select item"
-msgstr "Öğe seç"
-
-#: ../lib/gtcltk/select.tcl:208
-msgid "Ok"
-msgstr "Tamam"
-
-#: ../lib/gtcltk/select.tcl:209 ../lib/init/epsg_option.tcl:167
-#: ../lib/init/epsg_option.tcl:314 ../lib/init/file_option.tcl:114
-#: ../gui/tcltk/gis.m/gm.tcl:433 ../gui/tcltk/gis.m/animate.tcl:538
-#: ../gui/tcltk/gis.m/dnviz.tcl:230 ../gui/tcltk/gis.m/mapcanvas.tcl:855
-#: ../gui/tcltk/gis.m/georect.tcl:700 ../gui/tcltk/gis.m/rules.tcl:172
-msgid "Cancel"
-msgstr "İptal"
-
-#: ../lib/gis/gui.tcl:11 ../lib/gis/gui.tcl:15 ../lib/gis/gui.tcl:19
-#: ../lib/gis/gui.tcl:310 ../gui/tcltk/gis.m/runandoutput.tcl:258
-#: ../gui/tcltk/gis.m/grassabout.tcl:94 ../gui/tcltk/gis.m/gmlib.tcl:131
-msgid "Error"
-msgstr "Hata"
-
-#: ../lib/gis/gui.tcl:229 ../gui/tcltk/gis.m/gmlib.tcl:113
-msgid "Save File"
-msgstr "Dosyayı Kaydet"
-
-#: ../lib/gis/gui.tcl:231
-msgid "Load File"
-msgstr "Dosyayı Yükle"
-
-#: ../lib/gis/gui.tcl:295 ../lib/gis/gui.tcl:480
-#: ../gui/tcltk/gis.m/gmmenu.tcl:326
-msgid "Output"
-msgstr "Çıktı"
-
-#: ../lib/gis/gui.tcl:355
-msgid "Options"
-msgstr "Seçenekler"
-
-#: ../lib/gis/gui.tcl:464 ../gui/tcltk/gis.m/gmmenu.tcl:165
-msgid "Copy"
-msgstr "Kopyala"
-
-#: ../lib/gis/gui.tcl:503 ../gui/tcltk/gis.m/runandoutput.tcl:44
-#: ../gui/tcltk/gis.m/runandoutput.tcl:116
-msgid "Run"
-msgstr "Çalıştır"
-
-#: ../lib/gis/gui.tcl:504 ../lib/init/gis_set.tcl:506
-#: ../gui/tcltk/gis.m/thematic.tcl:241 ../gui/tcltk/gis.m/thematic.tcl:245
-#: ../gui/tcltk/gis.m/profile.tcl:131 ../gui/tcltk/gis.m/profile.tcl:135
-#: ../gui/tcltk/gis.m/labels.tcl:136 ../gui/tcltk/gis.m/labels.tcl:140
-#: ../gui/tcltk/gis.m/rastarrows.tcl:164 ../gui/tcltk/gis.m/rastarrows.tcl:167
-#: ../gui/tcltk/gis.m/runandoutput.tcl:47 ../gui/tcltk/gis.m/rastnums.tcl:163
-#: ../gui/tcltk/gis.m/rastnums.tcl:166 ../gui/tcltk/gis.m/frames.tcl:118
-#: ../gui/tcltk/gis.m/frames.tcl:122 ../gui/tcltk/gis.m/animate.tcl:408
-#: ../gui/tcltk/gis.m/animate.tcl:412 ../gui/tcltk/gis.m/animate.tcl:481
-#: ../gui/tcltk/gis.m/animate.tcl:484 ../gui/tcltk/gis.m/dnviz.tcl:208
-#: ../gui/tcltk/gis.m/dnviz.tcl:212 ../gui/tcltk/gis.m/gridline.tcl:162
-#: ../gui/tcltk/gis.m/gridline.tcl:214 ../gui/tcltk/gis.m/gridline.tcl:241
-#: ../gui/tcltk/gis.m/legend.tcl:189 ../gui/tcltk/gis.m/legend.tcl:192
-#: ../gui/tcltk/gis.m/raster.tcl:192 ../gui/tcltk/gis.m/raster.tcl:196
-#: ../gui/tcltk/gis.m/chart.tcl:184 ../gui/tcltk/gis.m/chart.tcl:188
-#: ../gui/tcltk/gis.m/vector.tcl:330 ../gui/tcltk/gis.m/vector.tcl:334
-#: ../gui/tcltk/gis.m/barscale.tcl:180 ../gui/tcltk/gis.m/barscale.tcl:184
-#: ../gui/tcltk/gis.m/rgbhis.tcl:156 ../gui/tcltk/gis.m/rgbhis.tcl:165
-#: ../gui/tcltk/gis.m/dtext.tcl:177 ../gui/tcltk/gis.m/dtext.tcl:181
-#: ../gui/tcltk/gis.m/georect.tcl:705 ../gui/tcltk/gis.m/georect.tcl:709
-#: ../gui/tcltk/gis.m/georect.tcl:1132 ../gui/tcltk/gis.m/georect.tcl:1136
-#: ../gui/tcltk/gis.m/rules.tcl:139 ../gui/tcltk/gis.m/rules.tcl:143
-#: ../gui/tcltk/gis.m/histogram.tcl:162 ../gui/tcltk/gis.m/histogram.tcl:165
-#: ../gui/tcltk/d.m/thematic.tcl:121 ../gui/tcltk/d.m/thematic.tcl:125
-#: ../gui/tcltk/d.m/labels.tcl:70 ../gui/tcltk/d.m/labels.tcl:74
-#: ../gui/tcltk/d.m/frames.tcl:66 ../gui/tcltk/d.m/frames.tcl:70
-#: ../gui/tcltk/d.m/gridline.tcl:81 ../gui/tcltk/d.m/gridline.tcl:120
-#: ../gui/tcltk/d.m/gridline.tcl:150 ../gui/tcltk/d.m/legend.tcl:86
-#: ../gui/tcltk/d.m/legend.tcl:90 ../gui/tcltk/d.m/raster.tcl:90
-#: ../gui/tcltk/d.m/raster.tcl:94 ../gui/tcltk/d.m/chart.tcl:96
-#: ../gui/tcltk/d.m/chart.tcl:100 ../gui/tcltk/d.m/rgbhis.tcl:130
-#: ../gui/tcltk/d.m/rgbhis.tcl:137 ../gui/tcltk/d.m/fttext.tcl:83
-#: ../gui/tcltk/d.m/fttext.tcl:87 ../gui/tcltk/d.m/vector.tcl:202
-#: ../gui/tcltk/d.m/vector.tcl:206 ../gui/tcltk/d.m/barscale.tcl:74
-#: ../gui/tcltk/d.m/barscale.tcl:78 ../gui/tcltk/d.m/dtext.tcl:75
-#: ../gui/tcltk/d.m/dtext.tcl:79
-msgid "Help"
-msgstr "Yardım"
-
-#: ../lib/gis/gui.tcl:505 ../gui/tcltk/gis.m/runandoutput.tcl:127
-msgid "Clear"
-msgstr "Temizle"
-
-#: ../lib/gis/gui.tcl:506 ../lib/init/epsg_option.tcl:394
-#: ../lib/init/epsg_option.tcl:438 ../gui/tcltk/gis.m/runandoutput.tcl:48
-#: ../gui/tcltk/gis.m/gmmenu.tcl:90 ../gui/tcltk/gis.m/mapprint.tcl:366
-#: ../gui/tcltk/d.m/menu.tcl:174 ../gui/tcltk/d.m/print.tcl:281
-msgid "Close"
-msgstr "Kapat"
-
-#: ../lib/gis/gui.tcl:577
-msgid "required"
-msgstr "gereken"
-
-#: ../lib/gis/gui.tcl:577
-msgid "optional"
-msgstr "seçimlik"
-
-#: ../lib/gis/gui.tcl:578
-msgid "multiple"
-msgstr "çoklu"
-
-#: ../lib/init/epsg_option.tcl:93
-msgid "WARNING: cant get enviromental variable"
-msgstr "UYARI: ortam değişkenleri belirlenemiyor"
-
-#: ../lib/init/epsg_option.tcl:94
-msgid ""
-"Warning: Unable to get enviromental variable GRASS_PROJSHARE. \n"
-"This is a GRASS installation error. \n"
-"Set enviromental variable GRASS_PROJSHARE to point to directory with Proj4 "
-"EPSG file. "
-msgstr ""
-
-#: ../lib/init/epsg_option.tcl:103
-msgid "Define location using EPSG projection codes"
-msgstr "EPSG projeksiyon kodlarını kullanarak mevki belirle"
-
-#: ../lib/init/epsg_option.tcl:122 ../lib/init/file_option.tcl:92
-msgid "Name of new location"
-msgstr "Yeni mevkinin adı"
-
-#: ../lib/init/epsg_option.tcl:125
-msgid "Enter name for location to be created"
-msgstr "Oluşturulacak mevki için ad girin"
-
-#: ../lib/init/epsg_option.tcl:129 ../lib/init/epsg_option.tcl:132
-msgid "Path to the EPSG-codes file"
-msgstr "EPSG-kodları dosyası yolu"
-
-#: ../lib/init/epsg_option.tcl:135 ../lib/init/epsg_option.tcl:148
-#: ../lib/init/gis_set.tcl:241 ../lib/init/file_option.tcl:105
-msgid "Browse..."
-msgstr "Gözat..."
-
-#: ../lib/init/epsg_option.tcl:136
-msgid "Browse to locate EPSG file"
-msgstr "EPSG dosyasını bulmak için göz at"
-
-#: ../lib/init/epsg_option.tcl:143
-msgid "EPSG code number of projection"
-msgstr "Projeksiyonun EPSG kod değeri"
-
-#: ../lib/init/epsg_option.tcl:146
-msgid "Enter EPSG code for selected projection"
-msgstr "Seçilen projeksiyon için EPSG kodunu girin"
-
-#: ../lib/init/epsg_option.tcl:149
-msgid "View EPSG codes and projection information."
-msgstr "EPSG kodları ve projeksiyon bilgilerini görüntüle."
-
-#: ../lib/init/epsg_option.tcl:155
-msgid "WARNING: epsg-codes file not found"
-msgstr "UYARI: epsg-kodları dosyası bulunamadı"
-
-#: ../lib/init/epsg_option.tcl:156
-msgid "WARNING: The epsg-codes file was not found!"
-msgstr "UYARI: epsg-kodları dosyası bulunamadı!"
-
-#: ../lib/init/epsg_option.tcl:164 ../lib/init/file_option.tcl:111
-msgid "Define location"
-msgstr "Mevki belirle"
-
-#: ../lib/init/epsg_option.tcl:187
-msgid "Invalid EPSG Code!"
-msgstr "Geçersiz EPSG Kodu!"
-
-#: ../lib/init/epsg_option.tcl:188
-#, tcl-format
-msgid "ERROR: Invalid EPSG code %s: should be an integer."
-msgstr "HATA: Geçersiz EPSG Kodu! %s: tamsayı olmalı."
-
-#: ../lib/init/epsg_option.tcl:198
-msgid "Location Exists!"
-msgstr "Mevki Mevcut!"
-
-#: ../lib/init/epsg_option.tcl:199
-#, tcl-format
-msgid "WARNING: Location '%s' already exists: please try another name."
-msgstr "UYARI: '%s' Mevkisi zaten mevcut: lütfen başka birini deneyin."
-
-#: ../lib/init/epsg_option.tcl:236 ../lib/init/epsg_option.tcl:263
-msgid "Error creating location!"
-msgstr "Mevki oluşturmada hata!"
-
-#: ../lib/init/epsg_option.tcl:237 ../lib/init/epsg_option.tcl:264
-#, tcl-format
-msgid ""
-"g.proj returned the following message:\n"
-"%s"
-msgstr ""
-"g.proj komutu şu mesajı verdi:\n"
-"%s"
-
-#: ../lib/init/epsg_option.tcl:244 ../lib/init/epsg_option.tcl:268
-msgid "Informational output from g.proj"
-msgstr "g.proj dan bilgilendirici çıktı"
-
-#: ../lib/init/epsg_option.tcl:245 ../lib/init/epsg_option.tcl:269
-#, tcl-format
-msgid ""
-"g.proj returned the following informational message:\n"
-"%s"
-msgstr ""
-"g.proj komutu şu bilgilendirme mesajını verdi:\n"
-"%s"
-
-#: ../lib/init/epsg_option.tcl:288
-msgid "Select datum transformation parameters:"
-msgstr "Datum dönüşüm parametrelerini seçin:"
-
-#: ../lib/init/epsg_option.tcl:292
-msgid ""
-"Continue without specifying parameters - if used when creating a location, "
-"other GRASS modules will use the \"default\" (likely non-optimum) parameters "
-"for this datum if necessary in the future."
-msgstr ""
-
-#: ../lib/init/epsg_option.tcl:344
-msgid "You can select EPSG code (in <braces>) and copy it for later use."
-msgstr ""
-
-#: ../lib/init/epsg_option.tcl:381
-msgid "GUESS THAT IS NOT THE EPSG FILE"
-msgstr ""
-
-#: ../lib/init/epsg_option.tcl:387 ../lib/init/epsg_option.tcl:416
-#: ../lib/init/epsg_option.tcl:435
-msgid "Search"
-msgstr "Ara"
-
-#: ../lib/init/epsg_option.tcl:389
-msgid "Grab code"
-msgstr "Kod yakala"
-
-#: ../lib/init/epsg_option.tcl:422
-msgid "Search text: "
-msgstr "Metni ara: "
-
-#: ../lib/init/epsg_option.tcl:423
-msgid "Search for entered text in EPSG file"
-msgstr "Girilen metni EPSG dosyasında ara"
-
-#: ../lib/init/epsg_option.tcl:428
-msgid "forward search"
-msgstr "ileri doğru ara"
-
-#: ../lib/init/epsg_option.tcl:429
-msgid "backward search"
-msgstr "geri doğru ara"
-
-#: ../lib/init/gis_set.tcl:109
-msgid "WARNING: can not save"
-msgstr "UYARI: kaydedilemiyor"
-
-#: ../lib/init/gis_set.tcl:110
-#, tcl-format
-msgid ""
-"Warning: unable to save data to <%s> file.\n"
-"Error message: %s"
-msgstr ""
-"Uyarı: Veri <%s> dosyasına kaydedilemiyor.\n"
-"Hata mesajı: %s"
-
-#: ../lib/init/gis_set.tcl:131 ../lib/init/gis_set.tcl:377
-#: ../lib/init/gis_set.tcl:483 ../lib/init/gis_set.tcl:608
-#: ../lib/init/gis_set.tcl:629 ../lib/init/gis_set.tcl:647
-#: ../lib/init/gis_set.tcl:676
-msgid "WARNING: invalid location"
-msgstr "UYARI: geçersiz mevki"
-
-#: ../lib/init/gis_set.tcl:132
-#, tcl-format
-msgid ""
-"Warning: location <%s> at GISDBASE <%s> is not a directory or does not exist."
-msgstr "Uyarı: <%s>GISDBASE deki <%s> mevkisi dizin değil veya mevcut değil."
-
-#: ../lib/init/gis_set.tcl:177
-#, tcl-format
-msgid "GRASS %s Startup"
-msgstr "GRASS %s Başlat"
-
-#: ../lib/init/gis_set.tcl:200
-msgid "Welcome to GRASS GIS Version"
-msgstr "Hoşgeldiniz! GRASS CBS Sürüm "
-
-#: ../lib/init/gis_set.tcl:202
-msgid ""
-"The world's leading open source GIS\n"
-"\n"
-msgstr ""
-"Dünyanın lider açık kodlu CBS yazılımı\n"
-"\n"
-
-#: ../lib/init/gis_set.tcl:203
-msgid "Select an existing project location and mapset\n"
-msgstr "Varolan proje mevkisi ve CBS harita takımını seçin\n"
-
-#: ../lib/init/gis_set.tcl:204
-msgid "or define a new location\n"
-msgstr "veya yeni bir mevki belirleyin.\n"
-
-#: ../lib/init/gis_set.tcl:227
-msgid "GIS Data Directory: "
-msgstr "Yeni CBS veritabanı dizini:"
-
-#: ../lib/init/gis_set.tcl:243
-msgid "New GIS data directory"
-msgstr "Yeni CBS veri dizini"
-
-#: ../lib/init/gis_set.tcl:266
-#, fuzzy
-msgid "Project Location (projection/coordinate system)"
-msgstr ""
-"Proje mevkisi\n"
-"(projeksiyon/koordinat sistemi)"
-
-#: ../lib/init/gis_set.tcl:299
-#, fuzzy
-msgid "Accessible Mapsets (directories of GIS files)"
-msgstr ""
-"Erişilebilir Harita takımları\n"
-"(CBS dosyaları dizinleri)"
-
-#: ../lib/init/gis_set.tcl:356
-#, fuzzy
-msgid "Create new mapset in selected location"
-msgstr ""
-"Seçilen mevkide\n"
-"yeni harita takımı oluştur"
-
-#: ../lib/init/gis_set.tcl:364
-msgid "Create new mapset"
-msgstr "Yeni harita takımı oluştur"
-
-#: ../lib/init/gis_set.tcl:369
-msgid "WARNING: invalid mapset name"
-msgstr "UYARI: geçersiz harita takımı"
-
-#: ../lib/init/gis_set.tcl:370
-#, tcl-format
-msgid ""
-"Warning: Mapset with name <%s> already exists. \n"
-"New mapset is NOT created. \n"
-"Choose different mapset name and try again."
-msgstr ""
-"Uyarı: <%s>harita takımı zaten mevcut. \n"
-"Yeni harita takımı oluşturulmadı. \n"
-"Farklı harita takımı adı seçin ve yeniden deneyin."
-
-#: ../lib/init/gis_set.tcl:378
-#, tcl-format
-msgid ""
-"Warning: selected location <%s> is not valid. \n"
-" New mapset is NOT created. \n"
-" Select valid location and try again."
-msgstr ""
-"Uyarı: seçilen <%s> mevkisi geçersiz. \n"
-"Yeni harita takımı oluşturulmadı. \n"
-"Geçerli mevki seçin ve yeniden deneyin."
-
-#: ../lib/init/gis_set.tcl:385
-msgid "WARNING: unable to mkdir"
-msgstr "UYARI: dizin oluşturulamadı"
-
-#: ../lib/init/gis_set.tcl:386
-#, tcl-format
-msgid ""
-"Warning: Unable to create directory for new mapset. \n"
-"Error message: %s"
-msgstr ""
-"Uyarı: Yeni harita takımı için dizin oluşturulamadı. \n"
-"Hata mesajı: %s"
-
-#: ../lib/init/gis_set.tcl:411
-msgid "Define new location with..."
-msgstr "Aşağıdakilerden biriyle mevki belirle..."
-
-#: ../lib/init/gis_set.tcl:415
-msgid "Georeferenced file"
-msgstr "Yer uyumlandırılmış dosya"
-
-#: ../lib/init/gis_set.tcl:428
-msgid "EPSG codes"
-msgstr "EPSG kodları"
-
-#: ../lib/init/gis_set.tcl:441
-msgid "Projection values"
-msgstr "Projeksiyon değerleri"
-
-#: ../lib/init/gis_set.tcl:479
-msgid "Enter GRASS"
-msgstr "GRASS'ı Başlat"
-
-#: ../lib/init/gis_set.tcl:484
-#, tcl-format
-msgid ""
-"Warning: selected location <%s> is not valid. \n"
-" Select valid location and try again."
-msgstr ""
-"Uyarı: seçilen <%s> mevkisi geçersiz. \n"
-"Geçerli mevki seçin ve yeniden deneyin."
-
-#: ../lib/init/gis_set.tcl:489 ../lib/init/gis_set.tcl:653
-msgid "WARNING: invalid mapset"
-msgstr "UYARI: geçersiz harita takımı"
-
-#: ../lib/init/gis_set.tcl:490
-#, tcl-format
-msgid "Warning: <%s> is not a valid mapset"
-msgstr "Uyarı: <%s> geçerli harita takımı değil"
-
-#: ../lib/init/gis_set.tcl:511
-msgid "Help already opened"
-msgstr "Yardım zaten açık"
-
-#: ../lib/init/gis_set.tcl:524
-msgid "Exit"
-msgstr "Çık"
-
-#: ../lib/init/gis_set.tcl:560
-msgid "WARNING: Invalid Database"
-msgstr "UYARI: Geçersiz Veritabanı"
-
-#: ../lib/init/gis_set.tcl:561
-msgid "WARNING: Invalid database. Finding first valid directory in parent tree"
-msgstr "UYARI: Geçersiz veritabanı. Ana dizinde geçerli ill dizin bulunuyor"
-
-#: ../lib/init/gis_set.tcl:609 ../lib/init/gis_set.tcl:630
-#: ../lib/init/gis_set.tcl:648 ../lib/init/gis_set.tcl:677
-#, tcl-format
-msgid ""
-"Warning: selected location <%%s> is not valid. \n"
-" Select valid location and try again."
-msgstr ""
-"Uyarı: seçilen <%%s> mevkisi geçersiz. \n"
-"Geçerli mevki seçin ve yeniden deneyin."
-
-#: ../lib/init/gis_set.tcl:654
-#, tcl-format
-msgid "Warning: <%%s> is not a valid mapset"
-msgstr "Uyarı: <%%s> geçerli harita takımı değil"
-
-#: ../lib/init/gis_set.tcl:747
-msgid "WARNING: change directory failed"
-msgstr "UYARI: dizin değiştirmede hata"
-
-#: ../lib/init/gis_set.tcl:748
-#, tcl-format
-msgid ""
-"Warning: could not change directory to <%s>.\n"
-"Check directory permissions."
-msgstr ""
-"Uyarı: Dizin <%s> e değiştirilemedi.\n"
-"Dizin izinlerini kontrol edin."
-
-#: ../lib/init/file_option.tcl:72
-msgid "Define location using projection information in georeferenced file"
-msgstr ""
-"Coğrafi referanslı dosyadaki projeksiyon bilgilerini kullanarak mevki belirle"
-
-#: ../lib/init/file_option.tcl:95
-msgid "Enter name of location to be created"
-msgstr "oluşturulacak mevki adını girin"
-
-#: ../lib/init/file_option.tcl:99
-msgid "Path to georeferenced file"
-msgstr "Coğrafi referanslı dosya yolu"
-
-#: ../lib/init/file_option.tcl:102
-msgid "Path to georeferenced file (format must be readable by GDAL/OGR)"
-msgstr ""
-"Coğrafi referanslı dosya yolu (GDAL/OGR tarafından okunabilir biçimde "
-"olmalıdır)"
-
-#: ../lib/init/file_option.tcl:106
-msgid "Browse to locate georeferenced file"
-msgstr "Coğrafi referanslı dosyayı bulmak için göz at"
-
-#: ../lib/init/file_option.tcl:131 ../lib/init/file_option.tcl:134
-msgid "Choose georeferenced file"
-msgstr "Coğrafi referanslı dosyayı seç"
-
-#: ../lib/init/file_option.tcl:152
-msgid ""
-"WARNING: Please supply a\n"
-"valid georeferenced file"
-msgstr ""
-"UYARI: Lütfen\n"
-"geçerli bir coğrafi referanslı dosya sağlayın"
-
-#: ../lib/init/file_option.tcl:184
-msgid "WARNING: Error creating new location"
-msgstr "UYARI: Yeni mevki oluşturmada hata"
-
-#: ../lib/init/file_option.tcl:185
-#, tcl-format
-msgid ""
-"Error creating new location from georeferenced file.  g.proj returned "
-"following message:\n"
-"\n"
-"%s"
-msgstr ""
-"coğrafi referanslı dosyadan yeni mevki oluşturmada hata. g.proj komutu takip "
-"eden mesajı verdi:\n"
-"\n"
-"%s"
-
 #: ../gui/tcltk/gis.m/thematic.tcl:107 ../gui/tcltk/gis.m/thematic.tcl:607
 #: ../gui/tcltk/gis.m/thematic.tcl:680 ../gui/tcltk/gis.m/labels.tcl:78
 #: ../gui/tcltk/gis.m/labels.tcl:279 ../gui/tcltk/gis.m/rastarrows.tcl:83
 #: ../gui/tcltk/gis.m/rastarrows.tcl:357 ../gui/tcltk/gis.m/rastnums.tcl:79
 #: ../gui/tcltk/gis.m/rastnums.tcl:360 ../gui/tcltk/gis.m/frames.tcl:78
-#: ../gui/tcltk/gis.m/frames.tcl:275 ../gui/tcltk/gis.m/animate.tcl:91
+#: ../gui/tcltk/gis.m/frames.tcl:275 ../gui/tcltk/gis.m/animate.tcl:88
 #: ../gui/tcltk/gis.m/mapprint.tcl:194 ../gui/tcltk/gis.m/mapprint.tcl:201
 #: ../gui/tcltk/gis.m/gridline.tcl:99 ../gui/tcltk/gis.m/gridline.tcl:406
-#: ../gui/tcltk/gis.m/legend.tcl:95 ../gui/tcltk/gis.m/legend.tcl:476
+#: ../gui/tcltk/gis.m/legend.tcl:95 ../gui/tcltk/gis.m/legend.tcl:506
 #: ../gui/tcltk/gis.m/raster.tcl:86 ../gui/tcltk/gis.m/raster.tcl:463
 #: ../gui/tcltk/gis.m/chart.tcl:89 ../gui/tcltk/gis.m/chart.tcl:441
 #: ../gui/tcltk/gis.m/vector.tcl:194 ../gui/tcltk/gis.m/vector.tcl:819
@@ -810,7 +39,6 @@ msgid "Error creating tempfile"
 msgstr "Geçici dosya oluşturmada hata"
 
 #: ../gui/tcltk/gis.m/thematic.tcl:129 ../gui/tcltk/gis.m/vector.tcl:220
-#: ../gui/tcltk/d.m/menu.tcl:94 ../gui/tcltk/d.m/menu.tcl:134
 msgid "Vector map"
 msgstr "Vektör harita"
 
@@ -844,7 +72,7 @@ msgstr ""
 
 #: ../gui/tcltk/gis.m/thematic.tcl:223 ../gui/tcltk/gis.m/labels.tcl:118
 #: ../gui/tcltk/gis.m/rastarrows.tcl:147 ../gui/tcltk/gis.m/rastnums.tcl:146
-#: ../gui/tcltk/gis.m/gridline.tcl:147 ../gui/tcltk/gis.m/legend.tcl:172
+#: ../gui/tcltk/gis.m/gridline.tcl:147 ../gui/tcltk/gis.m/legend.tcl:200
 #: ../gui/tcltk/gis.m/raster.tcl:168 ../gui/tcltk/gis.m/chart.tcl:166
 #: ../gui/tcltk/gis.m/vector.tcl:306 ../gui/tcltk/gis.m/cmd.tcl:105
 #: ../gui/tcltk/gis.m/barscale.tcl:160 ../gui/tcltk/gis.m/rgbhis.tcl:143
@@ -854,7 +82,7 @@ msgstr "Donuk "
 
 #: ../gui/tcltk/gis.m/thematic.tcl:227 ../gui/tcltk/gis.m/labels.tcl:122
 #: ../gui/tcltk/gis.m/rastarrows.tcl:151 ../gui/tcltk/gis.m/rastnums.tcl:150
-#: ../gui/tcltk/gis.m/gridline.tcl:151 ../gui/tcltk/gis.m/legend.tcl:176
+#: ../gui/tcltk/gis.m/gridline.tcl:151 ../gui/tcltk/gis.m/legend.tcl:204
 #: ../gui/tcltk/gis.m/raster.tcl:172 ../gui/tcltk/gis.m/chart.tcl:170
 #: ../gui/tcltk/gis.m/cmd.tcl:109 ../gui/tcltk/gis.m/barscale.tcl:164
 #: ../gui/tcltk/gis.m/rgbhis.tcl:147 ../gui/tcltk/gis.m/dtext.tcl:170
@@ -863,7 +91,6 @@ msgid " Transparent"
 msgstr "Saydam"
 
 #: ../gui/tcltk/gis.m/thematic.tcl:233 ../gui/tcltk/gis.m/vector.tcl:316
-#: ../gui/tcltk/d.m/thematic.tcl:116
 msgid "Vector map:"
 msgstr "Vektör harita:"
 
@@ -871,7 +98,33 @@ msgstr "Vektör harita:"
 msgid "vector for thematic mapping"
 msgstr "konusal haritalama vektörü"
 
-#: ../gui/tcltk/gis.m/thematic.tcl:251 ../gui/tcltk/d.m/thematic.tcl:131
+#: ../gui/tcltk/gis.m/thematic.tcl:241 ../gui/tcltk/gis.m/thematic.tcl:245
+#: ../gui/tcltk/gis.m/profile.tcl:131 ../gui/tcltk/gis.m/profile.tcl:135
+#: ../gui/tcltk/gis.m/labels.tcl:136 ../gui/tcltk/gis.m/labels.tcl:140
+#: ../gui/tcltk/gis.m/rastarrows.tcl:164 ../gui/tcltk/gis.m/rastarrows.tcl:167
+#: ../gui/tcltk/gis.m/runandoutput.tcl:47 ../gui/tcltk/gis.m/rastnums.tcl:163
+#: ../gui/tcltk/gis.m/rastnums.tcl:166 ../gui/tcltk/gis.m/frames.tcl:118
+#: ../gui/tcltk/gis.m/frames.tcl:122 ../gui/tcltk/gis.m/animate.tcl:405
+#: ../gui/tcltk/gis.m/animate.tcl:409 ../gui/tcltk/gis.m/animate.tcl:478
+#: ../gui/tcltk/gis.m/animate.tcl:481 ../gui/tcltk/gis.m/dnviz.tcl:208
+#: ../gui/tcltk/gis.m/dnviz.tcl:212 ../gui/tcltk/gis.m/gridline.tcl:162
+#: ../gui/tcltk/gis.m/gridline.tcl:214 ../gui/tcltk/gis.m/gridline.tcl:241
+#: ../gui/tcltk/gis.m/legend.tcl:219 ../gui/tcltk/gis.m/legend.tcl:222
+#: ../gui/tcltk/gis.m/raster.tcl:192 ../gui/tcltk/gis.m/raster.tcl:196
+#: ../gui/tcltk/gis.m/chart.tcl:184 ../gui/tcltk/gis.m/chart.tcl:188
+#: ../gui/tcltk/gis.m/vector.tcl:330 ../gui/tcltk/gis.m/vector.tcl:334
+#: ../gui/tcltk/gis.m/barscale.tcl:180 ../gui/tcltk/gis.m/barscale.tcl:184
+#: ../gui/tcltk/gis.m/rgbhis.tcl:156 ../gui/tcltk/gis.m/rgbhis.tcl:165
+#: ../gui/tcltk/gis.m/dtext.tcl:177 ../gui/tcltk/gis.m/dtext.tcl:181
+#: ../gui/tcltk/gis.m/georect.tcl:705 ../gui/tcltk/gis.m/georect.tcl:709
+#: ../gui/tcltk/gis.m/georect.tcl:1132 ../gui/tcltk/gis.m/georect.tcl:1136
+#: ../gui/tcltk/gis.m/rules.tcl:139 ../gui/tcltk/gis.m/rules.tcl:143
+#: ../gui/tcltk/gis.m/histogram.tcl:162 ../gui/tcltk/gis.m/histogram.tcl:165
+#: ../lib/gis/gui.tcl:504 ../lib/init/gis_set.tcl:507
+msgid "Help"
+msgstr "Yardım"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:251
 msgid "    vector type"
 msgstr "    vektör tipi"
 
@@ -883,20 +136,17 @@ msgstr " öznitelik katmanı"
 msgid "    NUMERIC attribute column to use for thematic map"
 msgstr "    Konusal harita için kullanılacak NUMERIC öznitelik sütunu"
 
-#: ../gui/tcltk/gis.m/thematic.tcl:268 ../gui/tcltk/d.m/thematic.tcl:150
-#: ../gui/tcltk/d.m/vector.tcl:348
+#: ../gui/tcltk/gis.m/thematic.tcl:268
 msgid "    show attribute columns"
 msgstr "     öznitelik sütunlarını göster"
 
 #: ../gui/tcltk/gis.m/thematic.tcl:269 ../gui/tcltk/gis.m/chart.tcl:213
-#: ../gui/tcltk/gis.m/vector.tcl:484 ../gui/tcltk/d.m/thematic.tcl:151
-#: ../gui/tcltk/d.m/chart.tcl:121 ../gui/tcltk/d.m/vector.tcl:349
+#: ../gui/tcltk/gis.m/vector.tcl:484
 msgid "columns"
 msgstr "sütunlar"
 
 #: ../gui/tcltk/gis.m/thematic.tcl:273 ../gui/tcltk/gis.m/chart.tcl:217
-#: ../gui/tcltk/gis.m/vector.tcl:488 ../gui/tcltk/d.m/thematic.tcl:155
-#: ../gui/tcltk/d.m/chart.tcl:125 ../gui/tcltk/d.m/vector.tcl:353
+#: ../gui/tcltk/gis.m/vector.tcl:488
 msgid "Show columns"
 msgstr "Sütunları göster"
 
@@ -905,22 +155,20 @@ msgid "   show data"
 msgstr "   veriyi göster"
 
 #: ../gui/tcltk/gis.m/thematic.tcl:275 ../gui/tcltk/gis.m/chart.tcl:219
-#: ../gui/tcltk/gis.m/vector.tcl:490 ../gui/tcltk/d.m/thematic.tcl:157
-#: ../gui/tcltk/d.m/vector.tcl:355
+#: ../gui/tcltk/gis.m/vector.tcl:490
 msgid "data"
 msgstr "veri"
 
 #: ../gui/tcltk/gis.m/thematic.tcl:279 ../gui/tcltk/gis.m/chart.tcl:223
-#: ../gui/tcltk/gis.m/vector.tcl:494 ../gui/tcltk/d.m/thematic.tcl:161
-#: ../gui/tcltk/d.m/vector.tcl:359
+#: ../gui/tcltk/gis.m/vector.tcl:494
 msgid "Show data"
 msgstr "Veriyi göster"
 
-#: ../gui/tcltk/gis.m/thematic.tcl:285 ../gui/tcltk/d.m/thematic.tcl:168
+#: ../gui/tcltk/gis.m/thematic.tcl:285
 msgid "Thematic map: type"
 msgstr "Konusal harita: tip"
 
-#: ../gui/tcltk/gis.m/thematic.tcl:288 ../gui/tcltk/d.m/thematic.tcl:171
+#: ../gui/tcltk/gis.m/thematic.tcl:288
 msgid " map by"
 msgstr ""
 
@@ -940,16 +188,15 @@ msgstr "    SQL nerede tümcesi ile sorgula   "
 msgid "Graduated points & lines: "
 msgstr ""
 
-#: ../gui/tcltk/gis.m/thematic.tcl:320 ../gui/tcltk/d.m/thematic.tcl:205
-#: ../gui/tcltk/d.m/vector.tcl:245
+#: ../gui/tcltk/gis.m/thematic.tcl:320
 msgid "icon"
 msgstr "simge"
 
-#: ../gui/tcltk/gis.m/thematic.tcl:324 ../gui/tcltk/d.m/thematic.tcl:210
+#: ../gui/tcltk/gis.m/thematic.tcl:324
 msgid "point color"
 msgstr "nokta rengi"
 
-#: ../gui/tcltk/gis.m/thematic.tcl:326 ../gui/tcltk/d.m/thematic.tcl:212
+#: ../gui/tcltk/gis.m/thematic.tcl:326
 msgid "line color"
 msgstr "çizgi rengi"
 
@@ -981,11 +228,11 @@ msgstr ""
 msgid " end color"
 msgstr " son renk"
 
-#: ../gui/tcltk/gis.m/thematic.tcl:358 ../gui/tcltk/d.m/thematic.tcl:243
+#: ../gui/tcltk/gis.m/thematic.tcl:358
 msgid "draw border"
 msgstr "sınırı çiz"
 
-#: ../gui/tcltk/gis.m/thematic.tcl:365 ../gui/tcltk/d.m/thematic.tcl:250
+#: ../gui/tcltk/gis.m/thematic.tcl:365
 msgid "save thematic colors to GRASSRGB column of vector file"
 msgstr "Konusal renkleri vektör dosyanın GRASSKYM sütununa kaydet"
 
@@ -1017,7 +264,7 @@ msgstr "Etiket yazı tipi"
 msgid "label font for legend"
 msgstr "Lejand etiket yazı tipi"
 
-#: ../gui/tcltk/gis.m/thematic.tcl:413 ../gui/tcltk/d.m/thematic.tcl:260
+#: ../gui/tcltk/gis.m/thematic.tcl:413
 msgid "use math notation in legend"
 msgstr ""
 
@@ -1130,7 +377,7 @@ msgstr "Etiketler dosyası:"
 msgid "labels file to display"
 msgstr "görüntülenecek etiketler dosyası"
 
-#: ../gui/tcltk/gis.m/labels.tcl:146 ../gui/tcltk/d.m/labels.tcl:80
+#: ../gui/tcltk/gis.m/labels.tcl:146
 msgid "Display constraints:"
 msgstr "Kısıtları göster:"
 
@@ -1142,11 +389,11 @@ msgstr "en küçük"
 msgid "max"
 msgstr "en büyük"
 
-#: ../gui/tcltk/gis.m/labels.tcl:151 ../gui/tcltk/d.m/labels.tcl:85
+#: ../gui/tcltk/gis.m/labels.tcl:151
 msgid "region size"
 msgstr "Bölge boyutu"
 
-#: ../gui/tcltk/gis.m/labels.tcl:157 ../gui/tcltk/d.m/labels.tcl:91
+#: ../gui/tcltk/gis.m/labels.tcl:157
 msgid " ignore rotation setting and draw horizontally"
 msgstr "döndürme ayarları yok kabul et ve yatay olarak çiz"
 
@@ -1158,7 +405,7 @@ msgstr "etiket dosyası oluşturmak için v.label komutunu çalıştır"
 msgid "v.label"
 msgstr "v.label"
 
-#: ../gui/tcltk/gis.m/gm.tcl:197 ../gui/tcltk/d.m/d.m.tcl:314
+#: ../gui/tcltk/gis.m/gm.tcl:197
 msgid "Loading GIS Manager"
 msgstr "CBS Yöneticisi yükleniyor"
 
@@ -1166,7 +413,7 @@ msgstr "CBS Yöneticisi yükleniyor"
 msgid "Creating MainFrame..."
 msgstr "Ana çerçeve oluşturuluyor..."
 
-#: ../gui/tcltk/gis.m/gm.tcl:244 ../gui/tcltk/d.m/d.m.tcl:404
+#: ../gui/tcltk/gis.m/gm.tcl:244
 msgid "Done"
 msgstr "Yapıldı."
 
@@ -1195,6 +442,22 @@ msgstr "Yazı tipi: "
 #: ../gui/tcltk/gis.m/gm.tcl:423
 msgid "Character encoding: "
 msgstr "Karakter kodlaması: "
+
+#: ../gui/tcltk/gis.m/gm.tcl:430 ../gui/tcltk/gis.m/animate.tcl:533
+#: ../gui/tcltk/gis.m/dnviz.tcl:228 ../gui/tcltk/gis.m/rules.tcl:170
+#: ../lib/init/epsg_option.tcl:311 ../lib/init/file_option.tcl:263
+#: ../vector/v.digit/settings.tcl:161
+msgid "OK"
+msgstr "TAMAM"
+
+#: ../gui/tcltk/gis.m/gm.tcl:433 ../gui/tcltk/gis.m/animate.tcl:535
+#: ../gui/tcltk/gis.m/dnviz.tcl:230 ../gui/tcltk/gis.m/mapcanvas.tcl:855
+#: ../gui/tcltk/gis.m/georect.tcl:700 ../gui/tcltk/gis.m/rules.tcl:172
+#: ../lib/gtcltk/select.tcl:209 ../lib/init/epsg_option.tcl:167
+#: ../lib/init/epsg_option.tcl:314 ../lib/init/file_option.tcl:114
+#: ../lib/init/file_option.tcl:266
+msgid "Cancel"
+msgstr "İptal"
 
 #: ../gui/tcltk/gis.m/gm.tcl:504
 #, tcl-format
@@ -1254,6 +517,17 @@ msgstr ""
 msgid "    scale factor for computing arrow length"
 msgstr ""
 
+#: ../gui/tcltk/gis.m/runandoutput.tcl:44
+#: ../gui/tcltk/gis.m/runandoutput.tcl:116 ../lib/gis/gui.tcl:503
+msgid "Run"
+msgstr "Çalıştır"
+
+#: ../gui/tcltk/gis.m/runandoutput.tcl:48 ../gui/tcltk/gis.m/gmmenu.tcl:90
+#: ../gui/tcltk/gis.m/mapprint.tcl:366 ../lib/gis/gui.tcl:506
+#: ../lib/init/epsg_option.tcl:394 ../lib/init/epsg_option.tcl:438
+msgid "Close"
+msgstr "Kapat"
+
 #: ../gui/tcltk/gis.m/runandoutput.tcl:118
 msgid "Run (background)"
 msgstr "Çalıştır (Artalan)"
@@ -1267,13 +541,29 @@ msgid "Run (in Xterm)"
 msgstr "Çalıştır (Xterm'de)"
 
 #: ../gui/tcltk/gis.m/runandoutput.tcl:125 ../gui/tcltk/gis.m/gmmenu.tcl:88
-#: ../gui/tcltk/gis.m/mapcanvas.tcl:859 ../gui/tcltk/d.m/menu.tcl:172
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:859
 msgid "Save"
 msgstr "Kaydet"
+
+#: ../gui/tcltk/gis.m/runandoutput.tcl:127 ../lib/gis/gui.tcl:505
+msgid "Clear"
+msgstr "Temizle"
 
 #: ../gui/tcltk/gis.m/runandoutput.tcl:148
 msgid "Output - GIS.m"
 msgstr "Çıktı - CBS.yöneticisi"
+
+#: ../gui/tcltk/gis.m/runandoutput.tcl:259
+#: ../gui/tcltk/gis.m/runandoutput.tcl:265
+#: ../gui/tcltk/gis.m/grassabout.tcl:94 ../gui/tcltk/gis.m/gmlib.tcl:137
+#: ../lib/gis/gui.tcl:11 ../lib/gis/gui.tcl:15 ../lib/gis/gui.tcl:19
+#: ../lib/gis/gui.tcl:310
+msgid "Error"
+msgstr "Hata"
+
+#: ../gui/tcltk/gis.m/runandoutput.tcl:266
+msgid "This module requires X11 support, but no xmons were found"
+msgstr ""
 
 #: ../gui/tcltk/gis.m/maptool.tcl:41 ../gui/tcltk/gis.m/georecttool.tcl:40
 msgid "Display active layers"
@@ -1292,7 +582,6 @@ msgid "Create flythough path for NVIZ"
 msgstr "NVIZ için uçuş hattı oluştur"
 
 #: ../gui/tcltk/gis.m/maptool.tcl:68 ../gui/tcltk/gis.m/georecttool.tcl:47
-#: ../gui/tcltk/d.m/tool1.tcl:40
 msgid "Erase to white"
 msgstr "Beyaz yap"
 
@@ -1308,8 +597,12 @@ msgstr "Büyüt"
 msgid "Zoom Out"
 msgstr "Küçült"
 
+#: ../gui/tcltk/gis.m/maptool.tcl:151 ../gui/tcltk/gis.m/georecttool.tcl:130
+#: ../vector/v.digit/toolbox.tcl:190
+msgid "Pan"
+msgstr "Kaydır"
+
 #: ../gui/tcltk/gis.m/maptool.tcl:165 ../gui/tcltk/gis.m/georecttool.tcl:144
-#: ../gui/tcltk/d.m/tool1.tcl:87
 msgid "Return to previous zoom"
 msgstr "Önceki görünüşe dön"
 
@@ -1318,23 +611,36 @@ msgid "Zoom to..."
 msgstr "Göster..."
 
 #: ../gui/tcltk/gis.m/maptool.tcl:184
-msgid "Zoom to selected map"
+#, fuzzy
+msgid "Zoom display to selected map"
 msgstr "Seçilen haritaya göre göster"
 
+#: ../gui/tcltk/gis.m/maptool.tcl:187
+#, fuzzy
+msgid "Zoom display to saved region"
+msgstr "Seçilen bölgeye göre göster"
+
 #: ../gui/tcltk/gis.m/maptool.tcl:190
-msgid "Save display geometry to named region"
+#, fuzzy
+msgid "Save display extents to named region"
 msgstr "Görünüş geometrisini isimlendirilmiş bölge olarak kaydet"
 
 #: ../gui/tcltk/gis.m/maptool.tcl:193
-msgid "Zoom to current region (set with g.region)"
+#, fuzzy
+msgid "Zoom display to computational region (set with g.region)"
 msgstr "Geçerli bölgeye göre göster (g.region ile ayarla)"
 
+#: ../gui/tcltk/gis.m/maptool.tcl:196
+#, fuzzy
+msgid "Zoom display to default region"
+msgstr "Varsayılan bölgeye göre göster"
+
 #: ../gui/tcltk/gis.m/maptool.tcl:199
-msgid "Set current region (WIND file) to match display"
+msgid "Set computational region extents to match display"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/maptool.tcl:228 ../gui/tcltk/gis.m/gmmenu.tcl:615
-#: ../gui/tcltk/gis.m/mapcanvas.tcl:1829 ../gui/tcltk/d.m/menu.tcl:554
+#: ../gui/tcltk/gis.m/maptool.tcl:228 ../gui/tcltk/gis.m/gmmenu.tcl:622
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1859
 msgid "Query"
 msgstr "Sorgu"
 
@@ -1399,7 +705,6 @@ msgid "Could not create TIF"
 msgstr "TIF oluşturulamıyor"
 
 #: ../gui/tcltk/gis.m/rastnums.tcl:103 ../gui/tcltk/gis.m/raster.tcl:114
-#: ../gui/tcltk/d.m/menu.tcl:77 ../gui/tcltk/d.m/menu.tcl:113
 msgid "Raster map"
 msgstr "Raster harita"
 
@@ -1429,7 +734,7 @@ msgid "  cell values font "
 msgstr ""
 
 #: ../gui/tcltk/gis.m/rastnums.tcl:180 ../gui/tcltk/gis.m/gridline.tcl:187
-#: ../gui/tcltk/gis.m/legend.tcl:234 ../gui/tcltk/gis.m/barscale.tcl:204
+#: ../gui/tcltk/gis.m/legend.tcl:264 ../gui/tcltk/gis.m/barscale.tcl:204
 #: ../gui/tcltk/gis.m/maptext.tcl:180 ../gui/tcltk/gis.m/dtext.tcl:226
 #: ../gui/tcltk/gis.m/histogram.tcl:177
 msgid "select font for text"
@@ -1455,11 +760,11 @@ msgstr ""
 msgid "Divide map display into frames for displaying multiple maps"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/frames.tcl:112 ../gui/tcltk/d.m/frames.tcl:60
+#: ../gui/tcltk/gis.m/frames.tcl:112
 msgid "create and select frame"
 msgstr "Çerçeve oluştur ve seç"
 
-#: ../gui/tcltk/gis.m/frames.tcl:114 ../gui/tcltk/d.m/frames.tcl:62
+#: ../gui/tcltk/gis.m/frames.tcl:114
 msgid "select frame"
 msgstr "çerçeve seç"
 
@@ -1496,100 +801,100 @@ msgstr "Sisteminiz hakkında bilgi toplanıyor"
 msgid "***** Done *****"
 msgstr "***** Yapıldı *****"
 
-#: ../gui/tcltk/gis.m/animate.tcl:299
+#: ../gui/tcltk/gis.m/animate.tcl:296
 msgid "Select maps to animate"
 msgstr "Canlandırılacak haritayı seç"
 
-#: ../gui/tcltk/gis.m/animate.tcl:313
+#: ../gui/tcltk/gis.m/animate.tcl:310
 msgid "Rewind animation"
 msgstr "Canlandırmayı tekrarla"
 
-#: ../gui/tcltk/gis.m/animate.tcl:319
+#: ../gui/tcltk/gis.m/animate.tcl:316
 msgid "Replay animation"
 msgstr "Canlandırmayı yeniden oynat"
 
-#: ../gui/tcltk/gis.m/animate.tcl:325
+#: ../gui/tcltk/gis.m/animate.tcl:322
 msgid "Step backwards through animation"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/animate.tcl:331
+#: ../gui/tcltk/gis.m/animate.tcl:328
 msgid "Stop animation"
 msgstr "Canlandırmayı durdur"
 
-#: ../gui/tcltk/gis.m/animate.tcl:337
+#: ../gui/tcltk/gis.m/animate.tcl:334
 msgid "Step forwards through animation"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/animate.tcl:343
+#: ../gui/tcltk/gis.m/animate.tcl:340
 msgid "Play animation"
 msgstr "Canlandırmayı oynat"
 
-#: ../gui/tcltk/gis.m/animate.tcl:356
+#: ../gui/tcltk/gis.m/animate.tcl:353
 msgid "Slower animation"
 msgstr "Yavaş canlandırma"
 
-#: ../gui/tcltk/gis.m/animate.tcl:362
+#: ../gui/tcltk/gis.m/animate.tcl:359
 msgid "Faster animation"
 msgstr "Hızlı canlandırma"
 
-#: ../gui/tcltk/gis.m/animate.tcl:372
+#: ../gui/tcltk/gis.m/animate.tcl:369
 msgid "Continuously loop through animation"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/animate.tcl:380
+#: ../gui/tcltk/gis.m/animate.tcl:377
 msgid "Run animation alternately forward and backward"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/animate.tcl:391
+#: ../gui/tcltk/gis.m/animate.tcl:388
 msgid "Show map names in animation window"
 msgstr "Harita adlarını canlandırma penceresinde göster"
 
-#: ../gui/tcltk/gis.m/animate.tcl:404
+#: ../gui/tcltk/gis.m/animate.tcl:401
 msgid "Quit animation"
 msgstr "Canlandırmadan çık"
 
-#: ../gui/tcltk/gis.m/animate.tcl:435
+#: ../gui/tcltk/gis.m/animate.tcl:432
 msgid "Select maps"
 msgstr "Haritaları seç"
 
-#: ../gui/tcltk/gis.m/animate.tcl:463
+#: ../gui/tcltk/gis.m/animate.tcl:460
 msgid "Maps for Animation"
 msgstr "Canlandırma için haritalar"
 
-#: ../gui/tcltk/gis.m/animate.tcl:479
+#: ../gui/tcltk/gis.m/animate.tcl:476
 msgid "Select maps to animate in one or more frames (1 frame required)"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/animate.tcl:492
+#: ../gui/tcltk/gis.m/animate.tcl:489
 msgid "Maps for frame 1 (required): "
 msgstr "Çerçeve 1 için harita (gerekli): "
 
-#: ../gui/tcltk/gis.m/animate.tcl:503
+#: ../gui/tcltk/gis.m/animate.tcl:500
 msgid "Maps for frame 2 (optional): "
 msgstr "Çerçeve 2 için harita (seçimlik): "
 
-#: ../gui/tcltk/gis.m/animate.tcl:514
+#: ../gui/tcltk/gis.m/animate.tcl:511
 msgid "Maps for frame 3 (optional): "
 msgstr "Çerçeve 3 için harita (seçimlik): "
 
-#: ../gui/tcltk/gis.m/animate.tcl:525
+#: ../gui/tcltk/gis.m/animate.tcl:522
 msgid "Maps for frame 4 (optional): "
 msgstr "Çerçeve 4 için harita (seçimlik): "
 
-#: ../gui/tcltk/gis.m/animate.tcl:540 ../gui/tcltk/gis.m/dnviz.tcl:232
+#: ../gui/tcltk/gis.m/animate.tcl:537 ../gui/tcltk/gis.m/dnviz.tcl:232
 #: ../gui/tcltk/gis.m/rules.tcl:174
 msgid "Apply"
 msgstr "Uygula"
 
-#: ../gui/tcltk/gis.m/animate.tcl:563
+#: ../gui/tcltk/gis.m/animate.tcl:560
 msgid "You must select maps to animate for frame 1"
 msgstr "Çerçeve 1 de canlandırmak için harita seçmelisiniz"
 
-#: ../gui/tcltk/gis.m/animate.tcl:564
+#: ../gui/tcltk/gis.m/animate.tcl:561
 msgid "No maps selected"
 msgstr "Hiçbir harita seçilmedi"
 
-#: ../gui/tcltk/gis.m/animate.tcl:1031
+#: ../gui/tcltk/gis.m/animate.tcl:1028
 msgid "Animation Window"
 msgstr "Canlandırma Penceresi"
 
@@ -1597,11 +902,11 @@ msgstr "Canlandırma Penceresi"
 msgid "Start new map display monitor"
 msgstr "Yeni harita görüntüleme ekranı başlat"
 
-#: ../gui/tcltk/gis.m/gmtool1.tcl:42 ../gui/tcltk/d.m/tool2.tcl:22
+#: ../gui/tcltk/gis.m/gmtool1.tcl:42
 msgid "Add raster layer"
 msgstr "Raster katman ekle"
 
-#: ../gui/tcltk/gis.m/gmtool1.tcl:49 ../gui/tcltk/d.m/tool2.tcl:28
+#: ../gui/tcltk/gis.m/gmtool1.tcl:49
 msgid "Add RGB or HIS layer"
 msgstr ""
 
@@ -1621,15 +926,15 @@ msgstr ""
 msgid "Add raster legend layer"
 msgstr "Raster lejand katmanı ekle"
 
-#: ../gui/tcltk/gis.m/gmtool1.tcl:92 ../gui/tcltk/d.m/tool2.tcl:48
+#: ../gui/tcltk/gis.m/gmtool1.tcl:92
 msgid "Add vector layer"
 msgstr "Vektör katman ekle"
 
-#: ../gui/tcltk/gis.m/gmtool1.tcl:99 ../gui/tcltk/d.m/tool2.tcl:62
+#: ../gui/tcltk/gis.m/gmtool1.tcl:99
 msgid "Add thematic map layer"
 msgstr "Konusal katman ekle"
 
-#: ../gui/tcltk/gis.m/gmtool1.tcl:108 ../gui/tcltk/d.m/tool2.tcl:54
+#: ../gui/tcltk/gis.m/gmtool1.tcl:108
 msgid "Add thematic charts layer"
 msgstr "Konusal çizelge katmanı ekle"
 
@@ -1637,7 +942,7 @@ msgstr "Konusal çizelge katmanı ekle"
 msgid "Add raster labels layer (using v.labels file)"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmtool1.tcl:128 ../gui/tcltk/d.m/tool2.tcl:88
+#: ../gui/tcltk/gis.m/gmtool1.tcl:128
 msgid "Add text layer"
 msgstr "Metin katmanı ekle"
 
@@ -1671,52 +976,62 @@ msgstr "Katmanlar yükleniyor..."
 msgid "Layers loaded"
 msgstr "Katmanlar yüklendi"
 
-#: ../gui/tcltk/gis.m/gmtree.tcl:1171
+#: ../gui/tcltk/gis.m/gmtree.tcl:1166
+#, fuzzy
+msgid "Selected raster layer is empty"
+msgstr "Raster katman ekle"
+
+#: ../gui/tcltk/gis.m/gmtree.tcl:1177
+#, fuzzy
+msgid "Selected vector layer is empty"
+msgstr "Vektör katman ekle"
+
+#: ../gui/tcltk/gis.m/gmtree.tcl:1183
 msgid "You can digitize raster or vector maps only"
 msgstr "Sadece raster veya vektör harita sayısallaştırabilirsiniz"
 
-#: ../gui/tcltk/gis.m/gmtool2.tcl:26 ../gui/tcltk/d.m/tool2.tcl:100
+#: ../gui/tcltk/gis.m/gmtool2.tcl:26
 msgid "Scalebar and north arrow"
 msgstr "Ölçek ve kuzey oku"
 
-#: ../gui/tcltk/gis.m/gmtool2.tcl:32 ../gui/tcltk/d.m/tool2.tcl:105
+#: ../gui/tcltk/gis.m/gmtool2.tcl:32
 msgid "Overlay grids and lines"
 msgstr "Çizgi ve gridleri çakıştır"
 
-#: ../gui/tcltk/gis.m/gmtool2.tcl:39 ../gui/tcltk/d.m/tool2.tcl:116
+#: ../gui/tcltk/gis.m/gmtool2.tcl:39
 msgid "Add command layer"
 msgstr "Komut katmanı ekle"
 
-#: ../gui/tcltk/gis.m/gmtool2.tcl:59 ../gui/tcltk/d.m/tool2.tcl:130
+#: ../gui/tcltk/gis.m/gmtool2.tcl:59
 msgid "Add group"
 msgstr "Grup ekle"
 
-#: ../gui/tcltk/gis.m/gmtool2.tcl:65 ../gui/tcltk/d.m/tool2.tcl:135
+#: ../gui/tcltk/gis.m/gmtool2.tcl:65
 msgid "Duplicate Layer"
 msgstr "Tekrarlanan Katman"
 
-#: ../gui/tcltk/gis.m/gmtool2.tcl:70 ../gui/tcltk/d.m/tool2.tcl:139
+#: ../gui/tcltk/gis.m/gmtool2.tcl:70
 msgid "Delete layer"
 msgstr "Katman sil"
 
-#: ../gui/tcltk/gis.m/gmtool2.tcl:84 ../gui/tcltk/d.m/tool1.tcl:121
+#: ../gui/tcltk/gis.m/gmtool2.tcl:84
 msgid "Create new workspace file (erase current workspace settings first)"
 msgstr ""
 "Yeni çalışma alanı dosyası oluştur (önce geçerli çalışma ayarlarını sil)"
 
-#: ../gui/tcltk/gis.m/gmtool2.tcl:90 ../gui/tcltk/d.m/tool1.tcl:124
+#: ../gui/tcltk/gis.m/gmtool2.tcl:90
 msgid "Open existing workspace file"
 msgstr "Mevcut çalışma alanı dosyasını aç"
 
-#: ../gui/tcltk/gis.m/gmtool2.tcl:96 ../gui/tcltk/d.m/tool1.tcl:127
+#: ../gui/tcltk/gis.m/gmtool2.tcl:96
 msgid "Save workspace file"
 msgstr "Çalışma alanı dosyasını kaydet"
 
-#: ../gui/tcltk/gis.m/gmtool2.tcl:111 ../gui/tcltk/d.m/tool1.tcl:66
+#: ../gui/tcltk/gis.m/gmtool2.tcl:111
 msgid "Animate raster map series"
 msgstr "Raster harita takımları canlandırması"
 
-#: ../gui/tcltk/gis.m/gmtool2.tcl:127 ../gui/tcltk/d.m/tool2.tcl:153
+#: ../gui/tcltk/gis.m/gmtool2.tcl:127
 msgid "Digitize map (select or create new map first)"
 msgstr "Harita sayısallaştır (seç veya önce yeni bir harita oluştur)"
 
@@ -1728,7 +1043,7 @@ msgstr "Yer kontrol noktalarını ayarla"
 msgid "Zoom to map"
 msgstr "Haritayı yaklaştır"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:85 ../gui/tcltk/d.m/menu.tcl:75
+#: ../gui/tcltk/gis.m/gmmenu.tcl:85
 msgid "&File"
 msgstr "&Dosya"
 
@@ -1736,11 +1051,11 @@ msgstr "&Dosya"
 msgid "Workspace"
 msgstr "Çalışma alanı"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:87 ../gui/tcltk/d.m/menu.tcl:171
+#: ../gui/tcltk/gis.m/gmmenu.tcl:87
 msgid "Open..."
 msgstr "Aç..."
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:89 ../gui/tcltk/d.m/menu.tcl:173
+#: ../gui/tcltk/gis.m/gmmenu.tcl:89
 msgid "Save as..."
 msgstr "Farklı kaydet..."
 
@@ -1749,7 +1064,6 @@ msgid "Import raster map"
 msgstr "Raster haritaları içe aktar"
 
 #: ../gui/tcltk/gis.m/gmmenu.tcl:94 ../gui/tcltk/gis.m/gmmenu.tcl:129
-#: ../gui/tcltk/d.m/menu.tcl:78 ../gui/tcltk/d.m/menu.tcl:114
 msgid "Multiple formats using GDAL"
 msgstr "GDAL desteği olan birçok biçim"
 
@@ -1793,7 +1107,7 @@ msgstr "SRTM hgt dosyaları"
 msgid "Terra ASTER"
 msgstr "Terra ASTER HDF dosyaları"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:108 ../gui/tcltk/d.m/menu.tcl:92
+#: ../gui/tcltk/gis.m/gmmenu.tcl:108
 msgid "Web Mapping Server"
 msgstr "Web Harita Sunucusu"
 
@@ -1906,9 +1220,13 @@ msgstr "SVG"
 msgid "Export grid 3D volume"
 msgstr "Grid3D hacmi dışa aktar"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:164 ../gui/tcltk/d.m/menu.tcl:149
+#: ../gui/tcltk/gis.m/gmmenu.tcl:164
 msgid "Manage maps and volumes"
 msgstr "Harita ve hacimleri yönet"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:165 ../lib/gis/gui.tcl:464
+msgid "Copy"
+msgstr "Kopyala"
 
 #: ../gui/tcltk/gis.m/gmmenu.tcl:167
 msgid "List"
@@ -1922,11 +1240,15 @@ msgstr "Süzgeçleneni listele"
 msgid "Rename"
 msgstr "Yeniden adlandır"
 
+#: ../gui/tcltk/gis.m/gmmenu.tcl:172 ../vector/v.digit/cats.tcl:20
+msgid "Delete"
+msgstr "Sil"
+
 #: ../gui/tcltk/gis.m/gmmenu.tcl:173
 msgid "Delete filtered"
 msgstr "Süzgeçleneni sil"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:175 ../gui/tcltk/d.m/menu.tcl:157
+#: ../gui/tcltk/gis.m/gmmenu.tcl:175
 msgid "Map type conversions"
 msgstr "Harita tipi dönüşümleri"
 
@@ -1942,7 +1264,7 @@ msgstr "Raster seriden hacme"
 msgid "Raster 2.5D to volume"
 msgstr "Raster 2.5D den hacme"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:180 ../gui/tcltk/d.m/menu.tcl:161
+#: ../gui/tcltk/gis.m/gmmenu.tcl:180
 msgid "Vector to raster"
 msgstr "Vektörden raster'e"
 
@@ -1986,27 +1308,27 @@ msgstr "NVIZ uçuş hattı"
 msgid "PostScript plot"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:199 ../gui/tcltk/d.m/menu.tcl:184
+#: ../gui/tcltk/gis.m/gmmenu.tcl:199
 msgid "E&xit"
 msgstr "Çı&k"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:201 ../gui/tcltk/d.m/menu.tcl:186
+#: ../gui/tcltk/gis.m/gmmenu.tcl:201
 msgid "&Config"
 msgstr "&Yapılandırma"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:202 ../gui/tcltk/d.m/menu.tcl:187
+#: ../gui/tcltk/gis.m/gmmenu.tcl:202
 msgid "Region"
 msgstr "Bölge"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:203 ../gui/tcltk/d.m/menu.tcl:188
+#: ../gui/tcltk/gis.m/gmmenu.tcl:203
 msgid "Display region settings"
 msgstr "Bölge ayarlarını göster"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:204 ../gui/tcltk/d.m/menu.tcl:189
+#: ../gui/tcltk/gis.m/gmmenu.tcl:204
 msgid "Change region settings"
 msgstr "Bölge ayarlarını değiştir"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:206 ../gui/tcltk/d.m/menu.tcl:192
+#: ../gui/tcltk/gis.m/gmmenu.tcl:206
 msgid "GRASS working environment"
 msgstr "GRASS çalışma ortamı"
 
@@ -2030,12 +1352,11 @@ msgstr "Ayarları göster"
 msgid "Change settings"
 msgstr "Ayarları değiştir"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:212 ../gui/tcltk/d.m/menu.tcl:198
+#: ../gui/tcltk/gis.m/gmmenu.tcl:212
 msgid "Show current GRASS version"
 msgstr "Geçerli GRASS sürümünü göster"
 
 #: ../gui/tcltk/gis.m/gmmenu.tcl:214 ../gui/tcltk/gis.m/gmmenu.tcl:215
-#: ../gui/tcltk/d.m/menu.tcl:200
 msgid "Manage projections"
 msgstr "Projeksiyonları yönet"
 
@@ -2051,16 +1372,15 @@ msgstr "Koordinatları dönüştür"
 msgid "Display font"
 msgstr "Yazıtipini göster"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:222 ../gui/tcltk/d.m/menu.tcl:218
+#: ../gui/tcltk/gis.m/gmmenu.tcl:222
 msgid "&Raster"
 msgstr "&Raster"
 
 #: ../gui/tcltk/gis.m/gmmenu.tcl:223 ../gui/tcltk/gis.m/gmmenu.tcl:419
-#: ../gui/tcltk/d.m/menu.tcl:219 ../gui/tcltk/d.m/menu.tcl:376
 msgid "Develop map"
 msgstr "Harita geliştir"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:224 ../gui/tcltk/d.m/menu.tcl:220
+#: ../gui/tcltk/gis.m/gmmenu.tcl:224
 msgid "Digitize raster"
 msgstr "Raster sayısallaştır"
 
@@ -2084,7 +1404,7 @@ msgstr ""
 msgid "Timestamps"
 msgstr "Zaman damgası"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:237 ../gui/tcltk/d.m/menu.tcl:231
+#: ../gui/tcltk/gis.m/gmmenu.tcl:237
 msgid "Resample using aggregate statistics"
 msgstr ""
 
@@ -2116,7 +1436,7 @@ msgstr ""
 msgid "Tiling"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:248 ../gui/tcltk/d.m/menu.tcl:240
+#: ../gui/tcltk/gis.m/gmmenu.tcl:248
 msgid "Manage map colors"
 msgstr "Harita renklerini yönet"
 
@@ -2140,8 +1460,7 @@ msgstr "KYM oluştur"
 msgid "HIS to RGB"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:257 ../gui/tcltk/d.m/menu.tcl:249
-#: ../gui/tcltk/d.m/menu.tcl:403
+#: ../gui/tcltk/gis.m/gmmenu.tcl:257
 msgid "Query by coordinate(s)"
 msgstr "Koordinat(lar)a göre sorgula"
 
@@ -2157,12 +1476,11 @@ msgstr "En yakın noktalar"
 msgid "MASK"
 msgstr "MASKE"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:262 ../gui/tcltk/d.m/menu.tcl:254
+#: ../gui/tcltk/gis.m/gmmenu.tcl:262
 msgid "Map calculator"
 msgstr "Harita hesaplayıcı"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:263 ../gui/tcltk/d.m/menu.tcl:255
-#: ../gui/tcltk/d.m/menu.tcl:413
+#: ../gui/tcltk/gis.m/gmmenu.tcl:263
 msgid "Neighborhood analysis"
 msgstr "Komşuluk analizi"
 
@@ -2175,11 +1493,10 @@ msgid "Neighborhood points"
 msgstr "Komşu noktalar"
 
 #: ../gui/tcltk/gis.m/gmmenu.tcl:267 ../gui/tcltk/gis.m/gmmenu.tcl:482
-#: ../gui/tcltk/d.m/menu.tcl:259 ../gui/tcltk/d.m/menu.tcl:427
 msgid "Overlay maps"
 msgstr "Haritaları çakıştır"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:268 ../gui/tcltk/d.m/menu.tcl:260
+#: ../gui/tcltk/gis.m/gmmenu.tcl:268
 msgid "Cross product"
 msgstr ""
 
@@ -2187,7 +1504,7 @@ msgstr ""
 msgid "Map series"
 msgstr "Harita serileri"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:270 ../gui/tcltk/d.m/menu.tcl:262
+#: ../gui/tcltk/gis.m/gmmenu.tcl:270
 msgid "Patch maps"
 msgstr "Haritaları birbirine ekle"
 
@@ -2195,7 +1512,7 @@ msgstr "Haritaları birbirine ekle"
 msgid "Statistical overlay"
 msgstr "İstatistiksel çakıştırma"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:274 ../gui/tcltk/d.m/menu.tcl:266
+#: ../gui/tcltk/gis.m/gmmenu.tcl:274
 msgid "Solar radiance and shadows"
 msgstr "Güneş ışınımı ve gölgeleme"
 
@@ -2207,7 +1524,7 @@ msgstr ""
 msgid "Shadows map"
 msgstr "Gölgelenme haritası"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:278 ../gui/tcltk/d.m/menu.tcl:270
+#: ../gui/tcltk/gis.m/gmmenu.tcl:278
 msgid "Terrain analysis"
 msgstr "Arazi analizi"
 
@@ -2215,11 +1532,11 @@ msgstr "Arazi analizi"
 msgid "Cumulative movement costs"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:280 ../gui/tcltk/d.m/menu.tcl:272
+#: ../gui/tcltk/gis.m/gmmenu.tcl:280
 msgid "Cost surface"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:281 ../gui/tcltk/d.m/menu.tcl:273
+#: ../gui/tcltk/gis.m/gmmenu.tcl:281
 msgid "Least cost route or flow"
 msgstr ""
 
@@ -2227,15 +1544,15 @@ msgstr ""
 msgid "Shaded relief"
 msgstr "Kabartma gölgelenme haritası"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:285 ../gui/tcltk/d.m/menu.tcl:276
+#: ../gui/tcltk/gis.m/gmmenu.tcl:285
 msgid "Slope and aspect"
 msgstr "Eğim ve bakı"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:286 ../gui/tcltk/d.m/menu.tcl:277
+#: ../gui/tcltk/gis.m/gmmenu.tcl:286
 msgid "Terrain parameters"
 msgstr "Arazi parametreleri"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:287 ../gui/tcltk/d.m/menu.tcl:278
+#: ../gui/tcltk/gis.m/gmmenu.tcl:287
 msgid "Textural features"
 msgstr "Tekstür objeleri"
 
@@ -2243,7 +1560,7 @@ msgstr "Tekstür objeleri"
 msgid "Visibility"
 msgstr "Görünürlük"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:291 ../gui/tcltk/d.m/menu.tcl:281
+#: ../gui/tcltk/gis.m/gmmenu.tcl:291
 msgid "Transform features"
 msgstr "Objeleri dönüştür"
 
@@ -2259,7 +1576,7 @@ msgstr ""
 msgid "Thin"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:297 ../gui/tcltk/d.m/menu.tcl:287
+#: ../gui/tcltk/gis.m/gmmenu.tcl:297
 msgid "Hydrologic modeling"
 msgstr "Hidrolojik modelleme"
 
@@ -2283,11 +1600,11 @@ msgstr ""
 msgid "Flow lines"
 msgstr "Akış hatları"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:305 ../gui/tcltk/gis.m/gmmenu.tcl:585
+#: ../gui/tcltk/gis.m/gmmenu.tcl:305 ../gui/tcltk/gis.m/gmmenu.tcl:592
 msgid "Groundwater flow model"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:307 ../gui/tcltk/d.m/menu.tcl:293
+#: ../gui/tcltk/gis.m/gmmenu.tcl:307
 msgid "SIMWE overland flow modeling"
 msgstr ""
 
@@ -2295,27 +1612,27 @@ msgstr ""
 msgid "SIMWE sediment flux modeling"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:310 ../gui/tcltk/d.m/menu.tcl:295
+#: ../gui/tcltk/gis.m/gmmenu.tcl:310
 msgid "Topographic index map"
 msgstr "Topoğrafik indeks haritası"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:311 ../gui/tcltk/d.m/menu.tcl:296
+#: ../gui/tcltk/gis.m/gmmenu.tcl:311
 msgid "TOPMODEL simulation"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:313 ../gui/tcltk/d.m/menu.tcl:297
+#: ../gui/tcltk/gis.m/gmmenu.tcl:313
 msgid "Watershed subbasins"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:314 ../gui/tcltk/d.m/menu.tcl:298
+#: ../gui/tcltk/gis.m/gmmenu.tcl:314
 msgid "Watershed analysis"
 msgstr "Havza analizi"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:315 ../gui/tcltk/d.m/menu.tcl:299
+#: ../gui/tcltk/gis.m/gmmenu.tcl:315
 msgid "Watershed basin creation"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:317 ../gui/tcltk/d.m/menu.tcl:301
+#: ../gui/tcltk/gis.m/gmmenu.tcl:317
 msgid "Landscape structure modeling"
 msgstr "Peyzaj Yapısı Modelleme"
 
@@ -2331,11 +1648,16 @@ msgstr "Peyzaj analizi"
 msgid "Analyze patches"
 msgstr "Küme analizi"
 
+#: ../gui/tcltk/gis.m/gmmenu.tcl:326 ../lib/gis/gui.tcl:295
+#: ../lib/gis/gui.tcl:480
+msgid "Output"
+msgstr "Çıktı"
+
 #: ../gui/tcltk/gis.m/gmmenu.tcl:328
 msgid "Landscape patch analysis"
 msgstr "Peyzaj küme analizi"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:329 ../gui/tcltk/d.m/menu.tcl:302
+#: ../gui/tcltk/gis.m/gmmenu.tcl:329
 msgid "Set up sampling and analysis framework"
 msgstr ""
 
@@ -2391,7 +1713,7 @@ msgstr "Zenginlik"
 msgid "Shape index"
 msgstr "Şekil indeksi"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:348 ../gui/tcltk/d.m/menu.tcl:308
+#: ../gui/tcltk/gis.m/gmmenu.tcl:348
 msgid "Wildfire modeling"
 msgstr "Doğa Yangını modelleme"
 
@@ -2407,7 +1729,7 @@ msgstr ""
 msgid "Anisotropic spread simulation"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:354 ../gui/tcltk/d.m/menu.tcl:314
+#: ../gui/tcltk/gis.m/gmmenu.tcl:354
 msgid "Change category values and labels"
 msgstr "Categori değerleri ve etiketleri değiştir"
 
@@ -2447,7 +1769,7 @@ msgstr "Histogram ile yeniden ölçekle"
 msgid "Concentric circles"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:369 ../gui/tcltk/d.m/menu.tcl:331
+#: ../gui/tcltk/gis.m/gmmenu.tcl:369
 msgid "Generate random cells"
 msgstr "Rasgele hücreler üret"
 
@@ -2459,7 +1781,7 @@ msgstr "Rasgele hücreler"
 msgid "Random cells and vector points"
 msgstr "Rasgele hücreler ve vektör noktalar"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:373 ../gui/tcltk/d.m/menu.tcl:334
+#: ../gui/tcltk/gis.m/gmmenu.tcl:373
 msgid "Generate surfaces"
 msgstr "Yüzey üret"
 
@@ -2491,7 +1813,7 @@ msgstr ""
 msgid "Contour lines"
 msgstr "Eşyükselti eğrileri"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:385 ../gui/tcltk/d.m/menu.tcl:343
+#: ../gui/tcltk/gis.m/gmmenu.tcl:385
 msgid "Interpolate surfaces"
 msgstr "Yüzey enterpolasyonu"
 
@@ -2524,21 +1846,20 @@ msgid "Fill NULL cells"
 msgstr "BOŞ hücreleri doldur"
 
 #: ../gui/tcltk/gis.m/gmmenu.tcl:398 ../gui/tcltk/gis.m/gmmenu.tcl:517
-#: ../gui/tcltk/gis.m/gmmenu.tcl:571 ../gui/tcltk/d.m/menu.tcl:354
-#: ../gui/tcltk/d.m/menu.tcl:459 ../gui/tcltk/d.m/menu.tcl:515
+#: ../gui/tcltk/gis.m/gmmenu.tcl:578
 msgid "Reports and statistics"
 msgstr "Raporlar ve istatistikler"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:399 ../gui/tcltk/d.m/menu.tcl:355
-#: ../gui/tcltk/d.m/menu.tcl:516
+#: ../gui/tcltk/gis.m/gmmenu.tcl:399
 msgid "Report basic file information"
 msgstr "Basit dosya bilgisini raporla"
 
 #: ../gui/tcltk/gis.m/gmmenu.tcl:400
-msgid "Report category information"
+#, fuzzy
+msgid "Manage category information"
 msgstr "Kategori bilgisini raporla"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:402 ../gui/tcltk/d.m/menu.tcl:358
+#: ../gui/tcltk/gis.m/gmmenu.tcl:402
 msgid "General statistics"
 msgstr "Genel istatistikler"
 
@@ -2550,7 +1871,7 @@ msgstr "Kategori değerleri aralığı"
 msgid "Sum cell category values"
 msgstr "Hücre kategori değerleri toplamı"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:405 ../gui/tcltk/d.m/menu.tcl:361
+#: ../gui/tcltk/gis.m/gmmenu.tcl:405
 msgid "Sum area by map and category"
 msgstr "Alanların harita ve kategoriye göre toplamı"
 
@@ -2558,12 +1879,11 @@ msgstr "Alanların harita ve kategoriye göre toplamı"
 msgid "Statistics for clumped cells (works with r.clump)"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:407 ../gui/tcltk/d.m/menu.tcl:363
+#: ../gui/tcltk/gis.m/gmmenu.tcl:407
 msgid "Total surface area corrected for topography"
 msgstr "Topoğrafya ile düzeltilmiş toplam yüzey alanı"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:408 ../gui/tcltk/d.m/menu.tcl:364
-#: ../gui/tcltk/d.m/menu.tcl:463
+#: ../gui/tcltk/gis.m/gmmenu.tcl:408
 msgid "Univariate statistics"
 msgstr ""
 
@@ -2575,7 +1895,7 @@ msgstr ""
 msgid "Sample transects (bearing/distance)"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:413 ../gui/tcltk/d.m/menu.tcl:370
+#: ../gui/tcltk/gis.m/gmmenu.tcl:413
 msgid "Covariance/correlation"
 msgstr ""
 
@@ -2587,11 +1907,11 @@ msgstr "Doğrusal ilişki"
 msgid "Mutual category occurences"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:418 ../gui/tcltk/d.m/menu.tcl:375
+#: ../gui/tcltk/gis.m/gmmenu.tcl:418
 msgid "&Vector"
 msgstr "&Vektör"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:420 ../gui/tcltk/d.m/menu.tcl:377
+#: ../gui/tcltk/gis.m/gmmenu.tcl:420
 msgid "Digitize"
 msgstr "Sayısallaştırma"
 
@@ -2607,61 +1927,61 @@ msgstr "Topoloji oluştur/yeniden kur: "
 msgid "Clean vector"
 msgstr "Vektör dosyaların topolojisini temizle"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:426
+#: ../gui/tcltk/gis.m/gmmenu.tcl:425
+msgid "Generalization"
+msgstr "Genelleştirme"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:427
 msgid "Convert object types"
 msgstr "Obje tipleirni değiştir"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:428
+#: ../gui/tcltk/gis.m/gmmenu.tcl:429
 msgid "Add centroids"
 msgstr "Alan merkezi ekle"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:430
+#: ../gui/tcltk/gis.m/gmmenu.tcl:431
 msgid "Build polylines"
 msgstr "Çoklu çizgileri oluştur"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:431
+#: ../gui/tcltk/gis.m/gmmenu.tcl:432
 msgid "Split polylines"
 msgstr "Çoklu çizgileri böl"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:432
+#: ../gui/tcltk/gis.m/gmmenu.tcl:433
 msgid "Parallel lines"
 msgstr "Paralel çizgiler"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:434
+#: ../gui/tcltk/gis.m/gmmenu.tcl:435
 msgid "Dissolve boundaries"
 msgstr "Ortak değere göre sınır oluştur"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:436
+#: ../gui/tcltk/gis.m/gmmenu.tcl:437
 msgid "Create 3D vector over raster"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:437
+#: ../gui/tcltk/gis.m/gmmenu.tcl:438
 msgid "Extrude 3D vector"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:439
+#: ../gui/tcltk/gis.m/gmmenu.tcl:440
 msgid "Link to OGR"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:441
+#: ../gui/tcltk/gis.m/gmmenu.tcl:442
 msgid "Create labels"
 msgstr "Etiketleri oluştur"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:443
+#: ../gui/tcltk/gis.m/gmmenu.tcl:444
 msgid "Reposition vector"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:444
+#: ../gui/tcltk/gis.m/gmmenu.tcl:445
 msgid "Reproject vector"
 msgstr "Vektörü yeniden projeksiyonlandır"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:446
+#: ../gui/tcltk/gis.m/gmmenu.tcl:447
 msgid "Metadata support"
 msgstr "Değişim verisi desteği"
-
-#: ../gui/tcltk/gis.m/gmmenu.tcl:448
-msgid "Generalization"
-msgstr "Genelleştirme"
 
 #: ../gui/tcltk/gis.m/gmmenu.tcl:451
 msgid "Query with attributes"
@@ -2719,15 +2039,15 @@ msgstr ""
 msgid "Nearest features"
 msgstr "En yakın objeler"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:468 ../gui/tcltk/d.m/menu.tcl:418
+#: ../gui/tcltk/gis.m/gmmenu.tcl:468
 msgid "Network analysis"
 msgstr "Ağ(şebeke) analizi"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:469 ../gui/tcltk/d.m/menu.tcl:419
+#: ../gui/tcltk/gis.m/gmmenu.tcl:469
 msgid "Allocate subnets"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:470 ../gui/tcltk/d.m/menu.tcl:420
+#: ../gui/tcltk/gis.m/gmmenu.tcl:470
 msgid "Network maintenance"
 msgstr ""
 
@@ -2735,7 +2055,7 @@ msgstr ""
 msgid "Visibility network"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:472 ../gui/tcltk/d.m/menu.tcl:421
+#: ../gui/tcltk/gis.m/gmmenu.tcl:472
 msgid "Shortest route"
 msgstr "En kısa rota"
 
@@ -2747,11 +2067,11 @@ msgstr "En kısa rotayı göster"
 msgid "Split net"
 msgstr "Şebekeyi böl"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:479 ../gui/tcltk/d.m/menu.tcl:424
+#: ../gui/tcltk/gis.m/gmmenu.tcl:479
 msgid "Steiner tree"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:480 ../gui/tcltk/d.m/menu.tcl:425
+#: ../gui/tcltk/gis.m/gmmenu.tcl:480
 msgid "Traveling salesman analysis"
 msgstr ""
 
@@ -2763,7 +2083,7 @@ msgstr "Haritaları çakıştır"
 msgid "Patch (combine)"
 msgstr "Birçok haritayı birbirine ekle (birleştir)"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:487 ../gui/tcltk/d.m/menu.tcl:434
+#: ../gui/tcltk/gis.m/gmmenu.tcl:487
 msgid "Change attributes"
 msgstr "Öznitelikleri değiştir"
 
@@ -2779,7 +2099,7 @@ msgstr "Objeleri etkileşimli olarak yeniden sınıflandır"
 msgid "Generate area for current region"
 msgstr "Geçerli bölgeden alan üret"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:494 ../gui/tcltk/d.m/menu.tcl:445
+#: ../gui/tcltk/gis.m/gmmenu.tcl:494
 msgid "Generate areas from points"
 msgstr "Noktalardan alan üret"
 
@@ -2799,7 +2119,7 @@ msgstr "Voronoi diyagramı/Thiessen poligonları"
 msgid "Generate grid"
 msgstr "Grid üret"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:500 ../gui/tcltk/d.m/menu.tcl:440
+#: ../gui/tcltk/gis.m/gmmenu.tcl:500
 msgid "Generate points"
 msgstr "Nokta üret"
 
@@ -2811,7 +2131,7 @@ msgstr "Veritabanındaki x/y koordinatlarından noktalar üret "
 msgid "Generate points along lines"
 msgstr "Çizgiler boyunca noktalar üret"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:503 ../gui/tcltk/d.m/menu.tcl:442
+#: ../gui/tcltk/gis.m/gmmenu.tcl:503
 msgid "Generate random points"
 msgstr "Rasgele noktalar üret"
 
@@ -2839,16 +2159,15 @@ msgstr "Nokta özniteliklerini alanlardan güncelle"
 msgid "Update point attributes from raster"
 msgstr "Nokta özniteliklerini rasterlardan güncelle"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:513 ../gui/tcltk/d.m/menu.tcl:452
+#: ../gui/tcltk/gis.m/gmmenu.tcl:513
 msgid "Sample raster map at point locations"
 msgstr "Raster haritayı noktanın konumunda örnekle"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:514 ../gui/tcltk/d.m/menu.tcl:453
+#: ../gui/tcltk/gis.m/gmmenu.tcl:514
 msgid "Sample raster neighborhood around points"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:518 ../gui/tcltk/gis.m/gmmenu.tcl:588
-#: ../gui/tcltk/d.m/menu.tcl:460
+#: ../gui/tcltk/gis.m/gmmenu.tcl:518 ../gui/tcltk/gis.m/gmmenu.tcl:595
 msgid "Basic information"
 msgstr "Temel bilgi"
 
@@ -2872,11 +2191,11 @@ msgstr ""
 msgid "Test normality"
 msgstr "Normalliği sına"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:529 ../gui/tcltk/d.m/menu.tcl:470
+#: ../gui/tcltk/gis.m/gmmenu.tcl:529
 msgid "&Imagery"
 msgstr "&Görüntü"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:530 ../gui/tcltk/d.m/menu.tcl:471
+#: ../gui/tcltk/gis.m/gmmenu.tcl:530
 msgid "Develop images and groups"
 msgstr "Görüntü ve grup geliştir"
 
@@ -2892,7 +2211,7 @@ msgstr "Hedef grup"
 msgid "Mosaic images"
 msgstr "Görüntüleri yanyana birleştir"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:536 ../gui/tcltk/d.m/menu.tcl:477
+#: ../gui/tcltk/gis.m/gmmenu.tcl:536
 msgid "Manage image colors"
 msgstr "Görüntü renklerini yönet"
 
@@ -2904,255 +2223,271 @@ msgstr ""
 msgid "RGB to HIS"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:541 ../gui/tcltk/d.m/menu.tcl:488
+#: ../gui/tcltk/gis.m/gmmenu.tcl:541
 msgid "Ortho photo rectification"
 msgstr "Ortofoto düzeltme"
 
 #: ../gui/tcltk/gis.m/gmmenu.tcl:547
+msgid "Basic RS processing"
+msgstr ""
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:548
+msgid "MODIS Quality flags"
+msgstr ""
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:550
+msgid "Albedo"
+msgstr ""
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:552
+msgid "Vegetation Indices"
+msgstr ""
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:554
 msgid "Brovey sharpening"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:548 ../gui/tcltk/d.m/menu.tcl:492
+#: ../gui/tcltk/gis.m/gmmenu.tcl:555
 msgid "Classify image"
 msgstr "Görüntü sınıflandır"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:549 ../gui/tcltk/d.m/menu.tcl:493
+#: ../gui/tcltk/gis.m/gmmenu.tcl:556
 msgid "Clustering input for unsupervised classification"
 msgstr "Kontrolsüz sınıflandırma için küme girdisi"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:551 ../gui/tcltk/d.m/menu.tcl:495
+#: ../gui/tcltk/gis.m/gmmenu.tcl:558
 msgid "Maximum likelyhood classification (MLC)"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:552 ../gui/tcltk/d.m/menu.tcl:496
+#: ../gui/tcltk/gis.m/gmmenu.tcl:559
 msgid "Sequential maximum a posteriory classification (SMAP)"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:554 ../gui/tcltk/d.m/menu.tcl:498
+#: ../gui/tcltk/gis.m/gmmenu.tcl:561
 msgid "Interactive input for supervised classification"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:555
+#: ../gui/tcltk/gis.m/gmmenu.tcl:562
 msgid "Input for supervised MLC"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:556
+#: ../gui/tcltk/gis.m/gmmenu.tcl:563
 msgid "Input for supervised SMAP"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:558 ../gui/tcltk/d.m/menu.tcl:502
+#: ../gui/tcltk/gis.m/gmmenu.tcl:565
 msgid "Filter image"
 msgstr "Görüntüyü filtrele"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:559
+#: ../gui/tcltk/gis.m/gmmenu.tcl:566
 msgid "Edge detection"
 msgstr "Kenar bulma"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:560
+#: ../gui/tcltk/gis.m/gmmenu.tcl:567
 msgid "Matrix/convolving filter"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:562 ../gui/tcltk/d.m/menu.tcl:506
+#: ../gui/tcltk/gis.m/gmmenu.tcl:569
 msgid "Spectral response"
 msgstr "Spektral yanıt"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:563 ../gui/tcltk/d.m/menu.tcl:507
+#: ../gui/tcltk/gis.m/gmmenu.tcl:570
 msgid "Tassled cap vegetation index"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:564 ../gui/tcltk/d.m/menu.tcl:508
+#: ../gui/tcltk/gis.m/gmmenu.tcl:571
 msgid "Transform image"
 msgstr "Görüntüyü dönüştür"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:565
+#: ../gui/tcltk/gis.m/gmmenu.tcl:572
 msgid "Canonical correlation"
 msgstr "Kuralsal ilişki"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:566
+#: ../gui/tcltk/gis.m/gmmenu.tcl:573
 msgid "Principal components"
 msgstr "Temel bileşenler"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:567
+#: ../gui/tcltk/gis.m/gmmenu.tcl:574
 msgid "Fast Fourier"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:568
+#: ../gui/tcltk/gis.m/gmmenu.tcl:575
 msgid "Inverse Fast Fourier"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:572
+#: ../gui/tcltk/gis.m/gmmenu.tcl:579
 msgid "Bit pattern comparison"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:573
+#: ../gui/tcltk/gis.m/gmmenu.tcl:580
 msgid "Kappa analysis"
 msgstr "Kappa analizi"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:574
+#: ../gui/tcltk/gis.m/gmmenu.tcl:581
 msgid "OIF for LandSat TM"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:577
+#: ../gui/tcltk/gis.m/gmmenu.tcl:584
 msgid "&Volumes"
 msgstr "&Hacimler"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:578 ../gui/tcltk/d.m/menu.tcl:525
+#: ../gui/tcltk/gis.m/gmmenu.tcl:585
 msgid "Develop grid3D volumes"
 msgstr "grid3D hacim geliştir"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:579 ../gui/tcltk/d.m/menu.tcl:526
+#: ../gui/tcltk/gis.m/gmmenu.tcl:586
 msgid "Manage nulls for grid3D volume"
 msgstr "grid3d hacimindeki boş değerleri yönet"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:580 ../gui/tcltk/d.m/menu.tcl:527
+#: ../gui/tcltk/gis.m/gmmenu.tcl:587
 msgid "Manage timestamp for grid3D volume"
 msgstr "grid3d hacimindeki tarih damgasını yönet"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:582
+#: ../gui/tcltk/gis.m/gmmenu.tcl:589
 msgid "3D MASK"
 msgstr "3D MASKE"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:583
+#: ../gui/tcltk/gis.m/gmmenu.tcl:590
 msgid "3D Map calculator"
 msgstr "3D Harita hesaplayıcı"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:584
+#: ../gui/tcltk/gis.m/gmmenu.tcl:591
 msgid "Cross section from volume"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:586
+#: ../gui/tcltk/gis.m/gmmenu.tcl:593
 msgid "Interpolate volume from vector points"
 msgstr "Vektör noktalardan hacim enterposyonu yap"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:587 ../gui/tcltk/d.m/menu.tcl:533
+#: ../gui/tcltk/gis.m/gmmenu.tcl:594
 msgid "Report and Statistics"
 msgstr "Rapor ve istatistikler"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:591 ../gui/tcltk/d.m/menu.tcl:537
+#: ../gui/tcltk/gis.m/gmmenu.tcl:598
 msgid "&Databases"
 msgstr "&Veritabanları"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:592 ../gui/tcltk/d.m/menu.tcl:547
+#: ../gui/tcltk/gis.m/gmmenu.tcl:599
 msgid "Database information"
 msgstr "Veritabanı bilgisi"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:593 ../gui/tcltk/d.m/menu.tcl:548
+#: ../gui/tcltk/gis.m/gmmenu.tcl:600
 msgid "Describe table"
 msgstr "Tabloyu tanımla"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:594 ../gui/tcltk/d.m/menu.tcl:549
+#: ../gui/tcltk/gis.m/gmmenu.tcl:601
 msgid "List columns"
 msgstr "Sütunları listele"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:595 ../gui/tcltk/d.m/menu.tcl:550
+#: ../gui/tcltk/gis.m/gmmenu.tcl:602
 msgid "List drivers"
 msgstr "Sürücüleri listele"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:596 ../gui/tcltk/d.m/menu.tcl:551
+#: ../gui/tcltk/gis.m/gmmenu.tcl:603
 msgid "List tables"
 msgstr "Tabloları listele"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:599 ../gui/tcltk/d.m/menu.tcl:538
+#: ../gui/tcltk/gis.m/gmmenu.tcl:606
 msgid "Manage database"
 msgstr "Veritabanını yönet"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:600 ../gui/tcltk/d.m/menu.tcl:539
+#: ../gui/tcltk/gis.m/gmmenu.tcl:607
 msgid "Connect to database"
 msgstr "Veritabanına bağlan"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:601 ../gui/tcltk/d.m/menu.tcl:540
+#: ../gui/tcltk/gis.m/gmmenu.tcl:608
 msgid "Login to database"
 msgstr "Veritabanına bağlan"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:603 ../gui/tcltk/d.m/menu.tcl:542
+#: ../gui/tcltk/gis.m/gmmenu.tcl:610
 msgid "Copy table"
 msgstr "Tabloları kopyala"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:604
+#: ../gui/tcltk/gis.m/gmmenu.tcl:611
 msgid "New table"
 msgstr "Yeni tablo"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:605
+#: ../gui/tcltk/gis.m/gmmenu.tcl:612
 msgid "Remove table"
 msgstr "Tabloyu kaldır"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:607
+#: ../gui/tcltk/gis.m/gmmenu.tcl:614
 msgid "Add columns"
 msgstr "Sütun ekle"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:608
+#: ../gui/tcltk/gis.m/gmmenu.tcl:615
 msgid "Change values"
 msgstr "Değerleri değiştir"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:609
+#: ../gui/tcltk/gis.m/gmmenu.tcl:616
 msgid "Drop column"
 msgstr "Sütunları kaldır"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:610
+#: ../gui/tcltk/gis.m/gmmenu.tcl:617
 msgid "Rename a column"
 msgstr "Sütunu yeniden adlandır"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:612 ../gui/tcltk/d.m/menu.tcl:545
+#: ../gui/tcltk/gis.m/gmmenu.tcl:619
 msgid "Test database"
 msgstr "Veritabanını sına"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:616
+#: ../gui/tcltk/gis.m/gmmenu.tcl:623
 msgid "Query any table"
 msgstr "Herhangi bir tabloyu sorgula"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:617
+#: ../gui/tcltk/gis.m/gmmenu.tcl:624
 msgid "Query vector attribute table"
 msgstr "Vektör öznitelik tablosunu sorgula"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:618
+#: ../gui/tcltk/gis.m/gmmenu.tcl:625
 msgid "SQL statement"
 msgstr "SQL tümcesi"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:620 ../gui/tcltk/d.m/menu.tcl:396
+#: ../gui/tcltk/gis.m/gmmenu.tcl:627
 msgid "Vector<->database connections"
 msgstr "Vektör<->veritabanı bağlantısı"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:621
+#: ../gui/tcltk/gis.m/gmmenu.tcl:628
 msgid "Reconnect vector to database"
 msgstr "Vektörü veritabanına yeniden bağla"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:622
+#: ../gui/tcltk/gis.m/gmmenu.tcl:629
 msgid "Set vector - database connection"
 msgstr "Vektör - veritabanı bağlantısını ayarla"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:625 ../gui/tcltk/d.m/menu.tcl:559
+#: ../gui/tcltk/gis.m/gmmenu.tcl:632
 msgid "&Help"
 msgstr "&Yardım"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:626 ../gui/tcltk/d.m/menu.tcl:560
+#: ../gui/tcltk/gis.m/gmmenu.tcl:633
 msgid "GRASS help"
 msgstr "GRASS Yardım"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:627 ../gui/tcltk/d.m/menu.tcl:561
+#: ../gui/tcltk/gis.m/gmmenu.tcl:634
 msgid "GIS Manager &help"
 msgstr "CBS Yöneticisi &Yardım"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:627 ../gui/tcltk/d.m/menu.tcl:561
+#: ../gui/tcltk/gis.m/gmmenu.tcl:634
 msgid "GIS Manager help"
 msgstr "CBS Yönetici Yardım"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:628 ../gui/tcltk/d.m/menu.tcl:562
+#: ../gui/tcltk/gis.m/gmmenu.tcl:635
 msgid "About &GRASS"
 msgstr "GRASS &Hakkında"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:628 ../gui/tcltk/d.m/menu.tcl:562
+#: ../gui/tcltk/gis.m/gmmenu.tcl:635
 msgid "About GRASS"
 msgstr "GRASS Hakkında"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:629 ../gui/tcltk/d.m/menu.tcl:563
+#: ../gui/tcltk/gis.m/gmmenu.tcl:636
 msgid "About &System"
 msgstr "Sistem &Hakkında"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:629 ../gui/tcltk/d.m/menu.tcl:563
+#: ../gui/tcltk/gis.m/gmmenu.tcl:636
 msgid "About System"
 msgstr "Sistem Hakkında"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:637 ../gui/tcltk/d.m/menu.tcl:571
+#: ../gui/tcltk/gis.m/gmmenu.tcl:644
 msgid "&Xtns"
 msgstr ""
 
@@ -3172,7 +2507,7 @@ msgstr "Önceden belirlenmiş kağıt tipi"
 msgid "Custom paper size"
 msgstr "Özel kağıt boyutu"
 
-#: ../gui/tcltk/gis.m/mapprint.tcl:276 ../gui/tcltk/d.m/print.tcl:181
+#: ../gui/tcltk/gis.m/mapprint.tcl:276
 msgid "width:"
 msgstr "genişlik:"
 
@@ -3213,8 +2548,6 @@ msgid "Save to PDF file*              "
 msgstr "PDF dosyasına kaydet*              "
 
 #: ../gui/tcltk/gis.m/mapprint.tcl:339 ../gui/tcltk/gis.m/mapprint.tcl:351
-#: ../gui/tcltk/d.m/print.tcl:212 ../gui/tcltk/d.m/print.tcl:223
-#: ../gui/tcltk/d.m/print.tcl:234 ../gui/tcltk/d.m/print.tcl:261
 msgid "Browse"
 msgstr "Göz at"
 
@@ -3226,9 +2559,29 @@ msgstr "EPS dosyasına kaydet               "
 msgid "*requires ghostscript to be installed and in path"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/mapprint.tcl:365 ../gui/tcltk/d.m/print.tcl:279
+#: ../gui/tcltk/gis.m/mapprint.tcl:365
 msgid "Print"
 msgstr "Yazdır"
+
+#: ../gui/tcltk/gis.m/gmlib.tcl:85 ../gui/tcltk/gis.m/gmlib.tcl:114
+msgid "Map Resource File"
+msgstr "Harita Kaynak Dosyası"
+
+#: ../gui/tcltk/gis.m/gmlib.tcl:86 ../gui/tcltk/gis.m/gmlib.tcl:116
+msgid "All Files"
+msgstr "Tüm Dosyalar"
+
+#: ../gui/tcltk/gis.m/gmlib.tcl:90
+msgid "Open File"
+msgstr "Dosya Aç"
+
+#: ../gui/tcltk/gis.m/gmlib.tcl:115
+msgid "DM Resource File"
+msgstr ""
+
+#: ../gui/tcltk/gis.m/gmlib.tcl:119 ../lib/gis/gui.tcl:229
+msgid "Save File"
+msgstr "Dosyayı Kaydet"
 
 #: ../gui/tcltk/gis.m/dnviz.tcl:49 ../gui/tcltk/gis.m/rules.tcl:35
 msgid "Select input map"
@@ -3366,7 +2719,7 @@ msgstr ""
 msgid "Grid options: "
 msgstr "Grid seçenekleri: "
 
-#: ../gui/tcltk/gis.m/gridline.tcl:158 ../gui/tcltk/d.m/gridline.tcl:77
+#: ../gui/tcltk/gis.m/gridline.tcl:158
 msgid "draw grid"
 msgstr "grid çiz"
 
@@ -3378,7 +2731,7 @@ msgstr "jeodejiz grid  "
 msgid "grid color "
 msgstr "grid rengi "
 
-#: ../gui/tcltk/gis.m/gridline.tcl:166 ../gui/tcltk/d.m/gridline.tcl:85
+#: ../gui/tcltk/gis.m/gridline.tcl:166
 msgid "Help for grids"
 msgstr "grid için yardım"
 
@@ -3422,11 +2775,11 @@ msgstr "sınır rengi"
 msgid "Geodesic and rhumblines for latlong locations only"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gridline.tcl:213 ../gui/tcltk/d.m/gridline.tcl:119
+#: ../gui/tcltk/gis.m/gridline.tcl:213
 msgid "draw geodesic line"
 msgstr "jeodejik çizgi çiz"
 
-#: ../gui/tcltk/gis.m/gridline.tcl:218 ../gui/tcltk/d.m/gridline.tcl:124
+#: ../gui/tcltk/gis.m/gridline.tcl:218
 msgid "Help for geodesic lines"
 msgstr "jeodejik çizgi için yardım"
 
@@ -3442,11 +2795,11 @@ msgstr " metin rengi"
 msgid "     line endpoints (x1,y1,x2,y2)"
 msgstr "      çizgi son noktası (x1,y1,x2,y2)"
 
-#: ../gui/tcltk/gis.m/gridline.tcl:240 ../gui/tcltk/d.m/gridline.tcl:149
+#: ../gui/tcltk/gis.m/gridline.tcl:240
 msgid "draw rhumbline"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/gridline.tcl:245 ../gui/tcltk/d.m/gridline.tcl:154
+#: ../gui/tcltk/gis.m/gridline.tcl:245
 msgid "Help for rhumblines"
 msgstr ""
 
@@ -3459,114 +2812,113 @@ msgstr "Lejand için raster harita"
 msgid "legend for %s"
 msgstr "%s için lejand"
 
-#: ../gui/tcltk/gis.m/legend.tcl:165
+#: ../gui/tcltk/gis.m/legend.tcl:193
 msgid "Display legend for raster map using cat values and labels"
 msgstr ""
 "kategori değerleri ve etiketleri kullanarak raster haritanın lejandını göster"
 
-#: ../gui/tcltk/gis.m/legend.tcl:182
+#: ../gui/tcltk/gis.m/legend.tcl:210
 msgid "Raster map: "
 msgstr "Raster harita: "
 
-#: ../gui/tcltk/gis.m/legend.tcl:199
+#: ../gui/tcltk/gis.m/legend.tcl:229
 #, tcl-format
 msgid "Legend placement and size as 0-100% of display"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/legend.tcl:205
+#: ../gui/tcltk/gis.m/legend.tcl:235
 #, tcl-format
 msgid "    x,y of lower left corner (in % from display top left)"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/legend.tcl:208 ../gui/tcltk/gis.m/barscale.tcl:191
+#: ../gui/tcltk/gis.m/legend.tcl:238 ../gui/tcltk/gis.m/barscale.tcl:191
 #: ../gui/tcltk/gis.m/maptext.tcl:150 ../gui/tcltk/gis.m/dtext.tcl:197
 msgid "place with mouse"
 msgstr "fare ile yerleştir"
 
-#: ../gui/tcltk/gis.m/legend.tcl:216
+#: ../gui/tcltk/gis.m/legend.tcl:246
 msgid "    legend height "
 msgstr "    lejand yüksekliği "
 
-#: ../gui/tcltk/gis.m/legend.tcl:218
+#: ../gui/tcltk/gis.m/legend.tcl:248
 #, tcl-format
 msgid "Legend height (% of display)"
 msgstr "Lejand yüksekliği (görüntünün % olarak)"
 
-#: ../gui/tcltk/gis.m/legend.tcl:219
+#: ../gui/tcltk/gis.m/legend.tcl:249
 msgid "%  width"
 msgstr "%  genişlik"
 
-#: ../gui/tcltk/gis.m/legend.tcl:221
+#: ../gui/tcltk/gis.m/legend.tcl:251
 #, tcl-format
 msgid "Legend width (% of display)"
 msgstr "Lejand genişliği (görüntünün % olarak)"
 
-#: ../gui/tcltk/gis.m/legend.tcl:228
+#: ../gui/tcltk/gis.m/legend.tcl:258
 msgid "Legend appearance: text color"
 msgstr "Lejand görünümü: metin rengi"
 
-#: ../gui/tcltk/gis.m/legend.tcl:232
+#: ../gui/tcltk/gis.m/legend.tcl:262
 msgid "  legend text font "
 msgstr "  lejand metni yazıtipi "
 
-#: ../gui/tcltk/gis.m/legend.tcl:243
+#: ../gui/tcltk/gis.m/legend.tcl:273
 msgid "do not display labels"
 msgstr "etiketleri gösterme"
 
-#: ../gui/tcltk/gis.m/legend.tcl:245
+#: ../gui/tcltk/gis.m/legend.tcl:275
 msgid "do not display values"
 msgstr "değerleri gösterme"
 
-#: ../gui/tcltk/gis.m/legend.tcl:252
+#: ../gui/tcltk/gis.m/legend.tcl:282
 msgid "    number of lines (0=display all):"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/legend.tcl:254
+#: ../gui/tcltk/gis.m/legend.tcl:284
 msgid "Lines to display"
 msgstr "Görüntülenecek çizgiler"
 
-#: ../gui/tcltk/gis.m/legend.tcl:256
+#: ../gui/tcltk/gis.m/legend.tcl:286
 msgid "invert legend"
 msgstr "lejandı ters çevir"
 
-#: ../gui/tcltk/gis.m/legend.tcl:263
+#: ../gui/tcltk/gis.m/legend.tcl:293
 msgid "    interval between categories (integer maps)"
 msgstr "    Kategorilerin basamak aralığı  (tamsayı haritalar)"
 
-#: ../gui/tcltk/gis.m/legend.tcl:265
+#: ../gui/tcltk/gis.m/legend.tcl:295
 msgid "Thinning interval"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/legend.tcl:272
+#: ../gui/tcltk/gis.m/legend.tcl:302
 msgid "draw smooth gradient (fp maps)"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/legend.tcl:274
+#: ../gui/tcltk/gis.m/legend.tcl:304
 msgid "with maximum of"
 msgstr "en büyük değer ile"
 
-#: ../gui/tcltk/gis.m/legend.tcl:276
+#: ../gui/tcltk/gis.m/legend.tcl:306
 msgid "Maximum lines to display for gradient"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/legend.tcl:277 ../gui/tcltk/gis.m/chart.tcl:196
-#: ../gui/tcltk/d.m/chart.tcl:108 ../gui/tcltk/d.m/vector.tcl:229
+#: ../gui/tcltk/gis.m/legend.tcl:307 ../gui/tcltk/gis.m/chart.tcl:196
 msgid "lines"
 msgstr "çizgiler"
 
-#: ../gui/tcltk/gis.m/legend.tcl:283
+#: ../gui/tcltk/gis.m/legend.tcl:313
 msgid "Display legend for subset of raster values"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/legend.tcl:290
+#: ../gui/tcltk/gis.m/legend.tcl:320
 msgid "skip categories with no labels"
 msgstr "etiketsiz kategorileri atla"
 
-#: ../gui/tcltk/gis.m/legend.tcl:297
+#: ../gui/tcltk/gis.m/legend.tcl:327
 msgid "    legend for only these categories     "
 msgstr "    sadece bu kategoriler için lejand     "
 
-#: ../gui/tcltk/gis.m/legend.tcl:304
+#: ../gui/tcltk/gis.m/legend.tcl:334
 msgid "    legend for only this range of values"
 msgstr "    sadece bu değer aralığı için lejand     "
 
@@ -3659,9 +3011,13 @@ msgid "size:"
 msgstr "boyut:"
 
 #: ../gui/tcltk/gis.m/maplabels.tcl:272 ../gui/tcltk/gis.m/maptext.tcl:184
-#: ../gui/tcltk/gis.m/dtext.tcl:228 ../gui/tcltk/d.m/fttext.tcl:149
+#: ../gui/tcltk/gis.m/dtext.tcl:228
 msgid "  color"
 msgstr "Renk"
+
+#: ../gui/tcltk/gis.m/maplabels.tcl:326
+msgid "Could not open labels file "
+msgstr ""
 
 #: ../gui/tcltk/gis.m/raster.tcl:127
 msgid "Raster drape map"
@@ -3716,7 +3072,6 @@ msgid "Adjust brightness of drape map"
 msgstr "Örtme haritası parlaklığını ayarla"
 
 #: ../gui/tcltk/gis.m/raster.tcl:246 ../gui/tcltk/gis.m/rgbhis.tcl:220
-#: ../gui/tcltk/d.m/raster.tcl:143 ../gui/tcltk/d.m/rgbhis.tcl:147
 msgid "overlay maps from other layers (transparent null value cells)"
 msgstr ""
 
@@ -3738,7 +3093,7 @@ msgid ""
 "Display pie and bar charts of attribute values at vector object locations"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/chart.tcl:176 ../gui/tcltk/d.m/chart.tcl:91
+#: ../gui/tcltk/gis.m/chart.tcl:176
 msgid "Vector map to chart:"
 msgstr "Vektör haritadan çizelgeye:"
 
@@ -3746,27 +3101,23 @@ msgstr "Vektör haritadan çizelgeye:"
 msgid "vector map to chart"
 msgstr "Çizelgesi yapılacak vektör harita"
 
-#: ../gui/tcltk/gis.m/chart.tcl:194 ../gui/tcltk/d.m/chart.tcl:106
+#: ../gui/tcltk/gis.m/chart.tcl:194
 msgid "Vector type:"
 msgstr "Vektör tipi:"
 
-#: ../gui/tcltk/gis.m/chart.tcl:195 ../gui/tcltk/d.m/chart.tcl:107
-#: ../gui/tcltk/d.m/vector.tcl:227
+#: ../gui/tcltk/gis.m/chart.tcl:195
 msgid "points"
 msgstr "noktalar"
 
-#: ../gui/tcltk/gis.m/chart.tcl:197 ../gui/tcltk/d.m/chart.tcl:109
-#: ../gui/tcltk/d.m/vector.tcl:231
+#: ../gui/tcltk/gis.m/chart.tcl:197
 msgid "boundaries"
 msgstr "sınırlar"
 
-#: ../gui/tcltk/gis.m/chart.tcl:198 ../gui/tcltk/d.m/chart.tcl:110
-#: ../gui/tcltk/d.m/vector.tcl:233
+#: ../gui/tcltk/gis.m/chart.tcl:198
 msgid "centroids"
 msgstr "alan merkezleri"
 
-#: ../gui/tcltk/gis.m/chart.tcl:199 ../gui/tcltk/d.m/chart.tcl:111
-#: ../gui/tcltk/d.m/vector.tcl:235
+#: ../gui/tcltk/gis.m/chart.tcl:199
 msgid "areas"
 msgstr "alanlar"
 
@@ -3798,7 +3149,7 @@ msgstr ""
 msgid "  scale factor"
 msgstr "  ölçek faktör"
 
-#: ../gui/tcltk/gis.m/chart.tcl:252 ../gui/tcltk/d.m/chart.tcl:158
+#: ../gui/tcltk/gis.m/chart.tcl:252
 msgid "Chart type:"
 msgstr "Çizelge tipi:"
 
@@ -3890,7 +3241,7 @@ msgstr "   Boyut"
 msgid "Icon size"
 msgstr "Simge boyutu"
 
-#: ../gui/tcltk/gis.m/vector.tcl:385 ../gui/tcltk/d.m/vector.tcl:259
+#: ../gui/tcltk/gis.m/vector.tcl:385
 msgid "Draw lines:"
 msgstr "Çizgileri çiz:"
 
@@ -3910,7 +3261,7 @@ msgstr "Çizgi Kalınlığı"
 msgid "(pixels) "
 msgstr ""
 
-#: ../gui/tcltk/gis.m/vector.tcl:401 ../gui/tcltk/d.m/vector.tcl:275
+#: ../gui/tcltk/gis.m/vector.tcl:401
 msgid "Fill areas:"
 msgstr "Alanları doldur:"
 
@@ -3918,15 +3269,15 @@ msgstr "Alanları doldur:"
 msgid "Random colors "
 msgstr "Rasgele renkler"
 
-#: ../gui/tcltk/gis.m/vector.tcl:410 ../gui/tcltk/d.m/vector.tcl:284
+#: ../gui/tcltk/gis.m/vector.tcl:410
 msgid "GRASSRGB column colors"
 msgstr "GRASSKYM sütun renkleri"
 
-#: ../gui/tcltk/gis.m/vector.tcl:417 ../gui/tcltk/d.m/vector.tcl:291
+#: ../gui/tcltk/gis.m/vector.tcl:417
 msgid "Label vectors:"
 msgstr "Etiket vektörleri:"
 
-#: ../gui/tcltk/gis.m/vector.tcl:418 ../gui/tcltk/d.m/vector.tcl:292
+#: ../gui/tcltk/gis.m/vector.tcl:418
 msgid "label"
 msgstr "etiket"
 
@@ -3938,7 +3289,7 @@ msgstr " Metin rengi"
 msgid "   Text size"
 msgstr " Metin boyutu"
 
-#: ../gui/tcltk/gis.m/vector.tcl:425 ../gui/tcltk/d.m/vector.tcl:299
+#: ../gui/tcltk/gis.m/vector.tcl:425
 msgid "text size"
 msgstr "metin boyutu"
 
@@ -3962,7 +3313,7 @@ msgstr "   Etiket için öznitelik sütunu"
 msgid "Query vectors for display: "
 msgstr "Vektörü görüntüleme için sorgula"
 
-#: ../gui/tcltk/gis.m/vector.tcl:456 ../gui/tcltk/d.m/vector.tcl:327
+#: ../gui/tcltk/gis.m/vector.tcl:456
 msgid "layer for query"
 msgstr "Sorgulanacak katman"
 
@@ -3998,7 +3349,7 @@ msgstr "      Yeni vektör"
 msgid "Select existing vector for saving queried objects"
 msgstr "Sorgulanan objelerin kaydedileceği varolan vektörü seç"
 
-#: ../gui/tcltk/gis.m/vector.tcl:522 ../gui/tcltk/d.m/vector.tcl:376
+#: ../gui/tcltk/gis.m/vector.tcl:522
 msgid "Display when avg. region dimension is"
 msgstr ""
 
@@ -4006,7 +3357,7 @@ msgstr ""
 msgid " or <"
 msgstr " or <"
 
-#: ../gui/tcltk/gis.m/cmd.tcl:115 ../gui/tcltk/d.m/cmd.tcl:52
+#: ../gui/tcltk/gis.m/cmd.tcl:115
 msgid "Command:"
 msgstr "Komut:"
 
@@ -4014,8 +3365,8 @@ msgstr "Komut:"
 msgid "Maximum zoom-in reached"
 msgstr "Yakınlaştırmanın en sonuna ulaşıldı"
 
-#: ../gui/tcltk/gis.m/mapcanvas.tcl:593 ../gui/tcltk/gis.m/mapcanvas.tcl:1136
-#: ../gui/tcltk/gis.m/mapcanvas.tcl:1189 ../gui/tcltk/gis.m/georect.tcl:1576
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:593 ../gui/tcltk/gis.m/mapcanvas.tcl:1219
+#: ../gui/tcltk/gis.m/georect.tcl:1576
 msgid "Error setting region"
 msgstr "Bölgeyi ayarlamada hata"
 
@@ -4023,11 +3374,11 @@ msgstr "Bölgeyi ayarlamada hata"
 msgid "please wait..."
 msgstr "lütfen bekleyin..."
 
-#: ../gui/tcltk/gis.m/mapcanvas.tcl:760 ../gui/tcltk/gis.m/mapcanvas.tcl:1783
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:760 ../gui/tcltk/gis.m/mapcanvas.tcl:1813
 msgid "You have to select map layer first"
 msgstr "Önce harita katmanını seçmelisiniz"
 
-#: ../gui/tcltk/gis.m/mapcanvas.tcl:761 ../gui/tcltk/gis.m/mapcanvas.tcl:1784
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:761 ../gui/tcltk/gis.m/mapcanvas.tcl:1814
 msgid "No map layer selected"
 msgstr "Hiçbir harita katmanı seçilmedi"
 
@@ -4052,59 +3403,54 @@ msgstr ""
 "%s bölge dosyası halihazırda mevcut. \n"
 "Üzerine yazılmasını istermisin?"
 
-#: ../gui/tcltk/gis.m/mapcanvas.tcl:1061
-#, tcl-format
-msgid "Display: rows=%d columns=%d  resolution=%g %s"
-msgstr ""
-
 #: ../gui/tcltk/gis.m/mapcanvas.tcl:1064
 #, tcl-format
 msgid "Display: rows=%d cols=%d  N-S res=%g  E-W res=%g"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/mapcanvas.tcl:1214 ../gui/tcltk/gis.m/georect.tcl:2018
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1136
+#, fuzzy
+msgid "Error setting region (Problem with g.region?)"
+msgstr "Geçerli bölgeye göre göster (g.region ile ayarla)"
+
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1182 ../gui/tcltk/gis.m/mapcanvas.tcl:1187
+#, fuzzy
+msgid "Error reading current resolution with g.region"
+msgstr "Geçerli bölgeye göre göster (g.region ile ayarla)"
+
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1244 ../gui/tcltk/gis.m/georect.tcl:2018
 msgid "Drag or click mouse to zoom"
 msgstr "Yaklaştırma için fareyi tıkla yada sürükle"
 
-#: ../gui/tcltk/gis.m/mapcanvas.tcl:1216 ../gui/tcltk/gis.m/georect.tcl:2020
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1246 ../gui/tcltk/gis.m/georect.tcl:2020
 msgid "Drag or click mouse to unzoom"
 msgstr "Uzaklaştırma için fareyi tıkla yada sürükle"
 
-#: ../gui/tcltk/gis.m/mapcanvas.tcl:1451 ../gui/tcltk/gis.m/georect.tcl:2218
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1481 ../gui/tcltk/gis.m/georect.tcl:2218
 msgid "Drag with mouse to pan"
 msgstr "Kaydırma için fareyi tıkla yada sürükle"
 
-#: ../gui/tcltk/gis.m/mapcanvas.tcl:1578
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1608
 msgid "Measurement"
 msgstr "Ölçüm"
 
-#: ../gui/tcltk/gis.m/mapcanvas.tcl:1597
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1627
 msgid "Draw measure line with mouse"
 msgstr "Ölçme çizgisini fareyle çizin"
 
-#: ../gui/tcltk/gis.m/mapcanvas.tcl:1687
-#, tcl-format
-msgid " --segment length = %s\n"
-msgstr ""
-
-#: ../gui/tcltk/gis.m/mapcanvas.tcl:1689
-#, tcl-format
-msgid "cumulative length = %s\n"
-msgstr ""
-
-#: ../gui/tcltk/gis.m/mapcanvas.tcl:1754
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1784
 msgid "Click to query feature"
 msgstr "Objeyi sorgulama için tıklayın"
 
-#: ../gui/tcltk/gis.m/mapcanvas.tcl:1822
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1852
 msgid "This layer type does not support queries"
 msgstr "Bu katman tipi sorgulamayı desteklemiyor"
 
-#: ../gui/tcltk/gis.m/mapcanvas.tcl:1823
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1853
 msgid "Query not supported"
 msgstr "Sorgu desteklenmiyor"
 
-#: ../gui/tcltk/gis.m/mapcanvas.tcl:1830
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1860
 msgid "You must select a map to query\n"
 msgstr "Sorgulama için bir harita seçmelisiniz\n"
 
@@ -4149,11 +3495,11 @@ msgstr "saydam artalan"
 msgid "display N. arrow only"
 msgstr "sadece Kuzey okunu göster"
 
-#: ../gui/tcltk/gis.m/barscale.tcl:224 ../gui/tcltk/d.m/barscale.tcl:94
+#: ../gui/tcltk/gis.m/barscale.tcl:224
 msgid "display scale only"
 msgstr "sadece ölçeği göster"
 
-#: ../gui/tcltk/gis.m/barscale.tcl:232 ../gui/tcltk/d.m/barscale.tcl:103
+#: ../gui/tcltk/gis.m/barscale.tcl:232
 msgid "text on top of scale, instead of to right"
 msgstr ""
 
@@ -4161,7 +3507,7 @@ msgstr ""
 msgid "line scale instead of bar"
 msgstr "çubuk yerine çizgi ölçek"
 
-#: ../gui/tcltk/gis.m/barscale.tcl:242 ../gui/tcltk/d.m/barscale.tcl:110
+#: ../gui/tcltk/gis.m/barscale.tcl:242
 msgid "use feet/miles instead of meters"
 msgstr "metre yerine feet/mil kullan"
 
@@ -4187,19 +3533,19 @@ msgid ""
 "Display 3 raster maps as Red/Green/Blue or Hue/Intensity/Saturation channels"
 msgstr ""
 
-#: ../gui/tcltk/gis.m/rgbhis.tcl:155 ../gui/tcltk/d.m/rgbhis.tcl:128
+#: ../gui/tcltk/gis.m/rgbhis.tcl:155
 msgid "display maps as RGB"
 msgstr "Haritaları KYM olarak göster"
 
-#: ../gui/tcltk/gis.m/rgbhis.tcl:160 ../gui/tcltk/d.m/rgbhis.tcl:134
+#: ../gui/tcltk/gis.m/rgbhis.tcl:160
 msgid "Help for RGB"
 msgstr "KYM için yardım"
 
-#: ../gui/tcltk/gis.m/rgbhis.tcl:164 ../gui/tcltk/d.m/rgbhis.tcl:135
+#: ../gui/tcltk/gis.m/rgbhis.tcl:164
 msgid "display maps as HIS"
 msgstr "Haritaları KYM olarak göster"
 
-#: ../gui/tcltk/gis.m/rgbhis.tcl:169 ../gui/tcltk/d.m/rgbhis.tcl:141
+#: ../gui/tcltk/gis.m/rgbhis.tcl:169
 msgid "Help for HIS"
 msgstr ""
 
@@ -4265,7 +3611,7 @@ msgstr "    Hizalama"
 msgid "  line width"
 msgstr "  Çizgi Kalınlığı"
 
-#: ../gui/tcltk/gis.m/maptext.tcl:177 ../gui/tcltk/d.m/fttext.tcl:144
+#: ../gui/tcltk/gis.m/maptext.tcl:177
 msgid "Font:"
 msgstr "Yazı tipi:"
 
@@ -4285,8 +3631,7 @@ msgstr "     metin döndürme (derece olarak)"
 msgid "Text options: font "
 msgstr "Metin seçenekleri: yazıtipi"
 
-#: ../gui/tcltk/gis.m/dtext.tcl:230 ../gui/tcltk/d.m/fttext.tcl:151
-#: ../gui/tcltk/d.m/dtext.tcl:106
+#: ../gui/tcltk/gis.m/dtext.tcl:230
 msgid "bold text"
 msgstr "koyu metin"
 
@@ -4569,1485 +3914,1513 @@ msgstr ""
 msgid "r.info error"
 msgstr "r.info hatası"
 
-#: ../gui/tcltk/gis.m/gmlib.tcl:79 ../gui/tcltk/gis.m/gmlib.tcl:108
-msgid "Map Resource File"
-msgstr "Harita Kaynak Dosyası"
-
-#: ../gui/tcltk/gis.m/gmlib.tcl:80 ../gui/tcltk/gis.m/gmlib.tcl:110
-msgid "All Files"
-msgstr "Tüm Dosyalar"
-
-#: ../gui/tcltk/gis.m/gmlib.tcl:84
-msgid "Open File"
-msgstr "Dosya Aç"
-
-#: ../gui/tcltk/gis.m/gmlib.tcl:109
-msgid "DM Resource File"
-msgstr ""
-
-#: ../gui/tcltk/d.m/thematic.tcl:156 ../gui/tcltk/d.m/vector.tcl:354
-msgid "     show data"
-msgstr "     veriyi göster"
-
-#: ../gui/tcltk/d.m/thematic.tcl:230
-msgid "Graduate colors: preset color schemes"
-msgstr ""
-
-#: ../gui/tcltk/d.m/thematic.tcl:258
-msgid "create graphic legend"
-msgstr "grafik lejand oluştur"
-
-#: ../gui/tcltk/d.m/thematic.tcl:267
-msgid "    select monitor for legend"
-msgstr "    lejand için ekran seç"
-
-#: ../gui/tcltk/d.m/labels.tcl:65
-msgid "Labels name:"
-msgstr "Etiket adı:"
-
-#: ../gui/tcltk/d.m/frames.tcl:64
-msgid "remove all frames"
-msgstr "tüm çerçeveleri kaldır"
-
-#: ../gui/tcltk/d.m/monitorsel.tcl:33
-msgid "x0"
-msgstr "x0"
-
-#: ../gui/tcltk/d.m/monitorsel.tcl:35
-msgid "Start/select display monitor x0"
-msgstr "x0 görüntü ekranını başlat/seç"
-
-#: ../gui/tcltk/d.m/monitorsel.tcl:38
-msgid "x1"
-msgstr "x1"
-
-#: ../gui/tcltk/d.m/monitorsel.tcl:40
-msgid "Start/select display monitor x1"
-msgstr "x1 görüntü ekranını başlat/seç"
-
-#: ../gui/tcltk/d.m/monitorsel.tcl:43
-msgid "x2"
-msgstr "x2"
-
-#: ../gui/tcltk/d.m/monitorsel.tcl:45
-msgid "Start/select display monitor x2"
-msgstr "x2 görüntü ekranını başlat/seç"
-
-#: ../gui/tcltk/d.m/monitorsel.tcl:48
-msgid "x3"
-msgstr "x3"
-
-#: ../gui/tcltk/d.m/monitorsel.tcl:50
-msgid "Start/select display monitor x3"
-msgstr "x3 görüntü ekranını başlat/seç"
-
-#: ../gui/tcltk/d.m/monitorsel.tcl:53
-msgid "x4"
-msgstr "x4"
-
-#: ../gui/tcltk/d.m/monitorsel.tcl:55
-msgid "Start/select display monitor x4"
-msgstr "x4 görüntü ekranını başlat/seç"
-
-#: ../gui/tcltk/d.m/monitorsel.tcl:58
-msgid "x5"
-msgstr "x5"
-
-#: ../gui/tcltk/d.m/monitorsel.tcl:60
-msgid "Start/select display monitor x5"
-msgstr "x5 görüntü ekranını başlat/seç"
-
-#: ../gui/tcltk/d.m/monitorsel.tcl:63
-msgid "x6"
-msgstr "x6"
-
-#: ../gui/tcltk/d.m/monitorsel.tcl:65
-msgid "Start/select display monitor x6"
-msgstr "x6 görüntü ekranını başlat/seç"
-
-#: ../gui/tcltk/d.m/gridline.tcl:78
-msgid "geodetic grid"
-msgstr "jeodejik grid"
-
-#: ../gui/tcltk/d.m/gridline.tcl:80
-msgid " grid color "
-msgstr "grid rengi"
-
-#: ../gui/tcltk/d.m/gridline.tcl:86
-msgid " grid color"
-msgstr "grid rengi"
-
-#: ../gui/tcltk/d.m/gridline.tcl:92
-msgid "     "
-msgstr "      "
-
-#: ../gui/tcltk/d.m/gridline.tcl:93
-msgid "draw grid border"
-msgstr "grid sınırını çiz"
-
-#: ../gui/tcltk/d.m/gridline.tcl:94
-msgid "draw border text"
-msgstr "sınır metnini yaz"
-
-#: ../gui/tcltk/d.m/gridline.tcl:95
-msgid " border & text color"
-msgstr "sınır & metin rengi"
-
-#: ../gui/tcltk/d.m/legend.tcl:81
-msgid "Raster map for legend:"
-msgstr "Lejand için raster harita"
-
-#: ../gui/tcltk/d.m/legend.tcl:96
-msgid "Display legend in monitor: "
-msgstr "Lejandı ekranda göster: "
-
-#: ../gui/tcltk/d.m/legend.tcl:99
-msgid " erase monitor before drawing legend"
-msgstr "lejandı çizmeden önce ekranı sil"
-
-#: ../gui/tcltk/d.m/legend.tcl:106 ../gui/tcltk/d.m/barscale.tcl:67
-msgid "Text color: "
-msgstr "Metin rengi: "
-
-#: ../gui/tcltk/d.m/legend.tcl:164
-msgid "do not show cat labels"
-msgstr "cat(kategori) etiketlerini gösterme"
-
-#: ../gui/tcltk/d.m/legend.tcl:166
-msgid "do not show cat numbers"
-msgstr "cat(kategori) numaralarını gösterme"
-
-#: ../gui/tcltk/d.m/legend.tcl:173
-msgid "skip cats with no labels"
-msgstr "etiketsiz kategorileri atla"
-
-#: ../gui/tcltk/d.m/legend.tcl:175
-msgid "draw smooth gradient"
-msgstr ""
-
-#: ../gui/tcltk/d.m/legend.tcl:177
-msgid "flip legend"
-msgstr "lejandı döndür"
-
-#: ../gui/tcltk/d.m/legend.tcl:185 ../gui/tcltk/d.m/barscale.tcl:118
-msgid "place with mouse (cannot save placement with group)"
-msgstr ""
-
-#: ../gui/tcltk/d.m/raster.tcl:85
-msgid "Raster name:"
-msgstr "Raster adı:"
-
-#: ../gui/tcltk/d.m/raster.tcl:108
-msgid "show legend in selected display monitor"
-msgstr "Lejandı seçilen ekranda göster"
-
-#: ../gui/tcltk/d.m/raster.tcl:111 ../gui/tcltk/d.m/raster.tcl:136
-msgid " thin legend by "
-msgstr ""
-
-#: ../gui/tcltk/d.m/raster.tcl:118
-msgid "Raster to drape over 1st map:"
-msgstr "İlk haritanın üzrine örtülecek raster harita"
-
-#: ../gui/tcltk/d.m/raster.tcl:132
-msgid "show legend for drape map in monitor"
-msgstr "ekrandaki örtülen harita için lejandı göster"
-
-#: ../gui/tcltk/d.m/chart.tcl:120
-msgid "  show attribute columns"
-msgstr "  öznitelik sütunlarını göster"
-
-#: ../gui/tcltk/d.m/chart.tcl:169
-msgid "    chart outline color:"
-msgstr "Çizelge çerçeve rengi:"
-
-#: ../gui/tcltk/d.m/menu.tcl:76
-msgid "Import"
-msgstr "İçe Aktar"
-
-#: ../gui/tcltk/d.m/menu.tcl:80
-msgid "Aggregate ASCII xyz data into raster grid"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:81
-msgid "ASCII GRID (includes GRASS ASCII)"
-msgstr "ASCII GRID (GRASS ASCII'de içerir)"
-
-#: ../gui/tcltk/d.m/menu.tcl:82
-msgid "Polygons and lines from ASCII file"
-msgstr "ASCII dosyadan poligon ve çizgiler"
-
-#: ../gui/tcltk/d.m/menu.tcl:84
-msgid "Binary file (includes GTOPO30 format)"
-msgstr "İkili dosya (GTOPO30 biçimi de dahil)"
-
-#: ../gui/tcltk/d.m/menu.tcl:85
-msgid "ESRI Arc/Info ASCII grid"
-msgstr "ESRI Arc/Info ASCII grid"
-
-#: ../gui/tcltk/d.m/menu.tcl:86 ../gui/tcltk/d.m/menu.tcl:120
-msgid "GRIDATB.FOR map file (TOPMODEL)"
-msgstr "GRIDATB.FOR harita dosyası (TOPMODEL)"
-
-#: ../gui/tcltk/d.m/menu.tcl:87 ../gui/tcltk/d.m/menu.tcl:121
-msgid "MAT-File (v.4) array (Matlab or Octave)"
-msgstr "MAT-Dosya (v.4) dizisi (Matlab veya Octave)"
-
-#: ../gui/tcltk/d.m/menu.tcl:88
-msgid "SPOT vegetation NDVI data sets"
-msgstr "SPOT vejetasyon NDVI veri takımı"
-
-#: ../gui/tcltk/d.m/menu.tcl:89
-msgid "SRTM hgt files"
-msgstr "SRTM hgt dosyaları"
-
-#: ../gui/tcltk/d.m/menu.tcl:90
-msgid "Terra ASTER HDF files"
-msgstr "Terra ASTER HDF dosyaları"
-
-#: ../gui/tcltk/d.m/menu.tcl:95
-msgid "Various formats using OGR"
-msgstr "OGR desteğindeki çeşitli biçimler"
-
-#: ../gui/tcltk/d.m/menu.tcl:97
-msgid "ASCII points file or GRASS ASCII vector file"
-msgstr "ASCII nokta dosyası veya GRASS ASCII vektör dosyası"
-
-#: ../gui/tcltk/d.m/menu.tcl:98
-msgid "Import old GRASS vector format"
-msgstr "Eski GRASS vektör biçimini içe aktar"
-
-#: ../gui/tcltk/d.m/menu.tcl:100
-msgid "DXF file"
-msgstr "DXF dosyası"
-
-#: ../gui/tcltk/d.m/menu.tcl:101
-msgid "ESRI e00 format"
-msgstr "ESRI e00 biçimi"
-
-#: ../gui/tcltk/d.m/menu.tcl:102
-msgid "Garmin GPS Waypoints/Routes/Tracks"
-msgstr "Garmin KKS Noktaları/Rotaları/İzleri"
-
-#: ../gui/tcltk/d.m/menu.tcl:103
-msgid "GPS Waypoints/Routes/Tracks using GPSBabel"
-msgstr "GPSBabel'in kullandığı KKS Noktaları/Rotaları/İzleri"
-
-#: ../gui/tcltk/d.m/menu.tcl:104
-msgid "GEOnet Name server country files (US-NGA GNS)"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:105
-msgid "Matlab and MapGen files"
-msgstr "Matlab ve MapGen dosyaları"
-
-#: ../gui/tcltk/d.m/menu.tcl:107 ../gui/tcltk/d.m/menu.tcl:142
-msgid "Grid 3D"
-msgstr "Grid 3D"
-
-#: ../gui/tcltk/d.m/menu.tcl:108 ../gui/tcltk/d.m/menu.tcl:143
-msgid "ASCII 3D file"
-msgstr "ASCII 3D dosyası"
-
-#: ../gui/tcltk/d.m/menu.tcl:109 ../gui/tcltk/d.m/menu.tcl:144
-msgid "Vis5D file"
-msgstr "Vis5D dosyası"
-
-#: ../gui/tcltk/d.m/menu.tcl:112
-msgid "Export"
-msgstr "Dışa Aktar"
-
-#: ../gui/tcltk/d.m/menu.tcl:116
-msgid "ASCII grid (for GRASS, Surfer, Modflow, etc)"
-msgstr "ASCII grid (GRASS, Surfer, Modflow, v.b. için)"
-
-#: ../gui/tcltk/d.m/menu.tcl:117
-msgid "ASCII x,y,z values of cell centers"
-msgstr "Hücre merkezlerinin ASCII x,y,z değerleri"
-
-#: ../gui/tcltk/d.m/menu.tcl:119
-msgid "ESRI ARC/INFO ASCII grid"
-msgstr "ESRI ARC/INFO ASCII grid"
-
-#: ../gui/tcltk/d.m/menu.tcl:123
-msgid "Binary file"
-msgstr "İkili dosya"
-
-#: ../gui/tcltk/d.m/menu.tcl:125
-msgid "MPEG-1 animations"
-msgstr "MPEG-1 canlandırma"
-
-#: ../gui/tcltk/d.m/menu.tcl:126
-msgid "PNG image (not georeferenced)"
-msgstr "PNG görüntüsü (coğrafi referanssız)"
-
-#: ../gui/tcltk/d.m/menu.tcl:127
-msgid "PPM image (24bit)"
-msgstr "PPM görüntüsü (24 bit)"
-
-#: ../gui/tcltk/d.m/menu.tcl:128
-msgid "PPM image from red, green, blue raster maps"
-msgstr "kırmızı, yeşil, mavi raster haritalardan PPM görüntüsü"
-
-#: ../gui/tcltk/d.m/menu.tcl:129
-msgid "POVray height-field"
-msgstr "POVray yükseklik-alanı"
-
-#: ../gui/tcltk/d.m/menu.tcl:130
-msgid "TIFF image (8/24bit)"
-msgstr "TIFF görüntüsü (8/24 bit)"
-
-#: ../gui/tcltk/d.m/menu.tcl:131
-msgid "VRML file"
-msgstr "VRML dosyası"
-
-#: ../gui/tcltk/d.m/menu.tcl:132 ../gui/tcltk/d.m/menu.tcl:140
-#: ../gui/tcltk/d.m/menu.tcl:145
-msgid "VTK ASCII file"
-msgstr "VTK ASCII dosyası"
-
-#: ../gui/tcltk/d.m/menu.tcl:135
-msgid "Various formats using OGR (SHAPE, MapInfo etc)"
-msgstr "OGR desteğindeki çeşitli biçimler (SHAPE, MapInfo v.d.)"
-
-#: ../gui/tcltk/d.m/menu.tcl:137
-msgid "DXF file (ASCII)"
-msgstr "DXF dosyası (ASCII)"
-
-#: ../gui/tcltk/d.m/menu.tcl:138
-msgid "ASCII vector or point file/old GRASS ASCII vector file"
-msgstr "ASCII vektör veya nokta dosyası/eski GRASS ASCII vektör dosyası"
-
-#: ../gui/tcltk/d.m/menu.tcl:139
-msgid "POV-Ray format"
-msgstr "POV-Ray biçimi"
-
-#: ../gui/tcltk/d.m/menu.tcl:150
-msgid "Copy maps"
-msgstr "Haritaları kopyala"
-
-#: ../gui/tcltk/d.m/menu.tcl:151
-msgid "List maps"
-msgstr "Haritaları listele"
-
-#: ../gui/tcltk/d.m/menu.tcl:152
-msgid "List maps using expressions and 'wildcards'"
-msgstr "Haritaları ifade ve 'joker karakter' kullanarak listele"
-
-#: ../gui/tcltk/d.m/menu.tcl:153
-msgid "Rename maps"
-msgstr "Haritaları yeniden adlandır"
-
-#: ../gui/tcltk/d.m/menu.tcl:154
-msgid "Remove maps"
-msgstr "Haritaları kaldır"
-
-#: ../gui/tcltk/d.m/menu.tcl:155
-msgid "Remove maps using expressions and 'wildcards'"
-msgstr "Haritaları ifade ve 'joker karakter' kullanarak kaldır"
-
-#: ../gui/tcltk/d.m/menu.tcl:158
-msgid "Raster to vector map"
-msgstr "Rasterdan vektöre"
-
-#: ../gui/tcltk/d.m/menu.tcl:159
-msgid "Raster map series to volume"
-msgstr "Raster harita serisinden hacime"
-
-#: ../gui/tcltk/d.m/menu.tcl:160
-msgid "Raster 2.5D map to volume"
-msgstr "2.5D raster haritadan hacime"
-
-#: ../gui/tcltk/d.m/menu.tcl:162
-msgid "Vector to vector"
-msgstr "Vektörden vektöre"
-
-#: ../gui/tcltk/d.m/menu.tcl:163
-msgid "Vector lines to points"
-msgstr "Vektör çizgiden noktalara"
-
-#: ../gui/tcltk/d.m/menu.tcl:164
-msgid "Vector 3D points to volume voxels"
-msgstr "3D vektör noktalardan hacime"
-
-#: ../gui/tcltk/d.m/menu.tcl:165
-msgid "Sites (GRASS 5.x) to vector"
-msgstr "Nokta dosyasından (GRASS 5.x) vektöre"
-
-#: ../gui/tcltk/d.m/menu.tcl:166
-msgid "Volumes to raster map series"
-msgstr "Hacimden raster harita serisine"
-
-#: ../gui/tcltk/d.m/menu.tcl:169
-msgid "Groups"
-msgstr "Gruplar"
-
-#: ../gui/tcltk/d.m/menu.tcl:170
-msgid "New"
-msgstr "Yeni"
-
-#: ../gui/tcltk/d.m/menu.tcl:170
-msgid "Create new group file"
-msgstr "Yeni grup dosyası oluştur"
-
-#: ../gui/tcltk/d.m/menu.tcl:171
-msgid "Open group file"
-msgstr "Grup dosyasını aç"
-
-#: ../gui/tcltk/d.m/menu.tcl:172
-msgid "Save group file"
-msgstr "Grup dosyasını kaydet"
-
-#: ../gui/tcltk/d.m/menu.tcl:173
-msgid "Save group file as name"
-msgstr "Grup dosyasını isim olarak kaydet"
-
-#: ../gui/tcltk/d.m/menu.tcl:174
-msgid "Close group"
-msgstr "Grubu kapat"
-
-#: ../gui/tcltk/d.m/menu.tcl:177
-msgid "Save display to image file"
-msgstr "Görünüşü görüntü dosyasına kaydet"
-
-#: ../gui/tcltk/d.m/menu.tcl:178
-msgid "XWD (Save display, selected with mouse, to map.xwd in home directory )"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:179
-msgid "Save displays to multiple graphic file formats"
-msgstr "Görüntüyü çeşitli grafik dosya biçimlerinde kaydet"
-
-#: ../gui/tcltk/d.m/menu.tcl:181
-msgid "Save map to Postscript file"
-msgstr "Haritayı Sayfa Tanımla Dili dosyası olarak  kaydet"
-
-#: ../gui/tcltk/d.m/menu.tcl:182
-msgid "Print to default printer"
-msgstr "Varsayılan yazıcıya yazdır"
-
-#: ../gui/tcltk/d.m/menu.tcl:182
-msgid "print"
-msgstr "yazdır"
-
-#: ../gui/tcltk/d.m/menu.tcl:184
-msgid "Exit Display Manager"
-msgstr "Görüntü Yöneticisi'nden Çık"
-
-#: ../gui/tcltk/d.m/menu.tcl:190
-msgid "Zoom to maximum extent of all displayed maps"
-msgstr "Görüntülenen tüm haritaların maksimum sınırına uyarla"
-
-#: ../gui/tcltk/d.m/menu.tcl:193
-msgid "Access other mapsets in current location"
-msgstr "Güncel mevkideki diğer harita takımlarına erişim"
-
-#: ../gui/tcltk/d.m/menu.tcl:194
-msgid "Change current working session to new mapset, location, or GISDBASE"
-msgstr ""
-"Geçerli çalışma oturumunu yeni harita takımı, mevki, veya GISDBASE'e değiştir"
-
-#: ../gui/tcltk/d.m/menu.tcl:195
-msgid "Modify access by other users to current mapset"
-msgstr "Geçerli harita takımına diğer kullanıcıların erişim hakkını değiştir"
-
-#: ../gui/tcltk/d.m/menu.tcl:196
-msgid "Show current GRASS environment settings"
-msgstr "Geçerli GRASS ortamı ayarlarını göster"
-
-#: ../gui/tcltk/d.m/menu.tcl:197
-msgid "Set GRASS environment settings"
-msgstr "GRASS ortam değişkenlerini ayarla "
-
-#: ../gui/tcltk/d.m/menu.tcl:201
-msgid "Create/edit projection information for current location"
-msgstr "Geçerli mevkinin projeksiyon bilgisini oluştur/düzelt"
-
-#: ../gui/tcltk/d.m/menu.tcl:202
-msgid "Show projection information and create projection files"
-msgstr "Projeksiyon bilgilerini göster ve projeksiyon dosyalarını oluştur"
-
-#: ../gui/tcltk/d.m/menu.tcl:204
-msgid "Convert coordinates from one projection to another"
-msgstr "Koordinatları bir projeksiyondan diğerine dönüştür"
-
-#: ../gui/tcltk/d.m/menu.tcl:206
-msgid "Text"
-msgstr "Metin"
-
-#: ../gui/tcltk/d.m/menu.tcl:207
-msgid "Select default text font"
-msgstr "Varsayılan metin yazıtipini seç"
-
-#: ../gui/tcltk/d.m/menu.tcl:208
-msgid "Select default freetype text font"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:210
-msgid "X-monitor displays"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:211
-msgid "Configure xmonitor displays"
-msgstr "x ekran görüntüsünü yapılandır"
-
-#: ../gui/tcltk/d.m/menu.tcl:212
-msgid "Configure frames for xmonitors"
-msgstr "x ekranı için çerçeveyi yapılandır"
-
-#: ../gui/tcltk/d.m/menu.tcl:213
-msgid "Start/restart xmonitor at specified window size"
-msgstr "x ekranını belirlenen pencere boyutlarında başlat/yeniden başlat"
-
-#: ../gui/tcltk/d.m/menu.tcl:214
-msgid "Set active xmonitor to specified size"
-msgstr "Aktif x ekranını belirlenen boyutlara ayarla"
-
-#: ../gui/tcltk/d.m/menu.tcl:215
-msgid "Display information about active xmonitor"
-msgstr "Aktif x ekranı hakkındaki bilgiyi göster"
-
-#: ../gui/tcltk/d.m/menu.tcl:222
-msgid "Compress/decompress raster file"
-msgstr "Raster dosyayı sıkıştır/aç"
-
-#: ../gui/tcltk/d.m/menu.tcl:223
-msgid "Manage boundary definitions"
-msgstr "Sınır belirlemelerini yönet"
-
-#: ../gui/tcltk/d.m/menu.tcl:224
-msgid "Manage null values"
-msgstr "Boş değerleri yönet"
-
-#: ../gui/tcltk/d.m/menu.tcl:225
-msgid "Manage timestamps for files"
-msgstr "Dosyaların zman damgasını yönet"
-
-#: ../gui/tcltk/d.m/menu.tcl:226
-msgid "Quantization for floating-point maps"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:228
-msgid "Resample (change resolution)"
-msgstr "Yeniden örnekle (çözünürlüğü değiştir)"
-
-#: ../gui/tcltk/d.m/menu.tcl:229
-msgid "Resample using nearest neighbor method"
-msgstr "En yakın komşu yöntemini kullanarak yeniden örnekle"
-
-#: ../gui/tcltk/d.m/menu.tcl:230
-msgid "Resample using various interpolation methods"
-msgstr "Çeşitli enterpolasyon yöntemlerini kullanarak yeniden örnekle"
-
-#: ../gui/tcltk/d.m/menu.tcl:232
-msgid "Resample using regularized spline with tension method"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:235
-msgid "Support file creation and maintenance"
-msgstr "Destek dosyası oluşturma ve bakımı"
-
-#: ../gui/tcltk/d.m/menu.tcl:237
-msgid "Reproject raster from other location"
-msgstr "Diğer mevkideki raster'ı yeniden projeksiyonlandır"
-
-#: ../gui/tcltk/d.m/menu.tcl:238
-msgid "Generate tiling for other projection"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:241
-msgid "Set colors to predefined color tables"
-msgstr "Renkleri önceden belirlenmiş renk tablosundan ayarla"
-
-#: ../gui/tcltk/d.m/menu.tcl:242
-msgid "Set colors using color rules"
-msgstr "Renkleri renk kurallarına göre ayarla"
-
-#: ../gui/tcltk/d.m/menu.tcl:244
-msgid "Blend 2 color maps to produce 3 RGB files"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:245
-msgid "Create color image from RGB files"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:246
+#: ../lib/gtcltk/select.tcl:103
+msgid "Select item"
+msgstr "Öğe seç"
+
+#: ../lib/gtcltk/select.tcl:208
+msgid "Ok"
+msgstr "Tamam"
+
+#: ../lib/gis/gui.tcl:231
+msgid "Load File"
+msgstr "Dosyayı Yükle"
+
+#: ../lib/gis/gui.tcl:355
+msgid "Options"
+msgstr "Seçenekler"
+
+#: ../lib/gis/gui.tcl:577
+msgid "required"
+msgstr "gereken"
+
+#: ../lib/gis/gui.tcl:577
+msgid "optional"
+msgstr "seçimlik"
+
+#: ../lib/gis/gui.tcl:578
+msgid "multiple"
+msgstr "çoklu"
+
+#: ../lib/init/epsg_option.tcl:93
+msgid "WARNING: cant get enviromental variable"
+msgstr "UYARI: ortam değişkenleri belirlenemiyor"
+
+#: ../lib/init/epsg_option.tcl:94
 msgid ""
-"Create 3 RGB (red, green, blue) maps from 3 HIS (hue, intensity, saturation) "
-"maps"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:251
-msgid "Create raster buffers"
-msgstr "Raster tampon oluştur"
-
-#: ../gui/tcltk/d.m/menu.tcl:252
-msgid "Create raster MASK"
-msgstr "Raster MASKE oluştur"
-
-#: ../gui/tcltk/d.m/menu.tcl:253
-msgid "Locate closest points between areas in 2 raster maps"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:256
-msgid "Moving window analysis of raster cells"
-msgstr "Raster hücrelerin kayar pencere analizi"
-
-#: ../gui/tcltk/d.m/menu.tcl:257
-msgid "Analyze vector points in neighborhood of raster cells"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:261
-msgid "Function of map series (time series)"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:264
-msgid "Statistical calculations for cover map over base map"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:267
-msgid "Solar irradiance and daily irradiation"
-msgstr "Güneş aydınlatması ve günlük aydınlanma"
-
-#: ../gui/tcltk/d.m/menu.tcl:268
-msgid "Shadows map for sun position or date/time"
-msgstr "Güneş konumuna veya tarih/zamana göre gölgelenme haritası"
-
-#: ../gui/tcltk/d.m/menu.tcl:271
-msgid "Calculate cumulative movement costs between locales"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:274
-msgid "Profile analysis"
-msgstr "Kesit analizi"
-
-#: ../gui/tcltk/d.m/menu.tcl:275
-msgid "Shaded relief map"
-msgstr "Gölgeli kabartma harita"
-
-#: ../gui/tcltk/d.m/menu.tcl:279
-msgid "Visibility/line of sight"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:282
-msgid "Clump small areas (statistics calculated by r.volume)"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:283
-msgid "Grow areas"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:284
-msgid "Thin linear features"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:288
-msgid "Carve stream channels into elevation map using vector streams map"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:289
-msgid "Depressionless elevation map and flowline map"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:290
-msgid "Fill lake from seed point to specified level"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:291
-msgid "Flow accumulation for massive grids"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:292
-msgid "Generate flow lines for raster map"
-msgstr "Raster haritanın akış hatlarını oluştur"
-
-#: ../gui/tcltk/d.m/menu.tcl:294
-msgid "SIMWE sediment erosion, transport, & deposition modeling"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:304
-msgid "Analyze landscape characteristics"
-msgstr "Peyzaj nitelikleri analizi"
-
-#: ../gui/tcltk/d.m/menu.tcl:305
-msgid "Analyze landscape patch characteristics"
-msgstr "Peyzaj küme nitelikleri analizi"
-
-#: ../gui/tcltk/d.m/menu.tcl:306
-msgid "Output landscape patch information"
-msgstr "Çıktı peyzaj küme bilgisi"
-
-#: ../gui/tcltk/d.m/menu.tcl:309
-msgid "Generate rate of spread (ROS) maps"
-msgstr "Yayılma oranı (ROS9 haritası oluştur"
-
-#: ../gui/tcltk/d.m/menu.tcl:310
-msgid "Generate least-cost spread paths"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:311
-msgid "Simulate anisotropic spread phenomena"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:315
-msgid "Edit category values of individual cells for displayed raster map"
-msgstr ""
-"Görüntülenen raster haritanın hücrelerinin kategori değerlerini tek tek "
-"düzelt"
-
-#: ../gui/tcltk/d.m/menu.tcl:318
-msgid "Reclassify categories for areas of specified sizes"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:319
-msgid "Reclassify categories using rules"
-msgstr "Kategorileri kurala göre yeniden sınıflandır"
-
-#: ../gui/tcltk/d.m/menu.tcl:320
-msgid "Reclassify categories using rules file"
-msgstr "Kategorileri kural dosyasına göre yeniden sınıflandır"
-
-#: ../gui/tcltk/d.m/menu.tcl:322
-msgid "Recode categories using rules (create new map)"
-msgstr "Kategorileri kurala göre yeniden kodla (yeni harita oluştur)"
-
-#: ../gui/tcltk/d.m/menu.tcl:323
-msgid "Recode categories using rules file (create new map)"
-msgstr "Kategorileri kural dosyasına göre yeniden kodla (yeni harita oluştur)"
-
-#: ../gui/tcltk/d.m/menu.tcl:325
-msgid "Rescale categories (create new map)"
-msgstr "Kategorileri yeniden ölçeklendir (yeni harita oluştur)"
-
-#: ../gui/tcltk/d.m/menu.tcl:326
-msgid "Rescale categories with equalized histogram (create new map)"
-msgstr ""
-"Kategorileri eşitlenmiş histograma göre yeniden ölçeklendir (yeni harita "
-"oluştur)"
-
-#: ../gui/tcltk/d.m/menu.tcl:329
-msgid "Generate concentric circles around points"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:330
-msgid "Generate random raster cells"
-msgstr "Rasgele raster hücreler üret"
-
-#: ../gui/tcltk/d.m/menu.tcl:332
-msgid "Generate random cells and vector points from raster map"
-msgstr "Raster haritadan rasgele hücreler ve vektör noktalar üret"
-
-#: ../gui/tcltk/d.m/menu.tcl:335
-msgid "Generate density surface using moving Gausian kernal"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:336
-msgid "Generate fractal surface"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:337
-msgid "Generate gaussian deviates surface"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:338
-msgid "Generate plane"
-msgstr "Düzlem üret"
-
-#: ../gui/tcltk/d.m/menu.tcl:339
-msgid "Generate random deviates surface"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:340
-msgid "Generate random surface with spatial dependence"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:342
-msgid "Generate vector contour lines"
-msgstr "Vektör eşyükselti eğrileri üret"
-
-#: ../gui/tcltk/d.m/menu.tcl:344
-msgid "Bilinear interpolation from raster points"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:345
-msgid "Inverse distance weighted interpolation from raster points"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:346
-msgid "Interpolation from raster contours"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:348
-msgid "Inverse distance weighted interpolation from vector points"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:349
-msgid "Regularized spline tension interpolation from vector points or contours"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:351
-msgid "Fill NULL cells by interpolation using regularized spline tension"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:356
-msgid "Report category labels and values"
-msgstr "Kategori etiketleri ve değerlerini raporla"
-
-#: ../gui/tcltk/d.m/menu.tcl:359
-msgid "Range of all category values"
-msgstr "Tüm kategori değerleri aralığı"
-
-#: ../gui/tcltk/d.m/menu.tcl:360
-msgid "Sum all cell category values"
-msgstr "Tüm hücre kategori değerleri toplamı"
-
-#: ../gui/tcltk/d.m/menu.tcl:362
-msgid "Summary statistics for clumped cells (works with r.clump)"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:365
-msgid "Univariate statistics (script version)"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:367
-msgid "Sample values along transects"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:368
-msgid "Sample values along transects (use azimuth, distance)"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:371
-msgid "Linear regression between 2 maps"
-msgstr "2 harita arasındaki doğrusal ilişki"
-
-#: ../gui/tcltk/d.m/menu.tcl:372
-msgid "Mutual category occurences (coincidence)"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:379
-msgid "Create/rebuild topology"
-msgstr "Topoloji oluştur/yeniden kur"
-
-#: ../gui/tcltk/d.m/menu.tcl:380
-msgid "Clean vector files"
-msgstr "Vektör dosyaları topolojisini temizle"
-
-#: ../gui/tcltk/d.m/menu.tcl:381
-msgid "Add missing centroids"
-msgstr "Kayıp alan merkezlerini ekle"
-
-#: ../gui/tcltk/d.m/menu.tcl:383
-msgid "Build polylines from adjacent segments"
-msgstr "Komşu parçalardan çoklu çizgi oluştur"
-
-#: ../gui/tcltk/d.m/menu.tcl:384
-msgid "Split polylines into segments"
-msgstr "Çoklu çizgileri parçalara böl"
-
-#: ../gui/tcltk/d.m/menu.tcl:385
-msgid "Create lines parallel to existing lines"
-msgstr "Mevcut çizgilere paralel çizgiler oluştur"
-
-#: ../gui/tcltk/d.m/menu.tcl:386
-msgid "Dissolve common boundaries"
-msgstr "Ortak sınır sorunlarını çöz"
-
-#: ../gui/tcltk/d.m/menu.tcl:388
-msgid "Convert vector feature types"
-msgstr "Vektör obje tipini dönüştür"
-
-#: ../gui/tcltk/d.m/menu.tcl:389
-msgid "Convert 2D vector to 3D by sampling raster"
-msgstr "Raster'ı örnekleyerek 2D vektörü 3D vektöre dönüştür"
-
-#: ../gui/tcltk/d.m/menu.tcl:390
-msgid "Extrude 2D vector into 3D vector"
-msgstr "2D vektör haritayı 3D ye dönüştür"
-
-#: ../gui/tcltk/d.m/menu.tcl:392
-msgid "Create text label file for vector features"
-msgstr "Vektör objeler için metin etiket dosyası oluştur"
-
-#: ../gui/tcltk/d.m/menu.tcl:394
-msgid "Reproject vector from other location"
-msgstr "Diğer mevkideki vektör'ı yeniden projeksiyonlandır"
-
-#: ../gui/tcltk/d.m/menu.tcl:397
-msgid "Create new vector as link to external OGR layer"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:398
-msgid "Set database connection for vector attributes"
-msgstr "Vektör öznitelikler için veritabanı bağlantısı ayarla"
-
-#: ../gui/tcltk/d.m/menu.tcl:400
-msgid "Rectify and georeference vector map"
-msgstr "Vektör haritayı düzeltme ve yer uyumlandırma"
-
-#: ../gui/tcltk/d.m/menu.tcl:402
-msgid "Query by attributes"
-msgstr "Özniteliklere göre sorgula"
-
-#: ../gui/tcltk/d.m/menu.tcl:404
-msgid "Query by map features"
-msgstr "Harita objelerine göre sorgula"
-
-#: ../gui/tcltk/d.m/menu.tcl:406
-msgid "Create vector buffers"
-msgstr "Vektör tampon oluştur"
-
-#: ../gui/tcltk/d.m/menu.tcl:407
-msgid "Linear referencing for vectors"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:408
-msgid "Create linear reference system"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:409
-msgid "Create stationing from imput lines, and linear reference system"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:410
-msgid ""
-"Create points/segments from input lines, linear reference system and "
-"positions read from stdin"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:411
-msgid ""
-"Find line id and real km+offset for given points in vector map using linear "
-"reference system"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:414
-msgid "Locate nearest features to points or centroids"
-msgstr "Nokta veya alan merkezilerine en yakın objeleri yerleştir"
-
-#: ../gui/tcltk/d.m/menu.tcl:415
-msgid "Generate Thiessen polygons around points (Voronoi diagram)"
-msgstr "Noktaların etrafında Thiessen poligonu üret (Voronoi diyagramı)"
-
-#: ../gui/tcltk/d.m/menu.tcl:416
-msgid "Connect points to create Delaunay triangles"
-msgstr "Delaunay üçgenlerini oluşturmak için noktaları bağla"
-
-#: ../gui/tcltk/d.m/menu.tcl:422
-msgid "Shortest route (visualization only)"
-msgstr "En kısa rota (sadece göster)"
-
-#: ../gui/tcltk/d.m/menu.tcl:423
-msgid "Split net to bands between cost isolines"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:428
-msgid "Overlay/combine 2 vector maps"
-msgstr "2 vektör haritayı çakıştır/birleştir"
-
-#: ../gui/tcltk/d.m/menu.tcl:429
-msgid "Patch multiple maps (combine)"
-msgstr "Birçok haritayı birbirine ekle (birleştir)"
-
-#: ../gui/tcltk/d.m/menu.tcl:431
-msgid "Generate area feature for extent of current region"
-msgstr "Geçerli bölgenin dış sınırlarından alan objesi üret"
-
-#: ../gui/tcltk/d.m/menu.tcl:432
-msgid "Generate rectangular vector grid"
-msgstr "Dikdörtgenimsi vektör grid üret"
-
-#: ../gui/tcltk/d.m/menu.tcl:435
-msgid "Attach, delete, or report categories"
-msgstr "Kategorileri ekle, sil veya raporla"
-
-#: ../gui/tcltk/d.m/menu.tcl:436
-msgid "Reclassify features using rules file"
-msgstr "Objeleri kural dosyasına göre yeniden sınıflandır"
-
-#: ../gui/tcltk/d.m/menu.tcl:439
-msgid "Work with vector points"
-msgstr "Vektör noktalarla çalış"
-
-#: ../gui/tcltk/d.m/menu.tcl:441
-msgid "Generate points from database with x/y coordinates"
-msgstr "Veritabanındaki x/y koordinatlarından noktalar üret"
-
-#: ../gui/tcltk/d.m/menu.tcl:443
-msgid "Random location perturbations of points"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:446
-msgid "Generate convex hull for point set"
-msgstr "Noktaların dışbükey kabuğunu üret"
-
-#: ../gui/tcltk/d.m/menu.tcl:447
-msgid "Generate Delaunay triangles for point set"
-msgstr "Noktalar için Delaunay üçgenleri üret"
-
-#: ../gui/tcltk/d.m/menu.tcl:448
-msgid "Generate Voronoi diagram/Thiessen polygons for point set"
-msgstr "Noktalar için Voronoi diyagram/Thiessen poligonu üret"
-
-#: ../gui/tcltk/d.m/menu.tcl:450
-msgid "Sample raster maps"
-msgstr "Raster haritaları örnekle"
-
-#: ../gui/tcltk/d.m/menu.tcl:451
-msgid "Calculate statistics for raster map overlain by vector map"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:455
-msgid "Partition points into test/training sets for k-fold cross validatation"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:456
-msgid "Transfer attribute data from queried vector map to points"
-msgstr "Öznitelik verisini sorgulanmış vektör haritadan noktalara aktar"
-
-#: ../gui/tcltk/d.m/menu.tcl:461
-msgid "Load vector attributes to database or create reports"
-msgstr "Vektör öznitelikleri veritabanına yükle veya rapor oluştur"
-
-#: ../gui/tcltk/d.m/menu.tcl:462
-msgid "Report areas for vector attribute categories"
-msgstr "Vektör öznitelik kategorileri için alanları raporla"
-
-#: ../gui/tcltk/d.m/menu.tcl:465
-msgid "Test normality of point distribution"
-msgstr "Nokta dağılımının normalliğini sına"
-
-#: ../gui/tcltk/d.m/menu.tcl:466
-msgid "Calculate stats for raster map underlying vector objects"
-msgstr "Vektör objelerin altındaki raster haritanın istatistiklerini hesapla"
-
-#: ../gui/tcltk/d.m/menu.tcl:467
-msgid "Indices of point counts in quadrats"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:472
-msgid "Create/edit imagery group"
-msgstr "Görüntü grubu oluştur/düzelt"
-
-#: ../gui/tcltk/d.m/menu.tcl:473
-msgid "Target imagery group"
-msgstr "Hedef görüntü grubu"
-
-#: ../gui/tcltk/d.m/menu.tcl:475
-msgid "Mosaic up to 4 adjacent images"
-msgstr "4 komşu görüntüye kadar yanyana birleştirme"
-
-#: ../gui/tcltk/d.m/menu.tcl:478
-msgid ""
-"Color balance and enhance color tables of multiband imagery for rgb display"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:479
-msgid ""
-"Transform HIS (Hue/Intensity/Saturation) color image to RGB (Red/Green/Blue)"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:480
-msgid ""
-"Transform RGB (Red/Green/Blue) color image to HIS (Hue/Intensity/Saturation)"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:482
-msgid "Rectify and georeference image group"
-msgstr "Görüntü grubunu düzeltme ve yer uyumlandırma"
-
-#: ../gui/tcltk/d.m/menu.tcl:483
-msgid "Set ground control points (GCP's) from raster map or keyboard entry"
-msgstr ""
-"Yer kontrol noktalarını (GCP's) raster haritadan veya klavye ile girerek "
-"ayarla"
-
-#: ../gui/tcltk/d.m/menu.tcl:485
-msgid "Set ground control points (GCP's) from vector map or keyboard entry"
-msgstr ""
-"Yer kontrol noktalarını (GCP's) vektör haritadan veya klavye ile girerek "
-"ayarla"
-
-#: ../gui/tcltk/d.m/menu.tcl:487
-msgid "Affine and Polynomial rectification (rubber sheet)"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:491
-msgid "Brovey transformation and pan sharpening"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:499
-msgid "Non-interactive input for supervised classification (MLC)"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:500
-msgid "Non-interactive input for supervised classification (SMAP)"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:503
-msgid "Zero edge crossing detection"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:504
-msgid "User defined matrix/convolving filter"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:509
-msgid "Canonical component"
-msgstr "Kuralsal bileşen"
-
-#: ../gui/tcltk/d.m/menu.tcl:510
-msgid "Principal component"
-msgstr "Temel bileşen"
-
-#: ../gui/tcltk/d.m/menu.tcl:511
-msgid "Fast Fourier Transform"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:512
-msgid "Inverse Fast Fourier Transform"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:517
-msgid "Range of image values"
-msgstr "Görüntü değerleri aralığı"
-
-#: ../gui/tcltk/d.m/menu.tcl:519
-msgid "Bit pattern comparison for ID of low quality pixels"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:520
-msgid "Kappa classification accuracy assessment"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:521
-msgid "Optimum index factor for LandSat TM"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:524
-msgid "&Grid3D"
-msgstr "&Grid3D"
-
-#: ../gui/tcltk/d.m/menu.tcl:529
-msgid "Create 3D mask for grid3D operations"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:530
-msgid "Create 2D raster cross section from grid3d volume"
-msgstr ""
-
-#: ../gui/tcltk/d.m/menu.tcl:531
-msgid "Map calculator for grid3D operations"
-msgstr "grid3D işlemleri için harita hesaplayıcı"
-
-#: ../gui/tcltk/d.m/menu.tcl:532
-msgid "Interpolate volume from vector points using splines"
-msgstr "Vektör noktalardan eğrileri kullanarak hacim enterpolasyonu yap"
-
-#: ../gui/tcltk/d.m/menu.tcl:534
-msgid "Display information about grid3D volume"
-msgstr "grid3D hacim hakkındaki bilgiyi göster"
-
-#: ../gui/tcltk/d.m/menu.tcl:543
-msgid "Add columns to table"
-msgstr "Tabloya sütun ekle"
-
-#: ../gui/tcltk/d.m/menu.tcl:544
-msgid "Change values in a column"
-msgstr "Sütundaki değerleri değiştir"
-
-#: ../gui/tcltk/d.m/menu.tcl:555
-msgid "Query data (SQL select)"
-msgstr "Veriyi sorgula (SQL seçimi)"
-
-#: ../gui/tcltk/d.m/menu.tcl:556
-msgid "Execute SQL statement"
-msgstr "SQL tümcesini yürüt"
-
-#: ../gui/tcltk/d.m/rgbhis.tcl:96
-msgid "red (RGB) or hue (HIS):"
-msgstr ""
-
-#: ../gui/tcltk/d.m/rgbhis.tcl:107
-msgid "green (RGB) or intensity (HIS):"
-msgstr ""
-
-#: ../gui/tcltk/d.m/rgbhis.tcl:118
-msgid "blue (RGB) or saturation (HIS):"
-msgstr ""
-
-#: ../gui/tcltk/d.m/fttext.tcl:102
-msgid "     (leave blank to place with mouse; position will not save)"
-msgstr ""
-
-#: ../gui/tcltk/d.m/fttext.tcl:108
-msgid "     coordinate type"
-msgstr "koordinat tipi"
-
-#: ../gui/tcltk/d.m/fttext.tcl:111
-msgid "  align text with coordinate point"
-msgstr "  metni koordinat notası ile hizala"
-
-#: ../gui/tcltk/d.m/fttext.tcl:120
+"Warning: Unable to get enviromental variable GRASS_PROJSHARE. \n"
+"This is a GRASS installation error. \n"
+"Set enviromental variable GRASS_PROJSHARE to point to directory with Proj4 "
+"EPSG file. "
+msgstr ""
+
+#: ../lib/init/epsg_option.tcl:103
+msgid "Define location using EPSG projection codes"
+msgstr "EPSG projeksiyon kodlarını kullanarak mevki belirle"
+
+#: ../lib/init/epsg_option.tcl:122 ../lib/init/file_option.tcl:92
+msgid "Name of new location"
+msgstr "Yeni mevkinin adı"
+
+#: ../lib/init/epsg_option.tcl:125
+msgid "Enter name for location to be created"
+msgstr "Oluşturulacak mevki için ad girin"
+
+#: ../lib/init/epsg_option.tcl:129 ../lib/init/epsg_option.tcl:132
+msgid "Path to the EPSG-codes file"
+msgstr "EPSG-kodları dosyası yolu"
+
+#: ../lib/init/epsg_option.tcl:135 ../lib/init/epsg_option.tcl:148
+#: ../lib/init/gis_set.tcl:243 ../lib/init/file_option.tcl:105
+msgid "Browse..."
+msgstr "Gözat..."
+
+#: ../lib/init/epsg_option.tcl:136
+msgid "Browse to locate EPSG file"
+msgstr "EPSG dosyasını bulmak için göz at"
+
+#: ../lib/init/epsg_option.tcl:143
+msgid "EPSG code number of projection"
+msgstr "Projeksiyonun EPSG kod değeri"
+
+#: ../lib/init/epsg_option.tcl:146
+msgid "Enter EPSG code for selected projection"
+msgstr "Seçilen projeksiyon için EPSG kodunu girin"
+
+#: ../lib/init/epsg_option.tcl:149
+msgid "View EPSG codes and projection information."
+msgstr "EPSG kodları ve projeksiyon bilgilerini görüntüle."
+
+#: ../lib/init/epsg_option.tcl:155
+msgid "WARNING: epsg-codes file not found"
+msgstr "UYARI: epsg-kodları dosyası bulunamadı"
+
+#: ../lib/init/epsg_option.tcl:156
+msgid "WARNING: The epsg-codes file was not found!"
+msgstr "UYARI: epsg-kodları dosyası bulunamadı!"
+
+#: ../lib/init/epsg_option.tcl:164 ../lib/init/file_option.tcl:111
+msgid "Define location"
+msgstr "Mevki belirle"
+
+#: ../lib/init/epsg_option.tcl:187
+msgid "Invalid EPSG Code!"
+msgstr "Geçersiz EPSG Kodu!"
+
+#: ../lib/init/epsg_option.tcl:188
+#, tcl-format
+msgid "ERROR: Invalid EPSG code %s: should be an integer."
+msgstr "HATA: Geçersiz EPSG Kodu! %s: tamsayı olmalı."
+
+#: ../lib/init/epsg_option.tcl:198
+msgid "Location Exists!"
+msgstr "Mevki Mevcut!"
+
+#: ../lib/init/epsg_option.tcl:199
+#, tcl-format
+msgid "WARNING: Location '%s' already exists: please try another name."
+msgstr "UYARI: '%s' Mevkisi zaten mevcut: lütfen başka birini deneyin."
+
+#: ../lib/init/epsg_option.tcl:236 ../lib/init/epsg_option.tcl:263
+#: ../lib/init/file_option.tcl:185 ../lib/init/file_option.tcl:212
+msgid "Error creating location!"
+msgstr "Mevki oluşturmada hata!"
+
+#: ../lib/init/epsg_option.tcl:237 ../lib/init/epsg_option.tcl:264
+#: ../lib/init/file_option.tcl:186 ../lib/init/file_option.tcl:213
 #, tcl-format
 msgid ""
-"     (for coordinates, % is from bottom left of display, pixels from top "
-"left)"
+"g.proj returned the following message:\n"
+"%s"
+msgstr ""
+"g.proj komutu şu mesajı verdi:\n"
+"%s"
+
+#: ../lib/init/epsg_option.tcl:244 ../lib/init/epsg_option.tcl:268
+#: ../lib/init/file_option.tcl:193 ../lib/init/file_option.tcl:217
+msgid "Informational output from g.proj"
+msgstr "g.proj dan bilgilendirici çıktı"
+
+#: ../lib/init/epsg_option.tcl:245 ../lib/init/epsg_option.tcl:269
+#: ../lib/init/file_option.tcl:194 ../lib/init/file_option.tcl:218
+#, tcl-format
+msgid ""
+"g.proj returned the following informational message:\n"
+"%s"
+msgstr ""
+"g.proj komutu şu bilgilendirme mesajını verdi:\n"
+"%s"
+
+#: ../lib/init/epsg_option.tcl:288 ../lib/init/file_option.tcl:240
+msgid "Select datum transformation parameters:"
+msgstr "Datum dönüşüm parametrelerini seçin:"
+
+#: ../lib/init/epsg_option.tcl:292 ../lib/init/file_option.tcl:244
+msgid ""
+"Continue without specifying parameters - if used when creating a location, "
+"other GRASS modules will use the \"default\" (likely non-optimum) parameters "
+"for this datum if necessary in the future."
 msgstr ""
 
-#: ../gui/tcltk/d.m/fttext.tcl:126
-msgid "     text rotation (degrees counterclockwise)"
-msgstr "     metin döndürme (saat yönü tersine derece olarak)"
-
-#: ../gui/tcltk/d.m/fttext.tcl:129
-msgid "rotation in radians"
-msgstr "radyan olarak döndürme miktarı"
-
-#: ../gui/tcltk/d.m/fttext.tcl:164
-msgid "height in pixels instead of %"
-msgstr "% yerine piksel olarak yükseklik"
-
-#: ../gui/tcltk/d.m/d.m.tcl:406
-msgid "Welcome to the GRASS GIS manager"
-msgstr "GRASS CBS yöneticisine hoşgeldiniz"
-
-#: ../gui/tcltk/d.m/tool1.tcl:22
-msgid "Display active layers in current region"
-msgstr "Aktif katmanları güncel bölgede göster"
-
-#: ../gui/tcltk/d.m/tool1.tcl:28
-msgid "Display active layers in default region"
-msgstr "Aktif katmanları geçerli bölgede göster"
-
-#: ../gui/tcltk/d.m/tool1.tcl:34
-msgid "Display active layers in saved region setting"
-msgstr "Aktif katmanları ayarları kaydedilmiş bölgede göster"
-
-#: ../gui/tcltk/d.m/tool1.tcl:54
-msgid "NVIZ - n dimensional visualization"
-msgstr "NVIZ - n boyutlu görüntüleme"
-
-#: ../gui/tcltk/d.m/tool1.tcl:60
-msgid "Fly through path for NVIZ"
-msgstr "NVIZ için uçuş hattı"
-
-#: ../gui/tcltk/d.m/tool1.tcl:81
-msgid "Zoom"
-msgstr "Yakınlaştır"
-
-#: ../gui/tcltk/d.m/tool1.tcl:93
-msgid "Pan and recenter"
-msgstr "Kaydır ve yeniden merkezle"
-
-#: ../gui/tcltk/d.m/tool1.tcl:99
-msgid "Query map (select map first)"
-msgstr "Sorgu haritası (önce haritayı seç)"
-
-#: ../gui/tcltk/d.m/tool1.tcl:104
-msgid "Measure lengths and areas"
-msgstr "Uzunluk ve alanları ölç"
-
-#: ../gui/tcltk/d.m/tool1.tcl:109
-msgid "Geographical position"
-msgstr "Coğrafi konum"
-
-#: ../gui/tcltk/d.m/tool1.tcl:130
-msgid "Print raster & vector maps using ps.map"
+#: ../lib/init/epsg_option.tcl:344
+msgid "You can select EPSG code (in <braces>) and copy it for later use."
 msgstr ""
 
-#: ../gui/tcltk/d.m/tool2.tcl:33
-msgid "Add legend"
-msgstr "Lejand ekle"
-
-#: ../gui/tcltk/d.m/tool2.tcl:76
-msgid "Add paint labels layer (from directory paint/labels)"
+#: ../lib/init/epsg_option.tcl:381
+msgid "GUESS THAT IS NOT THE EPSG FILE"
 msgstr ""
 
-#: ../gui/tcltk/d.m/tool2.tcl:82
-msgid "Add freetype text layer"
+#: ../lib/init/epsg_option.tcl:387 ../lib/init/epsg_option.tcl:416
+#: ../lib/init/epsg_option.tcl:435
+msgid "Search"
+msgstr "Ara"
+
+#: ../lib/init/epsg_option.tcl:389
+msgid "Grab code"
+msgstr "Kod yakala"
+
+#: ../lib/init/epsg_option.tcl:422
+msgid "Search text: "
+msgstr "Metni ara: "
+
+#: ../lib/init/epsg_option.tcl:423
+msgid "Search for entered text in EPSG file"
+msgstr "Girilen metni EPSG dosyasında ara"
+
+#: ../lib/init/epsg_option.tcl:428
+msgid "forward search"
+msgstr "ileri doğru ara"
+
+#: ../lib/init/epsg_option.tcl:429
+msgid "backward search"
+msgstr "geri doğru ara"
+
+#: ../lib/init/gis_set.tcl:107
+msgid "WARNING: can not save"
+msgstr "UYARI: kaydedilemiyor"
+
+#: ../lib/init/gis_set.tcl:108
+#, tcl-format
+msgid ""
+"Warning: unable to save data to <%s> file.\n"
+"Error message: %s"
+msgstr ""
+"Uyarı: Veri <%s> dosyasına kaydedilemiyor.\n"
+"Hata mesajı: %s"
+
+#: ../lib/init/gis_set.tcl:128 ../lib/init/gis_set.tcl:379
+#: ../lib/init/gis_set.tcl:485 ../lib/init/gis_set.tcl:609
+#: ../lib/init/gis_set.tcl:630 ../lib/init/gis_set.tcl:648
+#: ../lib/init/gis_set.tcl:676
+msgid "WARNING: invalid location"
+msgstr "UYARI: geçersiz mevki"
+
+#: ../lib/init/gis_set.tcl:129
+#, tcl-format
+msgid ""
+"Warning: location <%s> at GISDBASE <%s> is not a directory or does not exist."
+msgstr "Uyarı: <%s>GISDBASE deki <%s> mevkisi dizin değil veya mevcut değil."
+
+#: ../lib/init/gis_set.tcl:179
+#, tcl-format
+msgid "GRASS %s Startup"
+msgstr "GRASS %s Başlat"
+
+#: ../lib/init/gis_set.tcl:202
+msgid "Welcome to GRASS GIS Version"
+msgstr "Hoşgeldiniz! GRASS CBS Sürüm "
+
+#: ../lib/init/gis_set.tcl:204
+msgid ""
+"The world's leading open source GIS\n"
+"\n"
+msgstr ""
+"Dünyanın lider açık kodlu CBS yazılımı\n"
+"\n"
+
+#: ../lib/init/gis_set.tcl:205
+msgid "Select an existing project location and mapset\n"
+msgstr "Varolan proje mevkisi ve CBS harita takımını seçin\n"
+
+#: ../lib/init/gis_set.tcl:206
+msgid "or define a new location\n"
+msgstr "veya yeni bir mevki belirleyin.\n"
+
+#: ../lib/init/gis_set.tcl:229
+msgid "GIS Data Directory: "
+msgstr "Yeni CBS veritabanı dizini:"
+
+#: ../lib/init/gis_set.tcl:245
+msgid "New GIS data directory"
+msgstr "Yeni CBS veri dizini"
+
+#: ../lib/init/gis_set.tcl:268
+#, fuzzy
+msgid "Project Location (projection/coordinate system)"
+msgstr ""
+"Proje mevkisi\n"
+"(projeksiyon/koordinat sistemi)"
+
+#: ../lib/init/gis_set.tcl:301
+#, fuzzy
+msgid "Accessible Mapsets (directories of GIS files)"
+msgstr ""
+"Erişilebilir Harita takımları\n"
+"(CBS dosyaları dizinleri)"
+
+#: ../lib/init/gis_set.tcl:358
+#, fuzzy
+msgid "Create new mapset in selected location"
+msgstr ""
+"Seçilen mevkide\n"
+"yeni harita takımı oluştur"
+
+#: ../lib/init/gis_set.tcl:366
+msgid "Create new mapset"
+msgstr "Yeni harita takımı oluştur"
+
+#: ../lib/init/gis_set.tcl:371
+msgid "WARNING: invalid mapset name"
+msgstr "UYARI: geçersiz harita takımı"
+
+#: ../lib/init/gis_set.tcl:372
+#, tcl-format
+msgid ""
+"Warning: Mapset with name <%s> already exists. \n"
+"New mapset is NOT created. \n"
+"Choose different mapset name and try again."
+msgstr ""
+"Uyarı: <%s>harita takımı zaten mevcut. \n"
+"Yeni harita takımı oluşturulmadı. \n"
+"Farklı harita takımı adı seçin ve yeniden deneyin."
+
+#: ../lib/init/gis_set.tcl:380
+#, tcl-format
+msgid ""
+"Warning: selected location <%s> is not valid. \n"
+" New mapset is NOT created. \n"
+" Select valid location and try again."
+msgstr ""
+"Uyarı: seçilen <%s> mevkisi geçersiz. \n"
+"Yeni harita takımı oluşturulmadı. \n"
+"Geçerli mevki seçin ve yeniden deneyin."
+
+#: ../lib/init/gis_set.tcl:387
+msgid "WARNING: unable to mkdir"
+msgstr "UYARI: dizin oluşturulamadı"
+
+#: ../lib/init/gis_set.tcl:388
+#, tcl-format
+msgid ""
+"Warning: Unable to create directory for new mapset. \n"
+"Error message: %s"
+msgstr ""
+"Uyarı: Yeni harita takımı için dizin oluşturulamadı. \n"
+"Hata mesajı: %s"
+
+#: ../lib/init/gis_set.tcl:413
+msgid "Define new location with..."
+msgstr "Aşağıdakilerden biriyle mevki belirle..."
+
+#: ../lib/init/gis_set.tcl:417
+msgid "Georeferenced file"
+msgstr "Yer uyumlandırılmış dosya"
+
+#: ../lib/init/gis_set.tcl:430
+msgid "EPSG codes"
+msgstr "EPSG kodları"
+
+#: ../lib/init/gis_set.tcl:443
+msgid "Projection values"
+msgstr "Projeksiyon değerleri"
+
+#: ../lib/init/gis_set.tcl:481
+msgid "Enter GRASS"
+msgstr "GRASS'ı Başlat"
+
+#: ../lib/init/gis_set.tcl:486
+#, tcl-format
+msgid ""
+"Warning: selected location <%s> is not valid. \n"
+" Select valid location and try again."
+msgstr ""
+"Uyarı: seçilen <%s> mevkisi geçersiz. \n"
+"Geçerli mevki seçin ve yeniden deneyin."
+
+#: ../lib/init/gis_set.tcl:491 ../lib/init/gis_set.tcl:654
+msgid "WARNING: invalid mapset"
+msgstr "UYARI: geçersiz harita takımı"
+
+#: ../lib/init/gis_set.tcl:492
+#, tcl-format
+msgid "Warning: <%s> is not a valid mapset"
+msgstr "Uyarı: <%s> geçerli harita takımı değil"
+
+#: ../lib/init/gis_set.tcl:512
+msgid "Help already opened"
+msgstr "Yardım zaten açık"
+
+#: ../lib/init/gis_set.tcl:525
+msgid "Exit"
+msgstr "Çık"
+
+#: ../lib/init/gis_set.tcl:561
+msgid "WARNING: Invalid Database"
+msgstr "UYARI: Geçersiz Veritabanı"
+
+#: ../lib/init/gis_set.tcl:562
+msgid "WARNING: Invalid database. Finding first valid directory in parent tree"
+msgstr "UYARI: Geçersiz veritabanı. Ana dizinde geçerli ill dizin bulunuyor"
+
+#: ../lib/init/gis_set.tcl:610 ../lib/init/gis_set.tcl:631
+#: ../lib/init/gis_set.tcl:649 ../lib/init/gis_set.tcl:677
+#, tcl-format
+msgid ""
+"Warning: selected location <%%s> is not valid. \n"
+" Select valid location and try again."
+msgstr ""
+"Uyarı: seçilen <%%s> mevkisi geçersiz. \n"
+"Geçerli mevki seçin ve yeniden deneyin."
+
+#: ../lib/init/gis_set.tcl:655
+#, tcl-format
+msgid "Warning: <%%s> is not a valid mapset"
+msgstr "Uyarı: <%%s> geçerli harita takımı değil"
+
+#: ../lib/init/gis_set.tcl:747
+msgid "WARNING: change directory failed"
+msgstr "UYARI: dizin değiştirmede hata"
+
+#: ../lib/init/gis_set.tcl:748
+#, tcl-format
+msgid ""
+"Warning: could not change directory to <%s>.\n"
+"Check directory permissions."
+msgstr ""
+"Uyarı: Dizin <%s> e değiştirilemedi.\n"
+"Dizin izinlerini kontrol edin."
+
+#: ../lib/init/file_option.tcl:72
+msgid "Define location using projection information in georeferenced file"
+msgstr ""
+"Coğrafi referanslı dosyadaki projeksiyon bilgilerini kullanarak mevki belirle"
+
+#: ../lib/init/file_option.tcl:95
+msgid "Enter name of location to be created"
+msgstr "oluşturulacak mevki adını girin"
+
+#: ../lib/init/file_option.tcl:99
+msgid "Path to georeferenced file"
+msgstr "Coğrafi referanslı dosya yolu"
+
+#: ../lib/init/file_option.tcl:102
+msgid "Path to georeferenced file (format must be readable by GDAL/OGR)"
+msgstr ""
+"Coğrafi referanslı dosya yolu (GDAL/OGR tarafından okunabilir biçimde "
+"olmalıdır)"
+
+#: ../lib/init/file_option.tcl:106
+msgid "Browse to locate georeferenced file"
+msgstr "Coğrafi referanslı dosyayı bulmak için göz at"
+
+#: ../lib/init/file_option.tcl:131 ../lib/init/file_option.tcl:134
+msgid "Choose georeferenced file"
+msgstr "Coğrafi referanslı dosyayı seç"
+
+#: ../lib/init/file_option.tcl:152
+msgid ""
+"WARNING: Please supply a\n"
+"valid georeferenced file"
+msgstr ""
+"UYARI: Lütfen\n"
+"geçerli bir coğrafi referanslı dosya sağlayın"
+
+#: ../vector/v.digit/settings.tcl:64
+msgid "Add new column"
+msgstr "Yeni sütun ekle"
+
+#: ../vector/v.digit/settings.tcl:67
+msgid "Create table"
+msgstr "Tablo oluştur"
+
+#: ../vector/v.digit/settings.tcl:100
+msgid "Add command"
+msgstr "Komut ekle"
+
+#: ../vector/v.digit/settings.tcl:136
+msgid "Table successfully created"
+msgstr "Tablo başarıyla oluşturuldu"
+
+#: ../vector/v.digit/settings.tcl:152
+msgid "Settings already opened"
+msgstr "Ayarlar halihazırda açık"
+
+#: ../vector/v.digit/settings.tcl:170
+msgid "Symbology"
+msgstr "Semboloji"
+
+#: ../vector/v.digit/settings.tcl:174 ../vector/v.digit/settings.tcl:327
+msgid "Background"
+msgstr "Artalan"
+
+#: ../vector/v.digit/settings.tcl:181
+msgid "Highlight"
+msgstr "Vurgulama"
+
+#: ../vector/v.digit/settings.tcl:188
+msgid "Point"
+msgstr "Nokta"
+
+#: ../vector/v.digit/settings.tcl:197
+msgid "Line"
+msgstr "Çizgi"
+
+#: ../vector/v.digit/settings.tcl:206
+msgid "Boundary (no area)"
+msgstr "Sınır (alan değil)"
+
+#: ../vector/v.digit/settings.tcl:214
+msgid "Boundary (1 area)"
+msgstr "Sınır (1 alan)"
+
+#: ../vector/v.digit/settings.tcl:222
+msgid "Boundary (2 areas)"
+msgstr "Sınır (2 Alan)"
+
+#: ../vector/v.digit/settings.tcl:231
+msgid "Centroid (in area)"
+msgstr "Alan merkezi (alan içinde)"
+
+#: ../vector/v.digit/settings.tcl:239
+msgid "Centroid (outside area)"
+msgstr "Alan merkezi (alan dışında)"
+
+#: ../vector/v.digit/settings.tcl:247
+msgid "Centroid (duplicate in area)"
+msgstr "Alan merkezi (alan içinde tekrarlı)"
+
+#: ../vector/v.digit/settings.tcl:256
+msgid "Node (1 line)"
+msgstr "Düğüm (1 çizgi)"
+
+#: ../vector/v.digit/settings.tcl:264
+msgid "Node (2 lines)"
+msgstr "Düğüm (2 çizgi)"
+
+#: ../vector/v.digit/settings.tcl:274
+msgid "Settings"
+msgstr "Ayarlar"
+
+#: ../vector/v.digit/settings.tcl:279
+msgid "Snapping threshold in screen pixels"
 msgstr ""
 
-#: ../gui/tcltk/d.m/tool2.tcl:110
-msgid "Create or select display frame"
-msgstr "Görüntü çerçevesi oluştur veya seç"
-
-#: ../gui/tcltk/d.m/vector.tcl:197
-msgid "Vector name:"
-msgstr "Vektör adı:"
-
-#: ../gui/tcltk/d.m/vector.tcl:212
-msgid "Display:"
-msgstr "Görüntü:"
-
-#: ../gui/tcltk/d.m/vector.tcl:213
-msgid "shapes"
-msgstr "şekiller"
-
-#: ../gui/tcltk/d.m/vector.tcl:215
-msgid "categories"
-msgstr "kategoriler"
-
-#: ../gui/tcltk/d.m/vector.tcl:217
-msgid "topology"
-msgstr "topoloji"
-
-#: ../gui/tcltk/d.m/vector.tcl:219
-msgid "line directions"
-msgstr "çizgi doğrultusu"
-
-#: ../gui/tcltk/d.m/vector.tcl:226
-msgid "            "
-msgstr "           "
-
-#: ../gui/tcltk/d.m/vector.tcl:237
-msgid "faces"
-msgstr "yüzeyler"
-
-#: ../gui/tcltk/d.m/vector.tcl:262 ../gui/tcltk/d.m/vector.tcl:278
-#: ../gui/tcltk/d.m/vector.tcl:294
-msgid "color"
-msgstr "Renk"
-
-#: ../gui/tcltk/d.m/vector.tcl:281
-msgid "  "
-msgstr "  "
-
-#: ../gui/tcltk/d.m/vector.tcl:282
-msgid "random colors"
-msgstr "rasgele renkler"
-
-#: ../gui/tcltk/d.m/vector.tcl:297
-msgid " size"
-msgstr "boyut"
-
-#: ../gui/tcltk/d.m/vector.tcl:301
-msgid " align with pt"
+#: ../vector/v.digit/settings.tcl:289
+msgid "Snapping threshold in map units"
 msgstr ""
 
-#: ../gui/tcltk/d.m/vector.tcl:315
-msgid "     layer for labels"
-msgstr "      etiketlenecek katman"
+#: ../vector/v.digit/settings.tcl:306
+msgid "Line width in screen pixels"
+msgstr "Piksel olarak çizgi genişliği"
 
-#: ../gui/tcltk/d.m/vector.tcl:318
-msgid " attribute col for labels"
-msgstr "etiket için öznitelik sütunu"
-
-#: ../gui/tcltk/d.m/vector.tcl:326
-msgid "Query vectors: "
-msgstr "Vektör haritayı sorgula"
-
-#: ../gui/tcltk/d.m/vector.tcl:330
-msgid " query cat values"
-msgstr "kategori değerlerini sorgula"
-
-#: ../gui/tcltk/d.m/vector.tcl:333
-msgid "SQL query"
-msgstr "SQL sorgusu"
-
-#: ../gui/tcltk/d.m/vector.tcl:340
-msgid "     SQL where statement"
-msgstr "     SQL nerede tümcesi"
-
-#: ../gui/tcltk/d.m/vector.tcl:366
-msgid "Mouse query setup:"
-msgstr "Fareyle sorgu ayarı:"
-
-#: ../gui/tcltk/d.m/vector.tcl:367
-msgid "edit attributes (form mode)"
-msgstr "Öznitelikleri düzelt (form modunda)"
-
-#: ../gui/tcltk/d.m/vector.tcl:369
-msgid "results as text in terminal"
-msgstr "uçbirimde metin olarak sonuçları göster"
-
-#: ../gui/tcltk/d.m/vector.tcl:386
-msgid "Line width for ps.map print output:"
+#: ../vector/v.digit/settings.tcl:308
+msgid "Set line width in pixels"
 msgstr ""
 
-#: ../gui/tcltk/d.m/vector.tcl:388
-msgid "Line width used for printing"
-msgstr "Yazdırmada kullanılacak çizgi kalınlığı"
+#: ../vector/v.digit/settings.tcl:316
+msgid "Table"
+msgstr "Tablo"
 
-#: ../gui/tcltk/d.m/barscale.tcl:69
-msgid " Background color: "
-msgstr "Artalan rengi:"
+#: ../vector/v.digit/toolbox.tcl:20
+msgid "Welcome to v.digit"
+msgstr "v.digit'e hoşgeldiniz"
 
-#: ../gui/tcltk/d.m/barscale.tcl:71
-msgid "no background color"
-msgstr "artalan rengi yok"
+#: ../vector/v.digit/toolbox.tcl:21
+msgid "Left button"
+msgstr "Sol tuş"
 
-#: ../gui/tcltk/d.m/barscale.tcl:73
-msgid " "
-msgstr " "
+#: ../vector/v.digit/toolbox.tcl:22
+msgid "Middle button"
+msgstr "Orta tuş"
 
-#: ../gui/tcltk/d.m/barscale.tcl:92
-msgid "display N. arrow only "
-msgstr "sadece Kuzey okunu göster"
+#: ../vector/v.digit/toolbox.tcl:23
+msgid "Right button"
+msgstr "Sağ tuşu"
 
-#: ../gui/tcltk/d.m/barscale.tcl:101
-msgid "line scale instead of bar scale "
-msgstr "çubukölçek yerine çizgi ölçek"
+#: ../vector/v.digit/toolbox.tcl:76
+msgid "  Layer"
+msgstr "  Katman"
 
-#: ../gui/tcltk/d.m/dtext.tcl:101
-msgid "Text options: color"
-msgstr "Metin seçenekleri: renk"
+#: ../vector/v.digit/toolbox.tcl:80
+msgid "  Category"
+msgstr "  Kategori"
 
-#: ../gui/tcltk/d.m/print.tcl:169
-msgid "Paper format"
-msgstr "Kağıt biçimi"
+#: ../vector/v.digit/toolbox.tcl:84
+msgid "  Mode "
+msgstr "  Mod "
 
-#: ../gui/tcltk/d.m/print.tcl:180
-msgid "Custom"
-msgstr "Özel"
+#: ../vector/v.digit/toolbox.tcl:96
+msgid "Insert new record into table"
+msgstr "Tabloya yeni kayıt gir"
 
-#: ../gui/tcltk/d.m/print.tcl:184
-msgid "height:"
-msgstr "yükseklik:"
+#: ../vector/v.digit/toolbox.tcl:113
+msgid "Digitize new point"
+msgstr "Yeni nokta sayısallaştır"
 
-#: ../gui/tcltk/d.m/print.tcl:191
-msgid "left:"
-msgstr "Sol:"
+#: ../vector/v.digit/toolbox.tcl:118
+msgid "Digitize new line"
+msgstr "Yeni çizgi sayısallaştır"
 
-#: ../gui/tcltk/d.m/print.tcl:193
-msgid "right:"
-msgstr "sağ:"
+#: ../vector/v.digit/toolbox.tcl:123
+msgid "Digitize new boundary"
+msgstr "Yeni sınır sayısallaştır"
 
-#: ../gui/tcltk/d.m/print.tcl:195
-msgid "top:"
-msgstr "tepe:"
+#: ../vector/v.digit/toolbox.tcl:128
+msgid "Digitize new centroid"
+msgstr "Yeni alan merkezi sayısallaştır"
 
-#: ../gui/tcltk/d.m/print.tcl:197
-msgid "bottom:"
-msgstr "dip:"
-
-#: ../gui/tcltk/d.m/print.tcl:210
-msgid "PS file:"
-msgstr "PS dosyası:"
-
-#: ../gui/tcltk/d.m/print.tcl:221
-msgid "PDF file:"
-msgstr "PDF dosyası:"
-
-#: ../gui/tcltk/d.m/print.tcl:232
-msgid "PNG file:"
-msgstr "PNG dosyası:"
-
-#: ../gui/tcltk/d.m/print.tcl:241
-msgid "PNG file resolution (points/inch):"
+#: ../vector/v.digit/toolbox.tcl:134
+msgid "Move vertex"
 msgstr ""
 
-#: ../gui/tcltk/d.m/print.tcl:250
-msgid "Printer:"
-msgstr "Yazıcı:"
+#: ../vector/v.digit/toolbox.tcl:139
+msgid "Add vertex"
+msgstr ""
 
-#: ../gui/tcltk/d.m/print.tcl:259
-msgid "Script file:"
-msgstr "Betik dosyası:"
+#: ../vector/v.digit/toolbox.tcl:144
+msgid "Remove vertex"
+msgstr ""
 
-#: ../gui/tcltk/d.m/print.tcl:280
-msgid "Preview"
-msgstr "Ön izleme"
+#: ../vector/v.digit/toolbox.tcl:149
+msgid "Split line"
+msgstr "Çizgiyi parçala"
+
+#: ../vector/v.digit/toolbox.tcl:154
+msgid "Edit line/boundary"
+msgstr "Çizgi/sınırı düzelt"
+
+#: ../vector/v.digit/toolbox.tcl:159
+msgid "Move point, line, boundary, or centroid"
+msgstr "Nokta, çizgi, sınır, veya alan merkezini taşı"
+
+#: ../vector/v.digit/toolbox.tcl:164
+msgid "Delete point, line, boundary, or centroid"
+msgstr "Nokta, çizgi, sınır, veya alan merkezi sil"
+
+#: ../vector/v.digit/toolbox.tcl:175
+msgid "Redraw"
+msgstr "Yeniden çiz"
+
+#: ../vector/v.digit/toolbox.tcl:180
+msgid "Zoom in by window"
+msgstr "Pencere ile büyüt"
+
+#: ../vector/v.digit/toolbox.tcl:185
+msgid "Zoom out"
+msgstr "Küçült"
+
+#: ../vector/v.digit/toolbox.tcl:195
+msgid "Zoom to default region"
+msgstr "Varsayılan bölgeye göre göster"
+
+#: ../vector/v.digit/toolbox.tcl:208
+msgid "Zoom to saved region"
+msgstr "Seçilen bölgeye göre göster"
+
+#: ../vector/v.digit/toolbox.tcl:214
+msgid "Display categories"
+msgstr "Kategorileri göster"
+
+#: ../vector/v.digit/toolbox.tcl:219
+msgid "Copy categories"
+msgstr "Kategorileri kopyala"
+
+#: ../vector/v.digit/toolbox.tcl:224
+msgid "Display attributes"
+msgstr "Öznitelikleri göster"
+
+#: ../vector/v.digit/toolbox.tcl:236
+msgid "Open settings"
+msgstr "Ayarları aç"
+
+#: ../vector/v.digit/toolbox.tcl:242
+msgid "Save and exit"
+msgstr "Kaydet ve çık"
+
+#: ../vector/v.digit/toolbox.tcl:253
+msgid "mouse button actions (left, middle, right)"
+msgstr "fare tuş eylemleri (sol, orta, sağ)"
+
+#: ../vector/v.digit/cats.tcl:34
+msgid "Categories already opened"
+msgstr "Kategoriler zaten açık"
+
+#: ../vector/v.digit/cats.tcl:42
+msgid "Categories"
+msgstr "Kategoriler"
+
+#: ../vector/v.digit/cats.tcl:53
+msgid "Layer:"
+msgstr "Katman:"
+
+#: ../vector/v.digit/cats.tcl:55
+msgid "   Category:"
+msgstr "    Kategori:"
+
+#: ../vector/v.digit/cats.tcl:62
+msgid "Insert new record to table"
+msgstr "Tabloya yeni kayıt gir"
+
+#: ../vector/v.digit/cats.tcl:63
+msgid "Add new"
+msgstr "Yeni ekle"
 
 #: ../visualization/nviz/scripts/panel_animation.tcl:275
 msgid "Test"
 msgstr "Sınama"
+
+#~ msgid "WARNING: Error creating new location"
+#~ msgstr "UYARI: Yeni mevki oluşturmada hata"
+
+#~ msgid ""
+#~ "Error creating new location from georeferenced file.  g.proj returned "
+#~ "following message:\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "coğrafi referanslı dosyadan yeni mevki oluşturmada hata. g.proj komutu "
+#~ "takip eden mesajı verdi:\n"
+#~ "\n"
+#~ "%s"
+
+#~ msgid "     show data"
+#~ msgstr "     veriyi göster"
+
+#~ msgid "create graphic legend"
+#~ msgstr "grafik lejand oluştur"
+
+#~ msgid "    select monitor for legend"
+#~ msgstr "    lejand için ekran seç"
+
+#~ msgid "Labels name:"
+#~ msgstr "Etiket adı:"
+
+#~ msgid "remove all frames"
+#~ msgstr "tüm çerçeveleri kaldır"
+
+#~ msgid "x0"
+#~ msgstr "x0"
+
+#~ msgid "Start/select display monitor x0"
+#~ msgstr "x0 görüntü ekranını başlat/seç"
+
+#~ msgid "x1"
+#~ msgstr "x1"
+
+#~ msgid "Start/select display monitor x1"
+#~ msgstr "x1 görüntü ekranını başlat/seç"
+
+#~ msgid "x2"
+#~ msgstr "x2"
+
+#~ msgid "Start/select display monitor x2"
+#~ msgstr "x2 görüntü ekranını başlat/seç"
+
+#~ msgid "x3"
+#~ msgstr "x3"
+
+#~ msgid "Start/select display monitor x3"
+#~ msgstr "x3 görüntü ekranını başlat/seç"
+
+#~ msgid "x4"
+#~ msgstr "x4"
+
+#~ msgid "Start/select display monitor x4"
+#~ msgstr "x4 görüntü ekranını başlat/seç"
+
+#~ msgid "x5"
+#~ msgstr "x5"
+
+#~ msgid "Start/select display monitor x5"
+#~ msgstr "x5 görüntü ekranını başlat/seç"
+
+#~ msgid "x6"
+#~ msgstr "x6"
+
+#~ msgid "Start/select display monitor x6"
+#~ msgstr "x6 görüntü ekranını başlat/seç"
+
+#~ msgid "geodetic grid"
+#~ msgstr "jeodejik grid"
+
+#~ msgid " grid color "
+#~ msgstr "grid rengi"
+
+#~ msgid " grid color"
+#~ msgstr "grid rengi"
+
+#~ msgid "     "
+#~ msgstr "      "
+
+#~ msgid "draw grid border"
+#~ msgstr "grid sınırını çiz"
+
+#~ msgid "draw border text"
+#~ msgstr "sınır metnini yaz"
+
+#~ msgid " border & text color"
+#~ msgstr "sınır & metin rengi"
+
+#~ msgid "Raster map for legend:"
+#~ msgstr "Lejand için raster harita"
+
+#~ msgid "Display legend in monitor: "
+#~ msgstr "Lejandı ekranda göster: "
+
+#~ msgid " erase monitor before drawing legend"
+#~ msgstr "lejandı çizmeden önce ekranı sil"
+
+#~ msgid "Text color: "
+#~ msgstr "Metin rengi: "
+
+#~ msgid "do not show cat labels"
+#~ msgstr "cat(kategori) etiketlerini gösterme"
+
+#~ msgid "do not show cat numbers"
+#~ msgstr "cat(kategori) numaralarını gösterme"
+
+#~ msgid "skip cats with no labels"
+#~ msgstr "etiketsiz kategorileri atla"
+
+#~ msgid "flip legend"
+#~ msgstr "lejandı döndür"
+
+#~ msgid "Raster name:"
+#~ msgstr "Raster adı:"
+
+#~ msgid "show legend in selected display monitor"
+#~ msgstr "Lejandı seçilen ekranda göster"
+
+#~ msgid "Raster to drape over 1st map:"
+#~ msgstr "İlk haritanın üzrine örtülecek raster harita"
+
+#~ msgid "show legend for drape map in monitor"
+#~ msgstr "ekrandaki örtülen harita için lejandı göster"
+
+#~ msgid "  show attribute columns"
+#~ msgstr "  öznitelik sütunlarını göster"
+
+#~ msgid "    chart outline color:"
+#~ msgstr "Çizelge çerçeve rengi:"
+
+#~ msgid "Import"
+#~ msgstr "İçe Aktar"
+
+#~ msgid "ASCII GRID (includes GRASS ASCII)"
+#~ msgstr "ASCII GRID (GRASS ASCII'de içerir)"
+
+#~ msgid "Polygons and lines from ASCII file"
+#~ msgstr "ASCII dosyadan poligon ve çizgiler"
+
+#~ msgid "Binary file (includes GTOPO30 format)"
+#~ msgstr "İkili dosya (GTOPO30 biçimi de dahil)"
+
+#~ msgid "ESRI Arc/Info ASCII grid"
+#~ msgstr "ESRI Arc/Info ASCII grid"
+
+#~ msgid "GRIDATB.FOR map file (TOPMODEL)"
+#~ msgstr "GRIDATB.FOR harita dosyası (TOPMODEL)"
+
+#~ msgid "MAT-File (v.4) array (Matlab or Octave)"
+#~ msgstr "MAT-Dosya (v.4) dizisi (Matlab veya Octave)"
+
+#~ msgid "SPOT vegetation NDVI data sets"
+#~ msgstr "SPOT vejetasyon NDVI veri takımı"
+
+#~ msgid "SRTM hgt files"
+#~ msgstr "SRTM hgt dosyaları"
+
+#~ msgid "Terra ASTER HDF files"
+#~ msgstr "Terra ASTER HDF dosyaları"
+
+#~ msgid "Various formats using OGR"
+#~ msgstr "OGR desteğindeki çeşitli biçimler"
+
+#~ msgid "ASCII points file or GRASS ASCII vector file"
+#~ msgstr "ASCII nokta dosyası veya GRASS ASCII vektör dosyası"
+
+#~ msgid "Import old GRASS vector format"
+#~ msgstr "Eski GRASS vektör biçimini içe aktar"
+
+#~ msgid "DXF file"
+#~ msgstr "DXF dosyası"
+
+#~ msgid "ESRI e00 format"
+#~ msgstr "ESRI e00 biçimi"
+
+#~ msgid "Garmin GPS Waypoints/Routes/Tracks"
+#~ msgstr "Garmin KKS Noktaları/Rotaları/İzleri"
+
+#~ msgid "GPS Waypoints/Routes/Tracks using GPSBabel"
+#~ msgstr "GPSBabel'in kullandığı KKS Noktaları/Rotaları/İzleri"
+
+#~ msgid "Matlab and MapGen files"
+#~ msgstr "Matlab ve MapGen dosyaları"
+
+#~ msgid "Grid 3D"
+#~ msgstr "Grid 3D"
+
+#~ msgid "ASCII 3D file"
+#~ msgstr "ASCII 3D dosyası"
+
+#~ msgid "Vis5D file"
+#~ msgstr "Vis5D dosyası"
+
+#~ msgid "Export"
+#~ msgstr "Dışa Aktar"
+
+#~ msgid "ASCII grid (for GRASS, Surfer, Modflow, etc)"
+#~ msgstr "ASCII grid (GRASS, Surfer, Modflow, v.b. için)"
+
+#~ msgid "ASCII x,y,z values of cell centers"
+#~ msgstr "Hücre merkezlerinin ASCII x,y,z değerleri"
+
+#~ msgid "ESRI ARC/INFO ASCII grid"
+#~ msgstr "ESRI ARC/INFO ASCII grid"
+
+#~ msgid "Binary file"
+#~ msgstr "İkili dosya"
+
+#~ msgid "MPEG-1 animations"
+#~ msgstr "MPEG-1 canlandırma"
+
+#~ msgid "PNG image (not georeferenced)"
+#~ msgstr "PNG görüntüsü (coğrafi referanssız)"
+
+#~ msgid "PPM image (24bit)"
+#~ msgstr "PPM görüntüsü (24 bit)"
+
+#~ msgid "PPM image from red, green, blue raster maps"
+#~ msgstr "kırmızı, yeşil, mavi raster haritalardan PPM görüntüsü"
+
+#~ msgid "POVray height-field"
+#~ msgstr "POVray yükseklik-alanı"
+
+#~ msgid "TIFF image (8/24bit)"
+#~ msgstr "TIFF görüntüsü (8/24 bit)"
+
+#~ msgid "VRML file"
+#~ msgstr "VRML dosyası"
+
+#~ msgid "VTK ASCII file"
+#~ msgstr "VTK ASCII dosyası"
+
+#~ msgid "Various formats using OGR (SHAPE, MapInfo etc)"
+#~ msgstr "OGR desteğindeki çeşitli biçimler (SHAPE, MapInfo v.d.)"
+
+#~ msgid "DXF file (ASCII)"
+#~ msgstr "DXF dosyası (ASCII)"
+
+#~ msgid "ASCII vector or point file/old GRASS ASCII vector file"
+#~ msgstr "ASCII vektör veya nokta dosyası/eski GRASS ASCII vektör dosyası"
+
+#~ msgid "POV-Ray format"
+#~ msgstr "POV-Ray biçimi"
+
+#~ msgid "Copy maps"
+#~ msgstr "Haritaları kopyala"
+
+#~ msgid "List maps"
+#~ msgstr "Haritaları listele"
+
+#~ msgid "List maps using expressions and 'wildcards'"
+#~ msgstr "Haritaları ifade ve 'joker karakter' kullanarak listele"
+
+#~ msgid "Rename maps"
+#~ msgstr "Haritaları yeniden adlandır"
+
+#~ msgid "Remove maps"
+#~ msgstr "Haritaları kaldır"
+
+#~ msgid "Remove maps using expressions and 'wildcards'"
+#~ msgstr "Haritaları ifade ve 'joker karakter' kullanarak kaldır"
+
+#~ msgid "Raster to vector map"
+#~ msgstr "Rasterdan vektöre"
+
+#~ msgid "Raster map series to volume"
+#~ msgstr "Raster harita serisinden hacime"
+
+#~ msgid "Raster 2.5D map to volume"
+#~ msgstr "2.5D raster haritadan hacime"
+
+#~ msgid "Vector to vector"
+#~ msgstr "Vektörden vektöre"
+
+#~ msgid "Vector lines to points"
+#~ msgstr "Vektör çizgiden noktalara"
+
+#~ msgid "Vector 3D points to volume voxels"
+#~ msgstr "3D vektör noktalardan hacime"
+
+#~ msgid "Sites (GRASS 5.x) to vector"
+#~ msgstr "Nokta dosyasından (GRASS 5.x) vektöre"
+
+#~ msgid "Volumes to raster map series"
+#~ msgstr "Hacimden raster harita serisine"
+
+#~ msgid "Groups"
+#~ msgstr "Gruplar"
+
+#~ msgid "New"
+#~ msgstr "Yeni"
+
+#~ msgid "Create new group file"
+#~ msgstr "Yeni grup dosyası oluştur"
+
+#~ msgid "Open group file"
+#~ msgstr "Grup dosyasını aç"
+
+#~ msgid "Save group file"
+#~ msgstr "Grup dosyasını kaydet"
+
+#~ msgid "Save group file as name"
+#~ msgstr "Grup dosyasını isim olarak kaydet"
+
+#~ msgid "Close group"
+#~ msgstr "Grubu kapat"
+
+#~ msgid "Save display to image file"
+#~ msgstr "Görünüşü görüntü dosyasına kaydet"
+
+#~ msgid "Save displays to multiple graphic file formats"
+#~ msgstr "Görüntüyü çeşitli grafik dosya biçimlerinde kaydet"
+
+#~ msgid "Save map to Postscript file"
+#~ msgstr "Haritayı Sayfa Tanımla Dili dosyası olarak  kaydet"
+
+#~ msgid "Print to default printer"
+#~ msgstr "Varsayılan yazıcıya yazdır"
+
+#~ msgid "print"
+#~ msgstr "yazdır"
+
+#~ msgid "Exit Display Manager"
+#~ msgstr "Görüntü Yöneticisi'nden Çık"
+
+#~ msgid "Zoom to maximum extent of all displayed maps"
+#~ msgstr "Görüntülenen tüm haritaların maksimum sınırına uyarla"
+
+#~ msgid "Access other mapsets in current location"
+#~ msgstr "Güncel mevkideki diğer harita takımlarına erişim"
+
+#~ msgid "Change current working session to new mapset, location, or GISDBASE"
+#~ msgstr ""
+#~ "Geçerli çalışma oturumunu yeni harita takımı, mevki, veya GISDBASE'e "
+#~ "değiştir"
+
+#~ msgid "Modify access by other users to current mapset"
+#~ msgstr ""
+#~ "Geçerli harita takımına diğer kullanıcıların erişim hakkını değiştir"
+
+#~ msgid "Show current GRASS environment settings"
+#~ msgstr "Geçerli GRASS ortamı ayarlarını göster"
+
+#~ msgid "Set GRASS environment settings"
+#~ msgstr "GRASS ortam değişkenlerini ayarla "
+
+#~ msgid "Create/edit projection information for current location"
+#~ msgstr "Geçerli mevkinin projeksiyon bilgisini oluştur/düzelt"
+
+#~ msgid "Show projection information and create projection files"
+#~ msgstr "Projeksiyon bilgilerini göster ve projeksiyon dosyalarını oluştur"
+
+#~ msgid "Convert coordinates from one projection to another"
+#~ msgstr "Koordinatları bir projeksiyondan diğerine dönüştür"
+
+#~ msgid "Text"
+#~ msgstr "Metin"
+
+#~ msgid "Select default text font"
+#~ msgstr "Varsayılan metin yazıtipini seç"
+
+#~ msgid "Configure xmonitor displays"
+#~ msgstr "x ekran görüntüsünü yapılandır"
+
+#~ msgid "Configure frames for xmonitors"
+#~ msgstr "x ekranı için çerçeveyi yapılandır"
+
+#~ msgid "Start/restart xmonitor at specified window size"
+#~ msgstr "x ekranını belirlenen pencere boyutlarında başlat/yeniden başlat"
+
+#~ msgid "Set active xmonitor to specified size"
+#~ msgstr "Aktif x ekranını belirlenen boyutlara ayarla"
+
+#~ msgid "Display information about active xmonitor"
+#~ msgstr "Aktif x ekranı hakkındaki bilgiyi göster"
+
+#~ msgid "Compress/decompress raster file"
+#~ msgstr "Raster dosyayı sıkıştır/aç"
+
+#~ msgid "Manage boundary definitions"
+#~ msgstr "Sınır belirlemelerini yönet"
+
+#~ msgid "Manage null values"
+#~ msgstr "Boş değerleri yönet"
+
+#~ msgid "Manage timestamps for files"
+#~ msgstr "Dosyaların zman damgasını yönet"
+
+#~ msgid "Resample (change resolution)"
+#~ msgstr "Yeniden örnekle (çözünürlüğü değiştir)"
+
+#~ msgid "Resample using nearest neighbor method"
+#~ msgstr "En yakın komşu yöntemini kullanarak yeniden örnekle"
+
+#~ msgid "Resample using various interpolation methods"
+#~ msgstr "Çeşitli enterpolasyon yöntemlerini kullanarak yeniden örnekle"
+
+#~ msgid "Support file creation and maintenance"
+#~ msgstr "Destek dosyası oluşturma ve bakımı"
+
+#~ msgid "Reproject raster from other location"
+#~ msgstr "Diğer mevkideki raster'ı yeniden projeksiyonlandır"
+
+#~ msgid "Set colors to predefined color tables"
+#~ msgstr "Renkleri önceden belirlenmiş renk tablosundan ayarla"
+
+#~ msgid "Set colors using color rules"
+#~ msgstr "Renkleri renk kurallarına göre ayarla"
+
+#~ msgid "Create raster buffers"
+#~ msgstr "Raster tampon oluştur"
+
+#~ msgid "Create raster MASK"
+#~ msgstr "Raster MASKE oluştur"
+
+#~ msgid "Moving window analysis of raster cells"
+#~ msgstr "Raster hücrelerin kayar pencere analizi"
+
+#~ msgid "Solar irradiance and daily irradiation"
+#~ msgstr "Güneş aydınlatması ve günlük aydınlanma"
+
+#~ msgid "Shadows map for sun position or date/time"
+#~ msgstr "Güneş konumuna veya tarih/zamana göre gölgelenme haritası"
+
+#~ msgid "Profile analysis"
+#~ msgstr "Kesit analizi"
+
+#~ msgid "Shaded relief map"
+#~ msgstr "Gölgeli kabartma harita"
+
+#~ msgid "Generate flow lines for raster map"
+#~ msgstr "Raster haritanın akış hatlarını oluştur"
+
+#~ msgid "Analyze landscape characteristics"
+#~ msgstr "Peyzaj nitelikleri analizi"
+
+#~ msgid "Analyze landscape patch characteristics"
+#~ msgstr "Peyzaj küme nitelikleri analizi"
+
+#~ msgid "Output landscape patch information"
+#~ msgstr "Çıktı peyzaj küme bilgisi"
+
+#~ msgid "Generate rate of spread (ROS) maps"
+#~ msgstr "Yayılma oranı (ROS9 haritası oluştur"
+
+#~ msgid "Edit category values of individual cells for displayed raster map"
+#~ msgstr ""
+#~ "Görüntülenen raster haritanın hücrelerinin kategori değerlerini tek tek "
+#~ "düzelt"
+
+#~ msgid "Reclassify categories using rules"
+#~ msgstr "Kategorileri kurala göre yeniden sınıflandır"
+
+#~ msgid "Reclassify categories using rules file"
+#~ msgstr "Kategorileri kural dosyasına göre yeniden sınıflandır"
+
+#~ msgid "Recode categories using rules (create new map)"
+#~ msgstr "Kategorileri kurala göre yeniden kodla (yeni harita oluştur)"
+
+#~ msgid "Recode categories using rules file (create new map)"
+#~ msgstr ""
+#~ "Kategorileri kural dosyasına göre yeniden kodla (yeni harita oluştur)"
+
+#~ msgid "Rescale categories (create new map)"
+#~ msgstr "Kategorileri yeniden ölçeklendir (yeni harita oluştur)"
+
+#~ msgid "Rescale categories with equalized histogram (create new map)"
+#~ msgstr ""
+#~ "Kategorileri eşitlenmiş histograma göre yeniden ölçeklendir (yeni harita "
+#~ "oluştur)"
+
+#~ msgid "Generate random raster cells"
+#~ msgstr "Rasgele raster hücreler üret"
+
+#~ msgid "Generate random cells and vector points from raster map"
+#~ msgstr "Raster haritadan rasgele hücreler ve vektör noktalar üret"
+
+#~ msgid "Generate plane"
+#~ msgstr "Düzlem üret"
+
+#~ msgid "Generate vector contour lines"
+#~ msgstr "Vektör eşyükselti eğrileri üret"
+
+#~ msgid "Report category labels and values"
+#~ msgstr "Kategori etiketleri ve değerlerini raporla"
+
+#~ msgid "Range of all category values"
+#~ msgstr "Tüm kategori değerleri aralığı"
+
+#~ msgid "Sum all cell category values"
+#~ msgstr "Tüm hücre kategori değerleri toplamı"
+
+#~ msgid "Linear regression between 2 maps"
+#~ msgstr "2 harita arasındaki doğrusal ilişki"
+
+#~ msgid "Create/rebuild topology"
+#~ msgstr "Topoloji oluştur/yeniden kur"
+
+#~ msgid "Clean vector files"
+#~ msgstr "Vektör dosyaları topolojisini temizle"
+
+#~ msgid "Add missing centroids"
+#~ msgstr "Kayıp alan merkezlerini ekle"
+
+#~ msgid "Build polylines from adjacent segments"
+#~ msgstr "Komşu parçalardan çoklu çizgi oluştur"
+
+#~ msgid "Split polylines into segments"
+#~ msgstr "Çoklu çizgileri parçalara böl"
+
+#~ msgid "Create lines parallel to existing lines"
+#~ msgstr "Mevcut çizgilere paralel çizgiler oluştur"
+
+#~ msgid "Dissolve common boundaries"
+#~ msgstr "Ortak sınır sorunlarını çöz"
+
+#~ msgid "Convert vector feature types"
+#~ msgstr "Vektör obje tipini dönüştür"
+
+#~ msgid "Convert 2D vector to 3D by sampling raster"
+#~ msgstr "Raster'ı örnekleyerek 2D vektörü 3D vektöre dönüştür"
+
+#~ msgid "Extrude 2D vector into 3D vector"
+#~ msgstr "2D vektör haritayı 3D ye dönüştür"
+
+#~ msgid "Create text label file for vector features"
+#~ msgstr "Vektör objeler için metin etiket dosyası oluştur"
+
+#~ msgid "Reproject vector from other location"
+#~ msgstr "Diğer mevkideki vektör'ı yeniden projeksiyonlandır"
+
+#~ msgid "Set database connection for vector attributes"
+#~ msgstr "Vektör öznitelikler için veritabanı bağlantısı ayarla"
+
+#~ msgid "Rectify and georeference vector map"
+#~ msgstr "Vektör haritayı düzeltme ve yer uyumlandırma"
+
+#~ msgid "Query by attributes"
+#~ msgstr "Özniteliklere göre sorgula"
+
+#~ msgid "Query by map features"
+#~ msgstr "Harita objelerine göre sorgula"
+
+#~ msgid "Create vector buffers"
+#~ msgstr "Vektör tampon oluştur"
+
+#~ msgid "Locate nearest features to points or centroids"
+#~ msgstr "Nokta veya alan merkezilerine en yakın objeleri yerleştir"
+
+#~ msgid "Generate Thiessen polygons around points (Voronoi diagram)"
+#~ msgstr "Noktaların etrafında Thiessen poligonu üret (Voronoi diyagramı)"
+
+#~ msgid "Connect points to create Delaunay triangles"
+#~ msgstr "Delaunay üçgenlerini oluşturmak için noktaları bağla"
+
+#~ msgid "Shortest route (visualization only)"
+#~ msgstr "En kısa rota (sadece göster)"
+
+#~ msgid "Overlay/combine 2 vector maps"
+#~ msgstr "2 vektör haritayı çakıştır/birleştir"
+
+#~ msgid "Patch multiple maps (combine)"
+#~ msgstr "Birçok haritayı birbirine ekle (birleştir)"
+
+#~ msgid "Generate area feature for extent of current region"
+#~ msgstr "Geçerli bölgenin dış sınırlarından alan objesi üret"
+
+#~ msgid "Generate rectangular vector grid"
+#~ msgstr "Dikdörtgenimsi vektör grid üret"
+
+#~ msgid "Attach, delete, or report categories"
+#~ msgstr "Kategorileri ekle, sil veya raporla"
+
+#~ msgid "Reclassify features using rules file"
+#~ msgstr "Objeleri kural dosyasına göre yeniden sınıflandır"
+
+#~ msgid "Work with vector points"
+#~ msgstr "Vektör noktalarla çalış"
+
+#~ msgid "Generate points from database with x/y coordinates"
+#~ msgstr "Veritabanındaki x/y koordinatlarından noktalar üret"
+
+#~ msgid "Generate convex hull for point set"
+#~ msgstr "Noktaların dışbükey kabuğunu üret"
+
+#~ msgid "Generate Delaunay triangles for point set"
+#~ msgstr "Noktalar için Delaunay üçgenleri üret"
+
+#~ msgid "Generate Voronoi diagram/Thiessen polygons for point set"
+#~ msgstr "Noktalar için Voronoi diyagram/Thiessen poligonu üret"
+
+#~ msgid "Sample raster maps"
+#~ msgstr "Raster haritaları örnekle"
+
+#~ msgid "Transfer attribute data from queried vector map to points"
+#~ msgstr "Öznitelik verisini sorgulanmış vektör haritadan noktalara aktar"
+
+#~ msgid "Load vector attributes to database or create reports"
+#~ msgstr "Vektör öznitelikleri veritabanına yükle veya rapor oluştur"
+
+#~ msgid "Report areas for vector attribute categories"
+#~ msgstr "Vektör öznitelik kategorileri için alanları raporla"
+
+#~ msgid "Test normality of point distribution"
+#~ msgstr "Nokta dağılımının normalliğini sına"
+
+#~ msgid "Calculate stats for raster map underlying vector objects"
+#~ msgstr ""
+#~ "Vektör objelerin altındaki raster haritanın istatistiklerini hesapla"
+
+#~ msgid "Create/edit imagery group"
+#~ msgstr "Görüntü grubu oluştur/düzelt"
+
+#~ msgid "Target imagery group"
+#~ msgstr "Hedef görüntü grubu"
+
+#~ msgid "Mosaic up to 4 adjacent images"
+#~ msgstr "4 komşu görüntüye kadar yanyana birleştirme"
+
+#~ msgid "Rectify and georeference image group"
+#~ msgstr "Görüntü grubunu düzeltme ve yer uyumlandırma"
+
+#~ msgid "Set ground control points (GCP's) from raster map or keyboard entry"
+#~ msgstr ""
+#~ "Yer kontrol noktalarını (GCP's) raster haritadan veya klavye ile girerek "
+#~ "ayarla"
+
+#~ msgid "Set ground control points (GCP's) from vector map or keyboard entry"
+#~ msgstr ""
+#~ "Yer kontrol noktalarını (GCP's) vektör haritadan veya klavye ile girerek "
+#~ "ayarla"
+
+#~ msgid "Canonical component"
+#~ msgstr "Kuralsal bileşen"
+
+#~ msgid "Principal component"
+#~ msgstr "Temel bileşen"
+
+#~ msgid "Range of image values"
+#~ msgstr "Görüntü değerleri aralığı"
+
+#~ msgid "&Grid3D"
+#~ msgstr "&Grid3D"
+
+#~ msgid "Map calculator for grid3D operations"
+#~ msgstr "grid3D işlemleri için harita hesaplayıcı"
+
+#~ msgid "Interpolate volume from vector points using splines"
+#~ msgstr "Vektör noktalardan eğrileri kullanarak hacim enterpolasyonu yap"
+
+#~ msgid "Display information about grid3D volume"
+#~ msgstr "grid3D hacim hakkındaki bilgiyi göster"
+
+#~ msgid "Add columns to table"
+#~ msgstr "Tabloya sütun ekle"
+
+#~ msgid "Change values in a column"
+#~ msgstr "Sütundaki değerleri değiştir"
+
+#~ msgid "Query data (SQL select)"
+#~ msgstr "Veriyi sorgula (SQL seçimi)"
+
+#~ msgid "Execute SQL statement"
+#~ msgstr "SQL tümcesini yürüt"
+
+#~ msgid "     coordinate type"
+#~ msgstr "koordinat tipi"
+
+#~ msgid "  align text with coordinate point"
+#~ msgstr "  metni koordinat notası ile hizala"
+
+#~ msgid "     text rotation (degrees counterclockwise)"
+#~ msgstr "     metin döndürme (saat yönü tersine derece olarak)"
+
+#~ msgid "rotation in radians"
+#~ msgstr "radyan olarak döndürme miktarı"
+
+#~ msgid "height in pixels instead of %"
+#~ msgstr "% yerine piksel olarak yükseklik"
+
+#~ msgid "Welcome to the GRASS GIS manager"
+#~ msgstr "GRASS CBS yöneticisine hoşgeldiniz"
+
+#~ msgid "Display active layers in current region"
+#~ msgstr "Aktif katmanları güncel bölgede göster"
+
+#~ msgid "Display active layers in default region"
+#~ msgstr "Aktif katmanları geçerli bölgede göster"
+
+#~ msgid "Display active layers in saved region setting"
+#~ msgstr "Aktif katmanları ayarları kaydedilmiş bölgede göster"
+
+#~ msgid "NVIZ - n dimensional visualization"
+#~ msgstr "NVIZ - n boyutlu görüntüleme"
+
+#~ msgid "Fly through path for NVIZ"
+#~ msgstr "NVIZ için uçuş hattı"
+
+#~ msgid "Zoom"
+#~ msgstr "Yakınlaştır"
+
+#~ msgid "Pan and recenter"
+#~ msgstr "Kaydır ve yeniden merkezle"
+
+#~ msgid "Query map (select map first)"
+#~ msgstr "Sorgu haritası (önce haritayı seç)"
+
+#~ msgid "Measure lengths and areas"
+#~ msgstr "Uzunluk ve alanları ölç"
+
+#~ msgid "Geographical position"
+#~ msgstr "Coğrafi konum"
+
+#~ msgid "Add legend"
+#~ msgstr "Lejand ekle"
+
+#~ msgid "Create or select display frame"
+#~ msgstr "Görüntü çerçevesi oluştur veya seç"
+
+#~ msgid "Vector name:"
+#~ msgstr "Vektör adı:"
+
+#~ msgid "Display:"
+#~ msgstr "Görüntü:"
+
+#~ msgid "shapes"
+#~ msgstr "şekiller"
+
+#~ msgid "categories"
+#~ msgstr "kategoriler"
+
+#~ msgid "topology"
+#~ msgstr "topoloji"
+
+#~ msgid "line directions"
+#~ msgstr "çizgi doğrultusu"
+
+#~ msgid "            "
+#~ msgstr "           "
+
+#~ msgid "faces"
+#~ msgstr "yüzeyler"
+
+#~ msgid "color"
+#~ msgstr "Renk"
+
+#~ msgid "  "
+#~ msgstr "  "
+
+#~ msgid "random colors"
+#~ msgstr "rasgele renkler"
+
+#~ msgid " size"
+#~ msgstr "boyut"
+
+#~ msgid "     layer for labels"
+#~ msgstr "      etiketlenecek katman"
+
+#~ msgid " attribute col for labels"
+#~ msgstr "etiket için öznitelik sütunu"
+
+#~ msgid "Query vectors: "
+#~ msgstr "Vektör haritayı sorgula"
+
+#~ msgid " query cat values"
+#~ msgstr "kategori değerlerini sorgula"
+
+#~ msgid "SQL query"
+#~ msgstr "SQL sorgusu"
+
+#~ msgid "     SQL where statement"
+#~ msgstr "     SQL nerede tümcesi"
+
+#~ msgid "Mouse query setup:"
+#~ msgstr "Fareyle sorgu ayarı:"
+
+#~ msgid "edit attributes (form mode)"
+#~ msgstr "Öznitelikleri düzelt (form modunda)"
+
+#~ msgid "results as text in terminal"
+#~ msgstr "uçbirimde metin olarak sonuçları göster"
+
+#~ msgid "Line width used for printing"
+#~ msgstr "Yazdırmada kullanılacak çizgi kalınlığı"
+
+#~ msgid " Background color: "
+#~ msgstr "Artalan rengi:"
+
+#~ msgid "no background color"
+#~ msgstr "artalan rengi yok"
+
+#~ msgid " "
+#~ msgstr " "
+
+#~ msgid "display N. arrow only "
+#~ msgstr "sadece Kuzey okunu göster"
+
+#~ msgid "line scale instead of bar scale "
+#~ msgstr "çubukölçek yerine çizgi ölçek"
+
+#~ msgid "Text options: color"
+#~ msgstr "Metin seçenekleri: renk"
+
+#~ msgid "Paper format"
+#~ msgstr "Kağıt biçimi"
+
+#~ msgid "Custom"
+#~ msgstr "Özel"
+
+#~ msgid "height:"
+#~ msgstr "yükseklik:"
+
+#~ msgid "left:"
+#~ msgstr "Sol:"
+
+#~ msgid "right:"
+#~ msgstr "sağ:"
+
+#~ msgid "top:"
+#~ msgstr "tepe:"
+
+#~ msgid "bottom:"
+#~ msgstr "dip:"
+
+#~ msgid "PS file:"
+#~ msgstr "PS dosyası:"
+
+#~ msgid "PDF file:"
+#~ msgstr "PDF dosyası:"
+
+#~ msgid "PNG file:"
+#~ msgstr "PNG dosyası:"
+
+#~ msgid "Printer:"
+#~ msgstr "Yazıcı:"
+
+#~ msgid "Script file:"
+#~ msgstr "Betik dosyası:"
+
+#~ msgid "Preview"
+#~ msgstr "Ön izleme"

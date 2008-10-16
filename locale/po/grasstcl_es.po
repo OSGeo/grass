@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasstcl_es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-03 21:25+0200\n"
+"POT-Creation-Date: 2008-10-11 22:08+0200\n"
 "PO-Revision-Date: 2008-08-04 11:00+0200\n"
 "Last-Translator: Carlos Davila <carluti@users.sourceforge.net>\n"
 "Language-Team: Español <grass-translations@lists.osgeo.org>\n"
@@ -21,757 +21,12 @@ msgstr ""
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../vector/v.digit/settings.tcl:63
-msgid "Add new column"
-msgstr "Añadir nueva columna"
-
-#: ../vector/v.digit/settings.tcl:66
-msgid "Create table"
-msgstr "Crear tabla"
-
-#: ../vector/v.digit/settings.tcl:99
-msgid "Add command"
-msgstr "Añadir comando"
-
-#: ../vector/v.digit/settings.tcl:135
-msgid "Table successfully created"
-msgstr "Tabla creada con éxito"
-
-#: ../vector/v.digit/settings.tcl:151
-msgid "Settings already opened"
-msgstr "Configuración ya abierta"
-
-#: ../vector/v.digit/settings.tcl:160 ../lib/init/epsg_option.tcl:311
-#: ../lib/init/file_option.tcl:263 ../gui/tcltk/gis.m/gm.tcl:430
-#: ../gui/tcltk/gis.m/animate.tcl:536 ../gui/tcltk/gis.m/dnviz.tcl:228
-#: ../gui/tcltk/gis.m/rules.tcl:170
-msgid "OK"
-msgstr "OK"
-
-#: ../vector/v.digit/settings.tcl:169
-msgid "Symbology"
-msgstr "Simbología"
-
-#: ../vector/v.digit/settings.tcl:173 ../vector/v.digit/settings.tcl:326
-msgid "Background"
-msgstr "Fondo"
-
-#: ../vector/v.digit/settings.tcl:180
-msgid "Highlight"
-msgstr "Destacar"
-
-#: ../vector/v.digit/settings.tcl:187
-msgid "Point"
-msgstr "Punto"
-
-#: ../vector/v.digit/settings.tcl:196
-msgid "Line"
-msgstr "Línea"
-
-#: ../vector/v.digit/settings.tcl:205
-msgid "Boundary (no area)"
-msgstr "Borde (ningún área)"
-
-#: ../vector/v.digit/settings.tcl:213
-msgid "Boundary (1 area)"
-msgstr "Borde (1 área)"
-
-#: ../vector/v.digit/settings.tcl:221
-msgid "Boundary (2 areas)"
-msgstr "Borde (2 áreas)"
-
-#: ../vector/v.digit/settings.tcl:230
-msgid "Centroid (in area)"
-msgstr "Centroide (dentro del área)"
-
-#: ../vector/v.digit/settings.tcl:238
-msgid "Centroid (outside area)"
-msgstr "Centroide (fuera del área)"
-
-#: ../vector/v.digit/settings.tcl:246
-msgid "Centroid (duplicate in area)"
-msgstr "Centroide (duplicado en el área)"
-
-#: ../vector/v.digit/settings.tcl:255
-msgid "Node (1 line)"
-msgstr "Nodo (1 línea)"
-
-#: ../vector/v.digit/settings.tcl:263
-msgid "Node (2 lines)"
-msgstr "Nodo (2 líneas)"
-
-#: ../vector/v.digit/settings.tcl:273
-msgid "Settings"
-msgstr "Preferencias"
-
-#: ../vector/v.digit/settings.tcl:278
-msgid "Snapping threshold in screen pixels"
-msgstr "Umbral de dibujo en píxeles de pantalla"
-
-#: ../vector/v.digit/settings.tcl:288
-msgid "Snapping threshold in map units"
-msgstr "Umbral de dibujo en unidades del mapa"
-
-#: ../vector/v.digit/settings.tcl:305
-msgid "Line width in screen pixels"
-msgstr "Anchura de línea en píxeles de pantalla"
-
-#: ../vector/v.digit/settings.tcl:307
-msgid "Set line width in pixels"
-msgstr "Establecer la anchura de línea en píxeles"
-
-#: ../vector/v.digit/settings.tcl:315
-msgid "Table"
-msgstr "Tabla"
-
-#: ../vector/v.digit/toolbox.tcl:19
-msgid "Welcome to v.digit"
-msgstr "Bienvenido a v.digit"
-
-#: ../vector/v.digit/toolbox.tcl:20
-msgid "Left button"
-msgstr "Botón Izquierdo"
-
-#: ../vector/v.digit/toolbox.tcl:21
-msgid "Middle button"
-msgstr "Botón central"
-
-#: ../vector/v.digit/toolbox.tcl:22
-msgid "Right button"
-msgstr "Botón derecho"
-
-#: ../vector/v.digit/toolbox.tcl:75
-msgid "  Layer"
-msgstr "  Capa"
-
-#: ../vector/v.digit/toolbox.tcl:79
-msgid "  Category"
-msgstr "Categoría"
-
-#: ../vector/v.digit/toolbox.tcl:83
-msgid "  Mode "
-msgstr "Modo"
-
-#: ../vector/v.digit/toolbox.tcl:95
-msgid "Insert new record into table"
-msgstr "Introducir nuevo registro en tabla"
-
-#: ../vector/v.digit/toolbox.tcl:112
-msgid "Digitize new point"
-msgstr "Digitalizar nuevo punto"
-
-#: ../vector/v.digit/toolbox.tcl:117
-msgid "Digitize new line"
-msgstr "Digitalizar nueva línea"
-
-#: ../vector/v.digit/toolbox.tcl:122
-msgid "Digitize new boundary"
-msgstr "Digitalizar nuevo borde"
-
-#: ../vector/v.digit/toolbox.tcl:127
-msgid "Digitize new centroid"
-msgstr "Digitalizar nuevo centroide"
-
-#: ../vector/v.digit/toolbox.tcl:133
-msgid "Move vertex"
-msgstr "Mover vértice"
-
-#: ../vector/v.digit/toolbox.tcl:138
-msgid "Add vertex"
-msgstr "Añadir vértice"
-
-#: ../vector/v.digit/toolbox.tcl:143
-msgid "Remove vertex"
-msgstr "Eliminar vértice"
-
-#: ../vector/v.digit/toolbox.tcl:148
-msgid "Split line"
-msgstr "Quebrar línea"
-
-#: ../vector/v.digit/toolbox.tcl:153
-msgid "Edit line/boundary"
-msgstr "Editar línea/borde"
-
-#: ../vector/v.digit/toolbox.tcl:158
-msgid "Move point, line, boundary, or centroid"
-msgstr "Mover punto, línea, borde o centroide"
-
-#: ../vector/v.digit/toolbox.tcl:163
-msgid "Delete point, line, boundary, or centroid"
-msgstr "Borrar punto, línea, borde o centroide"
-
-#: ../vector/v.digit/toolbox.tcl:174
-msgid "Redraw"
-msgstr "Refrescar"
-
-#: ../vector/v.digit/toolbox.tcl:179
-msgid "Zoom in by window"
-msgstr "Acercar mediante ventana"
-
-#: ../vector/v.digit/toolbox.tcl:184
-msgid "Zoom out"
-msgstr "Alejar"
-
-#: ../vector/v.digit/toolbox.tcl:189 ../gui/tcltk/gis.m/maptool.tcl:151
-#: ../gui/tcltk/gis.m/georecttool.tcl:130
-msgid "Pan"
-msgstr "Encuadrar"
-
-#: ../vector/v.digit/toolbox.tcl:194
-msgid "Zoom to default region"
-msgstr "Zum a la región por defecto"
-
-#: ../vector/v.digit/toolbox.tcl:207
-msgid "Zoom to saved region"
-msgstr "Zum a una región guardada"
-
-#: ../vector/v.digit/toolbox.tcl:213
-msgid "Display categories"
-msgstr "Visualizar categorías"
-
-#: ../vector/v.digit/toolbox.tcl:218
-msgid "Copy categories"
-msgstr "Copiar Categorías"
-
-#: ../vector/v.digit/toolbox.tcl:223
-msgid "Display attributes"
-msgstr "Visualizar atributos"
-
-#: ../vector/v.digit/toolbox.tcl:235
-msgid "Open settings"
-msgstr "Abriendo preferencias"
-
-#: ../vector/v.digit/toolbox.tcl:241
-msgid "Save and exit"
-msgstr "Guardar y salir"
-
-#: ../vector/v.digit/toolbox.tcl:252
-msgid "mouse button actions (left, middle, right)"
-msgstr "Acciones de los botones del ratón (izquierda, central, derecha)"
-
-#: ../vector/v.digit/cats.tcl:20 ../gui/tcltk/gis.m/gmmenu.tcl:172
-msgid "Delete"
-msgstr "Borrar"
-
-#: ../vector/v.digit/cats.tcl:34
-msgid "Categories already opened"
-msgstr "Categorías ya abiertas"
-
-#: ../vector/v.digit/cats.tcl:42
-msgid "Categories"
-msgstr "Categorías"
-
-#: ../vector/v.digit/cats.tcl:53
-msgid "Layer:"
-msgstr "Capa:"
-
-#: ../vector/v.digit/cats.tcl:55
-msgid "   Category:"
-msgstr "   Categoría:"
-
-#: ../vector/v.digit/cats.tcl:62
-msgid "Insert new record to table"
-msgstr "Introducir nuevo registro en tabla"
-
-#: ../vector/v.digit/cats.tcl:63
-msgid "Add new"
-msgstr "Añadir nuevo"
-
-#: ../lib/gtcltk/select.tcl:103
-msgid "Select item"
-msgstr "Seleccionar item"
-
-#: ../lib/gtcltk/select.tcl:208
-msgid "Ok"
-msgstr "Ok"
-
-#: ../lib/gtcltk/select.tcl:209 ../lib/init/epsg_option.tcl:167
-#: ../lib/init/epsg_option.tcl:314 ../lib/init/file_option.tcl:114
-#: ../lib/init/file_option.tcl:266 ../gui/tcltk/gis.m/gm.tcl:433
-#: ../gui/tcltk/gis.m/animate.tcl:538 ../gui/tcltk/gis.m/dnviz.tcl:230
-#: ../gui/tcltk/gis.m/mapcanvas.tcl:855 ../gui/tcltk/gis.m/georect.tcl:700
-#: ../gui/tcltk/gis.m/rules.tcl:172
-msgid "Cancel"
-msgstr "Cancelar"
-
-#: ../lib/gis/gui.tcl:11 ../lib/gis/gui.tcl:15 ../lib/gis/gui.tcl:19
-#: ../lib/gis/gui.tcl:310 ../gui/tcltk/gis.m/runandoutput.tcl:259
-#: ../gui/tcltk/gis.m/runandoutput.tcl:265
-#: ../gui/tcltk/gis.m/grassabout.tcl:94 ../gui/tcltk/gis.m/gmlib.tcl:137
-msgid "Error"
-msgstr "Error"
-
-#: ../lib/gis/gui.tcl:229 ../gui/tcltk/gis.m/gmlib.tcl:119
-msgid "Save File"
-msgstr "Guardar archivo"
-
-#: ../lib/gis/gui.tcl:231
-msgid "Load File"
-msgstr "Cargar archivo"
-
-#: ../lib/gis/gui.tcl:295 ../lib/gis/gui.tcl:480
-#: ../gui/tcltk/gis.m/gmmenu.tcl:326
-msgid "Output"
-msgstr "Salida"
-
-#: ../lib/gis/gui.tcl:355
-msgid "Options"
-msgstr "Opciones"
-
-#: ../lib/gis/gui.tcl:464 ../gui/tcltk/gis.m/gmmenu.tcl:165
-msgid "Copy"
-msgstr "Copiar"
-
-#: ../lib/gis/gui.tcl:503 ../gui/tcltk/gis.m/runandoutput.tcl:44
-#: ../gui/tcltk/gis.m/runandoutput.tcl:116
-msgid "Run"
-msgstr "Ejecutar"
-
-#: ../lib/gis/gui.tcl:504 ../lib/init/gis_set.tcl:507
-#: ../gui/tcltk/gis.m/thematic.tcl:241 ../gui/tcltk/gis.m/thematic.tcl:245
-#: ../gui/tcltk/gis.m/profile.tcl:131 ../gui/tcltk/gis.m/profile.tcl:135
-#: ../gui/tcltk/gis.m/labels.tcl:136 ../gui/tcltk/gis.m/labels.tcl:140
-#: ../gui/tcltk/gis.m/rastarrows.tcl:164 ../gui/tcltk/gis.m/rastarrows.tcl:167
-#: ../gui/tcltk/gis.m/runandoutput.tcl:47 ../gui/tcltk/gis.m/rastnums.tcl:163
-#: ../gui/tcltk/gis.m/rastnums.tcl:166 ../gui/tcltk/gis.m/frames.tcl:118
-#: ../gui/tcltk/gis.m/frames.tcl:122 ../gui/tcltk/gis.m/animate.tcl:408
-#: ../gui/tcltk/gis.m/animate.tcl:412 ../gui/tcltk/gis.m/animate.tcl:481
-#: ../gui/tcltk/gis.m/animate.tcl:484 ../gui/tcltk/gis.m/dnviz.tcl:208
-#: ../gui/tcltk/gis.m/dnviz.tcl:212 ../gui/tcltk/gis.m/gridline.tcl:162
-#: ../gui/tcltk/gis.m/gridline.tcl:214 ../gui/tcltk/gis.m/gridline.tcl:241
-#: ../gui/tcltk/gis.m/legend.tcl:219 ../gui/tcltk/gis.m/legend.tcl:222
-#: ../gui/tcltk/gis.m/raster.tcl:192 ../gui/tcltk/gis.m/raster.tcl:196
-#: ../gui/tcltk/gis.m/chart.tcl:184 ../gui/tcltk/gis.m/chart.tcl:188
-#: ../gui/tcltk/gis.m/vector.tcl:330 ../gui/tcltk/gis.m/vector.tcl:334
-#: ../gui/tcltk/gis.m/barscale.tcl:180 ../gui/tcltk/gis.m/barscale.tcl:184
-#: ../gui/tcltk/gis.m/rgbhis.tcl:156 ../gui/tcltk/gis.m/rgbhis.tcl:165
-#: ../gui/tcltk/gis.m/dtext.tcl:177 ../gui/tcltk/gis.m/dtext.tcl:181
-#: ../gui/tcltk/gis.m/georect.tcl:705 ../gui/tcltk/gis.m/georect.tcl:709
-#: ../gui/tcltk/gis.m/georect.tcl:1132 ../gui/tcltk/gis.m/georect.tcl:1136
-#: ../gui/tcltk/gis.m/rules.tcl:139 ../gui/tcltk/gis.m/rules.tcl:143
-#: ../gui/tcltk/gis.m/histogram.tcl:162 ../gui/tcltk/gis.m/histogram.tcl:165
-msgid "Help"
-msgstr "Ayuda"
-
-#: ../lib/gis/gui.tcl:505 ../gui/tcltk/gis.m/runandoutput.tcl:127
-msgid "Clear"
-msgstr "Limpiar"
-
-#: ../lib/gis/gui.tcl:506 ../lib/init/epsg_option.tcl:394
-#: ../lib/init/epsg_option.tcl:438 ../gui/tcltk/gis.m/runandoutput.tcl:48
-#: ../gui/tcltk/gis.m/gmmenu.tcl:90 ../gui/tcltk/gis.m/mapprint.tcl:366
-msgid "Close"
-msgstr "Cerrar"
-
-#: ../lib/gis/gui.tcl:577
-msgid "required"
-msgstr "requerido"
-
-#: ../lib/gis/gui.tcl:577
-msgid "optional"
-msgstr "opcional"
-
-#: ../lib/gis/gui.tcl:578
-msgid "multiple"
-msgstr "múltiple"
-
-#: ../lib/init/epsg_option.tcl:93
-msgid "WARNING: cant get enviromental variable"
-msgstr "AVISO: no se puede obtener variable de entorno"
-
-#: ../lib/init/epsg_option.tcl:94
-msgid ""
-"Warning: Unable to get enviromental variable GRASS_PROJSHARE. \n"
-"This is a GRASS installation error. \n"
-"Set enviromental variable GRASS_PROJSHARE to point to directory with Proj4 "
-"EPSG file. "
-msgstr ""
-"Aviso: no se puede obtener la variable de entorno GRASS_PROJSHARE. \n"
-"Esto es un error de la instalación de GRASS\n"
-"Establezca la variable de entorno GRASS_PROJSHARE para que apunte al "
-"directorio con el archivo Proj4 SPSG. "
-
-#: ../lib/init/epsg_option.tcl:103
-msgid "Define location using EPSG projection codes"
-msgstr "Definir localización usando códigos de proyección EPSG"
-
-#: ../lib/init/epsg_option.tcl:122 ../lib/init/file_option.tcl:92
-msgid "Name of new location"
-msgstr "Nombre de la nueva localización"
-
-#: ../lib/init/epsg_option.tcl:125
-msgid "Enter name for location to be created"
-msgstr "Introducir nombre para la localización a crear"
-
-#: ../lib/init/epsg_option.tcl:129 ../lib/init/epsg_option.tcl:132
-msgid "Path to the EPSG-codes file"
-msgstr "Ruta al archivo de códigos EPSG"
-
-#: ../lib/init/epsg_option.tcl:135 ../lib/init/epsg_option.tcl:148
-#: ../lib/init/gis_set.tcl:243 ../lib/init/file_option.tcl:105
-msgid "Browse..."
-msgstr "Explorar..."
-
-#: ../lib/init/epsg_option.tcl:136
-msgid "Browse to locate EPSG file"
-msgstr "Explorar para localizar archivo EPSG"
-
-#: ../lib/init/epsg_option.tcl:143
-msgid "EPSG code number of projection"
-msgstr "Número de código EPSG de la proyección"
-
-#: ../lib/init/epsg_option.tcl:146
-msgid "Enter EPSG code for selected projection"
-msgstr "Introducir código EPSG para la proyección seleccionada"
-
-#: ../lib/init/epsg_option.tcl:149
-msgid "View EPSG codes and projection information."
-msgstr "Ver códigos EPSG e información de la proyección."
-
-#: ../lib/init/epsg_option.tcl:155
-msgid "WARNING: epsg-codes file not found"
-msgstr "AVISO: códigos EPSG no encontrados"
-
-#: ../lib/init/epsg_option.tcl:156
-msgid "WARNING: The epsg-codes file was not found!"
-msgstr "AVISO: ¡El archivo de códigos EPSG no se encontró!"
-
-#: ../lib/init/epsg_option.tcl:164 ../lib/init/file_option.tcl:111
-msgid "Define location"
-msgstr "Definir la localización"
-
-#: ../lib/init/epsg_option.tcl:187
-msgid "Invalid EPSG Code!"
-msgstr "¡Código EPSG no válido!"
-
-#: ../lib/init/epsg_option.tcl:188
-#, tcl-format
-msgid "ERROR: Invalid EPSG code %s: should be an integer."
-msgstr "ERROR: código EPSG %s no válido: debería ser un entero."
-
-#: ../lib/init/epsg_option.tcl:198
-msgid "Location Exists!"
-msgstr "¡La localización existe!"
-
-#: ../lib/init/epsg_option.tcl:199
-#, tcl-format
-msgid "WARNING: Location '%s' already exists: please try another name."
-msgstr "AVISO: la localización '%s' ya existe: por favor, pruebe otro nombre."
-
-#: ../lib/init/epsg_option.tcl:236 ../lib/init/epsg_option.tcl:263
-#: ../lib/init/file_option.tcl:185 ../lib/init/file_option.tcl:212
-msgid "Error creating location!"
-msgstr "¡Error al crear localización!"
-
-#: ../lib/init/epsg_option.tcl:237 ../lib/init/epsg_option.tcl:264
-#: ../lib/init/file_option.tcl:186 ../lib/init/file_option.tcl:213
-#, tcl-format
-msgid ""
-"g.proj returned the following message:\n"
-"%s"
-msgstr ""
-"g.proj devolvió el siguiente mensaje:\n"
-"%s"
-
-#: ../lib/init/epsg_option.tcl:244 ../lib/init/epsg_option.tcl:268
-#: ../lib/init/file_option.tcl:193 ../lib/init/file_option.tcl:217
-msgid "Informational output from g.proj"
-msgstr "Salida informativa de g.proj"
-
-#: ../lib/init/epsg_option.tcl:245 ../lib/init/epsg_option.tcl:269
-#: ../lib/init/file_option.tcl:194 ../lib/init/file_option.tcl:218
-#, tcl-format
-msgid ""
-"g.proj returned the following informational message:\n"
-"%s"
-msgstr ""
-"g.proj devolvió el siguiente mensaje informativo:\n"
-"%s"
-
-#: ../lib/init/epsg_option.tcl:288 ../lib/init/file_option.tcl:240
-msgid "Select datum transformation parameters:"
-msgstr "Seleccionar parámetros de transformación del datum:"
-
-#: ../lib/init/epsg_option.tcl:292 ../lib/init/file_option.tcl:244
-msgid ""
-"Continue without specifying parameters - if used when creating a location, "
-"other GRASS modules will use the \"default\" (likely non-optimum) parameters "
-"for this datum if necessary in the future."
-msgstr ""
-"Continuar sin especificar parámetros - si se usa al crear una localización, "
-"otros módulos de GRASS usarán los parámetros \"por defecto\" (probablemente "
-"no óptimos) para este datum si es necesario en el futuro."
-
-#: ../lib/init/epsg_option.tcl:344
-msgid "You can select EPSG code (in <braces>) and copy it for later use."
-msgstr ""
-"Puede seleccionar el código EPSG (entre <corchetes>) y copiarlo para uso "
-"posterior."
-
-#: ../lib/init/epsg_option.tcl:381
-msgid "GUESS THAT IS NOT THE EPSG FILE"
-msgstr "SUPONGA QUE NO ES EL ARCHIVO EPSG"
-
-#: ../lib/init/epsg_option.tcl:387 ../lib/init/epsg_option.tcl:416
-#: ../lib/init/epsg_option.tcl:435
-msgid "Search"
-msgstr "Buscar"
-
-#: ../lib/init/epsg_option.tcl:389
-msgid "Grab code"
-msgstr "Copiar código"
-
-#: ../lib/init/epsg_option.tcl:422
-msgid "Search text: "
-msgstr "Buscar texto: "
-
-#: ../lib/init/epsg_option.tcl:423
-msgid "Search for entered text in EPSG file"
-msgstr "Buscar el texto introducido en archivo EPSG"
-
-#: ../lib/init/epsg_option.tcl:428
-msgid "forward search"
-msgstr "buscar hacia delante"
-
-#: ../lib/init/epsg_option.tcl:429
-msgid "backward search"
-msgstr "buscar hacia atrás"
-
-#: ../lib/init/gis_set.tcl:107
-msgid "WARNING: can not save"
-msgstr "AVISO: no se puede guardar"
-
-#: ../lib/init/gis_set.tcl:108
-#, tcl-format
-msgid ""
-"Warning: unable to save data to <%s> file.\n"
-"Error message: %s"
-msgstr ""
-"Aviso: no se pueden guardar los datos en el archivo <%s>.\n"
-"Mensaje de error: %s"
-
-#: ../lib/init/gis_set.tcl:128 ../lib/init/gis_set.tcl:379
-#: ../lib/init/gis_set.tcl:485 ../lib/init/gis_set.tcl:609
-#: ../lib/init/gis_set.tcl:630 ../lib/init/gis_set.tcl:648
-#: ../lib/init/gis_set.tcl:676
-msgid "WARNING: invalid location"
-msgstr "AVISO: localización no válida"
-
-#: ../lib/init/gis_set.tcl:129
-#, tcl-format
-msgid "Warning: location <%s> at GISDBASE <%s> is not a directory or does not exist."
-msgstr "AVISO: la localización <%s> en GISDBASE <%s> no es un directorio o no existe."
-
-#: ../lib/init/gis_set.tcl:179
-#, tcl-format
-msgid "GRASS %s Startup"
-msgstr "Inicio de GRASS %s"
-
-#: ../lib/init/gis_set.tcl:202
-msgid "Welcome to GRASS GIS Version"
-msgstr "Bienvenido a GRASS GIS versión"
-
-#: ../lib/init/gis_set.tcl:204
-msgid ""
-"The world's leading open source GIS\n"
-"\n"
-msgstr ""
-"El principal GIS libre y de código abierto del mundo\n"
-"\n"
-
-#: ../lib/init/gis_set.tcl:205
-msgid "Select an existing project location and mapset\n"
-msgstr "Seleccione una localización y un directorio de mapas\n"
-
-#: ../lib/init/gis_set.tcl:206
-msgid "or define a new location\n"
-msgstr "existentes o cree una nueva localización\n"
-
-#: ../lib/init/gis_set.tcl:229
-msgid "GIS Data Directory: "
-msgstr "Directorio de datos GIS: "
-
-#: ../lib/init/gis_set.tcl:245
-msgid "New GIS data directory"
-msgstr "Nuevo directorio de datos GIS"
-
-#: ../lib/init/gis_set.tcl:268
-msgid "Project Location (projection/coordinate system)"
-msgstr "Localización del proyecto (proyección/sistema de coordenadas)"
-
-#: ../lib/init/gis_set.tcl:301
-msgid "Accessible Mapsets (directories of GIS files)"
-msgstr "Directorios de mapas accesibles (directorios de archivos GIS)"
-
-#: ../lib/init/gis_set.tcl:358
-msgid "Create new mapset in selected location"
-msgstr "Crear nuevo directorio de mapas en la localización seleccionada"
-
-#: ../lib/init/gis_set.tcl:366
-msgid "Create new mapset"
-msgstr "Crear directorio de mapas"
-
-#: ../lib/init/gis_set.tcl:371
-msgid "WARNING: invalid mapset name"
-msgstr "AVISO: nombre de directorio de mapas no admitido"
-
-#: ../lib/init/gis_set.tcl:372
-#, tcl-format
-msgid ""
-"Warning: Mapset with name <%s> already exists. \n"
-"New mapset is NOT created. \n"
-"Choose different mapset name and try again."
-msgstr ""
-"Aviso: el directorio de mapas <%s> ya existe.\n"
-"NO se crea el directorio.\n"
-"Elija un nombre diferente y pruebe otra vez."
-
-#: ../lib/init/gis_set.tcl:380
-#, tcl-format
-msgid ""
-"Warning: selected location <%s> is not valid. \n"
-" New mapset is NOT created. \n"
-" Select valid location and try again."
-msgstr ""
-"AVISO: la localización seleccionada <%s> no es válida. \n"
-"El nuevo directorio de mapas no ha sido creado. \n"
-"Intentar de nuevo con una localización válida."
-
-#: ../lib/init/gis_set.tcl:387
-msgid "WARNING: unable to mkdir"
-msgstr "AVISO: no se puede crear directorio"
-
-#: ../lib/init/gis_set.tcl:388
-#, tcl-format
-msgid ""
-"Warning: Unable to create directory for new mapset. \n"
-"Error message: %s"
-msgstr ""
-"Aviso: no se puede crear el nuevo directorio de mapas.\n"
-"Mensaje de error: %s"
-
-#: ../lib/init/gis_set.tcl:413
-msgid "Define new location with..."
-msgstr "Definir nueva localización con..."
-
-#: ../lib/init/gis_set.tcl:417
-msgid "Georeferenced file"
-msgstr "Archivo georreferenciado"
-
-#: ../lib/init/gis_set.tcl:430
-msgid "EPSG codes"
-msgstr "Códigos EPSG"
-
-#: ../lib/init/gis_set.tcl:443
-msgid "Projection values"
-msgstr "Valores de la proyección"
-
-#: ../lib/init/gis_set.tcl:481
-msgid "Enter GRASS"
-msgstr "Iniciar GRASS"
-
-#: ../lib/init/gis_set.tcl:486
-#, tcl-format
-msgid ""
-"Warning: selected location <%s> is not valid. \n"
-" Select valid location and try again."
-msgstr ""
-"AVISO: la localización seleccionada <%s> no es válida. \n"
-"Intentar de nuevo con una localización válida."
-
-#: ../lib/init/gis_set.tcl:491 ../lib/init/gis_set.tcl:654
-msgid "WARNING: invalid mapset"
-msgstr "AVISO: directorio de mapas no válido"
-
-#: ../lib/init/gis_set.tcl:492
-#, tcl-format
-msgid "Warning: <%s> is not a valid mapset"
-msgstr "AVISO: <%s> no es un directorio de mapas válido"
-
-#: ../lib/init/gis_set.tcl:512
-msgid "Help already opened"
-msgstr "La ayuda ya está abierta"
-
-#: ../lib/init/gis_set.tcl:525
-msgid "Exit"
-msgstr "Salir"
-
-#: ../lib/init/gis_set.tcl:561
-msgid "WARNING: Invalid Database"
-msgstr "AVISO: La base de datos no es válida"
-
-#: ../lib/init/gis_set.tcl:562
-msgid "WARNING: Invalid database. Finding first valid directory in parent tree"
-msgstr ""
-"AVISO: La base de datos no es válida. Buscando el primer directorio válido "
-"en directorios superiores"
-
-#: ../lib/init/gis_set.tcl:610 ../lib/init/gis_set.tcl:631
-#: ../lib/init/gis_set.tcl:649 ../lib/init/gis_set.tcl:677
-#, tcl-format
-msgid ""
-"Warning: selected location <%%s> is not valid. \n"
-" Select valid location and try again."
-msgstr ""
-"AVISO: la localización seleccionada <%%s> no es válida. \n"
-"Intentar de nuevo con una localización válida."
-
-#: ../lib/init/gis_set.tcl:655
-#, tcl-format
-msgid "Warning: <%%s> is not a valid mapset"
-msgstr "AVISO: <%%s> no es un directorio de mapas válido"
-
-#: ../lib/init/gis_set.tcl:747
-msgid "WARNING: change directory failed"
-msgstr "AVISO: falló el cambio de directorio"
-
-#: ../lib/init/gis_set.tcl:748
-#, tcl-format
-msgid ""
-"Warning: could not change directory to <%s>.\n"
-"Check directory permissions."
-msgstr ""
-"Aviso: no se pudo cambiar el directorio a <%s>.\n"
-"Compruebe los permisos del directorio."
-
-#: ../lib/init/file_option.tcl:72
-msgid "Define location using projection information in georeferenced file"
-msgstr ""
-"Definir localización usando la proyección contenida en archivo "
-"georreferenciado"
-
-#: ../lib/init/file_option.tcl:95
-msgid "Enter name of location to be created"
-msgstr "Introducir nombre de la nueva localización"
-
-#: ../lib/init/file_option.tcl:99
-msgid "Path to georeferenced file"
-msgstr "Ruta de archivo georreferenciado"
-
-#: ../lib/init/file_option.tcl:102
-msgid "Path to georeferenced file (format must be readable by GDAL/OGR)"
-msgstr "Ruta a archivo georreferenciado (el formato debe ser legible por GDAL/OGR)"
-
-#: ../lib/init/file_option.tcl:106
-msgid "Browse to locate georeferenced file"
-msgstr "Buscar archivo georreferenciado"
-
-#: ../lib/init/file_option.tcl:131 ../lib/init/file_option.tcl:134
-msgid "Choose georeferenced file"
-msgstr "Elegir archivo georreferenciado"
-
-#: ../lib/init/file_option.tcl:152
-msgid ""
-"WARNING: Please supply a\n"
-"valid georeferenced file"
-msgstr "AVISO: Por favor, especificar un archivo georreferenciado válido"
-
 #: ../gui/tcltk/gis.m/thematic.tcl:107 ../gui/tcltk/gis.m/thematic.tcl:607
 #: ../gui/tcltk/gis.m/thematic.tcl:680 ../gui/tcltk/gis.m/labels.tcl:78
 #: ../gui/tcltk/gis.m/labels.tcl:279 ../gui/tcltk/gis.m/rastarrows.tcl:83
 #: ../gui/tcltk/gis.m/rastarrows.tcl:357 ../gui/tcltk/gis.m/rastnums.tcl:79
 #: ../gui/tcltk/gis.m/rastnums.tcl:360 ../gui/tcltk/gis.m/frames.tcl:78
-#: ../gui/tcltk/gis.m/frames.tcl:275 ../gui/tcltk/gis.m/animate.tcl:91
+#: ../gui/tcltk/gis.m/frames.tcl:275 ../gui/tcltk/gis.m/animate.tcl:88
 #: ../gui/tcltk/gis.m/mapprint.tcl:194 ../gui/tcltk/gis.m/mapprint.tcl:201
 #: ../gui/tcltk/gis.m/gridline.tcl:99 ../gui/tcltk/gis.m/gridline.tcl:406
 #: ../gui/tcltk/gis.m/legend.tcl:95 ../gui/tcltk/gis.m/legend.tcl:506
@@ -849,6 +104,32 @@ msgstr "Mapa vectorial:"
 #: ../gui/tcltk/gis.m/thematic.tcl:236
 msgid "vector for thematic mapping"
 msgstr "Mapa vectorial para hacer mapas temáticos"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:241 ../gui/tcltk/gis.m/thematic.tcl:245
+#: ../gui/tcltk/gis.m/profile.tcl:131 ../gui/tcltk/gis.m/profile.tcl:135
+#: ../gui/tcltk/gis.m/labels.tcl:136 ../gui/tcltk/gis.m/labels.tcl:140
+#: ../gui/tcltk/gis.m/rastarrows.tcl:164 ../gui/tcltk/gis.m/rastarrows.tcl:167
+#: ../gui/tcltk/gis.m/runandoutput.tcl:47 ../gui/tcltk/gis.m/rastnums.tcl:163
+#: ../gui/tcltk/gis.m/rastnums.tcl:166 ../gui/tcltk/gis.m/frames.tcl:118
+#: ../gui/tcltk/gis.m/frames.tcl:122 ../gui/tcltk/gis.m/animate.tcl:405
+#: ../gui/tcltk/gis.m/animate.tcl:409 ../gui/tcltk/gis.m/animate.tcl:478
+#: ../gui/tcltk/gis.m/animate.tcl:481 ../gui/tcltk/gis.m/dnviz.tcl:208
+#: ../gui/tcltk/gis.m/dnviz.tcl:212 ../gui/tcltk/gis.m/gridline.tcl:162
+#: ../gui/tcltk/gis.m/gridline.tcl:214 ../gui/tcltk/gis.m/gridline.tcl:241
+#: ../gui/tcltk/gis.m/legend.tcl:219 ../gui/tcltk/gis.m/legend.tcl:222
+#: ../gui/tcltk/gis.m/raster.tcl:192 ../gui/tcltk/gis.m/raster.tcl:196
+#: ../gui/tcltk/gis.m/chart.tcl:184 ../gui/tcltk/gis.m/chart.tcl:188
+#: ../gui/tcltk/gis.m/vector.tcl:330 ../gui/tcltk/gis.m/vector.tcl:334
+#: ../gui/tcltk/gis.m/barscale.tcl:180 ../gui/tcltk/gis.m/barscale.tcl:184
+#: ../gui/tcltk/gis.m/rgbhis.tcl:156 ../gui/tcltk/gis.m/rgbhis.tcl:165
+#: ../gui/tcltk/gis.m/dtext.tcl:177 ../gui/tcltk/gis.m/dtext.tcl:181
+#: ../gui/tcltk/gis.m/georect.tcl:705 ../gui/tcltk/gis.m/georect.tcl:709
+#: ../gui/tcltk/gis.m/georect.tcl:1132 ../gui/tcltk/gis.m/georect.tcl:1136
+#: ../gui/tcltk/gis.m/rules.tcl:139 ../gui/tcltk/gis.m/rules.tcl:143
+#: ../gui/tcltk/gis.m/histogram.tcl:162 ../gui/tcltk/gis.m/histogram.tcl:165
+#: ../lib/gis/gui.tcl:504 ../lib/init/gis_set.tcl:507
+msgid "Help"
+msgstr "Ayuda"
 
 #: ../gui/tcltk/gis.m/thematic.tcl:251
 msgid "    vector type"
@@ -1169,6 +450,22 @@ msgstr "Fuente: "
 msgid "Character encoding: "
 msgstr "Codificación de caracteres: "
 
+#: ../gui/tcltk/gis.m/gm.tcl:430 ../gui/tcltk/gis.m/animate.tcl:533
+#: ../gui/tcltk/gis.m/dnviz.tcl:228 ../gui/tcltk/gis.m/rules.tcl:170
+#: ../lib/init/epsg_option.tcl:311 ../lib/init/file_option.tcl:263
+#: ../vector/v.digit/settings.tcl:161
+msgid "OK"
+msgstr "OK"
+
+#: ../gui/tcltk/gis.m/gm.tcl:433 ../gui/tcltk/gis.m/animate.tcl:535
+#: ../gui/tcltk/gis.m/dnviz.tcl:230 ../gui/tcltk/gis.m/mapcanvas.tcl:855
+#: ../gui/tcltk/gis.m/georect.tcl:700 ../gui/tcltk/gis.m/rules.tcl:172
+#: ../lib/gtcltk/select.tcl:209 ../lib/init/epsg_option.tcl:167
+#: ../lib/init/epsg_option.tcl:314 ../lib/init/file_option.tcl:114
+#: ../lib/init/file_option.tcl:266
+msgid "Cancel"
+msgstr "Cancelar"
+
 #: ../gui/tcltk/gis.m/gm.tcl:504
 #, tcl-format
 msgid "GRASS%s GIS Manager - %s %s"
@@ -1189,7 +486,8 @@ msgstr "Mapa de pendiente/intensidad"
 
 #: ../gui/tcltk/gis.m/rastarrows.tcl:134
 msgid "Display arrows whose orientations are based on raster aspect map"
-msgstr "Mostrar flechas cuya orientación esté basada en mapa ráster de orientación"
+msgstr ""
+"Mostrar flechas cuya orientación esté basada en mapa ráster de orientación"
 
 #: ../gui/tcltk/gis.m/rastarrows.tcl:140
 msgid "  (optionally, arrow lengths are based on slope or intensity map)"
@@ -1229,6 +527,17 @@ msgstr "Mapa de pendiente/intensidad: "
 msgid "    scale factor for computing arrow length"
 msgstr "Factor de escala para calcular la longitud del norte. "
 
+#: ../gui/tcltk/gis.m/runandoutput.tcl:44
+#: ../gui/tcltk/gis.m/runandoutput.tcl:116 ../lib/gis/gui.tcl:503
+msgid "Run"
+msgstr "Ejecutar"
+
+#: ../gui/tcltk/gis.m/runandoutput.tcl:48 ../gui/tcltk/gis.m/gmmenu.tcl:90
+#: ../gui/tcltk/gis.m/mapprint.tcl:366 ../lib/gis/gui.tcl:506
+#: ../lib/init/epsg_option.tcl:394 ../lib/init/epsg_option.tcl:438
+msgid "Close"
+msgstr "Cerrar"
+
 #: ../gui/tcltk/gis.m/runandoutput.tcl:118
 msgid "Run (background)"
 msgstr "Ejecutar (segundo plano)"
@@ -1246,13 +555,27 @@ msgstr "Ejecutar (en Xterm)"
 msgid "Save"
 msgstr "Guardar"
 
+#: ../gui/tcltk/gis.m/runandoutput.tcl:127 ../lib/gis/gui.tcl:505
+msgid "Clear"
+msgstr "Limpiar"
+
 #: ../gui/tcltk/gis.m/runandoutput.tcl:148
 msgid "Output - GIS.m"
 msgstr "Salida - GIS.m"
 
+#: ../gui/tcltk/gis.m/runandoutput.tcl:259
+#: ../gui/tcltk/gis.m/runandoutput.tcl:265
+#: ../gui/tcltk/gis.m/grassabout.tcl:94 ../gui/tcltk/gis.m/gmlib.tcl:137
+#: ../lib/gis/gui.tcl:11 ../lib/gis/gui.tcl:15 ../lib/gis/gui.tcl:19
+#: ../lib/gis/gui.tcl:310
+msgid "Error"
+msgstr "Error"
+
 #: ../gui/tcltk/gis.m/runandoutput.tcl:266
 msgid "This module requires X11 support, but no xmons were found"
-msgstr "Este módulo requiere soporte para X11, pero no se encontró ningún monitor X (xmon)"
+msgstr ""
+"Este módulo requiere soporte para X11, pero no se encontró ningún monitor X "
+"(xmon)"
 
 #: ../gui/tcltk/gis.m/maptool.tcl:41 ../gui/tcltk/gis.m/georecttool.tcl:40
 msgid "Display active layers"
@@ -1286,6 +609,11 @@ msgstr "Acercar"
 msgid "Zoom Out"
 msgstr "Alejar"
 
+#: ../gui/tcltk/gis.m/maptool.tcl:151 ../gui/tcltk/gis.m/georecttool.tcl:130
+#: ../vector/v.digit/toolbox.tcl:190
+msgid "Pan"
+msgstr "Encuadrar"
+
 #: ../gui/tcltk/gis.m/maptool.tcl:165 ../gui/tcltk/gis.m/georecttool.tcl:144
 msgid "Return to previous zoom"
 msgstr "Volver al zum anterior"
@@ -1308,7 +636,8 @@ msgstr "Guardar las límites de la visualización en la región designada"
 
 #: ../gui/tcltk/gis.m/maptool.tcl:193
 msgid "Zoom display to computational region (set with g.region)"
-msgstr "Zum de la visualización a la región computacional (establecida con g.region)"
+msgstr ""
+"Zum de la visualización a la región computacional (establecida con g.region)"
 
 #: ../gui/tcltk/gis.m/maptool.tcl:196
 msgid "Zoom display to default region"
@@ -1320,7 +649,7 @@ msgstr ""
 "Establecer la extensión de la región computacional para ajustar a la "
 "visualización"
 
-#: ../gui/tcltk/gis.m/maptool.tcl:228 ../gui/tcltk/gis.m/gmmenu.tcl:615
+#: ../gui/tcltk/gis.m/maptool.tcl:228 ../gui/tcltk/gis.m/gmmenu.tcl:622
 #: ../gui/tcltk/gis.m/mapcanvas.tcl:1859
 msgid "Query"
 msgstr "Consultas"
@@ -1439,7 +768,8 @@ msgstr ""
 
 #: ../gui/tcltk/gis.m/frames.tcl:105
 msgid "Divide map display into frames for displaying multiple maps"
-msgstr "Dividir visualización de mapa en marcos para visualizar múltiples mapas"
+msgstr ""
+"Dividir visualización de mapa en marcos para visualizar múltiples mapas"
 
 #: ../gui/tcltk/gis.m/frames.tcl:112
 msgid "create and select frame"
@@ -1484,100 +814,101 @@ msgstr "Recogiendo información sobre su sistema"
 msgid "***** Done *****"
 msgstr "***** Hecho *****"
 
-#: ../gui/tcltk/gis.m/animate.tcl:299
+#: ../gui/tcltk/gis.m/animate.tcl:296
 msgid "Select maps to animate"
 msgstr "Seleccionar mapas a animar"
 
-#: ../gui/tcltk/gis.m/animate.tcl:313
+#: ../gui/tcltk/gis.m/animate.tcl:310
 msgid "Rewind animation"
 msgstr "Retroceder animación"
 
-#: ../gui/tcltk/gis.m/animate.tcl:319
+#: ../gui/tcltk/gis.m/animate.tcl:316
 msgid "Replay animation"
 msgstr "Repetir animación"
 
-#: ../gui/tcltk/gis.m/animate.tcl:325
+#: ../gui/tcltk/gis.m/animate.tcl:322
 msgid "Step backwards through animation"
 msgstr "Ir hacia atrás por la animación"
 
-#: ../gui/tcltk/gis.m/animate.tcl:331
+#: ../gui/tcltk/gis.m/animate.tcl:328
 msgid "Stop animation"
 msgstr "Detener animación"
 
-#: ../gui/tcltk/gis.m/animate.tcl:337
+#: ../gui/tcltk/gis.m/animate.tcl:334
 msgid "Step forwards through animation"
 msgstr "Ir hacia delante por la animación"
 
-#: ../gui/tcltk/gis.m/animate.tcl:343
+#: ../gui/tcltk/gis.m/animate.tcl:340
 msgid "Play animation"
 msgstr "Reproducir animación"
 
-#: ../gui/tcltk/gis.m/animate.tcl:356
+#: ../gui/tcltk/gis.m/animate.tcl:353
 msgid "Slower animation"
 msgstr "Animación más lenta"
 
-#: ../gui/tcltk/gis.m/animate.tcl:362
+#: ../gui/tcltk/gis.m/animate.tcl:359
 msgid "Faster animation"
 msgstr "Animación más rápida"
 
-#: ../gui/tcltk/gis.m/animate.tcl:372
+#: ../gui/tcltk/gis.m/animate.tcl:369
 msgid "Continuously loop through animation"
 msgstr "Avanzar en bucle por la animación"
 
-#: ../gui/tcltk/gis.m/animate.tcl:380
+#: ../gui/tcltk/gis.m/animate.tcl:377
 msgid "Run animation alternately forward and backward"
 msgstr "Ejecutar animación alternativamente hacia delante y hacia atrás"
 
-#: ../gui/tcltk/gis.m/animate.tcl:391
+#: ../gui/tcltk/gis.m/animate.tcl:388
 msgid "Show map names in animation window"
 msgstr "Mostrar nombres de mapas en la ventana de animación"
 
-#: ../gui/tcltk/gis.m/animate.tcl:404
+#: ../gui/tcltk/gis.m/animate.tcl:401
 msgid "Quit animation"
 msgstr "Salir de la animación"
 
-#: ../gui/tcltk/gis.m/animate.tcl:435
+#: ../gui/tcltk/gis.m/animate.tcl:432
 msgid "Select maps"
 msgstr "Seleccionar mapas"
 
-#: ../gui/tcltk/gis.m/animate.tcl:463
+#: ../gui/tcltk/gis.m/animate.tcl:460
 msgid "Maps for Animation"
 msgstr "Mapas para animación"
 
-#: ../gui/tcltk/gis.m/animate.tcl:479
+#: ../gui/tcltk/gis.m/animate.tcl:476
 msgid "Select maps to animate in one or more frames (1 frame required)"
-msgstr "Seleccionar mapas para animar en uno o más marcos (se requiere un marco)"
+msgstr ""
+"Seleccionar mapas para animar en uno o más marcos (se requiere un marco)"
 
-#: ../gui/tcltk/gis.m/animate.tcl:492
+#: ../gui/tcltk/gis.m/animate.tcl:489
 msgid "Maps for frame 1 (required): "
 msgstr "Mapas para el marco 1 (requerido): "
 
-#: ../gui/tcltk/gis.m/animate.tcl:503
+#: ../gui/tcltk/gis.m/animate.tcl:500
 msgid "Maps for frame 2 (optional): "
 msgstr "Mapas para el marco 2 (opcional): "
 
-#: ../gui/tcltk/gis.m/animate.tcl:514
+#: ../gui/tcltk/gis.m/animate.tcl:511
 msgid "Maps for frame 3 (optional): "
 msgstr "Mapas para el marco 3 (opcional): "
 
-#: ../gui/tcltk/gis.m/animate.tcl:525
+#: ../gui/tcltk/gis.m/animate.tcl:522
 msgid "Maps for frame 4 (optional): "
 msgstr "Mapas para el marco 4 (opcional): "
 
-#: ../gui/tcltk/gis.m/animate.tcl:540 ../gui/tcltk/gis.m/dnviz.tcl:232
+#: ../gui/tcltk/gis.m/animate.tcl:537 ../gui/tcltk/gis.m/dnviz.tcl:232
 #: ../gui/tcltk/gis.m/rules.tcl:174
 msgid "Apply"
 msgstr "Aplicar"
 
-#: ../gui/tcltk/gis.m/animate.tcl:563
+#: ../gui/tcltk/gis.m/animate.tcl:560
 msgid "You must select maps to animate for frame 1"
 msgstr "Debe seleccionar mapas a animar para el marco 1"
 
-#: ../gui/tcltk/gis.m/animate.tcl:564
+#: ../gui/tcltk/gis.m/animate.tcl:561
 msgid "No maps selected"
 msgstr "Ningún mapa seleccionado"
 
-#: ../gui/tcltk/gis.m/animate.tcl:1031
+#: ../gui/tcltk/gis.m/animate.tcl:1028
 msgid "Animation Window"
 msgstr "Ventana de animación"
 
@@ -1906,6 +1237,10 @@ msgstr "Exportar volúmenes grid 3D"
 msgid "Manage maps and volumes"
 msgstr "Administrar mapas y volúmenes"
 
+#: ../gui/tcltk/gis.m/gmmenu.tcl:165 ../lib/gis/gui.tcl:464
+msgid "Copy"
+msgstr "Copiar"
+
 #: ../gui/tcltk/gis.m/gmmenu.tcl:167
 msgid "List"
 msgstr "Listar"
@@ -1917,6 +1252,10 @@ msgstr "Listar filtrado"
 #: ../gui/tcltk/gis.m/gmmenu.tcl:170
 msgid "Rename"
 msgstr "Cambiar nombre"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:172 ../vector/v.digit/cats.tcl:20
+msgid "Delete"
+msgstr "Borrar"
 
 #: ../gui/tcltk/gis.m/gmmenu.tcl:173
 msgid "Delete filtered"
@@ -2274,7 +1613,7 @@ msgstr "Acumulación de flujos"
 msgid "Flow lines"
 msgstr "Líneas de flujo"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:305 ../gui/tcltk/gis.m/gmmenu.tcl:585
+#: ../gui/tcltk/gis.m/gmmenu.tcl:305 ../gui/tcltk/gis.m/gmmenu.tcl:592
 msgid "Groundwater flow model"
 msgstr ""
 
@@ -2321,6 +1660,11 @@ msgstr "Analizar paisaje"
 #: ../gui/tcltk/gis.m/gmmenu.tcl:325
 msgid "Analyze patches"
 msgstr "Analizar parcelas"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:326 ../lib/gis/gui.tcl:295
+#: ../lib/gis/gui.tcl:480
+msgid "Output"
+msgstr "Salida"
 
 #: ../gui/tcltk/gis.m/gmmenu.tcl:328
 msgid "Landscape patch analysis"
@@ -2516,7 +1860,7 @@ msgid "Fill NULL cells"
 msgstr "Rellenas celdas NULAS"
 
 #: ../gui/tcltk/gis.m/gmmenu.tcl:398 ../gui/tcltk/gis.m/gmmenu.tcl:517
-#: ../gui/tcltk/gis.m/gmmenu.tcl:571
+#: ../gui/tcltk/gis.m/gmmenu.tcl:578
 msgid "Reports and statistics"
 msgstr "Informes y estadísticas"
 
@@ -2836,7 +2180,7 @@ msgstr "Muestrear mapa ráster en localizaciones de puntos"
 msgid "Sample raster neighborhood around points"
 msgstr "Muestrear 'vecindario' ráster alrededor de puntos"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:518 ../gui/tcltk/gis.m/gmmenu.tcl:588
+#: ../gui/tcltk/gis.m/gmmenu.tcl:518 ../gui/tcltk/gis.m/gmmenu.tcl:595
 msgid "Basic information"
 msgstr "Información básica"
 
@@ -2897,251 +2241,267 @@ msgid "Ortho photo rectification"
 msgstr "Rectificación de ortofotos"
 
 #: ../gui/tcltk/gis.m/gmmenu.tcl:547
-msgid "Brovey sharpening"
+msgid "Basic RS processing"
 msgstr ""
 
 #: ../gui/tcltk/gis.m/gmmenu.tcl:548
+msgid "MODIS Quality flags"
+msgstr ""
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:550
+msgid "Albedo"
+msgstr ""
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:552
+msgid "Vegetation Indices"
+msgstr ""
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:554
+msgid "Brovey sharpening"
+msgstr ""
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:555
 msgid "Classify image"
 msgstr "Clasificar imagen"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:549
+#: ../gui/tcltk/gis.m/gmmenu.tcl:556
 msgid "Clustering input for unsupervised classification"
 msgstr "Entrada de agrupaciones para clasificación no supervisada"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:551
+#: ../gui/tcltk/gis.m/gmmenu.tcl:558
 msgid "Maximum likelyhood classification (MLC)"
 msgstr "Clasificación por probabilidad máxima (MLC)"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:552
+#: ../gui/tcltk/gis.m/gmmenu.tcl:559
 msgid "Sequential maximum a posteriory classification (SMAP)"
 msgstr "Clasificación secuencial máxima a posteriori (SMAP)"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:554
+#: ../gui/tcltk/gis.m/gmmenu.tcl:561
 msgid "Interactive input for supervised classification"
 msgstr "Clasificación supervisada de entrada interactiva"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:555
+#: ../gui/tcltk/gis.m/gmmenu.tcl:562
 msgid "Input for supervised MLC"
 msgstr "Entrada para MLC supervisado"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:556
+#: ../gui/tcltk/gis.m/gmmenu.tcl:563
 msgid "Input for supervised SMAP"
 msgstr "Entrada para SMAP supervisado"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:558
+#: ../gui/tcltk/gis.m/gmmenu.tcl:565
 msgid "Filter image"
 msgstr "Filtro de imagen "
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:559
+#: ../gui/tcltk/gis.m/gmmenu.tcl:566
 msgid "Edge detection"
 msgstr "Detección de bordes"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:560
+#: ../gui/tcltk/gis.m/gmmenu.tcl:567
 #, fuzzy
 msgid "Matrix/convolving filter"
 msgstr "Filtro de matriz/"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:562
+#: ../gui/tcltk/gis.m/gmmenu.tcl:569
 msgid "Spectral response"
 msgstr "Respuesta espectral"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:563
+#: ../gui/tcltk/gis.m/gmmenu.tcl:570
 msgid "Tassled cap vegetation index"
 msgstr "Índice de vegetación 'Tassled cap'"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:564
+#: ../gui/tcltk/gis.m/gmmenu.tcl:571
 msgid "Transform image"
 msgstr "Transformar imagen"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:565
+#: ../gui/tcltk/gis.m/gmmenu.tcl:572
 msgid "Canonical correlation"
 msgstr "Correlación canónica"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:566
+#: ../gui/tcltk/gis.m/gmmenu.tcl:573
 msgid "Principal components"
 msgstr "Componentes principales"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:567
+#: ../gui/tcltk/gis.m/gmmenu.tcl:574
 msgid "Fast Fourier"
 msgstr "Fast Fourier"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:568
+#: ../gui/tcltk/gis.m/gmmenu.tcl:575
 msgid "Inverse Fast Fourier"
 msgstr "Fast Fourier inversa"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:572
+#: ../gui/tcltk/gis.m/gmmenu.tcl:579
 msgid "Bit pattern comparison"
 msgstr "Comparación de patrón de bit"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:573
+#: ../gui/tcltk/gis.m/gmmenu.tcl:580
 msgid "Kappa analysis"
 msgstr "Análisis kappa"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:574
+#: ../gui/tcltk/gis.m/gmmenu.tcl:581
 msgid "OIF for LandSat TM"
 msgstr "OIF para LandSat TM"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:577
+#: ../gui/tcltk/gis.m/gmmenu.tcl:584
 msgid "&Volumes"
 msgstr "&Volúmenes"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:578
+#: ../gui/tcltk/gis.m/gmmenu.tcl:585
 msgid "Develop grid3D volumes"
 msgstr "Crear volúmenes grid3D "
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:579
+#: ../gui/tcltk/gis.m/gmmenu.tcl:586
 msgid "Manage nulls for grid3D volume"
 msgstr "Administrar valores nulos en volúmenes grid3D"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:580
+#: ../gui/tcltk/gis.m/gmmenu.tcl:587
 msgid "Manage timestamp for grid3D volume"
 msgstr "Administrar hora en volúmenes grid3D"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:582
+#: ../gui/tcltk/gis.m/gmmenu.tcl:589
 msgid "3D MASK"
 msgstr "MÁSCARA 3D"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:583
+#: ../gui/tcltk/gis.m/gmmenu.tcl:590
 msgid "3D Map calculator"
 msgstr "Calculadora de mapas 3D"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:584
+#: ../gui/tcltk/gis.m/gmmenu.tcl:591
 msgid "Cross section from volume"
 msgstr "Sección transversal a partir de volumen"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:586
+#: ../gui/tcltk/gis.m/gmmenu.tcl:593
 msgid "Interpolate volume from vector points"
 msgstr "Interpolar volúmenes a partir de puntos vectoriales"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:587
+#: ../gui/tcltk/gis.m/gmmenu.tcl:594
 msgid "Report and Statistics"
 msgstr "Informes y estadística"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:591
+#: ../gui/tcltk/gis.m/gmmenu.tcl:598
 msgid "&Databases"
 msgstr "&Bases de datos"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:592
+#: ../gui/tcltk/gis.m/gmmenu.tcl:599
 msgid "Database information"
 msgstr "Información sobre la base de datos"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:593
+#: ../gui/tcltk/gis.m/gmmenu.tcl:600
 msgid "Describe table"
 msgstr "Describir tabla"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:594
+#: ../gui/tcltk/gis.m/gmmenu.tcl:601
 msgid "List columns"
 msgstr "Listar columnas"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:595
+#: ../gui/tcltk/gis.m/gmmenu.tcl:602
 msgid "List drivers"
 msgstr "Listar controladores"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:596
+#: ../gui/tcltk/gis.m/gmmenu.tcl:603
 msgid "List tables"
 msgstr "Listar tablas"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:599
+#: ../gui/tcltk/gis.m/gmmenu.tcl:606
 msgid "Manage database"
 msgstr "Administrar base de datos"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:600
+#: ../gui/tcltk/gis.m/gmmenu.tcl:607
 msgid "Connect to database"
 msgstr "Conectar a la base de datos"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:601
+#: ../gui/tcltk/gis.m/gmmenu.tcl:608
 msgid "Login to database"
 msgstr "Ingresar en base de datos"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:603
+#: ../gui/tcltk/gis.m/gmmenu.tcl:610
 msgid "Copy table"
 msgstr "Copiar tabla"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:604
+#: ../gui/tcltk/gis.m/gmmenu.tcl:611
 msgid "New table"
 msgstr "Nueva tabla"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:605
+#: ../gui/tcltk/gis.m/gmmenu.tcl:612
 msgid "Remove table"
 msgstr "Eliminar tabla"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:607
+#: ../gui/tcltk/gis.m/gmmenu.tcl:614
 msgid "Add columns"
 msgstr "Añadir columnas"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:608
+#: ../gui/tcltk/gis.m/gmmenu.tcl:615
 msgid "Change values"
 msgstr "Cambiar valores"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:609
+#: ../gui/tcltk/gis.m/gmmenu.tcl:616
 msgid "Drop column"
 msgstr "Quitar columna"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:610
+#: ../gui/tcltk/gis.m/gmmenu.tcl:617
 msgid "Rename a column"
 msgstr "Cambiar nombre de una columna"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:612
+#: ../gui/tcltk/gis.m/gmmenu.tcl:619
 msgid "Test database"
 msgstr "Probar base de datos"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:616
+#: ../gui/tcltk/gis.m/gmmenu.tcl:623
 msgid "Query any table"
 msgstr "Consultar cualquier tabla"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:617
+#: ../gui/tcltk/gis.m/gmmenu.tcl:624
 msgid "Query vector attribute table"
 msgstr "Consultar tabla de atributos de un vectorial"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:618
+#: ../gui/tcltk/gis.m/gmmenu.tcl:625
 msgid "SQL statement"
 msgstr "Sentencia SQL"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:620
+#: ../gui/tcltk/gis.m/gmmenu.tcl:627
 msgid "Vector<->database connections"
 msgstr "Conexión vectorial <-> base de datos"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:621
+#: ../gui/tcltk/gis.m/gmmenu.tcl:628
 msgid "Reconnect vector to database"
 msgstr "Volver a conectar vectorial a base de datos"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:622
+#: ../gui/tcltk/gis.m/gmmenu.tcl:629
 msgid "Set vector - database connection"
 msgstr "Configurar conexión vectorial - base de datos"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:625
+#: ../gui/tcltk/gis.m/gmmenu.tcl:632
 msgid "&Help"
 msgstr "&Ayuda"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:626
+#: ../gui/tcltk/gis.m/gmmenu.tcl:633
 msgid "GRASS help"
 msgstr "Manual de usuario"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:627
+#: ../gui/tcltk/gis.m/gmmenu.tcl:634
 msgid "GIS Manager &help"
 msgstr "&Ayuda del Administrador GIS"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:627
+#: ../gui/tcltk/gis.m/gmmenu.tcl:634
 msgid "GIS Manager help"
 msgstr "Ayuda del Administrador GIS"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:628
+#: ../gui/tcltk/gis.m/gmmenu.tcl:635
 msgid "About &GRASS"
 msgstr "Acerca de &GRASS"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:628
+#: ../gui/tcltk/gis.m/gmmenu.tcl:635
 msgid "About GRASS"
 msgstr "Acerca de GRASS"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:629
+#: ../gui/tcltk/gis.m/gmmenu.tcl:636
 msgid "About &System"
 msgstr "Acerca del &sistema"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:629
+#: ../gui/tcltk/gis.m/gmmenu.tcl:636
 msgid "About System"
 msgstr "Acerca del sistema"
 
-#: ../gui/tcltk/gis.m/gmmenu.tcl:637
+#: ../gui/tcltk/gis.m/gmmenu.tcl:644
 msgid "&Xtns"
 msgstr "E&xtensiones"
 
@@ -3216,6 +2576,26 @@ msgstr "*requiere que ghostscript esté instalado y en la ruta correcta"
 #: ../gui/tcltk/gis.m/mapprint.tcl:365
 msgid "Print"
 msgstr "Imprimir"
+
+#: ../gui/tcltk/gis.m/gmlib.tcl:85 ../gui/tcltk/gis.m/gmlib.tcl:114
+msgid "Map Resource File"
+msgstr "Archivo de recurso de mapa"
+
+#: ../gui/tcltk/gis.m/gmlib.tcl:86 ../gui/tcltk/gis.m/gmlib.tcl:116
+msgid "All Files"
+msgstr "Todos los archivos"
+
+#: ../gui/tcltk/gis.m/gmlib.tcl:90
+msgid "Open File"
+msgstr "Abrir archivo"
+
+#: ../gui/tcltk/gis.m/gmlib.tcl:115
+msgid "DM Resource File"
+msgstr "Archivo de recurso DM"
+
+#: ../gui/tcltk/gis.m/gmlib.tcl:119 ../lib/gis/gui.tcl:229
+msgid "Save File"
+msgstr "Guardar archivo"
 
 #: ../gui/tcltk/gis.m/dnviz.tcl:49 ../gui/tcltk/gis.m/rules.tcl:35
 msgid "Select input map"
@@ -3448,7 +2828,8 @@ msgstr "leyenda para %s"
 
 #: ../gui/tcltk/gis.m/legend.tcl:193
 msgid "Display legend for raster map using cat values and labels"
-msgstr "Mostrar leyenda para mapa ráster usando valores de categorías y etiquetas"
+msgstr ""
+"Mostrar leyenda para mapa ráster usando valores de categorías y etiquetas"
 
 #: ../gui/tcltk/gis.m/legend.tcl:210
 msgid "Raster map: "
@@ -3686,7 +3067,8 @@ msgstr "\tCobertura de color opcional. Usar mapa base para sombrear."
 
 #: ../gui/tcltk/gis.m/raster.tcl:214
 msgid "\tdrape map for color in color relief map or data fusion"
-msgstr "\tmapa de cobertura para mapa de relieve color en color o fusión de datos"
+msgstr ""
+"\tmapa de cobertura para mapa de relieve color en color o fusión de datos"
 
 #: ../gui/tcltk/gis.m/raster.tcl:219
 msgid "\tdrape map:  "
@@ -3726,7 +3108,8 @@ msgid "chart for %s"
 msgstr "gráfico para %s"
 
 #: ../gui/tcltk/gis.m/chart.tcl:159
-msgid "Display pie and bar charts of attribute values at vector object locations"
+msgid ""
+"Display pie and bar charts of attribute values at vector object locations"
 msgstr ""
 "Mostrar gráficos de tarta o de barras de los valores de atributos en las "
 "localizaciones de los objetos vectoriales"
@@ -4101,7 +3484,8 @@ msgstr "Ubicación de la escala: 0-100% f desde la esquina superior izquierda"
 
 #: ../gui/tcltk/gis.m/barscale.tcl:176
 msgid "\t enter x,y of scale/arrow upper left corner"
-msgstr "\t introducir X, Y de la esquina superior izquierda de la escala/flecha"
+msgstr ""
+"\t introducir X, Y de la esquina superior izquierda de la escala/flecha"
 
 #: ../gui/tcltk/gis.m/barscale.tcl:179
 msgid "    "
@@ -4165,7 +3549,8 @@ msgid "Raster map for blue or saturation channel"
 msgstr "Mapa ráster para el canal azul o de saturación"
 
 #: ../gui/tcltk/gis.m/rgbhis.tcl:136
-msgid "Display 3 raster maps as Red/Green/Blue or Hue/Intensity/Saturation channels"
+msgid ""
+"Display 3 raster maps as Red/Green/Blue or Hue/Intensity/Saturation channels"
 msgstr ""
 "Mostrar 3 mapas ráster como canales Rojo/Verde/Azul o de Tonalidad/"
 "Intensidad/Saturación"
@@ -4573,23 +3958,668 @@ msgstr "incluir valores nulos"
 msgid "r.info error"
 msgstr "error de r.info"
 
-#: ../gui/tcltk/gis.m/gmlib.tcl:85 ../gui/tcltk/gis.m/gmlib.tcl:114
-msgid "Map Resource File"
-msgstr "Archivo de recurso de mapa"
+#: ../lib/gtcltk/select.tcl:103
+msgid "Select item"
+msgstr "Seleccionar item"
 
-#: ../gui/tcltk/gis.m/gmlib.tcl:86 ../gui/tcltk/gis.m/gmlib.tcl:116
-msgid "All Files"
-msgstr "Todos los archivos"
+#: ../lib/gtcltk/select.tcl:208
+msgid "Ok"
+msgstr "Ok"
 
-#: ../gui/tcltk/gis.m/gmlib.tcl:90
-msgid "Open File"
-msgstr "Abrir archivo"
+#: ../lib/gis/gui.tcl:231
+msgid "Load File"
+msgstr "Cargar archivo"
 
-#: ../gui/tcltk/gis.m/gmlib.tcl:115
-msgid "DM Resource File"
-msgstr "Archivo de recurso DM"
+#: ../lib/gis/gui.tcl:355
+msgid "Options"
+msgstr "Opciones"
+
+#: ../lib/gis/gui.tcl:577
+msgid "required"
+msgstr "requerido"
+
+#: ../lib/gis/gui.tcl:577
+msgid "optional"
+msgstr "opcional"
+
+#: ../lib/gis/gui.tcl:578
+msgid "multiple"
+msgstr "múltiple"
+
+#: ../lib/init/epsg_option.tcl:93
+msgid "WARNING: cant get enviromental variable"
+msgstr "AVISO: no se puede obtener variable de entorno"
+
+#: ../lib/init/epsg_option.tcl:94
+msgid ""
+"Warning: Unable to get enviromental variable GRASS_PROJSHARE. \n"
+"This is a GRASS installation error. \n"
+"Set enviromental variable GRASS_PROJSHARE to point to directory with Proj4 "
+"EPSG file. "
+msgstr ""
+"Aviso: no se puede obtener la variable de entorno GRASS_PROJSHARE. \n"
+"Esto es un error de la instalación de GRASS\n"
+"Establezca la variable de entorno GRASS_PROJSHARE para que apunte al "
+"directorio con el archivo Proj4 SPSG. "
+
+#: ../lib/init/epsg_option.tcl:103
+msgid "Define location using EPSG projection codes"
+msgstr "Definir localización usando códigos de proyección EPSG"
+
+#: ../lib/init/epsg_option.tcl:122 ../lib/init/file_option.tcl:92
+msgid "Name of new location"
+msgstr "Nombre de la nueva localización"
+
+#: ../lib/init/epsg_option.tcl:125
+msgid "Enter name for location to be created"
+msgstr "Introducir nombre para la localización a crear"
+
+#: ../lib/init/epsg_option.tcl:129 ../lib/init/epsg_option.tcl:132
+msgid "Path to the EPSG-codes file"
+msgstr "Ruta al archivo de códigos EPSG"
+
+#: ../lib/init/epsg_option.tcl:135 ../lib/init/epsg_option.tcl:148
+#: ../lib/init/gis_set.tcl:243 ../lib/init/file_option.tcl:105
+msgid "Browse..."
+msgstr "Explorar..."
+
+#: ../lib/init/epsg_option.tcl:136
+msgid "Browse to locate EPSG file"
+msgstr "Explorar para localizar archivo EPSG"
+
+#: ../lib/init/epsg_option.tcl:143
+msgid "EPSG code number of projection"
+msgstr "Número de código EPSG de la proyección"
+
+#: ../lib/init/epsg_option.tcl:146
+msgid "Enter EPSG code for selected projection"
+msgstr "Introducir código EPSG para la proyección seleccionada"
+
+#: ../lib/init/epsg_option.tcl:149
+msgid "View EPSG codes and projection information."
+msgstr "Ver códigos EPSG e información de la proyección."
+
+#: ../lib/init/epsg_option.tcl:155
+msgid "WARNING: epsg-codes file not found"
+msgstr "AVISO: códigos EPSG no encontrados"
+
+#: ../lib/init/epsg_option.tcl:156
+msgid "WARNING: The epsg-codes file was not found!"
+msgstr "AVISO: ¡El archivo de códigos EPSG no se encontró!"
+
+#: ../lib/init/epsg_option.tcl:164 ../lib/init/file_option.tcl:111
+msgid "Define location"
+msgstr "Definir la localización"
+
+#: ../lib/init/epsg_option.tcl:187
+msgid "Invalid EPSG Code!"
+msgstr "¡Código EPSG no válido!"
+
+#: ../lib/init/epsg_option.tcl:188
+#, tcl-format
+msgid "ERROR: Invalid EPSG code %s: should be an integer."
+msgstr "ERROR: código EPSG %s no válido: debería ser un entero."
+
+#: ../lib/init/epsg_option.tcl:198
+msgid "Location Exists!"
+msgstr "¡La localización existe!"
+
+#: ../lib/init/epsg_option.tcl:199
+#, tcl-format
+msgid "WARNING: Location '%s' already exists: please try another name."
+msgstr "AVISO: la localización '%s' ya existe: por favor, pruebe otro nombre."
+
+#: ../lib/init/epsg_option.tcl:236 ../lib/init/epsg_option.tcl:263
+#: ../lib/init/file_option.tcl:185 ../lib/init/file_option.tcl:212
+msgid "Error creating location!"
+msgstr "¡Error al crear localización!"
+
+#: ../lib/init/epsg_option.tcl:237 ../lib/init/epsg_option.tcl:264
+#: ../lib/init/file_option.tcl:186 ../lib/init/file_option.tcl:213
+#, tcl-format
+msgid ""
+"g.proj returned the following message:\n"
+"%s"
+msgstr ""
+"g.proj devolvió el siguiente mensaje:\n"
+"%s"
+
+#: ../lib/init/epsg_option.tcl:244 ../lib/init/epsg_option.tcl:268
+#: ../lib/init/file_option.tcl:193 ../lib/init/file_option.tcl:217
+msgid "Informational output from g.proj"
+msgstr "Salida informativa de g.proj"
+
+#: ../lib/init/epsg_option.tcl:245 ../lib/init/epsg_option.tcl:269
+#: ../lib/init/file_option.tcl:194 ../lib/init/file_option.tcl:218
+#, tcl-format
+msgid ""
+"g.proj returned the following informational message:\n"
+"%s"
+msgstr ""
+"g.proj devolvió el siguiente mensaje informativo:\n"
+"%s"
+
+#: ../lib/init/epsg_option.tcl:288 ../lib/init/file_option.tcl:240
+msgid "Select datum transformation parameters:"
+msgstr "Seleccionar parámetros de transformación del datum:"
+
+#: ../lib/init/epsg_option.tcl:292 ../lib/init/file_option.tcl:244
+msgid ""
+"Continue without specifying parameters - if used when creating a location, "
+"other GRASS modules will use the \"default\" (likely non-optimum) parameters "
+"for this datum if necessary in the future."
+msgstr ""
+"Continuar sin especificar parámetros - si se usa al crear una localización, "
+"otros módulos de GRASS usarán los parámetros \"por defecto\" (probablemente "
+"no óptimos) para este datum si es necesario en el futuro."
+
+#: ../lib/init/epsg_option.tcl:344
+msgid "You can select EPSG code (in <braces>) and copy it for later use."
+msgstr ""
+"Puede seleccionar el código EPSG (entre <corchetes>) y copiarlo para uso "
+"posterior."
+
+#: ../lib/init/epsg_option.tcl:381
+msgid "GUESS THAT IS NOT THE EPSG FILE"
+msgstr "SUPONGA QUE NO ES EL ARCHIVO EPSG"
+
+#: ../lib/init/epsg_option.tcl:387 ../lib/init/epsg_option.tcl:416
+#: ../lib/init/epsg_option.tcl:435
+msgid "Search"
+msgstr "Buscar"
+
+#: ../lib/init/epsg_option.tcl:389
+msgid "Grab code"
+msgstr "Copiar código"
+
+#: ../lib/init/epsg_option.tcl:422
+msgid "Search text: "
+msgstr "Buscar texto: "
+
+#: ../lib/init/epsg_option.tcl:423
+msgid "Search for entered text in EPSG file"
+msgstr "Buscar el texto introducido en archivo EPSG"
+
+#: ../lib/init/epsg_option.tcl:428
+msgid "forward search"
+msgstr "buscar hacia delante"
+
+#: ../lib/init/epsg_option.tcl:429
+msgid "backward search"
+msgstr "buscar hacia atrás"
+
+#: ../lib/init/gis_set.tcl:107
+msgid "WARNING: can not save"
+msgstr "AVISO: no se puede guardar"
+
+#: ../lib/init/gis_set.tcl:108
+#, tcl-format
+msgid ""
+"Warning: unable to save data to <%s> file.\n"
+"Error message: %s"
+msgstr ""
+"Aviso: no se pueden guardar los datos en el archivo <%s>.\n"
+"Mensaje de error: %s"
+
+#: ../lib/init/gis_set.tcl:128 ../lib/init/gis_set.tcl:379
+#: ../lib/init/gis_set.tcl:485 ../lib/init/gis_set.tcl:609
+#: ../lib/init/gis_set.tcl:630 ../lib/init/gis_set.tcl:648
+#: ../lib/init/gis_set.tcl:676
+msgid "WARNING: invalid location"
+msgstr "AVISO: localización no válida"
+
+#: ../lib/init/gis_set.tcl:129
+#, tcl-format
+msgid ""
+"Warning: location <%s> at GISDBASE <%s> is not a directory or does not exist."
+msgstr ""
+"AVISO: la localización <%s> en GISDBASE <%s> no es un directorio o no existe."
+
+#: ../lib/init/gis_set.tcl:179
+#, tcl-format
+msgid "GRASS %s Startup"
+msgstr "Inicio de GRASS %s"
+
+#: ../lib/init/gis_set.tcl:202
+msgid "Welcome to GRASS GIS Version"
+msgstr "Bienvenido a GRASS GIS versión"
+
+#: ../lib/init/gis_set.tcl:204
+msgid ""
+"The world's leading open source GIS\n"
+"\n"
+msgstr ""
+"El principal GIS libre y de código abierto del mundo\n"
+"\n"
+
+#: ../lib/init/gis_set.tcl:205
+msgid "Select an existing project location and mapset\n"
+msgstr "Seleccione una localización y un directorio de mapas\n"
+
+#: ../lib/init/gis_set.tcl:206
+msgid "or define a new location\n"
+msgstr "existentes o cree una nueva localización\n"
+
+#: ../lib/init/gis_set.tcl:229
+msgid "GIS Data Directory: "
+msgstr "Directorio de datos GIS: "
+
+#: ../lib/init/gis_set.tcl:245
+msgid "New GIS data directory"
+msgstr "Nuevo directorio de datos GIS"
+
+#: ../lib/init/gis_set.tcl:268
+msgid "Project Location (projection/coordinate system)"
+msgstr "Localización del proyecto (proyección/sistema de coordenadas)"
+
+#: ../lib/init/gis_set.tcl:301
+msgid "Accessible Mapsets (directories of GIS files)"
+msgstr "Directorios de mapas accesibles (directorios de archivos GIS)"
+
+#: ../lib/init/gis_set.tcl:358
+msgid "Create new mapset in selected location"
+msgstr "Crear nuevo directorio de mapas en la localización seleccionada"
+
+#: ../lib/init/gis_set.tcl:366
+msgid "Create new mapset"
+msgstr "Crear directorio de mapas"
+
+#: ../lib/init/gis_set.tcl:371
+msgid "WARNING: invalid mapset name"
+msgstr "AVISO: nombre de directorio de mapas no admitido"
+
+#: ../lib/init/gis_set.tcl:372
+#, tcl-format
+msgid ""
+"Warning: Mapset with name <%s> already exists. \n"
+"New mapset is NOT created. \n"
+"Choose different mapset name and try again."
+msgstr ""
+"Aviso: el directorio de mapas <%s> ya existe.\n"
+"NO se crea el directorio.\n"
+"Elija un nombre diferente y pruebe otra vez."
+
+#: ../lib/init/gis_set.tcl:380
+#, tcl-format
+msgid ""
+"Warning: selected location <%s> is not valid. \n"
+" New mapset is NOT created. \n"
+" Select valid location and try again."
+msgstr ""
+"AVISO: la localización seleccionada <%s> no es válida. \n"
+"El nuevo directorio de mapas no ha sido creado. \n"
+"Intentar de nuevo con una localización válida."
+
+#: ../lib/init/gis_set.tcl:387
+msgid "WARNING: unable to mkdir"
+msgstr "AVISO: no se puede crear directorio"
+
+#: ../lib/init/gis_set.tcl:388
+#, tcl-format
+msgid ""
+"Warning: Unable to create directory for new mapset. \n"
+"Error message: %s"
+msgstr ""
+"Aviso: no se puede crear el nuevo directorio de mapas.\n"
+"Mensaje de error: %s"
+
+#: ../lib/init/gis_set.tcl:413
+msgid "Define new location with..."
+msgstr "Definir nueva localización con..."
+
+#: ../lib/init/gis_set.tcl:417
+msgid "Georeferenced file"
+msgstr "Archivo georreferenciado"
+
+#: ../lib/init/gis_set.tcl:430
+msgid "EPSG codes"
+msgstr "Códigos EPSG"
+
+#: ../lib/init/gis_set.tcl:443
+msgid "Projection values"
+msgstr "Valores de la proyección"
+
+#: ../lib/init/gis_set.tcl:481
+msgid "Enter GRASS"
+msgstr "Iniciar GRASS"
+
+#: ../lib/init/gis_set.tcl:486
+#, tcl-format
+msgid ""
+"Warning: selected location <%s> is not valid. \n"
+" Select valid location and try again."
+msgstr ""
+"AVISO: la localización seleccionada <%s> no es válida. \n"
+"Intentar de nuevo con una localización válida."
+
+#: ../lib/init/gis_set.tcl:491 ../lib/init/gis_set.tcl:654
+msgid "WARNING: invalid mapset"
+msgstr "AVISO: directorio de mapas no válido"
+
+#: ../lib/init/gis_set.tcl:492
+#, tcl-format
+msgid "Warning: <%s> is not a valid mapset"
+msgstr "AVISO: <%s> no es un directorio de mapas válido"
+
+#: ../lib/init/gis_set.tcl:512
+msgid "Help already opened"
+msgstr "La ayuda ya está abierta"
+
+#: ../lib/init/gis_set.tcl:525
+msgid "Exit"
+msgstr "Salir"
+
+#: ../lib/init/gis_set.tcl:561
+msgid "WARNING: Invalid Database"
+msgstr "AVISO: La base de datos no es válida"
+
+#: ../lib/init/gis_set.tcl:562
+msgid "WARNING: Invalid database. Finding first valid directory in parent tree"
+msgstr ""
+"AVISO: La base de datos no es válida. Buscando el primer directorio válido "
+"en directorios superiores"
+
+#: ../lib/init/gis_set.tcl:610 ../lib/init/gis_set.tcl:631
+#: ../lib/init/gis_set.tcl:649 ../lib/init/gis_set.tcl:677
+#, tcl-format
+msgid ""
+"Warning: selected location <%%s> is not valid. \n"
+" Select valid location and try again."
+msgstr ""
+"AVISO: la localización seleccionada <%%s> no es válida. \n"
+"Intentar de nuevo con una localización válida."
+
+#: ../lib/init/gis_set.tcl:655
+#, tcl-format
+msgid "Warning: <%%s> is not a valid mapset"
+msgstr "AVISO: <%%s> no es un directorio de mapas válido"
+
+#: ../lib/init/gis_set.tcl:747
+msgid "WARNING: change directory failed"
+msgstr "AVISO: falló el cambio de directorio"
+
+#: ../lib/init/gis_set.tcl:748
+#, tcl-format
+msgid ""
+"Warning: could not change directory to <%s>.\n"
+"Check directory permissions."
+msgstr ""
+"Aviso: no se pudo cambiar el directorio a <%s>.\n"
+"Compruebe los permisos del directorio."
+
+#: ../lib/init/file_option.tcl:72
+msgid "Define location using projection information in georeferenced file"
+msgstr ""
+"Definir localización usando la proyección contenida en archivo "
+"georreferenciado"
+
+#: ../lib/init/file_option.tcl:95
+msgid "Enter name of location to be created"
+msgstr "Introducir nombre de la nueva localización"
+
+#: ../lib/init/file_option.tcl:99
+msgid "Path to georeferenced file"
+msgstr "Ruta de archivo georreferenciado"
+
+#: ../lib/init/file_option.tcl:102
+msgid "Path to georeferenced file (format must be readable by GDAL/OGR)"
+msgstr ""
+"Ruta a archivo georreferenciado (el formato debe ser legible por GDAL/OGR)"
+
+#: ../lib/init/file_option.tcl:106
+msgid "Browse to locate georeferenced file"
+msgstr "Buscar archivo georreferenciado"
+
+#: ../lib/init/file_option.tcl:131 ../lib/init/file_option.tcl:134
+msgid "Choose georeferenced file"
+msgstr "Elegir archivo georreferenciado"
+
+#: ../lib/init/file_option.tcl:152
+msgid ""
+"WARNING: Please supply a\n"
+"valid georeferenced file"
+msgstr "AVISO: Por favor, especificar un archivo georreferenciado válido"
+
+#: ../vector/v.digit/settings.tcl:64
+msgid "Add new column"
+msgstr "Añadir nueva columna"
+
+#: ../vector/v.digit/settings.tcl:67
+msgid "Create table"
+msgstr "Crear tabla"
+
+#: ../vector/v.digit/settings.tcl:100
+msgid "Add command"
+msgstr "Añadir comando"
+
+#: ../vector/v.digit/settings.tcl:136
+msgid "Table successfully created"
+msgstr "Tabla creada con éxito"
+
+#: ../vector/v.digit/settings.tcl:152
+msgid "Settings already opened"
+msgstr "Configuración ya abierta"
+
+#: ../vector/v.digit/settings.tcl:170
+msgid "Symbology"
+msgstr "Simbología"
+
+#: ../vector/v.digit/settings.tcl:174 ../vector/v.digit/settings.tcl:327
+msgid "Background"
+msgstr "Fondo"
+
+#: ../vector/v.digit/settings.tcl:181
+msgid "Highlight"
+msgstr "Destacar"
+
+#: ../vector/v.digit/settings.tcl:188
+msgid "Point"
+msgstr "Punto"
+
+#: ../vector/v.digit/settings.tcl:197
+msgid "Line"
+msgstr "Línea"
+
+#: ../vector/v.digit/settings.tcl:206
+msgid "Boundary (no area)"
+msgstr "Borde (ningún área)"
+
+#: ../vector/v.digit/settings.tcl:214
+msgid "Boundary (1 area)"
+msgstr "Borde (1 área)"
+
+#: ../vector/v.digit/settings.tcl:222
+msgid "Boundary (2 areas)"
+msgstr "Borde (2 áreas)"
+
+#: ../vector/v.digit/settings.tcl:231
+msgid "Centroid (in area)"
+msgstr "Centroide (dentro del área)"
+
+#: ../vector/v.digit/settings.tcl:239
+msgid "Centroid (outside area)"
+msgstr "Centroide (fuera del área)"
+
+#: ../vector/v.digit/settings.tcl:247
+msgid "Centroid (duplicate in area)"
+msgstr "Centroide (duplicado en el área)"
+
+#: ../vector/v.digit/settings.tcl:256
+msgid "Node (1 line)"
+msgstr "Nodo (1 línea)"
+
+#: ../vector/v.digit/settings.tcl:264
+msgid "Node (2 lines)"
+msgstr "Nodo (2 líneas)"
+
+#: ../vector/v.digit/settings.tcl:274
+msgid "Settings"
+msgstr "Preferencias"
+
+#: ../vector/v.digit/settings.tcl:279
+msgid "Snapping threshold in screen pixels"
+msgstr "Umbral de dibujo en píxeles de pantalla"
+
+#: ../vector/v.digit/settings.tcl:289
+msgid "Snapping threshold in map units"
+msgstr "Umbral de dibujo en unidades del mapa"
+
+#: ../vector/v.digit/settings.tcl:306
+msgid "Line width in screen pixels"
+msgstr "Anchura de línea en píxeles de pantalla"
+
+#: ../vector/v.digit/settings.tcl:308
+msgid "Set line width in pixels"
+msgstr "Establecer la anchura de línea en píxeles"
+
+#: ../vector/v.digit/settings.tcl:316
+msgid "Table"
+msgstr "Tabla"
+
+#: ../vector/v.digit/toolbox.tcl:20
+msgid "Welcome to v.digit"
+msgstr "Bienvenido a v.digit"
+
+#: ../vector/v.digit/toolbox.tcl:21
+msgid "Left button"
+msgstr "Botón Izquierdo"
+
+#: ../vector/v.digit/toolbox.tcl:22
+msgid "Middle button"
+msgstr "Botón central"
+
+#: ../vector/v.digit/toolbox.tcl:23
+msgid "Right button"
+msgstr "Botón derecho"
+
+#: ../vector/v.digit/toolbox.tcl:76
+msgid "  Layer"
+msgstr "  Capa"
+
+#: ../vector/v.digit/toolbox.tcl:80
+msgid "  Category"
+msgstr "Categoría"
+
+#: ../vector/v.digit/toolbox.tcl:84
+msgid "  Mode "
+msgstr "Modo"
+
+#: ../vector/v.digit/toolbox.tcl:96
+msgid "Insert new record into table"
+msgstr "Introducir nuevo registro en tabla"
+
+#: ../vector/v.digit/toolbox.tcl:113
+msgid "Digitize new point"
+msgstr "Digitalizar nuevo punto"
+
+#: ../vector/v.digit/toolbox.tcl:118
+msgid "Digitize new line"
+msgstr "Digitalizar nueva línea"
+
+#: ../vector/v.digit/toolbox.tcl:123
+msgid "Digitize new boundary"
+msgstr "Digitalizar nuevo borde"
+
+#: ../vector/v.digit/toolbox.tcl:128
+msgid "Digitize new centroid"
+msgstr "Digitalizar nuevo centroide"
+
+#: ../vector/v.digit/toolbox.tcl:134
+msgid "Move vertex"
+msgstr "Mover vértice"
+
+#: ../vector/v.digit/toolbox.tcl:139
+msgid "Add vertex"
+msgstr "Añadir vértice"
+
+#: ../vector/v.digit/toolbox.tcl:144
+msgid "Remove vertex"
+msgstr "Eliminar vértice"
+
+#: ../vector/v.digit/toolbox.tcl:149
+msgid "Split line"
+msgstr "Quebrar línea"
+
+#: ../vector/v.digit/toolbox.tcl:154
+msgid "Edit line/boundary"
+msgstr "Editar línea/borde"
+
+#: ../vector/v.digit/toolbox.tcl:159
+msgid "Move point, line, boundary, or centroid"
+msgstr "Mover punto, línea, borde o centroide"
+
+#: ../vector/v.digit/toolbox.tcl:164
+msgid "Delete point, line, boundary, or centroid"
+msgstr "Borrar punto, línea, borde o centroide"
+
+#: ../vector/v.digit/toolbox.tcl:175
+msgid "Redraw"
+msgstr "Refrescar"
+
+#: ../vector/v.digit/toolbox.tcl:180
+msgid "Zoom in by window"
+msgstr "Acercar mediante ventana"
+
+#: ../vector/v.digit/toolbox.tcl:185
+msgid "Zoom out"
+msgstr "Alejar"
+
+#: ../vector/v.digit/toolbox.tcl:195
+msgid "Zoom to default region"
+msgstr "Zum a la región por defecto"
+
+#: ../vector/v.digit/toolbox.tcl:208
+msgid "Zoom to saved region"
+msgstr "Zum a una región guardada"
+
+#: ../vector/v.digit/toolbox.tcl:214
+msgid "Display categories"
+msgstr "Visualizar categorías"
+
+#: ../vector/v.digit/toolbox.tcl:219
+msgid "Copy categories"
+msgstr "Copiar Categorías"
+
+#: ../vector/v.digit/toolbox.tcl:224
+msgid "Display attributes"
+msgstr "Visualizar atributos"
+
+#: ../vector/v.digit/toolbox.tcl:236
+msgid "Open settings"
+msgstr "Abriendo preferencias"
+
+#: ../vector/v.digit/toolbox.tcl:242
+msgid "Save and exit"
+msgstr "Guardar y salir"
+
+#: ../vector/v.digit/toolbox.tcl:253
+msgid "mouse button actions (left, middle, right)"
+msgstr "Acciones de los botones del ratón (izquierda, central, derecha)"
+
+#: ../vector/v.digit/cats.tcl:34
+msgid "Categories already opened"
+msgstr "Categorías ya abiertas"
+
+#: ../vector/v.digit/cats.tcl:42
+msgid "Categories"
+msgstr "Categorías"
+
+#: ../vector/v.digit/cats.tcl:53
+msgid "Layer:"
+msgstr "Capa:"
+
+#: ../vector/v.digit/cats.tcl:55
+msgid "   Category:"
+msgstr "   Categoría:"
+
+#: ../vector/v.digit/cats.tcl:62
+msgid "Insert new record to table"
+msgstr "Introducir nuevo registro en tabla"
+
+#: ../vector/v.digit/cats.tcl:63
+msgid "Add new"
+msgstr "Añadir nuevo"
 
 #: ../visualization/nviz/scripts/panel_animation.tcl:275
 msgid "Test"
 msgstr "Test"
-

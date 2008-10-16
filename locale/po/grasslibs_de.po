@@ -4515,488 +4515,490 @@ msgid "Unable to define new light"
 msgstr "Kann Datei %s nicht öffnen."
 
 #, fuzzy
-msgid "Cannot describe table <%s>"
-msgstr "Kann Tabelle <%s> nicht beschreiben"
+#~ msgid "Cannot describe table <%s>"
+#~ msgstr "Kann Tabelle <%s> nicht beschreiben"
 
-msgid "Unknown command: %d last: %d"
-msgstr "Unbekanntes Kommando: %d zuletzt: %d"
+#~ msgid "Unknown command: %d last: %d"
+#~ msgstr "Unbekanntes Kommando: %d zuletzt: %d"
 
-msgid "Monitor: get_command: Premature EOF"
-msgstr "Monitor: get_command: Vorzeitiges EOF"
+#~ msgid "Monitor: get_command: Premature EOF"
+#~ msgstr "Monitor: get_command: Vorzeitiges EOF"
 
-msgid "Graphics driver [%s] started"
-msgstr "Grafiktreiber [%s] gestartet"
+#~ msgid "Graphics driver [%s] started"
+#~ msgstr "Grafiktreiber [%s] gestartet"
 
-msgid "ERROR %s from graphics driver.\n"
-msgstr "Graphik-Treiber liefert FEHLER %s.\n"
+#~ msgid "ERROR %s from graphics driver.\n"
+#~ msgstr "Graphik-Treiber liefert FEHLER %s.\n"
 
-msgid "ERROR - eof from graphics monitor.\n"
-msgstr "FEHLER - Unerwartetes Dateiende vom Monitor übermittelt.\n"
+#~ msgid "ERROR - eof from graphics monitor.\n"
+#~ msgstr "FEHLER - Unerwartetes Dateiende vom Monitor übermittelt.\n"
 
-msgid "Warning - no response from graphics monitor <%s>.\n"
-msgstr "Warnung - keine Antwort vom Graphikmonitor <%s>.\n"
+#~ msgid "Warning - no response from graphics monitor <%s>.\n"
+#~ msgstr "Warnung - keine Antwort vom Graphikmonitor <%s>.\n"
 
-msgid "Check to see if the mouse is still active.\n"
-msgstr "Kontrollieren Sie bitte, ob die Maus noch aktiv ist.\n"
+#~ msgid "Check to see if the mouse is still active.\n"
+#~ msgstr "Kontrollieren Sie bitte, ob die Maus noch aktiv ist.\n"
 
-msgid "ERROR - no response from graphics monitor <%s>.\n"
-msgstr "Fehler - keine Antwort vom Graphikmonitor <%s>.\n"
+#~ msgid "ERROR - no response from graphics monitor <%s>.\n"
+#~ msgstr "Fehler - keine Antwort vom Graphikmonitor <%s>.\n"
 
-msgid "No graphics monitor has been selected for output."
-msgstr "Kein Graphik-Monitor wurde für den Output selektiert."
+#~ msgid "No graphics monitor has been selected for output."
+#~ msgstr "Kein Graphik-Monitor wurde für den Output selektiert."
 
-msgid "Please run \"d.mon\" to select a graphics monitor."
-msgstr "Bitte benutzen Sie \"d.mon\", um einen Graphik-Monitor auszuwählen."
+#~ msgid "Please run \"d.mon\" to select a graphics monitor."
+#~ msgstr "Bitte benutzen Sie \"d.mon\", um einen Graphik-Monitor auszuwählen."
 
-msgid "Failed to get socket name for monitor <%s>."
-msgstr "Für Monitor <%s> konnte kein Socket hergestellt werden."
+#~ msgid "Failed to get socket name for monitor <%s>."
+#~ msgstr "Für Monitor <%s> konnte kein Socket hergestellt werden."
 
-msgid "No socket to connect to for monitor <%s>."
-msgstr "Keine Socket-Verbindung für Monitor <%s> vorhanden."
+#~ msgid "No socket to connect to for monitor <%s>."
+#~ msgstr "Keine Socket-Verbindung für Monitor <%s> vorhanden."
 
-msgid "Socket is already in use or not accepting connections."
-msgstr "Socket wird bereits benutzt oder akzeptiert keine Verbindungen."
+#~ msgid "Socket is already in use or not accepting connections."
+#~ msgstr "Socket wird bereits benutzt oder akzeptiert keine Verbindungen."
 
-msgid "Use d.mon to select a monitor"
-msgstr "Bitte benutzen Sie \"d.mon\", um einen Graphik-Monitor auszuwählen."
+#~ msgid "Use d.mon to select a monitor"
+#~ msgstr "Bitte benutzen Sie \"d.mon\", um einen Graphik-Monitor auszuwählen."
 
-msgid "Trying to connect to something not a socket."
-msgstr "Versuche eine Verbindung zu etwas herzustellen, was kein Socket ist."
+#~ msgid "Trying to connect to something not a socket."
+#~ msgstr ""
+#~ "Versuche eine Verbindung zu etwas herzustellen, was kein Socket ist."
 
-msgid "Probably an error with the server."
-msgstr "Wahrscheinlich ein Fehler mit dem Server."
+#~ msgid "Probably an error with the server."
+#~ msgstr "Wahrscheinlich ein Fehler mit dem Server."
 
-msgid "Connection failed."
-msgstr "Verbindung fehlgeschlagen."
-
-#, fuzzy
-msgid "Attempt to delete dead line"
-msgstr "Versuch, eine tote Fläche zu löschen"
+#~ msgid "Connection failed."
+#~ msgstr "Verbindung fehlgeschlagen."
 
 #, fuzzy
-msgid "Unable to connect lines %d,%d"
-msgstr "Kann Datei head nicht lesen"
-
-msgid "Unable to open file %s"
-msgstr "Kann Datei %s nicht öffnen."
+#~ msgid "Attempt to delete dead line"
+#~ msgstr "Versuch, eine tote Fläche zu löschen"
 
 #, fuzzy
-msgid "Unable to open temporary file"
-msgstr "Kann Datei %s nicht öffnen."
+#~ msgid "Unable to connect lines %d,%d"
+#~ msgstr "Kann Datei head nicht lesen"
 
-msgid "Hit RETURN to cancel request\n"
-msgstr "Drücken Sie RETURN, um abzubrechen.\n"
-
-msgid "Cannot open temp file"
-msgstr "Kann temporäre Datei nicht öffnen."
-
-msgid ""
-"\n"
-"Please specify ellipsoid name\n"
-msgstr ""
-"\n"
-"Bitte spezifizieren Sie einen Ellipsoiden\n"
-
-msgid "Enter 'list' for the list of available ellipsoids\n"
-msgstr "Geben Sie 'list' für eine Liste der verfügbaren Ellipsoiden ein.\n"
-
-msgid ""
-"\n"
-"invalid ellipsoid\n"
-msgstr ""
-"\n"
-"Ungültiger Ellipsoid\n"
+#~ msgid "Unable to open file %s"
+#~ msgstr "Kann Datei %s nicht öffnen."
 
 #, fuzzy
-msgid "Output name '%s' is not valid rast name."
-msgstr "Ausgabename '%s' ist kein erlaubter Rasterkartenname."
+#~ msgid "Unable to open temporary file"
+#~ msgstr "Kann Datei %s nicht öffnen."
+
+#~ msgid "Hit RETURN to cancel request\n"
+#~ msgstr "Drücken Sie RETURN, um abzubrechen.\n"
+
+#~ msgid "Cannot open temp file"
+#~ msgstr "Kann temporäre Datei nicht öffnen."
+
+#~ msgid ""
+#~ "\n"
+#~ "Please specify ellipsoid name\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Bitte spezifizieren Sie einen Ellipsoiden\n"
+
+#~ msgid "Enter 'list' for the list of available ellipsoids\n"
+#~ msgstr "Geben Sie 'list' für eine Liste der verfügbaren Ellipsoiden ein.\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "invalid ellipsoid\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Ungültiger Ellipsoid\n"
 
 #, fuzzy
-msgid "Output map '%s' is used as input"
-msgstr "Ergebniskarte '%s' ist gleichzeitig Eingabekarte."
-
-msgid ""
-"\n"
-"Please specify datum name\n"
-msgstr ""
-"\n"
-"Bitte spezifizieren Sie ein Datum\n"
-
-msgid "Enter 'list' for the list of available datums\n"
-msgstr "Geben Sie 'list' für eine Liste der verfügbaren Datums ein\n"
-
-msgid ""
-"\n"
-"invalid datum\n"
-msgstr ""
-"\n"
-"Ungültiges Datum\n"
-
-msgid "hit RETURN to continue -->"
-msgstr "Bitte RETURN zum Weitermachen drücken -->"
+#~ msgid "Output name '%s' is not valid rast name."
+#~ msgstr "Ausgabename '%s' ist kein erlaubter Rasterkartenname."
 
 #, fuzzy
-msgid "unable to open raster map [%s in %s]"
-msgstr "Kann nicht zum Verzeichnis %s wechseln."
+#~ msgid "Output map '%s' is used as input"
+#~ msgstr "Ergebniskarte '%s' ist gleichzeitig Eingabekarte."
 
-msgid "one moment...\n"
-msgstr "einen Moment bitte...\n"
+#~ msgid ""
+#~ "\n"
+#~ "Please specify datum name\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Bitte spezifizieren Sie ein Datum\n"
 
-msgid "No help available for command [%s]\n"
-msgstr "Leider keine Hilfe für das Kommando [%s] verfügbar.\n"
+#~ msgid "Enter 'list' for the list of available datums\n"
+#~ msgstr "Geben Sie 'list' für eine Liste der verfügbaren Datums ein\n"
 
-msgid " The raster map %s@%s is empty"
-msgstr " Die Rasterkarte %s@%s ist leer."
+#~ msgid ""
+#~ "\n"
+#~ "invalid datum\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Ungültiges Datum\n"
 
-msgid ""
-"\n"
-"\n"
-"Color table needed for file [%s] in mapset [%s].\n"
-msgstr ""
-"\n"
-"\n"
-"Farbtabelle wird für die Datei [%s] in Mapset [%s] benötigt.\n"
-
-msgid ""
-"\n"
-"Please identify the type desired:\n"
-msgstr ""
-"\n"
-"Bitte identifizieren Sie den entsprechenden Typ:\n"
-
-msgid "    1:  Random colors\n"
-msgstr "    1:  Zufällige Farben\n"
-
-msgid "    2:  Red, green, and blue color ramps\n"
-msgstr "    2:  Rote, grüne und blaue Farbrampen\n"
-
-msgid "    3:  Color wave\n"
-msgstr "    3:  Farbenwelle\n"
-
-msgid "    4:  Gray scale\n"
-msgstr "    4:  Graustufen\n"
-
-msgid "    5:  Aspect\n"
-msgstr "    5:  Farbe speziell für Hangneigungskarten\n"
-
-msgid "    6:  Rainbow colors\n"
-msgstr "    6:  Regenbogenfarben\n"
-
-msgid "    7:  Red through yellow to green\n"
-msgstr "    7:  Von rot über gelb zu grün\n"
-
-msgid "    8:  Green through yellow to red\n"
-msgstr "    8:  Von grün über gelb zu rot\n"
-
-msgid "RETURN  quit\n"
-msgstr "RETURN  um abzubrechen\n"
-
-msgid ""
-"\n"
-"%s invalid; Try again > "
-msgstr ""
-"\n"
-"%s ist ungültig; Bitte nocheinmal probieren > "
-
-msgid "%s not found"
-msgstr "%s nicht gefunden"
-
-msgid "ERROR in reading %s"
-msgstr "FEHLER beim Lesen von %s"
-
-msgid ""
-"\n"
-"\n"
-"Please specify projection name\n"
-msgstr ""
-"\n"
-"\n"
-"Bitte spezifizieren Sie eine Projektion\n"
-
-msgid "Enter 'list' for the list of available projections\n"
-msgstr "Geben Sie 'list' für eine Liste der verfügbaren Projektionen ein.\n"
-
-msgid ""
-"\n"
-"invalid projection\n"
-msgstr ""
-"\n"
-"Ungültige Projektion\n"
-
-msgid "with titles"
-msgstr "mit Titeln"
-
-msgid "(no title)"
-msgstr "(kein Titel)"
-
-msgid ""
-"\n"
-"FLAG: Set the following flag?\n"
-msgstr ""
-"\n"
-"FLAG: Soll das folgende Flag gesetzt werden?\n"
-
-msgid ""
-"\n"
-"OPTION:   %s\n"
-msgstr ""
-"\n"
-"OPTION:   %s\n"
-
-msgid "     key: %s\n"
-msgstr "     Key: %s\n"
-
-msgid "  format: %s\n"
-msgstr "  Format: %s\n"
-
-msgid " default: %s\n"
-msgstr " Standard: %s\n"
-
-msgid "required: %s\n"
-msgstr "benötigt werden: %s\n"
-
-msgid "multiple: %s\n"
-msgstr "vielfach: %s\n"
-
-msgid "enter option > "
-msgstr "Geben Sie eine Option ein > "
-
-msgid "   Try again? "
-msgstr "   Nochmal versuchen? "
-
-msgid "Sorry, %s is not accepted.\n"
-msgstr "Tut mir leid, %s wird nicht akzeptiert.\n"
-
-msgid ""
-"\n"
-"You have chosen:\n"
-"  %s\n"
-msgstr ""
-"\n"
-"Sie haben ausgewählt:\n"
-"  %s\n"
-
-msgid "Is this correct? "
-msgstr "Ist das richtig?"
-
-msgid "to accept the default"
-msgstr "Zum Akzeptieren der Standardeinstellung"
-
-msgid "to cancel request"
-msgstr "um die Aktion abzubrechen"
-
-msgid "Enter a new %s file name"
-msgstr "Bitte geben Sie einen neuen %s Dateinamen ein."
-
-msgid "Enter the name of an existing %s file"
-msgstr "Bitte geben Sie den Namen einer existierenden %s Datei ein."
-
-msgid "Enter %s file name"
-msgstr "Bitte geben Sie %s Dateinamen ein."
-
-msgid "Enter 'list' for a list of existing %s files\n"
-msgstr ""
-"Bitte geben Sie 'list' für eine Liste der bereits existierenden %s Dateien "
-"ein.\n"
-
-msgid "Enter 'list -f' for "
-msgstr "Geben Sie 'list -f' für "
-
-msgid "a list %s"
-msgstr "eine Liste %s ein."
-
-msgid "an extended list"
-msgstr "eine erweiterte Liste ein."
-
-msgid "Hit RETURN %s\n"
-msgstr "Drücken Sie RETURN %s\n"
-
-msgid ""
-"\n"
-"** %s - not found **\n"
-msgstr ""
-"\n"
-"** %s - leider nicht gefunden **\n"
-
-msgid ""
-"\n"
-"** %s exists. ok to overwrite? "
-msgstr ""
-"\n"
-"** %s existiert. Soll sie überschrieben werden? "
-
-msgid ""
-"\n"
-"**<%s> illegal name **\n"
-msgstr ""
-"\n"
-"**<%s> unerlaubter Name **\n"
-
-msgid ""
-"\n"
-"** %s - illegal request **\n"
-msgstr ""
-"\n"
-"** %s - unerlaubte Anfrage **\n"
-
-msgid ""
-"\n"
-"** %s - exists, select another name **\n"
-msgstr ""
-"\n"
-"** %s - existiert bereits, bitte wählen Sie einen anderen Namen **\n"
-
-msgid "ask: can't happen"
-msgstr "Frage: Das kann nicht passieren"
-
-msgid "Insufficent memory for allocation of gaussian"
-msgstr "Ungenügend Speicher zum Allokieren der Gausschen..."
+#~ msgid "hit RETURN to continue -->"
+#~ msgstr "Bitte RETURN zum Weitermachen drücken -->"
 
 #, fuzzy
-msgid "Cannot read topo for line [%d]"
-msgstr "Kann Datei head nicht lesen"
+#~ msgid "unable to open raster map [%s in %s]"
+#~ msgstr "Kann nicht zum Verzeichnis %s wechseln."
+
+#~ msgid "one moment...\n"
+#~ msgstr "einen Moment bitte...\n"
+
+#~ msgid "No help available for command [%s]\n"
+#~ msgstr "Leider keine Hilfe für das Kommando [%s] verfügbar.\n"
+
+#~ msgid " The raster map %s@%s is empty"
+#~ msgstr " Die Rasterkarte %s@%s ist leer."
+
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ "Color table needed for file [%s] in mapset [%s].\n"
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "Farbtabelle wird für die Datei [%s] in Mapset [%s] benötigt.\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Please identify the type desired:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Bitte identifizieren Sie den entsprechenden Typ:\n"
+
+#~ msgid "    1:  Random colors\n"
+#~ msgstr "    1:  Zufällige Farben\n"
+
+#~ msgid "    2:  Red, green, and blue color ramps\n"
+#~ msgstr "    2:  Rote, grüne und blaue Farbrampen\n"
+
+#~ msgid "    3:  Color wave\n"
+#~ msgstr "    3:  Farbenwelle\n"
+
+#~ msgid "    4:  Gray scale\n"
+#~ msgstr "    4:  Graustufen\n"
+
+#~ msgid "    5:  Aspect\n"
+#~ msgstr "    5:  Farbe speziell für Hangneigungskarten\n"
+
+#~ msgid "    6:  Rainbow colors\n"
+#~ msgstr "    6:  Regenbogenfarben\n"
+
+#~ msgid "    7:  Red through yellow to green\n"
+#~ msgstr "    7:  Von rot über gelb zu grün\n"
+
+#~ msgid "    8:  Green through yellow to red\n"
+#~ msgstr "    8:  Von grün über gelb zu rot\n"
+
+#~ msgid "RETURN  quit\n"
+#~ msgstr "RETURN  um abzubrechen\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "%s invalid; Try again > "
+#~ msgstr ""
+#~ "\n"
+#~ "%s ist ungültig; Bitte nocheinmal probieren > "
+
+#~ msgid "%s not found"
+#~ msgstr "%s nicht gefunden"
+
+#~ msgid "ERROR in reading %s"
+#~ msgstr "FEHLER beim Lesen von %s"
+
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ "Please specify projection name\n"
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "Bitte spezifizieren Sie eine Projektion\n"
+
+#~ msgid "Enter 'list' for the list of available projections\n"
+#~ msgstr "Geben Sie 'list' für eine Liste der verfügbaren Projektionen ein.\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "invalid projection\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Ungültige Projektion\n"
+
+#~ msgid "with titles"
+#~ msgstr "mit Titeln"
+
+#~ msgid "(no title)"
+#~ msgstr "(kein Titel)"
+
+#~ msgid ""
+#~ "\n"
+#~ "FLAG: Set the following flag?\n"
+#~ msgstr ""
+#~ "\n"
+#~ "FLAG: Soll das folgende Flag gesetzt werden?\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "OPTION:   %s\n"
+#~ msgstr ""
+#~ "\n"
+#~ "OPTION:   %s\n"
+
+#~ msgid "     key: %s\n"
+#~ msgstr "     Key: %s\n"
+
+#~ msgid "  format: %s\n"
+#~ msgstr "  Format: %s\n"
+
+#~ msgid " default: %s\n"
+#~ msgstr " Standard: %s\n"
+
+#~ msgid "required: %s\n"
+#~ msgstr "benötigt werden: %s\n"
+
+#~ msgid "multiple: %s\n"
+#~ msgstr "vielfach: %s\n"
+
+#~ msgid "enter option > "
+#~ msgstr "Geben Sie eine Option ein > "
+
+#~ msgid "   Try again? "
+#~ msgstr "   Nochmal versuchen? "
+
+#~ msgid "Sorry, %s is not accepted.\n"
+#~ msgstr "Tut mir leid, %s wird nicht akzeptiert.\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "You have chosen:\n"
+#~ "  %s\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Sie haben ausgewählt:\n"
+#~ "  %s\n"
+
+#~ msgid "Is this correct? "
+#~ msgstr "Ist das richtig?"
+
+#~ msgid "to accept the default"
+#~ msgstr "Zum Akzeptieren der Standardeinstellung"
+
+#~ msgid "to cancel request"
+#~ msgstr "um die Aktion abzubrechen"
+
+#~ msgid "Enter a new %s file name"
+#~ msgstr "Bitte geben Sie einen neuen %s Dateinamen ein."
+
+#~ msgid "Enter the name of an existing %s file"
+#~ msgstr "Bitte geben Sie den Namen einer existierenden %s Datei ein."
+
+#~ msgid "Enter %s file name"
+#~ msgstr "Bitte geben Sie %s Dateinamen ein."
+
+#~ msgid "Enter 'list' for a list of existing %s files\n"
+#~ msgstr ""
+#~ "Bitte geben Sie 'list' für eine Liste der bereits existierenden %s "
+#~ "Dateien ein.\n"
+
+#~ msgid "Enter 'list -f' for "
+#~ msgstr "Geben Sie 'list -f' für "
+
+#~ msgid "a list %s"
+#~ msgstr "eine Liste %s ein."
+
+#~ msgid "an extended list"
+#~ msgstr "eine erweiterte Liste ein."
+
+#~ msgid "Hit RETURN %s\n"
+#~ msgstr "Drücken Sie RETURN %s\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "** %s - not found **\n"
+#~ msgstr ""
+#~ "\n"
+#~ "** %s - leider nicht gefunden **\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "** %s exists. ok to overwrite? "
+#~ msgstr ""
+#~ "\n"
+#~ "** %s existiert. Soll sie überschrieben werden? "
+
+#~ msgid ""
+#~ "\n"
+#~ "**<%s> illegal name **\n"
+#~ msgstr ""
+#~ "\n"
+#~ "**<%s> unerlaubter Name **\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "** %s - illegal request **\n"
+#~ msgstr ""
+#~ "\n"
+#~ "** %s - unerlaubte Anfrage **\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "** %s - exists, select another name **\n"
+#~ msgstr ""
+#~ "\n"
+#~ "** %s - existiert bereits, bitte wählen Sie einen anderen Namen **\n"
+
+#~ msgid "ask: can't happen"
+#~ msgstr "Frage: Das kann nicht passieren"
+
+#~ msgid "Insufficent memory for allocation of gaussian"
+#~ msgstr "Ungenügend Speicher zum Allokieren der Gausschen..."
 
 #, fuzzy
-msgid "Can't read header file for [%s in %s]\n"
-msgstr "Kann range Datei für [%s in %s] nicht lesen."
+#~ msgid "Cannot read topo for line [%d]"
+#~ msgstr "Kann Datei head nicht lesen"
 
 #, fuzzy
-msgid "Can't open header file for [%s in %s]"
-msgstr "Kann range Datei für [%s in %s] nicht lesen."
+#~ msgid "Can't read header file for [%s in %s]\n"
+#~ msgstr "Kann range Datei für [%s in %s] nicht lesen."
 
 #, fuzzy
-msgid "Cannot get field info"
-msgstr "Kann die Layer-Informationen nicht abfragen."
+#~ msgid "Can't open header file for [%s in %s]"
+#~ msgstr "Kann range Datei für [%s in %s] nicht lesen."
 
 #, fuzzy
-msgid "Cannot open database"
-msgstr "Kann Datenbank '%s' nicht öffnen."
+#~ msgid "Cannot get field info"
+#~ msgstr "Kann die Layer-Informationen nicht abfragen."
 
 #, fuzzy
-msgid "Building topology ...\n"
-msgstr "Bitte Topologie für Vektorkarte <'%s> neu erzeugen\n"
-
-msgid ""
-"\r%d areas built      \n"
-"%d isles built\n"
-msgstr ""
-"\r%d Flächen erstellt \n"
-"%d Inselflächen erstellt\n"
+#~ msgid "Cannot open database"
+#~ msgstr "Kann Datenbank '%s' nicht öffnen."
 
 #, fuzzy
-msgid "Cannot open database <%s> by driver <%s>"
-msgstr "Kann Datenbank '%s' nicht öffnen."
+#~ msgid "Building topology ...\n"
+#~ msgstr "Bitte Topologie für Vektorkarte <'%s> neu erzeugen\n"
+
+#~ msgid ""
+#~ "\r%d areas built      \n"
+#~ "%d isles built\n"
+#~ msgstr ""
+#~ "\r%d Flächen erstellt \n"
+#~ "%d Inselflächen erstellt\n"
 
 #, fuzzy
-msgid "Cannot get column info"
-msgstr "Kann die Layer-Informationen nicht abfragen."
+#~ msgid "Cannot open database <%s> by driver <%s>"
+#~ msgstr "Kann Datenbank '%s' nicht öffnen."
 
 #, fuzzy
-msgid "Column type not supported"
-msgstr "OGR Feature Typ %d wird nicht unterstützt."
+#~ msgid "Cannot get column info"
+#~ msgstr "Kann die Layer-Informationen nicht abfragen."
 
 #, fuzzy
-msgid "OGR feature type [%d] not supported"
-msgstr "OGR Feature Typ %d wird nicht unterstützt."
+#~ msgid "Column type not supported"
+#~ msgstr "OGR Feature Typ %d wird nicht unterstützt."
 
 #, fuzzy
-msgid "Vect_rewrite_line() for this format/level not supported"
-msgstr "Vect_write_line() wird für dieses Format/Level nicht unterstützt."
+#~ msgid "OGR feature type [%d] not supported"
+#~ msgstr "OGR Feature Typ %d wird nicht unterstützt."
 
 #, fuzzy
-msgid "Vect_delete_line() for this format/level not supported"
-msgstr "Vect_write_line() wird für dieses Format/Level nicht unterstützt."
+#~ msgid "Vect_rewrite_line() for this format/level not supported"
+#~ msgstr "Vect_write_line() wird für dieses Format/Level nicht unterstützt."
 
 #, fuzzy
-msgid "Cannot rewrite line"
-msgstr "Kann temporäre Datei nicht öffnen."
+#~ msgid "Vect_delete_line() for this format/level not supported"
+#~ msgstr "Vect_write_line() wird für dieses Format/Level nicht unterstützt."
 
 #, fuzzy
-msgid "Cannot delete line"
-msgstr "Kann temporäre Datei nicht öffnen."
+#~ msgid "Cannot rewrite line"
+#~ msgstr "Kann temporäre Datei nicht öffnen."
 
 #, fuzzy
-msgid "Output name '%s' is not valid vector name."
-msgstr "Ausgabename '%s' ist kein erlaubter Rasterkartenname."
+#~ msgid "Cannot delete line"
+#~ msgstr "Kann temporäre Datei nicht öffnen."
 
 #, fuzzy
-msgid "Cannot copy vector '%s' to '%s'"
-msgstr "Kann Rasterkarte [%s in %s] nicht öffnen."
+#~ msgid "Output name '%s' is not valid vector name."
+#~ msgstr "Ausgabename '%s' ist kein erlaubter Rasterkartenname."
 
 #, fuzzy
-msgid "Cannot open existing vector map <%s>"
-msgstr "Kann nicht zum Verzeichnis %s wechseln."
+#~ msgid "Cannot copy vector '%s' to '%s'"
+#~ msgstr "Kann Rasterkarte [%s in %s] nicht öffnen."
 
 #, fuzzy
-msgid "Cannot delete existing vector <%s>"
-msgstr "Kann nicht zum Verzeichnis %s wechseln."
+#~ msgid "Cannot open existing vector map <%s>"
+#~ msgstr "Kann nicht zum Verzeichnis %s wechseln."
 
 #, fuzzy
-msgid "Cannot open new vector %s"
-msgstr "Kann die Debug-Datei '%s' nicht öffnen."
+#~ msgid "Cannot delete existing vector <%s>"
+#~ msgstr "Kann nicht zum Verzeichnis %s wechseln."
 
 #, fuzzy
-msgid "Cannot open history file for vector '%s'"
-msgstr "Kann die History-Datei für die Vektorkarte <%s> nicht öffnen."
+#~ msgid "Cannot open new vector %s"
+#~ msgstr "Kann die Debug-Datei '%s' nicht öffnen."
 
 #, fuzzy
-msgid "Could not stat file '%s'"
-msgstr "Kann Datei %s nicht öffnen."
+#~ msgid "Cannot open history file for vector '%s'"
+#~ msgstr "Kann die History-Datei für die Vektorkarte <%s> nicht öffnen."
 
 #, fuzzy
-msgid "Can't open directory %s"
-msgstr "Kann nicht zum Verzeichnis %s wechseln."
-
-msgid "Starting lu solver method"
-msgstr "Starte lu-Solver Methode"
+#~ msgid "Could not stat file '%s'"
+#~ msgstr "Kann Datei %s nicht öffnen."
 
 #, fuzzy
-msgid "%s - ** illegal name **"
-msgstr ""
-"\n"
-"**<%s> unerlaubter Name **\n"
+#~ msgid "Can't open directory %s"
+#~ msgstr "Kann nicht zum Verzeichnis %s wechseln."
+
+#~ msgid "Starting lu solver method"
+#~ msgstr "Starte lu-Solver Methode"
 
 #, fuzzy
-msgid "Gauss-Seidel -- iteration %5i error %g\n"
-msgstr "sparse SOR -- Durchlauf %5i Fehler %g\n"
+#~ msgid "%s - ** illegal name **"
+#~ msgstr ""
+#~ "\n"
+#~ "**<%s> unerlaubter Name **\n"
 
 #, fuzzy
-msgid "No such graphics monitor as <%s>.\n"
-msgstr "Fehler - keine Antwort vom Graphikmonitor <%s>.\n"
+#~ msgid "Gauss-Seidel -- iteration %5i error %g\n"
+#~ msgstr "sparse SOR -- Durchlauf %5i Fehler %g\n"
 
 #, fuzzy
-msgid "Please run \"d.mon\" to select a valid graphics monitor.\n"
-msgstr "Bitte benutzen Sie \"d.mon\", um einen Graphik-Monitor auszuwählen."
+#~ msgid "No such graphics monitor as <%s>.\n"
+#~ msgstr "Fehler - keine Antwort vom Graphikmonitor <%s>.\n"
 
 #, fuzzy
-msgid "Can't stat %s\n"
-msgstr "eine Liste %s ein."
-
-msgid "Error - Monitor <%s> is in use.\n"
-msgstr "Fehler - Monitor <%s> wird bereits benutzt.\n"
-
-msgid "Error - Monitor <%s> is in use by %s.\n"
-msgstr "Fehler - Monitor <%s> wird bereits von %s benutzt.\n"
-
-msgid "Error - Could not complete locking process for monitor <%s>.\n"
-msgstr "Fehler - Kann den Locking-Prozess für Monitor <%s> nicht beenden.\n"
-
-msgid "Error - Can't set up pipe to graphics device.\n"
-msgstr "Fehler - Kann keine Pipe zum Graphik-Gerät aufbauen.\n"
-
-msgid "Error - Graphics monitor <%s> not running!\n"
-msgstr "Fehler - Graphik-Monitor <%s> läuft nicht!\n"
+#~ msgid "Please run \"d.mon\" to select a valid graphics monitor.\n"
+#~ msgstr "Bitte benutzen Sie \"d.mon\", um einen Graphik-Monitor auszuwählen."
 
 #, fuzzy
-msgid "Please start graphics monitor <%s>.\n"
-msgstr "Fehler - keine Antwort vom Graphikmonitor <%s>.\n"
+#~ msgid "Can't stat %s\n"
+#~ msgstr "eine Liste %s ein."
 
-msgid "Not connected...\n"
-msgstr "Nicht verbunden...\n"
+#~ msgid "Error - Monitor <%s> is in use.\n"
+#~ msgstr "Fehler - Monitor <%s> wird bereits benutzt.\n"
 
-msgid "Couldn't connect to monitor. Will try once more.\n"
-msgstr ""
-"Kann nicht mit einem Monitor verbinden. Versuche es noch ein weiteres Mal.\n"
+#~ msgid "Error - Monitor <%s> is in use by %s.\n"
+#~ msgstr "Fehler - Monitor <%s> wird bereits von %s benutzt.\n"
+
+#~ msgid "Error - Could not complete locking process for monitor <%s>.\n"
+#~ msgstr "Fehler - Kann den Locking-Prozess für Monitor <%s> nicht beenden.\n"
+
+#~ msgid "Error - Can't set up pipe to graphics device.\n"
+#~ msgstr "Fehler - Kann keine Pipe zum Graphik-Gerät aufbauen.\n"
+
+#~ msgid "Error - Graphics monitor <%s> not running!\n"
+#~ msgstr "Fehler - Graphik-Monitor <%s> läuft nicht!\n"
+
+#, fuzzy
+#~ msgid "Please start graphics monitor <%s>.\n"
+#~ msgstr "Fehler - keine Antwort vom Graphikmonitor <%s>.\n"
+
+#~ msgid "Not connected...\n"
+#~ msgstr "Nicht verbunden...\n"
+
+#~ msgid "Couldn't connect to monitor. Will try once more.\n"
+#~ msgstr ""
+#~ "Kann nicht mit einem Monitor verbinden. Versuche es noch ein weiteres "
+#~ "Mal.\n"
 
 #~ msgid "Unable to allocate memory\n"
 #~ msgstr "Kann keinen Speicher belegen.\n"

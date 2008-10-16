@@ -28073,3885 +28073,3907 @@ msgstr "Kann Eingabe nicht von stdin lesen."
 msgid "Unable to set isosurface (%d) attribute (%d) of volume %d"
 msgstr "Kann folgende Attribute nicht auswählen: %s"
 
-msgid ""
-"Optional where condition (without WHERE key word), e.g.:\n"
-"\t\tobec = 'Liptakov'"
-msgstr ""
-"Optionale 'where'-Angabe (ohne 'WHERE' Schlüsselwort), z.B.:\n"
-"\t\tobec = 'Liptakov'"
+#~ msgid ""
+#~ "Optional where condition (without WHERE key word), e.g.:\n"
+#~ "\t\tobec = 'Liptakov'"
+#~ msgstr ""
+#~ "Optionale 'where'-Angabe (ohne 'WHERE' Schlüsselwort), z.B.:\n"
+#~ "\t\tobec = 'Liptakov'"
 
-msgid "Illegal output file name"
-msgstr "Ungültiger Ausgabedateiname"
+#~ msgid "Illegal output file name"
+#~ msgstr "Ungültiger Ausgabedateiname"
 
-msgid "Width in pixels of new display monitor"
-msgstr "Breite des neuen Grafik-Fensters in Pixel."
+#~ msgid "Width in pixels of new display monitor"
+#~ msgstr "Breite des neuen Grafik-Fensters in Pixel."
 
-msgid "Height in pixels of new display monitor"
-msgstr "Höhe des neuen Grafik-Fensters in Pixel."
+#~ msgid "Height in pixels of new display monitor"
+#~ msgstr "Höhe des neuen Grafik-Fensters in Pixel."
 
 #, fuzzy
-msgid "Moves displayed maps to another monitor"
-msgstr "Erzeugt und stellt ein Menü im aktiven Frame des Grafik-Fensters dar."
+#~ msgid "Moves displayed maps to another monitor"
+#~ msgstr ""
+#~ "Erzeugt und stellt ein Menü im aktiven Frame des Grafik-Fensters dar."
 
 #, fuzzy
-msgid "Target monitor"
-msgstr "Verarbeite Punkte ... "
+#~ msgid "Target monitor"
+#~ msgstr "Verarbeite Punkte ... "
 
-msgid "Source monitor"
-msgstr "Quell Grafik-Fenster."
+#~ msgid "Source monitor"
+#~ msgstr "Quell Grafik-Fenster."
 
 #, fuzzy
-msgid "display, export, GPS"
-msgstr "Darstellung, Export"
+#~ msgid "display, export, GPS"
+#~ msgstr "Darstellung, Export"
 
-msgid "Make JPEG instead of PNG image"
-msgstr "Erstelle ein JPEG anstelle des PNG Bildes."
+#~ msgid "Make JPEG instead of PNG image"
+#~ msgstr "Erstelle ein JPEG anstelle des PNG Bildes."
 
 #, fuzzy
-msgid "display, export"
-msgstr "Darstellung, Export"
+#~ msgid "display, export"
+#~ msgstr "Darstellung, Export"
 
 #, fuzzy
-msgid "Saves the contents of the active display monitor to a graphics file."
-msgstr ""
-"Löscht den Inhalte des aktiven Grafik-Fensters mit einer benutzerdefinierten "
-"Farbe."
+#~ msgid "Saves the contents of the active display monitor to a graphics file."
+#~ msgstr ""
+#~ "Löscht den Inhalte des aktiven Grafik-Fensters mit einer "
+#~ "benutzerdefinierten Farbe."
 
 #, fuzzy
-msgid "Compression for PNG files"
-msgstr "Name der PNG-Datei."
+#~ msgid "Compression for PNG files"
+#~ msgstr "Name der PNG-Datei."
 
 #, fuzzy
-msgid "Paper size for PostScript output"
-msgstr "PostScript Ausgabedatei"
+#~ msgid "Paper size for PostScript output"
+#~ msgstr "PostScript Ausgabedatei"
 
 #, fuzzy
-msgid "PostScript"
-msgstr "PostScript Ausgabedatei"
+#~ msgid "PostScript"
+#~ msgstr "PostScript Ausgabedatei"
 
 #, fuzzy
-msgid "Set transparent background"
-msgstr "Bestimmt die Farbe des Menü Hintergrunds."
+#~ msgid "Set transparent background"
+#~ msgstr "Bestimmt die Farbe des Menü Hintergrunds."
 
 #, fuzzy
-msgid "Displays a raster map and its legend on a graphics window"
-msgstr "Zeigt einen Maßstabsbalken im Grafik-Fenster an."
+#~ msgid "Displays a raster map and its legend on a graphics window"
+#~ msgstr "Zeigt einen Maßstabsbalken im Grafik-Fenster an."
 
 #, fuzzy
-msgid "omit entries with missing label"
-msgstr "Überspringe Kategorien ohne Label."
+#~ msgid "omit entries with missing label"
+#~ msgstr "Überspringe Kategorien ohne Label."
 
 #, fuzzy
-msgid "Number of lines to appear in the legend"
-msgstr "Wie oft soll der Filter wiederholt werden?"
+#~ msgid "Number of lines to appear in the legend"
+#~ msgstr "Wie oft soll der Filter wiederholt werden?"
 
 #, fuzzy
-msgid "Redraws the current display frame in the GRASS monitor"
-msgstr "Im Grafik-Fenster ist keine Karte dargestellt."
+#~ msgid "Redraws the current display frame in the GRASS monitor"
+#~ msgstr "Im Grafik-Fenster ist keine Karte dargestellt."
 
 #, fuzzy
-msgid "Redraw all frames"
-msgstr "Speichere alle Rahmen ab."
+#~ msgid "Redraw all frames"
+#~ msgstr "Speichere alle Rahmen ab."
 
 #, fuzzy
-msgid "Resizes active display monitor"
-msgstr "Zeige Informationen über das aktive Grafik-Fenster."
+#~ msgid "Resizes active display monitor"
+#~ msgstr "Zeige Informationen über das aktive Grafik-Fenster."
 
-msgid "New width for window"
-msgstr "Neue Fensterbreite."
+#~ msgid "New width for window"
+#~ msgstr "Neue Fensterbreite."
 
-msgid "New height for window"
-msgstr "Neue Fensterhöhe."
+#~ msgid "New height for window"
+#~ msgstr "Neue Fensterhöhe."
 
 #, fuzzy
-msgid "Slide show of GRASS raster/vector maps."
-msgstr "von"
+#~ msgid "Slide show of GRASS raster/vector maps."
+#~ msgstr "von"
 
 #, fuzzy
-msgid "display, slideshow"
-msgstr "Darstellung, Setup"
+#~ msgid "display, slideshow"
+#~ msgstr "Darstellung, Setup"
 
 #, fuzzy
-msgid "Show vector maps rather than raster maps"
-msgstr "Setze Region angepasst an diese Rasterkarte."
+#~ msgid "Show vector maps rather than raster maps"
+#~ msgstr "Setze Region angepasst an diese Rasterkarte."
 
 #, fuzzy
-msgid "Number of seconds to pause between slides"
-msgstr "Anzahl der Zellen zwischen Fließlinien."
+#~ msgid "Number of seconds to pause between slides"
+#~ msgstr "Anzahl der Zellen zwischen Fließlinien."
 
 #, fuzzy
-msgid "Enter raster map to display in 1st frame"
-msgstr "Name der Rasterkarte, die angezeigt werden soll."
+#~ msgid "Enter raster map to display in 1st frame"
+#~ msgstr "Name der Rasterkarte, die angezeigt werden soll."
 
-msgid "Enter command to execute in 1st frame"
-msgstr "Geben Sie den Befehl an, der im 1. Rahmen ausgeführt werden soll."
+#~ msgid "Enter command to execute in 1st frame"
+#~ msgstr "Geben Sie den Befehl an, der im 1. Rahmen ausgeführt werden soll."
 
 #, fuzzy
-msgid "Enter raster map to display in 2nd frame"
-msgstr "Name der Rasterkarte, die angezeigt werden soll."
+#~ msgid "Enter raster map to display in 2nd frame"
+#~ msgstr "Name der Rasterkarte, die angezeigt werden soll."
 
-msgid "Enter command to execute in 2nd frame"
-msgstr "Geben Sie den Befehl an, der im 2. Rahmen ausgeführt werden soll."
+#~ msgid "Enter command to execute in 2nd frame"
+#~ msgstr "Geben Sie den Befehl an, der im 2. Rahmen ausgeführt werden soll."
 
 #, fuzzy
-msgid "How to split display"
-msgstr "Darzustellender Text"
+#~ msgid "How to split display"
+#~ msgstr "Darzustellender Text"
 
 #, fuzzy
-msgid "display, legend"
-msgstr "Drehe Legende."
+#~ msgid "display, legend"
+#~ msgstr "Drehe Legende."
 
 #, fuzzy
-msgid "Vector map to display thematically"
-msgstr "Vektorkartentyp."
+#~ msgid "Vector map to display thematically"
+#~ msgstr "Vektorkartentyp."
 
-msgid "Theme_prefs"
-msgstr "Theme_prefs"
+#~ msgid "Theme_prefs"
+#~ msgstr "Theme_prefs"
 
 #, fuzzy
-msgid "Vector map type"
-msgstr "Vektorkartentyp."
+#~ msgid "Vector map type"
+#~ msgstr "Vektorkartentyp."
 
 #, fuzzy
-msgid "Attribute column to use for thematic display (must be numeric)"
-msgstr "Attribut-Spalte, die für die Pufferdistanz benutzt werden soll."
+#~ msgid "Attribute column to use for thematic display (must be numeric)"
+#~ msgstr "Attribut-Spalte, die für die Pufferdistanz benutzt werden soll."
 
 #, fuzzy
-msgid "Type of thematic display"
-msgstr "Name der Rasterkarte, die angezeigt werden soll."
+#~ msgid "Type of thematic display"
+#~ msgstr "Name der Rasterkarte, die angezeigt werden soll."
 
 #, fuzzy
-msgid "Layer to use for thematic display"
-msgstr "Text für einen neuen Kartentitel."
+#~ msgid "Layer to use for thematic display"
+#~ msgstr "Text für einen neuen Kartentitel."
 
 #, fuzzy
-msgid "Points"
-msgstr "Drucke"
+#~ msgid "Points"
+#~ msgstr "Drucke"
 
 #, fuzzy
-msgid "Vector point icon for point data"
-msgstr "Vektordatei die Beispielpunkte enthält."
+#~ msgid "Vector point icon for point data"
+#~ msgstr "Vektordatei die Beispielpunkte enthält."
 
 #, fuzzy
-msgid "Number of classes for interval theme (integer)"
-msgstr "Anzahl der Kopien."
+#~ msgid "Number of classes for interval theme (integer)"
+#~ msgstr "Anzahl der Kopien."
 
 #, fuzzy
-msgid "Misc"
-msgstr "Metrisch"
+#~ msgid "Misc"
+#~ msgstr "Metrisch"
 
 #, fuzzy
-msgid "Mapset(s) to list (default: current mapset search path)"
-msgstr ""
-"Mapset, dessen Dateien ausgegeben werden sollen (Standard: aktueller "
-"Suchpfad)."
+#~ msgid "Mapset(s) to list (default: current mapset search path)"
+#~ msgstr ""
+#~ "Mapset, dessen Dateien ausgegeben werden sollen (Standard: aktueller "
+#~ "Suchpfad)."
 
 #, fuzzy
-msgid "Output separator (default: newline)"
-msgstr "Name der Ausgabe-Rasterkarte (Standard: Eingabename)"
+#~ msgid "Output separator (default: newline)"
+#~ msgstr "Name der Ausgabe-Rasterkarte (Standard: Eingabename)"
 
 #, fuzzy
-msgid "Raster to remove"
-msgstr "3D Raster, das entfernt werden soll."
+#~ msgid "Raster to remove"
+#~ msgstr "3D Raster, das entfernt werden soll."
 
 #, fuzzy
-msgid "3d raster to remove"
-msgstr "3D Raster, das entfernt werden soll."
+#~ msgid "3d raster to remove"
+#~ msgstr "3D Raster, das entfernt werden soll."
 
 #, fuzzy
-msgid "Vector to remove"
-msgstr "Vektorkartentyp."
+#~ msgid "Vector to remove"
+#~ msgstr "Vektorkartentyp."
 
 #, fuzzy
-msgid "Region to remove"
-msgstr "Erzwinge das Löschen"
+#~ msgid "Region to remove"
+#~ msgstr "Erzwinge das Löschen"
 
 #, fuzzy
-msgid "Label to remove"
-msgstr "Kann nicht weitermachen."
+#~ msgid "Label to remove"
+#~ msgstr "Kann nicht weitermachen."
 
 #, fuzzy
-msgid "3dview to remove"
-msgstr "%-5d Zentroiden gelesen.\n"
+#~ msgid "3dview to remove"
+#~ msgstr "%-5d Zentroiden gelesen.\n"
 
 #, fuzzy
-msgid "Group to remove"
-msgstr "Gruppe, die entfernt werden soll."
+#~ msgid "Group to remove"
+#~ msgstr "Gruppe, die entfernt werden soll."
 
-msgid "imagery, raster, multispectral"
-msgstr "Bildverarbeitung, Raster, Multispektral"
+#~ msgid "imagery, raster, multispectral"
+#~ msgstr "Bildverarbeitung, Raster, Multispektral"
 
 #, fuzzy
-msgid "raster input maps"
-msgstr "Raster, Import"
+#~ msgid "raster input maps"
+#~ msgstr "Raster, Import"
 
 #, fuzzy
-msgid "write output to PNG image"
-msgstr "Überschreibe Ausgabedatei."
+#~ msgid "write output to PNG image"
+#~ msgstr "Überschreibe Ausgabedatei."
 
 #, fuzzy
-msgid "label with coordinates instead of numbering"
-msgstr "Benutze Kartenkoordinaten anstatt xyz-Koordniaten."
+#~ msgid "label with coordinates instead of numbering"
+#~ msgstr "Benutze Kartenkoordinaten anstatt xyz-Koordniaten."
 
 #, fuzzy
-msgid "Keep band numbers instead of using band color names."
-msgstr "Verwende die Nummern der Kanäle anstatt der Farbenbezeichnungen."
+#~ msgid "Keep band numbers instead of using band color names."
+#~ msgstr "Verwende die Nummern der Kanäle anstatt der Farbenbezeichnungen."
 
 #, fuzzy
-msgid "A"
-msgstr "A:"
+#~ msgid "A"
+#~ msgstr "A:"
 
 #, fuzzy
-msgid "B"
-msgstr "B:"
+#~ msgid "B"
+#~ msgstr "B:"
 
 #, fuzzy
-msgid "C"
-msgstr "C:"
+#~ msgid "C"
+#~ msgstr "C:"
 
 #, fuzzy
-msgid "D"
-msgstr "D:"
+#~ msgid "D"
+#~ msgstr "D:"
 
 #, fuzzy
-msgid "E"
-msgstr "E:"
+#~ msgid "E"
+#~ msgstr "E:"
 
 #, fuzzy
-msgid "F"
-msgstr "F:"
+#~ msgid "F"
+#~ msgstr "F:"
 
 #, fuzzy
-msgid "Formula (e.g. A-B or A*C+B)"
-msgstr "Formel (z.B. A-B oder A*C+B):"
+#~ msgid "Formula (e.g. A-B or A*C+B)"
+#~ msgstr "Formel (z.B. A-B oder A*C+B):"
 
-msgid "Show help"
-msgstr "Zeige die Hilfe an."
+#~ msgid "Show help"
+#~ msgstr "Zeige die Hilfe an."
 
 #, fuzzy
-msgid "Do not overwrite existing map"
-msgstr "Name einer existierenden Rasterkarte."
+#~ msgid "Do not overwrite existing map"
+#~ msgstr "Name einer existierenden Rasterkarte."
 
 #, fuzzy
-msgid "Exports GRASS raster into GDAL supported formats."
-msgstr "Exportiert GRASS Rasterdaten in GDAL-unterstütze Formate."
+#~ msgid "Exports GRASS raster into GDAL supported formats."
+#~ msgstr "Exportiert GRASS Rasterdaten in GDAL-unterstütze Formate."
 
 #, fuzzy
-msgid "Region sensitive output"
-msgstr "Lese r.stats Ausgabe."
+#~ msgid "Region sensitive output"
+#~ msgstr "Lese r.stats Ausgabe."
 
 #, fuzzy
-msgid ""
-"Creation option to the output format driver. Multiple options may be listed"
-msgstr ""
-"Optionen für den Ausgabeformat Treiber. Es können mehrere Optionen angegeben "
-"werden."
+#~ msgid ""
+#~ "Creation option to the output format driver. Multiple options may be "
+#~ "listed"
+#~ msgstr ""
+#~ "Optionen für den Ausgabeformat Treiber. Es können mehrere Optionen "
+#~ "angegeben werden."
 
 #, fuzzy
-msgid "Output field seperator"
-msgstr "Ausgabe Feld-Trennzeichen"
+#~ msgid "Output field seperator"
+#~ msgstr "Ausgabe Feld-Trennzeichen"
 
 #, fuzzy
-msgid "calculates univariate statistics from a GRASS raster map"
-msgstr ""
-"Berechnet univariate Statistikparameter einer Rasterkarte (nur Nicht-Null-"
-"Zellen)."
+#~ msgid "calculates univariate statistics from a GRASS raster map"
+#~ msgstr ""
+#~ "Berechnet univariate Statistikparameter einer Rasterkarte (nur Nicht-Null-"
+#~ "Zellen)."
 
-msgid "extended statistics (quartiles and percentile)"
-msgstr "Mehr statistische Kennzahlen (Quartile und Perzentile)."
+#~ msgid "extended statistics (quartiles and percentile)"
+#~ msgstr "Mehr statistische Kennzahlen (Quartile und Perzentile)."
 
 #, fuzzy
-msgid "Percentile to calculate (requires -e flag)"
-msgstr "Kann die Eingabekarte nicht schließen."
+#~ msgid "Percentile to calculate (requires -e flag)"
+#~ msgstr "Kann die Eingabekarte nicht schließen."
 
 #, fuzzy
-msgid "A (grid3D file)"
-msgstr "Eingabe-grid3D-Datei"
+#~ msgid "A (grid3D file)"
+#~ msgstr "Eingabe-grid3D-Datei"
 
 #, fuzzy
-msgid "B (grid3D file)"
-msgstr "Eingabe-grid3D-Datei"
+#~ msgid "B (grid3D file)"
+#~ msgstr "Eingabe-grid3D-Datei"
 
 #, fuzzy
-msgid "C (grid3D file)"
-msgstr "Eingabe-grid3D-Datei"
+#~ msgid "C (grid3D file)"
+#~ msgstr "Eingabe-grid3D-Datei"
 
 #, fuzzy
-msgid "D (grid3D file)"
-msgstr "Eingabe-grid3D-Datei"
+#~ msgid "D (grid3D file)"
+#~ msgstr "Eingabe-grid3D-Datei"
 
 #, fuzzy
-msgid "E (grid3D file)"
-msgstr "Eingabe-grid3D-Datei"
+#~ msgid "E (grid3D file)"
+#~ msgstr "Eingabe-grid3D-Datei"
 
 #, fuzzy
-msgid "F (grid3D file)"
-msgstr "Eingabe-grid3D-Datei"
+#~ msgid "F (grid3D file)"
+#~ msgstr "Eingabe-grid3D-Datei"
 
 #, fuzzy
-msgid "Name for output grid3D volume"
-msgstr "Name der Ausgabedatei"
+#~ msgid "Name for output grid3D volume"
+#~ msgstr "Name der Ausgabedatei"
 
 #, fuzzy
-msgid "raster, imagery, dehaze"
-msgstr "Raster, Bildverarbeitung"
+#~ msgid "raster, imagery, dehaze"
+#~ msgstr "Raster, Bildverarbeitung"
 
 #, fuzzy
-msgid "LANDSAT TM1 channel"
-msgstr "LANDSAT roter Kanal"
+#~ msgid "LANDSAT TM1 channel"
+#~ msgstr "LANDSAT roter Kanal"
 
 #, fuzzy
-msgid "LANDSAT TM2 channel"
-msgstr "LANDSAT roter Kanal"
+#~ msgid "LANDSAT TM2 channel"
+#~ msgstr "LANDSAT roter Kanal"
 
 #, fuzzy
-msgid "LANDSAT TM3 channel"
-msgstr "LANDSAT roter Kanal"
+#~ msgid "LANDSAT TM3 channel"
+#~ msgstr "LANDSAT roter Kanal"
 
 #, fuzzy
-msgid "LANDSAT TM4 channel"
-msgstr "LANDSAT roter Kanal"
+#~ msgid "LANDSAT TM4 channel"
+#~ msgstr "LANDSAT roter Kanal"
 
 #, fuzzy
-msgid "LANDSAT TM5 channel"
-msgstr "LANDSAT roter Kanal"
+#~ msgid "LANDSAT TM5 channel"
+#~ msgstr "LANDSAT roter Kanal"
 
 #, fuzzy
-msgid "LANDSAT TM7 channel"
-msgstr "LANDSAT roter Kanal"
+#~ msgid "LANDSAT TM7 channel"
+#~ msgstr "LANDSAT roter Kanal"
 
 #, fuzzy
-msgid "raster output dehazed maps prefix"
-msgstr "Prefix der Ausgabe-Rasterkarte."
+#~ msgid "raster output dehazed maps prefix"
+#~ msgstr "Prefix der Ausgabe-Rasterkarte."
 
 #, fuzzy
-msgid "%s: [%s] not found"
-msgstr "%s: <%s> nicht gefunden."
+#~ msgid "%s: [%s] not found"
+#~ msgstr "%s: <%s> nicht gefunden."
 
-msgid "Please choose a unit by entering one of the following letter codes:"
-msgstr ""
+#~ msgid "     'c': cells"
+#~ msgstr "     'c': Zellen"
 
-msgid "     'c': cells"
-msgstr "     'c': Zellen"
+#~ msgid "     'p': percent cover of region"
+#~ msgstr "     'p': Prozent Deckung der Region"
 
-msgid "     'p': percent cover of region"
-msgstr "     'p': Prozent Deckung der Region"
-
 #, fuzzy
-msgid "     'x': percent of '%s' category (column)"
-msgstr "     'x': Prozent der <%s> Kategorie (Spalte)"
+#~ msgid "     'x': percent of '%s' category (column)"
+#~ msgstr "     'x': Prozent der <%s> Kategorie (Spalte)"
 
 #, fuzzy
-msgid "     'y': percent of '%s' category (row)"
-msgstr "     'y': Prozent der <%s> Kategorie (Zeile)"
+#~ msgid "     'y': percent of '%s' category (row)"
+#~ msgstr "     'y': Prozent der <%s> Kategorie (Zeile)"
 
-msgid "     'a': acres"
-msgstr "     'a': Acres"
+#~ msgid "     'a': acres"
+#~ msgstr "     'a': Acres"
 
-msgid "     'h': hectares"
-msgstr "     'h': Hektar"
+#~ msgid "     'h': hectares"
+#~ msgstr "     'h': Hektar"
 
-msgid "     'k': square kilometers"
-msgstr "     'k': Quadratkilometer"
+#~ msgid "     'k': square kilometers"
+#~ msgstr "     'k': Quadratkilometer"
 
-msgid "     'm': square miles\n"
-msgstr "     'm': Quadratmeilen\n"
+#~ msgid "     'm': square miles\n"
+#~ msgstr "     'm': Quadratmeilen\n"
 
-msgid "     'Q': quit"
-msgstr "     'Q': Beenden"
+#~ msgid "     'Q': quit"
+#~ msgstr "     'Q': Beenden"
 
-msgid "Do you wish to save this report in a file? (y/n) [n] "
-msgstr "Möchten Sie diesen Bericht in einer Datei speichern? (y/n) [n] "
+#~ msgid "Do you wish to save this report in a file? (y/n) [n] "
+#~ msgstr "Möchten Sie diesen Bericht in einer Datei speichern? (y/n) [n] "
 
-msgid ""
-"Enter the file name or path\n"
-"> "
-msgstr ""
-"Geben Sie den Dateinamen oder Pfad ein\n"
-"> "
+#~ msgid ""
+#~ "Enter the file name or path\n"
+#~ "> "
+#~ msgstr ""
+#~ "Geben Sie den Dateinamen oder Pfad ein\n"
+#~ "> "
 
 #, fuzzy
-msgid "'%s' being saved\n"
-msgstr "<%s> wird gespeichert\n"
+#~ msgid "'%s' being saved\n"
+#~ msgstr "<%s> wird gespeichert\n"
 
 #, fuzzy
-msgid ""
-"Do you wish to print this report (requires Unix lpr command)? (y/n) [n] "
-msgstr "Möchten Sie diesen Bericht drucken? (y/n) [n] "
+#~ msgid ""
+#~ "Do you wish to print this report (requires Unix lpr command)? (y/n) [n] "
+#~ msgstr "Möchten Sie diesen Bericht drucken? (y/n) [n] "
 
-msgid ""
-"Do you wish it printed in 80 or 132 columns?\n"
-"> "
-msgstr ""
-"Möchten Sie die Ausgabe in 80 oder 132 Spalten?\n"
-"> "
+#~ msgid ""
+#~ "Do you wish it printed in 80 or 132 columns?\n"
+#~ "> "
+#~ msgstr ""
+#~ "Möchten Sie die Ausgabe in 80 oder 132 Spalten?\n"
+#~ "> "
 
-msgid ""
-"Do you wish to run this report with a different unit of measure? (y/n) [y] "
-msgstr "Möchten Sie diesen Bericht mit einer anderen Maßeinheit? (y/n) [y] "
+#~ msgid ""
+#~ "Do you wish to run this report with a different unit of measure? (y/n) "
+#~ "[y] "
+#~ msgstr "Möchten Sie diesen Bericht mit einer anderen Maßeinheit? (y/n) [y] "
 
-msgid "Interactively select End-Points"
-msgstr "End-Punkte interaktiv bestimmen."
+#~ msgid "Interactively select End-Points"
+#~ msgstr "End-Punkte interaktiv bestimmen."
 
 #, fuzzy
-msgid "Use mouse to select Start Point\n"
-msgstr ""
-"\n"
-"\n"
-"Verwenden Sie die Maus, um eine Aktion auszuwählen."
+#~ msgid "Use mouse to select Start Point\n"
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "Verwenden Sie die Maus, um eine Aktion auszuwählen."
 
 #, fuzzy
-msgid ""
-"\n"
-"Use mouse to draw profile line\n"
-msgstr ""
-"\n"
-"\n"
-"Verwenden Sie die Maus, um eine Aktion auszuwählen."
+#~ msgid ""
+#~ "\n"
+#~ "Use mouse to draw profile line\n"
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "Verwenden Sie die Maus, um eine Aktion auszuwählen."
 
 #, fuzzy
-msgid "Buttons:\n"
-msgstr ""
-"\n"
-"Maustasten:\n"
+#~ msgid "Buttons:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Maustasten:\n"
 
 #, fuzzy
-msgid "Left:   Mark next point\n"
-msgstr "Links:   Verschieben\n"
+#~ msgid "Left:   Mark next point\n"
+#~ msgstr "Links:   Verschieben\n"
 
 #, fuzzy
-msgid "Middle: Mark next point\n"
-msgstr "Mitte: Selektiere Nach\n"
+#~ msgid "Middle: Mark next point\n"
+#~ msgstr "Mitte: Selektiere Nach\n"
 
-msgid "elevin raster map <%s> not found"
-msgstr "elevin Rasterkarte <%s> nicht gefunden."
+#~ msgid "elevin raster map <%s> not found"
+#~ msgstr "elevin Rasterkarte <%s> nicht gefunden."
 
-msgid "aspin raster map <%s> not found"
-msgstr "aspin Rasterkarte <%s> nicht gefunden."
+#~ msgid "aspin raster map <%s> not found"
+#~ msgstr "aspin Rasterkarte <%s> nicht gefunden."
 
-msgid "linkein raster map <%s> not found"
-msgstr "linkin Rasterkarte <%s> wurde nicht gefunden."
+#~ msgid "linkein raster map <%s> not found"
+#~ msgstr "linkin Rasterkarte <%s> wurde nicht gefunden."
 
-msgid "albedo raster map <%s> not found"
-msgstr "albedo Rasterkarte <%s> wurde nicht gefunden."
+#~ msgid "albedo raster map <%s> not found"
+#~ msgstr "albedo Rasterkarte <%s> wurde nicht gefunden."
 
-msgid "latin raster map <%s> not found"
-msgstr "latin Rasterkarte <%s> wurde nicht gefunden."
+#~ msgid "latin raster map <%s> not found"
+#~ msgstr "latin Rasterkarte <%s> wurde nicht gefunden."
 
-msgid "coefbh raster map <%s> not found"
-msgstr "coefbh Rasterkarte <%s> wurde nicht gefunden."
+#~ msgid "coefbh raster map <%s> not found"
+#~ msgstr "coefbh Rasterkarte <%s> wurde nicht gefunden."
 
-msgid "coefdh raster map <%s> not found"
-msgstr "coefdh Rasterkarte <%s> wurde nicht gefunden."
+#~ msgid "coefdh raster map <%s> not found"
+#~ msgstr "coefdh Rasterkarte <%s> wurde nicht gefunden."
 
-msgid "No clump map specified and MASK not set."
-msgstr ""
-"Keine Klumpen-Karte angegeben. Außerdem ist die Maske (MASK) nicht gesetzt."
+#~ msgid "No clump map specified and MASK not set."
+#~ msgstr ""
+#~ "Keine Klumpen-Karte angegeben. Außerdem ist die Maske (MASK) nicht "
+#~ "gesetzt."
 
 #, fuzzy
-msgid "Unable to find data map"
-msgstr "Kann Rasterkarte <%s> nicht finden. "
+#~ msgid "Unable to find data map"
+#~ msgstr "Kann Rasterkarte <%s> nicht finden. "
 
 #, fuzzy
-msgid "Unable to find clump map"
-msgstr "Kann Rasterkarte %s nicht finden. "
+#~ msgid "Unable to find clump map"
+#~ msgstr "Kann Rasterkarte %s nicht finden. "
 
 #, fuzzy
-msgid "Memory allocation error"
-msgstr "Metrische Belegung."
+#~ msgid "Memory allocation error"
+#~ msgstr "Metrische Belegung."
 
 #, fuzzy
-msgid "Saving new map"
-msgstr "Lese Karte"
+#~ msgid "Saving new map"
+#~ msgstr "Lese Karte"
 
 #, fuzzy
-msgid "Terrain raster map (DEM)"
-msgstr "Terrain Rasterkarte (DEM)."
+#~ msgid "Terrain raster map (DEM)"
+#~ msgstr "Terrain Rasterkarte (DEM)."
 
 #, fuzzy
-msgid "Output raster map with lake"
-msgstr "Titel der Ausgabe-Rasterkarte."
+#~ msgid "Output raster map with lake"
+#~ msgstr "Titel der Ausgabe-Rasterkarte."
 
 #, fuzzy
-msgid "Cannot write lake raster map <%s>!"
-msgstr "Kann die Rasterkarte <%s> nicht erzeugen"
+#~ msgid "Cannot write lake raster map <%s>!"
+#~ msgstr "Kann die Rasterkarte <%s> nicht erzeugen"
 
 #, fuzzy
-msgid "Terrain raster map <%s> not found!"
-msgstr "aspin Rasterkarte <%s> nicht gefunden."
+#~ msgid "Terrain raster map <%s> not found!"
+#~ msgstr "aspin Rasterkarte <%s> nicht gefunden."
 
 #, fuzzy
-msgid "Cannot open terrain raster map <%s@%s>!"
-msgstr "Kann Rasterkarte <%s> nicht öffnen!"
+#~ msgid "Cannot open terrain raster map <%s@%s>!"
+#~ msgstr "Kann Rasterkarte <%s> nicht öffnen!"
 
 #, fuzzy
-msgid "Seed map <%s> not found!"
-msgstr "%s: %s nicht gefunden."
+#~ msgid "Seed map <%s> not found!"
+#~ msgstr "%s: %s nicht gefunden."
 
 #, fuzzy
-msgid "Cannot open seed map <%s@%s>!"
-msgstr "Kann Rasterkarte <%s> nicht öffnen!"
+#~ msgid "Cannot open seed map <%s@%s>!"
+#~ msgstr "Kann Rasterkarte <%s> nicht öffnen!"
 
 #, fuzzy
-msgid "Failure to allocate memory for row pointers"
-msgstr "Kann keinen Speicherplatz für Zeilen-Puffer belegen."
+#~ msgid "Failure to allocate memory for row pointers"
+#~ msgstr "Kann keinen Speicherplatz für Zeilen-Puffer belegen."
 
 #, fuzzy
-msgid "Loading maps: "
-msgstr "Lese Karte"
+#~ msgid "Loading maps: "
+#~ msgstr "Lese Karte"
 
 #, fuzzy
-msgid "Error reading terrain raster map. Probably broken file."
-msgstr "Fehler beim Lesen der Datei dbmscap\n"
+#~ msgid "Error reading terrain raster map. Probably broken file."
+#~ msgstr "Fehler beim Lesen der Datei dbmscap\n"
 
 #, fuzzy
-msgid "Error reading seed raster map. Probably broken file."
-msgstr "Fehler beim Lesen der Datei dbmscap\n"
+#~ msgid "Error reading seed raster map. Probably broken file."
+#~ msgstr "Fehler beim Lesen der Datei dbmscap\n"
 
 #, fuzzy
-msgid "Cannot write lake raster map <%s@%s>!"
-msgstr "Kann die Rasterkarte <%s> nicht erzeugen"
+#~ msgid "Cannot write lake raster map <%s@%s>!"
+#~ msgstr "Kann die Rasterkarte <%s> nicht erzeugen"
 
 #, fuzzy
-msgid ""
-"Starting lake filling at level of %8.4f in %d passes. \n"
-"Percent done:"
-msgstr "Starte in:"
+#~ msgid ""
+#~ "Starting lake filling at level of %8.4f in %d passes. \n"
+#~ "Percent done:"
+#~ msgstr "Starte in:"
 
 #, fuzzy
-msgid "Pass: %d\n"
-msgstr "Maske: %s\n"
+#~ msgid "Pass: %d\n"
+#~ msgstr "Maske: %s\n"
 
 #, fuzzy
-msgid "Error writing color file for <%s@%s>!"
-msgstr "Fehler beim Schreiben der Colr-Datei <%s>."
+#~ msgid "Error writing color file for <%s@%s>!"
+#~ msgstr "Fehler beim Schreiben der Colr-Datei <%s>."
 
 #, fuzzy
-msgid "All done."
-msgstr "Fertig."
+#~ msgid "All done."
+#~ msgstr "Fertig."
 
 #, fuzzy
-msgid "%s: base raster map not found"
-msgstr "%s: Rasterkarte %s nicht gefunden."
+#~ msgid "%s: base raster map not found"
+#~ msgstr "%s: Rasterkarte %s nicht gefunden."
 
 #, fuzzy
-msgid "%s: cover raster map not found"
-msgstr "%s - Rasterkarte nicht gefunden."
+#~ msgid "%s: cover raster map not found"
+#~ msgstr "%s - Rasterkarte nicht gefunden."
 
 #, fuzzy
-msgid "Calculates <simple> index on a raster map"
-msgstr "Berechnet den Form-Index einer Rasterkarte."
+#~ msgid "Calculates <simple> index on a raster map"
+#~ msgstr "Berechnet den Form-Index einer Rasterkarte."
 
 #, fuzzy
-msgid "raster, landscape structure analysis, job launcher"
-msgstr "Raster, Landschaftsstruktur Analyse, Patch-Index"
+#~ msgid "raster, landscape structure analysis, job launcher"
+#~ msgstr "Raster, Landschaftsstruktur Analyse, Patch-Index"
 
-msgid "Quietly"
-msgstr "ruhig"
+#~ msgid "Quietly"
+#~ msgstr "ruhig"
 
-msgid "Bilinear interpolation utility for raster map layers."
-msgstr "Bilineares Interpolationswerkzeug für Rasterkarten."
+#~ msgid "Bilinear interpolation utility for raster map layers."
+#~ msgstr "Bilineares Interpolationswerkzeug für Rasterkarten."
 
 #, fuzzy
-msgid ""
-"Specific input value to be assigned to the north and/or south poles for "
-"longitude-latitude grids"
-msgstr ""
-"Spezieller Eingabewert, welcher zum Nord- und/oder Südpol bei Lat-Long-"
-"Rastern zugewiesen werden soll."
+#~ msgid ""
+#~ "Specific input value to be assigned to the north and/or south poles for "
+#~ "longitude-latitude grids"
+#~ msgstr ""
+#~ "Spezieller Eingabewert, welcher zum Nord- und/oder Südpol bei Lat-Long-"
+#~ "Rastern zugewiesen werden soll."
 
 #, fuzzy
-msgid "This module is deprecated. Please use 'r.resamp.interp' instead."
-msgstr ""
-"Von der Verwendung dieses Moduls wird abgeraten. Bitte verwenden Sie "
-"stattdessen 'r.stats.interp'."
+#~ msgid "This module is deprecated. Please use 'r.resamp.interp' instead."
+#~ msgstr ""
+#~ "Von der Verwendung dieses Moduls wird abgeraten. Bitte verwenden Sie "
+#~ "stattdessen 'r.stats.interp'."
 
-msgid "Illegal output file name <%s>"
-msgstr "Ungültiger Ausgabe-Dateiname<%s>."
+#~ msgid "Illegal output file name <%s>"
+#~ msgstr "Ungültiger Ausgabe-Dateiname<%s>."
 
-msgid ""
-"The '-q' flag is superseded and will be removed in future. Please use '--"
-"quiet' instead"
-msgstr ""
-"Der Schalter '-q' wurde ersetzt und wird in einer der kommenden Versionen "
-"ersatzlos gestrichen. Bitte verwenden Sie stattdessen '--quiet'"
+#~ msgid ""
+#~ "The '-q' flag is superseded and will be removed in future. Please use '--"
+#~ "quiet' instead"
+#~ msgstr ""
+#~ "Der Schalter '-q' wurde ersetzt und wird in einer der kommenden Versionen "
+#~ "ersatzlos gestrichen. Bitte verwenden Sie stattdessen '--quiet'"
 
-msgid "Not enough memory for zero_array_cell"
-msgstr "Nicht genügend Speicher für zero_array_cell."
+#~ msgid "Not enough memory for zero_array_cell"
+#~ msgstr "Nicht genügend Speicher für zero_array_cell."
 
-msgid "Not enough disk space -- cannot write files"
-msgstr ""
-"Nicht genügend Speicher auf der Festplatte frei - kann die Dateien nicht "
-"schreiben."
+#~ msgid "Not enough disk space -- cannot write files"
+#~ msgstr ""
+#~ "Nicht genügend Speicher auf der Festplatte frei - kann die Dateien nicht "
+#~ "schreiben."
 
 #, fuzzy
-msgid "Raster input maps(s)"
-msgstr "rote Eingabe-Rasterkarte."
+#~ msgid "Raster input maps(s)"
+#~ msgstr "rote Eingabe-Rasterkarte."
 
 #, fuzzy
-msgid "Output file name"
-msgstr "Ausgabe-Tabellenname"
+#~ msgid "Output file name"
+#~ msgstr "Ausgabe-Tabellenname"
 
 #, fuzzy
-msgid "%s: can't read fp range for [%s]"
-msgstr "%s: Kann die Spanne für <%s> nicht lesen."
+#~ msgid "%s: can't read fp range for [%s]"
+#~ msgstr "%s: Kann die Spanne für <%s> nicht lesen."
 
 #, fuzzy
-msgid ""
-"Raster map [%s] already exists.\n"
-"Please try another."
-msgstr "Rasterkarte <%s> existiert in der Gruppe."
+#~ msgid ""
+#~ "Raster map [%s] already exists.\n"
+#~ "Please try another."
+#~ msgstr "Rasterkarte <%s> existiert in der Gruppe."
 
 #, fuzzy
-msgid "Path to rules file"
-msgstr "Pfad zur resultierenden VTK-Datei."
+#~ msgid "Path to rules file"
+#~ msgstr "Pfad zur resultierenden VTK-Datei."
 
 #, fuzzy
-msgid "RGB raster map <%s> not found"
-msgstr "Rasterkarte <%s> konnte nicht gefunden werden."
+#~ msgid "RGB raster map <%s> not found"
+#~ msgstr "Rasterkarte <%s> konnte nicht gefunden werden."
 
-msgid "Cannot create RGB data, please provide three maps [r,g,b]"
-msgstr ""
-"Kann RGB-Daten nicht erzeugen, bitte stellen Sie drei karten zur Verfügung "
-"[r,g,b]."
+#~ msgid "Cannot create RGB data, please provide three maps [r,g,b]"
+#~ msgstr ""
+#~ "Kann RGB-Daten nicht erzeugen, bitte stellen Sie drei karten zur "
+#~ "Verfügung [r,g,b]."
 
 #, fuzzy
-msgid "Vector cell map <%s> not found"
-msgstr "Vektorkarte <%s> nicht gefunden."
+#~ msgid "Vector cell map <%s> not found"
+#~ msgstr "Vektorkarte <%s> nicht gefunden."
 
-msgid "Cannot create vector data, please provide three maps [x,y,z]"
-msgstr ""
-"Kann Vektor-Daten nicht erzeugen, bitte geben Sie drei Karten an [x,y,z]."
+#~ msgid "Cannot create vector data, please provide three maps [x,y,z]"
+#~ msgstr ""
+#~ "Kann Vektor-Daten nicht erzeugen, bitte geben Sie drei Karten an [x,y,z]."
 
-msgid "Which raster map needs a color table"
-msgstr "Welche Rasterkarte braucht eine Farbtabelle"
+#~ msgid "Which raster map needs a color table"
+#~ msgstr "Welche Rasterkarte braucht eine Farbtabelle"
 
 #, fuzzy
-msgid "Edit header for [%s]\n"
-msgstr "Editiere Header für Karte <%s>.\n"
+#~ msgid "Edit header for [%s]\n"
+#~ msgstr "Editiere Header für Karte <%s>.\n"
 
 #, fuzzy
-msgid "[%s] cannot be found!"
-msgstr "<%s> konnte nicht gefunden werden!"
+#~ msgid "[%s] cannot be found!"
+#~ msgstr "<%s> konnte nicht gefunden werden!"
 
-msgid "For what layer shall the header file be edited? "
-msgstr "Für welchen Layer soll die Header-Datei editiert werden?"
+#~ msgid "For what layer shall the header file be edited? "
+#~ msgstr "Für welchen Layer soll die Header-Datei editiert werden?"
 
 #, fuzzy
-msgid "[%s] is a reclass of [%s] - cannot edit header! Run support on [%s]."
-msgstr ""
-"<%s> ist eine reklassifizierte Karte von <%s> - kann den Header nicht "
-"editieren! Wende support für Karte <%s> an."
+#~ msgid "[%s] is a reclass of [%s] - cannot edit header! Run support on [%s]."
+#~ msgstr ""
+#~ "<%s> ist eine reklassifizierte Karte von <%s> - kann den Header nicht "
+#~ "editieren! Wende support für Karte <%s> an."
 
 #, fuzzy
-msgid "[%s] is a reclass of [%s in %s] - cannot edit header!"
-msgstr ""
-"<%s> ist eine reklassifizierte Karte von [%s in %s] - kann den Header nicht "
-"editieren!"
+#~ msgid "[%s] is a reclass of [%s in %s] - cannot edit header!"
+#~ msgstr ""
+#~ "<%s> ist eine reklassifizierte Karte von [%s in %s] - kann den Header "
+#~ "nicht editieren!"
 
 #, fuzzy
-msgid "Cannot open raster map [%s]!"
-msgstr "Kann Rasterkarte <%s> nicht öffnen!"
+#~ msgid "Cannot open raster map [%s]!"
+#~ msgstr "Kann Rasterkarte <%s> nicht öffnen!"
 
 #, fuzzy
-msgid "Raster file [%s] is empty."
-msgstr "Rasterkarte <%s> ist leer."
+#~ msgid "Raster file [%s] is empty."
+#~ msgstr "Rasterkarte <%s> ist leer."
 
-msgid "cellhd compression: %d\n"
-msgstr "cellhd Kompression: %d\n"
+#~ msgid "cellhd compression: %d\n"
+#~ msgstr "cellhd Kompression: %d\n"
 
-msgid "3.0 compression %sindicated\n"
-msgstr "3.0 Komprimierung %s angezeigt.\n"
+#~ msgid "3.0 compression %sindicated\n"
+#~ msgstr "3.0 Komprimierung %s angezeigt.\n"
 
-msgid "Pre 3.0 compression %sindicated\n"
-msgstr "Pre 3.0 Komprimierung %s angezeigt.\n"
+#~ msgid "Pre 3.0 compression %sindicated\n"
+#~ msgstr "Pre 3.0 Komprimierung %s angezeigt.\n"
 
 #, fuzzy
-msgid "[%s] appears to be compressed. Is it? "
-msgstr "<%s> scheint komprimiert zu sein. Ist sie es?"
+#~ msgid "[%s] appears to be compressed. Is it? "
+#~ msgstr "<%s> scheint komprimiert zu sein. Ist sie es?"
 
-msgid "Please indicate the type of compression:\n"
-msgstr "Bitte geben Sie den Typ der Komprimierung an:\n"
+#~ msgid "Please indicate the type of compression:\n"
+#~ msgstr "Bitte geben Sie den Typ der Komprimierung an:\n"
 
-msgid "  1. Pre 3.0 compression\n"
-msgstr "  1. Pre 3.0 Komprimierung\n"
+#~ msgid "  1. Pre 3.0 compression\n"
+#~ msgstr "  1. Pre 3.0 Komprimierung\n"
 
-msgid "  2. 3.0 compression\n"
-msgstr "  2. 3.0 Komprimierung\n"
+#~ msgid "  2. 3.0 compression\n"
+#~ msgstr "  2. 3.0 Komprimierung\n"
 
 #, fuzzy
-msgid "The header for [%s] says the file is not compressed. "
-msgstr "Der Header der Datei <%s> sagt, dass die Datei nicht komprimiert ist."
+#~ msgid "The header for [%s] says the file is not compressed. "
+#~ msgstr ""
+#~ "Der Header der Datei <%s> sagt, dass die Datei nicht komprimiert ist."
 
-msgid "The file appears to be compressed.\n"
-msgstr "Die Datei erscheint, als sei sie komprimiert.\n"
+#~ msgid "The file appears to be compressed.\n"
+#~ msgstr "Die Datei erscheint, als sei sie komprimiert.\n"
 
-msgid "Most likely the header is wrong, but I want you to decide.\n"
-msgstr ""
-"Höhstwahrscheinlich ist die Information aus dem Header falsch, aber ich "
-"möchte, dass Sie entscheiden.\n"
+#~ msgid "Most likely the header is wrong, but I want you to decide.\n"
+#~ msgstr ""
+#~ "Höhstwahrscheinlich ist die Information aus dem Header falsch, aber ich "
+#~ "möchte, dass Sie entscheiden.\n"
 
 #, fuzzy
-msgid "The header for [%s] says the file is compressed. "
-msgstr "Der Header der Datei <%s> sagt, dass die Datei komprimiert ist."
+#~ msgid "The header for [%s] says the file is compressed. "
+#~ msgstr "Der Header der Datei <%s> sagt, dass die Datei komprimiert ist."
 
-msgid "The file does NOT appear to be compressed.\n"
-msgstr "Die Datei scheint NICHT komprimiert zu sein.\n"
+#~ msgid "The file does NOT appear to be compressed.\n"
+#~ msgstr "Die Datei scheint NICHT komprimiert zu sein.\n"
 
-msgid ""
-"Header indicates %d row%s in the raster map, but the actual file format "
-"indicates %d row%s"
-msgstr ""
-"Header gibt an, dass %d Reihe%s in der Rasterkarte enthalten sind, aber die "
-"aktuelle Datei hat %d Reihe%s."
+#~ msgid ""
+#~ "Header indicates %d row%s in the raster map, but the actual file format "
+#~ "indicates %d row%s"
+#~ msgstr ""
+#~ "Header gibt an, dass %d Reihe%s in der Rasterkarte enthalten sind, aber "
+#~ "die aktuelle Datei hat %d Reihe%s."
 
 #, fuzzy
-msgid "Unable to write header for [%s]."
-msgstr "Kann den Header für die Karte <%s> nicht schreiben."
+#~ msgid "Unable to write header for [%s]."
+#~ msgstr "Kann den Header für die Karte <%s> nicht schreiben."
 
 #, fuzzy
-msgid "Header for raster map [%s] updated."
-msgstr "Header der Rasterkarte <%s> wurde aktualisiert."
+#~ msgid "Header for raster map [%s] updated."
+#~ msgstr "Header der Rasterkarte <%s> wurde aktualisiert."
 
-msgid ""
-"\n"
-"hit RETURN to continue -->"
-msgstr ""
-"\n"
-"Bitte RETURN drücken um fortzufahren -->"
+#~ msgid ""
+#~ "\n"
+#~ "hit RETURN to continue -->"
+#~ msgstr ""
+#~ "\n"
+#~ "Bitte RETURN drücken um fortzufahren -->"
 
 #, fuzzy
-msgid "Please enter the following information for [%s]:"
-msgstr "Bitte geben Sie die folgenden Informationen für <%s>:"
+#~ msgid "Please enter the following information for [%s]:"
+#~ msgstr "Bitte geben Sie die folgenden Informationen für <%s>:"
 
-msgid "        Number of rows"
-msgstr "        Anzahl der Zeilen"
+#~ msgid "        Number of rows"
+#~ msgstr "        Anzahl der Zeilen"
 
-msgid "        Number of cols"
-msgstr "        Anzahl der Spalten"
+#~ msgid "        Number of cols"
+#~ msgstr "        Anzahl der Spalten"
 
-msgid "        Floating point map"
-msgstr "        Fließkomma-Karte"
+#~ msgid "        Floating point map"
+#~ msgstr "        Fließkomma-Karte"
 
 #, fuzzy
-msgid "rows * cols * bytes per cell must be same as file size (%lu)"
-msgstr ""
-"Reihen * Spalten * Bytes* pro Zelle müssen die gleiche Größe wie die "
-"Dateigröße ergeben (%ld)."
+#~ msgid "rows * cols * bytes per cell must be same as file size (%lu)"
+#~ msgstr ""
+#~ "Reihen * Spalten * Bytes* pro Zelle müssen die gleiche Größe wie die "
+#~ "Dateigröße ergeben (%ld)."
 
-msgid "If you need help figuring them out, just hit ESC"
-msgstr "Für Hilfe beim Herausfinden bitte ESC drücken."
+#~ msgid "If you need help figuring them out, just hit ESC"
+#~ msgstr "Für Hilfe beim Herausfinden bitte ESC drücken."
 
-msgid "** Negative values not allowed!"
-msgstr "** Negative Werte sind nicht erlaubt!"
+#~ msgid "** Negative values not allowed!"
+#~ msgstr "** Negative Werte sind nicht erlaubt!"
 
-msgid "** Positive values only please!"
-msgstr "** Bitte nur positive Werte!"
+#~ msgid "** Positive values only please!"
+#~ msgstr "** Bitte nur positive Werte!"
 
-msgid "Which raster map needs an updated history? "
-msgstr "Welche Rasterkarte benötigt eine Aktualisierung der History?"
+#~ msgid "Which raster map needs an updated history? "
+#~ msgstr "Welche Rasterkarte benötigt eine Aktualisierung der History?"
 
 #, fuzzy
-msgid "Raster file [%s] not found. Exiting."
-msgstr "Rasterkarte <%s> nicht gefunden. Beenden mich. "
+#~ msgid "Raster file [%s] not found. Exiting."
+#~ msgstr "Rasterkarte <%s> nicht gefunden. Beenden mich. "
 
 #, fuzzy
-msgid "History file for [%s] updated."
-msgstr "Die Historiedatei für die Karte <%s> wurde aktualisiert."
+#~ msgid "History file for [%s] updated."
+#~ msgstr "Die Historiedatei für die Karte <%s> wurde aktualisiert."
 
 #, fuzzy
-msgid "History file for [%s] not updated."
-msgstr "Die Historiedatei für die Karte <%s> wurde nicht aktualisiert."
+#~ msgid "History file for [%s] not updated."
+#~ msgstr "Die Historiedatei für die Karte <%s> wurde nicht aktualisiert."
 
-msgid ""
-"\n"
-"Hit RETURN to continue -->"
-msgstr ""
-"\n"
-"Drücke RETURN zum Fortfahren -->"
+#~ msgid ""
+#~ "\n"
+#~ "Hit RETURN to continue -->"
+#~ msgstr ""
+#~ "\n"
+#~ "Drücke RETURN zum Fortfahren -->"
 
 #, fuzzy
-msgid "Edit header for [%s]? "
-msgstr "Editiere Header der Karte <%s>?"
+#~ msgid "Edit header for [%s]? "
+#~ msgstr "Editiere Header der Karte <%s>?"
 
 #, fuzzy
-msgid ""
-"\n"
-"NOTE: [%s] is a reclass of [%s in %s]"
-msgstr ""
-"\n"
-"BEACHTE: <%s> ist eine reklassifizierte Karte von [%s in %s]."
+#~ msgid ""
+#~ "\n"
+#~ "NOTE: [%s] is a reclass of [%s in %s]"
+#~ msgstr ""
+#~ "\n"
+#~ "BEACHTE: <%s> ist eine reklassifizierte Karte von [%s in %s]."
 
-msgid "Canceling from edit header."
-msgstr "Breche das Editieren der Headerdatei ab."
+#~ msgid "Canceling from edit header."
+#~ msgstr "Breche das Editieren der Headerdatei ab."
 
 #, fuzzy
-msgid "Edit the category file for [%s]? "
-msgstr "Editiere die Kategorie-Datei für Karte <%s>?"
+#~ msgid "Edit the category file for [%s]? "
+#~ msgstr "Editiere die Kategorie-Datei für Karte <%s>?"
 
 #, fuzzy
-msgid "Create/Update the color table for [%s]? "
-msgstr "Erzeuge/Aktualisiere die Farbtabelle für die Karte <%s>?"
+#~ msgid "Create/Update the color table for [%s]? "
+#~ msgstr "Erzeuge/Aktualisiere die Farbtabelle für die Karte <%s>?"
 
 #, fuzzy
-msgid "Edit the history file for [%s]? "
-msgstr "Wollen Sie die History-Datei für Karte <%s> editieren?"
+#~ msgid "Edit the history file for [%s]? "
+#~ msgstr "Wollen Sie die History-Datei für Karte <%s> editieren?"
 
 #, fuzzy
-msgid ""
-"\n"
-"The null file for [%s] may indicate that some cells contain\n"
-" no data. If the null file for [%s] doesn't exist, zero cells in\n"
-" it are treated by GRASS application programs as no data."
-msgstr ""
-"\n"
-"Die null-Datei für Karte <%s> kann anzeigen, dass einige Zellen NODATA "
-"enthalten. Falls die null-Datei für Karte <%s> nicht existiert, werden zero "
-"(0)-Zellen von den GRASS-Modulen als NODATA behandelt. "
+#~ msgid ""
+#~ "\n"
+#~ "The null file for [%s] may indicate that some cells contain\n"
+#~ " no data. If the null file for [%s] doesn't exist, zero cells in\n"
+#~ " it are treated by GRASS application programs as no data."
+#~ msgstr ""
+#~ "\n"
+#~ "Die null-Datei für Karte <%s> kann anzeigen, dass einige Zellen NODATA "
+#~ "enthalten. Falls die null-Datei für Karte <%s> nicht existiert, werden "
+#~ "zero (0)-Zellen von den GRASS-Modulen als NODATA behandelt. "
 
 #, fuzzy
-msgid ""
-"\n"
-"Do you want to create/reset the null file for [%s] so that null cell values "
-"are considered valid data? "
-msgstr ""
-"\n"
-"Wollen Sie eine null-Datei für Karte <%s> erzeugen/zurücksetzen, so dass "
-"Zellen mit null-Werten als gültige Daten angesehen werden?"
+#~ msgid ""
+#~ "\n"
+#~ "Do you want to create/reset the null file for [%s] so that null cell "
+#~ "values are considered valid data? "
+#~ msgstr ""
+#~ "\n"
+#~ "Wollen Sie eine null-Datei für Karte <%s> erzeugen/zurücksetzen, so dass "
+#~ "Zellen mit null-Werten als gültige Daten angesehen werden?"
 
 #, fuzzy
-msgid ""
-"\n"
-"Do you want to delete the null file for [%s]\n"
-"(all zero cells will then be considered no data)? "
-msgstr ""
-"\n"
-"Wollen Sie die Null-Datei für Karte <%s> löschen?\n"
-"(alle 0 (zero)-Zellen werden dann NODATA sein.)"
+#~ msgid ""
+#~ "\n"
+#~ "Do you want to delete the null file for [%s]\n"
+#~ "(all zero cells will then be considered no data)? "
+#~ msgstr ""
+#~ "\n"
+#~ "Wollen Sie die Null-Datei für Karte <%s> löschen?\n"
+#~ "(alle 0 (zero)-Zellen werden dann NODATA sein.)"
 
-msgid "Which vector map needs updated categories?"
-msgstr "Für welche Vektordatei sollen die Kategorien aktualisiert werden?"
+#~ msgid "Which vector map needs updated categories?"
+#~ msgstr "Für welche Vektordatei sollen die Kategorien aktualisiert werden?"
 
-msgid "Which raster map needs updated categories?"
-msgstr "Für welche Rasterkarte sollen die Kategorien aktualisiert werden?"
+#~ msgid "Which raster map needs updated categories?"
+#~ msgstr "Für welche Rasterkarte sollen die Kategorien aktualisiert werden?"
 
 #, fuzzy
-msgid "%s map <%s> not found"
-msgstr "%s: %s nicht gefunden."
+#~ msgid "%s map <%s> not found"
+#~ msgstr "%s: %s nicht gefunden."
 
 #, fuzzy
-msgid "Category file for <%s> not updated"
-msgstr "Kategorie-Datei für <%s> nicht aktualisiert."
+#~ msgid "Category file for <%s> not updated"
+#~ msgstr "Kategorie-Datei für <%s> nicht aktualisiert."
 
 #, fuzzy
-msgid "Category file for <%s> updated"
-msgstr "Kategorie-Datei für <%s> aktualisiert."
+#~ msgid "Category file for <%s> updated"
+#~ msgstr "Kategorie-Datei für <%s> aktualisiert."
 
-msgid "Title, in quotes"
-msgstr "Titel, in Gänsefüßchen"
+#~ msgid "Title, in quotes"
+#~ msgstr "Titel, in Gänsefüßchen"
 
-msgid "Quiet - Do not show progress"
-msgstr "Schweigsam - keinen Fortschritt anzeigen."
+#~ msgid "Quiet - Do not show progress"
+#~ msgstr "Schweigsam - keinen Fortschritt anzeigen."
 
-msgid ""
-"The '-q' and '-n' flag is superseded and will be removed in future. Please "
-"use '--quiet' instead."
-msgstr ""
-"Die Schalter '-q' und '-n' wurden ersetzt und werden in einer der kommenden "
-"Versionen ersatzlos gestrichen. Bitte verwenden Sie stattdessen '--quiet'."
+#~ msgid ""
+#~ "The '-q' and '-n' flag is superseded and will be removed in future. "
+#~ "Please use '--quiet' instead."
+#~ msgstr ""
+#~ "Die Schalter '-q' und '-n' wurden ersetzt und werden in einer der "
+#~ "kommenden Versionen ersatzlos gestrichen. Bitte verwenden Sie stattdessen "
+#~ "'--quiet'."
 
 #, fuzzy
-msgid "Unable to find starting vector <%s> "
-msgstr "Kann der Startvektor %s nicht finden."
+#~ msgid "Unable to find starting vector <%s> "
+#~ msgstr "Kann der Startvektor %s nicht finden."
 
 #, fuzzy
-msgid "Unable to find stop vector <%s>"
-msgstr "Kann den Stoppvektor %s nicht finden."
+#~ msgid "Unable to find stop vector <%s>"
+#~ msgstr "Kann den Stoppvektor %s nicht finden."
 
 #, fuzzy
-msgid "Raster output map <%s> not found (no start_points given)"
-msgstr "Rasterausgabe %s - nicht gefunden (keine Start-Punkte angegeben)."
+#~ msgid "Raster output map <%s> not found (no start_points given)"
+#~ msgstr "Rasterausgabe %s - nicht gefunden (keine Start-Punkte angegeben)."
 
-msgid "Memory allocation error on reading start points from raster map %s"
-msgstr ""
-"Fehler beim allozieren von Speicher während des Lesens der Startpunktes der "
-"Rasterkarte %s."
+#~ msgid "Memory allocation error on reading start points from raster map %s"
+#~ msgstr ""
+#~ "Fehler beim allozieren von Speicher während des Lesens der Startpunktes "
+#~ "der Rasterkarte %s."
 
-msgid "Apply filter only to zero data values"
-msgstr "Filter nur auf 0-Werte anwenden."
+#~ msgid "Apply filter only to zero data values"
+#~ msgstr "Filter nur auf 0-Werte anwenden."
 
-msgid "G_put_raster_row failed (file system full?)"
-msgstr "G_put_raster_row failed (Dateisystem voll?)"
+#~ msgid "G_put_raster_row failed (file system full?)"
+#~ msgstr "G_put_raster_row failed (Dateisystem voll?)"
 
 #, fuzzy
-msgid "Run verbosly"
-msgstr "Detaillierte Ausgabe"
+#~ msgid "Run verbosly"
+#~ msgstr "Detaillierte Ausgabe"
 
-msgid "Run VERBOSELY"
-msgstr "Ausführliche Ausgabe."
+#~ msgid "Run VERBOSELY"
+#~ msgstr "Ausführliche Ausgabe."
 
-msgid "Cell file not found"
-msgstr "Cell-Datei nicht gefunden."
+#~ msgid "Cell file not found"
+#~ msgstr "Cell-Datei nicht gefunden."
 
 #, fuzzy
-msgid "Vector map <%s> not found in the current mapset"
-msgstr "Vektorkarte <%s> nicht gefunden."
+#~ msgid "Vector map <%s> not found in the current mapset"
+#~ msgstr "Vektorkarte <%s> nicht gefunden."
 
 #, fuzzy
-msgid "Cannot execute: %s"
-msgstr "Kann folgende Attribute nicht auswählen: %s"
+#~ msgid "Cannot execute: %s"
+#~ msgstr "Kann folgende Attribute nicht auswählen: %s"
 
 #, fuzzy
-msgid "Cannot link table: %s"
-msgstr "Kann die Tabelle <%s> nicht verändern."
+#~ msgid "Cannot link table: %s"
+#~ msgstr "Kann die Tabelle <%s> nicht verändern."
 
 #, fuzzy
-msgid "DXF input file"
-msgstr "DXF Ausgabedatei."
+#~ msgid "DXF input file"
+#~ msgstr "DXF Ausgabedatei."
 
 #, fuzzy
-msgid "Cannot open dxf file <%s>"
-msgstr "Kann die Datei <%s> nicht öffnen."
+#~ msgid "Cannot open dxf file <%s>"
+#~ msgstr "Kann die Datei <%s> nicht öffnen."
 
 #, fuzzy
-msgid "Use output= option to change vector map name"
-msgstr "Ausgabe option"
+#~ msgid "Use output= option to change vector map name"
+#~ msgstr "Ausgabe option"
 
 #, fuzzy
-msgid "Cannot open new vector map <%s>"
-msgstr "Kann die Vektor-Punktkarte <%s> nicht öffnen."
+#~ msgid "Cannot open new vector map <%s>"
+#~ msgstr "Kann die Vektor-Punktkarte <%s> nicht öffnen."
 
 #, fuzzy
-msgid "Conversion of <%s> to vector map:"
-msgstr "Kann die Vektordatei %s nicht erzeugen."
+#~ msgid "Conversion of <%s> to vector map:"
+#~ msgstr "Kann die Vektordatei %s nicht erzeugen."
 
 #, fuzzy
-msgid "Vector map <%s> is not in user mapset and cannot be updated"
-msgstr ""
-"Vektor <%s> ist nicht im Benutzer Mapset und kann nicht aktualisiert werden."
+#~ msgid "Vector map <%s> is not in user mapset and cannot be updated"
+#~ msgstr ""
+#~ "Vektor <%s> ist nicht im Benutzer Mapset und kann nicht aktualisiert "
+#~ "werden."
 
 #, fuzzy
-msgid "Do not print polyline info"
-msgstr "Erzeugt keine Topologie im Punkt-Modus."
+#~ msgid "Do not print polyline info"
+#~ msgstr "Erzeugt keine Topologie im Punkt-Modus."
 
 #, fuzzy
-msgid "Network input map <%s> not found"
-msgstr "Vektorkarte <%s> nicht gefunden."
+#~ msgid "Network input map <%s> not found"
+#~ msgstr "Vektorkarte <%s> nicht gefunden."
 
-msgid "ask_transform_coor():  Leaving session.. \n"
-msgstr "ask_transform_coor():  Verlasse session.. \n"
+#~ msgid "ask_transform_coor():  Leaving session.. \n"
+#~ msgstr "ask_transform_coor():  Verlasse session.. \n"
 
-msgid " Number of points that have been entered: %d\n"
-msgstr "Anzahl der Punkte, die eingegeben wurden: %d\n"
+#~ msgid " Number of points that have been entered: %d\n"
+#~ msgstr "Anzahl der Punkte, die eingegeben wurden: %d\n"
 
-msgid "Please answer yes or no"
-msgstr "Bitte antworten Sie mit yes oder no."
+#~ msgid "Please answer yes or no"
+#~ msgstr "Bitte antworten Sie mit yes oder no."
 
 #, fuzzy
-msgid "Hilight color for text"
-msgstr "für"
+#~ msgid "Hilight color for text"
+#~ msgstr "für"
 
 #, fuzzy
-msgid "Line: %d\n"
-msgstr "Länge der Linie: %f\n"
+#~ msgid "Line: %d\n"
+#~ msgstr "Länge der Linie: %f\n"
 
 #, fuzzy
-msgid "Insufficent memory for allocation of data structure"
-msgstr "Ungenügend Speicher für das Belegen der Datenstruktur."
+#~ msgid "Insufficent memory for allocation of data structure"
+#~ msgstr "Ungenügend Speicher für das Belegen der Datenstruktur."
 
 #, fuzzy
-msgid "Specified group does not exist"
-msgstr "Angegebene Gruppe existiert nicht... Beende mich."
+#~ msgid "Specified group does not exist"
+#~ msgstr "Angegebene Gruppe existiert nicht... Beende mich."
 
 #, fuzzy
-msgid "imagery group"
-msgstr "Bildgruppe"
+#~ msgid "imagery group"
+#~ msgstr "Bildgruppe"
 
 #, fuzzy
-msgid "imagery subgroup"
-msgstr "Bildgruppe"
+#~ msgid "imagery subgroup"
+#~ msgstr "Bildgruppe"
 
 #, fuzzy
-msgid "output raster map"
-msgstr "Farbton Ausgabe-Rasterkarte (hue)."
+#~ msgid "output raster map"
+#~ msgstr "Farbton Ausgabe-Rasterkarte (hue)."
 
 #, fuzzy
-msgid "Name of input raster map(s)"
-msgstr "Name der Eingabe-Rasterkarte."
+#~ msgid "Name of input raster map(s)"
+#~ msgstr "Name der Eingabe-Rasterkarte."
 
-msgid "Output file extension (inputfile(s) + extension)"
-msgstr ""
-"Dateieerweiterung der Ausgabekarte (Eingabedatei(en) + Dateierweiterung)."
+#~ msgid "Output file extension (inputfile(s) + extension)"
+#~ msgstr ""
+#~ "Dateieerweiterung der Ausgabekarte (Eingabedatei(en) + Dateierweiterung)."
 
-msgid "name=%s\n"
-msgstr "Name=%s\n"
+#~ msgid "name=%s\n"
+#~ msgstr "Name=%s\n"
 
-msgid "mapset=%s\n"
-msgstr "Mapset=%s\n"
+#~ msgid "mapset=%s\n"
+#~ msgstr "Mapset=%s\n"
 
-msgid "fullname=%s\n"
-msgstr "Vollname=%s\n"
+#~ msgid "fullname=%s\n"
+#~ msgstr "Vollname=%s\n"
 
-msgid "usage: %s file [prompt %%x %%y]\n"
-msgstr "Benutzung: %s Datei [%%x %%y]\n"
+#~ msgid "usage: %s file [prompt %%x %%y]\n"
+#~ msgstr "Benutzung: %s Datei [%%x %%y]\n"
 
-msgid "Illegal file name for real part: %s"
-msgstr "%s: %s - Ungültiger Name für den realen Teil"
+#~ msgid "Illegal file name for real part: %s"
+#~ msgstr "%s: %s - Ungültiger Name für den realen Teil"
 
-msgid "Illegal file name for imaginary part: %s"
-msgstr "%s: %s - ungültiger Dateiname für den Bildteil"
+#~ msgid "Illegal file name for imaginary part: %s"
+#~ msgstr "%s: %s - ungültiger Dateiname für den Bildteil"
 
 #, fuzzy
-msgid "** Can't read signature file <%s> **"
-msgstr "Kann die Signaturdatei <%s> nicht lesen."
+#~ msgid "** Can't read signature file <%s> **"
+#~ msgstr "Kann die Signaturdatei <%s> nicht lesen."
 
 #, fuzzy
-msgid ""
-"\n"
-"<%s> -- illegal result signature file name"
-msgstr "Ungültiger Signaturdateiname <%s>."
+#~ msgid ""
+#~ "\n"
+#~ "<%s> -- illegal result signature file name"
+#~ msgstr "Ungültiger Signaturdateiname <%s>."
 
-msgid "Illegal group name <%s>"
-msgstr "Ungültiger Gruppen-Name <%s>."
+#~ msgid "Illegal group name <%s>"
+#~ msgstr "Ungültiger Gruppen-Name <%s>."
 
-msgid "Illegal signature file name <%s>"
-msgstr "Ungültiger Signaturdateiname <%s>."
+#~ msgid "Illegal signature file name <%s>"
+#~ msgstr "Ungültiger Signaturdateiname <%s>."
 
-msgid "Setting map window"
-msgstr "Einstellung des Kartenfensters."
+#~ msgid "Setting map window"
+#~ msgstr "Einstellung des Kartenfensters."
 
-msgid "Current window not settable"
-msgstr "Aktuelles Fenster nicht einstellbar."
+#~ msgid "Current window not settable"
+#~ msgstr "Aktuelles Fenster nicht einstellbar."
 
-msgid "Can't clear current graphics window"
-msgstr "Kann aktuelles Grafik-Fenster nicht säubern."
+#~ msgid "Can't clear current graphics window"
+#~ msgstr "Kann aktuelles Grafik-Fenster nicht säubern."
 
-msgid "Cannot use current window"
-msgstr "Kann aktuelles Fenster nicht benutzen."
+#~ msgid "Cannot use current window"
+#~ msgstr "Kann aktuelles Fenster nicht benutzen."
 
-msgid ""
-"Generates and displays simple graphics on map layers drawn in the active "
-"graphics monitor display frame."
-msgstr ""
-"Erzeugt und stellt einfache Grafiken auf Karten im aktiven Grafik-Fenster "
-"dar."
+#~ msgid ""
+#~ "Generates and displays simple graphics on map layers drawn in the active "
+#~ "graphics monitor display frame."
+#~ msgstr ""
+#~ "Erzeugt und stellt einfache Grafiken auf Karten im aktiven Grafik-Fenster "
+#~ "dar."
 
-msgid ""
-"Unix file containg graphing instructions, if not given reads from standard "
-"input"
-msgstr ""
-"Unix-Datei, die Graphik-Instruktionen enthält. Falls diese nicht angegeben "
-"ist, wird von der Standardeingabe gelesen."
+#~ msgid ""
+#~ "Unix file containg graphing instructions, if not given reads from "
+#~ "standard input"
+#~ msgstr ""
+#~ "Unix-Datei, die Graphik-Instruktionen enthält. Falls diese nicht "
+#~ "angegeben ist, wird von der Standardeingabe gelesen."
 
-msgid ""
-"Color to draw with, either a standard GRASS color or R:G:B triplet "
-"(separated by colons)"
-msgstr ""
-"Farbe, die benutzt werden soll. Entweder GRASS Standardfarben oder R:G:B "
-"Tripel (durch Doppelpunkte getrennt)."
+#~ msgid ""
+#~ "Color to draw with, either a standard GRASS color or R:G:B triplet "
+#~ "(separated by colons)"
+#~ msgstr ""
+#~ "Farbe, die benutzt werden soll. Entweder GRASS Standardfarben oder R:G:B "
+#~ "Tripel (durch Doppelpunkte getrennt)."
 
-msgid "Don't add to list of commands in monitor"
-msgstr "Nicht zu der Kommandoliste im Monitor hinzufügen."
+#~ msgid "Don't add to list of commands in monitor"
+#~ msgstr "Nicht zu der Kommandoliste im Monitor hinzufügen."
 
-msgid "No current frame"
-msgstr "Kein aktueller Frame."
+#~ msgid "No current frame"
+#~ msgstr "Kein aktueller Frame."
 
-msgid "Current frame not available"
-msgstr "Aktueller Frame nicht verfügbar."
+#~ msgid "Current frame not available"
+#~ msgstr "Aktueller Frame nicht verfügbar."
 
-msgid "%s: 'is_null_value()' got NULL pointer!"
-msgstr "%s: 'is_null_value()' got NULL pointer!"
+#~ msgid "%s: 'is_null_value()' got NULL pointer!"
+#~ msgstr "%s: 'is_null_value()' got NULL pointer!"
 
-msgid "%s: 'is_null_value()' got negative column index"
-msgstr "%s: 'is_null_value()' hat einen negativen Spalten-Index."
+#~ msgid "%s: 'is_null_value()' got negative column index"
+#~ msgstr "%s: 'is_null_value()' hat einen negativen Spalten-Index."
 
-msgid "%s: 'is_null_value()' Unknown RASTER_MAP_TYPE '%d'"
-msgstr "%s: 'is_null_value()' Unbekannter RASTER_MAP_TYPE '%d'"
+#~ msgid "%s: 'is_null_value()' Unknown RASTER_MAP_TYPE '%d'"
+#~ msgstr "%s: 'is_null_value()' Unbekannter RASTER_MAP_TYPE '%d'"
 
 #, fuzzy
-msgid "Error reading raster map"
-msgstr "Fehler beim Lesen der Rasterkarte."
+#~ msgid "Error reading raster map"
+#~ msgstr "Fehler beim Lesen der Rasterkarte."
 
-msgid "Interactive profile plotting utility with optional output."
-msgstr ""
-"Interaktives Werkzeug zum Zeichnen von Profilen mit optionales Ausgabe."
+#~ msgid "Interactive profile plotting utility with optional output."
+#~ msgstr ""
+#~ "Interaktives Werkzeug zum Zeichnen von Profilen mit optionales Ausgabe."
 
-msgid "Optional display raster"
-msgstr "Rasterdarstellung optional"
+#~ msgid "Optional display raster"
+#~ msgstr "Rasterdarstellung optional"
 
-msgid "Output profile data to file(s) with prefix 'name'"
-msgstr "Gebe Profildaten in Datei(en) mit dem Prefix 'name'."
+#~ msgid "Output profile data to file(s) with prefix 'name'"
+#~ msgstr "Gebe Profildaten in Datei(en) mit dem Prefix 'name'."
 
 #, fuzzy
-msgid "Display raster [%s] not found. Using profile raster."
-msgstr "Darstellung."
+#~ msgid "Display raster [%s] not found. Using profile raster."
+#~ msgstr "Darstellung."
 
-msgid ""
-"\n"
-"\n"
-"Use mouse to choose action"
-msgstr ""
-"\n"
-"\n"
-"Verwenden Sie die Maus, um eine Aktion auszuwählen."
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ "Use mouse to choose action"
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "Verwenden Sie die Maus, um eine Aktion auszuwählen."
 
-msgid "Use 'd.frame -e' to remove left over frames"
-msgstr ""
-"Benutzen Sie bitte 'd.frame -e' um übrig gebliebene Rahmen zu entfernen."
+#~ msgid "Use 'd.frame -e' to remove left over frames"
+#~ msgstr ""
+#~ "Benutzen Sie bitte 'd.frame -e' um übrig gebliebene Rahmen zu entfernen."
 
-msgid "Error opening cell-file"
-msgstr "Fehler beim Öffnen der Zell-Datei."
+#~ msgid "Error opening cell-file"
+#~ msgstr "Fehler beim Öffnen der Zell-Datei."
 
-msgid "Error reading from cell-file"
-msgstr "Fehler beim Lesen der Zell-Datei."
+#~ msgid "Error reading from cell-file"
+#~ msgstr "Fehler beim Lesen der Zell-Datei."
 
-msgid "Mysterious window inconsistancy error"
-msgstr "Mysteriöser Fenster-Inkonsistenz Fehler."
+#~ msgid "Mysterious window inconsistancy error"
+#~ msgstr "Mysteriöser Fenster-Inkonsistenz Fehler."
 
-msgid "%s: Couldn't open raster <%s@%s>"
-msgstr "%s: Kann die Rasterkarte <%s@%s> nicht öffnen."
+#~ msgid "%s: Couldn't open raster <%s@%s>"
+#~ msgstr "%s: Kann die Rasterkarte <%s@%s> nicht öffnen."
 
-msgid "one moment ..."
-msgstr "eine Moment..."
+#~ msgid "one moment ..."
+#~ msgstr "eine Moment..."
 
-msgid " Middle: toggle flash color\n"
-msgstr ""
-" Mitte: wechselt zwischen den Farben, die auf dem Bildschirm aufleuchten "
-"sollen.\n"
+#~ msgid " Middle: toggle flash color\n"
+#~ msgstr ""
+#~ " Mitte: wechselt zwischen den Farben, die auf dem Bildschirm aufleuchten "
+#~ "sollen.\n"
 
-msgid "Enable flashing (slower)"
-msgstr "Aufleuchten anschalten (ist langsamer)."
+#~ msgid "Enable flashing (slower)"
+#~ msgstr "Aufleuchten anschalten (ist langsamer)."
 
-msgid "No raster map exists in current window"
-msgstr "Es existiert keine Rasterkarte im aktuellen Fenster."
+#~ msgid "No raster map exists in current window"
+#~ msgstr "Es existiert keine Rasterkarte im aktuellen Fenster."
 
-msgid "No current window"
-msgstr "Kein aktuelles Fenster."
+#~ msgid "No current window"
+#~ msgstr "Kein aktuelles Fenster."
 
-msgid "Current window not available"
-msgstr "Aktuelles Fenster ist nicht vorhanden."
+#~ msgid "Current window not available"
+#~ msgstr "Aktuelles Fenster ist nicht vorhanden."
 
-msgid "Getting screen window"
-msgstr "Hole Fenster."
+#~ msgid "Getting screen window"
+#~ msgstr "Hole Fenster."
 
-msgid "Error in calculating conversions"
-msgstr "Fehler bei der Berechnung der Umwandlung."
+#~ msgid "Error in calculating conversions"
+#~ msgstr "Fehler bei der Berechnung der Umwandlung."
 
-msgid "No current graphics window"
-msgstr "Kein aktuelles Grafik-Fenster."
+#~ msgid "No current graphics window"
+#~ msgstr "Kein aktuelles Grafik-Fenster."
 
-msgid "Current graphics window not available"
-msgstr "Aktuelles Fenster ist nicht vorhanden."
+#~ msgid "Current graphics window not available"
+#~ msgstr "Aktuelles Fenster ist nicht vorhanden."
 
-msgid "Setting graphics window"
-msgstr "Setze das Kartenfenster."
+#~ msgid "Setting graphics window"
+#~ msgstr "Setze das Kartenfenster."
 
-msgid "Can't set current graphics window"
-msgstr "Kann aktuelles Fenster nicht benutzen."
+#~ msgid "Can't set current graphics window"
+#~ msgstr "Kann aktuelles Fenster nicht benutzen."
 
-msgid "Getting graphics window coordinates"
-msgstr "Hole Koordinaten des Grafik-Fensters."
+#~ msgid "Getting graphics window coordinates"
+#~ msgstr "Hole Koordinaten des Grafik-Fensters."
 
-msgid "value [%.0f,%.0f] out of range [0-100]"
-msgstr "Wert [%.0f,%.0f] außerhalb der Spanne [0-100]"
+#~ msgid "value [%.0f,%.0f] out of range [0-100]"
+#~ msgstr "Wert [%.0f,%.0f] außerhalb der Spanne [0-100]"
 
 #, fuzzy
-msgid "Font name or pathname of TTF file"
-msgstr "Ausgabename der neuen TIFF-Datei."
+#~ msgid "Font name or pathname of TTF file"
+#~ msgstr "Ausgabename der neuen TIFF-Datei."
 
 #, fuzzy
-msgid "Setting release of FreeType"
-msgstr ""
-"\n"
-" Einstellungen des FreeType-Releases\n"
+#~ msgid "Setting release of FreeType"
+#~ msgstr ""
+#~ "\n"
+#~ " Einstellungen des FreeType-Releases\n"
 
-msgid "Display number of colors"
-msgstr "Stelle die Anzahl der Farben dar."
+#~ msgid "Display number of colors"
+#~ msgstr "Stelle die Anzahl der Farben dar."
 
-msgid "Use mouse to size & place legend"
-msgstr "Benutze Maus zum Plazieren und zur Größeneinstellung der Legende."
+#~ msgid "Use mouse to size & place legend"
+#~ msgstr "Benutze Maus zum Plazieren und zur Größeneinstellung der Legende."
 
 #, fuzzy
-msgid "Creates a list of commands for recreating screen graphics."
-msgstr ""
-"Erstelle eine Liste von Kommandos die zum Erstellen der aktuellen Grafik "
-"nötig sind."
+#~ msgid "Creates a list of commands for recreating screen graphics."
+#~ msgstr ""
+#~ "Erstelle eine Liste von Kommandos die zum Erstellen der aktuellen Grafik "
+#~ "nötig sind."
 
-msgid "Name of frame(s) to save"
-msgstr "Name der Rahmen zum speichern."
+#~ msgid "Name of frame(s) to save"
+#~ msgstr "Name der Rahmen zum speichern."
 
-msgid ""
-"List of object numbers to remove which are displayed after \"#\". -1 for the "
-"last object."
-msgstr ""
-"Liste der Objektnummer, die entfernt werden sollen, die hinter \"#\" "
-"angezeigt werden. -1 steht für das letzte Objekt."
+#~ msgid ""
+#~ "List of object numbers to remove which are displayed after \"#\". -1 for "
+#~ "the last object."
+#~ msgstr ""
+#~ "Liste der Objektnummer, die entfernt werden sollen, die hinter \"#\" "
+#~ "angezeigt werden. -1 steht für das letzte Objekt."
 
-msgid ""
-"List of object numbers to move (\"from\" to \"to\"). remove= option will be "
-"done first, if any."
-msgstr ""
-"Liste der Objektnummern die verschoben werden sollen. (\"von\" nach \"nach"
-"\"). Falls eine Option angegeben wurde, wird remove= als erstes ausgeführt."
+#~ msgid ""
+#~ "List of object numbers to move (\"from\" to \"to\"). remove= option will "
+#~ "be done first, if any."
+#~ msgstr ""
+#~ "Liste der Objektnummern die verschoben werden sollen. (\"von\" nach \"nach"
+#~ "\"). Falls eine Option angegeben wurde, wird remove= als erstes "
+#~ "ausgeführt."
 
-msgid "Save current frame"
-msgstr "Speichere aktuellen Rahmen."
+#~ msgid "Save current frame"
+#~ msgstr "Speichere aktuellen Rahmen."
 
-msgid "Save all the frames"
-msgstr "Speichere alle Rahmen ab."
+#~ msgid "Save all the frames"
+#~ msgstr "Speichere alle Rahmen ab."
 
-msgid "Only map objects without extra header and tailer"
-msgstr "Nur Kartenobjekte ohne extra Kopf und Ende."
+#~ msgid "Only map objects without extra header and tailer"
+#~ msgstr "Nur Kartenobjekte ohne extra Kopf und Ende."
 
-msgid "Unknown item type in pad: %s"
-msgstr "Unbekannter Typ in pad: %s"
+#~ msgid "Unknown item type in pad: %s"
+#~ msgstr "Unbekannter Typ in pad: %s"
 
-msgid ""
-"Don't add to list of vectors and commands in monitor (it won't be drawn if "
-"the monitor is refreshed)"
-msgstr ""
-"Nicht zu der Liste der Vektorkarten und Kommandos im Monitor hinzufügen (Die "
-"Vektorkarte wird nicht gezeichnet, wenn das Grafik-Fenster aktualisiert "
-"wird)."
+#~ msgid ""
+#~ "Don't add to list of vectors and commands in monitor (it won't be drawn "
+#~ "if the monitor is refreshed)"
+#~ msgstr ""
+#~ "Nicht zu der Liste der Vektorkarten und Kommandos im Monitor hinzufügen "
+#~ "(Die Vektorkarte wird nicht gezeichnet, wenn das Grafik-Fenster "
+#~ "aktualisiert wird)."
 
-msgid "No raster map exists in the current window"
-msgstr "Es existiert keine Rasterkarte im aktuellen Fenster. "
+#~ msgid "No raster map exists in the current window"
+#~ msgstr "Es existiert keine Rasterkarte im aktuellen Fenster. "
 
-msgid ""
-"Creates and displays a menu within the active frame on the graphics monitor."
-msgstr "Erzeugt und stellt ein Menü im aktiven Frame des Grafik-Fensters dar."
+#~ msgid ""
+#~ "Creates and displays a menu within the active frame on the graphics "
+#~ "monitor."
+#~ msgstr ""
+#~ "Erzeugt und stellt ein Menü im aktiven Frame des Grafik-Fensters dar."
 
-msgid "Sets the color of the menu background"
-msgstr "Bestimmt die Farbe des Menü Hintergrunds."
+#~ msgid "Sets the color of the menu background"
+#~ msgstr "Bestimmt die Farbe des Menü Hintergrunds."
 
-msgid "Sets the color of the menu text"
-msgstr "Bestimmt die Farbe für den Menütext."
+#~ msgid "Sets the color of the menu text"
+#~ msgstr "Bestimmt die Farbe für den Menütext."
 
-msgid "Sets the color dividing lines of text"
-msgstr "Bestimmt die Farbe zum Trennen von Textzeilen."
+#~ msgid "Sets the color dividing lines of text"
+#~ msgstr "Bestimmt die Farbe zum Trennen von Textzeilen."
 
-msgid "Sets the menu text size (in percent)"
-msgstr "Bestimmt die Menütextgröße (in Prozent)."
+#~ msgid "Sets the menu text size (in percent)"
+#~ msgstr "Bestimmt die Menütextgröße (in Prozent)."
 
-msgid "Menu must contain a title and at least one option"
-msgstr "Das Menü muss mindestens einen Titel und eine Option enthalten."
+#~ msgid "Menu must contain a title and at least one option"
+#~ msgstr "Das Menü muss mindestens einen Titel und eine Option enthalten."
 
-msgid ""
-"Draws text in the graphics monitor's active display frame using TrueType "
-"fonts."
-msgstr ""
-"Verwende TrueType-Schriften, um Text im aktiven Rahmen des Graphik-Fensters "
-"zu zeichnen."
+#~ msgid ""
+#~ "Draws text in the graphics monitor's active display frame using TrueType "
+#~ "fonts."
+#~ msgstr ""
+#~ "Verwende TrueType-Schriften, um Text im aktiven Rahmen des Graphik-"
+#~ "Fensters zu zeichnen."
 
-msgid "Screen position (percentage, [0,0] is bottom left)"
-msgstr "Koordinaten (in Prozent, [0,0] ist unten links)."
+#~ msgid "Screen position (percentage, [0,0] is bottom left)"
+#~ msgstr "Koordinaten (in Prozent, [0,0] ist unten links)."
 
-msgid "Path to TrueType font (including file name)"
-msgstr "Pfad zu den TrueType-Schriften (inklusive Dateiname)"
+#~ msgid "Path to TrueType font (including file name)"
+#~ msgstr "Pfad zu den TrueType-Schriften (inklusive Dateiname)"
 
-msgid "Height of letters (in percent of available frame height)"
-msgstr "Höhe der Buchstaben (in Prozent von der möglichen Rahmenhöhe)."
+#~ msgid "Height of letters (in percent of available frame height)"
+#~ msgstr "Höhe der Buchstaben (in Prozent von der möglichen Rahmenhöhe)."
 
-msgid "Either text or -c should be given"
-msgstr "Entweder muss die Option '-c' oder text angegeben werden. "
+#~ msgid "Either text or -c should be given"
+#~ msgstr "Entweder muss die Option '-c' oder text angegeben werden. "
 
-msgid "Choose only one coordinate system for placement"
-msgstr "Wählen Sie nur ein Koordinatensystem für die Plazierung aus."
+#~ msgid "Choose only one coordinate system for placement"
+#~ msgstr "Wählen Sie nur ein Koordinatensystem für die Plazierung aus."
 
-msgid "No font selected"
-msgstr "Keine Schrift ausgewählt."
+#~ msgid "No font selected"
+#~ msgstr "Keine Schrift ausgewählt."
 
-msgid "Invalid font: %s"
-msgstr "Ungültige Schrift: %s"
+#~ msgid "Invalid font: %s"
+#~ msgstr "Ungültige Schrift: %s"
 
-msgid "Unable to create text conversion context"
-msgstr "Kann den Textkonvertierungszusammenhang nicht erstellen."
+#~ msgid "Unable to create text conversion context"
+#~ msgstr "Kann den Textkonvertierungszusammenhang nicht erstellen."
 
-msgid "Text conversion error"
-msgstr "Fehler beim Konvertieren von Text."
+#~ msgid "Text conversion error"
+#~ msgstr "Fehler beim Konvertieren von Text."
 
-msgid "Unable to write the temporary file"
-msgstr "Kann die temporäre Datei nicht schreiben."
+#~ msgid "Unable to write the temporary file"
+#~ msgstr "Kann die temporäre Datei nicht schreiben."
 
-msgid "No predefined font"
-msgstr "Keine vordefinierte Schrift gefunden."
+#~ msgid "No predefined font"
+#~ msgstr "Keine vordefinierte Schrift gefunden."
 
-msgid "%s: Unable to read font"
-msgstr "%s: Kann diese Schrift nicht lesen."
+#~ msgid "%s: Unable to read font"
+#~ msgstr "%s: Kann diese Schrift nicht lesen."
 
-msgid "%s: Unable to read FreeType definition file; use the default"
-msgstr ""
-"%s: Kann die FreeType Definitionsdatei nicht lesen; nehme den Standard."
+#~ msgid "%s: Unable to read FreeType definition file; use the default"
+#~ msgstr ""
+#~ "%s: Kann die FreeType Definitionsdatei nicht lesen; nehme den Standard."
 
-msgid "%s: No FreeType definition file"
-msgstr "%s: Keine FreeType Definitionsdatei gefunden."
+#~ msgid "%s: No FreeType definition file"
+#~ msgstr "%s: Keine FreeType Definitionsdatei gefunden."
 
-msgid "%s: Unable to read FreeType definition file"
-msgstr "%s: Kann die FreeType Definitionsdatei nicht lesen."
+#~ msgid "%s: Unable to read FreeType definition file"
+#~ msgstr "%s: Kann die FreeType Definitionsdatei nicht lesen."
 
-msgid "Don't add to list of rasters and commands in monitor"
-msgstr ""
-"Nicht zu der Liste der Rasterkarten und Kommandos im Monitor hinzufügen."
+#~ msgid "Don't add to list of rasters and commands in monitor"
+#~ msgstr ""
+#~ "Nicht zu der Liste der Rasterkarten und Kommandos im Monitor hinzufügen."
 
-msgid "One mouse click only"
-msgstr "Nur ein Mausklick."
+#~ msgid "One mouse click only"
+#~ msgstr "Nur ein Mausklick."
 
-msgid "Use mouse to interactively place scale"
-msgstr "Benutze die Maus zum Interaktiven Plazieren des Maßstabs."
+#~ msgid "Use mouse to interactively place scale"
+#~ msgstr "Benutze die Maus zum Interaktiven Plazieren des Maßstabs."
 
-msgid "Use mouse to interactively place text"
-msgstr "Benutze die Maus zum Interaktiven Platzieren des Maßstabs."
+#~ msgid "Use mouse to interactively place text"
+#~ msgstr "Benutze die Maus zum Interaktiven Platzieren des Maßstabs."
 
-msgid "Click!\n"
-msgstr "Klick!\n"
+#~ msgid "Click!\n"
+#~ msgstr "Klick!\n"
 
-msgid " Left:    Place text here\n"
-msgstr " Links:    Platziere Text hier.\n"
+#~ msgid " Left:    Place text here\n"
+#~ msgstr " Links:    Platziere Text hier.\n"
 
-msgid " Right:   Quit\n"
-msgstr " Rechts:  Beenden\n"
+#~ msgid " Right:   Quit\n"
+#~ msgstr " Rechts:  Beenden\n"
 
-msgid "Just redraw given maps using default colors"
-msgstr "Nur die angegebene Karten mit ihren Standardfarben neu zeichnen."
+#~ msgid "Just redraw given maps using default colors"
+#~ msgstr "Nur die angegebene Karten mit ihren Standardfarben neu zeichnen."
 
-msgid "ERROR: can not get \"list\" items"
-msgstr "FEHLER: Kann keine \"list\" Werte finden."
+#~ msgid "ERROR: can not get \"list\" items"
+#~ msgstr "FEHLER: Kann keine \"list\" Werte finden."
 
-msgid "-j flag forced"
-msgstr "Benutzung des Schalters -j erzwungen."
+#~ msgid "-j flag forced"
+#~ msgstr "Benutzung des Schalters -j erzwungen."
 
-msgid "No map is displayed in GRASS monitor"
-msgstr "Im Grafik-Fenster ist keine Karte dargestellt."
+#~ msgid "No map is displayed in GRASS monitor"
+#~ msgstr "Im Grafik-Fenster ist keine Karte dargestellt."
 
-msgid "Interactively select route"
-msgstr "Selectiere interaktiv eine Route."
+#~ msgid "Interactively select route"
+#~ msgstr "Selectiere interaktiv eine Route."
 
-msgid "You must select more than one point"
-msgstr "Es müssen mehr als ein Punkt selektiert werden."
+#~ msgid "You must select more than one point"
+#~ msgstr "Es müssen mehr als ein Punkt selektiert werden."
 
-msgid "You must select at least four points"
-msgstr "Es müssen mindestens 4 Punkte selektiert werden."
+#~ msgid "You must select at least four points"
+#~ msgstr "Es müssen mindestens 4 Punkte selektiert werden."
 
-msgid "No raster or vector map displayed"
-msgstr "Es wird keine Raster- oder Vektorkarte angezeigt."
+#~ msgid "No raster or vector map displayed"
+#~ msgstr "Es wird keine Raster- oder Vektorkarte angezeigt."
 
-msgid "To establish and control use of a graphics display monitor."
-msgstr "Erzeugt und kontrolliert ein Grafik-Fenster."
+#~ msgid "To establish and control use of a graphics display monitor."
+#~ msgstr "Erzeugt und kontrolliert ein Grafik-Fenster."
 
-msgid "Name of graphics monitor to start"
-msgstr "Name des Grafik-Fensters, das gestartet werden soll."
+#~ msgid "Name of graphics monitor to start"
+#~ msgstr "Name des Grafik-Fensters, das gestartet werden soll."
 
-msgid "Name of graphics monitor to stop"
-msgstr "Name des Grafik-Fensters, das gestoppt werden soll."
+#~ msgid "Name of graphics monitor to stop"
+#~ msgstr "Name des Grafik-Fensters, das gestoppt werden soll."
 
-msgid "Name of graphics monitor to select"
-msgstr "Name des Grafik-Fensters, das ausgewählt werden soll."
+#~ msgid "Name of graphics monitor to select"
+#~ msgstr "Name des Grafik-Fensters, das ausgewählt werden soll."
 
-msgid "Name of graphics monitor to unlock"
-msgstr "Name des Grafik-Fensters, das entriegelt werden soll."
+#~ msgid "Name of graphics monitor to unlock"
+#~ msgstr "Name des Grafik-Fensters, das entriegelt werden soll."
 
-msgid "List all monitors"
-msgstr "Liste aller Grafik-Fenster."
+#~ msgid "List all monitors"
+#~ msgstr "Liste aller Grafik-Fenster."
 
-msgid "List all monitors (with current status)"
-msgstr "Liste alle Grafik-Fenster (mit aktuellem Status)."
+#~ msgid "List all monitors (with current status)"
+#~ msgstr "Liste alle Grafik-Fenster (mit aktuellem Status)."
 
-msgid "Print name of currently selected monitor"
-msgstr "Gib den Namen des aktuell selektierten Grafik-Fensters aus."
+#~ msgid "Print name of currently selected monitor"
+#~ msgstr "Gib den Namen des aktuell selektierten Grafik-Fensters aus."
 
-msgid "Release currently selected monitor"
-msgstr "Gebe das aktuell ausgewählte Grafik-Fenster frei."
+#~ msgid "Release currently selected monitor"
+#~ msgstr "Gebe das aktuell ausgewählte Grafik-Fenster frei."
 
-msgid "Do not automatically select when starting"
-msgstr "Nicht automatisch beim Starten selektieren."
+#~ msgid "Do not automatically select when starting"
+#~ msgstr "Nicht automatisch beim Starten selektieren."
 
-msgid "Problem selecting %s. Will try once more"
-msgstr "Probleme beim Auswählen von %s. Einmal versuche ich es noch..."
+#~ msgid "Problem selecting %s. Will try once more"
+#~ msgstr "Probleme beim Auswählen von %s. Einmal versuche ich es noch..."
 
-msgid "No such monitor as <%s>"
-msgstr "Es gibt das Grafik-Fenster <%s> nicht."
+#~ msgid "No such monitor as <%s>"
+#~ msgstr "Es gibt das Grafik-Fenster <%s> nicht."
 
 #, fuzzy
-msgid "Monitor <%s> released"
-msgstr "Kein Grafik-Fenster ausgewählt."
+#~ msgid "Monitor <%s> released"
+#~ msgstr "Kein Grafik-Fenster ausgewählt."
 
 #, fuzzy
-msgid "Error - Locking mechanism failed"
-msgstr "Fehler beim Schließen der ASCII-Datei."
+#~ msgid "Error - Locking mechanism failed"
+#~ msgstr "Fehler beim Schließen der ASCII-Datei."
 
 #, fuzzy
-msgid "Error choosing frame [%s]\n"
-msgstr "Fehler beim Lesen der Spanne für <%s>."
+#~ msgid "Error choosing frame [%s]\n"
+#~ msgstr "Fehler beim Lesen der Spanne für <%s>."
 
-msgid ""
-"\n"
-"Buttons:\n"
-msgstr ""
-"\n"
-"Maustasten:\n"
+#~ msgid ""
+#~ "\n"
+#~ "Buttons:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Maustasten:\n"
 
-msgid "Left:   Select frame\n"
-msgstr "Links:   Fenster (frame) auswählen.\n"
+#~ msgid "Left:   Select frame\n"
+#~ msgstr "Links:   Fenster (frame) auswählen.\n"
 
 #, fuzzy
-msgid "Right:  Accept frame\n"
-msgstr "Rechts:  Menü beenden\n"
+#~ msgid "Right:  Accept frame\n"
+#~ msgstr "Rechts:  Menü beenden\n"
 
 #, fuzzy
-msgid "Manages display frames on the user's graphics monitor."
-msgstr "Erzeugt und stellt ein Menü im aktiven Frame des Grafik-Fensters dar."
+#~ msgid "Manages display frames on the user's graphics monitor."
+#~ msgstr ""
+#~ "Erzeugt und stellt ein Menü im aktiven Frame des Grafik-Fensters dar."
 
 #, fuzzy
-msgid "Create a new frame"
-msgstr "Speichere alle Rahmen ab."
+#~ msgid "Create a new frame"
+#~ msgstr "Speichere alle Rahmen ab."
 
 #, fuzzy
-msgid "Select a frame"
-msgstr "Selektiere Daten aus der Datenbank."
+#~ msgid "Select a frame"
+#~ msgstr "Selektiere Daten aus der Datenbank."
 
 #, fuzzy
-msgid "Print name of current frame"
-msgstr "Speichere aktuellen Rahmen."
+#~ msgid "Print name of current frame"
+#~ msgstr "Speichere aktuellen Rahmen."
 
 #, fuzzy
-msgid "Print names of all frames"
-msgstr "Gebe Flächensummen aus."
+#~ msgid "Print names of all frames"
+#~ msgstr "Gebe Flächensummen aus."
 
 #, fuzzy
-msgid "List map names displayed in GRASS monitor"
-msgstr "Im Grafik-Fenster ist keine Karte dargestellt."
+#~ msgid "List map names displayed in GRASS monitor"
+#~ msgstr "Im Grafik-Fenster ist keine Karte dargestellt."
 
-msgid "Debugging output"
-msgstr "Debugging Ausgabe"
+#~ msgid "Debugging output"
+#~ msgstr "Debugging Ausgabe"
 
-msgid "Frame to be created/selected"
-msgstr "Fenster (frame), das erstellt/ausgewählt werden soll."
+#~ msgid "Frame to be created/selected"
+#~ msgstr "Fenster (frame), das erstellt/ausgewählt werden soll."
 
-msgid ""
-"\n"
-"Mouse Buttons:"
-msgstr ""
-"\n"
-"Maustasten:"
+#~ msgid ""
+#~ "\n"
+#~ "Mouse Buttons:"
+#~ msgstr ""
+#~ "\n"
+#~ "Maustasten:"
 
-msgid "Left:   Select From\n"
-msgstr "Links:   Selektiere Von\n"
+#~ msgid "Left:   Select From\n"
+#~ msgstr "Links:   Selektiere Von\n"
 
-msgid "Middle: Select To\n"
-msgstr "Mitte: Selektiere Nach\n"
+#~ msgid "Middle: Select To\n"
+#~ msgstr "Mitte: Selektiere Nach\n"
 
-msgid ""
-"Right:  Quit\n"
-"\n"
-msgstr ""
-"Rechts:  Beenden\n"
-"\n"
+#~ msgid ""
+#~ "Right:  Quit\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Rechts:  Beenden\n"
+#~ "\n"
 
 #, fuzzy
-msgid "Monitor: interactive command in redraw"
-msgstr "Grafik-Fenster: Interaktives Kommando zum erneuten Zeichnen\n"
+#~ msgid "Monitor: interactive command in redraw"
+#~ msgstr "Grafik-Fenster: Interaktives Kommando zum erneuten Zeichnen\n"
 
 #, fuzzy
-msgid "found %d visuals of type TrueColor"
-msgstr "Habe %d Ansichten vom Typ TrueColor gefunden\n"
+#~ msgid "found %d visuals of type TrueColor"
+#~ msgstr "Habe %d Ansichten vom Typ TrueColor gefunden\n"
 
-msgid "searching for highest bit depth"
-msgstr "Suche die höchste Bit-Tiefe"
+#~ msgid "searching for highest bit depth"
+#~ msgstr "Suche die höchste Bit-Tiefe"
 
 #, fuzzy
-msgid "selected %d bit depth"
-msgstr "Ausgewählte Bit-Tiefe: %d\n"
+#~ msgid "selected %d bit depth"
+#~ msgstr "Ausgewählte Bit-Tiefe: %d\n"
 
 #, fuzzy
-msgid "using default visual which is %s"
-msgstr "Benutze Standard-Ansicht mit <%s>.\n"
+#~ msgid "using default visual which is %s"
+#~ msgstr "Benutze Standard-Ansicht mit <%s>.\n"
 
 #, fuzzy
-msgid "Monitor: waitpid: expected %d but got %d"
-msgstr "Grafik-Fenster: Waitpid: erwarte %d, habe aber %d bekommen.\n"
+#~ msgid "Monitor: waitpid: expected %d but got %d"
+#~ msgstr "Grafik-Fenster: Waitpid: erwarte %d, habe aber %d bekommen.\n"
 
 #, fuzzy
-msgid "Monitor: XGetWMName failed"
-msgstr "Grafik-Fenster: XGetWMName fehlgeschlagen.\n"
+#~ msgid "Monitor: XGetWMName failed"
+#~ msgstr "Grafik-Fenster: XGetWMName fehlgeschlagen.\n"
 
 #, fuzzy
-msgid "Monitor: XGetWMName: bad result"
-msgstr "Grafik-Fenster: XGetWMName: Falsches Ergebnis.\n"
+#~ msgid "Monitor: XGetWMName: bad result"
+#~ msgstr "Grafik-Fenster: XGetWMName: Falsches Ergebnis.\n"
 
-msgid ""
-"\n"
-"\n"
-"WARNING!  A projection file already exists for this location\n"
-msgstr ""
-"\n"
-"\n"
-"WARNUNG! Eine Projektionsinformation für diese Location existiert bereits!\n"
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ "WARNING!  A projection file already exists for this location\n"
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "WARNUNG! Eine Projektionsinformation für diese Location existiert "
+#~ "bereits!\n"
 
-msgid "Would you still like to overwrite the current projection information "
-msgstr "Wollen sie wirklich die aktuelle Projektionsinformation überschreiben?"
+#~ msgid ""
+#~ "Would you still like to overwrite the current projection information "
+#~ msgstr ""
+#~ "Wollen sie wirklich die aktuelle Projektionsinformation überschreiben?"
 
-msgid "The projection information will not be updated."
-msgstr "Die Projektionsinformationen werden nicht aktualisiert."
+#~ msgid "The projection information will not be updated."
+#~ msgstr "Die Projektionsinformationen werden nicht aktualisiert."
 
 #, fuzzy
-msgid "<%s> is an illegal region name"
-msgstr "<%s> - ungültiger Regions-Name."
+#~ msgid "<%s> is an illegal region name"
+#~ msgstr "<%s> - ungültiger Regions-Name."
 
 #, fuzzy
-msgid "No LatLong information for XY-Projection"
-msgstr "Geo-Gitter Option ist für XY-Projektionen nicht verfügbar."
+#~ msgid "No LatLong information for XY-Projection"
+#~ msgstr "Geo-Gitter Option ist für XY-Projektionen nicht verfügbar."
 
 #, fuzzy
-msgid "Erasing monitors..."
-msgstr "Verarbeite Punkte ... "
+#~ msgid "Erasing monitors..."
+#~ msgstr "Verarbeite Punkte ... "
 
 #, fuzzy
-msgid "Display manager for GRASS"
-msgstr "Stelle die Anzahl der Farben dar."
+#~ msgid "Display manager for GRASS"
+#~ msgstr "Stelle die Anzahl der Farben dar."
 
 #, fuzzy
-msgid "Name of .dmrc settings file"
-msgstr "Name der Farb-Datei."
+#~ msgid "Name of .dmrc settings file"
+#~ msgstr "Name der Farb-Datei."
 
 #, fuzzy
-msgid "Name of the vector points map with x,y locations"
-msgstr "von z"
+#~ msgid "Name of the vector points map with x,y locations"
+#~ msgstr "von z"
 
 #, fuzzy
-msgid "Number of time iterations (sec.)"
-msgstr "Anzahl der Interpolationspunkte."
+#~ msgid "Number of time iterations (sec.)"
+#~ msgstr "Anzahl der Interpolationspunkte."
 
 #, fuzzy
-msgid "Multiscale simulation"
-msgstr "Metrische Belegung."
+#~ msgid "Multiscale simulation"
+#~ msgstr "Metrische Belegung."
 
 #, fuzzy
-msgid "Name of the elevation raster map, same units as N,E: [m] or [ft] "
-msgstr "Name der Rasterkarte, die Höheninformation enthält."
+#~ msgid "Name of the elevation raster map, same units as N,E: [m] or [ft] "
+#~ msgstr "Name der Rasterkarte, die Höheninformation enthält."
 
 #, fuzzy
-msgid "Name of the x-derivatives raster map [m/m] or [ft/ft]"
-msgstr "Name der Eingabe-Rasterkarte"
+#~ msgid "Name of the x-derivatives raster map [m/m] or [ft/ft]"
+#~ msgstr "Name der Eingabe-Rasterkarte"
 
 #, fuzzy
-msgid "Name of the y-derivatives raster map [m/m] or [ft/ft]"
-msgstr "Name der Eingabe-Rasterkarte"
+#~ msgid "Name of the y-derivatives raster map [m/m] or [ft/ft]"
+#~ msgstr "Name der Eingabe-Rasterkarte"
 
 #, fuzzy
-msgid "Threshold distance"
-msgstr "Ungültige Schrift: %s"
+#~ msgid "Threshold distance"
+#~ msgstr "Ungültige Schrift: %s"
 
 #, fuzzy
-msgid "Create 3D file"
-msgstr "Erzeuge eine 3D-Ausgabe."
+#~ msgid "Create 3D file"
+#~ msgstr "Erzeuge eine 3D-Ausgabe."
 
 #, fuzzy
-msgid "visualization"
-msgstr "Visualisieren"
+#~ msgid "visualization"
+#~ msgstr "Visualisieren"
 
 #, fuzzy
-msgid "Raster file(s) for Elevation"
-msgstr "Rasterkarte(n) für View%d"
+#~ msgid "Raster file(s) for Elevation"
+#~ msgstr "Rasterkarte(n) für View%d"
 
 #, fuzzy
-msgid "Raster file(s) for Color"
-msgstr "Rasterkarte(n) für View%d"
+#~ msgid "Raster file(s) for Color"
+#~ msgstr "Rasterkarte(n) für View%d"
 
 #, fuzzy
-msgid "Raster map to zoom into"
-msgstr "Rasterkarte, an die angepasst werden soll."
+#~ msgid "Raster map to zoom into"
+#~ msgstr "Rasterkarte, an die angepasst werden soll."
 
 #, fuzzy
-msgid "Save the current region to region definition file"
-msgstr "Übernehme Einstellungen von einer benannten Region."
+#~ msgid "Save the current region to region definition file"
+#~ msgstr "Übernehme Einstellungen von einer benannten Region."
 
 #, fuzzy
-msgid "Could not open input file <%s>."
-msgstr "Kann die Eingabedatei <%s> nicht öffnen."
+#~ msgid "Could not open input file <%s>."
+#~ msgstr "Kann die Eingabedatei <%s> nicht öffnen."
 
 #, fuzzy
-msgid "No such monitor as '%s'"
-msgstr "Es gibt das Grafik-Fenster <%s> nicht."
+#~ msgid "No such monitor as '%s'"
+#~ msgstr "Es gibt das Grafik-Fenster <%s> nicht."
 
 #, fuzzy
-msgid "Error - No such monitor as '%s'"
-msgstr "Es gibt das Grafik-Fenster <%s> nicht."
+#~ msgid "Error - No such monitor as '%s'"
+#~ msgstr "Es gibt das Grafik-Fenster <%s> nicht."
 
 #, fuzzy
-msgid ""
-"\a\n"
-"** The following raster maps in subgroup [%s] do not exist:"
-msgstr ""
-"** Die folgenden Rasterkarten in der Untergruppe <%s> existieren nicht:"
+#~ msgid ""
+#~ "\a\n"
+#~ "** The following raster maps in subgroup [%s] do not exist:"
+#~ msgstr ""
+#~ "** Die folgenden Rasterkarten in der Untergruppe <%s> existieren nicht:"
 
 #, fuzzy
-msgid "       %s"
-msgstr "Fertig!       "
+#~ msgid "       %s"
+#~ msgstr "Fertig!       "
 
 #, fuzzy
-msgid "Removing files from group"
-msgstr "elevin Rasterkarte <%s> nicht gefunden."
+#~ msgid "Removing files from group"
+#~ msgstr "elevin Rasterkarte <%s> nicht gefunden."
 
 #, fuzzy
-msgid "Adding files to group [%s]"
-msgstr "Lese Rasterkarte der Gruppe <%s> ..."
+#~ msgid "Adding files to group [%s]"
+#~ msgstr "Lese Rasterkarte der Gruppe <%s> ..."
 
 #, fuzzy
-msgid "Adding files to subgroup [%s]"
-msgstr "Lese Rasterkarte der Gruppe <%s> ..."
+#~ msgid "Adding files to subgroup [%s]"
+#~ msgstr "Lese Rasterkarte der Gruppe <%s> ..."
 
 #, fuzzy
-msgid "Skipping [%s]..."
-msgstr "Schreibe <%s> ..."
+#~ msgid "Skipping [%s]..."
+#~ msgstr "Schreibe <%s> ..."
 
 #, fuzzy
-msgid "Writing group REF"
-msgstr "Schreibe Ausgabekarte ..."
+#~ msgid "Writing group REF"
+#~ msgstr "Schreibe Ausgabekarte ..."
 
 #, fuzzy
-msgid "Writing subgroup REF"
-msgstr "Schreibe %s..."
+#~ msgid "Writing subgroup REF"
+#~ msgstr "Schreibe %s..."
 
-msgid "Found file <%s@%s> in group."
-msgstr "Habe Datei <%s@%s> in der Gruppe gefunden."
+#~ msgid "Found file <%s@%s> in group."
+#~ msgstr "Habe Datei <%s@%s> in der Gruppe gefunden."
 
-msgid "Found file <%s@%s> in subgroup."
-msgstr "Habe Datei <%s@%s> in Untergruppe gefunden."
+#~ msgid "Found file <%s@%s> in subgroup."
+#~ msgstr "Habe Datei <%s@%s> in Untergruppe gefunden."
 
 #, fuzzy
-msgid "Unable to open file: <%s>"
-msgstr "Kann die Datei <%s> nicht öffnen"
+#~ msgid "Unable to open file: <%s>"
+#~ msgstr "Kann die Datei <%s> nicht öffnen"
 
 #, fuzzy
-msgid "Multiplier"
-msgstr "Multiplikator für Z-Werte."
+#~ msgid "Multiplier"
+#~ msgstr "Multiplikator für Z-Werte."
 
 #, fuzzy
-msgid "Over-riding projection check."
-msgstr "Übersteuere die Überprüfung der Projektion."
+#~ msgid "Over-riding projection check."
+#~ msgstr "Übersteuere die Überprüfung der Projektion."
 
 #, fuzzy
-msgid ""
-"Projection of input dataset and current location appear to match.\n"
-"Proceeding with import...\n"
-msgstr ""
-"Die Projektionsinformationen des Eingabedatensatzes und der aktuellen "
-"Location stimmen überein.\n"
-"Fahre mit dem Import fort...\n"
+#~ msgid ""
+#~ "Projection of input dataset and current location appear to match.\n"
+#~ "Proceeding with import...\n"
+#~ msgstr ""
+#~ "Die Projektionsinformationen des Eingabedatensatzes und der aktuellen "
+#~ "Location stimmen überein.\n"
+#~ "Fahre mit dem Import fort...\n"
 
 #, fuzzy
-msgid "permission denied\n"
-msgstr "Zugang verweigert"
+#~ msgid "permission denied\n"
+#~ msgstr "Zugang verweigert"
 
 #, fuzzy
-msgid "not found\n"
-msgstr "nicht gefunden"
+#~ msgid "not found\n"
+#~ msgstr "nicht gefunden"
 
 #, fuzzy
-msgid "%s: percent complete: "
-msgstr "Prozent fertig: "
+#~ msgid "%s: percent complete: "
+#~ msgstr "Prozent fertig: "
 
 #, fuzzy
-msgid "Raster map not found."
-msgstr "Rasterkarte nicht gefunden."
+#~ msgid "Raster map not found."
+#~ msgstr "Rasterkarte nicht gefunden."
 
 #, fuzzy
-msgid "%s: can't read range for [%s]"
-msgstr "Kann Range-Datei für Karte %s nicht öffnen."
+#~ msgid "%s: can't read range for [%s]"
+#~ msgstr "Kann Range-Datei für Karte %s nicht öffnen."
 
 #, fuzzy
-msgid "Raster file [%s] not found"
-msgstr "3dview-Datei <%s> nicht gefunden."
+#~ msgid "Raster file [%s] not found"
+#~ msgstr "3dview-Datei <%s> nicht gefunden."
 
 #, fuzzy
-msgid "It was not possible writing in <%s>."
-msgstr "Kann <%s> nicht erzeugen."
+#~ msgid "It was not possible writing in <%s>."
+#~ msgstr "Kann <%s> nicht erzeugen."
 
 #, fuzzy
-msgid "\rDuplicate area centroids: %5d"
-msgstr "Doppelte Flächen-Zentroide: %5d"
+#~ msgid "\rDuplicate area centroids: %5d"
+#~ msgstr "Doppelte Flächen-Zentroide: %5d"
 
 #, fuzzy
-msgid "Cannot create table: '%s'"
-msgstr "Kann Tabelle <%s> nicht erzeugen."
+#~ msgid "Cannot create table: '%s'"
+#~ msgstr "Kann Tabelle <%s> nicht erzeugen."
 
-msgid "defaulting to nearest neighbor sampling"
-msgstr "Setze Standard auf 'nearest neighbor sampling'."
+#~ msgid "defaulting to nearest neighbor sampling"
+#~ msgstr "Setze Standard auf 'nearest neighbor sampling'."
 
 #, fuzzy
-msgid "Unable to get category list <%s>, editing terminated"
-msgstr "Zeige keine Kategorienummern."
+#~ msgid "Unable to get category list <%s>, editing terminated"
+#~ msgstr "Zeige keine Kategorienummern."
 
 #, fuzzy
-msgid "Unable to delete layer/category [%d/%d] line %d"
-msgstr "Zeige keine Kategorienummern."
+#~ msgid "Unable to delete layer/category [%d/%d] line %d"
+#~ msgstr "Zeige keine Kategorienummern."
 
 #, fuzzy
-msgid "Unable to write line %d"
-msgstr "Kann kein Face erzeugen."
+#~ msgid "Unable to write line %d"
+#~ msgstr "Kann kein Face erzeugen."
 
 #, fuzzy
-msgid "Unable to delete line %d"
-msgstr "Kann kein Face erzeugen."
+#~ msgid "Unable to delete line %d"
+#~ msgstr "Kann kein Face erzeugen."
 
 #, fuzzy
-msgid "Unknown query tool '%s'"
-msgstr "Unbekannte Methode <%s>."
+#~ msgid "Unknown query tool '%s'"
+#~ msgstr "Unbekannte Methode <%s>."
 
 #, fuzzy
-msgid ""
-"If 'list', 'file' and 'where' options are not specified, all features of "
-"given type and layer are extracted. Categories are not changed in that case."
-msgstr ""
-"Selektiert Vektorobjekte aus einer vorhandenen Vektorkarte und schreibt "
-"diese in einen neuen Datensatz. Wenn die Parameter 'list', 'file' und "
-"'where' nicht angegeben werden, werden alle Objekte vom angegebenen Typ "
-"extrahiert. Kategoriewerte werden in diesem Fall nicht verändert."
+#~ msgid ""
+#~ "If 'list', 'file' and 'where' options are not specified, all features of "
+#~ "given type and layer are extracted. Categories are not changed in that "
+#~ "case."
+#~ msgstr ""
+#~ "Selektiert Vektorobjekte aus einer vorhandenen Vektorkarte und schreibt "
+#~ "diese in einen neuen Datensatz. Wenn die Parameter 'list', 'file' und "
+#~ "'where' nicht angegeben werden, werden alle Objekte vom angegebenen Typ "
+#~ "extrahiert. Kategoriewerte werden in diesem Fall nicht verändert."
 
 #, fuzzy
-msgid "No layer database connection"
-msgstr "Datenbankverbindung nicht definiert."
+#~ msgid "No layer database connection"
+#~ msgstr "Datenbankverbindung nicht definiert."
 
 #, fuzzy
-msgid "Load categories from the database (table = %s, db = %s)."
-msgstr "Lade Kategorien von der Datenbank (Tabelle = %s, DB = %s).\n"
+#~ msgid "Load categories from the database (table = %s, db = %s)."
+#~ msgstr "Lade Kategorien von der Datenbank (Tabelle = %s, DB = %s).\n"
 
 #, fuzzy
-msgid "%d categories loaded from the database"
-msgstr "geladen von Tabelle"
+#~ msgid "%d categories loaded from the database"
+#~ msgstr "geladen von Tabelle"
 
 #, fuzzy
-msgid "Done"
-msgstr "Fertig."
+#~ msgid "Done"
+#~ msgstr "Fertig."
 
 #, fuzzy
-msgid "Cannot open OGR data source '%s'"
-msgstr "Kann die Datenquelle %s nicht öffnen."
+#~ msgid "Cannot open OGR data source '%s'"
+#~ msgstr "Kann die Datenquelle %s nicht öffnen."
 
 #, fuzzy
-msgid "Cannot create layer"
-msgstr "Kann tree nicht erzeugen."
+#~ msgid "Cannot create layer"
+#~ msgstr "Kann tree nicht erzeugen."
 
 #, fuzzy
-msgid "Vector map <%s> in location <%s> in mapset <%s> not available"
-msgstr "Vektordatei <%s> in der Location <%s> im Mapset <%s> nicht vorhanden."
+#~ msgid "Vector map <%s> in location <%s> in mapset <%s> not available"
+#~ msgstr ""
+#~ "Vektordatei <%s> in der Location <%s> im Mapset <%s> nicht vorhanden."
 
 #, fuzzy
-msgid ""
-"Load values from vector to database. For uploaded/printed category values '-"
-"1' is used for 'no category' and 'null'/'-' if category cannot be found or "
-"multiple categories were found."
-msgstr ""
-"Lade Werte von den Vektoren in die Datenbank. Im Upload/Print-Modus werden "
-"Kategoriewerte mit '-1' für 'keine Kategorie' gesetzt und 'null'/'-' wenn "
-"keine Kategorien gefunden werden konnte oder mehrere Kategorien enthalten "
-"sind."
+#~ msgid ""
+#~ "Load values from vector to database. For uploaded/printed category values "
+#~ "'-1' is used for 'no category' and 'null'/'-' if category cannot be found "
+#~ "or multiple categories were found."
+#~ msgstr ""
+#~ "Lade Werte von den Vektoren in die Datenbank. Im Upload/Print-Modus "
+#~ "werden Kategoriewerte mit '-1' für 'keine Kategorie' gesetzt und "
+#~ "'null'/'-' wenn keine Kategorien gefunden werden konnte oder mehrere "
+#~ "Kategorien enthalten sind."
 
 #, fuzzy
-msgid "Column(s)"
-msgstr "Spalte(n)."
+#~ msgid "Column(s)"
+#~ msgstr "Spalte(n)."
 
 #, fuzzy
-msgid "Column type [%d] not supported"
-msgstr "Spaltentyp nicht unterstützt"
+#~ msgid "Column type [%d] not supported"
+#~ msgstr "Spaltentyp nicht unterstützt"
 
 #, fuzzy
-msgid "Cannot read map header for <%s>"
-msgstr "Kann die Headerinformationen für Karte <%s> nicht lesen."
+#~ msgid "Cannot read map header for <%s>"
+#~ msgstr "Kann die Headerinformationen für Karte <%s> nicht lesen."
 
 #, fuzzy
-msgid "Cannot read category file for <%s>"
-msgstr "Kann die Kategorie-Datei der Karte <%s> nicht lesen."
+#~ msgid "Cannot read category file for <%s>"
+#~ msgstr "Kann die Kategorie-Datei der Karte <%s> nicht lesen."
 
 #, fuzzy
-msgid "Print;Shell Script"
-msgstr "Gebe die Statistik im Shell-Skript-Style aus."
+#~ msgid "Print;Shell Script"
+#~ msgstr "Gebe die Statistik im Shell-Skript-Style aus."
 
 #, fuzzy
-msgid "Creating support files for [%s]."
-msgstr "Erstelle Supportdateien für %s."
+#~ msgid "Creating support files for [%s]."
+#~ msgstr "Erstelle Supportdateien für %s."
 
 #, fuzzy
-msgid "Category file for [%s] not available"
-msgstr "Kategorie-Dateien für <%s> sind nicht vorhanden. "
+#~ msgid "Category file for [%s] not available"
+#~ msgstr "Kategorie-Dateien für <%s> sind nicht vorhanden. "
 
 #, fuzzy
-msgid "%s: <%s> raster map not found"
-msgstr "%s: Rasterkarte %s nicht gefunden."
+#~ msgid "%s: <%s> raster map not found"
+#~ msgstr "%s: Rasterkarte %s nicht gefunden."
 
 #, fuzzy
-msgid "%s: <%s> raster map exists already"
-msgstr "%s: Rasterkarte %s nicht gefunden."
+#~ msgid "%s: <%s> raster map exists already"
+#~ msgstr "%s: Rasterkarte %s nicht gefunden."
 
 #, fuzzy
-msgid "Cannot read category file of raster map <%s>"
-msgstr "Kann die Kategorie-Datei der Karte <%s> nicht schreiben"
+#~ msgid "Cannot read category file of raster map <%s>"
+#~ msgstr "Kann die Kategorie-Datei der Karte <%s> nicht schreiben"
 
 #, fuzzy
-msgid "%s - map not found"
-msgstr "%s: %s nicht gefunden."
+#~ msgid "%s - map not found"
+#~ msgstr "%s: %s nicht gefunden."
 
 #, fuzzy
-msgid "%s: Cannot open [%s]"
-msgstr "Kann %s nicht öffnen."
+#~ msgid "%s: Cannot open [%s]"
+#~ msgstr "Kann %s nicht öffnen."
 
 #, fuzzy
-msgid "%s not found"
-msgstr "<%s> nicht gefunden"
+#~ msgid "%s not found"
+#~ msgstr "<%s> nicht gefunden"
 
 #, fuzzy
-msgid "Could not access %s layer"
-msgstr "Konnte G3D Karte nicht schließen."
+#~ msgid "Could not access %s layer"
+#~ msgstr "Konnte G3D Karte nicht schließen."
 
 #, fuzzy
-msgid "Vector map %s - not found"
-msgstr "Vektorkarte <%s> nicht gefunden"
+#~ msgid "Vector map %s - not found"
+#~ msgstr "Vektorkarte <%s> nicht gefunden"
 
 #, fuzzy
-msgid "Raster map containing elevation data"
-msgstr "Name einer existierenden Rasterkarte mit Höheninformationen."
+#~ msgid "Raster map containing elevation data"
+#~ msgstr "Name einer existierenden Rasterkarte mit Höheninformationen."
 
 #, fuzzy
-msgid "Raster map name for storing results"
-msgstr "Rasterkarte mit den Klassifikationsergebnissen"
+#~ msgid "Raster map name for storing results"
+#~ msgstr "Rasterkarte mit den Klassifikationsergebnissen"
 
 #, fuzzy
-msgid "Height of the viewing location"
-msgstr "Koordinate, die den Standpunkt identifiziert."
+#~ msgid "Height of the viewing location"
+#~ msgstr "Koordinate, die den Standpunkt identifiziert."
 
 #, fuzzy
-msgid "%s: <%s> cellfile not found"
-msgstr "%s: <%s> nicht gefunden."
+#~ msgid "%s: <%s> cellfile not found"
+#~ msgstr "%s: <%s> nicht gefunden."
 
 #, fuzzy
-msgid "Cell file [%s] not found\n"
-msgstr "Cell-Datei nicht gefunden."
+#~ msgid "Cell file [%s] not found\n"
+#~ msgstr "Cell-Datei nicht gefunden."
 
 #, fuzzy
-msgid "rgb cell map [%s] not found\n"
-msgstr "Obere Karte <%s> nicht gefunden"
+#~ msgid "rgb cell map [%s] not found\n"
+#~ msgstr "Obere Karte <%s> nicht gefunden"
 
 #, fuzzy
-msgid "vector cell map [%s] not found\n"
-msgstr "Vektorkarte <%s> nicht gefunden."
+#~ msgid "vector cell map [%s] not found\n"
+#~ msgstr "Vektorkarte <%s> nicht gefunden."
 
 #, fuzzy
-msgid "%s - %s not found"
-msgstr "%s: %s nicht gefunden."
+#~ msgid "%s - %s not found"
+#~ msgstr "%s: %s nicht gefunden."
 
 #, fuzzy
-msgid "raster map <%s> not found"
-msgstr "Rasterkarte <%s> konnte nicht gefunden werden."
+#~ msgid "raster map <%s> not found"
+#~ msgstr "Rasterkarte <%s> konnte nicht gefunden werden."
 
 #, fuzzy
-msgid "can't read header for <%s> in <%s>"
-msgstr "Kann den Header für die 3D-Rasterkarte <%s> in <%s> nicht lesen."
+#~ msgid "can't read header for <%s> in <%s>"
+#~ msgstr "Kann den Header für die 3D-Rasterkarte <%s> in <%s> nicht lesen."
 
 #, fuzzy
-msgid "region <%s> not found"
-msgstr "Region <%s> nicht gefunden."
+#~ msgid "region <%s> not found"
+#~ msgstr "Region <%s> nicht gefunden."
 
 #, fuzzy
-msgid "can't read region <%s> in <%s>"
-msgstr "Kann Region <%s> in <%s> nicht lesen."
+#~ msgid "can't read region <%s> in <%s>"
+#~ msgstr "Kann Region <%s> in <%s> nicht lesen."
 
 #, fuzzy
-msgid "can't open 3dview file <%s> in <%s>"
-msgstr "Kann 3D-View-Datei <%s> in <%s> nicht öffnen."
+#~ msgid "can't open 3dview file <%s> in <%s>"
+#~ msgstr "Kann 3D-View-Datei <%s> in <%s> nicht öffnen."
 
 #, fuzzy
-msgid "can't read 3dview file <%s> in <%s>"
-msgstr "Kann 3D-View-Datei <%s> in <%s> nicht lesen."
+#~ msgid "can't read 3dview file <%s> in <%s>"
+#~ msgstr "Kann 3D-View-Datei <%s> in <%s> nicht lesen."
 
 #, fuzzy
-msgid "can't open vector map <%s> in <%s>"
-msgstr "Kann die Vektorkarte %s nicht öffnen."
+#~ msgid "can't open vector map <%s> in <%s>"
+#~ msgstr "Kann die Vektorkarte %s nicht öffnen."
 
 #, fuzzy
-msgid "invalid region: %s"
-msgstr "Ungültige Region: %s."
+#~ msgid "invalid region: %s"
+#~ msgstr "Ungültige Region: %s."
 
 #, fuzzy
-msgid "Creating support files"
-msgstr "Erzeuge Supportdateien."
+#~ msgid "Creating support files"
+#~ msgstr "Erzeuge Supportdateien."
 
 #, fuzzy
-msgid "can't open %s"
-msgstr "Kann %s nicht öffnen."
+#~ msgid "can't open %s"
+#~ msgstr "Kann %s nicht öffnen."
 
 #, fuzzy
-msgid "%s file [%s] not found!"
-msgstr "3dview-Datei <%s> nicht gefunden."
+#~ msgid "%s file [%s] not found!"
+#~ msgstr "3dview-Datei <%s> nicht gefunden."
 
 #, fuzzy
-msgid "%s: %s - map not found"
-msgstr "%s: <%s> nicht gefunden."
+#~ msgid "%s: %s - map not found"
+#~ msgstr "%s: <%s> nicht gefunden."
 
 #, fuzzy
-msgid "%s: unable to open %s"
-msgstr "Kann <%s> nicht öffnen."
+#~ msgid "%s: unable to open %s"
+#~ msgstr "Kann <%s> nicht öffnen."
 
 #, fuzzy
-msgid "%s - not found"
-msgstr "<%s> nicht gefunden"
+#~ msgid "%s - not found"
+#~ msgstr "<%s> nicht gefunden"
 
 #, fuzzy
-msgid "Cannot read %s"
-msgstr "Kann die Zeile nicht lesen."
+#~ msgid "Cannot read %s"
+#~ msgstr "Kann die Zeile nicht lesen."
 
 #, fuzzy
-msgid "map layer [%s] not legal for GRASS"
-msgstr "GRASS"
+#~ msgid "map layer [%s] not legal for GRASS"
+#~ msgstr "GRASS"
 
 #, fuzzy
-msgid "[%s] map not found."
-msgstr "%s: %s nicht gefunden."
+#~ msgid "[%s] map not found."
+#~ msgstr "%s: %s nicht gefunden."
 
 #, fuzzy
-msgid "[%s] map not found"
-msgstr "%s: %s nicht gefunden."
+#~ msgid "[%s] map not found"
+#~ msgstr "%s: %s nicht gefunden."
 
 #, fuzzy
-msgid "elevation file [%s] not found"
-msgstr "Rasterkarte <%s> nicht gefunden."
+#~ msgid "elevation file [%s] not found"
+#~ msgstr "Rasterkarte <%s> nicht gefunden."
 
 #, fuzzy
-msgid "min computed aspect %.4f  max computed aspect %.4f"
-msgstr ""
-"minimale berechnete Exposition%.4f  maximale berechnete Exposition %.4f."
+#~ msgid "min computed aspect %.4f  max computed aspect %.4f"
+#~ msgstr ""
+#~ "minimale berechnete Exposition%.4f  maximale berechnete Exposition %.4f."
 
 #, fuzzy
-msgid "min computed slope %.4f  max computed slope %.4f"
-msgstr "Berechnete minimale Hangneigung %.4f, maximale Hangneigung %.4f."
+#~ msgid "min computed slope %.4f  max computed slope %.4f"
+#~ msgstr "Berechnete minimale Hangneigung %.4f, maximale Hangneigung %.4f."
 
 #, fuzzy
-msgid "Cannot describe table <%s>"
-msgstr "Kann Tabelle <%s> nicht beschreiben."
+#~ msgid "Cannot describe table <%s>"
+#~ msgstr "Kann Tabelle <%s> nicht beschreiben."
 
 #, fuzzy
-msgid "Cannot insert values: %s"
-msgstr "Kann nicht an Tabelle <%s> anfügen."
+#~ msgid "Cannot insert values: %s"
+#~ msgstr "Kann nicht an Tabelle <%s> anfügen."
 
 #, fuzzy
-msgid "%s given an illegal number of points [%d]"
-msgstr "%s=%s - Ungültige Anzahl von Interpolationspunkten."
+#~ msgid "%s given an illegal number of points [%d]"
+#~ msgstr "%s=%s - Ungültige Anzahl von Interpolationspunkten."
 
 #, fuzzy
-msgid "Unable to open database %s by driver %s"
-msgstr "Kann Datenbank <%s> mit Treiber <%s> nicht öffnen."
+#~ msgid "Unable to open database %s by driver %s"
+#~ msgstr "Kann Datenbank <%s> mit Treiber <%s> nicht öffnen."
 
 #, fuzzy
-msgid "No DB connection settings defined. Set with db.connect"
-msgstr "Datenbankverbindung nicht definiert. Benutzen Sie db.connect."
+#~ msgid "No DB connection settings defined. Set with db.connect"
+#~ msgstr "Datenbankverbindung nicht definiert. Benutzen Sie db.connect."
 
 #, fuzzy
-msgid "Could not find input %s"
-msgstr "Kann die Karte %s nicht öffnen."
+#~ msgid "Could not find input %s"
+#~ msgstr "Kann die Karte %s nicht öffnen."
 
 #, fuzzy
-msgid "Could not open input"
-msgstr "Kann die Karte %s nicht öffnen."
+#~ msgid "Could not open input"
+#~ msgstr "Kann die Karte %s nicht öffnen."
 
 #, fuzzy
-msgid "Could not open output"
-msgstr "Kann die Karte %s nicht öffnen."
+#~ msgid "Could not open output"
+#~ msgstr "Kann die Karte %s nicht öffnen."
 
 #, fuzzy
-msgid "Could not find input map <%s>"
-msgstr "Kann die Karte %s nicht öffnen."
+#~ msgid "Could not find input map <%s>"
+#~ msgstr "Kann die Karte %s nicht öffnen."
 
 #, fuzzy
-msgid "Unkown item type in pad: %s"
-msgstr "Unbekannter Typ in pad: %s"
+#~ msgid "Unkown item type in pad: %s"
+#~ msgstr "Unbekannter Typ in pad: %s"
 
 #, fuzzy
-msgid "Unable to open driver <%s>"
-msgstr "Kann die Datei <%s> nicht öffnen"
+#~ msgid "Unable to open driver <%s>"
+#~ msgstr "Kann die Datei <%s> nicht öffnen"
 
 #, fuzzy
-msgid "Database connection not defined\n"
-msgstr "Datenbankverbindung nicht definiert."
+#~ msgid "Database connection not defined\n"
+#~ msgstr "Datenbankverbindung nicht definiert."
 
 #, fuzzy
-msgid "Can't read header for <%s> in <%s>"
-msgstr "Kann den Header für die 3D-Rasterkarte <%s> in <%s> nicht lesen."
+#~ msgid "Can't read header for <%s> in <%s>"
+#~ msgstr "Kann den Header für die 3D-Rasterkarte <%s> in <%s> nicht lesen."
 
 #, fuzzy
-msgid "Can't read header for 3D raster <%s> in <%s>"
-msgstr "Kann den Header für die 3D-Rasterkarte <%s> in <%s> nicht lesen."
+#~ msgid "Can't read header for 3D raster <%s> in <%s>"
+#~ msgstr "Kann den Header für die 3D-Rasterkarte <%s> in <%s> nicht lesen."
 
-msgid "%s in %s: %s"
-msgstr "%s in %s: %s"
+#~ msgid "%s in %s: %s"
+#~ msgstr "%s in %s: %s"
 
 #, fuzzy
-msgid "Can't write region <%s>"
-msgstr "Kann die Rasterkarte <%s> nicht erzeugen."
+#~ msgid "Can't write region <%s>"
+#~ msgstr "Kann die Rasterkarte <%s> nicht erzeugen."
 
 #, fuzzy
-msgid "<%s=%s> ** invalid input **"
-msgstr "<%s=%s> ** Ungültige Eingabe **"
+#~ msgid "<%s=%s> ** invalid input **"
+#~ msgstr "<%s=%s> ** Ungültige Eingabe **"
 
 #, fuzzy
-msgid "No graphics device selected."
-msgstr "Keine Graphik-Ausgabe ausgewählt."
+#~ msgid "No graphics device selected."
+#~ msgstr "Keine Graphik-Ausgabe ausgewählt."
 
 #, fuzzy
-msgid "Unable to read raster row."
-msgstr "Kann die Rasterzeile nicht lesen."
+#~ msgid "Unable to read raster row."
+#~ msgstr "Kann die Rasterzeile nicht lesen."
 
 #, fuzzy
-msgid "Training map [%s] not found."
-msgstr "%s: %s nicht gefunden."
+#~ msgid "Training map [%s] not found."
+#~ msgstr "%s: %s nicht gefunden."
 
 #, fuzzy
-msgid "%s map not found"
-msgstr "%s: %s nicht gefunden."
+#~ msgid "%s map not found"
+#~ msgstr "%s: %s nicht gefunden."
 
 #, fuzzy
-msgid "input raster map"
-msgstr "rote Eingabe-Rasterkarte."
+#~ msgid "input raster map"
+#~ msgstr "rote Eingabe-Rasterkarte."
 
 #, fuzzy
-msgid "Illegal file name: %s"
-msgstr "Ungültiger Ausgabe-Dateiname<%s>."
+#~ msgid "Illegal file name: %s"
+#~ msgstr "Ungültiger Ausgabe-Dateiname<%s>."
 
 #, fuzzy
-msgid "Cannot get layer info for vector map"
-msgstr "Kann die Layer-Informationen der Vektorkarte nicht bekommen"
+#~ msgid "Cannot get layer info for vector map"
+#~ msgstr "Kann die Layer-Informationen der Vektorkarte nicht bekommen"
 
 #, fuzzy
-msgid "Cannot open raster map <%s> in <%s>"
-msgstr "Kann die Rasterkarte <%s> nicht öffnen."
+#~ msgid "Cannot open raster map <%s> in <%s>"
+#~ msgstr "Kann die Rasterkarte <%s> nicht öffnen."
 
 #, fuzzy
-msgid "cover values extracted from the category labels of the cover map"
-msgstr "Benutze die Kategorie-Werte, die von der Coverkarte bedeckt sind."
+#~ msgid "cover values extracted from the category labels of the cover map"
+#~ msgstr "Benutze die Kategorie-Werte, die von der Coverkarte bedeckt sind."
 
 #, fuzzy
-msgid "%s: %s - raster map not found"
-msgstr "%s: Rasterkarte %s nicht gefunden."
+#~ msgid "%s: %s - raster map not found"
+#~ msgstr "%s: Rasterkarte %s nicht gefunden."
 
 #, fuzzy
-msgid "%s: %s - illegal name"
-msgstr "%s=%s - unzulässiger Wert."
+#~ msgid "%s: %s - illegal name"
+#~ msgstr "%s=%s - unzulässiger Wert."
 
 #, fuzzy
-msgid "%s: ERROR reading category file for %s"
-msgstr "Fehler beim Lesen der Cats-Datei <%s>."
+#~ msgid "%s: ERROR reading category file for %s"
+#~ msgstr "Fehler beim Lesen der Cats-Datei <%s>."
 
 #, fuzzy
-msgid "%s: %s - not found"
-msgstr "%s: <%s> nicht gefunden."
+#~ msgid "%s: %s - not found"
+#~ msgstr "%s: <%s> nicht gefunden."
 
 #, fuzzy
-msgid "%s: %s - illegal units"
-msgstr "%s=%s - unzulässiger Wert."
+#~ msgid "%s: %s - illegal units"
+#~ msgstr "%s=%s - unzulässiger Wert."
 
 #, fuzzy
-msgid "%s: %s - can't open"
-msgstr "%s: <%s> nicht gefunden."
+#~ msgid "%s: %s - can't open"
+#~ msgstr "%s: <%s> nicht gefunden."
 
 #, fuzzy
-msgid "Reading input map (%s)    ... "
-msgstr "Lese Rasterkarte <%s> ..."
+#~ msgid "Reading input map (%s)    ... "
+#~ msgstr "Lese Rasterkarte <%s> ..."
 
 #, fuzzy
-msgid "%s - ERROR reading %s"
-msgstr "%s: Fehler  beim Ausführen des Kommandos %s."
+#~ msgid "%s - ERROR reading %s"
+#~ msgstr "%s: Fehler  beim Ausführen des Kommandos %s."
 
 #, fuzzy
-msgid "%s: %s - can't create raster map"
-msgstr "Kann die Rasterkarte <%s> nicht erzeugen."
+#~ msgid "%s: %s - can't create raster map"
+#~ msgstr "Kann die Rasterkarte <%s> nicht erzeugen."
 
 #, fuzzy
-msgid "Writing output map (%s)   ... "
-msgstr "Schreibe Ausgabe-Rasterkarte %s ..."
+#~ msgid "Writing output map (%s)   ... "
+#~ msgstr "Schreibe Ausgabe-Rasterkarte %s ..."
 
 #, fuzzy
-msgid "%s - ERROR re-reading %s"
-msgstr "%s: Fehler  beim Ausführen des Kommandos %s."
+#~ msgid "%s - ERROR re-reading %s"
+#~ msgstr "%s: Fehler  beim Ausführen des Kommandos %s."
 
 #, fuzzy
-msgid "%s - ERROR writing %s"
-msgstr "%s: Fehler  beim Ausführen des Kommandos %s."
+#~ msgid "%s - ERROR writing %s"
+#~ msgstr "%s: Fehler  beim Ausführen des Kommandos %s."
 
 #, fuzzy
-msgid "Reading raster map... "
-msgstr "Lese Rasterkarte..."
+#~ msgid "Reading raster map... "
+#~ msgstr "Lese Rasterkarte..."
 
 #, fuzzy
-msgid "Writing raster map... "
-msgstr "Schreibe Rasterkarte..."
+#~ msgid "Writing raster map... "
+#~ msgstr "Schreibe Rasterkarte..."
 
-msgid "Category list: e.g. 1,3-8,13"
-msgstr "Kategorie-Liste, z.B.: 1,3-8,13"
+#~ msgid "Category list: e.g. 1,3-8,13"
+#~ msgstr "Kategorie-Liste, z.B.: 1,3-8,13"
 
 #, fuzzy
-msgid "Output separator character (default: tab)"
-msgstr "Trennzeichen zur Ausgabe (Standard: Tabulator)"
+#~ msgid "Output separator character (default: tab)"
+#~ msgstr "Trennzeichen zur Ausgabe (Standard: Tabulator)"
 
 #, fuzzy
-msgid "Cannot read category file of raster map <%s> in <%s>"
-msgstr "Kann die Kategorie-Datei der Karte <%s> nicht lesen."
+#~ msgid "Cannot read category file of raster map <%s> in <%s>"
+#~ msgstr "Kann die Kategorie-Datei der Karte <%s> nicht lesen."
 
 #, fuzzy
-msgid "Cannot find file %s"
-msgstr "Kann Datei <%s> nicht finden."
+#~ msgid "Cannot find file %s"
+#~ msgstr "Kann Datei <%s> nicht finden."
 
 #, fuzzy
-msgid "Cannot get header for %s"
-msgstr "Kann den Header für die Karte <%s> nicht schreiben."
+#~ msgid "Cannot get header for %s"
+#~ msgstr "Kann den Header für die Karte <%s> nicht schreiben."
 
 #, fuzzy
-msgid "Cannot create raster map %s"
-msgstr "Kann die Rasterkarte <%s> nicht erzeugen"
+#~ msgid "Cannot create raster map %s"
+#~ msgstr "Kann die Rasterkarte <%s> nicht erzeugen"
 
 #, fuzzy
-msgid "Cannot create vector map %s"
-msgstr "Kann die Rasterkarte <%s> nicht erzeugen"
+#~ msgid "Cannot create vector map %s"
+#~ msgstr "Kann die Rasterkarte <%s> nicht erzeugen"
 
 #, fuzzy
-msgid "Cannot create raster map '%s'"
-msgstr "Kann die Rasterkarte <%s> nicht erzeugen"
+#~ msgid "Cannot create raster map '%s'"
+#~ msgstr "Kann die Rasterkarte <%s> nicht erzeugen"
 
 #, fuzzy
-msgid "Number of raster rows to hold in memory"
-msgstr "Anzahl der Reihen, die im Hauptspeicher gehalten werden sollen."
+#~ msgid "Number of raster rows to hold in memory"
+#~ msgstr "Anzahl der Reihen, die im Hauptspeicher gehalten werden sollen."
 
 #, fuzzy
-msgid "Print raster map title only"
-msgstr "Gebe nur Rasterkartentyp aus."
+#~ msgid "Print raster map title only"
+#~ msgstr "Gebe nur Rasterkartentyp aus."
 
 #, fuzzy
-msgid "unknown type: %d"
-msgstr "Unbekannter Typ: %c"
+#~ msgid "unknown type: %d"
+#~ msgstr "Unbekannter Typ: %c"
 
 #, fuzzy
-msgid "Cannot open raster map [%s]"
-msgstr "Kann die Rasterkarte <%s> nicht öffnen."
+#~ msgid "Cannot open raster map [%s]"
+#~ msgstr "Kann die Rasterkarte <%s> nicht öffnen."
 
 #, fuzzy
-msgid "Cannot get raster band."
-msgstr "Kann die Rasterkarte <%s> nicht erzeugen."
+#~ msgid "Cannot get raster band."
+#~ msgstr "Kann die Rasterkarte <%s> nicht erzeugen."
 
 #, fuzzy
-msgid "Cannot allocate buffer for reading null values."
-msgstr "Kann Speicherplatz zum Lesen des GRASS Rasterdaten nicht belegen."
+#~ msgid "Cannot allocate buffer for reading null values."
+#~ msgstr "Kann Speicherplatz zum Lesen des GRASS Rasterdaten nicht belegen."
 
 #, fuzzy
-msgid "Cannot read GRASS raster."
-msgstr "Kann Rasterzeile %d nicht lesen."
+#~ msgid "Cannot read GRASS raster."
+#~ msgstr "Kann Rasterzeile %d nicht lesen."
 
 #, fuzzy
-msgid "Cannot write GDAL raster."
-msgstr "Kann Rasterkarten nicht schreiben."
+#~ msgid "Cannot write GDAL raster."
+#~ msgstr "Kann Rasterkarten nicht schreiben."
 
 #, fuzzy
-msgid "Cannot get [%s] driver"
-msgstr "Kann Datei %s nicht löschen."
+#~ msgid "Cannot get [%s] driver"
+#~ msgstr "Kann Datei %s nicht löschen."
 
 #, fuzzy
-msgid "Couldn't set geo transform."
-msgstr "Kann Benutzer/Passwort nicht setzen."
+#~ msgid "Couldn't set geo transform."
+#~ msgstr "Kann Benutzer/Passwort nicht setzen."
 
 #, fuzzy
-msgid "Couldn't set projection."
-msgstr "Kann die Projektionsdatei %s nicht erzeugen."
+#~ msgid "Couldn't set projection."
+#~ msgstr "Kann die Projektionsdatei %s nicht erzeugen."
 
 #, fuzzy
-msgid "Cannot export [%s] raster map."
-msgstr "Kann Rasterkarten nicht schreiben."
+#~ msgid "Cannot export [%s] raster map."
+#~ msgstr "Kann Rasterkarten nicht schreiben."
 
 #, fuzzy
-msgid "Cannot create [%s] raster map using [%s] driver."
-msgstr "Kann die Rasterkarte <%s> nicht erzeugen"
+#~ msgid "Cannot create [%s] raster map using [%s] driver."
+#~ msgstr "Kann die Rasterkarte <%s> nicht erzeugen"
 
 #, fuzzy
-msgid "Cannot read header of raster map <%s>"
-msgstr "Kann den Header für die 3D-Rasterkarte <%s> in <%s> nicht lesen."
+#~ msgid "Cannot read header of raster map <%s>"
+#~ msgstr "Kann den Header für die 3D-Rasterkarte <%s> in <%s> nicht lesen."
 
 #, fuzzy
-msgid "Cannot open TIFF file <%s>"
-msgstr "Kann die Datei <%s> nicht öffnen."
+#~ msgid "Cannot open TIFF file <%s>"
+#~ msgstr "Kann die Datei <%s> nicht öffnen."
 
 #, fuzzy
-msgid "Reading raster map"
-msgstr "Lese Rasterkarte..."
+#~ msgid "Reading raster map"
+#~ msgstr "Lese Rasterkarte..."
 
 #, fuzzy
-msgid "Cannot open output map."
-msgstr "Kann die Rasterkarte <%s> nicht öffnen."
+#~ msgid "Cannot open output map."
+#~ msgstr "Kann die Rasterkarte <%s> nicht öffnen."
 
 #, fuzzy
-msgid "Illegal file name. Please try another."
-msgstr "%s: %s - Ungültiger Name für den realen Teil"
+#~ msgid "Illegal file name. Please try another."
+#~ msgstr "%s: %s - Ungültiger Name für den realen Teil"
 
 #, fuzzy
-msgid "%s: can't open %s"
-msgstr "Kann %s nicht öffnen."
+#~ msgid "%s: can't open %s"
+#~ msgstr "Kann %s nicht öffnen."
 
 #, fuzzy
-msgid "Reading raster map <%s> ..."
-msgstr "Lese Rasterkarte <%s> ..."
+#~ msgid "Reading raster map <%s> ..."
+#~ msgstr "Lese Rasterkarte <%s> ..."
 
 #, fuzzy
-msgid "memory allocation failure"
-msgstr "Metrische Belegung."
+#~ msgid "memory allocation failure"
+#~ msgstr "Metrische Belegung."
 
 #, fuzzy
-msgid "Can't find data map."
-msgstr "Kann Rasterkarte <%s> nicht finden. "
+#~ msgid "Can't find data map."
+#~ msgstr "Kann Rasterkarte <%s> nicht finden. "
 
 #, fuzzy
-msgid "Can't find clump map."
-msgstr "Kann Rasterkarte %s nicht finden. "
+#~ msgid "Can't find clump map."
+#~ msgstr "Kann Rasterkarte %s nicht finden. "
 
 #, fuzzy
-msgid "Output terrain only vector map name"
-msgstr "Ausgabekarte mit Hangexposition."
+#~ msgid "Output terrain only vector map name"
+#~ msgstr "Ausgabekarte mit Hangexposition."
 
 #, fuzzy
-msgid "Cannot open vector map <%s> at the topological level"
-msgstr "Kann Vektorkarte <%s> in <%s> nicht öffnen."
+#~ msgid "Cannot open vector map <%s> at the topological level"
+#~ msgstr "Kann Vektorkarte <%s> in <%s> nicht öffnen."
 
 #, fuzzy
-msgid "Rebuilding topology ..."
-msgstr "Baue Topologie neu auf..."
+#~ msgid "Rebuilding topology ..."
+#~ msgstr "Baue Topologie neu auf..."
 
 #, fuzzy
-msgid "No record for cat = %d"
-msgstr "Kein Eintrag für Linie (cat = %d)"
+#~ msgid "No record for cat = %d"
+#~ msgstr "Kein Eintrag für Linie (cat = %d)"
 
 #, fuzzy
-msgid "Removing duplicates ..."
-msgstr "Entferne Doppelte ..."
+#~ msgid "Removing duplicates ..."
+#~ msgstr "Entferne Doppelte ..."
 
 #, fuzzy
-msgid "Attaching islands ..."
-msgstr "Füge Kategorien an...\n"
+#~ msgid "Attaching islands ..."
+#~ msgstr "Füge Kategorien an...\n"
 
 #, fuzzy
-msgid "Cannot calculate area centroid."
-msgstr "Kann den Flächenzentroiden nicht berechnen."
+#~ msgid "Cannot calculate area centroid."
+#~ msgstr "Kann den Flächenzentroiden nicht berechnen."
 
 #, fuzzy
-msgid "Attaching centroids ..."
-msgstr "Füge Kategorien an...\n"
+#~ msgid "Attaching centroids ..."
+#~ msgstr "Füge Kategorien an...\n"
 
 #, fuzzy
-msgid "Vector map <%s> not found in current mapset"
-msgstr "Vektorkarte <%s> nicht gefunden."
+#~ msgid "Vector map <%s> not found in current mapset"
+#~ msgstr "Vektorkarte <%s> nicht gefunden."
 
 #, fuzzy
-msgid "Error allocating memory for `lines_visited'"
-msgstr "Allokiere Speicher für die bilineare Interpolation."
+#~ msgid "Error allocating memory for `lines_visited'"
+#~ msgstr "Allokiere Speicher für die bilineare Interpolation."
 
 #, fuzzy
-msgid "The number of lines in the input vector map is [%d]"
-msgstr "Die minimale Anzahl der Eingabekarten ist zwei."
+#~ msgid "The number of lines in the input vector map is [%d]"
+#~ msgstr "Die minimale Anzahl der Eingabekarten ist zwei."
 
 #, fuzzy
-msgid "Database connection not defined for layer <%d>"
-msgstr "Die Datenbankverbindung für den Layer %d ist nicht definiert"
+#~ msgid "Database connection not defined for layer <%d>"
+#~ msgstr "Die Datenbankverbindung für den Layer %d ist nicht definiert"
 
 #, fuzzy
-msgid "Attribute column(s)"
-msgstr "Attribute"
+#~ msgid "Attribute column(s)"
+#~ msgstr "Attribute"
 
 #, fuzzy
-msgid "Cannot open select cursor"
-msgstr "Kann den Select-Cursor <%s> nicht öffnen."
+#~ msgid "Cannot open select cursor"
+#~ msgstr "Kann den Select-Cursor <%s> nicht öffnen."
 
 #, fuzzy
-msgid "Cannot get layer info"
-msgstr "Kann die Informationen zu Datenbankverbindung nicht lesen."
+#~ msgid "Cannot get layer info"
+#~ msgstr "Kann die Informationen zu Datenbankverbindung nicht lesen."
 
 #, fuzzy
-msgid ""
-"\n"
-"Building topology for %s ..."
-msgstr ""
-"\n"
-"Erstelle Topologie für %s ..."
+#~ msgid ""
+#~ "\n"
+#~ "Building topology for %s ..."
+#~ msgstr ""
+#~ "\n"
+#~ "Erstelle Topologie für %s ..."
 
 #, fuzzy
-msgid "cell file [%s] not found"
-msgstr "Cell-Datei nicht gefunden."
+#~ msgid "cell file [%s] not found"
+#~ msgstr "Cell-Datei nicht gefunden."
 
 #, fuzzy
-msgid "can't open raster map [%s]"
-msgstr "Kann die Rasterkarte <%s> nicht öffnen."
+#~ msgid "can't open raster map [%s]"
+#~ msgstr "Kann die Rasterkarte <%s> nicht öffnen."
 
 #, fuzzy
-msgid "Cannot rewrite line %d"
-msgstr "Kann kein Face erzeugen."
+#~ msgid "Cannot rewrite line %d"
+#~ msgstr "Kann kein Face erzeugen."
 
 #, fuzzy
-msgid "Editing tool"
-msgstr "Habe nichts zu zeigen."
+#~ msgid "Editing tool"
+#~ msgstr "Habe nichts zu zeigen."
 
 #, fuzzy
-msgid "For tool 'add', see also 'thresh' parameter"
-msgstr ""
-"Kopiere die Attributtabelle nicht mit (bitte Parameter 'new' beachten)."
+#~ msgid "For tool 'add', see also 'thresh' parameter"
+#~ msgstr ""
+#~ "Kopiere die Attributtabelle nicht mit (bitte Parameter 'new' beachten)."
 
 #, fuzzy
-msgid "Snap also to vertex (not implemented yet)"
-msgstr "Region <%s> nicht gefunden."
+#~ msgid "Snap also to vertex (not implemented yet)"
+#~ msgstr "Region <%s> nicht gefunden."
 
 #, fuzzy
-msgid "Close boundaries"
-msgstr "nicht"
+#~ msgid "Close boundaries"
+#~ msgstr "nicht"
 
 #, fuzzy
-msgid "Cannot copy line %d, editing terminated"
-msgstr "Kann nicht von <%s> lesen."
+#~ msgid "Cannot copy line %d, editing terminated"
+#~ msgstr "Kann nicht von <%s> lesen."
 
 #, fuzzy
-msgid "No layer database connection."
-msgstr "Datenbankverbindung nicht definiert."
+#~ msgid "No layer database connection."
+#~ msgstr "Datenbankverbindung nicht definiert."
 
 #, fuzzy
-msgid "Cannot snap lines %d,%d"
-msgstr "Kann die Zeit nicht auslesen:"
+#~ msgid "Cannot snap lines %d,%d"
+#~ msgstr "Kann die Zeit nicht auslesen:"
 
 #, fuzzy
-msgid "%d lines modified"
-msgstr "%-5d tote Linien (dead lines) übersprungen.\n"
+#~ msgid "%d lines modified"
+#~ msgstr "%-5d tote Linien (dead lines) übersprungen.\n"
 
 #, fuzzy
-msgid "Could not open ASCII file <%s>"
-msgstr "Kann die ASCII-Datei %s nicht öffnen."
+#~ msgid "Could not open ASCII file <%s>"
+#~ msgstr "Kann die ASCII-Datei %s nicht öffnen."
 
 #, fuzzy
-msgid "Print vector map region only"
-msgstr "Gebe nur Rasterkartenausdehnung aus."
+#~ msgid "Print vector map region only"
+#~ msgstr "Gebe nur Rasterkartenausdehnung aus."
 
 #, fuzzy
-msgid "Cannot open vector map <%s> at topo level [%d]"
-msgstr "Kann Vektorkarte <%s> in <%s> nicht öffnen."
+#~ msgid "Cannot open vector map <%s> at topo level [%d]"
+#~ msgstr "Kann Vektorkarte <%s> in <%s> nicht öffnen."
 
 #, fuzzy
-msgid "Cannot get layer info for vector map <%s>"
-msgstr "Kann die Layer-Informationen der Vektorkarte nicht auswählen."
+#~ msgid "Cannot get layer info for vector map <%s>"
+#~ msgstr "Kann die Layer-Informationen der Vektorkarte nicht auswählen."
 
 #, fuzzy
-msgid "Rotation angle (degrees counter-clockwise from East)"
-msgstr "Rotationswinkel in Grad (gegen den Uhrzeigersinn)."
+#~ msgid "Rotation angle (degrees counter-clockwise from East)"
+#~ msgstr "Rotationswinkel in Grad (gegen den Uhrzeigersinn)."
 
 #, fuzzy
-msgid "Cannot select attribute."
-msgstr "Kann folgende Attribute nicht auswählen: %s"
+#~ msgid "Cannot select attribute."
+#~ msgstr "Kann folgende Attribute nicht auswählen: %s"
 
 #, fuzzy
-msgid "Creating vector grid..."
-msgstr "Erstelle neue Cats-Datei..."
+#~ msgid "Creating vector grid..."
+#~ msgstr "Erstelle neue Cats-Datei..."
 
 #, fuzzy
-msgid "Could not find vector map <%s> in current mapset"
-msgstr "Vektorkarte <%s> nicht gefunden."
+#~ msgid "Could not find vector map <%s> in current mapset"
+#~ msgstr "Vektorkarte <%s> nicht gefunden."
 
 #, fuzzy
-msgid "Could not find input map <%s>."
-msgstr "Kann die Karte %s nicht öffnen."
+#~ msgid "Could not find input map <%s>."
+#~ msgstr "Kann die Karte %s nicht öffnen."
 
 #, fuzzy
-msgid "[%d] features written"
-msgstr "%d Feature geschrieben."
+#~ msgid "[%d] features written"
+#~ msgstr "%d Feature geschrieben."
 
 #, fuzzy
-msgid "Parameter <%s> not set"
-msgstr "Benötigter Parameter <%s> wurde nicht angegeben"
+#~ msgid "Parameter <%s> not set"
+#~ msgstr "Benötigter Parameter <%s> wurde nicht angegeben"
 
 #, fuzzy
-msgid "Input map containing lines"
-msgstr "Eingabe-Vektorkarte, die Linien enthält"
+#~ msgid "Input map containing lines"
+#~ msgstr "Eingabe-Vektorkarte, die Linien enthält"
 
 #, fuzzy
-msgid "Output map where segments will be written"
-msgstr "Ausgabekarte mit den Punkten wird geschrieben."
+#~ msgid "Output map where segments will be written"
+#~ msgstr "Ausgabekarte mit den Punkten wird geschrieben."
 
 #, fuzzy
-msgid "Cannot get layer information for vector map"
-msgstr "Kann die Layer-Informationen der Vektorkarte nicht bekommen"
+#~ msgid "Cannot get layer information for vector map"
+#~ msgstr "Kann die Layer-Informationen der Vektorkarte nicht bekommen"
 
 #, fuzzy
-msgid "<%s> cellfile not found"
-msgstr "Cell-Datei nicht gefunden."
+#~ msgid "<%s> cellfile not found"
+#~ msgstr "Cell-Datei nicht gefunden."
 
 #, fuzzy
-msgid "Database record for cat %d not found"
-msgstr "aspin Rasterkarte <%s> nicht gefunden."
+#~ msgid "Database record for cat %d not found"
+#~ msgstr "aspin Rasterkarte <%s> nicht gefunden."
 
 #, fuzzy
-msgid "Not able to open vector map <%s>"
-msgstr "Kann die Vektorkarte <%s> nicht öffnen"
+#~ msgid "Not able to open vector map <%s>"
+#~ msgstr "Kann die Vektorkarte <%s> nicht öffnen"
 
 #, fuzzy
-msgid "No table."
-msgstr "Keine Tabelle."
+#~ msgid "No table."
+#~ msgstr "Keine Tabelle."
 
 #, fuzzy
-msgid "Can't read raster"
-msgstr "Kann Rasterzeile %d nicht lesen."
+#~ msgid "Can't read raster"
+#~ msgstr "Kann Rasterzeile %d nicht lesen."
 
 #, fuzzy
-msgid "driver name"
-msgstr "Eingabe-Treibername"
+#~ msgid "driver name"
+#~ msgstr "Eingabe-Treibername"
 
 #, fuzzy
-msgid "database name"
-msgstr "Eingabe-Datenbankname"
+#~ msgid "database name"
+#~ msgstr "Eingabe-Datenbankname"
 
 #, fuzzy
-msgid "Driver name"
-msgstr "Eingabe-Treibername"
+#~ msgid "Driver name"
+#~ msgstr "Eingabe-Treibername"
 
 #, fuzzy
-msgid "Cannot list databases."
-msgstr "Kann Datenbank <%s> nicht öffnen."
+#~ msgid "Cannot list databases."
+#~ msgstr "Kann Datenbank <%s> nicht öffnen."
 
 #, fuzzy
-msgid "database location"
-msgstr "Pfad zur resultierenden VTK-Datei."
+#~ msgid "database location"
+#~ msgstr "Pfad zur resultierenden VTK-Datei."
 
 #, fuzzy
-msgid "Table name, select all from this table"
-msgstr "Kann Daten nicht aus der Tabelle selektieren"
+#~ msgid "Table name, select all from this table"
+#~ msgstr "Kann Daten nicht aus der Tabelle selektieren"
 
 #, fuzzy
-msgid "output field separator"
-msgstr "Ausgabe Feld-Trennzeichen"
+#~ msgid "output field separator"
+#~ msgstr "Ausgabe Feld-Trennzeichen"
 
 #, fuzzy
-msgid "output vertical record separator"
-msgstr "Vertikales Trennzeichen für die Ausgabe."
+#~ msgid "output vertical record separator"
+#~ msgstr "Vertikales Trennzeichen für die Ausgabe."
 
 #, fuzzy
-msgid "null value indicator"
-msgstr "Nullwert-Indikator"
+#~ msgid "null value indicator"
+#~ msgstr "Nullwert-Indikator"
 
 #, fuzzy
-msgid "do not include column names in output"
-msgstr "In der Ausgabe kein Spaltennamen ausgeben."
+#~ msgid "do not include column names in output"
+#~ msgstr "In der Ausgabe kein Spaltennamen ausgeben."
 
 #, fuzzy
-msgid "vertical output (instead of horizontal)"
-msgstr "Vertikale Ausgabe (anstatt horizontal)."
+#~ msgid "vertical output (instead of horizontal)"
+#~ msgstr "Vertikale Ausgabe (anstatt horizontal)."
 
 #, fuzzy
-msgid "Name of existing raster map"
-msgstr "Name einer existierenden Rasterkarte."
+#~ msgid "Name of existing raster map"
+#~ msgstr "Name einer existierenden Rasterkarte."
 
 #, fuzzy
-msgid "Cannot find mapset for %s"
-msgstr "Kann neu Reihe <%s> nicht einfügen."
+#~ msgid "Cannot find mapset for %s"
+#~ msgstr "Kann neu Reihe <%s> nicht einfügen."
 
 #, fuzzy
-msgid "Cannot open File %s"
-msgstr "Kann %s nicht öffnen."
+#~ msgid "Cannot open File %s"
+#~ msgstr "Kann %s nicht öffnen."
 
 #, fuzzy
-msgid "Not able to open file for [%s]"
-msgstr "Kann grid3-Datei <%s> nicht finden."
+#~ msgid "Not able to open file for [%s]"
+#~ msgstr "Kann grid3-Datei <%s> nicht finden."
 
 #, fuzzy
-msgid "Label file [%s] not available"
-msgstr "Layer <%s> ist nicht vorhanden."
+#~ msgid "Label file [%s] not available"
+#~ msgstr "Layer <%s> ist nicht vorhanden."
 
 #, fuzzy
-msgid "Can't open label file [%s]"
-msgstr "Kann Range-Datei für Karte %s nicht öffnen."
+#~ msgid "Can't open label file [%s]"
+#~ msgstr "Kann Range-Datei für Karte %s nicht öffnen."
 
 #, fuzzy
-msgid "unable to open [%s] in [%s]"
-msgstr "Kann <%s> nicht öffnen."
+#~ msgid "unable to open [%s] in [%s]"
+#~ msgstr "Kann <%s> nicht öffnen."
 
 #, fuzzy
-msgid "warning: unable to open [%s] in [%s]"
-msgstr "Kann die Eingabedatei <%s> nicht öffnen."
+#~ msgid "warning: unable to open [%s] in [%s]"
+#~ msgstr "Kann die Eingabedatei <%s> nicht öffnen."
 
 #, fuzzy
-msgid "Unable to open raster map [%s] in [%s]"
-msgstr "Kann Rasterkarte <%s> in <%s> nicht öffnen."
+#~ msgid "Unable to open raster map [%s] in [%s]"
+#~ msgstr "Kann Rasterkarte <%s> in <%s> nicht öffnen."
 
 #, fuzzy
-msgid "Unable to find input cell map '%s'"
-msgstr "Kann Rasterkarte %s nicht finden. "
+#~ msgid "Unable to find input cell map '%s'"
+#~ msgstr "Kann Rasterkarte %s nicht finden. "
 
 #, fuzzy
-msgid "Table to be imported"
-msgstr "Zu importierende Rasterdatei."
+#~ msgid "Table to be imported"
+#~ msgstr "Zu importierende Rasterdatei."
 
 #, fuzzy
-msgid "Unable to create raster map [%s]"
-msgstr "Kann die Rasterkarte <%s> nicht erzeugen."
+#~ msgid "Unable to create raster map [%s]"
+#~ msgstr "Kann die Rasterkarte <%s> nicht erzeugen."
 
 #, fuzzy
-msgid "Unable to create output <%s>"
-msgstr "Kann die Ausgabekarte nicht erzeugen."
+#~ msgid "Unable to create output <%s>"
+#~ msgstr "Kann die Ausgabekarte nicht erzeugen."
 
 #, fuzzy
-msgid "Input file [%s] not found."
-msgstr "3dview-Datei <%s> nicht gefunden."
+#~ msgid "Input file [%s] not found."
+#~ msgstr "3dview-Datei <%s> nicht gefunden."
 
 #, fuzzy
-msgid "Unable to open output file <%s>."
-msgstr "Kann Ausgabedatei <%s> nicht öffnen."
+#~ msgid "Unable to open output file <%s>."
+#~ msgstr "Kann Ausgabedatei <%s> nicht öffnen."
 
 #, fuzzy
-msgid "Multiplier for ascii data"
-msgstr "Multiplikator für Ascii-Daten"
+#~ msgid "Multiplier for ascii data"
+#~ msgstr "Multiplikator für Ascii-Daten"
 
 #, fuzzy
-msgid "Could not open temporary file: [%s]"
-msgstr "Kann die temporäre Datei <%s> nicht öffnen"
+#~ msgid "Could not open temporary file: [%s]"
+#~ msgstr "Kann die temporäre Datei <%s> nicht öffnen"
 
 #, fuzzy
-msgid "Could not open input file [%s]"
-msgstr "Kann die Eingabedatei <%s> nicht öffnen."
+#~ msgid "Could not open input file [%s]"
+#~ msgstr "Kann die Eingabedatei <%s> nicht öffnen."
 
 #, fuzzy
-msgid "unable to create raster"
-msgstr "Kann die Rasterkarte nicht erzeugen"
+#~ msgid "unable to create raster"
+#~ msgstr "Kann die Rasterkarte nicht erzeugen"
 
 #, fuzzy
-msgid "Unable to create output raster map <%s>"
-msgstr "Kann die Rasterkarte <%s> nicht erzeugen."
+#~ msgid "Unable to create output raster map <%s>"
+#~ msgstr "Kann die Rasterkarte <%s> nicht erzeugen."
 
 #, fuzzy
-msgid "Cannot open file for <%s>"
-msgstr "Kann die Datei <%s> nicht öffnen."
+#~ msgid "Cannot open file for <%s>"
+#~ msgstr "Kann die Datei <%s> nicht öffnen."
 
 #, fuzzy
-msgid "Name of the random surface to be produced"
-msgstr "Name der Ausgabe-Rasterkarte."
+#~ msgid "Name of the random surface to be produced"
+#~ msgstr "Name der Ausgabe-Rasterkarte."
 
 #, fuzzy
-msgid "%s: Unable to find raster map <%s>"
-msgstr "Kann die Rasterkarte <%s> nicht öffnen."
+#~ msgid "%s: Unable to find raster map <%s>"
+#~ msgstr "Kann die Rasterkarte <%s> nicht öffnen."
 
 #, fuzzy
-msgid "%s: Unable to open raster map <%s> in mapset <%s>"
-msgstr "%s: Kann die Rasterkarte <%s> in Mapset <%s> nicht öffnen."
+#~ msgid "%s: Unable to open raster map <%s> in mapset <%s>"
+#~ msgstr "%s: Kann die Rasterkarte <%s> in Mapset <%s> nicht öffnen."
 
 #, fuzzy
-msgid "%s:  Unable to open output raster map <%s>"
-msgstr "Kann die Rasterkarte <%s> nicht öffnen."
+#~ msgid "%s:  Unable to open output raster map <%s>"
+#~ msgstr "Kann die Rasterkarte <%s> nicht öffnen."
 
 #, fuzzy
-msgid "Vector <%s> could not be opened"
-msgstr "Vektorkarte <%s> nicht gefunden"
+#~ msgid "Vector <%s> could not be opened"
+#~ msgstr "Vektorkarte <%s> nicht gefunden"
 
 #, fuzzy
-msgid "No db connection for driver <%s> defined. Run db.connect."
-msgstr "Datenbankverbindung nicht definiert."
+#~ msgid "No db connection for driver <%s> defined. Run db.connect."
+#~ msgstr "Datenbankverbindung nicht definiert."
 
 #, fuzzy
-msgid "Table name"
-msgstr "Eingabetabelle"
+#~ msgid "Table name"
+#~ msgstr "Eingabetabelle"
 
 #, fuzzy
-msgid ""
-"Print current map connection parameters and exit (shell script style)\n"
-"\tformat:  layer[/layer name] table key database driver"
-msgstr "Gibt derzeitige Verbindungsparameter aus und beendet sich."
+#~ msgid ""
+#~ "Print current map connection parameters and exit (shell script style)\n"
+#~ "\tformat:  layer[/layer name] table key database driver"
+#~ msgstr "Gibt derzeitige Verbindungsparameter aus und beendet sich."
 
 #, fuzzy
-msgid "x column name"
-msgstr "Spaltenname für Y-Koordinate."
+#~ msgid "x column name"
+#~ msgstr "Spaltenname für Y-Koordinate."
 
 #, fuzzy
-msgid "z column name"
-msgstr "Spaltenname für Y-Koordinate."
+#~ msgid "z column name"
+#~ msgstr "Spaltenname für Y-Koordinate."
 
 #, fuzzy
-msgid "Cannot drop table: %s"
-msgstr "Kann die Tabelle <%s> nicht verändern."
+#~ msgid "Cannot drop table: %s"
+#~ msgstr "Kann die Tabelle <%s> nicht verändern."
 
 #, fuzzy
-msgid "Cannot open labels <%s>"
-msgstr "Kann die Datei <%s> nicht öffnen."
+#~ msgid "Cannot open labels <%s>"
+#~ msgstr "Kann die Datei <%s> nicht öffnen."
 
 #, fuzzy
-msgid "Cannot fetch data from table"
-msgstr "Kann Daten nicht aus der Tabelle selektieren."
+#~ msgid "Cannot fetch data from table"
+#~ msgstr "Kann Daten nicht aus der Tabelle selektieren."
 
 #, fuzzy
-msgid ""
-"OGR output datasource name. For example:\n"
-"\t\tESRI Shapefile: filename or directory for storage\n"
-"\t\tMapInfo File: filename or directory for storage"
-msgstr ""
-"OGR Datenquelle.\n"
-"\t\tESRI Shapefile: Verzeichnis, welches die Shapes beinhaltet.\n"
-"\t\tMapInfo File: Verzeichnis, welches die MapInfo-Files enthält."
+#~ msgid ""
+#~ "OGR output datasource name. For example:\n"
+#~ "\t\tESRI Shapefile: filename or directory for storage\n"
+#~ "\t\tMapInfo File: filename or directory for storage"
+#~ msgstr ""
+#~ "OGR Datenquelle.\n"
+#~ "\t\tESRI Shapefile: Verzeichnis, welches die Shapes beinhaltet.\n"
+#~ "\t\tMapInfo File: Verzeichnis, welches die MapInfo-Files enthält."
 
 #, fuzzy
-msgid "SVG file <%s> cannot be opened"
-msgstr "<%s> konnte nicht gefunden werden!"
+#~ msgid "SVG file <%s> cannot be opened"
+#~ msgstr "<%s> konnte nicht gefunden werden!"
 
 #, fuzzy
-msgid "Querying input '%s' ... "
-msgstr "Lese Eingabe ..."
+#~ msgid "Querying input '%s' ... "
+#~ msgstr "Lese Eingabe ..."
 
 #, fuzzy
-msgid "Copying %s input lines ... "
-msgstr "Verarbeite ainput Zeilen ..."
+#~ msgid "Copying %s input lines ... "
+#~ msgstr "Verarbeite ainput Zeilen ..."
 
 #, fuzzy
-msgid "Cannot create table <%s>"
-msgstr "Kann Tabelle <%s> nicht erzeugen."
+#~ msgid "Cannot create table <%s>"
+#~ msgstr "Kann Tabelle <%s> nicht erzeugen."
 
 #, fuzzy
-msgid "no record for cat = %d"
-msgstr "Kein Eintrag für Linie (cat = %d)"
+#~ msgid "no record for cat = %d"
+#~ msgstr "Kein Eintrag für Linie (cat = %d)"
 
 #, fuzzy
-msgid "cannot insert row: %s"
-msgstr "Kann neu Reihe <%s> nicht einfügen."
+#~ msgid "cannot insert row: %s"
+#~ msgstr "Kann neu Reihe <%s> nicht einfügen."
 
 #, fuzzy
-msgid "Cannot find line of cat %d"
-msgstr "Kann die Vektorkarte <%s> nicht finden."
+#~ msgid "Cannot find line of cat %d"
+#~ msgstr "Kann die Vektorkarte <%s> nicht finden."
 
 #, fuzzy
-msgid "Unalbe to open vector map <%s>"
-msgstr "Kann die Vektorkarte <%s> nicht öffnen"
+#~ msgid "Unalbe to open vector map <%s>"
+#~ msgstr "Kann die Vektorkarte <%s> nicht öffnen"
 
 #, fuzzy
-msgid "Database connection not defined for layer [%d]. Use v.db.connect first"
-msgstr ""
-"Datenbankverbindung für Layer <%d> nicht definiert. Bitte benutzen Sie "
-"zuerst v.db.connect."
+#~ msgid ""
+#~ "Database connection not defined for layer [%d]. Use v.db.connect first"
+#~ msgstr ""
+#~ "Datenbankverbindung für Layer <%d> nicht definiert. Bitte benutzen Sie "
+#~ "zuerst v.db.connect."
 
 #, fuzzy
-msgid "Transforms a vector map via a set of tie points."
-msgstr "Exportiert GRASS Vektorkarten in das DXF-Dateiformat."
+#~ msgid "Transforms a vector map via a set of tie points."
+#~ msgstr "Exportiert GRASS Vektorkarten in das DXF-Dateiformat."
 
 #, fuzzy
-msgid ""
-"ASCII file holding transform coordinates (if not given transformation "
-"options [xshift, yshift, zshift, xscale, yscale, zscale, zrot] will be used "
-"instead)"
-msgstr ""
-"Benutze Transformationsoptionen (xshift, yshift, zshift, xscale, yscale, "
-"zscale, zrot) anstelle von Punkten."
+#~ msgid ""
+#~ "ASCII file holding transform coordinates (if not given transformation "
+#~ "options [xshift, yshift, zshift, xscale, yscale, zscale, zrot] will be "
+#~ "used instead)"
+#~ msgstr ""
+#~ "Benutze Transformationsoptionen (xshift, yshift, zshift, xscale, yscale, "
+#~ "zscale, zrot) anstelle von Punkten."
 
 #, fuzzy
-msgid "Read coordinates from standard input"
-msgstr ""
-"ASCII-Datei, die in eine binäre Vektordatei konvertiert werden soll. Wenn "
-"nichts angegeben wird, wird von der Standardeingabe gelesen."
+#~ msgid "Read coordinates from standard input"
+#~ msgstr ""
+#~ "ASCII-Datei, die in eine binäre Vektordatei konvertiert werden soll. Wenn "
+#~ "nichts angegeben wird, wird von der Standardeingabe gelesen."
 
 #, fuzzy
-msgid "The '-s' flag is deprecated and will be removed in future"
-msgstr ""
-"Der Schalter '-q' wurde ersetzt und wird in einer der kommenden Versionen "
-"ersatzlos gestrichen. Bitte verwenden Sie stattdessen '--quiet'."
+#~ msgid "The '-s' flag is deprecated and will be removed in future"
+#~ msgstr ""
+#~ "Der Schalter '-q' wurde ersetzt und wird in einer der kommenden Versionen "
+#~ "ersatzlos gestrichen. Bitte verwenden Sie stattdessen '--quiet'."
 
 #, fuzzy
-msgid "Raster map <%s>] not found"
-msgstr "Rasterkarte <%s> konnte nicht gefunden werden."
+#~ msgid "Raster map <%s>] not found"
+#~ msgstr "Rasterkarte <%s> konnte nicht gefunden werden."
 
 #, fuzzy
-msgid "Cannot start driver '%s'."
-msgstr "Kann Treiber <%s> nicht starten"
+#~ msgid "Cannot start driver '%s'."
+#~ msgstr "Kann Treiber <%s> nicht starten"
 
 #, fuzzy
-msgid "Cannot describe table"
-msgstr "Kann die Tabelle nicht kopieren."
+#~ msgid "Cannot describe table"
+#~ msgstr "Kann die Tabelle nicht kopieren."
 
 #, fuzzy
-msgid "Cannot start driver <%s>."
-msgstr "Kann Treiber <%s> nicht starten"
+#~ msgid "Cannot start driver <%s>."
+#~ msgstr "Kann Treiber <%s> nicht starten"
 
 #, fuzzy
-msgid "[%s] is an illegal name"
-msgstr "<%s> ist ein ungültiger Dateiname"
+#~ msgid "[%s] is an illegal name"
+#~ msgstr "<%s> ist ein ungültiger Dateiname"
 
 #, fuzzy
-msgid "Cannot write to <%s>"
-msgstr "Kann nicht in die Datei schreiben."
+#~ msgid "Cannot write to <%s>"
+#~ msgstr "Kann nicht in die Datei schreiben."
 
 #, fuzzy
-msgid "Not able to open cellfile for [%s]"
-msgstr "Kann grid3-Datei <%s> nicht finden."
+#~ msgid "Not able to open cellfile for [%s]"
+#~ msgstr "Kann grid3-Datei <%s> nicht finden."
 
 #, fuzzy
-msgid "Not able to find cellfile [%s]"
-msgstr "Kann Datei <%s> nicht finden."
+#~ msgid "Not able to find cellfile [%s]"
+#~ msgstr "Kann Datei <%s> nicht finden."
 
 #, fuzzy
-msgid "Raster map [%s] not available"
-msgstr "Layer <%s> ist nicht vorhanden."
+#~ msgid "Raster map [%s] not available"
+#~ msgstr "Layer <%s> ist nicht vorhanden."
 
 #, fuzzy
-msgid "color file for [%s] not available"
-msgstr "Farbtabelle für <%s> nicht vorhanden"
+#~ msgid "color file for [%s] not available"
+#~ msgstr "Farbtabelle für <%s> nicht vorhanden"
 
 #, fuzzy
-msgid "Raster file [%s] not available"
-msgstr "Kategorie-Dateien für <%s> sind nicht vorhanden. "
+#~ msgid "Raster file [%s] not available"
+#~ msgstr "Kategorie-Dateien für <%s> sind nicht vorhanden. "
 
 #, fuzzy
-msgid "Raster map [%s] not found"
-msgstr "Rasterkarte <%s> konnte nicht gefunden werden."
+#~ msgid "Raster map [%s] not found"
+#~ msgstr "Rasterkarte <%s> konnte nicht gefunden werden."
 
 #, fuzzy
-msgid "Unable to open raster map [%s]"
-msgstr "Kann die Rasterkarte <%s> nicht öffnen."
+#~ msgid "Unable to open raster map [%s]"
+#~ msgstr "Kann die Rasterkarte <%s> nicht öffnen."
 
 #, fuzzy
-msgid "Vector file [%s] not available"
-msgstr "Farbtabelle für <%s> nicht vorhanden"
+#~ msgid "Vector file [%s] not available"
+#~ msgstr "Farbtabelle für <%s> nicht vorhanden"
 
 #, fuzzy
-msgid "Cannot open driver %s"
-msgstr "Kann %s nicht öffnen."
+#~ msgid "Cannot open driver %s"
+#~ msgstr "Kann %s nicht öffnen."
 
 #, fuzzy
-msgid "<%s> illegal name"
-msgstr "<%s> ist ein ungültiger Dateiname"
+#~ msgid "<%s> illegal name"
+#~ msgstr "<%s> ist ein ungültiger Dateiname"
 
 #, fuzzy
-msgid "Out of Memory!\n"
-msgstr "Speicher ist zu Ende (Out-of-memory)."
+#~ msgid "Out of Memory!\n"
+#~ msgstr "Speicher ist zu Ende (Out-of-memory)."
 
 #, fuzzy
-msgid "%s: %s - Unable to open the input raster map\n"
-msgstr "Kann Eingabe-Rasterkarte nicht richtig lesen."
+#~ msgid "%s: %s - Unable to open the input raster map\n"
+#~ msgstr "Kann Eingabe-Rasterkarte nicht richtig lesen."
 
-msgid "Insufficent memory for allocation of data sturcture"
-msgstr "Ungenügend Speicher für das Belegen der Datenstruktur."
+#~ msgid "Insufficent memory for allocation of data sturcture"
+#~ msgstr "Ungenügend Speicher für das Belegen der Datenstruktur."
 
 #, fuzzy
-msgid "%s: %s - illegal name for output raster map."
-msgstr "Name der Ausgabe-Rasterkarte."
+#~ msgid "%s: %s - illegal name for output raster map."
+#~ msgstr "Name der Ausgabe-Rasterkarte."
 
-msgid "Insufficent memory for allocation of data structure."
-msgstr "Ungenügend Speicher für das Belegen der Datenstruktur."
+#~ msgid "Insufficent memory for allocation of data structure."
+#~ msgstr "Ungenügend Speicher für das Belegen der Datenstruktur."
 
 #, fuzzy
-msgid "Exports GRASS raster data into various formats (requires GDAL)."
-msgstr "Exportiert GRASS Rasterdaten in GDAL-unterstütze Formate."
+#~ msgid "Exports GRASS raster data into various formats (requires GDAL)."
+#~ msgstr "Exportiert GRASS Rasterdaten in GDAL-unterstütze Formate."
 
 #, fuzzy
-msgid "Couldn't find raster map %s"
-msgstr "Kann die Rasterkarte <%s> nicht öffnen."
+#~ msgid "Couldn't find raster map %s"
+#~ msgstr "Kann die Rasterkarte <%s> nicht öffnen."
 
-msgid "%s: <%s> not found"
-msgstr "%s: <%s> nicht gefunden."
+#~ msgid "%s: <%s> not found"
+#~ msgstr "%s: <%s> nicht gefunden."
 
 #, fuzzy
-msgid "%s: <%s> illegal name"
-msgstr "%s=%s - unzulässiger Wert."
+#~ msgid "%s: <%s> illegal name"
+#~ msgstr "%s=%s - unzulässiger Wert."
 
 #, fuzzy
-msgid "%s: Cannot open <%s>"
-msgstr "Kann %s nicht öffnen."
+#~ msgid "%s: Cannot open <%s>"
+#~ msgstr "Kann %s nicht öffnen."
 
-msgid "CREATING SUPPORT FILES ..."
-msgstr "Erstelle Support-Dateien...."
+#~ msgid "CREATING SUPPORT FILES ..."
+#~ msgstr "Erstelle Support-Dateien...."
 
 #, fuzzy
-msgid "<%s> is not a valid GRASS map name"
-msgstr "<%s> ist kein gültiger GRASS Kartenname."
+#~ msgid "<%s> is not a valid GRASS map name"
+#~ msgstr "<%s> ist kein gültiger GRASS Kartenname."
 
 #, fuzzy
-msgid "Cannot find %s"
-msgstr "Kann %s nicht öffnen."
+#~ msgid "Cannot find %s"
+#~ msgstr "Kann %s nicht öffnen."
 
 #, fuzzy
-msgid "could not read range file"
-msgstr "Kann die Range-Datei nicht lesen."
+#~ msgid "could not read range file"
+#~ msgstr "Kann die Range-Datei nicht lesen."
 
-msgid "OUT OF MEMORY !!!\n"
-msgstr "Platz im Hauptspeicher reicht nicht aus !!!\n"
+#~ msgid "OUT OF MEMORY !!!\n"
+#~ msgstr "Platz im Hauptspeicher reicht nicht aus !!!\n"
 
 #, fuzzy
-msgid "Unable to create raster map [%s]."
-msgstr "Kann die Rasterkarte <%s> nicht erzeugen."
+#~ msgid "Unable to create raster map [%s]."
+#~ msgstr "Kann die Rasterkarte <%s> nicht erzeugen."
 
 #, fuzzy
-msgid "Name of the input raster map"
-msgstr "Name der Eingabe-Rasterkarte."
+#~ msgid "Name of the input raster map"
+#~ msgstr "Name der Eingabe-Rasterkarte."
 
 #, fuzzy
-msgid "Filtering [%s] in [%s]"
-msgstr "Lese <%s> in <%s>"
+#~ msgid "Filtering [%s] in [%s]"
+#~ msgstr "Lese <%s> in <%s>"
 
 #, fuzzy
-msgid "Open raster map %s in %s = %d"
-msgstr "Lese Rasterkarte <%s in %s> ..."
+#~ msgid "Open raster map %s in %s = %d"
+#~ msgstr "Lese Rasterkarte <%s in %s> ..."
 
 #, fuzzy
-msgid "Closing raster map"
-msgstr "Fehler beim Lesen der Rasterkarte."
+#~ msgid "Closing raster map"
+#~ msgstr "Fehler beim Lesen der Rasterkarte."
 
 #, fuzzy
-msgid "Swap temp files"
-msgstr "Öffnen der temporären Datei nicht möglich."
+#~ msgid "Swap temp files"
+#~ msgstr "Öffnen der temporären Datei nicht möglich."
 
 #, fuzzy
-msgid "Writing [%s]"
-msgstr "Schreibe %s..."
+#~ msgid "Writing [%s]"
+#~ msgstr "Schreibe %s..."
 
 #, fuzzy
-msgid "%s: illegal map name"
-msgstr "%s: ungültiger Wert."
+#~ msgid "%s: illegal map name"
+#~ msgstr "%s: ungültiger Wert."
 
 #, fuzzy
-msgid "Name of the new raster map"
-msgstr "Name der zweiten Rasterkarte."
+#~ msgid "Name of the new raster map"
+#~ msgstr "Name der zweiten Rasterkarte."
 
 #, fuzzy
-msgid "%s: <%s> illegal file name"
-msgstr "<%s> ist ein ungültiger Dateiname"
+#~ msgid "%s: <%s> illegal file name"
+#~ msgstr "<%s> ist ein ungültiger Dateiname"
 
 #, fuzzy
-msgid "can't open raster map <%s> in mapset %s"
-msgstr "%s: Kann die Rasterkarte <%s> in Mapset <%s> nicht öffnen."
+#~ msgid "can't open raster map <%s> in mapset %s"
+#~ msgstr "%s: Kann die Rasterkarte <%s> in Mapset <%s> nicht öffnen."
 
 #, fuzzy
-msgid ""
-"Converts a GRASS raster map to a PPM image file at the pixel resolution of "
-"the CURRENTLY DEFINED REGION."
-msgstr ""
-"Exportiert 3 GRASS Rasterkarten (R,G,B) als PPM-Bild mit der Pixel-Auflösung "
-"der DERZEITIG EINGESTELLTEN REGION."
+#~ msgid ""
+#~ "Converts a GRASS raster map to a PPM image file at the pixel resolution "
+#~ "of the CURRENTLY DEFINED REGION."
+#~ msgstr ""
+#~ "Exportiert 3 GRASS Rasterkarten (R,G,B) als PPM-Bild mit der Pixel-"
+#~ "Auflösung der DERZEITIG EINGESTELLTEN REGION."
 
 #, fuzzy
-msgid "Raster input map"
-msgstr "rote Eingabe-Rasterkarte."
+#~ msgid "Raster input map"
+#~ msgstr "rote Eingabe-Rasterkarte."
 
 #, fuzzy
-msgid "Mapset of input map"
-msgstr "Name der Eingabe-Rasterkarte"
+#~ msgid "Mapset of input map"
+#~ msgstr "Name der Eingabe-Rasterkarte"
 
 #, fuzzy
-msgid "Checking location %s, mapset %s:"
-msgstr "Prüfe Location %s, Mapset %s:"
+#~ msgid "Checking location %s, mapset %s:"
+#~ msgstr "Prüfe Location %s, Mapset %s:"
 
 #, fuzzy
-msgid "Input map [%s] in location [%s] in mapset [%s] not found."
-msgstr "Vektordatei <%s> in der Location <%s> im Mapset <%s> nicht vorhanden"
+#~ msgid "Input map [%s] in location [%s] in mapset [%s] not found."
+#~ msgstr ""
+#~ "Vektordatei <%s> in der Location <%s> im Mapset <%s> nicht vorhanden"
 
 #, fuzzy
-msgid "Can't work with xy data"
-msgstr "Kann die Daten nicht holen."
+#~ msgid "Can't work with xy data"
+#~ msgstr "Kann die Daten nicht holen."
 
 #, fuzzy
-msgid "ns-res:\t%f"
-msgstr "nsres=%f"
+#~ msgid "ns-res:\t%f"
+#~ msgstr "nsres=%f"
 
 #, fuzzy
-msgid "Error writing output map"
-msgstr "Fehler beim Lesen der Zell-Daten."
+#~ msgid "Error writing output map"
+#~ msgstr "Fehler beim Lesen der Zell-Daten."
 
 #, fuzzy
-msgid "<%s> is illegal file name"
-msgstr "<%s> ist ein ungültiger Dateiname"
+#~ msgid "<%s> is illegal file name"
+#~ msgstr "<%s> ist ein ungültiger Dateiname"
 
 #, fuzzy
-msgid "[%s] is an illegal file name"
-msgstr "<%s> ist ein ungültiger Dateiname"
+#~ msgid "[%s] is an illegal file name"
+#~ msgstr "<%s> ist ein ungültiger Dateiname"
 
 #, fuzzy
-msgid "input map can NOT be the same as output map"
-msgstr "Die Eingabekarte darf NICHT identisch sein mit der Ausgabekarte."
+#~ msgid "input map can NOT be the same as output map"
+#~ msgstr "Die Eingabekarte darf NICHT identisch sein mit der Ausgabekarte."
 
 #, fuzzy
-msgid "no rules specified. [%s] not created"
-msgstr "Keine Regeln angegeben. <%s> nicht erzeugt."
+#~ msgid "no rules specified. [%s] not created"
+#~ msgstr "Keine Regeln angegeben. <%s> nicht erzeugt."
 
 #, fuzzy
-msgid "no rules specified"
-msgstr "Keine Regeln angegeben."
+#~ msgid "no rules specified"
+#~ msgstr "Keine Regeln angegeben."
 
 #, fuzzy
-msgid "Can't open temp file [%s]"
-msgstr "Kann die Segmentdatei %s nicht öffnen."
+#~ msgid "Can't open temp file [%s]"
+#~ msgstr "Kann die Segmentdatei %s nicht öffnen."
 
 #, fuzzy
-msgid "Names of existing raster maps"
-msgstr "Name existierender Rasterkarte(n)"
+#~ msgid "Names of existing raster maps"
+#~ msgstr "Name existierender Rasterkarte(n)"
 
 #, fuzzy
-msgid "Unable to open input map <%s> in mapset <%s>"
-msgstr "%s: Kann die Rasterkarte <%s> in Mapset <%s> nicht öffnen."
+#~ msgid "Unable to open input map <%s> in mapset <%s>"
+#~ msgstr "%s: Kann die Rasterkarte <%s> in Mapset <%s> nicht öffnen."
 
 #, fuzzy
-msgid "%s - illegal name "
-msgstr "%s=%s - unzulässiger Wert."
+#~ msgid "%s - illegal name "
+#~ msgstr "%s=%s - unzulässiger Wert."
 
 #, fuzzy
-msgid "Couldn't find raster map [%s]"
-msgstr "Kann die Rasterkarte <%s> nicht öffnen."
+#~ msgid "Couldn't find raster map [%s]"
+#~ msgstr "Kann die Rasterkarte <%s> nicht öffnen."
 
 #, fuzzy
-msgid "%s in %s -can't open raster map"
-msgstr "CHILD[pid = %i] kann Rasterkarte nicht öffnen."
+#~ msgid "%s in %s -can't open raster map"
+#~ msgstr "CHILD[pid = %i] kann Rasterkarte nicht öffnen."
 
 #, fuzzy
-msgid "%s - can't create raster map"
-msgstr "Kann die Rasterkarte <%s> nicht erzeugen."
+#~ msgid "%s - can't create raster map"
+#~ msgstr "Kann die Rasterkarte <%s> nicht erzeugen."
 
 #, fuzzy
-msgid "%s=%s - illegal name"
-msgstr "%s=%s - unzulässiger Wert."
+#~ msgid "%s=%s - illegal name"
+#~ msgstr "%s=%s - unzulässiger Wert."
 
 #, fuzzy
-msgid "%s: can't create %s"
-msgstr "Fehler: Kann %s nicht erzeugen."
+#~ msgid "%s: can't create %s"
+#~ msgstr "Fehler: Kann %s nicht erzeugen."
 
-msgid "Normalized"
-msgstr "Normalisiert"
+#~ msgid "Normalized"
+#~ msgstr "Normalisiert"
 
 #, fuzzy
-msgid "Out of memory!"
-msgstr "Speicher ist zu Ende (Out-of-memory)."
+#~ msgid "Out of memory!"
+#~ msgstr "Speicher ist zu Ende (Out-of-memory)."
 
 #, fuzzy
-msgid "Cell file [%s] not found"
-msgstr "Cell-Datei nicht gefunden."
+#~ msgid "Cell file [%s] not found"
+#~ msgstr "Cell-Datei nicht gefunden."
 
 #, fuzzy
-msgid "Can't read current window parameters"
-msgstr "Kann die aktuellen Regionsparameter nicht lesen."
+#~ msgid "Can't read current window parameters"
+#~ msgstr "Kann die aktuellen Regionsparameter nicht lesen."
 
 #, fuzzy
-msgid "Error getting input null cells at row %d from %s"
-msgstr "Fehler beim Holen der Eingabe NULL-Zellen."
+#~ msgid "Error getting input null cells at row %d from %s"
+#~ msgstr "Fehler beim Holen der Eingabe NULL-Zellen."
 
-msgid "[%s] file name not legal"
-msgstr "[%s] ist ein ungültiger Name."
+#~ msgid "[%s] file name not legal"
+#~ msgstr "[%s] ist ein ungültiger Name."
 
-msgid "[%s] file name not legal\n"
-msgstr "[%s] ist ein ungültiger Name.\n"
+#~ msgid "[%s] file name not legal\n"
+#~ msgstr "[%s] ist ein ungültiger Name.\n"
 
 #, fuzzy
-msgid "Requested 3d raster map not found <%s>"
-msgstr "Angeforderte 3D-Rasterkarte nicht gefunden."
+#~ msgid "Requested 3d raster map not found <%s>"
+#~ msgstr "Angeforderte 3D-Rasterkarte nicht gefunden."
 
 #, fuzzy
-msgid "Could not open elevation map"
-msgstr "Kann die Höhenkarte nicht schließen"
+#~ msgid "Could not open elevation map"
+#~ msgstr "Kann die Höhenkarte nicht schließen"
 
 #, fuzzy
-msgid "Could not open output map"
-msgstr "Kann die Karte %s nicht öffnen."
+#~ msgid "Could not open output map"
+#~ msgstr "Kann die Karte %s nicht öffnen."
 
 #, fuzzy
-msgid "unable to close output map"
-msgstr "Kann die Ausgabe-Karte nicht schließen."
+#~ msgid "unable to close output map"
+#~ msgstr "Kann die Ausgabe-Karte nicht schließen."
 
 #, fuzzy
-msgid "Cannot create output map [%s]"
-msgstr "Kann die Rasterkarte <%s> nicht erzeugen"
+#~ msgid "Cannot create output map [%s]"
+#~ msgstr "Kann die Rasterkarte <%s> nicht erzeugen"
 
 #, fuzzy
-msgid "Database's name couldn't be read"
-msgstr "%s Datei(en), die entfernt werden sollen."
+#~ msgid "Database's name couldn't be read"
+#~ msgstr "%s Datei(en), die entfernt werden sollen."
 
 #, fuzzy
-msgid "Driver's name couldn't be read"
-msgstr "%s Datei(en), die entfernt werden sollen."
+#~ msgid "Driver's name couldn't be read"
+#~ msgstr "%s Datei(en), die entfernt werden sollen."
 
 #, fuzzy
-msgid "Cannot open vector points map <%s>"
-msgstr "Kann die Vektor-Punktkarte <%s> nicht öffnen."
+#~ msgid "Cannot open vector points map <%s>"
+#~ msgstr "Kann die Vektor-Punktkarte <%s> nicht öffnen."
 
 #, fuzzy
-msgid "Cannot create vector map <%s>"
-msgstr "Kann die Rasterkarte <%s> nicht erzeugen"
+#~ msgid "Cannot create vector map <%s>"
+#~ msgstr "Kann die Rasterkarte <%s> nicht erzeugen"
 
 #, fuzzy
-msgid ""
-"Interpolation: No database connection for driver <%s> defined. Run db.connect"
-msgstr "Datenbankverbindung nicht definiert."
+#~ msgid ""
+#~ "Interpolation: No database connection for driver <%s> defined. Run db."
+#~ "connect"
+#~ msgstr "Datenbankverbindung nicht definiert."
 
 #, fuzzy
-msgid "Could not find input map <%s> in current mapset."
-msgstr "Vektorkarte <%s> nicht gefunden."
+#~ msgid "Could not find input map <%s> in current mapset."
+#~ msgstr "Vektorkarte <%s> nicht gefunden."
 
 #, fuzzy
-msgid "Vector file [%s] not available in search list"
-msgstr "Kategorie-Dateien für <%s> sind nicht vorhanden. "
+#~ msgid "Vector file [%s] not available in search list"
+#~ msgstr "Kategorie-Dateien für <%s> sind nicht vorhanden. "
 
 #, fuzzy
-msgid "Cannot open database <%s>"
-msgstr "Kann Datenbank <%s> nicht öffnen."
+#~ msgid "Cannot open database <%s>"
+#~ msgstr "Kann Datenbank <%s> nicht öffnen."
 
 #, fuzzy
-msgid "Cannot open table <%s>"
-msgstr "Kann Datenbank <%s> nicht öffnen."
+#~ msgid "Cannot open table <%s>"
+#~ msgstr "Kann Datenbank <%s> nicht öffnen."
 
 #, fuzzy
-msgid "Cannot open driver <%s>"
-msgstr "Kann die Rasterkarte <%s> nicht öffnen."
+#~ msgid "Cannot open driver <%s>"
+#~ msgstr "Kann die Rasterkarte <%s> nicht öffnen."
 
 #, fuzzy
-msgid "Could not find input vector map %s"
-msgstr "von"
+#~ msgid "Could not find input vector map %s"
+#~ msgstr "von"
 
 #, fuzzy
-msgid ""
-"OGR layer name. If not given, all available layers are imported. Examples:\n"
-"\t\tESRI Shapefile: shapefile name\n"
-"\t\tMapInfo File: mapinfo file name"
-msgstr ""
-"OGR Layer-Name. Falls nicht angegeben, werden alle Layernamen in der "
-"Datenquelle nur angezeigt.\n"
-"\t\tESRI Shapefile: Shape-Name\n"
-"\t\tMapInfo File: MapInfo-Name"
+#~ msgid ""
+#~ "OGR layer name. If not given, all available layers are imported. "
+#~ "Examples:\n"
+#~ "\t\tESRI Shapefile: shapefile name\n"
+#~ "\t\tMapInfo File: mapinfo file name"
+#~ msgstr ""
+#~ "OGR Layer-Name. Falls nicht angegeben, werden alle Layernamen in der "
+#~ "Datenquelle nur angezeigt.\n"
+#~ "\t\tESRI Shapefile: Shape-Name\n"
+#~ "\t\tMapInfo File: MapInfo-Name"
 
 #, fuzzy
-msgid "The vector '%s' already exists."
-msgstr "Die Datei <%s> existiert bereits."
+#~ msgid "The vector '%s' already exists."
+#~ msgstr "Die Datei <%s> existiert bereits."
 
 #, fuzzy
-msgid "Could not find input map '%s'."
-msgstr "Kann die Karte %s nicht öffnen."
+#~ msgid "Could not find input map '%s'."
+#~ msgstr "Kann die Karte %s nicht öffnen."
 
 #, fuzzy
-msgid "Could not find network input map '%s'."
-msgstr "Kann die Karte %s nicht öffnen."
+#~ msgid "Could not find network input map '%s'."
+#~ msgstr "Kann die Karte %s nicht öffnen."
 
 #, fuzzy
-msgid "error opening raster map [%s]."
-msgstr "Fehler beim Öffnen der 3D-Rasterkarte <%s>"
+#~ msgid "error opening raster map [%s]."
+#~ msgstr "Fehler beim Öffnen der 3D-Rasterkarte <%s>"
 
 #, fuzzy
-msgid "Topology is not available"
-msgstr "Layer <%s> ist nicht vorhanden."
+#~ msgid "Topology is not available"
+#~ msgstr "Layer <%s> ist nicht vorhanden."
 
 #, fuzzy
-msgid "Cannot describe table %s"
-msgstr "Kann Tabelle <%s> nicht erzeugen."
+#~ msgid "Cannot describe table %s"
+#~ msgstr "Kann Tabelle <%s> nicht erzeugen."
 
 #, fuzzy
-msgid "Patching file <%s@%s>"
-msgstr "Übetrage in die Karte ..."
+#~ msgid "Patching file <%s@%s>"
+#~ msgstr "Übetrage in die Karte ..."
 
 #, fuzzy
-msgid "[%d] files patched"
-msgstr "%d Einträge aktualisiert."
+#~ msgid "[%d] files patched"
+#~ msgstr "%d Einträge aktualisiert."
 
 #, fuzzy
-msgid "Column type  not supported"
-msgstr "Spaltentyp nicht unterstützt"
+#~ msgid "Column type  not supported"
+#~ msgstr "Spaltentyp nicht unterstützt"
 
 #, fuzzy
-msgid "Could not open vector map <%s>"
-msgstr "Kann die Vektor-Punktkarte <%s> nicht öffnen."
+#~ msgid "Could not open vector map <%s>"
+#~ msgstr "Kann die Vektor-Punktkarte <%s> nicht öffnen."
 
 #, fuzzy
-msgid "Name of output raster map"
-msgstr "Name der Ausgabe-Rasterkarte."
+#~ msgid "Name of output raster map"
+#~ msgstr "Name der Ausgabe-Rasterkarte."
 
 #, fuzzy
-msgid "Done          "
-msgstr "Fertig!       "
+#~ msgid "Done          "
+#~ msgstr "Fertig!       "
 
 #, fuzzy
-msgid "Database connection not defined for layer <%d>. Use v.db.connect first."
-msgstr ""
-"Datenbankverbindung für Layer <%d> nicht definiert. Bitte benutzen Sie "
-"zuerst v.db.connect."
+#~ msgid ""
+#~ "Database connection not defined for layer <%d>. Use v.db.connect first."
+#~ msgstr ""
+#~ "Datenbankverbindung für Layer <%d> nicht definiert. Bitte benutzen Sie "
+#~ "zuerst v.db.connect."
 
 #, fuzzy
-msgid "Pass [%d] of [%d]:"
-msgstr "Durchlauf %d (von %d)."
+#~ msgid "Pass [%d] of [%d]:"
+#~ msgstr "Durchlauf %d (von %d)."
 
 #, fuzzy
-msgid "Illegal output name: '%s'"
-msgstr "Ungültiger Ausgabe-Dateiname<%s>."
+#~ msgid "Illegal output name: '%s'"
+#~ msgstr "Ungültiger Ausgabe-Dateiname<%s>."
 
 #, fuzzy
-msgid "Can't create output map"
-msgstr "Kann die Ausgabekarte nicht erzeugen."
+#~ msgid "Can't create output map"
+#~ msgstr "Kann die Ausgabekarte nicht erzeugen."
 
 #, fuzzy
-msgid "Could not close new 3d raster map"
-msgstr "Kann die Eingabekarte nicht schließen."
+#~ msgid "Could not close new 3d raster map"
+#~ msgstr "Kann die Eingabekarte nicht schließen."
 
 #, fuzzy
-msgid "%s: cellfile [%s] not found."
-msgstr "Cell-Datei nicht gefunden."
+#~ msgid "%s: cellfile [%s] not found."
+#~ msgstr "Cell-Datei nicht gefunden."
 
 #, fuzzy
-msgid "Unable to open cellfile [%s]."
-msgstr "Kann die Datei <%s> nicht öffnen"
+#~ msgid "Unable to open cellfile [%s]."
+#~ msgstr "Kann die Datei <%s> nicht öffnen"
 
 #, fuzzy
-msgid "Error reading wildcard."
-msgstr "Fehler beim Lesen der Wildcard."
+#~ msgid "Error reading wildcard."
+#~ msgstr "Fehler beim Lesen der Wildcard."
 
 #, fuzzy
-msgid ""
-"Sets the grid color, either a standard GRASS color or R:G:B triplet "
-"(separated by colons)"
-msgstr ""
-"Farbe, die benutzt werden soll. Entweder GRASS Standardfarben oder R:G:B "
-"Tripel (durch Doppelpunkte getrennt)."
+#~ msgid ""
+#~ "Sets the grid color, either a standard GRASS color or R:G:B triplet "
+#~ "(separated by colons)"
+#~ msgstr ""
+#~ "Farbe, die benutzt werden soll. Entweder GRASS Standardfarben oder R:G:B "
+#~ "Tripel (durch Doppelpunkte getrennt)."
 
 #, fuzzy
-msgid "Sets the border color, either a standard GRASS color or R:G:B triplet"
-msgstr "Textfarbe, entweder eine GRASS Standardfarbe oder ein R:G:B Tripel."
+#~ msgid ""
+#~ "Sets the border color, either a standard GRASS color or R:G:B triplet"
+#~ msgstr "Textfarbe, entweder eine GRASS Standardfarbe oder ein R:G:B Tripel."
 
-msgid "Border not yet implemented for LatLong locations: border not drawn."
-msgstr ""
-"Kartenrand ist für eine LL-Location noch nicht implementiert; er wird somit "
-"nicht gezeichnet."
+#~ msgid "Border not yet implemented for LatLong locations: border not drawn."
+#~ msgstr ""
+#~ "Kartenrand ist für eine LL-Location noch nicht implementiert; er wird "
+#~ "somit nicht gezeichnet."
 
 #, fuzzy
-msgid "Unable to open the temporary file."
-msgstr "Kann temporäre Datei nicht öffnen"
+#~ msgid "Unable to open the temporary file."
+#~ msgstr "Kann temporäre Datei nicht öffnen"
 
 #, fuzzy
-msgid "Unable to open raster map [%s]."
-msgstr "Kann die Rasterkarte <%s> nicht öffnen."
+#~ msgid "Unable to open raster map [%s]."
+#~ msgstr "Kann die Rasterkarte <%s> nicht öffnen."
 
 #, fuzzy
-msgid "Unable to find raster [%s]."
-msgstr "Kann Datei <%s> nicht finden."
+#~ msgid "Unable to find raster [%s]."
+#~ msgstr "Kann Datei <%s> nicht finden."
 
 #, fuzzy
-msgid "name for new raster map"
-msgstr "Titel für die neue Rasterkarte."
+#~ msgid "name for new raster map"
+#~ msgstr "Titel für die neue Rasterkarte."
 
 #, fuzzy
-msgid "Output GRASS image file"
-msgstr "Ausgabekarte mit Hangexposition."
+#~ msgid "Output GRASS image file"
+#~ msgstr "Ausgabekarte mit Hangexposition."
 
 #, fuzzy
-msgid "Resulting output map"
-msgstr "Auflösung der Ausgabe-Karte"
+#~ msgid "Resulting output map"
+#~ msgstr "Auflösung der Ausgabe-Karte"
 
 #, fuzzy
-msgid "name for new vector map"
-msgstr "Name der Vektorkarte"
+#~ msgid "name for new vector map"
+#~ msgstr "Name der Vektorkarte"
 
 #, fuzzy
-msgid "name for new vector map (omit for display to stdout)"
-msgstr "Vektorausgabekarte mit den angepassten Punkten im Fluss."
+#~ msgid "name for new vector map (omit for display to stdout)"
+#~ msgstr "Vektorausgabekarte mit den angepassten Punkten im Fluss."
 
 #, fuzzy
-msgid "Input vector map"
-msgstr "Eingabe Vektorkarte mit Netzwerk"
+#~ msgid "Input vector map"
+#~ msgstr "Eingabe Vektorkarte mit Netzwerk"
 
 #, fuzzy
-msgid "%s: ERROR can't open tempfile"
-msgstr "%s: Kann die temporäre Datei nicht öffnen"
+#~ msgid "%s: ERROR can't open tempfile"
+#~ msgstr "%s: Kann die temporäre Datei nicht öffnen"
 
 #, fuzzy
-msgid "vector map <%s> not found"
-msgstr "Vektorkarte <%s> nicht gefunden"
+#~ msgid "vector map <%s> not found"
+#~ msgstr "Vektorkarte <%s> nicht gefunden"
 
 #, fuzzy
-msgid "unable to find raster map [%s]"
-msgstr "Kann die Rasterkarte <%s> nicht öffnen."
+#~ msgid "unable to find raster map [%s]"
+#~ msgstr "Kann die Rasterkarte <%s> nicht öffnen."
 
 #, fuzzy
-msgid "Both \"-i\" AND \"color\" specified - ignoring color"
-msgstr ""
-"Es wurden beide Optionen \"color\" UND \"rast\" angegeben - Ignoriere die "
-"Option \"rast\"."
+#~ msgid "Both \"-i\" AND \"color\" specified - ignoring color"
+#~ msgstr ""
+#~ "Es wurden beide Optionen \"color\" UND \"rast\" angegeben - Ignoriere die "
+#~ "Option \"rast\"."
 
 #, fuzzy
-msgid "Both \"-i\" AND \"rules\" specified - ignoring rules"
-msgstr ""
-"Es wurden beide Optionen \"color\" UND \"rules\" angegeben - Ignoriere die "
-"Option \"rules\". "
+#~ msgid "Both \"-i\" AND \"rules\" specified - ignoring rules"
+#~ msgstr ""
+#~ "Es wurden beide Optionen \"color\" UND \"rules\" angegeben - Ignoriere "
+#~ "die Option \"rules\". "
 
 #, fuzzy
-msgid "Both \"-i\" AND \"raster\" specified - ignoring raster"
-msgstr ""
-"Es wurden beide Optionen \"color\" UND \"rast\" angegeben - Ignoriere die "
-"Option \"rast\"."
+#~ msgid "Both \"-i\" AND \"raster\" specified - ignoring raster"
+#~ msgstr ""
+#~ "Es wurden beide Optionen \"color\" UND \"rast\" angegeben - Ignoriere die "
+#~ "Option \"rast\"."
 
 #, fuzzy
-msgid "Both options \"color\" AND \"raster\" specified - ignoring raster"
-msgstr ""
-"Es wurden beide Optionen \"color\" UND \"rast\" angegeben - Ignoriere die "
-"Option \"rast\"."
+#~ msgid "Both options \"color\" AND \"raster\" specified - ignoring raster"
+#~ msgstr ""
+#~ "Es wurden beide Optionen \"color\" UND \"rast\" angegeben - Ignoriere die "
+#~ "Option \"rast\"."
 
-msgid "Both options \"color\" AND \"rules\" specified - ignoring rules"
-msgstr ""
-"Es wurden beide Optionen \"color\" UND \"rules\" angegeben - Ignoriere die "
-"Option \"rules\". "
+#~ msgid "Both options \"color\" AND \"rules\" specified - ignoring rules"
+#~ msgstr ""
+#~ "Es wurden beide Optionen \"color\" UND \"rules\" angegeben - Ignoriere "
+#~ "die Option \"rules\". "
 
 #, fuzzy
-msgid "Both options \"raster\" AND \"rules\" specified - ignoring raster"
-msgstr ""
-"Es wurden beide Optionen \"rast\" UND \"rules\" angegeben - Ignoriere die "
-"Option \"rast\". "
+#~ msgid "Both options \"raster\" AND \"rules\" specified - ignoring raster"
+#~ msgstr ""
+#~ "Es wurden beide Optionen \"rast\" UND \"rules\" angegeben - Ignoriere die "
+#~ "Option \"rast\". "
 
 #, fuzzy
-msgid "<%s> raster map not found"
-msgstr "%s: Rasterkarte %s nicht gefunden."
+#~ msgid "<%s> raster map not found"
+#~ msgstr "%s: Rasterkarte %s nicht gefunden."
 
 #, fuzzy
-msgid "<%s> unable to open raster map"
-msgstr "Kann die Rasterkarte <%s> nicht öffnen."
+#~ msgid "<%s> unable to open raster map"
+#~ msgstr "Kann die Rasterkarte <%s> nicht öffnen."
 
 #, fuzzy
-msgid "Cannot find vector map [%s]"
-msgstr "Kann die Vektor-Punktkarte <%s> nicht öffnen."
+#~ msgid "Cannot find vector map [%s]"
+#~ msgstr "Kann die Vektor-Punktkarte <%s> nicht öffnen."
 
 #, fuzzy
-msgid "%s - can't open raster map"
-msgstr "Kann die Rasterkarte <%s> nicht öffnen."
+#~ msgid "%s - can't open raster map"
+#~ msgstr "Kann die Rasterkarte <%s> nicht öffnen."
 
 #, fuzzy
-msgid "Can't get row %d from raster map %s"
-msgstr "Kann den Header der Rasterkarte <%s> nicht lesen."
+#~ msgid "Can't get row %d from raster map %s"
+#~ msgstr "Kann den Header der Rasterkarte <%s> nicht lesen."
 
 #, fuzzy
-msgid "%s - raster map not found"
-msgstr "%s: Rasterkarte %s nicht gefunden."
+#~ msgid "%s - raster map not found"
+#~ msgstr "%s: Rasterkarte %s nicht gefunden."
 
 #, fuzzy
-msgid "string representing no data cell value"
-msgstr "Zeichenkette, die NODATA-Werte repräsentiert."
+#~ msgid "string representing no data cell value"
+#~ msgstr "Zeichenkette, die NODATA-Werte repräsentiert."
 
 #, fuzzy
-msgid "File name of classification result"
-msgstr "Rasterkarte mit den Klassifikationsergebnissen"
+#~ msgid "File name of classification result"
+#~ msgstr "Rasterkarte mit den Klassifikationsergebnissen"
 
 #, fuzzy
-msgid "File name of reference classes"
-msgstr "Name der Datei mit den Referenz-Klassen"
+#~ msgid "File name of reference classes"
+#~ msgstr "Name der Datei mit den Referenz-Klassen"
 
 #, fuzzy
-msgid "wide report, 132 columns (default: 80)"
-msgstr "Breite Ausgabe mit 132 Spalten (Standard: 80)"
+#~ msgid "wide report, 132 columns (default: 80)"
+#~ msgstr "Breite Ausgabe mit 132 Spalten (Standard: 80)"
 
 #, fuzzy
-msgid "quiet"
-msgstr "schweigsam"
+#~ msgid "quiet"
+#~ msgstr "schweigsam"
 
 #, fuzzy
-msgid "<%s> - illegal output file name"
-msgstr "Ungültiger Ausgabedateiname"
+#~ msgid "<%s> - illegal output file name"
+#~ msgstr "Ungültiger Ausgabedateiname"
 
 #, fuzzy
-msgid "%s: <%s> reference map not found"
-msgstr "%s: Rasterkarte %s nicht gefunden."
+#~ msgid "%s: <%s> reference map not found"
+#~ msgstr "%s: Rasterkarte %s nicht gefunden."
 
 #, fuzzy
-msgid "Base raster map"
-msgstr "Name der Rasterkarte"
+#~ msgid "Base raster map"
+#~ msgstr "Name der Rasterkarte"
 
 #, fuzzy
-msgid "%s: raster map not found"
-msgstr "%s: Rasterkarte %s nicht gefunden."
+#~ msgid "%s: raster map not found"
+#~ msgstr "%s: Rasterkarte %s nicht gefunden."
 
-msgid "Raster map that represents the elevation, used for the 3D information"
-msgstr ""
-"Rasterkarte, die die Höheninformationen beinhaltet. Wird für die 3D-"
-"Informationen benötigt."
+#~ msgid ""
+#~ "Raster map that represents the elevation, used for the 3D information"
+#~ msgstr ""
+#~ "Rasterkarte, die die Höheninformationen beinhaltet. Wird für die 3D-"
+#~ "Informationen benötigt."
 
 #, fuzzy
-msgid "Problem opening input file [%s]"
-msgstr "Kann Ausgabedatei %s nicht öffnen."
+#~ msgid "Problem opening input file [%s]"
+#~ msgstr "Kann Ausgabedatei %s nicht öffnen."
 
 #, fuzzy
-msgid "Problem opening output file [%s]"
-msgstr "Kann Ausgabedatei %s nicht öffnen."
+#~ msgid "Problem opening output file [%s]"
+#~ msgstr "Kann Ausgabedatei %s nicht öffnen."
 
 #, fuzzy
-msgid "can't write category file for <%s>"
-msgstr "Kann die Kategorie-Datei der Karte <%s> nicht lesen."
+#~ msgid "can't write category file for <%s>"
+#~ msgstr "Kann die Kategorie-Datei der Karte <%s> nicht lesen."
 
 #, fuzzy
-msgid "%s: can't open tempfile"
-msgstr "%s: Kann die temporäre Datei nicht öffnen"
+#~ msgid "%s: can't open tempfile"
+#~ msgstr "%s: Kann die temporäre Datei nicht öffnen"
 
 #, fuzzy
-msgid "Unable to read row %d in raster map [%s]"
-msgstr "Kann den Header der Rasterkarte <%s> nicht lesen"
+#~ msgid "Unable to read row %d in raster map [%s]"
+#~ msgstr "Kann den Header der Rasterkarte <%s> nicht lesen"
 
 #, fuzzy
-msgid "Elevation map"
-msgstr "Höhenausrichtung"
+#~ msgid "Elevation map"
+#~ msgstr "Höhenausrichtung"
 
 #, fuzzy
-msgid "Topographic index ln(a/tanB) map"
-msgstr ""
-"(o)   Karte des Topographischen Index ln(a/tanB) (mit angewandter MASK)"
+#~ msgid "Topographic index ln(a/tanB) map"
+#~ msgstr ""
+#~ "(o)   Karte des Topographischen Index ln(a/tanB) (mit angewandter MASK)"
 
 #, fuzzy
-msgid "Output verbosely"
-msgstr "Detaillierte Ausgabe"
+#~ msgid "Output verbosely"
+#~ msgstr "Detaillierte Ausgabe"
 
 #, fuzzy
-msgid "Can't open raster map %s"
-msgstr "Kann die Rasterkarte <%s> nicht öffnen."
+#~ msgid "Can't open raster map %s"
+#~ msgstr "Kann die Rasterkarte <%s> nicht öffnen."
 
-msgid "CREATING SUPPORT FILES"
-msgstr "Erstelle Support-Dateien."
+#~ msgid "CREATING SUPPORT FILES"
+#~ msgstr "Erstelle Support-Dateien."
 
-msgid "ELEVATION PRODUCTS for mapset [%s] in [%s]"
-msgstr "Höhenprodukte für mapset [%s] in [%s]."
+#~ msgid "ELEVATION PRODUCTS for mapset [%s] in [%s]"
+#~ msgstr "Höhenprodukte für mapset [%s] in [%s]."
 
 #, fuzzy
-msgid "It could not be find input map <%s>"
-msgstr "Kann die Karte %s nicht öffnen."
+#~ msgid "It could not be find input map <%s>"
+#~ msgstr "Kann die Karte %s nicht öffnen."
 
 #, fuzzy
-msgid "It could not be found input map <%s>"
-msgstr "Kann nicht von <%s> lesen."
+#~ msgid "It could not be found input map <%s>"
+#~ msgstr "Kann nicht von <%s> lesen."
 
 #, fuzzy
-msgid "Auxiliar Table could not be dropped."
-msgstr "Tabelle"
+#~ msgid "Auxiliar Table could not be dropped."
+#~ msgstr "Tabelle"
 
 #, fuzzy
-msgid "Cannot find input map <%s>"
-msgstr "Kann %s nicht lesen."
+#~ msgid "Cannot find input map <%s>"
+#~ msgstr "Kann %s nicht lesen."
 
 #, fuzzy
-msgid "Input vector map <%s> not found."
-msgstr "Eingabevektorkarte wurde nicht gefunden."
+#~ msgid "Input vector map <%s> not found."
+#~ msgstr "Eingabevektorkarte wurde nicht gefunden."
 
-msgid "Category ranges: e.g. 1,3-8,13"
-msgstr "Kategorie-Liste, z.B.: 1,3-8,13"
+#~ msgid "Category ranges: e.g. 1,3-8,13"
+#~ msgstr "Kategorie-Liste, z.B.: 1,3-8,13"
 
 #, fuzzy
-msgid "Writing attributes ...\n"
-msgstr "Schreibe Attribute ..."
+#~ msgid "Writing attributes ...\n"
+#~ msgstr "Schreibe Attribute ..."
 
 #, fuzzy
-msgid "Could not open ascii file <%s>"
-msgstr "Kann die ASCII-Datei %s nicht öffnen."
+#~ msgid "Could not open ascii file <%s>"
+#~ msgstr "Kann die ASCII-Datei %s nicht öffnen."
 
 #, fuzzy
-msgid "Could not open temp file <%s>"
-msgstr "Kann die Eingabedatei <%s> nicht öffnen."
+#~ msgid "Could not open temp file <%s>"
+#~ msgstr "Kann die Eingabedatei <%s> nicht öffnen."
 
 #, fuzzy
-msgid "List available formats and exit"
-msgstr "Zeigt die vorhandenen Layer und beendet sich."
+#~ msgid "List available formats and exit"
+#~ msgstr "Zeigt die vorhandenen Layer und beendet sich."
 
 #, fuzzy
-msgid "Vector map <%s> not fould"
-msgstr "Vektorkarte <%s> nicht gefunden"
+#~ msgid "Vector map <%s> not fould"
+#~ msgstr "Vektorkarte <%s> nicht gefunden"
 
 #, fuzzy
-msgid "SVG output file"
-msgstr "DXF Ausgabedatei."
+#~ msgid "SVG output file"
+#~ msgstr "DXF Ausgabedatei."
 
 #, fuzzy
-msgid "Could not find vector '%s'"
-msgstr "Kann nicht von <%s> lesen."
+#~ msgid "Could not find vector '%s'"
+#~ msgstr "Kann nicht von <%s> lesen."
 
 #, fuzzy
-msgid "Could not find vector map %s"
-msgstr "Kann die Karte %s nicht öffnen."
+#~ msgid "Could not find vector map %s"
+#~ msgstr "Kann die Karte %s nicht öffnen."
 
 #, fuzzy
-msgid "Unable to get row %d from <%s>"
-msgstr "Kann den Header für die Karte <%s> nicht schreiben."
+#~ msgid "Unable to get row %d from <%s>"
+#~ msgstr "Kann den Header für die Karte <%s> nicht schreiben."
 
 #, fuzzy
-msgid "No input coordinates provided"
-msgstr "Keine Karte angegeben."
+#~ msgid "No input coordinates provided"
+#~ msgstr "Keine Karte angegeben."
 
 #, fuzzy
-msgid "Unable to allocate memory."
-msgstr "Kann den Speicher nicht belegen."
+#~ msgid "Unable to allocate memory."
+#~ msgstr "Kann den Speicher nicht belegen."
 
 #, fuzzy
-msgid "Raster output file"
-msgstr "Name der Ausgabedatei"
+#~ msgid "Raster output file"
+#~ msgstr "Name der Ausgabedatei"
 
 #, fuzzy
-msgid "Pass #%d (of %d) ... "
-msgstr "Durchlauf %d (von %d) ..."
+#~ msgid "Pass #%d (of %d) ... "
+#~ msgstr "Durchlauf %d (von %d) ..."
 
 #, fuzzy
-msgid "Writing raster map ... "
-msgstr "Schreibe Rasterkarte..."
+#~ msgid "Writing raster map ... "
+#~ msgstr "Schreibe Rasterkarte..."
 
 #, fuzzy
-msgid "Keep existing color table"
-msgstr "Behalte existierende Farbtabelle bei."
+#~ msgid "Keep existing color table"
+#~ msgstr "Behalte existierende Farbtabelle bei."
 
 #, fuzzy
-msgid "List rules"
-msgstr "Anzahl der Kontour-Level"
+#~ msgid "List rules"
+#~ msgstr "Anzahl der Kontour-Level"
 
 #, fuzzy
-msgid "Verbose mode."
-msgstr "Gesprächiger Modus"
+#~ msgid "Verbose mode."
+#~ msgstr "Gesprächiger Modus"
 
 #, fuzzy
-msgid " %d rows, %d cols."
-msgstr "%d Reihen, %d Spalten."
+#~ msgid " %d rows, %d cols."
+#~ msgstr "%d Reihen, %d Spalten."
 
 #, fuzzy
-msgid ""
-"Integer cell type.\n"
-"Writing"
-msgstr ""
-"Integer-Zelltype.\n"
-"Schreibe..."
+#~ msgid ""
+#~ "Integer cell type.\n"
+#~ "Writing"
+#~ msgstr ""
+#~ "Integer-Zelltype.\n"
+#~ "Schreibe..."
 
 #, fuzzy
-msgid ""
-"Float cell type.\n"
-"Writing"
-msgstr ""
-"Fließkomma Zellentyp.\n"
-"Schreibe..."
+#~ msgid ""
+#~ "Float cell type.\n"
+#~ "Writing"
+#~ msgstr ""
+#~ "Fließkomma Zellentyp.\n"
+#~ "Schreibe..."
 
 #, fuzzy
-msgid ""
-"Double cell type.\n"
-"Writing"
-msgstr ""
-"Double Zelltype.\n"
-"Schreibe..."
+#~ msgid ""
+#~ "Double cell type.\n"
+#~ "Writing"
+#~ msgstr ""
+#~ "Double Zelltype.\n"
+#~ "Schreibe..."
 
 #, fuzzy
-msgid "%s in %s - can't read header file"
-msgstr "Kann Header der Rasterkarte nicht lesen."
+#~ msgid "%s in %s - can't read header file"
+#~ msgstr "Kann Header der Rasterkarte nicht lesen."
 
 #, fuzzy
-msgid "%s - unable to create raster map"
-msgstr "Kann die Rasterkarte nicht erzeugen"
+#~ msgid "%s - unable to create raster map"
+#~ msgstr "Kann die Rasterkarte nicht erzeugen"
 
 #, fuzzy
-msgid "%s - unable to create category file"
-msgstr "Kann die temporäre Datei nicht schreiben."
+#~ msgid "%s - unable to create category file"
+#~ msgstr "Kann die temporäre Datei nicht schreiben."
 
 #, fuzzy
-msgid "verbose mode"
-msgstr "Gesprächiger Modus"
+#~ msgid "verbose mode"
+#~ msgstr "Gesprächiger Modus"
 
 #, fuzzy
-msgid "Vector map with points for which to modify the attribute table"
-msgstr ""
-"Name der Vektorpunktekarte, dessen Attributtabelle editiert werden soll. "
+#~ msgid "Vector map with points for which to modify the attribute table"
+#~ msgstr ""
+#~ "Name der Vektorpunktekarte, dessen Attributtabelle editiert werden soll. "
 
 #, fuzzy
-msgid "Layer of the vector for which to modify the attribute table"
-msgstr ""
-"Name der Vektorpunktekarte, dessen Attributtabelle editiert werden soll. "
+#~ msgid "Layer of the vector for which to modify the attribute table"
+#~ msgstr ""
+#~ "Name der Vektorpunktekarte, dessen Attributtabelle editiert werden soll. "
 
 #, fuzzy
-msgid "Path to an output file"
-msgstr "Pfad zur resultierenden VTK-Datei."
+#~ msgid "Path to an output file"
+#~ msgstr "Pfad zur resultierenden VTK-Datei."
 
 #, fuzzy
-msgid "Name of existing raster map to be displayed"
-msgstr "Name der Rasterkarte, die angezeigt werden soll."
+#~ msgid "Name of existing raster map to be displayed"
+#~ msgstr "Name der Rasterkarte, die angezeigt werden soll."
 
 #, fuzzy
-msgid "driver name:"
-msgstr "Eingabe-Treibername"
+#~ msgid "driver name:"
+#~ msgstr "Eingabe-Treibername"
 
 #, fuzzy
-msgid "Database name:"
-msgstr "Eingabe-Datenbankname"
+#~ msgid "Database name:"
+#~ msgstr "Eingabe-Datenbankname"
 
 #, fuzzy
-msgid ""
-"ASCII file to be converted to binary vector map, if not given (or \"-\") "
-"reads from standard input"
-msgstr ""
-"ASCII-Datei, die in eine binäre Vektordatei konvertiert werden soll. Wenn "
-"nichts angegeben wird, wird von der Standardeingabe gelesen."
+#~ msgid ""
+#~ "ASCII file to be converted to binary vector map, if not given (or \"-\") "
+#~ "reads from standard input"
+#~ msgstr ""
+#~ "ASCII-Datei, die in eine binäre Vektordatei konvertiert werden soll. Wenn "
+#~ "nichts angegeben wird, wird von der Standardeingabe gelesen."
 
 #, fuzzy
-msgid "could not find input map <%s>"
-msgstr "Kann die Karte %s nicht öffnen."
+#~ msgid "could not find input map <%s>"
+#~ msgstr "Kann die Karte %s nicht öffnen."
 
 #, fuzzy
-msgid "unable to open raster map [%s]"
-msgstr "Kann die Rasterkarte <%s> nicht öffnen."
+#~ msgid "unable to open raster map [%s]"
+#~ msgstr "Kann die Rasterkarte <%s> nicht öffnen."
 
 #, fuzzy
-msgid "cannot get layer info for vector map"
-msgstr "Kann die Layer-Informationen der Vektorkarte nicht bekommen"
+#~ msgid "cannot get layer info for vector map"
+#~ msgstr "Kann die Layer-Informationen der Vektorkarte nicht bekommen"
 
 #, fuzzy
-msgid "cannot open database %s by driver %s"
-msgstr "Kann Datenbank <%s> mit Treiber <%s> nicht öffnen."
+#~ msgid "cannot open database %s by driver %s"
+#~ msgstr "Kann Datenbank <%s> mit Treiber <%s> nicht öffnen."
 
 #, fuzzy
-msgid "column type not supported"
-msgstr "Spaltentyp nicht unterstützt"
+#~ msgid "column type not supported"
+#~ msgstr "Spaltentyp nicht unterstützt"
 
 #, fuzzy
-msgid "cannot select data from table"
-msgstr "Kann die Daten (%s) nicht aus der Tabelle selektieren."
+#~ msgid "cannot select data from table"
+#~ msgstr "Kann die Daten (%s) nicht aus der Tabelle selektieren."
 
 #, fuzzy
-msgid "cannot create table: %s"
-msgstr "Kann Tabelle <%s> nicht erzeugen."
+#~ msgid "cannot create table: %s"
+#~ msgstr "Kann Tabelle <%s> nicht erzeugen."
 
 #, fuzzy
-msgid "cannot create index"
-msgstr "Kann keinen Index erstellen."
+#~ msgid "cannot create index"
+#~ msgstr "Kann keinen Index erstellen."
 
 #, fuzzy
-msgid "cannot grant privileges on table %s"
-msgstr "Kann Privilegien für die Tabelle <%s> nicht zuweisen."
+#~ msgid "cannot grant privileges on table %s"
+#~ msgstr "Kann Privilegien für die Tabelle <%s> nicht zuweisen."
 
 #, fuzzy
-msgid "column type  not supported"
-msgstr "Spaltentyp nicht unterstützt"
+#~ msgid "column type  not supported"
+#~ msgstr "Spaltentyp nicht unterstützt"
 
 #, fuzzy
-msgid "Cannot find vector map"
-msgstr "Kann Vektorkarte nicht lesen."
+#~ msgid "Cannot find vector map"
+#~ msgstr "Kann Vektorkarte nicht lesen."
 
 #, fuzzy
-msgid "Cannot find raster map"
-msgstr "Kann Rasterkarten nicht schreiben."
+#~ msgid "Cannot find raster map"
+#~ msgstr "Kann Rasterkarten nicht schreiben."
 
 #, fuzzy
-msgid "Cannot open raster map"
-msgstr "Kann die Rasterkarte <%s> nicht öffnen."
+#~ msgid "Cannot open raster map"
+#~ msgstr "Kann die Rasterkarte <%s> nicht öffnen."
 
 #, fuzzy
-msgid ""
-"Number of column used as z coordinate (first column is 1) for points mode. "
-"If 0, z coordinate is not used."
-msgstr ""
-"Nummer der Spalte im Punkt-Modus, die als X-Koordinate genutzt werden soll "
-"(erste Spalte is 1)."
+#~ msgid ""
+#~ "Number of column used as z coordinate (first column is 1) for points "
+#~ "mode. If 0, z coordinate is not used."
+#~ msgstr ""
+#~ "Nummer der Spalte im Punkt-Modus, die als X-Koordinate genutzt werden "
+#~ "soll (erste Spalte is 1)."
 
 #, fuzzy
-msgid "Can't open temp file %s"
-msgstr "Kann die Segmentdatei %s nicht öffnen."
+#~ msgid "Can't open temp file %s"
+#~ msgstr "Kann die Segmentdatei %s nicht öffnen."
 
 #, fuzzy
-msgid "Unknown keyword [%s] in vector head."
-msgstr "Unbekanntes Wort <%s> im Vektor-Kopf"
+#~ msgid "Unknown keyword [%s] in vector head."
+#~ msgstr "Unbekanntes Wort <%s> im Vektor-Kopf"
 
 #, fuzzy
-msgid "Region Growing"
-msgstr "Rendering"
+#~ msgid "Region Growing"
+#~ msgstr "Rendering"
 
 #, fuzzy
-msgid "#%s"
-msgstr "%s"
+#~ msgid "#%s"
+#~ msgstr "%s"
 
 #, fuzzy
-msgid "Error while reading cell map."
-msgstr "Ein Fehler trat während des Lesens der Eingabe-Rasterkarte auf."
+#~ msgid "Error while reading cell map."
+#~ msgstr "Ein Fehler trat während des Lesens der Eingabe-Rasterkarte auf."
 
 #, fuzzy
-msgid "Error while writing new cell map."
-msgstr "Fehler beim Entfernen der alten Maske MASK."
+#~ msgid "Error while writing new cell map."
+#~ msgstr "Fehler beim Entfernen der alten Maske MASK."
 
 #, fuzzy
-msgid "Error in opening output file <%s>"
-msgstr "Fehler beim Öffnen der Displaydatei <%s>."
+#~ msgid "Error in opening output file <%s>"
+#~ msgstr "Fehler beim Öffnen der Displaydatei <%s>."
 
 #, fuzzy
-msgid "Unable to find input cell map <%s>"
-msgstr "Kann Eingabe nicht von <%s> lesen."
+#~ msgid "Unable to find input cell map <%s>"
+#~ msgstr "Kann Eingabe nicht von <%s> lesen."
 
 #, fuzzy
-msgid "Error in opening input file <%s>"
-msgstr "Fehler beim Öffnen der Displaydatei <%s>."
+#~ msgid "Error in opening input file <%s>"
+#~ msgstr "Fehler beim Öffnen der Displaydatei <%s>."
 
 #, fuzzy
-msgid "Unable to open cell man <%s> for input.\n"
-msgstr "Kann Zelldatei <%s> nicht zum Lesen öffnen."
+#~ msgid "Unable to open cell man <%s> for input.\n"
+#~ msgstr "Kann Zelldatei <%s> nicht zum Lesen öffnen."
 
 #, fuzzy
-msgid "Unable to open cell map <%s> for output.\n"
-msgstr "Kann Zelldatei <%s> nicht zum Lesen öffnen."
+#~ msgid "Unable to open cell map <%s> for output.\n"
+#~ msgstr "Kann Zelldatei <%s> nicht zum Lesen öffnen."
 
 #, fuzzy
-msgid "Unable to read map raster row %d"
-msgstr "Kann die Rasterzeile nicht lesen."
+#~ msgid "Unable to read map raster row %d"
+#~ msgstr "Kann die Rasterzeile nicht lesen."
 
 #, fuzzy
-msgid "Unable to write color table to raster [%s]"
-msgstr "Kann die Farbtabelle für %s nicht schreiben."
+#~ msgid "Unable to write color table to raster [%s]"
+#~ msgstr "Kann die Farbtabelle für %s nicht schreiben."
 
 #, fuzzy
-msgid "Cannot find map %s"
-msgstr "Kann %s nicht öffnen."
+#~ msgid "Cannot find map %s"
+#~ msgstr "Kann %s nicht öffnen."
 
 #, fuzzy
-msgid "Cannot open map %s"
-msgstr "Kann %s nicht öffnen."
+#~ msgid "Cannot open map %s"
+#~ msgstr "Kann %s nicht öffnen."
 
 #, fuzzy
-msgid "Name of predefined rules file"
-msgstr "Name der Filterdatei"
+#~ msgid "Name of predefined rules file"
+#~ msgstr "Name der Filterdatei"
 
-msgid "R:G:B value(s) out of range [0..255]: %d:%d:%d"
-msgstr "R:G:B Werte liegen außerhalb der Spanne [0...255]: %d %d %d"
+#~ msgid "R:G:B value(s) out of range [0..255]: %d:%d:%d"
+#~ msgstr "R:G:B Werte liegen außerhalb der Spanne [0...255]: %d %d %d"
 
-msgid "R G B value(s) out of range [0..255]: %d %d %d"
-msgstr "R:G:B Werte liegen außerhalb der Spanne [0...255]: %d %d %d"
+#~ msgid "R G B value(s) out of range [0..255]: %d %d %d"
+#~ msgstr "R:G:B Werte liegen außerhalb der Spanne [0...255]: %d %d %d"
 
-msgid "no such value"
-msgstr "Solche Werte sind nicht vorhanden."
+#~ msgid "no such value"
+#~ msgstr "Solche Werte sind nicht vorhanden."
 
-msgid "%s:line %d:%s"
-msgstr "%s:Linie %d:%s"
+#~ msgid "%s:line %d:%s"
+#~ msgstr "%s:Linie %d:%s"
 
 #, fuzzy
-msgid "bad color specification"
-msgstr "Punkt Klassifikation."
+#~ msgid "bad color specification"
+#~ msgstr "Punkt Klassifikation."
 
 #, fuzzy
-msgid "%s - unknown color"
-msgstr "%s - unbekannte Farbanfrage."
+#~ msgid "%s - unknown color"
+#~ msgstr "%s - unbekannte Farbanfrage."
 
 #, fuzzy
-msgid "Valid colors are:\n"
-msgstr "Ungültige Farbe: %s"
+#~ msgid "Valid colors are:\n"
+#~ msgstr "Ungültige Farbe: %s"
 
 #, fuzzy
-msgid "Unable to find base map <%s>"
-msgstr "Kann die Rasterkarte <%s> nicht öffnen."
+#~ msgid "Unable to find base map <%s>"
+#~ msgstr "Kann die Rasterkarte <%s> nicht öffnen."
 
 #, fuzzy
-msgid "Unable to find cover map <%s>"
-msgstr "Kann die Vektorkarte <%s> nicht öffnen"
+#~ msgid "Unable to find cover map <%s>"
+#~ msgstr "Kann die Vektorkarte <%s> nicht öffnen"
 
 #, fuzzy
-msgid "%s: reading category file for %s"
-msgstr "Fehler beim Lesen der Cats-Datei <%s>."
+#~ msgid "%s: reading category file for %s"
+#~ msgstr "Fehler beim Lesen der Cats-Datei <%s>."
 
 #, fuzzy
-msgid "%s: unable to open raster map [%s]"
-msgstr "Kann die Rasterkarte <%s> nicht öffnen."
+#~ msgid "%s: unable to open raster map [%s]"
+#~ msgstr "Kann die Rasterkarte <%s> nicht öffnen."
 
 #, fuzzy
-msgid "%s: unable to create raster map [%s]"
-msgstr "Kann die Rasterkarte <%s> nicht erzeugen."
+#~ msgid "%s: unable to create raster map [%s]"
+#~ msgstr "Kann die Rasterkarte <%s> nicht erzeugen."
 
 #, fuzzy
-msgid "Unable to open database %s with driver %s"
-msgstr "Kann Datenbank <%s> mit Treiber <%s> nicht öffnen."
+#~ msgid "Unable to open database %s with driver %s"
+#~ msgstr "Kann Datenbank <%s> mit Treiber <%s> nicht öffnen."
 
 #, fuzzy
-msgid "%s: Unable to read raster map [%s]"
-msgstr "Kann die Rasterkarte <%s> nicht erzeugen."
+#~ msgid "%s: Unable to read raster map [%s]"
+#~ msgstr "Kann die Rasterkarte <%s> nicht erzeugen."
 
 #, fuzzy
-msgid "%s: unable to open raster map <%s>"
-msgstr "Kann die Rasterkarte <%s> nicht öffnen."
+#~ msgid "%s: unable to open raster map <%s>"
+#~ msgstr "Kann die Rasterkarte <%s> nicht öffnen."
 
 #, fuzzy
-msgid "%s: Failed to read raster row %d"
-msgstr "Kann die Rasterkarte <%s> nicht erzeugen."
+#~ msgid "%s: Failed to read raster row %d"
+#~ msgstr "Kann die Rasterkarte <%s> nicht erzeugen."
 
 #, fuzzy
-msgid "Unable to find [%s]."
-msgstr "Kann Datei <%s> nicht finden."
+#~ msgid "Unable to find [%s]."
+#~ msgstr "Kann Datei <%s> nicht finden."
 
 #, fuzzy
-msgid "Unable to read cats table for %s"
-msgstr "Kann die Farbtabelle für %s nicht lesen."
+#~ msgid "Unable to read cats table for %s"
+#~ msgstr "Kann die Farbtabelle für %s nicht lesen."
 
 #, fuzzy
-msgid "Could not open raster <%s>"
-msgstr "%s: Kann die Rasterkarte <%s@%s> nicht öffnen."
+#~ msgid "Could not open raster <%s>"
+#~ msgstr "%s: Kann die Rasterkarte <%s@%s> nicht öffnen."
 
 #, fuzzy
-msgid "Screen coordinates to place the legend (as percentage)"
-msgstr "Gibt Rahmenkoordinaten des aktuellen Grafik-Fensters in Prozent aus."
+#~ msgid "Screen coordinates to place the legend (as percentage)"
+#~ msgstr ""
+#~ "Gibt Rahmenkoordinaten des aktuellen Grafik-Fensters in Prozent aus."
 
-msgid ""
-"Font name (not supported interactively, see also -l flag) or path to "
-"TrueType font (including file name)"
-msgstr ""
-"Schriftname oder Pfad zu den TrueType-Schriften inklusive Dateiname. Eine "
-"interaktive Auswahl ist nicht möglich. Siehe auch Schalter -l."
+#~ msgid ""
+#~ "Font name (not supported interactively, see also -l flag) or path to "
+#~ "TrueType font (including file name)"
+#~ msgstr ""
+#~ "Schriftname oder Pfad zu den TrueType-Schriften inklusive Dateiname. Eine "
+#~ "interaktive Auswahl ist nicht möglich. Siehe auch Schalter -l."
 
 #, fuzzy
-msgid "%s: o_open_file: raster map %s not found"
-msgstr "slopein Rasterkarte <%s> nicht gefunden."
+#~ msgid "%s: o_open_file: raster map %s not found"
+#~ msgstr "slopein Rasterkarte <%s> nicht gefunden."
 
 #, fuzzy
-msgid "%s: o_open_file: could not open raster map %s in %s"
-msgstr "Kann Rasterkarte <%s> in <%s> nicht öffnen."
+#~ msgid "%s: o_open_file: could not open raster map %s in %s"
+#~ msgstr "Kann Rasterkarte <%s> in <%s> nicht öffnen."
 
 #, fuzzy
-msgid "No record for category for [%d]"
-msgstr "Kein Eintrag für Kategorie [%d]."
+#~ msgid "No record for category for [%d]"
+#~ msgstr "Kein Eintrag für Kategorie [%d]."
 
 #, fuzzy
-msgid "Error reading ASCII file <%s>"
-msgstr "Fehler beim Lesen der ascii-Datei <%s>."
+#~ msgid "Error reading ASCII file <%s>"
+#~ msgstr "Fehler beim Lesen der ascii-Datei <%s>."
 
-msgid "Error reading categories: <%s>"
-msgstr "Fehler beim Lesen der Kategorien: <%s>"
+#~ msgid "Error reading categories: <%s>"
+#~ msgstr "Fehler beim Lesen der Kategorien: <%s>"
 
 #, fuzzy
-msgid "category [%d]"
-msgstr "%d Punkte ohne Kategorie übersprungen."
+#~ msgid "category [%d]"
+#~ msgstr "%d Punkte ohne Kategorie übersprungen."
 
 #, fuzzy
-msgid "No lines found"
-msgstr "Keine DXF-Layer gefunden!"
+#~ msgid "No lines found"
+#~ msgstr "Keine DXF-Layer gefunden!"
 
 #, fuzzy
-msgid "Assign cats to boundaries too"
-msgstr "%s Datei(en), die entfernt werden sollen."
+#~ msgid "Assign cats to boundaries too"
+#~ msgstr "%s Datei(en), die entfernt werden sollen."
 
 #, fuzzy
-msgid "Lines could not be merged"
-msgstr "%s Datei(en), die entfernt werden sollen."
+#~ msgid "Lines could not be merged"
+#~ msgstr "%s Datei(en), die entfernt werden sollen."
 
 #, fuzzy
-msgid "Could not find input vector '%s'"
-msgstr "Kann den Stoppvektor %s nicht finden."
+#~ msgid "Could not find input vector '%s'"
+#~ msgstr "Kann den Stoppvektor %s nicht finden."
 
 #, fuzzy
-msgid "Failed opening output vector map '%s'"
-msgstr "Kann die Vektorkarte <%s> nicht öffnen"
+#~ msgid "Failed opening output vector map '%s'"
+#~ msgstr "Kann die Vektorkarte <%s> nicht öffnen"
 
 #, fuzzy
-msgid "Do not create attribute table."
-msgstr "Keine Attributtabelle erzeugen."
+#~ msgid "Do not create attribute table."
+#~ msgstr "Keine Attributtabelle erzeugen."
 
 #, fuzzy
-msgid "Could not find input %s\n"
-msgstr "Kann die Karte %s nicht öffnen."
+#~ msgid "Could not find input %s\n"
+#~ msgstr "Kann die Karte %s nicht öffnen."
 
 #, fuzzy
-msgid "Error reading ascii file: [%s]"
-msgstr "Fehler beim Lesen der ascii-Datei <%s>."
+#~ msgid "Error reading ascii file: [%s]"
+#~ msgstr "Fehler beim Lesen der ascii-Datei <%s>."
 
 #, fuzzy
-msgid ""
-"List vector maps in input location and exit (a dummy value must be given for "
-"input)"
-msgstr "Listet alle Rasterkarten in der Eingabe-Location auf und beendet sich."
+#~ msgid ""
+#~ "List vector maps in input location and exit (a dummy value must be given "
+#~ "for input)"
+#~ msgstr ""
+#~ "Listet alle Rasterkarten in der Eingabe-Location auf und beendet sich."
 
 #, fuzzy
-msgid ""
-"Allows the user to interactively query a vector map layer at user-selected "
-"locations within the current geographic region"
-msgstr ""
-"Erlaubt dem Benutzer das interaktive Abfragen einer Vektorkarte in der "
-"aktuellen Region."
+#~ msgid ""
+#~ "Allows the user to interactively query a vector map layer at user-"
+#~ "selected locations within the current geographic region"
+#~ msgstr ""
+#~ "Erlaubt dem Benutzer das interaktive Abfragen einer Vektorkarte in der "
+#~ "aktuellen Region."
 
-msgid "+---------------------------------+---------------+"
-msgstr "+---------------------------------+---------------+"
+#~ msgid "+---------------------------------+---------------+"
+#~ msgstr "+---------------------------------+---------------+"
 
-msgid "| Tool                            | Threshold     |"
-msgstr "| Werkzeug                        | Schwellenwert |"
+#~ msgid "| Tool                            | Threshold     |"
+#~ msgstr "| Werkzeug                        | Schwellenwert |"
 
 #, fuzzy
-msgid "| Break                           |  "
-msgstr " lambda    | mean (m)    | rms (m)     |\n"
+#~ msgid "| Break                           |  "
+#~ msgstr " lambda    | mean (m)    | rms (m)     |\n"
 
 #, fuzzy
-msgid "| Remove dangles                  |  "
-msgstr " lambda    | mean (m)    | rms (m)     |\n"
+#~ msgid "| Remove dangles                  |  "
+#~ msgstr " lambda    | mean (m)    | rms (m)     |\n"
 
 #, fuzzy
-msgid "| Remove bridges                  |  "
-msgstr " lambda    | mean (m)    | rms (m)     |\n"
+#~ msgid "| Remove bridges                  |  "
+#~ msgstr " lambda    | mean (m)    | rms (m)     |\n"
 
 #, fuzzy
-msgid "| Prune                           |  "
-msgstr " lambda    | mean (m)    | rms (m)     |\n"
+#~ msgid "| Prune                           |  "
+#~ msgstr " lambda    | mean (m)    | rms (m)     |\n"
 
 #, fuzzy
-msgid "| Remove small areas              |  "
-msgstr "Entfernen"
+#~ msgid "| Remove small areas              |  "
+#~ msgstr "Entfernen"
 
 #, fuzzy
-msgid "| Remove small angles at nodes    |  "
-msgstr "Entfernen"
+#~ msgid "| Remove small angles at nodes    |  "
+#~ msgstr "Entfernen"
 
-msgid " %13e |"
-msgstr " %13e |"
+#~ msgid " %13e |"
+#~ msgstr " %13e |"
 
-msgid "--------------------------------------------------"
-msgstr "--------------------------------------------------"
+#~ msgid "--------------------------------------------------"
+#~ msgstr "--------------------------------------------------"
 
 #, fuzzy
-msgid "%s: <%s> vector map not found"
-msgstr "Warnung: Vektorkarte <%s> wurde nicht gefunden.\n"
+#~ msgid "%s: <%s> vector map not found"
+#~ msgstr "Warnung: Vektorkarte <%s> wurde nicht gefunden.\n"
 
 #, fuzzy
-msgid "Vector <%s> could not be open"
-msgstr "Vektorkarte <%s> nicht gefunden"
+#~ msgid "Vector <%s> could not be open"
+#~ msgstr "Vektorkarte <%s> nicht gefunden"
 
 #, fuzzy
-msgid "Raster <%s> could not be open."
-msgstr "Rasterkarte <%s> konnte nicht gefunden werden."
+#~ msgid "Raster <%s> could not be open."
+#~ msgstr "Rasterkarte <%s> konnte nicht gefunden werden."
 
 #, fuzzy
-msgid "CrossCorrelation()"
-msgstr "Korrelation"
+#~ msgid "CrossCorrelation()"
+#~ msgstr "Korrelation"
 
 #, fuzzy
-msgid "Interpolation()"
-msgstr "Interpolationsmethode"
+#~ msgid "Interpolation()"
+#~ msgstr "Interpolationsmethode"
 
 #, fuzzy
-msgid "Interpolation: Setting regions and boxes"
-msgstr "Setze das Kartenfenster."
+#~ msgid "Interpolation: Setting regions and boxes"
+#~ msgstr "Setze das Kartenfenster."
 
 #, fuzzy
-msgid "Interpolation: nsply = %d"
-msgstr "Interpolationsmethode"
+#~ msgid "Interpolation: nsply = %d"
+#~ msgstr "Interpolationsmethode"
 
 #, fuzzy
-msgid "Interpolation: (%d,%d): Number of points in <elaboration_box> is %d"
-msgstr "Kein Eintrag für Linie (cat = %d)."
+#~ msgid "Interpolation: (%d,%d): Number of points in <elaboration_box> is %d"
+#~ msgstr "Kein Eintrag für Linie (cat = %d)."
 
 #, fuzzy
-msgid "Interpolation: (%d,%d): Bilinear interpolation..."
-msgstr "Allokiere Speicher für die bilineare Interpolation."
+#~ msgid "Interpolation: (%d,%d): Bilinear interpolation..."
+#~ msgstr "Allokiere Speicher für die bilineare Interpolation."
 
 #, fuzzy
-msgid "Interpolation: (%d,%d): Bicubic interpolation..."
-msgstr "Allokiere Speicher für die bikubische Interpolation."
+#~ msgid "Interpolation: (%d,%d): Bicubic interpolation..."
+#~ msgstr "Allokiere Speicher für die bikubische Interpolation."
 
 #, fuzzy
-msgid "%s: Dropping <s>"
-msgstr "%s: Kann <%s> nicht öffnen."
+#~ msgid "%s: Dropping <s>"
+#~ msgstr "%s: Kann <%s> nicht öffnen."
 
 #, fuzzy
-msgid "%s: Dropping: Auxiliar Table could not be drop"
-msgstr "Tabelle"
+#~ msgid "%s: Dropping: Auxiliar Table could not be drop"
+#~ msgstr "Tabelle"
 
 #, fuzzy
-msgid "Interpolation was a success!"
-msgstr "Zu benutzende Interpolationsmethode"
+#~ msgid "Interpolation was a success!"
+#~ msgstr "Zu benutzende Interpolationsmethode"
 
 #, fuzzy
-msgid "CrossCorrelation: %d points read in region. "
-msgstr "%d Punkte in der Region."
+#~ msgid "CrossCorrelation: %d points read in region. "
+#~ msgstr "%d Punkte in der Region."
 
 #, fuzzy
-msgid "CrossCorrelation: It shouldn't take too long."
-msgstr "Kann Daten nicht aus der Tabelle selektieren."
+#~ msgid "CrossCorrelation: It shouldn't take too long."
+#~ msgstr "Kann Daten nicht aus der Tabelle selektieren."
 
 #, fuzzy
-msgid "No line found."
-msgstr "Nichts gefunden.\n"
+#~ msgid "No line found."
+#~ msgstr "Nichts gefunden.\n"
 
 #, fuzzy
-msgid "Nothing Found."
-msgstr "Nichts gefunden.\n"
+#~ msgid "Nothing Found."
+#~ msgstr "Nichts gefunden.\n"
 
 #, fuzzy
-msgid "No features found"
-msgstr "[%d] Feature verändert."
+#~ msgid "No features found"
+#~ msgstr "[%d] Feature verändert."
 
 #, fuzzy
-msgid "vector map to be created"
-msgstr "Es wird keine Vektordatei erstellt"
+#~ msgid "vector map to be created"
+#~ msgstr "Es wird keine Vektordatei erstellt"
 
 #~ msgid "%s: Error reading from raster map <%s> in mapset <%s>"
 #~ msgstr "%s: Fehler beim Lesen der Rasterkarte <%s> im Mapset <%s>."
