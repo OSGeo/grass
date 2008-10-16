@@ -1009,6 +1009,7 @@ class cmdPanel(wx.Panel):
                 valuelist=map( str, p.get('values',[]) )
 
                 if p.get('multiple', 'no') == 'yes' and \
+                        p.get('gisprompt',False) == False and \
                         p.get('type', '') == 'string':
                     txt = wx.StaticBox (parent=which_panel, id=0, label=" " + title + ": ")
                     self.label_id.append(txt.GetId())
@@ -1036,7 +1037,7 @@ class cmdPanel(wx.Panel):
                         chkbox.Bind(wx.EVT_CHECKBOX, self.OnCheckBoxMulti)
                     which_sizer.Add( item=hSizer, proportion=0,
                                      flag=wx.EXPAND | wx.TOP | wx.RIGHT | wx.LEFT, border=5 )
-                else:
+                elif p.get('gisprompt',False) == False:
                     if len(valuelist) == 1: # -> textctrl
                         txt = wx.StaticText(parent=which_panel,
                                             label = "%s. %s %s" % (title, _('Valid range'),
@@ -1133,8 +1134,10 @@ class cmdPanel(wx.Panel):
                 # GIS element entry
                 if p.get('prompt','') not in ('color',
                                               'color_none',
-                                              'dbcolumn',
+                                              'dbdriver',
+                                              'dbname',
                                               'dbtable',
+                                              'dbcolumn',
                                               'layer',
                                               'layer_all') and \
                        p.get('element', '') != 'file':
@@ -1156,7 +1159,7 @@ class cmdPanel(wx.Panel):
 
                     which_sizer.Add(item=selection, proportion=0,
                                     flag=wx.ADJUST_MINSIZE| wx.BOTTOM | wx.LEFT | wx.RIGHT, border=5)
-
+                    
                     # A select.Select is a combobox with two children: a textctl and a popupwindow;
                     # we target the textctl here
                     p['wxId'] = selection.GetChildren()[0].GetId()
@@ -1164,9 +1167,11 @@ class cmdPanel(wx.Panel):
                     if p.get('prompt', '') == 'vector':
                         selection.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
                     
-                # layer, dbcolumn, dbtable entry
-                elif p.get('prompt', '') in ('dbcolumn',
+                # layer, dbdriver, dbname, dbcolumn, dbtable entry
+                elif p.get('prompt', '') in ('dbdriver',
+                                             'dbname',
                                              'dbtable',
+                                             'dbcolumn',
                                              'layer',
                                              'layer_all'):
                     if p.get('prompt', '') in ('layer',
@@ -1180,11 +1185,23 @@ class cmdPanel(wx.Panel):
                         p['wxGetValue'] = win.GetStringSelection
                         win.Bind(wx.EVT_CHOICE, self.OnUpdateSelection)
                         win.Bind(wx.EVT_CHOICE, self.OnSetValue)
+                    elif p.get('prompt', '') == 'dbdriver':
+                        win = gselect.DriverSelect(parent=which_panel,
+                                                   choices=p['values'],
+                                                   value=p['default'])
+                        p['wxGetValue'] = win.GetStringSelection
+                        win.Bind(wx.EVT_COMBOBOX, self.OnUpdateSelection)
+                        win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
+                    elif p.get('prompt', '') == 'dbname':
+                        win = gselect.DatabaseSelect(parent=which_panel,
+                                                     value=p['default'])
+                        win.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
+                        win.Bind(wx.EVT_TEXT, self.OnSetValue)
                     elif p.get('prompt', '') == 'dbtable':
                         win = gselect.TableSelect(parent=which_panel)
                         p['wxGetValue'] = win.GetStringSelection
                         win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
-                    else:
+                    elif p.get('prompt', '') == 'dbcolumn':
                         win = gselect.ColumnSelect(parent=which_panel)
                         p['wxGetValue'] = win.GetStringSelection
                         win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
@@ -1271,6 +1288,9 @@ class cmdPanel(wx.Panel):
         #
         pMap = None
         pLayer = None
+        pDriver = None
+        pDatabase = None
+        pTable = None
         pColumn = []
         for p in self.task.params:
             if p.get('gisprompt', False) == False:
@@ -1286,6 +1306,12 @@ class cmdPanel(wx.Panel):
                 pLayer = p
             elif prompt == 'dbcolumn':
                 pColumn.append(p['wxId'])
+            elif prompt == 'dbdriver':
+                pDriver = p
+            elif prompt == 'dbname':
+                pDatabase = p
+            elif prompt == 'dbtable':
+                pTable = p
         
         if pMap:
             pMap['wxId-bind'] = pColumn
@@ -1294,6 +1320,15 @@ class cmdPanel(wx.Panel):
         
         if pLayer:
             pLayer['wxId-bind'] = pColumn
+
+        if pDriver and pTable:
+            pDriver['wxId-bind'] = [pTable['wxId'], ]
+
+        if pDatabase and pTable:
+            pDatabase['wxId-bind'] = [pTable['wxId'], ]
+
+        if pTable and pColumn:
+            pTable['wxId-bind'] = pColumn
         
 	#
 	# determine panel size
@@ -1442,34 +1477,43 @@ class cmdPanel(wx.Panel):
         """Update list of available layers, tables, columns for
         vector map layer"""
         id = event.GetId()
-        
+
         p = self.task.get_param(id, element='wxId', raiseError=False)
         if not p or \
                 not p.has_key('wxId-bind'):
             return
         
+        pType = p.get('prompt', '')
+        if not pType:
+            return
+
         pMap = self.task.get_param('map', raiseError=False)
         if not pMap:
             pMap = self.task.get_param('input', raiseError=False)
 
-        if not pMap or \
-                pMap.get('prompt', '') != 'vector':
-            return
-
         if p == pMap:
             map = event.GetString()
-        else:
+        elif pMap:
             map = pMap.get('value', '')
-        if not map:
-            return
-
+        
         for uid in p['wxId-bind']:
             win = self.FindWindowById(uid)
             name = win.GetName()
             if name == 'LayerSelect':
                 win.InsertLayers(map)
+            elif name == 'TableSelect':
+                pDriver = self.task.get_param('dbdriver', element='prompt', raiseError=False)
+                driver = db = None
+                if pDriver:
+                    driver = pDriver['value']
+                pDb = self.task.get_param('dbname', element='prompt', raiseError=False)
+                if pDb:
+                    db = pDb['value']
+                
+                win.InsertTables(driver, db)
+            
             elif name == 'ColumnSelect':
-                pLayer = self.task.get_param('layer', element='name', raiseError=False)
+                pLayer = self.task.get_param('layer', element='prompt', raiseError=False)
                 if pLayer and \
                         pLayer.get('prompt', '') == 'layer':
                     if pLayer.get('value', '') != '':
