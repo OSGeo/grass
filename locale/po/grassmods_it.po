@@ -5806,12 +5806,12 @@ msgstr "Nome della mappa con il risultato"
 #: ../imagery/i.vi/main.c:133
 #, fuzzy
 msgid "Name of the chan5 channel surface reflectance map"
-msgstr "Nome di un nuovo file raster"
+msgstr "Nome della mappa con il risultato"
 
 #: ../imagery/i.vi/main.c:140
 #, fuzzy
 msgid "Name of the chan7 channel surface reflectance map"
-msgstr "Nome di un nuovo file raster"
+msgstr "Nome della mappa con il risultato"
 
 #: ../imagery/i.vi/main.c:306 ../imagery/i.albedo/main.c:389
 #: ../raster/r.los/main.c:382 ../raster/r.texture/main.c:333
@@ -11865,8 +11865,9 @@ msgid "Name of the Soil sand fraction map [0.0-1.0]"
 msgstr "Nome del file raster in input"
 
 #: ../raster/r.uslek/main.c:62
+#, fuzzy
 msgid "Name of the Soil clay fraction map [0.0-1.0]"
-msgstr ""
+msgstr "Nome del file raster in input"
 
 #: ../raster/r.uslek/main.c:66
 #, fuzzy
@@ -17270,7 +17271,7 @@ msgstr "File contenente le direttive SQL"
 #: ../raster/r.mapcalc/main.c:148
 #, fuzzy
 msgid "parse error"
-msgstr "%s errori di aggiornamento\n"
+msgstr "Parametri"
 
 #: ../raster/r.mapcalc/main.c:157
 msgid "Floating point error(s) occured in the calculation"
@@ -25886,8 +25887,9 @@ msgid "Categories of points on terminals (layer is specified by nlayer)"
 msgstr ""
 
 #: ../vector/v.net.steiner/main.c:388
+#, fuzzy
 msgid "Number of steiner points (-1 for all possible)"
-msgstr ""
+msgstr "Punti di partenza del file raster"
 
 #: ../vector/v.net.steiner/main.c:447
 #, fuzzy
@@ -27014,8 +27016,9 @@ msgstr " nv colore\n"
 
 #: ../visualization/nviz2/cmd/args.c:289 ../visualization/nviz2/cmd/args.c:357
 #: ../visualization/nviz2/cmd/args.c:426
+#, fuzzy
 msgid "Position"
-msgstr ""
+msgstr "Nome del raster"
 
 #: ../visualization/nviz2/cmd/args.c:301
 #, fuzzy
@@ -27208,2815 +27211,2847 @@ msgstr "Nome del raster"
 msgid "Unable to set isosurface (%d) attribute (%d) of volume %d"
 msgstr "Non riesco a mostrare i database"
 
-#~ msgid ""
-#~ "Optional where condition (without WHERE key word), e.g.:\n"
-#~ "\t\tobec = 'Liptakov'"
-#~ msgstr ""
-#~ "Condizione opzionale where (senza la parola chiave WHERE), e.s.:\n"
-#~ "\t\tobec = 'Liptakov'"
+msgid ""
+"Optional where condition (without WHERE key word), e.g.:\n"
+"\t\tobec = 'Liptakov'"
+msgstr ""
+"Condizione opzionale where (senza la parola chiave WHERE), e.s.:\n"
+"\t\tobec = 'Liptakov'"
 
 #, fuzzy
-#~ msgid "Illegal output file name"
-#~ msgstr "Nome del file di output"
+msgid "Illegal output file name"
+msgstr "Nome del file di output"
 
 #, fuzzy
-#~ msgid "Display manager for GRASS"
-#~ msgstr "Numero di colonne"
+msgid "Display manager for GRASS"
+msgstr "Numero di colonne"
 
 #, fuzzy
-#~ msgid "Name of .dmrc settings file"
-#~ msgstr "Nome di un file MAT-File(v4) esistente"
+msgid "Name of .dmrc settings file"
+msgstr "Nome di un file MAT-File(v4) esistente"
 
-#~ msgid "Selects/starts specified monitor at specified size"
-#~ msgstr "Selezione/avvia il monitor specificato alla dimensione specificata"
+msgid "Selects/starts specified monitor at specified size"
+msgstr "Selezione/avvia il monitor specificato alla dimensione specificata"
 
 #, fuzzy
-#~ msgid "Moves displayed maps to another monitor"
-#~ msgstr ""
-#~ "Seleziona il tipo di carattere con cui il testo deve essere rappresentato "
-#~ "nel monitor grafico dell'utente."
+msgid "Moves displayed maps to another monitor"
+msgstr ""
+"Seleziona il tipo di carattere con cui il testo deve essere rappresentato "
+"nel monitor grafico dell'utente."
 
-#~ msgid "Saves active display monitor to PNG file in home directory"
-#~ msgstr ""
-#~ "Salva il monitor attivo visualizzato in un file PNG nella directory home"
+msgid "Saves active display monitor to PNG file in home directory"
+msgstr ""
+"Salva il monitor attivo visualizzato in un file PNG nella directory home"
 
-#~ msgid "Resolution of output file (single=1, double=2, quad=4)"
-#~ msgstr "Risoluzione del file di uscita (singolo=1, doppio=2, quadruplo=4)"
+msgid "Resolution of output file (single=1, double=2, quad=4)"
+msgstr "Risoluzione del file di uscita (singolo=1, doppio=2, quadruplo=4)"
 
 #, fuzzy
-#~ msgid "Saves the contents of the active display monitor to a graphics file."
-#~ msgstr ""
-#~ "Seleziona il tipo di carattere con cui il testo deve essere rappresentato "
-#~ "nel monitor grafico dell'utente."
+msgid "Saves the contents of the active display monitor to a graphics file."
+msgstr ""
+"Seleziona il tipo di carattere con cui il testo deve essere rappresentato "
+"nel monitor grafico dell'utente."
 
 #, fuzzy
-#~ msgid "Compression for PNG files"
-#~ msgstr "Nome del filtro file"
+msgid "Compression for PNG files"
+msgstr "Nome del filtro file"
 
-#~ msgid "File size/quality for JPEG files"
-#~ msgstr "Dimensione/qualità del file per JPEG"
+msgid "File size/quality for JPEG files"
+msgstr "Dimensione/qualità del file per JPEG"
 
 #, fuzzy
-#~ msgid "Paper size for PostScript output"
-#~ msgstr "File raster in output"
+msgid "Paper size for PostScript output"
+msgstr "File raster in output"
 
 #, fuzzy
-#~ msgid "PostScript"
-#~ msgstr "File raster in output"
+msgid "PostScript"
+msgstr "File raster in output"
 
-#~ msgid "Set background color to black (white default)"
-#~ msgstr "Imposta il colore dello sfondo nero (default bianco)"
+msgid "Set background color to black (white default)"
+msgstr "Imposta il colore dello sfondo nero (default bianco)"
 
-#~ msgid "Set transparent background"
-#~ msgstr "Imposta sfondo trasparente"
+msgid "Set transparent background"
+msgstr "Imposta sfondo trasparente"
 
-#~ msgid "Use the Cario driver to render images"
-#~ msgstr "Usa il driver Cario per restituire immagini"
+msgid "Use the Cario driver to render images"
+msgstr "Usa il driver Cario per restituire immagini"
 
-#~ msgid "Set paper orientation to landscape (for PostScript output)"
-#~ msgstr ""
-#~ "Imposta l'orientazione del foglio in orizzontale (per uscita PostScript)"
+msgid "Set paper orientation to landscape (for PostScript output)"
+msgstr ""
+"Imposta l'orientazione del foglio in orizzontale (per uscita PostScript)"
 
 #, fuzzy
-#~ msgid "Displays a raster map and its legend on a graphics window"
-#~ msgstr ""
-#~ "Seleziona il tipo di carattere con cui il testo deve essere rappresentato "
-#~ "nel monitor grafico dell'utente."
+msgid "Displays a raster map and its legend on a graphics window"
+msgstr ""
+"Seleziona il tipo di carattere con cui il testo deve essere rappresentato "
+"nel monitor grafico dell'utente."
 
 #, fuzzy
-#~ msgid "Number of lines to appear in the legend"
-#~ msgstr "Nume di righe da tenere in memoria"
+msgid "Number of lines to appear in the legend"
+msgstr "Nume di righe da tenere in memoria"
 
 #, fuzzy
-#~ msgid "Redraws the current display frame in the GRASS monitor"
-#~ msgstr "Non è mostrata nessuna mappa nel monitor GRASS"
+msgid "Redraws the current display frame in the GRASS monitor"
+msgstr "Non è mostrata nessuna mappa nel monitor GRASS"
 
 #, fuzzy
-#~ msgid "Redraw all frames"
-#~ msgstr "Numero di righe"
+msgid "Redraw all frames"
+msgstr "Numero di righe"
 
-#~ msgid "Resizes active display monitor"
-#~ msgstr "Ridimensiona il monitor attivo visualizzato"
+msgid "Resizes active display monitor"
+msgstr "Ridimensiona il monitor attivo visualizzato"
 
 #, fuzzy
-#~ msgid "Slide show of GRASS raster/vector maps."
-#~ msgstr "Slide show dei file raster e vettoriali presenti"
+msgid "Slide show of GRASS raster/vector maps."
+msgstr "Slide show dei file raster e vettoriali presenti"
 
 #, fuzzy
-#~ msgid "Show vector maps rather than raster maps"
-#~ msgstr "Converti una mappa raster in file height field per POVRAY"
+msgid "Show vector maps rather than raster maps"
+msgstr "Converti una mappa raster in file height field per POVRAY"
 
-#~ msgid "Mapsets to use. Specify multiple mapsets comma separated"
-#~ msgstr "Mapset da usare. Specificare multipli mapset separati dalla virgola"
+msgid "Mapsets to use. Specify multiple mapsets comma separated"
+msgstr "Mapset da usare. Specificare multipli mapset separati dalla virgola"
 
 #, fuzzy
-#~ msgid "Number of seconds to pause between slides"
-#~ msgstr "Nume di righe da tenere in memoria"
+msgid "Number of seconds to pause between slides"
+msgstr "Nume di righe da tenere in memoria"
 
 #, fuzzy
-#~ msgid "Enter raster map to display in 1st frame"
-#~ msgstr "Mappa(e) raster da leggere"
+msgid "Enter raster map to display in 1st frame"
+msgstr "Mappa(e) raster da leggere"
 
 #, fuzzy
-#~ msgid "Enter command to execute in 1st frame"
-#~ msgstr "Mappa(e) raster da leggere"
+msgid "Enter command to execute in 1st frame"
+msgstr "Mappa(e) raster da leggere"
 
 #, fuzzy
-#~ msgid "Enter raster map to display in 2nd frame"
-#~ msgstr "Mappa(e) raster da leggere"
+msgid "Enter raster map to display in 2nd frame"
+msgstr "Mappa(e) raster da leggere"
 
 #, fuzzy
-#~ msgid "Enter command to execute in 2nd frame"
-#~ msgstr "Mappa(e) raster da leggere"
+msgid "Enter command to execute in 2nd frame"
+msgstr "Mappa(e) raster da leggere"
 
-#~ msgid "Displays thematic vectormap"
-#~ msgstr "Mostra mappa vettoriale tematica"
+msgid "Displays thematic vectormap"
+msgstr "Mostra mappa vettoriale tematica"
 
 #, fuzzy
-#~ msgid "Vector map to display thematically"
-#~ msgstr "Mappa(e) raster da leggere"
+msgid "Vector map to display thematically"
+msgstr "Mappa(e) raster da leggere"
 
 #, fuzzy
-#~ msgid "Vector map type"
-#~ msgstr "File di input"
+msgid "Vector map type"
+msgstr "File di input"
 
 #, fuzzy
-#~ msgid "Attribute column to use for thematic display (must be numeric)"
-#~ msgstr "Nome della mappa raster da utilizzare per <%s>"
+msgid "Attribute column to use for thematic display (must be numeric)"
+msgstr "Nome della mappa raster da utilizzare per <%s>"
 
 #, fuzzy
-#~ msgid "Type of thematic display"
-#~ msgstr "Nome del raster map in output"
+msgid "Type of thematic display"
+msgstr "Nome del raster map in output"
 
 #, fuzzy
-#~ msgid "Layer to use for thematic display"
-#~ msgstr "Nome della mappa raster da utilizzare per <%s>"
+msgid "Layer to use for thematic display"
+msgstr "Nome della mappa raster da utilizzare per <%s>"
 
 #, fuzzy
-#~ msgid "Points"
-#~ msgstr "Stampa"
+msgid "Points"
+msgstr "Stampa"
 
-#~ msgid "Vector point icon for point data"
-#~ msgstr "Icona di punti vettoriali per dati puntiformi"
+msgid "Vector point icon for point data"
+msgstr "Icona di punti vettoriali per dati puntiformi"
 
 #, fuzzy
-#~ msgid "Number of classes for interval theme (integer)"
-#~ msgstr "Numero di passi attraverso il dataset"
+msgid "Number of classes for interval theme (integer)"
+msgstr "Numero di passi attraverso il dataset"
 
 #, fuzzy
-#~ msgid "Mapset(s) to list (default: current mapset search path)"
-#~ msgstr "Mapset del quale fornire la lista (default: percorso corrente)"
+msgid "Mapset(s) to list (default: current mapset search path)"
+msgstr "Mapset del quale fornire la lista (default: percorso corrente)"
 
 #, fuzzy
-#~ msgid "Output separator (default: newline)"
-#~ msgstr "Carattere di separatore in output (predefinito: tab)"
+msgid "Output separator (default: newline)"
+msgstr "Carattere di separatore in output (predefinito: tab)"
 
 #, fuzzy
-#~ msgid "Raster to remove"
-#~ msgstr "impossibile aprire <%s>"
+msgid "Raster to remove"
+msgstr "impossibile aprire <%s>"
 
 #, fuzzy
-#~ msgid "3d raster to remove"
-#~ msgstr "impossibile aprire <%s>"
+msgid "3d raster to remove"
+msgstr "impossibile aprire <%s>"
 
 #, fuzzy
-#~ msgid "Vector to remove"
-#~ msgstr "impossibile aprire <%s>"
+msgid "Vector to remove"
+msgstr "impossibile aprire <%s>"
 
 #, fuzzy
-#~ msgid "Region to remove"
-#~ msgstr "impossibile aprire <%s>"
+msgid "Region to remove"
+msgstr "impossibile aprire <%s>"
 
 #, fuzzy
-#~ msgid "Label to remove"
-#~ msgstr "impossibile aprire <%s>"
+msgid "Label to remove"
+msgstr "impossibile aprire <%s>"
 
 #, fuzzy
-#~ msgid "3dview to remove"
-#~ msgstr "impossibile aprire <%s>"
+msgid "3dview to remove"
+msgstr "impossibile aprire <%s>"
 
 #, fuzzy
-#~ msgid "Group to remove"
-#~ msgstr "impossibile aprire <%s>"
+msgid "Group to remove"
+msgstr "impossibile aprire <%s>"
 
 #, fuzzy
-#~ msgid "raster input maps"
-#~ msgstr "Mappa raster in input"
+msgid "raster input maps"
+msgstr "Mappa raster in input"
 
 #, fuzzy
-#~ msgid "write output to PNG image"
-#~ msgstr "Sovrascrivi file mappa in output"
+msgid "write output to PNG image"
+msgstr "Sovrascrivi file mappa in output"
 
 #, fuzzy
-#~ msgid "label with coordinates instead of numbering"
-#~ msgstr "Utilizzando le coordinate del centro della mappa\n"
+msgid "label with coordinates instead of numbering"
+msgstr "Utilizzando le coordinate del centro della mappa\n"
 
 #, fuzzy
-#~ msgid "Keep band numbers instead of using band color names."
-#~ msgstr "Usa i numeri delle bande invece che i nomi dei colori"
+msgid "Keep band numbers instead of using band color names."
+msgstr "Usa i numeri delle bande invece che i nomi dei colori"
 
-#~ msgid "Calculate new raster map from a r.mapcalc expression."
-#~ msgstr "Calcola una nuova mappa raster da un'espressione di r.mapcalc"
+msgid "Calculate new raster map from a r.mapcalc expression."
+msgstr "Calcola una nuova mappa raster da un'espressione di r.mapcalc"
 
-#~ msgid "A"
-#~ msgstr "A"
+msgid "A"
+msgstr "A"
 
-#~ msgid "B"
-#~ msgstr "B"
+msgid "B"
+msgstr "B"
 
-#~ msgid "C"
-#~ msgstr "C"
+msgid "C"
+msgstr "C"
 
-#~ msgid "D"
-#~ msgstr "D"
+msgid "D"
+msgstr "D"
 
-#~ msgid "E"
-#~ msgstr "E"
+msgid "E"
+msgstr "E"
 
-#~ msgid "F"
-#~ msgstr "F"
+msgid "F"
+msgstr "F"
 
-#~ msgid "Formula (e.g. A-B or A*C+B)"
-#~ msgstr "Formula (p.e. A-B o A*C+B)"
+msgid "Formula (e.g. A-B or A*C+B)"
+msgstr "Formula (p.e. A-B o A*C+B)"
 
-#~ msgid "Show help"
-#~ msgstr "Mostra help"
+msgid "Show help"
+msgstr "Mostra help"
 
-#~ msgid "Expert mode (enter a set of r.mapcalc expressions)"
-#~ msgstr "Modo esperto (inserisci un set di espressioni di r.mapcalc)"
+msgid "Expert mode (enter a set of r.mapcalc expressions)"
+msgstr "Modo esperto (inserisci un set di espressioni di r.mapcalc)"
 
 #, fuzzy
-#~ msgid "Do not overwrite existing map"
-#~ msgstr "Usa il flag -o per sovrascrivere il link esistente del layer <%d>"
+msgid "Do not overwrite existing map"
+msgstr "Usa il flag -o per sovrascrivere il link esistente del layer <%d>"
 
 #, fuzzy
-#~ msgid "Exports GRASS raster into GDAL supported formats."
-#~ msgstr "Esporta un raster grass come array binario"
+msgid "Exports GRASS raster into GDAL supported formats."
+msgstr "Esporta un raster grass come array binario"
 
 #, fuzzy
-#~ msgid "Region sensitive output"
-#~ msgstr "Mappa raster risultante"
+msgid "Region sensitive output"
+msgstr "Mappa raster risultante"
 
 #, fuzzy
-#~ msgid "Output field seperator"
-#~ msgstr "Campo separatore in output"
+msgid "Output field seperator"
+msgstr "Campo separatore in output"
 
 #, fuzzy
-#~ msgid "calculates univariate statistics from a GRASS raster map"
-#~ msgstr "impossibile aprire <%s>"
+msgid "calculates univariate statistics from a GRASS raster map"
+msgstr "impossibile aprire <%s>"
 
 #, fuzzy
-#~ msgid "A (grid3D file)"
-#~ msgstr "Nome del file di output"
+msgid "A (grid3D file)"
+msgstr "Nome del file di output"
 
 #, fuzzy
-#~ msgid "B (grid3D file)"
-#~ msgstr "Nome del file di output"
+msgid "B (grid3D file)"
+msgstr "Nome del file di output"
 
 #, fuzzy
-#~ msgid "C (grid3D file)"
-#~ msgstr "Nome del file di output"
+msgid "C (grid3D file)"
+msgstr "Nome del file di output"
 
 #, fuzzy
-#~ msgid "D (grid3D file)"
-#~ msgstr "Nome del file di output"
+msgid "D (grid3D file)"
+msgstr "Nome del file di output"
 
 #, fuzzy
-#~ msgid "E (grid3D file)"
-#~ msgstr "Nome del file di output"
+msgid "E (grid3D file)"
+msgstr "Nome del file di output"
 
 #, fuzzy
-#~ msgid "F (grid3D file)"
-#~ msgstr "Nome del file di output"
+msgid "F (grid3D file)"
+msgstr "Nome del file di output"
 
 #, fuzzy
-#~ msgid "Name for output grid3D volume"
-#~ msgstr "Nome del file in output"
+msgid "Name for output grid3D volume"
+msgstr "Nome del file in output"
 
-#~ msgid "Expert mode (enter a set of r3.mapcalc expressions)"
-#~ msgstr "Modo esperto (inserisci un set di espressioni r3.mapcalc)"
+msgid "Expert mode (enter a set of r3.mapcalc expressions)"
+msgstr "Modo esperto (inserisci un set di espressioni r3.mapcalc)"
 
 #, fuzzy
-#~ msgid "%s: [%s] not found"
-#~ msgstr "raster <%s> non trovato"
+msgid "%s: [%s] not found"
+msgstr "raster <%s> non trovato"
 
 #, fuzzy
-#~ msgid ""
-#~ "Enter the file name or path\n"
-#~ "> "
-#~ msgstr "Nome del raster map esistente"
+msgid ""
+"Enter the file name or path\n"
+"> "
+msgstr "Nome del raster map esistente"
 
-#~ msgid "Use mouse to select Start Point\n"
-#~ msgstr "Usa mouse per selezionare Punto di inizio\n"
+msgid "Use mouse to select Start Point\n"
+msgstr "Usa mouse per selezionare Punto di inizio\n"
 
-#~ msgid ""
-#~ "\n"
-#~ "Use mouse to draw profile line\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Usa mouse per disegnare la linea di profilo\n"
+msgid ""
+"\n"
+"Use mouse to draw profile line\n"
+msgstr ""
+"\n"
+"Usa mouse per disegnare la linea di profilo\n"
 
 #, fuzzy
-#~ msgid "Buttons:\n"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "Bottoni:\n"
+msgid "Buttons:\n"
+msgstr ""
+"\n"
+"\n"
+"Bottoni:\n"
 
 #, fuzzy
-#~ msgid "Left:   Mark next point\n"
-#~ msgstr " Sinistro:  mostra cosa c'è qui\n"
+msgid "Left:   Mark next point\n"
+msgstr " Sinistro:  mostra cosa c'è qui\n"
 
-#~ msgid "Middle: Mark next point\n"
-#~ msgstr "Centrale: Segna il prossimo punto\n"
+msgid "Middle: Mark next point\n"
+msgstr "Centrale: Segna il prossimo punto\n"
 
-#~ msgid ""
-#~ "Right:  Finish profile and exit\n"
-#~ "\n"
-#~ msgstr ""
-#~ "Destro: Finisci profilo ed esci\n"
-#~ "\n"
+msgid ""
+"Right:  Finish profile and exit\n"
+"\n"
+msgstr ""
+"Destro: Finisci profilo ed esci\n"
+"\n"
 
 #, fuzzy
-#~ msgid "elevin raster map <%s> not found"
-#~ msgstr "raster <%s> non trovato"
+msgid "elevin raster map <%s> not found"
+msgstr "raster <%s> non trovato"
 
 #, fuzzy
-#~ msgid "aspin raster map <%s> not found"
-#~ msgstr "raster <%s> non trovato"
+msgid "aspin raster map <%s> not found"
+msgstr "raster <%s> non trovato"
 
 #, fuzzy
-#~ msgid "linkein raster map <%s> not found"
-#~ msgstr "raster <%s> non trovato"
+msgid "linkein raster map <%s> not found"
+msgstr "raster <%s> non trovato"
 
 #, fuzzy
-#~ msgid "albedo raster map <%s> not found"
-#~ msgstr "raster <%s> non trovato"
+msgid "albedo raster map <%s> not found"
+msgstr "raster <%s> non trovato"
 
 #, fuzzy
-#~ msgid "latin raster map <%s> not found"
-#~ msgstr "raster <%s> non trovato"
+msgid "latin raster map <%s> not found"
+msgstr "raster <%s> non trovato"
 
 #, fuzzy
-#~ msgid "coefbh raster map <%s> not found"
-#~ msgstr "raster <%s> non trovato"
+msgid "coefbh raster map <%s> not found"
+msgstr "raster <%s> non trovato"
 
 #, fuzzy
-#~ msgid "coefdh raster map <%s> not found"
-#~ msgstr "raster <%s> non trovato"
+msgid "coefdh raster map <%s> not found"
+msgstr "raster <%s> non trovato"
 
 #, fuzzy
-#~ msgid "Unable to find data map"
-#~ msgstr "Non riesco a trovare il file raster %s"
+msgid "Unable to find data map"
+msgstr "Non riesco a trovare il file raster %s"
 
 #, fuzzy
-#~ msgid "Unable to find clump map"
-#~ msgstr "impossibile aprire <%s>"
+msgid "Unable to find clump map"
+msgstr "impossibile aprire <%s>"
 
 #, fuzzy
-#~ msgid "Saving new map"
-#~ msgstr "Mappa raster risultante"
+msgid "Saving new map"
+msgstr "Mappa raster risultante"
 
 #, fuzzy
-#~ msgid "Terrain raster map (DEM)"
-#~ msgstr "Nome del driver in input"
+msgid "Terrain raster map (DEM)"
+msgstr "Nome del driver in input"
 
 #, fuzzy
-#~ msgid "Output raster map with lake"
-#~ msgstr "Nome del driver in output"
+msgid "Output raster map with lake"
+msgstr "Nome del driver in output"
 
 #, fuzzy
-#~ msgid "Cannot write lake raster map <%s>!"
-#~ msgstr "Non riesco a trovare il file raster %s"
+msgid "Cannot write lake raster map <%s>!"
+msgstr "Non riesco a trovare il file raster %s"
 
 #, fuzzy
-#~ msgid "Terrain raster map <%s> not found!"
-#~ msgstr "raster <%s> non trovato"
+msgid "Terrain raster map <%s> not found!"
+msgstr "raster <%s> non trovato"
 
 #, fuzzy
-#~ msgid "Cannot open terrain raster map <%s@%s>!"
-#~ msgstr "Non riesco a trovare il file raster %s"
+msgid "Cannot open terrain raster map <%s@%s>!"
+msgstr "Non riesco a trovare il file raster %s"
 
 #, fuzzy
-#~ msgid "Seed map <%s> not found!"
-#~ msgstr "raster <%s> non trovato"
+msgid "Seed map <%s> not found!"
+msgstr "raster <%s> non trovato"
 
 #, fuzzy
-#~ msgid "Cannot open seed map <%s@%s>!"
-#~ msgstr "Non riesco a trovare il file raster %s"
+msgid "Cannot open seed map <%s@%s>!"
+msgstr "Non riesco a trovare il file raster %s"
 
 #, fuzzy
-#~ msgid "Failure to allocate memory for row pointers"
-#~ msgstr "impossibile aprire <%s>"
+msgid "Failure to allocate memory for row pointers"
+msgstr "impossibile aprire <%s>"
 
 #, fuzzy
-#~ msgid "Loading maps: "
-#~ msgstr "Mappa raster risultante"
+msgid "Loading maps: "
+msgstr "Mappa raster risultante"
 
 #, fuzzy
-#~ msgid "Error reading terrain raster map. Probably broken file."
-#~ msgstr "Non riesco a trovare il file raster %s"
+msgid "Error reading terrain raster map. Probably broken file."
+msgstr "Non riesco a trovare il file raster %s"
 
 #, fuzzy
-#~ msgid "Error reading seed raster map. Probably broken file."
-#~ msgstr "Non riesco a trovare il file raster %s"
+msgid "Error reading seed raster map. Probably broken file."
+msgstr "Non riesco a trovare il file raster %s"
 
 #, fuzzy
-#~ msgid "Cannot write lake raster map <%s@%s>!"
-#~ msgstr "Non riesco a trovare il file raster %s"
+msgid "Cannot write lake raster map <%s@%s>!"
+msgstr "Non riesco a trovare il file raster %s"
 
 #, fuzzy
-#~ msgid "Error writing color file for <%s@%s>!"
-#~ msgstr "Errore nella lettura del file dbmscap\n"
+msgid "Error writing color file for <%s@%s>!"
+msgstr "Errore nella lettura del file dbmscap\n"
 
 #, fuzzy
-#~ msgid "All done."
-#~ msgstr "Fatto.\n"
+msgid "All done."
+msgstr "Fatto.\n"
 
 #, fuzzy
-#~ msgid "%s: base raster map not found"
-#~ msgstr "raster <%s> non trovato"
+msgid "%s: base raster map not found"
+msgstr "raster <%s> non trovato"
 
 #, fuzzy
-#~ msgid "%s: cover raster map not found"
-#~ msgstr "raster <%s> non trovato"
+msgid "%s: cover raster map not found"
+msgstr "raster <%s> non trovato"
 
 #, fuzzy
-#~ msgid "Name of the vector points map with x,y locations"
+msgid "Name of the vector points map with x,y locations"
+msgstr "Nome di un file vettoriale in output"
+
+#, fuzzy
+msgid "Number of time iterations (sec.)"
+msgstr "Numero di passi attraverso il dataset"
+
+#, fuzzy
+msgid "Multiscale simulation"
+msgstr "locazione del database"
+
+#, fuzzy
+msgid "Name of the elevation raster map, same units as N,E: [m] or [ft] "
+msgstr "Nome del file raster in input"
+
+#, fuzzy
+msgid "Name of the x-derivatives raster map [m/m] or [ft/ft]"
+msgstr "Nome del file raster in input"
+
+#, fuzzy
+msgid "Name of the y-derivatives raster map [m/m] or [ft/ft]"
+msgstr "Nome del file raster in input"
+
+msgid "Quietly"
+msgstr "Silenziosamente"
+
+#, fuzzy
+msgid ""
+"Specific input value to be assigned to the north and/or south poles for "
+"longitude-latitude grids"
+msgstr ""
+"specifica un valore di output con cui assegnare i poli nord e/o sud per la "
+"griglia di longitudine-latitudine"
+
+#, fuzzy
+msgid "This module is deprecated. Please use 'r.resamp.interp' instead."
+msgstr ""
+"L'uso dell'istruzione \"scale\" dalla linea di comando è deprecato. Per "
+"favore inserisci l'istruzione \"scale\" nel file di istruzioni."
+
+#, fuzzy
+msgid "Illegal output file name <%s>"
+msgstr "Nome del file di output"
+
+msgid "Raster input maps(s)"
+msgstr "Mappe raster in input"
+
+#, fuzzy
+msgid "Output file name"
+msgstr "Nome del file di output"
+
+#, fuzzy
+msgid ""
+"Raster map [%s] already exists.\n"
+"Please try another."
+msgstr "ERRORE: <%s> esiste già\n"
+
+#, fuzzy
+msgid "Path to rules file"
+msgstr "Nome di un file vettoriale in output"
+
+#, fuzzy
+msgid "RGB raster map <%s> not found"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "Vector cell map <%s> not found"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "Cannot open raster map [%s]!"
+msgstr "Non riesco a trovare il file raster %s"
+
+msgid "Raster file [%s] is empty."
+msgstr "Il file raster [%s] è vuoto."
+
+#, fuzzy
+msgid "Unable to write header for [%s]."
+msgstr "Non riesco ad aprire il cellfile per [%s]"
+
+#, fuzzy
+msgid "        Number of rows"
+msgstr "Numero di righe"
+
+#, fuzzy
+msgid "        Number of cols"
+msgstr "Numero di colonne"
+
+#, fuzzy
+msgid "Raster file [%s] not found. Exiting."
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "Edit the history file for [%s]? "
+msgstr "Non riesco ad aprire il cellfile per [%s]"
+
+#, fuzzy
+msgid "%s map <%s> not found"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "Category file for <%s> not updated"
+msgstr "File category per [%s] non disponibile"
+
+#, fuzzy
+msgid "Category file for <%s> updated"
+msgstr "impossibile aprire <%s>"
+
+msgid "Title, in quotes"
+msgstr "Titolo, fra virgolette"
+
+#, fuzzy
+msgid "Quiet - Do not show progress"
+msgstr "Silenzioso"
+
+#, fuzzy
+msgid "Unable to find starting vector <%s> "
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Unable to find stop vector <%s>"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Raster output map <%s> not found (no start_points given)"
+msgstr "raster <%s> non trovato"
+
+msgid "Apply filter only to zero data values"
+msgstr "Applica soltanto il filtro per i valori uguali a zero"
+
+#, fuzzy
+msgid "Error reading '%s' map"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Cell file not found"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "Vector map <%s> not found in the current mapset"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "Threshold distance"
+msgstr "Unità della distanza"
+
+#, fuzzy
+msgid "Cannot execute: %s"
+msgstr "Non riesco ad impostare user/password"
+
+#, fuzzy
+msgid "Cannot link table: %s"
+msgstr "Non posso scrivere i collegamenti del database"
+
+#, fuzzy
+msgid "DXF input file"
+msgstr "File di input"
+
+#, fuzzy
+msgid "Cannot open dxf file <%s>"
+msgstr "Non riesco ad impostare user/password"
+
+#, fuzzy
+msgid "Cannot open new vector map <%s>"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Conversion of <%s> to vector map:"
+msgstr "Nome di un file vettoriale in output"
+
+#, fuzzy
+msgid "Vector map <%s> is not in user mapset and cannot be updated"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "Network input map <%s> not found"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "Hilight color for text"
+msgstr "Colore di evidenziazione del testo"
+
+msgid "Line: %d\n"
+msgstr "Linea: %d\n"
+
+#, fuzzy
+msgid "output raster map"
+msgstr "Nome del driver in output"
+
+msgid "Name of input raster map(s)"
+msgstr "Nome della mappe raster in input"
+
+msgid "name=%s\n"
+msgstr "name=%s\n"
+
+msgid "mapset=%s\n"
+msgstr "mapset=%s\n"
+
+msgid "fullname=%s\n"
+msgstr "fullname=%s\n"
+
+msgid "usage: %s file [prompt %%x %%y]\n"
+msgstr "uso %s file [prompt %%x %%y]\n"
+
+#, fuzzy
+msgid "Illegal file name for real part: %s"
+msgstr "File di input"
+
+#, fuzzy
+msgid "Illegal file name for imaginary part: %s"
+msgstr "File di input"
+
+#, fuzzy
+msgid "Illegal group name <%s>"
+msgstr "Utilizzando le coordinate del centro della mappa\n"
+
+#, fuzzy
+msgid "Illegal signature file name <%s>"
+msgstr "Nome file non valido [%s]."
+
+msgid "visualization"
+msgstr "visualizzazione"
+
+#, fuzzy
+msgid "Raster file(s) for Elevation"
+msgstr "file raster per la Vista%d"
+
+#, fuzzy
+msgid "Raster file(s) for Color"
+msgstr "file raster per la Vista%d"
+
+#, fuzzy
+msgid "Can't clear current graphics window"
+msgstr "Non riesco a descrivere la tabella"
+
+#, fuzzy
+msgid "Cannot use current window"
+msgstr "Non riesco a descrivere la tabella"
+
+msgid "Error reading raster map"
+msgstr "Errore leggendo la mappa raster"
+
+#, fuzzy
+msgid "Output profile data to file(s) with prefix 'name'"
+msgstr "Mostra il titolo del file raster"
+
+#, fuzzy
+msgid "Error opening cell-file"
+msgstr "Errore nell'apertura del file g3d"
+
+#, fuzzy
+msgid "Error reading from cell-file"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "%s: Couldn't open raster <%s@%s>"
+msgstr "Impossibile aprire <%s>"
+
+msgid " Middle: toggle flash color\n"
+msgstr " Centrale: abilita colore flash\n"
+
+#, fuzzy
+msgid "No current graphics window"
+msgstr "Non riesco a descrivere la tabella"
+
+#, fuzzy
+msgid "Can't set current graphics window"
+msgstr "Non riesco a descrivere la tabella"
+
+#, fuzzy
+msgid "Getting graphics window coordinates"
+msgstr "Utilizzando le coordinate del centro della mappa\n"
+
+#, fuzzy
+msgid "Font name or pathname of TTF file"
+msgstr "Nome di un nuovo file raster"
+
+#, fuzzy
+msgid "Setting release of FreeType"
+msgstr ""
+"\n"
+"Imposta la versione di FreeType\n"
+
+msgid "Display number of colors"
+msgstr "Mostra numero di colori"
+
+#, fuzzy
+msgid "Name of frame(s) to save"
+msgstr "Nome della mappa raster"
+
+#, fuzzy
+msgid ""
+"Creates and displays a menu within the active frame on the graphics monitor."
+msgstr ""
+"Seleziona il tipo di carattere con cui il testo deve essere rappresentato "
+"nel monitor grafico dell'utente."
+
+msgid "Path to TrueType font (including file name)"
+msgstr "Percorso del carattere TrueType (nome del file incluso)"
+
+#, fuzzy
+msgid "Either text or -c should be given"
+msgstr "Devono essere fornite sia l'opzione 'from_table' che 'select' "
+
+#, fuzzy
+msgid "Unable to write the temporary file"
+msgstr "Valore da scrivere per null"
+
+#, fuzzy
+msgid "No predefined font"
+msgstr "Nome del file con le regole predefinite"
+
+#, fuzzy
+msgid " Left:    Place text here\n"
+msgstr " Sinistro:  mostra cosa c'è qui\n"
+
+msgid " Right:   Quit\n"
+msgstr " Destro:  Esce\n"
+
+#, fuzzy
+msgid "ERROR: can not get \"list\" items"
+msgstr "ERRORE: non riesco ad ottenere la \"lista\" degli oggetti\n"
+
+#, fuzzy
+msgid "-j flag forced"
+msgstr "-j flag forzato\n"
+
+msgid "No map is displayed in GRASS monitor"
+msgstr "Non è mostrata nessuna mappa nel monitor GRASS"
+
+msgid "You must select more than one point"
+msgstr "Devi selezionare più di un punto"
+
+msgid "You must select at least four points"
+msgstr "Devi selezionare almeno quattro punti"
+
+msgid "No raster or vector map displayed"
+msgstr "Nessuna mappa raster o vettoriale visualizzata"
+
+msgid "Name of graphics monitor to start"
+msgstr "Nome del monitor grafico da avviare"
+
+msgid "Name of graphics monitor to stop"
+msgstr "Nome del monitor grafico da chiudere"
+
+msgid "Name of graphics monitor to select"
+msgstr "Nome del monitor grafico da selezionare"
+
+msgid "Name of graphics monitor to unlock"
+msgstr "Nome del monitor grafico da sbloccare"
+
+msgid "List all monitors"
+msgstr "Mostra di tutti i monitor"
+
+msgid "List all monitors (with current status)"
+msgstr "Mostra tutti i monitor (con lo stato corrente)"
+
+#, fuzzy
+msgid "Print name of currently selected monitor"
+msgstr "Utilizza la regione corrente"
+
+msgid "Monitor <%s> in use by another user"
+msgstr "Monitor <%s> è in uso da un altro utente"
+
+msgid "Monitor '%s' terminated"
+msgstr "Monitor '%s' chiuso"
+
+msgid "Error - Monitor '%s' was not running"
+msgstr "Errore - Il monitor '%s' non è avviato"
+
+msgid "Error - Monitor '%s' in use by another user"
+msgstr "Errore - Il monitor '%s' è in uso da un altro utente"
+
+#, fuzzy
+msgid "Error - Locking mechanism failed"
+msgstr "Errore nell'apertura del file g3d"
+
+#, fuzzy
+msgid "Error choosing frame [%s]\n"
+msgstr "Errore nel leggere il range di [%s]"
+
+msgid ""
+"\n"
+"Buttons:\n"
+msgstr ""
+"\n"
+"Bottoni:\n"
+
+#, fuzzy
+msgid "Left:   Select frame\n"
+msgstr " Sinistro:  mostra cosa c'è qui\n"
+
+#, fuzzy
+msgid "Right:  Accept frame\n"
+msgstr "%s Esce dal menu\n"
+
+#, fuzzy
+msgid "Manages display frames on the user's graphics monitor."
+msgstr ""
+"Seleziona il tipo di carattere con cui il testo deve essere rappresentato "
+"nel monitor grafico dell'utente."
+
+#, fuzzy
+msgid "Create a new frame"
+msgstr "Non riesco a descrivere la tabella"
+
+#, fuzzy
+msgid "Select a frame"
+msgstr "Estrae dati dal database."
+
+#, fuzzy
+msgid "Print name of current frame"
+msgstr "Stampa la regione corrente"
+
+#, fuzzy
+msgid "List map names displayed in GRASS monitor"
+msgstr "Non è mostrata nessuna mappa nel monitor GRASS"
+
+#, fuzzy
+msgid "Frame to be created/selected"
+msgstr "file vettoriale da creare"
+
+#, fuzzy
+msgid ""
+"\n"
+"Mouse Buttons:"
+msgstr ""
+"\n"
+"\n"
+"Bottoni:\n"
+
+#, fuzzy
+msgid "Left:   Select From\n"
+msgstr " Sinistro:  mostra cosa c'è qui\n"
+
+#, fuzzy
+msgid ""
+"Right:  Quit\n"
+"\n"
+msgstr " Destro: esce\n"
+
+#, fuzzy
+msgid "Monitor: interactive command in redraw"
+msgstr "Monitore: comandi interattivi per il ridisegnamento\n"
+
+#, fuzzy
+msgid "found %d visuals of type TrueColor"
+msgstr "trovate %d viste per il tipo TrueColor\n"
+
+#, fuzzy
+msgid "searching for highest bit depth"
+msgstr "ricerca del valore massimo di bit depth\n"
+
+#, fuzzy
+msgid "selected %d bit depth"
+msgstr "bit depth %d selezionata\n"
+
+#, fuzzy
+msgid "using default visual which is %s"
+msgstr "la vista predefinita utilizzata è %s\n"
+
+#, fuzzy
+msgid "Monitor: waitpid: expected %d but got %d"
+msgstr "Monitor: waitpid: atteso %d ma ricevuto %d\n"
+
+#, fuzzy
+msgid "Monitor: XGetWMName failed"
+msgstr "Monitor: XGetWMName fallito\n"
+
+#, fuzzy
+msgid "Monitor: XGetWMName: bad result"
+msgstr "Monitor: XGetWMName: risultato sbagliato\n"
+
+msgid ""
+"\n"
+"\n"
+"WARNING!  A projection file already exists for this location\n"
+msgstr ""
+"\n"
+"\n"
+"ATTENZIONE!  Un file della proiezione esiste già per questa location\n"
+
+msgid "Would you still like to overwrite the current projection information "
+msgstr "Vuoi ancora sovrascrivere le attuali informazioni sulla proiezione"
+
+msgid "The projection information will not be updated."
+msgstr "Le informazioni sulla proiezione non saranno aggiornate"
+
+#, fuzzy
+msgid "Raster map to zoom into"
+msgstr "Mappa(e) raster da leggere"
+
+msgid "Save the current region to region definition file"
+msgstr ""
+"Salva le impostazione della region corrente in un file di definizione della "
+"region"
+
+msgid "<%s> is an illegal region name"
+msgstr "<%s> è un nome di regione illegale"
+
+#, fuzzy
+msgid "Erasing monitors ..."
+msgstr "Sto disegnando ..."
+
+#, fuzzy
+msgid "Could not open input file <%s>."
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Unable to open file: <%s>"
+msgstr "Non riesco ad aprire il cellfile per [%s]"
+
+#, fuzzy
+msgid "not found\n"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "Raster map not found."
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "Raster file [%s] not found"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "It was not possible writing in <%s>."
+msgstr "impossibile aprire <%s>"
+
+#, fuzzy
+msgid "Cannot create table: '%s'"
+msgstr "Non riesco a descrivere la tabella"
+
+#, fuzzy
+msgid "Unable to get category list <%s>, editing terminated"
+msgstr "Non riesco a leggere da <%s>"
+
+#, fuzzy
+msgid "Unable to delete layer/category [%d/%d] line %d"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Unable to write line %d"
+msgstr "Valore da scrivere per null"
+
+#, fuzzy
+msgid "Unable to delete line %d"
+msgstr "Non riesco ad impostare user/password"
+
+#, fuzzy
+msgid "Unknown query tool '%s'"
+msgstr "Nome del raster"
+
+#, fuzzy
+msgid "No layer database connection"
+msgstr "locazione del database"
+
+#, fuzzy
+msgid "%d categories loaded from the database"
+msgstr "Estrae dati dal database."
+
+#, fuzzy
+msgid "Done"
+msgstr "Fatto.\n"
+
+#, fuzzy
+msgid "Cannot create layer"
+msgstr "Non riesco a descrivere la tabella"
+
+#, fuzzy
+msgid "Vector map <%s> in location <%s> in mapset <%s> not available"
+msgstr "Impossibile trovare il vettoriale [%s]"
+
+#, fuzzy
+msgid "Column type [%d] not supported"
+msgstr "Tipo di colonna non supportata"
+
+#, fuzzy
+msgid "Cannot read map header for <%s>"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Cannot read category file for <%s>"
+msgstr "Impossibile salvare la region <%s>"
+
+msgid "Print;Shell Script"
+msgstr "Stampa; script per la shell"
+
+msgid "Category file for [%s] not available"
+msgstr "File category per [%s] non disponibile"
+
+#, fuzzy
+msgid "%s: <%s> raster map not found"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "%s: <%s> raster map exists already"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "Cannot read category file of raster map <%s>"
+msgstr "Impossibile salvare la region <%s>"
+
+#, fuzzy
+msgid "%s - map not found"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "%s: Cannot open [%s]"
+msgstr "Non riesco ad impostare user/password"
+
+#, fuzzy
+msgid "%s not found"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "Could not access %s layer"
+msgstr "impossibile aprire <%s>"
+
+#, fuzzy
+msgid "Vector map %s - not found"
+msgstr "raster <%s> non trovato"
+
+msgid "Raster map containing elevation data"
+msgstr "Mappa raster che contiene i valori delle altezze"
+
+msgid "Raster map name for storing results"
+msgstr "Mappa raster con il nome dei risultati archiviati"
+
+msgid "Height of the viewing location"
+msgstr "Altezza della locazione visualizzata"
+
+#, fuzzy
+msgid "%s: <%s> cellfile not found"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "Cell file [%s] not found\n"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "rgb cell map [%s] not found\n"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "vector cell map [%s] not found\n"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "%s - %s not found"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "Creating support files"
+msgstr "Errore nella lettura del file dbmscap\n"
+
+#, fuzzy
+msgid "%s file [%s] not found!"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "%s: %s - map not found"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "%s: unable to open %s"
+msgstr "impossibile aprire <%s>"
+
+#, fuzzy
+msgid "%s - not found"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "Cannot read %s"
+msgstr "Non riesco ad impostare user/password"
+
+#, fuzzy
+msgid "[%s] map not found."
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "[%s] map not found"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "elevation file [%s] not found"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "Cannot describe table <%s>"
+msgstr "Non riesco a descrivere la tabella"
+
+#, fuzzy
+msgid "Cannot insert values: %s"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "%s given an illegal number of points [%d]"
+msgstr "%s ha dato un numero non valido di sites [%d]"
+
+#, fuzzy
+msgid "Unable to open database %s by driver %s"
+msgstr "Non riesco ad aprire il database %s col driver %s"
+
+#, fuzzy
+msgid "No DB connection settings defined. Set with db.connect"
+msgstr "Nessuna impostazione definita per il database. Fallo usando db.connect"
+
+msgid "Could not find input %s"
+msgstr "Non riesco a trovare l'input %s"
+
+msgid "Could not open input"
+msgstr "Non riesco ad aprire l'input"
+
+msgid "Could not open output"
+msgstr "Non riesco ad aprire l'output"
+
+#, fuzzy
+msgid "Could not find input map <%s>"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Unable to open driver <%s>"
+msgstr "impossibile aprire <%s>"
+
+msgid "Database connection not defined\n"
+msgstr "Connessione al database non definita\n"
+
+#, fuzzy
+msgid "Can't read header for <%s> in <%s>"
+msgstr "Impossibile leggere l'intestazione del raster 3D <%s> in <%s>"
+
+#, fuzzy
+msgid "Can't read header for 3D raster <%s> in <%s>"
+msgstr "Impossibile leggere l'intestazione del raster 3D <%s> in <%s>"
+
+msgid "%s in %s: %s"
+msgstr "%s in %s: %s"
+
+#, fuzzy
+msgid "Can't write region <%s>"
+msgstr "Impossibile salvare la region <%s>"
+
+msgid "<%s=%s> ** invalid input **"
+msgstr "<%s=%s> ** input non valido **"
+
+#, fuzzy
+msgid "No graphics device selected."
+msgstr "Nessun device grafico selezionato"
+
+#, fuzzy
+msgid "Unable to read raster row."
+msgstr "Nome del raster"
+
+#, fuzzy
+msgid "Training map [%s] not found."
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "%s map not found"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "input raster map"
+msgstr "Nome del driver in input"
+
+#, fuzzy
+msgid "Illegal file name: %s"
+msgstr "Nome file non valido [%s]."
+
+msgid "Cannot get layer info for vector map"
+msgstr "Impossibile ottenere informazioni sul layer vettoriale"
+
+#, fuzzy
+msgid "Cannot open raster map <%s> in <%s>"
+msgstr "Non riesco ad aprire il cellfile [%s]"
+
+#, fuzzy
+msgid "%s: %s - raster map not found"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "%s: %s - illegal name"
+msgstr "Nome del raster map in output"
+
+#, fuzzy
+msgid "%s: ERROR reading category file for %s"
+msgstr "Errore nella lettura del file dbmscap\n"
+
+#, fuzzy
+msgid "%s: %s - not found"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "%s: %s - illegal units"
+msgstr "Nome del raster map in output"
+
+#, fuzzy
+msgid "%s: %s - can't open"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "Reading input map (%s)    ... "
+msgstr "Mappa raster risultante"
+
+#, fuzzy
+msgid "%s - ERROR reading %s"
+msgstr "Errore nella lettura del file dbmscap\n"
+
+#, fuzzy
+msgid "%s: %s - can't create raster map"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Writing output map (%s)   ... "
+msgstr "Nome del driver in output"
+
+#, fuzzy
+msgid "%s - ERROR re-reading %s"
+msgstr "Errore nella lettura del file dbmscap\n"
+
+#, fuzzy
+msgid "Reading raster map... "
+msgstr "Mappa raster risultante"
+
+#, fuzzy
+msgid "Writing raster map... "
+msgstr "Nome del raster map esistente"
+
+msgid "Category list: e.g. 1,3-8,13"
+msgstr "Categoria lista: es. 1,3-8,13"
+
+msgid "Output separator character (default: tab)"
+msgstr "Carattere di separatore in output (predefinito: tab)"
+
+#, fuzzy
+msgid "Cannot read category file of raster map <%s> in <%s>"
+msgstr "Impossibile salvare la region <%s>"
+
+#, fuzzy
+msgid "Cannot find file %s"
+msgstr "Non riesco ad impostare user/password"
+
+#, fuzzy
+msgid "Cannot get header for %s"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Cannot create raster map %s"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Cannot create vector map %s"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Cannot create raster map '%s'"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Number of raster rows to hold in memory"
+msgstr "Nume di righe da tenere in memoria"
+
+#, fuzzy
+msgid "Print raster map title only"
+msgstr "Stampa solo il tipo di mappa raster"
+
+#, fuzzy
+msgid "unknown type: %d"
+msgstr "Tipo sconosciuto"
+
+msgid "Cannot open raster map [%s]"
+msgstr "Non riesco ad aprire il cellfile [%s]"
+
+#, fuzzy
+msgid "Cannot get raster band."
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Cannot read GRASS raster."
+msgstr "Non riesco ad impostare user/password"
+
+#, fuzzy
+msgid "Cannot write GDAL raster."
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Cannot get [%s] driver"
+msgstr "Non riesco a descrivere la tabella"
+
+#, fuzzy
+msgid "Couldn't set geo transform."
+msgstr "Nome del raster"
+
+#, fuzzy
+msgid "Couldn't set projection."
+msgstr "Nome del raster"
+
+#, fuzzy
+msgid "Cannot export [%s] raster map."
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Cannot create [%s] raster map using [%s] driver."
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Cannot read header of raster map <%s>"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Cannot open TIFF file <%s>"
+msgstr "Non riesco ad impostare user/password"
+
+#, fuzzy
+msgid "Reading raster map"
+msgstr "Mappa raster risultante"
+
+#, fuzzy
+msgid "Cannot open output map."
+msgstr "Nome della mappa di output"
+
+#, fuzzy
+msgid "Illegal file name. Please try another."
+msgstr "Nome del file di output"
+
+#, fuzzy
+msgid "%s: can't open %s"
+msgstr "Non riesco ad impostare user/password"
+
+#, fuzzy
+msgid "Reading raster map <%s> ..."
+msgstr "Mappa raster risultante"
+
+#, fuzzy
+msgid "memory allocation failure"
+msgstr "locazione del database"
+
+#, fuzzy
+msgid "Can't find data map."
+msgstr "Non riesco a mostrare i database"
+
+#, fuzzy
+msgid "Output terrain only vector map name"
+msgstr "Nome della tabella in output"
+
+#, fuzzy
+msgid "Cannot open vector map <%s> at the topological level"
+msgstr "impossibile aprire <%s>"
+
+#, fuzzy
+msgid "Rebuilding topology ..."
+msgstr "Mappa raster risultante"
+
+msgid "No record for cat = %d"
+msgstr "Nessun record per la cat = %d"
+
+#, fuzzy
+msgid "Removing duplicates ..."
+msgstr "Sto disegnando ..."
+
+#, fuzzy
+msgid "Attaching islands ..."
+msgstr "Sto disegnando ..."
+
+#, fuzzy
+msgid "Attaching centroids ..."
+msgstr "Sto disegnando ..."
+
+#, fuzzy
+msgid "Vector map <%s> not found in current mapset"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "Error allocating memory for `lines_visited'"
+msgstr "impossibile aprire <%s>"
+
+#, fuzzy
+msgid "The number of lines in the input vector map is [%d]"
+msgstr "Nome di  2-%d mappe raster in input"
+
+#, fuzzy
+msgid "The number of polylines in the output vector map is [%d]"
+msgstr "Nome di  2-%d mappe raster in input"
+
+#, fuzzy
+msgid "Database connection not defined for layer <%d>"
+msgstr "Connessione al database non definita\n"
+
+#, fuzzy
+msgid "Cannot open select cursor"
+msgstr "Non riesco ad impostare user/password"
+
+#, fuzzy
+msgid "Cannot get layer info"
+msgstr "Non riesco a descrivere la tabella"
+
+#, fuzzy
+msgid "cell file [%s] not found"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "can't open raster map [%s]"
+msgstr "Non riesco ad aprire il cellfile per [%s]"
+
+#, fuzzy
+msgid "Cannot rewrite line %d"
+msgstr "Impossibile creare l'indice"
+
+#, fuzzy
+msgid "Editing tool"
+msgstr "Esistente"
+
+#, fuzzy
+msgid "Close boundaries"
+msgstr "Non riesco a copiare la tabella"
+
+#, fuzzy
+msgid "Cannot copy line %d, editing terminated"
+msgstr "Non riesco a leggere da <%s>"
+
+#, fuzzy
+msgid "No layer database connection."
+msgstr "locazione del database"
+
+#, fuzzy
+msgid "Cannot snap lines %d,%d"
+msgstr "Non riesco ad impostare user/password"
+
+#, fuzzy
+msgid "%d lines modified"
+msgstr "%d categorie duplicate nel vettoriale"
+
+#, fuzzy
+msgid "Could not open ASCII file <%s>"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Print vector map region only"
+msgstr "Stampa solo il tipo di mappa raster"
+
+#, fuzzy
+msgid "Cannot open vector map <%s> at topo level [%d]"
+msgstr "impossibile aprire <%s>"
+
+#, fuzzy
+msgid "Cannot get layer info for vector map <%s>"
+msgstr "Impossibile ottenere informazioni sul layer vettoriale"
+
+#, fuzzy
+msgid "Cannot select attribute."
+msgstr "Non riesco a mostrare i database"
+
+#, fuzzy
+msgid "Creating vector grid..."
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Could not find vector map <%s> in current mapset"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Could not find input map <%s>."
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Parameter <%s> not set"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "Output map where segments will be written"
+msgstr "Mappa in uscita già esistente. Sarà sovrascritta!\n"
+
+#, fuzzy
+msgid "<%s> cellfile not found"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "Database record for cat %d not found"
+msgstr "Nessun record nel database per la categoria %d"
+
+#, fuzzy
+msgid "Not able to open vector map <%s>"
+msgstr "impossibile aprire <%s>"
+
+#, fuzzy
+msgid "Can't read raster"
+msgstr "Non riesco ad impostare user/password"
+
+msgid "driver name"
+msgstr "nome driver"
+
+msgid "database name"
+msgstr "nome database"
+
+#, fuzzy
+msgid "Driver name"
+msgstr "nome driver"
+
+msgid "Cannot list databases."
+msgstr "Non riesco a mostrare i database"
+
+msgid "database location"
+msgstr "locazione del database"
+
+msgid "Table name, select all from this table"
+msgstr "Nome tabella, seleziona tutto da questa tabella"
+
+msgid "output field separator"
+msgstr "campo separatore in output"
+
+msgid "output vertical record separator"
+msgstr "output verticale del separatore di record "
+
+msgid "null value indicator"
+msgstr "indicatore di valore nullo"
+
+msgid "do not include column names in output"
+msgstr "non includere i nomi delle colonne nell'output"
+
+msgid "vertical output (instead of horizontal)"
+msgstr "output verticale (invece che orizzontale)"
+
+#, fuzzy
+msgid "Name of existing raster map"
+msgstr ""
+"#-#-#-#-#  grassmods_it.po (grassmods_it)  #-#-#-#-#\n"
+"Nome di un file raster esistente\n"
+"#-#-#-#-#  grassmods_it.po (grassmods_it)  #-#-#-#-#\n"
+"Nome di una mappa raster esistente"
+
+#, fuzzy
+msgid "Cannot find mapset for %s"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Cannot open File %s"
+msgstr "Non riesco ad impostare user/password"
+
+#, fuzzy
+msgid "Not able to open file for [%s]"
+msgstr "Non riesco ad aprire il cellfile per [%s]"
+
+#, fuzzy
+msgid "Can't open label file [%s]"
+msgstr "Non riesco ad aprire il cellfile per [%s]"
+
+#, fuzzy
+msgid "unable to open [%s] in [%s]"
+msgstr "impossibile aprire <%s>"
+
+#, fuzzy
+msgid "warning: unable to open [%s] in [%s]"
+msgstr "impossibile aprire <%s>"
+
+#, fuzzy
+msgid "Unable to open raster map [%s] in [%s]"
+msgstr "impossibile aprire <%s>"
+
+#, fuzzy
+msgid "Unable to find input cell map '%s'"
+msgstr "impossibile aprire <%s>"
+
+#, fuzzy
+msgid "Table to be imported"
+msgstr "Il file raster da importare"
+
+#, fuzzy
+msgid "Unable to create raster map [%s]"
+msgstr "Nome della mappa raster risultante"
+
+#, fuzzy
+msgid "Unable to create output <%s>"
+msgstr "Nome della mappa raster risultante"
+
+#, fuzzy
+msgid "Input file [%s] not found."
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "Unable to open output file <%s>."
+msgstr "impossibile aprire <%s>"
+
+#, fuzzy
+msgid "Could not open temporary file: [%s]"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Could not open input file [%s]"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Unable to create output raster map <%s>"
+msgstr "Nome della mappa raster risultante"
+
+#, fuzzy
+msgid "%s: Unable to find raster map <%s>"
+msgstr "impossibile aprire <%s>"
+
+#, fuzzy
+msgid "%s: Unable to open raster map <%s> in mapset <%s>"
+msgstr "impossibile aprire <%s>"
+
+#, fuzzy
+msgid "%s:  Unable to open output raster map <%s>"
+msgstr "impossibile aprire <%s>"
+
+#, fuzzy
+msgid "Vector <%s> could not be opened"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "No db connection for driver <%s> defined. Run db.connect."
+msgstr "Nessuna impostazione definita per il database. Fallo usando db.connect"
+
+#, fuzzy
+msgid "Table name"
+msgstr "nome tabella"
+
+msgid ""
+"Print current map connection parameters and exit (shell script style)\n"
+"\tformat:  layer[/layer name] table key database driver"
+msgstr ""
+"Stampa i parametri di connessione correnti ed esce (stile shell script)\n"
+"\tformat:  layer[/layer name] table key database driver"
+
+#, fuzzy
+msgid "x column name"
+msgstr "nome tabella"
+
+#, fuzzy
+msgid "z column name"
+msgstr "nome tabella"
+
+#, fuzzy
+msgid "Cannot drop table: %s"
+msgstr "Non posso scrivere i collegamenti del database"
+
+#, fuzzy
+msgid "Cannot open labels <%s>"
+msgstr "Non posso scrivere i collegamenti del database"
+
+#, fuzzy
+msgid "Cannot fetch data from table"
+msgstr "Non riesco a selezionare dati dalla tabella"
+
+#, fuzzy
+msgid "SVG file <%s> cannot be opened"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "Querying input '%s' ... "
+msgstr "Mappa raster risultante"
+
+#, fuzzy
+msgid "Copying %s input lines ... "
+msgstr "Non riesco a copiare la tabella"
+
+#, fuzzy
+msgid "Cannot create table <%s>"
+msgstr "Non riesco a descrivere la tabella"
+
+#, fuzzy
+msgid "cannot insert row: %s"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Cannot find line of cat %d"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Unalbe to open vector map <%s>"
+msgstr "impossibile aprire <%s>"
+
+#, fuzzy
+msgid "Database connection not defined for layer [%d]. Use v.db.connect first"
+msgstr "Connessione al database non definita\n"
+
+#, fuzzy
+msgid "Transforms a vector map via a set of tie points."
+msgstr "Esporta un raster grass come array binario"
+
+#, fuzzy
+msgid "Raster map <%s>] not found"
+msgstr "raster <%s> non trovato"
+
+msgid "Cannot start driver '%s'."
+msgstr "Non riesco ad eseguire il driver '%s'"
+
+msgid "Cannot describe table"
+msgstr "Non riesco a descrivere la tabella"
+
+msgid "Cannot start driver <%s>."
+msgstr "Non riesco ad eseguire il driver <%s>."
+
+msgid "[%s] is an illegal name"
+msgstr "[%s] è un nome illegale"
+
+msgid "Cannot write to <%s>"
+msgstr "Non riesco a scrivere su <%s>"
+
+msgid "Not able to open cellfile for [%s]"
+msgstr "Non riesco ad aprire il cellfile per [%s]"
+
+#, fuzzy
+msgid "Not able to find cellfile [%s]"
+msgstr "Non riesco ad aprire il cellfile per [%s]"
+
+#, fuzzy
+msgid "Raster file [%s] not available"
+msgstr "file raster per la Vista%d"
+
+#, fuzzy
+msgid "Raster map [%s] not found"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "Unable to open raster map [%s]"
+msgstr "impossibile aprire <%s>"
+
+msgid "Vector file [%s] not available"
+msgstr "Impossibile trovare il vettoriale [%s]"
+
+#, fuzzy
+msgid "Cannot open driver %s"
+msgstr "Non riesco ad eseguire il driver '%s'"
+
+#, fuzzy
+msgid "<%s> illegal name"
+msgstr "Nome del raster map in output"
+
+msgid "Out of Memory!\n"
+msgstr "Memoria esaurita!\n"
+
+#, fuzzy
+msgid "%s: %s - illegal name for output raster map."
+msgstr "Nome del raster map in output"
+
+#, fuzzy
+msgid "Exports GRASS raster data into various formats (requires GDAL)."
+msgstr "Esporta un raster grass come array binario"
+
+msgid "Couldn't find raster map %s"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "%s: <%s> not found"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "%s: <%s> illegal name"
+msgstr "Nome del raster map in output"
+
+#, fuzzy
+msgid "%s: Cannot open <%s>"
+msgstr "Non riesco ad impostare user/password"
+
+#, fuzzy
+msgid "could not read range file"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Unable to create raster map [%s]."
+msgstr "Nome della mappa raster risultante"
+
+#, fuzzy
+msgid "Filtering [%s] in [%s]"
+msgstr "impossibile aprire <%s>"
+
+#, fuzzy
+msgid "Open raster map %s in %s = %d"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Closing raster map"
+msgstr "Mappa raster risultante"
+
+#, fuzzy
+msgid "Swap temp files"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Writing [%s]"
+msgstr "Sto disegnando ..."
+
+#, fuzzy
+msgid "%s: illegal map name"
+msgstr "Nome del raster map in output"
+
+msgid "Name of the new raster map"
+msgstr "Nome di un nuovo file raster"
+
+#, fuzzy
+msgid "%s: <%s> illegal file name"
+msgstr "Nome del raster map in output"
+
+#, fuzzy
+msgid "can't open raster map <%s> in mapset %s"
+msgstr "Impossibile aprire il file label <%s> nel mapset <%s>"
+
+msgid "Raster input map"
+msgstr "Mappa raster in input"
+
+#, fuzzy
+msgid "Checking location %s, mapset %s:"
+msgstr "Mappa raster in input"
+
+#, fuzzy
+msgid "Input map [%s] in location [%s] in mapset [%s] not found."
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "Error writing output map"
+msgstr "Mappa raster in input"
+
+#, fuzzy
+msgid "<%s> is illegal file name"
+msgstr "[%s] è un nome illegale"
+
+#, fuzzy
+msgid "[%s] is an illegal file name"
+msgstr "[%s] è un nome illegale"
+
+#, fuzzy
+msgid "no rules specified"
+msgstr "Nessuna mappa in input specificata"
+
+#, fuzzy
+msgid "Can't open temp file [%s]"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Unable to open input map <%s> in mapset <%s>"
+msgstr "impossibile aprire <%s>"
+
+#, fuzzy
+msgid "%s - illegal name "
+msgstr "Nome del raster map in output"
+
+#, fuzzy
+msgid "Couldn't find raster map [%s]"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "%s in %s -can't open raster map"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "%s - can't create raster map"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Normalized"
+msgstr "Normalizzata"
+
+#, fuzzy
+msgid "Cell file [%s] not found"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "Requested 3d raster map not found <%s>"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "Could not open elevation map"
+msgstr "impossibile aprire <%s>"
+
+#, fuzzy
+msgid "Could not open output map"
+msgstr "Nome della mappa di output"
+
+#, fuzzy
+msgid "unable to close output map"
+msgstr "Nome del file in output"
+
+#, fuzzy
+msgid "Cannot create output map [%s]"
+msgstr "Nome della mappa raster risultante"
+
+#, fuzzy
+msgid "Database's name couldn't be read"
+msgstr "Connessione al database non definita\n"
+
+#, fuzzy
+msgid "Cannot open vector points map <%s>"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Cannot create vector map <%s>"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid ""
+"Interpolation: No database connection for driver <%s> defined. Run db.connect"
+msgstr "Nessuna impostazione definita per il database. Fallo usando db.connect"
+
+#, fuzzy
+msgid "Could not find input map <%s> in current mapset."
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Vector file [%s] not available in search list"
+msgstr "file raster per la Vista%d"
+
+#, fuzzy
+msgid "Cannot open database <%s>"
+msgstr "Non posso scrivere i collegamenti del database"
+
+#, fuzzy
+msgid "Cannot open table <%s>"
+msgstr "Non posso scrivere i collegamenti del database"
+
+#, fuzzy
+msgid "Cannot open driver <%s>"
+msgstr "Non riesco ad eseguire il driver '%s'"
+
+#, fuzzy
+msgid "Could not find input vector map %s"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Could not find input map '%s'."
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Could not find network input map '%s'."
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "error opening raster map [%s]."
+msgstr "Nome di mappa(e) raster esistente(i)"
+
+#, fuzzy
+msgid "Topology is not available"
+msgstr "file raster per la Vista%d"
+
+#, fuzzy
+msgid "Cannot describe table %s"
+msgstr "Non riesco a descrivere la tabella"
+
+#, fuzzy
+msgid "Patching file <%s@%s>"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "[%d] files patched"
+msgstr "%d records aggiornati"
+
+#, fuzzy
+msgid "Column type  not supported"
+msgstr "Tipo di colonna non supportata"
+
+#, fuzzy
+msgid "Could not open vector map <%s>"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Database connection not defined for layer <%d>. Use v.db.connect first."
+msgstr "Connessione al database non definita\n"
+
+#, fuzzy
+msgid "Can't create output map"
+msgstr "Nome della mappa di output"
+
+#, fuzzy
+msgid "Could not close new 3d raster map"
+msgstr "impossibile aprire <%s>"
+
+#, fuzzy
+msgid "%s: cellfile [%s] not found."
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "Unable to open cellfile [%s]."
+msgstr "Non riesco ad aprire il cellfile per [%s]"
+
+#, fuzzy
+msgid "Unable to open the temporary file."
+msgstr "Valore da scrivere per null"
+
+#, fuzzy
+msgid "Unable to open raster map [%s]."
+msgstr "impossibile aprire <%s>"
+
+#, fuzzy
+msgid "Unable to find raster [%s]."
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "name for new raster map"
+msgstr "Nome di un nuovo file raster"
+
+#, fuzzy
+msgid "Output GRASS image file"
+msgstr "Mostra il titolo del file raster"
+
+#, fuzzy
+msgid "Resulting output map"
+msgstr "Mappa raster in input"
+
+#, fuzzy
+msgid "name for new vector map"
+msgstr "Nome di un file vettoriale in output"
+
+#, fuzzy
+msgid "name for new vector map (omit for display to stdout)"
+msgstr "Nome del nuovo file PPM. (use out=- per lo standard output)"
+
+#, fuzzy
+msgid "Input vector map"
+msgstr "Nome del driver in output"
+
+#, fuzzy
+msgid "%s: ERROR can't open tempfile"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "unable to find raster map [%s]"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "<%s> raster map not found"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "<%s> unable to open raster map"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Cannot find vector map [%s]"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "%s - can't open raster map"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Can't get row %d from raster map %s"
+msgstr "impossibile aprire <%s>"
+
+#, fuzzy
+msgid "%s - raster map not found"
+msgstr "raster <%s> non trovato"
+
+msgid "string representing no data cell value"
+msgstr "strighe che rappresentano le celle prive di valori"
+
+msgid "File name of classification result"
+msgstr "Nome del file con il risultato della classificazione"
+
+msgid "quiet"
+msgstr "silenzioso"
+
+#, fuzzy
+msgid "<%s> - illegal output file name"
+msgstr "Nome del file di output"
+
+#, fuzzy
+msgid "%s: <%s> reference map not found"
+msgstr "raster <%s> non trovato"
+
+msgid "Base raster map"
+msgstr "Mappa raster di base"
+
+#, fuzzy
+msgid "%s: raster map not found"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "Problem opening input file [%s]"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Problem opening output file [%s]"
+msgstr "impossibile aprire <%s>"
+
+#, fuzzy
+msgid "can't write category file for <%s>"
+msgstr "Impossibile salvare la region <%s>"
+
+#, fuzzy
+msgid "%s: can't open tempfile"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Unable to read row %d in raster map [%s]"
+msgstr "impossibile aprire <%s>"
+
+#, fuzzy
+msgid "Output verbosely"
+msgstr "Nome del driver in output"
+
+#, fuzzy
+msgid "Can't open raster map %s"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "It could not be find input map <%s>"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "It could not be found input map <%s>"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Cannot find input map <%s>"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Input vector map <%s> not found."
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "Category ranges: e.g. 1,3-8,13"
+msgstr "Categoria lista: es. 1,3-8,13"
+
+#, fuzzy
+msgid "Writing attributes ...\n"
+msgstr "Sto disegnando ..."
+
+#, fuzzy
+msgid "Could not open ascii file <%s>"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Could not open temp file <%s>"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "List available formats and exit"
+msgstr "Visualizza i formati supportati ed esci"
+
+#, fuzzy
+msgid "Vector map <%s> not fould"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "SVG output file"
+msgstr "File di input"
+
+#, fuzzy
+msgid "Could not find vector '%s'"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Could not find vector map %s"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Unable to get row %d from <%s>"
+msgstr "impossibile aprire <%s>"
+
+#, fuzzy
+msgid "No input coordinates provided"
+msgstr "Nessuna mappa in input specificata"
+
+msgid "Raster output file"
+msgstr "File raster in output"
+
+#, fuzzy
+msgid "Writing raster map ... "
+msgstr "Nome del driver in input"
+
+msgid "Keep existing color table"
+msgstr "Mantieni la tabella colore esistente"
+
+msgid "List rules"
+msgstr "Mostra regole"
+
+#, fuzzy
+msgid " %d rows, %d cols."
+msgstr "%d raster%s, %d vettoriale%s\n"
+
+#, fuzzy
+msgid "%s in %s - can't read header file"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "%s - unable to create raster map"
+msgstr "Nome della mappa raster risultante"
+
+#, fuzzy
+msgid "%s - unable to create category file"
+msgstr "Valore da scrivere per null"
+
+#, fuzzy
+msgid "Vector map with points for which to modify the attribute table"
+msgstr "Non riesco a descrivere la tabella"
+
+#, fuzzy
+msgid "Layer of the vector for which to modify the attribute table"
+msgstr ""
+"Nome della mappa vettoriale di punti della quale editare la tabella attributi"
+
+#, fuzzy
+msgid "Path to an output file"
+msgstr "Nome del file in output"
+
+#, fuzzy
+msgid "Name of existing raster map to be displayed"
+msgstr "Nome di una mappa raster esistente"
+
+msgid "driver name:"
+msgstr "nome del driver:"
+
+msgid "Database name:"
+msgstr "Nome del database:"
+
+#, fuzzy
+msgid "could not find input map <%s>"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "unable to open raster map [%s]"
+msgstr "Non riesco ad aprire il cellfile per [%s]"
+
+#, fuzzy
+msgid "cannot get layer info for vector map"
+msgstr "Non riesco ad impostare user/password"
+
+#, fuzzy
+msgid "cannot open database %s by driver %s"
+msgstr "Non riesco ad eseguire il driver '%s'"
+
+#, fuzzy
+msgid "column type not supported"
+msgstr "driver pg: colonna '%s', di tipo %d non supportata"
+
+#, fuzzy
+msgid "cannot select data from table"
+msgstr "Non riesco a mostrare i database"
+
+#, fuzzy
+msgid "cannot create table: %s"
+msgstr "Non riesco a descrivere la tabella"
+
+#, fuzzy
+msgid "cannot create index"
+msgstr "Non riesco a descrivere la tabella"
+
+#, fuzzy
+msgid "cannot grant privileges on table %s"
+msgstr "Non riesco a descrivere la tabella"
+
+#, fuzzy
+msgid "column type  not supported"
+msgstr "driver pg: colonna '%s', di tipo %d non supportata"
+
+#, fuzzy
+msgid "Cannot find vector map"
+msgstr "Non riesco ad impostare user/password"
+
+#, fuzzy
+msgid "Cannot find raster map"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Cannot open raster map"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Can't open temp file %s"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Error while reading cell map."
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Error while writing new cell map."
+msgstr "Errore nella scrittura della grid. Disco pieno?"
+
+#, fuzzy
+msgid "Error in opening output file <%s>"
+msgstr "impossibile aprire <%s>"
+
+#, fuzzy
+msgid "Unable to find input cell map <%s>"
+msgstr "impossibile aprire <%s>"
+
+#, fuzzy
+msgid "Error in opening input file <%s>"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Unable to open cell man <%s> for input.\n"
+msgstr "impossibile aprire <%s>"
+
+#, fuzzy
+msgid "Unable to open cell map <%s> for output.\n"
+msgstr "impossibile aprire <%s>"
+
+#, fuzzy
+msgid "Unable to read map raster row %d"
+msgstr "Nome del raster"
+
+#, fuzzy
+msgid "Unable to write color table to raster [%s]"
+msgstr "impossibile aprire <%s>"
+
+#, fuzzy
+msgid "Cannot find map %s"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Cannot open map %s"
+msgstr "Non riesco ad impostare user/password"
+
+msgid "Name of predefined rules file"
+msgstr "Nome del file con le regole predefinite"
+
+#, fuzzy
+msgid "R:G:B value(s) out of range [0..255]: %d:%d:%d"
+msgstr ""
+"** attenzione: valore(i) R:G:B al di fuori dell'intervallo [0..255]: %d:%d:%"
+"d **\n"
+
+#, fuzzy
+msgid "R G B value(s) out of range [0..255]: %d %d %d"
+msgstr ""
+"** attenzione: valore(i) R G B al di fuori dell'intervallo [0..255]: %d %d %"
+"d **\n"
+
+#, fuzzy
+msgid "no such value"
+msgstr "** attenzione: non trovo il valore **\n"
+
+#, fuzzy
+msgid "%s:line %d:%s"
+msgstr "%s:linea %d:%s\n"
+
+#, fuzzy
+msgid "bad color specification"
+msgstr "** definizione errata del colore **\n"
+
+#, fuzzy
+msgid "%s - unknown color"
+msgstr "%s - colore sconosciuto\n"
+
+msgid "Valid colors are:\n"
+msgstr "I colori validi sono:\n"
+
+#, fuzzy
+msgid "Unable to find cover map <%s>"
+msgstr "impossibile aprire <%s>"
+
+#, fuzzy
+msgid "%s: reading category file for %s"
+msgstr "Errore nella lettura del file dbmscap\n"
+
+#, fuzzy
+msgid "%s: unable to open raster map [%s]"
+msgstr "Non riesco ad aprire il cellfile per [%s]"
+
+#, fuzzy
+msgid "%s: unable to create raster map [%s]"
+msgstr "Nome della mappa raster risultante"
+
+#, fuzzy
+msgid "Unable to open database %s with driver %s"
+msgstr "Non riesco ad aprire il database %s col driver %s"
+
+#, fuzzy
+msgid "%s: Unable to read raster map [%s]"
+msgstr "Nome della mappa raster risultante"
+
+#, fuzzy
+msgid "%s: unable to open raster map <%s>"
+msgstr "impossibile aprire <%s>"
+
+#, fuzzy
+msgid "%s: Failed to read raster row %d"
+msgstr "Nome del raster"
+
+#, fuzzy
+msgid "Unable to find [%s]."
+msgstr "impossibile aprire <%s>"
+
+#, fuzzy
+msgid "Unable to read cats table for %s"
+msgstr "impossibile aprire <%s>"
+
+#, fuzzy
+msgid "Could not open raster <%s>"
+msgstr "impossibile aprire <%s>"
+
+msgid ""
+"Font name (not supported interactively, see also -l flag) or path to "
+"TrueType font (including file name)"
+msgstr ""
+"Nome del tipo carattere (non supportato in maniera interattiva, in tal caso "
+"vedi il flag -l) oppure percorso del font TrueType (completo del nome del "
+"file)"
+
+#, fuzzy
+msgid "%s: o_open_file: raster map %s not found"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "%s: o_open_file: could not open raster map %s in %s"
+msgstr "impossibile aprire <%s>"
+
+#, fuzzy
+msgid "No record for category for [%d]"
+msgstr "Nessun record per la cat = %d"
+
+#, fuzzy
+msgid "Error reading ASCII file <%s>"
+msgstr "Errore nella lettura del file dbmscap\n"
+
+#, fuzzy
+msgid "Error reading categories: <%s>"
+msgstr "Errore nella lettura del file dbmscap\n"
+
+#, fuzzy
+msgid "category [%d]"
+msgstr ""
+"Layer: %d\n"
+"categoria: %d\n"
+
+#, fuzzy
+msgid "No lines found"
+msgstr "Non ho trovato nulla.\n"
+
+#, fuzzy
+msgid "Could not find input vector '%s'"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Failed opening output vector map '%s'"
+msgstr "impossibile aprire <%s>"
+
+#, fuzzy
+msgid "Error reading ascii file: [%s]"
+msgstr "Errore nella lettura del file dbmscap\n"
+
+#, fuzzy
+msgid "%s: <%s> vector map not found"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "Vector <%s> could not be open"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "Raster <%s> could not be open."
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "Interpolation()"
+msgstr "Mostra il titolo del file raster"
+
+#, fuzzy
+msgid "Interpolation: nsply = %d"
+msgstr "Mostra il titolo del file raster"
+
+#, fuzzy
+msgid "%s: Dropping <s>"
+msgstr "Non riesco ad impostare user/password"
+
+#, fuzzy
+msgid "Interpolation was a success!"
+msgstr "Mostra il titolo del file raster"
+
+#, fuzzy
+msgid "CrossCorrelation: %d points read in region. "
+msgstr "Utilizza la regione corrente"
+
+#, fuzzy
+msgid "CrossCorrelation: It shouldn't take too long."
+msgstr "Non riesco a selezionare dati dalla tabella"
+
+#, fuzzy
+msgid "%s -- illegal output file name"
+msgstr "Nome del file di output"
+
+#, fuzzy
+msgid "Sorry, with method '%s' you have to define an output map."
+msgstr "Nome del file in output"
+
+#, fuzzy
+msgid "Writing "
+msgstr "Sto disegnando ..."
+
+#, fuzzy
+msgid "Maximum number of iteration"
+msgstr "Numero di passi attraverso il dataset"
+
+#, fuzzy
+msgid "Existing raster map name"
+msgstr "Nome del raster map esistente"
+
+#, fuzzy
+msgid "%s - can't read raster cellhd"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "error reading cell data"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Done!"
+msgstr "Fatto.\n"
+
+#, fuzzy
+msgid "No line found."
+msgstr "Non ho trovato nulla.\n"
+
+#, fuzzy
+msgid "Nothing Found."
+msgstr "Non ho trovato nulla.\n"
+
+#, fuzzy
+msgid "Could not open ascii file [%s]"
+msgstr "Non riesco a trovare il file raster %s"
+
+msgid "vector map to be created"
+msgstr "file vettoriale da creare"
+
+#, fuzzy
+msgid "Conversion of [%s] to vector map ..."
+msgstr "Mappa raster risultante"
+
+#, fuzzy
+msgid "EPSG code of projection to be created"
+msgstr "Numero di passi attraverso il dataset"
+
+msgid "must be even number of names"
+msgstr "deve essere un numero pari di nomi"
+
+msgid "ERROR: <%s> not found\n"
+msgstr "ERRORE: <%s> non trovato\n"
+
+msgid "ERROR: <%s> illegal name\n"
+msgstr "ERRORE: <%s> nome illegale\n"
+
+#, fuzzy
+msgid "Cannot open toolbox: %s"
+msgstr "Non riesco ad impostare user/password"
+
+#, fuzzy
+msgid "Cannot open toolbox."
+msgstr "Non riesco ad impostare user/password"
+
+#, fuzzy
+msgid "Vector map(s) -- source for composite"
+msgstr "File di input"
+
+#, fuzzy
+msgid "New vector composite"
+msgstr "Nome di un file vettoriale in output"
+
+#, fuzzy
+msgid ""
+"Name of output vector points map (if not specified, the program writes to "
+"standard output)"
+msgstr ""
+"Nome della mappa vettoriale di punti della quale editare la tabella attributi"
+
+#, fuzzy
+msgid "Vector map '%s' not found"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "vector, segment, curvature"
+msgstr "vettore da rimuovere"
+
+#, fuzzy
+msgid "More lines with category %d found"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "%s\n"
+msgstr "%s Sposta\n"
+
+#, fuzzy
+msgid "Raster '%s' not found"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "Cold not get raster row"
+msgstr "Nome del raster"
+
+#, fuzzy
+msgid "ILLEGAL Resolution!"
+msgstr "Risoluzione"
+
+#, fuzzy
+msgid "Error opening raster map %s"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Copy raster map <%s> into the memory"
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "vector map for which to edit attribute table"
+msgstr "Non riesco a descrivere la tabella"
+
+#, fuzzy
+msgid "Query layer"
+msgstr "nome tabella"
+
+#, fuzzy
+msgid "Column name (will be updated by qvector values)"
+msgstr "Nome della colonna (che sarà aggiornata con i valori raster)"
+
+#, fuzzy
+msgid "Query column name"
+msgstr "nome tabella"
+
+#, fuzzy
+msgid "Enter imagery group to be registered"
+msgstr "Nome della mappa raster"
+
+#, fuzzy
+msgid "output layer name"
+msgstr "Nome del file di output"
+
+msgid "L: from  M: to R: quit\n"
+msgstr "L: da  M: a R: esci\n"
+
+msgid ""
+"\n"
+"Where %s is one of:\n"
+msgstr ""
+"\n"
+"Dove %s è uno di:\n"
+
+#, fuzzy
+msgid "%s: - no such database %s\n"
+msgstr "Non posso scrivere i collegamenti del database"
+
+#, fuzzy
+msgid "No database updates."
+msgstr "nome database"
+
+#, fuzzy
+msgid "Input aspect file"
+msgstr "Nome della tabella in output"
+
+#, fuzzy
+msgid "Input barrier file"
+msgstr "File di input"
+
+#, fuzzy
+msgid "Quiet operation"
+msgstr "%s Esce dal menu\n"
+
+#, fuzzy
+msgid "datetime, datetime1/datetime2, or none"
+msgstr "nessuno"
+
+#, fuzzy
+msgid ""
+"\n"
+"Done\n"
+msgstr "Fatto\n"
+
+#, fuzzy
+msgid "Open vector 3d raster map %s"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Open 3d raster map %s"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Vector import complete"
+msgstr "File di input"
+
+#, fuzzy
+msgid "Unable to create raster map for [%s]"
+msgstr "Non riesco ad aprire il cellfile per [%s]"
+
+msgid "Done\n"
+msgstr "Fatto\n"
+
+#, fuzzy
+msgid "Open Raster file %s in Mapset %s"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Open 3d raster map %s\n"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Open elev raster map %s\n"
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Could not open map %s\n"
+msgstr "impossibile aprire <%s>"
+
+msgid "Bin raster map to be imported"
+msgstr "Il file raster bin è stato importato"
+
+msgid "Region size is lower than minreg, nothing displayed.\n"
+msgstr ""
+"La dimensione della regione è inferiore rispetto al valore di minreg, non "
+"verrà visualizzato nulla.\n"
+
+msgid "Region size is greater than maxreg, nothing displayed.\n"
+msgstr ""
+"La dimensione della regione è superiore rispetto al valore di maxreg, non "
+"verrà visualizzato nulla.\n"
+
+#, fuzzy
+msgid "Maximum distance"
+msgstr "Livello massimo di contorno"
+
+#, fuzzy
+msgid "Makes 3D trees from input point vector map"
+msgstr "Nome di un file vettoriale in output"
+
+#, fuzzy
+msgid "Name of the column with tree crown width"
+msgstr "Nome del file raster in input"
+
+#, fuzzy
+msgid "Name of the column with tree species"
+msgstr "Nome del file raster in input"
+
+#, fuzzy
+msgid "Cannot select attributes for point #%d"
+msgstr "Non riesco a mostrare i database"
+
+#, fuzzy
+msgid "Right: "
+msgstr " Destro: esce\n"
+
+msgid "%s Pan\n"
+msgstr "%s Sposta\n"
+
+msgid "%s Quit\n"
+msgstr "%s Esce\n"
+
+msgid "Draw geographic grid"
+msgstr "Disegna griglia geografica"
+
+#, fuzzy
+msgid "Quiet mode"
+msgstr "%s Esce dal menu\n"
+
+#, fuzzy
+msgid "%s[%d]: No raster map specified."
+msgstr "raster <%s> non trovato"
+
+#, fuzzy
+msgid "done."
+msgstr "Fatto.\n"
+
+#, fuzzy
+msgid "name for new binary vector map (omit for display to stdout)"
+msgstr "Nome del nuovo file PPM. (use out=- per lo standard output)"
+
+#, fuzzy
+msgid "Name for G3d raster map"
+msgstr "Nome del raster"
+
+#, fuzzy
+msgid "No output maps"
+msgstr "Nome della mappa di output"
+
+#, fuzzy
+msgid "Wrong rgb map values! Values should in between 0 and 255!\n"
+msgstr ""
+"Valori della mappa g3d errati! I valori devono essere compresi tra 0 e 255!\n"
+
+#, fuzzy
+#~ msgid "Name for output file (do NOT add extension)"
 #~ msgstr "Nome di un file vettoriale in output"
 
 #, fuzzy
-#~ msgid "Number of time iterations (sec.)"
-#~ msgstr "Numero di passi attraverso il dataset"
-
-#, fuzzy
-#~ msgid "Multiscale simulation"
-#~ msgstr "locazione del database"
-
-#, fuzzy
-#~ msgid "Name of the elevation raster map, same units as N,E: [m] or [ft] "
-#~ msgstr "Nome del file raster in input"
-
-#, fuzzy
-#~ msgid "Name of the x-derivatives raster map [m/m] or [ft/ft]"
-#~ msgstr "Nome del file raster in input"
-
-#, fuzzy
-#~ msgid "Name of the y-derivatives raster map [m/m] or [ft/ft]"
-#~ msgstr "Nome del file raster in input"
-
-#~ msgid "Quietly"
-#~ msgstr "Silenziosamente"
-
-#, fuzzy
-#~ msgid ""
-#~ "Specific input value to be assigned to the north and/or south poles for "
-#~ "longitude-latitude grids"
-#~ msgstr ""
-#~ "specifica un valore di output con cui assegnare i poli nord e/o sud per "
-#~ "la griglia di longitudine-latitudine"
-
-#, fuzzy
-#~ msgid "This module is deprecated. Please use 'r.resamp.interp' instead."
-#~ msgstr ""
-#~ "L'uso dell'istruzione \"scale\" dalla linea di comando è deprecato. Per "
-#~ "favore inserisci l'istruzione \"scale\" nel file di istruzioni."
-
-#, fuzzy
-#~ msgid "Illegal output file name <%s>"
-#~ msgstr "Nome del file di output"
-
-#~ msgid "Raster input maps(s)"
-#~ msgstr "Mappe raster in input"
-
-#, fuzzy
-#~ msgid "Output file name"
-#~ msgstr "Nome del file di output"
-
-#, fuzzy
-#~ msgid ""
-#~ "Raster map [%s] already exists.\n"
-#~ "Please try another."
-#~ msgstr "ERRORE: <%s> esiste già\n"
-
-#, fuzzy
-#~ msgid "Path to rules file"
-#~ msgstr "Nome di un file vettoriale in output"
-
-#, fuzzy
-#~ msgid "RGB raster map <%s> not found"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "Vector cell map <%s> not found"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "Cannot open raster map [%s]!"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#~ msgid "Raster file [%s] is empty."
-#~ msgstr "Il file raster [%s] è vuoto."
-
-#, fuzzy
-#~ msgid "Unable to write header for [%s]."
-#~ msgstr "Non riesco ad aprire il cellfile per [%s]"
-
-#, fuzzy
-#~ msgid "        Number of rows"
-#~ msgstr "Numero di righe"
-
-#, fuzzy
-#~ msgid "        Number of cols"
-#~ msgstr "Numero di colonne"
-
-#, fuzzy
-#~ msgid "Raster file [%s] not found. Exiting."
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "Edit the history file for [%s]? "
-#~ msgstr "Non riesco ad aprire il cellfile per [%s]"
-
-#, fuzzy
-#~ msgid "%s map <%s> not found"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "Category file for <%s> not updated"
-#~ msgstr "File category per [%s] non disponibile"
-
-#, fuzzy
-#~ msgid "Category file for <%s> updated"
-#~ msgstr "impossibile aprire <%s>"
-
-#~ msgid "Title, in quotes"
-#~ msgstr "Titolo, fra virgolette"
-
-#, fuzzy
-#~ msgid "Quiet - Do not show progress"
-#~ msgstr "Silenzioso"
-
-#, fuzzy
-#~ msgid "Unable to find starting vector <%s> "
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Unable to find stop vector <%s>"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Raster output map <%s> not found (no start_points given)"
-#~ msgstr "raster <%s> non trovato"
-
-#~ msgid "Apply filter only to zero data values"
-#~ msgstr "Applica soltanto il filtro per i valori uguali a zero"
-
-#, fuzzy
-#~ msgid "Error reading '%s' map"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Cell file not found"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "Vector map <%s> not found in the current mapset"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "Threshold distance"
-#~ msgstr "Unità della distanza"
-
-#, fuzzy
-#~ msgid "Cannot execute: %s"
-#~ msgstr "Non riesco ad impostare user/password"
-
-#, fuzzy
-#~ msgid "Cannot link table: %s"
-#~ msgstr "Non posso scrivere i collegamenti del database"
-
-#, fuzzy
-#~ msgid "DXF input file"
+#~ msgid "Images"
 #~ msgstr "File di input"
 
 #, fuzzy
-#~ msgid "Cannot open dxf file <%s>"
-#~ msgstr "Non riesco ad impostare user/password"
+#~ msgid "Data type"
+#~ msgstr "Tipo di grafico"
 
 #, fuzzy
-#~ msgid "Cannot open new vector map <%s>"
+#~ msgid "slopein raster map <%s> not found"
+#~ msgstr "raster <%s> non trovato"
+
+#, fuzzy
+#~ msgid "%s: Error reading from raster map <%s> in mapset <%s>"
 #~ msgstr "Non riesco a trovare il file raster %s"
 
 #, fuzzy
-#~ msgid "Conversion of <%s> to vector map:"
-#~ msgstr "Nome di un file vettoriale in output"
-
-#, fuzzy
-#~ msgid "Vector map <%s> is not in user mapset and cannot be updated"
+#~ msgid "Base raster map <%s> not found"
 #~ msgstr "raster <%s> non trovato"
 
 #, fuzzy
-#~ msgid "Network input map <%s> not found"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "Hilight color for text"
-#~ msgstr "Colore di evidenziazione del testo"
-
-#~ msgid "Line: %d\n"
-#~ msgstr "Linea: %d\n"
-
-#, fuzzy
-#~ msgid "output raster map"
-#~ msgstr "Nome del driver in output"
-
-#~ msgid "Name of input raster map(s)"
-#~ msgstr "Nome della mappe raster in input"
-
-#~ msgid "name=%s\n"
-#~ msgstr "name=%s\n"
-
-#~ msgid "mapset=%s\n"
-#~ msgstr "mapset=%s\n"
-
-#~ msgid "fullname=%s\n"
-#~ msgstr "fullname=%s\n"
-
-#~ msgid "usage: %s file [prompt %%x %%y]\n"
-#~ msgstr "uso %s file [prompt %%x %%y]\n"
-
-#, fuzzy
-#~ msgid "Illegal file name for real part: %s"
-#~ msgstr "File di input"
-
-#, fuzzy
-#~ msgid "Illegal file name for imaginary part: %s"
-#~ msgstr "File di input"
-
-#, fuzzy
-#~ msgid "Illegal group name <%s>"
-#~ msgstr "Utilizzando le coordinate del centro della mappa\n"
-
-#, fuzzy
-#~ msgid "Illegal signature file name <%s>"
-#~ msgstr "Nome file non valido [%s]."
-
-#~ msgid "visualization"
-#~ msgstr "visualizzazione"
-
-#, fuzzy
-#~ msgid "Raster file(s) for Elevation"
-#~ msgstr "file raster per la Vista%d"
-
-#, fuzzy
-#~ msgid "Raster file(s) for Color"
-#~ msgstr "file raster per la Vista%d"
-
-#, fuzzy
-#~ msgid "Can't clear current graphics window"
-#~ msgstr "Non riesco a descrivere la tabella"
-
-#, fuzzy
-#~ msgid "Cannot use current window"
-#~ msgstr "Non riesco a descrivere la tabella"
-
-#~ msgid "Error reading raster map"
-#~ msgstr "Errore leggendo la mappa raster"
-
-#, fuzzy
-#~ msgid "Output profile data to file(s) with prefix 'name'"
-#~ msgstr "Mostra il titolo del file raster"
-
-#, fuzzy
-#~ msgid "Error opening cell-file"
-#~ msgstr "Errore nell'apertura del file g3d"
-
-#, fuzzy
-#~ msgid "Error reading from cell-file"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "%s: Couldn't open raster <%s@%s>"
-#~ msgstr "Impossibile aprire <%s>"
-
-#~ msgid " Middle: toggle flash color\n"
-#~ msgstr " Centrale: abilita colore flash\n"
-
-#, fuzzy
-#~ msgid "No current graphics window"
-#~ msgstr "Non riesco a descrivere la tabella"
-
-#, fuzzy
-#~ msgid "Can't set current graphics window"
-#~ msgstr "Non riesco a descrivere la tabella"
-
-#, fuzzy
-#~ msgid "Getting graphics window coordinates"
-#~ msgstr "Utilizzando le coordinate del centro della mappa\n"
-
-#, fuzzy
-#~ msgid "Font name or pathname of TTF file"
-#~ msgstr "Nome di un nuovo file raster"
-
-#, fuzzy
-#~ msgid "Setting release of FreeType"
-#~ msgstr ""
-#~ "\n"
-#~ "Imposta la versione di FreeType\n"
-
-#~ msgid "Display number of colors"
-#~ msgstr "Mostra numero di colori"
-
-#, fuzzy
-#~ msgid "Name of frame(s) to save"
-#~ msgstr "Nome della mappa raster"
-
-#, fuzzy
-#~ msgid ""
-#~ "Creates and displays a menu within the active frame on the graphics "
-#~ "monitor."
-#~ msgstr ""
-#~ "Seleziona il tipo di carattere con cui il testo deve essere rappresentato "
-#~ "nel monitor grafico dell'utente."
-
-#~ msgid "Path to TrueType font (including file name)"
-#~ msgstr "Percorso del carattere TrueType (nome del file incluso)"
-
-#, fuzzy
-#~ msgid "Either text or -c should be given"
-#~ msgstr "Devono essere fornite sia l'opzione 'from_table' che 'select' "
-
-#, fuzzy
-#~ msgid "Unable to write the temporary file"
-#~ msgstr "Valore da scrivere per null"
-
-#, fuzzy
-#~ msgid "No predefined font"
-#~ msgstr "Nome del file con le regole predefinite"
-
-#, fuzzy
-#~ msgid " Left:    Place text here\n"
-#~ msgstr " Sinistro:  mostra cosa c'è qui\n"
-
-#~ msgid " Right:   Quit\n"
-#~ msgstr " Destro:  Esce\n"
-
-#, fuzzy
-#~ msgid "ERROR: can not get \"list\" items"
-#~ msgstr "ERRORE: non riesco ad ottenere la \"lista\" degli oggetti\n"
-
-#, fuzzy
-#~ msgid "-j flag forced"
-#~ msgstr "-j flag forzato\n"
-
-#~ msgid "No map is displayed in GRASS monitor"
-#~ msgstr "Non è mostrata nessuna mappa nel monitor GRASS"
-
-#~ msgid "You must select more than one point"
-#~ msgstr "Devi selezionare più di un punto"
-
-#~ msgid "You must select at least four points"
-#~ msgstr "Devi selezionare almeno quattro punti"
-
-#~ msgid "No raster or vector map displayed"
-#~ msgstr "Nessuna mappa raster o vettoriale visualizzata"
-
-#~ msgid "Name of graphics monitor to start"
-#~ msgstr "Nome del monitor grafico da avviare"
-
-#~ msgid "Name of graphics monitor to stop"
-#~ msgstr "Nome del monitor grafico da chiudere"
-
-#~ msgid "Name of graphics monitor to select"
-#~ msgstr "Nome del monitor grafico da selezionare"
-
-#~ msgid "Name of graphics monitor to unlock"
-#~ msgstr "Nome del monitor grafico da sbloccare"
-
-#~ msgid "List all monitors"
-#~ msgstr "Mostra di tutti i monitor"
-
-#~ msgid "List all monitors (with current status)"
-#~ msgstr "Mostra tutti i monitor (con lo stato corrente)"
-
-#, fuzzy
-#~ msgid "Print name of currently selected monitor"
-#~ msgstr "Utilizza la regione corrente"
-
-#~ msgid "Monitor <%s> in use by another user"
-#~ msgstr "Monitor <%s> è in uso da un altro utente"
-
-#~ msgid "Monitor '%s' terminated"
-#~ msgstr "Monitor '%s' chiuso"
-
-#~ msgid "Error - Monitor '%s' was not running"
-#~ msgstr "Errore - Il monitor '%s' non è avviato"
-
-#~ msgid "Error - Monitor '%s' in use by another user"
-#~ msgstr "Errore - Il monitor '%s' è in uso da un altro utente"
-
-#, fuzzy
-#~ msgid "Error - Locking mechanism failed"
-#~ msgstr "Errore nell'apertura del file g3d"
-
-#, fuzzy
-#~ msgid "Error choosing frame [%s]\n"
-#~ msgstr "Errore nel leggere il range di [%s]"
-
-#~ msgid ""
-#~ "\n"
-#~ "Buttons:\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Bottoni:\n"
-
-#, fuzzy
-#~ msgid "Left:   Select frame\n"
-#~ msgstr " Sinistro:  mostra cosa c'è qui\n"
-
-#, fuzzy
-#~ msgid "Right:  Accept frame\n"
-#~ msgstr "%s Esce dal menu\n"
-
-#, fuzzy
-#~ msgid "Manages display frames on the user's graphics monitor."
-#~ msgstr ""
-#~ "Seleziona il tipo di carattere con cui il testo deve essere rappresentato "
-#~ "nel monitor grafico dell'utente."
-
-#, fuzzy
-#~ msgid "Create a new frame"
-#~ msgstr "Non riesco a descrivere la tabella"
-
-#, fuzzy
-#~ msgid "Select a frame"
-#~ msgstr "Estrae dati dal database."
-
-#, fuzzy
-#~ msgid "Print name of current frame"
-#~ msgstr "Stampa la regione corrente"
-
-#, fuzzy
-#~ msgid "List map names displayed in GRASS monitor"
-#~ msgstr "Non è mostrata nessuna mappa nel monitor GRASS"
-
-#, fuzzy
-#~ msgid "Frame to be created/selected"
-#~ msgstr "file vettoriale da creare"
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "Mouse Buttons:"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "Bottoni:\n"
-
-#, fuzzy
-#~ msgid "Left:   Select From\n"
-#~ msgstr " Sinistro:  mostra cosa c'è qui\n"
-
-#, fuzzy
-#~ msgid ""
-#~ "Right:  Quit\n"
-#~ "\n"
-#~ msgstr " Destro: esce\n"
-
-#, fuzzy
-#~ msgid "Monitor: interactive command in redraw"
-#~ msgstr "Monitore: comandi interattivi per il ridisegnamento\n"
-
-#, fuzzy
-#~ msgid "found %d visuals of type TrueColor"
-#~ msgstr "trovate %d viste per il tipo TrueColor\n"
-
-#, fuzzy
-#~ msgid "searching for highest bit depth"
-#~ msgstr "ricerca del valore massimo di bit depth\n"
-
-#, fuzzy
-#~ msgid "selected %d bit depth"
-#~ msgstr "bit depth %d selezionata\n"
-
-#, fuzzy
-#~ msgid "using default visual which is %s"
-#~ msgstr "la vista predefinita utilizzata è %s\n"
-
-#, fuzzy
-#~ msgid "Monitor: waitpid: expected %d but got %d"
-#~ msgstr "Monitor: waitpid: atteso %d ma ricevuto %d\n"
-
-#, fuzzy
-#~ msgid "Monitor: XGetWMName failed"
-#~ msgstr "Monitor: XGetWMName fallito\n"
-
-#, fuzzy
-#~ msgid "Monitor: XGetWMName: bad result"
-#~ msgstr "Monitor: XGetWMName: risultato sbagliato\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "WARNING!  A projection file already exists for this location\n"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "ATTENZIONE!  Un file della proiezione esiste già per questa location\n"
-
-#~ msgid ""
-#~ "Would you still like to overwrite the current projection information "
-#~ msgstr "Vuoi ancora sovrascrivere le attuali informazioni sulla proiezione"
-
-#~ msgid "The projection information will not be updated."
-#~ msgstr "Le informazioni sulla proiezione non saranno aggiornate"
-
-#, fuzzy
-#~ msgid "Raster map to zoom into"
-#~ msgstr "Mappa(e) raster da leggere"
-
-#~ msgid "Save the current region to region definition file"
-#~ msgstr ""
-#~ "Salva le impostazione della region corrente in un file di definizione "
-#~ "della region"
-
-#~ msgid "<%s> is an illegal region name"
-#~ msgstr "<%s> è un nome di regione illegale"
-
-#, fuzzy
-#~ msgid "Erasing monitors ..."
-#~ msgstr "Sto disegnando ..."
-
-#, fuzzy
-#~ msgid "Could not open input file <%s>."
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Unable to open file: <%s>"
-#~ msgstr "Non riesco ad aprire il cellfile per [%s]"
-
-#, fuzzy
-#~ msgid "not found\n"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "Raster map not found."
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "Raster file [%s] not found"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "It was not possible writing in <%s>."
+#~ msgid "Color table for <%s> updated"
 #~ msgstr "impossibile aprire <%s>"
 
 #, fuzzy
-#~ msgid "Cannot create table: '%s'"
-#~ msgstr "Non riesco a descrivere la tabella"
-
-#, fuzzy
-#~ msgid "Unable to get category list <%s>, editing terminated"
-#~ msgstr "Non riesco a leggere da <%s>"
-
-#, fuzzy
-#~ msgid "Unable to delete layer/category [%d/%d] line %d"
+#~ msgid "Error reading raster map [%s]."
 #~ msgstr "Non riesco a trovare il file raster %s"
 
 #, fuzzy
-#~ msgid "Unable to write line %d"
-#~ msgstr "Valore da scrivere per null"
-
-#, fuzzy
-#~ msgid "Unable to delete line %d"
-#~ msgstr "Non riesco ad impostare user/password"
-
-#, fuzzy
-#~ msgid "Unknown query tool '%s'"
-#~ msgstr "Nome del raster"
-
-#, fuzzy
-#~ msgid "No layer database connection"
-#~ msgstr "locazione del database"
-
-#, fuzzy
-#~ msgid "%d categories loaded from the database"
-#~ msgstr "Estrae dati dal database."
-
-#, fuzzy
-#~ msgid "Done"
-#~ msgstr "Fatto.\n"
-
-#, fuzzy
-#~ msgid "Cannot create layer"
-#~ msgstr "Non riesco a descrivere la tabella"
-
-#, fuzzy
-#~ msgid "Vector map <%s> in location <%s> in mapset <%s> not available"
-#~ msgstr "Impossibile trovare il vettoriale [%s]"
-
-#, fuzzy
-#~ msgid "Column type [%d] not supported"
-#~ msgstr "Tipo di colonna non supportata"
-
-#, fuzzy
-#~ msgid "Cannot read map header for <%s>"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Cannot read category file for <%s>"
-#~ msgstr "Impossibile salvare la region <%s>"
-
-#~ msgid "Print;Shell Script"
-#~ msgstr "Stampa; script per la shell"
-
-#~ msgid "Category file for [%s] not available"
-#~ msgstr "File category per [%s] non disponibile"
-
-#, fuzzy
-#~ msgid "%s: <%s> raster map not found"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "%s: <%s> raster map exists already"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "Cannot read category file of raster map <%s>"
-#~ msgstr "Impossibile salvare la region <%s>"
-
-#, fuzzy
-#~ msgid "%s - map not found"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "%s: Cannot open [%s]"
-#~ msgstr "Non riesco ad impostare user/password"
-
-#, fuzzy
-#~ msgid "%s not found"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "Could not access %s layer"
-#~ msgstr "impossibile aprire <%s>"
-
-#, fuzzy
-#~ msgid "Vector map %s - not found"
-#~ msgstr "raster <%s> non trovato"
-
-#~ msgid "Raster map containing elevation data"
-#~ msgstr "Mappa raster che contiene i valori delle altezze"
-
-#~ msgid "Raster map name for storing results"
-#~ msgstr "Mappa raster con il nome dei risultati archiviati"
-
-#~ msgid "Height of the viewing location"
-#~ msgstr "Altezza della locazione visualizzata"
-
-#, fuzzy
-#~ msgid "%s: <%s> cellfile not found"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "Cell file [%s] not found\n"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "rgb cell map [%s] not found\n"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "vector cell map [%s] not found\n"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "%s - %s not found"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "Creating support files"
-#~ msgstr "Errore nella lettura del file dbmscap\n"
-
-#, fuzzy
-#~ msgid "%s file [%s] not found!"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "%s: %s - map not found"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "%s: unable to open %s"
-#~ msgstr "impossibile aprire <%s>"
-
-#, fuzzy
-#~ msgid "%s - not found"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "Cannot read %s"
-#~ msgstr "Non riesco ad impostare user/password"
-
-#, fuzzy
-#~ msgid "[%s] map not found."
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "[%s] map not found"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "elevation file [%s] not found"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "Cannot describe table <%s>"
-#~ msgstr "Non riesco a descrivere la tabella"
-
-#, fuzzy
-#~ msgid "Cannot insert values: %s"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "%s given an illegal number of points [%d]"
-#~ msgstr "%s ha dato un numero non valido di sites [%d]"
-
-#, fuzzy
-#~ msgid "Unable to open database %s by driver %s"
-#~ msgstr "Non riesco ad aprire il database %s col driver %s"
-
-#, fuzzy
-#~ msgid "No DB connection settings defined. Set with db.connect"
-#~ msgstr ""
-#~ "Nessuna impostazione definita per il database. Fallo usando db.connect"
-
-#~ msgid "Could not find input %s"
-#~ msgstr "Non riesco a trovare l'input %s"
-
-#~ msgid "Could not open input"
-#~ msgstr "Non riesco ad aprire l'input"
-
-#~ msgid "Could not open output"
-#~ msgstr "Non riesco ad aprire l'output"
-
-#, fuzzy
-#~ msgid "Could not find input map <%s>"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Unable to open driver <%s>"
-#~ msgstr "impossibile aprire <%s>"
-
-#~ msgid "Database connection not defined\n"
-#~ msgstr "Connessione al database non definita\n"
-
-#, fuzzy
-#~ msgid "Can't read header for <%s> in <%s>"
-#~ msgstr "Impossibile leggere l'intestazione del raster 3D <%s> in <%s>"
-
-#, fuzzy
-#~ msgid "Can't read header for 3D raster <%s> in <%s>"
-#~ msgstr "Impossibile leggere l'intestazione del raster 3D <%s> in <%s>"
-
-#~ msgid "%s in %s: %s"
-#~ msgstr "%s in %s: %s"
-
-#, fuzzy
-#~ msgid "Can't write region <%s>"
-#~ msgstr "Impossibile salvare la region <%s>"
-
-#~ msgid "<%s=%s> ** invalid input **"
-#~ msgstr "<%s=%s> ** input non valido **"
-
-#, fuzzy
-#~ msgid "No graphics device selected."
-#~ msgstr "Nessun device grafico selezionato"
-
-#, fuzzy
-#~ msgid "Unable to read raster row."
-#~ msgstr "Nome del raster"
-
-#, fuzzy
-#~ msgid "Training map [%s] not found."
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "%s map not found"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "input raster map"
-#~ msgstr "Nome del driver in input"
-
-#, fuzzy
-#~ msgid "Illegal file name: %s"
-#~ msgstr "Nome file non valido [%s]."
-
-#~ msgid "Cannot get layer info for vector map"
-#~ msgstr "Impossibile ottenere informazioni sul layer vettoriale"
-
-#, fuzzy
-#~ msgid "Cannot open raster map <%s> in <%s>"
-#~ msgstr "Non riesco ad aprire il cellfile [%s]"
-
-#, fuzzy
-#~ msgid "%s: %s - raster map not found"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "%s: %s - illegal name"
-#~ msgstr "Nome del raster map in output"
-
-#, fuzzy
-#~ msgid "%s: ERROR reading category file for %s"
-#~ msgstr "Errore nella lettura del file dbmscap\n"
-
-#, fuzzy
-#~ msgid "%s: %s - not found"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "%s: %s - illegal units"
-#~ msgstr "Nome del raster map in output"
-
-#, fuzzy
-#~ msgid "%s: %s - can't open"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "Reading input map (%s)    ... "
-#~ msgstr "Mappa raster risultante"
-
-#, fuzzy
-#~ msgid "%s - ERROR reading %s"
-#~ msgstr "Errore nella lettura del file dbmscap\n"
-
-#, fuzzy
-#~ msgid "%s: %s - can't create raster map"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Writing output map (%s)   ... "
-#~ msgstr "Nome del driver in output"
-
-#, fuzzy
-#~ msgid "%s - ERROR re-reading %s"
-#~ msgstr "Errore nella lettura del file dbmscap\n"
-
-#, fuzzy
-#~ msgid "Reading raster map... "
-#~ msgstr "Mappa raster risultante"
-
-#, fuzzy
-#~ msgid "Writing raster map... "
-#~ msgstr "Nome del raster map esistente"
-
-#~ msgid "Category list: e.g. 1,3-8,13"
-#~ msgstr "Categoria lista: es. 1,3-8,13"
-
-#~ msgid "Output separator character (default: tab)"
-#~ msgstr "Carattere di separatore in output (predefinito: tab)"
-
-#, fuzzy
-#~ msgid "Cannot read category file of raster map <%s> in <%s>"
-#~ msgstr "Impossibile salvare la region <%s>"
-
-#, fuzzy
-#~ msgid "Cannot find file %s"
-#~ msgstr "Non riesco ad impostare user/password"
-
-#, fuzzy
-#~ msgid "Cannot get header for %s"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Cannot create raster map %s"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Cannot create vector map %s"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Cannot create raster map '%s'"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Number of raster rows to hold in memory"
-#~ msgstr "Nume di righe da tenere in memoria"
-
-#, fuzzy
-#~ msgid "Print raster map title only"
-#~ msgstr "Stampa solo il tipo di mappa raster"
-
-#, fuzzy
-#~ msgid "unknown type: %d"
-#~ msgstr "Tipo sconosciuto"
-
-#~ msgid "Cannot open raster map [%s]"
-#~ msgstr "Non riesco ad aprire il cellfile [%s]"
-
-#, fuzzy
-#~ msgid "Cannot get raster band."
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Cannot read GRASS raster."
-#~ msgstr "Non riesco ad impostare user/password"
-
-#, fuzzy
-#~ msgid "Cannot write GDAL raster."
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Cannot get [%s] driver"
-#~ msgstr "Non riesco a descrivere la tabella"
-
-#, fuzzy
-#~ msgid "Couldn't set geo transform."
-#~ msgstr "Nome del raster"
-
-#, fuzzy
-#~ msgid "Couldn't set projection."
-#~ msgstr "Nome del raster"
-
-#, fuzzy
-#~ msgid "Cannot export [%s] raster map."
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Cannot create [%s] raster map using [%s] driver."
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Cannot read header of raster map <%s>"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Cannot open TIFF file <%s>"
-#~ msgstr "Non riesco ad impostare user/password"
-
-#, fuzzy
-#~ msgid "Reading raster map"
-#~ msgstr "Mappa raster risultante"
-
-#, fuzzy
-#~ msgid "Cannot open output map."
-#~ msgstr "Nome della mappa di output"
-
-#, fuzzy
-#~ msgid "Illegal file name. Please try another."
-#~ msgstr "Nome del file di output"
-
-#, fuzzy
-#~ msgid "%s: can't open %s"
-#~ msgstr "Non riesco ad impostare user/password"
-
-#, fuzzy
-#~ msgid "Reading raster map <%s> ..."
-#~ msgstr "Mappa raster risultante"
-
-#, fuzzy
-#~ msgid "memory allocation failure"
-#~ msgstr "locazione del database"
-
-#, fuzzy
-#~ msgid "Can't find data map."
-#~ msgstr "Non riesco a mostrare i database"
-
-#, fuzzy
-#~ msgid "Output terrain only vector map name"
+#~ msgid "Use '%s' option to change vector map name"
 #~ msgstr "Nome del database in output"
 
 #, fuzzy
-#~ msgid "Cannot open vector map <%s> at the topological level"
-#~ msgstr "impossibile aprire <%s>"
+#~ msgid "Invalid rendering method <%s>"
+#~ msgstr "Area: %d  Numero di isole: %d\n"
 
-#, fuzzy
-#~ msgid "Rebuilding topology ..."
-#~ msgstr "Mappa raster risultante"
-
-#~ msgid "No record for cat = %d"
-#~ msgstr "Nessun record per la cat = %d"
-
-#, fuzzy
-#~ msgid "Removing duplicates ..."
-#~ msgstr "Sto disegnando ..."
-
-#, fuzzy
-#~ msgid "Attaching islands ..."
-#~ msgstr "Sto disegnando ..."
-
-#, fuzzy
-#~ msgid "Attaching centroids ..."
-#~ msgstr "Sto disegnando ..."
-
-#, fuzzy
-#~ msgid "Vector map <%s> not found in current mapset"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "Error allocating memory for `lines_visited'"
-#~ msgstr "impossibile aprire <%s>"
-
-#, fuzzy
-#~ msgid "The number of lines in the input vector map is [%d]"
-#~ msgstr "Nome di  2-%d mappe raster in input"
-
-#, fuzzy
-#~ msgid "The number of polylines in the output vector map is [%d]"
-#~ msgstr "Nome di  2-%d mappe raster in input"
-
-#, fuzzy
-#~ msgid "Database connection not defined for layer <%d>"
-#~ msgstr "Connessione al database non definita\n"
-
-#, fuzzy
-#~ msgid "Cannot open select cursor"
-#~ msgstr "Non riesco ad impostare user/password"
-
-#, fuzzy
-#~ msgid "Cannot get layer info"
-#~ msgstr "Non riesco a descrivere la tabella"
-
-#, fuzzy
-#~ msgid "cell file [%s] not found"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "can't open raster map [%s]"
-#~ msgstr "Non riesco ad aprire il cellfile per [%s]"
-
-#, fuzzy
-#~ msgid "Cannot rewrite line %d"
-#~ msgstr "Impossibile creare l'indice"
-
-#, fuzzy
-#~ msgid "Editing tool"
-#~ msgstr "Esistente"
-
-#, fuzzy
-#~ msgid "Close boundaries"
-#~ msgstr "Non riesco a copiare la tabella"
-
-#, fuzzy
-#~ msgid "Cannot copy line %d, editing terminated"
-#~ msgstr "Non riesco a leggere da <%s>"
-
-#, fuzzy
-#~ msgid "No layer database connection."
-#~ msgstr "locazione del database"
-
-#, fuzzy
-#~ msgid "Cannot snap lines %d,%d"
-#~ msgstr "Non riesco ad impostare user/password"
-
-#, fuzzy
-#~ msgid "%d lines modified"
-#~ msgstr "%d categorie duplicate nel vettoriale"
-
-#, fuzzy
-#~ msgid "Could not open ASCII file <%s>"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Print vector map region only"
-#~ msgstr "Stampa solo il tipo di mappa raster"
-
-#, fuzzy
-#~ msgid "Cannot open vector map <%s> at topo level [%d]"
-#~ msgstr "impossibile aprire <%s>"
-
-#, fuzzy
-#~ msgid "Cannot get layer info for vector map <%s>"
-#~ msgstr "Impossibile ottenere informazioni sul layer vettoriale"
-
-#, fuzzy
-#~ msgid "Cannot select attribute."
-#~ msgstr "Non riesco a mostrare i database"
-
-#, fuzzy
-#~ msgid "Creating vector grid..."
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Could not find vector map <%s> in current mapset"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Could not find input map <%s>."
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Parameter <%s> not set"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "Output map where segments will be written"
-#~ msgstr "Mappa in uscita già esistente. Sarà sovrascritta!\n"
-
-#, fuzzy
-#~ msgid "<%s> cellfile not found"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "Database record for cat %d not found"
-#~ msgstr "Nessun record nel database per la categoria %d"
-
-#, fuzzy
-#~ msgid "Not able to open vector map <%s>"
-#~ msgstr "impossibile aprire <%s>"
-
-#, fuzzy
-#~ msgid "Can't read raster"
-#~ msgstr "Non riesco ad impostare user/password"
-
-#~ msgid "driver name"
-#~ msgstr "nome driver"
-
-#~ msgid "database name"
-#~ msgstr "nome database"
-
-#, fuzzy
-#~ msgid "Driver name"
-#~ msgstr "nome driver"
-
-#~ msgid "Cannot list databases."
-#~ msgstr "Non riesco a mostrare i database"
-
-#~ msgid "database location"
-#~ msgstr "locazione del database"
-
-#~ msgid "Table name, select all from this table"
-#~ msgstr "Nome tabella, seleziona tutto da questa tabella"
-
-#~ msgid "output field separator"
-#~ msgstr "campo separatore in output"
-
-#~ msgid "output vertical record separator"
-#~ msgstr "output verticale del separatore di record "
-
-#~ msgid "null value indicator"
-#~ msgstr "indicatore di valore nullo"
-
-#~ msgid "do not include column names in output"
-#~ msgstr "non includere i nomi delle colonne nell'output"
-
-#~ msgid "vertical output (instead of horizontal)"
-#~ msgstr "output verticale (invece che orizzontale)"
-
-#, fuzzy
-#~ msgid "Name of existing raster map"
-#~ msgstr ""
-#~ "#-#-#-#-#  grassmods_it.po (grassmods_it)  #-#-#-#-#\n"
-#~ "Nome di un file raster esistente\n"
-#~ "#-#-#-#-#  grassmods_it.po (grassmods_it)  #-#-#-#-#\n"
-#~ "Nome di una mappa raster esistente"
-
-#, fuzzy
-#~ msgid "Cannot find mapset for %s"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Cannot open File %s"
-#~ msgstr "Non riesco ad impostare user/password"
-
-#, fuzzy
-#~ msgid "Not able to open file for [%s]"
-#~ msgstr "Non riesco ad aprire il cellfile per [%s]"
-
-#, fuzzy
-#~ msgid "Can't open label file [%s]"
-#~ msgstr "Non riesco ad aprire il cellfile per [%s]"
-
-#, fuzzy
-#~ msgid "unable to open [%s] in [%s]"
-#~ msgstr "impossibile aprire <%s>"
-
-#, fuzzy
-#~ msgid "warning: unable to open [%s] in [%s]"
-#~ msgstr "impossibile aprire <%s>"
-
-#, fuzzy
-#~ msgid "Unable to open raster map [%s] in [%s]"
-#~ msgstr "impossibile aprire <%s>"
-
-#, fuzzy
-#~ msgid "Unable to find input cell map '%s'"
-#~ msgstr "impossibile aprire <%s>"
-
-#, fuzzy
-#~ msgid "Table to be imported"
-#~ msgstr "Il file raster da importare"
-
-#, fuzzy
-#~ msgid "Unable to create raster map [%s]"
-#~ msgstr "Nome della mappa raster risultante"
-
-#, fuzzy
-#~ msgid "Unable to create output <%s>"
-#~ msgstr "Nome della mappa raster risultante"
-
-#, fuzzy
-#~ msgid "Input file [%s] not found."
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "Unable to open output file <%s>."
-#~ msgstr "impossibile aprire <%s>"
-
-#, fuzzy
-#~ msgid "Could not open temporary file: [%s]"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Could not open input file [%s]"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Unable to create output raster map <%s>"
-#~ msgstr "Nome della mappa raster risultante"
-
-#, fuzzy
-#~ msgid "%s: Unable to find raster map <%s>"
-#~ msgstr "impossibile aprire <%s>"
-
-#, fuzzy
-#~ msgid "%s: Unable to open raster map <%s> in mapset <%s>"
-#~ msgstr "impossibile aprire <%s>"
-
-#, fuzzy
-#~ msgid "%s:  Unable to open output raster map <%s>"
-#~ msgstr "impossibile aprire <%s>"
-
-#, fuzzy
-#~ msgid "Vector <%s> could not be opened"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "No db connection for driver <%s> defined. Run db.connect."
-#~ msgstr ""
-#~ "Nessuna impostazione definita per il database. Fallo usando db.connect"
-
-#, fuzzy
-#~ msgid "Table name"
-#~ msgstr "nome tabella"
-
-#~ msgid ""
-#~ "Print current map connection parameters and exit (shell script style)\n"
-#~ "\tformat:  layer[/layer name] table key database driver"
-#~ msgstr ""
-#~ "Stampa i parametri di connessione correnti ed esce (stile shell script)\n"
-#~ "\tformat:  layer[/layer name] table key database driver"
-
-#, fuzzy
-#~ msgid "x column name"
-#~ msgstr "nome tabella"
-
-#, fuzzy
-#~ msgid "z column name"
-#~ msgstr "nome tabella"
-
-#, fuzzy
-#~ msgid "Cannot drop table: %s"
-#~ msgstr "Non posso scrivere i collegamenti del database"
-
-#, fuzzy
-#~ msgid "Cannot open labels <%s>"
-#~ msgstr "Non posso scrivere i collegamenti del database"
-
-#, fuzzy
-#~ msgid "Cannot fetch data from table"
-#~ msgstr "Non riesco a selezionare dati dalla tabella"
-
-#, fuzzy
-#~ msgid "SVG file <%s> cannot be opened"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "Querying input '%s' ... "
-#~ msgstr "Mappa raster risultante"
-
-#, fuzzy
-#~ msgid "Copying %s input lines ... "
-#~ msgstr "Non riesco a copiare la tabella"
-
-#, fuzzy
-#~ msgid "Cannot create table <%s>"
-#~ msgstr "Non riesco a descrivere la tabella"
-
-#, fuzzy
-#~ msgid "cannot insert row: %s"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Cannot find line of cat %d"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Unalbe to open vector map <%s>"
-#~ msgstr "impossibile aprire <%s>"
-
-#, fuzzy
-#~ msgid ""
-#~ "Database connection not defined for layer [%d]. Use v.db.connect first"
-#~ msgstr "Connessione al database non definita\n"
-
-#, fuzzy
-#~ msgid "Transforms a vector map via a set of tie points."
-#~ msgstr "Esporta un raster grass come array binario"
-
-#, fuzzy
-#~ msgid "Raster map <%s>] not found"
-#~ msgstr "raster <%s> non trovato"
-
-#~ msgid "Cannot start driver '%s'."
-#~ msgstr "Non riesco ad eseguire il driver '%s'"
-
-#~ msgid "Cannot describe table"
-#~ msgstr "Non riesco a descrivere la tabella"
-
-#~ msgid "Cannot start driver <%s>."
-#~ msgstr "Non riesco ad eseguire il driver <%s>."
-
-#~ msgid "[%s] is an illegal name"
-#~ msgstr "[%s] è un nome illegale"
-
-#~ msgid "Cannot write to <%s>"
-#~ msgstr "Non riesco a scrivere su <%s>"
-
-#~ msgid "Not able to open cellfile for [%s]"
-#~ msgstr "Non riesco ad aprire il cellfile per [%s]"
-
-#, fuzzy
-#~ msgid "Not able to find cellfile [%s]"
-#~ msgstr "Non riesco ad aprire il cellfile per [%s]"
-
-#, fuzzy
-#~ msgid "Raster file [%s] not available"
-#~ msgstr "file raster per la Vista%d"
-
-#, fuzzy
-#~ msgid "Raster map [%s] not found"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "Unable to open raster map [%s]"
-#~ msgstr "impossibile aprire <%s>"
-
-#~ msgid "Vector file [%s] not available"
-#~ msgstr "Impossibile trovare il vettoriale [%s]"
-
-#, fuzzy
-#~ msgid "Cannot open driver %s"
-#~ msgstr "Non riesco ad eseguire il driver '%s'"
-
-#, fuzzy
-#~ msgid "<%s> illegal name"
-#~ msgstr "Nome del raster map in output"
-
-#~ msgid "Out of Memory!\n"
-#~ msgstr "Memoria esaurita!\n"
-
-#, fuzzy
-#~ msgid "%s: %s - illegal name for output raster map."
-#~ msgstr "Nome del raster map in output"
-
-#, fuzzy
-#~ msgid "Exports GRASS raster data into various formats (requires GDAL)."
-#~ msgstr "Esporta un raster grass come array binario"
-
-#~ msgid "Couldn't find raster map %s"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "%s: <%s> not found"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "%s: <%s> illegal name"
-#~ msgstr "Nome del raster map in output"
-
-#, fuzzy
-#~ msgid "%s: Cannot open <%s>"
-#~ msgstr "Non riesco ad impostare user/password"
-
-#, fuzzy
-#~ msgid "could not read range file"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Unable to create raster map [%s]."
-#~ msgstr "Nome della mappa raster risultante"
-
-#, fuzzy
-#~ msgid "Filtering [%s] in [%s]"
-#~ msgstr "impossibile aprire <%s>"
-
-#, fuzzy
-#~ msgid "Open raster map %s in %s = %d"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Closing raster map"
-#~ msgstr "Mappa raster risultante"
-
-#, fuzzy
-#~ msgid "Swap temp files"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Writing [%s]"
-#~ msgstr "Sto disegnando ..."
-
-#, fuzzy
-#~ msgid "%s: illegal map name"
-#~ msgstr "Nome del raster map in output"
-
-#~ msgid "Name of the new raster map"
-#~ msgstr "Nome di un nuovo file raster"
-
-#, fuzzy
-#~ msgid "%s: <%s> illegal file name"
-#~ msgstr "Nome del raster map in output"
-
-#, fuzzy
-#~ msgid "can't open raster map <%s> in mapset %s"
-#~ msgstr "Impossibile aprire il file label <%s> nel mapset <%s>"
-
-#~ msgid "Raster input map"
-#~ msgstr "Mappa raster in input"
-
-#, fuzzy
-#~ msgid "Checking location %s, mapset %s:"
-#~ msgstr "Mappa raster in input"
-
-#, fuzzy
-#~ msgid "Input map [%s] in location [%s] in mapset [%s] not found."
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "Error writing output map"
-#~ msgstr "Mappa raster in input"
-
-#, fuzzy
-#~ msgid "<%s> is illegal file name"
-#~ msgstr "[%s] è un nome illegale"
-
-#, fuzzy
-#~ msgid "[%s] is an illegal file name"
-#~ msgstr "[%s] è un nome illegale"
-
-#, fuzzy
-#~ msgid "no rules specified"
-#~ msgstr "Nessuna mappa in input specificata"
-
-#, fuzzy
-#~ msgid "Can't open temp file [%s]"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Unable to open input map <%s> in mapset <%s>"
-#~ msgstr "impossibile aprire <%s>"
-
-#, fuzzy
-#~ msgid "%s - illegal name "
-#~ msgstr "Nome del raster map in output"
-
-#, fuzzy
-#~ msgid "Couldn't find raster map [%s]"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "%s in %s -can't open raster map"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "%s - can't create raster map"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Normalized"
-#~ msgstr "Normalizzata"
-
-#, fuzzy
-#~ msgid "Cell file [%s] not found"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "Requested 3d raster map not found <%s>"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "Could not open elevation map"
-#~ msgstr "impossibile aprire <%s>"
-
-#, fuzzy
-#~ msgid "Could not open output map"
-#~ msgstr "Nome della mappa di output"
-
-#, fuzzy
-#~ msgid "unable to close output map"
-#~ msgstr "Nome del file in output"
-
-#, fuzzy
-#~ msgid "Cannot create output map [%s]"
-#~ msgstr "Nome della mappa raster risultante"
-
-#, fuzzy
-#~ msgid "Database's name couldn't be read"
-#~ msgstr "Connessione al database non definita\n"
-
-#, fuzzy
-#~ msgid "Cannot open vector points map <%s>"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Cannot create vector map <%s>"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid ""
-#~ "Interpolation: No database connection for driver <%s> defined. Run db."
-#~ "connect"
-#~ msgstr ""
-#~ "Nessuna impostazione definita per il database. Fallo usando db.connect"
-
-#, fuzzy
-#~ msgid "Could not find input map <%s> in current mapset."
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Vector file [%s] not available in search list"
-#~ msgstr "file raster per la Vista%d"
-
-#, fuzzy
-#~ msgid "Cannot open database <%s>"
-#~ msgstr "Non posso scrivere i collegamenti del database"
-
-#, fuzzy
-#~ msgid "Cannot open table <%s>"
-#~ msgstr "Non posso scrivere i collegamenti del database"
-
-#, fuzzy
-#~ msgid "Cannot open driver <%s>"
-#~ msgstr "Non riesco ad eseguire il driver '%s'"
-
-#, fuzzy
-#~ msgid "Could not find input vector map %s"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Could not find input map '%s'."
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Could not find network input map '%s'."
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "error opening raster map [%s]."
-#~ msgstr "Nome di mappa(e) raster esistente(i)"
-
-#, fuzzy
-#~ msgid "Topology is not available"
-#~ msgstr "file raster per la Vista%d"
-
-#, fuzzy
-#~ msgid "Cannot describe table %s"
-#~ msgstr "Non riesco a descrivere la tabella"
-
-#, fuzzy
-#~ msgid "Patching file <%s@%s>"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "[%d] files patched"
-#~ msgstr "%d records aggiornati"
-
-#, fuzzy
-#~ msgid "Column type  not supported"
-#~ msgstr "Tipo di colonna non supportata"
-
-#, fuzzy
-#~ msgid "Could not open vector map <%s>"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid ""
-#~ "Database connection not defined for layer <%d>. Use v.db.connect first."
-#~ msgstr "Connessione al database non definita\n"
-
-#, fuzzy
-#~ msgid "Can't create output map"
-#~ msgstr "Nome della mappa di output"
-
-#, fuzzy
-#~ msgid "Could not close new 3d raster map"
-#~ msgstr "impossibile aprire <%s>"
-
-#, fuzzy
-#~ msgid "%s: cellfile [%s] not found."
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "Unable to open cellfile [%s]."
-#~ msgstr "Non riesco ad aprire il cellfile per [%s]"
-
-#, fuzzy
-#~ msgid "Unable to open the temporary file."
-#~ msgstr "Valore da scrivere per null"
-
-#, fuzzy
-#~ msgid "Unable to open raster map [%s]."
-#~ msgstr "impossibile aprire <%s>"
-
-#, fuzzy
-#~ msgid "Unable to find raster [%s]."
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "name for new raster map"
-#~ msgstr "Nome di un nuovo file raster"
-
-#, fuzzy
-#~ msgid "Output GRASS image file"
-#~ msgstr "Mostra il titolo del file raster"
-
-#, fuzzy
-#~ msgid "Resulting output map"
-#~ msgstr "Mappa raster in input"
-
-#, fuzzy
-#~ msgid "name for new vector map"
-#~ msgstr "Nome di un file vettoriale in output"
-
-#, fuzzy
-#~ msgid "name for new vector map (omit for display to stdout)"
-#~ msgstr "Nome del nuovo file PPM. (use out=- per lo standard output)"
-
-#, fuzzy
-#~ msgid "Input vector map"
-#~ msgstr "Nome del driver in output"
-
-#, fuzzy
-#~ msgid "%s: ERROR can't open tempfile"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "unable to find raster map [%s]"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "<%s> raster map not found"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "<%s> unable to open raster map"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Cannot find vector map [%s]"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "%s - can't open raster map"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Can't get row %d from raster map %s"
-#~ msgstr "impossibile aprire <%s>"
-
-#, fuzzy
-#~ msgid "%s - raster map not found"
-#~ msgstr "raster <%s> non trovato"
-
-#~ msgid "string representing no data cell value"
-#~ msgstr "strighe che rappresentano le celle prive di valori"
-
-#~ msgid "File name of classification result"
-#~ msgstr "Nome del file con il risultato della classificazione"
-
-#~ msgid "quiet"
-#~ msgstr "silenzioso"
-
-#, fuzzy
-#~ msgid "<%s> - illegal output file name"
-#~ msgstr "Nome del file di output"
-
-#, fuzzy
-#~ msgid "%s: <%s> reference map not found"
-#~ msgstr "raster <%s> non trovato"
-
-#~ msgid "Base raster map"
-#~ msgstr "Mappa raster di base"
-
-#, fuzzy
-#~ msgid "%s: raster map not found"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "Problem opening input file [%s]"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Problem opening output file [%s]"
-#~ msgstr "impossibile aprire <%s>"
-
-#, fuzzy
-#~ msgid "can't write category file for <%s>"
-#~ msgstr "Impossibile salvare la region <%s>"
-
-#, fuzzy
-#~ msgid "%s: can't open tempfile"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Unable to read row %d in raster map [%s]"
-#~ msgstr "impossibile aprire <%s>"
-
-#, fuzzy
-#~ msgid "Output verbosely"
-#~ msgstr "Nome del driver in output"
-
-#, fuzzy
-#~ msgid "Can't open raster map %s"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "It could not be find input map <%s>"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "It could not be found input map <%s>"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Cannot find input map <%s>"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Input vector map <%s> not found."
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "Category ranges: e.g. 1,3-8,13"
-#~ msgstr "Categoria lista: es. 1,3-8,13"
-
-#, fuzzy
-#~ msgid "Writing attributes ...\n"
-#~ msgstr "Sto disegnando ..."
-
-#, fuzzy
-#~ msgid "Could not open ascii file <%s>"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Could not open temp file <%s>"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "List available formats and exit"
-#~ msgstr "Visualizza i formati supportati ed esci"
-
-#, fuzzy
-#~ msgid "Vector map <%s> not fould"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "SVG output file"
-#~ msgstr "File di input"
-
-#, fuzzy
-#~ msgid "Could not find vector '%s'"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Could not find vector map %s"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Unable to get row %d from <%s>"
-#~ msgstr "impossibile aprire <%s>"
-
-#, fuzzy
-#~ msgid "No input coordinates provided"
-#~ msgstr "Nessuna mappa in input specificata"
-
-#~ msgid "Raster output file"
-#~ msgstr "File raster in output"
-
-#, fuzzy
-#~ msgid "Writing raster map ... "
-#~ msgstr "Nome del driver in input"
-
-#~ msgid "Keep existing color table"
-#~ msgstr "Mantieni la tabella colore esistente"
-
-#~ msgid "List rules"
-#~ msgstr "Mostra regole"
-
-#, fuzzy
-#~ msgid " %d rows, %d cols."
-#~ msgstr "%d raster%s, %d vettoriale%s\n"
-
-#, fuzzy
-#~ msgid "%s in %s - can't read header file"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "%s - unable to create raster map"
-#~ msgstr "Nome della mappa raster risultante"
-
-#, fuzzy
-#~ msgid "%s - unable to create category file"
-#~ msgstr "Valore da scrivere per null"
-
-#, fuzzy
-#~ msgid "Vector map with points for which to modify the attribute table"
-#~ msgstr "Non riesco a descrivere la tabella"
-
-#, fuzzy
-#~ msgid "Layer of the vector for which to modify the attribute table"
-#~ msgstr ""
-#~ "Nome della mappa vettoriale di punti della quale editare la tabella "
-#~ "attributi"
-
-#, fuzzy
-#~ msgid "Path to an output file"
-#~ msgstr "Nome del file in output"
-
-#, fuzzy
-#~ msgid "Name of existing raster map to be displayed"
-#~ msgstr "Nome di una mappa raster esistente"
-
-#~ msgid "driver name:"
-#~ msgstr "nome del driver:"
-
-#~ msgid "Database name:"
-#~ msgstr "Nome del database:"
-
-#, fuzzy
-#~ msgid "could not find input map <%s>"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "unable to open raster map [%s]"
-#~ msgstr "Non riesco ad aprire il cellfile per [%s]"
-
-#, fuzzy
-#~ msgid "cannot get layer info for vector map"
-#~ msgstr "Non riesco ad impostare user/password"
-
-#, fuzzy
-#~ msgid "cannot open database %s by driver %s"
-#~ msgstr "Non riesco ad eseguire il driver '%s'"
-
-#, fuzzy
-#~ msgid "column type not supported"
-#~ msgstr "driver pg: colonna '%s', di tipo %d non supportata"
-
-#, fuzzy
-#~ msgid "cannot select data from table"
-#~ msgstr "Non riesco a mostrare i database"
-
-#, fuzzy
-#~ msgid "cannot create table: %s"
-#~ msgstr "Non riesco a descrivere la tabella"
-
-#, fuzzy
-#~ msgid "cannot create index"
-#~ msgstr "Non riesco a descrivere la tabella"
-
-#, fuzzy
-#~ msgid "cannot grant privileges on table %s"
-#~ msgstr "Non riesco a descrivere la tabella"
-
-#, fuzzy
-#~ msgid "column type  not supported"
-#~ msgstr "driver pg: colonna '%s', di tipo %d non supportata"
-
-#, fuzzy
-#~ msgid "Cannot find vector map"
-#~ msgstr "Non riesco ad impostare user/password"
-
-#, fuzzy
-#~ msgid "Cannot find raster map"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Cannot open raster map"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Can't open temp file %s"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Error while reading cell map."
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Error while writing new cell map."
-#~ msgstr "Errore nella scrittura della grid. Disco pieno?"
-
-#, fuzzy
-#~ msgid "Error in opening output file <%s>"
-#~ msgstr "impossibile aprire <%s>"
-
-#, fuzzy
-#~ msgid "Unable to find input cell map <%s>"
-#~ msgstr "impossibile aprire <%s>"
-
-#, fuzzy
-#~ msgid "Error in opening input file <%s>"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Unable to open cell man <%s> for input.\n"
-#~ msgstr "impossibile aprire <%s>"
-
-#, fuzzy
-#~ msgid "Unable to open cell map <%s> for output.\n"
-#~ msgstr "impossibile aprire <%s>"
-
-#, fuzzy
-#~ msgid "Unable to read map raster row %d"
-#~ msgstr "Nome del raster"
-
-#, fuzzy
-#~ msgid "Unable to write color table to raster [%s]"
-#~ msgstr "impossibile aprire <%s>"
-
-#, fuzzy
-#~ msgid "Cannot find map %s"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Cannot open map %s"
-#~ msgstr "Non riesco ad impostare user/password"
-
-#~ msgid "Name of predefined rules file"
-#~ msgstr "Nome del file con le regole predefinite"
-
-#, fuzzy
-#~ msgid "R:G:B value(s) out of range [0..255]: %d:%d:%d"
-#~ msgstr ""
-#~ "** attenzione: valore(i) R:G:B al di fuori dell'intervallo [0..255]: %d:%"
-#~ "d:%d **\n"
-
-#, fuzzy
-#~ msgid "R G B value(s) out of range [0..255]: %d %d %d"
-#~ msgstr ""
-#~ "** attenzione: valore(i) R G B al di fuori dell'intervallo [0..255]: %d %"
-#~ "d %d **\n"
-
-#, fuzzy
-#~ msgid "no such value"
-#~ msgstr "** attenzione: non trovo il valore **\n"
-
-#, fuzzy
-#~ msgid "%s:line %d:%s"
-#~ msgstr "%s:linea %d:%s\n"
-
-#, fuzzy
-#~ msgid "bad color specification"
-#~ msgstr "** definizione errata del colore **\n"
-
-#, fuzzy
-#~ msgid "%s - unknown color"
-#~ msgstr "%s - colore sconosciuto\n"
-
-#~ msgid "Valid colors are:\n"
-#~ msgstr "I colori validi sono:\n"
-
-#, fuzzy
-#~ msgid "Unable to find cover map <%s>"
-#~ msgstr "impossibile aprire <%s>"
-
-#, fuzzy
-#~ msgid "%s: reading category file for %s"
-#~ msgstr "Errore nella lettura del file dbmscap\n"
-
-#, fuzzy
-#~ msgid "%s: unable to open raster map [%s]"
-#~ msgstr "Non riesco ad aprire il cellfile per [%s]"
-
-#, fuzzy
-#~ msgid "%s: unable to create raster map [%s]"
-#~ msgstr "Nome della mappa raster risultante"
-
-#, fuzzy
-#~ msgid "Unable to open database %s with driver %s"
-#~ msgstr "Non riesco ad aprire il database %s col driver %s"
-
-#, fuzzy
-#~ msgid "%s: Unable to read raster map [%s]"
-#~ msgstr "Nome della mappa raster risultante"
-
-#, fuzzy
-#~ msgid "%s: unable to open raster map <%s>"
-#~ msgstr "impossibile aprire <%s>"
-
-#, fuzzy
-#~ msgid "%s: Failed to read raster row %d"
-#~ msgstr "Nome del raster"
-
-#, fuzzy
-#~ msgid "Unable to find [%s]."
-#~ msgstr "impossibile aprire <%s>"
-
-#, fuzzy
-#~ msgid "Unable to read cats table for %s"
-#~ msgstr "impossibile aprire <%s>"
-
-#, fuzzy
-#~ msgid "Could not open raster <%s>"
-#~ msgstr "impossibile aprire <%s>"
-
-#~ msgid ""
-#~ "Font name (not supported interactively, see also -l flag) or path to "
-#~ "TrueType font (including file name)"
-#~ msgstr ""
-#~ "Nome del tipo carattere (non supportato in maniera interattiva, in tal "
-#~ "caso vedi il flag -l) oppure percorso del font TrueType (completo del "
-#~ "nome del file)"
-
-#, fuzzy
-#~ msgid "%s: o_open_file: raster map %s not found"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "%s: o_open_file: could not open raster map %s in %s"
-#~ msgstr "impossibile aprire <%s>"
-
-#, fuzzy
-#~ msgid "No record for category for [%d]"
-#~ msgstr "Nessun record per la cat = %d"
-
-#, fuzzy
-#~ msgid "Error reading ASCII file <%s>"
-#~ msgstr "Errore nella lettura del file dbmscap\n"
-
-#, fuzzy
-#~ msgid "Error reading categories: <%s>"
-#~ msgstr "Errore nella lettura del file dbmscap\n"
-
-#, fuzzy
-#~ msgid "category [%d]"
-#~ msgstr ""
-#~ "Layer: %d\n"
-#~ "categoria: %d\n"
-
-#, fuzzy
-#~ msgid "No lines found"
-#~ msgstr "Non ho trovato nulla.\n"
-
-#, fuzzy
-#~ msgid "Could not find input vector '%s'"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Failed opening output vector map '%s'"
-#~ msgstr "impossibile aprire <%s>"
-
-#, fuzzy
-#~ msgid "Error reading ascii file: [%s]"
-#~ msgstr "Errore nella lettura del file dbmscap\n"
-
-#, fuzzy
-#~ msgid "%s: <%s> vector map not found"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "Vector <%s> could not be open"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "Raster <%s> could not be open."
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "Interpolation()"
-#~ msgstr "Mostra il titolo del file raster"
-
-#, fuzzy
-#~ msgid "Interpolation: nsply = %d"
-#~ msgstr "Mostra il titolo del file raster"
-
-#, fuzzy
-#~ msgid "%s: Dropping <s>"
-#~ msgstr "Non riesco ad impostare user/password"
-
-#, fuzzy
-#~ msgid "Interpolation was a success!"
-#~ msgstr "Mostra il titolo del file raster"
-
-#, fuzzy
-#~ msgid "CrossCorrelation: %d points read in region. "
-#~ msgstr "Utilizza la regione corrente"
-
-#, fuzzy
-#~ msgid "CrossCorrelation: It shouldn't take too long."
-#~ msgstr "Non riesco a selezionare dati dalla tabella"
-
-#, fuzzy
-#~ msgid "%s -- illegal output file name"
-#~ msgstr "Nome del file di output"
-
-#, fuzzy
-#~ msgid "Sorry, with method '%s' you have to define an output map."
-#~ msgstr "Nome del file in output"
-
-#, fuzzy
-#~ msgid "Writing "
-#~ msgstr "Sto disegnando ..."
-
-#, fuzzy
-#~ msgid "Maximum number of iteration"
-#~ msgstr "Numero di passi attraverso il dataset"
-
-#, fuzzy
-#~ msgid "Existing raster map name"
-#~ msgstr "Nome del raster map esistente"
-
-#, fuzzy
-#~ msgid "%s - can't read raster cellhd"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "error reading cell data"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Done!"
-#~ msgstr "Fatto.\n"
-
-#, fuzzy
-#~ msgid "No line found."
-#~ msgstr "Non ho trovato nulla.\n"
-
-#, fuzzy
-#~ msgid "Nothing Found."
-#~ msgstr "Non ho trovato nulla.\n"
-
-#, fuzzy
-#~ msgid "Could not open ascii file [%s]"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#~ msgid "vector map to be created"
-#~ msgstr "file vettoriale da creare"
-
-#, fuzzy
-#~ msgid "Conversion of [%s] to vector map ..."
-#~ msgstr "Mappa raster risultante"
-
-#, fuzzy
-#~ msgid "EPSG code of projection to be created"
-#~ msgstr "Numero di passi attraverso il dataset"
-
-#~ msgid "must be even number of names"
-#~ msgstr "deve essere un numero pari di nomi"
-
-#~ msgid "ERROR: <%s> not found\n"
-#~ msgstr "ERRORE: <%s> non trovato\n"
-
-#~ msgid "ERROR: <%s> illegal name\n"
-#~ msgstr "ERRORE: <%s> nome illegale\n"
-
-#, fuzzy
-#~ msgid "Cannot open toolbox: %s"
-#~ msgstr "Non riesco ad impostare user/password"
-
-#, fuzzy
-#~ msgid "Cannot open toolbox."
-#~ msgstr "Non riesco ad impostare user/password"
-
-#, fuzzy
-#~ msgid "Vector map(s) -- source for composite"
-#~ msgstr "File di input"
-
-#, fuzzy
-#~ msgid "New vector composite"
-#~ msgstr "Nome di un file vettoriale in output"
-
-#, fuzzy
-#~ msgid ""
-#~ "Name of output vector points map (if not specified, the program writes to "
-#~ "standard output)"
-#~ msgstr ""
-#~ "Nome della mappa vettoriale di punti della quale editare la tabella "
-#~ "attributi"
-
-#, fuzzy
-#~ msgid "Vector map '%s' not found"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "vector, segment, curvature"
-#~ msgstr "vettore da rimuovere"
-
-#, fuzzy
-#~ msgid "More lines with category %d found"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "%s\n"
-#~ msgstr "%s Sposta\n"
-
-#, fuzzy
-#~ msgid "Raster '%s' not found"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "Cold not get raster row"
-#~ msgstr "Nome del raster"
-
-#, fuzzy
-#~ msgid "ILLEGAL Resolution!"
-#~ msgstr "Risoluzione"
-
-#, fuzzy
-#~ msgid "Error opening raster map %s"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Copy raster map <%s> into the memory"
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "vector map for which to edit attribute table"
-#~ msgstr "Non riesco a descrivere la tabella"
-
-#, fuzzy
-#~ msgid "Query layer"
-#~ msgstr "nome tabella"
-
-#, fuzzy
-#~ msgid "Column name (will be updated by qvector values)"
-#~ msgstr "Nome della colonna (che sarà aggiornata con i valori raster)"
-
-#, fuzzy
-#~ msgid "Query column name"
-#~ msgstr "nome tabella"
-
-#, fuzzy
-#~ msgid "Enter imagery group to be registered"
-#~ msgstr "Nome della mappa raster"
-
-#, fuzzy
-#~ msgid "output layer name"
-#~ msgstr "Nome del file di output"
-
-#~ msgid "L: from  M: to R: quit\n"
-#~ msgstr "L: da  M: a R: esci\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Where %s is one of:\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Dove %s è uno di:\n"
-
-#, fuzzy
-#~ msgid "%s: - no such database %s\n"
-#~ msgstr "Non posso scrivere i collegamenti del database"
-
-#, fuzzy
-#~ msgid "No database updates."
-#~ msgstr "nome database"
-
-#, fuzzy
-#~ msgid "Input aspect file"
-#~ msgstr "Nome della tabella in output"
-
-#, fuzzy
-#~ msgid "Input barrier file"
-#~ msgstr "File di input"
-
-#, fuzzy
-#~ msgid "Quiet operation"
-#~ msgstr "%s Esce dal menu\n"
-
-#, fuzzy
-#~ msgid "datetime, datetime1/datetime2, or none"
-#~ msgstr "nessuno"
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "Done\n"
-#~ msgstr "Fatto\n"
-
-#, fuzzy
-#~ msgid "Open vector 3d raster map %s"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Open 3d raster map %s"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Vector import complete"
-#~ msgstr "File di input"
-
-#, fuzzy
-#~ msgid "Unable to create raster map for [%s]"
-#~ msgstr "Non riesco ad aprire il cellfile per [%s]"
-
-#~ msgid "Done\n"
-#~ msgstr "Fatto\n"
-
-#, fuzzy
-#~ msgid "Open Raster file %s in Mapset %s"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Open 3d raster map %s\n"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Open elev raster map %s\n"
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
-#~ msgid "Could not open map %s\n"
-#~ msgstr "impossibile aprire <%s>"
-
-#~ msgid "Bin raster map to be imported"
-#~ msgstr "Il file raster bin è stato importato"
-
-#~ msgid "Region size is lower than minreg, nothing displayed.\n"
-#~ msgstr ""
-#~ "La dimensione della regione è inferiore rispetto al valore di minreg, non "
-#~ "verrà visualizzato nulla.\n"
-
-#~ msgid "Region size is greater than maxreg, nothing displayed.\n"
-#~ msgstr ""
-#~ "La dimensione della regione è superiore rispetto al valore di maxreg, non "
-#~ "verrà visualizzato nulla.\n"
-
-#, fuzzy
-#~ msgid "Maximum distance"
-#~ msgstr "Livello massimo di contorno"
-
-#, fuzzy
-#~ msgid "Makes 3D trees from input point vector map"
-#~ msgstr "Nome di un file vettoriale in output"
-
-#, fuzzy
-#~ msgid "Name of the column with tree crown width"
+#~ msgid "Name of the input raster map"
 #~ msgstr "Nome del file raster in input"
-
-#, fuzzy
-#~ msgid "Name of the column with tree species"
-#~ msgstr "Nome del file raster in input"
-
-#, fuzzy
-#~ msgid "Cannot select attributes for point #%d"
-#~ msgstr "Non riesco a mostrare i database"
-
-#, fuzzy
-#~ msgid "Right: "
-#~ msgstr " Destro: esce\n"
-
-#~ msgid "%s Pan\n"
-#~ msgstr "%s Sposta\n"
-
-#~ msgid "%s Quit\n"
-#~ msgstr "%s Esce\n"
-
-#~ msgid "Draw geographic grid"
-#~ msgstr "Disegna griglia geografica"
-
-#, fuzzy
-#~ msgid "Quiet mode"
-#~ msgstr "%s Esce dal menu\n"
-
-#, fuzzy
-#~ msgid "%s[%d]: No raster map specified."
-#~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "done."
-#~ msgstr "Fatto.\n"
-
-#, fuzzy
-#~ msgid "name for new binary vector map (omit for display to stdout)"
-#~ msgstr "Nome del nuovo file PPM. (use out=- per lo standard output)"
-
-#, fuzzy
-#~ msgid "Name for G3d raster map"
-#~ msgstr "Nome del raster"
-
-#, fuzzy
-#~ msgid "No output maps"
-#~ msgstr "Nome della mappa di output"
-
-#, fuzzy
-#~ msgid "Wrong rgb map values! Values should in between 0 and 255!\n"
-#~ msgstr ""
-#~ "Valori della mappa g3d errati! I valori devono essere compresi tra 0 e "
-#~ "255!\n"

@@ -5797,12 +5797,12 @@ msgstr "Ime izhodnega rastrskega sloja"
 #: ../imagery/i.vi/main.c:133
 #, fuzzy
 msgid "Name of the chan5 channel surface reflectance map"
-msgstr "Ime novega rastrskega sloja"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #: ../imagery/i.vi/main.c:140
 #, fuzzy
 msgid "Name of the chan7 channel surface reflectance map"
-msgstr "Ime novega rastrskega sloja"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #: ../imagery/i.vi/main.c:306 ../imagery/i.albedo/main.c:389
 #: ../raster/r.los/main.c:382 ../raster/r.texture/main.c:333
@@ -11959,8 +11959,9 @@ msgid "Name of the Soil sand fraction map [0.0-1.0]"
 msgstr "Ime vhodnega rastrskega sloja"
 
 #: ../raster/r.uslek/main.c:62
+#, fuzzy
 msgid "Name of the Soil clay fraction map [0.0-1.0]"
-msgstr ""
+msgstr "Ime vhodnega rastrskega sloja"
 
 #: ../raster/r.uslek/main.c:66
 #, fuzzy
@@ -18521,7 +18522,7 @@ msgstr "izhodni rastrski sloj"
 #: ../raster/r.statistics2/main.c:185
 #, fuzzy, c-format
 msgid "Unable to read range of base map <%s>"
-msgstr "ne morem odpreti razpona za datoteko %s"
+msgstr "Ne morem odpreti baze podatkov %s"
 
 #: ../raster/r.statistics2/main.c:249
 msgid "First pass"
@@ -26212,8 +26213,9 @@ msgid "Categories of points on terminals (layer is specified by nlayer)"
 msgstr ""
 
 #: ../vector/v.net.steiner/main.c:388
+#, fuzzy
 msgid "Number of steiner points (-1 for all possible)"
-msgstr ""
+msgstr "Rastrski sloj zaèetnih toèk"
 
 #: ../vector/v.net.steiner/main.c:447
 #, fuzzy
@@ -27348,8 +27350,9 @@ msgstr " nv barva\n"
 
 #: ../visualization/nviz2/cmd/args.c:289 ../visualization/nviz2/cmd/args.c:357
 #: ../visualization/nviz2/cmd/args.c:426
+#, fuzzy
 msgid "Position"
-msgstr ""
+msgstr "Ne najdem vhodne datoteke %s\n"
 
 #: ../visualization/nviz2/cmd/args.c:301
 #, fuzzy
@@ -27543,2888 +27546,2925 @@ msgstr "ne morem odpreti <%s>"
 msgid "Unable to set isosurface (%d) attribute (%d) of volume %d"
 msgstr "Ne morem izbrati (select) podatkov iz tabele"
 
-#~ msgid ""
-#~ "Optional where condition (without WHERE key word), e.g.:\n"
-#~ "\t\tobec = 'Liptakov'"
-#~ msgstr ""
-#~ "Mo¾na je uporaba 'where' pogoja (brez kljuène besede WHERE), npr.:\n"
-#~ "\t\tks=KS = 'Rudnik'"
+msgid ""
+"Optional where condition (without WHERE key word), e.g.:\n"
+"\t\tobec = 'Liptakov'"
+msgstr ""
+"Mo¾na je uporaba 'where' pogoja (brez kljuène besede WHERE), npr.:\n"
+"\t\tks=KS = 'Rudnik'"
 
 #, fuzzy
-#~ msgid "Illegal output file name"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "Illegal output file name"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Display manager for GRASS"
-#~ msgstr " ©tevilo kolon\n"
+msgid "Display manager for GRASS"
+msgstr " ©tevilo kolon\n"
 
 #, fuzzy
-#~ msgid "Name of .dmrc settings file"
-#~ msgstr "Ime obstojeèe MAT datoteke (v4)"
+msgid "Name of .dmrc settings file"
+msgstr "Ime obstojeèe MAT datoteke (v4)"
 
 #, fuzzy
-#~ msgid "Width in pixels of new display monitor"
-#~ msgstr "Izpi¹i informacije o vhodnem rastrskem sloju in konèaj"
+msgid "Width in pixels of new display monitor"
+msgstr "Izpi¹i informacije o vhodnem rastrskem sloju in konèaj"
 
 #, fuzzy
-#~ msgid "Height in pixels of new display monitor"
-#~ msgstr "Izpi¹i informacije o vhodnem rastrskem sloju in konèaj"
+msgid "Height in pixels of new display monitor"
+msgstr "Izpi¹i informacije o vhodnem rastrskem sloju in konèaj"
 
 #, fuzzy
-#~ msgid "Moves displayed maps to another monitor"
-#~ msgstr "Izbere pisavo v kateri bo tekst zapisan na grafiènem monitorju"
+msgid "Moves displayed maps to another monitor"
+msgstr "Izbere pisavo v kateri bo tekst zapisan na grafiènem monitorju"
 
 #, fuzzy
-#~ msgid "Saves the contents of the active display monitor to a graphics file."
-#~ msgstr "Izbere pisavo v kateri bo tekst zapisan na grafiènem monitorju"
+msgid "Saves the contents of the active display monitor to a graphics file."
+msgstr "Izbere pisavo v kateri bo tekst zapisan na grafiènem monitorju"
 
 #, fuzzy
-#~ msgid "Compression for PNG files"
-#~ msgstr "Ime datoteke s filtrom"
+msgid "Compression for PNG files"
+msgstr "Ime datoteke s filtrom"
 
 #, fuzzy
-#~ msgid "Paper size for PostScript output"
-#~ msgstr "Izhodni rastrski sloj"
+msgid "Paper size for PostScript output"
+msgstr "Izhodni rastrski sloj"
 
 #, fuzzy
-#~ msgid "PostScript"
-#~ msgstr "Izhodni rastrski sloj"
+msgid "PostScript"
+msgstr "Izhodni rastrski sloj"
 
 #, fuzzy
-#~ msgid "Number of lines to appear in the legend"
-#~ msgstr "©tevilo ponovitev filtracije"
+msgid "Number of lines to appear in the legend"
+msgstr "©tevilo ponovitev filtracije"
 
 #, fuzzy
-#~ msgid "Redraws the current display frame in the GRASS monitor"
-#~ msgstr "NAPAKA: Na grafiènem monitorju ni prikazana nobena karta\n"
+msgid "Redraws the current display frame in the GRASS monitor"
+msgstr "NAPAKA: Na grafiènem monitorju ni prikazana nobena karta\n"
 
 #, fuzzy
-#~ msgid "Redraw all frames"
-#~ msgstr "Izpi¹i sumo vrednosti za razrede"
+msgid "Redraw all frames"
+msgstr "Izpi¹i sumo vrednosti za razrede"
 
 #, fuzzy
-#~ msgid "Resizes active display monitor"
-#~ msgstr "Izpi¹i informacije o vhodnem rastrskem sloju in konèaj"
+msgid "Resizes active display monitor"
+msgstr "Izpi¹i informacije o vhodnem rastrskem sloju in konèaj"
 
 #, fuzzy
-#~ msgid "Slide show of GRASS raster/vector maps."
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "Slide show of GRASS raster/vector maps."
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Show vector maps rather than raster maps"
-#~ msgstr "Preoblikuje rastrski sloj v vektorskega."
+msgid "Show vector maps rather than raster maps"
+msgstr "Preoblikuje rastrski sloj v vektorskega."
 
 #, fuzzy
-#~ msgid "Number of seconds to pause between slides"
-#~ msgstr "©tevilo toèk najbli¾jih toèk, ki bodo upo¹tevane"
+msgid "Number of seconds to pause between slides"
+msgstr "©tevilo toèk najbli¾jih toèk, ki bodo upo¹tevane"
 
 #, fuzzy
-#~ msgid "Enter raster map to display in 1st frame"
-#~ msgstr "Rastrski sloj, ki ga ¾elite rekodirati"
+msgid "Enter raster map to display in 1st frame"
+msgstr "Rastrski sloj, ki ga ¾elite rekodirati"
 
 #, fuzzy
-#~ msgid "Enter command to execute in 1st frame"
-#~ msgstr "Rastrski sloj, ki ga ¾elite rekodirati"
+msgid "Enter command to execute in 1st frame"
+msgstr "Rastrski sloj, ki ga ¾elite rekodirati"
 
 #, fuzzy
-#~ msgid "Enter raster map to display in 2nd frame"
-#~ msgstr "Rastrski sloj, ki ga ¾elite rekodirati"
+msgid "Enter raster map to display in 2nd frame"
+msgstr "Rastrski sloj, ki ga ¾elite rekodirati"
 
 #, fuzzy
-#~ msgid "Enter command to execute in 2nd frame"
-#~ msgstr "Rastrski sloj, ki ga ¾elite rekodirati"
+msgid "Enter command to execute in 2nd frame"
+msgstr "Rastrski sloj, ki ga ¾elite rekodirati"
 
 #, fuzzy
-#~ msgid "Vector map to display thematically"
-#~ msgstr "Rastrski sloj, ki ga ¾elite rekodirati"
+msgid "Vector map to display thematically"
+msgstr "Rastrski sloj, ki ga ¾elite rekodirati"
 
 #, fuzzy
-#~ msgid "Vector map type"
-#~ msgstr "Ne najdem vhodnega vektorja <%s>"
+msgid "Vector map type"
+msgstr "Ne najdem vhodnega vektorja <%s>"
 
 #, fuzzy
-#~ msgid "Type of thematic display"
-#~ msgstr "Ime rastrskega sloja, ki bo uporabljen za <%s>"
+msgid "Type of thematic display"
+msgstr "Ime rastrskega sloja, ki bo uporabljen za <%s>"
 
 #, fuzzy
-#~ msgid "Points"
-#~ msgstr "ime tabele"
+msgid "Points"
+msgstr "ime tabele"
 
 #, fuzzy
-#~ msgid "Number of classes for interval theme (integer)"
-#~ msgstr "©tevilo ponovitev filtracije"
+msgid "Number of classes for interval theme (integer)"
+msgstr "©tevilo ponovitev filtracije"
 
 #, fuzzy
-#~ msgid "Misc"
-#~ msgstr "Metrièni"
+msgid "Misc"
+msgstr "Metrièni"
 
 #, fuzzy
-#~ msgid "Mapset(s) to list (default: current mapset search path)"
-#~ msgstr "Izpi¹i trenutne parametre povezave in konèaj"
+msgid "Mapset(s) to list (default: current mapset search path)"
+msgstr "Izpi¹i trenutne parametre povezave in konèaj"
 
 #, fuzzy
-#~ msgid "Output separator (default: newline)"
-#~ msgstr "Znak za separator na izhodu (privzet: tab)"
+msgid "Output separator (default: newline)"
+msgstr "Znak za separator na izhodu (privzet: tab)"
 
 #, fuzzy
-#~ msgid "Raster to remove"
-#~ msgstr "Binarna rastrska datoteka, ki jo nameravate uvoziti"
+msgid "Raster to remove"
+msgstr "Binarna rastrska datoteka, ki jo nameravate uvoziti"
 
 #, fuzzy
-#~ msgid "3d raster to remove"
-#~ msgstr "Binarna rastrska datoteka, ki jo nameravate uvoziti"
+msgid "3d raster to remove"
+msgstr "Binarna rastrska datoteka, ki jo nameravate uvoziti"
 
 #, fuzzy
-#~ msgid "Vector to remove"
-#~ msgstr "ne morem odpreti <%s>"
+msgid "Vector to remove"
+msgstr "ne morem odpreti <%s>"
 
 #, fuzzy
-#~ msgid "Region to remove"
-#~ msgstr "ne morem odpreti <%s>"
+msgid "Region to remove"
+msgstr "ne morem odpreti <%s>"
 
 #, fuzzy
-#~ msgid "Label to remove"
-#~ msgstr "ne morem odpreti <%s>"
+msgid "Label to remove"
+msgstr "ne morem odpreti <%s>"
 
 #, fuzzy
-#~ msgid "3dview to remove"
-#~ msgstr "Binarna rastrska datoteka, ki jo nameravate uvoziti"
+msgid "3dview to remove"
+msgstr "Binarna rastrska datoteka, ki jo nameravate uvoziti"
 
 #, fuzzy
-#~ msgid "Group to remove"
-#~ msgstr "ne morem odpreti <%s>"
+msgid "Group to remove"
+msgstr "ne morem odpreti <%s>"
 
 #, fuzzy
-#~ msgid "raster input maps"
-#~ msgstr "Vhodni rastrski sloj"
+msgid "raster input maps"
+msgstr "Vhodni rastrski sloj"
 
 #, fuzzy
-#~ msgid "write output to PNG image"
-#~ msgstr "Prepi¹i izhodno datoteko"
+msgid "write output to PNG image"
+msgstr "Prepi¹i izhodno datoteko"
 
 #, fuzzy
-#~ msgid "label with coordinates instead of numbering"
-#~ msgstr "Uporabljam koordinate sredi¹èa sloja\n"
+msgid "label with coordinates instead of numbering"
+msgstr "Uporabljam koordinate sredi¹èa sloja\n"
 
 #, fuzzy
-#~ msgid "Keep band numbers instead of using band color names."
-#~ msgstr "Ohrani ¹tevila za imena pasov namesto imena barv"
+msgid "Keep band numbers instead of using band color names."
+msgstr "Ohrani ¹tevila za imena pasov namesto imena barv"
 
 #, fuzzy
-#~ msgid "Do not overwrite existing map"
-#~ msgstr "Ne morem odpreti baze podatkov %s"
+msgid "Do not overwrite existing map"
+msgstr "Ne morem odpreti baze podatkov %s"
 
 #, fuzzy
-#~ msgid "Exports GRASS raster into GDAL supported formats."
-#~ msgstr "Izvozi GRASS-ov rastrski sloj v binarni \"array\""
+msgid "Exports GRASS raster into GDAL supported formats."
+msgstr "Izvozi GRASS-ov rastrski sloj v binarni \"array\""
 
 #, fuzzy
-#~ msgid "Region sensitive output"
-#~ msgstr "Rastrski sloj nadmorskih vi¹in"
+msgid "Region sensitive output"
+msgstr "Rastrski sloj nadmorskih vi¹in"
 
 #, fuzzy
-#~ msgid "Output field seperator"
-#~ msgstr "izpi¹i znak razmejitve med polji"
+msgid "Output field seperator"
+msgstr "izpi¹i znak razmejitve med polji"
 
 #, fuzzy
-#~ msgid "calculates univariate statistics from a GRASS raster map"
-#~ msgstr ""
-#~ "Izraèuna univariatne statistiène parametre za ne NULL celice rastrskega "
-#~ "sloja."
+msgid "calculates univariate statistics from a GRASS raster map"
+msgstr ""
+"Izraèuna univariatne statistiène parametre za ne NULL celice rastrskega "
+"sloja."
 
 #, fuzzy
-#~ msgid "A (grid3D file)"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "A (grid3D file)"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "B (grid3D file)"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "B (grid3D file)"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "C (grid3D file)"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "C (grid3D file)"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "D (grid3D file)"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "D (grid3D file)"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "E (grid3D file)"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "E (grid3D file)"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "F (grid3D file)"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "F (grid3D file)"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Name for output grid3D volume"
-#~ msgstr "Ime izhodne datoteke"
+msgid "Name for output grid3D volume"
+msgstr "Ime izhodne datoteke"
 
 #, fuzzy
-#~ msgid "%s: [%s] not found"
-#~ msgstr "Ne najdem rastrskega sloja <%s>"
+msgid "%s: [%s] not found"
+msgstr "Ne najdem rastrskega sloja <%s>"
 
 #, fuzzy
-#~ msgid ""
-#~ "Enter the file name or path\n"
-#~ "> "
-#~ msgstr "Zapisujem novo datoteko...\n"
+msgid ""
+"Enter the file name or path\n"
+"> "
+msgstr "Zapisujem novo datoteko...\n"
 
-#~ msgid "Interactively select End-Points"
-#~ msgstr "Interaktivno izberi konèni toèki"
+msgid "Interactively select End-Points"
+msgstr "Interaktivno izberi konèni toèki"
 
 #, fuzzy
-#~ msgid "Use mouse to select Start Point\n"
-#~ msgstr "Vnesti mora¹ vsaj %d toèk."
+msgid "Use mouse to select Start Point\n"
+msgstr "Vnesti mora¹ vsaj %d toèk."
 
 #, fuzzy
-#~ msgid "Buttons:\n"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "Gumbi:\n"
+msgid "Buttons:\n"
+msgstr ""
+"\n"
+"\n"
+"Gumbi:\n"
 
 #, fuzzy
-#~ msgid "Left:   Mark next point\n"
-#~ msgstr "Levi: poizveduj po karti\n"
+msgid "Left:   Mark next point\n"
+msgstr "Levi: poizveduj po karti\n"
 
 #, fuzzy
-#~ msgid "elevin raster map <%s> not found"
-#~ msgstr "ne najdem 3Dview datoteke <%s>"
+msgid "elevin raster map <%s> not found"
+msgstr "ne najdem 3Dview datoteke <%s>"
 
 #, fuzzy
-#~ msgid "aspin raster map <%s> not found"
-#~ msgstr "ne najdem 3Dview datoteke <%s>"
+msgid "aspin raster map <%s> not found"
+msgstr "ne najdem 3Dview datoteke <%s>"
 
 #, fuzzy
-#~ msgid "linkein raster map <%s> not found"
-#~ msgstr "ne najdem 3Dview datoteke <%s>"
+msgid "linkein raster map <%s> not found"
+msgstr "ne najdem 3Dview datoteke <%s>"
 
 #, fuzzy
-#~ msgid "albedo raster map <%s> not found"
-#~ msgstr "ne najdem 3Dview datoteke <%s>"
+msgid "albedo raster map <%s> not found"
+msgstr "ne najdem 3Dview datoteke <%s>"
 
 #, fuzzy
-#~ msgid "latin raster map <%s> not found"
-#~ msgstr "ne najdem 3Dview datoteke <%s>"
+msgid "latin raster map <%s> not found"
+msgstr "ne najdem 3Dview datoteke <%s>"
 
 #, fuzzy
-#~ msgid "coefbh raster map <%s> not found"
-#~ msgstr "ne najdem 3Dview datoteke <%s>"
+msgid "coefbh raster map <%s> not found"
+msgstr "ne najdem 3Dview datoteke <%s>"
 
 #, fuzzy
-#~ msgid "coefdh raster map <%s> not found"
-#~ msgstr "ne najdem 3Dview datoteke <%s>"
+msgid "coefdh raster map <%s> not found"
+msgstr "ne najdem 3Dview datoteke <%s>"
 
 #, fuzzy
-#~ msgid "Unable to find data map"
-#~ msgstr "Ne najdem vhodne datoteke %s\n"
+msgid "Unable to find data map"
+msgstr "Ne najdem vhodne datoteke %s\n"
 
 #, fuzzy
-#~ msgid "Unable to find clump map"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "Unable to find clump map"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Saving new map"
-#~ msgstr "Rastrski sloj nadmorskih vi¹in"
+msgid "Saving new map"
+msgstr "Rastrski sloj nadmorskih vi¹in"
 
 #, fuzzy
-#~ msgid "Terrain raster map (DEM)"
-#~ msgstr "izhodni rastrski sloj"
+msgid "Terrain raster map (DEM)"
+msgstr "izhodni rastrski sloj"
 
 #, fuzzy
-#~ msgid "Output raster map with lake"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "Output raster map with lake"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Cannot write lake raster map <%s>!"
-#~ msgstr "Ne morem odpreti baze podatkov %s"
+msgid "Cannot write lake raster map <%s>!"
+msgstr "Ne morem odpreti baze podatkov %s"
 
 #, fuzzy
-#~ msgid "Terrain raster map <%s> not found!"
-#~ msgstr "Ne najdem vhodnega rastrskega sloja <%s>."
+msgid "Terrain raster map <%s> not found!"
+msgstr "Ne najdem vhodnega rastrskega sloja <%s>."
 
 #, fuzzy
-#~ msgid "Cannot open terrain raster map <%s@%s>!"
-#~ msgstr "Ne morem odpreti baze podatkov %s"
+msgid "Cannot open terrain raster map <%s@%s>!"
+msgstr "Ne morem odpreti baze podatkov %s"
 
 #, fuzzy
-#~ msgid "Seed map <%s> not found!"
-#~ msgstr "Ne najdem vhodnega rastrskega sloja <%s>."
+msgid "Seed map <%s> not found!"
+msgstr "Ne najdem vhodnega rastrskega sloja <%s>."
 
 #, fuzzy
-#~ msgid "Cannot open seed map <%s@%s>!"
-#~ msgstr "Ne morem odpreti baze podatkov %s"
+msgid "Cannot open seed map <%s@%s>!"
+msgstr "Ne morem odpreti baze podatkov %s"
 
 #, fuzzy
-#~ msgid "Failure to allocate memory for row pointers"
-#~ msgstr "Ne morem izraèunati centroida obmoèja."
+msgid "Failure to allocate memory for row pointers"
+msgstr "Ne morem izraèunati centroida obmoèja."
 
 #, fuzzy
-#~ msgid "Loading maps: "
-#~ msgstr "Rastrski sloj nadmorskih vi¹in"
+msgid "Loading maps: "
+msgstr "Rastrski sloj nadmorskih vi¹in"
 
 #, fuzzy
-#~ msgid "Error reading terrain raster map. Probably broken file."
-#~ msgstr "Ime vhodnega rastrskega sloja"
+msgid "Error reading terrain raster map. Probably broken file."
+msgstr "Ime vhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Error reading seed raster map. Probably broken file."
-#~ msgstr "Ne najdem vhodne datoteke %s\n"
+msgid "Error reading seed raster map. Probably broken file."
+msgstr "Ne najdem vhodne datoteke %s\n"
 
 #, fuzzy
-#~ msgid "Cannot write lake raster map <%s@%s>!"
-#~ msgstr "Ne morem odpreti baze podatkov %s"
+msgid "Cannot write lake raster map <%s@%s>!"
+msgstr "Ne morem odpreti baze podatkov %s"
 
 #, fuzzy
-#~ msgid "Error writing color file for <%s@%s>!"
-#~ msgstr "ne morem odpreti razpona za datoteko %s"
+msgid "Error writing color file for <%s@%s>!"
+msgstr "ne morem odpreti razpona za datoteko %s"
 
 #, fuzzy
-#~ msgid "All done."
-#~ msgstr "Narejeno.\n"
+msgid "All done."
+msgstr "Narejeno.\n"
 
 #, fuzzy
-#~ msgid "%s: base raster map not found"
-#~ msgstr ""
-#~ "#-#-#-#-#  grassmods_sl.po (grassmods_sl)  #-#-#-#-#\n"
-#~ "#-#-#-#-#  grassmods_sl.po (grassmods_sl)  #-#-#-#-#\n"
-#~ "pozor: ne najdem vektorja %s\n"
-#~ "#-#-#-#-#  grassmods_sl.po (grassmods_sl)  #-#-#-#-#\n"
-#~ "Ne najdem vhodnega rastrskega sloja <%s>.\n"
-#~ "#-#-#-#-#  grassmods_sl.po (grassmods_sl)  #-#-#-#-#\n"
-#~ "Ne najdem rastrskega sloja <%s>"
+msgid "%s: base raster map not found"
+msgstr ""
+"#-#-#-#-#  grassmods_sl.po (grassmods_sl)  #-#-#-#-#\n"
+"#-#-#-#-#  grassmods_sl.po (grassmods_sl)  #-#-#-#-#\n"
+"pozor: ne najdem vektorja %s\n"
+"#-#-#-#-#  grassmods_sl.po (grassmods_sl)  #-#-#-#-#\n"
+"Ne najdem vhodnega rastrskega sloja <%s>.\n"
+"#-#-#-#-#  grassmods_sl.po (grassmods_sl)  #-#-#-#-#\n"
+"Ne najdem rastrskega sloja <%s>"
 
 #, fuzzy
-#~ msgid "%s: cover raster map not found"
-#~ msgstr "Ne najdem vhodnega rastrskega sloja <%s>."
+msgid "%s: cover raster map not found"
+msgstr "Ne najdem vhodnega rastrskega sloja <%s>."
 
 #, fuzzy
-#~ msgid "Name of the vector points map with x,y locations"
-#~ msgstr "Ime izhodnega vektorskega sloja"
+msgid "Name of the vector points map with x,y locations"
+msgstr "Ime izhodnega vektorskega sloja"
 
 #, fuzzy
-#~ msgid "Number of time iterations (sec.)"
-#~ msgstr "©tevilo toèk najbli¾jih toèk, ki bodo upo¹tevane"
+msgid "Number of time iterations (sec.)"
+msgstr "©tevilo toèk najbli¾jih toèk, ki bodo upo¹tevane"
 
 #, fuzzy
-#~ msgid "Multiscale simulation"
-#~ msgstr "lokacija baze podatkov"
+msgid "Multiscale simulation"
+msgstr "lokacija baze podatkov"
 
 #, fuzzy
-#~ msgid "Name of the elevation raster map, same units as N,E: [m] or [ft] "
-#~ msgstr "Ime rastrskega sloja nadmorskih vi¹in"
+msgid "Name of the elevation raster map, same units as N,E: [m] or [ft] "
+msgstr "Ime rastrskega sloja nadmorskih vi¹in"
 
 #, fuzzy
-#~ msgid "Name of the x-derivatives raster map [m/m] or [ft/ft]"
-#~ msgstr "Ime vhodnega rastrskega sloja"
+msgid "Name of the x-derivatives raster map [m/m] or [ft/ft]"
+msgstr "Ime vhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Name of the y-derivatives raster map [m/m] or [ft/ft]"
-#~ msgstr "Ime vhodnega rastrskega sloja"
+msgid "Name of the y-derivatives raster map [m/m] or [ft/ft]"
+msgstr "Ime vhodnega rastrskega sloja"
 
-#~ msgid "Quietly"
-#~ msgstr "Tiho"
+msgid "Quietly"
+msgstr "Tiho"
 
 #, fuzzy
-#~ msgid "Bilinear interpolation utility for raster map layers."
-#~ msgstr "Orodje za bilinearno interpolacijo za rastrske sloje."
+msgid "Bilinear interpolation utility for raster map layers."
+msgstr "Orodje za bilinearno interpolacijo za rastrske sloje."
 
 #, fuzzy
-#~ msgid ""
-#~ "Specific input value to be assigned to the north and/or south poles for "
-#~ "longitude-latitude grids"
-#~ msgstr ""
-#~ "Znaèilna vhodna vrednost, ki jo doloèimo severnemu in/ali ju¾nemu polu "
-#~ "za \n"
-#~ "dol¾insko-¹irinske mre¾e"
+msgid ""
+"Specific input value to be assigned to the north and/or south poles for "
+"longitude-latitude grids"
+msgstr ""
+"Znaèilna vhodna vrednost, ki jo doloèimo severnemu in/ali ju¾nemu polu za \n"
+"dol¾insko-¹irinske mre¾e"
 
 #, fuzzy
-#~ msgid "Illegal output file name <%s>"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "Illegal output file name <%s>"
+msgstr "Ime izhodnega rastrskega sloja"
 
-#~ msgid "Raster input maps(s)"
-#~ msgstr "Vhodni rastrski sloj(i)"
+msgid "Raster input maps(s)"
+msgstr "Vhodni rastrski sloj(i)"
 
-#~ msgid "Output file name"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "Output file name"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "%s: can't read fp range for [%s]"
-#~ msgstr "ne morem odpreti razpona za datoteko %s"
+msgid "%s: can't read fp range for [%s]"
+msgstr "ne morem odpreti razpona za datoteko %s"
 
 #, fuzzy
-#~ msgid ""
-#~ "Raster map [%s] already exists.\n"
-#~ "Please try another."
-#~ msgstr "Rastrski sloj kateremu naj se regija prilagodi"
+msgid ""
+"Raster map [%s] already exists.\n"
+"Please try another."
+msgstr "Rastrski sloj kateremu naj se regija prilagodi"
 
 #, fuzzy
-#~ msgid "Path to rules file"
-#~ msgstr "Ime izhodnega vektorskega sloja"
+msgid "Path to rules file"
+msgstr "Ime izhodnega vektorskega sloja"
 
 #, fuzzy
-#~ msgid "RGB raster map <%s> not found"
-#~ msgstr "Ne najdem vhodnega rastrskega sloja <%s>."
+msgid "RGB raster map <%s> not found"
+msgstr "Ne najdem vhodnega rastrskega sloja <%s>."
 
 #, fuzzy
-#~ msgid "Vector cell map <%s> not found"
-#~ msgstr "Ne najdem vhodnega vektorja <%s>"
+msgid "Vector cell map <%s> not found"
+msgstr "Ne najdem vhodnega vektorja <%s>"
 
 #, fuzzy
-#~ msgid "Cannot open raster map [%s]!"
-#~ msgstr "Ne najdem vhodne datoteke %s\n"
+msgid "Cannot open raster map [%s]!"
+msgstr "Ne najdem vhodne datoteke %s\n"
 
 #, fuzzy
-#~ msgid "Raster file [%s] is empty."
-#~ msgstr "Rastrski sloj, ki ga nameravate uvoziti"
+msgid "Raster file [%s] is empty."
+msgstr "Rastrski sloj, ki ga nameravate uvoziti"
 
 #, fuzzy
-#~ msgid "Unable to write header for [%s]."
-#~ msgstr "Ne morem odpreti cellfile za [%s]"
+msgid "Unable to write header for [%s]."
+msgstr "Ne morem odpreti cellfile za [%s]"
 
 #, fuzzy
-#~ msgid "        Number of rows"
-#~ msgstr " ©tevilo vrstic\n"
+msgid "        Number of rows"
+msgstr " ©tevilo vrstic\n"
 
 #, fuzzy
-#~ msgid "        Number of cols"
-#~ msgstr " ©tevilo kolon\n"
+msgid "        Number of cols"
+msgstr " ©tevilo kolon\n"
 
 #, fuzzy
-#~ msgid "Raster file [%s] not found. Exiting."
-#~ msgstr "Ne najdem rastrskega sloja <%s>"
+msgid "Raster file [%s] not found. Exiting."
+msgstr "Ne najdem rastrskega sloja <%s>"
 
 #, fuzzy
-#~ msgid "History file for [%s] updated."
-#~ msgstr "Rastrski sloj za povr¹ino"
+msgid "History file for [%s] updated."
+msgstr "Rastrski sloj za povr¹ino"
 
 #, fuzzy
-#~ msgid "Edit the history file for [%s]? "
-#~ msgstr "Ne morem odpreti cellfile za [%s]"
+msgid "Edit the history file for [%s]? "
+msgstr "Ne morem odpreti cellfile za [%s]"
 
 #, fuzzy
-#~ msgid "%s map <%s> not found"
-#~ msgstr "Ne najdem rastrskega sloja <%s>"
+msgid "%s map <%s> not found"
+msgstr "Ne najdem rastrskega sloja <%s>"
 
 #, fuzzy
-#~ msgid "Category file for <%s> not updated"
-#~ msgstr "Rastrski sloj za povr¹ino"
+msgid "Category file for <%s> not updated"
+msgstr "Rastrski sloj za povr¹ino"
 
 #, fuzzy
-#~ msgid "Category file for <%s> updated"
-#~ msgstr "Rastrski sloj za povr¹ino"
+msgid "Category file for <%s> updated"
+msgstr "Rastrski sloj za povr¹ino"
 
-#~ msgid "Title, in quotes"
-#~ msgstr "Naslov, v navednicah"
+msgid "Title, in quotes"
+msgstr "Naslov, v navednicah"
 
 #, fuzzy
-#~ msgid "Unable to find starting vector <%s> "
-#~ msgstr "Ne najdem vhodne datoteke %s\n"
+msgid "Unable to find starting vector <%s> "
+msgstr "Ne najdem vhodne datoteke %s\n"
 
 #, fuzzy
-#~ msgid "Unable to find stop vector <%s>"
-#~ msgstr "Ne najdem vhodne datoteke %s\n"
+msgid "Unable to find stop vector <%s>"
+msgstr "Ne najdem vhodne datoteke %s\n"
 
 #, fuzzy
-#~ msgid "Raster output map <%s> not found (no start_points given)"
-#~ msgstr "Ne najdem vhodnega vektorja <%s>"
+msgid "Raster output map <%s> not found (no start_points given)"
+msgstr "Ne najdem vhodnega vektorja <%s>"
 
-#~ msgid "Apply filter only to zero data values"
-#~ msgstr "Uporabi filter le na podatkih z vrednostjo niè (zero)"
+msgid "Apply filter only to zero data values"
+msgstr "Uporabi filter le na podatkih z vrednostjo niè (zero)"
 
 #, fuzzy
-#~ msgid "Cell file not found"
-#~ msgstr "ne najdem 3Dview datoteke <%s>"
+msgid "Cell file not found"
+msgstr "ne najdem 3Dview datoteke <%s>"
 
 #, fuzzy
-#~ msgid "Vector map <%s> not found in the current mapset"
-#~ msgstr "Ne najdem vhodnega vektorja <%s>"
+msgid "Vector map <%s> not found in the current mapset"
+msgstr "Ne najdem vhodnega vektorja <%s>"
 
 #, fuzzy
-#~ msgid "Threshold distance"
-#~ msgstr "Enote razdalje"
+msgid "Threshold distance"
+msgstr "Enote razdalje"
 
 #, fuzzy
-#~ msgid "Cannot execute: %s"
-#~ msgstr "Ne morem ustvariti tabele: %s"
+msgid "Cannot execute: %s"
+msgstr "Ne morem ustvariti tabele: %s"
 
 #, fuzzy
-#~ msgid "Cannot link table: %s"
-#~ msgstr "Ne morem odpreti baze podatkov %s"
+msgid "Cannot link table: %s"
+msgstr "Ne morem odpreti baze podatkov %s"
 
 #, fuzzy
-#~ msgid "DXF input file"
-#~ msgstr "Vhodni sloj"
+msgid "DXF input file"
+msgstr "Vhodni sloj"
 
 #, fuzzy
-#~ msgid "Cannot open dxf file <%s>"
-#~ msgstr "Ne morem odpreti baze podatkov %s"
+msgid "Cannot open dxf file <%s>"
+msgstr "Ne morem odpreti baze podatkov %s"
 
 #, fuzzy
-#~ msgid "Cannot open new vector map <%s>"
-#~ msgstr "ne morem odpreti vektorske datoteke <%s> v <%s>"
+msgid "Cannot open new vector map <%s>"
+msgstr "ne morem odpreti vektorske datoteke <%s> v <%s>"
 
 #, fuzzy
-#~ msgid "Conversion of <%s> to vector map:"
-#~ msgstr "Preoblikuje rastrski sloj v vektorskega."
+msgid "Conversion of <%s> to vector map:"
+msgstr "Preoblikuje rastrski sloj v vektorskega."
 
 #, fuzzy
-#~ msgid "Vector map <%s> is not in user mapset and cannot be updated"
-#~ msgstr "Ne najdem vhodnega vektorja <%s>"
+msgid "Vector map <%s> is not in user mapset and cannot be updated"
+msgstr "Ne najdem vhodnega vektorja <%s>"
 
 #, fuzzy
-#~ msgid "Create 3D file"
-#~ msgstr "Vhodni rastrski sloj"
+msgid "Create 3D file"
+msgstr "Vhodni rastrski sloj"
 
 #, fuzzy
-#~ msgid "Network input map <%s> not found"
-#~ msgstr "Ne najdem vhodnega vektorja <%s>"
+msgid "Network input map <%s> not found"
+msgstr "Ne najdem vhodnega vektorja <%s>"
 
-#~ msgid "ask_transform_coor():  Leaving session.. \n"
-#~ msgstr "sak_transform_coor(): Zapu¹èam sejo... \n"
+msgid "ask_transform_coor():  Leaving session.. \n"
+msgstr "sak_transform_coor(): Zapu¹èam sejo... \n"
 
-#~ msgid " Number of points that have been entered: %d\n"
-#~ msgstr "©tevilo toèk, ki so bile vnesene: %d\n"
+msgid " Number of points that have been entered: %d\n"
+msgstr "©tevilo toèk, ki so bile vnesene: %d\n"
 
-#~ msgid "Please answer yes or no"
-#~ msgstr "Prosim odgovori 'yes' ali 'no'"
+msgid "Please answer yes or no"
+msgstr "Prosim odgovori 'yes' ali 'no'"
 
 #, fuzzy
-#~ msgid "Line: %d\n"
-#~ msgstr "Vi¹ina linije: %f\n"
+msgid "Line: %d\n"
+msgstr "Vi¹ina linije: %f\n"
 
 #, fuzzy
-#~ msgid "output raster map"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "output raster map"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Name of input raster map(s)"
-#~ msgstr "Ime vhodnega rastrskega sloja"
+msgid "Name of input raster map(s)"
+msgstr "Ime vhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Illegal file name for real part: %s"
-#~ msgstr "Vhodni sloj"
+msgid "Illegal file name for real part: %s"
+msgstr "Vhodni sloj"
 
 #, fuzzy
-#~ msgid "Illegal file name for imaginary part: %s"
-#~ msgstr "Vhodni sloj"
+msgid "Illegal file name for imaginary part: %s"
+msgstr "Vhodni sloj"
 
 #, fuzzy
-#~ msgid "** Can't read signature file <%s> **"
-#~ msgstr "ne morem prebrati 3Dview datoteke <%s> v <%s>"
+msgid "** Can't read signature file <%s> **"
+msgstr "ne morem prebrati 3Dview datoteke <%s> v <%s>"
 
 #, fuzzy
-#~ msgid "Illegal group name <%s>"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "Illegal group name <%s>"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Illegal signature file name <%s>"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "Illegal signature file name <%s>"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Raster file(s) for Elevation"
-#~ msgstr "Rastrska(e) datoteka(e) za ogled %d"
+msgid "Raster file(s) for Elevation"
+msgstr "Rastrska(e) datoteka(e) za ogled %d"
 
 #, fuzzy
-#~ msgid "Raster file(s) for Color"
-#~ msgstr "Rastrska(e) datoteka(e) za ogled %d"
+msgid "Raster file(s) for Color"
+msgstr "Rastrska(e) datoteka(e) za ogled %d"
 
 #, fuzzy
-#~ msgid "Can't clear current graphics window"
-#~ msgstr "Ne morem ustvariti indeksa"
+msgid "Can't clear current graphics window"
+msgstr "Ne morem ustvariti indeksa"
 
 #, fuzzy
-#~ msgid "Cannot use current window"
-#~ msgstr "Ne morem ustvariti indeksa"
+msgid "Cannot use current window"
+msgstr "Ne morem ustvariti indeksa"
 
 #, fuzzy
-#~ msgid "No current frame"
-#~ msgstr "Uporabi nastavitve trenutne regije"
+msgid "No current frame"
+msgstr "Uporabi nastavitve trenutne regije"
 
 #, fuzzy
-#~ msgid "Error reading raster map"
-#~ msgstr "Nisem uspel odpreti vhodne datoteke."
+msgid "Error reading raster map"
+msgstr "Nisem uspel odpreti vhodne datoteke."
 
 #, fuzzy
-#~ msgid "Output profile data to file(s) with prefix 'name'"
-#~ msgstr "Naslov izhodnega rastrskega sloja"
+msgid "Output profile data to file(s) with prefix 'name'"
+msgstr "Naslov izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Error opening cell-file"
-#~ msgstr "Nisem uspel odpreti vhodne datoteke."
+msgid "Error opening cell-file"
+msgstr "Nisem uspel odpreti vhodne datoteke."
 
 #, fuzzy
-#~ msgid "Error reading from cell-file"
-#~ msgstr "Ne najdem vhodne datoteke %s\n"
+msgid "Error reading from cell-file"
+msgstr "Ne najdem vhodne datoteke %s\n"
 
 #, fuzzy
-#~ msgid "%s: Couldn't open raster <%s@%s>"
-#~ msgstr "ne morem odpreti <%s>"
+msgid "%s: Couldn't open raster <%s@%s>"
+msgstr "ne morem odpreti <%s>"
 
 #, fuzzy
-#~ msgid " Middle: toggle flash color\n"
-#~ msgstr "Srednji: barvni blisk\n"
+msgid " Middle: toggle flash color\n"
+msgstr "Srednji: barvni blisk\n"
 
 #, fuzzy
-#~ msgid "No current graphics window"
-#~ msgstr "Ne morem ustvariti indeksa"
+msgid "No current graphics window"
+msgstr "Ne morem ustvariti indeksa"
 
 #, fuzzy
-#~ msgid "Can't set current graphics window"
-#~ msgstr "Ne morem ustvariti indeksa"
+msgid "Can't set current graphics window"
+msgstr "Ne morem ustvariti indeksa"
 
 #, fuzzy
-#~ msgid "Getting graphics window coordinates"
-#~ msgstr "Uporabljam koordinate sredi¹èa sloja\n"
+msgid "Getting graphics window coordinates"
+msgstr "Uporabljam koordinate sredi¹èa sloja\n"
 
 #, fuzzy
-#~ msgid "Font name or pathname of TTF file"
-#~ msgstr "Ime novega rastrskega sloja."
+msgid "Font name or pathname of TTF file"
+msgstr "Ime novega rastrskega sloja."
 
 #, fuzzy
-#~ msgid "Setting release of FreeType"
-#~ msgstr ""
-#~ "\n"
-#~ "Nastavljam verzijo FreeType-a\n"
+msgid "Setting release of FreeType"
+msgstr ""
+"\n"
+"Nastavljam verzijo FreeType-a\n"
 
 #, fuzzy
-#~ msgid "Display number of colors"
-#~ msgstr " ©tevilo kolon\n"
+msgid "Display number of colors"
+msgstr " ©tevilo kolon\n"
 
 #, fuzzy
-#~ msgid "Name of frame(s) to save"
-#~ msgstr "Ime rastrskega sloja"
+msgid "Name of frame(s) to save"
+msgstr "Ime rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Save current frame"
-#~ msgstr "Uporabi nastavitve trenutne regije"
+msgid "Save current frame"
+msgstr "Uporabi nastavitve trenutne regije"
 
 #, fuzzy
-#~ msgid "Unknown item type in pad: %s"
-#~ msgstr "Nepoznan tip: %c"
+msgid "Unknown item type in pad: %s"
+msgstr "Nepoznan tip: %c"
 
 #, fuzzy
-#~ msgid ""
-#~ "Creates and displays a menu within the active frame on the graphics "
-#~ "monitor."
-#~ msgstr "Izbere pisavo v kateri bo tekst zapisan na grafiènem monitorju"
+msgid ""
+"Creates and displays a menu within the active frame on the graphics monitor."
+msgstr "Izbere pisavo v kateri bo tekst zapisan na grafiènem monitorju"
 
-#~ msgid "Path to TrueType font (including file name)"
-#~ msgstr "Pot do TrueType pisav (vkljuèujoè ime datoteke)"
+msgid "Path to TrueType font (including file name)"
+msgstr "Pot do TrueType pisav (vkljuèujoè ime datoteke)"
 
 #, fuzzy
-#~ msgid "Either text or -c should be given"
-#~ msgstr "Uporabi¹ lahko ali 'from_table' ali 'select'"
+msgid "Either text or -c should be given"
+msgstr "Uporabi¹ lahko ali 'from_table' ali 'select'"
 
 #, fuzzy
-#~ msgid "Invalid font: %s"
-#~ msgstr "neveljavna regija: %s"
+msgid "Invalid font: %s"
+msgstr "neveljavna regija: %s"
 
 #, fuzzy
-#~ msgid "Unable to write the temporary file"
-#~ msgstr "Vrednost, ki bo prirejena NULL vrednosti"
+msgid "Unable to write the temporary file"
+msgstr "Vrednost, ki bo prirejena NULL vrednosti"
 
 #, fuzzy
-#~ msgid "No predefined font"
-#~ msgstr "Ime datoteke s pravili"
+msgid "No predefined font"
+msgstr "Ime datoteke s pravili"
 
 #, fuzzy
-#~ msgid " Left:    Place text here\n"
-#~ msgstr "Levi: poizveduj po karti\n"
+msgid " Left:    Place text here\n"
+msgstr "Levi: poizveduj po karti\n"
 
 #, fuzzy
-#~ msgid " Right:   Quit\n"
-#~ msgstr "Desni: konèaj\n"
+msgid " Right:   Quit\n"
+msgstr "Desni: konèaj\n"
 
 #, fuzzy
-#~ msgid "-j flag forced"
-#~ msgstr "vsiljena je bila izbira -j\n"
+msgid "-j flag forced"
+msgstr "vsiljena je bila izbira -j\n"
 
 #, fuzzy
-#~ msgid "No map is displayed in GRASS monitor"
-#~ msgstr "NAPAKA: Na grafiènem monitorju ni prikazana nobena karta\n"
+msgid "No map is displayed in GRASS monitor"
+msgstr "NAPAKA: Na grafiènem monitorju ni prikazana nobena karta\n"
 
 #, fuzzy
-#~ msgid "Interactively select route"
-#~ msgstr "Interaktivno izberi konèni toèki"
+msgid "Interactively select route"
+msgstr "Interaktivno izberi konèni toèki"
 
 #, fuzzy
-#~ msgid "You must select at least four points"
-#~ msgstr "Vnesti mora¹ vsaj %d toèk."
+msgid "You must select at least four points"
+msgstr "Vnesti mora¹ vsaj %d toèk."
 
 #, fuzzy
-#~ msgid "No raster or vector map displayed"
-#~ msgstr "Ime rastrskega sloja, ki bo uporabljen za <%s>"
+msgid "No raster or vector map displayed"
+msgstr "Ime rastrskega sloja, ki bo uporabljen za <%s>"
 
 #, fuzzy
-#~ msgid "Name of graphics monitor to start"
-#~ msgstr "Ime rastrskega sloja, ki bo vseboval rezultate"
+msgid "Name of graphics monitor to start"
+msgstr "Ime rastrskega sloja, ki bo vseboval rezultate"
 
 #, fuzzy
-#~ msgid "Name of graphics monitor to stop"
-#~ msgstr "Ime rastrskega sloja"
+msgid "Name of graphics monitor to stop"
+msgstr "Ime rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Name of graphics monitor to select"
-#~ msgstr "Nobena grafièna naprava ni izbrana"
+msgid "Name of graphics monitor to select"
+msgstr "Nobena grafièna naprava ni izbrana"
 
 #, fuzzy
-#~ msgid "List all monitors"
-#~ msgstr "Spisek vrednosti plastnic"
+msgid "List all monitors"
+msgstr "Spisek vrednosti plastnic"
 
 #, fuzzy
-#~ msgid "Print name of currently selected monitor"
-#~ msgstr "Prilagodi trenutno regijo z vhodnemu rastrskemu sloju"
+msgid "Print name of currently selected monitor"
+msgstr "Prilagodi trenutno regijo z vhodnemu rastrskemu sloju"
 
 #, fuzzy
-#~ msgid "Error - Locking mechanism failed"
-#~ msgstr "Nisem uspel odpreti vhodne datoteke."
+msgid "Error - Locking mechanism failed"
+msgstr "Nisem uspel odpreti vhodne datoteke."
 
 #, fuzzy
-#~ msgid "Error choosing frame [%s]\n"
-#~ msgstr "Rekodira rastrske sloje"
+msgid "Error choosing frame [%s]\n"
+msgstr "Rekodira rastrske sloje"
 
 #, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "Buttons:\n"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "Gumbi:\n"
+msgid ""
+"\n"
+"Buttons:\n"
+msgstr ""
+"\n"
+"\n"
+"Gumbi:\n"
 
 #, fuzzy
-#~ msgid "Left:   Select frame\n"
-#~ msgstr "Levi: poizveduj po karti\n"
+msgid "Left:   Select frame\n"
+msgstr "Levi: poizveduj po karti\n"
 
 #, fuzzy
-#~ msgid "Right:  Accept frame\n"
-#~ msgstr "%s Zapri menu\n"
+msgid "Right:  Accept frame\n"
+msgstr "%s Zapri menu\n"
 
 #, fuzzy
-#~ msgid "Manages display frames on the user's graphics monitor."
-#~ msgstr "Izbere pisavo v kateri bo tekst zapisan na grafiènem monitorju"
+msgid "Manages display frames on the user's graphics monitor."
+msgstr "Izbere pisavo v kateri bo tekst zapisan na grafiènem monitorju"
 
 #, fuzzy
-#~ msgid "Create a new frame"
-#~ msgstr "Ne morem ustvariti tabele: %s"
+msgid "Create a new frame"
+msgstr "Ne morem ustvariti tabele: %s"
 
 #, fuzzy
-#~ msgid "Select a frame"
-#~ msgstr "Izberi podatke iz baze podatkov."
+msgid "Select a frame"
+msgstr "Izberi podatke iz baze podatkov."
 
 #, fuzzy
-#~ msgid "Print name of current frame"
-#~ msgstr "Uporabi nastavitve trenutne regije"
+msgid "Print name of current frame"
+msgstr "Uporabi nastavitve trenutne regije"
 
 #, fuzzy
-#~ msgid "Print names of all frames"
-#~ msgstr "Izpi¹i sumo vrednosti za razrede"
+msgid "Print names of all frames"
+msgstr "Izpi¹i sumo vrednosti za razrede"
 
 #, fuzzy
-#~ msgid "List map names displayed in GRASS monitor"
-#~ msgstr "NAPAKA: Na grafiènem monitorju ni prikazana nobena karta\n"
+msgid "List map names displayed in GRASS monitor"
+msgstr "NAPAKA: Na grafiènem monitorju ni prikazana nobena karta\n"
 
 #, fuzzy
-#~ msgid "Frame to be created/selected"
-#~ msgstr "Rastrski sloj, ki ga nameravate uvoziti"
+msgid "Frame to be created/selected"
+msgstr "Rastrski sloj, ki ga nameravate uvoziti"
 
 #, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "Mouse Buttons:"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "Gumbi:\n"
+msgid ""
+"\n"
+"Mouse Buttons:"
+msgstr ""
+"\n"
+"\n"
+"Gumbi:\n"
 
 #, fuzzy
-#~ msgid "Left:   Select From\n"
-#~ msgstr "Levi: poizveduj po karti\n"
+msgid "Left:   Select From\n"
+msgstr "Levi: poizveduj po karti\n"
 
 #, fuzzy
-#~ msgid ""
-#~ "Right:  Quit\n"
-#~ "\n"
-#~ msgstr "Desni: konèaj\n"
+msgid ""
+"Right:  Quit\n"
+"\n"
+msgstr "Desni: konèaj\n"
 
 #, fuzzy
-#~ msgid "Monitor: interactive command in redraw"
-#~ msgstr "Monitor: interaktivni ukaz v ponovnem risanju\n"
+msgid "Monitor: interactive command in redraw"
+msgstr "Monitor: interaktivni ukaz v ponovnem risanju\n"
 
 #, fuzzy
-#~ msgid "found %d visuals of type TrueColor"
-#~ msgstr "najdenih je bilo %d \"visuals\" tipa TrueColor\n"
+msgid "found %d visuals of type TrueColor"
+msgstr "najdenih je bilo %d \"visuals\" tipa TrueColor\n"
 
 #, fuzzy
-#~ msgid "searching for highest bit depth"
-#~ msgstr "i¹èem najveèjo mo¾no bitno globino\n"
+msgid "searching for highest bit depth"
+msgstr "i¹èem najveèjo mo¾no bitno globino\n"
 
 #, fuzzy
-#~ msgid "selected %d bit depth"
-#~ msgstr "izbrana %d bitna globina\n"
+msgid "selected %d bit depth"
+msgstr "izbrana %d bitna globina\n"
 
 #, fuzzy
-#~ msgid "using default visual which is %s"
-#~ msgstr "uporabljam privzeto \"visual\", ki je %s\n"
+msgid "using default visual which is %s"
+msgstr "uporabljam privzeto \"visual\", ki je %s\n"
 
 #, fuzzy
-#~ msgid "Monitor: waitpid: expected %d but got %d"
-#~ msgstr "Monitor: waitpid: prièakovan %d, dobil pa %d\n"
+msgid "Monitor: waitpid: expected %d but got %d"
+msgstr "Monitor: waitpid: prièakovan %d, dobil pa %d\n"
 
 #, fuzzy
-#~ msgid "Monitor: XGetWMName failed"
-#~ msgstr "Monitor: XGetWMName ni uspel\n"
+msgid "Monitor: XGetWMName failed"
+msgstr "Monitor: XGetWMName ni uspel\n"
 
 #, fuzzy
-#~ msgid "Monitor: XGetWMName: bad result"
-#~ msgstr "Monitor: XGetWMName: slab rezultat\n"
+msgid "Monitor: XGetWMName: bad result"
+msgstr "Monitor: XGetWMName: slab rezultat\n"
 
 #, fuzzy
-#~ msgid "Raster map to zoom into"
-#~ msgstr "Rastrski sloj kateremu naj se regija prilagodi"
+msgid "Raster map to zoom into"
+msgstr "Rastrski sloj kateremu naj se regija prilagodi"
 
 #, fuzzy
-#~ msgid "Save the current region to region definition file"
-#~ msgstr "Ne vzporejaj trenutne regije s slojem nadmorskih vi¹in"
+msgid "Save the current region to region definition file"
+msgstr "Ne vzporejaj trenutne regije s slojem nadmorskih vi¹in"
 
 #, fuzzy
-#~ msgid "<%s> is an illegal region name"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "<%s> is an illegal region name"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Erasing monitors ..."
-#~ msgstr "Zapisujem novo datoteko...\n"
+msgid "Erasing monitors ..."
+msgstr "Zapisujem novo datoteko...\n"
 
 #, fuzzy
-#~ msgid "Could not open input file <%s>."
-#~ msgstr "ne morem odpreti vektorske datoteke <%s> v <%s>"
+msgid "Could not open input file <%s>."
+msgstr "ne morem odpreti vektorske datoteke <%s> v <%s>"
 
 #, fuzzy
-#~ msgid "Unable to open file: <%s>"
-#~ msgstr "Ne morem odpreti cellfile za [%s]"
+msgid "Unable to open file: <%s>"
+msgstr "Ne morem odpreti cellfile za [%s]"
 
 #, fuzzy
-#~ msgid "Multiplier"
-#~ msgstr "Faktor mno¾enja za ascii podatke"
+msgid "Multiplier"
+msgstr "Faktor mno¾enja za ascii podatke"
 
 #, fuzzy
-#~ msgid "not found\n"
-#~ msgstr "Ne najdem rastrskega sloja <%s>"
+msgid "not found\n"
+msgstr "Ne najdem rastrskega sloja <%s>"
 
 #, fuzzy
-#~ msgid "Raster map not found."
-#~ msgstr "Ne najdem vhodnega rastrskega sloja <%s>."
+msgid "Raster map not found."
+msgstr "Ne najdem vhodnega rastrskega sloja <%s>."
 
 #, fuzzy
-#~ msgid "%s: can't read range for [%s]"
-#~ msgstr "ne morem odpreti razpona za datoteko %s"
+msgid "%s: can't read range for [%s]"
+msgstr "ne morem odpreti razpona za datoteko %s"
 
 #, fuzzy
-#~ msgid "Raster file [%s] not found"
-#~ msgstr "Ne najdem rastrskega sloja <%s>"
+msgid "Raster file [%s] not found"
+msgstr "Ne najdem rastrskega sloja <%s>"
 
 #, fuzzy
-#~ msgid "It was not possible writing in <%s>."
-#~ msgstr "ne morem odpreti <%s>"
+msgid "It was not possible writing in <%s>."
+msgstr "ne morem odpreti <%s>"
 
 #, fuzzy
-#~ msgid "\rDuplicate area centroids: %5d"
-#~ msgstr "Ne morem izraèunati centroida obmoèja."
+msgid "\rDuplicate area centroids: %5d"
+msgstr "Ne morem izraèunati centroida obmoèja."
 
 #, fuzzy
-#~ msgid "Cannot create table: '%s'"
-#~ msgstr "Ne morem ustvariti tabele: %s"
+msgid "Cannot create table: '%s'"
+msgstr "Ne morem ustvariti tabele: %s"
 
 #, fuzzy
-#~ msgid "Unable to get category list <%s>, editing terminated"
-#~ msgstr "Ne morem najti vhodne datoteke <%s>\n"
+msgid "Unable to get category list <%s>, editing terminated"
+msgstr "Ne morem najti vhodne datoteke <%s>\n"
 
 #, fuzzy
-#~ msgid "Unable to delete layer/category [%d/%d] line %d"
-#~ msgstr "Ne najdem vhodne datoteke %s\n"
+msgid "Unable to delete layer/category [%d/%d] line %d"
+msgstr "Ne najdem vhodne datoteke %s\n"
 
 #, fuzzy
-#~ msgid "Unable to write line %d"
-#~ msgstr "Vrednost, ki bo prirejena NULL vrednosti"
+msgid "Unable to write line %d"
+msgstr "Vrednost, ki bo prirejena NULL vrednosti"
 
 #, fuzzy
-#~ msgid "Unable to delete line %d"
-#~ msgstr "Ne morem opisati tabele"
+msgid "Unable to delete line %d"
+msgstr "Ne morem opisati tabele"
 
 #, fuzzy
-#~ msgid "Unknown query tool '%s'"
-#~ msgstr "Nepoznan tip"
+msgid "Unknown query tool '%s'"
+msgstr "Nepoznan tip"
 
 #, fuzzy
-#~ msgid "No layer database connection"
-#~ msgstr "lokacija baze podatkov"
+msgid "No layer database connection"
+msgstr "lokacija baze podatkov"
 
 #, fuzzy
-#~ msgid "%d categories loaded from the database"
-#~ msgstr "%d kategorij nalo¾enih iz tabele\n"
+msgid "%d categories loaded from the database"
+msgstr "%d kategorij nalo¾enih iz tabele\n"
 
 #, fuzzy
-#~ msgid "Done"
-#~ msgstr "Narejeno\n"
+msgid "Done"
+msgstr "Narejeno\n"
 
 #, fuzzy
-#~ msgid "Cannot open OGR data source '%s'"
-#~ msgstr "Ne morem odpreti baze podatkov %s"
+msgid "Cannot open OGR data source '%s'"
+msgstr "Ne morem odpreti baze podatkov %s"
 
 #, fuzzy
-#~ msgid "Cannot create layer"
-#~ msgstr "Ne morem ustvariti indeksa"
+msgid "Cannot create layer"
+msgstr "Ne morem ustvariti indeksa"
 
 #, fuzzy
-#~ msgid "Vector map <%s> in location <%s> in mapset <%s> not available"
-#~ msgstr "Ime rastrskega sloja"
+msgid "Vector map <%s> in location <%s> in mapset <%s> not available"
+msgstr "Ime rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Column type [%d] not supported"
-#~ msgstr "Tip zapisa kolone ni podprt"
+msgid "Column type [%d] not supported"
+msgstr "Tip zapisa kolone ni podprt"
 
 #, fuzzy
-#~ msgid "Cannot read map header for <%s>"
-#~ msgstr "Ne morem prebrati informacije polja"
+msgid "Cannot read map header for <%s>"
+msgstr "Ne morem prebrati informacije polja"
 
 #, fuzzy
-#~ msgid "Cannot read category file for <%s>"
-#~ msgstr "ne morem prebrati regije <%s> v <%s>"
+msgid "Cannot read category file for <%s>"
+msgstr "ne morem prebrati regije <%s> v <%s>"
 
 #, fuzzy
-#~ msgid "Print;Shell Script"
-#~ msgstr "Izpi¹i ¹tevilo celic v razredu"
+msgid "Print;Shell Script"
+msgstr "Izpi¹i ¹tevilo celic v razredu"
 
 #, fuzzy
-#~ msgid "%s: <%s> raster map not found"
-#~ msgstr ""
-#~ "#-#-#-#-#  grassmods_sl.po (grassmods_sl)  #-#-#-#-#\n"
-#~ "#-#-#-#-#  grassmods_sl.po (grassmods_sl)  #-#-#-#-#\n"
-#~ "pozor: ne najdem vektorja %s\n"
-#~ "#-#-#-#-#  grassmods_sl.po (grassmods_sl)  #-#-#-#-#\n"
-#~ "Ne najdem vhodnega rastrskega sloja <%s>.\n"
-#~ "#-#-#-#-#  grassmods_sl.po (grassmods_sl)  #-#-#-#-#\n"
-#~ "Ne najdem rastrskega sloja <%s>"
+msgid "%s: <%s> raster map not found"
+msgstr ""
+"#-#-#-#-#  grassmods_sl.po (grassmods_sl)  #-#-#-#-#\n"
+"#-#-#-#-#  grassmods_sl.po (grassmods_sl)  #-#-#-#-#\n"
+"pozor: ne najdem vektorja %s\n"
+"#-#-#-#-#  grassmods_sl.po (grassmods_sl)  #-#-#-#-#\n"
+"Ne najdem vhodnega rastrskega sloja <%s>.\n"
+"#-#-#-#-#  grassmods_sl.po (grassmods_sl)  #-#-#-#-#\n"
+"Ne najdem rastrskega sloja <%s>"
 
 #, fuzzy
-#~ msgid "Cannot read category file of raster map <%s>"
-#~ msgstr "ne morem prebrati regije <%s> v <%s>"
+msgid "Cannot read category file of raster map <%s>"
+msgstr "ne morem prebrati regije <%s> v <%s>"
 
 #, fuzzy
-#~ msgid "%s - map not found"
-#~ msgstr "Ne najdem rastrskega sloja <%s>"
+msgid "%s - map not found"
+msgstr "Ne najdem rastrskega sloja <%s>"
 
 #, fuzzy
-#~ msgid "%s: Cannot open [%s]"
-#~ msgstr "ne morem odpreti %s"
+msgid "%s: Cannot open [%s]"
+msgstr "ne morem odpreti %s"
 
 #, fuzzy
-#~ msgid "%s not found"
-#~ msgstr "Ne najdem rastrskega sloja <%s>"
+msgid "%s not found"
+msgstr "Ne najdem rastrskega sloja <%s>"
 
 #, fuzzy
-#~ msgid "Vector map %s - not found"
-#~ msgstr "Ne najdem vhodnega vektorja <%s>"
+msgid "Vector map %s - not found"
+msgstr "Ne najdem vhodnega vektorja <%s>"
 
 #, fuzzy
-#~ msgid "Raster map containing elevation data"
-#~ msgstr "Vhodni sloj vsebuje linije."
+msgid "Raster map containing elevation data"
+msgstr "Vhodni sloj vsebuje linije."
 
-#~ msgid "Raster map name for storing results"
-#~ msgstr "Ime rastrskega sloja z rezultati"
+msgid "Raster map name for storing results"
+msgstr "Ime rastrskega sloja z rezultati"
 
-#~ msgid "Height of the viewing location"
-#~ msgstr "Gledalèeva vi¹ina nad povr¹jem"
+msgid "Height of the viewing location"
+msgstr "Gledalèeva vi¹ina nad povr¹jem"
 
 #, fuzzy
-#~ msgid "%s: <%s> cellfile not found"
-#~ msgstr "Ne najdem rastrskega sloja <%s>"
+msgid "%s: <%s> cellfile not found"
+msgstr "Ne najdem rastrskega sloja <%s>"
 
 #, fuzzy
-#~ msgid "Cell file [%s] not found\n"
-#~ msgstr "ne najdem 3Dview datoteke <%s>"
+msgid "Cell file [%s] not found\n"
+msgstr "ne najdem 3Dview datoteke <%s>"
 
 #, fuzzy
-#~ msgid "rgb cell map [%s] not found\n"
-#~ msgstr "ne najdem 3Dview datoteke <%s>"
+msgid "rgb cell map [%s] not found\n"
+msgstr "ne najdem 3Dview datoteke <%s>"
 
 #, fuzzy
-#~ msgid "vector cell map [%s] not found\n"
-#~ msgstr "ne najdem 3Dview datoteke <%s>"
+msgid "vector cell map [%s] not found\n"
+msgstr "ne najdem 3Dview datoteke <%s>"
 
 #, fuzzy
-#~ msgid "%s - %s not found"
-#~ msgstr "Ne najdem rastrskega sloja <%s>"
+msgid "%s - %s not found"
+msgstr "Ne najdem rastrskega sloja <%s>"
 
-#~ msgid "raster map <%s> not found"
-#~ msgstr "Ne najdem vhodnega rastrskega sloja <%s>."
+msgid "raster map <%s> not found"
+msgstr "Ne najdem vhodnega rastrskega sloja <%s>."
 
-#~ msgid "can't read header for <%s> in <%s>"
-#~ msgstr "Ne morem prebrati vzglavja za <%s> v <%s>"
+msgid "can't read header for <%s> in <%s>"
+msgstr "Ne morem prebrati vzglavja za <%s> v <%s>"
 
-#~ msgid "region <%s> not found"
-#~ msgstr "ne najdem regije <%s>"
+msgid "region <%s> not found"
+msgstr "ne najdem regije <%s>"
 
-#~ msgid "can't read region <%s> in <%s>"
-#~ msgstr "ne morem prebrati regije <%s> v <%s>"
+msgid "can't read region <%s> in <%s>"
+msgstr "ne morem prebrati regije <%s> v <%s>"
 
-#~ msgid "can't open 3dview file <%s> in <%s>"
-#~ msgstr "ne morem odpreti 3Dview datoteke <%s> v <%s>"
+msgid "can't open 3dview file <%s> in <%s>"
+msgstr "ne morem odpreti 3Dview datoteke <%s> v <%s>"
 
-#~ msgid "can't read 3dview file <%s> in <%s>"
-#~ msgstr "ne morem prebrati 3Dview datoteke <%s> v <%s>"
+msgid "can't read 3dview file <%s> in <%s>"
+msgstr "ne morem prebrati 3Dview datoteke <%s> v <%s>"
 
 #, fuzzy
-#~ msgid "can't open vector map <%s> in <%s>"
-#~ msgstr "ne morem odpreti vektorske datoteke <%s> v <%s>"
+msgid "can't open vector map <%s> in <%s>"
+msgstr "ne morem odpreti vektorske datoteke <%s> v <%s>"
 
-#~ msgid "invalid region: %s"
-#~ msgstr "neveljavna regija: %s"
+msgid "invalid region: %s"
+msgstr "neveljavna regija: %s"
 
 #, fuzzy
-#~ msgid "Creating support files"
-#~ msgstr "ne morem odpreti razpona za datoteko %s"
+msgid "Creating support files"
+msgstr "ne morem odpreti razpona za datoteko %s"
 
-#~ msgid "can't open %s"
-#~ msgstr "ne morem odpreti %s"
+msgid "can't open %s"
+msgstr "ne morem odpreti %s"
 
 #, fuzzy
-#~ msgid "%s file [%s] not found!"
-#~ msgstr "ne najdem 3Dview datoteke <%s>"
+msgid "%s file [%s] not found!"
+msgstr "ne najdem 3Dview datoteke <%s>"
 
 #, fuzzy
-#~ msgid "%s: %s - map not found"
-#~ msgstr "Ne najdem rastrskega sloja <%s>"
+msgid "%s: %s - map not found"
+msgstr "Ne najdem rastrskega sloja <%s>"
 
 #, fuzzy
-#~ msgid "%s: unable to open %s"
-#~ msgstr "ne morem odpreti <%s>"
+msgid "%s: unable to open %s"
+msgstr "ne morem odpreti <%s>"
 
 #, fuzzy
-#~ msgid "%s - not found"
-#~ msgstr "Ne najdem rastrskega sloja <%s>"
+msgid "%s - not found"
+msgstr "Ne najdem rastrskega sloja <%s>"
 
 #, fuzzy
-#~ msgid "Cannot read %s"
-#~ msgstr "Ne morem ustvariti tabele: %s"
+msgid "Cannot read %s"
+msgstr "Ne morem ustvariti tabele: %s"
 
 #, fuzzy
-#~ msgid "[%s] map not found."
-#~ msgstr "Ne najdem rastrskega sloja <%s>"
+msgid "[%s] map not found."
+msgstr "Ne najdem rastrskega sloja <%s>"
 
 #, fuzzy
-#~ msgid "[%s] map not found"
-#~ msgstr "Ne najdem rastrskega sloja <%s>"
+msgid "[%s] map not found"
+msgstr "Ne najdem rastrskega sloja <%s>"
 
 #, fuzzy
-#~ msgid "elevation file [%s] not found"
-#~ msgstr "ne najdem 3Dview datoteke <%s>"
+msgid "elevation file [%s] not found"
+msgstr "ne najdem 3Dview datoteke <%s>"
 
 #, fuzzy
-#~ msgid "Cannot describe table <%s>"
-#~ msgstr "Ne morem opisati tabele"
+msgid "Cannot describe table <%s>"
+msgstr "Ne morem opisati tabele"
 
 #, fuzzy
-#~ msgid "Cannot insert values: %s"
-#~ msgstr "Ne morem vnesti v tabelo: %s"
+msgid "Cannot insert values: %s"
+msgstr "Ne morem vnesti v tabelo: %s"
 
 #, fuzzy
-#~ msgid "%s given an illegal number of points [%d]"
-#~ msgstr "©tevilo toèk najbli¾jih toèk, ki bodo upo¹tevane"
+msgid "%s given an illegal number of points [%d]"
+msgstr "©tevilo toèk najbli¾jih toèk, ki bodo upo¹tevane"
 
 #, fuzzy
-#~ msgid "Unable to open database %s by driver %s"
-#~ msgstr "Ne morem odpreti baze podatkov %s z gonilnikom %s"
+msgid "Unable to open database %s by driver %s"
+msgstr "Ne morem odpreti baze podatkov %s z gonilnikom %s"
 
 #, fuzzy
-#~ msgid "No DB connection settings defined. Set with db.connect"
-#~ msgstr ""
-#~ "Nastavitve za povezavo z bazo podatkov niso definirane. \n"
-#~ "Nastavi jih z db.connect"
+msgid "No DB connection settings defined. Set with db.connect"
+msgstr ""
+"Nastavitve za povezavo z bazo podatkov niso definirane. \n"
+"Nastavi jih z db.connect"
 
 #, fuzzy
-#~ msgid "Could not find input %s"
-#~ msgstr "Ne najdem vhodne datoteke %s\n"
+msgid "Could not find input %s"
+msgstr "Ne najdem vhodne datoteke %s\n"
 
 #, fuzzy
-#~ msgid "Could not open input"
-#~ msgstr "Ne najdem vhodne datoteke %s\n"
+msgid "Could not open input"
+msgstr "Ne najdem vhodne datoteke %s\n"
 
 #, fuzzy
-#~ msgid "Could not open output"
-#~ msgstr "Ne najdem vhodne datoteke %s\n"
+msgid "Could not open output"
+msgstr "Ne najdem vhodne datoteke %s\n"
 
 #, fuzzy
-#~ msgid "Could not find input map <%s>"
-#~ msgstr "Ne morem najti vhodne datoteke <%s>\n"
+msgid "Could not find input map <%s>"
+msgstr "Ne morem najti vhodne datoteke <%s>\n"
 
 #, fuzzy
-#~ msgid "Unkown item type in pad: %s"
-#~ msgstr "Nepoznan tip: %c"
+msgid "Unkown item type in pad: %s"
+msgstr "Nepoznan tip: %c"
 
 #, fuzzy
-#~ msgid "Unable to open driver <%s>"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "Unable to open driver <%s>"
+msgstr "Ime izhodnega rastrskega sloja"
 
-#~ msgid "Database connection not defined\n"
-#~ msgstr "Povezava z bazo podatkov ni definirana\n"
+msgid "Database connection not defined\n"
+msgstr "Povezava z bazo podatkov ni definirana\n"
 
 #, fuzzy
-#~ msgid "Can't read header for <%s> in <%s>"
-#~ msgstr "Ne morem prebrati vzglavja za <%s> v <%s>"
+msgid "Can't read header for <%s> in <%s>"
+msgstr "Ne morem prebrati vzglavja za <%s> v <%s>"
 
 #, fuzzy
-#~ msgid "Can't read header for 3D raster <%s> in <%s>"
-#~ msgstr "Ne morem prebrati vzglavja za <%s> v <%s>"
+msgid "Can't read header for 3D raster <%s> in <%s>"
+msgstr "Ne morem prebrati vzglavja za <%s> v <%s>"
 
 #, fuzzy
-#~ msgid "%s in %s: %s"
-#~ msgstr "%s:linija %d:%s\n"
+msgid "%s in %s: %s"
+msgstr "%s:linija %d:%s\n"
 
 #, fuzzy
-#~ msgid "Can't write region <%s>"
-#~ msgstr "ne morem prebrati regije <%s> v <%s>"
+msgid "Can't write region <%s>"
+msgstr "ne morem prebrati regije <%s> v <%s>"
 
 #, fuzzy
-#~ msgid "No graphics device selected."
-#~ msgstr "Nobena grafièna naprava ni izbrana"
+msgid "No graphics device selected."
+msgstr "Nobena grafièna naprava ni izbrana"
 
 #, fuzzy
-#~ msgid "Unable to read raster row."
-#~ msgstr "Ime rastrskega sloja"
+msgid "Unable to read raster row."
+msgstr "Ime rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Training map [%s] not found."
-#~ msgstr "Ne najdem vhodnega rastrskega sloja <%s>."
+msgid "Training map [%s] not found."
+msgstr "Ne najdem vhodnega rastrskega sloja <%s>."
 
 #, fuzzy
-#~ msgid "%s map not found"
-#~ msgstr "Ne najdem rastrskega sloja <%s>"
+msgid "%s map not found"
+msgstr "Ne najdem rastrskega sloja <%s>"
 
 #, fuzzy
-#~ msgid "input raster map"
-#~ msgstr "Ime vhodnega rastrskega sloja"
+msgid "input raster map"
+msgstr "Ime vhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Illegal file name: %s"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "Illegal file name: %s"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Cannot open raster map <%s> in <%s>"
-#~ msgstr ""
-#~ "#-#-#-#-#  grassmods_sl.po (grassmods_sl)  #-#-#-#-#\n"
-#~ "Ne morem odpreti cellfile za [%s]\n"
-#~ "#-#-#-#-#  grassmods_sl.po (grassmods_sl)  #-#-#-#-#\n"
-#~ "Ne morem odpreti baze podatkov %s"
+msgid "Cannot open raster map <%s> in <%s>"
+msgstr ""
+"#-#-#-#-#  grassmods_sl.po (grassmods_sl)  #-#-#-#-#\n"
+"Ne morem odpreti cellfile za [%s]\n"
+"#-#-#-#-#  grassmods_sl.po (grassmods_sl)  #-#-#-#-#\n"
+"Ne morem odpreti baze podatkov %s"
 
 #, fuzzy
-#~ msgid "cover values extracted from the category labels of the cover map"
-#~ msgstr "Vrednosti pridobljene iz kategorij pokrovnega sloja"
+msgid "cover values extracted from the category labels of the cover map"
+msgstr "Vrednosti pridobljene iz kategorij pokrovnega sloja"
 
 #, fuzzy
-#~ msgid "%s: %s - raster map not found"
-#~ msgstr "Ne najdem vhodnega rastrskega sloja <%s>."
+msgid "%s: %s - raster map not found"
+msgstr "Ne najdem vhodnega rastrskega sloja <%s>."
 
 #, fuzzy
-#~ msgid "%s: %s - not found"
-#~ msgstr "Ne najdem rastrskega sloja <%s>"
+msgid "%s: %s - not found"
+msgstr "Ne najdem rastrskega sloja <%s>"
 
 #, fuzzy
-#~ msgid "%s: %s - can't open"
-#~ msgstr "Ne najdem rastrskega sloja <%s>"
+msgid "%s: %s - can't open"
+msgstr "Ne najdem rastrskega sloja <%s>"
 
 #, fuzzy
-#~ msgid "Reading input map (%s)    ... "
-#~ msgstr "Berem dig datoteko...\n"
+msgid "Reading input map (%s)    ... "
+msgstr "Berem dig datoteko...\n"
 
 #, fuzzy
-#~ msgid "%s: %s - can't create raster map"
-#~ msgstr "ne morem odpreti razpona za datoteko %s"
+msgid "%s: %s - can't create raster map"
+msgstr "ne morem odpreti razpona za datoteko %s"
 
 #, fuzzy
-#~ msgid "Writing output map (%s)   ... "
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "Writing output map (%s)   ... "
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Reading raster map... "
-#~ msgstr "Berem dig_att datoteko...\n"
+msgid "Reading raster map... "
+msgstr "Berem dig_att datoteko...\n"
 
 #, fuzzy
-#~ msgid "Writing raster map... "
-#~ msgstr "Zapisujem novo datoteko...\n"
+msgid "Writing raster map... "
+msgstr "Zapisujem novo datoteko...\n"
 
-#~ msgid "Category list: e.g. 1,3-8,13"
-#~ msgstr "Spisek kategorij: npr. 1,3-8,13"
+msgid "Category list: e.g. 1,3-8,13"
+msgstr "Spisek kategorij: npr. 1,3-8,13"
 
 #, fuzzy
-#~ msgid "Output separator character (default: tab)"
-#~ msgstr "Znak za separator na izhodu (privzet: tab)"
+msgid "Output separator character (default: tab)"
+msgstr "Znak za separator na izhodu (privzet: tab)"
 
 #, fuzzy
-#~ msgid "Cannot read category file of raster map <%s> in <%s>"
-#~ msgstr "ne morem prebrati regije <%s> v <%s>"
+msgid "Cannot read category file of raster map <%s> in <%s>"
+msgstr "ne morem prebrati regije <%s> v <%s>"
 
 #, fuzzy
-#~ msgid "Cannot find file %s"
-#~ msgstr "Ne morem odpreti baze podatkov %s"
+msgid "Cannot find file %s"
+msgstr "Ne morem odpreti baze podatkov %s"
 
 #, fuzzy
-#~ msgid "Cannot get header for %s"
-#~ msgstr "Ne morem prebrati informacije polja"
+msgid "Cannot get header for %s"
+msgstr "Ne morem prebrati informacije polja"
 
 #, fuzzy
-#~ msgid "Cannot create raster map %s"
-#~ msgstr "Ne morem odpreti baze podatkov %s"
+msgid "Cannot create raster map %s"
+msgstr "Ne morem odpreti baze podatkov %s"
 
 #, fuzzy
-#~ msgid "Cannot create vector map %s"
-#~ msgstr "Ne morem najti vhodne datoteke <%s>\n"
+msgid "Cannot create vector map %s"
+msgstr "Ne morem najti vhodne datoteke <%s>\n"
 
 #, fuzzy
-#~ msgid "Cannot create raster map '%s'"
-#~ msgstr "Ne morem odpreti baze podatkov %s"
+msgid "Cannot create raster map '%s'"
+msgstr "Ne morem odpreti baze podatkov %s"
 
 #, fuzzy
-#~ msgid "Number of raster rows to hold in memory"
-#~ msgstr "©tevilo vrstic, ki naj jih hranim v spominu"
+msgid "Number of raster rows to hold in memory"
+msgstr "©tevilo vrstic, ki naj jih hranim v spominu"
 
 #, fuzzy
-#~ msgid "Print raster map title only"
-#~ msgstr "Izpi¹i le tip podatkovnega zapisa rastrskega sloja"
+msgid "Print raster map title only"
+msgstr "Izpi¹i le tip podatkovnega zapisa rastrskega sloja"
 
 #, fuzzy
-#~ msgid "unknown type: %d"
-#~ msgstr "Nepoznan tip: %c"
+msgid "unknown type: %d"
+msgstr "Nepoznan tip: %c"
 
 #, fuzzy
-#~ msgid "Cannot open raster map [%s]"
-#~ msgstr ""
-#~ "#-#-#-#-#  grassmods_sl.po (grassmods_sl)  #-#-#-#-#\n"
-#~ "Ne morem odpreti cellfile za [%s]\n"
-#~ "#-#-#-#-#  grassmods_sl.po (grassmods_sl)  #-#-#-#-#\n"
-#~ "Ne morem odpreti baze podatkov %s"
+msgid "Cannot open raster map [%s]"
+msgstr ""
+"#-#-#-#-#  grassmods_sl.po (grassmods_sl)  #-#-#-#-#\n"
+"Ne morem odpreti cellfile za [%s]\n"
+"#-#-#-#-#  grassmods_sl.po (grassmods_sl)  #-#-#-#-#\n"
+"Ne morem odpreti baze podatkov %s"
 
 #, fuzzy
-#~ msgid "Cannot get raster band."
-#~ msgstr "Pokrovni rastrski sloj"
+msgid "Cannot get raster band."
+msgstr "Pokrovni rastrski sloj"
 
 #, fuzzy
-#~ msgid "Cannot allocate buffer for reading null values."
-#~ msgstr "Ne morem izraèunati centroida obmoèja."
+msgid "Cannot allocate buffer for reading null values."
+msgstr "Ne morem izraèunati centroida obmoèja."
 
 #, fuzzy
-#~ msgid "Cannot read GRASS raster."
-#~ msgstr "Ne morem ustvariti tabele: %s"
+msgid "Cannot read GRASS raster."
+msgstr "Ne morem ustvariti tabele: %s"
 
 #, fuzzy
-#~ msgid "Cannot write GDAL raster."
-#~ msgstr "Ne morem odpreti baze podatkov %s"
+msgid "Cannot write GDAL raster."
+msgstr "Ne morem odpreti baze podatkov %s"
 
 #, fuzzy
-#~ msgid "Cannot get [%s] driver"
-#~ msgstr "Ne morem ustvariti indeksa"
+msgid "Cannot get [%s] driver"
+msgstr "Ne morem ustvariti indeksa"
 
 #, fuzzy
-#~ msgid "Couldn't set geo transform."
-#~ msgstr "Ne najdem vhodne datoteke %s\n"
+msgid "Couldn't set geo transform."
+msgstr "Ne najdem vhodne datoteke %s\n"
 
 #, fuzzy
-#~ msgid "Couldn't set projection."
-#~ msgstr "Ne najdem vhodne datoteke %s\n"
+msgid "Couldn't set projection."
+msgstr "Ne najdem vhodne datoteke %s\n"
 
 #, fuzzy
-#~ msgid "Cannot export [%s] raster map."
-#~ msgstr "Ne najdem vhodne datoteke %s\n"
+msgid "Cannot export [%s] raster map."
+msgstr "Ne najdem vhodne datoteke %s\n"
 
 #, fuzzy
-#~ msgid "Cannot create [%s] raster map using [%s] driver."
-#~ msgstr "Ne najdem vhodne datoteke %s\n"
+msgid "Cannot create [%s] raster map using [%s] driver."
+msgstr "Ne najdem vhodne datoteke %s\n"
 
 #, fuzzy
-#~ msgid "Cannot read header of raster map <%s>"
-#~ msgstr "Ne morem odpreti baze podatkov %s"
+msgid "Cannot read header of raster map <%s>"
+msgstr "Ne morem odpreti baze podatkov %s"
 
 #, fuzzy
-#~ msgid "Cannot open TIFF file <%s>"
-#~ msgstr "Ne morem odpreti baze podatkov %s"
+msgid "Cannot open TIFF file <%s>"
+msgstr "Ne morem odpreti baze podatkov %s"
 
 #, fuzzy
-#~ msgid "Reading raster map"
-#~ msgstr "Berem dig_att datoteko...\n"
+msgid "Reading raster map"
+msgstr "Berem dig_att datoteko...\n"
 
 #, fuzzy
-#~ msgid "Cannot open output map."
-#~ msgstr "Ime izhodnega sloja"
+msgid "Cannot open output map."
+msgstr "Ime izhodnega sloja"
 
 #, fuzzy
-#~ msgid "Illegal file name. Please try another."
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "Illegal file name. Please try another."
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "%s: can't open %s"
-#~ msgstr "ne morem odpreti %s"
+msgid "%s: can't open %s"
+msgstr "ne morem odpreti %s"
 
 #, fuzzy
-#~ msgid "Reading raster map <%s> ..."
-#~ msgstr "Berem dig_att datoteko...\n"
+msgid "Reading raster map <%s> ..."
+msgstr "Berem dig_att datoteko...\n"
 
 #, fuzzy
-#~ msgid "memory allocation failure"
-#~ msgstr "lokacija baze podatkov"
+msgid "memory allocation failure"
+msgstr "lokacija baze podatkov"
 
 #, fuzzy
-#~ msgid "Can't find data map."
-#~ msgstr "Ne morem izpisati baz podatkov."
+msgid "Can't find data map."
+msgstr "Ne morem izpisati baz podatkov."
 
 #, fuzzy
-#~ msgid "Output terrain only vector map name"
-#~ msgstr "Ime izhodne baze podatkov"
+msgid "Output terrain only vector map name"
+msgstr "Ime izhodnega rastrskega sloja ekspozicij"
 
 #, fuzzy
-#~ msgid "Cannot open vector map <%s> at the topological level"
-#~ msgstr "ne morem odpreti vektorske datoteke <%s> v <%s>"
+msgid "Cannot open vector map <%s> at the topological level"
+msgstr "ne morem odpreti vektorske datoteke <%s> v <%s>"
 
 #, fuzzy
-#~ msgid "Rebuilding topology ..."
-#~ msgstr "Berem dig_att datoteko...\n"
+msgid "Rebuilding topology ..."
+msgstr "Berem dig_att datoteko...\n"
 
 #, fuzzy
-#~ msgid "No record for cat = %d"
-#~ msgstr "Za vrstico (cat = %d) ni zapisa (record)<"
+msgid "No record for cat = %d"
+msgstr "Za vrstico (cat = %d) ni zapisa (record)<"
 
 #, fuzzy
-#~ msgid "Removing duplicates ..."
-#~ msgstr "Zapisujem novo datoteko...\n"
+msgid "Removing duplicates ..."
+msgstr "Zapisujem novo datoteko...\n"
 
 #, fuzzy
-#~ msgid "Attaching islands ..."
-#~ msgstr "Pripajam kategorije...\n"
+msgid "Attaching islands ..."
+msgstr "Pripajam kategorije...\n"
 
 #, fuzzy
-#~ msgid "Cannot calculate area centroid."
-#~ msgstr "Ne morem izraèunati centroida obmoèja."
+msgid "Cannot calculate area centroid."
+msgstr "Ne morem izraèunati centroida obmoèja."
 
 #, fuzzy
-#~ msgid "Attaching centroids ..."
-#~ msgstr "Pripajam kategorije...\n"
+msgid "Attaching centroids ..."
+msgstr "Pripajam kategorije...\n"
 
 #, fuzzy
-#~ msgid "Vector map <%s> not found in current mapset"
-#~ msgstr "Ne najdem vhodnega vektorja <%s>"
+msgid "Vector map <%s> not found in current mapset"
+msgstr "Ne najdem vhodnega vektorja <%s>"
 
 #, fuzzy
-#~ msgid "Error allocating memory for `lines_visited'"
-#~ msgstr "Ne morem izraèunati centroida obmoèja."
+msgid "Error allocating memory for `lines_visited'"
+msgstr "Ne morem izraèunati centroida obmoèja."
 
 #, fuzzy
-#~ msgid "The number of lines in the input vector map is [%d]"
-#~ msgstr "Ime vhodnega rastrskega sloja"
+msgid "The number of lines in the input vector map is [%d]"
+msgstr "Ime vhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Database connection not defined for layer <%d>"
-#~ msgstr "Povezava z bazo podatkov ni definirana\n"
+msgid "Database connection not defined for layer <%d>"
+msgstr "Povezava z bazo podatkov ni definirana\n"
 
 #, fuzzy
-#~ msgid "Cannot open select cursor"
-#~ msgstr "Ne morem odpreti baze podatkov %s"
+msgid "Cannot open select cursor"
+msgstr "Ne morem odpreti baze podatkov %s"
 
 #, fuzzy
-#~ msgid "Cannot get layer info"
-#~ msgstr "Ne morem prebrati informacije polja"
+msgid "Cannot get layer info"
+msgstr "Ne morem prebrati informacije polja"
 
 #, fuzzy
-#~ msgid "cell file [%s] not found"
-#~ msgstr "ne najdem 3Dview datoteke <%s>"
+msgid "cell file [%s] not found"
+msgstr "ne najdem 3Dview datoteke <%s>"
 
 #, fuzzy
-#~ msgid "can't open raster map [%s]"
-#~ msgstr "ne morem odpreti razpona za datoteko %s"
+msgid "can't open raster map [%s]"
+msgstr "ne morem odpreti razpona za datoteko %s"
 
 #, fuzzy
-#~ msgid "Cannot rewrite line %d"
-#~ msgstr "Ne morem ustvariti indeksa"
+msgid "Cannot rewrite line %d"
+msgstr "Ne morem ustvariti indeksa"
 
 #, fuzzy
-#~ msgid "Editing tool"
-#~ msgstr "Zapisujem novo datoteko...\n"
+msgid "Editing tool"
+msgstr "Zapisujem novo datoteko...\n"
 
 #, fuzzy
-#~ msgid "Snap also to vertex (not implemented yet)"
-#~ msgstr "ne najdem regije <%s>"
+msgid "Snap also to vertex (not implemented yet)"
+msgstr "ne najdem regije <%s>"
 
 #, fuzzy
-#~ msgid "Cannot copy line %d, editing terminated"
-#~ msgstr "Ne morem najti vhodne datoteke <%s>\n"
+msgid "Cannot copy line %d, editing terminated"
+msgstr "Ne morem najti vhodne datoteke <%s>\n"
 
 #, fuzzy
-#~ msgid "No layer database connection."
-#~ msgstr "lokacija baze podatkov"
+msgid "No layer database connection."
+msgstr "lokacija baze podatkov"
 
 #, fuzzy
-#~ msgid "Cannot snap lines %d,%d"
-#~ msgstr "Ne morem odpreti baze podatkov %s"
+msgid "Cannot snap lines %d,%d"
+msgstr "Ne morem odpreti baze podatkov %s"
 
 #, fuzzy
-#~ msgid "%d lines modified"
-#~ msgstr "%-5d mrtvih linij preskoèenih\n"
+msgid "%d lines modified"
+msgstr "%-5d mrtvih linij preskoèenih\n"
 
 #, fuzzy
-#~ msgid "Could not open ASCII file <%s>"
-#~ msgstr "Ne najdem vhodne datoteke %s\n"
+msgid "Could not open ASCII file <%s>"
+msgstr "Ne najdem vhodne datoteke %s\n"
 
 #, fuzzy
-#~ msgid "Print vector map region only"
-#~ msgstr "Izpi¹i le tip podatkovnega zapisa rastrskega sloja"
+msgid "Print vector map region only"
+msgstr "Izpi¹i le tip podatkovnega zapisa rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Cannot open vector map <%s> at topo level [%d]"
-#~ msgstr "ne morem odpreti vektorske datoteke <%s> v <%s>"
+msgid "Cannot open vector map <%s> at topo level [%d]"
+msgstr "ne morem odpreti vektorske datoteke <%s> v <%s>"
 
 #, fuzzy
-#~ msgid "Cannot get layer info for vector map <%s>"
-#~ msgstr "Vektorski sloj konènih toèk"
+msgid "Cannot get layer info for vector map <%s>"
+msgstr "Vektorski sloj konènih toèk"
 
 #, fuzzy
-#~ msgid "Cannot select attribute."
-#~ msgstr "Ne morem izbrati (select) podatkov iz tabele"
+msgid "Cannot select attribute."
+msgstr "Ne morem izbrati (select) podatkov iz tabele"
 
 #, fuzzy
-#~ msgid "Creating vector grid..."
-#~ msgstr "Zapisujem novo datoteko...\n"
+msgid "Creating vector grid..."
+msgstr "Zapisujem novo datoteko...\n"
 
 #, fuzzy
-#~ msgid "Could not find vector map <%s> in current mapset"
-#~ msgstr "Ne najdem vhodne datoteke %s\n"
+msgid "Could not find vector map <%s> in current mapset"
+msgstr "Ne najdem vhodne datoteke %s\n"
 
 #, fuzzy
-#~ msgid "Could not find input map <%s>."
-#~ msgstr "Ne morem najti vhodne datoteke <%s>\n"
+msgid "Could not find input map <%s>."
+msgstr "Ne morem najti vhodne datoteke <%s>\n"
 
 #, fuzzy
-#~ msgid "[%d] features written"
-#~ msgstr "%d toèk je bilo zapisanih na izhodno datoteko\n"
+msgid "[%d] features written"
+msgstr "%d toèk je bilo zapisanih na izhodno datoteko\n"
 
 #, fuzzy
-#~ msgid "Parameter <%s> not set"
-#~ msgstr "ne najdem 3Dview datoteke <%s>"
+msgid "Parameter <%s> not set"
+msgstr "ne najdem 3Dview datoteke <%s>"
 
 #, fuzzy
-#~ msgid "Output map where segments will be written"
-#~ msgstr "Ime izhodnega vektorskega sloja"
+msgid "Output map where segments will be written"
+msgstr "Ime izhodnega vektorskega sloja"
 
 #, fuzzy
-#~ msgid "<%s> cellfile not found"
-#~ msgstr "Ne najdem rastrskega sloja <%s>"
+msgid "<%s> cellfile not found"
+msgstr "Ne najdem rastrskega sloja <%s>"
 
 #, fuzzy
-#~ msgid "Database record for cat %d not found"
-#~ msgstr "Za vrstico (cat = %d) ni zapisa (record)<"
+msgid "Database record for cat %d not found"
+msgstr "Za vrstico (cat = %d) ni zapisa (record)<"
 
 #, fuzzy
-#~ msgid "Not able to open vector map <%s>"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "Not able to open vector map <%s>"
+msgstr "Ime izhodnega rastrskega sloja"
 
-#~ msgid "driver name"
-#~ msgstr "ime gonilnika"
+msgid "driver name"
+msgstr "ime gonilnika"
 
-#~ msgid "database name"
-#~ msgstr "ime baze podatkov"
+msgid "database name"
+msgstr "ime baze podatkov"
 
 #, fuzzy
-#~ msgid "Driver name"
-#~ msgstr "ime gonilnika"
+msgid "Driver name"
+msgstr "ime gonilnika"
 
-#~ msgid "Cannot list databases."
-#~ msgstr "Ne morem izpisati baz podatkov."
+msgid "Cannot list databases."
+msgstr "Ne morem izpisati baz podatkov."
 
-#~ msgid "database location"
-#~ msgstr "lokacija baze podatkov"
+msgid "database location"
+msgstr "lokacija baze podatkov"
 
-#~ msgid "Table name, select all from this table"
-#~ msgstr "Ime tabele, izberi vse iz te tabele"
+msgid "Table name, select all from this table"
+msgstr "Ime tabele, izberi vse iz te tabele"
 
-#~ msgid "output field separator"
-#~ msgstr "izpi¹i znak razmejitve med polji"
+msgid "output field separator"
+msgstr "izpi¹i znak razmejitve med polji"
 
-#~ msgid "output vertical record separator"
-#~ msgstr "izpi¹i znak za vertikalno razmejitev med enotami"
+msgid "output vertical record separator"
+msgstr "izpi¹i znak za vertikalno razmejitev med enotami"
 
-#~ msgid "null value indicator"
-#~ msgstr "znak za vrednost NULL"
+msgid "null value indicator"
+msgstr "znak za vrednost NULL"
 
-#~ msgid "do not include column names in output"
-#~ msgstr "izpis naj ne vsebuje imen kolon"
+msgid "do not include column names in output"
+msgstr "izpis naj ne vsebuje imen kolon"
 
-#~ msgid "vertical output (instead of horizontal)"
-#~ msgstr "vertikalni izpis (namesto horizontalnega)"
+msgid "vertical output (instead of horizontal)"
+msgstr "vertikalni izpis (namesto horizontalnega)"
 
-#~ msgid "Name of existing raster map"
-#~ msgstr "Ime obstojeèega rastrskega sloja"
+msgid "Name of existing raster map"
+msgstr "Ime obstojeèega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Cannot find mapset for %s"
-#~ msgstr "Ne morem vstaviti nove vrstice: %s"
+msgid "Cannot find mapset for %s"
+msgstr "Ne morem vstaviti nove vrstice: %s"
 
 #, fuzzy
-#~ msgid "Cannot open File %s"
-#~ msgstr "Ne morem odpreti baze podatkov %s"
+msgid "Cannot open File %s"
+msgstr "Ne morem odpreti baze podatkov %s"
 
 #, fuzzy
-#~ msgid "Not able to open file for [%s]"
-#~ msgstr "Ne morem odpreti cellfile za [%s]"
+msgid "Not able to open file for [%s]"
+msgstr "Ne morem odpreti cellfile za [%s]"
 
 #, fuzzy
-#~ msgid "Can't open label file [%s]"
-#~ msgstr "ne morem odpreti razpona za datoteko %s"
+msgid "Can't open label file [%s]"
+msgstr "ne morem odpreti razpona za datoteko %s"
 
 #, fuzzy
-#~ msgid "unable to open [%s] in [%s]"
-#~ msgstr "Ne morem odpreti cellfile za [%s]"
+msgid "unable to open [%s] in [%s]"
+msgstr "Ne morem odpreti cellfile za [%s]"
 
 #, fuzzy
-#~ msgid "warning: unable to open [%s] in [%s]"
-#~ msgstr "Ne morem odpreti cellfile za [%s]"
+msgid "warning: unable to open [%s] in [%s]"
+msgstr "Ne morem odpreti cellfile za [%s]"
 
 #, fuzzy
-#~ msgid "Unable to find input cell map '%s'"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "Unable to find input cell map '%s'"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Table to be imported"
-#~ msgstr "Rastrski sloj, ki ga nameravate uvoziti"
+msgid "Table to be imported"
+msgstr "Rastrski sloj, ki ga nameravate uvoziti"
 
 #, fuzzy
-#~ msgid "Unable to create raster map [%s]"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "Unable to create raster map [%s]"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Unable to create output <%s>"
-#~ msgstr "ne morem odpreti <%s>"
+msgid "Unable to create output <%s>"
+msgstr "ne morem odpreti <%s>"
 
 #, fuzzy
-#~ msgid "Input file [%s] not found."
-#~ msgstr "Ne najdem vhodnega vektorja."
+msgid "Input file [%s] not found."
+msgstr "Ne najdem vhodnega vektorja."
 
 #, fuzzy
-#~ msgid "Unable to open output file <%s>."
-#~ msgstr "ne morem odpreti <%s>"
+msgid "Unable to open output file <%s>."
+msgstr "ne morem odpreti <%s>"
 
 #, fuzzy
-#~ msgid "Multiplier for ascii data"
-#~ msgstr "Faktor mno¾enja za ascii podatke"
+msgid "Multiplier for ascii data"
+msgstr "Faktor mno¾enja za ascii podatke"
 
 #, fuzzy
-#~ msgid "Could not open temporary file: [%s]"
-#~ msgstr "Ne najdem vhodne datoteke %s\n"
+msgid "Could not open temporary file: [%s]"
+msgstr "Ne najdem vhodne datoteke %s\n"
 
 #, fuzzy
-#~ msgid "Could not open input file [%s]"
-#~ msgstr "Ne najdem vhodne datoteke %s\n"
+msgid "Could not open input file [%s]"
+msgstr "Ne najdem vhodne datoteke %s\n"
 
 #, fuzzy
-#~ msgid "unable to create raster"
-#~ msgstr "ne morem odpreti <%s>"
+msgid "unable to create raster"
+msgstr "ne morem odpreti <%s>"
 
 #, fuzzy
-#~ msgid "Unable to create output raster map <%s>"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "Unable to create output raster map <%s>"
+msgstr "Ime izhodnega rastrskega sloja"
 
-#~ msgid "Name of the random surface to be produced"
-#~ msgstr "Ime rastrskega sloja nakljuène povr¹ine, ki bo ustvarjen"
+msgid "Name of the random surface to be produced"
+msgstr "Ime rastrskega sloja nakljuène povr¹ine, ki bo ustvarjen"
 
 #, fuzzy
-#~ msgid "%s: Unable to find raster map <%s>"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "%s: Unable to find raster map <%s>"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "%s: Unable to open raster map <%s> in mapset <%s>"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "%s: Unable to open raster map <%s> in mapset <%s>"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "%s:  Unable to open output raster map <%s>"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "%s:  Unable to open output raster map <%s>"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Vector <%s> could not be opened"
-#~ msgstr "Ne najdem vhodnega vektorja <%s>"
+msgid "Vector <%s> could not be opened"
+msgstr "Ne najdem vhodnega vektorja <%s>"
 
 #, fuzzy
-#~ msgid "No db connection for driver <%s> defined. Run db.connect."
-#~ msgstr ""
-#~ "Povezava z bazo podatkov za gonilnik <%s> ni definirana. Po¾eni db."
-#~ "connect."
+msgid "No db connection for driver <%s> defined. Run db.connect."
+msgstr ""
+"Povezava z bazo podatkov za gonilnik <%s> ni definirana. Po¾eni db.connect."
 
 #, fuzzy
-#~ msgid "Table name"
-#~ msgstr "ime tabele"
+msgid "Table name"
+msgstr "ime tabele"
 
 #, fuzzy
-#~ msgid "Cannot drop table: %s"
-#~ msgstr "Ne morem odpreti baze podatkov %s"
+msgid "Cannot drop table: %s"
+msgstr "Ne morem odpreti baze podatkov %s"
 
 #, fuzzy
-#~ msgid "Cannot open labels <%s>"
-#~ msgstr "Ne morem odpreti baze podatkov %s"
+msgid "Cannot open labels <%s>"
+msgstr "Ne morem odpreti baze podatkov %s"
 
 #, fuzzy
-#~ msgid "Cannot fetch data from table"
-#~ msgstr "Ne morem izbrati (select) podatkov iz tabele"
+msgid "Cannot fetch data from table"
+msgstr "Ne morem izbrati (select) podatkov iz tabele"
 
 #, fuzzy
-#~ msgid "SVG file <%s> cannot be opened"
-#~ msgstr "Ne najdem vhodnega vektorja <%s>"
+msgid "SVG file <%s> cannot be opened"
+msgstr "Ne najdem vhodnega vektorja <%s>"
 
 #, fuzzy
-#~ msgid "Querying input '%s' ... "
-#~ msgstr "Berem dig datoteko...\n"
+msgid "Querying input '%s' ... "
+msgstr "Berem dig datoteko...\n"
 
 #, fuzzy
-#~ msgid "Copying %s input lines ... "
-#~ msgstr "Ime izhodnega vektorskega toèkovnega sloja"
+msgid "Copying %s input lines ... "
+msgstr "Ime izhodnega vektorskega toèkovnega sloja"
 
 #, fuzzy
-#~ msgid "Cannot create table <%s>"
-#~ msgstr "Ne morem ustvariti tabele: %s"
+msgid "Cannot create table <%s>"
+msgstr "Ne morem ustvariti tabele: %s"
 
 #, fuzzy
-#~ msgid "no record for cat = %d"
-#~ msgstr "Za vrstico (cat = %d) ni zapisa (record)<"
+msgid "no record for cat = %d"
+msgstr "Za vrstico (cat = %d) ni zapisa (record)<"
 
 #, fuzzy
-#~ msgid "cannot insert row: %s"
-#~ msgstr "Ne morem vstaviti nove vrstice: %s"
+msgid "cannot insert row: %s"
+msgstr "Ne morem vstaviti nove vrstice: %s"
 
 #, fuzzy
-#~ msgid "Cannot find line of cat %d"
-#~ msgstr "Ne morem najti vhodne datoteke <%s>\n"
+msgid "Cannot find line of cat %d"
+msgstr "Ne morem najti vhodne datoteke <%s>\n"
 
 #, fuzzy
-#~ msgid "Unalbe to open vector map <%s>"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "Unalbe to open vector map <%s>"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid ""
-#~ "Database connection not defined for layer [%d]. Use v.db.connect first"
-#~ msgstr "Povezava z bazo podatkov ni definirana\n"
+msgid "Database connection not defined for layer [%d]. Use v.db.connect first"
+msgstr "Povezava z bazo podatkov ni definirana\n"
 
 #, fuzzy
-#~ msgid "Transforms a vector map via a set of tie points."
-#~ msgstr "Izvozi GRASS-ov rastrski sloj v binarni \"array\""
+msgid "Transforms a vector map via a set of tie points."
+msgstr "Izvozi GRASS-ov rastrski sloj v binarni \"array\""
 
 #, fuzzy
-#~ msgid "Read coordinates from standard input"
-#~ msgstr "EASTING in NORTHING koordinate zaèetne toèke"
+msgid "Read coordinates from standard input"
+msgstr "EASTING in NORTHING koordinate zaèetne toèke"
 
 #, fuzzy
-#~ msgid "Raster map <%s>] not found"
-#~ msgstr "Ne najdem vhodnega rastrskega sloja <%s>."
+msgid "Raster map <%s>] not found"
+msgstr "Ne najdem vhodnega rastrskega sloja <%s>."
 
-#~ msgid "Cannot start driver '%s'."
-#~ msgstr "Ne morem zagnati gonilnika '%s'."
+msgid "Cannot start driver '%s'."
+msgstr "Ne morem zagnati gonilnika '%s'."
 
-#~ msgid "Cannot describe table"
-#~ msgstr "Ne morem opisati tabele"
+msgid "Cannot describe table"
+msgstr "Ne morem opisati tabele"
 
 #, fuzzy
-#~ msgid "Cannot start driver <%s>."
-#~ msgstr "Ne morem zagnati gonilnika '%s'."
+msgid "Cannot start driver <%s>."
+msgstr "Ne morem zagnati gonilnika '%s'."
 
 #, fuzzy
-#~ msgid "Cannot write to <%s>"
-#~ msgstr "Ne morem ustvariti tabele: %s"
+msgid "Cannot write to <%s>"
+msgstr "Ne morem ustvariti tabele: %s"
 
 #, fuzzy
-#~ msgid "Not able to open cellfile for [%s]"
-#~ msgstr "Ne morem odpreti cellfile za [%s]"
+msgid "Not able to open cellfile for [%s]"
+msgstr "Ne morem odpreti cellfile za [%s]"
 
 #, fuzzy
-#~ msgid "Not able to find cellfile [%s]"
-#~ msgstr "Ne morem odpreti cellfile za [%s]"
+msgid "Not able to find cellfile [%s]"
+msgstr "Ne morem odpreti cellfile za [%s]"
 
 #, fuzzy
-#~ msgid "Raster file [%s] not available"
-#~ msgstr "Rastrska(e) datoteka(e) za ogled %d"
+msgid "Raster file [%s] not available"
+msgstr "Rastrska(e) datoteka(e) za ogled %d"
 
 #, fuzzy
-#~ msgid "Raster map [%s] not found"
-#~ msgstr "Ne najdem vhodnega rastrskega sloja <%s>."
+msgid "Raster map [%s] not found"
+msgstr "Ne najdem vhodnega rastrskega sloja <%s>."
 
 #, fuzzy
-#~ msgid "Unable to open raster map [%s]"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "Unable to open raster map [%s]"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Cannot open driver %s"
-#~ msgstr "Ne morem odpreti baze podatkov %s"
+msgid "Cannot open driver %s"
+msgstr "Ne morem odpreti baze podatkov %s"
 
 #, fuzzy
-#~ msgid "<%s> illegal name"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "<%s> illegal name"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "%s: %s - Unable to open the input raster map\n"
-#~ msgstr "Ime vhodnega rastrskega sloja"
+msgid "%s: %s - Unable to open the input raster map\n"
+msgstr "Ime vhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "%s: %s - illegal name for output raster map."
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "%s: %s - illegal name for output raster map."
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Exports GRASS raster data into various formats (requires GDAL)."
-#~ msgstr "Izvozi GRASS-ov rastrski sloj v binarni \"array\""
+msgid "Exports GRASS raster data into various formats (requires GDAL)."
+msgstr "Izvozi GRASS-ov rastrski sloj v binarni \"array\""
 
 #, fuzzy
-#~ msgid "Couldn't find raster map %s"
-#~ msgstr "Ne najdem vhodne datoteke %s\n"
+msgid "Couldn't find raster map %s"
+msgstr "Ne najdem vhodne datoteke %s\n"
 
 #, fuzzy
-#~ msgid "%s: <%s> not found"
-#~ msgstr "Ne najdem rastrskega sloja <%s>"
+msgid "%s: <%s> not found"
+msgstr "Ne najdem rastrskega sloja <%s>"
 
 #, fuzzy
-#~ msgid "%s: Cannot open <%s>"
-#~ msgstr "ne morem odpreti %s"
+msgid "%s: Cannot open <%s>"
+msgstr "ne morem odpreti %s"
 
 #, fuzzy
-#~ msgid "Cannot find %s"
-#~ msgstr "Ne morem odpreti baze podatkov %s"
+msgid "Cannot find %s"
+msgstr "Ne morem odpreti baze podatkov %s"
 
 #, fuzzy
-#~ msgid "could not read range file"
-#~ msgstr "Ne najdem vhodne datoteke %s\n"
+msgid "could not read range file"
+msgstr "Ne najdem vhodne datoteke %s\n"
 
 #, fuzzy
-#~ msgid "Unable to create raster map [%s]."
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "Unable to create raster map [%s]."
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Filtering [%s] in [%s]"
-#~ msgstr "Ne morem odpreti cellfile za [%s]"
+msgid "Filtering [%s] in [%s]"
+msgstr "Ne morem odpreti cellfile za [%s]"
 
 #, fuzzy
-#~ msgid "Open raster map %s in %s = %d"
-#~ msgstr "Naslov izhodnega rastrskega sloja"
+msgid "Open raster map %s in %s = %d"
+msgstr "Naslov izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Closing raster map"
-#~ msgstr "Pokrovni rastrski sloj"
+msgid "Closing raster map"
+msgstr "Pokrovni rastrski sloj"
 
 #, fuzzy
-#~ msgid "Swap temp files"
-#~ msgstr "ne morem odpreti razpona za datoteko %s"
+msgid "Swap temp files"
+msgstr "ne morem odpreti razpona za datoteko %s"
 
 #, fuzzy
-#~ msgid "Writing [%s]"
-#~ msgstr "Zapisujem novo datoteko...\n"
+msgid "Writing [%s]"
+msgstr "Zapisujem novo datoteko...\n"
 
 #, fuzzy
-#~ msgid "%s: illegal map name"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "%s: illegal map name"
+msgstr "Ime izhodnega rastrskega sloja"
 
-#~ msgid "Name of the new raster map"
-#~ msgstr "Ime novega rastrskega sloja"
+msgid "Name of the new raster map"
+msgstr "Ime novega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "%s: <%s> illegal file name"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "%s: <%s> illegal file name"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "can't open raster map <%s> in mapset %s"
-#~ msgstr "ne morem odpreti 3Dview datoteke <%s> v <%s>"
+msgid "can't open raster map <%s> in mapset %s"
+msgstr "ne morem odpreti 3Dview datoteke <%s> v <%s>"
 
-#~ msgid ""
-#~ "Converts a GRASS raster map to a PPM image file at the pixel resolution "
-#~ "of the CURRENTLY DEFINED REGION."
-#~ msgstr ""
-#~ "Preobrazi GRASS-ov rastrski sloj v PPM slikovno datoteko v resoluciji "
-#~ "TRENUTNO \n"
-#~ "DEFINIRANE REGIJE"
+msgid ""
+"Converts a GRASS raster map to a PPM image file at the pixel resolution of "
+"the CURRENTLY DEFINED REGION."
+msgstr ""
+"Preobrazi GRASS-ov rastrski sloj v PPM slikovno datoteko v resoluciji "
+"TRENUTNO \n"
+"DEFINIRANE REGIJE"
 
-#~ msgid "Raster input map"
-#~ msgstr "Vhodni rastrski sloj"
+msgid "Raster input map"
+msgstr "Vhodni rastrski sloj"
 
-#~ msgid "Mapset of input map"
-#~ msgstr "\"Mapset\" vhodnega rastrskega sloja"
+msgid "Mapset of input map"
+msgstr "\"Mapset\" vhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Checking location %s, mapset %s:"
-#~ msgstr "Vhodni rastrski sloj"
+msgid "Checking location %s, mapset %s:"
+msgstr "Vhodni rastrski sloj"
 
 #, fuzzy
-#~ msgid "Input map [%s] in location [%s] in mapset [%s] not found."
-#~ msgstr "Ne najdem vhodnega vektorja."
+msgid "Input map [%s] in location [%s] in mapset [%s] not found."
+msgstr "Ne najdem vhodnega vektorja."
 
 #, fuzzy
-#~ msgid "Error writing output map"
-#~ msgstr "Resolucija izhodnega sloja"
+msgid "Error writing output map"
+msgstr "Resolucija izhodnega sloja"
 
 #, fuzzy
-#~ msgid "<%s> is illegal file name"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "<%s> is illegal file name"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "[%s] is an illegal file name"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "[%s] is an illegal file name"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "no rules specified"
-#~ msgstr "Doloèena ni bila nobena vhodna datoteka."
+msgid "no rules specified"
+msgstr "Doloèena ni bila nobena vhodna datoteka."
 
 #, fuzzy
-#~ msgid "Can't open temp file [%s]"
-#~ msgstr "ne morem odpreti razpona za datoteko %s"
+msgid "Can't open temp file [%s]"
+msgstr "ne morem odpreti razpona za datoteko %s"
 
-#~ msgid "Names of existing raster maps"
-#~ msgstr "Imena obstojeèih rastrskih slojev"
+msgid "Names of existing raster maps"
+msgstr "Imena obstojeèih rastrskih slojev"
 
 #, fuzzy
-#~ msgid "%s - illegal name "
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "%s - illegal name "
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Couldn't find raster map [%s]"
-#~ msgstr "Ne najdem vhodne datoteke %s\n"
+msgid "Couldn't find raster map [%s]"
+msgstr "Ne najdem vhodne datoteke %s\n"
 
 #, fuzzy
-#~ msgid "%s in %s -can't open raster map"
-#~ msgstr "ne morem odpreti razpona za datoteko %s"
+msgid "%s in %s -can't open raster map"
+msgstr "ne morem odpreti razpona za datoteko %s"
 
 #, fuzzy
-#~ msgid "%s - can't create raster map"
-#~ msgstr "ne morem odpreti razpona za datoteko %s"
+msgid "%s - can't create raster map"
+msgstr "ne morem odpreti razpona za datoteko %s"
 
 #, fuzzy
-#~ msgid "%s: can't create %s"
-#~ msgstr "ne morem odpreti %s"
+msgid "%s: can't create %s"
+msgstr "ne morem odpreti %s"
 
-#~ msgid "Normalized"
-#~ msgstr "Normaliziran"
+msgid "Normalized"
+msgstr "Normaliziran"
 
 #, fuzzy
-#~ msgid "Cell file [%s] not found"
-#~ msgstr "ne najdem 3Dview datoteke <%s>"
+msgid "Cell file [%s] not found"
+msgstr "ne najdem 3Dview datoteke <%s>"
 
 #, fuzzy
-#~ msgid "Requested 3d raster map not found <%s>"
-#~ msgstr "ne najdem 3Dview datoteke <%s>"
+msgid "Requested 3d raster map not found <%s>"
+msgstr "ne najdem 3Dview datoteke <%s>"
 
 #, fuzzy
-#~ msgid "Could not open elevation map"
-#~ msgstr "Ne najdem vhodne datoteke %s\n"
+msgid "Could not open elevation map"
+msgstr "Ne najdem vhodne datoteke %s\n"
 
 #, fuzzy
-#~ msgid "Could not open output map"
-#~ msgstr "Ne najdem vhodne datoteke %s\n"
+msgid "Could not open output map"
+msgstr "Ne najdem vhodne datoteke %s\n"
 
 #, fuzzy
-#~ msgid "unable to close output map"
-#~ msgstr "Ime izhodnega sloja"
+msgid "unable to close output map"
+msgstr "Ime izhodnega sloja"
 
 #, fuzzy
-#~ msgid "Cannot create output map [%s]"
-#~ msgstr "Ne morem ustvariti tabele: %s"
+msgid "Cannot create output map [%s]"
+msgstr "Ne morem ustvariti tabele: %s"
 
 #, fuzzy
-#~ msgid "Database's name couldn't be read"
-#~ msgstr "Povezava z bazo podatkov ni definirana\n"
+msgid "Database's name couldn't be read"
+msgstr "Povezava z bazo podatkov ni definirana\n"
 
 #, fuzzy
-#~ msgid "Cannot create vector map <%s>"
-#~ msgstr "Ne morem najti vhodne datoteke <%s>\n"
+msgid "Cannot create vector map <%s>"
+msgstr "Ne morem najti vhodne datoteke <%s>\n"
 
 #, fuzzy
-#~ msgid ""
-#~ "Interpolation: No database connection for driver <%s> defined. Run db."
-#~ "connect"
-#~ msgstr ""
-#~ "Povezava z bazo podatkov za gonilnik <%s> ni definirana. Po¾eni db."
-#~ "connect."
+msgid ""
+"Interpolation: No database connection for driver <%s> defined. Run db.connect"
+msgstr ""
+"Povezava z bazo podatkov za gonilnik <%s> ni definirana. Po¾eni db.connect."
 
 #, fuzzy
-#~ msgid "Could not find input map <%s> in current mapset."
-#~ msgstr "Ne morem najti vhodne datoteke <%s>\n"
+msgid "Could not find input map <%s> in current mapset."
+msgstr "Ne morem najti vhodne datoteke <%s>\n"
 
 #, fuzzy
-#~ msgid "Vector file [%s] not available in search list"
-#~ msgstr "Rastrska(e) datoteka(e) za ogled %d"
+msgid "Vector file [%s] not available in search list"
+msgstr "Rastrska(e) datoteka(e) za ogled %d"
 
 #, fuzzy
-#~ msgid "Cannot open database <%s>"
-#~ msgstr "Ne morem odpreti baze podatkov %s"
+msgid "Cannot open database <%s>"
+msgstr "Ne morem odpreti baze podatkov %s"
 
 #, fuzzy
-#~ msgid "Cannot open table <%s>"
-#~ msgstr "Ne morem odpreti baze podatkov %s"
+msgid "Cannot open table <%s>"
+msgstr "Ne morem odpreti baze podatkov %s"
 
 #, fuzzy
-#~ msgid "Cannot open driver <%s>"
-#~ msgstr "Ne morem odpreti baze podatkov %s"
+msgid "Cannot open driver <%s>"
+msgstr "Ne morem odpreti baze podatkov %s"
 
 #, fuzzy
-#~ msgid "Could not find input vector map %s"
-#~ msgstr "Ne morem najti vhodne datoteke <%s>\n"
+msgid "Could not find input vector map %s"
+msgstr "Ne morem najti vhodne datoteke <%s>\n"
 
 #, fuzzy
-#~ msgid "Could not find input map '%s'."
-#~ msgstr "Ne morem najti vhodne datoteke <%s>\n"
+msgid "Could not find input map '%s'."
+msgstr "Ne morem najti vhodne datoteke <%s>\n"
 
 #, fuzzy
-#~ msgid "Could not find network input map '%s'."
-#~ msgstr "Ne morem najti vhodne datoteke <%s>\n"
+msgid "Could not find network input map '%s'."
+msgstr "Ne morem najti vhodne datoteke <%s>\n"
 
 #, fuzzy
-#~ msgid "error opening raster map [%s]."
-#~ msgstr "Rekodira rastrske sloje"
+msgid "error opening raster map [%s]."
+msgstr "Rekodira rastrske sloje"
 
 #, fuzzy
-#~ msgid "Topology is not available"
-#~ msgstr "Rastrska(e) datoteka(e) za ogled %d"
+msgid "Topology is not available"
+msgstr "Rastrska(e) datoteka(e) za ogled %d"
 
 #, fuzzy
-#~ msgid "Cannot describe table %s"
-#~ msgstr "Ne morem opisati tabele"
+msgid "Cannot describe table %s"
+msgstr "Ne morem opisati tabele"
 
 #, fuzzy
-#~ msgid "Patching file <%s@%s>"
-#~ msgstr "ne morem odpreti <%s>"
+msgid "Patching file <%s@%s>"
+msgstr "ne morem odpreti <%s>"
 
 #, fuzzy
-#~ msgid "[%d] files patched"
-#~ msgstr "%d toèk je bilo zapisanih na izhodno datoteko\n"
+msgid "[%d] files patched"
+msgstr "%d toèk je bilo zapisanih na izhodno datoteko\n"
 
 #, fuzzy
-#~ msgid "Column type  not supported"
-#~ msgstr "Tip zapisa kolone ni podprt"
+msgid "Column type  not supported"
+msgstr "Tip zapisa kolone ni podprt"
 
 #, fuzzy
-#~ msgid "Could not open vector map <%s>"
-#~ msgstr "ne morem odpreti vektorske datoteke <%s> v <%s>"
+msgid "Could not open vector map <%s>"
+msgstr "ne morem odpreti vektorske datoteke <%s> v <%s>"
 
-#~ msgid "Name of output raster map"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "Name of output raster map"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid ""
-#~ "Database connection not defined for layer <%d>. Use v.db.connect first."
-#~ msgstr "Povezava z bazo podatkov ni definirana\n"
+msgid "Database connection not defined for layer <%d>. Use v.db.connect first."
+msgstr "Povezava z bazo podatkov ni definirana\n"
 
 #, fuzzy
-#~ msgid "Can't create output map"
-#~ msgstr "Ime izhodnega sloja"
+msgid "Can't create output map"
+msgstr "Ime izhodnega sloja"
 
 #, fuzzy
-#~ msgid "%s: cellfile [%s] not found."
-#~ msgstr "ne najdem 3Dview datoteke <%s>"
+msgid "%s: cellfile [%s] not found."
+msgstr "ne najdem 3Dview datoteke <%s>"
 
 #, fuzzy
-#~ msgid "Unable to open cellfile [%s]."
-#~ msgstr "Ne morem odpreti cellfile za [%s]"
+msgid "Unable to open cellfile [%s]."
+msgstr "Ne morem odpreti cellfile za [%s]"
 
 #, fuzzy
-#~ msgid "Unable to open raster map [%s]."
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "Unable to open raster map [%s]."
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Unable to find raster [%s]."
-#~ msgstr "Ne najdem vhodne datoteke %s\n"
+msgid "Unable to find raster [%s]."
+msgstr "Ne najdem vhodne datoteke %s\n"
 
 #, fuzzy
-#~ msgid "name for new raster map"
-#~ msgstr "Ime novega rastrskega sloja."
+msgid "name for new raster map"
+msgstr "Ime novega rastrskega sloja."
 
 #, fuzzy
-#~ msgid "Output GRASS image file"
-#~ msgstr "Naslov izhodnega rastrskega sloja"
+msgid "Output GRASS image file"
+msgstr "Naslov izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Resulting output map"
-#~ msgstr "Resolucija izhodnega sloja"
+msgid "Resulting output map"
+msgstr "Resolucija izhodnega sloja"
 
 #, fuzzy
-#~ msgid "name for new vector map"
-#~ msgstr "Ime izhodnega vektorskega sloja"
+msgid "name for new vector map"
+msgstr "Ime izhodnega vektorskega sloja"
 
 #, fuzzy
-#~ msgid "name for new vector map (omit for display to stdout)"
-#~ msgstr "Izhodna PPM datoteka (uporabi out=- za standardni izhod (stdout))"
+msgid "name for new vector map (omit for display to stdout)"
+msgstr "Izhodna PPM datoteka (uporabi out=- za standardni izhod (stdout))"
 
 #, fuzzy
-#~ msgid "Input vector map"
-#~ msgstr "Ime vhodnega rastrskega sloja"
+msgid "Input vector map"
+msgstr "Ime vhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "vector map <%s> not found"
-#~ msgstr "Ne najdem vhodnega vektorja <%s>"
+msgid "vector map <%s> not found"
+msgstr "Ne najdem vhodnega vektorja <%s>"
 
 #, fuzzy
-#~ msgid "unable to find raster map [%s]"
-#~ msgstr "Ne najdem vhodne datoteke %s\n"
+msgid "unable to find raster map [%s]"
+msgstr "Ne najdem vhodne datoteke %s\n"
 
 #, fuzzy
-#~ msgid "<%s> raster map not found"
-#~ msgstr "pozor: ne najdem vektorja %s\n"
+msgid "<%s> raster map not found"
+msgstr "pozor: ne najdem vektorja %s\n"
 
 #, fuzzy
-#~ msgid "<%s> unable to open raster map"
-#~ msgstr "Ne najdem vhodne datoteke %s\n"
+msgid "<%s> unable to open raster map"
+msgstr "Ne najdem vhodne datoteke %s\n"
 
 #, fuzzy
-#~ msgid "Cannot find vector map [%s]"
-#~ msgstr "Ne morem najti vhodne datoteke <%s>\n"
+msgid "Cannot find vector map [%s]"
+msgstr "Ne morem najti vhodne datoteke <%s>\n"
 
 #, fuzzy
-#~ msgid "%s - can't open raster map"
-#~ msgstr "ne morem odpreti razpona za datoteko %s"
+msgid "%s - can't open raster map"
+msgstr "ne morem odpreti razpona za datoteko %s"
 
 #, fuzzy
-#~ msgid "Can't get row %d from raster map %s"
-#~ msgstr "Imena 2-%d vhodnih rastrskih slojev"
+msgid "Can't get row %d from raster map %s"
+msgstr "Imena 2-%d vhodnih rastrskih slojev"
 
 #, fuzzy
-#~ msgid "%s - raster map not found"
-#~ msgstr "Ne najdem vhodnega rastrskega sloja <%s>."
+msgid "%s - raster map not found"
+msgstr "Ne najdem vhodnega rastrskega sloja <%s>."
 
-#~ msgid "string representing no data cell value"
-#~ msgstr "znak(i), ki predstavljajo null vrednost"
+msgid "string representing no data cell value"
+msgstr "znak(i), ki predstavljajo null vrednost"
 
-#~ msgid "File name of classification result"
-#~ msgstr "Ime datoteke z rezultatom klasifikacije"
+msgid "File name of classification result"
+msgstr "Ime datoteke z rezultatom klasifikacije"
 
-#~ msgid "File name of reference classes"
-#~ msgstr "Ime datoteke z referenènimi razredi"
+msgid "File name of reference classes"
+msgstr "Ime datoteke z referenènimi razredi"
 
-#~ msgid "wide report, 132 columns (default: 80)"
-#~ msgstr "¹iroko poroèilo, 132 kolon (privzeto: 80)"
+msgid "wide report, 132 columns (default: 80)"
+msgstr "¹iroko poroèilo, 132 kolon (privzeto: 80)"
 
-#~ msgid "quiet"
-#~ msgstr "tiho"
+msgid "quiet"
+msgstr "tiho"
 
 #, fuzzy
-#~ msgid "<%s> - illegal output file name"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "<%s> - illegal output file name"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "%s: <%s> reference map not found"
-#~ msgstr "Ne najdem rastrskega sloja <%s>"
+msgid "%s: <%s> reference map not found"
+msgstr "Ne najdem rastrskega sloja <%s>"
 
-#~ msgid "Base raster map"
-#~ msgstr "Osnovni rastrski sloj"
+msgid "Base raster map"
+msgstr "Osnovni rastrski sloj"
 
 #, fuzzy
-#~ msgid "%s: raster map not found"
-#~ msgstr "Ne najdem vhodnega rastrskega sloja <%s>."
+msgid "%s: raster map not found"
+msgstr "Ne najdem vhodnega rastrskega sloja <%s>."
 
 #, fuzzy
-#~ msgid "Problem opening input file [%s]"
-#~ msgstr "ne morem odpreti <%s>"
+msgid "Problem opening input file [%s]"
+msgstr "ne morem odpreti <%s>"
 
 #, fuzzy
-#~ msgid "Problem opening output file [%s]"
-#~ msgstr "ne morem odpreti <%s>"
+msgid "Problem opening output file [%s]"
+msgstr "ne morem odpreti <%s>"
 
 #, fuzzy
-#~ msgid "can't write category file for <%s>"
-#~ msgstr "ne morem prebrati regije <%s> v <%s>"
+msgid "can't write category file for <%s>"
+msgstr "ne morem prebrati regije <%s> v <%s>"
 
 #, fuzzy
-#~ msgid "%s: can't open tempfile"
-#~ msgstr "ne morem odpreti razpona za datoteko %s"
+msgid "%s: can't open tempfile"
+msgstr "ne morem odpreti razpona za datoteko %s"
 
 #, fuzzy
-#~ msgid "Unable to read row %d in raster map [%s]"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "Unable to read row %d in raster map [%s]"
+msgstr "Ime izhodnega rastrskega sloja"
 
-#~ msgid "Topographic index ln(a/tanB) map"
-#~ msgstr "Rastrski sloj s topografskim indeksom"
+msgid "Topographic index ln(a/tanB) map"
+msgstr "Rastrski sloj s topografskim indeksom"
 
-#~ msgid "Output verbosely"
-#~ msgstr "Bogat opis procesa"
+msgid "Output verbosely"
+msgstr "Bogat opis procesa"
 
 #, fuzzy
-#~ msgid "Can't open raster map %s"
-#~ msgstr "Ne najdem vhodne datoteke %s\n"
+msgid "Can't open raster map %s"
+msgstr "Ne najdem vhodne datoteke %s\n"
 
 #, fuzzy
-#~ msgid "It could not be find input map <%s>"
-#~ msgstr "Ne morem najti vhodne datoteke <%s>\n"
+msgid "It could not be find input map <%s>"
+msgstr "Ne morem najti vhodne datoteke <%s>\n"
 
 #, fuzzy
-#~ msgid "It could not be found input map <%s>"
-#~ msgstr "Ne morem najti vhodne datoteke <%s>\n"
+msgid "It could not be found input map <%s>"
+msgstr "Ne morem najti vhodne datoteke <%s>\n"
 
 #, fuzzy
-#~ msgid "Cannot find input map <%s>"
-#~ msgstr "Ne morem najti vhodne datoteke <%s>\n"
+msgid "Cannot find input map <%s>"
+msgstr "Ne morem najti vhodne datoteke <%s>\n"
 
 #, fuzzy
-#~ msgid "Input vector map <%s> not found."
-#~ msgstr "Ne najdem vhodnega vektorja."
+msgid "Input vector map <%s> not found."
+msgstr "Ne najdem vhodnega vektorja."
 
 #, fuzzy
-#~ msgid "Category ranges: e.g. 1,3-8,13"
-#~ msgstr "Spisek kategorij: npr. 1,3-8,13"
+msgid "Category ranges: e.g. 1,3-8,13"
+msgstr "Spisek kategorij: npr. 1,3-8,13"
 
 #, fuzzy
-#~ msgid "Writing attributes ...\n"
-#~ msgstr "Zapisujem novo datoteko...\n"
+msgid "Writing attributes ...\n"
+msgstr "Zapisujem novo datoteko...\n"
 
 #, fuzzy
-#~ msgid "Could not open ascii file <%s>"
-#~ msgstr "Ne najdem vhodne datoteke %s\n"
+msgid "Could not open ascii file <%s>"
+msgstr "Ne najdem vhodne datoteke %s\n"
 
 #, fuzzy
-#~ msgid "Could not open temp file <%s>"
-#~ msgstr "ne morem odpreti vektorske datoteke <%s> v <%s>"
+msgid "Could not open temp file <%s>"
+msgstr "ne morem odpreti vektorske datoteke <%s> v <%s>"
 
 #, fuzzy
-#~ msgid "List available formats and exit"
-#~ msgstr "Izpi¹i podprte formate in konèaj"
+msgid "List available formats and exit"
+msgstr "Izpi¹i podprte formate in konèaj"
 
 #, fuzzy
-#~ msgid "Vector map <%s> not fould"
-#~ msgstr "Ne najdem vhodnega vektorja <%s>"
+msgid "Vector map <%s> not fould"
+msgstr "Ne najdem vhodnega vektorja <%s>"
 
 #, fuzzy
-#~ msgid "SVG output file"
-#~ msgstr "Vhodni sloj"
+msgid "SVG output file"
+msgstr "Vhodni sloj"
 
 #, fuzzy
-#~ msgid "Could not find vector '%s'"
-#~ msgstr "Ne najdem vhodne datoteke %s\n"
+msgid "Could not find vector '%s'"
+msgstr "Ne najdem vhodne datoteke %s\n"
 
 #, fuzzy
-#~ msgid "Could not find vector map %s"
-#~ msgstr "Ne najdem vhodne datoteke %s\n"
+msgid "Could not find vector map %s"
+msgstr "Ne najdem vhodne datoteke %s\n"
 
 #, fuzzy
-#~ msgid "Unable to get row %d from <%s>"
-#~ msgstr "Imena 2-%d vhodnih rastrskih slojev"
+msgid "Unable to get row %d from <%s>"
+msgstr "Imena 2-%d vhodnih rastrskih slojev"
 
 #, fuzzy
-#~ msgid "No input coordinates provided"
-#~ msgstr "Y koordinata oziroma geografska ¹irina"
+msgid "No input coordinates provided"
+msgstr "Y koordinata oziroma geografska ¹irina"
 
-#~ msgid "Raster output file"
-#~ msgstr "Izhodni rastrski sloj"
+msgid "Raster output file"
+msgstr "Izhodni rastrski sloj"
 
 #, fuzzy
-#~ msgid "Writing raster map ... "
-#~ msgstr "izhodni rastrski sloj"
+msgid "Writing raster map ... "
+msgstr "izhodni rastrski sloj"
 
-#~ msgid "Keep existing color table"
-#~ msgstr "Ohrani obstojeèo barvno paleto"
+msgid "Keep existing color table"
+msgstr "Ohrani obstojeèo barvno paleto"
 
-#~ msgid "List rules"
-#~ msgstr "Na¹tej pravila"
+msgid "List rules"
+msgstr "Na¹tej pravila"
 
 #, fuzzy
-#~ msgid " %d rows, %d cols."
-#~ msgstr "%d raster%s, %d vektor%s\n"
+msgid " %d rows, %d cols."
+msgstr "%d raster%s, %d vektor%s\n"
 
 #, fuzzy
-#~ msgid "%s in %s - can't read header file"
-#~ msgstr "ne morem odpreti razpona za datoteko %s"
+msgid "%s in %s - can't read header file"
+msgstr "ne morem odpreti razpona za datoteko %s"
 
 #, fuzzy
-#~ msgid "%s - unable to create raster map"
-#~ msgstr "Ime rastrskega sloja"
+msgid "%s - unable to create raster map"
+msgstr "Ime rastrskega sloja"
 
 #, fuzzy
-#~ msgid "%s - unable to create category file"
-#~ msgstr "Vrednost, ki bo prirejena NULL vrednosti"
+msgid "%s - unable to create category file"
+msgstr "Vrednost, ki bo prirejena NULL vrednosti"
 
 #, fuzzy
-#~ msgid "Vector map with points for which to modify the attribute table"
-#~ msgstr "Ne ustvari tabele z atributi."
+msgid "Vector map with points for which to modify the attribute table"
+msgstr "Ne ustvari tabele z atributi."
 
 #, fuzzy
-#~ msgid "Layer of the vector for which to modify the attribute table"
-#~ msgstr "Ne ustvari tabele z atributi."
+msgid "Layer of the vector for which to modify the attribute table"
+msgstr "Ne ustvari tabele z atributi."
 
 #, fuzzy
-#~ msgid "Path to an output file"
-#~ msgstr "Ime izhodne datoteke"
+msgid "Path to an output file"
+msgstr "Ime izhodne datoteke"
 
 #, fuzzy
-#~ msgid "Name of existing raster map to be displayed"
-#~ msgstr "Ime obstojeèega rastrskega sloja"
+msgid "Name of existing raster map to be displayed"
+msgstr "Ime obstojeèega rastrskega sloja"
 
-#~ msgid "driver name:"
-#~ msgstr "ime gonilnika"
+msgid "driver name:"
+msgstr "ime gonilnika"
 
-#~ msgid "Database name:"
-#~ msgstr "ime baze podatkov"
+msgid "Database name:"
+msgstr "ime baze podatkov"
 
 #, fuzzy
-#~ msgid "could not find input map <%s>"
-#~ msgstr "Ne morem najti vhodne datoteke <%s>\n"
+msgid "could not find input map <%s>"
+msgstr "Ne morem najti vhodne datoteke <%s>\n"
 
 #, fuzzy
-#~ msgid "unable to open raster map [%s]"
-#~ msgstr "Ne morem odpreti cellfile za [%s]"
+msgid "unable to open raster map [%s]"
+msgstr "Ne morem odpreti cellfile za [%s]"
 
 #, fuzzy
-#~ msgid "cannot get layer info for vector map"
-#~ msgstr "Vektorski sloj konènih toèk"
+msgid "cannot get layer info for vector map"
+msgstr "Vektorski sloj konènih toèk"
 
 #, fuzzy
-#~ msgid "cannot open database %s by driver %s"
-#~ msgstr "Ne morem odpreti baze podatkov %s z gonilnikom %s"
+msgid "cannot open database %s by driver %s"
+msgstr "Ne morem odpreti baze podatkov %s z gonilnikom %s"
 
 #, fuzzy
-#~ msgid "column type not supported"
-#~ msgstr "Tip zapisa kolone ni podprt"
+msgid "column type not supported"
+msgstr "Tip zapisa kolone ni podprt"
 
 #, fuzzy
-#~ msgid "cannot select data from table"
-#~ msgstr "Ne morem izbrati (select) podatkov iz tabele"
+msgid "cannot select data from table"
+msgstr "Ne morem izbrati (select) podatkov iz tabele"
 
 #, fuzzy
-#~ msgid "cannot create table: %s"
-#~ msgstr "Ne morem ustvariti tabele: %s"
+msgid "cannot create table: %s"
+msgstr "Ne morem ustvariti tabele: %s"
 
 #, fuzzy
-#~ msgid "cannot create index"
-#~ msgstr "Ne morem ustvariti indeksa"
+msgid "cannot create index"
+msgstr "Ne morem ustvariti indeksa"
 
 #, fuzzy
-#~ msgid "cannot grant privileges on table %s"
-#~ msgstr "Ne morem ti garantirati (grant) privilegijev nad tabelo %s"
+msgid "cannot grant privileges on table %s"
+msgstr "Ne morem ti garantirati (grant) privilegijev nad tabelo %s"
 
 #, fuzzy
-#~ msgid "column type  not supported"
-#~ msgstr "Tip zapisa kolone ni podprt"
+msgid "column type  not supported"
+msgstr "Tip zapisa kolone ni podprt"
 
 #, fuzzy
-#~ msgid "Cannot find vector map"
-#~ msgstr "Vektorski sloj konènih toèk"
+msgid "Cannot find vector map"
+msgstr "Vektorski sloj konènih toèk"
 
 #, fuzzy
-#~ msgid "Cannot find raster map"
-#~ msgstr "Ime rastrskega sloja"
+msgid "Cannot find raster map"
+msgstr "Ime rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Cannot open raster map"
-#~ msgstr "Pokrovni rastrski sloj"
+msgid "Cannot open raster map"
+msgstr "Pokrovni rastrski sloj"
 
 #, fuzzy
-#~ msgid "Can't open temp file %s"
-#~ msgstr "ne morem odpreti razpona za datoteko %s"
+msgid "Can't open temp file %s"
+msgstr "ne morem odpreti razpona za datoteko %s"
 
 #, fuzzy
-#~ msgid "#%s"
-#~ msgstr "%s"
+msgid "#%s"
+msgstr "%s"
 
 #, fuzzy
-#~ msgid "Error while reading cell map."
-#~ msgstr "Ime vhodnega rastrskega sloja"
+msgid "Error while reading cell map."
+msgstr "Ime vhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Error while writing new cell map."
-#~ msgstr "Ime vhodnega rastrskega sloja"
+msgid "Error while writing new cell map."
+msgstr "Ime vhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Error in opening output file <%s>"
-#~ msgstr "ne morem odpreti <%s>"
+msgid "Error in opening output file <%s>"
+msgstr "ne morem odpreti <%s>"
 
 #, fuzzy
-#~ msgid "Unable to find input cell map <%s>"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "Unable to find input cell map <%s>"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Error in opening input file <%s>"
-#~ msgstr "ne morem odpreti vektorske datoteke <%s> v <%s>"
+msgid "Error in opening input file <%s>"
+msgstr "ne morem odpreti vektorske datoteke <%s> v <%s>"
 
 #, fuzzy
-#~ msgid "Unable to open cell man <%s> for input.\n"
-#~ msgstr "ne morem odpreti <%s>"
+msgid "Unable to open cell man <%s> for input.\n"
+msgstr "ne morem odpreti <%s>"
 
 #, fuzzy
-#~ msgid "Unable to read map raster row %d"
-#~ msgstr "Ime rastrskega sloja"
+msgid "Unable to read map raster row %d"
+msgstr "Ime rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Unable to write color table to raster [%s]"
-#~ msgstr "Ime rastrskega sloja"
+msgid "Unable to write color table to raster [%s]"
+msgstr "Ime rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Cannot find map %s"
-#~ msgstr "Ne morem odpreti baze podatkov %s"
+msgid "Cannot find map %s"
+msgstr "Ne morem odpreti baze podatkov %s"
 
 #, fuzzy
-#~ msgid "Cannot open map %s"
-#~ msgstr "ne morem odpreti %s"
+msgid "Cannot open map %s"
+msgstr "ne morem odpreti %s"
 
-#~ msgid "Name of predefined rules file"
-#~ msgstr "Ime datoteke s pravili"
+msgid "Name of predefined rules file"
+msgstr "Ime datoteke s pravili"
 
 #, fuzzy
-#~ msgid "R:G:B value(s) out of range [0..255]: %d:%d:%d"
-#~ msgstr ""
-#~ "** opozorilo: R:G:B vrednost(i) so izven dovoljenega razpona \n"
-#~ "[0 do 255]: %d:%d:%d **\n"
+msgid "R:G:B value(s) out of range [0..255]: %d:%d:%d"
+msgstr ""
+"** opozorilo: R:G:B vrednost(i) so izven dovoljenega razpona \n"
+"[0 do 255]: %d:%d:%d **\n"
 
 #, fuzzy
-#~ msgid "R G B value(s) out of range [0..255]: %d %d %d"
-#~ msgstr ""
-#~ "** opozorilo: R G B vrednost(i) so izven dovoljenega razpona \n"
-#~ "[0 do 255]: %d %d %d **\n"
+msgid "R G B value(s) out of range [0..255]: %d %d %d"
+msgstr ""
+"** opozorilo: R G B vrednost(i) so izven dovoljenega razpona \n"
+"[0 do 255]: %d %d %d **\n"
 
 #, fuzzy
-#~ msgid "no such value"
-#~ msgstr "** opozorilo: take vrednosti ni **\n"
+msgid "no such value"
+msgstr "** opozorilo: take vrednosti ni **\n"
 
 #, fuzzy
-#~ msgid "%s:line %d:%s"
-#~ msgstr "%s:linija %d:%s\n"
+msgid "%s:line %d:%s"
+msgstr "%s:linija %d:%s\n"
 
 #, fuzzy
-#~ msgid "bad color specification"
-#~ msgstr "** napaèna specifikacija barv **\n"
+msgid "bad color specification"
+msgstr "** napaèna specifikacija barv **\n"
 
 #, fuzzy
-#~ msgid "%s - unknown color"
-#~ msgstr "%s - nepoznana barva\n"
+msgid "%s - unknown color"
+msgstr "%s - nepoznana barva\n"
 
-#~ msgid "Valid colors are:\n"
-#~ msgstr "Veljavne barve so:\n"
+msgid "Valid colors are:\n"
+msgstr "Veljavne barve so:\n"
 
 #, fuzzy
-#~ msgid "Unable to find cover map <%s>"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "Unable to find cover map <%s>"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "%s: reading category file for %s"
-#~ msgstr "ne morem prebrati regije <%s> v <%s>"
+msgid "%s: reading category file for %s"
+msgstr "ne morem prebrati regije <%s> v <%s>"
 
 #, fuzzy
-#~ msgid "%s: unable to open raster map [%s]"
-#~ msgstr "Ne morem odpreti cellfile za [%s]"
+msgid "%s: unable to open raster map [%s]"
+msgstr "Ne morem odpreti cellfile za [%s]"
 
 #, fuzzy
-#~ msgid "%s: unable to create raster map [%s]"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "%s: unable to create raster map [%s]"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Unable to open database %s with driver %s"
-#~ msgstr "Ne morem odpreti baze podatkov %s z gonilnikom %s"
+msgid "Unable to open database %s with driver %s"
+msgstr "Ne morem odpreti baze podatkov %s z gonilnikom %s"
 
 #, fuzzy
-#~ msgid "%s: Unable to read raster map [%s]"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "%s: Unable to read raster map [%s]"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "%s: unable to open raster map <%s>"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "%s: unable to open raster map <%s>"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "%s: Failed to read raster row %d"
-#~ msgstr "Ime rastrskega sloja"
+msgid "%s: Failed to read raster row %d"
+msgstr "Ime rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Unable to find [%s]."
-#~ msgstr "ne morem odpreti <%s>"
+msgid "Unable to find [%s]."
+msgstr "ne morem odpreti <%s>"
 
 #, fuzzy
-#~ msgid "Unable to read cats table for %s"
-#~ msgstr "Ime rastrskega sloja"
+msgid "Unable to read cats table for %s"
+msgstr "Ime rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Could not open raster <%s>"
-#~ msgstr "Ne najdem vhodne datoteke %s\n"
+msgid "Could not open raster <%s>"
+msgstr "Ne najdem vhodne datoteke %s\n"
 
-#~ msgid ""
-#~ "Font name (not supported interactively, see also -l flag) or path to "
-#~ "TrueType font (including file name)"
-#~ msgstr ""
-#~ "Ime pisave (ni podprto interaktivno, glej tudi -l izbiro ukaza) ali pot "
-#~ "do \n"
-#~ "TrueType pisave (vkljuèujoè ime datoteke)"
+msgid ""
+"Font name (not supported interactively, see also -l flag) or path to "
+"TrueType font (including file name)"
+msgstr ""
+"Ime pisave (ni podprto interaktivno, glej tudi -l izbiro ukaza) ali pot do \n"
+"TrueType pisave (vkljuèujoè ime datoteke)"
 
 #, fuzzy
-#~ msgid "%s: o_open_file: raster map %s not found"
-#~ msgstr "ne najdem 3Dview datoteke <%s>"
+msgid "%s: o_open_file: raster map %s not found"
+msgstr "ne najdem 3Dview datoteke <%s>"
 
 #, fuzzy
-#~ msgid "%s: o_open_file: could not open raster map %s in %s"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "%s: o_open_file: could not open raster map %s in %s"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "No record for category for [%d]"
-#~ msgstr "Za vrstico (cat = %d) ni zapisa (record)<"
+msgid "No record for category for [%d]"
+msgstr "Za vrstico (cat = %d) ni zapisa (record)<"
 
 #, fuzzy
-#~ msgid "Error reading ASCII file <%s>"
-#~ msgstr "Ne najdem vhodne datoteke %s\n"
+msgid "Error reading ASCII file <%s>"
+msgstr "Ne najdem vhodne datoteke %s\n"
 
 #, fuzzy
-#~ msgid "category [%d]"
-#~ msgstr ""
-#~ "polje: %d\n"
-#~ "kategorija: %d\n"
+msgid "category [%d]"
+msgstr ""
+"polje: %d\n"
+"kategorija: %d\n"
 
 #, fuzzy
-#~ msgid "List of point coordinates. Required for add and move actions."
-#~ msgstr "Izberi tip: linija ali obmoèje"
+msgid "List of point coordinates. Required for add and move actions."
+msgstr "Izberi tip: linija ali obmoèje"
 
 #, fuzzy
-#~ msgid "Could not find input vector '%s'"
-#~ msgstr "Ne morem najti vhodne datoteke <%s>\n"
+msgid "Could not find input vector '%s'"
+msgstr "Ne morem najti vhodne datoteke <%s>\n"
 
 #, fuzzy
-#~ msgid "Failed opening output vector map '%s'"
-#~ msgstr "Ime izhodnega vektorskega sloja"
+msgid "Failed opening output vector map '%s'"
+msgstr "Ime izhodnega vektorskega sloja"
 
-#~ msgid "Do not create attribute table."
-#~ msgstr "Ne ustvari tabele z atributi."
+msgid "Do not create attribute table."
+msgstr "Ne ustvari tabele z atributi."
 
-#~ msgid "Could not find input %s\n"
-#~ msgstr "Ne najdem vhodne datoteke %s\n"
+msgid "Could not find input %s\n"
+msgstr "Ne najdem vhodne datoteke %s\n"
 
 #, fuzzy
-#~ msgid "Error reading ascii file: [%s]"
-#~ msgstr "Ne najdem vhodne datoteke %s\n"
+msgid "Error reading ascii file: [%s]"
+msgstr "Ne najdem vhodne datoteke %s\n"
 
 #, fuzzy
-#~ msgid ""
-#~ "List vector maps in input location and exit (a dummy value must be given "
-#~ "for input)"
-#~ msgstr "Izpi¹i rastrske sloje v vhodni \"location\" in konèaj"
+msgid ""
+"List vector maps in input location and exit (a dummy value must be given for "
+"input)"
+msgstr "Izpi¹i rastrske sloje v vhodni \"location\" in konèaj"
 
 #, fuzzy
-#~ msgid "| Tool                            | Threshold     |"
-#~ msgstr "                Trenutni sloj                  Novi sloj\n"
+msgid "| Tool                            | Threshold     |"
+msgstr "                Trenutni sloj                  Novi sloj\n"
 
 #, fuzzy
-#~ msgid "| Break                           |  "
-#~ msgstr ""
-#~ "                          PREVERI OSTANKE V SLOJU\n"
-#~ "\n"
+msgid "| Break                           |  "
+msgstr ""
+"                          PREVERI OSTANKE V SLOJU\n"
+"\n"
 
 #, fuzzy
-#~ msgid "| Prune                           |  "
-#~ msgstr ""
-#~ "                          PREVERI OSTANKE V SLOJU\n"
-#~ "\n"
+msgid "| Prune                           |  "
+msgstr ""
+"                          PREVERI OSTANKE V SLOJU\n"
+"\n"
 
 #, fuzzy
-#~ msgid "%s: <%s> vector map not found"
-#~ msgstr "Ne najdem vhodnega vektorja <%s>"
+msgid "%s: <%s> vector map not found"
+msgstr "Ne najdem vhodnega vektorja <%s>"
 
 #, fuzzy
-#~ msgid "Vector <%s> could not be open"
-#~ msgstr "Ne najdem vhodnega vektorja <%s>"
+msgid "Vector <%s> could not be open"
+msgstr "Ne najdem vhodnega vektorja <%s>"
 
 #, fuzzy
-#~ msgid "CrossCorrelation()"
-#~ msgstr "Korelacija"
+msgid "CrossCorrelation()"
+msgstr "Korelacija"
 
 #, fuzzy
-#~ msgid "Interpolation()"
-#~ msgstr "Interpolacijska metoda, ki jo ¾elite uporabiti"
+msgid "Interpolation()"
+msgstr "Interpolacijska metoda, ki jo ¾elite uporabiti"
 
 #, fuzzy
-#~ msgid "Interpolation: Setting regions and boxes"
-#~ msgstr "Interpolacijska metoda, ki jo ¾elite uporabiti"
+msgid "Interpolation: Setting regions and boxes"
+msgstr "Interpolacijska metoda, ki jo ¾elite uporabiti"
 
 #, fuzzy
-#~ msgid "Interpolation: nsply = %d"
-#~ msgstr "Interpolacijska metoda, ki jo ¾elite uporabiti"
+msgid "Interpolation: nsply = %d"
+msgstr "Interpolacijska metoda, ki jo ¾elite uporabiti"
 
 #, fuzzy
-#~ msgid "Interpolation: (%d,%d): Bilinear interpolation..."
-#~ msgstr "©tevilo toèk najbli¾jih toèk, ki bodo upo¹tevane"
+msgid "Interpolation: (%d,%d): Bilinear interpolation..."
+msgstr "©tevilo toèk najbli¾jih toèk, ki bodo upo¹tevane"
 
 #, fuzzy
-#~ msgid "Interpolation: (%d,%d): Bicubic interpolation..."
-#~ msgstr "©tevilo toèk najbli¾jih toèk, ki bodo upo¹tevane"
+msgid "Interpolation: (%d,%d): Bicubic interpolation..."
+msgstr "©tevilo toèk najbli¾jih toèk, ki bodo upo¹tevane"
 
 #, fuzzy
-#~ msgid "%s: Dropping <s>"
-#~ msgstr "ne morem odpreti %s"
+msgid "%s: Dropping <s>"
+msgstr "ne morem odpreti %s"
 
 #, fuzzy
-#~ msgid "Interpolation was a success!"
-#~ msgstr "Interpolacijska metoda, ki jo ¾elite uporabiti"
+msgid "Interpolation was a success!"
+msgstr "Interpolacijska metoda, ki jo ¾elite uporabiti"
 
 #, fuzzy
-#~ msgid "CrossCorrelation: %d points read in region. "
-#~ msgstr "Uporabi trenutno regijo"
+msgid "CrossCorrelation: %d points read in region. "
+msgstr "Uporabi trenutno regijo"
 
 #, fuzzy
-#~ msgid "CrossCorrelation: It shouldn't take too long."
-#~ msgstr "Ne morem izbrati (select) podatkov iz tabele"
+msgid "CrossCorrelation: It shouldn't take too long."
+msgstr "Ne morem izbrati (select) podatkov iz tabele"
 
 #, fuzzy
-#~ msgid "%s -- illegal output file name"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "%s -- illegal output file name"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Sorry, with method '%s' you have to define an output map."
-#~ msgstr "Ime izhodnega sloja"
+msgid "Sorry, with method '%s' you have to define an output map."
+msgstr "Ime izhodnega sloja"
 
 #, fuzzy
-#~ msgid "Calculation time"
-#~ msgstr "Izraèunavam sence iz DMR..."
+msgid "Calculation time"
+msgstr "Izraèunavam sence iz DMR..."
 
 #, fuzzy
-#~ msgid "Maximum number of iteration"
-#~ msgstr "©tevilo toèk najbli¾jih toèk, ki bodo upo¹tevane"
+msgid "Maximum number of iteration"
+msgstr "©tevilo toèk najbli¾jih toèk, ki bodo upo¹tevane"
 
-#~ msgid "Finished.\n"
-#~ msgstr "Konèano.\n"
+msgid "Finished.\n"
+msgstr "Konèano.\n"
 
 #, fuzzy
-#~ msgid "Existing raster map name"
-#~ msgstr "Zapisujem novo datoteko...\n"
+msgid "Existing raster map name"
+msgstr "Zapisujem novo datoteko...\n"
 
 #, fuzzy
-#~ msgid "%s - can't read raster cellhd"
-#~ msgstr "ne morem odpreti razpona za datoteko %s"
+msgid "%s - can't read raster cellhd"
+msgstr "ne morem odpreti razpona za datoteko %s"
 
 #, fuzzy
-#~ msgid "Done!"
-#~ msgstr "Narejeno\n"
+msgid "Done!"
+msgstr "Narejeno\n"
 
 #, fuzzy
-#~ msgid "No line found."
-#~ msgstr "Nièesar nisem na¹el.\n"
+msgid "No line found."
+msgstr "Nièesar nisem na¹el.\n"
 
 #, fuzzy
-#~ msgid "Nothing Found."
-#~ msgstr "Nièesar nisem na¹el.\n"
+msgid "Nothing Found."
+msgstr "Nièesar nisem na¹el.\n"
 
 #, fuzzy
-#~ msgid "Could not open ascii file [%s]"
-#~ msgstr "Ne najdem vhodne datoteke %s\n"
+msgid "Could not open ascii file [%s]"
+msgstr "Ne najdem vhodne datoteke %s\n"
 
 #, fuzzy
-#~ msgid "vector map to be created"
-#~ msgstr "Rastrski sloj, ki ga nameravate uvoziti"
+msgid "vector map to be created"
+msgstr "Rastrski sloj, ki ga nameravate uvoziti"
 
 #, fuzzy
-#~ msgid "Conversion of [%s] to vector map ..."
-#~ msgstr "Preoblikuje rastrski sloj v vektorskega."
+msgid "Conversion of [%s] to vector map ..."
+msgstr "Preoblikuje rastrski sloj v vektorskega."
 
 #, fuzzy
-#~ msgid "Finished"
-#~ msgstr "Konèano.\n"
+msgid "Finished"
+msgstr "Konèano.\n"
 
 #, fuzzy
-#~ msgid "Print the current region (shell script style)"
-#~ msgstr "Izpi¹e vrednosti v stilu lupinskega skripta"
+msgid "Print the current region (shell script style)"
+msgstr "Izpi¹e vrednosti v stilu lupinskega skripta"
 
 #, fuzzy
-#~ msgid "%s: - no such database %s\n"
-#~ msgstr "Ne morem odpreti baze podatkov %s"
+msgid "%s: - no such database %s\n"
+msgstr "Ne morem odpreti baze podatkov %s"
 
 #, fuzzy
-#~ msgid "ERROR: <%s> not found\n"
-#~ msgstr "Ne najdem rastrskega sloja <%s>"
+msgid "ERROR: <%s> not found\n"
+msgstr "Ne najdem rastrskega sloja <%s>"
 
 #, fuzzy
-#~ msgid "Cannot open toolbox: %s"
-#~ msgstr "Ne morem odpreti baze podatkov %s"
+msgid "Cannot open toolbox: %s"
+msgstr "Ne morem odpreti baze podatkov %s"
 
 #, fuzzy
-#~ msgid "Cannot open toolbox."
-#~ msgstr "ne morem odpreti %s"
+msgid "Cannot open toolbox."
+msgstr "ne morem odpreti %s"
 
-#~ msgid "Could not find input map <%s>\n"
-#~ msgstr "Ne morem najti vhodne datoteke <%s>\n"
+msgid "Could not find input map <%s>\n"
+msgstr "Ne morem najti vhodne datoteke <%s>\n"
 
-#~ msgid "'%s' has finished the transformation of the vectors.\n"
-#~ msgstr "'%s' je konèal spreminjanje vektorjev.\n"
+msgid "'%s' has finished the transformation of the vectors.\n"
+msgstr "'%s' je konèal spreminjanje vektorjev.\n"
 
-#~ msgid ""
-#~ "                          CHECK MAP RESIDUALS\n"
-#~ "\n"
-#~ msgstr ""
-#~ "                          PREVERI OSTANKE V SLOJU\n"
-#~ "\n"
+msgid ""
+"                          CHECK MAP RESIDUALS\n"
+"\n"
+msgstr ""
+"                          PREVERI OSTANKE V SLOJU\n"
+"\n"
 
-#~ msgid "                Current Map                  New Map\n"
-#~ msgstr "                Trenutni sloj                  Novi sloj\n"
+msgid "                Current Map                  New Map\n"
+msgstr "                Trenutni sloj                  Novi sloj\n"
 
 #, fuzzy
-#~ msgid "New vector composite"
-#~ msgstr "Ime izhodne datoteke"
+msgid "New vector composite"
+msgstr "Ime izhodne datoteke"
 
 #, fuzzy
-#~ msgid "Append files to existing file"
-#~ msgstr "Imena obstojeèih rastrskih slojev"
+msgid "Append files to existing file"
+msgstr "Imena obstojeèih rastrskih slojev"
 
 #, fuzzy
-#~ msgid "No database updates."
-#~ msgstr "ime baze podatkov"
+msgid "No database updates."
+msgstr "ime baze podatkov"
 
 #, fuzzy
-#~ msgid "Adding new features to vector file ..."
-#~ msgstr "Zapisujem novo datoteko...\n"
+msgid "Adding new features to vector file ..."
+msgstr "Zapisujem novo datoteko...\n"
 
 #, fuzzy
-#~ msgid "Vector map '%s' not found"
-#~ msgstr "Ne najdem vhodnega vektorja <%s>"
+msgid "Vector map '%s' not found"
+msgstr "Ne najdem vhodnega vektorja <%s>"
 
 #, fuzzy
-#~ msgid "Input aspect file"
-#~ msgstr "Ime izhodnega rastrskega sloja ekspozicij"
+msgid "Input aspect file"
+msgstr "Ime izhodnega rastrskega sloja ekspozicij"
 
 #, fuzzy
-#~ msgid "Input barrier file"
-#~ msgstr "Vhodni sloj"
+msgid "Input barrier file"
+msgstr "Vhodni sloj"
 
 #, fuzzy
-#~ msgid "Quiet operation"
-#~ msgstr "Agregacijska operacija"
+msgid "Quiet operation"
+msgstr "Agregacijska operacija"
 
 #, fuzzy
-#~ msgid ""
-#~ "Aspect file's resolution differs from                        current "
-#~ "region resolution"
-#~ msgstr "Resolucija vzdol¾ linije (privzeta = trenutna resolucija regije)"
+msgid ""
+"Aspect file's resolution differs from                        current region "
+"resolution"
+msgstr "Resolucija vzdol¾ linije (privzeta = trenutna resolucija regije)"
 
 #, fuzzy
-#~ msgid "%s\n"
-#~ msgstr "%s"
+msgid "%s\n"
+msgstr "%s"
 
 #, fuzzy
-#~ msgid "output layer name"
-#~ msgstr "Ime izhodnega sloja"
+msgid "output layer name"
+msgstr "Ime izhodnega sloja"
 
 #, fuzzy
-#~ msgid "Transforming data..."
-#~ msgstr "Ri¹em ..."
+msgid "Transforming data..."
+msgstr "Ri¹em ..."
 
 #, fuzzy
-#~ msgid "Did not find input cell map."
-#~ msgstr "Ne morem najti vhodne datoteke <%s>\n"
+msgid "Did not find input cell map."
+msgstr "Ne morem najti vhodne datoteke <%s>\n"
 
-#~ msgid "L: from  M: to R: quit\n"
-#~ msgstr "L: od  S: do  D: zakljuèi\n"
+msgid "L: from  M: to R: quit\n"
+msgstr "L: od  S: do  D: zakljuèi\n"
 
 #, fuzzy
-#~ msgid "datetime, datetime1/datetime2, or none"
-#~ msgstr "Datumèas, datumèas1/datumèas2, ali niè"
+msgid "datetime, datetime1/datetime2, or none"
+msgstr "Datumèas, datumèas1/datumèas2, ali niè"
 
 #, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "Done\n"
-#~ msgstr "Narejeno\n"
+msgid ""
+"\n"
+"Done\n"
+msgstr "Narejeno\n"
 
 #, fuzzy
-#~ msgid "Open vector 3d raster map %s"
-#~ msgstr "Naslov izhodnega rastrskega sloja"
+msgid "Open vector 3d raster map %s"
+msgstr "Naslov izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Open 3d raster map %s"
-#~ msgstr "Naslov izhodnega rastrskega sloja"
+msgid "Open 3d raster map %s"
+msgstr "Naslov izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "centroids"
-#~ msgstr "%-5d centroidov prebranih\n"
+msgid "centroids"
+msgstr "%-5d centroidov prebranih\n"
 
 #, fuzzy
-#~ msgid "ERROR: A line needs at least 2 points"
-#~ msgstr "Vnesti mora¹ vsaj %d toèk."
+msgid "ERROR: A line needs at least 2 points"
+msgstr "Vnesti mora¹ vsaj %d toèk."
 
 #, fuzzy
-#~ msgid "ERROR: An area needs at least 3 points"
-#~ msgstr "Vnesti mora¹ vsaj %d toèk."
+msgid "ERROR: An area needs at least 3 points"
+msgstr "Vnesti mora¹ vsaj %d toèk."
 
 #, fuzzy
-#~ msgid "Unable to create raster map for [%s]"
-#~ msgstr "Ne morem odpreti cellfile za [%s]"
+msgid "Unable to create raster map for [%s]"
+msgstr "Ne morem odpreti cellfile za [%s]"
 
-#~ msgid "Done\n"
-#~ msgstr "Narejeno\n"
+msgid "Done\n"
+msgstr "Narejeno\n"
 
-#~ msgid "Read fp map as integer (use map's quant rules"
-#~ msgstr "Preberi fp - \"floating point\" sloj kot \"integer\""
+msgid "Read fp map as integer (use map's quant rules"
+msgstr "Preberi fp - \"floating point\" sloj kot \"integer\""
 
-#~ msgid "Name for the resulting raster map"
-#~ msgstr "Ime izhodnega rastrskega sloja"
+msgid "Name for the resulting raster map"
+msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Open Raster file %s in Mapset %s"
-#~ msgstr "Naslov izhodnega rastrskega sloja"
+msgid "Open Raster file %s in Mapset %s"
+msgstr "Naslov izhodnega rastrskega sloja"
 
 #, fuzzy
-#~ msgid "Open 3d raster map %s\n"
-#~ msgstr "Naslov izhodnega rastrskega sloja"
+msgid "Open 3d raster map %s\n"
+msgstr "Naslov izhodnega rastrskega sloja"
 
 # Navpièna lestvica
 #, fuzzy
-#~ msgid "Open elev raster map %s\n"
-#~ msgstr "Izhodni rastrski sloj nadmorskih vi¹in"
+msgid "Open elev raster map %s\n"
+msgstr "Izhodni rastrski sloj nadmorskih vi¹in"
 
 #, fuzzy
-#~ msgid "Could not open map %s\n"
+msgid "Could not open map %s\n"
+msgstr "Ne najdem vhodne datoteke %s\n"
+
+#, fuzzy
+msgid "Bin raster map to be imported"
+msgstr "Binarna rastrska datoteka, ki jo nameravate uvoziti"
+
+msgid "Region size is lower than minreg, nothing displayed.\n"
+msgstr ""
+"Velikost regije je od najmanj¹e regije (minreg), ne morem prikazati "
+"nièesar.\n"
+
+msgid "Region size is greater than maxreg, nothing displayed.\n"
+msgstr ""
+"Velikost regije je veèja od najveèje regije (maxreg), ne morem prikazati "
+"nièesar\n"
+
+#, fuzzy
+msgid "Maximum distance"
+msgstr "Najveèja vrednost plastnice"
+
+#, fuzzy
+msgid "Makes 3D trees from input point vector map"
+msgstr "Ime izhodnega vektorskega sloja"
+
+#, fuzzy
+msgid "Name of the column with tree crown width"
+msgstr "Ime rastrskega sloja s podatki o glajenju"
+
+#, fuzzy
+msgid "Name of the column with tree species"
+msgstr "Ime rastrskega sloja s podatki o glajenju"
+
+#, fuzzy
+msgid "Cannot select attributes for point #%d"
+msgstr "Ne morem izbrati (select) podatkov iz tabele"
+
+#, fuzzy
+msgid "Right: "
+msgstr "Desni: konèaj\n"
+
+msgid "%s Pan\n"
+msgstr "%s Premakni\n"
+
+msgid "%s Quit\n"
+msgstr "%s Ugasni\n"
+
+msgid "Quiet mode"
+msgstr "Tihi naèin"
+
+#, fuzzy
+msgid "%s[%d]: No raster map specified."
+msgstr "pozor: ne najdem vektorja %s\n"
+
+#, fuzzy
+msgid "done."
+msgstr "Narejeno.\n"
+
+msgid ""
+"GRASS module to create a fractal surface of a given fractal dimension. Uses "
+"spectral synthesis method. Can create intermediate layers showing the build "
+"up of different spectral coefficients (see Saupe, pp.106-107 for an example "
+"of this). Use this module to generate naturally looking synthetical "
+"elevation models (DEM)."
+msgstr ""
+"Modul za izdelavo fraktalnih povr¹in dane fraktalne dimenzije. Uporablja "
+"metodo\n"
+"spektralne sinteze. Lahko izdela vmesne sloje, ki prikazujejo gradnjo "
+"razliènih\n"
+"spektralnih koeficientov (glej Saupe, str. 106-107). Modul se uporablja za \n"
+"izdelavo na pogled naravnih digitalnih modelov reliefa (DMR)."
+
+#, fuzzy
+msgid "name for new binary vector map (omit for display to stdout)"
+msgstr "Izhodna PPM datoteka (uporabi out=- za standardni izhod (stdout))"
+
+#, fuzzy
+msgid "Name for G3d raster map"
+msgstr "Ime rastrskega sloja"
+
+#, fuzzy
+msgid "No output maps"
+msgstr "Ime izhodnega sloja"
+
+#, fuzzy
+msgid "The resolution of raster and raster3d maps should be equal!"
+msgstr "Ime rastrskega sloja, ki bo reklasificiran"
+
+msgid "Connect to the database through DBMI."
+msgstr "Pove¾i se z bazo preko DBMI."
+
+#, fuzzy
+msgid "unknown interpolation method"
+msgstr "Interpolacijska metoda, ki jo ¾elite uporabiti"
+
+msgid "Name of existing raster map."
+msgstr "Ime obstojeèega rastrskega sloja."
+
+msgid "Name of input map"
+msgstr "Ime vhodnega sloja"
+
+msgid "cover raster map"
+msgstr "pokrovni rastrski sloj"
+
+msgid "resultant raster map"
+msgstr "izhodni rastrski sloj"
+
+msgid "Sampling distance step coefficient (0.5-1.5)"
+msgstr "Koeficient korak razdalje vzorèenja (0.5 do 1.5)"
+
+msgid "(i)   Rectangular elevation map"
+msgstr "(i)   Pravokotni rastrski sloj"
+
+msgid "Name of the resulting map"
+msgstr "Ime novega sloja"
+
+msgid "Invoke fast, but memory intensive operation"
+msgstr "Hitra, vendar spominsko potratna razlièica operacije"
+
+msgid "Done.\n"
+msgstr "Narejeno.\n"
+
+msgid "Zooming finished.\n"
+msgstr "Zoomiranje konèano.\n"
+
+msgid "column '%s' : type text is stored as varchar(250) some data may be lost"
+msgstr ""
+"kolona '%s': tip text je shranjen kot varchar(250) nekateri podatki so "
+"lahko\n"
+"izgubljeni"
+
+msgid ""
+"Output direction type AGNPS, ANSWERS or GRASS aspect\n"
+"              default: GRASS"
+msgstr ""
+"Tip zapisa izhodnega sloja: AGNPS, ANSWERS ali GRASS aspect\n"
+"              privzet: GRASS"
+
+msgid "Do zeroes in input map represent elevation?"
+msgstr "Ali nièle (0) v vhodnem sloju predstavljajo nadmorsko vi¹ino?"
+
+msgid "Slope"
+msgstr "Naklon"
+
+msgid "Aspect"
+msgstr "Ekspozicija"
+
+msgid "Profile curvature"
+msgstr "Profilna ukrivljenost"
+
+msgid "Tangential curvature"
+msgstr "Tangencialna ukrivljenost"
+
+msgid "Mean curvature"
+msgstr "Povpreèna ukrivljenost"
+
+msgid "Tension"
+msgstr "Napetost"
+
+msgid "Output direct (beam) irradiance/irradiation file (raster)"
+msgstr "Izhodni rastrski sloj energije direktne radiacije"
+
+msgid "Output reflected irradiance/irradiation file (raster)"
+msgstr "Izhodni rastrski sloj odbite radiacije"
+
+#, fuzzy
+#~ msgid "Name for output file (do NOT add extension)"
+#~ msgstr "Ime izhodne datoteke, ki bo vsebovala poroèilo"
+
+#, fuzzy
+#~ msgid "Images"
+#~ msgstr "Vhodni sloj"
+
+#, fuzzy
+#~ msgid "Data type"
+#~ msgstr "Tip objektov"
+
+#, fuzzy
+#~ msgid "slopein raster map <%s> not found"
+#~ msgstr "ne najdem 3Dview datoteke <%s>"
+
+#, fuzzy
+#~ msgid "%s: Error reading from raster map <%s> in mapset <%s>"
 #~ msgstr "Ne najdem vhodne datoteke %s\n"
 
 #, fuzzy
-#~ msgid "Bin raster map to be imported"
-#~ msgstr "Binarna rastrska datoteka, ki jo nameravate uvoziti"
-
-#~ msgid "Region size is lower than minreg, nothing displayed.\n"
-#~ msgstr ""
-#~ "Velikost regije je od najmanj¹e regije (minreg), ne morem prikazati "
-#~ "nièesar.\n"
-
-#~ msgid "Region size is greater than maxreg, nothing displayed.\n"
-#~ msgstr ""
-#~ "Velikost regije je veèja od najveèje regije (maxreg), ne morem prikazati "
-#~ "nièesar\n"
+#~ msgid "Base raster map <%s> not found"
+#~ msgstr "ne najdem 3Dview datoteke <%s>"
 
 #, fuzzy
-#~ msgid "Maximum distance"
-#~ msgstr "Najveèja vrednost plastnice"
-
-#, fuzzy
-#~ msgid "Makes 3D trees from input point vector map"
-#~ msgstr "Ime izhodnega vektorskega sloja"
-
-#, fuzzy
-#~ msgid "Name of the column with tree crown width"
-#~ msgstr "Ime rastrskega sloja s podatki o glajenju"
-
-#, fuzzy
-#~ msgid "Name of the column with tree species"
-#~ msgstr "Ime rastrskega sloja s podatki o glajenju"
-
-#, fuzzy
-#~ msgid "Cannot select attributes for point #%d"
-#~ msgstr "Ne morem izbrati (select) podatkov iz tabele"
-
-#, fuzzy
-#~ msgid "Right: "
-#~ msgstr "Desni: konèaj\n"
-
-#~ msgid "%s Pan\n"
-#~ msgstr "%s Premakni\n"
-
-#~ msgid "%s Quit\n"
-#~ msgstr "%s Ugasni\n"
-
-#~ msgid "Quiet mode"
-#~ msgstr "Tihi naèin"
-
-#, fuzzy
-#~ msgid "%s[%d]: No raster map specified."
-#~ msgstr "pozor: ne najdem vektorja %s\n"
-
-#, fuzzy
-#~ msgid "done."
-#~ msgstr "Narejeno.\n"
-
-#~ msgid ""
-#~ "GRASS module to create a fractal surface of a given fractal dimension. "
-#~ "Uses spectral synthesis method. Can create intermediate layers showing "
-#~ "the build up of different spectral coefficients (see Saupe, pp.106-107 "
-#~ "for an example of this). Use this module to generate naturally looking "
-#~ "synthetical elevation models (DEM)."
-#~ msgstr ""
-#~ "Modul za izdelavo fraktalnih povr¹in dane fraktalne dimenzije. Uporablja "
-#~ "metodo\n"
-#~ "spektralne sinteze. Lahko izdela vmesne sloje, ki prikazujejo gradnjo "
-#~ "razliènih\n"
-#~ "spektralnih koeficientov (glej Saupe, str. 106-107). Modul se uporablja "
-#~ "za \n"
-#~ "izdelavo na pogled naravnih digitalnih modelov reliefa (DMR)."
-
-#, fuzzy
-#~ msgid "name for new binary vector map (omit for display to stdout)"
-#~ msgstr "Izhodna PPM datoteka (uporabi out=- za standardni izhod (stdout))"
-
-#, fuzzy
-#~ msgid "Name for G3d raster map"
+#~ msgid "Color table for <%s> updated"
 #~ msgstr "Ime rastrskega sloja"
 
 #, fuzzy
-#~ msgid "No output maps"
-#~ msgstr "Ime izhodnega sloja"
+#~ msgid "Error reading raster map [%s]."
+#~ msgstr "Ne najdem vhodne datoteke %s\n"
 
 #, fuzzy
-#~ msgid "The resolution of raster and raster3d maps should be equal!"
-#~ msgstr "Ime rastrskega sloja, ki bo reklasificiran"
-
-#~ msgid "Connect to the database through DBMI."
-#~ msgstr "Pove¾i se z bazo preko DBMI."
+#~ msgid "Option <%s>: <%s> exists."
+#~ msgstr "ne najdem regije <%s>"
 
 #, fuzzy
-#~ msgid "unknown interpolation method"
-#~ msgstr "Interpolacijska metoda, ki jo ¾elite uporabiti"
+#~ msgid "Use '%s' option to change vector map name"
+#~ msgstr "Ime izhodne baze podatkov"
 
-#~ msgid "Name of existing raster map."
-#~ msgstr "Ime obstojeèega rastrskega sloja."
+#, fuzzy
+#~ msgid "Invalid rendering method <%s>"
+#~ msgstr "neveljavna regija: %s"
 
-#~ msgid "Name of input map"
-#~ msgstr "Ime vhodnega sloja"
-
-#~ msgid "cover raster map"
-#~ msgstr "pokrovni rastrski sloj"
-
-#~ msgid "resultant raster map"
-#~ msgstr "izhodni rastrski sloj"
-
-#~ msgid "Sampling distance step coefficient (0.5-1.5)"
-#~ msgstr "Koeficient korak razdalje vzorèenja (0.5 do 1.5)"
-
-#~ msgid "(i)   Rectangular elevation map"
-#~ msgstr "(i)   Pravokotni rastrski sloj"
-
-#~ msgid "Name of the resulting map"
-#~ msgstr "Ime novega sloja"
-
-#~ msgid "Invoke fast, but memory intensive operation"
-#~ msgstr "Hitra, vendar spominsko potratna razlièica operacije"
-
-#~ msgid "Done.\n"
-#~ msgstr "Narejeno.\n"
-
-#~ msgid "Zooming finished.\n"
-#~ msgstr "Zoomiranje konèano.\n"
-
-#~ msgid ""
-#~ "column '%s' : type text is stored as varchar(250) some data may be lost"
-#~ msgstr ""
-#~ "kolona '%s': tip text je shranjen kot varchar(250) nekateri podatki so "
-#~ "lahko\n"
-#~ "izgubljeni"
-
-#~ msgid ""
-#~ "Output direction type AGNPS, ANSWERS or GRASS aspect\n"
-#~ "              default: GRASS"
-#~ msgstr ""
-#~ "Tip zapisa izhodnega sloja: AGNPS, ANSWERS ali GRASS aspect\n"
-#~ "              privzet: GRASS"
-
-#~ msgid "Do zeroes in input map represent elevation?"
-#~ msgstr "Ali nièle (0) v vhodnem sloju predstavljajo nadmorsko vi¹ino?"
-
-#~ msgid "Slope"
-#~ msgstr "Naklon"
-
-#~ msgid "Aspect"
-#~ msgstr "Ekspozicija"
-
-#~ msgid "Profile curvature"
-#~ msgstr "Profilna ukrivljenost"
-
-#~ msgid "Tangential curvature"
-#~ msgstr "Tangencialna ukrivljenost"
-
-#~ msgid "Mean curvature"
-#~ msgstr "Povpreèna ukrivljenost"
-
-#~ msgid "Tension"
-#~ msgstr "Napetost"
-
-#~ msgid "Output direct (beam) irradiance/irradiation file (raster)"
-#~ msgstr "Izhodni rastrski sloj energije direktne radiacije"
-
-#~ msgid "Output reflected irradiance/irradiation file (raster)"
-#~ msgstr "Izhodni rastrski sloj odbite radiacije"
+#~ msgid "Name of the input raster map"
+#~ msgstr "Ime vhodnega rastrskega sloja"

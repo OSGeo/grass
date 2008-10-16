@@ -522,9 +522,9 @@ msgid "Unable to get list tables in database <%s>"
 msgstr "không thể mở tập tin bảng ellipsoid : %s"
 
 #: ../lib/db/dbmi_client/copy_tab.c:157
-#, c-format
+#, fuzzy, c-format
 msgid "Table <%s> already exists in database <%s>"
-msgstr ""
+msgstr "không thể mở tập tin bảng ellipsoid : %s"
 
 #: ../lib/db/dbmi_client/copy_tab.c:199 ../lib/db/dbmi_client/copy_tab.c:276
 #: ../lib/db/dbmi_client/table.c:110
@@ -1257,12 +1257,12 @@ msgstr ""
 #: ../lib/vector/Vlib/write_nat.c:640
 #, fuzzy
 msgid "Attempt to delete dead feature"
-msgstr "Không thể mở tập tin tạm"
+msgstr "Không thể tính toán trọng tâm cho vùng %d"
 
 #: ../lib/vector/Vlib/write_nat.c:885
 #, fuzzy
 msgid "Attempt to restore alive feature"
-msgstr "Không thể mở tập tin tạm"
+msgstr "Không thể tính toán trọng tâm cho vùng %d"
 
 #: ../lib/vector/Vlib/level_two.c:210 ../lib/vector/Vlib/level_two.c:235
 #: ../lib/vector/Vlib/level_two.c:259 ../lib/vector/Vlib/level_two.c:278
@@ -1978,9 +1978,9 @@ msgid "Window replacing the default"
 msgstr "để chấp nhận mặc định"
 
 #: ../lib/g3d/g3dcolor.c:332
-#, c-format
+#, fuzzy, c-format
 msgid "mapset <%s> is not the current mapset"
-msgstr ""
+msgstr "'Bọ': cố gắng cập nhật bản đồ không ở trong bộ bản đồ hiện tại."
 
 #: ../lib/g3d/g3dopen.c:20
 msgid "G3d_openCellOldNoHeader: error in G3d_maskOpenOld"
@@ -2041,7 +2041,7 @@ msgstr " G3d_openCellNew: lỗi trong G3d_malloc"
 #: ../lib/g3d/g3dopen.c:229
 #, fuzzy, c-format
 msgid "map <%s> is not in the current mapset"
-msgstr "Keine %s Dateien im aktuellen Mapset vorhanden\n"
+msgstr "'Bọ': cố gắng cập nhật bản đồ không ở trong bộ bản đồ hiện tại."
 
 #: ../lib/g3d/g3dopen.c:239
 msgid "G3d_openCellNew: could not open file"
@@ -2245,7 +2245,7 @@ msgstr ""
 #: ../lib/gis/opencell.c:932 ../lib/gis/opencell.c:1020
 #, fuzzy, c-format
 msgid "Unable to find '%s' in '%s'"
-msgstr "không thể tìm thấy [%s] trong [%s]"
+msgstr "không thể tìm thấy [%s]"
 
 #: ../lib/gis/opencell.c:965
 #, fuzzy, c-format
@@ -2308,9 +2308,9 @@ msgid "'%s/%s' was found in more mapsets (also found in <%s>)"
 msgstr ""
 
 #: ../lib/gis/find_file.c:82
-#, c-format
+#, fuzzy, c-format
 msgid "Using <%s@%s>"
-msgstr ""
+msgstr "không thể tìm thấy [%s]"
 
 #: ../lib/gis/quant_io.c:89
 #, c-format
@@ -3869,9 +3869,10 @@ msgid "Vector map <%s> loaded (%d points)"
 msgstr "Không tìm thấy vector đầu vào '%s'"
 
 #: ../lib/ogsf/GS2.c:1638
-#, c-format
+#, fuzzy, c-format
 msgid "Raster map <%s> is outside of current region. Load failed."
 msgstr ""
+"[%s] trong bộ bản đồ [%s] - ở một múi [%d] khác với vùng hiện hành [%d]"
 
 #: ../lib/ogsf/GS2.c:1716 ../lib/ogsf/GS2.c:1722 ../lib/ogsf/GS2.c:1730
 #: ../lib/ogsf/GS2.c:1739 ../lib/ogsf/GS2.c:1747 ../lib/ogsf/GS2.c:1757
@@ -4247,7 +4248,7 @@ msgstr ""
 #: ../lib/cairodriver/Graph.c:81
 #, fuzzy
 msgid "Unable to obtain visual"
-msgstr "không thể mở %s"
+msgstr "Không thể mở tập tin %s trong %s"
 
 #: ../lib/cairodriver/Graph.c:86
 #, fuzzy
@@ -4398,619 +4399,629 @@ msgid "Unable to define new light"
 msgstr "Không thể mở tập tin %s trong %s"
 
 #, fuzzy
-#~ msgid "Cannot describe table <%s>"
-#~ msgstr "Không thể mở CSDL"
+msgid "Cannot describe table <%s>"
+msgstr "Không thể mở CSDL"
 
 #, fuzzy
-#~ msgid "Unknown command: %d last: %d"
-#~ msgstr ""
-#~ "\n"
-#~ "Lệnh không biết: %d sau cùng: %d\n"
+msgid "Unknown command: %d last: %d"
+msgstr ""
+"\n"
+"Lệnh không biết: %d sau cùng: %d\n"
 
 #, fuzzy
-#~ msgid "Monitor: get_command: Premature EOF"
-#~ msgstr "Màn hình: get_command: EOF sớm\n"
+msgid "Monitor: get_command: Premature EOF"
+msgstr "Màn hình: get_command: EOF sớm\n"
 
-#~ msgid "ERROR %s from graphics driver.\n"
-#~ msgstr "LỖI %s từ trình điều khiển đồ họa.\n"
+msgid "ERROR %s from graphics driver.\n"
+msgstr "LỖI %s từ trình điều khiển đồ họa.\n"
 
-#~ msgid "ERROR - eof from graphics monitor.\n"
-#~ msgstr "LỖI - eof từ màn hình đồ họa.\n"
+msgid "ERROR - eof from graphics monitor.\n"
+msgstr "LỖI - eof từ màn hình đồ họa.\n"
 
-#~ msgid "Warning - no response from graphics monitor <%s>.\n"
-#~ msgstr "Cảnh báo - màn hình đồ họa không phản ứng <%s>.\n"
+msgid "Warning - no response from graphics monitor <%s>.\n"
+msgstr "Cảnh báo - màn hình đồ họa không phản ứng <%s>.\n"
 
-#~ msgid "Check to see if the mouse is still active.\n"
-#~ msgstr "Kiểm tra xem chuột có vẫn còn hoạt động không.\n"
+msgid "Check to see if the mouse is still active.\n"
+msgstr "Kiểm tra xem chuột có vẫn còn hoạt động không.\n"
 
-#~ msgid "ERROR - no response from graphics monitor <%s>.\n"
-#~ msgstr "LỖI - màn hình đồ họa không phản ứng <%s>.\n"
-
-#, fuzzy
-#~ msgid "No graphics monitor has been selected for output."
-#~ msgstr "Không có màn hình đồ họa được chọn cho đầu ra.\n"
+msgid "ERROR - no response from graphics monitor <%s>.\n"
+msgstr "LỖI - màn hình đồ họa không phản ứng <%s>.\n"
 
 #, fuzzy
-#~ msgid "Please run \"d.mon\" to select a graphics monitor."
-#~ msgstr "Hãy chạy \"d.mon\" để chọn một màn hình đồ họa .\n"
+msgid "No graphics monitor has been selected for output."
+msgstr "Không có màn hình đồ họa được chọn cho đầu ra.\n"
 
 #, fuzzy
-#~ msgid "Failed to get socket name for monitor <%s>."
-#~ msgstr "Thất bại khi lấy tên socket cho màn hình <%s>.\n"
+msgid "Please run \"d.mon\" to select a graphics monitor."
+msgstr "Hãy chạy \"d.mon\" để chọn một màn hình đồ họa .\n"
 
 #, fuzzy
-#~ msgid "No socket to connect to for monitor <%s>."
-#~ msgstr "Không có socket để nối với màn hình <%s>.\n"
+msgid "Failed to get socket name for monitor <%s>."
+msgstr "Thất bại khi lấy tên socket cho màn hình <%s>.\n"
 
 #, fuzzy
-#~ msgid "Socket is already in use or not accepting connections."
-#~ msgstr ""
-#~ "Socket đã được sử dụng hoặc không chấp nhận các kết nối.\n"
-#~ "Dùng d.mon để chọn một màn hình\n"
+msgid "No socket to connect to for monitor <%s>."
+msgstr "Không có socket để nối với màn hình <%s>.\n"
 
 #, fuzzy
-#~ msgid "Use d.mon to select a monitor"
-#~ msgstr "Hãy chạy \"d.mon\" để chọn một màn hình đồ họa .\n"
+msgid "Socket is already in use or not accepting connections."
+msgstr ""
+"Socket đã được sử dụng hoặc không chấp nhận các kết nối.\n"
+"Dùng d.mon để chọn một màn hình\n"
 
 #, fuzzy
-#~ msgid "Trying to connect to something not a socket."
-#~ msgstr ""
-#~ "Cố gắng kết nối tới thứ gì khác chứ không phải socket.\n"
-#~ "Có thể là lỗi chương trình.\n"
+msgid "Use d.mon to select a monitor"
+msgstr "Hãy chạy \"d.mon\" để chọn một màn hình đồ họa .\n"
 
 #, fuzzy
-#~ msgid "Probably an error with the server."
-#~ msgstr "Cố gắng kết nối hết thời gian chờ. Có thể bị lỗi với server.\n"
+msgid "Trying to connect to something not a socket."
+msgstr ""
+"Cố gắng kết nối tới thứ gì khác chứ không phải socket.\n"
+"Có thể là lỗi chương trình.\n"
 
 #, fuzzy
-#~ msgid "Connection failed."
-#~ msgstr "Kết nối thất bại.\n"
+msgid "Probably an error with the server."
+msgstr "Cố gắng kết nối hết thời gian chờ. Có thể bị lỗi với server.\n"
 
 #, fuzzy
-#~ msgid "Cannot read topo for line [%d]"
-#~ msgstr "Không thể đọc biểu đồ histogram cho [%s in %s]"
+msgid "Connection failed."
+msgstr "Kết nối thất bại.\n"
 
 #, fuzzy
-#~ msgid "Unable to open file %s"
-#~ msgstr "Không thể mở tập tin %s trong %s"
+msgid "Cannot read topo for line [%d]"
+msgstr "Không thể đọc biểu đồ histogram cho [%s in %s]"
 
 #, fuzzy
-#~ msgid "Unable to open temporary file"
-#~ msgstr "Không thể mở tập tin %s trong %s"
-
-#~ msgid "Hit RETURN to cancel request\n"
-#~ msgstr "Bấm RETURN để hủy yêu cầu\n"
-
-#~ msgid "Cannot open temp file"
-#~ msgstr "Không thể mở tập tin tạm"
-
-#~ msgid ""
-#~ "\n"
-#~ "Please specify ellipsoid name\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Vui lòng chỉ định tên ellipsoid\n"
-
-#~ msgid "Enter 'list' for the list of available ellipsoids\n"
-#~ msgstr "Nhập 'list' để biết danh sách các ellipsoid đang có\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "invalid ellipsoid\n"
-#~ msgstr ""
-#~ "\n"
-#~ "ellipsoid không hợp lệ\n"
-
-#~ msgid "Output name '%s' is not valid rast name."
-#~ msgstr "Tên đầu ra '%s' không phải là tên raster hợp lệ"
-
-#~ msgid "Output map '%s' is used as input"
-#~ msgstr "Bản đồ đầu ra '%s' được sử dụng làm đầu vào"
-
-#~ msgid ""
-#~ "\n"
-#~ "Please specify datum name\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Vui lòng chỉ định tên mốc tọa độ chuẩn\n"
-
-#~ msgid "Enter 'list' for the list of available datums\n"
-#~ msgstr "Nhập 'list' để có danh sách các mốc tọa độ chuẩn khả dụng\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "invalid datum\n"
-#~ msgstr ""
-#~ "\n"
-#~ "mốc tọa độ chuẩn không hợp lệ\n"
-
-#~ msgid "hit RETURN to continue -->"
-#~ msgstr "Bấm RETURN để tiếp tục -->"
-
-#~ msgid "unable to open raster map [%s in %s]"
-#~ msgstr "không thể mở bản đồ raster [%s in %s]"
-
-#~ msgid "one moment...\n"
-#~ msgstr "chờ một chút...\n"
-
-#~ msgid "No help available for command [%s]\n"
-#~ msgstr "Không có trợ giúp cho lệnh [%s]\n"
-
-#~ msgid " The raster map %s@%s is empty"
-#~ msgstr " Bản đồ raster %s@%s rỗng"
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "Color table needed for file [%s] in mapset [%s].\n"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "Bảng màu cần cho tập tin [%s] trong bộ bản đồ [%s].\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Please identify the type desired:\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Hãy xác định kiểu mong muốn:\n"
-
-#~ msgid "    1:  Random colors\n"
-#~ msgstr "    1:  Các màu ngẫu nhiên\n"
-
-#~ msgid "    2:  Red, green, and blue color ramps\n"
-#~ msgstr "    2:  Đỏ, lục, và xanh tăng dần\n"
-
-#~ msgid "    3:  Color wave\n"
-#~ msgstr "    3:  Farbenwelle\n"
-
-#~ msgid "    4:  Gray scale\n"
-#~ msgstr "    4:  Cấp độ xám\n"
-
-#~ msgid "    5:  Aspect\n"
-#~ msgstr "    5:  Hướng\n"
-
-#~ msgid "    6:  Rainbow colors\n"
-#~ msgstr "    6:  Mầu cầu vồng\n"
-
-#~ msgid "    7:  Red through yellow to green\n"
-#~ msgstr "    7:  Đỏ qua vàng đến lục\n"
-
-#~ msgid "    8:  Green through yellow to red\n"
-#~ msgstr "    8:  Lục qua vàng rồi đến đỏ\n"
-
-#~ msgid "RETURN  quit\n"
-#~ msgstr "ENTER  thoát ra\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "%s invalid; Try again > "
-#~ msgstr ""
-#~ "\n"
-#~ "%s không hợp lệ; Hãy thử lại > "
-
-#~ msgid "%s not found"
-#~ msgstr "không tìm thấy %s"
-
-#~ msgid "ERROR in reading %s"
-#~ msgstr "LỖI khi đang đọc %s"
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "Please specify projection name\n"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "Vui lòng chỉ định tên phép chiếu\n"
-
-#~ msgid "Enter 'list' for the list of available projections\n"
-#~ msgstr "Gõ 'list' để biết danh sách các phép chiếu hiện có\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "invalid projection\n"
-#~ msgstr ""
-#~ "\n"
-#~ "phép chiếu không hợp lệ\n"
-
-#~ msgid "with titles"
-#~ msgstr "với các tiêu đề"
-
-#~ msgid "(no title)"
-#~ msgstr "(không tiêu đề)"
-
-#~ msgid ""
-#~ "\n"
-#~ "FLAG: Set the following flag?\n"
-#~ msgstr ""
-#~ "\n"
-#~ "CỜ: Thiết lập cờ sau?\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "OPTION:   %s\n"
-#~ msgstr ""
-#~ "\n"
-#~ "TÙY_CHỌN:   %s\n"
-
-#~ msgid "     key: %s\n"
-#~ msgstr "     khóa: %s\n"
-
-#~ msgid "  format: %s\n"
-#~ msgstr "  định dạng: %s\n"
-
-#~ msgid " default: %s\n"
-#~ msgstr " mặc định: %s\n"
-
-#~ msgid "required: %s\n"
-#~ msgstr "cần có: %s\n"
-
-#~ msgid "multiple: %s\n"
-#~ msgstr "bội: %s\n"
-
-#~ msgid "enter option > "
-#~ msgstr "nhập tùy_chọn > "
-
-#~ msgid "   Try again? "
-#~ msgstr "   Thử lại? "
-
-#~ msgid "Sorry, %s is not accepted.\n"
-#~ msgstr "Xin lỗi, %s không được chấp nhận.\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "You have chosen:\n"
-#~ "  %s\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Bạn đã chọn:\n"
-#~ "  %s\n"
-
-#~ msgid "Is this correct? "
-#~ msgstr "Đã đúng chưa? "
-
-#~ msgid "to accept the default"
-#~ msgstr "để chấp nhận mặc định"
-
-#~ msgid "to cancel request"
-#~ msgstr "để hủy bỏ yêu cầu"
-
-#~ msgid "Enter a new %s file name"
-#~ msgstr "Nhập vào tên tập tin mới %s"
-
-#~ msgid "Enter the name of an existing %s file"
-#~ msgstr "Nhập vào tên một tập tin %s đã có"
-
-#~ msgid "Enter %s file name"
-#~ msgstr "Nhập vào tên tập tin %s"
-
-#~ msgid "Enter 'list' for a list of existing %s files\n"
-#~ msgstr "Gõ 'list' để có danh sách các tập tin %s hiện có\n"
-
-#~ msgid "Enter 'list -f' for "
-#~ msgstr "Gõ 'list -f' để "
-
-#~ msgid "a list %s"
-#~ msgstr "có một danh sách %s"
-
-#~ msgid "an extended list"
-#~ msgstr "danh sách mở rộng"
-
-#~ msgid "Hit RETURN %s\n"
-#~ msgstr "Bấm RETURN %s\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "** %s - not found **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "** %s - không tìm thấy **\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "** %s exists. ok to overwrite? "
-#~ msgstr ""
-#~ "\n"
-#~ "** %s tồn tại. Chấp nhận ghi đè? "
-
-#~ msgid ""
-#~ "\n"
-#~ "**<%s> illegal name **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "**<%s> tên không hợp lệ **\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "** %s - illegal request **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "** %s - yêu cầu không hợp lệ **\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "** %s - exists, select another name **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "** %s - đã có, chọn tên khác **\n"
-
-#~ msgid "ask: can't happen"
-#~ msgstr "yêu cầu: không thể xảy ra"
-
-#~ msgid "Can't read header file for [%s in %s]\n"
-#~ msgstr "Không thể đọc tập tin header của [%s trong %s]\n"
-
-#~ msgid "Can't open header file for [%s in %s]"
-#~ msgstr "Không thể mở tập tin header của [%s trong %s]"
+msgid "Unable to open file %s"
+msgstr "Không thể mở tập tin %s trong %s"
 
 #, fuzzy
-#~ msgid "Cannot get field info"
-#~ msgstr "Không thể lấy thông tin lớp"
+msgid "Unable to open temporary file"
+msgstr "Không thể mở tập tin %s trong %s"
+
+msgid "Hit RETURN to cancel request\n"
+msgstr "Bấm RETURN để hủy yêu cầu\n"
+
+msgid "Cannot open temp file"
+msgstr "Không thể mở tập tin tạm"
+
+msgid ""
+"\n"
+"Please specify ellipsoid name\n"
+msgstr ""
+"\n"
+"Vui lòng chỉ định tên ellipsoid\n"
+
+msgid "Enter 'list' for the list of available ellipsoids\n"
+msgstr "Nhập 'list' để biết danh sách các ellipsoid đang có\n"
+
+msgid ""
+"\n"
+"invalid ellipsoid\n"
+msgstr ""
+"\n"
+"ellipsoid không hợp lệ\n"
+
+msgid "Output name '%s' is not valid rast name."
+msgstr "Tên đầu ra '%s' không phải là tên raster hợp lệ"
+
+msgid "Output map '%s' is used as input"
+msgstr "Bản đồ đầu ra '%s' được sử dụng làm đầu vào"
+
+msgid ""
+"\n"
+"Please specify datum name\n"
+msgstr ""
+"\n"
+"Vui lòng chỉ định tên mốc tọa độ chuẩn\n"
+
+msgid "Enter 'list' for the list of available datums\n"
+msgstr "Nhập 'list' để có danh sách các mốc tọa độ chuẩn khả dụng\n"
+
+msgid ""
+"\n"
+"invalid datum\n"
+msgstr ""
+"\n"
+"mốc tọa độ chuẩn không hợp lệ\n"
+
+msgid "hit RETURN to continue -->"
+msgstr "Bấm RETURN để tiếp tục -->"
+
+msgid "unable to open raster map [%s in %s]"
+msgstr "không thể mở bản đồ raster [%s in %s]"
+
+msgid "one moment...\n"
+msgstr "chờ một chút...\n"
+
+msgid "No help available for command [%s]\n"
+msgstr "Không có trợ giúp cho lệnh [%s]\n"
+
+msgid " The raster map %s@%s is empty"
+msgstr " Bản đồ raster %s@%s rỗng"
+
+msgid ""
+"\n"
+"\n"
+"Color table needed for file [%s] in mapset [%s].\n"
+msgstr ""
+"\n"
+"\n"
+"Bảng màu cần cho tập tin [%s] trong bộ bản đồ [%s].\n"
+
+msgid ""
+"\n"
+"Please identify the type desired:\n"
+msgstr ""
+"\n"
+"Hãy xác định kiểu mong muốn:\n"
+
+msgid "    1:  Random colors\n"
+msgstr "    1:  Các màu ngẫu nhiên\n"
+
+msgid "    2:  Red, green, and blue color ramps\n"
+msgstr "    2:  Đỏ, lục, và xanh tăng dần\n"
+
+msgid "    3:  Color wave\n"
+msgstr "    3:  Farbenwelle\n"
+
+msgid "    4:  Gray scale\n"
+msgstr "    4:  Cấp độ xám\n"
+
+msgid "    5:  Aspect\n"
+msgstr "    5:  Hướng\n"
+
+msgid "    6:  Rainbow colors\n"
+msgstr "    6:  Mầu cầu vồng\n"
+
+msgid "    7:  Red through yellow to green\n"
+msgstr "    7:  Đỏ qua vàng đến lục\n"
+
+msgid "    8:  Green through yellow to red\n"
+msgstr "    8:  Lục qua vàng rồi đến đỏ\n"
+
+msgid "RETURN  quit\n"
+msgstr "ENTER  thoát ra\n"
+
+msgid ""
+"\n"
+"%s invalid; Try again > "
+msgstr ""
+"\n"
+"%s không hợp lệ; Hãy thử lại > "
+
+msgid "%s not found"
+msgstr "không tìm thấy %s"
+
+msgid "ERROR in reading %s"
+msgstr "LỖI khi đang đọc %s"
+
+msgid ""
+"\n"
+"\n"
+"Please specify projection name\n"
+msgstr ""
+"\n"
+"\n"
+"Vui lòng chỉ định tên phép chiếu\n"
+
+msgid "Enter 'list' for the list of available projections\n"
+msgstr "Gõ 'list' để biết danh sách các phép chiếu hiện có\n"
+
+msgid ""
+"\n"
+"invalid projection\n"
+msgstr ""
+"\n"
+"phép chiếu không hợp lệ\n"
+
+msgid "with titles"
+msgstr "với các tiêu đề"
+
+msgid "(no title)"
+msgstr "(không tiêu đề)"
+
+msgid ""
+"\n"
+"FLAG: Set the following flag?\n"
+msgstr ""
+"\n"
+"CỜ: Thiết lập cờ sau?\n"
+
+msgid ""
+"\n"
+"OPTION:   %s\n"
+msgstr ""
+"\n"
+"TÙY_CHỌN:   %s\n"
+
+msgid "     key: %s\n"
+msgstr "     khóa: %s\n"
+
+msgid "  format: %s\n"
+msgstr "  định dạng: %s\n"
+
+msgid " default: %s\n"
+msgstr " mặc định: %s\n"
+
+msgid "required: %s\n"
+msgstr "cần có: %s\n"
+
+msgid "multiple: %s\n"
+msgstr "bội: %s\n"
+
+msgid "enter option > "
+msgstr "nhập tùy_chọn > "
+
+msgid "   Try again? "
+msgstr "   Thử lại? "
+
+msgid "Sorry, %s is not accepted.\n"
+msgstr "Xin lỗi, %s không được chấp nhận.\n"
+
+msgid ""
+"\n"
+"You have chosen:\n"
+"  %s\n"
+msgstr ""
+"\n"
+"Bạn đã chọn:\n"
+"  %s\n"
+
+msgid "Is this correct? "
+msgstr "Đã đúng chưa? "
+
+msgid "to accept the default"
+msgstr "để chấp nhận mặc định"
+
+msgid "to cancel request"
+msgstr "để hủy bỏ yêu cầu"
+
+msgid "Enter a new %s file name"
+msgstr "Nhập vào tên tập tin mới %s"
+
+msgid "Enter the name of an existing %s file"
+msgstr "Nhập vào tên một tập tin %s đã có"
+
+msgid "Enter %s file name"
+msgstr "Nhập vào tên tập tin %s"
+
+msgid "Enter 'list' for a list of existing %s files\n"
+msgstr "Gõ 'list' để có danh sách các tập tin %s hiện có\n"
+
+msgid "Enter 'list -f' for "
+msgstr "Gõ 'list -f' để "
+
+msgid "a list %s"
+msgstr "có một danh sách %s"
+
+msgid "an extended list"
+msgstr "danh sách mở rộng"
+
+msgid "Hit RETURN %s\n"
+msgstr "Bấm RETURN %s\n"
+
+msgid ""
+"\n"
+"** %s - not found **\n"
+msgstr ""
+"\n"
+"** %s - không tìm thấy **\n"
+
+msgid ""
+"\n"
+"** %s exists. ok to overwrite? "
+msgstr ""
+"\n"
+"** %s tồn tại. Chấp nhận ghi đè? "
+
+msgid ""
+"\n"
+"**<%s> illegal name **\n"
+msgstr ""
+"\n"
+"**<%s> tên không hợp lệ **\n"
+
+msgid ""
+"\n"
+"** %s - illegal request **\n"
+msgstr ""
+"\n"
+"** %s - yêu cầu không hợp lệ **\n"
+
+msgid ""
+"\n"
+"** %s - exists, select another name **\n"
+msgstr ""
+"\n"
+"** %s - đã có, chọn tên khác **\n"
+
+msgid "ask: can't happen"
+msgstr "yêu cầu: không thể xảy ra"
+
+msgid "Can't read header file for [%s in %s]\n"
+msgstr "Không thể đọc tập tin header của [%s trong %s]\n"
+
+msgid "Can't open header file for [%s in %s]"
+msgstr "Không thể mở tập tin header của [%s trong %s]"
 
 #, fuzzy
-#~ msgid "Cannot open database"
-#~ msgstr "Không thể mở CSDL"
-
-#~ msgid "Building topology ...\n"
-#~ msgstr "Đang xây dựng tôpô ...\n"
-
-#~ msgid ""
-#~ "\r%d areas built      \n"
-#~ "%d isles built\n"
-#~ msgstr ""
-#~ "\r%d các vùng được xây dựng      \n"
-#~ "%d các đảo được xây dựng\n"
+msgid "Cannot get field info"
+msgstr "Không thể lấy thông tin lớp"
 
 #, fuzzy
-#~ msgid "Cannot open database <%s> by driver <%s>"
-#~ msgstr "Không thể mở CSDL"
+msgid "Cannot open database"
+msgstr "Không thể mở CSDL"
+
+msgid "Building topology ...\n"
+msgstr "Đang xây dựng tôpô ...\n"
+
+msgid ""
+"\r%d areas built      \n"
+"%d isles built\n"
+msgstr ""
+"\r%d các vùng được xây dựng      \n"
+"%d các đảo được xây dựng\n"
 
 #, fuzzy
-#~ msgid "Cannot get column info"
-#~ msgstr "Không thể lấy thông tin lớp"
+msgid "Cannot open database <%s> by driver <%s>"
+msgstr "Không thể mở CSDL"
 
 #, fuzzy
-#~ msgid "Column type not supported"
-#~ msgstr "Kiểu đối tượng OGR %d không được hỗ trợ"
+msgid "Cannot get column info"
+msgstr "Không thể lấy thông tin lớp"
 
 #, fuzzy
-#~ msgid "OGR feature type [%d] not supported"
-#~ msgstr "Kiểu đối tượng OGR %d không được hỗ trợ"
-
-#~ msgid "Vect_rewrite_line() for this format/level not supported"
-#~ msgstr "Vect_rewrite_line() cho định dạng/cấp này không được hỗ trợ"
-
-#~ msgid "Vect_delete_line() for this format/level not supported"
-#~ msgstr "Vect_delete_line() cho định dạng/cấp này không được hỗ trợ"
-
-#~ msgid "Cannot rewrite line"
-#~ msgstr "Không thể ghi lại đường"
-
-#~ msgid "Cannot delete line"
-#~ msgstr "Không thể xóa đường"
-
-#~ msgid "Output name '%s' is not valid vector name."
-#~ msgstr "Tên bản đồ đầu ra '%s' không phải là tên vector hợp lệ"
-
-#~ msgid "Cannot copy vector '%s' to '%s'"
-#~ msgstr "Không thể sao chép vector '%s' tới '%s'"
+msgid "Column type not supported"
+msgstr "Kiểu đối tượng OGR %d không được hỗ trợ"
 
 #, fuzzy
-#~ msgid "Cannot open existing vector map <%s>"
-#~ msgstr "Không thể xóa vector hiện có %s"
+msgid "OGR feature type [%d] not supported"
+msgstr "Kiểu đối tượng OGR %d không được hỗ trợ"
+
+msgid "Vect_rewrite_line() for this format/level not supported"
+msgstr "Vect_rewrite_line() cho định dạng/cấp này không được hỗ trợ"
+
+msgid "Vect_delete_line() for this format/level not supported"
+msgstr "Vect_delete_line() cho định dạng/cấp này không được hỗ trợ"
+
+msgid "Cannot rewrite line"
+msgstr "Không thể ghi lại đường"
+
+msgid "Cannot delete line"
+msgstr "Không thể xóa đường"
+
+msgid "Output name '%s' is not valid vector name."
+msgstr "Tên bản đồ đầu ra '%s' không phải là tên vector hợp lệ"
+
+msgid "Cannot copy vector '%s' to '%s'"
+msgstr "Không thể sao chép vector '%s' tới '%s'"
 
 #, fuzzy
-#~ msgid "Cannot delete existing vector <%s>"
-#~ msgstr "Không thể xóa vector hiện có %s"
-
-#~ msgid "Cannot open new vector %s"
-#~ msgstr "Không thể mở vector mới %s"
-
-#~ msgid "Cannot open history file for vector '%s'"
-#~ msgstr "Không thể mở tập tin lịch sử của vector '%s'"
-
-#~ msgid "Could not stat file '%s'"
-#~ msgstr "Không thể khởi động tập tin %s"
+msgid "Cannot open existing vector map <%s>"
+msgstr "Không thể xóa vector hiện có %s"
 
 #, fuzzy
-#~ msgid "Can't open directory %s"
-#~ msgstr "Không thể mở vector cũ %s"
+msgid "Cannot delete existing vector <%s>"
+msgstr "Không thể xóa vector hiện có %s"
 
-#~ msgid "%s - ** illegal name **"
-#~ msgstr "%s - ** tên không hợp lệ **"
+msgid "Cannot open new vector %s"
+msgstr "Không thể mở vector mới %s"
 
-#~ msgid "No such graphics monitor as <%s>.\n"
-#~ msgstr "Không có màn hình đồ họa nào là <%s>.\n"
+msgid "Cannot open history file for vector '%s'"
+msgstr "Không thể mở tập tin lịch sử của vector '%s'"
 
-#~ msgid "Please run \"d.mon\" to select a valid graphics monitor.\n"
-#~ msgstr "Hãy chạy \"d.mon\" để chọn một màn hình đồ họa hợp lệ.\n"
+msgid "Could not stat file '%s'"
+msgstr "Không thể khởi động tập tin %s"
 
-#~ msgid "Can't stat %s\n"
-#~ msgstr "Không thể khởi động %s\n"
+#, fuzzy
+msgid "Can't open directory %s"
+msgstr "Không thể mở vector cũ %s"
 
-#~ msgid "Error - Monitor <%s> is in use.\n"
-#~ msgstr "Lỗi - Màn hình <%s> đang được sử dụng.\n"
+msgid "%s - ** illegal name **"
+msgstr "%s - ** tên không hợp lệ **"
 
-#~ msgid "Error - Monitor <%s> is in use by %s.\n"
-#~ msgstr "Lỗi - Màn hình <%s> đang được sử dụng bởi %s.\n"
+msgid "No such graphics monitor as <%s>.\n"
+msgstr "Không có màn hình đồ họa nào là <%s>.\n"
 
-#~ msgid "Error - Could not complete locking process for monitor <%s>.\n"
-#~ msgstr "Lỗi - Không thể hoàn tất việc khóa màn hình <%s>.\n"
+msgid "Please run \"d.mon\" to select a valid graphics monitor.\n"
+msgstr "Hãy chạy \"d.mon\" để chọn một màn hình đồ họa hợp lệ.\n"
 
-#~ msgid "Error - Can't set up pipe to graphics device.\n"
-#~ msgstr "Lỗi - Không thể thiết lập 'ống dẫn' tới thiết bị đồ họa.\n"
+msgid "Can't stat %s\n"
+msgstr "Không thể khởi động %s\n"
 
-#~ msgid "Error - Graphics monitor <%s> not running!\n"
-#~ msgstr "Lỗi - Màn hình đồ họa <%s> không chạy!\n"
+msgid "Error - Monitor <%s> is in use.\n"
+msgstr "Lỗi - Màn hình <%s> đang được sử dụng.\n"
 
-#~ msgid "Please start graphics monitor <%s>.\n"
-#~ msgstr "Hãy khởi động màn hình đồ họa <%s>.\n"
+msgid "Error - Monitor <%s> is in use by %s.\n"
+msgstr "Lỗi - Màn hình <%s> đang được sử dụng bởi %s.\n"
 
-#~ msgid "Not connected...\n"
-#~ msgstr "Không kết nối ...\n"
+msgid "Error - Could not complete locking process for monitor <%s>.\n"
+msgstr "Lỗi - Không thể hoàn tất việc khóa màn hình <%s>.\n"
 
-#~ msgid "Couldn't connect to monitor. Will try once more.\n"
-#~ msgstr "Không thể kết nối với màn hình. Sẽ cố gắng một lần nữa \n"
+msgid "Error - Can't set up pipe to graphics device.\n"
+msgstr "Lỗi - Không thể thiết lập 'ống dẫn' tới thiết bị đồ họa.\n"
 
-#~ msgid "G_dump: memory allocated to G__"
-#~ msgstr "G_dump: bộ nhớ cấp phát cho G__"
+msgid "Error - Graphics monitor <%s> not running!\n"
+msgstr "Lỗi - Màn hình đồ họa <%s> không chạy!\n"
 
-#~ msgid "Size of cell in fp maps = %d"
-#~ msgstr "Kích thước của ô trong các bản đồ fp = %d"
+msgid "Please start graphics monitor <%s>.\n"
+msgstr "Hãy khởi động màn hình đồ họa <%s>.\n"
 
-#~ msgid "type for writing floating maps = %d"
-#~ msgstr "Kiểu để ghi các bản đồ float = %d"
+msgid "Not connected...\n"
+msgstr "Không kết nối ...\n"
 
-#~ msgid "current window = %p"
-#~ msgstr "Cửa sổ hiện hành = %p"
+msgid "Couldn't connect to monitor. Will try once more.\n"
+msgstr "Không thể kết nối với màn hình. Sẽ cố gắng một lần nữa \n"
 
-#~ msgid "Flag: window set? %d"
-#~ msgstr "Cờ: cửa sổ được thiết lập? %d"
+msgid "G_dump: memory allocated to G__"
+msgstr "G_dump: bộ nhớ cấp phát cho G__"
 
-#~ msgid "File descriptor for automatic mask %d"
-#~ msgstr "Trình mô tả tập tin cho mặt nạ tự động %d"
+msgid "Size of cell in fp maps = %d"
+msgstr "Kích thước của ô trong các bản đồ fp = %d"
 
-#~ msgid "Flag denoting automatic masking %d"
-#~ msgstr "Cờ biểu thị tạo mặt nạ tự động %d"
+msgid "type for writing floating maps = %d"
+msgstr "Kiểu để ghi các bản đồ float = %d"
 
-#~ msgid "CELL mask buffer %p"
-#~ msgstr "vùng đệm mặt nạ cho CELL %p"
+msgid "current window = %p"
+msgstr "Cửa sổ hiện hành = %p"
 
-#~ msgid "buffer for reading null rows %p"
-#~ msgstr "Vùng đệm để đọc các hàng null %p"
+msgid "Flag: window set? %d"
+msgstr "Cờ: cửa sổ được thiết lập? %d"
 
-#~ msgid "Pre/post compressed data buffer %p"
-#~ msgstr "Vùng đệm dữ liệu trước/sau khi nén %p"
+msgid "File descriptor for automatic mask %d"
+msgstr "Trình mô tả tập tin cho mặt nạ tự động %d"
 
-#~ msgid "sizeof compressed_buf %d"
-#~ msgstr "kích thước của compressed_buf %d"
+msgid "Flag denoting automatic masking %d"
+msgstr "Cờ biểu thị tạo mặt nạ tự động %d"
 
-#~ msgid "work data buffer %p"
-#~ msgstr "vùng đệm dữ liệu làm việc %p"
+msgid "CELL mask buffer %p"
+msgstr "vùng đệm mặt nạ cho CELL %p"
 
-#~ msgid "sizeof work_buf %d"
-#~ msgstr "kích thước của work_buf %d"
+msgid "buffer for reading null rows %p"
+msgstr "Vùng đệm để đọc các hàng null %p"
 
-#~ msgid "sizeof null_buf %d"
-#~ msgstr "kích thước của null_buf %d"
+msgid "Pre/post compressed data buffer %p"
+msgstr "Vùng đệm dữ liệu trước/sau khi nén %p"
 
-#~ msgid "sizeof mask_buf %d"
-#~ msgstr "kích thước của mask_buf %d"
+msgid "sizeof compressed_buf %d"
+msgstr "kích thước của compressed_buf %d"
 
-#~ msgid "Histogram request %d"
-#~ msgstr "yêu cầu biểu đồ histogram %d"
+msgid "work data buffer %p"
+msgstr "vùng đệm dữ liệu làm việc %p"
 
-#~ msgid "G_dump: file #%d"
-#~ msgstr "G_dump: tập tin #%d"
+msgid "sizeof work_buf %d"
+msgstr "kích thước của work_buf %d"
 
-#~ msgid "open mode = %d"
-#~ msgstr "chế độ mở = %d"
+msgid "sizeof null_buf %d"
+msgstr "kích thước của null_buf %d"
 
-#~ msgid "Cell header %p"
-#~ msgstr "header của cell %p"
+msgid "sizeof mask_buf %d"
+msgstr "kích thước của mask_buf %d"
 
-#~ msgid "Table reclass %p"
-#~ msgstr "Phân loại lại bảng %p"
+msgid "Histogram request %d"
+msgstr "yêu cầu biểu đồ histogram %d"
 
-#~ msgid "Cell stats %p"
-#~ msgstr "Thống kê cell %p"
+msgid "G_dump: file #%d"
+msgstr "G_dump: tập tin #%d"
 
-#~ msgid "Range structure %p"
-#~ msgstr "Cấu trúc miền %p"
+msgid "open mode = %d"
+msgstr "chế độ mở = %d"
 
-#~ msgid "float Range structure %p"
-#~ msgstr "Cấu trúc miền kiểu float %p"
+msgid "Cell header %p"
+msgstr "header của cell %p"
 
-#~ msgid "want histogram?  %d"
-#~ msgstr "cần biểu đồ histogram?  %d"
+msgid "Table reclass %p"
+msgstr "Phân loại lại bảng %p"
 
-#~ msgid "Automatic reclass flag %d"
-#~ msgstr "Cờ phân loại lại tự động %d"
+msgid "Cell stats %p"
+msgstr "Thống kê cell %p"
 
-#~ msgid "File row addresses %p"
-#~ msgstr "Các địa chỉ hàng tập tin %p"
+msgid "Range structure %p"
+msgstr "Cấu trúc miền %p"
 
-#~ msgid "Data to window col mapping %p"
-#~ msgstr "Lập bản đồ cột Dữ-liệu-đến-cửa-sổ %p"
+msgid "float Range structure %p"
+msgstr "Cấu trúc miền kiểu float %p"
 
-#~ msgid "Data to window row constants %f,%f"
-#~ msgstr "Các hằng số hàng Dữ-liệu-đến-cửa-sổ %p"
+msgid "want histogram?  %d"
+msgstr "cần biểu đồ histogram?  %d"
 
-#~ msgid "Current data row in memory %d"
-#~ msgstr "Hàng dữ liệu hiện tại trong bộ nhớ %d"
+msgid "Automatic reclass flag %d"
+msgstr "Cờ phân loại lại tự động %d"
 
-#~ msgid "Current null row in memory %d"
-#~ msgstr "Hàng null hiện tại trong bộ nhớ %d"
+msgid "File row addresses %p"
+msgstr "Các địa chỉ hàng tập tin %p"
 
-#~ msgid "nbytes per cell for current row %d"
-#~ msgstr "nbytes trên cell của hàng hiện tại %d"
+msgid "Data to window col mapping %p"
+msgstr "Lập bản đồ cột Dữ-liệu-đến-cửa-sổ %p"
 
-#~ msgid "Decompressed data buffer %s"
-#~ msgstr "Vùng đệm dữ liệu được giải nén %s"
+msgid "Data to window row constants %f,%f"
+msgstr "Các hằng số hàng Dữ-liệu-đến-cửa-sổ %p"
 
-#~ msgid "bytes per cell %d"
-#~ msgstr "bytes trên cell %d"
+msgid "Current data row in memory %d"
+msgstr "Hàng dữ liệu hiện tại trong bộ nhớ %d"
 
-#~ msgid "type: int, float or double map %d"
-#~ msgstr "Kiểu: bản đồ int, float hay double%d"
+msgid "Current null row in memory %d"
+msgstr "Hàng null hiện tại trong bộ nhớ %d"
 
-#~ msgid "Temporary name for NEW files %s"
-#~ msgstr "Tên tạm cho các tập tin MỚI %s"
+msgid "nbytes per cell for current row %d"
+msgstr "nbytes trên cell của hàng hiện tại %d"
 
-#~ msgid "Temporary name for NEW NULL files %s"
-#~ msgstr "Tên tạm cho các tập tin NULL MỚI %s"
+msgid "Decompressed data buffer %s"
+msgstr "Vùng đệm dữ liệu được giải nén %s"
 
-#~ msgid "Mapset of open file %s"
-#~ msgstr "Bộ bản đồ của tập tin mở %s"
+msgid "bytes per cell %d"
+msgstr "bytes trên cell %d"
 
-#~ msgid "io error warning given %d"
-#~ msgstr "cảnh báo lỗi io (ra/vào) được đưa ra %d"
+msgid "type: int, float or double map %d"
+msgstr "Kiểu: bản đồ int, float hay double%d"
 
-#~ msgid "xdr stream for reading fp %p"
-#~ msgstr "xdr stream để đọc fp %p"
+msgid "Temporary name for NEW files %s"
+msgstr "Tên tạm cho các tập tin MỚI %s"
 
-#~ msgid "NULL_ROWS array[%d] = %p"
-#~ msgstr "mảng NULL_ROWS [%d] = %p"
+msgid "Temporary name for NEW NULL files %s"
+msgstr "Tên tạm cho các tập tin NULL MỚI %s"
 
-#~ msgid "data buffer for reading null rows %p"
-#~ msgstr "vùng đệm dữ liệu để đọc các hàng null %p"
+msgid "Mapset of open file %s"
+msgstr "Bộ bản đồ của tập tin mở %s"
 
-#~ msgid "Minimum row null row number in memory %d"
-#~ msgstr "Số hàng null tối thiểu trong bộ nhớ %d"
+msgid "io error warning given %d"
+msgstr "cảnh báo lỗi io (ra/vào) được đưa ra %d"
 
-#~ msgid "Quant ptr = %p"
-#~ msgstr "Quant ptr = %p"
+msgid "xdr stream for reading fp %p"
+msgstr "xdr stream để đọc fp %p"
 
-#~ msgid "G_dump: end"
-#~ msgstr "G_dump: kết thúc"
+msgid "NULL_ROWS array[%d] = %p"
+msgstr "mảng NULL_ROWS [%d] = %p"
 
-#~ msgid "getting graphics window"
-#~ msgstr "đang lấy cửa sổ đồ họa"
+msgid "data buffer for reading null rows %p"
+msgstr "vùng đệm dữ liệu để đọc các hàng null %p"
 
-#~ msgid "clearing current graphics window"
-#~ msgstr "đang xóa cửa sổ đồ họa hiện tại"
+msgid "Minimum row null row number in memory %d"
+msgstr "Số hàng null tối thiểu trong bộ nhớ %d"
 
-#~ msgid "Setting map window"
-#~ msgstr "Thiết lập cửa sổ bản đồ"
+msgid "Quant ptr = %p"
+msgstr "Quant ptr = %p"
 
-#~ msgid "Current window not settable"
-#~ msgstr "Cửa sổ hiện tại không thể thiết lập được"
+msgid "G_dump: end"
+msgstr "G_dump: kết thúc"
 
-#~ msgid "Can't clear current graphics window"
-#~ msgstr "Không thể xóa cửa sổ bản đồ hiện tại"
+msgid "getting graphics window"
+msgstr "đang lấy cửa sổ đồ họa"
 
-#~ msgid "Color file for [%s] not available"
-#~ msgstr "Tập tin màu cho [%s] không khả dụng"
+msgid "clearing current graphics window"
+msgstr "đang xóa cửa sổ đồ họa hiện tại"
 
-#~ msgid "Cannot use current window"
-#~ msgstr "Không thể dùng cửa sổ hiện tại"
+msgid "Setting map window"
+msgstr "Thiết lập cửa sổ bản đồ"
 
-#~ msgid "Not able to open cellfile for [%s]"
-#~ msgstr "Không thể mở tập tin cell cho [%s]"
+msgid "Current window not settable"
+msgstr "Cửa sổ hiện tại không thể thiết lập được"
 
-#~ msgid "Monitor: _send: write returned short count: %d of %d\n"
-#~ msgstr "Màn hình: _send: việc ghi trả lại phép đếm thiếu: %d trong %d\n"
+msgid "Can't clear current graphics window"
+msgstr "Không thể xóa cửa sổ bản đồ hiện tại"
 
-#~ msgid "Force overwrite of output files"
-#~ msgstr "Buộc ghi đè các tập tin đầu ra"
+msgid "Color file for [%s] not available"
+msgstr "Tập tin màu cho [%s] không khả dụng"
+
+msgid "Cannot use current window"
+msgstr "Không thể dùng cửa sổ hiện tại"
+
+msgid "Not able to open cellfile for [%s]"
+msgstr "Không thể mở tập tin cell cho [%s]"
+
+msgid "Monitor: _send: write returned short count: %d of %d\n"
+msgstr "Màn hình: _send: việc ghi trả lại phép đếm thiếu: %d trong %d\n"
+
+msgid "Force overwrite of output files"
+msgstr "Buộc ghi đè các tập tin đầu ra"
+
+#~ msgid "Unable to allocate memory\n"
+#~ msgstr "Không thể cấp phát bộ nhớ\n"
+
+#, fuzzy
+#~ msgid "<%s>: bad mapset"
+#~ msgstr "<%s> trong bộ bản đồ <%s>"
+
+#~ msgid "unable to find [%s] in [%s]"
+#~ msgstr "không thể tìm thấy [%s] trong [%s]"

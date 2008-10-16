@@ -1062,7 +1062,7 @@ msgstr "Yeni vektör harita için ad:"
 #: ../gui/wxpython/gui_modules/gdialogs.py:64
 #, fuzzy
 msgid "Create attribute table"
-msgstr "&Tablo oluştur"
+msgstr "Ayrıca bağlı (%s) öznitelik tablosunuda kaldır "
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:127
 #: ../gui/wxpython/gui_modules/menudata.py:1201
@@ -1203,8 +1203,9 @@ msgid "Choose input directory"
 msgstr "GRASS veri dizinini seç:"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:814
+#, fuzzy
 msgid "Select file extension:"
-msgstr ""
+msgstr "Projeksiyonu Seç"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:831
 #, fuzzy
@@ -2252,8 +2253,9 @@ msgid "Please wait, opening vector map <%s> for editing..."
 msgstr "Düzenleme için hiçbir vektör harita seçilmedi."
 
 #: ../gui/wxpython/gui_modules/toolbars.py:1067
+#, fuzzy
 msgid "Digitize"
-msgstr ""
+msgstr "Yeni obje sayısallaştır"
 
 #: ../gui/wxpython/gui_modules/toolbars.py:1105
 #, fuzzy, python-format
@@ -6115,7 +6117,7 @@ msgid ""
 "Loading attribute data failed.\n"
 "\n"
 "%s"
-msgstr "Öznitelik verisini göster"
+msgstr "Ayrıca bağlı (%s) öznitelik tablosunuda kaldır "
 
 #: ../gui/wxpython/gui_modules/dbm.py:1695
 #, python-format
@@ -6260,8 +6262,9 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/dbm.py:2838
 #: ../gui/wxpython/gui_modules/vdigit.py:1820
+#, fuzzy
 msgid "Feature id:"
-msgstr ""
+msgstr "Grid üret"
 
 #: ../gui/wxpython/gui_modules/dbm.py:3076
 #, fuzzy
@@ -6969,8 +6972,9 @@ msgstr "Yüzey üret"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:583
 #: ../gui/wxpython/gui_modules/nviz_tools.py:688
+#, fuzzy
 msgid "Height above surface:"
-msgstr ""
+msgstr "Katman listesi"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:618
 #, fuzzy
@@ -7436,44 +7440,49 @@ msgstr "Harita katmanını kaldır"
 msgid "No map layer selected. Operation cancelled."
 msgstr "Hiç harita katmanı seçilmedi. İşlem iptal edildi."
 
-#~ msgid "Cancel the command settings and ignore changes"
-#~ msgstr "Komut seçeneklerini iptal et ve değişiklikleri yok say"
+msgid "Cancel the command settings and ignore changes"
+msgstr "Komut seçeneklerini iptal et ve değişiklikleri yok say"
 
-#~ msgid "About wxPython GRASS GUI"
-#~ msgstr "wxPython GRASS GUI Hakkında"
+msgid "About wxPython GRASS GUI"
+msgstr "wxPython GRASS GUI Hakkında"
 
-#~ msgid "Measuring distance ("
-#~ msgstr "Mesafe Ölçüm ("
+msgid "Measuring distance ("
+msgstr "Mesafe Ölçüm ("
 
-#~ msgid "Multiple import formats using GDAL"
-#~ msgstr "GDAL kullanarak çeşitli biçimleri içe aktar"
+msgid "Multiple import formats using GDAL"
+msgstr "GDAL kullanarak çeşitli biçimleri içe aktar"
 
-#~ msgid "Mapset search path"
-#~ msgstr "Harita takımı arama yolu"
+msgid "Mapset search path"
+msgstr "Harita takımı arama yolu"
 
-#~ msgid "All available mapsets"
-#~ msgstr "Varolan tüm harita takımları"
+msgid "All available mapsets"
+msgstr "Varolan tüm harita takımları"
 
-#~ msgid "Mapsets path:"
-#~ msgstr "Harita takımı yolu:"
+msgid "Mapsets path:"
+msgstr "Harita takımı yolu:"
 
-#~ msgid "Overlay raster maps"
-#~ msgstr "Raster haritaları çakıştır"
+msgid "Overlay raster maps"
+msgstr "Raster haritaları çakıştır"
 
-#~ msgid "Digitization interface:"
+#, fuzzy
+msgid "Digitization interface:"
+msgstr "Sayısallaştırm ayarları"
+
+msgid "Adding new feature to vector map <%s> failed."
+msgstr "<%s> vektör haritasına yeni obje eklemede hata."
+
+msgid "Save changes on exit automatically"
+msgstr "Değişiklikleri kaydet ve otomatik olarak çık"
+
+msgid "List of categories"
+msgstr "Kategori listesi"
+
+msgid "No database record available."
+msgstr "Hiç veritabanı kaydı yok"
+
+msgid "Error in Attribute Table Manager"
+msgstr "Öznitelik Tablo Yöneticisinde Hata"
+
+#, fuzzy
+#~ msgid "Vector digitizer interface:"
 #~ msgstr "Sayısallaştırma arayüzü:"
-
-#~ msgid "Adding new feature to vector map <%s> failed."
-#~ msgstr "<%s> vektör haritasına yeni obje eklemede hata."
-
-#~ msgid "Save changes on exit automatically"
-#~ msgstr "Değişiklikleri kaydet ve otomatik olarak çık"
-
-#~ msgid "List of categories"
-#~ msgstr "Kategori listesi"
-
-#~ msgid "No database record available."
-#~ msgstr "Hiç veritabanı kaydı yok"
-
-#~ msgid "Error in Attribute Table Manager"
-#~ msgstr "Öznitelik Tablo Yöneticisinde Hata"

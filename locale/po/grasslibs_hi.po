@@ -512,9 +512,9 @@ msgid "Unable to get list tables in database <%s>"
 msgstr "का"
 
 #: ../lib/db/dbmi_client/copy_tab.c:157
-#, c-format
+#, fuzzy, c-format
 msgid "Table <%s> already exists in database <%s>"
-msgstr ""
+msgstr "का"
 
 #: ../lib/db/dbmi_client/copy_tab.c:199 ../lib/db/dbmi_client/copy_tab.c:276
 #: ../lib/db/dbmi_client/table.c:110
@@ -1243,12 +1243,12 @@ msgstr ""
 #: ../lib/vector/Vlib/write_nat.c:640
 #, fuzzy
 msgid "Attempt to delete dead feature"
-msgstr "के लिए n"
+msgstr "के लिए"
 
 #: ../lib/vector/Vlib/write_nat.c:885
 #, fuzzy
 msgid "Attempt to restore alive feature"
-msgstr "के लिए n"
+msgstr "के लिए"
 
 #: ../lib/vector/Vlib/level_two.c:210 ../lib/vector/Vlib/level_two.c:235
 #: ../lib/vector/Vlib/level_two.c:259 ../lib/vector/Vlib/level_two.c:278
@@ -1960,9 +1960,9 @@ msgid "Window replacing the default"
 msgstr ""
 
 #: ../lib/g3d/g3dcolor.c:332
-#, c-format
+#, fuzzy, c-format
 msgid "mapset <%s> is not the current mapset"
-msgstr ""
+msgstr "है नहीं."
 
 #: ../lib/g3d/g3dopen.c:20
 msgid "G3d_openCellOldNoHeader: error in G3d_maskOpenOld"
@@ -2023,7 +2023,7 @@ msgstr ""
 #: ../lib/g3d/g3dopen.c:229
 #, fuzzy, c-format
 msgid "map <%s> is not in the current mapset"
-msgstr "n"
+msgstr "है नहीं."
 
 #: ../lib/g3d/g3dopen.c:239
 msgid "G3d_openCellNew: could not open file"
@@ -2281,9 +2281,9 @@ msgid "'%s/%s' was found in more mapsets (also found in <%s>)"
 msgstr ""
 
 #: ../lib/gis/find_file.c:82
-#, c-format
+#, fuzzy, c-format
 msgid "Using <%s@%s>"
-msgstr ""
+msgstr "का"
 
 #: ../lib/gis/quant_io.c:89
 #, fuzzy, c-format
@@ -3859,9 +3859,9 @@ msgid "Vector map <%s> loaded (%d points)"
 msgstr "नहीं"
 
 #: ../lib/ogsf/GS2.c:1638
-#, c-format
+#, fuzzy, c-format
 msgid "Raster map <%s> is outside of current region. Load failed."
-msgstr ""
+msgstr "है नहीं."
 
 #: ../lib/ogsf/GS2.c:1716 ../lib/ogsf/GS2.c:1722 ../lib/ogsf/GS2.c:1730
 #: ../lib/ogsf/GS2.c:1739 ../lib/ogsf/GS2.c:1747 ../lib/ogsf/GS2.c:1757
@@ -4386,570 +4386,580 @@ msgid "Unable to define new light"
 msgstr "का"
 
 #, fuzzy
-#~ msgid "ERROR %s from graphics driver.\n"
-#~ msgstr "त्रुटि n"
+msgid "ERROR %s from graphics driver.\n"
+msgstr "त्रुटि n"
 
 #, fuzzy
-#~ msgid "ERROR - eof from graphics monitor.\n"
-#~ msgstr "त्रुटि n"
+msgid "ERROR - eof from graphics monitor.\n"
+msgstr "त्रुटि n"
 
 #, fuzzy
-#~ msgid "Warning - no response from graphics monitor <%s>.\n"
-#~ msgstr "चेतावनी n"
+msgid "Warning - no response from graphics monitor <%s>.\n"
+msgstr "चेतावनी n"
 
 #, fuzzy
-#~ msgid "Check to see if the mouse is still active.\n"
-#~ msgstr "है n"
+msgid "Check to see if the mouse is still active.\n"
+msgstr "है n"
 
 #, fuzzy
-#~ msgid "ERROR - no response from graphics monitor <%s>.\n"
-#~ msgstr "त्रुटि n"
+msgid "ERROR - no response from graphics monitor <%s>.\n"
+msgstr "त्रुटि n"
 
 #, fuzzy
-#~ msgid "No graphics monitor has been selected for output."
-#~ msgstr "नहीं के लिए n"
+msgid "No graphics monitor has been selected for output."
+msgstr "नहीं के लिए n"
 
 #, fuzzy
-#~ msgid "Please run \"d.mon\" to select a graphics monitor."
-#~ msgstr "a n"
+msgid "Please run \"d.mon\" to select a graphics monitor."
+msgstr "a n"
 
 #, fuzzy
-#~ msgid "Failed to get socket name for monitor <%s>."
-#~ msgstr "के लिए n"
+msgid "Failed to get socket name for monitor <%s>."
+msgstr "के लिए n"
 
 #, fuzzy
-#~ msgid "No socket to connect to for monitor <%s>."
-#~ msgstr "नहीं के लिए n"
+msgid "No socket to connect to for monitor <%s>."
+msgstr "नहीं के लिए n"
 
 #, fuzzy
-#~ msgid "Socket is already in use or not accepting connections."
-#~ msgstr "है नहीं a n"
+msgid "Socket is already in use or not accepting connections."
+msgstr "है नहीं a n"
 
 #, fuzzy
-#~ msgid "Use d.mon to select a monitor"
-#~ msgstr "a n"
+msgid "Use d.mon to select a monitor"
+msgstr "a n"
 
 #, fuzzy
-#~ msgid "Trying to connect to something not a socket."
-#~ msgstr "नहीं a प्रोग्राम त्रुटि n"
+msgid "Trying to connect to something not a socket."
+msgstr "नहीं a प्रोग्राम त्रुटि n"
 
 #, fuzzy
-#~ msgid "Probably an error with the server."
-#~ msgstr "त्रुटि n"
+msgid "Probably an error with the server."
+msgstr "त्रुटि n"
 
 #, fuzzy
-#~ msgid "Connection failed."
-#~ msgstr "n"
+msgid "Connection failed."
+msgstr "n"
 
 #, fuzzy
-#~ msgid "Cannot read topo for line [%d]"
-#~ msgstr "के लिए"
+msgid "Cannot read topo for line [%d]"
+msgstr "के लिए"
 
 #, fuzzy
-#~ msgid "Unable to open temporary file"
-#~ msgstr "का"
+msgid "Unable to open temporary file"
+msgstr "का"
 
 #, fuzzy
-#~ msgid "Hit RETURN to cancel request\n"
+msgid "Hit RETURN to cancel request\n"
+msgstr "n"
+
+#, fuzzy
+msgid ""
+"\n"
+"Please specify ellipsoid name\n"
+msgstr "n"
+
+#, fuzzy
+msgid "Enter 'list' for the list of available ellipsoids\n"
+msgstr "के लिए का n"
+
+#, fuzzy
+msgid ""
+"\n"
+"invalid ellipsoid\n"
+msgstr "n"
+
+#, fuzzy
+msgid "Output name '%s' is not valid rast name."
+msgstr "है नहीं."
+
+#, fuzzy
+msgid "Output map '%s' is used as input"
+msgstr "है"
+
+#, fuzzy
+msgid ""
+"\n"
+"Please specify datum name\n"
+msgstr "n"
+
+#, fuzzy
+msgid "Enter 'list' for the list of available datums\n"
+msgstr "के लिए का n"
+
+#, fuzzy
+msgid ""
+"\n"
+"invalid datum\n"
+msgstr "n"
+
+#, fuzzy
+msgid "one moment...\n"
+msgstr "एक n"
+
+#, fuzzy
+msgid "No help available for command [%s]\n"
+msgstr "नहीं के लिए n"
+
+#, fuzzy
+msgid " The raster map %s@%s is empty"
+msgstr "है"
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Color table needed for file [%s] in mapset [%s].\n"
+msgstr "n के लिए n"
+
+#, fuzzy
+msgid ""
+"\n"
+"Please identify the type desired:\n"
+msgstr "n"
+
+#, fuzzy
+msgid "    1:  Random colors\n"
+msgstr "n"
+
+#, fuzzy
+msgid "    2:  Red, green, and blue color ramps\n"
+msgstr "n"
+
+#, fuzzy
+msgid "    3:  Color wave\n"
+msgstr "n"
+
+#, fuzzy
+msgid "    4:  Gray scale\n"
+msgstr "स्केल n"
+
+#, fuzzy
+msgid "    5:  Aspect\n"
+msgstr "n"
+
+#, fuzzy
+msgid "    6:  Rainbow colors\n"
+msgstr "इंद्रधनुष n"
+
+#, fuzzy
+msgid "    7:  Red through yellow to green\n"
+msgstr "n"
+
+#, fuzzy
+msgid "    8:  Green through yellow to red\n"
+msgstr "n"
+
+#, fuzzy
+msgid "RETURN  quit\n"
+msgstr "n"
+
+#, fuzzy
+msgid ""
+"\n"
+"%s invalid; Try again > "
+msgstr "n अवैध कोशिश करें "
+
+#, fuzzy
+msgid "%s not found"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "ERROR in reading %s"
+msgstr "त्रुटि"
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Please specify projection name\n"
+msgstr "n n"
+
+#, fuzzy
+msgid "Enter 'list' for the list of available projections\n"
+msgstr "के लिए का n"
+
+#, fuzzy
+msgid ""
+"\n"
+"invalid projection\n"
+msgstr "n"
+
+#, fuzzy
+msgid "(no title)"
+msgstr "शीर्षक"
+
+#, fuzzy
+msgid ""
+"\n"
+"FLAG: Set the following flag?\n"
+msgstr "सेट n"
+
+#, fuzzy
+msgid ""
+"\n"
+"OPTION:   %s\n"
+msgstr "n"
+
+#, fuzzy
+msgid "     key: %s\n"
+msgstr "n"
+
+#, fuzzy
+msgid "  format: %s\n"
+msgstr "n"
+
+#, fuzzy
+msgid " default: %s\n"
+msgstr "n"
+
+#, fuzzy
+msgid "required: %s\n"
+msgstr "n"
+
+#, fuzzy
+msgid "multiple: %s\n"
+msgstr "n"
+
+#, fuzzy
+msgid "   Try again? "
+msgstr "कोशिश करें "
+
+#, fuzzy
+msgid "Sorry, %s is not accepted.\n"
+msgstr "खेद है है नहीं n"
+
+#, fuzzy
+msgid ""
+"\n"
+"You have chosen:\n"
+"  %s\n"
+msgstr ""
+"\n"
+" n"
+
+#, fuzzy
+msgid "Is this correct? "
+msgstr "है "
+
+#, fuzzy
+msgid "Enter a new %s file name"
+msgstr "a"
+
+#, fuzzy
+msgid "Enter the name of an existing %s file"
+msgstr "का"
+
+#, fuzzy
+msgid "Enter 'list' for a list of existing %s files\n"
+msgstr "के लिए a का n"
+
+#, fuzzy
+msgid "Enter 'list -f' for "
+msgstr "f के लिए "
+
+#, fuzzy
+msgid "a list %s"
+msgstr "a"
+
+#, fuzzy
+msgid "Hit RETURN %s\n"
+msgstr "n"
+
+#, fuzzy
+msgid ""
+"\n"
+"** %s - not found **\n"
+msgstr "n नहीं n"
+
+#, fuzzy
+msgid ""
+"\n"
+"** %s exists. ok to overwrite? "
+msgstr "n "
+
+#, fuzzy
+msgid ""
+"\n"
+"** %s - illegal request **\n"
+msgstr "n n"
+
+#, fuzzy
+msgid ""
+"\n"
+"** %s - exists, select another name **\n"
+msgstr "n n"
+
+#, fuzzy
+msgid "ask: can't happen"
+msgstr "पूछें"
+
+#, fuzzy
+msgid "Can't read header file for [%s in %s]\n"
+msgstr "के लिए n"
+
+#, fuzzy
+msgid "Can't open header file for [%s in %s]"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Cannot get field info"
+msgstr "के लिए n"
+
+#, fuzzy
+msgid "Cannot open database"
+msgstr "लिंक ."
+
+#, fuzzy
+msgid "Building topology ...\n"
+msgstr "n"
+
+#, fuzzy
+msgid ""
+"\r%d areas built      \n"
+"%d isles built\n"
+msgstr "n n"
+
+#, fuzzy
+msgid "Cannot open database <%s> by driver <%s>"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Column type not supported"
+msgstr "विशेषता नहीं"
+
+#, fuzzy
+msgid "OGR feature type [%d] not supported"
+msgstr "विशेषता नहीं"
+
+#, fuzzy
+msgid "Vect_rewrite_line() for this format/level not supported"
+msgstr "के लिए नहीं"
+
+#, fuzzy
+msgid "Vect_delete_line() for this format/level not supported"
+msgstr "के लिए नहीं"
+
+#, fuzzy
+msgid "Output name '%s' is not valid vector name."
+msgstr "है नहीं."
+
+#, fuzzy
+msgid "Cannot open existing vector map <%s>"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Cannot delete existing vector <%s>"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Cannot open history file for vector '%s'"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Could not stat file '%s'"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Can't open directory %s"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "No such graphics monitor as <%s>.\n"
+msgstr "नहीं n"
+
+#, fuzzy
+msgid "Please run \"d.mon\" to select a valid graphics monitor.\n"
+msgstr "a n"
+
+#, fuzzy
+msgid "Can't stat %s\n"
+msgstr "n"
+
+#, fuzzy
+msgid "Error - Monitor <%s> is in use.\n"
+msgstr "त्रुटि है n"
+
+#, fuzzy
+msgid "Error - Monitor <%s> is in use by %s.\n"
+msgstr "त्रुटि है n"
+
+#, fuzzy
+msgid "Error - Could not complete locking process for monitor <%s>.\n"
+msgstr "त्रुटि नहीं के लिए n"
+
+#, fuzzy
+msgid "Error - Can't set up pipe to graphics device.\n"
+msgstr "त्रुटि सेट n"
+
+#, fuzzy
+msgid "Error - Graphics monitor <%s> not running!\n"
+msgstr "त्रुटि नहीं चल रहा है... n"
+
+#, fuzzy
+msgid "Please start graphics monitor <%s>.\n"
+msgstr "प्रारंभ n"
+
+#, fuzzy
+msgid "Not connected...\n"
+msgstr "कनेक्टेड n"
+
+#, fuzzy
+msgid "Couldn't connect to monitor. Will try once more.\n"
+msgstr "अधिक n"
+
+#, fuzzy
+msgid "G_dump: memory allocated to G__"
+msgstr "जी जी"
+
+#, fuzzy
+msgid "Size of cell in fp maps = %d"
+msgstr "का"
+
+#, fuzzy
+msgid "type for writing floating maps = %d"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Flag: window set? %d"
+msgstr "ध्वज सेट"
+
+#, fuzzy
+msgid "File descriptor for automatic mask %d"
+msgstr "फ़ाइल के लिए स्वचालित"
+
+#, fuzzy
+msgid "Flag denoting automatic masking %d"
+msgstr "ध्वज स्वचालित"
+
+#, fuzzy
+msgid "buffer for reading null rows %p"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "G_dump: file #%d"
+msgstr "जी"
+
+#, fuzzy
+msgid "Range structure %p"
+msgstr "सीमा"
+
+#, fuzzy
+msgid "float Range structure %p"
+msgstr "सीमा"
+
+#, fuzzy
+msgid "File row addresses %p"
+msgstr "फ़ाइल"
+
+#, fuzzy
+msgid "Data to window row constants %f,%f"
+msgstr "f f"
+
+#, fuzzy
+msgid "nbytes per cell for current row %d"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "bytes per cell %d"
+msgstr "बाइट्स"
+
+#, fuzzy
+msgid "Temporary name for NEW files %s"
+msgstr "अस्थायी के लिए"
+
+#, fuzzy
+msgid "Temporary name for NEW NULL files %s"
+msgstr "अस्थायी के लिए"
+
+#, fuzzy
+msgid "Mapset of open file %s"
+msgstr "का"
+
+#, fuzzy
+msgid "io error warning given %d"
+msgstr "त्रुटि"
+
+#, fuzzy
+msgid "xdr stream for reading fp %p"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "data buffer for reading null rows %p"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Minimum row null row number in memory %d"
+msgstr "संख्या"
+
+#, fuzzy
+msgid "G_dump: end"
+msgstr "जी"
+
+#, fuzzy
+msgid "Color file for [%s] not available"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Not able to open cellfile for [%s]"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "ERROR: GISBASE not set\n"
+msgstr "त्रुटि नहीं सेट n"
+
+#, fuzzy
+msgid "Error reading datum shift parameters for %s from table"
+msgstr "त्रुटि के लिए"
+
+#, fuzzy
+msgid "Error reading ellipsoid parameters for %s from table"
+msgstr "त्रुटि के लिए"
+
+#, fuzzy
+msgid "No ellipsoid field %s in file %s in %s"
+msgstr "नहीं फील्ड"
+
+#, fuzzy
+msgid "invalid value: field %s in file %s in %s"
+msgstr "अवैध फील्ड"
+
+#, fuzzy
+msgid "decimal field %i not present in sites file"
+msgstr "फील्ड i नहीं वर्तमान"
+
+#, fuzzy
+msgid ""
+"I'm finding records that do not have a floating point attributes (fields "
+"prefixed with '%')."
+msgstr "मी नहीं a बिन्दु."
+
+#, fuzzy
+msgid "No n-dims in site_list"
+msgstr "नहीं n"
+
+#, fuzzy
+msgid "No double attributes in site_list"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "No string attributes in site_list"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "String attribute index out of range"
+msgstr "का"
+
+#, fuzzy
+msgid "Unknown attribute type in call to G_readsites_xyz()!\n"
+msgstr "जी n"
+
+#, fuzzy
+#~ msgid "Unable to allocate memory\n"
 #~ msgstr "n"
 
 #, fuzzy
 #~ msgid ""
 #~ "\n"
-#~ "Please specify ellipsoid name\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Enter 'list' for the list of available ellipsoids\n"
-#~ msgstr "के लिए का n"
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "invalid ellipsoid\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Output name '%s' is not valid rast name."
-#~ msgstr "है नहीं."
-
-#, fuzzy
-#~ msgid "Output map '%s' is used as input"
-#~ msgstr "है"
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "Please specify datum name\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Enter 'list' for the list of available datums\n"
-#~ msgstr "के लिए का n"
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "invalid datum\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "one moment...\n"
-#~ msgstr "एक n"
-
-#, fuzzy
-#~ msgid "No help available for command [%s]\n"
-#~ msgstr "नहीं के लिए n"
-
-#, fuzzy
-#~ msgid " The raster map %s@%s is empty"
-#~ msgstr "है"
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "Color table needed for file [%s] in mapset [%s].\n"
-#~ msgstr "n के लिए n"
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "Please identify the type desired:\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "    1:  Random colors\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "    2:  Red, green, and blue color ramps\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "    3:  Color wave\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "    4:  Gray scale\n"
-#~ msgstr "स्केल n"
-
-#, fuzzy
-#~ msgid "    5:  Aspect\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "    6:  Rainbow colors\n"
-#~ msgstr "इंद्रधनुष n"
-
-#, fuzzy
-#~ msgid "    7:  Red through yellow to green\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "    8:  Green through yellow to red\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "RETURN  quit\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "%s invalid; Try again > "
-#~ msgstr "n अवैध कोशिश करें "
-
-#, fuzzy
-#~ msgid "%s not found"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "ERROR in reading %s"
-#~ msgstr "त्रुटि"
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "Please specify projection name\n"
+#~ "**<%s> illegal name **\n"
 #~ msgstr "n n"
-
-#, fuzzy
-#~ msgid "Enter 'list' for the list of available projections\n"
-#~ msgstr "के लिए का n"
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "invalid projection\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "(no title)"
-#~ msgstr "शीर्षक"
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "FLAG: Set the following flag?\n"
-#~ msgstr "सेट n"
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "OPTION:   %s\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "     key: %s\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "  format: %s\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid " default: %s\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "required: %s\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "multiple: %s\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "   Try again? "
-#~ msgstr "कोशिश करें "
-
-#, fuzzy
-#~ msgid "Sorry, %s is not accepted.\n"
-#~ msgstr "खेद है है नहीं n"
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "You have chosen:\n"
-#~ "  %s\n"
-#~ msgstr ""
-#~ "\n"
-#~ " n"
-
-#, fuzzy
-#~ msgid "Is this correct? "
-#~ msgstr "है "
-
-#, fuzzy
-#~ msgid "Enter a new %s file name"
-#~ msgstr "a"
-
-#, fuzzy
-#~ msgid "Enter the name of an existing %s file"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Enter 'list' for a list of existing %s files\n"
-#~ msgstr "के लिए a का n"
-
-#, fuzzy
-#~ msgid "Enter 'list -f' for "
-#~ msgstr "f के लिए "
-
-#, fuzzy
-#~ msgid "a list %s"
-#~ msgstr "a"
-
-#, fuzzy
-#~ msgid "Hit RETURN %s\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "** %s - not found **\n"
-#~ msgstr "n नहीं n"
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "** %s exists. ok to overwrite? "
-#~ msgstr "n "
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "** %s - illegal request **\n"
-#~ msgstr "n n"
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "** %s - exists, select another name **\n"
-#~ msgstr "n n"
-
-#, fuzzy
-#~ msgid "ask: can't happen"
-#~ msgstr "पूछें"
-
-#, fuzzy
-#~ msgid "Can't read header file for [%s in %s]\n"
-#~ msgstr "के लिए n"
-
-#, fuzzy
-#~ msgid "Can't open header file for [%s in %s]"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Cannot get field info"
-#~ msgstr "के लिए n"
-
-#, fuzzy
-#~ msgid "Cannot open database"
-#~ msgstr "लिंक ."
-
-#, fuzzy
-#~ msgid "Building topology ...\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid ""
-#~ "\r%d areas built      \n"
-#~ "%d isles built\n"
-#~ msgstr "n n"
-
-#, fuzzy
-#~ msgid "Cannot open database <%s> by driver <%s>"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Column type not supported"
-#~ msgstr "विशेषता नहीं"
-
-#, fuzzy
-#~ msgid "OGR feature type [%d] not supported"
-#~ msgstr "विशेषता नहीं"
-
-#, fuzzy
-#~ msgid "Vect_rewrite_line() for this format/level not supported"
-#~ msgstr "के लिए नहीं"
-
-#, fuzzy
-#~ msgid "Vect_delete_line() for this format/level not supported"
-#~ msgstr "के लिए नहीं"
-
-#, fuzzy
-#~ msgid "Output name '%s' is not valid vector name."
-#~ msgstr "है नहीं."
-
-#, fuzzy
-#~ msgid "Cannot open existing vector map <%s>"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Cannot delete existing vector <%s>"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Cannot open history file for vector '%s'"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Could not stat file '%s'"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Can't open directory %s"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "No such graphics monitor as <%s>.\n"
-#~ msgstr "नहीं n"
-
-#, fuzzy
-#~ msgid "Please run \"d.mon\" to select a valid graphics monitor.\n"
-#~ msgstr "a n"
-
-#, fuzzy
-#~ msgid "Can't stat %s\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Error - Monitor <%s> is in use.\n"
-#~ msgstr "त्रुटि है n"
-
-#, fuzzy
-#~ msgid "Error - Monitor <%s> is in use by %s.\n"
-#~ msgstr "त्रुटि है n"
-
-#, fuzzy
-#~ msgid "Error - Could not complete locking process for monitor <%s>.\n"
-#~ msgstr "त्रुटि नहीं के लिए n"
-
-#, fuzzy
-#~ msgid "Error - Can't set up pipe to graphics device.\n"
-#~ msgstr "त्रुटि सेट n"
-
-#, fuzzy
-#~ msgid "Error - Graphics monitor <%s> not running!\n"
-#~ msgstr "त्रुटि नहीं चल रहा है... n"
-
-#, fuzzy
-#~ msgid "Please start graphics monitor <%s>.\n"
-#~ msgstr "प्रारंभ n"
-
-#, fuzzy
-#~ msgid "Not connected...\n"
-#~ msgstr "कनेक्टेड n"
-
-#, fuzzy
-#~ msgid "Couldn't connect to monitor. Will try once more.\n"
-#~ msgstr "अधिक n"
-
-#, fuzzy
-#~ msgid "G_dump: memory allocated to G__"
-#~ msgstr "जी जी"
-
-#, fuzzy
-#~ msgid "Size of cell in fp maps = %d"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "type for writing floating maps = %d"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Flag: window set? %d"
-#~ msgstr "ध्वज सेट"
-
-#, fuzzy
-#~ msgid "File descriptor for automatic mask %d"
-#~ msgstr "फ़ाइल के लिए स्वचालित"
-
-#, fuzzy
-#~ msgid "Flag denoting automatic masking %d"
-#~ msgstr "ध्वज स्वचालित"
-
-#, fuzzy
-#~ msgid "buffer for reading null rows %p"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "G_dump: file #%d"
-#~ msgstr "जी"
-
-#, fuzzy
-#~ msgid "Range structure %p"
-#~ msgstr "सीमा"
-
-#, fuzzy
-#~ msgid "float Range structure %p"
-#~ msgstr "सीमा"
-
-#, fuzzy
-#~ msgid "File row addresses %p"
-#~ msgstr "फ़ाइल"
-
-#, fuzzy
-#~ msgid "Data to window row constants %f,%f"
-#~ msgstr "f f"
-
-#, fuzzy
-#~ msgid "nbytes per cell for current row %d"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "bytes per cell %d"
-#~ msgstr "बाइट्स"
-
-#, fuzzy
-#~ msgid "Temporary name for NEW files %s"
-#~ msgstr "अस्थायी के लिए"
-
-#, fuzzy
-#~ msgid "Temporary name for NEW NULL files %s"
-#~ msgstr "अस्थायी के लिए"
-
-#, fuzzy
-#~ msgid "Mapset of open file %s"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "io error warning given %d"
-#~ msgstr "त्रुटि"
-
-#, fuzzy
-#~ msgid "xdr stream for reading fp %p"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "data buffer for reading null rows %p"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Minimum row null row number in memory %d"
-#~ msgstr "संख्या"
-
-#, fuzzy
-#~ msgid "G_dump: end"
-#~ msgstr "जी"
-
-#, fuzzy
-#~ msgid "Color file for [%s] not available"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Not able to open cellfile for [%s]"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "ERROR: GISBASE not set\n"
-#~ msgstr "त्रुटि नहीं सेट n"
-
-#, fuzzy
-#~ msgid "Error reading datum shift parameters for %s from table"
-#~ msgstr "त्रुटि के लिए"
-
-#, fuzzy
-#~ msgid "Error reading ellipsoid parameters for %s from table"
-#~ msgstr "त्रुटि के लिए"
-
-#, fuzzy
-#~ msgid "No ellipsoid field %s in file %s in %s"
-#~ msgstr "नहीं फील्ड"
-
-#, fuzzy
-#~ msgid "invalid value: field %s in file %s in %s"
-#~ msgstr "अवैध फील्ड"
-
-#, fuzzy
-#~ msgid "decimal field %i not present in sites file"
-#~ msgstr "फील्ड i नहीं वर्तमान"
-
-#, fuzzy
-#~ msgid ""
-#~ "I'm finding records that do not have a floating point attributes (fields "
-#~ "prefixed with '%')."
-#~ msgstr "मी नहीं a बिन्दु."
-
-#, fuzzy
-#~ msgid "No n-dims in site_list"
-#~ msgstr "नहीं n"
-
-#, fuzzy
-#~ msgid "No double attributes in site_list"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "No string attributes in site_list"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "String attribute index out of range"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Unknown attribute type in call to G_readsites_xyz()!\n"
-#~ msgstr "जी n"

@@ -571,9 +571,9 @@ msgid "Unable to get list tables in database <%s>"
 msgstr "ไม่สามารถเปิดไฟล์ตารางรูปทรงรี: %s"
 
 #: ../lib/db/dbmi_client/copy_tab.c:157
-#, c-format
+#, fuzzy, c-format
 msgid "Table <%s> already exists in database <%s>"
-msgstr ""
+msgstr "ไม่สามารถเปิดไฟล์ตารางรูปทรงรี: %s"
 
 #: ../lib/db/dbmi_client/copy_tab.c:199 ../lib/db/dbmi_client/copy_tab.c:276
 #: ../lib/db/dbmi_client/table.c:110
@@ -2033,9 +2033,9 @@ msgid "Window replacing the default"
 msgstr "หน้าต่งถูกแทนด้วยค่าตั้งต้น"
 
 #: ../lib/g3d/g3dcolor.c:332
-#, c-format
+#, fuzzy, c-format
 msgid "mapset <%s> is not the current mapset"
-msgstr ""
+msgstr "ข้อผิดพลาด: ตั้งใจที่จะปรับปรุงแผนที่ ที่ไม่อยู่ในชุดแผนที่ที่กำลังใช้งาน"
 
 #: ../lib/g3d/g3dopen.c:20
 msgid "G3d_openCellOldNoHeader: error in G3d_maskOpenOld"
@@ -2096,7 +2096,7 @@ msgstr "G3d_openCellNew: ข้อผิดพลาดใน  G3d_malloc"
 #: ../lib/g3d/g3dopen.c:229
 #, fuzzy, c-format
 msgid "map <%s> is not in the current mapset"
-msgstr "ไม่มีไฟล์ %s อยู่ในชุดแผนที่ปัจจุบัน\n"
+msgstr "ข้อผิดพลาด: ตั้งใจที่จะปรับปรุงแผนที่ ที่ไม่อยู่ในชุดแผนที่ที่กำลังใช้งาน"
 
 #: ../lib/g3d/g3dopen.c:239
 msgid "G3d_openCellNew: could not open file"
@@ -2294,7 +2294,7 @@ msgstr ""
 #: ../lib/gis/opencell.c:932 ../lib/gis/opencell.c:1020
 #, fuzzy, c-format
 msgid "Unable to find '%s' in '%s'"
-msgstr "ไม่สามารถค้นหา [%s] ใน [%s]"
+msgstr "ไม่สามารถค้นหา  [%s]"
 
 #: ../lib/gis/opencell.c:965
 #, fuzzy, c-format
@@ -2357,9 +2357,9 @@ msgid "'%s/%s' was found in more mapsets (also found in <%s>)"
 msgstr ""
 
 #: ../lib/gis/find_file.c:82
-#, c-format
+#, fuzzy, c-format
 msgid "Using <%s@%s>"
-msgstr ""
+msgstr "ไม่สามารถค้นหา  [%s]"
 
 #: ../lib/gis/quant_io.c:89
 #, c-format
@@ -3885,9 +3885,9 @@ msgid "Vector map <%s> loaded (%d points)"
 msgstr "ไม่พบ ชื่อแผนที่เชิงเส้น <%s>"
 
 #: ../lib/ogsf/GS2.c:1638
-#, c-format
+#, fuzzy, c-format
 msgid "Raster map <%s> is outside of current region. Load failed."
-msgstr ""
+msgstr "[%s] ชุดแผนที่ [%s] - ในโซนที่แตกต่าง [%d] จากขอบเขตปัจจุบัน [%d]"
 
 #: ../lib/ogsf/GS2.c:1716 ../lib/ogsf/GS2.c:1722 ../lib/ogsf/GS2.c:1730
 #: ../lib/ogsf/GS2.c:1739 ../lib/ogsf/GS2.c:1747 ../lib/ogsf/GS2.c:1757
@@ -4253,7 +4253,7 @@ msgstr ""
 #: ../lib/cairodriver/Graph.c:81
 #, fuzzy
 msgid "Unable to obtain visual"
-msgstr "ไม่สามารถเปิดได้ %s"
+msgstr "ไม่สามารถเปิดไฟล์ %s ได้"
 
 #: ../lib/cairodriver/Graph.c:86
 #, fuzzy
@@ -4403,391 +4403,401 @@ msgstr ""
 msgid "Unable to define new light"
 msgstr "ไม่สามารถลบไฟล์  '%s'"
 
-#~ msgid "Cannot describe table <%s>"
-#~ msgstr "ไม่สามารถ บรรยายตารางนี้ได้ <%s>"
+msgid "Cannot describe table <%s>"
+msgstr "ไม่สามารถ บรรยายตารางนี้ได้ <%s>"
 
-#~ msgid "Unknown command: %d last: %d"
-#~ msgstr "ไม่รู้จักคำสั่งนี้: %d ลงท้าย: %d"
+msgid "Unknown command: %d last: %d"
+msgstr "ไม่รู้จักคำสั่งนี้: %d ลงท้าย: %d"
 
-#~ msgid "Monitor: get_command: Premature EOF"
-#~ msgstr "ตรวจดู: get_command: Premature EOF"
+msgid "Monitor: get_command: Premature EOF"
+msgstr "ตรวจดู: get_command: Premature EOF"
 
-#~ msgid "Graphics driver [%s] started"
-#~ msgstr "Graphics driver [%s] เริ่มแล้ว"
+msgid "Graphics driver [%s] started"
+msgstr "Graphics driver [%s] เริ่มแล้ว"
 
-#~ msgid "ERROR %s from graphics driver.\n"
-#~ msgstr "ข้อผิดพลาด %s จากตัวขับจอ \n"
+msgid "ERROR %s from graphics driver.\n"
+msgstr "ข้อผิดพลาด %s จากตัวขับจอ \n"
 
-#~ msgid "ERROR - eof from graphics monitor.\n"
-#~ msgstr "ข้อผิดพลาด - EOF จากจอแสดงผล \n"
+msgid "ERROR - eof from graphics monitor.\n"
+msgstr "ข้อผิดพลาด - EOF จากจอแสดงผล \n"
 
-#~ msgid "Warning - no response from graphics monitor <%s>.\n"
-#~ msgstr "คำเตือน - ไม่มีการตอบสนองจากจอแสดงผล <%s>.\n"
+msgid "Warning - no response from graphics monitor <%s>.\n"
+msgstr "คำเตือน - ไม่มีการตอบสนองจากจอแสดงผล <%s>.\n"
 
-#~ msgid "Check to see if the mouse is still active.\n"
-#~ msgstr "ตรวจสอบ เม้าส์ยังทำงานอยู่หรือไม่ \n"
+msgid "Check to see if the mouse is still active.\n"
+msgstr "ตรวจสอบ เม้าส์ยังทำงานอยู่หรือไม่ \n"
 
-#~ msgid "ERROR - no response from graphics monitor <%s>.\n"
-#~ msgstr "ข้อผิดพลาด - ไม่มีการตอบสนองจากจอแสดงผล <%s>.\n"
+msgid "ERROR - no response from graphics monitor <%s>.\n"
+msgstr "ข้อผิดพลาด - ไม่มีการตอบสนองจากจอแสดงผล <%s>.\n"
 
-#~ msgid "No graphics monitor has been selected for output."
-#~ msgstr "ไม่ได้เลือก จอแสดงผล"
+msgid "No graphics monitor has been selected for output."
+msgstr "ไม่ได้เลือก จอแสดงผล"
 
-#~ msgid "Please run \"d.mon\" to select a graphics monitor."
-#~ msgstr "โปรดใช้คำสั่ง  \"d.mon\" เพื่อเลือก จอแสดงผล"
+msgid "Please run \"d.mon\" to select a graphics monitor."
+msgstr "โปรดใช้คำสั่ง  \"d.mon\" เพื่อเลือก จอแสดงผล"
 
-#~ msgid "Failed to get socket name for monitor <%s>."
-#~ msgstr "ล้มเหลวที่จะอ่าน socket name จากจอแสดงผล <%s>."
+msgid "Failed to get socket name for monitor <%s>."
+msgstr "ล้มเหลวที่จะอ่าน socket name จากจอแสดงผล <%s>."
 
-#~ msgid "No socket to connect to for monitor <%s>."
-#~ msgstr "ไม่มี socketที่จะต่อกับจอแสดงผล <%s>."
+msgid "No socket to connect to for monitor <%s>."
+msgstr "ไม่มี socketที่จะต่อกับจอแสดงผล <%s>."
 
-#~ msgid "Socket is already in use or not accepting connections."
-#~ msgstr "Socket ถูกใช้อยู่ หรือไม่ยอมรับการเชื่อมต่อ."
+msgid "Socket is already in use or not accepting connections."
+msgstr "Socket ถูกใช้อยู่ หรือไม่ยอมรับการเชื่อมต่อ."
 
-#~ msgid "Use d.mon to select a monitor"
-#~ msgstr "ใช้คำสั่ง  d.mon เพื่อเลือก จอแสดงผล"
+msgid "Use d.mon to select a monitor"
+msgstr "ใช้คำสั่ง  d.mon เพื่อเลือก จอแสดงผล"
 
-#~ msgid "Trying to connect to something not a socket."
-#~ msgstr "ลองเชื่อมต่อกับอย่างอื่นที่ไม่ใช่ socket"
+msgid "Trying to connect to something not a socket."
+msgstr "ลองเชื่อมต่อกับอย่างอื่นที่ไม่ใช่ socket"
 
-#~ msgid "Probably program error."
-#~ msgstr "อาจจะเกิดจากข้อผิดพลาดของ โปรแกรม"
+msgid "Probably program error."
+msgstr "อาจจะเกิดจากข้อผิดพลาดของ โปรแกรม"
 
-#~ msgid "Connect attempt timed out."
-#~ msgstr "การเชื่อมต่อเกินเวลา"
+msgid "Connect attempt timed out."
+msgstr "การเชื่อมต่อเกินเวลา"
 
-#~ msgid "Probably an error with the server."
-#~ msgstr "อาจจะเกิดจากข้อผิดพลาดของ เครื่องแม่ข่าย"
+msgid "Probably an error with the server."
+msgstr "อาจจะเกิดจากข้อผิดพลาดของ เครื่องแม่ข่าย"
 
-#~ msgid "Connection failed."
-#~ msgstr "การเชื่อมต่อล้มเหลว"
+msgid "Connection failed."
+msgstr "การเชื่อมต่อล้มเหลว"
 
-#~ msgid "Cannot read topo for line [%d]"
-#~ msgstr "ไม่สามารถอ่าน topo สำหรับ เส้น  [%d]"
-
-#, fuzzy
-#~ msgid "Attempt to delete dead line"
-#~ msgstr "ตั้งใจที่จะลบพื้นที่"
-
-#~ msgid "Unable to open file %s"
-#~ msgstr "ไม่สามารถเปิดไฟล์ %s ได้"
+msgid "Cannot read topo for line [%d]"
+msgstr "ไม่สามารถอ่าน topo สำหรับ เส้น  [%d]"
 
 #, fuzzy
-#~ msgid "Unable to open temporary file"
-#~ msgstr "ไม่สามารถเปิดไฟล์ %s ได้"
-
-#~ msgid "Hit RETURN to cancel request\n"
-#~ msgstr "กด RETURN เพื่อยกเลิกคำสั่ง\n"
-
-#~ msgid "Cannot open temp file"
-#~ msgstr "ไม่สามารถเปิด temp ไฟล์"
+msgid "Attempt to delete dead line"
+msgstr "ตั้งใจที่จะลบพื้นที่"
+
+msgid "Unable to open file %s"
+msgstr "ไม่สามารถเปิดไฟล์ %s ได้"
+
+#, fuzzy
+msgid "Unable to open temporary file"
+msgstr "ไม่สามารถเปิดไฟล์ %s ได้"
+
+msgid "Hit RETURN to cancel request\n"
+msgstr "กด RETURN เพื่อยกเลิกคำสั่ง\n"
 
-#~ msgid ""
-#~ "\n"
-#~ "Please specify ellipsoid name\n"
-#~ msgstr ""
-#~ "\n"
-#~ "โปรดระบุชื่อทรงรี\n"
-
-#~ msgid "Enter 'list' for the list of available ellipsoids\n"
-#~ msgstr "ใส่ 'list' เพื่อแสดงรายการ รูปทรงรี\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "invalid ellipsoid\n"
-#~ msgstr ""
-#~ "\n"
-#~ "รูปทรงรี ไม่ถูกต้อง\n"
-
-#~ msgid "Output name '%s' is not valid rast name."
-#~ msgstr "ชื่อไฟล์ผลลัพธ์ '%s' ไม่มีชือ่ไฟล์เชิงภาพนี้"
-
-#~ msgid "Output map '%s' is used as input"
-#~ msgstr "แผนที่ผลลัพธ์ '%s'ใช้เป็นแผนที่นำเข้า"
-
-#~ msgid ""
-#~ "\n"
-#~ "Please specify datum name\n"
-#~ msgstr ""
-#~ "\n"
-#~ "โปรดระบุชื่อ datum \n"
-
-#~ msgid "Enter 'list' for the list of available datums\n"
-#~ msgstr "ใส่ 'list' เพื่อแสดงรายการ datums\n"
-
-#~ msgid "or 'custom' if you wish to enter custom parameters\n"
-#~ msgstr "หรือ 'custom' ถ้าคุณต้องการกำหนดค่าตัวแปรเอง \n"
-
-#~ msgid ""
-#~ "\n"
-#~ "invalid datum\n"
-#~ msgstr ""
-#~ "\n"
-#~ "datum ไม่ถูกต้อง\n"
-
-#~ msgid "hit RETURN to continue -->"
-#~ msgstr "กด RETURN เพื่อดำเนินการต่อ -->"
-
-#~ msgid "unable to open raster map [%s in %s]"
-#~ msgstr "ไม่สามารถเปิดข้อมูลเชิงภาพได้ [%s ใน %s]"
-
-#~ msgid "one moment...\n"
-#~ msgstr "โปรดรอสักครู่...\n"
-
-#~ msgid "No help available for command [%s]\n"
-#~ msgstr "ไม่มีความช่วยเหลือสำหรับคำสั่งนี้ [%s]\n"
-
-#~ msgid " The raster map %s@%s is empty"
-#~ msgstr "แผนที่เชิงภาพ %s@%s ว่าเปล่า"
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "Color table needed for file [%s] in mapset [%s].\n"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "ไฟล์นี้ต้องการดารางสี  [%s] ในชุดแผนที่ [%s].\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Please identify the type desired:\n"
-#~ msgstr ""
-#~ "\n"
-#~ "โปรดระบุชนิดที่จะใช้:\n"
-
-#~ msgid "    1:  Random colors\n"
-#~ msgstr "    1:  สีแบบสุ่ม\n"
-
-#~ msgid "    2:  Red, green, and blue color ramps\n"
-#~ msgstr "    2:  แดง, เขียว, และ น้ำเงิน แบบไล่สี\n"
-
-#~ msgid "    3:  Color wave\n"
-#~ msgstr "    3:  สีแบบ คลื่น\n"
-
-#~ msgid "    4:  Gray scale\n"
-#~ msgstr "    4:  โทนสีเทา\n"
-
-#~ msgid "    5:  Aspect\n"
-#~ msgstr "    5:  สีเชิงมุม\n"
-
-#~ msgid "    6:  Rainbow colors\n"
-#~ msgstr "    6:  สีรุ้ง\n"
-
-#~ msgid "    7:  Red through yellow to green\n"
-#~ msgstr "    7:  แดง ไล่ไป เหลือง ถึง เขียว\n"
-
-#~ msgid "    8:  Green through yellow to red\n"
-#~ msgstr "    7:  เขียว ไล่ไป เหลือง ถึง แดง\n"
-
-#~ msgid "RETURN  quit\n"
-#~ msgstr "RETURN  ออก\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "%s invalid; Try again > "
-#~ msgstr ""
-#~ "\n"
-#~ "%s ไม่ถูกต้อง; ลองใหม่ > "
+msgid "Cannot open temp file"
+msgstr "ไม่สามารถเปิด temp ไฟล์"
 
-#~ msgid "%s not found"
-#~ msgstr "%s ไม่พบ"
+msgid ""
+"\n"
+"Please specify ellipsoid name\n"
+msgstr ""
+"\n"
+"โปรดระบุชื่อทรงรี\n"
+
+msgid "Enter 'list' for the list of available ellipsoids\n"
+msgstr "ใส่ 'list' เพื่อแสดงรายการ รูปทรงรี\n"
+
+msgid ""
+"\n"
+"invalid ellipsoid\n"
+msgstr ""
+"\n"
+"รูปทรงรี ไม่ถูกต้อง\n"
 
-#~ msgid "ERROR in reading %s"
-#~ msgstr "เกิดข้อผิดพลาดในการอ่าน  %s"
+msgid "Output name '%s' is not valid rast name."
+msgstr "ชื่อไฟล์ผลลัพธ์ '%s' ไม่มีชือ่ไฟล์เชิงภาพนี้"
+
+msgid "Output map '%s' is used as input"
+msgstr "แผนที่ผลลัพธ์ '%s'ใช้เป็นแผนที่นำเข้า"
+
+msgid ""
+"\n"
+"Please specify datum name\n"
+msgstr ""
+"\n"
+"โปรดระบุชื่อ datum \n"
+
+msgid "Enter 'list' for the list of available datums\n"
+msgstr "ใส่ 'list' เพื่อแสดงรายการ datums\n"
+
+msgid "or 'custom' if you wish to enter custom parameters\n"
+msgstr "หรือ 'custom' ถ้าคุณต้องการกำหนดค่าตัวแปรเอง \n"
+
+msgid ""
+"\n"
+"invalid datum\n"
+msgstr ""
+"\n"
+"datum ไม่ถูกต้อง\n"
+
+msgid "hit RETURN to continue -->"
+msgstr "กด RETURN เพื่อดำเนินการต่อ -->"
+
+msgid "unable to open raster map [%s in %s]"
+msgstr "ไม่สามารถเปิดข้อมูลเชิงภาพได้ [%s ใน %s]"
+
+msgid "one moment...\n"
+msgstr "โปรดรอสักครู่...\n"
+
+msgid "No help available for command [%s]\n"
+msgstr "ไม่มีความช่วยเหลือสำหรับคำสั่งนี้ [%s]\n"
+
+msgid " The raster map %s@%s is empty"
+msgstr "แผนที่เชิงภาพ %s@%s ว่าเปล่า"
+
+msgid ""
+"\n"
+"\n"
+"Color table needed for file [%s] in mapset [%s].\n"
+msgstr ""
+"\n"
+"\n"
+"ไฟล์นี้ต้องการดารางสี  [%s] ในชุดแผนที่ [%s].\n"
+
+msgid ""
+"\n"
+"Please identify the type desired:\n"
+msgstr ""
+"\n"
+"โปรดระบุชนิดที่จะใช้:\n"
+
+msgid "    1:  Random colors\n"
+msgstr "    1:  สีแบบสุ่ม\n"
+
+msgid "    2:  Red, green, and blue color ramps\n"
+msgstr "    2:  แดง, เขียว, และ น้ำเงิน แบบไล่สี\n"
+
+msgid "    3:  Color wave\n"
+msgstr "    3:  สีแบบ คลื่น\n"
+
+msgid "    4:  Gray scale\n"
+msgstr "    4:  โทนสีเทา\n"
+
+msgid "    5:  Aspect\n"
+msgstr "    5:  สีเชิงมุม\n"
+
+msgid "    6:  Rainbow colors\n"
+msgstr "    6:  สีรุ้ง\n"
+
+msgid "    7:  Red through yellow to green\n"
+msgstr "    7:  แดง ไล่ไป เหลือง ถึง เขียว\n"
+
+msgid "    8:  Green through yellow to red\n"
+msgstr "    7:  เขียว ไล่ไป เหลือง ถึง แดง\n"
+
+msgid "RETURN  quit\n"
+msgstr "RETURN  ออก\n"
 
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "Please specify projection name\n"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "โปรดระบุชื่อการฉายภาพ\n"
+msgid ""
+"\n"
+"%s invalid; Try again > "
+msgstr ""
+"\n"
+"%s ไม่ถูกต้อง; ลองใหม่ > "
 
-#~ msgid "Enter 'list' for the list of available projections\n"
-#~ msgstr "ใส่ 'list' เพื่อแสดงรายการ การฉายภาพ\n"
+msgid "%s not found"
+msgstr "%s ไม่พบ"
 
-#~ msgid ""
-#~ "\n"
-#~ "invalid projection\n"
-#~ msgstr ""
-#~ "\n"
-#~ "การฉายภาพไม่ถูกต้อง\n"
-
-#~ msgid "with titles"
-#~ msgstr "ด้วย ชื่อเรื่อง"
+msgid "ERROR in reading %s"
+msgstr "เกิดข้อผิดพลาดในการอ่าน  %s"
 
-#~ msgid "(no title)"
-#~ msgstr "(ไม่มีชื่อเรื่อง)"
-
-#~ msgid ""
-#~ "\n"
-#~ "FLAG: Set the following flag?\n"
-#~ msgstr ""
-#~ "\n"
-#~ "ธง: กำหนดค่าธง?\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "OPTION:   %s\n"
-#~ msgstr ""
-#~ "\n"
-#~ "เงื่อนไข:   %s\n"
-
-#~ msgid "     key: %s\n"
-#~ msgstr "     เฉพาะ: %s\n"
-
-#~ msgid "  format: %s\n"
-#~ msgstr "  รูปแบบ: %s\n"
-
-#~ msgid " default: %s\n"
-#~ msgstr " ค่าตั้งต้น: %s\n"
-
-#~ msgid "required: %s\n"
-#~ msgstr "ต้องการ: %s\n"
-
-#~ msgid "multiple: %s\n"
-#~ msgstr "หลาย: %s\n"
-
-#~ msgid "enter option > "
-#~ msgstr "ใส่เงื่อนไข > "
-
-#~ msgid "   Try again? "
-#~ msgstr "   ลองใหม่? "
-
-#~ msgid "Sorry, %s is not accepted.\n"
-#~ msgstr "เสียใจ, %s ไม่ถูกต้อง.\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "You have chosen:\n"
-#~ "  %s\n"
-#~ msgstr ""
-#~ "\n"
-#~ "คุณได้เลือก:\n"
-#~ "  %s\n"
-
-#~ msgid "Is this correct? "
-#~ msgstr "อย่างนี้ถูกต้องหรือไม่? "
-
-#~ msgid "to accept the default"
-#~ msgstr "ใช้ค่าตั้งต้น"
+msgid ""
+"\n"
+"\n"
+"Please specify projection name\n"
+msgstr ""
+"\n"
+"\n"
+"โปรดระบุชื่อการฉายภาพ\n"
 
-#~ msgid "to cancel request"
-#~ msgstr "ยกเลิกการร้องขอ"
+msgid "Enter 'list' for the list of available projections\n"
+msgstr "ใส่ 'list' เพื่อแสดงรายการ การฉายภาพ\n"
 
-#~ msgid "Enter a new %s file name"
-#~ msgstr "ใส่ชื่อไฟล์ใหม่  %s"
+msgid ""
+"\n"
+"invalid projection\n"
+msgstr ""
+"\n"
+"การฉายภาพไม่ถูกต้อง\n"
 
-#~ msgid "Enter the name of an existing %s file"
-#~ msgstr "ใส่ชื่อไฟล์ที่มีอยู่แล้ว  %s"
+msgid "with titles"
+msgstr "ด้วย ชื่อเรื่อง"
 
-#~ msgid "Enter %s file name"
-#~ msgstr "ใส่ชื่อไฟล์  %s"
+msgid "(no title)"
+msgstr "(ไม่มีชื่อเรื่อง)"
+
+msgid ""
+"\n"
+"FLAG: Set the following flag?\n"
+msgstr ""
+"\n"
+"ธง: กำหนดค่าธง?\n"
+
+msgid ""
+"\n"
+"OPTION:   %s\n"
+msgstr ""
+"\n"
+"เงื่อนไข:   %s\n"
+
+msgid "     key: %s\n"
+msgstr "     เฉพาะ: %s\n"
+
+msgid "  format: %s\n"
+msgstr "  รูปแบบ: %s\n"
+
+msgid " default: %s\n"
+msgstr " ค่าตั้งต้น: %s\n"
+
+msgid "required: %s\n"
+msgstr "ต้องการ: %s\n"
+
+msgid "multiple: %s\n"
+msgstr "หลาย: %s\n"
+
+msgid "enter option > "
+msgstr "ใส่เงื่อนไข > "
+
+msgid "   Try again? "
+msgstr "   ลองใหม่? "
+
+msgid "Sorry, %s is not accepted.\n"
+msgstr "เสียใจ, %s ไม่ถูกต้อง.\n"
 
-#~ msgid "Enter 'list' for a list of existing %s files\n"
-#~ msgstr "ใส่  'list' สำหรับรายการที่มีอยู่แล้ว %s ไฟล์\n"
+msgid ""
+"\n"
+"You have chosen:\n"
+"  %s\n"
+msgstr ""
+"\n"
+"คุณได้เลือก:\n"
+"  %s\n"
+
+msgid "Is this correct? "
+msgstr "อย่างนี้ถูกต้องหรือไม่? "
 
-#~ msgid "Enter 'list -f' for "
-#~ msgstr "ใส่  'list -f' สำหรับ"
+msgid "to accept the default"
+msgstr "ใช้ค่าตั้งต้น"
 
-#~ msgid "a list %s"
-#~ msgstr "รายการ  %s"
+msgid "to cancel request"
+msgstr "ยกเลิกการร้องขอ"
 
-#~ msgid "an extended list"
-#~ msgstr "รายการขยาย"
+msgid "Enter a new %s file name"
+msgstr "ใส่ชื่อไฟล์ใหม่  %s"
 
-#~ msgid "Hit RETURN %s\n"
-#~ msgstr "กด  RETURN %s\n"
+msgid "Enter the name of an existing %s file"
+msgstr "ใส่ชื่อไฟล์ที่มีอยู่แล้ว  %s"
 
-#~ msgid ""
-#~ "\n"
-#~ "** %s - not found **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "** %s - ไม่พบ **\n"
+msgid "Enter %s file name"
+msgstr "ใส่ชื่อไฟล์  %s"
 
-#~ msgid ""
-#~ "\n"
-#~ "** %s exists. ok to overwrite? "
-#~ msgstr ""
-#~ "\n"
-#~ "** %s มีอยู่แล้ว. คุณต้องการที่จะเขียนทับหรือไม่? "
+msgid "Enter 'list' for a list of existing %s files\n"
+msgstr "ใส่  'list' สำหรับรายการที่มีอยู่แล้ว %s ไฟล์\n"
 
-#~ msgid ""
-#~ "\n"
-#~ "**<%s> illegal name **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "**<%s> ชื่อไม่ถูกต้อง **\n"
+msgid "Enter 'list -f' for "
+msgstr "ใส่  'list -f' สำหรับ"
 
-#~ msgid ""
-#~ "\n"
-#~ "** %s - illegal request **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "**<%s> คำร้องขอถูกต้อง **\n"
+msgid "a list %s"
+msgstr "รายการ  %s"
 
-#~ msgid ""
-#~ "\n"
-#~ "** %s - exists, select another name **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "** %s - มีอยู่แล้ว, ให้เลือกชื่ออื่น **\n"
+msgid "an extended list"
+msgstr "รายการขยาย"
 
-#~ msgid "ask: can't happen"
-#~ msgstr "ถาม: ไม่สามารถเกิดขึ้นได้"
+msgid "Hit RETURN %s\n"
+msgstr "กด  RETURN %s\n"
 
-#~ msgid "Insufficent memory for allocation of gaussian"
-#~ msgstr "หน่วยความจำไม่พอที่จะเก็บค่า gaussian"
+msgid ""
+"\n"
+"** %s - not found **\n"
+msgstr ""
+"\n"
+"** %s - ไม่พบ **\n"
 
-#~ msgid "Can't read header file for [%s in %s]\n"
-#~ msgstr "ไม่สามารถอ่านส่วนหัวของไฟล์สำหรับ [%s ใน %s]\n"
+msgid ""
+"\n"
+"** %s exists. ok to overwrite? "
+msgstr ""
+"\n"
+"** %s มีอยู่แล้ว. คุณต้องการที่จะเขียนทับหรือไม่? "
 
-#~ msgid "Can't open header file for [%s in %s]"
-#~ msgstr "ไม่สามารถอ่าน header ไฟล์ได้ สำหรับ[%s in %s]"
+msgid ""
+"\n"
+"**<%s> illegal name **\n"
+msgstr ""
+"\n"
+"**<%s> ชื่อไม่ถูกต้อง **\n"
 
-#~ msgid "Cannot get field info"
-#~ msgstr "ไม่สามารถอ่านรายละเอียด field ได้"
+msgid ""
+"\n"
+"** %s - illegal request **\n"
+msgstr ""
+"\n"
+"**<%s> คำร้องขอถูกต้อง **\n"
 
-#~ msgid "Cannot open database"
-#~ msgstr "ไม่สามารถเปิดฐานข้อมูลได้"
+msgid ""
+"\n"
+"** %s - exists, select another name **\n"
+msgstr ""
+"\n"
+"** %s - มีอยู่แล้ว, ให้เลือกชื่ออื่น **\n"
 
-#~ msgid "Could not select from table/column"
-#~ msgstr "ไม่สามารถเลือกจาก ตาราง/column"
+msgid "ask: can't happen"
+msgstr "ถาม: ไม่สามารถเกิดขึ้นได้"
 
-#~ msgid "Building topology ...\n"
-#~ msgstr "กำลังสร้าง topology ...\n"
+msgid "Insufficent memory for allocation of gaussian"
+msgstr "หน่วยความจำไม่พอที่จะเก็บค่า gaussian"
 
-#~ msgid ""
-#~ "\r%d areas built      \n"
-#~ "%d isles built\n"
-#~ msgstr ""
-#~ "\r%d สร้างรูปปิด      \n"
-#~ "%d สร้าง isles \n"
+msgid "Can't read header file for [%s in %s]\n"
+msgstr "ไม่สามารถอ่านส่วนหัวของไฟล์สำหรับ [%s ใน %s]\n"
 
-#~ msgid "Cannot open database <%s> by driver <%s>"
-#~ msgstr "ไม่สามารถเปิดฐานข้อมูล <%s> ด้วยตัวขับ <%s>"
+msgid "Can't open header file for [%s in %s]"
+msgstr "ไม่สามารถอ่าน header ไฟล์ได้ สำหรับ[%s in %s]"
 
-#~ msgid "Cannot get column info"
-#~ msgstr "ไม่สามารถอ่าน รายละเอียด column"
+msgid "Cannot get field info"
+msgstr "ไม่สามารถอ่านรายละเอียด field ได้"
 
-#~ msgid "Column type not supported"
-#~ msgstr "ไม่รองรับ ชนิด Column นี้"
+msgid "Cannot open database"
+msgstr "ไม่สามารถเปิดฐานข้อมูลได้"
 
-#~ msgid "OGR feature type [%d] not supported"
-#~ msgstr "ข้อมูล ชนิด OGR  [%d] ไม่รองรับ"
+msgid "Could not select from table/column"
+msgstr "ไม่สามารถเลือกจาก ตาราง/column"
 
-#~ msgid "Vect_rewrite_line() for this format/level not supported"
-#~ msgstr "Vect_rewrite_line() สำหรับ รูปแบบ/ระดับ  ไม่รองรับ"
+msgid "Building topology ...\n"
+msgstr "กำลังสร้าง topology ...\n"
 
-#~ msgid "Vect_delete_line() for this format/level not supported"
-#~ msgstr "Vect_delete_line() สำหรับ รูปแบบ/ระดับ  ไม่รองรับ"
+msgid ""
+"\r%d areas built      \n"
+"%d isles built\n"
+msgstr ""
+"\r%d สร้างรูปปิด      \n"
+"%d สร้าง isles \n"
 
-#~ msgid "Cannot rewrite line"
-#~ msgstr "ไม่สามารถเขียนใหม่"
+msgid "Cannot open database <%s> by driver <%s>"
+msgstr "ไม่สามารถเปิดฐานข้อมูล <%s> ด้วยตัวขับ <%s>"
 
-#~ msgid "Cannot delete line"
-#~ msgstr "ไม่สามารถลบ"
+msgid "Cannot get column info"
+msgstr "ไม่สามารถอ่าน รายละเอียด column"
+
+msgid "Column type not supported"
+msgstr "ไม่รองรับ ชนิด Column นี้"
+
+msgid "OGR feature type [%d] not supported"
+msgstr "ข้อมูล ชนิด OGR  [%d] ไม่รองรับ"
+
+msgid "Vect_rewrite_line() for this format/level not supported"
+msgstr "Vect_rewrite_line() สำหรับ รูปแบบ/ระดับ  ไม่รองรับ"
+
+msgid "Vect_delete_line() for this format/level not supported"
+msgstr "Vect_delete_line() สำหรับ รูปแบบ/ระดับ  ไม่รองรับ"
+
+msgid "Cannot rewrite line"
+msgstr "ไม่สามารถเขียนใหม่"
+
+msgid "Cannot delete line"
+msgstr "ไม่สามารถลบ"
+
+#~ msgid "Unable to allocate memory\n"
+#~ msgstr "ไม่สามารถจองหน่วยความจำได้\n"
+
+#, fuzzy
+#~ msgid "<%s>: bad mapset"
+#~ msgstr "<%s> ในชุดแผนที่ <%s>"
+
+#~ msgid "unable to find [%s] in [%s]"
+#~ msgstr "ไม่สามารถค้นหา [%s] ใน [%s]"

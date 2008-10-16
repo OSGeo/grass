@@ -531,9 +531,9 @@ msgid "Unable to get list tables in database <%s>"
 msgstr "impossibile aprire il file con la tabella dell'ellissoide: %s"
 
 #: ../lib/db/dbmi_client/copy_tab.c:157
-#, c-format
+#, fuzzy, c-format
 msgid "Table <%s> already exists in database <%s>"
-msgstr ""
+msgstr "impossibile aprire il file con la tabella dell'ellissoide: %s"
 
 #: ../lib/db/dbmi_client/copy_tab.c:199 ../lib/db/dbmi_client/copy_tab.c:276
 #: ../lib/db/dbmi_client/table.c:110
@@ -1275,12 +1275,12 @@ msgstr ""
 #: ../lib/vector/Vlib/write_nat.c:640
 #, fuzzy
 msgid "Attempt to delete dead feature"
-msgstr "Non riesco ad aprire il file temp"
+msgstr "Impossibile calcolare il centroide dell'area %d"
 
 #: ../lib/vector/Vlib/write_nat.c:885
 #, fuzzy
 msgid "Attempt to restore alive feature"
-msgstr "Non riesco ad aprire il file temp"
+msgstr "Impossibile calcolare il centroide dell'area %d"
 
 #: ../lib/vector/Vlib/level_two.c:210 ../lib/vector/Vlib/level_two.c:235
 #: ../lib/vector/Vlib/level_two.c:259 ../lib/vector/Vlib/level_two.c:278
@@ -2004,9 +2004,10 @@ msgid "Window replacing the default"
 msgstr "Finestra sostituisce il predefinito"
 
 #: ../lib/g3d/g3dcolor.c:332
-#, c-format
+#, fuzzy, c-format
 msgid "mapset <%s> is not the current mapset"
 msgstr ""
+"Bug: attesa di aggiornamento di una mappa non presente nel mapset in uso"
 
 #: ../lib/g3d/g3dopen.c:20
 msgid "G3d_openCellOldNoHeader: error in G3d_maskOpenOld"
@@ -2068,7 +2069,8 @@ msgstr "G3d_openCellNew: errore in G3d_malloc"
 #: ../lib/g3d/g3dopen.c:229
 #, fuzzy, c-format
 msgid "map <%s> is not in the current mapset"
-msgstr "Nessun file %s disponibile nel mapset in uso\n"
+msgstr ""
+"Bug: attesa di aggiornamento di una mappa non presente nel mapset in uso"
 
 #: ../lib/g3d/g3dopen.c:239
 msgid "G3d_openCellNew: could not open file"
@@ -2273,7 +2275,7 @@ msgstr ""
 #: ../lib/gis/opencell.c:932 ../lib/gis/opencell.c:1020
 #, fuzzy, c-format
 msgid "Unable to find '%s' in '%s'"
-msgstr "impossibile trovare [%s] in [%s]"
+msgstr "impossibile trovare [%s]"
 
 #: ../lib/gis/opencell.c:965
 #, fuzzy, c-format
@@ -2336,9 +2338,9 @@ msgid "'%s/%s' was found in more mapsets (also found in <%s>)"
 msgstr ""
 
 #: ../lib/gis/find_file.c:82
-#, c-format
+#, fuzzy, c-format
 msgid "Using <%s@%s>"
-msgstr ""
+msgstr "impossibile trovare [%s]"
 
 #: ../lib/gis/quant_io.c:89
 #, c-format
@@ -3910,9 +3912,9 @@ msgid "Vector map <%s> loaded (%d points)"
 msgstr "Non riesco a trovare il vettore '%s' di input"
 
 #: ../lib/ogsf/GS2.c:1638
-#, c-format
+#, fuzzy, c-format
 msgid "Raster map <%s> is outside of current region. Load failed."
-msgstr ""
+msgstr "[%s] nel mapset [%s] - zona [%d] diversa dalla regione in uso [%d]"
 
 #: ../lib/ogsf/GS2.c:1716 ../lib/ogsf/GS2.c:1722 ../lib/ogsf/GS2.c:1730
 #: ../lib/ogsf/GS2.c:1739 ../lib/ogsf/GS2.c:1747 ../lib/ogsf/GS2.c:1757
@@ -4281,7 +4283,7 @@ msgstr ""
 #: ../lib/cairodriver/Graph.c:81
 #, fuzzy
 msgid "Unable to obtain visual"
-msgstr "Impossibile aprire %s"
+msgstr "Impossibile aprire il file %s in %s"
 
 #: ../lib/cairodriver/Graph.c:86
 #, fuzzy
@@ -4432,610 +4434,619 @@ msgid "Unable to define new light"
 msgstr "Impossibile aprire il file %s in %s"
 
 #, fuzzy
-#~ msgid "Cannot describe table <%s>"
-#~ msgstr "Non posso scrivere i collegamenti del database"
+msgid "Cannot describe table <%s>"
+msgstr "Non posso scrivere i collegamenti del database"
 
 #, fuzzy
-#~ msgid "Unknown command: %d last: %d"
-#~ msgstr ""
-#~ "\n"
-#~ "Comando sconosciuto: %d ultimo: %d\n"
+msgid "Unknown command: %d last: %d"
+msgstr ""
+"\n"
+"Comando sconosciuto: %d ultimo: %d\n"
 
-#~ msgid "Monitor: get_command: Premature EOF"
-#~ msgstr "Monitor: get_command: EOF prematuro"
+msgid "Monitor: get_command: Premature EOF"
+msgstr "Monitor: get_command: EOF prematuro"
 
-#~ msgid "Graphics driver [%s] started"
-#~ msgstr "Driver grafico [%s] avviato"
+msgid "Graphics driver [%s] started"
+msgstr "Driver grafico [%s] avviato"
 
-#~ msgid "ERROR %s from graphics driver.\n"
-#~ msgstr "ERRORE %s dal driver grafico.\n"
+msgid "ERROR %s from graphics driver.\n"
+msgstr "ERRORE %s dal driver grafico.\n"
 
-#~ msgid "ERROR - eof from graphics monitor.\n"
-#~ msgstr "ERRORE - eof del monitor grafico.\n"
+msgid "ERROR - eof from graphics monitor.\n"
+msgstr "ERRORE - eof del monitor grafico.\n"
 
-#~ msgid "Warning - no response from graphics monitor <%s>.\n"
-#~ msgstr "Attenzione - nessuna risposta dal monitor grafico <%s>.\n"
+msgid "Warning - no response from graphics monitor <%s>.\n"
+msgstr "Attenzione - nessuna risposta dal monitor grafico <%s>.\n"
 
-#~ msgid "Check to see if the mouse is still active.\n"
-#~ msgstr "Controlla se il mouse è ancora attivo.\n"
+msgid "Check to see if the mouse is still active.\n"
+msgstr "Controlla se il mouse è ancora attivo.\n"
 
-#~ msgid "ERROR - no response from graphics monitor <%s>.\n"
-#~ msgstr "ERRORE: nessuna risposta dai monitor grafici <%s>.\n"
-
-#, fuzzy
-#~ msgid "No graphics monitor has been selected for output."
-#~ msgstr "Non è stato selezionato nessun monitor grafico per l'output.\n"
+msgid "ERROR - no response from graphics monitor <%s>.\n"
+msgstr "ERRORE: nessuna risposta dai monitor grafici <%s>.\n"
 
 #, fuzzy
-#~ msgid "Please run \"d.mon\" to select a graphics monitor."
-#~ msgstr "Per piacere avvia \"d.mon\" per selezionare un monitor grafico.\n"
+msgid "No graphics monitor has been selected for output."
+msgstr "Non è stato selezionato nessun monitor grafico per l'output.\n"
 
 #, fuzzy
-#~ msgid "Failed to get socket name for monitor <%s>."
-#~ msgstr "Fallimento nel dare un nome alla socket per il monitor <%s>.\n"
+msgid "Please run \"d.mon\" to select a graphics monitor."
+msgstr "Per piacere avvia \"d.mon\" per selezionare un monitor grafico.\n"
 
 #, fuzzy
-#~ msgid "No socket to connect to for monitor <%s>."
-#~ msgstr "Nessuna socket per connettersi al monitor <%s>.\n"
+msgid "Failed to get socket name for monitor <%s>."
+msgstr "Fallimento nel dare un nome alla socket per il monitor <%s>.\n"
 
 #, fuzzy
-#~ msgid "Socket is already in use or not accepting connections."
-#~ msgstr ""
-#~ "Socket già in uso o non in grado di accettare connessioni.\n"
-#~ "Usa d.mon per selezionare un monitor\n"
+msgid "No socket to connect to for monitor <%s>."
+msgstr "Nessuna socket per connettersi al monitor <%s>.\n"
 
 #, fuzzy
-#~ msgid "Use d.mon to select a monitor"
-#~ msgstr "Per piacere avvia \"d.mon\" per selezionare un monitor grafico.\n"
+msgid "Socket is already in use or not accepting connections."
+msgstr ""
+"Socket già in uso o non in grado di accettare connessioni.\n"
+"Usa d.mon per selezionare un monitor\n"
 
 #, fuzzy
-#~ msgid "Trying to connect to something not a socket."
-#~ msgstr ""
-#~ "Tentativo di connessione a qualcosa che non è una socket.\n"
-#~ "Probabilmente un errore nel programma\n"
+msgid "Use d.mon to select a monitor"
+msgstr "Per piacere avvia \"d.mon\" per selezionare un monitor grafico.\n"
 
 #, fuzzy
-#~ msgid "Probably an error with the server."
-#~ msgstr ""
-#~ "Tempo di connessione scaduto. Probabilmente ci sono errore con il "
-#~ "server.\n"
+msgid "Trying to connect to something not a socket."
+msgstr ""
+"Tentativo di connessione a qualcosa che non è una socket.\n"
+"Probabilmente un errore nel programma\n"
 
 #, fuzzy
-#~ msgid "Connection failed."
-#~ msgstr "Connessione fallita.\n"
+msgid "Probably an error with the server."
+msgstr ""
+"Tempo di connessione scaduto. Probabilmente ci sono errore con il server.\n"
 
 #, fuzzy
-#~ msgid "Cannot read topo for line [%d]"
-#~ msgstr "Non riesco a leggere l'istogramma per [%s in %s]"
+msgid "Connection failed."
+msgstr "Connessione fallita.\n"
 
 #, fuzzy
-#~ msgid "Unable to open file %s"
-#~ msgstr "Impossibile aprire il file %s in %s"
+msgid "Cannot read topo for line [%d]"
+msgstr "Non riesco a leggere l'istogramma per [%s in %s]"
 
 #, fuzzy
-#~ msgid "Unable to open temporary file"
-#~ msgstr "Impossibile aprire il file %s in %s"
-
-#~ msgid "Hit RETURN to cancel request\n"
-#~ msgstr "Premi INVIO per annullare la richiesta\n"
-
-#~ msgid "Cannot open temp file"
-#~ msgstr "Non riesco ad aprire il file temp"
-
-#~ msgid ""
-#~ "\n"
-#~ "Please specify ellipsoid name\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Per piacere specifica il nome dell'ellissoide\n"
-
-#~ msgid "Enter 'list' for the list of available ellipsoids\n"
-#~ msgstr "Digita 'list' per la lista degli ellissoidi disponibili\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "invalid ellipsoid\n"
-#~ msgstr ""
-#~ "\n"
-#~ "ellissoide non valido\n"
-
-#~ msgid "Output name '%s' is not valid rast name."
-#~ msgstr "Il nome '%s' in output non è un nome di raster valido."
-
-#~ msgid "Output map '%s' is used as input"
-#~ msgstr "La mappa '%s' in output è utilizzata come input"
-
-#~ msgid ""
-#~ "\n"
-#~ "Please specify datum name\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Per piacere specifica il nome del datum\n"
-
-#~ msgid "Enter 'list' for the list of available datums\n"
-#~ msgstr "Digita 'list' per la lista dei datum disponibili\n"
-
-#~ msgid "or 'custom' if you wish to enter custom parameters\n"
-#~ msgstr "o 'custom' se desidera di inserire parametri personalizzati\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "invalid datum\n"
-#~ msgstr ""
-#~ "\n"
-#~ "datum non valido\n"
-
-#~ msgid "hit RETURN to continue -->"
-#~ msgstr "premi INVIO per continuare -->"
-
-#~ msgid "unable to open raster map [%s in %s]"
-#~ msgstr "impossibile aprire un raster [%s in %s]"
-
-#~ msgid "one moment...\n"
-#~ msgstr "un momento...\n"
-
-#~ msgid "No help available for command [%s]\n"
-#~ msgstr "Nessun aiuto disponibile per il comando [%s]\n"
-
-#~ msgid " The raster map %s@%s is empty"
-#~ msgstr " La mappa raster %s@%s è vuota"
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "Color table needed for file [%s] in mapset [%s].\n"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "Tabella colori necessaria nel file [%s] per il mapset [%s].\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Please identify the type desired:\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Per piacere specifica il tipo desiderato:\n"
-
-#~ msgid "    1:  Random colors\n"
-#~ msgstr "    1:  Colori casuali\n"
-
-#~ msgid "    2:  Red, green, and blue color ramps\n"
-#~ msgstr "    2:  Rampe colori di rosso, verde e blu\n"
-
-#~ msgid "    3:  Color wave\n"
-#~ msgstr "    3:  Colore onda\n"
-
-#~ msgid "    4:  Gray scale\n"
-#~ msgstr "    4:  Scala di grigi\n"
-
-#~ msgid "    5:  Aspect\n"
-#~ msgstr "    5:  Aspetto\n"
-
-#~ msgid "    6:  Rainbow colors\n"
-#~ msgstr "    6:  colori dell'arcobaleno\n"
-
-#~ msgid "    7:  Red through yellow to green\n"
-#~ msgstr "    7: Da rosso a giallo via verde\n"
-
-#~ msgid "    8:  Green through yellow to red\n"
-#~ msgstr "    8:  Da verde a giallo via rosso\n"
-
-#~ msgid "RETURN  quit\n"
-#~ msgstr "INVIO  esce\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "%s invalid; Try again > "
-#~ msgstr ""
-#~ "\n"
-#~ "%s non valid; Prova ancora > "
-
-#~ msgid "%s not found"
-#~ msgstr "%s non trovato"
-
-#~ msgid "ERROR in reading %s"
-#~ msgstr "ERRORE nella lettura %s"
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "Please specify projection name\n"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "Per piacere specifica il nome della proiezione\n"
-
-#~ msgid "Enter 'list' for the list of available projections\n"
-#~ msgstr "Digita 'list' per la lista delle proiezioni disponibili\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "invalid projection\n"
-#~ msgstr ""
-#~ "\n"
-#~ "proiezione non valida\n"
-
-#~ msgid "with titles"
-#~ msgstr "con titoli"
-
-#~ msgid "(no title)"
-#~ msgstr "(nessun titolo)"
-
-#~ msgid ""
-#~ "\n"
-#~ "FLAG: Set the following flag?\n"
-#~ msgstr ""
-#~ "\n"
-#~ "FLAG: Assegnare il seguente flag?\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "OPTION:   %s\n"
-#~ msgstr ""
-#~ "\n"
-#~ "OPZIONE:   %s\n"
-
-#~ msgid "     key: %s\n"
-#~ msgstr "     chiave: %s\n"
-
-#~ msgid "  format: %s\n"
-#~ msgstr "  formato: %s\n"
-
-#~ msgid " default: %s\n"
-#~ msgstr " predefinito: %s\n"
-
-#~ msgid "required: %s\n"
-#~ msgstr "richiesto: %s\n"
-
-#~ msgid "multiple: %s\n"
-#~ msgstr "multiplo: %s\n"
-
-#~ msgid "enter option > "
-#~ msgstr "inserisci opzione > "
-
-#~ msgid "   Try again? "
-#~ msgstr "   Provo ancora? "
-
-#~ msgid "Sorry, %s is not accepted.\n"
-#~ msgstr "Spiacente, %s non è accettabile.\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "You have chosen:\n"
-#~ "  %s\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Hai selezionato:\n"
-#~ "  %s\n"
-
-#~ msgid "Is this correct? "
-#~ msgstr "È corretto? "
-
-#~ msgid "to accept the default"
-#~ msgstr "per accettare i valori predefiniti"
-
-#~ msgid "to cancel request"
-#~ msgstr "per annullare la richiesta"
-
-#~ msgid "Enter a new %s file name"
-#~ msgstr "Digita un nuovo nome di file %s "
-
-#~ msgid "Enter the name of an existing %s file"
-#~ msgstr "Digita il nome di un file %s esistente"
-
-#~ msgid "Enter %s file name"
-#~ msgstr "Inserisci il nome del file %s"
-
-#~ msgid "Enter 'list' for a list of existing %s files\n"
-#~ msgstr "Digita 'list' per una lista dei %s file esistenti\n"
-
-#~ msgid "Enter 'list -f' for "
-#~ msgstr "Digita 'list -f' per "
-
-#~ msgid "a list %s"
-#~ msgstr "una lista %s"
-
-#~ msgid "an extended list"
-#~ msgstr "una lista estesa"
-
-#~ msgid "Hit RETURN %s\n"
-#~ msgstr "Premi INVIO %s\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "** %s - not found **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "** %s - non trovato **\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "** %s exists. ok to overwrite? "
-#~ msgstr ""
-#~ "\n"
-#~ "** %s esiste già. Procedo alla sovrascrittura? "
-
-#~ msgid ""
-#~ "\n"
-#~ "**<%s> illegal name **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "**<%s> nome illegale **\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "** %s - illegal request **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "** %s - richiesta illegale **\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "** %s - exists, select another name **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "** %s - esiste, selezionare un altro nome **\n"
-
-#~ msgid "ask: can't happen"
-#~ msgstr "ask.c: non deve succedere"
-
-#~ msgid "Can't read header file for [%s in %s]\n"
-#~ msgstr "Non riesco a leggere il file di intestazione per [%s in %s]\n"
-
-#~ msgid "Can't open header file for [%s in %s]"
-#~ msgstr "Non riesco ad aprire il file di intestazione per [%s in %s]"
+msgid "Unable to open file %s"
+msgstr "Impossibile aprire il file %s in %s"
 
 #, fuzzy
-#~ msgid "Cannot get field info"
-#~ msgstr "Non posso cancellare la linea"
+msgid "Unable to open temporary file"
+msgstr "Impossibile aprire il file %s in %s"
+
+msgid "Hit RETURN to cancel request\n"
+msgstr "Premi INVIO per annullare la richiesta\n"
+
+msgid "Cannot open temp file"
+msgstr "Non riesco ad aprire il file temp"
+
+msgid ""
+"\n"
+"Please specify ellipsoid name\n"
+msgstr ""
+"\n"
+"Per piacere specifica il nome dell'ellissoide\n"
+
+msgid "Enter 'list' for the list of available ellipsoids\n"
+msgstr "Digita 'list' per la lista degli ellissoidi disponibili\n"
+
+msgid ""
+"\n"
+"invalid ellipsoid\n"
+msgstr ""
+"\n"
+"ellissoide non valido\n"
+
+msgid "Output name '%s' is not valid rast name."
+msgstr "Il nome '%s' in output non è un nome di raster valido."
+
+msgid "Output map '%s' is used as input"
+msgstr "La mappa '%s' in output è utilizzata come input"
+
+msgid ""
+"\n"
+"Please specify datum name\n"
+msgstr ""
+"\n"
+"Per piacere specifica il nome del datum\n"
+
+msgid "Enter 'list' for the list of available datums\n"
+msgstr "Digita 'list' per la lista dei datum disponibili\n"
+
+msgid "or 'custom' if you wish to enter custom parameters\n"
+msgstr "o 'custom' se desidera di inserire parametri personalizzati\n"
+
+msgid ""
+"\n"
+"invalid datum\n"
+msgstr ""
+"\n"
+"datum non valido\n"
+
+msgid "hit RETURN to continue -->"
+msgstr "premi INVIO per continuare -->"
+
+msgid "unable to open raster map [%s in %s]"
+msgstr "impossibile aprire un raster [%s in %s]"
+
+msgid "one moment...\n"
+msgstr "un momento...\n"
+
+msgid "No help available for command [%s]\n"
+msgstr "Nessun aiuto disponibile per il comando [%s]\n"
+
+msgid " The raster map %s@%s is empty"
+msgstr " La mappa raster %s@%s è vuota"
+
+msgid ""
+"\n"
+"\n"
+"Color table needed for file [%s] in mapset [%s].\n"
+msgstr ""
+"\n"
+"\n"
+"Tabella colori necessaria nel file [%s] per il mapset [%s].\n"
+
+msgid ""
+"\n"
+"Please identify the type desired:\n"
+msgstr ""
+"\n"
+"Per piacere specifica il tipo desiderato:\n"
+
+msgid "    1:  Random colors\n"
+msgstr "    1:  Colori casuali\n"
+
+msgid "    2:  Red, green, and blue color ramps\n"
+msgstr "    2:  Rampe colori di rosso, verde e blu\n"
+
+msgid "    3:  Color wave\n"
+msgstr "    3:  Colore onda\n"
+
+msgid "    4:  Gray scale\n"
+msgstr "    4:  Scala di grigi\n"
+
+msgid "    5:  Aspect\n"
+msgstr "    5:  Aspetto\n"
+
+msgid "    6:  Rainbow colors\n"
+msgstr "    6:  colori dell'arcobaleno\n"
+
+msgid "    7:  Red through yellow to green\n"
+msgstr "    7: Da rosso a giallo via verde\n"
+
+msgid "    8:  Green through yellow to red\n"
+msgstr "    8:  Da verde a giallo via rosso\n"
+
+msgid "RETURN  quit\n"
+msgstr "INVIO  esce\n"
+
+msgid ""
+"\n"
+"%s invalid; Try again > "
+msgstr ""
+"\n"
+"%s non valid; Prova ancora > "
+
+msgid "%s not found"
+msgstr "%s non trovato"
+
+msgid "ERROR in reading %s"
+msgstr "ERRORE nella lettura %s"
+
+msgid ""
+"\n"
+"\n"
+"Please specify projection name\n"
+msgstr ""
+"\n"
+"\n"
+"Per piacere specifica il nome della proiezione\n"
+
+msgid "Enter 'list' for the list of available projections\n"
+msgstr "Digita 'list' per la lista delle proiezioni disponibili\n"
+
+msgid ""
+"\n"
+"invalid projection\n"
+msgstr ""
+"\n"
+"proiezione non valida\n"
+
+msgid "with titles"
+msgstr "con titoli"
+
+msgid "(no title)"
+msgstr "(nessun titolo)"
+
+msgid ""
+"\n"
+"FLAG: Set the following flag?\n"
+msgstr ""
+"\n"
+"FLAG: Assegnare il seguente flag?\n"
+
+msgid ""
+"\n"
+"OPTION:   %s\n"
+msgstr ""
+"\n"
+"OPZIONE:   %s\n"
+
+msgid "     key: %s\n"
+msgstr "     chiave: %s\n"
+
+msgid "  format: %s\n"
+msgstr "  formato: %s\n"
+
+msgid " default: %s\n"
+msgstr " predefinito: %s\n"
+
+msgid "required: %s\n"
+msgstr "richiesto: %s\n"
+
+msgid "multiple: %s\n"
+msgstr "multiplo: %s\n"
+
+msgid "enter option > "
+msgstr "inserisci opzione > "
+
+msgid "   Try again? "
+msgstr "   Provo ancora? "
+
+msgid "Sorry, %s is not accepted.\n"
+msgstr "Spiacente, %s non è accettabile.\n"
+
+msgid ""
+"\n"
+"You have chosen:\n"
+"  %s\n"
+msgstr ""
+"\n"
+"Hai selezionato:\n"
+"  %s\n"
+
+msgid "Is this correct? "
+msgstr "È corretto? "
+
+msgid "to accept the default"
+msgstr "per accettare i valori predefiniti"
+
+msgid "to cancel request"
+msgstr "per annullare la richiesta"
+
+msgid "Enter a new %s file name"
+msgstr "Digita un nuovo nome di file %s "
+
+msgid "Enter the name of an existing %s file"
+msgstr "Digita il nome di un file %s esistente"
+
+msgid "Enter %s file name"
+msgstr "Inserisci il nome del file %s"
+
+msgid "Enter 'list' for a list of existing %s files\n"
+msgstr "Digita 'list' per una lista dei %s file esistenti\n"
+
+msgid "Enter 'list -f' for "
+msgstr "Digita 'list -f' per "
+
+msgid "a list %s"
+msgstr "una lista %s"
+
+msgid "an extended list"
+msgstr "una lista estesa"
+
+msgid "Hit RETURN %s\n"
+msgstr "Premi INVIO %s\n"
+
+msgid ""
+"\n"
+"** %s - not found **\n"
+msgstr ""
+"\n"
+"** %s - non trovato **\n"
+
+msgid ""
+"\n"
+"** %s exists. ok to overwrite? "
+msgstr ""
+"\n"
+"** %s esiste già. Procedo alla sovrascrittura? "
+
+msgid ""
+"\n"
+"**<%s> illegal name **\n"
+msgstr ""
+"\n"
+"**<%s> nome illegale **\n"
+
+msgid ""
+"\n"
+"** %s - illegal request **\n"
+msgstr ""
+"\n"
+"** %s - richiesta illegale **\n"
+
+msgid ""
+"\n"
+"** %s - exists, select another name **\n"
+msgstr ""
+"\n"
+"** %s - esiste, selezionare un altro nome **\n"
+
+msgid "ask: can't happen"
+msgstr "ask.c: non deve succedere"
+
+msgid "Can't read header file for [%s in %s]\n"
+msgstr "Non riesco a leggere il file di intestazione per [%s in %s]\n"
+
+msgid "Can't open header file for [%s in %s]"
+msgstr "Non riesco ad aprire il file di intestazione per [%s in %s]"
 
 #, fuzzy
-#~ msgid "Cannot open database"
-#~ msgstr "Non posso scrivere i collegamenti del database"
-
-#~ msgid "Building topology ...\n"
-#~ msgstr "Creazione topologia...\n"
-
-#~ msgid ""
-#~ "\r%d areas built      \n"
-#~ "%d isles built\n"
-#~ msgstr ""
-#~ "\r%d aree create      \n"
-#~ "%d isole create\n"
+msgid "Cannot get field info"
+msgstr "Non posso cancellare la linea"
 
 #, fuzzy
-#~ msgid "Cannot open database <%s> by driver <%s>"
-#~ msgstr "Non posso scrivere i collegamenti del database"
+msgid "Cannot open database"
+msgstr "Non posso scrivere i collegamenti del database"
+
+msgid "Building topology ...\n"
+msgstr "Creazione topologia...\n"
+
+msgid ""
+"\r%d areas built      \n"
+"%d isles built\n"
+msgstr ""
+"\r%d aree create      \n"
+"%d isole create\n"
 
 #, fuzzy
-#~ msgid "Cannot get column info"
-#~ msgstr "Non posso cancellare la linea"
-
-#~ msgid "Vect_rewrite_line() for this format/level not supported"
-#~ msgstr "Vect_rewrite_line() non supportato per questo formato/livello"
-
-#~ msgid "Vect_delete_line() for this format/level not supported"
-#~ msgstr "Vect_delete_line() non supportato per questo formato/livello"
-
-#~ msgid "Cannot rewrite line"
-#~ msgstr "Non riesco a riscrivere la linea"
-
-#~ msgid "Cannot delete line"
-#~ msgstr "Non posso cancellare la linea"
-
-#~ msgid "Output name '%s' is not valid vector name."
-#~ msgstr "Il nome '%s' in output non è valido per un vettore."
-
-#~ msgid "Cannot copy vector '%s' to '%s'"
-#~ msgstr "Non posso copiare il vettore '%s' nel '%s'"
+msgid "Cannot open database <%s> by driver <%s>"
+msgstr "Non posso scrivere i collegamenti del database"
 
 #, fuzzy
-#~ msgid "Cannot open existing vector map <%s>"
-#~ msgstr "Non posso cancellare il vettoriale %s"
+msgid "Cannot get column info"
+msgstr "Non posso cancellare la linea"
+
+msgid "Vect_rewrite_line() for this format/level not supported"
+msgstr "Vect_rewrite_line() non supportato per questo formato/livello"
+
+msgid "Vect_delete_line() for this format/level not supported"
+msgstr "Vect_delete_line() non supportato per questo formato/livello"
+
+msgid "Cannot rewrite line"
+msgstr "Non riesco a riscrivere la linea"
+
+msgid "Cannot delete line"
+msgstr "Non posso cancellare la linea"
+
+msgid "Output name '%s' is not valid vector name."
+msgstr "Il nome '%s' in output non è valido per un vettore."
+
+msgid "Cannot copy vector '%s' to '%s'"
+msgstr "Non posso copiare il vettore '%s' nel '%s'"
 
 #, fuzzy
-#~ msgid "Cannot delete existing vector <%s>"
-#~ msgstr "Non posso cancellare il vettoriale %s"
-
-#~ msgid "Cannot open new vector %s"
-#~ msgstr "Non posso aprire il nuovo vettoriale %s"
-
-#~ msgid "Cannot open history file for vector '%s'"
-#~ msgstr "Non riesco ad aprire lo storico per il vettoriale '%s'"
-
-#~ msgid "Could not stat file '%s'"
-#~ msgstr "Non riesco a trovare il file \"%s\""
+msgid "Cannot open existing vector map <%s>"
+msgstr "Non posso cancellare il vettoriale %s"
 
 #, fuzzy
-#~ msgid "Can't open directory %s"
-#~ msgstr "Non riesco ad aprire il vecchio vettoriale %s"
+msgid "Cannot delete existing vector <%s>"
+msgstr "Non posso cancellare il vettoriale %s"
 
-#~ msgid "%s - ** illegal name **"
-#~ msgstr "%s - ** nome illegale **"
+msgid "Cannot open new vector %s"
+msgstr "Non posso aprire il nuovo vettoriale %s"
 
-#~ msgid "No such graphics monitor as <%s>.\n"
-#~ msgstr "Non trovo un monitor grafico per <%s>.\n"
+msgid "Cannot open history file for vector '%s'"
+msgstr "Non riesco ad aprire lo storico per il vettoriale '%s'"
 
-#~ msgid "Please run \"d.mon\" to select a valid graphics monitor.\n"
-#~ msgstr ""
-#~ "Per piacere avvia \"d.mon\" per selezionare un monitor grafico valido.\n"
-
-#, fuzzy
-#~ msgid "Can't stat %s\n"
-#~ msgstr "Non è possibile trovare %s\n"
-
-#~ msgid "Error - Monitor <%s> is in use.\n"
-#~ msgstr "Errore - Monitor <%s> in uso.\n"
-
-#~ msgid "Error - Monitor <%s> is in use by %s.\n"
-#~ msgstr "Errore - il Monitor <%s> è in uso da %s.\n"
-
-#~ msgid "Error - Could not complete locking process for monitor <%s>.\n"
-#~ msgstr ""
-#~ "Errore - non riesco a completare il blocco del processo per il monitor <%"
-#~ "s>.\n"
-
-#~ msgid "Error - Can't set up pipe to graphics device.\n"
-#~ msgstr "Errore - non riesco a creare una pipe al dispositivo grafico.\n"
-
-#~ msgid "Error - Graphics monitor <%s> not running!\n"
-#~ msgstr "Errore -il monitor grafico <%s> non è stato avviato!\n"
-
-#~ msgid "Please start graphics monitor <%s>.\n"
-#~ msgstr "Per piacere avvia il monitor grafico <%s>.\n"
-
-#~ msgid "Not connected...\n"
-#~ msgstr "Non connesso...\n"
-
-#~ msgid "Couldn't connect to monitor. Will try once more.\n"
-#~ msgstr "Non riesco a collegarmi al monitor. Provo a farlo ancora.\n"
+msgid "Could not stat file '%s'"
+msgstr "Non riesco a trovare il file \"%s\""
 
 #, fuzzy
-#~ msgid "Size of cell in fp maps = %d"
-#~ msgstr "Dimensione della cella delle mappe in fp = %d\n"
+msgid "Can't open directory %s"
+msgstr "Non riesco ad aprire il vecchio vettoriale %s"
+
+msgid "%s - ** illegal name **"
+msgstr "%s - ** nome illegale **"
+
+msgid "No such graphics monitor as <%s>.\n"
+msgstr "Non trovo un monitor grafico per <%s>.\n"
+
+msgid "Please run \"d.mon\" to select a valid graphics monitor.\n"
+msgstr ""
+"Per piacere avvia \"d.mon\" per selezionare un monitor grafico valido.\n"
 
 #, fuzzy
-#~ msgid "type for writing floating maps = %d"
-#~ msgstr "per mappe raster presenti %d\n"
+msgid "Can't stat %s\n"
+msgstr "Non è possibile trovare %s\n"
+
+msgid "Error - Monitor <%s> is in use.\n"
+msgstr "Errore - Monitor <%s> in uso.\n"
+
+msgid "Error - Monitor <%s> is in use by %s.\n"
+msgstr "Errore - il Monitor <%s> è in uso da %s.\n"
+
+msgid "Error - Could not complete locking process for monitor <%s>.\n"
+msgstr ""
+"Errore - non riesco a completare il blocco del processo per il monitor <%"
+"s>.\n"
+
+msgid "Error - Can't set up pipe to graphics device.\n"
+msgstr "Errore - non riesco a creare una pipe al dispositivo grafico.\n"
+
+msgid "Error - Graphics monitor <%s> not running!\n"
+msgstr "Errore -il monitor grafico <%s> non è stato avviato!\n"
+
+msgid "Please start graphics monitor <%s>.\n"
+msgstr "Per piacere avvia il monitor grafico <%s>.\n"
+
+msgid "Not connected...\n"
+msgstr "Non connesso...\n"
+
+msgid "Couldn't connect to monitor. Will try once more.\n"
+msgstr "Non riesco a collegarmi al monitor. Provo a farlo ancora.\n"
 
 #, fuzzy
-#~ msgid "current window = %p"
-#~ msgstr "finestra corrente = %p\n"
+msgid "Size of cell in fp maps = %d"
+msgstr "Dimensione della cella delle mappe in fp = %d\n"
 
 #, fuzzy
-#~ msgid "Flag: window set? %d"
-#~ msgstr "Flag: finestra scelta? %d\n"
+msgid "type for writing floating maps = %d"
+msgstr "per mappe raster presenti %d\n"
 
 #, fuzzy
-#~ msgid "File descriptor for automatic mask %d"
-#~ msgstr "Descrizione del file per la maschera automatica %d\n"
+msgid "current window = %p"
+msgstr "finestra corrente = %p\n"
 
 #, fuzzy
-#~ msgid "Flag denoting automatic masking %d"
-#~ msgstr "Descrizione del file per la maschera automatica %d\n"
+msgid "Flag: window set? %d"
+msgstr "Flag: finestra scelta? %d\n"
 
 #, fuzzy
-#~ msgid "CELL mask buffer %p"
-#~ msgstr "CELL maschera del buffer %p\n"
-
-#~ msgid "buffer for reading null rows %p"
-#~ msgstr "buffer di lettura delle righe vuote %p"
-
-#~ msgid "Pre/post compressed data buffer %p"
-#~ msgstr "Buffer di dati pre/post compressi %p"
-
-#~ msgid "sizeof compressed_buf %d"
-#~ msgstr "dimensione del compressed_buf %d"
-
-#~ msgid "work data buffer %p"
-#~ msgstr "work data buffer %p"
-
-#~ msgid "sizeof work_buf %d"
-#~ msgstr "dimensione del work_buf %d"
-
-#~ msgid "sizeof null_buf %d"
-#~ msgstr "dimensione null_buf %d"
-
-#~ msgid "sizeof mask_buf %d"
-#~ msgstr "dimensione mask_buf %d"
-
-#~ msgid "Histogram request %d"
-#~ msgstr "Istogramma richiesto %d"
-
-#~ msgid "G_dump: file #%d"
-#~ msgstr "G_dump: file #%d"
-
-#~ msgid "open mode = %d"
-#~ msgstr "modalità di apertura = %d"
-
-#~ msgid "Cell header %p"
-#~ msgstr "Intestazione cella %p"
+msgid "File descriptor for automatic mask %d"
+msgstr "Descrizione del file per la maschera automatica %d\n"
 
 #, fuzzy
-#~ msgid "Table reclass %p"
-#~ msgstr "Tabella di riclassificazione %p\n"
+msgid "Flag denoting automatic masking %d"
+msgstr "Descrizione del file per la maschera automatica %d\n"
 
 #, fuzzy
-#~ msgid "Cell stats %p"
-#~ msgstr "Intestazione cella %p\n"
+msgid "CELL mask buffer %p"
+msgstr "CELL maschera del buffer %p\n"
+
+msgid "buffer for reading null rows %p"
+msgstr "buffer di lettura delle righe vuote %p"
+
+msgid "Pre/post compressed data buffer %p"
+msgstr "Buffer di dati pre/post compressi %p"
+
+msgid "sizeof compressed_buf %d"
+msgstr "dimensione del compressed_buf %d"
+
+msgid "work data buffer %p"
+msgstr "work data buffer %p"
+
+msgid "sizeof work_buf %d"
+msgstr "dimensione del work_buf %d"
+
+msgid "sizeof null_buf %d"
+msgstr "dimensione null_buf %d"
+
+msgid "sizeof mask_buf %d"
+msgstr "dimensione mask_buf %d"
+
+msgid "Histogram request %d"
+msgstr "Istogramma richiesto %d"
+
+msgid "G_dump: file #%d"
+msgstr "G_dump: file #%d"
+
+msgid "open mode = %d"
+msgstr "modalità di apertura = %d"
+
+msgid "Cell header %p"
+msgstr "Intestazione cella %p"
 
 #, fuzzy
-#~ msgid "Range structure %p"
-#~ msgstr "Struttura intervallo %p\n"
+msgid "Table reclass %p"
+msgstr "Tabella di riclassificazione %p\n"
 
 #, fuzzy
-#~ msgid "float Range structure %p"
-#~ msgstr "Struttura intervallo %p\n"
+msgid "Cell stats %p"
+msgstr "Intestazione cella %p\n"
 
 #, fuzzy
-#~ msgid "want histogram?  %d"
-#~ msgstr "vuoi un istogramma?  %d\n"
+msgid "Range structure %p"
+msgstr "Struttura intervallo %p\n"
 
 #, fuzzy
-#~ msgid "nbytes per cell for current row %d"
-#~ msgstr "nbyte per cella nella riga corrente %d\n"
+msgid "float Range structure %p"
+msgstr "Struttura intervallo %p\n"
 
 #, fuzzy
-#~ msgid "Decompressed data buffer %s"
-#~ msgstr "Buffer di dati decompresso %s\n"
+msgid "want histogram?  %d"
+msgstr "vuoi un istogramma?  %d\n"
 
 #, fuzzy
-#~ msgid "bytes per cell %d"
-#~ msgstr "byte per cella %d\n"
+msgid "nbytes per cell for current row %d"
+msgstr "nbyte per cella nella riga corrente %d\n"
 
 #, fuzzy
-#~ msgid "type: int, float or double map %d"
-#~ msgstr "tipi: mappa int, float o double %d\n"
+msgid "Decompressed data buffer %s"
+msgstr "Buffer di dati decompresso %s\n"
 
 #, fuzzy
-#~ msgid "Temporary name for NEW files %s"
-#~ msgstr "Nome temporaneo per NUOVI file %s\n"
+msgid "bytes per cell %d"
+msgstr "byte per cella %d\n"
 
 #, fuzzy
-#~ msgid "Temporary name for NEW NULL files %s"
-#~ msgstr "Nome temporaneo per NUOVI file VUOTI %s\n"
+msgid "type: int, float or double map %d"
+msgstr "tipi: mappa int, float o double %d\n"
 
 #, fuzzy
-#~ msgid "Mapset of open file %s"
-#~ msgstr "Mapset del file d'aprire%s\n"
+msgid "Temporary name for NEW files %s"
+msgstr "Nome temporaneo per NUOVI file %s\n"
 
 #, fuzzy
-#~ msgid "io error warning given %d"
-#~ msgstr "attenzione ho ricevuto un errore di i/o %d\n"
+msgid "Temporary name for NEW NULL files %s"
+msgstr "Nome temporaneo per NUOVI file VUOTI %s\n"
 
 #, fuzzy
-#~ msgid "NULL_ROWS array[%d] = %p"
-#~ msgstr "NULL_ROWS array[%d] = %p\n"
+msgid "Mapset of open file %s"
+msgstr "Mapset del file d'aprire%s\n"
 
 #, fuzzy
-#~ msgid "data buffer for reading null rows %p"
-#~ msgstr "buffer di lettura delle righe vuote %p\n"
+msgid "io error warning given %d"
+msgstr "attenzione ho ricevuto un errore di i/o %d\n"
 
 #, fuzzy
-#~ msgid "G_dump: end"
-#~ msgstr "G_dump: file #%d\n"
+msgid "NULL_ROWS array[%d] = %p"
+msgstr "NULL_ROWS array[%d] = %p\n"
 
 #, fuzzy
-#~ msgid "Current window not settable"
-#~ msgstr "finestra corrente = %p\n"
+msgid "data buffer for reading null rows %p"
+msgstr "buffer di lettura delle righe vuote %p\n"
 
 #, fuzzy
-#~ msgid "Color file for [%s] not available"
-#~ msgstr "LOCATION  << %s >>  non disponibile"
+msgid "G_dump: end"
+msgstr "G_dump: file #%d\n"
 
 #, fuzzy
-#~ msgid "Cannot use current window"
-#~ msgstr "finestra corrente = %p\n"
+msgid "Current window not settable"
+msgstr "finestra corrente = %p\n"
 
 #, fuzzy
-#~ msgid "Not able to open cellfile for [%s]"
-#~ msgstr "Impossibile aprire il file %s in %s"
+msgid "Color file for [%s] not available"
+msgstr "LOCATION  << %s >>  non disponibile"
 
-#~ msgid "Too many open raster maps"
-#~ msgstr "Troppi file raster aperti"
+#, fuzzy
+msgid "Cannot use current window"
+msgstr "finestra corrente = %p\n"
 
-#~ msgid "Too many open files"
-#~ msgstr "Troppi file aperti"
+#, fuzzy
+msgid "Not able to open cellfile for [%s]"
+msgstr "Impossibile aprire il file %s in %s"
 
-#~ msgid "ERROR: GISBASE not set\n"
-#~ msgstr "ERRORE: GISBASE non definito\n"
+msgid "Too many open raster maps"
+msgstr "Troppi file raster aperti"
+
+msgid "Too many open files"
+msgstr "Troppi file aperti"
+
+msgid "ERROR: GISBASE not set\n"
+msgstr "ERRORE: GISBASE non definito\n"
+
+#~ msgid "Unable to allocate memory\n"
+#~ msgstr "Impossibile allocare memoria\n"
+
+#, fuzzy
+#~ msgid "<%s>: bad mapset"
+#~ msgstr "<%s> nel mapset <%s>"
+
+#~ msgid "unable to find [%s] in [%s]"
+#~ msgstr "impossibile trovare [%s] in [%s]"

@@ -510,9 +510,9 @@ msgid "Unable to get list tables in database <%s>"
 msgstr "elipsoid tablo dosyası açılamıyor: %s"
 
 #: ../lib/db/dbmi_client/copy_tab.c:157
-#, c-format
+#, fuzzy, c-format
 msgid "Table <%s> already exists in database <%s>"
-msgstr ""
+msgstr "elipsoid tablo dosyası açılamıyor: %s"
 
 #: ../lib/db/dbmi_client/copy_tab.c:199 ../lib/db/dbmi_client/copy_tab.c:276
 #: ../lib/db/dbmi_client/table.c:110
@@ -1237,12 +1237,12 @@ msgstr ""
 #: ../lib/vector/Vlib/write_nat.c:640
 #, fuzzy
 msgid "Attempt to delete dead feature"
-msgstr "Üstbilgi dosyası okunamıyor"
+msgstr "[%d] alanının topolojisi okunamıyor"
 
 #: ../lib/vector/Vlib/write_nat.c:885
 #, fuzzy
 msgid "Attempt to restore alive feature"
-msgstr "Üstbilgi dosyası okunamıyor"
+msgstr "[%d] alanının topolojisi okunamıyor"
 
 #: ../lib/vector/Vlib/level_two.c:210 ../lib/vector/Vlib/level_two.c:235
 #: ../lib/vector/Vlib/level_two.c:259 ../lib/vector/Vlib/level_two.c:278
@@ -1963,9 +1963,10 @@ msgid "Window replacing the default"
 msgstr ""
 
 #: ../lib/g3d/g3dcolor.c:332
-#, c-format
+#, fuzzy, c-format
 msgid "mapset <%s> is not the current mapset"
 msgstr ""
+"Geçerli harita takımında olmayan vektör harita güncellemek için açılamıyor"
 
 #: ../lib/g3d/g3dopen.c:20
 msgid "G3d_openCellOldNoHeader: error in G3d_maskOpenOld"
@@ -2026,7 +2027,8 @@ msgstr ""
 #: ../lib/g3d/g3dopen.c:229
 #, fuzzy, c-format
 msgid "map <%s> is not in the current mapset"
-msgstr "Geçerli harita takımında hiç %s dosyası yok\n"
+msgstr ""
+"Geçerli harita takımında olmayan vektör harita güncellemek için açılamıyor"
 
 #: ../lib/g3d/g3dopen.c:239
 msgid "G3d_openCellNew: could not open file"
@@ -2225,7 +2227,7 @@ msgstr ""
 #: ../lib/gis/opencell.c:932 ../lib/gis/opencell.c:1020
 #, fuzzy, c-format
 msgid "Unable to find '%s' in '%s'"
-msgstr "[%s] deki [%s] bulunamıyor"
+msgstr "[%s] bulunamadı"
 
 #: ../lib/gis/opencell.c:965
 #, fuzzy, c-format
@@ -2288,9 +2290,9 @@ msgid "'%s/%s' was found in more mapsets (also found in <%s>)"
 msgstr ""
 
 #: ../lib/gis/find_file.c:82
-#, c-format
+#, fuzzy, c-format
 msgid "Using <%s@%s>"
-msgstr ""
+msgstr "[%s] bulunamadı"
 
 #: ../lib/gis/quant_io.c:89
 #, c-format
@@ -3819,9 +3821,10 @@ msgid "Vector map <%s> loaded (%d points)"
 msgstr "<%s> vektör haritası bulunamadı"
 
 #: ../lib/ogsf/GS2.c:1638
-#, c-format
+#, fuzzy, c-format
 msgid "Raster map <%s> is outside of current region. Load failed."
 msgstr ""
+"Geçerli harita takımında olmayan vektör harita güncellemek için açılamıyor"
 
 #: ../lib/ogsf/GS2.c:1716 ../lib/ogsf/GS2.c:1722 ../lib/ogsf/GS2.c:1730
 #: ../lib/ogsf/GS2.c:1739 ../lib/ogsf/GS2.c:1747 ../lib/ogsf/GS2.c:1757
@@ -4188,7 +4191,7 @@ msgstr ""
 #: ../lib/cairodriver/Graph.c:81
 #, fuzzy
 msgid "Unable to obtain visual"
-msgstr "%s açılamadı"
+msgstr " %s dosyası açılamıyor"
 
 #: ../lib/cairodriver/Graph.c:86
 #, fuzzy
@@ -4336,344 +4339,360 @@ msgstr ""
 msgid "Unable to define new light"
 msgstr "'%s' dosyası silinemiyor"
 
-#~ msgid "Cannot describe table <%s>"
-#~ msgstr "<%s> tablosu tanımlanamıyor"
+msgid "Cannot describe table <%s>"
+msgstr "<%s> tablosu tanımlanamıyor"
 
-#~ msgid "Unknown command: %d last: %d"
-#~ msgstr "bilinmeyen komut:%d sürüyor:%d"
+msgid "Unknown command: %d last: %d"
+msgstr "bilinmeyen komut:%d sürüyor:%d"
 
-#~ msgid "Graphics driver [%s] started"
-#~ msgstr " [%s] grafik sürücüsü başlatılamadı"
+msgid "Graphics driver [%s] started"
+msgstr " [%s] grafik sürücüsü başlatılamadı"
 
-#~ msgid "Warning - no response from graphics monitor <%s>.\n"
-#~ msgstr "Uyarı - <%s> grafik ekranda hiçbir yanıt yok.\n"
+msgid "Warning - no response from graphics monitor <%s>.\n"
+msgstr "Uyarı - <%s> grafik ekranda hiçbir yanıt yok.\n"
 
-#~ msgid "Check to see if the mouse is still active.\n"
-#~ msgstr "Farenin hala aktif olup olmadığını kontrol ediniz.\n"
+msgid "Check to see if the mouse is still active.\n"
+msgstr "Farenin hala aktif olup olmadığını kontrol ediniz.\n"
 
-#~ msgid "ERROR - no response from graphics monitor <%s>.\n"
-#~ msgstr "HATA - <%s> grafik ekranından hiçbir yanıt yok.\n"
+msgid "ERROR - no response from graphics monitor <%s>.\n"
+msgstr "HATA - <%s> grafik ekranından hiçbir yanıt yok.\n"
 
-#~ msgid "No graphics monitor has been selected for output."
-#~ msgstr "Çıktı için hiçbir ekran seçilmedi."
+msgid "No graphics monitor has been selected for output."
+msgstr "Çıktı için hiçbir ekran seçilmedi."
 
-#~ msgid "Please run \"d.mon\" to select a graphics monitor."
-#~ msgstr "Lütfen grafik ekran seçmek için \"d.mon\" komutunu çalıştırın."
+msgid "Please run \"d.mon\" to select a graphics monitor."
+msgstr "Lütfen grafik ekran seçmek için \"d.mon\" komutunu çalıştırın."
 
-#~ msgid "Failed to get socket name for monitor <%s>."
-#~ msgstr "<%s> ekranına bağlı soket adı belirlenemiyor."
+msgid "Failed to get socket name for monitor <%s>."
+msgstr "<%s> ekranına bağlı soket adı belirlenemiyor."
 
-#~ msgid "No socket to connect to for monitor <%s>."
-#~ msgstr "<%s> ekranına hiçbir soket bağlı değil."
+msgid "No socket to connect to for monitor <%s>."
+msgstr "<%s> ekranına hiçbir soket bağlı değil."
 
-#~ msgid "Socket is already in use or not accepting connections."
-#~ msgstr "Soket ya zaten kullanımda yada bağlantıları kabul etmiyor."
+msgid "Socket is already in use or not accepting connections."
+msgstr "Soket ya zaten kullanımda yada bağlantıları kabul etmiyor."
 
-#~ msgid "Use d.mon to select a monitor"
-#~ msgstr "Lütfen grafik ekran seçmek için \"d.mon\" komutunu kullanın"
+msgid "Use d.mon to select a monitor"
+msgstr "Lütfen grafik ekran seçmek için \"d.mon\" komutunu kullanın"
 
-#~ msgid "Trying to connect to something not a socket."
-#~ msgstr "Soket olmayan birşeye bağlanmaya çalışıyorsunuz."
+msgid "Trying to connect to something not a socket."
+msgstr "Soket olmayan birşeye bağlanmaya çalışıyorsunuz."
 
-#~ msgid "Probably program error."
-#~ msgstr "Muhtemelen program hatası."
+msgid "Probably program error."
+msgstr "Muhtemelen program hatası."
 
-#~ msgid "Connect attempt timed out."
-#~ msgstr "Bağlantı girişiminde zaman aşımı."
+msgid "Connect attempt timed out."
+msgstr "Bağlantı girişiminde zaman aşımı."
 
-#~ msgid "Probably an error with the server."
-#~ msgstr "Muhtemelen sunucu ile ilgili bir hata."
+msgid "Probably an error with the server."
+msgstr "Muhtemelen sunucu ile ilgili bir hata."
 
-#~ msgid "Connection failed."
-#~ msgstr "Bağlantıda hata oldu."
+msgid "Connection failed."
+msgstr "Bağlantıda hata oldu."
 
-#~ msgid "Cannot read topo for line [%d]"
-#~ msgstr "[%d] çizgisinin topolojisi okunamıyor"
+msgid "Cannot read topo for line [%d]"
+msgstr "[%d] çizgisinin topolojisi okunamıyor"
 
 #, fuzzy
-#~ msgid "Unable to open temporary file"
-#~ msgstr " %s dosyası açılamıyor"
+msgid "Unable to open temporary file"
+msgstr " %s dosyası açılamıyor"
 
-#~ msgid "Hit RETURN to cancel request\n"
-#~ msgstr "İstekten vazgeçmek için ENTER'a basın\n"
+msgid "Hit RETURN to cancel request\n"
+msgstr "İstekten vazgeçmek için ENTER'a basın\n"
 
-#~ msgid "Cannot open temp file"
-#~ msgstr "Geçici dosya açılamıyor"
+msgid "Cannot open temp file"
+msgstr "Geçici dosya açılamıyor"
+
+msgid ""
+"\n"
+"Please specify ellipsoid name\n"
+msgstr ""
+"\n"
+"Lütfen elipsoid adını belirleyiniz\n"
+
+msgid "Enter 'list' for the list of available ellipsoids\n"
+msgstr "Kullanılabilir elipsoidlerin listesini görmek için 'list' yazın\n"
+
+msgid ""
+"\n"
+"invalid ellipsoid\n"
+msgstr ""
+"\n"
+"geçersiz elipsoid\n"
+
+msgid "Output name '%s' is not valid rast name."
+msgstr "'%s' çıktı adı geçerli bir raster adı değildir."
+
+msgid "Output map '%s' is used as input"
+msgstr "'%s' çıktı haritası girdi olarak kullanılıyor"
+
+msgid ""
+"\n"
+"Please specify datum name\n"
+msgstr ""
+"\n"
+"Lütfen datum adını belirleyiniz\n"
+
+msgid "Enter 'list' for the list of available datums\n"
+msgstr "Kullanılabilir datumların listesi için 'list' yazın\n"
+
+msgid "or 'custom' if you wish to enter custom parameters\n"
+msgstr "veya özel değişkenler girmek istiyorsanız 'custom' yazın\n"
+
+msgid ""
+"\n"
+"invalid datum\n"
+msgstr ""
+"\n"
+"geçersiz datum\n"
+
+msgid "hit RETURN to continue -->"
+msgstr "Devam etmek için ENTER'a basın -->"
+
+msgid "unable to open raster map [%s in %s]"
+msgstr "[%s deki %s] raster haritası açılamıyor"
+
+msgid "one moment...\n"
+msgstr "bir dakika...\n"
+
+msgid "No help available for command [%s]\n"
+msgstr "[%s] komutu için yardım yoktur\n"
+
+msgid " The raster map %s@%s is empty"
+msgstr "%s@%s raster haritası boş"
+
+msgid ""
+"\n"
+"\n"
+"Color table needed for file [%s] in mapset [%s].\n"
+msgstr ""
+"\n"
+"\n"
+"[%s] harita takımındaki [%s] dosyası için gerekli renk tablosu.\n"
+
+msgid ""
+"\n"
+"Please identify the type desired:\n"
+msgstr ""
+"\n"
+"İstenen tipi belirleyin:\n"
+
+msgid "    1:  Random colors\n"
+msgstr "    1:  Rasgele renkler\n"
+
+msgid "    3:  Color wave\n"
+msgstr "    3:  Renk dalgası\n"
+
+msgid "    4:  Gray scale\n"
+msgstr "    4:  Gri ölçek\n"
+
+msgid "    5:  Aspect\n"
+msgstr "    5:  Bakı\n"
+
+msgid "    6:  Rainbow colors\n"
+msgstr "    6:  Gökkuşağı renkleri\n"
+
+msgid "    7:  Red through yellow to green\n"
+msgstr "    7:  kırmızıdan sarıya, oradan da yaşile\n"
+
+msgid "    8:  Green through yellow to red\n"
+msgstr "    8:  Yeşilden sarıya, oradanda kırmızıya\n"
+
+msgid "RETURN  quit\n"
+msgstr "Çıkmak için ENTER'a basın\n"
+
+msgid ""
+"\n"
+"%s invalid; Try again > "
+msgstr ""
+"\n"
+"%s geçersiz; Tekrar deneyin > "
+
+msgid "%s not found"
+msgstr "%s bulunamadı"
+
+msgid "ERROR in reading %s"
+msgstr "%s'i okumada hata"
+
+msgid ""
+"\n"
+"\n"
+"Please specify projection name\n"
+msgstr ""
+"\n"
+"\n"
+"Lütfen projeksiyon adını belirleyin\n"
+
+msgid "Enter 'list' for the list of available projections\n"
+msgstr "Kullanılabilir projeksiyonların listesini görmek için 'list' yazın\n"
+
+msgid ""
+"\n"
+"invalid projection\n"
+msgstr ""
+"\n"
+"geçersiz projeksiyon\n"
+
+msgid "with titles"
+msgstr "başlıkla"
+
+msgid "(no title)"
+msgstr "(başlıksız)"
+
+msgid ""
+"\n"
+"FLAG: Set the following flag?\n"
+msgstr ""
+"\n"
+"FLAMA: tkip eden flamayı seçeyim mi?\n"
+
+msgid ""
+"\n"
+"OPTION:   %s\n"
+msgstr ""
+"\n"
+"SEÇENEK:   %s\n"
+
+msgid "     key: %s\n"
+msgstr "    anahtar: %s\n"
+
+msgid "  format: %s\n"
+msgstr "  biçim: %s\n"
+
+msgid " default: %s\n"
+msgstr " varsayılan: %s\n"
+
+msgid "required: %s\n"
+msgstr "gereken: %s\n"
+
+msgid "multiple: %s\n"
+msgstr "çoklu: %s\n"
+
+msgid "enter option > "
+msgstr "seçeneği girin >"
+
+msgid "   Try again? "
+msgstr "   Tekrar deneyeyim mi? "
+
+msgid "Sorry, %s is not accepted.\n"
+msgstr "Üzgünüm, %s kabul edilmedi.\n"
+
+msgid ""
+"\n"
+"You have chosen:\n"
+"  %s\n"
+msgstr ""
+"\n"
+"Seçtiniz:\n"
+"  %s\n"
+
+msgid "Is this correct? "
+msgstr "Bu doğru mu?"
+
+msgid "to accept the default"
+msgstr "varsayılanı kabul et"
+
+msgid "to cancel request"
+msgstr "İsteği iptal etmek için"
+
+msgid "Enter a new %s file name"
+msgstr "Yeni bir %s dosya adı girin"
+
+msgid "Enter the name of an existing %s file"
+msgstr "Mevcut %s dosyasının adını gir"
+
+msgid "Enter %s file name"
+msgstr "%s dosya adını gir"
+
+msgid "Enter 'list' for a list of existing %s files\n"
+msgstr "Mevcut %s dosyalar listesi için 'listeyi' gir\n"
+
+msgid "Enter 'list -f' for "
+msgstr "için 'list -f' gir"
+
+msgid "a list %s"
+msgstr "%s listesi"
+
+msgid "an extended list"
+msgstr "genişletilmiş liste"
+
+msgid "Hit RETURN %s\n"
+msgstr "Enter'a Bas %s\n"
+
+msgid ""
+"\n"
+"** %s - not found **\n"
+msgstr ""
+"\n"
+"** %s - bulunamadı **\n"
+
+msgid ""
+"\n"
+"** %s exists. ok to overwrite? "
+msgstr ""
+"\n"
+"** %s mevcut. Üzerine yazmak için onaylıyormusunuz? "
+
+msgid ""
+"\n"
+"** %s - illegal request **\n"
+msgstr ""
+"\n"
+"** %s - uygun olmayan istek **\n"
+
+msgid ""
+"\n"
+"** %s - exists, select another name **\n"
+msgstr ""
+"\n"
+"** %s - mevcut, başka bir ad seçin **\n"
+
+msgid "Can't read header file for [%s in %s]\n"
+msgstr "[%s deki %s] için üstbilgi dosyası okunamıyor\n"
+
+msgid "Can't open header file for [%s in %s]"
+msgstr "[%s deki %s] için üstbilgi dosyası açılamıyo"
+
+msgid "Cannot rewrite line"
+msgstr "Çizgi yeniden yazılamıyor"
+
+msgid "Cannot delete line"
+msgstr "Çizgi silinemedi"
+
+msgid "Building topology ...\n"
+msgstr "Topoloji oluşturuluyor...\n"
+
+msgid "Cannot get field info"
+msgstr "Alan bilgisi alınamıyor"
+
+msgid "Cannot open database"
+msgstr "Veritabanı açılamıyor"
+
+msgid "Could not select from table/column"
+msgstr "Tablo veya sütundan seçilemiyor"
+
+msgid "Cannot open database <%s> by driver <%s>"
+msgstr "<%s> sürücüsüyle <%s> veritabanı açılamıyor"
+
+msgid "Cannot get column info"
+msgstr "Sütun bilgisi alınamıyor"
+
+msgid "OGR feature type [%d] not supported"
+msgstr "[%d] OGR obje tipi desteklenmiyor"
+
+#~ msgid "Unable to allocate memory\n"
+#~ msgstr "Hafıza ayrılamıyor\n"
+
+#, fuzzy
+#~ msgid "<%s>: bad mapset"
+#~ msgstr "<%s> harita takımındaki <%s>"
 
 #~ msgid ""
 #~ "\n"
-#~ "Please specify ellipsoid name\n"
+#~ "**<%s> illegal name **\n"
 #~ msgstr ""
 #~ "\n"
-#~ "Lütfen elipsoid adını belirleyiniz\n"
+#~ "**<%s> uygun olmayan ad **\n"
 
-#~ msgid "Enter 'list' for the list of available ellipsoids\n"
-#~ msgstr "Kullanılabilir elipsoidlerin listesini görmek için 'list' yazın\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "invalid ellipsoid\n"
-#~ msgstr ""
-#~ "\n"
-#~ "geçersiz elipsoid\n"
-
-#~ msgid "Output name '%s' is not valid rast name."
-#~ msgstr "'%s' çıktı adı geçerli bir raster adı değildir."
-
-#~ msgid "Output map '%s' is used as input"
-#~ msgstr "'%s' çıktı haritası girdi olarak kullanılıyor"
-
-#~ msgid ""
-#~ "\n"
-#~ "Please specify datum name\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Lütfen datum adını belirleyiniz\n"
-
-#~ msgid "Enter 'list' for the list of available datums\n"
-#~ msgstr "Kullanılabilir datumların listesi için 'list' yazın\n"
-
-#~ msgid "or 'custom' if you wish to enter custom parameters\n"
-#~ msgstr "veya özel değişkenler girmek istiyorsanız 'custom' yazın\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "invalid datum\n"
-#~ msgstr ""
-#~ "\n"
-#~ "geçersiz datum\n"
-
-#~ msgid "hit RETURN to continue -->"
-#~ msgstr "Devam etmek için ENTER'a basın -->"
-
-#~ msgid "unable to open raster map [%s in %s]"
-#~ msgstr "[%s deki %s] raster haritası açılamıyor"
-
-#~ msgid "one moment...\n"
-#~ msgstr "bir dakika...\n"
-
-#~ msgid "No help available for command [%s]\n"
-#~ msgstr "[%s] komutu için yardım yoktur\n"
-
-#~ msgid " The raster map %s@%s is empty"
-#~ msgstr "%s@%s raster haritası boş"
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "Color table needed for file [%s] in mapset [%s].\n"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "[%s] harita takımındaki [%s] dosyası için gerekli renk tablosu.\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Please identify the type desired:\n"
-#~ msgstr ""
-#~ "\n"
-#~ "İstenen tipi belirleyin:\n"
-
-#~ msgid "    1:  Random colors\n"
-#~ msgstr "    1:  Rasgele renkler\n"
-
-#~ msgid "    3:  Color wave\n"
-#~ msgstr "    3:  Renk dalgası\n"
-
-#~ msgid "    4:  Gray scale\n"
-#~ msgstr "    4:  Gri ölçek\n"
-
-#~ msgid "    5:  Aspect\n"
-#~ msgstr "    5:  Bakı\n"
-
-#~ msgid "    6:  Rainbow colors\n"
-#~ msgstr "    6:  Gökkuşağı renkleri\n"
-
-#~ msgid "    7:  Red through yellow to green\n"
-#~ msgstr "    7:  kırmızıdan sarıya, oradan da yaşile\n"
-
-#~ msgid "    8:  Green through yellow to red\n"
-#~ msgstr "    8:  Yeşilden sarıya, oradanda kırmızıya\n"
-
-#~ msgid "RETURN  quit\n"
-#~ msgstr "Çıkmak için ENTER'a basın\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "%s invalid; Try again > "
-#~ msgstr ""
-#~ "\n"
-#~ "%s geçersiz; Tekrar deneyin > "
-
-#~ msgid "%s not found"
-#~ msgstr "%s bulunamadı"
-
-#~ msgid "ERROR in reading %s"
-#~ msgstr "%s'i okumada hata"
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "Please specify projection name\n"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "Lütfen projeksiyon adını belirleyin\n"
-
-#~ msgid "Enter 'list' for the list of available projections\n"
-#~ msgstr ""
-#~ "Kullanılabilir projeksiyonların listesini görmek için 'list' yazın\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "invalid projection\n"
-#~ msgstr ""
-#~ "\n"
-#~ "geçersiz projeksiyon\n"
-
-#~ msgid "with titles"
-#~ msgstr "başlıkla"
-
-#~ msgid "(no title)"
-#~ msgstr "(başlıksız)"
-
-#~ msgid ""
-#~ "\n"
-#~ "FLAG: Set the following flag?\n"
-#~ msgstr ""
-#~ "\n"
-#~ "FLAMA: tkip eden flamayı seçeyim mi?\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "OPTION:   %s\n"
-#~ msgstr ""
-#~ "\n"
-#~ "SEÇENEK:   %s\n"
-
-#~ msgid "     key: %s\n"
-#~ msgstr "    anahtar: %s\n"
-
-#~ msgid "  format: %s\n"
-#~ msgstr "  biçim: %s\n"
-
-#~ msgid " default: %s\n"
-#~ msgstr " varsayılan: %s\n"
-
-#~ msgid "required: %s\n"
-#~ msgstr "gereken: %s\n"
-
-#~ msgid "multiple: %s\n"
-#~ msgstr "çoklu: %s\n"
-
-#~ msgid "enter option > "
-#~ msgstr "seçeneği girin >"
-
-#~ msgid "   Try again? "
-#~ msgstr "   Tekrar deneyeyim mi? "
-
-#~ msgid "Sorry, %s is not accepted.\n"
-#~ msgstr "Üzgünüm, %s kabul edilmedi.\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "You have chosen:\n"
-#~ "  %s\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Seçtiniz:\n"
-#~ "  %s\n"
-
-#~ msgid "Is this correct? "
-#~ msgstr "Bu doğru mu?"
-
-#~ msgid "to accept the default"
-#~ msgstr "varsayılanı kabul et"
-
-#~ msgid "to cancel request"
-#~ msgstr "İsteği iptal etmek için"
-
-#~ msgid "Enter a new %s file name"
-#~ msgstr "Yeni bir %s dosya adı girin"
-
-#~ msgid "Enter the name of an existing %s file"
-#~ msgstr "Mevcut %s dosyasının adını gir"
-
-#~ msgid "Enter %s file name"
-#~ msgstr "%s dosya adını gir"
-
-#~ msgid "Enter 'list' for a list of existing %s files\n"
-#~ msgstr "Mevcut %s dosyalar listesi için 'listeyi' gir\n"
-
-#~ msgid "Enter 'list -f' for "
-#~ msgstr "için 'list -f' gir"
-
-#~ msgid "a list %s"
-#~ msgstr "%s listesi"
-
-#~ msgid "an extended list"
-#~ msgstr "genişletilmiş liste"
-
-#~ msgid "Hit RETURN %s\n"
-#~ msgstr "Enter'a Bas %s\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "** %s - not found **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "** %s - bulunamadı **\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "** %s exists. ok to overwrite? "
-#~ msgstr ""
-#~ "\n"
-#~ "** %s mevcut. Üzerine yazmak için onaylıyormusunuz? "
-
-#~ msgid ""
-#~ "\n"
-#~ "** %s - illegal request **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "** %s - uygun olmayan istek **\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "** %s - exists, select another name **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "** %s - mevcut, başka bir ad seçin **\n"
-
-#~ msgid "Can't read header file for [%s in %s]\n"
-#~ msgstr "[%s deki %s] için üstbilgi dosyası okunamıyor\n"
-
-#~ msgid "Can't open header file for [%s in %s]"
-#~ msgstr "[%s deki %s] için üstbilgi dosyası açılamıyo"
-
-#~ msgid "Cannot rewrite line"
-#~ msgstr "Çizgi yeniden yazılamıyor"
-
-#~ msgid "Cannot delete line"
-#~ msgstr "Çizgi silinemedi"
-
-#~ msgid "Building topology ...\n"
-#~ msgstr "Topoloji oluşturuluyor...\n"
-
-#~ msgid "Cannot get field info"
-#~ msgstr "Alan bilgisi alınamıyor"
-
-#~ msgid "Cannot open database"
-#~ msgstr "Veritabanı açılamıyor"
-
-#~ msgid "Could not select from table/column"
-#~ msgstr "Tablo veya sütundan seçilemiyor"
-
-#~ msgid "Cannot open database <%s> by driver <%s>"
-#~ msgstr "<%s> sürücüsüyle <%s> veritabanı açılamıyor"
-
-#~ msgid "Cannot get column info"
-#~ msgstr "Sütun bilgisi alınamıyor"
-
-#~ msgid "OGR feature type [%d] not supported"
-#~ msgstr "[%d] OGR obje tipi desteklenmiyor"
+#~ msgid "unable to find [%s] in [%s]"
+#~ msgstr "[%s] deki [%s] bulunamıyor"

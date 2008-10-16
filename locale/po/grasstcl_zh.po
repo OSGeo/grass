@@ -4542,230 +4542,240 @@ msgstr "添加新项"
 msgid "Test"
 msgstr "测试"
 
-#~ msgid "WARNING: Error creating new location"
-#~ msgstr "警告："
+msgid "WARNING: Error creating new location"
+msgstr "警告："
 
-#~ msgid "Import"
-#~ msgstr "导入"
+msgid "Import"
+msgstr "导入"
 
-#~ msgid "Binary file (includes GTOPO30 format)"
-#~ msgstr "二进制文件（包括GTOPO30格式）"
+msgid "Binary file (includes GTOPO30 format)"
+msgstr "二进制文件（包括GTOPO30格式）"
 
-#~ msgid "ESRI Arc/Info ASCII grid"
-#~ msgstr "ESRI Arc/Info ASCII 格网"
+msgid "ESRI Arc/Info ASCII grid"
+msgstr "ESRI Arc/Info ASCII 格网"
 
-#~ msgid "GRIDATB.FOR map file (TOPMODEL)"
-#~ msgstr "GRIDATB.FOR地图文件（TOPMODEL）"
+msgid "GRIDATB.FOR map file (TOPMODEL)"
+msgstr "GRIDATB.FOR地图文件（TOPMODEL）"
 
-#~ msgid "SRTM hgt files"
-#~ msgstr "SRTM hgt文件"
+msgid "SRTM hgt files"
+msgstr "SRTM hgt文件"
 
-#~ msgid "Terra ASTER HDF files"
-#~ msgstr "Terra ASTER HDF文件"
+msgid "Terra ASTER HDF files"
+msgstr "Terra ASTER HDF文件"
 
-#~ msgid "Various formats using OGR"
-#~ msgstr "使用OGR的多种格式"
+msgid "Various formats using OGR"
+msgstr "使用OGR的多种格式"
 
-#~ msgid "ASCII points file or GRASS ASCII vector file"
-#~ msgstr "ASCII点文件或GRASS ASCII矢量文件"
+msgid "ASCII points file or GRASS ASCII vector file"
+msgstr "ASCII点文件或GRASS ASCII矢量文件"
 
-#~ msgid "Import old GRASS vector format"
-#~ msgstr "导入旧的GRASS矢量格式"
+msgid "Import old GRASS vector format"
+msgstr "导入旧的GRASS矢量格式"
 
-#~ msgid "DXF file"
-#~ msgstr "DXF文件"
+msgid "DXF file"
+msgstr "DXF文件"
 
-#~ msgid "ESRI e00 format"
-#~ msgstr "ESRI e00格式"
+msgid "ESRI e00 format"
+msgstr "ESRI e00格式"
 
-#~ msgid "Matlab and MapGen files"
-#~ msgstr "Matlab和MapGen文件"
+msgid "Matlab and MapGen files"
+msgstr "Matlab和MapGen文件"
 
-#~ msgid "Grid 3D"
-#~ msgstr "3D格网"
+msgid "Grid 3D"
+msgstr "3D格网"
 
-#~ msgid "ASCII 3D file"
-#~ msgstr "ASCII 3D文件"
+msgid "ASCII 3D file"
+msgstr "ASCII 3D文件"
 
-#~ msgid "Vis5D file"
-#~ msgstr "Vis5D文件"
+msgid "Vis5D file"
+msgstr "Vis5D文件"
 
-#~ msgid "Export"
-#~ msgstr "导出"
+msgid "Export"
+msgstr "导出"
 
-#~ msgid "ASCII x,y,z values of cell centers"
-#~ msgstr "栅格中心的ASCII x，y，z值"
+msgid "ASCII x,y,z values of cell centers"
+msgstr "栅格中心的ASCII x，y，z值"
 
-#~ msgid "ESRI ARC/INFO ASCII grid"
-#~ msgstr "ESRI ARC/INFO ASCII格网"
+msgid "ESRI ARC/INFO ASCII grid"
+msgstr "ESRI ARC/INFO ASCII格网"
 
-#~ msgid "Binary file"
-#~ msgstr "二进制文件"
+msgid "Binary file"
+msgstr "二进制文件"
 
-#~ msgid "MPEG-1 animations"
-#~ msgstr "MPEG-1动画"
+msgid "MPEG-1 animations"
+msgstr "MPEG-1动画"
 
-#~ msgid "PNG image (not georeferenced)"
-#~ msgstr "PNG图像（非空间参考的)"
+msgid "PNG image (not georeferenced)"
+msgstr "PNG图像（非空间参考的)"
 
-#~ msgid "PPM image (24bit)"
-#~ msgstr "PPM图像（24位）"
+msgid "PPM image (24bit)"
+msgstr "PPM图像（24位）"
 
-#~ msgid "TIFF image (8/24bit)"
-#~ msgstr "TIFF图像（8/24位）"
+msgid "TIFF image (8/24bit)"
+msgstr "TIFF图像（8/24位）"
 
-#~ msgid "VRML file"
-#~ msgstr "VRML文件"
+msgid "VRML file"
+msgstr "VRML文件"
 
-#~ msgid "VTK ASCII file"
-#~ msgstr "VTK ASCII文件"
+msgid "VTK ASCII file"
+msgstr "VTK ASCII文件"
 
-#~ msgid "Various formats using OGR (SHAPE, MapInfo etc)"
-#~ msgstr "使用OGR的多种格式׈（SHAPE，MapInfo等等）"
+msgid "Various formats using OGR (SHAPE, MapInfo etc)"
+msgstr "使用OGR的多种格式׈（SHAPE，MapInfo等等）"
 
-#~ msgid "DXF file (ASCII)"
-#~ msgstr "DXF文件（ASCII）"
+msgid "DXF file (ASCII)"
+msgstr "DXF文件（ASCII）"
 
-#~ msgid "ASCII vector or point file/old GRASS ASCII vector file"
-#~ msgstr "ASCII矢量或点文件/旧GRASS ASCII矢量文件"
+msgid "ASCII vector or point file/old GRASS ASCII vector file"
+msgstr "ASCII矢量或点文件/旧GRASS ASCII矢量文件"
 
-#~ msgid "POV-Ray format"
-#~ msgstr "POV-Ray格式"
+msgid "POV-Ray format"
+msgstr "POV-Ray格式"
 
-#~ msgid "Copy maps"
-#~ msgstr "复制地图"
+msgid "Copy maps"
+msgstr "复制地图"
 
-#~ msgid "List maps"
-#~ msgstr "列举地图"
+msgid "List maps"
+msgstr "列举地图"
 
-#~ msgid "List maps using expressions and 'wildcards'"
-#~ msgstr "使用描述和和‘通配符’列出地图"
+msgid "List maps using expressions and 'wildcards'"
+msgstr "使用描述和和‘通配符’列出地图"
 
-#~ msgid "Rename maps"
-#~ msgstr "重命名地图"
+msgid "Rename maps"
+msgstr "重命名地图"
 
-#~ msgid "Remove maps"
-#~ msgstr "移除地图"
+msgid "Remove maps"
+msgstr "移除地图"
 
-#~ msgid "Remove maps using expressions and 'wildcards'"
-#~ msgstr "使用描述和‘通配符’移除地图"
+msgid "Remove maps using expressions and 'wildcards'"
+msgstr "使用描述和‘通配符’移除地图"
 
-#~ msgid "Raster to vector map"
-#~ msgstr "栅格图转换为矢量图"
+msgid "Raster to vector map"
+msgstr "栅格图转换为矢量图"
 
-#~ msgid "Vector to vector"
-#~ msgstr "矢量图转换为矢量图"
+msgid "Vector to vector"
+msgstr "矢量图转换为矢量图"
 
-#~ msgid "Vector lines to points"
-#~ msgstr "矢量线转换为点"
+msgid "Vector lines to points"
+msgstr "矢量线转换为点"
 
-#~ msgid "Groups"
-#~ msgstr "组文件"
+msgid "Groups"
+msgstr "组文件"
 
-#~ msgid "New"
-#~ msgstr "新建"
+msgid "New"
+msgstr "新建"
 
-#~ msgid "Create new group file"
-#~ msgstr "创建新组文件"
+msgid "Create new group file"
+msgstr "创建新组文件"
 
-#~ msgid "Open group file"
-#~ msgstr "打开组文件"
+msgid "Open group file"
+msgstr "打开组文件"
 
-#~ msgid "Save group file"
-#~ msgstr "保存组文件"
+msgid "Save group file"
+msgstr "保存组文件"
 
-#~ msgid "Save group file as name"
-#~ msgstr "另存组文件为"
+msgid "Save group file as name"
+msgstr "另存组文件为"
 
-#~ msgid "Close group"
-#~ msgstr "关闭组"
+msgid "Close group"
+msgstr "关闭组"
 
-#~ msgid "Save map to Postscript file"
-#~ msgstr "保存地图为Postscript文件"
+msgid "Save map to Postscript file"
+msgstr "保存地图为Postscript文件"
 
-#~ msgid "Print to default printer"
-#~ msgstr "使用默认打印机打印"
+msgid "Print to default printer"
+msgstr "使用默认打印机打印"
 
-#~ msgid "print"
-#~ msgstr "打印"
+msgid "print"
+msgstr "打印"
 
-#~ msgid "Exit Display Manager"
-#~ msgstr "退出显示管理器"
+msgid "Exit Display Manager"
+msgstr "退出显示管理器"
 
-#~ msgid "Zoom to maximum extent of all displayed maps"
-#~ msgstr "缩放到所有已显示地图的最大范围"
+msgid "Zoom to maximum extent of all displayed maps"
+msgstr "缩放到所有已显示地图的最大范围"
 
-#~ msgid "Access other mapsets in current location"
-#~ msgstr "在当前路径访问其他地图集"
+msgid "Access other mapsets in current location"
+msgstr "在当前路径访问其他地图集"
 
-#~ msgid "Show current GRASS environment settings"
-#~ msgstr "显示当前GRASS环境设置"
+msgid "Show current GRASS environment settings"
+msgstr "显示当前GRASS环境设置"
 
-#~ msgid "Set GRASS environment settings"
-#~ msgstr "设定GRASS环境设置"
+msgid "Set GRASS environment settings"
+msgstr "设定GRASS环境设置"
 
-#~ msgid "Create/edit projection information for current location"
-#~ msgstr "创建/编辑当前路径的投影信息"
+msgid "Create/edit projection information for current location"
+msgstr "创建/编辑当前路径的投影信息"
 
-#~ msgid "Show projection information and create projection files"
-#~ msgstr "显示投影信息并创建投影文件"
+msgid "Show projection information and create projection files"
+msgstr "显示投影信息并创建投影文件"
 
-#~ msgid "Text"
-#~ msgstr "文本"
+msgid "Text"
+msgstr "文本"
 
-#~ msgid "Select default text font"
-#~ msgstr "选择默认的文件字体"
+msgid "Select default text font"
+msgstr "选择默认的文件字体"
 
-#~ msgid "Select default freetype text font"
-#~ msgstr "选择默认的freetype文件字体"
+msgid "Select default freetype text font"
+msgstr "选择默认的freetype文件字体"
 
-#~ msgid "X-monitor displays"
-#~ msgstr "X-monitor显示"
+msgid "X-monitor displays"
+msgstr "X-monitor显示"
 
-#~ msgid "Configure xmonitor displays"
-#~ msgstr "配置xmonitor显示"
+msgid "Configure xmonitor displays"
+msgstr "配置xmonitor显示"
 
-#~ msgid "Start/restart xmonitor at specified window size"
-#~ msgstr "以特定窗口大小启动/重启xmonitor"
+msgid "Start/restart xmonitor at specified window size"
+msgstr "以特定窗口大小启动/重启xmonitor"
 
-#~ msgid "Set active xmonitor to specified size"
-#~ msgstr "设置当前xmonitor为特定大小"
+msgid "Set active xmonitor to specified size"
+msgstr "设置当前xmonitor为特定大小"
 
-#~ msgid "Display information about active xmonitor"
-#~ msgstr "显示活动xmonitor信息"
+msgid "Display information about active xmonitor"
+msgstr "显示活动xmonitor信息"
 
-#~ msgid "Compress/decompress raster file"
-#~ msgstr "压缩/解压缩栅格文件"
+msgid "Compress/decompress raster file"
+msgstr "压缩/解压缩栅格文件"
 
-#~ msgid "Manage null values"
-#~ msgstr "管理null值"
+msgid "Manage null values"
+msgstr "管理null值"
 
-#~ msgid "Manage timestamps for files"
-#~ msgstr "管理文件的时间戳"
+msgid "Manage timestamps for files"
+msgstr "管理文件的时间戳"
 
-#~ msgid "Quantization for floating-point maps"
-#~ msgstr "量化浮点型地图"
+msgid "Quantization for floating-point maps"
+msgstr "量化浮点型地图"
 
-#~ msgid "Resample (change resolution)"
-#~ msgstr "重采样（改变分辨率）"
+msgid "Resample (change resolution)"
+msgstr "重采样（改变分辨率）"
 
-#~ msgid "Resample using nearest neighbor method"
-#~ msgstr "使用最近邻法重采样"
+msgid "Resample using nearest neighbor method"
+msgstr "使用最近邻法重采样"
 
-#~ msgid "Resample using various interpolation methods"
-#~ msgstr "使用内插法重采样"
+msgid "Resample using various interpolation methods"
+msgstr "使用内插法重采样"
 
-#~ msgid "Support file creation and maintenance"
-#~ msgstr "文件创建与保存支持"
+msgid "Support file creation and maintenance"
+msgstr "文件创建与保存支持"
 
-#~ msgid "Set colors to predefined color tables"
-#~ msgstr "设定颜色为预定义颜色表"
+msgid "Set colors to predefined color tables"
+msgstr "设定颜色为预定义颜色表"
 
-#~ msgid "Set colors using color rules"
-#~ msgstr "使用颜色规则设定颜射"
+msgid "Set colors using color rules"
+msgstr "使用颜色规则设定颜射"
 
-#~ msgid "Create color image from RGB files"
-#~ msgstr "从RGB文件创建彩色影像"
+msgid "Create color image from RGB files"
+msgstr "从RGB文件创建彩色影像"
 
-#~ msgid "Create raster buffers"
-#~ msgstr "创建栅格图缓冲区"
+msgid "Create raster buffers"
+msgstr "创建栅格图缓冲区"
+
+#~ msgid "Save display to image file"
+#~ msgstr "保存当前显示为图片文件"
+
+#~ msgid "Manage boundary definitions"
+#~ msgstr "管理边界定义"
+
+#, fuzzy
+#~ msgid "Manage category labels and values"
+#~ msgstr "管理地图于地图集"

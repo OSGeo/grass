@@ -4612,173 +4612,172 @@ msgid "Test"
 msgstr ""
 
 #, fuzzy
-#~ msgid "ASCII points file or GRASS ASCII vector file"
-#~ msgstr "vektors"
+msgid "ASCII points file or GRASS ASCII vector file"
+msgstr "vektors"
 
 #, fuzzy
-#~ msgid "Import old GRASS vector format"
-#~ msgstr "vektors"
+msgid "Import old GRASS vector format"
+msgstr "vektors"
 
 #, fuzzy
-#~ msgid "ASCII vector or point file/old GRASS ASCII vector file"
-#~ msgstr "vektors vektors"
+msgid "ASCII vector or point file/old GRASS ASCII vector file"
+msgstr "vektors vektors"
 
 #, fuzzy
-#~ msgid "Raster to vector map"
-#~ msgstr "vektors"
+msgid "Raster to vector map"
+msgstr "vektors"
 
 #, fuzzy
-#~ msgid "Vector to vector"
-#~ msgstr "vektors"
+msgid "Vector to vector"
+msgstr "vektors"
 
 #, fuzzy
-#~ msgid "Sites (GRASS 5.x) to vector"
-#~ msgstr "vektors"
+msgid "Sites (GRASS 5.x) to vector"
+msgstr "vektors"
 
 #, fuzzy
-#~ msgid "Print to default printer"
-#~ msgstr "Drukāt"
+msgid "Print to default printer"
+msgstr "Drukāt"
 
 #, fuzzy
-#~ msgid "Analyze vector points in neighborhood of raster cells"
-#~ msgstr "vektors"
+msgid "Analyze vector points in neighborhood of raster cells"
+msgstr "vektors"
 
 #, fuzzy
-#~ msgid "Carve stream channels into elevation map using vector streams map"
-#~ msgstr "vektors"
+msgid "Carve stream channels into elevation map using vector streams map"
+msgstr "vektors"
 
 #, fuzzy
-#~ msgid "Generate random cells and vector points from raster map"
-#~ msgstr "vektors"
+msgid "Generate random cells and vector points from raster map"
+msgstr "vektors"
 
 #, fuzzy
-#~ msgid "Generate vector contour lines"
-#~ msgstr "vektors"
+msgid "Generate vector contour lines"
+msgstr "vektors"
 
 #, fuzzy
-#~ msgid "Inverse distance weighted interpolation from vector points"
-#~ msgstr "vektors"
+msgid "Inverse distance weighted interpolation from vector points"
+msgstr "vektors"
 
 #, fuzzy
-#~ msgid ""
-#~ "Regularized spline tension interpolation from vector points or contours"
-#~ msgstr "vektors"
+msgid "Regularized spline tension interpolation from vector points or contours"
+msgstr "vektors"
 
 #, fuzzy
-#~ msgid "Clean vector files"
-#~ msgstr "vektors"
+msgid "Clean vector files"
+msgstr "vektors"
 
 #, fuzzy
-#~ msgid "Add missing centroids"
-#~ msgstr "%-5d centroīdi nolasīti\n"
+msgid "Add missing centroids"
+msgstr "%-5d centroīdi nolasīti\n"
 
 #, fuzzy
-#~ msgid "Convert vector feature types"
-#~ msgstr "vektors"
+msgid "Convert vector feature types"
+msgstr "vektors"
 
 #, fuzzy
-#~ msgid "Convert 2D vector to 3D by sampling raster"
-#~ msgstr "vektors"
+msgid "Convert 2D vector to 3D by sampling raster"
+msgstr "vektors"
 
 #, fuzzy
-#~ msgid "Extrude 2D vector into 3D vector"
-#~ msgstr "vektors vektors"
+msgid "Extrude 2D vector into 3D vector"
+msgstr "vektors vektors"
 
 #, fuzzy
-#~ msgid "Create text label file for vector features"
-#~ msgstr "vektors"
+msgid "Create text label file for vector features"
+msgstr "vektors"
 
 #, fuzzy
-#~ msgid "Reproject vector from other location"
-#~ msgstr "vektors"
+msgid "Reproject vector from other location"
+msgstr "vektors"
 
 #, fuzzy
-#~ msgid "Create new vector as link to external OGR layer"
-#~ msgstr "vektors"
+msgid "Create new vector as link to external OGR layer"
+msgstr "vektors"
 
 #, fuzzy
-#~ msgid "Set database connection for vector attributes"
-#~ msgstr "vektors"
+msgid "Set database connection for vector attributes"
+msgstr "vektors"
 
 #, fuzzy
-#~ msgid "Rectify and georeference vector map"
-#~ msgstr "vektors"
+msgid "Rectify and georeference vector map"
+msgstr "vektors"
 
 #, fuzzy
-#~ msgid "Create vector buffers"
-#~ msgstr "vektors"
+msgid "Create vector buffers"
+msgstr "vektors"
 
 #, fuzzy
-#~ msgid ""
-#~ "Find line id and real km+offset for given points in vector map using "
-#~ "linear reference system"
-#~ msgstr "vektors"
+msgid ""
+"Find line id and real km+offset for given points in vector map using linear "
+"reference system"
+msgstr "vektors"
 
 #, fuzzy
-#~ msgid "Locate nearest features to points or centroids"
-#~ msgstr "%-5d centroīdi nolasīti\n"
+msgid "Locate nearest features to points or centroids"
+msgstr "%-5d centroīdi nolasīti\n"
 
 #, fuzzy
-#~ msgid "Overlay/combine 2 vector maps"
-#~ msgstr "vektors"
+msgid "Overlay/combine 2 vector maps"
+msgstr "vektors"
 
 #, fuzzy
-#~ msgid "Generate rectangular vector grid"
-#~ msgstr "vektors"
+msgid "Generate rectangular vector grid"
+msgstr "vektors"
 
 #, fuzzy
-#~ msgid "Work with vector points"
-#~ msgstr "vektors"
+msgid "Work with vector points"
+msgstr "vektors"
 
 #, fuzzy
-#~ msgid "Calculate statistics for raster map overlain by vector map"
-#~ msgstr "vektors"
+msgid "Calculate statistics for raster map overlain by vector map"
+msgstr "vektors"
 
 #, fuzzy
-#~ msgid "Transfer attribute data from queried vector map to points"
-#~ msgstr "vektors"
+msgid "Transfer attribute data from queried vector map to points"
+msgstr "vektors"
 
 #, fuzzy
-#~ msgid "Load vector attributes to database or create reports"
-#~ msgstr "vektors"
+msgid "Load vector attributes to database or create reports"
+msgstr "vektors"
 
 #, fuzzy
-#~ msgid "Report areas for vector attribute categories"
-#~ msgstr "vektors"
+msgid "Report areas for vector attribute categories"
+msgstr "vektors"
 
 #, fuzzy
-#~ msgid "Calculate stats for raster map underlying vector objects"
-#~ msgstr "vektors"
+msgid "Calculate stats for raster map underlying vector objects"
+msgstr "vektors"
 
 #, fuzzy
-#~ msgid "Set ground control points (GCP's) from vector map or keyboard entry"
-#~ msgstr "vektors"
+msgid "Set ground control points (GCP's) from vector map or keyboard entry"
+msgstr "vektors"
 
 #, fuzzy
-#~ msgid "Interpolate volume from vector points using splines"
-#~ msgstr "vektors"
+msgid "Interpolate volume from vector points using splines"
+msgstr "vektors"
 
 #, fuzzy
-#~ msgid "Print raster & vector maps using ps.map"
-#~ msgstr "Drukāt vektors"
+msgid "Print raster & vector maps using ps.map"
+msgstr "Drukāt vektors"
 
 #, fuzzy
-#~ msgid "Convert vector lines to points"
-#~ msgstr "vektors"
+msgid "Convert vector lines to points"
+msgstr "vektors"
 
 #, fuzzy
-#~ msgid ""
-#~ "Find line ID and real km+offset for given points in vector map using "
-#~ "linear reference system"
-#~ msgstr "vektors"
+msgid ""
+"Find line ID and real km+offset for given points in vector map using linear "
+"reference system"
+msgstr "vektors"
 
 #, fuzzy
-#~ msgid "Remove existing attribute table for vector map"
-#~ msgstr "vektors"
+msgid "Remove existing attribute table for vector map"
+msgstr "vektors"
 
 #, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "by GDAL (raster) or OGR (vector)\n"
-#~ "\n"
-#~ msgstr "vektors"
+msgid ""
+"\n"
+"by GDAL (raster) or OGR (vector)\n"
+"\n"
+msgstr "vektors"

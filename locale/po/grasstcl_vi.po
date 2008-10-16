@@ -4108,6 +4108,7 @@ msgid "2nd order"
 msgstr "bậc 2"
 
 #: ../gui/tcltk/gis.m/georect.tcl:1016
+#, fuzzy
 msgid "polynomial transformation  (rasters only). Requires 6+ GCPs."
 msgstr "chuyển đổi đa thức (chỉ dùng cho raster). Cần 6 điểm khống chế"
 
@@ -4948,1443 +4949,1435 @@ msgid "Test"
 msgstr "Chữ"
 
 #, fuzzy
-#~ msgid "WARNING: Error creating new location"
-#~ msgstr "CẢNH BÁO: bộ bản đồ không hợp lệ"
+msgid "WARNING: Error creating new location"
+msgstr "CẢNH BÁO: bộ bản đồ không hợp lệ"
 
 #, fuzzy
-#~ msgid "cumulative length = %s\n"
-#~ msgstr "Tính toán các chi phí di chuyển tích lũy giữa các địa bàn"
+msgid "cumulative length = %s\n"
+msgstr "Tính toán các chi phí di chuyển tích lũy giữa các địa bàn"
 
-#~ msgid "     show data"
-#~ msgstr "    hiển thị dữ liệu"
+msgid "     show data"
+msgstr "    hiển thị dữ liệu"
 
-#~ msgid "Graduate colors: preset color schemes"
-#~ msgstr "màu phân cấp: các chế độ màu thiết lập sẵn"
+msgid "Graduate colors: preset color schemes"
+msgstr "màu phân cấp: các chế độ màu thiết lập sẵn"
 
-#~ msgid "create graphic legend"
-#~ msgstr "tạo chú giải đồ họa"
+msgid "create graphic legend"
+msgstr "tạo chú giải đồ họa"
 
-#~ msgid "    select monitor for legend"
-#~ msgstr "    chọn màn hình đồ họa cho chú giải"
+msgid "    select monitor for legend"
+msgstr "    chọn màn hình đồ họa cho chú giải"
 
-#~ msgid "Labels name:"
-#~ msgstr "Tên nhãn:"
+msgid "Labels name:"
+msgstr "Tên nhãn:"
 
-#~ msgid "remove all frames"
-#~ msgstr "loại bỏ tất cả các khung"
+msgid "remove all frames"
+msgstr "loại bỏ tất cả các khung"
 
-#~ msgid "Start/select display monitor x0"
-#~ msgstr "Khởi động/chọn màn hình x0"
+msgid "Start/select display monitor x0"
+msgstr "Khởi động/chọn màn hình x0"
 
-#~ msgid "x1"
-#~ msgstr "x1"
+msgid "x1"
+msgstr "x1"
 
-#~ msgid "Start/select display monitor x1"
-#~ msgstr "Khởi động/chọn màn hình x1"
+msgid "Start/select display monitor x1"
+msgstr "Khởi động/chọn màn hình x1"
 
-#~ msgid "Start/select display monitor x2"
-#~ msgstr "Khởi động/chọn màn hình x2"
+msgid "Start/select display monitor x2"
+msgstr "Khởi động/chọn màn hình x2"
 
-#~ msgid "Start/select display monitor x3"
-#~ msgstr "Khởi động/chọn màn hình x3"
+msgid "Start/select display monitor x3"
+msgstr "Khởi động/chọn màn hình x3"
 
-#~ msgid "Start/select display monitor x4"
-#~ msgstr "Khởi động/chọn màn hình x4"
+msgid "Start/select display monitor x4"
+msgstr "Khởi động/chọn màn hình x4"
 
-#~ msgid "Start/select display monitor x5"
-#~ msgstr "Khởi động/chọn màn hình x5"
+msgid "Start/select display monitor x5"
+msgstr "Khởi động/chọn màn hình x5"
 
-#~ msgid "Start/select display monitor x6"
-#~ msgstr "Khởi động/chọn màn hình x6"
+msgid "Start/select display monitor x6"
+msgstr "Khởi động/chọn màn hình x6"
 
-#~ msgid "geodetic grid"
-#~ msgstr "lưới đo đạc"
+msgid "geodetic grid"
+msgstr "lưới đo đạc"
 
-#~ msgid " grid color "
-#~ msgstr " màu lưới"
+msgid " grid color "
+msgstr " màu lưới"
 
-#~ msgid " grid color"
-#~ msgstr " màu lưới"
+msgid " grid color"
+msgstr " màu lưới"
 
-#~ msgid "draw grid border"
-#~ msgstr "vẽ biên lưới"
+msgid "draw grid border"
+msgstr "vẽ biên lưới"
 
-#~ msgid "draw border text"
-#~ msgstr "vẽ chữ ở biên"
+msgid "draw border text"
+msgstr "vẽ chữ ở biên"
 
-#~ msgid " border & text color"
-#~ msgstr "màu biên và chữ"
+msgid " border & text color"
+msgstr "màu biên và chữ"
 
-#~ msgid "Raster map for legend:"
-#~ msgstr "Bản đồ raster làm chú giải:"
+msgid "Raster map for legend:"
+msgstr "Bản đồ raster làm chú giải:"
 
-#~ msgid "Display legend in monitor: "
-#~ msgstr "Trình bày chú giải trong màn hình:"
+msgid "Display legend in monitor: "
+msgstr "Trình bày chú giải trong màn hình:"
 
-#~ msgid " erase monitor before drawing legend"
-#~ msgstr " xóa màn hình trước khi vẽ chú giải"
+msgid " erase monitor before drawing legend"
+msgstr " xóa màn hình trước khi vẽ chú giải"
 
-#~ msgid "Text color: "
-#~ msgstr "Màu chữ: "
+msgid "Text color: "
+msgstr "Màu chữ: "
 
-#~ msgid "do not show cat labels"
-#~ msgstr "không hiển thị nhãn phạm trù"
+msgid "do not show cat labels"
+msgstr "không hiển thị nhãn phạm trù"
 
-#~ msgid "do not show cat numbers"
-#~ msgstr "không hiển thị số phạm trù"
+msgid "do not show cat numbers"
+msgstr "không hiển thị số phạm trù"
 
-#~ msgid "skip cats with no labels"
-#~ msgstr "bỏ qua các phạm trù không nhãn"
+msgid "skip cats with no labels"
+msgstr "bỏ qua các phạm trù không nhãn"
 
-#~ msgid "draw smooth gradient"
-#~ msgstr "vẽ gradient trơn"
+msgid "draw smooth gradient"
+msgstr "vẽ gradient trơn"
 
-#~ msgid "flip legend"
-#~ msgstr "lật chú giải"
+msgid "flip legend"
+msgstr "lật chú giải"
 
-#~ msgid "place with mouse (cannot save placement with group)"
-#~ msgstr "đặt bằng chuột (không thể lưu vị trí đặt với nhóm)"
+msgid "place with mouse (cannot save placement with group)"
+msgstr "đặt bằng chuột (không thể lưu vị trí đặt với nhóm)"
 
-#~ msgid "Raster name:"
-#~ msgstr "tên Raster:"
+msgid "Raster name:"
+msgstr "tên Raster:"
 
-#~ msgid "show legend in selected display monitor"
-#~ msgstr "hiển thị chú giải trong màn hình trình bày được chọn"
+msgid "show legend in selected display monitor"
+msgstr "hiển thị chú giải trong màn hình trình bày được chọn"
 
-#~ msgid " thin legend by "
-#~ msgstr "làm mảnh chú giải bởi "
+msgid " thin legend by "
+msgstr "làm mảnh chú giải bởi "
 
-#~ msgid "Raster to drape over 1st map:"
-#~ msgstr "Raster để chồng lên bản đồ thứ nhất:"
+msgid "Raster to drape over 1st map:"
+msgstr "Raster để chồng lên bản đồ thứ nhất:"
 
-#~ msgid "show legend for drape map in monitor"
-#~ msgstr "hiển thị chú giải cho bản đồ chồng trong màn hình"
+msgid "show legend for drape map in monitor"
+msgstr "hiển thị chú giải cho bản đồ chồng trong màn hình"
 
-#~ msgid "  show attribute columns"
-#~ msgstr "hiển thị các cột thuộc tính"
+msgid "  show attribute columns"
+msgstr "hiển thị các cột thuộc tính"
 
-#~ msgid "    chart outline color:"
-#~ msgstr "   màu viền biểu đồ:"
+msgid "    chart outline color:"
+msgstr "   màu viền biểu đồ:"
 
-#~ msgid "Import"
-#~ msgstr "Nhập"
+msgid "Import"
+msgstr "Nhập"
 
-#~ msgid "Aggregate ASCII xyz data into raster grid"
-#~ msgstr "Tổng hợp dữ liệu xyz ASCII vào lưới raster"
+msgid "Aggregate ASCII xyz data into raster grid"
+msgstr "Tổng hợp dữ liệu xyz ASCII vào lưới raster"
 
-#~ msgid "ASCII GRID (includes GRASS ASCII)"
-#~ msgstr "LƯỚI ASCII (bao gồm cả ASCII GRASS)"
+msgid "ASCII GRID (includes GRASS ASCII)"
+msgstr "LƯỚI ASCII (bao gồm cả ASCII GRASS)"
 
-#~ msgid "Polygons and lines from ASCII file"
-#~ msgstr "Các vùng và đường từ tập tin ASCII"
+msgid "Polygons and lines from ASCII file"
+msgstr "Các vùng và đường từ tập tin ASCII"
 
-#~ msgid "Binary file (includes GTOPO30 format)"
-#~ msgstr "tập tin nhị phân (bao gồm cả định dạng GTOPO30)"
+msgid "Binary file (includes GTOPO30 format)"
+msgstr "tập tin nhị phân (bao gồm cả định dạng GTOPO30)"
 
-#~ msgid "ESRI Arc/Info ASCII grid"
-#~ msgstr "lưới Arc/Info ASCII của ESRI"
+msgid "ESRI Arc/Info ASCII grid"
+msgstr "lưới Arc/Info ASCII của ESRI"
 
-#~ msgid "GRIDATB.FOR map file (TOPMODEL)"
-#~ msgstr "tập tin bản đồ GRIDATB.FOR (TOPMODEL)"
+msgid "GRIDATB.FOR map file (TOPMODEL)"
+msgstr "tập tin bản đồ GRIDATB.FOR (TOPMODEL)"
 
-#~ msgid "MAT-File (v.4) array (Matlab or Octave)"
-#~ msgstr "Mảng MAT-File (v.4) (Matlab hay Octave)"
+msgid "MAT-File (v.4) array (Matlab or Octave)"
+msgstr "Mảng MAT-File (v.4) (Matlab hay Octave)"
 
-#~ msgid "SPOT vegetation NDVI data sets"
-#~ msgstr "các bộ dữ liệu NDVI thảm thực vật từ ảnh SPOT"
+msgid "SPOT vegetation NDVI data sets"
+msgstr "các bộ dữ liệu NDVI thảm thực vật từ ảnh SPOT"
 
-#~ msgid "SRTM hgt files"
-#~ msgstr "các tập tin hgt SRTM"
+msgid "SRTM hgt files"
+msgstr "các tập tin hgt SRTM"
 
-#~ msgid "Terra ASTER HDF files"
-#~ msgstr "Các tập tin ASTER HDF Terra"
+msgid "Terra ASTER HDF files"
+msgstr "Các tập tin ASTER HDF Terra"
 
-#~ msgid "Various formats using OGR"
-#~ msgstr "Nhiều định dạng khác nhau bằng cách dùng OGR"
-
-#, fuzzy
-#~ msgid "ASCII points file or GRASS ASCII vector file"
-#~ msgstr "Tập tin điểm ASCII hoặc tập tin vector ASCII GRASS"
-
-#~ msgid "Import old GRASS vector format"
-#~ msgstr "Nhập định dạng vector GRASS cũ"
+msgid "Various formats using OGR"
+msgstr "Nhiều định dạng khác nhau bằng cách dùng OGR"
 
 #, fuzzy
-#~ msgid "DXF file"
-#~ msgstr "tập tin PDF:"
+msgid "ASCII points file or GRASS ASCII vector file"
+msgstr "Tập tin điểm ASCII hoặc tập tin vector ASCII GRASS"
 
-#~ msgid "ESRI e00 format"
-#~ msgstr "định dạng e00 của ESRI"
-
-#~ msgid "Garmin GPS Waypoints/Routes/Tracks"
-#~ msgstr "Điểm tọa độ/Đường đi/Lộ trình của GPS Garmin"
+msgid "Import old GRASS vector format"
+msgstr "Nhập định dạng vector GRASS cũ"
 
 #, fuzzy
-#~ msgid "GPS Waypoints/Routes/Tracks using GPSBabel"
-#~ msgstr "Điểm tọa độ/Đường đi/Lộ trình của GPS Garmin bằng GPSBabel"
+msgid "DXF file"
+msgstr "tập tin PDF:"
 
-#~ msgid "GEOnet Name server country files (US-NGA GNS)"
-#~ msgstr "Các tập tin quốc gia từ máy chủ GEOnet Name (US-NGA GNS)"
+msgid "ESRI e00 format"
+msgstr "định dạng e00 của ESRI"
 
-#~ msgid "Matlab and MapGen files"
-#~ msgstr "Các tập tin Matlab và MapGen"
-
-#~ msgid "Grid 3D"
-#~ msgstr "Lưới 3D"
-
-#~ msgid "ASCII 3D file"
-#~ msgstr "Tập tin ASCII 3D"
-
-#~ msgid "Vis5D file"
-#~ msgstr "tập tin Vis5D"
-
-#~ msgid "Export"
-#~ msgstr "Xuất"
-
-#~ msgid "ASCII grid (for GRASS, Surfer, Modflow, etc)"
-#~ msgstr "Lưới ASCII (của GRASS, Surfer, Modflow...)"
-
-#~ msgid "ESRI ARC/INFO ASCII grid"
-#~ msgstr "Lưới ASCII ARC/INFO của ESRI"
-
-#~ msgid "Binary file"
-#~ msgstr "Tập tin nhị phân"
-
-#~ msgid "MPEG-1 animations"
-#~ msgstr "các ảnh động MPEG-1"
-
-#~ msgid "PNG image (not georeferenced)"
-#~ msgstr "Ảnh PNG (không tham chiếu địa lý)"
-
-#~ msgid "PPM image (24bit)"
-#~ msgstr "Ảnh PPM (24bit)"
-
-#~ msgid "PPM image from red, green, blue raster maps"
-#~ msgstr "Ảnh PPM từ các bản đồ raster đỏ, lục, xanh"
-
-#~ msgid "POVray height-field"
-#~ msgstr "trường chiều cao POVray"
-
-#~ msgid "TIFF image (8/24bit)"
-#~ msgstr "Ảnh TIFF (8/24bit)"
-
-#~ msgid "VRML file"
-#~ msgstr "Tập tin VRML"
-
-#~ msgid "VTK ASCII file"
-#~ msgstr "Tập tin ASCII VTK"
-
-#~ msgid "Various formats using OGR (SHAPE, MapInfo etc)"
-#~ msgstr "Nhiều định dạng khác nhau bằng OGR (SHAPE, MapINfo...)"
-
-#~ msgid "DXF file (ASCII)"
-#~ msgstr "Tập tin DXF (ASCII)"
+msgid "Garmin GPS Waypoints/Routes/Tracks"
+msgstr "Điểm tọa độ/Đường đi/Lộ trình của GPS Garmin"
 
 #, fuzzy
-#~ msgid "ASCII vector or point file/old GRASS ASCII vector file"
-#~ msgstr "Tập tin điểm hoặc vector ASCII/tập tin vector ASCII cũ của GRASS"
+msgid "GPS Waypoints/Routes/Tracks using GPSBabel"
+msgstr "Điểm tọa độ/Đường đi/Lộ trình của GPS Garmin bằng GPSBabel"
 
-#~ msgid "POV-Ray format"
-#~ msgstr "định dạng POV-Ray"
+msgid "GEOnet Name server country files (US-NGA GNS)"
+msgstr "Các tập tin quốc gia từ máy chủ GEOnet Name (US-NGA GNS)"
 
-#~ msgid "Copy maps"
-#~ msgstr "Sao chép các bản đồ"
+msgid "Matlab and MapGen files"
+msgstr "Các tập tin Matlab và MapGen"
 
-#~ msgid "List maps"
-#~ msgstr "Liệt kê các bản đồ"
+msgid "Grid 3D"
+msgstr "Lưới 3D"
 
-#~ msgid "List maps using expressions and 'wildcards'"
-#~ msgstr "Liệt kê các bản đồ bằng cách dùng biểu thức và ký tự đại diện"
+msgid "ASCII 3D file"
+msgstr "Tập tin ASCII 3D"
 
-#~ msgid "Rename maps"
-#~ msgstr "Đặt lại tên các bản đồ"
+msgid "Vis5D file"
+msgstr "tập tin Vis5D"
 
-#~ msgid "Remove maps"
-#~ msgstr "Loại bỏ các bản đồ"
+msgid "Export"
+msgstr "Xuất"
 
-#~ msgid "Remove maps using expressions and 'wildcards'"
-#~ msgstr "Loại bỏ các bản đồ bằng cách dùng biểu thức và ký tự đại diện"
+msgid "ASCII grid (for GRASS, Surfer, Modflow, etc)"
+msgstr "Lưới ASCII (của GRASS, Surfer, Modflow...)"
 
-#~ msgid "Raster to vector map"
-#~ msgstr "Bản đồ raster thành vector"
+msgid "ESRI ARC/INFO ASCII grid"
+msgstr "Lưới ASCII ARC/INFO của ESRI"
 
-#~ msgid "Raster map series to volume"
-#~ msgstr "Chuỗi bản đồ raster thành thể tích"
+msgid "Binary file"
+msgstr "Tập tin nhị phân"
 
-#, fuzzy
-#~ msgid "Raster 2.5D map to volume"
-#~ msgstr "Chuỗi bản đồ raster thành thể tích"
+msgid "MPEG-1 animations"
+msgstr "các ảnh động MPEG-1"
 
-#~ msgid "Vector to vector"
-#~ msgstr "Vector thành vector"
+msgid "PNG image (not georeferenced)"
+msgstr "Ảnh PNG (không tham chiếu địa lý)"
 
-#~ msgid "Vector lines to points"
-#~ msgstr "Đường vector thành điểm"
+msgid "PPM image (24bit)"
+msgstr "Ảnh PPM (24bit)"
 
-#~ msgid "Vector 3D points to volume voxels"
-#~ msgstr "Điểm vector 3D thành thể tích voxel"
+msgid "PPM image from red, green, blue raster maps"
+msgstr "Ảnh PPM từ các bản đồ raster đỏ, lục, xanh"
 
-#~ msgid "Sites (GRASS 5.x) to vector"
-#~ msgstr "Địa điểm (GRASS 5.x) thành vector"
+msgid "POVray height-field"
+msgstr "trường chiều cao POVray"
 
-#~ msgid "Volumes to raster map series"
-#~ msgstr "Thể tích thành các chuỗi bản đồ raster"
+msgid "TIFF image (8/24bit)"
+msgstr "Ảnh TIFF (8/24bit)"
 
-#~ msgid "Groups"
-#~ msgstr "Các nhóm"
+msgid "VRML file"
+msgstr "Tập tin VRML"
 
-#~ msgid "New"
-#~ msgstr "Mới"
+msgid "VTK ASCII file"
+msgstr "Tập tin ASCII VTK"
 
-#~ msgid "Create new group file"
-#~ msgstr "Tạo nhóm mới"
+msgid "Various formats using OGR (SHAPE, MapInfo etc)"
+msgstr "Nhiều định dạng khác nhau bằng OGR (SHAPE, MapINfo...)"
 
-#~ msgid "Open group file"
-#~ msgstr "Mở tập tin nhóm"
-
-#~ msgid "Save group file"
-#~ msgstr "Lưu tập tin nhóm"
-
-#~ msgid "Save group file as name"
-#~ msgstr "Lưu tập tin nhóm thành tên"
-
-#~ msgid "Close group"
-#~ msgstr "Đóng nhóm"
-
-#~ msgid "Save display to image file"
-#~ msgstr "Lưu trình bày thành tập tin ảnh"
-
-#~ msgid ""
-#~ "XWD (Save display, selected with mouse, to map.xwd in home directory )"
-#~ msgstr ""
-#~ "XWD (Lưu trình bày, được chọn bằng chuột, thành map.xwd trong thư mục nhà)"
-
-#~ msgid "Save displays to multiple graphic file formats"
-#~ msgstr "Lưu trình bày thành các định dạng tập tin đồ họa đa"
-
-#~ msgid "Save map to Postscript file"
-#~ msgstr "Lưu bản đồ thành tập tin Postscript"
-
-#~ msgid "Print to default printer"
-#~ msgstr "In ra máy in mặc định"
-
-#~ msgid "print"
-#~ msgstr "in"
-
-#~ msgid "Exit Display Manager"
-#~ msgstr "Thoát Trình Quản lý Hiển thị"
-
-#~ msgid "Zoom to maximum extent of all displayed maps"
-#~ msgstr "Phóng đến phạm vi tối đa của tất cả các bản đồ được trình bày"
-
-#~ msgid "Access other mapsets in current location"
-#~ msgstr "Truy cập các bộ bản đồ khác trong location hiện tại"
-
-#~ msgid "Change current working session to new mapset, location, or GISDBASE"
-#~ msgstr ""
-#~ "Thay đổi phiên làm việc hiện tại sang bộ bản đồ, location hoặc CSDL GIS "
-#~ "mới"
-
-#~ msgid "Modify access by other users to current mapset"
-#~ msgstr "Thay đổi quyền truy cập của người dùng vào bộ bản đồ hiện tại"
-
-#~ msgid "Show current GRASS environment settings"
-#~ msgstr "Hiển thị các thiết lập biến môi trường hiện tại của GRASS"
-
-#~ msgid "Set GRASS environment settings"
-#~ msgstr "Thiết lập các biến môi trường của GRASS"
-
-#~ msgid "Create/edit projection information for current location"
-#~ msgstr "Tạo/chỉnh sửa thông tin phép chiếu của location hiện tại"
-
-#~ msgid "Show projection information and create projection files"
-#~ msgstr "Hiển thị thông tin phép chiếu và tạo các tập tin phép chiếu"
-
-#~ msgid "Convert coordinates from one projection to another"
-#~ msgstr "Đổi các tọa độ từ một phép chiếu này sang phép chiếu khác"
-
-#~ msgid "Text"
-#~ msgstr "Chữ"
-
-#~ msgid "Select default text font"
-#~ msgstr "Chọn phông chữ mặc định"
-
-#~ msgid "Select default freetype text font"
-#~ msgstr "Chọn phông chữ freetype mặc định"
-
-#~ msgid "X-monitor displays"
-#~ msgstr "Các trình bày màn hình X"
-
-#~ msgid "Configure xmonitor displays"
-#~ msgstr "Cấu hình các trình bày màn hình x"
-
-#~ msgid "Configure frames for xmonitors"
-#~ msgstr "Cấu hình các khung cho màn hình x"
-
-#~ msgid "Start/restart xmonitor at specified window size"
-#~ msgstr "Khởi động/khởi động lại màn hình x ở kích thước cửa sổ chỉ định"
-
-#~ msgid "Set active xmonitor to specified size"
-#~ msgstr "Thiết lập màn hình x kích hoạt về kích thước chỉ định"
-
-#~ msgid "Display information about active xmonitor"
-#~ msgstr "Trình bày thông tin về màn hình x kích hoạt"
+msgid "DXF file (ASCII)"
+msgstr "Tập tin DXF (ASCII)"
 
 #, fuzzy
-#~ msgid "Compress/decompress raster file"
-#~ msgstr "Nén/giải nén tập tin raster"
+msgid "ASCII vector or point file/old GRASS ASCII vector file"
+msgstr "Tập tin điểm hoặc vector ASCII/tập tin vector ASCII cũ của GRASS"
 
-#~ msgid "Manage boundary definitions"
-#~ msgstr "Quản lý các định nghĩa ranh giới"
+msgid "POV-Ray format"
+msgstr "định dạng POV-Ray"
 
-#~ msgid "Manage null values"
-#~ msgstr "Quản lý các giá trị rỗng"
+msgid "Copy maps"
+msgstr "Sao chép các bản đồ"
 
-#~ msgid "Manage timestamps for files"
-#~ msgstr "Quản lý các đánh dấu thời gian cho tập tin"
+msgid "List maps"
+msgstr "Liệt kê các bản đồ"
 
-#~ msgid "Quantization for floating-point maps"
-#~ msgstr "Lượng tử hóa các bản đồ kiểu dấu chấm động"
+msgid "List maps using expressions and 'wildcards'"
+msgstr "Liệt kê các bản đồ bằng cách dùng biểu thức và ký tự đại diện"
+
+msgid "Rename maps"
+msgstr "Đặt lại tên các bản đồ"
+
+msgid "Remove maps"
+msgstr "Loại bỏ các bản đồ"
+
+msgid "Remove maps using expressions and 'wildcards'"
+msgstr "Loại bỏ các bản đồ bằng cách dùng biểu thức và ký tự đại diện"
+
+msgid "Raster to vector map"
+msgstr "Bản đồ raster thành vector"
+
+msgid "Raster map series to volume"
+msgstr "Chuỗi bản đồ raster thành thể tích"
 
 #, fuzzy
-#~ msgid "Resample (change resolution)"
-#~ msgstr "Thu mẫu lại (đổi độ phân giải), dùng phương pháp lân cận gần nhất"
+msgid "Raster 2.5D map to volume"
+msgstr "Chuỗi bản đồ raster thành thể tích"
+
+msgid "Vector to vector"
+msgstr "Vector thành vector"
+
+msgid "Vector lines to points"
+msgstr "Đường vector thành điểm"
+
+msgid "Vector 3D points to volume voxels"
+msgstr "Điểm vector 3D thành thể tích voxel"
+
+msgid "Sites (GRASS 5.x) to vector"
+msgstr "Địa điểm (GRASS 5.x) thành vector"
+
+msgid "Volumes to raster map series"
+msgstr "Thể tích thành các chuỗi bản đồ raster"
+
+msgid "Groups"
+msgstr "Các nhóm"
+
+msgid "New"
+msgstr "Mới"
+
+msgid "Create new group file"
+msgstr "Tạo nhóm mới"
+
+msgid "Open group file"
+msgstr "Mở tập tin nhóm"
+
+msgid "Save group file"
+msgstr "Lưu tập tin nhóm"
+
+msgid "Save group file as name"
+msgstr "Lưu tập tin nhóm thành tên"
+
+msgid "Close group"
+msgstr "Đóng nhóm"
+
+msgid "Save display to image file"
+msgstr "Lưu trình bày thành tập tin ảnh"
+
+msgid "XWD (Save display, selected with mouse, to map.xwd in home directory )"
+msgstr ""
+"XWD (Lưu trình bày, được chọn bằng chuột, thành map.xwd trong thư mục nhà)"
+
+msgid "Save displays to multiple graphic file formats"
+msgstr "Lưu trình bày thành các định dạng tập tin đồ họa đa"
+
+msgid "Save map to Postscript file"
+msgstr "Lưu bản đồ thành tập tin Postscript"
+
+msgid "Print to default printer"
+msgstr "In ra máy in mặc định"
+
+msgid "print"
+msgstr "in"
+
+msgid "Exit Display Manager"
+msgstr "Thoát Trình Quản lý Hiển thị"
+
+msgid "Zoom to maximum extent of all displayed maps"
+msgstr "Phóng đến phạm vi tối đa của tất cả các bản đồ được trình bày"
+
+msgid "Access other mapsets in current location"
+msgstr "Truy cập các bộ bản đồ khác trong location hiện tại"
+
+msgid "Change current working session to new mapset, location, or GISDBASE"
+msgstr ""
+"Thay đổi phiên làm việc hiện tại sang bộ bản đồ, location hoặc CSDL GIS mới"
+
+msgid "Modify access by other users to current mapset"
+msgstr "Thay đổi quyền truy cập của người dùng vào bộ bản đồ hiện tại"
+
+msgid "Show current GRASS environment settings"
+msgstr "Hiển thị các thiết lập biến môi trường hiện tại của GRASS"
+
+msgid "Set GRASS environment settings"
+msgstr "Thiết lập các biến môi trường của GRASS"
+
+msgid "Create/edit projection information for current location"
+msgstr "Tạo/chỉnh sửa thông tin phép chiếu của location hiện tại"
+
+msgid "Show projection information and create projection files"
+msgstr "Hiển thị thông tin phép chiếu và tạo các tập tin phép chiếu"
+
+msgid "Convert coordinates from one projection to another"
+msgstr "Đổi các tọa độ từ một phép chiếu này sang phép chiếu khác"
+
+msgid "Text"
+msgstr "Chữ"
+
+msgid "Select default text font"
+msgstr "Chọn phông chữ mặc định"
+
+msgid "Select default freetype text font"
+msgstr "Chọn phông chữ freetype mặc định"
+
+msgid "X-monitor displays"
+msgstr "Các trình bày màn hình X"
+
+msgid "Configure xmonitor displays"
+msgstr "Cấu hình các trình bày màn hình x"
+
+msgid "Configure frames for xmonitors"
+msgstr "Cấu hình các khung cho màn hình x"
+
+msgid "Start/restart xmonitor at specified window size"
+msgstr "Khởi động/khởi động lại màn hình x ở kích thước cửa sổ chỉ định"
+
+msgid "Set active xmonitor to specified size"
+msgstr "Thiết lập màn hình x kích hoạt về kích thước chỉ định"
+
+msgid "Display information about active xmonitor"
+msgstr "Trình bày thông tin về màn hình x kích hoạt"
 
 #, fuzzy
-#~ msgid "Resample using nearest neighbor method"
-#~ msgstr "Thu mẫu lại (đổi độ phân giải), dùng phương pháp lân cận gần nhất"
+msgid "Compress/decompress raster file"
+msgstr "Nén/giải nén tập tin raster"
+
+msgid "Manage boundary definitions"
+msgstr "Quản lý các định nghĩa ranh giới"
+
+msgid "Manage null values"
+msgstr "Quản lý các giá trị rỗng"
+
+msgid "Manage timestamps for files"
+msgstr "Quản lý các đánh dấu thời gian cho tập tin"
+
+msgid "Quantization for floating-point maps"
+msgstr "Lượng tử hóa các bản đồ kiểu dấu chấm động"
 
 #, fuzzy
-#~ msgid "Resample using various interpolation methods"
-#~ msgstr "Thu mẫu lại (đổi độ phân giải), dùng phương pháp lân cận gần nhất"
+msgid "Resample (change resolution)"
+msgstr "Thu mẫu lại (đổi độ phân giải), dùng phương pháp lân cận gần nhất"
 
 #, fuzzy
-#~ msgid "Resample using regularized spline with tension method"
-#~ msgstr ""
-#~ "Thu mẫu lại (đổi độ phân giải), dùng đường spline chính quy có sức căng"
-
-#~ msgid "Support file creation and maintenance"
-#~ msgstr "Tạo và bảo trì tập tin hỗ trợ"
-
-#~ msgid "Reproject raster from other location"
-#~ msgstr "Quy chiếu lại raster từ location khác"
-
-#~ msgid "Generate tiling for other projection"
-#~ msgstr "Tạo chồng xếp (tiling) cho phép chiếu khác"
-
-#~ msgid "Set colors to predefined color tables"
-#~ msgstr "Thiết lập màu theo các bảng màu có sẵn"
-
-#~ msgid "Set colors using color rules"
-#~ msgstr "Chọn màu bằng các dùng các quy tắc màu"
-
-#~ msgid "Blend 2 color maps to produce 3 RGB files"
-#~ msgstr "Trộn hai bản đồ màu để tạo ra ba tập tin RGB"
-
-#~ msgid "Create color image from RGB files"
-#~ msgstr "Tạo ảnh màu từ các tập tin RGB"
-
-#~ msgid ""
-#~ "Create 3 RGB (red, green, blue) maps from 3 HIS (hue, intensity, "
-#~ "saturation) maps"
-#~ msgstr ""
-#~ "Tạo 3 bản đồ RGB (đỏ, lục, xanh) từ 3 bản đồ HIS (màu sắc, cường độ, độ "
-#~ "bão hoà"
-
-#~ msgid "Create raster buffers"
-#~ msgstr "Tạo các vùng đệm raster"
-
-#~ msgid "Create raster MASK"
-#~ msgstr "Tạo MẶT NẠ raster"
-
-#~ msgid "Locate closest points between areas in 2 raster maps"
-#~ msgstr "Định vị điểm gần nhất giữa các vùng trong 2 bản đồ raster"
-
-#~ msgid "Moving window analysis of raster cells"
-#~ msgstr "Phân tích di chuyển cửa sổ trên các cell raster"
-
-#~ msgid "Analyze vector points in neighborhood of raster cells"
-#~ msgstr "Phân tích các điểm vector lân cận với các cell raster"
-
-#~ msgid "Function of map series (time series)"
-#~ msgstr "Chức năng của chuỗi bản đồ (chuỗi thời gian)"
-
-#~ msgid "Statistical calculations for cover map over base map"
-#~ msgstr "Tính toán thống kê cho bản đồ lớp phủ trên bản đồ nền"
-
-#~ msgid "Solar irradiance and daily irradiation"
-#~ msgstr "Bức xạ mặt trời và chiếu sáng hàng ngày"
-
-#~ msgid "Shadows map for sun position or date/time"
-#~ msgstr "Bản đồ đổ bóng theo vị trí mặt trời hoặc ngày/giờ"
-
-#~ msgid "Calculate cumulative movement costs between locales"
-#~ msgstr "Tính toán các chi phí di chuyển tích lũy giữa các địa bàn"
-
-#~ msgid "Profile analysis"
-#~ msgstr "Phân tích mặt cắt"
-
-#~ msgid "Shaded relief map"
-#~ msgstr "Bản đồ nổi đổ bóng"
-
-#~ msgid "Visibility/line of sight"
-#~ msgstr "Khả năng nhìn thấy/đường nhìn thấy"
-
-#~ msgid "Clump small areas (statistics calculated by r.volume)"
-#~ msgstr "Gộp khối các vùng nhỏ (thống kê tính bằng r.volume)"
-
-#~ msgid "Grow areas"
-#~ msgstr "Làm lớn các vùng"
-
-#~ msgid "Thin linear features"
-#~ msgstr "Làm mảnh các đối tượng tuyến tính"
-
-#~ msgid "Carve stream channels into elevation map using vector streams map"
-#~ msgstr ""
-#~ "Khắc các đường suối vào một bản đồ độ cao bằng cách dùng bản đồ suối "
-#~ "vector"
-
-#~ msgid "Depressionless elevation map and flowline map"
-#~ msgstr "Bản đồ độ cao không giảm cấp và bản đồ dòng chảy"
-
-#~ msgid "Fill lake from seed point to specified level"
-#~ msgstr "Làm đầy hồ từ điểm 'gieo hạt' đến một mức chỉ định"
-
-#~ msgid "Flow accumulation for massive grids"
-#~ msgstr "Sự tích lũy dòng chảy đối với các lưới thô"
-
-#~ msgid "Generate flow lines for raster map"
-#~ msgstr "Sinh ra các đường dòng chảy cho bản đồ raster"
-
-#~ msgid "SIMWE sediment erosion, transport, & deposition modeling"
-#~ msgstr "Mô hình xói mòn chất lắng tụ, di chuyển và dịch chuyển SIMWE"
-
-#~ msgid "Analyze landscape characteristics"
-#~ msgstr "Phân tích các đặc điểm cảnh quan"
-
-#~ msgid "Analyze landscape patch characteristics"
-#~ msgstr "Phân tích các tính chất 'vá' của cảnh quan"
-
-#~ msgid "Output landscape patch information"
-#~ msgstr "Xuất ra thông tin 'vá' của cảnh quan"
-
-#~ msgid "Generate rate of spread (ROS) maps"
-#~ msgstr "Sinh ra các bản đồ tốc độ phát tán (ROS)"
-
-#~ msgid "Generate least-cost spread paths"
-#~ msgstr "Sinh ra các đường dẫn phát tán chi phí thấp nhất"
-
-#~ msgid "Simulate anisotropic spread phenomena"
-#~ msgstr "Giả lập các hiện tượng phát tán không đẳng hướng"
-
-#~ msgid "Edit category values of individual cells for displayed raster map"
-#~ msgstr ""
-#~ "Chỉnh sửa các giá trị phạm trù của các ô của bản đồ raster được trình bày"
-
-#~ msgid "Reclassify categories for areas of specified sizes"
-#~ msgstr "Phân loại lại các phạm trù cho những vùng có k.thước chỉ định"
-
-#~ msgid "Reclassify categories using rules"
-#~ msgstr "Phân loại lại các phạm trù-dùng quy tắc"
-
-#~ msgid "Reclassify categories using rules file"
-#~ msgstr "Phân loại lại các phạm trù-dùng tập tin quy tắc"
-
-#~ msgid "Recode categories using rules (create new map)"
-#~ msgstr "Mã hóa lại các phạm trù bằng-dùng quy tắc (tạo bản đồ mới)"
-
-#~ msgid "Recode categories using rules file (create new map)"
-#~ msgstr "Mã hóa lại các phạm trù-dùng tập tin quy tắc (tạo bản đồ mới)"
-
-#~ msgid "Rescale categories (create new map)"
-#~ msgstr "Lấy lại tỷ lệ các phạm trù (tạo bản đồ mới)"
-
-#~ msgid "Rescale categories with equalized histogram (create new map)"
-#~ msgstr ""
-#~ "Lấy lại tỷ lệ các phạm trù với biểu đồ histogram được cân bằng (tạo bản "
-#~ "đồ mới)"
-
-#~ msgid "Generate concentric circles around points"
-#~ msgstr "Tạo các vòng đồng tâm quanh các điểm"
-
-#~ msgid "Generate random raster cells"
-#~ msgstr "Sinh ra các ô raster ngẫu nhiên"
-
-#~ msgid "Generate random cells and vector points from raster map"
-#~ msgstr "Sinh ra các ô ngẫu nhiên và các điểm vector từ bản đồ raster"
-
-#~ msgid "Generate density surface using moving Gausian kernal"
-#~ msgstr "Tạo bề mặt mật độ-dùng nhân Gauss di chuyển"
-
-#~ msgid "Generate fractal surface"
-#~ msgstr "Tạo các mặt"
-
-#~ msgid "Generate gaussian deviates surface"
-#~ msgstr "Tạo bề mặt các độ lệch kiểu Gauss"
-
-#~ msgid "Generate plane"
-#~ msgstr "Sinh ra mặt phẳng"
-
-#~ msgid "Generate random deviates surface"
-#~ msgstr "Sinh ra bề mặt độ lệch ngẫu nhiên"
-
-#~ msgid "Generate random surface with spatial dependence"
-#~ msgstr "Sinh ra bề mặt ngẫu nhiên có sự phụ thuộc không gian"
-
-#~ msgid "Generate vector contour lines"
-#~ msgstr "Sinh ra các đường bình độ vector"
-
-#~ msgid "Bilinear interpolation from raster points"
-#~ msgstr "Nội suy song tuyến tính từ các điểm raster"
-
-#~ msgid "Inverse distance weighted interpolation from raster points"
-#~ msgstr "Nội suy IDSW từ các điểm raster"
-
-#~ msgid "Interpolation from raster contours"
-#~ msgstr "Nội suy từ các đường bình độ raster"
-
-#~ msgid "Inverse distance weighted interpolation from vector points"
-#~ msgstr "Nội suy IDSW từ các điểm vector"
-
-#~ msgid ""
-#~ "Regularized spline tension interpolation from vector points or contours"
-#~ msgstr ""
-#~ "Nội suy đường spline chính quy có sức căng từ các điểm/đường bình độ "
-#~ "vector"
-
-#~ msgid "Fill NULL cells by interpolation using regularized spline tension"
-#~ msgstr ""
-#~ "Lấp đầy các ô rỗng bằng cách nội suy, dùng đường spline chính quy có sức "
-#~ "căng"
-
-#~ msgid "Report category labels and values"
-#~ msgstr "Báo cáo các nhãn và giá trị phạm trù"
-
-#~ msgid "Range of all category values"
-#~ msgstr "Miền của tất cả các giá trị phạm trù"
-
-#~ msgid "Sum all cell category values"
-#~ msgstr "Tổng của tất cả các giá trị phạm trù"
-
-#~ msgid "Summary statistics for clumped cells (works with r.clump)"
-#~ msgstr "Thống kê tóm tắt cho các ô được gộp khối (tạo ra từ r.clump)"
-
-#~ msgid "Univariate statistics (script version)"
-#~ msgstr "Thống kê một biến (phiên bản tập lệnh)"
-
-#~ msgid "Sample values along transects"
-#~ msgstr "Lấy mẫu các giá trị dọc theo các tuyến"
-
-#~ msgid "Sample values along transects (use azimuth, distance)"
-#~ msgstr "Lấy mẫu các giá trị dọc theo các tuyến (dùng phương vị, kh.cách)"
-
-#~ msgid "Linear regression between 2 maps"
-#~ msgstr "Hồi quy tuyến tính giữa hai bản đồ"
-
-#~ msgid "Mutual category occurences (coincidence)"
-#~ msgstr "Sự xuất hiện phạm trù chung (ngẫu nhiên)"
-
-#~ msgid "Create/rebuild topology"
-#~ msgstr "Tạo/xây dựng tôpô"
+msgid "Resample using nearest neighbor method"
+msgstr "Thu mẫu lại (đổi độ phân giải), dùng phương pháp lân cận gần nhất"
 
 #, fuzzy
-#~ msgid "Clean vector files"
-#~ msgstr "Làm sạch các tập tin vector"
-
-#~ msgid "Build polylines from adjacent segments"
-#~ msgstr "Xây dựng các đường từ các đoạn kề nhau"
-
-#~ msgid "Split polylines into segments"
-#~ msgstr "Ngắt đường thành các đoạn"
-
-#~ msgid "Create lines parallel to existing lines"
-#~ msgstr "Tạo các đường song song với các đường hiện có"
-
-#~ msgid "Convert vector feature types"
-#~ msgstr "Đổi kiểu đối tượng vector"
-
-#~ msgid "Convert 2D vector to 3D by sampling raster"
-#~ msgstr "Đổi vector 2D thành 3D bằng cách thu mẫu raster"
-
-#~ msgid "Extrude 2D vector into 3D vector"
-#~ msgstr "Trồi vector 2D vào trong vector 3D"
-
-#~ msgid "Create text label file for vector features"
-#~ msgstr "Tạo tập tin nhãn cho các đối tượng vector"
-
-#~ msgid "Reproject vector from other location"
-#~ msgstr "Quy chiếu lại vector từ location khác"
-
-#~ msgid "Create new vector as link to external OGR layer"
-#~ msgstr "Tạo vector mới dạng liên kết đến lớp OGR ngoài"
-
-#~ msgid "Set database connection for vector attributes"
-#~ msgstr "Thiết lập kết nối CSDL với các thuộc tính vector"
-
-#~ msgid "Rectify and georeference vector map"
-#~ msgstr "Nắn chỉnh và tham chiếu địa lý bản đồ vector"
-
-#~ msgid "Query by attributes"
-#~ msgstr "Truy vấn theo thuộc tính"
-
-#~ msgid "Query by map features"
-#~ msgstr "Truy vấn theo các đối tượng của bản đồ"
-
-#~ msgid "Create vector buffers"
-#~ msgstr "Tạo các vùng đệm vector"
-
-#~ msgid "Linear referencing for vectors"
-#~ msgstr "Tham chiếu tuyến tính cho các vector"
-
-#~ msgid "Create linear reference system"
-#~ msgstr "Tạo hệ thống tham chiếu tuyến tính"
-
-#~ msgid "Create stationing from imput lines, and linear reference system"
-#~ msgstr ""
-#~ "Tạo các trạm (stationing) từ các đường đầu vào và hệ thống tham chiếu "
-#~ "tuyến tính"
-
-#~ msgid ""
-#~ "Create points/segments from input lines, linear reference system and "
-#~ "positions read from stdin"
-#~ msgstr ""
-#~ "Tạo các điểm/đoạn từ các đường dầu vào, hệ thống tham chiếu tuyến tính và "
-#~ "đọc vị trí từ stdin"
-
-#~ msgid ""
-#~ "Find line id and real km+offset for given points in vector map using "
-#~ "linear reference system"
-#~ msgstr ""
-#~ "Tìm id đường và km+độ dịch thực sự đối với các điểm cho trước trong một "
-#~ "bản đồ vector, dùng hệ thống tham chiếu tuyến tính"
-
-#~ msgid "Locate nearest features to points or centroids"
-#~ msgstr "Định vị các đối tượng gần nhất với các điểm hoặc trọng tâm"
-
-#~ msgid "Generate Thiessen polygons around points (Voronoi diagram)"
-#~ msgstr "Sinh ra các vùng Thiessen quanh các điểm (sơ đồ Voronoi)"
-
-#~ msgid "Connect points to create Delaunay triangles"
-#~ msgstr "Nối các điểm để tạo các tam giác Delaunay"
-
-#~ msgid "Shortest route (visualization only)"
-#~ msgstr "Lộ trình ngắn nhất (chỉ để xem)"
-
-#~ msgid "Split net to bands between cost isolines"
-#~ msgstr "Ngắt mạng lưới thành các bằng giữa các đường đồng giá trị"
-
-#~ msgid "Overlay/combine 2 vector maps"
-#~ msgstr "Chồng/tổ hợp hai bản đồ vector"
-
-#~ msgid "Patch multiple maps (combine)"
-#~ msgstr "'Vá' nhiều bản đồ (tổ hợp)"
-
-#~ msgid "Generate area feature for extent of current region"
-#~ msgstr "Sinh ra đối tượng vùng cho phạm vi của vùng hiện tại"
-
-#~ msgid "Generate rectangular vector grid"
-#~ msgstr "Sinh ra lưới vector hình chữ nhật"
-
-#~ msgid "Attach, delete, or report categories"
-#~ msgstr "Gắn, xóa, hoặc báo cáo các phạm trù"
-
-#~ msgid "Reclassify features using rules file"
-#~ msgstr "Phân loại lại các đối tượng-dùng tập tin quy tắc"
-
-#~ msgid "Work with vector points"
-#~ msgstr "Làm việc với các điểm vector"
-
-#~ msgid "Generate points from database with x/y coordinates"
-#~ msgstr "Sinh ra các điểm từ CSDL có các tọa độ x/y"
-
-#~ msgid "Random location perturbations of points"
-#~ msgstr "Các sự xáo trộn vị trí ngẫu nhiên của các điểm"
-
-#~ msgid "Generate convex hull for point set"
-#~ msgstr "Sinh ra bao lồi hoặc tập hợp điểm"
-
-#~ msgid "Generate Delaunay triangles for point set"
-#~ msgstr "Sinh ra tam giác Delaunay từ tập hợp điểm"
-
-#~ msgid "Generate Voronoi diagram/Thiessen polygons for point set"
-#~ msgstr "Sinh ra sơ đồ Voronoi/đa giác Thiessen từ tập hợp điểm"
-
-#~ msgid "Sample raster maps"
-#~ msgstr "Lấy mẫu các bản đồ raster"
-
-#~ msgid "Calculate statistics for raster map overlain by vector map"
-#~ msgstr "Tính toán thống kê cho bản đồ raster chồng lên bởi bản đồ vector"
-
-#~ msgid ""
-#~ "Partition points into test/training sets for k-fold cross validatation"
-#~ msgstr ""
-#~ "Phân chia các điểm thành các bộ/tập hợp 'huấn luyện' dùng cho kiểm chứng "
-#~ "chéo k-fold"
-
-#~ msgid "Transfer attribute data from queried vector map to points"
-#~ msgstr "Chuyển dữ liệu thuộc tính từ bản đồ vector được truy vấn vào điểm"
-
-#~ msgid "Load vector attributes to database or create reports"
-#~ msgstr "Nạp các thuộc tính vector vào CSDL hoặc tạo báo cáo"
-
-#~ msgid "Report areas for vector attribute categories"
-#~ msgstr "Báo cáo diện tích cho các phạm trù thuộc tính vector"
-
-#~ msgid "Test normality of point distribution"
-#~ msgstr "Thử mức độ bình thường của phân bố điểm"
-
-#~ msgid "Calculate stats for raster map underlying vector objects"
-#~ msgstr ""
-#~ "Tính toán các thống kê cho lớp bản đồ raster ở dưới các đối tượng vector"
-
-#~ msgid "Indices of point counts in quadrats"
-#~ msgstr "Các chỉ số đếm các điểm trong các mẫu ô vuông"
-
-#~ msgid "Create/edit imagery group"
-#~ msgstr "Tạo/chỉnh sửa nhóm ảnh"
-
-#~ msgid "Target imagery group"
-#~ msgstr "Xác định đích cho nhóm ảnh"
-
-#~ msgid "Mosaic up to 4 adjacent images"
-#~ msgstr "Khảm tối đa 4 ảnh kề nhau"
-
-#~ msgid ""
-#~ "Color balance and enhance color tables of multiband imagery for rgb "
-#~ "display"
-#~ msgstr ""
-#~ "Cân bằng màu và cải thiện bảng màu của ảnh nhiều băng để hiển thị rgb"
-
-#~ msgid ""
-#~ "Transform HIS (Hue/Intensity/Saturation) color image to RGB (Red/Green/"
-#~ "Blue)"
-#~ msgstr ""
-#~ "Chuyển đổi ảnh màu HIS (màu sắc/cường độ/độ bão hòa) thành RGB (đỏ/lục/"
-#~ "xanh)"
-
-#~ msgid ""
-#~ "Transform RGB (Red/Green/Blue) color image to HIS (Hue/Intensity/"
-#~ "Saturation)"
-#~ msgstr ""
-#~ "Chuyển đổi ảnh màu RGB (đỏ/lục/xanh) thành HIS (màu sắc/cường độ/độ bão "
-#~ "hòa)"
-
-#~ msgid "Rectify and georeference image group"
-#~ msgstr "Nắn chỉnh và tham chiếu địa lý ảnh"
-
-#~ msgid "Set ground control points (GCP's) from raster map or keyboard entry"
-#~ msgstr ""
-#~ "Thiết lập các điểm khống chế (GCP) từ ảnh raster hoặc nhập vào từ bàn phím"
-
-#~ msgid "Set ground control points (GCP's) from vector map or keyboard entry"
-#~ msgstr ""
-#~ "Thiết lập các điểm khống chế (GCP) từ ảnh vector hoặc nhập vào từ bàn phím"
-
-#~ msgid "Affine and Polynomial rectification (rubber sheet)"
-#~ msgstr "Nắn chỉnh affine và đa thức (kiểu tấm cao su)"
-
-#~ msgid "Brovey transformation and pan sharpening"
-#~ msgstr "Phép chuyển đổi Brovey và làm sắc ảnh toàn sắc"
-
-#~ msgid "Non-interactive input for supervised classification (MLC)"
-#~ msgstr "Đầu vào không tương tác cho phân loại có hướng dẫn (MLC)"
-
-#~ msgid "Non-interactive input for supervised classification (SMAP)"
-#~ msgstr "Đầu vào không tương tác cho phân loại có hướng dẫn (SMAP)"
-
-#~ msgid "Zero edge crossing detection"
-#~ msgstr "Phát hiện mép giao nhau bằng 0"
-
-#~ msgid "User defined matrix/convolving filter"
-#~ msgstr "phép lọc ma trận/quấn do người dùng định nghĩa"
-
-#~ msgid "Canonical component"
-#~ msgstr "thành phần chính tắc"
-
-#~ msgid "Principal component"
-#~ msgstr "Thành phần chủ yếu"
-
-#~ msgid "Fast Fourier Transform"
-#~ msgstr "Phép chuyển đổi Fast Fourier"
-
-#~ msgid "Inverse Fast Fourier Transform"
-#~ msgstr "Phép chuyển đổi Inverse Fast Fourier"
-
-#~ msgid "Range of image values"
-#~ msgstr "Miền của các giá trị ảnh"
-
-#~ msgid "Bit pattern comparison for ID of low quality pixels"
-#~ msgstr "So sánh bit để nhận diện các điểm ảnh chất lượng thấp"
-
-#~ msgid "Kappa classification accuracy assessment"
-#~ msgstr "Phép phân loại Kappa để đánh giá độ chính xác"
-
-#~ msgid "Optimum index factor for LandSat TM"
-#~ msgstr "Hệ số chỉ mục tối ưu (OIF) cho ảnh LandSat TM"
-
-#~ msgid "&Grid3D"
-#~ msgstr "&Grid3D"
-
-#~ msgid "Create 3D mask for grid3D operations"
-#~ msgstr "Tạo mặt nạ 3D cho các lệnh grid3D"
-
-#~ msgid "Create 2D raster cross section from grid3d volume"
-#~ msgstr "Tạo mặt cắt raster 2D cho thể tích grid3D"
-
-#~ msgid "Map calculator for grid3D operations"
-#~ msgstr "Tính toán bản đồ cho các lệnh về grid3D"
-
-#~ msgid "Interpolate volume from vector points using splines"
-#~ msgstr "Nội suy thể tích từ các điểm vector (dùng đường spline)"
-
-#~ msgid "Display information about grid3D volume"
-#~ msgstr "Trình bày thông tin về thể tích grid3D"
-
-#~ msgid "Add columns to table"
-#~ msgstr "Thêm cột vào bảng"
-
-#~ msgid "Change values in a column"
-#~ msgstr "Thay đổi các giá trị trong một cột"
-
-#~ msgid "Query data (SQL select)"
-#~ msgstr "Truy vấn dữ liệu (chọn SQL)"
-
-#~ msgid "Execute SQL statement"
-#~ msgstr "Thực thi câu lệnh SQL"
-
-#~ msgid "red (RGB) or hue (HIS):"
-#~ msgstr "đỏ (RGB) hoặc màu sắc (HIS)"
-
-#~ msgid "green (RGB) or intensity (HIS):"
-#~ msgstr "lục (RGB) hoặc cường độ (HIS)"
-
-#~ msgid "blue (RGB) or saturation (HIS):"
-#~ msgstr "xanh (RGB) hoặc độ bão hòa (HIS)"
-
-#~ msgid "     (leave blank to place with mouse; position will not save)"
-#~ msgstr "  (chừa trống để đặt bằng chuột, vị trí sẽ không lưu lại)"
-
-#~ msgid "     coordinate type"
-#~ msgstr "    kiểu tọa độ"
-
-#~ msgid "  align text with coordinate point"
-#~ msgstr "  canh thằng chữ với điểm tọa độ"
-
-#~ msgid ""
-#~ "     (for coordinates, % is from bottom left of display, pixels from top "
-#~ "left)"
-#~ msgstr ""
-#~ "(đối với các tọa độ, % tính từ góc dưới trái của phần trình bày điểm ảnh "
-#~ "tính từ góc trên trái)"
-
-#~ msgid "     text rotation (degrees counterclockwise)"
-#~ msgstr "    xoay chữ (độ, ngược chiều kim đồng hồ)"
-
-#~ msgid "rotation in radians"
-#~ msgstr "xoay theo radian"
-
-#~ msgid "height in pixels instead of %"
-#~ msgstr "chiều vào theo điểm ảnh thay vì %"
-
-#~ msgid "Welcome to the GRASS GIS manager"
-#~ msgstr "Chào mừng đến với Trình Quản lý GIS"
-
-#~ msgid "Display active layers in current region"
-#~ msgstr "Trình bày các lớp kích hoạt trong vùng hiện tại"
-
-#~ msgid "Display active layers in default region"
-#~ msgstr "Trình bày các lớp kích hoạt trong vùng mặc định"
-
-#~ msgid "Display active layers in saved region setting"
-#~ msgstr "Trình bày các lớp kích hoạt trong thiết lập vùng được lưu"
-
-#~ msgid "NVIZ - n dimensional visualization"
-#~ msgstr "NVIZ - phép xem n chiều"
-
-#~ msgid "Fly through path for NVIZ"
-#~ msgstr "Đường bay ngang dùng cho NVIZ"
-
-#~ msgid "Zoom"
-#~ msgstr "Phóng"
-
-#~ msgid "Pan and recenter"
-#~ msgstr "Di chuyển và canh giữa"
-
-#~ msgid "Query map (select map first)"
-#~ msgstr "Truy vấn bản đồ (chọn bản đồ trước)"
-
-#~ msgid "Measure lengths and areas"
-#~ msgstr "Đo chiều dài và diện tích"
-
-#~ msgid "Geographical position"
-#~ msgstr "Vị trí địa lý"
-
-#~ msgid "Print raster & vector maps using ps.map"
-#~ msgstr "In các bản đồ raster và vector bằng ps.map"
-
-#~ msgid "Add legend"
-#~ msgstr "Thêm chú giải"
-
-#~ msgid "Add paint labels layer (from directory paint/labels)"
-#~ msgstr "Thêm lớp nhãn paint (từ thư mục paint/lables)"
-
-#~ msgid "Add freetype text layer"
-#~ msgstr "Thêm lớp văn bản freetype"
-
-#~ msgid "Create or select display frame"
-#~ msgstr "Chọn hoặc tạo khung trình bày"
-
-#~ msgid "Vector name:"
-#~ msgstr "Tên vector:"
-
-#~ msgid "Display:"
-#~ msgstr "Trình bày:"
-
-#~ msgid "shapes"
-#~ msgstr "dạng"
-
-#~ msgid "categories"
-#~ msgstr "phạm trù"
-
-#~ msgid "topology"
-#~ msgstr "tôpô"
-
-#~ msgid "line directions"
-#~ msgstr "hướng đường"
-
-#~ msgid "faces"
-#~ msgstr "mặt"
-
-#~ msgid "color"
-#~ msgstr "màu"
-
-#~ msgid "random colors"
-#~ msgstr "màu ngẫu nhiên"
-
-#~ msgid " size"
-#~ msgstr "k.thước"
-
-#~ msgid " align with pt"
-#~ msgstr "canh thẳng với pt"
-
-#~ msgid "     layer for labels"
-#~ msgstr "    lớp gán nhãn"
-
-#~ msgid " attribute col for labels"
-#~ msgstr "cột thuộc tính làm nhãn"
-
-#~ msgid "Query vectors: "
-#~ msgstr "Truy vấn vector:"
-
-#~ msgid " query cat values"
-#~ msgstr " Truy vấn các giá trị phạm trù"
-
-#~ msgid "SQL query"
-#~ msgstr "truy vấn SQL"
-
-#~ msgid "     SQL where statement"
-#~ msgstr "    câu lệnh where của SQL"
-
-#~ msgid "Mouse query setup:"
-#~ msgstr "Thiết lập truy vấn bằng chuột:"
-
-#~ msgid "edit attributes (form mode)"
-#~ msgstr "chỉnh sửa thuộc tính (chế độ biểu mẫu)"
-
-#~ msgid "results as text in terminal"
-#~ msgstr "kết quả dạng văn bản tại terminal"
-
-#~ msgid "Line width for ps.map print output:"
-#~ msgstr "Chiều dày đường cho đầu ra in bằng ps.map:"
-
-#~ msgid "Line width used for printing"
-#~ msgstr "Chiều dày đường dùng cho in ấn"
-
-#~ msgid " Background color: "
-#~ msgstr "Màu nền: "
-
-#~ msgid "no background color"
-#~ msgstr "không có màu nền"
-
-#~ msgid " "
-#~ msgstr " "
-
-#~ msgid "display N. arrow only "
-#~ msgstr "Zeige nur Nordpfeil"
-
-#~ msgid "line scale instead of bar scale "
-#~ msgstr "thước tỷ lệ kiểu đường thay vì thanh "
-
-#~ msgid "Text options: color"
-#~ msgstr "Tùy chọn chữ: màu"
-
-#~ msgid "Paper format"
-#~ msgstr "Định dạng giấy"
-
-#~ msgid "Custom"
-#~ msgstr "Tùy chỉnh"
-
-#~ msgid "height:"
-#~ msgstr "chiều cao:"
-
-#~ msgid "left:"
-#~ msgstr "trái:"
-
-#~ msgid "right:"
-#~ msgstr "phải:"
-
-#~ msgid "top:"
-#~ msgstr "trên:"
-
-#~ msgid "bottom:"
-#~ msgstr "dưới:"
-
-#~ msgid "PS file:"
-#~ msgstr "tập tin PS:"
-
-#~ msgid "PDF file:"
-#~ msgstr "tập tin PDF:"
-
-#~ msgid "PNG file:"
-#~ msgstr "tập tin PNG"
-
-#~ msgid "PNG file resolution (points/inch):"
-#~ msgstr "Độ phân giải tập tin PNG (điểm/inch):"
-
-#~ msgid "Printer:"
-#~ msgstr "Máy in:"
-
-#~ msgid "Script file:"
-#~ msgstr "tập tin Script:"
-
-#~ msgid "Preview"
-#~ msgstr "Xem trước"
+msgid "Resample using various interpolation methods"
+msgstr "Thu mẫu lại (đổi độ phân giải), dùng phương pháp lân cận gần nhất"
 
 #, fuzzy
-#~ msgid " width"
-#~ msgstr "chiều rộng:"
+msgid "Resample using regularized spline with tension method"
+msgstr ""
+"Thu mẫu lại (đổi độ phân giải), dùng đường spline chính quy có sức căng"
 
-#~ msgid "text color"
-#~ msgstr "màu chữ"
+msgid "Support file creation and maintenance"
+msgstr "Tạo và bảo trì tập tin hỗ trợ"
 
-#~ msgid " text size"
-#~ msgstr "cỡ chữ"
+msgid "Reproject raster from other location"
+msgstr "Quy chiếu lại raster từ location khác"
 
-#~ msgid " justification"
-#~ msgstr " canh thẳng"
+msgid "Generate tiling for other projection"
+msgstr "Tạo chồng xếp (tiling) cho phép chiếu khác"
 
-#~ msgid "query cat values    "
-#~ msgstr "truy vấn các giá trị phạm trù   "
+msgid "Set colors to predefined color tables"
+msgstr "Thiết lập màu theo các bảng màu có sẵn"
+
+msgid "Set colors using color rules"
+msgstr "Chọn màu bằng các dùng các quy tắc màu"
+
+msgid "Blend 2 color maps to produce 3 RGB files"
+msgstr "Trộn hai bản đồ màu để tạo ra ba tập tin RGB"
+
+msgid "Create color image from RGB files"
+msgstr "Tạo ảnh màu từ các tập tin RGB"
+
+msgid ""
+"Create 3 RGB (red, green, blue) maps from 3 HIS (hue, intensity, saturation) "
+"maps"
+msgstr ""
+"Tạo 3 bản đồ RGB (đỏ, lục, xanh) từ 3 bản đồ HIS (màu sắc, cường độ, độ bão "
+"hoà"
+
+msgid "Create raster buffers"
+msgstr "Tạo các vùng đệm raster"
+
+msgid "Create raster MASK"
+msgstr "Tạo MẶT NẠ raster"
+
+msgid "Locate closest points between areas in 2 raster maps"
+msgstr "Định vị điểm gần nhất giữa các vùng trong 2 bản đồ raster"
+
+msgid "Moving window analysis of raster cells"
+msgstr "Phân tích di chuyển cửa sổ trên các cell raster"
+
+msgid "Analyze vector points in neighborhood of raster cells"
+msgstr "Phân tích các điểm vector lân cận với các cell raster"
+
+msgid "Function of map series (time series)"
+msgstr "Chức năng của chuỗi bản đồ (chuỗi thời gian)"
+
+msgid "Statistical calculations for cover map over base map"
+msgstr "Tính toán thống kê cho bản đồ lớp phủ trên bản đồ nền"
+
+msgid "Solar irradiance and daily irradiation"
+msgstr "Bức xạ mặt trời và chiếu sáng hàng ngày"
+
+msgid "Shadows map for sun position or date/time"
+msgstr "Bản đồ đổ bóng theo vị trí mặt trời hoặc ngày/giờ"
+
+msgid "Calculate cumulative movement costs between locales"
+msgstr "Tính toán các chi phí di chuyển tích lũy giữa các địa bàn"
+
+msgid "Profile analysis"
+msgstr "Phân tích mặt cắt"
+
+msgid "Shaded relief map"
+msgstr "Bản đồ nổi đổ bóng"
+
+msgid "Visibility/line of sight"
+msgstr "Khả năng nhìn thấy/đường nhìn thấy"
+
+msgid "Clump small areas (statistics calculated by r.volume)"
+msgstr "Gộp khối các vùng nhỏ (thống kê tính bằng r.volume)"
+
+msgid "Grow areas"
+msgstr "Làm lớn các vùng"
+
+msgid "Thin linear features"
+msgstr "Làm mảnh các đối tượng tuyến tính"
+
+msgid "Carve stream channels into elevation map using vector streams map"
+msgstr ""
+"Khắc các đường suối vào một bản đồ độ cao bằng cách dùng bản đồ suối vector"
+
+msgid "Depressionless elevation map and flowline map"
+msgstr "Bản đồ độ cao không giảm cấp và bản đồ dòng chảy"
+
+msgid "Fill lake from seed point to specified level"
+msgstr "Làm đầy hồ từ điểm 'gieo hạt' đến một mức chỉ định"
+
+msgid "Flow accumulation for massive grids"
+msgstr "Sự tích lũy dòng chảy đối với các lưới thô"
+
+msgid "Generate flow lines for raster map"
+msgstr "Sinh ra các đường dòng chảy cho bản đồ raster"
+
+msgid "SIMWE sediment erosion, transport, & deposition modeling"
+msgstr "Mô hình xói mòn chất lắng tụ, di chuyển và dịch chuyển SIMWE"
+
+msgid "Analyze landscape characteristics"
+msgstr "Phân tích các đặc điểm cảnh quan"
+
+msgid "Analyze landscape patch characteristics"
+msgstr "Phân tích các tính chất 'vá' của cảnh quan"
+
+msgid "Output landscape patch information"
+msgstr "Xuất ra thông tin 'vá' của cảnh quan"
+
+msgid "Generate rate of spread (ROS) maps"
+msgstr "Sinh ra các bản đồ tốc độ phát tán (ROS)"
+
+msgid "Generate least-cost spread paths"
+msgstr "Sinh ra các đường dẫn phát tán chi phí thấp nhất"
+
+msgid "Simulate anisotropic spread phenomena"
+msgstr "Giả lập các hiện tượng phát tán không đẳng hướng"
+
+msgid "Edit category values of individual cells for displayed raster map"
+msgstr ""
+"Chỉnh sửa các giá trị phạm trù của các ô của bản đồ raster được trình bày"
+
+msgid "Reclassify categories for areas of specified sizes"
+msgstr "Phân loại lại các phạm trù cho những vùng có k.thước chỉ định"
+
+msgid "Reclassify categories using rules"
+msgstr "Phân loại lại các phạm trù-dùng quy tắc"
+
+msgid "Reclassify categories using rules file"
+msgstr "Phân loại lại các phạm trù-dùng tập tin quy tắc"
+
+msgid "Recode categories using rules (create new map)"
+msgstr "Mã hóa lại các phạm trù bằng-dùng quy tắc (tạo bản đồ mới)"
+
+msgid "Recode categories using rules file (create new map)"
+msgstr "Mã hóa lại các phạm trù-dùng tập tin quy tắc (tạo bản đồ mới)"
+
+msgid "Rescale categories (create new map)"
+msgstr "Lấy lại tỷ lệ các phạm trù (tạo bản đồ mới)"
+
+msgid "Rescale categories with equalized histogram (create new map)"
+msgstr ""
+"Lấy lại tỷ lệ các phạm trù với biểu đồ histogram được cân bằng (tạo bản đồ "
+"mới)"
+
+msgid "Generate concentric circles around points"
+msgstr "Tạo các vòng đồng tâm quanh các điểm"
+
+msgid "Generate random raster cells"
+msgstr "Sinh ra các ô raster ngẫu nhiên"
+
+msgid "Generate random cells and vector points from raster map"
+msgstr "Sinh ra các ô ngẫu nhiên và các điểm vector từ bản đồ raster"
+
+msgid "Generate density surface using moving Gausian kernal"
+msgstr "Tạo bề mặt mật độ-dùng nhân Gauss di chuyển"
+
+msgid "Generate fractal surface"
+msgstr "Tạo các mặt"
+
+msgid "Generate gaussian deviates surface"
+msgstr "Tạo bề mặt các độ lệch kiểu Gauss"
+
+msgid "Generate plane"
+msgstr "Sinh ra mặt phẳng"
+
+msgid "Generate random deviates surface"
+msgstr "Sinh ra bề mặt độ lệch ngẫu nhiên"
+
+msgid "Generate random surface with spatial dependence"
+msgstr "Sinh ra bề mặt ngẫu nhiên có sự phụ thuộc không gian"
+
+msgid "Generate vector contour lines"
+msgstr "Sinh ra các đường bình độ vector"
+
+msgid "Bilinear interpolation from raster points"
+msgstr "Nội suy song tuyến tính từ các điểm raster"
+
+msgid "Inverse distance weighted interpolation from raster points"
+msgstr "Nội suy IDSW từ các điểm raster"
+
+msgid "Interpolation from raster contours"
+msgstr "Nội suy từ các đường bình độ raster"
+
+msgid "Inverse distance weighted interpolation from vector points"
+msgstr "Nội suy IDSW từ các điểm vector"
+
+msgid "Regularized spline tension interpolation from vector points or contours"
+msgstr ""
+"Nội suy đường spline chính quy có sức căng từ các điểm/đường bình độ vector"
+
+msgid "Fill NULL cells by interpolation using regularized spline tension"
+msgstr ""
+"Lấp đầy các ô rỗng bằng cách nội suy, dùng đường spline chính quy có sức căng"
 
 #, fuzzy
-#~ msgid "Select default font for GRASS displays"
-#~ msgstr "Chọn phông chữ mặc định"
+msgid "Report category labels and values"
+msgstr "Báo cáo các nhãn và giá trị phạm trù"
+
+msgid "Range of all category values"
+msgstr "Miền của tất cả các giá trị phạm trù"
+
+msgid "Sum all cell category values"
+msgstr "Tổng của tất cả các giá trị phạm trù"
+
+msgid "Summary statistics for clumped cells (works with r.clump)"
+msgstr "Thống kê tóm tắt cho các ô được gộp khối (tạo ra từ r.clump)"
+
+msgid "Univariate statistics (script version)"
+msgstr "Thống kê một biến (phiên bản tập lệnh)"
+
+msgid "Sample values along transects"
+msgstr "Lấy mẫu các giá trị dọc theo các tuyến"
+
+msgid "Sample values along transects (use azimuth, distance)"
+msgstr "Lấy mẫu các giá trị dọc theo các tuyến (dùng phương vị, kh.cách)"
+
+msgid "Linear regression between 2 maps"
+msgstr "Hồi quy tuyến tính giữa hai bản đồ"
+
+msgid "Mutual category occurences (coincidence)"
+msgstr "Sự xuất hiện phạm trù chung (ngẫu nhiên)"
+
+msgid "Create/rebuild topology"
+msgstr "Tạo/xây dựng tôpô"
 
 #, fuzzy
-#~ msgid "   grid & text color "
-#~ msgstr "màu lưới   "
+msgid "Clean vector files"
+msgstr "Làm sạch các tập tin vector"
+
+msgid "Build polylines from adjacent segments"
+msgstr "Xây dựng các đường từ các đoạn kề nhau"
+
+msgid "Split polylines into segments"
+msgstr "Ngắt đường thành các đoạn"
+
+msgid "Create lines parallel to existing lines"
+msgstr "Tạo các đường song song với các đường hiện có"
+
+msgid "Convert vector feature types"
+msgstr "Đổi kiểu đối tượng vector"
+
+msgid "Convert 2D vector to 3D by sampling raster"
+msgstr "Đổi vector 2D thành 3D bằng cách thu mẫu raster"
+
+msgid "Extrude 2D vector into 3D vector"
+msgstr "Trồi vector 2D vào trong vector 3D"
+
+msgid "Create text label file for vector features"
+msgstr "Tạo tập tin nhãn cho các đối tượng vector"
+
+msgid "Reproject vector from other location"
+msgstr "Quy chiếu lại vector từ location khác"
+
+msgid "Create new vector as link to external OGR layer"
+msgstr "Tạo vector mới dạng liên kết đến lớp OGR ngoài"
+
+msgid "Set database connection for vector attributes"
+msgstr "Thiết lập kết nối CSDL với các thuộc tính vector"
+
+msgid "Rectify and georeference vector map"
+msgstr "Nắn chỉnh và tham chiếu địa lý bản đồ vector"
+
+msgid "Query by attributes"
+msgstr "Truy vấn theo thuộc tính"
+
+msgid "Query by map features"
+msgstr "Truy vấn theo các đối tượng của bản đồ"
+
+msgid "Create vector buffers"
+msgstr "Tạo các vùng đệm vector"
+
+msgid "Linear referencing for vectors"
+msgstr "Tham chiếu tuyến tính cho các vector"
+
+msgid "Create linear reference system"
+msgstr "Tạo hệ thống tham chiếu tuyến tính"
+
+msgid "Create stationing from imput lines, and linear reference system"
+msgstr ""
+"Tạo các trạm (stationing) từ các đường đầu vào và hệ thống tham chiếu tuyến "
+"tính"
+
+msgid ""
+"Create points/segments from input lines, linear reference system and "
+"positions read from stdin"
+msgstr ""
+"Tạo các điểm/đoạn từ các đường dầu vào, hệ thống tham chiếu tuyến tính và "
+"đọc vị trí từ stdin"
+
+msgid ""
+"Find line id and real km+offset for given points in vector map using linear "
+"reference system"
+msgstr ""
+"Tìm id đường và km+độ dịch thực sự đối với các điểm cho trước trong một bản "
+"đồ vector, dùng hệ thống tham chiếu tuyến tính"
+
+msgid "Locate nearest features to points or centroids"
+msgstr "Định vị các đối tượng gần nhất với các điểm hoặc trọng tâm"
+
+msgid "Generate Thiessen polygons around points (Voronoi diagram)"
+msgstr "Sinh ra các vùng Thiessen quanh các điểm (sơ đồ Voronoi)"
+
+msgid "Connect points to create Delaunay triangles"
+msgstr "Nối các điểm để tạo các tam giác Delaunay"
+
+msgid "Shortest route (visualization only)"
+msgstr "Lộ trình ngắn nhất (chỉ để xem)"
+
+msgid "Split net to bands between cost isolines"
+msgstr "Ngắt mạng lưới thành các bằng giữa các đường đồng giá trị"
+
+msgid "Overlay/combine 2 vector maps"
+msgstr "Chồng/tổ hợp hai bản đồ vector"
+
+msgid "Patch multiple maps (combine)"
+msgstr "'Vá' nhiều bản đồ (tổ hợp)"
+
+msgid "Generate area feature for extent of current region"
+msgstr "Sinh ra đối tượng vùng cho phạm vi của vùng hiện tại"
+
+msgid "Generate rectangular vector grid"
+msgstr "Sinh ra lưới vector hình chữ nhật"
+
+msgid "Attach, delete, or report categories"
+msgstr "Gắn, xóa, hoặc báo cáo các phạm trù"
+
+msgid "Reclassify features using rules file"
+msgstr "Phân loại lại các đối tượng-dùng tập tin quy tắc"
+
+msgid "Work with vector points"
+msgstr "Làm việc với các điểm vector"
+
+msgid "Generate points from database with x/y coordinates"
+msgstr "Sinh ra các điểm từ CSDL có các tọa độ x/y"
+
+msgid "Random location perturbations of points"
+msgstr "Các sự xáo trộn vị trí ngẫu nhiên của các điểm"
+
+msgid "Generate convex hull for point set"
+msgstr "Sinh ra bao lồi hoặc tập hợp điểm"
+
+msgid "Generate Delaunay triangles for point set"
+msgstr "Sinh ra tam giác Delaunay từ tập hợp điểm"
+
+msgid "Generate Voronoi diagram/Thiessen polygons for point set"
+msgstr "Sinh ra sơ đồ Voronoi/đa giác Thiessen từ tập hợp điểm"
+
+msgid "Sample raster maps"
+msgstr "Lấy mẫu các bản đồ raster"
+
+msgid "Calculate statistics for raster map overlain by vector map"
+msgstr "Tính toán thống kê cho bản đồ raster chồng lên bởi bản đồ vector"
+
+msgid "Partition points into test/training sets for k-fold cross validatation"
+msgstr ""
+"Phân chia các điểm thành các bộ/tập hợp 'huấn luyện' dùng cho kiểm chứng "
+"chéo k-fold"
+
+msgid "Transfer attribute data from queried vector map to points"
+msgstr "Chuyển dữ liệu thuộc tính từ bản đồ vector được truy vấn vào điểm"
+
+msgid "Load vector attributes to database or create reports"
+msgstr "Nạp các thuộc tính vector vào CSDL hoặc tạo báo cáo"
+
+msgid "Report areas for vector attribute categories"
+msgstr "Báo cáo diện tích cho các phạm trù thuộc tính vector"
+
+msgid "Test normality of point distribution"
+msgstr "Thử mức độ bình thường của phân bố điểm"
+
+msgid "Calculate stats for raster map underlying vector objects"
+msgstr ""
+"Tính toán các thống kê cho lớp bản đồ raster ở dưới các đối tượng vector"
+
+msgid "Indices of point counts in quadrats"
+msgstr "Các chỉ số đếm các điểm trong các mẫu ô vuông"
+
+msgid "Create/edit imagery group"
+msgstr "Tạo/chỉnh sửa nhóm ảnh"
+
+msgid "Target imagery group"
+msgstr "Xác định đích cho nhóm ảnh"
+
+msgid "Mosaic up to 4 adjacent images"
+msgstr "Khảm tối đa 4 ảnh kề nhau"
+
+msgid ""
+"Color balance and enhance color tables of multiband imagery for rgb display"
+msgstr "Cân bằng màu và cải thiện bảng màu của ảnh nhiều băng để hiển thị rgb"
+
+msgid ""
+"Transform HIS (Hue/Intensity/Saturation) color image to RGB (Red/Green/Blue)"
+msgstr ""
+"Chuyển đổi ảnh màu HIS (màu sắc/cường độ/độ bão hòa) thành RGB (đỏ/lục/xanh)"
+
+msgid ""
+"Transform RGB (Red/Green/Blue) color image to HIS (Hue/Intensity/Saturation)"
+msgstr ""
+"Chuyển đổi ảnh màu RGB (đỏ/lục/xanh) thành HIS (màu sắc/cường độ/độ bão hòa)"
+
+msgid "Rectify and georeference image group"
+msgstr "Nắn chỉnh và tham chiếu địa lý ảnh"
+
+msgid "Set ground control points (GCP's) from raster map or keyboard entry"
+msgstr ""
+"Thiết lập các điểm khống chế (GCP) từ ảnh raster hoặc nhập vào từ bàn phím"
+
+msgid "Set ground control points (GCP's) from vector map or keyboard entry"
+msgstr ""
+"Thiết lập các điểm khống chế (GCP) từ ảnh vector hoặc nhập vào từ bàn phím"
+
+msgid "Affine and Polynomial rectification (rubber sheet)"
+msgstr "Nắn chỉnh affine và đa thức (kiểu tấm cao su)"
+
+msgid "Brovey transformation and pan sharpening"
+msgstr "Phép chuyển đổi Brovey và làm sắc ảnh toàn sắc"
+
+msgid "Non-interactive input for supervised classification (MLC)"
+msgstr "Đầu vào không tương tác cho phân loại có hướng dẫn (MLC)"
+
+msgid "Non-interactive input for supervised classification (SMAP)"
+msgstr "Đầu vào không tương tác cho phân loại có hướng dẫn (SMAP)"
+
+msgid "Zero edge crossing detection"
+msgstr "Phát hiện mép giao nhau bằng 0"
+
+msgid "User defined matrix/convolving filter"
+msgstr "phép lọc ma trận/quấn do người dùng định nghĩa"
+
+msgid "Canonical component"
+msgstr "thành phần chính tắc"
+
+msgid "Principal component"
+msgstr "Thành phần chủ yếu"
+
+msgid "Fast Fourier Transform"
+msgstr "Phép chuyển đổi Fast Fourier"
+
+msgid "Inverse Fast Fourier Transform"
+msgstr "Phép chuyển đổi Inverse Fast Fourier"
+
+msgid "Range of image values"
+msgstr "Miền của các giá trị ảnh"
+
+msgid "Bit pattern comparison for ID of low quality pixels"
+msgstr "So sánh bit để nhận diện các điểm ảnh chất lượng thấp"
+
+msgid "Kappa classification accuracy assessment"
+msgstr "Phép phân loại Kappa để đánh giá độ chính xác"
+
+msgid "Optimum index factor for LandSat TM"
+msgstr "Hệ số chỉ mục tối ưu (OIF) cho ảnh LandSat TM"
+
+msgid "&Grid3D"
+msgstr "&Grid3D"
+
+msgid "Create 3D mask for grid3D operations"
+msgstr "Tạo mặt nạ 3D cho các lệnh grid3D"
+
+msgid "Create 2D raster cross section from grid3d volume"
+msgstr "Tạo mặt cắt raster 2D cho thể tích grid3D"
+
+msgid "Map calculator for grid3D operations"
+msgstr "Tính toán bản đồ cho các lệnh về grid3D"
+
+msgid "Interpolate volume from vector points using splines"
+msgstr "Nội suy thể tích từ các điểm vector (dùng đường spline)"
+
+msgid "Display information about grid3D volume"
+msgstr "Trình bày thông tin về thể tích grid3D"
+
+msgid "Add columns to table"
+msgstr "Thêm cột vào bảng"
+
+msgid "Change values in a column"
+msgstr "Thay đổi các giá trị trong một cột"
+
+msgid "Query data (SQL select)"
+msgstr "Truy vấn dữ liệu (chọn SQL)"
+
+msgid "Execute SQL statement"
+msgstr "Thực thi câu lệnh SQL"
+
+msgid "red (RGB) or hue (HIS):"
+msgstr "đỏ (RGB) hoặc màu sắc (HIS)"
+
+msgid "green (RGB) or intensity (HIS):"
+msgstr "lục (RGB) hoặc cường độ (HIS)"
+
+msgid "blue (RGB) or saturation (HIS):"
+msgstr "xanh (RGB) hoặc độ bão hòa (HIS)"
+
+msgid "     (leave blank to place with mouse; position will not save)"
+msgstr "  (chừa trống để đặt bằng chuột, vị trí sẽ không lưu lại)"
+
+msgid "     coordinate type"
+msgstr "    kiểu tọa độ"
+
+msgid "  align text with coordinate point"
+msgstr "  canh thằng chữ với điểm tọa độ"
+
+msgid ""
+"     (for coordinates, % is from bottom left of display, pixels from top "
+"left)"
+msgstr ""
+"(đối với các tọa độ, % tính từ góc dưới trái của phần trình bày điểm ảnh "
+"tính từ góc trên trái)"
+
+msgid "     text rotation (degrees counterclockwise)"
+msgstr "    xoay chữ (độ, ngược chiều kim đồng hồ)"
+
+msgid "rotation in radians"
+msgstr "xoay theo radian"
+
+msgid "height in pixels instead of %"
+msgstr "chiều vào theo điểm ảnh thay vì %"
+
+msgid "Welcome to the GRASS GIS manager"
+msgstr "Chào mừng đến với Trình Quản lý GIS"
+
+msgid "Display active layers in current region"
+msgstr "Trình bày các lớp kích hoạt trong vùng hiện tại"
+
+msgid "Display active layers in default region"
+msgstr "Trình bày các lớp kích hoạt trong vùng mặc định"
+
+msgid "Display active layers in saved region setting"
+msgstr "Trình bày các lớp kích hoạt trong thiết lập vùng được lưu"
+
+msgid "NVIZ - n dimensional visualization"
+msgstr "NVIZ - phép xem n chiều"
+
+msgid "Fly through path for NVIZ"
+msgstr "Đường bay ngang dùng cho NVIZ"
+
+msgid "Zoom"
+msgstr "Phóng"
+
+msgid "Pan and recenter"
+msgstr "Di chuyển và canh giữa"
+
+msgid "Query map (select map first)"
+msgstr "Truy vấn bản đồ (chọn bản đồ trước)"
+
+msgid "Measure lengths and areas"
+msgstr "Đo chiều dài và diện tích"
+
+msgid "Geographical position"
+msgstr "Vị trí địa lý"
+
+msgid "Print raster & vector maps using ps.map"
+msgstr "In các bản đồ raster và vector bằng ps.map"
+
+msgid "Add legend"
+msgstr "Thêm chú giải"
+
+msgid "Add paint labels layer (from directory paint/labels)"
+msgstr "Thêm lớp nhãn paint (từ thư mục paint/lables)"
+
+msgid "Add freetype text layer"
+msgstr "Thêm lớp văn bản freetype"
+
+msgid "Create or select display frame"
+msgstr "Chọn hoặc tạo khung trình bày"
+
+msgid "Vector name:"
+msgstr "Tên vector:"
+
+msgid "Display:"
+msgstr "Trình bày:"
+
+msgid "shapes"
+msgstr "dạng"
+
+msgid "categories"
+msgstr "phạm trù"
+
+msgid "topology"
+msgstr "tôpô"
+
+msgid "line directions"
+msgstr "hướng đường"
+
+msgid "faces"
+msgstr "mặt"
+
+msgid "color"
+msgstr "màu"
+
+msgid "random colors"
+msgstr "màu ngẫu nhiên"
+
+msgid " size"
+msgstr "k.thước"
+
+msgid " align with pt"
+msgstr "canh thẳng với pt"
+
+msgid "     layer for labels"
+msgstr "    lớp gán nhãn"
+
+msgid " attribute col for labels"
+msgstr "cột thuộc tính làm nhãn"
+
+msgid "Query vectors: "
+msgstr "Truy vấn vector:"
+
+msgid " query cat values"
+msgstr " Truy vấn các giá trị phạm trù"
+
+msgid "SQL query"
+msgstr "truy vấn SQL"
+
+msgid "     SQL where statement"
+msgstr "    câu lệnh where của SQL"
+
+msgid "Mouse query setup:"
+msgstr "Thiết lập truy vấn bằng chuột:"
+
+msgid "edit attributes (form mode)"
+msgstr "chỉnh sửa thuộc tính (chế độ biểu mẫu)"
+
+msgid "results as text in terminal"
+msgstr "kết quả dạng văn bản tại terminal"
+
+msgid "Line width for ps.map print output:"
+msgstr "Chiều dày đường cho đầu ra in bằng ps.map:"
+
+msgid "Line width used for printing"
+msgstr "Chiều dày đường dùng cho in ấn"
+
+msgid " Background color: "
+msgstr "Màu nền: "
+
+msgid "no background color"
+msgstr "không có màu nền"
+
+msgid " "
+msgstr " "
+
+msgid "display N. arrow only "
+msgstr "Zeige nur Nordpfeil"
+
+msgid "line scale instead of bar scale "
+msgstr "thước tỷ lệ kiểu đường thay vì thanh "
+
+msgid "Text options: color"
+msgstr "Tùy chọn chữ: màu"
+
+msgid "Paper format"
+msgstr "Định dạng giấy"
+
+msgid "Custom"
+msgstr "Tùy chỉnh"
+
+msgid "height:"
+msgstr "chiều cao:"
+
+msgid "left:"
+msgstr "trái:"
+
+msgid "right:"
+msgstr "phải:"
+
+msgid "top:"
+msgstr "trên:"
+
+msgid "bottom:"
+msgstr "dưới:"
+
+msgid "PS file:"
+msgstr "tập tin PS:"
+
+msgid "PDF file:"
+msgstr "tập tin PDF:"
+
+msgid "PNG file:"
+msgstr "tập tin PNG"
+
+msgid "PNG file resolution (points/inch):"
+msgstr "Độ phân giải tập tin PNG (điểm/inch):"
+
+msgid "Printer:"
+msgstr "Máy in:"
+
+msgid "Script file:"
+msgstr "tập tin Script:"
+
+msgid "Preview"
+msgstr "Xem trước"
 
 #, fuzzy
-#~ msgid "  grid text font "
-#~ msgstr "màu lưới   "
+msgid " width"
+msgstr "chiều rộng:"
+
+msgid "text color"
+msgstr "màu chữ"
+
+msgid " text size"
+msgstr "cỡ chữ"
+
+msgid " justification"
+msgstr " canh thẳng"
+
+msgid "query cat values    "
+msgstr "truy vấn các giá trị phạm trù   "
 
 #, fuzzy
-#~ msgid "Recode using rules"
-#~ msgstr "Phân loại lại các phạm trù-dùng quy tắc"
+msgid "Select default font for GRASS displays"
+msgstr "Chọn phông chữ mặc định"
 
 #, fuzzy
-#~ msgid "Convert vector lines to points"
-#~ msgstr "Đường vector thành điểm"
+msgid "   grid & text color "
+msgstr "màu lưới   "
 
 #, fuzzy
-#~ msgid "Create stationing from input lines and a linear reference system"
-#~ msgstr ""
-#~ "Tạo các trạm (stationing) từ các đường đầu vào và hệ thống tham chiếu "
-#~ "tuyến tính"
+msgid "  grid text font "
+msgstr "màu lưới   "
 
 #, fuzzy
-#~ msgid "Create points and line segments along a linear reference system"
-#~ msgstr ""
-#~ "Tạo các trạm (stationing) từ các đường đầu vào và hệ thống tham chiếu "
-#~ "tuyến tính"
+msgid "Recode using rules"
+msgstr "Phân loại lại các phạm trù-dùng quy tắc"
 
 #, fuzzy
-#~ msgid ""
-#~ "Find line ID and real km+offset for given points in vector map using "
-#~ "linear reference system"
-#~ msgstr ""
-#~ "Tìm id đường và km+độ dịch thực sự đối với các điểm cho trước trong một "
-#~ "bản đồ vector, dùng hệ thống tham chiếu tuyến tính"
+msgid "Convert vector lines to points"
+msgstr "Đường vector thành điểm"
 
 #, fuzzy
-#~ msgid "Select font file"
-#~ msgstr "chọn phông chữ cho nhãn"
+msgid "Create stationing from input lines and a linear reference system"
+msgstr ""
+"Tạo các trạm (stationing) từ các đường đầu vào và hệ thống tham chiếu tuyến "
+"tính"
 
 #, fuzzy
-#~ msgid "GRASS"
-#~ msgstr "Trợ giúp GRASS"
+msgid "Create points and line segments along a linear reference system"
+msgstr ""
+"Tạo các trạm (stationing) từ các đường đầu vào và hệ thống tham chiếu tuyến "
+"tính"
 
 #, fuzzy
-#~ msgid "select font for text (default is GRASS romans)"
-#~ msgstr "chọn phông chữ"
+msgid ""
+"Find line ID and real km+offset for given points in vector map using linear "
+"reference system"
+msgstr ""
+"Tìm id đường và km+độ dịch thực sự đối với các điểm cho trước trong một bản "
+"đồ vector, dùng hệ thống tham chiếu tuyến tính"
 
 #, fuzzy
-#~ msgid "\tred (RGB) or hue (HIS):\t"
-#~ msgstr "đỏ (RGB) hoặc màu sắc (HIS)"
+msgid "Select font file"
+msgstr "chọn phông chữ cho nhãn"
 
 #, fuzzy
-#~ msgid "\tgreen (RGB) or intensity (HIS):"
-#~ msgstr "lục (RGB) hoặc cường độ (HIS)"
+msgid "GRASS"
+msgstr "Trợ giúp GRASS"
 
 #, fuzzy
-#~ msgid "\tblue (RGB) or saturation (HIS):"
-#~ msgstr "xanh (RGB) hoặc độ bão hòa (HIS)"
+msgid "select font for text (default is GRASS romans)"
+msgstr "chọn phông chữ"
 
 #, fuzzy
-#~ msgid "SVG file"
-#~ msgstr "tập tin PS:"
+msgid "\tred (RGB) or hue (HIS):\t"
+msgstr "đỏ (RGB) hoặc màu sắc (HIS)"
 
 #, fuzzy
-#~ msgid ""
-#~ "Bicubic and bilinear interpolation with Tykhonov regularization from "
-#~ "vector points"
-#~ msgstr "Nội suy song tuyến tính từ các điểm raster"
+msgid "\tgreen (RGB) or intensity (HIS):"
+msgstr "lục (RGB) hoặc cường độ (HIS)"
 
 #, fuzzy
-#~ msgid "Copy attribute table"
-#~ msgstr "cột thuộc tính làm nhãn"
+msgid "\tblue (RGB) or saturation (HIS):"
+msgstr "xanh (RGB) hoặc độ bão hòa (HIS)"
 
 #, fuzzy
-#~ msgid "Remove existing attribute table for vector map"
-#~ msgstr "Tạo tập tin nhãn cho các đối tượng vector"
+msgid "SVG file"
+msgstr "tập tin PS:"
 
 #, fuzzy
-#~ msgid "integer"
-#~ msgstr "Con trỏ"
+msgid ""
+"Bicubic and bilinear interpolation with Tykhonov regularization from vector "
+"points"
+msgstr "Nội suy song tuyến tính từ các điểm raster"
 
 #, fuzzy
-#~ msgid "varchar"
-#~ msgstr "Tìm kiếm"
+msgid "Copy attribute table"
+msgstr "cột thuộc tính làm nhãn"
 
-#~ msgid "Create ps.map file for postscript printing"
-#~ msgstr "Tạo tập tin ps.map để in ấn postscript"
+#, fuzzy
+msgid "Remove existing attribute table for vector map"
+msgstr "Tạo tập tin nhãn cho các đối tượng vector"
 
-#~ msgid "     chart outline color:"
-#~ msgstr "    màu đường viền biểu đồ:"
+#, fuzzy
+msgid "integer"
+msgstr "Con trỏ"
 
-#~ msgid "Line width (pixels; 0 is finest)"
-#~ msgstr "Chiều dày đường (điểm ảnh; 0 là mảnh nhất)"
+#, fuzzy
+msgid "varchar"
+msgstr "Tìm kiếm"
 
-#~ msgid "Category:"
-#~ msgstr "Phạm trù:"
+msgid "Create ps.map file for postscript printing"
+msgstr "Tạo tập tin ps.map để in ấn postscript"
 
-#~ msgid "Path to new location"
-#~ msgstr "Đường dẫn đến location mới"
+msgid "     chart outline color:"
+msgstr "    màu đường viền biểu đồ:"
 
-#~ msgid ""
-#~ " \n"
-#~ "CREATING A NEW GRASS LOCATION USING GEOREFERENCED FILE\n"
-#~ "\n"
-#~ " "
-#~ msgstr ""
-#~ " \n"
-#~ "TẠO MỘT LOCATION GRASS MỚI VỚI TẬP TIN THAM CHIẾU ĐỊA LÝ  \n"
-#~ " "
+msgid "Line width (pixels; 0 is finest)"
+msgstr "Chiều dày đường (điểm ảnh; 0 là mảnh nhất)"
 
-#~ msgid "The file must have georeferencing information readable\n"
-#~ msgstr "Tập tin này phải chứa thông tin tham chiếu địa lý đọc được.\n"
+msgid "Category:"
+msgstr "Phạm trù:"
 
-#~ msgid ""
-#~ "by GDAL or OGR, and GRASS must be compiled with GDAL and OGR.\n"
-#~ "\n"
-#~ msgstr ""
-#~ "bởi GDAL hoặc OGR, và GRASS phải được biên dịch với GDAL và OGR.\n"
-#~ "\n"
+msgid "Path to new location"
+msgstr "Đường dẫn đến location mới"
 
-#~ msgid ""
-#~ "\n"
-#~ "   Name of new location:\n"
-#~ "\n"
-#~ msgstr ""
-#~ "\n"
-#~ "   Tên loation mới:\n"
-#~ "\n"
+msgid ""
+" \n"
+"CREATING A NEW GRASS LOCATION USING GEOREFERENCED FILE\n"
+"\n"
+" "
+msgstr ""
+" \n"
+"TẠO MỘT LOCATION GRASS MỚI VỚI TẬP TIN THAM CHIẾU ĐỊA LÝ  \n"
+" "
 
-#~ msgid ""
-#~ "\n"
-#~ "   Path to location:\n"
-#~ "\n"
-#~ msgstr ""
-#~ "\n"
-#~ "   Đường dẫn đến Location:\n"
-#~ "\n"
+msgid "The file must have georeferencing information readable\n"
+msgstr "Tập tin này phải chứa thông tin tham chiếu địa lý đọc được.\n"
 
-#~ msgid ""
-#~ "\n"
-#~ "The folder (Grass database) in which the location should be created\n"
-#~ "\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Thư mục (CSDL GRASS) chứa location cần tạo\n"
-#~ "\n"
+msgid ""
+"by GDAL or OGR, and GRASS must be compiled with GDAL and OGR.\n"
+"\n"
+msgstr ""
+"bởi GDAL hoặc OGR, và GRASS phải được biên dịch với GDAL và OGR.\n"
+"\n"
 
-#~ msgid ""
-#~ "\n"
-#~ "   Path to georeferenced file:\n"
-#~ "\n"
-#~ msgstr ""
-#~ "\n"
-#~ "   Đường dẫn đến tập tin tham chiếu địa lý:\n"
-#~ "\n"
+msgid ""
+"\n"
+"   Name of new location:\n"
+"\n"
+msgstr ""
+"\n"
+"   Tên loation mới:\n"
+"\n"
 
-#~ msgid ""
-#~ "\n"
-#~ "Georeferenced file with projection information that can be read\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Tập tin tham chiếu địa lý với thông tin phép chiếu có thể đọc được\n"
+msgid ""
+"\n"
+"   Path to location:\n"
+"\n"
+msgstr ""
+"\n"
+"   Đường dẫn đến Location:\n"
+"\n"
 
-#~ msgid ""
-#~ "\n"
-#~ "by GDAL (raster) or OGR (vector)\n"
-#~ "\n"
-#~ msgstr ""
-#~ "\n"
-#~ "bởi GDAL (raster) hoặc OGR (vector)\n"
-#~ "\n"
+msgid ""
+"\n"
+"The folder (Grass database) in which the location should be created\n"
+"\n"
+msgstr ""
+"\n"
+"Thư mục (CSDL GRASS) chứa location cần tạo\n"
+"\n"
 
-#~ msgid "dxf file"
-#~ msgstr "tập tin dxf"
+msgid ""
+"\n"
+"   Path to georeferenced file:\n"
+"\n"
+msgstr ""
+"\n"
+"   Đường dẫn đến tập tin tham chiếu địa lý:\n"
+"\n"
 
-#~ msgid "New location path"
-#~ msgstr "Đường dẫn location mới"
+msgid ""
+"\n"
+"Georeferenced file with projection information that can be read\n"
+msgstr ""
+"\n"
+"Tập tin tham chiếu địa lý với thông tin phép chiếu có thể đọc được\n"
 
-#~ msgid "GRASS Help"
-#~ msgstr "GRASS Hilfe"
+msgid ""
+"\n"
+"by GDAL (raster) or OGR (vector)\n"
+"\n"
+msgstr ""
+"\n"
+"bởi GDAL (raster) hoặc OGR (vector)\n"
+"\n"
 
-#~ msgid "Back"
-#~ msgstr "Quay lại"
+msgid "dxf file"
+msgstr "tập tin dxf"
 
-#~ msgid "Contents"
-#~ msgstr "Các nội dung"
+msgid "New location path"
+msgstr "Đường dẫn location mới"
 
-#~ msgid "Decrease"
-#~ msgstr "Giảm"
+msgid "GRASS Help"
+msgstr "GRASS Hilfe"
 
-#~ msgid "Find"
-#~ msgstr "Tìm"
+msgid "Back"
+msgstr "Quay lại"
 
-#~ msgid "Forward"
-#~ msgstr "Tới"
+msgid "Contents"
+msgstr "Các nội dung"
 
-#~ msgid "Increase"
-#~ msgstr "Tăng"
+msgid "Decrease"
+msgstr "Giảm"
 
-#~ msgid "Index"
-#~ msgstr "Chỉ mục"
+msgid "Find"
+msgstr "Tìm"
 
-#~ msgid "Next"
-#~ msgstr "Tiếp"
+msgid "Forward"
+msgstr "Tới"
 
-#~ msgid "Open"
-#~ msgstr "Mở"
+msgid "Increase"
+msgstr "Tăng"
 
-#~ msgid "Previous"
-#~ msgstr "Trước đó"
+msgid "Index"
+msgstr "Chỉ mục"
 
-#~ msgid "Refresh"
-#~ msgstr "Làm tươi lại"
+msgid "Next"
+msgstr "Tiếp"
 
-#~ msgid "Reload"
-#~ msgstr "Nạp lại"
+msgid "Open"
+msgstr "Mở"
 
-#~ msgid "UpLevel"
-#~ msgstr "Lên_Cấp"
+msgid "Previous"
+msgstr "Trước đó"
 
-#~ msgid "Find..."
-#~ msgstr "Tìm..."
+msgid "Refresh"
+msgstr "Làm tươi lại"
 
-#~ msgid "Search in topics..."
-#~ msgstr "Tìm theo nội dung..."
+msgid "Reload"
+msgstr "Nạp lại"
 
-#~ msgid "Increase font size"
-#~ msgstr "Tăng k.thước phông chữ"
+msgid "UpLevel"
+msgstr "Lên_Cấp"
 
-#~ msgid "Decrease font size"
-#~ msgstr "Giảm k.thước phông chữ"
+msgid "Find..."
+msgstr "Tìm..."
 
-#~ msgid "About"
-#~ msgstr "Nói về"
+msgid "Search in topics..."
+msgstr "Tìm theo nội dung..."
 
-#~ msgid "Save as HTML files..."
-#~ msgstr "Lưu như các tập tin html..."
+msgid "Increase font size"
+msgstr "Tăng k.thước phông chữ"
 
-#~ msgid "Topic not found!"
-#~ msgstr "Chủ đề không tìm thấy!"
+msgid "Decrease font size"
+msgstr "Giảm k.thước phông chữ"
 
-#~ msgid "Displaying..."
-#~ msgstr "Đang trình bày"
+msgid "About"
+msgstr "Nói về"
 
-#~ msgid "Done."
-#~ msgstr "Xong."
+msgid "Save as HTML files..."
+msgstr "Lưu như các tập tin html..."
 
-#~ msgid "Select directory to Save HTML files"
-#~ msgstr "Chọn thư mục để lưu các tập tin html."
+msgid "Topic not found!"
+msgstr "Chủ đề không tìm thấy!"
 
-#~ msgid "Filename will be ignored"
-#~ msgstr "Tên tập tin sẽ bị bỏ qua."
+msgid "Displaying..."
+msgstr "Đang trình bày"
 
-#~ msgid "Generating HTMLs...."
-#~ msgstr "Đang tạo các html..."
+msgid "Done."
+msgstr "Xong."
 
-#~ msgid "Can't open output file:"
-#~ msgstr "Không thể mở tập tin đầu ra:"
+msgid "Select directory to Save HTML files"
+msgstr "Chọn thư mục để lưu các tập tin html."
 
-#~ msgid "Generating HTMLs...  %i of %i  \"%s\""
-#~ msgstr "Đang tạo các html...%i của %i \"%s\""
+msgid "Filename will be ignored"
+msgstr "Tên tập tin sẽ bị bỏ qua."
 
-#~ msgid "Search in all topics"
-#~ msgstr "Tìm tất cả các chủ đề "
+msgid "Generating HTMLs...."
+msgstr "Đang tạo các html..."
 
-#~ msgid "Find what: "
-#~ msgstr "Tìm cái gì: "
+msgid "Can't open output file:"
+msgstr "Không thể mở tập tin đầu ra:"
 
-#~ msgid "Direction"
-#~ msgstr "Hướng"
+msgid "Generating HTMLs...  %i of %i  \"%s\""
+msgstr "Đang tạo các html...%i của %i \"%s\""
 
-#~ msgid "Up"
-#~ msgstr "Lên"
+msgid "Search in all topics"
+msgstr "Tìm tất cả các chủ đề "
 
-#~ msgid "Down"
-#~ msgstr "Xuống"
+msgid "Find what: "
+msgstr "Tìm cái gì: "
 
-#~ msgid "Match case"
-#~ msgstr "Khớp chữ"
+msgid "Direction"
+msgstr "Hướng"
 
-#~ msgid "Regexp expression"
-#~ msgstr "Biểu thức Regexp"
+msgid "Up"
+msgstr "Lên"
 
-#~ msgid "Searching in %s..."
-#~ msgstr "Đang tìm trong %s..."
+msgid "Down"
+msgstr "Xuống"
 
-#~ msgid ""
-#~ "Error in regular expression:\n"
-#~ "\"%s\""
-#~ msgstr ""
-#~ "Lỗi trong biểu thức quy tắc:\n"
-#~ "\"%s\""
+msgid "Match case"
+msgstr "Khớp chữ"
 
-#~ msgid "list devices"
-#~ msgstr "Liệt kê các thiết bị"
+msgid "Regexp expression"
+msgstr "Biểu thức Regexp"
 
-#~ msgid "Manage region"
-#~ msgstr "Quản lý vùng"
+msgid "Searching in %s..."
+msgstr "Đang tìm trong %s..."
 
-#~ msgid "Create WIND3 (default 3D window) from current 2D region"
-#~ msgstr "Tạo WIND3 (cửa sổ 3D mặc định) từ vùng 2D hiện tại"
+msgid ""
+"Error in regular expression:\n"
+"\"%s\""
+msgstr ""
+"Lỗi trong biểu thức quy tắc:\n"
+"\"%s\""
 
-#~ msgid "Manage 3D region"
-#~ msgstr "Quản lý vùng 3D"
+msgid "list devices"
+msgstr "Liệt kê các thiết bị"
 
-#~ msgid "Break lines at intersections"
-#~ msgstr "Ngắt đường tại các giao điểm"
+msgid "Manage region"
+msgstr "Quản lý vùng"
+
+msgid "Create WIND3 (default 3D window) from current 2D region"
+msgstr "Tạo WIND3 (cửa sổ 3D mặc định) từ vùng 2D hiện tại"
+
+msgid "Manage 3D region"
+msgstr "Quản lý vùng 3D"
+
+msgid "Break lines at intersections"
+msgstr "Ngắt đường tại các giao điểm"
+
+#, fuzzy
+#~ msgid "X Windows not available"
+#~ msgstr "Liệt kê các thiết bị đầu ra ghostscript"

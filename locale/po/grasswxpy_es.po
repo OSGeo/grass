@@ -1165,7 +1165,7 @@ msgstr "Seleccionar directorio de datos de GRASS:"
 #: ../gui/wxpython/gui_modules/gdialogs.py:814
 #, fuzzy
 msgid "Select file extension:"
-msgstr "Seleccionar localización de origen:"
+msgstr "Seleccionar archivo DXF a importar"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:831
 msgid "Add imported layers into layer tree"
@@ -6401,7 +6401,7 @@ msgid ""
 "Loading attribute data failed.\n"
 "\n"
 "%s"
-msgstr "vectorial."
+msgstr "Mostrar tabla de atributos"
 
 #: ../gui/wxpython/gui_modules/dbm.py:1695
 #, python-format
@@ -7266,8 +7266,9 @@ msgstr "Superficies de coste"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:583
 #: ../gui/wxpython/gui_modules/nviz_tools.py:688
+#, fuzzy
 msgid "Height above surface:"
-msgstr ""
+msgstr "Lista de capas"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:618
 #, fuzzy
@@ -7719,75 +7720,74 @@ msgstr ""
 msgid "No map layer selected. Operation cancelled."
 msgstr ""
 
-#~ msgid "Query selected vector map in editable mode"
-#~ msgstr "Consultar el mapa vectorial seleccionado en modo editable"
+msgid "Query selected vector map in editable mode"
+msgstr "Consultar el mapa vectorial seleccionado en modo editable"
 
-#~ msgid "List of DXF layers"
-#~ msgstr "Lista de capas DXF"
+msgid "List of DXF layers"
+msgstr "Lista de capas DXF"
 
-#~ msgid "Cancel the command settings and ignore changes"
-#~ msgstr "Cancelar la configuración de la orden e ignorar los cambios"
+msgid "Cancel the command settings and ignore changes"
+msgstr "Cancelar la configuración de la orden e ignorar los cambios"
 
-#~ msgid ""
-#~ "This is a sample program for\n"
-#~ "GRASS command interface parsing\n"
-#~ "and automatic GUI building.\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Este es un programa de ejemplo para\n"
-#~ "el análisis de la interfaz de órdenes de GRASS\n"
-#~ "y la construcción automática de la GUI.\n"
-#~ "%s"
+msgid ""
+"This is a sample program for\n"
+"GRASS command interface parsing\n"
+"and automatic GUI building.\n"
+"%s"
+msgstr ""
+"Este es un programa de ejemplo para\n"
+"el análisis de la interfaz de órdenes de GRASS\n"
+"y la construcción automática de la GUI.\n"
+"%s"
 
-#~ msgid "About wxPython GRASS GUI"
-#~ msgstr "Acerca de la GUI wxPython de GRASS"
+msgid "About wxPython GRASS GUI"
+msgstr "Acerca de la GUI wxPython de GRASS"
 
-#~ msgid ""
-#~ "Unable to start Nviz. The OpenGL package was not found. You can get it at "
-#~ "http://PyOpenGL.sourceforge.net. Switching back to 2D display mode.\n"
-#~ "\n"
-#~ "Details: %s"
-#~ msgstr ""
-#~ "No se puede iniciar Zviz. !No se encontró el paquete OpenGL. Puede "
-#~ "obtenerlo en http://PyOpenGL.sourceforge.net. Se vuelve al modo de "
-#~ "visualización 2D.\n"
-#~ "\n"
-#~ "Detalles: %s"
+msgid ""
+"Unable to start Nviz. The OpenGL package was not found. You can get it at "
+"http://PyOpenGL.sourceforge.net. Switching back to 2D display mode.\n"
+"\n"
+"Details: %s"
+msgstr ""
+"No se puede iniciar Zviz. !No se encontró el paquete OpenGL. Puede obtenerlo "
+"en http://PyOpenGL.sourceforge.net. Se vuelve al modo de visualización 2D.\n"
+"\n"
+"Detalles: %s"
 
-#~ msgid "Multiple import formats using GDAL"
-#~ msgstr "Múltiples formatos de importación usando GDAL"
+msgid "Multiple import formats using GDAL"
+msgstr "Múltiples formatos de importación usando GDAL"
 
-#~ msgid "Overlay raster maps"
-#~ msgstr "Superponer mapas ráster"
-
-#, fuzzy
-#~ msgid "Vector digitizer interface:"
-#~ msgstr "Error"
+msgid "Overlay raster maps"
+msgstr "Superponer mapas ráster"
 
 #, fuzzy
-#~ msgid ""
-#~ "Note: User can choose from two interfaces for digitization. The simple "
-#~ "one uses v.edit command on the background. Map topology is rebuild on "
-#~ "each operation which can significantly slow-down response. The vdigit is "
-#~ "a native interface which uses v.edit functionality, but doesn't call the "
-#~ "module itself."
-#~ msgstr "topología."
+msgid "Vector digitizer interface:"
+msgstr "Error"
 
 #, fuzzy
-#~ msgid "Undo is not implemented in vedit component. Use vdigit instead."
-#~ msgstr "Usar."
+msgid ""
+"Note: User can choose from two interfaces for digitization. The simple one "
+"uses v.edit command on the background. Map topology is rebuild on each "
+"operation which can significantly slow-down response. The vdigit is a native "
+"interface which uses v.edit functionality, but doesn't call the module "
+"itself."
+msgstr "topología."
 
 #, fuzzy
-#~ msgid "Adding new feature to vector map <%s> failed."
-#~ msgstr "vectorial."
-
-#~ msgid "List of categories"
-#~ msgstr "Lista de categorías"
+msgid "Undo is not implemented in vedit component. Use vdigit instead."
+msgstr "Usar."
 
 #, fuzzy
-#~ msgid "Error in digitization tool"
-#~ msgstr "Error"
+msgid "Adding new feature to vector map <%s> failed."
+msgstr "vectorial."
+
+msgid "List of categories"
+msgstr "Lista de categorías"
 
 #, fuzzy
-#~ msgid "Error in Attribute Table Manager"
-#~ msgstr "Error Tabla"
+msgid "Error in digitization tool"
+msgstr "Error"
+
+#, fuzzy
+msgid "Error in Attribute Table Manager"
+msgstr "Error Tabla"

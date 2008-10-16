@@ -511,9 +511,9 @@ msgid "Unable to get list tables in database <%s>"
 msgstr "���"
 
 #: ../lib/db/dbmi_client/copy_tab.c:157
-#, c-format
+#, fuzzy, c-format
 msgid "Table <%s> already exists in database <%s>"
-msgstr ""
+msgstr "���"
 
 #: ../lib/db/dbmi_client/copy_tab.c:199 ../lib/db/dbmi_client/copy_tab.c:276
 #: ../lib/db/dbmi_client/table.c:110
@@ -1991,9 +1991,9 @@ msgid "G3d_openCellNew: error in G3d_malloc"
 msgstr ""
 
 #: ../lib/g3d/g3dopen.c:229
-#, c-format
+#, fuzzy, c-format
 msgid "map <%s> is not in the current mapset"
-msgstr ""
+msgstr "���"
 
 #: ../lib/g3d/g3dopen.c:239
 msgid "G3d_openCellNew: could not open file"
@@ -2250,9 +2250,9 @@ msgid "'%s/%s' was found in more mapsets (also found in <%s>)"
 msgstr ""
 
 #: ../lib/gis/find_file.c:82
-#, c-format
+#, fuzzy, c-format
 msgid "Using <%s@%s>"
-msgstr ""
+msgstr "���"
 
 #: ../lib/gis/quant_io.c:89
 #, fuzzy, c-format
@@ -4309,161 +4309,165 @@ msgid "Unable to define new light"
 msgstr "���"
 
 #, fuzzy
-#~ msgid "Cannot describe table <%s>"
-#~ msgstr "���"
+msgid "Cannot describe table <%s>"
+msgstr "���"
 
 #, fuzzy
-#~ msgid "ERROR %s from graphics driver.\n"
-#~ msgstr "��� %s ������ ����.\n"
+msgid "ERROR %s from graphics driver.\n"
+msgstr "��� %s ������ ����.\n"
 
 #, fuzzy
-#~ msgid "ERROR - eof from graphics monitor.\n"
-#~ msgstr "��� - eof from graphics monitor.\n"
+msgid "ERROR - eof from graphics monitor.\n"
+msgstr "��� - eof from graphics monitor.\n"
 
 #, fuzzy
-#~ msgid "Warning - no response from graphics monitor <%s>.\n"
-#~ msgstr "������� - ����������<%s> � ����.\n"
+msgid "Warning - no response from graphics monitor <%s>.\n"
+msgstr "������� - ����������<%s> � ����.\n"
 
 #, fuzzy
-#~ msgid "Check to see if the mouse is still active.\n"
-#~ msgstr "����� ���� � ��.\n"
+msgid "Check to see if the mouse is still active.\n"
+msgstr "����� ���� � ��.\n"
 
 #, fuzzy
-#~ msgid "ERROR - no response from graphics monitor <%s>.\n"
-#~ msgstr "��� - ����������<%s> � ����.\n"
+msgid "ERROR - no response from graphics monitor <%s>.\n"
+msgstr "��� - ����������<%s> � ����.\n"
 
 #, fuzzy
-#~ msgid "No graphics monitor has been selected for output."
-#~ msgstr "� ��� ���������������.\n"
+msgid "No graphics monitor has been selected for output."
+msgstr "� ��� ���������������.\n"
 
 #, fuzzy
-#~ msgid "Please run \"d.mon\" to select a graphics monitor."
-#~ msgstr "�����\"d.mon\" ����� ������ ����\n"
+msgid "Please run \"d.mon\" to select a graphics monitor."
+msgstr "�����\"d.mon\" ����� ������ ����\n"
 
 #, fuzzy
-#~ msgid "Failed to get socket name for monitor <%s>."
-#~ msgstr "����� ���� ���������<%s>.\n"
+msgid "Failed to get socket name for monitor <%s>."
+msgstr "����� ���� ���������<%s>.\n"
 
 #, fuzzy
-#~ msgid "No socket to connect to for monitor <%s>."
-#~ msgstr "����� ������������������<%s>.\n"
+msgid "No socket to connect to for monitor <%s>."
+msgstr "����� ������������������<%s>.\n"
 
 #, fuzzy
-#~ msgid "Socket is already in use or not accepting connections."
-#~ msgstr ""
-#~ "����������� ��� ������������.\n"
-#~ "�����d.mon ����� ����n"
+msgid "Socket is already in use or not accepting connections."
+msgstr ""
+"����������� ��� ������������.\n"
+"�����d.mon ����� ����n"
 
 #, fuzzy
-#~ msgid "Use d.mon to select a monitor"
-#~ msgstr "�����\"d.mon\" ����� ������ ����\n"
+msgid "Use d.mon to select a monitor"
+msgstr "�����\"d.mon\" ����� ������ ����\n"
 
 #, fuzzy
-#~ msgid "Trying to connect to something not a socket."
-#~ msgstr ""
-#~ "��������� � ������\n"
-#~ "���� ��� �����\n"
+msgid "Trying to connect to something not a socket."
+msgstr ""
+"��������� � ������\n"
+"���� ��� �����\n"
 
 #, fuzzy
-#~ msgid "Probably an error with the server."
-#~ msgstr "��������������� ������ ���� ��� ����\n"
+msgid "Probably an error with the server."
+msgstr "��������������� ������ ���� ��� ����\n"
 
 #, fuzzy
-#~ msgid "Connection failed."
-#~ msgstr "��������n"
+msgid "Connection failed."
+msgstr "��������n"
 
 #, fuzzy
-#~ msgid "Cannot read topo for line [%d]"
-#~ msgstr "���"
+msgid "Cannot read topo for line [%d]"
+msgstr "���"
 
 #, fuzzy
-#~ msgid "Unable to open temporary file"
-#~ msgstr "���"
+msgid "Unable to open temporary file"
+msgstr "���"
 
 #, fuzzy
-#~ msgid "Output name '%s' is not valid rast name."
-#~ msgstr "���."
+msgid "Output name '%s' is not valid rast name."
+msgstr "���."
 
 #, fuzzy
-#~ msgid " The raster map %s@%s is empty"
-#~ msgstr "��"
+msgid " The raster map %s@%s is empty"
+msgstr "��"
 
 #, fuzzy
-#~ msgid "    5:  Aspect\n"
-#~ msgstr "傾斜方位またはdy値を出力するファイル"
+msgid "    5:  Aspect\n"
+msgstr "傾斜方位またはdy値を出力するファイル"
 
 #, fuzzy
-#~ msgid "Cannot get field info"
-#~ msgstr "���"
+msgid "Cannot get field info"
+msgstr "���"
 
 #, fuzzy
-#~ msgid "Cannot open database"
-#~ msgstr "���"
+msgid "Cannot open database"
+msgstr "���"
 
 #, fuzzy
-#~ msgid "Cannot open database <%s> by driver <%s>"
-#~ msgstr "���"
+msgid "Cannot open database <%s> by driver <%s>"
+msgstr "���"
 
 #, fuzzy
-#~ msgid "Output name '%s' is not valid vector name."
-#~ msgstr "���."
+msgid "Output name '%s' is not valid vector name."
+msgstr "���."
 
 #, fuzzy
-#~ msgid "Cannot open existing vector map <%s>"
-#~ msgstr "���"
+msgid "Cannot open existing vector map <%s>"
+msgstr "���"
 
 #, fuzzy
-#~ msgid "Cannot delete existing vector <%s>"
-#~ msgstr "���"
+msgid "Cannot delete existing vector <%s>"
+msgstr "���"
 
 #, fuzzy
-#~ msgid "Cannot open new vector %s"
-#~ msgstr "���"
+msgid "Cannot open new vector %s"
+msgstr "���"
 
 #, fuzzy
-#~ msgid "Cannot open history file for vector '%s'"
-#~ msgstr "���"
+msgid "Cannot open history file for vector '%s'"
+msgstr "���"
 
 #, fuzzy
-#~ msgid "Can't open directory %s"
-#~ msgstr "���"
+msgid "Can't open directory %s"
+msgstr "���"
 
 #, fuzzy
-#~ msgid "No such graphics monitor as <%s>.\n"
-#~ msgstr "����������<%s> � �����.\n"
+msgid "No such graphics monitor as <%s>.\n"
+msgstr "����������<%s> � �����.\n"
 
 #, fuzzy
-#~ msgid "Please run \"d.mon\" to select a valid graphics monitor.\n"
-#~ msgstr "�����\"d.mon\" ����� �����������\n"
+msgid "Please run \"d.mon\" to select a valid graphics monitor.\n"
+msgstr "�����\"d.mon\" ����� �����������\n"
 
 #, fuzzy
-#~ msgid "Error - Monitor <%s> is in use.\n"
-#~ msgstr "��� - ����<%s> ���\n"
+msgid "Error - Monitor <%s> is in use.\n"
+msgstr "��� - ����<%s> ���\n"
 
 #, fuzzy
-#~ msgid "Error - Could not complete locking process for monitor <%s>.\n"
-#~ msgstr "��� - � �� ����������(lock) ������<%s>.\n"
+msgid "Error - Could not complete locking process for monitor <%s>.\n"
+msgstr "��� - � �� ����������(lock) ������<%s>.\n"
 
 #, fuzzy
-#~ msgid "Error - Can't set up pipe to graphics device.\n"
-#~ msgstr "��� - ����� (pipe) ������� �����.\n"
+msgid "Error - Can't set up pipe to graphics device.\n"
+msgstr "��� - ����� (pipe) ������� �����.\n"
 
 #, fuzzy
-#~ msgid "Error - Graphics monitor <%s> not running!\n"
-#~ msgstr "��� - ����������<%s> � ����\n"
+msgid "Error - Graphics monitor <%s> not running!\n"
+msgstr "��� - ����������<%s> � ����\n"
 
 #, fuzzy
-#~ msgid "Please start graphics monitor <%s>.\n"
-#~ msgstr "���� ����������<%s>.\n"
+msgid "Please start graphics monitor <%s>.\n"
+msgstr "���� ����������<%s>.\n"
 
 #, fuzzy
-#~ msgid "Not connected...\n"
-#~ msgstr "�������...\n"
+msgid "Not connected...\n"
+msgstr "�������...\n"
 
 #, fuzzy
-#~ msgid "Couldn't connect to monitor. Will try once more.\n"
-#~ msgstr "����� ����� ���� ���� ����\n"
+msgid "Couldn't connect to monitor. Will try once more.\n"
+msgstr "����� ����� ���� ���� ����\n"
 
 #, fuzzy
-#~ msgid "ERROR: GISBASE not set\n"
-#~ msgstr "���: GISBASE � �����\n"
+msgid "ERROR: GISBASE not set\n"
+msgstr "���: GISBASE � �����\n"
+
+#, fuzzy
+#~ msgid "Unable to allocate memory\n"
+#~ msgstr "����� ���� ���\n"

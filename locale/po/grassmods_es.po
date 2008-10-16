@@ -9095,7 +9095,7 @@ msgstr "No se puede leer el archivo de color"
 #: ../raster/r.external/main.c:362
 #, fuzzy, c-format
 msgid "Unable to create fcell/%s file"
-msgstr "No se puede leer el archivo de color"
+msgstr "No se puede crear el índice"
 
 #: ../raster/r.external/main.c:394
 #, fuzzy, c-format
@@ -10153,7 +10153,7 @@ msgstr "Leyendo %s ..."
 #: ../raster/r.what/main.c:335
 #, fuzzy, c-format
 msgid "Error reading <%s>"
-msgstr "Error al leer el mapa '%s'"
+msgstr "Error al leer el mapa ráster [%s]."
 
 #: ../raster/r.sum/main.c:46
 msgid "Sums up the raster cell values."
@@ -16813,8 +16813,7 @@ msgstr "Redondear datos de coma flotante"
 #: ../raster/r.quant/main.c:108
 #, fuzzy
 msgid "-t, -r, rules=, basemap= and fprange= are mutually exclusive"
-msgstr ""
-"Las opciones \"color\", \"rules\" y \"raster\" son excluyentes entre si"
+msgstr "weight= y -c son excluyentes mutuamente"
 
 #: ../raster/r.quant/main.c:116
 #, fuzzy
@@ -18738,8 +18737,9 @@ msgid "Exports the color table associated with a raster map layer."
 msgstr "Muestra la tabla de colores asociada a una capa de mapa ráster."
 
 #: ../raster/r.colors.out/main.c:73
+#, fuzzy
 msgid "Path to rules file (\"-\" to write rules to stdin)"
-msgstr ""
+msgstr "Archivo de coordenadas de entrada (omitir para leer de stdin)"
 
 #: ../raster/r.colors.out/main.c:77
 #, fuzzy
@@ -27704,1122 +27704,1843 @@ msgstr "No se puede leer la entrada desde stdin"
 msgid "Unable to set isosurface (%d) attribute (%d) of volume %d"
 msgstr "No se pueden seleccionar los atributos de los puntos de <%s>"
 
-#~ msgid ""
-#~ "Optional where condition (without WHERE key word), e.g.:\n"
-#~ "\t\tobec = 'Liptakov'"
-#~ msgstr ""
-#~ "Condición opcional dónde (sin la palabra clave WHERE), ej.:\n"
-#~ "\t\tobec = 'Liptakov'"
+msgid ""
+"Optional where condition (without WHERE key word), e.g.:\n"
+"\t\tobec = 'Liptakov'"
+msgstr ""
+"Condición opcional dónde (sin la palabra clave WHERE), ej.:\n"
+"\t\tobec = 'Liptakov'"
 
-#~ msgid "Illegal output file name"
-#~ msgstr "Nombre de archivo de salida no admitido"
+msgid "Illegal output file name"
+msgstr "Nombre de archivo de salida no admitido"
 
-#~ msgid "Selects/starts specified monitor at specified size"
-#~ msgstr "Selecciona/lanza un monitor determinado al tamaño especificado"
+msgid "Selects/starts specified monitor at specified size"
+msgstr "Selecciona/lanza un monitor determinado al tamaño especificado"
 
-#~ msgid "Width in pixels of new display monitor"
-#~ msgstr "Anchura en pixels del nuevo monitor"
+msgid "Width in pixels of new display monitor"
+msgstr "Anchura en pixels del nuevo monitor"
 
-#~ msgid "Height in pixels of new display monitor"
-#~ msgstr "Altura en pixels del nuevo monitor"
+msgid "Height in pixels of new display monitor"
+msgstr "Altura en pixels del nuevo monitor"
 
-#~ msgid "Moves displayed maps to another monitor"
-#~ msgstr "Mueve los mapas que se muestran a otro monitor"
+msgid "Moves displayed maps to another monitor"
+msgstr "Mueve los mapas que se muestran a otro monitor"
 
-#~ msgid "clear target monitor before moving"
-#~ msgstr "borra el monitor de destino antes de moverlos"
+msgid "clear target monitor before moving"
+msgstr "borra el monitor de destino antes de moverlos"
 
-#~ msgid "stay with source monitor"
-#~ msgstr "permanecer en el monitor orginal"
+msgid "stay with source monitor"
+msgstr "permanecer en el monitor orginal"
 
-#~ msgid "kill source monitor after moving"
-#~ msgstr "eliminar el monitor original después de moverlo"
+msgid "kill source monitor after moving"
+msgstr "eliminar el monitor original después de moverlo"
 
-#~ msgid "Target monitor"
-#~ msgstr "Monitor de destino"
+msgid "Target monitor"
+msgstr "Monitor de destino"
 
-#~ msgid "Source monitor"
-#~ msgstr "Monitor de origen"
+msgid "Source monitor"
+msgstr "Monitor de origen"
 
-#~ msgid "Export display monitor to a GpsDrive compatible backdrop image"
-#~ msgstr ""
-#~ "Exporta el monitor visible a una imagen de fondo compatible con GpsDrive"
+msgid "Export display monitor to a GpsDrive compatible backdrop image"
+msgstr ""
+"Exporta el monitor visible a una imagen de fondo compatible con GpsDrive"
 
-#~ msgid "display, export, GPS"
-#~ msgstr "muestra, exporta, GPS"
+msgid "display, export, GPS"
+msgstr "muestra, exporta, GPS"
 
-#~ msgid "name for new map image (lives in ~/.gpsdrive)"
-#~ msgstr "nombre para el nuevo mapa de imagen (reside en ~/.gpsdrive)"
+msgid "name for new map image (lives in ~/.gpsdrive)"
+msgstr "nombre para el nuevo mapa de imagen (reside en ~/.gpsdrive)"
 
-#~ msgid "Make JPEG instead of PNG image"
-#~ msgstr "Crea una imagen JPG en lugar de PNG"
+msgid "Make JPEG instead of PNG image"
+msgstr "Crea una imagen JPG en lugar de PNG"
 
-#~ msgid "Saves the contents of the active display monitor to a graphics file."
-#~ msgstr "Guarda el contenido del monitor activo en un fichero gráfico."
+msgid "Saves the contents of the active display monitor to a graphics file."
+msgstr "Guarda el contenido del monitor activo en un fichero gráfico."
 
-#~ msgid "display, export"
-#~ msgstr "muestra, exporta"
+msgid "display, export"
+msgstr "muestra, exporta"
 
-#~ msgid "Name for output file (do NOT add extension)"
-#~ msgstr "Nombre para el archivo de salida (NO añadir extensión)"
+msgid "Name for output file (do NOT add extension)"
+msgstr "Nombre para el archivo de salida (NO añadir extensión)"
 
-#~ msgid "Dimensions of output file versus current window size"
-#~ msgstr "Dimensiones de archivo de salida versus tamaño de la ventana actual"
+msgid "Dimensions of output file versus current window size"
+msgstr "Dimensiones de archivo de salida versus tamaño de la ventana actual"
 
-#~ msgid "(same=1, double size=2, quadruple size=4)"
-#~ msgstr "(igual=1, doble tamaño=2, cuádruple tamaño=4)"
+msgid "(same=1, double size=2, quadruple size=4)"
+msgstr "(igual=1, doble tamaño=2, cuádruple tamaño=4)"
 
-#~ msgid "Images"
-#~ msgstr "Imágenes"
+msgid "Images"
+msgstr "Imágenes"
 
-#~ msgid "Width and height of output image (overrides resolution setting)"
-#~ msgstr ""
-#~ "Anchura y altura de la imagen de salida (ignora la configuración de "
-#~ "resolución)"
+msgid "Width and height of output image (overrides resolution setting)"
+msgstr ""
+"Anchura y altura de la imagen de salida (ignora la configuración de "
+"resolución)"
 
-#~ msgid "Compression for PNG files"
-#~ msgstr "Compresión para archivos PNG"
+msgid "Compression for PNG files"
+msgstr "Compresión para archivos PNG"
 
-#~ msgid "(0=none, 1=fastest, 9=most; lossless, only time vs. filesize)"
-#~ msgstr ""
-#~ "(0=ninguna, 1=la más rápida, 9=máxima; sin pérdida, sólo tiempo vs. "
-#~ "tamaño de archivo)"
+msgid "(0=none, 1=fastest, 9=most; lossless, only time vs. filesize)"
+msgstr ""
+"(0=ninguna, 1=la más rápida, 9=máxima; sin pérdida, sólo tiempo vs. tamaño "
+"de archivo)"
 
-#~ msgid "File size/quality for JPEG files"
-#~ msgstr "Tamaño/calidad de archivo para archivos JPEG"
+msgid "File size/quality for JPEG files"
+msgstr "Tamaño/calidad de archivo para archivos JPEG"
 
-#~ msgid "(10=smallest/worst, 100=largest/best)"
-#~ msgstr "(10=el más pequeño/peor, 100=el más grande/mejor)"
+msgid "(10=smallest/worst, 100=largest/best)"
+msgstr "(10=el más pequeño/peor, 100=el más grande/mejor)"
 
-#~ msgid "Paper size for PostScript output"
-#~ msgstr "Tamaño de papel para salida PostScript"
+msgid "Paper size for PostScript output"
+msgstr "Tamaño de papel para salida PostScript"
 
-#~ msgid "PostScript"
-#~ msgstr "PostScript"
+msgid "PostScript"
+msgstr "PostScript"
 
-#~ msgid "PostScript level (only limits functionality!)"
-#~ msgstr "Nivel PostScript (¡sólo limita la funcinalidad!)"
+msgid "PostScript level (only limits functionality!)"
+msgstr "Nivel PostScript (¡sólo limita la funcinalidad!)"
 
-#~ msgid "Set background color to black (white default)"
-#~ msgstr "Ajustar el color de fondo a negro (blanco por omisión)"
+msgid "Set background color to black (white default)"
+msgstr "Ajustar el color de fondo a negro (blanco por omisión)"
 
-#~ msgid "Set transparent background"
-#~ msgstr "Establecer fondo transparente"
+msgid "Set transparent background"
+msgstr "Establecer fondo transparente"
 
-#~ msgid "Use the Cario driver to render images"
-#~ msgstr "Usar el controlador Cairo para representar las imágenes"
+msgid "Use the Cario driver to render images"
+msgstr "Usar el controlador Cairo para representar las imágenes"
 
-#~ msgid "Set paper orientation to landscape (for PostScript output)"
-#~ msgstr ""
-#~ "Establecer la orientación del papel a horizontal (para salida PostScript)"
+msgid "Set paper orientation to landscape (for PostScript output)"
+msgstr ""
+"Establecer la orientación del papel a horizontal (para salida PostScript)"
 
-#~ msgid "Displays a raster map and its legend on a graphics window"
-#~ msgstr "Muestra un mapa ráster y su leyenda en una ventana gráfica"
-
-#~ msgid "omit entries with missing label"
-#~ msgstr "omitir las entradas con una etiqueta perdida"
-
-#~ msgid "Number of lines to appear in the legend"
-#~ msgstr "Número de líneas que deben aparecer en la leyenda"
-
-#~ msgid "Redraws the current display frame in the GRASS monitor"
-#~ msgstr "Vuelve a dibujar el marco activo en el monitor GRASS"
-
-#~ msgid "Redraw all frames"
-#~ msgstr "Redibujar todos los marcos"
-
-#~ msgid "Do not preserve individual regions when redrawing all frames"
-#~ msgstr ""
-#~ "No preservar regiones individuales cuando se redibujan todos los marcos"
-
-#~ msgid "Resizes active display monitor"
-#~ msgstr "Modifica el tamaño del monitor activo"
-
-#~ msgid "New width for window"
-#~ msgstr "Nueva anchura de ventana"
-
-#~ msgid "New height for window"
-#~ msgstr "Nueva altura de ventana"
-
-#~ msgid "Slide show of GRASS raster/vector maps."
-#~ msgstr "Presentación de mapas ráster/vectoriales de GRASS."
-
-#~ msgid "display, slideshow"
-#~ msgstr "muestra, presentación"
-
-#~ msgid "Show vector maps rather than raster maps"
-#~ msgstr "Muestra mapas vectoriales en vez de mapas ráster"
-
-#~ msgid "Map prefix. Specify character(s) to view selected maps only"
-#~ msgstr ""
-#~ "Prefijo de mapa. Especificar carácter(es) para ver sólo los mapas "
-#~ "seleccionados"
-
-#~ msgid "Mapsets to use. Specify multiple mapsets comma separated"
-#~ msgstr ""
-#~ "Directorio de mapas a usar. Especificar múltiples directorios separados "
-#~ "por comas"
-
-#~ msgid "Number of seconds to pause between slides"
-#~ msgstr "Número de segundos de pausa entre diapositivas"
+msgid "Displays a raster map and its legend on a graphics window"
+msgstr "Muestra un mapa ráster y su leyenda en una ventana gráfica"
 
 #, fuzzy
-#~ msgid "Split the display into subframes."
-#~ msgstr "Introducir mapa ráster a mostrar en el primer marco"
+msgid "omit entries with missing label"
+msgstr "omitir las entradas con una etiqueta perdida"
+
+msgid "Number of lines to appear in the legend"
+msgstr "Número de líneas que deben aparecer en la leyenda"
+
+msgid "Redraws the current display frame in the GRASS monitor"
+msgstr "Vuelve a dibujar el marco activo en el monitor GRASS"
+
+msgid "Redraw all frames"
+msgstr "Redibujar todos los marcos"
+
+msgid "Do not preserve individual regions when redrawing all frames"
+msgstr ""
+"No preservar regiones individuales cuando se redibujan todos los marcos"
+
+msgid "Resizes active display monitor"
+msgstr "Modifica el tamaño del monitor activo"
+
+msgid "New width for window"
+msgstr "Nueva anchura de ventana"
+
+msgid "New height for window"
+msgstr "Nueva altura de ventana"
+
+msgid "Slide show of GRASS raster/vector maps."
+msgstr "Presentación de mapas ráster/vectoriales de GRASS."
+
+msgid "display, slideshow"
+msgstr "muestra, presentación"
+
+msgid "Show vector maps rather than raster maps"
+msgstr "Muestra mapas vectoriales en vez de mapas ráster"
+
+msgid "Map prefix. Specify character(s) to view selected maps only"
+msgstr ""
+"Prefijo de mapa. Especificar carácter(es) para ver sólo los mapas "
+"seleccionados"
+
+msgid "Mapsets to use. Specify multiple mapsets comma separated"
+msgstr ""
+"Directorio de mapas a usar. Especificar múltiples directorios separados por "
+"comas"
+
+msgid "Number of seconds to pause between slides"
+msgstr "Número de segundos de pausa entre diapositivas"
 
 #, fuzzy
-#~ msgid "Number of subframes"
-#~ msgstr "Número de fotogramas"
-
-#~ msgid "Displays thematic vectormap"
-#~ msgstr "Visualizar mapa vectorial temático"
-
-#~ msgid "display, legend"
-#~ msgstr "mostrar, leyenda"
-
-#~ msgid "Vector map to display thematically"
-#~ msgstr "Mapa vectorial a mostrar temáticamente"
-
-#~ msgid "Theme_prefs"
-#~ msgstr "Preferencias de tema"
-
-#~ msgid "Vector map type"
-#~ msgstr "Tipo de mapa vectorial"
-
-#~ msgid "Attribute column to use for thematic display (must be numeric)"
-#~ msgstr ""
-#~ "Columna de atributos a usar para presentación temática (debe ser numérico)"
-
-#~ msgid "Type of thematic display"
-#~ msgstr "Tipo de visualización temática"
-
-#~ msgid "Thematic divisions of data for display"
-#~ msgstr "Divisiones temáticas de los datos a mostrar"
-
-#~ msgid ""
-#~ "Break points for custom breaks option. Separate values by spaces. (0 10 "
-#~ "20 30 ...)"
-#~ msgstr ""
-#~ "Puntos de ruptura para la opción de ruptura personalizada. Separar "
-#~ "valores por espacios (0 10 20 30...)"
-
-#~ msgid "Layer to use for thematic display"
-#~ msgstr "Capa a usar para visualización temática"
-
-#~ msgid "Points"
-#~ msgstr "Puntos"
-
-#~ msgid "Vector point icon for point data"
-#~ msgstr "Icono de punto vectorial para datos de puntos"
-
-#~ msgid ""
-#~ "Icon size for point data (minimum icon size/line width for graduated "
-#~ "points/lines)"
-#~ msgstr ""
-#~ "Tamaño de icono para datos de puntos (tamaño de icono mínimo/anchura de "
-#~ "línea para gradiente de puntos/líneas)"
-
-#~ msgid "Maximum icon size/line width for graduated points and lines"
-#~ msgstr ""
-#~ "Tamaño máximo de icono/anchura de línea para gradiente de puntos y líneas"
-
-#~ msgid "Number of classes for interval theme (integer)"
-#~ msgstr "Número de clases para tema de intervalo (entero)"
-
-#~ msgid ""
-#~ "Color scheme for graduated color mapping (select 'single_color' for "
-#~ "graduated point/line display)"
-#~ msgstr ""
-#~ "Esquema de colores para mapas en gradiente de color (seleccionar "
-#~ "'single_color' para mostrar gradiente de puntos/líneas)"
-
-#~ msgid ""
-#~ "Color for graduated points map (grass named color or R:G:B triplet). Set "
-#~ "color scheme to single color."
-#~ msgstr ""
-#~ "Color para mapa de gradiente de puntos (nombre de color de grass o "
-#~ "triplete R:G:B). Establecer esquema de color a un color."
-
-#~ msgid ""
-#~ "Color for graduated lines or point/area outlines (grass named color or R:"
-#~ "G:B triplet). Set color scheme to single color."
-#~ msgstr ""
-#~ "Color para mapa de gradiente de líneas o puntos/bordes de área (nombre de "
-#~ "color de grass o triplete R:G:B). Establecer esquema de color a un color."
-
-#~ msgid ""
-#~ "Beginning color for custom color gradient. Must be expressed as R:G:B "
-#~ "triplet."
-#~ msgstr ""
-#~ "Color inicial para gradiente de color personalizado. Se debe expresar "
-#~ "como triplete R:G:B."
-
-#~ msgid ""
-#~ "Ending color for custom color gradient. Must be expressed as R:G:B triplet"
-#~ msgstr ""
-#~ "Color final para gradiente de color personalizado. Se debe expresar como "
-#~ "triplete R:G:B."
-
-#~ msgid "Misc"
-#~ msgstr "Miscelánea"
-
-#~ msgid "Select x11 display monitor for legend"
-#~ msgstr "Seleccionar monitor x11 para la leyenda"
-
-#~ msgid "Save thematic map commands to group file for GIS Manager"
-#~ msgstr ""
-#~ "Guardar comandos de mapa temático en archivo de grupo para el "
-#~ "Administrador GIS"
-
-#~ msgid ""
-#~ "Root for the name of psmap instruction files to be in current directory "
-#~ "(if not set, no psmap instruction files will be created)"
-#~ msgstr ""
-#~ "Raíz para el nombre de los archivos de instrucciones psmap para estar en "
-#~ "el directorio actual ((si no se indica, no se creará ningún archivo de "
-#~ "instrucciones psmap)"
-
-#~ msgid "Name of group file where thematic map commands will be saved"
-#~ msgstr ""
-#~ "Nombre de archivo de grupo en el que se guardarán los comandos del mapa "
-#~ "temático"
-
-#~ msgid "Create graphic legend in x11 display monitor"
-#~ msgstr "Crear leyenda gráfica en monitor x11"
-
-#~ msgid "Only draw fills (no outlines) for areas and points"
-#~ msgstr "Dibujar sólo rellenos (no líneas exteriores) para áreas y puntos"
-
-#~ msgid "Update color values to GRASSRGB column in attribute table"
-#~ msgstr ""
-#~ "Actualizar valores de color a la columna GRASSRGB en la tabla de atributos"
-
-#~ msgid "Output legend for GIS Manager (for scripting use only)"
-#~ msgstr ""
-#~ "Producir leyenda para el Administrador GIS (sólo para uso en scripts)"
-
-#~ msgid "Use math notation brackets in legend"
-#~ msgstr "Usar corchetes de anotación matemática en la leyenda"
+msgid "Split the display into subframes."
+msgstr "Introducir mapa ráster a mostrar en el primer marco"
 
 #, fuzzy
-#~ msgid "Lists data files using basic regular expressions and wildcards."
-#~ msgstr "Aplicar expresiones regulares y comodines a g.list"
+msgid "Number of subframes"
+msgstr "Número de fotogramas"
 
-#~ msgid "Data type"
-#~ msgstr "Tipo de datos"
+msgid "Displays thematic vectormap"
+msgstr "Visualizar mapa vectorial temático"
 
-#~ msgid "Mapset(s) to list (default: current mapset search path)"
-#~ msgstr ""
-#~ "Directorio(s) de mapas a listar (por omisión: ruta de búsqueda en el "
-#~ "directorio actual)"
+msgid "display, legend"
+msgstr "mostrar, leyenda"
 
-#~ msgid "Output separator (default: newline)"
-#~ msgstr "Separador de la salida (por omisión: nueva línea)"
+msgid "Vector map to display thematically"
+msgstr "Mapa vectorial a mostrar temáticamente"
+
+msgid "Theme_prefs"
+msgstr "Preferencias de tema"
+
+msgid "Vector map type"
+msgstr "Tipo de mapa vectorial"
+
+msgid "Attribute column to use for thematic display (must be numeric)"
+msgstr ""
+"Columna de atributos a usar para presentación temática (debe ser numérico)"
+
+msgid "Type of thematic display"
+msgstr "Tipo de visualización temática"
+
+msgid "Thematic divisions of data for display"
+msgstr "Divisiones temáticas de los datos a mostrar"
+
+msgid ""
+"Break points for custom breaks option. Separate values by spaces. (0 10 20 "
+"30 ...)"
+msgstr ""
+"Puntos de ruptura para la opción de ruptura personalizada. Separar valores "
+"por espacios (0 10 20 30...)"
+
+msgid "Layer to use for thematic display"
+msgstr "Capa a usar para visualización temática"
+
+msgid "Points"
+msgstr "Puntos"
+
+msgid "Vector point icon for point data"
+msgstr "Icono de punto vectorial para datos de puntos"
+
+msgid ""
+"Icon size for point data (minimum icon size/line width for graduated points/"
+"lines)"
+msgstr ""
+"Tamaño de icono para datos de puntos (tamaño de icono mínimo/anchura de "
+"línea para gradiente de puntos/líneas)"
+
+msgid "Maximum icon size/line width for graduated points and lines"
+msgstr ""
+"Tamaño máximo de icono/anchura de línea para gradiente de puntos y líneas"
+
+msgid "Number of classes for interval theme (integer)"
+msgstr "Número de clases para tema de intervalo (entero)"
+
+msgid ""
+"Color scheme for graduated color mapping (select 'single_color' for "
+"graduated point/line display)"
+msgstr ""
+"Esquema de colores para mapas en gradiente de color (seleccionar "
+"'single_color' para mostrar gradiente de puntos/líneas)"
+
+msgid ""
+"Color for graduated points map (grass named color or R:G:B triplet). Set "
+"color scheme to single color."
+msgstr ""
+"Color para mapa de gradiente de puntos (nombre de color de grass o triplete "
+"R:G:B). Establecer esquema de color a un color."
+
+msgid ""
+"Color for graduated lines or point/area outlines (grass named color or R:G:B "
+"triplet). Set color scheme to single color."
+msgstr ""
+"Color para mapa de gradiente de líneas o puntos/bordes de área (nombre de "
+"color de grass o triplete R:G:B). Establecer esquema de color a un color."
+
+msgid ""
+"Beginning color for custom color gradient. Must be expressed as R:G:B "
+"triplet."
+msgstr ""
+"Color inicial para gradiente de color personalizado. Se debe expresar como "
+"triplete R:G:B."
+
+msgid ""
+"Ending color for custom color gradient. Must be expressed as R:G:B triplet"
+msgstr ""
+"Color final para gradiente de color personalizado. Se debe expresar como "
+"triplete R:G:B."
+
+msgid "Misc"
+msgstr "Miscelánea"
+
+msgid "Select x11 display monitor for legend"
+msgstr "Seleccionar monitor x11 para la leyenda"
+
+msgid "Save thematic map commands to group file for GIS Manager"
+msgstr ""
+"Guardar comandos de mapa temático en archivo de grupo para el Administrador "
+"GIS"
+
+msgid ""
+"Root for the name of psmap instruction files to be in current directory (if "
+"not set, no psmap instruction files will be created)"
+msgstr ""
+"Raíz para el nombre de los archivos de instrucciones psmap para estar en el "
+"directorio actual ((si no se indica, no se creará ningún archivo de "
+"instrucciones psmap)"
+
+msgid "Name of group file where thematic map commands will be saved"
+msgstr ""
+"Nombre de archivo de grupo en el que se guardarán los comandos del mapa "
+"temático"
+
+msgid "Create graphic legend in x11 display monitor"
+msgstr "Crear leyenda gráfica en monitor x11"
+
+msgid "Only draw fills (no outlines) for areas and points"
+msgstr "Dibujar sólo rellenos (no líneas exteriores) para áreas y puntos"
+
+msgid "Update color values to GRASSRGB column in attribute table"
+msgstr ""
+"Actualizar valores de color a la columna GRASSRGB en la tabla de atributos"
+
+msgid "Output legend for GIS Manager (for scripting use only)"
+msgstr "Producir leyenda para el Administrador GIS (sólo para uso en scripts)"
+
+msgid "Use math notation brackets in legend"
+msgstr "Usar corchetes de anotación matemática en la leyenda"
 
 #, fuzzy
-#~ msgid "Removes data files using basic regular expressions and wildcards."
-#~ msgstr "Aplicar expresiones regulares y comodines a g.list"
-
-#~ msgid "Raster to remove"
-#~ msgstr "Ráster a eliminar"
-
-#~ msgid "3d raster to remove"
-#~ msgstr "Ráster 3D a eliminar"
-
-#~ msgid "Vector to remove"
-#~ msgstr "Vectorial a eliminar"
-
-#~ msgid "Region to remove"
-#~ msgstr "Región a eliminar"
-
-#~ msgid "Label to remove"
-#~ msgstr "Etiqueta a eliminar"
-
-#~ msgid "3dview to remove"
-#~ msgstr "Vista 3D a eliminar"
-
-#~ msgid "Group to remove"
-#~ msgstr "Grupo a eliminar"
-
-#~ msgid ""
-#~ "displays spectral response at user specified locations in group or images"
-#~ msgstr ""
-#~ "muestra la respuesta espectral en localizaciones especificadas por el "
-#~ "usuario en grupo o imágenes"
-
-#~ msgid "imagery, raster, multispectral"
-#~ msgstr "imaginería, ráster, multiespectral"
-
-#~ msgid "group input"
-#~ msgstr "entrada de grupo"
-
-#~ msgid "raster input maps"
-#~ msgstr "mapas ráster de entrada"
-
-#~ msgid "write output to PNG image"
-#~ msgstr "escribir la salida a imagen PNG"
-
-#~ msgid "Use image list and not group"
-#~ msgstr "Usar lista de imágenes y no grupo"
-
-#~ msgid "Select multiple points"
-#~ msgstr "Seleccionar múltiples puntos"
-
-#~ msgid "label with coordinates instead of numbering"
-#~ msgstr "Etiquetar con coordenadas en vez de numeración"
-
-#~ msgid "Calculate new raster map from a r.mapcalc expression."
-#~ msgstr "Calcular un nuevo mapa ráster a partir de una expresión r.mapcalc."
-
-#~ msgid "A"
-#~ msgstr "A"
-
-#~ msgid "B"
-#~ msgstr "B"
-
-#~ msgid "C"
-#~ msgstr "C"
-
-#~ msgid "D"
-#~ msgstr "D"
-
-#~ msgid "E"
-#~ msgstr "E"
-
-#~ msgid "F"
-#~ msgstr "F"
-
-#~ msgid "Formula (e.g. A-B or A*C+B)"
-#~ msgstr "Formula (ej. A-B o A*C+B)"
-
-#~ msgid "Show help"
-#~ msgstr "Mostrar ayuda"
-
-#~ msgid "Expert mode (enter a set of r.mapcalc expressions)"
-#~ msgstr "Modo avanzado (introducir un conjunto de expresiones de r.mapcalc)"
-
-#~ msgid "Do not overwrite existing map"
-#~ msgstr "No sobrescribir mapas existentes"
-
-#~ msgid "Exports GRASS raster into GDAL supported formats."
-#~ msgstr "Exporta un ráster de GRASS a formatos soportados por GDAL."
-
-#~ msgid "Region sensitive output"
-#~ msgstr "Salida sensible a región"
-
-#~ msgid ""
-#~ "Creation option to the output format driver. Multiple options may be "
-#~ "listed"
-#~ msgstr ""
-#~ "Opción de creación para el controlador de formato de salida. Se pueden "
-#~ "indicar múltiples opciones."
-
-#~ msgid "Output field seperator"
-#~ msgstr "Separador de campos de salida"
-
-#~ msgid "Calculates new grid3D volume from r3.mapcalc expression."
-#~ msgstr ""
-#~ "Calcula un nuevo volumen grid3D a partir de una expresión r3.mapcalc."
-
-#~ msgid "A (grid3D file)"
-#~ msgstr "A (archivo grid3D)"
-
-#~ msgid "B (grid3D file)"
-#~ msgstr "B (archivo grid3D)"
-
-#~ msgid "C (grid3D file)"
-#~ msgstr "C (archivo grid3D)"
-
-#~ msgid "D (grid3D file)"
-#~ msgstr "D (archivo grid3D)"
-
-#~ msgid "E (grid3D file)"
-#~ msgstr "E (archivo grid3D)"
-
-#~ msgid "F (grid3D file)"
-#~ msgstr "F (archivo grid3D)"
-
-#~ msgid "Name for output grid3D volume"
-#~ msgstr "Nombre para el volumen grid3D de salida"
-
-#~ msgid "Expert mode (enter a set of r3.mapcalc expressions)"
-#~ msgstr "Modo experto (introducir un conjunto de expresiones r3.mapcalc)"
-
-#~ msgid "%s: [%s] not found"
-#~ msgstr "%s: [%s] no encontrado"
-
-#~ msgid "GIS Coincidence Tabulation Facility\n"
-#~ msgstr "Utilidd de tabulación de coincidencia GIS\n"
-
-#~ msgid ""
-#~ "This utility will allow you to compare the coincidence of two map layers\n"
-#~ msgstr ""
-#~ "Esta utilidad le permitirá comparar la coincidencia de dos capas de mapa\n"
-
-#~ msgid "The report can be made in one of 8 units."
-#~ msgstr "El informe se puede hacer en una de 8 unidades."
-
-#~ msgid "Please choose a unit by entering one of the following letter codes:"
-#~ msgstr ""
-#~ "Por favor, elija una unidad introduciendo uno de los siguientes códigos "
-#~ "de letras:"
-
-#~ msgid "     'c': cells"
-#~ msgstr "     'c': celdas"
-
-#~ msgid "     'p': percent cover of region"
-#~ msgstr "     'p': porcentaje de cobertura de región"
-
-#~ msgid "     'x': percent of '%s' category (column)"
-#~ msgstr "     'x': porcentaje de categoría '%s' (columna)"
-
-#~ msgid "     'y': percent of '%s' category (row)"
-#~ msgstr "     'y': porcentaje de categoría '%s' (fila)"
-
-#~ msgid "     'a': acres"
-#~ msgstr "     'a': acres"
-
-#~ msgid "     'h': hectares"
-#~ msgstr "     'h': hectáreas"
-
-#~ msgid "     'k': square kilometers"
-#~ msgstr "     'k': kilómetros cuadrados"
-
-#~ msgid "     'm': square miles\n"
-#~ msgstr "     'm': millas cuadradas\n"
-
-#~ msgid "     'Q': quit"
-#~ msgstr "     'Q': salir"
-
-#~ msgid "Do you wish to save this report in a file? (y/n) [n] "
-#~ msgstr "¿Desea guardar este informe en un archivo? (y/n) [n] "
-
-#~ msgid ""
-#~ "Enter the file name or path\n"
-#~ "> "
-#~ msgstr ""
-#~ "Introduzca el nombre o ruta del archivo\n"
-#~ "> "
-
-#~ msgid "'%s' being saved\n"
-#~ msgstr "Guardando '%s?\n"
-
-#~ msgid ""
-#~ "Do you wish to print this report (requires Unix lpr command)? (y/n) [n] "
-#~ msgstr ""
-#~ "¿Desea imprimir este informe (requiere el comando Unix lpr)? (y/n) [n] "
-
-#~ msgid ""
-#~ "Do you wish it printed in 80 or 132 columns?\n"
-#~ "> "
-#~ msgstr ""
-#~ "¿Desea imprimirlo a 80 ó 132 columnas?\n"
-#~ "> "
-
-#~ msgid ""
-#~ "Do you wish to run this report with a different unit of measure? (y/n) "
-#~ "[y] "
-#~ msgstr ""
-#~ "¿Desea ejecutar este informe con una unidad de medida diferente? (y/n) "
-#~ "[y] "
-
-#~ msgid "Interactively select End-Points"
-#~ msgstr "Seleccionar puntos finales de forma interactiva"
-
-#~ msgid "Use mouse to select Start Point\n"
-#~ msgstr "Usar el ratón para seleccionar el Punto de Inicio\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Use mouse to draw profile line\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Usar el ratón para dibujar la línea de perfil\n"
-
-#~ msgid "Buttons:\n"
-#~ msgstr "Botones:\n"
-
-#~ msgid "Left:   Mark next point\n"
-#~ msgstr "Izquierda: marcar siguiente punto\n"
-
-#~ msgid "Middle: Mark next point\n"
-#~ msgstr "Centro: marcar siguiente punto\n"
-
-#~ msgid ""
-#~ "Right:  Finish profile and exit\n"
-#~ "\n"
-#~ msgstr ""
-#~ "Derecha: finalizar perfil y salir\n"
-#~ "\n"
-
-#~ msgid "elevin raster map <%s> not found"
-#~ msgstr "No se encuentra el mapa ráster de elevación de entada <%s>"
-
-#~ msgid "aspin raster map <%s> not found"
-#~ msgstr "No se encuentra el mapa ráster de orientación de entada <%s>"
-
-#~ msgid "slopein raster map <%s> not found"
-#~ msgstr "No se encuentra el mapa ráster de pendiente de entada <%s>"
-
-#~ msgid "linkein raster map <%s> not found"
-#~ msgstr ""
-#~ "No se encuentra el mapa ráster de coeficiente de turbidez atmosférica de "
-#~ "Linke de entada <%s>"
-
-#~ msgid "albedo raster map <%s> not found"
-#~ msgstr ""
-#~ "No se encuentra el mapa ráster de entada de coeficiente albedo del "
-#~ "terreno <%s>"
-
-#~ msgid "latin raster map <%s> not found"
-#~ msgstr "No se encuentra el mapa ráster de latitudes de entada <%s>"
-
-#~ msgid "coefbh raster map <%s> not found"
-#~ msgstr "No se encuentra el mapa ráster coefbh <%s>"
-
-#~ msgid "coefdh raster map <%s> not found"
-#~ msgstr "No se encuentra el mapa ráster coefdh <%s>"
-
-#~ msgid "Unable to find data map"
-#~ msgstr "No se puede encontrar el mapa de datos"
+msgid "Lists data files using basic regular expressions and wildcards."
+msgstr "Aplicar expresiones regulares y comodines a g.list"
+
+msgid "Data type"
+msgstr "Tipo de datos"
+
+msgid "Mapset(s) to list (default: current mapset search path)"
+msgstr ""
+"Directorio(s) de mapas a listar (por omisión: ruta de búsqueda en el "
+"directorio actual)"
+
+msgid "Output separator (default: newline)"
+msgstr "Separador de la salida (por omisión: nueva línea)"
 
 #, fuzzy
-#~ msgid "Unable to find clump map"
-#~ msgstr "No se puede abrir el archivo <%s>"
+msgid "Removes data files using basic regular expressions and wildcards."
+msgstr "Aplicar expresiones regulares y comodines a g.list"
 
-#~ msgid "%s: base raster map not found"
-#~ msgstr "%s: mapa ráster de base no encontrado"
+msgid "Raster to remove"
+msgstr "Ráster a eliminar"
 
-#~ msgid "%s: cover raster map not found"
-#~ msgstr "%s: mapa ráster de cobetura no encontrado"
+msgid "3d raster to remove"
+msgstr "Ráster 3D a eliminar"
 
-#~ msgid "%s: base map and output map must be different"
-#~ msgstr "%s: los mapas de base y de salida deben ser diferentes"
+msgid "Vector to remove"
+msgstr "Vectorial a eliminar"
 
-#~ msgid "%s: Error reading from raster map <%s> in mapset <%s>"
-#~ msgstr ""
-#~ "%s: error al leer del mapa ráster <%s> en el directorio de mapas <%s>"
+msgid "Region to remove"
+msgstr "Región a eliminar"
 
-#~ msgid "Illegal output file name <%s>"
-#~ msgstr "Nombre de archivo de salida <%s> no admitido"
+msgid "Label to remove"
+msgstr "Etiqueta a eliminar"
 
-#~ msgid "Base raster map <%s> not found"
-#~ msgstr "No se encuentra el mapa ráster de base <%s>"
+msgid "3dview to remove"
+msgstr "Vista 3D a eliminar"
 
-#~ msgid "Base map and output map <%s> must be different"
-#~ msgstr "El mapa de base y de salida <%s> deben ser diferentes"
+msgid "Group to remove"
+msgstr "Grupo a eliminar"
 
-#~ msgid "Not enough memory for zero_array_cell"
-#~ msgstr "Memoria insuficiente para zero_array_cell"
+msgid ""
+"displays spectral response at user specified locations in group or images"
+msgstr ""
+"muestra la respuesta espectral en localizaciones especificadas por el "
+"usuario en grupo o imágenes"
 
-#~ msgid "Not enough disk space -- cannot write files"
-#~ msgstr "Espacio en disco insuficiente -- no se pueden escribir archivos"
+msgid "imagery, raster, multispectral"
+msgstr "imaginería, ráster, multiespectral"
 
-#~ msgid "Path to rules file"
-#~ msgstr "Ruta al archivo de reglas"
+msgid "group input"
+msgstr "entrada de grupo"
 
-#~ msgid "Enter rules interactively"
-#~ msgstr "Introducir reglas de forma interactiva"
+msgid "raster input maps"
+msgstr "mapas ráster de entrada"
 
-#~ msgid ""
-#~ "Interactive mode is incompatible with \"color\", \"rules\", and \"raster"
-#~ "\" options"
-#~ msgstr ""
-#~ "El modo interactivo es incompatible con las opciones \"color\", \"reglas"
-#~ "\" y \"raster\""
+msgid "write output to PNG image"
+msgstr "escribir la salida a imagen PNG"
 
-#~ msgid "RGB raster map <%s> not found"
-#~ msgstr "No se encuentra el mapa ráster RGB <%s>"
+msgid "Use image list and not group"
+msgstr "Usar lista de imágenes y no grupo"
 
-#~ msgid "Cannot create RGB data, please provide three maps [r,g,b]"
-#~ msgstr ""
-#~ "No se pueden crear los datos RGB. Por favor proporciones tres mapas [R,G,"
-#~ "B]"
+msgid "Select multiple points"
+msgstr "Seleccionar múltiples puntos"
 
-#~ msgid "Vector cell map <%s> not found"
-#~ msgstr "No se encuentra el mapa de celdas vectorial <%s>"
+msgid "label with coordinates instead of numbering"
+msgstr "Etiquetar con coordenadas en vez de numeración"
 
-#~ msgid "Cannot create vector data, please provide three maps [x,y,z]"
-#~ msgstr ""
-#~ "No se pueden crear los datos del vectorial. Por favor proporcione tres "
-#~ "mapas [X,Y,Z]"
+msgid "Calculate new raster map from a r.mapcalc expression."
+msgstr "Calcular un nuevo mapa ráster a partir de una expresión r.mapcalc."
 
-#~ msgid "Which raster map needs a color table"
-#~ msgstr "Qué mapa ráster necesita una tabla de color"
+msgid "A"
+msgstr "A"
 
-#~ msgid "Color table for <%s> updated"
-#~ msgstr "Tabla de color para <%s> actualizada"
+msgid "B"
+msgstr "B"
 
-#~ msgid "Edit header for [%s]\n"
-#~ msgstr "Editar cabecera para [%s]\n"
+msgid "C"
+msgstr "C"
 
-#~ msgid "[%s] cannot be found!"
-#~ msgstr "¡No se puede encontrar [%s]!"
+msgid "D"
+msgstr "D"
 
-#~ msgid "For what layer shall the header file be edited? "
-#~ msgstr "¿Para qué capa se editará el archivo de cabecera?"
+msgid "E"
+msgstr "E"
 
-#~ msgid "[%s] is a reclass of [%s] - cannot edit header! Run support on [%s]."
-#~ msgstr ""
-#~ "[%s] es una reclasificación de [%s] - ¡No se puede editar la cabecera! "
-#~ "Ejecute support en [%s]."
+msgid "F"
+msgstr "F"
 
-#~ msgid "[%s] is a reclass of [%s in %s] - cannot edit header!"
-#~ msgstr ""
-#~ "[%s] es una reclasificación de [%s en %s] - ¡No se puede editar la "
-#~ "cabecera!"
+msgid "Formula (e.g. A-B or A*C+B)"
+msgstr "Formula (ej. A-B o A*C+B)"
 
-#~ msgid "Cannot open raster map [%s]!"
-#~ msgstr "¡No se puede abrir el mapa ráster [%s]!"
+msgid "Show help"
+msgstr "Mostrar ayuda"
 
-#~ msgid "Raster file [%s] is empty."
-#~ msgstr "El archivo ráster [%s] está vacío."
+msgid "Expert mode (enter a set of r.mapcalc expressions)"
+msgstr "Modo avanzado (introducir un conjunto de expresiones de r.mapcalc)"
 
-#~ msgid "Error reading raster map [%s]."
-#~ msgstr "Error al leer el mapa ráster [%s]."
+msgid "Do not overwrite existing map"
+msgstr "No sobrescribir mapas existentes"
 
-#~ msgid "cellhd compression: %d\n"
-#~ msgstr "compresión cellhd: %d\n"
+msgid "Exports GRASS raster into GDAL supported formats."
+msgstr "Exporta un ráster de GRASS a formatos soportados por GDAL."
 
-#~ msgid "[%s] appears to be compressed. Is it? "
-#~ msgstr "[%s] parece estar comprimido. ¿Lo está? "
+msgid "Region sensitive output"
+msgstr "Salida sensible a región"
 
-#~ msgid "Please indicate the type of compression:\n"
-#~ msgstr "Por favor, indique el tipo de compresión:\n"
+msgid ""
+"Creation option to the output format driver. Multiple options may be listed"
+msgstr ""
+"Opción de creación para el controlador de formato de salida. Se pueden "
+"indicar múltiples opciones."
 
-#~ msgid "  1. Pre 3.0 compression\n"
-#~ msgstr "  1. Compresión pre 3.0 \n"
+msgid "Output field seperator"
+msgstr "Separador de campos de salida"
 
-#~ msgid "  2. 3.0 compression\n"
-#~ msgstr "  2. compresión 3.0\n"
+msgid "Calculates new grid3D volume from r3.mapcalc expression."
+msgstr "Calcula un nuevo volumen grid3D a partir de una expresión r3.mapcalc."
 
-#~ msgid "The header for [%s] says the file is not compressed. "
-#~ msgstr "La cabecera de [%s] dice que el archivo no está comprimido. "
+msgid "A (grid3D file)"
+msgstr "A (archivo grid3D)"
 
-#~ msgid "The file appears to be compressed.\n"
-#~ msgstr "El fichero parece estar comprimido.\n"
+msgid "B (grid3D file)"
+msgstr "B (archivo grid3D)"
 
-#~ msgid "Most likely the header is wrong, but I want you to decide.\n"
-#~ msgstr ""
-#~ "Con toda probabilidad la cabecera está equivocada, pero debe decidir.\n"
+msgid "C (grid3D file)"
+msgstr "C (archivo grid3D)"
 
-#~ msgid "The header for [%s] says the file is compressed. "
-#~ msgstr "La cabecera de [%s] dice que el archivo está comprimido. "
+msgid "D (grid3D file)"
+msgstr "D (archivo grid3D)"
 
-#~ msgid "The file does NOT appear to be compressed.\n"
-#~ msgstr "El archivo NO parece estar comprimido.\n"
+msgid "E (grid3D file)"
+msgstr "E (archivo grid3D)"
 
-#~ msgid ""
-#~ "Header indicates %d row%s in the raster map, but the actual file format "
-#~ "indicates %d row%s"
-#~ msgstr ""
-#~ "La cabecera indica %d filas%s en el mapa ráster, pero el formato de "
-#~ "archivo actual indica %d filas%s"
-
-#~ msgid "Unable to write header for [%s]."
-#~ msgstr "No se puede escribir la cabecera para [%s]."
-
-#~ msgid "Header for raster map [%s] updated."
-#~ msgstr "Cabecera para el mapa ráster [%s] actualizada."
-
-#~ msgid ""
-#~ "\n"
-#~ "hit RETURN to continue -->"
-#~ msgstr ""
-#~ "\n"
-#~ "pulse INTRO para continuar -->"
-
-#~ msgid "Please enter the following information for [%s]:"
-#~ msgstr "Por favor, introduzca la siguiente información para [%s]:"
-
-#~ msgid "        Number of rows"
-#~ msgstr "        Número de filas"
-
-#~ msgid "        Number of cols"
-#~ msgstr "        Número de columnas"
-
-#~ msgid "        Floating point map"
-#~ msgstr "        Mapa de coma flotante"
-
-#~ msgid "rows * cols * bytes per cell must be same as file size (%lu)"
-#~ msgstr ""
-#~ "filas * columnas * bytes por celda deben ser igual que el tamaño de "
-#~ "archivo (%lu)"
-
-#~ msgid "If you need help figuring them out, just hit ESC"
-#~ msgstr "Si necesita ayuda para averiguarlos, presione ESC"
+msgid "F (grid3D file)"
+msgstr "F (archivo grid3D)"
 
-#~ msgid "** Negative values not allowed!"
-#~ msgstr "** ¡No se permiten valores negativos!"
+msgid "Name for output grid3D volume"
+msgstr "Nombre para el volumen grid3D de salida"
 
-#~ msgid "** Positive values only please!"
-#~ msgstr "** ¡Sólo valores positivos, por favor!"
+msgid "Expert mode (enter a set of r3.mapcalc expressions)"
+msgstr "Modo experto (introducir un conjunto de expresiones r3.mapcalc)"
 
-#~ msgid "Which raster map needs an updated history? "
-#~ msgstr "¿Qué mapa ráster necesita un histórico actualizado? "
-
-#~ msgid "Raster file [%s] not found. Exiting."
-#~ msgstr "Archivo ráster <%s> no encontrado. Saliendo."
+msgid "%s: [%s] not found"
+msgstr "%s: [%s] no encontrado"
 
-#~ msgid "History file for [%s] updated."
-#~ msgstr "Archivo histórico para <%s> actualizado."
-
-#~ msgid "History file for [%s] not updated."
-#~ msgstr "Archivo histórico para <%s> no actualizado."
-
-#~ msgid ""
-#~ "\n"
-#~ "Hit RETURN to continue -->"
-#~ msgstr ""
-#~ "\n"
-#~ "Pulse INTRO para continuar -->"
+msgid "GIS Coincidence Tabulation Facility\n"
+msgstr "Utilidd de tabulación de coincidencia GIS\n"
 
-#~ msgid "Edit header for [%s]? "
-#~ msgstr "¿Editar cabecera de [%s]? "
+msgid ""
+"This utility will allow you to compare the coincidence of two map layers\n"
+msgstr ""
+"Esta utilidad le permitirá comparar la coincidencia de dos capas de mapa\n"
 
-#~ msgid ""
-#~ "\n"
-#~ "NOTE: [%s] is a reclass of [%s in %s]"
-#~ msgstr ""
-#~ "\n"
-#~ "NOTA: [%s] es una reclasificación de [%s en %s]"
+msgid "The report can be made in one of 8 units."
+msgstr "El informe se puede hacer en una de 8 unidades."
 
-#~ msgid "Canceling from edit header."
-#~ msgstr "Cancelando desde la cabecera del editor."
+msgid "Please choose a unit by entering one of the following letter codes:"
+msgstr ""
+"Por favor, elija una unidad introduciendo uno de los siguientes códigos de "
+"letras:"
 
-#~ msgid "Edit the category file for [%s]? "
-#~ msgstr "¿Editar el archivo de categorías para [%s]?"
+msgid "     'c': cells"
+msgstr "     'c': celdas"
 
-#~ msgid "Create/Update the color table for [%s]? "
-#~ msgstr "¿Crear/actualizar tabla de colores para [%s]?"
+msgid "     'p': percent cover of region"
+msgstr "     'p': porcentaje de cobertura de región"
 
-#~ msgid "Edit the history file for [%s]? "
-#~ msgstr "¿Editar el archivo histórico de [%s]? "
+msgid "     'x': percent of '%s' category (column)"
+msgstr "     'x': porcentaje de categoría '%s' (columna)"
 
-#~ msgid ""
-#~ "\n"
-#~ "The null file for [%s] may indicate that some cells contain\n"
-#~ " no data. If the null file for [%s] doesn't exist, zero cells in\n"
-#~ " it are treated by GRASS application programs as no data."
-#~ msgstr ""
-#~ "\n"
-#~ "El archivo de nulos de [%s] puede indicar que algunas celdas no contienen "
-#~ "datos\n"
-#~ "Si el archivo de nulos de [%s] no existe, las celdas con valor cero son "
-#~ "tratadas por\n"
-#~ " los programas de la aplicación GRASS como sin datos."
+msgid "     'y': percent of '%s' category (row)"
+msgstr "     'y': porcentaje de categoría '%s' (fila)"
 
-#~ msgid ""
-#~ "\n"
-#~ "Do you want to create/reset the null file for [%s] so that null cell "
-#~ "values are considered valid data? "
-#~ msgstr ""
-#~ "\n"
-#~ "¿Quiere crear/restablecer el archivo de nulos de [%s] de forma que los "
-#~ "valores de celdas nulas sean considerados datos válidos?"
+msgid "     'a': acres"
+msgstr "     'a': acres"
 
-#~ msgid ""
-#~ "\n"
-#~ "Do you want to delete the null file for [%s]\n"
-#~ "(all zero cells will then be considered no data)? "
-#~ msgstr ""
-#~ "\n"
-#~ "¿Quiere borrar el archivo de nulos de [%s]?\n"
-#~ "(todas las celdas con cero serán consideradas sin datos)"
+msgid "     'h': hectares"
+msgstr "     'h': hectáreas"
 
-#~ msgid "Which vector map needs updated categories?"
-#~ msgstr "¿Qué mapa vectorial necesita categorías actualizadas?"
+msgid "     'k': square kilometers"
+msgstr "     'k': kilómetros cuadrados"
 
-#~ msgid "Which raster map needs updated categories?"
-#~ msgstr "¿Qué mapa ráster necesita categorías actualizadas?"
+msgid "     'm': square miles\n"
+msgstr "     'm': millas cuadradas\n"
 
-#~ msgid "%s map <%s> not found"
-#~ msgstr "No se encuentra el mapa %s <%s>"
+msgid "     'Q': quit"
+msgstr "     'Q': salir"
 
-#~ msgid "Category file for <%s> not updated"
-#~ msgstr "Archivo de categorías para <%s> no actualizado"
+msgid "Do you wish to save this report in a file? (y/n) [n] "
+msgstr "¿Desea guardar este informe en un archivo? (y/n) [n] "
 
-#~ msgid "Category file for <%s> updated"
-#~ msgstr "Archivo de categorías para <%s> actualizado"
+msgid ""
+"Enter the file name or path\n"
+"> "
+msgstr ""
+"Introduzca el nombre o ruta del archivo\n"
+"> "
 
-#~ msgid "Title, in quotes"
-#~ msgstr "Título, entre comillas"
+msgid "'%s' being saved\n"
+msgstr "Guardando '%s?\n"
 
-#~ msgid "Unable to open vector map <%s> in <%s>"
-#~ msgstr "No se puede abrir el mapa vectorial <%s> en <%s>"
+msgid ""
+"Do you wish to print this report (requires Unix lpr command)? (y/n) [n] "
+msgstr ""
+"¿Desea imprimir este informe (requiere el comando Unix lpr)? (y/n) [n] "
 
-#~ msgid "Unable to find starting vector <%s> "
-#~ msgstr "No se puede encontrar el vector de inicio <%s> "
+msgid ""
+"Do you wish it printed in 80 or 132 columns?\n"
+"> "
+msgstr ""
+"¿Desea imprimirlo a 80 ó 132 columnas?\n"
+"> "
 
-#~ msgid "Unable to find stop vector <%s>"
-#~ msgstr "No se puede encontrar el vector de fin <%s>"
+msgid ""
+"Do you wish to run this report with a different unit of measure? (y/n) [y] "
+msgstr ""
+"¿Desea ejecutar este informe con una unidad de medida diferente? (y/n) [y] "
 
-#~ msgid "Raster output map <%s> not found (no start_points given)"
-#~ msgstr ""
-#~ "No se encuentra el mapa ráster de salida <%s> (no se indican puntos de "
-#~ "inicio)"
+msgid "Interactively select End-Points"
+msgstr "Seleccionar puntos finales de forma interactiva"
 
-#~ msgid "Memory allocation error on reading start points from raster map %s"
-#~ msgstr ""
-#~ "Error de asignación de memoria al leer los puntos de inicio del mapa "
-#~ "ráster %s"
+msgid "Use mouse to select Start Point\n"
+msgstr "Usar el ratón para seleccionar el Punto de Inicio\n"
 
-#~ msgid "Apply filter only to zero data values"
-#~ msgstr "Aplicar filtro sólo a valores cero de datos"
+msgid ""
+"\n"
+"Use mouse to draw profile line\n"
+msgstr ""
+"\n"
+"Usar el ratón para dibujar la línea de perfil\n"
 
-#~ msgid "Run verbosly"
-#~ msgstr "Ejecutar de forma verbosa"
+msgid "Buttons:\n"
+msgstr "Botones:\n"
 
-#~ msgid "Run VERBOSELY"
-#~ msgstr "Ejecutar de forma VERBOSA"
+msgid "Left:   Mark next point\n"
+msgstr "Izquierda: marcar siguiente punto\n"
 
-#~ msgid "Cell file not found"
-#~ msgstr "No se encontró el mapa ráster"
+msgid "Middle: Mark next point\n"
+msgstr "Centro: marcar siguiente punto\n"
 
-#~ msgid "Vector map <%s> not found in the current mapset"
-#~ msgstr ""
-#~ "No se encuentra el mapa vectorial <%s> en el directorio de mapas actual"
+msgid ""
+"Right:  Finish profile and exit\n"
+"\n"
+msgstr ""
+"Derecha: finalizar perfil y salir\n"
+"\n"
+
+msgid "elevin raster map <%s> not found"
+msgstr "No se encuentra el mapa ráster de elevación de entada <%s>"
+
+msgid "aspin raster map <%s> not found"
+msgstr "No se encuentra el mapa ráster de orientación de entada <%s>"
+
+msgid "slopein raster map <%s> not found"
+msgstr "No se encuentra el mapa ráster de pendiente de entada <%s>"
+
+msgid "linkein raster map <%s> not found"
+msgstr ""
+"No se encuentra el mapa ráster de coeficiente de turbidez atmosférica de "
+"Linke de entada <%s>"
+
+msgid "albedo raster map <%s> not found"
+msgstr ""
+"No se encuentra el mapa ráster de entada de coeficiente albedo del terreno <%"
+"s>"
+
+msgid "latin raster map <%s> not found"
+msgstr "No se encuentra el mapa ráster de latitudes de entada <%s>"
+
+msgid "coefbh raster map <%s> not found"
+msgstr "No se encuentra el mapa ráster coefbh <%s>"
+
+msgid "coefdh raster map <%s> not found"
+msgstr "No se encuentra el mapa ráster coefdh <%s>"
+
+msgid "Unable to find data map"
+msgstr "No se puede encontrar el mapa de datos"
 
 #, fuzzy
-#~ msgid "Layer %d: %s / %s\n"
-#~ msgstr "Capa %d: %s\n"
+msgid "Unable to find clump map"
+msgstr "No se puede abrir el archivo <%s>"
+
+msgid "%s: base raster map not found"
+msgstr "%s: mapa ráster de base no encontrado"
+
+msgid "%s: cover raster map not found"
+msgstr "%s: mapa ráster de cobetura no encontrado"
+
+msgid "%s: base map and output map must be different"
+msgstr "%s: los mapas de base y de salida deben ser diferentes"
+
+msgid "%s: Error reading from raster map <%s> in mapset <%s>"
+msgstr "%s: error al leer del mapa ráster <%s> en el directorio de mapas <%s>"
+
+msgid "Illegal output file name <%s>"
+msgstr "Nombre de archivo de salida <%s> no admitido"
+
+msgid "Base raster map <%s> not found"
+msgstr "No se encuentra el mapa ráster de base <%s>"
+
+msgid "Base map and output map <%s> must be different"
+msgstr "El mapa de base y de salida <%s> deben ser diferentes"
+
+msgid "Not enough memory for zero_array_cell"
+msgstr "Memoria insuficiente para zero_array_cell"
+
+msgid "Not enough disk space -- cannot write files"
+msgstr "Espacio en disco insuficiente -- no se pueden escribir archivos"
+
+msgid "Path to rules file"
+msgstr "Ruta al archivo de reglas"
+
+msgid "Enter rules interactively"
+msgstr "Introducir reglas de forma interactiva"
+
+msgid ""
+"Interactive mode is incompatible with \"color\", \"rules\", and \"raster\" "
+"options"
+msgstr ""
+"El modo interactivo es incompatible con las opciones \"color\", \"reglas\" y "
+"\"raster\""
+
+msgid "RGB raster map <%s> not found"
+msgstr "No se encuentra el mapa ráster RGB <%s>"
+
+msgid "Cannot create RGB data, please provide three maps [r,g,b]"
+msgstr ""
+"No se pueden crear los datos RGB. Por favor proporciones tres mapas [R,G,B]"
+
+msgid "Vector cell map <%s> not found"
+msgstr "No se encuentra el mapa de celdas vectorial <%s>"
+
+msgid "Cannot create vector data, please provide three maps [x,y,z]"
+msgstr ""
+"No se pueden crear los datos del vectorial. Por favor proporcione tres mapas "
+"[X,Y,Z]"
+
+msgid "Which raster map needs a color table"
+msgstr "Qué mapa ráster necesita una tabla de color"
+
+msgid "Color table for <%s> updated"
+msgstr "Tabla de color para <%s> actualizada"
+
+msgid "Edit header for [%s]\n"
+msgstr "Editar cabecera para [%s]\n"
+
+msgid "[%s] cannot be found!"
+msgstr "¡No se puede encontrar [%s]!"
+
+msgid "For what layer shall the header file be edited? "
+msgstr "¿Para qué capa se editará el archivo de cabecera?"
+
+msgid "[%s] is a reclass of [%s] - cannot edit header! Run support on [%s]."
+msgstr ""
+"[%s] es una reclasificación de [%s] - ¡No se puede editar la cabecera! "
+"Ejecute support en [%s]."
+
+msgid "[%s] is a reclass of [%s in %s] - cannot edit header!"
+msgstr ""
+"[%s] es una reclasificación de [%s en %s] - ¡No se puede editar la cabecera!"
+
+msgid "Cannot open raster map [%s]!"
+msgstr "¡No se puede abrir el mapa ráster [%s]!"
+
+msgid "Raster file [%s] is empty."
+msgstr "El archivo ráster [%s] está vacío."
+
+msgid "Error reading raster map [%s]."
+msgstr "Error al leer el mapa ráster [%s]."
+
+msgid "cellhd compression: %d\n"
+msgstr "compresión cellhd: %d\n"
+
+msgid "[%s] appears to be compressed. Is it? "
+msgstr "[%s] parece estar comprimido. ¿Lo está? "
+
+msgid "Please indicate the type of compression:\n"
+msgstr "Por favor, indique el tipo de compresión:\n"
+
+msgid "  1. Pre 3.0 compression\n"
+msgstr "  1. Compresión pre 3.0 \n"
+
+msgid "  2. 3.0 compression\n"
+msgstr "  2. compresión 3.0\n"
+
+msgid "The header for [%s] says the file is not compressed. "
+msgstr "La cabecera de [%s] dice que el archivo no está comprimido. "
+
+msgid "The file appears to be compressed.\n"
+msgstr "El fichero parece estar comprimido.\n"
+
+msgid "Most likely the header is wrong, but I want you to decide.\n"
+msgstr ""
+"Con toda probabilidad la cabecera está equivocada, pero debe decidir.\n"
+
+msgid "The header for [%s] says the file is compressed. "
+msgstr "La cabecera de [%s] dice que el archivo está comprimido. "
+
+msgid "The file does NOT appear to be compressed.\n"
+msgstr "El archivo NO parece estar comprimido.\n"
+
+msgid ""
+"Header indicates %d row%s in the raster map, but the actual file format "
+"indicates %d row%s"
+msgstr ""
+"La cabecera indica %d filas%s en el mapa ráster, pero el formato de archivo "
+"actual indica %d filas%s"
+
+msgid "Unable to write header for [%s]."
+msgstr "No se puede escribir la cabecera para [%s]."
+
+msgid "Header for raster map [%s] updated."
+msgstr "Cabecera para el mapa ráster [%s] actualizada."
+
+msgid ""
+"\n"
+"hit RETURN to continue -->"
+msgstr ""
+"\n"
+"pulse INTRO para continuar -->"
+
+msgid "Please enter the following information for [%s]:"
+msgstr "Por favor, introduzca la siguiente información para [%s]:"
+
+msgid "        Number of rows"
+msgstr "        Número de filas"
+
+msgid "        Number of cols"
+msgstr "        Número de columnas"
+
+msgid "        Floating point map"
+msgstr "        Mapa de coma flotante"
+
+msgid "rows * cols * bytes per cell must be same as file size (%lu)"
+msgstr ""
+"filas * columnas * bytes por celda deben ser igual que el tamaño de archivo "
+"(%lu)"
+
+msgid "If you need help figuring them out, just hit ESC"
+msgstr "Si necesita ayuda para averiguarlos, presione ESC"
+
+msgid "** Negative values not allowed!"
+msgstr "** ¡No se permiten valores negativos!"
+
+msgid "** Positive values only please!"
+msgstr "** ¡Sólo valores positivos, por favor!"
+
+msgid "Which raster map needs an updated history? "
+msgstr "¿Qué mapa ráster necesita un histórico actualizado? "
+
+msgid "Raster file [%s] not found. Exiting."
+msgstr "Archivo ráster <%s> no encontrado. Saliendo."
+
+msgid "History file for [%s] updated."
+msgstr "Archivo histórico para <%s> actualizado."
+
+msgid "History file for [%s] not updated."
+msgstr "Archivo histórico para <%s> no actualizado."
+
+msgid ""
+"\n"
+"Hit RETURN to continue -->"
+msgstr ""
+"\n"
+"Pulse INTRO para continuar -->"
+
+msgid "Edit header for [%s]? "
+msgstr "¿Editar cabecera de [%s]? "
+
+msgid ""
+"\n"
+"NOTE: [%s] is a reclass of [%s in %s]"
+msgstr ""
+"\n"
+"NOTA: [%s] es una reclasificación de [%s en %s]"
+
+msgid "Canceling from edit header."
+msgstr "Cancelando desde la cabecera del editor."
+
+msgid "Edit the category file for [%s]? "
+msgstr "¿Editar el archivo de categorías para [%s]?"
+
+msgid "Create/Update the color table for [%s]? "
+msgstr "¿Crear/actualizar tabla de colores para [%s]?"
+
+msgid "Edit the history file for [%s]? "
+msgstr "¿Editar el archivo histórico de [%s]? "
+
+msgid ""
+"\n"
+"The null file for [%s] may indicate that some cells contain\n"
+" no data. If the null file for [%s] doesn't exist, zero cells in\n"
+" it are treated by GRASS application programs as no data."
+msgstr ""
+"\n"
+"El archivo de nulos de [%s] puede indicar que algunas celdas no contienen "
+"datos\n"
+"Si el archivo de nulos de [%s] no existe, las celdas con valor cero son "
+"tratadas por\n"
+" los programas de la aplicación GRASS como sin datos."
+
+msgid ""
+"\n"
+"Do you want to create/reset the null file for [%s] so that null cell values "
+"are considered valid data? "
+msgstr ""
+"\n"
+"¿Quiere crear/restablecer el archivo de nulos de [%s] de forma que los "
+"valores de celdas nulas sean considerados datos válidos?"
+
+msgid ""
+"\n"
+"Do you want to delete the null file for [%s]\n"
+"(all zero cells will then be considered no data)? "
+msgstr ""
+"\n"
+"¿Quiere borrar el archivo de nulos de [%s]?\n"
+"(todas las celdas con cero serán consideradas sin datos)"
+
+msgid "Which vector map needs updated categories?"
+msgstr "¿Qué mapa vectorial necesita categorías actualizadas?"
+
+msgid "Which raster map needs updated categories?"
+msgstr "¿Qué mapa ráster necesita categorías actualizadas?"
+
+msgid "%s map <%s> not found"
+msgstr "No se encuentra el mapa %s <%s>"
+
+msgid "Category file for <%s> not updated"
+msgstr "Archivo de categorías para <%s> no actualizado"
+
+msgid "Category file for <%s> updated"
+msgstr "Archivo de categorías para <%s> actualizado"
+
+msgid "Title, in quotes"
+msgstr "Título, entre comillas"
+
+msgid "Unable to open vector map <%s> in <%s>"
+msgstr "No se puede abrir el mapa vectorial <%s> en <%s>"
+
+msgid "Unable to find starting vector <%s> "
+msgstr "No se puede encontrar el vector de inicio <%s> "
+
+msgid "Unable to find stop vector <%s>"
+msgstr "No se puede encontrar el vector de fin <%s>"
+
+msgid "Raster output map <%s> not found (no start_points given)"
+msgstr ""
+"No se encuentra el mapa ráster de salida <%s> (no se indican puntos de "
+"inicio)"
+
+msgid "Memory allocation error on reading start points from raster map %s"
+msgstr ""
+"Error de asignación de memoria al leer los puntos de inicio del mapa ráster %"
+"s"
+
+msgid "Apply filter only to zero data values"
+msgstr "Aplicar filtro sólo a valores cero de datos"
+
+msgid "Run verbosly"
+msgstr "Ejecutar de forma verbosa"
+
+msgid "Run VERBOSELY"
+msgstr "Ejecutar de forma VERBOSA"
+
+msgid "Cell file not found"
+msgstr "No se encontró el mapa ráster"
+
+msgid "Vector map <%s> not found in the current mapset"
+msgstr ""
+"No se encuentra el mapa vectorial <%s> en el directorio de mapas actual"
 
 #, fuzzy
-#~ msgid "Option <%s>: <%s> exists."
-#~ msgstr "opción <%s>: <%s> existe."
+msgid "Layer %d: %s / %s\n"
+msgstr "Capa %d: %s\n"
 
 #, fuzzy
-#~ msgid "Use '%s' option to change vector map name"
-#~ msgstr "Usar salida= opción de cambiar el nombre del mapa vectorial"
-
-#~ msgid "Vector map <%s> is not in user mapset and cannot be updated"
-#~ msgstr ""
-#~ "El mapa vectorial <%s> no esta en el directorio de mapas del usuario y no "
-#~ "se puede actualizar"
-
-#~ msgid "Do not print polyline info"
-#~ msgstr "No imprimir información de polilíneas"
-
-#~ msgid "Network input map <%s> not found"
-#~ msgstr "Mapa de red de entrada <%s> no encontrado"
-
-#~ msgid "ask_transform_coor():  Leaving session.. \n"
-#~ msgstr "ask_transform_coord():  Terminado sesión.. \n"
-
-#~ msgid " Number of points that have been entered: %d\n"
-#~ msgstr "Número de puntos que han sido ingresados: %d\n"
-
-#~ msgid "Please answer yes or no"
-#~ msgstr "Por favor responda Si o No"
-
-#~ msgid "Hilight color for text"
-#~ msgstr "Color de resalte para texto"
-
-#~ msgid "Line: %d\n"
-#~ msgstr "Línea: %d\n"
-
-#~ msgid "Insufficent memory for allocation of data structure"
-#~ msgstr ""
-#~ "Memoria insuficiente para la asignación de la estructura de los datos"
-
-#~ msgid "name=%s\n"
-#~ msgstr "nombre=%s\n"
-
-#~ msgid "mapset=%s\n"
-#~ msgstr "directorio de mapas=%s\n"
-
-#~ msgid "fullname=%s\n"
-#~ msgstr "nombre completo=%s\n"
-
-#~ msgid "usage: %s file [prompt %%x %%y]\n"
-#~ msgstr "uso: %s archivo [prompt %%x %%y]\n"
-
-#~ msgid "Illegal file name for real part: %s"
-#~ msgstr "Nombre de archivo no admitido para la parte real: %s"
-
-#~ msgid "Illegal file name for imaginary part: %s"
-#~ msgstr "Nombre de archivo no admitido para la parte imaginaria: %s"
-
-#~ msgid "** Can't read signature file <%s> **"
-#~ msgstr "** No se puede leer el archivo de firmas <%s> **"
-
-#~ msgid ""
-#~ "\n"
-#~ "<%s> -- illegal result signature file name"
-#~ msgstr ""
-#~ "\n"
-#~ "<%s> -- nombre de archivo de firmas resultante no admitido"
-
-#~ msgid "Illegal group name <%s>"
-#~ msgstr "Nombre de grupo <%s> no admitido"
-
-#~ msgid "Illegal signature file name <%s>"
-#~ msgstr "Nombre de archivo de firmas <%s> no admitido"
-
-#~ msgid "Setting map window"
-#~ msgstr "Configurando ventana de mapa"
-
-#~ msgid "Current window not settable"
-#~ msgstr "La ventana actual no es configurable"
-
-#~ msgid "Can't clear current graphics window"
-#~ msgstr "No se puede borrar la ventana gráfica actual"
-
-#~ msgid "Cannot use current window"
-#~ msgstr "No se puede usar la ventana actual"
-
-#~ msgid "Don't add to list of commands in monitor"
-#~ msgstr "No añadir a la lista de comandos en el monitor"
-
-#~ msgid "No current frame"
-#~ msgstr "Ningún marco actual"
-
-#~ msgid "Current frame not available"
-#~ msgstr "Marco actual no disponible"
-
-#~ msgid "%s: 'is_null_value()' got NULL pointer!"
-#~ msgstr "%s: 'is_null_value()' ¡se obtuvo puntero NULL!"
-
-#~ msgid "%s: 'is_null_value()' got negative column index"
-#~ msgstr "%s: 'is_null_value()' obtuvo índice de columna negativo"
-
-#~ msgid "%s: 'is_null_value()' Unknown RASTER_MAP_TYPE '%d'"
-#~ msgstr "%s: 'is_null_value()' Tipo de mapa ráster '%d' desconocido"
-
-#~ msgid "Error reading raster map"
-#~ msgstr "Error leyendo mapa ráster"
-
-#~ msgid "Interactive profile plotting utility with optional output."
-#~ msgstr "Utilidad de ploteo de perfil interactivo con salida opcional."
-
-#~ msgid "Optional display raster"
-#~ msgstr "Ráster de visualización opcional"
-
-#~ msgid "Output profile data to file(s) with prefix 'name'"
-#~ msgstr "Sacar datos del perfil al archivo(s) con prefijo 'nombre'"
-
-#~ msgid "Display raster [%s] not found. Using profile raster."
-#~ msgstr "Mostrar ráster[%s] no encontrado. Usando ráster de perfil."
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "Use mouse to choose action"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "Usar el ratón para elegin acción"
+msgid "Option <%s>: <%s> exists."
+msgstr "opción <%s>: <%s> existe."
 
 #, fuzzy
-#~ msgid "Use 'd.frame -e' to remove left over frames"
-#~ msgstr "Usar 'd.frame -e' para eliminar left over frames"
+msgid "Use '%s' option to change vector map name"
+msgstr "Usar salida= opción de cambiar el nombre del mapa vectorial"
 
-#~ msgid "Error opening cell-file"
-#~ msgstr "Error al abrir el archivo de celdas"
+msgid "Vector map <%s> is not in user mapset and cannot be updated"
+msgstr ""
+"El mapa vectorial <%s> no esta en el directorio de mapas del usuario y no se "
+"puede actualizar"
 
-#~ msgid "Error reading from cell-file"
-#~ msgstr "Error al leer del archivo de celdas"
+msgid "Do not print polyline info"
+msgstr "No imprimir información de polilíneas"
 
-#~ msgid "Mysterious window inconsistancy error"
-#~ msgstr "Error de inconsistencia de ventana misterioso"
+msgid "Network input map <%s> not found"
+msgstr "Mapa de red de entrada <%s> no encontrado"
 
-#~ msgid "%s: Couldn't open raster <%s@%s>"
-#~ msgstr "%s: No se pudo abrir el ráster<%s@%s>"
+msgid "ask_transform_coor():  Leaving session.. \n"
+msgstr "ask_transform_coord():  Terminado sesión.. \n"
 
-#~ msgid "one moment ..."
-#~ msgstr "un momento..."
+msgid " Number of points that have been entered: %d\n"
+msgstr "Número de puntos que han sido ingresados: %d\n"
 
-#~ msgid " Middle: toggle flash color\n"
-#~ msgstr " Centro: fijar color de parpadeo\n"
+msgid "Please answer yes or no"
+msgstr "Por favor responda Si o No"
 
-#~ msgid "Enable flashing (slower)"
-#~ msgstr "Habilitar flashing (más lento)"
+msgid "Hilight color for text"
+msgstr "Color de resalte para texto"
 
-#~ msgid "No raster map exists in current window"
-#~ msgstr "No existe ningún mapa ráster en la ventana actual"
+msgid "Line: %d\n"
+msgstr "Línea: %d\n"
 
-#~ msgid "No current window"
-#~ msgstr "Ninguna ventana actual"
+msgid "Insufficent memory for allocation of data structure"
+msgstr "Memoria insuficiente para la asignación de la estructura de los datos"
 
-#~ msgid "Current window not available"
-#~ msgstr "La ventana actual no está disponible"
+msgid "name=%s\n"
+msgstr "nombre=%s\n"
 
-#~ msgid "Getting screen window"
-#~ msgstr "Obteniendo ventana de la pantalla"
+msgid "mapset=%s\n"
+msgstr "directorio de mapas=%s\n"
 
-#~ msgid "Error in calculating conversions"
-#~ msgstr "Error calculando conversiones"
+msgid "fullname=%s\n"
+msgstr "nombre completo=%s\n"
 
-#~ msgid "No current graphics window"
-#~ msgstr "Ninguna ventana de gráficos actual"
+msgid "usage: %s file [prompt %%x %%y]\n"
+msgstr "uso: %s archivo [prompt %%x %%y]\n"
 
-#~ msgid "Current graphics window not available"
-#~ msgstr "Ventana de gráficos actual no disponible"
+msgid "Illegal file name for real part: %s"
+msgstr "Nombre de archivo no admitido para la parte real: %s"
 
-#~ msgid "Setting graphics window"
-#~ msgstr "Configurando la ventana de gráficos"
+msgid "Illegal file name for imaginary part: %s"
+msgstr "Nombre de archivo no admitido para la parte imaginaria: %s"
 
-#~ msgid "Can't set current graphics window"
-#~ msgstr "No se puede configurar la ventana de gráficos actual"
+msgid "** Can't read signature file <%s> **"
+msgstr "** No se puede leer el archivo de firmas <%s> **"
 
-#~ msgid "Getting graphics window coordinates"
-#~ msgstr "Obteniendo coordenadas de la ventana de gráficos"
+msgid ""
+"\n"
+"<%s> -- illegal result signature file name"
+msgstr ""
+"\n"
+"<%s> -- nombre de archivo de firmas resultante no admitido"
 
-#~ msgid "Font name or pathname of TTF file"
-#~ msgstr "Nombre de fuente o ruta al archivo TTF"
+msgid "Illegal group name <%s>"
+msgstr "Nombre de grupo <%s> no admitido"
 
-#~ msgid "Setting release of FreeType"
-#~ msgstr "Configurando el lanzamiento de FreeType"
+msgid "Illegal signature file name <%s>"
+msgstr "Nombre de archivo de firmas <%s> no admitido"
 
-#~ msgid "Display number of colors"
-#~ msgstr "Mostrar número de colores"
+msgid "Setting map window"
+msgstr "Configurando ventana de mapa"
 
-#~ msgid "Use mouse to size & place legend"
-#~ msgstr "Usar el ratón para dimensionar y situar la leyenda"
+msgid "Current window not settable"
+msgstr "La ventana actual no es configurable"
 
-#~ msgid "Creates a list of commands for recreating screen graphics."
-#~ msgstr "Crea una lista de comandos para recrear gráficos de pantalla."
+msgid "Can't clear current graphics window"
+msgstr "No se puede borrar la ventana gráfica actual"
 
-#~ msgid "Name of frame(s) to save"
-#~ msgstr "Nombre de marco(s) a guardar"
+msgid "Cannot use current window"
+msgstr "No se puede usar la ventana actual"
 
-#~ msgid ""
-#~ "List of object numbers to remove which are displayed after \"#\". -1 for "
-#~ "the last object."
-#~ msgstr ""
-#~ "Lista de números de objeto a eliminar que son mostrados tras \"#\". -1 "
-#~ "para el último objeto."
+msgid "Don't add to list of commands in monitor"
+msgstr "No añadir a la lista de comandos en el monitor"
 
-#~ msgid ""
-#~ "List of object numbers to move (\"from\" to \"to\"). remove= option will "
-#~ "be done first, if any."
-#~ msgstr ""
-#~ "Lista de números de objeto a mover (\"desde\" a \"a\"). eliminar= las "
-#~ "opciones se harán primero, si las hay."
+msgid "No current frame"
+msgstr "Ningún marco actual"
 
-#~ msgid "Save current frame"
-#~ msgstr "Guardar el marco actual"
+msgid "Current frame not available"
+msgstr "Marco actual no disponible"
 
-#~ msgid "Save all the frames"
-#~ msgstr "Guardar todos los marcos"
+msgid "%s: 'is_null_value()' got NULL pointer!"
+msgstr "%s: 'is_null_value()' ¡se obtuvo puntero NULL!"
 
-#~ msgid "Only map objects without extra header and tailer"
-#~ msgstr "Sólo objetos de mapa sin cabecera y cola extra"
+msgid "%s: 'is_null_value()' got negative column index"
+msgstr "%s: 'is_null_value()' obtuvo índice de columna negativo"
+
+msgid "%s: 'is_null_value()' Unknown RASTER_MAP_TYPE '%d'"
+msgstr "%s: 'is_null_value()' Tipo de mapa ráster '%d' desconocido"
+
+msgid "Error reading raster map"
+msgstr "Error leyendo mapa ráster"
+
+msgid "Interactive profile plotting utility with optional output."
+msgstr "Utilidad de ploteo de perfil interactivo con salida opcional."
+
+msgid "Optional display raster"
+msgstr "Ráster de visualización opcional"
+
+msgid "Output profile data to file(s) with prefix 'name'"
+msgstr "Sacar datos del perfil al archivo(s) con prefijo 'nombre'"
+
+msgid "Display raster [%s] not found. Using profile raster."
+msgstr "Mostrar ráster[%s] no encontrado. Usando ráster de perfil."
+
+msgid ""
+"\n"
+"\n"
+"Use mouse to choose action"
+msgstr ""
+"\n"
+"\n"
+"Usar el ratón para elegin acción"
 
 #, fuzzy
-#~ msgid "Unknown item type in pad: %s"
-#~ msgstr "Tipo de objeto desconocido en : %s"
+msgid "Use 'd.frame -e' to remove left over frames"
+msgstr "Usar 'd.frame -e' para eliminar left over frames"
 
-#~ msgid "Rendering method for filled polygons"
-#~ msgstr "Método de renderizado para polígonos rellenos"
+msgid "Error opening cell-file"
+msgstr "Error al abrir el archivo de celdas"
+
+msgid "Error reading from cell-file"
+msgstr "Error al leer del archivo de celdas"
+
+msgid "Mysterious window inconsistancy error"
+msgstr "Error de inconsistencia de ventana misterioso"
+
+msgid "%s: Couldn't open raster <%s@%s>"
+msgstr "%s: No se pudo abrir el ráster<%s@%s>"
+
+msgid "one moment ..."
+msgstr "un momento..."
+
+msgid " Middle: toggle flash color\n"
+msgstr " Centro: fijar color de parpadeo\n"
+
+msgid "Enable flashing (slower)"
+msgstr "Habilitar flashing (más lento)"
+
+msgid "No raster map exists in current window"
+msgstr "No existe ningún mapa ráster en la ventana actual"
+
+msgid "No current window"
+msgstr "Ninguna ventana actual"
+
+msgid "Current window not available"
+msgstr "La ventana actual no está disponible"
+
+msgid "Getting screen window"
+msgstr "Obteniendo ventana de la pantalla"
+
+msgid "Error in calculating conversions"
+msgstr "Error calculando conversiones"
+
+msgid "No current graphics window"
+msgstr "Ninguna ventana de gráficos actual"
+
+msgid "Current graphics window not available"
+msgstr "Ventana de gráficos actual no disponible"
+
+msgid "Setting graphics window"
+msgstr "Configurando la ventana de gráficos"
+
+msgid "Can't set current graphics window"
+msgstr "No se puede configurar la ventana de gráficos actual"
+
+msgid "Getting graphics window coordinates"
+msgstr "Obteniendo coordenadas de la ventana de gráficos"
+
+msgid "Font name or pathname of TTF file"
+msgstr "Nombre de fuente o ruta al archivo TTF"
+
+msgid "Setting release of FreeType"
+msgstr "Configurando el lanzamiento de FreeType"
+
+msgid "Display number of colors"
+msgstr "Mostrar número de colores"
+
+msgid "Use mouse to size & place legend"
+msgstr "Usar el ratón para dimensionar y situar la leyenda"
+
+msgid "Creates a list of commands for recreating screen graphics."
+msgstr "Crea una lista de comandos para recrear gráficos de pantalla."
+
+msgid "Name of frame(s) to save"
+msgstr "Nombre de marco(s) a guardar"
+
+msgid ""
+"List of object numbers to remove which are displayed after \"#\". -1 for the "
+"last object."
+msgstr ""
+"Lista de números de objeto a eliminar que son mostrados tras \"#\". -1 para "
+"el último objeto."
+
+msgid ""
+"List of object numbers to move (\"from\" to \"to\"). remove= option will be "
+"done first, if any."
+msgstr ""
+"Lista de números de objeto a mover (\"desde\" a \"a\"). eliminar= las "
+"opciones se harán primero, si las hay."
+
+msgid "Save current frame"
+msgstr "Guardar el marco actual"
+
+msgid "Save all the frames"
+msgstr "Guardar todos los marcos"
+
+msgid "Only map objects without extra header and tailer"
+msgstr "Sólo objetos de mapa sin cabecera y cola extra"
+
+#, fuzzy
+msgid "Unknown item type in pad: %s"
+msgstr "Tipo de objeto desconocido en : %s"
+
+msgid "Rendering method for filled polygons"
+msgstr "Método de renderizado para polígonos rellenos"
+
+#, fuzzy
+msgid ""
+"g;use the libgis render functions (features: clipping);r;use the raster "
+"graphics library functions (features: polylines);d;use the display library "
+"basic functions (features: polylines);c;use the display library clipping "
+"functions (features: clipping);l;use the display library culling functions "
+"(features: culling, polylines)"
+msgstr ""
+"g;usar las funciones de renderización de libgis (funciones: clipping);r;usar "
+"las funciones de la biblioteca de gráficos ráster (funciones: polilíneas);d;"
+"usar las funciones básicas de la biblioteca de visualización (funciones: "
+"polilíneas);c;usar las funciones de clipping de la biblioteca de "
+"visualización (funciones: clipping);l;usar las funciones de culling de la "
+"biblioteca de visualización (funciones: culling, polilíneas)"
+
+msgid ""
+"Don't add to list of vectors and commands in monitor (it won't be drawn if "
+"the monitor is refreshed)"
+msgstr ""
+"No añadir a la lista de vectoriales y comandos en el monitor (no se "
+"dibujarán si se refresca el monitor)"
+
+msgid "No raster map exists in the current window"
+msgstr "No existe ningún mapa ráster en la ventana actual"
+
+msgid ""
+"Creates and displays a menu within the active frame on the graphics monitor."
+msgstr "Crea y muestra un menú en el marco activo de la pantalla."
+
+msgid "Sets the color of the menu background"
+msgstr "Establece el color de fondo del menú"
+
+msgid "Sets the color of the menu text"
+msgstr "Establece el color del texto del menú"
+
+msgid "Sets the color dividing lines of text"
+msgstr "Establece el color de separación de líneas de texto"
+
+msgid "Sets the menu text size (in percent)"
+msgstr "Establece el tamaño de texto del menú (en porcentaje)"
+
+msgid "Menu must contain a title and at least one option"
+msgstr "El menú debe contener un título y al menos una opción"
+
+msgid "Don't add to list of rasters and commands in monitor"
+msgstr "No añadir a la lista de rásters y comandos en el monitor"
+
+msgid "One mouse click only"
+msgstr "Un solo clic del ratón"
+
+msgid "Use mouse to interactively place scale"
+msgstr "Usar el ratón para situar la escala de forma interactiva"
+
+msgid "Use mouse to interactively place text"
+msgstr "Usar el ratón para situar el texto de forma interactiva"
+
+msgid "Click!\n"
+msgstr "¡Clic!\n"
+
+msgid " Left:    Place text here\n"
+msgstr " Izquierda:    Sitúe el texto aquí\n"
+
+msgid " Right:   Quit\n"
+msgstr " Derecha:   Salir\n"
+
+msgid "Just redraw given maps using default colors"
+msgstr "Sólo redibujar los mapas dados usando colores predeterminados"
+
+msgid "ERROR: can not get \"list\" items"
+msgstr "ERROR: no se pueden obtener los elementos de \"lista\""
+
+msgid "-j flag forced"
+msgstr "Opción -j forzada"
+
+msgid "No map is displayed in GRASS monitor"
+msgstr "Ningún mapa está mostrado en el monitor de GRASS"
+
+msgid "Interactively select route"
+msgstr "Seleccionar ruta de forma interactiva"
+
+msgid "You must select more than one point"
+msgstr "Debe seleccionar más de un punto"
+
+msgid "You must select at least four points"
+msgstr "Debe seleccionar al menos cuatro puntos"
+
+msgid "No raster or vector map displayed"
+msgstr "Ningún mapa ráster o vectorial mostrado"
+
+msgid "To establish and control use of a graphics display monitor."
+msgstr "Para establecer y controlar el uso de una pantalla."
+
+msgid "Name of graphics monitor to start"
+msgstr "Nombre de la pantalla a iniciar"
+
+msgid "Name of graphics monitor to stop"
+msgstr "Nombre de la pantalla a detener"
+
+msgid "Name of graphics monitor to select"
+msgstr "Nombre de la pantalla a seleccionar"
+
+msgid "Name of graphics monitor to unlock"
+msgstr "Nombre de la pantalla a desbloquear"
+
+msgid "List all monitors"
+msgstr "Listar todas las pantallas"
+
+msgid "List all monitors (with current status)"
+msgstr "Listar todas las pantallas (con el estado actual)"
+
+msgid "Print name of currently selected monitor"
+msgstr "Impirmir el nombre de la pantalla seleccionada actualmente"
+
+msgid "Release currently selected monitor"
+msgstr "Libera la pantalla seleccionada actualmente"
+
+msgid "Do not automatically select when starting"
+msgstr "No seleccionar automáticamente al empezar"
+
+msgid "Problem selecting %s. Will try once more"
+msgstr "Problema al seleccionar %s. Se intentará otra vez"
+
+msgid "Usage:  %s monitor_name"
+msgstr "Uso: %s nombre de monitor"
+
+msgid "No such monitor as <%s>"
+msgstr "No hay tal monitor <%s>"
+
+msgid "%s: -%c unrecognized option"
+msgstr "%s: opción -%c no reconocida"
+
+msgid "Monitor <%s> released"
+msgstr "Monitor <%s> liberado"
+
+msgid "Monitor <%s> in use by another user"
+msgstr "Monitor <%s> en uso por otro usuario"
+
+msgid "Failed testing lock mechanism"
+msgstr "Fallo al probar el mecanismo de bloqueo"
+
+msgid "Usage:  %s [-fv] [name]"
+msgstr "Uso: %s [-fv] [nombre]"
+
+msgid "Usage: %s [-f] monitor_name"
+msgstr "Uso: %s [-f] nombre de monitor"
+
+msgid "Monitor '%s' terminated"
+msgstr "Monitor '%s' terminado"
+
+msgid "Error - Monitor '%s' was not running"
+msgstr "Error - El monitor '%s' no estaba funcionando"
+
+msgid "Error - Monitor '%s' in use by another user"
+msgstr "Error - Monitor '%s' en uso por otro usuario"
+
+msgid "Error - Locking mechanism failed"
+msgstr "Error - Falló el mecanismo de bloqueo"
+
+msgid "Error choosing frame [%s]\n"
+msgstr "Error al elegir el marco [%s]\n"
+
+msgid ""
+"\n"
+"Buttons:\n"
+msgstr ""
+"\n"
+"Botones:\n"
+
+msgid "Left:   Select frame\n"
+msgstr "Izquierda:   Seleccionar marco\n"
+
+msgid "Middle: Keep original frame\n"
+msgstr "Centro: Mantener marco original\n"
+
+msgid "Right:  Accept frame\n"
+msgstr "Derecha:  Aceptar marco\n"
+
+msgid "Manages display frames on the user's graphics monitor."
+msgstr "Gestiona marcos de presentación en la pantalla del usuario."
+
+msgid "Create a new frame"
+msgstr "Crea un nuevo marco"
+
+msgid "Select a frame"
+msgstr "Seleccionar un marco"
+
+msgid "Print name of current frame"
+msgstr "Imprimir el nombre del marco actual"
+
+msgid "Print names of all frames"
+msgstr "Imprimir el nombre de todos los marcos"
+
+msgid "List map names displayed in GRASS monitor"
+msgstr "Listar nombres de los mapas mostrados en el monitor de GRASS"
+
+msgid "Debugging output"
+msgstr "Salida de depuración"
+
+msgid "Frame to be created/selected"
+msgstr "Marco a crear/seleccionar"
+
+msgid "bottom,top,left,right"
+msgstr "inferior,superior,izquierda,derecha"
+
+msgid "Where to place the frame, values in percent (implies -c)"
+msgstr "Dónde colocar el marco, valores en porcentaje (implica -c)"
+
+msgid ""
+"\n"
+"Mouse Buttons:"
+msgstr ""
+"\n"
+"Botones del ratón:"
+
+msgid "Left:   Select From\n"
+msgstr "Izquierda: seleccionar desde\n"
+
+msgid "Middle: Select To\n"
+msgstr "Centro: seleccionar hasta\n"
+
+msgid ""
+"Right:  Quit\n"
+"\n"
+msgstr ""
+"Derecho: salir\n"
+"\n"
+
+msgid "Monitor: interactive command in redraw"
+msgstr "Monitor: comando interactivo en redibujar"
+
+msgid "found %d visuals of type TrueColor"
+msgstr "%d visuales encontrados de tipo TrueColor"
+
+msgid "searching for highest bit depth"
+msgstr "buscando la profundidad de bit más alta"
+
+msgid "selected %d bit depth"
+msgstr "profundidad de bit %d seleccionada"
+
+msgid "using default visual which is %s"
+msgstr "utilizando el visual predeterminado, que es %s"
+
+msgid "Monitor: waitpid: expected %d but got %d"
+msgstr "Monitor: waitpid: se esperaba %d pero se obtuvo %d"
+
+msgid "Monitor: XGetWMName failed"
+msgstr "Monitor: XGetWMName falló"
+
+msgid "Monitor: XGetWMName: bad result"
+msgstr "Monitor: XGetWMName: mal resultado"
+
+msgid ""
+"\n"
+"\n"
+"WARNING!  A projection file already exists for this location\n"
+msgstr ""
+"\n"
+"\n"
+"¡AVISO!  Ya existe un archivo de proyección para esta localización\n"
+
+msgid "Would you still like to overwrite the current projection information "
+msgstr "¿Todavía quiere sobrescribir la información de la proyección actual? "
+
+msgid "The projection information will not be updated."
+msgstr "La información de la proyección no se actualizará."
+
+msgid "Enable interactive prompting (for command-line use only)"
+msgstr "Activar introducción interactiva (sólo para línea de comandos)"
+
+msgid "<%s> is an illegal region name"
+msgstr "<%s> es un nombre de región no admitido"
+
+#, fuzzy
+msgid "Erasing monitors..."
+msgstr "Borrando monitores..."
+
+msgid "Apply regular expressions and wildcards to g.remove"
+msgstr "Aplicar expresiones regulares y comodines a g.remove"
+
+msgid "Memory allocation error"
+msgstr "Error de asignación de memoria"
+
+msgid "Cannot execute: %s"
+msgstr "No se puede ejecutar: %s"
+
+msgid "Cannot link table: %s"
+msgstr "No se puede conectar la tabla: %s"
+
+msgid "Name of input raster map(s)"
+msgstr "Nombre del mapa(s) ráster de entrada"
+
+msgid "Output file extension (inputfile(s) + extension)"
+msgstr "La extensión del archivo de salida (archivo(s) de salida + extensión)"
+
+msgid "Display manager for GRASS"
+msgstr "Administrador de visualización para GRASS"
+
+msgid "Name of .dmrc settings file"
+msgstr "Nombre del archivo de configuración .dmrc"
+
+msgid "Saves active display monitor to PNG file in home directory"
+msgstr "Guarda el monitor activo a un archivo PNG en el directorio home"
+
+msgid "Resolution of output file (single=1, double=2, quad=4)"
+msgstr "Resolución del archivo de salida (único=1, doble=2, cuádruple=4)"
+
+msgid ""
+"Divides active display into two frames & displays maps/executes commands in "
+"each frame."
+msgstr ""
+"Divide la visualización activa en dos marcos y muestra los mapas/ejecuta los "
+"comandos en cada uno."
+
+msgid "Enter command to execute in 1st frame"
+msgstr "Introducir comando a ejecutar en el primer marco"
+
+msgid "Enter raster map to display in 2nd frame"
+msgstr "Introducir mapa ráster a mostrar en el segundo marco"
+
+msgid "Enter command to execute in 2nd frame"
+msgstr "Introducir comando a ejecutar en el segundo marco"
+
+msgid "How to split display"
+msgstr "Como dividir la visualización"
+
+msgid "Keep band numbers instead of using band color names."
+msgstr ""
+"Mantener números de banda en vez de usar nombres de color de las bandas."
+
+msgid "calculates univariate statistics from a GRASS raster map"
+msgstr "Calcula estadísticas univariantes a partir de un mapa ráster de GRASS."
+
+msgid "extended statistics (quartiles and percentile)"
+msgstr "estadísticas ampliadas (cuartiles y percentiles)"
+
+msgid "Percentile to calculate (requires -e flag)"
+msgstr "Percentil a calcular (requiere la opción -e)"
+
+msgid "Saving new map"
+msgstr "Guardando el nuevo mapa"
+
+msgid "Cell area: %f"
+msgstr "Área de celda: %f"
+
+#, fuzzy
+msgid "Terrain raster map (DEM)"
+msgstr "Mapa ráster de terreno (MDT)"
+
+msgid "Output raster map with lake"
+msgstr "Producir mapa ráster con lago"
+
+msgid "Cannot write lake raster map <%s>!"
+msgstr "¡No se puede escribir el mapa ráster de lago <%s>!"
+
+msgid "Terrain raster map <%s> not found!"
+msgstr "¡Mapa ráster de terreno <%s> no encontrado!"
+
+msgid "Cannot open terrain raster map <%s@%s>!"
+msgstr "¡No se puede abrir el mapa ráster de terreno <%s@%s>!"
+
+#, fuzzy
+msgid "Seed map <%s> not found!"
+msgstr "mapa <%s> no encontrado"
+
+#, fuzzy
+msgid "Cannot open seed map <%s@%s>!"
+msgstr "No se puede abrir la base de datos %s"
+
+msgid "Failure to allocate memory for row pointers"
+msgstr "Fallo al asignar memoria para punteros de fila"
+
+msgid "Loading maps: "
+msgstr "Cargando mapas: "
+
+msgid "Error reading terrain raster map. Probably broken file."
+msgstr ""
+"Error al leer el mapa ráster de terreno. Probablemente el archivo está "
+"corrupto."
+
+#, fuzzy
+msgid "Error reading seed raster map. Probably broken file."
+msgstr ""
+"Error al leer el mapa ráster de . Probablemente el archivo está corrupto."
+
+msgid "Cannot write lake raster map <%s@%s>!"
+msgstr "¡No se puede escribir el mapa ráster de lago <%s@%s>!"
+
+msgid ""
+"Starting lake filling at level of %8.4f in %d passes. \n"
+"Percent done:"
+msgstr ""
+"Empezando el relleno del lago al nivel %8.4f en %d pases.\n"
+"Porcentaje hecho:"
+
+msgid "Pass: %d\n"
+msgstr "Pase: %d\n"
+
+msgid "Error writing color file for <%s@%s>!"
+msgstr "¡Error al escribir archivo de color para <%s@%s>!"
+
+msgid "All done."
+msgstr "Todo hecho."
+
+msgid "Calculates <simple> index on a raster map"
+msgstr "Calcula el índice <simple> en un mapa ráster"
+
+msgid "raster, landscape structure analysis, job launcher"
+msgstr "ráster, análisis de estructura de paisaje, lanzador de trabajos"
+
+msgid "Bilinear interpolation utility for raster map layers."
+msgstr "Utilidad de interpolación bilineal para capas de mapa ráster."
+
+msgid ""
+"Specific input value to be assigned to the north and/or south poles for "
+"longitude-latitude grids"
+msgstr ""
+"Valores de entrada específicos a asignar a los polos Norte y/o Sur para "
+"cuadrículas longitud-latitud"
+
+msgid "This module is deprecated. Please use 'r.resamp.interp' instead."
+msgstr ""
+"Este módulo está despreciado. Por favor, use 'r.resamp.interp' en su lugar."
+
+msgid "Raster input maps(s)"
+msgstr "Mapa(s) ráster de entrada"
+
+msgid "Output file name"
+msgstr "Nombre de archivo de salida"
+
+msgid "%s: can't read fp range for [%s]"
+msgstr "%s: no se puede leer el rango fp para [%s]"
+
+msgid ""
+"Raster map [%s] already exists.\n"
+"Please try another."
+msgstr ""
+"El mapa ráster [%s] ya existe.\n"
+"Por favor, pruebe otro."
+
+msgid "DXF input file"
+msgstr "Archivo DXF de entrada"
+
+msgid "Cannot open dxf file <%s>"
+msgstr "No se puede abrir el archivo dxf <%s>"
+
+msgid "Cannot open new vector map <%s>"
+msgstr "No se puede abrir el nuevo mapa vectorial <%s>"
+
+msgid "Conversion of <%s> to vector map:"
+msgstr "Conversión de <%s> a mapa vectorial:"
+
+#, fuzzy
+msgid "Specified group does not exist"
+msgstr "El grupo especificado no existe... Saliendo."
+
+msgid "imagery group"
+msgstr "grupo de imaginería"
+
+msgid "imagery subgroup"
+msgstr "subgrupo de imágenes"
+
+msgid "output raster map"
+msgstr "mapa de salida ráster"
+
+msgid ""
+"Generates and displays simple graphics on map layers drawn in the active "
+"graphics monitor display frame."
+msgstr ""
+"Genera y muestra gráficos sencillos en capas de mapa dibujadas en el marco "
+"de visualización del monitor activo."
+
+msgid ""
+"Unix file containg graphing instructions, if not given reads from standard "
+"input"
+msgstr ""
+"Archivo Unix que contiene instrucciones gráficas. Si no se indica lee de la "
+"entrada estándar"
+
+msgid ""
+"Color to draw with, either a standard GRASS color or R:G:B triplet "
+"(separated by colons)"
+msgstr ""
+"Color con el que dibujar: color estándar de GRASS o triplete R:G:B (separado "
+"por dos puntos)"
+
+msgid "value [%.0f,%.0f] out of range [0-100]"
+msgstr "valor [%.0f,%.0f] fuera de rango [0-100]"
+
+msgid ""
+"Draws text in the graphics monitor's active display frame using TrueType "
+"fonts."
+msgstr ""
+"Escribe texto en el marco activo de la pantalla usando fuentes TrueType."
+
+msgid "Screen position (percentage, [0,0] is bottom left)"
+msgstr "Posición de pantalla (porcentaje, [0,0] es inferior izquierda)"
+
+msgid "Path to TrueType font (including file name)"
+msgstr "Ruta del tipo de letra TrueType (incluir nombre de fichero)"
+
+msgid "Height of letters (in percent of available frame height)"
+msgstr "Altura de letras (en porcentaje de la altura del marco disponible)"
+
+msgid "Either text or -c should be given"
+msgstr "Texto o se debe dar -c"
+
+msgid "Choose only one coordinate system for placement"
+msgstr "Elegir sólo un sistema de coordenadas para la ubicación"
+
+msgid "No font selected"
+msgstr "Ninguna fuente seleccionada"
+
+msgid "Invalid font: %s"
+msgstr "Fuente inválida: %s"
+
+msgid "Unable to create text conversion context"
+msgstr "No se puede crear el contexto de conversión de texto"
+
+msgid "Text conversion error"
+msgstr "Error en la conversión de texto"
+
+msgid "Unable to write the temporary file"
+msgstr "No se puede escribir el archivo temporal"
+
+msgid "No predefined font"
+msgstr "Ninguna fuente predefinida"
+
+msgid "%s: Unable to read font"
+msgstr "%s: No se puede leer la fuente"
+
+msgid "%s: Unable to read FreeType definition file; use the default"
+msgstr ""
+"%s: no se puede leer el archivo de definición FreeType; use el predeterminado"
+
+msgid "%s: No FreeType definition file"
+msgstr "%s: ninún archivo de definición FreeType"
+
+msgid "%s: Unable to read FreeType definition file"
+msgstr "%s: no se puede leer el archivo de definición FreeType"
+
+msgid "No LatLong information for XY-Projection"
+msgstr "Sin información de latitud/longitud para la proyección XY"
+
+msgid "Quietly"
+msgstr "De forma silenciosa"
+
+msgid ""
+"The '-q' flag is superseded and will be removed in future. Please use '--"
+"quiet' instead"
+msgstr ""
+"La opción '-q' está suplantada y se eliminará en el futuro. Por favor, use "
+"'--quiet' en su lugar"
+
+msgid "Quiet - Do not show progress"
+msgstr "Silencioso - no muestra el progreso"
+
+msgid "Suppress single crossing error messages"
+msgstr "Suprime mensaje de error de cruzamiento simple"
+
+msgid ""
+"The '-q' and '-n' flag is superseded and will be removed in future. Please "
+"use '--quiet' instead."
+msgstr ""
+"Las opciones '-q' y '-n' son suplantadas y serán eliminadas en el futuro. "
+"Por favor use '--quiet' en su lugar."
+
+msgid "G_put_raster_row failed (file system full?)"
+msgstr "G_put_raster_row falló (¿sistema de archivos lleno?)"
+
+msgid "Quiet; No chatter"
+msgstr "En silencio; Sin comentarios"
+
+msgid "Raster file(s) for Elevation"
+msgstr "Archivo(s) ráster para elevación"
+
+msgid "Raster file(s) for Color"
+msgstr "Archivo(s) ráster para color"
+
+msgid ""
+"Not enough data columns. Incorrect delimiter or column number?\n"
+"[%s]"
+msgstr ""
+"Columnas de datos insuficientes. ¿Delimitador o número de columna "
+"incorrecto?\n"
+"[%s]"
+
+msgid ""
+"Input raster map constains cells with NULL-value (no-data). For no-data "
+"values was used value %g. You can specify nodata value by %s parameter."
+msgstr ""
+"El mapa ráster de entrada contiene celdas con valor NULO (sin datos). Para "
+"los valores sin datos se usó el valor %g. Puede especificar el valor para "
+"para las celdas sin datos con el parámetro %s."
+
+msgid "Name of the vector points map with x,y locations"
+msgstr "Nombre del mapa vectorial de puntos con localizaciones X,Y"
+
+msgid "Number of time iterations (sec.)"
+msgstr "Número de repeticiones de tiempo (segundos)"
+
+msgid "Multiscale simulation"
+msgstr "Simulación multiescala"
+
+msgid "Running MAY 10 version"
+msgstr "Ejecutando la versión MAY 10"
+
+msgid "Name of the elevation raster map, same units as N,E: [m] or [ft] "
+msgstr ""
+"Nombre del mapa ráster de elevaciones, en las mismas unidades que N,E: [m] o "
+"[pies]"
+
+msgid "Name of the x-derivatives raster map [m/m] or [ft/ft]"
+msgstr "Nombre del mapa ráster de derivadas de X [m/m] o [pies/pies]"
+
+msgid "Name of the y-derivatives raster map [m/m] or [ft/ft]"
+msgstr "Nombre del mapa ráster de derivadas de Y [m/m] o [pies/pies]"
+
+msgid "Threshold distance set to %g map units (based on 2D resolution)"
+msgstr ""
+"Distancia umbral establecida a %g unidades de mapa (basado en resolución 2D)"
+
+msgid "Raster map to zoom into"
+msgstr "Mapa ráster en el que hacer zum"
+
+msgid "Save the current region to region definition file"
+msgstr "Guardar la región actual en archivo de definición de región"
+
+msgid "Multiplier"
+msgstr "Multiplicador"
+
+msgid "Unknown query tool '%s'"
+msgstr "Herramienta de consulta '%s' desconocida"
+
+msgid "Column type [%d] not supported"
+msgstr "Tipo de columna [%d] no soportado"
+
+msgid "defaulting to nearest neighbor sampling"
+msgstr "haciendo predeterminado el muestreo por el vecino más próximo"
+
+msgid "Only %d lines found, at least two needed"
+msgstr "Sólo se han encontrado %d líneas, se necesitan el menos dos"
+
+msgid "Unable to delete line %d"
+msgstr "No se puede borrar la línea %d"
+
+msgid "Unable to write line %d"
+msgstr "No se puede escribir la línea %d"
+
+msgid "Unable to connect line id %d to line %d"
+msgstr "No se puede conectar la línea con ID %d a la línea %d"
+
+msgid ""
+"Unable to connect line id %d to line %d because of threshold distance. Run v."
+"edit with other threshold distance value."
+msgstr ""
+"No se puede conectar la línea con ID %d a la línea %d por la distancia "
+"umbral. Ejecute v.edit con otro valor de distancia umbral."
+
+msgid "Unable to get category list <%s>, editing terminated"
+msgstr "No se puede obtener la lista de categorías <%s>, edición terminada"
+
+msgid "Unable to delete layer/category [%d/%d] line %d"
+msgstr "No se puede borrar la capa/categoría [%d/%d] línea %d"
+
+msgid "\rDuplicate area centroids: %5d"
+msgstr "\rCentroides de área duplicados: %5d"
+
+msgid "\rRemoved vertices: %5d"
+msgstr "\rVértices eliminados: %5d"
+
+msgid ""
+"Load values from vector to database. For uploaded/printed category values '-"
+"1' is used for 'no category' and 'null'/'-' if category cannot be found or "
+"multiple categories were found."
+msgstr ""
+"Cargar valores de vectorial a base de datos. Para valores de categorías "
+"subidos/impresos se usa '-1' para 'sin categoría' y 'null'/'-' si la "
+"categoría no se puede encontrar o se encontraron múltiples categorías."
+
+msgid "Column(s)"
+msgstr "Columna(s)"
+
+msgid "Cannot open OGR data source '%s'"
+msgstr "No se puede abrir el origen de datos OGR '%s'"
+
+msgid "Cannot create layer"
+msgstr "No se puede crear la capa"
+
+msgid ""
+"\a\n"
+"** The following raster maps in subgroup [%s] do not exist:"
+msgstr ""
+"\a\n"
+"** Los siguientes mapas ráster en el subgrupo [%s] no existen:"
+
+msgid "       %s"
+msgstr "       %s"
+
+#, fuzzy
+#~ msgid "Name of raster map to generate legend from"
+#~ msgstr "Nombre del mapa ráster a usar para <%s>"
+
+#, fuzzy
+#~ msgid "Enter raster map to display in 1st frame"
+#~ msgstr "Introducir mapa ráster a mostrar en el segundo marco"
+
+#~ msgid "        Number of bytes per cell"
+#~ msgstr "        Número de bytes por celda"
+
+#, fuzzy
+#~ msgid "No attribute table found"
+#~ msgstr "Atributo no encontrado"
+
+#, fuzzy
+#~ msgid "No numerical attributes found. Skipping export"
+#~ msgstr "No se encontraron áreas, se salta el tipo=polígono"
+
+#, fuzzy
+#~ msgid "Error reading value of attribute '%s'"
+#~ msgstr "Error al leer categorías: '%s'"
+
+#~ msgid "Illegal subgroup name <%s>"
+#~ msgstr "Nombre de subgrupo <%s> no admitido"
+
+#, fuzzy
+#~ msgid "Database is not a %s"
+#~ msgstr "Nombre de la base de datos de entrada"
+
+#~ msgid "No monitor selected"
+#~ msgstr " Ningún monitor seleccionado"
 
 #, fuzzy
 #~ msgid ""
-#~ "g;use the libgis render functions (features: clipping);r;use the raster "
-#~ "graphics library functions (features: polylines);d;use the display "
-#~ "library basic functions (features: polylines);c;use the display library "
-#~ "clipping functions (features: clipping);l;use the display library culling "
-#~ "functions (features: culling, polylines)"
+#~ "d;use the display library basic functions (features: polylines);c;use the "
+#~ "display library clipping functions (features: clipping);l;use the display "
+#~ "library culling functions (features: culling, polylines)"
 #~ msgstr ""
 #~ "g;usar las funciones de renderización de libgis (funciones: clipping);r;"
 #~ "usar las funciones de la biblioteca de gráficos ráster (funciones: "
@@ -28829,692 +29550,20 @@ msgstr "No se pueden seleccionar los atributos de los puntos de <%s>"
 #~ "de culling de la biblioteca de visualización (funciones: culling, "
 #~ "polilíneas)"
 
-#~ msgid ""
-#~ "Don't add to list of vectors and commands in monitor (it won't be drawn "
-#~ "if the monitor is refreshed)"
-#~ msgstr ""
-#~ "No añadir a la lista de vectoriales y comandos en el monitor (no se "
-#~ "dibujarán si se refresca el monitor)"
-
-#~ msgid "No raster map exists in the current window"
-#~ msgstr "No existe ningún mapa ráster en la ventana actual"
-
-#~ msgid ""
-#~ "Creates and displays a menu within the active frame on the graphics "
-#~ "monitor."
-#~ msgstr "Crea y muestra un menú en el marco activo de la pantalla."
-
-#~ msgid "Sets the color of the menu background"
-#~ msgstr "Establece el color de fondo del menú"
-
-#~ msgid "Sets the color of the menu text"
-#~ msgstr "Establece el color del texto del menú"
-
-#~ msgid "Sets the color dividing lines of text"
-#~ msgstr "Establece el color de separación de líneas de texto"
-
-#~ msgid "Sets the menu text size (in percent)"
-#~ msgstr "Establece el tamaño de texto del menú (en porcentaje)"
-
-#~ msgid "Menu must contain a title and at least one option"
-#~ msgstr "El menú debe contener un título y al menos una opción"
-
-#~ msgid "Don't add to list of rasters and commands in monitor"
-#~ msgstr "No añadir a la lista de rásters y comandos en el monitor"
-
-#~ msgid "One mouse click only"
-#~ msgstr "Un solo clic del ratón"
-
-#~ msgid "Use mouse to interactively place scale"
-#~ msgstr "Usar el ratón para situar la escala de forma interactiva"
-
-#~ msgid "Use mouse to interactively place text"
-#~ msgstr "Usar el ratón para situar el texto de forma interactiva"
-
-#~ msgid "Click!\n"
-#~ msgstr "¡Clic!\n"
-
-#~ msgid " Left:    Place text here\n"
-#~ msgstr " Izquierda:    Sitúe el texto aquí\n"
-
-#~ msgid " Right:   Quit\n"
-#~ msgstr " Derecha:   Salir\n"
-
-#~ msgid "Just redraw given maps using default colors"
-#~ msgstr "Sólo redibujar los mapas dados usando colores predeterminados"
-
-#~ msgid "ERROR: can not get \"list\" items"
-#~ msgstr "ERROR: no se pueden obtener los elementos de \"lista\""
-
-#~ msgid "-j flag forced"
-#~ msgstr "Opción -j forzada"
-
-#~ msgid "No map is displayed in GRASS monitor"
-#~ msgstr "Ningún mapa está mostrado en el monitor de GRASS"
-
-#~ msgid "Interactively select route"
-#~ msgstr "Seleccionar ruta de forma interactiva"
-
-#~ msgid "You must select more than one point"
-#~ msgstr "Debe seleccionar más de un punto"
-
-#~ msgid "You must select at least four points"
-#~ msgstr "Debe seleccionar al menos cuatro puntos"
-
-#~ msgid "No raster or vector map displayed"
-#~ msgstr "Ningún mapa ráster o vectorial mostrado"
-
-#~ msgid "To establish and control use of a graphics display monitor."
-#~ msgstr "Para establecer y controlar el uso de una pantalla."
-
-#~ msgid "Name of graphics monitor to start"
-#~ msgstr "Nombre de la pantalla a iniciar"
-
-#~ msgid "Name of graphics monitor to stop"
-#~ msgstr "Nombre de la pantalla a detener"
-
-#~ msgid "Name of graphics monitor to select"
-#~ msgstr "Nombre de la pantalla a seleccionar"
-
-#~ msgid "Name of graphics monitor to unlock"
-#~ msgstr "Nombre de la pantalla a desbloquear"
-
-#~ msgid "List all monitors"
-#~ msgstr "Listar todas las pantallas"
-
-#~ msgid "List all monitors (with current status)"
-#~ msgstr "Listar todas las pantallas (con el estado actual)"
-
-#~ msgid "Print name of currently selected monitor"
-#~ msgstr "Impirmir el nombre de la pantalla seleccionada actualmente"
-
-#~ msgid "Release currently selected monitor"
-#~ msgstr "Libera la pantalla seleccionada actualmente"
-
-#~ msgid "Do not automatically select when starting"
-#~ msgstr "No seleccionar automáticamente al empezar"
-
-#~ msgid "Problem selecting %s. Will try once more"
-#~ msgstr "Problema al seleccionar %s. Se intentará otra vez"
-
-#~ msgid "Usage:  %s monitor_name"
-#~ msgstr "Uso: %s nombre de monitor"
-
-#~ msgid "No such monitor as <%s>"
-#~ msgstr "No hay tal monitor <%s>"
-
-#~ msgid "%s: -%c unrecognized option"
-#~ msgstr "%s: opción -%c no reconocida"
-
-#~ msgid "Monitor <%s> released"
-#~ msgstr "Monitor <%s> liberado"
-
-#~ msgid "Monitor <%s> in use by another user"
-#~ msgstr "Monitor <%s> en uso por otro usuario"
-
-#~ msgid "Failed testing lock mechanism"
-#~ msgstr "Fallo al probar el mecanismo de bloqueo"
-
-#~ msgid "Usage:  %s [-fv] [name]"
-#~ msgstr "Uso: %s [-fv] [nombre]"
-
-#~ msgid "Usage: %s [-f] monitor_name"
-#~ msgstr "Uso: %s [-f] nombre de monitor"
-
-#~ msgid "Monitor '%s' terminated"
-#~ msgstr "Monitor '%s' terminado"
-
-#~ msgid "Error - Monitor '%s' was not running"
-#~ msgstr "Error - El monitor '%s' no estaba funcionando"
-
-#~ msgid "Error - Monitor '%s' in use by another user"
-#~ msgstr "Error - Monitor '%s' en uso por otro usuario"
-
-#~ msgid "Error - Locking mechanism failed"
-#~ msgstr "Error - Falló el mecanismo de bloqueo"
-
-#~ msgid "Error choosing frame [%s]\n"
-#~ msgstr "Error al elegir el marco [%s]\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Buttons:\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Botones:\n"
-
-#~ msgid "Left:   Select frame\n"
-#~ msgstr "Izquierda:   Seleccionar marco\n"
-
-#~ msgid "Middle: Keep original frame\n"
-#~ msgstr "Centro: Mantener marco original\n"
-
-#~ msgid "Right:  Accept frame\n"
-#~ msgstr "Derecha:  Aceptar marco\n"
-
-#~ msgid "Manages display frames on the user's graphics monitor."
-#~ msgstr "Gestiona marcos de presentación en la pantalla del usuario."
-
-#~ msgid "Create a new frame"
-#~ msgstr "Crea un nuevo marco"
-
-#~ msgid "Select a frame"
-#~ msgstr "Seleccionar un marco"
-
-#~ msgid "Print name of current frame"
-#~ msgstr "Imprimir el nombre del marco actual"
-
-#~ msgid "Print names of all frames"
-#~ msgstr "Imprimir el nombre de todos los marcos"
-
-#~ msgid "List map names displayed in GRASS monitor"
-#~ msgstr "Listar nombres de los mapas mostrados en el monitor de GRASS"
-
-#~ msgid "Debugging output"
-#~ msgstr "Salida de depuración"
-
-#~ msgid "Frame to be created/selected"
-#~ msgstr "Marco a crear/seleccionar"
-
-#~ msgid "bottom,top,left,right"
-#~ msgstr "inferior,superior,izquierda,derecha"
-
-#~ msgid "Where to place the frame, values in percent (implies -c)"
-#~ msgstr "Dónde colocar el marco, valores en porcentaje (implica -c)"
-
-#~ msgid ""
-#~ "\n"
-#~ "Mouse Buttons:"
-#~ msgstr ""
-#~ "\n"
-#~ "Botones del ratón:"
-
-#~ msgid "Left:   Select From\n"
-#~ msgstr "Izquierda: seleccionar desde\n"
-
-#~ msgid "Middle: Select To\n"
-#~ msgstr "Centro: seleccionar hasta\n"
-
-#~ msgid ""
-#~ "Right:  Quit\n"
-#~ "\n"
-#~ msgstr ""
-#~ "Derecho: salir\n"
-#~ "\n"
-
-#~ msgid "Monitor: interactive command in redraw"
-#~ msgstr "Monitor: comando interactivo en redibujar"
-
-#~ msgid "found %d visuals of type TrueColor"
-#~ msgstr "%d visuales encontrados de tipo TrueColor"
-
-#~ msgid "searching for highest bit depth"
-#~ msgstr "buscando la profundidad de bit más alta"
-
-#~ msgid "selected %d bit depth"
-#~ msgstr "profundidad de bit %d seleccionada"
-
-#~ msgid "using default visual which is %s"
-#~ msgstr "utilizando el visual predeterminado, que es %s"
-
-#~ msgid "Monitor: waitpid: expected %d but got %d"
-#~ msgstr "Monitor: waitpid: se esperaba %d pero se obtuvo %d"
-
-#~ msgid "Monitor: XGetWMName failed"
-#~ msgstr "Monitor: XGetWMName falló"
-
-#~ msgid "Monitor: XGetWMName: bad result"
-#~ msgstr "Monitor: XGetWMName: mal resultado"
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "WARNING!  A projection file already exists for this location\n"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "¡AVISO!  Ya existe un archivo de proyección para esta localización\n"
-
-#~ msgid ""
-#~ "Would you still like to overwrite the current projection information "
-#~ msgstr ""
-#~ "¿Todavía quiere sobrescribir la información de la proyección actual? "
-
-#~ msgid "The projection information will not be updated."
-#~ msgstr "La información de la proyección no se actualizará."
-
-#~ msgid "Enable interactive prompting (for command-line use only)"
-#~ msgstr "Activar introducción interactiva (sólo para línea de comandos)"
-
-#~ msgid "<%s> is an illegal region name"
-#~ msgstr "<%s> es un nombre de región no admitido"
+#, fuzzy
+#~ msgid "Invalid rendering method <%s>"
+#~ msgstr "Método no válido: %s"
 
 #, fuzzy
-#~ msgid "Erasing monitors..."
-#~ msgstr "Borrando monitores..."
+#~ msgid "Unable to create face"
+#~ msgstr "No se puede crear el índice"
 
-#~ msgid "Apply regular expressions and wildcards to g.remove"
+#~ msgid "Unable to set size"
+#~ msgstr "No se puede establecer el tamaño"
+
+#~ msgid "format"
+#~ msgstr "formato"
+
+#, fuzzy
+#~ msgid "Apply regular expressions and wildcards to g.list"
 #~ msgstr "Aplicar expresiones regulares y comodines a g.remove"
-
-#~ msgid "Memory allocation error"
-#~ msgstr "Error de asignación de memoria"
-
-#~ msgid "Cannot execute: %s"
-#~ msgstr "No se puede ejecutar: %s"
-
-#~ msgid "Cannot link table: %s"
-#~ msgstr "No se puede conectar la tabla: %s"
-
-#~ msgid "Name of input raster map(s)"
-#~ msgstr "Nombre del mapa(s) ráster de entrada"
-
-#~ msgid "Output file extension (inputfile(s) + extension)"
-#~ msgstr ""
-#~ "La extensión del archivo de salida (archivo(s) de salida + extensión)"
-
-#~ msgid "Display manager for GRASS"
-#~ msgstr "Administrador de visualización para GRASS"
-
-#~ msgid "Name of .dmrc settings file"
-#~ msgstr "Nombre del archivo de configuración .dmrc"
-
-#~ msgid "Saves active display monitor to PNG file in home directory"
-#~ msgstr "Guarda el monitor activo a un archivo PNG en el directorio home"
-
-#~ msgid "Resolution of output file (single=1, double=2, quad=4)"
-#~ msgstr "Resolución del archivo de salida (único=1, doble=2, cuádruple=4)"
-
-#~ msgid ""
-#~ "Divides active display into two frames & displays maps/executes commands "
-#~ "in each frame."
-#~ msgstr ""
-#~ "Divide la visualización activa en dos marcos y muestra los mapas/ejecuta "
-#~ "los comandos en cada uno."
-
-#~ msgid "Enter command to execute in 1st frame"
-#~ msgstr "Introducir comando a ejecutar en el primer marco"
-
-#~ msgid "Enter raster map to display in 2nd frame"
-#~ msgstr "Introducir mapa ráster a mostrar en el segundo marco"
-
-#~ msgid "Enter command to execute in 2nd frame"
-#~ msgstr "Introducir comando a ejecutar en el segundo marco"
-
-#~ msgid "How to split display"
-#~ msgstr "Como dividir la visualización"
-
-#~ msgid "Keep band numbers instead of using band color names."
-#~ msgstr ""
-#~ "Mantener números de banda en vez de usar nombres de color de las bandas."
-
-#~ msgid "calculates univariate statistics from a GRASS raster map"
-#~ msgstr ""
-#~ "Calcula estadísticas univariantes a partir de un mapa ráster de GRASS."
-
-#~ msgid "extended statistics (quartiles and percentile)"
-#~ msgstr "estadísticas ampliadas (cuartiles y percentiles)"
-
-#~ msgid "Percentile to calculate (requires -e flag)"
-#~ msgstr "Percentil a calcular (requiere la opción -e)"
-
-#~ msgid "Saving new map"
-#~ msgstr "Guardando el nuevo mapa"
-
-#~ msgid "Cell area: %f"
-#~ msgstr "Área de celda: %f"
-
-#~ msgid "Terrain raster map (DEM)"
-#~ msgstr "Mapa ráster de terreno (MDT)"
-
-#~ msgid "Output raster map with lake"
-#~ msgstr "Producir mapa ráster con lago"
-
-#~ msgid "Cannot write lake raster map <%s>!"
-#~ msgstr "¡No se puede escribir el mapa ráster de lago <%s>!"
-
-#~ msgid "Terrain raster map <%s> not found!"
-#~ msgstr "¡Mapa ráster de terreno <%s> no encontrado!"
-
-#~ msgid "Cannot open terrain raster map <%s@%s>!"
-#~ msgstr "¡No se puede abrir el mapa ráster de terreno <%s@%s>!"
-
-#, fuzzy
-#~ msgid "Seed map <%s> not found!"
-#~ msgstr "mapa <%s> no encontrado"
-
-#, fuzzy
-#~ msgid "Cannot open seed map <%s@%s>!"
-#~ msgstr "No se puede abrir la base de datos %s"
-
-#~ msgid "Failure to allocate memory for row pointers"
-#~ msgstr "Fallo al asignar memoria para punteros de fila"
-
-#~ msgid "Loading maps: "
-#~ msgstr "Cargando mapas: "
-
-#~ msgid "Error reading terrain raster map. Probably broken file."
-#~ msgstr ""
-#~ "Error al leer el mapa ráster de terreno. Probablemente el archivo está "
-#~ "corrupto."
-
-#, fuzzy
-#~ msgid "Error reading seed raster map. Probably broken file."
-#~ msgstr ""
-#~ "Error al leer el mapa ráster de . Probablemente el archivo está corrupto."
-
-#~ msgid "Cannot write lake raster map <%s@%s>!"
-#~ msgstr "¡No se puede escribir el mapa ráster de lago <%s@%s>!"
-
-#~ msgid ""
-#~ "Starting lake filling at level of %8.4f in %d passes. \n"
-#~ "Percent done:"
-#~ msgstr ""
-#~ "Empezando el relleno del lago al nivel %8.4f en %d pases.\n"
-#~ "Porcentaje hecho:"
-
-#~ msgid "Pass: %d\n"
-#~ msgstr "Pase: %d\n"
-
-#~ msgid "Error writing color file for <%s@%s>!"
-#~ msgstr "¡Error al escribir archivo de color para <%s@%s>!"
-
-#~ msgid "All done."
-#~ msgstr "Todo hecho."
-
-#~ msgid "Calculates <simple> index on a raster map"
-#~ msgstr "Calcula el índice <simple> en un mapa ráster"
-
-#~ msgid "raster, landscape structure analysis, job launcher"
-#~ msgstr "ráster, análisis de estructura de paisaje, lanzador de trabajos"
-
-#~ msgid "Bilinear interpolation utility for raster map layers."
-#~ msgstr "Utilidad de interpolación bilineal para capas de mapa ráster."
-
-#~ msgid ""
-#~ "Specific input value to be assigned to the north and/or south poles for "
-#~ "longitude-latitude grids"
-#~ msgstr ""
-#~ "Valores de entrada específicos a asignar a los polos Norte y/o Sur para "
-#~ "cuadrículas longitud-latitud"
-
-#~ msgid "This module is deprecated. Please use 'r.resamp.interp' instead."
-#~ msgstr ""
-#~ "Este módulo está despreciado. Por favor, use 'r.resamp.interp' en su "
-#~ "lugar."
-
-#~ msgid "Raster input maps(s)"
-#~ msgstr "Mapa(s) ráster de entrada"
-
-#~ msgid "Output file name"
-#~ msgstr "Nombre de archivo de salida"
-
-#~ msgid "%s: can't read fp range for [%s]"
-#~ msgstr "%s: no se puede leer el rango fp para [%s]"
-
-#~ msgid ""
-#~ "Raster map [%s] already exists.\n"
-#~ "Please try another."
-#~ msgstr ""
-#~ "El mapa ráster [%s] ya existe.\n"
-#~ "Por favor, pruebe otro."
-
-#~ msgid "DXF input file"
-#~ msgstr "Archivo DXF de entrada"
-
-#~ msgid "Cannot open dxf file <%s>"
-#~ msgstr "No se puede abrir el archivo dxf <%s>"
-
-#~ msgid "Cannot open new vector map <%s>"
-#~ msgstr "No se puede abrir el nuevo mapa vectorial <%s>"
-
-#~ msgid "Conversion of <%s> to vector map:"
-#~ msgstr "Conversión de <%s> a mapa vectorial:"
-
-#, fuzzy
-#~ msgid "Specified group does not exist"
-#~ msgstr "El grupo especificado no existe... Saliendo."
-
-#~ msgid "imagery group"
-#~ msgstr "grupo de imaginería"
-
-#~ msgid "imagery subgroup"
-#~ msgstr "subgrupo de imágenes"
-
-#~ msgid "output raster map"
-#~ msgstr "mapa de salida ráster"
-
-#~ msgid ""
-#~ "Generates and displays simple graphics on map layers drawn in the active "
-#~ "graphics monitor display frame."
-#~ msgstr ""
-#~ "Genera y muestra gráficos sencillos en capas de mapa dibujadas en el "
-#~ "marco de visualización del monitor activo."
-
-#~ msgid ""
-#~ "Unix file containg graphing instructions, if not given reads from "
-#~ "standard input"
-#~ msgstr ""
-#~ "Archivo Unix que contiene instrucciones gráficas. Si no se indica lee de "
-#~ "la entrada estándar"
-
-#~ msgid ""
-#~ "Color to draw with, either a standard GRASS color or R:G:B triplet "
-#~ "(separated by colons)"
-#~ msgstr ""
-#~ "Color con el que dibujar: color estándar de GRASS o triplete R:G:B "
-#~ "(separado por dos puntos)"
-
-#~ msgid "value [%.0f,%.0f] out of range [0-100]"
-#~ msgstr "valor [%.0f,%.0f] fuera de rango [0-100]"
-
-#~ msgid ""
-#~ "Draws text in the graphics monitor's active display frame using TrueType "
-#~ "fonts."
-#~ msgstr ""
-#~ "Escribe texto en el marco activo de la pantalla usando fuentes TrueType."
-
-#~ msgid "Screen position (percentage, [0,0] is bottom left)"
-#~ msgstr "Posición de pantalla (porcentaje, [0,0] es inferior izquierda)"
-
-#~ msgid "Path to TrueType font (including file name)"
-#~ msgstr "Ruta del tipo de letra TrueType (incluir nombre de fichero)"
-
-#~ msgid "Height of letters (in percent of available frame height)"
-#~ msgstr "Altura de letras (en porcentaje de la altura del marco disponible)"
-
-#~ msgid "Either text or -c should be given"
-#~ msgstr "Texto o se debe dar -c"
-
-#~ msgid "Choose only one coordinate system for placement"
-#~ msgstr "Elegir sólo un sistema de coordenadas para la ubicación"
-
-#~ msgid "No font selected"
-#~ msgstr "Ninguna fuente seleccionada"
-
-#~ msgid "Invalid font: %s"
-#~ msgstr "Fuente inválida: %s"
-
-#~ msgid "Unable to create text conversion context"
-#~ msgstr "No se puede crear el contexto de conversión de texto"
-
-#~ msgid "Text conversion error"
-#~ msgstr "Error en la conversión de texto"
-
-#~ msgid "Unable to write the temporary file"
-#~ msgstr "No se puede escribir el archivo temporal"
-
-#~ msgid "No predefined font"
-#~ msgstr "Ninguna fuente predefinida"
-
-#~ msgid "%s: Unable to read font"
-#~ msgstr "%s: No se puede leer la fuente"
-
-#~ msgid "%s: Unable to read FreeType definition file; use the default"
-#~ msgstr ""
-#~ "%s: no se puede leer el archivo de definición FreeType; use el "
-#~ "predeterminado"
-
-#~ msgid "%s: No FreeType definition file"
-#~ msgstr "%s: ninún archivo de definición FreeType"
-
-#~ msgid "%s: Unable to read FreeType definition file"
-#~ msgstr "%s: no se puede leer el archivo de definición FreeType"
-
-#~ msgid "No LatLong information for XY-Projection"
-#~ msgstr "Sin información de latitud/longitud para la proyección XY"
-
-#~ msgid "Quietly"
-#~ msgstr "De forma silenciosa"
-
-#~ msgid ""
-#~ "The '-q' flag is superseded and will be removed in future. Please use '--"
-#~ "quiet' instead"
-#~ msgstr ""
-#~ "La opción '-q' está suplantada y se eliminará en el futuro. Por favor, "
-#~ "use '--quiet' en su lugar"
-
-#~ msgid "Quiet - Do not show progress"
-#~ msgstr "Silencioso - no muestra el progreso"
-
-#~ msgid "Suppress single crossing error messages"
-#~ msgstr "Suprime mensaje de error de cruzamiento simple"
-
-#~ msgid ""
-#~ "The '-q' and '-n' flag is superseded and will be removed in future. "
-#~ "Please use '--quiet' instead."
-#~ msgstr ""
-#~ "Las opciones '-q' y '-n' son suplantadas y serán eliminadas en el futuro. "
-#~ "Por favor use '--quiet' en su lugar."
-
-#~ msgid "G_put_raster_row failed (file system full?)"
-#~ msgstr "G_put_raster_row falló (¿sistema de archivos lleno?)"
-
-#~ msgid "Quiet; No chatter"
-#~ msgstr "En silencio; Sin comentarios"
-
-#~ msgid "Raster file(s) for Elevation"
-#~ msgstr "Archivo(s) ráster para elevación"
-
-#~ msgid "Raster file(s) for Color"
-#~ msgstr "Archivo(s) ráster para color"
-
-#~ msgid ""
-#~ "Not enough data columns. Incorrect delimiter or column number?\n"
-#~ "[%s]"
-#~ msgstr ""
-#~ "Columnas de datos insuficientes. ¿Delimitador o número de columna "
-#~ "incorrecto?\n"
-#~ "[%s]"
-
-#~ msgid ""
-#~ "Input raster map constains cells with NULL-value (no-data). For no-data "
-#~ "values was used value %g. You can specify nodata value by %s parameter."
-#~ msgstr ""
-#~ "El mapa ráster de entrada contiene celdas con valor NULO (sin datos). "
-#~ "Para los valores sin datos se usó el valor %g. Puede especificar el valor "
-#~ "para para las celdas sin datos con el parámetro %s."
-
-#~ msgid "Name of the vector points map with x,y locations"
-#~ msgstr "Nombre del mapa vectorial de puntos con localizaciones X,Y"
-
-#~ msgid "Number of time iterations (sec.)"
-#~ msgstr "Número de repeticiones de tiempo (segundos)"
-
-#~ msgid "Multiscale simulation"
-#~ msgstr "Simulación multiescala"
-
-#~ msgid "Running MAY 10 version"
-#~ msgstr "Ejecutando la versión MAY 10"
-
-#~ msgid "Name of the elevation raster map, same units as N,E: [m] or [ft] "
-#~ msgstr ""
-#~ "Nombre del mapa ráster de elevaciones, en las mismas unidades que N,E: "
-#~ "[m] o [pies]"
-
-#~ msgid "Name of the x-derivatives raster map [m/m] or [ft/ft]"
-#~ msgstr "Nombre del mapa ráster de derivadas de X [m/m] o [pies/pies]"
-
-#~ msgid "Name of the y-derivatives raster map [m/m] or [ft/ft]"
-#~ msgstr "Nombre del mapa ráster de derivadas de Y [m/m] o [pies/pies]"
-
-#~ msgid "Threshold distance set to %g map units (based on 2D resolution)"
-#~ msgstr ""
-#~ "Distancia umbral establecida a %g unidades de mapa (basado en resolución "
-#~ "2D)"
-
-#~ msgid "Raster map to zoom into"
-#~ msgstr "Mapa ráster en el que hacer zum"
-
-#~ msgid "Save the current region to region definition file"
-#~ msgstr "Guardar la región actual en archivo de definición de región"
-
-#~ msgid "Multiplier"
-#~ msgstr "Multiplicador"
-
-#~ msgid "Unknown query tool '%s'"
-#~ msgstr "Herramienta de consulta '%s' desconocida"
-
-#~ msgid "Column type [%d] not supported"
-#~ msgstr "Tipo de columna [%d] no soportado"
-
-#~ msgid "defaulting to nearest neighbor sampling"
-#~ msgstr "haciendo predeterminado el muestreo por el vecino más próximo"
-
-#~ msgid "Only %d lines found, at least two needed"
-#~ msgstr "Sólo se han encontrado %d líneas, se necesitan el menos dos"
-
-#~ msgid "Unable to delete line %d"
-#~ msgstr "No se puede borrar la línea %d"
-
-#~ msgid "Unable to write line %d"
-#~ msgstr "No se puede escribir la línea %d"
-
-#~ msgid "Unable to connect line id %d to line %d"
-#~ msgstr "No se puede conectar la línea con ID %d a la línea %d"
-
-#~ msgid ""
-#~ "Unable to connect line id %d to line %d because of threshold distance. "
-#~ "Run v.edit with other threshold distance value."
-#~ msgstr ""
-#~ "No se puede conectar la línea con ID %d a la línea %d por la distancia "
-#~ "umbral. Ejecute v.edit con otro valor de distancia umbral."
-
-#~ msgid "Unable to get category list <%s>, editing terminated"
-#~ msgstr "No se puede obtener la lista de categorías <%s>, edición terminada"
-
-#~ msgid "Unable to delete layer/category [%d/%d] line %d"
-#~ msgstr "No se puede borrar la capa/categoría [%d/%d] línea %d"
-
-#~ msgid "\rDuplicate area centroids: %5d"
-#~ msgstr "\rCentroides de área duplicados: %5d"
-
-#~ msgid "\rRemoved vertices: %5d"
-#~ msgstr "\rVértices eliminados: %5d"
-
-#~ msgid ""
-#~ "Load values from vector to database. For uploaded/printed category values "
-#~ "'-1' is used for 'no category' and 'null'/'-' if category cannot be found "
-#~ "or multiple categories were found."
-#~ msgstr ""
-#~ "Cargar valores de vectorial a base de datos. Para valores de categorías "
-#~ "subidos/impresos se usa '-1' para 'sin categoría' y 'null'/'-' si la "
-#~ "categoría no se puede encontrar o se encontraron múltiples categorías."
-
-#~ msgid "Column(s)"
-#~ msgstr "Columna(s)"
-
-#~ msgid "Cannot open OGR data source '%s'"
-#~ msgstr "No se puede abrir el origen de datos OGR '%s'"
-
-#~ msgid "Cannot create layer"
-#~ msgstr "No se puede crear la capa"
-
-#~ msgid ""
-#~ "\a\n"
-#~ "** The following raster maps in subgroup [%s] do not exist:"
-#~ msgstr ""
-#~ "\a\n"
-#~ "** Los siguientes mapas ráster en el subgrupo [%s] no existen:"
-
-#~ msgid "       %s"
-#~ msgstr "       %s"

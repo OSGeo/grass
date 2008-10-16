@@ -523,9 +523,9 @@ msgid "Unable to get list tables in database <%s>"
 msgstr "Nezmo¾en odpreti datoteko s tabelo elipsoida: %s"
 
 #: ../lib/db/dbmi_client/copy_tab.c:157
-#, c-format
+#, fuzzy, c-format
 msgid "Table <%s> already exists in database <%s>"
-msgstr ""
+msgstr "Nezmo¾en odpreti datoteko s tabelo elipsoida: %s"
 
 #: ../lib/db/dbmi_client/copy_tab.c:199 ../lib/db/dbmi_client/copy_tab.c:276
 #: ../lib/db/dbmi_client/table.c:110
@@ -1259,12 +1259,12 @@ msgstr ""
 #: ../lib/vector/Vlib/write_nat.c:640
 #, fuzzy
 msgid "Attempt to delete dead feature"
-msgstr "Ne morem odpreti temp datoteke"
+msgstr "Ne morem prebrati histograma za [%s v %s]"
 
 #: ../lib/vector/Vlib/write_nat.c:885
 #, fuzzy
 msgid "Attempt to restore alive feature"
-msgstr "Ne morem odpreti temp datoteke"
+msgstr "Ne morem prebrati histograma za [%s v %s]"
 
 #: ../lib/vector/Vlib/level_two.c:210 ../lib/vector/Vlib/level_two.c:235
 #: ../lib/vector/Vlib/level_two.c:259 ../lib/vector/Vlib/level_two.c:278
@@ -1982,9 +1982,9 @@ msgid "Window replacing the default"
 msgstr "za izbrati privzeto"
 
 #: ../lib/g3d/g3dcolor.c:332
-#, c-format
+#, fuzzy, c-format
 msgid "mapset <%s> is not the current mapset"
-msgstr ""
+msgstr "Hro¹è: poskus posodobitve sloja, ki ni v trenutnem mapset."
 
 #: ../lib/g3d/g3dopen.c:20
 msgid "G3d_openCellOldNoHeader: error in G3d_maskOpenOld"
@@ -2045,7 +2045,7 @@ msgstr ""
 #: ../lib/g3d/g3dopen.c:229
 #, fuzzy, c-format
 msgid "map <%s> is not in the current mapset"
-msgstr "v trenutnem \"mapset\" ni datotek z imenom %s\n"
+msgstr "Hro¹è: poskus posodobitve sloja, ki ni v trenutnem mapset."
 
 #: ../lib/g3d/g3dopen.c:239
 msgid "G3d_openCellNew: could not open file"
@@ -2247,7 +2247,7 @@ msgstr ""
 #: ../lib/gis/opencell.c:932 ../lib/gis/opencell.c:1020
 #, fuzzy, c-format
 msgid "Unable to find '%s' in '%s'"
-msgstr "ne najdem [%s] v [%s]"
+msgstr "ne najdem [%s]"
 
 #: ../lib/gis/opencell.c:965
 #, fuzzy, c-format
@@ -2310,9 +2310,9 @@ msgid "'%s/%s' was found in more mapsets (also found in <%s>)"
 msgstr ""
 
 #: ../lib/gis/find_file.c:82
-#, c-format
+#, fuzzy, c-format
 msgid "Using <%s@%s>"
-msgstr ""
+msgstr "ne najdem [%s]"
 
 #: ../lib/gis/quant_io.c:89
 #, c-format
@@ -3884,9 +3884,9 @@ msgid "Vector map <%s> loaded (%d points)"
 msgstr "Vneseni vektor '%s' ni bil najden"
 
 #: ../lib/ogsf/GS2.c:1638
-#, c-format
+#, fuzzy, c-format
 msgid "Raster map <%s> is outside of current region. Load failed."
-msgstr ""
+msgstr "[%s] v \"mapset\" [%s] - v drugi coni [%d] kot trenutna regija [%d]"
 
 #: ../lib/ogsf/GS2.c:1716 ../lib/ogsf/GS2.c:1722 ../lib/ogsf/GS2.c:1730
 #: ../lib/ogsf/GS2.c:1739 ../lib/ogsf/GS2.c:1747 ../lib/ogsf/GS2.c:1757
@@ -4256,7 +4256,7 @@ msgstr ""
 #: ../lib/cairodriver/Graph.c:81
 #, fuzzy
 msgid "Unable to obtain visual"
-msgstr "Ne morem odpreti %s"
+msgstr "Nezmo¾en odpreti datoteko %s v %s"
 
 #: ../lib/cairodriver/Graph.c:86
 #, fuzzy
@@ -4407,669 +4407,676 @@ msgid "Unable to define new light"
 msgstr "Nezmo¾en odpreti datoteko %s v %s"
 
 #, fuzzy
-#~ msgid "Cannot describe table <%s>"
-#~ msgstr "Ne morem zapisati povezav z bazo podatkov."
+msgid "Cannot describe table <%s>"
+msgstr "Ne morem zapisati povezav z bazo podatkov."
 
-#~ msgid "ERROR %s from graphics driver.\n"
-#~ msgstr "NAPAKA %s iz grafiènega gonilnika.\n"
+msgid "ERROR %s from graphics driver.\n"
+msgstr "NAPAKA %s iz grafiènega gonilnika.\n"
 
-#~ msgid "ERROR - eof from graphics monitor.\n"
-#~ msgstr "NAPAKA - \"eof\" iz grafiènega monitorja.\n"
+msgid "ERROR - eof from graphics monitor.\n"
+msgstr "NAPAKA - \"eof\" iz grafiènega monitorja.\n"
 
-#~ msgid "Warning - no response from graphics monitor <%s>.\n"
-#~ msgstr "Opozorilo - grafièni monitor <%s> se ne odziva.\n"
+msgid "Warning - no response from graphics monitor <%s>.\n"
+msgstr "Opozorilo - grafièni monitor <%s> se ne odziva.\n"
 
-#~ msgid "Check to see if the mouse is still active.\n"
-#~ msgstr "Preizkusi ali je mi¹ka ¹e aktivna.\n"
+msgid "Check to see if the mouse is still active.\n"
+msgstr "Preizkusi ali je mi¹ka ¹e aktivna.\n"
 
-#~ msgid "ERROR - no response from graphics monitor <%s>.\n"
-#~ msgstr "NAPAKA - grafièni monitor <%s> se ne odziva.\n"
+msgid "ERROR - no response from graphics monitor <%s>.\n"
+msgstr "NAPAKA - grafièni monitor <%s> se ne odziva.\n"
 
 #, fuzzy
-#~ msgid "No graphics monitor has been selected for output."
-#~ msgstr "Noben grafièni monitor ni izbran za izhod.\n"
+msgid "No graphics monitor has been selected for output."
+msgstr "Noben grafièni monitor ni izbran za izhod.\n"
 
 #, fuzzy
-#~ msgid "Please run \"d.mon\" to select a graphics monitor."
-#~ msgstr "Prosim po¾enite \"d.mon\" za izbiro grafiènega monitorja.\n"
+msgid "Please run \"d.mon\" to select a graphics monitor."
+msgstr "Prosim po¾enite \"d.mon\" za izbiro grafiènega monitorja.\n"
 
 #, fuzzy
-#~ msgid "Failed to get socket name for monitor <%s>."
-#~ msgstr "Nisem uspel dobiti imena vtiènice za monitor <%s>.\n"
+msgid "Failed to get socket name for monitor <%s>."
+msgstr "Nisem uspel dobiti imena vtiènice za monitor <%s>.\n"
 
 #, fuzzy
-#~ msgid "No socket to connect to for monitor <%s>."
-#~ msgstr "Ni vtiènice, ki bi jo lahko povezal z monitorjem <%s>.\n"
+msgid "No socket to connect to for monitor <%s>."
+msgstr "Ni vtiènice, ki bi jo lahko povezal z monitorjem <%s>.\n"
 
 #, fuzzy
-#~ msgid "Socket is already in use or not accepting connections."
-#~ msgstr ""
-#~ "Vtiènica je ¾e v uporabi ali ne sprejema povezav.\n"
-#~ "Uporabi d.mon za izbiro monitorja\n"
+msgid "Socket is already in use or not accepting connections."
+msgstr ""
+"Vtiènica je ¾e v uporabi ali ne sprejema povezav.\n"
+"Uporabi d.mon za izbiro monitorja\n"
 
 #, fuzzy
-#~ msgid "Use d.mon to select a monitor"
-#~ msgstr "Prosim po¾enite \"d.mon\" za izbiro grafiènega monitorja.\n"
+msgid "Use d.mon to select a monitor"
+msgstr "Prosim po¾enite \"d.mon\" za izbiro grafiènega monitorja.\n"
 
 #, fuzzy
-#~ msgid "Trying to connect to something not a socket."
-#~ msgstr ""
-#~ "Poskus povezave z neèem, kar ni vtiènica.\n"
-#~ "Verjetno je napaka v programu.\n"
+msgid "Trying to connect to something not a socket."
+msgstr ""
+"Poskus povezave z neèem, kar ni vtiènica.\n"
+"Verjetno je napaka v programu.\n"
 
 #, fuzzy
-#~ msgid "Probably an error with the server."
-#~ msgstr ""
-#~ "Èas za poskus priklopa se je iztekel. Verjetno zaradi napake na "
-#~ "stre¾niku.\n"
+msgid "Probably an error with the server."
+msgstr ""
+"Èas za poskus priklopa se je iztekel. Verjetno zaradi napake na stre¾niku.\n"
 
 #, fuzzy
-#~ msgid "Connection failed."
-#~ msgstr "Povezava ni uspela.\n"
+msgid "Connection failed."
+msgstr "Povezava ni uspela.\n"
 
 #, fuzzy
-#~ msgid "Cannot read topo for line [%d]"
-#~ msgstr "Ne morem prebrati histograma za [%s v %s]"
+msgid "Cannot read topo for line [%d]"
+msgstr "Ne morem prebrati histograma za [%s v %s]"
 
 #, fuzzy
-#~ msgid "Unable to open file %s"
-#~ msgstr "Nezmo¾en odpreti datoteko %s v %s"
+msgid "Unable to open file %s"
+msgstr "Nezmo¾en odpreti datoteko %s v %s"
 
 #, fuzzy
-#~ msgid "Unable to open temporary file"
-#~ msgstr "Nezmo¾en odpreti datoteko %s v %s"
+msgid "Unable to open temporary file"
+msgstr "Nezmo¾en odpreti datoteko %s v %s"
 
-#~ msgid "Hit RETURN to cancel request\n"
-#~ msgstr "Pritisni RETURN za razveljaviti zahtevo\n"
+msgid "Hit RETURN to cancel request\n"
+msgstr "Pritisni RETURN za razveljaviti zahtevo\n"
 
-#~ msgid "Cannot open temp file"
-#~ msgstr "Ne morem odpreti temp datoteke"
+msgid "Cannot open temp file"
+msgstr "Ne morem odpreti temp datoteke"
 
-#~ msgid ""
-#~ "\n"
-#~ "Please specify ellipsoid name\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Prosim doloèite ime elipsoida\n"
+msgid ""
+"\n"
+"Please specify ellipsoid name\n"
+msgstr ""
+"\n"
+"Prosim doloèite ime elipsoida\n"
 
-#~ msgid "Enter 'list' for the list of available ellipsoids\n"
-#~ msgstr "Vpi¹i 'list' za spisek elipsoidov na voljo\n"
+msgid "Enter 'list' for the list of available ellipsoids\n"
+msgstr "Vpi¹i 'list' za spisek elipsoidov na voljo\n"
 
-#~ msgid ""
-#~ "\n"
-#~ "invalid ellipsoid\n"
-#~ msgstr ""
-#~ "\n"
-#~ "neveljaven elipsoid\n"
+msgid ""
+"\n"
+"invalid ellipsoid\n"
+msgstr ""
+"\n"
+"neveljaven elipsoid\n"
 
 #, fuzzy
-#~ msgid "Output name '%s' is not valid rast name."
-#~ msgstr "Izhodno ime '%s' ni veljavno ime za vektor."
+msgid "Output name '%s' is not valid rast name."
+msgstr "Izhodno ime '%s' ni veljavno ime za vektor."
 
-#~ msgid "Output map '%s' is used as input"
-#~ msgstr "Izhodni sloj '%s' je uporabljen kot vhodni"
-
-#~ msgid ""
-#~ "\n"
-#~ "Please specify datum name\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Prosim doloèite fundamentalno toèko\n"
-
-#~ msgid "Enter 'list' for the list of available datums\n"
-#~ msgstr "Vpi¹ite 'list' za spisek fundamentalnih toèk, ki so na voljo\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "invalid datum\n"
-#~ msgstr ""
-#~ "\n"
-#~ "neveljavna fundamentalna toèka\n"
-
-#~ msgid "hit RETURN to continue -->"
-#~ msgstr "pritisnite RETURN za nadaljevanje -->"
-
-#~ msgid "unable to open raster map [%s in %s]"
-#~ msgstr "ne morem odpreti rastrskega sloja [%s v %s]"
-
-#~ msgid "one moment...\n"
-#~ msgstr "trenutek...\n"
-
-#~ msgid "No help available for command [%s]\n"
-#~ msgstr "Za ukaz [%s] ni na voljo pomoèi\n"
-
-#~ msgid " The raster map %s@%s is empty"
-#~ msgstr "Rastrski sloj %s@%s je prazen"
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "Color table needed for file [%s] in mapset [%s].\n"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "Datoteka [%s] v \"mapset\" [%s] potrebuje barvno tabelo.\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Please identify the type desired:\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Prosim identificiraj ¾eleni tip:\n"
-
-#~ msgid "    1:  Random colors\n"
-#~ msgstr "    1:  Nakljuène barve\n"
+msgid "Output map '%s' is used as input"
+msgstr "Izhodni sloj '%s' je uporabljen kot vhodni"
 
-#~ msgid "    2:  Red, green, and blue color ramps\n"
-#~ msgstr "    2:  Rdeèe, zeleno modri barvni prehod\n"
+msgid ""
+"\n"
+"Please specify datum name\n"
+msgstr ""
+"\n"
+"Prosim doloèite fundamentalno toèko\n"
+
+msgid "Enter 'list' for the list of available datums\n"
+msgstr "Vpi¹ite 'list' za spisek fundamentalnih toèk, ki so na voljo\n"
+
+msgid ""
+"\n"
+"invalid datum\n"
+msgstr ""
+"\n"
+"neveljavna fundamentalna toèka\n"
+
+msgid "hit RETURN to continue -->"
+msgstr "pritisnite RETURN za nadaljevanje -->"
+
+msgid "unable to open raster map [%s in %s]"
+msgstr "ne morem odpreti rastrskega sloja [%s v %s]"
+
+msgid "one moment...\n"
+msgstr "trenutek...\n"
+
+msgid "No help available for command [%s]\n"
+msgstr "Za ukaz [%s] ni na voljo pomoèi\n"
+
+msgid " The raster map %s@%s is empty"
+msgstr "Rastrski sloj %s@%s je prazen"
+
+msgid ""
+"\n"
+"\n"
+"Color table needed for file [%s] in mapset [%s].\n"
+msgstr ""
+"\n"
+"\n"
+"Datoteka [%s] v \"mapset\" [%s] potrebuje barvno tabelo.\n"
+
+msgid ""
+"\n"
+"Please identify the type desired:\n"
+msgstr ""
+"\n"
+"Prosim identificiraj ¾eleni tip:\n"
 
-#~ msgid "    3:  Color wave\n"
-#~ msgstr "    3:  Barvni val\n"
-
-#~ msgid "    4:  Gray scale\n"
-#~ msgstr "    4:  Sivinski barvni prehod\n"
-
-#~ msgid "    5:  Aspect\n"
-#~ msgstr "    5:  Senèenje reliefa\n"
-
-#~ msgid "    6:  Rainbow colors\n"
-#~ msgstr "    6:  Mavrièni barvni prehod\n"
-
-#~ msgid "    7:  Red through yellow to green\n"
-#~ msgstr "    7:  Rdeèe, rumeno, zeleni barvni prehod\n"
-
-#~ msgid "    8:  Green through yellow to red\n"
-#~ msgstr "    8:  Zeleno, rumeno, rdeèi barvni prehod\n"
-
-#~ msgid "RETURN  quit\n"
-#~ msgstr "RETURN zakljuèi\n"
+msgid "    1:  Random colors\n"
+msgstr "    1:  Nakljuène barve\n"
 
-#~ msgid ""
-#~ "\n"
-#~ "%s invalid; Try again > "
-#~ msgstr ""
-#~ "\n"
-#~ "%s neveljaven; Poskusi znova > "
+msgid "    2:  Red, green, and blue color ramps\n"
+msgstr "    2:  Rdeèe, zeleno modri barvni prehod\n"
 
+msgid "    3:  Color wave\n"
+msgstr "    3:  Barvni val\n"
+
+msgid "    4:  Gray scale\n"
+msgstr "    4:  Sivinski barvni prehod\n"
+
+msgid "    5:  Aspect\n"
+msgstr "    5:  Senèenje reliefa\n"
+
+msgid "    6:  Rainbow colors\n"
+msgstr "    6:  Mavrièni barvni prehod\n"
+
+msgid "    7:  Red through yellow to green\n"
+msgstr "    7:  Rdeèe, rumeno, zeleni barvni prehod\n"
+
+msgid "    8:  Green through yellow to red\n"
+msgstr "    8:  Zeleno, rumeno, rdeèi barvni prehod\n"
+
+msgid "RETURN  quit\n"
+msgstr "RETURN zakljuèi\n"
+
+msgid ""
+"\n"
+"%s invalid; Try again > "
+msgstr ""
+"\n"
+"%s neveljaven; Poskusi znova > "
+
 #, fuzzy
-#~ msgid "%s not found"
-#~ msgstr "ne najdem %s"
+msgid "%s not found"
+msgstr "ne najdem %s"
+
+msgid "ERROR in reading %s"
+msgstr "NAPAKA v branju %s"
 
-#~ msgid "ERROR in reading %s"
-#~ msgstr "NAPAKA v branju %s"
+msgid ""
+"\n"
+"\n"
+"Please specify projection name\n"
+msgstr ""
+"\n"
+"\n"
+"Prosim podaj ime projekcije\n"
 
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "Please specify projection name\n"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "Prosim podaj ime projekcije\n"
+msgid "Enter 'list' for the list of available projections\n"
+msgstr "Vnesi 'list' za spisek projekcij, ki so na voljo\n"
 
-#~ msgid "Enter 'list' for the list of available projections\n"
-#~ msgstr "Vnesi 'list' za spisek projekcij, ki so na voljo\n"
+msgid ""
+"\n"
+"invalid projection\n"
+msgstr ""
+"\n"
+"neveljavna projekcija\n"
 
-#~ msgid ""
-#~ "\n"
-#~ "invalid projection\n"
-#~ msgstr ""
-#~ "\n"
-#~ "neveljavna projekcija\n"
-
-#~ msgid "with titles"
-#~ msgstr "z naslovi"
+msgid "with titles"
+msgstr "z naslovi"
 
-#~ msgid "(no title)"
-#~ msgstr "(ni naslova)"
-
-#~ msgid ""
-#~ "\n"
-#~ "FLAG: Set the following flag?\n"
-#~ msgstr ""
-#~ "\n"
-#~ "IZBIRA: Doloèite naslednjo izbiro?\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "OPTION:   %s\n"
-#~ msgstr ""
-#~ "\n"
-#~ "MO®NOST:   %s\n"
-
-#~ msgid "     key: %s\n"
-#~ msgstr "     kljuè: %s\n"
-
-#~ msgid "  format: %s\n"
-#~ msgstr "  format: %s\n"
-
-#~ msgid " default: %s\n"
-#~ msgstr " privzet: %s\n"
-
-#~ msgid "required: %s\n"
-#~ msgstr "zahtevan: %s\n"
-
-#~ msgid "multiple: %s\n"
-#~ msgstr "veèkraten: %s\n"
+msgid "(no title)"
+msgstr "(ni naslova)"
+
+msgid ""
+"\n"
+"FLAG: Set the following flag?\n"
+msgstr ""
+"\n"
+"IZBIRA: Doloèite naslednjo izbiro?\n"
+
+msgid ""
+"\n"
+"OPTION:   %s\n"
+msgstr ""
+"\n"
+"MO®NOST:   %s\n"
+
+msgid "     key: %s\n"
+msgstr "     kljuè: %s\n"
+
+msgid "  format: %s\n"
+msgstr "  format: %s\n"
+
+msgid " default: %s\n"
+msgstr " privzet: %s\n"
+
+msgid "required: %s\n"
+msgstr "zahtevan: %s\n"
 
-#~ msgid "enter option > "
-#~ msgstr "vpi¹ite mo¾nost > "
+msgid "multiple: %s\n"
+msgstr "veèkraten: %s\n"
 
-#~ msgid "   Try again? "
-#~ msgstr "   Poskusite ¹e enkrat. "
+msgid "enter option > "
+msgstr "vpi¹ite mo¾nost > "
 
-#~ msgid "Sorry, %s is not accepted.\n"
-#~ msgstr "Oprostite, %s ni sprejet.\n"
+msgid "   Try again? "
+msgstr "   Poskusite ¹e enkrat. "
 
-#~ msgid ""
-#~ "\n"
-#~ "You have chosen:\n"
-#~ "  %s\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Izbrali ste:\n"
-#~ "  %s\n"
+msgid "Sorry, %s is not accepted.\n"
+msgstr "Oprostite, %s ni sprejet.\n"
 
-#~ msgid "Is this correct? "
-#~ msgstr "Ali je to pravilno? "
+msgid ""
+"\n"
+"You have chosen:\n"
+"  %s\n"
+msgstr ""
+"\n"
+"Izbrali ste:\n"
+"  %s\n"
 
-#~ msgid "to accept the default"
-#~ msgstr "za izbrati privzeto"
+msgid "Is this correct? "
+msgstr "Ali je to pravilno? "
 
-#~ msgid "to cancel request"
-#~ msgstr "za razveljaviti zahtevo"
+msgid "to accept the default"
+msgstr "za izbrati privzeto"
 
-#~ msgid "Enter a new %s file name"
-#~ msgstr "Vnesite novo %s ime datoteke"
+msgid "to cancel request"
+msgstr "za razveljaviti zahtevo"
 
-#~ msgid "Enter the name of an existing %s file"
-#~ msgstr "Vnesite ime obstojeèe %s datoteke"
+msgid "Enter a new %s file name"
+msgstr "Vnesite novo %s ime datoteke"
 
-#~ msgid "Enter %s file name"
-#~ msgstr "Vnesite %s ime datoteke"
+msgid "Enter the name of an existing %s file"
+msgstr "Vnesite ime obstojeèe %s datoteke"
 
-#~ msgid "Enter 'list' for a list of existing %s files\n"
-#~ msgstr "Vpi¹ite 'list' za spisek obstojeèih %s datotek\n"
+msgid "Enter %s file name"
+msgstr "Vnesite %s ime datoteke"
 
-#~ msgid "Enter 'list -f' for "
-#~ msgstr "Vpi¹ite 'list' -f za "
+msgid "Enter 'list' for a list of existing %s files\n"
+msgstr "Vpi¹ite 'list' za spisek obstojeèih %s datotek\n"
 
-#~ msgid "a list %s"
-#~ msgstr "spisek %s"
+msgid "Enter 'list -f' for "
+msgstr "Vpi¹ite 'list' -f za "
 
-#~ msgid "an extended list"
-#~ msgstr "raz¹irjen spisek"
+msgid "a list %s"
+msgstr "spisek %s"
 
-#~ msgid "Hit RETURN %s\n"
-#~ msgstr "Pritisnite RETURN %s\n"
+msgid "an extended list"
+msgstr "raz¹irjen spisek"
 
-#~ msgid ""
-#~ "\n"
-#~ "** %s - not found **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "** %s - ni bil najden **\n"
+msgid "Hit RETURN %s\n"
+msgstr "Pritisnite RETURN %s\n"
 
-#~ msgid ""
-#~ "\n"
-#~ "** %s exists. ok to overwrite? "
-#~ msgstr ""
-#~ "\n"
-#~ "** %s obstaja. Ali ¾elite, prepisati? "
+msgid ""
+"\n"
+"** %s - not found **\n"
+msgstr ""
+"\n"
+"** %s - ni bil najden **\n"
 
-#~ msgid ""
-#~ "\n"
-#~ "**<%s> illegal name **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "**<%s> neveljavno ime **\n"
+msgid ""
+"\n"
+"** %s exists. ok to overwrite? "
+msgstr ""
+"\n"
+"** %s obstaja. Ali ¾elite, prepisati? "
 
-#~ msgid ""
-#~ "\n"
-#~ "** %s - illegal request **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "** %s - neveljavna zahteva **\n"
+msgid ""
+"\n"
+"**<%s> illegal name **\n"
+msgstr ""
+"\n"
+"**<%s> neveljavno ime **\n"
 
-#~ msgid ""
-#~ "\n"
-#~ "** %s - exists, select another name **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "** %s - obstaja, izberite drugo ime **\n"
+msgid ""
+"\n"
+"** %s - illegal request **\n"
+msgstr ""
+"\n"
+"** %s - neveljavna zahteva **\n"
 
+msgid ""
+"\n"
+"** %s - exists, select another name **\n"
+msgstr ""
+"\n"
+"** %s - obstaja, izberite drugo ime **\n"
+
 #, fuzzy
-#~ msgid "ask: can't happen"
-#~ msgstr "vpra¹aj: ne more se zgoditi"
+msgid "ask: can't happen"
+msgstr "vpra¹aj: ne more se zgoditi"
 
-#~ msgid "Can't read header file for [%s in %s]\n"
-#~ msgstr "Ne morem prebrati datoteke z vzglavjem za [%s v %s]\n"
+msgid "Can't read header file for [%s in %s]\n"
+msgstr "Ne morem prebrati datoteke z vzglavjem za [%s v %s]\n"
 
-#~ msgid "Can't open header file for [%s in %s]"
-#~ msgstr "Ne morem odpreti datoteke z vzglavjem za [%s v %s]"
+msgid "Can't open header file for [%s in %s]"
+msgstr "Ne morem odpreti datoteke z vzglavjem za [%s v %s]"
 
 #, fuzzy
-#~ msgid "Cannot get field info"
-#~ msgstr "Ne morem zbrisati linije"
+msgid "Cannot get field info"
+msgstr "Ne morem zbrisati linije"
 
 #, fuzzy
-#~ msgid "Cannot open database"
-#~ msgstr "Ne morem zapisati povezav z bazo podatkov."
+msgid "Cannot open database"
+msgstr "Ne morem zapisati povezav z bazo podatkov."
 
-#~ msgid "Building topology ...\n"
-#~ msgstr "Gradim topologijo ...\n"
+msgid "Building topology ...\n"
+msgstr "Gradim topologijo ...\n"
 
-#~ msgid ""
-#~ "\r%d areas built      \n"
-#~ "%d isles built\n"
-#~ msgstr ""
-#~ "\r%d obmoèij zgrajenih      \n"
-#~ "%d otokov zgrajenih\n"
+msgid ""
+"\r%d areas built      \n"
+"%d isles built\n"
+msgstr ""
+"\r%d obmoèij zgrajenih      \n"
+"%d otokov zgrajenih\n"
 
 #, fuzzy
-#~ msgid "Cannot open database <%s> by driver <%s>"
-#~ msgstr "Ne morem zapisati povezav z bazo podatkov."
+msgid "Cannot open database <%s> by driver <%s>"
+msgstr "Ne morem zapisati povezav z bazo podatkov."
 
 #, fuzzy
-#~ msgid "Cannot get column info"
-#~ msgstr "Ne morem zbrisati linije"
+msgid "Cannot get column info"
+msgstr "Ne morem zbrisati linije"
 
-#~ msgid "Vect_rewrite_line() for this format/level not supported"
-#~ msgstr "Vect_rewrite_line() za ta format/nivo ni podprt"
+msgid "Vect_rewrite_line() for this format/level not supported"
+msgstr "Vect_rewrite_line() za ta format/nivo ni podprt"
 
-#~ msgid "Vect_delete_line() for this format/level not supported"
-#~ msgstr "Vect_delete_line() za ta format/nivo ni podprt"
+msgid "Vect_delete_line() for this format/level not supported"
+msgstr "Vect_delete_line() za ta format/nivo ni podprt"
 
-#~ msgid "Cannot rewrite line"
-#~ msgstr "Ne morem prepisati linije"
+msgid "Cannot rewrite line"
+msgstr "Ne morem prepisati linije"
 
-#~ msgid "Cannot delete line"
-#~ msgstr "Ne morem zbrisati linije"
+msgid "Cannot delete line"
+msgstr "Ne morem zbrisati linije"
 
-#~ msgid "Output name '%s' is not valid vector name."
-#~ msgstr "Izhodno ime '%s' ni veljavno ime za vektor."
+msgid "Output name '%s' is not valid vector name."
+msgstr "Izhodno ime '%s' ni veljavno ime za vektor."
 
-#~ msgid "Cannot copy vector '%s' to '%s'"
-#~ msgstr "Ne morem kopirati '%s' v '%s'"
+msgid "Cannot copy vector '%s' to '%s'"
+msgstr "Ne morem kopirati '%s' v '%s'"
 
 #, fuzzy
-#~ msgid "Cannot open existing vector map <%s>"
-#~ msgstr "Ne morem zbrisati obstojeèega vektorja %s"
+msgid "Cannot open existing vector map <%s>"
+msgstr "Ne morem zbrisati obstojeèega vektorja %s"
 
 #, fuzzy
-#~ msgid "Cannot delete existing vector <%s>"
-#~ msgstr "Ne morem zbrisati obstojeèega vektorja %s"
+msgid "Cannot delete existing vector <%s>"
+msgstr "Ne morem zbrisati obstojeèega vektorja %s"
 
-#~ msgid "Cannot open new vector %s"
-#~ msgstr "Ne morem odpreti novega vektorja %s"
+msgid "Cannot open new vector %s"
+msgstr "Ne morem odpreti novega vektorja %s"
 
-#~ msgid "Cannot open history file for vector '%s'"
-#~ msgstr "Ne morem odpreti datoteke z zgodovino za vektor '%s'"
+msgid "Cannot open history file for vector '%s'"
+msgstr "Ne morem odpreti datoteke z zgodovino za vektor '%s'"
 
 #, fuzzy
-#~ msgid "Can't open directory %s"
-#~ msgstr "Starega vektorja %s ne morem odpreti"
+msgid "Can't open directory %s"
+msgstr "Starega vektorja %s ne morem odpreti"
 
-#~ msgid "%s - ** illegal name **"
-#~ msgstr "%s - ** neveljavno ime **"
+msgid "%s - ** illegal name **"
+msgstr "%s - ** neveljavno ime **"
 
-#~ msgid "No such graphics monitor as <%s>.\n"
-#~ msgstr "Grafiènega monitorja z imenom <%s> ni.\n"
+msgid "No such graphics monitor as <%s>.\n"
+msgstr "Grafiènega monitorja z imenom <%s> ni.\n"
 
-#~ msgid "Please run \"d.mon\" to select a valid graphics monitor.\n"
-#~ msgstr ""
-#~ "Prosim po¾enite \"d.mon\" za izbiro veljavnega grafiènega monitorja.\n"
+msgid "Please run \"d.mon\" to select a valid graphics monitor.\n"
+msgstr "Prosim po¾enite \"d.mon\" za izbiro veljavnega grafiènega monitorja.\n"
 
-#~ msgid "Error - Monitor <%s> is in use.\n"
-#~ msgstr "Napaka - Monitor <%s> je ¾e v uporabi.\n"
+msgid "Error - Monitor <%s> is in use.\n"
+msgstr "Napaka - Monitor <%s> je ¾e v uporabi.\n"
 
-#~ msgid "Error - Monitor <%s> is in use by %s.\n"
-#~ msgstr "Napaka - Monitor <%s> ¾e uporablja %s.\n"
+msgid "Error - Monitor <%s> is in use by %s.\n"
+msgstr "Napaka - Monitor <%s> ¾e uporablja %s.\n"
 
-#~ msgid "Error - Could not complete locking process for monitor <%s>.\n"
-#~ msgstr "Napaka - Nisem mogel dokonèati zaklepanja za monitor <%s>.\n"
+msgid "Error - Could not complete locking process for monitor <%s>.\n"
+msgstr "Napaka - Nisem mogel dokonèati zaklepanja za monitor <%s>.\n"
 
-#~ msgid "Error - Can't set up pipe to graphics device.\n"
-#~ msgstr "Napaka - Ne morem vzpostaviti cevi do grafiène naprave.\n"
+msgid "Error - Can't set up pipe to graphics device.\n"
+msgstr "Napaka - Ne morem vzpostaviti cevi do grafiène naprave.\n"
 
-#~ msgid "Error - Graphics monitor <%s> not running!\n"
-#~ msgstr "Napaka - Grafièni monitor <%s> ni zagnan!\n"
+msgid "Error - Graphics monitor <%s> not running!\n"
+msgstr "Napaka - Grafièni monitor <%s> ni zagnan!\n"
 
-#~ msgid "Please start graphics monitor <%s>.\n"
-#~ msgstr "Prosim po¾enite grafièni monitor <%s>.\n"
+msgid "Please start graphics monitor <%s>.\n"
+msgstr "Prosim po¾enite grafièni monitor <%s>.\n"
 
-#~ msgid "Not connected...\n"
-#~ msgstr "Ni povezave...\n"
+msgid "Not connected...\n"
+msgstr "Ni povezave...\n"
 
-#~ msgid "Couldn't connect to monitor. Will try once more.\n"
-#~ msgstr "Nisem se mogel povezati z monitorjem. Posku¹am ¹e enkrat.\n"
+msgid "Couldn't connect to monitor. Will try once more.\n"
+msgstr "Nisem se mogel povezati z monitorjem. Posku¹am ¹e enkrat.\n"
 
 #, fuzzy
-#~ msgid "Size of cell in fp maps = %d"
-#~ msgstr "Velikost celice v fp slojih = %d\n"
+msgid "Size of cell in fp maps = %d"
+msgstr "Velikost celice v fp slojih = %d\n"
 
 #, fuzzy
-#~ msgid "type for writing floating maps = %d"
-#~ msgstr "tip za pisanje slojev s plavajoèo vejico = %d\n"
+msgid "type for writing floating maps = %d"
+msgstr "tip za pisanje slojev s plavajoèo vejico = %d\n"
 
 #, fuzzy
-#~ msgid "current window = %p"
-#~ msgstr "trenutno okno = %p\n"
+msgid "current window = %p"
+msgstr "trenutno okno = %p\n"
 
 #, fuzzy
-#~ msgid "Flag: window set? %d"
-#~ msgstr "Izbira: okno nastavljeno? %d\n"
+msgid "Flag: window set? %d"
+msgstr "Izbira: okno nastavljeno? %d\n"
 
 #, fuzzy
-#~ msgid "File descriptor for automatic mask %d"
-#~ msgstr "Deskriptor datoteke za avtomatièno masko %d\n"
+msgid "File descriptor for automatic mask %d"
+msgstr "Deskriptor datoteke za avtomatièno masko %d\n"
 
 #, fuzzy
-#~ msgid "Flag denoting automatic masking %d"
-#~ msgstr "Izbira, ki oznaèuje avtomatièno maskiranje %d\n"
+msgid "Flag denoting automatic masking %d"
+msgstr "Izbira, ki oznaèuje avtomatièno maskiranje %d\n"
 
 #, fuzzy
-#~ msgid "CELL mask buffer %p"
-#~ msgstr "'buffer' delovnih podatkov %p\\n"
+msgid "CELL mask buffer %p"
+msgstr "'buffer' delovnih podatkov %p\\n"
 
 #, fuzzy
-#~ msgid "buffer for reading null rows %p"
-#~ msgstr "buffer za branje 'null' vrstic %p\\n"
+msgid "buffer for reading null rows %p"
+msgstr "buffer za branje 'null' vrstic %p\\n"
 
 #, fuzzy
-#~ msgid "Pre/post compressed data buffer %p"
-#~ msgstr "Podatkovni 'buffer' %p pred/po krèenju\\n"
+msgid "Pre/post compressed data buffer %p"
+msgstr "Podatkovni 'buffer' %p pred/po krèenju\\n"
 
 #, fuzzy
-#~ msgid "sizeof compressed_buf %d"
-#~ msgstr "velikost skrèenega 'bufferja': commpressed_buf %d\\n"
+msgid "sizeof compressed_buf %d"
+msgstr "velikost skrèenega 'bufferja': commpressed_buf %d\\n"
 
 #, fuzzy
-#~ msgid "work data buffer %p"
-#~ msgstr "'buffer' delovnih podatkov %p\\n"
+msgid "work data buffer %p"
+msgstr "'buffer' delovnih podatkov %p\\n"
 
 #, fuzzy
-#~ msgid "sizeof work_buf %d"
-#~ msgstr "velikost delovnih podatkov work_buf %d\n"
+msgid "sizeof work_buf %d"
+msgstr "velikost delovnih podatkov work_buf %d\n"
 
 #, fuzzy
-#~ msgid "sizeof null_buf %d"
-#~ msgstr "velikost null_buf %d\n"
+msgid "sizeof null_buf %d"
+msgstr "velikost null_buf %d\n"
 
 #, fuzzy
-#~ msgid "sizeof mask_buf %d"
-#~ msgstr "velikost mask_buf %f\n"
+msgid "sizeof mask_buf %d"
+msgstr "velikost mask_buf %f\n"
 
 #, fuzzy
-#~ msgid "Histogram request %d"
-#~ msgstr "Zahteva po histogramu %d\n"
+msgid "Histogram request %d"
+msgstr "Zahteva po histogramu %d\n"
 
 #, fuzzy
-#~ msgid "G_dump: file #%d"
-#~ msgstr "G_dump: datoteka #%d\n"
+msgid "G_dump: file #%d"
+msgstr "G_dump: datoteka #%d\n"
 
 #, fuzzy
-#~ msgid "open mode = %d"
-#~ msgstr "odprti naèin = %d\n"
+msgid "open mode = %d"
+msgstr "odprti naèin = %d\n"
 
 #, fuzzy
-#~ msgid "Table reclass %p"
-#~ msgstr "Reklasifikacija tabele %p\n"
+msgid "Table reclass %p"
+msgstr "Reklasifikacija tabele %p\n"
 
 #, fuzzy
-#~ msgid "Range structure %p"
-#~ msgstr "Struktura razpona %p\n"
+msgid "Range structure %p"
+msgstr "Struktura razpona %p\n"
 
 #, fuzzy
-#~ msgid "float Range structure %p"
-#~ msgstr "Struktura razpona %p\n"
+msgid "float Range structure %p"
+msgstr "Struktura razpona %p\n"
 
 #, fuzzy
-#~ msgid "want histogram?  %d"
-#~ msgstr "Ali ¾elite histogram? %d\n"
+msgid "want histogram?  %d"
+msgstr "Ali ¾elite histogram? %d\n"
 
 #, fuzzy
-#~ msgid "Automatic reclass flag %d"
-#~ msgstr "Samodejna izbira reklasifikacije %d\n"
+msgid "Automatic reclass flag %d"
+msgstr "Samodejna izbira reklasifikacije %d\n"
 
 #, fuzzy
-#~ msgid "File row addresses %p"
-#~ msgstr "Vrstièni naslovi datoteke %p\n"
+msgid "File row addresses %p"
+msgstr "Vrstièni naslovi datoteke %p\n"
 
 #, fuzzy
-#~ msgid "Current data row in memory %d"
-#~ msgstr "Trenutna vrstica podatkov v spominu %d\\n"
+msgid "Current data row in memory %d"
+msgstr "Trenutna vrstica podatkov v spominu %d\\n"
 
 #, fuzzy
-#~ msgid "Current null row in memory %d"
-#~ msgstr "Trenutna vrstica null vrednosti v spominu %d\\n"
+msgid "Current null row in memory %d"
+msgstr "Trenutna vrstica null vrednosti v spominu %d\\n"
 
 #, fuzzy
-#~ msgid "nbytes per cell for current row %d"
-#~ msgstr "nbajtov na celico v trenutni vrstici %d\n"
+msgid "nbytes per cell for current row %d"
+msgstr "nbajtov na celico v trenutni vrstici %d\n"
 
 #, fuzzy
-#~ msgid "Decompressed data buffer %s"
-#~ msgstr "Razkrèen (dekomprimiran) podatkovni 'buffer' %s\\n"
+msgid "Decompressed data buffer %s"
+msgstr "Razkrèen (dekomprimiran) podatkovni 'buffer' %s\\n"
 
 #, fuzzy
-#~ msgid "bytes per cell %d"
-#~ msgstr "bajtov na celico %d\n"
+msgid "bytes per cell %d"
+msgstr "bajtov na celico %d\n"
 
 #, fuzzy
-#~ msgid "type: int, float or double map %d"
-#~ msgstr "tip: integer, plavajoèa vejica ali 'dvojni' %d\n"
+msgid "type: int, float or double map %d"
+msgstr "tip: integer, plavajoèa vejica ali 'dvojni' %d\n"
 
 #, fuzzy
-#~ msgid "Temporary name for NEW files %s"
-#~ msgstr "Zaèasno ime za NEW datoteke %s\n"
+msgid "Temporary name for NEW files %s"
+msgstr "Zaèasno ime za NEW datoteke %s\n"
 
 #, fuzzy
-#~ msgid "Temporary name for NEW NULL files %s"
-#~ msgstr "Zaèasno ime za NEW NULL datoteke %s\n"
+msgid "Temporary name for NEW NULL files %s"
+msgstr "Zaèasno ime za NEW NULL datoteke %s\n"
 
 #, fuzzy
-#~ msgid "Mapset of open file %s"
-#~ msgstr "\"Mapset\" odprte datoteke %s\n"
+msgid "Mapset of open file %s"
+msgstr "\"Mapset\" odprte datoteke %s\n"
 
 #, fuzzy
-#~ msgid "io error warning given %d"
-#~ msgstr "io opozorilo za napako %d\n"
+msgid "io error warning given %d"
+msgstr "io opozorilo za napako %d\n"
 
 #, fuzzy
-#~ msgid "xdr stream for reading fp %p"
-#~ msgstr "xdr tok za branje fp %p\n"
+msgid "xdr stream for reading fp %p"
+msgstr "xdr tok za branje fp %p\n"
 
 #, fuzzy
-#~ msgid "NULL_ROWS array[%d] = %p"
-#~ msgstr "NULL_ROWS array[%d] = %p\n"
+msgid "NULL_ROWS array[%d] = %p"
+msgstr "NULL_ROWS array[%d] = %p\n"
 
 #, fuzzy
-#~ msgid "data buffer for reading null rows %p"
-#~ msgstr "podatkovni 'buffer' za branje null vrstic %p\n"
+msgid "data buffer for reading null rows %p"
+msgstr "podatkovni 'buffer' za branje null vrstic %p\n"
 
 #, fuzzy
-#~ msgid "Minimum row null row number in memory %d"
-#~ msgstr "Minimalni row = null row ¹tevilo shranjeno v spominu %d\n"
+msgid "Minimum row null row number in memory %d"
+msgstr "Minimalni row = null row ¹tevilo shranjeno v spominu %d\n"
 
 #, fuzzy
-#~ msgid "G_dump: end"
-#~ msgstr "G_dump: datoteka #%d\n"
+msgid "G_dump: end"
+msgstr "G_dump: datoteka #%d\n"
 
 #, fuzzy
-#~ msgid "Current window not settable"
-#~ msgstr "trenutno okno = %p\n"
+msgid "Current window not settable"
+msgstr "trenutno okno = %p\n"
 
 #, fuzzy
-#~ msgid "Color file for [%s] not available"
-#~ msgstr "LOCATION  << %s >>  ne obstaja"
+msgid "Color file for [%s] not available"
+msgstr "LOCATION  << %s >>  ne obstaja"
 
 #, fuzzy
-#~ msgid "Cannot use current window"
-#~ msgstr "trenutno okno = %p\n"
+msgid "Cannot use current window"
+msgstr "trenutno okno = %p\n"
 
 #, fuzzy
-#~ msgid "Not able to open cellfile for [%s]"
-#~ msgstr "Nezmo¾en odpreti datoteko %s v %s"
+msgid "Not able to open cellfile for [%s]"
+msgstr "Nezmo¾en odpreti datoteko %s v %s"
+
+msgid "Too many open raster maps"
+msgstr "Preveè odprtih rastrskih slojev"
 
-#~ msgid "Too many open raster maps"
-#~ msgstr "Preveè odprtih rastrskih slojev"
+msgid "Too many open files"
+msgstr "Preveè odprtih datotek"
 
-#~ msgid "Too many open files"
-#~ msgstr "Preveè odprtih datotek"
+msgid "ERROR: GISBASE not set\n"
+msgstr "NAPAKA: GISBASE ni nastavljen\n"
 
-#~ msgid "ERROR: GISBASE not set\n"
-#~ msgstr "NAPAKA: GISBASE ni nastavljen\n"
+msgid "Error reading datum shift parameters for %s from table"
+msgstr ""
+"Napaka pri branju parametrov premika fundamentalne toèke za %s iz tabele"
 
-#~ msgid "Error reading datum shift parameters for %s from table"
-#~ msgstr ""
-#~ "Napaka pri branju parametrov premika fundamentalne toèke za %s iz tabele"
+msgid "Error reading ellipsoid parameters for %s from table"
+msgstr "Napaka pri branju parametrov elipsoida za %s iz tabele"
 
-#~ msgid "Error reading ellipsoid parameters for %s from table"
-#~ msgstr "Napaka pri branju parametrov elipsoida za %s iz tabele"
+msgid "No ellipsoid field %s in file %s in %s"
+msgstr "Ni polja za elipsoid %s v datoteki %s v %s"
 
-#~ msgid "No ellipsoid field %s in file %s in %s"
-#~ msgstr "Ni polja za elipsoid %s v datoteki %s v %s"
+msgid "invalid value: field %s in file %s in %s"
+msgstr "neveljavna vrednost: polje %s v datoteki %s v %s"
 
-#~ msgid "invalid value: field %s in file %s in %s"
-#~ msgstr "neveljavna vrednost: polje %s v datoteki %s v %s"
+msgid "No n-dims in site_list"
+msgstr "Ni n-dims v site_list"
 
-#~ msgid "No n-dims in site_list"
-#~ msgstr "Ni n-dims v site_list"
+msgid "No double attributes in site_list"
+msgstr "Ni dvojnih atributov v site_list"
 
-#~ msgid "No double attributes in site_list"
-#~ msgstr "Ni dvojnih atributov v site_list"
+msgid "No string attributes in site_list"
+msgstr "V site_list ni atributov tipa \"string\" "
 
-#~ msgid "No string attributes in site_list"
-#~ msgstr "V site_list ni atributov tipa \"string\" "
+msgid "String attribute index out of range"
+msgstr "Atributni indeks tipa \"string\" je izven razpona"
 
-#~ msgid "String attribute index out of range"
-#~ msgstr "Atributni indeks tipa \"string\" je izven razpona"
+msgid "Unknown attribute type in call to G_readsites_xyz()!\n"
+msgstr "Nepoznan atributni tip v klicu G_readsites_xyz()!\n"
 
-#~ msgid "Unknown attribute type in call to G_readsites_xyz()!\n"
-#~ msgstr "Nepoznan atributni tip v klicu G_readsites_xyz()!\n"
+msgid "Failed to convert string attribute."
+msgstr "Ne morem spremeniti atributnega tipa."
 
-#~ msgid "Failed to convert string attribute."
-#~ msgstr "Ne morem spremeniti atributnega tipa."
+msgid "Reading sites list ...                  "
+msgstr "Berem spisek toèk ...                  "
 
-#~ msgid "Reading sites list ...                  "
-#~ msgstr "Berem spisek toèk ...                  "
+msgid "failed to guess format"
+msgstr "ni mi uspelo uganiti formata"
 
-#~ msgid "failed to guess format"
-#~ msgstr "ni mi uspelo uganiti formata"
+msgid "decimal field %i not present in sites file"
+msgstr "polje za decimalke %i ni prisotno v datoteki s toèkami"
 
-#~ msgid "decimal field %i not present in sites file"
-#~ msgstr "polje za decimalke %i ni prisotno v datoteki s toèkami"
+msgid ""
+"I'm finding records that do not have a floating point attributes (fields "
+"prefixed with '%')."
+msgstr ""
+"I¹èem enote, ki nimajo atributov s plavajoèo vejico (polja s predpono '%')."
 
-#~ msgid ""
-#~ "I'm finding records that do not have a floating point attributes (fields "
-#~ "prefixed with '%')."
-#~ msgstr ""
-#~ "I¹èem enote, ki nimajo atributov s plavajoèo vejico (polja s predpono "
-#~ "'%')."
+msgid "WARNING: can not create a new process\n"
+msgstr "OPOZORILO: ne morem ustvariti novega procesa\n"
 
-#~ msgid "WARNING: can not create a new process\n"
-#~ msgstr "OPOZORILO: ne morem ustvariti novega procesa\n"
+msgid "Select type: point, line, boundary, centroid or area"
+msgstr "Izberi tip: toèka, linija, meja, centroid ali obmoèje"
+
+#~ msgid "Unable to allocate memory\n"
+#~ msgstr "Nezmo¾en dodeliti spomin\n"
+
+#, fuzzy
+#~ msgid "<%s>: bad mapset"
+#~ msgstr "<%s> v \"mapset\" <%s>"
 
-#~ msgid "Select type: point, line, boundary, centroid or area"
-#~ msgstr "Izberi tip: toèka, linija, meja, centroid ali obmoèje"
+#~ msgid "unable to find [%s] in [%s]"
+#~ msgstr "ne najdem [%s] v [%s]"

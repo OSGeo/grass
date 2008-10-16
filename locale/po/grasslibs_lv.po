@@ -527,9 +527,9 @@ msgid "Unable to get list tables in database <%s>"
 msgstr "neiespējami atvērt elipsoīda tabulas failu: %s"
 
 #: ../lib/db/dbmi_client/copy_tab.c:157
-#, c-format
+#, fuzzy, c-format
 msgid "Table <%s> already exists in database <%s>"
-msgstr ""
+msgstr "neiespējami atvērt elipsoīda tabulas failu: %s"
 
 #: ../lib/db/dbmi_client/copy_tab.c:199 ../lib/db/dbmi_client/copy_tab.c:276
 #: ../lib/db/dbmi_client/table.c:110
@@ -1266,12 +1266,12 @@ msgstr ""
 #: ../lib/vector/Vlib/write_nat.c:640
 #, fuzzy
 msgid "Attempt to delete dead feature"
-msgstr "Nevar atvērt 'temp'/pagaidu failu"
+msgstr "Nevar nolasīt histogrammu priekš [%s no %s]"
 
 #: ../lib/vector/Vlib/write_nat.c:885
 #, fuzzy
 msgid "Attempt to restore alive feature"
-msgstr "Nevar atvērt 'temp'/pagaidu failu"
+msgstr "Nevar nolasīt histogrammu priekš [%s no %s]"
 
 #: ../lib/vector/Vlib/level_two.c:210 ../lib/vector/Vlib/level_two.c:235
 #: ../lib/vector/Vlib/level_two.c:259 ../lib/vector/Vlib/level_two.c:278
@@ -1992,9 +1992,9 @@ msgid "Window replacing the default"
 msgstr "Logs aizvieto noklusēto"
 
 #: ../lib/g3d/g3dcolor.c:332
-#, c-format
+#, fuzzy, c-format
 msgid "mapset <%s> is not the current mapset"
-msgstr ""
+msgstr "Defekts: atteikts papildināt karti,kura nav tekošajā karšu komplektā."
 
 #: ../lib/g3d/g3dopen.c:20
 msgid "G3d_openCellOldNoHeader: error in G3d_maskOpenOld"
@@ -2055,7 +2055,7 @@ msgstr ""
 #: ../lib/g3d/g3dopen.c:229
 #, fuzzy, c-format
 msgid "map <%s> is not in the current mapset"
-msgstr "nav %s faili pieejami pašreizējā karšu biblotēkā\n"
+msgstr "Defekts: atteikts papildināt karti,kura nav tekošajā karšu komplektā."
 
 #: ../lib/g3d/g3dopen.c:239
 msgid "G3d_openCellNew: could not open file"
@@ -2255,7 +2255,7 @@ msgstr ""
 #: ../lib/gis/opencell.c:932 ../lib/gis/opencell.c:1020
 #, fuzzy, c-format
 msgid "Unable to find '%s' in '%s'"
-msgstr "neiespējami atrast [%s] iekš [%s]"
+msgstr "neiespējami atrast [%s]"
 
 #: ../lib/gis/opencell.c:965
 #, fuzzy, c-format
@@ -2318,9 +2318,9 @@ msgid "'%s/%s' was found in more mapsets (also found in <%s>)"
 msgstr ""
 
 #: ../lib/gis/find_file.c:82
-#, c-format
+#, fuzzy, c-format
 msgid "Using <%s@%s>"
-msgstr ""
+msgstr "neiespējami atrast [%s]"
 
 #: ../lib/gis/quant_io.c:89
 #, c-format
@@ -3880,9 +3880,9 @@ msgid "Vector map <%s> loaded (%d points)"
 msgstr "Ieejas vektors '%s' nav atrasts"
 
 #: ../lib/ogsf/GS2.c:1638
-#, c-format
+#, fuzzy, c-format
 msgid "Raster map <%s> is outside of current region. Load failed."
-msgstr ""
+msgstr "Defekts: atteikts papildināt karti,kura nav tekošajā karšu komplektā."
 
 #: ../lib/ogsf/GS2.c:1716 ../lib/ogsf/GS2.c:1722 ../lib/ogsf/GS2.c:1730
 #: ../lib/ogsf/GS2.c:1739 ../lib/ogsf/GS2.c:1747 ../lib/ogsf/GS2.c:1757
@@ -4251,7 +4251,7 @@ msgstr ""
 #: ../lib/cairodriver/Graph.c:81
 #, fuzzy
 msgid "Unable to obtain visual"
-msgstr "Neisespējami atvērt %s"
+msgstr "Neiespējami atvērt failu %s iekš %s"
 
 #: ../lib/cairodriver/Graph.c:86
 #, fuzzy
@@ -4402,637 +4402,647 @@ msgid "Unable to define new light"
 msgstr "Neiespējami atvērt failu %s iekš %s"
 
 #, fuzzy
-#~ msgid "Cannot describe table <%s>"
-#~ msgstr "Nevar atvērt datubāzi %s"
+msgid "Cannot describe table <%s>"
+msgstr "Nevar atvērt datubāzi %s"
 
-#~ msgid "ERROR %s from graphics driver.\n"
-#~ msgstr "KĻŪDA %s no grafiskā draivera.\n"
+msgid "ERROR %s from graphics driver.\n"
+msgstr "KĻŪDA %s no grafiskā draivera.\n"
 
-#~ msgid "ERROR - eof from graphics monitor.\n"
-#~ msgstr "KĻŪDA - eof no grafiskā monitora.\n"
+msgid "ERROR - eof from graphics monitor.\n"
+msgstr "KĻŪDA - eof no grafiskā monitora.\n"
 
-#~ msgid "Warning - no response from graphics monitor <%s>.\n"
-#~ msgstr "Brīdinājums - nav atbildes reakcijas no grafiskā monitora <%s>.\n"
+msgid "Warning - no response from graphics monitor <%s>.\n"
+msgstr "Brīdinājums - nav atbildes reakcijas no grafiskā monitora <%s>.\n"
 
-#~ msgid "Check to see if the mouse is still active.\n"
-#~ msgstr "Pārbīdi lai redzētu vai pele vēl ir aktīva.\n"
+msgid "Check to see if the mouse is still active.\n"
+msgstr "Pārbīdi lai redzētu vai pele vēl ir aktīva.\n"
 
-#~ msgid "ERROR - no response from graphics monitor <%s>.\n"
-#~ msgstr "KĻŪDA - nav atbildes no grafiskā monitora <%s>\n"
-
-#, fuzzy
-#~ msgid "No graphics monitor has been selected for output."
-#~ msgstr "Datu atspoguļošanai netika izvēlēts monitors.\n"
+msgid "ERROR - no response from graphics monitor <%s>.\n"
+msgstr "KĻŪDA - nav atbildes no grafiskā monitora <%s>\n"
 
 #, fuzzy
-#~ msgid "Please run \"d.mon\" to select a graphics monitor."
-#~ msgstr "Lūdzu palaid \"d.mon\" lai izvēlētos grafisko monitoru.\n"
+msgid "No graphics monitor has been selected for output."
+msgstr "Datu atspoguļošanai netika izvēlēts monitors.\n"
 
 #, fuzzy
-#~ msgid "Failed to get socket name for monitor <%s>."
-#~ msgstr "Izgāšanās lai iegūtu pieslēguma vietas nosaukumu monitoram <%s>.\n"
+msgid "Please run \"d.mon\" to select a graphics monitor."
+msgstr "Lūdzu palaid \"d.mon\" lai izvēlētos grafisko monitoru.\n"
 
 #, fuzzy
-#~ msgid "No socket to connect to for monitor <%s>."
-#~ msgstr "Nav pieslēguma vietas lai pieslēgtos monitoram <%s>.\n"
+msgid "Failed to get socket name for monitor <%s>."
+msgstr "Izgāšanās lai iegūtu pieslēguma vietas nosaukumu monitoram <%s>.\n"
 
 #, fuzzy
-#~ msgid "Socket is already in use or not accepting connections."
-#~ msgstr ""
-#~ "Kontaktligzda jau tiek lietota vai noraida pieslēgumus.\n"
-#~ "Lieto d.mon lai izvēlētos monitoru\n"
+msgid "No socket to connect to for monitor <%s>."
+msgstr "Nav pieslēguma vietas lai pieslēgtos monitoram <%s>.\n"
 
 #, fuzzy
-#~ msgid "Use d.mon to select a monitor"
-#~ msgstr "Lūdzu palaid \"d.mon\" lai izvēlētos grafisko monitoru.\n"
+msgid "Socket is already in use or not accepting connections."
+msgstr ""
+"Kontaktligzda jau tiek lietota vai noraida pieslēgumus.\n"
+"Lieto d.mon lai izvēlētos monitoru\n"
 
 #, fuzzy
-#~ msgid "Trying to connect to something not a socket."
-#~ msgstr ""
-#~ "Meiģinājums pieslēgties kautkam kas nav piesēglma iespējas.\n"
-#~ "Iespējams programmas kļūda.\n"
+msgid "Use d.mon to select a monitor"
+msgstr "Lūdzu palaid \"d.mon\" lai izvēlētos grafisko monitoru.\n"
 
 #, fuzzy
-#~ msgid "Probably an error with the server."
-#~ msgstr "Pieslēgšanās mieģinājuma laika beigas. Iespējama servera kļūda.\n"
+msgid "Trying to connect to something not a socket."
+msgstr ""
+"Meiģinājums pieslēgties kautkam kas nav piesēglma iespējas.\n"
+"Iespējams programmas kļūda.\n"
 
 #, fuzzy
-#~ msgid "Connection failed."
-#~ msgstr "Pieslēgšanās izgāzusies\n"
+msgid "Probably an error with the server."
+msgstr "Pieslēgšanās mieģinājuma laika beigas. Iespējama servera kļūda.\n"
 
 #, fuzzy
-#~ msgid "Cannot read topo for line [%d]"
-#~ msgstr "Nevar nolasīt histogrammu priekš [%s no %s]"
+msgid "Connection failed."
+msgstr "Pieslēgšanās izgāzusies\n"
 
 #, fuzzy
-#~ msgid "Unable to open file %s"
-#~ msgstr "Neiespējami atvērt failu %s iekš %s"
+msgid "Cannot read topo for line [%d]"
+msgstr "Nevar nolasīt histogrammu priekš [%s no %s]"
 
 #, fuzzy
-#~ msgid "Unable to open temporary file"
-#~ msgstr "Neiespējami atvērt failu %s iekš %s"
-
-#~ msgid "Hit RETURN to cancel request\n"
-#~ msgstr "Ievadi RETURN lai  apturētu pieprasījumu\n"
-
-#~ msgid "Cannot open temp file"
-#~ msgstr "Nevar atvērt 'temp'/pagaidu failu"
-
-#~ msgid ""
-#~ "\n"
-#~ "Please specify ellipsoid name\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Lūdzu norādi elipsoīda nosaukumu\n"
-
-#~ msgid "Enter 'list' for the list of available ellipsoids\n"
-#~ msgstr "Ievadi 'list' lai iegūtu pieejamo elipsoīdu sarakstu\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "invalid ellipsoid\n"
-#~ msgstr ""
-#~ "\n"
-#~ "nederīgs elipsoīds\n"
-
-#~ msgid "Output name '%s' is not valid rast name."
-#~ msgstr "Izejas vārds '%s' nav derīgs rastra nosaukums."
-
-#~ msgid "Output map '%s' is used as input"
-#~ msgstr "Izejas karte '%s' tiek lietota kā iejas karte"
-
-#~ msgid ""
-#~ "\n"
-#~ "Please specify datum name\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Lūdzu norādi datuma nosaukumu\n"
-
-#~ msgid "Enter 'list' for the list of available datums\n"
-#~ msgstr "Ievadi 'list' lai redzētu pieejamos \"datums\"\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "invalid datum\n"
-#~ msgstr ""
-#~ "\n"
-#~ "nederīgs datums\n"
-
-#~ msgid "hit RETURN to continue -->"
-#~ msgstr "spied ENTER lai turpinātu -->"
-
-#~ msgid "unable to open raster map [%s in %s]"
-#~ msgstr "neiespējami atvērt rastra karti [%s iekš %s]"
-
-#~ msgid "one moment...\n"
-#~ msgstr "vienu mirkli...\n"
-
-#~ msgid "No help available for command [%s]\n"
-#~ msgstr "Nav pieejama palīdzība komandai [%s]\n"
-
-#~ msgid " The raster map %s@%s is empty"
-#~ msgstr " Rastra karte %s@%s ir tukša"
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "Color table needed for file [%s] in mapset [%s].\n"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "Krāsu tabuli ir nepieciešams fails [%s] karšu biblotēkā [%s].\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Please identify the type desired:\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Lūdzu identificē izvēlēto tipu:\n"
-
-#~ msgid "    1:  Random colors\n"
-#~ msgstr "    1:  Brīvas izvēlas krāsas\n"
-
-#~ msgid "    2:  Red, green, and blue color ramps\n"
-#~ msgstr "    2:  Sarkanas,zaļas un zilas krāsas\n"
-
-#~ msgid "    3:  Color wave\n"
-#~ msgstr "    3:  Krāsu viļni\n"
-
-#~ msgid "    4:  Gray scale\n"
-#~ msgstr "    4:  Plēkas krāsas\n"
-
-#~ msgid "    5:  Aspect\n"
-#~ msgstr "    5:  Ekspozīcija \n"
-
-#~ msgid "    6:  Rainbow colors\n"
-#~ msgstr "    6:  Varavīksnes krāsas\n"
-
-#~ msgid "    7:  Red through yellow to green\n"
-#~ msgstr "    7:  Sarkanais caur dzelteno uz zaļo\n"
-
-#~ msgid "    8:  Green through yellow to red\n"
-#~ msgstr "    8:  Zaļais caur dzelteno uz sarkano\n"
-
-#~ msgid "RETURN  quit\n"
-#~ msgstr "ATGRIEZT pamest\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "%s invalid; Try again > "
-#~ msgstr ""
-#~ "\n"
-#~ "%s nederīgs; Meiģini vēlreiz > "
-
-#~ msgid "%s not found"
-#~ msgstr "%s nav atrasts"
-
-#~ msgid "ERROR in reading %s"
-#~ msgstr "KĻŪDA nolasot %s"
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "Please specify projection name\n"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "Lūdzu norādi projekta nosaukumu\n"
-
-#~ msgid "Enter 'list' for the list of available projections\n"
-#~ msgstr "Ievadi 'list', lai iegūtu pieejamo projekciju sarakstu\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "invalid projection\n"
-#~ msgstr ""
-#~ "\n"
-#~ "nederīga projekcija\n"
-
-#~ msgid "with titles"
-#~ msgstr "ar virsrakstiem"
-
-#~ msgid "(no title)"
-#~ msgstr "(nav virsraksta)"
-
-#~ msgid ""
-#~ "\n"
-#~ "FLAG: Set the following flag?\n"
-#~ msgstr ""
-#~ "\n"
-#~ "KAROGS: Likt sekojošo pazīmi/karogu?\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "OPTION:   %s\n"
-#~ msgstr ""
-#~ "\n"
-#~ "OPCIJA/PAZĪME:   %s\n"
-
-#~ msgid "     key: %s\n"
-#~ msgstr "     atslēga: %s\n"
-
-#~ msgid "  format: %s\n"
-#~ msgstr "  formāts: %s\n"
-
-#~ msgid " default: %s\n"
-#~ msgstr " noklusēts: %s\n"
-
-#~ msgid "required: %s\n"
-#~ msgstr "prasītais: %s\n"
-
-#~ msgid "multiple: %s\n"
-#~ msgstr "daudzskaitlīgs: %s\n"
-
-#~ msgid "enter option > "
-#~ msgstr "ievadi opciju/pazīmi > "
-
-#~ msgid "   Try again? "
-#~ msgstr "   Meiģini vēl? "
-
-#~ msgid "Sorry, %s is not accepted.\n"
-#~ msgstr "Atvainojiet, %s nav akceptēts.\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "You have chosen:\n"
-#~ "  %s\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Tu esi izvēlējies:\n"
-#~ "  %s\n"
-
-#~ msgid "Is this correct? "
-#~ msgstr "Vai tas ir pareizi?"
-
-#~ msgid "to accept the default"
-#~ msgstr "lai apstiprinātu noklusēto"
-
-#~ msgid "to cancel request"
-#~ msgstr "lai apturētu pieprasījumu"
-
-#~ msgid "Enter a new %s file name"
-#~ msgstr "Ievadi juanu %s faila nosaukumu"
-
-#~ msgid "Enter the name of an existing %s file"
-#~ msgstr "Ievadi eksistējoša %s faila nosaukumu"
-
-#~ msgid "Enter %s file name"
-#~ msgstr "Ievadi %s faila nosaukumu"
-
-#~ msgid "Enter 'list' for a list of existing %s files\n"
-#~ msgstr "Ievadi 'list' lai redzētu esošo %s failu sarakstu\n"
-
-#~ msgid "Enter 'list -f' for "
-#~ msgstr "Ievadi 'list -f' lai "
-
-#~ msgid "a list %s"
-#~ msgstr "saraksts %s"
-
-#~ msgid "an extended list"
-#~ msgstr "izvērsts saraksts"
-
-#~ msgid "Hit RETURN %s\n"
-#~ msgstr "Ievadi RETURN %s\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "** %s - not found **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "** %s - nav atrasts **\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "** %s exists. ok to overwrite? "
-#~ msgstr ""
-#~ "\n"
-#~ "** %s eksistē. ok, lai pārrakstītu? "
-
-#~ msgid ""
-#~ "\n"
-#~ "**<%s> illegal name **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "**<%s> neatļauts nosaukums **\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "** %s - illegal request **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "** %s - neatļauts pieprasījums **\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "** %s - exists, select another name **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "** %s - eksistē, izvēlies citu nosaukumu **\n"
-
-#~ msgid "ask: can't happen"
-#~ msgstr "jautājums: nevar notikt"
+msgid "Unable to open file %s"
+msgstr "Neiespējami atvērt failu %s iekš %s"
 
 #, fuzzy
-#~ msgid "Cannot get field info"
-#~ msgstr "Nevar iegūt slāņa informāciju"
+msgid "Unable to open temporary file"
+msgstr "Neiespējami atvērt failu %s iekš %s"
+
+msgid "Hit RETURN to cancel request\n"
+msgstr "Ievadi RETURN lai  apturētu pieprasījumu\n"
+
+msgid "Cannot open temp file"
+msgstr "Nevar atvērt 'temp'/pagaidu failu"
+
+msgid ""
+"\n"
+"Please specify ellipsoid name\n"
+msgstr ""
+"\n"
+"Lūdzu norādi elipsoīda nosaukumu\n"
+
+msgid "Enter 'list' for the list of available ellipsoids\n"
+msgstr "Ievadi 'list' lai iegūtu pieejamo elipsoīdu sarakstu\n"
+
+msgid ""
+"\n"
+"invalid ellipsoid\n"
+msgstr ""
+"\n"
+"nederīgs elipsoīds\n"
+
+msgid "Output name '%s' is not valid rast name."
+msgstr "Izejas vārds '%s' nav derīgs rastra nosaukums."
+
+msgid "Output map '%s' is used as input"
+msgstr "Izejas karte '%s' tiek lietota kā iejas karte"
+
+msgid ""
+"\n"
+"Please specify datum name\n"
+msgstr ""
+"\n"
+"Lūdzu norādi datuma nosaukumu\n"
+
+msgid "Enter 'list' for the list of available datums\n"
+msgstr "Ievadi 'list' lai redzētu pieejamos \"datums\"\n"
+
+msgid ""
+"\n"
+"invalid datum\n"
+msgstr ""
+"\n"
+"nederīgs datums\n"
+
+msgid "hit RETURN to continue -->"
+msgstr "spied ENTER lai turpinātu -->"
+
+msgid "unable to open raster map [%s in %s]"
+msgstr "neiespējami atvērt rastra karti [%s iekš %s]"
+
+msgid "one moment...\n"
+msgstr "vienu mirkli...\n"
+
+msgid "No help available for command [%s]\n"
+msgstr "Nav pieejama palīdzība komandai [%s]\n"
+
+msgid " The raster map %s@%s is empty"
+msgstr " Rastra karte %s@%s ir tukša"
+
+msgid ""
+"\n"
+"\n"
+"Color table needed for file [%s] in mapset [%s].\n"
+msgstr ""
+"\n"
+"\n"
+"Krāsu tabuli ir nepieciešams fails [%s] karšu biblotēkā [%s].\n"
+
+msgid ""
+"\n"
+"Please identify the type desired:\n"
+msgstr ""
+"\n"
+"Lūdzu identificē izvēlēto tipu:\n"
+
+msgid "    1:  Random colors\n"
+msgstr "    1:  Brīvas izvēlas krāsas\n"
+
+msgid "    2:  Red, green, and blue color ramps\n"
+msgstr "    2:  Sarkanas,zaļas un zilas krāsas\n"
+
+msgid "    3:  Color wave\n"
+msgstr "    3:  Krāsu viļni\n"
+
+msgid "    4:  Gray scale\n"
+msgstr "    4:  Plēkas krāsas\n"
+
+msgid "    5:  Aspect\n"
+msgstr "    5:  Ekspozīcija \n"
+
+msgid "    6:  Rainbow colors\n"
+msgstr "    6:  Varavīksnes krāsas\n"
+
+msgid "    7:  Red through yellow to green\n"
+msgstr "    7:  Sarkanais caur dzelteno uz zaļo\n"
+
+msgid "    8:  Green through yellow to red\n"
+msgstr "    8:  Zaļais caur dzelteno uz sarkano\n"
+
+msgid "RETURN  quit\n"
+msgstr "ATGRIEZT pamest\n"
+
+msgid ""
+"\n"
+"%s invalid; Try again > "
+msgstr ""
+"\n"
+"%s nederīgs; Meiģini vēlreiz > "
+
+msgid "%s not found"
+msgstr "%s nav atrasts"
+
+msgid "ERROR in reading %s"
+msgstr "KĻŪDA nolasot %s"
+
+msgid ""
+"\n"
+"\n"
+"Please specify projection name\n"
+msgstr ""
+"\n"
+"\n"
+"Lūdzu norādi projekta nosaukumu\n"
+
+msgid "Enter 'list' for the list of available projections\n"
+msgstr "Ievadi 'list', lai iegūtu pieejamo projekciju sarakstu\n"
+
+msgid ""
+"\n"
+"invalid projection\n"
+msgstr ""
+"\n"
+"nederīga projekcija\n"
+
+msgid "with titles"
+msgstr "ar virsrakstiem"
+
+msgid "(no title)"
+msgstr "(nav virsraksta)"
+
+msgid ""
+"\n"
+"FLAG: Set the following flag?\n"
+msgstr ""
+"\n"
+"KAROGS: Likt sekojošo pazīmi/karogu?\n"
+
+msgid ""
+"\n"
+"OPTION:   %s\n"
+msgstr ""
+"\n"
+"OPCIJA/PAZĪME:   %s\n"
+
+msgid "     key: %s\n"
+msgstr "     atslēga: %s\n"
+
+msgid "  format: %s\n"
+msgstr "  formāts: %s\n"
+
+msgid " default: %s\n"
+msgstr " noklusēts: %s\n"
+
+msgid "required: %s\n"
+msgstr "prasītais: %s\n"
+
+msgid "multiple: %s\n"
+msgstr "daudzskaitlīgs: %s\n"
+
+msgid "enter option > "
+msgstr "ievadi opciju/pazīmi > "
+
+msgid "   Try again? "
+msgstr "   Meiģini vēl? "
+
+msgid "Sorry, %s is not accepted.\n"
+msgstr "Atvainojiet, %s nav akceptēts.\n"
+
+msgid ""
+"\n"
+"You have chosen:\n"
+"  %s\n"
+msgstr ""
+"\n"
+"Tu esi izvēlējies:\n"
+"  %s\n"
+
+msgid "Is this correct? "
+msgstr "Vai tas ir pareizi?"
+
+msgid "to accept the default"
+msgstr "lai apstiprinātu noklusēto"
+
+msgid "to cancel request"
+msgstr "lai apturētu pieprasījumu"
+
+msgid "Enter a new %s file name"
+msgstr "Ievadi juanu %s faila nosaukumu"
+
+msgid "Enter the name of an existing %s file"
+msgstr "Ievadi eksistējoša %s faila nosaukumu"
+
+msgid "Enter %s file name"
+msgstr "Ievadi %s faila nosaukumu"
+
+msgid "Enter 'list' for a list of existing %s files\n"
+msgstr "Ievadi 'list' lai redzētu esošo %s failu sarakstu\n"
+
+msgid "Enter 'list -f' for "
+msgstr "Ievadi 'list -f' lai "
+
+msgid "a list %s"
+msgstr "saraksts %s"
+
+msgid "an extended list"
+msgstr "izvērsts saraksts"
+
+msgid "Hit RETURN %s\n"
+msgstr "Ievadi RETURN %s\n"
+
+msgid ""
+"\n"
+"** %s - not found **\n"
+msgstr ""
+"\n"
+"** %s - nav atrasts **\n"
+
+msgid ""
+"\n"
+"** %s exists. ok to overwrite? "
+msgstr ""
+"\n"
+"** %s eksistē. ok, lai pārrakstītu? "
+
+msgid ""
+"\n"
+"**<%s> illegal name **\n"
+msgstr ""
+"\n"
+"**<%s> neatļauts nosaukums **\n"
+
+msgid ""
+"\n"
+"** %s - illegal request **\n"
+msgstr ""
+"\n"
+"** %s - neatļauts pieprasījums **\n"
+
+msgid ""
+"\n"
+"** %s - exists, select another name **\n"
+msgstr ""
+"\n"
+"** %s - eksistē, izvēlies citu nosaukumu **\n"
+
+msgid "ask: can't happen"
+msgstr "jautājums: nevar notikt"
 
 #, fuzzy
-#~ msgid "Cannot open database"
-#~ msgstr "Nevar atvērt datubāzi %s"
-
-#~ msgid "Building topology ...\n"
-#~ msgstr "Veidojam topoloģiju... \n"
-
-#~ msgid ""
-#~ "\r%d areas built      \n"
-#~ "%d isles built\n"
-#~ msgstr ""
-#~ "\r%d  laukumi izveidoti      \n"
-#~ "%d salas izveidotas\n"
+msgid "Cannot get field info"
+msgstr "Nevar iegūt slāņa informāciju"
 
 #, fuzzy
-#~ msgid "Cannot open database <%s> by driver <%s>"
-#~ msgstr "Nevar atvērt datubāzi %s"
+msgid "Cannot open database"
+msgstr "Nevar atvērt datubāzi %s"
+
+msgid "Building topology ...\n"
+msgstr "Veidojam topoloģiju... \n"
+
+msgid ""
+"\r%d areas built      \n"
+"%d isles built\n"
+msgstr ""
+"\r%d  laukumi izveidoti      \n"
+"%d salas izveidotas\n"
 
 #, fuzzy
-#~ msgid "Cannot get column info"
-#~ msgstr "Nevar iegūt slāņa informāciju"
-
-#~ msgid "Vect_rewrite_line() for this format/level not supported"
-#~ msgstr "Vect_rewrite_line() šimformātam/līmenim nav atbalstīta"
-
-#~ msgid "Vect_delete_line() for this format/level not supported"
-#~ msgstr "Vect_delete_line() šim formātam/līmenim nav atbalstīta"
-
-#~ msgid "Cannot rewrite line"
-#~ msgstr "Nevar pārrakstīt līniju"
-
-#~ msgid "Cannot delete line"
-#~ msgstr "Nevar dzēst līniju"
-
-#~ msgid "Output name '%s' is not valid vector name."
-#~ msgstr "Izejas vārds '%s' nav derīgs vektora nosaukums."
-
-#~ msgid "Cannot copy vector '%s' to '%s'"
-#~ msgstr "Nevar kopēt vektoru '%s' uz '%s'"
+msgid "Cannot open database <%s> by driver <%s>"
+msgstr "Nevar atvērt datubāzi %s"
 
 #, fuzzy
-#~ msgid "Cannot open existing vector map <%s>"
-#~ msgstr "Nevar izdzēst eksistējošu vektoru %s "
+msgid "Cannot get column info"
+msgstr "Nevar iegūt slāņa informāciju"
+
+msgid "Vect_rewrite_line() for this format/level not supported"
+msgstr "Vect_rewrite_line() šimformātam/līmenim nav atbalstīta"
+
+msgid "Vect_delete_line() for this format/level not supported"
+msgstr "Vect_delete_line() šim formātam/līmenim nav atbalstīta"
+
+msgid "Cannot rewrite line"
+msgstr "Nevar pārrakstīt līniju"
+
+msgid "Cannot delete line"
+msgstr "Nevar dzēst līniju"
+
+msgid "Output name '%s' is not valid vector name."
+msgstr "Izejas vārds '%s' nav derīgs vektora nosaukums."
+
+msgid "Cannot copy vector '%s' to '%s'"
+msgstr "Nevar kopēt vektoru '%s' uz '%s'"
 
 #, fuzzy
-#~ msgid "Cannot delete existing vector <%s>"
-#~ msgstr "Nevar izdzēst eksistējošu vektoru %s "
-
-#~ msgid "Cannot open new vector %s"
-#~ msgstr "Nevar atvērt jaunu vektoru %s"
-
-#~ msgid "Cannot open history file for vector '%s'"
-#~ msgstr "Nevar atvērt vēsturi vektoram '%s'"
-
-#~ msgid "Could not stat file '%s'"
-#~ msgstr "Nevar palaist failu '%s'"
+msgid "Cannot open existing vector map <%s>"
+msgstr "Nevar izdzēst eksistējošu vektoru %s "
 
 #, fuzzy
-#~ msgid "Can't open directory %s"
-#~ msgstr "Nevar atvērt veco vektoru %s"
+msgid "Cannot delete existing vector <%s>"
+msgstr "Nevar izdzēst eksistējošu vektoru %s "
 
-#~ msgid "No such graphics monitor as <%s>.\n"
-#~ msgstr "Nav tāds grafiskais monitors kā <%s>.\n"
+msgid "Cannot open new vector %s"
+msgstr "Nevar atvērt jaunu vektoru %s"
 
-#~ msgid "Please run \"d.mon\" to select a valid graphics monitor.\n"
-#~ msgstr "Lūdzu palaid \"d.mon\" lai izvēlētos derīgu grafisko monitoru.\n"
+msgid "Cannot open history file for vector '%s'"
+msgstr "Nevar atvērt vēsturi vektoram '%s'"
 
-#~ msgid "Can't stat %s\n"
-#~ msgstr "Nevar uzsākt %s\n"
-
-#~ msgid "Error - Monitor <%s> is in use.\n"
-#~ msgstr "Kļūda - Monitots <%s> tiek lietots\n"
-
-#~ msgid "Error - Monitor <%s> is in use by %s.\n"
-#~ msgstr "Kļūda - Monitoru <%s> lieto %s.\n"
-
-#~ msgid "Error - Could not complete locking process for monitor <%s>.\n"
-#~ msgstr "Kļūda - Nevar pabeigt monitora procesa slēgšanu monitoram <%s>.\n"
-
-#~ msgid "Error - Can't set up pipe to graphics device.\n"
-#~ msgstr "Kļūda - Nevar izveidot savienojumu ar grafisko iekārtu.\n"
-
-#~ msgid "Error - Graphics monitor <%s> not running!\n"
-#~ msgstr "Kļūda - Grafiskais monitors <%s> nedarbojas!\n"
-
-#~ msgid "Please start graphics monitor <%s>.\n"
-#~ msgstr "Lūdzu startē grafisko monitoru <%s>.\n"
-
-#~ msgid "Not connected...\n"
-#~ msgstr "Nav pieslēdzies...\n"
-
-#~ msgid "Couldn't connect to monitor. Will try once more.\n"
-#~ msgstr "Nevar pieslēgties monitoram. Tiks mieģināts vēlreiz.\n"
+msgid "Could not stat file '%s'"
+msgstr "Nevar palaist failu '%s'"
 
 #, fuzzy
-#~ msgid "Size of cell in fp maps = %d"
-#~ msgstr "Celles izmērs fp maps = %d\n"
+msgid "Can't open directory %s"
+msgstr "Nevar atvērt veco vektoru %s"
+
+msgid "No such graphics monitor as <%s>.\n"
+msgstr "Nav tāds grafiskais monitors kā <%s>.\n"
+
+msgid "Please run \"d.mon\" to select a valid graphics monitor.\n"
+msgstr "Lūdzu palaid \"d.mon\" lai izvēlētos derīgu grafisko monitoru.\n"
+
+msgid "Can't stat %s\n"
+msgstr "Nevar uzsākt %s\n"
+
+msgid "Error - Monitor <%s> is in use.\n"
+msgstr "Kļūda - Monitots <%s> tiek lietots\n"
+
+msgid "Error - Monitor <%s> is in use by %s.\n"
+msgstr "Kļūda - Monitoru <%s> lieto %s.\n"
+
+msgid "Error - Could not complete locking process for monitor <%s>.\n"
+msgstr "Kļūda - Nevar pabeigt monitora procesa slēgšanu monitoram <%s>.\n"
+
+msgid "Error - Can't set up pipe to graphics device.\n"
+msgstr "Kļūda - Nevar izveidot savienojumu ar grafisko iekārtu.\n"
+
+msgid "Error - Graphics monitor <%s> not running!\n"
+msgstr "Kļūda - Grafiskais monitors <%s> nedarbojas!\n"
+
+msgid "Please start graphics monitor <%s>.\n"
+msgstr "Lūdzu startē grafisko monitoru <%s>.\n"
+
+msgid "Not connected...\n"
+msgstr "Nav pieslēdzies...\n"
+
+msgid "Couldn't connect to monitor. Will try once more.\n"
+msgstr "Nevar pieslēgties monitoram. Tiks mieģināts vēlreiz.\n"
 
 #, fuzzy
-#~ msgid "type for writing floating maps = %d"
-#~ msgstr "eksist;ejošām rastra kartēm %d\n"
-
-#~ msgid "current window = %p"
-#~ msgstr "pašreizējais logs = %p"
-
-#~ msgid "Flag: window set? %d"
-#~ msgstr "Karogs: izvēlēties logu? %d"
+msgid "Size of cell in fp maps = %d"
+msgstr "Celles izmērs fp maps = %d\n"
 
 #, fuzzy
-#~ msgid "File descriptor for automatic mask %d"
-#~ msgstr "Faila deskriptors automātiskai slēpšanai %d\n"
+msgid "type for writing floating maps = %d"
+msgstr "eksist;ejošām rastra kartēm %d\n"
 
-#~ msgid "Flag denoting automatic masking %d"
-#~ msgstr "Karogs atņemt automātisko maskēšanu %d"
+msgid "current window = %p"
+msgstr "pašreizējais logs = %p"
 
-#~ msgid "CELL mask buffer %p"
-#~ msgstr "CELL maskas bufferis %p"
-
-#~ msgid "buffer for reading null rows %p"
-#~ msgstr "rezerve tukšo rindu lasīšanai %p"
-
-#~ msgid "Pre/post compressed data buffer %p"
-#~ msgstr "Pirms/pēc kompresēto datu rzerves buferis %p"
-
-#~ msgid "sizeof compressed_buf %d"
-#~ msgstr "compressed_buf izmērs %d"
-
-#~ msgid "work data buffer %p"
-#~ msgstr "darba bufera izmērs %p"
-
-#~ msgid "sizeof work_buf %d"
-#~ msgstr "work_buf izmērs %d"
-
-#~ msgid "sizeof null_buf %d"
-#~ msgstr "null_buf izmērs%d"
-
-#~ msgid "sizeof mask_buf %d"
-#~ msgstr "mask_buf  izmērs %d"
-
-#~ msgid "Histogram request %d"
-#~ msgstr "Histogrammas pieprasījums %d"
-
-#~ msgid "G_dump: file #%d"
-#~ msgstr "G_dump: fails #%d"
+msgid "Flag: window set? %d"
+msgstr "Karogs: izvēlēties logu? %d"
 
 #, fuzzy
-#~ msgid "open mode = %d"
-#~ msgstr "atvērtā režijmā = %d\n"
+msgid "File descriptor for automatic mask %d"
+msgstr "Faila deskriptors automātiskai slēpšanai %d\n"
+
+msgid "Flag denoting automatic masking %d"
+msgstr "Karogs atņemt automātisko maskēšanu %d"
+
+msgid "CELL mask buffer %p"
+msgstr "CELL maskas bufferis %p"
+
+msgid "buffer for reading null rows %p"
+msgstr "rezerve tukšo rindu lasīšanai %p"
+
+msgid "Pre/post compressed data buffer %p"
+msgstr "Pirms/pēc kompresēto datu rzerves buferis %p"
+
+msgid "sizeof compressed_buf %d"
+msgstr "compressed_buf izmērs %d"
+
+msgid "work data buffer %p"
+msgstr "darba bufera izmērs %p"
+
+msgid "sizeof work_buf %d"
+msgstr "work_buf izmērs %d"
+
+msgid "sizeof null_buf %d"
+msgstr "null_buf izmērs%d"
+
+msgid "sizeof mask_buf %d"
+msgstr "mask_buf  izmērs %d"
+
+msgid "Histogram request %d"
+msgstr "Histogrammas pieprasījums %d"
+
+msgid "G_dump: file #%d"
+msgstr "G_dump: fails #%d"
 
 #, fuzzy
-#~ msgid "Cell header %p"
-#~ msgstr "Šūnas iesākums  %p\n"
-
-#~ msgid "Table reclass %p"
-#~ msgstr "Tabulas pārklasificēšana %p"
-
-#~ msgid "Cell stats %p"
-#~ msgstr "Šūnu statistika %p"
+msgid "open mode = %d"
+msgstr "atvērtā režijmā = %d\n"
 
 #, fuzzy
-#~ msgid "Range structure %p"
-#~ msgstr "Amplitūdas, loka struktūra %p\n"
+msgid "Cell header %p"
+msgstr "Šūnas iesākums  %p\n"
+
+msgid "Table reclass %p"
+msgstr "Tabulas pārklasificēšana %p"
+
+msgid "Cell stats %p"
+msgstr "Šūnu statistika %p"
 
 #, fuzzy
-#~ msgid "float Range structure %p"
-#~ msgstr "plūstoša loka struktūra %p\n"
-
-#~ msgid "want histogram?  %d"
-#~ msgstr "vēlies histogrammu? %d"
-
-#~ msgid "Automatic reclass flag %d"
-#~ msgstr "Automātiskās pārklasificēšanas karogs %d"
-
-#~ msgid "File row addresses %p"
-#~ msgstr "Faila līnijas adrese %p"
+msgid "Range structure %p"
+msgstr "Amplitūdas, loka struktūra %p\n"
 
 #, fuzzy
-#~ msgid "Data to window col mapping %p"
-#~ msgstr "Data to window col mapping %p\n"
+msgid "float Range structure %p"
+msgstr "plūstoša loka struktūra %p\n"
+
+msgid "want histogram?  %d"
+msgstr "vēlies histogrammu? %d"
+
+msgid "Automatic reclass flag %d"
+msgstr "Automātiskās pārklasificēšanas karogs %d"
+
+msgid "File row addresses %p"
+msgstr "Faila līnijas adrese %p"
 
 #, fuzzy
-#~ msgid "Data to window row constants %f,%f"
-#~ msgstr "Data to window row constants %f,%f\n"
-
-#~ msgid "Current data row in memory %d"
-#~ msgstr "Tekošā datu rinda/līnija atmiņā  %d"
-
-#~ msgid "Current null row in memory %d"
-#~ msgstr "Tekošā nulles līnija atmiņā %d"
-
-#~ msgid "nbytes per cell for current row %d"
-#~ msgstr "nbytes uz šūnu tekošājai rindai %d"
-
-#~ msgid "Decompressed data buffer %s"
-#~ msgstr "Dekompresēto datu buferis %s"
-
-#~ msgid "bytes per cell %d"
-#~ msgstr "baiti uz šūnu %d"
-
-#~ msgid "type: int, float or double map %d"
-#~ msgstr "tips: int,float vai double karte %d"
-
-#~ msgid "Temporary name for NEW files %s"
-#~ msgstr "Pagaidu vārds JAUNAJAM failam %s"
-
-#~ msgid "Temporary name for NEW NULL files %s"
-#~ msgstr "Pagaidu nosaukums NEW NULL failiem %s"
-
-#~ msgid "Mapset of open file %s"
-#~ msgstr "Atvērto failu karšu biblotēka %s"
-
-#~ msgid "io error warning given %d"
-#~ msgstr "sniegts io kļūdas brīdinājums %d"
-
-#~ msgid "xdr stream for reading fp %p"
-#~ msgstr "xdr plūsma fp nolasīšanai %p"
-
-#~ msgid "NULL_ROWS array[%d] = %p"
-#~ msgstr "NULL_ROWS masīvs[%d] = %p"
-
-#~ msgid "data buffer for reading null rows %p"
-#~ msgstr "datu buferis nolasot nullees līnijas %p"
+msgid "Data to window col mapping %p"
+msgstr "Data to window col mapping %p\n"
 
 #, fuzzy
-#~ msgid "Minimum row null row number in memory %d"
-#~ msgstr "Minimum row null row number in memory %d\n"
+msgid "Data to window row constants %f,%f"
+msgstr "Data to window row constants %f,%f\n"
 
-#~ msgid "G_dump: end"
-#~ msgstr "G_dump: beigas"
+msgid "Current data row in memory %d"
+msgstr "Tekošā datu rinda/līnija atmiņā  %d"
 
-#~ msgid "Current window not settable"
-#~ msgstr "Pašreizējais logs nav izvēlams"
+msgid "Current null row in memory %d"
+msgstr "Tekošā nulles līnija atmiņā %d"
 
-#~ msgid "Color file for [%s] not available"
-#~ msgstr "Krāsu fails priekš [%s] nav pieejams"
+msgid "nbytes per cell for current row %d"
+msgstr "nbytes uz šūnu tekošājai rindai %d"
 
-#~ msgid "Cannot use current window"
-#~ msgstr "Nevar lietot pašreizējo logu"
+msgid "Decompressed data buffer %s"
+msgstr "Dekompresēto datu buferis %s"
 
-#~ msgid "Not able to open cellfile for [%s]"
-#~ msgstr "Neiespējami atvērtcellfailu priekš [%s]"
+msgid "bytes per cell %d"
+msgstr "baiti uz šūnu %d"
 
-#, fuzzy
-#~ msgid "Too many open raster maps"
-#~ msgstr "Nevar atvērt 'temp'/pagaidu failu"
+msgid "type: int, float or double map %d"
+msgstr "tips: int,float vai double karte %d"
 
-#, fuzzy
-#~ msgid "Too many open files"
-#~ msgstr "Atvērtā faila nosaukums %s"
+msgid "Temporary name for NEW files %s"
+msgstr "Pagaidu vārds JAUNAJAM failam %s"
 
-#~ msgid "ERROR: GISBASE not set\n"
-#~ msgstr "KĻŪDA: GISBASE nav noteikta\n"
+msgid "Temporary name for NEW NULL files %s"
+msgstr "Pagaidu nosaukums NEW NULL failiem %s"
 
-#~ msgid "Error reading datum shift parameters for %s from table"
-#~ msgstr "Kļūda nolsaot datum mai'mas parametrus priekš %s no  tabulas"
+msgid "Mapset of open file %s"
+msgstr "Atvērto failu karšu biblotēka %s"
 
-#~ msgid "Error reading ellipsoid parameters for %s from table"
-#~ msgstr "Kļūda noasot elipsoīda parametrus laukam %s no tabulas"
+msgid "io error warning given %d"
+msgstr "sniegts io kļūdas brīdinājums %d"
 
-#, fuzzy
-#~ msgid "invalid value: field %s in file %s in %s"
-#~ msgstr "nederīgs a: lauks %s failā %s pie %s"
+msgid "xdr stream for reading fp %p"
+msgstr "xdr plūsma fp nolasīšanai %p"
 
-#~ msgid "No n-dims in site_list"
-#~ msgstr "Nav n-dims iekš site_list"
+msgid "NULL_ROWS array[%d] = %p"
+msgstr "NULL_ROWS masīvs[%d] = %p"
 
-#~ msgid "No double attributes in site_list"
-#~ msgstr "Nav dubulto atribūtu site_list"
-
-#~ msgid "No string attributes in site_list"
-#~ msgstr "Nav teksta (string) atribūtu site_list"
-
-#~ msgid "String attribute index out of range"
-#~ msgstr "Teksts(string) atribūta indekss ir arpus diapazona"
-
-#~ msgid "Unknown attribute type in call to G_readsites_xyz()!\n"
-#~ msgstr "Nezināms atribūta tips pieprasījumam G_readsites_xyz()!\n"
-
-#~ msgid "Failed to convert string attribute."
-#~ msgstr "Izgāzusies konvertācija taksta (string) atribūtam."
-
-#~ msgid "Reading sites list ...                  "
-#~ msgstr "Lasam novietojuma sarakstu ...                  "
-
-#~ msgid "failed to guess format"
-#~ msgstr "izgāšanās minot formātu"
-
-#~ msgid "decimal field %i not present in sites file"
-#~ msgstr "decimālais lauks %i nav prezentēts novietojuma failos"
-
-#~ msgid ""
-#~ "I'm finding records that do not have a floating point attributes (fields "
-#~ "prefixed with '%')."
-#~ msgstr ""
-#~ "Atrodu ierakstus, kuri nesatur peldošā punkta (decimāldaļu) atribūtus "
-#~ "(lauku pievienotais prefiks/piedēklis '%')."
+msgid "data buffer for reading null rows %p"
+msgstr "datu buferis nolasot nullees līnijas %p"
 
 #, fuzzy
-#~ msgid "WARNING: can not create a new process\n"
-#~ msgstr "Nevar izveidot jaunu procesu!"
+msgid "Minimum row null row number in memory %d"
+msgstr "Minimum row null row number in memory %d\n"
+
+msgid "G_dump: end"
+msgstr "G_dump: beigas"
+
+msgid "Current window not settable"
+msgstr "Pašreizējais logs nav izvēlams"
+
+msgid "Color file for [%s] not available"
+msgstr "Krāsu fails priekš [%s] nav pieejams"
+
+msgid "Cannot use current window"
+msgstr "Nevar lietot pašreizējo logu"
+
+msgid "Not able to open cellfile for [%s]"
+msgstr "Neiespējami atvērtcellfailu priekš [%s]"
+
+#, fuzzy
+msgid "Too many open raster maps"
+msgstr "Nevar atvērt 'temp'/pagaidu failu"
+
+#, fuzzy
+msgid "Too many open files"
+msgstr "Atvērtā faila nosaukums %s"
+
+msgid "ERROR: GISBASE not set\n"
+msgstr "KĻŪDA: GISBASE nav noteikta\n"
+
+msgid "Error reading datum shift parameters for %s from table"
+msgstr "Kļūda nolsaot datum mai'mas parametrus priekš %s no  tabulas"
+
+msgid "Error reading ellipsoid parameters for %s from table"
+msgstr "Kļūda noasot elipsoīda parametrus laukam %s no tabulas"
+
+#, fuzzy
+msgid "invalid value: field %s in file %s in %s"
+msgstr "nederīgs a: lauks %s failā %s pie %s"
+
+msgid "No n-dims in site_list"
+msgstr "Nav n-dims iekš site_list"
+
+msgid "No double attributes in site_list"
+msgstr "Nav dubulto atribūtu site_list"
+
+msgid "No string attributes in site_list"
+msgstr "Nav teksta (string) atribūtu site_list"
+
+msgid "String attribute index out of range"
+msgstr "Teksts(string) atribūta indekss ir arpus diapazona"
+
+msgid "Unknown attribute type in call to G_readsites_xyz()!\n"
+msgstr "Nezināms atribūta tips pieprasījumam G_readsites_xyz()!\n"
+
+msgid "Failed to convert string attribute."
+msgstr "Izgāzusies konvertācija taksta (string) atribūtam."
+
+msgid "Reading sites list ...                  "
+msgstr "Lasam novietojuma sarakstu ...                  "
+
+msgid "failed to guess format"
+msgstr "izgāšanās minot formātu"
+
+msgid "decimal field %i not present in sites file"
+msgstr "decimālais lauks %i nav prezentēts novietojuma failos"
+
+msgid ""
+"I'm finding records that do not have a floating point attributes (fields "
+"prefixed with '%')."
+msgstr ""
+"Atrodu ierakstus, kuri nesatur peldošā punkta (decimāldaļu) atribūtus (lauku "
+"pievienotais prefiks/piedēklis '%')."
+
+#, fuzzy
+msgid "WARNING: can not create a new process\n"
+msgstr "Nevar izveidot jaunu procesu!"
+
+#~ msgid "Unable to allocate memory\n"
+#~ msgstr "Neiespējami piešķirt atmiņu\n"
+
+#, fuzzy
+#~ msgid "<%s>: bad mapset"
+#~ msgstr "<%s>karšu kopā <%s>"
+
+#~ msgid "unable to find [%s] in [%s]"
+#~ msgstr "neiespējami atrast [%s] iekš [%s]"

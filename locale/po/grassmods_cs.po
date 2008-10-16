@@ -9942,7 +9942,7 @@ msgstr "Naèítám %s..."
 #: ../raster/r.what/main.c:335
 #, fuzzy, c-format
 msgid "Error reading <%s>"
-msgstr "Chyba pøi ètení øádku"
+msgstr "Chyba pøi ètení rastrového souboru [%s]."
 
 #: ../raster/r.sum/main.c:46
 msgid "Sums up the raster cell values."
@@ -27100,1583 +27100,1564 @@ msgstr "Nelze èíst vstup ze standardního vstupu"
 msgid "Unable to set isosurface (%d) attribute (%d) of volume %d"
 msgstr "Nelze vybrat atributy bodu z <%s>"
 
-#~ msgid "Calculates new grid3D volume from r3.mapcalc expression."
-#~ msgstr "Tvorba nové grid3d volume mapy na základì výrazu pro r3.mapcalc."
+msgid "Calculates new grid3D volume from r3.mapcalc expression."
+msgstr "Tvorba nové grid3d volume mapy na základì výrazu pro r3.mapcalc."
 
-#~ msgid "A (grid3D file)"
-#~ msgstr "A (soubor grid3D)"
+msgid "A (grid3D file)"
+msgstr "A (soubor grid3D)"
 
-#~ msgid "B (grid3D file)"
-#~ msgstr "B (soubor grid3D)"
+msgid "B (grid3D file)"
+msgstr "B (soubor grid3D)"
 
-#~ msgid "C (grid3D file)"
-#~ msgstr "C (soubor grid3D)"
+msgid "C (grid3D file)"
+msgstr "C (soubor grid3D)"
 
-#~ msgid "D (grid3D file)"
-#~ msgstr "D (soubor grid3D)"
+msgid "D (grid3D file)"
+msgstr "D (soubor grid3D)"
 
-#~ msgid "E (grid3D file)"
-#~ msgstr "E (soubor grid3D)"
+msgid "E (grid3D file)"
+msgstr "E (soubor grid3D)"
 
-#~ msgid "F (grid3D file)"
-#~ msgstr "F (soubor grid3D)"
+msgid "F (grid3D file)"
+msgstr "F (soubor grid3D)"
 
-#~ msgid "Formula (e.g. A-B or A*C+B)"
-#~ msgstr "Vzorec (napø. A-B nebo A*C+B)"
+msgid "Formula (e.g. A-B or A*C+B)"
+msgstr "Vzorec (napø. A-B nebo A*C+B)"
 
-#~ msgid "Name for output grid3D volume"
-#~ msgstr "Název výstupního souboru grid3D objem"
+msgid "Name for output grid3D volume"
+msgstr "Název výstupního souboru grid3D objem"
 
-#~ msgid "Show help"
-#~ msgstr "Zobraz nápovìdu"
+msgid "Show help"
+msgstr "Zobraz nápovìdu"
 
-#~ msgid "Expert mode (enter a set of r3.mapcalc expressions)"
-#~ msgstr "Expertní mód (zadejte soubor výrazù pro r3.mapcalc)"
+msgid "Expert mode (enter a set of r3.mapcalc expressions)"
+msgstr "Expertní mód (zadejte soubor výrazù pro r3.mapcalc)"
 
-#~ msgid "Do not overwrite existing map"
-#~ msgstr "Nepøepisuj existující mapu"
+msgid "Do not overwrite existing map"
+msgstr "Nepøepisuj existující mapu"
 
-#~ msgid "Output field seperator"
-#~ msgstr "Výstupní oddìlovaè"
+msgid "Output field seperator"
+msgstr "Výstupní oddìlovaè"
 
-#~ msgid "Displays a raster map and its legend on a graphics window"
-#~ msgstr "Zobrazí rastrovou mapu spolu s legendou"
+msgid "Displays a raster map and its legend on a graphics window"
+msgstr "Zobrazí rastrovou mapu spolu s legendou"
 
-#~ msgid "omit entries with missing label"
-#~ msgstr "pøeskoèit záznamy bez popisku"
+msgid "omit entries with missing label"
+msgstr "pøeskoèit záznamy bez popisku"
 
-#~ msgid "Number of lines to appear in the legend"
-#~ msgstr "Poèet øádkù v legendì"
+msgid "Number of lines to appear in the legend"
+msgstr "Poèet øádkù v legendì"
 
-#~ msgid "Displays thematic vectormap"
-#~ msgstr "Tématicky zobrazuje vektorovou mapu"
+msgid "Displays thematic vectormap"
+msgstr "Tématicky zobrazuje vektorovou mapu"
 
-#~ msgid "display, legend"
-#~ msgstr "zobrazení, legenda"
+msgid "display, legend"
+msgstr "zobrazení, legenda"
 
-#~ msgid "Vector map to display thematically"
-#~ msgstr "Vektorová mapa, která bude tématicky zobrazena"
+msgid "Vector map to display thematically"
+msgstr "Vektorová mapa, která bude tématicky zobrazena"
 
-#~ msgid "Theme_prefs"
-#~ msgstr "Theme_prefs"
+msgid "Theme_prefs"
+msgstr "Theme_prefs"
 
-#~ msgid "Vector map type"
-#~ msgstr "Typ vektorové mapy"
+msgid "Vector map type"
+msgstr "Typ vektorové mapy"
 
-#~ msgid "Attribute column to use for thematic display (must be numeric)"
-#~ msgstr ""
-#~ "Název sloupce atributu, který má být pou¾it pro tématické zobrazení (musí "
-#~ "být èíselný)"
+msgid "Attribute column to use for thematic display (must be numeric)"
+msgstr ""
+"Název sloupce atributu, který má být pou¾it pro tématické zobrazení (musí "
+"být èíselný)"
 
-#~ msgid "Type of thematic display"
-#~ msgstr "Typ tématu"
+msgid "Type of thematic display"
+msgstr "Typ tématu"
 
-#~ msgid "Thematic divisions of data for display"
-#~ msgstr "Zpùsob dìlení celkového rozsahu dat na intervaly pøi zobrazení"
+msgid "Thematic divisions of data for display"
+msgstr "Zpùsob dìlení celkového rozsahu dat na intervaly pøi zobrazení"
 
-#~ msgid ""
-#~ "Break points for custom breaks option. Separate values by spaces. (0 10 "
-#~ "20 30 ...)"
-#~ msgstr ""
-#~ "Hodnoty zastavení (break points). Hodnoty oddìlené mezerou (0 10 20 "
-#~ "30 ...)"
+msgid ""
+"Break points for custom breaks option. Separate values by spaces. (0 10 20 "
+"30 ...)"
+msgstr ""
+"Hodnoty zastavení (break points). Hodnoty oddìlené mezerou (0 10 20 30 ...)"
 
-#~ msgid "Layer to use for thematic display"
-#~ msgstr "Vrstva pou¾itá k tématickému zobrazení"
+msgid "Layer to use for thematic display"
+msgstr "Vrstva pou¾itá k tématickému zobrazení"
 
-#~ msgid "Points"
-#~ msgstr "Body"
+msgid "Points"
+msgstr "Body"
 
-#~ msgid "Vector point icon for point data"
-#~ msgstr "Ikona pro bodová data"
+msgid "Vector point icon for point data"
+msgstr "Ikona pro bodová data"
 
-#~ msgid ""
-#~ "Icon size for point data (minimum icon size/line width for graduated "
-#~ "points/lines)"
-#~ msgstr ""
-#~ "Velikost ikony pro bodová data (minimální velikost ikony/¹íøka linie pro "
-#~ "zvìt¹ující se body nebo linie)"
+msgid ""
+"Icon size for point data (minimum icon size/line width for graduated points/"
+"lines)"
+msgstr ""
+"Velikost ikony pro bodová data (minimální velikost ikony/¹íøka linie pro "
+"zvìt¹ující se body nebo linie)"
 
-#~ msgid "Maximum icon size/line width for graduated points and lines"
-#~ msgstr ""
-#~ "Maximální velikost ikony nebo ¹íøka linie pro zvìt¹ující se body a linie"
+msgid "Maximum icon size/line width for graduated points and lines"
+msgstr ""
+"Maximální velikost ikony nebo ¹íøka linie pro zvìt¹ující se body a linie"
 
-#~ msgid "Number of classes for interval theme (integer)"
-#~ msgstr "Poèet tøíd pro intervalové téma (celé èíslo)"
+msgid "Number of classes for interval theme (integer)"
+msgstr "Poèet tøíd pro intervalové téma (celé èíslo)"
 
-#~ msgid ""
-#~ "Color scheme for graduated color mapping (select 'single_color' for "
-#~ "graduated point/line display)"
-#~ msgstr ""
-#~ "Barevné schéma pro gradující barvy (vyberte 'single_color' pro zobrazení "
-#~ "gradujících bodù/linií)"
+msgid ""
+"Color scheme for graduated color mapping (select 'single_color' for "
+"graduated point/line display)"
+msgstr ""
+"Barevné schéma pro gradující barvy (vyberte 'single_color' pro zobrazení "
+"gradujících bodù/linií)"
 
-#~ msgid ""
-#~ "Color for graduated points map (grass named color or R:G:B triplet). Set "
-#~ "color scheme to single color."
-#~ msgstr ""
-#~ "Barva pro gradující bodové mapy (jména barev definovaných GRASSem nebo "
-#~ "triplet R:G:B). Nastaví barevné téma na jednobarevné."
+msgid ""
+"Color for graduated points map (grass named color or R:G:B triplet). Set "
+"color scheme to single color."
+msgstr ""
+"Barva pro gradující bodové mapy (jména barev definovaných GRASSem nebo "
+"triplet R:G:B). Nastaví barevné téma na jednobarevné."
 
-#~ msgid ""
-#~ "Color for graduated lines or point/area outlines (grass named color or R:"
-#~ "G:B triplet). Set color scheme to single color."
-#~ msgstr ""
-#~ "Barva pro gradující linie nebo body/okraje ploch (barvy známé GRASSu nebo "
-#~ "triplet R:G:B). Nastavíbarevné schéma na jednu barvu."
+msgid ""
+"Color for graduated lines or point/area outlines (grass named color or R:G:B "
+"triplet). Set color scheme to single color."
+msgstr ""
+"Barva pro gradující linie nebo body/okraje ploch (barvy známé GRASSu nebo "
+"triplet R:G:B). Nastavíbarevné schéma na jednu barvu."
 
-#~ msgid ""
-#~ "Beginning color for custom color gradient. Must be expressed as R:G:B "
-#~ "triplet."
-#~ msgstr ""
-#~ "Poèáteèní barva pro vlastní barevný gradient. Musí být zadána jako trojce "
-#~ "R:G:B."
+msgid ""
+"Beginning color for custom color gradient. Must be expressed as R:G:B "
+"triplet."
+msgstr ""
+"Poèáteèní barva pro vlastní barevný gradient. Musí být zadána jako trojce R:"
+"G:B."
 
-#~ msgid ""
-#~ "Ending color for custom color gradient. Must be expressed as R:G:B triplet"
-#~ msgstr ""
-#~ "Koncová barva pro vlastní barevný gradient. Musí být zadána jako trojce R:"
-#~ "G:B."
+msgid ""
+"Ending color for custom color gradient. Must be expressed as R:G:B triplet"
+msgstr ""
+"Koncová barva pro vlastní barevný gradient. Musí být zadána jako trojce R:G:"
+"B."
 
-#~ msgid "Misc"
-#~ msgstr "Rùzné"
+msgid "Misc"
+msgstr "Rùzné"
 
-#~ msgid "Select x11 display monitor for legend"
-#~ msgstr "Vybrat pro zobrazení legendy monitor x1"
+msgid "Select x11 display monitor for legend"
+msgstr "Vybrat pro zobrazení legendy monitor x1"
 
-#~ msgid "Save thematic map commands to group file for GIS Manager"
-#~ msgstr ""
-#~ "Ulo¾ pøíkazy pro vytvoøení tématické mapy do souboru skupiny pro GIS "
-#~ "Manager"
+msgid "Save thematic map commands to group file for GIS Manager"
+msgstr ""
+"Ulo¾ pøíkazy pro vytvoøení tématické mapy do souboru skupiny pro GIS Manager"
 
-#~ msgid ""
-#~ "Root for the name of psmap instruction files to be in current directory "
-#~ "(if not set, no psmap instruction files will be created)"
-#~ msgstr ""
-#~ "Koøen názvu souborù psmap pro aktuální adresáø (pokud není nastaven, "
-#~ "¾ádný soubor s instrukcemi pro psmap nebude vytvoøen)"
+msgid ""
+"Root for the name of psmap instruction files to be in current directory (if "
+"not set, no psmap instruction files will be created)"
+msgstr ""
+"Koøen názvu souborù psmap pro aktuální adresáø (pokud není nastaven, ¾ádný "
+"soubor s instrukcemi pro psmap nebude vytvoøen)"
 
-#~ msgid "Name of group file where thematic map commands will be saved"
-#~ msgstr ""
-#~ "Jméno souboru skupiny kam budou ulo¾eny pøíkazy pro tématické zobrazení"
+msgid "Name of group file where thematic map commands will be saved"
+msgstr ""
+"Jméno souboru skupiny kam budou ulo¾eny pøíkazy pro tématické zobrazení"
 
-#~ msgid "Create graphic legend in x11 display monitor"
-#~ msgstr "Vytvoøit grafickou legendu v grafickém monitoru x1"
+msgid "Create graphic legend in x11 display monitor"
+msgstr "Vytvoøit grafickou legendu v grafickém monitoru x1"
 
-#~ msgid "Only draw fills (no outlines) for areas and points"
-#~ msgstr "Kreslit pouze výplnì (bez hranic) ploch a bodù"
+msgid "Only draw fills (no outlines) for areas and points"
+msgstr "Kreslit pouze výplnì (bez hranic) ploch a bodù"
 
-#~ msgid "Update color values to GRASSRGB column in attribute table"
-#~ msgstr "Ulo¾ barevné hodnoty do tabulky do sloupeèku GRASSRGB"
+msgid "Update color values to GRASSRGB column in attribute table"
+msgstr "Ulo¾ barevné hodnoty do tabulky do sloupeèku GRASSRGB"
 
-#~ msgid "Output legend for GIS Manager (for scripting use only)"
-#~ msgstr "Výstupní legenda pro GIS Manager (pouze pøi pou¾ití ve skriptech)"
+msgid "Output legend for GIS Manager (for scripting use only)"
+msgstr "Výstupní legenda pro GIS Manager (pouze pøi pou¾ití ve skriptech)"
 
-#~ msgid "Use math notation brackets in legend"
-#~ msgstr "Pou¾ij matematický zápis závorek v legendì"
+msgid "Use math notation brackets in legend"
+msgstr "Pou¾ij matematický zápis závorek v legendì"
 
 #, fuzzy
-#~ msgid "Removes data files using basic regular expressions and wildcards."
-#~ msgstr "Pou¾ij regulární výrazy a zástupné znaky na g.list"
+msgid "Removes data files using basic regular expressions and wildcards."
+msgstr "Pou¾ij regulární výrazy a zástupné znaky na g.list"
 
-#~ msgid "Raster to remove"
-#~ msgstr "Rastrová mapa ke smazání"
+msgid "Raster to remove"
+msgstr "Rastrová mapa ke smazání"
 
-#~ msgid "3d raster to remove"
-#~ msgstr "3d rastrová mapa ke smazání"
+msgid "3d raster to remove"
+msgstr "3d rastrová mapa ke smazání"
 
-#~ msgid "Vector to remove"
-#~ msgstr "Vektorová mapa ke smazání"
+msgid "Vector to remove"
+msgstr "Vektorová mapa ke smazání"
 
-#~ msgid "Region to remove"
-#~ msgstr "Region ke smazání"
+msgid "Region to remove"
+msgstr "Region ke smazání"
 
-#~ msgid "Label to remove"
-#~ msgstr "©títky ke smazání"
+msgid "Label to remove"
+msgstr "©títky ke smazání"
 
-#~ msgid "3dview to remove"
-#~ msgstr "smazat 3dview"
+msgid "3dview to remove"
+msgstr "smazat 3dview"
 
-#~ msgid "Group to remove"
-#~ msgstr "Skupina ke smazání"
+msgid "Group to remove"
+msgstr "Skupina ke smazání"
 
-#~ msgid "Calculate new raster map from a r.mapcalc expression."
-#~ msgstr "Poèítá novou mapu z výrazu pro r.mapcalc."
+msgid "Calculate new raster map from a r.mapcalc expression."
+msgstr "Poèítá novou mapu z výrazu pro r.mapcalc."
 
-#~ msgid "A"
-#~ msgstr "A"
+msgid "A"
+msgstr "A"
 
-#~ msgid "B"
-#~ msgstr "B"
+msgid "B"
+msgstr "B"
 
-#~ msgid "C"
-#~ msgstr "C"
+msgid "C"
+msgstr "C"
 
-#~ msgid "D"
-#~ msgstr "D"
+msgid "D"
+msgstr "D"
 
-#~ msgid "E"
-#~ msgstr "E"
+msgid "E"
+msgstr "E"
 
-#~ msgid "F"
-#~ msgstr "F"
+msgid "F"
+msgstr "F"
 
-#~ msgid "Expert mode (enter a set of r.mapcalc expressions)"
-#~ msgstr "Expertní mód (zadejte soubor výrazù pro r.mapcalc)"
-
-#, fuzzy
-#~ msgid "Lists data files using basic regular expressions and wildcards."
-#~ msgstr "Pou¾ij regulární výrazy a zástupné znaky na g.list"
-
-#~ msgid "Data type"
-#~ msgstr "Typ dat"
-
-#~ msgid "Mapset(s) to list (default: current mapset search path)"
-#~ msgstr "Mapset, ze kterého má být seznam udìlán (výchozí: aktuální)"
-
-#~ msgid "Output separator (default: newline)"
-#~ msgstr "Oddìlovaè výstupu (výchozí: øádkový zlom)"
-
-#~ msgid "Exports GRASS raster into GDAL supported formats."
-#~ msgstr ""
-#~ "Exportuje GRASS rastry do jednoho z formátù podporovaných knihovnou GDAL."
-
-#~ msgid "Region sensitive output"
-#~ msgstr "Výstup s ohledem na region"
-
-#~ msgid ""
-#~ "Creation option to the output format driver. Multiple options may be "
-#~ "listed"
-#~ msgstr "Volby pro ovladaè výstupního formátu. Volby je mo¾no kombinovat."
-
-#~ msgid "Current window not settable"
-#~ msgstr "Aktuální okno nelze nastavit"
-
-#~ msgid "Error in calculating conversions"
-#~ msgstr "Chyba pøi pøepoèítávání"
-
-#~ msgid "Display number of colors"
-#~ msgstr "Zobraz poèet barev"
-
-#~ msgid "Rendering method for filled polygons"
-#~ msgstr "Vykreslovací metoda pro plné polygony"
+msgid "Expert mode (enter a set of r.mapcalc expressions)"
+msgstr "Expertní mód (zadejte soubor výrazù pro r.mapcalc)"
 
 #, fuzzy
-#~ msgid ""
-#~ "d;use the display library basic functions (features: polylines);c;use the "
-#~ "display library clipping functions (features: clipping);l;use the display "
-#~ "library culling functions (features: culling, polylines)"
-#~ msgstr ""
-#~ "g;pou¾ití vykreslovacích funkcí(prvky:vystøihování);r;pou¾ití knihovny "
-#~ "funkcí pro rastrovou grafiku (prvky: lomená èára);d;pou¾ití knihovny "
-#~ "základních zobrazovacích funkcí (prvky: lomená èára);c; pou¾ití knihovny "
-#~ "zobrazovacích vystøihovacích funkcí (prvky: vystøihování);l;pou¾ití "
-#~ "knihovny zobrazovacích odstraòovacích funkcí (prvky: odstranìní, lomená "
-#~ "èára)"
+msgid "Lists data files using basic regular expressions and wildcards."
+msgstr "Pou¾ij regulární výrazy a zástupné znaky na g.list"
+
+msgid "Data type"
+msgstr "Typ dat"
+
+msgid "Mapset(s) to list (default: current mapset search path)"
+msgstr "Mapset, ze kterého má být seznam udìlán (výchozí: aktuální)"
+
+msgid "Output separator (default: newline)"
+msgstr "Oddìlovaè výstupu (výchozí: øádkový zlom)"
+
+msgid "Exports GRASS raster into GDAL supported formats."
+msgstr ""
+"Exportuje GRASS rastry do jednoho z formátù podporovaných knihovnou GDAL."
+
+msgid "Region sensitive output"
+msgstr "Výstup s ohledem na region"
+
+msgid ""
+"Creation option to the output format driver. Multiple options may be listed"
+msgstr "Volby pro ovladaè výstupního formátu. Volby je mo¾no kombinovat."
+
+msgid "Current window not settable"
+msgstr "Aktuální okno nelze nastavit"
+
+msgid "Error in calculating conversions"
+msgstr "Chyba pøi pøepoèítávání"
+
+msgid "Display number of colors"
+msgstr "Zobraz poèet barev"
+
+msgid "Rendering method for filled polygons"
+msgstr "Vykreslovací metoda pro plné polygony"
 
 #, fuzzy
-#~ msgid "Invalid rendering method <%s>"
-#~ msgstr "Neplatná metoda: %s"
-
-#~ msgid "Error reading raster map"
-#~ msgstr "chyba pøi ètení rastrové mapy"
-
-#~ msgid "Interactive profile plotting utility with optional output."
-#~ msgstr "Nástroj pro interaktivní vytváøení profilù s volitelným výstupem."
-
-#~ msgid "Optional display raster"
-#~ msgstr "Volitelný rastr, který bude zobrazen"
-
-#~ msgid "Output profile data to file(s) with prefix 'name'"
-#~ msgstr "Výstupní data profilu ulo¾it do souboru(ù) s prefixem 'jméno'"
-
-#~ msgid "Display raster [%s] not found. Using profile raster."
-#~ msgstr "Rastr ke zobrazení [%s] nenalezen. Pou¾iji rastr profilu."
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "Use mouse to choose action"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "Pou¾ít my¹ pro vybraní akce"
-
-#~ msgid "Use 'd.frame -e' to remove left over frames"
-#~ msgstr "Pou¾ijte 'd.frame -e' pro smazání zbylých rámcù"
-
-#~ msgid "Error opening cell-file"
-#~ msgstr "Chyba pøi otevírání souboru cell"
-
-#~ msgid "Error reading from cell-file"
-#~ msgstr "Chyba pøi ètení souboru cell"
-
-#~ msgid "Mysterious window inconsistancy error"
-#~ msgstr "Záhadná chyba nekonzistence okna"
-
-#~ msgid "%s: Couldn't open raster <%s@%s>"
-#~ msgstr "%s: Nelze otevøít rastrový soubor <%s@%s>"
-
-#~ msgid "%s: Couldn't read color table for <%s@%s>"
-#~ msgstr "%s: Nelze èíst tabulku barev pro <%s@%s>"
-
-#~ msgid "one moment ..."
-#~ msgstr "momentíèek ..."
-
-#~ msgid "%s: 'is_null_value()' got NULL pointer!"
-#~ msgstr "%s: 'is_null_value()' dostala NULLový pointer!"
-
-#~ msgid "%s: 'is_null_value()' got negative column index"
-#~ msgstr "%s: 'is_null_value()' dostala negativní index sloupeèku"
-
-#~ msgid "%s: 'is_null_value()' Unknown RASTER_MAP_TYPE '%d'"
-#~ msgstr "%s: 'is_null_value()' Neznámý RASTER_MAP_TYPE '%d'"
-
-#~ msgid "Monitor: waitpid: expected %d but got %d"
-#~ msgstr "Monitor: waitpid: oèekával jsem %d, ale dostal jsem %d"
-
-#~ msgid "Monitor: XGetWMName failed"
-#~ msgstr "Monitor: XgetWMName selhalo"
-
-#~ msgid "Monitor: XGetWMName: bad result"
-#~ msgstr "Monitor: XGetWMName: ¹patný výsledek"
-
-#~ msgid "Monitor: interactive command in redraw"
-#~ msgstr "Monitor: interaktivní pøíkaz v pøekreslení"
-
-#~ msgid "found %d visuals of type TrueColor"
-#~ msgstr "nalezeno %d zobrazení typu TrueColor"
-
-#~ msgid "searching for highest bit depth"
-#~ msgstr "hledám nejvìt¹í bitovou hloubku"
-
-#~ msgid "selected %d bit depth"
-#~ msgstr "vybrána hloubka %d bitù"
-
-#~ msgid "using default visual which is %s"
-#~ msgstr "pou¾ívám výchozí zobrazení, co¾ je %s"
-
-#~ msgid "Can't set current graphics window"
-#~ msgstr "Nelze pou¾ít aktuální okno"
+msgid ""
+"d;use the display library basic functions (features: polylines);c;use the "
+"display library clipping functions (features: clipping);l;use the display "
+"library culling functions (features: culling, polylines)"
+msgstr ""
+"g;pou¾ití vykreslovacích funkcí(prvky:vystøihování);r;pou¾ití knihovny "
+"funkcí pro rastrovou grafiku (prvky: lomená èára);d;pou¾ití knihovny "
+"základních zobrazovacích funkcí (prvky: lomená èára);c; pou¾ití knihovny "
+"zobrazovacích vystøihovacích funkcí (prvky: vystøihování);l;pou¾ití knihovny "
+"zobrazovacích odstraòovacích funkcí (prvky: odstranìní, lomená èára)"
 
 #, fuzzy
-#~ msgid "Database is not a %s"
-#~ msgstr "Název vstupní databáze není nastaven"
+msgid "Invalid rendering method <%s>"
+msgstr "Neplatná metoda: %s"
 
-#~ msgid "Cannot use current window"
-#~ msgstr "Nelze pou¾ít aktuální okno"
+msgid "Error reading raster map"
+msgstr "chyba pøi ètení rastrové mapy"
 
-#~ msgid "Hilight color for text"
-#~ msgstr "Zvýrazòující barva textu"
+msgid "Interactive profile plotting utility with optional output."
+msgstr "Nástroj pro interaktivní vytváøení profilù s volitelným výstupem."
 
-#~ msgid "Vector map <%s> not found in the current mapset"
-#~ msgstr "Vektorová mapa <%s> nebyla nalezena v souèasném mapsetu"
+msgid "Optional display raster"
+msgstr "Volitelný rastr, který bude zobrazen"
 
-#~ msgid "Not enough memory for zero_array_cell"
-#~ msgstr "Pro zero_array_cell není dostatek pamìti"
+msgid "Output profile data to file(s) with prefix 'name'"
+msgstr "Výstupní data profilu ulo¾it do souboru(ù) s prefixem 'jméno'"
 
-#~ msgid "Not enough disk space -- cannot write files"
-#~ msgstr "Plné místo na disku -- nemohu zapsat soubory"
+msgid "Display raster [%s] not found. Using profile raster."
+msgstr "Rastr ke zobrazení [%s] nenalezen. Pou¾iji rastr profilu."
 
-#, fuzzy
-#~ msgid "Option <%s>: <%s> exists."
-#~ msgstr "volba <%s>: <%s> ji¾ existuje"
+msgid ""
+"\n"
+"\n"
+"Use mouse to choose action"
+msgstr ""
+"\n"
+"\n"
+"Pou¾ít my¹ pro vybraní akce"
 
-#, fuzzy
-#~ msgid "Use '%s' option to change vector map name"
-#~ msgstr "Pou¾ijte volbu output= pro zmìnu jména vektoru"
+msgid "Use 'd.frame -e' to remove left over frames"
+msgstr "Pou¾ijte 'd.frame -e' pro smazání zbylých rámcù"
 
-#~ msgid "Network input map <%s> not found"
-#~ msgstr "Vstupní mapa sí»ì <%s> nebyla nalezena"
+msgid "Error opening cell-file"
+msgstr "Chyba pøi otevírání souboru cell"
 
-#~ msgid "Do not print polyline info"
-#~ msgstr "Nevypisovat info o zdvojených liniích "
+msgid "Error reading from cell-file"
+msgstr "Chyba pøi ètení souboru cell"
 
-#~ msgid "Line: %d\n"
-#~ msgstr "Linie: %d\n"
+msgid "Mysterious window inconsistancy error"
+msgstr "Záhadná chyba nekonzistence okna"
 
-#~ msgid "Vector map <%s> is not in user mapset and cannot be updated"
-#~ msgstr "Vektorová mapa <%s> není v tomto mapsetu a nelze ji mìnit"
+msgid "%s: Couldn't open raster <%s@%s>"
+msgstr "%s: Nelze otevøít rastrový soubor <%s@%s>"
 
-#~ msgid "%s: base raster map not found"
-#~ msgstr "%s: základní mapa nebyla nalezena"
+msgid "%s: Couldn't read color table for <%s@%s>"
+msgstr "%s: Nelze èíst tabulku barev pro <%s@%s>"
 
-#~ msgid "%s: cover raster map not found"
-#~ msgstr "%s: pøekryvná mapa nebyla nalezena"
+msgid "one moment ..."
+msgstr "momentíèek ..."
 
-#~ msgid "%s: base map and output map must be different"
-#~ msgstr "%s: základní mapa a výstupní mapa musí být rùzné"
+msgid "%s: 'is_null_value()' got NULL pointer!"
+msgstr "%s: 'is_null_value()' dostala NULLový pointer!"
 
-#~ msgid "Cell file not found"
-#~ msgstr "Rastrový (cell) soubor nebyl nalezen"
+msgid "%s: 'is_null_value()' got negative column index"
+msgstr "%s: 'is_null_value()' dostala negativní index sloupeèku"
 
-#~ msgid "elevin raster map <%s> not found"
-#~ msgstr "vstupní rastr s elevací <%s> nebyl nalezen"
+msgid "%s: 'is_null_value()' Unknown RASTER_MAP_TYPE '%d'"
+msgstr "%s: 'is_null_value()' Neznámý RASTER_MAP_TYPE '%d'"
 
-#~ msgid "aspin raster map <%s> not found"
-#~ msgstr "vstupní rastr s expozicí <%s> nebyl nalezen"
+msgid "Monitor: waitpid: expected %d but got %d"
+msgstr "Monitor: waitpid: oèekával jsem %d, ale dostal jsem %d"
 
-#~ msgid "slopein raster map <%s> not found"
-#~ msgstr "vstupní rastr sklonu <%s> nebyl nalezen"
+msgid "Monitor: XGetWMName failed"
+msgstr "Monitor: XgetWMName selhalo"
 
-#~ msgid "linkein raster map <%s> not found"
-#~ msgstr "vstupní rastr s Linkovými koeficienty <%s> nebyl nalezen"
+msgid "Monitor: XGetWMName: bad result"
+msgstr "Monitor: XGetWMName: ¹patný výsledek"
 
-#~ msgid "albedo raster map <%s> not found"
-#~ msgstr "rastrový soubor albeda <%s> nebyl nalezen"
+msgid "Monitor: interactive command in redraw"
+msgstr "Monitor: interaktivní pøíkaz v pøekreslení"
 
-#~ msgid "latin raster map <%s> not found"
-#~ msgstr "rastrový soubor se zem. ¹íøkou <%s> nebyl nalezen"
+msgid "found %d visuals of type TrueColor"
+msgstr "nalezeno %d zobrazení typu TrueColor"
 
-#~ msgid "coefbh raster map <%s> not found"
-#~ msgstr ""
-#~ "raststrový soubor s koeficientem pøímého sluneèního záøení <%s> nebyl "
-#~ "nalezen"
+msgid "searching for highest bit depth"
+msgstr "hledám nejvìt¹í bitovou hloubku"
 
-#~ msgid "coefdh raster map <%s> not found"
-#~ msgstr "rastrový soubor s koeficientem difíºzního záøení <%s> nebyl nalezen"
+msgid "selected %d bit depth"
+msgstr "vybrána hloubka %d bitù"
 
-#~ msgid "Unable to open vector map <%s> in <%s>"
-#~ msgstr "Nelze otevøít vektorovou mapu <%s> v  <%s>"
+msgid "using default visual which is %s"
+msgstr "pou¾ívám výchozí zobrazení, co¾ je %s"
 
-#, fuzzy
-#~ msgid "%s - not found"
-#~ msgstr "<%s> nenalezen"
-
-#~ msgid "Title, in quotes"
-#~ msgstr "Titulek v uvozovkách"
-
-#~ msgid "RGB raster map <%s> not found"
-#~ msgstr "RGB rastrová mapa <%s> nenalezena"
-
-#~ msgid "Cannot create RGB data, please provide three maps [r,g,b]"
-#~ msgstr "Nelze vytvoøit data RGB, prosím zadejte tøi mapy [r,g,b]"
-
-#~ msgid "Vector cell map <%s> not found"
-#~ msgstr "Vektorová mapa buòek <%s> nebyla nalezena"
-
-#~ msgid "Cannot create vector data, please provide three maps [x,y,z]"
-#~ msgstr ""
-#~ "Nelze vytvoøit vektorová data, prosím zadejte tøi mapové vrstvy [x,y,z]"
-
-#~ msgid "Unable to find starting vector <%s> "
-#~ msgstr "Nelze nalézt poèáteèní vektor <%s> "
-
-#~ msgid "Unable to find stop vector <%s>"
-#~ msgstr "Nelze nalézt koncový vektor <%s> "
-
-#~ msgid "Raster output map <%s> not found (no start_points given)"
-#~ msgstr ""
-#~ "Výstupní rastrová mapa <%s>  nenalezena (nebyly zadány start_points)"
-
-#~ msgid "Memory allocation error on reading start points from raster map %s"
-#~ msgstr ""
-#~ "Chyba pøi alokaci pamìti pøi ètení poèáteèních bodù z rastrové mapy %s"
-
-#~ msgid "Run verbosly"
-#~ msgstr "Roz¹íøený výpis"
-
-#~ msgid "Run VERBOSELY"
-#~ msgstr "Roz¹íøený výpis"
-
-#~ msgid "No clump map specified and MASK not set."
-#~ msgstr "Nebyla zadána mapa spojitých oblastí a nastavena MASKa"
-
-#~ msgid "Unable to find data map"
-#~ msgstr "Nelze nalézt mapu s daty"
-
-#~ msgid "Unable to find clump map"
-#~ msgstr "Nelze nalézt mapu shlukù (clump)"
-
-#~ msgid "%s: Error reading from raster map <%s> in mapset <%s>"
-#~ msgstr "%s: Chyba pøi ètení z rastrové mapy <%s> v mapsetu <%s>"
+msgid "Can't set current graphics window"
+msgstr "Nelze pou¾ít aktuální okno"
 
 #, fuzzy
-#~ msgid ""
-#~ "aspect;aspect oriented grey colors;aspectcolr;aspect oriented rainbow "
-#~ "colors;bcyr;blue through cyan through yellow to red;bgyr;blue through "
-#~ "green through yellow to red;byg;blue through yellow to green colors;byr;"
-#~ "blue through yellow to red colors;curvature;for terrain curvatures (from "
-#~ "v.surf.rst and r.slope.aspect curvature colors);differences;differences "
-#~ "oriented colors;elevation;maps percentage ranges of raster values to "
-#~ "elevation color ramp;etopo2;rainbow color ramp for the ETOPO2 2-minute "
-#~ "Worldwide Bathymetry/Topography dataset;evi;enhanced vegetative index "
-#~ "colors;grey;grey scale;grey1.0;grey scale for raster values between 0.0-"
-#~ "1.0;grey255;grey scale for raster values bewtween 0-255;grey.eq;histogram-"
-#~ "equalized grey scale;grey.log;histogram logarithmic transformed grey "
-#~ "scale;gyr;green through yellow to red colors;ndvi;Normalized Difference "
-#~ "Vegetation Index colors;population;color table covering human population "
-#~ "classification breaks;rainbow;rainbow color table;ramp;color ramp;random;"
-#~ "random color table;ryb;red through yellow to blue colors;ryg;red through "
-#~ "yellow to green colors;slope;r.slope.aspect-type slope colors for raster "
-#~ "values 0-90;srtm;color palette for Shuttle Radar Topography Mission "
-#~ "elevation values;terrain;global elevation color table covering -11000 to "
-#~ "+8850m;wave;color wave;"
-#~ msgstr ""
-#~ "aspect; mapa expozice v ¹edých barvách;aspectcolr;mapa expozice v barvách "
-#~ "duhy;"
+msgid "Database is not a %s"
+msgstr "Název vstupní databáze není nastaven"
 
-#~ msgid "Apply filter only to zero data values"
-#~ msgstr "Aplikuj filtr pouze na nulové hodnoty dat"
+msgid "Cannot use current window"
+msgstr "Nelze pou¾ít aktuální okno"
 
-#~ msgid "%s: [%s] not found"
-#~ msgstr "%s: [%s] nebyl nalezen"
+msgid "Hilight color for text"
+msgstr "Zvýrazòující barva textu"
 
-#~ msgid "Base raster map <%s> not found"
-#~ msgstr "podkladová rastrová vrstva <%s> nebyla nalezena"
+msgid "Vector map <%s> not found in the current mapset"
+msgstr "Vektorová mapa <%s> nebyla nalezena v souèasném mapsetu"
 
-#~ msgid "Base map and output map <%s> must be different"
-#~ msgstr "Základní mapa a výstupní <%s> mapa musí být rùzné"
+msgid "Not enough memory for zero_array_cell"
+msgstr "Pro zero_array_cell není dostatek pamìti"
 
-#~ msgid "Insufficent memory for allocation of data structure"
-#~ msgstr "Nedostatek pamìti pro alokování datové struktury"
-
-#~ msgid "** Can't read signature file <%s> **"
-#~ msgstr "** Nelze èíst soubor s pøíznaky <%s> **"
-
-#~ msgid "calculates univariate statistics from a GRASS raster map"
-#~ msgstr "Spoèítá základní statistiku z GRASS  rastrové mapy."
-
-#~ msgid "extended statistics (quartiles and percentile)"
-#~ msgstr "roz¹íøená statistika (kvartily a percentily)"
-
-#~ msgid "Percentile to calculate (requires -e flag)"
-#~ msgstr "Percentil, který se má spoèítat (vy¾aduje pøepínaè -e)"
-
-#~ msgid ""
-#~ "displays spectral response at user specified locations in group or images"
-#~ msgstr ""
-#~ "zobrazí spektrální odrazivost na u¾ivatelem zadaných mapách ve skupinì "
-#~ "snímkù"
-
-#~ msgid "imagery, raster, multispectral"
-#~ msgstr "rastr, dpz, multispektrální"
-
-#~ msgid "group input"
-#~ msgstr "vstupní skupina"
-
-#~ msgid "raster input maps"
-#~ msgstr "Vstupní rastrové soubory"
-
-#~ msgid "write output to PNG image"
-#~ msgstr "Zapsat výstup jako soubor PNG"
-
-#~ msgid "Use image list and not group"
-#~ msgstr "Pou¾ij seznam snímkù a ne skupinu"
-
-#~ msgid "Select multiple points"
-#~ msgstr "Vyber více bodù"
-
-#~ msgid "label with coordinates instead of numbering"
-#~ msgstr "oznaè souøadnicemi místo èíslováním"
-
-#~ msgid "Resizes active display monitor"
-#~ msgstr "Mìní velikost aktivního monitoru"
-
-#~ msgid "New width for window"
-#~ msgstr "Nová ¹íøka okna"
-
-#~ msgid "New height for window"
-#~ msgstr "Nová vý¹ka okna"
-
-#~ msgid "Slide show of GRASS raster/vector maps."
-#~ msgstr "Slide show rastrù/vektorù."
-
-#~ msgid "display, slideshow"
-#~ msgstr "zobrazení, prezentace"
-
-#~ msgid "Show vector maps rather than raster maps"
-#~ msgstr "Zobrazit vektory, místo rastrù"
-
-#~ msgid "Map prefix. Specify character(s) to view selected maps only"
-#~ msgstr ""
-#~ "Pøedpona mapy. Zadejte písmeno(na) pro zobrazení pouze vybraných map"
-
-#~ msgid "Map number show across the monitor"
-#~ msgstr "Poèet map zobrazených na monitoru"
-
-#~ msgid "Map number show down the monitor"
-#~ msgstr "Poèet map zobrazených pod monitorem"
-
-#~ msgid "Mapsets to use. Specify multiple mapsets comma separated"
-#~ msgstr "Mapset který bude pou¾it. Více mapsetù lze oddìlit èárkou"
-
-#~ msgid "Number of seconds to pause between slides"
-#~ msgstr "Poèet vteøin pro pøestávku mezi slidy."
-
-#~ msgid "Apply regular expressions and wildcards to g.remove"
-#~ msgstr "Pou¾ij regulární výrazy a zástupné znaky pro g.remove "
-
-#~ msgid "Saves active display monitor to PNG file in home directory"
-#~ msgstr "Ulo¾í aktuální obsah monitoru do souboru PNG v domovském adresáøi"
-
-#~ msgid "display, export"
-#~ msgstr "zobrazení, export"
-
-#~ msgid "Resolution of output file (single=1, double=2, quad=4)"
-#~ msgstr "Rozli¹ení výstupního souboru (1x, 2x, 4x)"
-
-#~ msgid "Export display monitor to a GpsDrive compatible backdrop image"
-#~ msgstr "Exportuj monitor do souboru kompatibilním s GpsDrive"
-
-#~ msgid "display, export, GPS"
-#~ msgstr "zobrazení, export, GPS"
-
-#~ msgid "name for new map image (lives in ~/.gpsdrive)"
-#~ msgstr "jméno nového obrázku (bude ulo¾en do ~/.gpsdrive)"
-
-#~ msgid "Make JPEG instead of PNG image"
-#~ msgstr "Vytvoø JPEG místo PNG"
-
-#~ msgid ""
-#~ "Divides active display into two frames & displays maps/executes commands "
-#~ "in each frame."
-#~ msgstr ""
-#~ "Rozdìlí aktivní monitor na dva rámy a v ka¾dém rámu zobrazí mapu a pøíkaz "
-#~ "pro její vytvoøení."
-
-#~ msgid "Enter raster map to display in 1st frame"
-#~ msgstr "Rastrová mapa, která má být zobrazena v první rámu"
-
-#~ msgid "Enter command to execute in 1st frame"
-#~ msgstr "Vlo¾te pøíkaz pro vykonání v první rámu"
-
-#~ msgid "Enter raster map to display in 2nd frame"
-#~ msgstr "Rastrová mapa, která má být zobrazena v druhém rámu"
-
-#~ msgid "Enter command to execute in 2nd frame"
-#~ msgstr "Vlo¾te pøíkaz pro vykonání v druhém rámu"
-
-#~ msgid "How to split display"
-#~ msgstr "Jak rozdìlit monitor"
-
-#~ msgid "Redraws the current display frame in the GRASS monitor"
-#~ msgstr "Pøekreslí aktuálnì zobrazené mapy v monitoru"
-
-#~ msgid "Redraw all frames"
-#~ msgstr "Pøekreslit v¹echny rámy"
-
-#~ msgid "Do not preserve individual regions when redrawing all frames"
-#~ msgstr "Nedor¾ovat individuální regiony pokud pøekraslují v¹echny rámy"
-
-#~ msgid "Moves displayed maps to another monitor"
-#~ msgstr "Pøesune aktuálnì zobrazené mapy do jiného monitoru"
-
-#~ msgid "clear target monitor before moving"
-#~ msgstr "Vyèisti cílový monitor pøed pøesunem"
-
-#~ msgid "stay with source monitor"
-#~ msgstr "zùstaò ve zdrojovém monitoru"
-
-#~ msgid "kill source monitor after moving"
-#~ msgstr "zab zdrojový monitor po pøesunu"
-
-#~ msgid "Target monitor"
-#~ msgstr "Cílový monitor"
-
-#~ msgid "Source monitor"
-#~ msgstr "Zdrojový monitor"
-
-#~ msgid "Display manager for GRASS"
-#~ msgstr "GIS manager pro GRASS"
-
-#~ msgid "Name of .dmrc settings file"
-#~ msgstr "Jméno souboru s nastavením .dmrc"
-
-#~ msgid "Selects/starts specified monitor at specified size"
-#~ msgstr "Vybere/nastartuje zadaný monitor o zadané velikosti"
-
-#~ msgid "Width in pixels of new display monitor"
-#~ msgstr "©íøka nového monitoru v pixelech "
-
-#~ msgid "Height in pixels of new display monitor"
-#~ msgstr "Vý¹ka nového monitoru v pixelech"
-
-#~ msgid "Saves the contents of the active display monitor to a graphics file."
-#~ msgstr "Ulo¾í obsah aktuálního monitoru jako soubor s obrázkem."
-
-#~ msgid "Name for output file (do NOT add extension)"
-#~ msgstr "Jméno obrázku (NEpøidávejte koncovku)"
-
-#~ msgid "Dimensions of output file versus current window size"
-#~ msgstr "Rozmìry výstupu versus souèasná velikost okna"
-
-#~ msgid "(same=1, double size=2, quadruple size=4)"
-#~ msgstr "(stejná velikost=1, dvojitá=2, ètyønásobná=4)"
-
-#~ msgid "Images"
-#~ msgstr "Obrázky"
-
-#~ msgid "Width and height of output image (overrides resolution setting)"
-#~ msgstr "©íøka a vý¹ka výstupního obrazu (pøepí¹e nastavení rozli¹ení)"
-
-#~ msgid "Compression for PNG files"
-#~ msgstr "Komprese pro soubory PNG"
-
-#~ msgid "(0=none, 1=fastest, 9=most; lossless, only time vs. filesize)"
-#~ msgstr "(0=nic, 1=nejrychleji, 9=bezeztrát; pouze èas vs velikost souboru)"
-
-#~ msgid "File size/quality for JPEG files"
-#~ msgstr "Velikost/kvalita souboru JPEG"
-
-#~ msgid "(10=smallest/worst, 100=largest/best)"
-#~ msgstr "(10=nejmen¹í/nejhor¹í, 100=nejvìt¹í/nejlep¹í)"
-
-#~ msgid "Paper size for PostScript output"
-#~ msgstr "Velikost papíru pro výstup v PostScript."
-
-#~ msgid "PostScript"
-#~ msgstr "PostScript"
-
-#~ msgid "PostScript level (only limits functionality!)"
-#~ msgstr "Úroveò Postscriptu ( pouze omezuje funkènost!)"
-
-#~ msgid "Set background color to black (white default)"
-#~ msgstr "Nastav barvu pozadí na èernou (bílá je výchozí)"
-
-#~ msgid "Set transparent background"
-#~ msgstr "Nastavit prùhledné pozadí"
-
-#~ msgid "Use the Cario driver to render images"
-#~ msgstr "Pou¾ít ovladaè Cairo pro vykreslení obrazù"
-
-#~ msgid "Set paper orientation to landscape (for PostScript output)"
-#~ msgstr "Nastavit papír na orientaci krajina (pro výstup Postscript)"
-
-#~ msgid "Illegal output file name"
-#~ msgstr "Neplatný název výstupního souboru"
-
-#~ msgid "Enable interactive prompting (for command-line use only)"
-#~ msgstr "Povolit interaktivní vyzívání (pouze s pou¾itím pøíkazového øádku)"
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "WARNING!  A projection file already exists for this location\n"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "VAROVÁNÍ!  V této location ji¾ existuje soubor s projekcí\n"
-
-#~ msgid ""
-#~ "Would you still like to overwrite the current projection information "
-#~ msgstr "Stále si pøejete pøepsat aktuální informace o projekci"
-
-#~ msgid "The projection information will not be updated."
-#~ msgstr "Informace o projekci nebudou aktualizovány."
-
-#~ msgid "<%s> is an illegal region name"
-#~ msgstr "<%s> je neplatný název regionu"
-
-#~ msgid "Erasing monitors..."
-#~ msgstr "Ma¾u monitory ... "
-
-#~ msgid "Enable flashing (slower)"
-#~ msgstr "Umo¾ni probliknutí (pomalej¹í)"
-
-#~ msgid " Middle: toggle flash color\n"
-#~ msgstr " Prostøední: zmìnit barvu\n"
-
-#~ msgid "To establish and control use of a graphics display monitor."
-#~ msgstr "Slou¾í k vytvoøení a kontrole grafického monitoru."
-
-#~ msgid "Name of graphics monitor to start"
-#~ msgstr "Jméno grafického monitoru, který bude spu¹tìn"
-
-#~ msgid "Name of graphics monitor to stop"
-#~ msgstr "Jméno grafického monitoru, který bude vypnut"
-
-#~ msgid "Name of graphics monitor to select"
-#~ msgstr "Jméno grafického monitoru, který bude vybrán"
-
-#~ msgid "Name of graphics monitor to unlock"
-#~ msgstr "Jméno monitoru k odemèení"
-
-#~ msgid "List all monitors"
-#~ msgstr "Seznam v¹ech monitorù"
-
-#~ msgid "List all monitors (with current status)"
-#~ msgstr "Seznam monitorù (s aktuálním stavem)"
-
-#~ msgid "Print name of currently selected monitor"
-#~ msgstr "Vypi¹ jméno aktuálnì vybraného monitoru"
-
-#~ msgid "Release currently selected monitor"
-#~ msgstr "Uvolni souèasný vybraný monitor"
-
-#~ msgid "Do not automatically select when starting"
-#~ msgstr "Nevybírej monitor automaticky pøi startu"
-
-#~ msgid "Problem selecting %s. Will try once more"
-#~ msgstr "Problém pøi výbìru monitoru %s. Zkusím to je¹tì jednou"
-
-#~ msgid "Usage:  %s monitor_name"
-#~ msgstr "Pou¾ití: %s jmeno_monitoru"
-
-#~ msgid "%s: -%c unrecognized option"
-#~ msgstr "%s: -%c nerozpoznaná volba"
-
-#~ msgid "Monitor <%s> released"
-#~ msgstr "monitor <%s> byl uvolnìn"
-
-#~ msgid "Monitor <%s> in use by another user"
-#~ msgstr "Monitor <%s> je pou¾íván jiným u¾ivatelem"
-
-#~ msgid "No such monitor as <%s>"
-#~ msgstr "Monitor <%s> neexistuje"
-
-#~ msgid "Failed testing lock mechanism"
-#~ msgstr "Testování uzamykacího mechanismu selhalo"
-
-#~ msgid "Usage:  %s [-fv] [name]"
-#~ msgstr "Pou¾ití: %s [-fv] [jmeno]"
-
-#~ msgid "Usage: %s [-f] monitor_name"
-#~ msgstr "Pou¾ití: %s [-f] jmeno_monitoru"
-
-#~ msgid "Monitor '%s' terminated"
-#~ msgstr "Monitor '%s' ukonèen"
-
-#~ msgid "Error - Monitor '%s' was not running"
-#~ msgstr "Chyba - Monitor '%s' nebì¾í"
-
-#~ msgid "Error - Monitor '%s' in use by another user"
-#~ msgstr "Chyba - Monitor '%s' je pou¾íván jiným u¾ivatelem"
-
-#~ msgid "Error - Locking mechanism failed"
-#~ msgstr "Chyba - selhal zamykací mechanismus"
-
-#~ msgid "No current window"
-#~ msgstr "®ádné aktuální okno"
-
-#~ msgid "Current window not available"
-#~ msgstr "Aktuální okno není dostupné"
-
-#~ msgid "Setting map window"
-#~ msgstr "Nastavuji mapové okno"
-
-#~ msgid "Getting screen window"
-#~ msgstr "Získání obrazového okna"
-
-#~ msgid "No raster map exists in the current window"
-#~ msgstr "V aktuálním oknì neexistuje ¾ádná rastrová mapa"
-
-#~ msgid ""
-#~ "\n"
-#~ "Mouse Buttons:"
-#~ msgstr ""
-#~ "\n"
-#~ "Tlaèítka my¹i:"
-
-#~ msgid "Left:   Select From\n"
-#~ msgstr " Levé:    Vybrat z\n"
-
-#~ msgid "Middle: Select To\n"
-#~ msgstr "Prostøední tlaèítko: Vybrat do\n"
-
-#~ msgid ""
-#~ "Right:  Quit\n"
-#~ "\n"
-#~ msgstr ""
-#~ " Pravé tlaèítko: ukonèit\n"
-#~ "\n"
-
-#~ msgid ""
-#~ "g;use the libgis render functions (features: clipping);r;use the raster "
-#~ "graphics library functions (features: polylines);d;use the display "
-#~ "library basic functions (features: polylines);c;use the display library "
-#~ "clipping functions (features: clipping);l;use the display library culling "
-#~ "functions (features: culling, polylines)"
-#~ msgstr ""
-#~ "g;pou¾ití vykreslovacích funkcí(prvky:vystøihování);r;pou¾ití knihovny "
-#~ "funkcí pro rastrovou grafiku (prvky: lomená èára);d;pou¾ití knihovny "
-#~ "základních zobrazovacích funkcí (prvky: lomená èára);c; pou¾ití knihovny "
-#~ "zobrazovacích vystøihovacích funkcí (prvky: vystøihování);l;pou¾ití "
-#~ "knihovny zobrazovacích odstraòovacích funkcí (prvky: odstranìní, lomená "
-#~ "èára)"
-
-#~ msgid ""
-#~ "Don't add to list of vectors and commands in monitor (it won't be drawn "
-#~ "if the monitor is refreshed)"
-#~ msgstr ""
-#~ "Nepøidávej do seznamu vektorù a pøíkazù v monitoru (nebude vykresleno, "
-#~ "pokud monitoru bude pøekreslen)"
-
-#~ msgid "Can't clear current graphics window"
-#~ msgstr "Nelze vyèistit aktuální okno"
-
-#~ msgid "Use mouse to size & place legend"
-#~ msgstr "Pou¾ít my¹ pro velikost a umístìní legendy"
-
-#~ msgid "No raster map exists in current window"
-#~ msgstr "V aktuálním oknì není ¾ádná rastrová mapa"
-
-#~ msgid "No raster or vector map displayed"
-#~ msgstr "Název rastrové nebo vektorové mapy, která bude zobrazena"
-
-#~ msgid "Font name or pathname of TTF file"
-#~ msgstr "Jméno  nebo cesta k TTF souboru."
-
-#~ msgid "Setting release of FreeType"
-#~ msgstr "Nastavuji verzi FreeType"
-
-#~ msgid "No current frame"
-#~ msgstr "®ádný aktuální rámec"
-
-#~ msgid "Current frame not available"
-#~ msgstr "Aktuální rámec není dostupný"
-
-#~ msgid "Creates a list of commands for recreating screen graphics."
-#~ msgstr "Vytvoøí seznam pøíkazù pro obnovení obsahu monitoru."
-
-#~ msgid "Name of frame(s) to save"
-#~ msgstr "Název rámu(ù) urèeného k ulo¾ení"
-
-#~ msgid ""
-#~ "List of object numbers to remove which are displayed after \"#\". -1 for "
-#~ "the last object."
-#~ msgstr ""
-#~ "Seznam èísel objektù k vyjmutí, které jsou zobrazeny po \"#\" -1 pro "
-#~ "poslední objekt."
-
-#~ msgid ""
-#~ "List of object numbers to move (\"from\" to \"to\"). remove= option will "
-#~ "be done first, if any."
-#~ msgstr ""
-#~ "Seznam èísel objektù, které budou pøejmenovány (\"from\" na \"to\"). "
-#~ "Nejprve bude provedena volba remove=."
-
-#~ msgid "Save current frame"
-#~ msgstr "Ulo¾ souèasný rám"
-
-#~ msgid "Save all the frames"
-#~ msgstr "Ulo¾ v¹echny rámy"
-
-#~ msgid "Only map objects without extra header and tailer"
-#~ msgstr "Pouze mapové objekty bez extra hlavièky a patièky"
-
-#~ msgid "Unknown item type in pad: %s"
-#~ msgstr "Neznámý prvek v podlo¾ce: %s"
-
-#~ msgid "No current graphics window"
-#~ msgstr "®ádný vybraný monitor"
-
-#~ msgid "Current graphics window not available"
-#~ msgstr "Aktuální monitor není dostupný"
-
-#~ msgid "Error choosing frame [%s]\n"
-#~ msgstr "Chyba pøi výbìru rámce [%s]\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Buttons:\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Tlaèítka:\n"
-
-#~ msgid "Left:   Select frame\n"
-#~ msgstr " Levé:    Vybrat rámec\n"
-
-#~ msgid "Middle: Keep original frame\n"
-#~ msgstr "Prostøední: Ponechat pùvodní rám\n"
-
-#~ msgid "Right:  Accept frame\n"
-#~ msgstr "Pravé: Potvrï rámec\n"
-
-#~ msgid "Manages display frames on the user's graphics monitor."
-#~ msgstr "Správa rámcù v grafickém monitoru"
-
-#~ msgid "Create a new frame"
-#~ msgstr "Vytvoøit nový rámec"
-
-#~ msgid "Select a frame"
-#~ msgstr "Vybrat rámec"
-
-#~ msgid "Print name of current frame"
-#~ msgstr "Vypsat aktuální rámec"
-
-#~ msgid "Print names of all frames"
-#~ msgstr "Vytisknout jména v¹ech rámcù"
-
-#~ msgid "List map names displayed in GRASS monitor"
-#~ msgstr "Vypi¹ jména map zobrazených v grafickém monitoru"
-
-#~ msgid "Debugging output"
-#~ msgstr "Roz¹íøený výstup"
-
-#~ msgid "Frame to be created/selected"
-#~ msgstr "Rámec, který má být vytvoøen/vybrán"
-
-#~ msgid "bottom,top,left,right"
-#~ msgstr "spodní,svrchní,levý,pravý"
-
-#~ msgid "Where to place the frame, values in percent (implies -c)"
-#~ msgstr "Kam umístit rám, hodnoty v procentech (potøebuje volbu -c)"
-
-#~ msgid "Setting graphics window"
-#~ msgstr "Nastavuji mapové okno"
-
-#~ msgid "Getting graphics window coordinates"
-#~ msgstr "Pou¾ívám souøadnice monitoru"
-
-#~ msgid ""
-#~ "Generates and displays simple graphics on map layers drawn in the active "
-#~ "graphics monitor display frame."
-#~ msgstr ""
-#~ "Vytvoøí a zobrazí jednoduché grafické prvky na mapì vykreslené v aktivním "
-#~ "grafickém monitoru."
-
-#~ msgid ""
-#~ "Unix file containg graphing instructions, if not given reads from "
-#~ "standard input"
-#~ msgstr ""
-#~ "Soubor (Unix) obsahující grafické instrukce, pokud není zadáno, ète se "
-#~ "standardní vstup"
-
-#~ msgid ""
-#~ "Color to draw with, either a standard GRASS color or R:G:B triplet "
-#~ "(separated by colons)"
-#~ msgstr ""
-#~ "Barva kresby, buï standardní GRASS barva nebo trojice R:G:B (oddìleno "
-#~ "dvojteèkou)"
-
-#~ msgid "Don't add to list of rasters and commands in monitor"
-#~ msgstr "Nepøidávat do seznamu rastrù a pøíkazù v monitoru"
-
-#~ msgid "Interactively select route"
-#~ msgstr "Interaktivní výbìr trasy"
-
-#~ msgid "You must select more than one point"
-#~ msgstr "Je potøeba vybrat více ne¾ jeden bod"
-
-#~ msgid "You must select at least four points"
-#~ msgstr "Musíte vybrat nejménì ètyøi body."
-
-#~ msgid "Use mouse to interactively place scale"
-#~ msgstr "Pou¾ít my¹ pro umístìní mìøítka"
-
-#~ msgid ""
-#~ "Creates and displays a menu within the active frame on the graphics "
-#~ "monitor."
-#~ msgstr "Vytvoøit a zobrazit menu v aktivní rámci grafického monitoru."
-
-#~ msgid "Sets the color of the menu background"
-#~ msgstr "Nastaví barvu pozadí menu"
-
-#~ msgid "Sets the color of the menu text"
-#~ msgstr "Nastavit barvu textu v menu"
-
-#~ msgid "Sets the color dividing lines of text"
-#~ msgstr "Nastaví barvu linií oddìlujících øádky textu"
-
-#~ msgid "Sets the menu text size (in percent)"
-#~ msgstr "Nastaví velikost písma v menu (procenta)"
-
-#~ msgid "Menu must contain a title and at least one option"
-#~ msgstr "Menu musí obsahovat titulek a nejménì jednu volbu"
-
-#~ msgid "Don't add to list of commands in monitor"
-#~ msgstr "Nepøidávat do seznamu v monitoru pøíkazy"
-
-#~ msgid "Use mouse to interactively place text"
-#~ msgstr "Pou¾ít my¹ pro umístìní textu"
-
-#~ msgid "Click!\n"
-#~ msgstr "Klik!\n"
-
-#~ msgid " Left:    Place text here\n"
-#~ msgstr " Levé:    Vlo¾it text sem\n"
-
-#~ msgid " Right:   Quit\n"
-#~ msgstr " Pravé :   ukonèit\n"
-
-#~ msgid "value [%.0f,%.0f] out of range [0-100]"
-#~ msgstr "hodnota [%.0f,%.0f] je mimo interval [0-100]"
-
-#~ msgid ""
-#~ "Draws text in the graphics monitor's active display frame using TrueType "
-#~ "fonts."
-#~ msgstr ""
-#~ "Vykreslí text v aktivním rámci grafického monitoru s vyu¾itím písma "
-#~ "TrueType"
-
-#~ msgid "Screen position (percentage, [0,0] is bottom left)"
-#~ msgstr "Souøadnice v procentech rámce ([0,0] je vlevo dole)"
-
-#~ msgid "Path to TrueType font (including file name)"
-#~ msgstr "Cesta k TrueType fontùm (vèetnì jména souboru)"
-
-#~ msgid "Height of letters (in percent of available frame height)"
-#~ msgstr "Vý¹ka písmen (v procentech dostupné vý¹ky rámce)"
-
-#~ msgid "Either text or -c should be given"
-#~ msgstr "Mìl by být zadán buï text nebo -c"
-
-#~ msgid "Choose only one coordinate system for placement"
-#~ msgstr "Vyberte pro umístìní pouze jeden souøadnicový systém"
-
-#~ msgid "No font selected"
-#~ msgstr "Nebylo vybráno ¾ádné písmo"
-
-#~ msgid "Invalid font: %s"
-#~ msgstr "Chybné písmo: %s"
-
-#~ msgid "Unable to create text conversion context"
-#~ msgstr "Nelze vytvoøit textovou konverzi kontextu"
-
-#~ msgid "Text conversion error"
-#~ msgstr "Chyba pøi konverzi textu"
-
-#~ msgid "Unable to write the temporary file"
-#~ msgstr "Nelze zapisovat do doèasného souboru"
-
-#~ msgid "No predefined font"
-#~ msgstr "®ádné pøeddefinované písmo"
-
-#~ msgid "%s: Unable to read font"
-#~ msgstr "%s: Nelze èíst písmo"
-
-#~ msgid "%s: Unable to read FreeType definition file; use the default"
-#~ msgstr "%s: Nelze èíst definièní soubor FreeType; pou¾iji výchozí"
-
-#~ msgid "%s: No FreeType definition file"
-#~ msgstr "%s: Å½ádný definièní soubor FreeType"
-
-#~ msgid "%s: Unable to read FreeType definition file"
-#~ msgstr "%s: Nelze èíst definièní soubor FreeType"
-
-#~ msgid "Just redraw given maps using default colors"
-#~ msgstr "Pouze pøekresli zobrazené mapy s výchozími barvami."
-
-#~ msgid "ERROR: can not get \"list\" items"
-#~ msgstr "CHYBA: nelze získat polo¾ky \"list\""
-
-#~ msgid "-j flag forced"
-#~ msgstr "volba -j byla nastavena nucenì"
-
-#~ msgid "No map is displayed in GRASS monitor"
-#~ msgstr "Nebyla zobrazena ¾ádná mapa v monitoru GRASSu"
-
-#~ msgid "One mouse click only"
-#~ msgstr "Pouze jedno kliknutí my¹í"
-
-#~ msgid "Quiet; No chatter"
-#~ msgstr "Ti¹e; ¾ádné zprávy"
-
-#~ msgid "ask_transform_coor():  Leaving session.. \n"
-#~ msgstr "ask_transform_coor():  Opou¹tím sezení...\n"
-
-#~ msgid " Number of points that have been entered: %d\n"
-#~ msgstr " Poèet zadaných bodù: %d\n"
-
-#~ msgid "Please answer yes or no"
-#~ msgstr "Odpovìzte prosím yes (ano) nebo no (ne)"
+msgid "Not enough disk space -- cannot write files"
+msgstr "Plné místo na disku -- nemohu zapsat soubory"
 
 #, fuzzy
-#~ msgid "No attribute table found"
-#~ msgstr "Atribut(y) nenalezeny"
+msgid "Option <%s>: <%s> exists."
+msgstr "volba <%s>: <%s> ji¾ existuje"
 
 #, fuzzy
-#~ msgid "No numerical attributes found. Skipping export"
-#~ msgstr "Nic nebylo nalezeno, pøeskakuji type=poly"
+msgid "Use '%s' option to change vector map name"
+msgstr "Pou¾ijte volbu output= pro zmìnu jména vektoru"
+
+msgid "Network input map <%s> not found"
+msgstr "Vstupní mapa sí»ì <%s> nebyla nalezena"
+
+msgid "Do not print polyline info"
+msgstr "Nevypisovat info o zdvojených liniích "
+
+msgid "Line: %d\n"
+msgstr "Linie: %d\n"
+
+msgid "Vector map <%s> is not in user mapset and cannot be updated"
+msgstr "Vektorová mapa <%s> není v tomto mapsetu a nelze ji mìnit"
+
+msgid "%s: base raster map not found"
+msgstr "%s: základní mapa nebyla nalezena"
+
+msgid "%s: cover raster map not found"
+msgstr "%s: pøekryvná mapa nebyla nalezena"
+
+msgid "%s: base map and output map must be different"
+msgstr "%s: základní mapa a výstupní mapa musí být rùzné"
+
+msgid "Cell file not found"
+msgstr "Rastrový (cell) soubor nebyl nalezen"
+
+msgid "elevin raster map <%s> not found"
+msgstr "vstupní rastr s elevací <%s> nebyl nalezen"
+
+msgid "aspin raster map <%s> not found"
+msgstr "vstupní rastr s expozicí <%s> nebyl nalezen"
+
+msgid "slopein raster map <%s> not found"
+msgstr "vstupní rastr sklonu <%s> nebyl nalezen"
+
+msgid "linkein raster map <%s> not found"
+msgstr "vstupní rastr s Linkovými koeficienty <%s> nebyl nalezen"
+
+msgid "albedo raster map <%s> not found"
+msgstr "rastrový soubor albeda <%s> nebyl nalezen"
+
+msgid "latin raster map <%s> not found"
+msgstr "rastrový soubor se zem. ¹íøkou <%s> nebyl nalezen"
+
+msgid "coefbh raster map <%s> not found"
+msgstr ""
+"raststrový soubor s koeficientem pøímého sluneèního záøení <%s> nebyl nalezen"
+
+msgid "coefdh raster map <%s> not found"
+msgstr "rastrový soubor s koeficientem difíºzního záøení <%s> nebyl nalezen"
+
+msgid "Unable to open vector map <%s> in <%s>"
+msgstr "Nelze otevøít vektorovou mapu <%s> v  <%s>"
 
 #, fuzzy
-#~ msgid "Error reading value of attribute '%s'"
-#~ msgstr "Chyba pøi ètení kategorií: '%s'"
+msgid "%s - not found"
+msgstr "<%s> nenalezen"
 
-#~ msgid "Quiet - Do not show progress"
-#~ msgstr "Ti¹e - potlaè hlá¹ení o prùbìhu zpracování"
+msgid "Title, in quotes"
+msgstr "Titulek v uvozovkách"
 
-#~ msgid "Illegal output file name <%s>"
-#~ msgstr "Neplatný název výstupního souboru <%s>"
+msgid "RGB raster map <%s> not found"
+msgstr "RGB rastrová mapa <%s> nenalezena"
 
-#~ msgid ""
-#~ "The '-q' flag is superseded and will be removed in future. Please use '--"
-#~ "quiet' instead"
-#~ msgstr ""
-#~ "Pøepínaè '-q' je zastaralý a bude v budoucnosti odstranìn. prosím, "
-#~ "peou¾ijte pøepínaè '--quiet'."
+msgid "Cannot create RGB data, please provide three maps [r,g,b]"
+msgstr "Nelze vytvoøit data RGB, prosím zadejte tøi mapy [r,g,b]"
 
-#~ msgid "Quietly"
-#~ msgstr "Potichu"
+msgid "Vector cell map <%s> not found"
+msgstr "Vektorová mapa buòek <%s> nebyla nalezena"
+
+msgid "Cannot create vector data, please provide three maps [x,y,z]"
+msgstr ""
+"Nelze vytvoøit vektorová data, prosím zadejte tøi mapové vrstvy [x,y,z]"
+
+msgid "Unable to find starting vector <%s> "
+msgstr "Nelze nalézt poèáteèní vektor <%s> "
+
+msgid "Unable to find stop vector <%s>"
+msgstr "Nelze nalézt koncový vektor <%s> "
+
+msgid "Raster output map <%s> not found (no start_points given)"
+msgstr "Výstupní rastrová mapa <%s>  nenalezena (nebyly zadány start_points)"
+
+msgid "Memory allocation error on reading start points from raster map %s"
+msgstr "Chyba pøi alokaci pamìti pøi ètení poèáteèních bodù z rastrové mapy %s"
+
+msgid "Run verbosly"
+msgstr "Roz¹íøený výpis"
+
+msgid "Run VERBOSELY"
+msgstr "Roz¹íøený výpis"
+
+msgid "No clump map specified and MASK not set."
+msgstr "Nebyla zadána mapa spojitých oblastí a nastavena MASKa"
+
+msgid "Unable to find data map"
+msgstr "Nelze nalézt mapu s daty"
+
+msgid "Unable to find clump map"
+msgstr "Nelze nalézt mapu shlukù (clump)"
+
+msgid "%s: Error reading from raster map <%s> in mapset <%s>"
+msgstr "%s: Chyba pøi ètení z rastrové mapy <%s> v mapsetu <%s>"
 
 #, fuzzy
-#~ msgid "Name of terrain raster map (DEM)"
-#~ msgstr "Mapa s modelem terénu (DMT)"
+msgid ""
+"aspect;aspect oriented grey colors;aspectcolr;aspect oriented rainbow colors;"
+"bcyr;blue through cyan through yellow to red;bgyr;blue through green through "
+"yellow to red;byg;blue through yellow to green colors;byr;blue through "
+"yellow to red colors;curvature;for terrain curvatures (from v.surf.rst and r."
+"slope.aspect curvature colors);differences;differences oriented colors;"
+"elevation;maps percentage ranges of raster values to elevation color ramp;"
+"etopo2;rainbow color ramp for the ETOPO2 2-minute Worldwide Bathymetry/"
+"Topography dataset;evi;enhanced vegetative index colors;grey;grey scale;"
+"grey1.0;grey scale for raster values between 0.0-1.0;grey255;grey scale for "
+"raster values bewtween 0-255;grey.eq;histogram-equalized grey scale;grey.log;"
+"histogram logarithmic transformed grey scale;gyr;green through yellow to red "
+"colors;ndvi;Normalized Difference Vegetation Index colors;population;color "
+"table covering human population classification breaks;rainbow;rainbow color "
+"table;ramp;color ramp;random;random color table;ryb;red through yellow to "
+"blue colors;ryg;red through yellow to green colors;slope;r.slope.aspect-type "
+"slope colors for raster values 0-90;srtm;color palette for Shuttle Radar "
+"Topography Mission elevation values;terrain;global elevation color table "
+"covering -11000 to +8850m;wave;color wave;"
+msgstr ""
+"aspect; mapa expozice v ¹edých barvách;aspectcolr;mapa expozice v barvách "
+"duhy;"
 
-#~ msgid "GIS Coincidence Tabulation Facility\n"
-#~ msgstr "Schopnost spoèítat tabulku koincidence\n"
+msgid "Apply filter only to zero data values"
+msgstr "Aplikuj filtr pouze na nulové hodnoty dat"
 
-#~ msgid ""
-#~ "This utility will allow you to compare the coincidence of two map layers\n"
-#~ msgstr ""
-#~ "Tento nástroj vám umo¾ní porovnat coincidence dvou mapových vrstev\n"
+msgid "%s: [%s] not found"
+msgstr "%s: [%s] nebyl nalezen"
 
-#~ msgid "The report can be made in one of 8 units."
-#~ msgstr "Zprávu lze vytvoøit za pomoci nìkteré z osmi jednotek."
-
-#~ msgid "Please choose a unit by entering one of the following letter codes:"
-#~ msgstr "Vyberte prosím jednotky zadáním jednoho z následujících písmen:"
+msgid "Base raster map <%s> not found"
+msgstr "podkladová rastrová vrstva <%s> nebyla nalezena"
 
-#~ msgid "     'c': cells"
-#~ msgstr "    'c': pixely"
+msgid "Base map and output map <%s> must be different"
+msgstr "Základní mapa a výstupní <%s> mapa musí být rùzné"
 
-#~ msgid "     'p': percent cover of region"
-#~ msgstr "     'p': procenta pokryvnosti regionu"
-
-#~ msgid "     'x': percent of '%s' category (column)"
-#~ msgstr "     'x': procenta '%s' kategorie (sloupec)"
-
-#~ msgid "     'y': percent of '%s' category (row)"
-#~ msgstr "     'y': procenta '%s' kategorie (øádek)"
+msgid "Insufficent memory for allocation of data structure"
+msgstr "Nedostatek pamìti pro alokování datové struktury"
 
-#~ msgid "     'a': acres"
-#~ msgstr "     'a': akry"
+msgid "** Can't read signature file <%s> **"
+msgstr "** Nelze èíst soubor s pøíznaky <%s> **"
 
-#~ msgid "     'h': hectares"
-#~ msgstr "     'h': hektary"
+msgid "calculates univariate statistics from a GRASS raster map"
+msgstr "Spoèítá základní statistiku z GRASS  rastrové mapy."
 
-#~ msgid "     'k': square kilometers"
-#~ msgstr "     'k': ètvereèní kilometry"
-
-#~ msgid "     'm': square miles\n"
-#~ msgstr "     'm': ètvereèní míle\n"
+msgid "extended statistics (quartiles and percentile)"
+msgstr "roz¹íøená statistika (kvartily a percentily)"
 
-#~ msgid "     'Q': quit"
-#~ msgstr "     'Q': konec"
+msgid "Percentile to calculate (requires -e flag)"
+msgstr "Percentil, který se má spoèítat (vy¾aduje pøepínaè -e)"
 
-#~ msgid "Do you wish to save this report in a file? (y/n) [n] "
-#~ msgstr "Pøejete si ulo¾it tuto zprávu do souboru? (y/n) [n] "
+msgid ""
+"displays spectral response at user specified locations in group or images"
+msgstr ""
+"zobrazí spektrální odrazivost na u¾ivatelem zadaných mapách ve skupinì snímkù"
 
-#~ msgid ""
-#~ "Enter the file name or path\n"
-#~ "> "
-#~ msgstr ""
-#~ "Zadejte jméno souboru\n"
-#~ "> "
+msgid "imagery, raster, multispectral"
+msgstr "rastr, dpz, multispektrální"
 
-#~ msgid "'%s' being saved\n"
-#~ msgstr "'%s' ulo¾en\n"
+msgid "group input"
+msgstr "vstupní skupina"
 
-#~ msgid ""
-#~ "Do you wish to print this report (requires Unix lpr command)? (y/n) [n] "
-#~ msgstr ""
-#~ "Pøejete si vytisknout tuto zprávu (vy¾aduje Unixový pøíkaz lpr)? (y/n) "
-#~ "[n] "
+msgid "raster input maps"
+msgstr "Vstupní rastrové soubory"
 
-#~ msgid ""
-#~ "Do you wish it printed in 80 or 132 columns?\n"
-#~ "> "
-#~ msgstr ""
-#~ "Pøejete si vytisknout ji v 80 nebo 132 sloupcích?\n"
-#~ "> "
-
-#~ msgid ""
-#~ "Do you wish to run this report with a different unit of measure? (y/n) "
-#~ "[y] "
-#~ msgstr "Pøejete si vytvoøit tuto zprávu s rùznými jednotkami? (y/n) [y]"
-
-#~ msgid "Interactively select End-Points"
-#~ msgstr "Interaktivní výbìr koncových bodù"
-
-#~ msgid "Use mouse to select Start Point\n"
-#~ msgstr "Pro výbìr poèáteèního bodu pou¾ijte my¹\n"
+msgid "write output to PNG image"
+msgstr "Zapsat výstup jako soubor PNG"
 
-#~ msgid ""
-#~ "\n"
-#~ "Use mouse to draw profile line\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Pou¾ít my¹ pro kreslení linie profilu\n"
+msgid "Use image list and not group"
+msgstr "Pou¾ij seznam snímkù a ne skupinu"
 
-#~ msgid "Buttons:\n"
-#~ msgstr "Tlaèítka:\n"
-
-#~ msgid "Left:   Mark next point\n"
-#~ msgstr "Levé tlaèítko:  Oznaè dal¹í bod\n"
-
-#~ msgid "Middle: Mark next point\n"
-#~ msgstr "Prostøední tlaèítko: Oznaè dal¹í bod\n"
-
-#~ msgid ""
-#~ "Right:  Finish profile and exit\n"
-#~ "\n"
-#~ msgstr ""
-#~ "Pravé:  ukonèit profil a opustit\n"
-#~ "\n"
-
-#~ msgid "Suppress single crossing error messages"
-#~ msgstr "Potlaè chybové zprávy o pøekrytí"
-
-#~ msgid ""
-#~ "The '-q' and '-n' flag is superseded and will be removed in future. "
-#~ "Please use '--quiet' instead."
-#~ msgstr ""
-#~ "Volby '-q' a '-n' jsou zastaralé a budou v budoucnu odstranìny. Prosím "
-#~ "pou¾ijte pøepínaè '--quiet'."
-
-#~ msgid "Bilinear interpolation utility for raster map layers."
-#~ msgstr "Nástroj pro bilineární interpolaci rastrových map."
-
-#~ msgid ""
-#~ "Specific input value to be assigned to the north and/or south poles for "
-#~ "longitude-latitude grids"
-#~ msgstr ""
-#~ "Specifická hodnota vstupu, která bude pøiøa¾ena severnímu a/nebo ji¾nímu "
-#~ "pólu pro rastrové mapy v systému zem. délka/¹íøka"
-
-#~ msgid "This module is deprecated. Please use 'r.resamp.interp' instead."
-#~ msgstr "Tento modul je zastaralý. Prosím, pou¾ijte 'r.stats.interp'."
-
-#~ msgid "Path to rules file"
-#~ msgstr "Cesta k souboru s pravidly"
-
-#~ msgid "Enter rules interactively"
-#~ msgstr "Spustit interaktivnì"
-
-#~ msgid ""
-#~ "Interactive mode is incompatible with \"color\", \"rules\", and \"raster"
-#~ "\" options"
-#~ msgstr ""
-#~ "Interaktivní mód nelze pou¾ít s volbami \"barva\", \"pravidlo\", a \"rastr"
-#~ "\" "
-
-#~ msgid "Which vector map needs updated categories?"
-#~ msgstr "Který vektorový soubor vy¾aduje aktualizované kategorie?"
-
-#~ msgid "Which raster map needs updated categories?"
-#~ msgstr "Který rastrový soubor vy¾aduje aktualizované kategorie?"
-
-#~ msgid "%s map <%s> not found"
-#~ msgstr "%s mapa <%s> nebyla nalezena"
-
-#~ msgid "Category file for <%s> not updated"
-#~ msgstr "Soubor s kategoriemi pro <%s> nebyl aktualizován."
-
-#~ msgid "Category file for <%s> updated"
-#~ msgstr "Soubor s kategoriemi pro <%s> byl aktualizován."
-
-#~ msgid ""
-#~ "\n"
-#~ "Hit RETURN to continue -->"
-#~ msgstr ""
-#~ "\n"
-#~ "Stiknìte RETURN pro pokraèování -->"
-
-#~ msgid "Edit header for [%s]? "
-#~ msgstr "Editovat hlavièku pro [%s]?"
-
-#~ msgid ""
-#~ "\n"
-#~ "NOTE: [%s] is a reclass of [%s in %s]"
-#~ msgstr ""
-#~ "\n"
-#~ "POZNÁMKA: [%s] je reklasifikací [%s z %s]"
-
-#~ msgid "Canceling from edit header."
-#~ msgstr "Stornování editace hlavièky."
-
-#~ msgid "Edit the category file for [%s]? "
-#~ msgstr "Editace souboru s kategoriemi pro [%s]? "
-
-#~ msgid "Create/Update the color table for [%s]? "
-#~ msgstr "Vytvoøení/Aktualizace tabulky barev pro [%s]?"
-
-#~ msgid "Edit the history file for [%s]? "
-#~ msgstr "Editace souboru s historií pro [%s]?"
-
-#~ msgid ""
-#~ "\n"
-#~ "The null file for [%s] may indicate that some cells contain\n"
-#~ " no data. If the null file for [%s] doesn't exist, zero cells in\n"
-#~ " it are treated by GRASS application programs as no data."
-#~ msgstr ""
-#~ "\n"
-#~ "Soubor \"null\" pro [%s] mù¾e naznaèovat, ¾e nìkteré buòky obsahují\n"
-#~ " \"¾ádná data\". Pokud tento soubor pro [%s] neexistuje, pak jsou nulové "
-#~ "buòky\n"
-#~ "interpretovány moduly GRASSu jako \"¾ádná data\"."
+msgid "Select multiple points"
+msgstr "Vyber více bodù"
 
-#~ msgid ""
-#~ "\n"
-#~ "Do you want to create/reset the null file for [%s] so that null cell "
-#~ "values are considered valid data? "
-#~ msgstr ""
-#~ "\n"
-#~ "Pøejete si vytvoøit/obnovit soubor \"null\" pro [%s], tak¾e hodnoty bunìk "
-#~ "NULL budou pova¾ovány za platná data?"
+msgid "label with coordinates instead of numbering"
+msgstr "oznaè souøadnicemi místo èíslováním"
 
-#~ msgid ""
-#~ "\n"
-#~ "Do you want to delete the null file for [%s]\n"
-#~ "(all zero cells will then be considered no data)? "
-#~ msgstr ""
-#~ "\n"
-#~ "Pøejete si odstranit soubor \"null\" pro [%s]\n"
-#~ "(v¹echny nulové buòky budou poté pova¾ovány za \"no data\")?"
-
-#~ msgid "Which raster map needs an updated history? "
-#~ msgstr "Který rastrový soubor vy¾aduje aktualizovanou historii? "
+msgid "Resizes active display monitor"
+msgstr "Mìní velikost aktivního monitoru"
 
-#~ msgid "Raster file [%s] not found. Exiting."
-#~ msgstr "Rastrový soubor [%s] nebyl nalezen. Ukonèuji se."
+msgid "New width for window"
+msgstr "Nová ¹íøka okna"
 
-#~ msgid "History file for [%s] updated."
-#~ msgstr "Soubor s historií pro [%s] byl aktualizován."
+msgid "New height for window"
+msgstr "Nová vý¹ka okna"
 
-#~ msgid "History file for [%s] not updated."
-#~ msgstr "Soubor s historií pro [%s] nebyl aktualizován."
+msgid "Slide show of GRASS raster/vector maps."
+msgstr "Slide show rastrù/vektorù."
 
-#~ msgid "Which raster map needs a color table"
-#~ msgstr "Který rastrový soubor vy¾aduje tabulku barev"
+msgid "display, slideshow"
+msgstr "zobrazení, prezentace"
 
-#~ msgid "Color table for <%s> updated"
-#~ msgstr "Tabulka barev pro <%s> byla aktualizována"
+msgid "Show vector maps rather than raster maps"
+msgstr "Zobrazit vektory, místo rastrù"
 
-#~ msgid ""
-#~ "\n"
-#~ "hit RETURN to continue -->"
-#~ msgstr ""
-#~ "\n"
-#~ "Stisknìte RETURN pro pokraèování -->"
+msgid "Map prefix. Specify character(s) to view selected maps only"
+msgstr "Pøedpona mapy. Zadejte písmeno(na) pro zobrazení pouze vybraných map"
 
-#~ msgid "Edit header for [%s]\n"
-#~ msgstr "Edituj hlavièku pro [%s]\n"
+msgid "Map number show across the monitor"
+msgstr "Poèet map zobrazených na monitoru"
 
-#~ msgid "[%s] cannot be found!"
-#~ msgstr "[%s] nemù¾e být nalezen!"
+msgid "Map number show down the monitor"
+msgstr "Poèet map zobrazených pod monitorem"
 
-#~ msgid "For what layer shall the header file be edited? "
-#~ msgstr "Pro kterou vrstvu má být upraven soubor s hlavièkou? "
+msgid "Mapsets to use. Specify multiple mapsets comma separated"
+msgstr "Mapset který bude pou¾it. Více mapsetù lze oddìlit èárkou"
 
-#~ msgid "[%s] is a reclass of [%s] - cannot edit header! Run support on [%s]."
-#~ msgstr ""
-#~ "[%s] je reklasifikací [%s] - nemohu upravit hlavièku! Spus»te r.support "
-#~ "pro [%s]."
+msgid "Number of seconds to pause between slides"
+msgstr "Poèet vteøin pro pøestávku mezi slidy."
 
-#~ msgid "[%s] is a reclass of [%s in %s] - cannot edit header!"
-#~ msgstr "[%s] je reklasifikací [%s v %s] - nemohu upravit hlavièku!"
+msgid "Apply regular expressions and wildcards to g.remove"
+msgstr "Pou¾ij regulární výrazy a zástupné znaky pro g.remove "
 
-#~ msgid "Cannot open raster map [%s]!"
-#~ msgstr "Nelze otevøít rastrový soubor [%s]!"
+msgid "Saves active display monitor to PNG file in home directory"
+msgstr "Ulo¾í aktuální obsah monitoru do souboru PNG v domovském adresáøi"
 
-#~ msgid "Raster file [%s] is empty."
-#~ msgstr "Rastrový soubor [%s] je prázdný."
+msgid "display, export"
+msgstr "zobrazení, export"
 
-#~ msgid "Error reading raster map [%s]."
-#~ msgstr "Chyba pøi ètení rastrového souboru [%s]."
+msgid "Resolution of output file (single=1, double=2, quad=4)"
+msgstr "Rozli¹ení výstupního souboru (1x, 2x, 4x)"
 
-#~ msgid "cellhd compression: %d\n"
-#~ msgstr "komprese cellhd: %d\n"
+msgid "Export display monitor to a GpsDrive compatible backdrop image"
+msgstr "Exportuj monitor do souboru kompatibilním s GpsDrive"
 
-#~ msgid "3.0 compression %sindicated\n"
-#~ msgstr "%sindikována 3.0 komprese\n"
+msgid "display, export, GPS"
+msgstr "zobrazení, export, GPS"
 
-#~ msgid "Pre 3.0 compression %sindicated\n"
-#~ msgstr "%sindikována pøedbì¾ná 3.0 komprese\n"
+msgid "name for new map image (lives in ~/.gpsdrive)"
+msgstr "jméno nového obrázku (bude ulo¾en do ~/.gpsdrive)"
 
-#~ msgid "[%s] appears to be compressed. Is it? "
-#~ msgstr "[%s] se jeví jako komprimovaný. Je tomu tak?"
+msgid "Make JPEG instead of PNG image"
+msgstr "Vytvoø JPEG místo PNG"
 
-#~ msgid "Please indicate the type of compression:\n"
-#~ msgstr "Prosím, udejte typ komprese:\n"
+msgid ""
+"Divides active display into two frames & displays maps/executes commands in "
+"each frame."
+msgstr ""
+"Rozdìlí aktivní monitor na dva rámy a v ka¾dém rámu zobrazí mapu a pøíkaz "
+"pro její vytvoøení."
 
-#~ msgid "  1. Pre 3.0 compression\n"
-#~ msgstr "  1. Pøedbì¾ná 3.0 komprese\n"
+msgid "Enter raster map to display in 1st frame"
+msgstr "Rastrová mapa, která má být zobrazena v první rámu"
 
-#~ msgid "  2. 3.0 compression\n"
-#~ msgstr "  2. 3.0 komprese\n"
+msgid "Enter command to execute in 1st frame"
+msgstr "Vlo¾te pøíkaz pro vykonání v první rámu"
 
-#~ msgid "The header for [%s] says the file is not compressed. "
-#~ msgstr "Hlavièka pro [%s] øíká, ¾e soubor není komprimován. "
+msgid "Enter raster map to display in 2nd frame"
+msgstr "Rastrová mapa, která má být zobrazena v druhém rámu"
 
-#~ msgid "The file appears to be compressed.\n"
-#~ msgstr "Soubor se ukazuje být komprimován.\n"
+msgid "Enter command to execute in 2nd frame"
+msgstr "Vlo¾te pøíkaz pro vykonání v druhém rámu"
 
-#~ msgid "Most likely the header is wrong, but I want you to decide.\n"
-#~ msgstr "Hlavièka je pravdìpodobnì chybná, rozhodnutí je na Vás.\n"
+msgid "How to split display"
+msgstr "Jak rozdìlit monitor"
 
-#~ msgid "The header for [%s] says the file is compressed. "
-#~ msgstr "Hlavièka pro [%s] øíká, ¾e je soubor komprimován. "
+msgid "Redraws the current display frame in the GRASS monitor"
+msgstr "Pøekreslí aktuálnì zobrazené mapy v monitoru"
 
-#~ msgid "The file does NOT appear to be compressed.\n"
-#~ msgstr ""
-#~ "Soubor se NEJEVÍ jako komprimovaný.\n"
-#~ "\n"
+msgid "Redraw all frames"
+msgstr "Pøekreslit v¹echny rámy"
 
-#~ msgid ""
-#~ "Header indicates %d row%s in the raster map, but the actual file format "
-#~ "indicates %d row%s"
-#~ msgstr ""
-#~ "Hlavièka uvádí %d øádkù %s v souboru, ale platný formát souboru uvádí %d "
-#~ "øádkù %s"
+msgid "Do not preserve individual regions when redrawing all frames"
+msgstr "Nedor¾ovat individuální regiony pokud pøekraslují v¹echny rámy"
 
-#~ msgid "Unable to write header for [%s]."
-#~ msgstr "Nejsem schopen zapsat hlavièku pro [%s]"
+msgid "Moves displayed maps to another monitor"
+msgstr "Pøesune aktuálnì zobrazené mapy do jiného monitoru"
 
-#~ msgid "Header for raster map [%s] updated."
-#~ msgstr "Hlavièka rastrového souboru [%s] byla aktualizována."
+msgid "clear target monitor before moving"
+msgstr "Vyèisti cílový monitor pøed pøesunem"
 
-#~ msgid "Please enter the following information for [%s]:"
-#~ msgstr "Prosím, zadejte následující informace pro [%s]:"
+msgid "stay with source monitor"
+msgstr "zùstaò ve zdrojovém monitoru"
 
-#~ msgid "        Number of rows"
-#~ msgstr "        Poèet øádkù"
+msgid "kill source monitor after moving"
+msgstr "zab zdrojový monitor po pøesunu"
 
-#~ msgid "        Number of cols"
-#~ msgstr "        Poèet sloupcù"
+msgid "Target monitor"
+msgstr "Cílový monitor"
 
-#~ msgid "        Floating point map"
-#~ msgstr "        Mapa s plovoucí desetinnou èárkou"
+msgid "Source monitor"
+msgstr "Zdrojový monitor"
 
-#~ msgid "rows * cols * bytes per cell must be same as file size (%lu)"
-#~ msgstr ""
-#~ "øádky * sloupce * byty na buòku musí mít stejnou velikost jako soubor (%"
-#~ "lu)"
+msgid "Display manager for GRASS"
+msgstr "GIS manager pro GRASS"
 
-#~ msgid "If you need help figuring them out, just hit ESC"
-#~ msgstr "Pokud potøebujete pomoc s vyèíslením, stisknìte ESC"
+msgid "Name of .dmrc settings file"
+msgstr "Jméno souboru s nastavením .dmrc"
 
-#~ msgid "** Negative values not allowed!"
-#~ msgstr "** Záporné hodnoty nejsou povoleny!"
+msgid "Selects/starts specified monitor at specified size"
+msgstr "Vybere/nastartuje zadaný monitor o zadané velikosti"
 
-#~ msgid "** Positive values only please!"
-#~ msgstr "** Pouze kladné hodnoty, prosím!"
+msgid "Width in pixels of new display monitor"
+msgstr "©íøka nového monitoru v pixelech "
 
-#~ msgid "Illegal file name for real part: %s"
-#~ msgstr "Neplatný název souboru pro reálnou èást: %s"
+msgid "Height in pixels of new display monitor"
+msgstr "Vý¹ka nového monitoru v pixelech"
 
-#~ msgid "Illegal file name for imaginary part: %s"
-#~ msgstr "Neplatný název pro imaginární èást: %s"
+msgid "Saves the contents of the active display monitor to a graphics file."
+msgstr "Ulo¾í obsah aktuálního monitoru jako soubor s obrázkem."
 
-#~ msgid "name=%s\n"
-#~ msgstr "name=%s\n"
+msgid "Name for output file (do NOT add extension)"
+msgstr "Jméno obrázku (NEpøidávejte koncovku)"
 
-#~ msgid "mapset=%s\n"
-#~ msgstr "mapset=%s\n"
+msgid "Dimensions of output file versus current window size"
+msgstr "Rozmìry výstupu versus souèasná velikost okna"
 
-#~ msgid "fullname=%s\n"
-#~ msgstr "fullname=%s\n"
+msgid "(same=1, double size=2, quadruple size=4)"
+msgstr "(stejná velikost=1, dvojitá=2, ètyønásobná=4)"
 
-#~ msgid "usage: %s file [prompt %%x %%y]\n"
-#~ msgstr "pou¾ití: %s soubor [prompt %%x %%y]\n"
+msgid "Images"
+msgstr "Obrázky"
 
-#~ msgid "Illegal group name <%s>"
-#~ msgstr "Neplatné jméno skupiny <%s>"
+msgid "Width and height of output image (overrides resolution setting)"
+msgstr "©íøka a vý¹ka výstupního obrazu (pøepí¹e nastavení rozli¹ení)"
 
-#~ msgid "Illegal signature file name <%s>"
-#~ msgstr "Neplatný název souboru se signaturami <%s>."
+msgid "Compression for PNG files"
+msgstr "Komprese pro soubory PNG"
 
-#~ msgid ""
-#~ "Optional where condition (without WHERE key word), e.g.:\n"
-#~ "\t\tobec = 'Liptakov'"
-#~ msgstr ""
-#~ "Volitelná podmínka where (bez klíèového slova WHERE), napø.:\n"
-#~ "\t\tobec = 'Liptakov'"
+msgid "(0=none, 1=fastest, 9=most; lossless, only time vs. filesize)"
+msgstr "(0=nic, 1=nejrychleji, 9=bezeztrát; pouze èas vs velikost souboru)"
 
-#~ msgid ""
-#~ "\n"
-#~ "<%s> -- illegal result signature file name"
-#~ msgstr ""
-#~ "\n"
-#~ "<%s> -- neplatný název souboru výsledných pøíznakù"
+msgid "File size/quality for JPEG files"
+msgstr "Velikost/kvalita souboru JPEG"
+
+msgid "(10=smallest/worst, 100=largest/best)"
+msgstr "(10=nejmen¹í/nejhor¹í, 100=nejvìt¹í/nejlep¹í)"
+
+msgid "Paper size for PostScript output"
+msgstr "Velikost papíru pro výstup v PostScript."
+
+msgid "PostScript"
+msgstr "PostScript"
+
+msgid "PostScript level (only limits functionality!)"
+msgstr "Úroveò Postscriptu ( pouze omezuje funkènost!)"
+
+msgid "Set background color to black (white default)"
+msgstr "Nastav barvu pozadí na èernou (bílá je výchozí)"
+
+msgid "Set transparent background"
+msgstr "Nastavit prùhledné pozadí"
+
+msgid "Use the Cario driver to render images"
+msgstr "Pou¾ít ovladaè Cairo pro vykreslení obrazù"
+
+msgid "Set paper orientation to landscape (for PostScript output)"
+msgstr "Nastavit papír na orientaci krajina (pro výstup Postscript)"
+
+msgid "Illegal output file name"
+msgstr "Neplatný název výstupního souboru"
+
+msgid "Enable interactive prompting (for command-line use only)"
+msgstr "Povolit interaktivní vyzívání (pouze s pou¾itím pøíkazového øádku)"
+
+msgid ""
+"\n"
+"\n"
+"WARNING!  A projection file already exists for this location\n"
+msgstr ""
+"\n"
+"\n"
+"VAROVÁNÍ!  V této location ji¾ existuje soubor s projekcí\n"
+
+msgid "Would you still like to overwrite the current projection information "
+msgstr "Stále si pøejete pøepsat aktuální informace o projekci"
+
+msgid "The projection information will not be updated."
+msgstr "Informace o projekci nebudou aktualizovány."
+
+msgid "<%s> is an illegal region name"
+msgstr "<%s> je neplatný název regionu"
+
+msgid "Erasing monitors..."
+msgstr "Ma¾u monitory ... "
+
+msgid "Enable flashing (slower)"
+msgstr "Umo¾ni probliknutí (pomalej¹í)"
+
+msgid " Middle: toggle flash color\n"
+msgstr " Prostøední: zmìnit barvu\n"
+
+msgid "To establish and control use of a graphics display monitor."
+msgstr "Slou¾í k vytvoøení a kontrole grafického monitoru."
+
+msgid "Name of graphics monitor to start"
+msgstr "Jméno grafického monitoru, který bude spu¹tìn"
+
+msgid "Name of graphics monitor to stop"
+msgstr "Jméno grafického monitoru, který bude vypnut"
+
+msgid "Name of graphics monitor to select"
+msgstr "Jméno grafického monitoru, který bude vybrán"
+
+msgid "Name of graphics monitor to unlock"
+msgstr "Jméno monitoru k odemèení"
+
+msgid "List all monitors"
+msgstr "Seznam v¹ech monitorù"
+
+msgid "List all monitors (with current status)"
+msgstr "Seznam monitorù (s aktuálním stavem)"
+
+msgid "Print name of currently selected monitor"
+msgstr "Vypi¹ jméno aktuálnì vybraného monitoru"
+
+msgid "Release currently selected monitor"
+msgstr "Uvolni souèasný vybraný monitor"
+
+msgid "Do not automatically select when starting"
+msgstr "Nevybírej monitor automaticky pøi startu"
+
+msgid "Problem selecting %s. Will try once more"
+msgstr "Problém pøi výbìru monitoru %s. Zkusím to je¹tì jednou"
+
+msgid "Usage:  %s monitor_name"
+msgstr "Pou¾ití: %s jmeno_monitoru"
+
+msgid "%s: -%c unrecognized option"
+msgstr "%s: -%c nerozpoznaná volba"
+
+msgid "Monitor <%s> released"
+msgstr "monitor <%s> byl uvolnìn"
+
+msgid "Monitor <%s> in use by another user"
+msgstr "Monitor <%s> je pou¾íván jiným u¾ivatelem"
+
+msgid "No such monitor as <%s>"
+msgstr "Monitor <%s> neexistuje"
+
+msgid "Failed testing lock mechanism"
+msgstr "Testování uzamykacího mechanismu selhalo"
+
+msgid "Usage:  %s [-fv] [name]"
+msgstr "Pou¾ití: %s [-fv] [jmeno]"
+
+msgid "Usage: %s [-f] monitor_name"
+msgstr "Pou¾ití: %s [-f] jmeno_monitoru"
+
+msgid "Monitor '%s' terminated"
+msgstr "Monitor '%s' ukonèen"
+
+msgid "Error - Monitor '%s' was not running"
+msgstr "Chyba - Monitor '%s' nebì¾í"
+
+msgid "Error - Monitor '%s' in use by another user"
+msgstr "Chyba - Monitor '%s' je pou¾íván jiným u¾ivatelem"
+
+msgid "Error - Locking mechanism failed"
+msgstr "Chyba - selhal zamykací mechanismus"
+
+msgid "No current window"
+msgstr "®ádné aktuální okno"
+
+msgid "Current window not available"
+msgstr "Aktuální okno není dostupné"
+
+msgid "Setting map window"
+msgstr "Nastavuji mapové okno"
+
+msgid "Getting screen window"
+msgstr "Získání obrazového okna"
+
+msgid "No raster map exists in the current window"
+msgstr "V aktuálním oknì neexistuje ¾ádná rastrová mapa"
+
+msgid ""
+"\n"
+"Mouse Buttons:"
+msgstr ""
+"\n"
+"Tlaèítka my¹i:"
+
+msgid "Left:   Select From\n"
+msgstr " Levé:    Vybrat z\n"
+
+msgid "Middle: Select To\n"
+msgstr "Prostøední tlaèítko: Vybrat do\n"
+
+msgid ""
+"Right:  Quit\n"
+"\n"
+msgstr ""
+" Pravé tlaèítko: ukonèit\n"
+"\n"
+
+msgid ""
+"g;use the libgis render functions (features: clipping);r;use the raster "
+"graphics library functions (features: polylines);d;use the display library "
+"basic functions (features: polylines);c;use the display library clipping "
+"functions (features: clipping);l;use the display library culling functions "
+"(features: culling, polylines)"
+msgstr ""
+"g;pou¾ití vykreslovacích funkcí(prvky:vystøihování);r;pou¾ití knihovny "
+"funkcí pro rastrovou grafiku (prvky: lomená èára);d;pou¾ití knihovny "
+"základních zobrazovacích funkcí (prvky: lomená èára);c; pou¾ití knihovny "
+"zobrazovacích vystøihovacích funkcí (prvky: vystøihování);l;pou¾ití knihovny "
+"zobrazovacích odstraòovacích funkcí (prvky: odstranìní, lomená èára)"
+
+msgid ""
+"Don't add to list of vectors and commands in monitor (it won't be drawn if "
+"the monitor is refreshed)"
+msgstr ""
+"Nepøidávej do seznamu vektorù a pøíkazù v monitoru (nebude vykresleno, pokud "
+"monitoru bude pøekreslen)"
+
+msgid "Can't clear current graphics window"
+msgstr "Nelze vyèistit aktuální okno"
+
+msgid "Use mouse to size & place legend"
+msgstr "Pou¾ít my¹ pro velikost a umístìní legendy"
+
+msgid "No raster map exists in current window"
+msgstr "V aktuálním oknì není ¾ádná rastrová mapa"
+
+msgid "No raster or vector map displayed"
+msgstr "Název rastrové nebo vektorové mapy, která bude zobrazena"
+
+msgid "Font name or pathname of TTF file"
+msgstr "Jméno  nebo cesta k TTF souboru."
+
+msgid "Setting release of FreeType"
+msgstr "Nastavuji verzi FreeType"
+
+msgid "No current frame"
+msgstr "®ádný aktuální rámec"
+
+msgid "Current frame not available"
+msgstr "Aktuální rámec není dostupný"
+
+msgid "Creates a list of commands for recreating screen graphics."
+msgstr "Vytvoøí seznam pøíkazù pro obnovení obsahu monitoru."
+
+msgid "Name of frame(s) to save"
+msgstr "Název rámu(ù) urèeného k ulo¾ení"
+
+msgid ""
+"List of object numbers to remove which are displayed after \"#\". -1 for the "
+"last object."
+msgstr ""
+"Seznam èísel objektù k vyjmutí, které jsou zobrazeny po \"#\" -1 pro "
+"poslední objekt."
+
+msgid ""
+"List of object numbers to move (\"from\" to \"to\"). remove= option will be "
+"done first, if any."
+msgstr ""
+"Seznam èísel objektù, které budou pøejmenovány (\"from\" na \"to\"). Nejprve "
+"bude provedena volba remove=."
+
+msgid "Save current frame"
+msgstr "Ulo¾ souèasný rám"
+
+msgid "Save all the frames"
+msgstr "Ulo¾ v¹echny rámy"
+
+msgid "Only map objects without extra header and tailer"
+msgstr "Pouze mapové objekty bez extra hlavièky a patièky"
+
+msgid "Unknown item type in pad: %s"
+msgstr "Neznámý prvek v podlo¾ce: %s"
+
+msgid "No current graphics window"
+msgstr "®ádný vybraný monitor"
+
+msgid "Current graphics window not available"
+msgstr "Aktuální monitor není dostupný"
+
+msgid "Error choosing frame [%s]\n"
+msgstr "Chyba pøi výbìru rámce [%s]\n"
+
+msgid ""
+"\n"
+"Buttons:\n"
+msgstr ""
+"\n"
+"Tlaèítka:\n"
+
+msgid "Left:   Select frame\n"
+msgstr " Levé:    Vybrat rámec\n"
+
+msgid "Middle: Keep original frame\n"
+msgstr "Prostøední: Ponechat pùvodní rám\n"
+
+msgid "Right:  Accept frame\n"
+msgstr "Pravé: Potvrï rámec\n"
+
+msgid "Manages display frames on the user's graphics monitor."
+msgstr "Správa rámcù v grafickém monitoru"
+
+msgid "Create a new frame"
+msgstr "Vytvoøit nový rámec"
+
+msgid "Select a frame"
+msgstr "Vybrat rámec"
+
+msgid "Print name of current frame"
+msgstr "Vypsat aktuální rámec"
+
+msgid "Print names of all frames"
+msgstr "Vytisknout jména v¹ech rámcù"
+
+msgid "List map names displayed in GRASS monitor"
+msgstr "Vypi¹ jména map zobrazených v grafickém monitoru"
+
+msgid "Debugging output"
+msgstr "Roz¹íøený výstup"
+
+msgid "Frame to be created/selected"
+msgstr "Rámec, který má být vytvoøen/vybrán"
+
+msgid "bottom,top,left,right"
+msgstr "spodní,svrchní,levý,pravý"
+
+msgid "Where to place the frame, values in percent (implies -c)"
+msgstr "Kam umístit rám, hodnoty v procentech (potøebuje volbu -c)"
+
+msgid "Setting graphics window"
+msgstr "Nastavuji mapové okno"
+
+msgid "Getting graphics window coordinates"
+msgstr "Pou¾ívám souøadnice monitoru"
+
+msgid ""
+"Generates and displays simple graphics on map layers drawn in the active "
+"graphics monitor display frame."
+msgstr ""
+"Vytvoøí a zobrazí jednoduché grafické prvky na mapì vykreslené v aktivním "
+"grafickém monitoru."
+
+msgid ""
+"Unix file containg graphing instructions, if not given reads from standard "
+"input"
+msgstr ""
+"Soubor (Unix) obsahující grafické instrukce, pokud není zadáno, ète se "
+"standardní vstup"
+
+msgid ""
+"Color to draw with, either a standard GRASS color or R:G:B triplet "
+"(separated by colons)"
+msgstr ""
+"Barva kresby, buï standardní GRASS barva nebo trojice R:G:B (oddìleno "
+"dvojteèkou)"
+
+msgid "Don't add to list of rasters and commands in monitor"
+msgstr "Nepøidávat do seznamu rastrù a pøíkazù v monitoru"
+
+msgid "Interactively select route"
+msgstr "Interaktivní výbìr trasy"
+
+msgid "You must select more than one point"
+msgstr "Je potøeba vybrat více ne¾ jeden bod"
+
+msgid "You must select at least four points"
+msgstr "Musíte vybrat nejménì ètyøi body."
+
+msgid "Use mouse to interactively place scale"
+msgstr "Pou¾ít my¹ pro umístìní mìøítka"
+
+msgid ""
+"Creates and displays a menu within the active frame on the graphics monitor."
+msgstr "Vytvoøit a zobrazit menu v aktivní rámci grafického monitoru."
+
+msgid "Sets the color of the menu background"
+msgstr "Nastaví barvu pozadí menu"
+
+msgid "Sets the color of the menu text"
+msgstr "Nastavit barvu textu v menu"
+
+msgid "Sets the color dividing lines of text"
+msgstr "Nastaví barvu linií oddìlujících øádky textu"
+
+msgid "Sets the menu text size (in percent)"
+msgstr "Nastaví velikost písma v menu (procenta)"
+
+msgid "Menu must contain a title and at least one option"
+msgstr "Menu musí obsahovat titulek a nejménì jednu volbu"
+
+msgid "Don't add to list of commands in monitor"
+msgstr "Nepøidávat do seznamu v monitoru pøíkazy"
+
+msgid "Use mouse to interactively place text"
+msgstr "Pou¾ít my¹ pro umístìní textu"
+
+msgid "Click!\n"
+msgstr "Klik!\n"
+
+msgid " Left:    Place text here\n"
+msgstr " Levé:    Vlo¾it text sem\n"
+
+msgid " Right:   Quit\n"
+msgstr " Pravé :   ukonèit\n"
+
+msgid "value [%.0f,%.0f] out of range [0-100]"
+msgstr "hodnota [%.0f,%.0f] je mimo interval [0-100]"
+
+msgid ""
+"Draws text in the graphics monitor's active display frame using TrueType "
+"fonts."
+msgstr ""
+"Vykreslí text v aktivním rámci grafického monitoru s vyu¾itím písma TrueType"
+
+msgid "Screen position (percentage, [0,0] is bottom left)"
+msgstr "Souøadnice v procentech rámce ([0,0] je vlevo dole)"
+
+msgid "Path to TrueType font (including file name)"
+msgstr "Cesta k TrueType fontùm (vèetnì jména souboru)"
+
+msgid "Height of letters (in percent of available frame height)"
+msgstr "Vý¹ka písmen (v procentech dostupné vý¹ky rámce)"
+
+msgid "Either text or -c should be given"
+msgstr "Mìl by být zadán buï text nebo -c"
+
+msgid "Choose only one coordinate system for placement"
+msgstr "Vyberte pro umístìní pouze jeden souøadnicový systém"
+
+msgid "No font selected"
+msgstr "Nebylo vybráno ¾ádné písmo"
+
+msgid "Invalid font: %s"
+msgstr "Chybné písmo: %s"
+
+msgid "Unable to create text conversion context"
+msgstr "Nelze vytvoøit textovou konverzi kontextu"
+
+msgid "Text conversion error"
+msgstr "Chyba pøi konverzi textu"
+
+msgid "Unable to write the temporary file"
+msgstr "Nelze zapisovat do doèasného souboru"
+
+msgid "No predefined font"
+msgstr "®ádné pøeddefinované písmo"
+
+msgid "%s: Unable to read font"
+msgstr "%s: Nelze èíst písmo"
+
+msgid "%s: Unable to read FreeType definition file; use the default"
+msgstr "%s: Nelze èíst definièní soubor FreeType; pou¾iji výchozí"
+
+msgid "%s: No FreeType definition file"
+msgstr "%s: Å½ádný definièní soubor FreeType"
+
+msgid "%s: Unable to read FreeType definition file"
+msgstr "%s: Nelze èíst definièní soubor FreeType"
+
+msgid "Just redraw given maps using default colors"
+msgstr "Pouze pøekresli zobrazené mapy s výchozími barvami."
+
+msgid "ERROR: can not get \"list\" items"
+msgstr "CHYBA: nelze získat polo¾ky \"list\""
+
+msgid "-j flag forced"
+msgstr "volba -j byla nastavena nucenì"
+
+msgid "No map is displayed in GRASS monitor"
+msgstr "Nebyla zobrazena ¾ádná mapa v monitoru GRASSu"
+
+msgid "One mouse click only"
+msgstr "Pouze jedno kliknutí my¹í"
+
+msgid "Quiet; No chatter"
+msgstr "Ti¹e; ¾ádné zprávy"
+
+msgid "ask_transform_coor():  Leaving session.. \n"
+msgstr "ask_transform_coor():  Opou¹tím sezení...\n"
+
+msgid " Number of points that have been entered: %d\n"
+msgstr " Poèet zadaných bodù: %d\n"
+
+msgid "Please answer yes or no"
+msgstr "Odpovìzte prosím yes (ano) nebo no (ne)"
+
+#, fuzzy
+msgid "No attribute table found"
+msgstr "Atribut(y) nenalezeny"
+
+#, fuzzy
+msgid "No numerical attributes found. Skipping export"
+msgstr "Nic nebylo nalezeno, pøeskakuji type=poly"
+
+#, fuzzy
+msgid "Error reading value of attribute '%s'"
+msgstr "Chyba pøi ètení kategorií: '%s'"
+
+msgid "Quiet - Do not show progress"
+msgstr "Ti¹e - potlaè hlá¹ení o prùbìhu zpracování"
+
+msgid "Illegal output file name <%s>"
+msgstr "Neplatný název výstupního souboru <%s>"
+
+msgid ""
+"The '-q' flag is superseded and will be removed in future. Please use '--"
+"quiet' instead"
+msgstr ""
+"Pøepínaè '-q' je zastaralý a bude v budoucnosti odstranìn. prosím, peou¾ijte "
+"pøepínaè '--quiet'."
+
+msgid "Quietly"
+msgstr "Potichu"
+
+#, fuzzy
+msgid "Name of terrain raster map (DEM)"
+msgstr "Mapa s modelem terénu (DMT)"
+
+msgid "GIS Coincidence Tabulation Facility\n"
+msgstr "Schopnost spoèítat tabulku koincidence\n"
+
+msgid ""
+"This utility will allow you to compare the coincidence of two map layers\n"
+msgstr "Tento nástroj vám umo¾ní porovnat coincidence dvou mapových vrstev\n"
+
+msgid "The report can be made in one of 8 units."
+msgstr "Zprávu lze vytvoøit za pomoci nìkteré z osmi jednotek."
+
+msgid "Please choose a unit by entering one of the following letter codes:"
+msgstr "Vyberte prosím jednotky zadáním jednoho z následujících písmen:"
+
+msgid "     'c': cells"
+msgstr "    'c': pixely"
+
+msgid "     'p': percent cover of region"
+msgstr "     'p': procenta pokryvnosti regionu"
+
+msgid "     'x': percent of '%s' category (column)"
+msgstr "     'x': procenta '%s' kategorie (sloupec)"
+
+msgid "     'y': percent of '%s' category (row)"
+msgstr "     'y': procenta '%s' kategorie (øádek)"
+
+msgid "     'a': acres"
+msgstr "     'a': akry"
+
+msgid "     'h': hectares"
+msgstr "     'h': hektary"
+
+msgid "     'k': square kilometers"
+msgstr "     'k': ètvereèní kilometry"
+
+msgid "     'm': square miles\n"
+msgstr "     'm': ètvereèní míle\n"
+
+msgid "     'Q': quit"
+msgstr "     'Q': konec"
+
+msgid "Do you wish to save this report in a file? (y/n) [n] "
+msgstr "Pøejete si ulo¾it tuto zprávu do souboru? (y/n) [n] "
+
+msgid ""
+"Enter the file name or path\n"
+"> "
+msgstr ""
+"Zadejte jméno souboru\n"
+"> "
+
+msgid "'%s' being saved\n"
+msgstr "'%s' ulo¾en\n"
+
+msgid ""
+"Do you wish to print this report (requires Unix lpr command)? (y/n) [n] "
+msgstr ""
+"Pøejete si vytisknout tuto zprávu (vy¾aduje Unixový pøíkaz lpr)? (y/n) [n] "
+
+msgid ""
+"Do you wish it printed in 80 or 132 columns?\n"
+"> "
+msgstr ""
+"Pøejete si vytisknout ji v 80 nebo 132 sloupcích?\n"
+"> "
+
+msgid ""
+"Do you wish to run this report with a different unit of measure? (y/n) [y] "
+msgstr "Pøejete si vytvoøit tuto zprávu s rùznými jednotkami? (y/n) [y]"
+
+msgid "Interactively select End-Points"
+msgstr "Interaktivní výbìr koncových bodù"
+
+msgid "Use mouse to select Start Point\n"
+msgstr "Pro výbìr poèáteèního bodu pou¾ijte my¹\n"
+
+msgid ""
+"\n"
+"Use mouse to draw profile line\n"
+msgstr ""
+"\n"
+"Pou¾ít my¹ pro kreslení linie profilu\n"
+
+msgid "Buttons:\n"
+msgstr "Tlaèítka:\n"
+
+msgid "Left:   Mark next point\n"
+msgstr "Levé tlaèítko:  Oznaè dal¹í bod\n"
+
+msgid "Middle: Mark next point\n"
+msgstr "Prostøední tlaèítko: Oznaè dal¹í bod\n"
+
+msgid ""
+"Right:  Finish profile and exit\n"
+"\n"
+msgstr ""
+"Pravé:  ukonèit profil a opustit\n"
+"\n"
+
+msgid "Suppress single crossing error messages"
+msgstr "Potlaè chybové zprávy o pøekrytí"
+
+msgid ""
+"The '-q' and '-n' flag is superseded and will be removed in future. Please "
+"use '--quiet' instead."
+msgstr ""
+"Volby '-q' a '-n' jsou zastaralé a budou v budoucnu odstranìny. Prosím "
+"pou¾ijte pøepínaè '--quiet'."
+
+msgid "Bilinear interpolation utility for raster map layers."
+msgstr "Nástroj pro bilineární interpolaci rastrových map."
+
+msgid ""
+"Specific input value to be assigned to the north and/or south poles for "
+"longitude-latitude grids"
+msgstr ""
+"Specifická hodnota vstupu, která bude pøiøa¾ena severnímu a/nebo ji¾nímu "
+"pólu pro rastrové mapy v systému zem. délka/¹íøka"
+
+msgid "This module is deprecated. Please use 'r.resamp.interp' instead."
+msgstr "Tento modul je zastaralý. Prosím, pou¾ijte 'r.stats.interp'."
+
+msgid "Path to rules file"
+msgstr "Cesta k souboru s pravidly"
+
+msgid "Enter rules interactively"
+msgstr "Spustit interaktivnì"
+
+msgid ""
+"Interactive mode is incompatible with \"color\", \"rules\", and \"raster\" "
+"options"
+msgstr ""
+"Interaktivní mód nelze pou¾ít s volbami \"barva\", \"pravidlo\", a \"rastr\" "
+
+msgid "Which vector map needs updated categories?"
+msgstr "Který vektorový soubor vy¾aduje aktualizované kategorie?"
+
+msgid "Which raster map needs updated categories?"
+msgstr "Který rastrový soubor vy¾aduje aktualizované kategorie?"
+
+msgid "%s map <%s> not found"
+msgstr "%s mapa <%s> nebyla nalezena"
+
+msgid "Category file for <%s> not updated"
+msgstr "Soubor s kategoriemi pro <%s> nebyl aktualizován."
+
+msgid "Category file for <%s> updated"
+msgstr "Soubor s kategoriemi pro <%s> byl aktualizován."
+
+msgid ""
+"\n"
+"Hit RETURN to continue -->"
+msgstr ""
+"\n"
+"Stiknìte RETURN pro pokraèování -->"
+
+msgid "Edit header for [%s]? "
+msgstr "Editovat hlavièku pro [%s]?"
+
+msgid ""
+"\n"
+"NOTE: [%s] is a reclass of [%s in %s]"
+msgstr ""
+"\n"
+"POZNÁMKA: [%s] je reklasifikací [%s z %s]"
+
+msgid "Canceling from edit header."
+msgstr "Stornování editace hlavièky."
+
+msgid "Edit the category file for [%s]? "
+msgstr "Editace souboru s kategoriemi pro [%s]? "
+
+msgid "Create/Update the color table for [%s]? "
+msgstr "Vytvoøení/Aktualizace tabulky barev pro [%s]?"
+
+msgid "Edit the history file for [%s]? "
+msgstr "Editace souboru s historií pro [%s]?"
+
+msgid ""
+"\n"
+"The null file for [%s] may indicate that some cells contain\n"
+" no data. If the null file for [%s] doesn't exist, zero cells in\n"
+" it are treated by GRASS application programs as no data."
+msgstr ""
+"\n"
+"Soubor \"null\" pro [%s] mù¾e naznaèovat, ¾e nìkteré buòky obsahují\n"
+" \"¾ádná data\". Pokud tento soubor pro [%s] neexistuje, pak jsou nulové "
+"buòky\n"
+"interpretovány moduly GRASSu jako \"¾ádná data\"."
+
+msgid ""
+"\n"
+"Do you want to create/reset the null file for [%s] so that null cell values "
+"are considered valid data? "
+msgstr ""
+"\n"
+"Pøejete si vytvoøit/obnovit soubor \"null\" pro [%s], tak¾e hodnoty bunìk "
+"NULL budou pova¾ovány za platná data?"
+
+msgid ""
+"\n"
+"Do you want to delete the null file for [%s]\n"
+"(all zero cells will then be considered no data)? "
+msgstr ""
+"\n"
+"Pøejete si odstranit soubor \"null\" pro [%s]\n"
+"(v¹echny nulové buòky budou poté pova¾ovány za \"no data\")?"
+
+msgid "Which raster map needs an updated history? "
+msgstr "Který rastrový soubor vy¾aduje aktualizovanou historii? "
+
+msgid "Raster file [%s] not found. Exiting."
+msgstr "Rastrový soubor [%s] nebyl nalezen. Ukonèuji se."
+
+msgid "History file for [%s] updated."
+msgstr "Soubor s historií pro [%s] byl aktualizován."
+
+msgid "History file for [%s] not updated."
+msgstr "Soubor s historií pro [%s] nebyl aktualizován."
+
+msgid "Which raster map needs a color table"
+msgstr "Který rastrový soubor vy¾aduje tabulku barev"
+
+msgid "Color table for <%s> updated"
+msgstr "Tabulka barev pro <%s> byla aktualizována"
+
+msgid ""
+"\n"
+"hit RETURN to continue -->"
+msgstr ""
+"\n"
+"Stisknìte RETURN pro pokraèování -->"
+
+msgid "Edit header for [%s]\n"
+msgstr "Edituj hlavièku pro [%s]\n"
+
+msgid "[%s] cannot be found!"
+msgstr "[%s] nemù¾e být nalezen!"
+
+msgid "For what layer shall the header file be edited? "
+msgstr "Pro kterou vrstvu má být upraven soubor s hlavièkou? "
+
+msgid "[%s] is a reclass of [%s] - cannot edit header! Run support on [%s]."
+msgstr ""
+"[%s] je reklasifikací [%s] - nemohu upravit hlavièku! Spus»te r.support pro "
+"[%s]."
+
+msgid "[%s] is a reclass of [%s in %s] - cannot edit header!"
+msgstr "[%s] je reklasifikací [%s v %s] - nemohu upravit hlavièku!"
+
+msgid "Cannot open raster map [%s]!"
+msgstr "Nelze otevøít rastrový soubor [%s]!"
+
+msgid "Raster file [%s] is empty."
+msgstr "Rastrový soubor [%s] je prázdný."
+
+msgid "Error reading raster map [%s]."
+msgstr "Chyba pøi ètení rastrového souboru [%s]."
+
+msgid "cellhd compression: %d\n"
+msgstr "komprese cellhd: %d\n"
+
+msgid "3.0 compression %sindicated\n"
+msgstr "%sindikována 3.0 komprese\n"
+
+msgid "Pre 3.0 compression %sindicated\n"
+msgstr "%sindikována pøedbì¾ná 3.0 komprese\n"
+
+msgid "[%s] appears to be compressed. Is it? "
+msgstr "[%s] se jeví jako komprimovaný. Je tomu tak?"
+
+msgid "Please indicate the type of compression:\n"
+msgstr "Prosím, udejte typ komprese:\n"
+
+msgid "  1. Pre 3.0 compression\n"
+msgstr "  1. Pøedbì¾ná 3.0 komprese\n"
+
+msgid "  2. 3.0 compression\n"
+msgstr "  2. 3.0 komprese\n"
+
+msgid "The header for [%s] says the file is not compressed. "
+msgstr "Hlavièka pro [%s] øíká, ¾e soubor není komprimován. "
+
+msgid "The file appears to be compressed.\n"
+msgstr "Soubor se ukazuje být komprimován.\n"
+
+msgid "Most likely the header is wrong, but I want you to decide.\n"
+msgstr "Hlavièka je pravdìpodobnì chybná, rozhodnutí je na Vás.\n"
+
+msgid "The header for [%s] says the file is compressed. "
+msgstr "Hlavièka pro [%s] øíká, ¾e je soubor komprimován. "
+
+msgid "The file does NOT appear to be compressed.\n"
+msgstr ""
+"Soubor se NEJEVÍ jako komprimovaný.\n"
+"\n"
+
+msgid ""
+"Header indicates %d row%s in the raster map, but the actual file format "
+"indicates %d row%s"
+msgstr ""
+"Hlavièka uvádí %d øádkù %s v souboru, ale platný formát souboru uvádí %d "
+"øádkù %s"
+
+msgid "Unable to write header for [%s]."
+msgstr "Nejsem schopen zapsat hlavièku pro [%s]"
+
+msgid "Header for raster map [%s] updated."
+msgstr "Hlavièka rastrového souboru [%s] byla aktualizována."
+
+msgid "Please enter the following information for [%s]:"
+msgstr "Prosím, zadejte následující informace pro [%s]:"
+
+msgid "        Number of rows"
+msgstr "        Poèet øádkù"
+
+msgid "        Number of cols"
+msgstr "        Poèet sloupcù"
+
+msgid "        Floating point map"
+msgstr "        Mapa s plovoucí desetinnou èárkou"
+
+msgid "rows * cols * bytes per cell must be same as file size (%lu)"
+msgstr ""
+"øádky * sloupce * byty na buòku musí mít stejnou velikost jako soubor (%lu)"
+
+msgid "If you need help figuring them out, just hit ESC"
+msgstr "Pokud potøebujete pomoc s vyèíslením, stisknìte ESC"
+
+msgid "** Negative values not allowed!"
+msgstr "** Záporné hodnoty nejsou povoleny!"
+
+msgid "** Positive values only please!"
+msgstr "** Pouze kladné hodnoty, prosím!"
+
+msgid "Illegal file name for real part: %s"
+msgstr "Neplatný název souboru pro reálnou èást: %s"
+
+msgid "Illegal file name for imaginary part: %s"
+msgstr "Neplatný název pro imaginární èást: %s"
+
+msgid "name=%s\n"
+msgstr "name=%s\n"
+
+msgid "mapset=%s\n"
+msgstr "mapset=%s\n"
+
+msgid "fullname=%s\n"
+msgstr "fullname=%s\n"
+
+msgid "usage: %s file [prompt %%x %%y]\n"
+msgstr "pou¾ití: %s soubor [prompt %%x %%y]\n"
+
+msgid "Illegal group name <%s>"
+msgstr "Neplatné jméno skupiny <%s>"
+
+msgid "Illegal signature file name <%s>"
+msgstr "Neplatný název souboru se signaturami <%s>."
+
+msgid ""
+"Optional where condition (without WHERE key word), e.g.:\n"
+"\t\tobec = 'Liptakov'"
+msgstr ""
+"Volitelná podmínka where (bez klíèového slova WHERE), napø.:\n"
+"\t\tobec = 'Liptakov'"
+
+msgid ""
+"\n"
+"<%s> -- illegal result signature file name"
+msgstr ""
+"\n"
+"<%s> -- neplatný název souboru výsledných pøíznakù"

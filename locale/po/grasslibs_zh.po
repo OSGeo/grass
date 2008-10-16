@@ -574,9 +574,9 @@ msgid "Unable to get list tables in database <%s>"
 msgstr "无法打开椭球表文件：%s"
 
 #: ../lib/db/dbmi_client/copy_tab.c:157
-#, c-format
+#, fuzzy, c-format
 msgid "Table <%s> already exists in database <%s>"
-msgstr ""
+msgstr "无法打开椭球表文件：%s"
 
 #: ../lib/db/dbmi_client/copy_tab.c:199 ../lib/db/dbmi_client/copy_tab.c:276
 #: ../lib/db/dbmi_client/table.c:110
@@ -1308,12 +1308,12 @@ msgstr ""
 #: ../lib/vector/Vlib/write_nat.c:640
 #, fuzzy
 msgid "Attempt to delete dead feature"
-msgstr "无法打开临时文件"
+msgstr "无法为区域 %d 计算质心"
 
 #: ../lib/vector/Vlib/write_nat.c:885
 #, fuzzy
 msgid "Attempt to restore alive feature"
-msgstr "无法打开临时文件"
+msgstr "无法为区域 %d 计算质心"
 
 #: ../lib/vector/Vlib/level_two.c:210 ../lib/vector/Vlib/level_two.c:235
 #: ../lib/vector/Vlib/level_two.c:259 ../lib/vector/Vlib/level_two.c:278
@@ -2039,9 +2039,9 @@ msgid "Window replacing the default"
 msgstr "替换默认窗口"
 
 #: ../lib/g3d/g3dcolor.c:332
-#, c-format
+#, fuzzy, c-format
 msgid "mapset <%s> is not the current mapset"
-msgstr ""
+msgstr "错误：试图更新不在当前地图集中的地图。"
 
 #: ../lib/g3d/g3dopen.c:20
 msgid "G3d_openCellOldNoHeader: error in G3d_maskOpenOld"
@@ -2102,7 +2102,7 @@ msgstr "G3d_openCellNew: G3d_malloc错误"
 #: ../lib/g3d/g3dopen.c:229
 #, fuzzy, c-format
 msgid "map <%s> is not in the current mapset"
-msgstr "当前地图集中没有 %s 文件\n"
+msgstr "错误：试图更新不在当前地图集中的地图。"
 
 #: ../lib/g3d/g3dopen.c:239
 msgid "G3d_openCellNew: could not open file"
@@ -2301,7 +2301,7 @@ msgstr ""
 #: ../lib/gis/opencell.c:932 ../lib/gis/opencell.c:1020
 #, fuzzy, c-format
 msgid "Unable to find '%s' in '%s'"
-msgstr "无法找到[%s]在[%s]中"
+msgstr "无法找到[%s]"
 
 #: ../lib/gis/opencell.c:965
 #, fuzzy, c-format
@@ -2364,9 +2364,9 @@ msgid "'%s/%s' was found in more mapsets (also found in <%s>)"
 msgstr ""
 
 #: ../lib/gis/find_file.c:82
-#, c-format
+#, fuzzy, c-format
 msgid "Using <%s@%s>"
-msgstr ""
+msgstr "无法找到[%s]"
 
 #: ../lib/gis/quant_io.c:89
 #, c-format
@@ -3917,9 +3917,9 @@ msgid "Vector map <%s> loaded (%d points)"
 msgstr "输入矢量'%s'未找到"
 
 #: ../lib/ogsf/GS2.c:1638
-#, c-format
+#, fuzzy, c-format
 msgid "Raster map <%s> is outside of current region. Load failed."
-msgstr ""
+msgstr "[%s]在地图集[%s]中 - 区域[%d]与当前的范围[%d]不同"
 
 #: ../lib/ogsf/GS2.c:1716 ../lib/ogsf/GS2.c:1722 ../lib/ogsf/GS2.c:1730
 #: ../lib/ogsf/GS2.c:1739 ../lib/ogsf/GS2.c:1747 ../lib/ogsf/GS2.c:1757
@@ -4290,7 +4290,7 @@ msgstr ""
 #: ../lib/cairodriver/Graph.c:81
 #, fuzzy
 msgid "Unable to obtain visual"
-msgstr "无法打开%s"
+msgstr "无法打开文件 %s 在 %s 中"
 
 #: ../lib/cairodriver/Graph.c:86
 #, fuzzy
@@ -4440,636 +4440,646 @@ msgstr ""
 msgid "Unable to define new light"
 msgstr "无法打开文件 %s 在 %s 中"
 
-#~ msgid "Cannot describe table <%s>"
-#~ msgstr "无法打开数据库表 <%s>"
+msgid "Cannot describe table <%s>"
+msgstr "无法打开数据库表 <%s>"
 
-#~ msgid "ERROR %s from graphics driver.\n"
-#~ msgstr "错误的%s来自图形驱动器。\n"
+msgid "ERROR %s from graphics driver.\n"
+msgstr "错误的%s来自图形驱动器。\n"
 
-#~ msgid "ERROR - eof from graphics monitor.\n"
-#~ msgstr "错误 - 图形监视器的eof。\n"
+msgid "ERROR - eof from graphics monitor.\n"
+msgstr "错误 - 图形监视器的eof。\n"
 
-#~ msgid "Warning - no response from graphics monitor <%s>.\n"
-#~ msgstr "警告 - 图形监视器<%s>没有响应。\n"
+msgid "Warning - no response from graphics monitor <%s>.\n"
+msgstr "警告 - 图形监视器<%s>没有响应。\n"
 
-#~ msgid "Check to see if the mouse is still active.\n"
-#~ msgstr "请检查鼠标是否还能活动。\n"
+msgid "Check to see if the mouse is still active.\n"
+msgstr "请检查鼠标是否还能活动。\n"
 
-#~ msgid "ERROR - no response from graphics monitor <%s>.\n"
-#~ msgstr "错误 - 图形监视器<%s>没有响应。\n"
-
-#, fuzzy
-#~ msgid "No graphics monitor has been selected for output."
-#~ msgstr "没有选择用来输出的图形监视器。\n"
+msgid "ERROR - no response from graphics monitor <%s>.\n"
+msgstr "错误 - 图形监视器<%s>没有响应。\n"
 
 #, fuzzy
-#~ msgid "Please run \"d.mon\" to select a graphics monitor."
-#~ msgstr "请运行\"d.mon\"来选择一个图形监视器。\n"
+msgid "No graphics monitor has been selected for output."
+msgstr "没有选择用来输出的图形监视器。\n"
 
 #, fuzzy
-#~ msgid "Failed to get socket name for monitor <%s>."
-#~ msgstr "获取监视器<%s>的socket名称失败。\n"
+msgid "Please run \"d.mon\" to select a graphics monitor."
+msgstr "请运行\"d.mon\"来选择一个图形监视器。\n"
 
 #, fuzzy
-#~ msgid "No socket to connect to for monitor <%s>."
-#~ msgstr "没有socket连接到监视器<%s>。\n"
+msgid "Failed to get socket name for monitor <%s>."
+msgstr "获取监视器<%s>的socket名称失败。\n"
 
 #, fuzzy
-#~ msgid "Socket is already in use or not accepting connections."
-#~ msgstr ""
-#~ "Socket已经在使用或是不接受连接。\n"
-#~ "请使用d.mon来选择一个监视器\n"
+msgid "No socket to connect to for monitor <%s>."
+msgstr "没有socket连接到监视器<%s>。\n"
 
 #, fuzzy
-#~ msgid "Use d.mon to select a monitor"
-#~ msgstr "请运行\"d.mon\"来选择一个图形监视器。\n"
+msgid "Socket is already in use or not accepting connections."
+msgstr ""
+"Socket已经在使用或是不接受连接。\n"
+"请使用d.mon来选择一个监视器\n"
 
 #, fuzzy
-#~ msgid "Trying to connect to something not a socket."
-#~ msgstr ""
-#~ "尝试连接到别的东西而不是socket。\n"
-#~ "或许是程序出错。\n"
+msgid "Use d.mon to select a monitor"
+msgstr "请运行\"d.mon\"来选择一个图形监视器。\n"
 
 #, fuzzy
-#~ msgid "Probably an error with the server."
-#~ msgstr "尝试连接超时。可能是服务器出现错误。\n"
+msgid "Trying to connect to something not a socket."
+msgstr ""
+"尝试连接到别的东西而不是socket。\n"
+"或许是程序出错。\n"
 
 #, fuzzy
-#~ msgid "Connection failed."
-#~ msgstr "连接失败。\n"
+msgid "Probably an error with the server."
+msgstr "尝试连接超时。可能是服务器出现错误。\n"
 
 #, fuzzy
-#~ msgid "Cannot read topo for line [%d]"
-#~ msgstr "无法读取[ %s 在 %s 中]的直方图"
+msgid "Connection failed."
+msgstr "连接失败。\n"
 
 #, fuzzy
-#~ msgid "Unable to open file %s"
-#~ msgstr "无法打开文件 %s 在 %s 中"
+msgid "Cannot read topo for line [%d]"
+msgstr "无法读取[ %s 在 %s 中]的直方图"
 
 #, fuzzy
-#~ msgid "Unable to open temporary file"
-#~ msgstr "无法打开文件 %s 在 %s 中"
-
-#~ msgid "Hit RETURN to cancel request\n"
-#~ msgstr "按回车取消请求\n"
-
-#~ msgid "Cannot open temp file"
-#~ msgstr "无法打开临时文件"
-
-#~ msgid ""
-#~ "\n"
-#~ "Please specify ellipsoid name\n"
-#~ msgstr ""
-#~ "\n"
-#~ "请指定椭球名称\n"
-
-#~ msgid "Enter 'list' for the list of available ellipsoids\n"
-#~ msgstr "输入'list'，列出所有可用的投影\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "invalid ellipsoid\n"
-#~ msgstr ""
-#~ "\n"
-#~ "无效的椭球\n"
-
-#~ msgid "Output name '%s' is not valid rast name."
-#~ msgstr "输出的名称'%s'不是有效的栅格名称。"
-
-#~ msgid "Output map '%s' is used as input"
-#~ msgstr "输出地图'%s'被用作输入"
-
-#~ msgid ""
-#~ "\n"
-#~ "Please specify datum name\n"
-#~ msgstr ""
-#~ "\n"
-#~ "请指定基准面名称\n"
-
-#~ msgid "Enter 'list' for the list of available datums\n"
-#~ msgstr "输入'list'，列出可用的基准面\n"
-
-#~ msgid "or 'custom' if you wish to enter custom parameters\n"
-#~ msgstr "或输入'custom'进行自定义参数设置\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "invalid datum\n"
-#~ msgstr ""
-#~ "\n"
-#~ "无效的基准面\n"
-
-#~ msgid "hit RETURN to continue -->"
-#~ msgstr "按回车键继续 -->"
-
-#~ msgid "unable to open raster map [%s in %s]"
-#~ msgstr "无法打开栅格图[%s在%s中]"
-
-#~ msgid "one moment...\n"
-#~ msgstr "请稍等片刻...\n"
-
-#~ msgid "No help available for command [%s]\n"
-#~ msgstr "命令[%s]没有可用的帮助\n"
-
-#~ msgid " The raster map %s@%s is empty"
-#~ msgstr " 栅格图%s@%s是空的"
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "Color table needed for file [%s] in mapset [%s].\n"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "文件[%s]在地图集[%s]中，需要色彩表。\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Please identify the type desired:\n"
-#~ msgstr ""
-#~ "\n"
-#~ "请确定需要的类型：\n"
-
-#~ msgid "    1:  Random colors\n"
-#~ msgstr "    1：  随机颜色\n"
-
-#~ msgid "    2:  Red, green, and blue color ramps\n"
-#~ msgstr "    2：  红、绿、蓝色阶\n"
-
-#~ msgid "    3:  Color wave\n"
-#~ msgstr "    3：  色波(Color wave)\n"
-
-#~ msgid "    4:  Gray scale\n"
-#~ msgstr "    4：  灰度\n"
-
-#~ msgid "    5:  Aspect\n"
-#~ msgstr "    5：  色相(Aspect)\n"
-
-#~ msgid "    6:  Rainbow colors\n"
-#~ msgstr "    6:   色带(Rainbow colors)\n"
-
-#~ msgid "    7:  Red through yellow to green\n"
-#~ msgstr "    7：  红到黄再到绿\n"
-
-#~ msgid "    8:  Green through yellow to red\n"
-#~ msgstr "    8：  绿到黄再到红\n"
-
-#~ msgid "RETURN  quit\n"
-#~ msgstr "回车  退出\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "%s invalid; Try again > "
-#~ msgstr ""
-#~ "\n"
-#~ "%s无效：重试 > "
-
-#~ msgid "%s not found"
-#~ msgstr "未发现 %s"
-
-#~ msgid "ERROR in reading %s"
-#~ msgstr "读取 %s 时出现错误"
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "Please specify projection name\n"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "请指定投影名称\n"
-
-#~ msgid "Enter 'list' for the list of available projections\n"
-#~ msgstr "输入'list'，列出所有可用的投影\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "invalid projection\n"
-#~ msgstr ""
-#~ "\n"
-#~ "无效的投影\n"
-
-#~ msgid "with titles"
-#~ msgstr "标题"
-
-#~ msgid "(no title)"
-#~ msgstr "(无标题)"
-
-#~ msgid ""
-#~ "\n"
-#~ "FLAG: Set the following flag?\n"
-#~ msgstr ""
-#~ "\n"
-#~ "标记：是否设置下面的标记？\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "OPTION:   %s\n"
-#~ msgstr ""
-#~ "\n"
-#~ "选项：   %s\n"
-
-#~ msgid "     key: %s\n"
-#~ msgstr "     关键字： %s\n"
-
-#~ msgid "  format: %s\n"
-#~ msgstr "  格式： %s\n"
-
-#~ msgid " default: %s\n"
-#~ msgstr " 默认值： %s\n"
-
-#~ msgid "required: %s\n"
-#~ msgstr " 必须值： %s\n"
-
-#~ msgid "multiple: %s\n"
-#~ msgstr " 倍数： %s\n"
-
-#~ msgid "enter option > "
-#~ msgstr "输入选项 > "
-
-#~ msgid "   Try again? "
-#~ msgstr "   重试？"
-
-#~ msgid "Sorry, %s is not accepted.\n"
-#~ msgstr "对不起，%s 不能被接受。\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "You have chosen:\n"
-#~ "  %s\n"
-#~ msgstr ""
-#~ "\n"
-#~ "您选择了：\n"
-#~ "  %s\n"
-
-#~ msgid "Is this correct? "
-#~ msgstr "正确吗？"
-
-#~ msgid "to accept the default"
-#~ msgstr "接受默认值"
-
-#~ msgid "to cancel request"
-#~ msgstr "取消请求"
-
-#~ msgid "Enter a new %s file name"
-#~ msgstr "输入一个新的 %s 文件名"
-
-#~ msgid "Enter the name of an existing %s file"
-#~ msgstr "输入已有 %s 文件的名称"
-
-#~ msgid "Enter %s file name"
-#~ msgstr "输入 %s 文件名"
-
-#~ msgid "Enter 'list' for a list of existing %s files\n"
-#~ msgstr "输入'list'，列出已有的 %s 文件\n"
-
-#~ msgid "Enter 'list -f' for "
-#~ msgstr "输入'list -f'，得到"
-
-#~ msgid "a list %s"
-#~ msgstr "列表%s"
-
-#~ msgid "an extended list"
-#~ msgstr "扩展列表"
-
-#~ msgid "Hit RETURN %s\n"
-#~ msgstr "按回车%s\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "** %s - not found **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "** %s - 未发现 **\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "** %s exists. ok to overwrite? "
-#~ msgstr ""
-#~ "\n"
-#~ "** %s 已经存在。您确定要覆盖？ "
-
-#~ msgid ""
-#~ "\n"
-#~ "**<%s> illegal name **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "**<%s> 非法的名称 **\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "** %s - illegal request **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "** %s - 非法的请求 **\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "** %s - exists, select another name **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "** %s - 已存在，请选择其它的名称 **\n"
-
-#~ msgid "ask: can't happen"
-#~ msgstr "查询：无法完成"
-
-#~ msgid "Can't read header file for [%s in %s]\n"
-#~ msgstr "无法读取[%s在%s中]的头文件\n"
-
-#~ msgid "Can't open header file for [%s in %s]"
-#~ msgstr "无法打开[%s在%s中]的头文件"
+msgid "Unable to open file %s"
+msgstr "无法打开文件 %s 在 %s 中"
 
 #, fuzzy
-#~ msgid "Cannot get field info"
-#~ msgstr "无法获取图层信息"
+msgid "Unable to open temporary file"
+msgstr "无法打开文件 %s 在 %s 中"
+
+msgid "Hit RETURN to cancel request\n"
+msgstr "按回车取消请求\n"
+
+msgid "Cannot open temp file"
+msgstr "无法打开临时文件"
+
+msgid ""
+"\n"
+"Please specify ellipsoid name\n"
+msgstr ""
+"\n"
+"请指定椭球名称\n"
+
+msgid "Enter 'list' for the list of available ellipsoids\n"
+msgstr "输入'list'，列出所有可用的投影\n"
+
+msgid ""
+"\n"
+"invalid ellipsoid\n"
+msgstr ""
+"\n"
+"无效的椭球\n"
+
+msgid "Output name '%s' is not valid rast name."
+msgstr "输出的名称'%s'不是有效的栅格名称。"
+
+msgid "Output map '%s' is used as input"
+msgstr "输出地图'%s'被用作输入"
+
+msgid ""
+"\n"
+"Please specify datum name\n"
+msgstr ""
+"\n"
+"请指定基准面名称\n"
+
+msgid "Enter 'list' for the list of available datums\n"
+msgstr "输入'list'，列出可用的基准面\n"
+
+msgid "or 'custom' if you wish to enter custom parameters\n"
+msgstr "或输入'custom'进行自定义参数设置\n"
+
+msgid ""
+"\n"
+"invalid datum\n"
+msgstr ""
+"\n"
+"无效的基准面\n"
+
+msgid "hit RETURN to continue -->"
+msgstr "按回车键继续 -->"
+
+msgid "unable to open raster map [%s in %s]"
+msgstr "无法打开栅格图[%s在%s中]"
+
+msgid "one moment...\n"
+msgstr "请稍等片刻...\n"
+
+msgid "No help available for command [%s]\n"
+msgstr "命令[%s]没有可用的帮助\n"
+
+msgid " The raster map %s@%s is empty"
+msgstr " 栅格图%s@%s是空的"
+
+msgid ""
+"\n"
+"\n"
+"Color table needed for file [%s] in mapset [%s].\n"
+msgstr ""
+"\n"
+"\n"
+"文件[%s]在地图集[%s]中，需要色彩表。\n"
+
+msgid ""
+"\n"
+"Please identify the type desired:\n"
+msgstr ""
+"\n"
+"请确定需要的类型：\n"
+
+msgid "    1:  Random colors\n"
+msgstr "    1：  随机颜色\n"
+
+msgid "    2:  Red, green, and blue color ramps\n"
+msgstr "    2：  红、绿、蓝色阶\n"
+
+msgid "    3:  Color wave\n"
+msgstr "    3：  色波(Color wave)\n"
+
+msgid "    4:  Gray scale\n"
+msgstr "    4：  灰度\n"
+
+msgid "    5:  Aspect\n"
+msgstr "    5：  色相(Aspect)\n"
+
+msgid "    6:  Rainbow colors\n"
+msgstr "    6:   色带(Rainbow colors)\n"
+
+msgid "    7:  Red through yellow to green\n"
+msgstr "    7：  红到黄再到绿\n"
+
+msgid "    8:  Green through yellow to red\n"
+msgstr "    8：  绿到黄再到红\n"
+
+msgid "RETURN  quit\n"
+msgstr "回车  退出\n"
+
+msgid ""
+"\n"
+"%s invalid; Try again > "
+msgstr ""
+"\n"
+"%s无效：重试 > "
+
+msgid "%s not found"
+msgstr "未发现 %s"
+
+msgid "ERROR in reading %s"
+msgstr "读取 %s 时出现错误"
+
+msgid ""
+"\n"
+"\n"
+"Please specify projection name\n"
+msgstr ""
+"\n"
+"\n"
+"请指定投影名称\n"
+
+msgid "Enter 'list' for the list of available projections\n"
+msgstr "输入'list'，列出所有可用的投影\n"
+
+msgid ""
+"\n"
+"invalid projection\n"
+msgstr ""
+"\n"
+"无效的投影\n"
+
+msgid "with titles"
+msgstr "标题"
+
+msgid "(no title)"
+msgstr "(无标题)"
+
+msgid ""
+"\n"
+"FLAG: Set the following flag?\n"
+msgstr ""
+"\n"
+"标记：是否设置下面的标记？\n"
+
+msgid ""
+"\n"
+"OPTION:   %s\n"
+msgstr ""
+"\n"
+"选项：   %s\n"
+
+msgid "     key: %s\n"
+msgstr "     关键字： %s\n"
+
+msgid "  format: %s\n"
+msgstr "  格式： %s\n"
+
+msgid " default: %s\n"
+msgstr " 默认值： %s\n"
+
+msgid "required: %s\n"
+msgstr " 必须值： %s\n"
+
+msgid "multiple: %s\n"
+msgstr " 倍数： %s\n"
+
+msgid "enter option > "
+msgstr "输入选项 > "
+
+msgid "   Try again? "
+msgstr "   重试？"
+
+msgid "Sorry, %s is not accepted.\n"
+msgstr "对不起，%s 不能被接受。\n"
+
+msgid ""
+"\n"
+"You have chosen:\n"
+"  %s\n"
+msgstr ""
+"\n"
+"您选择了：\n"
+"  %s\n"
+
+msgid "Is this correct? "
+msgstr "正确吗？"
+
+msgid "to accept the default"
+msgstr "接受默认值"
+
+msgid "to cancel request"
+msgstr "取消请求"
+
+msgid "Enter a new %s file name"
+msgstr "输入一个新的 %s 文件名"
+
+msgid "Enter the name of an existing %s file"
+msgstr "输入已有 %s 文件的名称"
+
+msgid "Enter %s file name"
+msgstr "输入 %s 文件名"
+
+msgid "Enter 'list' for a list of existing %s files\n"
+msgstr "输入'list'，列出已有的 %s 文件\n"
+
+msgid "Enter 'list -f' for "
+msgstr "输入'list -f'，得到"
+
+msgid "a list %s"
+msgstr "列表%s"
+
+msgid "an extended list"
+msgstr "扩展列表"
+
+msgid "Hit RETURN %s\n"
+msgstr "按回车%s\n"
+
+msgid ""
+"\n"
+"** %s - not found **\n"
+msgstr ""
+"\n"
+"** %s - 未发现 **\n"
+
+msgid ""
+"\n"
+"** %s exists. ok to overwrite? "
+msgstr ""
+"\n"
+"** %s 已经存在。您确定要覆盖？ "
+
+msgid ""
+"\n"
+"**<%s> illegal name **\n"
+msgstr ""
+"\n"
+"**<%s> 非法的名称 **\n"
+
+msgid ""
+"\n"
+"** %s - illegal request **\n"
+msgstr ""
+"\n"
+"** %s - 非法的请求 **\n"
+
+msgid ""
+"\n"
+"** %s - exists, select another name **\n"
+msgstr ""
+"\n"
+"** %s - 已存在，请选择其它的名称 **\n"
+
+msgid "ask: can't happen"
+msgstr "查询：无法完成"
+
+msgid "Can't read header file for [%s in %s]\n"
+msgstr "无法读取[%s在%s中]的头文件\n"
+
+msgid "Can't open header file for [%s in %s]"
+msgstr "无法打开[%s在%s中]的头文件"
 
 #, fuzzy
-#~ msgid "Cannot open database"
-#~ msgstr "无法打开数据库 %s"
-
-#~ msgid "Building topology ...\n"
-#~ msgstr "建立拓扑...\n"
-
-#~ msgid ""
-#~ "\r%d areas built      \n"
-#~ "%d isles built\n"
-#~ msgstr ""
-#~ "\r建立 %d 个区域      \n"
-#~ "建立 %d 个岛\n"
+msgid "Cannot get field info"
+msgstr "无法获取图层信息"
 
 #, fuzzy
-#~ msgid "Cannot open database <%s> by driver <%s>"
-#~ msgstr "无法打开数据库 %s"
+msgid "Cannot open database"
+msgstr "无法打开数据库 %s"
+
+msgid "Building topology ...\n"
+msgstr "建立拓扑...\n"
+
+msgid ""
+"\r%d areas built      \n"
+"%d isles built\n"
+msgstr ""
+"\r建立 %d 个区域      \n"
+"建立 %d 个岛\n"
 
 #, fuzzy
-#~ msgid "Cannot get column info"
-#~ msgstr "无法获取图层信息"
+msgid "Cannot open database <%s> by driver <%s>"
+msgstr "无法打开数据库 %s"
 
 #, fuzzy
-#~ msgid "Column type not supported"
-#~ msgstr "不支持的 OGR 要素类型 %d"
+msgid "Cannot get column info"
+msgstr "无法获取图层信息"
 
 #, fuzzy
-#~ msgid "OGR feature type [%d] not supported"
-#~ msgstr "不支持的 OGR 要素类型 %d"
-
-#~ msgid "Vect_rewrite_line() for this format/level not supported"
-#~ msgstr "这种格式/级别不支持 Vect_rewrite_line()"
-
-#~ msgid "Vect_delete_line() for this format/level not supported"
-#~ msgstr "这种格式/级别不支持 Vect_delete_line()"
-
-#~ msgid "Cannot rewrite line"
-#~ msgstr "无法重写线"
-
-#~ msgid "Cannot delete line"
-#~ msgstr "无法删除想线"
-
-#~ msgid "Output name '%s' is not valid vector name."
-#~ msgstr "输出的名称'%s'不是有效的矢量名称。"
-
-#~ msgid "Cannot copy vector '%s' to '%s'"
-#~ msgstr "无法将矢量'%s'拷贝为'%s'"
+msgid "Column type not supported"
+msgstr "不支持的 OGR 要素类型 %d"
 
 #, fuzzy
-#~ msgid "Cannot open existing vector map <%s>"
-#~ msgstr "无法删除已有矢量%s"
+msgid "OGR feature type [%d] not supported"
+msgstr "不支持的 OGR 要素类型 %d"
+
+msgid "Vect_rewrite_line() for this format/level not supported"
+msgstr "这种格式/级别不支持 Vect_rewrite_line()"
+
+msgid "Vect_delete_line() for this format/level not supported"
+msgstr "这种格式/级别不支持 Vect_delete_line()"
+
+msgid "Cannot rewrite line"
+msgstr "无法重写线"
+
+msgid "Cannot delete line"
+msgstr "无法删除想线"
+
+msgid "Output name '%s' is not valid vector name."
+msgstr "输出的名称'%s'不是有效的矢量名称。"
+
+msgid "Cannot copy vector '%s' to '%s'"
+msgstr "无法将矢量'%s'拷贝为'%s'"
 
 #, fuzzy
-#~ msgid "Cannot delete existing vector <%s>"
-#~ msgstr "无法删除已有矢量%s"
-
-#~ msgid "Cannot open new vector %s"
-#~ msgstr "无法打开新的矢量%s"
-
-#~ msgid "Cannot open history file for vector '%s'"
-#~ msgstr "无法打开矢量'%s'的历史记录"
-
-#~ msgid "Could not stat file '%s'"
-#~ msgstr "无法统计文件'%s'"
+msgid "Cannot open existing vector map <%s>"
+msgstr "无法删除已有矢量%s"
 
 #, fuzzy
-#~ msgid "Can't open directory %s"
-#~ msgstr "无法打开旧的矢量%s"
+msgid "Cannot delete existing vector <%s>"
+msgstr "无法删除已有矢量%s"
 
-#~ msgid "%s - ** illegal name **"
-#~ msgstr "%s - ** 非法的名称 **"
+msgid "Cannot open new vector %s"
+msgstr "无法打开新的矢量%s"
 
-#~ msgid "No such graphics monitor as <%s>.\n"
-#~ msgstr "没有名为<%s>的图形监视器。\n"
+msgid "Cannot open history file for vector '%s'"
+msgstr "无法打开矢量'%s'的历史记录"
 
-#~ msgid "Please run \"d.mon\" to select a valid graphics monitor.\n"
-#~ msgstr "请运行\"d.mon\"来选择一个有效的图形监视器。\n"
-
-#~ msgid "Can't stat %s\n"
-#~ msgstr "无法统计%s\n"
-
-#~ msgid "Error - Monitor <%s> is in use.\n"
-#~ msgstr "错误 - 监视器<%s>正在使用。\n"
-
-#~ msgid "Error - Monitor <%s> is in use by %s.\n"
-#~ msgstr "错误 - 监视器<%s>正在被%s使用。\n"
-
-#~ msgid "Error - Could not complete locking process for monitor <%s>.\n"
-#~ msgstr "错误 - 不能为监视器<%s>完全锁定进程。\n"
-
-#~ msgid "Error - Can't set up pipe to graphics device.\n"
-#~ msgstr "错误 - 无法建立到图形设备的管道。\n"
-
-#~ msgid "Error - Graphics monitor <%s> not running!\n"
-#~ msgstr "错误 - 图形监视器<%s>没有运行！\n"
-
-#~ msgid "Please start graphics monitor <%s>.\n"
-#~ msgstr "请启动图形监视器<%s>。\n"
-
-#~ msgid "Not connected...\n"
-#~ msgstr "未连接...\n"
-
-#~ msgid "Couldn't connect to monitor. Will try once more.\n"
-#~ msgstr "不能连接到监视器。请再试一次。\n"
-
-#~ msgid "G_dump: memory allocated to G__"
-#~ msgstr "G_dump：为G__分配了内存"
-
-#~ msgid "Size of cell in fp maps = %d"
-#~ msgstr "fp maps 的象元大小= %d"
-
-#~ msgid "current window = %p"
-#~ msgstr "当前窗口 = %p"
-
-#~ msgid "File descriptor for automatic mask %d"
-#~ msgstr "自动掩模的文件描述符 %d"
-
-#~ msgid "Flag denoting automatic masking %d"
-#~ msgstr "自动掩模的标记 %d"
-
-#~ msgid "CELL mask buffer %p"
-#~ msgstr "像元掩膜的缓冲区%p"
-
-#~ msgid "buffer for reading null rows %p"
-#~ msgstr "读取空行的缓冲区 %p"
-
-#~ msgid "Pre/post compressed data buffer %p"
-#~ msgstr "（预/后）压缩数据的缓冲区 %p"
-
-#~ msgid "sizeof compressed_buf %d"
-#~ msgstr "压缩数据的缓冲区大小 %d"
-
-#~ msgid "work data buffer %p"
-#~ msgstr "工作数据的缓冲区 %p"
-
-#~ msgid "sizeof work_buf %d"
-#~ msgstr "工作数据的缓冲区大小 %d"
-
-#~ msgid "sizeof null_buf %d"
-#~ msgstr "空值缓冲区大小 %d"
-
-#~ msgid "sizeof mask_buf %d"
-#~ msgstr "掩模缓冲区大小 %d"
-
-#~ msgid "Histogram request %d"
-#~ msgstr "直方图需要 %d"
-
-#~ msgid "G_dump: file #%d"
-#~ msgstr "G_dump：文件 #%d"
-
-#~ msgid "open mode = %d"
-#~ msgstr "打开模式 = %d"
-
-#~ msgid "Cell header %p"
-#~ msgstr "像元的头信息 %p"
-
-#~ msgid "Table reclass %p"
-#~ msgstr "表格重分类 %p"
-
-#~ msgid "Cell stats %p"
-#~ msgstr "像元的统计值 %p"
-
-#~ msgid "Range structure %p"
-#~ msgstr "范围构成 %p"
-
-#~ msgid "float Range structure %p"
-#~ msgstr "浮点范围构成 %p"
-
-#~ msgid "want histogram?  %d"
-#~ msgstr "需要直方图？  %d"
-
-#~ msgid "Automatic reclass flag %d"
-#~ msgstr "自动重分类标记 %d"
-
-#~ msgid "File row addresses %p"
-#~ msgstr "文件的行的地址 %p"
-
-#~ msgid "Data to window col mapping %p"
-#~ msgstr "数据到窗口列的映射%p"
-
-#~ msgid "Data to window row constants %f,%f"
-#~ msgstr "数据到窗口行的常量 %f,%f"
-
-#~ msgid "Current data row in memory %d"
-#~ msgstr "当前内存中的数据行 %d"
-
-#~ msgid "Current null row in memory %d"
-#~ msgstr "当前内存中的空行 %d"
-
-#~ msgid "nbytes per cell for current row %d"
-#~ msgstr "当前行中每个像元所占的字节数 %d"
-
-#~ msgid "Decompressed data buffer %s"
-#~ msgstr "解压数据的缓冲区%s"
-
-#~ msgid "bytes per cell %d"
-#~ msgstr "每个像元所占字节数 %d"
-
-#~ msgid "type: int, float or double map %d"
-#~ msgstr "类型：整型、浮点或双精度地图 %d"
-
-#~ msgid "Temporary name for NEW files %s"
-#~ msgstr "新文件的临时名称 %s"
-
-#~ msgid "Temporary name for NEW NULL files %s"
-#~ msgstr "新的空文件的临时名称 %s"
-
-#~ msgid "Mapset of open file %s"
-#~ msgstr "打开文件的地图集 %s"
-
-#~ msgid "io error warning given %d"
-#~ msgstr "IO错误警告 %d"
-
-#~ msgid "xdr stream for reading fp %p"
-#~ msgstr "读取 fp 的 xdr 流 %p"
-
-#~ msgid "data buffer for reading null rows %p"
-#~ msgstr "读取空行的数据缓冲区 %p"
-
-#~ msgid "G_dump: end"
-#~ msgstr "G_dump：结束"
+msgid "Could not stat file '%s'"
+msgstr "无法统计文件'%s'"
 
 #, fuzzy
-#~ msgid "Current window not settable"
-#~ msgstr "当前窗口 = %p"
+msgid "Can't open directory %s"
+msgstr "无法打开旧的矢量%s"
+
+msgid "%s - ** illegal name **"
+msgstr "%s - ** 非法的名称 **"
+
+msgid "No such graphics monitor as <%s>.\n"
+msgstr "没有名为<%s>的图形监视器。\n"
+
+msgid "Please run \"d.mon\" to select a valid graphics monitor.\n"
+msgstr "请运行\"d.mon\"来选择一个有效的图形监视器。\n"
+
+msgid "Can't stat %s\n"
+msgstr "无法统计%s\n"
+
+msgid "Error - Monitor <%s> is in use.\n"
+msgstr "错误 - 监视器<%s>正在使用。\n"
+
+msgid "Error - Monitor <%s> is in use by %s.\n"
+msgstr "错误 - 监视器<%s>正在被%s使用。\n"
+
+msgid "Error - Could not complete locking process for monitor <%s>.\n"
+msgstr "错误 - 不能为监视器<%s>完全锁定进程。\n"
+
+msgid "Error - Can't set up pipe to graphics device.\n"
+msgstr "错误 - 无法建立到图形设备的管道。\n"
+
+msgid "Error - Graphics monitor <%s> not running!\n"
+msgstr "错误 - 图形监视器<%s>没有运行！\n"
+
+msgid "Please start graphics monitor <%s>.\n"
+msgstr "请启动图形监视器<%s>。\n"
+
+msgid "Not connected...\n"
+msgstr "未连接...\n"
+
+msgid "Couldn't connect to monitor. Will try once more.\n"
+msgstr "不能连接到监视器。请再试一次。\n"
+
+msgid "G_dump: memory allocated to G__"
+msgstr "G_dump：为G__分配了内存"
+
+msgid "Size of cell in fp maps = %d"
+msgstr "fp maps 的象元大小= %d"
+
+msgid "current window = %p"
+msgstr "当前窗口 = %p"
+
+msgid "File descriptor for automatic mask %d"
+msgstr "自动掩模的文件描述符 %d"
+
+msgid "Flag denoting automatic masking %d"
+msgstr "自动掩模的标记 %d"
+
+msgid "CELL mask buffer %p"
+msgstr "像元掩膜的缓冲区%p"
+
+msgid "buffer for reading null rows %p"
+msgstr "读取空行的缓冲区 %p"
+
+msgid "Pre/post compressed data buffer %p"
+msgstr "（预/后）压缩数据的缓冲区 %p"
+
+msgid "sizeof compressed_buf %d"
+msgstr "压缩数据的缓冲区大小 %d"
+
+msgid "work data buffer %p"
+msgstr "工作数据的缓冲区 %p"
+
+msgid "sizeof work_buf %d"
+msgstr "工作数据的缓冲区大小 %d"
+
+msgid "sizeof null_buf %d"
+msgstr "空值缓冲区大小 %d"
+
+msgid "sizeof mask_buf %d"
+msgstr "掩模缓冲区大小 %d"
+
+msgid "Histogram request %d"
+msgstr "直方图需要 %d"
+
+msgid "G_dump: file #%d"
+msgstr "G_dump：文件 #%d"
+
+msgid "open mode = %d"
+msgstr "打开模式 = %d"
+
+msgid "Cell header %p"
+msgstr "像元的头信息 %p"
+
+msgid "Table reclass %p"
+msgstr "表格重分类 %p"
+
+msgid "Cell stats %p"
+msgstr "像元的统计值 %p"
+
+msgid "Range structure %p"
+msgstr "范围构成 %p"
+
+msgid "float Range structure %p"
+msgstr "浮点范围构成 %p"
+
+msgid "want histogram?  %d"
+msgstr "需要直方图？  %d"
+
+msgid "Automatic reclass flag %d"
+msgstr "自动重分类标记 %d"
+
+msgid "File row addresses %p"
+msgstr "文件的行的地址 %p"
+
+msgid "Data to window col mapping %p"
+msgstr "数据到窗口列的映射%p"
+
+msgid "Data to window row constants %f,%f"
+msgstr "数据到窗口行的常量 %f,%f"
+
+msgid "Current data row in memory %d"
+msgstr "当前内存中的数据行 %d"
+
+msgid "Current null row in memory %d"
+msgstr "当前内存中的空行 %d"
+
+msgid "nbytes per cell for current row %d"
+msgstr "当前行中每个像元所占的字节数 %d"
+
+msgid "Decompressed data buffer %s"
+msgstr "解压数据的缓冲区%s"
+
+msgid "bytes per cell %d"
+msgstr "每个像元所占字节数 %d"
+
+msgid "type: int, float or double map %d"
+msgstr "类型：整型、浮点或双精度地图 %d"
+
+msgid "Temporary name for NEW files %s"
+msgstr "新文件的临时名称 %s"
+
+msgid "Temporary name for NEW NULL files %s"
+msgstr "新的空文件的临时名称 %s"
+
+msgid "Mapset of open file %s"
+msgstr "打开文件的地图集 %s"
+
+msgid "io error warning given %d"
+msgstr "IO错误警告 %d"
+
+msgid "xdr stream for reading fp %p"
+msgstr "读取 fp 的 xdr 流 %p"
+
+msgid "data buffer for reading null rows %p"
+msgstr "读取空行的数据缓冲区 %p"
+
+msgid "G_dump: end"
+msgstr "G_dump：结束"
 
 #, fuzzy
-#~ msgid "Color file for [%s] not available"
-#~ msgstr "区域  << %s >>  无效"
+msgid "Current window not settable"
+msgstr "当前窗口 = %p"
 
 #, fuzzy
-#~ msgid "Cannot use current window"
-#~ msgstr "当前窗口 = %p"
+msgid "Color file for [%s] not available"
+msgstr "区域  << %s >>  无效"
 
 #, fuzzy
-#~ msgid "Not able to open cellfile for [%s]"
-#~ msgstr "无法打开文件 %s 在 %s 中"
+msgid "Cannot use current window"
+msgstr "当前窗口 = %p"
 
-#~ msgid "Too many open raster maps"
-#~ msgstr "打开太多的栅格文件"
+#, fuzzy
+msgid "Not able to open cellfile for [%s]"
+msgstr "无法打开文件 %s 在 %s 中"
 
-#~ msgid "Too many open files"
-#~ msgstr "打开太多文件"
+msgid "Too many open raster maps"
+msgstr "打开太多的栅格文件"
 
-#~ msgid "ERROR: GISBASE not set\n"
-#~ msgstr "错误：GISBASE没有设置\n"
+msgid "Too many open files"
+msgstr "打开太多文件"
 
-#~ msgid "Error reading datum shift parameters for %s from table"
-#~ msgstr "从表中读取 %s 的基准面偏移参数时发生错误"
+msgid "ERROR: GISBASE not set\n"
+msgstr "错误：GISBASE没有设置\n"
 
-#~ msgid "Error reading ellipsoid parameters for %s from table"
-#~ msgstr "从表中读取 %s 的椭球参数时发生错误"
+msgid "Error reading datum shift parameters for %s from table"
+msgstr "从表中读取 %s 的基准面偏移参数时发生错误"
 
-#~ msgid "No ellipsoid field %s in file %s in %s"
-#~ msgstr "没有椭球信息字段 %s 在文件%s (在%s中)"
+msgid "Error reading ellipsoid parameters for %s from table"
+msgstr "从表中读取 %s 的椭球参数时发生错误"
 
-#~ msgid "invalid value: field %s in file %s in %s"
-#~ msgstr "无效的值：字段%s 文件%s (在%s中)"
+msgid "No ellipsoid field %s in file %s in %s"
+msgstr "没有椭球信息字段 %s 在文件%s (在%s中)"
 
-#~ msgid "No n-dims in site_list"
-#~ msgstr "在站点列表中没有 n-dims"
+msgid "invalid value: field %s in file %s in %s"
+msgstr "无效的值：字段%s 文件%s (在%s中)"
 
-#~ msgid "No double attributes in site_list"
-#~ msgstr "在站点列表中没有双精度属性"
+msgid "No n-dims in site_list"
+msgstr "在站点列表中没有 n-dims"
 
-#~ msgid "No string attributes in site_list"
-#~ msgstr "在站点列表中没有字符串属性"
+msgid "No double attributes in site_list"
+msgstr "在站点列表中没有双精度属性"
 
-#~ msgid "String attribute index out of range"
-#~ msgstr "字符串属性索引越界"
+msgid "No string attributes in site_list"
+msgstr "在站点列表中没有字符串属性"
 
-#~ msgid "Unknown attribute type in call to G_readsites_xyz()!\n"
-#~ msgstr "在调用 G_readsites_xyz() 时有未知的属性类型！\n"
+msgid "String attribute index out of range"
+msgstr "字符串属性索引越界"
 
-#~ msgid "Failed to convert string attribute."
-#~ msgstr "转换字符串属性失败。"
+msgid "Unknown attribute type in call to G_readsites_xyz()!\n"
+msgstr "在调用 G_readsites_xyz() 时有未知的属性类型！\n"
 
-#~ msgid "Reading sites list ...                  "
-#~ msgstr "读取站点列表 ...                  "
+msgid "Failed to convert string attribute."
+msgstr "转换字符串属性失败。"
 
-#~ msgid "failed to guess format"
-#~ msgstr "无法确定格式"
+msgid "Reading sites list ...                  "
+msgstr "读取站点列表 ...                  "
 
-#~ msgid "decimal field %i not present in sites file"
-#~ msgstr "十进制字段 %i 不在站点文件中"
+msgid "failed to guess format"
+msgstr "无法确定格式"
 
-#~ msgid ""
-#~ "I'm finding records that do not have a floating point attributes (fields "
-#~ "prefixed with '%')."
-#~ msgstr "这些记录没有浮点属性(字段以'%'为前缀)."
+msgid "decimal field %i not present in sites file"
+msgstr "十进制字段 %i 不在站点文件中"
+
+msgid ""
+"I'm finding records that do not have a floating point attributes (fields "
+"prefixed with '%')."
+msgstr "这些记录没有浮点属性(字段以'%'为前缀)."
+
+#~ msgid "Unable to allocate memory\n"
+#~ msgstr "无法分配内存\n"
+
+#, fuzzy
+#~ msgid "<%s>: bad mapset"
+#~ msgstr "<%s>在地图集<%s>中"
+
+#~ msgid "unable to find [%s] in [%s]"
+#~ msgstr "无法找到[%s]在[%s]中"
