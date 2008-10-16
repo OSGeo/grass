@@ -1,24 +1,22 @@
 """
-MODULE:     wxgui.py
+@package wxgui.py
 
-CLASSES:
-    * GMFrame
-    * GMApp
+@brief Main Python app for GRASS wxPython GUI. Main menu, layer management
+toolbar, notebook control for display management and access to
+command console.
 
-PURPOSE:    Main Python app for GRASS wxPython GUI. Main menu, layer management
-            toolbar, notebook control for display management and access to
-            command console.
+Classes:
+ - GMFrame
+ - GMApp
 
-AUTHORS:    The GRASS Development Team
-            Michael Barton (Arizona State University)
-            Jachym Cepicky (Mendel University of Agriculture)
-            Martin Landa <landa.martin gmail.com>
+(C) 2006-2008 by the GRASS Development Team
+This program is free software under the GNU General Public
+License (>=v2). Read the file COPYING that comes with GRASS
+for details.
 
-COPYRIGHT:  (C) 2006-2007 by the GRASS Development Team
-            This program is free software under the GNU General Public
-            License (>=v2). Read the file COPYING that comes with GRASS
-            for details.
-
+@author Michael Barton (Arizona State University)
+@author Jachym Cepicky (Mendel University of Agriculture)
+@author Martin Landa <landa.martin gmail.com>
 """
 
 import sys
@@ -413,8 +411,10 @@ class GMFrame(wx.Frame):
 
     def OnRunCmd(self, event):
         """Run command"""
-
         cmd = event.GetString()
+
+        if cmd[:2] == 'd.' and not self.curr_page:
+            self.NewDisplay(show=True)
         
         self.goutput.RunCmd(cmd, switchPage=True)
         
