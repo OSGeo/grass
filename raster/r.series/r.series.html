@@ -43,6 +43,12 @@ first and the last raster listed in <em>input=</em>, respectively.
 <p>
 If the <em>range=</em> option is given, any values which fall outside
 that range will be treated as if they were NULL.
+The <em>range</em> parameter can be set to <em>low,high</em> thresholds:
+values outside of this range are treated as NULL (i.e., they will be
+ignored by most aggregates, or will cause the result to be NULL if -n is given).
+The <em>low,high</em> thresholds are floating point, so use <em>-inf</em> or
+<em>inf</em> for a single threshold (e.g., <em>range=0,inf</em> to ignore
+negative values, or <em>range=-inf,-200.4</em> to ignore values above -200.4).
 
 <h2>EXAMPLES</h2>
 
