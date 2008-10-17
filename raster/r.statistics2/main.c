@@ -173,7 +173,7 @@ int main(int argc, char **argv)
 
     cover_fd = G_open_cell_old(covermap, "");
     if (cover_fd < 0)
-	G_fatal_error(_("Unable to open base map <%s>"), basemap);
+	G_fatal_error(_("Unable to open cover map <%s>"), covermap);
 
     if (usecats && G_read_cats(covermap, "", &cats) < 0)
 	G_fatal_error(_("Unable to read category file of cover map <%s>"), covermap);
