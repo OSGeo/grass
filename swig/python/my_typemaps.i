@@ -33,7 +33,7 @@ typedef char * string_allows_none;
 		for(i=0;i<len;i++) {
 			stringobject=PyString_FromString($1[i]);
 			if(!stringobject) return NULL;
-			PyList_SetItem($1,i,stringobject);
+			PyList_SetItem($result,i,stringobject);
 		}
 //		G_free_list($1);
 	}

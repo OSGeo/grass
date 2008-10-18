@@ -5,7 +5,7 @@ all: numptr
 numptr:
 	python setup.py build --build-lib build/lib
 	# build bytecode .pyc file
-	python build/lib/test.py
+	python build/lib/test.py >& /dev/null
 
 clean:
 	-rm -rf build/

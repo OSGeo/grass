@@ -14,16 +14,16 @@ CLEAN_SUBDIRS = NumPtr
 
 default: _$(LIB_NAME).so numptr
 
-$(LIB_NAME)_wrap.c: $(LIB_NAME).i
+%_wrap.c: %.i my_typemaps.i renames.i
 	$(SWIG) $(ARCH_INC) -python -shadow $<
 
-$(LIB_NAME)_wrap.o: $(LIB_NAME)_wrap.c
+%_wrap.o: %_wrap.c
 	$(CC) $(CFLAGS) $(INCLUDE_DIRS) $<
 
-_$(LIB_NAME).so: $(LIB_NAME)_wrap.o
-	$(LD) $(LDFLAGS) $< -o _$(LIB_NAME).so
+_%.so: %_wrap.o
+	$(LD) $(LDFLAGS) $< -o $@
 	# build bytecode .pyc file; ignore undefined symbol error
-	echo "import $(LIB_NAME)" | python; true
+	echo "import $*" | python; true
 
 numptr:
 	$(MAKE) -C NumPtr
