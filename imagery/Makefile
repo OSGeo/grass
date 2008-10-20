@@ -7,6 +7,7 @@ SUBDIRS = \
 	i.atcorr \
 	i.cca \
 	i.cluster \
+	i.emissivity \
 	i.find \
 	i.gensig \
 	i.gensigset \
@@ -18,6 +19,7 @@ SUBDIRS = \
 	i.rectify \
 	i.rgb.his \
 	i.smap \
+	i.sunhours \
 	i.target \
 	i.pca \
 	i.vi 

@@ -1635,6 +1635,11 @@ class Data:
                                  _("Creates Latitude or Longitude map."),
                                  "self.OnMenuCmd",
                                  "i.latlong"),
+
+                                (_("Potential Sunshine Hours"),
+                                 _("Creates Potential Sunshine Hours map."),
+                                 "self.OnMenuCmd",
+                                 "i.sunhours"),
 	                        ("","","", ""),
 
                                 (_("Albedo"),
@@ -1646,6 +1651,12 @@ class Data:
                                  _("14 types of vegetation Indices."),
                                  "self.OnMenuCmd",
                                  "i.vi"),
+	                        ("","","", ""),
+
+                                (_("Emissivity"),
+                                 _("Emissivity from NDVI."),
+                                 "self.OnMenuCmd",
+                                 "i.emissivity"),
 				)
                          ),
                         ("","","", ""),
