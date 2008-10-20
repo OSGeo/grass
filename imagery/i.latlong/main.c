@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
     input1->description = _("Name of the input map");
 
     output1 = G_define_standard_option(G_OPT_R_OUTPUT);
-    output1->description = _("Name of the output longitude layer");
+    output1->description = _("Name of the output latitude or longitude layer");
     
     flag1 = G_define_flag();
     flag1->key = 'l';
