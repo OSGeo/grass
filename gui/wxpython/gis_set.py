@@ -65,10 +65,10 @@ class GRASSStartup(wx.Frame):
         #
         # image
         try:
-            name = os.path.join(globalvar.ETCDIR, "gui", "images", "gintro.gif")
+            name = os.path.join(globalvar.ETCDIR, "gui", "images", "startup_banner.png")
             self.hbitmap = wx.StaticBitmap(self.panel, wx.ID_ANY,
                                            wx.Bitmap(name=name,
-                                                     type=wx.BITMAP_TYPE_GIF))
+                                                     type=wx.BITMAP_TYPE_PNG))
         except:
             self.hbitmap = wx.StaticBitmap(self.panel, wx.ID_ANY, wx.EmptyBitmap(530,150))
 
