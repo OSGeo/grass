@@ -140,9 +140,7 @@ text
   <dt>GRASS_GUI</dt>
   <dd>either <tt>text</tt> or <tt>gui</tt> to define non-/graphical startup.
     <br><br>
-    Can also specify the name of the GUI to use, e.g. <tt>tcltk</tt>
-    (<em><a href="gis.m.html">gis.m</a></em>), <tt>oldtcltk</tt>
-    (<em><a href="d.m.html">d.m</a></em>) or <tt>wxpython</tt>
+    Can also specify the name of the GUI to use, e.g. <tt>wxpython</tt>
     (<em><a href="wxGUI.html">wxGUI</a></em>). Also exists as a GRASS
     gisenv variable (see below). If this shell variable exists at GRASS
     startup, it will determine the GUI used. If it is not defined startup
@@ -158,7 +156,7 @@ text
     defines the height of GRASS monitor, see also GRASS_WIDTH.</dd>
   
   <dt>GRASS_HTML_BROWSER</dt>
-  <dd>[init.sh, d.m, gis.m]<br>
+  <dd>[init.sh, wxgui]<br>
     defines name of HTML browser. For most platforms this should be
     an executable in your PATH, or the full path to an executable.<br><br>
     Mac OS X runs applications differently from the CLI.
@@ -245,7 +243,7 @@ text
     defines the width of GRASS monitor, see also GRASS_HEIGHT.</dd>
   
   <dt>GRASS_WISH</dt>
-  <dd>[d.m, nviz]<br>
+  <dd>[nviz, Tcl/Tk programs]<br>
     set wish shell name to override 'wish'.</dd>
   
   <dt>GRASS_NO_GLX_PBUFFERS</dt>
@@ -451,7 +449,7 @@ detailed list of the variables.
     it causes programs to use the specified named region (created with
     e.g. <tt>g.region save=...</tt>) to be used as the current region, instead of
     the region from the WIND file.<br><br>
-    This allows programs such as gis.m to run external commands on an
+    This allows programs such as the GUI to run external commands on an
     alternate region without having to modify the WIND file then change it
     back afterwards.</dd>
 </dl>
@@ -472,10 +470,6 @@ detailed list of the variables.
 	g.gisenv set=DEBUG=0
     </pre></div>
   
-  <dt>DM_FORM_MODE</dt>
-  <dd>[d.m]<br>
-    sets default form mode (<tt>txt</tt> or <tt>gui</tt>)</dd>
-  
   <dt>GISDBASE</dt>
   <dd>initial database</dd>
 
@@ -490,9 +484,7 @@ detailed list of the variables.
   <dt>GRASS_GUI</dt>
   <dd>either <tt>text</tt> or <tt>gui</tt> to define non-/graphical startup.
     <br><br> Can also specify the name of the GUI to use,
-    e.g. <tt>tcltk</tt>
-    (<em><a href="gis.m.html">gis.m</a></em>), <tt>oldtcltk</tt>
-    (<em><a href="d.m.html">d.m</a></em>) or <tt>wxpython</tt>
+    e.g. <tt>wxpython</tt>
     (<em><a href="wxGUI.html">wxGUI</a></em>). Also exists as a shell
     environment variable. If this shell variable exists at GRASS
     startup, it will determine the GUI used. If it is not defined

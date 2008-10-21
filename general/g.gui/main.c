@@ -42,10 +42,8 @@ int main(int argc, char *argv[])
     type->type = TYPE_STRING;
     type->label = _("GUI type");
     type->description = _("Default value: GRASS_GUI if defined otherwise wxpython");
-    type->descriptions = _("tcltk;Tcl/Tk based GUI - GIS Manager (gis.m);"
-			   "oldtcltk;Old Tcl/Tk based GUI - Display Manager (d.m);"
-			   "wxpython;wxPython based next generation GUI");
-    type->options = "tcltk,oldtcltk,wxpython";
+    type->descriptions = _("wxpython;wxPython based GUI");
+    type->options = "wxpython";
 
     rc_file = G_define_standard_option(G_OPT_F_INPUT);
     rc_file->key = "workspace";
@@ -77,29 +75,7 @@ int main(int argc, char *argv[])
 
     }
 
-    if (strcmp(type->answer, "oldtcltk") == 0) {
-	sprintf(progname, "%s/etc/dm/d.m.tcl", G_gisbase());
-	if (rc_file->answer) {
-	    G_spawn(getenv("GRASS_WISH"), "d.m", progname, "-name", "d_m_tcl",
-		    rc_file->answer, NULL);
-	}
-	else {
-	    G_spawn(getenv("GRASS_WISH"), "d.m", progname, "-name", "d_m_tcl",
-		    NULL);
-	}
-    }
-    else if (strcmp(type->answer, "tcltk") == 0) {
-	sprintf(progname, "%s/etc/gm/gm.tcl", G_gisbase());
-	if (rc_file->answer) {
-	    G_spawn(getenv("GRASS_WISH"), "gis.m", progname, "-name",
-		    "gm_tcl", rc_file->answer, NULL);
-	}
-	else {
-	    G_spawn(getenv("GRASS_WISH"), "gis.m", progname, "-name",
-		    "gm_tcl", NULL);
-	}
-    }
-    else if (strcmp(type->answer, "wxpython") == 0) {
+    if (strcmp(type->answer, "wxpython") == 0) {
 	sprintf(progname, "%s/etc/wxpython/wxgui.py", G_gisbase());
 	if (rc_file->answer) {
 	    G_spawn("python", "wxgui", progname, "--workspace",
