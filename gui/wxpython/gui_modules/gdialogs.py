@@ -753,7 +753,8 @@ class LoadMapLayersDialog(wx.Dialog):
                 list.append(layer)
 
         self.layers.Set(list)
-
+        self.OnSelectAll(None)
+        
         event.Skip()
 
     def GetMapLayers(self):

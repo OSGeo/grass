@@ -1006,7 +1006,8 @@ class cmdPanel(wx.Panel):
                     p['value'] = p.get('default','')
 
             if ( len(p.get('values', []) ) > 0):
-                valuelist=map( str, p.get('values',[]) )
+                valuelist      = map(str, p.get('values',[]))
+                valuelist_desc = map(str, p.get('values_desc',[]))
 
                 if p.get('multiple', 'no') == 'yes' and \
                         p.get('gisprompt',False) == False and \
@@ -1027,14 +1028,23 @@ class cmdPanel(wx.Panel):
                         # for multi checkboxes, this is an array of all wx IDs
                         # for each individual checkbox
                         p[ 'wxId' ] = []
+                    idx = 0
                     for val in valuelist:
-                        chkbox = wx.CheckBox( parent=which_panel, label = text_beautify(val) )
+                        try:
+                            label = valuelist_desc[idx]
+                        except IndexError:
+                            label = val
+                        
+                        chkbox = wx.CheckBox( parent=which_panel, label = text_beautify(label) )
                         p[ 'wxId' ].append( chkbox.GetId() )
                         if isEnabled.has_key(val):
                             chkbox.SetValue( True )
                         hSizer.Add( item=chkbox, proportion=0,
                                     flag=wx.ADJUST_MINSIZE | wx.ALL, border=1 )
                         chkbox.Bind(wx.EVT_CHECKBOX, self.OnCheckBoxMulti)
+
+                        idx += 1
+                        
                     which_sizer.Add( item=hSizer, proportion=0,
                                      flag=wx.EXPAND | wx.TOP | wx.RIGHT | wx.LEFT, border=5 )
                 elif p.get('gisprompt',False) == False:

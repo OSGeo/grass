@@ -337,7 +337,5 @@ int main(int argc, char *argv[])
 	cell_stats(fd, with_percents, with_counts, with_areas, with_labels,
 		   fmt);
 
-    G_done_msg(" ");
-
     exit(EXIT_SUCCESS);
 }
