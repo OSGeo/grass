@@ -10,7 +10,7 @@ help_message()
     cat <<-EOF
 	Usage:
 	  $CMD_NAME [-h | -help | --help] [-v | --version] [-c]
-		  [-text | -gui | -tcltk | -wxpython]
+		  [-text | -gui | -wxpython]
 		  [[[<GISDBASE>/]<LOCATION_NAME>/]<MAPSET>]
 	
 	Flags:
@@ -20,8 +20,6 @@ help_message()
 	  -text                          use text based interface
 	                                   and set as default
 	  -gui                           use graphical user interface ($DEFAULT_GUI by default)
-	                                   and set as default
-	  -tcltk                         use Tcl/Tk based graphical user interface
 	                                   and set as default
 	  -wxpython                      use wxPython based graphical user interface
 	                                   and set as default
@@ -34,7 +32,7 @@ help_message()
 	  GISDBASE/LOCATION_NAME/MAPSET  fully qualified initial mapset directory
 	
 	Environment variables relevant for startup:
-	  GRASS_GUI                      select GUI (text, gui, tcltk, wxpython)
+	  GRASS_GUI                      select GUI (text, gui, wxpython)
 	  GRASS_WISH                     set wish shell name to override 'wish'
 	  GRASS_HTML_BROWSER             set html web browser for help pages
 	  GRASS_ADDON_PATH               set additional path(s) to local GRASS modules
@@ -98,10 +96,10 @@ read_gui()
 	GRASS_GUI="$DEFAULT_GUI"
     fi
 
-    # d.m no longer exists
+    # gis.m, d.m no longer exist
     case "$GRASS_GUI" in
-    d.m | oldtcltk)
-	GRASS_GUI=gis.m
+    d.m | oldtcltk | gis.m)
+	GRASS_GUI="$DEFAULT_GUI"
 	;;
     esac
 }
@@ -257,26 +255,16 @@ check_gui()
 	if [ "$GRASS_GUI" = "wxpython" ]; then
 	    echo 'variable=True' | "$GRASS_PYTHON" >/dev/null 2>&1
 	fi
-	# Check if we need to find wish
-	if [ "$GRASS_GUI" = "tcltk" ] || \
-	    [ "$GRASS_GUI" = "gis.m" ] ; then
-
-	    # Check if wish is working properly
-	    echo 'exit 0' | "$GRASS_WISH" >/dev/null 2>&1
-	fi
-
 	# ok
 	if [ "$?" = 0 ] ; then
-	    # Set the tcltkgrass base directory
-	    TCLTKGRASSBASE="$ETC"
 	    # Set the wxpython base directory
 	    WXPYTHONGRASSBASE="$ETC/wxpython"
 	else
-	    # Wish was not found - switch to text interface mode
+	    # Python was not found - switch to text interface mode
 	    cat <<-EOF
 		
-		WARNING: The wish command does not work as expected!
-		Please check your GRASS_WISH environment variable.
+		WARNING: The python command does not work as expected!
+		Please check your GRASS_PYTHON environment variable.
 		Use the -help option for details.
 		Switching to text based interface mode.
 		
@@ -420,7 +408,7 @@ set_data()
 		;;
 	    
 	    # Check for GUI
-	    tcltk | gis.m | wxpython)
+	    wxpython)
 		gui_startup
 		;;
 	    *)
@@ -436,18 +424,15 @@ set_data()
 
 gui_startup()
 {
-    if [ "$GRASS_GUI" = "tcltk" ] || [ "$GRASS_GUI" = "gis.m" ] ; then
+    if [ "$GRASS_GUI" = "wxpython" ] ; then
 		# eval `foo` will return subshell return code and not app foo return code!!!
-	eval '"$GRASS_WISH" -file "$TCLTKGRASSBASE/gis_set.tcl"'
-	thetest=$?
-    else
 	eval '"$GRASS_PYTHON" "$WXPYTHONGRASSBASE/gis_set.py"'
 	thetest=$?
     fi
 
     case $thetest in
 	1)
-	    # The gis_set.tcl script printed an error message so wait
+	    # The startup script printed an error message so wait
 	    # for user to read it
 	    cat <<-EOF
 		Error in GUI startup. If necessary, please
@@ -481,7 +466,7 @@ gui_startup()
 	    exit 0
 	    ;;
 	*)
-	    echo "ERROR: Invalid return code from gis_set.tcl."
+	    echo "ERROR: Invalid return code from GUI startup script."
 	    echo "Please advise GRASS developers of this error."
 	    cleanup_tmpdir
 	    exit 1
@@ -606,10 +591,7 @@ start_gui()
     
     case "$GRASS_GUI" in
         
-        # Check for tcltk interface
-        tcltk | gis.m)
-            "$GISBASE/scripts/gis.m"
-            ;;
+        # Check for gui interface
         wxpython)
             "$GISBASE/etc/wxpython/scripts/wxgui"
             ;;
@@ -664,9 +646,6 @@ show_info()
 	See the licence terms with:              g.version -c
 	EOF
     case "$GRASS_GUI" in
-    tcltk | gis.m)
-        echo "If required, restart the GUI with:       g.gui tcltk"
-        ;;
     wxpython)
         echo "If required, restart the GUI with:       g.gui wxpython"
         ;;
@@ -769,7 +748,7 @@ default_startup()
     if [ "$MINGW" ] ; then
 	# "$ETC/run" doesn't work at all???
         "$SHELL"
-	rm -rf "$LOCATION/.tmp"/*  # remove gis.m session files from .tmp
+	rm -rf "$LOCATION/.tmp"/*  # remove GUI session files from .tmp
     else
     	"$ETC/run" "$SHELL"
 	EXIT_VAL=$?

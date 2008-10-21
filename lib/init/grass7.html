@@ -17,7 +17,7 @@
 <H2>SYNOPSIS</H2>
 
 <B>grass70</B> [<B>-</B>] [<B>-v</B>] [<B>-h | -help | --help</B>]
-    [<B>-text | -gui | -tcltk | -wxpython]</B>]
+    [<B>-text | -gui | -wxpython]</B>]
     [[[<B>&lt;GISDBASE&gt;/</B>]<B>&lt;LOCATION_NAME&gt;/</B>]
     	<B>&lt;MAPSET&gt;</B>]
 
@@ -43,7 +43,7 @@ interface and mapset. Thus, the next time the user runs GRASS, typing
 settings for the user interface and mapset selected.
 
 <P>
-If you specify a graphical user interface (Tcl/Tk or wxPython) the <EM>grass70</EM>
+If you specify a graphical user interface (wxPython) the <EM>grass70</EM>
 program will try to verify that the system you specified exists and that you
 can access it successfully. If any of these checks fail then <EM>grass70</EM>
 will automatically switch back to the text user interface mode.
@@ -67,10 +67,7 @@ All command line options are optional.
 <DT><B>-text</B>
 <DD> Indicates that the text based user interface should be used
 
-<DT><B>-gui</B> (or <B>-tcltk</B>)
-<DD> Indicates that the old Tcl/Tk based graphical user interface should be used
-
-<DT><B>-wxpython</B>
+<DT><B>-gui</B> (or <B>-wxpython</B>)
 <DD> Indicates that the new Python based graphical user interface should be used
 
 <DT><B>-v</B> <B>--version</B>
@@ -126,9 +123,7 @@ The <EM>grass70</EM> program will check for the existence of an environment
 variable called GRASS_GUI which indicates the type of user interface for
 GRASS to use. If this variable is not set when <EM>grass70</EM> is run, then
 it will be created and then saved in the <tt>$HOME/.grassrc7</tt> file for
-the next time GRASS is run. In addition to "text", "tcltk" or "wxpython",
-the GRASS_GUI variable can be set to the name of the Tcl/Tk GUI to use, for
-example "gis.m" or "d.m".
+the next time GRASS is run. It can be set to "text" or "wxpython".
 
 <P>
 There is an order of precedence in the way <EM>grass70</EM> determines the user
@@ -140,15 +135,15 @@ lowest.
  <DD>&bull; Command line argument<BR>
      &bull; Environment variable GRASS_GUI<BR>
      &bull; Value set in <tt>$HOME/.grassrc7</tt><BR>
-     &bull; Default value - currently gis.m
+     &bull; Default value - wxpython
 </DL>
 
 <H3>Tcl/Tk and Python Environment Variables</H3>
 
 <P>
-If you choose to use the Tcl/Tk graphical user interface, then the following
-environment variables can be used to override your system default
-<tt>tclsh</tt> and <tt>wish</tt> commands.
+If you choose to use the wxPython interface or Tcl/Tk modules, then
+the following environment variables can be used to override your
+system default <tt>tclsh</tt>, <tt>wish</tt>, and <tt>python</tt> commands.
 
 <DL>
 <DT><B>GRASS_TCLSH</B>
@@ -162,18 +157,12 @@ environment variables can be used to override your system default
 </DL>
 
 
-<H4>Example Use of GRASS Tcl/Tk Environment Variables</H4>
+<H4>Example Use of GRASS Python Environment Variable</H4>
 
 <P>
-Suppose your system has Tcl/Tk 8.3 installed and you install a personal
-version of the Tcl/Tk 8.5 binaries under <tt>$HOME/bin</tt>. You can use
-the above variables to have GRASS use the Tcl/Tk 8.5 binaries instead.
-
-<P>
-<pre>
-   GRASS_TCLSH = $HOME/bin/tclsh8.5
-   GRASS_WISH  = $HOME/bin/wish8.5
-</pre>
+Suppose your system has Python 2.4 installed and you install a personal
+version of the Python 2.5 binaries under <tt>$HOME/bin</tt>. You can use
+the above variables to have GRASS use the Python 2.5 binaries instead.
 
 
 <H4>Example Use of the GRASS Python Environment Variable</H4>
@@ -372,24 +361,18 @@ The following are some possible examples.
 
 <H2>CAVEAT</H2>
 
-If you start GRASS using the Tcl/Tk interface you must have a <tt>wish</tt>
+If you start GRASS using the wxPython interface you must have a <tt>python</tt>
 command in your $PATH variable. That is, the command must be named
-<tt>wish</tt> and not something like <tt>wish8.3</tt>. By default, some Tcl/Tk
-installations do not create a <tt>wish</tt> command. In these cases the system
-administrator must create an appropriate link to the actual <tt>wish</tt>
+<tt>python</tt> and not something like <tt>python2.5</tt>. Rarely some Python
+installations do not create a <tt>python</tt> command. In these cases the system
+administrator must create an appropriate link to the actual <tt>python</tt>
 program.
 
 <P>
-For example, suppose Tcl/Tk 8.3 programs are installed in /usr/local/bin. Then
-the system administrator should go to the /usr/local/bin directory and run the
-commands "<tt>ln -s wish8.3 wish</tt>" and "<tt>ln -s tclsh8.3 tclsh</tt>" to
-properly install Tcl/Tk for use with GRASS.
-
-<P>
-Furthermore, if you have more than one version of Tcl/Tk installed, make sure
+Furthermore, if you have more than one version of Python installed, make sure
 that the version you want to use with GRASS is the first version found in
 your <tt>$PATH</tt> variable. GRASS searches your <tt>$PATH</tt> variable
-until it finds the first version of <tt>wish</tt>.
+until it finds the first version of <tt>python</tt>.
 
 
 <H2>FILES</H2>
