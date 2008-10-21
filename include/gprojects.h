@@ -32,7 +32,7 @@
 
 struct pj_info
 {
-    projPJ *pj;
+    projPJ pj;
     double meters;
     int zone;
     char proj[100];
