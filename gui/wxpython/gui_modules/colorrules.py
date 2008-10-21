@@ -48,6 +48,8 @@ class ColorTable(wx.Frame):
         @param cmd command (given as list)
         """
         self.parent = parent # GMFrame
+  
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
         
         # grass command
         self.cmd = kwargs['cmd']
@@ -449,7 +451,7 @@ class ColorTable(wx.Frame):
         if self.elem == 'cell':
 
             try:
-                if '%' not in vals:
+                if vals != '-':
                     float(vals)
             except ValueError:
                 tc.SetValue('')
