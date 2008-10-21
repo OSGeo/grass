@@ -1,7 +1,16 @@
+STATUS:
+	The i.ortho.photo suite of modules has been temporarily removed
+	from GRASS 7 as they are heavily dependent on the text-based
+	Vask libary and interactive XDRIVER monitors, both of which
+	have been removed. As the modules are rewritten to run in non-
+	interactive mode or with a wxPython frontend, they will be
+	added back into GRASS 7. This work will be undertaken in the
+	develbranch6 SVN.
+
 AUTHORS:
-The orthophoto rectification programs went out under alpha in 4.0.
-It has since had bug fixes performed by OGI (Shapiro?) and also by
-the original programmer - Mike Baba of DBA Systems, Fairfax, VA.
+	The orthophoto rectification programs went out under alpha in 4.0.
+	It has since had bug fixes performed by OGI (Shapiro?) and also by
+	the original programmer - Mike Baba of DBA Systems, Fairfax, VA.
 
 COPYRIGHT:    (C) 1999 by the GRASS Development Team
 
