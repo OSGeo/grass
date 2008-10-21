@@ -315,8 +315,8 @@ int main(int argc, char *argv[])
 
     G_set_window(&src_w);
 
-    row_scale = 1 + ceil(dst_w.ns_res / src_w.ns_res);
-    col_scale = 1 + ceil(dst_w.ew_res / src_w.ew_res);
+    row_scale = 2 + ceil(dst_w.ns_res / src_w.ns_res);
+    col_scale = 2 + ceil(dst_w.ew_res / src_w.ew_res);
 
     /* allocate buffers for input rows */
     bufs = G_malloc(row_scale * sizeof(DCELL *));
