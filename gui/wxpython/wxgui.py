@@ -416,7 +416,10 @@ class GMFrame(wx.Frame):
         if cmd[:2] == 'd.' and not self.curr_page:
             self.NewDisplay(show=True)
         
-        self.goutput.RunCmd(cmd, switchPage=True)
+        if len(cmd.split(' ')) > 1:
+            self.goutput.RunCmd(cmd, switchPage=True)
+        else:
+            self.goutput.RunCmd(cmd, switchPage=False)
         
         self.OnUpdateStatusBar(None)
 
@@ -907,9 +910,10 @@ class GMFrame(wx.Frame):
                 
         if command[0] == 'r.colors' or command[0] == 'vcolors':
             ctable = colorrules.ColorTable(self, cmd=command[0])
-            ctable.Show()      
+            ctable.Show()
         else:
             dlg = rules.RulesText(self, cmd=command)
+            dlg.CenterOnScreen()
             if dlg.ShowModal() == wx.ID_OK:
                 gtemp = utils.GetTempfile()
                 output = open(gtemp, "w")
