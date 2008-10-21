@@ -1,3 +1,16 @@
+/****************************************************************************
+ *
+ * MODULE:       r.null
+ * AUTHOR(S):    U.S.Army Construction Engineering Research Laboratory
+ * PURPOSE:      Manages NULL-values of given raster map.
+ * COPYRIGHT:    (C) 2008 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
+
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -42,15 +55,10 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("raster");
-    module->description = _("Creates explicitly the NULL-value bitmap file.");
+    module->keywords = _("raster, null data");
+    module->description = _("Manages NULL-values of given raster map.");
 
-    parms.map = G_define_option();
-    parms.map->key = "map";
-    parms.map->type = TYPE_STRING;
-    parms.map->required = YES;
-    parms.map->multiple = NO;
-    parms.map->gisprompt = "old,cell,raster";
+    parms.map = G_define_standard_option(G_OPT_R_MAP);
     parms.map->description = _("Raster map for which to edit null file");
 
     parms.setnull = G_define_option();
@@ -106,43 +114,48 @@ int main(int argc, char *argv[])
 
     is_reclass = (G_is_reclass(name, mapset, rname, rmapset) > 0);
     if (is_reclass)
-	G_fatal_error
-	    ("%s is a reclass of map <%s> in mapset <%s>. Consider to generate a copy with r.mapcalc. Exiting.",
-	     name, rname, rmapset);
+	G_fatal_error(_("Raster map <%s> is a reclass of map <%s@%s>. "
+			"Consider to generate a copy with r.mapcalc. Exiting."),
+		      name, rname, rmapset);
 
 
     if (strcmp(mapset, G_mapset()) != 0)
-	G_fatal_error("%s is not in your mapset (%s)", name, G_mapset());
-
+	G_fatal_error(_("Raster map <%s> is not in your mapset <%s>"),
+		      name, G_mapset());
+    
     if (parms.null->answer) {
 	if (sscanf(parms.null->answer, "%lf", &new_null) == 1)
 	    change_null = 1;
 	else
-	    G_fatal_error("%s is illegal entry for null", parms.null->answer);
+	    G_fatal_error(_("%s is illegal entry for null"),
+			  parms.null->answer);
     }
 
     map_type = G_raster_map_type(name, mapset);
 
     if (only_null && G_find_file_misc("cell_misc", "null", name, mapset))
-	G_fatal_error("%s already has a null bitmap file!", name);
+	G_fatal_error(_("Raster map <%s> already has a null bitmap file"), name);
 
     if (map_type == CELL_TYPE) {
 	if (only_fp)
-	    G_fatal_error("%s is integer!", name);
+	    G_fatal_error(_("<%s> is integer raster map (CELL)"),
+			  name);
 
 	if ((double)((int)new_null) != new_null) {
-	    G_warning("%s is an integer map! Using null=%d", name,
-		      (int)new_null);
+	    G_warning(_("<%s> is integer raster map (CELL). Using null=%d."),
+		      name, (int)new_null);
 	    new_null = (double)((int)new_null);
 	}
     }
     else if (only_int)
-	G_fatal_error("%s is floating point!", name);
+	G_fatal_error(_("<%s> is floating pointing raster map"),
+		      name);
 
     parse_vallist(parms.setnull->answers, &d_mask);
 
     if (G_get_cellhd(name, mapset, &cellhd) < 0)
-	G_fatal_error("Can't read cell header for %s", name);
+	G_fatal_error(_("Unable to read header of raster map <%s>"),
+		      G_fully_qualified_name(name, mapset));
 
     if (create) {
 	/* write a file of no-nulls */
@@ -153,31 +166,38 @@ int main(int argc, char *argv[])
 
 	null_fd = G_open_new_misc("cell_misc", "null", name);
 
-	G_message("Writing new null file for [%s]... ", name);
+	G_verbose_message(_("Writing new null file for raster map <%s>..."),
+			  name);
 
 	for (row = 0; row < cellhd.rows; row++) {
 	    G_percent(row, cellhd.rows, 1);
 	    if (G__write_null_bits(null_fd, null_bits, row, cellhd.cols, 0) <
 		0)
-		G_fatal_error("Error writing null row %d", row);
+		G_fatal_error(_("Error writing null row %d"), row);
 	}
 	G_percent(row, cellhd.rows, 1);
 	close(null_fd);
-	G_message("Done");
+
+	G_done_msg(_("Raster map <%s> modified."), name);
+
 	exit(EXIT_SUCCESS);
     }
 
     if (remove) {
 	/* write a file of no-nulls */
-	G_message("Removing null file for [%s]... ", name);
+	G_verbose_message(_("Removing null file for raster map <%s>..."),
+			   name);
 	null_fd = G_open_new_misc("cell_misc", "null", name);
 	G__file_name_misc(path, "cell_misc", "null", name, mapset);
 	unlink(path);
-	G_message("Done");
+
+	G_done_msg(_("Raster map <%s> modified."), name);
+
 	exit(EXIT_SUCCESS);
     }
 
     process(name, mapset, change_null, map_type);
+
     exit(EXIT_SUCCESS);
 }
 
@@ -235,9 +255,9 @@ int parse_d_mask_rule(char *vallist, d_Mask * d_mask, char *where)
 
     else {
 	if (where)
-	    G_fatal_error("%s: %s: illegal value spec", where, vallist);
+	    G_fatal_error(_("%s: %s: illegal value spec"), where, vallist);
 	else
-	    G_fatal_error("%s: illegal value spec", vallist);
+	    G_fatal_error(_("%s: illegal value spec"), vallist);
     }
 
     return 0;
@@ -304,20 +324,23 @@ int doit(char *name, char *mapset, int change_null, RASTER_MAP_TYPE map_type)
 
     rast = G_allocate_raster_buf(map_type);
 
-    G_message("Writing new data for [%s]... ", name);
+    G_verbose_message(_("Writing new data for raster map <%s>..."), name);
+
     /* the null file is written automatically */
     for (row = 0; row < cellhd.rows; row++) {
 	G_percent(row, cellhd.rows, 1);
 
 	if (G_get_raster_row_nomask(old, rast, row, map_type) < 0) {
-	    G_warning("Can't read row %d", row);
+	    G_warning(_("Unable to read raster map <%s> row %d"),
+		      name, row);
 	    break;
 	}
 
 	mask_raster_array(rast, cellhd.cols, change_null, map_type);
 
 	if (G_put_raster_row(new, rast, map_type) < 0) {
-	    G_warning("Can't write row %d", row);
+	    G_warning(_("Failed writing raster map <%s> row %d"),
+		      name, row);
 	    break;
 	}
     }
@@ -329,5 +352,6 @@ int doit(char *name, char *mapset, int change_null, RASTER_MAP_TYPE map_type)
 	return 1;
     }
     G_close_cell(new);
+
     return 0;
 }
