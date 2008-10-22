@@ -6,7 +6,7 @@
 
 int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
 {
-    int i, nrows, trows, vrows, ncols, tablecol, tschemacol, viewcol,
+    int i, j, nrows, trows, vrows, ncols, tablecol, tschemacol, viewcol,
 	vschemacol;
     dbString *list;
     PGresult *rest, *resv;
@@ -94,15 +94,16 @@ int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
     PQclear(rest);
 
 
-    for (i = 0; i < vrows; i++) {
+    for (j = 0; j < vrows; j++) {
 	if (vschemacol >= 0) {
-	    sprintf(buf, "%s.%s", (char *)PQgetvalue(resv, i, vschemacol),
-		    (char *)PQgetvalue(resv, i, viewcol));
+	    sprintf(buf, "%s.%s", (char *)PQgetvalue(resv, j, vschemacol),
+		    (char *)PQgetvalue(resv, j, viewcol));
 	}
 	else {
-	    sprintf(buf, "%s", (char *)PQgetvalue(resv, i, viewcol));
+	    sprintf(buf, "%s", (char *)PQgetvalue(resv, j, viewcol));
 	}
 	db_set_string(&list[i], buf);
+	i++;
     }
 
     PQclear(resv);
