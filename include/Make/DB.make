@@ -12,7 +12,7 @@ EXTRA_INC += -I$(MODULE_TOPDIR)/lib/db/dbmi_driver
 
 dbmi: $(DBDRIVERDIR)/$(PGM)$(EXE) db_html
 
-db_html: $(HTMLDIR)/grass-$(PGM).html
+db_html: $(HTMLDIR)/grass-$(PGM).html $(MANDIR)/grass-$(PGM).$(MANSECT)
 
 $(DBDRIVERDIR)/$(PGM)$(EXE): $(ARCH_OBJS) $(DEPENDENCIES)
 	$(call linker)

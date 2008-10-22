@@ -8,12 +8,13 @@ include $(MODULE_TOPDIR)/include/Make/Compile.make
 
 PROGFILES = $(patsubst %,$(BIN)/%$(EXE),$(PROGRAMS))
 HTMLFILES = $(patsubst %,$(HTMLDIR)/%.html,$(PROGRAMS))
+MANFILES  = $(patsubst %,$(MANDIR)/%.$(MANSECT),$(PROGRAMS))
 
 multi: progs htmlmulti
 
 progs: $(PROGFILES)
 
-htmlmulti: $(HTMLFILES)
+htmlmulti: $(HTMLFILES) $(MANFILES)
 
 $(BIN)/%$(EXE): $(DEPENDENCIES)
 	$(call linker)

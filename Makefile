@@ -51,6 +51,7 @@ DIRS = \
 	visualization \
 	locale \
 	tools \
+	man \
 	gem \
 	macosx
 
@@ -85,7 +86,6 @@ default: builddemolocation
 	done
 	-cp -f $(FILES) ${ARCH_DISTDIR}/
 	-cp -f ${ARCH_BINDIR}/grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR} ${ARCH_DISTDIR}/grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}.tmp
-	@(cd tools ; sh -c "./build_html_index.sh")
 	@if [ `cat "$(ERRORLOG)" | wc -l` -gt 5 ] ; then \
 		echo "--"     >> $(ERRORLOG) ; \
 		echo "In case of errors please change into the directory with error and run 'make'." >> $(ERRORLOG) ; \
