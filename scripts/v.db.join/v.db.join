@@ -103,13 +103,13 @@ COLTYPES=`db.describe -c driver="$driver" database="$database" table="$GIS_OPT_O
 
 i=1
 for col in $COLLIST ; do
-  v.db.addcol "$GIS_OPT_MAP" col="$col `echo $COLTYPES | cut -d' ' -f$i | tr -s '_' ' '`"
+  v.db.addcol "$GIS_OPT_MAP" layer="$GIS_OPT_LAYER" col="$col `echo $COLTYPES | cut -d' ' -f$i | tr -s '_' ' '`"
   if [ $? -ne 0 ] ; then
 	g.message -e "Cannot continue."
 	exit 1
   fi
   echo "UPDATE $maptable SET $col=(SELECT $col
-        FROM $GIS_OPT_OTABLE WHERE $GIS_OPT_OTABLE.$GIS_OPT_OCOLUMN=$maptable.$GIS_OPT_COLUMN);" | db.execute
+        FROM $GIS_OPT_OTABLE WHERE $GIS_OPT_OTABLE.$GIS_OPT_OCOLUMN=$maptable.$GIS_OPT_COLUMN);" | db.execute driver=$driver database=$database
   i=`expr $i + 1`
 done
 
