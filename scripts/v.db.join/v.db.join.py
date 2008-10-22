@@ -98,14 +98,14 @@ def main():
 	    coltype = "%s" % col[1]
 	colspec = "%s %s" % (colname, coltype)
 
-	if grass.run_command('v.db.addcol', map = map, columns = colspec) != 0:
+	if grass.run_command('v.db.addcol', map = map, columns = colspec, layer = layer) != 0:
 	    grass.fatal("Error creating column <%s>." % colname)
 
 	stmt = template.substitute(table = maptable, column = column,
 				   otable = otable, ocolumn = ocolumn,
 				   colname = colname)
 
-	if grass.write_command('db.execute', stdin = stmt) != 0:
+	if grass.write_command('db.execute', stdin = stmt, database = database, driver = driver) != 0:
 	    grass.fatal("Error filling column <%s>." % colname)
 
     # write cmd history:
