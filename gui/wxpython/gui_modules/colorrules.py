@@ -451,9 +451,10 @@ class ColorTable(wx.Frame):
         if self.elem == 'cell':
 
             try:
-                if vals != '-':
+                if vals != '-' and \
+                        vals[-1] != '%':
                     float(vals)
-            except ValueError:
+            except (IndexError, ValueError):
                 tc.SetValue('')
                 self.ruleslines[num-1000]['value'] = ''
                 return
