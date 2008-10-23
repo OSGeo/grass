@@ -8,31 +8,32 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-GLOBAL struct Cell_head window;
+extern struct Cell_head window;
 
-#define LAYER struct _layer_
-GLOBAL LAYER
+struct _layer_
 {
     char *name;
     char *mapset;
     struct Categories labels;
     int nlen;			/* num chars of largest cat when printed */
     int clen;			/* num chars for cat label when printed */
-} *layers INIT(NULL);
-GLOBAL int nlayers INIT(0);
+};
+#define LAYER struct _layer_
+extern LAYER *layers;
+extern int nlayers;
 
-#define GSTATS struct _gstats_
-GLOBAL GSTATS
+struct _gstats_
 {
     CELL *cats;
     double area;
     long count;
-} *Gstats INIT(NULL);
-GLOBAL int nstats INIT(0);
+};
+#define GSTATS struct _gstats_
+extern GSTATS *Gstats;
+extern int nstats;
 
 #define MAX_UNITS 10
-#define UNITS struct _units_
-GLOBAL UNITS
+struct _units_
 {
     double factor;
     int type;
@@ -40,33 +41,39 @@ GLOBAL UNITS
     int dp;
     int eformat;
     char *label[2];
-} unit[MAX_UNITS];
-GLOBAL int nunits INIT(0);
+};
+#define UNITS struct _units_
+extern UNITS unit[MAX_UNITS];
+extern int nunits;
 
 #define DEFAULT_PAGE_LENGTH 0
 #define DEFAULT_PAGE_WIDTH  79
-GLOBAL int page_width INIT(DEFAULT_PAGE_WIDTH);
-GLOBAL int page_length INIT(DEFAULT_PAGE_LENGTH);
-GLOBAL int masking INIT(1);
-GLOBAL int use_formfeed INIT(0);
-GLOBAL int nlines INIT(0);
-GLOBAL int with_headers INIT(1);
-GLOBAL int verbose INIT(1);
-GLOBAL int e_format INIT(0);
-GLOBAL int no_nulls INIT(0);
-GLOBAL int no_nulls_all INIT(0);
 
-GLOBAL char *stats_file;
-GLOBAL char *no_data_str;
-GLOBAL int stats_flag INIT(0);
-GLOBAL int nsteps, cat_ranges, as_int;
-GLOBAL int *is_fp INIT(NULL);
-GLOBAL DCELL *DMAX INIT(NULL), *DMIN INIT(NULL);
+extern int page_width;
+extern int page_length;
+extern int masking;
+extern int use_formfeed;
+extern int nlines;
+extern int with_headers;
+extern int verbose;
+extern int e_format;
+extern int no_nulls;
+extern int no_nulls_all;
 
-GLOBAL int maskfd;
-GLOBAL CELL *mask;
-GLOBAL CELL NULL_CELL;
-GLOBAL int (*get_row) ();
+extern char *stats_file;
+extern char *no_data_str;
+extern int stats_flag;
+extern int nsteps, cat_ranges, as_int;
+extern int *is_fp;
+extern DCELL *DMAX, *DMIN;
+
+extern int maskfd;
+extern CELL *mask;
+extern CELL NULL_CELL;
+extern int (*get_row)();
+
+extern char fs[2];
+extern struct Categories *labels;
 
 /* format.c */
 int format_parms(double, int *, int *, int *, int);
@@ -113,9 +120,6 @@ int get_stats(void);
 double area_sum(int *, int);
 long count_sum(int *, int);
 int same_cats(int, int, int);
-
-GLOBAL char fs[2];
-GLOBAL struct Categories *labels INIT(NULL);
 
 #define EVERYTHING 0
 #define REPORT_ONLY 1

@@ -18,13 +18,25 @@
  *               for details.
  *
  *****************************************************************************/
-#define GLOBAL
+
 #include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include "global.h"
 #include "local_proto.h"
 
+char *group;
+char *subgroup;
+char *sigfile;
+struct Ref Ref;
+struct Signature S;
+DCELL **cell;
+int *cellfd;
+CELL *class_cell, *reject_cell;
+int class_fd, reject_fd;
+char *class_name, *reject_name;
+double *B;
+double *P;
 
 int main(int argc, char *argv[])
 {

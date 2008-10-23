@@ -22,12 +22,39 @@
  *
  *****************************************************************************/
 
-#define GLOBAL
 #include <stdlib.h>
 #include <string.h>
 #include "global.h"
 #include "crs.h"
 #include <grass/glocale.h>
+
+ROWCOL row_map[NROWS][NCOLS];
+ROWCOL col_map[NROWS][NCOLS];
+ROWCOL row_min[NROWS];
+ROWCOL row_max[NROWS];
+ROWCOL row_left[NROWS];
+ROWCOL row_right[NROWS];
+IDX row_idx[NROWS];
+int matrix_rows, matrix_cols;
+
+void **cell_buf;
+int temp_fd;
+RASTER_MAP_TYPE map_type;
+char *temp_name;
+int *ref_list;
+char **new_name;
+struct Ref ref;
+
+/* georef coefficients */
+
+double E12[10], N12[10];
+double E21[10], N21[10];
+
+/* DELETED WITH CRS MODIFICATIONS
+   double E12a, E12b, E12c, N12a, N12b, N12c;
+   double E21a, E21b, E21c, N21a, N21b, N21c;
+ */
+struct Cell_head target_window;
 
 #define NFILES 15
 

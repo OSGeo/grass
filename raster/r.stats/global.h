@@ -1,25 +1,18 @@
 #include <grass/gis.h>
 
-#ifndef GLOBAL
-# define GLOBAL extern
-# define INIT(x)
-#else
-# define INIT(x) =(x)
-#endif
+extern char *no_data_str;
+extern int nfiles;
+extern int nrows;
+extern int ncols, no_nulls, no_nulls_all;
+extern int nsteps, cat_ranges, raw_output, as_int, averaged;
+extern int *is_fp;
+extern DCELL *DMAX, *DMIN;
 
-GLOBAL char *no_data_str;
-GLOBAL int nfiles;
-GLOBAL int nrows;
-GLOBAL int ncols, no_nulls INIT(0), no_nulls_all INIT(0);
-GLOBAL int nsteps, cat_ranges, raw_output, as_int, averaged;
-GLOBAL int *is_fp INIT(NULL);
-GLOBAL DCELL *DMAX INIT(NULL), *DMIN INIT(NULL);
+extern CELL NULL_CELL;
+extern int (*get_row) ();
 
-GLOBAL CELL NULL_CELL;
-GLOBAL int (*get_row) ();
-
-GLOBAL char fs[2];
-GLOBAL struct Categories *labels INIT(NULL);
+extern char fs[2];
+extern struct Categories *labels;
 
 /* cell_stats.c */
 int cell_stats(int[], int, int, int, int, char *);

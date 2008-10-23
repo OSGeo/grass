@@ -21,36 +21,32 @@
 
 #include <grass/gis.h>
 
-#ifndef GLOBAL
-#define GLOBAL extern
-#endif
-
 struct stats_table
 {
     long count;
     double area;
 };
 
-GLOBAL struct Cell_head window;
+extern struct Cell_head window;
 
-GLOBAL char *title1, *title2;
+extern char *title1, *title2;
 
-GLOBAL double window_cells;
-GLOBAL double window_area;
+extern double window_cells;
+extern double window_area;
 
-GLOBAL struct stats_table *table;
-GLOBAL long *catlist1, *catlist2;
-GLOBAL int no_data1, no_data2;
-GLOBAL int Rndex, Cndex;
-GLOBAL char *dumpname;
-GLOBAL char *statname;
-GLOBAL FILE *dumpfile;
+extern struct stats_table *table;
+extern long *catlist1, *catlist2;
+extern int no_data1, no_data2;
+extern int Rndex, Cndex;
+extern char *dumpname;
+extern char *statname;
+extern FILE *dumpfile;
 
-GLOBAL char map1name[GNAME_MAX], map2name[GNAME_MAX];
-GLOBAL char *mapset1, *mapset2;
-GLOBAL int ncat1, ncat2;
+extern char map1name[GNAME_MAX], map2name[GNAME_MAX];
+extern char *mapset1, *mapset2;
+extern int ncat1, ncat2;
 
-GLOBAL char *fill, *midline;
+extern char *fill, *midline;
 
 /* check.c */
 int check_report_size(void);

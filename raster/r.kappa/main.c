@@ -26,8 +26,23 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
-#define GLOBAL
 #include "kappa.h"
+
+struct Cell_head window;
+
+char *maps[2];
+char *output;
+char *title;
+long *matr;
+long *rlst;
+int ncat;
+char *stats_file;
+
+LAYER *layers;
+int nlayers;
+
+GSTATS *Gstats;
+size_t nstats;
 
 /* function prototypes */
 static void layer(char *s);

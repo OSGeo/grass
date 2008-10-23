@@ -1,58 +1,48 @@
 #include "defs.h"
 
-#ifndef GLOBAL
-#  define GLOBAL extern
-#  define INIT(x)
-#else
-#  define INIT(x) = x
-#endif
+extern int SCREEN_TOP;
+extern int SCREEN_BOTTOM;
+extern int SCREEN_LEFT;
+extern int SCREEN_RIGHT;
 
-GLOBAL int G_get_color();
+extern Window *INFO_WINDOW;
+extern Window *MENU_WINDOW;
+extern Window *PROMPT_WINDOW;
 
-GLOBAL int SCREEN_TOP;
-GLOBAL int SCREEN_BOTTOM;
-GLOBAL int SCREEN_LEFT;
-GLOBAL int SCREEN_RIGHT;
+extern View *VIEW_MAP1;
+extern View *VIEW_TITLE1;
+extern View *VIEW_MAP1_ZOOM;
+extern View *VIEW_TITLE1_ZOOM;
 
-GLOBAL Window *INFO_WINDOW;
-GLOBAL Window *MENU_WINDOW;
-GLOBAL Window *PROMPT_WINDOW;
+extern View *VIEW_MAP2;
+extern View *VIEW_TITLE2;
+extern View *VIEW_MAP2_ZOOM;
+extern View *VIEW_TITLE2_ZOOM;
 
-GLOBAL View *VIEW_MAP1;
-GLOBAL View *VIEW_TITLE1;
-GLOBAL View *VIEW_MAP1_ZOOM;
-GLOBAL View *VIEW_TITLE1_ZOOM;
+extern View *VIEW_MENU;
 
-GLOBAL View *VIEW_MAP2;
-GLOBAL View *VIEW_TITLE2;
-GLOBAL View *VIEW_MAP2_ZOOM;
-GLOBAL View *VIEW_TITLE2_ZOOM;
+extern Group group;
 
-GLOBAL View *VIEW_MENU;
-
-GLOBAL Group group;
-
-GLOBAL char interrupt_char;
-GLOBAL char *tempfile1;
-GLOBAL char *tempfile2;
-GLOBAL char *digit_points;	/* digitizer control points */
-GLOBAL char *digit_results;	/* digitizer results */
-GLOBAL int use_digitizer INIT(0);	/* is there a digitizer out there? */
+extern char interrupt_char;
+extern char *tempfile1;
+extern char *tempfile2;
+extern char *digit_points;	/* digitizer control points */
+extern char *digit_results;	/* digitizer results */
+extern int use_digitizer;	/* is there a digitizer out there? */
 
 /* group file list, target cell,vector files */
-GLOBAL char *group_list INIT(NULL);
-GLOBAL char *cell_list INIT(NULL);
-GLOBAL char *vect_list INIT(NULL);
+extern char *group_list;
+extern char *cell_list;
+extern char *vect_list;
 
-GLOBAL int from_keyboard INIT(-1);	/* input method */
-GLOBAL int from_digitizer INIT(-1);
-GLOBAL int from_screen INIT(-1);
-GLOBAL int from_flag INIT(0);
+extern int from_keyboard;	/* input method */
+extern int from_digitizer;
+extern int from_screen;
+extern int from_flag;
 
-GLOBAL int dotsize INIT(4);
+extern int dotsize;
 
-
-GLOBAL int THE_COLORS[10];
+extern int THE_COLORS[10];
 
 #define BLACK	THE_COLORS[0]
 #define BLUE	THE_COLORS[1]

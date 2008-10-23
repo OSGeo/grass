@@ -1,18 +1,14 @@
 #include <grass/imagery.h>
 
-#ifndef GLOBAL
-#define GLOBAL extern
-#endif
-
-GLOBAL char *group;
-GLOBAL char *subgroup;
-GLOBAL char *sigfile;
-GLOBAL struct Ref Ref;
-GLOBAL struct Signature S;
-GLOBAL DCELL **cell;
-GLOBAL int *cellfd;
-GLOBAL CELL *class_cell, *reject_cell;
-GLOBAL int class_fd, reject_fd;
-GLOBAL char *class_name, *reject_name;
-GLOBAL double *B;
-GLOBAL double *P;
+extern char *group;
+extern char *subgroup;
+extern char *sigfile;
+extern struct Ref Ref;
+extern struct Signature S;
+extern DCELL **cell;
+extern int *cellfd;
+extern CELL *class_cell, *reject_cell;
+extern int class_fd, reject_fd;
+extern char *class_name, *reject_name;
+extern double *B;
+extern double *P;

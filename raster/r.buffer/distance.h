@@ -23,12 +23,6 @@
 #define __DISTANCE_H__
 
 #include <grass/gis.h>
-#ifndef GLOBAL
-#define GLOBAL extern
-#define INIT(x)
-#else
-#define INIT(x) =(x)
-#endif
 
 struct Distance
 {
@@ -45,16 +39,16 @@ typedef unsigned char MAPTYPE;
  * (if short is 2 bytes)
  */
 
-GLOBAL struct Distance *distances;
-GLOBAL int ndist;
-GLOBAL int wrap_ncols INIT(0);
-GLOBAL MAPTYPE *map;
-GLOBAL struct Cell_head window;
-GLOBAL int minrow, maxrow, mincol, maxcol;
-GLOBAL char *pgm_name;
-GLOBAL double meters_to_grid INIT(1.0);
-GLOBAL double ns_to_ew_squared;
-GLOBAL int count_rows_with_data;
+extern struct Distance *distances;
+extern int ndist;
+extern int wrap_ncols;
+extern MAPTYPE *map;
+extern struct Cell_head window;
+extern int minrow, maxrow, mincol, maxcol;
+extern char *pgm_name;
+extern double meters_to_grid;
+extern double ns_to_ew_squared;
+extern int count_rows_with_data;
 
 #define MAPINDEX(r,c) (r * window.cols + c)
 #define ZONE_INCR 2
