@@ -334,15 +334,15 @@ int import_band(GDALDatasetH hMEMDS, int band, const char *name,
 	}
     }
 
-    if (n_nulls > 0) {
+    if (n_nulls > 0) {  /* TODO: && nodata_param NOT specified */
 	if (maptype == CELL_TYPE)
 	    G_warning(_("Input raster map contains cells with NULL-value (no-data). "
-		       "The value %d was used to represent no-data values in the input map."
+		       "The value %d was used to represent no-data values in the input map. "
 		       "You can specify nodata value by %s parameter."),
 		      (int)nodataval, nodatakey);
 	else
 	    G_warning(_("Input raster map contains cells with NULL-value (no-data). "
-		       "The value %g was used to represent no-data values in the input map."
+		       "The value %g was used to represent no-data values in the input map. "
 		       "You can specify nodata value by %s parameter."),
 		      nodataval, nodatakey);
     }
@@ -599,11 +599,6 @@ int main(int argc, char *argv[])
 	}
     }
 
-    /* force nodata-value if needed */
-    if (nodataopt->answer) {
-	nodataval = atof(nodataopt->answer);
-    }
-
     /* If file type not set by user ... */
     /* Get min/max values. */
     if (G_read_fp_range(ref.file[0].name, ref.file[0].mapset, &sRange) == -1) {
@@ -643,6 +638,11 @@ int main(int argc, char *argv[])
 		}
 	    }
 	}
+    }
+
+    /* force nodata-value if needed */
+    if (nodataopt->answer) {
+	nodataval = atof(nodataopt->answer);
     }
 
     G_debug(3, "Input map datatype=%s\n",
