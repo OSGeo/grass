@@ -29,19 +29,12 @@
 #define LEFT  1
 #define RIGHT 2
 
-#ifndef GLOBAL
-# define GLOBAL extern
-# define INIT(x)
-#else
-# define INIT(x) =(x)
-#endif
-
-GLOBAL int nfiles;
-GLOBAL int nrows;
-GLOBAL int ncols;
-GLOBAL int NCATS INIT(1 << SHIFT);
-GLOBAL char *names[NFILES];
-GLOBAL struct Categories labels[NFILES];
+extern int nfiles;
+extern int nrows;
+extern int ncols;
+extern int NCATS;
+extern char *names[NFILES];
+extern struct Categories labels[NFILES];
 
 typedef struct
 {
@@ -51,9 +44,9 @@ typedef struct
     int right;
 } NODE;
 
-GLOBAL NODE *tree;		/* tree of values */
-GLOBAL int tlen;		/* allocate tree size */
-GLOBAL int N;			/* number of actual nodes in tree */
+extern NODE *tree;		/* tree of values */
+extern int tlen;		/* allocate tree size */
+extern int N;			/* number of actual nodes in tree */
 
 typedef struct
 {
@@ -61,7 +54,7 @@ typedef struct
     CELL result;
 } RECLASS;
 
-GLOBAL RECLASS *reclass INIT(NULL);
-GLOBAL CELL *table INIT(NULL);
+extern RECLASS *reclass;
+extern CELL *table;
 
 #endif /* __R_CROSS_GLOB_H__ */

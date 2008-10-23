@@ -24,10 +24,20 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define GLOBAL
 #include "distance.h"
 #include "local_proto.h"
 #include <grass/glocale.h>
+
+struct Distance *distances;
+int ndist;
+int wrap_ncols;
+MAPTYPE *map;
+struct Cell_head window;
+int minrow, maxrow, mincol, maxcol;
+char *pgm_name;
+double meters_to_grid = 1.0;
+double ns_to_ew_squared;
+int count_rows_with_data;
 
 int main(int argc, char *argv[])
 {

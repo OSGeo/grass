@@ -15,21 +15,26 @@
 *               for details.
 *****************************************************************************/
 
-#define SPLIT_QC
 #include <stdio.h>
 #include "assert.h"
 #include "index.h"
 #include "card.h"
 #include "split_q.h"
 
+struct Branch BranchBuf[MAXCARD + 1];
+int BranchCount;
+struct Rect CoverSplit;
+RectReal CoverSplitArea;
 
+/* variables for finding a partition */
+struct PartitionVars Partitions[METHODS];
 
 /*-----------------------------------------------------------------------------
 | Load branch buffer with branches from full node plus the extra branch.
 -----------------------------------------------------------------------------*/
 static void RTreeGetBranches(struct Node *n, struct Branch *b)
 {
-    register int i;
+    int i;
 
     assert(n);
     assert(b);
@@ -118,7 +123,7 @@ static void RTreePickSeeds(struct PartitionVars *p)
 static void RTreeLoadNodes(struct Node *n, struct Node *q,
 			   struct PartitionVars *p)
 {
-    register int i;
+    int i;
 
     assert(n);
     assert(q);
@@ -141,7 +146,7 @@ static void RTreeLoadNodes(struct Node *n, struct Node *q,
 -----------------------------------------------------------------------------*/
 static void RTreeInitPVars(struct PartitionVars *p, int maxrects, int minfill)
 {
-    register int i;
+    int i;
 
     assert(p);
 
@@ -164,7 +169,7 @@ static void RTreeInitPVars(struct PartitionVars *p, int maxrects, int minfill)
 -----------------------------------------------------------------------------*/
 static void RTreePrintPVars(struct PartitionVars *p)
 {
-    register int i;
+    int i;
 
     assert(p);
 
@@ -215,7 +220,7 @@ static void RTreePrintPVars(struct PartitionVars *p)
 -----------------------------------------------------------------------------*/
 static void RTreeMethodZero(struct PartitionVars *p, int minfill)
 {
-    register int i;
+    int i;
     RectReal biggestDiff;
     int group, chosen = 0, betterGroup = 0;
 
@@ -284,10 +289,10 @@ static void RTreeMethodZero(struct PartitionVars *p, int minfill)
 | Old node is one of the new ones, and one really new one is created.
 | Tries more than one method for choosing a partition, uses best result.
 -----------------------------------------------------------------------------*/
-extern void RTreeSplitNode(struct Node *n, struct Branch *b, struct Node **nn)
+void RTreeSplitNode(struct Node *n, struct Branch *b, struct Node **nn)
 {
-    register struct PartitionVars *p;
-    register int level;
+    struct PartitionVars *p;
+    int level;
 
     assert(n);
     assert(b);

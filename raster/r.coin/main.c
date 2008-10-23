@@ -16,16 +16,33 @@
  *
  ***************************************************************************/
 
-#define GLOBAL
 #include <stdlib.h>
 #include <unistd.h>
 #include "coin.h"
 
+struct Cell_head window;
+
+char *title1, *title2;
+
+double window_cells;
+double window_area;
+
+struct stats_table *table;
+long *catlist1, *catlist2;
+int no_data1, no_data2;
+int Rndex, Cndex;
+char *dumpname;
+char *statname;
+FILE *dumpfile;
+
+char map1name[GNAME_MAX], map2name[GNAME_MAX];
+char *mapset1, *mapset2;
+int ncat1, ncat2;
+
+char *fill, *midline;
 
 int main(int argc, char *argv[])
 {
-    double G_area_of_cell_at_row();
-
     fill =
 	"                                                                                                                                       ";
     midline =

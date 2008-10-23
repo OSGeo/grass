@@ -18,7 +18,7 @@
  *               for details.
  *
  *****************************************************************************/
-#define GLOBAL
+
 #include <stdlib.h>
 #include <string.h>
 #include "what.h"
@@ -26,6 +26,13 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
+
+struct Categories *cats;
+int *fd;
+char **rast;
+int nrasts;
+char **name;
+char **mapset;
 
 int main(int argc, char **argv)
 {

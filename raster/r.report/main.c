@@ -13,9 +13,46 @@
  *               for details.
  *
  *****************************************************************************/
-#define GLOBAL
+
 #include <stdlib.h>
 #include "global.h"
+
+struct Cell_head window;
+
+LAYER *layers;
+int nlayers;
+
+GSTATS *Gstats;
+int nstats;
+
+UNITS unit[MAX_UNITS];
+int nunits;
+
+int page_width = DEFAULT_PAGE_WIDTH;
+int page_length = DEFAULT_PAGE_LENGTH;
+int masking = 1;
+int use_formfeed;
+int nlines;
+int with_headers = 1;
+int verbose = 1;
+int e_format;
+int no_nulls;
+int no_nulls_all;
+
+char *stats_file;
+char *no_data_str;
+int stats_flag;
+int nsteps, cat_ranges, as_int;
+int *is_fp;
+DCELL *DMAX, *DMIN;
+
+int maskfd;
+CELL *mask;
+CELL NULL_CELL;
+int (*get_row)();
+
+char fs[2];
+struct Categories *labels;
 
 int main(int argc, char *argv[])
 {

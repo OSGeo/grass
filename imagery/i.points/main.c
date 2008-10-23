@@ -26,9 +26,52 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-#define GLOBAL
 #include "globals.h"
 #include "local_proto.h"
+
+int SCREEN_TOP;
+int SCREEN_BOTTOM;
+int SCREEN_LEFT;
+int SCREEN_RIGHT;
+
+Window *INFO_WINDOW;
+Window *MENU_WINDOW;
+Window *PROMPT_WINDOW;
+
+View *VIEW_MAP1;
+View *VIEW_TITLE1;
+View *VIEW_MAP1_ZOOM;
+View *VIEW_TITLE1_ZOOM;
+
+View *VIEW_MAP2;
+View *VIEW_TITLE2;
+View *VIEW_MAP2_ZOOM;
+View *VIEW_TITLE2_ZOOM;
+
+View *VIEW_MENU;
+
+Group group;
+
+char interrupt_char;
+char *tempfile1;
+char *tempfile2;
+char *digit_points;	/* digitizer control points */
+char *digit_results;	/* digitizer results */
+int use_digitizer;	/* is there a digitizer out there? */
+
+/* group file list, target cell,vector files */
+char *group_list;
+char *cell_list;
+char *vect_list;
+
+int from_keyboard = -1;	/* input method */
+int from_digitizer = -1;
+int from_screen = -1;
+int from_flag;
+
+int dotsize = 4;
+
+int THE_COLORS[10];
 
 
 #ifdef __GNUC_MINOR__

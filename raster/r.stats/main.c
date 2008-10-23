@@ -16,7 +16,6 @@
  *               for details.
  *
  *****************************************************************************/
-#define GLOBAL
 
 #include <stdlib.h>
 #include <string.h>
@@ -25,6 +24,20 @@
 #include <grass/glocale.h>
 
 #include "global.h"
+
+char *no_data_str;
+int nfiles;
+int nrows;
+int ncols, no_nulls, no_nulls_all;
+int nsteps, cat_ranges, raw_output, as_int, averaged;
+int *is_fp;
+DCELL *DMAX, *DMIN;
+
+CELL NULL_CELL;
+int (*get_row) ();
+
+char fs[2];
+struct Categories *labels;
 
 int main(int argc, char *argv[])
 {

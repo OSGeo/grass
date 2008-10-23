@@ -16,13 +16,24 @@
  *
  ***************************************************************************/
 
-#define GLOBAL
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include "glob.h"
 #include "local_proto.h"
 #include <grass/glocale.h>
+
+int nfiles;
+int nrows;
+int ncols;
+int NCATS = 1 << SHIFT;
+char *names[NFILES];
+struct Categories labels[NFILES];
+NODE *tree;		/* tree of values */
+int tlen;		/* allocate tree size */
+int N;			/* number of actual nodes in tree */
+RECLASS *reclass;
+CELL *table;
 
 static int cmp(const void *, const void *);
 
