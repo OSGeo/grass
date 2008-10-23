@@ -1,6 +1,9 @@
 #!/bin/sh
 
 # Markus Neteler, 2006
+#               This program is free software under the GNU General Public
+#               License (>=v2). Read the file COPYING that comes with GRASS
+#               for details.
 # Test cases for 2D raster data
 # generate a hemisphere to test slope, aspect, curvatures
 
@@ -9,8 +12,9 @@ BOXLENGTH=1000  # side length of test area
 RADIUS=500      # half BOXLENGTH
 
 ############
-if [ -z "$GISBASE" ] ; then
-    echo "You must be in GRASS GIS to run this program."
+
+if  [ -z "$GISBASE" ] ; then
+    echo "You must be in GRASS GIS to run this program." >&2
     exit 1
 fi
 
@@ -20,7 +24,7 @@ TMP="disk.$$"
 cleanup()
 {
  echo "Removing temporary map"
- g.remove rast=$TMP > /dev/null
+ g.remove --q rast=$TMP > /dev/null
 }
 
 ########################
@@ -40,6 +44,6 @@ HEIGHT="$RADIUS * sin($ALPHA)"
 
 r.mapcalc "hemisphere=$HEIGHT"
 cleanup
-
-echo "Now generate aspect + slope on <hemisphere>"
+g.message "Generated raster map <hemisphere>"
+#echo "Now generate aspect + slope on <hemisphere>"
 
