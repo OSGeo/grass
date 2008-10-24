@@ -102,7 +102,7 @@ else
        exit 1
     fi
 
-   table=`v.db.connect $GIS_OPT_INPUT -g | grep -w $GIS_OPT_LAYER | awk '{print $2}'`
+   table=`v.db.connect $GIS_OPT_INPUT -g fs=";" | grep -w $GIS_OPT_LAYER | awk -F ";" '{print $2}'`
    if [ -z "$table" ] ; then
       g.message -e 'There is no table connected to this map!'
       exit 1

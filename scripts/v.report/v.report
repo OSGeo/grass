@@ -143,7 +143,7 @@ fi
 if [ $TABLEEXISTS -eq 1 ] ; then
    v.db.select -c map="$MAP" layer="$LAYER" | sort -n -t'|' -k 1 | grep -v '^0' > "$TMP1"
    if [ `wc -l "$TMP1" | awk '{print $1}'` -eq 0 ] ; then
-      KEY=`v.db.connect -g map="$GIS_OPT_MAP" | grep -w "$LAYER" | cut -f3 -d" "`
+      KEY=`v.db.connect -g map="$GIS_OPT_MAP" fs=";" | grep -w "$LAYER" | cut -f3 -d';'`
       g.message -e "There is a table connected to input vector map '$MAP', but\
       there are no categories present in the key column '$KEY'. Consider using\
       v.to.db to correct this."

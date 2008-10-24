@@ -177,7 +177,7 @@ if [ $? -ne 0 ] ; then
 fi
 
 # connect the map to the DB:
-v.db.connect map="$GIS_OPT_MAP" database="$database" driver="$driver" \
+v.db.connect map="$GIS_OPT_MAP" database="${database}" driver="$driver" \
    layer="$GIS_OPT_LAYER" table="$table" key=cat
 
 # finally we have to add cats into the attribute DB to make modules such as v.what.rast happy:
