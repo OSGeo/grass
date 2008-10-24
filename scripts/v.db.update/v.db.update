@@ -127,10 +127,10 @@ fi
 if [ -n "$GIS_OPT_WHERE" ]
   then
     echo "UPDATE $table SET $GIS_OPT_COLUMN=$value WHERE $GIS_OPT_WHERE" |
-       db.execute database="$database" driver="$driver"
+       db.execute database="${database}" driver=${driver}
 else
     echo "UPDATE $table SET $GIS_OPT_COLUMN=$value" | \
-       db.execute database="$database" driver="$driver"
+       db.execute database="${database}" driver=${driver}
 fi
 
 # write cmd history:

@@ -72,7 +72,7 @@ fi
 for VECT in `g.list type=vect mapset=${MAPSET} | sed 1,2d | grep -v '^-*$'`
 do
     g.message message="Reconnecting vector '${VECT}@${MAPSET}'"
-    for LINK in `v.db.connect -g map=${VECT}@${MAPSET} | tr ' ' '|'`
+    for LINK in `v.db.connect -g fs=";" map=${VECT}@${MAPSET} | tr ';' '|'`
     do
         eval `echo $LINK | sed 's$\([^\|]*\)|\([^\|]*\)|\([^\|]*\)|\([^\|]*\)|\([^\|]*\)$LAYER=\1 SCHEMA_TABLE=\2 KEY=\3 DATABASE=\4 DRIVER=\5$'`
 
@@ -90,7 +90,7 @@ do
         if [ "$DATABASE" = "$OLD_DATABASE" -a "$SCHEMA" = "$OLD_SCHEMA" ]
 	then
 	   g.message "    Reconnecting layer $LAYER"
-	   CMD="v.db.connect -o map=${VECT}@${MAPSET} layer=$LAYER driver=$DRIVER database=$NEW_DATABASE table=$NEW_SCHEMA_TABLE key=$KEY"
+	   CMD="v.db.connect -o map=${VECT}@${MAPSET} layer=$LAYER driver=$DRIVER database=${NEW_DATABASE} table=$NEW_SCHEMA_TABLE key=$KEY"
 	   g.message message="$CMD"
 	   $CMD
 	else 

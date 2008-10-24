@@ -101,7 +101,7 @@ if [ $force -eq 0 ] ; then
 fi
 
 
-echo "DROP TABLE $table" | db.execute database=$database driver=$driver
+echo "DROP TABLE $table" | db.execute database="${database}" driver=${driver}
 if [ $? -eq 1 ] ; then
   	g.message -e "Cannot continue (problem deleting column)."
     	exit 1

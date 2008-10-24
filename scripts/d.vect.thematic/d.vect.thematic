@@ -351,9 +351,9 @@ if [ "$GIS_FLAG_S" -eq 1 ] ; then
     export GRASS_PNG_AUTO_WRITE
 fi
 
-table=`v.db.connect $GIS_OPT_MAP -g | grep -w $GIS_OPT_LAYER | awk '{print $2}'`
-database=`v.db.connect $GIS_OPT_MAP -g | grep -w $GIS_OPT_LAYER | awk '{print $4}'`
-driver=`v.db.connect $GIS_OPT_MAP -g | grep -w $GIS_OPT_LAYER | awk '{print $5}'`
+table=`v.db.connect $GIS_OPT_MAP -g fs=";" | grep -w $GIS_OPT_LAYER | awk -F ";" '{print $2}'`
+database=`v.db.connect $GIS_OPT_MAP -g fs=";" | grep -w $GIS_OPT_LAYER | awk -F ";" '{print $4}'`
+driver=`v.db.connect $GIS_OPT_MAP -g fs=";" | grep -w $GIS_OPT_LAYER | awk -F ";" '{print $5}'`
 
 if [ -z "$table" ]
     then
@@ -366,7 +366,7 @@ if [ "$GIS_FLAG_U" -eq 1 ] ; then
     # test, if the column GRASSRGB is in the table
     if [ -z "`db.columns table=$table database=$database driver=$driver| grep -i grassrgb`" ] ; then
         g.message message="Creating column 'grassrgb' in table '$table'"
-        echo "ALTER TABLE $table ADD COLUMN grassrgb varchar(11)" | db.execute database=$database
+        echo "ALTER TABLE $table ADD COLUMN grassrgb varchar(11)" | database="${database}" driver=${driver}
     fi
 fi
 
@@ -756,7 +756,7 @@ if [ "$GIS_OPT_THEMETYPE" = "graduated_colors" ] ; then
         # update color to database?
         if [ $GIS_FLAG_U -eq 1 ] ; then
             echo "UPDATE $table SET GRASSRGB = '$themecolor' WHERE\
-                $sqlwhere" | db.execute database=$database
+                $sqlwhere" | db.execute database="${database}" driver=${driver}
         fi
                
         # Create group for GIS Manager
@@ -1057,7 +1057,7 @@ if [ "$GIS_OPT_THEMETYPE" = "graduated_points" -o "$GIS_OPT_THEMETYPE" = "gradua
         # update color to database?
         if [ $GIS_FLAG_U -eq 1 ] ; then
             echo "UPDATE $table SET GRASSRGB = '$themecolor' WHERE\
-                $sqlwhere" | db.execute database=$database
+                $sqlwhere" | db.execute database="${database}" driver=${driver}
         fi
       
         # Create group for GIS Manager

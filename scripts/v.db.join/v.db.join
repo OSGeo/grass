@@ -73,15 +73,15 @@ fi
 
 PROG=`basename $0`
 
-driver=`v.db.connect -g map="$GIS_OPT_MAP" | grep "^$GIS_OPT_LAYER " | cut -d' ' -f5`
-database=`v.db.connect -g map="$GIS_OPT_MAP" | grep "^$GIS_OPT_LAYER " | cut -d' ' -f4`
+driver=`v.db.connect -g map="$GIS_OPT_MAP" fs=";" | grep "^$GIS_OPT_LAYER " | cut -d';' -f5`
+database=`v.db.connect -g map="$GIS_OPT_MAP" fs=";" | grep "^$GIS_OPT_LAYER " | cut -d';' -f4`
 
 if [ "$driver" = "dbf" ] ; then
    g.message -e "JOIN is not supported for tables stored in DBF format."
    exit 1
 fi
 
-maptable=`v.db.connect -g map="$GIS_OPT_MAP" | grep "^$GIS_OPT_LAYER " | cut -d' ' -f2`
+maptable=`v.db.connect -g map="$GIS_OPT_MAP" fs=";" | grep "^$GIS_OPT_LAYER " | cut -d';' -f2`
 if [ -z "$maptable" ] ; then
    g.message 'There is no table connected to this map! Cannot join any column.'
    cleanup
@@ -109,7 +109,7 @@ for col in $COLLIST ; do
 	exit 1
   fi
   echo "UPDATE $maptable SET $col=(SELECT $col
-        FROM $GIS_OPT_OTABLE WHERE $GIS_OPT_OTABLE.$GIS_OPT_OCOLUMN=$maptable.$GIS_OPT_COLUMN);" | db.execute driver=$driver database=$database
+        FROM $GIS_OPT_OTABLE WHERE $GIS_OPT_OTABLE.$GIS_OPT_OCOLUMN=$maptable.$GIS_OPT_COLUMN);" | db.execute database="${database}" driver=${driver}
   i=`expr $i + 1`
 done
 

@@ -318,7 +318,7 @@ done
 
 
 g.message -v "Updating the database ..."
-db.execute input="$SQLTMP" database="$DB_DATABASE" driver="$DB_SQLDRIVER"
+db.execute input="$SQLTMP" database="${DB_DATABASE}" driver="$DB_SQLDRIVER"
 EXITCODE=$?
 
 
