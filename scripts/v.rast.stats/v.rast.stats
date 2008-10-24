@@ -197,7 +197,7 @@ fi
 
 #check if DBF driver used, in this case cut to 10 chars col names:
 DBFDRIVER=0
-v.db.connect -g "$VECTOR" | grep -w "$GIS_OPT_LAYER" | cut -d' ' -f5 | grep -i dbf --quiet
+v.db.connect -g "$VECTOR" fs=";" | grep -w "$GIS_OPT_LAYER" | cut -d';' -f5 | grep -i dbf --quiet
 if [ $? -eq 0 ] ; then
    DBFDRIVER=1
 else
@@ -205,11 +205,11 @@ else
    DBFDRIVER=0
 fi
 # we need this for non-DBF driver:
-DB_SQLDRIVER=`v.db.connect -g "$VECTOR" | cut -d' ' -f5`
-DB_DATABASE="`v.db.connect -g "$VECTOR" | cut -d' ' -f4`"
+DB_SQLDRIVER=`v.db.connect -g "$VECTOR" fs=";" | cut -d';' -f5`
+DB_DATABASE="`v.db.connect -g "$VECTOR" fs=";" | cut -d';' -f4`"
 
 #Find out which table is linked to the vector map on the given layer
-TABLE=`v.db.connect map="$VECTOR" -g | grep -w "$GIS_OPT_LAYER" | awk '{print $2}'`
+TABLE=`v.db.connect map="$VECTOR" -g fs=";" | grep -w "$GIS_OPT_LAYER" | awk -F ";" '{print $2}'`
 if [ -z "$TABLE" ] ; then
    g.message -e 'There is no table connected to this map! Run v.db.connect or v.db.addtable first.'
    exit 1
