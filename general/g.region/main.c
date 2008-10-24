@@ -43,11 +43,7 @@ int main(int argc, char *argv[])
     struct
     {
 	struct Flag
-	    *update,
-	    *print,
-	    *gprint,
-	    *lprint,
-	    *eprint,
+	    *update, *print, *gprint, *lprint, *eprint, *nangle,
 	    *center, *res_set, *dist_res, *dflt, *z, *savedefault, *bbox;
     } flag;
     struct
@@ -104,6 +100,14 @@ int main(int argc, char *argv[])
     flag.dist_res->description =
 	_("Print region resolution in meters (geodesic)");
     flag.dist_res->guisection = _("Print");
+
+    flag.nangle = G_define_flag();
+    flag.nangle->key = 'n';
+    flag.nangle->label = _("Print the convergence angle (degrees CCW)");
+    flag.nangle->description =
+	_("The difference between the projection's grid north and true north, "
+	  "measured at the center coordinates of the current region.");
+    flag.nangle->guisection = _("Print");
 
     flag.z = G_define_flag();
     flag.z->key = '3';
@@ -351,6 +355,9 @@ int main(int argc, char *argv[])
 
     if (flag.center->answer)
 	print_flag |= PRINT_CENTER;
+
+    if (flag.nangle->answer)
+	print_flag |= PRINT_NANGLE;
 
     if (flag.dist_res->answer)
 	print_flag |= PRINT_METERS;
