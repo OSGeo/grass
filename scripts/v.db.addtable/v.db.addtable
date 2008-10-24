@@ -125,13 +125,13 @@ if [ $? -ne 0 ] ; then
    driver=`db.connect -p | grep '^driver' | cut -d':' -f2`
 else
    # there is a definition for layer 1, so we check for the user defined layer
-   database=`v.db.connect map="$GIS_OPT_MAP" -g | grep -w "$QUERYLAYER" | awk '{print $4}'`
+   database=`v.db.connect map="$GIS_OPT_MAP" -g fs=";" | grep -w "$QUERYLAYER" | awk -F ";" '{print $4}'`
    if [ -z "database" ] ; then
       #nothing on user defined layer, so we use the default mapset settings in this case:
       database=`db.connect -p | grep '^database' | cut -d':' -f2`
       driver=`db.connect -p | grep '^driver' | cut -d':' -f2`
    else
-      driver=`v.db.connect map="$GIS_OPT_MAP" -g | grep -w "$QUERYLAYER" | awk '{print $5}'`
+      driver=`v.db.connect map="$GIS_OPT_MAP" -g fs=";" | grep -w "$QUERYLAYER" | awk -F ";" '{print $5}'`
    fi
 fi
 

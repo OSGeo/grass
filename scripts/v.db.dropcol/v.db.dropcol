@@ -97,15 +97,15 @@ if [ ! "$file" ] ; then
    exit 1
 fi
 
-table=`v.db.connect map=$GIS_OPT_MAP -g | grep -w $GIS_OPT_LAYER | cut -f2 -d" "`
+table=`v.db.connect map=$GIS_OPT_MAP -g fs=";" | grep -w $GIS_OPT_LAYER | cut -f2 -d";"`
 if [ -z "$table" ] ; then
    g.message -e 'There is no table connected to the input vector map! Cannot delete any column'
    cleanup
    exit 1
 fi
-keycol=`v.db.connect -g map=$GIS_OPT_MAP | grep -w $GIS_OPT_LAYER | cut -f3 -d' '`
-database=`v.db.connect -g map=$GIS_OPT_MAP | grep -w $GIS_OPT_LAYER | cut -f4 -d' '`
-driver=`v.db.connect -g map=$GIS_OPT_MAP | grep -w $GIS_OPT_LAYER | cut -f5 -d' '`
+keycol=`v.db.connect -g fs=";" map=$GIS_OPT_MAP | grep -w $GIS_OPT_LAYER | cut -f3 -d';'`
+database=`v.db.connect -g fs=";" map=$GIS_OPT_MAP | grep -w $GIS_OPT_LAYER | cut -f4 -d';'`
+driver=`v.db.connect -g fs=";" map=$GIS_OPT_MAP | grep -w $GIS_OPT_LAYER | cut -f5 -d';'`
 col="$GIS_OPT_COLUMN"
 
 if [ "$col" = "$keycol" ] ; then

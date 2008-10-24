@@ -78,7 +78,7 @@ if [ -z "$GIS_OPT_TABLE" ] ; then
        g.message -e "An error occured while running v.db.connect"
        exit 1
     fi
-    table=`v.db.connect map="$GIS_OPT_MAP" -g | grep -w "$GIS_OPT_LAYER" | awk '{print $2}'`
+    table=`v.db.connect map="$GIS_OPT_MAP" -g fs=";" | grep -w "$GIS_OPT_LAYER" | awk -F ";" '{print $2}'`
     if [ -z $table ] ; then
        g.message -e "No table assigned to layer <$GIS_OPT_LAYER>"
        exit 1
@@ -86,7 +86,7 @@ if [ -z "$GIS_OPT_TABLE" ] ; then
     # Removing table name connected to selected layer
 else
     # Removing user specified table
-    existingtable=`v.db.connect map="$GIS_OPT_MAP" -g | grep -w "$GIS_OPT_LAYER" | awk '{print $2}'`
+    existingtable=`v.db.connect map="$GIS_OPT_MAP" -g fs=";" | grep -w "$GIS_OPT_LAYER" | awk -F ";" '{print $2}'`
     table=$GIS_OPT_TABLE
     if [ "$existingtable" != "$table" ] ; then
        g.message -e "User selected table <$table> but the table <$existingtable> is linked to layer <$GIS_OPT_LAYER>" 
@@ -100,8 +100,8 @@ if [ $? -ne 0 ] ; then
    g.message -e "An error occured while running v.db.connect" 
    exit 1
 fi
-database=`v.db.connect map="$GIS_OPT_MAP" -g | grep -w "$GIS_OPT_LAYER" | awk '{print $4}'`
-driver=`v.db.connect map="$GIS_OPT_MAP" -g | grep -w "$GIS_OPT_LAYER" | awk '{print $5}'`
+database=`v.db.connect map="$GIS_OPT_MAP" -g fs=";" | grep -w "$GIS_OPT_LAYER" | awk -F ";" '{print $4}'`
+driver=`v.db.connect map="$GIS_OPT_MAP" -g fs=";" | grep -w "$GIS_OPT_LAYER" | awk -F ";" '{print $5}'`
 
 g.message "Removing table <$table> linked to layer <$GIS_OPT_LAYER> of vector map <$GIS_OPT_MAP>" 
 
