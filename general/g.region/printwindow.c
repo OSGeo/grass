@@ -1,9 +1,14 @@
 #include <string.h>
 #include <stdlib.h>
+#include <projects.h>
 #include <grass/gis.h>
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
+
+#define DEG2RAD(a) ((a) * M_PI / 180.0)
+#define RAD2DEG(a) ((a) * 180.0 / M_PI)
+
 
 int print_window(struct Cell_head *window, int print_flag)
 {
@@ -53,7 +58,7 @@ int print_window(struct Cell_head *window, int print_flag)
     if (print_flag & PRINT_CENTER || print_flag & PRINT_MBBOX)
 	width = 16;
 
-    if (print_flag & PRINT_LL)
+    if (print_flag & PRINT_LL || print_flag & PRINT_NANGLE)
 	width = 18;
 
     if (print_flag & PRINT_EXTENT)
@@ -461,6 +466,122 @@ int print_window(struct Cell_head *window, int print_flag)
 		fprintf(stdout, "%-*s %s\n", width, "east-west center:", buf);
 	    }
 	}
+    }
+
+    /* flag.nangle */
+    if (print_flag & PRINT_NANGLE) {
+	double convergence;
+
+	if (G_projection() == PROJECTION_XY)
+	    convergence = 0./0.;
+	else if (G_projection() == PROJECTION_LL)
+	    convergence = 0.0;
+	else {
+	    struct Key_Value *in_proj_info, *in_unit_info;
+	    double lo1, la1, lo2, la2, lo3, la3, lo4, la4;
+	    double mid_n_lo, mid_n_la, mid_s_lo, mid_s_la;
+	    double lat_center, lon_center;
+	    struct pj_info iproj, oproj;	/* proj parameters  */
+	    struct FACTORS fact;
+
+	    /* read current projection info */
+	    if ((in_proj_info = G_get_projinfo()) == NULL)
+		G_fatal_error(_("Can't get projection info of current location"));
+
+	    if ((in_unit_info = G_get_projunits()) == NULL)
+		G_fatal_error(_("Can't get projection units of current location"));
+
+	    if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
+		G_fatal_error(_("Can't get projection key values of current location"));
+
+	    /*  output projection to lat/long w/ same ellipsoid as input */
+	    oproj.zone = 0;
+	    oproj.meters = 1.;
+	    sprintf(oproj.proj, "ll");
+	    if ((oproj.pj = pj_latlong_from_proj(iproj.pj)) == NULL)
+		G_fatal_error(_("Unable to update lat/long projection parameters"));
+
+	    /* for DEBUG
+	       pj_print_proj_params(&iproj, &oproj);
+	     */
+
+	    /* do the transform
+	     * syntax: pj_do_proj(outx, outy, in_info, out_info) 
+	     *
+	     *  1 ------ 2
+	     *  |        |  map corners
+	     *  |        |
+	     *  4--------3
+	     */
+
+	    latitude = window->north;
+	    longitude = window->west;
+	    if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0)
+		G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
+
+	    lo1 = longitude;
+	    la1 = latitude;
+
+	    latitude = window->north;
+	    longitude = window->east;
+	    if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0)
+		G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
+
+	    lo2 = longitude;
+	    la2 = latitude;
+
+	    latitude = window->south;
+	    longitude = window->east;
+	    if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0)
+		G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
+
+	    lo3 = longitude;
+	    la3 = latitude;
+
+	    latitude = window->south;
+	    longitude = window->west;
+	    if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0)
+		G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
+
+	    lo4 = longitude;
+	    la4 = latitude;
+
+	    /* 
+	     * map corners and side mids:
+	     *          mid_n
+	     *       1 ---+---2
+	     *       |        |
+	     * mid_w +        + mid_e 
+	     *       |        |
+	     *       4----+---3
+	     *          mid_s
+	     *
+	     * lo: longitude
+	     * la: latitude
+	     */
+
+	    /* side mids for easting, northing center: */
+	    mid_n_lo = (lo2 + lo1) / 2.;
+	    mid_n_la = (la2 + la1) / 2.;
+	    mid_s_lo = (lo3 + lo4) / 2.;
+	    mid_s_la = (la3 + la4) / 2.;
+
+	    lat_center = (mid_n_la + mid_s_la) / 2.;
+	    lon_center = (mid_n_lo + mid_s_lo) / 2.;
+
+	    LP lp = { DEG2RAD(lon_center), DEG2RAD(lat_center) };
+	    pj_factors(lp, iproj.pj, 0.0, &fact);
+	    convergence = RAD2DEG(fact.conv);
+
+	    G_free_key_value(in_proj_info);
+	    G_free_key_value(in_unit_info);
+	}
+
+	if (print_flag & PRINT_SH)
+	    fprintf(stdout, "converge_angle=%f\n", convergence);
+	else
+	    fprintf(stdout, "%-*s %f\n", width, "convergence angle:",
+		    convergence);
     }
 
     /* flag.bbox

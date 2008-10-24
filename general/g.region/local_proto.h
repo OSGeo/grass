@@ -9,6 +9,7 @@
 #define PRINT_METERS 0x20
 #define PRINT_3D     0x40
 #define PRINT_MBBOX  0x80
+#define PRINT_NANGLE 0x100
 
 /* adjust.c */
 int adjust_window(struct Cell_head *, int, int, int);
