@@ -200,12 +200,12 @@ int GP_load_site(int id, const char *filename)
    Note: char array is allocated by G_store()
 
    \param id point set id
-   \param[out] filename point set filename
+   \param[out] &filename point set filename
 
    \return -1 on error (point set not found)
    \return 1 on success
  */
-int GP_get_sitename(int id, char *filename)
+int GP_get_sitename(int id, char **filename)
 {
     geosite *gp;
 
@@ -213,7 +213,7 @@ int GP_get_sitename(int id, char *filename)
 	return (-1);
     }
 
-    filename = G_store(gp->filename);
+    *filename = G_store(gp->filename);
 
     return (1);
 }

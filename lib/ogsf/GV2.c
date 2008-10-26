@@ -198,12 +198,12 @@ int GV_load_vector(int id, const char *filename)
    Note: char array is allocated by G_store()
 
    \param id vector set id
-   \param filename filename
+   \param filename &filename
 
    \return -1 on error (invalid vector set id)
    \return 1 on success
  */
-int GV_get_vectname(int id, char *filename)
+int GV_get_vectname(int id, char **filename)
 {
     geovect *gv;
 
@@ -211,7 +211,7 @@ int GV_get_vectname(int id, char *filename)
 	return (-1);
     }
 
-    filename = G_store(gv->filename);
+    *filename = G_store(gv->filename);
 
     return (1);
 }
