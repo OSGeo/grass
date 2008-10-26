@@ -8,6 +8,8 @@ svn co svn://svn.debian.org/pkg-grass/packages/grass/branches/6.3/debian .
 # After that, you can build current version of GRASS with
 
 dpkg-buildpackage -rfakeroot
+  or
+debuild binary
 
 # in main GRASS source directory. After the packages are generated, you can
 # install them with
