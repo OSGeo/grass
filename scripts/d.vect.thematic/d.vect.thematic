@@ -366,7 +366,7 @@ if [ "$GIS_FLAG_U" -eq 1 ] ; then
     # test, if the column GRASSRGB is in the table
     if [ -z "`db.columns table=$table database=$database driver=$driver| grep -i grassrgb`" ] ; then
         g.message message="Creating column 'grassrgb' in table '$table'"
-        echo "ALTER TABLE $table ADD COLUMN grassrgb varchar(11)" | database="${database}" driver=${driver}
+        echo "ALTER TABLE $table ADD COLUMN grassrgb varchar(11)" | db.execute database="${database}" driver=${driver}
     fi
 fi
 
