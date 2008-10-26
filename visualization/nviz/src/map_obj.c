@@ -1584,7 +1584,7 @@ int get_att(int id, int type, Nv_data * data, Tcl_Interp * interp, int argc,
 
     case VECT:{
 	    int mem, color, width, flat;
-	    char temp[128];
+	    char temp[128], *tempname;
 
 	    GV_get_vectmode(id, &mem, &color, &width, &flat);
 	    switch (sv_att_atoi(argv[2])) {
@@ -1600,8 +1600,8 @@ int get_att(int id, int type, Nv_data * data, Tcl_Interp * interp, int argc,
 		Tcl_SetResult(interp, temp, TCL_VOLATILE);
 		break;
 	    case SV_ATT_MAP:
-		GV_get_vectname(id, temp);
-		Tcl_SetResult(interp, temp, TCL_VOLATILE);
+		GV_get_vectname(id, &tempname);
+		Tcl_SetResult(interp, tempname, TCL_VOLATILE);
 		break;
 	    }
 	}
@@ -1610,7 +1610,7 @@ int get_att(int id, int type, Nv_data * data, Tcl_Interp * interp, int argc,
     case SITE:{
 	    int atmod, color, width, marker, use_z;
 	    float size;
-	    char temp[128];
+	    char temp[128], *tempname;
 
 	    GP_get_sitemode(id, &atmod, &color, &width, &size, &marker);
 	    GP_get_zmode(id, &use_z);
@@ -1669,8 +1669,8 @@ int get_att(int id, int type, Nv_data * data, Tcl_Interp * interp, int argc,
 
 		break;
 	    case SV_ATT_MAP:
-		GP_get_sitename(id, temp);
-		Tcl_SetResult(interp, temp, TCL_VOLATILE);
+		GP_get_sitename(id, &tempname);
+		Tcl_SetResult(interp, tempname, TCL_VOLATILE);
 		break;
 	    }
 	}
