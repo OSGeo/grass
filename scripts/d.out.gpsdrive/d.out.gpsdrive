@@ -9,7 +9,7 @@
 #
 # PURPOSE:      Export display monitor to a gpsdrive compatible image
 #
-# COPYRIGHT:    (c) 2005 The GRASS Development Team
+# COPYRIGHT:    (c) 2005-2008 The GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
@@ -33,9 +33,20 @@
 #    2817 is maybe someones screen dpi converted to pixels/meter??
 #
 #  At scales wider than say 1:250,000 the curvatute of the Earth really starts
-#   to play havoc with gpsDrive's simple projection system if you are using
+#   to play havoc with GpsDrive's simple projection system if you are using
 #   a UTM or other non-lat/lon projection. Best to use output from a lat/lon
-#   location in that case.
+#   location in that case. i.e. to avoid distortion, anything more global than
+#   1:150k to 1:500k should use "top_*".
+#
+# Beware  if you are using an image originating from a map projection with
+# a significant deviation between true  north  and  the  map  projection's
+# local  +y  direction  (known as the Convergence Angle). GpsDrive assumes
+# that true north is always directly up! i.e. the Central Meridian of  the
+# map projection is located at the map tile's center. For some map projec-
+# tions and areas of the country this can be a really bad  assumption  and
+# your  map  will be significantly rotated. This effect is most visible at
+# map scales covering a large area. This does not affect lat/lon maps.
+# The pnmrotate program may help, or gdalwarp to a custom map-centered tmerc.
 #
 # A series of 1:50,000 maps may not be so bad.
 #   This translates to approx a 22.7km x 18.2km image window in the GIS.
@@ -50,6 +61,8 @@
 #   export GRASS_HEIGHT=512
 #   d.mon x0
 #
+#############################################################################
+
 
 #%Module
 #%  description: Export display monitor to a GpsDrive compatible backdrop image
@@ -59,7 +72,7 @@
 #% key: output
 #% type: string
 #% gisprompt: new_file,file,output
-#% description: name for new map image (lives in ~/.gpsdrive)
+#% description: name for new map image (lives in ~/.gpsdrive/maps/)
 #% required : yes
 #%end
 #%flag
@@ -98,12 +111,12 @@ LC_NUMERIC=C
 export LC_NUMERIC
 
 
-if [ ! -d "$HOME/.gpsdrive" ] ; then
-    mkdir "$HOME/.gpsdrive"
+if [ ! -d "$HOME/.gpsdrive/maps" ] ; then
+    mkdir -p "$HOME/.gpsdrive/maps"
 fi
 
 # GpsDrive scales maps named top_* as lat/lon (1:1) on-screen
-# GpsDrive scales maps named map_* as UTM-like (1:cos(lat) ?) on-screen
+# GpsDrive scales maps named map_* as UTM-like (1:cos(lat) ) on-screen
 PROJ=`g.region -p | grep ^proj | cut -f2 -d' '`
 if [ "$PROJ" -eq 3 ] ; then
    IS_LATLON=1
@@ -112,11 +125,16 @@ else
    IS_LATLON=0
    TYPE="map"
    if [ "$PROJ" -ne 1 ] ; then
-      g.message "GpsDrive assumes northings are not rotated compared to true-geographic north."
-      g.message "If you are using a projection with significant curvature away from the central"
-      g.message 'meridian, then you will likely end up with a distorted background map!'
-      g.message "Keeping the area small will lessen the error, but not eliminate it."
-      g.message "Consider output from a Lat/Lon location."
+      g.message message="GpsDrive assumes northings are not rotated compared "\
+"to true-geographic north. If you are using a projection with significant "\
+"curvature away from the central meridian, then you will likely end up with "\
+'a distorted background map! '\
+"Keeping the area small will lessen the error, but not eliminate it. "\
+"Consider output from a Lat/Lon location if the convergence angle is "\
+"more than a couple of degrees."
+      g.region -n
+
+	# TODO: add a flag to correct for convergence angle with pnmrotate
    fi
 fi
 
@@ -130,7 +148,7 @@ export GRASS_HEIGHT
 # get rid of no or double extension
 output="${TYPE}_`basename $GIS_OPT_OUTPUT .png`.png"
 
-GRASS_PNGFILE="$HOME/.gpsdrive/$output"
+GRASS_PNGFILE="$HOME/.gpsdrive/maps/$output"
 export GRASS_PNGFILE
 
 # As .jpg output will overwrite .png of the same name, we check,
@@ -158,17 +176,17 @@ curr_mon=`d.mon -p | awk '{printf "%s", $4}'`
 
 #export display to PNG driver
 dsave=`d.save -a`
-d.mon start=PNG
+d.mon start=PNG --quiet
   FRAME_DIMS="`d.info -b | cut -f2- -d' '`"
   eval "$dsave"
-d.mon stop=PNG
+d.mon stop=PNG --quiet
 #reset
 sleep 1
 d.mon select="$curr_mon"
 
 if [ "$GIS_FLAG_J" -eq 1 ] ; then
    out_jpeg="`basename $output .png`.jpg"
-   cd "$HOME/.gpsdrive"
+   cd "$HOME/.gpsdrive/maps/"
    sync  # sleep 1
    pngtopnm "$output" | pnmtojpeg > "$out_jpeg"
    rm -f "$output"
@@ -181,28 +199,26 @@ FRAME_WIDTH="`echo $FRAME_DIMS | awk '{printf("%f", $2 - $1)}'`"
 FRAME_HEIGHT="`echo $FRAME_DIMS | awk '{printf("%f", $4 - $3)}'`"
 
 if [ $IS_LATLON -eq 0 ] ; then
-   LAT=`g.region -l | grep 'Center lat' | cut -f2 -d'[' | sed -e 's/]$//'`
-   LON=`g.region -l | grep 'Center lon' | cut -f2 -d'[' | sed -e 's/]$//'`
+   LAT=`g.region -lg | grep 'center_lat' | cut -f2 -d'='`
+   LON=`g.region -lg | grep 'center_long' | cut -f2 -d'='`
 
    M_PER_PIXEL=`echo $e $w $FRAME_WIDTH | awk '{printf("%f", ($1 - $2) / $3)}'`
 else
-   LAT=`g.region -c | grep 'northing' | cut -f2 -d':' | awk '{print $1}'`
-   LON=`g.region -c | grep 'easting' | cut -f2 -d':' | awk '{print $1}'`
+   LAT=`g.region -cg | grep 'northing' | cut -f2 -d'='`
+   LON=`g.region -cg | grep 'easting' | cut -f2 -d'='`
 
-   EXTENT=`g.region -e | grep 'north-south extent' | cut -f2 -d':' | awk '{print $1}'`
+   EXTENT=`g.region -eg | grep 'ns_extent' | cut -f2 -d'='`
    M_PER_PIXEL=`echo $EXTENT $FRAME_HEIGHT | awk '{printf("%f", ($1 * 1852*60.) / $2)}'`
 fi
 
 SCALE=`echo $M_PER_PIXEL | awk '{printf("%d", 0.5 + ($1 * 2817.947378) )}'`
 
 if [ $IS_LATLON -eq 0 ] && [ "$SCALE" -ge 125000 ] ; then
-   g.message -w "Projected input maps may be somewhat inaccurate at this scale."
+   g.message -w "Projected input maps may be somewhat inaccurate at this scale. Better to use lat/lon"
 fi
 
-echo "$output $LAT $LON $SCALE" >> "$HOME/.gpsdrive/map_koord.txt"
+echo "$output $LAT $LON $SCALE" >> "$HOME/.gpsdrive/maps/map_koord.txt"
 
-g.message "Center lat,lon is [$LAT,$LON]"
-g.message "Scale is [1:${SCALE}]"
+g.message -v "Center lat,lon is [$LAT,$LON],  scale is [1:${SCALE}]"
 
 g.message "Done."
-
