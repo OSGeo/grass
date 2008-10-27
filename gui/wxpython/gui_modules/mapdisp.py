@@ -736,6 +736,18 @@ class BufferedWindow(MapWindow, wx.Window):
             if item and self.tree.IsItemChecked(item):
                 self.parent.digit.driver.DrawMap()
 
+            # translate tmp objects (pointer position)
+            if digitToolbar.GetAction() == 'moveLine':
+                if  hasattr(self, "vdigitMove") and \
+                        self.vdigitMove.has_key('beginDiff'):
+                    # move line
+                    for id in self.vdigitMove['id']:
+                        # print self.pdcTmp.GetIdBounds(id)
+                        self.pdcTmp.TranslateId(id,
+                                                self.vdigitMove['beginDiff'][0],
+                                                self.vdigitMove['beginDiff'][1])
+                    del self.vdigitMove['beginDiff']
+        
         #
         # render overlays
         #
@@ -758,6 +770,7 @@ class BufferedWindow(MapWindow, wx.Window):
         #
         if len(self.polycoords) > 0:
             self.DrawLines(self.pdcTmp)
+        
         if self.parent.gismanager.georectifying:
             # -> georectifier (redraw GCPs)
             if self.parent.toolbars['georect']:
@@ -781,7 +794,7 @@ class BufferedWindow(MapWindow, wx.Window):
 
         Debug.msg (2, "BufferedWindow.UpdateMap(): render=%s, renderVector=%s -> time=%g" % \
                    (render, renderVector, (stop-start)))
-
+        
         return True
 
     def DrawCompRegionExtent(self):
@@ -952,7 +965,7 @@ class BufferedWindow(MapWindow, wx.Window):
 
         if not polycoords:
             polycoords = self.polycoords
-
+        
         if len(polycoords) > 0:
             self.plineid = wx.ID_NEW + 1
             # convert from EN to XY
@@ -1193,7 +1206,7 @@ class BufferedWindow(MapWindow, wx.Window):
                     # add new point to the line
                     self.polycoords.append(self.Pixel2Cell(event.GetPositionTuple()[:]))
                     self.DrawLines(pdc=self.pdcTmp)
-
+            
             elif digitToolbar.GetAction() == "editLine" and hasattr(self, "vdigitMove"):
                 self.polycoords.append(self.Pixel2Cell(self.mouse['begin']))
                 self.vdigitMove['id'].append(wx.NewId())
@@ -1913,7 +1926,8 @@ class BufferedWindow(MapWindow, wx.Window):
         # digitization tool
         if self.mouse["use"] == "pointer" and digitToolbar:
             digitClass = self.parent.digit
-            if (digitToolbar.GetAction() == "addLine" and digitToolbar.GetAction('type') in ["line", "boundary"]) or \
+            if (digitToolbar.GetAction() == "addLine" and \
+                    digitToolbar.GetAction('type') in ["line", "boundary"]) or \
                     digitToolbar.GetAction() == "editLine":
                 # add line or boundary -> remove last point from the line
                 try:
@@ -1984,11 +1998,6 @@ class BufferedWindow(MapWindow, wx.Window):
                     and hasattr(self, "vdigitMove"):
                 dx = self.mouse['end'][0] - self.mouse['begin'][0]
                 dy = self.mouse['end'][1] - self.mouse['begin'][1]
-                if self.vdigitMove.has_key('beginDiff'):
-                    if digitToolbar.GetAction() == 'moveLine':
-                        dx += self.vdigitMove['beginDiff'][0]
-                        dy += self.vdigitMove['beginDiff'][1]
-                    del self.vdigitMove['beginDiff']
                 
                 if len(self.vdigitMove['id']) > 0:
                     # draw lines on new position
@@ -2168,12 +2177,10 @@ class BufferedWindow(MapWindow, wx.Window):
             ce = newreg['w'] + (newreg['e'] - newreg['w']) / 2
             cn = newreg['s'] + (newreg['n'] - newreg['s']) / 2
             if hasattr(self, "vdigitMove"):
-                xo = self.Cell2Pixel((self.Map.region['center_easting'], self.Map.region['center_northing']))
-                xn = self.Cell2Pixel((ce, cn))
-                self.vdigitMove['beginDiff'] = (xn[0] - xo[0], xn[1] - xo[1])
-                for id in self.vdigitMove['id']:
-                    self.pdcTmp.RemoveId(id)
-                
+                # xo = self.Cell2Pixel((self.Map.region['center_easting'], self.Map.region['center_northing']))
+                # xn = self.Cell2Pixel(ce, cn))
+                tmp = self.Pixel2Cell(self.mouse['end'])
+            
             # calculate new center point and display resolution
             self.Map.region['center_easting'] = ce
             self.Map.region['center_northing'] = cn
@@ -2181,6 +2188,15 @@ class BufferedWindow(MapWindow, wx.Window):
             self.Map.region["nsres"] = (newreg['n'] - newreg['s']) / self.Map.height
             self.Map.AlignExtentFromDisplay()
 
+            if hasattr(self, "vdigitMove"):
+                tmp1 = self.mouse['end']
+                tmp2 = self.Cell2Pixel(self.vdigitMove['begin'])
+                dx = tmp1[0] - tmp2[0]
+                dy = tmp1[1] - tmp2[1]
+                self.vdigitMove['beginDiff'] = (dx, dy)
+                for id in self.vdigitMove['id']:
+                    self.pdcTmp.RemoveId(id)
+            
             self.ZoomHistory(self.Map.region['n'], self.Map.region['s'],
                              self.Map.region['e'], self.Map.region['w'])
 
@@ -2885,7 +2901,7 @@ class MapFrame(wx.Frame):
                                                  (e, n, distance_seg, distance_tot), 0)
             else:
                 self.statusbar.SetStatusText("%.2f, %.2f" % (e, n), 0)
-
+        
         event.Skip()
 
     def OnDraw(self, event):
