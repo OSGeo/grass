@@ -3,14 +3,23 @@
 <em>r.out.gdal</em> allows a user to export a GRASS raster map layer
 into any GDAL supported raster map format.
 
-For possible <em>metaopt</em> parameters see the 'supported formats' pages
-of GDAL.
-The <em>createopt</em> may be used to create TFW or World files ("TFW=YES",
-"WORLDFILE=ON").
+For possible <em>metaopt</em> parameters see the individual
+<a href="http://www.gdal.org/formats_list.html">supported formats</a> pages
+on the GDAL website.
+The <em>createopt</em> parameter may be used to create TFW or World files
+("TFW=YES","WORLDFILE=ON").
 <p>
-<em>r.out.gdal</em> also supports the export of multiband rasters through
-a group (created e.g. with <em>i.group</em>), when the group's name is entered
-as input.
+<em>r.out.gdal</em> also supports the export of multiband rasters as
+a group, when the imagery group's name is entered as input.
+(created imagery groups with the <em><a href="i.group.html">i.group</a></em>
+module)
+<p>
+As with most GRASS raster modules, the current region extents and region
+resolution are used, and a MASK is respected if present.
+Use <em><a href="g.region.html">g.region</a></em>'s "align=", or "rast="
+options if you need to realign the region settings the original map's
+before export.
+
 
 <h2>SUPPORTED RASTER FORMATS</h2>
 
@@ -44,28 +53,101 @@ local GDAL installation. Available may be (incomplete list):<p>
   XPM: X11 PixMap Format
 </pre>
 
+
 <h2>NOTES</h2>
 
-When writing out GeoTIFF format for users of ESRI software or ImageMagick,
-the band interleaving should be switched to pixel interleaving using
-<em>createopt="INTERLEAVE=PIXEL"</em>.
+When writing out multi-band GeoTIFF images for users of ESRI software or
+ImageMagick, the interleaving mode should be set to "pixel" using
+<em>createopt="INTERLEAVE=PIXEL"</em>. BAND interleaving is slightly more
+efficient, but not supported by some applications.
+<!-- GDAL switched default from BAND to PIXEL interleave on 08/01/07 (r11823) -->
+This issue only arises when writing out multi-band imagery groups.
+Some software may not recognize all of the compression methods available.
+<!-- e.g. data destined for ESRI software should use COMPRESS=LZW/PACKBITS/DEFLATE ??? -->
+
 <p>
 To specify multiple options use a comma separated list
 (<em>createopt="TFW=YES,COMPRESS=DEFLATE"</em>).
 <p>
-Out of the GDAL data types, the closest match for GRASS CELL, FCELL and DCELL
-rasters are respectively Int32, Float32 and Float64. These are not exact
-equivalents, but they will preserve the max possible data range and number of
-decimal places for each respective GRASS raster data type. Please keep in mind, that
-not all CELL rasters will require Int32 - e.g., 0-255 CELL raster are covered
-by the Byte <em>type</em> as well. Moreover, some GDAL-supported formats do not
-support all the data types possible in GDAL and GRASS. Use
-<em><a href="r.info">r.info</a></em> to check the data type and range for your
-GRASS raster, refer to specific format documentation
-(<a href="http://www.gdal.org/">GDAL website</a>, format vendor's docs) and
-e.g. the Wikipedia article
-<em><a href="http://en.wikipedia.org/wiki/C_syntax#Typical_boundaries_of_primitive_integral_types">Typical boundaries of primitive integral types</a></em>
+Out of the GDAL data types, the closest match for GRASS CELL, FCELL and
+DCELL rasters are respectively Int32, Float32 and Float64. These are not
+exact equivalents, but they will preserve the maximum possible data range
+and number of decimal places for each respective GRASS raster data type.
+Please keep in mind that not all CELL rasters will require Int32 - e.g.,
+0-255 CELL raster are covered by the Byte <em>type</em> as well.
+Moreover, some GDAL-supported formats do not support all the data types
+possible in GDAL and GRASS. Use <em><a href="r.info">r.info</a></em> to
+check the data type and range for your GRASS raster, refer to specific
+format documentation (on the <a href="http://www.gdal.org/">GDAL website</a>),
+format vendor's documentation, and e.g. the Wikipedia article
+<em><a href="http://en.wikipedia.org/wiki/C_syntax#Typical_boundaries_of_primitive_integral_types">Typical
+  boundaries of primitive integral types</a></em>
 for details.
+
+
+<h4>Ranges of GDAL data types</h4>
+<pre>
+  GDAL data type	       minimum  	maximum
+
+  Byte  			     0  	    255
+  UInt16			     0  	 65,535
+  Int16, CInt16 	       -32,768  	 32,767
+  UInt32			     0    4,294,967,295
+  Int32, CInt32 	-2,147,483,648    2,147,483,647
+  Float32, CFloat32	       -3.4E38  	 3.4E38
+  Float64, CFloat64	     -1.79E308         1.79E308
+</pre>
+
+<p>
+Float32 precision is 7 decimal places, e.g. 1.0000001E20, so 1.000000001E20
+is truncated to 1.0000000E20.
+<p>
+Float64 precision is 16 decimal places, e.g. 1.0000000000000001E20,
+equivalent to DCELL.
+<p>
+Note that e.g. 0.0000000012345678E20 is stored as 1.2345678000000000E11,
+so Float32 would be ok.
+<p>
+If there is a need to keep file sizes small, use the simplest data type
+covering the data range of the raster(s) to be exported, e.g., if suitable
+use Byte rather than UInt16; use Int16 rather than Int32; or use Float32
+rather than Float64. In addition, the COMPRESS <b>createopt</b> used can
+have a very large impact on the size of the output file.
+
+
+<h4>Improving GeoTIFF compatibility</h4>
+
+To create a highly compatibility GeoTIFF with various other GIS software 
+packages, it is recommended to keep the GeoTIFF file as simple as possible.
+You will have to experiment with which options your software is compatible
+with, as this varies widely between vendors and versions. Long term, the
+less metadata you have to remove the more self-documenting (and useful)
+the dataset will be.
+<p>
+Here are some things to try:
+
+<ul>
+<li>Create a World file with <tt>createopt="TFW=YES"</tt>.
+
+<li>Do not use GeoTIFF internal compression. Other GIS software often 
+supports only a subset of the available compression methods with the 
+supported methods differing between GIS software packages. Unfortunately
+this means the output image can be rather huge, but the file can be
+compressed with software like <tt>zip</tt>, <tt>gnuzip</tt>, or <tt>bzip2</tt>.
+
+<li>Skip exporting the color table. Color tables are not always properly
+rendered and the GeoTIFF file can appear completely black. If you are lucky
+the problematic software package has a method to reset the color table.
+
+<li>Keep metadata simple with <tt>createopt="PROFILE=GeoTIFF"</tt> or 
+<tt>createopt="PROFILE=BASELINE"</tt>. With BASELINE no GDAL or GeoTIFF
+tags will be written and a World file is required (<em>createopt="TFW=YES"</em>).
+
+<li>Adding overviews with <tt>gdaladdo</tt> after exporting can speed up display.
+Note that other software might create their own overviews, ignoring existing
+overviews.
+</ul>
+
 
 <h2>EXAMPLES</h2>
 
@@ -77,7 +159,14 @@ r.out.gdal input=roads output=roads.tif type=UInt16
 
 <h4>Export a DCELL raster map in GeoTIFF format suitable for ESRI software:</h4>
 <div class="code"><pre>
-r.out.gdal in=elevation.10m out=ned_elev10m.tif type=Float64 createopt="INTERLEAVE=PIXEL,TFW=YES"
+r.out.gdal in=elevation.10m out=ned_elev10m.tif type=Float64 createopt="TFW=YES"
+</pre></div>
+<p>
+
+<h4>Export R,G,B imagery bands in GeoTIFF format suitable for ESRI software:</h4>
+<div class="code"><pre>
+i.group group=nc_landsat_rgb input=lsat7_2002_30,lsat7_2002_20,lsat7_2002_10
+r.out.gdal in=nc_landsat_rgb out=nc_landsat_rgb.tif type=Byte createopt="INTERLEAVE=PIXEL,TFW=YES"
 </pre></div>
 <p>
 
@@ -99,13 +188,17 @@ gdalinfo lsat_multiband.tif
 <h2>GDAL RELATED ERROR MESSAGES</h2>
 
 <ul>
-<li> "ERROR 6: SetColorInterpretation() not supported for this dataset.": This <i>may</i>
- indicate that the color table was not written properly. But usually it will be
- correct and the message can be ignored.</li>
-<li> "ERROR 6: SetNoDataValue() not supported for this dataset.": The selected output format
- does not support "no data". It is recommended to use a different output format.</li>
-<li> "Warning 1: Lost metadata writing to GeoTIFF ... too large to fit in tag.": The color table metadata
-  are too large. It is recommended to use a different output format.</li>
+<li> "ERROR 6: SetColorInterpretation() not supported for this dataset.":
+ This <i>may</i> indicate that the color table was not written properly.
+ But usually it will be correct and the message can be ignored.</li>
+
+<li> "ERROR 6: SetNoDataValue() not supported for this dataset.":
+ The selected output format does not support "no data". It is recommended
+ to use a different output format if your data contains NULLs.</li>
+
+<li> "Warning 1: Lost metadata writing to GeoTIFF ... too large to fit in
+ tag.": The color table metadata may be too large. It is recommended to
+ simplify or not write the color table, or use a different output format.</li>
 </ul>
 
 
