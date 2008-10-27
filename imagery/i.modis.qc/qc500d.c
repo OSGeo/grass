@@ -9,7 +9,7 @@ CELL qc500d(CELL pixel)
 {
     CELL qctemp;
 
-    pixel >> 30;		/* bit no 30 becomes 0 */
+    pixel >>= 30;		/* bit no 30 becomes 0 */
     qctemp = pixel & 0x01;    
 
     return qctemp;

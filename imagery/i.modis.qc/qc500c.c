@@ -19,7 +19,7 @@ CELL qc500c(CELL pixel, int bandno)
 {
     CELL qctemp;
 
-    pixel >> 2 + (4 * (bandno - 1));	/* bitshift [] to [0-3] etc. */
+    pixel >>= 2 + (4 * (bandno - 1));	/* bitshift [] to [0-3] etc. */
     qctemp = pixel & 0x0F;    
     
     return qctemp;

@@ -9,7 +9,7 @@ CELL qc500e(CELL pixel)
 {
     CELL qctemp;
 
-    pixel >> 31;		/* bit no 31 becomes 0 */
+    pixel >>= 31;		/* bit no 31 becomes 0 */
     qctemp = pixel & 0x01; 
     
     return qctemp;
