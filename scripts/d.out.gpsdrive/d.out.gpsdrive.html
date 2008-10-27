@@ -13,8 +13,9 @@ This software comes with absolutely no warranty.</em></b>
 <P>
 <H2>NOTES</H2>
 
-Maps are saved in the user's <tt>~/.gpsdrive</tt> directory. Geo-referencing
-information is added to the user's <tt>~/.gpsdrive/map_koord.txt</tt> file.
+Maps are saved in the user's <tt>~/.gpsdrive/maps/</tt> directory.
+Geo-referencing information is added to the user's
+<tt>~/.gpsdrive/maps/map_koord.txt</tt> file.
 
 <P>
 JPEG output requires the <tt>pngtopnm</tt> and <tt>pnmtojpeg</tt> programs
@@ -25,11 +26,19 @@ GpsDrive assumes northings are not rotated compared to true-geographic north.
 If you are using a projection with significant curvature away from the central
 meridian, or a map datum with a significant rotational component, then you will 
 likely end up with a distorted or inexact background map!
-Keeping the area small will lessen the error, but not eliminate it.
+Keeping the area small will lessen the error, but not eliminate it, if
+necessary you could reproject the map into a custom projection (such as tmerc)
+centered directly on the center of your map. You can check the local
+convergence angle (difference between grid north and true north) with
+"<tt>g.region -n</tt>".
 <P>
-Best output is created from a Lat/Lon location or by keeping the output area
-small (1:50,000). This translates to approx a 22.7km x 18.2km image window in the 
-GIS. [<tt>x_ext=scale*(1280/2817.95)</tt>]
+To avoid distortion, anything more global than 1:150k to 1:500k
+should come from a lat/lon location. Anything more local than that
+will look better coming from a projected system such as UTM.
+<P>
+The extent of a map given a target scale can be calculated with 
+<tt>x_ext=scale*(1280/2817.95)</tt>. e.g. 1:50,000 translates to approx
+a 22.7km x 18.2km image window in the GIS.
 <P>
 For your convenience (calculations are rough, but nominal):
 <div class="code"><pre>
@@ -108,7 +117,8 @@ done
 
 <BR>
 Note that to get a smoother transition between backdrop maps this script
-creates overlapping tiles.
+creates overlapping tiles. For best results at least 1/3rd overlap should
+be maintained.
 
 
 <BR><BR>
@@ -135,4 +145,5 @@ University of Otago<BR>
 New Zealand</i><BR>
 <BR>
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
