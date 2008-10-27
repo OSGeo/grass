@@ -3227,13 +3227,13 @@ class VectorDBInfo(gselect.VectorDBInfo):
                 if len(item) < 1:
                     continue
                 
-                key, value = item.split(':')
+                key, value = item.split(':', 1)
                 
                 if key == 'Layer' and readAttrb:
                     readAttrb = False
                 
                 if readAttrb:
-                    name, value = item.split(':')
+                    name, value = item.split(':', 1)
                     name = name.strip()
                     # append value to the column
                     if len(value) < 1:
