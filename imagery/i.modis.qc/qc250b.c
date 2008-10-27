@@ -11,7 +11,7 @@ CELL qc250b(CELL pixel)
 {
     CELL qctemp;
 
-    qctemp >> 2;		/*bits [2-3] become [0-1] */
+    pixel >>= 2;		/*bits [2-3] become [0-1] */
     qctemp = pixel & 0x03;
     
     return qctemp;
