@@ -567,6 +567,10 @@ class VDigitToolbar(AbstractToolbar):
         else:
             # initialize toolbar
             self.toolbar[0].ToggleTool(self.action['id'], True)
+
+        # clear tmp canvas
+        if self.action['id'] != id:
+            self.parent.MapWindow.ClearLines(pdc=self.parent.MapWindow.pdcTmp)
         
     def OnAddPoint(self, event):
         """Add point to the vector map Laier"""
@@ -583,16 +587,18 @@ class VDigitToolbar(AbstractToolbar):
                         'type' : "line",
                         'id'   : self.addLine }
         self.parent.MapWindow.mouse['box'] = 'line'
-        self.parent.MapWindow.polycoords = [] # reset temp line
+        ### self.parent.MapWindow.polycoords = [] # reset temp line
 
     def OnAddBoundary(self, event):
         """Add boundary to the vector map layer"""
         Debug.msg (2, "VDigitToolbar.OnAddBoundary()")
+        if self.action['desc'] != 'addLine' or \
+                self.action['type'] != 'boundary':
+            self.parent.MapWindow.polycoords = [] # reset temp line
         self.action = { 'desc' : "addLine",
                         'type' : "boundary",
                         'id'   : self.addBoundary }
         self.parent.MapWindow.mouse['box'] = 'line'
-        self.parent.MapWindow.polycoords = [] # reset temp line
 
     def OnAddCentroid(self, event):
         """Add centroid to the vector map layer"""
