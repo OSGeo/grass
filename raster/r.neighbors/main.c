@@ -128,6 +128,7 @@ int main(int argc, char *argv[])
     }
     parm.method->options = p;
     parm.method->description = _("Neighborhood operation");
+    parm.method->guisection = _("Neighborhood");
 
     parm.size = G_define_option();
     parm.size->key = "size";
@@ -135,6 +136,7 @@ int main(int argc, char *argv[])
     parm.size->required = NO;
     parm.size->description = _("Neighborhood size");
     parm.size->answer = "3";
+    parm.size->guisection = _("Neighborhood");
 
     parm.title = G_define_option();
     parm.title->key = "title";
@@ -157,6 +159,7 @@ int main(int argc, char *argv[])
     flag.circle = G_define_flag();
     flag.circle->key = 'c';
     flag.circle->description = _("Use circular neighborhood");
+    flag.circle->guisection = _("Neighborhood");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
