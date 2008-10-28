@@ -1168,7 +1168,7 @@ int GS_get_cat_at_xy(int id, int att, char *catstr, float x, float y)
     typbuff *buff;
     geosurf *gs;
 
-    catstr[0] = '\0';
+    *catstr = '\0';
     gs = gs_get_surf(id);
 
     if (NULL == gs) {
@@ -1298,7 +1298,7 @@ int GS_get_val_at_xy(int id, int att, char *valstr, float x, float y)
     typbuff *buff;
     geosurf *gs;
 
-    valstr = '\0';
+    *valstr = '\0';
     gs = gs_get_surf(id);
 
     if (NULL == gs) {
