@@ -163,7 +163,7 @@ cat << EOF > "${TMP}.html"
 <li> r.* - <a href="#r">raster</a> commands
 <li> r3.* - <a href="#r3">raster3D</a> commands
 <li> v.* - <a href="#v">vector</a> commands
-<li> gis.m - GUI frontend (Tcl/Tk)
+<li> wxGUI - GUI frontend (wxPython)
 <li> nviz - visualization suite
 <li> xganim - raster map slideshow
 EOF
@@ -296,7 +296,7 @@ cat << EOF > "${TMP}.tex"
 \item [r.{*}]raster commands
 \item [r3.{*}]raster3D commands
 \item [v.{*}]vector commands
-\item [gis.m]GUI frontend (Tcl/Tk)
+\item [wxGUI]GUI frontend (wxPython)
 \item [nviz]visualization suite
 \item [xganim]raster map slideshow
 EOF
