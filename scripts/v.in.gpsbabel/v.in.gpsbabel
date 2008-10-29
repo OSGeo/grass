@@ -66,7 +66,6 @@
 #% key: input
 #% type: string
 #% description: Device or file used to import data
-#% answer: /dev/gps
 #%end
 #%option
 #% key: output
@@ -79,7 +78,7 @@
 #% key: format
 #% type: string
 #% description: Format of GPS input data (use gpsbabel supported formats)
-#% answer: garmin
+#% answer: gpx
 #%end
 #%option
 #% key: proj
