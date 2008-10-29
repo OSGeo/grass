@@ -179,16 +179,21 @@ int main(int argc, char *argv[])
     createopt = G_define_option();
     createopt->key = "createopt";
     createopt->type = TYPE_STRING;
-    createopt->description =
+    createopt->label =
 	_("Creation option(s) to pass to the output format driver");
+    createopt->description =
+	_("In the form of \"NAME=VALUE\", separate multiple entries with a comma.");
     createopt->multiple = YES;
     createopt->required = NO;
 
     metaopt = G_define_option();
     metaopt->key = "metaopt";
     metaopt->type = TYPE_STRING;
-    metaopt->description = _("Metadata key passed on the output dataset "
-			     "if possible");
+    metaopt->label =
+	_("Metadata key(s) and value(s) to include");
+    metaopt->description =
+	_("In the form of \"META-TAG=VALUE\", separate multiple entries "
+	  "with a comma. Not supported by all output format drivers.");
     metaopt->multiple = YES;
     metaopt->required = NO;
 
