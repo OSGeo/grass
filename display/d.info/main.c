@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
     gflag = G_define_flag();
     gflag->key = 'g';
     gflag->description =
-	_("Display screen rectangle coordinates and resolution of entire window");
+	_("Display geographic coordinates and resolution of entire screen");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
