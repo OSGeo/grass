@@ -11,8 +11,12 @@
 #define GLOBAL extern
 #endif
 
+/*
 GLOBAL FILE *fdelevin, *fddxin, *fddyin, *fdrain, *fdinfil, *fdtraps,
     *fdmanin, *fddepth, *fddisch, *fderr, *fdoutwalk, *fdwalkers;
+*/
+GLOBAL FILE *fdelevin, *fddxin, *fddyin, *fdrain, *fdinfil, *fdtraps,
+    *fdmanin, *fddepth, *fddisch, *fderr;
 GLOBAL FILE *fdwdepth, *fddetin, *fdtranin, *fdtauin, *fdtc, *fdet, *fdconc,
     *fdflux, *fderdep;
 GLOBAL FILE *fdsfile, *fw;
@@ -24,11 +28,11 @@ GLOBAL char *rain;
 GLOBAL char *infil;
 GLOBAL char *traps;
 GLOBAL char *manin;
-GLOBAL char *sfile;
+/* GLOBAL char *sfile; */
 GLOBAL char *depth;
 GLOBAL char *disch;
 GLOBAL char *err;
-GLOBAL char *outwalk;
+/* GLOBAL char *outwalk; */
 GLOBAL char *mapset;
 GLOBAL char *mscale;
 GLOBAL char *tserie;
@@ -77,9 +81,11 @@ struct Point
     double z1;
 };
 
+/*
 GLOBAL struct Point *points;
 GLOBAL int npoints;
 GLOBAL int npoints_alloc;
+*/
 
 GLOBAL int input_data(void);
 GLOBAL int seeds(long int, long int);
@@ -114,11 +120,12 @@ GLOBAL double **gama, **gammas, **si, **inf, **sigma;
 GLOBAL float **dc, **tau, **er, **ct, **trap;
 GLOBAL float **dif;
 
-GLOBAL double vavg[MAXW][2], stack[MAXW][3], w[MAXW][3];
+/* GLOBAL double vavg[MAXW][2], stack[MAXW][3], w[MAXW][3]; */
+GLOBAL double vavg[MAXW][2], w[MAXW][3];
 GLOBAL int iflag[MAXW];
 
 GLOBAL double hbeta;
-GLOBAL int ldemo;
+/* GLOBAL int ldemo; */
 GLOBAL double hhmax, sisum, vmean;
 GLOBAL double infsum, infmean;
 GLOBAL int maxw, maxwa, nwalk;
@@ -126,7 +133,8 @@ GLOBAL double rwalk, bresx, bresy, xrand, yrand;
 GLOBAL double stepx, stepy, xp0, yp0;
 GLOBAL double chmean, si0, deltap, deldif, cch, hhc, halpha;
 GLOBAL double eps;
-GLOBAL int maxwab, nstack;
+/* GLOBAL int maxwab, nstack; */
+GLOBAL int maxwab;
 GLOBAL int iterout, mx2o, my2o;
 GLOBAL int miter, nwalka, lwwfin;
 GLOBAL double timec;
