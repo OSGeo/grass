@@ -118,6 +118,11 @@ void D_fit_d_to_u(void)
     fit_aspect(&D, &U);
 }
 
+void D_fit_u_to_d(void)
+{
+    fit_aspect(&U, &D);
+}
+
 void D_show_conversions(void)
 {
     fprintf(stderr,
