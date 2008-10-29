@@ -45,6 +45,7 @@
  * Notes on modifications:
  * v. 1.0 May 2002
  * modified by Y. Chemin in February 2008 (reporting, optional inputs)
+ * sites-related input/output commented out Nov. 2008
  */
 
 /********************************/
@@ -79,7 +80,7 @@
 #include <grass/Vect.h>
 #include <grass/linkm.h>
 #include <grass/bitmap.h>
-#include <grass/site.h>
+/* #include <grass/site.h> */
 #include <grass/glocale.h>
 
 /********************************/
@@ -187,12 +188,14 @@ int main(int argc, char *argv[])
 	_("Name of the flow controls raster map (permeability ratio 0-1)");
     parm.traps->guisection = _("Input_options");
 
+/*
     parm.sfile = G_define_standard_option(G_OPT_V_INPUT);
     parm.sfile->key = "vector";
     parm.sfile->required = NO;
     parm.sfile->description =
 	_("Name of the sampling locations vector points map");
     parm.sfile->guisection = _("Input_options");
+*/
 
     parm.depth = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.depth->key = "depth";
@@ -212,12 +215,14 @@ int main(int argc, char *argv[])
     parm.err->description = _("Output simulation error raster map [m]");
     parm.err->guisection = _("Output_options");
 
+/*
     parm.outwalk = G_define_standard_option(G_OPT_V_OUTPUT);
     parm.outwalk->key = "outwalk";
     parm.outwalk->required = NO;
     parm.outwalk->description =
 	_("Name of the output walkers vector points map");
     parm.outwalk->guisection = _("Output_options");
+*/
 
     parm.nwalk = G_define_option();
     parm.nwalk->key = "nwalk";
@@ -244,6 +249,7 @@ int main(int argc, char *argv[])
 	_("Time interval for creating output maps [minutes]");
     parm.outiter->guisection = _("Parameters");
 
+/*
     parm.density = G_define_option();
     parm.density->key = "density";
     parm.density->type = TYPE_INTEGER;
@@ -251,6 +257,7 @@ int main(int argc, char *argv[])
     parm.density->required = NO;
     parm.density->description = _("Density of output walkers");
     parm.density->guisection = _("Parameters");
+*/
 
     parm.diffc = G_define_option();
     parm.diffc->key = "diffc";
@@ -331,13 +338,12 @@ int main(int argc, char *argv[])
     depth = parm.depth->answer;
     disch = parm.disch->answer;
     err = parm.err->answer;
-    outwalk = parm.outwalk->answer;
-    sfile = parm.sfile->answer;
+/*    outwalk = parm.outwalk->answer; */
+/*    sfile = parm.sfile->answer; */
 
-    /*      sscanf(parm.nwalk->answer, "%d", &maxwa); */
     sscanf(parm.niter->answer, "%d", &timesec);
     sscanf(parm.outiter->answer, "%d", &iterout);
-    sscanf(parm.density->answer, "%d", &ldemo);
+/*    sscanf(parm.density->answer, "%d", &ldemo); */
     sscanf(parm.diffc->answer, "%lf", &frac);
     sscanf(parm.hmax->answer, "%lf", &hhmax);
     sscanf(parm.halpha->answer, "%lf", &halpha);
@@ -458,12 +464,21 @@ int main(int argc, char *argv[])
      * G_set_embedded_null_value_mode(1);
      */
 
-    if ((depth == NULL) && (disch == NULL) && (err == NULL) &&
+/* replaced with condition that skips outwalk */
+/*    if ((depth == NULL) && (disch == NULL) && (err == NULL) &&
 	(outwalk == NULL))
 	G_warning(_("You are not outputting any raster or vector points maps"));
     ret_val = input_data();
     if (ret_val != 1)
 	G_fatal_error(_("Input failed"));
+*/
+
+ if ((depth == NULL) && (disch == NULL) && (err == NULL))
+        G_warning(_("You are not outputting any raster maps"));
+    ret_val = input_data();
+    if (ret_val != 1)
+        G_fatal_error(_("Input failed"));
+
 
     /* memory allocation for output grids */
 
@@ -510,11 +525,13 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Cannot write raster maps"));
     }
 
+/*
     if (fdwalkers != NULL)
 	fclose(fdwalkers);
 
     if (sfile != NULL)
 	fclose(fw);
+*/
     /* Exit with Success */
     exit(EXIT_SUCCESS);
 }
