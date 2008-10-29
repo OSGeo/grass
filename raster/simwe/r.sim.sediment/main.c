@@ -73,7 +73,7 @@
 #include <grass/Vect.h>
 #include <grass/linkm.h>
 #include <grass/bitmap.h>
-#include <grass/site.h>
+/*#include <grass/site.h> */
 #include <grass/glocale.h>
 
 /********************************/
@@ -165,13 +165,14 @@ int main(int argc, char *argv[])
     parm.maninval->description = _("Name of the Mannings n value");
     parm.maninval->guisection = _("Input_options");
 
-    /* needs to be updated to GRASS 6 vector format !! */
+    /* needs to be updated to GRASS 6 vector format !! 
     parm.sfile = G_define_standard_option(G_OPT_V_INPUT);
     parm.sfile->key = "vector";
     parm.sfile->required = NO;
     parm.sfile->description =
 	_("Name of the sampling locations vector points map");
     parm.sfile->guisection = _("Input_options");
+*/
 
     parm.tc = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.tc->key = "tc";
@@ -230,6 +231,7 @@ int main(int argc, char *argv[])
 	_("Time interval for creating output maps [minutes]");
     parm.outiter->guisection = _("Parameters");
 
+/*
     parm.density = G_define_option();
     parm.density->key = "density";
     parm.density->type = TYPE_INTEGER;
@@ -237,6 +239,7 @@ int main(int argc, char *argv[])
     parm.density->required = NO;
     parm.density->description = _("Density of output walkers");
     parm.density->guisection = _("Parameters");
+*/
 
     parm.diffc = G_define_option();
     parm.diffc->key = "diffc";
@@ -311,12 +314,12 @@ int main(int argc, char *argv[])
     conc = parm.conc->answer;
     flux = parm.flux->answer;
     erdep = parm.erdep->answer;
-    sfile = parm.sfile->answer;
+/*    sfile = parm.sfile->answer; */
 
     /*      sscanf(parm.nwalk->answer, "%d", &maxwa); */
     sscanf(parm.niter->answer, "%d", &timesec);
     sscanf(parm.outiter->answer, "%d", &iterout);
-    sscanf(parm.density->answer, "%d", &ldemo);
+/*    sscanf(parm.density->answer, "%d", &ldemo); */
     sscanf(parm.diffc->answer, "%lf", &frac);
     sscanf(parm.maninval->answer, "%lf", &manin_val);
 
@@ -414,11 +417,13 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Cannot write raster maps"));
     }
 
+/*
     if (fdwalkers != NULL)
 	fclose(fdwalkers);
 
     if (sfile != NULL)
 	G_sites_close(fw);
+*/
     /* Exit with Success */
     exit(EXIT_SUCCESS);
 }
