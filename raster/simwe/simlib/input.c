@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <grass/gis.h>
-#include <grass/site.h>
+/* #include <grass/site.h> */
 #include <grass/bitmap.h>
 #include <grass/glocale.h>
 #include <grass/linkm.h>
@@ -19,6 +19,7 @@
  * \brief allocate memory, read input rasters, assign UNDEF to NODATA
  *
  *  \return int
+ * sites related input/output commented out - needs update to vect, HM nov 2008
  */
 
 
@@ -31,17 +32,16 @@ int input_data(void)
     int fd1, fd2, fd3, fd4, fd4a, fd4b, fd5, row, row_rev;
     int fd9, fd10, fd11, fd12;
     int l, j;
-    int nn, cc, ii, dd;
+/*    int nn, cc, ii, dd; */
     double unitconv = 0.0000002;	/* mm/hr to m/s */
     char *mapset;
-    Site *site;
+/* output water depth and discharge at outlet points given in site file*/
+/*    Site *site; 
 
     npoints = 0;
     npoints_alloc = 0;
 
-    /* put some warning messages about diff. in resol., etc. */
     if (sfile != NULL) {
-	/* open ascii file for ascii output of gamma */
 	fw = fopen("simwe_data.txt", "w");
 
 	mapset = G_find_sites(sfile, "");
@@ -57,14 +57,12 @@ int input_data(void)
 	site = G_site_new_struct(cc, nn, ii, dd);
 	G_message(_("Reading sites map (%s) ..."), sfile);
 
-	/*
 	   if (dd==0)
 	   {
 	   fprintf(stderr,"\n");
 	   G_warning("I'm finding records that do not have 
 	   a floating point attributes (fields prefixed with '%').");
 	   } 
-	 */
 
 	while (G_site_get(fdsfile, site) >= 0) {
 	    if (npoints_alloc <= npoints) {
@@ -76,8 +74,7 @@ int input_data(void)
 	    }
 	    points[npoints].east = site->east * conv;
 	    points[npoints].north = site->north * conv;
-	    points[npoints].z1 = 0.;	/*site->dbl_att[0]; */
-	    /*printf("\n%f %f",points[npoints].east/conv,points[npoints].north/conv); */
+	    points[npoints].z1 = 0.;	
 	    if ((points[npoints].east / conv <= cellhd.east &&
 		 points[npoints].east / conv >= cellhd.west) &&
 		(points[npoints].north / conv <= cellhd.north &&
@@ -86,6 +83,7 @@ int input_data(void)
 	}
 	G_sites_close(fdsfile);
     }
+*/
 
     /* Allocate raster buffers */
     cell1 = G_allocate_f_raster_buf();
