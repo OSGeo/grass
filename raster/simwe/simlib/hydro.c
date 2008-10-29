@@ -19,7 +19,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <grass/gis.h>
-#include <grass/site.h>
+/* #include <grass/site.h> */
 #include <grass/bitmap.h>
 #include <grass/linkm.h>
 #include <grass/glocale.h>
@@ -36,14 +36,16 @@ void main_loop(void)
 {
 
     int i, ii, l, k;
-    int icoub, lwout, nmult;
+/*    int icoub, lwout, nmult; */
+    int icoub, nmult;
     int iw, iblock, lw;
     int itime, iter1;
     int nfiterh, nfiterw;
     int mgen, mgen2, mgen3;
     int nblock;
     int icfl;
-    int mitfac, p;
+    int mitfac;
+/*  int mitfac, p; */
     double x, y;
     double velx, vely, stxm, stym;
     double factor, conn, gaux, gauy;
@@ -55,7 +57,7 @@ void main_loop(void)
     nblock = 1;
     icoub = 0;
     icfl = 0;
-    nstack = 0;
+/*    nstack = 0; */
 
     if (maxwa > (MAXW - mx * my)) {
 	mitfac = maxwa / (MAXW - mx * my);
@@ -131,13 +133,14 @@ void main_loop(void)
 			    iflag[lw] = 1;
 			}
 
+/*
 			lwout = lw / ldemo;
 			lwout *= ldemo;
 
 			if (lwout == lw) {
 			    ++lwwfin;
-
 			}
+*/
 		    }
 		}		/*DEFined area */
 	    }
@@ -286,22 +289,26 @@ void main_loop(void)
 		    }
 		}
 
+/* output walkers commented out */
 		/*        write the walkers which reach the box */
-
+/*
 		if (w[lw][1] >= xmin && w[lw][2] >= ymin && w[lw][1]
 		    <= xmax && w[lw][2] <= ymax && iflag[lw] == 0) {
 
 		    lwout = lw / ldemo;
 		    lwout *= ldemo;
-		    if (lwout == lw && (i == miter || i == iter1)) {	/* check this once again */
+		    if (lwout == lw && (i == miter || i == iter1)) {	
 			stack[nstack][1] = mixx / conv + w[lw][1] / conv;
 			stack[nstack][2] = miyy / conv + w[lw][2] / conv;
 			stack[nstack][3] = w[lw][3];
 
 			nstack++;
+*/
 			/*                  iflag[lw] = 1; */
+/*
 		    }
 		}
+*/
 
 		/* walker is leaving the box */
 
@@ -327,14 +334,19 @@ void main_loop(void)
 		    conn = (double)nblock / (double)iblock;
 		    itime = (int)(i * deltap * timec);
 		    ii = output_data(itime, conn);
-		    nstack = 0;
+/*		    nstack = 0; */
 		    if (ii != 1)
 			G_fatal_error(_("Unable to write raster maps"));
 		}
 
 	    }
 
-	    if (sfile != NULL) {	/* ascii data site file output for gamma  - hydrograph */
+/* ascii data site file output for gamma  - hydrograph or sediment*/
+/* cchez incl. sqrt(sinsl) */
+/* sediment */
+/*defined area */
+/*
+	    if (sfile != NULL) {	
 
 		for (p = 0; p < npoints; p++) {
 
@@ -346,21 +358,21 @@ void main_loop(void)
 		    if (zz[k][l] != UNDEF) {
 
 			if (wdepth == NULL) {
-			    points[p].z1 = step * gama[k][l] * cchez[k][l];	/* cchez incl. sqrt(sinsl) */
+			    points[p].z1 = step * gama[k][l] * cchez[k][l];	
 			}
 			else
-			    points[p].z1 = gama[k][l] * slope[k][l];	/* sediment */
+			    points[p].z1 = gama[k][l] * slope[k][l];	
 
 			G_debug(2, " k,l,z1 %d %d %f", k, l, points[p].z1);
 
 			fprintf(fw, "%f %f %f\n", points[p].east / conv,
 				points[p].north / conv, points[p].z1);
-		    }		/*defined area */
+		    }		
 
 		}
 
 	    }
-
+*/
 
 	}			/* miter */
 
