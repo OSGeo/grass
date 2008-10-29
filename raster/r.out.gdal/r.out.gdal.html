@@ -17,8 +17,8 @@ module)
 As with most GRASS raster modules, the current region extents and region
 resolution are used, and a MASK is respected if present.
 Use <em><a href="g.region.html">g.region</a></em>'s "align=", or "rast="
-options if you need to realign the region settings the original map's
-before export.
+options if you need to realign the region settings to match the original
+map's before export.
 
 
 <h2>SUPPORTED RASTER FORMATS</h2>
@@ -98,15 +98,6 @@ for details.
   Float64, CFloat64	     -1.79E308         1.79E308
 </pre>
 
-<p>
-Float32 precision is 7 decimal places, e.g. 1.0000001E20, so 1.000000001E20
-is truncated to 1.0000000E20.
-<p>
-Float64 precision is 16 decimal places, e.g. 1.0000000000000001E20,
-equivalent to DCELL.
-<p>
-Note that e.g. 0.0000000012345678E20 is stored as 1.2345678000000000E11,
-so Float32 would be ok.
 <p>
 If there is a need to keep file sizes small, use the simplest data type
 covering the data range of the raster(s) to be exported, e.g., if suitable
