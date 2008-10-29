@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Flag *rflag, *dflag, *cflag, *fflag, *bflag, *gflag;
     double t, b, l, r;
-    struct Cell_head window;
+    double n, s, e, w;
 
     G_gisinit(argv[0]);
 
@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
     gflag = G_define_flag();
     gflag->key = 'g';
     gflag->description =
-	_("Display screen rectangle coordinates and resolution (west, east, north, south, ewres, nsres)");
+	_("Display screen rectangle coordinates and resolution of entire window");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -67,8 +67,10 @@ int main(int argc, char *argv[])
     if (R_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
-    if (rflag->answer || dflag->answer)
+
+    if (rflag->answer || dflag->answer || fflag->answer || gflag->answer)
 	R_get_window(&t, &b, &l, &r);
+
 
     if (rflag->answer)
 	fprintf(stdout, "rectangle: %f %f %f %f\n", l, r, t, b);
@@ -76,10 +78,8 @@ int main(int argc, char *argv[])
     if (dflag->answer)
 	fprintf(stdout, "dimensions: %f %f\n", r - l, b - t);
 
-    if (fflag->answer) {
-	R_get_window(&t, &b, &l, &r);
+    if (fflag->answer)
 	fprintf(stdout, "frame: %f %f %f %f\n", l, r, t, b);
-    }
 
     if (bflag->answer) {
 	D_setup(0);
@@ -93,15 +93,20 @@ int main(int argc, char *argv[])
     }
 
     if (gflag->answer) {
-	/* Read in the map window associated with window */
-	G_get_window(&window);
-	fprintf(stdout, "w=%f\n", window.west);
-	fprintf(stdout, "e=%f\n", window.east);
-	fprintf(stdout, "n=%f\n", window.north);
-	fprintf(stdout, "s=%f\n", window.south);
-	fprintf(stdout, "ewres=%f\n", window.ew_res);
-	fprintf(stdout, "nsres=%f\n", window.ns_res);
+	/* outer bounds of the screen (including margins) */
+	D_setup(0);
 
+	w = D_d_to_u_col(l);
+	e = D_d_to_u_col(r);
+	n = D_d_to_u_row(t);
+	s = D_d_to_u_row(b);
+
+	fprintf(stdout, "w=%f\n", w );
+	fprintf(stdout, "e=%f\n", e );
+	fprintf(stdout, "n=%f\n", n );
+	fprintf(stdout, "s=%f\n", s );
+	fprintf(stdout, "ewres=%.15g\n", (e-w)/(r-l) );
+	fprintf(stdout, "nsres=%.15g\n", (n-s)/(b-t) );
     }
 
     R_close_driver();
