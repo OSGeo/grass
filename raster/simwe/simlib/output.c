@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <grass/gis.h>
-#include <grass/site.h>
+/* #include <grass/site.h> */
 #include <grass/bitmap.h>
 #include <grass/linkm.h>
 
@@ -24,15 +24,17 @@ int output_data(int tt, double ft)
     struct History hist, hist1;	/* hist2, hist3, hist4, hist5 */
     char *depth0 = NULL, *disch0 = NULL, *err0 = NULL;
     char *conc0 = NULL, *flux0 = NULL;
-    char *erdep0 = NULL, *outwalk0 = NULL;
+/*    char *erdep0 = NULL, *outwalk0 = NULL; */
+    char *erdep0 = NULL;
     char *mapst = NULL;
     char *type;
     char buf[256];
     int ndigit;
     FCELL dat1, dat2;
     float a1, a2;
-    Site_head walkershead;
+/*    Site_head walkershead;
     Site *sd;
+*/
 
 
     ndigit = 2;
@@ -45,6 +47,7 @@ int output_data(int tt, double ft)
     if (timesec >= 10000)
 	ndigit = 6;
 
+/*
     if (outwalk != NULL) {
 	if (ts == 1) {
 	    sprintf(buf, "%s%.*d", outwalk, ndigit, tt);
@@ -82,9 +85,9 @@ int output_data(int tt, double ft)
 		sd->fcat = (float)stack[i][3];
 		G_site_put(fdoutwalk, sd);
 	    }
-
 	}
     }
+*/
     if (depth != NULL) {
 	cell6 = G_allocate_f_raster_buf();
 	if (ts == 1) {
