@@ -96,15 +96,15 @@ int main(int argc, char *argv[])
 	/* outer bounds of the screen (including margins) */
 	D_setup(0);
 
-	w = D_d_to_u_col(l);
-	e = D_d_to_u_col(r);
 	n = D_d_to_u_row(t);
 	s = D_d_to_u_row(b);
+	w = D_d_to_u_col(l);
+	e = D_d_to_u_col(r);
 
-	fprintf(stdout, "w=%f\n", w );
-	fprintf(stdout, "e=%f\n", e );
 	fprintf(stdout, "n=%f\n", n );
 	fprintf(stdout, "s=%f\n", s );
+	fprintf(stdout, "w=%f\n", w );
+	fprintf(stdout, "e=%f\n", e );
 	fprintf(stdout, "ewres=%.15g\n", (e-w)/(r-l) );
 	fprintf(stdout, "nsres=%.15g\n", (n-s)/(b-t) );
     }
