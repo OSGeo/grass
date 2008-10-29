@@ -7,6 +7,7 @@
 /* cnversions.c */
 void D_update_conversions(void);
 void D_fit_d_to_u(void);
+void D_fit_u_to_d(void);
 void D_show_conversions(void);
 
 void D_do_conversions(const struct Cell_head *, double, double, double, double);
