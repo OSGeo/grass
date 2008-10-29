@@ -11,16 +11,23 @@ EXCLUDEMODS="\
 v.topo.check \
 i.ask \
 i.find \
-photo.elev \
-photo.target \
 helptext.html \
 r.watershed.ram \
 r.watershed.seg \
-gis.m \
-wxGUI.* \
-d.paint.labels \
-p.out.vrml \
-r.cats"
+wxGUI.*"
+
+# these modules don't use G_parser()
+check_for_desc_override()
+{
+    case "$BASENAME" in
+	g.parser)
+	    SHORTDESC="Provides automated parser, GUI, and help support for GRASS scipts."
+	    ;;
+	r.li.daemon)
+	    SHORTDESC="Support module for r.li landscape index calculations."
+	    ;;
+    esac
+}
 
 
 ############# nothing to configure below ############
@@ -181,11 +188,11 @@ cp -f $GEMDIR/docs/GEM-Manual/img* $HTMLDIR/gem/
 chmod a+r $HTMLDIR/gem/*.html $HTMLDIR/gem/img*
 
 #process all HTML pages:
-cd $HTMLDIR
+cd "$HTMLDIR"
 
 #get list of available GRASS modules:
 CMDLIST=`ls -1 *.*.html | grep -v "$FULLINDEX" | grep -v index.html | \
-  grep -v gis.m.html | grep -v "\($EXCLUDEHTML\)" | cut -d'.' -f1 | sort -u`
+  grep -v "\($EXCLUDEHTML\)" | cut -d'.' -f1 | sort -u`
 CMDLISTNO=`echo $CMDLIST | wc -w | awk '{print $1}'`
 
 echo "Generating HTML manual pages index (help system)..." >&2
@@ -208,7 +215,6 @@ cat <<EOF
 <tr><td>&nbsp;&nbsp;r.*  </td><td>raster commands</td></tr>
 <tr><td>&nbsp;&nbsp;r3.* </td><td>raster3D commands</td></tr>
 <tr><td>&nbsp;&nbsp;v.*  </td><td>vector commands</td></tr>
-<tr><td>&nbsp;&nbsp;<a href="gis.m.html">gis.m</a> </td><td>GUI frontend to GIS menus and display</td></tr>
 <tr><td>&nbsp;&nbsp;<a href="nviz.html">nviz</a> </td><td>visualization suite</td></tr>
 <tr><td>&nbsp;&nbsp;<a href="wxGUI.html">wxGUI</a> </td><td>wxPython-based GUI frontend</td></tr>
 <tr><td>&nbsp;&nbsp;<a href="xganim.html">xganim</a> </td><td>raster map slideshow</td></tr>
@@ -245,14 +251,15 @@ EOF
   do
     BASENAME=`basename $i .html`
     SHORTDESC="`cat $i | awk '/NAME/,/SYNOPSIS/' | grep '<em>' | cut -d'-' -f2- | sed 's+^ ++g' | grep -vi 'SYNOPSIS' | head -n 1`"
+    check_for_desc_override
     echo "<tr><td valign=\"top\"><a href=\"$i\">$BASENAME</a></td> <td>$SHORTDESC</td></tr>"
   done
   echo "</table>"
 done
 
 write_html_footer - index.html
-) > $FULLINDEX.tmp
-replace_file $FULLINDEX
+) > "$FULLINDEX.tmp"
+replace_file "$FULLINDEX"
 
 # done full index
 
@@ -263,7 +270,7 @@ replace_file $FULLINDEX
 for k in $CMDLIST
 do 
   MODCLASS=`expand_module_class_name $k`
-  FILENAME=$MODCLASS.html
+  FILENAME="$MODCLASS.html"
 
   (
   write_html_header - "GRASS GIS $GRASSVERSION Reference Manual: $MODCLASS"
@@ -274,14 +281,15 @@ do
   do
     BASENAME=`basename $k .html`
     SHORTDESC="`cat $k | awk '/NAME/,/SYNOPSIS/' | grep '<em>' | cut -d'-' -f2- | sed 's+^ ++g' | grep -vi 'SYNOPSIS' | head -n 1`"
+    check_for_desc_override
     echo "<tr><td valign=\"top\"><a href=\"$k\">$BASENAME</a></td> <td>$SHORTDESC</td></tr>"
   done
   
   echo "</table>"
 
   write_html_footer - index.html
-  ) > $FILENAME.tmp
-  replace_file $FILENAME
+  ) > "$FILENAME.tmp"
+  replace_file "$FILENAME"
 done
 
 ###############################################################################
@@ -301,9 +309,8 @@ do
   echo "<li><a href=\"$MODCLASS.html\">$MODCLASS commands</a></li>"
 done
 
-#extra stuff for 'nviz' and 'xganim' and GUIs:
+#extra stuff for 'nviz' and 'xganim' and GUI:
 cat <<EOF
-<li><a href="gis.m.html">gis.m</a> and <a href="d.m.html">d.m</a> GIS managers</li>
 <li><a href="nviz.html">nviz</a> visualization and animation tool</li>
 <li><a href="wxGUI.html">wxGUI</a> wxPython-based GUI frontend</li>
 <li><a href="xganim.html">xganim</a> tool  for animating a raster map series</li>
@@ -314,8 +321,8 @@ cat <<EOF
 EOF
 
 write_html_footer - index.html
-) > $FILENAME.tmp
-replace_file $FILENAME
+) > "$FILENAME.tmp"
+replace_file "$FILENAME"
 
 ###############################################################################
 
