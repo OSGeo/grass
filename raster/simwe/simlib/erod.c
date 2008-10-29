@@ -19,7 +19,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <grass/gis.h>
-#include <grass/site.h>
+/* #include <grass/site.h> */
 #include <grass/bitmap.h>
 #include <grass/linkm.h>
 
