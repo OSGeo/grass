@@ -41,7 +41,7 @@ Export areas from GRASS vector map to Shapefile format (generates /tmp/testogr.s
 v.out.ogr input=multi type=area dsn=/tmp olayer=testogr 
 </pre></div>
 
-Export 3D lines from GRASS vector map to Shapefile format:
+Export 3D lines from GRASS vector map to Shapefile format (use <tt>SHPT=POLYGONZ</tt> for 3D faces):
 <div class="code"><pre>
 v.out.ogr input=lines_3d type=line dsn=/tmp olayer=testogr lco="SHPT=ARCZ"
 </pre></div>
