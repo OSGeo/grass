@@ -4,10 +4,10 @@
 
 #ifdef MAIN
 FILE *fdelevin, *fddxin, *fddyin, *fdrain, *fdinfil, *fdtraps, *fdmanin,
-    *fddepth, *fddisch, *fderr, *fdoutwalk, *fdwalkers;
+    *fddepth, *fddisch, *fderr    /*, *fdoutwalk, *fdwalkers*/ ;
 FILE *fdwdepth, *fddetin, *fdtranin, *fdtauin, *fdtc, *fdet, *fdconc, *fdflux,
     *fderdep;
-FILE *fdsfile, *fw;
+/* FILE *fdsfile, *fw; */
 
 char *elevin;
 char *dxin;
@@ -16,11 +16,11 @@ char *rain;
 char *infil;
 char *traps;
 char *manin;
-char *sfile;
+/* char *sfile; */
 char *depth;
 char *disch;
 char *err;
-char *outwalk;
+/* char *outwalk; */
 char *mapset;
 
 /* Flag */
@@ -41,13 +41,24 @@ char *rainval;
 char *maninval;
 char *infilval;
 
+/* walkers taken out 
 struct
 {
     struct Option *elevin, *dxin, *dyin, *rain, *infil, *traps, *manin,
-	*sfile, *depth, *disch, *err, *outwalk, *nwalk, *niter, *outiter,
+    *sfile, *depth, *disch, *err, *outwalk, *nwalk, *niter, *outiter,
 	*density, *diffc, *hmax, *halpha, *hbeta, *wdepth, *detin, *tranin,
 	*tauin, *tc, *et, *conc, *flux, *erdep, *rainval, *maninval,
 	*infilval;
+} parm;
+*/
+
+struct
+{
+    struct Option *elevin, *dxin, *dyin, *rain, *infil, *traps, *manin,
+        *depth, *disch, *err, *nwalk, *niter, *outiter,
+        *diffc, *hmax, *halpha, *hbeta, *wdepth, *detin, *tranin,
+        *tauin, *tc, *et, *conc, *flux, *erdep, *rainval, *maninval,
+        *infilval;
 } parm;
 
 struct
@@ -63,6 +74,7 @@ struct
 
 struct Cell_head cellhd;
 
+/* check whether this is the outlet
 struct Point
 {
     double north, east;
@@ -71,6 +83,7 @@ struct Point
 struct Point *points;
 int npoints;
 int npoints_alloc;
+*/
 
 
 int input_data(void);
@@ -110,7 +123,7 @@ double vavg[MAXW][2], stack[MAXW][3], w[MAXW][3];
 int iflag[MAXW];
 
 double hbeta;
-int ldemo;
+/* int ldemo; */
 double hhmax, sisum, vmean;
 double infsum, infmean;
 int maxw, maxwa, nwalk;
@@ -129,8 +142,10 @@ double manin_val;
 double infil_val;
 
 #else
+/* extern FILE *fdelevin, *fddxin, *fddyin, *fdrain, *fdinfil, *fdtraps,
+    *fdmanin, *fddepth, *fddisch, *fderr, *fdoutwalk, *fdwalkers; */
 extern FILE *fdelevin, *fddxin, *fddyin, *fdrain, *fdinfil, *fdtraps,
-    *fdmanin, *fddepth, *fddisch, *fderr, *fdoutwalk, *fdwalkers;
+    *fdmanin, *fddepth, *fddisch, *fderr;
 extern FILE *fdwdepth, *fddetin, *fdtranin, *fdtauin, *fdtc, *fdet, *fdconc,
     *fdflux, *fderdep;
 extern FILE *fdsfile, *fw;
@@ -146,7 +161,7 @@ extern char *sfile;
 extern char *depth;
 extern char *disch;
 extern char *err;
-extern char *outwalk;
+/* extern char *outwalk; */
 extern char *mapset;
 extern char *tserie;
 
