@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
 
     output1 = G_define_standard_option(G_OPT_R_OUTPUT);
     output1->key = "usle_k";
-    output1->description = _("Name of the output USLE K factor layer");
+    output1->description = _("Name of the output USLE K factor map [t.ha.hr/ha.MJ.mm]");
 
     /********************/ 
     if (G_parser(argc, argv))
