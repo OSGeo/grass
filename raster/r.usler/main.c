@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
     module->description = _("Computes USLE R factor, Rainfall erosivity index.");
     
     input2 = G_define_standard_option(G_OPT_R_INPUT);
-    input2->description = _("Name of the annual precipitation map");
+    input2->description = _("Name of the annual precipitation map [mm/year]");
 
     output = G_define_standard_option(G_OPT_R_OUTPUT);
 
@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
     input1->options = "roose, morgan, foster, elswaify";
     input1->descriptions = _("roose;Roosle (1975);"
 			     "morgan;Morgan (1974);"
-			     "foster;Foster(1981);"
+			     "foster;Foster (1981);"
 			     "elswaify;El-Swaify (1985)");
     input1->answer = "morgan";
 
@@ -122,6 +122,7 @@ int main(int argc, char *argv[])
 		/*calculate elswaify     */ 
 		if (!strcmp(nameflag, "elswaify")) 
 		    d = elswaify_1985(d_annual_pmm);
+		outrast[col] = d ;
 	    }
 	if (G_put_d_raster_row(outfd, outrast) < 0)
 	    G_fatal_error(_("Failed writing raster map <%s> row %d"),
