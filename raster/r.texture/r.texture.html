@@ -88,6 +88,16 @@ Haralick, R.M., K. Shanmugam, and I. Dinstein. 1973. Textural features for
     Station, employer for hire of James Darrell McCauley). <br>
     Man page of <a href="http://netpbm.sourceforge.net/doc/pgmtexture.html">pgmtexture</a></p>
 
+<h2>EXAMPLE</h2>
+
+Calculation of Angular Second Moment of B/W orthophoto (North Carolina data set):
+<div class="code"><pre>
+g.region rast=ortho_2001_t792_1m -p
+r.texture -a ortho_2001_t792_1m prefix=ortho_texture
+</pre></div>
+This calculates four maps (requested texture at four orientations):
+ortho_texture_ASM_0, ortho_texture_ASM_45, ortho_texture_ASM_90, ortho_texture_ASM_135.
+
 <h2>BUGS</h2>
 - The program can run incredibly slow for large raster maps.
 <p>
