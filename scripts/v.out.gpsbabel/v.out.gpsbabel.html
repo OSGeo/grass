@@ -1,0 +1,63 @@
+<H2>DESCRIPTION</H2>
+
+<EM>v.out.gpsbabel</EM> allows the user to export waypoint, route, and track
+data from a vector map into a locally connected GPS receiver or as a file in
+many common GPS data formats. Translation is done via the 
+<EM><A HREF="http://www.gpsbabel.org">GpsBabel</a></EM> program. 
+
+<P>
+Do not use as a primary means of navigation.
+
+
+<H2>NOTES</H2>
+
+<em>v.out.gpsbabel</em> automatically reprojects data from the 
+projection settings of the current location to Lat/Lon WGS84.
+<p>
+GPX format is used for data interchange between GRASS and GpsBabel.
+If the requested output is GPX, then <tt>gpsbabel</tt> is never run.
+<P>
+The <b>layer</b> option is only used in conjunction with the
+<b>where</b> SQL query option.
+
+
+<H2>EXAMPLES</H2>
+
+<h3>GPX Export</h3>
+
+Export a vector lines map to a GPX track file:
+<div class="code"><pre>
+v.out.gpsbabel -t input=trail output=trail.gpx
+</pre></div>
+
+
+<h3>GPS device connected via USB adapter</h3>
+
+Export vector maps named <i>waypoints, tracks, routes</i> to a Garmin GPS
+connected to /dev/ttyUSB0:
+<div class="code"><pre>
+v.out.gpsbabel -w input=waypoints format=garmin output=/dev/ttyUSB0
+v.out.gpsbabel -t input=tracks format=garmin output=/dev/ttyUSB0
+v.out.gpsbabel -r input=routes format=garmin output=/dev/ttyUSB0
+</pre></div>
+
+
+<H2>SEE ALSO</H2>
+<EM><A HREF="m.proj.html">m.proj</A></EM><BR>
+<EM><A HREF="v.in.ascii.html">v.in.ascii</A></EM><BR>
+<EM><A HREF="v.out.ascii.html">v.out.ascii</A></EM><BR>
+<EM><A HREF="v.in.garmin.html">v.in.garmin</A></EM><BR>
+<EM><A HREF="v.in.gpsbabel.html">v.in.gpsbabel</A></EM><BR>
+<EM><A HREF="v.extract.html">v.extract</A></EM><BR>
+<BR>
+
+<A HREF="http://www.gpsbabel.org">GpsBabel.org</a><BR>
+The <A HREF="http://www.gdal.org/ogr/drv_gpx.html">GDAL/OGR GPX format page</a><BR>
+cs2cs from <A HREF="http://proj.osgeo.org">PROJ.4</a><BR>
+
+
+<H2>AUTHOR</H2>
+Hamish Bowman, Dunedin New Zealand
+
+<p>
+<i>Last changed: $Date$</i>
