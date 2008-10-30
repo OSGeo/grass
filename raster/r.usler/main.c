@@ -20,7 +20,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-double elswaify_1985(double annaul_pmm);
+double elswaify_1985(double annual_pmm);
 double morgan_1974(double annual_pmm);
 double foster_1981(double annual_pmm);
 double roose_1975(double annual_pmm);
@@ -54,6 +54,7 @@ int main(int argc, char *argv[])
     input2->description = _("Name of the annual precipitation map [mm/year]");
 
     output = G_define_standard_option(G_OPT_R_OUTPUT);
+    output->description = _("Name of the USLE R map [MJ.mm/ha.hr.year]");
 
     /* Define the different options */ 
     input1 = G_define_option();
