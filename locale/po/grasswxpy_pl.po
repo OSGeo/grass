@@ -1493,7 +1493,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/preferences.py:527
 msgid "aster"
-msgstr "Raster"
+msgstr "aster"
 
 #: ../gui/wxpython/gui_modules/preferences.py:528
 msgid "gyro"
