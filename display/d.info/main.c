@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("No graphics device selected"));
 
 
-    if (rflag->answer || dflag->answer || fflag->answer || gflag->answer)
+    if (rflag->answer || dflag->answer || fflag->answer)
 	R_get_window(&t, &b, &l, &r);
 
 
@@ -96,10 +96,10 @@ int main(int argc, char *argv[])
 	/* outer bounds of the screen (including margins) */
 	D_setup(0);
 
-	n = D_d_to_u_row(t);
-	s = D_d_to_u_row(b);
-	w = D_d_to_u_col(l);
-	e = D_d_to_u_col(r);
+	n = D_get_u_north();
+	s = D_get_u_south();
+	w = D_get_u_west();
+	e = D_get_u_east();
 
 	fprintf(stdout, "n=%f\n", n );
 	fprintf(stdout, "s=%f\n", s );
