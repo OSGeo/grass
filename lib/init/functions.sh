@@ -722,7 +722,7 @@ bash_startup()
     bashrc="$HOME/.bashrc"
     rm -f "$bashrc"
     echo "test -r ~/.alias && . ~/.alias" >> "$bashrc"
-    echo "PS1='$GRASS GRASS_VERSION ($LOCATION_NAME):\w > '" >> "$bashrc"
+    echo "PS1='GRASS $GRASS_VERSION ($LOCATION_NAME):\w > '" >> "$bashrc"
     echo "PROMPT_COMMAND=$GISBASE/etc/prompt.sh" >> "$bashrc"
 
     if [ -r "$USERHOME/.grass.bashrc" ]
