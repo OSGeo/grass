@@ -354,13 +354,17 @@ int main(int argc, char *argv[])
 
 	}			/*Region */
 	else if (gflag->answer) {
-	    G_format_northing(cellhd.north, tmp1, cellhd.proj);
-	    G_format_northing(cellhd.south, tmp2, cellhd.proj);
+	    sprintf(tmp1, "%f", cellhd.north);
+	    sprintf(tmp2, "%f", cellhd.south);
+	    G_trim_decimal(tmp1);
+	    G_trim_decimal(tmp2);
 	    fprintf(out, "north=%s\n", tmp1);
 	    fprintf(out, "south=%s\n", tmp2);
 
-	    G_format_easting(cellhd.east, tmp1, cellhd.proj);
-	    G_format_easting(cellhd.west, tmp2, cellhd.proj);
+	    sprintf(tmp1, "%f", cellhd.east);
+	    sprintf(tmp2, "%f", cellhd.west);
+	    G_trim_decimal(tmp1);
+	    G_trim_decimal(tmp2);
 	    fprintf(out, "east=%s\n", tmp1);
 	    fprintf(out, "west=%s\n", tmp2);
 
