@@ -289,8 +289,8 @@ int main(int argc, char **argv)
     tempfile1 = G_tempfile();
     tempfile2 = G_tempfile();
 
-    fe = open(tempfile1, O_RDWR | O_CREAT);
-    fd = open(tempfile2, O_RDWR | O_CREAT);
+    fe = open(tempfile1, O_RDWR | O_CREAT, 0666);
+    fd = open(tempfile2, O_RDWR | O_CREAT, 0666);
 
     /* transfer the input map to a temp file */
     for (i = 0; i < nrows; i++) {
