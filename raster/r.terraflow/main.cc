@@ -229,7 +229,7 @@ void check_header(char* cellname) {
     RASTER_MAP_TYPE data_type;
 	data_type = G_raster_map_type(opt->elev_grid, mapset);
 #ifdef ELEV_SHORT
-	G_message(_("elevation stored as SHORT (%dB)"),
+	G_verbose_message(_("Elevation stored as SHORT (%dB)"),
 		sizeof(elevation_type));
 	if (data_type == FCELL_TYPE) {
 	  G_warning(_("raster %s is of type FCELL_TYPE "
@@ -241,7 +241,7 @@ void check_header(char* cellname) {
 	}
 #endif 
 #ifdef ELEV_FLOAT
-	G_message( _("elevation stored as FLOAT (%dB)"), 
+	G_verbose_message( _("Elevation stored as FLOAT (%dB)"), 
 			sizeof(elevation_type));
 	if (data_type == CELL_TYPE) {
 	  G_warning(_("raster %s is of type CELL_TYPE "
@@ -338,7 +338,7 @@ void record_args(int argc, char **argv) {
   size_t mm_size = opt->mem  << 20; /* (in bytes) */
   char tmp[100];
   formatNumber(tmp, mm_size);
-  sprintf(buf,"memory size: %s bytes", tmp);
+  sprintf(buf, "Memory size: %s bytes", tmp);
   stats->comment(buf);
 }
 
@@ -420,18 +420,19 @@ printMaxSortSize(long nodata_count) {
   long long maxneed = (fillmaxsize > flowmaxsize) ? fillmaxsize: flowmaxsize;
   maxneed =  2*maxneed; /* need 2*N to sort */
 
-  fprintf(stderr, "total elements=%ld, nodata elements=%ld\n", (long)nrows*ncols, nodata_count);
-  fprintf(stderr, "largest temporary files: \n");
-  fprintf(stderr, "\t\t FILL: %s [%d elements, %dB each]\n",
+  G_message( "total elements=%ld, nodata elements=%ld",
+		(long)nrows*ncols, nodata_count);
+  G_message( "largest temporary files: ");
+  G_message( "\t\t FILL: %s [%d elements, %dB each]",
 		  formatNumber(buf, fillmaxsize),
 		  nrows * ncols, sizeof(waterWindowType));
-  fprintf(stderr, "\t\t FLOW: %s [%ld elements, %dB each]\n",
+  G_message( "\t\t FLOW: %s [%ld elements, %dB each]",
 		  formatNumber(buf, flowmaxsize),
 		  (long)(nrows * ncols - nodata_count), sizeof(sweepItem));
-  fprintf(stderr, "Will need at least %s space available in %s\n",
-		  formatNumber(buf, maxneed),  		  /* need 2*N to sort */
+  G_message( "Will need at least %s space available in %s",
+		  formatNumber(buf, maxneed),  	  /* need 2*N to sort */
 		  getenv(STREAM_TMPDIR));
- 
+
 #ifdef HAVE_STATVFS_H
   fprintf(stderr, "Checking current space in %s: ", getenv(STREAM_TMPDIR));
   struct statvfs statbuf;
@@ -444,7 +445,7 @@ printMaxSortSize(long nodata_count) {
 	fprintf(stderr, ". OK.\n");
   } else {
 	fprintf(stderr, ". Not enough space available.\n");
-	exit(1);
+	exit(EXIT_FAILURE);
   }
 #endif
 }
@@ -457,11 +458,6 @@ main(int argc, char *argv[]) {
   struct GModule *module;
   Rtimer rtTotal;    
   char buf[BUFSIZ];
-
-/* this disturbs the parser
-  fprintf(stderr, "r.terraflow December 2003\n");
-  fflush(stderr);
-*/
 
   /* initialize GIS library */
   G_gisinit(argv[0]);
@@ -498,8 +494,7 @@ main(int argc, char *argv[]) {
   parse_args(argc, argv);
   check_args();
 
-  fprintf(stderr, "region size is %d x %d\n", nrows, ncols);
-  fflush(stderr);
+  G_verbose_message( _("Region size is %d x %d"), nrows, ncols);
  
   /* check STREAM path (the place where intermediate STREAMs are placed) */
   sprintf(buf, "%s=%s",STREAM_TMPDIR, opt->streamdir);
