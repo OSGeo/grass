@@ -205,9 +205,9 @@ int main(int argc, char **argv)
     tempfile2 = G_tempfile();
     tempfile3 = G_tempfile();
 
-    fe = open(tempfile1, O_RDWR | O_CREAT);	/* elev */
-    fd = open(tempfile2, O_RDWR | O_CREAT);	/* dirn */
-    fm = open(tempfile3, O_RDWR | O_CREAT);	/* problems */
+    fe = open(tempfile1, O_RDWR | O_CREAT, 0666);	/* elev */
+    fd = open(tempfile2, O_RDWR | O_CREAT, 0666);	/* dirn */
+    fm = open(tempfile3, O_RDWR | O_CREAT, 0666);	/* problems */
 
     G_message(_("Reading map..."));
     for (i = 0; i < nrows; i++) {
