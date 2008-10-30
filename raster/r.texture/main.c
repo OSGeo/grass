@@ -345,8 +345,8 @@ int main(int argc, char *argv[])
 				      result, row);
 
 	    G_close_cell(outfd);
-	    G_important_message(_("Calculated measure #%d (56 measures available)"),
-				(t_measure + 1));
+	    G_important_message(_("Calculated measure #%d <%s%s> (56 measures available)"),
+				(t_measure + 1), filename, suffixes[t_measure]);
 	}
     G_free(outrast);
     G_free(data);
