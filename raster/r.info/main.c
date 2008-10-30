@@ -345,6 +345,8 @@ int main(int argc, char **argv)
 	    G_format_easting(cellhd.west, tmp2, cellhd.proj);
 	    fprintf(out, "east=%s\n", tmp1);
 	    fprintf(out, "west=%s\n", tmp2);
+	    fprintf(out, "top=%f\n", zmax);
+	    fprintf(out, "bottom=%f\n", zmin);
 	}
 
 	if (sflag->answer) {
