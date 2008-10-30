@@ -5,6 +5,19 @@ by features from another one.
 
 <h2>NOTES</h2>
 
+Only features with category numbers will be considered. If required
+the <em>v.category</em> module can be used to add them. Typically
+boundaries do not need to be given a category number, as an area's
+attributes are inherited from the centroid. Typically points, lines, and
+centroids will always want to have a cat number.
+<p>
+e.g. take a road which separates two farms. It is ambiguous as to which
+farm an attribute that is attached to the road belongs to. The boundary
+only needs a cat number if it will hold its own attributes, such as road
+name or pavement form. A centroid in each paddock holds the information
+with respect to ownership, area, etc.
+
+
 <h2>EXAMPLES</h2>
 
 Extract forest fire points from larger fire map:
@@ -21,14 +34,18 @@ v.select ain=watrcrsl_eurnasia_wgs84 bin=italy_area \
          out=watrcrsl_italy op=overlap
 </pre></div>
 
+
 <h2>SEE ALSO</h2>
 
 <em>
+<a HREF="v.category.html">v.category</a>,
 <a HREF="v.overlay.html">v.overlay</a>,
 <a HREF="sql.html">GRASS SQL interface</a></em>
+
 
 <h2>AUTHORS</h2>
 
 Radim Blazek
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
