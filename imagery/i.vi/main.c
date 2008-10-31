@@ -21,6 +21,7 @@
  *		 and GARI uses B,G,R and NIR.   
  *
  * Changelog:	 Added EVI on 20080718 (Yann)
+ * 		 Added VARI on 20081014 (Yann)
  *
  *****************************************************************************/
 
@@ -46,6 +47,7 @@ double g_vi(double bluechan, double greenchan, double redchan,
 	     double nirchan, double chan5chan, double chan7chan);
 double ga_ri(double redchan, double nirchan, double bluechan,
 	      double greenchan);
+double va_ri(double redchan, double greenchan, double bluechan);
 
 int main(int argc, char *argv[]) 
 {
@@ -58,9 +60,7 @@ int main(int argc, char *argv[])
     struct History history;	/*metadata */
     struct Colors colors;	/*Color rules */
 
-    /* FMEO Declarations */ 
     char *result;		/*output raster name */
-    /* File Descriptors */ 
     int infd_redchan, infd_nirchan, infd_greenchan;
     int infd_bluechan, infd_chan5chan, infd_chan7chan;
     int outfd;
@@ -75,8 +75,8 @@ int main(int argc, char *argv[])
     module->keywords = _("imagery, vegetation index, biophysical parameters");
     module->label =
 	_("Calculates different types of vegetation indices.");
-    module->description = _("Uses red and nir, "
-			    "and only some requiring additional bands.");
+    module->description = _("Uses red and nir bands mostly, "
+			    "and some indices require additional bands.");
     
     /* Define the different options */ 
     input1 = G_define_option();
@@ -84,21 +84,21 @@ int main(int argc, char *argv[])
     input1->type = TYPE_STRING;
     input1->required = YES;
     input1->description = _("Name of vegetation index");
-    input1->descriptions =_("sr;Simple Ratio;"
-			    "ndvi;Normalized Difference Vegetation Index;"
-			    "ipvi;Infrared Percentage Vegetation Index;"
+    input1->descriptions =_("arvi;Atmospherically Resistant Vegetation Indices;"
 			    "dvi;Difference Vegetation Index;"
 			    "evi;Enhanced Vegetation Index;"
-			    "pvi;Perpendicular Vegetation Index;"
-			    "wdvi;Weighted Difference Vegetation Index;"
-			    "savi;Soil Adjusted Vegetation Index;"
+			    "gvi;Green Vegetation Index;"
+			    "gari;Green atmospherically resistant vegetation index;"
+			    "gemi;Global Environmental Monitoring Index;"
+			    "ipvi;Infrared Percentage Vegetation Index;"
 			    "msavi;Modified Soil Adjusted Vegetation Index;"
 			    "msavi2;second Modified Soil Adjusted Vegetation Index;"
-			    "gemi;Global Environmental Monitoring Index;"
-			    "arvi;Atmospherically Resistant Vegetation Indices;"
-			    "gvi;Green Vegetation Index;"
-			    "gari;Green atmospherically resistant vegetation index;");
-    input1->answer = "ndvi";
+			    "ndvi;Normalized Difference Vegetation Index;"
+			    "pvi;Perpendicular Vegetation Index;"
+			    "savi;Soil Adjusted Vegetation Index;"
+                            "sr;Simple Ratio;"
+                            "vari;Visible Atmospherically Resistant Index;"
+			    "wdvi;Weighted Difference Vegetation Index;");
 
     input2 = G_define_standard_option(G_OPT_R_INPUT);
     input2->key = "red";
@@ -108,6 +108,7 @@ int main(int argc, char *argv[])
 
     input3 = G_define_standard_option(G_OPT_R_INPUT);
     input3->key = "nir";
+    input3->required = NO;
     input3->label =
 	_("Name of the nir channel surface reflectance map");
     input3->description = _("Range: [0.0;1.0]");
@@ -154,13 +155,66 @@ int main(int argc, char *argv[])
     chan7chan = input7->answer;
     result = output->answer;
 
+    if (!strcmp(viflag, "sr") && (!(input2->answer) || !(input3->answer)) )
+	G_fatal_error(_("sr index requires red and nir maps"));
+
+    if (!strcmp(viflag, "ndvi") && (!(input2->answer) || !(input3->answer)) )
+	G_fatal_error(_("ndvi index requires red and nir maps"));
+
+    if (!strcmp(viflag, "ipvi") && (!(input2->answer) || !(input3->answer)) )
+	G_fatal_error(_("ipvi index requires red and nir maps"));
+
+    if (!strcmp(viflag, "dvi") && (!(input2->answer) || !(input3->answer)) )
+	G_fatal_error(_("dvi index requires red and nir maps"));
+
+    if (!strcmp(viflag, "pvi") && (!(input2->answer) || !(input3->answer)) )
+	G_fatal_error(_("pvi index requires red and nir maps"));
+
+    if (!strcmp(viflag, "wdvi") && (!(input2->answer) || !(input3->answer)) )
+	G_fatal_error(_("wdvi index requires red and nir maps"));
+
+    if (!strcmp(viflag, "savi") && (!(input2->answer) || !(input3->answer)) )
+	G_fatal_error(_("savi index requires red and nir maps"));
+
+    if (!strcmp(viflag, "msavi") && (!(input2->answer) || !(input3->answer)) )
+	G_fatal_error(_("msavi index requires red and nir maps"));
+
+    if (!strcmp(viflag, "msavi2") && (!(input2->answer) || !(input3->answer)) )
+	G_fatal_error(_("msavi2 index requires red and nir maps"));
+
+    if (!strcmp(viflag, "gemi") && (!(input2->answer) || !(input3->answer)) )
+	G_fatal_error(_("gemi index requires red and nir maps"));
+
+    if (!strcmp(viflag, "arvi") && (!(input2->answer) || !(input3->answer) 
+                || !(input5->answer)) )
+	G_fatal_error(_("arvi index requires blue, red and nir maps"));
+
+    if (!strcmp(viflag, "evi") && (!(input2->answer) || !(input3->answer) 
+                || !(input5->answer)) )
+	G_fatal_error(_("evi index requires blue, red and nir maps"));
+
+    if (!strcmp(viflag, "vari") && (!(input2->answer) || !(input4->answer) 
+                || !(input5->answer)) )
+	G_fatal_error(_("vari index requires blue, green and red maps"));
+
+    if (!strcmp(viflag, "gari") && (!(input2->answer) || !(input3->answer) 
+                || !(input4->answer) || !(input5->answer)) )
+	G_fatal_error(_("gari index requires blue, green, red and nir maps"));
+
+    if (!strcmp(viflag, "gvi") && (!(input2->answer) || !(input3->answer) 
+                || !(input4->answer) || !(input5->answer) 
+                || !(input6->answer) || !(input7->answer)) )
+	G_fatal_error(_("gvi index requires blue, green, red, nir, chan5 and chan7 maps"));
+
     if ((infd_redchan = G_open_cell_old(redchan, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), redchan);
     inrast_redchan = G_allocate_d_raster_buf();
 
-    if ((infd_nirchan = G_open_cell_old(nirchan, "")) < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), nirchan);
-    inrast_nirchan = G_allocate_d_raster_buf();
+    if (nirchan) {
+        if ((infd_nirchan = G_open_cell_old(nirchan, "")) < 0)
+            G_fatal_error(_("Unable to open raster map <%s>"), nirchan);
+        inrast_nirchan = G_allocate_d_raster_buf();
+    }
 
     if (greenchan) {
 	if ((infd_greenchan = G_open_cell_old(greenchan, "")) < 0)
@@ -209,9 +263,11 @@ int main(int argc, char *argv[])
 	if (G_get_d_raster_row(infd_redchan, inrast_redchan, row) < 0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			  redchan, row);
-	if (G_get_d_raster_row(infd_nirchan, inrast_nirchan, row) < 0)
-	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
-			  nirchan, row);
+	if (nirchan) {
+	    if (G_get_d_raster_row(infd_nirchan, inrast_nirchan, row) < 0)
+	        G_fatal_error(_("Unable to read raster map <%s> row %d"),
+			      nirchan, row);
+        }
 	if (greenchan) {
 	    if (G_get_d_raster_row(infd_greenchan, inrast_greenchan, row) < 0)
 		G_fatal_error(_("Unable to read raster map <%s> row %d"),
@@ -237,14 +293,19 @@ int main(int argc, char *argv[])
 	for (col = 0; col < ncols; col++)
 	{
 	    d_redchan   = inrast_redchan[col];
+            if(nirchan)
 	    d_nirchan   = inrast_nirchan[col];
+            if(greenchan)
 	    d_greenchan = inrast_greenchan[col];
+            if(bluechan)
 	    d_bluechan  = inrast_bluechan[col];
+            if(chan5chan)
 	    d_chan5chan = inrast_chan5chan[col];
+            if(chan7chan)
 	    d_chan7chan = inrast_chan7chan[col];
 
 	    if (G_is_d_null_value(&d_redchan) ||
-		G_is_d_null_value(&d_nirchan) || 
+		((nirchan) && G_is_d_null_value(&d_nirchan)) || 
 		((greenchan) && G_is_d_null_value(&d_greenchan)) ||
 		((bluechan) && G_is_d_null_value(&d_bluechan)) ||
 		((chan5chan) && G_is_d_null_value(&d_chan5chan)) ||
@@ -300,6 +361,9 @@ int main(int argc, char *argv[])
 
 		if (!strcmp(viflag, "gari"))
 		    outrast[col] = ga_ri(d_redchan, d_nirchan, d_bluechan, d_greenchan);
+
+		if (!strcmp(viflag, "vari"))
+		    outrast[col] = va_ri(d_redchan, d_greenchan, d_bluechan);
 	    }
 	}
 	if (G_put_d_raster_row(outfd, outrast) < 0)
