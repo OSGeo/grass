@@ -49,10 +49,6 @@ int main(int argc, char *argv[])
     struct History history;	/*metadata */
     struct Colors colors;	/*Color rules */
 
-
-
-    /************************************/ 
-    /* FMEO Declarations**************** */ 
     char *result;		/*output raster name */
 
     /*File Descriptors */ 
@@ -78,7 +74,12 @@ int main(int argc, char *argv[])
     input1->required = YES;
     input1->gisprompt = _("Name of QC type to extract");
     input1->description = _("Name of QC");
-    input1->options = "adjcorr,atcorr,cloud,data_quality,diff_orbit_from_500m,modland_qa_bits";
+    input1->descriptions =_("adjcorr;Adjacency Correction;"
+                            "atcorr;Atmospheric Correction;"
+                            "cloud;Cloud State;"
+                            "data_quality;Band-Wise Data Quality Flag;"
+                            "diff_orbit_from_500m;250m Band is at Different Orbit than 500m;"
+                            "modland_qa_bits;MODIS Land General Quality Assessment;");
     input1->answer = _("modland_qa_bits");
 
     input2 = G_define_standard_option(G_OPT_R_INPUT);
@@ -92,6 +93,13 @@ int main(int argc, char *argv[])
     input_band->gisprompt = "old,value";
     input_band->description =
 	_("Band number of Modis product 250m=[1,2],500m=[1-7]");
+    input_band->descriptions =_("1;250m/500m Band 1: Red;"
+                                "2;250m/500m Band 2: NIR;"
+                                "3;500m Band 3: Blue;"
+                                "4;500m Band 4: Green;"
+                                "5;500m Band 5: SWIR 1;"
+                                "6;500m Band 6: SWIR 2;"
+                                "7;500m Band 7: SWIR 3;");
 
     output = G_define_standard_option(G_OPT_R_OUTPUT);
     output->key = _("output");
@@ -117,7 +125,7 @@ int main(int argc, char *argv[])
 
     if ((!strcmp(qcflag, "cloud") && flag1->answer) || 
 	(!strcmp(qcflag, "diff_orbit_from_500m") && flag1->answer))
-	G_fatal_error(_("Those flags cannot work with MOD09A @ 500m products"));
+	G_fatal_error(_("This flag is not available for MOD09A @ 500m products"));
 
     if (!strcmp(qcflag, "data_quality")) {
 	if (bandno < 1 || bandno > 7)
