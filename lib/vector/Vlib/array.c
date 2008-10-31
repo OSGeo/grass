@@ -69,6 +69,7 @@ VARRAY *Vect_new_varray(int size)
    GV_AREA or: GV_POINT | GV_LINE | GV_BOUNDARY | GV_CENTROID
 
    Array is not reset to zero before, but old values (if any > 0) are overwritten.
+   Array must be initialised by Vect_new_varray(size) call.
 
    \param Map vector map
    \param field layer number
@@ -115,6 +116,7 @@ Vect_set_varray_from_cat_string(struct Map_info *Map, int field,
    GV_CENTROID
 
    Array is not reset to zero before, but old values (if any > 0) are overwritten.
+   Array must be initialised by Vect_new_varray(size) call.
 
    \param Map vector map
    \param field layer number
@@ -233,7 +235,7 @@ static int in_array(int *cats, size_t ncats, int cat)
    either: GV_AREA or: GV_POINT | GV_LINE | GV_BOUNDARY | GV_CENTROID
 
    Array is not reset to zero before, but old values (if any > 0) are
-   overwritten.
+   overwritten. Array must be initialised by Vect_new_varray(size) call.
 
    \param Map vector map
    \param field layer number
@@ -297,6 +299,9 @@ Vect_set_varray_from_db(struct Map_info *Map, int field, const char *where,
     if (type & GV_AREA) {	/* Areas */
 	n = Vect_get_num_areas(Map);
 
+        /* IMHO varray should be allocated only when it's required AND only as large as required
+        as WHERE will create a small subset of all vector features and thus on large datasets
+        it's waste of memory to allocate it for all features. */
 	if (n > varray->size) {	/* not enough space */
 	    G_warning(_("Not enough space in vector array"));
 	    return 0;
