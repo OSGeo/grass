@@ -3,10 +3,10 @@ MODULE_TOPDIR = ../..
 include $(MODULE_TOPDIR)/include/Make/Other.make
 
 default: $(ETC)/python
+	$(MAKE) $(ETC)/python/grass.py $(ETC)/python/README.txt
 
-$(ETC)/python: grass.py README.txt
-	if [ ! -d $@ ]; then $(MKDIR) $@; fi
-	for file in $^ ; do $(INSTALL_DATA) $$file $@ ; done
+$(ETC)/python:
+	-if [ ! -d $@ ]; then $(MKDIR) $@; fi
 
-.PHONY: $(ETC)/python
-
+$(ETC)/python/%: %
+	$(INSTALL_DATA) $< $@
