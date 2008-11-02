@@ -67,7 +67,7 @@ GRASS_GUI: wxpython
 
 or easier start new GRASS session with -wxpython switch.
 
-$ grass63 -wxpython
+$ grass70 -wxpython
 
 3 - STARTUP FROM GRASS TERMINAL
 
@@ -97,7 +97,7 @@ $~ export PATH=scripts/:$PATH
 
 Start GRASS:
 
-$~ grass63 ~/grassdata/spearfish60/user1
+$~ grass70 ~/grassdata/spearfish60/user1
 
 Use command p.mon (shell script in gui/scripts directory) to start map
 display:
