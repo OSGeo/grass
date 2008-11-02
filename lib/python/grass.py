@@ -230,33 +230,14 @@ def parse_key_val(s, sep = '=', dflt = None):
 	result[k] = v
     return result
 
-_kv_regex = None
-
-def parse_key_val2(s):
-    """Parse a string into a dictionary, where entries are separated
-    by newlines and the key and value are separated by `=', and the
-    value is enclosed in single quotes.
-    Suitable for parsing the output from g.findfile and g.gisenv.
-    """
-    global _kv_regex
-    if _kv_regex == None:
-	_kv_regex = re.compile("([^=]+)='(.*)';?")
-    result = []
-    for line in s.splitlines():
-	m = _kv_regex.match(line)
-	if m != None:
-	    result.append(m.groups())
-	else:
-	    result.append(line.split('=', 1))
-    return dict(result)
-
 # interface to g.gisenv
 
 def gisenv():
     """Returns the output from running g.gisenv (with no arguments), as a
     dictionary.
     """
-    return parse_key_val2(read_command("g.gisenv"))
+    s = read_command("g.gisenv", flags='n')
+    return parse_key_val(s)
 
 # interface to g.region
 
@@ -287,8 +268,8 @@ def del_temp_region():
 
 def find_file(name, element = 'cell', mapset = None):
     """Returns the output from running g.findfile as a dictionary."""
-    s = read_command("g.findfile", element = element, file = name, mapset = mapset)
-    return parse_key_val2(s)
+    s = read_command("g.findfile", flags='n', element = element, file = name, mapset = mapset)
+    return parse_key_val(s)
 
 # interface to g.list
 
