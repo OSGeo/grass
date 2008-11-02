@@ -91,12 +91,18 @@ Haralick, R.M., K. Shanmugam, and I. Dinstein. 1973. Textural features for
 <h2>EXAMPLE</h2>
 
 Calculation of Angular Second Moment of B/W orthophoto (North Carolina data set):
+
 <div class="code"><pre>
 g.region rast=ortho_2001_t792_1m -p
 r.texture -a ortho_2001_t792_1m prefix=ortho_texture
+# display
+g.region n=221461 s=221094 w=638279 e=638694
+d.shadedmap drape=ortho_texture_ASM_0 rel=ortho_2001_t792_1m
 </pre></div>
+
 This calculates four maps (requested texture at four orientations):
 ortho_texture_ASM_0, ortho_texture_ASM_45, ortho_texture_ASM_90, ortho_texture_ASM_135.
+
 
 <h2>BUGS</h2>
 - The program can run incredibly slow for large raster maps.
