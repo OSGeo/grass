@@ -159,7 +159,7 @@ fi
 
 cleanup()
 {
-   g.message -d "Cleaning up ..."
+   g.message -v "Cleaning up ..."
    \rm -f "$TMP" "$TMP.gpx"
    # only try to remove map if it exists to avoid ugly warnings
    g.findfile element=vector file="tmp_vogb_epsg4326_$$" > /dev/null
@@ -211,6 +211,7 @@ fi
 
 # SQL extract if needed
 if [ -n "$GIS_OPT_WHERE" ] ; then
+   g.message -v "Extracting data ..."
 
    v.extract in="$GIS_OPT_INPUT" out="tmp_vogb_extr_$$" \
       type="$GIS_OPT_TYPE" layer="$GIS_OPT_LAYER" \
@@ -224,7 +225,7 @@ if [ -n "$GIS_OPT_WHERE" ] ; then
 
    eval `v.info -t map="tmp_vogb_extr_$$"`
    if [ "$primitives" -eq 0 ] ; then
-      g.message -e "SQL query returned an empty map"
+      g.message -e "SQL query returned an empty map (no $GIS_OPT_TYPE features?)"
       cleanup
       exit 1
    fi
@@ -241,8 +242,11 @@ fi
 
 # TODO: multi layer will probably fail badly due to sed 's/^ 1   /'
 #   output as old GRASS 4 vector ascii and fight with dig_ascii/?
+#   Change to s/^ \([0-9]   .*\)    /# \1/' ??? mmph.
 
 # reproject to lat/lon WGS84
+g.message -v "Reprojecting data ..."
+
 v.out.ascii in="$INMAP" format=standard | \
    sed -e 's/^\([PLBCFKA]\)/#\1/' -e 's/^ 1     /# 1  /' | \
    tail -n +11 | m.proj -od --quiet | \
@@ -260,19 +264,23 @@ fi
 
 # export as GPX using v.out.ogr
 if [ $TRK -eq 1 ] ; then
-   LINETYPE="FORCE_GPX_TRACK=YES,"
+   LINETYPE="lco=FORCE_GPX_TRACK=YES"
 elif [ $RTE -eq 1 ] ; then
-   LINETYPE="FORCE_GPX_ROUTE=YES,"
+   LINETYPE="lco=FORCE_GPX_ROUTE=YES"
 else
    LINETYPE=""
 fi
 
-# TODO: cat is being reported as evelation? or is <ele>=element??
-# TODO: fix attribute output.  ogr2ogr -sql to rename columns?
-#        see http://www.gdal.org/ogr/drv_gpx.html
+# BUG: cat is being reported as evelation and attribute output is skipped.
+#   (v.out.ogr DB reading bug)
+#   v.out.ogr -> shapefile -> GPX works, but we try to avoid that as it's
+#     lossy. Also that would allow -a_srs $IN_PROJ -t_srs EPSG:4326 so
+#     skip m.proj pains..
+
+g.message -v "Exporting data ..."
 
 v.out.ogr in=tmp_vogb_epsg4326_$$ dsn="$TMP.gpx" type="$GIS_OPT_TYPE" \
-  format=GPX lco="${LINETYPE}GPX_USE_EXTENSIONS=YES" --quiet
+  format=GPX ${LINETYPE} dsco="GPX_USE_EXTENSIONS=YES" --quiet
 
 if [ $? -ne 0 ] ; then
     g.message -e "Error exporting data"
@@ -284,7 +292,7 @@ if [ "$GIS_OPT_FORMAT" = gpx ] ; then
    # short circuit, we have what we came for.
    mv "$TMP.gpx" "$GIS_OPT_OUTPUT"
    cleanup
-   g.message -d "Fast exit"
+   g.message -v "Fast exit."
    exit 0
 fi
 
@@ -298,6 +306,8 @@ elif [ $TRK -eq 1 ] ; then
 elif [ $RTE -eq 1 ] ; then
    GTYPE="-r"
 fi
+
+g.message -v "Running GpsBabel ..."
 
 gpsbabel $GTYPE -i gpx -f "$TMP.gpx" \
     -o "$GIS_OPT_FORMAT" -F "$GIS_OPT_OUTPUT"
