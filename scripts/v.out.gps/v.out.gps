@@ -262,6 +262,24 @@ if [ $? -ne 0 ] ; then
 fi
 
 
+# don't v.db.connect directly as source table will be removed with
+# temporary map in that case. So we copy it first but this fails when
+# the map (ie table) is in another mapset.  ?
+db.copy from_table="$INMAP" to_table="tmp_vogb_epsg4326_$$"
+if [ $? -ne 0 ] ; then
+    g.message -e "Error copying temporary DB"
+    cleanup
+    exit 1
+fi
+
+v.db.connect map="tmp_vogb_epsg4326_$$" table="tmp_vogb_epsg4326_$$" --quiet
+if [ $? -ne 0 ] ; then
+    g.message -e "Error reconnecting temporary DB"
+    cleanup
+    exit 1
+fi
+
+
 # export as GPX using v.out.ogr
 if [ $TRK -eq 1 ] ; then
    LINETYPE="lco=FORCE_GPX_TRACK=YES"
@@ -276,8 +294,8 @@ fi
 #   v.out.ogr -> shapefile -> GPX works, but we try to avoid that as it's
 #     lossy. Also that would allow ogr2ogr -a_srs $IN_PROJ -t_srs EPSG:4326
 #     so skip m.proj pains.. if that is done ogr2ogr -a_srs MUST HAVE +wktext
-#     with PROJ.4 terms or else the +nadgrids will be ignored! (best to feed
-#     it g.proj -wf) in that case.
+#     with PROJ.4 terms or else the +nadgrids will be ignored! best to feed
+#     it  IN_PROJ="`g.proj -jf` +wktext"  in that case.
 
 g.message -v "Exporting data ..."
 
