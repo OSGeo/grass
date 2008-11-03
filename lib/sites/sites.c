@@ -21,6 +21,8 @@
 #include <grass/site.h>
 #include <grass/dbmi.h>
 #include <grass/Vect.h>
+#include <grass/glocale.h>
+
 
 #define DQUOTE '"'
 #define SPACE ' '
@@ -92,7 +94,7 @@ int G_site_get(struct Map_info *Map, Site * s)
 				      site_att_cmp);
 
 	    if (sa == NULL) {
-		G_warning("Attributes for category %d not found", cat);
+		G_warning(_("Attributes for category %d not found"), cat);
 		for (i = 0; i < Map->n_site_dbl; i++)
 		    s->dbl_att[i] = 0;
 		for (i = 0; i < Map->n_site_str; i++)
@@ -131,7 +133,7 @@ int G_site_put(struct Map_info *Map, const Site * s)
     G_debug(4, "cattype = %d", s->cattype);
 
     if (s->cattype == FCELL_TYPE || s->cattype == DCELL_TYPE)
-	G_fatal_error("Category must be integer");
+	G_fatal_error(_("Category must be integer"));
 
     if (s->cattype == CELL_TYPE)
 	Vect_cat_set(Cats, 1, s->ccat);
@@ -205,9 +207,9 @@ int G_site_put_head(struct Map_info *Map, Site_head * head)
 		if ((head->time =
 		     (struct TimeStamp *)G_malloc(sizeof(struct TimeStamp)))
 		    == NULL)
-		    G_fatal_error("Memory error in writing timestamp");
+		    G_fatal_error(_("Memory error in writing timestamp"));
 		else if (G_scan_timestamp(head->time, head->stime) < 0) {
-		    G_warning("Illegal TimeStamp string");
+		    G_warning(_("Illegal TimeStamp string"));
 		    return -1;	/* added to prevent crash 5/2000 MN */
 		}
 	    }
@@ -236,7 +238,7 @@ int G_site_get_head(struct Map_info *Map, Site_head * head)
     if (head->stime && strlen(head->stime) > 0) {
 	if ((head->time =
 	     (struct TimeStamp *)G_malloc(sizeof(struct TimeStamp))) == NULL)
-	    G_fatal_error("Memory error in allocating timestamp");
+	    G_fatal_error(_("Memory error in allocating timestamp"));
 	if (G_scan_timestamp(head->time, head->stime) < 0) {
 	    G_warning(datetime_error_msg());
 
@@ -290,8 +292,9 @@ struct Map_info *G_sites_open_old(const char *name, const char *mapset)
     dbColumn *column;
     dbValue *value;
 
-    G_warning
-	("Adapted sites library used for vector points (module should be updated to GRASS 6 vector library).");
+    G_message(
+	_("Dev note: Adapted sites library used for vector points. "
+	  "(module should be updated to GRASS 6 vector library)"));
 
     Map = (struct Map_info *)G_malloc(sizeof(struct Map_info));
 
@@ -314,7 +317,7 @@ struct Map_info *G_sites_open_old(const char *name, const char *mapset)
 
     driver = db_start_driver_open_database(fi->driver, fi->database);
     if (driver == NULL)
-	G_fatal_error("Cannot open database %s by driver %s", fi->database,
+	G_fatal_error(_("Cannot open database %s by driver %s"), fi->database,
 		      fi->driver);
 
     db_init_string(&stmt);
@@ -322,7 +325,7 @@ struct Map_info *G_sites_open_old(const char *name, const char *mapset)
     db_append_string(&stmt, fi->table);
 
     if (db_open_select_cursor(driver, &stmt, &cursor, DB_SEQUENTIAL) != DB_OK)
-	G_fatal_error("Cannot select attributes.");
+	G_fatal_error(_("Cannot select attributes"));
 
     nrows = db_get_num_rows(&cursor);
     G_debug(1, "%d rows selected from vector attribute table", nrows);
@@ -337,7 +340,7 @@ struct Map_info *G_sites_open_old(const char *name, const char *mapset)
     adbl = astr = 0;
     while (1) {
 	if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK)
-	    G_fatal_error("Cannot fetch row.");
+	    G_fatal_error(_("Cannot fetch row"));
 
 	if (!more)
 	    break;
@@ -417,8 +420,9 @@ struct Map_info *G_sites_open_new(const char *name)
 {
     struct Map_info *Map;
 
-    G_warning
-	("Adapted sites library used for vector points (module should be updated to GRASS 6 vector library).");
+    G_message(
+	_("Dev note: Adapted sites library used for vector points. "
+	  "(module should be updated to GRASS 6 vector library)"));
     G_warning("Site/vector attributes ignored.");
 
     Map = (struct Map_info *)G_malloc(sizeof(struct Map_info));
@@ -518,7 +522,7 @@ Site *G_site_new_struct(RASTER_MAP_TYPE cattype,
     Site *s;
 
     if (n_dim < 2 || n_s_att < 0 || n_d_att < 0)
-	G_fatal_error("G_oldsite_new_struct: invalid # dims or fields\n");
+	G_fatal_error(_("G_oldsite_new_struct: invalid # dims or fields"));
 
     if ((s = (Site *) G_malloc(sizeof(Site))) == NULL)
 	return (Site *) NULL;
@@ -1188,7 +1192,7 @@ int G_sites_get_fields(struct Map_info *Map, char ***cnames, int **ctypes,
 
     driver = db_start_driver_open_database(fi->driver, fi->database);
     if (driver == NULL)
-	G_fatal_error("Cannot open database %s by driver %s", fi->database,
+	G_fatal_error(_("Cannot open database %s by driver %s"), fi->database,
 		      fi->driver);
 
     db_init_string(&stmt);
@@ -1196,7 +1200,7 @@ int G_sites_get_fields(struct Map_info *Map, char ***cnames, int **ctypes,
     db_append_string(&stmt, fi->table);
 
     if (db_open_select_cursor(driver, &stmt, &cursor, DB_SEQUENTIAL) != DB_OK)
-	G_fatal_error("Cannot select attributes.");
+	G_fatal_error(_("Cannot select attributes"));
 
     nrows = db_get_num_rows(&cursor);
     G_debug(1, "%d rows selected from vector attribute table", nrows);
@@ -1252,9 +1256,8 @@ int G_sites_get_fields(struct Map_info *Map, char ***cnames, int **ctypes,
     return ncols;
 }
 
-/*
-   Frees fields allocated with G_sites_get_fields
- */
+
+/* Frees fields allocated with G_sites_get_fields */
 void G_sites_free_fields(int ncols, char **cnames, int *ctypes, int *ndx)
 {
     for (; ncols > 0; ncols--)
@@ -1265,7 +1268,3 @@ void G_sites_free_fields(int ncols, char **cnames, int *ctypes, int *ndx)
 }
 
 /*** ACS_MODIFY_END - sites_attribute management *******************************/
-
-/*******************************************************************************/
-
-/*******************************************************************************/
