@@ -207,7 +207,7 @@ else
       GIS_OPT_TYPE="line"
    fi
 fi
-   
+
 
 # SQL extract if needed
 if [ -n "$GIS_OPT_WHERE" ] ; then
@@ -232,6 +232,8 @@ if [ -n "$GIS_OPT_WHERE" ] ; then
 
    INMAP="tmp_vogb_extr_$$"
 else
+#   g.copy "$GIS_OPT_INPUT,tmp_vogb_extr_$$"   # to get a copy of DB into local mapset
+#   INMAP="tmp_vogb_extr_$$"
    INMAP="$GIS_OPT_INPUT"
 fi
 
@@ -263,20 +265,29 @@ fi
 
 
 # don't v.db.connect directly as source table will be removed with
-# temporary map in that case. So we copy it first but this fails when
-# the map (ie table) is in another mapset.  ?
-db.copy from_table="$INMAP" to_table="tmp_vogb_epsg4326_$$"
-if [ $? -ne 0 ] ; then
-    g.message -e "Error copying temporary DB"
-    cleanup
-    exit 1
-fi
+# temporary map in that case. So we make a temp copy of it to work with.
+DB_PARAMS=`v.db.connect -g "$INMAP" 2> /dev/null | grep "^$GIS_OPT_LAYER "`
+if [ -n "$DB_PARAMS" ] ; then
+   DB_TABLE=`echo "$DB_PARAMS" | cut -f2 -d' '`
+   DB_KEY=`echo "$DB_PARAMS" | cut -f3 -d' '`
+   DB_DATABASE=`echo "$DB_PARAMS" | cut -f4 -d' '`
+   DB_DRIVER=`echo "$DB_PARAMS" | cut -f5 -d' '`
 
-v.db.connect map="tmp_vogb_epsg4326_$$" table="tmp_vogb_epsg4326_$$" --quiet
-if [ $? -ne 0 ] ; then
-    g.message -e "Error reconnecting temporary DB"
-    cleanup
-    exit 1
+   db.copy from_driver="$DB_DRIVER" from_database="$DB_DATABASE" \
+      from_table="$DB_TABLE"  to_table="tmp_vogb_epsg4326_$$"
+
+   if [ $? -ne 0 ] ; then
+       g.message -e "Error copying temporary DB"
+       cleanup
+       exit 1
+   fi
+
+   v.db.connect map="tmp_vogb_epsg4326_$$" table="tmp_vogb_epsg4326_$$" --quiet
+   if [ $? -ne 0 ] ; then
+      g.message -e "Error reconnecting temporary DB"
+      cleanup
+      exit 1
+   fi
 fi
 
 
@@ -290,16 +301,16 @@ else
 fi
 
 # BUG: cat is being reported as evelation and attribute output is skipped.
-#   (v.out.ogr DB reading bug)
+#   (v.out.ogr DB reading or ->OGR GPX driver bug ?)
 #   v.out.ogr -> shapefile -> GPX works, but we try to avoid that as it's
 #     lossy. Also that would allow ogr2ogr -a_srs $IN_PROJ -t_srs EPSG:4326
-#     so skip m.proj pains.. if that is done ogr2ogr -a_srs MUST HAVE +wktext
+#     so skip m.proj pains.. if that is done ogr2ogr -s_srs MUST HAVE +wktext
 #     with PROJ.4 terms or else the +nadgrids will be ignored! best to feed
 #     it  IN_PROJ="`g.proj -jf` +wktext"  in that case.
 
 g.message -v "Exporting data ..."
 
-v.out.ogr in=tmp_vogb_epsg4326_$$ dsn="$TMP.gpx" type="$GIS_OPT_TYPE" \
+v.out.ogr in="tmp_vogb_epsg4326_$$" dsn="$TMP.gpx" type="$GIS_OPT_TYPE" \
   format=GPX ${LINETYPE} dsco="GPX_USE_EXTENSIONS=YES" --quiet
 
 if [ $? -ne 0 ] ; then
@@ -310,7 +321,7 @@ fi
 
 if [ "$GIS_OPT_FORMAT" = gpx ] ; then
    # short circuit, we have what we came for.
-   mv "$TMP.gpx" "$GIS_OPT_OUTPUT"
+   mv -f "$TMP.gpx" "$GIS_OPT_OUTPUT"
    cleanup
    g.message -v "Fast exit."
    exit 0
