@@ -245,6 +245,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.popupID12 = wx.NewId()
             self.popupID13 = wx.NewId()
             self.popupID14 = wx.NewId()
+            self.popupID15 = wx.NewId()
 
         self.popupMenu = wx.Menu()
         # general item
@@ -335,6 +336,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.popupMenu.Append(self.popupID13, text=_("Set computational region from selected map (ignore NULLs)"))
             self.Bind(wx.EVT_MENU, self.OnSetCompRegFromRaster, id=self.popupID13)
             self.popupMenu.AppendSeparator()
+            self.popupMenu.Append(self.popupID15, _("Set color table"))
+            self.Bind (wx.EVT_MENU, self.OnColorTable, id=self.popupID15)
             self.popupMenu.Append(self.popupID4, _("Histogram"))
             self.Bind (wx.EVT_MENU, self.OnHistogram, id=self.popupID4)
             self.popupMenu.Append(self.popupID5, _("Profile"))
@@ -418,6 +421,13 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                                      style=wx.DEFAULT_FRAME_STYLE, rasterList=[mapLayer.name])
             # show new display
             self.profileFrame.Show()
+        
+    def OnColorTable(self, event):
+        """Set color table for raster map"""
+        name = self.GetPyData(self.layer_selected)[0]['maplayer'].name
+        menuform.GUI().ParseCommand(['r.colors',
+                                     'map=%s' % name],
+                                    parentframe=self)
         
     def OnHistogram(self, event):
         """
