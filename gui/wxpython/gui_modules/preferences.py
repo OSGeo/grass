@@ -100,6 +100,9 @@ class Settings:
                 'statusbarMode': {
                     'selection' : 0
                     },
+                'bgcolor': {
+                    'color' : (255, 255, 255, 255),
+                    }
                 },
             #
             # advanced
@@ -1013,6 +1016,25 @@ class PreferencesDialog(wx.Dialog):
                       pos=(row, 1))
 
         #
+        # Background color
+        #
+        row += 1
+        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                         label=_("Background color:")),
+                      flag=wx.ALIGN_LEFT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos=(row, 0))
+        bgColor = csel.ColourSelect(parent=panel, id=wx.ID_ANY,
+                                    colour=self.settings.Get(group='display', key='bgcolor', subkey='color'),
+                                    size=(35, 35))
+        bgColor.SetName('GetColour')
+        self.winId['display:bgcolor:color'] = bgColor.GetId()
+        
+        gridSizer.Add(item=bgColor,
+                      flag=wx.ALIGN_RIGHT,
+                      pos=(row, 1))
+        
+        #
         # Use computation resolution
         #
         row += 1
@@ -1185,7 +1207,7 @@ class PreferencesDialog(wx.Dialog):
         label = wx.StaticText(parent=panel, id=wx.ID_ANY, label="Color")
         hlColor = csel.ColourSelect(parent=panel, id=wx.ID_ANY,
                                     colour=self.settings.Get(group='atm', key='highlight', subkey='color'),
-                                    size=(25, 25))
+                                    size=(35, 35))
         hlColor.SetName('GetColour')
         self.winId['atm:highlight:color'] = hlColor.GetId()
 
