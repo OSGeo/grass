@@ -371,7 +371,7 @@ int main(int argc, char *argv[])
     }
 
     for (option = ctx.first_option; option; option = option->next_opt) {
-	char buff[1024], upper[1024];
+	char buff[4096], upper[4096];
 
 	sprintf(buff, "GIS_OPT_%s=%s", option->key,
 		option->answer ? option->answer : "");
