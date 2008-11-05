@@ -896,11 +896,14 @@ class Map(object):
             mapoutstr = self.mapfile.replace('\\', '/')
 
         # compose command
+        bgcolor = ':'.join(map(str, UserSettings.Get(group='display', key='bgcolor',
+                                                     subkey='color')))
+        
         complist = ["g.pnmcomp",
                     "in=%s" % ",".join(maps),
                     "mask=%s" % ",".join(masks),
                     "opacity=%s" % ",".join(opacities),
-                    "background=255:255:255",
+                    "background=%s" % bgcolor,
                     "width=%s" % str(self.width),
                     "height=%s" % str(self.height),
                     "output=%s" % self.mapfile]
