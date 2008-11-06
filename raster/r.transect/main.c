@@ -6,7 +6,7 @@
  *               Markus Neteler <neteler itc.it>, 
  *               Bernhard Reiter <bernhard intevation.de>, 
  *               Glynn Clements <glynn gclements.plus.com>, 
- *               Hamish Bowman <hamish_nospam yahoo.com>, 
+ *               Hamish Bowman <hamish_b yahoo.com>, 
  *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      This program outputs, in ASCII, the values in a raster map
  *               which lie along one or more user-defined transect lines.
@@ -78,6 +78,7 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
+
     projection = G_projection();
 
     if (coord->answer)
@@ -113,5 +114,8 @@ int main(int argc, char *argv[])
 	G_usage();
 	exit(EXIT_FAILURE);
     }
+
+    G_verbose_message(_("End coordinate: %.15g, %.15g"), e2, n2);
+
     exit(system(command));
 }
