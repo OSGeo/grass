@@ -133,6 +133,11 @@ text
   <dd>set to any value to send user mail on an error or warning that 
     happens while stderr is being redirected.</dd>
   
+  <dt>GRASS_FONT_CAP</dt>
+  <dd>[g.mkfontcap, d.font, display drivers]<br>
+    specifies an alternative location (to $GISBASE/etc/fontcap) for 
+    the font configuration file.</dd>
+  
   <dt>GRASS_GNUPLOT</dt>
   <dd>[<!-- m.svfit, s.probplt, s.sv -->i.spectral]<br>
     program to use for plotting <em>gnuplot</em> data.</dd>
@@ -145,11 +150,6 @@ text
     gisenv variable (see below). If this shell variable exists at GRASS
     startup, it will determine the GUI used. If it is not defined startup
     will default to the last GUI used.</dd>
-  
-  <dt>GRASS_FONT_CAP</dt>
-  <dd>[g.mkfontcap, d.font, display drivers]<br>
-    specifies an alternative location (to $GISBASE/etc/fontcap) for 
-    the font configuration file.</dd>
   
   <dt>GRASS_HEIGHT</dt>
   <dd>[d.mon]<br>
@@ -168,7 +168,23 @@ text
       &quot;CFBundleIdentifier&quot;</code> <i>/path/to/application.app</i><code>/Contents/Info.plist</code><br>
     &nbsp; The signature is the &lt;string&gt; following the &lt;key&gt;,
     without the bracketing &lt;string&gt; tags.</dd>
-  
+
+  <dt>G_INFO_FORMAT_STANDARD</dt>
+  <dd>[init.sh, wxgui]<br>
+    sets percentage output and message formatting style to standard formatting.</dd>
+
+  <dt>G_INFO_FORMAT_GUI</dt>
+  <dd>[init.sh, wxgui]<br>
+    sets percentage output and message formatting style to GUI formatting.</dd>
+
+  <dt>G_INFO_FORMAT_SILENT</dt>
+  <dd>[init.sh, wxgui]<br>
+    disables percentage output and error messages.</dd>
+
+  <dt>G_INFO_FORMAT_PLAIN</dt>
+  <dd>[init.sh, wxgui]<br>
+    sets percentage output and message formatting style to ASCII output without rewinding control characters.</dd>
+
   <dt>GRASS_INT_ZLIB</dt>
   <dd>[libgis]<br>
     if the environment variable GRASS_INT_ZLIB exists, new compressed
@@ -177,8 +193,7 @@ text
     cellhd file.
     <br><br>
     Obviously, decompression is controlled by the
-    raster's <tt>compressed</tt> value, not the environment variable.
-  </dd>
+    raster's <tt>compressed</tt> value, not the environment variable.</dd>
   
   <dt>GRASS_MESSAGE_FORMAT</dt>
   <dd>[various modules]<br>
