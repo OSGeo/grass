@@ -497,7 +497,7 @@ int G_info_format(void)
 	else if (fstr && G_strcasecmp(fstr, "silent") == 0)
 	    grass_info_format = G_INFO_FORMAT_SILENT;
 	else if (fstr && G_strcasecmp(fstr, "plain") == 0)
-	    grass_info_format = G_INFO_FORMAT_BATCH;
+	    grass_info_format = G_INFO_FORMAT_PLAIN;
 	else
 	    grass_info_format = G_INFO_FORMAT_STANDARD;
     }
