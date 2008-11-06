@@ -112,7 +112,7 @@ int G_percent2(long n, long d, int s, FILE * out)
 	    }
 	}
 	else {
-	    if (format == G_INFO_FORMAT_BATCH) {
+	    if (format == G_INFO_FORMAT_PLAIN) {
 		if (out != NULL) {
 		    if (x == 100)
 			fprintf(out, "%d\n", x);
