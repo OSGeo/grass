@@ -332,6 +332,7 @@ static int write_error(const char *msg, int fatal,
 	logfile = getenv("GIS_ERROR_LOG");
 	if (!logfile) {
 	    char buf[GPATH_MAX];
+
 	    sprintf(buf, "%s/GIS_ERROR_LOG", G__home());
 	    logfile = G_store(buf);
 	}
@@ -495,6 +496,8 @@ int G_info_format(void)
 	    grass_info_format = G_INFO_FORMAT_GUI;
 	else if (fstr && G_strcasecmp(fstr, "silent") == 0)
 	    grass_info_format = G_INFO_FORMAT_SILENT;
+	else if (fstr && G_strcasecmp(fstr, "plain") == 0)
+	    grass_info_format = G_INFO_FORMAT_BATCH;
 	else
 	    grass_info_format = G_INFO_FORMAT_STANDARD;
     }

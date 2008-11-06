@@ -111,15 +111,25 @@ int G_percent2(long n, long d, int s, FILE * out)
 		fprintf(out, "%4d%%\b\b\b\b\b", x);
 	    }
 	}
-	else {			/* GUI */
-	    if (out != NULL) {
-		if (first) {
-		    fprintf(out, "\n");
+	else {
+	    if (format == G_INFO_FORMAT_BATCH) {
+		if (out != NULL) {
+		    if (x == 100)
+			fprintf(out, "%d\n", x);
+		    else
+			fprintf(out, "%d..", x);
 		}
-		fprintf(out, "GRASS_INFO_PERCENT: %d\n", x);
-		fflush(out);
 	    }
-	    first = 0;
+	    else {		/* GUI */
+		if (out != NULL) {
+		    if (first) {
+			fprintf(out, "\n");
+		    }
+		    fprintf(out, "GRASS_INFO_PERCENT: %d\n", x);
+		    fflush(out);
+		}
+		first = 0;
+	    }
 	}
     }
 
