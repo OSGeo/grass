@@ -1,3 +1,7 @@
+
+#ifndef GRASS_LIST_H
+#define GRASS_LIST_H
+
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
@@ -21,12 +25,8 @@ extern struct list *list;
 #define COPY   3
 #define LIST   4
 
-
 /* add_elem.c */
 int add_element(char *, char *);
-
-/* copyfile.c */
-int copyfile(char *, char *, char *, char *);
 
 /* do_copy.c */
 int do_copy(int, char *, char *, char *);
@@ -49,12 +49,6 @@ char *find(int, char *, char *);
 /* get_len.c */
 int get_description_len(int);
 
-/* menu.c */
-int menu(int);
-int build_menu(void);
-int free_menu(void);
-int display_menu(void);
-
 /* read_list.c */
 int read_list(int);
 
@@ -63,3 +57,6 @@ int show_elements(void);
 
 /* sighold.c */
 int hold_signals(int);
+
+#endif
+

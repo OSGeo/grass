@@ -16,6 +16,9 @@ $(ARCH_DIRS):
 $(OBJDIR):
 	-test -d $(OBJDIR) || $(MKDIR) $(OBJDIR)
 
+$(ARCH_INCDIR)/%.h: %.h
+	$(INSTALL_DATA) $< $@
+
 # default clean rules
 clean:
 	-rm -rf $(OBJDIR) $(EXTRA_CLEAN_DIRS)

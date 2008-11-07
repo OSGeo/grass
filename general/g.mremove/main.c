@@ -30,9 +30,6 @@
 #include <regex.h>
 #include "global.h"
 
-int nlist;
-struct list *list;
-
 static int ls_filter(const char *, void *);
 
 int main(int argc, char *argv[])

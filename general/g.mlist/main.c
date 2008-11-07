@@ -22,16 +22,14 @@
 #include <string.h>
 #include <regex.h>
 #include <grass/spawn.h>
+#include <grass/list.h>
 #include "global.h"
-
-int nlist;
-struct list *list;
 
 static int any;
 
-static void do_list(const struct list *,
-		    const char *, const char *, const char *,
-		    int, int, int);
+static void make_list(const struct list *,
+		      const char *, const char *, const char *,
+		      int, int, int);
 static int parse(const char *);
 static int ls_filter(const char *, void *);
 
@@ -204,9 +202,9 @@ int main(int argc, char *argv[])
 	    }
 	}
 	else
-	    do_list(&list[n], pattern, opt.mapset->answer, separator,
-		    flag.pretty->answer, flag.type->answer,
-		    flag.mapset->answer);
+	    make_list(&list[n], pattern, opt.mapset->answer, separator,
+		      flag.pretty->answer, flag.type->answer,
+		      flag.mapset->answer);
     }
 
     if (!flag.pretty->answer && any)
@@ -220,7 +218,7 @@ int main(int argc, char *argv[])
     exit(EXIT_SUCCESS);
 }
 
-static void do_list(
+static void make_list(
     const struct list *elem,
     const char *pattern, const char *mapset, const char *separator,
     int pretty, int add_type, int add_mapset)
@@ -240,8 +238,8 @@ static void do_list(
     if (!mapset || !*mapset) {
 	int n;
 	for (n = 0; mapset = G__mapset_name(n), mapset; n++)
-	    do_list(elem, pattern, mapset, separator,
-		    pretty, add_type, add_mapset);
+	    make_list(elem, pattern, mapset, separator,
+		      pretty, add_type, add_mapset);
 	return;
     }
 

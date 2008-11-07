@@ -21,8 +21,8 @@
 #include <string.h>
 #include <unistd.h>
 #include <grass/spawn.h>
+#include <grass/list.h>
 #include "local_proto.h"
-#include "list.h"
 
 struct Option *element;
 
