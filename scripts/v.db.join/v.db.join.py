@@ -34,6 +34,7 @@
 #% description: Layer where to join
 #% answer: 1
 #% required : no
+#% gisprompt: old_layer,layer,layer
 #%end
 
 #%option
@@ -41,6 +42,7 @@
 #% type: string
 #% description: Join column in map table
 #% required : yes
+#% gisprompt: old_dbcolumn,dbcolumn,dbcolumn
 #%end
 
 #%option
@@ -48,6 +50,7 @@
 #% type: string
 #% description: Other table name
 #% required : yes
+#% gisprompt: old_dbtable,dbtable,dbtable
 #%end
 
 #%option
@@ -55,6 +58,7 @@
 #% type: string
 #% description: Join column in other table
 #% required : yes
+#% gisprompt: old_dbcolumn,dbcolumn,dbcolumn
 #%end
 
 import sys
