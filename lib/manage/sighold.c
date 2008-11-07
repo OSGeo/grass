@@ -1,11 +1,9 @@
-#include "signal.h"
-
-void (*sig) ();
+#include <signal.h>
+#include <grass/config.h>
 
 int hold_signals(int hold)
 {
-
-    sig = hold ? SIG_IGN : SIG_DFL;
+    RETSIGTYPE (*sig)() = hold ? SIG_IGN : SIG_DFL;
 
     signal(SIGINT, sig);
 

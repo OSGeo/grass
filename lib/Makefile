@@ -40,12 +40,9 @@ SUBDIRS = \
 	arraystats \
 	python \
 	ogsf \
-	nviz
-
-#compile if C++ compiler present:
-ifneq ($(strip $(CXX)),)
-    SUBDIRS += iostream
-endif
+	nviz \
+	iostream \
+	manage
 
 #doxygen:
 DOXNAME=grass

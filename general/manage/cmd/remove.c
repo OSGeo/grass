@@ -21,8 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/glocale.h>
-
-#include "list.h"
+#include <grass/list.h>
 #include "local_proto.h"
 
 static int check_reclass(const char *name, const char *mapset, int force)

@@ -1,10 +1,7 @@
 
 MODULE_TOPDIR = ../..
 
-SUBDIRS = \
-	lib \
-	cmd \
-	lister
+SUBDIRS = cmd lister
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 

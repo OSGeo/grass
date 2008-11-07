@@ -1,4 +1,4 @@
-#include "list.h"
+#include <grass/list.h>
 #include "local_proto.h"
 
 int init(char *pgm)
