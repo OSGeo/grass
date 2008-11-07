@@ -30,18 +30,21 @@ int get_stats(const char *name, const char *mapset, struct Cell_stats *statf)
     int fd;
 
     if ((fd = G_open_cell_old(name, mapset)) < 0)
-	G_fatal_error("error opening map <%s@%s>", name, mapset);
+	G_fatal_error(_("Unable to open raster map <%s>"),
+		      G_fully_qualified_name(name, mapset));
 
     cell = G_allocate_cell_buf();
     nrows = G_window_rows();
     ncols = G_window_cols();
 
     G_init_cell_stats(statf);
-    G_message(_("Reading %s ..."), name);
+    G_verbose_message(_("Reading raster map <%s>..."),
+		      G_fully_qualified_name(name, mapset));
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
 	if (G_get_c_raster_row(fd, cell, row) < 0)
-	    G_fatal_error("error reading map <%s@%s>", name, mapset);
+	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
+			  G_fully_qualified_name(name, mapset), row);
 	G_update_cell_stats(cell, ncols, statf);
     }
     G_percent(row, nrows, 2);
@@ -60,7 +63,8 @@ void get_fp_stats(const char *name, const char *mapset,
     int fd;
 
     if ((fd = G_open_cell_old(name, mapset)) < 0)
-	G_fatal_error("error opening map <%s@%s>", name, mapset);
+	G_fatal_error("Unable to open raster map <%s>",
+		      G_fully_qualified_name(name, mapset));
 
     dcell = G_allocate_d_raster_buf();
     nrows = G_window_rows();
@@ -71,7 +75,7 @@ void get_fp_stats(const char *name, const char *mapset,
 
     if (statf->geometric) {
 	if (min * max < 0)
-	    G_fatal_error(_("Cannot use logarithmic scaling if range includes zero"));
+	    G_fatal_error(_("Unable to use logarithmic scaling if range includes zero"));
 
 	if (min < 0) {
 	    statf->flip = 1;
@@ -89,13 +93,15 @@ void get_fp_stats(const char *name, const char *mapset,
     statf->stats = G_calloc(statf->count, sizeof(unsigned long));
     statf->total = 0;
 
-    G_message(_("Reading %s ..."), name);
+    G_verbose_message(_("Reading raster map <%s>..."),
+		      G_fully_qualified_name(name, mapset));
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
 
 	if (G_get_d_raster_row(fd, dcell, row) < 0)
-	    G_fatal_error("error reading map <%s@%s>", name, mapset);
-
+	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
+			  G_fully_qualified_name(name, mapset), row);
+	
 	for (col = 0; col < ncols; col++) {
 	    DCELL x;
 	    int i;
