@@ -5,7 +5,7 @@
 # MODULE:       v.db.join
 # AUTHOR(S):    Markus Neteler
 # PURPOSE:      Join a table to a map table
-# COPYRIGHT:    (C) 2007 by Markus Neteler and the GRASS Development Team
+# COPYRIGHT:    (C) 2007-2008 by Markus Neteler and the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
@@ -33,6 +33,7 @@
 #% description: Layer where to join
 #% answer: 1
 #% required : no
+#% gisprompt: old_layer,layer,layer
 #%end
 
 #%option
@@ -40,6 +41,7 @@
 #% type: string
 #% description: Join column in map table
 #% required : yes
+#% gisprompt: old_dbcolumn,dbcolumn,dbcolumn
 #%end
 
 #%option
@@ -47,6 +49,7 @@
 #% type: string
 #% description: Other table name
 #% required : yes
+#% gisprompt: old_dbtable,dbtable,dbtable
 #%end
 
 #%option
@@ -54,6 +57,7 @@
 #% type: string
 #% description: Join column in other table
 #% required : yes
+#% gisprompt: old_dbcolumn,dbcolumn,dbcolumn
 #%end
 
 if  [ -z "$GISBASE" ] ; then
@@ -73,23 +77,24 @@ fi
 
 PROG=`basename $0`
 
-driver=`v.db.connect -g map="$GIS_OPT_MAP" fs=";" | grep "^$GIS_OPT_LAYER " | cut -d';' -f5`
-database=`v.db.connect -g map="$GIS_OPT_MAP" fs=";" | grep "^$GIS_OPT_LAYER " | cut -d';' -f4`
+driver=`v.db.connect -g map="$GIS_OPT_MAP" fs=";" | grep "^$GIS_OPT_LAYER" | cut -d';' -f5`
+database=`v.db.connect -g map="$GIS_OPT_MAP" fs=";" | grep "^$GIS_OPT_LAYER" | cut -d';' -f4`
 
 if [ "$driver" = "dbf" ] ; then
    g.message -e "JOIN is not supported for tables stored in DBF format."
    exit 1
 fi
 
-maptable=`v.db.connect -g map="$GIS_OPT_MAP" fs=";" | grep "^$GIS_OPT_LAYER " | cut -d';' -f2`
+maptable=`v.db.connect -g map="$GIS_OPT_MAP" fs=";" | grep "^$GIS_OPT_LAYER" | cut -d';' -f2`
+
 if [ -z "$maptable" ] ; then
    g.message 'There is no table connected to this map! Cannot join any column.'
-   cleanup
+   ### cleanup
    exit 1
 fi
 
 v.info --quiet -c "$GIS_OPT_MAP" layer="$GIS_OPT_LAYER" | \
-   cut -d'|' -f1,2 | grep "|${GIS_OPT_COLUMN}$" 2>&1 >/dev/null
+    cut -d'|' -f1,2 | grep "|${GIS_OPT_COLUMN}$" 2>&1 >/dev/null
 
 if [ $? -ne 0 ] ; then
     g.message -e "Column <$GIS_OPT_COLUMN> not found in table <$GIS_OPT_MAP> at layer $GIS_OPT_LAYER"
