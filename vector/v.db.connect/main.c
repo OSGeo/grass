@@ -7,7 +7,7 @@
  *               
  * PURPOSE:      sets/prints DB connection for a given vector map
  *               
- * COPYRIGHT:    (C) 2002 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2008 by the GRASS Development Team
  *
  *               This program is free software under the 
  *               GNU General Public License (>=v2). 
@@ -71,6 +71,7 @@ int main(int argc, char **argv)
     dbkey->description = _("Must refer to an integer column");
 
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
+    field_opt->gisprompt = "new_layer,layer,layer";
 
     sep_opt = G_define_standard_option(G_OPT_F_SEP);
     sep_opt->answer = " ";
