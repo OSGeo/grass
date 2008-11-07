@@ -25,7 +25,7 @@ static int format_error(char *, int, char *);
 int read_list(int check_if_empty)
 {
     FILE *fd;
-    char element_list[600];
+    char element_list[GPATH_MAX];
     char buf[1024];
     char elem[100];
     char alias[100];
@@ -39,7 +39,8 @@ int read_list(int check_if_empty)
     list = 0;
     any = 0;
 
-    if ((env = G__getenv("ELEMENT_LIST")))
+    env = getenv("ELEMENT_LIST");
+    if (env)
 	strcpy(element_list, env);
     else
 	sprintf(element_list, "%s/etc/element_list", G_gisbase());
