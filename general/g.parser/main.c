@@ -358,7 +358,7 @@ int main(int argc, char *argv[])
      * to uppercase it was necessary to use uppercase variables.
      * Set both until all scripts are updated */
     for (flag = ctx.first_flag; flag; flag = flag->next_flag) {
-	char buff[12];
+	char buff[16];
 
 	sprintf(buff, "GIS_FLAG_%c=%d", flag->key, flag->answer ? 1 : 0);
 	putenv(G_store(buff));
