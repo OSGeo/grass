@@ -39,10 +39,14 @@ char *G_adjust_Cell_head3(struct Cell_head *, int, int, int);
 char *G_align_window(struct Cell_head *, const struct Cell_head *);
 
 /* alloc.c */
-void *G_malloc(size_t);
-void *G_calloc(size_t, size_t);
-void *G_realloc(void *, size_t);
+void *G__malloc(const char *, int, size_t);
+void *G__calloc(const char *, int, size_t, size_t);
+void *G__realloc(const char *, int, void *, size_t);
 void G_free(void *);
+
+#define G_malloc(n)     G__malloc(__FILE__, __LINE__, (n))
+#define G_calloc(m, n)  G__calloc(__FILE__, __LINE__, (m), (n))
+#define G_realloc(p, n) G__realloc(__FILE__, __LINE__, (p), (n))
 
 /* alloc_cell.c */
 size_t G_raster_size(RASTER_MAP_TYPE);
