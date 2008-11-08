@@ -575,8 +575,6 @@ int main(int argc, char *argv[])
 	G__put_window(&def_wind, "../PERMANENT", "DEFAULT_WIND");
     }
 
-    G_done_msg(" ");
-
     exit(EXIT_SUCCESS);
 }
 
@@ -919,7 +917,7 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 	}
     }
 
-    G_message(_("<%s> created"), output);
+    G_done_msg(_("Raster map <%s> created."), output);
 
     return;
 }
