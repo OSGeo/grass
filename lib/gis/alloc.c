@@ -31,21 +31,20 @@
  * \return void * 
  */
 
-void *G_malloc(size_t n)
+void *G__malloc(const char *file, int line, size_t n)
 {
     void *buf;
-
+	
     if (n <= 0)
 	n = 1;			/* make sure we get a valid request */
-
+	
     buf = malloc(n);
-    if (buf)
-	return buf;
+    if (!buf)
+	G_fatal_error(_("G_malloc: unable to allocate %lu bytes at %s:%d"),
+		      (unsigned long) n, file, line);
 
-    G_fatal_error(_("G_malloc: out of memory"));
-    return NULL;
+    return buf;
 }
-
 
 /**
  * \brief Memory allocation.
@@ -63,7 +62,7 @@ void *G_malloc(size_t n)
  * \return void * 
  */
 
-void *G_calloc(size_t m, size_t n)
+void *G__calloc(const char *file, int line, size_t m, size_t n)
 {
     void *buf;
 
@@ -73,11 +72,11 @@ void *G_calloc(size_t m, size_t n)
 	n = 1;
 
     buf = calloc(m, n);
-    if (buf)
-	return buf;
+    if (!buf)
+	G_fatal_error(_("G_calloc: unable to allocate %lu * %lu bytes at %s:%d"),
+		      (unsigned long) m, (unsigned long) n, file, line);
 
-    G_fatal_error(_("G_calloc: out of memory"));
-    return NULL;
+    return buf;
 }
 
 
@@ -101,7 +100,7 @@ void *G_calloc(size_t m, size_t n)
  * \return void * 
  */
 
-void *G_realloc(void *buf, size_t n)
+void *G__realloc(const char *file, int line, void *buf, size_t n)
 {
     if (n <= 0)
 	n = 1;			/* make sure we get a valid request */
@@ -111,11 +110,11 @@ void *G_realloc(void *buf, size_t n)
     else
 	buf = realloc(buf, n);
 
-    if (buf)
-	return buf;
+    if (!buf)
+	G_fatal_error(_("G_realloc: unable to allocate %lu bytes at %s:%d"),
+		      (unsigned long) n, file, line);
 
-    G_fatal_error(_("G_realloc: out of memory"));
-    return NULL;
+    return buf;
 }
 
 
