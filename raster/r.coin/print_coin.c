@@ -37,7 +37,7 @@ int print_coin(int Conformat, int out_cols, int tofile)
     int addflag;
     char topformat[133], midformat[133], namformat[133];
     char fillformat[133];
-    char *mapone;
+    const char *mapone;
     int col0, row0;
 
     if (tofile) {

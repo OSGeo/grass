@@ -17,12 +17,14 @@
  ***************************************************************************/
 
 #include <stdlib.h>
-#include <unistd.h>
+#include <string.h>
+#include <grass/gis.h>
+#include <grass/glocale.h>
 #include "coin.h"
 
 struct Cell_head window;
 
-char *title1, *title2;
+const char *title1, *title2;
 
 double window_cells;
 double window_area;
@@ -31,24 +33,72 @@ struct stats_table *table;
 long *catlist1, *catlist2;
 int no_data1, no_data2;
 int Rndex, Cndex;
-char *dumpname;
-char *statname;
+const char *dumpname;
+const char *statname;
 FILE *dumpfile;
 
-char map1name[GNAME_MAX], map2name[GNAME_MAX];
-char *mapset1, *mapset2;
+const char *map1name, *map2name;
 int ncat1, ncat2;
 
 char *fill, *midline;
 
 int main(int argc, char *argv[])
 {
+    struct GModule *module;
+    struct
+    {
+	struct Option *map1, *map2, *units;
+    } parm;
+    struct
+    {
+	struct Flag *w;
+    } flag;
+
     fill =
 	"                                                                                                                                       ";
     midline =
 	"------------------------------------------------------------------------------------------------------------------------------------";
 
     G_gisinit(argv[0]);
+
+    module = G_define_module();
+    module->keywords = _("raster");
+    module->description =
+	_("Tabulates the mutual occurrence (coincidence) "
+	  "of categories for two raster map layers.");
+
+    parm.map1 = G_define_option();
+    parm.map1->key = "map1";
+    parm.map1->required = YES;
+    parm.map1->type = TYPE_STRING;
+    parm.map1->gisprompt = "old,cell,raster";
+    parm.map1->description = _("Name of first raster map");
+
+    parm.map2 = G_define_option();
+    parm.map2->key = "map2";
+    parm.map2->required = YES;
+    parm.map2->type = TYPE_STRING;
+    parm.map2->gisprompt = "old,cell,raster";
+    parm.map2->description = _("Name of second raster map");
+
+    parm.units = G_define_option();
+    parm.units->key = "units";
+    parm.units->required = YES;
+    parm.units->type = TYPE_STRING;
+    parm.units->label = _("Unit of measure");
+    parm.units->description =
+	_("c(ells), p(ercent), x(percent of category [column]), "
+	  "y(percent of category [row]), a(cres), h(ectares), "
+	  "k(square kilometers), m(square miles)");
+    parm.units->options = "c,p,x,y,a,h,k,m";
+
+    flag.w = G_define_flag();
+    flag.w->key = 'w';
+    flag.w->description = _("Wide report, 132 columns (default: 80)");
+
+    if (G_parser(argc, argv))
+	exit(EXIT_FAILURE);
+
     G_get_window(&window);
     /* now make a temorary region with the same boundaries only 1 x 1 */
     window.rows = 1;
@@ -68,11 +118,19 @@ int main(int argc, char *argv[])
 
     window_cells = G_window_rows() * G_window_cols();
 
+    map1name = parm.map1->answer;
+    map2name = parm.map2->answer;
 
-    command_version(argc, argv);
+    if (!G_find_cell2(map1name, ""))
+	G_fatal_error(_("Raster map <%s> not found"), map1name);
+    if (!G_find_cell2(map2name, ""))
+	G_fatal_error(_("Raster map <%s> not found"), map2name);
 
-    unlink(dumpname);
-    unlink(statname);
+    make_coin();
+    print_coin(*parm.units->answer, flag.w->answer ? 132 : 80, 0);
 
-    exit(0);
+    remove(dumpname);
+    remove(statname);
+
+    exit(EXIT_SUCCESS);
 }

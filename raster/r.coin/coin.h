@@ -29,7 +29,7 @@ struct stats_table
 
 extern struct Cell_head window;
 
-extern char *title1, *title2;
+extern const char *title1, *title2;
 
 extern double window_cells;
 extern double window_area;
@@ -38,21 +38,17 @@ extern struct stats_table *table;
 extern long *catlist1, *catlist2;
 extern int no_data1, no_data2;
 extern int Rndex, Cndex;
-extern char *dumpname;
-extern char *statname;
+extern const char *dumpname;
+extern const char *statname;
 extern FILE *dumpfile;
 
-extern char map1name[GNAME_MAX], map2name[GNAME_MAX];
-extern char *mapset1, *mapset2;
+extern const char *map1name, *map2name;
 extern int ncat1, ncat2;
 
 extern char *fill, *midline;
 
 /* check.c */
 int check_report_size(void);
-
-/* cmd.c */
-int command_version(int, char *[]);
 
 /* format.c */
 int format_double(double, char *, int);
