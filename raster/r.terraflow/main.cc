@@ -134,14 +134,6 @@ parse_args(int argc, char *argv[]) {
   streamdir->description=
      _("Directory to hold temporary files (they can be large)");
 
-  /* verbose flag */
-  /* please, remove before GRASS 7 released */
-  struct Flag *quiet;
-  quiet = G_define_flag() ;
-  quiet->key         = 'q' ;
-  quiet->description = _("Quiet");
-  /* quiet->answer = 'n'; */
-
  /* stats file */
   struct Option *stats_opt;
   stats_opt = G_define_option() ;
@@ -177,19 +169,7 @@ parse_args(int argc, char *argv[]) {
   opt->mem = atoi(mem->answer);
   opt->streamdir = streamdir->answer;
 
-  opt->verbose = FALSE;
-/* please, remove before GRASS 7 released */
-  if(quiet->answer) {
-    G_warning(_("The '-q' flag is superseded and will be removed "
-	"in future. Please use '--quiet' instead."));
-    G_putenv("GRASS_VERBOSE","0");
-    opt->verbose = FALSE;
-  }
-  else {
-    if(G_verbose() == G_verbose_max())
-	opt->verbose = TRUE;
-  }
-
+  opt->verbose = G_verbose() == G_verbose_max();
 
   opt->stats = stats_opt->answer;
 
@@ -471,6 +451,13 @@ main(int argc, char *argv[]) {
   module->description = _("Flow computation for massive grids (Float version).");
 #endif
 
+  /* read user options; fill in global <opt> */  
+  opt = (userOptions*)malloc(sizeof(userOptions));
+  assert(opt);
+  
+  parse_args(argc, argv);
+  check_args();
+
   /* get the current region and dimensions */  
   region = (struct Cell_head*)malloc(sizeof(struct Cell_head));
   assert(region);
@@ -486,13 +473,6 @@ main(int argc, char *argv[]) {
     nrows = (dimension_type)nr;
     ncols = (dimension_type)nc;
   }
-
-  /* read user options; fill in global <opt> */  
-  opt = (userOptions*)malloc(sizeof(userOptions));
-  assert(opt);
-  
-  parse_args(argc, argv);
-  check_args();
 
   G_verbose_message( _("Region size is %d x %d"), nrows, ncols);
  
