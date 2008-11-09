@@ -45,9 +45,9 @@ int make_coin(void)
 	      map1name, map2name);
 
     sprintf(buf, "r.stats -anrc fs=: input=\"");
-    strcat(buf, G_fully_qualified_name(map1name, mapset1));
+    strcat(buf, map1name);
     strcat(buf, ",");
-    strcat(buf, G_fully_qualified_name(map2name, mapset2));
+    strcat(buf, map2name);
     strcat(buf, "\"");
     statfd = fopen(statname, "w");
     if (statfd == NULL)
@@ -113,8 +113,7 @@ int make_coin(void)
     /* want the smaller number across, larger number down */
     reversed = 0;
     if (ncat1 > ncat2) {
-	char name[GNAME_MAX];
-	char *mp;
+	const char *name;
 	long *list;
 	int n;
 
@@ -122,12 +121,9 @@ int make_coin(void)
 	ncat1 = ncat2;
 	ncat2 = n;
 
-	strcpy(name, map1name);
-	strcpy(map1name, map2name);
-	strcpy(map2name, name);
-	mp = mapset1;
-	mapset1 = mapset2;
-	mapset2 = mp;
+	name = map1name;
+	map1name = map2name;
+	map2name = name;
 
 	list = catlist1;
 	catlist1 = catlist2;
@@ -136,8 +132,8 @@ int make_coin(void)
 	reversed = 1;
     }
 
-    title1 = G_get_cell_title(map1name, mapset1);
-    title2 = G_get_cell_title(map2name, mapset2);
+    title1 = G_get_cell_title(map1name, "");
+    title2 = G_get_cell_title(map2name, "");
 
     /* determine where no data (cat 0) is */
     for (no_data1 = ncat1 - 1; no_data1 >= 0; no_data1--)
