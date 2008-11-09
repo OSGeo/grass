@@ -7,7 +7,10 @@ many common GPS data formats. Translation is done via the
 
 <P>
 Do not use as a primary means of navigation.
-
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License (GPL) for more details.
 
 <H2>NOTES</H2>
 
@@ -16,9 +19,44 @@ projection settings of the current location to Lat/Lon WGS84.
 <p>
 GPX format is used for data interchange between GRASS and GpsBabel.
 If the requested output is GPX, then <tt>gpsbabel</tt> is never run.
+<p>
+OGR's GPX driver knows a number of standard field names. If an attribute
+column matches the name it will be used in that field. Otherwise the
+attribute will be placed within the <tt>&lt;extensions&gt;</tt> metadata
+section of the record. Not all fields names are used with all feature
+types (e.g. DOP fix error is not meaningful for route lines). You can
+use the <em>v.db.renamecol</em> module to rename columns.
 <P>
-The <b>layer</b> option is only used in conjunction with the
-<b>where</b> SQL query option.
+These are the standard GPX data fields known to OGR:
+<div class="code"><pre>
+ageofdgpsdata
+cmt:	 Comment
+course
+desc
+dgpsid:	 DGPS station type
+ele:	 Elevation
+fix
+geoidheight
+hdop:	 Horizontal dillution of precision (estimated fix error)
+magvar:	 Magnetic variation
+name
+number
+pdop:	 Positional dillution of precision (estimated fix error)
+route_fid
+route_point_id
+sat
+speed
+src
+sym
+time
+track_fid
+track_seg_id
+track_seg_point_id
+type
+url
+urlname
+vdop:	 Vertical dillution of precision (estimated fix error)
+</pre></div>
 
 
 <H2>EXAMPLES</H2>
@@ -43,12 +81,16 @@ v.out.gps -r input=routes format=garmin output=/dev/ttyUSB0
 
 
 <H2>SEE ALSO</H2>
-<EM><A HREF="m.proj.html">m.proj</A></EM><BR>
-<EM><A HREF="v.in.ascii.html">v.in.ascii</A></EM><BR>
-<EM><A HREF="v.out.ascii.html">v.out.ascii</A></EM><BR>
-<EM><A HREF="v.in.garmin.html">v.in.garmin</A></EM><BR>
-<EM><A HREF="v.in.gpsbabel.html">v.in.gpsbabel</A></EM><BR>
-<EM><A HREF="v.extract.html">v.extract</A></EM><BR>
+<EM>
+<A HREF="m.proj.html">m.proj</A><BR>
+<A HREF="v.in.ascii.html">v.in.ascii</A><BR>
+<A HREF="v.out.ascii.html">v.out.ascii</A><BR>
+<A HREF="v.in.garmin.html">v.in.garmin</A><BR>
+<A HREF="v.in.gpsbabel.html">v.in.gpsbabel</A><BR>
+<A HREF="v.db.renamecol.html">v.db.renamecol</A><BR>
+<A HREF="v.extract.html">v.extract</A>
+</EM>
+<BR>
 <BR>
 
 <A HREF="http://www.gpsbabel.org">GpsBabel.org</a><BR>
