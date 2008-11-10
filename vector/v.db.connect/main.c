@@ -248,7 +248,7 @@ int main(int argc, char **argv)
 								&Map));
 			if (!driver)
 			    G_fatal_error(_("Unable to start driver <%s>"),
-					  dbdriver);
+					  dbdriver->answer);
 
 			db_get_column(driver, dbtable->answer, dbkey->answer,
 				      &column);
