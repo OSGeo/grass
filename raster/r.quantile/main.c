@@ -188,9 +188,10 @@ static void sort_bins(void)
     G_message(_("Computing quantiles"));
 }
 
-static void compute_quantiles(void)
+static void compute_quantiles(int recode)
 {
     struct bin *b = &bins[0];
+    double prev_v = min;
     int quant;
 
     for (quant = 0; quant < num_quants; quant++) {
@@ -210,8 +211,16 @@ static void compute_quantiles(void)
 	    : values[b->base + i0] * (i1 - k) + values[b->base + i1] * (k -
 									i0);
 
-	printf("%d:%f:%f\n", quant, 100 * quants[quant], v);
+	if (recode)
+	    printf("%f:%f:%i\n", prev_v, v, quant + 1);
+	else
+	    printf("%d:%f:%f\n", quant, 100 * quants[quant], v);
+
+	prev_v = v;
     }
+
+    if (recode)
+	printf("%f:%f:%i\n", prev_v, max, num_quants + 1);
 }
 
 int main(int argc, char *argv[])
@@ -221,6 +230,10 @@ int main(int argc, char *argv[])
     {
 	struct Option *input, *quant, *perc, *slots;
     } opt;
+    struct {
+	struct Flag *r;
+    } flag;
+    int recode;
     int infile;
     struct FPRange range;
 
@@ -253,10 +266,15 @@ int main(int argc, char *argv[])
     opt.slots->description = _("Number of bins to use");
     opt.slots->answer = "1000000";
 
+    flag.r = G_define_flag();
+    flag.r->key = 'r';
+    flag.r->description = _("Generate recode rules based on quantile-defined intervals.");
+ 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     num_slots = atoi(opt.slots->answer);
+    recode = flag.r->answer;
 
     if (opt.perc->answer) {
 	int i;
@@ -305,7 +323,7 @@ int main(int argc, char *argv[])
     G_free(slot_bins);
 
     sort_bins();
-    compute_quantiles();
+    compute_quantiles(recode);
 
     return (EXIT_SUCCESS);
 }
