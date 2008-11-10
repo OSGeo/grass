@@ -52,20 +52,40 @@ v.db.connect map=vectormap table=table
 <p>
 Using hardcoded path to DBF directory (not recommended):<br>
 <div class="code"><pre>
-v.db.connect map=vectormap table=table database=/home/user/grassdata/spearfish60/PERMANENT/dbf
+v.db.connect map=vectormap table=table \
+             database=/home/user/grassdata/spearfish60/PERMANENT/dbf
 </pre></div>
 
 <p>
 Using variable as DBF directory definition, single quotes must be used:<br>
 <div class="code"><pre>
-v.db.connect map=vectormap table=table database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/'
+v.db.connect map=vectormap table=table \
+             database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/'
 </pre></div>
 
 <p>
-Connect vector map layer 2 and key ID to database with variables (note: if needed, single quotes must be used for the <em>database</em> parameter):
+Connect vector map layer 2 and key ID to database with variables
+(note: if needed, single quotes must be used for the <em>database</em>
+parameter):
 <div class="code"><pre>
 v.db.connect map=vectormap table=table layer=2 key=ID
 </pre></div>
+
+
+
+<h3>Connect vector map to database (SQLite driver)</h3>
+
+Very similar to DBF driver example above.
+
+<div class="code"><pre>
+db.connect driver=sqlite database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db'
+db.tables -p
+v.db.connect map=vectormap table=table driver=sqlite \
+             database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db'
+v.db.connect -p map=vectormap
+</pre></div>
+
+
 
 <h3>Connect vector map to database (MySQL driver)</h3>
 
@@ -169,6 +189,7 @@ v.db.connect map=mytable driver=pg database="host=localhost,dbname=meteo" \
 
 <h2>SEE ALSO</h2>
 
+<em>
 <a HREF="db.connect.html">db.connect</a>,
 <a HREF="db.copy.html">db.copy</a>,
 <a HREF="db.tables.html">db.tables</a>,
@@ -179,6 +200,7 @@ v.db.connect map=mytable driver=pg database="host=localhost,dbname=meteo" \
 <a HREF="v.external.html">v.external</a>,
 <a HREF="v.in.db.html">v.in.db</a>,
 <a HREF="v.overlay.html">v.overlay</a>
+</em>
 
 <h2>AUTHOR</h2>
 
