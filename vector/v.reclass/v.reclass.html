@@ -1,18 +1,42 @@
 <H2>DESCRIPTION</H2>
 
-<EM>v.reclass</EM> allows user to create a new vector map based on the reclassification 
-of an existing vector map.  
+<EM>v.reclass</EM> allows user to create a new vector map based on
+the reclassification of an existing vector map. It also allows the user
+to change the <i>key column</i> away from the default of "<b>cat</b>" with
+the <b>column</b> option.
 
 <p>
 Rules file may contain on each row either pair:
 <div class="code"><pre>
 keyword&nbsp;value
 </pre></div>
-(separated by space) or comment beginning by #(hash). 
-Definition of new category begins with keyword <I>cat</I> followed by new category value.
+(separated by space) or comment beginning with '#' (hash). 
+Definition of new category begins with keyword <I>cat</I> followed
+by the new category value.
 Keyword <I>where</I> specifies SQL where condition.
 
-<H2>EXAMPLE</H2>
+
+
+<H2>NOTES</H2>
+
+No table is created for the reclassed map if the <B>column</B> option is
+used and the column type is integer (as the result could contain ambiguities).
+
+If the <B>column</B> option is used and the column type is string, a new
+table is created containing the newly generated cat numbers and a single
+column containing the unique string column values, sorted in alphabetical
+order.
+
+<P>
+For dissolving common boundaries, see 
+<em><a href="v.dissolve.html">v.dissolve</a></em>.
+
+
+
+<H2>EXAMPLES</H2>
+
+
+<H4>Example 1: Reclass by rules</H4>
 
 <div class="code"><pre>
 v.reclass input=land output=land_u type=boundary rules=land.rcl
@@ -28,22 +52,36 @@ cat 2
 where use = 'E14'
 </pre></div>
 
-Produces a new vector area map <EM>land_u</EM> containing boundaries from <EM>land</EM> with area category values selected 
-from database by SQL select statement: <br>
-<I>select id from tland where use = 'E13' and owner = 'Jara Cimrman' </I> changed to category 1;
+Produces a new vector area map <EM>land_u</EM> containing boundaries from
+<EM>land</EM> with area category values selected from database by SQL
+select statement:
 <br>
-values selected from database by SQL select statement: <br>
-<I>select id from tland where use = 'E14' </I> changed to category 2.
+<tt>select id from tland where use = 'E13' and owner = 'Jara Cimrman'</tt>
+changed to category 1;
+<br>
+values selected from database by SQL select statement: 
+<br>
+<tt>select id from tland where use = 'E14'</tt> changed to category 2.
 
-<H2>NOTES</H2>
-No table is created for reclassed layer if <B>column</B> option is used and column type is
-integer (there is nothing which could be written to the table).
-<P>
-For dissolving common boundaries, see <em><a href="v.dissolve.html">v.dissolve</a></em>.
+
+<H4>Example 2: Reclass by attribute column</H4>
+
+(North Carolina sample dataset)<br>
+
+<div class="code"><pre>
+v.reclass in=streams out=streams_by_type column=I_vs_P
+
+v.db.select streams_by_type
+cat|I_vs_P
+1|intermittent
+2|perennial
+</pre></div>
+
 
 <H2>BUGS</H2>
 
 No table is created for reclassed layer if <B>rules</B> option is used.
+
 
 <H2>SEE ALSO</H2>
 
@@ -54,10 +92,12 @@ No table is created for reclassed layer if <B>rules</B> option is used.
 <p>
 <em><a HREF="sql.html">GRASS SQL interface</a></em>
 
+
 <H2>AUTHOR</H2>
 
 R.L. Glenn, USDA, SCS, NHQ-CGIS<BR>
-from v.reclass to v.db.reclass and later to v.reclass in 5.7 rewritten by Radim Blazek
+from v.reclass to v.db.reclass and later to v.reclass in 5.7 rewritten
+by Radim Blazek
 
 <p>
 <i>Last changed: $Date$</i>
