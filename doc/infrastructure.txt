@@ -171,12 +171,6 @@ Maintainer: OSGeo-SAC, http://wiki.osgeo.org/wiki/SAC
 
 == GRASS Bugtracker ==
 
-Maintainer: Bernhard Reiter, Jan-Oliver Wagner (gforce)
-            Maciej Sieczka (bugs generally), with help from
-             - Jachym Cepicky - code patches,
-             - Scott Mitchell - website patches,
-             - Martin Landa   - doc patches
-
 Very old bugtracker (Dec 2000 - Dec 2006):
   * https://intevation.de/rt/webrt?q_queue=grass
   * webRT, sponsored by Intevation GmbH, Germany
