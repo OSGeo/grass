@@ -1,4 +1,5 @@
 #include <unistd.h>
+#include <grass/glocale.h>
 #include "global.h"
 
 /* Modified to support Grass 5.0 fp format 11 april 2000
@@ -90,17 +91,14 @@ int rectify(char *name, char *mapset, char *result, int order)
 
     if (target_window.proj != cellhd.proj) {
 	cellhd.proj = target_window.proj;
-	sprintf(buf,
-		"WARNING %s@%s: projection don't match current settings.\n",
-		name, mapset);
-	G_warning(buf);
+	G_warning(_("Raster map <%s@%s>: projection don't match current settings"),
+		  name, mapset);
     }
 
     if (target_window.zone != cellhd.zone) {
 	cellhd.zone = target_window.zone;
-	sprintf(buf, "WARNING %s@%s: zone don't match current settings .\n",
-		name, mapset);
-	G_warning(buf);
+	G_warning(_("Raster map <%s@%s>: zone don't match current settings"),
+		  name, mapset);
     }
 
     target_window.compressed = cellhd.compressed;

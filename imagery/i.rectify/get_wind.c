@@ -1,3 +1,4 @@
+#include <grass/glocale.h>
 #include "global.h"
 #include "crs.h"		/* CRS HEADER FILE */
 
@@ -42,9 +43,9 @@ int georef_window(struct Cell_head *w1, struct Cell_head *w2, int order)
     w2->ns_res = (w2->north - w2->south) / w1->rows;
     w2->ew_res = (w2->east - w2->west) / w1->cols;
 
-    fprintf(stderr, "Region N=%f S=%f E=%f W=%f\n", w2->north, w2->south,
+    G_message(_("Region N=%f S=%f E=%f W=%f"), w2->north, w2->south,
 	    w2->east, w2->west);
-    fprintf(stderr, "Resolution EW=%f NS=%f\n", w2->ew_res, w2->ns_res);
+    G_message(_("Resolution EW=%f NS=%f"), w2->ew_res, w2->ns_res);
 
     return 0;
 }

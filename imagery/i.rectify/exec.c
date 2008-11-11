@@ -13,6 +13,7 @@
 #include <fcntl.h>
 #include <time.h>
 #include <unistd.h>
+#include <grass/glocale.h>
 #include "global.h"
 
 int exec_rectify(int order, char *extension)
@@ -50,8 +51,8 @@ int exec_rectify(int order, char *extension)
 		G_malloc(strlen(ref.file[n].name) + strlen(extension) + 1);
 	    strcpy(result, ref.file[n].name);
 	    strcat(result, extension);
-	    fprintf(stderr, "Rectified input file %s will be saved as %s\n",
-		    name, result);
+	    G_message(_("Rectified input raster map <%s> will be saved as <%s>"),
+		      name, result);
 
 	    select_current_env();
 

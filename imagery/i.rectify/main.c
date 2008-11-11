@@ -24,9 +24,10 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <grass/glocale.h>
 #include "global.h"
 #include "crs.h"
-#include <grass/glocale.h>
+
 
 ROWCOL row_map[NROWS][NCOLS];
 ROWCOL col_map[NROWS][NCOLS];
@@ -80,11 +81,11 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("imagery");
+    module->keywords = _("imagery, rectify");
     module->description =
 	_("Rectifies an image by computing a coordinate "
 	  "transformation for each pixel in the image based on the "
-	  "control points");
+	  "control points.");
 
     grp = G_define_standard_option(G_OPT_I_GROUP);
 
@@ -107,7 +108,7 @@ int main(int argc, char *argv[])
     c = G_define_flag();
     c->key = 'c';
     c->description =
-	_("Use curr. region settings in target location (def.=calculate smallest area)");
+	_("Use current region settings in target location (def.=calculate smallest area)");
 
     a = G_define_flag();
     a->key = 'a';
@@ -201,7 +202,7 @@ int main(int argc, char *argv[])
 	georef_window(&cellhd, &target_window, order);
     }
 
-    G_message(_("Using Region: N=%f S=%f, E=%f W=%f"), target_window.north,
+    G_verbose_message(_("Using region: N=%f S=%f, E=%f W=%f"), target_window.north,
 	      target_window.south, target_window.east, target_window.west);
 
     exec_rectify(order, extension);
@@ -215,11 +216,11 @@ void err_exit(char *file, char *grp)
     int n;
 
     fprintf(stderr,
-	    "Input raster map <%s> does not exist in group <%s>.\n Try:\n",
+	    _("Input raster map <%s> does not exist in group <%s>.\n Try:\n"),
 	    file, grp);
 
     for (n = 0; n < ref.nfiles; n++)
 	fprintf(stderr, "%s\n", ref.file[n].name);
 
-    G_fatal_error("Exit!");
+    G_fatal_error(_("Exit!"));
 }

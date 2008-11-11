@@ -829,7 +829,8 @@ class mainFrame(wx.Frame):
     def OnCancel(self, event):
         """Cancel button pressed"""
         self.MakeModal(False)
-        if self.get_dcmd:
+        if self.get_dcmd and \
+                hasattr(self.parent, "GetPyData"):
             # display decorations and 
             # pressing OK or cancel after setting layer properties
             if self.task.name in ['d.barscale','d.legend','d.histogram'] \

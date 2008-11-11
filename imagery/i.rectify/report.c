@@ -1,3 +1,4 @@
+#include <grass/glocale.h>
 #include "global.h"
 
 int report(char *name, char *mapset, char *result,
@@ -8,14 +9,11 @@ int report(char *name, char *mapset, char *result,
     long ncells;
 
     select_current_env();
-    fprintf(stderr, "***********************************************\n");
-    fprintf(stderr, "Rectify [%s@%s] (LOCATION %s)\n",
-	    name, mapset, G_location());
-    fprintf(stderr, " into  [%s in ", result);
+    G_message(_("Rectify <%s@%s> (location <%s>)"),
+	      name, mapset, G_location());
     select_target_env();
-    fprintf(stderr, "%s] (LOCATION %s)\n", G_mapset(), G_location());
-    fprintf(stderr, "%s\n", ok ? "complete" : "failed");
-    fprintf(stderr, "-----------------------------------------------\n");
+    G_message(_("into  <%s@%s> (location <%s>) ... %s"),
+	      result, G_mapset(), G_location(), ok ? _("complete") : _("failed"));
     select_current_env();
 
     if (!ok)
@@ -26,30 +24,33 @@ int report(char *name, char *mapset, char *result,
     hours = minutes / 60;
     minutes -= hours * 60;
     ncells = target_window.rows * target_window.cols;
-    fprintf(stderr, " %d rows, %d cols (%ld cells) completed in ",
-	    target_window.rows, target_window.cols, ncells);
+    G_verbose_message(_("%d rows, %d cols (%ld cells) completed in"),
+			target_window.rows, target_window.cols, ncells);
     if (hours)
-	fprintf(stderr, "%d:%02d:%02ld\n", hours, minutes, seconds % 60);
+	G_verbose_message("%d:%02d:%02ld", hours, minutes, seconds % 60);
     else
-	fprintf(stderr, "%d:%02ld\n", minutes, seconds % 60);
+	G_verbose_message("%d:%02ld", minutes, seconds % 60);
     if (seconds)
-	fprintf(stderr, " %.1f cells per minute\n",
-		(60.0 * ncells) / ((double)seconds));
-
-    fprintf(stderr, "\n");
+	G_verbose_message(_("%.1f cells per minute"),
+			  (60.0 * ncells) / ((double)seconds));
+		      
     seconds = compress;
 
-    if (seconds <= 0)
+    if (seconds <= 0) {
+	G_message("-----------------------------------------------");
 	return 1;
+    }
 
     minutes = seconds / 60;
     hours = minutes / 60;
     minutes -= hours * 60;
-    fprintf(stderr, " data compression required an additional ");
+    G_verbose_message(_("data compression required an additional"));
     if (hours)
-	fprintf(stderr, "%d:%02d:%02ld\n", hours, minutes, seconds % 60);
+	G_verbose_message("%d:%02d:%02ld", hours, minutes, seconds % 60);
     else
-	fprintf(stderr, "%d:%02ld\n", minutes, seconds % 60);
+	G_verbose_message("%d:%02ld\n", minutes, seconds % 60);
+
+    G_message("-----------------------------------------------");
 
     return 0;
 }

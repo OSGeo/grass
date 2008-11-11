@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <grass/glocale.h>
 #include "global.h"
 #include "crs.h"		/* CRS HEADER FILE */
 int get_control_points(char *group, int order	/* THIS HAS BEEN ADDED WITH THE CRS MODIFICATIONS */
@@ -11,24 +12,24 @@ int get_control_points(char *group, int order	/* THIS HAS BEEN ADDED WITH THE CR
     if (!I_get_control_points(group, &cp))
 	exit(0);
 
-    sprintf(msg, "Control Point file for group [%s] in [%s] - ",
+    sprintf(msg, _("Control Point file for group <%s@%s> - "),
 	    group, G_mapset());
 
     switch (CRS_compute_georef_equations(&cp, E12, N12, E21, N21, order)) {
     case 0:
 	sprintf(&msg[strlen(msg)],
-		"Not enough active control points for current order, %d are required.",
+		_("Not enough active control points for current order, %d are required."),
 		(order + 1) * (order + 2) / 2);
 	break;
     case -1:
-	strcat(msg, "Poorly placed control points.");
-	strcat(msg, " Can not generate the transformation equation.");
+	strcat(msg, _("Poorly placed control points."));
+	strcat(msg, _(" Can not generate the transformation equation."));
 	break;
     case -2:
-	strcat(msg, "Not enough memory to solve for transformation equation");
+	strcat(msg, _("Not enough memory to solve for transformation equation"));
 	break;
     case -3:
-	strcat(msg, "Invalid order");
+	strcat(msg, _("Invalid order"));
 	break;
     default:
 	/* COMMENTED OUT WHEN SUPPORT FOR 3rd ORDER WAS ADDED BY 'CRS'
@@ -40,5 +41,6 @@ int get_control_points(char *group, int order	/* THIS HAS BEEN ADDED WITH THE CR
 	return 1;
     }
     G_fatal_error(msg);
-    exit(1);
+
+    return 0; /* G_fatal_error() calls exit() */
 }
