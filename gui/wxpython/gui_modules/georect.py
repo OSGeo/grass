@@ -24,12 +24,14 @@ import os
 import sys
 import tempfile
 import shutil
+import time
 
 import wx
 from wx.lib.mixins.listctrl import CheckListCtrlMixin, ListCtrlAutoWidthMixin, TextEditMixin
 import wx.lib.colourselect as  csel
 import wx.wizard as wiz
 
+import grass
 import globalvar
 import mapdisp
 import render
@@ -817,7 +819,13 @@ class GCP(wx.Frame):
             mapWin.polypen = wx.Pen(colour=wxCol, width=wpx, style=wx.SOLID) # ?
             coord = mapWin.Cell2Pixel((gcp[coordtype][0], gcp[coordtype][1]))
             mapWin.DrawCross(pdc=mapWin.pdcTmp, coords=coord,
-                             size=5, text=('%s' % str(idx + 1), font, wxCol, 0.0))
+                             size=5, text={ 'text' : '%s' % str(idx + 1),
+                                            'font' : font,
+                                            'color': wxCol,
+                                            'coords': [coord[0] + 5,
+                                                       coord[1] + 5,
+                                                       5,
+                                                       5]})
             
             idx += 1
             
@@ -990,8 +998,10 @@ class GCP(wx.Frame):
             if self.clip_to_region:
                 cmdlist.append('-c')
             
-            self.parent.goutput.RunCmd(cmdlist)
+            self.parent.goutput.RunCmd(cmdlist, compReg=False,
+                                       switchPage=True)
 
+            time.sleep(.1)
             self.grwiz.SwitchEnv('original')
 
         elif maptype == 'vector':

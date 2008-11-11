@@ -418,7 +418,10 @@ class BufferedWindow(MapWindow, wx.Window):
                 # self.ovlcoords[drawid] = coords
 
         elif pdctype == 'text': # draw text on top of map
-            rotation = float(img['rotation'])
+            if img.has_key('rotation'):
+                rotation = float(img['rotation'])
+            else:
+                rotation = 0.0
             w, h = self.GetFullTextExtent(img['text'])[0:2]
             pdc.SetFont(img['font'])
             pdc.SetTextForeground(img['color'])
@@ -442,7 +445,11 @@ class BufferedWindow(MapWindow, wx.Window):
         @param textinfo text metadata (text, font, color, rotation)
         @param coords reference point
         """
-        rotation = float(textinfo['rotation'])
+        if textinfo.has_key('rotation'):
+            rotation = float(textinfo['rotation'])
+        else:
+            rotation = 0.0
+        
         coords = textinfo['coords']
         
         Debug.msg (4, "BufferedWindow.TextBounds(): text=%s, rotation=%f" % \
@@ -673,11 +680,13 @@ class BufferedWindow(MapWindow, wx.Window):
         #
         
         # update layer dictionary if there has been a change in layers
-        if self.tree.reorder == True:
+        if self.tree and self.tree.reorder == True:
             self.tree.ReorderLayers()
             
         # reset flag for auto-rendering
-        self.tree.rerender = False
+        if self.tree:
+            self.tree.rerender = False
+        
         if render:
             # update display size
             self.Map.ChangeMapSize(self.GetClientSize())
@@ -2931,9 +2940,10 @@ class MapFrame(wx.Frame):
 
     def OnPointer(self, event):
         """Pointer button clicked"""
-        if event:
-            self.toolbars['map'].OnTool(event)
-        self.toolbars['map'].action['desc'] = ''
+        if self.toolbars['map']:
+            if event:
+                self.toolbars['map'].OnTool(event)
+            self.toolbars['map'].action['desc'] = ''
         
         self.MapWindow.mouse['use'] = "pointer"
         self.MapWindow.mouse['box'] = "point"
@@ -2967,8 +2977,9 @@ class MapFrame(wx.Frame):
         Zoom in the map.
         Set mouse cursor, zoombox attributes, and zoom direction
         """
-        self.toolbars['map'].OnTool(event)
-        self.toolbars['map'].action['desc'] = ''
+        if self.toolbars['map']:
+            self.toolbars['map'].OnTool(event)
+            self.toolbars['map'].action['desc'] = ''
         
         self.MapWindow.mouse['use'] = "zoom"
         self.MapWindow.mouse['box'] = "box"
@@ -2983,8 +2994,9 @@ class MapFrame(wx.Frame):
         Zoom out the map.
         Set mouse cursor, zoombox attributes, and zoom direction
         """
-        self.toolbars['map'].OnTool(event)
-        self.toolbars['map'].action['desc'] = ''
+        if self.toolbars['map']:
+            self.toolbars['map'].OnTool(event)
+            self.toolbars['map'].action['desc'] = ''
         
         self.MapWindow.mouse['use'] = "zoom"
         self.MapWindow.mouse['box'] = "box"
@@ -3004,8 +3016,9 @@ class MapFrame(wx.Frame):
         """
         Panning, set mouse to drag
         """
-        self.toolbars['map'].OnTool(event)
-        self.toolbars['map'].action['desc'] = ''
+        if self.toolbars['map']:
+            self.toolbars['map'].OnTool(event)
+            self.toolbars['map'].action['desc'] = ''
         
         self.MapWindow.mouse['use'] = "pan"
         self.MapWindow.mouse['box'] = "pan"
@@ -3510,8 +3523,9 @@ class MapFrame(wx.Frame):
 
     def OnQuery(self, event):
         """Query tools menu"""
-        self.toolbars['map'].OnTool(event)
-        action = self.toolbars['map'].GetAction()
+        if self.toolbars['map']:
+            self.toolbars['map'].OnTool(event)
+            action = self.toolbars['map'].GetAction()
         
         point = wx.GetMousePosition()
         toolsmenu = wx.Menu()
