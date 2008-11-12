@@ -193,11 +193,12 @@ cut -d&lt;the_field_separator_character&gt; -f&lt;comma-separated_list_of_column
 
 <h3>Example 1a) - standard format mode</h3>
 Sample ASCII polygon vector map for 'standard' format mode. 
-The two areas will be assigned categories 20 and 21.
+The two areas will be assigned categories 20 and 21. It is
+not necessary to pad each coordinate line with spaces.
 The example can be tested in the Spearfish sample dataset:
 <p>
 <div class="code"><pre>
-ORGANIZATION: GRASS Development Team
+echo "ORGANIZATION: GRASS Development Team
 DIGIT DATE:   1/9/2005
 DIGIT NAME:   -
 MAP NAME:     test
@@ -224,7 +225,7 @@ B  4
  5959010.9323622 3401338.36037757
 C  1 1
  5959063.08352122 3401386.98533277
- 1 21
+ 1 21" | v.in.ascii format=standard output=test_polygons
 </pre></div>
 
 <h3>Example 1b) - standard format mode</h3>
