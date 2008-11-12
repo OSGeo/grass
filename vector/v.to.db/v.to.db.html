@@ -42,13 +42,13 @@ needed.
 
 Upload category numbers to attribute table (used for new map):<br>
 <div class="code"><pre>
-v.to.db map=soils type=area option=cat
+v.to.db map=soils type=centroid option=cat
 </pre></div>
 
 <p>
-Upload area sizes of each polygon to attribute table:<br>
+Upload polygon areas to corresponding centroid record in the attribute table:<br>
 <div class="code"><pre>
-v.to.db map=soils type=area option=area col=area_size unit=h
+v.to.db map=soils type=centroid option=area col=area_size unit=h
 </pre></div>
 
 <p>
