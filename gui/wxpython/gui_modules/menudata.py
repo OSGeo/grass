@@ -601,6 +601,12 @@ class Data:
                                  "r.support.stats"),
                                 ("","","", ""),
 
+                                (_("Link to GDAL"),
+                                 _("Link GDAL supported raster file to a binary raster map layer."),
+                                 "self.OnMenuCmd",
+                                 "r.external"),
+                                ("","","", ""),
+
                                 (_("Reproject raster"),
                                  _("Re-projects a raster map from one location to the current location."),
                                  "self.OnMenuCmd",
@@ -1277,7 +1283,7 @@ class Data:
                                 ("","","", ""),
 
                                 (_("Link to OGR"),
-                                 _("Available drivers: ESRI Shapefile,MapInfo File,UK .NTF,SDTS,TIGER,S57,DGN,VRT,REC,Memory,BNA,CSV,GML,GPX,KML,GeoJSON,GMT,SQLite,ODBC,PGeo,PostgreSQL,AVCBin"),
+                                 _("Creates a new vector as a read-only link to OGR layer."),
                                  "self.OnMenuCmd",
                                  "v.external"),
                                 ("","","", ""),
