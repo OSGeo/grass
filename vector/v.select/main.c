@@ -5,7 +5,7 @@
  * AUTHOR(S):    Radim Blazek <radim.blazek gmail.com> (original contributor)
  *               Glynn Clements <glynn gclements.plus.com>, Markus Neteler <neteler itc.it>
  * PURPOSE:      
- * COPYRIGHT:    (C) 2003-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2008 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -129,26 +129,32 @@ int main(int argc, char *argv[])
     pre[1] = "b";
 
     module = G_define_module();
-    module->keywords = _("vector");
+    module->keywords = _("vector, query");
     module->description =
-	_("Select features from ainput by features from binput");
+	_("Selects features from vector map (A) by features from other vector map (B).");
 
     in_opt[0] = G_define_standard_option(G_OPT_V_INPUT);
+    in_opt[0]->description = _("Name of input vector map (A)");
     in_opt[0]->key = "ainput";
-
+    
     type_opt[0] = G_define_standard_option(G_OPT_V_TYPE);
+    type_opt[0]->label = _("Feature type (vector map A)");
     type_opt[0]->key = "atype";
 
     field_opt[0] = G_define_standard_option(G_OPT_V_FIELD);
+    field_opt[0]->label = _("Layer number (vector map A)");
     field_opt[0]->key = "alayer";
 
     in_opt[1] = G_define_standard_option(G_OPT_V_INPUT);
+    in_opt[1]->description = _("Name of input vector map (B)");
     in_opt[1]->key = "binput";
 
     type_opt[1] = G_define_standard_option(G_OPT_V_TYPE);
+    type_opt[1]->label = _("Feature type (vector map B)");
     type_opt[1]->key = "btype";
 
     field_opt[1] = G_define_standard_option(G_OPT_V_FIELD);
+    field_opt[1]->label = _("Layer number (vector map B)");
     field_opt[1]->key = "blayer";
 
     out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
@@ -160,11 +166,12 @@ int main(int argc, char *argv[])
     operator_opt->multiple = NO;
     operator_opt->options = "overlap";
     operator_opt->answer = "overlap";
+    operator_opt->label =
+	_("Operator defines required relation between features");
     operator_opt->description =
-	_("Operator defines required relation between features. "
-	  "A feature is written to output if the result of operation 'ainput operator binput' is true. "
-	  "An input feature is considered to be true, if category of given layer is defined.\n"
-	  "\t overlap: features partially or completely overlap");
+	_("A feature is written to output if the result of operation 'ainput operator binput' is true. "
+	  "An input feature is considered to be true, if category of given layer is defined.");
+    operator_opt->descriptions = _("overlap;features partially or completely overlap");
 
     table_flag = G_define_flag();
     table_flag->key = 't';
@@ -213,13 +220,13 @@ int main(int argc, char *argv[])
 
     /* Lines in A. Go through all lines and mark those that meets condition */
     if (type[0] & (GV_POINTS | GV_LINES)) {
-	G_message(_("Processing ainput lines ..."));
-
+	G_message(_("Processing vector features..."));
+	
 	for (aline = 1; aline <= nalines; aline++) {
 	    BOUND_BOX abox;
 
 	    G_debug(3, "aline = %d", aline);
-	    G_percent(aline, nalines, 1);	/* must be before any continue */
+	    G_percent(aline, nalines, 2);	/* must be before any continue */
 
 	    /* Check category */
 	    if (Vect_get_line_cat(&(In[0]), aline, field[0]) < 0)
@@ -293,8 +300,8 @@ int main(int argc, char *argv[])
     if (type[0] & GV_AREA) {
 	int aarea, naareas;
 
-	G_message(_("Processing ainput areas ..."));
-
+	G_message(_("Processing vector areas..."));
+	
 	naareas = Vect_get_num_areas(&(In[0]));
 
 	for (aarea = 1; aarea <= naareas; aarea++) {
@@ -444,7 +451,7 @@ int main(int argc, char *argv[])
     if (!(table_flag->answer)) {
 	int ttype, ntabs = 0;
 
-	G_message(_("Writing attributes ..."));
+	G_verbose_message(_("Writing attributes..."));
 
 	/* Number of output tabs */
 	for (i = 0; i < Vect_get_num_dblinks(&(In[0])); i++) {
@@ -473,12 +480,10 @@ int main(int argc, char *argv[])
 	    if (fields[i] == 0)
 		continue;
 
-	    G_message(_("Layer %d"), fields[i]);
-
 	    /* Make a list of categories */
 	    IFi = Vect_get_field(&(In[0]), fields[i]);
 	    if (!IFi) {		/* no table */
-		G_message("No table.");
+		G_warning(_("Layer %d - no table"), fields[i]);
 		continue;
 	    }
 
@@ -493,13 +498,12 @@ int main(int argc, char *argv[])
 				      ncats[i]);
 
 	    if (ret == DB_FAILED) {
-		G_warning(_("Cannot copy table"));
+		G_warning(_("Layer %d - unable to copy table"), fields[i]);
 	    }
 	    else {
 		Vect_map_add_dblink(&Out, OFi->number, OFi->name, OFi->table,
 				    IFi->key, OFi->database, OFi->driver);
 	    }
-	    G_done_msg("");
 	}
     }
 
@@ -507,6 +511,8 @@ int main(int argc, char *argv[])
 
     Vect_build(&Out, stderr);
     Vect_close(&Out);
+
+    G_done_msg(" ");
 
     exit(EXIT_SUCCESS);
 }
