@@ -1,3 +1,5 @@
+/*** TODO: make non-interactive and merge with main imagery library ***/
+
 
 /*************************************************************
 * I_ask_camera_old (prompt,camera)
