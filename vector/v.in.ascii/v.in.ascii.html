@@ -5,7 +5,7 @@ binary format. The module may import two formats:
 <ul>
 <li><b>standard</b> contains all data types, each coordinate on one row</li>
 <li><b>point</b> (default) reads only points, each point defined on
-  one row. Values are separated by a user definable deliminator. If
+  one row. Values are separated by a user-definable delimiter. If
   the <b>columns</b> option is not defined, default names are used. It
   is possible to specify the column order for the x,y,z coordinates
   and category values.</li>
@@ -30,7 +30,7 @@ The field separator may be a character, the word '<tt>tab</tt>'
 or '<tt>comma</tt>' (or ',') for a comma.
 
 <p>
-Attribute table is only created if it is needed, i.e. when at
+An attribute table is only created if it is needed, i.e. when at
 least one attribute column is present in the input file besides
 geometry columns. The attribute column will be auto-scanned for type, but
 may be explicitly declared along with the geometry columns using the
@@ -69,14 +69,14 @@ or within a subregion (the <b>-r</b> flag) before resorting the to
 disabling of topology.
 
 <p>
-A GRASS ASCII vector map (in <B>standard format</B> mode) may contain a mix
+A GRASS ASCII vector map (in <b>standard format</b> mode) may contain a mix
 of primitives including points, lines, boundaries, centroids, areas,
 faces, and kernels.
 <!--This format is described in the
 <a HREF="http://freegis.org/cgi-bin/viewcvs.cgi/~checkout~/grass6/doc/vector/vector.html#ascii">GRASS
-Vector ASCII Format Specification</a>.--> On top a header can be
-defined (see example below).  The header is not required if
-the <b>-n</b> flag is used.
+Vector ASCII Format Specification</a>.--> The GRASS ASCII vector format
+may contain a header with various metadata (see example below). 
+The header is not required if the <b>-n</b> flag is used.
 
 <p>The header is similar as the head file of vector binary format but
 contains bounding box also. Key words are:
@@ -193,8 +193,7 @@ cut -d&lt;the_field_separator_character&gt; -f&lt;comma-separated_list_of_column
 
 <h3>Example 1a) - standard format mode</h3>
 Sample ASCII polygon vector map for 'standard' format mode. 
-The two areas will be assigned categories 20 and 21. It is
-not necessary to pad each coordinate line with spaces.
+The two areas will be assigned categories 20 and 21. 
 The example can be tested in the Spearfish sample dataset:
 <p>
 <div class="code"><pre>
@@ -229,8 +228,10 @@ C  1 1
 </pre></div>
 
 <h3>Example 1b) - standard format mode</h3>
-Sample ASCII 3D line vector map for 'standard' format mode with simplified input
-(no header). The example can be tested in the Spearfish sample dataset:
+Sample ASCII 3D line vector map for 'standard' format mode with simplified input.
+Note the <b>-z</b> flag indicating 3D vector input, and the <b>-n</b> flag
+indicating no vector header should be expected from the input file.
+The example can be tested in the Spearfish sample dataset:
 
 <div class="code"><pre>
 echo "L 5 1
@@ -357,13 +358,13 @@ cat $MAPSET/group/$GROUP/POINTS | v.in.ascii out=$GROUP_gcp fs=space skip=3 \
 <a HREF="db.execute.html">db.execute</a>,
 <a HREF="r.in.ascii.html">r.in.ascii</a>,
 <a HREF="r.in.xyz.html">r.in.xyz</a>,
-<a HREF="v.db.connect.html">v.db.connect</a>,
-<a HREF="v.out.ascii.html">v.out.ascii</a>,
-<a HREF="v.info.html">v.info</a>,
 <a HREF="v.build.html">v.build</a>,
 <a HREF="v.build.polylines.html">v.build.polylines</a>,
 <a HREF="v.centroids.html">v.centroids</a>,
-<a HREF="v.clean.html">v.clean</a>
+<a HREF="v.clean.html">v.clean</a>,
+<a HREF="v.db.connect.html">v.db.connect</a>,
+<a HREF="v.info.html">v.info</a>,
+<a HREF="v.out.ascii.html">v.out.ascii</a>,
 </em>
 
 <h2>AUTHORS</h2>
