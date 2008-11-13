@@ -2,7 +2,7 @@
 
 <em>v.category</em> attaches, deletes or reports vector categories to
 map geometry. These categories (IDs) are used to link geometry
-object(s) to attribute record (from attribute table linked to vector map).
+object(s) to attribute records (from attribute table linked to vector map).
 
 <h2>NOTES</h2>
 
@@ -28,7 +28,11 @@ in this case, the module places new centroids in areas automatically.
 
 <p>
 The <b>id</b> parameter specifies the list of feature ids to which the
-operation is performed. By default all vector features are processed.
+operation is performed; by default, all vector feature ids are processed. 
+The <b>id</b> is an internal (unique) geometry id that all vector primitives possess, 
+and is separate from any category the feature may also possess. 
+Use <div class="code"><pre><em><a href="v.edit.html">v.edit</a></em> map=inputname tool=select</pre></div>
+to find out the geometry ids of certain features.
 
 <h2>EXAMPLES</h2>
 
