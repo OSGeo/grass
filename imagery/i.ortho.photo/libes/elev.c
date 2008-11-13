@@ -1,0 +1,77 @@
+
+/**********************************************************
+* I_get_group_elev (group, elev_layer, mapset_elev, tl, math_exp, units, nd);
+* I_put_group_elev (group, elev_layer, mapset_elev, tl, math_exp, units, nd);
+**********************************************************/
+#include <stdio.h>
+#include <unistd.h>
+#include "orthophoto.h"
+#include <grass/ortholib.h>
+#include <grass/gis.h>
+
+#define IN_BUF 200
+
+
+/* Put the "elev" name into the block file "ELEV" */
+int
+I_put_group_elev(char *group, char *elev, char *mapset_elev, char *tl,
+		 char *math_exp, char *units, char *nd)
+{
+    FILE *fd;
+
+    /*    G_suppress_warnings(1); */
+    fd = (FILE *) I_fopen_group_elev_new(group);
+    /*    G_suppress_warnings(0); */
+    if (fd == NULL)
+	return 0;
+
+    fprintf(fd, "elevation layer :%s\n", elev);
+    fprintf(fd, "mapset elevation:%s\n", mapset_elev);
+    fprintf(fd, "location        :%s\n", tl);
+    fprintf(fd, "math expresion  :%s\n", math_exp);
+    fprintf(fd, "units           :%s\n", units);
+    fprintf(fd, "no data values  :%s\n", nd);
+
+    return 0;
+}
+
+
+/* Return the elev name from the block file ELEV */
+int
+I_get_group_elev(char *group, char *elev, char *mapset_elev, char *tl,
+		 char *math_exp, char *units, char *nd)
+{
+    char buf[IN_BUF];
+    FILE *fd;
+
+    if (!I_find_group_elev_file(group))
+	return 0;
+
+    G_suppress_warnings(1);
+    fd = I_fopen_group_elev_old(group);
+    G_suppress_warnings(0);
+    if (!fd) {
+	G_warning
+	    ("unable to open elevation file for group [%s] in mapset [%s]",
+	     group, G_mapset());
+	G_sleep(3);
+
+	return 0;
+    }
+
+    fgets(buf, IN_BUF, fd);
+    sscanf(buf, "elevation layer :%s\n", elev);
+    fgets(buf, IN_BUF, fd);
+    sscanf(buf, "mapset elevation:%s\n", mapset_elev);
+    fgets(buf, IN_BUF, fd);
+    sscanf(buf, "location        :%s\n", tl);
+    fgets(buf, IN_BUF, fd);
+    sscanf(buf, "math expresion  :%s\n", math_exp);
+    fgets(buf, IN_BUF, fd);
+    sscanf(buf, "units           :%s\n", units);
+    fgets(buf, IN_BUF, fd);
+    sscanf(buf, "no data values  :%s\n", nd);
+    fclose(fd);
+
+    return (1);
+}
