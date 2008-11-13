@@ -112,6 +112,7 @@ int main(int argc, char **argv)
     DCELL min, max;
     DCELL *out_row;
     struct Cell_head window;
+    int need_sqrt = 0;
 
     G_gisinit(argv[0]);
 
@@ -138,8 +139,10 @@ int main(int argc, char **argv)
     in_name = opt.in->answer;
     out_name = opt.out->answer;
 
-    if (strcmp(opt.met->answer, "euclidian") == 0)
+    if (strcmp(opt.met->answer, "euclidian") == 0) {
 	distance = &distance_euclidian_squared;
+	need_sqrt = 1;
+    }
     else if (strcmp(opt.met->answer, "squared") == 0)
 	distance = &distance_euclidian_squared;
     else if (strcmp(opt.met->answer, "maximum") == 0)
@@ -252,7 +255,9 @@ int main(int argc, char **argv)
 
 	if (out_row != dist_row)
 	    for (col = 0; col < ncols; col++)
-		out_row[col] = sqrt(dist_row[col]);
+		out_row[col] = need_sqrt
+		    ? sqrt(dist_row[col])
+		    : dist_row[col];
 
 	G_put_d_raster_row(out_fd, out_row);
 
