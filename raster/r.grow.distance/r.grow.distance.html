@@ -51,19 +51,37 @@ The <i>Maximum metric</i> is given by the formula
 
 where the isolines of distance from a point are squares.
 
+
+<h2>EXAMPLE</h2>
+
+Spearfish sample dataset
+<div class="code"><pre>
+r.grow.distance in=roads out=dist_from_roads
+</pre></div>
+
+
 <h2>SEE ALSO</h2>
 
-<em><a href="r.grow.html">r.grow</a></em><br>
-<em><a href="r.buffer.html">r.buffer</a></em><br>
-<em><a href="r.patch.html">r.patch</a></em>
+<em>
+<a href="r.grow.html">r.grow</a><br>
+<a href="r.buffer.html">r.buffer</a><br>
+<a href="r.cost.html">r.cost</a><br>
+<a href="r.patch.html">r.patch</a>
+</em>
 
 <p>
 
-<em><a href="http://en.wikipedia.org/wiki/Euclidean_metric">Wikipedia Entry: Euclidean Metric</a></em><br>
-<em><a href="http://en.wikipedia.org/wiki/Manhattan_metric">Wikipedia Entry: Manhattan Metric</a></em>
+<em>
+<a href="http://en.wikipedia.org/wiki/Euclidean_metric">Wikipedia Entry:
+    Euclidean Metric</a><br>
+<a href="http://en.wikipedia.org/wiki/Manhattan_metric">Wikipedia Entry:
+    Manhattan Metric</a>
+</em>
+
 
 <h2>AUTHORS</h2>
 
 Glynn Clements
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
