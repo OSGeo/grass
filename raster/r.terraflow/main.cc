@@ -459,12 +459,13 @@ main(int argc, char *argv[]) {
   assert(region);
 
   parse_args(argc, argv);
-  check_args();
 
   /* get the current region and dimensions */  
   if (G_get_set_window(region) == -1) {
     G_fatal_error("r.terraflow: error getting current region");
   }
+  check_args();
+
   int nr = G_window_rows();
   int nc = G_window_cols();
   if ((nr > dimension_type_max) || (nc > dimension_type_max)) {
