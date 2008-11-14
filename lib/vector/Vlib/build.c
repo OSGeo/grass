@@ -42,37 +42,17 @@ static int (*Build_array[]) () = {
 #endif
 };
 
-FILE *Msgout = NULL;
-
-
-int prnmsg(char *msg, ...)
-{
-    char buffer[1000];
-    va_list ap;
-
-    if (Msgout != NULL) {
-	va_start(ap, msg);
-	vsprintf(buffer, msg, ap);
-	va_end(ap);
-	fprintf(Msgout, "%s", buffer);
-	fflush(Msgout);
-    }
-
-    return 1;
-}
-
 /*!
    \brief Build topology for vector map
 
    \param Map vector map
-   \param msgout file for message output (stdout/stderr for example) or NULL
 
    \return 1 on success
    \return 0 on error
  */
-int Vect_build(struct Map_info *Map, FILE * msgout)
+int Vect_build(struct Map_info *Map)
 {
-    return Vect_build_partial(Map, GV_BUILD_ALL, msgout);
+    return Vect_build_partial(Map, GV_BUILD_ALL);
 }
 
 
@@ -121,17 +101,15 @@ int Vect_get_built(struct Map_info *Map)
 
    \param Map vector map
    \param build highest level of build
-   \param msgout file pointer for message output (stdout/stderr for example) or NULL
 
    \return 1 on success, 0 on error
  */
-int Vect_build_partial(struct Map_info *Map, int build, FILE * msgout)
+int Vect_build_partial(struct Map_info *Map, int build)
 {
     struct Plus_head *plus;
     int ret;
 
     G_debug(3, "Vect_build(): build = %d", build);
-    Msgout = msgout;
 
     /* If topology is already build (map on level2), set level to 1 so that lines will
      *  be read by V1_read_ (all lines) */
@@ -141,8 +119,8 @@ int Vect_build_partial(struct Map_info *Map, int build, FILE * msgout)
     Map->plus.Spidx_built = 1;
 
     plus = &(Map->plus);
-    prnmsg(_("Building topology for vector map <%s>...\n"),
-	   Vect_get_name(Map));
+    G_verbose_message(_("Building topology for vector map <%s>..."),
+		      Vect_get_name(Map));
     plus->with_z = Map->head.with_z;
     plus->spidx_with_z = Map->head.with_z;
 
@@ -151,13 +129,13 @@ int Vect_build_partial(struct Map_info *Map, int build, FILE * msgout)
 	dig_cidx_init(plus);
     }
 
-    ret = ((*Build_array[Map->format]) (Map, build, msgout));
+    ret = ((*Build_array[Map->format]) (Map, build));
 
     if (ret == 0) {
 	return 0;
     }
 
-    prnmsg(_("Topology was built\n"));
+    G_verbose_message(_("Topology was built"));
 
     Map->level = LEVEL_2;
     plus->mode = GV_MODE_WRITE;
@@ -167,20 +145,18 @@ int Vect_build_partial(struct Map_info *Map, int build, FILE * msgout)
 	dig_cidx_sort(plus);
     }
 
-    /* prnmsg ("Topology was built.\n") ; */
-
-    prnmsg(_("Number of nodes     :   %d\n"), plus->n_nodes);
-    prnmsg(_("Number of primitives:   %d\n"), plus->n_lines);
-    prnmsg(_("Number of points    :   %d\n"), plus->n_plines);
-    prnmsg(_("Number of lines     :   %d\n"), plus->n_llines);
-    prnmsg(_("Number of boundaries:   %d\n"), plus->n_blines);
-    prnmsg(_("Number of centroids :   %d\n"), plus->n_clines);
+    G_verbose_message(_("Number of nodes: %d"), plus->n_nodes);
+    G_verbose_message(_("Number of primitives: %d"), plus->n_lines);
+    G_verbose_message(_("Number of points: %d"), plus->n_plines);
+    G_verbose_message(_("Number of lines: %d"), plus->n_llines);
+    G_verbose_message(_("Number of boundaries: %d"), plus->n_blines);
+    G_verbose_message(_("Number of centroids: %d"), plus->n_clines);
 
     if (plus->n_flines > 0)
-	prnmsg(_("Number of faces     :   %d\n"), plus->n_flines);
+	G_verbose_message(_("Number of faces: %d"), plus->n_flines);
 
     if (plus->n_klines > 0)
-	prnmsg(_("Number of kernels   :   %d\n"), plus->n_klines);
+	G_verbose_message(_("Number of kernels: %d"), plus->n_klines);
 
     if (plus->built >= GV_BUILD_AREAS) {
 	int line, nlines, area, nareas, err_boundaries, err_centr_out,
@@ -220,29 +196,29 @@ int Vect_build_partial(struct Map_info *Map, int build, FILE * msgout)
 		err_nocentr++;
 	}
 
-	prnmsg(_("Number of areas     :   %d\n"), plus->n_areas);
-	prnmsg(_("Number of isles     :   %d\n"), plus->n_isles);
+	G_verbose_message(_("Number of areas: %d"), plus->n_areas);
+	G_verbose_message(_("Number of isles: %d"), plus->n_isles);
 
 	if (err_boundaries)
-	    prnmsg(_("Number of incorrect boundaries   :   %d\n"),
-		   err_boundaries);
+	    G_verbose_message(_("Number of incorrect boundaries: %d"),
+			      err_boundaries);
 
 	if (err_centr_out)
-	    prnmsg(_("Number of centroids outside area :   %d\n"),
-		   err_centr_out);
+	    G_verbose_message(_("Number of centroids outside area: %d"),
+			      err_centr_out);
 
 	if (err_centr_dupl)
-	    prnmsg(_("Number of duplicate centroids    :   %d\n"),
-		   err_centr_dupl);
+	    G_verbose_message(_("Number of duplicate centroids: %d"),
+			      err_centr_dupl);
 
 	if (err_nocentr)
-	    prnmsg(_("Number of areas without centroid :   %d\n"),
-		   err_nocentr);
+	    G_verbose_message(_("Number of areas without centroid: %d"),
+			      err_nocentr);
 
     }
     else {
-	prnmsg(_("Number of areas     :   -\n"));
-	prnmsg(_("Number of isles     :   -\n"));
+	G_verbose_message(_("Number of areas: -"));
+	G_verbose_message(_("Number of isles: -"));
     }
     return 1;
 }
@@ -451,7 +427,7 @@ int Vect_save_spatial_index(struct Map_info *Map)
 int Vect_spatial_index_dump(struct Map_info *Map, FILE * out)
 {
     if (!(Map->plus.Spidx_built)) {
-	Vect_build_sidx_from_topo(Map, NULL);
+	Vect_build_sidx_from_topo(Map);
     }
 
     fprintf(out, "---------- SPATIAL INDEX DUMP ----------\n");

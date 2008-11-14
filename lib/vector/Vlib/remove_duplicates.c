@@ -31,13 +31,11 @@
    \param Map vector map where duplicate lines will be deleted
    \param type type of line to be delete
    \param Err vector map where duplicate lines will be written or NULL
-   \param msgout file pointer where messages will be written or NULL
 
    \return void
  */
 void
-Vect_remove_duplicates(struct Map_info *Map, int type, struct Map_info *Err,
-		       FILE * msgout)
+Vect_remove_duplicates(struct Map_info *Map, int type, struct Map_info *Err)
 {
     struct line_pnts *APoints, *BPoints;
     struct line_cats *ACats, *BCats, *Cats;
@@ -64,9 +62,6 @@ Vect_remove_duplicates(struct Map_info *Map, int type, struct Map_info *Err,
      */
 
     ndupl = 0;
-
-    if (msgout)
-	fprintf(msgout, "%s: %5d", _("Duplicates"), ndupl);
 
     for (i = 1; i <= nlines; i++) {
 	if (!Vect_line_alive(Map, i))
@@ -113,20 +108,11 @@ Vect_remove_duplicates(struct Map_info *Map, int type, struct Map_info *Err,
 
 	    ndupl++;
 
-	    if (msgout) {
-		fprintf(msgout, "\r%s: %5d", _("Duplicates"), ndupl);
-		fflush(msgout);
-	    }
-
 	    break;		/* line was deleted -> take the next one */
 	}
 	nlines = Vect_get_num_lines(Map);	/* For future when lines with cats will be rewritten */
 	G_debug(3, "nlines =  %d\n", nlines);
     }
-    if (msgout)
-	fprintf(msgout, "\n");
-
-    return;
 }
 
 /*!

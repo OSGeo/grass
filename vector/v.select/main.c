@@ -509,7 +509,7 @@ int main(int argc, char *argv[])
 
     Vect_close(&(In[0]));
 
-    Vect_build(&Out, stderr);
+    Vect_build(&Out);
     Vect_close(&Out);
 
     G_done_msg(" ");

@@ -353,11 +353,7 @@ int main(int argc, char *argv[])
     Vect_set_map_name(&OutMap, "Output from v.patch");
     Vect_set_person(&OutMap, G_whoami());
 
-    if (G_verbose() > G_verbose_min())
-	Vect_build(&OutMap, stderr);
-    else
-	Vect_build(&OutMap, NULL);
-
+    Vect_build(&OutMap);
     Vect_close(&OutMap);
 
     if (bbox_name) {
@@ -366,11 +362,7 @@ int main(int argc, char *argv[])
 	G_important_message("");
 	G_important_message(_("Building topology for vector map <%s>..."),
 			    bbox_name);
-	if (G_verbose() > G_verbose_min())
-	    Vect_build(&BBoxMap, stderr);
-	else
-	    Vect_build(&BBoxMap, NULL);
-
+	Vect_build(&BBoxMap);
 	Vect_close(&BBoxMap);
     }
 

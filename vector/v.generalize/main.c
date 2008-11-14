@@ -432,7 +432,7 @@ int main(int argc, char *argv[])
     /* remove incorrect boundaries
      * they may occur only if they were generalized */
     if (mask_type & GV_BOUNDARY) {
-	Vect_build_partial(&Out, GV_BUILD_ATTACH_ISLES, NULL);
+	Vect_build_partial(&Out, GV_BUILD_ATTACH_ISLES);
 	n_lines = Vect_get_num_lines(&Out);
 	for (i = 1; i <= n_lines; i++) {
 	    type = Vect_read_line(&Out, Points, Cats, i);
@@ -452,7 +452,7 @@ int main(int argc, char *argv[])
      * were generalized
      */
     if ((mask_type & GV_BOUNDARY) && method != DISPLACEMENT) {
-	Vect_build_partial(&Out, GV_BUILD_ATTACH_ISLES, NULL);
+	Vect_build_partial(&Out, GV_BUILD_ATTACH_ISLES);
 	n_areas = Vect_get_num_areas(&Out);
 	for (i = 1; i <= n_areas; i++) {
 	    /* skip dead area */
@@ -472,14 +472,11 @@ int main(int argc, char *argv[])
 
     /* remove small areas */
     if (rs_flag->answer && simplification && (mask_type & GV_AREA)) {
-	Vect_build_partial(&Out, GV_BUILD_CENTROIDS, NULL);
-	Vect_remove_small_areas(&Out, thresh, NULL, NULL, &slide);
+	Vect_build_partial(&Out, GV_BUILD_CENTROIDS);
+	Vect_remove_small_areas(&Out, thresh, NULL, &slide);
     }
 
-    if (G_verbose() > G_verbose_min())
-	Vect_build(&Out, stderr);
-    else
-	Vect_build(&Out, NULL);
+    Vect_build(&Out);
 
     /* finally copy tables */
     if (ca_flag->answer)

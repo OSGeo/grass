@@ -440,7 +440,7 @@ void G_sites_close(struct Map_info *Map)
     int i, j;
 
     if (Map->mode == GV_MODE_WRITE || Map->mode == GV_MODE_RW)
-	Vect_build(Map, stderr);
+	Vect_build(Map);
 
     Vect_close(Map);
 

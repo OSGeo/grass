@@ -222,8 +222,8 @@ void stop(struct Map_info *In, struct Map_info *Out)
     Vect_close(In);
 
     G_message(_("Rebuilding topology..."));
-    Vect_build_partial(Out, GV_BUILD_NONE, NULL);
-    Vect_build(Out, stderr);
+    Vect_build_partial(Out, GV_BUILD_NONE);
+    Vect_build(Out);
     Vect_close(Out);
 }
 
@@ -601,7 +601,7 @@ int main(int argc, char *argv[])
 
     /* Break lines */
     G_message(_("Building parts of topology..."));
-    Vect_build_partial(&Out, GV_BUILD_BASE, stderr);
+    Vect_build_partial(&Out, GV_BUILD_BASE);
 
     /* Warning: snapping must be done, otherwise colinear boundaries are not broken and 
      * topology cannot be built (the same angle). But snapping distance must be very, very 
@@ -613,13 +613,13 @@ int main(int argc, char *argv[])
      * the same angles of lines at nodes, don't forget about LongLat data, probably
      * calculate different threshold for each map, depending on map's bounding box */
     G_message(_("Snapping boundaries..."));
-    Vect_snap_lines(&Out, GV_BOUNDARY, 1e-7, NULL, stderr);
+    Vect_snap_lines(&Out, GV_BOUNDARY, 1e-7, NULL);
 
     G_message(_("Breaking boundaries..."));
-    Vect_break_lines(&Out, GV_BOUNDARY, NULL, stderr);
+    Vect_break_lines(&Out, GV_BOUNDARY, NULL);
 
     G_message(_("Removing duplicates..."));
-    Vect_remove_duplicates(&Out, GV_BOUNDARY, NULL, stderr);
+    Vect_remove_duplicates(&Out, GV_BOUNDARY, NULL);
 
     /* Dangles and bridges don't seem to be necessary if snapping is small enough. */
     /*
@@ -631,7 +631,7 @@ int main(int argc, char *argv[])
      */
 
     G_message(_("Attaching islands..."));
-    Vect_build_partial(&Out, GV_BUILD_ATTACH_ISLES, stderr);
+    Vect_build_partial(&Out, GV_BUILD_ATTACH_ISLES);
 
     /* Calculate new centroids for all areas */
     nareas = Vect_get_num_areas(&Out);
@@ -745,7 +745,7 @@ int main(int argc, char *argv[])
     }
 
     G_message(_("Attaching centroids..."));
-    Vect_build_partial(&Out, GV_BUILD_CENTROIDS, stderr);
+    Vect_build_partial(&Out, GV_BUILD_CENTROIDS);
 
     stop(&In, &Out);
     exit(EXIT_SUCCESS);

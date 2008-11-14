@@ -181,7 +181,7 @@ void close_files(void)
     /*   if (parm.lgout)
        G_close_cell(lgfd); */
     if (parm.flout) {
-	Vect_build(&fl, stderr);
+	Vect_build(&fl);
 	Vect_close(&fl);
     }
 }

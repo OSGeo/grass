@@ -221,7 +221,7 @@ int main(int argc, char *argv[])
     Vect_hist_command(&Map);
 
     if (e_flag->answer) {
-	Vect_build(&Map, stderr);
+	Vect_build(&Map);
 	Vect_close(&Map);
 	exit(EXIT_SUCCESS);
     }
@@ -535,7 +535,7 @@ int main(int argc, char *argv[])
 	Vect_close(&Map);
     }
     else {
-	Vect_build(&Map, stderr);
+	Vect_build(&Map);
 	Vect_close(&Map);
     }
 

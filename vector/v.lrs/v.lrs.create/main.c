@@ -861,13 +861,13 @@ int main(int argc, char **argv)
     Vect_close(&PMap);
 
     G_message(_("Building topology for output (out_lines) map..."));
-    Vect_build(&Out, stderr);
+    Vect_build(&Out);
     Vect_close(&Out);
 
     /* Write errors */
     if (err_opt->answer) {
 	G_message(_("Building topology for error (err) map..."));
-	Vect_build(&EMap, stderr);
+	Vect_build(&EMap);
 	Vect_close(&EMap);
     }
 

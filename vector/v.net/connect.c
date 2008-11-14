@@ -54,7 +54,7 @@ int connect_arcs(struct Map_info *In, struct Map_info *Pnts,
 
     /* rewrite all primitives to output file */
     Vect_copy_map_lines(In, Out);
-    Vect_build_partial(Out, GV_BUILD_BASE, NULL);
+    Vect_build_partial(Out, GV_BUILD_BASE);
 
     /* go thorough all points in point map and write a new arcs if missing */
     while ((type = Vect_read_next_line(Pnts, Points, Cats)) >= 0) {

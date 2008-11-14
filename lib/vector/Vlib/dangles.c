@@ -27,7 +27,7 @@
 #define SELECT_DANGLE 2
 
 static void dangles(struct Map_info *, int, int, double,
-		    struct Map_info *, FILE *, struct ilist *);
+		    struct Map_info *, struct ilist *);
 
 /*!
    \brief Remove dangles from vector map.
@@ -47,15 +47,14 @@ static void dangles(struct Map_info *, int, int, double,
    \param type type of dangles (GV_LINES, GV_LINE or GV_BOUNDARY)
    \param maxlength maxlength of dangles or -1 for all dangles
    \param Err vector map where deleted dangles are written or NULL
-   \param msgout file pointer where messages will be written or NULL
 
    \return
  */
 void
 Vect_remove_dangles(struct Map_info *Map, int type, double maxlength,
-		    struct Map_info *Err, FILE * msgout)
+		    struct Map_info *Err)
 {
-    dangles(Map, type, REMOVE_DANGLE, maxlength, Err, msgout, NULL);
+    dangles(Map, type, REMOVE_DANGLE, maxlength, Err, NULL);
 }
 
 /*!
@@ -74,15 +73,14 @@ Vect_remove_dangles(struct Map_info *Map, int type, double maxlength,
    \param Map input map where have to be deleted
    \param maxlength maxlength of dangles or -1 for all dangles
    \param Err vector map where deleted dangles are written or NULL
-   \param msgout file pointer where messages will be written or NULL
 
    \return 
  */
 void
 Vect_chtype_dangles(struct Map_info *Map, double maxlength,
-		    struct Map_info *Err, FILE * msgout)
+		    struct Map_info *Err)
 {
-    dangles(Map, 0, CHTYPE_DANGLE, maxlength, Err, msgout, NULL);
+    dangles(Map, 0, CHTYPE_DANGLE, maxlength, Err, NULL);
 }
 
 /*!
@@ -99,15 +97,14 @@ Vect_chtype_dangles(struct Map_info *Map, double maxlength,
    \param Map input map where have to be deleted
    \param type type of dangles (GV_LINES, GV_LINE or GV_BOUNDARY)
    \param maxlength maxlength of dangles or -1 for all dangles
-   \param msgout file pointer where messages will be written or NULL
 
    \return
  */
 void
 Vect_select_dangles(struct Map_info *Map, int type, double maxlength,
-		    FILE * msgout, struct ilist *List)
+		    struct ilist *List)
 {
-    dangles(Map, type, SELECT_DANGLE, maxlength, NULL, msgout, List);
+    dangles(Map, type, SELECT_DANGLE, maxlength, NULL, List);
 }
 
 /*
@@ -126,11 +123,10 @@ Vect_select_dangles(struct Map_info *Map, int type, double maxlength,
    option dangle option (REMOVE_DANGLE, CHTYPE_DANGLE, SELECT_DANGLE)
    maxlength maxlength of dangles or -1 for all dangles
    Err vector map where deleted dangles are written or NULL
-   msgout file pointer where messages will be written or NULL
    List_dangle list of feature (selected dangles) ids 
  */
 static void dangles(struct Map_info *Map, int type, int option,
-		    double maxlength, struct Map_info *Err, FILE * msgout,
+		    double maxlength, struct Map_info *Err,
 		    struct ilist *List_dangle)
 {
     struct line_pnts *Points;
@@ -167,10 +163,6 @@ static void dangles(struct Map_info *Map, int type, int option,
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
     List = Vect_new_list();
-
-    if (msgout)
-	fprintf(msgout, "%s %5d  %s: %5d",
-		_("Removed dangles:"), dangles_removed, lmsg, lines_removed);
 
     nnodes = Vect_get_num_nodes(Map);
     G_debug(2, "nnodes =  %d", nnodes);
@@ -266,23 +258,7 @@ static void dangles(struct Map_info *Map, int type, int option,
 		}
 	    }			/* delete the chain */
 
-	    if (msgout) {
-		if (msgout)
-		    fprintf(msgout, "\r%s %5d  %s: %5d",
-			    _("Removed dangles:"), dangles_removed, lmsg,
-			    lines_removed);
-		fflush(msgout);
-	    }
-
 	    dangles_removed++;
 	}			/* lcount == 1 */
     }				/* node <= nnodes */
-
-    if (msgout) {
-	if (msgout)
-	    fprintf(msgout, "\r%s %5d  %s: %5d",
-		    _("Removed dangles:"), dangles_removed, lmsg,
-		    lines_removed);
-	fprintf(msgout, "\n");
-    }
 }

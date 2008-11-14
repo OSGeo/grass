@@ -223,11 +223,7 @@ int main(int argc, char *argv[])
 			    fi->database, fi->driver);
     }
 
-    if (G_verbose() > G_verbose_min())
-	Vect_build(&Map, stderr);
-    else
-	Vect_build(&Map, NULL);
-
+    Vect_build(&Map);
     Vect_close(&Map);
 
     G_done_msg(" ");

@@ -32,13 +32,12 @@
 
    \param Map input map
    \param Err vector map where error line segments are written
-   \param msgout file pointer where messages will be written or NULL
 
    \return number of line modifications
  */
 int
 Vect_clean_small_angles_at_nodes(struct Map_info *Map, int otype,
-				 struct Map_info *Err, FILE * msgout)
+				 struct Map_info *Err)
 {
     int node;
     int nmodif = 0;
@@ -49,9 +48,6 @@ Vect_clean_small_angles_at_nodes(struct Map_info *Map, int otype,
     SCats = Vect_new_cats_struct();
     LCats = Vect_new_cats_struct();
     OCats = Vect_new_cats_struct();
-
-    if (msgout)
-	fprintf(msgout, "%s: %5d", _("Modifications"), nmodif);
 
     for (node = 1; node <= Vect_get_num_nodes(Map); node++) {
 	int i, nlines;
@@ -246,19 +242,10 @@ Vect_clean_small_angles_at_nodes(struct Map_info *Map, int otype,
 		angle1 = angle2;
 	    }
 
-	    if (msgout) {
-		fprintf(msgout, "\r%s: %5d", _("Modifications"), nmodif);
-		fflush(msgout);
-	    }
-
 	    if (clean)
 		break;
-
 	}
-
     }
-    if (msgout)
-	fprintf(stderr, "\n");
 
     return (nmodif);
 }

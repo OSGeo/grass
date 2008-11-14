@@ -36,9 +36,6 @@
 #ifdef HAVE_OGR
 #include <ogr_api.h>
 
-extern FILE *Msgout;
-extern int prnmsg(char *msg, ...);
-
 /* 
  *  This structure keeps info about geometry parts above current geometry, path to curent geometry in the 
  *  feature. First 'part' number however is feature Id 
@@ -321,12 +318,11 @@ static int add_geometry(struct Map_info *Map, OGRGeometryH hGeom, int FID,
 
    \param Map_info vector map
    \param build build level 
-   \param msgout message output (stdout/stderr for example) or NULL
 
    \return 1 on success
    \return 0 on error
  */
-int Vect_build_ogr(struct Map_info *Map, int build, FILE * msgout)
+int Vect_build_ogr(struct Map_info *Map, int build)
 {
     int iFeature, count, FID;
     GEOM_PARTS parts;
@@ -335,8 +331,6 @@ int Vect_build_ogr(struct Map_info *Map, int build, FILE * msgout)
 
     if (build != GV_BUILD_ALL)
 	G_fatal_error(_("Partial build for OGR is not supported"));
-
-    Msgout = msgout;
 
     /* TODO move this init to better place (Vect_open_ ?), because in theory build may be reused on level2 */
     Map->fInfo.ogr.offset = NULL;
@@ -352,7 +346,7 @@ int Vect_build_ogr(struct Map_info *Map, int build, FILE * msgout)
     init_parts(&parts);
 
     /* Note: Do not use OGR_L_GetFeatureCount (it may scan all features)!!! */
-    prnmsg(_("Feature: "));
+    G_verbose_message(_("Feature: "));
 
     OGR_L_ResetReading(Map->fInfo.ogr.layer);
     count = iFeature = 0;
@@ -361,12 +355,6 @@ int Vect_build_ogr(struct Map_info *Map, int build, FILE * msgout)
 	count++;
 
 	G_debug(4, "---- Feature %d ----", iFeature);
-
-	/* print progress */
-	if (count == 1000) {
-	    prnmsg("%7d\b\b\b\b\b\b\b", iFeature);
-	    count = 0;
-	}
 
 	hGeom = OGR_F_GetGeometryRef(hFeature);
 	if (hGeom == NULL) {
@@ -390,8 +378,6 @@ int Vect_build_ogr(struct Map_info *Map, int build, FILE * msgout)
 	OGR_F_Destroy(hFeature);
     }				/* while */
     free_parts(&parts);
-
-    prnmsg("%4d\n", iFeature);
 
     Map->plus.built = GV_BUILD_ALL;
     return 1;

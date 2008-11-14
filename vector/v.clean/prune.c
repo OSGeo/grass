@@ -56,10 +56,7 @@ prune(struct Map_info *Out, int otype, double thresh, struct Map_info *Err)
     G_debug(1, "nlines =  %d", nlines);
 
     if (Err)
-	Vect_build_partial(Err, GV_BUILD_BASE, NULL);
-
-    if (G_verbose() > G_verbose_min())
-	fprintf(stderr, _("Removed vertices: %5d"), nremoved);
+	Vect_build_partial(Err, GV_BUILD_BASE);
 
     for (line = 1; line <= nlines; line++) {
 
@@ -210,11 +207,6 @@ prune(struct Map_info *Out, int otype, double thresh, struct Map_info *Err)
 	    nremoved += norig - TPoints->n_points;
 	    G_debug(4, "%d vertices removed", norig - TPoints->n_points);
 	}
-
-	if (G_verbose() > G_verbose_min())
-	    fprintf(stderr, "\r%s: %5d", _("Removed vertices"), nremoved);
-
-	fflush(stderr);
     }
 
     G_important_message(_("\n%d vertices from input %d (vertices of given type) removed, i.e. %.2f %%"),

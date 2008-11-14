@@ -198,7 +198,7 @@ int main(int argc, char *argv[])
 
     db_close_database_shutdown_driver(Driver);
 
-    Vect_build(&Map, stderr);
+    Vect_build(&Map);
     Vect_close(&Map);
 
     G_done_msg("");

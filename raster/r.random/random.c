@@ -251,7 +251,7 @@ int execute_random(struct rr_state *theState)
     if (theState->outvector) {
 	db_commit_transaction(driver);
 	db_close_database_shutdown_driver(driver);
-	Vect_build(&Out, stderr);
+	Vect_build(&Out);
 	Vect_close(&Out);
     }
     if (theState->outraster)

@@ -148,13 +148,12 @@ static int copy_file(const char *src, const char *dst)
    \param[in] in input vector map name
    \param[in] mapset mapset name
    \param[in] out output vector map name
-   \param[in] msgout output file for messages or NULL 
 
    \return -1 error
    \return 0 success
  */
 int
-Vect_copy(const char *in, const char *mapset, const char *out, FILE * msgout)
+Vect_copy(const char *in, const char *mapset, const char *out)
 {
     int i, n, ret, type;
     struct Map_info In, Out;
@@ -294,12 +293,11 @@ Vect_copy(const char *in, const char *mapset, const char *out, FILE * msgout)
 
    \param[in] in input vector map name
    \param[in] out output vector map name
-   \param[in] msgout output file for messages or NULL 
 
    \return -1 error
    \return 0 success
  */
-int Vect_rename(const char *in, const char *out, FILE * msgout)
+int Vect_rename(const char *in, const char *out)
 {
     int i, n, ret, type;
     struct Map_info Map;

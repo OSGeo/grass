@@ -1131,10 +1131,7 @@ int main(int argc, char *argv[])
 
     Vect_close(&From);
     if (Outp != NULL) {
-	if (G_verbose() > G_verbose_min())
-	    Vect_build(Outp, stderr);
-	else
-	    Vect_build(Outp, NULL);
+	Vect_build(Outp);
 	Vect_close(Outp);
     }
 

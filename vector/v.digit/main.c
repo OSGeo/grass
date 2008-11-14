@@ -192,7 +192,7 @@ int main(int argc, char *argv[])
 	if (new_f->answer) {
 	    G_message(_("New empty map created."));
 	    Vect_open_new(&Map, map_opt->answer, 0);
-	    Vect_build(&Map, NULL);
+	    Vect_build(&Map);
 	    Vect_close(&Map);
 	    Vect_open_update(&Map, map_opt->answer, G_mapset());
 	}

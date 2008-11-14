@@ -37,7 +37,7 @@ int do_rename(int n, char *old, char *new)
 	    G_warning(_("Vector map <%s> not found"), old);
 	}
 	else {
-	    ret = Vect_rename(old, new, stderr);
+	    ret = Vect_rename(old, new);
 	    if (ret != -1) {
 		renamed = 1;
 	    }

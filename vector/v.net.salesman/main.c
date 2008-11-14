@@ -371,7 +371,7 @@ int main(int argc, char **argv)
     }
     fprintf(stdout, "\n\n");
 
-    Vect_build(&Out, stderr);
+    Vect_build(&Out);
 
     /* Free, ... */
     Vect_destroy_list(StArcs);

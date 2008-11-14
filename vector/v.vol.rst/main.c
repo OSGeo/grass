@@ -885,7 +885,7 @@ int main(int argc, char *argv[])
 
 	    if (cvdev != NULL || devi != NULL) {
 		db_close_database_shutdown_driver(driver);
-		Vect_build(&Map, stderr);
+		Vect_build(&Map);
 		Vect_close(&Map);
 	    }
 

@@ -31,21 +31,13 @@
  */
 int snap_lines(struct Map_info *Map, struct ilist *List, double thresh)
 {
-
-    FILE *output;
-
-    if (G_verbose() > G_verbose_min()) {
+    if (G_verbose() > G_verbose_min())
 	G_important_message(SEP);
-	output = stderr;
-    }
-    else
-	output = NULL;
 
-    Vect_snap_lines_list(Map, List, thresh, NULL, output);
+    Vect_snap_lines_list(Map, List, thresh, NULL);
 
-    if (G_verbose() > G_verbose_min()) {
+    if (G_verbose() > G_verbose_min())
 	G_important_message(SEP);
-    }
 
     return 1;
 }

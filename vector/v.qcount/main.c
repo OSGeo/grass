@@ -147,7 +147,7 @@ int main(int argc, char **argv)
 	    Vect_write_line(&Out, GV_POINT, Points, Cats);
 	}
 
-	Vect_build(&Out, stderr);
+	Vect_build(&Out);
 	Vect_close(&Out);
 
     }

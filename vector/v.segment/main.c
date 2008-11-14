@@ -228,13 +228,7 @@ int main(int argc, char **argv)
     G_message(_("%d lines written to output map (%d lost)"),
 	      lines_written, lines_read - lines_written);
 
-    if (G_verbose() > G_verbose_min()) {
-	Vect_build(&Out, stderr);
-    }
-    else {
-	Vect_build(&Out, NULL);
-    }
-
+    Vect_build(&Out);
     /* Free, close ... */
     Vect_close(&In);
     Vect_close(&Out);

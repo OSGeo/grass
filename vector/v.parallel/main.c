@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
     }
 
     Vect_close(&In);
-    Vect_build(&Out, stderr);
+    Vect_build(&Out);
     Vect_close(&Out);
 
     exit(EXIT_SUCCESS);

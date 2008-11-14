@@ -121,14 +121,14 @@ void Vect_spatial_index_del_item(SPATIAL_INDEX * si, int id)
    \return 0 OK
    \return 1 error
  */
-int Vect_build_spatial_index(struct Map_info *Map, FILE * msgout)
+int Vect_build_spatial_index(struct Map_info *Map)
 {
     if (Map->level < 2) {
 	G_fatal_error(_("Unable to build spatial index from topology, "
 			"vector map is not opened at topo level 2"));
     }
     if (!(Map->plus.Spidx_built)) {
-	return (Vect_build_sidx_from_topo(Map, msgout));
+	return (Vect_build_sidx_from_topo(Map));
     }
     return 0;
 }
@@ -137,12 +137,11 @@ int Vect_build_spatial_index(struct Map_info *Map, FILE * msgout)
    \brief Create spatial index from topo if necessary
 
    \param Map pointer to vector map
-   \param msgout print progress here
 
    \return 0 OK
    \return 1 error
  */
-int Vect_build_sidx_from_topo(struct Map_info *Map, FILE * msgout)
+int Vect_build_sidx_from_topo(struct Map_info *Map)
 {
     int i, total, done;
     struct Plus_head *plus;
@@ -162,7 +161,7 @@ int Vect_build_sidx_from_topo(struct Map_info *Map, FILE * msgout)
 
     /* Nodes */
     for (i = 1; i <= plus->n_nodes; i++) {
-	G_percent2(i, total, 1, msgout);
+	G_percent(i, total, 1);
 
 	Node = plus->Node[i];
 	if (!Node)
@@ -174,7 +173,7 @@ int Vect_build_sidx_from_topo(struct Map_info *Map, FILE * msgout)
     /* Lines */
     done = plus->n_nodes;
     for (i = 1; i <= plus->n_lines; i++) {
-	G_percent2(done + i, total, 1, msgout);
+	G_percent(done + i, total, 1);
 
 	Line = plus->Line[i];
 	if (!Line)
@@ -193,7 +192,7 @@ int Vect_build_sidx_from_topo(struct Map_info *Map, FILE * msgout)
     /* Areas */
     done += plus->n_lines;
     for (i = 1; i <= plus->n_areas; i++) {
-	G_percent2(done + i, total, 1, msgout);
+	G_percent(done + i, total, 1);
 
 	Area = plus->Area[i];
 	if (!Area)
@@ -212,7 +211,7 @@ int Vect_build_sidx_from_topo(struct Map_info *Map, FILE * msgout)
     /* Isles */
     done += plus->n_areas;
     for (i = 1; i <= plus->n_isles; i++) {
-	G_percent2(done + i, total, 1, msgout);
+	G_percent(done + i, total, 1);
 
 	Isle = plus->Isle[i];
 	if (!Isle)

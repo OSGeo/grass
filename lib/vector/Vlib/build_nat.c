@@ -23,9 +23,6 @@
 #include <grass/gis.h>
 #include <grass/Vect.h>
 
-extern FILE *Msgout;
-extern int prnmsg(char *msg, ...);
-
 /*!
    \brief Build area on given side of line (GV_LEFT or GV_RIGHT)
 
@@ -417,12 +414,11 @@ int Vect_attach_centroids(struct Map_info *Map, BOUND_BOX * box)
 
    \param Map_info vector map
    \param build build level
-   \param msgout message output (stdout/stderr for example) or NULL
 
    \return 1 on success
    \return 0 on error
  */
-int Vect_build_nat(struct Map_info *Map, int build, FILE * msgout)
+int Vect_build_nat(struct Map_info *Map, int build)
 {
     struct Plus_head *plus;
     int i, j, s, type, lineid;
@@ -439,7 +435,6 @@ int Vect_build_nat(struct Map_info *Map, int build, FILE * msgout)
     G_debug(3, "Vect_build_nat() build = %d", build);
 
     plus = &(Map->plus);
-    Msgout = msgout;
 
     if (build == plus->built)
 	return 1;		/* Do nothing */
@@ -507,7 +502,7 @@ int Vect_build_nat(struct Map_info *Map, int build, FILE * msgout)
 
 	/* register lines, create nodes */
 	Vect_rewind(Map);
-	prnmsg(_("Registering primitives: "));
+	G_verbose_message(_("Registering primitives:"));
 	i = 1;
 	j = 1;
 	npoints = 0;
@@ -547,18 +542,11 @@ int Vect_build_nat(struct Map_info *Map, int build, FILE * msgout)
 		if (Cats->n_cats == 0)	/* add field 0, cat 0 */
 		    dig_cidx_add_cat(plus, 0, 0, lineid, type);
 	    }
-
-	    /* print progress */
-	    if (i == 1000) {
-		prnmsg("%7d\b\b\b\b\b\b\b", j);
-		i = 0;
-	    }
 	    i++;
 	    j++;
 	}
-	prnmsg("\r%d %s            \n", plus->n_lines,
-	       _("primitives registered"));
-	prnmsg("%d %s\n", npoints, _("vertices registered"));
+	G_verbose_message(_("%d primitives registered"), plus->n_lines);
+	G_verbose_message(_("%d vertices registered"), npoints);
 
 	plus->built = GV_BUILD_BASE;
     }
@@ -569,9 +557,9 @@ int Vect_build_nat(struct Map_info *Map, int build, FILE * msgout)
     if (plus->built < GV_BUILD_AREAS) {
 	/* Build areas */
 	/* Go through all bundaries and try to build area for both sides */
-	prnmsg(_("Building areas: "));
+	G_verbose_message(_("Building areas:"));
 	for (i = 1; i <= plus->n_lines; i++) {
-	    G_percent2(i, plus->n_lines, 1, msgout);
+	    G_percent(i, plus->n_lines, 1);
 
 	    /* build */
 	    if (plus->Line[i] == NULL) {
@@ -592,8 +580,8 @@ int Vect_build_nat(struct Map_info *Map, int build, FILE * msgout)
 		Vect_build_line_area(Map, i, side);
 	    }
 	}
-	prnmsg("\r%d %s      \n%d %s\n", plus->n_areas, _("areas built"),
-	       plus->n_isles, _("isles built"));
+	G_verbose_message(_("%d areas built"), plus->n_areas);
+	G_verbose_message(_("%d isles built"), plus->n_isles);
 	plus->built = GV_BUILD_AREAS;
     }
 
@@ -602,13 +590,11 @@ int Vect_build_nat(struct Map_info *Map, int build, FILE * msgout)
 
     /* Attach isles to areas */
     if (plus->built < GV_BUILD_ATTACH_ISLES) {
-	prnmsg(_("Attaching islands: "));
+	G_verbose_message(_("Attaching islands:"));
 	for (i = 1; i <= plus->n_isles; i++) {
-	    G_percent2(i, plus->n_isles, 1, msgout);
+	    G_percent(i, plus->n_isles, 1);
 	    Vect_attach_isle(Map, i);
 	}
-	if (i == 1)
-	    prnmsg("\n");
 	plus->built = GV_BUILD_ATTACH_ISLES;
     }
 
@@ -619,11 +605,11 @@ int Vect_build_nat(struct Map_info *Map, int build, FILE * msgout)
     if (plus->built < GV_BUILD_CENTROIDS) {
 	int nlines;
 
-	prnmsg(_("Attaching centroids: "));
+	G_verbose_message(_("Attaching centroids:"));
 
 	nlines = Vect_get_num_lines(Map);
 	for (line = 1; line <= nlines; line++) {
-	    G_percent2(line, nlines, 1, msgout);
+	    G_percent(line, nlines, 1);
 
 	    Line = plus->Line[line];
 	    if (!Line)

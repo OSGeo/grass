@@ -185,11 +185,8 @@ int main(int argc, char **argv)
 	Vect_copy_tables(&In, &Out, 0);
 
 	/* support */
-	Vect_build_partial(&Out, GV_BUILD_NONE, NULL);
-	if (G_verbose() > G_verbose_min())
-	    Vect_build(&Out, stderr);
-	else
-	    Vect_build(&Out, NULL);
+	Vect_build_partial(&Out, GV_BUILD_NONE);
+	Vect_build(&Out);
 
 	Vect_close(&In);
 	Vect_close(&Out);

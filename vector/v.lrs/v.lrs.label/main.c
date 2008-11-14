@@ -513,7 +513,7 @@ int main(int argc, char **argv)
     }
 
     db_close_database(rsdriver);
-    Vect_build(&Out, stderr);
+    Vect_build(&Out);
 
     /* Free, close ... */
     Vect_close(&In);

@@ -194,9 +194,9 @@ int Vect_open_new(struct Map_info *, const char *, int);
 int Vect_open_update(struct Map_info *, const char *, const char *);
 int Vect_open_update_head(struct Map_info *, const char *, const char *);
 int Vect_copy_head_data(struct Map_info *, struct Map_info *);
-int Vect_build(struct Map_info *, FILE *);
+int Vect_build(struct Map_info *);
 int Vect_get_built(struct Map_info *);
-int Vect_build_partial(struct Map_info *, int, FILE *);
+int Vect_build_partial(struct Map_info *, int);
 int Vect_set_constraint_region(struct Map_info *, double, double, double,
 			       double, double, double);
 int Vect_set_constraint_type(struct Map_info *, int);
@@ -296,30 +296,25 @@ int Vect_point_in_area_outer_ring(double, double, struct Map_info *, int);
 int Vect_point_in_island(double, double, struct Map_info *, int);
 
 /* Cleaning */
-void Vect_break_lines(struct Map_info *, int, struct Map_info *, FILE *);
+void Vect_break_lines(struct Map_info *, int, struct Map_info *);
 int Vect_break_lines_list(struct Map_info *, struct ilist *, struct ilist *,
-			  int, struct Map_info *, FILE *);
-void Vect_break_polygons(struct Map_info *, int, struct Map_info *, FILE *);
-void Vect_remove_duplicates(struct Map_info *, int, struct Map_info *,
-			    FILE *);
+			  int, struct Map_info *);
+void Vect_break_polygons(struct Map_info *, int, struct Map_info *);
+void Vect_remove_duplicates(struct Map_info *, int, struct Map_info *);
 int Vect_line_check_duplicate(const struct line_pnts *,
 			      const struct line_pnts *, int);
-void Vect_snap_lines(struct Map_info *, int, double, struct Map_info *,
-		     FILE *);
+void Vect_snap_lines(struct Map_info *, int, double, struct Map_info *);
 void Vect_snap_lines_list(struct Map_info *, struct ilist *, double,
-			  struct Map_info *, FILE *);
-void Vect_remove_dangles(struct Map_info *, int, double, struct Map_info *,
-			 FILE *);
-void Vect_chtype_dangles(struct Map_info *, double, struct Map_info *,
-			 FILE *);
-void Vect_select_dangles(struct Map_info *, int, double, FILE *,
-			 struct ilist *);
-void Vect_remove_bridges(struct Map_info *, struct Map_info *, FILE *);
-void Vect_chtype_bridges(struct Map_info *, struct Map_info *, FILE *);
+			  struct Map_info *);
+void Vect_remove_dangles(struct Map_info *, int, double, struct Map_info *);
+void Vect_chtype_dangles(struct Map_info *, double, struct Map_info *);
+void Vect_select_dangles(struct Map_info *, int, double, struct ilist *);
+void Vect_remove_bridges(struct Map_info *, struct Map_info *);
+void Vect_chtype_bridges(struct Map_info *, struct Map_info *);
 int Vect_remove_small_areas(struct Map_info *, double, struct Map_info *,
-			    FILE *, double *);
+			    double *);
 int Vect_clean_small_angles_at_nodes(struct Map_info *, int,
-				     struct Map_info *, FILE *);
+				     struct Map_info *);
 
 /* Overlay */
 int Vect_overlay_str_to_operator(const char *);
@@ -360,8 +355,8 @@ double Vect_points_distance(double, double, double, double, double, double,
 			    int);
 int Vect_option_to_types(struct Option *);
 int Vect_copy_map_lines(struct Map_info *, struct Map_info *);
-int Vect_copy(const char *, const char *, const char *, FILE *);
-int Vect_rename(const char *, const char *, FILE *);
+int Vect_copy(const char *, const char *, const char *);
+int Vect_rename(const char *, const char *);
 int Vect_copy_table(struct Map_info *, struct Map_info *, int, int,
 		    const char *, int);
 int Vect_copy_table_by_cats(struct Map_info *, struct Map_info *, int, int,
@@ -392,8 +387,8 @@ int Vect_save_topo(struct Map_info *);
 int Vect_open_spatial_index(struct Map_info *);
 int Vect_save_spatial_index(struct Map_info *);
 int Vect_spatial_index_dump(struct Map_info *, FILE *);
-int Vect_build_sidx_from_topo(struct Map_info *, FILE *);
-int Vect_build_spatial_index(struct Map_info *, FILE *);
+int Vect_build_sidx_from_topo(struct Map_info *);
+int Vect_build_spatial_index(struct Map_info *);
 
 int Vect__write_head(struct Map_info *);
 int Vect__read_head(struct Map_info *);
@@ -446,8 +441,8 @@ long V1_rewrite_line_ogr(struct Map_info *, long offset, int type,
 #endif
 
     /* Miscellaneous */
-int Vect_build_nat(struct Map_info *, int, FILE *);
-int Vect_build_ogr(struct Map_info *, int, FILE *);
+int Vect_build_nat(struct Map_info *, int);
+int Vect_build_ogr(struct Map_info *, int);
 int Vect_build_line_area(struct Map_info *, int, int);
 int Vect_isle_find_area(struct Map_info *, int);
 int Vect_attach_isle(struct Map_info *, int);

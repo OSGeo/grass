@@ -158,7 +158,7 @@ int main(int argc, char *argv[])
     fclose(fd);
 
     Vect_open_old(&Map, out_opt->answer, G_mapset());
-    Vect_build(&Map, stderr);
+    Vect_build(&Map);
     Vect_close(&Map);
 
     exit(EXIT_SUCCESS);

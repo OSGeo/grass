@@ -29,13 +29,6 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Out,
     dbString stmt;
     int nmodif;
 
-    FILE *output;
-
-    if (G_verbose() > G_verbose_min())
-	output = stderr;
-    else
-	output = NULL;
-
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
@@ -44,15 +37,15 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Out,
      * and Vect_clean_small_angles_at_nodes() until no more small dangles are found */
     do {
 	G_message(_("Breaking lines..."));
-	Vect_break_lines(Out, GV_LINE | GV_BOUNDARY, NULL, output);
+	Vect_break_lines(Out, GV_LINE | GV_BOUNDARY, NULL);
 
 	/* Probably not necessary for LINE x AREA */
 	G_message(_("Removing duplicates..."));
-	Vect_remove_duplicates(Out, GV_BOUNDARY, NULL, output);
+	Vect_remove_duplicates(Out, GV_BOUNDARY, NULL);
 
 	G_message(_("Cleaning boundaries at nodes..."));
 	nmodif =
-	    Vect_clean_small_angles_at_nodes(Out, GV_BOUNDARY, NULL, output);
+	    Vect_clean_small_angles_at_nodes(Out, GV_BOUNDARY, NULL);
     } while (nmodif > 0);
 
     /* ?: May be result of Vect_break_lines() + Vect_remove_duplicates() any dangle or bridge?
@@ -60,7 +53,7 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Out,
 
     /* Attach islands */
     G_message(_("Attaching islands..."));
-    Vect_build_partial(Out, GV_BUILD_ATTACH_ISLES, output);
+    Vect_build_partial(Out, GV_BUILD_ATTACH_ISLES);
 
 
     /* Calculate new centroids for all areas */
@@ -269,7 +262,7 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Out,
 
     /* Build topology and remove boundaries with area without centroid on both sides */
     G_message(_("Attaching centroids..."));
-    Vect_build_partial(Out, GV_BUILD_ALL, output);
+    Vect_build_partial(Out, GV_BUILD_ALL);
 
     /* Create a list of lines to be deleted */
     nlines = Vect_get_num_lines(Out);

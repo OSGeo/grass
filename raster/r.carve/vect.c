@@ -42,7 +42,7 @@ int open_new_vect(struct Map_info *map, char *vect)
 int close_vect(struct Map_info *map, const int build_support)
 {
     if (build_support)
-	Vect_build(map, stderr);
+	Vect_build(map);
 
     Vect_set_release_support(map);
     Vect_close(map);

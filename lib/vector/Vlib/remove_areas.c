@@ -32,15 +32,13 @@
    \param Map vector map
    \param thresh maximum area size for removed areas
    \param Err vector map where removed lines and centroids are written
-   \param msgout file pointer where messages will be written or NULL
    \param removed_area  pointer to where total size of removed area is stored or NULL
 
    \return number of removed areas 
  */
 int
 Vect_remove_small_areas(struct Map_info *Map, double thresh,
-			struct Map_info *Err, FILE * msgout,
-			double *removed_area)
+			struct Map_info *Err, double *removed_area)
 {
     int area;
     int nremoved = 0;
@@ -54,9 +52,6 @@ Vect_remove_small_areas(struct Map_info *Map, double thresh,
     AList = Vect_new_list();
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
-
-    if (msgout)
-	fprintf(msgout, "%s: %5d", _("Removed areas"), nremoved);
 
     for (area = 1; area <= Vect_get_num_areas(Map); area++) {
 	int i, j, centroid, dissolve_neighbour;
@@ -176,13 +171,7 @@ Vect_remove_small_areas(struct Map_info *Map, double thresh,
 	}
 
 	nremoved++;
-	if (msgout) {
-	    fprintf(msgout, "\r%s: %5d", _("Removed areas"), nremoved);
-	    fflush(stderr);
-	}
     }
-    if (msgout)
-	fprintf(stderr, "\n");
 
     if (removed_area)
 	*removed_area = size_removed;

@@ -62,7 +62,6 @@ int add_item(int id, struct ilist *list)
  * \param[in] List_lines list of lines to snap
  * \param[in] thresh threshold in which snap vertices
  * \param[out] Err vector map where lines representing snap are written or NULL
- * \param[out] msgout file pointer where messages will be written or NULL
  *
  * \return void
  */
@@ -80,13 +79,12 @@ int add_item(int id, struct ilist *list)
  */
 void
 Vect_snap_lines_list(struct Map_info *Map, struct ilist *List_lines,
-		     double thresh, struct Map_info *Err, FILE * msgout)
+		     double thresh, struct Map_info *Err)
 {
     struct line_pnts *Points, *NPoints;
     struct line_cats *Cats;
     int line, ltype, line_idx;
     double thresh2;
-    int printed;
 
     struct Node *RTree;
     int point;			/* index in points array */
@@ -100,7 +98,6 @@ Vect_snap_lines_list(struct Map_info *Map, struct ilist *List_lines,
     struct ilist *List;
     int *Index = NULL;		/* indexes of anchors for vertices */
     int aindex = 0;		/* allocated Index */
-    int width = 26;		/* fprintf width */
 
     if (List_lines->n_values < 1)
 	return;
@@ -118,10 +115,6 @@ Vect_snap_lines_list(struct Map_info *Map, struct ilist *List_lines,
     point = 1;			/* index starts from 1 ! */
     nvertices = 0;
     XPnts = NULL;
-    printed = 0;
-
-    if (msgout)
-	fprintf(msgout, "%s...", _("Registering points"));
 
     for (line_idx = 0; line_idx < List_lines->n_values; line_idx++) {
 	int v;
@@ -166,21 +159,8 @@ Vect_snap_lines_list(struct Map_info *Map, struct ilist *List_lines,
 		point++;
 	    }
 	}
-	if (msgout && printed > 1000) {
-	    fprintf(msgout, "\r%s... %d", _("Registering points"), point - 1);
-	    fflush(msgout);
-	    printed = 0;
-	}
-	printed++;
     }
     npoints = point - 1;
-    if (msgout) {
-	fprintf(msgout,
-		"\r                                               \r");
-	fprintf(msgout, "%-*s: %4d\n", width, _("All vertices"), nvertices);
-	fprintf(msgout, "%-*s: %4d\n", width, _("Registered points"),
-		npoints);
-    }
 
     /* Go through all registered points and if not yet marked mark it as anchor and assign this anchor
      * to all not yet marked points in threshold */
@@ -226,21 +206,12 @@ Vect_snap_lines_list(struct Map_info *Map, struct ilist *List_lines,
 	    }
 	}
     }
-    if (msgout) {
-	fprintf(msgout, "%-*s: %4d\n", width, _("Nodes marked as anchor"),
-		nanchors);
-	fprintf(msgout, "%-*s: %4d\n", width, _("Nodes marked to be snapped"),
-		ntosnap);
-    }
 
     /* Go through all lines and: 
      *   1) for all vertices: if not anchor snap it to its anchor
      *   2) for all segments: snap it to all anchors in threshold (except anchors of vertices of course) */
 
-    printed = 0;
     nsnapped = ncreated = 0;
-    if (msgout)
-	fprintf(msgout, "%-*s: %4d", width, _("Snaps"), nsnapped + ncreated);
 
     for (line_idx = 0; line_idx < List_lines->n_values; line_idx++) {
 	int v, spoint, anchor;
@@ -407,21 +378,7 @@ Vect_snap_lines_list(struct Map_info *Map, struct ilist *List_lines,
 		Vect_write_line(Err, ltype, Points, Cats);
 	    }
 	}
-
-	if (msgout && printed > 1000) {
-	    fprintf(msgout, "\r%s: %5d  (line = %d)", _("Snaps"),
-		    nsnapped + ncreated, line);
-	    fflush(msgout);
-	    printed = 0;
-	}
-	printed++;
     }				/* for each line */
-
-    if (msgout) {
-	fprintf(msgout, "\r%-*s: %4d\n", width, _("Snapped vertices"),
-		nsnapped);
-	fprintf(msgout, "%-*s: %4d\n", width, _("New vertices"), ncreated);
-    }
 
     Vect_destroy_line_struct(Points);
     Vect_destroy_line_struct(NPoints);
@@ -454,13 +411,12 @@ static int sort_new(const void *pa, const void *pb)
  * \param[in] type type of lines to snap
  * \param[in] thresh threshold in which snap vertices
  * \param[out] Err vector map where lines representing snap are written or NULL
- * \param[out] msgout file pointer where messages will be written or NULL
  *
  * \return void
  */
 void
 Vect_snap_lines(struct Map_info *Map, int type, double thresh,
-		struct Map_info *Err, FILE * msgout)
+		struct Map_info *Err)
 {
     int line, nlines, ltype;
 
@@ -484,7 +440,7 @@ Vect_snap_lines(struct Map_info *Map, int type, double thresh,
 	Vect_list_append(List, line);
     }
 
-    Vect_snap_lines_list(Map, List, thresh, Err, msgout);
+    Vect_snap_lines_list(Map, List, thresh, Err);
 
     Vect_destroy_list(List);
 
