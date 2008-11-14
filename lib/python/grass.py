@@ -358,7 +358,7 @@ def overwrite():
 
 def verbosity():
     """Return the verbosity level selected by GRASS_VERBOSE"""
-    vbstr = 'GRASS_VERBOSE'
+    vbstr = os.getenv('GRASS_VERBOSE')
     if vbstr:
 	return int(vbstr)
     else:
