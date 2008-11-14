@@ -162,17 +162,21 @@ statistics (stats) of the run. The default name is <tt>stats.out</tt>
 
 <h2>EXAMPLES</h2>
 
+Spearfish sample data set:
+
 <div class="code"><pre>
- r.terraflow elev=spearfish filled=spearfish-filled \
-    dir=spearfish-mfdir swatershed=spearfish-watershed \
-    accumulation=spearfish-accu tci=spearfish-tci
+g.region rast=elevation.10m -p
+r.terraflow elev=elevation.10m filled=elevation10m.filled \
+    dir=elevation10m.mfdir swatershed=elevation10m.watershed \
+    accumulation=elevation10m.accu tci=elevation10m.tci
 </pre></div>
 
 <div class="code"><pre>
- r.terraflow elev=spearfish filled=spearfish-filled \
-    dir=spearfish-mfdir swatershed=spearfish-watershed \
-    accumulation=spearfish-accu tci=spearfish-tci d8cut=500 memory=800 \
-    STREAM-DIR=/var/tmp/ stats=spearfish-stats.txt 
+g.region rast=elevation.10m -p
+r.terraflow elev=elevation.10m filled=elevation10m.filled \
+    dir=elevation10m.mfdir swatershed=elevation10m.watershed \
+    accumulation=elevation10m.accu tci=elevation10m.tci d8cut=500 memory=800 \
+    STREAM-DIR=/var/tmp/ stats=elevation10mstats.txt 
 </pre></div>
 
 
