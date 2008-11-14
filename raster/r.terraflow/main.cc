@@ -455,12 +455,13 @@ main(int argc, char *argv[]) {
   opt = (userOptions*)malloc(sizeof(userOptions));
   assert(opt);
   
+  region = (struct Cell_head*)malloc(sizeof(struct Cell_head));
+  assert(region);
+
   parse_args(argc, argv);
   check_args();
 
   /* get the current region and dimensions */  
-  region = (struct Cell_head*)malloc(sizeof(struct Cell_head));
-  assert(region);
   if (G_get_set_window(region) == -1) {
     G_fatal_error("r.terraflow: error getting current region");
   }
