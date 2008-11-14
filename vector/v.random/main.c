@@ -296,10 +296,7 @@ int main(int argc, char *argv[])
     }
 
     if (!flag.notopo->answer) {
-	if (G_verbose() > G_verbose_min())
-	    Vect_build(&Out, stderr);
-	else
-	    Vect_build(&Out, NULL);
+	Vect_build(&Out);
     }
     Vect_close(&Out);
 

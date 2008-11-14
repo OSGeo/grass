@@ -384,7 +384,7 @@ int main(int argc, char **argv)
 
 	Vect_close(&Net);
 
-	Vect_build(&Out, stderr);
+	Vect_build(&Out);
 	Vect_close(&Out);
     }
     else {

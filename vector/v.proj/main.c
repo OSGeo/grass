@@ -279,11 +279,7 @@ int main(int argc, char *argv[])
 
     Vect_close(&Map);
 
-    if (G_verbose() > G_verbose_min())
-	Vect_build(&Out_Map, stderr);
-    else
-	Vect_build(&Out_Map, NULL);
-
+    Vect_build(&Out_Map);
     Vect_close(&Out_Map);
 
     exit(EXIT_SUCCESS);

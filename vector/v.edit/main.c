@@ -286,8 +286,7 @@ int main(int argc, char *argv[])
 				    coord, thresh[THRESH_COORDS], NULL);
 	}
 	else {
-	    ret = Vect_break_lines_list(&Map, List, NULL,
-					GV_LINES, NULL, NULL);
+	    ret = Vect_break_lines_list(&Map, List, NULL, GV_LINES, NULL);
 	}
 	G_message(_("%d lines broken"), ret);
 	break;
@@ -410,11 +409,8 @@ int main(int argc, char *argv[])
     /* build topology only if requested or if tool!=select */
     if (!(action_mode == MODE_SELECT || params.topo->answer == 1 ||
 	 !MODE_NONE)) {
-	Vect_build_partial(&Map, GV_BUILD_NONE, NULL);
-	if (G_verbose() > G_verbose_min())
-	    Vect_build(&Map, stderr);
-	else
-	    Vect_build(&Map, NULL);
+	Vect_build_partial(&Map, GV_BUILD_NONE);
+	Vect_build(&Map);
     }
 
     if (List)

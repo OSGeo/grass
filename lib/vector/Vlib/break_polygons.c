@@ -55,13 +55,11 @@ void srch(int id, int *arg)
    \param Map input map where polygons will be broken
    \param type type of line to be broken
    \param Err vector map where points at intersections will be written or NULL
-   \param msgout file pointer where messages will be written or NULL
 
    \return
  */
 void
-Vect_break_polygons(struct Map_info *Map, int type, struct Map_info *Err,
-		    FILE * msgout)
+Vect_break_polygons(struct Map_info *Map, int type, struct Map_info *Err)
 {
     struct line_pnts *BPoints, *Points;
     struct line_cats *Cats;
@@ -73,7 +71,6 @@ Vect_break_polygons(struct Map_info *Map, int type, struct Map_info *Err,
     struct Rect rect;
     double dx, dy, a1 = 0, a2 = 0;
     int closed, last_point, cross;
-    int printed;
 
     RTree = RTreeNewIndex();
 
@@ -93,7 +90,6 @@ Vect_break_polygons(struct Map_info *Map, int type, struct Map_info *Err,
     nallpoints = 0;
     XPnts = NULL;
 
-    printed = 0;
     for (i = 1; i <= nlines; i++) {
 	G_debug(3, "i =  %d", i);
 	if (!Vect_line_alive(Map, i))
@@ -210,28 +206,11 @@ Vect_break_polygons(struct Map_info *Map, int type, struct Map_info *Err,
 		npoints++;
 	    }
 	}
-	if (msgout && printed > 5000) {
-	    fprintf(msgout, "\r%s %d", _("Registering points"), npoints - 1);
-	    fflush(msgout);
-	    printed = 0;
-	}
-	printed++;
-    }
-    if (msgout) {
-	fprintf(msgout, "\r%s %d", _("Registering points"), npoints - 1);
-	fprintf(msgout, "\n");
-	fprintf(msgout, "%s: %5d\n", _("All points (vertices)"), nallpoints);
-	fprintf(msgout, "%s: %5d\n",
-		_("Registered points (unique coordinates)"), npoints - 1);
-	fprintf(msgout, "%s: %5d\n", _("Points marked for break"), nmarks);
     }
 
     /* G_sleep (10); */
 
     nbreaks = 0;
-    if (msgout)
-	fprintf(msgout, "%s: %5d", _("Breaks"), nbreaks);
-    printed = 0;
 
     /* Second loop through lines (existing when loop is started, no need to process lines written again)
      * and break at points marked for break */
@@ -305,13 +284,6 @@ Vect_break_polygons(struct Map_info *Map, int type, struct Map_info *Err,
 		broken = 1;
 		nbreaks++;
 	    }
-
-	    if (msgout && printed > 1000) {
-		fprintf(msgout, "\r%s: %5d", _("Breaks"), nbreaks);
-		fflush(msgout);
-		printed = 0;
-	    }
-	    printed++;
 	}
 	if (!broken && n_orig_points > Points->n_points) {	/* was pruned before -> rewrite */
 	    if (Points->n_points > 1) {
@@ -329,9 +301,6 @@ Vect_break_polygons(struct Map_info *Map, int type, struct Map_info *Err,
 	}
     }
 
-    if (msgout)
-	fprintf(msgout, "\r%s: %5d", _("Breaks"), nbreaks);
-
     /* Write points on breaks */
     if (Err) {
 	Vect_reset_cats(Cats);
@@ -343,9 +312,6 @@ Vect_break_polygons(struct Map_info *Map, int type, struct Map_info *Err,
 	    }
 	}
     }
-
-    if (msgout)
-	fprintf(msgout, "\n");
 
     G_free(XPnts);
     RTreeDestroyNode(RTree);

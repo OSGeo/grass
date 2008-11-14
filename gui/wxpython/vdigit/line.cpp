@@ -603,7 +603,7 @@ int Digit::BreakLines()
     changeset = AddActionsBefore();
     
     ret = Vect_break_lines_list(display->mapInfo, display->selected.values, NULL,
-				GV_LINES, NULL, NULL);
+				GV_LINES, NULL);
 
     if (ret > 0) {
 	AddActionsAfter(changeset, nlines);
@@ -639,7 +639,7 @@ int Digit::SnapLines(double thresh)
     changeset = AddActionsBefore();
     
     Vect_snap_lines_list (display->mapInfo, display->selected.values,
-			  thresh, NULL, NULL);
+			  thresh, NULL);
 
     if (nlines < Vect_get_num_lines(display->mapInfo)) {
 	AddActionsAfter(changeset, nlines);
@@ -957,7 +957,7 @@ int Digit::BreakLineAtIntersection(int line, struct line_pnts* points_line,
     }
 
     ret = Vect_break_lines_list(display->mapInfo, listBreak, listRef,
-				GV_LINES, NULL, NULL);
+				GV_LINES, NULL);
 
     for (int i = 0; i < listBreak->n_values; i++) {	
 	if (Vect_line_alive(display->mapInfo, listBreak->value[i]))

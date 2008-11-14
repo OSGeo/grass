@@ -247,7 +247,7 @@ int main(int argc, char *argv[])
     db_close_database(driver);
     db_shutdown_driver(driver);
 
-    Vect_build(&Map, stderr);
+    Vect_build(&Map);
     Vect_close(&Map);
 
     G_site_free_struct(s);

@@ -94,7 +94,6 @@ int main(int argc, char *argv[])
     int navailable_layers;
     int layer_id;
     int overwrite;
-    FILE *output;
 
     G_gisinit(argv[0]);
 
@@ -245,11 +244,6 @@ int main(int argc, char *argv[])
     G_begin_polygon_area_calculations();	/* Used in geom() */
 
     OGRRegisterAll();
-
-    if (G_verbose() > G_verbose_min())
-	output = stderr;
-    else
-	output = NULL;
 
     /* list supported formats */
     if (formats_flag->answer) {
@@ -888,7 +882,7 @@ int main(int argc, char *argv[])
     G_message("%s", separator);
 
     /* TODO: is it necessary to build here? probably not, consumes time */
-    Vect_build(&Map, output);
+    Vect_build(&Map);
 
     if (!no_clean_flag->answer &&
 	Vect_get_num_primitives(&Map, GV_BOUNDARY) > 0) {
@@ -908,12 +902,12 @@ int main(int argc, char *argv[])
 	Vect_set_release_support(&Map);
 	Vect_close(&Map);
 	Vect_open_update(&Map, out_opt->answer, G_mapset());
-	Vect_build_partial(&Map, GV_BUILD_BASE, output);	/* Downgrade topo */
+	Vect_build_partial(&Map, GV_BUILD_BASE);	/* Downgrade topo */
 
 	if (snap >= 0) {
 	    G_message("%s", separator);
 	    G_message(_("Snap boundaries (threshold = %.3e):"), snap);
-	    Vect_snap_lines(&Map, GV_BOUNDARY, snap, NULL, output);
+	    Vect_snap_lines(&Map, GV_BOUNDARY, snap, NULL);
 	}
 
 	/* It is not to clean to snap centroids, but I have seen data with 2 duplicate polygons
@@ -927,12 +921,12 @@ int main(int argc, char *argv[])
 
 	G_message("%s", separator);
 	G_message(_("Break polygons:"));
-	Vect_break_polygons(&Map, GV_BOUNDARY, NULL, output);
+	Vect_break_polygons(&Map, GV_BOUNDARY, NULL);
 
 	/* It is important to remove also duplicate centroids in case of duplicate imput polygons */
 	G_message("%s", separator);
 	G_message(_("Remove duplicates:"));
-	Vect_remove_duplicates(&Map, GV_BOUNDARY | GV_CENTROID, NULL, output);
+	Vect_remove_duplicates(&Map, GV_BOUNDARY | GV_CENTROID, NULL);
 
 	/* Vect_clean_small_angles_at_nodes() can change the geometry so that new intersections
 	 * are created. We must call Vect_break_lines(), Vect_remove_duplicates()
@@ -940,42 +934,41 @@ int main(int argc, char *argv[])
 	do {
 	    G_message("%s", separator);
 	    G_message(_("Break boundaries:"));
-	    Vect_break_lines(&Map, GV_BOUNDARY, NULL, output);
+	    Vect_break_lines(&Map, GV_BOUNDARY, NULL);
 
 	    G_message("%s", separator);
 	    G_message(_("Remove duplicates:"));
-	    Vect_remove_duplicates(&Map, GV_BOUNDARY, NULL, output);
+	    Vect_remove_duplicates(&Map, GV_BOUNDARY, NULL);
 
 	    G_message("%s", separator);
 	    G_message(_("Clean boundaries at nodes:"));
 	    nmodif =
-		Vect_clean_small_angles_at_nodes(&Map, GV_BOUNDARY, NULL,
-						 output);
+		Vect_clean_small_angles_at_nodes(&Map, GV_BOUNDARY, NULL);
 	} while (nmodif > 0);
 
 	G_message("%s", separator);
 	if (type & GV_BOUNDARY) {	/* that means lines were converted boundaries */
 	    G_message(_("Change boundary dangles to lines:"));
-	    Vect_chtype_dangles(&Map, -1.0, NULL, output);
+	    Vect_chtype_dangles(&Map, -1.0, NULL);
 	}
 	else {
 	    G_message(_("Change dangles to lines:"));
-	    Vect_remove_dangles(&Map, GV_BOUNDARY, -1.0, NULL, output);
+	    Vect_remove_dangles(&Map, GV_BOUNDARY, -1.0, NULL);
 	}
 
 	G_message("%s", separator);
 	if (type & GV_BOUNDARY) {
 	    G_message(_("Change boundary bridges to lines:"));
-	    Vect_chtype_bridges(&Map, NULL, output);
+	    Vect_chtype_bridges(&Map, NULL);
 	}
 	else {
 	    G_message(_("Remove bridges:"));
-	    Vect_remove_bridges(&Map, NULL, output);
+	    Vect_remove_bridges(&Map, NULL);
 	}
 
 	/* Boundaries are hopefully clean, build areas */
 	G_message("%s", separator);
-	Vect_build_partial(&Map, GV_BUILD_ATTACH_ISLES, output);
+	Vect_build_partial(&Map, GV_BUILD_ATTACH_ISLES);
 
 	/* Calculate new centroids for all areas, centroids have the same id as area */
 	ncentr = Vect_get_num_areas(&Map);
@@ -1059,10 +1052,10 @@ int main(int argc, char *argv[])
 	if (Centr)
 	    G_free(Centr);
 	G_message("%s", separator);
-	Vect_build_partial(&Map, GV_BUILD_NONE, NULL);
+	Vect_build_partial(&Map, GV_BUILD_NONE);
 
 	G_message("%s", separator);
-	Vect_build(&Map, output);
+	Vect_build(&Map);
 
 	G_message("%s", separator);
 

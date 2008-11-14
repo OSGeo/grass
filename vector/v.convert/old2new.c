@@ -141,7 +141,7 @@ int old2new(char *in, char *out, int endian)
     /* Convert dig_cats to table */
     attributes(in, &Mapout);
 
-    Vect_build(&Mapout, stderr);
+    Vect_build(&Mapout);
     Vect_close(&Mapout);
 
     fclose(Digin);

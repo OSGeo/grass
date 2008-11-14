@@ -267,13 +267,7 @@ int main(int argc, char *argv[])
     /* close input vector */
     Vect_close(&In);
     /* build topology for output vector */
-    if (G_verbose() > G_verbose_min()) {
-	Vect_build(&Out, stderr);
-    }
-    else {
-	Vect_build(&Out, NULL);
-    }
-
+    Vect_build(&Out);
     /* close output vector */
     Vect_close(&Out);
 

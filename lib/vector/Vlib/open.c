@@ -445,7 +445,7 @@ Vect_open_update(struct Map_info *Map, const char *name, const char *mapset)
 	Map->plus.alloc_upnodes = 0;
 
 	/* Build spatial index from topo */
-	Vect_build_sidx_from_topo(Map, NULL);
+	Vect_build_sidx_from_topo(Map);
     }
 
     return ret;

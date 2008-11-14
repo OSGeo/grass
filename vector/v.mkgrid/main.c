@@ -276,10 +276,7 @@ int main(int argc, char *argv[])
 
     db_close_database_shutdown_driver(Driver);
 
-    if (G_verbose() > G_verbose_min())
-	Vect_build(&Map, stderr);
-    else
-	Vect_build(&Map, NULL);
+    Vect_build(&Map);
     Vect_close(&Map);
 
     exit(EXIT_SUCCESS);

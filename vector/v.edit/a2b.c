@@ -299,7 +299,7 @@ int close_lines(struct Map_info *Map, int ltype, double thresh)
 
     nlines_modified = 0;
 
-    Vect_build_partial(Map, GV_BUILD_BASE, NULL);
+    Vect_build_partial(Map, GV_BUILD_BASE);
     nlines = Vect_get_num_lines(Map);
 
     for (line = 1; line <= nlines; line++) {

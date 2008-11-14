@@ -104,8 +104,8 @@ int DisplayDriver::CloseMap()
     if (mapInfo) {
 	if (mapInfo->mode == GV_MODE_RW) {
 	    /* rebuild topology */
-	    Vect_build_partial(mapInfo, GV_BUILD_NONE, NULL);
-	    Vect_build(mapInfo, NULL);
+	    Vect_build_partial(mapInfo, GV_BUILD_NONE);
+	    Vect_build(mapInfo);
 	}
 	/* close map and store topo/cidx */
 	ret = Vect_close(mapInfo); 

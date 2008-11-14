@@ -368,7 +368,7 @@ int main(int argc, char **argv)
 
 
     /* clean up and bye bye */
-    Vect_build(&Map, stderr);
+    Vect_build(&Map);
     Vect_close(&Map);
 
     exit(EXIT_SUCCESS);

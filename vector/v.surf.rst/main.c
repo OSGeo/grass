@@ -597,7 +597,7 @@ int main(int argc, char *argv[])
 	   TreeMap.head.plani_zone = G_zone ();
 	 */
 	print_tree(root, x_orig, y_orig, &TreeMap);
-	Vect_build(&TreeMap, NULL);
+	Vect_build(&TreeMap);
 	Vect_close(&TreeMap);
     }
 
@@ -691,7 +691,7 @@ int main(int argc, char *argv[])
 	   OverMap.head.plani_zone = G_zone ();
 	 */
 	print_tree(root, x_orig, y_orig, &OverMap);
-	Vect_build(&OverMap, NULL);
+	Vect_build(&OverMap);
 	Vect_close(&OverMap);
     }
 
@@ -711,7 +711,7 @@ int main(int argc, char *argv[])
     if (cvdev != NULL || devi != NULL) {
 	/*  db_close_database_shutdown_driver ( driver2 ); */
 	db_close_database(driver2);
-	Vect_build(&Map2, stderr);
+	Vect_build(&Map2);
 	Vect_close(&Map2);
     }
 

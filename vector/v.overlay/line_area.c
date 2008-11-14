@@ -67,13 +67,10 @@ int line_area(struct Map_info *In, int *field, struct Map_info *Out,
     db_init_string(&stmt);
 
     G_message(_("Breaking lines..."));
-    if (G_verbose() > G_verbose_min())
-	Vect_break_lines(Out, GV_LINE | GV_BOUNDARY, NULL, stderr);
-    else
-	Vect_break_lines(Out, GV_LINE | GV_BOUNDARY, NULL, NULL);
+    Vect_break_lines(Out, GV_LINE | GV_BOUNDARY, NULL);
 
     /* Basic topology needed only */
-    Vect_build_partial(Out, GV_BUILD_BASE, NULL);
+    Vect_build_partial(Out, GV_BUILD_BASE);
 
     nlines = Vect_get_num_lines(Out);
 

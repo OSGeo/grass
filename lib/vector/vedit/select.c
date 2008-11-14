@@ -91,7 +91,7 @@ int Vedit_select_by_query(struct Map_info *Map,
 	    thresh_tmp = fabs(thresh);
 
 	    /* select dangles shorter than 'thresh_tmp' */
-	    Vect_select_dangles(Map, type, thresh_tmp, NULL, List_dangle);
+	    Vect_select_dangles(Map, type, thresh_tmp, List_dangle);
 
 	    if (thresh <= 0.0) {	/* shorter than */
 		for (i = 0; i < List_dangle->n_values; i++) {

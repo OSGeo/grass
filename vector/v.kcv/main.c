@@ -253,7 +253,7 @@ int main(int argc, char *argv[])
 
     db_close_database_shutdown_driver(Driver);
 
-    Vect_build(&Out, stderr);
+    Vect_build(&Out);
     Vect_close(&Out);
 
     exit(EXIT_SUCCESS);

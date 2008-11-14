@@ -352,7 +352,7 @@ int main(int argc, char *argv[])
     Vect_close(&Out);
     Vect_close(&Outlier);
     if (qgis_opt->answer) {
-	Vect_build(&Qgis, stderr);
+	Vect_build(&Qgis);
 	Vect_close(&Qgis);
     }
 

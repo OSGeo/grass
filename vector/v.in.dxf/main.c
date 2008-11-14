@@ -163,7 +163,7 @@ int main(int argc, char *argv[])
 	if (found_layers) {
 	    if (Vect_open_old(Map, output, G_mapset())) {
 		if (!flag_topo)
-		    if (!Vect_build(Map, stderr))
+		    if (!Vect_build(Map))
 			G_warning(_("Building topology failed"));
 		Vect_close(Map);
 	    }

@@ -240,7 +240,7 @@ int main(int argc, char *argv[])
     G_close_cell(input_fd);
 
     if (!no_topol->answer)
-	Vect_build(&Map, stderr);
+	Vect_build(&Map);
 
 
     /* insert cats and optionally labels if raster cats were used */

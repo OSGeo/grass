@@ -50,7 +50,7 @@ Vect_select_lines_by_box(struct Map_info *Map, BOUND_BOX * Box,
 
     if (!(plus->Spidx_built)) {
 	G_debug(3, "Building spatial index.");
-	Vect_build_sidx_from_topo(Map, NULL);
+	Vect_build_sidx_from_topo(Map);
     }
 
     list->n_values = 0;
@@ -100,7 +100,7 @@ Vect_select_areas_by_box(struct Map_info *Map, BOUND_BOX * Box,
 
     if (!(Map->plus.Spidx_built)) {
 	G_debug(3, "Building spatial index.");
-	Vect_build_sidx_from_topo(Map, NULL);
+	Vect_build_sidx_from_topo(Map);
     }
 
     dig_select_areas(&(Map->plus), Box, list);
@@ -137,7 +137,7 @@ Vect_select_isles_by_box(struct Map_info *Map, BOUND_BOX * Box,
 
     if (!(Map->plus.Spidx_built)) {
 	G_debug(3, "Building spatial index.");
-	Vect_build_sidx_from_topo(Map, NULL);
+	Vect_build_sidx_from_topo(Map);
     }
 
     dig_select_isles(&(Map->plus), Box, list);
@@ -169,7 +169,7 @@ Vect_select_nodes_by_box(struct Map_info *Map, BOUND_BOX * Box,
 
     if (!(plus->Spidx_built)) {
 	G_debug(3, "Building spatial index.");
-	Vect_build_sidx_from_topo(Map, NULL);
+	Vect_build_sidx_from_topo(Map);
     }
 
     list->n_values = 0;

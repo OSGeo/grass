@@ -168,8 +168,8 @@ void update(int wx, int wy)
 void end(void)
 {
     G_debug(1, "end()");
-    Vect_build_partial(&Map, GV_BUILD_NONE, NULL);
-    Vect_build(&Map, stdout);
+    Vect_build_partial(&Map, GV_BUILD_NONE);
+    Vect_build(&Map);
     Vect_close(&Map);
 
     if (1 == G_put_window(&GRegion))

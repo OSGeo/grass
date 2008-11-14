@@ -23,8 +23,7 @@
 #include <grass/glocale.h>
 
 static void
-remove_bridges(struct Map_info *Map, int chtype, struct Map_info *Err,
-	       FILE * msgout);
+remove_bridges(struct Map_info *Map, int chtype, struct Map_info *Err);
 
 /*!
    \brief Remove bridges from vector map.
@@ -37,15 +36,14 @@ remove_bridges(struct Map_info *Map, int chtype, struct Map_info *Err,
 
    \param Map input map where bridges are deleted
    \param Err vector map where deleted bridges are written or NULL
-   \param msgout file pointer where messages will be written or NULL
 
    \return
  */
 
 void
-Vect_remove_bridges(struct Map_info *Map, struct Map_info *Err, FILE * msgout)
+Vect_remove_bridges(struct Map_info *Map, struct Map_info *Err)
 {
-    remove_bridges(Map, 0, Err, msgout);
+    remove_bridges(Map, 0, Err);
 }
 
 /*!
@@ -59,15 +57,14 @@ Vect_remove_bridges(struct Map_info *Map, struct Map_info *Err, FILE * msgout)
 
    \param Map input map where bridges are changed
    \param Err vector map where changed bridges are written or NULL
-   \param msgout file pointer where messages will be written or NULL
 
    \return
  */
 
 void
-Vect_chtype_bridges(struct Map_info *Map, struct Map_info *Err, FILE * msgout)
+Vect_chtype_bridges(struct Map_info *Map, struct Map_info *Err)
 {
-    remove_bridges(Map, 1, Err, msgout);
+    remove_bridges(Map, 1, Err);
 }
 
 /* 
@@ -84,8 +81,7 @@ Vect_chtype_bridges(struct Map_info *Map, struct Map_info *Err, FILE * msgout)
    List of all lines in chain is created during the cycle.
  */
 void
-remove_bridges(struct Map_info *Map, int chtype, struct Map_info *Err,
-	       FILE * msgout)
+remove_bridges(struct Map_info *Map, int chtype, struct Map_info *Err)
 {
     int i, type, nlines, line;
     int left, right, node1, node2, current_line, next_line;
@@ -115,10 +111,6 @@ remove_bridges(struct Map_info *Map, int chtype, struct Map_info *Err,
     nlines = Vect_get_num_lines(Map);
 
     G_debug(1, "nlines =  %d", nlines);
-
-    if (msgout)
-	fprintf(msgout, "%s: %5d  %s: %5d",
-		_("Removed bridges"), bridges_removed, lmsg, lines_removed);
 
     for (line = 1; line <= nlines; line++) {
 	if (!Vect_line_alive(Map, line))
@@ -196,17 +188,5 @@ remove_bridges(struct Map_info *Map, int chtype, struct Map_info *Err,
 	    }
 	    bridges_removed++;
 	}
-
-	if (msgout) {
-	    fprintf(msgout, "\r%s: %5d  %s: %5d",
-		    _("Removed bridges"), bridges_removed, lmsg,
-		    lines_removed);
-	    fflush(msgout);
-	}
-    }
-    if (msgout) {
-	fprintf(msgout, "\r%s: %5d  %s: %5d",
-		_("Removed bridges"), bridges_removed, lmsg, lines_removed);
-	fprintf(msgout, "\n");
     }
 }

@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
 	Vect_set_open_level(1);
 	Vect_open_old(&Map, map_opt->answer, G_mapset());
 
-	Vect_build(&Map, stderr);
+	Vect_build(&Map);
     }
     /* dump topology */
     if (dump || sdump || cdump) {
@@ -150,7 +150,7 @@ int main(int argc, char *argv[])
 	    }
 	}
 
-	Vect_build(&Err, stderr);
+	Vect_build(&Err);
 	Vect_close(&Err);
     }
 

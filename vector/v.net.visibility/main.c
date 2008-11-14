@@ -118,11 +118,7 @@ int main(int argc, char *argv[])
     G_free(points);
     G_free(lines);
 
-    if (G_verbose() > G_verbose_min())
-	Vect_build(&out, stderr);
-    else
-	Vect_build(&out, NULL);
-
+    Vect_build(&out);
     Vect_close(&out);
     Vect_close(&in);
     exit(EXIT_SUCCESS);

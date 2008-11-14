@@ -98,7 +98,7 @@ int main(int argc, char **argv)
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
 
-    Vect_build_partial(&Out, GV_BUILD_BASE, NULL);
+    Vect_build_partial(&Out, GV_BUILD_BASE);
 
     /* initialize working region */
     G_get_window(&Window);
@@ -119,7 +119,7 @@ int main(int argc, char **argv)
 
     Vect_close(&In);
 
-    Vect_build_partial(&Out, GV_BUILD_ATTACH_ISLES, NULL);
+    Vect_build_partial(&Out, GV_BUILD_ATTACH_ISLES);
 
     nareas = Vect_get_num_areas(&Out);
     G_debug(3, "nareas = %d", nareas);
@@ -150,8 +150,8 @@ int main(int argc, char **argv)
 	Vect_write_line(&Out, GV_CENTROID, Points, Cats);
     }
 
-    Vect_build_partial(&Out, GV_BUILD_NONE, NULL);
-    Vect_build(&Out, stderr);
+    Vect_build_partial(&Out, GV_BUILD_NONE);
+    Vect_build(&Out);
     Vect_close(&Out);
 
     exit(EXIT_SUCCESS);

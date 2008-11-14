@@ -28,16 +28,14 @@
    \param Map input vector map 
    \param type feature type
    \param[out] Err vector map where points at intersections will be written or NULL
-   \param[out] msgout file pointer where messages will be written or NULL
 
    \return
  */
 
 void
-Vect_break_lines(struct Map_info *Map, int type, struct Map_info *Err,
-		 FILE * msgout)
+Vect_break_lines(struct Map_info *Map, int type, struct Map_info *Err)
 {
-    Vect_break_lines_list(Map, NULL, NULL, type, Err, msgout);
+    Vect_break_lines_list(Map, NULL, NULL, type, Err);
 
     return;
 }
@@ -60,15 +58,13 @@ Vect_break_lines(struct Map_info *Map, int type, struct Map_info *Err,
    \param List_ref list of reference lines or NULL
    \param type feature type
    \param[out] Err vector map where points at intersections will be written or NULL
-   \param[out] msgout file pointer where messages will be written or NULL
 
    \return number of intersections
  */
 
 int
 Vect_break_lines_list(struct Map_info *Map, struct ilist *List_break,
-		      struct ilist *List_ref, int type, struct Map_info *Err,
-		      FILE * msgout)
+		      struct ilist *List_ref, int type, struct Map_info *Err)
 {
     struct line_pnts *APoints, *BPoints, *Points;
     struct line_pnts **AXLines, **BXLines;
@@ -84,7 +80,6 @@ Vect_break_lines_list(struct Map_info *Map, struct ilist *List_break,
     int is3d;
     int node, anode1, anode2, bnode1, bnode2;
     double nodex, nodey;
-    int printed;
 
     APoints = Vect_new_line_struct();
     BPoints = Vect_new_line_struct();
@@ -116,10 +111,8 @@ Vect_break_lines_list(struct Map_info *Map, struct ilist *List_break,
      * the file, and process next line (remaining lines overlapping box are skipped)
      */
     nbreaks = 0;
-    printed = 0;
 
-    if (msgout)
-	fprintf(msgout, _("%s %5d"), _("Intersections:"), nbreaks);
+    G_verbose_message(_("Intersections: %5d"), nbreaks);
 
     for (iline = 0; iline < nlines; iline++) {
 	if (List_break) {
@@ -361,14 +354,6 @@ Vect_break_lines_list(struct Map_info *Map, struct ilist *List_break,
 		G_free(yx);
 		G_free(zx);
 	    }
-
-	    if (msgout && printed > 1000) {
-		fprintf(msgout, "\r%s %5d (line %d)", _("Intersections:"),
-			nbreaks, aline);
-		fflush(msgout);
-		printed = 0;
-	    }
-	    printed++;
 	    if (naxlines > 0)
 		break;		/* first line was broken and deleted -> take the next one */
 	}
@@ -382,9 +367,7 @@ Vect_break_lines_list(struct Map_info *Map, struct ilist *List_break,
 	G_debug(3, "nlines =  %d", nlines);
     }				/* for each line */
 
-    if (msgout)
-	fprintf(msgout, "\r%s %5d                        \n",
-		_("Intersections:"), nbreaks);
+    G_verbose_message(_("Intersections: %5d"), nbreaks);
 
     Vect_destroy_list(List);
 

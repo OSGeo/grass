@@ -483,12 +483,7 @@ int main(int argc, char *argv[])
     if (option == O_ADD || option == O_DEL || option == O_CHFIELD ||
 	option == O_SUM) {
 	Vect_copy_tables(&In, &Out, 0);
-	if (G_verbose() > G_verbose_min()) {
-	    Vect_build(&Out, stderr);
-	}
-	else {
-	    Vect_build(&Out, NULL);
-	}
+	Vect_build(&Out);
 	Vect_close(&Out);
     }
     Vect_close(&In);

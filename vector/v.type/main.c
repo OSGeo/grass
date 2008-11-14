@@ -226,7 +226,7 @@ int main(int argc, char *argv[])
     }
 
     Vect_copy_tables(&In, &Out, 0);
-    Vect_build(&Out, stderr);
+    Vect_build(&Out);
     Vect_close(&Out);
     Vect_close(&In);
 
