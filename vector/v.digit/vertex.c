@@ -34,8 +34,7 @@ int split_line_begin(void *closure)
     i_prompt("Split line:");
     i_prompt_buttons("Select", "", "Quit tool");
 
-    /* TODO: use some better threshold */
-    sl->thresh = fabs(D_d_to_u_col(10) - D_d_to_u_col(0));
+    sl->thresh = get_thresh();
     G_debug(2, "thresh = %f", sl->thresh);
 
     sl->last_line = 0;
@@ -199,8 +198,7 @@ int rm_vertex_begin(void *closure)
     i_prompt("Remove vertex:");
     i_prompt_buttons("Select vertex", "", "Quit tool");
 
-    /* TODO: use some better threshold */
-    rv->thresh = fabs(D_d_to_u_col(10) - D_d_to_u_col(0));
+    rv->thresh = get_thresh();
     G_debug(2, "thresh = %f", rv->thresh);
 
     rv->last_line = 0;
@@ -364,8 +362,7 @@ int add_vertex_begin(void *closure)
     i_prompt("Add vertex:");
     i_prompt_buttons("Select", "", "Quit tool");
 
-    /* TODO: use some better threshold */
-    av->thresh = fabs(D_d_to_u_col(10) - D_d_to_u_col(0));
+    av->thresh = get_thresh();
     G_debug(2, "thresh = %f", av->thresh);
 
     av->last_line = 0;
@@ -561,8 +558,7 @@ int move_vertex_begin(void *closure)
     i_prompt("Move vertex:");
     i_prompt_buttons("Select", "", "Quit tool");
 
-    /* TODO: use some better threshold */
-    mv->thresh = fabs(D_d_to_u_col(10) - D_d_to_u_col(0));
+    mv->thresh = get_thresh();
     G_debug(2, "thresh = %f", mv->thresh);
 
     mv->last_line = 0;
@@ -590,9 +586,9 @@ int move_vertex_update(void *closure, int sxn, int syn, int button)
 
     if (button == 1) {		/* Select / new location */
 	if (mv->last_line == 0) {	/* Select line */
-	    int line =
-		Vect_find_line(&Map, x, y, 0, GV_LINE | GV_BOUNDARY,
-			       mv->thresh, 0, 0);
+	    int line = Vect_find_line(&Map, x, y, 0, GV_POINT | GV_LINE | GV_BOUNDARY,
+				      mv->thresh, 0, 0);
+
 	    G_debug(2, "line found = %d", line);
 
 	    /* Display new selected line if any */

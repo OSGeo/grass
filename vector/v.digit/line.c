@@ -102,15 +102,7 @@ int snap(double *x, double *y)
 
     G_debug(2, "snap(): x = %f, y = %f", *x, *y);
 
-    if (!var_geti(VAR_SNAP))
-	return 0;
-
-    if (var_geti(VAR_SNAP_MODE) == SNAP_MAP) {
-	thresh = var_getd(VAR_SNAP_MAP);
-    }
-    else {
-	thresh = Scale * var_geti(VAR_SNAP_SCREEN);
-    }
+    thresh = get_thresh();
 
     node = Vect_find_node(&Map, *x, *y, 0, thresh, 0);
 
@@ -285,8 +277,7 @@ int edit_line_begin(void *closure)
     i_prompt("Edit line or boundary:");
     i_prompt_buttons("Select", "", "Quit tool");
 
-    /* TODO: use some better threshold */
-    el->thresh = fabs(D_d_to_u_col(10) - D_d_to_u_col(0));
+    el->thresh = get_thresh();
     G_debug(2, "thresh = %f", el->thresh);
 
     el->phase = 1;
@@ -470,8 +461,7 @@ int delete_line_begin(void *closure)
     i_prompt("Delete point, line, boundary, or centroid:");
     i_prompt_buttons("Select", "Unselect", "Quit tool");
 
-    /* TODO: use some better threshold */
-    dl->thresh = fabs(D_d_to_u_col(10) - D_d_to_u_col(0));
+    dl->thresh = get_thresh();
     G_debug(2, "thresh = %f", dl->thresh);
 
     dl->line = 0;
@@ -610,8 +600,7 @@ int move_line_begin(void *closure)
     i_prompt("Move point, line, boundary, or centroid:");
     i_prompt_buttons("Select", "", "Quit tool");
 
-    /* TODO: use some better threshold */
-    ml->thresh = fabs(D_d_to_u_col(10) - D_d_to_u_col(0));
+    ml->thresh = get_thresh();
     G_debug(2, "thresh = %f", ml->thresh);
 
     ml->last_line = 0;

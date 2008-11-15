@@ -137,6 +137,8 @@ void set_tool(tool_func_begin * begin,
 void cancel_tool(void);
 int c_update_tool(ClientData, Tcl_Interp *, int, char **);
 
+double get_thresh();
+
 /* form */
 int reset_values(ClientData, Tcl_Interp *, int, char **);
 int set_value(ClientData, Tcl_Interp *, int, char **);
