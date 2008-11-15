@@ -109,7 +109,8 @@ proc mkAttPopup {w att {mode 0}} {
 		set attPopup_UseColor 1
 		pack $w.f2.use_color -side bottom -expand yes -fill both \
 			-pady 2 -before $w.f2.map
-
+    } elseif {"$att" == "emission" } then {
+        label $w.f2.const -text "Constant not supported" 
     } else {
 		button $w.f2.const -text "New constant"	-command "$cb2" -bd 1 -width 10
     }
