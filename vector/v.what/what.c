@@ -6,7 +6,6 @@
 #include <grass/display.h>
 #include <grass/colors.h>
 #include <grass/Vect.h>
-#include <grass/form.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 #include "what.h"
@@ -14,7 +13,97 @@ static int nlines = 50;
 
 #define WDTH 5
 
-int what(double east, double north, double maxdist, int topo, int showextra)
+static void F_generate(
+    const char *drvname, const char *dbname, const char *tblname, const char *key,
+    int keyval, char **form)
+{
+    int col, ncols, ctype, sqltype, more;
+    char buf[5000];
+    const char *colname;
+    dbString sql, html, str;
+    dbDriver *driver;
+    dbHandle handle;
+    dbCursor cursor;
+    dbTable *table;
+    dbColumn *column;
+    dbValue *value;
+
+    G_debug(2,
+	    "F_generate(): drvname = '%s', dbname = '%s', tblname = '%s', key = '%s', keyval = %d",
+	    drvname, dbname, tblname, key, keyval);
+
+    db_init_string(&sql);
+    db_init_string(&html);	/* here is the result stored */
+    db_init_string(&str);
+
+    G_debug(2, "Open driver");
+    driver = db_start_driver(drvname);
+    if (!driver)
+	G_fatal_error("Cannot open driver");
+
+    G_debug(2, "Driver opened");
+
+    db_init_handle(&handle);
+    db_set_handle(&handle, dbname, NULL);
+    G_debug(2, "Open database");
+    if (db_open_database(driver, &handle) != DB_OK)
+	G_fatal_error("Cannot open database");
+
+    G_debug(2, "Database opened");
+
+    /* TODO: test if table exist first, but this should be tested by application befor
+     *        F_generate() is called, because it may be correct (connection defined in DB
+     *        but table does not exist) */
+
+    sprintf(buf, "select * from %s where %s = %d", tblname, key, keyval);
+    G_debug(2, "%s", buf);
+    db_set_string(&sql, buf);
+    if (db_open_select_cursor(driver, &sql, &cursor, DB_SEQUENTIAL) != DB_OK)
+	G_fatal_error("Cannot open select cursor");
+
+    G_debug(2, "Select Cursor opened");
+
+    table = db_get_cursor_table(&cursor);
+
+    if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK)
+	G_fatal_error("Cannot fetch next record");
+
+    if (!more) {
+	G_warning("No database record");
+	*form = G_store("No record selected.");
+    }
+    else {
+	ncols = db_get_table_number_of_columns(table);
+
+	/* Start form */
+	for (col = 0; col < ncols; col++) {
+	    column = db_get_table_column(table, col);
+	    sqltype = db_get_column_sqltype(column);
+	    ctype = db_sqltype_to_Ctype(sqltype);
+	    value = db_get_column_value(column);
+	    db_convert_value_to_string(value, sqltype, &str);
+	    colname = db_get_column_name(column);
+
+	    G_debug(2, "%s: %s", colname, db_get_string(&str));
+
+	    sprintf(buf, "%s : %s\n", colname, db_get_string(&str));
+	    db_append_string(&html, buf);
+	}
+    }
+    G_debug(2, "FORM STRING:%s", db_get_string(&html));
+
+    db_close_cursor(&cursor);
+    db_close_database(driver);
+    db_shutdown_driver(driver);
+
+    *form = G_store(db_get_string(&html));
+
+    db_free_string(&sql);
+    db_free_string(&html);
+    db_free_string(&str);
+}
+
+void what(double east, double north, double maxdist, int topo, int showextra)
 {
     int type;
     char east_buf[40], north_buf[40];
@@ -260,14 +349,12 @@ int what(double east, double north, double maxdist, int topo, int showextra)
 			Cats->field[j], Cats->cat[j]);
 		Fi = Vect_get_field(&(Map[i]), Cats->field[j]);
 		if (Fi != NULL && showextra) {
-		    int format = F_TXT, edit_mode = F_VIEW;
 
 		    fprintf(stdout,
 			    _("\nDriver: %s\nDatabase: %s\nTable: %s\nKey column: %s\n"),
 			    Fi->driver, Fi->database, Fi->table, Fi->key);
 		    F_generate(Fi->driver, Fi->database, Fi->table, Fi->key,
-			       Cats->cat[j], NULL, NULL, edit_mode, format,
-			       &form);
+			       Cats->cat[j], &form);
 		    fprintf(stdout, "%s", form);
 		    G_free(form);
 		    G_free(Fi);
@@ -277,6 +364,4 @@ int what(double east, double north, double maxdist, int topo, int showextra)
     }				/* for nvects */
 
     fflush(stdout);
-
-    return 0;
 }
