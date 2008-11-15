@@ -60,7 +60,8 @@ proc appBusy {} {
         . configure -cursor {watch blue}
         $Nv_(APP) configure -cursor {watch blue}
     }
-    $Nv_(AREA).menu.wait_pls configure -fg red -bg black
+#$Nv_(AREA).menu.wait_pls configure -fg red -bg black
+    pack $Nv_(AREA).menu.wait_pls
     grab $Nv_(AREA).menu.wait_pls
     update
 }
@@ -70,7 +71,8 @@ proc appNotBusy {} {
 
     . configure -cursor ""
     $Nv_(APP) configure -cursor ""
-    $Nv_(AREA).menu.wait_pls configure -fg gray90 -bg gray90
+#$Nv_(AREA).menu.wait_pls configure -fg grey -bg grey
+    pack forget $Nv_(AREA).menu.wait_pls
     grab release $Nv_(AREA).menu.wait_pls
     update
 }

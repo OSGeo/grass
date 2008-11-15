@@ -340,8 +340,7 @@ if {$DEBUG} {puts "panel area made"}
 	pack $Nv_(P_AREA) -side top -fill y -expand yes
 
 	# Make label with invisible text to hold "Please wait..." message
-	label $Nv_(AREA).menu.wait_pls -text "Please Wait..." \
-		-fg gray90
+	label $Nv_(AREA).menu.wait_pls -text "Please Wait..." -fg red -bg black
 
 	#Bind menu area to canvas and scrollbars
 	$Nv_(PAREA).canvas create window 0 0 -window $Nv_(P_AREA) -anchor nw
@@ -351,7 +350,7 @@ if {$DEBUG} {puts "panel area made"}
 		{"NVIZ Help" "About NVIZ" "NVIZ - Bugs / ToDo"} \
 		{0 0 0} \
 		{"nviz_browse nviz_toc.html" "nviz_browse nviz_desc.html" "nviz_browse bugs_todo.html"} ] \
-		-side right -fill x -expand yes -anchor e
+		-side right -fill none -expand no -anchor e
 
 	# DEBUG
 	if {$DEBUG} {puts "Help menu made"}
@@ -380,7 +379,7 @@ if {$DEBUG} {puts "panel area made"}
 				"Separator" \
 				"reset_Nviz" "Nv_close_scripting ; exit ; puts"}]
 
-	pack $filemenu -side left -fill x -expand yes 
+	pack $filemenu -side left -fill x -expand no 
 
 
 # DEBUG
@@ -393,9 +392,9 @@ if {$DEBUG} {puts "file menu made"}
 # DEBUG
 if {$DEBUG} {puts "disabled made"}
 
-	pack [Nv_mkConfigMenu $leftmenu.config] -side left -fill x -expand yes 
+	pack [Nv_mkConfigMenu $leftmenu.config] -side left -fill x -expand no 
 
-	pack [Nv_mkPanelMenu $leftmenu.panel] -side left -fill x -expand yes 
+	pack [Nv_mkPanelMenu $leftmenu.panel] -side left -fill x -expand no 
 # DEBUG
 if {$DEBUG} {puts "scripting menu 0 made"}
 
@@ -433,13 +432,13 @@ if {$DEBUG} {puts "scripting menu 0 made"}
 	$scriptingmenu add command -label "Script Tools" \
 		-underline 1 -command {exec nviz -f $default_panel_path/script_tools -q &}
 
-	pack $leftmenu.scripting -side left -fill x -expand yes
+	pack $leftmenu.scripting -side left -fill x -expand no
 
 
 # DEBUG
 if {$DEBUG} {puts "scripting menu made"}
 
-	pack $leftmenu -side left -fill x -expand yes 
+	pack $leftmenu -side left -fill x -expand no 
 
 
 	tk_menuBar $Nv_(AREA).menu $Nv_(AREA).menu.file $Nv_(AREA).menu.panel \
@@ -447,7 +446,7 @@ if {$DEBUG} {puts "scripting menu made"}
 
 	set Nv_(Q) [Q_init 2]
 
-	pack $Nv_(AREA).menu.wait_pls -side left -fill x -expand yes
+#pack $Nv_(AREA).menu.wait_pls -side left -fill x -expand yes
 
 	# initialize Main panel
 	Nv_force_panel main
