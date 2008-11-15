@@ -190,8 +190,7 @@ int display_cats_begin(void *closure)
     i_prompt("Display categories:");
     i_prompt_buttons("Select line", "", "Quit tool");
 
-    /* TODO: use some better threshold */
-    dc->thresh = fabs(D_d_to_u_col(10) - D_d_to_u_col(0));
+    dc->thresh = get_thresh();
     G_debug(2, "thresh = %f", dc->thresh);
 
     F_clear();
@@ -301,8 +300,7 @@ int copy_cats_begin(void *closure)
     i_prompt("Copy attributes:");
     i_prompt_buttons("Select source object", "", "Quit tool");
 
-    /* TODO: use some better threshold */
-    cc->thresh = fabs(D_d_to_u_col(10) - D_d_to_u_col(0));
+    cc->thresh = get_thresh();
     G_debug(2, "thresh = %f", cc->thresh);
 
     cc->src_line = 0;
@@ -462,8 +460,7 @@ int display_attributes_begin(void *closure)
     i_prompt("Display attributes:");
     i_prompt_buttons("Select line", "", "Quit tool");
 
-    /* TODO: use some better threshold */
-    da->thresh = fabs(D_d_to_u_col(10) - D_d_to_u_col(0));
+    da->thresh = get_thresh();
     G_debug(2, "thresh = %f", da->thresh);
 
     F_clear();

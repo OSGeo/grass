@@ -1,8 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
+#include <grass/display.h>
 #include "global.h"
 #include "proto.h"
 
@@ -143,4 +145,18 @@ void set_tool(tool_func_begin * begin_fn, tool_func_update * update_fn,
     tool_closure = closure;
 
     Tcl_Eval(Toolbox, ".screen.canvas configure -cursor crosshair");
+}
+
+/* Get snapping/selection threshold from GUI */
+double get_thresh() {
+    /* If not found, fall back to old calculation method */
+    if (!var_geti(VAR_SNAP))
+        return fabs(D_d_to_u_col(10) - D_d_to_u_col(0));
+
+    if (var_geti(VAR_SNAP_MODE) == SNAP_MAP) {
+        return fabs(var_getd(VAR_SNAP_MAP));
+    }
+    else {
+        return fabs(Scale * var_geti(VAR_SNAP_SCREEN));
+    }
 }
