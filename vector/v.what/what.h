@@ -1,5 +1,5 @@
 /* what.c */
-extern int what(double, double, double, int, int);
+extern void what(double, double, double, int, int);
 
 extern char **vect;
 extern int nvects;
