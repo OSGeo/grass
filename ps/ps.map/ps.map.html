@@ -1520,14 +1520,9 @@ USAGE:	<B>end</B>
 <H2>EXAMPLE ps.map INPUT FILE</H2>
 
 The following is an example of a <EM>ps.map</EM> script file. The file has been
-named <EM>spear.soils</EM>.
-This script file can be entered at the command line:
+named <EM>spear.soils</EM>:
 
 <PRE>
-  <B>ps.map input=</B><EM>spear.soils</EM> <B>output=</B><EM>soils.ps</EM>
-</PRE>
-<PRE>
-
 # this ps.map example draws a map of Spearfish, SD
 <B>raster</B> soils
 <B>outline</B>
@@ -1592,8 +1587,20 @@ This script file can be entered at the command line:
 <B>paper</B> a4
     <B>end</B>
 <B>end</B>
-
 </PRE>
+
+This script file can be entered at the command line:
+
+<div class="code"><pre>
+ # First set the region
+ g.region rast=soils
+
+ # Generate comment file (or use text editor)
+ echo "Spearfish (SD) soils" &gt; soil.cmt
+
+ # Generate map as Postsript file
+ ps.map input=spear.soils output=soils.ps
+</pre></div>
 
 <P>
 More examples can be found on the
