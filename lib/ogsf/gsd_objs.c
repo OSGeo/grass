@@ -200,8 +200,9 @@ void gsd_line_onsurf(geosurf * gs, float *v1, float *v2)
 
 	for (i = 0; i < np; i++) {
 	    /* ACS */
-	    /*      pts[i][Z] += fudge; */
-	    pts[i][Z] *= fudge;
+            /* reverting back, as it broke displaying X symbol and query line */
+	    pts[i][Z] += fudge;
+	    /*pts[i][Z] *= fudge;*/
 	    gsd_vert_func(pts[i]);
 	}
 
