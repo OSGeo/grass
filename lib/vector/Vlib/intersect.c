@@ -1065,7 +1065,7 @@ Vect_line_intersection(struct line_pnts *APoints,
     return 1;
 }
 
-static struct line_pnts *APnts, *BPnts;
+static struct line_pnts *APnts, *BPnts, *IPnts;
 
 static int cross_found;		/* set by find_cross() */
 
@@ -1087,6 +1087,23 @@ static int find_cross(int id, int *arg)
 				    BPnts->y[j + 1], BPnts->z[j + 1], &x1,
 				    &y1, &z1, &x2, &y2, &z2, 0);
 
+    switch (ret) {
+    case 0:
+    case 5:
+	break;
+    case 1:
+	if (0 > Vect_copy_xyz_to_pnts(IPnts, &x1, &y1, &z1, 1))
+	    G_warning(_("Error while adding point to array. Out of memory"));
+	break;
+    case 2:
+    case 3:
+    case 4:
+	if (0 > Vect_copy_xyz_to_pnts(IPnts, &x1, &y1, &z1, 1))
+	    G_warning(_("Error while adding point to array. Out of memory"));
+	if (0 > Vect_copy_xyz_to_pnts(IPnts, &x2, &y2, &z2, 1))
+	    G_warning(_("Error while adding point to array. Out of memory"));
+	break;
+    }
     /* add ALL (including end points and duplicates), clean later */
     if (ret > 0) {
 	cross_found = 1;
@@ -1126,11 +1143,21 @@ Vect_line_check_intersection(struct line_pnts *APoints,
     if (APoints->n_points == 1 && BPoints->n_points == 1) {
 	if (APoints->x[0] == BPoints->x[0] && APoints->y[0] == BPoints->y[0]) {
 	    if (!with_z) {
+		if (0 >
+		    Vect_copy_xyz_to_pnts(IPnts, &APoints->x[0],
+					  &APoints->y[0], NULL, 1))
+		    G_warning(_("Error while adding point to array. Out of memory"));
 		return 1;
 	    }
 	    else {
-		if (APoints->z[0] == BPoints->z[0])
+		if (APoints->z[0] == BPoints->z[0]) {
+		    if (0 >
+			Vect_copy_xyz_to_pnts(IPnts, &APoints->x[0],
+					      &APoints->y[0], &APoints->z[0],
+					      1))
+			G_warning(_("Error while adding point to array. Out of memory"));
 		    return 1;
+		}
 		else
 		    return 0;
 	    }
@@ -1146,6 +1173,10 @@ Vect_line_check_intersection(struct line_pnts *APoints,
 			   NULL, NULL);
 
 	if (dist <= rethresh) {
+	    if (0 >
+		Vect_copy_xyz_to_pnts(IPnts, &APoints->x[0], &APoints->y[0],
+				      &APoints->z[0], 1))
+		G_warning(_("Error while adding point to array. Out of memory"));
 	    return 1;
 	}
 	else {
@@ -1158,8 +1189,13 @@ Vect_line_check_intersection(struct line_pnts *APoints,
 			   BPoints->z[0], with_z, NULL, NULL, NULL, &dist,
 			   NULL, NULL);
 
-	if (dist <= rethresh)
+	if (dist <= rethresh) {
+	    if (0 >
+		Vect_copy_xyz_to_pnts(IPnts, &BPoints->x[0], &BPoints->y[0],
+				      &BPoints->z[0], 1))
+		G_warning(_("Error while adding point to array. Out of memory"));
 	    return 1;
+	}
 	else
 	    return 0;
     }
@@ -1245,4 +1281,30 @@ Vect_line_check_intersection(struct line_pnts *APoints,
     RTreeDestroyNode(RTree);
 
     return cross_found;
+}
+
+/*!
+ * \brief Get 2 lines intersection points.
+ * 
+ * A wrapper around Vect_line_check_intersection() function.
+ *
+ * \param[in] APoints first input line 
+ * \param[in] BPoints second input line 
+ * \param[out] IPoints output with intersection points
+ * \param[in] with_z 3D, not supported (only if one or both are points)!
+ *
+ * \return 0 no intersection 
+ * \return 1 intersection found
+ */
+int
+Vect_line_get_intersections(struct line_pnts *APoints,
+			    struct line_pnts *BPoints,
+			    struct line_pnts *IPoints, int with_z)
+{
+    int ret;
+
+    IPnts = IPoints;
+    ret = Vect_line_check_intersection(APoints, BPoints, with_z);
+
+    return ret;
 }
