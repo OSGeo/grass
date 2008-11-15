@@ -34,7 +34,7 @@ proc set_col_type { rnum } {
 }
 
 proc add_tab_col { name type width namedit typedit widthedit } {
-    global tabrow columns table_frame
+    global tabrow columns table_frame iconpath
 
     set row [ frame $table_frame.row$tabrow ]
     set columns(frm,$tabrow) $row
@@ -42,6 +42,7 @@ proc add_tab_col { name type width namedit typedit widthedit } {
     set columns(name,$tabrow) $name
     set columns(type,$tabrow) $type
     set columns(width,$tabrow) $width
+    set columns(rem,$tabrow) 0
    
     Entry $row.a -width 20 -textvariable columns(name,$tabrow) -bg white
     if { $namedit == 0 } { $row.a configure -state disabled }
@@ -51,12 +52,23 @@ proc add_tab_col { name type width namedit typedit widthedit } {
     if { $typedit == 0 } { $row.b configure -state disabled }
     Entry $row.c -width 10 -textvariable columns(width,$tabrow) -bg white
     if { $widthedit == 0 } { $row.c configure -state disabled }
-    set_col_type $tabrow 
-   
-    pack $row.a $row.b $row.c -side left; 
+    set_col_type $tabrow
+    Button $row.d -image [image create photo -file "$iconpath/remove.gif"]  \
+    	-borderwidth 1\
+    	-command "rem_tab_col $row $tabrow"
+    if { $typedit == 0 } { $row.d configure -state disabled }
+     
+    pack $row.a $row.b $row.c $row.d -side left; 
     pack $row -side top -fill x -expand no -anchor n 
 
     incr tabrow
+}
+
+proc rem_tab_col { row num } {
+	global columns
+	
+	set columns(rem,$num) 1
+	destroy $row
 }
 
 proc table_buttons { } {
@@ -116,12 +128,14 @@ proc make_table { } {
     global tabrow columns create_table_err create_table_msg
 
     set coldef ""
-    for {set i 1} {$i < $tabrow} {incr i} { 
-        if { $i > 1 } { append coldef ", " }
-        append coldef "$columns(name,$i) $columns(type,$i) "
-        if { $columns(type,$i) == "varchar" } {
-            append coldef "( $columns(width,$i) )"
-        }
+    for {set i 1} {$i < $tabrow} {incr i} {
+    	if { $columns(rem,$i) == 0 } {
+        	if { $i > 1 } { append coldef ", " }
+        	append coldef "$columns(name,$i) $columns(type,$i) "
+        	if { $columns(type,$i) == "varchar" } {
+            		append coldef "( $columns(width,$i) )"
+		}
+	}
     }
     puts $coldef
 
@@ -131,9 +145,9 @@ proc make_table { } {
     c_create_table $field $field_name $columns(name,1) $coldef
     
     if { $create_table_err == 1 } {
-        MessageDlg .msg -type ok -message $create_table_msg
+        MessageDlg .msg -icon error -parent .settings -type ok -message $create_table_msg
     } else {
-        MessageDlg .msg -type ok -message [G_msg "Table successfully created"]
+        MessageDlg .msg -icon info -parent .settings -type ok -message [G_msg "Table successfully created"]
         clear_table
         c_table_definition
     }

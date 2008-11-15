@@ -23,7 +23,7 @@ set prompt_middle [G_msg "Middle button"]
 set prompt_right [G_msg "Right button"]
 set coor ""
 
-wm title . "v.digit - $map_name@$map_mapset"
+wm title . "v.digit toolbox - $map_name@$map_mapset"
 
 proc get_update_line {ox oy x y} {
     .screen.canvas delete active
