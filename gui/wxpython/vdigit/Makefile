@@ -22,7 +22,13 @@ SHLIB = $(OBJDIR)/_$(LIB_NAME).so
 
 EXTRA_CLEAN_FILES = $(SHLIB) $(LIB_NAME).i $(LIB_NAME).py $(LIB_NAME)_wrap.cpp
 
+ifneq ($(USE_WXWIDGETS),)
+ifneq ($(USE_PYTHON),)
+ifneq ($(strip $(CXX)),)
 default: install_vdigit
+endif
+endif
+endif
 
 $(LIB_NAME).i: digit.i dig_types.i driver.h digit.h
 	cat digit.i dig_types.i > $(LIB_NAME).i

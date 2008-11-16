@@ -9,4 +9,6 @@ DEPENDENCIES = $(GISDEP)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 
+ifneq ($(USE_X11),)
 default: cmd
+endif

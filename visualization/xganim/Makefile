@@ -9,4 +9,6 @@ DEPENDENCIES = $(GISDEP)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 
+ifneq ($(strip $(XMLIB)),)
 default: cmd
+endif

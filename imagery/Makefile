@@ -1,7 +1,5 @@
 MODULE_TOPDIR = ..
 
-include $(MODULE_TOPDIR)/include/Make/Vars.make
-
 SUBDIRS = \
 	i.albedo \
 	i.atcorr \
@@ -22,14 +20,10 @@ SUBDIRS = \
 	i.sunhours \
 	i.target \
 	i.pca \
-	i.vi 
-
-FFTWBASED = i.fft i.ifft i.zc
-
-#compile if FFTW present:
-ifneq ($(strip $(FFTWLIB)),)
-    SUBDIRS += $(FFTWBASED)
-endif
+	i.vi \
+	i.fft \
+	i.ifft \
+	i.zc
 
 PGM = imageryintro
 

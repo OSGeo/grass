@@ -10,7 +10,9 @@ EXTRA_CFLAGS = $(VECT_CFLAGS)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 
+ifneq ($(USE_OPENDWG),)
 default: chck cmd $(ADINIT)
+endif
 
 chck:
 	./check

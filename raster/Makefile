@@ -110,47 +110,15 @@ SUBDIRS = \
 	r.watershed \
 	r.what \
 	r.what.color \
-	wildfire
+	wildfire \
+	r.in.gdal \
+	r.out.gdal \
+	r.surf.fractal \
+	r.out.png \
+	r.terraflow \
+	r.out.tiff
 
 #	r.le \
-
-GDALBASED = r.in.gdal r.out.gdal
-
-FFTWBASED = r.surf.fractal
-
-PNGBASED = r.out.png
-
-CXXBASED = r.terraflow
-
-TIFFBASED = r.out.tiff
-
-include $(MODULE_TOPDIR)/include/Make/Vars.make
-
-#compile if GDAL present:
-ifneq ($(USE_GDAL),)
-    SUBDIRS += $(GDALBASED)
-endif
-
-#compile if FFTW present:
-ifneq ($(strip $(FFTWLIB)),)
-    SUBDIRS += $(FFTWBASED)
-endif
-
-#compile if PNG present:
-ifneq ($(strip $(PNGLIB)),)
-    SUBDIRS += $(PNGBASED)
-endif
-
-#compile if C++ compiler present:
-ifneq ($(strip $(CXX)),)
-    SUBDIRS += $(CXXBASED)
-endif
-
-#compile if TIFF present:
-ifneq ($(strip $(TIFFLIB)),)
-    SUBDIRS += $(TIFFBASED)
-endif
-
 
 PGM = rasterintro
 

@@ -7,4 +7,6 @@ DEPENDENCIES= $(IMAGERYDEP) $(GMATHDEP) $(GISDEP) $(GISDEP)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 
+ifneq ($(strip $(FFTWLIB)),)
 default: cmd
+endif

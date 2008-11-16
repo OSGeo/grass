@@ -13,9 +13,11 @@ EXTRA_INC = $(VECT_INC)
 AUXDIR := $(ARCH_DISTDIR)/etc/v.digit
 TCLFILES := $(patsubst %,$(AUXDIR)/%,$(wildcard *.tcl))
 
+ifneq ($(strip $(TCLTKLIBS)),)
 pre: $(AUXDIR)
 
 default: cmd $(TCLFILES)
+endif
 
 $(AUXDIR):
 	if [ ! -d $(ETC) ]; then $(MKDIR) $(ETC); fi

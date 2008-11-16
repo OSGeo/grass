@@ -9,4 +9,6 @@ EXTRA_CFLAGS = $(TIFFINCPATH)
 LIBES = $(GISLIB) $(TIFFLIBPATH) $(TIFFLIB)
 DEPENDENCIES = $(GISDEP)
 
+ifneq ($(strip $(TIFFLIB)),)
 default: cmd
+endif

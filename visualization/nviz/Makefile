@@ -20,11 +20,15 @@ SCRIPTS := \
 	$(wildcard scripts/*.tcl) \
 	$(wildcard scripts/*Index)
 
+ifneq ($(USE_OPENGL),)
+ifneq ($(strip $(TCLTKLIBS)),)
 default:
 	$(MAKE) -C src
 	$(MAKE) install
 	$(MAKE) -C html
 	$(MAKE) html
+endif
+endif
 
 # Install the scripts in the appropriate directory
 install:
