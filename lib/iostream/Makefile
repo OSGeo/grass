@@ -10,6 +10,4 @@ endif
 
 ifneq ($(strip $(CXX)),)
 default: stlib
-else
-default:
 endif

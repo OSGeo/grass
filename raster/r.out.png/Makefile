@@ -8,4 +8,6 @@ DEPENDENCIES = $(GISDEP)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 
+ifneq ($(strip $(PNGLIB)),)
 default: cmd
+endif

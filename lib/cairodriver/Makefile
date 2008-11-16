@@ -11,7 +11,5 @@ include $(MODULE_TOPDIR)/include/Make/Lib.make
 
 ifneq ($(USE_CAIRO),)
 default: lib
-else
-default:
 endif
 

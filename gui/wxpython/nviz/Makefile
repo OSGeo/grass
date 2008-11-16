@@ -22,7 +22,15 @@ SHLIB = $(OBJDIR)/_$(LIB_NAME).so
 
 EXTRA_CLEAN_FILES = $(SHLIB) $(LIB_NAME).i $(LIB_NAME).py $(LIB_NAME)_wrap.cpp
 
+ifneq ($(USE_WXWIDGETS),)
+ifneq ($(USE_PYTHON),)
+ifneq ($(strip $(CXX)),)
+ifneq ($(strip $(OPENGLLIB)),)
 default: install_nviz
+endif
+endif
+endif
+endif
 
 $(LIB_NAME).i: nviz.i nviz_types.i nviz.h
 	cat nviz.i nviz_types.i > $(LIB_NAME).i

@@ -10,6 +10,8 @@ ARCH_DIRS = $(ARCH_DISTDIR) $(ARCH_BINDIR) $(ARCH_INCDIR) $(ARCH_LIBDIR) \
 
 pre: $(ARCH_DIRS)
 
+default:
+
 $(ARCH_DIRS):
 	$(MKDIR) $@
 

@@ -1,7 +1,7 @@
 
 MODULE_TOPDIR = ..
 
-include $(MODULE_TOPDIR)/include/Make/Vars.make
+PGM = vectorintro
 
 SUBDIRS = \
 	v.buffer \
@@ -71,31 +71,12 @@ SUBDIRS = \
 	v.what \
 	v.what.rast\
 	v.vol.rst \
-	lidar
-
-OGRBASED = v.out.ogr v.in.ogr v.external
-
-#compile if OGR present:
-ifneq ($(USE_OGR),)
-    SUBDIRS += $(OGRBASED)
-endif
-
-TCLTKBASED = v.digit
-
-#compile if Tcl/Tk present:
-ifneq ($(strip $(TCLTKLIBS)),)
-    SUBDIRS += $(TCLTKBASED)
-endif
-
-
-OPENDWGBASED = v.in.dwg
-
-#compile if OPENDWG present:
-ifneq ($(USE_OPENDWG),)
-    SUBDIRS += $(OPENDWGBASED)
-endif
-
-PGM = vectorintro
+	lidar \
+	v.out.ogr \
+	v.in.ogr \
+	v.external \
+	v.digit \
+	v.in.dwg
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 

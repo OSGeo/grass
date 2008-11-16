@@ -30,4 +30,6 @@ DEPENDENCIES = $(GISDEP) $(NVIZDEP)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 
+ifneq ($(USE_OPENGL),)
 default: cmd
+endif

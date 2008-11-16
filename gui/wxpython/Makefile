@@ -1,21 +1,6 @@
 MODULE_TOPDIR = ../..
 
-SUBDIRS = docs scripts
-
-include $(MODULE_TOPDIR)/include/Make/Vars.make
-
-#compile if wxWidgets, Python, CXX present
-ifneq ($(USE_WXWIDGETS),)
-  ifneq ($(USE_PYTHON),)
-    ifneq ($(strip $(CXX)),)
-       SUBDIRS += vdigit
-         #compile if OpenGL present
-         ifneq ($(strip $(OPENGLLIB)),)
-           SUBDIRS += nviz
-         endif
-    endif
-  endif
-endif
+SUBDIRS = docs scripts vdigit nviz
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 
