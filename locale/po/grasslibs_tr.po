@@ -1,16 +1,17 @@
-# translation of grasslibs_tr.po to TÜRKÇE
+# translation of grasslibs_tr.po to Türkçe
 # Copyright (C) 2006, 2007 GRASS Development Team
 # This file is distributed under the same license as the GRASS package.
-# oyy <yilmazy@istanbul.edu.tr>, 2006.
 #
+# oyy <yilmazy@istanbul.edu.tr>, 2006.
+# Osman Yalçın YILMAZ <yilmazy@istanbul.edu.tr>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_tr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-10-11 22:08+0200\n"
-"PO-Revision-Date: 2007-12-02 19:27+0200\n"
-"Last-Translator: Osman Yalçın YILMAZ\n"
-"Language-Team: TÜRKÇE <grass-translations@lists.osgeo.org>\n"
+"PO-Revision-Date: 2008-11-16 02:32+0200\n"
+"Last-Translator: Osman Yalçın YILMAZ <yilmazy@istanbul.edu.tr>\n"
+"Language-Team: Türkçe <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -344,7 +345,7 @@ msgstr ""
 #: ../lib/ogsf/Gs3.c:761 ../lib/ogsf/Gs3.c:829 ../lib/ogsf/Gp3.c:54
 #, c-format
 msgid "Raster map <%s> not found"
-msgstr "<%s> raster haritası yok"
+msgstr "<%s> raster haritası bulunamadı"
 
 #: ../lib/gpde/N_arrays_io.c:67 ../lib/ogsf/Gs3.c:137 ../lib/ogsf/Gs3.c:211
 #: ../lib/ogsf/Gs3.c:368 ../lib/ogsf/Gs3.c:483 ../lib/ogsf/Gs3.c:573
@@ -355,15 +356,15 @@ msgstr "<%s> raster haritası açılamıyor"
 #: ../lib/gpde/N_arrays_io.c:96
 #, c-format
 msgid "Reading raster map <%s> into memory"
-msgstr "<%s> raster haritası okunarak hafızaya alınıyor"
+msgstr "<%s> raster haritası belleğe alınıyor"
 
 #: ../lib/gpde/N_arrays_io.c:103
 msgid "Could not get raster row"
-msgstr "Raster satır bilgisi alınamıyor"
+msgstr "Raster satırı alınamıyor"
 
 #: ../lib/gpde/N_arrays_io.c:161 ../lib/gpde/N_arrays_io.c:243
 msgid "Unable to close input map"
-msgstr "Girdi harita kapatılamadı"
+msgstr "Girdi haritası kapatılamıyor"
 
 #: ../lib/gpde/N_arrays_io.c:190
 msgid "N_array_2d * array is empty"
@@ -381,19 +382,19 @@ msgstr ""
 
 #: ../lib/gpde/N_arrays_io.c:227 ../lib/gpde/N_arrays_io.c:232
 #: ../lib/gpde/N_arrays_io.c:237
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write raster row %i"
-msgstr "%i raster satırına yazılamıyor"
+msgstr "%i raster satırı yazılamıyor"
 
 #: ../lib/gpde/N_arrays_io.c:295
 #, c-format
 msgid "Requested g3d map <%s> not found"
-msgstr "İstenen <%s> g3d haritası bulunamadı"
+msgstr "İstenen <%s> g3d  haritası bulunamadı"
 
 #: ../lib/gpde/N_arrays_io.c:303 ../lib/gpde/N_arrays_io.c:445
 #, c-format
 msgid "Error opening g3d map <%s>"
-msgstr "<%s> g3d haritası açılırken hata"
+msgstr "<%s>g3d dosyasını açmada hata"
 
 #: ../lib/gpde/N_arrays_io.c:331
 #, c-format
@@ -402,7 +403,7 @@ msgstr "<%s> g3d haritası okunarak hafızaya alınıyor"
 
 #: ../lib/gpde/N_arrays_io.c:386 ../lib/gpde/N_arrays_io.c:486
 msgid "Error closing g3d file"
-msgstr "g3d dosyasını kapamada hata"
+msgstr "g3b dosyasını kapatmada hata"
 
 #: ../lib/gpde/N_arrays_io.c:447
 #, c-format
@@ -491,9 +492,9 @@ msgstr ""
 
 #: ../lib/db/dbmi_client/copy_tab.c:100 ../lib/db/dbmi_client/copy_tab.c:120
 #: ../lib/db/dbmi_client/db.c:41
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to start driver <%s>"
-msgstr "<%s> vektör haritası açılamadı"
+msgstr "<%s> Sürücüsü başlatılamıyor"
 
 #: ../lib/db/dbmi_client/copy_tab.c:105 ../lib/db/dbmi_client/copy_tab.c:126
 #: ../lib/db/dbmi_client/db.c:46 ../lib/db/dbmi_client/delete_tab.c:49
@@ -502,73 +503,73 @@ msgstr "<%s> vektör haritası açılamadı"
 #: ../lib/vector/Vlib/net.c:185 ../lib/vector/Vlib/net.c:355
 #, c-format
 msgid "Unable to open database <%s> by driver <%s>"
-msgstr "<%s> sürücüsüyler <%s> veritabanı açılamıyor"
+msgstr "<%s>  veritabanı <%s> sürücüsüyle açılamıyor"
 
 #: ../lib/db/dbmi_client/copy_tab.c:144
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to get list tables in database <%s>"
-msgstr "elipsoid tablo dosyası açılamıyor: %s"
+msgstr "< %s> veritabanındaki tablo tablo listesi alınamıyor"
 
 #: ../lib/db/dbmi_client/copy_tab.c:157
-#, fuzzy, c-format
+#, c-format
 msgid "Table <%s> already exists in database <%s>"
-msgstr "elipsoid tablo dosyası açılamıyor: %s"
+msgstr "<%s> tablosu <%s> veritabanında zaten var"
 
 #: ../lib/db/dbmi_client/copy_tab.c:199 ../lib/db/dbmi_client/copy_tab.c:276
 #: ../lib/db/dbmi_client/table.c:110
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open select cursor: '%s'"
-msgstr "'%s' dizini açılamıyor"
+msgstr "Seçme imleci açılamıyor: '%s'"
 
 #: ../lib/db/dbmi_client/copy_tab.c:231
-#, fuzzy, c-format
+#, c-format
 msgid "Column <%s> is not integer"
-msgstr "<%s> tablosu tanımlanamıyor"
+msgstr "<%s> sütunu tamsayı değil"
 
 #: ../lib/db/dbmi_client/copy_tab.c:248
-#, fuzzy, c-format
+#, c-format
 msgid "Column <%s> not found"
-msgstr "<%s> tablosu tanımlanamıyor"
+msgstr "<%s> sütunu bulunamıyor"
 
 #: ../lib/db/dbmi_client/copy_tab.c:251
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create table <%s>"
-msgstr "<%s> tablosu silinemiyor"
+msgstr "<%s> tablosu oluşturulamıyor"
 
 #: ../lib/db/dbmi_client/copy_tab.c:295
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to fetch data from table <%s>"
-msgstr "<%s> tablosu kopyalanamadı"
+msgstr "<%s> tablosundan veri alınamadı"
 
 #: ../lib/db/dbmi_client/copy_tab.c:351
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown column type (column <%s>)"
-msgstr "Tarih sütun tipi okunamıyor"
+msgstr "Bilinmeyen sütun tipi (sütun <%s>)"
 
 #: ../lib/db/dbmi_client/select.c:279
-#, fuzzy, c-format
+#, c-format
 msgid "Unable select records from table <%s>"
-msgstr "<%s> tablosu için indeks oluşturulamıyor, anahtar <%s>"
+msgstr "<%s> tablosundan veri seçilemiyor"
 
 #: ../lib/db/dbmi_client/delete_tab.c:44
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open driver <%s>"
-msgstr " %s dosyası açılamıyor"
+msgstr "< %s> sürücüsü açılamıyor"
 
 #: ../lib/db/dbmi_client/delete_tab.c:62
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to drop table: '%s'"
-msgstr "<%s> tablosu kopyalanamadı"
+msgstr "Tablo düşürülemedi: '%s'"
 
 #: ../lib/db/dbmi_client/column.c:110
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to describe table <%s>"
-msgstr "<%s> tablosu silinemiyor"
+msgstr "<%s> tablosu tanımlanamıyor"
 
 #: ../lib/db/dbmi_client/table.c:46
-#, fuzzy, c-format
+#, c-format
 msgid "Unable open database <%s> by driver <%s>"
-msgstr "<%s> sürücüsüyler <%s> veritabanı açılamıyor"
+msgstr "<%s>  veritabanı <%s> sürücüsüyle açılamıyor"
 
 #: ../lib/driver/parse_ftcap.c:32
 #, c-format
@@ -578,7 +579,7 @@ msgstr "%s: Yazıtipi tanım dosyası okunamıyor; varsayılanı kullan"
 #: ../lib/driver/parse_ftcap.c:38
 #, c-format
 msgid "%s: No font definition file"
-msgstr "%s: YAzıtipi tanım dosyası yok"
+msgstr "%s: Yazıtipi tanım dosyası yok"
 
 #: ../lib/arraystats/class.c:21
 msgid "Discont algorithm currently not available because of bugs"
@@ -617,29 +618,28 @@ msgid "GRASS_WIDTH=%d, GRASS_HEIGHT=%d"
 msgstr ""
 
 #: ../lib/vector/diglib/spindex.c:248
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to delete node %d from spatial index"
-msgstr "'%s' dosyası silinemiyor"
+msgstr "%d düğümü konumsal indeksten silinemiyor"
 
 #: ../lib/vector/diglib/spindex.c:288
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to delete line %d from spatial index"
-msgstr "'%s' dosyası silinemiyor"
+msgstr "%d çizgisi konumsal indeksten silinemiyor"
 
 #: ../lib/vector/diglib/spindex.c:314
-#, fuzzy
 msgid "Attempt to delete sidx for dead area"
-msgstr "[%d] alanının topolojisi okunamıyor"
+msgstr ""
 
 #: ../lib/vector/diglib/spindex.c:327
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to delete area %d from spatial index"
-msgstr "'%s' dosyası silinemiyor"
+msgstr "%d alanı konumsal indeksten silinemiyor"
 
 #: ../lib/vector/diglib/spindex.c:362
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to delete isle %d from spatial index"
-msgstr "'%s' dosyası silinemiyor"
+msgstr "%d adası konumsal indeksten silinemiyor"
 
 #: ../lib/vector/diglib/plus_area.c:195 ../lib/vector/diglib/plus_area.c:651
 #: ../lib/vector/diglib/plus_area.c:659
@@ -671,79 +671,70 @@ msgid "Dead centroid %d registered for area (bug in the vector library)"
 msgstr ""
 
 #: ../lib/vector/diglib/plus_area.c:406
-#, fuzzy, c-format
+#, c-format
 msgid "Attempt to delete area %d info from dead isle %d"
-msgstr "[%d] adasının topolojisi okunamıyor"
+msgstr ""
 
 #: ../lib/vector/diglib/plus_area.c:749
-#, fuzzy, c-format
+#, c-format
 msgid "Attempt to delete isle %d info from dead area %d"
-msgstr "[%d] alanının topolojisi okunamıyor"
+msgstr ""
 
 #: ../lib/vector/diglib/plus.c:288
-#, fuzzy
 msgid "Unable read topology for nodes"
 msgstr "Düğümlerin topolojisi okunamıyor"
 
 #: ../lib/vector/diglib/plus.c:293
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read topology for node %d"
-msgstr "[%d] düğümünün topolojisi okunamıyor"
+msgstr "%d düğümünün topolojisi okunamıyor"
 
 #: ../lib/vector/diglib/plus.c:298
-#, fuzzy
 msgid "Unable read topology for lines"
 msgstr "Çizgilerin topolojisi okunamıyor"
 
 #: ../lib/vector/diglib/plus.c:303
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read topology for line %d"
-msgstr "Üstbilgi dosyası okunamıyor"
+msgstr "%d çizgisinin topolojisi okunamıyor"
 
 #: ../lib/vector/diglib/plus.c:308
-#, fuzzy
 msgid "Unable to read topo for areas"
 msgstr "Alanların topolojisi okunamıyor"
 
 #: ../lib/vector/diglib/plus.c:313
-#, fuzzy, c-format
+#, c-format
 msgid "Unable read topology for area %d"
-msgstr "[%d] alanının topolojisi okunamıyor"
+msgstr "%d alanının topolojisi okunamıyor"
 
 #: ../lib/vector/diglib/plus.c:318
-#, fuzzy
 msgid "Unable to read topology for isles"
 msgstr "Adaların topolojisi okunamıyor"
 
 #: ../lib/vector/diglib/plus.c:323
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read topology for isle %d"
-msgstr "[%d] adasının topolojisi okunamıyor"
+msgstr "%d adasının topolojisi okunamıyor"
 
 #: ../lib/vector/diglib/plus.c:345 ../lib/vector/diglib/plus.c:371
-#, fuzzy
 msgid "Unable to write head to plus file"
-msgstr "Üstbilgi dosyası okunamıyor"
+msgstr ""
 
 #: ../lib/vector/diglib/plus.c:350
-#, fuzzy
 msgid "Unable to write nodes to plus file"
-msgstr "%i raster satırına yazılamıyor"
+msgstr ""
 
 #: ../lib/vector/diglib/plus.c:355
-#, fuzzy
 msgid "Unable to write lines to plus file"
-msgstr "'%s' dosyası silinemiyor"
+msgstr ""
 
 #: ../lib/vector/diglib/plus.c:360
-#, fuzzy
 msgid "Unable to write areas to plus file"
-msgstr "%i raster satırına yazılamıyor"
+msgstr ""
 
 #: ../lib/vector/diglib/plus.c:365
-#, fuzzy
 msgid "Unable to write isles to plus file"
-msgstr "%i raster satırına yazılamıyor"
+msgstr ""
 
 #: ../lib/vector/diglib/plus_node.c:217
 #, c-format
@@ -753,19 +744,18 @@ msgid ""
 msgstr ""
 
 #: ../lib/vector/vedit/select.c:235
-#, fuzzy
 msgid "Unknown query tool"
-msgstr "bilinmeyen hata"
+msgstr "bilinmeyen sorgu aracı"
 
 #: ../lib/vector/vedit/cats.c:66
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to set category %d for line %d"
-msgstr "Üstbilgi dosyası okunamıyor"
+msgstr ""
 
 #: ../lib/vector/vedit/cats.c:75
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to delete layer/category %d/%d line %d"
-msgstr "<%s> vektör haritası silinemiyor"
+msgstr ""
 
 #: ../lib/vector/Vlib/build.c:31 ../lib/vector/Vlib/open.c:40
 #: ../lib/vector/Vlib/close.c:38 ../lib/vector/Vlib/read.c:30
@@ -775,14 +765,13 @@ msgid "Requested format is not compiled in this version"
 msgstr "İstenen format bu sürümde derlenmedi."
 
 #: ../lib/vector/Vlib/build.c:144
-#, fuzzy, c-format
+#, c-format
 msgid "Building topology for vector map <%s>...\n"
-msgstr "Lütfen <%s@%s> vektörünün topolojisiin tekrar kurun"
+msgstr "<%s> vektör haritası için topoloji kuruluyor   \n"
 
 #: ../lib/vector/Vlib/build.c:160
-#, fuzzy
 msgid "Topology was built\n"
-msgstr "Topoloji oluşturuldu.\n"
+msgstr "Topoloji oluşturuldu\n"
 
 #: ../lib/vector/Vlib/build.c:172
 #, c-format
@@ -863,24 +852,22 @@ msgid "Number of isles     :   -\n"
 msgstr "Ada sayısı     :   -\n"
 
 #: ../lib/vector/Vlib/build.c:274
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open topo file for write <%s>"
-msgstr "Topoloji dosyası yazmak için açılamıyor: <%s>"
+msgstr "Topoloji dosyası yazmak için açılamıyor <%s>"
 
 #: ../lib/vector/Vlib/build.c:282
-#, fuzzy
 msgid "Error writing out topo file"
-msgstr "Topoloji dosyasını yazmada hata."
+msgstr "Topoloji dosyasını yazmada hata"
 
 #: ../lib/vector/Vlib/build.c:425
-#, fuzzy, c-format
+#, c-format
 msgid "Unable open spatial index file for write <%s>"
-msgstr "Mekansal indeks yazmak için açılamıyor: <%s>"
+msgstr "Konumsal indeks dosyası yazmak için açılamıyor <%s>"
 
 #: ../lib/vector/Vlib/build.c:433
-#, fuzzy
 msgid "Error writing out spatial index file"
-msgstr "Mekansal indek dosyasını yazmada hata."
+msgstr "Konumsal indek dosyasını yazmada hata"
 
 #: ../lib/vector/Vlib/intersect.c:127
 msgid "3D not supported by Vect_segment_intersection()"
@@ -910,12 +897,11 @@ msgstr "<%s> vektör haritası bulunamadı"
 msgid ""
 "Vector map which is not in the current mapset cannot be opened for update"
 msgstr ""
-"Geçerli harita takımında olmayan vektör harita güncellemek için açılamıyor"
 
 #: ../lib/vector/Vlib/open.c:199 ../lib/ogsf/Gv3.c:63 ../lib/ogsf/Gp3.c:115
 #, c-format
 msgid "Unable to open vector map <%s>"
-msgstr "<%s> vektör haritası açılamadı"
+msgstr "<%s> vektör haritası açılamıyor"
 
 #: ../lib/vector/Vlib/open.c:211 ../lib/vector/Vlib/open.c:279
 #: ../lib/vector/Vlib/open.c:299
@@ -932,12 +918,12 @@ msgstr "Üstbilgi dosyası okunamıyor"
 #: ../lib/vector/Vlib/open.c:236
 #, c-format
 msgid "Unable to open topology file for vector map <%s>"
-msgstr "<%s> vektör haritasının topoloji dosyası açılamıyor"
+msgstr ""
 
 #: ../lib/vector/Vlib/open.c:262
 #, c-format
 msgid "Unable to open category index file for vector map <%s>"
-msgstr "<%s> vektör haritasının kategori indeks dosyası açılamıyor"
+msgstr ""
 
 #: ../lib/vector/Vlib/open.c:353 ../lib/vector/Vlib/open.c:576
 #, c-format
@@ -945,21 +931,21 @@ msgid "Unable to open history file for vector map <%s>"
 msgstr "<%s> vektör haritasının geçmiş dosyası açılamıyor"
 
 #: ../lib/vector/Vlib/open.c:531
-#, fuzzy, c-format
+#, c-format
 msgid "%s is not in the current mapset (%s)"
-msgstr "Geçerli harita takımında hiç %s dosyası yok\n"
+msgstr "%s dosyası geçerli harita takımında değil (%s)"
 
 #: ../lib/vector/Vlib/open.c:540 ../lib/vector/Vlib/map.c:176
 #: ../lib/vector/Vlib/map.c:313
 #, c-format
 msgid "Vector map name is not SQL compliant"
-msgstr "Vektör harita adı SQL uyumlu değil"
+msgstr "Vektör harita isimleri YSD uyumlu değil"
 
 #: ../lib/vector/Vlib/open.c:547 ../lib/vector/Vlib/map.c:187
 #: ../lib/vector/Vlib/map.c:317
 #, c-format
 msgid "Vector map <%s> already exists and will be overwritten"
-msgstr "<%s> vektörü zaten mevcut ve üzerine yazılacak"
+msgstr "<%s> vektör haritası zaten mevcut ve üzerine yazılacak"
 
 #: ../lib/vector/Vlib/open.c:552 ../lib/vector/Vlib/map.c:191
 #, c-format
@@ -983,7 +969,7 @@ msgstr ""
 #: ../lib/vector/Vlib/open.c:742
 #, c-format
 msgid "Please rebuild topology for vector map <%s@%s>"
-msgstr "Lütfen <%s@%s> vektörünün topolojisiin tekrar kurun"
+msgstr ""
 
 #: ../lib/vector/Vlib/snap.c:124 ../lib/vector/Vlib/snap.c:170
 #: ../lib/vector/Vlib/break_polygons.c:214
@@ -993,7 +979,7 @@ msgstr "Noktalar kaydediliyor"
 
 #: ../lib/vector/Vlib/snap.c:180
 msgid "All vertices"
-msgstr ""
+msgstr "Tüm kırıklık noktaları"
 
 #: ../lib/vector/Vlib/snap.c:181
 msgid "Registered points"
@@ -1020,40 +1006,40 @@ msgid "New vertices"
 msgstr ""
 
 #: ../lib/vector/Vlib/close.c:134
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to close vector <%s>"
-msgstr "<%s> vektör haritası açılamadı"
+msgstr "<%s> vektörü kapatılamıyor"
 
 #: ../lib/vector/Vlib/legal_vname.c:48
 #, c-format
 msgid "Illegal vector map name <%s>. May not contain '.' or 'NULL'."
-msgstr "<%s> uygun olmayan vektör harita adı. '.' veya 'NULL' içermemelidir."
+msgstr ""
 
 #: ../lib/vector/Vlib/legal_vname.c:55
 #, c-format
 msgid "Illegal vector map name <%s>. Must start with a letter."
-msgstr "<%s> uygun olmayan vektör harita adı. Harf ile başlamalıdır."
+msgstr ""
 
 #: ../lib/vector/Vlib/legal_vname.c:63
 #, c-format
 msgid "Illegal vector map name <%s>. Character '%c' not allowed."
-msgstr "<%s> uygun olmayan vektör harita adı. '%c' karakteri kullanılamaz."
+msgstr ""
 
 #: ../lib/vector/Vlib/legal_vname.c:70
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Illegal vector map name <%s>. SQL keyword cannot be used as vector map name."
-msgstr "<%s> uygun olmayan vektör harita adı. '%c' karakteri kullanılamaz."
+msgstr ""
 
 #: ../lib/vector/Vlib/legal_vname.c:101 ../lib/vector/Vlib/legal_vname.c:105
 #, c-format
 msgid "Output vector map name <%s> is not valid map name"
-msgstr "<%s> çıktı vektör harita adı geçerli bir harita adı değildir"
+msgstr ""
 
 #: ../lib/vector/Vlib/legal_vname.c:142 ../lib/vector/Vlib/legal_vname.c:146
 #, c-format
 msgid "Output vector map <%s> is used as input"
-msgstr "<%s> çıktı vektör haritası girdi olarak kullanılıyor"
+msgstr ""
 
 #: ../lib/vector/Vlib/cindex.c:31
 msgid "Category index is not up to date"
@@ -1070,11 +1056,11 @@ msgstr ""
 
 #: ../lib/vector/Vlib/cindex.c:232
 msgid "Layer or category index out of range"
-msgstr "Katman veya kategori indeksi aralık dışında"
+msgstr ""
 
 #: ../lib/vector/Vlib/cindex.c:283
 msgid "Layer index out of range"
-msgstr "Katman indeksi aralık dışında"
+msgstr ""
 
 #: ../lib/vector/Vlib/cindex.c:460
 #, c-format
@@ -1089,16 +1075,15 @@ msgstr "Kategori indeks dosyasını yazmada hata <%s>"
 #: ../lib/vector/Vlib/cindex.c:511
 #, c-format
 msgid "Unable to open category index file for vector map <%s@%s>"
-msgstr "<%s@%s> vektör haritasının kategori indeks dosyası açılamıyor"
+msgstr ""
 
 #: ../lib/vector/Vlib/clean_nodes.c:54 ../lib/vector/Vlib/clean_nodes.c:250
 msgid "Modifications"
-msgstr ""
+msgstr "Değişiklikler"
 
 #: ../lib/vector/Vlib/read.c:99
-#, fuzzy
 msgid "vector map is not opened"
-msgstr "<%s> vektör haritası bulunamadı"
+msgstr "vektör harita açılamadı"
 
 #: ../lib/vector/Vlib/read.c:102
 #, c-format
@@ -1132,32 +1117,30 @@ msgstr ""
 #: ../lib/vector/Vlib/net.c:179 ../lib/vector/Vlib/net.c:350
 #, c-format
 msgid "Database connection not defined for layer %d"
-msgstr "%d katmanı için veritabanı bağlantısı belirlenemedi"
+msgstr "%d katmanının veritabanı bağlantısı belirlenmedi"
 
 #: ../lib/vector/Vlib/array.c:292
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to select record from table <%s> (key %s, where %s)"
-msgstr "<%s> tablosu için indeks oluşturulamıyor, anahtar <%s>"
+msgstr ""
 
 #: ../lib/vector/Vlib/break_lines.c:122
 #, c-format
 msgid "%s %5d"
-msgstr ""
+msgstr "%s %5d"
 
 #: ../lib/vector/Vlib/break_lines.c:122 ../lib/vector/Vlib/break_lines.c:366
 #: ../lib/vector/Vlib/break_lines.c:387
-#, fuzzy
 msgid "Intersections:"
-msgstr "Diğer projeksiyon"
+msgstr "Kesişimler:"
 
 #: ../lib/vector/Vlib/break_polygons.c:223
 msgid "All points (vertices)"
-msgstr ""
+msgstr "Tüm noktalar (Kırıklık noktaları)"
 
 #: ../lib/vector/Vlib/break_polygons.c:225
-#, fuzzy
 msgid "Registered points (unique coordinates)"
-msgstr "Kaydedilen noktalar"
+msgstr "Kaydedilen noktalar (benzersiz koordinatlar)"
 
 #: ../lib/vector/Vlib/break_polygons.c:226
 msgid "Points marked for break"
@@ -1172,17 +1155,15 @@ msgstr ""
 #: ../lib/vector/Vlib/bridges.c:121 ../lib/vector/Vlib/bridges.c:202
 #: ../lib/vector/Vlib/bridges.c:209
 msgid "Removed bridges"
-msgstr ""
+msgstr "Kaldırılan köprüler"
 
 #: ../lib/vector/Vlib/poly.c:235
-#, fuzzy
 msgid "Unable to find point in polygon"
-msgstr "[%s] deki [%s] bulunamıyor"
+msgstr "Poligon içinde nokta bulunamadı"
 
 #: ../lib/vector/Vlib/poly.c:649
-#, fuzzy
 msgid "conditions failed"
-msgstr "Bağlantıda hata oldu."
+msgstr ""
 
 #: ../lib/vector/Vlib/cats.c:45
 msgid "Vect_new_cats_struct(): Out of memory"
@@ -1203,9 +1184,9 @@ msgid "not implemented"
 msgstr ""
 
 #: ../lib/vector/Vlib/sindex.c:109
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to delete item %d from spatial index"
-msgstr "'%s' dosyası silinemiyor"
+msgstr ""
 
 #: ../lib/vector/Vlib/sindex.c:127
 msgid ""
@@ -1232,31 +1213,28 @@ msgstr ""
 #: ../lib/vector/Vlib/write_nat.c:50 ../lib/vector/Vlib/write_nat.c:83
 #, c-format
 msgid "%s: Area %d does not exist"
-msgstr ""
+msgstr "%s: Alan %d mevcut değil"
 
 #: ../lib/vector/Vlib/write_nat.c:640
-#, fuzzy
 msgid "Attempt to delete dead feature"
-msgstr "[%d] alanının topolojisi okunamıyor"
+msgstr ""
 
 #: ../lib/vector/Vlib/write_nat.c:885
-#, fuzzy
 msgid "Attempt to restore alive feature"
-msgstr "[%d] alanının topolojisi okunamıyor"
+msgstr ""
 
 #: ../lib/vector/Vlib/level_two.c:210 ../lib/vector/Vlib/level_two.c:235
 #: ../lib/vector/Vlib/level_two.c:259 ../lib/vector/Vlib/level_two.c:278
 #: ../lib/vector/Vlib/level_two.c:296 ../lib/vector/Vlib/level_two.c:315
-#, fuzzy, c-format
+#, c-format
 msgid "Vector map <%s> is not open on level >= 2"
-msgstr "<%s> vektör haritası bulunamadı"
+msgstr ""
 
 #: ../lib/vector/Vlib/graph.c:110 ../lib/vector/Vlib/net.c:432
 msgid "GngFlatten error"
 msgstr ""
 
 #: ../lib/vector/Vlib/graph.c:143
-#, fuzzy
 msgid "Unable to add network arc"
 msgstr "Şebeke çizgisi eklenemedi"
 
@@ -1266,12 +1244,10 @@ msgid "dglShortestPath error: %s"
 msgstr ""
 
 #: ../lib/vector/Vlib/build_nat.c:96
-#, fuzzy
 msgid "Unable to add area (map closed, topo saved)"
 msgstr "Alan eklenemiyor (harita kapandı, topoloji kaydedildi)"
 
 #: ../lib/vector/Vlib/build_nat.c:105
-#, fuzzy
 msgid "Unable to add isle (map closed, topo saved)"
 msgstr "Ada eklenemiyor (harita kapatıldı, topoloji kaydedildi)"
 
@@ -1284,14 +1260,12 @@ msgid "Request to find area outside nonexistent isle"
 msgstr ""
 
 #: ../lib/vector/Vlib/build_nat.c:510
-#, fuzzy
 msgid "Registering primitives: "
-msgstr "çizgiler kaydediliyor: "
+msgstr ""
 
 #: ../lib/vector/Vlib/build_nat.c:520
-#, fuzzy
 msgid "Unable to read vector map"
-msgstr "<%s%s> vektör haritası okunamıyor"
+msgstr "Vektör harita okunamıyor"
 
 #: ../lib/vector/Vlib/build_nat.c:560
 msgid "primitives registered"
@@ -1302,19 +1276,16 @@ msgid "vertices registered"
 msgstr ""
 
 #: ../lib/vector/Vlib/build_nat.c:572
-#, fuzzy
 msgid "Building areas: "
-msgstr "Grafik oluşturuluyor..."
+msgstr "Alanlar oluşturuluyor: "
 
 #: ../lib/vector/Vlib/build_nat.c:595
-#, fuzzy
 msgid "areas built"
-msgstr "Grafik oluşturuldu"
+msgstr "alanlar oluşturuldu"
 
 #: ../lib/vector/Vlib/build_nat.c:596
-#, fuzzy
 msgid "isles built"
-msgstr "Grafik oluşturuldu"
+msgstr "adalar oluşturuldu"
 
 #: ../lib/vector/Vlib/build_nat.c:605
 msgid "Attaching islands: "
@@ -1339,13 +1310,13 @@ msgid ""
 msgstr ""
 
 #: ../lib/vector/Vlib/build_ogr.c:275
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to calculate centroid for area %d"
-msgstr "%d alanı için merkez hesaplanamadı"
+msgstr "%d alanı içinalan merkezi hesaplanamadı"
 
 #: ../lib/vector/Vlib/build_ogr.c:312 ../lib/vector/Vlib/read_ogr.c:120
 #: ../lib/vector/Vlib/read_ogr.c:306
-#, fuzzy, c-format
+#, c-format
 msgid "OGR feature type %d not supported"
 msgstr "%d OGR obje tipi desteklenmiyor"
 
@@ -1359,9 +1330,8 @@ msgid ""
 msgstr ""
 
 #: ../lib/vector/Vlib/build_ogr.c:355
-#, fuzzy
 msgid "Feature: "
-msgstr "Obje tip(ler)i"
+msgstr "Obje: "
 
 #: ../lib/vector/Vlib/build_ogr.c:373
 #, c-format
@@ -1369,58 +1339,55 @@ msgid "Feature %d without geometry ignored"
 msgstr "geometrisi olmayan %d obje yok sayıldı"
 
 #: ../lib/vector/Vlib/build_ogr.c:380
-#, fuzzy
 msgid "OGR feature without ID ignored"
-msgstr "ID'si olmayan OGR objesi görmezden gelindi."
+msgstr "ID'si olmayan OGR objesi görmezden gelindi"
 
 #: ../lib/vector/Vlib/level.c:38
-#, fuzzy
 msgid "Map structure was never initialized"
-msgstr "Vektör yapısı başlatılamadı"
+msgstr "Harita yapısı başlatılamadı"
 
 #: ../lib/vector/Vlib/level.c:40
 msgid "Map structure has been closed"
 msgstr ""
 
 #: ../lib/vector/Vlib/area.c:53
-#, fuzzy
 msgid "Attempt to read points of nonexistent area"
-msgstr "[%d] alanının topolojisi okunamıyor"
+msgstr ""
 
 #: ../lib/vector/Vlib/area.c:125
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read line %d"
-msgstr "Üstbilgi dosyası okunamıyor"
+msgstr "%d çizgisi okunamıyor"
 
 #: ../lib/vector/Vlib/area.c:164 ../lib/vector/Vlib/area.c:193
 #: ../lib/vector/Vlib/area.c:257 ../lib/vector/Vlib/area.c:286
-#, fuzzy, c-format
+#, c-format
 msgid "Attempt to read topo for dead area (%d)"
-msgstr "[%d] alanının topolojisi okunamıyor"
+msgstr ""
 
 #: ../lib/vector/Vlib/area.c:313
-#, fuzzy, c-format
+#, c-format
 msgid "Attempt to read topo for dead isle (%d)"
-msgstr "[%d] adasının topolojisi okunamıyor"
+msgstr ""
 
 #: ../lib/vector/Vlib/open_ogr.c:53
 msgid "OGR format cannot be updated"
 msgstr ""
 
 #: ../lib/vector/Vlib/open_ogr.c:65
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open OGR data source '%s'"
-msgstr "'%s' dizini açılamıyor"
+msgstr "'%s' OGR veri kaynağı açılamıyor"
 
 #: ../lib/vector/Vlib/open_ogr.c:85
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open layer <%s>"
-msgstr " %s dosyası açılamıyor"
+msgstr "<%s> katmanı açılamıyor"
 
 #: ../lib/vector/Vlib/open_ogr.c:129
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open fidx file for vector map <%s@%s>"
-msgstr "<%s@%s> vektör haritasının kategori indeks dosyası açılamıyor"
+msgstr ""
 
 #: ../lib/vector/Vlib/open_ogr.c:147
 #, c-format
@@ -1438,7 +1405,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/remove_areas.c:59 ../lib/vector/Vlib/remove_areas.c:180
 msgid "Removed areas"
-msgstr ""
+msgstr "Kaldırılan alanlar"
 
 #: ../lib/vector/Vlib/remove_areas.c:98
 msgid "Area is composed of dead boundary"
@@ -1446,36 +1413,34 @@ msgstr ""
 
 #: ../lib/vector/Vlib/remove_duplicates.c:69
 #: ../lib/vector/Vlib/remove_duplicates.c:117
-#, fuzzy
 msgid "Duplicates"
-msgstr "tekrarlanan doğu alanı"
+msgstr "Tekrarlar"
 
 #: ../lib/vector/Vlib/map.c:55
-#, fuzzy
 msgid "input vector map is not open"
-msgstr "<%s> vektör haritası bulunamadı"
+msgstr "girdi vektör harita açılamıyor"
 
 #: ../lib/vector/Vlib/map.c:65 ../lib/vector/Vlib/map.c:81
 #: ../lib/ogsf/Gp3.c:143
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read vector map <%s>"
-msgstr "<%s%s> vektör haritası okunamıyor"
+msgstr ""
 
 #: ../lib/vector/Vlib/map.c:180
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find vector map <%s> in <%s>"
-msgstr "<%s> vektör haritası <%s>'e kopyalanamıyor"
+msgstr "<%s> deki <%s> vektör haritası bulunamadı"
 
 #: ../lib/vector/Vlib/map.c:211 ../lib/vector/Vlib/map.c:330
 #, c-format
 msgid "Unable to copy vector map <%s> to <%s>"
-msgstr "<%s> vektör haritası <%s>'e kopyalanamıyor"
+msgstr "Vektör harita <%s> ten <%s> e kopyalanamıyor"
 
 #: ../lib/vector/Vlib/map.c:258 ../lib/vector/Vlib/map.c:380
 #: ../lib/vector/Vlib/map.c:608 ../lib/vector/Vlib/map.c:715
 #, c-format
 msgid "Unable to copy table <%s>"
-msgstr "<%s> tablosu kopyalanamadı"
+msgstr "<%s> tablosuna kopyalanamıyor"
 
 #: ../lib/vector/Vlib/map.c:274 ../lib/vector/Vlib/map.c:409
 #: ../lib/vector/Vlib/map.c:621
@@ -1489,24 +1454,24 @@ msgid "Unable to delete table <%s>"
 msgstr "<%s> tablosu silinemiyor"
 
 #: ../lib/vector/Vlib/map.c:443
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid vector map name <%s>"
-msgstr "<%s%s> vektör haritası okunamıyor"
+msgstr ""
 
 #: ../lib/vector/Vlib/map.c:457
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open header file for vector map <%s>"
-msgstr "<%s> vektör haritasının geçmiş dosyası açılamıyor"
+msgstr ""
 
 #: ../lib/vector/Vlib/map.c:479
 #, c-format
 msgid "Unable to find table <%s> linked to vector map <%s>"
-msgstr "<%s> vektör haritasına bağlı <%s> tablosu bulunamıyor"
+msgstr ""
 
 #: ../lib/vector/Vlib/map.c:495
-#, fuzzy, c-format
+#, c-format
 msgid "Table <%s> linked to vector map <%s> does not exist"
-msgstr "<%s> vektör haritasına bağlı <%s> tablosu bulunamıyor"
+msgstr ""
 
 #: ../lib/vector/Vlib/map.c:509
 #, c-format
@@ -1531,17 +1496,15 @@ msgstr "'%s' dizini kaldırılamıyor "
 #: ../lib/vector/Vlib/map.c:599 ../lib/vector/Vlib/map.c:700
 #, c-format
 msgid "Unable to add database link for vector map <%s>"
-msgstr "<%s> vektör haritasınaveritabanı bağlanamıyor"
+msgstr "<%s> vektör haritasının veritabanı bağı eklenemiyor"
 
 #: ../lib/vector/Vlib/read_nat.c:136
-#, fuzzy
 msgid "Attempt to read dead line"
-msgstr "Üstbilgi dosyası okunamıyor"
+msgstr ""
 
 #: ../lib/vector/Vlib/overlay.c:74
-#, fuzzy
 msgid "unknown operator"
-msgstr "bilinmeyen hata"
+msgstr "bilinmeyen işletmen"
 
 #: ../lib/vector/Vlib/overlay.c:123
 msgid "Overlay: line/boundary types not supported by AND operator"
@@ -1552,39 +1515,34 @@ msgid "Overlay: area x area types not supported by AND operator"
 msgstr ""
 
 #: ../lib/vector/Vlib/read_ogr.c:178
-#, fuzzy
 msgid "OGR feature without ID"
-msgstr "ID'si olmayan OGR objesi "
+msgstr "ID'si olmayan OGR objesi"
 
 #: ../lib/vector/Vlib/read_ogr.c:378 ../lib/vector/Vlib/read_ogr.c:386
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to get feature geometry, FID %ld"
-msgstr "Obje geometrisi belirlenemedi, FID  [%ld]"
+msgstr "Obje geometrisi belirlenemedi, FID  %ld"
 
 #: ../lib/vector/Vlib/field.c:89
-#, fuzzy
 msgid "Layer number must be 1 or greater"
-msgstr "Alan numarası 1 veya daha büyük olmalıdır."
+msgstr ""
 
 #: ../lib/vector/Vlib/field.c:94
-#, fuzzy
 msgid "Unable to add database link, map is not opened in WRITE mode"
-msgstr "Veritabanı bağlantısı eklenemiyor, harita WRITE modunda açılmadı."
+msgstr "Veritabanı bağlantısı eklenemiyor, harita WRITE modunda açılmadı"
 
 #: ../lib/vector/Vlib/field.c:100
-#, fuzzy
 msgid "Unable to add database link"
-msgstr "Veritabanı bağlantısı eklenemiyor."
+msgstr "Veritabanı bağlantısı eklenemiyor"
 
 #: ../lib/vector/Vlib/field.c:106 ../lib/vector/Vlib/field.c:151
-#, fuzzy
 msgid "Unable to write database links"
-msgstr "Veritanı bağlantısı yazılamıyor."
+msgstr "Veritanı bağlantısı yazılamıyor"
 
 #: ../lib/vector/Vlib/field.c:219
-#, fuzzy, c-format
+#, c-format
 msgid "Layer number %d or name <%s> already exists"
-msgstr "<%d> alan adı veya <%s> adı zaten mevcut"
+msgstr ""
 
 #: ../lib/vector/Vlib/field.c:298
 #, c-format
@@ -1596,7 +1554,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/field.c:305
 msgid "Default driver is not set"
-msgstr "Varsayılan sürücü ayarlanamadı"
+msgstr "Varsayılan sürücü ayarlanmadı"
 
 #: ../lib/vector/Vlib/field.c:308
 msgid "Default database is not set"
@@ -1608,9 +1566,8 @@ msgid "Requested dblink %d, maximum link number %d"
 msgstr ""
 
 #: ../lib/vector/Vlib/field.c:507
-#, fuzzy
 msgid "Unable to open OGR DBMI driver"
-msgstr "OGR DBMI sürücüsü açılamıyor."
+msgstr "OGR DBMI sürücüsü açılamıyor"
 
 #: ../lib/vector/Vlib/field.c:546
 msgid ""
@@ -1629,21 +1586,19 @@ msgid "Error in rule on row %d in %s"
 msgstr ""
 
 #: ../lib/vector/Vlib/field.c:686
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open vector database definition file '%s'"
-msgstr "datum tablo dosyası açılamıyor: %s"
+msgstr ""
 
 #: ../lib/vector/Vlib/field.c:774
 msgid "Bug: attempt to update map which is not in current mapset"
 msgstr ""
 
 #: ../lib/vector/Vlib/net.c:121
-#, fuzzy
 msgid "Building graph..."
 msgstr "Grafik oluşturuluyor..."
 
 #: ../lib/vector/Vlib/net.c:163
-#, fuzzy
 msgid "Unable to build network graph"
 msgstr "Şebeke grafiği oluşturulamıyor"
 
@@ -1657,18 +1612,17 @@ msgstr ""
 
 #: ../lib/vector/Vlib/net.c:190 ../lib/vector/Vlib/net.c:207
 #: ../lib/vector/Vlib/net.c:360
-#, fuzzy, c-format
+#, c-format
 msgid "Column <%s> not found in table <%s>"
-msgstr "<%s> tablosu tanımlanamıyor"
+msgstr "<%s> sütunu <%s> tablosunda bulunamıyor"
 
 #: ../lib/vector/Vlib/net.c:196 ../lib/vector/Vlib/net.c:213
 #: ../lib/vector/Vlib/net.c:366
-#, fuzzy, c-format
+#, c-format
 msgid "Data type of column <%s> not supported (must be numeric)"
-msgstr "z sütunu sütun tipi desteklenmiyor ( tamsayı veya ondalık olmalı)"
+msgstr "<%s> sütunu veri tipi desteklenmiyor ( tamsayı olmalı)"
 
 #: ../lib/vector/Vlib/net.c:226
-#, fuzzy
 msgid "Registering arcs..."
 msgstr "çizgiler kaydediliyor ..."
 
@@ -1700,7 +1654,6 @@ msgid "Database record for node %d (cat = %d) not found (cost set to 0)"
 msgstr "%d düğümünün (cat = %d) veritabanı kaydı bulunamıyor (cost set to 0)"
 
 #: ../lib/vector/Vlib/net.c:429
-#, fuzzy
 msgid "Flattening the graph..."
 msgstr "Grafik oluşturuluyor..."
 
@@ -1713,23 +1666,21 @@ msgid "Wrong line direction in Vect_net_get_line_cost()"
 msgstr ""
 
 #: ../lib/vector/Vlib/line.c:60 ../lib/ogsf/gsd_img_mpeg.c:317
-#, fuzzy
 msgid "Out of memory"
-msgstr "G_malloc: hafıza yetersiz"
+msgstr "Yetersiz bellek"
 
 #: ../lib/vector/Vlib/line.c:199 ../lib/vector/Vlib/line.c:231
-#, fuzzy
 msgid "Index out of range in"
-msgstr "Katman indeksi aralık dışında"
+msgstr "İndeks aralık dışında"
 
 #: ../lib/vector/Vlib/line.c:527
 msgid "Segment outside line, no segment created"
 msgstr ""
 
 #: ../lib/vector/Vlib/header.c:95 ../lib/vector/Vlib/header.c:143
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open header file of vector <%s>"
-msgstr "<%s> vektör haritasının geçmiş dosyası açılamıyor"
+msgstr ""
 
 #: ../lib/vector/Vlib/header.c:151
 #, c-format
@@ -1737,9 +1688,9 @@ msgid "Corrupted row in head: %s"
 msgstr ""
 
 #: ../lib/vector/Vlib/header.c:187
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown keyword %s in vector head"
-msgstr "Bilinmeyen vektör tipi."
+msgstr ""
 
 #: ../lib/vector/Vlib/header.c:510 ../lib/gis/proj3.c:64
 msgid "Unknown projection"
@@ -1747,63 +1698,59 @@ msgstr "Bilinmeyen projeksiyon"
 
 #: ../lib/vector/Vlib/write.c:27 ../lib/vector/Vlib/write.c:33
 #: ../lib/vector/Vlib/write.c:39 ../lib/vector/Vlib/write.c:46
-#, fuzzy
 msgid "for this format/level not supported"
-msgstr "Sütun tipi desteklenmiyor"
+msgstr ""
 
 #: ../lib/vector/Vlib/write.c:135
-#, fuzzy
 msgid "Unable to write feature, vector map is not opened"
-msgstr "Çizgi yazılamıyor, harita açılamadı"
+msgstr ""
 
 #: ../lib/vector/Vlib/write.c:148
-#, fuzzy
 msgid "Unable to write feature (negative offset)"
-msgstr "Doğrusal eşitlik denklemi çözülemiyor"
+msgstr ""
 
 #: ../lib/vector/Vlib/write.c:181
-#, fuzzy
 msgid "Unable to rewrite feature, vector map is not opened"
-msgstr "Çizgi yeniden yazılamıyor, harita açılamadı"
+msgstr ""
 
 #: ../lib/vector/Vlib/write.c:194
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to rewrite feature %d"
-msgstr "'%s' dosyası silinemiyor"
+msgstr ""
 
 #: ../lib/vector/Vlib/write.c:219
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to delete feature %d, vector map <%s> is not opened on topology level"
-msgstr "Çizgi silinemedi, '%s' haritası 2 katmanda açılamadı"
+msgstr ""
 
 #: ../lib/vector/Vlib/write.c:225
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to delete feature %d, vector map <%s> is not opened in 'write' mode"
-msgstr "Çizgi silinemedi, '%s' haritası 'write' modunda açılmadı"
+msgstr ""
 
 #: ../lib/vector/Vlib/write.c:239
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to feature %d from vector map <%s>"
-msgstr "<%s> vektör haritası silinemiyor"
+msgstr ""
 
 #: ../lib/vector/Vlib/write.c:265
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to restore feature %d, vector map <%s> is not opened on topology level"
-msgstr "Çizgi silinemedi, '%s' haritası 2 katmanda açılamadı"
+msgstr ""
 
 #: ../lib/vector/Vlib/write.c:271
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to restore feature %d, vector map <%s> is not opened in 'write' mode"
-msgstr "Çizgi silinemedi, '%s' haritası 'write' modunda açılmadı"
+msgstr ""
 
 #: ../lib/vector/Vlib/write.c:285
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to restore feature %d from vector map <%s>"
-msgstr "<%s> vektör haritası silinemiyor"
+msgstr ""
 
 #: ../lib/proj/get_proj.c:148
 #, c-format
@@ -1830,64 +1777,60 @@ msgstr ""
 
 #: ../lib/proj/get_proj.c:401
 msgid "Input Projection Parameters"
-msgstr "Girdi Projeksiyon Değişkenleri"
+msgstr "Girdi Projeksiyon  Parametreleri"
 
 #: ../lib/proj/get_proj.c:404
 msgid "Input Unit Factor"
-msgstr "Girdi Birim faktörü"
+msgstr "Girdi Birim Faktörü"
 
 #: ../lib/proj/get_proj.c:414
 msgid "Output Projection Parameters"
-msgstr "Çıktı Projeksiyon Değişkenleri"
+msgstr ""
 
 #: ../lib/proj/get_proj.c:417
 msgid "Output Unit Factor"
 msgstr "Çıktı Birim faktörü"
 
 #: ../lib/proj/datum.c:271 ../lib/proj/datum.c:336
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open datum table file <%s>"
-msgstr "datum tablo dosyası açılamıyor: %s"
+msgstr "datum tablo dosyası açılamıyor <%s>"
 
 #: ../lib/proj/datum.c:284 ../lib/proj/datum.c:350
-#, fuzzy, c-format
+#, c-format
 msgid "Error in datum table file <%s>, line %d"
-msgstr "Datum tablo dosyasında hata, satır %d"
+msgstr "<%s> Datum tablo dosyasında hata, satır %d"
 
 #: ../lib/proj/convert.c:108
-#, fuzzy
 msgid "Unable parse GRASS PROJ_INFO file"
 msgstr "GRASS PROJ_INFO dosyası ayrıştırılamıyor"
 
 #: ../lib/proj/convert.c:113
-#, fuzzy
 msgid "Unable get PROJ.4-style parameter string"
 msgstr "PROJ.4 stilindeki parametre dizesi alınamıyor"
 
 #: ../lib/proj/convert.c:125
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "OGR can't parse PROJ.4-style parameter string: %s (OGR Error code was %d)"
 msgstr ""
-"OGR, PROJ.4 stilindeki değişken dizesini ayrıştıramıyor:\n"
-"%s\n"
-"(OGR Hata kodu %d)"
+"OGR, PROJ.4 stilindeki değişken dizesini ayrıştıramıyor: %s (OGR Hata kodu %"
+"d)"
 
 #: ../lib/proj/convert.c:131
-#, fuzzy, c-format
+#, c-format
 msgid "OGR can't get WKT-style parameter string (OGR Error code was %d)"
 msgstr ""
-"OGR, WKT stilindeki değişken dizesini ayrıştıramıyor:\n"
-"(OGR Hata kodu %d)"
+"OGR, WKT stilindeki değişken dizesini ayrıştıramıyor:(OGR Hata kodu %d)"
 
 #: ../lib/proj/convert.c:384
 msgid "No projection name! Projection parameters likely to be meaningless."
 msgstr "Projeksiyon adı yok! Projeksiyon değişkenleri anlamsız gibi görünüyor."
 
 #: ../lib/proj/convert.c:420
-#, fuzzy, c-format
+#, c-format
 msgid "Datum <%s> not recognised by GRASS and no parameters found"
-msgstr "<%s> Datum'u GRASS tarafından tanınmıyor ve değişkenler yok."
+msgstr "<%s> Datum'u GRASS tarafından tanınmıyor ve değişkenler yok"
 
 #: ../lib/proj/convert.c:436
 #, c-format
@@ -1911,40 +1854,38 @@ msgid "pj_transform() failed: %s"
 msgstr ""
 
 #: ../lib/proj/ellipse.c:75
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid ellipsoid <%s> in file"
-msgstr "Dosyada  geçersiz %s elipsoidi"
+msgstr "Dosyada  geçersiz <%s> elipsoidi"
 
 #: ../lib/proj/ellipse.c:98
 msgid "No secondary ellipsoid descriptor (rf, es or b) in file"
 msgstr ""
 
 #: ../lib/proj/ellipse.c:102
-#, fuzzy
 msgid "Invalid ellipsoid descriptors (a, rf, es or b) in file"
-msgstr "Dosyada  geçersiz %s elipsoidi"
+msgstr ""
 
 #: ../lib/proj/ellipse.c:115
 msgid "No ellipsoid info given in file"
 msgstr "Dosyada hiç elipsoid bilgisi verilmedi"
 
 #: ../lib/proj/ellipse.c:216 ../lib/gis/get_ellipse.c:283
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open ellipsoid table file <%s>"
-msgstr "elipsoid tablo dosyası açılamıyor: %s"
+msgstr "elipsoid tablo dosyası açılamıyor <%s>"
 
 #: ../lib/g3d/g3dparam.c:52
 msgid "Data type used in the output file"
-msgstr "Çıktı dosyasında kullanılan veri tipi"
+msgstr ""
 
 #: ../lib/g3d/g3dparam.c:61
 msgid "Precision used in the output file (default, max, or 0 to 52)"
 msgstr ""
-"Çıktı dosyasında kullanılan hassaslık (varsayılan, en büyük, veya 0-52)"
 
 #: ../lib/g3d/g3dparam.c:71
 msgid "The compression method used in the output file"
-msgstr "Çıktı dosyasında kullanılan sıkıştırma yöntemi"
+msgstr ""
 
 #: ../lib/g3d/g3dparam.c:81
 msgid "The dimensions of the tiles used in the output file"
@@ -1963,10 +1904,9 @@ msgid "Window replacing the default"
 msgstr ""
 
 #: ../lib/g3d/g3dcolor.c:332
-#, fuzzy, c-format
+#, c-format
 msgid "mapset <%s> is not the current mapset"
 msgstr ""
-"Geçerli harita takımında olmayan vektör harita güncellemek için açılamıyor"
 
 #: ../lib/g3d/g3dopen.c:20
 msgid "G3d_openCellOldNoHeader: error in G3d_maskOpenOld"
@@ -2025,10 +1965,9 @@ msgid "G3d_openCellNew: error in G3d_malloc"
 msgstr ""
 
 #: ../lib/g3d/g3dopen.c:229
-#, fuzzy, c-format
+#, c-format
 msgid "map <%s> is not in the current mapset"
 msgstr ""
-"Geçerli harita takımında olmayan vektör harita güncellemek için açılamıyor"
 
 #: ../lib/g3d/g3dopen.c:239
 msgid "G3d_openCellNew: could not open file"
@@ -2048,32 +1987,30 @@ msgid "can't get history information for [%s] in mapset [%s]"
 msgstr "[%s] harita takımındaki [%s] in geçmiş bilgisi alınamıyor"
 
 #: ../lib/g3d/g3drange.c:72
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open range file for [%s in %s]"
-msgstr "[%s deki %s] için üst bilgi dosyası oluşturulamıyor"
+msgstr ""
 
 #: ../lib/g3d/g3drange.c:78 ../lib/g3d/g3drange.c:88
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading range file for [%s in %s]"
 msgstr "[%s deki %s] in aralık dosyası okunamıyor"
 
 #: ../lib/g3d/g3drange.c:153
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open range file for <%s>"
-msgstr "<%s> vektör haritasının geçmiş dosyası açılamıyor"
+msgstr "<%s> için aralık dosyası açılamıyor"
 
 #: ../lib/gis/gdal.c:54
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to locate symbol <%s>"
-msgstr "<%s> tablosu silinemiyor"
+msgstr "<%s> simgesi yüklenemedi"
 
 #: ../lib/gis/gdal.c:94
-#, fuzzy
 msgid "Unable to load GDAL library"
-msgstr "Şebeke çizgisi eklenemedi"
+msgstr "GDAL kütüphanesi yüklenemedi"
 
 #: ../lib/gis/sample.c:71
-#, fuzzy
 msgid "Unknown interpolation type"
 msgstr "bilinmeyen enterpolasyon tipi"
 
@@ -2082,9 +2019,8 @@ msgid "\"no data\" label found; setting to zero"
 msgstr "\"no data\" etiketi bulundu; sıfıra ayarlanıyor"
 
 #: ../lib/gis/sample.c:299
-#, fuzzy
 msgid "Problem reading raster map"
-msgstr "Raster hücre dosyasını okumada hata"
+msgstr ""
 
 #: ../lib/gis/put_cellhd.c:26
 #, c-format
@@ -2102,14 +2038,14 @@ msgid "Illegal filename. Character <%c> not allowed.\n"
 msgstr "Uygun olmayan dosya adı. <%c> karakteri kullanılamaz.\n"
 
 #: ../lib/gis/legal_name.c:77 ../lib/gis/legal_name.c:81
-#, fuzzy, c-format
+#, c-format
 msgid "Output raster map name <%s> is not valid map name"
-msgstr "<%s> çıktı vektör harita adı geçerli bir harita adı değildir"
+msgstr ""
 
 #: ../lib/gis/legal_name.c:118 ../lib/gis/legal_name.c:122
-#, fuzzy, c-format
+#, c-format
 msgid "Output raster map <%s> is used as input"
-msgstr "<%s> çıktı vektör haritası girdi olarak kullanılıyor"
+msgstr ""
 
 #: ../lib/gis/debug.c:69
 #, c-format
@@ -2139,7 +2075,7 @@ msgstr "<%s> harita takımında hiç %s dosyası yok\n"
 #: ../lib/gis/list.c:174
 #, c-format
 msgid "%s files available in mapset <%s>:\n"
-msgstr "<%s> harita takımında %s dosya kullanılabilir:\n"
+msgstr "<%s>  harita takımında kullanılabilir %s dosyalar :\n"
 
 #: ../lib/gis/list.c:245
 msgid "G_list: Unknown element type"
@@ -2154,14 +2090,14 @@ msgid "Other Projection"
 msgstr "Diğer projeksiyon"
 
 #: ../lib/gis/opencell.c:105
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open raster map <%s@%s>"
-msgstr "<%s> raster haritası açılamıyor"
+msgstr "<%s@%s> raster haritası açılamıyor"
 
 #: ../lib/gis/opencell.c:174
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find <%s@%s>"
-msgstr "[%s] bulunamadı"
+msgstr "<%s@%s> bulunamadı"
 
 #: ../lib/gis/opencell.c:190
 #, c-format
@@ -2171,10 +2107,9 @@ msgid ""
 msgstr ""
 
 #: ../lib/gis/opencell.c:214
-#, fuzzy, c-format
+#, c-format
 msgid "Raster map <%s@%s>: format field in header file invalid"
 msgstr ""
-"Üstbilgi dosyası geçersiz olan [%s deki %s] in yeniden sınıflandırılmasıdır\n"
 
 #: ../lib/gis/opencell.c:221
 #, c-format
@@ -2199,17 +2134,14 @@ msgid "map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"
 msgstr ""
 
 #: ../lib/gis/opencell.c:604
-#, fuzzy, c-format
+#, c-format
 msgid "Raster map <%s> is not in the current mapset (%s)"
 msgstr ""
-"Geçerli harita takımında olmayan vektör harita güncellemek için açılamıyor"
 
 #: ../lib/gis/opencell.c:611
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> is an illegal file name"
-msgstr ""
-"\n"
-"**<%s> uygun olmayan ad **\n"
+msgstr "<%s> uygun olmayan bir addır"
 
 #: ../lib/gis/opencell.c:622 ../lib/gis/opencell.c:723
 msgid "G__open_raster_new(): no temp files available"
@@ -2225,34 +2157,34 @@ msgid "G_set_fp_type(): can only be called with FCELL_TYPE or DCELL_TYPE"
 msgstr ""
 
 #: ../lib/gis/opencell.c:932 ../lib/gis/opencell.c:1020
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find '%s' in '%s'"
-msgstr "[%s] bulunamadı"
+msgstr "'%s' '%s' içinde bulunamadı"
 
 #: ../lib/gis/opencell.c:965
-#, fuzzy, c-format
+#, c-format
 msgid "Raster map <%s> not found in mapset <%s>"
-msgstr "<%s> raster haritası yok"
+msgstr ""
 
 #: ../lib/gis/opencell.c:1026
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find '%s'"
-msgstr "[%s] bulunamadı"
+msgstr "'%s' bulunamadı"
 
 #: ../lib/gis/opencell.c:1031
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open '%s'"
-msgstr "%s açılamadı"
+msgstr "'%s' açılamadı"
 
 #: ../lib/gis/opencell.c:1041
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid type: field '%s' in file '%s'"
-msgstr "geçersiz tip: %s dosyasındaki %s alanı"
+msgstr "geçersiz tip: '%s' alanı '%s' dosyasındaki"
 
 #: ../lib/gis/opencell.c:1055
-#, fuzzy, c-format
+#, c-format
 msgid "Raster map <%s> is not xdr: byte_order: %s"
-msgstr "<%s> raster haritası yok"
+msgstr ""
 
 #: ../lib/gis/opencell.c:1135
 msgid ""
@@ -2290,9 +2222,9 @@ msgid "'%s/%s' was found in more mapsets (also found in <%s>)"
 msgstr ""
 
 #: ../lib/gis/find_file.c:82
-#, fuzzy, c-format
+#, c-format
 msgid "Using <%s@%s>"
-msgstr "[%s] bulunamadı"
+msgstr "<%s@%s> kullanılıyor"
 
 #: ../lib/gis/quant_io.c:89
 #, c-format
@@ -2323,7 +2255,7 @@ msgstr "Girdi yazım hatası"
 
 #: ../lib/gis/color_rules.c:112
 msgid "R/G/B not in range 0-255"
-msgstr "R/G/B 0-255 aralığında değil"
+msgstr ""
 
 #: ../lib/gis/color_rules.c:114
 msgid "invalid color name"
@@ -2342,9 +2274,9 @@ msgid "unknown error"
 msgstr "bilinmeyen hata"
 
 #: ../lib/gis/color_rules.c:151
-#, fuzzy, c-format
+#, c-format
 msgid "bad rule (%s): [%s]"
-msgstr "kötü kural (%s): %s"
+msgstr "kötü kural (%s): [%s]"
 
 #: ../lib/gis/spawn.c:80 ../lib/gis/spawn.c:112
 msgid "Too many arguments"
@@ -2451,25 +2383,23 @@ msgid "cell_values_double: xdr_double failed for index %d"
 msgstr ""
 
 #: ../lib/gis/get_row.c:621
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading compressed map <%s@%s>, row %d"
-msgstr ""
-"[%s] harita takımındaki [%s] sıkıştırılmış haritasını okumada hata, satır %d"
+msgstr "<%s@%s> sıkıştırılmış haritasını okumada hata, satır %d"
 
 #: ../lib/gis/get_row.c:624
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading map <%s@%s>, row %d"
-msgstr "[%s] harita takımındaki [%s] haritasını okumada hata, satır %d"
+msgstr "<%s@%s> haritasını okumada hata, satır %d"
 
 #: ../lib/gis/get_row.c:1031 ../lib/gis/get_row.c:1036
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading null row %d"
 msgstr "%d boş satırları okumada hata"
 
 #: ../lib/gis/get_row.c:1115
-#, fuzzy
 msgid "Unable to realloc buffer"
-msgstr "Hafıza ayrılamıyor\n"
+msgstr ""
 
 #: ../lib/gis/ls.c:87
 #, c-format
@@ -2591,40 +2521,39 @@ msgid "ERROR: "
 msgstr "HATA:"
 
 #: ../lib/gis/get_cellhd.c:71 ../lib/gis/get_cellhd.c:100
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read header file for raster map <%s@%s>."
-msgstr "[%s deki %s] için üst bilgi dosyası oluşturulamıyor"
+msgstr ""
 
 #: ../lib/gis/get_cellhd.c:74
-#, fuzzy, c-format
+#, c-format
 msgid " It is a reclass of raster map <%s@%s> "
-msgstr "[%s deki %s] in yeniden sınıflandırmasıdır"
+msgstr ""
 
 #: ../lib/gis/get_cellhd.c:78
-#, fuzzy, c-format
+#, c-format
 msgid "which is missing."
 msgstr "kayıp olan"
 
 #: ../lib/gis/get_cellhd.c:80
-#, fuzzy, c-format
+#, c-format
 msgid "whose header file can't be opened."
 msgstr "üstbilgi dosyası açılamayan"
 
 #: ../lib/gis/get_cellhd.c:88
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open header file for raster map <%s@%s>"
-msgstr "<%s@%s> vektör haritasının kategori indeks dosyası açılamıyor"
+msgstr ""
 
 #: ../lib/gis/get_cellhd.c:105
-#, fuzzy, c-format
+#, c-format
 msgid " It is a reclass of raster map <%s@%s> whose header file is invalid."
 msgstr ""
-"Üstbilgi dosyası geçersiz olan [%s deki %s] in yeniden sınıflandırılmasıdır\n"
 
 #: ../lib/gis/get_cellhd.c:109
-#, fuzzy, c-format
+#, c-format
 msgid " Invalid format."
-msgstr "Uygun olmayan biçim\n"
+msgstr "Uygun olmayan biçim"
 
 #: ../lib/gis/cats.c:385
 #, c-format
@@ -2634,17 +2563,17 @@ msgstr "[%s] %s harita takımındaki [%s] in kategori desteği"
 #: ../lib/gis/cats.c:421
 #, c-format
 msgid "category support for vector map [%s] in mapset [%s] %s"
-msgstr "[%s] %s harita takımındaki [%s] vektör dosyasının kategori desteği"
+msgstr ""
 
 #: ../lib/gis/get_ellipse.c:85
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open file %s in <%s>"
-msgstr "%s içindeki %s dosyası açılamadı"
+msgstr "%s içindeki <%s> dosyası açılamadı"
 
 #: ../lib/gis/get_ellipse.c:333
 #, c-format
 msgid "Lines%s of ellipsoid table file <%s> are invalid"
-msgstr "<%s> elipsoid tablo dosyasının %s satırları geçersiz"
+msgstr ""
 
 #: ../lib/gis/get_ellipse.c:335
 #, c-format
@@ -2652,24 +2581,24 @@ msgid "Line%s of ellipsoid table file <%s> is invalid"
 msgstr "<%s> elipsoid tablo dosyasının %s satırı geçersiz"
 
 #: ../lib/gis/get_ellipse.c:355 ../lib/gis/get_ellipse.c:381
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid a: field '%s' in file %s in <%s>"
-msgstr "geçersiz tip: %s dosyasındaki %s alanı"
+msgstr ""
 
 #: ../lib/gis/get_ellipse.c:368
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid ellipsoid '%s' in file %s in <%s>"
-msgstr "%s deki %s dosyasında %s geçersiz elipsoidi"
+msgstr "'%s' geçersiz elipsoidi '%s' dosyasında <%s> "
 
 #: ../lib/gis/get_ellipse.c:385
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid es: field '%s' in file %s in <%s>"
-msgstr "geçersiz tip: %s dosyasındaki %s alanı"
+msgstr ""
 
 #: ../lib/gis/get_ellipse.c:399
-#, fuzzy, c-format
+#, c-format
 msgid "No ellipsoid info given in file %s in <%s>"
-msgstr "%s deki %s dosyasında hiç elipsoid bilgisi verilmedi"
+msgstr "%s deki <%s> dosyasında hiç elipsoid bilgisi verilmedi"
 
 #: ../lib/gis/location.c:44
 #, c-format
@@ -2714,7 +2643,7 @@ msgid ""
 msgstr ""
 
 #: ../lib/gis/mapset_msc.c:60
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to make mapset element %s (%s)"
 msgstr "%s (%s) harita takımı elemanı yapılamıyor"
 
@@ -2748,40 +2677,39 @@ msgstr "Öznitelik sütun(lar) adı"
 
 #: ../lib/gis/parser.c:411
 msgid "Name of input imagery group"
-msgstr "Girdi görüntü grubu adı"
+msgstr ""
 
 #: ../lib/gis/parser.c:419
-#, fuzzy
 msgid "Name of input imagery subgroup"
-msgstr "Girdi görüntü grubu adı"
+msgstr "Girdi görüntü altgrubunun adı"
 
 #: ../lib/gis/parser.c:429 ../lib/gis/parser.c:454
 msgid "Name of input raster map"
-msgstr "Girdi raster haritanın adı"
+msgstr "Girdi raster haritası adı"
 
 #: ../lib/gis/parser.c:438 ../lib/gis/parser.c:463
 msgid "Name of input raster map(s)"
-msgstr "Girdi raster harita(lar)ın adı"
+msgstr "Girdi raster harita(lar) adı"
 
 #: ../lib/gis/parser.c:446
 msgid "Name for output raster map"
-msgstr "Çıktı raster haritanın adı"
+msgstr "Çıktı raster haritasının adı"
 
 #: ../lib/gis/parser.c:471
 msgid "Name of base raster map"
-msgstr "Altlık raster harita adı"
+msgstr "Raster temel haritanın adı"
 
 #: ../lib/gis/parser.c:479
 msgid "Name of cover raster map"
-msgstr "Örtü raster harita adı"
+msgstr ""
 
 #: ../lib/gis/parser.c:487
 msgid "Name of elevation raster map"
-msgstr "Girdi yükselti raster haritanın adı"
+msgstr "Yükselti raster haritası adı"
 
 #: ../lib/gis/parser.c:496
 msgid "Name of elevation raster map(s)"
-msgstr "Girdi yükselti raster harita(lar)ın adı"
+msgstr ""
 
 #: ../lib/gis/parser.c:506 ../lib/gis/parser.c:531
 msgid "Name of input raster3d map"
@@ -2793,19 +2721,19 @@ msgstr "Girdi raster3d harita(lar) adı"
 
 #: ../lib/gis/parser.c:523
 msgid "Name for output raster3d map"
-msgstr "Çıktı raster3d haritanın adı"
+msgstr ""
 
 #: ../lib/gis/parser.c:550 ../lib/gis/parser.c:575
 msgid "Name of input vector map"
-msgstr "Girdi vektör haritanın adı"
+msgstr "Girdi vektör haritasının adı"
 
 #: ../lib/gis/parser.c:559 ../lib/gis/parser.c:584
 msgid "Name of input vector map(s)"
-msgstr "Girdi vektör harita(lar) adı"
+msgstr ""
 
 #: ../lib/gis/parser.c:567
 msgid "Name for output vector map"
-msgstr "Çıktı vektör haritanın adı"
+msgstr "Çıktı vektör haritasının adı"
 
 #: ../lib/gis/parser.c:593
 msgid "Type"
@@ -2824,8 +2752,6 @@ msgid ""
 "A single vector map can be connected to multiple database tables. This "
 "number determines which table to use."
 msgstr ""
-"Tek bir vektör harita birçok veritabanı tablosuna bağlanabilir. Bu sayı "
-"hangi tablonun kullanılacağını belirler."
 
 #: ../lib/gis/parser.c:610
 msgid "Category value"
@@ -2845,7 +2771,7 @@ msgstr "Girdi dosyasının adı"
 
 #: ../lib/gis/parser.c:636
 msgid "Name for output file"
-msgstr "Çıktı dosyasının adı"
+msgstr "Çıktı dosya adı"
 
 #: ../lib/gis/parser.c:644
 msgid "Field separator"
@@ -2857,15 +2783,15 @@ msgstr "Renk"
 
 #: ../lib/gis/parser.c:656
 msgid "Either a standard color name or R:G:B triplet"
-msgstr "Ya standart renk adı yada R:G:B üçlüsü"
+msgstr "Ya standart renk adı veya K:Y:M üçlemesi"
 
 #: ../lib/gis/parser.c:665
 msgid "Background color"
-msgstr "Artalan rengi"
+msgstr "Arkaplan rengi"
 
 #: ../lib/gis/parser.c:667
 msgid "Either a standard GRASS color, R:G:B triplet, or \"none\""
-msgstr "Ya standart renk adı yada R:G:B üçlüsü, veya \"none\""
+msgstr "Ya standart GRASS rengi,K:Y:M üçlemesi, yada \"hiçbiri\""
 
 #: ../lib/gis/parser.c:811
 #, c-format
@@ -2925,7 +2851,7 @@ msgstr ""
 
 #: ../lib/gis/parser.c:1160 ../lib/gis/parser.c:1639 ../lib/gis/parser.c:1931
 msgid "Allow output files to overwrite existing files"
-msgstr "Çıktı dosyaların mevcut dosyalar üzerine yazmasına olanak sağla"
+msgstr ""
 
 #: ../lib/gis/parser.c:1162 ../lib/gis/parser.c:1643
 msgid "Verbose module output"
@@ -2983,21 +2909,19 @@ msgstr "Üzerine yaz"
 
 #: ../lib/gis/parser.c:1941
 msgid "Run with minimal output messages"
-msgstr "En az çıktı mesajıyla çalış"
+msgstr ""
 
 #: ../lib/gis/parser.c:1943
 msgid "Run quietly"
-msgstr ""
+msgstr "Yavaşça çalıştır"
 
 #: ../lib/gis/parser.c:1976
-#, fuzzy
 msgid "Unable to spawn the 'wish' program"
-msgstr "%s açılamadı"
+msgstr ""
 
 #: ../lib/gis/parser.c:1995
-#, fuzzy
 msgid "Unable to determine program name"
-msgstr "kullanıcı ev dizini belirlenemiyor"
+msgstr ""
 
 #: ../lib/gis/parser.c:2052
 #, c-format
@@ -3057,18 +2981,16 @@ msgstr ""
 "Hata: <%s> parametresi için kayıp değer\n"
 
 #: ../lib/gis/parser.c:2268
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "ERROR: value <%s> ambiguous for parameter <%s>\n"
 msgstr ""
-"\n"
-"Hata: <%s> parametresi için <%s> değeri aralık dışında\n"
 
 #: ../lib/gis/parser.c:2270
-#, fuzzy, c-format
+#, c-format
 msgid "       valid options: %s\n"
-msgstr " seçenekler: %s\n"
+msgstr "       geçerli seçenekler: %s\n"
 
 #: ../lib/gis/parser.c:2398
 #, c-format
@@ -3422,9 +3344,9 @@ msgid "GISRC - variable not set"
 msgstr "GISRC - değişken ayarlanmadı"
 
 #: ../lib/gis/env.c:274
-#, fuzzy, c-format
+#, c-format
 msgid "G_getenv(): Variable %s not set"
-msgstr "GISRC - değişken ayarlanmadı"
+msgstr ""
 
 #: ../lib/gis/env.c:300
 #, c-format
@@ -3434,7 +3356,7 @@ msgstr "%s ayarlanmadı"
 #: ../lib/gis/done_msg.c:38
 #, c-format
 msgid "%s complete. %s"
-msgstr "%s tamamlanadı. %s"
+msgstr "%s tamamlandı. %s"
 
 #: ../lib/gis/get_window.c:67 ../lib/gis/get_window.c:85
 #, c-format
@@ -3570,9 +3492,9 @@ msgid "Unable to find file [%s] for subgroup [%s] of group [%s in %s]"
 msgstr "[%s in %s] grubunun [%s] altgrubundaki [%s] dosyası bulunamıyor"
 
 #: ../lib/imagery/target.c:38
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read target file for group [%s]"
-msgstr "[%s] için üstbilgi dosyası oluşturulamıyor"
+msgstr ""
 
 #: ../lib/psdriver/Graph_set.c:199
 #, c-format
@@ -3595,9 +3517,9 @@ msgid "No features from vector map <%s> fall within current region"
 msgstr ""
 
 #: ../lib/ogsf/Gv3.c:254
-#, fuzzy, c-format
+#, c-format
 msgid "Vector map <%s> loaded (%d features)"
-msgstr "<%s> vektör haritası bulunamadı"
+msgstr ""
 
 #: ../lib/ogsf/gk.c:322
 msgid "Need at least 3 keyframes for spline"
@@ -3608,44 +3530,38 @@ msgid "Need at least 2 keyframes for interpolation"
 msgstr ""
 
 #: ../lib/ogsf/GVL2.c:249
-#, fuzzy, c-format
+#, c-format
 msgid "Loading 3d raster map <%s>..."
-msgstr "<%s> raster haritası okunarak hafızaya alınıyor"
+msgstr ""
 
 #: ../lib/ogsf/Gvl3.c:39 ../lib/ogsf/gvl_file.c:428
-#, fuzzy, c-format
+#, c-format
 msgid "3D raster map <%s> not found"
-msgstr "<%s> raster haritası yok"
+msgstr "<%s> 3B raster haritası bulunamadı"
 
 #: ../lib/ogsf/gsd_img_mpeg.c:63
-#, fuzzy
 msgid "Unable to allocate stream"
-msgstr "Hafıza ayrılamıyor\n"
+msgstr ""
 
 #: ../lib/ogsf/gsd_img_mpeg.c:156
-#, fuzzy
 msgid "Video codec not found"
-msgstr "<%s> vektör haritası bulunamadı"
+msgstr ""
 
 #: ../lib/ogsf/gsd_img_mpeg.c:162
-#, fuzzy
 msgid "Unable to open codec"
-msgstr "%s açılamadı"
+msgstr ""
 
 #: ../lib/ogsf/gsd_img_mpeg.c:181
-#, fuzzy
 msgid "Unable to allocate picture"
-msgstr "Hafıza ayrılamıyor\n"
+msgstr ""
 
 #: ../lib/ogsf/gsd_img_mpeg.c:192
-#, fuzzy
 msgid "Unable to allocate temporary picture"
-msgstr "Hafıza ayrılamıyor\n"
+msgstr ""
 
 #: ../lib/ogsf/gsd_img_mpeg.c:252
-#, fuzzy
 msgid "Error while writing video frame"
-msgstr "Topoloji dosyasını yazmada hata."
+msgstr ""
 
 #: ../lib/ogsf/gsd_img_mpeg.c:298
 #, c-format
@@ -3657,19 +3573,17 @@ msgid "Unable to deduce output format from file extension: using MPEG"
 msgstr ""
 
 #: ../lib/ogsf/gsd_img_mpeg.c:310
-#, fuzzy
 msgid "Unable to find suitable output format"
-msgstr "<%s> vektör haritasına bağlı <%s> tablosu bulunamıyor"
+msgstr "Uygun çıktı biçimi bulunamadı"
 
 #: ../lib/ogsf/gsd_img_mpeg.c:337
-#, fuzzy
 msgid "Invalid output format parameters"
-msgstr "Girdi Projeksiyon Değişkenleri"
+msgstr ""
 
 #: ../lib/ogsf/gsd_img_mpeg.c:351
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open <%s>"
-msgstr "%s açılamadı"
+msgstr "<%s> açılamıyor"
 
 #: ../lib/ogsf/gsd_img_mpeg.c:361
 msgid "NVIZ has not been built with MPEG output support"
@@ -3677,48 +3591,45 @@ msgstr ""
 
 #: ../lib/ogsf/gsd_img_ppm.c:53 ../lib/ogsf/gsd_img_ppm.c:96
 #: ../lib/ogsf/gsd_img_tif.c:64 ../lib/ogsf/GK2.c:219
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open file <%s> for writing"
-msgstr "%s yazma için açılamıyor"
+msgstr "<%s> dosyası yazma için açılamıyor"
 
 #: ../lib/ogsf/gsdrape.c:207
-#, fuzzy
 msgid "Unable to process vector map - out of memory"
-msgstr "<%s%s> vektör haritası okunamıyor"
+msgstr ""
 
 #: ../lib/ogsf/gsd_legend.c:245
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read color file of raster map <%s>"
-msgstr "[%s deki %s] için üst bilgi dosyası oluşturulamıyor"
+msgstr "<%s> raster haritasının renk dosyası okunamıyor"
 
 #: ../lib/ogsf/gsd_legend.c:251
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read category file of raster map <%s>"
-msgstr "[%s deki %s] için üst bilgi dosyası oluşturulamıyor"
+msgstr "<%s> raster haritasının kategori dosyası okunamıyor"
 
 #: ../lib/ogsf/gsd_legend.c:268
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read fp range of raster map <%s>"
-msgstr "<%s> raster haritası oluşturulamıyor"
+msgstr "<%s> raster haritasının kayar nokta aralığı okunamıyor"
 
 #: ../lib/ogsf/gsd_legend.c:280
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read range of raster map <%s>"
-msgstr "<%s> raster haritası oluşturulamıyor"
+msgstr ""
 
 #: ../lib/ogsf/gsd_legend.c:294
 msgid "Range request error for legend"
 msgstr ""
 
 #: ../lib/ogsf/gsd_legend.c:384
-#, fuzzy
 msgid "Unable to show discrete FP range (use list"
-msgstr "Veritanı bağlantısı yazılamıyor."
+msgstr ""
 
 #: ../lib/ogsf/gsd_legend.c:500
-#, fuzzy
 msgid "Too many categories to show as discrete!"
-msgstr "[%s in %s] için çok fazla yeniden sınıflandırma kategorisi"
+msgstr ""
 
 #: ../lib/ogsf/gsd_legend.c:502
 msgid "Try using smaller font!"
@@ -3726,15 +3637,14 @@ msgstr ""
 
 #: ../lib/ogsf/Gs3.c:133 ../lib/ogsf/Gs3.c:207 ../lib/ogsf/Gs3.c:364
 #: ../lib/ogsf/Gs3.c:479 ../lib/ogsf/Gs3.c:583
-#, fuzzy
 msgid "Unable to allocate memory for a null buffer"
-msgstr "Hafıza ayrılamıyor\n"
+msgstr ""
 
 #: ../lib/ogsf/Gs3.c:140 ../lib/ogsf/Gs3.c:214 ../lib/ogsf/Gs3.c:376
 #: ../lib/ogsf/Gs3.c:491 ../lib/ogsf/Gs3.c:586
-#, fuzzy, c-format
+#, c-format
 msgid "Loading raster map <%s>..."
-msgstr "<%s> raster haritası okunarak hafızaya alınıyor"
+msgstr ""
 
 #: ../lib/ogsf/Gs3.c:643
 #, c-format
@@ -3742,9 +3652,9 @@ msgid "Color table range doesn't match data (mincol=%d, maxcol=%d"
 msgstr ""
 
 #: ../lib/ogsf/Gs3.c:705 ../lib/ogsf/Gs3.c:775
-#, fuzzy, c-format
+#, c-format
 msgid "Translating colors from raster map <%s>..."
-msgstr "Lütfen <%s@%s> vektörünün topolojisiin tekrar kurun"
+msgstr ""
 
 #: ../lib/ogsf/Gs3.c:1012
 msgid "View not saved by this program,there may be some inconsistancies"
@@ -3779,28 +3689,27 @@ msgid "Check no. of frames requested and keyframes marked"
 msgstr ""
 
 #: ../lib/ogsf/gs_bm.c:124
-#, fuzzy
 msgid "Bitmap mismatch"
-msgstr "İki eşlemli maske oluşturuldu"
+msgstr ""
 
 #: ../lib/ogsf/gvl_file.c:104
 msgid "Maximum number of datafiles exceeded"
 msgstr ""
 
 #: ../lib/ogsf/gvl_file.c:437
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open 3D raster map <%s>"
-msgstr "<%s> raster haritası açılamıyor"
+msgstr "<%s> 3B raster haritası açılamadı"
 
 #: ../lib/ogsf/gvl_file.c:443
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read range of 3D raster map <%s>"
-msgstr "<%s> raster haritası oluşturulamıyor"
+msgstr ""
 
 #: ../lib/ogsf/gvl_file.c:471
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to close 3D raster map <%s>"
-msgstr "<%s> raster haritası açılamıyor"
+msgstr ""
 
 #: ../lib/ogsf/trans.c:180
 msgid "Out of matrix stack space"
@@ -3816,15 +3725,14 @@ msgid "No points from vector map <%s> fall within current region"
 msgstr ""
 
 #: ../lib/ogsf/Gp3.c:209
-#, fuzzy, c-format
+#, c-format
 msgid "Vector map <%s> loaded (%d points)"
-msgstr "<%s> vektör haritası bulunamadı"
+msgstr ""
 
 #: ../lib/ogsf/GS2.c:1638
-#, fuzzy, c-format
+#, c-format
 msgid "Raster map <%s> is outside of current region. Load failed."
 msgstr ""
-"Geçerli harita takımında olmayan vektör harita güncellemek için açılamıyor"
 
 #: ../lib/ogsf/GS2.c:1716 ../lib/ogsf/GS2.c:1722 ../lib/ogsf/GS2.c:1730
 #: ../lib/ogsf/GS2.c:1739 ../lib/ogsf/GS2.c:1747 ../lib/ogsf/GS2.c:1757
@@ -3833,9 +3741,8 @@ msgid "GS_load_att_map(): Out of memory. Unable to load map"
 msgstr ""
 
 #: ../lib/ogsf/GS2.c:1833
-#, fuzzy
 msgid "Loading failed"
-msgstr "Bağlantıda hata oldu."
+msgstr ""
 
 #: ../lib/ogsf/GS2.c:1837
 msgid "Error finding range"
@@ -3940,7 +3847,7 @@ msgstr "Matris başlatılamadı"
 
 #: ../lib/gmath/la.c:759 ../lib/gmath/la.c:800
 msgid "Could not allocate space for vector structure"
-msgstr "Vektör yapısı için boş alan ayrılamıyor"
+msgstr ""
 
 #: ../lib/gmath/la.c:790
 msgid "Specified matrix row index is outside range"
@@ -3956,11 +3863,11 @@ msgstr "Belirlenen sütun indeksi sınırlar dışında"
 
 #: ../lib/gmath/la.c:855
 msgid "Unknown vector type."
-msgstr "Bilinmeyen vektör tipi."
+msgstr ""
 
 #: ../lib/gmath/la.c:980
 msgid "Output vector is uninitialized"
-msgstr "Çıktı vektör sıfırlanamadı"
+msgstr ""
 
 #: ../lib/gmath/la.c:985
 msgid "Vectors are not of the same type"
@@ -3968,7 +3875,7 @@ msgstr "Vektör haritalar aynı tipte değil"
 
 #: ../lib/gmath/la.c:990
 msgid "Output vector is of incorrect type"
-msgstr "Çıktı vektör yanlış tipte"
+msgstr ""
 
 #: ../lib/gmath/la.c:995
 msgid "Matrices not allowed"
@@ -3980,11 +3887,11 @@ msgstr "Vektörler farklı boyutlara sahip"
 
 #: ../lib/gmath/la.c:1007
 msgid "Output vector has incorrect dimension"
-msgstr "Çıktı vektör yanlış boyutlara sahip"
+msgstr ""
 
 #: ../lib/gmath/la.c:1053
 msgid "Vector dimensions out of range"
-msgstr "Vektör boyutları sınırlar dışında"
+msgstr ""
 
 #: ../lib/gmath/la.c:1058
 msgid "Row/column out of range"
@@ -3992,11 +3899,11 @@ msgstr "Satır/sütun sınırlar dışında"
 
 #: ../lib/gmath/la.c:1273
 msgid "Vector structure is not initialised"
-msgstr "Vektör yapısı başlatılamadı"
+msgstr ""
 
 #: ../lib/gmath/la.c:1394 ../lib/gmath/la.c:1402 ../lib/gmath/la.c:1407
 msgid "Input format error"
-msgstr "Girdi biçimi hatası"
+msgstr "Girdi biçim hatası"
 
 #: ../lib/gmath/del2g.c:50
 msgid "    taking FFT of image..."
@@ -4041,7 +3948,7 @@ msgstr ""
 #: ../lib/display/tran_colr.c:105 ../lib/display/tran_colr.c:107
 #, c-format
 msgid "[%s]: No such color"
-msgstr "[%s]: Öyle bir renk yok"
+msgstr "[%s]:Böyle bir renk yok"
 
 #: ../lib/symbol/read.c:206
 #, c-format
@@ -4077,7 +3984,7 @@ msgstr ""
 
 #: ../lib/rst/interp_float/vinput2d.c:73
 msgid "Vector is not 3D"
-msgstr "Vektör 3 boyutlu değil"
+msgstr "Vektör 3B değil"
 
 #: ../lib/rst/interp_float/vinput2d.c:76
 msgid "Loading data from attribute table ..."
@@ -4115,7 +4022,7 @@ msgstr "s sütunu sütun tipi desteklenmiyor (tamsayı veya ondalık sayı olmal
 
 #: ../lib/rst/interp_float/vinput2d.c:121
 msgid "Reading lines from vector map ... "
-msgstr "Çizgiler vektör haritadan  okunuyor ..."
+msgstr ""
 
 #: ../lib/rst/interp_float/vinput2d.c:153
 #: ../lib/rst/interp_float/vinput2d.c:271
@@ -4125,7 +4032,7 @@ msgstr "%d kategorisinin veritabanı kaydı bulunamıyor"
 
 #: ../lib/rst/interp_float/vinput2d.c:234
 msgid "Reading nodes from vector map ... "
-msgstr "Düğümler vektör haritadan okunuyor ..."
+msgstr ""
 
 #: ../lib/rst/interp_float/vinput2d.c:316
 msgid "strip exists with insufficient data"
@@ -4163,7 +4070,7 @@ msgstr "bazı noktalar bölgenin dışında -- yok sayılacak..."
 #: ../lib/rst/interp_float/input2d.c:47
 #, c-format
 msgid "Mask raster map <%s> not found"
-msgstr "<%s> raster maske haritası bulunamadı"
+msgstr ""
 
 #: ../lib/rst/interp_float/input2d.c:69
 msgid "Bitmap mask created"
@@ -4179,9 +4086,8 @@ msgid "Invalid Drawable XID: %s"
 msgstr ""
 
 #: ../lib/cairodriver/Graph.c:72
-#, fuzzy
 msgid "Unable to open display"
-msgstr "%s açılamadı"
+msgstr "Görüntü açılamıyor"
 
 #: ../lib/cairodriver/Graph.c:76
 #, c-format
@@ -4189,14 +4095,12 @@ msgid "invalid Visual XID: %s"
 msgstr ""
 
 #: ../lib/cairodriver/Graph.c:81
-#, fuzzy
 msgid "Unable to obtain visual"
-msgstr " %s dosyası açılamıyor"
+msgstr ""
 
 #: ../lib/cairodriver/Graph.c:86
-#, fuzzy
 msgid "Unable to query drawable"
-msgstr "<%s> tablosu kopyalanamadı"
+msgstr ""
 
 #: ../lib/cairodriver/Graph.c:91
 msgid "Failed to initialize Xlib surface"
@@ -4205,7 +4109,7 @@ msgstr ""
 #: ../lib/cairodriver/Graph.c:145
 #, c-format
 msgid "Unknown file extension: %s"
-msgstr ""
+msgstr "Bilinmeyen dosya uzantısı: %s"
 
 #: ../lib/cairodriver/Graph.c:170
 #, c-format
@@ -4213,33 +4117,32 @@ msgid "cairo: collecting to file: %s"
 msgstr ""
 
 #: ../lib/cairodriver/Graph.c:312
-#, fuzzy
 msgid "Unknown Cairo surface type"
-msgstr "bilinmeyen enterpolasyon tipi"
+msgstr ""
 
 #: ../lib/cairodriver/Graph.c:317
 msgid "Failed to initialize Cairo surface"
 msgstr ""
 
 #: ../lib/cairodriver/write_ppm.c:27 ../lib/cairodriver/write_bmp.c:72
-#, fuzzy, c-format
+#, c-format
 msgid "Cairo: unable to open output file <%s>"
-msgstr "datum tablo dosyası açılamıyor: %s"
+msgstr ""
 
 #: ../lib/cairodriver/write_ppm.c:34
-#, fuzzy, c-format
+#, c-format
 msgid "Cairo: unable to open mask file <%s>"
-msgstr " %s dosyası açılamıyor"
+msgstr ""
 
 #: ../lib/cairodriver/read_bmp.c:88 ../lib/cairodriver/read_ppm.c:28
-#, fuzzy, c-format
+#, c-format
 msgid "Cairo: unable to open input file <%s>"
-msgstr "datum tablo dosyası açılamıyor: %s"
+msgstr ""
 
 #: ../lib/cairodriver/read_bmp.c:92 ../lib/cairodriver/read_ppm.c:32
-#, fuzzy, c-format
+#, c-format
 msgid "Cairo: invalid input file <%s>"
-msgstr "'%s' girdi haritası bulunamadı"
+msgstr ""
 
 #: ../lib/cairodriver/read_bmp.c:96
 #, c-format
@@ -4247,9 +4150,9 @@ msgid "Cairo: Invalid BMP header for <%s>"
 msgstr ""
 
 #: ../lib/cairodriver/Text.c:48
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to convert from <%s> to UTF-8"
-msgstr "<%s> vektör haritası <%s>'e kopyalanamıyor"
+msgstr ""
 
 #: ../lib/cairodriver/Text.c:58
 msgid "Some characters could not be converted to UTF-8"
@@ -4261,14 +4164,14 @@ msgid "Cairo: input file has incorrect dimensions: expected: %dx%d got: %dx%d"
 msgstr ""
 
 #: ../lib/cairodriver/read_ppm.c:46
-#, fuzzy, c-format
+#, c-format
 msgid "Cairo: unable to open input mask file <%s>"
-msgstr "datum tablo dosyası açılamıyor: %s"
+msgstr ""
 
 #: ../lib/cairodriver/read_ppm.c:50
-#, fuzzy, c-format
+#, c-format
 msgid "Cairo: invalid input mask file <%s>"
-msgstr "'%s' girdi haritası bulunamadı"
+msgstr ""
 
 #: ../lib/cairodriver/read_ppm.c:56
 #, c-format
@@ -4287,22 +4190,20 @@ msgstr ""
 
 #: ../lib/nviz/render.c:108
 msgid "Bad server connection"
-msgstr ""
+msgstr "Kötü sunucu bağlantısı"
 
 #: ../lib/nviz/render.c:117
-#, fuzzy
 msgid "Unable to create rendering context"
-msgstr "Yeni bir süreç oluşturulamıyor"
+msgstr ""
 
 #: ../lib/nviz/position.c:50
-#, fuzzy
 msgid "Unable to set focus"
-msgstr "%s açılamadı"
+msgstr ""
 
 #: ../lib/nviz/nviz.c:76
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid color (%s), using \"white\" as default"
-msgstr "Yanlış sembol rengi: '%s', varsayılan kullanılıyor."
+msgstr "Yanlış renk (%s), \"beyaz\" varsayılan olarak kullanılıyor"
 
 #: ../lib/nviz/map_obj.c:65
 msgid "Maximum surfaces loaded!"
@@ -4313,9 +4214,9 @@ msgid "Maximum vector line maps loaded!"
 msgstr ""
 
 #: ../lib/nviz/map_obj.c:103 ../lib/nviz/map_obj.c:134
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading vector map <%s>"
-msgstr "<%s> g3d haritası açılırken hata"
+msgstr ""
 
 #: ../lib/nviz/map_obj.c:122
 msgid "Maximum vector point maps loaded!"
@@ -4326,18 +4227,17 @@ msgid "Maximum volumes loaded!"
 msgstr ""
 
 #: ../lib/nviz/map_obj.c:158
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading 3d raster map <%s>"
-msgstr "<%s> g3d haritası açılırken hata"
+msgstr ""
 
 #: ../lib/nviz/map_obj.c:166
 msgid "Nviz_new_map_obj(): unsupported data type"
 msgstr ""
 
 #: ../lib/nviz/lights.c:144
-#, fuzzy
 msgid "Unable to define new light"
-msgstr "'%s' dosyası silinemiyor"
+msgstr ""
 
 msgid "Cannot describe table <%s>"
 msgstr "<%s> tablosu tanımlanamıyor"
@@ -4358,7 +4258,7 @@ msgid "ERROR - no response from graphics monitor <%s>.\n"
 msgstr "HATA - <%s> grafik ekranından hiçbir yanıt yok.\n"
 
 msgid "No graphics monitor has been selected for output."
-msgstr "Çıktı için hiçbir ekran seçilmedi."
+msgstr ""
 
 msgid "Please run \"d.mon\" to select a graphics monitor."
 msgstr "Lütfen grafik ekran seçmek için \"d.mon\" komutunu çalıştırın."
@@ -4393,12 +4293,11 @@ msgstr "Bağlantıda hata oldu."
 msgid "Cannot read topo for line [%d]"
 msgstr "[%d] çizgisinin topolojisi okunamıyor"
 
-#, fuzzy
 msgid "Unable to open temporary file"
-msgstr " %s dosyası açılamıyor"
+msgstr "Geçici dosya açılamıyor"
 
 msgid "Hit RETURN to cancel request\n"
-msgstr "İstekten vazgeçmek için ENTER'a basın\n"
+msgstr "İstekten vazgeçmek için ENTER'a bas\n"
 
 msgid "Cannot open temp file"
 msgstr "Geçici dosya açılamıyor"
@@ -4450,7 +4349,7 @@ msgid "hit RETURN to continue -->"
 msgstr "Devam etmek için ENTER'a basın -->"
 
 msgid "unable to open raster map [%s in %s]"
-msgstr "[%s deki %s] raster haritası açılamıyor"
+msgstr ""
 
 msgid "one moment...\n"
 msgstr "bir dakika...\n"
@@ -4459,7 +4358,7 @@ msgid "No help available for command [%s]\n"
 msgstr "[%s] komutu için yardım yoktur\n"
 
 msgid " The raster map %s@%s is empty"
-msgstr "%s@%s raster haritası boş"
+msgstr ""
 
 msgid ""
 "\n"
@@ -4481,7 +4380,7 @@ msgid "    1:  Random colors\n"
 msgstr "    1:  Rasgele renkler\n"
 
 msgid "    3:  Color wave\n"
-msgstr "    3:  Renk dalgası\n"
+msgstr ""
 
 msgid "    4:  Gray scale\n"
 msgstr "    4:  Gri ölçek\n"
@@ -4672,7 +4571,7 @@ msgid "Could not select from table/column"
 msgstr "Tablo veya sütundan seçilemiyor"
 
 msgid "Cannot open database <%s> by driver <%s>"
-msgstr "<%s> sürücüsüyle <%s> veritabanı açılamıyor"
+msgstr "<%s> veritabanı <%s>  sürücüsüyle açılamıyor"
 
 msgid "Cannot get column info"
 msgstr "Sütun bilgisi alınamıyor"
@@ -4680,19 +4579,22 @@ msgstr "Sütun bilgisi alınamıyor"
 msgid "OGR feature type [%d] not supported"
 msgstr "[%d] OGR obje tipi desteklenmiyor"
 
-#~ msgid "Unable to allocate memory\n"
-#~ msgstr "Hafıza ayrılamıyor\n"
+#, fuzzy
+msgid "Unable to allocate memory\n"
+msgstr "Matris için boş alan ayrılamıyor"
 
 #, fuzzy
-#~ msgid "<%s>: bad mapset"
-#~ msgstr "<%s> harita takımındaki <%s>"
+msgid "<%s>: bad mapset"
+msgstr "<%s> harita takımındaki <%s>"
 
-#~ msgid ""
-#~ "\n"
-#~ "**<%s> illegal name **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "**<%s> uygun olmayan ad **\n"
+#, fuzzy
+msgid ""
+"\n"
+"**<%s> illegal name **\n"
+msgstr ""
+"\n"
+"** %s - uygun olmayan istek **\n"
 
-#~ msgid "unable to find [%s] in [%s]"
-#~ msgstr "[%s] deki [%s] bulunamıyor"
+#, fuzzy
+msgid "unable to find [%s] in [%s]"
+msgstr "'%s' '%s' içinde bulunamadı"
