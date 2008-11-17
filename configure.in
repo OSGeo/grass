@@ -189,7 +189,6 @@ LOC_ARG_WITH(odbc, ODBC, no)
 LOC_ARG_WITH(fftw, FFTW)
 LOC_ARG_WITH(blas, BLAS, no)
 LOC_ARG_WITH(lapack, LAPACK, no)
-LOC_ARG_WITH(motif, Motif, no)
 LOC_ARG_WITH(cairo, Cairo, no)
 LOC_ARG_WITH(freetype, FreeType, no)
 LOC_ARG_WITH(nls, NLS, no)
@@ -260,9 +259,6 @@ LOC_ARG_WITH_LIB(blas, BLAS)
 
 LOC_ARG_WITH_INC(lapack, LAPACK)
 LOC_ARG_WITH_LIB(lapack, LAPACK)
-
-LOC_ARG_WITH_INC(motif, Motif)
-LOC_ARG_WITH_LIB(motif, Motif)
 
 LOC_ARG_WITH_INC(cairo, cairo)
 LOC_ARG_WITH_LIB(cairo, cairo)
@@ -1383,34 +1379,6 @@ AC_SUBST(LAPACKINC)
 
 # Done checking LAPACK
 
-# Enable Motif option
-
-LOC_CHECK_USE(motif,Motif,USE_MOTIF)
-
-XMINC=
-XMLIB=
-
-if test -n "$USE_MOTIF"; then
-
-# With Motif includes directory
-
-LOC_CHECK_INC_PATH(motif,Motif,XMINC)
-
-LOC_CHECK_INCLUDES(Xm/Xm.h,Motif,$XMINC $X_CFLAGS)
-
-# With Motif library directory
-
-LOC_CHECK_LIB_PATH(motif,Motif,XMLIB)
-
-LOC_CHECK_LIBS(Xm,XmStringCreate,Motif,$XMLIB,XMLIB,$X_LIBS -lXm -lXt $X_PRE_LIBS -lX11 $X_EXTRA_LIBS,,)
-
-fi # $USE_MOTIF
-
-AC_SUBST(XMINC)
-AC_SUBST(XMLIB)
-
-# Done checking Motif
-
 # Enable Cairo display driver option
 
 LOC_CHECK_USE(cairo,Cairo,USE_CAIRO)
@@ -1737,7 +1705,6 @@ LOC_MSG_USE(GDAL support,USE_GDAL)
 LOC_MSG_USE(JPEG support,USE_JPEG)
 LOC_MSG_USE(LAPACK support,USE_LAPACK)
 LOC_MSG_USE(Large File support (LFS), USE_LARGEFILES)
-LOC_MSG_USE(Motif support,USE_MOTIF)
 LOC_MSG_USE(MySQL support,USE_MYSQL)
 LOC_MSG_USE(NLS support,USE_NLS)
 LOC_MSG_USE(ODBC support,USE_ODBC)

@@ -92,11 +92,8 @@ LINK_FLAGS          = @LDFLAGS@
 
 DLLIB               = @DLLIB@
 XCFLAGS             = @X_CFLAGS@
-XMINC               = @XMINC@
 XLIBPATH            = @X_LIBS@
 XLIB                = @X_PRE_LIBS@ @XLIB@
-XTLIB               = @XTLIB@
-XMLIB               = @XMLIB@
 XEXTRALIBS          = @X_EXTRA_LIBS@
 USE_X11             = @USE_X11@
 
