@@ -438,14 +438,16 @@ class Map(object):
     def GetWindow(self):
         """Read WIND file and set up self.wind dictionary"""
         # FIXME: duplicated region WIND == g.region (at least some values)
-        windfile = os.path.join (self.env['GISDBASE'],
+        filename = os.path.join (self.env['GISDBASE'],
                                  self.env['LOCATION_NAME'],
                                  self.env['MAPSET'],
                                  "WIND")
         try:
-            windfile = open (windfile, "r")
-        except StandardError, e:
-            sys.stderr.write("%s %<s>: %s" % (_("Unable to open file"), windfile, e))
+            windfile = open (filename, "r")
+        except IOError, e:
+            sys.stderr.write("%s: %s <%s>: %s\n%s\n" % (_("Error"), _("Unable to open file"),
+                                                    filename, e,
+                                                    _("wxGUI closed.")))
             sys.exit(1)
 
         for line in windfile.readlines():
