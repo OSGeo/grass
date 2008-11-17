@@ -14,20 +14,28 @@
 
 <h3>Raster maps in general</h3>
 
+A "raster map" is a data layer consisting of a gridded array of cells.
+It has a certain number of rows and columns, with a data point (or null
+value indicator) in each cell. These may exist as a 2D grid or as a 3D
+cube made up of many smaller cubes, i.e. a stack of 2D grids.
+<p>
 The geographic boundaries of the raster map are described by the north,
 south, east, and west fields. These values describe the lines which bound
 the map at its edges. These lines do NOT pass through the center of the
 grid cells at the edge of the map, but along the edge of the map itself.
+i.e. the geographic extent of the map is described by the outer bounds of
+all cells within the map.
 
 <P>
 As a general rule in GRASS:
 <ol>
 <li> Raster output maps have their bounds and resolution equal to those
-of the current region.
+of the current computational region.
 <li> Raster input maps are automatically cropped/padded and rescaled
 (using nearest-neighbour resampling) to match the current region.
 <li> Raster input maps are automatically masked if a raster map named
-     MASK exists.
+     MASK exists. The MASK is only applied when <i>reading</i> maps
+     from the disk.
 </ol>
 
 There are a few exceptions to this:
@@ -124,8 +132,7 @@ nearest neighbor, bilinear, and bicubic method: <b>method=nearest</b> uses the
 same algorithm as <a href="r.resample.html">r.resample</a>, but not the same 
 code, so it may not produce identical results in cases which are decided 
 by the rounding of floating-point numbers.
-<p>
-
+<br>
 For <a href="r.resamp.interp.html">r.resamp.interp</a> <b>method=bilinear</b>
 and <b>method=bicubic</b>, the raster values are treated as samples at each
 raster cell's centre, defining a piecewise-continuous surface. The resulting 
@@ -133,6 +140,7 @@ raster values are obtained by sampling the surface at each region cell's centre.
 As the algorithm only interpolates, and doesn't extrapolate, a margin of 0.5 
 (for bilinear) or 1.5 (for bicubic) cells is lost from the extent of the original 
 raster. Any samples taken within this margin will be null.</li>
+
 <li><a href="r.resamp.rst.html">r.resamp.rst</a> Regularized Spline with Tension 
 (RST) interpolation 2D: Behaves similarly, i.e. it computes a surface assuming 
 that the values are samples at each raster cell's centre, and samples the surface
@@ -142,8 +150,7 @@ at each region cell's centre.
 <li>For <a href="r.resamp.stats.html">r.resamp.stats</a> without <b>-w</b>, the value of 
 each region cell is the chosen aggregate of the values from all of the raster
 cells whose centres fall within the bounds of the region cell.
-<p>
-
+<br>
 With <b>-w</b>, the samples are weighted according to the proportion of the
 raster cell which falls within the bounds of the region cell, so the
 result is normally unaffected by rounding error (a miniscule difference 
