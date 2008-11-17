@@ -20,4 +20,225 @@ the prex D_. To avoid name conflicts, programmers should not create variables or
 their own modules which use this prefix.
 
 TODO: insert ordered function list (see GRASS 5 progman)
+
+- int D_add_to_cell_list();
+
+- int D_add_to_dig_list();
+
+- int D_add_to_list();
+
+- double D_a_to_d_col();
+
+- double D_a_to_d_row();
+
+- void D_box();
+
+- void D_box_clip();
+
+- int D_c_color();
+
+- void D_cell_draw_end();
+
+- int D_cell_draw_setup();
+
+- int D_check_map_window();
+
+- int D_clear_window();
+
+- int D_clip_to_map();
+
+- void D_clip_to_map();
+
+- int D_color();
+
+- int D_color_number_to_RGB();
+
+- int D_color_of_type();
+
+- void D_cont();
+
+- int D_cont_abs();
+
+- int D_cont_clip();
+
+- int D_cont_rel();
+
+- int D_d_color();
+
+- int D_do_conversions();
+
+- int D_draw_cell();
+
+- int D_draw_c_raster();
+
+- int D_draw_d_raster();
+
+- int D_draw_f_raster();
+
+- int D_draw_raster();
+
+- int D_draw_raster_RGB();
+
+- double D_d_to_a_col();
+
+- double D_d_to_a_row();
+
+- double D_d_to_u_col();
+
+- double D_d_to_u_row();
+
+- void D_erase();
+
+- void D_erase_window();
+
+- int D_f_color();
+
+- void D_full_screen();
+
+- int D_get_a();
+
+- void D_get_a();
+
+- double D_get_a_east();
+
+- double D_get_a_north();
+
+- double D_get_a_south();
+
+- double D_get_a_west();
+
+- int D_get_cell_list();
+
+- int D_get_cell_name();
+
+- int D_get_cur_wind();
+
+- int D_get_d();
+
+- void D_get_d();
+
+- double D_get_d_east();
+
+- int D_get_dig_list();
+
+- int D_get_dig_name();
+
+- double D_get_d_north();
+
+- double D_get_d_south();
+
+- double D_get_d_west();
+
+- int D_get_erase_color();
+
+- double D_get_ew_resolution();
+
+- int D_get_list();
+
+- double D_get_ns_resolution();
+
+- int D_get_screen_window();
+
+- void D_get_u();
+
+- double D_get_u_east();
+
+- double D_get_u_north();
+
+- double D_get_u_south();
+
+- int D_get_u_south();
+
+- double D_get_u_to_d_xconv();
+
+- double D_get_u_to_d_yconv();
+
+- double D_get_u_west();
+
+- int D_is_lat_lon();
+
+- void D_line_width();
+
+- void D_move();
+
+- int D_move_abs();
+
+- void D_move_clip();
+
+- int D_move_rel();
+
+- int D_new_window();
+
+- int D_new_window_percent();
+
+- int D_parse_color();
+
+- void D_polydots();
+
+- void D_polydots_clip();
+
+- void D_polygon();
+
+- void D_polygon_clip();
+
+- void D_polygon_cull();
+
+- void D_polyline();
+
+- void D_polyline_clip();
+
+- void D_polyline_cull();
+
+- int D_popup();
+
+- int D_raster_use_color();
+
+- void D_remove_window();
+
+- int D_remove_windows();
+
+- void D_remove_windows();
+
+- int D_reset_screen_window();
+
+- int D_set_cell_name();
+
+- int D_set_clip();
+
+- void D_set_clip();
+
+- int D_set_clip_window();
+
+- int D_set_clip_window_to_map_window();
+
+- int D_set_clip_window_to_screen_window();
+
+- int D_set_cur_wind();
+
+- int D_set_dig_name();
+
+- int D_set_erase_color();
+
+- int D_set_overlay_mode();
+
+- int D_setup();
+
+- int D_show_window();
+
+- void D_symbol();
+
+- void D_symbol2();
+
+- int D_timestamp();
+
+- int D_translate_color();
+
+- double D_u_to_a_col();
+
+- double D_u_to_a_row();
+
+- double D_u_to_d_col();
+
+- double D_u_to_d_row();
+
 */
