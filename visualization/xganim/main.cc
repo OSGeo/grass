@@ -23,69 +23,47 @@
 #include <math.h>
 #include <limits.h>
 #include <unistd.h>
+
+#include <wx/image.h>
+#include <wx/bitmap.h>
+#include <wx/event.h>
+
+extern "C" {
 #include <grass/gis.h>
 #include <grass/glocale.h>
-#include "gui.h"
-#include "local_proto.h"
+}
 
-#define COLOR_OFFSET 0
-#define MAXIMAGES 400
+#include "gui.h"
+
 #define DEF_MAX 900
 #define DEF_MIN 600
-#define MAXVIEWS    4
 #define BORDER_W    2
 
-
-/* function prototypes */
-static int load_files();
-static Boolean do_run(XtPointer);
 static char **gee_wildfiles(char *wildarg, char *element, int *num);
-static void change_label(Widget wid, char *str);
-static void parse_command(struct Option **viewopts,
-			  char *vfiles[MAXVIEWS][MAXIMAGES],
-			  int *numviews, int *numframes);
+static void parse_command(
+    struct Option **viewopts, char *vfiles[MAXVIEWS][MAXIMAGES],
+    int *numviews, int *numframes);
 
+struct Option *viewopts[MAXVIEWS];
 
-/* global variables */
-Widget canvas, flabel;
-Display *theDisplay;
-XImage *pic_array[MAXIMAGES];
-GC invertGC, drawGC;
 unsigned int nrows, ncols;
+char *vfiles[MAXVIEWS][MAXIMAGES];
 int numviews;
+int frames;
 int Top = 0, Left = 0;
 char frame[MAXIMAGES][4];
-char *vfiles[MAXVIEWS][MAXIMAGES];
 int LabelPos[MAXVIEWS][2];
 
 float vscale, scale;		/* resampling scale factors */
 int irows, icols, vrows, vcols;
-int frames;
 
-unsigned int depth;
-
-Visual *use_visual;
+BEGIN_EVENT_TABLE(MyApp, wxApp)
+EVT_IDLE(MyApp::do_run)
+END_EVENT_TABLE()
 
 int main(int argc, char **argv)
 {
-    Widget toplevel, mainwin, trc;
-    int scrn;
-    Display *dpy;
-    Window grwin;
-    Colormap fixedcmap;
-
-    int i, j;
-    unsigned int *sdimp;
-    int longdim;
-    unsigned long blackPix, whitePix;
-
-    struct gui_data cd;
-
-    XtAppContext AppC;
-    Arg wargs[15];
-    unsigned int n;
-
-    struct Option *viewopts[MAXVIEWS];
+    int i;
 
     G_gisinit(argv[0]);
 
@@ -107,6 +85,15 @@ int main(int argc, char **argv)
 	exit(EXIT_FAILURE);
 
     parse_command(viewopts, vfiles, &numviews, &frames);
+
+    return wxEntry(argc, argv);
+}
+
+bool MyApp::OnInit()
+{
+    int i, j;
+    unsigned int *sdimp;
+    int longdim;
 
     /* debug */
     if (G_verbose() > G_verbose_std()) {
@@ -158,11 +145,11 @@ int main(int argc, char **argv)
     if (numviews == 4)
 	vscale = scale / 2.;
 
-    nrows *= scale;
-    ncols *= scale;
+    nrows = (unsigned int) (nrows * scale);
+    ncols = (unsigned int) (ncols * scale);
     /* now nrows & ncols are the size of the combined - views image */
-    vrows *= vscale;
-    vcols *= vscale;
+    vrows = (int) (vrows * vscale);
+    vcols = (int) (vcols * vscale);
     /* now vrows & vcols are the size for each sub-image */
 
     /* add to nrows & ncols for borders */
@@ -172,183 +159,49 @@ int main(int argc, char **argv)
     nrows += (1 + (nrows / vrows)) * BORDER_W;
     ncols += (1 + (ncols / vcols)) * BORDER_W;
 
-    toplevel = XtAppInitialize(&AppC, "xganimate", NULL, 0,
-			       &argc, argv, NULL, wargs, 0);
+    gd.speed = 100;
+    gd.direction = 1;
+    gd.shownames = 1;
 
-    theDisplay = XtDisplay(toplevel);
-
-    n = 0;
-    if (ncols > nrows) {
-	XtSetArg(wargs[n], XmNwidth, ncols);
-	n++;
-	XtSetArg(wargs[n], XmNheight, nrows + 60);
-	n++;
-    }
-    else {
-	XtSetArg(wargs[n], XmNwidth, ncols + 80);
-	n++;
-	XtSetArg(wargs[n], XmNheight, nrows);
-	n++;
-    }
-    mainwin = XtCreateManagedWidget("GRASS Animate", xmFormWidgetClass,
-				    toplevel, wargs, n);
-
-    cd.speed = 100;
-    cd.direction = 1;
-    cd.shownames = 1;
-
-    n = 0;
-    XtSetArg(wargs[n], XmNtopAttachment, XmATTACH_FORM);
-    n++;
-    XtSetArg(wargs[n], XmNleftAttachment, XmATTACH_FORM);
-    n++;
-    XtSetArg(wargs[n], XmNwidth, ncols);
-    n++;
-    XtSetArg(wargs[n], XmNheight, nrows);
-    n++;
-    canvas = XtCreateManagedWidget("canvas", xmDrawingAreaWidgetClass,
-				   mainwin, wargs, n);
-
-    n = 0;
-    if (ncols > nrows) {
-	XtSetArg(wargs[n], XmNorientation, XmHORIZONTAL);
-	n++;
-	XtSetArg(wargs[n], XmNleftAttachment, XmATTACH_FORM);
-	n++;
-	XtSetArg(wargs[n], XmNrightAttachment, XmATTACH_FORM);
-	n++;
-	XtSetArg(wargs[n], XmNbottomAttachment, XmATTACH_FORM);
-	n++;
-	XtSetArg(wargs[n], XmNtopAttachment, XmATTACH_WIDGET);
-	n++;
-	XtSetArg(wargs[n], XmNtopWidget, canvas);
-	n++;
-    }
-    else {
-	XtSetArg(wargs[n], XmNorientation, XmVERTICAL);
-	n++;
-	XtSetArg(wargs[n], XmNleftAttachment, XmATTACH_WIDGET);
-	n++;
-	XtSetArg(wargs[n], XmNleftWidget, canvas);
-	n++;
-	XtSetArg(wargs[n], XmNrightAttachment, XmATTACH_FORM);
-	n++;
-	XtSetArg(wargs[n], XmNbottomAttachment, XmATTACH_FORM);
-	n++;
-	XtSetArg(wargs[n], XmNtopAttachment, XmATTACH_FORM);
-	n++;
-    }
-    XtSetArg(wargs[n], XmNbackground, WhitePixelOfScreen(XtScreen(toplevel)));
-    n++;
-    XtSetArg(wargs[n], XmNadjustMargin, False);
-    n++;
-    trc = XtCreateManagedWidget("controls_rc",
-				xmRowColumnWidgetClass, mainwin, wargs, n);
-
-    make_buttons(&cd, trc, XtScreen(toplevel));
-
-    n = 0;
-    XtSetArg(wargs[n], XmNalignment, XmALIGNMENT_END);
-    n++;
-    flabel = XtCreateManagedWidget("cfr", xmLabelWidgetClass, trc, wargs, n);
-
-    XtRealizeWidget(toplevel);
-    set_buttons_pixmap(theDisplay, XtWindow(canvas));
-
-    /**************************************************************/
-
-    dpy = XtDisplay(canvas);
-    grwin = XtWindow(canvas);
-    scrn = DefaultScreen(dpy);
-    use_visual = DefaultVisual(dpy, scrn);
-#if 1
-    fixedcmap = XCreateColormap(dpy, grwin, use_visual, AllocNone);
-#else
-    fixedcmap = DefaultColormap(dpy, scrn);
-#endif
-    fixedcmap = InitColorTableFixed(fixedcmap);
-
-    XtVaGetValues(canvas, XmNdepth, &depth, NULL);
-
-    XtVaSetValues(toplevel, XmNcolormap, fixedcmap, NULL);
-    XtSetWMColormapWindows(toplevel, &canvas, 1);
-
-    /**************************************************************/
-
-    blackPix = _get_lookup_for_color(0, 0, 0);
-    whitePix = _get_lookup_for_color(255, 255, 255);
-
-    drawGC =
-	XCreateGC(XtDisplay(canvas), XtWindow(canvas), (unsigned long)0,
-		  NULL);
-    XSetFunction(theDisplay, drawGC, GXcopy);
-    XSetForeground(theDisplay, drawGC, blackPix);
-    XSetBackground(theDisplay, drawGC, whitePix);
-
-    invertGC =
-	XCreateGC(XtDisplay(canvas), XtWindow(canvas), (unsigned long)0,
-		  NULL);
-    XSetFunction(theDisplay, invertGC, GXcopy);
-    XSetForeground(theDisplay, invertGC, whitePix);
-    XSetBackground(theDisplay, invertGC, blackPix);
-
+    mainwin = new MyFrame(wxString("GRASS Animate", wxConvISO8859_1), ncols, nrows, &gd);
+    mainwin->Show();
+    SetTopWindow(mainwin);
 
     for (j = 0; j < MAXIMAGES; j++)
 	sprintf(frame[j], "%2d", j + 1);
 
-    while (1) {			/* wait for window */
-	XEvent xev;
-
-	XNextEvent(theDisplay, &xev);
-	if (xev.type == MapNotify && xev.xmap.event == XtWindow(mainwin))
-	    break;
-    }
-
-    XtAppAddWorkProc(AppC, do_run, &cd);
-    XtAppMainLoop(AppC);
-
-    return 0;
+    return true;
 }
 
 
-static int load_files()
+int MyApp::load_files(void)
 {
-    CELL *cell;
-    FCELL *fcell;
     DCELL *dcell;
-    void *voidc = NULL;
     unsigned char *tr, *tg, *tb, *tset;
     int tsiz, coff;
     int rowoff, row, col, vxoff, vyoff;
     int cnt, ret, fd;
     int vnum;
-    XImage *pa;
-    char *mapset, name[BUFSIZ];
+    const char *name;
     struct Colors colors;
-    int rtype;
 
-    cell = G_allocate_c_raster_buf();
-    fcell = G_allocate_f_raster_buf();
     dcell = G_allocate_d_raster_buf();
 
     tsiz = G_window_cols();
 
     /* allocate memory */
-    tr = G_malloc(tsiz * sizeof(char));
-    tg = G_malloc(tsiz * sizeof(char));
-    tb = G_malloc(tsiz * sizeof(char));
-    tset = G_malloc(tsiz * sizeof(char));
+    tr   = (unsigned char *) G_malloc(tsiz * sizeof(char));
+    tg   = (unsigned char *) G_malloc(tsiz * sizeof(char));
+    tb   = (unsigned char *) G_malloc(tsiz * sizeof(char));
+    tset = (unsigned char *) G_malloc(tsiz * sizeof(char));
+
+    wxImage img(ncols, nrows);
 
     for (cnt = 0; cnt < frames; cnt++) {
 	if (cnt > MAXIMAGES) {
 	    cnt--;
 	    break;
 	}
-
-	pa = XCreateImage(theDisplay, use_visual, depth, ZPixmap,
-			  0, NULL, ncols, nrows, 8, 0);
-	pa->data = G_malloc((size_t) nrows * pa->bytes_per_line);
-	pic_array[cnt] = pa;
 
 	for (vnum = 0; vnum < numviews; vnum++) {
 	    if (icols == vcols) {
@@ -375,83 +228,64 @@ static int load_files()
 		LabelPos[vnum][1] = vyoff + vrows - 1;
 	    }
 
-	    strcpy(name, vfiles[vnum][cnt]);
+	    name = vfiles[vnum][cnt];
 	    G_message(_("Reading file [%s]..."), name);
 
-	    mapset = G_find_cell2(name, "");
-	    if (mapset == NULL)
-		G_fatal_error(_("Raster map <%s> not found"), name);
-
-	    fd = G_open_cell_old(name, mapset);
+	    fd = G_open_cell_old(name, "");
 	    if (fd < 0)
 		G_fatal_error(_("Unable to open raster map <%s>"), name);
 	    /*
 	       strcpy(title[cnt],G_get_cell_title(name, mapset));
 	     */
 
-	    rtype = G_get_raster_map_type(fd);
-	    if (rtype == CELL_TYPE)
-		voidc = (CELL *) cell;
-	    else if (rtype == FCELL_TYPE)
-		voidc = (FCELL *) fcell;
-	    else if (rtype == DCELL_TYPE)
-		voidc = (DCELL *) dcell;
-	    else
-		/* should not reach here */
-		G_fatal_error(_("Unable to determine raster cell type"));
-
-	    ret = G_read_colors(name, mapset, &colors);
+	    ret = G_read_colors(name, "", &colors);
 	    if (ret < 0)
 		G_fatal_error(_("Unable to read color file"));
 
 	    for (row = 0; row < vrows; row++) {
-		if (G_get_raster_row
-		    (fd, (void *)voidc, (int)(row / vscale), rtype) < 0)
+		if (G_get_d_raster_row(fd, dcell, (int)(row / vscale)) < 0)
 		    G_fatal_error(_("Unable to read raster row"));
 
 		rowoff = (vyoff + row) * ncols;
-		G_lookup_raster_colors((void *)voidc, tr, tg, tb, tset, tsiz,
-				       &colors, rtype);
+		G_lookup_d_raster_colors(dcell, tr, tg, tb, tset, tsiz, &colors);
 
 		for (col = 0; col < vcols; col++) {
 		    coff = (int)(col / vscale);
 
 		    if (!tset[coff])
-			tr[coff] = tg[coff] = tb[coff] = 255;
-
-		    XPutPixel(pa, vxoff + col, vyoff + row,
-			      _get_lookup_for_color(tr[coff],
-						    tg[coff], tb[coff]));
+			img.SetRGB(vxoff + col, vyoff + row, 255, 255, 255);
+		    else
+			img.SetRGB(vxoff + col, vyoff + row, tr[coff], tg[coff], tb[coff]);
 		}
 	    }
 
 	    G_close_cell(fd);
 	}
 
-	XPutImage(theDisplay, XtWindow(canvas), drawGC, pa, 0, 0,
-		  Left, Top, ncols, nrows);
-	change_label(flabel, frame[cnt]);
+	wxBitmap *bmp = new wxBitmap(img);
+	pic_array[cnt] = bmp;
 
+	mainwin->canvas->draw_image(bmp);
+	mainwin->change_label(frame[cnt]);
     }
-    G_free(cell);
-    G_free(fcell);
+
     G_free(dcell);
     G_free(tr);
     G_free(tg);
     G_free(tb);
     G_free(tset);
 
-    return (cnt);
+    return cnt;
 }
 
 
 /* ###################################################### */
-static Boolean do_run(XtPointer p)
+
+void MyApp::do_run(wxIdleEvent &ev)
 {
     static int first = 1;
-    struct gui_data *cd = p;
+    struct gui_data *cd = &gd;
     int i, cnt;
-    Drawable dr;
 
     if (first) {
 	first = 0;
@@ -487,7 +321,7 @@ static Boolean do_run(XtPointer p)
 	cd->stop = 1;
 
     if (cd->stop && !cd->step)
-	return (False);
+	return;
 
     if (cd->curframe < cd->nframes && cd->curframe >= 0) {
 	/* little pause */
@@ -497,26 +331,17 @@ static Boolean do_run(XtPointer p)
 	    for (tf = 0.0; tf < cd->speed; tf += .01) ;
 	}
 
-	dr = XtWindow(canvas);
-	XPutImage(theDisplay, dr, drawGC, pic_array[cd->curframe], 0, 0,
-		  Left, Top, ncols, nrows);
+	mainwin->canvas->draw_image(pic_array[cd->curframe]);
 
 	/* draw labels */
-	if (cd->shownames == 1)
-	    for (i = 0; i < numviews; i++) {
-		XDrawString(theDisplay, dr, drawGC,
-			    LabelPos[i][0] + 5, LabelPos[i][1] - 5,
-			    vfiles[i][cd->curframe],
-			    (int)strlen(vfiles[i][cd->curframe]));
-	    }
-	else if (cd->shownames == 2)
-	    for (i = 0; i < numviews; i++) {
-		XDrawString(theDisplay, dr, invertGC,
-			    LabelPos[i][0] + 5, LabelPos[i][1] - 5,
-			    vfiles[i][cd->curframe],
-			    (int)strlen(vfiles[i][cd->curframe]));
-	    }
-	change_label(flabel, frame[cd->curframe]);
+	for (i = 0; i < numviews; i++) {
+	    mainwin->canvas->draw_text(
+		cd->shownames,
+		LabelPos[i][0] + 5, LabelPos[i][1] - 5,
+		vfiles[i][cd->curframe]);
+	}
+
+	mainwin->change_label(frame[cd->curframe]);
 
 	cd->prevframe = cd->curframe;
     }
@@ -527,13 +352,12 @@ static Boolean do_run(XtPointer p)
 	cd->step = 0;
 	cd->stop = 1;
     }
-
-    return False;		/* to keep it running */
 }
 
 
 /* ###################################################### */
-static char **gee_wildfiles(char *wildarg, char *element, int *num)
+
+char **gee_wildfiles(char *wildarg, char *element, int *num)
 {
     int n, cnt = 0;
     char path[GPATH_MAX], *mapset, cmd[GPATH_MAX], buf[512];
@@ -582,22 +406,7 @@ static char **gee_wildfiles(char *wildarg, char *element, int *num)
 
 
 /********************************************************************/
-/* to change label in label widget */
-
-static void change_label(Widget wid, char *str)
-{
-    Arg wargs[1];
-    XmString xmstr;
-
-    xmstr = XmStringCreateSimple(str);
-    XtSetArg(wargs[0], XmNlabelString, xmstr);
-    XtSetValues(wid, wargs, 1);
-    XmStringFree(xmstr);
-}
-
-
-/********************************************************************/
-static void parse_command(struct Option **viewopts,
+void parse_command(struct Option **viewopts,
 			  char *vfiles[MAXVIEWS][MAXIMAGES],
 			  int *numviews, int *numframes)
 {
@@ -630,3 +439,6 @@ static void parse_command(struct Option **viewopts,
 	}
     }
 }
+
+IMPLEMENT_APP_NO_MAIN(MyApp)
+
