@@ -12,6 +12,17 @@
 
 <h2>Vector data processing in GRASS GIS</h2>
 
+<h3>Vector maps in general</h3>
+
+A "vector map" is a data layer consisting of a number of sparse features
+in geographic space. These might be data points (drill sites), lines
+(roads), polygons (park boundary), volumes (3D CAD structure), or some
+combination of all these. Typically each feature in the map will be
+tied to a set of attribute layers stored in a database (road names,
+site ID, geologic type, etc.). As a general rule these can exist in 2D
+or 3D space and are independent of the GIS's computation region.
+
+
 <h3>Vector data import and export</h3>
 
 The <a href="v.in.ogr.html">v.in.ogr</a> module offers a common
