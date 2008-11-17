@@ -56,7 +56,7 @@ routines. Therefore, programmers should always include this file when
 writing code using routines from this library:
 
 \verbatim
-#include "gis.h"
+#include <grass/gis.h>
 \endverbatim
 
 <b>Note</b>. All routines and global variables in this library,
@@ -72,7 +72,7 @@ It is <B>mandatory</B> that the system be initialized before any other
 library routines are called.
 
 <P>
-int G_gisinit(char *program_name) initialize gis library
+int G_gisinit() initialize gis library
 
 This routine reads the user's GRASS environment file into memory and
 makes sure that the user has selected a valid database and mapset. It
@@ -95,11 +95,11 @@ The following routines are used by other routines in the library to
 report warning and error messages. They may also be used directly by
 GRASS programs.
 
-<P> int G_fatal_error(char *message, ...) print error message and exit
+<P> int G_fatal_error() print error message and exit
 
-<P> int G_debug(level, char *message, ...) print debug message
+<P> int G_debug() print debug message
 
-<P> int G_warning(char *message, ...) print warning message and continue
+<P> int G_warning() print warning message and continue
 
 These routines report errors to the user. The normal mode is to write
 the <B>message</B> to the screen (on the standard error output) and
@@ -122,7 +122,7 @@ handle the error messages differently, the following routines can be
 used to modify the error handling:
 
 <P>
-int G_set_error_routine(int (*handler)()) change error handling
+int G_set_error_routine() change error handling
 
 This routine provides a different error handler for G_fatal_error()
 and G_warning(). The <B>handler</B> routine must be defined as follows:
@@ -146,13 +146,13 @@ This routine resets the error handling for <I>G_fatal_error()</I> and
 <I>G_warning()</I> back to the default action.
 
 <P>
-int G_sleep_on_error(int flag) sleep on error? 
+int G_sleep_on_error() sleep on error? 
 
 If <B>flag</B> is 0, then no pause will occur after printing an error
 or warning message. Otherwise the pause will occur.
 
 <P>
-int G_suppress_warnings(int flag) suppress warnings?
+int G_suppress_warnings() suppress warnings?
 
 If <B>flag</B> is 0, then <I>G_warning()</I> will no longer print
 warning messages. If <B>flag</B> is 1, then G_warning() will print
@@ -253,10 +253,10 @@ be used in place of the higher level interface routines described
 above.</B>
 
 <P>
-int G_getenv(char *name) query GRASS environment variable
+int G_getenv() query GRASS environment variable
 
 <P>
-int G__getenv(char *name) query GRASS environment variable
+int G__getenv() query GRASS environment variable
 
 These routines look up the variable <B>name</B> in the GRASS
 environment and return its value (which is a character string). If
@@ -264,11 +264,11 @@ environment and return its value (which is a character string). If
 exit(). G__setenv() just returns the NULL pointer.
 
 <P>
-int G_setenv (char *name, char *value) set GRASS environment
+int G_setenv () set GRASS environment
   variable
 
 <P>
-int G__setenv(char *name, char *value) set GRASS environment variable 
+int G__setenv() set GRASS environment variable 
   
 These routines set the the GRASS environment variable <B>name</B>
 to <B>value.</B> If <B>value</B> is NULL, the <B>name</B> is unset.
@@ -350,8 +350,7 @@ Hit RETURN to cancel request
 The last line of the prompt can be modified using G_set_ask_return_msg().
 
 <P>
-char * G_ask_old(char *prompt, char *name, char *element, char *label)
-prompt for existing database file
+char * G_ask_old() prompt for existing database file
   
 The user is asked to enter the name of an existing database file.
 
@@ -362,8 +361,7 @@ from the user's mapset search path. See \ref Mapset_Search_Path for some
 more details about the search path.
 
 <P>
-char * G_ask_new(char *prompt, char *name, char *element, char
-  *label) prompt for new database file
+char * G_ask_new() prompt for new database file
 The user is asked to enter the name of a new file which does not exist 
 in the current mapset.
 
@@ -374,8 +372,7 @@ assumption is that <B>name</B> will be used to create a new file. New
 files are always created in the current mapset.
 
 <P>
-char * G_ask_in_mapset(char *prompt, char *name, char *element, char
-  *label) prompt for existing database file
+char * G_ask_in_mapset() prompt for existing database file
   
 The user is asked to enter the name of an file which exists in the
 current mapset.
@@ -387,8 +384,7 @@ assumption is that <B>name</B> will be used to modify a file. GRASS
 only permits users to modify files in the current mapset.
 
 <P>
-char * G_ask_any(char *prompt, char *name, char *element, char
-  *label, int warn) prompt for any valid file name
+char * G_ask_any() prompt for any valid file name
   
 The user is asked to enter any legal file name. If <B>warn</B> is 1
 and the file chosen exists in the current mapset, then the user is
@@ -397,7 +393,7 @@ leg al name is accepted and no warning is issued to the user if the
 file exists.
 
 <P>
-int G_set_ask_return_msg(char *msg) set Hit RETURN msg
+int G_set_ask_return_msg() set Hit RETURN msg
 
 The "Hit RETURN to cancel request" part of the prompt in the prompting
 routines described above, is modified to "Hit RETURN <B>msg.</B>"
@@ -420,7 +416,7 @@ programs). This form of the name is known as the <I>fully qualified
 file name</I> and is built by the following routine:
 
 <P>
-char * G_fully_qualified_name(char *name, char *mapset) fully
+char * G_fully_qualified_name() fully
   qualified file name
   
 Returns a fully qualified name for the file <B>name</B> in
@@ -433,7 +429,7 @@ The following example shows how an interactive version of <I>d.rast</I>
 interfaces with the command-line version of <I>d.rast</I>:
 
 \verbatim
-#include "gis.h"
+#include <grass/gis.h>
 int main(char *argc, char **argv)
 {
  char name[GNAME_MAX], *mapset, *fqn;
@@ -463,7 +459,7 @@ where the file resides.
 The following routines search the database for files:
 
 <P>
-char * G_find_file(char *element, char *name, char *mapset) find a
+char * G_find_file() find a
   database file 
   
 Look for the file <B>name</B> under the specified <B>element</B> in
@@ -520,7 +516,7 @@ line, for example, the programmer must check that the name is
 legal. The following routine checks for legal file names:
 
 <P>
-int G_legal_filename(char *name) check for legal database file
+int G_legal_filename() check for legal database file
   names
   
 Returns 1 if <B>name</B> is ok, -1 otherwise.
@@ -537,8 +533,7 @@ interactively <I>using G_ask_old(), and noninteractively using
 G_find_file().</I>
 
 <P>
-int G_open_old(char *element, char *name, char *mapset) open a
-database file for reading
+int G_open_old() open a database file for reading
 
 The database file <B>name</B> under the
 <B>element</B> in the specified <B>mapset</B> is opened for reading (but
@@ -549,8 +544,7 @@ The UNIX open() routine is used to open the file. If the file does not exist,
 -1 is returned. Otherwise the file descriptor from the open() is returned.
 
 <P>
-FILE * G_fopen_old(char *element, char *name, char *mapset) open a
-  database file for reading
+FILE * G_fopen_old() open a database file for reading
 
 The database file <B>name</B> under the
 <B>element</B> in the specified <B>mapset</B> is opened for reading (but
@@ -572,8 +566,7 @@ exist. Its <B>name</B> can be obtained interactively <I>using
 G_ask_in_mapset(), and noninteractively using G_find_file().</I>
 
 <P>
-int G_open_update(char *element, char *name) open a database file
-  for update
+int G_open_update() open a database file for update
 
 The database file <B>name</B> under the <B>element</B> in the
   current mapset is opened for reading and writing.
@@ -584,8 +577,7 @@ The UNIX open() routine is used to open the file. If the file does not exist,
   the file descriptor from the open() is returned.
 
 <P>
-int G_fopen_append(char *element, char *name) open a database file for
-update
+int G_fopen_append() open a database file for update
 
 The database file <B>name</B> under the <B>element</B> in the current
 mapset is opened for appending (but not for reading).
@@ -619,7 +611,7 @@ exist. In this case <I>G_find_file()</I> could be used to see if
 <B>name</B> exists.
 
 <P>
-int G_open_new(char *element, char *name) open a new database file
+int G_open_new() open a new database file
   
 The database file <B>name</B> under the <B>element</B> in the current
 mapset is created and opened for writing (but not reading).
@@ -630,7 +622,7 @@ exist, -1 is returned. Otherwise the file is positioned at the end of
 the file and the file descriptor from the open() is returned.
 
 <P>
-FILE * G_fopen_new(char *element, char *name) open a new database file
+FILE * G_fopen_new() open a new database file
   
 The database file <B>name</B> under the <B>element</B> in the current
 mapset is created and opened for writing (but not reading).
@@ -651,7 +643,7 @@ files in the current mapset (These functions only apply to the current
 mapset since GRASS does permit users to modify things in mapsets other
 than the current mapset; see \ref Database_Access_Rules).
 
-int G_rename(char *element, char *old, char *new) rename a database
+int G_rename() rename a database
 file
   
 The file or directory <B>old</B> under the database <B>element</B>
@@ -666,7 +658,7 @@ there was an error.
   valid database file name.
 
 <P>
-int G_remove(char *element, char *name) remove a database file
+int G_remove() remove a database file
 
 The file or directory <B>name</B> under the database <B>element</B> directory
   in the current mapset is removed.
@@ -701,19 +693,19 @@ they print a diagnostic message to that effect and then call exit().
 routines.
 
 <P>
-int G_free(void *buf) free the memory allocated 
+int G_free() free the memory allocated 
 
 Free the memory allocated by the GRASS malloc routines.
 
 <P>
-void * G_malloc (int size) memory allocation
+void * G_malloc () memory allocation
 
 Allocates a block of memory at least <B>size</B> bytes which is
 aligned properly for all data types. A pointer to the aligned block is
 returned.
 
 <P>
-void * G_realloc(void *ptr, int size) memory allocation
+void * G_realloc() memory allocation
 
 Changes the <B>size</B> of a previously allocated block of memory at
 <B>ptr</B> and returns a pointer to the new block of memory. The
@@ -727,7 +719,7 @@ a block of <B>size</B> bytes. This routine works around broken
 realloc() routines, which do not handle a NULL <B>ptr.</B>
 
 <P>
-void * G_calloc(int n, int size) memory allocation
+void * G_calloc() memory allocation
 
 Allocates a properly aligned block of memory <B>n</B>*<B>size</B>
 bytes in length, initializes the allocated memory to zero, and returns
@@ -738,39 +730,39 @@ a pointer to the allocated block of memory.
 discussed in Allocating_Raster_I_O_Buffers.
 
 <P>
-double * G_alloc_vector(int n) memory allocation
+double * G_alloc_vector() memory allocation
 
 Allocate a vector (array) of <B>n</B> doubles initialized to zero.
 
 <P>
-float * G_alloc_fvector(int n) memory allocation 
+float * G_alloc_fvector() memory allocation 
 
 Allocate a vector (array) of <B>n</B> floats initialized to zero.
 
 <P>
-double ** G_alloc_matrix(int rows, int cols) memory allocation
+double ** G_alloc_matrix() memory allocation
 
 Allocate a matrix of <B>rows</B> by <B>cols</B> doubles initialized to
 zero.
 
 <P>
-float ** G_alloc_fmatrix(int rows, int cols) memory allocation
+float ** G_alloc_fmatrix() memory allocation
 
 Allocate a matrix of <B>rows</B> by <B>cols</B> floats initialized to
 zero.
 
 <P>
-int G_free_vector(double *v) memory deallocation
+int G_free_vector() memory deallocation
 
 Deallocate a vector (array) of doubles or floats.
 
 <P>
-int G_free_matrix(double **m) memory deallocation
+int G_free_matrix() memory deallocation
 
 Deallocate a matrix of doubles.
 
 <P>
-int G_free_fmatrix(float **m) memory deallocation
+int G_free_fmatrix() memory deallocation
 
 Deallocate a matrix of floats.
 
@@ -808,7 +800,7 @@ term "window" is used in the routine name (where "region" should
 probably be used instead.)]
 
 <P>
-int G_get_window(struct Cell_head *region) read the database region
+int G_get_window() read the database region
 
 Reads the database region as stored in the WIND file in the user's
 current mapset <B>into region.</B>
@@ -825,7 +817,7 @@ region will not be used. Programs that read or write raster file data
 G_window_rows() and G_window_cols().</I>
 
 <P>
-int G_put_window(struct Cell_head *region) write the database region
+int G_put_window() write the database region
 Writes the database region file (WIND) in the user's current mapset
 from <B>region.</B> Returns 1 if the region is written ok. Returns -1
 if not (no diagnostic message is printed).
@@ -847,7 +839,7 @@ Permanent_Mapset for a discussion of the default region.)  The
 following routine reads this region:
 
 <P>
-int G_get_default_window(struct Cell_head *region) read the default
+int G_get_default_window() read the default
 region
 
 Reads the default region for the location into <B>region.</B>
@@ -895,7 +887,7 @@ for (row = 0; row < nrows; row++){
 \endverbatim
 
 <P>
-int G_set_window(struct Cell_head *region) set the active region 
+int G_set_window() set the active region 
 
 This routine sets the active region from <B>region.</B> Setting the
 active region does not change the WIND file in the database. It simply
@@ -927,8 +919,7 @@ region that was active when the open occurred still applies to these
 files.
 
 <P>
-int G_get_set_window(struct Cell_head *region) get the active
-  region
+int G_get_set_window() get the active region
 
 Gets the values of the currently active region into <B>region.</B> If
 <I>G_set_window()</I> has been called, then the values set by that call
@@ -943,8 +934,7 @@ programmer should consider whether or not the full region information
 is really needed before using this routine.
 
 <P>
-char * G_align_window(struct Cell_head *region, struct Cell_head *ref)
-align two regions
+char * G_align_window() align two regions
 
 Modifies the input <B>region</B> to align to the <B>ref</B>
 region. The resolutions in <B>region</B> are set to match those in
@@ -960,8 +950,7 @@ east eastward and the west westward.
 This routine returns NULL if ok, otherwise it returns an error message.
 
 <P>
-double G_col_to_easting(double col, struct Cell_head *region) column
-to easting
+double G_col_to_easting() column to easting
 
 Converts a <B>col</B>umn relative to a <B>region</B> to an easting;
 
@@ -972,8 +961,7 @@ edge of the column; and col+1.0 will return the easting for the
 eastern edge of the column.
 
 <P>
-double G_row_to_northing(double row, struct Cell_head *region) row to
-northing
+double G_row_to_northing() row to northing
 
 Converts a <B>row</B> relative to a <B>region</B> to a northing;
 
@@ -983,8 +971,7 @@ center of the row; row+0.0 will return the northing for the northern
 edge of the row; and row+1.0 will return the northing for the southern
 edge of the row.
 
-double G_easting_to_col(double east, struct Cell_head *region) easting
-to column
+double G_easting_to_col() easting to column
 
 <P>
 Converts an <B>east</B>ing relative to a <B>region</B> to a column.
@@ -994,8 +981,7 @@ Converts an <B>east</B>ing relative to a <B>region</B> to a column.
 give the column number.
 
 <P>
-double G_northing_to_row(double north, struct Cell_head *region)
-northing to row
+double G_northing_to_row() northing to row
 
 Converts a <B>north</B>ing relative to a <B>region</B> to a row.
 
@@ -1029,15 +1015,14 @@ region. The current values are:
 99 Other (more than 121 projections are supported)
 
 <P>
-char * G_database_projection_name(int proj) query cartographic
-projection
+char * G_database_projection_name() query cartographic projection
 
 Returns a pointer to a string which is a printable name for projection
 code <B>proj</B> (as returned by <I>G_projection()</I>). Returns NULL if
 <B>proj</B> is not a valid projection.
 
 <P>
-char * G_database_unit_name(int plural) database units
+char * G_database_unit_name() database units
 
 Returns a string describing the database grid units. It returns a
 plural form (eg. feet) if <B>plural</B> is true. Otherwise it returns
@@ -1110,43 +1095,37 @@ in "gis.h"), then latitude-longitude ASCII format is invoked.
 Otherwise, a standard floating-point to ASCII conversion is made.
 
 <P>
-int G_format_easting(double east, char *buf, int projection) easting
-to ASCII
+int G_format_easting() easting to ASCII
 
 Converts the double representation of the <B>east</B> coordinate to
 its ASCII representation (into <B>buf</B>).
 
 <P>
-int G_format_northing(double north, char *buf, int projection)
-northing to ASCII
+int G_format_northing() northing to ASCII
 
 Converts the double representation of the <B>north</B> coordinate to
 its ASCII representation (into <B>buf</B>).
 
 <P>
-int G_format_resolution(double resolution, char *buf, int projection)
-resolution to ASCII
+int G_format_resolution() resolution to ASCII
 
 Converts the double representation of the <B>resolution</B> to its
 ASCII representation (into <B>buf</B>).
 
 <P>
-int G_scan_easting(char *buf, double *easting, int projection) ASCII
-easting to double
+int G_scan_easting() ASCII easting to double
 
 Converts the ASCII "easting" coordinate string in <B>buf</B> to its
 double representation (into <B>easting</B>).
 
 <P>
-int G_scan_northing(char *buf, double *northing, int projection) ASCII
-northing to double
+int G_scan_northing() ASCII northing to double
 
 Converts the ASCII "northing" coordinate string in <B>buf</B> to its
 double representation (into <B>northing</B>).
 
 <P>
-int G_scan_resolution(char *buf, double *resolution, int projection)
-ASCII resolution to double
+int G_scan_resolution() ASCII resolution to double
 
 Converts the ASCII "resolution" string in <B>buf</B> to its double
 representation (into resolution).
@@ -1188,15 +1167,14 @@ return value is 1 or 0, all the grid cells in the map have the same
 area. Otherwise the area of a grid cell varies with the row.
 
 <P>
-double G_area_of_cell_at_row(int row) cell area in specified row
+double G_area_of_cell_at_row() cell area in specified row
 
 This routine returns the area in square meters of a cell in the
 specified <B>row.</B> This value is constant for planimetric grids and
 varies with the row if the projection is latitude-longitude.
 
 <P>
-int G_begin_zone_area_on_ellipsoid(double a, double e2, double s)
-begin area calculations for ellipsoid
+int G_begin_zone_area_on_ellipsoid() begin area calculations for ellipsoid
 
 Initializes raster area calculations for an ellipsoid, where <B>a</B>
 is the semi-major axis of the ellipse (in meters), <B>e2</B> is the
@@ -1210,15 +1188,14 @@ grid cell).
 zero implies a sphere.
 
 <P>
-double G_area_for_zone_on_ellipsoid(double north, double south) area
-between latitudes
+double G_area_for_zone_on_ellipsoid() area between latitudes
 
 Returns the area between latitudes <B>north</B> and <B>south</B>
 scaled by the factor <B>s</B> passed to
 <I>G_begin_zone_area_on_ellipsoid().</I>
 
 <P>
-int G_begin_zone_area_on_sphere(double r, double s) initialize
+int G_begin_zone_area_on_sphere() initialize
 calculations for sphere
 
 Initializes raster area calculations for a sphere.  The radius of the
@@ -1227,8 +1204,7 @@ calculations of a part of the zone (see
 <I>G_begin_zone_area_on_ellipsoid()</I>).
 
 <P>
-double G_area_for_zone_on_sphere(double north, double south) area
-between latitudes
+double G_area_for_zone_on_sphere() area between latitudes
 
 Returns the area between latitudes <B>north</B> and <B>south</B>
 scaled by the factor <B>s</B> passed to
@@ -1271,8 +1247,7 @@ projection is planimetric, and 0 if the projection doesn't have a
 metric (e.g. imagery.)
 
 <P>
-double G_area_of_polygon(double *x, double *y, int n) area in square
-meters of polygon
+double G_area_of_polygon() area in square meters of polygon
 
 Returns the area in square meters of the polygon described by the
 <B>n</B> pairs of <B>x,y</B> coordinate vertices. It is used both for
@@ -1292,16 +1267,14 @@ square meters.  If the units are feet, then the area is in square
 feet, and so on.
 
 <P>
-int G_begin_ellipsoid_polygon_area (double a, double e2) begin area
-calculations
+int G_begin_ellipsoid_polygon_area () begin area calculations
 
 This initializes the polygon area calculations for the ellipsoid with
 semi-major axis <B>a</B> (in meters) and ellipsoid eccentricity
 squared <B>e2.</B>
 
 <P>
-double G_ellipsoid_polygon_area(double *lon, double *lat, int n) area
-of lat-long polygon
+double G_ellipsoid_polygon_area() area of lat-long polygon
 
 Returns the area in square meters of the polygon described by the
 <B>n</B> pairs of <B>lat,long</B> vertices for latitude-longitude
@@ -1329,7 +1302,7 @@ projection is planimetric, and 0 if the projection doesn't hav e a
 metric (e.g. imagery).
 
 <P>
-double G_distance(double x1, y1, x2, y2) distance in meters
+double G_distance() distance in meters
 
 This routine computes the distance, in meters, from <B>x1,y1</B> to
 <B>x2,y2.</B> If the projection is latitude-longitude, this distance
@@ -1337,8 +1310,7 @@ is measured along the geodesic. Two routines perform geodesic distance
 calculations.
 
 <P>
-int G_begin_geodesic_distance(double a, double e2) begin geodesic
-distance
+int G_begin_geodesic_distance() begin geodesic distance
 
 Initializes the distance calculations for the ellipsoid with
 semi-major axis <B>a</B> (in meters) and ellipsoid eccentricity
@@ -1346,8 +1318,7 @@ squared <B>e2.</B> It is used only for the latitude-longitude
 projection.
 
 <P>
-double G_geodesic_distance(double lon1, double lat1, double lon2,
-double lat2) geodesic distance
+double G_geodesic_distance() geodesic distance
 
 Calculates the geodesic distance from <B>lon1,lat1</B> to
 <B>lon2,lat2</B> in meters.
@@ -1358,20 +1329,17 @@ three routines provide a mechanism for calculating distance with two
 fixed latitudes and varying longitude separation.
 
 <P>
-int G_set_geodesic_distance_lat1(double lat1) set geodesic
-  distance lat1
+int G_set_geodesic_distance_lat1() set geodesic distance lat1
 
 Set the first latitude.
 
 <P>
-int G_set_geodesic_distance_lat2(double lat2) set geodesic
-  distance lat2
+int G_set_geodesic_distance_lat2() set geodesic distance lat2
 
 Set the second latitude.
 
 <P>
-double G_geodesic_distance_lon_to_lon(double lon1, double lon2)
-geodesic distance
+double G_geodesic_distance_lon_to_lon() geodesic distance
 
 Calculates the geodesic distance from <B>lon1,lat1</B> to
 <B>lon2,lat2</B> in meters, where <B>lat1</B> was the latitude passed
@@ -1389,8 +1357,7 @@ equivalent, but GRASS requires the east to be bigger than the west,
 some adjustment of coordinates is necessary.
 
 <P>
-double G_adjust_easting(double east, struct Cell_head *region) returns
-east larger than west
+double G_adjust_easting() returns east larger than west
 
 If the region projection is PROJECTION_LL, then this routine returns
 an equivalent <B>east</B> that is larger, but no more than 360 degrees
@@ -1399,7 +1366,7 @@ region. Otherwise no adjustment is made and the original <B>east</B>
 is returned.
 
 <P>
-double G_adjust_east_longitude(double east, double west) adjust east
+double G_adjust_east_longitude() adjust east
 longitude
 
 This routine returns an equivalent <B>east</B> that is larger, but no
@@ -1409,8 +1376,7 @@ more than 360 larger than the <B>west</B> coordinate.
 This routine should be used only with latitude-longitude coordinates.
 
 <P>
-int G_shortest_way(double *east1, double *east2) shortest way between
-eastings
+int G_shortest_way() shortest way between eastings
 
 If the database projection is PROJECTION_LL, then <B>east1,east2</B>
 are changed so that they are no more than 180 degrees apart. Their
@@ -1421,7 +1387,7 @@ PROJECTION_LL, then <B>east1,east2</B> are not changed.
 \subsection Miscellaneous Miscellaneous
 
 
-char * G_ellipsoid_name(int n) return ellipsoid name
+char * G_ellipsoid_name() return ellipsoid name
 
 This routine returns a pointer to a string containing the name for the
 <B>n</B><I>th</I> ellipsoid in the GRASS ellipsoid table; NULL when
@@ -1436,16 +1402,14 @@ for (n=0; name=G_ellipsoid_name(n); n++)
 \endverbatim
 
 <P>
-int G_get_ellipsoid_by_name(char *name, double *a, double *e2) get
-ellipsoid by name
+int G_get_ellipsoid_by_name() get ellipsoid by name
 
 This routine returns the semi-major axis <B>a</B> (in meters) and
 eccentricity squared <B>e2</B> for the named ellipsoid.  Returns 1 if
 <B>name</B> is a known ellipsoid, 0 otherwise.
 
 <P>
-int G_get_ellipsoid_parameters(double *a, double *e2) get ellipsoid
-parameters
+int G_get_ellipsoid_parameters() get ellipsoid parameters
 
 This routine returns the semi-major axis <B>a</B> (in meters) and the
 eccentricity squared <B>e2</B> for the ellipsoid associated with the
@@ -1453,8 +1417,7 @@ database. If there is no ellipsoid explicitly associated with the
 database, it returns the values for the WGS 84 ellipsoid.
 
 <P>
-double G_meridional_radius_of_curvature(double lon, double a, double
-e2) meridional radius of curvature
+double G_meridional_radius_of_curvature() meridional radius of curvature
 
 Returns the meridional radius of curvature at a given longitude:
 
@@ -1464,8 +1427,7 @@ Returns the meridional radius of curvature at a given longitude:
 
 
 <P>
-double G_transverse_radius_of_curvature(double lon, double a, double
-e2) transverse radius of curvature
+double G_transverse_radius_of_curvature() transverse radius of curvature
 
 Returns the transverse radius of curvature at a given longitude:
 
@@ -1474,8 +1436,7 @@ Returns the transverse radius of curvature at a given longitude:
 \f$
 
 <P>
-double G_radius_of_conformal_tangent_sphere(double lon, double a,
-double e2) radius of conformal tangent sphere
+double G_radius_of_conformal_tangent_sphere() radius of conformal tangent sphere
 
 Returns the radius of the conformal sphere tangent to ellipsoid at a
 given longitude:
@@ -1485,7 +1446,7 @@ r = \frac{a (1-e^2)^{1/2}}{(1-e^2\sin^2 lon)}
 \f$
 
 <P>
-int G_pole_in_polygon(double *x, double *y, int n) pole in polygon
+int G_pole_in_polygon() pole in polygon
 
 For latitude-longitude coordinates, this routine determines if the
 polygon defined by the <B>n</B> coordinate vertices <B>x,y</B>
@@ -1518,8 +1479,7 @@ The following routines form the foundation of a general purpose line
 and polygon plotting capability.
 
 <P>
-int G_bresenham_line(int x1, int y1, int x2, int y2, int (*point)())
-Bresenham line algorithm
+int G_bresenham_line() Bresenham line algorithm
 
 Draws a line from <B>x1,y1</B> to <B>x2,y2</B> using Bresenham's
 algorithm. A routine to plot points must be provided, as is defined
@@ -1533,8 +1493,7 @@ This routine does not require a previous call to <I>G_setup_plot()</I> to
 function correctly, and is independent of all following routines.
 
 <P>
-int G_setup_plot(double t, double b, double l, double r, nt (*Move)(),
-      int (*Cont)()) initialize plotting routines
+int G_setup_plot() initialize plotting routines
 
 Initializes the plotting capability. This routine must be called once
 before calling the <B>G_plot_*()</B> routines described below.
@@ -1561,8 +1520,7 @@ Cont(x, y) draw from previous position
 to x,y. Cont() is responsible for clipping
 
 <P>
-int G_plot_line(double east1, double north1, double east2, double
-north2) plot line between latlon coordinates 
+int G_plot_line() plot line between latlon coordinates 
 
 A line from <B>east1,north1</B> to <B>east2,north2</B> is plotted in
 output x,y coordinates (e.g. pixels for graphics.) This routine
@@ -1573,7 +1531,7 @@ See <B>G_setup_plot()</B> for the required coordinate initialization
 procedure.
 
 <P>
-int G_plot_polygon(double *east, double *north, int n) plot filled
+int G_plot_polygon() plot filled
 polygon with n vertices
 
 The polygon, described by the <B>n</B> vertices <B>east,north</B>, is
@@ -1584,8 +1542,7 @@ See <B>G_setup_plot()</B> for the required coordinate initialization
 procedure.
 
 <P>
-int G_plot_area(double **xs, double **ys, int *npts, int rings) plot
-multiple polygons
+int G_plot_area() plot multiple polygons
 
 Like G_plot_polygon(), except it takes a set of polygons, each with
 <B>npts[<I>i</I>]</B> vertices, where the number of polygons is
@@ -1593,8 +1550,7 @@ specified with the <B>rings</B> argument.  It is especially useful for
 plotting vector areas with interior islands.
 
 <P>
-int G_plot_where_en(int x, int y, double *east, double *north) x,y
-to east,north
+int G_plot_where_en() x,y to east,north
 
 The pixel coordinates <B>x,y</B> are converted to map coordinates
 <B>east,north.</B>
@@ -1604,8 +1560,7 @@ See <B>G_setup_plot()</B> for the required coordinate initialization
 procedure.
 
 <P>
-int G_plot_where_xy(double *east, double *north, int *x, int *y)
-east,north to x,y
+int G_plot_where_xy() east,north to x,y
 
 The map coordinates <B>east,north</B> are converted to pixel
 coordinates <B>x,y.</B>
@@ -1615,8 +1570,7 @@ See <B>G_setup_plot()</B> for the required coordinate initialization
 procedure.
 
 <P>
-int G_plot_fx(double (*f)(), double east1, double east2) plot
-  f(east1) to f(east2)
+int G_plot_fx() plot f(east1) to f(east2)
 
 The function <B>f(east)</B> is plotted from <B>east1</B> to
 <B>east2.</B> The function <B>f(east)</B> must return the map northing
@@ -1797,7 +1751,7 @@ Allocates memory for the Flag structure and returns a pointer to this
 memory (of <I>type struct Flag *).</I>
 
 <P>
-int G_parser(int argc, char *argv[]) parse command line
+int G_parser() parse command line
 
 The command line parameters <B>argv</B> and the number of parameters
 <B>argc</B> from the main() routine are passed directly to
@@ -1879,7 +1833,7 @@ parser routines <I>G_define_option()</I> and <I>G_define_flag()</I> as
 defined in Parser_Routines.
 
 \verbatim
-#include "gis.h" ; /* The standard GRASS include file */
+#include <grass/gis.h> ; /* The standard GRASS include file */
 
 struct Option *opt ; /* Establish an Option pointer for each option */
 struct Flag *flag ; /* Establish a Flag pointer for each option */
@@ -2061,7 +2015,7 @@ described in Complete_Structure_Members_Table.
 \verbatim
 #include <stdlib.h>
 #include <string.h>
-#include "gis.h"
+#include <grass/gis.h>
 #include "glocale.h"
 
 int
@@ -2766,7 +2720,7 @@ Strings have the usual C meaning: a NULL terminated array of characters.
 These next 3 routines remove unwanted white space from a single string.
 
 <P>
-char * G_squeeze(char *s) remove unnecessary white space 
+char * G_squeeze() remove unnecessary white space 
 
 Leading and trailing white space is removed from the string <B>s</B>
 and internal white space which is more than one character is reduced
@@ -2774,21 +2728,20 @@ to a single space character. White space here means spaces, tabs,
 linefeeds, newlines, and formfeeds. Returns <B>s.</B>
 
 <P>
-void G_strip(char *s) remove leading/training white space
+void G_strip() remove leading/training white space
 
 Leading and trailing white space is removed from the string <B>s.</B>
 White space here means only spaces and tabs. There is no return value.
 
 <P>
-char * G_chop(char *s) Chop leading and trailing white spaces:
+char * G_chop() Chop leading and trailing white spaces:
   space, &#92;f, &#92;n, &#92;r, &#92;t, &#92;v - returns pointer to string
 
 <P>
 The next routines replaces character(s) from string.
 
 <P>
-char * G_strchg(char *bug, char character, char new) replace
-character(s)
+char * G_strchg() replace character(s)
 
 Replace all occurencies of character in string bug with new.  Returns
 changed string
@@ -2797,7 +2750,7 @@ changed string
 This next routine copies a string to allocated memory.
 
 <P>
-char * G_store(char *s) copy string to allocated memory
+char * G_store() copy string to allocated memory
 
 This routine allocates enough memory to hold the string <B>s</B>,
 copies <B>s</B> to the allocated memory, and returns a pointer to the
@@ -2807,13 +2760,13 @@ allocated memory.
 The next 2 routines convert between upper and lower case.
 
 <P>
-char * G_tolcase(char *s) convert string to lower case
+char * G_tolcase() convert string to lower case
 
 Upper case letters in the string <B>s</B> are converted to their lower
 case equivalent.  Returns <B>s.</B>
 
 <P>
-char * G_toucase(char *s) convert string to upper case
+char * G_toucase() convert string to upper case
 
 Lower case letters in the string <B>s</B> are converted to their upper
 case equivalent.  Returns <B>s.</B>
@@ -2822,7 +2775,7 @@ case equivalent.  Returns <B>s.</B>
 And finally a routine which gives a printable version of control characters.
 
 <P>
-char * G_unctrl(unsigned char c) printable version of control
+char * G_unctrl() printable version of control
   character
 
 This routine returns a pointer to a string which contains an
@@ -2853,18 +2806,18 @@ overwritten from call to call.
 <I>FOLLOWING new FUNCTIONS need to be merged into the flow of this text:</I>
 
 <P>
-int G_trim_decimal(char *buf) trim
+int G_trim_decimal() trim
 
 This routine remove trailing zeros from decimal number for example:
 23.45000 would come back as 23.45
 
 <P>
-char * G_index(str, delim) delimiter
+char * G_index() delimiter
 
 Position of delimiter
 
 <P>
-char * G_rindex (str, delim) ??????
+char * G_rindex () ??????
 
 <P>
 int G_strcasecmp(char *a, char *b) string compare ignoring case (upper or lower)
@@ -2875,12 +2828,12 @@ int G_strcasecmp(char *a, char *b) string compare ignoring case (upper or lower)
 1 if a&gt;b
 
 <P>
-char * G_strstr(char *mainString, char *subString)Return a pointer
+char * G_strstr() Return a pointer
   to the first occurrence of subString in mainString, or NULL if no occurrences
   are found
 
 <P>
-char * G_strdup(char *string) Return a pointer to a string that is a
+char * G_strdup() Return a pointer to a string that is a
 duplicate of the string given to G_strdup.  The duplicate is created
 using malloc.  If unable to allocate the required space, NULL is
 returned.
@@ -2972,7 +2925,7 @@ command, but not terminate the menu module itself. The G_system() call
 allows this.
 
 <P>
-int G_system(command) run a shell level command
+int G_system() run a shell level command
 
 The shell level <B>command</B> is executed. Interrupt signals for the
 parent module are ignored during the call. Interrupt signals for the
@@ -3030,7 +2983,7 @@ immediately (see W. Richard Stevens. 1997. UNIX network programming:
 Volume 1, 2nd edition. Prentice Hall).
 
 <P>
-char * G_sock_get_fname(char *name) makes full socket path
+char * G_sock_get_fname() makes full socket path
 
 Takes a simple <B>name</B> for a communication channel and builds the
 full path for a sockets file with that <B>name</B>.  The path as of
@@ -3041,7 +2994,7 @@ The caller is responsible for freeing the memory of the returned
 string when it is no longer needed.
 
 <P>
-int G_sock_exists(char *name) does the socket exist
+int G_sock_exists() does the socket exist
 
 Takes the full path to a unix socket; determines if the file exists;
 and if the file exists whether it is a socket file or not.  Returns a
@@ -3049,7 +3002,7 @@ non-zero value if the file exists and is a socket file.  Otherwise it
 returns zero.
 
 <P>
-int G_sock_bind(char *name) binds the socket
+int G_sock_bind() binds the socket
 
 Takes the full path to a unix socket and attempts to bind a file
 descriptor to the path <B>name</B>.  If successful it will return the
@@ -3069,8 +3022,7 @@ processes must call <B>G_sock_bind()</B> prior to calling
 <B>G_sock_listen()</B> and <B>G_sock_accept()</B>.
 
 <P>
-int G_sock_listen(int fd, unsigned int queue) listen on a
-socket
+int G_sock_listen() listen on a socket
 
 Takes the file descriptor returned by a successful call to
 <B>G_sock_bind()</B> and the length of the the listen queue.  A
@@ -3085,7 +3037,7 @@ successful call to <B>G_sock_accept()</B>.  This function is a simple
 wrapper around the system <B>listen()</B> function.
 
 <P>
-int G_sock_accept(int fd) accept a connection on the listening
+int G_sock_accept() accept a connection on the listening
 socket
 
 Takes the file descriptor returned by a successful call to
@@ -3105,8 +3057,7 @@ simple wrapper around the system's <B>accept()</B> function, with the
 second and third arguments being <B>NULL</B>.
 
 <P>
-int G_sock_connect(char *name) make a connection to a
-server process
+int G_sock_connect() make a connection to a server process
 
 Takes the full path to a socket file and attempts to make a connection
 to a server listening for connections.  If successful, the file
@@ -3126,7 +3077,7 @@ Example
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
-#include "gis.h"
+#include <grass/gis.h>
 
 int main (int argc, char *argv[])
 {
@@ -3209,7 +3160,7 @@ Returns a pointer to a string which is the current date and time. The
 format is the same as that produced by the UNIX <I>date</I> command.
 
 <P>
-char * G_gets(char *buf) get a line of input (detect ctrl-z)
+char * G_gets() get a line of input (detect ctrl-z)
 
 This routine does a <I>gets()</I> from stdin into <B>buf.</B> It exits
 if end-of-file is detected. If stdin is a tty (i.e., not a pipe or
@@ -3287,7 +3238,7 @@ char * G_whoami() user's name
 Returns a pointer to a string which is the user's login name.
 
 <P>
-int G_yes(char *question, int default) ask a yes/no question
+int G_yes() ask a yes/no question
 
 This routine prints a <B>question</B> to the user, and expects the
 user to respond either yes or no. (Invalid responses are rejected and
@@ -3498,7 +3449,7 @@ of Makefiles.
 \section TimeStamp_functions Timestamp functions
 
 \verbatim
- #include "gis.h"
+ #include <grass/gis.h>
 \endverbatim
 
 
@@ -3557,21 +3508,21 @@ count=2  means 2 datetimes were copied
 
 
 <P>
-int G_init_timestamp(struct TimeStamp *ts)
+int G_init_timestamp()
 Sets ts-&gt;count = 0, to indicate no valid DateTimes are in TimeStamp.
 
 <P>
-int G_set_timestamp(struct TimeStamp *ts, DateTime *dt) Copies a
+int G_set_timestamp() Copies a
   single DateTime to a TimeStamp in preparation for writing.  (overwrites any
   existing information in TimeStamp)
 
 <P>
-int G_set_timestamp_range(struct TimeStamp *ts, DateTime *dt1, DateTime *dt2)
+int G_set_timestamp_range()
 Copies two DateTimes (a range) to a TimeStamp in preparation for writing.
 (overwrites any existing information in TimeStamp)
 
 <P>
-int G_write_raster_timestamp(char *name, struct TimeStamp *ts)
+int G_write_raster_timestamp()
 Returns:
 
 <br>
@@ -3585,7 +3536,7 @@ Returns:
 
 
 <P>
-int G_write_vector_timestamp(char *name, struct TimeStamp *ts)
+int G_write_vector_timestamp()
 Returns:
 
 <br>
@@ -3599,7 +3550,7 @@ Returns:
 
 
 <P>
-int G_format_timestamp(struct TimeStamp *ts, char *buf)
+int G_format_timestamp()
 Returns:
 
 <br>
@@ -3610,7 +3561,7 @@ Returns:
 
 
 <P>
-int G_scan_timestamp(struct TimeStamp *ts, char *buf)
+int G_scan_timestamp()
 Returns:
 
 <br>
@@ -3621,7 +3572,7 @@ Returns:
 
 
 <P>
-int G_remove_raster_timestamp(char *name)
+int G_remove_raster_timestamp()
 Only timestamp files in current mapset can be removed
 
 <P>
@@ -3638,7 +3589,7 @@ Returns:
 
 
 <P>
-int G_remove_vector_timestamp(char *name)
+int G_remove_vector_timestamp()
 Only timestamp files in current mapset can be removed
 
 <P>
@@ -3655,13 +3606,12 @@ Returns:
 
 
 <P>
-int G_read_grid3_timestamp(char *name,char *mapset, struct
-    TimeStamp *ts) read grid3 timestamp
+int G_read_grid3_timestamp() read grid3 timestamp
 
 Returns 1 on success. 0 or negative on error.
 
 <P>
-int G_remove_grid3_timestamp(char *name) remove grid3
+int G_remove_grid3_timestamp() remove grid3
 timestamp
 
 Only timestamp files in current mapset can be removed
@@ -3680,8 +3630,7 @@ Returns:
 
 
 <P>
-int G_write_grid3_timestamp(char *name,
-    struct TimeStamp *ts) write grid3 timestamp
+int G_write_grid3_timestamp() write grid3 timestamp
 
 Returns:
 
