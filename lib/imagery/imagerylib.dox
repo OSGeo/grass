@@ -10,25 +10,22 @@ support integrated image processing directly in GRASS. It contains
 routines that provide access to the <I>group</I> database structure
 which was also introduced in GRASS 3.0 for the same purpose. It is
 assumed that the reader has read Database_Structure for a general
-description of GRASS databases, Image_Data_Groups for a description of
-imagery groups, and Raster_Maps for details about map layers in
-GRASS. The routines in the Imagery_Library are presented in functional
+description of GRASS databases, \ref Image_Data_Groups for a description of
+imagery groups, and \ref Raster_Maps for details about map layers in
+GRASS. The routines in the \ref Imagery_Library are presented in functional
 groupings, rather than in alphabetical order. The order of
 presentation will, it is hoped, provide a better understanding of how
 the library is to be used, as well as show the interrelationships
 among the various routines. Note that a good way to understand how to
 use these routines is to look at the source code for GRASS modules
 which use them. Most routines in this library require that the header
-file "imagery.h" be included in any code using these
+file <grass/imagery.h> be included in any code using these
 routines. Therefore, programmers should always include this file when
 writing code using routines from this library:
 
 \verbatim
-#include "imagery.h"
+#include <grass/imagery.h>
 \endverbatim
-
-<P>
-This header file includes the "gis.h" header file as well.
 
 <P>
 <B>Note.</B> All routines and global variables in this library,
@@ -36,11 +33,7 @@ documented or undocumented, start with the prefix <B>I_.</B> To avoid
 name conflicts, programmers should not create variables or routines in
 their own modules which use this prefix.
 
-<P>
-An alphabetic index is provided in Appendix_E_Index_to_Imagery_Library
-
 \subsection Group_Processing Group Processing
-
 
 The group is the key database structure which permits integration of
 image processing in GRASS.
@@ -69,28 +62,14 @@ response, a message is printed, and the user is prompted again. If the
 user cancels the request, 0 is returned; otherwise, 1 is returned.
 
 <P>
-int I_ask_group_old(char *prompt, char *group) prompt for an existing
-group
+int I_ask_group_old() prompt for an existing group
 
 Asks the user to enter the name of an existing <B>group</B> in the
 current mapset.
 
 <P>
-int I_ask_group_new(char *prompt, char *group) prompt for new group
-
-Asks the user to enter a name for a <B>group</B> which does not exist
-in the current mapset.
-
-<P>
-int I_ask_group_any(char *prompt, char *group) prompt for any
-valid group name
-
-Asks the user to enter a valid <B>group</B> name. The <B>group</B> may
-or may not exist in the current mapset.
-
-<P>
 <B>Note.</B> The user is not warned if the <B>group</B> exists. The
-programmer should use <I>I_find_group</I> to determine if the
+programmer should use <I>I_find_group()</I> to determine if the
 <B>group</B> exists.
 
 <P>
@@ -99,7 +78,7 @@ programmer must handle the 0 return properly:
 
 \verbatim
 char group[INAME_LEN];
-\par
+
 if ( ! I_ask_group_any ("Enter group to be processed", group))
    exit(0);
 \endverbatim
@@ -113,7 +92,7 @@ Sometimes it is necessary to determine if a given group already
 exists. The following routine provides this service:
 
 <P>
-int I_find_group(char *group)does group exist?  
+int I_find_group() does group exist?  
 
 Returns 1 if the specified <B>group</B> exists in the current mapset;
 0 otherwise.
@@ -125,15 +104,14 @@ Returns 1 if the specified <B>group</B> exists in the current mapset;
 These routines provide access to the information contained in the REF
 file for groups and subgroups, as well as routines to update this
 information.  They use the <I>Ref</I> structure, which is defined in
-the "imagery.h" header file; see \ref Imagery_Library_Data_Structures.
+the <grass/imagery.h> header file; see \ref Imagery_Library_Data_Structures.
 
 <P>
 The contents of the REF file are read or updated by the following
 routines:
 
 <P>
-int I_get_group_ref(char *group, struct Ref *ref) read group REF
-  file
+int I_get_group_ref() read group REF file
 
 Reads the contents of the REF file for the specified <B>group</B> into
 the <B>ref</B> structure.
@@ -142,8 +120,7 @@ the <B>ref</B> structure.
 Returns 1 if successful; 0 otherwise (but no error messages are printed).
 
 <P>
-int I_put_group_ref(char *group, struct Ref *ref) write group REF
-file 
+int I_put_group_ref() write group REF file 
 
 Writes the contents of the <B>ref</B> structure to the REF file for
 the specified <B>group.</B>
@@ -156,8 +133,7 @@ Returns 1 if successful; 0 otherwise (and prints a diagnostic error).
 already exist.
 
 <P>
-int I_get_subgroup_ref(char *group, char *subgroup, struct Ref
-  *ref) read subgroup REF file
+int I_get_subgroup_ref() read subgroup REF file
 
 Reads the contents of the REF file for the specified <B>subgroup</B>
 of the specified <B>group</B> into the <B>ref</B> structure.
@@ -166,8 +142,7 @@ of the specified <B>group</B> into the <B>ref</B> structure.
 Returns 1 if successful; 0 otherwise (but no error messages are printed).
 
 <P>
-int I_put_subgroup_ref(char *group, char *subgroup, struct Ref *ref)
-write subgroup REF file
+int I_put_subgroup_ref() write subgroup REF file
 
 Writes the contents of the <B>ref</B> structure into the REF file for
 the specified <B>subgroup</B> of the specified <B>group.</B>
@@ -183,19 +158,18 @@ not already exist.
 These next routines manipulate the <I>Ref</I> structure:
 
 <P>
-int I_init_group_ref(struct Ref *ref) initialize Ref structure
+int I_init_group_ref() initialize Ref structure
 
 This routine initializes the <B>ref</B> structure for other library
 calls which require a <I>Ref</I> structure. This routine must be
 called before any use of the structure can be made.
 
 <P>
-<B>Note.</B> The routines I_get_group_ref and I_get_subgroup_ref call
+<B>Note.</B> The routines I_get_group_ref() and I_get_subgroup_ref() call
 this routine automatically.
 
 <P>
-int I_add_file_to_group_ref(char *name, char *mapset, struct Ref *ref)
-add file name to Ref structure
+int I_add_file_to_group_ref() add file name to Ref structure
 
 This routine adds the file <B>name</B> and <B>mapset</B> to the list
 contained in the <B>ref</B> structure, if it is not already in the
@@ -206,12 +180,11 @@ files already in the group.
 
 <P>
 Returns the index into the <I>file</I> array within the <B>ref</B>
-structure for the file after insertion; see
+structure for the file after insertion; see \ref
 Imagery_Library_Data_Structures.
 
 <P>
-int I_transfer_group_ref_file(struct Ref *src, int n, struct Ref
-  *dst)copy Ref lists
+int I_transfer_group_ref_file() copy Ref lists
 
 This routine is used to copy file names from one <I>Ref</I> structure
 to another. The name and mapset for file <B>n</B> from the <B>src</B>
@@ -241,7 +214,7 @@ This routine is used by <I>i.points</I> to create the REF file for a
 subgroup.
 
 <P>
-int I_free_group_ref(struct Ref *ref) free Ref structure
+int I_free_group_ref() free Ref structure
 
 This routine frees memory allocated to the <B>ref</B> structure.
 
@@ -251,8 +224,7 @@ This routine frees memory allocated to the <B>ref</B> structure.
 The following two routines read and write the TARGET file.
 
 <P>
-int I_get_target(char *group, char *location, char *mapset) read
-target information
+int I_get_target() read target information
 
 Reads the target <B>location</B> and <B>mapset</B> from the TARGET
 file for the specified group. Returns 1 if successful; 0 otherwise
@@ -264,8 +236,7 @@ by other programs.
 <B>Note.</B> This routine does <B>not</B> validate the target information.
 
 <P>
-int I_put_target(char *group, char *location, char *mapset) write
-target information
+int I_put_target() write target information
 
 Writes the target <B>location</B> and <B>mapset</B> to the TARGET file
 for the specified <B>group.</B> Returns 1 if successful; 0 otherwise
@@ -289,7 +260,7 @@ updated by the module <I>i.points</I>,and read by <I>i.rectify.</I>
 
 <P>
 These routines use the <I>Control_Points</I> structure, which is
-defined in the "imagery.h" <I>header file</I>; see
+defined in the <grass/imagery.h> <I>header file</I>; see \ref
 Imagery_Library_Data_Structures.
 
 <P>
@@ -298,8 +269,7 @@ provided by the routines below is incomplete. A routine to initialize
 the structure is needed.
 
 <P>
-int I_get_control_points(char *group, struct Control_Points *cp) read
-group control points
+int I_get_control_points() read group control points
 
 Reads the control points from the POINTS file for the <B>group</B>
 into the <B>cp</B> structure. Returns 1 if successful; 0 otherwise
@@ -310,8 +280,7 @@ into the <B>cp</B> structure. Returns 1 if successful; 0 otherwise
 invalid, or does not exist.
 
 <P>
-int I_new_control_point(struct Control_Points *cp, double e1,
-  double n1, double e2, double n2, int status) add new control point
+int I_new_control_point() add new control point
 
 Once the control points have been read into the <B>cp</B> structure,
 this routine adds new points to it. The new control point is given by
@@ -323,8 +292,7 @@ so status should be set to 1.
 
 
 <P>
-int I_put_control_points(char *group, struct Control_Points *cp) write
-group control points
+int I_put_control_points() write group control points
 
 Writes the control points from the <B>cp</B> structure to the POINTS
 file for the specified group.
@@ -365,7 +333,7 @@ discussion of Makefiles.
 
 \section Imagery_Library_Data_Structures Imagery Library Data Structures
 
-Some of the data structures in the "imagery.h" header file are
+Some of the data structures in the <grass/imagery.h> header file are
 described below.
 
 \subsection struct_Ref struct Ref
