@@ -45,104 +45,50 @@ modules which use this prefix.
 Before any other graphics calls can be made, a successful connection to a 
 running and selected graphics driver must be made.
 
-\verbatim
-R_open_driver()
-R_close_driver()
-\endverbatim
+- R_open_driver()
+
+- R_close_driver()
 
 \section col Colors
 
-GRASS is highly dependent on color for distinguishing between different 
-categories. No graphic patterning is supported in any automatic way. There 
-are two color modes. Fixed color refers to set and immutable color look-up 
-tables on the hardware device. In some cases this is necessary because the 
-graphics device does not contain programmer definable color look-up tables 
-(LUT). Floating colors use the LUTs of the graphics device often in an 
-interactive mode with the user. The basic impact on the user is that under 
-the fixed mode, multiple maps can be displayed on the device with apparently 
-no color interference between maps. Under float mode, the user may 
-interactively manipulate the hardware color tables (using modules such as 
-<i>d.colors</i>). Other than the fact that in float mode no more colors 
-may be used than color registers available on the user's chosen driver, 
-there are no other programming repercussions.
-
-\verbatim
-R_color_table_fixed()
-R_color_table_float()
-\endverbatim
-
 Colors are set using integer values in the range of 0-255 to set the
-<b>red, green</b>, and <b>blue</b> intensities. In float mode, these values
-are used to directly modify the hardware color look-up tables and
-instantaneously modify the appearance of colors on the monitor. In fixed mode,
-these values modify secondary look-up tables in the devices driver module so
-that the colors involved point to the closest available color on the device.
+<b>red, green</b>, and <b>blue</b> intensities.
 
-\verbatim
-R_reset_color()
-R_reset_colors()
-R_color()
-R_standard_color()
-R_RGB_color()
-\endverbatim
+- R_standard_color()
+
+- R_RGB_color()
 
 \section basic Basic Graphics
 
-\verbatim
-R_screen_bot()
-R_screen_top()
-R_screen_left()
-R_screen_rite()
-R_move_abs()
-R_move_rel()
-R_cont_abs()
-R_cont_rel()
-R_box_abs()
-R_box_rel()
-R_erase()
-R_flush()
-R_stabilize()
-\endverbatim
+- R_box_abs()
+
+- R_erase()
 
 \section poly Poly Calls
 
 In many cases strings of points are used to describe a complex line, a series of
-dots, or a solid polygon. Absolute and relative calls are provided for each of
-these operations.
+dots, or a solid polygon.
 
-\verbatim
-R_polydots_abs()
-R_polydots_rel()
-R_polygon_abs()
-R_polygon_rel()
-R_polyline_abs()
-R_polyline_rel()
-\endverbatim
+- R_polydots_abs()
 
-\section raster Raster Calls
+- R_polygon_abs()
 
-GRASS requires efficient drawing of raster information to the display device.
-These calls provide that capability.
-
-\verbatim
-R_raster()
-R_raster_char()
-R_set_RGB_color()
-R_RGB_raster()
-\endverbatim
+- R_polyline_abs()
 
 \section text Text
 
 These calls provide access to built-in vector fonts which may be sized and
 clipped to the programmer's specifications.
 
-\verbatim
-R_set_window()
-R_font()
-R_text_size()
-R_text()
-R_get_text_box()
-\endverbatim
+- R_set_window()
+
+- R_font()
+
+- R_text_size()
+
+- R_text()
+
+- R_get_text_box()
 
 \section font GRASS font support
 
@@ -177,19 +123,6 @@ directory display/drivers/lib unless stated otherwise):
   (same file), which use the Move_abs() and Cont_abs() functions (these are
   implemented separately by each display driver, e.g. XDRIVER).
 </ul>
-
-\section user User Input
-
-The raster library provides mouse (or other pointing device) input from the
-user. This can be accomplished with a pointer, a rubber-band line or a
-rubber-band box. Upon pressing one of three mouse buttons, the current mouse
-location and the button pressed are returned.
-
-\verbatim
-R_get_location_with_pointer()
-R_get_location_with_line()
-R_get_location_with_box()
-\endverbatim
 
 \section load Loading the Raster Graphics Library
 
