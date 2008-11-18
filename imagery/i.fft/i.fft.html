@@ -8,35 +8,20 @@ components in frequency space.
 
 <H2>NOTES</H2>
 
-The real and imaginary components are stored as arrays of
-doubles in the <EM>cell_misc</EM> directory (for use in the
-inverse transform program,
-
-<EM><A HREF="i.ifft.html">i.ifft</A></EM>),
-
-and are also scaled and formatted into the
+The real and imaginary components are stored into the
 <B>real_image</B> and <B>imaginary_image</B> raster map
-layers for inspection, masking, etc.  In these raster map
+layers.  In these raster map
 layers the low frequency components are in the center and
 the high frequency components are toward the edges.  The
-<B>input_image</B> need not be square;  before
-processing, the X and Y dimensions of the
-<B>input_image</B> are padded with zeroes to the next
-highest power of two in extent (i.e., 256 x 256 is
-processed at that size, but 200 x 400 is padded to 256 x
-512).  The cell category values for viewing, etc., are
-calculated by taking the natural log of the actual values
-then rescaling to 255, or whatever optional range is given
-on the command line, as suggested by Richards (1986).  A
+<B>input_image</B> need not be square. A
 color table is assigned to the resultant map layer.
 
 
 <P>
 
-The current geographic region and mask settings are
-respected when reading the input file.  The presence of a
-mask will, in general, make the resulting fast Fourier
-transform invalid, or at least difficult to interpret.
+The current geographic region and mask settings are respected when
+reading the input file. The presence of nulls or a mask will make the
+resulting fast Fourier transform invalid.
 
 <H2>SEE ALSO</H2>
 

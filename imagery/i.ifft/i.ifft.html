@@ -20,22 +20,6 @@ When <EM>i.ifft</EM> is executed, it (automatically) uses the same GRASS
 region definition setting that was used during the original transformation
 done with <EM><A HREF="i.fft.html">i.fft</A></EM>.
 
-
-<P>
-
-The real and imaginary components are read from arrays of
-doubles in the <EM>cell_misc</EM> directory (produced by
-the forward transform program,
-
-<EM><A HREF="i.fft.html">i.fft</A></EM>),
-
-and the reconstructed image will preserve the cell value
-scaling of the original image processed by
-
-<EM><A HREF="i.fft.html">i.fft</A></EM>.  No color
-table is assigned to the output map;  one should be created
-before viewing the <EM>output_image</EM>.
-
 <H2>SEE ALSO</H2>
 
 M. Frigo and S. G. Johnson (1998): "FFTW: An Adaptive Software Architecture
