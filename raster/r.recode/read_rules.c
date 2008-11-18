@@ -16,29 +16,33 @@ int report_range(void)
     inp_type = G_raster_map_type(name, "");
     if (inp_type != CELL_TYPE) {
 	if (G_read_fp_range(name, "", &drange) <= 0)
-	    G_fatal_error(_("Unable to read f_range for map %s"), name);
+	    G_fatal_error(_("Unable to read fp range of raster map <%s>"),
+			  G_fully_qualified_name(name, mapset));
 
 	G_get_fp_range_min_max(&drange, &old_dmin, &old_dmax);
 	if (G_is_d_null_value(&old_dmin) || G_is_d_null_value(&old_dmax))
-	    G_message(_("Data range is empty"));
+	    G_important_message(_("Data range of raster map <%s> is empty"),
+				G_fully_qualified_name(name, mapset));
 	else {
 	    sprintf(buff, "%.10f", old_dmin);
 	    sprintf(buff2, "%.10f", old_dmax);
 	    G_trim_decimal(buff);
 	    G_trim_decimal(buff2);
-	    G_message(_("Data range of %s is %s to %s (entire map)"), name,
-		      buff, buff2);
+	    G_message(_("Data range of raster map <%s> is %s to %s (entire map)"),
+		      G_fully_qualified_name(name, mapset), buff, buff2);
 	}
     }
     if (G_read_range(name, "", &range) <= 0)
-	G_fatal_error(_("Unable to read range for map <%s>"), name);
+	G_fatal_error(_("Unable to read range of raster map <%s>"),
+		      G_fully_qualified_name(name, mapset));
 
     G_get_range_min_max(&range, &old_min, &old_max);
     if (G_is_c_null_value(&old_min) || G_is_c_null_value(&old_max))
-	G_message(_("Integer data range of %s is empty"), name);
+	G_important_message(_("Integer data range of raster map <%s> is empty"),
+			    G_fully_qualified_name(name, mapset));
     else
-	G_message(_("Integer data range of %s is %d to %d"),
-		  name, (int)old_min, (int)old_max);
+	G_message(_("Integer data range of raster mao <%s> is %d to %d"),
+		  G_fully_qualified_name(name, mapset), (int) old_min, (int) old_max);
 
     return 0;
 }
@@ -120,7 +124,7 @@ int read_rules(FILE * fp)
 		G_fpreclass_set_neg_infinite_rule(&rcl_struct, oHigh, nLow);
 	    }
 	    else
-		G_message(_("%s is not a valid rule"), buf);
+		G_message(_("'%s' is not a valid rule"), buf);
 	    break;
 	}			/* switch */
     }				/* loop */
