@@ -6,7 +6,7 @@
  *               Bob Covill <bcovill tekmap.ns.ca>, Hamish Bowman <hamish_nospam yahoo.com>,
  *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      Recode categorical raster maps
- * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2008 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -43,12 +43,12 @@ int main(int argc, char *argv[])
     } parm;
 
     /* any interaction must run in a term window */
-    G_putenv("GRASS_UI_TERM", "1");
+    /* G_putenv("GRASS_UI_TERM", "1"); */
 
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("raster");
+    module->keywords = _("raster, recode category");
     module->description = _("Recodes categorical raster maps.");
 
     parm.input = G_define_standard_option(G_OPT_R_INPUT);
@@ -56,12 +56,10 @@ int main(int argc, char *argv[])
 
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
 
-    parm.rules = G_define_option();
+    parm.rules = G_define_standard_option(G_OPT_F_INPUT);
     parm.rules->key = "rules";
-    parm.rules->type = TYPE_STRING;
-    parm.rules->description = _("File containing recode rules");
-    parm.rules->key_desc = "name";
-    parm.rules->gisprompt = "old_file,file,input";
+    parm.rules->label = _("File containing recode rules");
+    parm.rules->required = NO;
 
     parm.title = G_define_option();
     parm.title->key = "title";
@@ -90,7 +88,7 @@ int main(int argc, char *argv[])
     if (parm.rules->answer) {
 	srcfp = fopen(parm.rules->answer, "r");
 	if (!srcfp)
-	    G_fatal_error(_("Cannot open rules file <%s>"),
+	    G_fatal_error(_("Unable to open rules file <%s>"),
 			  parm.rules->answer);
     }
 
@@ -106,5 +104,8 @@ int main(int argc, char *argv[])
 
     do_recode();
 
+    G_done_msg(_("Raster map <%s> created."),
+	       result);
+    
     exit(EXIT_SUCCESS);
 }
