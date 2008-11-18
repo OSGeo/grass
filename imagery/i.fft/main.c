@@ -39,31 +39,37 @@
 #include <grass/gis.h>
 #include <grass/gmath.h>
 #include <grass/glocale.h>
-#include "globals.h"
-#include "local_proto.h"
 
-char Cellmap_real[GNAME_MAX], Cellmap_imag[GNAME_MAX];
+static void fft_colors(const char *name)
+{
+    struct Colors wave, colors;
+    struct FPRange range;
+    DCELL min, max;
+
+    G_read_fp_range(name, G_mapset(), &range);
+    G_get_fp_range_min_max(&range, &min, &max);
+    G_make_wave_colors(&wave, min, max);
+    G_abs_log_colors(&colors, &wave, 100);
+    G_write_colors(name, G_mapset(), &colors);
+    G_free_colors(&colors);
+}
 
 int main(int argc, char *argv[])
 {
     /* Global variable & function declarations */
-    int Range;
-    char Cellmap_orig[GNAME_MAX];
-    int inputfd, realfd, imagfd;	/* the input and output file descriptors */
-    char *inmapset;		/* the input mapset name */
-    struct Cell_head window;
-    CELL *cell_row, *cell_row2;
-    double max, min, scale, temp;
-
-    int i, j;			/* Loop control variables */
-    int or, oc;			/* Original dimensions of image */
-    int rows, cols;		/* Smallest powers of 2 >= number of rows & columns */
-    long totsize;		/* Total number of data points */
-    double *data[2];		/* Data structure containing real & complex values of FFT */
-    int save_args();		/* function to stash the command line arguments */
     struct GModule *module;
-    struct Option *op1, *op2, *op3, *op4;
-    int maskfd;
+    struct {
+	struct Option *orig, *real, *imag;
+    } opt;
+    const char *Cellmap_real, *Cellmap_imag;
+    const char *Cellmap_orig;
+    int inputfd, realfd, imagfd;	/* the input and output file descriptors */
+    struct Cell_head window;
+    DCELL *cell_real, *cell_imag;
+    int rows, cols;		/* number of rows & columns */
+    long totsize;		/* Total number of data points */
+    double (*data)[2];		/* Data structure containing real & complex values of FFT */
+    int i, j;			/* Loop control variables */
 
     G_gisinit(argv[0]);
 
@@ -73,199 +79,134 @@ int main(int argc, char *argv[])
 	_("Fast Fourier Transform (FFT) for image processing.");
 
     /* define options */
-    op1 = G_define_option();
-    op1->key = "input_image";
-    op1->type = TYPE_STRING;
-    op1->required = YES;
-    op1->multiple = NO;
-    op1->gisprompt = "old,cell,raster";
-    op1->description = _("Input raster map being fft");
+    opt.orig = G_define_option();
+    opt.orig->key = "input_image";
+    opt.orig->type = TYPE_STRING;
+    opt.orig->required = YES;
+    opt.orig->multiple = NO;
+    opt.orig->gisprompt = "old,cell,raster";
+    opt.orig->description = _("Input raster map being fft");
 
-    op2 = G_define_option();
-    op2->key = "real_image";
-    op2->type = TYPE_STRING;
-    op2->required = YES;
-    op2->multiple = NO;
-    op2->gisprompt = "new,cell,raster";
-    op2->description = _("Output real part arrays stored as raster map");
+    opt.real = G_define_option();
+    opt.real->key = "real_image";
+    opt.real->type = TYPE_STRING;
+    opt.real->required = YES;
+    opt.real->multiple = NO;
+    opt.real->gisprompt = "new,cell,raster";
+    opt.real->description = _("Output real part arrays stored as raster map");
 
-    op3 = G_define_option();
-    op3->key = "imaginary_image";
-    op3->type = TYPE_STRING;
-    op3->required = YES;
-    op3->multiple = NO;
-    op3->gisprompt = "new,cell,raster";
-    op3->description = _("Output imaginary part arrays stored as raster map");
+    opt.imag = G_define_option();
+    opt.imag->key = "imaginary_image";
+    opt.imag->type = TYPE_STRING;
+    opt.imag->required = YES;
+    opt.imag->multiple = NO;
+    opt.imag->gisprompt = "new,cell,raster";
+    opt.imag->description = _("Output imaginary part arrays stored as raster map");
 
-    op4 = G_define_option();
-    op4->key = "range";
-    op4->type = TYPE_INTEGER;
-    op4->required = NO;
-    op4->multiple = NO;
-    op4->answer = "255";
-    op4->description = _("Range of values in output display files");
-
-    /*call parser */
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    strcpy(Cellmap_orig, op1->answer);
-    strcpy(Cellmap_real, op2->answer);
-    strcpy(Cellmap_imag, op3->answer);
+    Cellmap_orig = opt.orig->answer;
+    Cellmap_real = opt.real->answer;
+    Cellmap_imag = opt.imag->answer;
 
-    /* open input cell map */
-    if ((inmapset = G_find_cell(Cellmap_orig, "")) == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), Cellmap_orig);
-
-    inputfd = G_open_cell_old(Cellmap_orig, inmapset);
+    inputfd = G_open_cell_old(Cellmap_orig, "");
     if (inputfd < 0)
-	exit(EXIT_FAILURE);
+	G_fatal_error(_("Unable to open input map <%s>"), Cellmap_orig);
 
-    if ((maskfd = G_maskfd()) >= 0)
+    if (G_maskfd() >= 0)
 	G_warning(_("Raster MASK found, consider to remove "
 		    "(see man-page). Will continue..."));
 
-    sscanf(op4->answer, "%d", &Range);
-    if (Range <= 0)
-	G_fatal_error(_("Range less than or equal to zero not allowed."));
-
     G_get_set_window(&window);	/* get the current window for later */
-    put_orig_window(&window);
 
     /* get the rows and columns in the current window */
-    or = G_window_rows();
-    oc = G_window_cols();
-    rows = G_math_max_pow2(or);
-    cols = G_math_max_pow2(oc);
+    rows = G_window_rows();
+    cols = G_window_cols();
     totsize = rows * cols;
 
-    /*  fprintf(stderr,"Power 2 values : %d rows %d columns\n",rows,cols); */
-
     /* Allocate appropriate memory for the structure containing
-       the real and complex components of the FFT.  DATA[0] will
-       contain the real, and DATA[1] the complex component.
+       the real and complex components of the FFT.  data[...][0] will
+       contain the real, and data[...][1] the complex component.
      */
-    data[0] = (double *)G_malloc((rows * cols) * sizeof(double));
-    data[1] = (double *)G_malloc((rows * cols) * sizeof(double));
-
-    /* Initialize real & complex components to zero */
-    G_message(_("Initializing data...\n"));
-    {
-	register double *dptr1, *dptr0;
-
-	dptr0 = data[0];
-	dptr1 = data[1];
-	for (i = 0; i < totsize; i++) {
-	    *dptr0++ = *dptr1++ = 0.0;
-	}
-    }
+    data = G_malloc(rows * cols * 2 * sizeof(double));
 
     /* allocate the space for one row of cell map data */
-    cell_row = G_allocate_cell_buf();
+    cell_real = G_allocate_d_raster_buf();
+    cell_imag = G_allocate_d_raster_buf();
+
+#define C(i, j) ((i) * cols + (j))
 
     /* Read in cell map values */
     G_message(_("Reading the raster map..."));
-    for (i = 0; i < or; i++) {
-	if (G_get_map_row(inputfd, cell_row, i) < 0)
+    for (i = 0; i < rows; i++) {
+	if (G_get_d_raster_row(inputfd, cell_real, i) < 0)
 	    G_fatal_error(_("Error while reading input raster map."));
-	for (j = 0; j < oc; j++)
-	    *(data[0] + (i * cols) + j) = (double)cell_row[j];
+	for (j = 0; j < cols; j++) {
+	    data[C(i, j)][0] = cell_real[j];
+	    data[C(i, j)][1] = 0.0;
+	}
     }
-    /* close input cell map and release the row buffer */
+
+    /* close input cell map */
     G_close_cell(inputfd);
-    G_free(cell_row);
 
     /* perform FFT */
     G_message(_("Starting FFT..."));
-    fft(-1, data, totsize, cols, rows);
+    fft2(-1, data, totsize, cols, rows);
     G_message(_("FFT completed..."));
 
-    /* set up a window for the transform cell map */
-    window.rows = rows;
-    window.cols = cols;
-    window.south = window.north - window.rows * window.ns_res;
-    window.east = window.cols * window.ew_res + window.west;
-    G_set_window(&window);
+    /* open the output cell maps */
+    if ((realfd = G_open_fp_cell_new(Cellmap_real)) < 0)
+	G_fatal_error(_("Unable to open real output map <%s>"), Cellmap_real);
+    if ((imagfd = G_open_fp_cell_new(Cellmap_imag)) < 0)
+	G_fatal_error(_("Unable to open imaginary output map <%s>"), Cellmap_imag);
 
-    /* open the output cell maps and allocate cell row buffers */
-    if ((realfd = G_open_cell_new(Cellmap_real)) < 0)
-	exit(1);
-    if ((imagfd = G_open_cell_new(Cellmap_imag)) < 0)
-	exit(1);
-    cell_row = G_allocate_cell_buf();
-    cell_row2 = G_allocate_cell_buf();
+#define SWAP1(a, b)				\
+    do {					\
+	double temp = (a);			\
+	(a) = (b);				\
+	(b) = temp;				\
+    } while (0)
+
+#define SWAP2(a, b)				\
+    do {					\
+	SWAP1(data[(a)][0], data[(b)][0]);	\
+	SWAP1(data[(a)][1], data[(b)][1]);	\
+    } while (0)
 
     /* rotate the data array for standard display */
     G_message(_("Rotating data..."));
+    for (i = 0; i < rows; i++)
+	for (j = 0; j < cols / 2; j++)
+	    SWAP2(C(i, j), C(i, j + cols / 2));
+    for (i = 0; i < rows / 2; i++)
+	for (j = 0; j < cols; j++)
+	    SWAP2(C(i, j), C(i + rows / 2, j));
+
+    G_message(_("Writing transformed data..."));
+
     for (i = 0; i < rows; i++) {
-	for (j = 0; j < cols / 2; j++) {
-	    temp = *(data[0] + i * cols + j);
-	    *(data[0] + i * cols + j) = *(data[0] + i * cols + j + cols / 2);
-	    *(data[0] + i * cols + j + cols / 2) = temp;
-	    temp = *(data[1] + i * cols + j);
-	    *(data[1] + i * cols + j) = *(data[1] + i * cols + j + cols / 2);
-	    *(data[1] + i * cols + j + cols / 2) = temp;
-	}
-    }
-    for (i = 0; i < rows / 2; i++) {
 	for (j = 0; j < cols; j++) {
-	    temp = *(data[0] + i * cols + j);
-	    *(data[0] + i * cols + j) =
-		*(data[0] + (i + rows / 2) * cols + j);
-	    *(data[0] + (i + rows / 2) * cols + j) = temp;
-	    temp = *(data[1] + i * cols + j);
-	    *(data[1] + i * cols + j) =
-		*(data[1] + (i + rows / 2) * cols + j);
-	    *(data[1] + (i + rows / 2) * cols + j) = temp;
+	    cell_real[j] = data[C(i, j)][0];
+	    cell_imag[j] = data[C(i, j)][1];
 	}
+	G_put_d_raster_row(realfd, cell_real);
+	G_put_d_raster_row(imagfd, cell_imag);
     }
 
-    G_message(_("Writing transformed data to file..."));
-    /* write out the double arrays to cell_misc/file/FFTREAL and FFTIMAG */
-    max = 0.0;
-    min = 0.0;
-    save_fft(totsize, data, &max, &min);
-
-    G_message(_("Writing viewable versions of transformed data to files..."));
-    /* Write out result to a new cell map */
-    /*
-       for (i=0; i<rows; i++) {
-       for (j=0; j<cols; j++) {
-       *(cell_row+j) = (CELL) (log(1.0+fabs(*(data[0]+i*cols+j)
-       )) * scale);
-       *(cell_row2+j) = (CELL) (log(1.0+fabs(*(data[1]+i*cols+j
-       ))) * scale);
-       }
-     */
-    scale = (double)Range / log(1.0 + max > -min ? max : -min);
-    {
-	register double *data0, *data1;
-	register CELL *cptr1, *cptr2;
-
-	for (i = 0; i < rows; i++) {
-	    data0 = data[0] + i * cols;
-	    data1 = data[1] + i * cols;
-	    cptr1 = cell_row;
-	    cptr2 = cell_row2;
-	    for (j = 0; j < cols; j++) {
-		*cptr1++ = (CELL) (log(1.0 + fabs(*data0++)) * scale);
-		*cptr2++ = (CELL) (log(1.0 + fabs(*data1++)) * scale);
-	    }
-	    G_put_raster_row(realfd, cell_row, CELL_TYPE);
-	    G_put_raster_row(imagfd, cell_row2, CELL_TYPE);
-	}
-    }
     G_close_cell(realfd);
     G_close_cell(imagfd);
-    G_free(cell_row);
-    G_free(cell_row2);
 
-    /* set up the color tables for histogram streched grey scale */
-    fft_colors();
+    G_free(cell_real);
+    G_free(cell_imag);
+
+    /* set up the color tables */
+    fft_colors(Cellmap_real);
+    fft_colors(Cellmap_imag);
 
     /* Release memory resources */
-    for (i = 0; i < 2; i++)
-	G_free(data[i]);
+    G_free(data);
 
     G_done_msg(_("Transform successful."));
 
