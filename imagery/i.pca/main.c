@@ -8,7 +8,7 @@
  *
  * PURPOSE:      Principal Component Analysis transform of satellite data.
  *
- * COPYRIGHT:    (C) 2004-2007 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2004-2008 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("imagery");
+    module->keywords = _("imagery, image transformation, PCA");
     module->description = _("Principal components analysis (pca) program "
 			    "for image processing.");
 
@@ -127,7 +127,7 @@ int main(int argc, char *argv[])
 			  opt_in->answers[i]);
     }
 
-    G_message(_("Calculating covariance matrix:"));
+    G_verbose_message(_("Calculating covariance matrix..."));
     calc_mu(inp_fd, mu, bands);
 
     calc_covariance(inp_fd, covar, mu, bands);
@@ -141,7 +141,7 @@ int main(int argc, char *argv[])
 	}
     }
 
-    G_debug(1, _("Calculating eigenvalues and eigenvectors..."));
+    G_debug(1, "Calculating eigenvalues and eigenvectors...");
     eigen(covar, eigmat, eigval, bands);
 
 #ifdef PCA_DEBUG
@@ -149,10 +149,10 @@ int main(int argc, char *argv[])
     dump_eigen(bands, eigmat, eigval);
 #endif
 
-    G_debug(1, _("Ordering eigenvalues in descending order..."));
+    G_debug(1, "Ordering eigenvalues in descending order...");
     egvorder2(eigval, eigmat, bands);
 
-    G_debug(1, _("Transposing eigen matrix..."));
+    G_debug(1, "Transposing eigen matrix...");
     transpose2(eigmat, bands);
 
     /* write output images */
@@ -203,7 +203,8 @@ set_output_scale(struct Option *scale_opt, int *scale, int *scale_min,
 	    if (*scale_min == 0)
 		*scale = 0;
 	    else {
-		G_warning(_("Scale range length should be > 0. Using default values: 0,255"));
+		G_warning(_("Scale range length should be > 0. "
+			    "Using default values: 0,255."));
 		*scale_min = 0;
 		*scale_max = 255;
 	    }
@@ -239,16 +240,16 @@ static int calc_mu(int *fds, double *mu, int bands)
 	if (rowbuf)
 	    G_free(rowbuf);
 	if ((rowbuf = G_allocate_raster_buf(maptype)) == NULL)
-	    G_fatal_error(_("Cannot allocate memory for row buffer"));
+	    G_fatal_error(_("Unable allocate memory for row buffer"));
 
-	G_message(_("Computing Means for band %d:"), i + 1);
+	G_message(_("Computing Means for band %d..."), i + 1);
 	for (row = 0; row < rows; row++) {
 	    void *ptr = rowbuf;
 
 	    G_percent(row, rows - 1, 2);
 
 	    if (G_get_raster_row(fds[i], rowbuf, row, maptype) < 0)
-		G_fatal_error(_("Cannot read raster row [%d]"), row);
+		G_fatal_error(_("Unable to read raster map row %d"), row);
 
 	    for (col = 0; col < cols; col++) {
 		/* skip null cells */
@@ -288,16 +289,16 @@ static int calc_covariance(int *fds, double **covar, double *mu, int bands)
 	if (rowbuf1)
 	    G_free(rowbuf1);
 	if ((rowbuf1 = G_allocate_raster_buf(maptype)) == NULL)
-	    G_fatal_error(_("Cannot allocate memory for row buffer"));
+	    G_fatal_error(_("Unable allocate memory for row buffer"));
 
-	G_message(_("Computing row %d of covariance matrix:"), j + 1);
+	G_message(_("Computing row %d of covariance matrix..."), j + 1);
 	for (row = 0; row < rows; row++) {
 	    void *ptr1, *ptr2;
 
 	    G_percent(row, rows - 1, 2);
 
 	    if (G_get_raster_row(fds[j], rowbuf1, row, maptype) < 0)
-		G_fatal_error(_("Cannot read raster row [%d]"), row);
+		G_fatal_error(_("Unable to read raster map row %d"), row);
 
 	    for (k = j; k < bands; k++) {
 		RASTER_MAP_TYPE maptype2 = G_get_raster_map_type(fds[k]);
@@ -306,10 +307,10 @@ static int calc_covariance(int *fds, double **covar, double *mu, int bands)
 		if (rowbuf2)
 		    G_free(rowbuf2);
 		if ((rowbuf2 = G_allocate_raster_buf(maptype2)) == NULL)
-		    G_fatal_error(_("Cannot allocate memory for row buffer"));
+		    G_fatal_error(_("Unable to allocate memory for row buffer"));
 
 		if (G_get_raster_row(fds[k], rowbuf2, row, maptype2) < 0)
-		    G_fatal_error(_("Cannot read raster row [%d]"), row);
+		    G_fatal_error(_("Unable to read raster map row %d"), row);
 
 		ptr1 = rowbuf1;
 		ptr2 = rowbuf2;
@@ -369,7 +370,7 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
 	G_allocate_raster_buf(DCELL_TYPE);
 
     if (!outbuf)
-	G_fatal_error(_("Cannot allocate memory for raster row"));
+	G_fatal_error(_("Unable to allocate memory for raster row"));
 
     for (i = 0; i < bands; i++) {
 	char name[100];
@@ -378,7 +379,7 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
 
 	sprintf(name, "%s.%d", out_basename, i + 1);
 
-	G_message("%s: Transforming:", name);
+	G_message("Transforming <%s>...", name);
 
 	/* open a new file for output */
 	if (scale)
@@ -397,7 +398,7 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
 	    int row, col;
 
 	    if (scale && (pass == PASSES)) {
-		G_message(_("%s: Rescaling the data to [%d,%d] range:"),
+		G_message(_("Rescaling the data <%s> to range %d,%d..."),
 			  name, scale_min, scale_max);
 
 		old_range = max - min;
@@ -421,10 +422,10 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
 		    if (rowbuf)
 			G_free(rowbuf);
 		    if (!(rowbuf = G_allocate_raster_buf(maptype)))
-			G_fatal_error(_("Cannot allocate memory for row buffer"));
+			G_fatal_error(_("Unable allocate memory for row buffer"));
 
 		    if (G_get_raster_row(inp_fd[j], rowbuf, row, maptype) < 0)
-			G_fatal_error(_("Cannot read raster row [%d]"), row);
+			G_fatal_error(_("Unable to read raster map row %d"), row);
 
 		    rowptr = rowbuf;
 		    outptr = outbuf;
