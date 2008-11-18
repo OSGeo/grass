@@ -53,6 +53,7 @@ SUBDIRS = \
 	v.in.mapgen \
 	v.in.sites.all \
 	v.in.wfs \
+	v.out.gps \
 	v.rast.stats \
 	v.report \
 	v.what.vect
