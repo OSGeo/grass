@@ -1185,44 +1185,48 @@ class cmdPanel(wx.Panel):
                                              'dbcolumn',
                                              'layer',
                                              'layer_all'):
-                    if p.get('prompt', '') in ('layer',
-                                               'layer_all'):
-                        if p.get('prompt', '') == 'layer_all':
-                            all = True
-                        else:
-                            all = False
-                        if p.get('age', 'old_layer') == 'old_layer':
-                            win = gselect.LayerSelect(parent=which_panel,
-                                                      all=all)
+                    if p.get('multiple', 'no') == 'yes':
+                        win = wx.TextCtrl(parent=which_panel, value = p.get('default',''),
+                                          size=globalvar.DIALOG_TEXTCTRL_SIZE)
+                    else:
+                        if p.get('prompt', '') in ('layer',
+                                                   'layer_all'):
+                            if p.get('prompt', '') == 'layer_all':
+                                all = True
+                            else:
+                                all = False
+                            if p.get('age', 'old_layer') == 'old_layer':
+                                win = gselect.LayerSelect(parent=which_panel,
+                                                          all=all)
+                                p['wxGetValue'] = win.GetStringSelection
+                                win.Bind(wx.EVT_CHOICE, self.OnUpdateSelection)
+                                win.Bind(wx.EVT_CHOICE, self.OnSetValue)
+                            else:
+                                win = wx.SpinCtrl(parent=which_panel, id=wx.ID_ANY,
+                                                  min=1, max=100, initial=1)
+                                win.Bind(wx.EVT_SPINCTRL, self.OnSetValue)
+                                
+                        elif p.get('prompt', '') == 'dbdriver':
+                            win = gselect.DriverSelect(parent=which_panel,
+                                                       choices=p['values'],
+                                                       value=p['default'])
                             p['wxGetValue'] = win.GetStringSelection
-                            win.Bind(wx.EVT_CHOICE, self.OnUpdateSelection)
-                            win.Bind(wx.EVT_CHOICE, self.OnSetValue)
-                        else:
-                            win = wx.SpinCtrl(parent=which_panel, id=wx.ID_ANY,
-                                              min=1, max=100, initial=1)
-                            win.Bind(wx.EVT_SPINCTRL, self.OnSetValue)
-
-                    elif p.get('prompt', '') == 'dbdriver':
-                        win = gselect.DriverSelect(parent=which_panel,
-                                                   choices=p['values'],
-                                                   value=p['default'])
-                        p['wxGetValue'] = win.GetStringSelection
-                        win.Bind(wx.EVT_COMBOBOX, self.OnUpdateSelection)
-                        win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
-                    elif p.get('prompt', '') == 'dbname':
-                        win = gselect.DatabaseSelect(parent=which_panel,
-                                                     value=p['default'])
-                        win.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
-                        win.Bind(wx.EVT_TEXT, self.OnSetValue)
-                    elif p.get('prompt', '') == 'dbtable':
-                        win = gselect.TableSelect(parent=which_panel)
-                        p['wxGetValue'] = win.GetStringSelection
-                        win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
-                    elif p.get('prompt', '') == 'dbcolumn':
-                        win = gselect.ColumnSelect(parent=which_panel)
-                        p['wxGetValue'] = win.GetStringSelection
-                        win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
-                    
+                            win.Bind(wx.EVT_COMBOBOX, self.OnUpdateSelection)
+                            win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
+                        elif p.get('prompt', '') == 'dbname':
+                            win = gselect.DatabaseSelect(parent=which_panel,
+                                                         value=p['default'])
+                            win.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
+                            win.Bind(wx.EVT_TEXT, self.OnSetValue)
+                        elif p.get('prompt', '') == 'dbtable':
+                            win = gselect.TableSelect(parent=which_panel)
+                            p['wxGetValue'] = win.GetStringSelection
+                            win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
+                        elif p.get('prompt', '') == 'dbcolumn':
+                            win = gselect.ColumnSelect(parent=which_panel)
+                            p['wxGetValue'] = win.GetStringSelection
+                            win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
+                            
                     p['wxId'] = win.GetId()
                     
                     which_sizer.Add(item=win, proportion=0,

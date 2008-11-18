@@ -476,8 +476,9 @@ class GMConsole(wx.Panel):
             # Thread aborted (using our convention of None return)
             self.WriteLog(_('Please note that the data are left in incosistent stage '
                             'and can be corrupted'), self.cmd_output.StyleWarning)
-            self.WriteCmdLog('(%s) %s' % (str(time.ctime()),
-                                          _('Command aborted')))
+            self.WriteCmdLog('(%s) %s (%d sec)' % (str(time.ctime()),
+                                                   _('Command aborted'),
+                                                   (time.time() - event.time)))
             # pid=self.cmdThread.requestId)
         else:
             try:

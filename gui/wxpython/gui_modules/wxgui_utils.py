@@ -291,17 +291,21 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             layer = self.GetPyData(self.layer_selected)[0]['maplayer']
             # enable editing only for vector map layers available in the current mapset
             digitToolbar = self.mapdisplay.toolbars['vdigit']
-            if layer.GetMapset() != grassenv.GetGRASSVariable("MAPSET"):
-                # only vector map in current mapset can be edited
-                self.popupMenu.Enable (self.popupID5, False)
-                self.popupMenu.Enable (self.popupID6, False)
-            elif digitToolbar and digitToolbar.GetLayer():
+            if digitToolbar:
                 # background vector map
                 self.popupMenu.Append(self.popupID14,
                                       text=_("Use as background vector map"),
                                       kind=wx.ITEM_CHECK)
                 self.Bind(wx.EVT_MENU, self.OnSetBgMap, id=self.popupID14)
-
+                if UserSettings.Get(group='vdigit', key='bgmap', subkey='value',
+                                    internal=True) == layer.GetName():
+                    self.popupMenu.Check(self.popupID14, True)
+            
+            if layer.GetMapset() != grassenv.GetGRASSVariable("MAPSET"):
+                # only vector map in current mapset can be edited
+                self.popupMenu.Enable (self.popupID5, False)
+                self.popupMenu.Enable (self.popupID6, False)
+            elif digitToolbar and digitToolbar.GetLayer():
                 # vector map already edited
                 vdigitLayer = digitToolbar.GetLayer()
                 if vdigitLayer is layer:
@@ -320,10 +324,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     self.popupMenu.Enable(self.popupID6, False)
                     # enable 'bgmap'
                     self.popupMenu.Enable(self.popupID14, True)
-                    if UserSettings.Get(group='vdigit', key='bgmap', subkey='value',
-                                        internal=True) == layer.GetName():
-                        self.popupMenu.Check(self.popupID14, True)
-                
+            
             self.popupMenu.Append(self.popupID7, _("Metadata"))
             self.Bind (wx.EVT_MENU, self.OnMetadata, id=self.popupID7)
 
