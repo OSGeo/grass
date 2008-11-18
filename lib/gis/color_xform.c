@@ -232,8 +232,9 @@ int G_log_colors(struct Colors *dst, struct Colors *src, int samples)
 	}
 
 	if (i > 0)
-	    G_add_d_raster_color_rule(&prev, red, grn, blu, &x, red2, grn2,
-				      blu2, dst);
+	    G_add_d_raster_color_rule(&prev, red, grn, blu,
+				      &x, red2, grn2, blu2,
+				      dst);
 
 	prev = x;
 
@@ -244,3 +245,70 @@ int G_log_colors(struct Colors *dst, struct Colors *src, int samples)
 
     return 0;
 }
+
+/*!
+ * \brief make logarithmically-scaled version of an existing color table, allowing for signed values
+ *
+ *  \param dst
+ *  \param src
+ *  \param samples
+ *  \return int
+ */
+
+int G_abs_log_colors(struct Colors *dst, struct Colors *src, int samples)
+{
+    DCELL min, max;
+    double lmin, lmax;
+    DCELL amax, lamax;
+    int red, grn, blu;
+    DCELL prev;
+    int i;
+
+    G_init_colors(dst);
+
+    G_get_d_color_range(&min, &max, src);
+
+    lmin = log(fabs(min) + 1.0);
+    lmax = log(fabs(max) + 1.0);
+
+    amax = fabs(min) > fabs(max) ? fabs(min) : fabs(max);
+    lamax = lmin > lmax ? lmin : lmax;
+
+    G_get_default_color(&red, &grn, &blu, src);
+    G_set_default_color(red, grn, blu, dst);
+
+    G_get_null_value_color(&red, &grn, &blu, src);
+    G_set_null_value_color(red, grn, blu, dst);
+
+    for (i = 0; i <= samples; i++) {
+	int red2, grn2, blu2;
+	double lx;
+	DCELL x, y;
+
+	y = min + (max - min) * i / samples;
+	G_get_d_raster_color(&y, &red2, &grn2, &blu2, src);
+
+	if (i == 0)
+	    x = 1;
+	else if (i == samples)
+	    x = amax;
+	else {
+	    lx = 0 + lamax * i / samples;
+	    x = exp(lx);
+	}
+
+	if (i > 0)
+	    G_add_d_raster_color_rule(&prev, red, grn, blu,
+				      &x, red2, grn2, blu2,
+				      dst);
+
+	prev = x;
+
+	red = red2;
+	grn = grn2;
+	blu = blu2;
+    }
+
+    return 0;
+}
+
