@@ -206,7 +206,7 @@ int G_make_bgyr_fp_colors(struct Colors *, DCELL, DCELL);
 int G_make_byg_colors(struct Colors *, CELL, CELL);
 int G_make_byg_fp_colors(struct Colors *, DCELL, DCELL);
 int G_make_grey_scale_colors(struct Colors *, CELL, CELL);
-int G_make_grey_scale_fp_colors(struct Colors *, double, double);
+int G_make_grey_scale_fp_colors(struct Colors *, DCELL, DCELL);
 int G_make_gyr_colors(struct Colors *, CELL, CELL);
 int G_make_gyr_fp_colors(struct Colors *, DCELL, DCELL);
 int G_make_rainbow_colors(struct Colors *, CELL, CELL);
@@ -357,6 +357,7 @@ int G_histogram_eq_colors(struct Colors *, struct Colors *,
 void G_histogram_eq_colors_fp(struct Colors *,
 			      struct Colors *, struct FP_stats *);
 int G_log_colors(struct Colors *, struct Colors *, int);
+int G_abs_log_colors(struct Colors *, struct Colors *, int);
 
 /* commas.c */
 int G_insert_commas(char *);

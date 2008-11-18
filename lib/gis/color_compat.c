@@ -132,7 +132,7 @@ int G_make_grey_scale_colors(struct Colors *colors, CELL min, CELL max)
     return G_make_colors(colors, "grey", min, max);
 }
 
-int G_make_grey_scale_fp_colors(struct Colors *colors, double min, double max)
+int G_make_grey_scale_fp_colors(struct Colors *colors, DCELL min, DCELL max)
 {
     return G_make_fp_colors(colors, "grey", min, max);
 }
