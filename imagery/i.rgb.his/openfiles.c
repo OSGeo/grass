@@ -18,19 +18,19 @@ void openfiles(char *r_name, char *g_name, char *b_name,
 	G_fatal_error(_("Raster map <%s> not found"), b_name);
 
     if ((fd_input[0] = G_open_cell_old(r_name, mapset)) < 0)
-	G_fatal_error(_("Cannot open raster map <%s>"), r_name);
+	G_fatal_error(_("Unable to open raster map <%s>"), r_name);
     if ((fd_input[1] = G_open_cell_old(g_name, mapset)) < 0)
-	G_fatal_error(_("Cannot open raster map <%s>"), g_name);
+	G_fatal_error(_("Unable to open raster map <%s>"), g_name);
     if ((fd_input[2] = G_open_cell_old(b_name, mapset)) < 0)
-	G_fatal_error(_("Cannot open raster map <%s>"), b_name);
+	G_fatal_error(_("Unable to open raster map <%s>"), b_name);
 
     /* open output files */
     if ((fd_output[0] = G_open_cell_new(h_name)) < 0)
-	G_fatal_error(_("Cannot create raster map <%s>"), h_name);
+	G_fatal_error(_("Unable to create raster map <%s>"), h_name);
     if ((fd_output[1] = G_open_cell_new(i_name)) < 0)
-	G_fatal_error(_("Cannot create raster map <%s>"), i_name);
+	G_fatal_error(_("Unable to create raster map <%s>"), i_name);
     if ((fd_output[2] = G_open_cell_new(s_name)) < 0)
-	G_fatal_error(_("Cannot create raster map <%s>"), s_name);
+	G_fatal_error(_("Unable to create raster map <%s>"), s_name);
 
     /* allocate the cell row buffer */
     if ((rowbuf[0] = G_allocate_cell_buf()) == NULL)
