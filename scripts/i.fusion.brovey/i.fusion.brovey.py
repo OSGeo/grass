@@ -29,53 +29,56 @@
 
 #%Module
 #%  description: Brovey transform to merge multispectral and high-res panchromatic channels
-#%  keywords: raster, imagery, fusion
+#%  keywords: imagery, fusion, Brovey
 #%End
 #%Flag
 #%  key: l
-#%  description: sensor: LANDSAT
+#%  description: LANDSAT sensor
+#%  guisection: Sensor
 #%END
 #%Flag
 #%  key: q
-#%  description: sensor: QuickBird
+#%  description: QuickBird sensor
+#%  guisection: Sensor
 #%END
 #%Flag
 #%  key: s
-#%  description: sensor: SPOT
+#%  description: SPOT sensor
+#%  guisection: Sensor
 #%END
 #%option
 #% key: ms1
 #% type: string
 #% gisprompt: old,cell,raster
-#% description: raster input map (green: tm2 | qbird_green | spot1)
+#% description: Name of input raster map (green: tm2 | qbird_green | spot1)
 #% required : yes
 #%end
 #%option
 #% key: ms2
 #% type: string
 #% gisprompt: old,cell,raster
-#% description: raster input map (NIR: tm4 | qbird_nir | spot2)
+#% description: Name of input raster map (NIR: tm4 | qbird_nir | spot2
 #% required : yes
 #%end
 #%option
 #% key: ms3
 #% type: string
 #% gisprompt: old,cell,raster
-#% description: raster input map (MIR; tm5 | qbird_red | spot3)
+#% description: Name of input raster map (MIR; tm5 | qbird_red | spot3
 #% required : yes
 #%end
 #%option
 #% key: pan
 #% type: string
 #% gisprompt: old,cell,raster
-#% description: raster input map (etmpan | qbird_pan | spotpan)
+#% description: Name of input raster map (etmpan | qbird_pan | spotpan)
 #% required : yes
 #%end
 #%option
 #% key: outputprefix
 #% type: string
 #% gisprompt: new,cell,raster
-#% description: raster output map prefix (e.g. 'brov')
+#% description: Name for output raster map prefix (e.g. 'brov')
 #% required : yes
 #%end
 
@@ -111,10 +114,10 @@ def main():
     # clone current region
     grass.use_temp_region()
 
-    grass.message("Using resolution from PAN: %f" % panres)
+    grass.verbose("Using resolution from PAN: %f" % panres)
     grass.run_command('g.region', flags = 'a', res = panres)
 
-    grass.message("Performing Brovey transformation...")
+    grass.verbose("Performing Brovey transformation...")
 
     # The formula was originally developed for LANDSAT-TM5 and SPOT, 
     # but it also works well with LANDSAT-TM7
@@ -153,7 +156,7 @@ def main():
 
     if spot:
         #apect table is nice for SPOT:
-	grass.message("Assigning color tables for SPOT ...")
+	grass.message("Assigning color tables for SPOT...")
 	for ch in ['red', 'green', 'blue']:
 	    grass.run_command('r.colors', map = "%s.%s" % (out, ch), col = 'aspect')
 	grass.message("Fixing output names...")
@@ -163,7 +166,7 @@ def main():
 	    grass.run_command('g.rename', rast = (src, dst), quiet = True)
     else:
 	#aspect table is nice for LANDSAT and QuickBird:
-	grass.message("Assigning color tables for LANDSAT or QuickBird ...")
+	grass.message("Assigning color tables for LANDSAT or QuickBird...")
 	for ch in ['red', 'green', 'blue']:
 	    grass.run_command('r.colors', map = "%s.%s" % (out, ch), col = 'aspect')
 
@@ -171,10 +174,10 @@ def main():
     for ch in ['red', 'green', 'blue']:
 	grass.message("%s.%s" % (out, ch))
 
-    grass.message("To visualize output, run:")
-    grass.message("g.region -p rast=%s.red" % out)
-    grass.message("d.rgb r=%s.red g=%s.green b=%s.blue" % (out, out, out))
-    grass.message("If desired, combine channels with 'r.composite' to a single map.")
+    grass.verbose("To visualize output, run:")
+    grass.verbose("g.region -p rast=%s.red" % out)
+    grass.verbose("d.rgb r=%s.red g=%s.green b=%s.blue" % (out, out, out))
+    grass.verbose("If desired, combine channels with 'r.composite' to a single map.")
 
     # write cmd history:
     for ch in ['red', 'green', 'blue']:
