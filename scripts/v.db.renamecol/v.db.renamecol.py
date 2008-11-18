@@ -86,7 +86,7 @@ def main():
 
     # describe old col
     oldcoltype = None
-    for f in grass.db_describe(table):
+    for f in grass.db_describe(table)['cols']:
 	if f[0] != oldcol:
 	    continue
 	oldcoltype = f[1]
