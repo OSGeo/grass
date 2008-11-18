@@ -10,7 +10,7 @@
  * PURPOSE:      Hue-intensity-saturation (his) to red-green-blue (rgb)
  *               raster map color transformation function.
  *
- * COPYRIGHT:    (C) 2007 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2007-2008 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -42,35 +42,35 @@ int main(int argc, char **argv)
 
     /* Set description */
     module = G_define_module();
-    module->keywords = _("imagery");
+    module->keywords = _("imagery, color transformation, RGB, HIS");
     module->description =
-	_("Hue-intensity-saturation (his) to red-green-blue (rgb) "
-	  "raster map color transformation function.");
+	_("Transforms raster maps from HIS (Hue-Intensity-Saturation) color space to "
+	  "RGB (Red-Green-Blue) color space.");
 
     /* Define the different options */
     opt_hue = G_define_standard_option(G_OPT_R_INPUT);
     opt_hue->key = "hue_input";
-    opt_hue->description = _("Hue map name");
+    opt_hue->description = _("Name of input raster map (hue)");
 
     opt_int = G_define_standard_option(G_OPT_R_INPUT);
     opt_int->key = "intensity_input";
-    opt_int->description = _("Intensity map name");
+    opt_int->description = _("Name of input raster map (intensity)");
 
     opt_sat = G_define_standard_option(G_OPT_R_INPUT);
     opt_sat->key = "saturation_input";
-    opt_sat->description = _("Saturation map name");
+    opt_sat->description = _("Name of input raster map (saturation)");
 
     opt_red = G_define_standard_option(G_OPT_R_OUTPUT);
     opt_red->key = "red_output";
-    opt_red->description = _("Output map representing the red");
+    opt_red->description = _("Name for output raster map (red)");
 
     opt_green = G_define_standard_option(G_OPT_R_OUTPUT);
     opt_green->key = "green_output";
-    opt_green->description = _("Output map representing the green");
+    opt_green->description = _("Name for output raster map (green)");
 
     opt_blue = G_define_standard_option(G_OPT_R_OUTPUT);
     opt_blue->key = "blue_output";
-    opt_blue->description = _("Output map representing the blue");
+    opt_blue->description = _("Name for output raster map (blue)");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -91,7 +91,7 @@ int main(int argc, char **argv)
 	/* read in a row from each cell map */
 	for (band = 0; band < 3; band++)
 	    if (G_get_map_row(fd_input[band], rowbuffer[band], i) < 0)
-		G_fatal_error(_("Cannot read row from raster map"));
+		G_fatal_error(_("Unable to read raster map row %d"), i);
 
 	/* process this row of the map */
 	his2rgb(rowbuffer, cols);
@@ -100,7 +100,7 @@ int main(int argc, char **argv)
 	for (band = 0; band < 3; band++)
 	    if (G_put_raster_row(fd_output[band], rowbuffer[band], CELL_TYPE)
 		< 0)
-		G_fatal_error(_("Cannot write row to raster map"));
+		G_fatal_error(_("Failed writing raster map row %d"), i);
     }
 
     closefiles(opt_red->answer, opt_green->answer, opt_blue->answer,
