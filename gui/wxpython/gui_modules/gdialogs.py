@@ -749,8 +749,11 @@ class LoadMapLayersDialog(wx.Dialog):
 
         list = []
         for layer in self.map_layers:
-            if re.compile('^' + event.GetString()).search(layer):
-                list.append(layer)
+            try:
+                if re.compile('^' + event.GetString()).search(layer):
+                    list.append(layer)
+            except:
+                pass
 
         self.layers.Set(list)
         self.OnSelectAll(None)
