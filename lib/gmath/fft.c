@@ -80,7 +80,7 @@ int fft2(int i_sign, double (*data)[2], int NN, int dimc, int dimr)
     norm = 1.0 / sqrt(NN);
 
 #ifdef HAVE_FFTW3_H
-    plan = fftw_plan_dft_2d(dimc, dimr, data, data,
+    plan = fftw_plan_dft_2d(dimr, dimc, data, data,
 			    (i_sign < 0) ? FFTW_FORWARD : FFTW_BACKWARD,
 			    FFTW_ESTIMATE);
 
