@@ -24,7 +24,7 @@ int write_support(int bands, char *outname, double **eigmat)
 	G_mark_colors_as_fp(&colors);
 
     if (G_write_colors(outname, mapset, &colors) < 0)
-	G_message(_("Cannot write color table of raster map <%s>"), outname);
+	G_message(_("Unable to write color table for raster map <%s>"), outname);
 
     return write_history(bands, outname, eigmat);
 }
