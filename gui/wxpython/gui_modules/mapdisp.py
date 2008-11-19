@@ -3298,10 +3298,6 @@ class MapFrame(wx.Frame):
         printmenu.AppendItem(doprint)
         self.Bind(wx.EVT_MENU, self.printopt.OnDoPrint, doprint)
 
-        reset = wx.MenuItem(printmenu, -1,'Reset')
-        printmenu.AppendItem(reset)
-        self.Bind(wx.EVT_MENU, self.printopt.OnReset, reset)
-
         # Popup the menu.  If an item is selected then its handler
         # will be called before PopupMenu returns.
         self.PopupMenu(printmenu)
