@@ -322,6 +322,9 @@ static int read_ellipsoid_table(int fatal)
 	    continue;
 	}
     }
+
+    fclose(fd);
+
     if (!err) {
 	/* over correct typed version */
 	qsort(table, count, sizeof(*table), compare_table_names);
