@@ -156,6 +156,3 @@ class PrintOptions:
         else:
             self.printData = wx.PrintData( printer.GetPrintDialogData().GetPrintData() )
         printout.Destroy()
-
-    def OnReset(self):
-	self.printData = None
