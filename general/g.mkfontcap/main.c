@@ -115,6 +115,9 @@ int main(int argc, char *argv[])
 
     /* Prepare list of directories to search */
     if (extradirs->answer) {
+#ifndef HAVE_FT2BUILD_H
+	G_warning("This GRASS installation was compiled without Freetype support, extradirs parameter ignored");
+#endif
 	char *str = G_store(extradirs->answer);
 
 	while ((str = strtok(str, ","))) {
