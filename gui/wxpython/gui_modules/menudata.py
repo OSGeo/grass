@@ -317,6 +317,11 @@ class Data:
                                  "self.OnMenuCmd",
                                  "v.out.dxf"),
 
+				(_("Multiple GPS export formats using GPSBabel"),
+				 _("Exports a vector map to a GPS receiver or file format supported by GPSBabel."),
+				 "self.OnMenuCmd",
+				 "v.out.gpsbabel"),
+
                                 (_("POV-Ray export"),
                                  _("Converts to POV-Ray format, GRASS x,y,z -> POV-Ray x,z,y"),
                                  "self.OnMenuCmd",
@@ -768,6 +773,11 @@ class Data:
                                  "self.OnMenuCmd",
                                  "r.los"),
                                 )
+
+                                (_("Distance to features"),
+                                 _("Generates a raster map layer of distance to features in input layer."),
+                                 "self.OnMenuCmd",
+                                 "r.grow.distance"),
                          ),
                         (_("Transform features"), (
 
