@@ -1,8 +1,9 @@
 <h2>DESCRIPTION</h2>
 
 
-<em>r.grow.distance</em> generates a raster map representing the
-distance to the nearest non-null cell in the input map.
+<em>r.grow.distance</em> generates raster maps representing the
+distance to the nearest non-null cell in the input map and/or the
+value of the nearest non-null cell.
 
 <h2>NOTES</h2>
 The user has the option of specifying four different metrics which
@@ -56,7 +57,7 @@ where the isolines of distance from a point are squares.
 
 Spearfish sample dataset
 <div class="code"><pre>
-r.grow.distance in=roads out=dist_from_roads
+r.grow.distance in=roads dist=dist_from_roads
 </pre></div>
 
 
