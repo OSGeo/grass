@@ -2272,14 +2272,15 @@ class BufferedWindow(MapWindow, wx.Window):
         """
         self.ZoomToMap(zoom=True)
         
-    def ZoomToMap(self, zoom=False):
+    def ZoomToMap(self, layer=None, zoom=False):
         """
         Set display extents to match selected raster
         or vector map.
         """
         zoomreg = {}
 
-        layer = self.GetSelectedLayer()
+        if not layer:
+            layer = self.GetSelectedLayer()
         
         if layer is None:
             return

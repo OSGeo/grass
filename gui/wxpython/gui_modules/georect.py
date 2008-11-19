@@ -163,6 +163,7 @@ class GeorectWizard(object):
                 cmdlist = ['d.vect', 'map=%s' % xy_map]
 
             self.Map.AddLayer(type=rendertype, command=cmdlist, l_active=True,
+                              name=utils.GetLayerNameFromCmd(cmdlist),
                               l_hidden=False, l_opacity=1.0, l_render=False)
 
             #
