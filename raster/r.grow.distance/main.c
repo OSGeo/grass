@@ -27,10 +27,11 @@
 #include <grass/glocale.h>
 
 static int nrows, ncols;
-static char *in_row;
+static DCELL *in_row;
 static CELL *old_x_row, *old_y_row;
 static CELL *new_x_row, *new_y_row;
 static DCELL *dist_row;
+static DCELL *old_val_row, *new_val_row;
 static double (*distance) (double dx, double dy);
 static double xres, yres;
 
@@ -54,20 +55,27 @@ static double distance_manhattan(double dx, double dy)
 void swap_rows(void)
 {
     CELL *temp;
+    DCELL *dtemp;
 
     temp = old_x_row;
     old_x_row = new_x_row;
     new_x_row = temp;
+
     temp = old_y_row;
     old_y_row = new_y_row;
     new_y_row = temp;
+
+    dtemp = old_val_row;
+    old_val_row = new_val_row;
+    new_val_row = dtemp;
 }
 static void check(int col, int dx, int dy)
 {
     const CELL *xrow = dy ? old_x_row : new_x_row;
     const CELL *yrow = dy ? old_y_row : new_y_row;
+    const DCELL *vrow = dy ? old_val_row : new_val_row;
     int x, y;
-    double d;
+    double d, v;
 
     if (dist_row[col] == 0)
 	return;
@@ -83,12 +91,14 @@ static void check(int col, int dx, int dy)
 
     x = xrow[col + dx] + dx;
     y = yrow[col + dx] + dy;
+    v = vrow[col + dx];
     d = (*distance) (xres * x, yres * y);
 
     if (!G_is_d_null_value(&dist_row[col]) && dist_row[col] < d)
 	return;
 
     dist_row[col] = d;
+    new_val_row[col] = v;
     new_x_row[col] = x;
     new_y_row[col] = y;
 }
@@ -98,12 +108,13 @@ int main(int argc, char **argv)
     struct GModule *module;
     struct
     {
-	struct Option *in, *out, *met;
+	struct Option *in, *dist, *val, *met;
     } opt;
-    char *in_name;
-    char *out_name;
+    const char *in_name;
+    const char *dist_name;
+    const char *val_name;
     int in_fd;
-    int out_fd;
+    int dist_fd, val_fd;
     char *temp_name;
     int temp_fd;
     int row, col;
@@ -112,7 +123,6 @@ int main(int argc, char **argv)
     DCELL min, max;
     DCELL *out_row;
     struct Cell_head window;
-    int need_sqrt = 0;
 
     G_gisinit(argv[0]);
 
@@ -123,7 +133,15 @@ int main(int argc, char **argv)
 
     opt.in = G_define_standard_option(G_OPT_R_INPUT);
 
-    opt.out = G_define_standard_option(G_OPT_R_OUTPUT);
+    opt.dist = G_define_standard_option(G_OPT_R_OUTPUT);
+    opt.dist->key = "distance";
+    opt.dist->required = NO;
+    opt.dist->description = _("Name for distance output map");
+
+    opt.val = G_define_standard_option(G_OPT_R_OUTPUT);
+    opt.val->key = "value";
+    opt.val->required = NO;
+    opt.val->description = _("Name for value output map");
 
     opt.met = G_define_option();
     opt.met->key = "metric";
@@ -137,12 +155,14 @@ int main(int argc, char **argv)
 	exit(EXIT_FAILURE);
 
     in_name = opt.in->answer;
-    out_name = opt.out->answer;
+    dist_name = opt.dist->answer;
+    val_name = opt.val->answer;
 
-    if (strcmp(opt.met->answer, "euclidian") == 0) {
+    if (!dist_name && !val_name)
+	G_fatal_error(_("At least one of distance= and value= must be given"));
+
+    if (strcmp(opt.met->answer, "euclidian") == 0)
 	distance = &distance_euclidian_squared;
-	need_sqrt = 1;
-    }
     else if (strcmp(opt.met->answer, "squared") == 0)
 	distance = &distance_euclidian_squared;
     else if (strcmp(opt.met->answer, "maximum") == 0)
@@ -156,9 +176,13 @@ int main(int argc, char **argv)
     if (in_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), in_name);
 
-    out_fd = G_open_raster_new(out_name, DCELL_TYPE);
-    if (out_fd < 0)
-	G_fatal_error(_("Unable to create raster map <%s>"), out_name);
+    dist_fd = G_open_raster_new(dist_name, DCELL_TYPE);
+    if (dist_fd < 0)
+	G_fatal_error(_("Unable to create distance map <%s>"), dist_name);
+
+    val_fd = G_open_raster_new(val_name, DCELL_TYPE);
+    if (val_fd < 0)
+	G_fatal_error(_("Unable to create value map <%s>"), val_name);
 
     temp_name = G_tempfile();
     temp_fd = open(temp_name, O_RDWR | O_CREAT | O_EXCL, 0700);
@@ -172,7 +196,10 @@ int main(int argc, char **argv)
     xres = window.ew_res;
     yres = window.ns_res;
 
-    in_row = G_allocate_null_buf();
+    in_row = G_allocate_d_raster_buf();
+
+    old_val_row = G_allocate_d_raster_buf();
+    new_val_row = G_allocate_d_raster_buf();
 
     old_x_row = G_allocate_c_raster_buf();
     old_y_row = G_allocate_c_raster_buf();
@@ -181,7 +208,7 @@ int main(int argc, char **argv)
 
     dist_row = G_allocate_d_raster_buf();
 
-    if (strcmp(opt.met->answer, "euclidian") == 0)
+    if (dist_name && strcmp(opt.met->answer, "euclidian") == 0)
 	out_row = G_allocate_d_raster_buf();
     else
 	out_row = dist_row;
@@ -199,13 +226,14 @@ int main(int argc, char **argv)
 
 	G_set_d_null_value(dist_row, ncols);
 
-	G_get_null_value_row(in_fd, in_row, irow);
+	G_get_d_raster_row(in_fd, in_row, irow);
 
 	for (col = 0; col < ncols; col++)
-	    if (!in_row[col]) {
+	    if (!G_is_d_null_value(&in_row[col])) {
 		new_x_row[col] = 0;
 		new_y_row[col] = 0;
 		dist_row[col] = 0;
+		new_val_row[col] = in_row[col];
 	    }
 
 	for (col = 0; col < ncols; col++)
@@ -223,6 +251,7 @@ int main(int argc, char **argv)
 	write(temp_fd, new_x_row, ncols * sizeof(CELL));
 	write(temp_fd, new_y_row, ncols * sizeof(CELL));
 	write(temp_fd, dist_row, ncols * sizeof(DCELL));
+	write(temp_fd, new_val_row, ncols * sizeof(DCELL));
 
 	swap_rows();
     }
@@ -237,7 +266,7 @@ int main(int argc, char **argv)
     for (row = 0; row < nrows; row++) {
 	int irow = nrows - 1 - row;
 	off_t offset =
-	    (off_t) irow * ncols * (2 * sizeof(CELL) + sizeof(DCELL));
+	    (off_t) irow * ncols * (2 * sizeof(CELL) + 2 * sizeof(DCELL));
 
 	G_percent(row, nrows, 2);
 
@@ -246,6 +275,7 @@ int main(int argc, char **argv)
 	read(temp_fd, new_x_row, ncols * sizeof(CELL));
 	read(temp_fd, new_y_row, ncols * sizeof(CELL));
 	read(temp_fd, dist_row, ncols * sizeof(DCELL));
+	read(temp_fd, new_val_row, ncols * sizeof(DCELL));
 
 	for (col = 0; col < ncols; col++) {
 	    check(col, -1, -1);
@@ -253,13 +283,16 @@ int main(int argc, char **argv)
 	    check(col, 1, -1);
 	}
 
-	if (out_row != dist_row)
-	    for (col = 0; col < ncols; col++)
-		out_row[col] = need_sqrt
-		    ? sqrt(dist_row[col])
-		    : dist_row[col];
+	if (dist_name) {
+	    if (out_row != dist_row)
+		for (col = 0; col < ncols; col++)
+		    out_row[col] = sqrt(dist_row[col]);
 
-	G_put_d_raster_row(out_fd, out_row);
+	    G_put_d_raster_row(dist_fd, out_row);
+	}
+
+	if (val_name)
+	    G_put_d_raster_row(val_fd, new_val_row);
 
 	swap_rows();
     }
@@ -269,13 +302,22 @@ int main(int argc, char **argv)
     close(temp_fd);
     remove(temp_name);
 
-    G_close_cell(out_fd);
+    G_close_cell(dist_fd);
+    G_close_cell(val_fd);
 
-    G_init_colors(&colors);
-    G_read_fp_range(out_name, G_mapset(), &range);
-    G_get_fp_range_min_max(&range, &min, &max);
-    G_make_fp_colors(&colors, "rainbow", min, max);
-    G_write_colors(out_name, G_mapset(), &colors);
+    if (val_name) {
+	if (G_read_colors(in_name, "", &colors) < 0)
+	    G_fatal_error(_("Unable to read color table for raster map <%s>"), in_name);
+	G_write_colors(val_name, G_mapset(), &colors);
+    }
+
+    if (dist_name) {
+	G_init_colors(&colors);
+	G_read_fp_range(dist_name, G_mapset(), &range);
+	G_get_fp_range_min_max(&range, &min, &max);
+	G_make_fp_colors(&colors, "rainbow", min, max);
+	G_write_colors(dist_name, G_mapset(), &colors);
+    }
 
     return EXIT_SUCCESS;
 }
