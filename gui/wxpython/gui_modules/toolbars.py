@@ -294,7 +294,7 @@ class GRToolbar(AbstractToolbar):
         self.zoomin = wx.NewId()
         self.zoomout = wx.NewId()
         self.zoomback = wx.NewId()
-        self.zoommenu = wx.NewId()
+        self.zoomtomap = wx.NewId()
 
         # tool, label, bitmap, kind, shortHelp, longHelp, handler
         return (
@@ -323,12 +323,20 @@ class GRToolbar(AbstractToolbar):
             (self.zoomback, "zoom_back", Icons["zoom_back"].GetBitmap(),
              wx.ITEM_NORMAL, Icons["zoom_back"].GetLabel(), Icons["zoom_back"].GetDesc(),
              self.mapdisplay.OnZoomBack),
-            (self.zoommenu, "zoommenu", Icons["zoommenu"].GetBitmap(),
-             wx.ITEM_NORMAL, Icons["zoommenu"].GetLabel(), Icons["zoommenu"].GetDesc(),
-             self.mapdisplay.OnZoomMenu),
+            (self.zoomtomap, "zoomtomap", Icons["zoommenu"].GetBitmap(),
+             wx.ITEM_NORMAL, _("Zoom to map"), _("Zoom to displayed map"),
+             self.OnZoomMap),
             ("", "", "", "", "", "", ""),
             )
 
+    def OnZoomMap(self, event):
+        """Zoom to selected map"""
+        layer = self.mapcontent.GetListOfLayers()[0]
+
+        self.mapdisplay.MapWindow.ZoomToMap(layer=layer)
+
+        event.Skip()
+        
 class GCPToolbar(AbstractToolbar):
     """
     Toolbar for managing ground control points during georectification
