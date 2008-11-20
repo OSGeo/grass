@@ -196,7 +196,7 @@ get_a_e2_rf(const char *s1, const char *s2, double *a, double *e2,
 struct ellps_list *read_ellipsoid_table(int fatal)
 {
     FILE *fd;
-    char *file;
+    char file[GPATH_MAX];
     char buf[4096];
     char name[100], descr[1024], buf1[1024], buf2[1024];
     char badlines[1024];
@@ -207,14 +207,13 @@ struct ellps_list *read_ellipsoid_table(int fatal)
 
     int count = 0;
 
-    G_asprintf(&file, "%s%s", G_gisbase(), ELLIPSOIDTABLE);
+    sprintf(file, "%s%s", G_gisbase(), ELLIPSOIDTABLE);
     fd = fopen(file, "r");
 
-    if (fd == NULL) {
-	perror(file);
+    if (!fd) {
 	(fatal ? G_fatal_error : G_warning)(
 	    _("Unable to open ellipsoid table file <%s>"), file);
-	return 0;
+	return NULL;
     }
 
     err = 0;
@@ -261,17 +260,15 @@ struct ellps_list *read_ellipsoid_table(int fatal)
 
     fclose(fd);
 
-    if (!err) {
-	G_free(file);
+    if (!err)
 	return outputlist;
-    }
 
     (fatal ? G_fatal_error : G_warning)(
 	err == 1
 	? _("Line%s of ellipsoid table file <%s> is invalid")
 	: _("Lines%s of ellipsoid table file <%s> are invalid"),
 	badlines, file);
-    G_free(file);
+
     return outputlist;
 }
 
