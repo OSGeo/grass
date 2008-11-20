@@ -28,7 +28,7 @@
 static int any;
 
 static void make_list(const struct list *,
-		      const char *, const char *, const char *,
+		      const char *, const char *,
 		      int, int, int);
 static int parse(const char *);
 static int ls_filter(const char *, void *);
@@ -40,6 +40,7 @@ int main(int argc, char *argv[])
     {
 	struct Option *type;
 	struct Option *pattern;
+	struct Option *exclude;
 	struct Option *separator;
 	struct Option *mapset;
     } opt;
@@ -53,8 +54,8 @@ int main(int argc, char *argv[])
 	struct Flag *full;
     } flag;
     int i, n, all, num_types;
-    char *pattern = NULL, separator[2], *buf;
-    regex_t regex;
+    char *pattern = NULL, *exclude = NULL, separator[2], *buf;
+    regex_t regex, regex_ex;
 
     G_gisinit(argv[0]);
 
@@ -91,8 +92,14 @@ int main(int argc, char *argv[])
     opt.pattern->type = TYPE_STRING;
     opt.pattern->required = NO;
     opt.pattern->multiple = NO;
-    opt.pattern->answer = "*";
     opt.pattern->description = _("Map name search pattern (default: all)");
+
+    opt.exclude = G_define_option();
+    opt.exclude->key = "exclude";
+    opt.exclude->type = TYPE_STRING;
+    opt.exclude->required = NO;
+    opt.exclude->multiple = NO;
+    opt.exclude->description = _("Map name exclusion pattern (default: none)");
 
     opt.separator = G_define_option();
     opt.separator->key = "separator";
@@ -145,14 +152,27 @@ int main(int argc, char *argv[])
     if (flag.regex->answer && flag.extended->answer)
 	G_fatal_error(_("-r and -e are mutually exclusive"));
 
-    if (flag.regex->answer || flag.extended->answer)
-	pattern = opt.pattern->answer;
-    else
-	pattern = wc2regex(opt.pattern->answer);
+    if (opt.pattern->answer) {
+	if (flag.regex->answer || flag.extended->answer)
+	    pattern = G_store(opt.pattern->answer);
+	else
+	    pattern = wc2regex(opt.pattern->answer);
 
-    if (regcomp(&regex, pattern, (flag.regex->answer ? 0 : REG_EXTENDED) | REG_NOSUB))
-	G_fatal_error(_("Unable to compile regular expression %s"), pattern);
-    G_set_ls_filter(ls_filter, &regex);
+	if (regcomp(&regex, pattern, (flag.regex->answer ? 0 : REG_EXTENDED) | REG_NOSUB))
+	    G_fatal_error(_("Unable to compile regular expression %s"), pattern);
+	G_set_ls_filter(ls_filter, &regex);
+    }
+
+    if (opt.exclude->answer) {
+	if (flag.regex->answer || flag.extended->answer)
+	    exclude = G_store(opt.exclude->answer);
+	else
+	    exclude = wc2regex(opt.exclude->answer);
+
+	if (regcomp(&regex_ex, exclude, (flag.regex->answer ? 0 : REG_EXTENDED) | REG_NOSUB))
+	    G_fatal_error(_("Unable to compile regular expression %s"), exclude);
+	G_set_ls_exclude_filter(ls_filter, &regex_ex);
+    }
 
     if (strcmp(opt.separator->answer, "newline") == 0)
 	separator[0] = '\n';
@@ -202,7 +222,7 @@ int main(int argc, char *argv[])
 	    }
 	}
 	else
-	    make_list(&list[n], pattern, opt.mapset->answer, separator,
+	    make_list(&list[n], opt.mapset->answer, separator,
 		      flag.pretty->answer, flag.type->answer,
 		      flag.mapset->answer);
     }
@@ -210,17 +230,22 @@ int main(int argc, char *argv[])
     if (!flag.pretty->answer && any)
 	fprintf(stdout, "\n");
 
-    if (!flag.regex->answer)
+    if (pattern) {
 	G_free(pattern);
+	regfree(&regex);
+    }
 
-    regfree(&regex);
+    if (exclude) {
+	G_free(exclude);
+	regfree(&regex_ex);
+    }
 
     exit(EXIT_SUCCESS);
 }
 
 static void make_list(
     const struct list *elem,
-    const char *pattern, const char *mapset, const char *separator,
+    const char *mapset, const char *separator,
     int pretty, int add_type, int add_mapset)
 {
     char path[GPATH_MAX];
@@ -238,7 +263,7 @@ static void make_list(
     if (!mapset || !*mapset) {
 	int n;
 	for (n = 0; mapset = G__mapset_name(n), mapset; n++)
-	    make_list(elem, pattern, mapset, separator,
+	    make_list(elem, mapset, separator,
 		      pretty, add_type, add_mapset);
 	return;
     }
