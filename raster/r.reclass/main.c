@@ -60,9 +60,10 @@ int main(int argc, char *argv[])
     parm.rules = G_define_option();
     parm.rules->key = "rules";
     parm.rules->type = TYPE_STRING;
-    parm.rules->description = _("File containing reclass rules");
+    parm.rules->description = _("File containing reclass rules; \"-\" to read from stdin");
     parm.rules->key_desc = "name";
     parm.rules->gisprompt = "old_file,file,input";
+    parm.rules->answer = "-";
 
     parm.title = G_define_option();
     parm.title->key = "title";
@@ -82,7 +83,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Input map can NOT be the same as output map"));
 
     srcfp = stdin;
-    if (parm.rules->answer) {
+    if (strcmp(parm.rules->answer, "-") != 0) {
 	srcfp = fopen(parm.rules->answer, "r");
 	if (!srcfp)
 	    G_fatal_error(_("Cannot open rules file <%s>"),
