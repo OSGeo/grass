@@ -1,7 +1,4 @@
 #include <stdio.h>
-
-#include <grass/glocale.h>
-
 #include "global.h"
 
 #define F2I(map_type) \
@@ -45,8 +42,7 @@ int do_recode(void)
     /* open the input file for reading */
     in_fd = G_open_cell_old(name, "");
     if (in_fd < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"),
-		      G_fully_qualified_name(name, mapset));
+	G_fatal_error("Can't open input map");
 
     out_fd = G_open_raster_new(result, out_type);
 
