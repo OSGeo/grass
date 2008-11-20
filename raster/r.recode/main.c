@@ -42,9 +42,6 @@ int main(int argc, char *argv[])
 	struct Flag *a, *d;
     } parm;
 
-    /* any interaction must run in a term window */
-    G_putenv("GRASS_UI_TERM", "1");
-
     G_gisinit(argv[0]);
 
     module = G_define_module();
@@ -59,9 +56,10 @@ int main(int argc, char *argv[])
     parm.rules = G_define_option();
     parm.rules->key = "rules";
     parm.rules->type = TYPE_STRING;
-    parm.rules->description = _("File containing recode rules");
+    parm.rules->description = _("File containing recode rules; \"-\" to read from stdin");
     parm.rules->key_desc = "name";
     parm.rules->gisprompt = "old_file,file,input";
+    parm.rules->answer = "-";
 
     parm.title = G_define_option();
     parm.title->key = "title";
@@ -87,7 +85,7 @@ int main(int argc, char *argv[])
     make_dcell = parm.d->answer;
 
     srcfp = stdin;
-    if (parm.rules->answer) {
+    if (strcmp(parm.rules->answer, "-") != 0) {
 	srcfp = fopen(parm.rules->answer, "r");
 	if (!srcfp)
 	    G_fatal_error(_("Cannot open rules file <%s>"),
