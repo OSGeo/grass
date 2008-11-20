@@ -320,7 +320,7 @@ class Data:
 				(_("Multiple GPS export formats using GPSBabel"),
 				 _("Exports a vector map to a GPS receiver or file format supported by GPSBabel."),
 				 "self.OnMenuCmd",
-				 "v.out.gpsbabel"),
+				 "v.out.gps"),
 
                                 (_("POV-Ray export"),
                                  _("Converts to POV-Ray format, GRASS x,y,z -> POV-Ray x,z,y"),
