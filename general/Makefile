@@ -3,12 +3,14 @@ MODULE_TOPDIR = ..
 
 SUBDIRS = \
 	g.access \
+	g.copy \
 	g.dirseps \
 	g.filename \
 	g.findetc \
 	g.findfile \
 	g.gisenv \
 	g.gui \
+	g.list \
 	g.mapset \
 	g.mapsets \
 	g.message \
@@ -16,9 +18,11 @@ SUBDIRS = \
 	g.mlist \
 	g.mremove \
 	g.parser \
-	g.proj \
 	g.pnmcomp \
+	g.proj \
 	g.region \
+	g.remove \
+	g.rename \
 	g.tempfile \
 	g.transform \
 	g.version \
