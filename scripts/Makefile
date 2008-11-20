@@ -21,7 +21,9 @@ SUBDIRS = \
 	i.tasscap \
 	m.proj \
 	r.blend \
+	r.buffer \
 	r.fillnulls \
+	r.grow \
 	r.in.aster \
 	r.in.srtm \
 	r.in.wms \
