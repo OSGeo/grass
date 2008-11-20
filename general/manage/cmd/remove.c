@@ -22,7 +22,6 @@
 #include <string.h>
 #include <grass/glocale.h>
 #include <grass/list.h>
-#include "local_proto.h"
 
 static int check_reclass(const char *name, const char *mapset, int force)
 {
@@ -92,7 +91,9 @@ int main(int argc, char *argv[])
     int result = EXIT_SUCCESS;
     int force = 0;
 
-    init(argv[0]);
+    G_gisinit(argv[0]);
+
+    read_list(0);
 
     module = G_define_module();
     module->keywords = _("general, map management");

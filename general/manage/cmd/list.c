@@ -22,9 +22,10 @@
 #include <unistd.h>
 #include <grass/spawn.h>
 #include <grass/list.h>
-#include "local_proto.h"
 
 struct Option *element;
+
+int parse(const char *data_type);
 
 int main(int argc, char *argv[])
 {
@@ -34,7 +35,9 @@ int main(int argc, char *argv[])
     struct Flag *full;
     char *str;
 
-    init(argv[0]);
+    G_gisinit(argv[0]);
+
+    read_list(0);
 
     module = G_define_module();
     module->keywords = _("general, map management");
