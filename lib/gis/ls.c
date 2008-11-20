@@ -33,6 +33,9 @@ typedef int ls_filter_func(const char * /*filename */ , void * /*closure */ );
 static ls_filter_func *ls_filter;
 static void *ls_closure;
 
+static ls_filter_func *ls_ex_filter;
+static void *ls_ex_closure;
+
 static int cmp_names(const void *aa, const void *bb)
 {
     char *const *a = (char *const *)aa;
@@ -58,6 +61,12 @@ void G_set_ls_filter(ls_filter_func *func, void *closure)
 {
     ls_filter = func;
     ls_closure = closure;
+}
+
+void G_set_ls_exclude_filter(ls_filter_func *func, void *closure)
+{
+    ls_ex_filter = func;
+    ls_ex_closure = closure;
 }
 
 /**
@@ -90,6 +99,8 @@ char **G__ls(const char *dir, int *num_files)
 	if (dp->d_name[0] == '.')	/* Don't list hidden files */
 	    continue;
 	if (ls_filter && !(*ls_filter)(dp->d_name, ls_closure))
+	    continue;
+	if (ls_ex_filter && (*ls_ex_filter)(dp->d_name, ls_ex_closure))
 	    continue;
 	dir_listing = (char **)G_realloc(dir_listing, (1 + n) * sizeof(char *));
 	dir_listing[n] = G_store(dp->d_name);
