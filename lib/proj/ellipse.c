@@ -197,7 +197,6 @@ struct ellps_list *read_ellipsoid_table(int fatal)
 {
     FILE *fd;
     char *file;
-    char *errbuf;
     char buf[4096];
     char name[100], descr[1024], buf1[1024], buf2[1024];
     char badlines[1024];
@@ -213,10 +212,8 @@ struct ellps_list *read_ellipsoid_table(int fatal)
 
     if (fd == NULL) {
 	perror(file);
-	G_asprintf(&errbuf, _("Unable to open ellipsoid table file <%s>"),
-		   file);
-	fatal ? G_fatal_error(errbuf) : G_warning(errbuf);
-	G_free(errbuf);
+	(fatal ? G_fatal_error : G_warning)(
+	    _("Unable to open ellipsoid table file <%s>"), file);
 	return 0;
     }
 
@@ -264,15 +261,16 @@ struct ellps_list *read_ellipsoid_table(int fatal)
 
     fclose(fd);
 
-    if (!err)
+    if (!err) {
+	G_free(file);
 	return outputlist;
+    }
 
-    G_asprintf(&errbuf,
-	       (err == 1 ? "Line%s of ellipsoid table file <%s> is invalid"
-		: "Lines%s of ellipsoid table file <%s> are invalid"),
-	       badlines, file);
-    fatal ? G_fatal_error(errbuf) : G_warning(errbuf);
-    G_free(errbuf);
+    (fatal ? G_fatal_error : G_warning)(
+	err == 1
+	? _("Line%s of ellipsoid table file <%s> is invalid")
+	: _("Lines%s of ellipsoid table file <%s> are invalid"),
+	badlines, file);
     G_free(file);
     return outputlist;
 }
