@@ -33,7 +33,7 @@ static int (*neighbors)[2];
 typedef int metric_fn(int, int);
 
 
-static int distance_euclidian_squared(int dx, int dy)
+static int distance_euclidean_squared(int dx, int dy)
 {
     return dx * dx + dy * dy;
 }
@@ -75,11 +75,11 @@ static void setup_neighbors(double radius, int limit, metric_fn * dist)
     }
 }
 
-static void setup_neighbors_euclidian(double radius)
+static void setup_neighbors_euclidean(double radius)
 {
     int r2 = (int)(radius * radius);
 
-    setup_neighbors(radius, r2, distance_euclidian_squared);
+    setup_neighbors(radius, r2, distance_euclidean_squared);
 }
 
 static void setup_neighbors_maximum(double radius)
@@ -99,14 +99,9 @@ int main(int argc, char **argv)
     {
 	struct Option *in, *out, *rad, *met, *old, *new;
     } opt;
-    struct
-    {
-	struct Flag *q;
-    } flag;
     struct Colors colr;
     struct Categories cats;
     struct History history;
-    int verbose;
     int colrfile;
     char *in_name;
     char *out_name;
@@ -145,8 +140,8 @@ int main(int argc, char **argv)
     opt.met->type = TYPE_STRING;
     opt.met->required = NO;
     opt.met->description = _("Metric");
-    opt.met->options = "euclidian,maximum,manhattan";
-    opt.met->answer = "euclidian";
+    opt.met->options = "euclidean,maximum,manhattan";
+    opt.met->answer = "euclidean";
 
     opt.old = G_define_option();
     opt.old->key = "old";
@@ -160,10 +155,6 @@ int main(int argc, char **argv)
     opt.new->type = TYPE_INTEGER;
     opt.new->required = NO;
     opt.new->description = _("Value to write for \"grown\" cells");
-
-    flag.q = G_define_flag();
-    flag.q->key = 'q';
-    flag.q->description = _("Quiet");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -179,13 +170,11 @@ int main(int argc, char **argv)
     if (opt.new->answer)
 	newval = atoi(opt.new->answer);
 
-    verbose = !flag.q->answer;
-
     nrows = G_window_rows();
     ncols = G_window_cols();
 
-    if (strcmp(opt.met->answer, "euclidian") == 0)
-	setup_neighbors_euclidian(radius);
+    if (strcmp(opt.met->answer, "euclidean") == 0)
+	setup_neighbors_euclidean(radius);
     else if (strcmp(opt.met->answer, "maximum") == 0)
 	setup_neighbors_maximum(radius);
     else if (strcmp(opt.met->answer, "manhattan") == 0)
@@ -277,8 +266,7 @@ int main(int argc, char **argv)
 
 	G_put_d_raster_row(out_fd, out_row);
 
-	if (verbose)
-	    G_percent(row, nrows, 2);
+	G_percent(row, nrows, 2);
 
 	tmp = in_rows[0];
 	for (i = 0; i < size * 2; i++)
@@ -286,8 +274,7 @@ int main(int argc, char **argv)
 	in_rows[size * 2] = tmp;
     }
 
-    if (verbose)
-	G_percent(row, nrows, 2);
+    G_percent(row, nrows, 2);
 
     G_close_cell(in_fd);
     G_close_cell(out_fd);
