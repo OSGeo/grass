@@ -26,7 +26,7 @@
 int get_stats(const char *, const char *, struct Cell_stats *);
 void get_fp_stats(const char *name, const char *mapset,
 		  struct FP_stats *statf,
-		  DCELL min, DCELL max, int geometric);
+		  DCELL min, DCELL max, int geometric, int geom_abs);
 
 /* main.c */
 int main(int, char *[]);

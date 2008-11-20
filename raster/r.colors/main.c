@@ -150,7 +150,7 @@ int main(int argc, char **argv)
     struct GModule *module;
     struct
     {
-	struct Flag *r, *w, *l, *g, *e, *n;
+	struct Flag *r, *w, *l, *g, *a, *e, *n;
     } flag;
     struct
     {
@@ -218,6 +218,11 @@ int main(int argc, char **argv)
     flag.g->description = _("Logarithmic scaling");
     flag.g->guisection = _("Colors");
 
+    flag.a = G_define_flag();
+    flag.a->key = 'a';
+    flag.a->description = _("Logarithmic-absolute scaling");
+    flag.a->guisection = _("Colors");
+
     flag.e = G_define_flag();
     flag.e->key = 'e';
     flag.e->description = _("Histogram equalization");
@@ -247,6 +252,9 @@ int main(int argc, char **argv)
 
     if (!!style + !!cmap + !!rules > 1)
 	G_fatal_error(_("\"color\", \"rules\", and \"raster\" options are mutually exclusive"));
+
+    if (flag.g->answer && flag.a->answer)
+	G_fatal_error(_("-g and -a flags are mutually exclusive"));
 
     is_from_stdin = rules && strcmp(rules, "-") == 0;
     if (is_from_stdin)
@@ -344,7 +352,7 @@ int main(int argc, char **argv)
     if (flag.e->answer) {
 	if (fp) {
 	    struct FP_stats fpstats;
-	    get_fp_stats(name, mapset, &fpstats, min, max, flag.g->answer);
+	    get_fp_stats(name, mapset, &fpstats, min, max, flag.g->answer, flag.a->answer);
 	    G_histogram_eq_colors_fp(&colors_tmp, &colors, &fpstats);
 	}
 	else {
@@ -357,6 +365,11 @@ int main(int argc, char **argv)
 
     if (flag.g->answer) {
 	G_log_colors(&colors_tmp, &colors, 100);
+	colors = colors_tmp;
+    }
+
+    if (flag.a->answer) {
+	G_abs_log_colors(&colors_tmp, &colors, 100);
 	colors = colors_tmp;
     }
 

@@ -56,7 +56,7 @@ int get_stats(const char *name, const char *mapset, struct Cell_stats *statf)
 
 void get_fp_stats(const char *name, const char *mapset,
 		  struct FP_stats *statf,
-		  DCELL min, DCELL max, int geometric)
+		  DCELL min, DCELL max, int geometric, int geom_abs)
 {
     DCELL *dcell;
     int row, col, nrows, ncols;
@@ -71,6 +71,7 @@ void get_fp_stats(const char *name, const char *mapset,
     ncols = G_window_cols();
 
     statf->geometric = geometric;
+    statf->geom_abs = geom_abs;
     statf->flip = 0;
 
     if (statf->geometric) {
@@ -85,6 +86,13 @@ void get_fp_stats(const char *name, const char *mapset,
 
 	min = log(min);
 	max = log(max);
+    }
+
+    if (statf->geom_abs) {
+	double a = log(fabs(min) + 1);
+	double b = log(fabs(max) + 1);
+	min = a < b ? a : b;
+	max = a > b ? a : b;
     }
 
     statf->count = 1000;
@@ -114,6 +122,8 @@ void get_fp_stats(const char *name, const char *mapset,
 		x = -x;
 	    if (statf->geometric)
 		x = log(x);
+	    if (statf->geom_abs)
+		x = log(fabs(x) + 1);
 
 	    i = (int) floor(statf->count * (x - statf->min) / (statf->max - statf->min));
 	    statf->stats[i]++;

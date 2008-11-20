@@ -162,9 +162,10 @@ void G_histogram_eq_colors_fp(struct Colors *dst,
 	val2 = statf->min + (statf->max - statf->min) * i / statf->count;
 	if (statf->geometric)
 	    val2 = exp(val2);
+	if (statf->geom_abs)
+	    val2 = exp(val2) - 1;
 	if (statf->flip)
 	    val2 = -val2;
-
 	x = min + (max - min) * sum / statf->total;
 	G_get_d_raster_color(&x, &red2, &grn2, &blu2, src);
 
@@ -297,10 +298,17 @@ int G_abs_log_colors(struct Colors *dst, struct Colors *src, int samples)
 	    x = exp(lx);
 	}
 
-	if (i > 0)
-	    G_add_d_raster_color_rule(&prev, red, grn, blu,
-				      &x, red2, grn2, blu2,
+	if (i > 0) {
+	    DCELL x0 = prev, x1 = x;
+	    G_add_d_raster_color_rule(&x0, red, grn, blu,
+				      &x1, red2, grn2, blu2,
 				      dst);
+	    x0 = -x0;
+	    x1 = -x1;
+	    G_add_d_raster_color_rule(&x0, red, grn, blu,
+				      &x1, red2, grn2, blu2,
+				      dst);
+	}
 
 	prev = x;
 
