@@ -22,7 +22,6 @@
 #include <string.h>
 #include <grass/glocale.h>
 #include <grass/list.h>
-#include "local_proto.h"
 
 int main(int argc, char *argv[])
 {
@@ -33,7 +32,9 @@ int main(int argc, char *argv[])
     char *from, *to;
     int result = EXIT_SUCCESS;
 
-    init(argv[0]);
+    G_gisinit(argv[0]);
+
+    read_list(0);
 
     module = G_define_module();
     module->keywords = _("general, map management");
