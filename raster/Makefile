@@ -4,7 +4,6 @@ SUBDIRS = \
 	r.average \
 	r.basins.fill \
 	r.bitpattern \
-	r.buffer \
 	r.carve \
 	r.category \
 	r.circle \
