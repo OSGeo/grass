@@ -37,7 +37,7 @@ static double xres, yres;
 
 #define MAX(a, b)	((a) > (b) ? (a) : (b))
 
-static double distance_euclidian_squared(double dx, double dy)
+static double distance_euclidean_squared(double dx, double dy)
 {
     return dx * dx + dy * dy;
 }
@@ -148,8 +148,8 @@ int main(int argc, char **argv)
     opt.met->type = TYPE_STRING;
     opt.met->required = NO;
     opt.met->description = _("Metric");
-    opt.met->options = "euclidian,squared,maximum,manhattan";
-    opt.met->answer = "euclidian";
+    opt.met->options = "euclidean,squared,maximum,manhattan";
+    opt.met->answer = "euclidean";
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -161,10 +161,10 @@ int main(int argc, char **argv)
     if (!dist_name && !val_name)
 	G_fatal_error(_("At least one of distance= and value= must be given"));
 
-    if (strcmp(opt.met->answer, "euclidian") == 0)
-	distance = &distance_euclidian_squared;
+    if (strcmp(opt.met->answer, "euclidean") == 0)
+	distance = &distance_euclidean_squared;
     else if (strcmp(opt.met->answer, "squared") == 0)
-	distance = &distance_euclidian_squared;
+	distance = &distance_euclidean_squared;
     else if (strcmp(opt.met->answer, "maximum") == 0)
 	distance = &distance_maximum;
     else if (strcmp(opt.met->answer, "manhattan") == 0)
@@ -176,13 +176,17 @@ int main(int argc, char **argv)
     if (in_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), in_name);
 
-    dist_fd = G_open_raster_new(dist_name, DCELL_TYPE);
-    if (dist_fd < 0)
-	G_fatal_error(_("Unable to create distance map <%s>"), dist_name);
+    if (dist_name) {
+	dist_fd = G_open_raster_new(dist_name, DCELL_TYPE);
+	if (dist_fd < 0)
+	    G_fatal_error(_("Unable to create distance map <%s>"), dist_name);
+    }
 
-    val_fd = G_open_raster_new(val_name, DCELL_TYPE);
-    if (val_fd < 0)
-	G_fatal_error(_("Unable to create value map <%s>"), val_name);
+    if (val_name) {
+	val_fd = G_open_raster_new(val_name, DCELL_TYPE);
+	if (val_fd < 0)
+	    G_fatal_error(_("Unable to create value map <%s>"), val_name);
+    }
 
     temp_name = G_tempfile();
     temp_fd = open(temp_name, O_RDWR | O_CREAT | O_EXCL, 0700);
@@ -208,7 +212,7 @@ int main(int argc, char **argv)
 
     dist_row = G_allocate_d_raster_buf();
 
-    if (dist_name && strcmp(opt.met->answer, "euclidian") == 0)
+    if (dist_name && strcmp(opt.met->answer, "euclidean") == 0)
 	out_row = G_allocate_d_raster_buf();
     else
 	out_row = dist_row;
@@ -302,8 +306,10 @@ int main(int argc, char **argv)
     close(temp_fd);
     remove(temp_name);
 
-    G_close_cell(dist_fd);
-    G_close_cell(val_fd);
+    if (dist_name)
+	G_close_cell(dist_fd);
+    if (val_name)
+	G_close_cell(val_fd);
 
     if (val_name) {
 	if (G_read_colors(in_name, "", &colors) < 0)
