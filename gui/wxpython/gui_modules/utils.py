@@ -256,8 +256,6 @@ def GetVectorNumberOfLayers(vector):
         else:
             layers.append(value)
     
-    print layers
-    
     return layers
 
 def reexec_with_pythonw():
