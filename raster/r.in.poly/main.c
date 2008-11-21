@@ -32,7 +32,8 @@ int main(int argc, char *argv[])
 
 
     input = G_define_standard_option(G_OPT_F_INPUT);
-
+    input->description = _("Name of input file; or \"-\" to read from stdin");
+ 
     output = G_define_standard_option(G_OPT_R_OUTPUT);
 
     title = G_define_option();

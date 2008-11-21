@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include "format.h"
@@ -18,10 +19,16 @@ int poly_to_rast(char *input_file, char *raster_map, char *title, int nrows)
     int pass, npasses;
     struct History history;
 
-    ifd = fopen(input_file, "r");
+
+   /* open input file */
+    if (strcmp("-", input_file) == 0)
+	ifd = stdin;
+    else
+	ifd = fopen(input_file, "r");
+
     if (ifd == NULL) {
 	perror(input_file);
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
     rfd = G_open_cell_new(raster_map);
@@ -31,10 +38,13 @@ int poly_to_rast(char *input_file, char *raster_map, char *title, int nrows)
     if (title == NULL)
 	title = "";
     G_strip(title);
+
     G_init_cats((CELL) 0, title, &labels);
+
     format = getformat(ifd);
     npasses = begin_rasterization(nrows, format);
     pass = 0;
+
     do {
 	pass++;
 	if (npasses > 1)
@@ -61,6 +71,7 @@ int poly_to_rast(char *input_file, char *raster_map, char *title, int nrows)
 	}
 
 	G_message(_("Writing raster map..."));
+
 	stat = output_raster(rfd);
     } while (stat == 0);
     /* stat: 0 means repeat
