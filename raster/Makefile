@@ -1,7 +1,6 @@
 MODULE_TOPDIR = ..
 
 SUBDIRS = \
-	r.average \
 	r.basins.fill \
 	r.bitpattern \
 	r.buffer \
@@ -40,7 +39,6 @@ SUBDIRS = \
 	r.li \
 	r.los \
 	r.mapcalc \
-	r.median \
 	r.mfilter \
 	r.mode \
 	r.neighbors \
@@ -80,7 +78,6 @@ SUBDIRS = \
 	r.statistics \
 	r.statistics2 \
 	r.stats \
-	r.sum \
 	r.sun \
 	r.sunmask \
 	r.support \
