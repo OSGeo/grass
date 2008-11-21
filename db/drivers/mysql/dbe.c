@@ -27,7 +27,7 @@ int db__driver_open_database(dbHandle * handle)
 
     init_error();
     db_get_connection(&default_connection);
-    name = db_get_handle_dbname(handle);
+    name = G_store(db_get_handle_dbname(handle));
 
     /* if name is empty use default_connection.databaseName */
     if (strlen(name) == 0)
