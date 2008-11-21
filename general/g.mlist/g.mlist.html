@@ -26,6 +26,27 @@ List certain raster maps with one variable character/number:
   g.mlist type=rast pattern="N45E00?.meters"
 </pre></div>
 
+Use of <em>exclude</em> parameter:
+<div class="code"><pre>
+# without exclude:
+  g.mlist rast pat="r*" mapset=PERMANENT
+  railroads
+  roads
+  rstrct.areas
+  rushmore
+
+# exclude only complete word(s):
+  g.mlist rast pat="r*" exclude=roads mapset=PERMANENT
+  railroads
+  rstrct.areas
+  rushmore
+
+# exclude with wildcard:
+  g.mlist rast pat="r*" exclude="*roads*" mapset=PERMANENT
+  rstrct.areas
+  rushmore
+</pre></div>
+
 <h3>Regular expressions:</h3>
 
 Print out all soils map with "soils" in their name:
