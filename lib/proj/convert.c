@@ -730,6 +730,8 @@ static const char *papszDatumEquiv[] = {
     "New_Zealand_Geodetic_Datum_2000",
     "Monte_Mario_Rome",
     "Monte_Mario",
+    "MONTROME",
+    "Monte_Mario",
     "Campo_Inchauspe_1969",
     "Campo_Inchauspe",
     "S_JTSK_Ferro",
