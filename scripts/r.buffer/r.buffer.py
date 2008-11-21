@@ -99,7 +99,14 @@ def main():
     distances1 = [scale * float(d) for d in distances]
     distances2 = [d * d for d in distances1]
 
-    grass.run_command('r.grow.distance',  input = input, metric = 'squared',
+    s = grass.read_command("g.proj", flags='j')
+    kv = grass.parse_key_val(s)
+    if kv['+proj'] == 'longlat':
+	metric = 'geodesic'
+    else:
+	metric = 'squared'
+
+    grass.run_command('r.grow.distance',  input = input, metric = metric,
 		      distance = temp_dist)
 
     if zero:
