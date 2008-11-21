@@ -60,7 +60,6 @@
 import sys
 import os
 import atexit
-import string
 import math
 import grass
 
@@ -104,21 +103,18 @@ def main():
 		      distance = temp_dist)
 
     if zero:
-	t = string.Template("$temp_src = if($input == 0,null(),1)")
+	exp = "$temp_src = if($input == 0,null(),1)"
     else:
-	t = string.Template("$temp_src = if(isnull($input),null(),1)")
+	exp = "$temp_src = if(isnull($input),null(),1)"
 
-    e = t.substitute(temp_src = temp_src, input = input)
-    grass.run_command('r.mapcalc', expression = e)
+    grass.mapcalc(exp, temp_src = temp_src, input = input)
 
-    s = "$output = if(!isnull($input),$input,%s)"
+    exp = "$output = if(!isnull($input),$input,%s)"
     for n, dist2 in enumerate(distances2):
-	s %= "if($dist <= %f,%d,%%s)" % (dist2,n + 2)
-    s %= "null()"
+	exp %= "if($dist <= %f,%d,%%s)" % (dist2,n + 2)
+    exp %= "null()"
 
-    t = string.Template(s)
-    e = t.substitute(output = output, input = temp_src, dist = temp_dist)
-    grass.run_command('r.mapcalc', expression = e)
+    grass.mapcalc(exp, output = output, input = temp_src, dist = temp_dist)
 
     p = grass.feed_command('r.category', map = output, rules = '-')
     p.stdin.write("1:distances calculated from these locations\n")

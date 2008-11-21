@@ -110,9 +110,8 @@ def main():
     else:
 	round = ""
 
-    t = string.Template('$name = $type($round(x() * $kx + y() * $ky + $kz))')
-    e = t.substitute(name = name, type = type, round = round, kx = kx, ky = ky, kz = kz)
-    grass.run_command('r.mapcalc', expression = e)
+    grass.mapcalc("$name = $type($round(x() * $kx + y() * $ky + $kz))",
+		  name = name, type = type, round = round, kx = kx, ky = ky, kz = kz)
 
     grass.raster_history(name)
 
