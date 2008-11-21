@@ -75,7 +75,6 @@
 import sys
 import os
 import atexit
-import string
 import math
 import grass
 
@@ -125,10 +124,10 @@ def main():
     grass.run_command('r.grow.distance',  input = input, metric = metric,
 		      distance = temp_dist, value = temp_val)
 
-    t = string.Template("$output = if(!isnull($input),$old,if($dist < $radius,$new,null()))")
-    e = t.substitute(output = output, input = input, radius = radius,
-		     old = old, new = new, dist = temp_dist)
-    grass.run_command('r.mapcalc', expression = e)
+    grass.mapcalc(
+	"$output = if(!isnull($input),$old,if($dist < $radius,$new,null()))",
+	output = output, input = input, radius = radius,
+	old = old, new = new, dist = temp_dist)
 
     grass.run_command('r.colors', map = output, raster = input)
 

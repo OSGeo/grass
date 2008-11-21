@@ -84,7 +84,6 @@
 
 import sys
 import os
-import string
 import grass
 
 def main():
@@ -133,14 +132,11 @@ def main():
     # note: for RGB composite then revert brov.red and brov.green!
 
     grass.message("Calculating %s.{red,green,blue}: ..." % out)
-    t = string.Template(
-	'''eval(k = float("$pan") / ("$ms1" + "$ms2" + "$ms3"))
+    e = '''eval(k = float("$pan") / ("$ms1" + "$ms2" + "$ms3"))
 	   "$out.red"   = "$ms3" * k
 	   "$out.green" = "$ms2" * k
-	   "$out.blue"  = "$ms1" * k''')
-    e = t.substitute(out = out, pan = pan, ms1 = ms1, ms2 = ms2, ms3 = ms3)
-    if grass.run_command('r.mapcalc', expression = e) != 0:
-	grass.fatal("An error occurred while running r.mapcalc")
+	   "$out.blue"  = "$ms1" * k'''
+    grass.mapcalc(e, out = out, pan = pan, ms1 = ms1, ms2 = ms2, ms3 = ms3)
 
     # Maybe?
     #r.colors   $GIS_OPT_OUTPUTPREFIX.red col=grey

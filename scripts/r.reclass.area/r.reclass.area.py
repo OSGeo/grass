@@ -113,7 +113,7 @@ def main():
 
     grass.message("Written: %s" % outfile)
 
-    grass.run_command('r.mapcalc', expression = "%s = %s" % (outfile, recfile))
+    grass.mapcalc("$outfile = $recfile", outfile = outfile, recfile = recfile)
     grass.run_command('g.remove', rast = [recfile, clumpfile], quiet = True)
 
 if __name__ == "__main__":

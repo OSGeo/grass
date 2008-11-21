@@ -228,8 +228,8 @@ def main():
     for i in cats:
 	grass.verbose("Processing category %s (%d/%d)" % (i, currnum, number))
 	grass.run_command('g.remove', rast = 'MASK', quiet = True, stderr = nuldev)
-	grass.run_command('r.mapcalc', quiet = True,
-			  expression = "MASK = if(%s_%s == %s, 1, null())" % (vector, tmpname, i))
+	grass.mapcalc("MASK = if($name == $i, 1, null())",
+		      name = "%s_%s" % (vector, tmpname), i = i)
 
         #n, min, max, range, mean, stddev, variance, coeff_var, sum
 	# How to test r.univar $? exit status? using -e creates the real possibility of out-of-memory errors

@@ -4,6 +4,7 @@ import types
 import subprocess
 import re
 import atexit
+import string
 
 # subprocess wrapper that uses shell on Windows
 
@@ -508,3 +509,11 @@ def raster_info(map):
     for k in ['min', 'max', 'north', 'south', 'east', 'west', 'nsres', 'ewres']:
 	kv[k] = float(kv[k])
     return kv
+
+# interface to r.mapcalc
+
+def mapcalc(exp, **kwargs):
+    t = string.Template(exp)
+    e = t.substitute(**kwargs)
+    if run_command('r.mapcalc', expression = e) != 0:
+	grass.fatal("An error occurred while running r.mapcalc")

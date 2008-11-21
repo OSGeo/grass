@@ -182,8 +182,7 @@ def main():
 
     grass.message("Remapping digital numbers to NDVI...")
     tmpname = "%s_%s" % (name, pid)
-    e = "%s = 0.004 * %s - 0.1" % (tmpname, name)
-    grass.run_command('r.mapcalc', expression = e)
+    grass.mapcalc("$tmpname = 0.004 * $name - 0.1", tmpname = tmpname, name = name)
     grass.run_command('g.remove', rast = name, quiet = True)
     grass.run_command('g.rename', rast = (tmpname, name), quiet = True)
 
@@ -251,8 +250,8 @@ def main():
     grass.message("Filtering NDVI map by Status Map quality layer...")
 
     filtfile = "%s_filt" % name
-    e = "%s = if(%s >= 248, %s, null())" % (filtfile, smfile, name)
-    grass.run_command('r.mapcalc', expression = e)
+    grass.mapcalc("$filtfile = if($smfile >= 248, $name, null())",
+		  filtfile = filtfile, smfile = smfile, name = name)
     grass.run_command('r.colors', map = filtfile, color = 'ndvi', quiet = True)
     grass.message("Filtered SPOT VEGETATION NDVI map <%s>." % filtfile)
 

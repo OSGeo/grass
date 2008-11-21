@@ -97,8 +97,8 @@ def main():
 
     grass.message("Locating and isolating NULL areas...")
     #creating 0/1 map:
-    e = "%s = if(isnull(%s),1,null())" % (tmp1, input)
-    grass.run_command('r.mapcalc', expression = e)
+    grass.mapcalc("$tmp1 = if(isnull($input),1,null())",
+		  tmp1 = tmp1, input = input)
 
     #generate a ring:
     # the buffer is set to three times the map resolution so you get nominally
@@ -113,7 +113,7 @@ def main():
     if grass.run_command('r.buffer', input = tmp1, distances = res, out = tmp1 + '.buf') != 0:
 	grass.fatal("abandoned. Removing temporary map, restoring user mask if needed:")
 
-    grass.run_command('r.mapcalc', expression = "MASK=if(%s.buf==2,1,null())" % tmp1)
+    grass.mapcalc("MASK=if($tmp1.buf==2,1,null())", tmp1 = tmp1)
 
     # now we only see the outlines of the NULL areas if looking at INPUT.
     # Use this outline (raster border) for interpolating the fill data:

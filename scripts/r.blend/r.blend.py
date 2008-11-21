@@ -76,16 +76,15 @@ def main():
     frac2 = perc_inv / 100.0
 
     grass.message("Calculating the three component maps...")
-    template = string.Template("$output.$$ch = $frac1 * $$ch#$first + $frac2 * $$ch#$second")
-    s = template.substitute(output = output,
-			    first = first, second = second,
-			    frac1 = frac1, frac2 = frac2)
-    template = string.Template(s)
-    cmd = []
-    for ch in ['r','g','b']:
-	map = "%s.%s" % (output, ch)
-	cmd.append(template.substitute(ch = ch))
-    grass.run_command('r.mapcalc', expression = ';'.join(cmd))
+
+    template = string.Template("$$output.$ch = $$frac1 * $ch#$$first + $$frac2 * $ch#$$second")
+    cmd = [template.substitute(ch = ch) for ch in ['r','g','b']]
+    cmd = ';'.join(cmd)
+
+    grass.mapcalc(cmd,
+		  output = output,
+		  first = first, second = second,
+		  frac1 = frac1, frac2 = frac2)
 
     for ch in ['r','g','b']:
 	map = "%s.%s" % (output, ch)

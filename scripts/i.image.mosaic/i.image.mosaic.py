@@ -44,7 +44,6 @@
 
 import sys
 import os
-import string
 import grass
 
 def copy_colors(fh, map, offset):
@@ -90,10 +89,8 @@ def main():
 
     grass.message("Mosaicing %d images..." % count)
 
-    t = string.Template("$output = " + make_expression(1, count))
-    print t.template
-    e = t.substitute(output = output, **parms)
-    grass.run_command('r.mapcalc', expression = e)
+    grass.mapcalc("$output = " + make_expression(1, count),
+		  output = output, **parms)
 
     #modify the color table:
     p = grass.feed_command('r.colors', map = output, rules='-')

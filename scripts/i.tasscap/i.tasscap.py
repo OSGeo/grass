@@ -100,7 +100,6 @@
 
 import sys
 import os
-import string
 import grass
 
 parms = [[( 0.3037, 0.2793, 0.4743, 0.5585, 0.5082, 0.1863),
@@ -118,9 +117,9 @@ ordinals = ["first", "second", "third", "fourth"]
 names = ["Brightness", "Greenness", "Wetness", "Haze"]
 
 def calc1(out, bands, k1, k2, k3, k4, k5, k7, k0 = 0):
-    t = string.Template("$out = $k1 * $band1 + $k2 * $band2 + $k3 * $band3 + $k4 * $band4 + $k5 * $band5 + $k7 * $band7 + $k0")
-    e = t.substitute(out = out, k1 = k1, k2 = k2, k3 = k3, k4 = k4, k5 = k5, k7 = k7, k0 = k0, **bands)
-    grass.run_command('r.mapcalc', expression = e)
+    grass.mapcalc(
+	"$out = $k1 * $band1 + $k2 * $band2 + $k3 * $band3 + $k4 * $band4 + $k5 * $band5 + $k7 * $band7 + $k0",
+	out = out, k1 = k1, k2 = k2, k3 = k3, k4 = k4, k5 = k5, k7 = k7, k0 = k0, **bands)
     grass.run_command('r.colors', map = out, color = 'grey')
 
 def calcN(options, i, n):
