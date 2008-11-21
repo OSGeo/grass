@@ -239,6 +239,27 @@ def ListSortLower(list):
     """Sort list items (not case-sensitive)"""
     list.sort(cmp=lambda x, y: cmp(x.lower(), y.lower()))
 
+def GetVectorNumberOfLayers(vector):
+    """Get list of vector layers"""
+    cmdlist = ['v.category',
+               'input=%s' % vector,
+               'option=report']
+    
+    layers = []
+    for line in gcmd.Command(cmdlist).ReadStdOutput():
+        if not 'Layer' in line:
+            continue
+        
+        value = line.split(':')[1].strip()
+        if '/' in value: # value/name
+            layers.append(value.split('/')[0])
+        else:
+            layers.append(value)
+    
+    print layers
+    
+    return layers
+
 def reexec_with_pythonw():
     """Re-execute Python on Mac OS"""
     if sys.platform == 'darwin' and \

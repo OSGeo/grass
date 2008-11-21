@@ -406,11 +406,11 @@ int main(int argc, char *argv[])
 	    }
 	    else {
 		if (freps[i]->table != '\0') {
-		    G_message("%s: %d/%s", _("Layer/table"),
-			      freps[i]->field, freps[i]->table);
+		    fprintf(stdout, "%s: %d/%s\n", _("Layer/table"),
+			    freps[i]->field, freps[i]->table);
 		}
 		else {
-		    G_message("%s: %d", _("Layer"), freps[i]->field);
+		    fprintf(stdout, "%s: %d\n", _("Layer"), freps[i]->field);
 		}
 		fprintf(stdout, "type       count        min        max\n");
 		fprintf(stdout, "point    %7d %10d %10d\n",
