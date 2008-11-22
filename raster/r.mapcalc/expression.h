@@ -76,6 +76,7 @@ typedef struct expression
 	expr_data_func func;
 	expr_data_bind bind;
     } data;
+    void *worker;
 } expression;
 
 typedef struct expr_list

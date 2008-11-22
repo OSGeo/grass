@@ -1,12 +1,17 @@
 
 #include <stdlib.h>
 #include <unistd.h>
+#ifdef USE_PTHREAD
+#include <pthread.h>
+#include <signal.h>
+#endif
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
 #include "mapcalc.h"
 #include "globals.h"
+#include "func_proto.h"
 
 /****************************************************************************/
 
@@ -95,6 +100,127 @@ static void initialize(expression * e)
 
 /****************************************************************************/
 
+#ifdef USE_PTHREAD
+
+struct worker {
+    struct expression *exp;
+    pthread_t thread;
+    pthread_cond_t cond;
+    pthread_mutex_t mutex;
+};
+
+static int num_workers;
+static struct worker *workers;
+
+static pthread_mutex_t worker_mutex;
+
+static pthread_mutex_t map_mutex;
+
+static void *worker(void *arg)
+{
+    struct worker *w = arg;
+
+    for (;;) {
+	pthread_mutex_lock(&w->mutex);
+	while (!w->exp)
+	    pthread_cond_wait(&w->cond, &w->mutex);
+	evaluate(w->exp);
+	pthread_mutex_unlock(&w->mutex);
+
+	w->exp->worker = NULL;
+	w->exp = NULL;
+    }
+
+    return NULL;
+}
+
+static struct worker *get_worker(void)
+{
+    int i;
+
+    for (i = 0; i < num_workers; i++) {
+	struct worker *w = &workers[i];
+	if (!w->exp)
+	    return w;
+    }
+
+    return NULL;
+}
+
+static void begin_evaluate(struct expression *e)
+{
+    struct worker *w;
+ 
+    pthread_mutex_lock(&worker_mutex);
+    w = get_worker();
+
+    if (!w) {
+	e->worker = NULL;
+	pthread_mutex_unlock(&worker_mutex);
+	evaluate(e);
+	return;
+    }
+
+    pthread_mutex_lock(&w->mutex);
+    w->exp = e;
+    e->worker = w;
+    pthread_cond_signal(&w->cond);
+    pthread_mutex_unlock(&w->mutex);
+
+    pthread_mutex_unlock(&worker_mutex);
+}
+
+static void end_evaluate(struct expression *e)
+{
+    struct worker *w = e->worker;
+
+    if (!w)
+	return;
+
+    pthread_mutex_lock(&w->mutex);
+    pthread_mutex_unlock(&w->mutex);
+}
+
+static void init_threads(void)
+{
+    const char *p = getenv("WORKERS");
+    int i;
+
+    pthread_mutex_init(&map_mutex, NULL);
+
+    pthread_mutex_init(&worker_mutex, NULL);
+
+    num_workers = p ? atoi(p) : 8;
+    workers = G_calloc(num_workers, sizeof(struct worker));
+
+    for (i = 0; i < num_workers; i++) {
+	struct worker *w = &workers[i];
+	pthread_mutex_init(&w->mutex, NULL);
+	pthread_cond_init(&w->cond, NULL);
+	pthread_create(&w->thread, NULL, worker, w);
+    }
+}
+
+static void end_threads(void)
+{
+    int i;
+
+    pthread_mutex_destroy(&map_mutex);
+
+    pthread_mutex_destroy(&worker_mutex);
+
+    for (i = 0; i < num_workers; i++) {
+	struct worker *w = &workers[i];
+	pthread_kill(w->thread, SIGINT);
+	pthread_mutex_destroy(&w->mutex);
+	pthread_cond_destroy(&w->cond);
+    }
+}
+
+#endif
+
+/****************************************************************************/
+
 static void evaluate_constant(expression * e)
 {
     int *ibuf = e->buf;
@@ -129,11 +255,19 @@ static void evaluate_variable(expression * e)
 
 static void evaluate_map(expression * e)
 {
+#ifdef USE_PTHREAD
+    pthread_mutex_lock(&map_mutex);
+#endif
+
     get_map_row(e->data.map.idx,
 		e->data.map.mod,
 		current_depth + e->data.map.depth,
 		current_row + e->data.map.row,
 		e->data.map.col, e->buf, e->res_type);
+
+#ifdef USE_PTHREAD
+    pthread_mutex_unlock(&map_mutex);
+#endif
 }
 
 static void evaluate_function(expression * e)
@@ -141,6 +275,16 @@ static void evaluate_function(expression * e)
     int i;
     int res;
 
+#ifdef USE_PTHREAD
+    if (e->data.func.argc > 1 && e->data.func.func != f_eval) {
+	for (i = 1; i <= e->data.func.argc; i++)
+	    begin_evaluate(e->data.func.args[i]);
+
+	for (i = 1; i <= e->data.func.argc; i++)
+	    end_evaluate(e->data.func.args[i]);
+    }
+    else
+#endif
     for (i = 1; i <= e->data.func.argc; i++)
 	evaluate(e->data.func.args[i]);
 
@@ -303,6 +447,10 @@ void execute(expr_list * ee)
     count = rows * depths;
     n = 0;
 
+#ifdef USE_PTHREAD
+    init_threads();
+#endif
+
     for (current_depth = 0; current_depth < depths; current_depth++)
 	for (current_row = 0; current_row < rows; current_row++) {
 	    if (verbose)
@@ -323,6 +471,10 @@ void execute(expr_list * ee)
 
 	    n++;
 	}
+
+#ifdef USE_PTHREAD
+    end_threads();
+#endif
 
     if (verbose)
 	G_percent(n, count, 2);
