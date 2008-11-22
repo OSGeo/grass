@@ -317,10 +317,10 @@ class Data:
                                  "self.OnMenuCmd",
                                  "v.out.dxf"),
 
-				(_("Multiple GPS export formats using GPSBabel"),
-				 _("Exports a vector map to a GPS receiver or file format supported by GPSBabel."),
-				 "self.OnMenuCmd",
-				 "v.out.gps"),
+                                (_("Multiple GPS export formats using GPSBabel"),
+                                 _("Exports a vector map to a GPS receiver or file format supported by GPSBabel."),
+                                 "self.OnMenuCmd",
+                                 "v.out.gps"),
 
                                 (_("POV-Ray export"),
                                  _("Converts to POV-Ray format, GRASS x,y,z -> POV-Ray x,z,y"),
@@ -772,12 +772,12 @@ class Data:
                                  _("Line-of-sight raster analysis program."),
                                  "self.OnMenuCmd",
                                  "r.los"),
-                                )
 
                                 (_("Distance to features"),
                                  _("Generates a raster map layer of distance to features in input layer."),
                                  "self.OnMenuCmd",
                                  "r.grow.distance"),
+                                )
                          ),
                         (_("Transform features"), (
 
@@ -1656,7 +1656,7 @@ class Data:
                                  _("Creates Potential Sunshine Hours map."),
                                  "self.OnMenuCmd",
                                  "i.sunhours"),
-	                        ("","","", ""),
+                                ("","","", ""),
 
                                 (_("Albedo"),
                                  _("Albedo from Modis, Aster, Landsat, AVHRR."),
@@ -1667,13 +1667,13 @@ class Data:
                                  _("14 types of vegetation Indices."),
                                  "self.OnMenuCmd",
                                  "i.vi"),
-	                        ("","","", ""),
+                                ("","","", ""),
 
                                 (_("Emissivity"),
                                  _("Emissivity from NDVI."),
                                  "self.OnMenuCmd",
                                  "i.emissivity"),
-				)
+                                )
                          ),
                         ("","","", ""),
 
