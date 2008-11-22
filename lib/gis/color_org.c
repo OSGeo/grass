@@ -3,7 +3,6 @@
 
 #define LOOKUP_COLORS 2048
 
-static int organizing = 0;
 static int organize_lookup(struct Colors *, int);
 static int organize_fp_lookup(struct Colors *, int);
 static int double_comp(const void *, const void *);
@@ -11,8 +10,8 @@ static int double_comp(const void *, const void *);
 int G__organize_colors(struct Colors *colors)
 {
     /* don't do anything if called recursively */
-    if (!organizing) {
-	organizing = 1;
+    if (!colors->organizing) {
+	colors->organizing = 1;
 
 	organize_lookup(colors, 0);
 	organize_lookup(colors, 1);
@@ -20,7 +19,7 @@ int G__organize_colors(struct Colors *colors)
 	organize_fp_lookup(colors, 0);
 	organize_fp_lookup(colors, 1);
 
-	organizing = 0;
+	colors->organizing = 0;
     }
 
     return 0;

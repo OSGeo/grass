@@ -119,15 +119,6 @@ static int gisinit(void)
     /* no histograms */
     G__.want_histogram = 0;
 
-    /* Set compressed data buffer size to zero */
-    G__.compressed_buf_size = 0;
-    G__.work_buf_size = 0;
-    G__.null_buf_size = 0;
-    G__.mask_buf_size = 0;
-    G__.temp_buf_size = 0;
-    /* mask buf we always want to keep allocated */
-    G__reallocate_mask_buf();
-
     /* set the write type for floating maps */
     G__.fp_type = FCELL_TYPE;
     G__.fp_nbytes = XDR_FLOAT_NBYTES;

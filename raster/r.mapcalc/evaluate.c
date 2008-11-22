@@ -3,7 +3,6 @@
 #include <unistd.h>
 #ifdef USE_PTHREAD
 #include <pthread.h>
-#include <signal.h>
 #endif
 
 #include <grass/gis.h>
@@ -114,8 +113,6 @@ static struct worker *workers;
 
 static pthread_mutex_t worker_mutex;
 
-static pthread_mutex_t map_mutex;
-
 static void *worker(void *arg)
 {
     struct worker *w = arg;
@@ -125,10 +122,10 @@ static void *worker(void *arg)
 	while (!w->exp)
 	    pthread_cond_wait(&w->cond, &w->mutex);
 	evaluate(w->exp);
-	pthread_mutex_unlock(&w->mutex);
-
 	w->exp->worker = NULL;
 	w->exp = NULL;
+	pthread_mutex_unlock(&w->mutex);
+	pthread_cond_signal(&w->cond);
     }
 
     return NULL;
@@ -151,11 +148,14 @@ static void begin_evaluate(struct expression *e)
 {
     struct worker *w;
  
+    if (e->worker)
+	G_fatal_error("Expression <%s> already has a worker", format_expression(e));
+
     pthread_mutex_lock(&worker_mutex);
     w = get_worker();
+    e->worker = w;
 
     if (!w) {
-	e->worker = NULL;
 	pthread_mutex_unlock(&worker_mutex);
 	evaluate(e);
 	return;
@@ -163,7 +163,6 @@ static void begin_evaluate(struct expression *e)
 
     pthread_mutex_lock(&w->mutex);
     w->exp = e;
-    e->worker = w;
     pthread_cond_signal(&w->cond);
     pthread_mutex_unlock(&w->mutex);
 
@@ -178,6 +177,8 @@ static void end_evaluate(struct expression *e)
 	return;
 
     pthread_mutex_lock(&w->mutex);
+    while (e->worker)
+	pthread_cond_wait(&w->cond, &w->mutex);
     pthread_mutex_unlock(&w->mutex);
 }
 
@@ -186,12 +187,12 @@ static void init_threads(void)
     const char *p = getenv("WORKERS");
     int i;
 
-    pthread_mutex_init(&map_mutex, NULL);
-
     pthread_mutex_init(&worker_mutex, NULL);
 
     num_workers = p ? atoi(p) : 8;
     workers = G_calloc(num_workers, sizeof(struct worker));
+
+    printf("num_workers = %d\n", num_workers);
 
     for (i = 0; i < num_workers; i++) {
 	struct worker *w = &workers[i];
@@ -205,13 +206,11 @@ static void end_threads(void)
 {
     int i;
 
-    pthread_mutex_destroy(&map_mutex);
-
     pthread_mutex_destroy(&worker_mutex);
 
     for (i = 0; i < num_workers; i++) {
 	struct worker *w = &workers[i];
-	pthread_kill(w->thread, SIGINT);
+	pthread_cancel(w->thread);
 	pthread_mutex_destroy(&w->mutex);
 	pthread_cond_destroy(&w->cond);
     }
@@ -255,19 +254,11 @@ static void evaluate_variable(expression * e)
 
 static void evaluate_map(expression * e)
 {
-#ifdef USE_PTHREAD
-    pthread_mutex_lock(&map_mutex);
-#endif
-
     get_map_row(e->data.map.idx,
 		e->data.map.mod,
 		current_depth + e->data.map.depth,
 		current_row + e->data.map.row,
 		e->data.map.col, e->buf, e->res_type);
-
-#ifdef USE_PTHREAD
-    pthread_mutex_unlock(&map_mutex);
-#endif
 }
 
 static void evaluate_function(expression * e)
@@ -405,7 +396,6 @@ void execute(expr_list * ee)
     int count, n;
 
     setup_region();
-    setup_maps();
     setup_rand();
 
     exprs = ee;
@@ -443,6 +433,8 @@ void execute(expr_list * ee)
 
 	e->data.bind.fd = open_output_map(var, val->res_type);
     }
+
+    setup_maps();
 
     count = rows * depths;
     n = 0;

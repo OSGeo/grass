@@ -65,7 +65,6 @@ struct fileinfo			/* Information for opened cell files */
     int io_error;		/* io error warning given       */
     XDR xdrstream;		/* xdr stream for reading fp    */
     unsigned char *NULL_ROWS[NULL_ROWS_INMEM];
-    unsigned char *null_work_buf;	/* data buffer for reading null rows    */
     int min_null_row;		/* Minimum row null row number in memory */
     struct Quant quant;
     struct GDAL_link *gdal;
@@ -79,16 +78,6 @@ struct G__			/*  Structure of library globals */
     int window_set;		/* Flag: window set?                    */
     int mask_fd;		/* File descriptor for automatic mask   */
     int auto_mask;		/* Flag denoting automatic masking      */
-    CELL *mask_buf;
-    char *null_buf;		/* buffer for reading null rows         */
-    CELL *temp_buf;
-    unsigned char *compressed_buf;	/* Pre/post compressed data buffer      */
-    int compressed_buf_size;	/* sizeof compressed_buf                */
-    unsigned char *work_buf;	/* work data buffer                     */
-    int work_buf_size;		/* sizeof work_buf                      */
-    int null_buf_size;		/* sizeof null_buf                      */
-    int mask_buf_size;		/* sizeof mask_buf                      */
-    int temp_buf_size;		/* sizeof temp_buf                      */
     int want_histogram;
 
     int fileinfo_count;
@@ -100,4 +89,3 @@ extern struct G__ G__;		/* allocated in gisinit */
 #define OPEN_OLD              1
 #define OPEN_NEW_COMPRESSED   2
 #define OPEN_NEW_UNCOMPRESSED 3
-#define OPEN_NEW_RANDOM       4

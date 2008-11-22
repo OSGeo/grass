@@ -24,8 +24,6 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-static int allocate_compress_buf(int);
-
 static struct fileinfo *new_fileinfo(int fd)
 {
     int oldsize = G__.fileinfo_count;
@@ -283,7 +281,6 @@ int G__open_cell_old(const char *name, const char *mapset)
     /* allocate null bitstream buffers for reading null rows */
     for (i = 0; i < NULL_ROWS_INMEM; i++)
 	fcb->NULL_ROWS[i] = G__allocate_null_bits(G__.window.cols);
-    fcb->null_work_buf = G__allocate_null_bits(fcb->cellhd.cols);
     /* initialize : no NULL rows in memory */
     fcb->min_null_row = (-1) * NULL_ROWS_INMEM;
 
@@ -320,19 +317,8 @@ int G__open_cell_old(const char *name, const char *mapset)
      */
 
     /* for reading fcb->data is allocated to be fcb->cellhd.cols * fcb->nbytes 
-       (= XDR_FLOAT/DOUBLE_NBYTES) and G__.work_buf to be G__.window.cols * 
-       sizeof(CELL or DCELL or FCELL) */
+       (= XDR_FLOAT/DOUBLE_NBYTES) */
     fcb->data = (unsigned char *)G_calloc(fcb->cellhd.cols, MAP_NBYTES);
-
-    G__reallocate_work_buf(INTERN_SIZE);
-    G__reallocate_mask_buf();
-    G__reallocate_null_buf();
-    G__reallocate_temp_buf();
-    /* work_buf is used as intermediate buf for conversions */
-    /*
-     * allocate/enlarge the compressed data buffer needed by get_map_row()
-     */
-    allocate_compress_buf(fd);
 
     /* initialize/read in quant rules for float point maps */
     if (fcb->map_type != CELL_TYPE) {
@@ -416,27 +402,6 @@ int G_open_cell_new(const char *name)
     /* bytes per cell for current map */
     WRITE_NBYTES = NBYTES;
     return G__open_raster_new(name, OPEN_NEW_COMPRESSED);
-}
-
-/*!
-  \brief Opens a new cell file in a database (random mode)
-
-  See also G_open_cell_new().
- 
-  Used for non sequential writes.
-  
-  \param name map name
-
-  \return open file descriptor ( >= 0) if successful
-  \return negative integer if error
-*/
-int G_open_cell_new_random(const char *name)
-{
-    WRITE_MAP_TYPE = CELL_TYPE;
-    /* bytes per cell for current map */
-    WRITE_NBYTES = NBYTES;
-    strcpy(cell_dir, "cell");
-    return G__open_raster_new(name, OPEN_NEW_RANDOM);
 }
 
 /*!
@@ -638,13 +603,9 @@ static int G__open_raster_new(const char *name, int open_mode)
     fcb->open_mode = -1;
 
     /* for writing fcb->data is allocated to be G__.window.cols * 
-       sizeof(CELL or DCELL or FCELL) and G__.work_buf to be G__.window.cols *
-       fcb->nbytes (= XDR_FLOAT/DOUBLE_NBYTES) */
+       sizeof(CELL or DCELL or FCELL)  */
     fcb->data = (unsigned char *)G_calloc(G__.window.cols,
 					  G_raster_size(fcb->map_type));
-
-    G__reallocate_null_buf();
-    /* we need null buffer to automatically write embeded nulls in put_row */
 
     if (open_mode == OPEN_NEW_COMPRESSED && !COMPRESSION_TYPE)
 	COMPRESSION_TYPE = getenv("GRASS_INT_ZLIB") ? 2 : 1;
@@ -654,7 +615,6 @@ static int G__open_raster_new(const char *name, int open_mode)
      * set format to cell/supercell
      * for compressed writing
      *   allocate space to hold the row address array
-     *   allocate/enlarge both the compress_buf and the work_buf
      */
     G_copy((char *)&fcb->cellhd, (char *)&G__.window, sizeof(fcb->cellhd));
 
@@ -664,11 +624,7 @@ static int G__open_raster_new(const char *name, int open_mode)
 	G__write_row_ptrs(fd);
 	fcb->cellhd.compressed = COMPRESSION_TYPE;
 
-	allocate_compress_buf(fd);
 	fcb->nbytes = 1;	/* to the minimum */
-	G__reallocate_work_buf(sizeof(CELL));
-	G__reallocate_mask_buf();
-	G__reallocate_temp_buf();
     }
     else {
 	fcb->nbytes = WRITE_NBYTES;
@@ -680,31 +636,9 @@ static int G__open_raster_new(const char *name, int open_mode)
 	}
 	else
 	    fcb->cellhd.compressed = 0;
-	G__reallocate_work_buf(fcb->nbytes);
-	G__reallocate_mask_buf();
-	G__reallocate_temp_buf();
 
 	if (fcb->map_type != CELL_TYPE) {
 	    G_quant_init(&(fcb->quant));
-	}
-
-	if (open_mode == OPEN_NEW_RANDOM) {
-	    G_warning(_("Unable to write embedded null values "
-			"for raster map open for random access"));
-	    if (fcb->map_type == CELL_TYPE)
-		G_write_zeros(fd,
-			      (long)WRITE_NBYTES * fcb->cellhd.cols *
-			      fcb->cellhd.rows);
-	    else if (fcb->map_type == FCELL_TYPE) {
-		if (G__random_f_initialize_0
-		    (fd, fcb->cellhd.rows, fcb->cellhd.cols) < 0)
-		    return -1;
-	    }
-	    else {
-		if (G__random_d_initialize_0
-		    (fd, fcb->cellhd.rows, fcb->cellhd.cols) < 0)
-		    return -1;
-	    }
 	}
     }
 
@@ -739,7 +673,6 @@ static int G__open_raster_new(const char *name, int open_mode)
     for (i = 0; i < NULL_ROWS_INMEM; i++)
 	fcb->NULL_ROWS[i] = G__allocate_null_bits(fcb->cellhd.cols);
     fcb->min_null_row = (-1) * NULL_ROWS_INMEM;
-    fcb->null_work_buf = G__allocate_null_bits(fcb->cellhd.cols);
 
     /* init cell stats */
     /* now works only for int maps */
@@ -759,122 +692,6 @@ static int G__open_raster_new(const char *name, int open_mode)
 
     return fd;
 }
-
-/*!
-  \brief allocate/enlarge the compressed data buffer needed by get_map_row()
-  and put_map_row()
-  
-  Note: compressed format is repeat, value:
-  
-  Repeat takes 1 byte, value takes up to sizeof(CELL)
-  plus 1 byte header for nbytes needed to store row
-*/
-static int allocate_compress_buf(int fd)
-{
-    struct fileinfo *fcb = &G__.fileinfo[fd];
-    int n;
-
-    n = fcb->cellhd.cols * (sizeof(CELL) + 1) + 1;
-    if (fcb->cellhd.compressed && fcb->map_type == CELL_TYPE &&
-	(n > G__.compressed_buf_size)) {
-	if (G__.compressed_buf_size <= 0)
-	    G__.compressed_buf = (unsigned char *)G_malloc(n);
-	else
-	    G__.compressed_buf =
-		(unsigned char *)G_realloc((char *)G__.compressed_buf, n);
-	G__.compressed_buf_size = n;
-    }
-
-    return 0;
-}
-
-/*!
-  \brief Allocate/enlarge the work data buffer needed by get_map_row and put_map_row()
-
-  \param bytes_per_cell number of bytes per cell
-
-  \return 0
-*/
-int G__reallocate_work_buf(int bytes_per_cell)
-{
-    int n;
-
-    n = G__.window.cols * (bytes_per_cell + 1) + 1;
-    if (n > G__.work_buf_size) {
-	if (G__.work_buf_size <= 0)
-	    G__.work_buf = (unsigned char *)G_malloc(n);
-	else
-	    G__.work_buf =
-		(unsigned char *)G_realloc((char *)G__.work_buf, n);
-	G__.work_buf_size = n;
-    }
-
-    return 0;
-}
-
-/*!
-  \brief Allocate/enlarge the null data buffer needed by get_map_row()
-  and for conversion in put_row 
-
-  \return 0
-*/
-int G__reallocate_null_buf(void)
-{
-    int n;
-    n = (G__.window.cols + 1) * sizeof(char);
-    if (n > G__.null_buf_size) {
-	if (G__.null_buf_size <= 0)
-	    G__.null_buf = (char *)G_malloc(n);
-	else
-	    G__.null_buf = (char *)G_realloc(G__.null_buf, n);
-	G__.null_buf_size = n;
-    }
-
-    return 0;
-}
-
-/*!
-  \brief Allocate/enlarge the mask buffer needed by get_map_row()
-
-  \return 0
-*/
-int G__reallocate_mask_buf(void)
-{
-    int n;
-
-    n = (G__.window.cols + 1) * sizeof(CELL);
-    if (n > G__.mask_buf_size) {
-	if (G__.mask_buf_size <= 0)
-	    G__.mask_buf = (CELL *) G_malloc(n);
-	else
-	    G__.mask_buf = (CELL *) G_realloc((char *)G__.mask_buf, n);
-	G__.mask_buf_size = n;
-    }
-
-    return 0;
-}
-
-/*!
-  \brief Allocate/enlarge the temporary buffer needed by G_get_raster_row[_nomask]
-
-  \return 0
-*/
-int G__reallocate_temp_buf(void)
-{
-    int n;
-
-    n = (G__.window.cols + 1) * sizeof(CELL);
-    if (n > G__.temp_buf_size) {
-	if (G__.temp_buf_size <= 0)
-	    G__.temp_buf = (CELL *) G_malloc(n);
-	else
-	    G__.temp_buf = (CELL *) G_realloc((char *)G__.temp_buf, n);
-	G__.temp_buf_size = n;
-    }
-
-    return 0;
-}
-
 
 /*!
   \brief Set raster map floating-point data format.

@@ -43,6 +43,7 @@ static expression *allocate(int type, int res_type)
     e->type = type;
     e->res_type = res_type;
     e->buf = NULL;
+    e->worker = NULL;
     return e;
 }
 
