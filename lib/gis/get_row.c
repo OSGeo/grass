@@ -146,14 +146,18 @@ static int read_data_compressed(int fd, int row, unsigned char *data_buf,
     off_t t1 = fcb->row_ptr[row];
     off_t t2 = fcb->row_ptr[row + 1];
     ssize_t readamount = t2 - t1;
-    unsigned char *cmp = G__.compressed_buf;
+    unsigned char *cmp;
     int n;
 
     if (lseek(fd, t1, SEEK_SET) < 0)
 	return -1;
 
-    if (read(fd, cmp, readamount) != readamount)
+    cmp = G__alloca(readamount);
+
+    if (read(fd, cmp, readamount) != readamount) {
+	G__freea(cmp);
 	return -1;
+    }
 
     /* Now decompress the row */
     if (fcb->cellhd.compressed > 0) {
@@ -173,6 +177,8 @@ static int read_data_compressed(int fd, int row, unsigned char *data_buf,
     }
     else
 	memcpy(data_buf, cmp, readamount);
+
+    G__freea(cmp);
 
     return 0;
 }
@@ -475,11 +481,11 @@ static void gdal_values_double(int fd, const double *data,
 
 /* transfer_to_cell_XY takes bytes from fcb->data, converts these bytes with
    the appropriate procedure (e.g. XDR or byte reordering) into type X 
-   values which are put into array G__.work_buf.  
-   finally the values in G__.work_buf are converted into 
+   values which are put into array work_buf.  
+   finally the values in work_buf are converted into 
    type Y and put into 'cell'.
    if type X == type Y the intermediate step of storing the values in 
-   G__.work_buf might be ommited. check the appropriate function for XY to
+   work_buf might be ommited. check the appropriate function for XY to
    determine the procedure of conversion. 
  */
 
@@ -512,73 +518,89 @@ static void transfer_to_cell_XX(int fd, void *cell)
 static void transfer_to_cell_fi(int fd, void *cell)
 {
     struct fileinfo *fcb = &G__.fileinfo[fd];
+    FCELL *work_buf = G__alloca(G__.window.cols * sizeof(FCELL));
     int i;
 
-    transfer_to_cell_XX(fd, G__.work_buf);
+    transfer_to_cell_XX(fd, work_buf);
 
     for (i = 0; i < G__.window.cols; i++)
 	((CELL *) cell)[i] = (fcb->col_map[i] == 0)
 	    ? 0
-	    : G_quant_get_cell_value(&fcb->quant,
-				     ((FCELL *) G__.work_buf)[i]);
+	    : G_quant_get_cell_value(&fcb->quant, work_buf[i]);
+
+    G__freea(work_buf);
 }
 
 static void transfer_to_cell_di(int fd, void *cell)
 {
     struct fileinfo *fcb = &G__.fileinfo[fd];
+    DCELL *work_buf = G__alloca(G__.window.cols * sizeof(DCELL));
     int i;
 
-    transfer_to_cell_XX(fd, G__.work_buf);
+    transfer_to_cell_XX(fd, work_buf);
 
     for (i = 0; i < G__.window.cols; i++)
 	((CELL *) cell)[i] = (fcb->col_map[i] == 0)
 	    ? 0
-	    : G_quant_get_cell_value(&fcb->quant,
-				     ((DCELL *) G__.work_buf)[i]);
+	    : G_quant_get_cell_value(&fcb->quant, work_buf[i]);
+
+    G__freea(work_buf);
 }
 
 /*--------------------------------------------------------------------------*/
 
 static void transfer_to_cell_if(int fd, void *cell)
 {
+    CELL *work_buf = G__alloca(G__.window.cols * sizeof(CELL));
     int i;
 
-    transfer_to_cell_XX(fd, G__.work_buf);
+    transfer_to_cell_XX(fd, work_buf);
 
     for (i = 0; i < G__.window.cols; i++)
-	((FCELL *) cell)[i] = ((CELL *) G__.work_buf)[i];
+	((FCELL *) cell)[i] = work_buf[i];
+
+    G__freea(work_buf);
 }
 
 static void transfer_to_cell_df(int fd, void *cell)
 {
+    DCELL *work_buf = G__alloca(G__.window.cols * sizeof(DCELL));
     int i;
 
-    transfer_to_cell_XX(fd, G__.work_buf);
+    transfer_to_cell_XX(fd, work_buf);
 
     for (i = 0; i < G__.window.cols; i++)
-	((FCELL *) cell)[i] = ((DCELL *) G__.work_buf)[i];
+	((FCELL *) cell)[i] = work_buf[i];
+
+    G__freea(work_buf);
 }
 
 /*--------------------------------------------------------------------------*/
 
 static void transfer_to_cell_id(int fd, void *cell)
 {
+    CELL *work_buf = G__alloca(G__.window.cols * sizeof(CELL));
     int i;
 
-    transfer_to_cell_XX(fd, G__.work_buf);
+    transfer_to_cell_XX(fd, work_buf);
 
     for (i = 0; i < G__.window.cols; i++)
-	((DCELL *) cell)[i] = ((CELL *) G__.work_buf)[i];
+	((DCELL *) cell)[i] = work_buf[i];
+
+    G__freea(work_buf);
 }
 
 static void transfer_to_cell_fd(int fd, void *cell)
 {
+    FCELL *work_buf = G__alloca(G__.window.cols * sizeof(FCELL));
     int i;
 
-    transfer_to_cell_XX(fd, G__.work_buf);
+    transfer_to_cell_XX(fd, work_buf);
 
     for (i = 0; i < G__.window.cols; i++)
-	((DCELL *) cell)[i] = ((FCELL *) G__.work_buf)[i];
+	((DCELL *) cell)[i] = work_buf[i];
+
+    G__freea(work_buf);
 }
 
 /*--------------------------------------------------------------------------*/
@@ -661,13 +683,15 @@ static int get_map_row(int fd, void *rast, int row, RASTER_MAP_TYPE data_type,
 {
     struct fileinfo *fcb = &G__.fileinfo[fd];
     int size = G_raster_size(data_type);
+    CELL *temp_buf = NULL;
     void *buf;
     int type;
     int stat;
     int i;
 
     if (fcb->reclass_flag && data_type != CELL_TYPE) {
-	buf = G__.temp_buf;
+	temp_buf = G__alloca(G__.window.cols * sizeof(CELL));
+	buf = temp_buf;
 	type = CELL_TYPE;
     }
     else {
@@ -675,10 +699,12 @@ static int get_map_row(int fd, void *rast, int row, RASTER_MAP_TYPE data_type,
 	type = data_type;
     }
 
-    stat =
-	get_map_row_no_reclass(fd, buf, row, type, null_is_zero, with_mask);
-    if (stat < 0)
+    stat = get_map_row_no_reclass(fd, buf, row, type, null_is_zero, with_mask);
+    if (stat < 0) {
+	if (temp_buf)
+	    G__freea(temp_buf);
 	return stat;
+    }
 
     if (!fcb->reclass_flag)
 	return 1;
@@ -692,9 +718,11 @@ static int get_map_row(int fd, void *rast, int row, RASTER_MAP_TYPE data_type,
 	return 1;
 
     for (i = 0; i < G__.window.cols; i++) {
-	G_set_raster_value_c(rast, G__.temp_buf[i], data_type);
+	G_set_raster_value_c(rast, temp_buf[i], data_type);
 	rast = G_incr_void_ptr(rast, size);
     }
+
+    G__freea(temp_buf);
 
     return 1;
 }
@@ -1054,6 +1082,9 @@ static void get_null_value_row_nomask(int fd, char *flags, int row)
 	(fcb->min_null_row + NULL_ROWS_INMEM - 1 < row))
 	/* the null row row is not in memory */
     {
+	unsigned char *null_work_buf = G__alloca(
+	    G__null_bitstream_size(fcb->cellhd.cols));
+
 	/* read in NULL_ROWS_INMEM rows from null file 
 	   so that the requested row is between fcb->min_null_row
 	   and fcb->min_null_row + NULL_ROWS_INMEM */
@@ -1067,21 +1098,19 @@ static void get_null_value_row_nomask(int fd, char *flags, int row)
 	    if (i + fcb->min_null_row >= G__.window.rows)
 		break;
 
-	    if (read_null_bits(null_fd, fcb->null_work_buf,
+	    if (read_null_bits(null_fd, null_work_buf,
 			       i + fcb->min_null_row, fcb->cellhd.cols,
 			       fd) < 0) {
 		if (fcb->map_type == CELL_TYPE) {
-		    /*
-		       If can't read null row, assume  that all map 0's are nulls 
-		       use allocated G__.mask_buf to read map row */
-		    get_map_row_nomask(fd, (void *)G__.mask_buf,
-				       i + fcb->min_null_row, CELL_TYPE);
-		    for (j = 0; j < G__.window.cols; j++) {
-			if (G__.mask_buf[j] == 0)
-			    flags[j] = 1;
-			else
-			    flags[j] = 0;
-		    }
+		    /* If can't read null row, assume  that all map 0's are nulls */
+		    CELL *mask_buf = G__alloca(G__.window.cols * sizeof(CELL));
+
+		    get_map_row_nomask(fd, mask_buf, i + fcb->min_null_row,
+				       CELL_TYPE);
+		    for (j = 0; j < G__.window.cols; j++)
+			flags[j] = (mask_buf[j] == 0);
+
+		    G__freea(mask_buf);
 		}
 		else {		/* fp map */
 
@@ -1093,12 +1122,12 @@ static void get_null_value_row_nomask(int fd, char *flags, int row)
 	    else {
 		/* copy null row to flags row translated by window column mapping */
 		/* the fcb->NULL_ROWS[row-fcb->min_null_row] has G__.window.cols bits, */
-		/* the fcb->null_work_buf has size fcb->cellhd.cols */
+		/* the null_work_buf has size fcb->cellhd.cols */
 		for (j = 0; j < G__.window.cols; j++) {
 		    if (!fcb->col_map[j])
 			flags[j] = 1;
 		    else
-			flags[j] = G__check_null_bit(fcb->null_work_buf,
+			flags[j] = G__check_null_bit(null_work_buf,
 						     fcb->col_map[j] - 1,
 						     fcb->cellhd.cols);
 		}
@@ -1120,6 +1149,8 @@ static void get_null_value_row_nomask(int fd, char *flags, int row)
 
 	if (null_fd > 0)
 	    close(null_fd);
+
+	G__freea(null_work_buf);
     }				/* row is not in memory */
 
     /* copy null file data translated by column mapping to user null row */
@@ -1159,20 +1190,25 @@ static void get_null_value_row_gdal(int fd, char *flags, int row)
 
 static void embed_mask(char *flags, int row)
 {
+    CELL *mask_buf = G__alloca(G__.window.cols * sizeof(CELL));
     int i;
 
     if (G__.auto_mask <= 0)
 	return;
 
-    if (get_map_row_nomask(G__.mask_fd, G__.mask_buf, row, CELL_TYPE) < 0)
+    if (get_map_row_nomask(G__.mask_fd, mask_buf, row, CELL_TYPE) < 0) {
+	G__freea(mask_buf);
 	return;
+    }
 
     if (G__.fileinfo[G__.mask_fd].reclass_flag)
-	do_reclass_int(G__.mask_fd, G__.mask_buf, 1);
+	do_reclass_int(G__.mask_fd, mask_buf, 1);
 
     for (i = 0; i < G__.window.cols; i++)
-	if (G__.mask_buf[i] == 0)
+	if (mask_buf[i] == 0)
 	    flags[i] = 1;
+
+    G__freea(mask_buf);
 }
 
 static void get_null_value_row(int fd, char *flags, int row, int with_mask)
@@ -1193,6 +1229,7 @@ static int embed_nulls(int fd, void *buf, int row, RASTER_MAP_TYPE map_type,
 		       int null_is_zero, int with_mask)
 {
     struct fileinfo *fcb = &G__.fileinfo[fd];
+    char *null_buf;
     int i;
 
     /* this is because without null file the nulls can be only due to 0's
@@ -1201,18 +1238,22 @@ static int embed_nulls(int fd, void *buf, int row, RASTER_MAP_TYPE map_type,
 	&& (G__.auto_mask <= 0 || !with_mask))
 	return 1;
 
-    get_null_value_row(fd, G__.null_buf, row, with_mask);
+    null_buf = G__alloca(G__.window.cols);
+
+    get_null_value_row(fd, null_buf, row, with_mask);
 
     for (i = 0; i < G__.window.cols; i++) {
 	/* also check for nulls which might be already embedded by quant
 	   rules in case of fp map. */
-	if (G__.null_buf[i] || G_is_null_value(buf, map_type)) {
+	if (null_buf[i] || G_is_null_value(buf, map_type)) {
 	    /* G__set_[f/d]_null_value() sets it to 0 is the embedded mode
 	       is not set and calls G_set_[f/d]_null_value() otherwise */
 	    G__set_null_value(buf, 1, null_is_zero, map_type);
 	}
 	buf = G_incr_void_ptr(buf, G_raster_size(map_type));
     }
+
+    G__freea(null_buf);
 
     return 1;
 }

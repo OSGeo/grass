@@ -31,6 +31,19 @@
 
 /*============================== Prototypes ================================*/
 
+#ifdef __GNUC__
+# ifdef __MINGW32__
+#  include <malloc.h>
+# else
+#  include <alloca.h>
+# endif
+# define G__alloca(n) alloca(n)
+# define G__freea(p)
+#else
+# define G__alloca(n) G_malloc(n)
+# define G__freea(p) G_free(p)
+#endif
+
 /* adj_cellhd.c */
 char *G_adjust_Cell_head(struct Cell_head *, int, int);
 char *G_adjust_Cell_head3(struct Cell_head *, int, int, int);
@@ -629,10 +642,6 @@ void G_free_imatrix(int **);
 char *G_index(const char *, int);
 char *G_rindex(const char *, int);
 
-/* init_map.c */
-int G__random_d_initialize_0(int, int, int);
-int G__random_f_initialize_0(int, int, int);
-
 /* interp.c */
 DCELL G_interp_linear(double, DCELL, DCELL);
 DCELL G_interp_bilinear(double, double, DCELL, DCELL, DCELL, DCELL);
@@ -793,7 +802,6 @@ int G_insert_c_null_values(CELL *, char *, int);
 int G_insert_f_null_values(FCELL *, char *, int);
 int G_insert_d_null_values(DCELL *, char *, int);
 int G__check_null_bit(const unsigned char *, int, int);
-int G__set_flags_from_01_random(const char *, unsigned char *, int, int, int);
 int G__convert_01_flags(const char *, unsigned char *, int);
 int G__convert_flags_01(char *, const unsigned char *, int);
 int G__init_null_bits(unsigned char *, int);
@@ -821,17 +829,12 @@ FILE *G_fopen_modify_misc(const char *, const char *, const char *);
 int G_open_cell_old(const char *, const char *);
 int G__open_cell_old(const char *, const char *);
 int G_open_cell_new(const char *);
-int G_open_cell_new_random(const char *);
 int G_open_cell_new_uncompressed(const char *);
 int G_want_histogram(int);
 int G_set_cell_format(int);
 int G_cellvalue_format(CELL);
 int G_open_fp_cell_new(const char *);
 int G_open_fp_cell_new_uncompressed(const char *);
-int G__reallocate_work_buf(int);
-int G__reallocate_null_buf(void);
-int G__reallocate_mask_buf(void);
-int G__reallocate_temp_buf(void);
 int G_set_fp_type(RASTER_MAP_TYPE);
 int G_raster_map_is_fp(const char *, const char *);
 RASTER_MAP_TYPE G_raster_map_type(const char *, const char *);
@@ -914,14 +917,11 @@ int G_put_cellhd(const char *, struct Cell_head *);
 /* put_row.c */
 int G_zeros_r_nulls(int);
 int G_put_map_row(int, const CELL *);
-int G_put_map_row_random(int, const CELL *, int, int, int);
 int G__put_null_value_row(int, const char *);
 int G_put_raster_row(int, const void *, RASTER_MAP_TYPE);
 int G_put_c_raster_row(int, const CELL *);
 int G_put_f_raster_row(int, const FCELL *);
 int G_put_d_raster_row(int, const DCELL *);
-int G__write_data(int, int, int);
-int G__write_data_compressed(int, int, int);
 int G__open_null_write(int);
 int G__write_null_bits(int, const unsigned char *, int, int, int);
 

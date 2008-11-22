@@ -3,10 +3,12 @@
 #include <limits.h>
 #include <string.h>
 #include <unistd.h>
+#ifdef USE_PTHREAD
+#include <pthread.h>
+#endif
 
 #include <grass/gis.h>
 #include <grass/btree.h>
-#include <grass/rowio.h>
 #include <grass/glocale.h>
 
 #include "mapcalc.h"
@@ -28,7 +30,21 @@ void setup_region(void)
 
 /****************************************************************************/
 
-typedef struct map
+struct sub_cache
+{
+    int row;
+    char *valid;
+    void **buf;
+};
+
+struct row_cache
+{
+    int fd;
+    int nrows;
+    struct sub_cache *sub[3];
+};
+
+struct map
 {
     const char *name;
     const char *mapset;
@@ -40,26 +56,139 @@ typedef struct map
     struct Categories cats;
     struct Colors colors;
     BTREE btree;
-    ROWIO rowio;
-} map;
+    struct row_cache cache;
+#ifdef USE_PTHREAD
+    pthread_mutex_t mutex;
+#endif
+};
 
 /****************************************************************************/
 
-static map *maps;
+static struct map *maps;
 static int num_maps;
 static int max_maps;
-
-static unsigned char *red, *grn, *blu;
-static unsigned char *set;
 
 static int min_row = INT_MAX;
 static int max_row = -INT_MAX;
 static int min_col = INT_MAX;
 static int max_col = -INT_MAX;
 
-static int max_rows_in_memory = 3;
+static int max_rows_in_memory = 8;
 
-static int read_row_type;
+#ifdef USE_PTHREAD
+static pthread_mutex_t cats_mutex;
+#endif
+
+/****************************************************************************/
+
+static void cache_sub_init(struct row_cache *cache, int data_type)
+{
+    struct sub_cache *sub = G_malloc(sizeof(struct sub_cache));
+    int i;
+
+    sub->row = -cache->nrows;
+    sub->valid = G_calloc(cache->nrows, 1);
+    sub->buf = G_malloc(cache->nrows * sizeof(void *));
+    for (i = 0; i < cache->nrows; i++)
+	sub->buf[i] = G_allocate_raster_buf(data_type);
+
+    cache->sub[data_type] = sub;
+}
+
+static void cache_setup(struct row_cache *cache, int fd, int nrows)
+{
+    cache->fd = fd;
+    cache->nrows = nrows;
+    cache->sub[CELL_TYPE] = NULL;
+    cache->sub[FCELL_TYPE] = NULL;
+    cache->sub[DCELL_TYPE] = NULL;
+};
+
+static void cache_release(struct row_cache *cache)
+{
+    int t;
+
+    for (t = 0; t < 3; t++) {
+	struct sub_cache *sub = cache->sub[t];
+	int i;
+
+	if (!sub)
+	    continue;
+
+	for (i = 0; i < cache->nrows; i++)
+	    G_free(sub->buf[i]);
+
+	G_free(sub->buf);
+	G_free(sub->valid);
+
+	G_free(sub);
+    }
+};
+
+static void *cache_get_raw(struct row_cache *cache, int row, int data_type)
+{
+    struct sub_cache *sub;
+    void **tmp;
+    char *vtmp;
+    int i, j;
+    int newrow;
+
+    if (!cache->sub[data_type])
+	cache_sub_init(cache, data_type);
+    sub = cache->sub[data_type];
+
+    i = row - sub->row;
+
+    if (i >= 0 && i < cache->nrows) {
+	if (!sub->valid[i]) {
+	    G_get_raster_row(cache->fd, sub->buf[i], row + i, data_type);
+	    sub->valid[i] = 1;
+	}
+	return sub->buf[i];
+    }
+
+    if (i <= -cache->nrows || i >= cache->nrows * 2 - 1) {
+	memset(sub->valid, 0, cache->nrows);
+	sub->row = i;
+	G_get_raster_row(cache->fd, sub->buf[0], row, data_type);
+	sub->valid[0] = 1;
+	return sub->buf[0];
+    }
+
+    tmp = G__alloca(cache->nrows * sizeof(void *));
+    memcpy(tmp, sub->buf, cache->nrows * sizeof(void *));
+    vtmp = G__alloca(cache->nrows);
+    memcpy(vtmp, sub->valid, cache->nrows);
+
+    i = (i < 0)
+	? 0
+	: cache->nrows - 1;
+    newrow = row - i;
+
+    for (j = 0; j < cache->nrows; j++) {
+	int r = newrow + j;
+	int k = r - sub->row;
+	int l = (k + cache->nrows) % cache->nrows;
+
+	sub->buf[j] = tmp[l];
+	sub->valid[j] = k >= 0 && k < cache->nrows && vtmp[l];
+    }
+
+    sub->row = newrow;
+    G__freea(tmp);
+    G__freea(vtmp);
+
+    G_get_raster_row(cache->fd, sub->buf[i], row, data_type);
+    sub->valid[i] = 1;
+
+    return sub->buf[i];
+}
+
+static void cache_get(struct row_cache *cache, void *buf, int row, int res_type)
+{
+    void *p = cache_get_raw(cache, row, res_type);
+    memcpy(buf, p, columns * G_raster_size(res_type));
+};
 
 /****************************************************************************/
 
@@ -68,17 +197,8 @@ static int compare_ints(const void *a, const void *b)
     return *(const int *)a - *(const int *)b;
 }
 
-static void init_colors(map * m)
+static void init_colors(struct map *m)
 {
-    if (!red)
-	red = G_malloc(columns);
-    if (!grn)
-	grn = G_malloc(columns);
-    if (!blu)
-	blu = G_malloc(columns);
-    if (!set)
-	set = G_malloc(columns);
-
     if (G_read_colors((char *)m->name, (char *)m->mapset, &m->colors) < 0)
 	G_fatal_error(_("Unable to read color file for raster map <%s@%s>"),
 		      m->name, m->mapset);
@@ -86,7 +206,7 @@ static void init_colors(map * m)
     m->have_colors = 1;
 }
 
-static void init_cats(map * m)
+static void init_cats(struct map *m)
 {
     if (G_read_cats((char *)m->name, (char *)m->mapset, &m->cats) < 0)
 	G_fatal_error(_("Unable to read category file of raster map <%s@%s>"),
@@ -99,9 +219,13 @@ static void init_cats(map * m)
     m->have_cats = 1;
 }
 
-static void translate_from_colors(map * m, DCELL * rast, CELL * cell,
+static void translate_from_colors(struct map *m, DCELL *rast, CELL *cell,
 				  int ncols, int mod)
 {
+    unsigned char *red = G__alloca(columns);
+    unsigned char *grn = G__alloca(columns);
+    unsigned char *blu = G__alloca(columns);
+    unsigned char *set = G__alloca(columns);
     int i;
 
     G_lookup_d_raster_colors(rast, red, grn, blu, set, ncols, &m->colors);
@@ -141,6 +265,11 @@ static void translate_from_colors(map * m, DCELL * rast, CELL * cell,
 	G_fatal_error(_("Invalid map modifier: '%c'"), mod);
 	break;
     }
+
+    G__freea(red);
+    G__freea(grn);
+    G__freea(blu);
+    G__freea(set);
 }
 
 /* convert cell values to double based on the values in the
@@ -166,7 +295,7 @@ static void translate_from_colors(map * m, DCELL * rast, CELL * cell,
 #define SHIFT 6
 #define NCATS (1<<SHIFT)
 
-static void translate_from_cats(map * m, CELL * cell, DCELL * xcell,
+static void translate_from_cats(struct map *m, CELL * cell, DCELL * xcell,
 				int ncols)
 {
     struct Categories *pcats;
@@ -177,6 +306,10 @@ static void translate_from_cats(map * m, CELL * cell, DCELL * xcell,
     double *values;
     void *ptr;
     char *label;
+
+#ifdef XUSE_PTHREAD
+    pthread_mutex_lock(&cats_mutex);
+#endif
 
     btree = &m->btree;
     pcats = &m->cats;
@@ -221,44 +354,39 @@ static void translate_from_cats(map * m, CELL * cell, DCELL * xcell,
 	else
 	    *xcell = values[idx];
     }
+
+#ifdef XUSE_PTHREAD
+    pthread_mutex_unlock(&cats_mutex);
+#endif
 }
 
-static void set_read_row_type(int res_type)
+static void read_row(int fd, void *buf, int row, int res_type)
 {
-    read_row_type = res_type;
-}
-
-static int read_row(int fd, void *buf, int row, int dummy)
-{
-    if (G_get_raster_row(fd, (DCELL *) buf, row, read_row_type) < 0)
+    if (G_get_raster_row(fd, buf, row, res_type) < 0)
 	G_fatal_error(_("Unable to read raster map row %d"), row);
-
-    return 0;
 }
 
-static void setup_map(map * m)
+static void setup_map(struct map *m)
 {
     int nrows = m->max_row - m->min_row + 1;
-    int size = (sizeof(CELL) > sizeof(double))
-	? sizeof(CELL)
-	: sizeof(double);
+
+#ifdef USE_PTHREAD
+    pthread_mutex_init(&m->mutex, NULL);
+#endif
 
     if (nrows > 1 && nrows <= max_rows_in_memory) {
-	if (rowio_setup(&m->rowio, m->fd, nrows,
-			columns * size, read_row, NULL) < 0)
-	    G_fatal_error(_("Rowio_setup failed"));
+	cache_setup(&m->cache, m->fd, nrows);
 	m->use_rowio = 1;
     }
     else
 	m->use_rowio = 0;
 }
 
-static void read_map(map * m, void *buf, int res_type, int row, int col)
+static void read_map(struct map *m, void *buf, int res_type, int row, int col)
 {
     CELL *ibuf = buf;
     FCELL *fbuf = buf;
     DCELL *dbuf = buf;
-    void *bp;
 
     if (row < 0 || row >= rows) {
 	int i;
@@ -284,23 +412,16 @@ static void read_map(map * m, void *buf, int res_type, int row, int col)
 	return;
     }
 
-    set_read_row_type(res_type);
-
-    if (m->use_rowio) {
-	bp = rowio_get(&m->rowio, row);
-	if (!bp)
-	    G_fatal_error(_("Rowio_get failed"));
-
-	G_copy(buf, bp, columns * G_raster_size(res_type));
-    }
+    if (m->use_rowio)
+	cache_get(&m->cache, buf, row, res_type);
     else
-	read_row(m->fd, buf, row, 0);
+	read_row(m->fd, buf, row, res_type);
 
     if (col)
 	column_shift(buf, res_type, col);
 }
 
-static void close_map(map * m)
+static void close_map(struct map *m)
 {
     if (m->fd < 0)
 	return;
@@ -308,6 +429,10 @@ static void close_map(map * m)
     if (G_close_cell(m->fd) < 0)
 	G_fatal_error(_("Unable to close raster map <%s@%s>"),
 		      m->name, m->mapset);
+
+#ifdef USE_PTHREAD
+    pthread_mutex_destroy(&m->mutex);
+#endif
 
     if (m->have_cats) {
 	btree_free(&m->btree);
@@ -321,7 +446,7 @@ static void close_map(map * m)
     }
 
     if (m->use_rowio) {
-	rowio_release(&m->rowio);
+	cache_release(&m->cache);
 	m->use_rowio = 0;
     }
 }
@@ -361,7 +486,8 @@ int open_map(const char *name, int mod, int row, int col)
     char *mapset;
     int use_cats = 0;
     int use_colors = 0;
-    map *m;
+    struct map *m;
+    int fd;
 
     if (row < min_row)
 	min_row = row;
@@ -372,9 +498,13 @@ int open_map(const char *name, int mod, int row, int col)
     if (col > max_col)
 	max_col = col;
 
-    mapset = G_find_cell2((char *)name, "");
+    mapset = G_find_cell2(name, "");
     if (!mapset)
 	G_fatal_error(_("Raster map <%s> not found"), name);
+
+    fd = G_open_cell_old(name, mapset);
+    if (fd < 0)
+	G_fatal_error(_("Unable to open raster map <%s@%s>"), name, mapset);
 
     switch (mod) {
     case 'M':
@@ -418,7 +548,7 @@ int open_map(const char *name, int mod, int row, int col)
 
     if (num_maps >= max_maps) {
 	max_maps += 10;
-	maps = G_realloc(maps, max_maps * sizeof(map));
+	maps = G_realloc(maps, max_maps * sizeof(struct map));
     }
 
     m = &maps[num_maps];
@@ -430,13 +560,14 @@ int open_map(const char *name, int mod, int row, int col)
     m->use_rowio = 0;
     m->min_row = row;
     m->max_row = row;
+    m->fd = fd;
 
     if (use_cats)
 	init_cats(m);
     if (use_colors)
 	init_colors(m);
 
-    m->fd = G_open_cell_old((char *)name, mapset);
+    m->fd = G_open_cell_old(name, mapset);
 
     if (m->fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s@%s>"), name, mapset);
@@ -448,6 +579,10 @@ void setup_maps(void)
 {
     int i;
 
+#ifdef USE_PTHREAD
+    pthread_mutex_init(&cats_mutex, NULL);
+#endif
+
     for (i = 0; i < num_maps; i++)
 	setup_map(&maps[i]);
 }
@@ -455,19 +590,23 @@ void setup_maps(void)
 void get_map_row(int idx, int mod, int depth, int row, int col, void *buf,
 		 int res_type)
 {
-    static CELL *ibuf;
-    static DCELL *fbuf;
-    map *m = &maps[idx];
+    CELL *ibuf;
+    DCELL *fbuf;
+    struct map *m = &maps[idx];
+
+#ifdef USE_PTHREAD
+    pthread_mutex_lock(&m->mutex);
+#endif
 
     switch (mod) {
     case 'M':
 	read_map(m, buf, res_type, row, col);
 	break;
     case '@':
-	if (!ibuf)
-	    ibuf = G_malloc(columns * sizeof(CELL));
+	ibuf = G__alloca(columns * sizeof(CELL));
 	read_map(m, ibuf, CELL_TYPE, row, col);
 	translate_from_cats(m, ibuf, buf, columns);
+	G__freea(ibuf);
 	break;
     case 'r':
     case 'g':
@@ -475,15 +614,19 @@ void get_map_row(int idx, int mod, int depth, int row, int col, void *buf,
     case '#':
     case 'y':
     case 'i':
-	if (!fbuf)
-	    fbuf = G_malloc(columns * sizeof(DCELL));
+	fbuf = G__alloca(columns * sizeof(DCELL));
 	read_map(m, fbuf, DCELL_TYPE, row, col);
 	translate_from_colors(m, fbuf, buf, columns, mod);
+	G__freea(fbuf);
 	break;
     default:
 	G_fatal_error(_("Invalid map modifier: '%c'"), mod);
 	break;
     }
+
+#ifdef USE_PTHREAD
+    pthread_mutex_unlock(&m->mutex);
+#endif
 }
 
 void close_maps(void)
@@ -494,6 +637,10 @@ void close_maps(void)
 	close_map(&maps[i]);
 
     num_maps = 0;
+
+#ifdef USE_PTHREAD
+    pthread_mutex_destroy(&cats_mutex);
+#endif
 }
 
 /****************************************************************************/
@@ -535,7 +682,7 @@ void unopen_output_map(int fd)
 
 void copy_cats(const char *dst, int idx)
 {
-    const map *m = &maps[idx];
+    const struct map *m = &maps[idx];
     struct Categories cats;
 
     if (G_read_cats((char *)m->name, (char *)m->mapset, &cats) < 0)
@@ -547,7 +694,7 @@ void copy_cats(const char *dst, int idx)
 
 void copy_colors(const char *dst, int idx)
 {
-    const map *m = &maps[idx];
+    const struct map *m = &maps[idx];
     struct Colors colr;
 
     if (G_read_colors((char *)m->name, (char *)m->mapset, &colr) <= 0)
@@ -559,7 +706,7 @@ void copy_colors(const char *dst, int idx)
 
 void copy_history(const char *dst, int idx)
 {
-    const map *m = &maps[idx];
+    const struct map *m = &maps[idx];
     struct History hist;
 
     if (G_read_history((char *)m->name, (char *)m->mapset, &hist) < 0)

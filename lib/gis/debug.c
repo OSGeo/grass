@@ -111,14 +111,6 @@ int G_dump(int fd)
     G_message("Flag: window set? %d", G__.window_set);
     G_message("File descriptor for automatic mask %d", G__.mask_fd);
     G_message("Flag denoting automatic masking %d", G__.auto_mask);
-    G_message("CELL mask buffer %p", G__.mask_buf);
-    G_message("buffer for reading null rows %p", G__.null_buf);
-    G_message("Pre/post compressed data buffer %p", G__.compressed_buf);
-    G_message("sizeof compressed_buf %d", G__.compressed_buf_size);
-    G_message("work data buffer %p", G__.work_buf);
-    G_message("sizeof work_buf %d", G__.work_buf_size);
-    G_message("sizeof null_buf %d", G__.null_buf_size);
-    G_message("sizeof mask_buf %d", G__.mask_buf_size);
     G_message("Histogram request %d", G__.want_histogram);
 
     G_message("G_dump: file #%d", fd);
@@ -147,7 +139,6 @@ int G_dump(int fd)
     G_message("io error warning given %d", fcb->io_error);
     G_message("xdr stream for reading fp %p", &fcb->xdrstream);
     G_message("NULL_ROWS array[%d] = %p", NULL_ROWS_INMEM, fcb->NULL_ROWS);
-    G_message("data buffer for reading null rows %p", fcb->null_work_buf);
     G_message("Minimum row null number in memory %d", fcb->min_null_row);
     G_message("Quant ptr = %p", &fcb->quant);
     G_message("G_dump: end");

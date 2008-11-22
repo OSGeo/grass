@@ -44,6 +44,7 @@ int G_init_colors(struct Colors *colors)
     colors->modular.lookup.active = 0;
     colors->modular.fp_lookup.active = 0;
     colors->modular.fp_lookup.nalloc = 0;
+    colors->organizing = 0;
 
     return 0;
 }

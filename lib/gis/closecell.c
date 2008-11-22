@@ -139,7 +139,6 @@ static int close_old(int fd)
 
     for (i = 0; i < NULL_ROWS_INMEM; i++)
 	G_free(fcb->NULL_ROWS[i]);
-    G_free(fcb->null_work_buf);
 
     if (fcb->cellhd.compressed)
 	G_free(fcb->row_ptr);
@@ -178,13 +177,9 @@ static int close_new(int fd, int ok)
 	case OPEN_NEW_UNCOMPRESSED:
 	    G_debug(1, "close %s uncompressed", fcb->name);
 	    break;
-	case OPEN_NEW_RANDOM:
-	    G_debug(1, "close %s random", fcb->name);
-	    break;
 	}
 
-	if (fcb->open_mode != OPEN_NEW_RANDOM &&
-	    fcb->cur_row < fcb->cellhd.rows) {
+	if (fcb->cur_row < fcb->cellhd.rows) {
 	    G_zero_raster_buf(fcb->data, fcb->map_type);
 	    for (row = fcb->cur_row; row < fcb->cellhd.rows; row++)
 		G_put_raster_row(fd, fcb->data, fcb->map_type);
@@ -216,12 +211,13 @@ static int close_new(int fd, int ok)
 				   row, fcb->cellhd.cols, fd);
 
 	    /* write missing rows */
-	    if (fcb->open_mode != OPEN_NEW_RANDOM
-		&& fcb->null_cur_row < fcb->cellhd.rows) {
-		G__init_null_bits(fcb->null_work_buf, fcb->cellhd.cols);
+	    if (fcb->null_cur_row < fcb->cellhd.rows) {
+		unsigned char *null_work_buf = G__allocate_null_bits(fcb->cellhd.cols);
+		G__init_null_bits(null_work_buf, fcb->cellhd.cols);
 		for (row = fcb->null_cur_row; row < fcb->cellhd.rows; row++)
-		    G__write_null_bits(null_fd, fcb->null_work_buf, row,
+		    G__write_null_bits(null_fd, null_work_buf, row,
 				       fcb->cellhd.cols, fd);
+		G_free(null_work_buf);
 	    }
 	    close(null_fd);
 
@@ -387,7 +383,6 @@ static int close_new(int fd, int ok)
 
     for (i = 0; i < NULL_ROWS_INMEM; i++)
 	G_free(fcb->NULL_ROWS[i]);
-    G_free(fcb->null_work_buf);
 
     if (fcb->map_type != CELL_TYPE)
 	G_quant_free(&fcb->quant);

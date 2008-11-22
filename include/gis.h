@@ -337,6 +337,7 @@ struct Colors
     struct _Color_Info_ modular;
     DCELL cmin;
     DCELL cmax;
+    int organizing;
 };
 
 
