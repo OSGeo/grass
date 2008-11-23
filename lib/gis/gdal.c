@@ -120,10 +120,23 @@ static void init_gdal(void)
 
 #endif /* GDAL_LINK */
 
-struct GDAL_link *G_get_gdal_link(const char *name, const char *mapset)
+void G_init_gdal(void)
 {
 #ifdef GDAL_LINK
     static int initialized;
+
+    if (initialized)
+	return;
+
+    init_gdal();
+    (*pGDALAllRegister)();
+    initialized = 1;
+#endif
+}
+
+struct GDAL_link *G_get_gdal_link(const char *name, const char *mapset)
+{
+#ifdef GDAL_LINK
     GDALDatasetH data;
     GDALRasterBandH band;
     GDALDataType type;
@@ -200,11 +213,7 @@ struct GDAL_link *G_get_gdal_link(const char *name, const char *mapset)
     if (req_type != map_type)
 	return NULL;
 
-    if (!initialized) {
-	init_gdal();
-	(*pGDALAllRegister)();
-	initialized = 1;
-    }
+    G_init_gdal();
 
     data = (*pGDALOpen)(filename, GA_ReadOnly);
     if (!data)

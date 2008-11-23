@@ -28,12 +28,15 @@
 #include "pi.h"
 
 
-static double boa;
-static double f;
-static double ff64;
-static double al;
-static double t1, t2, t3, t4, t1r, t2r;
+static struct state {
+    double boa;
+    double f;
+    double ff64;
+    double al;
+    double t1, t2, t3, t4, t1r, t2r;
+} state;
 
+static struct state *st = &state;
 
 /**
  * \brief Begin geodesic distance.
@@ -51,10 +54,10 @@ static double t1, t2, t3, t4, t1r, t2r;
 
 int G_begin_geodesic_distance(double a, double e2)
 {
-    al = a;
-    boa = sqrt(1 - e2);
-    f = 1 - boa;
-    ff64 = f * f / 64;
+    st->al = a;
+    st->boa = sqrt(1 - e2);
+    st->f = 1 - st->boa;
+    st->ff64 = st->f * st->f / 64;
 
     return 0;
 }
@@ -74,7 +77,7 @@ int G_begin_geodesic_distance(double a, double e2)
 
 int G_set_geodesic_distance_lat1(double lat1)
 {
-    t1r = atan(boa * tan(Radians(lat1)));
+    st->t1r = atan(st->boa * tan(Radians(lat1)));
 
     return 0;
 }
@@ -96,24 +99,24 @@ int G_set_geodesic_distance_lat2(double lat2)
     double stm, ctm, sdtm, cdtm;
     double tm, dtm;
 
-    t2r = atan(boa * tan(Radians(lat2)));
+    st->t2r = atan(st->boa * tan(Radians(lat2)));
 
-    tm = (t1r + t2r) / 2;
-    dtm = (t2r - t1r) / 2;
+    tm = (st->t1r + st->t2r) / 2;
+    dtm = (st->t2r - st->t1r) / 2;
 
     stm = sin(tm);
     ctm = cos(tm);
     sdtm = sin(dtm);
     cdtm = cos(dtm);
 
-    t1 = stm * cdtm;
-    t1 = t1 * t1 * 2;
+    st->t1 = stm * cdtm;
+    st->t1 = st->t1 * st->t1 * 2;
 
-    t2 = sdtm * ctm;
-    t2 = t2 * t2 * 2;
+    st->t2 = sdtm * ctm;
+    st->t2 = st->t2 * st->t2 * 2;
 
-    t3 = sdtm * sdtm;
-    t4 = cdtm * cdtm - stm * stm;
+    st->t3 = sdtm * sdtm;
+    st->t4 = cdtm * cdtm - stm * stm;
 
     return 0;
 }
@@ -141,14 +144,14 @@ double G_geodesic_distance_lon_to_lon(double lon1, double lon2)
     sdlmr = sin(Radians(lon2 - lon1) / 2);
 
     /* special case - shapiro */
-    if (sdlmr == 0.0 && t1r == t2r)
+    if (sdlmr == 0.0 && st->t1r == st->t2r)
 	return 0.0;
 
-    q = t3 + sdlmr * sdlmr * t4;
+    q = st->t3 + sdlmr * sdlmr * st->t4;
 
     /* special case - shapiro */
     if (q == 1.0)
-	return M_PI * al;
+	return M_PI * st->al;
 
     /* Mod: shapiro
      * cd=1-2q is ill-conditioned if q is small O(10**-23)
@@ -179,20 +182,18 @@ double G_geodesic_distance_lon_to_lon(double lon1, double lon2)
 	t = acos(cd) / sd;	/* don't know how to fix acos(1-2*q) yet */
     /* mod ends here */
 
-    u = t1 / (1 - q);
-    v = t2 / q;
+    u = st->t1 / (1 - q);
+    v = st->t2 / q;
     d = 4 * t * t;
     x = u + v;
     e = -2 * cd;
     y = u - v;
     a = -d * e;
 
-    return (al * sd *
-	    (t - f / 4 * (t * x - y) +
-	     ff64 * (x * (a + (t - (a + e) / 2) * x) + y * (-2 * d + e * y)
-		     + d * x * y)
-	    )
-	);
+    return st->al * sd * (t
+			  - st->f / 4 * (t * x - y)
+			  + st->ff64 * (x * (a + (t - (a + e) / 2) * x)
+					+ y * (-2 * d + e * y) + d * x * y));
 }
 
 

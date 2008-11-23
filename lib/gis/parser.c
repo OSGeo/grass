@@ -91,23 +91,6 @@
 #define REPLACED      5
 #define KEYLENGTH 64
 
-static int interactive_ok = 1;
-static int n_opts;
-static int n_flags;
-static int overwrite;
-static int quiet;
-static int has_required;
-
-static struct Flag first_flag;	/* First flag in a linked list      */
-static struct Flag *current_flag;	/* Pointer for traversing list      */
-
-static struct Option first_option;
-static struct Option *current_option;
-
-static struct GModule module_info;	/* general information on the corresponding module */
-
-static const char *pgm_name = NULL;
-
 struct Item
 {
     struct Option *option;
@@ -115,9 +98,31 @@ struct Item
     struct Item *next_item;
 };
 
-static struct Item first_item;
-static struct Item *current_item;
-static int n_items = 0;
+static struct state {
+    int no_interactive;
+    int n_opts;
+    int n_flags;
+    int overwrite;
+    int quiet;
+    int has_required;
+
+    struct GModule module_info;	/* general information on the corresponding module */
+
+    const char *pgm_name;
+
+    struct Flag first_flag;	/* First flag in a linked list      */
+    struct Flag *current_flag;	/* Pointer for traversing list      */
+
+    struct Option first_option;
+    struct Option *current_option;
+
+    struct Item first_item;
+    struct Item *current_item;
+    int n_items;
+} state;
+
+static struct state *st = &state;
+
 static int show_options(int, const char *);
 static int show(const char *, int);
 static int set_flag(int);
@@ -154,11 +159,9 @@ static void G_script(void);
  * \return always returns 0
  */
 
-int G_disable_interactive(void)
+void G_disable_interactive(void)
 {
-    interactive_ok = 0;
-
-    return 0;
+    st->no_interactive = 1;
 }
 
 
@@ -182,34 +185,34 @@ struct Flag *G_define_flag(void)
 
     /* Allocate memory if not the first flag */
 
-    if (n_flags) {
+    if (st->n_flags) {
 	flag = (struct Flag *)G_malloc(sizeof(struct Flag));
-	current_flag->next_flag = flag;
+	st->current_flag->next_flag = flag;
     }
     else
-	flag = &first_flag;
+	flag = &st->first_flag;
 
     /* Zero structure */
 
     G_zero((char *)flag, sizeof(struct Flag));
 
-    current_flag = flag;
-    n_flags++;
+    st->current_flag = flag;
+    st->n_flags++;
 
-    if (n_items) {
+    if (st->n_items) {
 	item = (struct Item *)G_malloc(sizeof(struct Item));
-	current_item->next_item = item;
+	st->current_item->next_item = item;
     }
     else
-	item = &first_item;
+	item = &st->first_item;
 
     G_zero((char *)item, sizeof(struct Item));
 
     item->flag = flag;
     item->option = NULL;
 
-    current_item = item;
-    n_items++;
+    st->current_item = item;
+    st->n_items++;
 
     return (flag);
 }
@@ -238,12 +241,12 @@ struct Option *G_define_option(void)
 
     /* Allocate memory if not the first option */
 
-    if (n_opts) {
+    if (st->n_opts) {
 	opt = (struct Option *)G_malloc(sizeof(struct Option));
-	current_option->next_opt = opt;
+	st->current_option->next_opt = opt;
     }
     else
-	opt = &first_option;
+	opt = &st->first_option;
 
     /* Zero structure */
     G_zero((char *)opt, sizeof(struct Option));
@@ -263,23 +266,23 @@ struct Option *G_define_option(void)
     opt->descriptions = NULL;
     opt->guisection = NULL;
 
-    current_option = opt;
-    n_opts++;
+    st->current_option = opt;
+    st->n_opts++;
 
-    if (n_items) {
+    if (st->n_items) {
 	item = (struct Item *)G_malloc(sizeof(struct Item));
-	current_item->next_item = item;
+	st->current_item->next_item = item;
     }
     else
-	item = &first_item;
+	item = &st->first_item;
 
     G_zero((char *)item, sizeof(struct Item));
 
     item->option = opt;
     item->flag = NULL;
 
-    current_item = item;
-    n_items++;
+    st->current_item = item;
+    st->n_items++;
 
     return (opt);
 }
@@ -687,7 +690,7 @@ struct GModule *G_define_module(void)
 
     /* Allocate memory */
 
-    module = &module_info;
+    module = &st->module_info;
 
     /* Zero structure */
 
@@ -753,14 +756,14 @@ int G_parser(int argc, char **argv)
 	}
     }
     G_basename(tmp_name, "exe");
-    pgm_name = tmp_name;
+    st->pgm_name = tmp_name;
 
     /* Stash default answers */
 
-    opt = &first_option;
+    opt = &st->first_option;
     while (opt != NULL) {
 	if (opt->required)
-	    has_required = 1;
+	    st->has_required = 1;
 
 	/* Parse options */
 	if (opt->options) {
@@ -842,11 +845,11 @@ int G_parser(int argc, char **argv)
 
     /* If there are NO arguments, go interactive */
 
-    if (argc < 2 && has_required && interactive_ok && isatty(0)) {
+    if (argc < 2 && st->has_required && !st->no_interactive && isatty(0)) {
 	G_gui();
 	return -1;
     }
-    else if (argc < 2 && has_required && isatty(0)) {
+    else if (argc < 2 && st->has_required && isatty(0)) {
 	G_usage();
 	return -1;
     }
@@ -894,7 +897,7 @@ int G_parser(int argc, char **argv)
 
 	    /* Overwrite option */
 	    if (strcmp(ptr, "--o") == 0 || strcmp(ptr, "--overwrite") == 0) {
-		overwrite = 1;
+		st->overwrite = 1;
 	    }
 
 	    /* Verbose option */
@@ -902,13 +905,13 @@ int G_parser(int argc, char **argv)
 		char buff[32];
 
 		/* print everything: max verbosity level */
-		module_info.verbose = G_verbose_max();
+		st->module_info.verbose = G_verbose_max();
 		sprintf(buff, "GRASS_VERBOSE=%d", G_verbose_max());
 		putenv(G_store(buff));
-		if (quiet == 1) {
+		if (st->quiet == 1) {
 		    G_warning(_("Use either --quiet or --verbose flag, not both. Assuming --verbose."));
 		}
-		quiet = -1;
+		st->quiet = -1;
 	    }
 
 	    /* Quiet option */
@@ -916,13 +919,13 @@ int G_parser(int argc, char **argv)
 		char buff[32];
 
 		/* print nothing, but errors and warnings */
-		module_info.verbose = G_verbose_min();
+		st->module_info.verbose = G_verbose_min();
 		sprintf(buff, "GRASS_VERBOSE=%d", G_verbose_min());
 		putenv(G_store(buff));
-		if (quiet == -1) {
+		if (st->quiet == -1) {
 		    G_warning(_("Use either --quiet or --verbose flag, not both. Assuming --quiet."));
 		}
-		quiet = 1;	/* for passing to gui init */
+		st->quiet = 1;	/* for passing to gui init */
 	    }
 
 	    /* Force gui to come up */
@@ -943,8 +946,8 @@ int G_parser(int argc, char **argv)
 	    }
 
 	    /* If we see the first option with no equal sign */
-	    else if (need_first_opt && n_opts) {
-		first_option.answer = G_store(ptr);
+	    else if (need_first_opt && st->n_opts) {
+		st->first_option.answer = G_store(ptr);
 		need_first_opt = 0;
 	    }
 
@@ -997,13 +1000,13 @@ static int uses_new_gisprompt(void)
     char element[KEYLENGTH];
     char desc[KEYLENGTH];
 
-    if (module_info.overwrite)
+    if (st->module_info.overwrite)
 	return 1;
 
     /* figure out if any of the options use a "new" gisprompt */
     /* This is to see if we should spit out the --o flag      */
-    if (n_opts) {
-	opt = &first_option;
+    if (st->n_opts) {
+	opt = &st->first_option;
 	while (opt != NULL) {
 	    if (opt->gisprompt) {
 		split_gisprompt(opt->gisprompt, age, element, desc);
@@ -1052,34 +1055,34 @@ int G_usage(void)
 
     new_prompt = uses_new_gisprompt();
 
-    if (!pgm_name)		/* v.dave && r.michael */
-	pgm_name = G_program_name();
-    if (!pgm_name)
-	pgm_name = "??";
+    if (!st->pgm_name)		/* v.dave && r.michael */
+	st->pgm_name = G_program_name();
+    if (!st->pgm_name)
+	st->pgm_name = "??";
 
-    if (module_info.label || module_info.description) {
+    if (st->module_info.label || st->module_info.description) {
 	fprintf(stderr, _("\nDescription:\n"));
-	if (module_info.label)
-	    fprintf(stderr, " %s\n", module_info.label);
-	if (module_info.description)
-	    fprintf(stderr, " %s\n", module_info.description);
+	if (st->module_info.label)
+	    fprintf(stderr, " %s\n", st->module_info.label);
+	if (st->module_info.description)
+	    fprintf(stderr, " %s\n", st->module_info.description);
     }
-    if (module_info.keywords) {
+    if (st->module_info.keywords) {
 	fprintf(stderr, _("\nKeywords:\n"));
-	fprintf(stderr, " %s\n", module_info.keywords);
+	fprintf(stderr, " %s\n", st->module_info.keywords);
     }
 
     fprintf(stderr, _("\nUsage:\n "));
 
-    len = show(pgm_name, 1);
+    len = show(st->pgm_name, 1);
 
     /* Print flags */
 
-    if (n_flags) {
+    if (st->n_flags) {
 	item[0] = ' ';
 	item[1] = '[';
 	item[2] = '-';
-	flag = &first_flag;
+	flag = &st->first_flag;
 	for (n = 3; flag != NULL; n++, flag = flag->next_flag)
 	    item[n] = flag->key;
 	item[n++] = ']';
@@ -1088,8 +1091,8 @@ int G_usage(void)
     }
 
     maxlen = 0;
-    if (n_opts) {
-	opt = &first_option;
+    if (st->n_opts) {
+	opt = &st->first_option;
 	while (opt != NULL) {
 	    if (opt->key_desc != NULL)
 		key_desc = opt->key_desc;
@@ -1139,8 +1142,8 @@ int G_usage(void)
 
     fprintf(stderr, _("\nFlags:\n"));
 
-    if (n_flags) {
-	flag = &first_flag;
+    if (st->n_flags) {
+	flag = &st->first_flag;
 	while (flag != NULL) {
 	    fprintf(stderr, "  -%c   ", flag->key);
 
@@ -1167,9 +1170,9 @@ int G_usage(void)
 
     /* Print help info for options */
 
-    if (n_opts) {
+    if (st->n_opts) {
 	fprintf(stderr, _("\nParameters:\n"));
-	opt = &first_option;
+	opt = &st->first_option;
 	while (opt != NULL) {
 	    fprintf(stderr, "  %*s   ", maxlen, opt->key);
 
@@ -1289,45 +1292,45 @@ static void G_usage_xml(void)
     encoding = "UTF-8";
 #endif
 
-    if (!pgm_name)		/* v.dave && r.michael */
-	pgm_name = G_program_name();
-    if (!pgm_name)
-	pgm_name = "??";
+    if (!st->pgm_name)		/* v.dave && r.michael */
+	st->pgm_name = G_program_name();
+    if (!st->pgm_name)
+	st->pgm_name = "??";
 
     fprintf(stdout, "<?xml version=\"1.0\" encoding=\"%s\"?>\n", encoding);
     fprintf(stdout, "<!DOCTYPE task SYSTEM \"grass-interface.dtd\">\n");
 
-    fprintf(stdout, "<task name=\"%s\">\n", pgm_name);
+    fprintf(stdout, "<task name=\"%s\">\n", st->pgm_name);
 
-    if (module_info.label) {
+    if (st->module_info.label) {
 	fprintf(stdout, "\t<label>\n\t\t");
-	print_escaped_for_xml(stdout, module_info.label);
+	print_escaped_for_xml(stdout, st->module_info.label);
 	fprintf(stdout, "\n\t</label>\n");
     }
 
-    if (module_info.description) {
+    if (st->module_info.description) {
 	fprintf(stdout, "\t<description>\n\t\t");
-	print_escaped_for_xml(stdout, module_info.description);
+	print_escaped_for_xml(stdout, st->module_info.description);
 	fprintf(stdout, "\n\t</description>\n");
     }
 
-    if (module_info.keywords) {
+    if (st->module_info.keywords) {
 	fprintf(stdout, "\t<keywords>\n\t\t");
-	print_escaped_for_xml(stdout, module_info.keywords);
+	print_escaped_for_xml(stdout, st->module_info.keywords);
 	fprintf(stdout, "\n\t</keywords>\n");
     }
 
 	/***** Don't use parameter-groups for now.  We'll reimplement this later 
 	 ***** when we have a concept of several mutually exclusive option
 	 ***** groups
-	if (n_opts || n_flags)
+	if (st->n_opts || st->n_flags)
 		fprintf(stdout, "\t<parameter-group>\n");
 	 *****
 	 *****
 	 *****/
 
-    if (n_opts) {
-	opt = &first_option;
+    if (st->n_opts) {
+	opt = &st->first_option;
 	while (opt != NULL) {
 	    /* TODO: make this a enumeration type? */
 	    switch (opt->type) {
@@ -1439,8 +1442,8 @@ static void G_usage_xml(void)
     }
 
 
-    if (n_flags) {
-	flag = &first_flag;
+    if (st->n_flags) {
+	flag = &st->first_flag;
 	while (flag != NULL) {
 	    fprintf(stdout, "\t<flag name=\"%c\">\n", flag->key);
 
@@ -1468,7 +1471,7 @@ static void G_usage_xml(void)
 	/***** Don't use parameter-groups for now.  We'll reimplement this later 
 	 ***** when we have a concept of several mutually exclusive option
 	 ***** groups
-	if (n_opts || n_flags)
+	if (st->n_opts || st->n_flags)
 		fprintf(stdout, "\t</parameter-group>\n");
 	 *****
 	 *****
@@ -1513,15 +1516,15 @@ static void G_usage_html(void)
 
     new_prompt = uses_new_gisprompt();
 
-    if (!pgm_name)		/* v.dave && r.michael */
-	pgm_name = G_program_name();
-    if (!pgm_name)
-	pgm_name = "??";
+    if (!st->pgm_name)		/* v.dave && r.michael */
+	st->pgm_name = G_program_name();
+    if (!st->pgm_name)
+	st->pgm_name = "??";
 
     fprintf(stdout,
 	    "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n");
     fprintf(stdout, "<html>\n<head>\n");
-    fprintf(stdout, "<title>GRASS GIS: %s</title>\n", pgm_name);
+    fprintf(stdout, "<title>GRASS GIS: %s</title>\n", st->pgm_name);
     fprintf(stdout,
 	    "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">\n");
     fprintf(stdout,
@@ -1531,34 +1534,34 @@ static void G_usage_html(void)
     fprintf(stdout,
 	    "<img src=\"grass_logo.png\" alt=\"GRASS logo\"><hr align=center size=6 noshade>\n\n");
     fprintf(stdout, "<h2>%s</h2>\n", _("NAME"));
-    fprintf(stdout, "<em><b>%s</b></em> ", pgm_name);
+    fprintf(stdout, "<em><b>%s</b></em> ", st->pgm_name);
 
-    if (module_info.label || module_info.description)
+    if (st->module_info.label || st->module_info.description)
 	fprintf(stdout, " - ");
 
-    if (module_info.label)
-	fprintf(stdout, "%s<BR>\n", module_info.label);
+    if (st->module_info.label)
+	fprintf(stdout, "%s<BR>\n", st->module_info.label);
 
-    if (module_info.description)
-	fprintf(stdout, "%s\n", module_info.description);
+    if (st->module_info.description)
+	fprintf(stdout, "%s\n", st->module_info.description);
 
 
     fprintf(stdout, "<h2>%s</h2>\n", _("KEYWORDS"));
-    if (module_info.keywords) {
-	fprintf(stdout, "%s", module_info.keywords);
+    if (st->module_info.keywords) {
+	fprintf(stdout, "%s", st->module_info.keywords);
 	fprintf(stdout, "\n");
     }
     fprintf(stdout, "<h2>%s</h2>\n", _("SYNOPSIS"));
-    fprintf(stdout, "<b>%s</b><br>\n", pgm_name);
-    fprintf(stdout, "<b>%s help</b><br>\n", pgm_name);
+    fprintf(stdout, "<b>%s</b><br>\n", st->pgm_name);
+    fprintf(stdout, "<b>%s help</b><br>\n", st->pgm_name);
 
-    fprintf(stdout, "<b>%s</b>", pgm_name);
+    fprintf(stdout, "<b>%s</b>", st->pgm_name);
 
 
 
     /* print short version first */
-    if (n_flags) {
-	flag = &first_flag;
+    if (st->n_flags) {
+	flag = &st->first_flag;
 	fprintf(stdout, " [-<b>");
 	while (flag != NULL) {
 	    fprintf(stdout, "%c", flag->key);
@@ -1569,8 +1572,8 @@ static void G_usage_html(void)
     else
 	fprintf(stdout, " ");
 
-    if (n_opts) {
-	opt = &first_option;
+    if (st->n_opts) {
+	opt = &st->first_option;
 
 	while (opt != NULL) {
 	    if (opt->key_desc != NULL)
@@ -1614,11 +1617,11 @@ static void G_usage_html(void)
 
     /* now long version */
     fprintf(stdout, "\n");
-    if (n_flags || new_prompt) {
-	flag = &first_flag;
+    if (st->n_flags || new_prompt) {
+	flag = &st->first_flag;
 	fprintf(stdout, "<h3>%s:</h3>\n", _("Flags"));
 	fprintf(stdout, "<DL>\n");
-	while (n_flags && flag != NULL) {
+	while (st->n_flags && flag != NULL) {
 	    fprintf(stdout, "<DT><b>-%c</b></DT>\n", flag->key);
 
 	    if (flag->label) {
@@ -1652,8 +1655,8 @@ static void G_usage_html(void)
     }
 
     fprintf(stdout, "\n");
-    if (n_opts) {
-	opt = &first_option;
+    if (st->n_opts) {
+	opt = &st->first_option;
 	fprintf(stdout, "<h3>%s:</h3>\n", _("Parameters"));
 	fprintf(stdout, "<DL>\n");
 
@@ -1767,18 +1770,18 @@ static void G_script(void)
 	    "#############################################################################/\n");
 
     fprintf(fp, "#%%Module\n");
-    if (module_info.label)
-	fprintf(fp, "#%% label: %s\n", module_info.label);
-    if (module_info.description)
-	fprintf(fp, "#%% description: %s\n", module_info.description);
-    if (module_info.keywords)
-	fprintf(fp, "#%% keywords: %s\n", module_info.keywords);
+    if (st->module_info.label)
+	fprintf(fp, "#%% label: %s\n", st->module_info.label);
+    if (st->module_info.description)
+	fprintf(fp, "#%% description: %s\n", st->module_info.description);
+    if (st->module_info.keywords)
+	fprintf(fp, "#%% keywords: %s\n", st->module_info.keywords);
     fprintf(fp, "#%%End\n");
 
-    if (n_flags) {
+    if (st->n_flags) {
 	struct Flag *flag;
 
-	for (flag = &first_flag; flag; flag = flag->next_flag) {
+	for (flag = &st->first_flag; flag; flag = flag->next_flag) {
 	    fprintf(fp, "#%%Flag\n");
 	    fprintf(fp, "#%% key: %c\n", flag->key);
 	    if (flag->label)
@@ -1791,10 +1794,10 @@ static void G_script(void)
 	}
     }
 
-    if (n_opts) {
+    if (st->n_opts) {
 	struct Option *opt;
 
-	for (opt = &first_option; opt; opt = opt->next_opt) {
+	for (opt = &st->first_option; opt; opt = opt->next_opt) {
 	    switch (opt->type) {
 	    case TYPE_INTEGER:
 		type = "integer";
@@ -1857,20 +1860,20 @@ static void generate_tcl(FILE * fp)
     const char *type;
     int optn;
 
-    fprintf(fp, "begin_dialog {%s} {\n", pgm_name);
-    fprintf(fp, " label {%s}\n", module_info.label ? module_info.label : "");
+    fprintf(fp, "begin_dialog {%s} {\n", st->pgm_name);
+    fprintf(fp, " label {%s}\n", st->module_info.label ? st->module_info.label : "");
     fprintf(fp, " desc {%s}\n",
-	    module_info.description ? module_info.description : "");
+	    st->module_info.description ? st->module_info.description : "");
     fprintf(fp, " key {%s}\n",
-	    module_info.keywords ? module_info.keywords : "");
+	    st->module_info.keywords ? st->module_info.keywords : "");
     fprintf(fp, "}\n");
 
     optn = 1;
 
-    if (n_flags) {
+    if (st->n_flags) {
 	struct Flag *flag;
 
-	for (flag = &first_flag; flag; flag = flag->next_flag, optn++) {
+	for (flag = &st->first_flag; flag; flag = flag->next_flag, optn++) {
 	    fprintf(fp, "add_flag %d {\n", optn);
 	    fprintf(fp, " name {%c}\n", flag->key);
 	    fprintf(fp, " desc {%s}\n", flag->description);
@@ -1884,10 +1887,10 @@ static void generate_tcl(FILE * fp)
 	}
     }
 
-    if (n_opts) {
+    if (st->n_opts) {
 	struct Option *opt;
 
-	for (opt = &first_option; opt; opt = opt->next_opt, optn++) {
+	for (opt = &st->first_option; opt; opt = opt->next_opt, optn++) {
 	    if (opt->key_desc != NULL)
 		type = opt->key_desc;
 	    else
@@ -1932,7 +1935,7 @@ static void generate_tcl(FILE * fp)
 	fprintf(fp, " name {overwrite}\n");
 	fprintf(fp, " desc {%s}\n",
 		_("Allow output files to overwrite existing files"));
-	fprintf(fp, " answer %d\n", overwrite);
+	fprintf(fp, " answer %d\n", st->overwrite);
 	fprintf(fp, " label {%s}\n", _("Allow overwrite"));
 	fprintf(fp, " guisection {}\n");
 	fprintf(fp, "}\n");
@@ -1942,7 +1945,7 @@ static void generate_tcl(FILE * fp)
     fprintf(fp, "add_xflag %d {\n", optn);
     fprintf(fp, " name {quiet}\n");
     fprintf(fp, " desc {%s}\n", _("Run with minimal output messages"));
-    fprintf(fp, " answer %d\n", quiet);
+    fprintf(fp, " answer %d\n", st->quiet);
     fprintf(fp, " label {%s}\n", _("Run quietly"));
     fprintf(fp, " guisection {}\n");
     fprintf(fp, "}\n");
@@ -1958,10 +1961,10 @@ static void G_gui_tcltk(void)
 {
     FILE *fp;
 
-    if (!pgm_name)
-	pgm_name = G_program_name();
-    if (!pgm_name)
-	pgm_name = "??";
+    if (!st->pgm_name)
+	st->pgm_name = G_program_name();
+    if (!st->pgm_name)
+	st->pgm_name = "??";
 
 #ifdef __MINGW32__
     if (getenv("GRASS_DEBUG_GUI"))
@@ -1992,14 +1995,14 @@ static void G_gui_wx(void)
 {
     char script[GPATH_MAX];
 
-    if (!pgm_name)
-	pgm_name = G_program_name();
-    if (!pgm_name)
+    if (!st->pgm_name)
+	st->pgm_name = G_program_name();
+    if (!st->pgm_name)
 	G_fatal_error(_("Unable to determine program name"));
 
     sprintf(script, "%s/etc/wxpython/gui_modules/menuform.py",
 	    getenv("GISBASE"));
-    G_spawn("python", "menuform.py", script, pgm_name, NULL);
+    G_spawn("python", "menuform.py", script, st->pgm_name, NULL);
 }
 
 /**
@@ -2031,10 +2034,10 @@ static void G_gui(void)
 **/
 static void G_tcltk(void)
 {
-    if (!pgm_name)
-	pgm_name = G_program_name();
-    if (!pgm_name)
-	pgm_name = "??";
+    if (!st->pgm_name)
+	st->pgm_name = G_program_name();
+    if (!st->pgm_name)
+	st->pgm_name = "??";
 
     generate_tcl(stdout);
 }
@@ -2096,14 +2099,14 @@ static int set_flag(int f)
 
     /* Flag is not valid if there are no flags to set */
 
-    if (!n_flags) {
+    if (!st->n_flags) {
 	fprintf(stderr, _("Sorry, <%c> is not a valid flag\n"), f);
 	return (1);
     }
 
     /* Find flag with corrrect keyword */
 
-    flag = &first_flag;
+    flag = &st->first_flag;
     while (flag != NULL) {
 	if (flag->key == f) {
 	    flag->answer = 1;
@@ -2153,7 +2156,7 @@ static int set_option(char *string)
     /* Find option with best keyword match */
     got_one = 0;
     key_len = strlen(the_key);
-    for (at_opt = &first_option; at_opt != NULL; at_opt = at_opt->next_opt) {
+    for (at_opt = &st->first_option; at_opt != NULL; at_opt = at_opt->next_opt) {
 	if (at_opt->key == NULL || strncmp(the_key, at_opt->key, key_len))
 	    continue;
 
@@ -2201,10 +2204,10 @@ static int check_opts(void)
 
     error = 0;
 
-    if (!n_opts)
+    if (!st->n_opts)
 	return (0);
 
-    opt = &first_option;
+    opt = &st->first_option;
     while (opt != NULL) {
 	/* Check answer against options if any */
 
@@ -2391,10 +2394,10 @@ static int check_required(void)
 
     err = 0;
 
-    if (!n_opts)
+    if (!st->n_opts)
 	return (0);
 
-    opt = &first_option;
+    opt = &st->first_option;
     while (opt != NULL) {
 	if (opt->required && opt->answer == NULL) {
 	    fprintf(stderr,
@@ -2418,10 +2421,10 @@ static int split_opts(void)
     int len;
 
 
-    if (!n_opts)
+    if (!st->n_opts)
 	return 0;
 
-    opt = &first_option;
+    opt = &st->first_option;
     while (opt != NULL) {
 	if ( /*opt->multiple && */ (opt->answer != NULL)) {
 	    /* Allocate some memory to store array of pointers */
@@ -2476,11 +2479,11 @@ static int check_multiple_opts(void)
     int n;
     int error;
 
-    if (!n_opts)
+    if (!st->n_opts)
 	return (0);
 
     error = 0;
-    opt = &first_option;
+    opt = &st->first_option;
     while (opt != NULL) {
 	if ((opt->answer != NULL) && (opt->key_desc != NULL)) {
 	    /* count commas */
@@ -2516,9 +2519,9 @@ static int check_overwrite(void)
     char *overstr;
     int over;
 
-    module_info.overwrite = 0;
+    st->module_info.overwrite = 0;
 
-    if (!n_opts)
+    if (!st->n_opts)
 	return (0);
 
     over = 0;
@@ -2533,15 +2536,15 @@ static int check_overwrite(void)
 	    over = 1;
     }
 
-    if (overwrite || over) {
-	module_info.overwrite = 1;
+    if (st->overwrite || over) {
+	st->module_info.overwrite = 1;
 	/* Set the environment so that programs run in a script also obey --o */
 	putenv("GRASS_OVERWRITE=1");
 	/* No need to check options for existing files if overwrite is true */
 	return error;
     }
 
-    opt = &first_option;
+    opt = &st->first_option;
     while (opt != NULL) {
 	if ((opt->answer != NULL) && (opt->gisprompt != NULL)) {
 	    split_gisprompt(opt->gisprompt, age, element, desc);
@@ -2550,7 +2553,7 @@ static int check_overwrite(void)
 		int i;
 		for (i = 0; opt->answers[i]; i++) {
 		    if (G_find_file(element, opt->answers[i], G_mapset())) {	/* found */
-			if (!overwrite && !over) {
+			if (!st->overwrite && !over) {
 			    if (G_info_format() != G_INFO_FORMAT_GUI) {
 				fprintf(stderr,
 					_("ERROR: option <%s>: <%s> exists.\n"),
@@ -2641,8 +2644,8 @@ char *G_recreate_command(void)
     strcpy(cur, tmp);
     cur += len;
 
-    if (n_flags) {
-	flag = &first_flag;
+    if (st->n_flags) {
+	flag = &st->first_flag;
 	while (flag != '\0') {
 	    if (flag->answer == 1) {
 		flg[0] = ' ';
@@ -2664,7 +2667,7 @@ char *G_recreate_command(void)
 	}
     }
 
-    opt = &first_option;
+    opt = &st->first_option;
     while (opt != '\0') {
 	if (opt->answer != '\0' && opt->answers[0] != NULL) {
 	    slen = strlen(opt->key) + strlen(opt->answers[0]) + 4;	/* +4 for: ' ' = " " */
