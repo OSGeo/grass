@@ -22,27 +22,33 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-#define ENV struct env
-
-ENV {
+struct bind {
     int loc;
     char *name;
     char *value;
 };
 
-static ENV *env = NULL;
-static ENV *env2 = NULL;
-static int count = 0;
-static int count2 = 0;
-static int init[10] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-static char *gisrc = NULL;
-static int varmode = G_GISRC_MODE_FILE;	/* where find/store variables */
+struct env {
+    struct bind *binds;
+    int count;
+    int size;
+};
+
+static struct state {
+    struct env env;
+    struct env env2;
+    char *gisrc;
+    int varmode;
+    int init[2];
+} state;
+
+static struct state *st = &state;
 
 static int read_env(int);
 static int set_env(const char *, const char *, int);
 static int unset_env(const char *, int);
 static char *get_env(const char *, int);
-static int write_env(int);
+static void write_env(int);
 static FILE *open_env(const char *, int);
 
 /**
@@ -58,7 +64,7 @@ static FILE *open_env(const char *, int);
 */
 void G_set_gisrc_mode(int mode)
 {
-    varmode = mode;
+    st->varmode = mode;
 }
 
 /**
@@ -70,7 +76,7 @@ void G_set_gisrc_mode(int mode)
 */
 int G_get_gisrc_mode(void)
 {
-    return (varmode);
+    return (st->varmode);
 }
 
 static int read_env(int loc)
@@ -78,16 +84,15 @@ static int read_env(int loc)
     char buf[200];
     char *name;
     char *value;
-
     FILE *fd;
 
-    if (loc == G_VAR_GISRC && varmode == G_GISRC_MODE_MEMORY)
+    if (loc == G_VAR_GISRC && st->varmode == G_GISRC_MODE_MEMORY)
 	return 0;		/* don't use file for GISRC */
 
-    if (init[loc])
+    if (st->init[loc])
 	return 1;
 
-    init[loc] = 1;
+    st->init[loc] = 1;
 
     if ((fd = open_env("r", loc))) {
 	while (G_getl2(buf, sizeof buf, fd)) {
@@ -103,6 +108,7 @@ static int read_env(int loc)
 	    if (*name && *value)
 		set_env(name, value, loc);
 	}
+
 	fclose(fd);
     }
 
@@ -135,31 +141,38 @@ static int set_env(const char *name, const char *value, int loc)
      *   and look for name in the environment
      */
     empty = -1;
-    for (n = 0; n < count; n++)
-	if (!env[n].name)	/* mark empty slot found */
+    for (n = 0; n < st->env.count; n++) {
+	struct bind *b = &st->env.binds[n];
+	if (!b->name)	/* mark empty slot found */
 	    empty = n;
-	else if (strcmp(env[n].name, name) == 0 && env[n].loc == loc) {
-	    env[n].value = tv;
+	else if (strcmp(b->name, name) == 0 && b->loc == loc) {
+	    b->value = tv;
 	    return 1;
 	}
+    }
 
     /* add name to env: to empty slot if any */
     if (empty >= 0) {
-	env[empty].loc = loc;
-	env[empty].name = G_store(name);
-	env[empty].value = tv;
+	struct bind *b = &st->env.binds[empty];
+	b->loc = loc;
+	b->name = G_store(name);
+	b->value = tv;
 	return 0;
     }
 
     /* must increase the env list and add in */
-    if ((n = count++))
-	env = (ENV *) G_realloc((char *)env, count * sizeof(ENV));
-    else
-	env = (ENV *) G_malloc(sizeof(ENV));
+    if (st->env.count >= st->env.size) {
+	st->env.size += 20;
+	st->env.binds = G_realloc(st->env.binds, st->env.size * sizeof(struct bind));
+    }
 
-    env[n].loc = loc;
-    env[n].name = G_store(name);
-    env[n].value = tv;
+    {
+	struct bind *b = &st->env.binds[st->env.count++];
+
+	b->loc = loc;
+	b->name = G_store(name);
+	b->value = tv;
+    }
 
     return 0;
 }
@@ -168,13 +181,14 @@ static int unset_env(const char *name, int loc)
 {
     int n;
 
-    for (n = 0; n < count; n++)
-	if (env[n].name && (strcmp(env[n].name, name) == 0) &&
-	    env[n].loc == loc) {
-	    G_free(env[n].name);
-	    env[n].name = 0;
+    for (n = 0; n < st->env.count; n++) {
+	struct bind *b = &st->env.binds[n];
+	if (b->name && strcmp(b->name, name) == 0 && b->loc == loc) {
+	    G_free(b->name);
+	    b->name = 0;
 	    return 1;
 	}
+    }
 
     return 0;
 }
@@ -183,16 +197,17 @@ static char *get_env(const char *name, int loc)
 {
     int n;
 
-    for (n = 0; n < count; n++) {
-	if (env[n].name && (strcmp(env[n].name, name) == 0) &&
-	    env[n].loc == loc)
-	    return env[n].value;
+    for (n = 0; n < st->env.count; n++) {
+	struct bind *b = &st->env.binds[n];
+	if (b->name && (strcmp(b->name, name) == 0) &&
+	    b->loc == loc)
+	    return b->value;
     }
 
     return NULL;
 }
 
-static int write_env(int loc)
+static void write_env(int loc)
 {
     FILE *fd;
     int n;
@@ -202,8 +217,8 @@ static int write_env(int loc)
     RETSIGTYPE (*sigquit)(int);
 #endif
 
-    if (loc == G_VAR_GISRC && varmode == G_GISRC_MODE_MEMORY)
-	return 0;		/* don't use file for GISRC */
+    if (loc == G_VAR_GISRC && st->varmode == G_GISRC_MODE_MEMORY)
+	return;		/* don't use file for GISRC */
 
     /*
      * THIS CODE NEEDS TO BE PROTECTED FROM INTERRUPTS
@@ -214,10 +229,12 @@ static int write_env(int loc)
     sigquit = signal(SIGQUIT, SIG_IGN);
 #endif
     if ((fd = open_env("w", loc))) {
-	for (n = 0; n < count; n++)
-	    if (env[n].name && env[n].value && env[n].loc == loc
-		&& (sscanf(env[n].value, "%1s", dummy) == 1))
-		fprintf(fd, "%s: %s\n", env[n].name, env[n].value);
+	for (n = 0; n < st->env.count; n++) {
+	    struct bind *b = &st->env.binds[n];
+	    if (b->name && b->value && b->loc == loc
+		&& (sscanf(b->value, "%1s", dummy) == 1))
+		fprintf(fd, "%s: %s\n", b->name, b->value);
+	}
 	fclose(fd);
     }
 
@@ -225,23 +242,21 @@ static int write_env(int loc)
 #ifdef SIGQUIT
     signal(SIGQUIT, sigquit);
 #endif
-
-    return 0;
 }
 
 static FILE *open_env(const char *mode, int loc)
 {
-    char buf[1000];
+    char buf[GPATH_MAX];
 
     if (loc == G_VAR_GISRC) {
-	if (!gisrc)
-	    gisrc = getenv("GISRC");
+	if (!st->gisrc)
+	    st->gisrc = getenv("GISRC");
 
-	if (!gisrc) {
+	if (!st->gisrc) {
 	    G_fatal_error(_("GISRC - variable not set"));
-	    return (NULL);
+	    return NULL;
 	}
-	strcpy(buf, gisrc);
+	strcpy(buf, st->gisrc);
     }
     else if (loc == G_VAR_MAPSET) {
 	/* Warning: G_VAR_GISRC must be previously read -> */
@@ -348,12 +363,11 @@ char *G__getenv2(const char *name, int loc)
 
    \return 0
 */
-int G_setenv(const char *name, const char *value)
+void G_setenv(const char *name, const char *value)
 {
     read_env(G_VAR_GISRC);
     set_env(name, value, G_VAR_GISRC);
     write_env(G_VAR_GISRC);
-    return 0;
 }
 
 /**
@@ -368,12 +382,11 @@ int G_setenv(const char *name, const char *value)
 
    \return 0
 */
-int G_setenv2(const char *name, const char *value, int loc)
+void G_setenv2(const char *name, const char *value, int loc)
 {
     read_env(loc);
     set_env(name, value, loc);
     write_env(loc);
-    return 0;
 }
 
 /**
@@ -384,11 +397,10 @@ int G_setenv2(const char *name, const char *value, int loc)
 
    \return 0
 */
-int G__setenv(const char *name, const char *value)
+void G__setenv(const char *name, const char *value)
 {
     read_env(G_VAR_GISRC);
     set_env(name, value, G_VAR_GISRC);
-    return 0;
 }
 
 /**
@@ -400,11 +412,10 @@ int G__setenv(const char *name, const char *value)
 
    \return 0
 */
-int G__setenv2(const char *name, const char *value, int loc)
+void G__setenv2(const char *name, const char *value, int loc)
 {
     read_env(loc);
     set_env(name, value, loc);
-    return 0;
 }
 
 /**
@@ -416,13 +427,11 @@ int G__setenv2(const char *name, const char *value, int loc)
 
    \return 0
 */
-int G_unsetenv(const char *name)
+void G_unsetenv(const char *name)
 {
     read_env(G_VAR_GISRC);
     unset_env(name, G_VAR_GISRC);
     write_env(G_VAR_GISRC);
-
-    return 0;
 }
 
 /**
@@ -434,13 +443,11 @@ int G_unsetenv(const char *name)
 
    \return 0
 */
-int G_unsetenv2(const char *name, int loc)
+void G_unsetenv2(const char *name, int loc)
 {
     read_env(loc);
     unset_env(name, loc);
     write_env(loc);
-
-    return 0;
 }
 
 /**
@@ -450,12 +457,10 @@ int G_unsetenv2(const char *name, int loc)
 
    \return 0
 */
-int G__write_env(void)
+void G__write_env(void)
 {
-    if (init[G_VAR_GISRC])
+    if (st->init[G_VAR_GISRC])
 	write_env(G_VAR_GISRC);
-
-    return 0;
 }
 
 /**
@@ -478,9 +483,9 @@ char *G__env_name(int n)
 
     read_env(G_VAR_GISRC);
     if (n >= 0)
-	for (i = 0; i < count; i++)
-	    if (env[i].name && *env[i].name && (n-- == 0))
-		return env[i].name;
+	for (i = 0; i < st->env.count; i++)
+	    if (st->env.binds[i].name && *st->env.binds[i].name && (n-- == 0))
+		return st->env.binds[i].name;
     return NULL;
 }
 
@@ -491,11 +496,9 @@ char *G__env_name(int n)
 
    \return 0
 */
-int G__read_env(void)
+void G__read_env(void)
 {
-    init[G_VAR_GISRC] = 0;
-
-    return 0;
+    st->init[G_VAR_GISRC] = 0;
 }
 
 /**
@@ -505,21 +508,20 @@ int G__read_env(void)
 
    \return 0
 */
-int G__create_alt_env(void)
+void G__create_alt_env(void)
 {
     int i;
 
     /* copy env to env2 */
-    env2 = env;
-    count2 = count;
-    env = NULL;
-    count = 0;
+    st->env2 = st->env;
 
-    for (i = 0; i < count2; i++)
-	if (env2[count].name)
-	    set_env(env2[count].name, env2[count].value, G_VAR_GISRC);
+    st->env.count = 0;
 
-    return 0;
+    for (i = 0; i < st->env2.count; i++) {
+	struct bind *b = &st->env2.binds[i];
+	if (b->name)
+	    set_env(b->name, b->value, G_VAR_GISRC);
+    }
 }
 
 /**
@@ -529,19 +531,11 @@ int G__create_alt_env(void)
 
    \return 0
 */
-int G__switch_env(void)
+void G__switch_env(void)
 {
-    ENV *tmp;
-    int n;
+    struct env tmp;
 
-    n = count;
-    tmp = env;
-
-    env = env2;
-    count = count2;
-
-    env2 = tmp;
-    count2 = n;
-
-    return 0;
+    tmp = st->env;
+    st->env = st->env2;
+    st->env2 = tmp;
 }

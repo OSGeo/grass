@@ -25,10 +25,12 @@
 static double min4(double, double, double, double);
 static double min2(double, double);
 
+static struct state {
+    int projection;
+    double factor;
+} state;
 
-static int projection = 0;
-static double factor = 1.0;
-
+static struct state *st = &state;
 
 /**
  * \brief Begin distance calculations.
@@ -45,16 +47,16 @@ int G_begin_distance_calculations(void)
 {
     double a, e2;
 
-    factor = 1.0;
-    switch (projection = G_projection()) {
+    st->factor = 1.0;
+    switch (st->projection = G_projection()) {
     case PROJECTION_LL:
 	G_get_ellipsoid_parameters(&a, &e2);
 	G_begin_geodesic_distance(a, e2);
 	return 2;
     default:
-	factor = G_database_units_to_meters_factor();
-	if (factor <= 0.0) {
-	    factor = 1.0;	/* assume meter grid */
+	st->factor = G_database_units_to_meters_factor();
+	if (st->factor <= 0.0) {
+	    st->factor = 1.0;	/* assume meter grid */
 	    return 0;
 	}
 	return 1;
@@ -77,10 +79,10 @@ int G_begin_distance_calculations(void)
 
 double G_distance(double e1, double n1, double e2, double n2)
 {
-    if (projection == PROJECTION_LL)
+    if (st->projection == PROJECTION_LL)
 	return G_geodesic_distance(e1, n1, e2, n2);
     else
-	return factor * hypot(e1 - e2, n1 - n2);
+	return st->factor * hypot(e1 - e2, n1 - n2);
 }
 
 

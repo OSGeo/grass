@@ -26,28 +26,29 @@
 
 static struct table
 {
-    char *name;			/* Short Name / acronym of map datum */
-    char *descr;		/* Long Name for map datum */
-    char *ellps;		/* acronym for ellipsoid used with this datum */
-    double dx;			/* delta x */
-    double dy;			/* delta y */
-    double dz;			/* delta z */
-} *table;
-
-static int size;
-static int count = -1;
+    struct datum
+    {
+	char *name;		/* Short Name / acronym of map datum */
+	char *descr;		/* Long Name for map datum */
+	char *ellps;		/* acronym for ellipsoid used with this datum */
+	double dx;		/* delta x */
+	double dy;		/* delta y */
+	double dz;		/* delta z */
+    } *datums;
+    int size;
+    int count;
+} table;
 
 static int compare_table_names(const void *, const void *);
-static void read_datum_table(void);
 
 int G_get_datum_by_name(const char *name)
 {
     int i;
 
-    read_datum_table();
+    G_read_datum_table();
 
-    for (i = 0; i < count; i++)
-	if (G_strcasecmp(name, table[i].name) == 0)
+    for (i = 0; i < table.count; i++)
+	if (G_strcasecmp(name, table.datums[i].name) == 0)
 	    return i;
 
     return -1;
@@ -55,32 +56,32 @@ int G_get_datum_by_name(const char *name)
 
 char *G_datum_name(int n)
 {
-    read_datum_table();
+    G_read_datum_table();
 
-    if (n < 0 || n >= count)
+    if (n < 0 || n >= table.count)
 	return NULL;
 
-    return table[n].name;
+    return table.datums[n].name;
 }
 
 char *G_datum_description(int n)
 {
-    read_datum_table();
+    G_read_datum_table();
 
-    if (n < 0 || n >= count)
+    if (n < 0 || n >= table.count)
 	return NULL;
 
-    return table[n].descr;
+    return table.datums[n].descr;
 }
 
 char *G_datum_ellipsoid(int n)
 {
-    read_datum_table();
+    G_read_datum_table();
 
-    if (n < 0 || n >= count)
+    if (n < 0 || n >= table.count)
 	return NULL;
 
-    return table[n].ellps;
+    return table.datums[n].ellps;
 }
 
 /***********************************************************
@@ -141,17 +142,15 @@ int G_get_datumparams_from_projinfo(const struct Key_Value *projinfo,
 
 }
 
-static void read_datum_table(void)
+void G_read_datum_table(void)
 {
     FILE *fd;
     char file[GPATH_MAX];
     char buf[1024];
     int line;
 
-    if (count >= 0)
+    if (table.count > 0)
 	return;
-
-    count = 0;
 
     sprintf(file, "%s%s", G_gisbase(), DATUMTABLE);
 
@@ -163,18 +162,18 @@ static void read_datum_table(void)
 
     for (line = 1; G_getl2(buf, sizeof(buf), fd); line++) {
 	char name[100], descr[100], ellps[100];
-	struct table *t;
+	struct datum *t;
 
 	G_strip(buf);
 	if (*buf == '\0' || *buf == '#')
 	    continue;
 
-	if (count >= size) {
-	    size += 50;
-	    table = G_realloc(table, size * sizeof(struct table));
+	if (table.count >= table.size) {
+	    table.size += 50;
+	    table.datums = G_realloc(table.datums, table.size * sizeof(struct datum));
 	}
 
-	t = &table[count];
+	t = &table.datums[table.count];
 
 	if (sscanf(buf, "%s \"%99[^\"]\" %s dx=%lf dy=%lf dz=%lf",
 		   name, descr, ellps, &t->dx, &t->dy, &t->dz) != 6) {
@@ -186,16 +185,16 @@ static void read_datum_table(void)
 	t->descr = G_store(descr);
 	t->ellps = G_store(ellps);
 
-	count++;
+	table.count++;
     }
 
-    qsort(table, count, sizeof(struct table), compare_table_names);
+    qsort(table.datums, table.count, sizeof(struct datum), compare_table_names);
 }
 
 static int compare_table_names(const void *aa, const void *bb)
 {
-    const struct table *a = aa;
-    const struct table *b = bb;
+    const struct datum *a = aa;
+    const struct datum *b = bb;
 
     return G_strcasecmp(a->name, b->name);
 }

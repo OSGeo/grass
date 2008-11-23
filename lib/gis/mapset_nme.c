@@ -16,12 +16,17 @@
 #include <unistd.h>
 #include <grass/gis.h>
 
-static char **mapset_name;
-static char **mapset_name2;
-static int nmapset = 0;
-static int nmapset2 = 0;
-static int new_mapset(const char *);
-static int get_list_of_mapsets(void);
+static struct state {
+    struct list {
+	char **names;
+	int count;
+	int size;
+    } path, path2;
+} state;
+
+static struct state *st = &state;
+
+static void new_mapset(const char *);
 
 /*!
    \brief Get name of the n'th mapset from the mapset_name[] list.
@@ -35,67 +40,46 @@ static int get_list_of_mapsets(void);
  */
 char *G__mapset_name(int n)
 {
-    /*
-     * first call will detect no mapsets in list
-     * and go look up the list
-     */
-    if (nmapset == 0)
-	get_list_of_mapsets();
-    /*
-     * must not run off the bounds of the list
-     */
-    if (n < 0 || n >= nmapset)
-	return ((char *)NULL);
+    if (st->path.count == 0)
+	G_get_list_of_mapsets();
 
-    return mapset_name[n];
+    if (n < 0 || n >= st->path.count)
+	return NULL;
+
+    return st->path.names[n];
 }
 
-static int get_list_of_mapsets(void)
+void G_get_list_of_mapsets(void)
 {
-    char name[GNAME_MAX];
-    FILE *fd;
+    FILE *fp;
 
-    /*
-     * the list of mapsets is in SEARCH_PATH file in the mapset
-     */
-    mapset_name = NULL;
-    if ((fd = G_fopen_old("", "SEARCH_PATH", G_mapset()))) {
-	while (fscanf(fd, "%s", name) == 1)
+    fp = G_fopen_old("", "SEARCH_PATH", G_mapset());
+    if (fp) {
+	char name[GNAME_MAX];
+	while (fscanf(fp, "%s", name) == 1)
 	    if (G__mapset_permissions(name) >= 0)
 		new_mapset(name);
-	fclose(fd);
+	fclose(fp);
     }
-    /*
-     * if no list, then set the list to the current mapset followed
-     * by PERMANENT
-     */
-    if (!nmapset) {
-	char *perm;
-	char *cur;
 
-	cur = G_mapset();
-	perm = "PERMANENT";
+    if (!st->path.count) {
+	static const char perm[] = "PERMANENT";
+	const char *cur = G_mapset();
 
 	new_mapset(cur);
 	if (strcmp(perm, cur) != 0 && G__mapset_permissions(perm) >= 0)
 	    new_mapset(perm);
     }
-
-    return 0;
 }
 
-static int new_mapset(const char *name)
+static void new_mapset(const char *name)
 {
-    /*
-     * extend mapset name list and store name
-     * note: assumes G_realloc will become G_malloc if mapset_name == NULL
-     */
-    nmapset++;
-    mapset_name =
-	(char **)G_realloc((char *)mapset_name, nmapset * sizeof(char *));
-    mapset_name[nmapset - 1] = G_store(name);
+    if (st->path.count >= st->path.size) {
+	st->path.size += 10;
+	st->path.names = G_realloc(st->path.names, st->path.size * sizeof(char *));
+    }
 
-    return 0;
+    st->path.names[st->path.count++] = G_store(name);
 }
 
 /*!
@@ -103,14 +87,12 @@ static int new_mapset(const char *name)
 
    \return 0
  */
-int G__create_alt_search_path(void)
+void G__create_alt_search_path(void)
 {
-    nmapset2 = nmapset;
-    mapset_name2 = mapset_name;
+    st->path2.count = st->path.count;
+    st->path2.names = st->path.names;
 
-    nmapset = 0;
-
-    return 0;
+    st->path.count = 0;
 }
 
 /*!
@@ -118,21 +100,19 @@ int G__create_alt_search_path(void)
 
    \return 0
  */
-int G__switch_search_path(void)
+void G__switch_search_path(void)
 {
-    int n;
+    int count;
     char **names;
 
-    n = nmapset2;
-    names = mapset_name2;
+    count = st->path2.count;
+    names = st->path2.names;
 
-    nmapset2 = nmapset;
-    mapset_name2 = mapset_name;
+    st->path2.count = st->path.count;
+    st->path2.names = st->path.names;
 
-    nmapset = n;
-    mapset_name = names;
-
-    return 0;
+    st->path.count = count;
+    st->path.names = names;
 }
 
 /*!
@@ -140,11 +120,9 @@ int G__switch_search_path(void)
 
    \return 0
  */
-int G_reset_mapsets(void)
+void G_reset_mapsets(void)
 {
-    nmapset = 0;
-
-    return 0;
+    st->path.count = 0;
 }
 
 /*!
@@ -156,51 +134,37 @@ int G_reset_mapsets(void)
  */
 char **G_available_mapsets(void)
 {
-    int i, n;
-    static int alloc = 0;
-    static char **mapsets = NULL;
+    char **mapsets = NULL;
+    int alloc = 0;
+    int n = 0;
     DIR *dir;
     struct dirent *ent;
-    char buf[1024];
-    struct stat st;
 
     G_debug(3, "G_available_mapsets");
 
-    if (alloc == 0) {		/* alloc some space, so that if something failes we can return array */
-	alloc = 50;
-	mapsets = (char **)G_calloc(alloc, sizeof(char *));
-    }
-    else {			/* free old strings and reset pointers to NULL */
-	i = 0;
-	while (mapsets[i]) {
-	    G_free(mapsets[i]);
-	    mapsets[i] = NULL;
-	}
-    }
-
-    n = 0;
     dir = opendir(G_location_path());
-    if (dir == NULL)
+    if (!dir)
 	return mapsets;
 
     while ((ent = readdir(dir))) {
+	char buf[GPATH_MAX];
+	struct stat st;
+
 	sprintf(buf, "%s/%s/WIND", G_location_path(), ent->d_name);
-	if (stat(buf, &st) == 0) {
-	    G_debug(4, "%s is mapset", ent->d_name);
-	    /* Realloc space if necessary */
-	    if (n + 2 >= alloc) {
-		alloc += 50;
-		mapsets = (char **)G_realloc(mapsets, alloc * sizeof(char *));
-		for (i = n; i < alloc; i++)
-		    mapsets[i] = NULL;
-	    }
-	    /* Add to list */
-	    mapsets[n] = G_store(ent->d_name);
-	    n++;
-	}
-	else {
+
+	if (G_stat(buf, &st) != 0) {
 	    G_debug(4, "%s is not mapset", ent->d_name);
+	    continue;
 	}
+
+	G_debug(4, "%s is mapset", ent->d_name);
+
+	if (n + 2 >= alloc) {
+	    alloc += 50;
+	    mapsets = G_realloc(mapsets, alloc * sizeof(char *));
+	}
+
+	mapsets[n++] = G_store(ent->d_name);
     }
 
     closedir(dir);
@@ -220,9 +184,9 @@ void G_add_mapset_to_search_path(const char *mapset)
 {
     int i;
 
-    for (i = 0; i < nmapset; i++) {
-	if (strcmp(mapset_name[i], mapset) == 0)
+    for (i = 0; i < st->path.count; i++)
+	if (strcmp(st->path.names[i], mapset) == 0)
 	    return;
-    }
+
     new_mapset(mapset);
 }

@@ -28,26 +28,25 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-static struct table
-{
-    char *name;
-    char *descr;
-    double a;
-    double e2;
-    double f;
-} *table = NULL;
-
-static int count = -1;
 static const char PERMANENT[] = "PERMANENT";
 
-/* static int get_a_e2 (char *, char *, double *,double *); */
-static int get_a_e2_f(const char *, const char *, double *, double *,
-		      double *);
-void ellipsoid_table_file(char *);
-static int compare_table_names(const void *, const void *);
-static int read_ellipsoid_table(int);
-static int get_ellipsoid_parameters(struct Key_Value *, double *, double *);
+static struct table {
+    struct ellipse
+    {
+	char *name;
+	char *descr;
+	double a;
+	double e2;
+	double f;
+    } *ellipses;
+    int count;
+    int size;
+} table;
 
+/* static int get_a_e2 (char *, char *, double *,double *); */
+static int get_a_e2_f(const char *, const char *, double *, double *, double *);
+static int compare_ellipse_names(const void *, const void *);
+static int get_ellipsoid_parameters(struct Key_Value *, double *, double *);
 
 /*!
  * \brief get ellipsoid parameters
@@ -111,12 +110,12 @@ int G_get_ellipsoid_by_name(const char *name, double *a, double *e2)
 {
     int i;
 
-    (void)read_ellipsoid_table(0);
+    G_read_ellipsoid_table(0);
 
-    for (i = 0; i < count; i++) {
-	if (G_strcasecmp(name, table[i].name) == 0) {
-	    *a = table[i].a;
-	    *e2 = table[i].e2;
+    for (i = 0; i < table.count; i++) {
+	if (G_strcasecmp(name, table.ellipses[i].name) == 0) {
+	    *a = table.ellipses[i].a;
+	    *e2 = table.ellipses[i].e2;
 	    return 1;
 	}
     }
@@ -137,8 +136,8 @@ int G_get_ellipsoid_by_name(const char *name, double *a, double *e2)
  */
 char *G_ellipsoid_name(int n)
 {
-    (void)read_ellipsoid_table(0);
-    return n >= 0 && n < count ? table[n].name : NULL;
+    G_read_ellipsoid_table(0);
+    return n >= 0 && n < table.count ? table.ellipses[n].name : NULL;
 }
 
 /*
@@ -172,13 +171,13 @@ int G_get_spheroid_by_name(const char *name, double *a, double *e2, double *f)
 {
     int i;
 
-    (void)read_ellipsoid_table(0);
+    G_read_ellipsoid_table(0);
 
-    for (i = 0; i < count; i++) {
-	if (G_strcasecmp(name, table[i].name) == 0) {
-	    *a = table[i].a;
-	    *e2 = table[i].e2;
-	    *f = table[i].f;
+    for (i = 0; i < table.count; i++) {
+	if (G_strcasecmp(name, table.ellipses[i].name) == 0) {
+	    *a = table.ellipses[i].a;
+	    *e2 = table.ellipses[i].e2;
+	    *f = table.ellipses[i].f;
 	    return 1;
 	}
     }
@@ -201,12 +200,11 @@ int G_get_spheroid_by_name(const char *name, double *a, double *e2, double *f)
 
 char *G_ellipsoid_description(int n)
 {
-    (void)read_ellipsoid_table(0);
-    return n >= 0 && n < count ? table[n].descr : NULL;
+    G_read_ellipsoid_table(0);
+    return n >= 0 && n < table.count ? table.ellipses[n].descr : NULL;
 }
 
-static int
-get_a_e2_f(const char *s1, const char *s2, double *a, double *e2, double *f)
+static int get_a_e2_f(const char *s1, const char *s2, double *a, double *e2, double *f)
 {
     double b, recipf;
 
@@ -246,54 +244,45 @@ get_a_e2_f(const char *s1, const char *s2, double *a, double *e2, double *f)
     return 0;
 }
 
-void ellipsoid_table_file(char *file)
+static int compare_ellipse_names(const void *pa, const void *pb)
 {
-    sprintf(file, "%s/etc/ellipse.table", G_gisbase());
-    return;
-}
+    const struct ellipse *a = pa;
+    const struct ellipse *b = pb;
 
-static int compare_table_names(const void *pa, const void *pb)
-{
-    const struct table *a = pa, *b = pb;
-
-    /* return strcmp(a->name,b->name); */
     return G_strcasecmp(a->name, b->name);
 }
 
-static int read_ellipsoid_table(int fatal)
+int G_read_ellipsoid_table(int fatal)
 {
     FILE *fd;
     char file[GPATH_MAX];
     char buf[1024];
-    char name[100], descr[100], buf1[100], buf2[100];
     char badlines[256];
     int line;
     int err;
 
-    if (count >= 0)
+    if (table.count > 0)
 	return 1;
-    count = 0;
-    table = NULL;
 
-    (void)ellipsoid_table_file(file);
+    sprintf(file, "%s/etc/ellipse.table", G_gisbase());
     fd = fopen(file, "r");
 
     if (fd == NULL) {
-	perror(file);
-	sprintf(buf, _("Unable to open ellipsoid table file <%s>"), file);
-	fatal ? G_fatal_error(buf) : G_warning(buf);
+	(fatal ? G_fatal_error : G_warning)(_("Unable to open ellipsoid table file <%s>"), file);
 	return 0;
     }
 
     err = 0;
     *badlines = 0;
     for (line = 1; G_getl2(buf, sizeof buf, fd); line++) {
+	char name[100], descr[100], buf1[100], buf2[100];
+	struct ellipse *e;
+
 	G_strip(buf);
 	if (*buf == 0 || *buf == '#')
 	    continue;
 
-	if (sscanf(buf, "%s  \"%99[^\"]\" %s %s", name, descr, buf1, buf2) !=
-	    4) {
+	if (sscanf(buf, "%s  \"%99[^\"]\" %s %s", name, descr, buf1, buf2) != 4) {
 	    err++;
 	    sprintf(buf, " %d", line);
 	    if (*badlines)
@@ -302,17 +291,19 @@ static int read_ellipsoid_table(int fatal)
 	    continue;
 	}
 
-	table =
-	    (struct table *)G_realloc((char *)table,
-				      (count + 1) * sizeof(*table));
-	table[count].name = G_store(name);
-	table[count].descr = G_store(descr);
+	if (table.count >= table.size) {
+	    table.size += 60;
+	    table.ellipses = G_realloc(table.ellipses, table.size * sizeof(struct ellipse));
+	}
 
-	if (get_a_e2_f
-	    (buf1, buf2, &table[count].a, &table[count].e2, &table[count].f)
-	    || get_a_e2_f(buf2, buf1, &table[count].a, &table[count].e2,
-			  &table[count].f))
-	    count++;
+	e = &table.ellipses[table.count];
+
+	e->name = G_store(name);
+	e->descr = G_store(descr);
+
+	if (get_a_e2_f(buf1, buf2, &e->a, &e->e2, &e->f) ||
+	    get_a_e2_f(buf2, buf1, &e->a, &e->e2, &e->f))
+	    table.count++;
 	else {
 	    err++;
 	    sprintf(buf, " %d", line);
@@ -327,22 +318,20 @@ static int read_ellipsoid_table(int fatal)
 
     if (!err) {
 	/* over correct typed version */
-	qsort(table, count, sizeof(*table), compare_table_names);
+	qsort(table.ellipses, table.count, sizeof(struct ellipse), compare_ellipse_names);
 	return 1;
     }
 
-    (fatal ? G_fatal_error : G_warning) ((err > 1)
-					 ?
-					 _("Lines%s of ellipsoid table file <%s> are invalid")
-					 :
-					 _("Line%s of ellipsoid table file <%s> is invalid"),
-					 badlines, file);
+    (fatal ? G_fatal_error : G_warning)(
+	(err > 1)
+	? _("Lines%s of ellipsoid table file <%s> are invalid")
+	: _("Line%s of ellipsoid table file <%s> is invalid"),
+	badlines, file);
 
     return 0;
 }
 
-static int get_ellipsoid_parameters(struct Key_Value *proj_keys, double *a,
-				    double *e2)
+static int get_ellipsoid_parameters(struct Key_Value *proj_keys, double *a, double *e2)
 {
     char *str, *str1;
 
@@ -354,40 +343,35 @@ static int get_ellipsoid_parameters(struct Key_Value *proj_keys, double *a,
 	if (strncmp(str, "sphere", 6) == 0) {
 	    str = G_find_key_value("a", proj_keys);
 	    if (str != NULL) {
-		if (sscanf(str, "%lf", a) != 1) {
+		if (sscanf(str, "%lf", a) != 1)
 		    G_fatal_error(_("Invalid a: field '%s' in file %s in <%s>"),
 				  str, PROJECTION_FILE, PERMANENT);
-		}
 	    }
-	    else {
+	    else
 		*a = 6370997.0;
-	    }
+
 	    *e2 = 0.0;
 
 	    return 0;
 	}
 	else {
-	    if (G_get_ellipsoid_by_name(str, a, e2) == 0) {
+	    if (G_get_ellipsoid_by_name(str, a, e2) == 0)
 		G_fatal_error(_("Invalid ellipsoid '%s' in file %s in <%s>"),
 			      str, PROJECTION_FILE, PERMANENT);
-	    }
-	    else {
+	    else
 		return 1;
-	    }
 	}
     }
     else {
 	str = G_find_key_value("a", proj_keys);
 	str1 = G_find_key_value("es", proj_keys);
 	if ((str != NULL) && (str1 != NULL)) {
-	    if (sscanf(str, "%lf", a) != 1) {
+	    if (sscanf(str, "%lf", a) != 1)
 		G_fatal_error(_("Invalid a: field '%s' in file %s in <%s>"),
 			      str, PROJECTION_FILE, PERMANENT);
-	    }
-	    if (sscanf(str1, "%lf", e2) != 1) {
+	    if (sscanf(str1, "%lf", e2) != 1)
 		G_fatal_error(_("Invalid es: field '%s' in file %s in <%s>"),
 			      str, PROJECTION_FILE, PERMANENT);
-	    }
 
 	    return 1;
 	}
@@ -398,10 +382,9 @@ static int get_ellipsoid_parameters(struct Key_Value *proj_keys, double *a,
 		*e2 = .006694385;
 		return 0;
 	    }
-	    else {
+	    else
 		G_fatal_error(_("No ellipsoid info given in file %s in <%s>"),
 			      PROJECTION_FILE, PERMANENT);
-	    }
 	}
     }
 

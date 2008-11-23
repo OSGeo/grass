@@ -201,7 +201,7 @@ char *G_chop(char *);
 int G_clear_screen(void);
 
 /* clicker.c */
-int G_clicker(void);
+void G_clicker(void);
 
 /* closecell.c */
 int G_close_cell(int);
@@ -401,8 +401,9 @@ int G_get_datum_by_name(const char *);
 char *G_datum_name(int);
 char *G_datum_description(int);
 char *G_datum_ellipsoid(int);
-int G_get_datumparams_from_projinfo(const struct Key_Value *projinfo,
-				    char *datumname, char *params);
+int G_get_datumparams_from_projinfo(const struct Key_Value *, char *, char *);
+void G_read_datum_table(void);
+
 
 /* debug.c */
 int G_debug(int, const char *, ...) __attribute__ ((format(printf, 2, 3)));
@@ -430,19 +431,19 @@ char *G_getenv(const char *);
 char *G_getenv2(const char *, int);
 char *G__getenv(const char *);
 char *G__getenv2(const char *, int);
-int G_setenv(const char *, const char *);
-int G_setenv2(const char *, const char *, int);
-int G__setenv(const char *, const char *);
-int G__setenv2(const char *, const char *, int);
-int G_unsetenv(const char *);
-int G_unsetenv2(const char *, int);
-int G__write_env(void);
+void G_setenv(const char *, const char *);
+void G_setenv2(const char *, const char *, int);
+void G__setenv(const char *, const char *);
+void G__setenv2(const char *, const char *, int);
+void G_unsetenv(const char *);
+void G_unsetenv2(const char *, int);
+void G__write_env(void);
 char *G__env_name(int);
-int G__read_env(void);
+void G__read_env(void);
 void G_set_gisrc_mode(int);
 int G_get_gisrc_mode(void);
-int G__create_alt_env(void);
-int G__switch_env(void);
+void G__create_alt_env(void);
+void G__switch_env(void);
 
 /* error.c */
 int G_info_format(void);
@@ -533,6 +534,7 @@ void G_fpreclass_perform_if(const struct FPReclass *, const CELL *, FCELL *,
 void G_fpreclass_perform_id(const struct FPReclass *, const CELL *, DCELL *,
 			    int);
 /* gdal.c */
+void G_init_gdal(void);
 struct GDAL_link *G_get_gdal_link(const char *, const char *);
 void G_close_gdal_link(struct GDAL_link *);
 
@@ -556,6 +558,7 @@ int G_get_spheroid_by_name(const char *, double *, double *, double *);
 int G_get_ellipsoid_by_name(const char *, double *, double *);
 char *G_ellipsoid_name(int);
 char *G_ellipsoid_description(int);
+int G_read_ellipsoid_table(int);
 
 /* get_projinfo.c */
 struct Key_Value *G_get_projunits(void);
@@ -758,11 +761,12 @@ int G__mapset_permissions2(const char *, const char *, const char *);
 
 /* mapset_nme.c */
 char *G__mapset_name(int);
-int G__create_alt_search_path(void);
-int G__switch_search_path(void);
-int G_reset_mapsets(void);
+void G_get_list_of_mapsets(void);
+void G__create_alt_search_path(void);
+void G__switch_search_path(void);
+void G_reset_mapsets(void);
 char **G_available_mapsets(void);
-void G_add_mapset_to_search_path(const char *mapset);
+void G_add_mapset_to_search_path(const char *);
 
 /* mask_info.c */
 char *G_mask_info(void);
@@ -847,7 +851,7 @@ int G_set_quant_rules(int, struct Quant *);
 int G_check_overwrite(int argc, char **argv);
 
 /* parser.c */
-int G_disable_interactive(void);
+void G_disable_interactive(void);
 struct GModule *G_define_module(void);
 struct Flag *G_define_flag(void);
 struct Option *G_define_option(void);
@@ -867,8 +871,8 @@ int G_lstat(const char *, struct stat *);
 int G_stat(const char *, struct stat *);
 
 /* percent.c */
-int G_percent(long, long, int);
-int G_percent_reset(void);
+void G_percent(long, long, int);
+void G_percent_reset(void);
 
 /* plot.c */
 int G_setup_plot(double, double, double, double, int (*)(int, int),
@@ -1053,7 +1057,7 @@ DCELL G_get_raster_sample(
     INTERP_TYPE);
 
 /* set_window.c */
-int G_get_set_window(struct Cell_head *);
+void G_get_set_window(struct Cell_head *);
 int G_set_window(struct Cell_head *);
 
 /* short_way.c */

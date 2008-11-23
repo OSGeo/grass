@@ -17,10 +17,6 @@
 #include <math.h>
 #include <grass/gis.h>
 
-static double xconv, yconv;
-static double left, right, top, bottom;
-static int ymin, ymax;
-static struct Cell_head window;
 static int fastline(double, double, double, double);
 static int slowline(double, double, double, double);
 static int plot_line(double, double, double, double, int (*)());
@@ -28,20 +24,35 @@ static double nearest(double, double);
 static int edge(double, double, double, double);
 static int edge_point(double, int);
 
-#define POINT struct point
-POINT {
-    double x;
-    int y;
-};
 static int edge_order(const void *, const void *);
 static int row_solid_fill(int, double, double);
 static int row_dotted_fill(int, double, double);
-static int dotted_fill_gap = 2;
 static int ifloor(double);
 static int iceil(double);
-static int (*row_fill) () = row_solid_fill;
-static int (*move) (int, int);
-static int (*cont) (int, int);
+
+struct point {
+    double x;
+    int y;
+};
+#define POINT struct point
+
+static struct state {
+    struct Cell_head window;
+    double xconv, yconv;
+    double left, right, top, bottom;
+    int ymin, ymax;
+    int dotted_fill_gap;
+
+    POINT *P;
+    int np;
+    int npalloc;
+
+    int (*row_fill)(int, double, double);
+    int (*move)(int, int);
+    int (*cont)(int, int);
+} state;
+
+static struct state *st = &state;
 
 /*!
  * \brief returns east larger than west
@@ -97,27 +108,27 @@ static int (*cont) (int, int);
 int G_setup_plot(double t, double b, double l, double r,
 		 int (*Move) (int, int), int (*Cont) (int, int))
 {
-    G_get_set_window(&window);
+    G_get_set_window(&st->window);
 
-    left = l;
-    right = r;
-    top = t;
-    bottom = b;
+    st->left = l;
+    st->right = r;
+    st->top = t;
+    st->bottom = b;
 
-    xconv = (right - left) / (window.east - window.west);
-    yconv = (bottom - top) / (window.north - window.south);
+    st->xconv = (st->right - st->left) / (st->window.east - st->window.west);
+    st->yconv = (st->bottom - st->top) / (st->window.north - st->window.south);
 
-    if (top < bottom) {
-	ymin = iceil(top);
-	ymax = ifloor(bottom);
+    if (st->top < st->bottom) {
+	st->ymin = iceil(st->top);
+	st->ymax = ifloor(st->bottom);
     }
     else {
-	ymin = iceil(bottom);
-	ymax = ifloor(top);
+	st->ymin = iceil(st->bottom);
+	st->ymax = ifloor(st->top);
     }
 
-    move = Move;
-    cont = Cont;
+    st->move = Move;
+    st->cont = Cont;
 
     return 0;
 }
@@ -136,20 +147,20 @@ int G_setup_plot(double t, double b, double l, double r,
 int G_setup_fill(int gap)
 {
     if (gap > 0) {
-	row_fill = row_dotted_fill;
-	dotted_fill_gap = gap + 1;
+	st->row_fill = row_dotted_fill;
+	st->dotted_fill_gap = gap + 1;
     }
     else
-	row_fill = row_solid_fill;
+	st->row_fill = row_solid_fill;
 
     return 0;
 }
 
-#define X(e) (left + xconv * ((e) - window.west))
-#define Y(n) (top + yconv * (window.north - (n)))
+#define X(e) (st->left + st->xconv * ((e) - st->window.west))
+#define Y(n) (st->top + st->yconv * (st->window.north - (n)))
 
-#define EAST(x) (window.west + ((x)-left)/xconv)
-#define NORTH(y) (window.north - ((y)-top)/yconv)
+#define EAST(x) (st->window.west + ((x)-st->left)/st->xconv)
+#define NORTH(y) (st->window.north - ((y)-st->top)/st->yconv)
 
 
 /*!
@@ -167,7 +178,7 @@ int G_setup_fill(int gap)
 
 int G_plot_where_xy(double east, double north, int *x, int *y)
 {
-    *x = ifloor(X(G_adjust_easting(east, &window)) + 0.5);
+    *x = ifloor(X(G_adjust_easting(east, &st->window)) + 0.5);
     *y = ifloor(Y(north) + 0.5);
 
     return 0;
@@ -189,7 +200,7 @@ int G_plot_where_xy(double east, double north, int *x, int *y)
 
 int G_plot_where_en(int x, int y, double *east, double *north)
 {
-    *east = G_adjust_easting(EAST(x), &window);
+    *east = G_adjust_easting(EAST(x), &st->window);
     *north = NORTH(y);
 
     return 0;
@@ -200,8 +211,8 @@ int G_plot_point(double east, double north)
     int x, y;
 
     G_plot_where_xy(east, north, &x, &y);
-    move(x, y);
-    cont(x, y);
+    st->move(x, y);
+    st->cont(x, y);
 
     return 0;
 }
@@ -243,8 +254,8 @@ int G_plot_line2(double east1, double north1, double east2, double north2)
 
 static int fastline(double x1, double y1, double x2, double y2)
 {
-    move(ifloor(x1 + 0.5), ifloor(y1 + 0.5));
-    cont(ifloor(x2 + 0.5), ifloor(y2 + 0.5));
+    st->move(ifloor(x1 + 0.5), ifloor(y1 + 0.5));
+    st->cont(ifloor(x2 + 0.5), ifloor(y2 + 0.5));
 
     return 0;
 }
@@ -278,9 +289,9 @@ static int slowline(double x1, double y1, double x2, double y2)
 	}
 	if (xstart <= xstop) {
 	    ystart = ifloor(m * xstart + b + 0.5);
-	    move(xstart, ystart);
+	    st->move(xstart, ystart);
 	    while (xstart <= xstop) {
-		cont(xstart++, ystart);
+		st->cont(xstart++, ystart);
 		ystart = ifloor(m * xstart + b + 0.5);
 	    }
 	}
@@ -302,9 +313,9 @@ static int slowline(double x1, double y1, double x2, double y2)
 	}
 	if (ystart <= ystop) {
 	    xstart = ifloor(m * ystart + b + 0.5);
-	    move(xstart, ystart);
+	    st->move(xstart, ystart);
 	    while (ystart <= ystop) {
-		cont(xstart, ystart++);
+		st->cont(xstart, ystart++);
 		xstart = ifloor(m * ystart + b + 0.5);
 	    }
 	}
@@ -321,18 +332,18 @@ static int plot_line(double east1, double north1, double east2, double north2,
     y1 = Y(north1);
     y2 = Y(north2);
 
-    if (window.proj == PROJECTION_LL) {
+    if (st->window.proj == PROJECTION_LL) {
 	if (east1 > east2)
 	    while ((east1 - east2) > 180)
 		east2 += 360;
 	else if (east2 > east1)
 	    while ((east2 - east1) > 180)
 		east1 += 360;
-	while (east1 > window.east) {
+	while (east1 > st->window.east) {
 	    east1 -= 360.0;
 	    east2 -= 360.0;
 	}
-	while (east1 < window.west) {
+	while (east1 < st->window.west) {
 	    east1 += 360.0;
 	    east2 += 360.0;
 	}
@@ -341,12 +352,12 @@ static int plot_line(double east1, double north1, double east2, double north2,
 
 	line(x1, y1, x2, y2);
 
-	if (east2 > window.east || east2 < window.west) {
-	    while (east2 > window.east) {
+	if (east2 > st->window.east || east2 < st->window.west) {
+	    while (east2 > st->window.east) {
 		east1 -= 360.0;
 		east2 -= 360.0;
 	    }
-	    while (east2 < window.west) {
+	    while (east2 < st->window.west) {
 		east1 += 360.0;
 		east2 += 360.0;
 	    }
@@ -376,10 +387,6 @@ static int plot_line(double east1, double north1, double east2, double north2,
  *
  * returns 0 ok, 2 n<3, -1 weird internal error, 1 no memory
  */
-
-static POINT *P;
-static int np;
-static int npalloc = 0;
 
 #define OK 0
 #define TOO_FEW_EDGES 2
@@ -419,16 +426,19 @@ int G_plot_polygon(const double *x, const double *y, int n)
     double e0, e1;
     int shift1, shift2;
 
+    if (!st->row_fill)
+	st->row_fill = row_solid_fill;
+
     if (n < 3)
 	return TOO_FEW_EDGES;
 
     /* traverse the perimeter */
 
-    np = 0;
+    st->np = 0;
     shift1 = 0;
 
     /* global wrap-around for lat-lon, part1 */
-    if (window.proj == PROJECTION_LL) {
+    if (st->window.proj == PROJECTION_LL) {
 	/*
 	   pole = G_pole_in_polygon(x,y,n);
 	 */
@@ -464,9 +474,9 @@ int G_plot_polygon(const double *x, const double *y, int n)
 	    return NO_MEMORY;
 
 	shift = 0;		/* shift into window */
-	while (E + shift > window.east)
+	while (E + shift > st->window.east)
 	    shift -= 360.0;
-	while (E + shift < window.west)
+	while (E + shift < st->window.west)
 	    shift += 360.0;
 	shift1 = X(x[n - 1] + shift) - X(x[n - 1]);
     }
@@ -485,28 +495,28 @@ int G_plot_polygon(const double *x, const double *y, int n)
     }
 
     /* check if perimeter has odd number of points */
-    if (np % 2)
+    if (st->np % 2)
 	return OUT_OF_SYNC;
 
     /* sort the edge points by col(x) and then by row(y) */
-    qsort(P, np, sizeof(POINT), &edge_order);
+    qsort(st->P, st->np, sizeof(POINT), &edge_order);
 
     /* plot */
-    for (i = 1; i < np; i += 2) {
-	if (P[i].y != P[i - 1].y)
+    for (i = 1; i < st->np; i += 2) {
+	if (st->P[i].y != st->P[i - 1].y)
 	    return OUT_OF_SYNC;
-	row_fill(P[i].y, P[i - 1].x + shift1, P[i].x + shift1);
+	st->row_fill(st->P[i].y, st->P[i - 1].x + shift1, st->P[i].x + shift1);
     }
-    if (window.proj == PROJECTION_LL) {	/* now do wrap-around, part 2 */
+    if (st->window.proj == PROJECTION_LL) {	/* now do wrap-around, part 2 */
 	shift = 0;
-	while (W + shift < window.west)
+	while (W + shift < st->window.west)
 	    shift += 360.0;
-	while (W + shift > window.east)
+	while (W + shift > st->window.east)
 	    shift -= 360.0;
 	shift2 = X(x[n - 1] + shift) - X(x[n - 1]);
 	if (shift2 != shift1) {
-	    for (i = 1; i < np; i += 2) {
-		row_fill(P[i].y, P[i - 1].x + shift2, P[i].x + shift2);
+	    for (i = 1; i < st->np; i += 2) {
+		st->row_fill(st->P[i].y, st->P[i - 1].x + shift2, st->P[i].x + shift2);
 	    }
 	}
     }
@@ -549,9 +559,12 @@ int G_plot_area(double *const *xs, double *const *ys, int *rpnts, int rings)
     double e0, e1;
     int *shift1 = NULL, shift2;
 
+    if (!st->row_fill)
+	st->row_fill = row_solid_fill;
+
     /* traverse the perimeter */
 
-    np = 0;
+    st->np = 0;
     shift1 = (int *)G_calloc(sizeof(int), rings);
 
     for (j = 0; j < rings; j++) {
@@ -564,7 +577,7 @@ int G_plot_area(double *const *xs, double *const *ys, int *rpnts, int rings)
 	y = ys[j];
 
 	/* global wrap-around for lat-lon, part1 */
-	if (window.proj == PROJECTION_LL) {
+	if (st->window.proj == PROJECTION_LL) {
 	    /*
 	       pole = G_pole_in_polygon(x,y,n);
 	     */
@@ -600,9 +613,9 @@ int G_plot_area(double *const *xs, double *const *ys, int *rpnts, int rings)
 		return NO_MEMORY;
 
 	    shift = 0;		/* shift into window */
-	    while (E + shift > window.east)
+	    while (E + shift > st->window.east)
 		shift -= 360.0;
-	    while (E + shift < window.west)
+	    while (E + shift < st->window.west)
 		shift += 360.0;
 	    shift1[j] = X(x[n - 1] + shift) - X(x[n - 1]);
 	}
@@ -622,33 +635,33 @@ int G_plot_area(double *const *xs, double *const *ys, int *rpnts, int rings)
     }				/* for() */
 
     /* check if perimeter has odd number of points */
-    if (np % 2)
+    if (st->np % 2)
 	return OUT_OF_SYNC;
 
     /* sort the edge points by col(x) and then by row(y) */
-    qsort(P, np, sizeof(POINT), &edge_order);
+    qsort(st->P, st->np, sizeof(POINT), &edge_order);
 
     /* plot */
     for (j = 0; j < rings; j++) {
-	for (i = 1; i < np; i += 2) {
-	    if (P[i].y != P[i - 1].y)
+	for (i = 1; i < st->np; i += 2) {
+	    if (st->P[i].y != st->P[i - 1].y)
 		return OUT_OF_SYNC;
-	    row_fill(P[i].y, P[i - 1].x + shift1[j], P[i].x + shift1[j]);
+	    st->row_fill(st->P[i].y, st->P[i - 1].x + shift1[j], st->P[i].x + shift1[j]);
 	}
-	if (window.proj == PROJECTION_LL) {	/* now do wrap-around, part 2 */
+	if (st->window.proj == PROJECTION_LL) {	/* now do wrap-around, part 2 */
 	    n = rpnts[j];
 	    x = xs[j];
 	    y = ys[j];
 
 	    shift = 0;
-	    while (W + shift < window.west)
+	    while (W + shift < st->window.west)
 		shift += 360.0;
-	    while (W + shift > window.east)
+	    while (W + shift > st->window.east)
 		shift -= 360.0;
 	    shift2 = X(x[n - 1] + shift) - X(x[n - 1]);
 	    if (shift2 != shift1[j]) {
-		for (i = 1; i < np; i += 2) {
-		    row_fill(P[i].y, P[i - 1].x + shift2, P[i].x + shift2);
+		for (i = 1; i < st->np; i += 2) {
+		    st->row_fill(st->P[i].y, st->P[i - 1].x + shift2, st->P[i].x + shift2);
 		}
 	    }
 	}
@@ -699,24 +712,24 @@ static int edge(double x0, double y0, double x1, double y1)
 static int edge_point(double x, int y)
 {
 
-    if (y < ymin || y > ymax)
+    if (y < st->ymin || y > st->ymax)
 	return 1;
-    if (np >= npalloc) {
-	if (npalloc > 0) {
-	    npalloc *= 2;
-	    P = (POINT *) G_realloc(P, npalloc * sizeof(POINT));
+    if (st->np >= st->npalloc) {
+	if (st->npalloc > 0) {
+	    st->npalloc *= 2;
+	    st->P = (POINT *) G_realloc(st->P, st->npalloc * sizeof(POINT));
 	}
 	else {
-	    npalloc = 32;
-	    P = (POINT *) G_malloc(npalloc * sizeof(POINT));
+	    st->npalloc = 32;
+	    st->P = (POINT *) G_malloc(st->npalloc * sizeof(POINT));
 	}
-	if (P == NULL) {
-	    npalloc = 0;
+	if (st->P == NULL) {
+	    st->npalloc = 0;
 	    return 0;
 	}
     }
-    P[np].x = x;
-    P[np++].y = y;
+    st->P[st->np].x = x;
+    st->P[st->np++].y = y;
     return 1;
 }
 
@@ -744,8 +757,8 @@ static int row_solid_fill(int y, double x1, double x2)
     i1 = iceil(x1);
     i2 = ifloor(x2);
     if (i1 <= i2) {
-	move(i1, y);
-	cont(i2, y);
+	st->move(i1, y);
+	st->cont(i2, y);
     }
 
     return 0;
@@ -755,15 +768,15 @@ static int row_dotted_fill(int y, double x1, double x2)
 {
     int i1, i2, i;
 
-    if (y != iceil(y / dotted_fill_gap) * dotted_fill_gap)
+    if (y != iceil(y / st->dotted_fill_gap) * st->dotted_fill_gap)
 	return 0;
 
-    i1 = iceil(x1 / dotted_fill_gap) * dotted_fill_gap;
+    i1 = iceil(x1 / st->dotted_fill_gap) * st->dotted_fill_gap;
     i2 = ifloor(x2);
     if (i1 <= i2) {
-	for (i = i1; i <= i2; i += dotted_fill_gap) {
-	    move(i, y);
-	    cont(i, y);
+	for (i = i1; i <= i2; i += st->dotted_fill_gap) {
+	    st->move(i, y);
+	    st->cont(i, y);
 	}
     }
 
@@ -814,7 +827,7 @@ int G_plot_fx(double (*f) (double), double east1, double east2)
     double incr;
 
 
-    incr = fabs(1.0 / xconv);
+    incr = fabs(1.0 / st->xconv);
 
     east = east1;
     north = f(east1);

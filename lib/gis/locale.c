@@ -19,25 +19,31 @@
 #include <string.h>
 #include <locale.h>
 #include <grass/glocale.h>
-
+#include <grass/gis.h>
 
 #if defined(HAVE_LIBINTL_H) && defined(USE_NLS)
-static char *locale_dir(void)
+void G_init_locale(void)
 {
-    static char localedir[4096];
+    static int initialized;
+    char localedir[GPATH_MAX];
     const char *gisbase;
 
-    if (*localedir)
-	return localedir;
+    if (initialized)
+	return;
+    initialized = 1;
+
+    setlocale(LC_CTYPE, "");
+    setlocale(LC_MESSAGES, "");
 
     gisbase = getenv("GISBASE");
     if (!gisbase || !*gisbase)
-	return "";
+	return;
 
     strcpy(localedir, gisbase);
     strcat(localedir, "/locale");
 
-    return localedir;
+    bindtextdomain("grasslibs", localedir);
+    bindtextdomain("grassmods", localedir);
 }
 #endif
 
@@ -53,19 +59,7 @@ static char *locale_dir(void)
 char *G_gettext(const char *package, const char *msgid)
 {
 #if defined(HAVE_LIBINTL_H) && defined(USE_NLS)
-    static char now_bound[4096];
-    static int initialized;
-
-    if (!initialized) {
-	setlocale(LC_CTYPE, "");
-	setlocale(LC_MESSAGES, "");
-	initialized = 1;
-    }
-
-    if (strcmp(now_bound, package) != 0) {
-	strcpy(now_bound, package);
-	bindtextdomain(package, locale_dir());
-    }
+    G_init_locale();
 
     return dgettext(package, msgid);
 #else

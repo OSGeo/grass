@@ -25,14 +25,12 @@
  * 'window'.
  *
  * \param[out] window window structure to be set
- * \return 1
+ * \return
  */
-int G_get_set_window(struct Cell_head *window)
+void G_get_set_window(struct Cell_head *window)
 {
     G__init_window();
     G_copy(window, &G__.window, sizeof(*window));
-
-    return 1;
 }
 
 

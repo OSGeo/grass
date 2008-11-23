@@ -17,12 +17,14 @@
 #include <stdio.h>
 #include <grass/gis.h>
 
+static struct state {
+    int prev;
+    int first;
+} state = {-1, 1};
 
-static int prev = -1;
-static int first = 1;
+static struct state *st = &state;
 
-
-int G_percent(long n, long d, int s)
+void G_percent(long n, long d, int s)
 {
     int x, format;
 
@@ -33,10 +35,10 @@ int G_percent(long n, long d, int s)
 
     /* be verbose only 1> */
     if (format == G_INFO_FORMAT_SILENT || G_verbose() < 1)
-	return 0;
+	return;
 
-    if (n <= 0 || n >= d || x > prev + s) {
-	prev = x;
+    if (n <= 0 || n >= d || x > st->prev + s) {
+	st->prev = x;
 
 	if (format == G_INFO_FORMAT_STANDARD) {
 	    fprintf(stderr, "%4d%%\b\b\b\b\b", x);
@@ -49,12 +51,12 @@ int G_percent(long n, long d, int s)
 		    fprintf(stderr, "%d..", x);
 	    }
 	    else {		/* GUI */
-		if (first) {
+		if (st->first) {
 		    fprintf(stderr, "\n");
 		}
 		fprintf(stderr, "GRASS_INFO_PERCENT: %d\n", x);
 		fflush(stderr);
-		first = 0;
+		st->first = 0;
 	    }
 	}
     }
@@ -63,11 +65,11 @@ int G_percent(long n, long d, int s)
 	if (format == G_INFO_FORMAT_STANDARD) {
 	    fprintf(stderr, "\n");
 	}
-	prev = -1;
-	first = 1;
+	st->prev = -1;
+	st->first = 1;
     }
 
-    return 0;
+    return;
 }
 
 
@@ -77,10 +79,8 @@ int G_percent(long n, long d, int s)
  * \return always returns 0
  */
 
-int G_percent_reset(void)
+void G_percent_reset(void)
 {
-    prev = -1;
-    first = 1;
-
-    return 0;
+    st->prev = -1;
+    st->first = 1;
 }
