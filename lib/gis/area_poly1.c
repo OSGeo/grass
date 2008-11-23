@@ -21,15 +21,15 @@
 
 #define TWOPI M_PI + M_PI
 
-static double QA, QB, QC;
-static double QbarA, QbarB, QbarC, QbarD;
+static struct state {
+    double QA, QB, QC;
+    double QbarA, QbarB, QbarC, QbarD;
+    double AE;  /** a^2(1-e^2) */
+    double Qp;  /** Q at the north pole */
+    double E;   /** Area of the earth */
+} state;
 
-static double AE;  /** a^2(1-e^2) */
-
-static double Qp;  /** Q at the north pole */
-
-static double E;   /** Area of the earth */
-
+static struct state *st = &state;
 
 static double Q(double x)
 {
@@ -38,7 +38,7 @@ static double Q(double x)
     sinx = sin(x);
     sinx2 = sinx * sinx;
 
-    return sinx * (1 + sinx2 * (QA + sinx2 * (QB + sinx2 * QC)));
+    return sinx * (1 + sinx2 * (st->QA + sinx2 * (st->QB + sinx2 * st->QC)));
 }
 
 static double Qbar(double x)
@@ -48,7 +48,7 @@ static double Qbar(double x)
     cosx = cos(x);
     cosx2 = cosx * cosx;
 
-    return cosx * (QbarA + cosx2 * (QbarB + cosx2 * (QbarC + cosx2 * QbarD)));
+    return cosx * (st->QbarA + cosx2 * (st->QbarB + cosx2 * (st->QbarC + cosx2 * st->QbarD)));
 }
 
 
@@ -71,21 +71,21 @@ int G_begin_ellipsoid_polygon_area(double a, double e2)
     e4 = e2 * e2;
     e6 = e4 * e2;
 
-    AE = a * a * (1 - e2);
+    st->AE = a * a * (1 - e2);
 
-    QA = (2.0 / 3.0) * e2;
-    QB = (3.0 / 5.0) * e4;
-    QC = (4.0 / 7.0) * e6;
+    st->QA = (2.0 / 3.0) * e2;
+    st->QB = (3.0 / 5.0) * e4;
+    st->QC = (4.0 / 7.0) * e6;
 
-    QbarA = -1.0 - (2.0 / 3.0) * e2 - (3.0 / 5.0) * e4 - (4.0 / 7.0) * e6;
-    QbarB = (2.0 / 9.0) * e2 + (2.0 / 5.0) * e4 + (4.0 / 7.0) * e6;
-    QbarC = -(3.0 / 25.0) * e4 - (12.0 / 35.0) * e6;
-    QbarD = (4.0 / 49.0) * e6;
+    st->QbarA = -1.0 - (2.0 / 3.0) * e2 - (3.0 / 5.0) * e4 - (4.0 / 7.0) * e6;
+    st->QbarB = (2.0 / 9.0) * e2 + (2.0 / 5.0) * e4 + (4.0 / 7.0) * e6;
+    st->QbarC = -(3.0 / 25.0) * e4 - (12.0 / 35.0) * e6;
+    st->QbarD = (4.0 / 49.0) * e6;
 
-    Qp = Q(M_PI_2);
-    E = 4 * M_PI * Qp * AE;
-    if (E < 0.0)
-	E = -E;
+    st->Qp = Q(M_PI_2);
+    st->E = 4 * M_PI * st->Qp * st->AE;
+    if (st->E < 0.0)
+	st->E = -st->E;
 
     return 0;
 }
@@ -136,12 +136,12 @@ double G_ellipsoid_polygon_area(const double *lon, const double *lat, int n)
 		x1 += TWOPI;
 
 	dx = x2 - x1;
-	area += dx * (Qp - Q(y2));
+	area += dx * (st->Qp - Q(y2));
 
 	if ((dy = y2 - y1) != 0.0)
 	    area += dx * Q(y2) - (dx / dy) * (Qbar2 - Qbar1);
     }
-    if ((area *= AE) < 0.0)
+    if ((area *= st->AE) < 0.0)
 	area = -area;
 
     /* kludge - if polygon circles the south pole the area will be
@@ -149,10 +149,10 @@ double G_ellipsoid_polygon_area(const double *lon, const double *lat, int n)
      * the difference between total surface area of the earth and
      * the "north pole" area.
      */
-    if (area > E)
-	area = E;
-    if (area > E / 2)
-	area = E - area;
+    if (area > st->E)
+	area = st->E;
+    if (area > st->E / 2)
+	area = st->E - area;
 
     return area;
 }
