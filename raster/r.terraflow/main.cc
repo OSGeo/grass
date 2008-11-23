@@ -461,9 +461,8 @@ main(int argc, char *argv[]) {
   parse_args(argc, argv);
 
   /* get the current region and dimensions */  
-  if (G_get_set_window(region) == -1) {
-    G_fatal_error("r.terraflow: error getting current region");
-  }
+  G_get_set_window(region);
+
   check_args();
 
   int nr = G_window_rows();

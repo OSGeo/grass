@@ -493,9 +493,7 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-
-    if (G_get_set_window(&region) == -1)
-	G_fatal_error(_("Unable to get current region"));
+    G_get_set_window(&region);
 
     larger = ((region.cols < region.rows) ? region.rows : region.cols);
     default_skip = (larger < 50) ? 1 : (int)(larger / 50);

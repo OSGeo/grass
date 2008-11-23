@@ -283,8 +283,7 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (G_get_set_window(&winhd) == -1)
-	G_fatal_error(_("Retrieving and setting region failed"));
+    G_get_set_window(&winhd);
 
     inp_ew_res = winhd.ew_res;
     inp_ns_res = winhd.ns_res;

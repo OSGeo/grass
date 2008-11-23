@@ -434,8 +434,7 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (G_get_set_window(&cellhd) == -1)
-	G_fatal_error("G_get_set_window() failed");
+    G_get_set_window(&cellhd);
 
     G3d_getWindow(&current_region);
     G3d_readWindow(&current_region, NULL);
