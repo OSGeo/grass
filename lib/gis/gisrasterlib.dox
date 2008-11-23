@@ -1643,6 +1643,8 @@ int Dcell() If the map is a floating-point map, read the map using
 
 \section Null_no_data NULL (no data) handling
 
+The <TT>null</TT> file is stored in <TT>cell_misc/name/null file</TT>.
+
 -2^31 (= 0x80000000 = -2147483648) is the null value
 for the CELL type, so you'll never see that value in a map.
 
@@ -1660,6 +1662,18 @@ pattern to be null. I intend to change this in 7.x so that all FP NaN
 values are treated as null. This will mean that code which can
 generate NaNs doesn't have to explicitly convert them to the GRASS
 null value.
+
+<b>Presence or absence of <TT>null</TT> file:</b>
+For an integer map, any cells which were null will become zero, but
+any zeroes (cells which were previously either null or zero) will be
+treated as nulls (this is for compatibility with GRASS 4.x, which
+didn't have a <TT>null</TT> file, but typically used zero to indicate a null
+value).
+
+For a floating-point map, any cells which were null will become zero
+(when writing FP data, a null has a zero written to the fcell/<map>
+file, and the corresponding bit is set in the <TT>null</TT>
+file).
 
 \section Color_Functions Color Functions (new and upgraded)
 
