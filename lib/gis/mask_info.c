@@ -29,9 +29,10 @@
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
+
 char *G_mask_info(void)
 {
-    static char text[200];
+    char text[GNAME_MAX + GMAPSET_MAX + 16];
     char name[GNAME_MAX];
     char mapset[GMAPSET_MAX];
 
@@ -47,7 +48,7 @@ char *G_mask_info(void)
 	break;
     }
 
-    return text;
+    return G_store(text);
 }
 
 int G__mask_info(char *name, char *mapset)

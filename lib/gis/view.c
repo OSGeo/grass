@@ -29,8 +29,9 @@ static void pr_winerr(int, const char *);
 static void edge_sort(float sides[4]);
 static int read_old_format(struct G_3dview *, FILE *);
 
-static int vers_major = 4;
-static int vers_minor = 1;
+static const int vers_major = 4;
+static const int vers_minor = 1;
+
 static int Suppress_warn = 0;
 
 

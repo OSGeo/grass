@@ -2,7 +2,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-static char *NULL_STRING = "null";
+static const char NULL_STRING[] = "null";
 static int reclass_type(FILE *, char **, char **);
 static FILE *fopen_cellhd_old(const char *, const char *);
 static FILE *fopen_cellhd_new(const char *);

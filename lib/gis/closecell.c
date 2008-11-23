@@ -41,7 +41,6 @@
 
 static int close_old(int);
 static int close_new(int, int);
-static char CELL_DIR[100];
 
 static int write_fp_format(int fd);
 
@@ -168,6 +167,7 @@ static int close_new(int fd, int ok)
     char path[GPATH_MAX];
     CELL cell_min, cell_max;
     int row, i, open_mode;
+    const char *CELL_DIR;
 
     if (ok) {
 	switch (fcb->open_mode) {
@@ -255,7 +255,7 @@ static int close_new(int fd, int ok)
 		creat(G__file_name(path, "cell", fcb->name, fcb->mapset),
 		      0666);
 	    close(cell_fd);
-	    strcpy(CELL_DIR, "fcell");
+	    CELL_DIR = "fcell";
 	}
 	else {
 	    /* remove fcell/name file */
@@ -265,7 +265,7 @@ static int close_new(int fd, int ok)
 	    G__file_name_misc(path, "cell_misc", FORMAT_FILE, fcb->name,
 			      fcb->mapset);
 	    remove(path);
-	    strcpy(CELL_DIR, "cell");
+	    CELL_DIR = "cell";
 	    close(fd);
 	}
     }				/* ok */

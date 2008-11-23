@@ -787,7 +787,6 @@ char *G_fully_qualified_name(const char *, const char *);
 int G__unqualified_name(const char *, const char *, char *, char *);
 
 /* null_val.c */
-void G__init_null_patterns(void);
 void G__set_null_value(void *, int, int, RASTER_MAP_TYPE);
 void G_set_null_value(void *, int, RASTER_MAP_TYPE);
 void G_set_c_null_value(CELL *, int);
@@ -869,7 +868,6 @@ int G_stat(const char *, struct stat *);
 
 /* percent.c */
 int G_percent(long, long, int);
-int G_percent2(long, long, int, FILE *);
 int G_percent_reset(void);
 
 /* plot.c */
@@ -915,7 +913,6 @@ char *G_database_ellipse_name(void);
 int G_put_cellhd(const char *, struct Cell_head *);
 
 /* put_row.c */
-int G_zeros_r_nulls(int);
 int G_put_map_row(int, const CELL *);
 int G__put_null_value_row(int, const char *);
 int G_put_raster_row(int, const void *, RASTER_MAP_TYPE);

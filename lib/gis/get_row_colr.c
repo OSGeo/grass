@@ -25,35 +25,31 @@ G_get_raster_row_colors(int fd, int row, struct Colors *colors,
 			unsigned char *red, unsigned char *grn,
 			unsigned char *blu, unsigned char *nul)
 {
-    static void *array;
-    static int array_size;
-    static unsigned char *set;
-    static int set_size;
-
-    int cols = G__.window.cols;
-    int type = G__.fileinfo[fd].map_type;
+    int cols = G_window_cols();
+    int type = G_get_raster_map_type(fd);
     int size = G_raster_size(type);
+    void *array;
+    unsigned char *set;
     void *p;
     int i;
 
-    if (array_size < cols * size) {
-	array_size = cols * size;
-	array = (DCELL *) G_realloc(array, array_size);
-    }
+    array = G__alloca(cols * size);
 
-    if (set_size < cols) {
-	set_size = cols;
-	set = G_realloc(set, set_size);
-    }
-
-    if (G_get_raster_row(fd, array, row, type) < 0)
+    if (G_get_raster_row(fd, array, row, type) < 0) {
+	G__freea(array);
 	return -1;
+    }
 
     if (nul)
 	for (i = 0, p = array; i < cols; i++, p = G_incr_void_ptr(p, size))
 	    nul[i] = G_is_null_value(p, type);
 
+    set = G__alloca(cols);
+
     G_lookup_raster_colors(array, red, grn, blu, set, cols, colors, type);
+
+    G__freea(array);
+    G__freea(set);
 
     return 0;
 }

@@ -563,9 +563,7 @@ char *G_get_cats_title(const struct Categories *pcats)
 
 char *G_get_raster_cats_title(const struct Categories *pcats)
 {
-    static char *none = "";
-
-    return pcats->title ? pcats->title : none;
+    return pcats->title ? pcats->title : "";
 }
 
 

@@ -197,11 +197,10 @@ static int write_env(int loc)
     FILE *fd;
     int n;
     char dummy[2];
-    void (*sigint) ()
+    RETSIGTYPE (*sigint)(int);
 #ifdef SIGQUIT
-     , (*sigquit) ()
+    RETSIGTYPE (*sigquit)(int);
 #endif
-     ;
 
     if (loc == G_VAR_GISRC && varmode == G_GISRC_MODE_MEMORY)
 	return 0;		/* don't use file for GISRC */

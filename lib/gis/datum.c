@@ -144,7 +144,7 @@ int G_get_datumparams_from_projinfo(const struct Key_Value *projinfo,
 static void read_datum_table(void)
 {
     FILE *fd;
-    char file[1024];
+    char file[GPATH_MAX];
     char buf[1024];
     int line;
 

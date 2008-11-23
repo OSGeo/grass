@@ -615,10 +615,11 @@ static void transfer_to_cell_fd(int fd, void *cell)
 static int get_map_row_nomask(int fd, void *rast, int row,
 			      RASTER_MAP_TYPE data_type)
 {
-    static void (*transfer_to_cell_FtypeOtype[3][3]) () = { {
-    transfer_to_cell_XX, transfer_to_cell_if, transfer_to_cell_id}, {
-    transfer_to_cell_fi, transfer_to_cell_XX, transfer_to_cell_fd}, {
-    transfer_to_cell_di, transfer_to_cell_df, transfer_to_cell_XX}};
+    static void (*transfer_to_cell_FtypeOtype[3][3])() = {
+	{transfer_to_cell_XX, transfer_to_cell_if, transfer_to_cell_id},
+	{transfer_to_cell_fi, transfer_to_cell_XX, transfer_to_cell_fd},
+	{transfer_to_cell_di, transfer_to_cell_df, transfer_to_cell_XX}
+    };
     struct fileinfo *fcb = &G__.fileinfo[fd];
     int r;
     int rowStatus;

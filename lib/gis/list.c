@@ -23,7 +23,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-static int broken_pipe;
+static volatile int broken_pipe;
 static int list_element(FILE *, const char *, const char *, const char *,
 			int (*)(const char *, const char *, const char *));
 static void sigpipe_catch(int);
@@ -60,7 +60,7 @@ int G_list_element(const char *element,
     int count;
 
 #ifdef SIGPIPE
-    void (*sigpipe) ();
+    RETSIGTYPE (*sigpipe)(int);
 #endif
 
     /* must catch broken pipe in case "more" quits */
@@ -133,11 +133,9 @@ static void sigpipe_catch(int n)
     signal(n, sigpipe_catch);
 }
 
-static int list_element(FILE * out,
-			const char *element, const char *desc,
-			const char *mapset, int (*lister) (const char *,
-							   const char *,
-							   const char *))
+static int list_element(
+    FILE *out, const char *element, const char *desc, const char *mapset,
+    int (*lister)(const char *, const char *, const char *))
 {
     char path[GPATH_MAX];
     int count = 0;

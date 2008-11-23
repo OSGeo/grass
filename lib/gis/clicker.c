@@ -13,7 +13,7 @@ static int G_clicker_prev = 0;
 int G_clicker(void)
 {
     int x;
-    static char clicks[] = "|/-\\";
+    static const char clicks[] = "|/-\\";
 
     if (G_clicker_prev == -1 || G_clicker_prev == 3)
 	x = 0;
