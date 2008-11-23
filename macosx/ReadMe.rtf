@@ -251,12 +251,11 @@ Sometimes, for mysterious reasons so far, the automatic check for X11 fails.  De
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 
 \f0\fs24 \cf0 \
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
-\cf0 To install the new Python GUI (see REQUIREMENTS.html and gui/wxpython/README, wxpython installer available at {\field{\*\fldinst{HYPERLINK "http://wxpython.org/"}}{\fldrslt wxpython.org}}), add this to configure (fill in the correct version at x.x.x.x for the wxpython you have installed):\
+To install the new Python GUI (see REQUIREMENTS.html and gui/wxpython/README, wxpython installer available at {\field{\*\fldinst{HYPERLINK "http://wxpython.org/"}}{\fldrslt wxpython.org}}), add this to configure (fill in the correct version at x.x.x.x for the wxpython you have installed):\
 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li180\fi-180\ql\qnatural\pardirnatural
 
-\f1\fs20 \cf0 --with-python --with-wxwidgets=/usr/bin/wx-config\
+\f1\fs20 \cf0 --with-python\
  --with-wxwidgets=/usr/local/lib/wxPython-unicode-x.x.x.x/bin/wx-config\
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 
@@ -269,8 +268,7 @@ Note 3: for now, disable lib/nviz/render.c - either delete it, or add something 
 \i after
 \i0  the .c.  You will get an error in visualization/nviz2/cmd, but this does not work on OSX yet.\
 \
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
-\cf0 If you want ffmpeg support (see build instructions below), add this:\
+If you want ffmpeg support (see build instructions below), add this:\
 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li180\fi-180\ql\qnatural\pardirnatural
 
@@ -412,12 +410,10 @@ The
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 
 \b0\fs24 \cf0 \
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
-\cf0 The simplest way to install Tcl/Tk Aqua is to download {\field{\*\fldinst{HYPERLINK "http://www.activestate.com/Products/activetcl/"}}{\fldrslt ActiveTcl}} from ActiveState.  This will give you a universal 32bit Tcl/Tk Aqua.  \ul Make sure to run the 
+The simplest way to install Tcl/Tk Aqua is to download {\field{\*\fldinst{HYPERLINK "http://www.activestate.com/Products/activetcl/"}}{\fldrslt ActiveTcl}} from ActiveState.  This will give you a universal 32bit Tcl/Tk Aqua.  \ul Make sure to run the 
 \i convenience
 \i0  commands below.\ulnone \
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
-\cf0 \
+\
 To make it easier to configure for GRASS (and other software), run these commands in a Terminal:\
 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li180\fi-180\ql\qnatural\pardirnatural
