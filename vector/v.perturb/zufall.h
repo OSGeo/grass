@@ -26,9 +26,6 @@ struct klotz1
     int first, xptr;
 };
 
-/* clicker.c */
-int G_clicker(void);
-
 /* fische.c */
 int fische(int, double *, int *);
 
