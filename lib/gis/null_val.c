@@ -24,11 +24,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-/* Flag to indicate null patterns are initialized */
-static int initialized = FALSE;
-
 static int EmbedGivenNulls(void *, char *, RASTER_MAP_TYPE, int);
-static void InitError(void);
 
 /****************************************************************************
 * int EmbedGivenNulls (void *cell, char *nulls, RASTER_MAP_TYPE map_type,
@@ -75,27 +71,6 @@ static int EmbedGivenNulls(void *cell, char *nulls, RASTER_MAP_TYPE map_type,
     }
 
     return 1;
-}
-
-/****************************************************************************
-* void InitError (void)
-*
-* PURPOSE: 	To print an error message and exit the program. This function
-*   	    	is called if something tries to access a null pattern before
-*   	    	it is initialized.
-* INPUT VARS:	none
-* RETURN VAL:	none
-*****************************************************************************/
-static void InitError(void)
-{
-    char errMsg[512];		/* array to hold error message */
-
-    strcpy(errMsg, _("Null values have not been initialized. "));
-    strcat(errMsg, _("G_gisinit() must be called first. "));
-    strcat(errMsg, _("Please advise GRASS developers of this error.\n"));
-    G_fatal_error(errMsg);
-
-    return;
 }
 
 /*========================== Library Functions =============================*/
@@ -272,11 +247,6 @@ int G_is_null_value(const void *rast, RASTER_MAP_TYPE data_type)
 int G_is_c_null_value(const CELL * cellVal)
 {
     int i;			/* counter */
-
-    /* Check if the null patterns have been initialized */
-    if (!initialized) {
-	InitError();
-    }
 
     /* Check if the CELL value matches the null pattern */
     for (i = 0; i < sizeof(CELL); i++)
