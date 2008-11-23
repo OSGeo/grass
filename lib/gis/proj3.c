@@ -84,7 +84,7 @@ double G_database_units_to_meters_factor(void)
     char buf[256];
     int n;
 
-    static struct
+    static const struct
     {
 	char *unit;
 	double factor;

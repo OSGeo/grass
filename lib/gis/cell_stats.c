@@ -4,7 +4,7 @@
 #define INCR 10
 #define SHIFT 6
 
-static int NCATS = 1 << SHIFT;
+static const int NCATS = 1 << SHIFT;
 
 #define NODE struct Cell_stats_node
 

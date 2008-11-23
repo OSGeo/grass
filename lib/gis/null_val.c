@@ -24,30 +24,11 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-/*======================= Internal Constants/Defines =======================*/
-
-/* none */
-
-/*========================== Internal Typedefs =============================*/
-
-/* none */
-
-/*====================== Static Variable Declaration =======================*/
-
-/* Null pattern variables */
-static CELL cellNullPattern;
-static FCELL fcellNullPattern;
-static DCELL dcellNullPattern;
-
 /* Flag to indicate null patterns are initialized */
 static int initialized = FALSE;
 
-/*============================== Prototypes ================================*/
-
 static int EmbedGivenNulls(void *, char *, RASTER_MAP_TYPE, int);
 static void InitError(void);
-
-/*======================= Internal Static Functions ========================*/
 
 /****************************************************************************
 * int EmbedGivenNulls (void *cell, char *nulls, RASTER_MAP_TYPE map_type,
@@ -120,57 +101,6 @@ static void InitError(void)
 /*========================== Library Functions =============================*/
 
 /****************************************************************************
-* void G__init_null_patterns (void)
-*
-* PURPOSE: 	To initialize the three null patterns for CELL, FCELL, and
-*   	    	DCELL data types. It also sets the initialized flag to TRUE.
-*   	    	This function is called by G_gisinit()
-* INPUT VARS:	none
-* RETURN VAL:	none
-*****************************************************************************/
-void G__init_null_patterns(void)
-{
-    unsigned char *bytePtr;	/* pointer to traverse FCELL and DCELL */
-    int numBits;		/* number of bits for CELL type */
-    int i;			/* counter */
-
-    if (!initialized) {
-	/* Create the null pattern for the CELL data type - set the left */
-	/* most bit to 1 and the rest to 0, basically INT_MIN. Since CELL is */
-	/* some type of integer the bytes are not split into exponent and */
-	/* mantissa. Thus a simple left shift can be used */
-	numBits = sizeof(CELL) * 8;
-
-	cellNullPattern = 1 << (numBits - 1);
-
-	/* Create the null pattern for the FCELL data type - set all bits */
-	/* to 1, basically NaN. Need to use a byte pointer since bytes */
-	/* represent the exponent and mantissa */
-	bytePtr = (unsigned char *)&fcellNullPattern;
-
-	for (i = 0; i < sizeof(FCELL); i++) {
-	    *bytePtr = (unsigned char)255;
-	    bytePtr++;
-	}
-
-	/* Create the null pattern for the DCELL data type - set all bits */
-	/* to 1, basically NaN. Need to use a byte pointer since bytes */
-	/* represent the exponent and mantissa */
-	bytePtr = (unsigned char *)&dcellNullPattern;
-
-	for (i = 0; i < sizeof(DCELL); i++) {
-	    *bytePtr = (unsigned char)255;
-	    bytePtr++;
-	}
-
-	/* Set the initialized flag to TRUE */
-	initialized = TRUE;
-    }
-
-    return;
-}
-
-/****************************************************************************
 * void G__set_null_value (void *rast, int numVals, int null_is_zero,
 *   RASTER_MAP_TYPE data_type)
 *
@@ -234,25 +164,12 @@ void G_set_null_value(void *buf, int numVals, RASTER_MAP_TYPE data_type)
 *   	    	numVals     =>	number of values to set to null
 * RETURN VAL:	none
 *****************************************************************************/
-void G_set_c_null_value(CELL * cellVals, int numVals)
+void G_set_c_null_value(CELL *cellVals, int numVals)
 {
-    CELL *cellPtr;		/* pointer to CELL array to set to null */
     int i;			/* counter */
 
-    /* Check if the null patterns have been initialized */
-    if (!initialized) {
-	InitError();
-    }
-
-    /* Set numVals consecutive CELL values to null */
-    cellPtr = cellVals;
-
-    for (i = 0; i < numVals; i++) {
-	*cellPtr = cellNullPattern;
-	cellPtr++;
-    }
-
-    return;
+    for (i = 0; i < numVals; i++)
+	cellVals[i] = (int) 0x80000000;
 }
 
 /****************************************************************************
@@ -263,25 +180,14 @@ void G_set_c_null_value(CELL * cellVals, int numVals)
 *   	    	numVals     =>	number of values to set to null
 * RETURN VAL:	none
 *****************************************************************************/
-void G_set_f_null_value(FCELL * fcellVals, int numVals)
+void G_set_f_null_value(FCELL *fcellVals, int numVals)
 {
-    FCELL *fcellPtr;		/* pointer to FCELL array to set to null */
-    int i;			/* counter */
+    static const unsigned char null_bits[4] = {
+	0xFF, 0xFF, 0xFF, 0xFF};
+    int i;
 
-    /* Check if the null patterns have been initialized */
-    if (!initialized) {
-	InitError();
-    }
-
-    /* Set numVals consecutive FCELL values to null */
-    fcellPtr = fcellVals;
-
-    for (i = 0; i < numVals; i++) {
-	*fcellPtr = fcellNullPattern;
-	fcellPtr++;
-    }
-
-    return;
+    for (i = 0; i < numVals; i++)
+	memcpy(&fcellVals[i], null_bits, sizeof(null_bits));
 }
 
 /****************************************************************************
@@ -292,25 +198,14 @@ void G_set_f_null_value(FCELL * fcellVals, int numVals)
 *   	    	numVals     =>	number of values to set to null
 * RETURN VAL:	none
 *****************************************************************************/
-void G_set_d_null_value(DCELL * dcellVals, int numVals)
+void G_set_d_null_value(DCELL *dcellVals, int numVals)
 {
-    DCELL *dcellPtr;		/* pointer to DCELL array to set to null */
-    int i;			/* counter */
+    static const unsigned char null_bits[8] = {
+	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+    int i;
 
-    /* Check if the null patterns have been initialized */
-    if (!initialized) {
-	InitError();
-    }
-
-    /* Set numVals consecutive DCELL values to null */
-    dcellPtr = dcellVals;
-
-    for (i = 0; i < numVals; i++) {
-	*dcellPtr = dcellNullPattern;
-	dcellPtr++;
-    }
-
-    return;
+    for (i = 0; i < numVals; i++)
+	memcpy(&dcellVals[i], null_bits, sizeof(null_bits));
 }
 
 /****************************************************************************
@@ -384,12 +279,9 @@ int G_is_c_null_value(const CELL * cellVal)
     }
 
     /* Check if the CELL value matches the null pattern */
-    for (i = 0; i < sizeof(CELL); i++) {
-	if (((unsigned char *)cellVal)[i] !=
-	    ((unsigned char *)&cellNullPattern)[i]) {
+    for (i = 0; i < sizeof(CELL); i++)
+	if (cellVal[i] != (CELL) 0x80000000)
 	    return FALSE;
-	}
-    }
 
     return TRUE;
 }

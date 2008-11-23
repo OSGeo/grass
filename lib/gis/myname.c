@@ -34,7 +34,7 @@
 
 char *G_myname(void)
 {
-    static char name[GNAME_MAX];
+    char name[GNAME_MAX];
     char path[GPATH_MAX];
     FILE *fd;
     int ok;
@@ -49,5 +49,5 @@ char *G_myname(void)
     if (!ok)
 	strcpy(name, _("Unknown Location"));
 
-    return name;
+    return G_store(name);
 }

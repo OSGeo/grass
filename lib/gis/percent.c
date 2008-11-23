@@ -22,75 +22,7 @@ static int prev = -1;
 static int first = 1;
 
 
-/**
- * \brief Print percent complete messages.
- *
- * This routine prints a percentage complete message to stderr. The
- * percentage complete is <i>(<b>n</b>/<b>d</b>)*100</i>, and these are 
- * printed only for each <b>s</b> percentage. This is perhaps best 
- * explained by example:
-\code
-  #include <stdio.h>
-  #include <grass/gis.h>
-  int row;
-  int nrows;
-  nrows = 1352; // 1352 is not a special value - example only
-
-  fprintf (stderr, "Percent complete: ");
-  for (row = 0; row < nrows; row++)
-  {
-      G_percent (row, nrows, 10);
-  }
-  G_percent (row, nrows, 10);
-\endcode
- * This will print completion messages at 10% increments; i.e., 10%, 20%, 30%,
- * etc., up to 100%. Each message does not appear on a new line, but rather erases
- * the previous message. After 100%, a new line is printed.
- *
- * \param[in] n current element
- * \param[in] d total number of elements
- * \param[in] s increment size
- * \return always returns 0
- */
-
 int G_percent(long n, long d, int s)
-{
-    return (G_percent2(n, d, s, stderr));
-}
-
-
-/**
- * \brief Print percent complete messages.
- *
- * This routine prints a percentage complete message to stderr. The
- * percentage complete is <i>(<b>n</b>/<b>d</b>)*100</i>, and these are 
- * printed only for each <b>s</b> percentage. This is perhaps best 
- * explained by example:
-\code
-  #include <stdio.h>
-  #include <grass/gis.h>
-  int row;
-  int nrows;
-  nrows = 1352; // 1352 is not a special value - example only
-  fprintf (stderr, "Percent complete: ");
-  for (row = 0; row < nrows; row++)
-  {
-      G_percent (row, nrows, 10);
-  }
-  G_percent (row, nrows, 10);
-\endcode
- * This will print completion messages at 10% increments; i.e., 10%, 20%, 30%,
- * etc., up to 100%. Each message does not appear on a new line, but rather erases
- * the previous message. After 100%, a new line is printed.
- *
- * \param[in] n current element
- * \param[in] d total number of elements
- * \param[in] s increment size
- * \param[in,out] out file to print to
- * \return always returns 0
- */
-
-int G_percent2(long n, long d, int s, FILE * out)
 {
     int x, format;
 
@@ -107,27 +39,21 @@ int G_percent2(long n, long d, int s, FILE * out)
 	prev = x;
 
 	if (format == G_INFO_FORMAT_STANDARD) {
-	    if (out != NULL) {
-		fprintf(out, "%4d%%\b\b\b\b\b", x);
-	    }
+	    fprintf(stderr, "%4d%%\b\b\b\b\b", x);
 	}
 	else {
 	    if (format == G_INFO_FORMAT_PLAIN) {
-		if (out != NULL) {
-		    if (x == 100)
-			fprintf(out, "%d\n", x);
-		    else
-			fprintf(out, "%d..", x);
-		}
+		if (x == 100)
+		    fprintf(stderr, "%d\n", x);
+		else
+		    fprintf(stderr, "%d..", x);
 	    }
 	    else {		/* GUI */
-		if (out != NULL) {
-		    if (first) {
-			fprintf(out, "\n");
-		    }
-		    fprintf(out, "GRASS_INFO_PERCENT: %d\n", x);
-		    fflush(out);
+		if (first) {
+		    fprintf(stderr, "\n");
 		}
+		fprintf(stderr, "GRASS_INFO_PERCENT: %d\n", x);
+		fflush(stderr);
 		first = 0;
 	    }
 	}
@@ -135,9 +61,7 @@ int G_percent2(long n, long d, int s, FILE * out)
 
     if (x >= 100) {
 	if (format == G_INFO_FORMAT_STANDARD) {
-	    if (out != NULL) {
-		fprintf(out, "\n");
-	    }
+	    fprintf(stderr, "\n");
 	}
 	prev = -1;
 	first = 1;

@@ -38,7 +38,7 @@ static struct table
 } *table = NULL;
 
 static int count = -1;
-static char *PERMANENT = "PERMANENT";
+static const char PERMANENT[] = "PERMANENT";
 
 /* static int get_a_e2 (char *, char *, double *,double *); */
 static int get_a_e2_f(const char *, const char *, double *, double *,

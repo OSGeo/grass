@@ -126,9 +126,6 @@ static int gisinit(void)
     /* Set masking flag unknown */
     G__.auto_mask = -1;
 
-    /* set architecture dependent bit patterns for embeded null vals */
-    G__init_null_patterns();
-
     initialized = 1;
 
     setlocale(LC_NUMERIC, "C");

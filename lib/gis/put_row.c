@@ -1,25 +1,6 @@
 
 /**********************************************************************
  *
- *   G_zeros_r_nulls(zeros_r_nulls)
- *      int zeros_r_nulls	the last argument of put_data()
- *
- *   zeros_r_nulls > 0		zero values of buf to be written into files
- *   				are null values by default.
- *
- *   zeros_r_nulls == 0		zero values are just zero itself.
- *
- *   zeros_r_nulls < 0		do not set. return current setting.
- *   				1: set
- *   				0: not set
- *
- *   Return setting values in all cases.
- *
- *   *** NOTE *** 
- *   Use only to change a default behavior for zero of G_put_map_row
- *
- ********************************************************************** 
- *
  *   G_put_[c/f/d]_raster_row(fd, buf)
  *      int fd           file descriptor of the opened map
  *      [F/D]CELL *buf   buffer holding row info to be written
@@ -104,8 +85,6 @@
 #include "G.h"
 #include <grass/glocale.h>
 
-static int _zeros_r_nulls = 1;
-
 static int put_raster_data(int, char *, const void *, int, int, int,
 			   RASTER_MAP_TYPE);
 static int put_data(int, char *, const CELL *, int, int, int);
@@ -127,14 +106,6 @@ static int put_raster_row(int fd, const void *buf, RASTER_MAP_TYPE data_type,
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-
-int G_zeros_r_nulls(int zeros_r_nulls)
-{
-    if (zeros_r_nulls >= 0)
-	_zeros_r_nulls = zeros_r_nulls > 0;
-
-    return _zeros_r_nulls;
-}
 
 int G__put_null_value_row(int fd, const char *buf)
 {
@@ -162,7 +133,7 @@ int G_put_map_row(int fd, const CELL * buf)
 	return -1;
     }
 
-    return put_raster_row(fd, buf, CELL_TYPE, _zeros_r_nulls);
+    return put_raster_row(fd, buf, CELL_TYPE, 1);
 }
 
 int G_put_raster_row(int fd, const void *buf, RASTER_MAP_TYPE data_type)
@@ -795,11 +766,10 @@ static int convert_and_write_di(int fd, const DCELL * buf)
 static int put_raster_row(int fd, const void *buf, RASTER_MAP_TYPE data_type,
 			  int zeros_r_nulls)
 {
-    static int (*convert_and_write_FtypeOtype[3][3]) () = {
-	{
-	NULL, convert_and_write_if, convert_and_write_id}, {
-	convert_and_write_fi, NULL, convert_and_write_fd}, {
-	convert_and_write_di, convert_and_write_df, NULL}
+    static int (*convert_and_write_FtypeOtype[3][3])() = {
+	{NULL, convert_and_write_if, convert_and_write_id},
+	{convert_and_write_fi, NULL, convert_and_write_fd},
+	{convert_and_write_di, convert_and_write_df, NULL}
     };
     struct fileinfo *fcb = &G__.fileinfo[fd];
     char *null_buf;

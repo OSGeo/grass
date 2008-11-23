@@ -21,7 +21,7 @@
 #define F2I(map_type) \
 	(map_type == CELL_TYPE ? 0 : (map_type == FCELL_TYPE ? 1 : 2))
 
-static int type_size[3] = { sizeof(CELL), sizeof(FCELL), sizeof(DCELL) };
+static const int type_size[3] = { sizeof(CELL), sizeof(FCELL), sizeof(DCELL) };
 
 
 /**

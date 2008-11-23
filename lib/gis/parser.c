@@ -2616,7 +2616,7 @@ static int split_gisprompt(const char *gisprompt, char *age, char *element,
  */
 char *G_recreate_command(void)
 {
-    static char *buff;
+    char *buff;
     char flg[4];
     char *cur;
     const char *tmp;
