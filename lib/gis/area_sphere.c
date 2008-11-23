@@ -19,8 +19,11 @@
 #include "pi.h"
 
 
-static double M;
+static struct state {
+    double M;
+} state;
 
+static struct state *st = &state;
 
 /*
  * r is radius of sphere, s is a scaling factor
@@ -41,7 +44,7 @@ static double M;
 
 int G_begin_zone_area_on_sphere(double r, double s)
 {
-    return (M = s * 2.0 * r * r * M_PI);
+    return (st->M = s * 2.0 * r * r * M_PI);
 }
 
 
@@ -54,7 +57,7 @@ int G_begin_zone_area_on_sphere(double r, double s)
 
 double G_darea0_on_sphere(double lat)
 {
-    return (M * sin(Radians(lat)));
+    return (st->M * sin(Radians(lat)));
 }
 
 

@@ -18,10 +18,12 @@
 #include <grass/gis.h>
 #include "pi.h"
 
+static struct state {
+    double E;
+    double M;
+} state;
 
-static double E;
-static double M;
-
+static struct state *st = &state;
 
 /*
  * a is semi-major axis, e2 is eccentricity squared, s is a scale factor
@@ -49,8 +51,8 @@ static double M;
 
 int G_begin_zone_area_on_ellipsoid(double a, double e2, double s)
 {
-    E = sqrt(e2);
-    M = s * a * a * M_PI * (1 - e2) / E;
+    st->E = sqrt(e2);
+    st->M = s * a * a * M_PI * (1 - e2) / st->E;
 
     return 0;
 }
@@ -70,9 +72,9 @@ double G_darea0_on_ellipsoid(double lat)
 {
     double x;
 
-    x = E * sin(Radians(lat));
+    x = st->E * sin(Radians(lat));
 
-    return (M * (x / (1.0 - x * x) + 0.5 * log((1.0 + x) / (1.0 - x))));
+    return (st->M * (x / (1.0 - x * x) + 0.5 * log((1.0 + x) / (1.0 - x))));
 }
 
 
