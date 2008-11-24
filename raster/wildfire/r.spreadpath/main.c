@@ -135,8 +135,7 @@ int main(int argc, char **argv)
     out_file = G_tempfile();
 
     /*  Get database window parameters      */
-    if (G_get_window(&window) < 0)
-	G_fatal_error("can't read current window parameters");
+    G_get_window(&window);
 
     verbose = flag1->answer;
 

@@ -132,8 +132,7 @@ int main(int argc, char **argv)
     output = parm.output->answer;
 
     /*  Get database window parameters                              */
-    if (G_get_window(&window) < 0)
-	G_fatal_error(_("Unable to read current region parameters"));
+    G_get_window(&window);
 
     /*  find number of rows and columns in window                   */
     nrows = G_window_rows();

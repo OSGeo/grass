@@ -89,10 +89,7 @@ static int drawvect(int zoomit,	/* -1 = refresh, 0 = new image, 1 = zoom, 2 = wa
 	    get_vector_color();	/* ask line_color to draw map */
 
 	    if (!numfiles) {	/* first map: SET VECTOR WINDOW BY WIND */
-		if (G_get_window(&cellhd) < 0) {
-		    G_warning("Can't read current region parameters");
-		    return 0;
-		}
+		G_get_window(&cellhd);
 		G_copy(&VIEW_MAP2->cell.head, &cellhd, sizeof(cellhd));
 	    }
 	    else		/* not the first map */
