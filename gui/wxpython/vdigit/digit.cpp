@@ -32,7 +32,7 @@ Digit::Digit(DisplayDriver *ddriver, void *window)
 	InitCats();
     }
 
-    changesetCurrent = -1; // initial value for undo/redo
+    changesetEnd = changesetCurrent = -1; // initial value for undo/redo
 
     display->msgCaption = _("Digitization error");
     

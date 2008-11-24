@@ -36,7 +36,8 @@ private:
 
     std::map<int, std::vector<action_meta> > changesets;
     int changesetCurrent;  /* first changeset to apply */
-
+    int changesetEnd;      /* last changeset to be applied */
+    
     int AddActionToChangeset(int, action_type, int);
     int ApplyChangeset(int, bool);
     void FreeChangeset(int);

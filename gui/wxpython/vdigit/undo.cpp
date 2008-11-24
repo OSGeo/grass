@@ -55,7 +55,7 @@ int Digit::Undo(int level)
     if (level < 0) { /* undo */
 	if (changesetCurrent + level < -1)
 	    return changesetCurrent;
-	for (int changeset = changesetCurrent; changeset >= changesetCurrent + level; --changeset) {
+	for (int changeset = changesetCurrent; changeset > changesetCurrent + level; --changeset) {
 	    ApplyChangeset(changeset, true);
 	}
     }
@@ -69,9 +69,14 @@ int Digit::Undo(int level)
 
     changesetCurrent += level;
 
-    G_debug(2, "Digit.Undo(): changeset_current=%d",
-	    changesetCurrent);
-
+    G_debug(2, "Digit.Undo(): changeset_current=%d, changeset_last=%d, changeset_end=%d",
+	    changesetCurrent, changesetLast, changesetEnd);
+    
+    if (changesetCurrent == changesetEnd) {
+	changesetEnd = changesetLast;
+	return -1;
+    }
+    
     return changesetCurrent;
 }
 
@@ -92,13 +97,16 @@ int Digit::ApplyChangeset(int changeset, bool undo)
     if (changeset < 0 || changeset > (int) changesets.size())
 	return -1;
 
+    if (changesetEnd < 0)
+	changesetEnd = changeset;
+    
     ret = 0;
     std::vector<action_meta> action = changesets[changeset];
     for (std::vector<action_meta>::const_reverse_iterator i = action.rbegin(), e = action.rend();
 	 i != e; ++i) {
 	type = (*i).type;
 	line = (*i).line;
-
+	
 	if ((undo && type == ADD) ||
 	    (!undo && type == DEL)) {
 	    if (Vect_line_alive(display->mapInfo, line)) {
