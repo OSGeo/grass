@@ -48,6 +48,8 @@ DisplayDriver::DisplayDriver(void *device, void *deviceTmp)
 
     drawSegments = false;
 
+    G_set_verbose(0);
+    
     // avoid GUI crash when G_fatal_error() is called (opening the vector map)
     // Vect_set_fatal_error(GV_FATAL_PRINT);
     // G_set_error_routine(print_error);
