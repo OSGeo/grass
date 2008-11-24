@@ -72,13 +72,14 @@ struct fileinfo			/* Information for opened cell files */
 
 struct G__			/*  Structure of library globals */
 {
-    int fp_nbytes;		/* size of cell in floating maps */
     RASTER_MAP_TYPE fp_type;	/* type for writing floating maps */
     struct Cell_head window;	/* Contains the current window          */
     int window_set;		/* Flag: window set?                    */
     int mask_fd;		/* File descriptor for automatic mask   */
     int auto_mask;		/* Flag denoting automatic masking      */
     int want_histogram;
+    int nbytes;
+    int compression_type;
 
     int fileinfo_count;
     struct fileinfo *fileinfo;

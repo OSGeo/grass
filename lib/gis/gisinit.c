@@ -120,11 +120,13 @@ static int gisinit(void)
     G__.want_histogram = 0;
 
     /* set the write type for floating maps */
-    G__.fp_type = FCELL_TYPE;
-    G__.fp_nbytes = XDR_FLOAT_NBYTES;
+    G__.fp_type = -1;
 
     /* Set masking flag unknown */
     G__.auto_mask = -1;
+
+    G__.nbytes = sizeof(CELL);
+    G__.compression_type = 0;
 
     initialized = 1;
 

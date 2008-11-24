@@ -833,8 +833,8 @@ int G_open_cell_old(const char *, const char *);
 int G__open_cell_old(const char *, const char *);
 int G_open_cell_new(const char *);
 int G_open_cell_new_uncompressed(const char *);
-int G_want_histogram(int);
-int G_set_cell_format(int);
+void G_want_histogram(int);
+void G_set_cell_format(int);
 int G_cellvalue_format(CELL);
 int G_open_fp_cell_new(const char *);
 int G_open_fp_cell_new_uncompressed(const char *);
@@ -896,7 +896,7 @@ int G_pclose(FILE *);
 
 /* progrm_nme.c */
 const char *G_program_name(void);
-int G_set_program_name(const char *);
+void G_set_program_name(const char *);
 
 /* proj1.c */
 int G_projection(void);
