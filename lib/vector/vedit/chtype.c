@@ -25,17 +25,11 @@
 
     \param Map vector map
     \param List list of selected primitives
-    \param[out] npoints number of points after conversion
-    \param[out] ncentroids number of centroids after conversion
-    \param[out] nlines number of lines after conversion
-    \param[out] nboundaries number of boundaries after conversion
 
     \return number of modified primitives
     \return -1 on error
 */
-int Vedit_chtype_lines(struct Map_info *Map, struct ilist *List,
-		       int *npoints, int *ncentroids,
-		       int *nlines, int *nboundaries)
+int Vedit_chtype_lines(struct Map_info *Map, struct ilist *List)
 {
     int i;
     int nret, line;
@@ -44,7 +38,6 @@ int Vedit_chtype_lines(struct Map_info *Map, struct ilist *List,
     struct line_cats *Cats;
 
     nret = 0;
-    *npoints = *ncentroids = *nlines = *nboundaries = 0;
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
@@ -60,19 +53,15 @@ int Vedit_chtype_lines(struct Map_info *Map, struct ilist *List,
 	switch (type) {
 	case GV_POINT:
 	    newtype = GV_CENTROID;
-	    (*npoints)++;
 	    break;
 	case GV_CENTROID:
 	    newtype = GV_POINT;
-	    (*ncentroids)++;
 	    break;
 	case GV_LINE:
 	    newtype = GV_BOUNDARY;
-	    (*nlines)++;
 	    break;
 	case GV_BOUNDARY:
 	    newtype = GV_LINE;
-	    (*nboundaries)++;
 	    break;
 	default:
 	    newtype = -1;

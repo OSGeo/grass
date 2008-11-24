@@ -25,8 +25,7 @@ int Vedit_modify_cats(struct Map_info *, struct ilist *,
 int Vedit_copy_lines(struct Map_info *, struct Map_info *, struct ilist *);
 
 /* chtype.c */
-int Vedit_chtype_lines(struct Map_info *, struct ilist *,
-		       int *, int *, int *, int *);
+int Vedit_chtype_lines(struct Map_info *, struct ilist *);
 
 /* delete.c */
 

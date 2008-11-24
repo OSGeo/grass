@@ -358,27 +358,10 @@ int main(int argc, char *argv[])
 	    break;
 	}
     case MODE_CHTYPE:{
-	    int npoints, nlines, ncentroids, nboundaries;
-
-	    ret = Vedit_chtype_lines(&Map, List,
-				     &npoints, &ncentroids,
-				     &nlines, &nboundaries);
+	    ret = Vedit_chtype_lines(&Map, List);
 
 	    if (ret > 0) {
-		if (npoints > 0) {
-		    G_message(_("%d points converted to centroids"), npoints);
-		}
-		if (ncentroids > 0) {
-		    G_message(_("%d centroids converted to points"),
-			      ncentroids);
-		}
-		if (nlines > 0) {
-		    G_message(_("%d lines converted to boundaries"), nlines);
-		}
-		if (nboundaries > 0) {
-		    G_message(_("%d boundaries converted to lines"),
-			      nboundaries);
-		}
+		G_message(_("%d features converted"), ret);
 	    }
 	    else {
 		G_message(_("No feature modified"));
@@ -390,20 +373,7 @@ int main(int argc, char *argv[])
 	ret = -1;
 	break;
     }
-
-    /*
-       if (print && ret > 0) {
-       for (i = 0; i < Vect_get_num_updated_lines(&Map); i++) {
-       if (i > 0)
-       fprintf (stdout, ",");
-       fprintf (stdout, "%d", Vect_get_updated_line(&Map, i));
-       }
-       if (Vect_get_num_updated_lines(&Map) > 0)
-       fprintf (stdout, "\n");
-       fflush (stdout);
-       }
-     */
-
+    
     Vect_hist_command(&Map);
 
     /* build topology only if requested or if tool!=select */
