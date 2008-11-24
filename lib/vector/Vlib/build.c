@@ -145,18 +145,18 @@ int Vect_build_partial(struct Map_info *Map, int build)
 	dig_cidx_sort(plus);
     }
 
-    G_verbose_message(_("Number of nodes: %d"), plus->n_nodes);
-    G_verbose_message(_("Number of primitives: %d"), plus->n_lines);
-    G_verbose_message(_("Number of points: %d"), plus->n_plines);
-    G_verbose_message(_("Number of lines: %d"), plus->n_llines);
-    G_verbose_message(_("Number of boundaries: %d"), plus->n_blines);
-    G_verbose_message(_("Number of centroids: %d"), plus->n_clines);
+    G_message(_("Number of nodes: %d"), plus->n_nodes);
+    G_message(_("Number of primitives: %d"), plus->n_lines);
+    G_message(_("Number of points: %d"), plus->n_plines);
+    G_message(_("Number of lines: %d"), plus->n_llines);
+    G_message(_("Number of boundaries: %d"), plus->n_blines);
+    G_message(_("Number of centroids: %d"), plus->n_clines);
 
     if (plus->n_flines > 0)
-	G_verbose_message(_("Number of faces: %d"), plus->n_flines);
+	G_message(_("Number of faces: %d"), plus->n_flines);
 
     if (plus->n_klines > 0)
-	G_verbose_message(_("Number of kernels: %d"), plus->n_klines);
+	G_message(_("Number of kernels: %d"), plus->n_klines);
 
     if (plus->built >= GV_BUILD_AREAS) {
 	int line, nlines, area, nareas, err_boundaries, err_centr_out,
@@ -196,29 +196,29 @@ int Vect_build_partial(struct Map_info *Map, int build)
 		err_nocentr++;
 	}
 
-	G_verbose_message(_("Number of areas: %d"), plus->n_areas);
-	G_verbose_message(_("Number of isles: %d"), plus->n_isles);
+	G_message(_("Number of areas: %d"), plus->n_areas);
+	G_message(_("Number of isles: %d"), plus->n_isles);
 
 	if (err_boundaries)
-	    G_verbose_message(_("Number of incorrect boundaries: %d"),
+	    G_message(_("Number of incorrect boundaries: %d"),
 			      err_boundaries);
 
 	if (err_centr_out)
-	    G_verbose_message(_("Number of centroids outside area: %d"),
+	    G_message(_("Number of centroids outside area: %d"),
 			      err_centr_out);
 
 	if (err_centr_dupl)
-	    G_verbose_message(_("Number of duplicate centroids: %d"),
+	    G_message(_("Number of duplicate centroids: %d"),
 			      err_centr_dupl);
 
 	if (err_nocentr)
-	    G_verbose_message(_("Number of areas without centroid: %d"),
+	    G_message(_("Number of areas without centroid: %d"),
 			      err_nocentr);
 
     }
     else {
-	G_verbose_message(_("Number of areas: -"));
-	G_verbose_message(_("Number of isles: -"));
+	G_message(_("Number of areas: -"));
+	G_message(_("Number of isles: -"));
     }
     return 1;
 }

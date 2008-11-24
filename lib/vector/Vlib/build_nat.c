@@ -421,7 +421,7 @@ int Vect_attach_centroids(struct Map_info *Map, BOUND_BOX * box)
 int Vect_build_nat(struct Map_info *Map, int build)
 {
     struct Plus_head *plus;
-    int i, j, s, type, lineid;
+    int i, s, type, lineid;
     long offset;
     int side, line, area;
     struct line_pnts *Points, *APoints;
@@ -502,9 +502,8 @@ int Vect_build_nat(struct Map_info *Map, int build)
 
 	/* register lines, create nodes */
 	Vect_rewind(Map);
-	G_verbose_message(_("Registering primitives:"));
+	G_message(_("Registering primitives..."));
 	i = 1;
-	j = 1;
 	npoints = 0;
 	while (1) {
 	    /* register line */
@@ -542,11 +541,19 @@ int Vect_build_nat(struct Map_info *Map, int build)
 		if (Cats->n_cats == 0)	/* add field 0, cat 0 */
 		    dig_cidx_add_cat(plus, 0, 0, lineid, type);
 	    }
+
+	    if (G_verbose() > G_verbose_min() && i % 1000 == 0) {
+		fprintf(stderr, "%7d\b\b\b\b\b\b\b", i);
+	    }
+	    
 	    i++;
-	    j++;
 	}
-	G_verbose_message(_("%d primitives registered"), plus->n_lines);
-	G_verbose_message(_("%d vertices registered"), npoints);
+	
+	if (G_verbose() > G_verbose_min())
+	    fprintf(stderr, "\r");
+
+	G_message(_("%d primitives registered"), plus->n_lines);
+	G_message(_("%d vertices registered"), npoints);
 
 	plus->built = GV_BUILD_BASE;
     }
@@ -557,7 +564,7 @@ int Vect_build_nat(struct Map_info *Map, int build)
     if (plus->built < GV_BUILD_AREAS) {
 	/* Build areas */
 	/* Go through all bundaries and try to build area for both sides */
-	G_verbose_message(_("Building areas:"));
+	G_message(_("Building areas..."));
 	for (i = 1; i <= plus->n_lines; i++) {
 	    G_percent(i, plus->n_lines, 1);
 
@@ -580,8 +587,8 @@ int Vect_build_nat(struct Map_info *Map, int build)
 		Vect_build_line_area(Map, i, side);
 	    }
 	}
-	G_verbose_message(_("%d areas built"), plus->n_areas);
-	G_verbose_message(_("%d isles built"), plus->n_isles);
+	G_message(_("%d areas built"), plus->n_areas);
+	G_message(_("%d isles built"), plus->n_isles);
 	plus->built = GV_BUILD_AREAS;
     }
 
@@ -590,7 +597,7 @@ int Vect_build_nat(struct Map_info *Map, int build)
 
     /* Attach isles to areas */
     if (plus->built < GV_BUILD_ATTACH_ISLES) {
-	G_verbose_message(_("Attaching islands:"));
+	G_message(_("Attaching islands..."));
 	for (i = 1; i <= plus->n_isles; i++) {
 	    G_percent(i, plus->n_isles, 1);
 	    Vect_attach_isle(Map, i);
@@ -605,7 +612,7 @@ int Vect_build_nat(struct Map_info *Map, int build)
     if (plus->built < GV_BUILD_CENTROIDS) {
 	int nlines;
 
-	G_verbose_message(_("Attaching centroids:"));
+	G_message(_("Attaching centroids..."));
 
 	nlines = Vect_get_num_lines(Map);
 	for (line = 1; line <= nlines; line++) {
