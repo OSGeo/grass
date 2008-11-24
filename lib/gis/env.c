@@ -79,6 +79,12 @@ int G_get_gisrc_mode(void)
     return (st->varmode);
 }
 
+void G_init_env(void)
+{
+    read_env(G_VAR_GISRC);
+    read_env(G_VAR_MAPSET);
+}
+
 static int read_env(int loc)
 {
     char buf[200];
