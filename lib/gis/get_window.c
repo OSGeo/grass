@@ -25,6 +25,12 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
+static struct state {
+    int initialized;
+    struct Cell_head dbwindow;
+} state;
+
+static struct state *st = &state;
 
 /*!
  * \brief read the database region
@@ -44,59 +50,41 @@
  *  \return int
  */
 
-int G_get_window(struct Cell_head *window)
+void G_get_window(struct Cell_head *window)
 {
-    static int first = 1;
-    static struct Cell_head dbwindow;
-    char *regvar;
+    const char *regvar, *err;
+
+    if (st->initialized) {
+	*window = st->dbwindow;
+	return;
+    }
 
     /* Optionally read the region from environment variable */
     regvar = getenv("GRASS_REGION");
 
     if (regvar) {
-	char **tokens, *delm = ";";
-	char *err;
-
-	tokens = G_tokenize(regvar, delm);
-
-	err = G__read_Cell_head_array(tokens, window, 0);
-
+	char **tokens = G_tokenize(regvar, ";");
+	err = G__read_Cell_head_array(tokens, &st->dbwindow, 0);
 	G_free_tokens(tokens);
-
-	if (err) {
-	    G_fatal_error(_("region for current mapset %s\nrun \"g.region\""),
-			  err);
-	    G_free(err);
-	}
-
-	return 1;
     }
-
-    if (first) {
-	char *wind, *err;
-
-	wind = getenv("WIND_OVERRIDE");
+    else {
+	char *wind = getenv("WIND_OVERRIDE");
 	if (wind)
-	    err = G__get_window(&dbwindow, "windows", wind, G_mapset());
+	    err = G__get_window(&st->dbwindow, "windows", wind, G_mapset());
 	else
-	    err = G__get_window(&dbwindow, "", "WIND", G_mapset());
-
-	if (err) {
-	    G_fatal_error(_("region for current mapset %s\nrun \"g.region\""),
-			  err);
-	    G_free(err);
-	}
+	    err = G__get_window(&st->dbwindow, "", "WIND", G_mapset());
     }
 
-    first = 0;
-    G_copy(window, &dbwindow, sizeof(dbwindow));
+    if (err)
+	G_fatal_error(_("region for current mapset %s\nrun \"g.region\""), err);
+
+    st->initialized = 1;
+    *window = st->dbwindow;
 
     if (!G__.window_set) {
 	G__.window_set = 1;
-	G_copy(&G__.window, &dbwindow, sizeof(dbwindow));
+	G__.window = st->dbwindow;
     }
-
-    return 1;
 }
 
 
@@ -112,37 +100,29 @@ int G_get_window(struct Cell_head *window)
  *  \return int
  */
 
-int G_get_default_window(struct Cell_head *window)
+void G_get_default_window(struct Cell_head *window)
 {
-    char *err;
+    const char *err = G__get_window(window, "", "DEFAULT_WIND", "PERMANENT");
 
-    if ((err = G__get_window(window, "", "DEFAULT_WIND", "PERMANENT"))) {
+    if (err)
 	G_fatal_error(_("default region %s"), err);
-	G_free(err);
-    }
-    return 1;
 }
 
 char *G__get_window(struct Cell_head *window,
 		    const char *element, const char *name, const char *mapset)
 {
-    FILE *fd;
+    FILE *fp;
     char *err;
 
-    G_zero((char *)window, sizeof(struct Cell_head));
+    G_zero(window, sizeof(struct Cell_head));
 
     /* Read from file */
-    if (!(fd = G_fopen_old(element, name, mapset))) {
-	/*
-	   char path[GPATH_MAX];
-	   G__file_name (path,element,name,mapset);
-	   fprintf (stderr, "G__get_window(%s)\n",path);
-	 */
+    fp = G_fopen_old(element, name, mapset);
+    if (!fp)
 	return G_store(_("is not set"));
-    }
 
-    err = G__read_Cell_head(fd, window, 0);
-    fclose(fd);
+    err = G__read_Cell_head(fp, window, 0);
+    fclose(fp);
 
     if (err) {
 	char msg[1024];

@@ -427,6 +427,7 @@ void G_tred2(double **, int, double[], double[]);
 int G_is_little_endian(void);
 
 /* env.c */
+void G_init_env(void);
 char *G_getenv(const char *);
 char *G_getenv2(const char *, int);
 char *G__getenv(const char *);
@@ -583,8 +584,8 @@ int G_get_raster_row_colors(int, int, struct Colors *,
 			    unsigned char *);
 
 /* get_window.c */
-int G_get_window(struct Cell_head *);
-int G_get_default_window(struct Cell_head *);
+void G_get_window(struct Cell_head *);
+void G_get_default_window(struct Cell_head *);
 char *G__get_window(struct Cell_head *, const char *, const char *,
 		    const char *);
 
