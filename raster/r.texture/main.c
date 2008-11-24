@@ -61,10 +61,13 @@ int main(int argc, char *argv[])
     int a, c, corr, v, idm, sa, sv, se, e, dv, de, moc1, moc2, mcc;
     RASTER_MAP_TYPE data_type, out_data_type;
     struct GModule *module;
+    char mapname[GNAME_MAX];
     struct Option *input, *output, *size_O, *dist_O;
     struct Flag *flag2, *flag3, *flag4, *flag5,
 	*flag6, *flag7, *flag8, *flag9, *flag10, *flag11,
 	*flag12, *flag13, *flag14, *flag15;
+    struct History history;
+
     G_gisinit(argv[0]);
 
     module = G_define_module();
@@ -345,8 +348,15 @@ int main(int argc, char *argv[])
 				      result, row);
 
 	    G_close_cell(outfd);
-	    G_important_message(_("Calculated measure #%d <%s%s> (56 measures available)"),
-				(t_measure + 1), filename, suffixes[t_measure]);
+	    strcpy(mapname, filename);
+	    strcat(mapname, suffixes[t_measure]);
+	    G_important_message(_("Calculated measure #%d <%s> (56 measures available)"),
+				(t_measure + 1), mapname);
+
+	    G_short_history(mapname, "raster", &history);
+	    G_command_history(&history);
+	    G_write_history(mapname, &history);
+
 	}
     G_free(outrast);
     G_free(data);
