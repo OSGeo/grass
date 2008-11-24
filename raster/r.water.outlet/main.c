@@ -56,7 +56,6 @@ int main(int argc, char *argv[])
     char drain_name[GNAME_MAX], *drain_mapset, E_f, dr_f, ba_f, N_f, errr;
     struct GModule *module;
     struct Option *opt1, *opt2, *opt3, *opt4;
-    char *buf;
 
     G_gisinit(argv[0]);
 
@@ -97,10 +96,7 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (G_get_window(&window) < 0) {
-	G_asprintf(&buf, _("Unable to read current window parameters"));
-	G_fatal_error(buf);
-    }
+    G_get_window(&window);
 
     strcpy(drain_name, opt1->answer);
     strcpy(basin_name, opt2->answer);

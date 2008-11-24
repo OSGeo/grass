@@ -142,8 +142,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Unable to read header of raster map <%s>"),
 		      inopt->answer);
 
-    if ((G_get_window(&cellhd) < 0))
-	G_fatal_error(_("Can't set window"));
+    G_get_window(&cellhd);
 
     G_read_colors(inopt->answer, "", &colors);
     if ((isfp = G_raster_map_is_fp(inopt->answer, "")))

@@ -230,8 +230,7 @@ int main(int argc, char *argv[])
     out_file = G_tempfile();
 
     /*  Get database window parameters      */
-    if (G_get_window(&window) < 0)
-	G_fatal_error(_("Unable to read current window parameters"));
+    G_get_window(&window);
 
     /*  Find north-south, east_west and diagonal factors */
     EW_fac = 1.0;
