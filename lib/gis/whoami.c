@@ -39,41 +39,30 @@
 
 char *G_whoami(void)
 {
+    static char *name;
+
+    if (name)
+	return name;
+
 #ifdef __MINGW32__
-    char *name = getenv("USERNAME");
+    name = getenv("USERNAME");
+#endif
+    if (!name || !*name)
+	name = getenv("LOGNAME");
 
-    if (name == NULL) {
-	name = "user_name";
-    }
-#else
-    static char *name = NULL;
+    if (!name || !*name)
+	name = getenv("USER");
 
-#ifdef COMMENTED_OUT
-    char *getlogin();
-    char *ttyname();
-
-    if (name == NULL) {
-	char *x;
-
-	x = ttyname(0);
-	if (x && *x) {
-	    x = getlogin();
-	    if (x && *x)
-		name = G_store(x);
-	}
-    }
-#endif /* COMMENTED_OUT */
-
-    if (name == NULL) {
-	struct passwd *p;
-
-	if ((p = getpwuid(getuid())))
+#ifndef __MINGW32__
+    if (!name || !*name) {
+	struct passwd *p = getpwuid(getuid());
+	if (p && p->pw_name && *p->pw_name)
 	    name = G_store(p->pw_name);
     }
-    if (name == NULL)
-	name = G_store("?");
-
 #endif
+
+    if (!name || !*name)
+	name = "anonymous";
 
     return name;
 }

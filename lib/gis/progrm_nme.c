@@ -35,7 +35,7 @@ const char *G_program_name(void)
     return name;
 }
 
-int G_set_program_name(const char *s)
+void G_set_program_name(const char *s)
 {
     int i;
     char *temp;
@@ -51,6 +51,4 @@ int G_set_program_name(const char *s)
     G_basename(temp, "exe");
     name = G_store(temp);
     G_free(temp);
-
-    return 0;
 }

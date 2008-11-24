@@ -45,7 +45,6 @@ static int grass_debug_level = -1;
 
 int G_debug(int level, const char *msg, ...)
 {
-#ifdef GDEBUG
     char *lstr, *filen;
     va_list ap;
     FILE *fd;
@@ -84,7 +83,6 @@ int G_debug(int level, const char *msg, ...)
 
 	va_end(ap);
     }
-#endif
 
     return 1;
 }
@@ -105,7 +103,6 @@ int G_dump(int fd)
     const struct fileinfo *fcb = &G__.fileinfo[fd];
 
     G_message("G_dump: memory allocated to G__");
-    G_message("Size of cell in fp maps = %d", G__.fp_nbytes);
     G_message("type for writing floating maps = %d", G__.fp_type);
     G_message("current window = %p", &G__.window);
     G_message("Flag: window set? %d", G__.window_set);

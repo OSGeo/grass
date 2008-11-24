@@ -67,7 +67,8 @@ static struct fileinfo *new_fileinfo(int fd)
  *  \return int
  */
 
-static int G__open_raster_new(const char *name, int open_mode);
+static int G__open_raster_new(const char *name, int open_mode,
+			      RASTER_MAP_TYPE map_type);
 
 /*!
   \brief Open an existing integer raster map (cell)
@@ -148,7 +149,7 @@ int G__open_cell_old(const char *name, const char *mapset)
 {
     struct fileinfo *fcb;
     int fd;
-    char cell_dir[100];
+    char *cell_dir;
     const char *r_name;
     const char *r_mapset;
     struct Cell_head cellhd;
@@ -237,18 +238,18 @@ int G__open_cell_old(const char *name, const char *mapset)
 
     /* record number of bytes per cell */
     if (MAP_TYPE == FCELL_TYPE) {
-	strcpy(cell_dir, "fcell");
+	cell_dir = "fcell";
 	INTERN_SIZE = sizeof(FCELL);
 	MAP_NBYTES = XDR_FLOAT_NBYTES;
     }
     else if (MAP_TYPE == DCELL_TYPE) {
-	strcpy(cell_dir, "fcell");
+	cell_dir = "fcell";
 	INTERN_SIZE = sizeof(DCELL);
 	MAP_NBYTES = XDR_DOUBLE_NBYTES;
     }
     else {			/* integer */
 
-	strcpy(cell_dir, "cell");
+	cell_dir = "cell";
 	INTERN_SIZE = sizeof(CELL);
 	MAP_NBYTES = CELL_nbytes;
     }
@@ -345,29 +346,6 @@ int G__open_cell_old(const char *name, const char *mapset)
 
 /*****************************************************************/
 
-static int WRITE_NBYTES = sizeof(CELL);
-
-/* bytes per cell for current map */
-
-static int NBYTES = sizeof(CELL);
-
-/* bytes per cell for writing integer maps */
-
-static RASTER_MAP_TYPE WRITE_MAP_TYPE = CELL_TYPE;
-
-/* a type of current map */
-
-static int COMPRESSION_TYPE = 0;
-
-#define FP_NBYTES G__.fp_nbytes
-/* bytes per cell for writing floating point maps */
-#define FP_TYPE  G__.fp_type
-/* a type of floating maps to be open */
-static int FP_TYPE_SET = 0;	/* wether or not the f.p. type was set explicitly
-				   by calling G_set_fp_type() */
-
-static char cell_dir[100];
-
 /*!
   \brief Opens a new cell file in a database (compressed)
 
@@ -397,11 +375,7 @@ static char cell_dir[100];
 */
 int G_open_cell_new(const char *name)
 {
-    WRITE_MAP_TYPE = CELL_TYPE;
-    strcpy(cell_dir, "cell");
-    /* bytes per cell for current map */
-    WRITE_NBYTES = NBYTES;
-    return G__open_raster_new(name, OPEN_NEW_COMPRESSED);
+    return G__open_raster_new(name, OPEN_NEW_COMPRESSED, CELL_TYPE);
 }
 
 /*!
@@ -416,11 +390,7 @@ int G_open_cell_new(const char *name)
 */
 int G_open_cell_new_uncompressed(const char *name)
 {
-    WRITE_MAP_TYPE = CELL_TYPE;	/* a type of current map */
-    strcpy(cell_dir, "cell");
-    /* bytes per cell for current map */
-    WRITE_NBYTES = NBYTES;
-    return G__open_raster_new(name, OPEN_NEW_UNCOMPRESSED);
+    return G__open_raster_new(name, OPEN_NEW_UNCOMPRESSED, CELL_TYPE);
 }
 
 /*!
@@ -433,11 +403,9 @@ int G_open_cell_new_uncompressed(const char *name)
 
   \return 0
 */
-int G_want_histogram(int flag)
+void G_want_histogram(int flag)
 {
     G__.want_histogram = flag;
-
-    return 0;
 }
 
 /*!
@@ -454,18 +422,14 @@ int G_want_histogram(int flag)
   
   \return 0
 */
-int G_set_cell_format(int n)
+void G_set_cell_format(int n)
 /* sets the format for integer raster map */
 {
-    if (WRITE_MAP_TYPE == CELL_TYPE) {
-	NBYTES = n + 1;
-	if (NBYTES <= 0)
-	    NBYTES = 1;
-	if ((unsigned int) NBYTES > sizeof(CELL))
-	    NBYTES = sizeof(CELL);
-    }
-
-    return 0;
+    G__.nbytes = n + 1;
+    if (G__.nbytes <= 0)
+	G__.nbytes = 1;
+    if (G__.nbytes > sizeof(CELL))
+	G__.nbytes = sizeof(CELL);
 }
 
 /*!
@@ -484,6 +448,16 @@ int G_cellvalue_format(CELL v)
 	    if (!(v /= 256))
 		return i;
     return sizeof(CELL) - 1;
+}
+
+static int get_fp_type(void)
+{
+    if (G__.fp_type <= 0)
+	G__.fp_type = getenv("GRASS_FP_DOUBLE")
+	    ? DCELL_TYPE
+	    : FCELL_TYPE;
+
+    return G__.fp_type;
 }
 
 /*!
@@ -505,24 +479,7 @@ int G_cellvalue_format(CELL v)
 */
 int G_open_fp_cell_new(const char *name)
 {
-    /* use current float. type for writing float point maps */
-    /* if the FP type was NOT explicitly set by G_set_fp_type()
-       use environment variable */
-    if (!FP_TYPE_SET) {
-	if (getenv("GRASS_FP_DOUBLE")) {
-	    FP_TYPE = DCELL_TYPE;
-	    FP_NBYTES = XDR_DOUBLE_NBYTES;
-	}
-	else {
-	    FP_TYPE = FCELL_TYPE;
-	    FP_NBYTES = XDR_FLOAT_NBYTES;
-	}
-    }
-    WRITE_MAP_TYPE = FP_TYPE;
-    WRITE_NBYTES = FP_NBYTES;
-
-    strcpy(cell_dir, "fcell");
-    return G__open_raster_new(name, OPEN_NEW_COMPRESSED);
+    return G__open_raster_new(name, OPEN_NEW_COMPRESSED, get_fp_type());
 }
 
 /*!
@@ -537,26 +494,11 @@ int G_open_fp_cell_new(const char *name)
 */
 int G_open_fp_cell_new_uncompressed(const char *name)
 {
-    /* use current float. type for writing float point maps */
-    if (!FP_TYPE_SET) {
-	if (getenv("GRASS_FP_DOUBLE")) {
-	    FP_TYPE = DCELL_TYPE;
-	    FP_NBYTES = XDR_DOUBLE_NBYTES;
-	}
-	else {
-	    FP_TYPE = FCELL_TYPE;
-	    FP_NBYTES = XDR_FLOAT_NBYTES;
-	}
-    }
-    WRITE_MAP_TYPE = FP_TYPE;
-    WRITE_NBYTES = FP_NBYTES;
-
-    strcpy(cell_dir, "fcell");
-    return G__open_raster_new(name, OPEN_NEW_UNCOMPRESSED);
+    return G__open_raster_new(name, OPEN_NEW_UNCOMPRESSED, get_fp_type());
 }
 
-/* opens a f-cell or cell file depending on WRITE_MAP_TYPE */
-static int G__open_raster_new(const char *name, int open_mode)
+static int G__open_raster_new(const char *name, int open_mode,
+			      RASTER_MAP_TYPE map_type)
 {
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
     struct fileinfo *fcb;
@@ -564,6 +506,26 @@ static int G__open_raster_new(const char *name, int open_mode)
     char *tempname;
     char *map;
     char *mapset;
+    const char *cell_dir;
+    int nbytes;
+
+    switch (map_type) {
+    case CELL_TYPE:
+	cell_dir = "cell";
+	nbytes = G__.nbytes;
+	break;
+    case FCELL_TYPE:
+	nbytes = XDR_FLOAT_NBYTES;
+	cell_dir = "fcell";
+	break;
+    case DCELL_TYPE:
+	nbytes =  XDR_DOUBLE_NBYTES;
+	cell_dir = "fcell";
+	break;
+    default:
+	G_fatal_error(_("Invalid map type <%d>"), map_type);
+	break;
+    }
 
     if (G__unqualified_name(name, G_mapset(), xname, xmapset) < 0)
 	G_fatal_error(_("Raster map <%s> is not in the current mapset (%s)"),
@@ -599,7 +561,7 @@ static int G__open_raster_new(const char *name, int open_mode)
     G__make_mapset_element(cell_dir);
 
     /* mark closed */
-    fcb->map_type = WRITE_MAP_TYPE;
+    fcb->map_type = map_type;
     fcb->open_mode = -1;
 
     /* for writing fcb->data is allocated to be G__.window.cols * 
@@ -607,8 +569,8 @@ static int G__open_raster_new(const char *name, int open_mode)
     fcb->data = (unsigned char *)G_calloc(G__.window.cols,
 					  G_raster_size(fcb->map_type));
 
-    if (open_mode == OPEN_NEW_COMPRESSED && !COMPRESSION_TYPE)
-	COMPRESSION_TYPE = getenv("GRASS_INT_ZLIB") ? 2 : 1;
+    if (open_mode == OPEN_NEW_COMPRESSED && !G__.compression_type)
+	G__.compression_type = getenv("GRASS_INT_ZLIB") ? 2 : 1;
 
     /*
      * copy current window into cell header
@@ -622,17 +584,17 @@ static int G__open_raster_new(const char *name, int open_mode)
 	fcb->row_ptr = G_calloc(fcb->cellhd.rows + 1, sizeof(off_t));
 	G_zero(fcb->row_ptr, (fcb->cellhd.rows + 1) * sizeof(off_t));
 	G__write_row_ptrs(fd);
-	fcb->cellhd.compressed = COMPRESSION_TYPE;
+	fcb->cellhd.compressed = G__.compression_type;
 
 	fcb->nbytes = 1;	/* to the minimum */
     }
     else {
-	fcb->nbytes = WRITE_NBYTES;
+	fcb->nbytes = nbytes;
 	if (open_mode == OPEN_NEW_COMPRESSED) {
 	    fcb->row_ptr = G_calloc(fcb->cellhd.rows + 1, sizeof(off_t));
 	    G_zero(fcb->row_ptr, (fcb->cellhd.rows + 1) * sizeof(off_t));
 	    G__write_row_ptrs(fd);
-	    fcb->cellhd.compressed = COMPRESSION_TYPE;
+	    fcb->cellhd.compressed = G__.compression_type;
 	}
 	else
 	    fcb->cellhd.compressed = 0;
@@ -709,18 +671,15 @@ static int G__open_raster_new(const char *name, int open_mode)
 */
 int G_set_fp_type(RASTER_MAP_TYPE map_type)
 {
-    FP_TYPE_SET = 1;
-    if (map_type != FCELL_TYPE && map_type != DCELL_TYPE) {
+    switch (map_type) {
+    case FCELL_TYPE:
+    case DCELL_TYPE:
+	G__.fp_type = map_type;
+	return 1;
+    default:
 	G_warning(_("G_set_fp_type(): can only be called with FCELL_TYPE or DCELL_TYPE"));
 	return -1;
     }
-    FP_TYPE = map_type;
-    if (map_type == DCELL_TYPE)
-	FP_NBYTES = XDR_DOUBLE_NBYTES;
-    else
-	FP_NBYTES = XDR_FLOAT_NBYTES;
-
-    return 1;
 }
 
 
@@ -899,11 +858,7 @@ RASTER_MAP_TYPE G__check_fp_type(const char *name, const char *mapset)
 */
 int G_open_raster_new(const char *name, RASTER_MAP_TYPE wr_type)
 {
-    if (wr_type == CELL_TYPE)
-	return G_open_cell_new(name);
-
-    G_set_fp_type(wr_type);
-    return G_open_fp_cell_new(name);
+    return G__open_raster_new(name, OPEN_NEW_COMPRESSED, wr_type);
 }
 
 /*!
@@ -919,11 +874,7 @@ int G_open_raster_new(const char *name, RASTER_MAP_TYPE wr_type)
 */
 int G_open_raster_new_uncompressed(const char *name, RASTER_MAP_TYPE wr_type)
 {
-    if (wr_type == CELL_TYPE)
-	return G_open_cell_new_uncompressed(name);
-
-    G_set_fp_type(wr_type);
-    return G_open_fp_cell_new_uncompressed(name);
+    return G__open_raster_new(name, OPEN_NEW_UNCOMPRESSED, wr_type);
 }
 
 /*!
