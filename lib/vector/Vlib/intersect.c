@@ -1087,6 +1087,9 @@ static int find_cross(int id, int *arg)
 				    BPnts->y[j + 1], BPnts->z[j + 1], &x1,
 				    &y1, &z1, &x2, &y2, &z2, 0);
 
+    if (!IPnts)
+	IPnts = Vect_new_line_struct();
+    
     switch (ret) {
     case 0:
     case 5:
@@ -1138,6 +1141,9 @@ Vect_line_check_intersection(struct line_pnts *APoints,
     BPnts = BPoints;
 
     /* TODO: 3D, RE (representation error) threshold, GV_POINTS (line x point) */
+
+    if (!IPnts)
+	IPnts = Vect_new_line_struct();
 
     /* If one or both are point (Points->n_points == 1) */
     if (APoints->n_points == 1 && BPoints->n_points == 1) {
