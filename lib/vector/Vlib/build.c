@@ -119,8 +119,10 @@ int Vect_build_partial(struct Map_info *Map, int build)
     Map->plus.Spidx_built = 1;
 
     plus = &(Map->plus);
-    G_verbose_message(_("Building topology for vector map <%s>..."),
-		      Vect_get_name(Map));
+    if (build > GV_BUILD_NONE) {
+	G_message(_("Building topology for vector map <%s>..."),
+		  Vect_get_name(Map));
+    }
     plus->with_z = Map->head.with_z;
     plus->spidx_with_z = Map->head.with_z;
 
@@ -135,7 +137,9 @@ int Vect_build_partial(struct Map_info *Map, int build)
 	return 0;
     }
 
-    G_verbose_message(_("Topology was built"));
+    if (build > GV_BUILD_NONE) {
+	G_verbose_message(_("Topology was built"));
+    }
 
     Map->level = LEVEL_2;
     plus->mode = GV_MODE_WRITE;
@@ -145,19 +149,21 @@ int Vect_build_partial(struct Map_info *Map, int build)
 	dig_cidx_sort(plus);
     }
 
-    G_message(_("Number of nodes: %d"), plus->n_nodes);
-    G_message(_("Number of primitives: %d"), plus->n_lines);
-    G_message(_("Number of points: %d"), plus->n_plines);
-    G_message(_("Number of lines: %d"), plus->n_llines);
-    G_message(_("Number of boundaries: %d"), plus->n_blines);
-    G_message(_("Number of centroids: %d"), plus->n_clines);
+    if (build > GV_BUILD_NONE) {
+	G_message(_("Number of nodes: %d"), plus->n_nodes);
+	G_message(_("Number of primitives: %d"), plus->n_lines);
+	G_message(_("Number of points: %d"), plus->n_plines);
+	G_message(_("Number of lines: %d"), plus->n_llines);
+	G_message(_("Number of boundaries: %d"), plus->n_blines);
+	G_message(_("Number of centroids: %d"), plus->n_clines);
 
-    if (plus->n_flines > 0)
-	G_message(_("Number of faces: %d"), plus->n_flines);
-
-    if (plus->n_klines > 0)
-	G_message(_("Number of kernels: %d"), plus->n_klines);
-
+	if (plus->n_flines > 0)
+	    G_message(_("Number of faces: %d"), plus->n_flines);
+	
+	if (plus->n_klines > 0)
+	    G_message(_("Number of kernels: %d"), plus->n_klines);
+    }
+    
     if (plus->built >= GV_BUILD_AREAS) {
 	int line, nlines, area, nareas, err_boundaries, err_centr_out,
 	    err_centr_dupl, err_nocentr;
@@ -216,7 +222,7 @@ int Vect_build_partial(struct Map_info *Map, int build)
 			      err_nocentr);
 
     }
-    else {
+    else if (build > GV_BUILD_NONE) {
 	G_message(_("Number of areas: -"));
 	G_message(_("Number of isles: -"));
     }

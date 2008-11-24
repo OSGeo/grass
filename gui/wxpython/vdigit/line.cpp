@@ -865,7 +865,6 @@ struct Map_info** Digit::OpenBackgroundVectorMap(const char *bgmap)
 int Digit::TypeConvLines()
 {
     int ret;
-    int npoints, ncentroids, nboundaries;
     int changeset, nlines;
 
     if (!display->mapInfo) {
@@ -878,9 +877,7 @@ int Digit::TypeConvLines()
     /* register changeset */
     changeset = AddActionsBefore();
     
-    ret = Vedit_chtype_lines (display->mapInfo, display->selected.values,
-			       &npoints, &ncentroids,
-			       &nlines, &nboundaries);
+    ret = Vedit_chtype_lines (display->mapInfo, display->selected.values);
 
     if(ret > 0) {
 	AddActionsAfter(changeset, nlines);
