@@ -246,7 +246,7 @@ def GetVectorNumberOfLayers(vector):
                'option=report']
     
     layers = []
-    for line in gcmd.Command(cmdlist).ReadStdOutput():
+    for line in gcmd.Command(cmdlist, rerr=None).ReadStdOutput():
         if not 'Layer' in line:
             continue
         
