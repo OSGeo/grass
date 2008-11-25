@@ -236,6 +236,9 @@
 /* define if regex.h exists */
 #undef HAVE_REGEX_H
 
+/* define if pthread.h exists */
+#undef HAVE_PTHREAD_H
+
 /*
  * configuration information solely dependent on the above
  * nothing below this point should need changing

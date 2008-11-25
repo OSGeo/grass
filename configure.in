@@ -195,6 +195,7 @@ LOC_ARG_WITH(nls, NLS, no)
 LOC_ARG_WITH(readline, Readline, no)
 LOC_ARG_WITH(opendwg, openDWG, no)
 LOC_ARG_WITH(regex, regex)
+LOC_ARG_WITH(pthread, POSIX threads, no)
 AC_ARG_WITH(python,
 [  --with-python[=path/python-config] enable support for Python SWIG bindings (python-config with path, \
 e.g. '--with-python=/usr/bin/python2.5-config', default: no)],, with_python="no")
@@ -276,6 +277,9 @@ LOC_ARG_WITH_LIB(opendwg, openDWG)
 
 LOC_ARG_WITH_INC(regex, regex)
 LOC_ARG_WITH_LIB(regex, regex)
+
+LOC_ARG_WITH_INC(pthread, POSIX threads)
+LOC_ARG_WITH_LIB(pthread, POSIX threads)
 
 # Put this early on so CPPFLAGS and LDFLAGS have any additional dirs
 
@@ -1517,6 +1521,39 @@ AC_SUBST(USE_OPENDWG)
 
 # Done checking OPENDWG
 
+# Enable pthread option
+
+LOC_CHECK_USE(pthread,POSIX threads,USE_PTHREAD)
+
+PTHREADINCPATH=
+PTHREADLIBPATH=
+PTHREADLIB=
+
+if test -n "$USE_PTHREAD"; then
+
+# With pthread includes directory
+
+LOC_CHECK_INC_PATH(pthread,POSIX threads,PTHREADINCPATH)
+
+LOC_CHECK_INCLUDES(pthread.h,POSIX threads,$PTHREADINCPATH)
+
+# With pthread library directory
+
+LOC_CHECK_LIB_PATH(pthread,POSIX threads,PTHREADLIBPATH)
+
+LOC_CHECK_FUNC(pthread_create,POSIX threads functions,PTHREADLIB,,,,,[
+LOC_CHECK_LIBS(pthread,pthread_create,POSIX threads,$PTHREADLIBPATH,PTHREADLIB,,,)
+])
+
+fi # $USE_PTHREAD
+
+AC_SUBST(PTHREADINCPATH)
+AC_SUBST(PTHREADLIBPATH)
+AC_SUBST(PTHREADLIB)
+AC_SUBST(USE_PTHREAD)
+
+# Done checking pthread
+
 # Enable LFS (from cdr-tools)
 dnl Check for large file support
 dnl Do this last to make sure that no large file definition
@@ -1719,4 +1756,6 @@ LOC_MSG_USE(Tcl/Tk support,USE_TCLTK)
 LOC_MSG_USE(wxWidgets support,USE_WXWIDGETS)
 LOC_MSG_USE(TIFF support,USE_TIFF)
 LOC_MSG_USE(X11 support,USE_X11)
+LOC_MSG_USE(Regex support,USE_REGEX)
+LOC_MSG_USE(POSIX thread support,USE_PTHREAD)
 LOC_MSG()
