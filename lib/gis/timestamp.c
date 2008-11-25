@@ -247,10 +247,10 @@ int G_scan_timestamp(struct TimeStamp *ts, const char *buf)
  *  \param dt1    first DateTime struct to be filled
  *  \param dt2    second DateTime struct to be filled
  *  \param count  return code
- *  \return int   always 0
+ *  \return
  */
-int G_get_timestamps(const struct TimeStamp *ts,
-		     DateTime * dt1, DateTime * dt2, int *count)
+void G_get_timestamps(const struct TimeStamp *ts,
+		      DateTime * dt1, DateTime * dt2, int *count)
 {
     *count = 0;
     if (ts->count > 0) {
@@ -261,8 +261,6 @@ int G_get_timestamps(const struct TimeStamp *ts,
 	datetime_copy(dt2, &ts->dt[1]);
 	*count = 2;
     }
-
-    return 0;
 }
 
 

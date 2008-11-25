@@ -25,17 +25,15 @@
  * using <i>G_allocate_cell_buf.</i>
  *
  * \param[in] buf
- * \return always returns 0
+ * \return
  */
 
-int G_zero_cell_buf(CELL * buf)
+void G_zero_cell_buf(CELL * buf)
 {
     int i = G_window_cols();
 
     while (i--)
 	*buf++ = 0;
-
-    return 0;
 }
 
 
@@ -48,10 +46,10 @@ int G_zero_cell_buf(CELL * buf)
  *
  *  \param[in,out] rast
  *  \param[in] data_type RASTER_MAP_TYPE
- *  \return always returns 0
+ *  \return
  */
 
-int G_zero_raster_buf(void *rast, RASTER_MAP_TYPE data_type)
+void G_zero_raster_buf(void *rast, RASTER_MAP_TYPE data_type)
 {
     int i;
     unsigned char *ptr;
@@ -62,6 +60,4 @@ int G_zero_raster_buf(void *rast, RASTER_MAP_TYPE data_type)
 
     while (i--)
 	*ptr++ = 0;
-
-    return 0;
 }

@@ -82,10 +82,10 @@ int G_insert_commas(char *buf)
  *  - 1234       stays   1234
  *
  * \param[in,out] buf string
- * \return always returns 0
+ * \return
  */
 
-int G_remove_commas(char *buf)
+void G_remove_commas(char *buf)
 {
     char *b;
 
@@ -94,6 +94,4 @@ int G_remove_commas(char *buf)
 	    *buf++ = *b;
 
     *buf = 0;
-
-    return 0;
 }

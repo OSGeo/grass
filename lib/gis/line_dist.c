@@ -5,13 +5,11 @@
 #define TOLERANCE 1.0e-10
 static double tolerance = TOLERANCE;
 
-int G_set_distance_to_line_tolerance(double t)
+void G_set_distance_to_line_tolerance(double t)
 {
     if (t <= 0.0)
 	t = TOLERANCE;
     tolerance = t;
-
-    return 0;
 }
 
 double G_distance2_point_to_line(double x, double y,	/* point */

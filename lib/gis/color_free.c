@@ -11,15 +11,13 @@
  * well as after <i>G_init_colors.</i>
  *
  *  \param colors
- *  \return int
+ *  \return
  */
 
-int G_free_colors(struct Colors *colors)
+void G_free_colors(struct Colors *colors)
 {
     G__color_reset(colors);
     G_init_colors(colors);
-
-    return 0;
 }
 
 /*******************************************
@@ -27,7 +25,7 @@ int G_free_colors(struct Colors *colors)
  * library
  *******************************************/
 
-int G__color_free_rules(struct _Color_Info_ *cp)
+void G__color_free_rules(struct _Color_Info_ *cp)
 {
     struct _Color_Rule_ *rule, *next;
 
@@ -36,11 +34,9 @@ int G__color_free_rules(struct _Color_Info_ *cp)
 	G_free(rule);
     }
     cp->rules = NULL;
-
-    return 0;
 }
 
-int G__color_free_lookup(struct _Color_Info_ *cp)
+void G__color_free_lookup(struct _Color_Info_ *cp)
 {
     if (cp->lookup.active) {
 	G_free(cp->lookup.red);
@@ -49,11 +45,9 @@ int G__color_free_lookup(struct _Color_Info_ *cp)
 	G_free(cp->lookup.set);
 	cp->lookup.active = 0;
     }
-
-    return 0;
 }
 
-int G__color_free_fp_lookup(struct _Color_Info_ *cp)
+void G__color_free_fp_lookup(struct _Color_Info_ *cp)
 {
     if (cp->fp_lookup.active) {
 	G_free(cp->fp_lookup.vals);
@@ -61,11 +55,9 @@ int G__color_free_fp_lookup(struct _Color_Info_ *cp)
 	cp->fp_lookup.active = 0;
 	cp->fp_lookup.nalloc = 0;
     }
-
-    return 0;
 }
 
-int G__color_reset(struct Colors *colors)
+void G__color_reset(struct Colors *colors)
 {
     G__color_free_lookup(&colors->fixed);
     G__color_free_lookup(&colors->modular);
@@ -73,6 +65,4 @@ int G__color_reset(struct Colors *colors)
     G__color_free_rules(&colors->modular);
     colors->version = 0;
     /* this routine should NOT init the colors */
-
-    return 0;
 }

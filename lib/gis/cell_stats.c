@@ -9,7 +9,7 @@ static const int NCATS = 1 << SHIFT;
 #define NODE struct Cell_stats_node
 
 static int next_node(struct Cell_stats *);
-static int init_node(NODE *, int, int);
+static void init_node(NODE *, int, int);
 
 
 /*!
@@ -28,17 +28,15 @@ static int init_node(NODE *, int, int);
  *
  * Set the count for NULL-values to zero.
  *
- *  \return int
+ *  \return
  */
 
-int G_init_cell_stats(struct Cell_stats *s)
+void G_init_cell_stats(struct Cell_stats *s)
 {
     s->N = 0;
     s->tlen = INCR;
     s->node = (NODE *) G_malloc(s->tlen * sizeof(NODE));
     s->null_data_count = 0;
-
-    return 1;
 }
 
 
@@ -161,7 +159,7 @@ int G_update_cell_stats(const CELL * cell, int n, struct Cell_stats *s)
     return 0;
 }
 
-static int init_node(NODE * node, int idx, int offset)
+static void init_node(NODE * node, int idx, int offset)
 {
     long *count;
     int i;
@@ -172,8 +170,6 @@ static int init_node(NODE * node, int idx, int offset)
     node->idx = idx;
     node->count[offset] = 1;
     node->left = 0;
-
-    return 0;
 }
 
 
@@ -390,13 +386,12 @@ int G_next_cell_stat(CELL * cat, long *count, struct Cell_stats *s)
  *
  *  \param count
  *  \param s
- *  \return int
+ *  \return
  */
 
-int G_get_stats_for_null_value(long *count, const struct Cell_stats *s)
+void G_get_stats_for_null_value(long *count, const struct Cell_stats *s)
 {
     *count = s->null_data_count;
-    return 1;
 }
 
 
@@ -407,16 +402,14 @@ int G_get_stats_for_null_value(long *count, const struct Cell_stats *s)
  * called any time after calling<i>G_init_cell_stats.</i>
  *
  *  \param s
- *  \return int
+ *  \return
  */
 
-int G_free_cell_stats(struct Cell_stats *s)
+void G_free_cell_stats(struct Cell_stats *s)
 {
     int i;
 
     for (i = 1; i <= s->N; i++)
 	G_free(s->node[i].count);
     G_free(s->node);
-
-    return 0;
 }

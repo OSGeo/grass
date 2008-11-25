@@ -41,12 +41,12 @@ static int gisinit(void);
  * \return exit() is called on error
  */
 
-int G__gisinit(const char *version, const char *pgm)
+void G__gisinit(const char *version, const char *pgm)
 {
     char *mapset;
 
     if (initialized)
-	return 0;
+	return;
 
     G_set_program_name(pgm);
 
@@ -67,8 +67,6 @@ int G__gisinit(const char *version, const char *pgm)
     }
 
     gisinit();
-
-    return 0;
 }
 
 
@@ -77,34 +75,31 @@ int G__gisinit(const char *version, const char *pgm)
  *
  * Initializes GIS engine, but does not check for a valid mapset.
  *
- * \return always returns 0 on success
+ * \return
  */
 
-int G__no_gisinit(const char *version)
+void G__no_gisinit(const char *version)
 {
     if (initialized)
-	return 0;
+	return;
 
     if (strcmp(version, GIS_H_VERSION) != 0)
 	G_fatal_error(_("Incompatible library version for module"));
 
     gisinit();
-
-    return 0;
 }
 
 
 /**
  * \brief Checks to see if GIS engine is initialized.
  *
- * \return 1 on success
- * \return exit() is called on error
+ * \return
  */
 
-int G__check_gisinit(void)
+void G__check_gisinit(void)
 {
     if (initialized)
-	return 1;
+	return;
     G_warning(_("System not initialized. Programmer forgot to call G_gisinit()."));
     G_sleep(3);
     exit(EXIT_FAILURE);

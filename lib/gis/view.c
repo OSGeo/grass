@@ -42,14 +42,12 @@ static int Suppress_warn = 0;
  * the window when the view was saved overlaps the current window.
  *
  * \param[in] b
- * \return always returns 0
+ * \return
  */
 
-int G_3dview_warning(int b)
+void G_3dview_warning(int b)
 {
     Suppress_warn = b ? 0 : 1;
-
-    return 0;
 }
 
 

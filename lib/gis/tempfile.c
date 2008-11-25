@@ -84,10 +84,10 @@ char *G__tempfile(int pid)
  * \brief Populates <b>element</b> with a path string.
  *
  * \param[in,out] element
- * \return always returns 0
+ * \return
  */
 
-int G__temp_element(char *element)
+void G__temp_element(char *element)
 {
     const char *machine;
 
@@ -98,6 +98,4 @@ int G__temp_element(char *element)
 	strcat(element, machine);
     }
     G__make_mapset_element(element);
-
-    return 0;
 }

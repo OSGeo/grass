@@ -24,7 +24,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-static int EmbedGivenNulls(void *, char *, RASTER_MAP_TYPE, int);
+static void EmbedGivenNulls(void *, char *, RASTER_MAP_TYPE, int);
 
 /****************************************************************************
 * int EmbedGivenNulls (void *cell, char *nulls, RASTER_MAP_TYPE map_type,
@@ -37,7 +37,7 @@ static int EmbedGivenNulls(void *, char *, RASTER_MAP_TYPE, int);
 *   	    	ncols	    =>	??
 * RETURN VAL:	??
 *****************************************************************************/
-static int EmbedGivenNulls(void *cell, char *nulls, RASTER_MAP_TYPE map_type,
+static void EmbedGivenNulls(void *cell, char *nulls, RASTER_MAP_TYPE map_type,
 			   int ncols)
 {
     CELL *c;
@@ -69,8 +69,6 @@ static int EmbedGivenNulls(void *cell, char *nulls, RASTER_MAP_TYPE map_type,
 	    }
 	}
     }
-
-    return 1;
 }
 
 /*========================== Library Functions =============================*/
@@ -96,8 +94,6 @@ void G__set_null_value(void *rast, int numVals, int null_is_zero,
     }
 
     G_set_null_value(rast, numVals, data_type);
-
-    return;
 }
 
 /****************************************************************************
@@ -127,8 +123,6 @@ void G_set_null_value(void *buf, int numVals, RASTER_MAP_TYPE data_type)
     default:
 	G_warning(_("G_set_null_value: wrong data type!"));
     }
-
-    return;
 }
 
 /****************************************************************************
@@ -344,13 +338,13 @@ int G_is_d_null_value(const DCELL * dcellVal)
  *  \param flags
  *  \param count
  *  \param data_type
- *  \return int
+ *  \return
  */
 
-int G_insert_null_values(void *rast, char *null_row, int ncols,
-			 RASTER_MAP_TYPE data_type)
+void G_insert_null_values(void *rast, char *null_row, int ncols,
+			  RASTER_MAP_TYPE data_type)
 {
-    return (EmbedGivenNulls(rast, null_row, data_type, ncols));
+    EmbedGivenNulls(rast, null_row, data_type, ncols);
 }
 
 /****************************************************************************
@@ -373,12 +367,12 @@ int G_insert_null_values(void *rast, char *null_row, int ncols,
  *  \param cell
  *  \param flags
  *  \param count
- *  \return int
+ *  \return
  */
 
-int G_insert_c_null_values(CELL * cellVal, char *null_row, int ncols)
+void G_insert_c_null_values(CELL * cellVal, char *null_row, int ncols)
 {
-    return (EmbedGivenNulls((void *)cellVal, null_row, CELL_TYPE, ncols));
+    EmbedGivenNulls((void *)cellVal, null_row, CELL_TYPE, ncols);
 }
 
 /****************************************************************************
@@ -401,12 +395,12 @@ int G_insert_c_null_values(CELL * cellVal, char *null_row, int ncols)
  *  \param fcell
  *  \param flags
  *  \param count
- *  \return int
+ *  \return
  */
 
-int G_insert_f_null_values(FCELL * fcellVal, char *null_row, int ncols)
+void G_insert_f_null_values(FCELL * fcellVal, char *null_row, int ncols)
 {
-    return (EmbedGivenNulls((void *)fcellVal, null_row, FCELL_TYPE, ncols));
+    EmbedGivenNulls((void *)fcellVal, null_row, FCELL_TYPE, ncols);
 }
 
 /****************************************************************************
@@ -429,12 +423,12 @@ int G_insert_f_null_values(FCELL * fcellVal, char *null_row, int ncols)
  *  \param dcell
  *  \param flags
  *  \param count
- *  \return int
+ *  \return
  */
 
-int G_insert_d_null_values(DCELL * dcellVal, char *null_row, int ncols)
+void G_insert_d_null_values(DCELL * dcellVal, char *null_row, int ncols)
 {
-    return (EmbedGivenNulls((void *)dcellVal, null_row, DCELL_TYPE, ncols));
+    EmbedGivenNulls((void *)dcellVal, null_row, DCELL_TYPE, ncols);
 }
 
 /****************************************************************************
@@ -531,7 +525,7 @@ int G__set_flags_from_01_random(const char *zero_ones, unsigned char *flags,
 *   	    	n   	    =>	??
 * RETURN VAL:	??
 *****************************************************************************/
-int G__convert_01_flags(const char *zero_ones, unsigned char *flags, int n)
+void G__convert_01_flags(const char *zero_ones, unsigned char *flags, int n)
 {
     unsigned char *v;
     int count;
@@ -557,8 +551,6 @@ int G__convert_01_flags(const char *zero_ones, unsigned char *flags, int n)
 
 	v++;
     }
-
-    return 0;
 }
 
 /****************************************************************************
@@ -570,7 +562,7 @@ int G__convert_01_flags(const char *zero_ones, unsigned char *flags, int n)
 *   	    	n   	    =>	??
 * RETURN VAL:	??
 *****************************************************************************/
-int G__convert_flags_01(char *zero_ones, const unsigned char *flags, int n)
+void G__convert_flags_01(char *zero_ones, const unsigned char *flags, int n)
 {
     const unsigned char *v;
     int count;
@@ -593,8 +585,6 @@ int G__convert_flags_01(char *zero_ones, const unsigned char *flags, int n)
 
 	v++;
     }
-
-    return 0;
 }
 
 /****************************************************************************
@@ -605,7 +595,7 @@ int G__convert_flags_01(char *zero_ones, const unsigned char *flags, int n)
 *   	    	cols	=>  ??
 * RETURN VAL:	??
 *****************************************************************************/
-int G__init_null_bits(unsigned char *flags, int cols)
+void G__init_null_bits(unsigned char *flags, int cols)
 {
     unsigned char *v;
     int size;
@@ -625,6 +615,4 @@ int G__init_null_bits(unsigned char *flags, int cols)
 
 	v++;
     }
-
-    return 0;
 }

@@ -17,16 +17,16 @@
 #include <math.h>
 #include <grass/gis.h>
 
-static int fastline(double, double, double, double);
-static int slowline(double, double, double, double);
-static int plot_line(double, double, double, double, int (*)());
+static void fastline(double, double, double, double);
+static void slowline(double, double, double, double);
+static void plot_line(double, double, double, double, void (*)());
 static double nearest(double, double);
 static int edge(double, double, double, double);
 static int edge_point(double, int);
 
 static int edge_order(const void *, const void *);
-static int row_solid_fill(int, double, double);
-static int row_dotted_fill(int, double, double);
+static void row_solid_fill(int, double, double);
+static void row_dotted_fill(int, double, double);
 static int ifloor(double);
 static int iceil(double);
 
@@ -47,7 +47,7 @@ static struct state {
     int np;
     int npalloc;
 
-    int (*row_fill)(int, double, double);
+    void (*row_fill)(int, double, double);
     int (*move)(int, int);
     int (*cont)(int, int);
 } state;
@@ -102,11 +102,11 @@ static struct state *st = &state;
  * to x,y. Cont(~) is responsible for clipping
  *
  *  \param ~
- *  \return int
+ *  \return
  */
 
-int G_setup_plot(double t, double b, double l, double r,
-		 int (*Move) (int, int), int (*Cont) (int, int))
+void G_setup_plot(double t, double b, double l, double r,
+		  int (*Move) (int, int), int (*Cont) (int, int))
 {
     G_get_set_window(&st->window);
 
@@ -129,8 +129,6 @@ int G_setup_plot(double t, double b, double l, double r,
 
     st->move = Move;
     st->cont = Cont;
-
-    return 0;
 }
 
 /*!
@@ -142,9 +140,9 @@ int G_setup_plot(double t, double b, double l, double r,
  * row_solid_fill is used.
  *
  *  \param int
- *  \return int
+ *  \return
  */
-int G_setup_fill(int gap)
+void G_setup_fill(int gap)
 {
     if (gap > 0) {
 	st->row_fill = row_dotted_fill;
@@ -152,8 +150,6 @@ int G_setup_fill(int gap)
     }
     else
 	st->row_fill = row_solid_fill;
-
-    return 0;
 }
 
 #define X(e) (st->left + st->xconv * ((e) - st->window.west))
@@ -173,15 +169,13 @@ int G_setup_fill(int gap)
  *  \param north
  *  \param x
  *  \param y
- *  \return int
+ *  \return
  */
 
-int G_plot_where_xy(double east, double north, int *x, int *y)
+void G_plot_where_xy(double east, double north, int *x, int *y)
 {
     *x = ifloor(X(G_adjust_easting(east, &st->window)) + 0.5);
     *y = ifloor(Y(north) + 0.5);
-
-    return 0;
 }
 
 
@@ -195,26 +189,22 @@ int G_plot_where_xy(double east, double north, int *x, int *y)
  *  \param y
  *  \param east
  *  \param north
- *  \return int
+ *  \return
  */
 
-int G_plot_where_en(int x, int y, double *east, double *north)
+void G_plot_where_en(int x, int y, double *east, double *north)
 {
     *east = G_adjust_easting(EAST(x), &st->window);
     *north = NORTH(y);
-
-    return 0;
 }
 
-int G_plot_point(double east, double north)
+void G_plot_point(double east, double north)
 {
     int x, y;
 
     G_plot_where_xy(east, north, &x, &y);
     st->move(x, y);
     st->cont(x, y);
-
-    return 0;
 }
 
 /*
@@ -235,29 +225,27 @@ int G_plot_point(double east, double north)
  *  \param north1
  *  \param east2
  *  \param north2
- *  \return int
+ *  \return
  */
 
-int G_plot_line(double east1, double north1, double east2, double north2)
+void G_plot_line(double east1, double north1, double east2, double north2)
 {
-    return plot_line(east1, north1, east2, north2, fastline);
+    plot_line(east1, north1, east2, north2, fastline);
 }
 
-int G_plot_line2(double east1, double north1, double east2, double north2)
+void G_plot_line2(double east1, double north1, double east2, double north2)
 {
-    return plot_line(east1, north1, east2, north2, slowline);
+    plot_line(east1, north1, east2, north2, slowline);
 }
 
 /* fastline converts double rows/cols to ints then plots
  * this is ok for graphics, but not the best for vector to raster
  */
 
-static int fastline(double x1, double y1, double x2, double y2)
+static void fastline(double x1, double y1, double x2, double y2)
 {
     st->move(ifloor(x1 + 0.5), ifloor(y1 + 0.5));
     st->cont(ifloor(x2 + 0.5), ifloor(y2 + 0.5));
-
-    return 0;
 }
 
 /* NOTE (shapiro): 
@@ -266,7 +254,7 @@ static int fastline(double x1, double y1, double x2, double y2)
  *   be adjusted for this: left=-0.5; right = window.cols-0.5;
  */
 
-static int slowline(double x1, double y1, double x2, double y2)
+static void slowline(double x1, double y1, double x2, double y2)
 {
     double dx, dy;
     double m, b;
@@ -320,12 +308,10 @@ static int slowline(double x1, double y1, double x2, double y2)
 	    }
 	}
     }
-
-    return 0;
 }
 
-static int plot_line(double east1, double north1, double east2, double north2,
-		     int (*line) (double, double, double, double))
+static void plot_line(double east1, double north1, double east2, double north2,
+		      void (*line)(double, double, double, double))
 {
     double x1, x2, y1, y2;
 
@@ -371,8 +357,6 @@ static int plot_line(double east1, double north1, double east2, double north2,
 	x2 = X(east2);
 	line(x1, y1, x2, y2);
     }
-
-    return 0;
 }
 
 /*
@@ -750,7 +734,7 @@ static int edge_order(const void *aa, const void *bb)
     return (0);
 }
 
-static int row_solid_fill(int y, double x1, double x2)
+static void row_solid_fill(int y, double x1, double x2)
 {
     int i1, i2;
 
@@ -760,16 +744,14 @@ static int row_solid_fill(int y, double x1, double x2)
 	st->move(i1, y);
 	st->cont(i2, y);
     }
-
-    return 0;
 }
 
-static int row_dotted_fill(int y, double x1, double x2)
+static void row_dotted_fill(int y, double x1, double x2)
 {
     int i1, i2, i;
 
     if (y != iceil(y / st->dotted_fill_gap) * st->dotted_fill_gap)
-	return 0;
+	return;
 
     i1 = iceil(x1 / st->dotted_fill_gap) * st->dotted_fill_gap;
     i2 = ifloor(x2);
@@ -779,8 +761,6 @@ static int row_dotted_fill(int y, double x1, double x2)
 	    st->cont(i, y);
 	}
     }
-
-    return 0;
 }
 
 static int ifloor(double x)
@@ -821,7 +801,7 @@ static int iceil(double x)
  *  \return int
  */
 
-int G_plot_fx(double (*f) (double), double east1, double east2)
+void G_plot_fx(double (*f) (double), double east1, double east2)
 {
     double east, north, north1;
     double incr;
@@ -848,7 +828,6 @@ int G_plot_fx(double (*f) (double), double east1, double east2)
 	    east = east1;
 	}
     }
-    G_plot_line(east, north, east2, f(east2));
 
-    return 0;
+    G_plot_line(east, north, east2, f(east2));
 }

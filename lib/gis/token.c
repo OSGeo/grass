@@ -92,14 +92,12 @@ int G_number_of_tokens(char **tokens)
  * tokens to release memory.
  *
  * \param[in,out] tokens
- * \return always returns 0
+ * \return
  */
 
-int G_free_tokens(char **tokens)
+void G_free_tokens(char **tokens)
 {
     if (tokens[0] != NULL)
 	G_free(tokens[0]);
     G_free(tokens);
-
-    return (0);
 }

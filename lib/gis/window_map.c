@@ -30,10 +30,10 @@
  * any way.
  *
  * \param[in] fd file descriptor
- * \return always returns 0
+ * \return
  */
 
-int G__create_window_mapping(int fd)
+void G__create_window_mapping(int fd)
 {
     struct fileinfo *fcb = &G__.fileinfo[fd];
     COLUMN_MAPPING *col;
@@ -45,7 +45,7 @@ int G__create_window_mapping(int fd)
     G__init_window();
 
     if (fcb->open_mode >= 0 && fcb->open_mode != OPEN_OLD)	/* open for write? */
-	return 0;
+	return;
     if (fcb->open_mode == OPEN_OLD)	/* already open ? */
 	G_free(fcb->col_map);
 
@@ -109,8 +109,6 @@ int G__create_window_mapping(int fd)
     fcb->C2 =
 	(fcb->cellhd.north - G__.window.north +
 	 G__.window.ns_res / 2.0) / fcb->cellhd.ns_res;
-
-    return 0;
 }
 
 
@@ -314,17 +312,15 @@ int G_window_cols(void)
 /**
  * \brief Initialize window.
  *
- * \return always returns 0
+ * \return
  */
 
-int G__init_window(void)
+void G__init_window(void)
 {
     if (!G__.window_set) {
 	G__.window_set = 1;
 	G_get_window(&G__.window);
     }
-
-    return 0;
 }
 
 

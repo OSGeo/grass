@@ -25,10 +25,9 @@
  * \param[in]  b source (from)
  * \param[in]  n number of bytes to copy
  *
- * \return always returns 0
+ * \return
  */
-int G_copy(void *a, const void *b, int n)
+void G_copy(void *a, const void *b, int n)
 {
     memcpy(a, b, n);
-    return 0;
 }

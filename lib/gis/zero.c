@@ -23,12 +23,10 @@
  *
  * \param[in,out] buf
  * \param[in] i number of bytes to be zeroed
- * \return always returns 0
+ * \return
  */
 
-int G_zero(void *buf, int i)
+void G_zero(void *buf, int i)
 {
     memset(buf, 0, i);
-
-    return 0;
 }

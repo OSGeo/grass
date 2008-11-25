@@ -27,10 +27,10 @@
  *
  * \param[in] east1 east (x) coordinate of first point
  * \param[in] east2 east (x) coordinate of second point
- * \return always returns 0
+ * \return
  */
 
-int G_shortest_way(double *east1, double *east2)
+void G_shortest_way(double *east1, double *east2)
 {
     if (G_projection() == PROJECTION_LL) {
 	if (*east1 > *east2)
@@ -40,6 +40,4 @@ int G_shortest_way(double *east1, double *east2)
 	    while ((*east2 - *east1) > 180)
 		*east1 += 360;
     }
-
-    return 0;
 }

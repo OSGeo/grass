@@ -214,5 +214,6 @@ int G3d_range_write(G3D_Map * map)
 
 int G3d_range_init(G3D_Map * map)
 {
-    return G_init_fp_range(&(map->range));
+    G_init_fp_range(&(map->range));
+    return 0;
 }

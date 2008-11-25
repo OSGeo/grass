@@ -123,7 +123,7 @@ static struct state {
 
 static struct state *st = &state;
 
-static int show_options(int, const char *);
+static void show_options(int, const char *);
 static int show(const char *, int);
 static int set_flag(int);
 static int contains(const char *, int);
@@ -135,10 +135,10 @@ static int check_int(const char *, const char **);
 static int check_double(const char *, const char **);
 static int check_string(const char *, const char **, int *);
 static int check_required(void);
-static int split_opts(void);
+static void split_opts(void);
 static int check_multiple_opts(void);
 static int check_overwrite(void);
-static int split_gisprompt(const char *, char *, char *, char *);
+static void split_gisprompt(const char *, char *, char *, char *);
 
 static void G_gui(void);
 static void G_tcltk(void);
@@ -1040,10 +1040,10 @@ static int uses_new_gisprompt(void)
  * the standard usage message and print additional information about how 
  * the two options work together.
  *
- * \return always returns 0
+ * \return
  */
 
-int G_usage(void)
+void G_usage(void)
 {
     struct Option *opt;
     struct Flag *flag;
@@ -1212,8 +1212,6 @@ int G_usage(void)
 	    opt = opt->next_opt;
 	}
     }
-
-    return 0;
 }
 
 
@@ -2049,7 +2047,7 @@ static void G_tcltk(void)
  *
  **************************************************************************/
 
-static int show_options(int maxlen, const char *str)
+static void show_options(int maxlen, const char *str)
 {
     char *buff = G_store(str);
     char *p1, *p2;
@@ -2075,8 +2073,6 @@ static int show_options(int maxlen, const char *str)
     fprintf(stderr, "%s\n", p1);
 
     G_free(buff);
-
-    return 0;
 }
 
 static int show(const char *item, int len)
@@ -2411,7 +2407,7 @@ static int check_required(void)
     return (err);
 }
 
-static int split_opts(void)
+static void split_opts(void)
 {
     struct Option *opt;
     char *ptr1;
@@ -2422,7 +2418,7 @@ static int split_opts(void)
 
 
     if (!st->n_opts)
-	return 0;
+	return;
 
     opt = &st->first_option;
     while (opt != NULL) {
@@ -2467,8 +2463,6 @@ static int split_opts(void)
 	}
 	opt = opt->next_opt;
     }
-
-    return 0;
 }
 
 static int check_multiple_opts(void)
@@ -2579,8 +2573,8 @@ static int check_overwrite(void)
     return (error);
 }
 
-static int split_gisprompt(const char *gisprompt, char *age, char *element,
-			   char *desc)
+static void split_gisprompt(const char *gisprompt, char *age, char *element,
+			    char *desc)
 {
     const char *ptr1;
     char *ptr2;
@@ -2605,8 +2599,6 @@ static int split_gisprompt(const char *gisprompt, char *age, char *element,
 	*ptr2 = *ptr1;
     }
     *ptr2 = '\0';
-
-    return 0;
 }
 
 /**

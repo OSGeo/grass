@@ -269,13 +269,13 @@ double *getlevels(struct Option *levels,
 
 	dstep = atof(step->answer);
 	/* fix if step < 1, Roger Bivand 1/2001: */
-	dmax = (max->answer) ? atof(max->answer) : dstep == 0 ?
-	    G_fatal_error(_("This step value is not allowed.")) : zmax -
-	    fmod(zmax, dstep);
-	dmin =
-	    (min->answer) ? atof(min->answer) : dstep ==
-	    0 ? G_fatal_error(_("This step value is not allowed.")) :
-	    fmod(zmin, dstep) ? zmin - fmod(zmin, dstep) + dstep : zmin;
+	dmax = (max->answer) ? atof(max->answer) :
+	    dstep == 0 ? (G_fatal_error(_("This step value is not allowed.")), 0) :
+	    zmax - fmod(zmax, dstep);
+	dmin = (min->answer) ? atof(min->answer) :
+	    dstep == 0 ? (G_fatal_error(_("This step value is not allowed.")), 0) :
+	    fmod(zmin, dstep) ? zmin - fmod(zmin, dstep) + dstep :
+	    zmin;
 
 	while (dmin < zmin) {
 	    dmin += dstep;

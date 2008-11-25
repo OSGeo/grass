@@ -325,7 +325,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-static int get_cond(char **, char *, DCELL);
+static void get_cond(char **, char *, DCELL);
 static int get_fmt(char **, char *, int *);
 static int cmp(const void *, const void *);
 
@@ -725,16 +725,15 @@ char *G_get_raster_cat(void *rast,
  * used and which weren't.
  *
  *  \param pcats
- *  \return int
+ *  \return
  */
 
-int G_unmark_raster_cats(struct Categories *pcats)
+void G_unmark_raster_cats(struct Categories *pcats)
 {				/* structure to hold category info */
     int i;
 
     for (i = 0; i < pcats->ncats; i++)
 	pcats->marks[i] = 0;
-    return 0;
 }
 
 
@@ -749,14 +748,13 @@ int G_unmark_raster_cats(struct Categories *pcats)
  *  \param rast_row
  *  \param ncols
  *  \param pcats
- *  \return int
+ *  \return
  */
 
-int G_mark_c_raster_cats(const CELL * rast_row,	/* raster row to update stats */
-			 int ncols, struct Categories *pcats)
+void G_mark_c_raster_cats(const CELL * rast_row,	/* raster row to update stats */
+			  int ncols, struct Categories *pcats)
 {				/* structure to hold category info */
     G_mark_raster_cats(rast_row, ncols, pcats, CELL_TYPE);
-    return 0;
 }
 
 
@@ -771,14 +769,13 @@ int G_mark_c_raster_cats(const CELL * rast_row,	/* raster row to update stats */
  *  \param rast_row
  *  \param ncols
  *  \param pcats
- *  \return int
+ *  \return 
  */
 
-int G_mark_f_raster_cats(const FCELL * rast_row,	/* raster row to update stats */
+void G_mark_f_raster_cats(const FCELL * rast_row,	/* raster row to update stats */
 			 int ncols, struct Categories *pcats)
 {				/* structure to hold category info */
     G_mark_raster_cats(rast_row, ncols, pcats, FCELL_TYPE);
-    return 0;
 }
 
 
@@ -793,14 +790,13 @@ int G_mark_f_raster_cats(const FCELL * rast_row,	/* raster row to update stats *
  *  \param rast_row
  *  \param ncols
  *  \param pcats
- *  \return int
+ *  \return 
  */
 
-int G_mark_d_raster_cats(const DCELL * rast_row,	/* raster row to update stats */
-			 int ncols, struct Categories *pcats)
+void G_mark_d_raster_cats(const DCELL * rast_row,	/* raster row to update stats */
+			  int ncols, struct Categories *pcats)
 {				/* structure to hold category info */
     G_mark_raster_cats(rast_row, ncols, pcats, DCELL_TYPE);
-    return 0;
 }
 
 
@@ -848,13 +844,12 @@ int G_mark_raster_cats(const void *rast_row,	/* raster row to update stats */
  * cat label.
  *
  *  \param pcats
- *  \return int
+ *  \return
  */
 
-int G_rewind_raster_cats(struct Categories *pcats)
+void G_rewind_raster_cats(struct Categories *pcats)
 {
     pcats->last_marked_rule = -1;
-    return 0;
 }
 
 char *G_get_next_marked_d_raster_cat(struct Categories *pcats,	/* structure to hold category info */
@@ -955,7 +950,7 @@ static int get_fmt(char **f, char *fmt, int *i)
     return 1;
 }
 
-static int get_cond(char **f, char *value, DCELL val)
+static void get_cond(char **f, char *value, DCELL val)
 {
     char *ff;
 
@@ -981,8 +976,6 @@ static int get_cond(char **f, char *value, DCELL val)
     }
     *value = 0;
     *f = ff;
-
-    return 0;
 }
 
 
@@ -1406,14 +1399,12 @@ char *G_get_ith_raster_cat(const struct Categories *pcats, int i, void *rast1,
  *  \param n
  *  \param title
  *  \param cats
- *  \return int
  */
 
-int G_init_cats(CELL num, const char *title, struct Categories *pcats)
+void G_init_cats(CELL num, const char *title, struct Categories *pcats)
 {
     G_init_raster_cats(title, pcats);
     pcats->num = num;
-    return 0;
 }
 
 
@@ -1426,10 +1417,10 @@ int G_init_cats(CELL num, const char *title, struct Categories *pcats)
  *
  *  \param title
  *  \param pcats
- *  \return int
+ *  \return
  */
 
-int G_init_raster_cats(const char *title, struct Categories *pcats)
+void G_init_raster_cats(const char *title, struct Categories *pcats)
 {
     G_set_raster_cats_title(title, pcats);
     pcats->labels = NULL;
@@ -1443,7 +1434,6 @@ int G_init_raster_cats(const char *title, struct Categories *pcats)
     pcats->a2 = 0.0;
     pcats->last_marked_rule = -1;
     G_quant_init(&pcats->q);
-    return 0;
 }
 
 
@@ -1455,13 +1445,12 @@ int G_init_raster_cats(const char *title, struct Categories *pcats)
  *
  *  \param title
  *  \param cats
- *  \return int
+ *  \return
  */
 
-int G_set_cats_title(const char *title, struct Categories *pcats)
+void G_set_cats_title(const char *title, struct Categories *pcats)
 {
     G_set_raster_cats_title(title, pcats);
-    return 0;
 }
 
 
@@ -1472,24 +1461,22 @@ int G_set_cats_title(const char *title, struct Categories *pcats)
  *
  *  \param title
  *  \param pcats
- *  \return int
+ *  \return
  */
 
-int G_set_raster_cats_title(const char *title, struct Categories *pcats)
+void G_set_raster_cats_title(const char *title, struct Categories *pcats)
 {
     if (title == NULL)
 	title = "";
     pcats->title = G_store(title);
     G_newlines_to_spaces(pcats->title);
     G_strip(pcats->title);
-    return 0;
 }
 
-int G_set_cats_fmt(const char *fmt, double m1, double a1, double m2,
-		   double a2, struct Categories *pcats)
+void G_set_cats_fmt(const char *fmt, double m1, double a1, double m2,
+		    double a2, struct Categories *pcats)
 {
     G_set_raster_cats_fmt(fmt, m1, a1, m2, a2, pcats);
-    return 0;
 }
 
 
@@ -1504,10 +1491,9 @@ int G_set_cats_fmt(const char *fmt, double m1, double a1, double m2,
  *  \param m2
  *  \param a2
  *  \param pcats
- *  \return int
  */
 
-int G_set_raster_cats_fmt(const char *fmt, double m1, double a1, double m2,
+void G_set_raster_cats_fmt(const char *fmt, double m1, double a1, double m2,
 			  double a2, struct Categories *pcats)
 {
     pcats->m1 = m1;
@@ -1518,7 +1504,6 @@ int G_set_raster_cats_fmt(const char *fmt, double m1, double a1, double m2,
     pcats->fmt = G_store(fmt);
     G_newlines_to_spaces(pcats->fmt);
     G_strip(pcats->fmt);
-    return 0;
 }
 
 
@@ -1529,13 +1514,12 @@ int G_set_raster_cats_fmt(const char *fmt, double m1, double a1, double m2,
  * and<i>G_set_cat.</i>
  *
  *  \param cats
- *  \return int
+ *  \return
  */
 
-int G_free_cats(struct Categories *pcats)
+void G_free_cats(struct Categories *pcats)
 {
     G_free_raster_cats(pcats);
-    return 0;
 }
 
 
@@ -1545,10 +1529,10 @@ int G_free_cats(struct Categories *pcats)
  * Same as existing G_free_cats()
  *
  *  \param pcats
- *  \return int
+ *  \return
  */
 
-int G_free_raster_cats(struct Categories *pcats)
+void G_free_raster_cats(struct Categories *pcats)
 {
     int i;
 
@@ -1571,7 +1555,6 @@ int G_free_raster_cats(struct Categories *pcats)
     G_quant_free(&pcats->q);
     pcats->ncats = 0;
     pcats->nalloc = 0;
-    return 0;
 }
 
 
@@ -1586,12 +1569,11 @@ int G_free_raster_cats(struct Categories *pcats)
  *
  *  \param pcats_to
  *  \param pcats_from
- *  \return int
+ *  \return
  */
 
-int
-G_copy_raster_cats(struct Categories *pcats_to,
-		   const struct Categories *pcats_from)
+void G_copy_raster_cats(struct Categories *pcats_to,
+			const struct Categories *pcats_from)
 {
     int i;
     char *descr;
@@ -1602,7 +1584,6 @@ G_copy_raster_cats(struct Categories *pcats_to,
 	descr = G_get_ith_d_raster_cat(pcats_from, i, &d1, &d2);
 	G_set_d_raster_cat(&d1, &d2, descr, pcats_to);
     }
-    return 0;
 }
 
 int G_number_of_raster_cats(struct Categories *pcats)

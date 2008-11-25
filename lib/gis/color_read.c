@@ -393,9 +393,7 @@ static int read_old_colors(FILE * fd, struct Colors *colors)
  *  \return int
  */
 
-int G_mark_colors_as_fp(struct Colors *colors)
+void G_mark_colors_as_fp(struct Colors *colors)
 {
     colors->is_float = 1;
-
-    return 0;
 }

@@ -16,7 +16,7 @@
  *       no check is made by this routine for valid projection
  ***********************************************************/
 
-static int mystats(double, double, double, double, double *, double *);
+static void mystats(double, double, double, double, double *, double *);
 
 
 /*!
@@ -63,8 +63,8 @@ int G_pole_in_polygon(const double *x, const double *y, int n)
     return total_area >= 0.0 ? 1 : -1;
 }
 
-static int mystats(double x0, double y0, double x1, double y1, double *len,
-		   double *area)
+static void mystats(double x0, double y0, double x1, double y1, double *len,
+		    double *area)
 {
     if (x1 > x0)
 	while (x1 - x0 > 180)
@@ -79,6 +79,4 @@ static int mystats(double x0, double y0, double x1, double y1, double *len,
 	*area = (x0 - x1) * (y0 + y1) / 2.0;
     else
 	*area = (x1 - x0) * (y1 + y0) / 2.0;
-
-    return 0;
 }

@@ -32,10 +32,10 @@
  * \param[in] x1
  * \param[in] y1
  * \param[in] point pointer to point plotting function
- * \return always returns 0
+ * \return
  */
 
-int G_bresenham_line(int x0, int y0, int x1, int y1, int (*point) (int, int))
+void G_bresenham_line(int x0, int y0, int x1, int y1, int (*point) (int, int))
 {
     int dx, dy;
     int xinc, yinc;
@@ -90,6 +90,4 @@ int G_bresenham_line(int x0, int y0, int x1, int y1, int (*point) (int, int))
     }
 
     point(x1, y1);
-
-    return 0;
 }

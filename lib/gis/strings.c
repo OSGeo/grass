@@ -195,9 +195,9 @@ char *G_str_replace(char *buffer, const char *old_str, const char *new_str)
  *
  * \param[in,out] buf buffer to be worked on
  *
- * \return 0
+ * \return
  */
-int G_strip(char *buf)
+void G_strip(char *buf)
 {
     char *a, *b;
 
@@ -212,8 +212,6 @@ int G_strip(char *buf)
 	a++;
 	*a = 0;
     }
-
-    return 0;
 }
 
 /*!

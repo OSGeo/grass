@@ -416,18 +416,16 @@ int G__quant_organize_fp_lookup(struct Quant *q)
  * Initializes the <em>q</em> struct.
  *
  *  \param q
- *  \return int
+ *  \return
  */
 
-int G_quant_init(struct Quant *quant)
+void G_quant_init(struct Quant *quant)
 {
     quant->fp_lookup.active = 0;
     quant->maxNofRules = 0;
     quant->truncate_only = 0;
     quant->round_only = 0;
     G_quant_clear(quant);
-
-    return 1;
 }
 
 /*--------------------------------------------------------------------------*/
@@ -446,7 +444,6 @@ int G_quant_is_round(const struct Quant *quant)
 
 /*--------------------------------------------------------------------------*/
 
-
 /*!
  * \brief 
  *
@@ -454,9 +451,15 @@ int G_quant_is_round(const struct Quant *quant)
  * rules to perform simple truncation on floats.
  *
  *  \param q
- *  \return int
+ *  \return
  */
 
+void G_quant_truncate(struct Quant *quant)
+{
+    quant->truncate_only = 1;
+}
+
+/*--------------------------------------------------------------------------*/
 
 /*!
  * \brief 
@@ -465,21 +468,12 @@ int G_quant_is_round(const struct Quant *quant)
  * rules to perform simple rounding on floats.
  *
  *  \param q
- *  \return int
+ *  \return
  */
 
-int G_quant_truncate(struct Quant *quant)
-{
-    quant->truncate_only = 1;
-    return 1;
-}
-
-/*--------------------------------------------------------------------------*/
-
-int G_quant_round(struct Quant *quant)
+void G_quant_round(struct Quant *quant)
 {
     quant->round_only = 1;
-    return 1;
 }
 
 /*--------------------------------------------------------------------------*/

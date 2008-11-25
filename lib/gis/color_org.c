@@ -3,11 +3,11 @@
 
 #define LOOKUP_COLORS 2048
 
-static int organize_lookup(struct Colors *, int);
+static void organize_lookup(struct Colors *, int);
 static int organize_fp_lookup(struct Colors *, int);
 static int double_comp(const void *, const void *);
 
-int G__organize_colors(struct Colors *colors)
+void G__organize_colors(struct Colors *colors)
 {
     /* don't do anything if called recursively */
     if (!colors->organizing) {
@@ -21,8 +21,6 @@ int G__organize_colors(struct Colors *colors)
 
 	colors->organizing = 0;
     }
-
-    return 0;
 }
 
 static int organize_fp_lookup(struct Colors *colors, int mod)
@@ -93,7 +91,7 @@ static int organize_fp_lookup(struct Colors *colors, int mod)
     return 0;
 }
 
-static int organize_lookup(struct Colors *colors, int mod)
+static void organize_lookup(struct Colors *colors, int mod)
 {
     int i, n;
     CELL x;
@@ -102,7 +100,7 @@ static int organize_lookup(struct Colors *colors, int mod)
 
     /* don't do anything if the color structure is float */
     if (colors->is_float)
-	return 0;
+	return;
 
     if (mod)
 	cp = &colors->modular;
@@ -110,11 +108,11 @@ static int organize_lookup(struct Colors *colors, int mod)
 	cp = &colors->fixed;
 
     if (cp->lookup.active)
-	return 0;
+	return;
 
     n = (CELL) cp->max - (CELL) cp->min + 1;
     if (n >= LOOKUP_COLORS || n <= 0)
-	return 0;
+	return;
 
     x = (CELL) cp->min;
     for (i = 0; i < n; i++)
@@ -132,8 +130,6 @@ static int organize_lookup(struct Colors *colors, int mod)
 		     cp->lookup.set, n, colors, mod, 1, CELL_TYPE);
 
     cp->lookup.active = 1;
-
-    return 0;
 }
 
 static int double_comp(const void *xx, const void *yy)
