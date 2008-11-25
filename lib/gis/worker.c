@@ -4,7 +4,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-#ifdef USE_PTHREAD
+#ifdef HAVE_PTHREAD_H
 
 /****************************************************************************/
 
@@ -132,6 +132,7 @@ void G_finish_workers(void)
     for (i = 0; i < num_workers; i++) {
 	struct worker *w = &workers[i];
 	w->cancel = 1;
+	pthread_cancel(w->thread);
     }
 
     for (i = 0; i < num_workers; i++) {

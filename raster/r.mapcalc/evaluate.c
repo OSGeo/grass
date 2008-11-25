@@ -103,7 +103,7 @@ static void do_evaluate(void *p)
 
 static void begin_evaluate(struct expression *e)
 {
-    G_begin_execute(do_evaluate, e, &e->worker, 1);
+    G_begin_execute(do_evaluate, e, &e->worker, 0);
 }
 
 static void end_evaluate(struct expression *e)

@@ -4,9 +4,9 @@ GDAL_LINK = $(USE_GDAL)
 GDAL_DYNAMIC = 1
 
 LIB_NAME = $(GIS_LIBNAME)
-EXTRA_LIBS = $(XDRLIB) $(SOCKLIB) $(DATETIMELIB) $(INTLLIB) $(MATHLIB)
+EXTRA_LIBS = $(XDRLIB) $(SOCKLIB) $(DATETIMELIB) $(PTHREADLIBPATH) $(PTHREADLIB) $(INTLLIB) $(MATHLIB)
 DATASRC = ellipse.table datum.table datumtransform.table FIPS.code state27 state83 projections gui.tcl
-EXTRA_INC = $(ZLIBINCPATH)
+EXTRA_INC = $(ZLIBINCPATH) $(PTHREADINCPATH)
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 include $(MODULE_TOPDIR)/include/Make/Doxygen.make
@@ -35,12 +35,6 @@ else
 EXTRA_LIBS += $(GDALLIBS)
 endif
 
-endif
-
-ifneq ($(USE_PTHREAD),)
-PTHREADLIB = -lpthread
-EXTRA_CFLAGS += -DUSE_PTHREAD
-EXTRA_LIBS += $(PTHREADLIB)
 endif
 
 default: lib $(FMODE_OBJ) $(DATAFILES) $(COLORFILES) $(ETC)/colors.desc $(ETC)/element_list

@@ -3,7 +3,7 @@
 #include <limits.h>
 #include <string.h>
 #include <unistd.h>
-#ifdef USE_PTHREAD
+#ifdef HAVE_PTHREAD_H
 #include <pthread.h>
 #endif
 
@@ -57,7 +57,7 @@ struct map
     struct Colors colors;
     BTREE btree;
     struct row_cache cache;
-#ifdef USE_PTHREAD
+#ifdef HAVE_PTHREAD_H
     pthread_mutex_t mutex;
 #endif
 };
@@ -75,7 +75,7 @@ static int max_col = -INT_MAX;
 
 static int max_rows_in_memory = 8;
 
-#ifdef USE_PTHREAD
+#ifdef HAVE_PTHREAD_H
 static pthread_mutex_t cats_mutex;
 #endif
 
@@ -307,7 +307,7 @@ static void translate_from_cats(struct map *m, CELL * cell, DCELL * xcell,
     void *ptr;
     char *label;
 
-#ifdef XUSE_PTHREAD
+#ifdef HAVE_PTHREAD_H
     pthread_mutex_lock(&cats_mutex);
 #endif
 
@@ -355,7 +355,7 @@ static void translate_from_cats(struct map *m, CELL * cell, DCELL * xcell,
 	    *xcell = values[idx];
     }
 
-#ifdef XUSE_PTHREAD
+#ifdef HAVE_PTHREAD_H
     pthread_mutex_unlock(&cats_mutex);
 #endif
 }
@@ -370,7 +370,7 @@ static void setup_map(struct map *m)
 {
     int nrows = m->max_row - m->min_row + 1;
 
-#ifdef USE_PTHREAD
+#ifdef HAVE_PTHREAD_H
     pthread_mutex_init(&m->mutex, NULL);
 #endif
 
@@ -430,7 +430,7 @@ static void close_map(struct map *m)
 	G_fatal_error(_("Unable to close raster map <%s@%s>"),
 		      m->name, m->mapset);
 
-#ifdef USE_PTHREAD
+#ifdef HAVE_PTHREAD_H
     pthread_mutex_destroy(&m->mutex);
 #endif
 
@@ -579,7 +579,7 @@ void setup_maps(void)
 {
     int i;
 
-#ifdef USE_PTHREAD
+#ifdef HAVE_PTHREAD_H
     pthread_mutex_init(&cats_mutex, NULL);
 #endif
 
@@ -594,7 +594,7 @@ void get_map_row(int idx, int mod, int depth, int row, int col, void *buf,
     DCELL *fbuf;
     struct map *m = &maps[idx];
 
-#ifdef USE_PTHREAD
+#ifdef HAVE_PTHREAD_H
     pthread_mutex_lock(&m->mutex);
 #endif
 
@@ -624,7 +624,7 @@ void get_map_row(int idx, int mod, int depth, int row, int col, void *buf,
 	break;
     }
 
-#ifdef USE_PTHREAD
+#ifdef HAVE_PTHREAD_H
     pthread_mutex_unlock(&m->mutex);
 #endif
 }
@@ -638,7 +638,7 @@ void close_maps(void)
 
     num_maps = 0;
 
-#ifdef USE_PTHREAD
+#ifdef HAVE_PTHREAD_H
     pthread_mutex_destroy(&cats_mutex);
 #endif
 }
