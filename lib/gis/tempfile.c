@@ -24,12 +24,12 @@ static int initialized;
 
 void G_init_tempfile(void)
 {
-    if (initialized)
+    if (G_is_initialized(&initialized))
 	return;
 
     G_init_counter(&unique, 0);
 
-    initialized = 1;
+    G_initialize_done(&initialized);
 }
 
 /**

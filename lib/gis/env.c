@@ -95,10 +95,8 @@ static int read_env(int loc)
     if (loc == G_VAR_GISRC && st->varmode == G_GISRC_MODE_MEMORY)
 	return 0;		/* don't use file for GISRC */
 
-    if (st->init[loc])
+    if (G_is_initialized(&st->init[loc]))
 	return 1;
-
-    st->init[loc] = 1;
 
     if ((fd = open_env("r", loc))) {
 	while (G_getl2(buf, sizeof buf, fd)) {
@@ -118,6 +116,7 @@ static int read_env(int loc)
 	fclose(fd);
     }
 
+    G_initialize_done(&st->init[loc]);
     return 0;
 }
 

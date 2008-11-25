@@ -317,10 +317,12 @@ int G_window_cols(void)
 
 void G__init_window(void)
 {
-    if (!G__.window_set) {
-	G__.window_set = 1;
-	G_get_window(&G__.window);
-    }
+    if (G_is_initialized(&G__.window_set))
+	return;
+
+    G_get_window(&G__.window);
+
+    G_initialize_done(&G__.window_set);
 }
 
 

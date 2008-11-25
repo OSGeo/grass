@@ -37,6 +37,7 @@ static struct table
     } *datums;
     int size;
     int count;
+    int initialized;
 } table;
 
 static int compare_table_names(const void *, const void *);
@@ -149,7 +150,7 @@ void G_read_datum_table(void)
     char buf[1024];
     int line;
 
-    if (table.count > 0)
+    if (G_is_initialized(&table.initialized))
 	return;
 
     sprintf(file, "%s%s", G_gisbase(), DATUMTABLE);
@@ -157,6 +158,7 @@ void G_read_datum_table(void)
     fd = fopen(file, "r");
     if (!fd) {
 	G_warning(_("unable to open datum table file: %s"), file);
+	G_initialize_done(&table.initialized);
 	return;
     }
 
@@ -189,6 +191,8 @@ void G_read_datum_table(void)
     }
 
     qsort(table.datums, table.count, sizeof(struct datum), compare_table_names);
+
+    G_initialize_done(&table.initialized);
 }
 
 static int compare_table_names(const void *aa, const void *bb)

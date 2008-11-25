@@ -42,9 +42,10 @@ char *G_home(void)
 
 char *G__home(void)
 {
+    static int initialized;
     static char *home = 0;
 
-    if (home)
+    if (G_is_initialized(&initialized))
 	return home;
 
 #ifdef __MINGW32__
@@ -68,5 +69,6 @@ char *G__home(void)
     home = getenv("HOME");
 #endif
     G_debug(2, "G__home home = %s", home);
+    G_initialize_done(&initialized);
     return home;
 }

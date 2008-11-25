@@ -54,7 +54,7 @@ void G_get_window(struct Cell_head *window)
 {
     const char *regvar, *err;
 
-    if (st->initialized) {
+    if (G_is_initialized(&st->initialized)) {
 	*window = st->dbwindow;
 	return;
     }
@@ -78,13 +78,14 @@ void G_get_window(struct Cell_head *window)
     if (err)
 	G_fatal_error(_("region for current mapset %s\nrun \"g.region\""), err);
 
-    st->initialized = 1;
     *window = st->dbwindow;
 
     if (!G__.window_set) {
 	G__.window_set = 1;
 	G__.window = st->dbwindow;
     }
+
+    G_initialize_done(&st->initialized);
 }
 
 

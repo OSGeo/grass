@@ -450,24 +450,6 @@ int G_cellvalue_format(CELL v)
     return sizeof(CELL) - 1;
 }
 
-int G_get_fp_type(void)
-{
-    if (G__.fp_type <= 0)
-	G__.fp_type = getenv("GRASS_FP_DOUBLE")
-	    ? DCELL_TYPE
-	    : FCELL_TYPE;
-
-    return G__.fp_type;
-}
-
-int G_get_compression_type(void)
-{
-    if (!G__.compression_type)
-	G__.compression_type = getenv("GRASS_INT_ZLIB") ? 2 : 1;
-    return G__.compression_type;
-}
-
-
 /*!
   \brief Opens new fcell file in a database
 
@@ -487,7 +469,7 @@ int G_get_compression_type(void)
 */
 int G_open_fp_cell_new(const char *name)
 {
-    return G__open_raster_new(name, OPEN_NEW_COMPRESSED, G_get_fp_type());
+    return G__open_raster_new(name, OPEN_NEW_COMPRESSED, G__.fp_type);
 }
 
 /*!
@@ -502,7 +484,7 @@ int G_open_fp_cell_new(const char *name)
 */
 int G_open_fp_cell_new_uncompressed(const char *name)
 {
-    return G__open_raster_new(name, OPEN_NEW_UNCOMPRESSED, G_get_fp_type());
+    return G__open_raster_new(name, OPEN_NEW_UNCOMPRESSED, G__.fp_type);
 }
 
 static int G__open_raster_new(const char *name, int open_mode,
@@ -589,7 +571,7 @@ static int G__open_raster_new(const char *name, int open_mode,
 	fcb->row_ptr = G_calloc(fcb->cellhd.rows + 1, sizeof(off_t));
 	G_zero(fcb->row_ptr, (fcb->cellhd.rows + 1) * sizeof(off_t));
 	G__write_row_ptrs(fd);
-	fcb->cellhd.compressed = G_get_compression_type();
+	fcb->cellhd.compressed = G__.compression_type;
 
 	fcb->nbytes = 1;	/* to the minimum */
     }
@@ -599,7 +581,7 @@ static int G__open_raster_new(const char *name, int open_mode,
 	    fcb->row_ptr = G_calloc(fcb->cellhd.rows + 1, sizeof(off_t));
 	    G_zero(fcb->row_ptr, (fcb->cellhd.rows + 1) * sizeof(off_t));
 	    G__write_row_ptrs(fd);
-	    fcb->cellhd.compressed = G_get_compression_type();
+	    fcb->cellhd.compressed = G__.compression_type;
 	}
 	else
 	    fcb->cellhd.compressed = 0;

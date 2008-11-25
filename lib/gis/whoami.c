@@ -39,9 +39,10 @@
 
 char *G_whoami(void)
 {
+    static int initialized;
     static char *name;
 
-    if (name)
+    if (G_is_initialized(&initialized))
 	return name;
 
 #ifdef __MINGW32__
@@ -63,6 +64,8 @@ char *G_whoami(void)
 
     if (!name || !*name)
 	name = "anonymous";
+
+    G_initialize_done(&initialized);
 
     return name;
 }

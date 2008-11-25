@@ -308,7 +308,7 @@ void G_init_logging(void)
     static int initialized;
     char *fstr;
 
-    if (initialized)
+    if (G_is_initialized(&initialized))
 	return;
 
     G_init_counter(&message_id, 1);
@@ -335,7 +335,7 @@ void G_init_logging(void)
     else
 	grass_info_format = G_INFO_FORMAT_STANDARD;
 
-    initialized = 1;
+    G_initialize_done(&initialized);
 }
 
 /* Write a message to the log file */

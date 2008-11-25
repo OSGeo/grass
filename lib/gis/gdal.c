@@ -125,12 +125,12 @@ void G_init_gdal(void)
 #ifdef GDAL_LINK
     static int initialized;
 
-    if (initialized)
+    if (G_is_initialized(&initialized))
 	return;
 
     init_gdal();
     (*pGDALAllRegister)();
-    initialized = 1;
+    G_initialize_done(&initialized);
 #endif
 }
 

@@ -21,13 +21,14 @@
 
 #include <stdlib.h>
 #include <grass/config.h>
+#include <grass/gis.h>
 
 #define MAXLEVEL 3
 #define STDLEVEL 2
 #define MINLEVEL 0
 
-
-static int verbose = -1;	/* current verbosity level */
+static int initialized;
+static int verbose;	/* current verbosity level */
 
 
 /**
@@ -44,17 +45,17 @@ static int verbose = -1;	/* current verbosity level */
 
 int G_verbose(void)
 {
-    char *verstr;		/* string for GRASS_VERBOSE content */
+    const char *verstr;		/* string for GRASS_VERBOSE content */
+
+    if (G_is_initialized(&initialized))
+	return verbose;
 
     /* verbose not defined -> get it from env. */
-    if (verbose < 0) {
+    verstr = getenv("GRASS_VERBOSE");
+    verbose = verstr ? atoi(verstr) : STDLEVEL;
 
-	if ((verstr = getenv("GRASS_VERBOSE"))) {
-	    if ((verbose = atoi(verstr))) ;
-	}
-	else
-	    verbose = STDLEVEL;
-    }
+    G_initialize_done(&initialized);
+
     return verbose;
 }
 
