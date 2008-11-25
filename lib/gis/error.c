@@ -46,11 +46,10 @@ static int (*ext_error) (const char *, int);	/* Roger Bivand 17 June 2000 */
 static int no_warn = 0;
 static int no_sleep = 1;
 
-static int grass_info_format = -1;
+static int grass_info_format;
 static char *logfile;
 static char *prefix_std[3];
-
-static int message_id = 1;
+static struct Counter message_id;
 
 static int print_word(FILE *, char **, int *, const int);
 static void print_sentence(FILE *, const int, const char *);
@@ -312,6 +311,8 @@ void G_init_logging(void)
     if (initialized)
 	return;
 
+    G_init_counter(&message_id, 1);
+
     prefix_std[0] = "";
     prefix_std[1] = _("WARNING: ");
     prefix_std[2] = _("ERROR: ");
@@ -446,16 +447,17 @@ static void print_sentence(FILE * fd, const int type, const char *msg)
 {
     char prefix[100];
     const char *start;
+    int id = G_counter_next(&message_id);
 
     switch (type) {
     case MSG:
-	sprintf(prefix, "GRASS_INFO_MESSAGE(%d,%d): ", getpid(), message_id);
+	sprintf(prefix, "GRASS_INFO_MESSAGE(%d,%d): ", getpid(), id);
 	break;
     case WARN:
-	sprintf(prefix, "GRASS_INFO_WARNING(%d,%d): ", getpid(), message_id);
+	sprintf(prefix, "GRASS_INFO_WARNING(%d,%d): ", getpid(), id);
 	break;
     case ERR:
-	sprintf(prefix, "GRASS_INFO_ERROR(%d,%d): ", getpid(), message_id);
+	sprintf(prefix, "GRASS_INFO_ERROR(%d,%d): ", getpid(), id);
 	break;
     }
 
@@ -480,8 +482,7 @@ static void print_sentence(FILE * fd, const int type, const char *msg)
 	fprintf(fd, "\n");
 	start = next;
     }
-    fprintf(stderr, "GRASS_INFO_END(%d,%d)\n", getpid(), message_id);
-    message_id++;
+    fprintf(stderr, "GRASS_INFO_END(%d,%d)\n", getpid(), id);
 }
 
 /*!

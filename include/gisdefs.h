@@ -387,6 +387,10 @@ int G_recursive_copy(const char *, const char *);
 /* copy_file.c */
 int G_copy_file(const char *, const char *);
 
+/* counter.c */
+void G_init_counter(struct Counter *, int);
+int G_counter_next(struct Counter *);
+
 /* dalloc.c */
 double *G_alloc_vector(size_t);
 double **G_alloc_matrix(int, int);
@@ -609,6 +613,7 @@ char *G_gisdbase(void);
 void G__gisinit(const char *, const char *);
 void G__no_gisinit(const char *);
 void G__check_gisinit(void);
+void G_init_all(void);
 
 /* histo_eq.c */
 void G_histogram_eq(const struct Histogram *, unsigned char **,
@@ -1100,6 +1105,7 @@ int G_svelim(double *, int);
 int G_system(const char *);
 
 /* tempfile.c */
+void G_init_tempfile(void);
 char *G_tempfile(void);
 char *G__tempfile(int);
 void G__temp_element(char *);
