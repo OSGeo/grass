@@ -45,6 +45,11 @@
 static int (*ext_error) (const char *, int);	/* Roger Bivand 17 June 2000 */
 static int no_warn = 0;
 static int no_sleep = 1;
+
+static int grass_info_format = -1;
+static char *logfile;
+static char *prefix_std[3];
+
 static int message_id = 1;
 
 static int print_word(FILE *, char **, int *, const int);
@@ -249,14 +254,7 @@ int G_unset_error_routine(void)
 /* Print info to stderr and optionally to log file and optionally send mail */
 static int print_error(const char *msg, const int type)
 {
-    static char *prefix_std[3];
     int fatal, format;
-
-    if (!prefix_std[0]) {	/* First time: set prefixes  */
-	prefix_std[0] = "";
-	prefix_std[1] = _("WARNING: ");
-	prefix_std[2] = _("ERROR: ");
-    }
 
     if (type == ERR)
 	fatal = TRUE;
@@ -270,6 +268,7 @@ static int print_error(const char *msg, const int type)
 	char *w;
 	int len, lead;
 
+	G_init_logging();
 	format = G_info_format();
 
 	if (format != G_INFO_FORMAT_GUI) {
@@ -321,22 +320,46 @@ static int log_error(const char *msg, int fatal)
     return 0;
 }
 
+void G_init_logging(void)
+{
+    static int initialized;
+    char *fstr;
+
+    if (initialized)
+	return;
+
+    prefix_std[0] = "";
+    prefix_std[1] = _("WARNING: ");
+    prefix_std[2] = _("ERROR: ");
+
+    logfile = getenv("GIS_ERROR_LOG");
+    if (!logfile) {
+	char buf[GPATH_MAX];
+	sprintf(buf, "%s/GIS_ERROR_LOG", G__home());
+	logfile = G_store(buf);
+    }
+
+    fstr = getenv("GRASS_MESSAGE_FORMAT");
+
+    if (fstr && G_strcasecmp(fstr, "gui") == 0)
+	grass_info_format = G_INFO_FORMAT_GUI;
+    else if (fstr && G_strcasecmp(fstr, "silent") == 0)
+	grass_info_format = G_INFO_FORMAT_SILENT;
+    else if (fstr && G_strcasecmp(fstr, "plain") == 0)
+	grass_info_format = G_INFO_FORMAT_PLAIN;
+    else
+	grass_info_format = G_INFO_FORMAT_STANDARD;
+
+    initialized = 1;
+}
+
 /* Write a message to the log file */
 static int write_error(const char *msg, int fatal,
 		       time_t clock, const char *cwd)
 {
-    static char *logfile;
     FILE *log;
 
-    if (!logfile) {
-	logfile = getenv("GIS_ERROR_LOG");
-	if (!logfile) {
-	    char buf[GPATH_MAX];
-
-	    sprintf(buf, "%s/GIS_ERROR_LOG", G__home());
-	    logfile = G_store(buf);
-	}
-    }
+    G_init_logging();
 
     log = fopen(logfile, "r");
     if (!log)
@@ -486,21 +509,7 @@ static void print_sentence(FILE * fd, const int type, const char *msg)
  */
 int G_info_format(void)
 {
-    static int grass_info_format = -1;
-    char *fstr;
-
-    if (grass_info_format < 0) {
-	fstr = getenv("GRASS_MESSAGE_FORMAT");
-
-	if (fstr && G_strcasecmp(fstr, "gui") == 0)
-	    grass_info_format = G_INFO_FORMAT_GUI;
-	else if (fstr && G_strcasecmp(fstr, "silent") == 0)
-	    grass_info_format = G_INFO_FORMAT_SILENT;
-	else if (fstr && G_strcasecmp(fstr, "plain") == 0)
-	    grass_info_format = G_INFO_FORMAT_PLAIN;
-	else
-	    grass_info_format = G_INFO_FORMAT_STANDARD;
-    }
+    G_init_logging();
 
     return grass_info_format;
 }

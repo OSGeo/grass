@@ -406,6 +406,7 @@ void G_read_datum_table(void);
 
 
 /* debug.c */
+void G_init_debug(void);
 int G_debug(int, const char *, ...) __attribute__ ((format(printf, 2, 3)));
 
 /* distance.c */
@@ -460,6 +461,7 @@ int G_suppress_warnings(int);
 int G_sleep_on_error(int);
 int G_set_error_routine(int (*)(const char *, int));
 int G_unset_error_routine(void);
+void G_init_logging(void);
 
 /* file_name.c */
 char *G__file_name(char *, const char *, const char *, const char *);
@@ -837,6 +839,8 @@ int G_open_cell_new_uncompressed(const char *);
 void G_want_histogram(int);
 void G_set_cell_format(int);
 int G_cellvalue_format(CELL);
+int G_get_fp_type(void);
+int G_get_compression_type(void);
 int G_open_fp_cell_new(const char *);
 int G_open_fp_cell_new_uncompressed(const char *);
 int G_set_fp_type(RASTER_MAP_TYPE);
