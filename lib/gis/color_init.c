@@ -17,10 +17,10 @@
  * to <i>G_add_color_rule</i> and<i>G_set_color.</i>
  *
  *  \param colors
- *  \return int
+ *  \return
  */
 
-int G_init_colors(struct Colors *colors)
+void G_init_colors(struct Colors *colors)
 {
     colors->version = 0;
     colors->null_set = 0;
@@ -45,6 +45,4 @@ int G_init_colors(struct Colors *colors)
     colors->modular.fp_lookup.active = 0;
     colors->modular.fp_lookup.nalloc = 0;
     colors->organizing = 0;
-
-    return 0;
 }

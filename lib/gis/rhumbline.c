@@ -32,10 +32,10 @@
 #include "pi.h"
 
 
-static int adjust_lat(double *);
+static void adjust_lat(double *);
 
 #if 0
-static int adjust_lon(double *);
+static void adjust_lon(double *);
 #endif /* unused */
 
 static struct state {
@@ -109,24 +109,20 @@ double G_rhumbline_lat_from_lon(double lon)
 
 
 #if 0
-static int adjust_lon(double *lon)
+static void adjust_lon(double *lon)
 {
     while (*lon > 180.0)
 	*lon -= 360.0;
     while (*lon < -180.0)
 	*lon += 360.0;
-
-    return 0;
 }
 #endif /* unused */
 
 
-static int adjust_lat(double *lat)
+static void adjust_lat(double *lat)
 {
     if (*lat > 90.0)
 	*lat = 90.0;
     if (*lat < -90.0)
 	*lat = -90.0;
-
-    return 0;
 }

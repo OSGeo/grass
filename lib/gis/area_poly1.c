@@ -61,10 +61,10 @@ static double Qbar(double x)
  *
  * \param[in] a semi-major axis
  * \param[in] e2 ellipsoid eccentricity
- * \return always returns 0
+ * \return
  */
 
-int G_begin_ellipsoid_polygon_area(double a, double e2)
+void G_begin_ellipsoid_polygon_area(double a, double e2)
 {
     double e4, e6;
 
@@ -86,8 +86,6 @@ int G_begin_ellipsoid_polygon_area(double a, double e2)
     st->E = 4 * M_PI * st->Qp * st->AE;
     if (st->E < 0.0)
 	st->E = -st->E;
-
-    return 0;
 }
 
 

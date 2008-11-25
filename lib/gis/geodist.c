@@ -49,17 +49,15 @@ static struct state *st = &state;
  *
  * \param[in] a semi-major axis in meters
  * \param[in] e2 ellipsoid eccentricity
- * \return always returns 0
+ * \return
  */
 
-int G_begin_geodesic_distance(double a, double e2)
+void G_begin_geodesic_distance(double a, double e2)
 {
     st->al = a;
     st->boa = sqrt(1 - e2);
     st->f = 1 - st->boa;
     st->ff64 = st->f * st->f / 64;
-
-    return 0;
 }
 
 
@@ -72,14 +70,12 @@ int G_begin_geodesic_distance(double a, double e2)
  * <b>Note:</b> Must be called first.
  *
  * \param[in] lat1 first latitude
- * \return always returns 0
+ * \return
  */
 
-int G_set_geodesic_distance_lat1(double lat1)
+void G_set_geodesic_distance_lat1(double lat1)
 {
     st->t1r = atan(st->boa * tan(Radians(lat1)));
-
-    return 0;
 }
 
 
@@ -91,10 +87,10 @@ int G_set_geodesic_distance_lat1(double lat1)
  * <b>Note:</b> Must be called second.
  *
  * \param[in] lat2 second latitidue
- * \return always returns 0
+ * \return
  */
 
-int G_set_geodesic_distance_lat2(double lat2)
+void G_set_geodesic_distance_lat2(double lat2)
 {
     double stm, ctm, sdtm, cdtm;
     double tm, dtm;
@@ -117,8 +113,6 @@ int G_set_geodesic_distance_lat2(double lat2)
 
     st->t3 = sdtm * sdtm;
     st->t4 = cdtm * cdtm - stm * stm;
-
-    return 0;
 }
 
 

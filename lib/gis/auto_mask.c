@@ -76,10 +76,10 @@ int G__check_for_auto_masking(void)
 /**
  * \brief Suppresses masking.
  *
- * \return always returns 0
+ * \return
  */
 
-int G_suppress_masking(void)
+void G_suppress_masking(void)
 {
     if (G__.auto_mask > 0) {
 	G_close_cell(G__.mask_fd);
@@ -87,23 +87,19 @@ int G_suppress_masking(void)
 	G__.mask_fd = -1;
     }
     G__.auto_mask = -2;
-
-    return 0;
 }
 
 
 /**
  * \brief Unsuppresses masking.
  *
- * \return always returns 0
+ * \return
  */
 
-int G_unsuppress_masking(void)
+void G_unsuppress_masking(void)
 {
     if (G__.auto_mask < -1) {
 	G__.mask_fd = -1;
 	G__check_for_auto_masking();
     }
-
-    return 0;
 }

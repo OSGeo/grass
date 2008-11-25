@@ -39,12 +39,12 @@ static struct state *st = &state;
  *
  * \param[in] r radius of sphere
  * \param[in] s scale factor
- * \return int
+ * \return
  */
 
-int G_begin_zone_area_on_sphere(double r, double s)
+void G_begin_zone_area_on_sphere(double r, double s)
 {
-    return (st->M = s * 2.0 * r * r * M_PI);
+    st->M = s * 2.0 * r * r * M_PI;
 }
 
 

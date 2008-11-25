@@ -2,6 +2,7 @@
 #include <stdio.h>		/*  For NULL */
 #include <stdlib.h>		/*  For rand() and srand() */
 #include <grass/gis.h>
+#include <grass/glocale.h>
 
 #define MAX_COLORS 1024
 #define DEVIATION 128
@@ -16,10 +17,10 @@
  *  \param colors
  *  \param min
  *  \param max
- *  \return int
+ *  \return
  */
 
-int G_make_random_colors(struct Colors *colors, CELL min, CELL max)
+void G_make_random_colors(struct Colors *colors, CELL min, CELL max)
 {
     unsigned char red, grn, blu;
     int count;
@@ -27,7 +28,8 @@ int G_make_random_colors(struct Colors *colors, CELL min, CELL max)
 
     G_init_colors(colors);
     if (min > max)
-	return -1;
+	G_fatal_error(_("G_make_random_colors: min (%d) > max (%d)"),
+		      min, max);
 
     srand(time(NULL));
 
@@ -42,6 +44,4 @@ int G_make_random_colors(struct Colors *colors, CELL min, CELL max)
 	G_add_modular_color_rule(n, red, grn, blu, n, red, grn, blu, colors);
     }
     G_set_color_range(min, max, colors);
-
-    return 1;
 }

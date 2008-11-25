@@ -23,17 +23,17 @@
  *
  * \param[in] fd file descriptor
  * \param[in] n number of bytes to write
- * \return always returns 0
+ * \return
  */
 
-int G_write_zeros(int fd, size_t n)
+void G_write_zeros(int fd, size_t n)
 {
     char zeros[1024];
     char *z;
     int i;
 
     if (n <= 0)
-	return 0;
+	return;
 
     /* There is a subtle gotcha to be avoided here.
      *
@@ -61,6 +61,4 @@ int G_write_zeros(int fd, size_t n)
 	write(fd, zeros, i);
 	n -= i;
     }
-
-    return 0;
 }

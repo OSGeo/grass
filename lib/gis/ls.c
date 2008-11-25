@@ -140,8 +140,6 @@ void G_ls(const char *dir, FILE * stream)
 	G_free(dir_listing[i]);
 
     G_free(dir_listing);
-
-    return;
 }
 
 /**
@@ -218,6 +216,4 @@ void G_ls_format(char **list, int num_items, int perline, FILE * stream)
 	    }
 	}
     }
-
-    return;
 }

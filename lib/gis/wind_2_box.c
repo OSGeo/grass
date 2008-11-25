@@ -27,11 +27,11 @@
  * \param[in,out] dst destination window
  * \param[in] rows number of rows in box
  * \param[in] cols number of columns in box
- * \return always returns 0
+ * \return
  */
 
-int G_adjust_window_to_box(const struct Cell_head *src,
-			   struct Cell_head *dst, int rows, int cols)
+void G_adjust_window_to_box(const struct Cell_head *src,
+			    struct Cell_head *dst, int rows, int cols)
 {
     double ew, ns;
 
@@ -53,6 +53,4 @@ int G_adjust_window_to_box(const struct Cell_head *src,
     /* compute rows and cols */
     dst->rows = (dst->north - dst->south) / dst->ns_res;
     dst->cols = (dst->east - dst->west) / dst->ew_res;
-
-    return 0;
 }

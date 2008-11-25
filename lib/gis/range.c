@@ -92,11 +92,9 @@
 /* range functions for type "Range" */
 
 /*-------------------------------------------------------------------------*/
-int G__remove_fp_range(const char *name)
+void G__remove_fp_range(const char *name)
 {
     G_remove_misc("cell_misc", "f_range", name);
-
-    return 0;
 }
 
 
@@ -106,15 +104,13 @@ int G__remove_fp_range(const char *name)
  * Sets the integer range <em>r</em> to [1,255]
  *
  *  \param r
- *  \return int
+ *  \return
  */
 
-int G_construct_default_range(struct Range *range)
+void G_construct_default_range(struct Range *range)
 {
     G_update_range(DEFAULT_CELL_MIN, range);
     G_update_range(DEFAULT_CELL_MAX, range);
-
-    return 0;
 }
 
 
@@ -371,7 +367,7 @@ int G_write_range(const char *name, const struct Range *range)
  * created.
  *
  *  \param r
- *  \return int
+ *  \return
  */
 
 int G_write_fp_range(const char *name, const struct FPRange *range)
@@ -425,44 +421,41 @@ int G_write_fp_range(const char *name, const struct FPRange *range)
  *  \param cat
  *  \param range
  *
- *  \return int
+ *  \return
  */
 
-int G_update_range(CELL cat, struct Range *range)
+void G_update_range(CELL cat, struct Range *range)
 {
     if (!G_is_c_null_value(&cat)) {
 	if (range->first_time) {
 	    range->first_time = 0;
 	    range->min = cat;
 	    range->max = cat;
-	    return 0;
+	    return;
 	}
 	if (cat < range->min)
 	    range->min = cat;
 	if (cat > range->max)
 	    range->max = cat;
     }
-
-    return 0;
 }
 
 /*-------------------------------------------------------------------------*/
 
-int G_update_fp_range(DCELL val, struct FPRange *range)
+void G_update_fp_range(DCELL val, struct FPRange *range)
 {
     if (!G_is_d_null_value(&val)) {
 	if (range->first_time) {
 	    range->first_time = 0;
 	    range->min = val;
 	    range->max = val;
-	    return 0;
+	    return;
 	}
 	if (val < range->min)
 	    range->min = val;
 	if (val > range->max)
 	    range->max = val;
     }
-    return 0;
 }
 
 /*-------------------------------------------------------------------------*/
@@ -478,20 +471,18 @@ int G_update_fp_range(DCELL val, struct FPRange *range)
  *  \param cell
  *  \param n
  *  \param range
- *  \return int
+ *  \return
  */
 
-int G_row_update_range(const CELL * cell, int n, struct Range *range)
+void G_row_update_range(const CELL *cell, int n, struct Range *range)
 {
     G__row_update_range(cell, n, range, 0);
-
-    return 0;
 }
 
 /*-------------------------------------------------------------------------*/
 
-int G__row_update_range(const CELL * cell, int n,
-			struct Range *range, int ignore_zeros)
+void G__row_update_range(const CELL *cell, int n,
+			 struct Range *range, int ignore_zeros)
 {
     CELL cat;
 
@@ -510,14 +501,12 @@ int G__row_update_range(const CELL * cell, int n,
 	if (cat > range->max)
 	    range->max = cat;
     }
-
-    return 0;
 }
 
 /*-------------------------------------------------------------------------*/
 
-int G_row_update_fp_range(const void *rast, int n,
-			  struct FPRange *range, RASTER_MAP_TYPE data_type)
+void G_row_update_fp_range(const void *rast, int n,
+			   struct FPRange *range, RASTER_MAP_TYPE data_type)
 {
     DCELL val = 0L;
 
@@ -552,8 +541,6 @@ int G_row_update_fp_range(const void *rast, int n,
 
 	rast = G_incr_void_ptr(rast, G_raster_size(data_type));
     }
-
-    return 0;
 }
 
 /*-------------------------------------------------------------------------*/
@@ -568,16 +555,14 @@ int G_row_update_fp_range(const void *rast, int n,
  * no min/max have been defined - probably a <tt>"first"</tt> boolean flag.
  *
  *  \param range
- *  \return int
+ *  \return
  */
 
-int G_init_range(struct Range *range)
+void G_init_range(struct Range *range)
 {
     G_set_c_null_value(&(range->min), 1);
     G_set_c_null_value(&(range->max), 1);
     range->first_time = 1;
-
-    return 0;
 }
 
 /*-------------------------------------------------------------------------*/
@@ -596,11 +581,11 @@ int G_init_range(struct Range *range)
  *  \param range
  *  \param min
  *  \param max
- *  \return int
+ *  \return
  */
 
 
-int G_get_range_min_max(const struct Range *range, CELL * min, CELL * max)
+void G_get_range_min_max(const struct Range *range, CELL * min, CELL * max)
 {
     if (range->first_time) {
 	G_set_c_null_value(min, 1);
@@ -617,8 +602,6 @@ int G_get_range_min_max(const struct Range *range, CELL * min, CELL * max)
 	else
 	    *max = range->max;
     }
-
-    return 0;
 }
 
 /*-------------------------------------------------------------------------*/
@@ -631,16 +614,14 @@ int G_get_range_min_max(const struct Range *range, CELL * min, CELL * max)
  * <tt>"first"</tt> boolean flag.
  *
  *  \param r
- *  \return int
+ *  \return
  */
 
-int G_init_fp_range(struct FPRange *range)
+void G_init_fp_range(struct FPRange *range)
 {
     G_set_d_null_value(&(range->min), 1);
     G_set_d_null_value(&(range->max), 1);
     range->first_time = 1;
-
-    return 0;
 }
 
 /*-------------------------------------------------------------------------*/
@@ -656,11 +637,11 @@ int G_init_fp_range(struct FPRange *range)
  *  \param r
  *  \param min
  *  \param max
- *  \return int
+ *  \return
  */
 
-int G_get_fp_range_min_max(const struct FPRange *range,
-			   DCELL * min, DCELL * max)
+void G_get_fp_range_min_max(const struct FPRange *range,
+			    DCELL *min, DCELL *max)
 {
     if (range->first_time) {
 	G_set_d_null_value(min, 1);
@@ -677,6 +658,4 @@ int G_get_fp_range_min_max(const struct FPRange *range,
 	else
 	    *max = range->max;
     }
-
-    return 0;
 }

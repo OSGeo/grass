@@ -140,9 +140,9 @@ char *G_find_key_value(const char *key, const struct Key_Value *kv)
 
    \param[in] kv Key_Value structure
 
-   \return 0
+   \return
  */
-int G_free_key_value(struct Key_Value *kv)
+void G_free_key_value(struct Key_Value *kv)
 {
     int n;
 
@@ -155,6 +155,4 @@ int G_free_key_value(struct Key_Value *kv)
     kv->nitems = 0;		/* just for safe measure */
     kv->nalloc = 0;
     G_free(kv);
-
-    return 0;
 }

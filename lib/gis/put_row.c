@@ -189,8 +189,6 @@ static void write_error(int fd, int row)
     G_warning(_("map [%s] - unable to write row %d"), fcb->name, row);
 
     fcb->io_error = 1;
-
-    return;
 }
 
 /*--------------------------------------------------------------------------*/

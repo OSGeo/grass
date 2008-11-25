@@ -46,15 +46,13 @@ static struct state *st = &state;
  * \param[in] a semi-major axis
  * \param[in] e2 ellipsoid eccentricity
  * \param[in] s scale factor
- * \return always returns 0
+ * \return
  */
 
-int G_begin_zone_area_on_ellipsoid(double a, double e2, double s)
+void G_begin_zone_area_on_ellipsoid(double a, double e2, double s)
 {
     st->E = sqrt(e2);
     st->M = s * a * a * M_PI * (1 - e2) / st->E;
-
-    return 0;
 }
 
 

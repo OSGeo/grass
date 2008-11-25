@@ -24,12 +24,12 @@
 #define THRESHOLD .0000000000000000000000000000005
 /* .5 * 10 ^(-30) */
 
-static int write_new_colors(FILE *, struct Colors *);
-static int write_rules(FILE *, struct _Color_Rule_ *, DCELL, DCELL);
-static int write_old_colors(FILE *, struct Colors *);
-static int forced_write_old_colors(FILE *, struct Colors *);
-static int format_min(char *, double);
-static int format_max(char *, double);
+static void write_rules(FILE *, struct _Color_Rule_ *, DCELL, DCELL);
+static void write_new_colors(FILE *, struct Colors *);
+static void write_old_colors(FILE *, struct Colors *);
+static void forced_write_old_colors(FILE *, struct Colors *);
+static void format_min(char *, double);
+static void format_max(char *, double);
 
 
 /*!
@@ -80,7 +80,6 @@ int G_write_colors(const char *name, const char *mapset,
     char element[512];
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
     FILE *fd;
-    int stat;
 
     if (G__name_is_fully_qualified(name, xname, xmapset)) {
 	if (strcmp(xmapset, mapset) != 0)
@@ -100,22 +99,22 @@ int G_write_colors(const char *name, const char *mapset,
     if (!(fd = G_fopen_new(element, name)))
 	return -1;
 
-    stat = G__write_colors(fd, colors);
+    G__write_colors(fd, colors);
     fclose(fd);
-    return stat;
+    return 1;
 }
 
-int G__write_colors(FILE * fd, struct Colors *colors)
+void G__write_colors(FILE * fd, struct Colors *colors)
 {
     if (getenv("FORCE_GRASS3_COLORS"))
-	return forced_write_old_colors(fd, colors);
+	forced_write_old_colors(fd, colors);
     else if (colors->version < 0)
-	return write_old_colors(fd, colors);
+	write_old_colors(fd, colors);
     else
-	return write_new_colors(fd, colors);
+	write_new_colors(fd, colors);
 }
 
-static int write_new_colors(FILE * fd, struct Colors *colors)
+static void write_new_colors(FILE * fd, struct Colors *colors)
 {
     char str1[100], str2[100];
 
@@ -152,12 +151,10 @@ static int write_new_colors(FILE * fd, struct Colors *colors)
     }
     if (colors->fixed.rules)
 	write_rules(fd, colors->fixed.rules, colors->cmin, colors->cmax);
-
-    return 1;
 }
 
-static int write_rules(FILE * fd, struct _Color_Rule_ *crules, DCELL dmin, DCELL dmax	/* overall min and max data values in color table */
-    )
+/* overall min and max data values in color table */
+static void write_rules(FILE * fd, struct _Color_Rule_ *crules, DCELL dmin, DCELL dmax)
 {
     struct _Color_Rule_ *rule;
     char str[100];
@@ -193,11 +190,9 @@ static int write_rules(FILE * fd, struct _Color_Rule_ *crules, DCELL dmin, DCELL
 	}
 	fprintf(fd, "\n");
     }
-
-    return 0;
 }
 
-static int write_old_colors(FILE * fd, struct Colors *colors)
+static void write_old_colors(FILE * fd, struct Colors *colors)
 {
     int i, n;
 
@@ -221,11 +216,9 @@ static int write_old_colors(FILE * fd, struct Colors *colors)
 		    (int)colors->fixed.lookup.blu[i]);
 	fprintf(fd, "\n");
     }
-
-    return 1;
 }
 
-static int forced_write_old_colors(FILE * fd, struct Colors *colors)
+static void forced_write_old_colors(FILE * fd, struct Colors *colors)
 {
     int red, grn, blu;
     CELL cat;
@@ -241,11 +234,9 @@ static int forced_write_old_colors(FILE * fd, struct Colors *colors)
 	    fprintf(fd, " %d %d", grn, blu);
 	fprintf(fd, "\n");
     }
-
-    return 1;
 }
 
-static int format_min(char *str, double dval)
+static void format_min(char *str, double dval)
 {
     double dtmp;
 
@@ -256,11 +247,9 @@ static int format_min(char *str, double dval)
 	sprintf(str, "%.*f", PRECISION, dval - THRESHOLD);
 	/* because precision is probably higher than PRECISION */
     }
-
-    return 0;
 }
 
-static int format_max(char *str, double dval)
+static void format_max(char *str, double dval)
 {
     double dtmp;
 
@@ -271,6 +260,4 @@ static int format_max(char *str, double dval)
 	sprintf(str, "%.*f", PRECISION, dval + THRESHOLD);
 	/* because precision is probably higher than PRECISION */
     }
-
-    return 0;
 }

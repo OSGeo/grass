@@ -196,10 +196,10 @@ int G_write_history(const char *name, struct History *hist)
  *  \param name
  *  \param type
  *  \param history
- *  \return int
+ *  \return
  */
 
-int G_short_history(const char *name, const char *type, struct History *hist)
+void G_short_history(const char *name, const char *type, struct History *hist)
 {
     strncpy(hist->mapid, G_date(), RECORD_LEN);
     strncpy(hist->title, name, RECORD_LEN);
@@ -211,8 +211,6 @@ int G_short_history(const char *name, const char *type, struct History *hist)
     strcpy(hist->datsrc_1, "");
     strcpy(hist->datsrc_2, "");
     hist->edlinecnt = 0;
-
-    return 1;
 }
 
 /*!

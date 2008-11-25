@@ -150,7 +150,7 @@ int G_get_reclass(const char *name, const char *mapset,
     return stat;
 }
 
-int G_free_reclass(struct Reclass *reclass)
+void G_free_reclass(struct Reclass *reclass)
 {
     switch (reclass->type) {
     case RECLASS_TABLE:
@@ -167,8 +167,6 @@ int G_free_reclass(struct Reclass *reclass)
     default:
 	break;
     }
-
-    return 0;
 }
 
 static int reclass_type(FILE * fd, char **rname, char **rmapset)

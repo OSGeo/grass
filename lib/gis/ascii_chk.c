@@ -28,10 +28,10 @@
  * tabs, which are turned into spaces.
  *
  * \param[in,out] string buffer to have non-ascii characters removed
- * \return always returns 0
+ * \return
  */
 
-int G_ascii_check(char *string)
+void G_ascii_check(char *string)
 {
     char *ptr1, *ptr2;
 
@@ -46,6 +46,4 @@ int G_ascii_check(char *string)
 	ptr1++;
     }
     *ptr2 = 0;
-
-    return 0;
 }

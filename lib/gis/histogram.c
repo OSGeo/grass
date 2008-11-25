@@ -16,15 +16,13 @@ static int cmp_count(const void *, const void *);
  * initializes the histogram structure for calls to G_set_histogram()
  * and G_add_histogram()
  * \param  histogram
- * \return int
+ * \return
  */
 
-int G_init_histogram(struct Histogram *histogram)
+void G_init_histogram(struct Histogram *histogram)
 {
     histogram->num = 0;
     histogram->list = NULL;
-
-    return 0;
 }
 
 
@@ -158,9 +156,9 @@ int G_write_histogram_cs(const char *name, struct Cell_stats *statf)
  *
  * \param statf: cell statistics
  * \param histogram: raster histogram
- * \return 0 
+ * \return 
  */
-int G_make_histogram_cs(struct Cell_stats *statf, struct Histogram *histogram)
+void G_make_histogram_cs(struct Cell_stats *statf, struct Histogram *histogram)
 {
     CELL cat;
     long count;
@@ -171,8 +169,6 @@ int G_make_histogram_cs(struct Cell_stats *statf, struct Histogram *histogram)
 	G_add_histogram(cat, count, histogram);
 
     G_sort_histogram(histogram);
-
-    return 0;
 }
 
 
@@ -231,14 +227,12 @@ long G_get_histogram_count(int n, const struct Histogram *histogram)
  * \param histogram: struct for histogram
  * \return 
  */
-int G_free_histogram(struct Histogram *histogram)
+void G_free_histogram(struct Histogram *histogram)
 {
     if (histogram->num > 0)
 	G_free(histogram->list);
     histogram->num = 0;
     histogram->list = NULL;
-
-    return 1;
 }
 
 /*!
@@ -365,14 +359,12 @@ static FILE *fopen_histogram_new(const char *name)
  *
  *  Removes the histogram information associated with map layer "name"
  * \param name: name of map
- * \return 0
+ * \return
  */
 
-int G_remove_histogram(const char *name)
+void G_remove_histogram(const char *name)
 {
     G_remove_misc("cell_misc", "histogram", name);
-
-    return 0;
 }
 
 
@@ -436,16 +428,14 @@ int G_set_histogram(CELL cat, long count, struct Histogram *histogram)
  * \param histogram: struct for histogram
  * \return 
  */
-int G_extend_histogram(CELL cat, long count, struct Histogram *histogram)
+void G_extend_histogram(CELL cat, long count, struct Histogram *histogram)
 {
     histogram->num++;
     histogram->list =
-	(LIST *) G_realloc((char *)histogram->list,
+	(LIST *) G_realloc(histogram->list,
 			   histogram->num * sizeof(LIST));
     histogram->list[histogram->num - 1].cat = cat;
     histogram->list[histogram->num - 1].count = count;
-
-    return 0;
 }
 
 
@@ -455,12 +445,10 @@ int G_extend_histogram(CELL cat, long count, struct Histogram *histogram)
  * \param histogram: struct for histogram
  * \return 
  */
-int G_zero_histogram(struct Histogram *histogram)
+void G_zero_histogram(struct Histogram *histogram)
 {
     int i;
 
     for (i = 0; i < histogram->num; i++)
 	histogram->list[i].count = 0;
-
-    return 0;
 }

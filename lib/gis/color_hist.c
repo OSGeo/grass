@@ -36,11 +36,11 @@
  *
  *  \param colors
  *  \param s
- *  \return int
+ *  \return
  */
 
-int G_make_histogram_eq_colors(struct Colors *colors,
-			       struct Cell_stats *statf)
+void G_make_histogram_eq_colors(struct Colors *colors,
+				struct Cell_stats *statf)
 {
     long count, total;
     CELL prev = 0, cat;
@@ -61,7 +61,7 @@ int G_make_histogram_eq_colors(struct Colors *colors,
 	if (count > 0)
 	    total += count;
     if (total <= 0)
-	return 0;
+	return;
 
     span = total / 256.0;
     first = 1;
@@ -94,13 +94,10 @@ int G_make_histogram_eq_colors(struct Colors *colors,
 	G_add_color_rule(prev, grey, grey, grey, cat, grey, grey, grey,
 			 colors);
     }
-
-    return 0;
 }
 
-
-int G_make_histogram_log_colors(struct Colors *colors,
-				struct Cell_stats *statf, int min, int max)
+void G_make_histogram_log_colors(struct Colors *colors,
+				 struct Cell_stats *statf, int min, int max)
 {
     long count, total;
     double lmin, lmax;
@@ -121,7 +118,7 @@ int G_make_histogram_log_colors(struct Colors *colors,
 	if (count > 0)
 	    total += count;
     if (total <= 0)
-	return 0;
+	return;
 
     first = 1;
     grey = 0;
@@ -157,6 +154,4 @@ int G_make_histogram_log_colors(struct Colors *colors,
 	G_add_color_rule(prev, grey, grey, grey, cat, grey, grey, grey,
 			 colors);
     }
-
-    return 0;
 }

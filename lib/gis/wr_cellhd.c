@@ -24,11 +24,11 @@
  * \param[in,out] fd header file
  * \param[in] cellhd pointed to cell header structure
  * \param[in] is_cellhd 1 cell header; 0 window
- * \return always returns 1
+ * \return
  */
 
-int G__write_Cell_head(FILE * fd,
-		       const struct Cell_head *cellhd, int is_cellhd)
+void G__write_Cell_head(FILE * fd,
+			const struct Cell_head *cellhd, int is_cellhd)
 {
     char buf[1024];
     int fmt;
@@ -63,8 +63,6 @@ int G__write_Cell_head(FILE * fd,
 	fprintf(fd, "format:     %d\n", cellhd->format);
 	fprintf(fd, "compressed: %d\n", cellhd->compressed);
     }
-
-    return 1;
 }
 
 
@@ -74,11 +72,11 @@ int G__write_Cell_head(FILE * fd,
  * \param[in,out] fd header file
  * \param[in] cellhd pointer to cell header structure
  * \param[in] is_cellhd 1 cell header; 0 window
- * \return always returns 1
+ * \return
  */
 
-int G__write_Cell_head3(FILE * fd,
-			const struct Cell_head *cellhd, int is_cellhd)
+void G__write_Cell_head3(FILE * fd,
+			 const struct Cell_head *cellhd, int is_cellhd)
 {
     char buf[1024];
     int fmt;
@@ -102,6 +100,4 @@ int G__write_Cell_head3(FILE * fd,
 
     G_format_resolution(cellhd->tb_res, buf, fmt);
     fprintf(fd, "t-b resol:  %s\n", buf);
-
-    return 1;
 }

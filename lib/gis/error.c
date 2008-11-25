@@ -54,19 +54,18 @@ static int message_id = 1;
 
 static int print_word(FILE *, char **, int *, const int);
 static void print_sentence(FILE *, const int, const char *);
-static int print_error(const char *, const int);
+static void print_error(const char *, const int);
 static int mail_msg(const char *, int);
 static int write_error(const char *, int, time_t, const char *);
-static int log_error(const char *, int);
+static void log_error(const char *, int);
 
-static int vfprint_error(int type, const char *template, va_list ap)
+static void vfprint_error(int type, const char *template, va_list ap)
 {
     char buffer[2000];		/* G_asprintf does not work */
 
     vsprintf(buffer, template, ap);
 
-    /* . */
-    return print_error(buffer, type);
+    print_error(buffer, type);
 }
 
 /*!
@@ -85,8 +84,6 @@ void G_message(const char *msg, ...)
 	vfprint_error(MSG, msg, ap);
 	va_end(ap);
     }
-
-    return;
 }
 
 /*!
@@ -106,8 +103,6 @@ void G_verbose_message(const char *msg, ...)
 	vfprint_error(MSG, msg, ap);
 	va_end(ap);
     }
-
-    return;
 }
 
 /*!
@@ -130,8 +125,6 @@ void G_important_message(const char *msg, ...)
 	vfprint_error(MSG, msg, ap);
 	va_end(ap);
     }
-
-    return;
 }
 
 /*!
@@ -152,7 +145,7 @@ void G_important_message(const char *msg, ...)
  * \return Terminates with an exit status of EXIT_FAILURE if no external
  * routine is specified by G_set_error_routine()
  */
-int G_fatal_error(const char *msg, ...)
+void G_fatal_error(const char *msg, ...)
 {
     va_list ap;
 
@@ -173,20 +166,18 @@ int G_fatal_error(const char *msg, ...)
  *
  * \param msg string (cannot be NULL)
  *
- * \return 0
+ * \return
  */
-int G_warning(const char *msg, ...)
+void G_warning(const char *msg, ...)
 {
     va_list ap;
 
     if (no_warn)
-	return 0;
+	return;
 
     va_start(ap, msg);
     vfprint_error(WARN, msg, ap);
     va_end(ap);
-
-    return 0;
 }
 
 /*!
@@ -228,12 +219,11 @@ int G_sleep_on_error(int flag)
  * \param error_routine routine will be called like this: error_routine(msg,
  * fatal)
  *
- * \return 0
+ * \return
  */
-int G_set_error_routine(int (*error_routine) (const char *, int))
+void G_set_error_routine(int (*error_routine) (const char *, int))
 {
     ext_error = error_routine;	/* Roger Bivand 17 June 2000 */
-    return 0;
 }
 
 /*!
@@ -244,15 +234,13 @@ int G_set_error_routine(int (*error_routine) (const char *, int))
  *
  * \return 0
  */
-int G_unset_error_routine(void)
+void G_unset_error_routine(void)
 {
     ext_error = 0;		/* Roger Bivand 17 June 2000 */
-
-    return 0;
 }
 
 /* Print info to stderr and optionally to log file and optionally send mail */
-static int print_error(const char *msg, const int type)
+static void print_error(const char *msg, const int type)
 {
     int fatal, format;
 
@@ -297,11 +285,9 @@ static int print_error(const char *msg, const int type)
 	    print_sentence(stderr, type, msg);
 	}
     }
-
-    return 0;
 }
 
-static int log_error(const char *msg, int fatal)
+static void log_error(const char *msg, int fatal)
 {
     char cwd[GPATH_MAX];
     time_t clock;
@@ -316,8 +302,6 @@ static int log_error(const char *msg, int fatal)
     /* write the error log file */
     if ((gisbase = G_gisbase()))
 	write_error(msg, fatal, clock, cwd);
-
-    return 0;
 }
 
 void G_init_logging(void)

@@ -48,12 +48,12 @@ static void sigpipe_catch(int);
    \param lister     If given will call this routine to get a list
    title. NULL if no titles desired. 
 
-   \return Number of elements
+   \return
 */
-int G_list_element(const char *element,
-		   const char *desc,
-		   const char *mapset,
-		   int (*lister) (const char *, const char *, const char *))
+void G_list_element(const char *element,
+		    const char *desc,
+		    const char *mapset,
+		    int (*lister) (const char *, const char *, const char *))
 {
     int n;
     FILE *more;
@@ -123,8 +123,6 @@ int G_list_element(const char *element,
 #ifdef SIGPIPE
     signal(SIGPIPE, sigpipe);
 #endif
-
-    return 0;
 }
 
 static void sigpipe_catch(int n)

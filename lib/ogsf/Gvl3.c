@@ -63,8 +63,7 @@ int Gvl_load_colors_data(void **color_data, const char *name)
  */
 int Gvl_unload_colors_data(void *color_data)
 {
-    if (!G_free_colors(color_data))
-	return (-1);
+    G_free_colors(color_data);
 
     G_free(color_data);
 

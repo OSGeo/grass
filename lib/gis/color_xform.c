@@ -53,11 +53,11 @@
  *  \param dst
  *  \param src
  *  \param statf
- *  \return int
+ *  \return
  */
 
-int G_histogram_eq_colors(struct Colors *dst,
-			  struct Colors *src, struct Cell_stats *statf)
+void G_histogram_eq_colors(struct Colors *dst,
+			   struct Colors *src, struct Cell_stats *statf)
 {
     DCELL min, max;
     int red, grn, blu;
@@ -83,7 +83,7 @@ int G_histogram_eq_colors(struct Colors *dst,
 	    total += count;
 
     if (total <= 0)
-	return 0;
+	return;
 
     sum = 0;
     prev = 0;
@@ -111,8 +111,6 @@ int G_histogram_eq_colors(struct Colors *dst,
 	grn = grn2;
 	blu = blu2;
     }
-
-    return 0;
 }
 
 /*!
@@ -191,10 +189,10 @@ void G_histogram_eq_colors_fp(struct Colors *dst,
  *  \param dst
  *  \param src
  *  \param samples
- *  \return int
+ *  \return
  */
 
-int G_log_colors(struct Colors *dst, struct Colors *src, int samples)
+void G_log_colors(struct Colors *dst, struct Colors *src, int samples)
 {
     DCELL min, max;
     double lmin, lmax;
@@ -243,8 +241,6 @@ int G_log_colors(struct Colors *dst, struct Colors *src, int samples)
 	grn = grn2;
 	blu = blu2;
     }
-
-    return 0;
 }
 
 /*!
@@ -253,10 +249,10 @@ int G_log_colors(struct Colors *dst, struct Colors *src, int samples)
  *  \param dst
  *  \param src
  *  \param samples
- *  \return int
+ *  \return
  */
 
-int G_abs_log_colors(struct Colors *dst, struct Colors *src, int samples)
+void G_abs_log_colors(struct Colors *dst, struct Colors *src, int samples)
 {
     DCELL min, max;
     double lmin, lmax;
@@ -316,7 +312,5 @@ int G_abs_log_colors(struct Colors *dst, struct Colors *src, int samples)
 	grn = grn2;
 	blu = blu2;
     }
-
-    return 0;
 }
 

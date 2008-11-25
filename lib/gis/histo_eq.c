@@ -10,8 +10,9 @@
 * inputs are histo, output is map,min,max
 ****************************************************************/
 #include <grass/gis.h>
-int G_histogram_eq(const struct Histogram *histo,
-		   unsigned char **map, CELL * min, CELL * max)
+
+void G_histogram_eq(const struct Histogram *histo,
+		    unsigned char **map, CELL *min, CELL *max)
 {
     int i;
     int x;
@@ -30,7 +31,7 @@ int G_histogram_eq(const struct Histogram *histo,
 	*min = *max = G_get_histogram_cat(0, histo);
 	*map = xmap = (unsigned char *)G_malloc(1);
 	*xmap = 0;
-	return 0;
+	return;
     }
     if ((*min = G_get_histogram_cat(first = 0, histo)) == 0)
 	*min = G_get_histogram_cat(++first, histo);
@@ -50,7 +51,7 @@ int G_histogram_eq(const struct Histogram *histo,
     if (total <= 0) {
 	for (i = 0; i < len; i++)
 	    xmap[i] = 0;
-	return 0;
+	return;
     }
 
     span = total / 256;
@@ -73,6 +74,4 @@ int G_histogram_eq(const struct Histogram *histo,
 	while (prev++ <= cat)
 	    *xmap++ = x;
     }
-
-    return 0;
 }

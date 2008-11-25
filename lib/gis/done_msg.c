@@ -23,10 +23,10 @@
  * \brief Print a final message.
  *
  * \param[in] msg string.  Cannot be NULL.
- * \return always returns 0
+ * \return
  */
 
-int G_done_msg(const char *msg, ...)
+void G_done_msg(const char *msg, ...)
 {
     char buffer[2000];
     va_list ap;
@@ -36,6 +36,4 @@ int G_done_msg(const char *msg, ...)
     va_end(ap);
 
     G_message(_("%s complete. %s"), G_program_name(), buffer);
-
-    return 0;
 }

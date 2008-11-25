@@ -326,7 +326,6 @@ G3d_writeColors(const char *name, const char *mapset, struct Colors *colors)
  /* adapted from G_write_colors */
 {
     FILE *fd;
-    int stat;
 
     if (strcmp(mapset, G_mapset()) != 0) {
 	G_warning(_("mapset <%s> is not the current mapset"), mapset);
@@ -337,10 +336,10 @@ G3d_writeColors(const char *name, const char *mapset, struct Colors *colors)
     if (!fd)
 	return -1;
 
-    stat = G__write_colors(fd, colors);
+    G__write_colors(fd, colors);
     fclose(fd);
 
-    return stat;
+    return 1;
 }
 
 /*---------------------------------------------------------------------------*/

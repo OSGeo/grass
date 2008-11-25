@@ -35,10 +35,10 @@ NOTE: These routines are used by G_format_northing(), G_format_easting(), and
 #include <grass/gis.h>
 #include <string.h>
 
-static int format(char *, int, int, double, char);
-static int ll_parts(double, int *, int *, double *);
+static void format(char *, int, int, double, char);
+static void ll_parts(double, int *, int *, double *);
 
-int G_lat_format(double lat, char *buf)
+void G_lat_format(double lat, char *buf)
 {
     int d, m;
     char h;
@@ -46,8 +46,6 @@ int G_lat_format(double lat, char *buf)
 
     G_lat_parts(lat, &d, &m, &s, &h);
     format(buf, d, m, s, h);
-
-    return 0;
 }
 
 char *G_lat_format_string(void)
@@ -55,7 +53,7 @@ char *G_lat_format_string(void)
     return "dd:mm:ss{N|S}";
 }
 
-int G_lon_format(double lon, char *buf)
+void G_lon_format(double lon, char *buf)
 {
     int d, m;
     char h;
@@ -63,15 +61,14 @@ int G_lon_format(double lon, char *buf)
 
     G_lon_parts(lon, &d, &m, &s, &h);
     format(buf, d, m, s, h);
-
-    return 0;
 }
+
 char *G_lon_format_string(void)
 {
     return "ddd:mm:ss{E|W}";
 }
 
-int G_llres_format(double res, char *buf)
+void G_llres_format(double res, char *buf)
 {
     int d, m;
     char h;
@@ -80,16 +77,14 @@ int G_llres_format(double res, char *buf)
     G_lat_parts(res, &d, &m, &s, &h);
     h = 0;
     format(buf, d, m, s, h);
-
-    return 0;
 }
+
 char *G_llres_format_string(void)
 {
     return "dd:mm:ss";
 }
 
-
-static int format(char *buf, int d, int m, double s, char h)
+static void format(char *buf, int d, int m, double s, char h)
 {
     char temp[50];
     double ss;
@@ -117,14 +112,12 @@ static int format(char *buf, int d, int m, double s, char h)
 	sprintf(buf, "%d%c", d, h);
     else
 	sprintf(buf, "0");
-
-    return 0;
 }
 
-int G_lat_parts(double lat,	/* lat in degrees to be split into parts */
-		int *d, int *m,	/* degrees, minutes */
-		double *s,	/* seconds */
-		char *h		/* hemisphere */
+void G_lat_parts(double lat,		/* lat in degrees to be split into parts */
+		 int *d, int *m,	/* degrees, minutes */
+		 double *s,		/* seconds */
+		 char *h		/* hemisphere */
     )
 {
     if (lat < 0) {
@@ -135,14 +128,12 @@ int G_lat_parts(double lat,	/* lat in degrees to be split into parts */
 	*h = 'N';
 
     ll_parts(lat, d, m, s);
-
-    return 0;
 }
 
-int G_lon_parts(double lon,	/* lon in degrees to be split into parts */
-		int *d, int *m,	/* degrees, minutes */
-		double *s,	/* seconds */
-		char *h		/* hemisphere */
+void G_lon_parts(double lon,		/* lon in degrees to be split into parts */
+		 int *d, int *m,	/* degrees, minutes */
+		 double *s,		/* seconds */
+		 char *h		/* hemisphere */
     )
 {
     while (lon > 180.0)
@@ -158,14 +149,13 @@ int G_lon_parts(double lon,	/* lon in degrees to be split into parts */
 	*h = 'E';
 
     ll_parts(lon, d, m, s);
-
-    return 0;
 }
 
-static int ll_parts(double ll,	/* ll in degrees to be split into parts */
-		    int *d, int *m,	/* degrees, minutes */
-		    double *s)
-{				/* seconds */
+static void ll_parts(double ll,		/* ll in degrees to be split into parts */
+		     int *d, int *m,	/* degrees, minutes */
+		     double *s		/* seconds */
+)
+{
     if (ll == 0.0) {
 	*d = 0;
 	*m = 0;
@@ -180,6 +170,4 @@ static int ll_parts(double ll,	/* ll in degrees to be split into parts */
 	if (*s < 0)
 	    *s = 0;
     }
-
-    return 0;
 }

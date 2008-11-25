@@ -153,10 +153,10 @@ int G_get_d_raster_color(const DCELL * rast,
  *  \param[out] grn green value
  *  \param[out] blu blue value
  *  \param[in] colors Colors struct
- *  \return always returns 0
+ *  \return
  */
 
-int G_get_null_value_color(int *red, int *grn, int *blu,
+void G_get_null_value_color(int *red, int *grn, int *blu,
 			   const struct Colors *colors)
 {
     if (colors->null_set) {
@@ -171,8 +171,6 @@ int G_get_null_value_color(int *red, int *grn, int *blu,
     }
     else
 	*red = *blu = *grn = 255;	/* white */
-
-    return 0;
 }
 
 
@@ -186,11 +184,11 @@ int G_get_null_value_color(int *red, int *grn, int *blu,
  *  \param[out] grn green value
  *  \param[out] blu blue value
  *  \param[in] colors Colors struct
- *  \return always returns 0
+ *  \return
  */
 
-int G_get_default_color(int *red, int *grn, int *blu,
-			const struct Colors *colors)
+void G_get_default_color(int *red, int *grn, int *blu,
+			 const struct Colors *colors)
 {
     if (colors->undef_set) {
 	*red = (int)colors->undef_red;
@@ -199,6 +197,4 @@ int G_get_default_color(int *red, int *grn, int *blu,
     }
     else
 	*red = *blu = *grn = 255;	/* white */
-
-    return 0;
 }

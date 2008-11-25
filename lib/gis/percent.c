@@ -68,8 +68,6 @@ void G_percent(long n, long d, int s)
 	st->prev = -1;
 	st->first = 1;
     }
-
-    return;
 }
 
 
