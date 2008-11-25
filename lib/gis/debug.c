@@ -43,20 +43,28 @@ static int grass_debug_level = -1;
  * \return 1 on success
  */
 
+void G_init_debug(void)
+{
+    const char *lstr;
+
+    if (grass_debug_level >= 0)
+	return;
+
+    lstr = G__getenv("DEBUG");
+
+    if (lstr != NULL)
+	grass_debug_level = atoi(lstr);
+    else
+	grass_debug_level = 0;
+}
+
 int G_debug(int level, const char *msg, ...)
 {
-    char *lstr, *filen;
+    char *filen;
     va_list ap;
     FILE *fd;
 
-    if (grass_debug_level < 0) {
-	lstr = G__getenv("DEBUG");
-
-	if (lstr != NULL)
-	    grass_debug_level = atoi(lstr);
-	else
-	    grass_debug_level = 0;
-    }
+    G_init_debug();
 
     if (grass_debug_level >= level) {
 	va_start(ap, msg);
