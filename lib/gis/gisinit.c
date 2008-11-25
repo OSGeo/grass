@@ -129,3 +129,26 @@ static int gisinit(void)
 
     return 0;
 }
+
+void G_init_all(void)
+{
+    G__check_gisinit();
+    G_init_env();
+    G_init_logging();
+    G__init_window();
+    G_get_fp_type();
+    G_get_compression_type();
+    G__check_for_auto_masking();
+    G_init_locale();
+    G_init_debug();
+    G_verbose();
+    G_init_tempfile();
+    G_init_gdal();
+    G_get_list_of_mapsets();
+    G__home();
+    G__machine_name();
+    G_whoami();
+    G_read_datum_table();
+    G_read_ellipsoid_table(0);
+}
+

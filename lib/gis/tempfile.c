@@ -19,6 +19,18 @@
 #include <sys/stat.h>
 #include <grass/gis.h>
 
+static struct Counter unique;
+static int initialized;
+
+void G_init_tempfile(void)
+{
+    if (initialized)
+	return;
+
+    G_init_counter(&unique, 0);
+
+    initialized = 1;
+}
 
 /**
  * \brief Returns a temporary file name.
@@ -49,7 +61,6 @@ char *G_tempfile(void)
     return G__tempfile(getpid());
 }
 
-
 /**
  * \brief Create tempfile from process id.
  *
@@ -64,14 +75,15 @@ char *G__tempfile(int pid)
     char path[GPATH_MAX];
     char name[GNAME_MAX];
     char element[100];
-    static int uniq = 0;
     struct stat st;
 
     if (pid <= 0)
 	pid = getpid();
     G__temp_element(element);
+    G_init_tempfile();
     do {
-	sprintf(name, "%d.%d", pid, uniq++);
+	int uniq = G_counter_next(&unique);
+	sprintf(name, "%d.%d", pid, uniq);
 	G__file_name(path, element, name, G_mapset());
     }
     while (stat(path, &st) == 0);
