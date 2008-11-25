@@ -16,9 +16,10 @@
 
 char *G__machine_name(void)
 {
+    static int initialized;
     static char name[128];
 
-    if (*name)
+    if (G_is_initialized(&initialized))
 	return name;
 
 #if defined(HAVE_GETHOSTNAME)
@@ -34,5 +35,6 @@ char *G__machine_name(void)
     strcpy(name, "unknown");
 #endif
 
+    G_initialize_done(&initialized);
     return name;
 }

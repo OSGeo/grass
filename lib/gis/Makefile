@@ -37,6 +37,12 @@ endif
 
 endif
 
+ifneq ($(USE_PTHREAD),)
+PTHREADLIB = -lpthread
+EXTRA_CFLAGS += -DUSE_PTHREAD
+EXTRA_LIBS += $(PTHREADLIB)
+endif
+
 default: lib $(FMODE_OBJ) $(DATAFILES) $(COLORFILES) $(ETC)/colors.desc $(ETC)/element_list
 
 $(FMODE_OBJ): fmode.dat

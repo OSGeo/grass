@@ -23,8 +23,8 @@
 #include "G.h"
 
 
-static int grass_debug_level = -1;
-
+static int initialized;
+static int grass_debug_level;
 
 /**
  * \brief Print debugging message.
@@ -47,7 +47,7 @@ void G_init_debug(void)
 {
     const char *lstr;
 
-    if (grass_debug_level >= 0)
+    if (G_is_initialized(&initialized))
 	return;
 
     lstr = G__getenv("DEBUG");
@@ -56,6 +56,8 @@ void G_init_debug(void)
 	grass_debug_level = atoi(lstr);
     else
 	grass_debug_level = 0;
+
+    G_initialize_done(&initialized);
 }
 
 int G_debug(int level, const char *msg, ...)

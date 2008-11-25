@@ -25,25 +25,26 @@
 void G_init_locale(void)
 {
     static int initialized;
-    char localedir[GPATH_MAX];
     const char *gisbase;
 
-    if (initialized)
+    if (G_is_initialized(&initialized))
 	return;
-    initialized = 1;
 
     setlocale(LC_CTYPE, "");
     setlocale(LC_MESSAGES, "");
 
     gisbase = getenv("GISBASE");
-    if (!gisbase || !*gisbase)
-	return;
+    if (gisbase && *gisbase) {
+	char localedir[GPATH_MAX];
 
-    strcpy(localedir, gisbase);
-    strcat(localedir, "/locale");
+	strcpy(localedir, gisbase);
+	strcat(localedir, "/locale");
 
-    bindtextdomain("grasslibs", localedir);
-    bindtextdomain("grassmods", localedir);
+	bindtextdomain("grasslibs", localedir);
+	bindtextdomain("grassmods", localedir);
+    }
+
+    G_initialize_done(&initialized);
 }
 #endif
 

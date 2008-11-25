@@ -41,6 +41,7 @@ static struct table {
     } *ellipses;
     int count;
     int size;
+    int initialized;
 } table;
 
 /* static int get_a_e2 (char *, char *, double *,double *); */
@@ -261,7 +262,7 @@ int G_read_ellipsoid_table(int fatal)
     int line;
     int err;
 
-    if (table.count > 0)
+    if (G_is_initialized(&table.initialized))
 	return 1;
 
     sprintf(file, "%s/etc/ellipse.table", G_gisbase());
@@ -269,6 +270,7 @@ int G_read_ellipsoid_table(int fatal)
 
     if (fd == NULL) {
 	(fatal ? G_fatal_error : G_warning)(_("Unable to open ellipsoid table file <%s>"), file);
+	G_initialize_done(&table.initialized);
 	return 0;
     }
 
@@ -319,6 +321,7 @@ int G_read_ellipsoid_table(int fatal)
     if (!err) {
 	/* over correct typed version */
 	qsort(table.ellipses, table.count, sizeof(struct ellipse), compare_ellipse_names);
+	G_initialize_done(&table.initialized);
 	return 1;
     }
 
@@ -327,6 +330,8 @@ int G_read_ellipsoid_table(int fatal)
 	? _("Lines%s of ellipsoid table file <%s> are invalid")
 	: _("Line%s of ellipsoid table file <%s> is invalid"),
 	badlines, file);
+
+    G_initialize_done(&table.initialized);
 
     return 0;
 }

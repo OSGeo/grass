@@ -115,13 +115,13 @@ static int gisinit(void)
     G__.want_histogram = 0;
 
     /* set the write type for floating maps */
-    G__.fp_type = -1;
+    G__.fp_type = getenv("GRASS_FP_DOUBLE") ? DCELL_TYPE : FCELL_TYPE;
 
     /* Set masking flag unknown */
     G__.auto_mask = -1;
 
     G__.nbytes = sizeof(CELL);
-    G__.compression_type = 0;
+    G__.compression_type = getenv("GRASS_INT_ZLIB") ? 2 : 1;
 
     initialized = 1;
 
@@ -136,8 +136,6 @@ void G_init_all(void)
     G_init_env();
     G_init_logging();
     G__init_window();
-    G_get_fp_type();
-    G_get_compression_type();
     G__check_for_auto_masking();
     G_init_locale();
     G_init_debug();

@@ -388,6 +388,8 @@ int G_recursive_copy(const char *, const char *);
 int G_copy_file(const char *, const char *);
 
 /* counter.c */
+int G_is_initialized(int *);
+void G_initialize_done(int *);
 void G_init_counter(struct Counter *, int);
 int G_counter_next(struct Counter *);
 
@@ -848,8 +850,6 @@ int G_open_cell_new_uncompressed(const char *);
 void G_want_histogram(int);
 void G_set_cell_format(int);
 int G_cellvalue_format(CELL);
-int G_get_fp_type(void);
-int G_get_compression_type(void);
 int G_open_fp_cell_new(const char *);
 int G_open_fp_cell_new_uncompressed(const char *);
 int G_set_fp_type(RASTER_MAP_TYPE);
@@ -1200,6 +1200,12 @@ int G_window_rows(void);
 int G_window_cols(void);
 void G__init_window(void);
 int G_row_repeat_nomask(int, int);
+
+/* worker.c */
+void G_begin_execute(void (*func)(void *), void *, void **, int);
+void G_end_execute(void **);
+void G_init_workers(void);
+void G_finish_workers(void);
 
 /* wr_cellhd.c */
 void G__write_Cell_head(FILE *, const struct Cell_head *, int);
