@@ -1,3 +1,19 @@
+/***************************************************************
+ *
+ * MODULE:       v.delaunay
+ *
+ * AUTHOR(S):    Martin Pavlovsky (Paul Kelly mentor)
+ *
+ * PURPOSE:      creates a Delaunay triangulation vector map
+ *
+ * COPYRIGHT:    (C) 2008 by the GRASS Development Team
+ *
+ *               This program is free software under the
+ *               GNU General Public License (>=v2).
+ *               Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ **************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
