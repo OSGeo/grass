@@ -255,9 +255,9 @@ int main(int argc, char *argv[])
 
     /* if not given, get east and north: XX */
     if (!parm.north->answer || !parm.east->answer) {
-	G_message(_("Using map center coordinates\n"));
 	north = (window.north - window.south) / 2. + window.south;
 	east = (window.west - window.east) / 2. + window.east;
+	G_message(_("Using map center coordinates: %f %f"), east, north);
     }
     else {			/* user defined east, north: */
 
@@ -275,7 +275,7 @@ int main(int argc, char *argv[])
     if (parm.opt3->answer && parm.opt4->answer)
 	solparms = 1;		/* opt3 & opt4 complete */
     else
-	solparms = 0;
+	solparms = 0;		/* calculate sun position */
 
     if (parm.year->answer && parm.month->answer && parm.day->answer &&
 	parm.hour->answer && parm.minutes->answer && parm.seconds->answer &&
@@ -546,7 +546,7 @@ int main(int argc, char *argv[])
     hist.edlinecnt = 3;
     G_write_history(outname, &hist);
 
-    G_done_msg("");
+    G_done_msg(" ");
     exit(EXIT_SUCCESS);
 }
 
