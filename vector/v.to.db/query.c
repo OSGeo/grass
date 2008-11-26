@@ -81,8 +81,6 @@ int query(struct Map_info *Map)
     if ((Fi = Vect_get_field(Map, options.qfield)) == NULL)
 	G_fatal_error(_("Database connection not defined for layer %d. Use v.db.connect first."),
 		      options.qfield);
-    G_debug(3, "Reading from map <%s>, query layer %d: updating table <%s>, column <%s>",
-            options.name, options.qfield, Fi->table, Fi->key);
 
     /* Open driver */
     driver = db_start_driver_open_database(Fi->driver, Fi->database);
