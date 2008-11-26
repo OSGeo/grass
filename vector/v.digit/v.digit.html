@@ -4,6 +4,7 @@
 user interface.  Attribute tables can be directly generated while
 digitizing (define in "Settings" first).
 
+
 <h2>NOTES</h2>
 
 The <b>bgcmd</b> option is intended to be used with display (d.*) commands.
@@ -19,6 +20,11 @@ there and occupies space. Any vector module used afterwards on this map
 which really reads and writes vector geometry (so
 not <em><a href="g.copy.html">g.copy</a></em>) will writes only lines
 which are 'alive'.
+
+<p>
+If <em>v.digit</em> crashes for some reason you can repair the vector map
+which was left open with the <em>v.build</em> module.
+
 
 <h2>EXAMPLES</h2>
 
