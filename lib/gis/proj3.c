@@ -2,10 +2,24 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-static int lookup(const char *, const char *, char *, int);
+static const char *lookup_proj(const char *);
+static const char *lookup_units(const char *);
 static int equal(const char *, const char *);
 static int lower(char);
 
+static int initialized;
+static struct Key_Value *proj_info, *proj_units;
+
+static void init(void)
+{
+    if (G_is_initialized(&initialized))
+	return;
+
+    proj_info = G_get_projinfo();
+    proj_units = G_get_projunits();
+
+    G_initialize_done(&initialized);
+}
 
 /*!
  * \brief database units
@@ -18,10 +32,10 @@ static int lower(char);
  *  \return char * 
  */
 
-char *G_database_unit_name(int plural)
+const char *G_database_unit_name(int plural)
 {
     int n;
-    static char name[256];
+    const char *name;
 
     switch (n = G_projection()) {
     case PROJECTION_XY:
@@ -31,8 +45,10 @@ char *G_database_unit_name(int plural)
 	return G__unit_name(G__projection_units(n), plural);
     }
 
-    if (!lookup(UNIT_FILE, plural ? "units" : "unit", name, sizeof(name)))
-	strcpy(name, plural ? "units" : "unit");
+    name = lookup_units(plural ? "units" : "unit");
+    if (!name)
+	return plural ? "units" : "unit";
+
     return name;
 }
 
@@ -48,10 +64,10 @@ char *G_database_unit_name(int plural)
  *  \return char * 
  */
 
-char *G_database_projection_name(void)
+const char *G_database_projection_name(void)
 {
     int n;
-    static char name[256];
+    const char *name;
 
     switch (n = G_projection()) {
     case PROJECTION_XY:
@@ -60,8 +76,11 @@ char *G_database_projection_name(void)
     case PROJECTION_SP:
 	return G__projection_name(n);
     }
-    if (!lookup(PROJECTION_FILE, "name", name, sizeof(name)))
-	strcpy(name, _("Unknown projection"));
+
+    name = lookup_proj("name");
+    if (!name)
+	return _("Unknown projection");
+
     return name;
 }
 
@@ -79,9 +98,9 @@ char *G_database_projection_name(void)
 
 double G_database_units_to_meters_factor(void)
 {
-    char *unit;
+    const char *unit;
+    const char *buf;
     double factor;
-    char buf[256];
     int n;
 
     static const struct
@@ -97,7 +116,8 @@ double G_database_units_to_meters_factor(void)
     };
 
     factor = 0.0;
-    if (lookup(UNIT_FILE, "meters", buf, sizeof(buf)))
+    buf = lookup_units("meters");
+    if (buf)
 	sscanf(buf, "%lf", &factor);
     if (factor <= 0.0) {
 	unit = G_database_unit_name(0);
@@ -130,22 +150,22 @@ double G_database_units_to_meters_factor(void)
  *  \return char * 
  */
 
-char *G_database_datum_name(void)
+const char *G_database_datum_name(void)
 {
-    static char name[256], params[256];
-    struct Key_Value *projinfo;
+    const char *name;
+    char buf[256], params[256];
     int datumstatus;
 
-    if (lookup(PROJECTION_FILE, "datum", name, sizeof(name)))
+    name = lookup_proj("datum");
+    if (name)
 	return name;
-    else if ((projinfo = G_get_projinfo()) == NULL)
+    else if (!proj_info)
 	return NULL;
     else
-	datumstatus = G_get_datumparams_from_projinfo(projinfo, name, params);
+	datumstatus = G_get_datumparams_from_projinfo(proj_info, buf, params);
 
-    G_free_key_value(projinfo);
     if (datumstatus == 2)
-	return params;
+	return G_store(params);
     else
 	return NULL;
 }
@@ -159,32 +179,34 @@ char *G_database_datum_name(void)
  * NULL otherwise
  ***********************************************************************/
 
-char *G_database_ellipse_name(void)
+const char *G_database_ellipse_name(void)
 {
-    static char name[256];
+    const char *name;
 
-    if (!lookup(PROJECTION_FILE, "ellps", name, sizeof(name))) {
+    name = lookup_proj("ellps");
+    if (!name) {
+	char buf[256];
 	double a, es;
 
 	G_get_ellipsoid_parameters(&a, &es);
-	sprintf(name, "a=%.16g es=%.16g", a, es);
+	sprintf(buf, "a=%.16g es=%.16g", a, es);
+	name = G_store(buf);
     }
 
     /* strcpy (name, "Unknown ellipsoid"); */
     return name;
 }
 
-static int lookup(const char *file, const char *key, char *value, int len)
+static const char *lookup_proj(const char *key)
 {
-    char path[GPATH_MAX];
+    init();
+    return G_find_key_value(key, proj_info);
+}
 
-    /*
-       G__file_name (path, "", file, G_mapset());
-       if (access(path,0) == 0)
-       return G_lookup_key_value_from_file(path, key, value, len) == 1;
-     */
-    G__file_name(path, "", file, "PERMANENT");
-    return G_lookup_key_value_from_file(path, key, value, len) == 1;
+static const char *lookup_units(const char *key)
+{
+    init();
+    return G_find_key_value(key, proj_units);
 }
 
 static int equal(const char *a, const char *b)
