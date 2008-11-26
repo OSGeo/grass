@@ -1,0 +1,50 @@
+<H2>DESCRIPTION</H2>
+
+<EM>v.delaunay2</EM> uses an existing vector points map (<B>input</B>)
+to create a Delaunay triangulation vector map (<B>output</B>).
+<P>
+
+<BR>
+Delaunay triangulation example:
+<center>
+<img src=v_delaunay_spearfish60_archsites.png border=1><BR>
+<table border=0 width=590>
+<tr><td><center>
+<i>Delaunay Triangulation</i>
+</center></td></tr>
+</table>
+</center>
+
+
+<H2>EXAMPLE</H2>
+
+Commands used with the Spearfish dataset to create the above figure.
+<div class="code"><pre>
+  g.region n=4927250 s=4920000 w=588650 e=605850
+  v.delaunay2 -lr in=archsites out=arch_delaunay
+  d.vect map=arch_delaunay color=0:0:255
+</pre></div>
+
+
+<H2>REFERENCES</H2>
+<EM>Leonid Guibas and Jorge Stolfi, (1985). 
+Primitives for the 
+Manipulation of General Subdivisions and the Computation of
+Voronoi Diagrams, ACM Transactions on Graphics, Vol 4, No. 2, 
+April 1985, Pages 74-123
+</EM>
+
+<H2>SEE ALSO</H2>
+<EM>
+<A HREF="v.voronoi.html">v.voronoi</A>, 
+<A HREF="v.hull.html">v.hull</A>
+</EM>
+
+
+<H2>AUTHORS</H2>
+Martin Pavlovsky, Google Summer of Code 2008, Student<br>
+Paul Kelly, Mentor<br>
+
+
+<p>
+<i>Last changed: $Date: (Mon, 18 Aug 2008) $</i></p>
