@@ -92,6 +92,12 @@ UPDATE roads SET travelcost=2 WHERE cat=2;
 cat file.sql | db.execute
 </pre></div>
 
+<P>
+<em>Join table 'myroads' into table 'extratab' based on common 'cat' column values (not supported by DBF driver):<br>
+<div class="code"><pre>
+echo "UPDATE extratab SET names=(SELECT label FROM myroads WHERE extratab.cat=myroads.cat);" | db.execute
+</pre></div>
+
 <h2>SEE ALSO</h2>
 <em><a HREF="db.columns.html">db.columns</a>,
 <a HREF="db.describe.html">db.describe</a>,
