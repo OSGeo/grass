@@ -10,7 +10,7 @@ int update(struct Map_info *Map)
 {
     int i, *catexst, *cex, upd, fcat;
     char buf1[2000], buf2[2000], left[20], right[20];
-    struct field_info *Fi;
+    struct field_info *qFi, *Fi;
     dbString stmt;
     dbDriver *driver;
 
@@ -22,9 +22,16 @@ int update(struct Map_info *Map)
 
     db_init_string(&stmt);
 
+    /* layer to find table to read from */
+    if ((qFi = Vect_get_field(Map, options.qfield)) == NULL)
+        G_fatal_error(_("Database connection not defined for layer %d. Use v.db.connect first."),
+                      options.qfield);
+    /* layer to find table to write to */
     if ((Fi = Vect_get_field(Map, options.field)) == NULL)
 	G_fatal_error(_("Database connection not defined for layer %d. Use v.db.connect first."),
 		      options.field);
+    G_debug(3, "Reading from map <%s>, query layer %d: updating table <%s>, column <%s>", 
+            options.name, options.qfield, Fi->table, Fi->key);
 
     /* Open driver */
     driver = db_start_driver_open_database(Fi->driver, Fi->database);
@@ -36,7 +43,7 @@ int update(struct Map_info *Map)
     db_begin_transaction(driver);
 
     /* select existing categories to array (array is sorted) */
-    vstat.select = db_select_int(driver, Fi->table, Fi->key, NULL, &catexst);
+    vstat.select = db_select_int(driver, qFi->table, Fi->key, NULL, &catexst);
 
     /* create beginning of stmt */
     switch (options.option) {
@@ -61,6 +68,8 @@ int update(struct Map_info *Map)
 	sprintf(buf1, "update %s set ", Fi->table);
 	break;
     }
+
+    G_debug(3, "Existing categories: %d", vstat.rcat);
 
     /* update */
     G_message(_("Updating database..."));
@@ -180,6 +189,7 @@ int update(struct Map_info *Map)
 	    }
 	}
 
+	G_debug(3, "SQL: %s", buf2);
 	db_set_string(&stmt, buf2);
 
 	/* category exist in DB ? */
