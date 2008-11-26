@@ -155,7 +155,7 @@ int db__copy_table(const char *from_drvname, const char *from_dbname,
 
 	if (strcmp(to_tblname, tblname) == 0) {
 	    G_warning(_("Table <%s> already exists in database <%s>"),
-		      to_dbname, to_dbname);
+		      to_tblname, to_dbname);
 	    db_close_database_shutdown_driver(to_driver);
 	    if (from_driver != to_driver)
 		db_close_database_shutdown_driver(from_driver);
