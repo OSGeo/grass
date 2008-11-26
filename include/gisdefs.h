@@ -921,11 +921,11 @@ char *G__unit_name(int, int);
 char *G__projection_name(int);
 
 /* proj3.c */
-char *G_database_unit_name(int);
-char *G_database_projection_name(void);
+const char *G_database_unit_name(int);
+const char *G_database_projection_name(void);
+const char *G_database_datum_name(void);
+const char *G_database_ellipse_name(void);
 double G_database_units_to_meters_factor(void);
-char *G_database_datum_name(void);
-char *G_database_ellipse_name(void);
 
 /* put_cellhd.c */
 int G_put_cellhd(const char *, struct Cell_head *);

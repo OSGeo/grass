@@ -12,7 +12,7 @@
 
 int print_window(struct Cell_head *window, int print_flag)
 {
-    char *prj, *datum, *ellps;
+    const char *prj, *datum, *ellps;
     int x, width = 11;
 
     char north[30], south[30], east[30], west[30], nsres[30], ewres[30],
