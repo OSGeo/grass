@@ -609,6 +609,7 @@ int main(int argc, char *argv[])
     check_projection(&cellhd, hDS, flag_o->answer);
 
     G_verbose_message(_("Proceeding with import..."));
+    G_message("Importing band %d of %d...", band, GDALGetRasterCount( hDS ));
 
     hBand = GDALGetRasterBand(hDS, band);
     if (!hBand)
