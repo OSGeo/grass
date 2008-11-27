@@ -29,11 +29,12 @@ SUBDIRS = \
 	r.in.arc \
 	r.in.ascii \
 	r.in.bin \
-	r.info \
+	r.in.gdal \
 	r.in.gridatb \
 	r.in.mat \
 	r.in.poly \
 	r.in.xyz \
+	r.info \
 	r.kappa \
 	r.lake \
 	r.li \
@@ -46,12 +47,15 @@ SUBDIRS = \
 	r.out.arc \
 	r.out.ascii \
 	r.out.bin \
+	r.out.gdal \
 	r.out.gridatb \
 	r.out.mat \
 	r.out.mpeg \
+	r.out.png \
 	r.out.pov \
 	r.out.ppm \
 	r.out.ppm3 \
+	r.out.tiff \
 	r.out.vrml \
 	r.out.vtk \
 	r.param.scale \
@@ -67,14 +71,17 @@ SUBDIRS = \
 	r.recode \
 	r.region \
 	r.report \
-	r.resample \
 	r.resamp.interp \
 	r.resamp.rst \
 	r.resamp.stats \
+	r.resample \
 	r.rescale \
 	r.rescale.eq \
+	r.ros \
 	r.series \
 	r.slope.aspect \
+	r.spread \
+	r.spreadpath \
 	r.statistics \
 	r.statistics2 \
 	r.statistics3 \
@@ -85,10 +92,12 @@ SUBDIRS = \
 	r.support.stats \
 	r.surf.area \
 	r.surf.contour \
+	r.surf.fractal \
+	r.surf.gauss \
 	r.surf.idw \
 	r.surf.idw2 \
 	r.surf.random \
-	r.surf.gauss \
+	r.terraflow \
 	r.texture \
 	r.thin \
 	r.timestamp \
@@ -106,14 +115,7 @@ SUBDIRS = \
 	r.water.outlet \
 	r.watershed \
 	r.what \
-	r.what.color \
-	wildfire \
-	r.in.gdal \
-	r.out.gdal \
-	r.surf.fractal \
-	r.out.png \
-	r.terraflow \
-	r.out.tiff
+	r.what.color
 
 #	r.le \
 
