@@ -1877,12 +1877,12 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         else:
             layerNew = layerOld
             catNew = int(event.GetLabel())
-
+        
         try:
             if layerNew not in self.cats[self.fid].keys():
-                self.cats[layerNew] = []
-            self.cats[layerNew].append(catNew)
-            self.cats[layerOld].remove(catOld)
+                self.cats[self.fid][layerNew] = []
+            self.cats[self.fid][layerNew].append(catNew)
+            self.cats[self.fid][layerOld].remove(catOld)
         except:
             event.Veto()
             self.list.SetStringItem(itemIndex, 0, str(layerNew))
