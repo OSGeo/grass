@@ -25,8 +25,7 @@ int Vect_reset_line(struct line_pnts *);
 int Vect_destroy_line_struct(struct line_pnts *);
 int Vect_point_on_line(struct line_pnts *, double, double *, double *,
 		       double *, double *, double *);
-int Vect_line_segment(struct line_pnts *, double, double,
-		      struct line_pnts *);
+int Vect_line_segment(struct line_pnts *, double, double, struct line_pnts *);
 double Vect_line_length(struct line_pnts *);
 double Vect_area_perimeter(struct line_pnts *);
 double Vect_line_geodesic_length(struct line_pnts *);
@@ -71,8 +70,7 @@ int Vect_set_varray_from_db(struct Map_info *, int, const char *, int, int,
 struct dblinks *Vect_new_dblinks_struct(void);
 void Vect_reset_dblinks(struct dblinks *);
 int Vect_add_dblink(struct dblinks *, int, const char *,
-		    const char *, const char *, const char *,
-		    const char *);
+		    const char *, const char *, const char *, const char *);
 int Vect_check_dblink(struct dblinks *, int);
 int Vect_map_add_dblink(struct Map_info *, int, const char *,
 			const char *, const char *, const char *,
@@ -84,7 +82,7 @@ int Vect_write_dblinks(struct Map_info *);
 struct field_info *Vect_default_field_info(struct Map_info *, int,
 					   const char *, int);
 struct field_info *Vect_get_dblink(struct Map_info *, int);
-struct field_info *Vect_get_field(struct Map_info *, int );
+struct field_info *Vect_get_field(struct Map_info *, int);
 void Vect_set_db_updated(struct Map_info *);
 const char *Vect_get_column_names(struct Map_info *, int);
 const char *Vect_get_column_types(struct Map_info *, int);
@@ -323,8 +321,7 @@ int Vect_overlay(struct Map_info *, int, struct ilist *, struct ilist *,
 		 int, struct Map_info *);
 int Vect_overlay_and(struct Map_info *, int, struct ilist *,
 		     struct ilist *, struct Map_info *, int,
-		     struct ilist *, struct ilist *,
-		     struct Map_info *);
+		     struct ilist *, struct ilist *, struct Map_info *);
 
 /* Graph */
 void Vect_graph_init(GRAPH *, int);
@@ -371,6 +368,8 @@ int Vect_line_intersection(struct line_pnts *, struct line_pnts *,
 			   struct line_pnts ***, struct line_pnts ***, int *,
 			   int *, int);
 int Vect_line_check_intersection(struct line_pnts *, struct line_pnts *, int);
+int Vect_line_get_intersections(struct line_pnts *, struct line_pnts *,
+				struct line_pnts *, int);
 char *Vect_subst_var(const char *str, struct Map_info *Map);
 
 /*
