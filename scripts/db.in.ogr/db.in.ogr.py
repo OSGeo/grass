@@ -96,8 +96,10 @@ def main():
 
     # rename ID col if requested from cat to new name
     if key:
-	grass.run_command('v.db.renamecol', quiet = True, map = output, layer = 1,
-			  column = (cat, key), stdout = nuldev, stderr = nuldev)
+	grass.run_command('db.execute', quiet = True, flags = 'f',
+			  stdin = "ALTER TABLE %s ADD COLUMN %s integer" % (output, key) )
+	grass.run_command('db.execute', quiet = True, flags = 'f',
+			  stdin = "UPDATE %s SET %s=cat" % (output, key) )
 
     # ... and immediately drop the empty geometry
     vectfile = grass.find_file(output, element = 'vector', mapset = mapset)['file']
