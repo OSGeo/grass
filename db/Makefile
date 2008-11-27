@@ -2,7 +2,6 @@
 MODULE_TOPDIR = ..
 
 SUBDIRS = \
-	drivers \
 	db.columns \
 	db.connect \
 	db.copy \
@@ -23,5 +22,7 @@ include $(MODULE_TOPDIR)/include/Make/Dir.make
 
 default: htmldir
 
-htmldir: subdirs
+htmldir:
+	$(MAKE) -C drivers
+	$(MAKE) parsubdirs
 

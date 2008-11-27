@@ -47,6 +47,14 @@ else
 	$(SHLIB_LD) -o $@ $(LDFLAGS) $^ $(EXTRA_LIBS)
 endif
 
-install_nviz: $(SHLIB) $(LIB_NAME).py
-	$(INSTALL) $(SHLIB) $(ETCDIR)/nviz
-	$(INSTALL_DATA) $(LIB_NAME).py $(ETCDIR)/nviz
+install_nviz:
+	$(MAKE) $(ETCDIR)/nviz/_$(LIB_NAME).so $(ETCDIR)/nviz/$(LIB_NAME).py
+
+$(ETCDIR)/nviz/_$(LIB_NAME).so: $(SHLIB)
+	$(INSTALL) $< $@
+
+$(ETCDIR)/nviz/$(LIB_NAME).py: $(LIB_NAME).py
+	$(INSTALL_DATA) $< $@
+
+.PHONY: install_nviz
+

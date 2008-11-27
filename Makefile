@@ -58,6 +58,7 @@ DIRS = \
 SUBDIRS = $(DIRS)
 
 FILES = AUTHORS COPYING CHANGES REQUIREMENTS.html GPL.TXT
+FILES_DST = $(patsubst %,${ARCH_DISTDIR}/%,$(FILES))
 
 # why no locale directory?
 BIN_DIST_FILES = $(FILES) \
@@ -84,8 +85,8 @@ default: builddemolocation
 	for subdir in $$list; do \
 		$(MAKE) -C $$subdir; \
 	done
-	-cp -f $(FILES) ${ARCH_DISTDIR}/
-	-cp -f ${ARCH_BINDIR}/grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR} ${ARCH_DISTDIR}/grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}.tmp
+	$(MAKE) $(FILES_DST)
+	$(MAKE) ${ARCH_BINDIR}/grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}
 	@if [ `cat "$(ERRORLOG)" | wc -l` -gt 5 ] ; then \
 		echo "--"     >> $(ERRORLOG) ; \
 		echo "In case of errors please change into the directory with error and run 'make'." >> $(ERRORLOG) ; \
@@ -99,6 +100,12 @@ default: builddemolocation
 	@echo "Finished compilation: `date`" >> $(ERRORLOG)
 	@cat $(ERRORLOG)
 	@if [ `cat "$(ERRORLOG)" | wc -l` -gt 8 ] ; then false ; else true ; fi
+
+${ARCH_DISTDIR}/%: %
+	$(INSTALL_DATA) $< $@
+
+${ARCH_BINDIR}/grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}: ${ARCH_DISTDIR}/grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}.tmp
+	$(INSTALL) $< $@
 
 LIBDIRS = \
 	lib/external/shapelib \

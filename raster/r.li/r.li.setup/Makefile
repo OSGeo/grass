@@ -6,17 +6,28 @@ PGM = r.li.setup
 
 include $(MODULE_TOPDIR)/include/Make/Script.make
 
+SCRIPT_SRC = \
+	area_query \
+	masked_area_selection \
+	r.li.setup.main \
+	r.li.setup.procedures.tcl \
+	r.li.windows.tcl \
+	sample_area_vector.sh \
+	square_mouse_selection.sh \
+	square_query
+
+SCRIPT_DST := $(patsubst %,$(TARGET)/%,$(SCRIPT_SRC))
+
+DATA_SRC = circle.txt polygon.txt
+
+DATA_DST := $(patsubst %,$(TARGET)/%,$(DATA_SRC))
+
 default: script
-	$(MKDIR) $(TARGET)
-	$(INSTALL) area_query $(TARGET)/area_query
-	$(INSTALL) masked_area_selection $(TARGET)/masked_area_selection
-	$(INSTALL) r.li.setup.main $(TARGET)/r.li.setup.main
-	$(INSTALL) r.li.setup.procedures.tcl $(TARGET)/r.li.setup.procedures.tcl
-	$(INSTALL) r.li.windows.tcl $(TARGET)/r.li.windows.tcl
-	$(INSTALL) sample_area_vector.sh $(TARGET)/sample_area_vector.sh
-	$(INSTALL) square_mouse_selection.sh $(TARGET)/square_mouse_selection.sh
-	$(INSTALL) square_query $(TARGET)/square_query
-	$(INSTALL_DATA) circle.txt $(TARGET)/circle.txt
-	$(INSTALL_DATA) polygon.txt $(TARGET)/polygon.txt
+	if [ ! -d $(TARGET) ] ; then $(MKDIR) $(TARGET) ; fi
+	$(MAKE) $(SCRIPT_DST) $(DATA_DST)
 
+$(TARGET)/%.txt: %.txt
+	$(INSTALL_DATA) $< $@
 
+$(TARGET)/%: %
+	$(INSTALL) $< $@

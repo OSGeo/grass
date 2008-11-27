@@ -13,9 +13,9 @@ default: install_scripts
 	$(MAKE) parsubdirs
 
 install_scripts:
-	-$(MKDIR) $(ETCDIR) $(ETCDIR)/compat $(ETCDIR)/gui_modules \
-		$(ETCDIR)/icons $(ETCDIR)/icons/silk $(ETCDIR)/images \
-		$(ETCDIR)/scripts $(ETCDIR)/vdigit $(ETCDIR)/xml $(ETCDIR)/nviz
+	-for dir in '' compat gui_modules icons icons/silk images scripts vdigit xml nviz ; do \
+	if [ ! -d $(ETCDIR)/$$dir ] ; then $(MKDIR) $(ETCDIR)/$$dir ; fi ; \
+	done
 	$(MAKE) $(DSTFILES)
 
 $(ETCDIR)/scripts/wxgui: wxgui
@@ -26,3 +26,4 @@ $(ETCDIR)/scripts/%: scripts/%
 
 $(ETCDIR)/%: %
 	$(INSTALL_DATA) $< $@
+
