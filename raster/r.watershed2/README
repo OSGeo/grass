@@ -1,0 +1,50 @@
+
+  fast version of r.watershed
+  ===========================
+  
+  Implemented is a new sorting algorithm for both the ram and the 
+  segmented version, resulting in significant speed improvements,
+  with identical results.
+  
+  The following procedure assumes that GRASS was compiled from source
+  and that the configured source tree is available.
+  To compile and install the test version of r.watershed for GRASS,
+  
+  1) copy the directory <r.watershed2> into the directory 
+     <raster> of the GRASS souorce tree
+  
+  2) edit <Makefile> in directory <raster>
+     add the line
+     r.watershed2 \
+     e.g. after 
+     r.watershed \
+    
+  3) change to directory <r.watershed2>
+     run make
+    
+  4) optionally change to GRASS source directory, something like 
+     grass-6.4.svn
+     run as su
+     make install
+    
+  Testing
+  =======
+  
+  The new test version can be invoked with r.watershed2.
+  The new sorting algorithm is implemented for both the ram and the
+  segmented version.
+  The new segmented version is still much slower than the new ram 
+  version, but the new segmented version is already much faster than 
+  the original ram version. A new option is available for the segmented 
+  mode specifying the maximum amount of memory to be used in MB.
+  Set up a watershed analysis with the original version, run it.
+  The command will have been r.watershed <options>
+  To test, use the same input options, but different output maps 
+  and run r.watershed2 <test options>
+  There should be no differences in the outputs of the original and 
+  the new version.
+  If you find critical differences between the original and the fast version, 
+  please let me know at 
+  markus.metz.giswork at gmail.com
+  
+    
