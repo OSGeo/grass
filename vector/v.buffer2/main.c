@@ -254,7 +254,7 @@ int main(int argc, char *argv[])
 	    dalpha = 0;
 
 	unit_tolerance = tolerance * MIN(da, db);
-	G_message(_("The tolerance in map units = %g"), unit_tolerance);
+	G_verbose_message(_("The tolerance in map units = %g"), unit_tolerance);
     }
 
     Vect_check_input_output_name(in_opt->answer, out_opt->answer,
@@ -338,7 +338,8 @@ int main(int argc, char *argv[])
     if ((type & GV_POINTS) || (type & GV_LINES)) {
 	int ltype;
 
-	G_message(_("Lines buffers..."));
+	if (nlines > 0)
+	    G_message(_("Buffering lines..."));
 	for (line = 1; line <= nlines; line++) {
 	    int cat;
 
@@ -404,7 +405,8 @@ int main(int argc, char *argv[])
     if (type & GV_AREA) {
 	int centroid;
 
-	G_message(_("Areas buffers..."));
+	if (nareas > 0) 
+	    G_message(_("Buffering areas..."));
 	for (area = 1; area <= nareas; area++) {
 	    int cat;
 
@@ -464,7 +466,7 @@ int main(int argc, char *argv[])
     /* Create areas */
 
     /* Break lines */
-    G_message(_("Building parts of topology..."));
+    G_verbose_message(_("Building parts of topology..."));
     Vect_build_partial(&Out, GV_BUILD_BASE);
 
     G_message(_("Snapping boundaries..."));
