@@ -21,7 +21,7 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-static int nsew(char *, char *, char *, char *);
+static int nsew(const char *, const char *, const char *, const char *);
 static void die(struct Option *);
 
 int main(int argc, char *argv[])
@@ -33,10 +33,10 @@ int main(int argc, char *argv[])
     int ival;
     int row_flag = 0, col_flag = 0;
     struct Cell_head window, temp_window;
-    char *value;
-    char *name;
-    char *mapset;
-    char *err;
+    const char *value;
+    const char *name;
+    const char *mapset;
+    const char *err;
     char **rast_ptr, **vect_ptr;
 
     struct GModule *module;
@@ -381,7 +381,7 @@ int main(int argc, char *argv[])
 
     /* region= */
     if ((name = parm.region->answer)) {
-	mapset = G_find_file("windows", name, "");
+	mapset = G_find_file2("windows", name, "");
 	if (!mapset)
 	    G_fatal_error(_("Region <%s> not found"), name);
 	if (G__get_window(&window, "windows", name, mapset) != NULL)
@@ -821,7 +821,7 @@ static void die(struct Option *parm)
     G_fatal_error(_("Invalid input <%s=%s>"), parm->key, parm->answer);
 }
 
-static int nsew(char *value, char *a, char *b, char *c)
+static int nsew(const char *value, const char *a, const char *b, const char *c)
 {
     if (strncmp(value, a, strlen(a)) == 0)
 	return 1;

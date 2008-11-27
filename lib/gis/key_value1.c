@@ -125,7 +125,7 @@ int G_set_key_value(const char *key, const char *value, struct Key_Value *kv)
    \return poiter to value of key
    \return NULL if no key found
  */
-char *G_find_key_value(const char *key, const struct Key_Value *kv)
+const char *G_find_key_value(const char *key, const struct Key_Value *kv)
 {
     int n;
 

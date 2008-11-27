@@ -130,7 +130,7 @@ Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
     FILE *fp;
     int level, level_request, ferror;
     int format, ret;
-    char *fmapset;
+    const char *fmapset;
 
     G_debug(1, "Vect_open_old(): name = %s mapset= %s update = %d", name,
 	    mapset, update);

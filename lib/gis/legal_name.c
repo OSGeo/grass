@@ -68,7 +68,7 @@ int G_legal_filename(const char *s)
 int G_check_input_output_name(const char *input, const char *output,
 			      int error)
 {
-    char *mapset;
+    const char *mapset;
 
     if (output == NULL)
 	return 0;		/* don't die on undefined parameters */

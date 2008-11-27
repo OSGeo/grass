@@ -1006,7 +1006,7 @@ int G_get_d_raster_row(int fd, DCELL * buf, int row)
 static int open_null_read(int fd)
 {
     struct fileinfo *fcb = &G__.fileinfo[fd];
-    char *name, *mapset, *dummy;
+    const char *name, *mapset, *dummy;
     int null_fd;
 
     if (fcb->null_file_exists == 0)
@@ -1021,7 +1021,7 @@ static int open_null_read(int fd)
 	mapset = fcb->mapset;
     }
 
-    dummy = G_find_file_misc("cell_misc", NULL_FILE, name, mapset);
+    dummy = G_find_file2_misc("cell_misc", NULL_FILE, name, mapset);
 
     if (!dummy) {
 	/* G_warning("unable to find [%s]",path); */

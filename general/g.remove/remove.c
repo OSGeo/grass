@@ -86,8 +86,8 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option **parm, *p;
     struct Flag *force_flag;
-    char *name, *mapset;
-    char *location_path;
+    const char *name, *mapset;
+    const char *location_path;
     int result = EXIT_SUCCESS;
     int force = 0;
 

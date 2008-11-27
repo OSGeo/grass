@@ -86,7 +86,7 @@ int gethead(FILE * fd,
     int n, s, e, w, r, c;
     char label[100], value[100];
     char buf[1024];
-    char *err;
+    const char *err;
     int ret, len;
 
     /* rsb fix */

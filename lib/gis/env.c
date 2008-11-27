@@ -47,7 +47,7 @@ static struct state *st = &state;
 static int read_env(int);
 static int set_env(const char *, const char *, int);
 static int unset_env(const char *, int);
-static char *get_env(const char *, int);
+static const char *get_env(const char *, int);
 static void write_env(int);
 static FILE *open_env(const char *, int);
 
@@ -198,7 +198,7 @@ static int unset_env(const char *name, int loc)
     return 0;
 }
 
-static char *get_env(const char *name, int loc)
+static const char *get_env(const char *name, int loc)
 {
     int n;
 
@@ -283,11 +283,11 @@ static FILE *open_env(const char *mode, int loc)
 
    \return char pointer to value for name
 */
-char *G_getenv(const char *name)
+const char *G_getenv(const char *name)
 {
-    char *value;
+    const char *value = G__getenv(name);
 
-    if ((value = G__getenv(name)))
+    if (value)
 	return value;
 
     G_fatal_error(_("G_getenv(): Variable %s not set"), name);
@@ -309,11 +309,11 @@ char *G_getenv(const char *name)
    \return variable value
    \return NULL if not found
 */
-char *G_getenv2(const char *name, int loc)
+const char *G_getenv2(const char *name, int loc)
 {
-    char *value;
+    const char *value = G__getenv2(name, loc);
 
-    if ((value = G__getenv2(name, loc)))
+    if (value)
 	return value;
 
     G_fatal_error(_("%s not set"), name);
@@ -328,7 +328,7 @@ char *G_getenv2(const char *name, int loc)
    \return char pointer to value for name
    \return NULL if name not set
 */
-char *G__getenv(const char *name)
+const char *G__getenv(const char *name)
 {
     if (strcmp(name, "GISBASE") == 0)
 	return getenv(name);
@@ -347,7 +347,7 @@ char *G__getenv(const char *name)
    \return char pointer to value for name
    \return NULL if name not set
 */
-char *G__getenv2(const char *name, int loc)
+const char *G__getenv2(const char *name, int loc)
 {
     if (strcmp(name, "GISBASE") == 0)
 	return getenv(name);
@@ -482,7 +482,7 @@ void G__write_env(void)
 
    \return pointer to variable name
 */
-char *G__env_name(int n)
+const char *G__env_name(int n)
 {
     int i;
 

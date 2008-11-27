@@ -42,10 +42,10 @@ int count_rows_with_data;
 int main(int argc, char *argv[])
 {
     struct Distance *pd;
-    char *input, *output, *mapset;
+    const char *input, *output, *mapset;
     char **zone_list;
     double to_meters;
-    char *units;
+    const char *units;
     int offset;
     int count;
     int step, nsteps;

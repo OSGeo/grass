@@ -39,7 +39,7 @@ static void new_mapset(const char *);
    \return mapset name
    \return NULL if mapset not found
  */
-char *G__mapset_name(int n)
+const char *G__mapset_name(int n)
 {
     G_get_list_of_mapsets();
 

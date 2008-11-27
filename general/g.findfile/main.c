@@ -23,8 +23,8 @@
 
 int main(int argc, char *argv[])
 {
-    char file[GPATH_MAX], name[GNAME_MAX], *mapset;
-    char *search_mapset;
+    char file[GPATH_MAX], name[GNAME_MAX];
+    const char *search_mapset, *mapset;
     struct GModule *module;
     struct Option *elem_opt;
     struct Option *mapset_opt;

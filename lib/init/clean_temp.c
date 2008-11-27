@@ -119,7 +119,7 @@ void clean_dir(const char *pathname, uid_t uid, pid_t pid, time_t now,
 
 int main(int argc, char *argv[])
 {
-    char *mapset;
+    const char *mapset;
     char element[GNAME_MAX];
     char tmppath[BUF_MAX];
     pid_t ppid;

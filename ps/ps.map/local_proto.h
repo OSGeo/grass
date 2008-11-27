@@ -30,8 +30,8 @@ int do_geogrid(void);
 int do_geogrid_numbers(void);
 
 /* do_header.c */
-int do_map_header(char *);
-int read_header_file(char *);
+int do_map_header(const char *);
+int read_header_file(const char *);
 
 /* do_labels.c */
 int do_labels(int);
@@ -56,7 +56,7 @@ int do_vectors(int);
 int do_vpoints(int);
 
 /* error.c */
-int error(char *, char *, char *);
+int error(const char *, const char *, const char *);
 
 /* fit_map.c */
 int fit_map_to_box(void);

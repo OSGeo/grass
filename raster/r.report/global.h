@@ -12,8 +12,8 @@ extern struct Cell_head window;
 
 struct _layer_
 {
-    char *name;
-    char *mapset;
+    const char *name;
+    const char *mapset;
     struct Categories labels;
     int nlen;			/* num chars of largest cat when printed */
     int clen;			/* num chars for cat label when printed */
@@ -85,7 +85,7 @@ int header(int, int);
 int divider(char *);
 int trailer(void);
 int newline(void);
-int lcr(char *, char *, char *, char *, int);
+int lcr(const char *, const char *, const char *, char *, int);
 
 /* label.c */
 char *print_label(char *, int, int, int, int);

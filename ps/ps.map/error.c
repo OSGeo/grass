@@ -4,7 +4,7 @@
 #include "local_proto.h"
 extern FILE *tracefd;
 
-int error(char *a, char *b, char *c)
+int error(const char *a, const char *b, const char *c)
 {
     char msg[2000];
 

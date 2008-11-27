@@ -61,7 +61,6 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *in_opt, *out_opt, *feature_opt;
     struct Flag *smooth_flg, *value_flg, *z_flg, *no_topol;
-    char *mapset;
     int feature;
 
 
@@ -115,10 +114,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("z flag is supported only for points"));
 
     /* Open files */
-    if ((mapset = G_find_cell(in_opt->answer, "")) == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), in_opt->answer);
-
-    if ((input_fd = G_open_cell_old(in_opt->answer, mapset)) < 0)
+    if ((input_fd = G_open_cell_old(in_opt->answer, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), in_opt->answer);
 
     data_type = G_get_raster_map_type(input_fd);
@@ -141,7 +137,7 @@ int main(int argc, char *argv[])
 
     /* Open category labels */
     if (data_type == CELL_TYPE) {
-	if (0 == G_read_cats(in_opt->answer, mapset, &RastCats))
+	if (0 == G_read_cats(in_opt->answer, "", &RastCats))
 	    has_cats = 1;
     }
     else

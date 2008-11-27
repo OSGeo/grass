@@ -3,12 +3,12 @@
 #include <grass/glocale.h>
 
 
-int open_cell_old(char *name, char *mapset)
+int open_cell_old(const char *name, const char *mapset)
 {
     int fd;
 
     if (mapset == NULL)
-	mapset = G_find_cell(name, "");
+	mapset = G_find_cell2(name, "");
     fd = G_open_cell_old(name, mapset);
     if (fd >= 0)
 	return fd;
@@ -19,7 +19,7 @@ int open_cell_old(char *name, char *mapset)
     return -1;
 }
 
-int open_cell_new(char *name)
+int open_cell_new(const char *name)
 {
     int fd;
 

@@ -15,7 +15,7 @@
 
 int G_put_cell_title(const char *name, const char *title)
 {
-    char *mapset;
+    const char *mapset;
     FILE *in, *out;
     char *tempfile;
     int line;

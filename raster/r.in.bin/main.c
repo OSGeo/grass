@@ -71,9 +71,9 @@ static void SwabDouble(double *dp)
 
 int main(int argc, char *argv[])
 {
-    char *input;
-    char *output;
-    char *title;
+    const char *input;
+    const char *output;
+    const char *title;
     FILE *fd;
     int cf;
     struct Cell_head cellhd;
@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
     double *x_d;
     struct stat fileinfo;
     int FILE_SIZE;
-    char *err;
+    const char *err;
     char dummy[2];
     struct GRD_HEADER header;
     struct
@@ -231,8 +231,7 @@ int main(int argc, char *argv[])
 
     input = parm.input->answer;
     output = parm.output->answer;
-    if (title = parm.title->answer)
-	G_strip(title);
+    title = parm.title->answer;
 
     if (flag.f->answer)
 	bytes = 4;

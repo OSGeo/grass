@@ -1,6 +1,6 @@
 #include <grass/gis.h>
 
-int make_history(char *name, char *group, char *subgroup, char *sigfile)
+void make_history(const char *name, const char *group, const char *subgroup, const char *sigfile)
 {
     struct History hist;
 
@@ -9,6 +9,4 @@ int make_history(char *name, char *group, char *subgroup, char *sigfile)
 	sprintf(hist.datsrc_2, "Sigset file: %s", sigfile);
 	G_write_history(name, &hist);
     }
-
-    return 0;
 }

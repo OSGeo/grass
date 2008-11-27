@@ -85,13 +85,6 @@ int init_vars(int argc, char *argv[])
     this_mapset = G_mapset();
     if (sl_flag || sg_flag || ls_flag)
 	er_flag = 1;
-    ele_mapset = do_exist(ele_name);
-    if (pit_flag)
-	pit_mapset = do_exist(pit_name);
-    if (ob_flag)
-	ob_mapset = do_exist(ob_name);
-    if (ril_flag)
-	ril_mapset = do_exist(ril_name);
     /* for sd factor
        if (dep_flag)        {
        if (sscanf (dep_name, "%lf", &dep_slope) != 1)       {
@@ -120,7 +113,7 @@ int init_vars(int argc, char *argv[])
     r_h =
 	(CELL *) G_malloc(sizeof(CELL) * size_array(&r_h_seg, nrows, ncols));
 
-    fd = G_open_cell_old(ele_name, ele_mapset);
+    fd = G_open_cell_old(ele_name, "");
     if (fd < 0) {
 	G_fatal_error(_("unable to open elevation map layer"));
     }
@@ -137,8 +130,7 @@ int init_vars(int argc, char *argv[])
 	(CELL *) G_malloc(sizeof(CELL) * size_array(&wat_seg, nrows, ncols));
 
     if (run_flag) {
-	run_mapset = do_exist(run_name);
-	fd = G_open_cell_old(run_name, run_mapset);
+	fd = G_open_cell_old(run_name, "");
 	if (fd < 0) {
 	    G_fatal_error(_("unable to open runoff map layer"));
 	}
@@ -159,8 +151,7 @@ int init_vars(int argc, char *argv[])
     asp = (CELL *) G_calloc(size_array(&asp_seg, nrows, ncols), sizeof(CELL));
 
     if (pit_flag) {
-	pit_mapset = do_exist(pit_name);
-	fd = G_open_cell_old(pit_name, pit_mapset);
+	fd = G_open_cell_old(pit_name, "");
 	if (fd < 0) {
 	    G_fatal_error(_("unable to open depression map layer"));
 	}
@@ -174,7 +165,7 @@ int init_vars(int argc, char *argv[])
     }
     swale = flag_create(nrows, ncols);
     if (ob_flag) {
-	fd = G_open_cell_old(ob_name, ob_mapset);
+	fd = G_open_cell_old(ob_name, "");
 	if (fd < 0) {
 	    G_fatal_error(_("unable to open blocking map layer"));
 	}
@@ -188,7 +179,7 @@ int init_vars(int argc, char *argv[])
 	G_close_cell(fd);
     }
     if (ril_flag) {
-	ril_fd = G_open_cell_old(ril_name, ril_mapset);
+	ril_fd = G_open_cell_old(ril_name, "");
 	if (ril_fd < 0) {
 	    G_fatal_error(_("unable to open rill map layer"));
 	}
@@ -366,14 +357,4 @@ int init_vars(int argc, char *argv[])
     G_percent(r, nrows, 3);	/* finish it */
 
     return 0;
-}
-
-char *do_exist(char *file_name)
-{
-    char *file_mapset = G_find_cell2(file_name, "");
-
-    if (file_mapset == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), file_name);
-
-    return (file_mapset);
 }

@@ -1,2 +1,2 @@
 /* opennew.c */
-int opennew(char *, RASTER_MAP_TYPE);
+int opennew(const char *, RASTER_MAP_TYPE);

@@ -62,7 +62,7 @@ int load_vectors(const struct Option *elev_map,
     int i, id;
     int nvects;
 
-    char *mapset;
+    const char *mapset;
 
     double x, y, z;
     

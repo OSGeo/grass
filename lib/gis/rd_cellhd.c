@@ -85,8 +85,7 @@ char *G__read_Cell_head_array(char **array,
     char value[200];
     int i, line;
     int flags;
-    char *G_adjust_Cell_head();
-    char *err;
+    const char *err;
 
     G_debug(2, "G__read_Cell_head_array");
 

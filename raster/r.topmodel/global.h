@@ -147,5 +147,5 @@ extern struct misc misc;
 extern struct flg flg;
 
 /* Miscellaneous variables */
-extern char *gisbase, *mapset;
+extern const char *mapset;
 extern char buf[BUFSIZE];

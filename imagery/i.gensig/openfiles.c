@@ -8,7 +8,7 @@
 int openfiles(struct parms *parms, struct files *files)
 {
     struct Ref Ref;		/* subgroup reference list */
-    char *mapset;
+    const char *mapset;
     int n;
 
 

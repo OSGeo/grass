@@ -9,7 +9,7 @@
  *  returns 0 - success
  *          1 - error
  */
-int do_copy(int n, char *old, char *mapset, char *new)
+int do_copy(int n, const char *old, const char *mapset, const char *new)
 {
     int i, ret, len;
     char path[GPATH_MAX], path2[GPATH_MAX];

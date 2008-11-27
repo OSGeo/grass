@@ -13,7 +13,7 @@ void rdwr_gridatb(void)
     FCELL *fcell;
     RASTER_MAP_TYPE data_type;
 
-    fd = G_open_cell_old(iname, mapset);
+    fd = G_open_cell_old(iname, "");
     if (fd < 0)
 	G_fatal_error("%s - could not read", iname);
 
@@ -30,7 +30,7 @@ void rdwr_gridatb(void)
 	break;
     }
 
-    G_get_cellhd(iname, mapset, &cellhd);
+    G_get_cellhd(iname, "", &cellhd);
 
     adjcellhdval = adjcellhd(&cellhd);
     switch (adjcellhdval) {
@@ -47,7 +47,7 @@ void rdwr_gridatb(void)
 
     fp = fopen(file, "w");
 
-    fprintf(fp, "%s\n", G_get_cell_title(iname, mapset));
+    fprintf(fp, "%s\n", G_get_cell_title(iname, ""));
     fprintf(fp, "%d %d %lf\n", cellhd.cols, cellhd.rows, cellhd.ns_res);
 
     for (row = 0; row < cellhd.rows; row++) {

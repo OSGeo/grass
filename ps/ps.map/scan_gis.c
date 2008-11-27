@@ -6,7 +6,7 @@
 int scan_gis(char *element, char *desc, char *key, char *data,
 	     char *name, char *mapset, int gobble)
 {
-    char *ms;
+    const char *ms;
 
 
     *mapset = 0;

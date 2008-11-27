@@ -12,7 +12,7 @@ struct colortable
     double height;		/* fp legend height */
     char *font;
     char *name;
-    char *mapset;
+    const char *mapset;
     int fontsize;
     int color;
     int cols;

@@ -42,7 +42,7 @@ FILE *fp, *fp2;
 
 int main(int argc, char *argv[])
 {
-    char *name, *mapset;
+    const char *name, *mapset;
     char outfile[GNAME_MAX];
     int fd, projection;
     char buf[512], buf1[1024], buf2[1024];
@@ -330,9 +330,8 @@ int main(int argc, char *argv[])
 /* ************************************
  * Claculate camera and eye coordinates
  **************************************/
-int do_profile
-    (double e1,
-     double e2, double n1, double n2, char *name, int fd, int data_type)
+int do_profile(double e1, double e2, double n1, double n2,
+	       const char *name, int fd, int data_type)
 {
     float rows, cols, LEN;
     double Y, X, AZI;

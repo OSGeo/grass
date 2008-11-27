@@ -360,7 +360,8 @@ void MyApp::do_run(wxIdleEvent &ev)
 char **gee_wildfiles(char *wildarg, char *element, int *num)
 {
     int n, cnt = 0;
-    char path[GPATH_MAX], *mapset, cmd[GPATH_MAX], buf[512];
+    char path[GPATH_MAX], cmd[GPATH_MAX], buf[512];
+    const char *mapset;
     char *p, *tfile;
     static char *newfiles[MAXIMAGES];
     FILE *tf;

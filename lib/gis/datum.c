@@ -55,7 +55,7 @@ int G_get_datum_by_name(const char *name)
     return -1;
 }
 
-char *G_datum_name(int n)
+const char *G_datum_name(int n)
 {
     G_read_datum_table();
 
@@ -65,7 +65,7 @@ char *G_datum_name(int n)
     return table.datums[n].name;
 }
 
-char *G_datum_description(int n)
+const char *G_datum_description(int n)
 {
     G_read_datum_table();
 
@@ -75,7 +75,7 @@ char *G_datum_description(int n)
     return table.datums[n].descr;
 }
 
-char *G_datum_ellipsoid(int n)
+const char *G_datum_ellipsoid(int n)
 {
     G_read_datum_table();
 

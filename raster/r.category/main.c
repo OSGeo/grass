@@ -30,8 +30,8 @@ static struct Categories cats;
 
 int main(int argc, char *argv[])
 {
-    char *name;
-    char *mapset;
+    const char *name;
+    const char *mapset;
     long x, y;
     double dx;
     RASTER_MAP_TYPE map_type;
@@ -139,7 +139,7 @@ int main(int argc, char *argv[])
 	/* use cats from another map */
 	if (parm.raster->answer) {
 	    int fd;
-	    char *cmapset;
+	    const char *cmapset;
 
 	    cmapset = G_find_cell2(parm.raster->answer, "");
 	    if (cmapset == NULL)
@@ -321,7 +321,7 @@ int print_d_label(double x)
     return 0;
 }
 
-int scan_cats(char *s, long *x, long *y)
+int scan_cats(const char *s, long *x, long *y)
 {
     char dummy[2];
 
@@ -336,7 +336,7 @@ int scan_cats(char *s, long *x, long *y)
     return 0;
 }
 
-int scan_vals(char *s, double *x)
+int scan_vals(const char *s, double *x)
 {
     char dummy[10];
 

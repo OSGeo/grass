@@ -94,7 +94,6 @@ int contrastWeightedEdgeDensity(int fd, char **par, area_des ad,
     int l;			/*number of read byte */
     int ris = 0;
 
-    char *mapset;
     char *file;
     char *strFile;
 
@@ -160,9 +159,7 @@ int contrastWeightedEdgeDensity(int fd, char **par, area_des ad,
 	return RLI_ERRORE;
     }
 
-    mapset = G_find_cell(ad->raster, "");
-
-    if (G_get_cellhd(ad->raster, mapset, &hd) == -1) {
+    if (G_get_cellhd(ad->raster, "", &hd) == -1) {
 	G_fatal_error("can't read raster header");
 	return RLI_ERRORE;
     }

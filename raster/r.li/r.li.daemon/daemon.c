@@ -285,7 +285,8 @@ int parseSetup(char *path, list l, g_areas g, char *raster)
 {
     struct stat s;
     struct Cell_head cellhd;
-    char *buf, *token, *mapset;
+    char *buf;
+    const char *token;
     int setup;
     int letti;
     double rel_x, rel_y, rel_rl, rel_cl;
@@ -314,8 +315,7 @@ int parseSetup(char *path, list l, g_areas g, char *raster)
     rel_cl = atof(strtok(NULL, "\n"));
 
     /*finding raster map */
-    mapset = G_find_cell(raster, "");
-    if (G_get_cellhd(raster, mapset, &cellhd) == -1)
+    if (G_get_cellhd(raster, "", &cellhd) == -1)
 	G_fatal_error(_("Cannot read raster header file"));
     /*calculating absolute sampling frame definition */
     sf_x = (int)rint(cellhd.cols * rel_x);

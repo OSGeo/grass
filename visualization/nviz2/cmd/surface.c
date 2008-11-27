@@ -29,7 +29,7 @@
  */
 int load_rasters(const struct GParams *params, nv_data * data)
 {
-    char *mapset;
+    const char *mapset;
     int i;
     int nelevs, nelev_map, nelev_const, ncolor_map, ncolor_const, nmask_map;
     int ntransp_map, ntransp_const, nshine_map, nshine_const;

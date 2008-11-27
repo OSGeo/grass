@@ -38,7 +38,7 @@
  * \return Pointer to an error string on failure
  */
 
-char *G_align_window(struct Cell_head *window, const struct Cell_head *ref)
+const char *G_align_window(struct Cell_head *window, const struct Cell_head *ref)
 {
     int preserve;
 

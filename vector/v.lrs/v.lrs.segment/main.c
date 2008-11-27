@@ -55,7 +55,8 @@ int main(int argc, char **argv)
     struct Option *lfield_opt, *file_opt;
     struct Option *table_opt;
     struct GModule *module;
-    char *mapset, buf[2000];
+    const char *mapset;
+    char buf[2000];
     const char *drv, *db;
     struct Map_info In, Out;
     struct line_cats *LCats, *SCats;

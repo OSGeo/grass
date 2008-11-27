@@ -61,15 +61,13 @@ int patch_density(int fd, char **par, area_des ad, double *result)
     CELL *buf, *sup;
     int count = 0, i, j, connected = 0, complete_line = 1, other_above = 0;
     double area;
-    char *mapset;
     struct Cell_head hd;
     CELL complete_value;
     double EW_DIST1, EW_DIST2, NS_DIST1, NS_DIST2;
     int mask_fd = -1, *mask_buf, *mask_sup, null_count = 0;
 
     G_set_c_null_value(&complete_value, 1);
-    mapset = G_find_cell(ad->raster, "");
-    if (G_get_cellhd(ad->raster, mapset, &hd) == -1)
+    if (G_get_cellhd(ad->raster, "", &hd) == -1)
 	return 0;
     sup = G_allocate_cell_buf();
 

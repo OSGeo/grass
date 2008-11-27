@@ -48,7 +48,7 @@ void G_lat_format(double lat, char *buf)
     format(buf, d, m, s, h);
 }
 
-char *G_lat_format_string(void)
+const char *G_lat_format_string(void)
 {
     return "dd:mm:ss{N|S}";
 }
@@ -63,7 +63,7 @@ void G_lon_format(double lon, char *buf)
     format(buf, d, m, s, h);
 }
 
-char *G_lon_format_string(void)
+const char *G_lon_format_string(void)
 {
     return "ddd:mm:ss{E|W}";
 }
@@ -79,7 +79,7 @@ void G_llres_format(double res, char *buf)
     format(buf, d, m, s, h);
 }
 
-char *G_llres_format_string(void)
+const char *G_llres_format_string(void)
 {
     return "dd:mm:ss";
 }

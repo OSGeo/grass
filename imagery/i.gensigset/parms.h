@@ -18,7 +18,7 @@ int write_sigfile(struct parms *, struct SigSet *);
 int get_training_classes(struct parms *, struct files *, struct SigSet *);
 
 /* labels.c */
-int read_training_labels(struct parms *, struct files *);
+void read_training_labels(struct parms *, struct files *);
 
 /* openfiles.c */
 int openfiles(struct parms *, struct files *);

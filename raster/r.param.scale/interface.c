@@ -164,27 +164,8 @@ void interface(int argc, char **argv)
 	mparam = ELEV;
     }
 
-    /*--------------------------------------------------------------------------*/
-    /*                      CHECK INPUT RASTER FILE EXISTS                      */
-
-    /*--------------------------------------------------------------------------*/
-    if ((mapset_in = G_find_cell2(rast_in_name, "")) == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), rast_in_name);
-
-    /*--------------------------------------------------------------------------*/
-    /*                  CHECK OUTPUT RASTER FILE DOES NOT EXIST                 */
-
-    /*--------------------------------------------------------------------------*/
-
-    mapset_out = G_mapset();	/* Set output to current mapset.        */
-
     /* make sure input and output names are valid */
     G_check_input_output_name(rast_in_name, rast_out_name, GR_FATAL_EXIT);
-
-    /*--------------------------------------------------------------------------*/
-    /*                 CHECK WINDOW SIZE IS NOT EVEN OR TOO LARGE               */
-
-    /*--------------------------------------------------------------------------*/
 
     if ((wsize / 2 != (wsize - 1) / 2) || (wsize > MAX_WSIZE))
 	G_fatal_error(_("Inappropriate window size (too big or even)"));

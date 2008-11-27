@@ -261,7 +261,6 @@ int main(int argc, char *argv[])
     int changemask = 0;
     int elevfd = -1, outfd = -1;	/*file descriptors */
     int output_type, cols, rows;
-    char *mapset = NULL;
 
     /* Initialize GRASS */
     G_gisinit(argv[0]);
@@ -327,13 +326,8 @@ int main(int argc, char *argv[])
 	/*Open the elevation raster map */
 
 	/********************************/
-	mapset = G_find_cell2(param.elevation->answer, "");
 
-	if (mapset == NULL) {
-	    fatal_error(map, -1, -1, _("Elevation map not found"));
-	}
-
-	elevfd = G_open_cell_old(param.elevation->answer, mapset);
+	elevfd = G_open_cell_old(param.elevation->answer, "");
 	if (elevfd <= 0)
 	    fatal_error(map, -1, -1, _("Unable to open elevation map"));
 

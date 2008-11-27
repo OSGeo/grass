@@ -1,4 +1,6 @@
 
+#include <grass/config.h>
+
 #include <stdlib.h>
 #include <limits.h>
 #include <string.h>
@@ -455,7 +457,8 @@ static void close_map(struct map *m)
 
 int map_type(const char *name, int mod)
 {
-    char *mapset, *tmpname;
+    const char *mapset;
+    char *tmpname;
     int result;
 
     switch (mod) {
@@ -483,7 +486,7 @@ int map_type(const char *name, int mod)
 int open_map(const char *name, int mod, int row, int col)
 {
     int i;
-    char *mapset;
+    const char *mapset;
     int use_cats = 0;
     int use_colors = 0;
     struct map *m;

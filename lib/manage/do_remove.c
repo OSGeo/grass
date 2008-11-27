@@ -9,12 +9,12 @@
  *  returns 0 - success
  *          1 - error
  */
-int do_remove(int n, char *old)
+int do_remove(int n, const char *old)
 {
     int i, ret;
 
     /* int len; */
-    char *mapset;
+    const char *mapset;
     int result = 0;
     int removed = 0;
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];

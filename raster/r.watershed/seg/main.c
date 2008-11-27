@@ -39,13 +39,11 @@ SHORT drain[3][3] = {{ 7,6,5 },{ 8,0,4 },{ 1,2,3 }};
 SHORT updrain[3][3]	= {{ 3,2,1 },{ 4,0,8 },{ 5,6,7 }};
 SHORT nextdr[8]	= { 1,-1,0,0,-1,1,1,-1 };
 SHORT nextdc[8]	= { 0,0,-1,1,1,-1,1,-1 };
-char ele_name[GNAME_MAX], *ele_mapset, pit_name[GNAME_MAX],
-    *pit_mapset;
-char run_name[GNAME_MAX], *run_mapset, ob_name[GNAME_MAX], *ob_mapset;
-char ril_name[GNAME_MAX], *ril_mapset, dep_name[GNAME_MAX],
-    *dep_mapset;
+char ele_name[GNAME_MAX], pit_name[GNAME_MAX];
+char run_name[GNAME_MAX], ob_name[GNAME_MAX];
+char ril_name[GNAME_MAX], dep_name[GNAME_MAX];
 
-char *this_mapset;
+const char *this_mapset;
 char seg_name[GNAME_MAX], bas_name[GNAME_MAX], haf_name[GNAME_MAX],
     thr_name[8];
 char ls_name[GNAME_MAX], st_name[GNAME_MAX], sl_name[GNAME_MAX],

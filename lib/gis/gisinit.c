@@ -43,7 +43,7 @@ static int gisinit(void);
 
 void G__gisinit(const char *version, const char *pgm)
 {
-    char *mapset;
+    const char *mapset;
 
     if (initialized)
 	return;
@@ -55,7 +55,8 @@ void G__gisinit(const char *version, const char *pgm)
 
     /* Make sure location and mapset are set */
     G_location_path();
-    switch (G__mapset_permissions(mapset = G_mapset())) {
+    mapset = G_mapset();
+    switch (G__mapset_permissions(mapset)) {
     case 1:
 	break;
     case 0:

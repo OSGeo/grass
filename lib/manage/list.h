@@ -7,9 +7,9 @@
 
 struct list
 {
-    char **element;		/* list of related elements */
+    const char **element;	/* list of related elements */
     char *alias;		/* element alias */
-    char **desc;		/* description of elements */
+    const char **desc;		/* description of elements */
     char *text;			/* menu text */
     int nelem;			/* number of elements */
     char status;
@@ -26,25 +26,25 @@ extern struct list *list;
 #define LIST   4
 
 /* add_elem.c */
-int add_element(char *, char *);
+int add_element(const char *, const char *);
 
 /* do_copy.c */
-int do_copy(int, char *, char *, char *);
+int do_copy(int, const char *, const char *, const char *);
 
 /* do_list.c */
-int do_list(int, char *);
+void do_list(int, const char *);
 
 /* do_remove.c */
-int do_remove(int, char *);
+int do_remove(int, const char *);
 
 /* do_rename.c */
-int do_rename(int, char *, char *);
+int do_rename(int, const char *, const char *);
 
 /* empty.c */
 int empty(char *);
 
 /* find.c */
-char *find(int, char *, char *);
+const char *find(int, char *, const char *);
 
 /* get_len.c */
 int get_description_len(int);

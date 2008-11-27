@@ -29,7 +29,7 @@ struct BM *IL_create_bitmask(struct interp_params *params)
 /** Creates a bitmap mask from given raster map **/
 {
     int i, j, cfmask = 0, irev, MASKfd;
-    char *mapsetm;
+    const char *mapsetm;
     CELL *cellmask, *MASK;
     struct BM *bitmask;
 

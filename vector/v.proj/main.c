@@ -37,11 +37,11 @@ int main(int argc, char *argv[])
     int day, yr, Out_proj;
     int out_zone = 0;
     int overwrite;		/* overwrite output map */
-    char *mapset;
-    char *omap_name, *map_name, *iset_name, *oset_name, *iloc_name;
+    const char *mapset;
+    const char *omap_name, *map_name, *iset_name, *oset_name, *iloc_name;
     struct pj_info info_in;
     struct pj_info info_out;
-    char *gbase;
+    const char *gbase;
     char date[40], mon[4];
     struct GModule *module;
     struct Option *omapopt, *mapopt, *isetopt, *ilocopt, *ibaseopt;

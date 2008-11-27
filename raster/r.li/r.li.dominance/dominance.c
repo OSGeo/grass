@@ -67,17 +67,12 @@ int main(int argc, char *argv[])
 int dominance(int fd, char **par, area_des ad, double *result)
 {
 
-    char *mapset;
-
     int ris = RLI_OK;
-
     double indice = 0;
-
     struct Cell_head hd;
 
 
-    mapset = G_find_cell(ad->raster, "");
-    if (G_get_cellhd(ad->raster, mapset, &hd) == -1)
+    if (G_get_cellhd(ad->raster, "", &hd) == -1)
 	return RLI_ERRORE;
 
 

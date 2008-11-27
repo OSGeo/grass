@@ -60,7 +60,6 @@ int main(int argc, char *argv[])
     char title[64];
     char buf_nsres[100], buf_ewres[100];
     struct Colors colors;
-    char *inmap;
     int infile, outfile;
     DCELL *outbuf;
     int row, col;
@@ -98,12 +97,8 @@ int main(int argc, char *argv[])
 
     G_get_set_window(&dst_w);
 
-    inmap = G_find_cell2(rastin->answer, "");
-    if (!inmap)
-	G_fatal_error(_("Raster map <%s> not found"), rastin->answer);
-
     /* set window to old map */
-    G_get_cellhd(rastin->answer, inmap, &src_w);
+    G_get_cellhd(rastin->answer, "", &src_w);
 
     /* enlarge source window */
     {
@@ -133,7 +128,7 @@ int main(int argc, char *argv[])
     cur_row = -100;
 
     /* open old map */
-    infile = G_open_cell_old(rastin->answer, inmap);
+    infile = G_open_cell_old(rastin->answer, "");
     if (infile < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), rastin->answer);
 
@@ -316,7 +311,7 @@ int main(int argc, char *argv[])
     G_write_history(rastout->answer, &history);
 
     /* copy color table from source map */
-    if (G_read_colors(rastin->answer, inmap, &colors) < 0)
+    if (G_read_colors(rastin->answer, "", &colors) < 0)
 	G_fatal_error(_("Unable to read color table for %s"), rastin->answer);
     G_mark_colors_as_fp(&colors);
     if (G_write_colors(rastout->answer, G_mapset(), &colors) < 0)

@@ -10,7 +10,7 @@
 int old2new(char *in, char *out, int endian)
 {
     int i, j, nlines, ncats, sline, att;
-    char *mapset;
+    const char *mapset;
     FILE *Digin, *Attin;
     struct Line *lines;		/* array of points and lines */
     struct Categ *cats;		/* array of categories */

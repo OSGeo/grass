@@ -30,7 +30,8 @@ int main(int argc, char *argv[])
     struct Option **parm, *p;
     char *old, *new;
     int nrmaps;
-    char *mapset, *location_path, **rmaps;
+    const char *mapset, *location_path;
+    char **rmaps;
     int result = EXIT_SUCCESS;
 
     G_gisinit(argv[0]);

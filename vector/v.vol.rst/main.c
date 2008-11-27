@@ -149,43 +149,43 @@ int fdcell, fdcout;
    04/01/2005 (jh) - variable smoothing and CV
  */
 
-char *input;
-char *cellinp = NULL;
-char *cellout = NULL;
-char *mapset = NULL;
+const char *input;
+const char *cellinp;
+const char *cellout;
+const char *mapset;
 
-char *scol = NULL;
-char *outz = NULL;
-char *gradient = NULL;
-char *aspect1 = NULL;
-char *aspect2 = NULL;
-char *ncurv = NULL;
-char *gcurv = NULL;
-char *mcurv = NULL;
+const char *scol;
+const char *outz;
+const char *gradient;
+const char *aspect1;
+const char *aspect2;
+const char *ncurv;
+const char *gcurv;
+const char *mcurv;
 
-char *maskmap = NULL;
-char *redinp = NULL;
-char *devi = NULL;
-char *cvdev = NULL;
+const char *maskmap;
+const char *redinp;
+const char *devi;
+const char *cvdev;
 
 int sdisk, disk;
-FILE *Tmp_fd_z = NULL;
-char *Tmp_file_z = NULL;
+FILE *Tmp_fd_z;
+const char *Tmp_file_z;
 
-FILE *Tmp_fd_dx = NULL;
-char *Tmp_file_dx = NULL;
-FILE *Tmp_fd_dy = NULL;
-char *Tmp_file_dy = NULL;
-FILE *Tmp_fd_dz = NULL;
-char *Tmp_file_dz = NULL;
-FILE *Tmp_fd_xx = NULL;
-char *Tmp_file_xx = NULL;
-FILE *Tmp_fd_yy = NULL;
-char *Tmp_file_yy = NULL;
-FILE *Tmp_fd_xy = NULL;
-char *Tmp_file_xy = NULL;
-FILE *Tmp_fd_cell = NULL;
-char *Tmp_file_cell = NULL;
+FILE *Tmp_fd_dx;
+const char *Tmp_file_dx;
+FILE *Tmp_fd_dy;
+const char *Tmp_file_dy;
+FILE *Tmp_fd_dz;
+const char *Tmp_file_dz;
+FILE *Tmp_fd_xx;
+const char *Tmp_file_xx;
+FILE *Tmp_fd_yy;
+const char *Tmp_file_yy;
+FILE *Tmp_fd_xy;
+const char *Tmp_file_xy;
+FILE *Tmp_fd_cell;
+const char *Tmp_file_cell;
 
 struct BM *bitmask;
 struct Cell_head cellhd;

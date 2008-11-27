@@ -37,7 +37,7 @@ int G_put_window(const struct Cell_head *window)
 	: G__put_window(window, "", "WIND");
 }
 
-int G__put_window(const struct Cell_head *window, char *dir, char *name)
+int G__put_window(const struct Cell_head *window, const char *dir, const char *name)
 {
     FILE *fd;
 

@@ -34,7 +34,7 @@
 #include "local_proto.h"
 
 
-void supported_formats(char **formats)
+void supported_formats(const char **formats)
 {
     /* Code taken from r.in.gdal */
 
@@ -111,7 +111,7 @@ int main(int argc, char *argv[])
 
     struct Cell_head cellhead;
     struct Ref ref;
-    char *mapset, *gdal_formats = NULL;
+    const char *mapset, *gdal_formats = NULL;
     RASTER_MAP_TYPE maptype;
     int bHaveMinMax;
     double dfCellMin;

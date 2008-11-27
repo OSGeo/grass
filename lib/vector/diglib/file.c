@@ -154,7 +154,7 @@ void dig_file_init(GVFILE * file)
 int dig_file_load(GVFILE * file)
 {
     int ret, mode, load;
-    char *cmode;
+    const char *cmode;
     size_t size;
     struct stat sbuf;
 

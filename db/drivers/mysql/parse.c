@@ -26,7 +26,7 @@
  *  \return DB_OK Success
  *  \return DB_FAILED Failed to parse database
  */
-int parse_conn(char *str, CONNPAR * conn)
+int parse_conn(const char *str, CONNPAR * conn)
 {
     int i;
     char **tokens, delm[2];

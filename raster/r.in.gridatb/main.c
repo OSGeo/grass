@@ -23,8 +23,8 @@
 
 struct Cell_head cellhd;
 FCELL *cell;
-char *file;
-char *mapset, *oname;
+const char *file;
+const char *mapset, *oname;
 
 int main(int argc, char **argv)
 {

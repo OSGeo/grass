@@ -46,7 +46,7 @@ static void open_write_vector_maps(input_maps * in, G3D_Region region,
 				   FILE * fp, int dp);
 
 /*opens a raster input map */
-static int open_input_map(char *name, char *mapset);
+static int open_input_map(const char *name, const char *mapset);
 
 /*Check if all maps are available */
 static void check_input_maps(void);
@@ -89,7 +89,7 @@ input_maps *create_input_maps_struct(void)
 /* ************************************************************************* */
 /* Open the raster input map *********************************************** */
 /* ************************************************************************* */
-int open_input_map(char *name, char *mapset)
+int open_input_map(const char *name, const char *mapset)
 {
     int fd;
 
@@ -113,7 +113,7 @@ int open_input_map(char *name, char *mapset)
 void check_input_maps(void)
 {
     int i = 0;
-    char *mapset, *name;
+    const char *mapset, *name;
 
     /*Check top and bottom if surface is requested */
     if (param.structgrid->answer) {
@@ -368,7 +368,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     int dp, i, changemask = 0;
     int rows, cols;
-    char *mapset, *name;
+    const char *mapset, *name;
     double scale = 1.0, llscale = 1.0;
 
     input_maps *in;

@@ -235,7 +235,7 @@ int zoom_default(void)
 int zoom_region(void)
 {
     struct Cell_head win;
-    char *mapset;
+    const char *mapset;
 
     G_debug(2, "zoom_region()");
 

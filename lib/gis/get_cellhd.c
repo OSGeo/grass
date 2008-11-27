@@ -50,7 +50,6 @@ int G_get_cellhd(const char *name, const char *mapset,
     char real_name[GNAME_MAX], real_mapset[GMAPSET_MAX];
     char buf[1024];
     char *tail;
-    char *err;
 
     /*
        is_reclass = G_is_reclass (name, mapset, real_name, real_mapset);
@@ -91,27 +90,8 @@ int G_get_cellhd(const char *name, const char *mapset,
 	}
     }
 
-    err = G__read_Cell_head(fd, cellhd, 1);
+    G__read_Cell_head(fd, cellhd, 1);
     fclose(fd);
 
-    if (err == NULL)
-	return 0;
-
-    sprintf(buf, _("Unable to read header file for raster map <%s@%s>."),
-	    name, mapset);
-    tail = buf + strlen(buf);
-    if (is_reclass) {
-	sprintf(tail,
-		_(" It is a reclass of raster map <%s@%s> whose header file is invalid."),
-		real_name, real_mapset);
-    }
-    else
-	sprintf(tail, _(" Invalid format."));
-    tail = buf + strlen(buf);
-    strcpy(tail, err);
-
-    G_free(err);
-
-    G_warning(buf);
-    return -1;
+    return 0;
 }

@@ -93,8 +93,9 @@ OGRSpatialReferenceH GPJ_grass_to_osr(struct Key_Value * proj_info,
     struct gpj_datum dstruct;
     struct gpj_ellps estruct;
     size_t len;
-    char *ellps, *ellpslong, *datum, *params, *towgs84, *datumlongname,
-	*start, *end, *unit, *unfact, *buff;
+    const char *ellps, *unit, *unfact;
+    char *ellpslong, *datum, *params, *towgs84, *datumlongname,
+	*start, *end, *buff;
     const char *sysname, *osrunit, *osrunfact;
     double a, es, rf;
     int haveparams = 0;
@@ -138,9 +139,9 @@ OGRSpatialReferenceH GPJ_grass_to_osr(struct Key_Value * proj_info,
     haveparams = GPJ__get_datum_params(proj_info, &datum, &params);
 
     if ((datum == NULL) || (GPJ_get_datum_by_name(datum, &dstruct) < 0)) {
-	G_asprintf(&datumlongname, "unknown");
+	datumlongname = "unknown";
 	if (ellps == NULL)
-	    G_asprintf(&ellps, "unnamed");
+	    ellps = "unnamed";
     }
     else {
 	datumlongname = G_store(dstruct.longname);
@@ -204,7 +205,7 @@ OGRSpatialReferenceH GPJ_grass_to_osr(struct Key_Value * proj_info,
 	    lastpart[len] = '\0';
 
 	    if (unit == NULL)
-		G_asprintf(&unit, "unknown");
+		unit = "unknown";
 	    G_asprintf(&end, ",UNIT[\"%s\",%.16g]]", unit, unfactf);
 	}
 

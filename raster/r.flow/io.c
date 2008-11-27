@@ -38,12 +38,12 @@
 
 /****************************** Annoyances ******************************/
 
-static char *tmp_name(char *fullname)
+static const char *tmp_name(const char *fullname)
 {
-    char *mapset = G_mapset();
-    char *location = G_location_path();
     char element[1024];
-    char *el = element;
+    const char *mapset = G_mapset();
+    const char *location = G_location_path();
+    const char *el = element;
 
     G__temp_element(element);
     while (*fullname++ == *location++) ;
@@ -57,7 +57,7 @@ static char *tmp_name(char *fullname)
 
 static int open_existing_cell_file(char *fname, struct Cell_head *chd)
 {
-    char *mapset = G_find_cell(fname, "");
+    const char *mapset = G_find_cell(fname, "");
 
     if (mapset == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), fname);
@@ -125,17 +125,17 @@ void read_input_files(void)
     }
 }
 
-static int open_segment_file(char *name, layer l, int new)
+static int open_segment_file(const char *name, layer l, int new)
 {
     int fd;
-    char *mapset;
+    const char *mapset;
 
     if (new == TEMP)
 	G__temp_element(string);
     else
 	sprintf(string, "cell_misc/%s", parm.elevin);
 
-    if (new || !(mapset = G_find_file(string, name, ""))) {
+    if (new || !(mapset = G_find_file2(string, name, ""))) {
 	if ((fd = G_open_new(string, name)) < 0)
 	    G_fatal_error(_("Cannot create segment file %s"), name);
 
@@ -188,7 +188,7 @@ void close_files(void)
 
 void write_density_file(void)
 {
-    char *mapset;
+    const char *mapset;
     int dsfd, row, col;
     double dsmax = 0.0;
     struct Colors colors;

@@ -27,7 +27,8 @@ static int parse_command(Nv_data * data, Tcl_Interp * interp,	/* Current interpr
     struct Option *panel_path, *script, *state;
     struct Flag *no_args, *script_kill, *demo, *verbose;
     struct GModule *module;
-    char *arglist[3], *autoload;
+    char *arglist[3];
+    const char *autoload;
     int i, aload = 1;
     char *argv2[argc - 1];
     int argc2, ii, jj;

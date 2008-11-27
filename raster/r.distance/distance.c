@@ -25,11 +25,10 @@
 /* this code assumes that list1 and list2 have at least one cell in each */
 
 void
-find_minimum_distance(struct CatEdgeList *list1, struct CatEdgeList *list2,
-		      double *east1, double *north1, double *east2,
-		      double *north2, double *distance,
-		      struct Cell_head *region, int overlap, char *name1,
-		      char *name2)
+find_minimum_distance(const struct CatEdgeList *list1, const struct CatEdgeList *list2,
+		      double *east1, double *north1, double *east2, double *north2,
+		      double *distance, const struct Cell_head *region, int overlap,
+		      const char *name1, const char *name2)
 {
     int i1, i2;
     double dist;
@@ -76,10 +75,10 @@ find_minimum_distance(struct CatEdgeList *list1, struct CatEdgeList *list2,
     }
 }
 
-int null_distance(char *name1, char *name2, int *zerro_row, int *zerro_col)
+int null_distance(const char *name1, const char *name2, int *zerro_row, int *zerro_col)
 {
     RASTER_MAP_TYPE maptype1, maptype2;
-    char *mapset;
+    const char *mapset;
     int mapd1, mapd2;
     void *inrast1, *inrast2;
     int nrows, ncols, row, col;

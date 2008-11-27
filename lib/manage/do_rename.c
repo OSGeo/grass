@@ -9,11 +9,11 @@
  *  returns 0 - success
  *          1 - error
  */
-int do_rename(int n, char *old, char *new)
+int do_rename(int n, const char *old, const char *new)
 {
     int i, ret;
     int len;
-    char *mapset;
+    const char *mapset;
     int result = 0;
     int renamed = 0;
 

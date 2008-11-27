@@ -41,7 +41,8 @@ int main(int argc, char *argv[])
     int last_row, last_column, grid, bilin, ext, flag_auxiliar, cross;	/* booleans */
     double passoN, passoE, lambda, mean;
 
-    char *mapset, *dvr, *db, *vector, *map, table_name[1024], title[64];
+    const char *mapset, *dvr, *db, *vector, *map;
+    char table_name[1024], title[64];
 
     int dim_vect, nparameters, BW;
     int *lineVect;		/* Vector restoring primitive's ID */
@@ -517,7 +518,7 @@ int main(int argc, char *argv[])
 		    obsVect[i][1] = observ[i].coordY;
 
 		    if (bspline_field > 0) {
-			int cat, ival, ret, type;
+			int cat, ival, ret;
 
 			cat = observ[i].cat;
 			if (cat < 0)

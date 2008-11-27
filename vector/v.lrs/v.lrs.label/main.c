@@ -78,7 +78,8 @@ int main(int argc, char **argv)
     struct Option *Opaque;
 
     struct GModule *module;
-    char *mapset, buf[2000];
+    const char *mapset;
+    char buf[2000];
     const char *drv, *db;
     struct Map_info In, Out;
     struct line_cats *LCats, *SCats;

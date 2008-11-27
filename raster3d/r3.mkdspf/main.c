@@ -54,10 +54,11 @@ int NTHRESH;
 
 int main(int argc, char *argv[])
 {
-    char *dspout, element[160];
+    char element[GNAME_MAX+10];
+    const char *dspout;
     void *g3map;
     G3D_Region g3reg;
-    char *mapset;
+    const char *mapset;
     double dmin, dmax;
     struct GModule *module;
 

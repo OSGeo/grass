@@ -23,7 +23,7 @@ extern int ps_copies;
 int ps_map(void)
 {
     long current_offset;
-    char *date;
+    const char *date;
     int urx, ury;
 
     /* get date */

@@ -32,7 +32,6 @@ int main(int argc, char *argv[])
     double Thresh;
     int NumOrients;
     int inputfd, zcfd;		/* the input and output file descriptors */
-    char *inmapset;		/* the input mapset name */
     struct Cell_head window;
     CELL *cell_row;
     float Width;
@@ -100,10 +99,7 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     /* open input cell map */
-    if ((inmapset = G_find_cell(input_map->answer, "")) == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), input_map->answer);
-
-    inputfd = G_open_cell_old(input_map->answer, inmapset);
+    inputfd = G_open_cell_old(input_map->answer, "");
     if (inputfd < 0)
 	exit(EXIT_FAILURE);
 

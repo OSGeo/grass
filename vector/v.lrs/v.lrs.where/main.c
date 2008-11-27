@@ -43,7 +43,7 @@ int main(int argc, char **argv)
     struct Option *lfield_opt, *pfield_opt;
     struct Option *driver_opt, *database_opt, *table_opt, *thresh_opt;
     struct GModule *module;
-    char *mapset;
+    const char *mapset;
     const char *drv, *db;
     struct Map_info LMap, PMap;
     struct line_cats *LCats, *PCats;

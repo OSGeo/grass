@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
     int n;
     int i;
     int skip;
-    char *cur_mapset;
+    const char *cur_mapset;
     char **ptr;
     char **tokens;
     int no_tokens;
@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
 
     if (opt1->answer) {
 	for (ptr = opt1->answers; *ptr != NULL; ptr++) {
-	    char *mapset;
+	    const char *mapset;
 
 	    mapset = *ptr;
 	    if (G__mapset_permissions(mapset) < 0)
@@ -127,7 +127,7 @@ int main(int argc, char *argv[])
 
     /* add to existing search path */
     if (opt2->answer) {
-	char *oldname;
+	const char *oldname;
 
 	Path[0] = '\0';
 
@@ -156,7 +156,7 @@ int main(int argc, char *argv[])
 
     /* remove from existing search path */
     if (opt3->answer) {
-	char *oldname;
+	const char *oldname;
 
 	Path[0] = '\0';
 

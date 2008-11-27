@@ -59,7 +59,7 @@ static int nopt1;
 int pj_get_kv(struct pj_info *info, struct Key_Value *in_proj_keys,
 	      struct Key_Value *in_units_keys)
 {
-    char *str;
+    const char *str;
     int i;
     double a, es, rf;
     int returnval = 1;

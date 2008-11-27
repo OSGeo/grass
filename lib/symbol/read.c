@@ -232,7 +232,8 @@ SYMBOL *S_read(char *sname)
     int i, j, k, l;
     FILE *fp;
     char group[500], name[500], buf[2001];
-    char *ms, *c;
+    const char *ms;
+    char *c;
     double x, y, x2, y2, rad, ang1, ang2;
     int r, g, b;
     double fr, fg, fb;

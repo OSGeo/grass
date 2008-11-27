@@ -70,7 +70,7 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
     double deltx, delty, deltz;
     int first_time = 1;
     CELL *cellmask;
-    char *mapsetm;
+    const char *mapsetm;
     char buf[500];
     int cat, intval;
     struct field_info *Fi;

@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
     double N, E;
     int row, col, basin_fd, drain_fd;
     CELL *cell_buf;
-    char drain_name[GNAME_MAX], *drain_mapset, E_f, dr_f, ba_f, N_f, errr;
+    char drain_name[GNAME_MAX], E_f, dr_f, ba_f, N_f, errr;
     struct GModule *module;
     struct Option *opt1, *opt2, *opt3, *opt4;
 
@@ -120,14 +120,12 @@ int main(int argc, char *argv[])
     G_get_set_window(&window);
     dr_f = ba_f = N_f = E_f = errr = 0;
 
-    drain_mapset = do_exist(drain_name);
-
     nrows = G_window_rows();
     ncols = G_window_cols();
     total = nrows * ncols;
     nrows_less_one = nrows - 1;
     ncols_less_one = ncols - 1;
-    drain_fd = G_open_cell_old(drain_name, drain_mapset);
+    drain_fd = G_open_cell_old(drain_name, "");
 
     if (drain_fd < 0)
 	G_fatal_error(_("Unable to open drainage pointer map"));

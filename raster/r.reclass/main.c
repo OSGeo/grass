@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
     char buf[1024];
     RULE *rules, *tail;
     int any;
-    char *old_mapset;
+    const char *old_mapset;
     FILE *srcfp;
     int tty;
     struct GModule *module;

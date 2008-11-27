@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     struct Option *type, *rc_file;
     struct Flag *oneoff;
     struct GModule *module;
-    char *gui_type_env;
+    const char *gui_type_env;
     char progname[GPATH_MAX];
 
     G_gisinit(argv[0]);

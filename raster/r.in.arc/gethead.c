@@ -19,7 +19,7 @@ int gethead(FILE * fd, struct Cell_head *cellhd, int *missingval)
     int nodata, res, s, w, r, c;
     char label[100], value[100];
     char buf[1024];
-    char *err;
+    const char *err;
 
     s = nodata = res = w = r = c = 0;
 

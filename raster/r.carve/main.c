@@ -60,7 +60,7 @@ int main(int argc, char **argv)
     struct Option *width, *depth;
     struct Flag *noflat;
 
-    char *vmapset, *rmapset;
+    const char *vmapset, *rmapset;
     int infd, outfd;
     struct Map_info Map;
     struct Map_info outMap;

@@ -81,12 +81,10 @@ DCELL feature(double *coeff);	/* Set of six quadratic coefficents.    */
 
 /* ------ Global variables ------ */
 
-extern char
+extern const char
  *rast_in_name,			/* Name of the raster file to process.  */
- *rast_out_name,		/* Name of the raster output file.      */
- *mapset_in,			/* If no problems, these will be names  */
- *mapset_out,			/* of mapsets containing the files to   */
-				/* be processed. Otherwise, error code. */
+ *rast_out_name;		/* Name of the raster output file.      */
+extern int
   constrained;			/* Flag that forces quadtratic through  */
 
 				/* the central cell of the window.      */

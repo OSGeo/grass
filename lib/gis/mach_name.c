@@ -14,7 +14,7 @@
  *
  */
 
-char *G__machine_name(void)
+const char *G__machine_name(void)
 {
     static int initialized;
     static char name[128];

@@ -3,7 +3,7 @@
 
 #define LIST struct Histogram_list
 
-void new_stats(char *name, struct Reclass *reclass)
+void new_stats(const char *name, struct Reclass *reclass)
 {
     struct Histogram histo, histo2;
     struct Range range;

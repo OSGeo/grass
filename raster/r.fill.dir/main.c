@@ -54,17 +54,18 @@
 #include "tinf.h"
 #include "local.h"
 
+static int dir_type(int type, int dir);
+
 int main(int argc, char **argv)
 {
-
     int fe, fd, fm;
-    int i, j, type, dir_type();
+    int i, j, type;
     int new_id;
     int nrows, ncols, nbasins;
-    int cell_open(), cell_open_new();
     int map_id, dir_id, bas_id;
-    char map_name[GNAME_MAX], *map_mapset, new_map_name[GNAME_MAX];
-    char *tempfile1, *tempfile2, *tempfile3;
+    char map_name[GNAME_MAX], new_map_name[GNAME_MAX];
+    const char *map_mapset;
+    const char *tempfile1, *tempfile2, *tempfile3;
     char dir_name[GNAME_MAX];
     char bas_name[GNAME_MAX];
 
@@ -295,7 +296,7 @@ int main(int argc, char **argv)
     exit(EXIT_SUCCESS);
 }
 
-int dir_type(int type, int dir)
+static int dir_type(int type, int dir)
 {
     if (type == 1) {		/* AGNPS aspect format */
 	if (dir == 128)

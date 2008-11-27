@@ -66,7 +66,7 @@ int G_lookup_key_value_from_file(const char *file,
 {
     struct Key_Value *kv;
     int stat;
-    char *v;
+    const char *v;
 
     *value = 0;
     kv = G_read_key_value_file(file, &stat);

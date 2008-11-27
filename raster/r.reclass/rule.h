@@ -13,16 +13,16 @@ RULE {
 int add_rule(RULE **, CELL, CELL, CELL);
 
 /* parse.c */
-int parse(char *, RULE **, RULE **, struct Categories *);
+int parse(const char *, RULE **, RULE **, struct Categories *);
 
 /* reclass.c */
-int reclass(char *, char *, char *, RULE *, struct Categories *, char *);
+int reclass(const char *, const char *, const char *, RULE *, struct Categories *, const char *);
 
 /* input.c */
-int input(FILE *, int, char *);
+int input(FILE *, int, const char *);
 
 /* range.c */
-int new_range(char *, struct Reclass *);
+int new_range(const char *, struct Reclass *);
 
 /* stats.c */
-void new_stats(char *, struct Reclass *);
+void new_stats(const char *, struct Reclass *);

@@ -94,7 +94,8 @@ void print_datuminfo(void)
 void print_proj4(int dontprettify)
 {
     struct pj_info pjinfo;
-    char *proj4, *proj4mod, *i, *unfact;
+    char *proj4, *proj4mod, *i;
+    const char *unfact;
 
     if (check_xy())
 	return;
@@ -168,7 +169,7 @@ void create_location(char *location)
 	/* Create flag given but no location specified; overwrite
 	 * projection files for current location */
 
-	char *mapset = G_mapset();
+	const char *mapset = G_mapset();
 	struct Key_Value *old_projinfo = NULL, *old_projunits = NULL;
 	struct Cell_head old_cellhd;
 

@@ -33,7 +33,7 @@ extern int nfiles;
 extern int nrows;
 extern int ncols;
 extern int NCATS;
-extern char *names[NFILES];
+extern const char *names[NFILES];
 extern struct Categories labels[NFILES];
 
 typedef struct

@@ -109,7 +109,7 @@ int main (int argc, char *argv[])
     struct Map_info In, Out;
     struct line_pnts *Points;
     struct line_cats *Cats, *BCats;
-    char *mapset;
+    const char *mapset;
     struct GModule *module;
     struct Option *in_opt, *out_opt, *type_opt, *dista_opt, *distb_opt, *angle_opt;
     struct Flag *straight_flag, *nocaps_flag;

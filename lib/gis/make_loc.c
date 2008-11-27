@@ -237,7 +237,7 @@ G_compare_projections(const struct Key_Value *proj_info1,
     /* -------------------------------------------------------------------- */
 
     {
-	char *x_0_1 = NULL, *x_0_2 = NULL;
+	const char *x_0_1 = NULL, *x_0_2 = NULL;
 
 	x_0_1 = G_find_key_value("x_0", proj_info1);
 	x_0_2 = G_find_key_value("x_0", proj_info2);
@@ -251,7 +251,7 @@ G_compare_projections(const struct Key_Value *proj_info1,
     /* -------------------------------------------------------------------- */
 
     {
-	char *y_0_1 = NULL, *y_0_2 = NULL;
+	const char *y_0_1 = NULL, *y_0_2 = NULL;
 
 	y_0_1 = G_find_key_value("y_0", proj_info1);
 	y_0_2 = G_find_key_value("y_0", proj_info2);

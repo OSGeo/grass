@@ -9,7 +9,7 @@ static int write_history(int, char *, double **);
 
 int write_support(int bands, char *outname, double **eigmat)
 {
-    char *mapset = G_mapset();
+    const char *mapset = G_mapset();
     struct Colors colors;
     struct FPRange range;
     DCELL min, max;

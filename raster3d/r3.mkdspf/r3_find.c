@@ -8,9 +8,9 @@
 #include <grass/G3d.h>
 
 
-int g3_find_dsp_file(char *cell, char *file, char *mset)
+int g3_find_dsp_file(const char *cell, const char *file, const char *mset)
 {
-    char element[100], name[GNAME_MAX], mapset[GMAPSET_MAX],
+    char element[GNAME_MAX+10], name[GNAME_MAX], mapset[GMAPSET_MAX],
 	tofind[GNAME_MAX];
 
     if (file == NULL || *file == 0)
@@ -28,7 +28,7 @@ int g3_find_dsp_file(char *cell, char *file, char *mset)
 
 
 /* return NULL on error: otherwise returns dspout */
-char *check_get_any_dspname(char *dspf, char *g3f, char *mset)
+const char *check_get_any_dspname(const char *dspf, const char *g3f, const char *mset)
 {
     if (!G_find_grid3(g3f, ""))
 	G_fatal_error("[%s] 3D raster map not found", g3f);

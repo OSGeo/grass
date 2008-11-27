@@ -8,5 +8,5 @@ void rdwr_gridatb(void);
 
 extern struct Cell_head cellhd;
 extern FCELL *cell;
-extern char *file;
-extern char *mapset, *oname;
+extern const char *file;
+extern const char *mapset, *oname;

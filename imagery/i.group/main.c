@@ -195,7 +195,7 @@ static int add_or_update_group(char group[INAME_LEN], char **rasters, int k)
 {
     int m, n, skip;
     struct Ref ref;
-    char *mapset;
+    const char *mapset;
 
     I_get_group_ref(group, &ref);
 
@@ -234,7 +234,7 @@ static int add_or_update_subgroup(char group[INAME_LEN],
 {
     int m, n, skip;
     struct Ref ref;
-    char *mapset;
+    const char *mapset;
 
     I_get_subgroup_ref(group, subgroup, &ref);
 
@@ -272,7 +272,7 @@ static int remove_group_files(char group[INAME_LEN], char **rasters, int k)
     int m, n, skip;
     struct Ref ref;
     struct Ref ref_tmp;
-    char *mapset;
+    const char *mapset;
     char tmp_name[INAME_LEN];
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
@@ -330,7 +330,7 @@ static int remove_subgroup_files(char group[INAME_LEN],
     int m, n, skip;
     struct Ref ref;
     struct Ref ref_tmp;
-    char *mapset;
+    const char *mapset;
     char tmp_name[INAME_LEN];
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
