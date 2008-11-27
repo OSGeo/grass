@@ -29,8 +29,10 @@ OBJS =	at_exit_funcs.o \
 	actions.o \
 	main.o
 
-default: $(SRCS) $(HDRS) $(OBJS)
-	$(CC) $(OBJS) -o gem7 $(CFLAGS) $(CLIBS) $(LDFLAGS)
+default: gem7
+
+gem7: $(SRCS) $(HDRS) $(OBJS)
+	$(CC) $(OBJS) -o $@ $(CFLAGS) $(CLIBS) $(LDFLAGS)
 
 %.o: %.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -c $<

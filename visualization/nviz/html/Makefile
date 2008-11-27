@@ -8,14 +8,11 @@ SRCFILES := $(wildcard  *.* img/nv/*.* nvimg/*/*.*)
 DSTFILES := $(patsubst %,$(GRASS_NVIZ_DOCS)/%,$(SRCFILES))
 
 default:
-	-$(MKDIR) $(ARCH_DISTDIR)/docs
-	-$(MKDIR) $(ARCH_DISTDIR)/docs/html
-	-$(MKDIR) $(GRASS_NVIZ_DOCS)
-	-$(MKDIR) $(GRASS_NVIZ_DOCS)/img
-	-$(MKDIR) $(GRASS_NVIZ_DOCS)/img/nv
-	-$(MKDIR) $(GRASS_NVIZ_DOCS)/nvimg
-	-$(MKDIR) $(GRASS_NVIZ_DOCS)/nvimg/panel
-	-$(MKDIR) $(GRASS_NVIZ_DOCS)/nvimg/work
+	-if [ ! -d $(ARCH_DISTDIR)/docs ] ; then $(MKDIR) $(ARCH_DISTDIR)/docs ; fi
+	-if [ ! -d $(ARCH_DISTDIR)/docs/html ] ; then $(MKDIR) $(ARCH_DISTDIR)/docs/html ; fi
+	-for dir in '' img img/nv nvimg nvimg/panel nvimg/work ; do \
+	if [ ! -d $(GRASS_NVIZ_DOCS)/$$dir ] ; then $(MKDIR) $(GRASS_NVIZ_DOCS)/$$dir ; fi \
+	done
 	$(MAKE) $(DSTFILES)
 
 $(GRASS_NVIZ_DOCS)/%: %

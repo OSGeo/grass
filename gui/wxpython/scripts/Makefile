@@ -7,6 +7,9 @@ ETCDIR = $(ETC)/gui/scripts
 default: install_scripts
 
 install_scripts:
-	$(MKDIR) $(ETCDIR)
-	$(INSTALL) d.rast3d $(ETCDIR)/
+	if [ ! -d $(ETCDIR) ] ; then $(MKDIR) $(ETCDIR) ; fi
+	$(MAKE) $(ETCDIR)/d.rast3d
+
+$(ETCDIR)/%: %
+	$(INSTALL) $< $@
 

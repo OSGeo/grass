@@ -17,12 +17,14 @@ DSTPAT := $(patsubst patterns/%.eps,$(ETC)/paint/patterns/%.eps,$(SRCPAT))
 default: cmd $(PROLOG) patt
 
 $(PROLOG): prolog.ps
-	$(MKDIR) $(ETC)/paint
+	if [ ! -d $(ETC)/paint ] ; then $(MKDIR) $(ETC)/paint ; fi
 	$(INSTALL_DATA) $< $@
 
 patt:
-	$(MKDIR) $(ETC)/paint/patterns/
+	if [ ! -d $(ETC)/paint/patterns ] ; then $(MKDIR) $(ETC)/paint/patterns ; fi
 	$(MAKE) $(DSTPAT)
 
 $(ETC)/paint/patterns/%.eps: patterns/%.eps
 	$(INSTALL_DATA) $< $@
+
+.PHONY: patt

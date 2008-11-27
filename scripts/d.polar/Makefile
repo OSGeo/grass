@@ -5,7 +5,7 @@ PGM = d.polar
 include $(MODULE_TOPDIR)/include/Make/Script.make
 
 default: script
-	$(MKDIR) $(ETC)/d.polar/
+	if [ ! -d $(ETC)/d.polar ] ; then $(MKDIR) $(ETC)/d.polar ; fi
 	$(MAKE) $(ETC)/d.polar/ps_defs.eps
 
 $(ETC)/d.polar/%: %

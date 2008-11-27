@@ -19,6 +19,10 @@ SCRIPTS := \
 	scripts/$(NV_VER)_script \
 	$(wildcard scripts/*.tcl) \
 	$(wildcard scripts/*Index)
+SCRIPT_DST := $(patsubst scripts/%,$(INSTALL_DIR)/scripts/%,$(SCRIPTS))
+
+BITMAPS := $(filter-out flythrough,$(wildcard bitmaps/*)) $(wildcard bitmaps/flythrough/*.gif)
+BITMAP_DST := $(patsubst bitmaps/%,$(INSTALL_DIR)/bitmaps/%,$(BITMAPS))
 
 ifneq ($(USE_OPENGL),)
 ifneq ($(strip $(TCLTKLIBS)),)
@@ -32,15 +36,31 @@ endif
 
 # Install the scripts in the appropriate directory
 install:
-	-$(MKDIR) $(INSTALL_DIR)
-	$(INSTALL) src/nvwish$(EXE) $(INSTALL_DIR)/$(PGM)$(EXE)
-	$(INSTALL) scripts/$(PGM) $(BIN)
+	-if [ ! -d $(INSTALL_DIR) ] ; then $(MKDIR) $(INSTALL_DIR) ; fi
+	$(MAKE) $(INSTALL_DIR)/$(PGM)$(EXE)
+	$(MAKE) $(BIN)/$(PGM)
 ifneq ($(strip $(MINGW)),)
-	$(INSTALL) scripts/nviz.bat $(BIN)
+	$(MAKE) $(BIN)/nviz.bat
 endif
-	-$(MKDIR) $(INSTALL_DIR)/scripts
-	for file in $(SCRIPTS) ; do $(INSTALL) $$file $(INSTALL_DIR)/scripts ; done
-	-$(MKDIR) $(INSTALL_DIR)/bitmaps
-	-$(MKDIR) $(INSTALL_DIR)/bitmaps/flythrough
-	find -L bitmaps -path '*/.svn' -prune -o -type f -print | \
-		while read file ; do $(INSTALL_DATA) $$file $(INSTALL_DIR)/$$file ; done
+	-if [ ! -d $(INSTALL_DIR)/scripts ] ; then $(MKDIR) $(INSTALL_DIR)/scripts ; fi
+	$(MAKE) $(SCRIPT_DST)
+	-if [ ! -d $(INSTALL_DIR)/bitmaps ] ; then $(MKDIR) $(INSTALL_DIR)/bitmaps ; fi
+	-if [ ! -d $(INSTALL_DIR)/bitmaps/flythrough ] ; then $(MKDIR) $(INSTALL_DIR)/bitmaps/flythrough ; fi
+	$(MAKE) $(BITMAP_DST)
+
+$(INSTALL_DIR)/$(PGM)$(EXE): src/nvwish$(EXE)
+	$(INSTALL) $< $@
+
+$(BIN)/$(PGM): scripts/$(PGM)
+	$(INSTALL) $< $@
+
+$(BIN)/nviz.bat: scripts/nviz.bat
+	$(INSTALL) $< $@
+
+$(INSTALL_DIR)/scripts/%: scripts/%
+	$(INSTALL) $< $@
+
+$(INSTALL_DIR)/bitmaps/%: bitmaps/%
+	$(INSTALL_DATA) $< $@
+
+.PHONY: install
