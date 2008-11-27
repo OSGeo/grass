@@ -86,7 +86,7 @@ default: builddemolocation
 		$(MAKE) -C $$subdir; \
 	done
 	$(MAKE) $(FILES_DST)
-	$(MAKE) ${ARCH_BINDIR}/grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}
+	$(MAKE) ${ARCH_DISTDIR}/grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}.tmp
 	@if [ `cat "$(ERRORLOG)" | wc -l` -gt 5 ] ; then \
 		echo "--"     >> $(ERRORLOG) ; \
 		echo "In case of errors please change into the directory with error and run 'make'." >> $(ERRORLOG) ; \
@@ -104,7 +104,7 @@ default: builddemolocation
 ${ARCH_DISTDIR}/%: %
 	$(INSTALL_DATA) $< $@
 
-${ARCH_BINDIR}/grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}: ${ARCH_DISTDIR}/grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}.tmp
+${ARCH_DISTDIR}/grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}.tmp: ${ARCH_BINDIR}/grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}
 	$(INSTALL) $< $@
 
 LIBDIRS = \
