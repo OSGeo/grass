@@ -4,7 +4,7 @@
  * MODULE:       v.drape
  * 
  * AUTHOR(S):    Radim Blazek, Dylan Beaudette
- *               
+ *               Maris Nartiss - WHERE support and raster NULL support
  * PURPOSE:      Convert 2D vector to 3D vector by sampling of elevation raster.
  *               
  * COPYRIGHT:    (C) 2005 by the GRASS Development Team
@@ -29,31 +29,136 @@
 */
 
 #include <stdlib.h>
-#include <math.h>
 #include <grass/gis.h>
 #include <grass/Vect.h>
+#include <grass/dbmi.h>
 #include <grass/glocale.h>
+
+/* Samples raster map */
+int sample_raster(const int ltype, int fdrast, struct Cell_head window,
+		  struct line_pnts *Points, const INTERP_TYPE method,
+		  const double scale, const struct Option *null_opt,
+		  const double null_val)
+{
+    double estimated_elevation;
+    int j;
+
+    /* adjust flow based on specific type of line */
+    switch (ltype) {
+	/* points (at least 1 vertex) */
+    case GV_POINT:
+    case GV_CENTROID:
+    case GV_KERNEL:
+	/* sample raster at this point, and update the z-coordinate
+	 * (note that input vector should not be 3D!)
+	 */
+	estimated_elevation = scale * G_get_raster_sample(fdrast,
+							  &window,
+							  NULL,
+							  Points->
+							  y[0],
+							  Points->
+							  x[0], 0, method);
+	/* Elevation value has to be meaningfull */
+	if (G_is_d_null_value(&estimated_elevation)) {
+	    if (null_opt->answer) {
+		estimated_elevation = null_val;
+	    }
+	    else {
+		return 0;
+	    }
+	}
+	/* update the elevation value for each data point */
+	Points->z[0] = estimated_elevation;
+	break;
+	/* standard lines (at least 2 vertexes) */
+    case GV_LINE:
+    case GV_BOUNDARY:
+	if (Points->n_points < 2)
+	    break;		/* At least 2 points */
+
+	/* loop through each point in a line */
+	for (j = 0; j < Points->n_points; j++) {
+	    /* sample raster at this point, and update the z-coordinate (note that input vector should not be 3D!) */
+	    estimated_elevation = scale * G_get_raster_sample(fdrast,
+							      &window,
+							      NULL,
+							      Points->
+							      y[j],
+							      Points->
+							      x[j], 0,
+							      method);
+
+	    if (G_is_d_null_value(&estimated_elevation)) {
+		if (null_opt->answer) {
+		    estimated_elevation = null_val;
+		}
+		else {
+		    return 0;
+		}
+	    }
+	    /* update the elevation value for each data point */
+	    Points->z[j] = estimated_elevation;
+	}			/* end looping through point in a line */
+	break;
+
+	/* lines with at least 3 vertexes */
+    case GV_FACE:
+	if (Points->n_points < 3)
+	    break;		/* At least 3 points */
+
+	/* loop through each point in a line */
+	for (j = 0; j < Points->n_points; j++) {
+	    /* sample raster at this point, and update the z-coordinate (note that input vector should not be 3D!) */
+	    estimated_elevation = scale * G_get_raster_sample(fdrast,
+							      &window,
+							      NULL,
+							      Points->
+							      y[j],
+							      Points->
+							      x[j], 0,
+							      method);
+
+	    if (G_is_d_null_value(&estimated_elevation)) {
+		if (null_opt->answer) {
+		    estimated_elevation = null_val;
+		}
+		else {
+		    return 0;
+		}
+	    }
+	    /* update the elevation value for each data point */
+	    Points->z[j] = estimated_elevation;
+	}
+	break;
+    }				/* end line type switch */
+    return 1;
+}
 
 int main(int argc, char *argv[])
 {
     struct GModule *module;
     struct Option *in_opt, *out_opt, *type_opt, *rast_opt, *method_opt,
-	*scale_opt;
+	*scale_opt, *where_opt, *layer_opt, *null_opt;
 
     struct Map_info In, Out;
     struct line_pnts *Points;
     struct line_cats *Cats;
+    struct field_info *Fi;
 
-    /* int    layer; */
-    int line, nlines, otype, ltype;
-    BOUND_BOX in_bbox, region_bbox, rast_bbox;
+    int line, nlines, otype, ltype, ncats =
+	0, layer, i, c, *cats, field_index, id, out_num = 0, *new_cats;
 
     char *mapset;
-    int j;
-    double scale, estimated_elevation;
+    double scale, null_val;
     INTERP_TYPE method = UNKNOWN;
     int fdrast;			/* file descriptor for raster map is int */
-    struct Cell_head window, rast_window;
+    struct Cell_head window;
+
+    dbDriver *driver;
+    dbHandle handle;
+    dbTable *table;
+    dbString table_name, dbsql, valstr;
 
     G_gisinit(argv[0]);
 
@@ -73,12 +178,8 @@ int main(int argc, char *argv[])
     rast_opt->key = "rast";
     rast_opt->required = NO;
     rast_opt->description = _("Elevation raster map for height extraction");
-
-    scale_opt = G_define_option();
-    scale_opt->key = "scale";
-    scale_opt->type = TYPE_DOUBLE;
-    scale_opt->description = _("Scale sampled raster values");
-    scale_opt->answer = "1.0";
+    
+    out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
 
     method_opt = G_define_option();
     method_opt->key = "method";
@@ -91,11 +192,35 @@ int main(int argc, char *argv[])
 	"bilinear;bilinear interpolation;"
 	"cubic;cubic convolution interpolation;";
     method_opt->description = _("Sampling method");
+    
+    scale_opt = G_define_option();
+    scale_opt->key = "scale";
+    scale_opt->type = TYPE_DOUBLE;
+    scale_opt->description = _("Scale sampled raster values");
+    scale_opt->answer = "1.0";
 
-    out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
+    where_opt = G_define_standard_option(G_OPT_WHERE);
+
+    layer_opt = G_define_standard_option(G_OPT_V_FIELD);
+    layer_opt->answer = "1";
+    layer_opt->description = _("Layer is only used for WHERE SQL statement");
+
+    null_opt = G_define_option();
+    null_opt->key = "null_value";
+    null_opt->type = TYPE_DOUBLE;
+    null_opt->label = _("Vector Z value for unknown height");
+    null_opt->description =
+	_("Will set Z to this value, if value from raster map can not be read");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
+    layer = atoi(layer_opt->answer);
+    if (layer == 0)
+	G_fatal_error(_("Layer 0 not supported"));
+
+    if (null_opt->answer)
+	null_val = atof(null_opt->answer);
 
     /* which interpolation method should we use */
     if (method_opt->answer[0] == 'b')
@@ -105,8 +230,6 @@ int main(int argc, char *argv[])
     else {
 	method = NEAREST;
     }
-
-    /* setup the raster for sampling */
 
     /* setup the region */
     G_get_window(&window);
@@ -127,9 +250,6 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Unable to open raster map <%s>"), rast_opt->answer);
     }
 
-    /* read raster header */
-    G_get_cellhd(rast_opt->answer, mapset, &rast_window);
-
     Vect_set_open_level(2);
 
     /* check input/output vector maps */
@@ -138,36 +258,48 @@ int main(int argc, char *argv[])
 
     Vect_open_old(&In, in_opt->answer, "");
 
-    /* checks 
-       does the elevation raster cover the entire are of the vector map?
-       does the current region include the entire input vector map ?
-     */
-    Vect_get_map_box(&In, &in_bbox);
-    Vect_region_box(&window, &region_bbox);
-    Vect_region_box(&rast_window, &rast_bbox);
-    if (in_bbox.W < region_bbox.W ||
-	in_bbox.E > region_bbox.E ||
-	in_bbox.S < region_bbox.S || in_bbox.N > region_bbox.N) {
-	G_warning(_("Current region does not include the entire input vector map <%s>"),
-		  in_opt->answer);
-    }
-    if (in_bbox.W < rast_bbox.W ||
-	in_bbox.E > rast_bbox.E ||
-	in_bbox.S < rast_bbox.S || in_bbox.N > rast_bbox.N) {
-	G_warning(_("Elevation raster map <%s> does not cover the entire area "
-		   "of the input vector map <%s>. "), rast_opt->answer,
-		  in_opt->answer);
-    }
+    if (where_opt->answer) {
+	/* Let's get vector layers db connections information */
+	Fi = Vect_get_field(&In, layer);
+	if (!Fi) {
+	    Vect_close(&In);
+	    G_fatal_error(_("Database connection not defined for layer %d"),
+			  layer);
+	}
+	G_debug(1,
+		"Field number:%d; Name:<%s>; Driver:<%s>; Database:<%s>; Table:<%s>; Key:<%s>",
+		Fi->number, Fi->name, Fi->driver, Fi->database, Fi->table,
+		Fi->key);
+	/* Prepeare strings for use in db_* calls */
+	db_init_string(&dbsql);
+	db_init_string(&valstr);
+	db_init_string(&table_name);
+	db_init_handle(&handle);
 
-    /* setup the new vector map */
-    /* remember to open the new vector map as 3D */
-    Vect_open_new(&Out, out_opt->answer, WITH_Z);
-    Vect_copy_head_data(&In, &Out);
-    Vect_hist_copy(&In, &Out);
-    Vect_hist_command(&Out);
-    /* copy the input vector's attribute table to the new vector */
-    /* This works for both level 1 and 2 */
-    Vect_copy_tables(&In, &Out, 0);
+	/* Prepearing database for use */
+	driver = db_start_driver(Fi->driver);
+	if (driver == NULL) {
+	    Vect_close(&In);
+	    G_fatal_error(_("Unable to start driver <%s>"), Fi->driver);
+	}
+	db_set_handle(&handle, Fi->database, NULL);
+	if (db_open_database(driver, &handle) != DB_OK) {
+	    Vect_close(&In);
+	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+			  Fi->database, driver);
+	}
+	db_set_string(&table_name, Fi->table);
+	if (db_describe_table(driver, &table_name, &table) != DB_OK) {
+	    Vect_close(&In);
+	    G_fatal_error(_("Unable to describe table <%s>"), Fi->table);
+	}
+	ncats =
+	    db_select_int(driver, Fi->table, Fi->key, where_opt->answer,
+			  &cats);
+	if (ncats < 1)
+	    G_fatal_error(_("No features match Your query"));
+	G_debug(3, "Number of features matching query: %d", ncats);
+    }
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
@@ -177,99 +309,119 @@ int main(int argc, char *argv[])
 	 (GV_POINTS | GV_LINES | GV_BOUNDARY | GV_CENTROID | GV_FACE |
 	  GV_KERNEL))) {
 
-	/* loop through each line in the dataset */
-	nlines = Vect_get_num_lines(&In);
-
-	for (line = 1; line <= nlines; line++) {
-
-	    /* progress feedback */
-	    G_percent(line, nlines, 2);
-
-	    /* get the line type */
-	    ltype = Vect_read_line(&In, Points, Cats, line);
-
-	    /* adjust flow based on specific type of line */
-	    switch (ltype) {
-		/* points (at least 1 vertex) */
-	    case GV_POINT:
-	    case GV_CENTROID:
-	    case GV_KERNEL:
-		/* sample raster at this point, and update the z-coordinate
-		 * (note that input vector should not be 3D!)
-		 */
-		estimated_elevation = scale * G_get_raster_sample(fdrast,
-								  &window,
-								  NULL,
-								  Points->
-								  y[0],
-								  Points->
-								  x[0], 0,
-								  method);
-
-		/* update the elevation value for each data point */
-		Points->z[0] = estimated_elevation;
-		break;
-		/* standard lines (at least 2 vertexes) */
-	    case GV_LINE:
-	    case GV_BOUNDARY:
-		if (Points->n_points < 2)
-		    break;	/* At least 2 points */
-
-		/* loop through each point in a line */
-		for (j = 0; j < Points->n_points; j++) {
-		    /* sample raster at this point, and update the z-coordinate (note that input vector should not be 3D!) */
-		    estimated_elevation = scale * G_get_raster_sample(fdrast,
-								      &window,
-								      NULL,
-								      Points->
-								      y[j],
-								      Points->
-								      x[j], 0,
-								      method);
-
-		    /* update the elevation value for each data point */
-		    Points->z[j] = estimated_elevation;
-		}		/* end looping through point in a line */
-		break;
-
-		/* lines with at least 3 vertexes */
-	    case GV_FACE:
-		if (Points->n_points < 3)
-		    break;	/* At least 3 points */
-
-		/* loop through each point in a line */
-		for (j = 0; j < Points->n_points; j++) {
-		    /* sample raster at this point, and update the z-coordinate (note that input vector should not be 3D!) */
-		    estimated_elevation = scale * G_get_raster_sample(fdrast,
-								      &window,
-								      NULL,
-								      Points->
-								      y[j],
-								      Points->
-								      x[j], 0,
-								      method);
-
-		    /* update the elevation value for each data point */
-		    Points->z[j] = estimated_elevation;
+	/* process all lines matching WHERE statement */
+	if (where_opt->answer) {
+	    field_index = Vect_cidx_get_field_index(&In, layer);
+	    for (i = 0; i < ncats; i++) {
+		G_percent(i, ncats, 2);
+                
+		c = Vect_cidx_find_next(&In, field_index, cats[i],
+					otype, 0, &ltype, &id);
+		while (c >= 0) {
+		    c++;
+		    if (ltype & otype) {
+			if (Vect_read_line(&In, Points, Cats, id) == ltype)
+			    if (sample_raster
+				(ltype, fdrast, window, Points, method,
+				 scale, null_opt, null_val)) {
+				
+                                /* Open new file only if there is something to write in */
+				if (out_num < 1) {
+				    if (0 >
+					Vect_open_new(&Out, out_opt->answer,
+						      WITH_Z)) {
+					Vect_close(&In);
+					G_fatal_error(_("Unable to create vector map <%s>"),
+						      out_opt->answer);
+				    }
+				    Vect_copy_head_data(&In, &Out);
+				    Vect_hist_copy(&In, &Out);
+				    Vect_hist_command(&Out);
+				}
+                                
+				Vect_write_line(&Out, ltype, Points, Cats);
+				out_num++;
+			    }
+		    }
+		    else
+			G_fatal_error
+			    ("Error in Vect_cidx_find_next function! Report a bug.");
+		    c = Vect_cidx_find_next(&In, field_index, cats[i],
+					    otype, c, &ltype, &id);
 		}
-		break;
-	    }			/* end line type switch */
+	    }
+	}
+	else {
+	    /* loop through each line in the dataset */
+	    nlines = Vect_get_num_lines(&In);
 
-	    /* write the new line file, with the updated Points struct */
-	    Vect_write_line(&Out, ltype, Points, Cats);
-	}			/* end looping thru lines */
+	    for (line = 1; line <= nlines; line++) {
+
+		/* progress feedback */
+		G_percent(line, nlines, 2);
+
+		/* get the line type */
+		ltype = Vect_read_line(&In, Points, Cats, line);
+
+		/* write the new line file, with the updated Points struct */
+		if (sample_raster
+		    (ltype, fdrast, window, Points, method, scale, null_opt,
+		     null_val)) {
+		    
+                    /* Open new file only if there is something to write in */
+		    if (out_num < 1) {
+			if (0 > Vect_open_new(&Out, out_opt->answer, WITH_Z)) {
+			    Vect_close(&In);
+			    G_fatal_error(_("Unable to create vector map <%s>"),
+					  out_opt->answer);
+			}
+			Vect_copy_head_data(&In, &Out);
+			Vect_hist_copy(&In, &Out);
+			Vect_hist_command(&Out);
+		    }
+                    
+		    Vect_write_line(&Out, ltype, Points, Cats);
+		    out_num++;
+		}
+	    }			/* end looping thru lines */
+	}
 
     }				/* end working on type=lines */
 
     /* close elevation raster: */
     G_close_cell(fdrast);
-
+    
+    /* build topology for output vector */
+    if (out_num > 0) {
+	Vect_build(&Out);
+        
+        /* Now let's move attribute data from all old map layers to new map */
+        for (i = 0; i < Out.plus.n_cidx; i++) {
+            new_cats = (int *)G_malloc(Out.plus.cidx[i].n_cats * sizeof(int));
+            if (!new_cats) {
+                G_warning(_("Due to error attribute data to new map are not transferred"));
+                break;
+            }
+            /* Vect_copy_table_by_cats does not accept Map.plus.cidx[].cat array as input.
+            	Thus we construct new array of cats. */
+            for (c = 0; c < Out.plus.cidx[i].n_cats; c++) {
+                new_cats[c] = Out.plus.cidx[i].cat[c][0];
+            }
+            if (0 > Vect_copy_table_by_cats(&In, &Out, In.plus.cidx[i].field, Out.plus.cidx[i].field,
+                    NULL, otype, new_cats, Out.plus.cidx[i].n_cats))
+                    G_warning(_("Due to error attribute data to new map are not transferred"));
+        }
+	/* close output vector */
+	Vect_close(&Out);
+    }
+    else {
+        /* close input vector */
+        Vect_close(&In);
+	G_warning(_("No features drapped. Check Your computational region and input raster map."));
+	exit(EXIT_FAILURE);
+    }
     /* close input vector */
     Vect_close(&In);
-    /* build topology for output vector */
-    Vect_build(&Out);
-    /* close output vector */
-    Vect_close(&Out);
-
+    
     exit(EXIT_SUCCESS);
 }
