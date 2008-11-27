@@ -1646,9 +1646,9 @@ class AttributeManager(wx.Frame):
                         os.environ.has_key('GRASS_DB_ENCODING'):
                     enc = os.environ['GRASS_DB_ENCODING']
                 if enc:
-                    sqlFile.file.write(sql.encode(enc))
+                    sqlFile.file.write(sql.encode(enc) + ';')
                 else:
-                    sqlFile.file.write(sql)
+                    sqlFile.file.write(sql + ';')
                 sqlFile.file.write(os.linesep)
                 sqlFile.file.flush()
 

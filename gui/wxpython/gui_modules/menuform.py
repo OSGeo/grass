@@ -50,9 +50,8 @@ import re
 import string
 import textwrap
 import os
-from os import system
 import time
-start = time.time()
+import copy
 
 ### i18N
 import gettext
@@ -1317,7 +1316,7 @@ class cmdPanel(wx.Panel):
             if p.get('gisprompt', False) == False:
                 continue
             
-            prompt = p.get('prompt', '')
+            prompt = p.get('element', '')
             
             if prompt == 'vector':
                 name = p.get('name', '')
@@ -1335,7 +1334,7 @@ class cmdPanel(wx.Panel):
                 pTable = p
         
         if pMap:
-            pMap['wxId-bind'] = pColumn
+            pMap['wxId-bind'] = copy.copy(pColumn)
             if pLayer:
                 pMap['wxId-bind'].append(pLayer['wxId'])
         
@@ -1350,7 +1349,7 @@ class cmdPanel(wx.Panel):
 
         if pTable and pColumn:
             pTable['wxId-bind'] = pColumn
-        
+                
 	#
 	# determine panel size
 	#
@@ -1497,8 +1496,21 @@ class cmdPanel(wx.Panel):
     def OnUpdateSelection(self, event):
         """Update list of available layers, tables, columns for
         vector map layer"""
-        id = event.GetId()
-
+        if not event:
+            id = None
+            for p in self.task.params:
+                if p.get('gisprompt', False) == False:
+                    continue
+                prompt = p.get('element', '')
+                if prompt == 'vector':
+                    name = p.get('name', '')
+                    if name in ('map', 'input'):
+                        id = p['wxId']
+            if id is None:
+                return
+        else:
+            id = event.GetId()
+        
         p = self.task.get_param(id, element='wxId', raiseError=False)
         if not p or \
                 not p.has_key('wxId-bind'):
@@ -1511,11 +1523,8 @@ class cmdPanel(wx.Panel):
         pMap = self.task.get_param('map', raiseError=False)
         if not pMap:
             pMap = self.task.get_param('input', raiseError=False)
-
-        if p == pMap:
-            map = event.GetString()
-        elif pMap:
-            map = pMap.get('value', '')
+        
+        map = pMap.get('value', '')
         
         for uid in p['wxId-bind']:
             win = self.FindWindowById(uid)
@@ -1534,9 +1543,8 @@ class cmdPanel(wx.Panel):
                 win.InsertTables(driver, db)
             
             elif name == 'ColumnSelect':
-                pLayer = self.task.get_param('layer', element='prompt', raiseError=False)
-                if pLayer and \
-                        pLayer.get('prompt', '') == 'layer':
+                pLayer = self.task.get_param('layer', element='element', raiseError=False)
+                if pLayer:
                     if pLayer.get('value', '') != '':
                         layer = int(pLayer.get('value', 1))
                     else:
@@ -1546,7 +1554,8 @@ class cmdPanel(wx.Panel):
                 
                 win.InsertColumns(map, layer)
         
-        event.Skip()
+        if event:
+            event.Skip()
         
     def createCmd( self, ignoreErrors = False ):
         """
@@ -1614,7 +1623,7 @@ class GrassGUIApp(wx.App):
         self.mf.CentreOnScreen()
         self.mf.Show(True)
         self.SetTopWindow(self.mf)
-        # print >> sys.stderr, time.time() - start
+        
         return True
 
 class GUI:
@@ -1700,6 +1709,8 @@ class GUI:
             # update only propwin reference
             get_dcmd(dcmd=None, layer=layer, params=None,
                      propwin=self.mf)
+
+        self.mf.notebookpanel.OnUpdateSelection(None)
         
         if show:
             if self.parent:
@@ -1709,7 +1720,6 @@ class GUI:
         else:
             self.mf.OnApply(None)
         
-        # print >> sys.stderr, time.time() - start
         return cmd
 
     def GetCommandInputMapParamKey(self, cmd):

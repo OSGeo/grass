@@ -141,8 +141,9 @@ int main(int argc, char **argv)
     type_opt->guisection = _("Query");
 
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
-    field_opt->description =
-	_("Layer number. If -1, all layers are displayed.");
+    field_opt->label =
+	_("Layer number (if -1, all layers are displayed)");
+    field_opt->gisprompt = "old_layer,layer,layer_all";
     field_opt->guisection = _("Query");
 
     cat_opt = G_define_standard_option(G_OPT_V_CATS);
