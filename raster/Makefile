@@ -26,6 +26,7 @@ SUBDIRS = \
 	r.grow.distance \
 	r.gwflow \
 	r.his \
+	r.horizon \
 	r.in.arc \
 	r.in.ascii \
 	r.in.bin \
@@ -86,7 +87,7 @@ SUBDIRS = \
 	r.statistics2 \
 	r.statistics3 \
 	r.stats \
-	r.sun \
+	r.sun2 \
 	r.sunmask \
 	r.support \
 	r.support.stats \
