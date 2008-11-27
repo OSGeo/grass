@@ -3,8 +3,19 @@ MODULE_TOPDIR = ..
 
 SUBDIRS = \
 	drivers \
-	base \
-	db.login
+	db.columns \
+	db.connect \
+	db.copy \
+	db.createdb \
+	db.databases \
+	db.describe \
+	db.drivers \
+	db.dropdb \
+	db.droptable \
+	db.execute \
+	db.login \
+	db.select \
+	db.tables
 
 PGM = databaseintro
 
