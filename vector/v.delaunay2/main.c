@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 {
 
     /* GRASS related variables */
-    char *mapset;
+    const char *mapset;
     struct Map_info map_in, map_out;
     struct Cell_head Window;
     BOUND_BOX Box;

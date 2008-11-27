@@ -28,7 +28,7 @@ int main(int argc, char **argv)
 {
     struct Cell_head window;
     char *label_name;
-    char *mapset;
+    const char *mapset;
     double minreg, maxreg, reg, dx, dy;
     FILE *infile;
     struct Option *opt1;

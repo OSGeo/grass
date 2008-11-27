@@ -4,7 +4,7 @@
 
 static char *me = "bseg_read_cell";
 
-int bseg_read_cell(BSEG * bseg, char *map_name, char *mapset)
+int bseg_read_cell(BSEG * bseg, const char *map_name, const char *mapset)
 {
     int row, nrows;
     int col, ncols;

@@ -12,7 +12,7 @@ int describe_table(MYSQL_RES *, dbTable **, cursor *);
 void field_info(MYSQL_FIELD *, int *, int *);
 
 /* parse.c */
-int parse_conn(char *, CONNPAR *);
+int parse_conn(const char *, CONNPAR *);
 
 /* replace.c */
 int replace_variables(char *, char **, char **);

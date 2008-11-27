@@ -2013,7 +2013,7 @@ static void G_gui_wx(void)
 static void G_gui(void)
 {
     /* read environment variables first then internal GRASS variable */
-    char *gui = getenv("GRASS_GUI");
+    const char *gui = getenv("GRASS_GUI");
 
     if (!gui) {
 	gui = G_getenv("GRASS_GUI");
@@ -2510,7 +2510,7 @@ static int check_overwrite(void)
     char element[KEYLENGTH];
     char desc[KEYLENGTH];
     int error = 0;
-    char *overstr;
+    const char *overstr;
     int over;
 
     st->module_info.overwrite = 0;

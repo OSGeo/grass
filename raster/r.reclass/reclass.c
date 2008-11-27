@@ -185,7 +185,7 @@ static int _reclass( /* const */ RULE * rules, struct Categories *cats,
 
 static int re_reclass( /* const */ RULE * rules, struct Categories *cats,
 		      /* const */ struct Reclass *old, struct Reclass *new,
-		      char *input_name, char *input_mapset)
+		      const char *input_name, const char *input_mapset)
 {
     struct Reclass mid;
 
@@ -199,9 +199,9 @@ static int re_reclass( /* const */ RULE * rules, struct Categories *cats,
     return 0;
 }
 
-int reclass(char *old_name, char *old_mapset,
-	    char *new_name, RULE * rules, struct Categories *cats,
-	    char *title)
+int reclass(const char *old_name, const char *old_mapset,
+	    const char *new_name, RULE *rules, struct Categories *cats,
+	    const char *title)
 {
     struct Reclass old, new;
     struct History hist;
@@ -228,8 +228,10 @@ int reclass(char *old_name, char *old_mapset,
     if (G_put_reclass(new_name, &new) < 0)
 	G_fatal_error(_("Cannot create reclass file of <%s>"), new_name);
 
-    if (title == NULL)
-	sprintf(title = buf, "Reclass of %s in %s", new.name, new.mapset);
+    if (!title) {
+	sprintf(buf, "Reclass of %s in %s", new.name, new.mapset);
+	title = buf;
+    }
 
     if ((fd = G_fopen_new("cell", new_name)) == NULL)
 	G_fatal_error(_("Cannot create raster map <%s>"), new_name);

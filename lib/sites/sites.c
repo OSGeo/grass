@@ -266,13 +266,13 @@ int G_site_get_head(struct Map_info *Map, Site_head * head)
  *
  **********************************************************************/
 
-char *G_find_sites(char *name, const char *mapset)
+const char *G_find_sites(char *name, const char *mapset)
 {
     return G_find_vector(name, mapset);
 }
 
 
-char *G_find_sites2(const char *name, const char *mapset)
+const char *G_find_sites2(const char *name, const char *mapset)
 {
     return G_find_vector2(name, mapset);
 }

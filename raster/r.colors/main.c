@@ -143,9 +143,9 @@ int main(int argc, char **argv)
     int have_stats = 0;
     struct FPRange range;
     DCELL min, max;
-    char *name, *mapset;
-    char *style, *cmap, *cmapset;
-    char *rules;
+    const char *name, *mapset;
+    const char *style, *cmap, *cmapset;
+    const char *rules;
     int fp;
     struct GModule *module;
     struct

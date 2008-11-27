@@ -13,7 +13,7 @@
 int attributes(char *in, struct Map_info *Out)
 {
     int i, cat, count;
-    char *mapset;
+    const char *mapset;
     struct Categories Cats;
     char buf[1024];
     dbString sql, lab;

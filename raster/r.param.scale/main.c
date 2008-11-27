@@ -15,16 +15,10 @@
 #include <grass/glocale.h>
 #include "param.h"
 
-char
- *rast_in_name,			/* Name of the raster file to process.  */
- *rast_out_name,		/* Name of the raster output file.      */
- *mapset_in,			/* If no problems, these will be names  */
- *mapset_out,			/* of mapsets containing the files to   */
-				/* be processed. Otherwise, error code. */
-  constrained;			/* Flag that forces quadtratic through  */
-
+const char *rast_in_name;	/* Name of the raster file to process.  */
+const char *rast_out_name;	/* Name of the raster output file.      */
+int constrained;		/* Flag that forces quadtratic through  */
 				/* the central cell of the window.      */
-
 int
   fd_in,			/* File descriptor for input and        */
   fd_out,			/* output raster files.                 */

@@ -192,12 +192,13 @@ int read_sites(int mode3d, int complete_map, struct Map_info map_in,
 	sites[nsites].entry_pt = MY_NULL;
 
 	nsites += 1;
-	/* number 100 was arbitrarily chosen /*
-	   /*        if (nsites == allocated && line != nlines){
-	   allocated += 100;
-	   realloc_sites(allocated);
-	   }
-	 */
+	/* number 100 was arbitrarily chosen */
+#if 0
+	if (nsites == allocated && line != nlines){
+	    allocated += 100;
+	    realloc_sites(allocated);
+	}
+#endif
     }
     if (nsites != nlines)
 	realloc_sites(nsites);

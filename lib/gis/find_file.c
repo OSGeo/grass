@@ -18,10 +18,10 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-static char *find_file(int misc,
-		       const char *dir,
-		       const char *element,
-		       const char *name, const char *mapset)
+static const char *find_file(
+    int misc,
+    const char *dir,
+    const char *element, const char *name, const char *mapset)
 {
     char path[GPATH_MAX];
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
@@ -82,7 +82,7 @@ static char *find_file(int misc,
 		G_warning(_("Using <%s@%s>"),
 			  pname, pselmapset);
 	    
-	    return (char *)pselmapset;
+	    return pselmapset;
 	}
     }
     /*
@@ -106,13 +106,14 @@ static char *find_file(int misc,
 
 
 
-static char *find_file1(int misc,
-			const char *dir,
-			const char *element, char *name, const char *mapset)
+static const char *find_file1(
+    int misc,
+    const char *dir,
+    const char *element, char *name, const char *mapset)
 {
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
     const char *pname, *pmapset;
-    char *mp;
+    const char *mp;
 
     if (G__name_is_fully_qualified(name, xname, xmapset)) {
 	pname = xname;
@@ -156,12 +157,12 @@ static char *find_file1(int misc,
  *              where file was found, or NULL if not found
  */
 
-char *G_find_file(const char *element, char *name, const char *mapset)
+const char *G_find_file(const char *element, char *name, const char *mapset)
 {
     return find_file1(0, NULL, element, name, mapset);
 }
 
-char *G_find_file_misc(const char *dir,
+const char *G_find_file_misc(const char *dir,
 		       const char *element, char *name, const char *mapset)
 {
     return find_file1(1, dir, element, name, mapset);
@@ -188,12 +189,12 @@ char *G_find_file_misc(const char *dir,
  *  \return char *  pointer to a string with name of mapset
  *              where file was found, or NULL if not found
  */
-char *G_find_file2(const char *element, const char *name, const char *mapset)
+const char *G_find_file2(const char *element, const char *name, const char *mapset)
 {
     return find_file(0, NULL, element, name, mapset);
 }
 
-char *G_find_file2_misc(const char *dir,
+const char *G_find_file2_misc(const char *dir,
 			const char *element,
 			const char *name, const char *mapset)
 {

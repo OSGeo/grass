@@ -25,9 +25,9 @@
 int main(int argc, char *argv[])
 {
     char path[1024];
-    char *element;
-    char *mapset;
-    char *name;
+    const char *element;
+    const char *mapset;
+    const char *name;
     struct GModule *module;
     struct Option *opt1;
     struct Option *opt2;

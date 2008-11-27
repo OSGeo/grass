@@ -25,7 +25,8 @@
 int main(int argc, char *argv[])
 {
     int n, store;
-    char *name, *value, *ptr;
+    const char *name, *value;
+    char *ptr;
     struct Option *get, *set, *store_opt;
     struct Flag *flag_s, *flag_n;
     struct GModule *module;

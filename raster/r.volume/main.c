@@ -39,8 +39,8 @@ int main(int argc, char *argv[])
     int out_mode, use_MASK, *n, *e;
     long int *count;
     int fd_data, fd_clump;
-    char *datamap, *clumpmap, *site_list;
-    char *clump_mapset;
+    const char *datamap, *clumpmap, *site_list;
+    const char *clump_mapset;
     double avg, vol, total_vol, east, north, *sum;
     struct Cell_head window;
     struct Map_info *fd_sites = NULL;
@@ -86,7 +86,6 @@ int main(int argc, char *argv[])
     G_get_window(&window);
 
     /* initialize */
-    *site_list = 0;
     out_mode = 1;		/* assume full output text */
     mysite = G_site_new_struct(CELL_TYPE, 2, 0, 4);
 

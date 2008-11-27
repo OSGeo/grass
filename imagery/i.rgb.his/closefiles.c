@@ -13,7 +13,7 @@ int closefiles(char *h_name, char *i_name, char *s_name,
     struct Colors colors;
     struct Range range;
     CELL min, max;
-    char *mapset;
+    const char *mapset;
 
     for (i = 0; i < 3; i++) {
 	G_close_cell(fd_output[i]);

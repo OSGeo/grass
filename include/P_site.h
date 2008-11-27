@@ -34,8 +34,8 @@ int G_site_put_head(struct Map_info *p, Site_head * head);
 struct Map_info *G_sites_open_old(const char *name, const char *mapset);
 struct Map_info *G_sites_open_new(const char *name);
 void G_sites_close(struct Map_info *);
-char *G_find_sites(char *name, const char *mapset);
-char *G_find_sites2(const char *name, const char *mapset);
+const char *G_find_sites(char *name, const char *mapset);
+const char *G_find_sites2(const char *name, const char *mapset);
 int G__site_put(struct Map_info *, Site *, int);
 
 struct Map_info *G_fopen_sites_old(const char *, const char *);

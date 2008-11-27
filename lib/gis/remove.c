@@ -73,7 +73,7 @@ static int G__remove(int misc, const char *dir, const char *element,
 		     const char *name)
 {
     char path[GPATH_MAX];
-    char *mapset;
+    const char *mapset;
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
     /* name in mapset legal only if mapset is current mapset */

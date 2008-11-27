@@ -47,7 +47,8 @@ int main(int argc, char *argv[])
     struct Map_info Map;
     struct dig_head v_head;
     BOUND_BOX box;
-    char *mapset, line[200], buf[1001];
+    const char *mapset;
+    char line[200], buf[1001];
     int i;
     int with_z;
     struct field_info *fi;

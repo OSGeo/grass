@@ -186,7 +186,7 @@ int query_vect_cats(char *name, double x, double y, double maxdist,
     struct Map_info Map;
     int line, area;
     static struct line_cats *Cats = NULL;
-    char *mapset;
+    const char *mapset;
 
     if (!Cats)
 	Cats = Vect_new_cats_struct();

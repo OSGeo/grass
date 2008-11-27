@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
 static int find(FILE * fd, char *element)
 {
     int len1 = 0, len2 = 0;
-    char *mapset;
+    const char *mapset;
     int n;
 
     fseek(fd, 0L, SEEK_SET);

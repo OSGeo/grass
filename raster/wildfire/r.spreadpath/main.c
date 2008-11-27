@@ -68,7 +68,7 @@ int main(int argc, char **argv)
 	len, flag,
 	srows, scols,
 	backrow_fd, backcol_fd, path_fd, in_row_fd, in_col_fd, out_fd;
-    char *current_mapset,
+    const char *current_mapset,
 	*search_mapset,
 	*path_mapset,
 	*backrow_mapset,

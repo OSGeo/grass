@@ -30,13 +30,13 @@
 
 struct Cell_head window;
 
-char *maps[2];
-char *output;
-char *title;
+const char *maps[2];
+const char *output;
+const char *title;
 long *matr;
 long *rlst;
 int ncat;
-char *stats_file;
+const char *stats_file;
 
 LAYER *layers;
 int nlayers;
@@ -45,7 +45,7 @@ GSTATS *Gstats;
 size_t nstats;
 
 /* function prototypes */
-static void layer(char *s);
+static void layer(const char *s);
 
 int main(int argc, char **argv)
 {
@@ -131,9 +131,10 @@ int main(int argc, char **argv)
 }
 
 
-static void layer(char *s)
+static void layer(const char *s)
 {
-    char name[GNAME_MAX], *mapset;
+    char name[GNAME_MAX];
+    const char *mapset;
     int n;
 
     strcpy(name, s);

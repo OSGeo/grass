@@ -8,5 +8,5 @@ int mask_match_d_interval(DCELL, d_Interval *);
 /* null.c */
 int main(int, char *[]);
 int parse_d_mask_rule(char *, d_Mask *, char *);
-int process(char *, char *, int, RASTER_MAP_TYPE);
-int doit(char *, char *, int, RASTER_MAP_TYPE);
+int process(const char *, const char *, int, RASTER_MAP_TYPE);
+int doit(const char *, const char *, int, RASTER_MAP_TYPE);

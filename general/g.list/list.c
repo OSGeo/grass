@@ -31,8 +31,9 @@ int main(int argc, char *argv[])
 {
     int i, n, len;
     struct GModule *module;
-    struct Option *mapset;
+    struct Option *mapset_opt;
     struct Flag *full;
+    const char *mapset;
     char *str;
 
     G_gisinit(argv[0]);
@@ -52,6 +53,7 @@ int main(int argc, char *argv[])
     element->required = YES;
     element->multiple = YES;
     element->description = "Data type";
+
     for (len = 0, n = 0; n < nlist; n++)
 	len += strlen(list[n].alias) + 1;
     str = G_malloc(len);
@@ -66,12 +68,12 @@ int main(int argc, char *argv[])
     }
     element->options = str;
 
-    mapset = G_define_option();
-    mapset->key = "mapset";
-    mapset->type = TYPE_STRING;
-    mapset->required = NO;
-    mapset->multiple = NO;
-    mapset->description = _("Mapset to list (default: current search path)");
+    mapset_opt = G_define_option();
+    mapset_opt->key = "mapset";
+    mapset_opt->type = TYPE_STRING;
+    mapset_opt->required = NO;
+    mapset_opt->multiple = NO;
+    mapset_opt->description = _("Mapset to list (default: current search path)");
 
     full = G_define_flag();
     full->key = 'f';
@@ -80,11 +82,12 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (mapset->answer == NULL)
-	mapset->answer = "";
+    mapset = mapset_opt->answer;
+    if (!mapset)
+	mapset = "";
 
-    if (G_strcasecmp(mapset->answer, ".") == 0)
-	mapset->answer = G_mapset();
+    if (G_strcasecmp(mapset, ".") == 0)
+	mapset = G_mapset();
 
     i = 0;
     while (element->answers[i]) {
@@ -97,12 +100,12 @@ int main(int argc, char *argv[])
 		    list[n].element[0]);
 	    G_debug(3, "lister CMD: %s", lister);
 	    if (access(lister, 1) == 0)	/* execute permission? */
-		G_spawn(lister, lister, mapset->answer, NULL);
+		G_spawn(lister, lister, mapset, NULL);
 	    else
-		do_list(n, mapset->answer);
+		do_list(n, mapset);
 	}
 	else {
-	    do_list(n, mapset->answer);
+	    do_list(n, mapset);
 	}
 
 	i++;

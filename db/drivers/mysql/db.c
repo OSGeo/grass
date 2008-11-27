@@ -21,7 +21,7 @@
 
 int db__driver_open_database(dbHandle * handle)
 {
-    char *name;
+    const char *name;
     dbConnection default_connection;
     MYSQL *res;
 
@@ -38,7 +38,7 @@ int db__driver_open_database(dbHandle * handle)
 
     {
 	/* Client version */
-	char *user, *password;
+	const char *user, *password;
 	CONNPAR connpar;
 
 	if (parse_conn(name, &connpar) == DB_FAILED) {
@@ -56,9 +56,6 @@ int db__driver_open_database(dbHandle * handle)
 	connection = mysql_init(NULL);
 	res = mysql_real_connect(connection, connpar.host, user, password,
 				 connpar.dbname, connpar.port, NULL, 0);
-
-	G_free(user);
-	G_free(password);
 
 	if (res == NULL) {
 	    append_error(_("Cannot connect to MySQL: "));

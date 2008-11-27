@@ -18,7 +18,7 @@
  *              where cell file was found, or NULL if not found
  */
 
-char *G_find_grid3(const char *name, const char *mapset)
+const char *G_find_grid3(const char *name, const char *mapset)
 {
     return G_find_file2_misc("grid3", "cell", name, mapset);
 }

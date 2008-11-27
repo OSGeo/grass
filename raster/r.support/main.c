@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 {
     char rname[GNAME_MAX];	/* Reclassed map name */
     char rmapset[GMAPSET_MAX];	/* Reclassed mapset   */
-    char *mapset;		/* Raster mapset      */
+    const char *mapset;		/* Raster mapset      */
     struct Cell_head cellhd;
     struct GModule *module;
     struct Option *raster, *title_opt, *history_opt;
@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
     struct Flag *stats_flag, *null_flag, *del_flag;
     int cellhd_ok;		/* Is cell header OK? */
     int is_reclass;		/* Is raster reclass? */
-    char *infile;
+    const char *infile;
     char title[MAX_TITLE_LEN + 1], datasrc[RECORD_LEN + 1];
     struct History hist;
 

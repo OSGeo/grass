@@ -87,9 +87,9 @@ int main(int argc, char *argv[])
 {
     void *cell, *cell2;
     SEGMENT in_seg, out_seg;
-    char *cost_mapset;
-    char *in_file, *out_file;
-    char *search_mapset;
+    const char *cost_mapset;
+    const char *in_file, *out_file;
+    const char *search_mapset;
     double *value;
     extern struct Cell_head window;
     double NS_fac, EW_fac, DIAG_fac, H_DIAG_fac, V_DIAG_fac;

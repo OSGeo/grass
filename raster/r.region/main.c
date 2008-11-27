@@ -28,9 +28,9 @@ int main(int argc, char *argv[])
     int i;
     double x;
     struct Cell_head cellhd, window;
-    char *value;
-    char *name;
-    char *err;
+    const char *value;
+    const char *name;
+    const char *err;
 
     struct GModule *module;
     struct

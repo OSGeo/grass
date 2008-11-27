@@ -14,7 +14,8 @@ char *query_vect(char *name, double x, double y)
     double maxdist;
     int line, area;
     static struct line_cats *Cats = NULL;
-    char *mapset, *form_buf;
+    const char *mapset;
+    char *form_buf;
     dbString form;
     struct field_info *Fi;
 

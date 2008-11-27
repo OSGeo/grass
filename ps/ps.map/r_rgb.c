@@ -25,7 +25,6 @@ int read_rgb(char *key, char *data)
     if (PS.cell_fd >= 0) {
 	G_close_cell(PS.cell_fd);
 	G_free(PS.cell_name);
-	G_free(PS.cell_mapset);
 	G_free_colors(&PS.colors);
 	PS.cell_fd = -1;
     }
@@ -45,7 +44,8 @@ int read_rgb(char *key, char *data)
     /* get file names for R, G, & B */
 
     for (i = 0; i < 3; i++) {
-	char *mapset, *name, *p;
+	const char *mapset, *name;
+	char *p;
 
 	name = names[i];
 

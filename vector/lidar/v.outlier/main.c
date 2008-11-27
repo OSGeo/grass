@@ -38,7 +38,8 @@ int main(int argc, char *argv[])
     /* Variables' declarations */
     int dim_vect, nparameters, BW, npoints;
     double ew_resol, ns_resol, mean, lambda;
-    char *dvr, *db, *mapset, table_name[1024];
+    const char *dvr, *db, *mapset;
+    char table_name[1024];
 
     int last_row, last_column, flag_auxiliar = FALSE;
 

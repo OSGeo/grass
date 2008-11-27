@@ -52,7 +52,7 @@
  *  \return char *
  *
  */
-char *G_find_vector(char *name, const char *mapset)
+const char *G_find_vector(char *name, const char *mapset)
 {
     return G_find_file(GRASS_VECT_DIRECTORY, name, mapset);
 }
@@ -72,7 +72,7 @@ char *G_find_vector(char *name, const char *mapset)
  *  \param mapset
  *  \return char *
  */
-char *G_find_vector2(const char *name, const char *mapset)
+const char *G_find_vector2(const char *name, const char *mapset)
 {
     return G_find_file2(GRASS_VECT_DIRECTORY, name, mapset);
 }

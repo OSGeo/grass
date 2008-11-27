@@ -27,7 +27,7 @@ int nfiles;
 int nrows;
 int ncols;
 int NCATS = 1 << SHIFT;
-char *names[NFILES];
+const char *names[NFILES];
 struct Categories labels[NFILES];
 NODE *tree;		/* tree of values */
 int tlen;		/* allocate tree size */
@@ -43,9 +43,9 @@ int main(int argc, char *argv[])
     int fd[NFILES];
     int outfd;
     int i;
-    char *name;
-    char *output;
-    char *mapset;
+    const char *name;
+    const char *output;
+    const char *mapset;
     int non_zero;
     struct Range range;
     CELL ncats, max_cats;
@@ -156,7 +156,7 @@ int main(int argc, char *argv[])
     qsort(reclass, result + 1, sizeof(RECLASS), cmp);
     table = (CELL *) G_calloc(result + 1, sizeof(CELL));
     for (i = 0; i < nfiles; i++) {
-	mapset = G_find_cell(names[i], "");
+	mapset = G_find_cell2(names[i], "");
 	G_read_cats(names[i], mapset, &labels[i]);
     }
 

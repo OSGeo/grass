@@ -774,7 +774,7 @@ RASTER_MAP_TYPE G__check_fp_type(const char *name, const char *mapset)
     char path[GPATH_MAX];
     struct Key_Value *format_keys;
     int in_stat;
-    char *str, *str1;
+    const char *str, *str1;
     RASTER_MAP_TYPE map_type;
     const char *xmapset;
 
@@ -795,7 +795,6 @@ RASTER_MAP_TYPE G__check_fp_type(const char *name, const char *mapset)
 	return -1;
     }
     if ((str = G_find_key_value("type", format_keys)) != NULL) {
-	G_strip(str);
 	if (strcmp(str, "double") == 0)
 	    map_type = DCELL_TYPE;
 	else if (strcmp(str, "float") == 0)
@@ -813,7 +812,6 @@ RASTER_MAP_TYPE G__check_fp_type(const char *name, const char *mapset)
     }
 
     if ((str1 = G_find_key_value("byte_order", format_keys)) != NULL) {
-	G_strip(str1);
 	if (strcmp(str1, "xdr") != 0)
 	    G_warning(_("Raster map <%s> is not xdr: byte_order: %s"),
 			name, str);

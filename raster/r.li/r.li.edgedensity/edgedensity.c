@@ -78,16 +78,10 @@ int main(int argc, char *argv[])
 int edgedensity(int fd, char **valore, area_des ad, double *result)
 {
     struct Cell_head hd;
-
     int ris = -1;
-
-    char *mapset;
-
     double indice = 0;
 
-    mapset = G_find_cell(ad->raster, "");
-
-    if (G_get_cellhd(ad->raster, mapset, &hd) == -1)
+    if (G_get_cellhd(ad->raster, "", &hd) == -1)
 	return RLI_ERRORE;
 
 

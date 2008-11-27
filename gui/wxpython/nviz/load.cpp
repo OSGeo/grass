@@ -35,7 +35,7 @@ extern "C" {
 */
 int Nviz::LoadSurface(const char* name, const char *color_name, const char *color_value)
 {
-    char *mapset;
+    const char *mapset;
     int id;
 
     mapset = G_find_cell2 (name, "");
@@ -121,7 +121,7 @@ int Nviz::UnloadSurface(int id)
 int Nviz::LoadVector(const char *name, bool points)
 {
     int id;
-    char *mapset;
+    const char *mapset;
 
     if (GS_num_surfs() == 0) { /* load base surface if no loaded */
 	int *surf_list, nsurf;

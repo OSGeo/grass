@@ -26,7 +26,7 @@
 int main(int argc, char *argv[])
 {
     int i, n;
-    char *mapset;
+    const char *mapset;
     struct GModule *module;
     struct Option **parm, *p;
     char *from, *to;

@@ -48,7 +48,7 @@ int G_set_window(struct Cell_head *window)
 {
     int i;
     int maskfd;
-    char *err;
+    const char *err;
 
     /* adjust window, check for valid window */
     /* adjust the real one, not a copy

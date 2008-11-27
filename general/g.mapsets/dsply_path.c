@@ -7,7 +7,7 @@ int display_mapset_path(int verbose)
     int n;
     int map;			/* pointer into list of available mapsets */
     int offset = 6;		/* accounts for " <x>, " */
-    char *name;
+    const char *name;
     int len;
     int nleft;
 

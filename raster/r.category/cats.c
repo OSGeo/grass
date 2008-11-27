@@ -19,11 +19,11 @@
 #include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
+#include "local_proto.h"
 
 static struct Cell_stats statf;
 
-
-int get_cats(char *name, char *mapset)
+int get_cats(const char *name, const char *mapset)
 {
     int fd;
     int row, nrows, ncols;

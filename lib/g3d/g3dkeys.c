@@ -6,7 +6,7 @@
 
 int G3d_keyGetInt(struct Key_Value *keys, const char *key, int *i)
 {
-    char *str;
+    const char *str;
 
     if ((str = G_find_key_value(key, keys)) == NULL) {
 	G3d_error("G3d_keyGetInt: cannot find field %s in key structure",
@@ -25,7 +25,7 @@ int G3d_keyGetInt(struct Key_Value *keys, const char *key, int *i)
 
 int G3d_keyGetDouble(struct Key_Value *keys, const char *key, double *d)
 {
-    char *str;
+    const char *str;
 
     if ((str = G_find_key_value(key, keys)) == NULL) {
 	G3d_error("G3d_keyGetDouble: cannot find field %s in key structure",
@@ -46,7 +46,7 @@ int G3d_keyGetDouble(struct Key_Value *keys, const char *key, double *d)
 int
 G3d_keyGetString(struct Key_Value *keys, const char *key, char **returnStr)
 {
-    char *str;
+    const char *str;
 
     if ((str = G_find_key_value(key, keys)) == NULL) {
 	G3d_error("G3d_keyGetString: cannot find field %s in key structure",
@@ -54,7 +54,6 @@ G3d_keyGetString(struct Key_Value *keys, const char *key, char **returnStr)
 	return 0;
     }
 
-    G_strip(str);
     *returnStr = G_store(str);
     return 1;
 }
@@ -65,7 +64,7 @@ int
 G3d_keyGetValue(struct Key_Value *keys, const char *key, char *val1,
 		char *val2, int result1, int result2, int *resultVar)
 {
-    char *str;
+    const char *str;
 
     if ((str = G_find_key_value(key, keys)) == NULL) {
 	G3d_error("G3d_keyGetValue: cannot find field %s in key structure",
@@ -73,7 +72,6 @@ G3d_keyGetValue(struct Key_Value *keys, const char *key, char *val1,
 	return 0;
     }
 
-    G_strip(str);
     if (strcmp(str, val1) == 0) {
 	*resultVar = result1;
 	return 1;

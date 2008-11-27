@@ -290,7 +290,7 @@ static void log_error(const char *msg, int fatal)
 {
     char cwd[GPATH_MAX];
     time_t clock;
-    char *gisbase;
+    const char *gisbase;
 
     /* get time */
     clock = time(NULL);
@@ -374,7 +374,7 @@ static int mail_msg(const char *msg, int fatal)
 {
     FILE *mail;
     char command[64];
-    char *user;
+    const char *user;
 
     user = G_whoami();
     if (user == 0 || *user == 0)

@@ -29,9 +29,9 @@
  *  \return char * 
  */
 
-char *G_home(void)
+const char *G_home(void)
 {
-    char *home = G__home();
+    const char *home = G__home();
 
     if (home)
 	return home;
@@ -40,10 +40,10 @@ char *G_home(void)
     return NULL;
 }
 
-char *G__home(void)
+const char *G__home(void)
 {
     static int initialized;
-    static char *home = 0;
+    static const char *home = 0;
 
     if (G_is_initialized(&initialized))
 	return home;

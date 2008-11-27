@@ -90,11 +90,9 @@ int init_vars(int argc, char *argv[])
     this_mapset = G_mapset();
     if (sl_flag || sg_flag || ls_flag)
 	er_flag = 1;
-    ele_mapset = do_exist(ele_name);
     /* for sd factor
        if (dep_flag)        {
        if (sscanf (dep_name, "%lf", &dep_slope) != 1)       {
-       dep_mapset = do_exist (dep_name);
        dep_flag = -1;
        }
        }
@@ -135,13 +133,12 @@ int init_vars(int argc, char *argv[])
 
     cseg_open(&alt, SROW, SCOL, num_cseg_bytes);
     cseg_open(&r_h, SROW, SCOL, 4);
-    cseg_read_cell(&alt, ele_name, ele_mapset);
-    cseg_read_cell(&r_h, ele_name, ele_mapset);
+    cseg_read_cell(&alt, ele_name, "");
+    cseg_read_cell(&r_h, ele_name, "");
     cseg_open(&wat, SROW, SCOL, num_cseg_bytes);
 
     if (run_flag) {
-	run_mapset = do_exist(run_name);
-	cseg_read_cell(&wat, run_name, run_mapset);
+	cseg_read_cell(&wat, run_name, "");
     }
     else {
 	for (r = 0; r < nrows; r++) {
@@ -152,8 +149,7 @@ int init_vars(int argc, char *argv[])
     }
     cseg_open(&asp, SROW, SCOL, num_cseg_bytes);
     if (pit_flag) {
-	pit_mapset = do_exist(pit_name);
-	cseg_read_cell(&asp, pit_name, pit_mapset);
+	cseg_read_cell(&asp, pit_name, "");
     }
     else {
 	for (r = 0; r < nrows; r++) {
@@ -164,8 +160,7 @@ int init_vars(int argc, char *argv[])
     }
     bseg_open(&swale, SROW, SCOL, num_cseg_bytes);
     if (ob_flag) {
-	ob_mapset = do_exist(ob_name);
-	bseg_read_cell(&swale, ob_name, ob_mapset);
+	bseg_read_cell(&swale, ob_name, "");
     }
     else {
 	for (r = 0; r < nrows; r++) {
@@ -174,9 +169,8 @@ int init_vars(int argc, char *argv[])
 	}
     }
     if (ril_flag) {
-	ril_mapset = do_exist(ril_name);
 	dseg_open(&ril, 1, (int)PAGE_BLOCK / sizeof(double), 1);
-	dseg_read_cell(&ril, ril_name, ril_mapset);
+	dseg_read_cell(&ril, ril_name, "");
     }
     bseg_open(&in_list, SROW, SCOL, num_cseg_bytes);
     bseg_open(&worked, SROW, SCOL, num_cseg_bytes);
@@ -396,12 +390,3 @@ int init_vars(int argc, char *argv[])
     return 0;
 }
 
-char *do_exist(char *file_name)
-{
-    char *file_mapset = G_find_cell2(file_name, "");
-
-    if (file_mapset == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), file_name);
-
-    return (file_mapset);
-}

@@ -3,7 +3,7 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-int zoom(struct Cell_head *window, char *name, char *mapset)
+int zoom(struct Cell_head *window, const char *name, const char *mapset)
 {
     int fd;
     void *raster, *rast_ptr;

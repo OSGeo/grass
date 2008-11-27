@@ -17,7 +17,7 @@ void viz_make_header(file_info * hf, double dmin, double dmax,
 int r3read_level(void *g3map, G3D_Region * g3reg, file_info * Headfax,
 		 float *data, int n_lev);
 /* r3_find.c */
-int g3_find_dsp_file(char *cell, char *file, char *mset);
-char *check_get_any_dspname(char *dspf, char *g3f, char *mset);
+int g3_find_dsp_file(const char *cell, const char *file, const char *mset);
+const char *check_get_any_dspname(const char *dspf, const char *g3f, const char *mset);
 
 #endif

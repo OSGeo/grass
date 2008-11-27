@@ -26,7 +26,7 @@ struct map map;
 struct file file;
 struct misc misc;
 struct flg flg;
-char *mapset;
+const char *mapset;
 
 int main(int argc, char **argv)
 {

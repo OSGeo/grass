@@ -37,10 +37,10 @@
  *  \retval char * Pointer to string
  */
 
-char *G_whoami(void)
+const char *G_whoami(void)
 {
     static int initialized;
-    static char *name;
+    static const char *name;
 
     if (G_is_initialized(&initialized))
 	return name;

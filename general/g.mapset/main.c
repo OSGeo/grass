@@ -31,13 +31,13 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *gisdbase_opt, *location_opt, *mapset_opt;
     struct Flag *f_add, *f_list;
-    char *gisdbase_old, *location_old, *mapset_old;
-    char *gisdbase_new, *location_new, *mapset_new;
-    char *gis_lock;
+    const char *gisdbase_old, *location_old, *mapset_old;
+    const char *gisdbase_new, *location_new, *mapset_new;
+    const char *gis_lock;
     char *mapset_old_path, *mapset_new_path;
     char *lock_prog;
+    const char *shell;
     char path[GPATH_MAX];
-    char *shell;
 
     G_gisinit(argv[0]);
 

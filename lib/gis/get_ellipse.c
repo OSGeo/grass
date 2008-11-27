@@ -135,7 +135,7 @@ int G_get_ellipsoid_by_name(const char *name, double *a, double *e2)
  *  \return char * ellipsoid name
  *  \return NULL if no ellipsoid found
  */
-char *G_ellipsoid_name(int n)
+const char *G_ellipsoid_name(int n)
 {
     G_read_ellipsoid_table(0);
     return n >= 0 && n < table.count ? table.ellipses[n].name : NULL;
@@ -199,7 +199,7 @@ int G_get_spheroid_by_name(const char *name, double *a, double *e2, double *f)
  * \return NULL if no ellipsoid found
  */
 
-char *G_ellipsoid_description(int n)
+const char *G_ellipsoid_description(int n)
 {
     G_read_ellipsoid_table(0);
     return n >= 0 && n < table.count ? table.ellipses[n].descr : NULL;
@@ -338,7 +338,7 @@ int G_read_ellipsoid_table(int fatal)
 
 static int get_ellipsoid_parameters(struct Key_Value *proj_keys, double *a, double *e2)
 {
-    char *str, *str1;
+    const char *str, *str1;
 
     if (!proj_keys) {
 	return -1;

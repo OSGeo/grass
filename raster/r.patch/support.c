@@ -17,7 +17,6 @@ int support(char **names,
 	    struct Colors *colr, int *colr_ok, RASTER_MAP_TYPE out_type)
 {
     int i;
-    char *mapset;
     struct Categories pcats;
     struct Colors pcolr;
     CELL n;
@@ -25,13 +24,12 @@ int support(char **names,
     int red, grn, blu;
     int do_cats, do_colr;
 
-    mapset = G_find_cell(names[0], "");
     *cats_ok = 1;
     *colr_ok = 1;
-    if (G_read_cats(names[0], mapset, cats) < 0)
+    if (G_read_cats(names[0], "", cats) < 0)
 	*cats_ok = 0;
     G_suppress_warnings(1);
-    if (G_read_colors(names[0], mapset, colr) < 0)
+    if (G_read_colors(names[0], "", colr) < 0)
 	*colr_ok = 0;
     G_suppress_warnings(0);
 
@@ -39,10 +37,9 @@ int support(char **names,
 	return 0;
 
     for (i = 1; i < nfiles; i++) {
-	mapset = G_find_cell(names[i], "");
-	do_cats = *cats_ok && (G_read_cats(names[i], mapset, &pcats) >= 0);
+	do_cats = *cats_ok && (G_read_cats(names[i], "", &pcats) >= 0);
 	G_suppress_warnings(1);
-	do_colr = *colr_ok && (G_read_colors(names[i], mapset, &pcolr) >= 0);
+	do_colr = *colr_ok && (G_read_colors(names[i], "", &pcolr) >= 0);
 	G_suppress_warnings(0);
 	if (!do_cats && !do_colr)
 	    continue;

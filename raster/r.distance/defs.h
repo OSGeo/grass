@@ -38,9 +38,9 @@ struct EdgeList			/* keep track of edge cells */
 
 struct Map
 {
-    char *name;			/* raster map name */
-    char *mapset;		/* raster map mapset */
-    char *fullname;		/* raster map fully qualified name */
+    const char *name;		/* raster map name */
+    const char *mapset;		/* raster map mapset */
+    const char *fullname;	/* raster map fully qualified name */
     struct Categories labels;	/* category labels */
     struct EdgeList edges;	/* edge cells */
 };
@@ -54,10 +54,10 @@ struct Parms
 };
 
 /* distance.c */
-void find_minimum_distance(struct CatEdgeList *, struct CatEdgeList *,
+void find_minimum_distance(const struct CatEdgeList *, const struct CatEdgeList *,
 			   double *, double *, double *, double *, double *,
-			   struct Cell_head *, int, char *, char *);
-int null_distance(char *name1, char *name2, int *, int *);
+			   const struct Cell_head *, int, const char *, const char *);
+int null_distance(const char *, const char *, int *, int *);
 
 /* edges.c */
 void print_edge_info(struct Map *);

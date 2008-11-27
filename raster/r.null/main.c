@@ -27,7 +27,7 @@ static int parse_vallist(char **, d_Mask *);
 
 int main(int argc, char *argv[])
 {
-    char *name, *mapset;
+    const char *name, *mapset;
     char rname[GNAME_MAX], rmapset[GMAPSET_MAX];
     char path[GPATH_MAX];
     int row, col, null_fd;
@@ -133,7 +133,7 @@ int main(int argc, char *argv[])
 
     map_type = G_raster_map_type(name, mapset);
 
-    if (only_null && G_find_file_misc("cell_misc", "null", name, mapset))
+    if (only_null && G_find_file2_misc("cell_misc", "null", name, mapset))
 	G_fatal_error(_("Raster map <%s> already has a null bitmap file"), name);
 
     if (map_type == CELL_TYPE) {
@@ -263,8 +263,7 @@ int parse_d_mask_rule(char *vallist, d_Mask * d_mask, char *where)
     return 0;
 }
 
-int
-process(char *name, char *mapset, int change_null, RASTER_MAP_TYPE map_type)
+int process(const char *name, const char *mapset, int change_null, RASTER_MAP_TYPE map_type)
 {
     struct Colors colr;
     struct History hist;
@@ -306,7 +305,7 @@ process(char *name, char *mapset, int change_null, RASTER_MAP_TYPE map_type)
     return 0;
 }
 
-int doit(char *name, char *mapset, int change_null, RASTER_MAP_TYPE map_type)
+int doit(const char *name, const char *mapset, int change_null, RASTER_MAP_TYPE map_type)
 {
     int new, old, row;
     void *rast;

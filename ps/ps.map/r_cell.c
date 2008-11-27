@@ -16,7 +16,6 @@ int read_cell(char *name, char *mapset)
     if (PS.cell_fd >= 0) {
 	G_close_cell(PS.cell_fd);
 	G_free(PS.cell_name);
-	G_free(PS.cell_mapset);
 	G_free_colors(&PS.colors);
 	PS.cell_fd = -1;
     }

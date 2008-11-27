@@ -45,11 +45,11 @@
 #endif
 
 /* adj_cellhd.c */
-char *G_adjust_Cell_head(struct Cell_head *, int, int);
-char *G_adjust_Cell_head3(struct Cell_head *, int, int, int);
+const char *G_adjust_Cell_head(struct Cell_head *, int, int);
+const char *G_adjust_Cell_head3(struct Cell_head *, int, int, int);
 
 /* align_window.c */
-char *G_align_window(struct Cell_head *, const struct Cell_head *);
+const char *G_align_window(struct Cell_head *, const struct Cell_head *);
 
 /* alloc.c */
 void *G__malloc(const char *, int, size_t);
@@ -404,13 +404,13 @@ void G_free_fvector(float *);
 void G_free_fmatrix(float **);
 
 /* date.c */
-char *G_date(void);
+const char *G_date(void);
 
 /* datum.c */
 int G_get_datum_by_name(const char *);
-char *G_datum_name(int);
-char *G_datum_description(int);
-char *G_datum_ellipsoid(int);
+const char *G_datum_name(int);
+const char *G_datum_description(int);
+const char *G_datum_ellipsoid(int);
 int G_get_datumparams_from_projinfo(const struct Key_Value *, char *, char *);
 void G_read_datum_table(void);
 
@@ -439,10 +439,10 @@ int G_is_little_endian(void);
 
 /* env.c */
 void G_init_env(void);
-char *G_getenv(const char *);
-char *G_getenv2(const char *, int);
-char *G__getenv(const char *);
-char *G__getenv2(const char *, int);
+const char *G_getenv(const char *);
+const char *G_getenv2(const char *, int);
+const char *G__getenv(const char *);
+const char *G__getenv2(const char *, int);
 void G_setenv(const char *, const char *);
 void G_setenv2(const char *, const char *, int);
 void G__setenv(const char *, const char *);
@@ -450,7 +450,7 @@ void G__setenv2(const char *, const char *, int);
 void G_unsetenv(const char *);
 void G_unsetenv2(const char *, int);
 void G__write_env(void);
-char *G__env_name(int);
+const char *G__env_name(int);
 void G__read_env(void);
 void G_set_gisrc_mode(int);
 int G_get_gisrc_mode(void);
@@ -479,22 +479,22 @@ char *G__file_name_misc(char *, const char *, const char *, const char *,
 			const char *);
 
 /* find_cell.c */
-char *G_find_cell(char *, const char *);
-char *G_find_cell2(const char *, const char *);
+const char *G_find_cell(char *, const char *);
+const char *G_find_cell2(const char *, const char *);
 
 /* find_file.c */
-char *G_find_file(const char *, char *, const char *);
-char *G_find_file2(const char *, const char *, const char *);
-char *G_find_file_misc(const char *, const char *, char *, const char *);
-char *G_find_file2_misc(const char *, const char *, const char *,
-			const char *);
+const char *G_find_file(const char *, char *, const char *);
+const char *G_find_file2(const char *, const char *, const char *);
+const char *G_find_file_misc(const char *, const char *, char *, const char *);
+const char *G_find_file2_misc(const char *, const char *, const char *,
+			      const char *);
 
 /* find_etc.c */
 char *G_find_etc(const char *);
 
 /* find_vect.c */
-char *G_find_vector(char *, const char *);
-char *G_find_vector2(const char *, const char *);
+const char *G_find_vector(char *, const char *);
+const char *G_find_vector2(const char *, const char *);
 
 /* flate.c */
 int G_zlib_compress(const unsigned char *, int, unsigned char *, int);
@@ -569,8 +569,8 @@ int G_get_cellhd(const char *, const char *, struct Cell_head *);
 int G_get_ellipsoid_parameters(double *, double *);
 int G_get_spheroid_by_name(const char *, double *, double *, double *);
 int G_get_ellipsoid_by_name(const char *, double *, double *);
-char *G_ellipsoid_name(int);
-char *G_ellipsoid_description(int);
+const char *G_ellipsoid_name(int);
+const char *G_ellipsoid_description(int);
 int G_read_ellipsoid_table(int);
 
 /* get_projinfo.c */
@@ -606,10 +606,10 @@ int G_getl(char *, int, FILE *);
 int G_getl2(char *, int, FILE *);
 
 /* gisbase.c */
-char *G_gisbase(void);
+const char *G_gisbase(void);
 
 /* gisdbase.c */
-char *G_gisdbase(void);
+const char *G_gisdbase(void);
 
 /* gisinit.c */
 void G__gisinit(const char *, const char *);
@@ -646,8 +646,8 @@ void G_short_history(const char *, const char *, struct History *);
 int G_command_history(struct History *);
 
 /* home.c */
-char *G_home(void);
-char *G__home(void);
+const char *G_home(void);
+const char *G__home(void);
 
 /* ialloc.c */
 int *G_alloc_ivector(size_t);
@@ -681,7 +681,7 @@ int G_is_mapset(const char *);
 /* key_value1.c */
 struct Key_Value *G_create_key_value(void);
 int G_set_key_value(const char *, const char *, struct Key_Value *);
-char *G_find_key_value(const char *, const struct Key_Value *);
+const char *G_find_key_value(const char *, const struct Key_Value *);
 void G_free_key_value(struct Key_Value *);
 
 /* key_value2.c */
@@ -713,11 +713,11 @@ void G_free_list(char **);
 
 /* ll_format.c */
 void G_lat_format(double, char *);
-char *G_lat_format_string(void);
+const char *G_lat_format_string(void);
 void G_lon_format(double, char *);
-char *G_lon_format_string(void);
+const char *G_lon_format_string(void);
 void G_llres_format(double, char *);
-char *G_llres_format_string(void);
+const char *G_llres_format_string(void);
 void G_lat_parts(double, int *, int *, double *, char *);
 void G_lon_parts(double, int *, int *, double *, char *);
 
@@ -727,8 +727,8 @@ int G_lon_scan(const char *, double *);
 int G_llres_scan(const char *, double *);
 
 /* location.c */
+const char *G_location(void);
 char *G_location_path(void);
-char *G_location(void);
 char *G__location_path(void);
 
 /* ls.c */
@@ -743,7 +743,7 @@ int G_ludcmp(double **, int, int *, double *);
 void G_lubksb(double **, int, int *, double[]);
 
 /* mach_name.c */
-char *G__machine_name(void);
+const char *G__machine_name(void);
 
 /* make_loc.c */
 int G__make_location(const char *, struct Cell_head *, struct Key_Value *,
@@ -764,8 +764,8 @@ char *G_tolcase(char *);
 char *G_toucase(char *);
 
 /* mapset.c */
-char *G_mapset(void);
-char *G__mapset(void);
+const char *G_mapset(void);
+const char *G__mapset(void);
 
 /* mapset_msc.c */
 int G__make_mapset_element(const char *);
@@ -774,7 +774,7 @@ int G__mapset_permissions(const char *);
 int G__mapset_permissions2(const char *, const char *, const char *);
 
 /* mapset_nme.c */
-char *G__mapset_name(int);
+const char *G__mapset_name(int);
 void G_get_list_of_mapsets(void);
 void G__create_alt_search_path(void);
 void G__switch_search_path(void);
@@ -917,8 +917,8 @@ int G_projection(void);
 
 /* proj2.c */
 int G__projection_units(int);
-char *G__unit_name(int, int);
-char *G__projection_name(int);
+const char *G__unit_name(int, int);
+const char *G__projection_name(int);
 
 /* proj3.c */
 const char *G_database_unit_name(int);
@@ -945,7 +945,7 @@ int G_put_cell_title(const char *, const char *);
 
 /* put_window.c */
 int G_put_window(const struct Cell_head *);
-int G__put_window(const struct Cell_head *, char *, char *);
+int G__put_window(const struct Cell_head *, const char *, const char *);
 
 /* putenv.c */
 void G_putenv(const char *, const char *);
@@ -1156,7 +1156,7 @@ int G_put_3dview(const char *, const char *, const struct G_3dview *,
 int G_get_3dview(const char *, const char *, struct G_3dview *);
 
 /* whoami.c */
-char *G_whoami(void);
+const char *G_whoami(void);
 
 /* wind_2_box.c */
 void G_adjust_window_to_box(const struct Cell_head *, struct Cell_head *, int,

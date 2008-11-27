@@ -40,10 +40,10 @@ int bseg_open(BSEG *, int, int, int);
 int bseg_put(BSEG *, CELL *, int, int);
 
 /* bseg_read.c */
-int bseg_read_cell(BSEG *, char *, char *);
+int bseg_read_cell(BSEG *, const char *, const char *);
 
 /* bseg_write.c */
-int bseg_write_cellfile(BSEG *, char *);
+int bseg_write_cellfile(BSEG *, const char *);
 
 /* cseg_close.c */
 int cseg_close(CSEG *);
@@ -58,7 +58,7 @@ int cseg_open(CSEG *, int, int, int);
 int cseg_put(CSEG *, int, int, CELL);
 
 /* cseg_read.c */
-int cseg_read_cell(CSEG *, char *, char *);
+int cseg_read_cell(CSEG *, const char *, const char *);
 
 /* cseg_write.c */
-int cseg_write_cellfile(CSEG *, char *);
+int cseg_write_cellfile(CSEG *, const char *);

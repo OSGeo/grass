@@ -66,10 +66,10 @@ int main(int argc, char *argv[])
     int patt = 0, in_fd, out_fd, patt_fd = 0;
     int old, new;
     double slope_1, slope_2, max_vert_angle = 0.0, color_factor;
-    char *old_mapset, *patt_mapset = NULL;
+    const char *old_mapset, *patt_mapset = NULL;
     FCELL *value;
-    char *search_mapset, *current_mapset;
-    char *in_name, *out_name, *patt_name = NULL;
+    const char *search_mapset, *current_mapset;
+    const char *in_name, *out_name, *patt_name = NULL;
     struct Categories cats;
     struct Cell_head cellhd_elev, cellhd_patt;
     extern struct Cell_head window;

@@ -40,7 +40,7 @@
  * \return Localized text string on error
  */
 
-char *G_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_flag)
+const char *G_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_flag)
 {
     if (!row_flag) {
 	if (cellhd->ns_res <= 0)
@@ -191,8 +191,8 @@ char *G_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_flag)
  * \return Localized text string on error
  */
 
-char *G_adjust_Cell_head3(struct Cell_head *cellhd, int row_flag,
-			  int col_flag, int depth_flag)
+const char *G_adjust_Cell_head3(struct Cell_head *cellhd, int row_flag,
+				int col_flag, int depth_flag)
 {
     if (!row_flag) {
 	if (cellhd->ns_res <= 0)

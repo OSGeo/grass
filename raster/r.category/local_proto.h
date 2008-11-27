@@ -20,13 +20,13 @@
 #define __LOCAL_PROTO_H__
 
 /* cats.c */
-int get_cats(char *, char *);
+int get_cats(const char *, const char *);
 int next_cat(long *);
 
 /* main.c */
 int print_label(long);
 int print_d_label(double);
-int scan_cats(char *, long *, long *);
-int scan_vals(char *, double *);
+int scan_cats(const char *, long *, long *);
+int scan_vals(const char *, double *);
 
 #endif /* __LOCAL_PROTO_H__ */

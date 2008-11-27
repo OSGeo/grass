@@ -22,6 +22,22 @@
 
 
 /*!
+ * \brief Get current location name
+ *
+ * Returns the name of the current database location. This routine
+ * should be used by modules that need to display the current location
+ * to the user. See Locations for an explanation of locations.
+ *
+ *  \param
+ *  \return char* tolocation name
+ */
+
+const char *G_location(void)
+{
+    return G_getenv("LOCATION_NAME");
+}
+
+/*!
  * \brief Get current location directory
  *
  * Returns the full UNIX path name of the current database
@@ -39,7 +55,7 @@ char *G_location_path(void)
     char *location;
 
     location = G__location_path();
-    if (access(location, 0) != 0) {
+    if (access(location, F_OK) != 0) {
 	perror("access");
 	G_fatal_error(_("LOCATION << %s >> not available"), location);
     }
@@ -49,21 +65,6 @@ char *G_location_path(void)
 
 
 /*!
- * \brief Get current location name
- *
- * Returns the name of the current database location. This routine
- * should be used by modules that need to display the current location
- * to the user. See Locations for an explanation of locations.
- *
- *  \param
- *  \return char* tolocation name
- */
-char *G_location(void)
-{
-    return G_getenv("LOCATION_NAME");
-}
-
-/*!
  * \brief Get current location path
  *
  *  \param
@@ -71,13 +72,9 @@ char *G_location(void)
  */
 char *G__location_path(void)
 {
-    char *location = 0;
-    char *base;
-    char *name;
-
-    name = G_location();
-    base = G_gisdbase();
-    location = G_malloc(strlen(base) + strlen(name) + 2);
+    const char *name = G_location();
+    const char *base = G_gisdbase();
+    char *location = G_malloc(strlen(base) + strlen(name) + 2);
 
     sprintf(location, "%s/%s", base, name);
 

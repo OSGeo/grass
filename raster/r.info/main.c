@@ -38,7 +38,7 @@ static void compose_line(FILE *, const char *, ...);
 
 int main(int argc, char **argv)
 {
-    char *name, *mapset;
+    const char *name, *mapset;
     char tmp1[100], tmp2[100], tmp3[100];
     char timebuff[256];
     char units[GNAME_MAX], vdatum[GNAME_MAX];

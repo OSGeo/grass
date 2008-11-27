@@ -17,7 +17,7 @@ int G__projection_units(int n)
     }
 }
 
-char *G__unit_name(int unit, int plural)
+const char *G__unit_name(int unit, int plural)
 {
     switch (unit) {
     case 0:
@@ -33,7 +33,7 @@ char *G__unit_name(int unit, int plural)
     }
 }
 
-char *G__projection_name(int n)
+const char *G__projection_name(int n)
 {
     switch (n) {
     case PROJECTION_XY:

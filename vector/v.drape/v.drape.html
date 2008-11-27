@@ -28,7 +28,6 @@ vector and raster data for display in POVRAY.</p>
 v.drape in=roads rast=elevation.10m method=bilinear out=roads3d
 v.info roads3d
 </pre></div>
-</p>
 
 <p>Create 3D vector roads map containing only "unimproved" roads.
 Set road height to 1000 m for all parts without height information.
@@ -36,7 +35,6 @@ Set road height to 1000 m for all parts without height information.
 v.drape input=roads type=line rast=elevation.dem output=roads_3d \
 method=nearest scale=1.0 where='cat=5' layer=1 null_value=1000
 </pre></div>
-</p>
 
 <h2>POVRAY EXAMPLE</h2>
 

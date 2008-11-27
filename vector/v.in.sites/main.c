@@ -32,7 +32,7 @@
 int main(int argc, char *argv[])
 {
     int i, cat, *clen, len;
-    char *sname, *mapset;
+    const char *sname, *mapset;
     char buf[1024];
     int count, withz;
     int dims, dbls, strs;

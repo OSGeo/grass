@@ -36,7 +36,7 @@
 
 int G_check_overwrite(int argc, char **argv)
 {
-    char *overstr;
+    const char *overstr;
     int overwrite;
 
     overwrite = 0;

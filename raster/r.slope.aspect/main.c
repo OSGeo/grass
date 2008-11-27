@@ -90,18 +90,17 @@ int main(int argc, char *argv[])
     struct History hist;
     struct Colors colors;
 
-    char *elev_name;
-    char *aspect_name;
-    char *slope_name;
-    char *pcurv_name;
-    char *tcurv_name;
-    char *dx_name;
-    char *dy_name;
-    char *dxx_name;
-    char *dyy_name;
-    char *dxy_name;
+    const char *elev_name;
+    const char *aspect_name;
+    const char *slope_name;
+    const char *pcurv_name;
+    const char *tcurv_name;
+    const char *dx_name;
+    const char *dy_name;
+    const char *dxx_name;
+    const char *dyy_name;
+    const char *dxy_name;
     char buf[300];
-    char *mapset;
     int nrows, row;
     int ncols, col;
 
@@ -362,15 +361,10 @@ int main(int argc, char *argv[])
 		      parm.dxx->key, parm.dyy->key, parm.dxy->key);
     }
 
-    /* check elevation file existence */
-    mapset = G_find_cell2(elev_name, "");
-    if (!mapset)
-	G_fatal_error(_("Raster map <%s> not found"), elev_name);
-
     /* set the window from the header for the elevation file */
     if (!flag.a->answer) {
 	G_get_window(&window);
-	if (G_get_cellhd(elev_name, mapset, &cellhd) >= 0) {
+	if (G_get_cellhd(elev_name, "", &cellhd) >= 0) {
 	    G_align_window(&window, &cellhd);
 	    G_set_window(&window);
 	}
@@ -444,7 +438,7 @@ int main(int argc, char *argv[])
      */
 
     /* open the elevation file for reading */
-    elevation_fd = G_open_cell_old(elev_name, mapset);
+    elevation_fd = G_open_cell_old(elev_name, "");
     if (elevation_fd < 0)
 	exit(EXIT_FAILURE);
     elev_cell[0] = (DCELL *) G_calloc(ncols + 1, sizeof(DCELL));

@@ -4,17 +4,17 @@
 #include "rule.h"
 
 static int scan_value(CELL *);
-static char *cur;
+static const char *cur;
 static int state;
 int default_rule = 0;
 int default_to_itself = 0;
 char *default_label;
 CELL DEFAULT;
 
-int parse(char *line, RULE ** rules, RULE ** tail, struct Categories *cats)
+int parse(const char *line, RULE ** rules, RULE ** tail, struct Categories *cats)
 {
-    char *label;
-    char *save;
+    const char *label;
+    const char *save;
     CELL v;
     CELL lo[100], hi[100], new = (CELL) 0;
     int count;

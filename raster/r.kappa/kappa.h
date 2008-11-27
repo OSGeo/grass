@@ -10,20 +10,20 @@ struct _gstats_
 
 struct _layer_
 {
-    char *name;
-    char *mapset;
+    const char *name;
+    const char *mapset;
     struct Categories labels;
 };
 
 extern struct Cell_head window;
 
-extern char *maps[2];
-extern char *output;
-extern char *title;
+extern const char *maps[2];
+extern const char *output;
+extern const char *title;
 extern long *matr;
 extern long *rlst;
 extern int ncat;
-extern char *stats_file;
+extern const char *stats_file;
 
 #define LAYER struct _layer_
 extern LAYER *layers;

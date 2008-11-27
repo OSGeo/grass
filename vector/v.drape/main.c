@@ -52,13 +52,8 @@ int sample_raster(const int ltype, int fdrast, struct Cell_head window,
 	/* sample raster at this point, and update the z-coordinate
 	 * (note that input vector should not be 3D!)
 	 */
-	estimated_elevation = scale * G_get_raster_sample(fdrast,
-							  &window,
-							  NULL,
-							  Points->
-							  y[0],
-							  Points->
-							  x[0], 0, method);
+	estimated_elevation = scale * G_get_raster_sample(
+	    fdrast, &window, NULL, Points->y[0], Points->x[0], 0, method);
 	/* Elevation value has to be meaningfull */
 	if (G_is_d_null_value(&estimated_elevation)) {
 	    if (null_opt->answer) {
@@ -80,14 +75,8 @@ int sample_raster(const int ltype, int fdrast, struct Cell_head window,
 	/* loop through each point in a line */
 	for (j = 0; j < Points->n_points; j++) {
 	    /* sample raster at this point, and update the z-coordinate (note that input vector should not be 3D!) */
-	    estimated_elevation = scale * G_get_raster_sample(fdrast,
-							      &window,
-							      NULL,
-							      Points->
-							      y[j],
-							      Points->
-							      x[j], 0,
-							      method);
+	    estimated_elevation = scale * G_get_raster_sample(
+		fdrast, &window, NULL, Points->y[j], Points->x[j], 0, method);
 
 	    if (G_is_d_null_value(&estimated_elevation)) {
 		if (null_opt->answer) {
@@ -110,14 +99,8 @@ int sample_raster(const int ltype, int fdrast, struct Cell_head window,
 	/* loop through each point in a line */
 	for (j = 0; j < Points->n_points; j++) {
 	    /* sample raster at this point, and update the z-coordinate (note that input vector should not be 3D!) */
-	    estimated_elevation = scale * G_get_raster_sample(fdrast,
-							      &window,
-							      NULL,
-							      Points->
-							      y[j],
-							      Points->
-							      x[j], 0,
-							      method);
+	    estimated_elevation = scale * G_get_raster_sample(
+		fdrast, &window, NULL, Points->y[j], Points->x[j], 0, method);
 
 	    if (G_is_d_null_value(&estimated_elevation)) {
 		if (null_opt->answer) {
@@ -149,7 +132,6 @@ int main(int argc, char *argv[])
     int line, nlines, otype, ltype, ncats =
 	0, layer, i, c, *cats, field_index, id, out_num = 0, *new_cats;
 
-    char *mapset;
     double scale, null_val;
     INTERP_TYPE method = UNKNOWN;
     int fdrast;			/* file descriptor for raster map is int */
@@ -199,7 +181,7 @@ int main(int argc, char *argv[])
     scale_opt->description = _("Scale sampled raster values");
     scale_opt->answer = "1.0";
 
-    where_opt = G_define_standard_option(G_OPT_WHERE);
+    where_opt = G_define_standard_option(G_OPT_DB_WHERE);
 
     layer_opt = G_define_standard_option(G_OPT_V_FIELD);
     layer_opt->answer = "1";
@@ -240,13 +222,8 @@ int main(int argc, char *argv[])
     /* Check output type */
     otype = Vect_option_to_types(type_opt);
 
-    /* check for the elev raster, and check for error condition */
-    if ((mapset = G_find_cell(rast_opt->answer, "")) == NULL) {
-	G_fatal_error(_("Raster map <%s> not found"), rast_opt->answer);
-    }
-
     /* open the elev raster, and check for error condition */
-    if ((fdrast = G_open_cell_old(rast_opt->answer, mapset)) < 0) {
+    if ((fdrast = G_open_cell_old(rast_opt->answer, "")) < 0) {
 	G_fatal_error(_("Unable to open raster map <%s>"), rast_opt->answer);
     }
 

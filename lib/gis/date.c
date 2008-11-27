@@ -27,20 +27,29 @@
  * \return Pointer to a string holding date/time
  */
 
-char *G_date(void)
+const char *G_date(void)
 {
+    static int initialized;
+    static char *date;
     time_t clock;
     struct tm *local;
-    char *date;
+    char *tdate;
     char *d;
+
+    if (G_is_initialized(&initialized))
+	return date;
 
     time(&clock);
 
     local = localtime(&clock);
-    date = asctime(local);
-    for (d = date; *d; d++)
+    tdate = asctime(local);
+    for (d = tdate; *d; d++)
 	if (*d == '\n')
 	    *d = 0;
+
+    date = G_store(tdate);
+
+    G_initialize_done(&initialized);
 
     return date;
 }

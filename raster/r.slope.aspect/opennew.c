@@ -3,7 +3,7 @@
 #include <grass/glocale.h>
 
 
-int opennew(char *name, RASTER_MAP_TYPE wr_type)
+int opennew(const char *name, RASTER_MAP_TYPE wr_type)
 {
     int fd;
 

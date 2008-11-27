@@ -40,7 +40,7 @@ F_generate(char *drvname, char *dbname, char *tblname, char *key, int keyval,
 	"euc-jp",
 	NULL
     };
-    char *enc_env;
+    const char *enc_env;
 
     G__read_env();
     enc_env = G__getenv("GRASS_DB_ENCODING");

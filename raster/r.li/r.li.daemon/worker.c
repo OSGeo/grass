@@ -40,7 +40,6 @@
 void worker(char *raster, int f(int, char **, area_des, double *),
 	    char *server_channel, char *mychannel, char **parameters)
 {
-    char *mapset;
     int fd, aid;
     int rec_ch, send_ch, erease_mask = 0, data_type = 0;
     int cache_rows, used = 0;
@@ -59,14 +58,13 @@ void worker(char *raster, int f(int, char **, area_des, double *),
     pid = getpid();
     ad = malloc(sizeof(struct area_entry));
     /* open raster map */
-    mapset = G_find_cell(raster, "");
-    fd = G_open_cell_old(raster, mapset);
-    if (G_get_cellhd(raster, mapset, &hd) == -1) {
+    fd = G_open_cell_old(raster, "");
+    if (G_get_cellhd(raster, "", &hd) == -1) {
 	G_message(_("CHILD[pid = %i] cannot open raster map"), pid);
 	exit(EXIT_FAILURE);
     }
     /* read data type to allocate cache */
-    data_type = G_raster_map_type(raster, mapset);
+    data_type = G_raster_map_type(raster, "");
     /* calculate rows in cache */
     switch (data_type) {
     case CELL_TYPE:{
@@ -222,27 +220,26 @@ void worker(char *raster, int f(int, char **, area_des, double *),
 
 char *mask_preprocessing(char *mask, char *raster, int rl, int cl)
 {
-    char *mapset, *tmp_file;
+    const char *tmp_file;
     struct Cell_head cell, oldcell;
     int mask_fd, old_fd, *buf, i, j;
     CELL *old;
     double add_row, add_col;
 
     buf = malloc(cl * sizeof(int));
-    mapset = G_find_cell(raster, "");
     /* open raster */
-    if (G_get_cellhd(raster, mapset, &cell) == -1)
+    if (G_get_cellhd(raster, "", &cell) == -1)
 	return NULL;
-    mapset = G_find_cell(mask, "");
+
     /* open raster */
-    if (G_get_cellhd(mask, mapset, &oldcell) == -1)
+    if (G_get_cellhd(mask, "", &oldcell) == -1)
 	return NULL;
 
     add_row = 1.0 * oldcell.rows / rl;
     add_col = 1.0 * oldcell.cols / cl;
     tmp_file = G_tempfile();
     mask_fd = open(tmp_file, O_RDWR | O_CREAT, 0755);
-    old_fd = G_open_cell_old(mask, mapset);
+    old_fd = G_open_cell_old(mask, "");
     old = G_allocate_cell_buf();
     for (i = 0; i < rl; i++) {
 	int riga;

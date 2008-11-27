@@ -41,13 +41,13 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
     int cf1 = 0, cf2 = 0, cf3 = 0, cf4 = 0, cf5 = 0, cf6 = 0;	/* cell file descriptors */
     int nrows, ncols;		/* current region rows and columns */
     int i;			/* loop counter */
-    char *mapset;
+    const char *mapset;
     float dat1, dat2;
     struct Colors colors, colors2;
     double value1, value2;
     struct History hist, hist1, hist2, hist3, hist4, hist5;
     struct _Color_Rule_ *rule;
-    char *maps, *type;
+    const char *maps, *type;
     int cond1, cond2;
 
     cond2 = ((params->pcurv != NULL) ||

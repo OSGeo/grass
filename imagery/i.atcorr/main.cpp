@@ -69,11 +69,11 @@ int hit = 0;
 int mis = 0;
 
 /* function prototypes */
-static void adjust_region (char *, char *);
+static void adjust_region (char *, const char *);
 static CELL round_c (FCELL);
 static void write_fp_to_cell (int, FCELL *);
 static void process_raster (int, InputMask, ScaleRange, int, int, int, bool, ScaleRange, bool);
-static void copy_colors (char *, char *, char *);
+static void copy_colors (char *, const char *, char *);
 static void define_module (void);
 static struct Options define_options (void);
 static void read_scale (Option *, ScaleRange &);
@@ -84,7 +84,7 @@ static void read_scale (Option *, ScaleRange &);
    Atmospheric corrections should be done on the whole
    satelite image, not just portions.
 */
-static void adjust_region (char *name, char *mapset)
+static void adjust_region (char *name, const char *mapset)
 {
     struct Cell_head iimg_head;	/* the input image header file */
 
@@ -397,7 +397,7 @@ static void process_raster (int ifd, InputMask imask, ScaleRange iscale,
 
 
 /* Copy the colors from map named iname to the map named oname */
-static void copy_colors (char *iname, char *imapset, char *oname)
+static void copy_colors (char *iname, const char *imapset, char *oname)
 {
     struct Colors colors;
 
@@ -551,7 +551,7 @@ int main(int argc, char* argv[])
     int oimg_fd;	        /* output image's file descriptor */
     int ialt_fd = -1;       /* input elevation map's file descriptor */
     int ivis_fd = -1;       /* input visibility map's file descriptor */
-    char *iimg_mapset, *ialt_mapset, *iviz_mapset;
+    const char *iimg_mapset, *ialt_mapset, *iviz_mapset;
     
     /* Define module */
     define_module();

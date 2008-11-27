@@ -23,7 +23,7 @@ void prn_error_mat(int out_cols, int hdr)
     int thisone;
     long t_row, t_col;
     long t_rowcount, grand_count;
-    char *mapone;
+    const char *mapone;
     FILE *fd;
 
     if (output != NULL) {

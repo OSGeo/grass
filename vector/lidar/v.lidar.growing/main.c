@@ -46,7 +46,8 @@ int main(int argc, char *argv[])
     double Z_interp;
     double Thres_j, Thres_d, ew_resol, ns_resol;
     double minNS, minEW, maxNS, maxEW;
-    char *mapset, buf[1024];
+    const char *mapset;
+    char buf[1024];
 
     int colorBordo, ripieno, conta, lungPunti, lungHull, xi, c1, c2;
     double altPiano;

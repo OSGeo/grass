@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *map_opt, *bgcmd_opt;
     struct Flag *new_f;
-    char *mapset;
+    const char *mapset;
     char **tokens;
     char *fake_argv[4];
     char toolbox[GPATH_MAX];

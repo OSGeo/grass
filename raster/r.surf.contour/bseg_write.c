@@ -3,7 +3,7 @@
 
 static char *me = "bseg_write_cell";
 
-int bseg_write_cellfile(BSEG * bseg, char *map_name)
+int bseg_write_cellfile(BSEG * bseg, const char *map_name)
 {
     int map_fd;
     int row, nrows;

@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
     CELL con1, con2;
     double d1, d2;
     CELL *alt_row;
-    char *con_name, *alt_name, *con_mapset;
+    const char *con_name, *alt_name, *con_mapset;
     int file_fd;
     int fast_mode;
     CELL value;

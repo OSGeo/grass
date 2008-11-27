@@ -50,12 +50,12 @@ int process_right(int, int, int, int);
 int process_row(int, int);
 
 /* read_map.c */
-int read_input_map(char *, char *, int);
+int read_input_map(const char *, const char *, int);
 
 /* support.c */
-int make_support_files(char *, char *);
+int make_support_files(const char *, const char *);
 
 /* write_map.c */
-int write_output_map(char *, int);
+int write_output_map(const char *, int);
 
 #endif /* __LOCAL_PROTO_H__ */

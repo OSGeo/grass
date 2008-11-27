@@ -26,7 +26,7 @@
  *  \return pointer to string containing the base directory
  */
 
-char *G_gisdbase(void)
+const char *G_gisdbase(void)
 {
     return G_getenv("GISDBASE");
 }

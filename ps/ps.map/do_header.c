@@ -10,12 +10,12 @@
 #include "local_proto.h"
 
 static double x, y, dy, fontsize;
-static int append(char, char *);
-static int apply(char *, char *, char *);
+static void append(char, char *);
+static void apply(const char *, const char *, char *);
 static char *get_format(char *, char *);
-static int output(char *, char *);
+static int output(char *, const char *);
 
-int do_map_header(char *date)
+int do_map_header(const char *date)
 {
     char temp[100];
 
@@ -59,7 +59,7 @@ int do_map_header(char *date)
 }
 
 
-int read_header_file(char *date)
+int read_header_file(const char *date)
 {
     char buf[1024];
 
@@ -71,7 +71,7 @@ int read_header_file(char *date)
 }
 
 
-static int output(char *line, char *date)
+static int output(char *line, const char *date)
 {
     char text[1024];
     char fmt[30];
@@ -162,22 +162,18 @@ static char *get_format(char *buf, char *fmt)
 }
 
 
-static int append(char c, char *buf)
+static void append(char c, char *buf)
 {
     while (*buf)
 	buf++;
     *buf++ = c;
     *buf = 0;
-
-    return 0;
 }
 
-static int apply(char *buf, char *fmt, char *text)
+static void apply(const char *buf, const char *fmt, char *text)
 {
     char temp[300];
 
     sprintf(temp, fmt, buf);
     strcat(text, temp);
-
-    return 0;
 }

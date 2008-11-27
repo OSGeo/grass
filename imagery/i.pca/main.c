@@ -114,15 +114,11 @@ int main(int argc, char *argv[])
     /* open and check input/output files */
     for (i = 0; i < bands; i++) {
 	char tmpbuf[128];
-	char *mapset;
 
 	sprintf(tmpbuf, "%s.%d", opt_out->answer, i + 1);
 	G_check_input_output_name(opt_in->answers[i], tmpbuf, GR_FATAL_EXIT);
 
-	if ((mapset = G_find_cell(opt_in->answers[i], "")) == NULL)
-	    G_fatal_error(_("Raster map <%s> not found"), opt_in->answers[i]);
-
-	if ((inp_fd[i] = G_open_cell_old(opt_in->answers[i], mapset)) < 0)
+	if ((inp_fd[i] = G_open_cell_old(opt_in->answers[i], "")) < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
 			  opt_in->answers[i]);
     }

@@ -46,7 +46,7 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
     struct Colors colors;
     struct History hist, hist1, hist2, hist3, hist4, hist5;
     char *type;
-    char *mapset = NULL;
+    const char *mapset = NULL;
     int cond1, cond2;
     FCELL dat1, dat2;
 

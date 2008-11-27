@@ -34,7 +34,8 @@ int main(int argc, char *argv[])
 {
     /* Declarations */
     int dim_vect, nparameters, BW, npoints, nrows, ncols, nsply, nsplx;
-    char *dvr, *db, *mapset, table_name[1024];
+    const char *dvr, *db, *mapset;
+    char table_name[1024];
     double lambda, ew_resol, ns_resol, mean, passoN, passoE, HighThresh,
 	LowThresh;
 

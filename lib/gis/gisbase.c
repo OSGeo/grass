@@ -39,7 +39,7 @@
  *  \return char * 
  */
 
-char *G_gisbase(void)
+const char *G_gisbase(void)
 {
     return G_getenv("GISBASE");
 }

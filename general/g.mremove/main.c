@@ -43,7 +43,8 @@ int main(int argc, char *argv[])
 	struct Flag *force;
 	struct Flag *basemap;
     } flag;
-    char *name, *mapset, *location_path, path[GPATH_MAX], **files;
+    const char *mapset, *location_path;
+    char *name, path[GPATH_MAX], **files;
     char *buf, *buf2;
     int num_files, rast, result = EXIT_SUCCESS;
     int i, j, n;

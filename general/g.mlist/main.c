@@ -54,7 +54,9 @@ int main(int argc, char *argv[])
 	struct Flag *full;
     } flag;
     int i, n, all, num_types;
-    char *pattern = NULL, *exclude = NULL, separator[2], *buf;
+    char *pattern = NULL, *exclude = NULL;
+    const char *mapset;
+    char separator[2], *buf;
     regex_t regex, regex_ex;
 
     G_gisinit(argv[0]);
@@ -186,11 +188,13 @@ int main(int argc, char *argv[])
 	separator[0] = opt.separator->answer[0];
     separator[1] = 0;
 
-    if (opt.mapset->answer == NULL)
-	opt.mapset->answer = "";
+    mapset = opt.mapset->answer;
 
-    if (G_strcasecmp(opt.mapset->answer, ".") == 0)
-	opt.mapset->answer = G_mapset();
+    if (mapset == NULL)
+	mapset = "";
+
+    if (G_strcasecmp(mapset, ".") == 0)
+	mapset = G_mapset();
 
     for (i = 0; opt.type->answers[i]; i++) {
 	if (strcmp(opt.type->answers[i], "all") == 0)
@@ -217,12 +221,12 @@ int main(int argc, char *argv[])
 	    G_debug(3, "lister CMD: %s", lister);
 
 	    if (access(lister, 1) == 0) {	/* execute permission? */
-		G_spawn(lister, lister, opt.mapset->answer, NULL);
+		G_spawn(lister, lister, mapset, NULL);
 		continue;
 	    }
 	}
 	else
-	    make_list(&list[n], opt.mapset->answer, separator,
+	    make_list(&list[n], mapset, separator,
 		      flag.pretty->answer, flag.type->answer,
 		      flag.mapset->answer);
     }

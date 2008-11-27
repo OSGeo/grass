@@ -232,7 +232,7 @@ int parse_units(char *s)
 int parse_layer(char *s)
 {
     char name[GNAME_MAX];
-    char *mapset;
+    const char *mapset;
     struct FPRange fp_range;
     int n;
 

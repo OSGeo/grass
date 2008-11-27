@@ -52,11 +52,11 @@ extern SHORT drain[3][3];
 extern SHORT updrain[3][3];
 extern SHORT nextdr[8];
 extern SHORT nextdc[8];
-extern char ele_name[GNAME_MAX], *ele_mapset, pit_name[GNAME_MAX], *pit_mapset;
-extern char run_name[GNAME_MAX], *run_mapset, ob_name[GNAME_MAX], *ob_mapset;
-extern char ril_name[GNAME_MAX], *ril_mapset, dep_name[GNAME_MAX], *dep_mapset;
+extern char ele_name[GNAME_MAX], pit_name[GNAME_MAX];
+extern char run_name[GNAME_MAX], ob_name[GNAME_MAX];
+extern char ril_name[GNAME_MAX], dep_name[GNAME_MAX];
 
-extern char *this_mapset;
+extern const char *this_mapset;
 extern char seg_name[GNAME_MAX], bas_name[GNAME_MAX], haf_name[GNAME_MAX], thr_name[8];
 extern char ls_name[GNAME_MAX], st_name[GNAME_MAX], sl_name[GNAME_MAX], sg_name[GNAME_MAX];
 extern char wat_name[GNAME_MAX], asp_name[GNAME_MAX], arm_name[GNAME_MAX], dis_name[GNAME_MAX];
