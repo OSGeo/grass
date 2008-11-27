@@ -10,6 +10,9 @@ the MAPSET database settings (see <em>db.connect</em>).
 <em>v.db.addtable</em> is a front-end to <em>db.execute</em> to allow easier
 usage.
 
+v.db.addtable does not automatically add new categories to the newly-created table;
+to do this, the user must add them manually by using <em>v.category</em>.
+
 The supported types of columns depend on the database backend. However, all
 backends should support VARCHAR, INT, DOUBLE PRECISION and DATE. The default
 dbf backend supports only these types.
@@ -38,6 +41,7 @@ v.info -c sentiero_brenta_points
 <em><a HREF="db.connect.html">db.connect</a></em>,
 <em><a HREF="db.droptable.html">db.droptable</a></em>,
 <em><a HREF="db.execute.html">db.execute</a></em>,
+<em><a HREF="v.category.html">v.category</a></em>,
 <em><a HREF="v.db.addcol.html">v.db.addcol</a></em>,
 <em><a HREF="v.db.connect.html">v.db.connect</a></em>,
 <em><a HREF="v.db.dropcol.html">v.db.dropcol</a></em>,
