@@ -49,8 +49,11 @@ else:
     import fcntl
 from threading import Thread
 
-import grass
 import globalvar
+grassPath = os.path.join(globalvar.ETCDIR, "python")
+sys.path.append(grassPath)
+import grass
+
 import utils
 from debug import Debug as Debug
 

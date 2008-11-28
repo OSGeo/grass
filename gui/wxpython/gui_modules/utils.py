@@ -17,9 +17,11 @@ for details.
 import os
 import sys
 
+import globalvar
+grassPath = os.path.join(globalvar.ETCDIR, "python")
+sys.path.append(grassPath)
 import grass
 
-import globalvar
 import gcmd
 import grassenv
 try:
