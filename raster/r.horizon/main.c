@@ -66,11 +66,11 @@ const double invEarth = 1. / EARTHRADIUS;
 
 const double minAngle = DEG;
 
-char *elevin;
-char *latin = NULL;
-char *horizon = NULL;
-char *mapset = NULL;
-char *per;
+const char *elevin;
+const char *latin = NULL;
+const char *horizon = NULL;
+const char *mapset = NULL;
+const char *per;
 char shad_filename[256];
 
 struct Cell_head cellhd;
@@ -188,8 +188,8 @@ int main(int argc, char *argv[])
 	 " The input for this is the angle (in degrees), which is measured "
 	 " counterclockwise with east=0, north=90 etc. The output is the horizon height in radians.");
 
-    if (G_get_set_window(&cellhd) == -1)
-	G_fatal_error("G_get_set_window() failed");
+    G_get_set_window(&cellhd);
+
     stepx = cellhd.ew_res;
     stepy = cellhd.ns_res;
     stepxhalf = stepx / 2.;
@@ -550,7 +550,7 @@ int INPUT(void)
     }
     /*read Z raster */
 
-    if ((mapset = G_find_cell(elevin, "")) == NULL)
+    if ((mapset = G_find_cell2(elevin, "")) == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), elevin);
 
     fd1 = G_open_cell_old(elevin, mapset);

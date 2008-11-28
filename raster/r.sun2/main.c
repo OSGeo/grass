@@ -70,26 +70,26 @@ FILE *fincidout, *fbeam_rad, *finsol_time, *fdiff_rad, *frefl_rad;
 FILE *fw;
 
 
-char *elevin;
-char *aspin;
-char *slopein;
-char *civiltime = NULL;
-char *linkein = NULL;
-char *albedo = NULL;
-char *latin = NULL;
-char *coefbh = NULL;
-char *coefdh = NULL;
-char *incidout = NULL;
-char *longin = NULL;
-char *horizon = NULL;
-char *beam_rad = NULL;
-char *insol_time = NULL;
-char *diff_rad = NULL;
-char *refl_rad = NULL;
-char *glob_rad = NULL;
-char *mapset = NULL;
-char *per;
-char *shade;
+const char *elevin;
+const char *aspin;
+const char *slopein;
+const char *civiltime = NULL;
+const char *linkein = NULL;
+const char *albedo = NULL;
+const char *latin = NULL;
+const char *coefbh = NULL;
+const char *coefdh = NULL;
+const char *incidout = NULL;
+const char *longin = NULL;
+const char *horizon = NULL;
+const char *beam_rad = NULL;
+const char *insol_time = NULL;
+const char *diff_rad = NULL;
+const char *refl_rad = NULL;
+const char *glob_rad = NULL;
+const char *mapset = NULL;
+const char *per;
+const char *shade;
 char mapname[1024];
 
 struct Cell_head cellhd;
@@ -232,8 +232,8 @@ int main(int argc, char *argv[])
 	 "incidence angle and/or irradiance raster maps. The shadowing effect of "
 	 "the topography is optionally incorporated.");
 
-    if (G_get_set_window(&cellhd) == -1)
-	G_fatal_error("G_get_set_window() failed");
+    G_get_set_window(&cellhd);
+
     gridGeom.stepx = cellhd.ew_res;
     gridGeom.stepy = cellhd.ns_res;
     invstepx = 1. / gridGeom.stepx;
@@ -788,7 +788,7 @@ int INPUT_part(int offset, double *zmax)
     }
 
 
-    if ((mapset = G_find_cell(elevin, "")) == NULL)
+    if ((mapset = G_find_cell2(elevin, "")) == NULL)
 	G_fatal_error("Elevation raster file not found");
 
 
@@ -805,7 +805,7 @@ int INPUT_part(int offset, double *zmax)
 	    }
 
 	}
-	if ((mapset = G_find_cell(slopein, "")) == NULL)
+	if ((mapset = G_find_cell2(slopein, "")) == NULL)
 	       G_fatal_error(_("Raster map <%s> not found"),slopein);
 	fd3 = G_open_cell_old(slopein, mapset);
 
@@ -822,7 +822,7 @@ int INPUT_part(int offset, double *zmax)
 	    }
 	}
 
-	if ((mapset = G_find_cell(aspin, "")) == NULL)
+	if ((mapset = G_find_cell2(aspin, "")) == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"),aspin);
 	fd2 = G_open_cell_old(aspin, mapset);
 
@@ -837,7 +837,7 @@ int INPUT_part(int offset, double *zmax)
 		li[l] = (float *)G_malloc(sizeof(float) * (n));
 
 	}
-	if ((mapset = G_find_cell(linkein, "")) == NULL)
+	if ((mapset = G_find_cell2(linkein, "")) == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"),linkein);
 
 	fd4 = G_open_cell_old(linkein, mapset);
@@ -850,7 +850,7 @@ int INPUT_part(int offset, double *zmax)
 	    for (l = 0; l < numRows; l++)
 		a[l] = (float *)G_malloc(sizeof(float) * (n));
 	}
-	if ((mapset = G_find_cell(albedo, "")) == NULL)
+	if ((mapset = G_find_cell2(albedo, "")) == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"),albedo);
 
 	fd5 = G_open_cell_old(albedo, mapset);
@@ -863,7 +863,7 @@ int INPUT_part(int offset, double *zmax)
 	    for (l = 0; l < numRows; l++)
 		la[l] = (float *)G_malloc(sizeof(float) * (n));
 	}
-	if ((mapset = G_find_cell(latin, "")) == NULL)
+	if ((mapset = G_find_cell2(latin, "")) == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"),latin);
 
 	fd6 = G_open_cell_old(latin, mapset);
@@ -875,7 +875,7 @@ int INPUT_part(int offset, double *zmax)
 	for (l = 0; l < numRows; l++)
 	    longitArray[l] = (float *)G_malloc(sizeof(float) * (n));
 
-	if ((mapset = G_find_cell(longin, "")) == NULL)
+	if ((mapset = G_find_cell2(longin, "")) == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"),longin);
 
 	fd7 = G_open_cell_old(longin, mapset);
@@ -891,7 +891,7 @@ int INPUT_part(int offset, double *zmax)
 	    for (l = 0; l < numRows; l++)
 		cbhr[l] = (float *)G_malloc(sizeof(float) * (n));
 	}
-	if ((mapset = G_find_cell(coefbh, "")) == NULL)
+	if ((mapset = G_find_cell2(coefbh, "")) == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"),coefbh);
 
 	fr1 = G_open_cell_old(coefbh, mapset);
@@ -904,7 +904,7 @@ int INPUT_part(int offset, double *zmax)
 	    for (l = 0; l < numRows; l++)
 		cdhr[l] = (float *)G_malloc(sizeof(float) * (n));
 	}
-	if ((mapset = G_find_cell(coefdh, "")) == NULL)
+	if ((mapset = G_find_cell2(coefdh, "")) == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"),coefdh);
 
 	fr2 = G_open_cell_old(coefdh, mapset);
@@ -928,7 +928,7 @@ int INPUT_part(int offset, double *zmax)
 	 * 
 	 * horizonbuf[0]=G_allocate_f_raster_buf();
 	 * sprintf(shad_filename, "%s_%02d", horizon, arrayNumInt);
-	 * if((mapset=G_find_cell(shad_filename,""))==NULL)
+	 * if((mapset=G_find_cell2(shad_filename,""))==NULL)
 	 * G_message("Horizon file no. %d not found\n", arrayNumInt);
 	 * 
 	 * fd_shad[0] = G_open_cell_old(shad_filename,mapset);
@@ -941,7 +941,7 @@ int INPUT_part(int offset, double *zmax)
 	for (i = 0; i < arrayNumInt; i++) {
 		horizonbuf[i] = G_allocate_f_raster_buf();
 	    sprintf(shad_filename, formatString, horizon, i);
-	    if ((mapset = G_find_cell(shad_filename, "")) == NULL)
+	    if ((mapset = G_find_cell2(shad_filename, "")) == NULL)
 		G_fatal_error(_("Horizon file no. %d <%s> not found"), i, shad_filename);
 
 	    fd_shad[i] = G_open_cell_old(shad_filename, mapset);
