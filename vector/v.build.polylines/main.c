@@ -204,7 +204,8 @@ int main(int argc, char **argv)
 
     /* Copy (all linked) tables if needed */
     if (write_cats != NO_CATS) {
-	Vect_copy_tables(&map, &Out, 0);
+        if (Vect_copy_tables(&map, &Out, 0))
+            G_warning(_("Failed to copy attribute table to output map"));
     }
 
     /* Tidy up */

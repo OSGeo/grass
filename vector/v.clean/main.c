@@ -271,7 +271,8 @@ int main(int argc, char *argv[])
 
     /* This works for both level 1 and 2 */
     Vect_copy_map_lines(&In, &Out);
-    Vect_copy_tables(&In, &Out, 0);
+    if (Vect_copy_tables(&In, &Out, 0))
+        G_warning(_("Failed to copy attribute table to output map"));
 
     Vect_set_release_support(&In);
     Vect_close(&In);

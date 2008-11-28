@@ -275,7 +275,8 @@ int main(int argc, char *argv[])
     fprintf(stderr, "\r");
 
     /* Copy tables */
-    Vect_copy_tables(&Map, &Out_Map, 0);
+    if (Vect_copy_tables(&Map, &Out_Map, 0))
+        G_warning(_("Failed to copy attribute table to output map"));
 
     Vect_close(&Map);
 

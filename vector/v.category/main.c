@@ -482,7 +482,8 @@ int main(int argc, char *argv[])
 
     if (option == O_ADD || option == O_DEL || option == O_CHFIELD ||
 	option == O_SUM) {
-	Vect_copy_tables(&In, &Out, 0);
+        if (Vect_copy_tables(&In, &Out, 0))
+            G_warning(_("Failed to copy attribute table to output map"));
 	Vect_build(&Out);
 	Vect_close(&Out);
     }

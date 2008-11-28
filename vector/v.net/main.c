@@ -182,7 +182,8 @@ int main(int argc, char **argv)
 	    Vect_close(&Points);
 	}
 
-	Vect_copy_tables(&In, &Out, 0);
+        if (Vect_copy_tables(&In, &Out, 0))
+            G_warning(_("Failed to copy attribute table to output map"));
 
 	/* support */
 	Vect_build_partial(&Out, GV_BUILD_NONE);
