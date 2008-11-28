@@ -52,7 +52,7 @@ struct Cell_head window;
 
 int main(int argc, char *argv[])
 {
-    int line, nlines;
+    int line, nlines, nlinks;
     double east, north, (*rng) (), max, myrand();
     int i, j, n, nsites, verbose, np, *p, dcmp();
     int *pnt_part;
@@ -153,32 +153,48 @@ int main(int argc, char *argv[])
 
     /* Copy tables */
     if (Vect_copy_tables(&In, &Out, 0))
-        G_warning(_("Failed to copy attribute table to output map"));
+	G_warning(_("Failed to copy attribute table to output map"));
 
     /* Add column */
     db_init_string(&sql);
 
-    Fi = Vect_get_field(&Out, 1);
+    /* Check if there is a database for output */
+    nlinks = Vect_get_num_dblinks(&Out);
+    if (nlinks < 1)
+	Fi = Vect_default_field_info(&Out, 1, NULL, GV_1TABLE);
+    else
+	Fi = Vect_get_field(&Out, 1);
     if (Fi == NULL) {
+	Vect_delete(Out.name);
 	G_fatal_error(_("Unable to get layer info for vector map <%s>"),
-		      in_opt->answer);
+		      out_opt->answer);
     }
 
     Driver = db_start_driver_open_database(Fi->driver, Fi->database);
-    if (Driver == NULL)
+    if (Driver == NULL) {
+	Vect_delete(Out.name);
 	G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 		      Fi->database, Fi->driver);
+    }
 
-    sprintf(buf, "alter table %s add column %s integer", Fi->table,
-	    col_opt->answer);
+    if (nlinks < 1)
+	sprintf(buf, "create table %s (%s integer, %s integer)", Fi->table,
+		Fi->key, col_opt->answer);
+    else
+	sprintf(buf, "alter table %s add column %s integer", Fi->table,
+		col_opt->answer);
 
     db_set_string(&sql, buf);
 
     G_debug(3, "SQL: %s", db_get_string(&sql));
 
     if (db_execute_immediate(Driver, &sql) != DB_OK) {
+	Vect_delete(Out.name);
 	G_fatal_error(_("Cannot alter table: %s"), db_get_string(&sql));
     }
+    if (nlinks < 1)
+	Vect_map_add_dblink(&Out, Fi->number, Fi->name, Fi->table, Fi->key,
+			    Fi->database, Fi->driver);
 
     /*
      * make histogram of number sites in each test partition since the
@@ -233,14 +249,19 @@ int main(int argc, char *argv[])
 		Vect_read_line(&In, Points, Cats, nearest);
 		Vect_cat_get(Cats, 1, &cat);
 
-		sprintf(buf, "update %s set %s = %d where %s = %d", Fi->table,
-			col_opt->answer, i + 1, Fi->key, cat);
+		if (nlinks < 1)
+		    sprintf(buf, "insert into %s (%s, %s) values (%d, %d)",
+			    Fi->table, Fi->key, col_opt->answer, cat, i + 1);
+		else
+		    sprintf(buf, "update %s set %s = %d where %s = %d",
+			    Fi->table, col_opt->answer, i + 1, Fi->key, cat);
 
 		db_set_string(&sql, buf);
 
 		G_debug(3, "SQL: %s", db_get_string(&sql));
 
 		if (db_execute_immediate(Driver, &sql) != DB_OK) {
+		    Vect_delete(Out.name);
 		    G_fatal_error(_("Unable to insert row: %s"),
 				  db_get_string(&sql));
 		}
