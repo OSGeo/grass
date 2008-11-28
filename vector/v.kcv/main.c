@@ -152,7 +152,8 @@ int main(int argc, char *argv[])
     Vect_copy_map_lines(&In, &Out);
 
     /* Copy tables */
-    Vect_copy_tables(&In, &Out, 0);
+    if (Vect_copy_tables(&In, &Out, 0))
+        G_warning(_("Failed to copy attribute table to output map"));
 
     /* Add column */
     db_init_string(&sql);

@@ -336,7 +336,8 @@ int main(int argc, char *argv[])
 			 ztozero, trans_params,
 			 table->answer, columns_name, atoi(field->answer));
 
-    Vect_copy_tables(&Old, &New, 0);
+    if (Vect_copy_tables(&Old, &New, 0))
+        G_warning(_("Failed to copy attribute table to output map"));
     Vect_close(&Old);
     Vect_build(&New);
 

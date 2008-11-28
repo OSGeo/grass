@@ -225,7 +225,8 @@ int main(int argc, char *argv[])
 	Vect_write_line(&Out, type, Points, Cats);
     }
 
-    Vect_copy_tables(&In, &Out, 0);
+    if (Vect_copy_tables(&In, &Out, 0))
+        G_warning(_("Failed to copy attribute table to output map"));
     Vect_build(&Out);
     Vect_close(&Out);
     Vect_close(&In);
