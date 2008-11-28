@@ -1,4 +1,9 @@
-Probably the sun position calculation shouldbe replaced
+TODO
+
+11/2008: Integrate latest GRASS 7 API changes
+
+-------
+Probably the sun position calculation should be replaced
 with 
 
  G_calc_solar_position()
