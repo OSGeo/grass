@@ -554,6 +554,8 @@ int Vect_delete(const char *map)
    \brief Copy tables linked to vector map.
 
    All if field = 0, or table defined by given field if field > 0
+   Notice, that if input map has no tables defined, it will copy
+   nothing and return 0 (success).
 
    \param[in] In input vector map
    \param[out] Out output vector map
@@ -568,9 +570,10 @@ int Vect_copy_tables(struct Map_info *In, struct Map_info *Out, int field)
     struct field_info *Fi, *Fin;
     dbDriver *driver;
 
-    G_debug(2, "Vect_copy_tables()");
-
     n = Vect_get_num_dblinks(In);
+
+    G_debug(2, "Vect_copy_tables(): copying %d tables",n);
+
     type = GV_1TABLE;
     if (n > 1)
 	type = GV_MTABLE;
