@@ -325,9 +325,7 @@ class VectorDBInfo:
                                          "-g", "--q",
                                          "map=%s" % self.map],
                                     rerr=None, stderr=None)
-        print ["v.db.connect",
-                "-g", "--q",
-                "map=%s" % self.map]
+        
         if layerCommand.returncode != 0:
             return False
 
