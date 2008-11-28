@@ -1,5 +1,5 @@
-#ifndef E_INTERSECT_H
-#define E_INTERSECT_H
+#ifndef GRASS_E_INTERSECT_H
+#define GRASS_E_INTERSECT_H
 
 #define FZERO(X, TOL) (fabs(X)<TOL)
 #define FEQUAL(X, Y, TOL) (fabs(X-Y)<TOL)

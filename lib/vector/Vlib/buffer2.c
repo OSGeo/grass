@@ -1,9 +1,23 @@
-/* Functions: ...
- **
- ** Author: Radim Blazek, Rosen Matev; July 2008
- **
- **
+/*!
+   \file buffer2.c
+
+   \brief Vector library - nearest, adjust, parallel lines
+
+   Higher level functions for reading/writing/manipulating vectors.
+
+   (C) 2001-2008 by the GRASS Development Team
+
+   This program is free software under the 
+   GNU General Public License (>=v2). 
+   Read the file COPYING that comes with GRASS
+   for details.
+
+   \author Original author Radim Blazek (see buffer.c)
+   \author Rewritten by Rosen Matev (Google Summer of Code 2008)
+
+   \date 2008
  */
+
 #include <stdlib.h>
 #include <grass/Vect.h>
 #include <grass/gis.h>
@@ -167,9 +181,9 @@ static double angular_tolerance(double tol, double da, double db)
  * when (da == db) we have plain distances (old case)
  * round - 1 for round corners, 0 for sharp corners. (tol is used only if round == 1)
  */
-void parallel_line(struct line_pnts *Points, double da, double db,
-		   double dalpha, int side, int round, int caps, int looped,
-		   double tol, struct line_pnts *nPoints)
+static void parallel_line(struct line_pnts *Points, double da, double db,
+			  double dalpha, int side, int round, int caps, int looped,
+			  double tol, struct line_pnts *nPoints)
 {
     int i, j, res, np;
 
@@ -328,9 +342,9 @@ void parallel_line(struct line_pnts *Points, double da, double db,
 }
 
 /* input line must be looped */
-void convolution_line(struct line_pnts *Points, double da, double db,
-		      double dalpha, int side, int round, int caps,
-		      double tol, struct line_pnts *nPoints)
+static void convolution_line(struct line_pnts *Points, double da, double db,
+			     double dalpha, int side, int round, int caps,
+			     double tol, struct line_pnts *nPoints)
 {
     int i, j, res, np;
 
@@ -638,8 +652,8 @@ static void extract_contour(struct planar_graph *pg, struct pg_edge *first,
  * 
  * TODO: Implement side != 0 feature;
  */
-void extract_outer_contour(struct planar_graph *pg, int side,
-			   struct line_pnts *nPoints)
+static void extract_outer_contour(struct planar_graph *pg, int side,
+				  struct line_pnts *nPoints)
 {
     int i;
 
@@ -694,8 +708,8 @@ void extract_outer_contour(struct planar_graph *pg, int side,
  *
  * returns: 0 when there are no more inner contours; otherwise, 1
  */
-int extract_inner_contour(struct planar_graph *pg, int *winding,
-			  struct line_pnts *nPoints)
+static int extract_inner_contour(struct planar_graph *pg, int *winding,
+				 struct line_pnts *nPoints)
 {
     int i, w;
 
@@ -731,8 +745,8 @@ int extract_inner_contour(struct planar_graph *pg, int *winding,
  ** returns:  1 in buffer
  **           0 not in buffer
  */
-int point_in_buf(struct line_pnts *Points, double px, double py, double da,
-		 double db, double dalpha)
+static int point_in_buf(struct line_pnts *Points, double px, double py, double da,
+			double db, double dalpha)
 {
     int i, np;
 
@@ -807,7 +821,7 @@ int point_in_buf(struct line_pnts *Points, double px, double py, double da,
 
 /* returns 0 for ccw, non-zero for cw
  */
-int get_polygon_orientation(const double *x, const double *y, int n)
+static int get_polygon_orientation(const double *x, const double *y, int n)
 {
     double x1, y1, x2, y2;
 
@@ -830,9 +844,9 @@ int get_polygon_orientation(const double *x, const double *y, int n)
 }
 
 /* internal */
-void add_line_to_array(struct line_pnts *Points,
-		       struct line_pnts ***arrPoints, int *count,
-		       int *allocated, int more)
+static void add_line_to_array(struct line_pnts *Points,
+			      struct line_pnts ***arrPoints, int *count,
+			      int *allocated, int more)
 {
     if (*allocated == *count) {
 	*allocated += more;
@@ -844,7 +858,7 @@ void add_line_to_array(struct line_pnts *Points,
     return;
 }
 
-void destroy_lines_array(struct line_pnts **arr, int count)
+static void destroy_lines_array(struct line_pnts **arr, int count)
 {
     int i;
 
@@ -856,11 +870,11 @@ void destroy_lines_array(struct line_pnts **arr, int count)
 /* area_outer and area_isles[i] must be closed non self-intersecting lines
    side: 0 - auto, 1 - right, -1 left
  */
-void buffer_lines(struct line_pnts *area_outer, struct line_pnts **area_isles,
-		  int isles_count, int side, double da, double db,
-		  double dalpha, int round, int caps, double tol,
-		  struct line_pnts **oPoints, struct line_pnts ***iPoints,
-		  int *inner_count)
+static void buffer_lines(struct line_pnts *area_outer, struct line_pnts **area_isles,
+			 int isles_count, int side, double da, double db,
+			 double dalpha, int round, int caps, double tol,
+			 struct line_pnts **oPoints, struct line_pnts ***iPoints,
+			 int *inner_count)
 {
     struct planar_graph *pg2;
 
@@ -966,18 +980,20 @@ void buffer_lines(struct line_pnts *area_outer, struct line_pnts **area_isles,
 
 
 /*!
-   \fn void Vect_line_buffer(struct line_pnts *Points, double da, double db, double dalpha, int round, int caps, double tol, struct line_pnts **oPoints, struct line_pnts ***iPoints, int *inner_count) {
-   \brief Creates buffer around the line Points.
-   \param InPoints input line
+   \brief Creates buffer around line.
+
+   See also Vect_line_buffer().
+
+   \param InPoints input line geometry
    \param da distance along major axis
-   \param da distance along minor axis
+   \param db distance along minor axis
    \param dalpha angle between 0x and major axis
    \param round make corners round
    \param caps add caps at line ends
    \param tol maximum distance between theoretical arc and output segments
-   \param oPoints output polygon outer border (ccw order)
-   \param inner_count number of holes
-   \param iPoints array of output polygon's holes (cw order)
+   \param[out] oPoints output polygon outer border (ccw order)
+   \param[out] inner_count number of holes
+   \param[out] iPoints array of output polygon's holes (cw order)
  */
 void Vect_line_buffer2(struct line_pnts *Points, double da, double db,
 		       double dalpha, int round, int caps, double tol,
@@ -1029,6 +1045,21 @@ void Vect_line_buffer2(struct line_pnts *Points, double da, double db,
     return;
 }
 
+/*!
+   \brief Creates buffer around area.
+
+   \param Map vector map
+   \param area area id
+   \param da distance along major axis
+   \param db distance along minor axis
+   \param dalpha angle between 0x and major axis
+   \param round make corners round
+   \param caps add caps at line ends
+   \param tol maximum distance between theoretical arc and output segments
+   \param[out] oPoints output polygon outer border (ccw order)
+   \param[out] inner_count number of holes
+   \param[out] iPoints array of output polygon's holes (cw order)
+ */
 void Vect_area_buffer2(struct Map_info *Map, int area, double da, double db,
 		       double dalpha, int round, int caps, double tol,
 		       struct line_pnts **oPoints,
@@ -1087,8 +1118,8 @@ void Vect_area_buffer2(struct Map_info *Map, int area, double da, double db,
 }
 
 /*!
-   \fn void Vect_point_buffer(double px, double py, double da, double db, double dalpha, int round, double tol, struct line_pnts **oPoints) {
-   \brief Creates buffer around the point (px,py).
+   \brief Creates buffer around the point (px, py).
+
    \param px input point x-coordinate
    \param py input point y-coordinate
    \param da distance along major axis
@@ -1096,7 +1127,7 @@ void Vect_area_buffer2(struct Map_info *Map, int area, double da, double db,
    \param dalpha angle between 0x and major axis
    \param round make corners round
    \param tol maximum distance between theoretical arc and output segments
-   \param nPoints output polygon outer border (ccw order)
+   \param[out] nPoints output polygon outer border (ccw order)
  */
 void Vect_point_buffer2(double px, double py, double da, double db,
 			double dalpha, int round, double tol,
@@ -1141,14 +1172,17 @@ void Vect_point_buffer2(double px, double py, double da, double db,
 
 
 /*
-   \fn void Vect_line_parallel2 ( struct line_pnts *InPoints, double distance, double tolerance, int rm_end,
-   struct line_pnts *OutPoints )
    \brief Create parrallel line
-   \param InPoints input line
-   \param distance
-   \param tolerance maximum distance between theoretical arc and polygon segments
-   \param rm_end remove end points falling into distance
-   \param OutPoints output line
+
+   See also Vect_line_parallel().
+   
+   \param InPoints input line geometry
+   \param da distance along major axis
+   \param da distance along minor axis
+   \param dalpha angle between 0x and major axis
+   \param round make corners round
+   \param tol maximum distance between theoretical arc and output segments
+   \param[out] OutPoints output line
  */
 void Vect_line_parallel2(struct line_pnts *InPoints, double da, double db,
 			 double dalpha, int side, int round, double tol,
@@ -1164,5 +1198,6 @@ void Vect_line_parallel2(struct line_pnts *InPoints, double da, double db,
     /*    if (!loops)
        clean_parallel(OutPoints, InPoints, distance, rm_end);
      */
+    
     return;
 }
