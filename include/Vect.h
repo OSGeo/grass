@@ -35,7 +35,22 @@ int Vect_line_distance(struct line_pnts *, double, double, double, int,
 int Vect_line_box(struct line_pnts *, BOUND_BOX *);
 void Vect_line_parallel(struct line_pnts *, double, double, int,
 			struct line_pnts *);
+void Vect_line_parallel2(struct line_pnts *, double, double,
+			 double, int, int, double,
+			 struct line_pnts *);
 void Vect_line_buffer(struct line_pnts *, double, double, struct line_pnts *);
+void Vect_line_buffer2(struct line_pnts *, double, double,
+		       double, int, int, double,
+		       struct line_pnts **,
+		       struct line_pnts ***, int *);
+void Vect_area_buffer2(struct Map_info *, int, double, double,
+		       double, int, int, double,
+		       struct line_pnts **,
+		       struct line_pnts ***, int *);
+void Vect_point_buffer2(double, double, double, double,
+			double, int, double,
+			struct line_pnts **);
+
 
 /* Categories */
 struct line_cats *Vect_new_cats_struct(void);

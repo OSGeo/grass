@@ -1,7 +1,7 @@
 /*!
    \file buffer.c
 
-   \brief Vector library - nearest, adjust_line, parallel_line
+   \brief Vector library - nearest, adjust, parallel lines
 
    Higher level functions for reading/writing/manipulating vectors.
 
