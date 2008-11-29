@@ -10,7 +10,7 @@
  * PURPOSE:      processes a single input raster map layer
  *               and constructs the real and imaginary Fourier
  *               components in frequency space
- * COPYRIGHT:    (C) 1999-2007 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2008 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -74,35 +74,23 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("imagery");
+    module->keywords = _("imagery, FFT");
     module->description =
 	_("Fast Fourier Transform (FFT) for image processing.");
 
     /* define options */
-    opt.orig = G_define_option();
+    /* define options */
+    opt.orig = G_define_standard_option(G_OPT_R_INPUT);
     opt.orig->key = "input_image";
-    opt.orig->type = TYPE_STRING;
-    opt.orig->required = YES;
-    opt.orig->multiple = NO;
-    opt.orig->gisprompt = "old,cell,raster";
-    opt.orig->description = _("Input raster map being fft");
 
-    opt.real = G_define_option();
+    opt.real = G_define_standard_option(G_OPT_R_OUTPUT);
     opt.real->key = "real_image";
-    opt.real->type = TYPE_STRING;
-    opt.real->required = YES;
-    opt.real->multiple = NO;
-    opt.real->gisprompt = "new,cell,raster";
-    opt.real->description = _("Output real part arrays stored as raster map");
+    opt.real->description = _("Name for output real part arrays stored as raster map");
 
-    opt.imag = G_define_option();
+    opt.imag = G_define_standard_option(G_OPT_R_OUTPUT);
     opt.imag->key = "imaginary_image";
-    opt.imag->type = TYPE_STRING;
-    opt.imag->required = YES;
-    opt.imag->multiple = NO;
-    opt.imag->gisprompt = "new,cell,raster";
-    opt.imag->description = _("Output imaginary part arrays stored as raster map");
-
+    opt.imag->description = _("Name for output imaginary part arrays stored as raster map");
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -112,7 +100,7 @@ int main(int argc, char *argv[])
 
     inputfd = G_open_cell_old(Cellmap_orig, "");
     if (inputfd < 0)
-	G_fatal_error(_("Unable to open input map <%s>"), Cellmap_orig);
+	G_fatal_error(_("Unable to open raster map <%s>"), Cellmap_orig);
 
     if (G_maskfd() >= 0)
 	G_warning(_("Raster MASK found, consider to remove "
@@ -138,14 +126,18 @@ int main(int argc, char *argv[])
 #define C(i, j) ((i) * cols + (j))
 
     /* Read in cell map values */
-    G_message(_("Reading the raster map..."));
+    G_message(_("Reading the raster map <%s>..."),
+	      Cellmap_orig);
     for (i = 0; i < rows; i++) {
 	if (G_get_d_raster_row(inputfd, cell_real, i) < 0)
-	    G_fatal_error(_("Error while reading input raster map."));
+	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
+			  Cellmap_orig, i);
 	for (j = 0; j < cols; j++) {
 	    data[C(i, j)][0] = cell_real[j];
 	    data[C(i, j)][1] = 0.0;
 	}
+
+	G_percent(i+1, rows, 2);
     }
 
     /* close input cell map */
@@ -154,13 +146,12 @@ int main(int argc, char *argv[])
     /* perform FFT */
     G_message(_("Starting FFT..."));
     fft2(-1, data, totsize, cols, rows);
-    G_message(_("FFT completed..."));
 
     /* open the output cell maps */
     if ((realfd = G_open_fp_cell_new(Cellmap_real)) < 0)
-	G_fatal_error(_("Unable to open real output map <%s>"), Cellmap_real);
+	G_fatal_error(_("Unable to create raster map <%s>"), Cellmap_real);
     if ((imagfd = G_open_fp_cell_new(Cellmap_imag)) < 0)
-	G_fatal_error(_("Unable to open imaginary output map <%s>"), Cellmap_imag);
+	G_fatal_error(_("Unable to create raster map <%s>"), Cellmap_imag);
 
 #define SWAP1(a, b)				\
     do {					\
@@ -193,6 +184,8 @@ int main(int argc, char *argv[])
 	}
 	G_put_d_raster_row(realfd, cell_real);
 	G_put_d_raster_row(imagfd, cell_imag);
+
+	G_percent(i+1, rows, 2);
     }
 
     G_close_cell(realfd);
@@ -208,7 +201,7 @@ int main(int argc, char *argv[])
     /* Release memory resources */
     G_free(data);
 
-    G_done_msg(_("Transform successful."));
+    G_done_msg(_(" "));
 
     exit(EXIT_SUCCESS);
 }
