@@ -1,3 +1,21 @@
+
+/****************************************************************************
+ *
+ * MODULE:       i.ifft
+ * AUTHOR(S):    David B. Satnik and Ali R. Vali (original contributors),
+ *               Markus Neteler <neteler itc.it>
+ *               Bernhard Reiter <bernhard intevation.de>, 
+ *               Brad Douglas <rez touchofmadness.com>, 
+ *               Glynn Clements <glynn gclements.plus.com>
+ * PURPOSE:      processes the real and imaginary Fourier
+ *               components in frequency space and constract raster map
+ * COPYRIGHT:    (C) 1999-2008 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 /*
    Central Washington University GIS Laboratory
    Programmer: David B. Satnik
@@ -55,35 +73,23 @@ int main(int argc, char *argv[])
 
     /* Set description */
     module = G_define_module();
-    module->keywords = _("imagery");
+    module->keywords = _("imagery, FFT");
     module->description =
 	_("Inverse Fast Fourier Transform (IFFT) for image processing.");
 
     /* define options */
-    opt.real = G_define_option();
+    opt.real = G_define_standard_option(G_OPT_R_INPUT);
     opt.real->key = "real_image";
-    opt.real->type = TYPE_STRING;
-    opt.real->required = YES;
-    opt.real->multiple = NO;
-    opt.real->gisprompt = "old,cell,raster";
-    opt.real->description = _("Input raster map (image fft, real part)");
+    opt.real->description = _("Name of input raster map (image fft, real part)");
 
-    opt.imag = G_define_option();
+    opt.imag = G_define_standard_option(G_OPT_R_INPUT);
     opt.imag->key = "imaginary_image";
-    opt.imag->type = TYPE_STRING;
-    opt.imag->required = YES;
-    opt.imag->multiple = NO;
-    opt.imag->gisprompt = "old,cell,raster";
-    opt.imag->description = _("Input raster map (image fft, imaginary part");
+    opt.imag->description = _("Name of input raster map (image fft, imaginary part");
 
-    opt.orig = G_define_option();
+    opt.orig = G_define_standard_option(G_OPT_R_OUTPUT);
     opt.orig->key = "output_image";
-    opt.orig->type = TYPE_STRING;
-    opt.orig->required = YES;
-    opt.orig->multiple = NO;
-    opt.orig->gisprompt = "new,cell,raster";
-    opt.orig->description = _("Output inverse raster map after IFFT");
-
+    opt.orig->description = _("Name for output raster map");
+    
     /*call parser */
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -95,11 +101,13 @@ int main(int argc, char *argv[])
     /* open input raster map */
     realfd = G_open_cell_old(Cellmap_real, "");
     if (realfd < 0)
-	G_fatal_error(_("Unable to open real input map <%s>"), Cellmap_real);
+	G_fatal_error(_("Unable to open raster map <%s>"),
+		      Cellmap_real);
 
     imagfd = G_open_cell_old(Cellmap_imag, "");
-    if (imagfd < 0)
-	G_fatal_error(_("Unable to open imaginary input map <%s>"), Cellmap_imag);
+    if (imagfd < 0)	
+	G_fatal_error(_("Unable to open raster map <%s>"),
+		      Cellmap_imag);
 
     /* get and compare the original window data */
     G_get_cellhd(Cellmap_real, "", &realhead);
@@ -113,7 +121,7 @@ int main(int argc, char *argv[])
 	realhead.west   != imaghead.west   ||
 	realhead.ew_res != imaghead.ew_res ||
 	realhead.ns_res != imaghead.ns_res)
-	G_fatal_error(_("The real and imaginary original windows did not match."));
+	G_fatal_error(_("The real and imaginary original windows did not match"));
 
     G_set_window(&realhead);	/* set the window to the whole cell map */
 
@@ -135,16 +143,19 @@ int main(int argc, char *argv[])
 #define C(i, j) ((i) * cols + (j))
 
     /* Read in cell map values */
-    G_message(_("Reading the raster maps..."));
+    G_message(_("Reading raster maps..."));
     for (i = 0; i < rows; i++) {
 	if (G_get_d_raster_row(realfd, cell_real, i) < 0)
-	    G_fatal_error(_("Error while reading real input raster map."));
+	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
+			  Cellmap_real, i);
 	if (G_get_d_raster_row(imagfd, cell_imag, i) < 0)
-	    G_fatal_error(_("Error while reading imaginary input raster map."));
+	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
+			  Cellmap_imag, i);
 	for (j = 0; j < cols; j++) {
 	    data[C(i, j)][0] = cell_real[j];
 	    data[C(i, j)][1] = cell_imag[j];
 	}
+	G_percent(i+1, rows, 2);
     }
 
     /* close input cell maps */
@@ -152,7 +163,7 @@ int main(int argc, char *argv[])
     G_close_cell(imagfd);
 
     /* Read in cell map values */
-    G_message(_("Masking the raster maps..."));
+    G_message(_("Masking raster maps..."));
     maskfd = G_maskfd();
     if (maskfd >= 0) {
 	maskbuf = G_allocate_cell_buf();
@@ -165,6 +176,7 @@ int main(int argc, char *argv[])
 		    data[C(i, j)][1] = 0.0;
 		}
 	    }
+	    G_percent(i+1, rows, 2);
 	}
 
 	G_close_cell(maskfd);
@@ -185,7 +197,7 @@ int main(int argc, char *argv[])
     } while (0)
 
     /* rotate the data array for standard display */
-    G_message(_("Rotating data arrays..."));
+    G_message(_("Rotating data..."));
     for (i = 0; i < rows; i++)
 	for (j = 0; j < cols / 2; j++)
 	    SWAP2(C(i, j), C(i, j + cols / 2));
@@ -196,18 +208,22 @@ int main(int argc, char *argv[])
     /* perform inverse FFT */
     G_message(_("Starting Inverse FFT..."));
     fft2(1, data, totsize, cols, rows);
-    G_message(_("Inverse FFT completed..."));
 
     /* open the output cell map */
     if ((outputfd = G_open_fp_cell_new(Cellmap_orig)) < 0)
-	G_fatal_error(_("Unable to open output map <%s>"), Cellmap_orig);
+	G_fatal_error(_("Unable to create raster map <%s>"),
+		      Cellmap_orig);
+
 
     /* Write out result to a new cell map */
-    G_message(_("Writing output map..."));
+    G_message(_("Writing raster map <%s>..."),
+	      Cellmap_orig);
     for (i = 0; i < rows; i++) {
 	for (j = 0; j < cols; j++)
 	    cell_real[j] = data[C(i, j)][0];
 	G_put_d_raster_row(outputfd, cell_real);
+
+	G_percent(i+1, rows, 2);
     }
 
     G_close_cell(outputfd);
@@ -220,7 +236,7 @@ int main(int argc, char *argv[])
     /* Release memory resources */
     G_free(data);
 
-    G_done_msg(_("Transform successful."));
+    G_done_msg(" ");
 
     exit(EXIT_SUCCESS);
 }
