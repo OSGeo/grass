@@ -279,7 +279,7 @@ def list_grouped(type):
     are mapset names and the values are lists of maps in that mapset. 
     """
     dashes_re = re.compile("^----+$")
-    mapset_re = re.compile("<(.*)>:$")
+    mapset_re = re.compile("<(.*)>")
     result = {}
     mapset = None
     for line in read_command("g.list", type = type).splitlines():
