@@ -6,7 +6,7 @@
  *               Markus Neteler <neteler itc.it>, 
  *               Roberto Flor <flor itc.it>,
  *               Brad Douglas <rez touchofmadness.com>, 
- *               Hamish Bowman <hamish_nospam yahoo.com>
+ *               Hamish Bowman <hamish_b yahoo.com>
  * PURPOSE:      Watershed determination using the GRASS segmentation lib
  * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
  *
