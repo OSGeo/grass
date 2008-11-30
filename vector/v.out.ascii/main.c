@@ -116,6 +116,8 @@ int main(int argc, char *argv[])
 	fs = "\t";
     if (strcmp(fs, "space") == 0)
 	fs = " ";
+    if (strcmp(fs, "comma") == 0)
+	fs = ",";
 
     /*The precision of the output */
     if (dp_opt->answer) {
