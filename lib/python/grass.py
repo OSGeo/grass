@@ -296,6 +296,23 @@ def list_grouped(type):
             result[mapset].extend(line.split())
     return result
 
+def list_grouped2(type, pattern=None):
+    """Returns the output from running g.mlist, as a dictionary where the keys
+    are mapset names and the values are lists of maps in that mapset. 
+    """
+    result = {}
+    mapset = None
+    for line in read_command("g.mlist", flags="m",
+                             type = type, pattern = pattern).splitlines():
+        map, mapset = line.split('@')
+        
+        if result.has_key(mapset):
+            result[mapset].append(map)
+        else:
+	    result[mapset] = [map, ]
+    
+    return result
+
 def _concat(xs):
     result = []
     for x in xs:
