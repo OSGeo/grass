@@ -1187,6 +1187,7 @@ class cmdPanel(wx.Panel):
                     if p.get('multiple', 'no') == 'yes':
                         win = wx.TextCtrl(parent=which_panel, value = p.get('default',''),
                                           size=globalvar.DIALOG_TEXTCTRL_SIZE)
+                        win.Bind(wx.EVT_TEXT, self.OnSetValue)
                     else:
                         if p.get('prompt', '') in ('layer',
                                                    'layer_all'):
