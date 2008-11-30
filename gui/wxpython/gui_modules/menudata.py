@@ -1229,6 +1229,11 @@ class Data:
                                  _("Create new empty vector map"),
                                  "self.OnNewVector",
                                  ""),
+                                
+                                (_("Edit vector map (non-interactively)"),
+                                 _("Edits a vector map, allows adding, deleting and modifying selected vector features."),
+                                 "self.OnMenuCmd",
+                                 "v.edit"),
                                 ("","","", ""),
 
                                 (_("Create/rebuild topology"),
