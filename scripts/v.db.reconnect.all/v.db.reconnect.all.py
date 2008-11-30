@@ -20,7 +20,8 @@
 #%option
 #% key: old_database
 #% type: string
-#% description: Name of old database. The database must be in form printed by v.db.connect -g, i.e. with substituted variables
+#% label: Name of old database
+#% description: The database must be in form printed by v.db.connect -g, i.e. with substituted variables
 #% required : yes
 #%END
 #%option
