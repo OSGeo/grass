@@ -1308,6 +1308,7 @@ class cmdPanel(wx.Panel):
         #
         pMap = None
         pLayer = None
+        pLayerList = []
         pDriver = None
         pDatabase = None
         pTable = None
@@ -1323,7 +1324,9 @@ class cmdPanel(wx.Panel):
                 if name in ('map', 'input'):
                     pMap = p
             elif prompt == 'layer':
-                pLayer = p
+                pLayerList.append(p['wxId'])
+                if not pLayer: # TODO: check all 'layer' options
+                    pLayer = p
             elif prompt == 'dbcolumn':
                 pColumn.append(p['wxId'])
             elif prompt == 'dbdriver':
@@ -1336,10 +1339,10 @@ class cmdPanel(wx.Panel):
         if pMap:
             pMap['wxId-bind'] = copy.copy(pColumn)
             if pLayer:
-                pMap['wxId-bind'].append(pLayer['wxId'])
+                pMap['wxId-bind'] += pLayerList
         
         if pLayer:
-            pLayer['wxId-bind'] = pColumn
+            p['wxId-bind'] = pColumn
 
         if pDriver and pTable:
             pDriver['wxId-bind'] = [pTable['wxId'], ]
