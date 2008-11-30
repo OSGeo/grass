@@ -191,27 +191,31 @@ static void parse_command_line(int argc, char **argv)
     sql->description =
 	_("For example: 'select * from rybniky where kapri = 'hodne'");
 
+    input = G_define_standard_option(G_OPT_F_INPUT);
+    input->required = NO;
+    input->description = _("Name of file with sql statement");
+
     fs = G_define_standard_option(G_OPT_F_SEP);
     fs->description = _("Output field separator");
+    fs->guisection = _("Format");
 
     vs = G_define_standard_option(G_OPT_F_SEP);
     vs->key = "vs";
     vs->description = _("Output vertical record separator");
     vs->answer = NULL;
+    vs->guisection = _("Format");
 
     nv = G_define_option();
     nv->key = "nv";
     nv->type = TYPE_STRING;
     nv->required = NO;
     nv->description = _("Null value indicator");
-
-    input = G_define_standard_option(G_OPT_F_INPUT);
-    input->required = NO;
-    input->description = _("Name of file with sql statement");
+    nv->guisection = _("Format");
 
     c = G_define_flag();
     c->key = 'c';
     c->description = _("Do not include column names in output");
+    c->guisection = _("Format");
 
     d = G_define_flag();
     d->key = 'd';
@@ -220,6 +224,7 @@ static void parse_command_line(int argc, char **argv)
     v = G_define_flag();
     v->key = 'v';
     v->description = _("Vertical output (instead of horizontal)");
+    v->guisection = _("Format");
 
     flag_test = G_define_flag();
     flag_test->key = 't';
