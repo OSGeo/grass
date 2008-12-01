@@ -27,18 +27,18 @@ int attributes(char *in, struct Map_info *Out)
 
     /* Find vector mapset */
     if (NULL == (mapset = G_find_file("dig", in, ""))) {
-	G_warning(_("Input vector was not found."));	/* Should not happen */
+	G_warning(_("Vector map <%s> not found"), in);	/* Should not happen */
 	return 0;
     }
 
     /* Find dig_cats if exists */
     if (NULL == G_find_file("dig_cats", in, mapset)) {
-	G_message(_("No category labels (dig_cats) found, no table created.\n"));
+	G_message(_("No category labels (dig_cats) found, no table created"));
 	return 0;
     }
 
     if (G_read_vector_cats(in, mapset, &Cats) == -1) {
-	G_warning(_("Cannot open dig_cats file."));
+	G_warning(_("Unable to open dig_cats file"));
 	return -1;
     }
 
@@ -64,26 +64,31 @@ int attributes(char *in, struct Map_info *Out)
 
     driver = db_start_driver(fi->driver);
     if (driver == NULL)
-	G_fatal_error("Cannot open driver %s", fi->driver);
+	G_fatal_error(_("Unable to open driver <%s>"),
+		      fi->driver);
     db_init_handle(&handle);
     db_set_handle(&handle, Vect_subst_var(fi->database, Out), NULL);
     if (db_open_database(driver, &handle) != DB_OK) {
 	db_shutdown_driver(driver);
-	G_fatal_error(_("Cannot open database %s"), fi->database);
+	G_fatal_error(_("Unable to open database <%s>"),
+		      fi->database);
     }
 
     if (db_execute_immediate(driver, &sql) != DB_OK) {
 	db_close_database(driver);
 	db_shutdown_driver(driver);
-	G_fatal_error(_("Cannot create table: %s"), db_get_string(&sql));
+	G_fatal_error(_("Unable to create table: '%s'"),
+		      db_get_string(&sql));
     }
 
     if (db_create_index2(driver, fi->table, "cat") != DB_OK)
-	G_warning("Cannot create index");
+	G_warning(_("Unable to create index for table <%s>, key <%s>"),
+		  fi->table, "cat");
 
     if (db_grant_on_table
 	(driver, fi->table, DB_PRIV_SELECT, DB_GROUP | DB_PUBLIC) != DB_OK)
-	G_fatal_error("Cannot grant privileges on table %s", fi->table);
+	G_fatal_error(_("Unable to grant privileges on table <%s>"),
+		      fi->table);
 
 
     G_debug(1, "ncats = %d", Cats.ncats);
@@ -102,7 +107,7 @@ int attributes(char *in, struct Map_info *Out)
 	if (db_execute_immediate(driver, &sql) != DB_OK) {
 	    db_close_database(driver);
 	    db_shutdown_driver(driver);
-	    G_fatal_error(_("Cannot insert into table: %s"),
+	    G_fatal_error(_("Unable to insert new record: '%s'"),
 			  db_get_string(&sql));
 	}
 	count++;

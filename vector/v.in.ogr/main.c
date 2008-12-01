@@ -750,24 +750,25 @@ int main(int argc, char *argv[])
 					      Vect_subst_var(Fi->database,
 							     &Map));
 	    if (driver == NULL) {
-		G_fatal_error(_("Cannot open database %s by driver %s"),
+		G_fatal_error(_("Unable open database <%s> by driver <%s>"),
 			      Vect_subst_var(Fi->database, &Map), Fi->driver);
 	    }
 
 	    if (db_execute_immediate(driver, &sql) != DB_OK) {
 		db_close_database(driver);
 		db_shutdown_driver(driver);
-		G_fatal_error(_("Cannot create table: %s"),
+		G_fatal_error(_("Unable to create table: '%s'"),
 			      db_get_string(&sql));
 	    }
 
 	    if (db_create_index2(driver, Fi->table, cat_col_name) != DB_OK)
-		G_warning(_("Cannot create index"));
+		G_warning(_("Unable to create index for table <%s>, key <%s>"),
+			  Fi->table, cat_col_name);
 
 	    if (db_grant_on_table
 		(driver, Fi->table, DB_PRIV_SELECT,
 		 DB_GROUP | DB_PUBLIC) != DB_OK)
-		G_fatal_error(_("Cannot grant privileges on table %s"),
+		G_fatal_error(_("Unable to grant privileges on table <%s>"),
 			      Fi->table);
 
 	    db_begin_transaction(driver);

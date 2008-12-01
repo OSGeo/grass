@@ -1,8 +1,7 @@
-
 /**
  * \file db.c
  *
- * \brief Low Level SQLite databse driver.
+ * \brief DBMI - Low Level SQLite database driver.
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -16,19 +15,19 @@
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/dbmi.h>
+#include <grass/glocale.h>
 #include "globals.h"
 #include "proto.h"
 
 
 /**
- * \fn int db__driver_open_database (dbHandle *handle)
- *
  * \brief Open SQLite database.
  *
  * \param[in,out] handle database handle
- * \return int DB_FAILED on error; DB_OK on success
+ *
+ * \return DB_FAILED on error
+ * \return DB_OK on success
  */
-
 int db__driver_open_database(dbHandle * handle)
 {
     char name2[2000];
@@ -82,7 +81,7 @@ int db__driver_open_database(dbHandle * handle)
     G_debug(2, "name2 = '%s'", name2);
 
     if (sqlite3_open(name2, &sqlite) != SQLITE_OK) {
-	append_error("Cannot open database: ");
+	append_error(_("Unable to open database: "));
 	append_error((char *)sqlite3_errmsg(sqlite));
 	report_error();
 	return DB_FAILED;
@@ -93,11 +92,9 @@ int db__driver_open_database(dbHandle * handle)
 
 
 /**
- * \fn int db__driver_close_database (void)
- *
  * \brief Close SQLite database.
  *
- * \return int always returns DB_OK
+ * \return always returns DB_OK
  */
 
 int db__driver_close_database(void)

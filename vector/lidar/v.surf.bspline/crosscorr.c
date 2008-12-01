@@ -73,7 +73,7 @@ int cross_correlation(struct Map_info *Map, double passWE, double passNS)
     ndata = Vect_get_num_lines(Map);
 
     if (ndata > NDATA_MAX)
-	G_warning(_("CrossCorrelation: %d are too many points. "
+	G_warning(_("%d are too many points. "
 		    "The cross validation would take too much time."), ndata);
 
     /*points = Vect_new_line_struct (); */
@@ -82,11 +82,11 @@ int cross_correlation(struct Map_info *Map, double passWE, double passNS)
     /* Current region is read and points recorded into observ */
     observ = P_Read_Vector_Region_Map(Map, &region, &ndata, 1024, 1);
     G_debug(5, "CrossCorrelation: %d points read in region. ", ndata);
-    fprintf(stdout, _("CrossCorrelation: %d points read in region.\n"),
-	    ndata);
+    G_verbose_message(_("%d points read in region"),
+		      ndata);
 
     if (ndata > 50)
-	G_warning(_("CrossCorrelation: Maybe, it takes too long. "
+	G_warning(_("Maybe, it takes too long. "
 		    "It will depend on how many points you are considering."));
     else
 	G_debug(5, "CrossCorrelation: It shouldn't take too long.");
@@ -110,7 +110,8 @@ int cross_correlation(struct Map_info *Map, double passWE, double passNS)
 
 	    Fi = Vect_get_field(Map, bspline_field);
 	    if (Fi == NULL)
-		G_fatal_error(_("CrossCorrelation: Cannot read field info"));
+	      G_fatal_error(_("Database connection not defined for layer %d"),
+			    bspline_field);
 
 	    driver_cats =
 		db_start_driver_open_database(Fi->driver, Fi->database);
@@ -118,7 +119,7 @@ int cross_correlation(struct Map_info *Map, double passWE, double passNS)
 		    Fi->database);
 
 	    if (driver_cats == NULL)
-		G_fatal_error(_("CrossCorrelation: Cannot open database %s by driver %s"),
+		G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			      Fi->database, Fi->driver);
 
 	    nrec =
@@ -128,13 +129,14 @@ int cross_correlation(struct Map_info *Map, double passWE, double passNS)
 
 	    ctype = cvarr.ctype;
 	    if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE)
-		G_fatal_error(_("CrossCorrelation: Column type not supported"));
+		G_fatal_error(_("Column type not supported"));
 
 	    if (nrec < 0)
-		G_fatal_error(_("CrossCorrelation: Cannot select data from table"));
+		G_fatal_error(_("No records selected from table <%s> "),
+			      Fi->table);
 
-	    G_message(_("CrossCorrelation: %d records selected from table"),
-		      nrec);
+	    G_debug(1, "%d records selected from table",
+		    nrec);
 
 	    db_close_database_shutdown_driver(driver_cats);
 	}
@@ -145,7 +147,7 @@ int cross_correlation(struct Map_info *Map, double passWE, double passNS)
 	nparam_spl = nsplx * nsply;	/* Total number of splines */
 
 	if (nparam_spl > 22900)
-	    G_fatal_error(_("CrossCorrelation: Too many splines (%d x %d). "
+	    G_fatal_error(_("Too many splines (%d x %d). "
 			    "Consider changing spline steps \"sie=\" \"sin=\"."),
 			  nsplx, nsply);
 
@@ -163,10 +165,9 @@ int cross_correlation(struct Map_info *Map, double passWE, double passNS)
 
 	for (lbd = 0; lbd < PARAM_LAMBDA; lbd++) {	/* For each lambda value */
 
-	    fprintf(stdout,
-		    _("CrossCorrelation: Begining cross validation with "
-		      "lambda_i=%.4f ...\n"), lambda[lbd]);
-
+	    G_message(_("Begining cross validation with "
+			"lambda_i=%.4f..."), lambda[lbd]);
+	    
 	    /*
 	       How cross correlation algorithm is done:
 	       For each cicle, only the first ndata-1 "observ" elements are considered for the 
@@ -214,7 +215,7 @@ int cross_correlation(struct Map_info *Map, double passWE, double passNS)
 			    obs_mean[i] = dval;
 			}
 			if (ret != DB_OK) {
-			    G_warning(_("CrossCorrelation: No record for point (cat = %d)"),
+			    G_warning(_("No record for point (cat = %d)"),
 				      cat);
 			    continue;
 			}
@@ -284,12 +285,9 @@ int cross_correlation(struct Map_info *Map, double passWE, double passNS)
 	    stdev[lbd] =
 		calc_standard_deviation(stat_vect.error, stat_vect.n_points);
 
-	    fprintf(stdout, _("CrossCorrelation: Mean = %.5lf\n"), mean[lbd]);
-	    fprintf(stdout,
-		    _("CrossCorrelation: Root Means Square (RMS) = %.5lf\n"),
-		    rms[lbd]);
-	    fprintf(stdout,
-		    "\n---------------------o-o-------------------\n\n");
+	    G_message(_("Mean = %.5lf"), mean[lbd]);
+	    G_message(_("Root Means Square (RMS) = %.5lf"),
+		      rms[lbd]);
 	}			/* ENDFOR each lambda value */
 
 	G_free_matrix(N);
@@ -304,31 +302,28 @@ int cross_correlation(struct Map_info *Map, double passWE, double passNS)
 	stdev_min = find_minimum(stdev, &lbd_min);
 
 	/* Writing some output */
-	fprintf(stdout,
-		_("CrossCorrelation: Different number of splines and lambda_i values have "
-		 "been taken for the cross correlation\n"));
-	fprintf(stdout,
-		_("CrossCorrelation: The minimum value for the test (rms=%lf) was obtained with:\n"),
-		rms_min);
-	fprintf(stdout, _("CrossCorrelation: lambda_i = %.3f\n"),
-		lambda[lbd_min]);
+	G_message(_("Different number of splines and lambda_i values have "
+		    "been taken for the cross correlation"));
+	G_message(_("The minimum value for the test (rms=%lf) was "
+		    "obtained with: lambda_i = %.3f"),
+		  rms_min,
+		  lambda[lbd_min]);
 
 	*lambda_min = lambda[lbd_min];
 #endif
 
-	fprintf(stdout, _("Now, the results into a table:\n"));
-	fprintf(stdout, _(" lambda    | mean        | rms         |\n"));
+	G_message(_("Results into a table:"));
+	G_message(_(" lambda    | mean        | rms         |"));
 	for (lbd = 0; lbd < PARAM_LAMBDA; lbd++) {
-	    fprintf(stdout, _(" %-10.5f| %-12.4f| %-12.4f|\n"), lambda[lbd],
-		    mean[lbd], rms[lbd]);
+	    G_message(_(" %-10.5f| %-12.4f| %-12.4f|"), lambda[lbd],
+		      mean[lbd], rms[lbd]);
 	}
-	fprintf(stdout, _("\nResults are over.\n"));
-
+	
 	G_free_vector(mean);
 	G_free_vector(rms);
     }				/* ENDIF (ndata > 0) */
     else
-	G_warning(_("CrossCorrelation: No point lies into the current region"));
+	G_warning(_("No point lies into the current region"));
 
     G_free(observ);
     return TRUE;

@@ -103,12 +103,13 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
     if (open_db) {
 	fi = Vect_get_field(Map, (Clist->field > 0 ? Clist->field : 1));
 	if (fi == NULL) {
-	    G_fatal_error(_("Cannot read field info"));
+	    G_fatal_error(_("Database connection not defined for layer %d"),
+			  (Clist->field > 0 ? Clist->field : 1));
 	}
 
 	driver = db_start_driver_open_database(fi->driver, fi->database);
 	if (driver == NULL)
-	    G_fatal_error(_("Cannot open database %s by driver %s"),
+	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			  fi->database, fi->driver);
     }
 
