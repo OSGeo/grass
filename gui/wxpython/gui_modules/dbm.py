@@ -590,13 +590,17 @@ class AttributeManager(wx.Frame):
             sqlSimple.Bind(wx.EVT_RADIOBUTTON,   self.OnChangeSql)
             sqlAdvanced.Bind(wx.EVT_RADIOBUTTON, self.OnChangeSql)
 
-            sqlWhere = wx.TextCtrl(parent=panel, id=wx.ID_ANY, value="",
-                                   style=wx.TE_PROCESS_ENTER)
+            sqlWhereColumn = wx.Choice(parent=panel, id=wx.ID_ANY,
+                                       size=(100,-1),
+                                       choices=self.mapDBInfo.GetColumns(self.mapDBInfo.layers[layer]['table']))
+            sqlWhereValue = wx.TextCtrl(parent=panel, id=wx.ID_ANY, value="",
+                                        style=wx.TE_PROCESS_ENTER)
+
             sqlStatement = wx.TextCtrl(parent=panel, id=wx.ID_ANY,
                                        value="SELECT * FROM %s" % \
                                            self.mapDBInfo.layers[layer]['table'],
                                        style=wx.TE_PROCESS_ENTER)
-            sqlWhere.Bind(wx.EVT_TEXT_ENTER,     self.OnApplySqlStatement)
+            sqlWhereValue.Bind(wx.EVT_TEXT_ENTER, self.OnApplySqlStatement)
             sqlStatement.Bind(wx.EVT_TEXT_ENTER, self.OnApplySqlStatement)
 
             sqlLabel = wx.StaticText(parent=panel, id=wx.ID_ANY,
@@ -613,7 +617,9 @@ class AttributeManager(wx.Frame):
             sqlSimpleSizer = wx.BoxSizer(wx.HORIZONTAL)
             sqlSimpleSizer.Add(item=sqlLabel,
                                flag=wx.ALIGN_CENTER_VERTICAL)
-            sqlSimpleSizer.Add(item=sqlWhere, proportion=1,
+            sqlSimpleSizer.Add(item=sqlWhereColumn,
+                               flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
+            sqlSimpleSizer.Add(item=sqlWhereValue, proportion=1,
                                flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
             sqlFlexSizer.Add(item=sqlSimpleSizer,
                              flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
@@ -645,7 +651,8 @@ class AttributeManager(wx.Frame):
             self.layerPage[layer]['data']      = win.GetId()
             self.layerPage[layer]['simple']    = sqlSimple.GetId()
             self.layerPage[layer]['advanced']  = sqlAdvanced.GetId()
-            self.layerPage[layer]['where']     = sqlWhere.GetId()
+            self.layerPage[layer]['whereColumn'] = sqlWhereColumn.GetId()
+            self.layerPage[layer]['where']     = sqlWhereValue.GetId()
             self.layerPage[layer]['builder']   = btnSqlBuilder.GetId()
             self.layerPage[layer]['statement'] = sqlStatement.GetId()
 
@@ -1572,6 +1579,12 @@ class AttributeManager(wx.Frame):
         """Layer tab changed"""
         pageNum = event.GetSelection()
         self.layer = self.mapDBInfo.layers.keys()[pageNum]
+        
+        try:
+            idCol = self.layerPage[self.layer]['whereColumn']
+        except KeyError:
+            idCol = None
+        
         try:
             self.OnChangeSql(None)
             # update statusbar
@@ -1580,7 +1593,12 @@ class AttributeManager(wx.Frame):
                                GetItemCount())
         except:
             pass
-
+        
+        if idCol:
+            winCol = self.FindWindowById(idCol)
+            table = self.mapDBInfo.layers[self.layer]["table"]
+            self.mapDBInfo.GetColumns(table)
+        
         event.Skip()
         
     def OnPageChanged(self, event):
@@ -1674,10 +1692,11 @@ class AttributeManager(wx.Frame):
         listWin = self.FindWindowById(self.layerPage[self.layer]['data'])
         if self.FindWindowById(self.layerPage[self.layer]['simple']).GetValue():
             # simple sql statement
-            where = self.FindWindowById(self.layerPage[self.layer]['where']).GetValue().strip()
+            whereCol = self.FindWindowById(self.layerPage[self.layer]['whereColumn']).GetStringSelection()
+            whereVal = self.FindWindowById(self.layerPage[self.layer]['where']).GetValue().strip()
             try:
-                if len(where) > 0:
-                    keyColumn = listWin.LoadData(self.layer, where=where)
+                if len(whereVal) > 0:
+                    keyColumn = listWin.LoadData(self.layer, where=whereCol + whereVal)
                 else:
                     keyColumn = listWin.LoadData(self.layer)
             except gcmd.CmdError, e:
