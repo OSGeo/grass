@@ -93,7 +93,7 @@ int path(struct Map_info *In, struct Map_info *Out, char *filename,
 
     driver = db_start_driver_open_database(Fi->driver, Fi->database);
     if (driver == NULL)
-	G_fatal_error(_("Cannot open database <%s> by driver <%s>"),
+	G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 		      Fi->database, Fi->driver);
 
     sprintf(buf,
@@ -106,7 +106,7 @@ int path(struct Map_info *In, struct Map_info *Out, char *filename,
 
     if (db_execute_immediate(driver, &sql) != DB_OK) {
 	db_close_database_shutdown_driver(driver);
-	G_fatal_error(_("Cannot create table: %s"), db_get_string(&sql));
+	G_fatal_error(_("Unable to create table: '%s'"), db_get_string(&sql));
     }
 
     if (db_create_index2(driver, Fi->table, "cat") != DB_OK)

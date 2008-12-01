@@ -62,9 +62,9 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("vector");
+    module->keywords = _("vector, metadata, history");
     module->description =
-	_("Outputs basic information about a user-specified vector map layer.");
+	_("Outputs basic information about a user-specified vector map.");
 
     /* get G_OPT_ from include/gis.h */
     in_opt = G_define_standard_option(G_OPT_V_MAP);
@@ -74,23 +74,28 @@ int main(int argc, char *argv[])
     histf = G_define_flag();
     histf->key = 'h';
     histf->description = _("Print vector history instead of info");
+    histf->guisection = _("Print");
 
     columns = G_define_flag();
     columns->key = 'c';
     columns->description =
 	_("Print types/names of table columns for specified layer instead of info");
+    columns->guisection = _("Print");
 
     gflag = G_define_flag();
     gflag->key = 'g';
     gflag->description = _("Print map region only");
+    gflag->guisection = _("Print");
 
     mflag = G_define_flag();
     mflag->key = 'm';
     mflag->description = _("Print map title only");
+    mflag->guisection = _("Print");
 
     tflag = G_define_flag();
     tflag->key = 't';
     tflag->description = _("Print topology information only");
+    tflag->guisection = _("Print");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -193,18 +198,22 @@ int main(int argc, char *argv[])
 		G_message(_("Displaying column types/names for database connection of layer %d:"),
 			  field);
 		if ((fi = Vect_get_field(&Map, field)) == NULL)
-		    G_fatal_error("Database connection not defined");
+		    G_fatal_error(_("Database connection not defined for layer %d"),
+				  field);
 		driver = db_start_driver(fi->driver);
 		if (driver == NULL)
-		    G_fatal_error("Cannot open driver %s", fi->driver);
+		    G_fatal_error(_("Unable to open driver <%s>"),
+				  fi->driver);
 		db_init_handle(&handle);
 		db_set_handle(&handle, fi->database, NULL);
 		if (db_open_database(driver, &handle) != DB_OK)
-		    G_fatal_error("Cannot open database <%s>", fi->database);
+		    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+			fi->database, fi->driver);
 		db_init_string(&table_name);
 		db_set_string(&table_name, fi->table);
 		if (db_describe_table(driver, &table_name, &table) != DB_OK)
-		    G_fatal_error("Cannot open table <%s>", fi->table);
+		    G_fatal_error(_("Unable to describe table <%s>"),
+				  fi->table);
 
 		ncols = db_get_table_number_of_columns(table);
 		for (col = 0; col < ncols; col++)

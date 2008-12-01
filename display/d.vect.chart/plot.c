@@ -4,6 +4,8 @@
 #include <grass/display.h>
 #include <grass/raster.h>
 #include <grass/symbol.h>
+#include <grass/glocale.h>
+
 #include "global.h"
 
 /* Returns 0 - ok , 1 - error */
@@ -33,13 +35,14 @@ plot(int ctype, struct Map_info *Map, int type, int field,
 
     Fi = Vect_get_field(Map, field);
     if (Fi == NULL)
-	G_fatal_error("No database table defined for selected field <%d>",
+	G_fatal_error(_("Database connection not defined for layer %d"),
 		      field);
 
     /* Open driver */
     driver = db_start_driver_open_database(Fi->driver, Fi->database);
     if (driver == NULL) {
-	G_warning("Cannot open database %s by driver %s", Fi->database,
+	G_warning(_("Unable to open database <%s> by driver <%s>"),
+		  Fi->database,
 		  Fi->driver);
 	return 1;
     }
@@ -79,7 +82,8 @@ plot(int ctype, struct Map_info *Map, int type, int field,
 
 	if (db_open_select_cursor(driver, &sql, &cursor, DB_SEQUENTIAL) !=
 	    DB_OK) {
-	    G_warning("Cannot open select cursor: %s", buf);
+	    G_warning(_("Unable to open select cursor: '%s'"),
+		      buf);
 	    return 1;
 	}
 

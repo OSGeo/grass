@@ -317,7 +317,8 @@ struct Map_info *G_sites_open_old(const char *name, const char *mapset)
 
     driver = db_start_driver_open_database(fi->driver, fi->database);
     if (driver == NULL)
-	G_fatal_error(_("Cannot open database %s by driver %s"), fi->database,
+	G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+		      fi->database,
 		      fi->driver);
 
     db_init_string(&stmt);
@@ -325,7 +326,8 @@ struct Map_info *G_sites_open_old(const char *name, const char *mapset)
     db_append_string(&stmt, fi->table);
 
     if (db_open_select_cursor(driver, &stmt, &cursor, DB_SEQUENTIAL) != DB_OK)
-	G_fatal_error(_("Cannot select attributes"));
+	G_fatal_error(_("Unable to open select cursor: '%s'"),
+		      db_get_string(&stmt));
 
     nrows = db_get_num_rows(&cursor);
     G_debug(1, "%d rows selected from vector attribute table", nrows);

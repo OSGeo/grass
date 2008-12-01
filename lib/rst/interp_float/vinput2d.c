@@ -76,7 +76,8 @@ int IL_vector_input_data_2d(struct interp_params *params, struct Map_info *Map,	
 	G_message(_("Loading data from attribute table ..."));
 	Fi = Vect_get_field(Map, field);
 	if (Fi == NULL)
-	    G_fatal_error(_("Cannot get layer info"));
+	    G_fatal_error(_("Database connection not defined for layer %d"),
+			  field);
 	G_debug(3, "  driver = %s database = %s table = %s", Fi->driver,
 		Fi->database, Fi->table);
 	db_init_handle(&handle);
@@ -84,7 +85,8 @@ int IL_vector_input_data_2d(struct interp_params *params, struct Map_info *Map,	
 	driver = db_start_driver(Fi->driver);
 	db_set_handle(&handle, Fi->database, NULL);
 	if (db_open_database(driver, &handle) != DB_OK)
-	    G_fatal_error(_("Cannot open database %s"), Fi->database);
+	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+			  Fi->database, Fi->driver);
 
 	zctype = db_column_Ctype(driver, Fi->table, zcol);
 	G_debug(3, " zcol C type = %d", zctype);

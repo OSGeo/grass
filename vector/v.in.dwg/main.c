@@ -6,7 +6,7 @@
  *                
  *  PURPOSE:      Import of DWG/DXF files
  *                
- *  COPYRIGHT:    (C) 2001 by the GRASS Development Team
+ *  COPYRIGHT:    (C) 2001-2008 by the GRASS Development Team
  * 
  *                This program is free software under the 
  *                GNU General Public License (>=v2). 
@@ -80,14 +80,10 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     module->keywords = _("vector, import");
-    module->description = "Convert DWG/DXF to GRASS vector map";
+    module->description = _("Converts DWG/DXF to GRASS vector map");
 
-    in_opt = G_define_option();
-    in_opt->key = "input";
-    in_opt->type = TYPE_STRING;
-    in_opt->required = YES;
-    in_opt->description = "DWG or DXF file";
-    in_opt->gisprompt = "old_file,file,input";
+    in_opt = G_define_standard_option(G_OPT_F_INPUT);
+    in_opt->description = _("Name of DWG or DXF file");
 
     out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
     out_opt->required = YES;
@@ -97,28 +93,28 @@ int main(int argc, char *argv[])
     layers_opt->type = TYPE_STRING;
     layers_opt->required = NO;
     layers_opt->multiple = YES;
-    layers_opt->description = "List of layers to import";
+    layers_opt->description = _("List of layers to import");
 
     invert_flag = G_define_flag();
     invert_flag->key = 'i';
     invert_flag->description =
-	"Invert selection by layers (don't import layers in list)";
+	_("Invert selection by layers (don't import layers in list)");
 
     z_flag = G_define_flag();
     z_flag->key = 'z';
-    z_flag->description = "Create 3D vector";
+    z_flag->description = _("Create 3D vector map");
 
     circle_flag = G_define_flag();
     circle_flag->key = 'c';
-    circle_flag->description = "Write circles as points (centre)";
+    circle_flag->description = _("Write circles as points (centre)");
 
     l_flag = G_define_flag();
     l_flag->key = 'l';
-    l_flag->description = "List available layers and exit";
+    l_flag->description = _("List available layers and exit");
 
     int_flag = G_define_flag();
     int_flag->key = 'n';
-    int_flag->description = "Use numeric type for attribute \"layer\"";
+    int_flag->description = _("Use numeric type for attribute \"layer\"");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -138,10 +134,10 @@ int main(int argc, char *argv[])
     /* Init OpenDWG */
     sprintf(path, "%s/etc/adinit.dat", G_gisbase());
     if (!adInitAd2(path, &initerror)) {
-	sprintf(buf, "Unable to initialize OpenDWG Toolkit, error: %d: %s.",
+	sprintf(buf, _("Unable to initialize OpenDWG Toolkit, error: %d: %s."),
 		initerror, adErrorStr(initerror));
 	if (initerror == AD_UNABLE_TO_OPEN_INIT_FILE)
-	    sprintf(buf, "%s Cannot open %s", buf, path);
+	    sprintf(buf, _("%s Cannot open %s"), buf, path);
 	G_fatal_error(buf);
     }
     adSetupDwgRead();
@@ -149,7 +145,8 @@ int main(int argc, char *argv[])
 
     /* Open input file */
     if ((dwghandle = adLoadFile(in_opt->answer, AD_PRELOAD_ALL, 1)) == NULL) {
-	G_fatal_error("Cannot open input file. Error %d: %s", adError(),
+	G_fatal_error(_("Unable to open input file <%s>. Error %d: %s"),
+		      in_opt->answer, adError(),
 		      adErrorStr(adError()));
     }
 
@@ -211,7 +208,7 @@ int main(int argc, char *argv[])
 	db_start_driver_open_database(Fi->driver,
 				      Vect_subst_var(Fi->database, &Map));
     if (driver == NULL) {
-	G_fatal_error("Cannot open database %s by driver %s",
+	G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 		      Vect_subst_var(Fi->database, &Map), Fi->driver);
     }
     db_begin_transaction(driver);
@@ -236,15 +233,17 @@ int main(int argc, char *argv[])
     if (db_execute_immediate(driver, &sql) != DB_OK) {
 	db_close_database(driver);
 	db_shutdown_driver(driver);
-	G_fatal_error("Cannot create table: %s", db_get_string(&sql));
+	G_fatal_error(_("Unable to create table: '%s'", db_get_string(&sql));
     }
 
     if (db_create_index2(driver, Fi->table, "cat") != DB_OK)
-	G_warning("Cannot create index");
+	G_warning(_("Unable to create index for table <%s>, key <%s>"),
+		  Fi->table, "cat");
 
     if (db_grant_on_table
 	(driver, Fi->table, DB_PRIV_SELECT, DB_GROUP | DB_PUBLIC) != DB_OK)
-	G_fatal_error("Cannot grant privileges on table %s", Fi->table);
+	G_fatal_error(_("Unable to grant privileges on table <%s>"),
+		      Fi->table);
 
     cat = 1;
     n_elements = n_skipped = 0;
@@ -271,11 +270,6 @@ int main(int argc, char *argv[])
 	}
     }
 
-    G_message(_("%d elements processed"), n_elements);
-    if (n_skipped > 0)
-	G_message(_("%d elements skipped (layer name was not in list)"),
-		  n_skipped);
-
     db_commit_transaction(driver);
     db_close_database_shutdown_driver(driver);
 
@@ -284,6 +278,12 @@ int main(int argc, char *argv[])
 
     Vect_build(&Map, stderr);
     Vect_close(&Map);
+    
+    if (n_skipped > 0)
+	G_message(_("%d elements skipped (layer name was not in list)"),
+		  n_skipped);
+    
+    G_done_msg(_("%d elements processed"), n_elements);
 
     exit(EXIT_SUCCESS);
 }

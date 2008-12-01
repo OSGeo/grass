@@ -38,10 +38,11 @@ int execute_random(struct rr_state *theState)
 
     /* open the data files, input raster should be set-up already */
     if ((infd = theState->fd_old) < 0)
-	G_fatal_error(_("Cannot open raster map <%s>"), theState->inraster);
+	G_fatal_error(_("Unable to open raster map <%s>"),
+		      theState->inraster);
     if (theState->docover == 1) {
 	if ((cinfd = theState->fd_cold) < 0)
-	    G_fatal_error(_("Cannot open cover raster map <%s>"),
+	    G_fatal_error(_("Unable to open raster map <%s>"),
 			  theState->inrcover);
     }
 
@@ -51,7 +52,7 @@ int execute_random(struct rr_state *theState)
 	else
 	    type = theState->buf.type;
 	if ((outfd = G_open_raster_new(theState->outraster, type)) < 0)
-	    G_fatal_error(_("Cannot create raster map <%s>"),
+	    G_fatal_error(_("Unable to create raster map <%s>"),
 			  theState->outraster);
 	theState->fd_new = outfd;
 
@@ -70,7 +71,7 @@ int execute_random(struct rr_state *theState)
 	    db_start_driver_open_database(fi->driver,
 					  Vect_subst_var(fi->database, &Out));
 	if (!driver)
-	    G_fatal_error(_("Cannot open database <%s> by driver <%s>"),
+	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			  Vect_subst_var(fi->database, &Out), fi->driver);
 
 	Vect_map_add_dblink(&Out, 1, NULL, fi->table, "cat", fi->database,

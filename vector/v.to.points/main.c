@@ -60,7 +60,7 @@ void write_point(struct Map_info *Out, double x, double y, double z,
 	db_append_string(&stmt, buf);
 
 	if (db_execute_immediate(driver, &stmt) != DB_OK) {
-	    G_warning(_("Cannot insert new record: %s"),
+	    G_warning(_("Unable to insert new record: '%s'"),
 		      db_get_string(&stmt));
 	}
     }
@@ -265,7 +265,8 @@ int main(int argc, char **argv)
 							   &Out), Fi->table);
 
 	    if (ret == DB_FAILED) {
-		G_fatal_error(_("Cannot copy table"));
+		G_fatal_error(_("Unable to copy table <%s>"),
+			      Fin->table);
 	    }
 	}
 
@@ -276,7 +277,7 @@ int main(int argc, char **argv)
 	/* Open driver */
 	driver = db_start_driver_open_database(Fi->driver, Fi->database);
 	if (driver == NULL)
-	    G_fatal_error(_("Cannot open database <%s> by driver <%s>"),
+	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			  Fi->database, Fi->driver);
 
 	sprintf(buf,
@@ -286,16 +287,18 @@ int main(int argc, char **argv)
 
 	if (db_execute_immediate(driver, &stmt) != DB_OK) {
 	    db_close_database_shutdown_driver(driver);
-	    G_fatal_error(_("Cannot create table: %s"), db_get_string(&stmt));
+	    G_fatal_error(_("Unable to create table: '%s'"),
+			  db_get_string(&stmt));
 	}
 
 	if (db_create_index2(driver, Fi->table, "cat") != DB_OK)
-	    G_warning(_("Cannot create index"));
+	    G_warning(_("Unable to create index for table <%s>, key <%s>"),
+		      Fi->table, "cat");
 
 	if (db_grant_on_table
 	    (driver, Fi->table, DB_PRIV_SELECT,
 	     DB_GROUP | DB_PUBLIC) != DB_OK)
-	    G_fatal_error(_("Cannot grant privileges on table <%s>"),
+	    G_fatal_error(_("Unable to grant privileges on table <%s>"),
 			  Fi->table);
 
 	db_begin_transaction(driver);
