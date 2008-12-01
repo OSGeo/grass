@@ -140,10 +140,9 @@ int add_pt(SHORT r, SHORT c, SHORT downr, SHORT downc, CELL ele, CELL downe)
 int drop_pt(void)
 {
     int child, childr, parent;
-    int childp, childrp, parentp;
+    int childp, childrp;
     CELL ele, eler;
     int i;
-    POINT point;
     HEAP heap_pos;
 
     if (heap_size == 1) {
@@ -220,7 +219,6 @@ int drop_pt(void)
 int sift_up(int start, CELL ele)
 {
     int parent, parentp, child, childp;
-    POINT point;
     CELL elep;
     HEAP heap_pos;
 
