@@ -356,6 +356,8 @@ int main(int argc, char *argv[])
 
     ret = system(command);
 
+    if(ret != EXIT_SUCCESS)
+	G_warning(_("Subprocess failed with exit code %d"), ret);
 
     /* record map metadata/history info */
     if (opt8->answer)
