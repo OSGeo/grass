@@ -8,6 +8,7 @@ int find_pourpts(void)
 
     basin_num = 0;
     for (row = 0; row < nrows; row++) {
+	G_percent(row, nrows, 3);
 	northing = window.north - (row + .5) * window.ns_res;
 	for (col = 0; col < ncols; col++) {
 	    /* cseg_get (&wat, &value, row, col);
@@ -39,6 +40,7 @@ int find_pourpts(void)
 	    }
 	}
     }
+    G_percent(nrows, nrows, 1);	/* finish it */
 
     return 0;
 }

@@ -8,7 +8,13 @@
 int init_vars(int argc, char *argv[])
 {
     SHORT r, c;
-    int fd, num_cseg_total, num_cseg, num_cseg_bytes;
+    int fd, num_cseg_total, num_open_segs;
+    int seg_rows, seg_cols;
+    double segs_mb;
+    char *mb_opt;
+
+    /* int page_block, num_cseg; */
+    int max_bytes;
     CELL *buf, alt_value, wat_value, asp_value, worked_value;
     char MASK_flag;
 
@@ -21,7 +27,7 @@ int init_vars(int argc, char *argv[])
     max_length = dzero = 0.0;
     ril_value = -1.0;
     /* dep_slope = 0.0; */
-    num_cseg_bytes = MAX_BYTES - 4 * PAGE_BLOCK;
+    max_bytes = 0;
     sides = 8;
     for (r = 1; r < argc; r++) {
 	if (sscanf(argv[r], "el=%[^\n]", ele_name) == 1)
@@ -54,6 +60,11 @@ int init_vars(int argc, char *argv[])
 	    ls_flag++;
 	else if (sscanf(argv[r], "ob=%[^\n]", ob_name) == 1)
 	    ob_flag++;
+	else if (sscanf(argv[r], "mb=%[^\n]", mb_opt) == 1) {
+	    if (sscanf(mb_opt, "%lf", &segs_mb) == 0) {
+		segs_mb = 300;
+	    }
+	}
 	else if (sscanf(argv[r], "r=%[^\n]", ril_name) == 1) {
 	    if (sscanf(ril_name, "%lf", &ril_value) == 0) {
 		ril_value = -1.0;
@@ -110,32 +121,46 @@ int init_vars(int argc, char *argv[])
 		window.ns_res * window.ns_res);
     if (sides == 4)
 	diag *= 0.5;
-    if (ls_flag)
-	num_cseg_bytes -= PAGE_BLOCK;
-    if (sg_flag)
-	num_cseg_bytes -= PAGE_BLOCK;
-    if (ril_flag)
-	num_cseg_bytes -= PAGE_BLOCK;
-    /* if (dep_flag == -1) num_cseg_bytes -= PAGE_BLOCK; */
-    if (sl_flag)
-	num_cseg_bytes -= sizeof(double) * SROW * SCOL * 4;
-    num_cseg = sizeof(CELL) * 3 + sizeof(double);
-    num_cseg_bytes /= num_cseg * 4 * SROW * SCOL;
+
+    /* segment parameters: one size fits all. Fine tune? */
+    /* Segment rows and cols: 200 */
+    /* 1 segment open for all rasters: 2.86 MB */
+    /* num_open_segs = segs_mb / 2.86 */
+
+    seg_rows = SROW;
+    seg_cols = SCOL;
+
+    if (segs_mb < 3.0) {
+	segs_mb = 300;
+	G_warning(_("Maximum memory to be used was smaller than 3 MB, set to default = 300 MB."));
+    }
+
+    num_open_segs = segs_mb / 2.86;
+
+    G_debug(1, "segs MB: %.0f", segs_mb);
+    G_debug(1, "seg cols: %d", seg_cols);
+    G_debug(1, "seg rows: %d", seg_rows);
+
     num_cseg_total = nrows / SROW + 1;
-    G_debug(1, "    segments in row:\t%d", num_cseg_total);
+    G_debug(1, "   row segments:\t%d", num_cseg_total);
 
     num_cseg_total = ncols / SCOL + 1;
-    G_debug(1, "segments in columns:\t%d", num_cseg_total);
+    G_debug(1, "column segments:\t%d", num_cseg_total);
 
-    num_cseg_total = (ncols / SCOL + 1) * (nrows / SROW + 1);
-    G_debug(1, "     total segments:\t%d", num_cseg_total);
-    G_debug(1, "      open segments:\t%d", num_cseg_bytes);
+    num_cseg_total = (ncols / seg_cols + 1) * (nrows / seg_rows + 1);
+    G_debug(1, " total segments:\t%d", num_cseg_total);
+    G_debug(1, "  open segments:\t%d", num_open_segs);
 
-    cseg_open(&alt, SROW, SCOL, num_cseg_bytes);
-    cseg_open(&r_h, SROW, SCOL, 4);
+    /* nonsense to have more segments open than exist */
+    if (num_open_segs > nrows)
+	num_open_segs = nrows;
+    G_debug(1, "  open segments after adjusting:\t%d", num_open_segs);
+
+    cseg_open(&alt, seg_rows, seg_cols, num_open_segs);
+    cseg_open(&r_h, seg_rows, seg_cols, num_open_segs);
     cseg_read_cell(&alt, ele_name, "");
     cseg_read_cell(&r_h, ele_name, "");
-    cseg_open(&wat, SROW, SCOL, num_cseg_bytes);
+    cseg_open(&wat, seg_rows, seg_cols, num_open_segs);
 
     if (run_flag) {
 	cseg_read_cell(&wat, run_name, "");
@@ -147,7 +172,7 @@ int init_vars(int argc, char *argv[])
 		    exit(EXIT_FAILURE);
 	}
     }
-    cseg_open(&asp, SROW, SCOL, num_cseg_bytes);
+    cseg_open(&asp, seg_rows, seg_cols, num_open_segs);
     if (pit_flag) {
 	cseg_read_cell(&asp, pit_name, "");
     }
@@ -158,7 +183,7 @@ int init_vars(int argc, char *argv[])
 		    exit(EXIT_FAILURE);
 	}
     }
-    bseg_open(&swale, SROW, SCOL, num_cseg_bytes);
+    bseg_open(&swale, seg_rows, seg_cols, num_open_segs);
     if (ob_flag) {
 	bseg_read_cell(&swale, ob_name, "");
     }
@@ -169,11 +194,11 @@ int init_vars(int argc, char *argv[])
 	}
     }
     if (ril_flag) {
-	dseg_open(&ril, 1, (int)PAGE_BLOCK / sizeof(double), 1);
+	dseg_open(&ril, 1, seg_rows * seg_cols, num_open_segs);
 	dseg_read_cell(&ril, ril_name, "");
     }
-    bseg_open(&in_list, SROW, SCOL, num_cseg_bytes);
-    bseg_open(&worked, SROW, SCOL, num_cseg_bytes);
+    bseg_open(&in_list, seg_rows, seg_cols, num_open_segs);
+    bseg_open(&worked, seg_rows, seg_cols, num_open_segs);
     MASK_flag = 0;
     do_points = nrows * ncols;
     if (NULL != G_find_file("cell", "MASK", G_mapset())) {
@@ -197,16 +222,26 @@ int init_vars(int argc, char *argv[])
 	    G_free(buf);
 	}
     }
-    dseg_open(&slp, SROW, SCOL, num_cseg_bytes);
-    dseg_open(&s_l, SROW, SCOL, 4);
+    /* dseg_open(&slp, SROW, SCOL, num_open_segs); */
+    dseg_open(&s_l, seg_rows, seg_cols, num_open_segs);
     if (sg_flag)
-	dseg_open(&s_g, 1, (int)PAGE_BLOCK / sizeof(double), 1);
+	dseg_open(&s_g, 1, seg_rows * seg_cols, num_open_segs);
     if (ls_flag)
-	dseg_open(&l_s, 1, (int)PAGE_BLOCK / sizeof(double), 1);
-    seg_open(&astar_pts, 1, do_points, 1, PAGE_BLOCK / sizeof(POINT),
-	     4, sizeof(POINT));
-    first_astar = first_cum = -1;
+	dseg_open(&l_s, 1, seg_rows * seg_cols, num_open_segs);
+    seg_open(&astar_pts, 1, do_points, 1, seg_rows * seg_cols,
+	     num_open_segs, sizeof(POINT));
+
+    /* heap_index will track astar_pts in the binary min-heap */
+    /* heap_index is one-based */
+    seg_open(&heap_index, 1, do_points + 1, 1, seg_rows * seg_cols,
+	     num_open_segs, sizeof(HEAP));
+
     G_message(_("SECTION 1b (of %1d): Determining Offmap Flow."), tot_parts);
+
+    /* heap is empty */
+    heap_size = 0;
+
+    first_astar = first_cum = -1;
 
     if (MASK_flag) {
 	for (r = 0; r < nrows; r++) {
@@ -343,15 +378,15 @@ int init_vars(int argc, char *argv[])
 		    }
 		    else {
 			bseg_put(&in_list, &zero, r, c);
-			dseg_put(&slp, &dzero, r, c);
+			/* dseg_put(&slp, &dzero, r, c); */
 		    }
 		}
 	    }
 	}
-	G_percent(r, nrows, 3);	/* finish it */
     }
     else {
 	for (r = 0; r < nrows; r++) {
+	    G_percent(r, nrows, 3);
 	    for (c = 0; c < ncols; c++) {
 		bseg_put(&worked, &zero, r, c);
 		dseg_put(&s_l, &half_res, r, c);
@@ -381,11 +416,12 @@ int init_vars(int argc, char *argv[])
 		}
 		else {
 		    bseg_put(&in_list, &zero, r, c);
-		    dseg_put(&slp, &dzero, r, c);
+		    /* dseg_put(&slp, &dzero, r, c); */
 		}
 	    }
 	}
     }
+    G_percent(r, nrows, 3);	/* finish it */
 
     return 0;
 }
