@@ -18,10 +18,10 @@
 #define MIN_GRADIENT_DEGREES	1
 #define DEG_TO_RAD		((2 * M_PI) / 360.)
 #define METER_TO_FOOT		(1 / 0.3048)
-#define MAX_BYTES		2000000
-#define PAGE_BLOCK		512
-#define SROW			9
-#define SCOL   			13
+#define MAX_BYTES		10485760
+#define PAGE_BLOCK		1024
+#define SROW			200
+#define SCOL   			200
 #define RITE			1
 #define LEFT			2
 #define NEITHER			0
@@ -35,8 +35,16 @@ POINT {
     int nxt;
 };
 
+#define HEAP    struct heap_item
+HEAP {
+   int point;
+   CELL ele;
+};
+
 extern struct Cell_head window;
 
+extern SSEG heap_index;
+extern int heap_size;
 extern int first_astar, first_cum, nxt_avail_pt, total_cells, do_points;
 extern SHORT nrows, ncols;
 extern double half_res, diag, max_length, dep_slope;
@@ -78,6 +86,7 @@ CELL def_basin(int, int, CELL, double, CELL);
 /* do_astar.c */
 int do_astar(void);
 int add_pt(SHORT, SHORT, SHORT, SHORT, CELL, CELL);
+int drop_pt(void);
 double get_slope(SHORT, SHORT, SHORT, SHORT, CELL, CELL);
 int replace(SHORT, SHORT, SHORT, SHORT);
 

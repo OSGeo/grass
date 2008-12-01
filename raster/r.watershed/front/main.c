@@ -6,7 +6,7 @@
  *               Brad Douglas <rez touchofmadness.com>,
  *		 Hamish Bowman <hamish_b yahoo.com>
  * PURPOSE:      Watershed determination
- * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2008 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -40,6 +40,7 @@ int main(int argc, char *argv[])
     struct Option *opt13;
     struct Option *opt14;
     struct Option *opt15;
+    struct Option *opt16;
     struct Flag *flag_flow;
     struct Flag *flag_seg;
     struct GModule *module;
@@ -176,6 +177,13 @@ int main(int argc, char *argv[])
     opt15->type = TYPE_STRING;
     opt15->gisprompt = "new,cell,raster";
     opt15->guisection = _("Output_options");
+
+    opt16 = G_define_option() ;
+    opt16->key         = "memory";
+    opt16->type        = TYPE_INTEGER;
+    opt16->required    = NO;
+    opt16->answer      = "300"; /* 300MB default value, please keep in sync with r.terraflow */
+    opt16->description = _("Maximum memory to be used with -m flag (in MB)");
 
     flag_flow = G_define_flag();
     flag_flow->key = '4';
@@ -333,6 +341,13 @@ int main(int argc, char *argv[])
 	strcat(command, " S=");
 	strcat(command, "\"");
 	strcat(command, opt15->answer);
+	strcat(command, "\"");
+    }
+
+    if (flag_seg->answer && opt16->answer) {
+	strcat(command, " mb=");
+	strcat(command, "\"");
+	strcat(command, opt16->answer);
 	strcat(command, "\"");
     }
 
