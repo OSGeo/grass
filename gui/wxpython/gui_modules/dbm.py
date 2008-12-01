@@ -2460,8 +2460,16 @@ class LayerBook(wx.Notebook):
         cmdTable = gcmd.Command(['db.tables',
                                  '-p', '--q',
                                  'driver=%s' % driver,
-                                 'database=%s' % database])
+                                 'database=%s' % database], rerr=None)
 
+        if cmdTable.returncode != 0:
+            wx.MessageBox(parent=self,
+                          message=_("Unable to get list of tables.\n"
+                                    "Please use db.connect to set database parameters."),
+                          caption=_("Error"), style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
+
+            return tables
+        
         for table in cmdTable.ReadStdOutput():
             tables.append(table)
 
