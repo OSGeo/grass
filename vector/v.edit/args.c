@@ -38,12 +38,12 @@ int parser(int argc, char *argv[], struct GParams *params,
     params->map->description = _("Name of vector map to edit");
 
     params->fld = G_define_standard_option(G_OPT_V_FIELD);
-    params->fld->guisection = _("Query");
+    params->fld->guisection = _("Selection");
 
     params->type = G_define_standard_option(G_OPT_V_TYPE);
     params->type->answer = "point,line,boundary,centroid";
     params->type->options = "point,line,boundary,centroid";
-    params->type->guisection = _("Query");
+    params->type->guisection = _("Selection");
 
     params->tool = G_define_option();
     params->tool->key = "tool";
@@ -124,12 +124,12 @@ int parser(int argc, char *argv[], struct GParams *params,
     params->id->required = NO;
     params->id->key = "ids";
     params->id->label = _("ID values");
-    params->id->guisection = _("Query");
+    params->id->guisection = _("Selection");
 
 
     params->cat = G_define_standard_option(G_OPT_V_CATS);
     params->cat->required = NO;
-    params->cat->guisection = _("Query");
+    params->cat->guisection = _("Selection");
 
     params->coord = G_define_option();
     params->coord->key = "coords";
@@ -138,7 +138,7 @@ int parser(int argc, char *argv[], struct GParams *params,
     params->coord->required = NO;
     params->coord->multiple = YES;
     params->coord->description = _("List of point coordinates");
-    params->coord->guisection = _("Query");
+    params->coord->guisection = _("Selection");
 
     params->bbox = G_define_option();
     params->bbox->key = "bbox";
@@ -147,7 +147,7 @@ int parser(int argc, char *argv[], struct GParams *params,
     params->bbox->required = NO;
     params->bbox->multiple = NO;
     params->bbox->description = _("Bounding box for selecting features");
-    params->bbox->guisection = _("Query");
+    params->bbox->guisection = _("Selection");
 
     params->poly = G_define_option();
     params->poly->key = "polygon";
@@ -156,10 +156,10 @@ int parser(int argc, char *argv[], struct GParams *params,
     params->poly->required = NO;
     params->poly->multiple = YES;
     params->poly->description = _("Polygon for selecting features");
-    params->poly->guisection = _("Query");
+    params->poly->guisection = _("Selection");
 
     params->where = G_define_standard_option(G_OPT_DB_WHERE);
-    params->where->guisection = _("Query");
+    params->where->guisection = _("Selection");
 
     params->query = G_define_option();
     params->query->key = "query";
@@ -173,7 +173,7 @@ int parser(int argc, char *argv[], struct GParams *params,
 	_("length;Select only lines or boundaries shorter"
 	  "/longer than threshold distance;"
 	  "dangle;Select dangles shorter/longer than " "threshold distance");
-    params->query->guisection = _("Query");
+    params->query->guisection = _("Selection");
 
     params->bmaps = G_define_standard_option(G_OPT_V_MAPS);
     params->bmaps->key = "bgmap";

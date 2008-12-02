@@ -138,19 +138,19 @@ int main(int argc, char **argv)
     type_opt = G_define_standard_option(G_OPT_V_TYPE);
     type_opt->answer = "point,line,boundary,centroid,area,face";
     type_opt->options = "point,line,boundary,centroid,area,face";
-    type_opt->guisection = _("Query");
+    type_opt->guisection = _("Selection");
 
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
     field_opt->label =
 	_("Layer number (if -1, all layers are displayed)");
     field_opt->gisprompt = "old_layer,layer,layer_all";
-    field_opt->guisection = _("Query");
+    field_opt->guisection = _("Selection");
 
     cat_opt = G_define_standard_option(G_OPT_V_CATS);
-    cat_opt->guisection = _("Query");
+    cat_opt->guisection = _("Selection");
 
     where_opt = G_define_standard_option(G_OPT_DB_WHERE);
-    where_opt->guisection = _("Query");
+    where_opt->guisection = _("Selection");
 
     /* Colors */
     color_opt = G_define_option();
@@ -339,7 +339,7 @@ int main(int argc, char **argv)
     /* Query */
     id_flag = G_define_flag();
     id_flag->key = 'i';
-    id_flag->guisection = _("Query");
+    id_flag->guisection = _("Selection");
     id_flag->description = _("Use values from 'cats' option as feature id");
 
     zcol_flag = G_define_flag();
