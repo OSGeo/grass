@@ -63,7 +63,7 @@ int Vedit_modify_cats(struct Map_info *Map, struct ilist *List,
 		/* add new category */
 		if (!del) {
 		    if (Vect_cat_set(Cats, layer, cat) < 1) {
-			G_warning(_("Unable to set category %d for line %d"),
+			G_warning(_("Unable to set category %d for (feature id %d)"),
 				  cat, line);
 		    }
 		    else {
@@ -71,11 +71,7 @@ int Vedit_modify_cats(struct Map_info *Map, struct ilist *List,
 		    }
 		}
 		else {		/* delete old category */
-		    if (Vect_field_cat_del(Cats, layer, cat) == 0) {
-			G_warning(_("Unable to delete layer/category %d/%d line %d"),
-				  layer, cat, line);
-		    }
-		    else {
+		    if (Vect_field_cat_del(Cats, layer, cat) == 1) {
 			rewrite = 1;
 		    }
 		}
