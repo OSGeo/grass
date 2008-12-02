@@ -11,7 +11,6 @@ int init_vars(int argc, char *argv[])
     int fd, num_cseg_total, num_open_segs;
     int seg_rows, seg_cols;
     double segs_mb;
-    char *mb_opt;
 
     /* int page_block, num_cseg; */
     int max_bytes;
@@ -29,6 +28,7 @@ int init_vars(int argc, char *argv[])
     /* dep_slope = 0.0; */
     max_bytes = 0;
     sides = 8;
+    segs_mb = 300;
     for (r = 1; r < argc; r++) {
 	if (sscanf(argv[r], "el=%[^\n]", ele_name) == 1)
 	    ele_flag++;
@@ -60,11 +60,7 @@ int init_vars(int argc, char *argv[])
 	    ls_flag++;
 	else if (sscanf(argv[r], "ob=%[^\n]", ob_name) == 1)
 	    ob_flag++;
-	else if (sscanf(argv[r], "mb=%[^\n]", mb_opt) == 1) {
-	    if (sscanf(mb_opt, "%lf", &segs_mb) == 0) {
-		segs_mb = 300;
-	    }
-	}
+	else if (sscanf(argv[r], "mb=%lf", &segs_mb) == 1) ;
 	else if (sscanf(argv[r], "r=%[^\n]", ril_name) == 1) {
 	    if (sscanf(ril_name, "%lf", &ril_value) == 0) {
 		ril_value = -1.0;
@@ -138,8 +134,10 @@ int init_vars(int argc, char *argv[])
     num_open_segs = segs_mb / 2.86;
 
     G_debug(1, "segs MB: %.0f", segs_mb);
-    G_debug(1, "seg cols: %d", seg_cols);
+    G_debug(1, "region rows: %d", nrows);
     G_debug(1, "seg rows: %d", seg_rows);
+    G_debug(1, "region cols: %d", ncols);
+    G_debug(1, "seg cols: %d", seg_cols);
 
     num_cseg_total = nrows / SROW + 1;
     G_debug(1, "   row segments:\t%d", num_cseg_total);
@@ -152,8 +150,8 @@ int init_vars(int argc, char *argv[])
     G_debug(1, "  open segments:\t%d", num_open_segs);
 
     /* nonsense to have more segments open than exist */
-    if (num_open_segs > nrows)
-	num_open_segs = nrows;
+    if (num_open_segs > num_cseg_total)
+	num_open_segs = num_cseg_total;
     G_debug(1, "  open segments after adjusting:\t%d", num_open_segs);
 
     cseg_open(&alt, seg_rows, seg_cols, num_open_segs);
