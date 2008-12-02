@@ -622,6 +622,20 @@ struct Option *G_define_standard_option(int opt)
 	Opt->label = _("Category values");
 	Opt->description = _("Example: 1,3,7-9,13");
 	break;
+    case G_OPT_V_ID:
+	Opt->key = "id";
+	Opt->type = TYPE_INTEGER;
+	Opt->required = NO;
+	Opt->description = _("Feature id");
+	break;
+    case G_OPT_V_IDS:
+	Opt->key = "ids";
+	Opt->type = TYPE_STRING;
+	Opt->key_desc = "range";
+	Opt->required = NO;
+	Opt->label = _("Feature ids");
+	Opt->description = _("Example: 1,3,7-9,13");
+	break;
 
 	/* files */
     case G_OPT_F_INPUT:

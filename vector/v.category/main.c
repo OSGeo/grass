@@ -96,11 +96,8 @@ int main(int argc, char *argv[])
     field_opt->multiple = YES;
     field_opt->guisection = _("Selection");
 
-    id_opt = G_define_standard_option(G_OPT_V_CAT);
-    id_opt->multiple = YES;
-    id_opt->label = _("Feature id(s)");
-    id_opt->description = _("By default all ids are processed");
-    id_opt->key = "id";
+    id_opt = G_define_standard_option(G_OPT_V_IDS);
+    id_opt->label = _("Feature ids (by default all features are processed)");
     id_opt->guisection = _("Selection");
 
     cat_opt = G_define_standard_option(G_OPT_V_CAT);
