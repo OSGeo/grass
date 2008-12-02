@@ -69,9 +69,9 @@ int main(int argc, char *argv[])
 	_("Attach, delete or report vector categories to map geometry.");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
+
     out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
     out_opt->required = NO;
-    type_opt = G_define_standard_option(G_OPT_V_TYPE);
 
     option_opt = G_define_option();
     option_opt->key = "option";
@@ -88,14 +88,23 @@ int main(int argc, char *argv[])
 				 "report;print report (statistics), in shell style: layer type count min max;"
 				 "print;print category values, more cats in the same layer are separated by '/'");
 
-    cat_opt = G_define_standard_option(G_OPT_V_CAT);
-    cat_opt->answer = "1";
-    cat_opt->guisection = _("Selection");
+    type_opt = G_define_standard_option(G_OPT_V_TYPE);
+    type_opt->guisection = _("Selection");
 
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
     field_opt->answer = "1";
     field_opt->multiple = YES;
     field_opt->guisection = _("Selection");
+
+    id_opt = G_define_standard_option(G_OPT_V_CAT);
+    id_opt->multiple = YES;
+    id_opt->label = _("Feature id(s)");
+    id_opt->description = _("By default all ids are processed");
+    id_opt->key = "id";
+    id_opt->guisection = _("Selection");
+
+    cat_opt = G_define_standard_option(G_OPT_V_CAT);
+    cat_opt->answer = "1";
 
     step_opt = G_define_option();
     step_opt->key = "step";
@@ -104,12 +113,6 @@ int main(int argc, char *argv[])
     step_opt->multiple = NO;
     step_opt->answer = "1";
     step_opt->description = _("Category increment");
-
-    id_opt = G_define_standard_option(G_OPT_V_CAT);
-    id_opt->multiple = YES;
-    id_opt->label = _("Feature id(s)");
-    id_opt->description = _("By default all ids are processed");
-    id_opt->key = "id";
 
     shell = G_define_flag();
     shell->key = 'g';
