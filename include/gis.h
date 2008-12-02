@@ -190,6 +190,8 @@ static const char *GRASS_copyright __attribute__ ((unused))
     G_OPT_V_FIELD,		/* layer number (layers used to be called fields) */
     G_OPT_V_CAT,		/* one category */
     G_OPT_V_CATS,		/* more categories */
+    G_OPT_V_ID, 		/* one feature id */
+    G_OPT_V_IDS,		/* more feature ids */
 
     G_OPT_F_INPUT,		/* old input file */
     G_OPT_F_OUTPUT,		/* new output file */

@@ -38,6 +38,7 @@ int parser(int argc, char *argv[], struct GParams *params,
     params->map->description = _("Name of vector map to edit");
 
     params->fld = G_define_standard_option(G_OPT_V_FIELD);
+    params->fld->gisprompt = "new_layer,layer,layer";
     params->fld->guisection = _("Selection");
 
     params->type = G_define_standard_option(G_OPT_V_TYPE);
@@ -120,12 +121,8 @@ int parser(int argc, char *argv[], struct GParams *params,
 	_("'-1' for threshold based on the current resolution settings");
     params->maxdist->answer = "-1,0,0";
 
-    params->id = G_define_standard_option(G_OPT_V_CATS);
-    params->id->required = NO;
-    params->id->key = "ids";
-    params->id->label = _("ID values");
+    params->id = G_define_standard_option(G_OPT_V_IDS);
     params->id->guisection = _("Selection");
-
 
     params->cat = G_define_standard_option(G_OPT_V_CATS);
     params->cat->required = NO;
@@ -202,12 +199,7 @@ int parser(int argc, char *argv[], struct GParams *params,
     params->reverse = G_define_flag();
     params->reverse->key = 'r';
     params->reverse->description = _("Reverse selection");
-
-    /*
-       params -> print = G_define_flag();
-       params -> print -> key = 'i';
-       params -> print -> description = _("Print ID's of edited features");
-     */
+    params->reverse->guisection = _("Selection");
 
     params->close = G_define_flag();
     params->close->key = 'c';
@@ -227,16 +219,6 @@ int parser(int argc, char *argv[], struct GParams *params,
     params->move_first->key = '1';
     params->move_first->description =
 	_("Modify only first found feature in bounding box");
-
-    /*
-       params -> boundary = G_define_flag();
-       params -> boundary -> key = 'b';
-       params -> boundary -> description = _("Assign cats to boundaries too");
-
-       params -> print_cat = G_define_flag();
-       params -> print_cat -> key = 'c';
-       params -> print_cat -> description = _("Print category numbers instead of ID's");
-     */
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
