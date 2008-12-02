@@ -178,6 +178,7 @@ int main(int argc, char *argv[])
     if (action_mode != MODE_CREATE && action_mode != MODE_ADD) {
 	/* select lines */
 	List = Vect_new_list();
+	G_message(_("Selecting features..."));
 	if (action_mode == MODE_COPY && BgMap && BgMap[0]) {
 	    List = select_lines(BgMap[0], action_mode, &params, thresh, List);
 	}
