@@ -21,7 +21,6 @@
 #include <grass/glocale.h>
 #include <grass/gis.h>
 
-#if defined(HAVE_LIBINTL_H) && defined(USE_NLS)
 void G_init_locale(void)
 {
     static int initialized;
@@ -33,6 +32,7 @@ void G_init_locale(void)
     setlocale(LC_CTYPE, "");
     setlocale(LC_MESSAGES, "");
 
+#if defined(HAVE_LIBINTL_H) && defined(USE_NLS)
     gisbase = getenv("GISBASE");
     if (gisbase && *gisbase) {
 	char localedir[GPATH_MAX];
@@ -43,10 +43,10 @@ void G_init_locale(void)
 	bindtextdomain("grasslibs", localedir);
 	bindtextdomain("grassmods", localedir);
     }
+#endif
 
     G_initialize_done(&initialized);
 }
-#endif
 
 
 /**
