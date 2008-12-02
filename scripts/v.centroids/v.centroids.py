@@ -47,6 +47,7 @@
 #% key: layer
 #% type: integer
 #% description: Layer number
+#% gisprompt: old_layer,layer,layer
 #% answer: 1
 #% required: no
 #%end
