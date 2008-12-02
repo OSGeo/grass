@@ -18,6 +18,7 @@ dirs:
 	if [ ! -d $(ETC)/symbol/demo ]; then $(MKDIR) $(ETC)/symbol/demo ; fi
 	if [ ! -d $(ETC)/symbol/basic ]; then $(MKDIR) $(ETC)/symbol/basic ; fi
 	if [ ! -d $(ETC)/symbol/extra ]; then $(MKDIR) $(ETC)/symbol/extra ; fi
+	if [ ! -d $(ETC)/symbol/geology ]; then $(MKDIR) $(ETC)/symbol/geology ; fi
 
 symb:	$(SYMBOL_DST)
 
