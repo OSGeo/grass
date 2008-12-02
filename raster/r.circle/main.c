@@ -1,7 +1,7 @@
 
 /****************************************************************************
  *
- * MODULE:       r.cats
+ * MODULE:       r.circle
  *
  * AUTHOR(S):    Bill Brown - CERL (Jan, 1993)
  *               Markus Neteler
@@ -9,7 +9,7 @@
  * PURPOSE:      Creates a raster map containing concentric rings
  *	         around a given point.
  *
- * COPYRIGHT:    (C) 2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2006-2008 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -152,6 +152,9 @@ int main(int argc, char *argv[])
     G_command_history(&history);
     G_write_history(out_file->answer, &history);
 
+    G_done_msg(_("Raster map <%s> created."),
+	       out_file->answer);
+    
     return (EXIT_SUCCESS);
 }
 
