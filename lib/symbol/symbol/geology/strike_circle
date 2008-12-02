@@ -1,0 +1,13 @@
+VERSION 1.0
+BOX -0.5 -0.5 0.5 0.5
+STRING
+  LINE
+    -1 0
+     1 0
+  END
+END
+POLYGON
+  RING
+    ARC 0 0 0.333 0 180
+  END
+END
