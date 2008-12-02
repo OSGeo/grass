@@ -492,6 +492,8 @@ class GMFrame(wx.Frame):
     def OnAboutGRASS(self, event):
         """Display 'About GRASS' dialog"""
         info = wx.AboutDialogInfo()
+
+        rev = "$Revision$"
         # name
         info.SetName("GRASS GIS")
         # version
@@ -501,8 +503,8 @@ class GMFrame(wx.Frame):
         copyrightFile = open(os.path.join(os.getenv("GISBASE"), "COPYING"), 'r')
         copyrightOut = []
         copyright = copyrightFile.readlines()
-        info.SetCopyright(wordwrap(''.join(copyright[:11] + copyright[26:-3]),
-                                   550, wx.ClientDC(self)))
+        info.SetCopyright(rev + '\n\n' + wordwrap(''.join(copyright[:11] + copyright[26:-3]),
+                                                  550, wx.ClientDC(self)))
         copyrightFile.close()
         # website
         info.SetWebSite(("http://grass.osgeo.org", "The official GRASS site"))
