@@ -11,6 +11,7 @@ int sg_factor(void)
 
     G_message(_("SECTION 4: Length Slope determination."));
     for (r = nrows - 1; r >= 0; r--) {
+/* FIXME: G_percent params count backwards */
 	G_percent(r, nrows, 3);
 	for (c = ncols - 1; c >= 0; c--) {
 	    cseg_get(&alt, &low_elev, r, c);
