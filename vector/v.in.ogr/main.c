@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
     layer_opt->description =
 	_("Examples:\n" "\t\tESRI Shapefile: shapefile name\n"
 	  "\t\tMapInfo File: mapinfo file name");
-    layer_opt->guisection = _("Query");
+    layer_opt->guisection = _("Selection");
 
     spat_opt = G_define_option();
     spat_opt->key = "spatial";
@@ -140,7 +140,7 @@ int main(int argc, char *argv[])
 	_("Format: xmin,ymin,xmax,ymax - usually W,S,E,N");
 
     where_opt = G_define_standard_option(G_OPT_DB_WHERE);
-    where_opt->guisection = _("Query");
+    where_opt->guisection = _("Selection");
 
     min_area_opt = G_define_option();
     min_area_opt->key = "min_area";
@@ -162,7 +162,7 @@ int main(int argc, char *argv[])
 	  "line;import area boundaries as lines;"
 	  "boundary;import lines as area boundaries;"
 	  "centroid;import points as centroids");
-    type_opt->guisection = _("Query");
+    type_opt->guisection = _("Selection");
 
     snap_opt = G_define_option();
     snap_opt->key = "snap";

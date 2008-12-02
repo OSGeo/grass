@@ -126,9 +126,10 @@ int main(int argc, char **argv)
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
     field_opt->description =
 	_("Layer number. If -1, all layers are displayed.");
+    field_opt->guisection = _("Selection");
 
     where_opt = G_define_standard_option(G_OPT_DB_WHERE);
-    where_opt->guisection = _("Query");
+    where_opt->guisection = _("Selection");
 
     bwidth_opt = G_define_option();
     bwidth_opt->key = "bwidth";

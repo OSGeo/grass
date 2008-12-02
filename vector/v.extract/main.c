@@ -104,7 +104,7 @@ int main(int argc, char **argv)
     r_flag = G_define_flag();
     r_flag->key = 'r';
     r_flag->description = _("Reverse selection");
-    r_flag->guisection = _("Query");
+    r_flag->guisection = _("Selection");
 
     inopt = G_define_standard_option(G_OPT_V_INPUT);
 
@@ -114,19 +114,19 @@ int main(int argc, char **argv)
     typopt->answer = "point,line,boundary,centroid,area,face";
     typopt->options = "point,line,boundary,centroid,area,face";
     typopt->label = _("Types to be extracted");
-    typopt->guisection = _("Query");
+    typopt->guisection = _("Selection");
 
     fieldopt = G_define_standard_option(G_OPT_V_FIELD);
     fieldopt->label =
 	_("Layer number (if -1, all features in all layers of given type " "are extracted)");
-    fieldopt->guisection = _("Query");
+    fieldopt->guisection = _("Selection");
     
     listopt = G_define_standard_option(G_OPT_V_CATS);
     listopt->key = "list";
-    listopt->guisection = _("Query");
+    listopt->guisection = _("Selection");
 
     whereopt = G_define_standard_option(G_OPT_DB_WHERE);
-    whereopt->guisection = _("Query");
+    whereopt->guisection = _("Selection");
 
     fileopt = G_define_standard_option(G_OPT_F_INPUT);
     fileopt->key = "file";
@@ -134,7 +134,7 @@ int main(int argc, char **argv)
     fileopt->label =
 	_("Input text file with category numbers/number ranges to be extracted");
     fileopt->description = _("If '-' given reads from standard input");
-    fileopt->guisection = _("Query");
+    fileopt->guisection = _("Selection");
 
     nrandopt = G_define_option();
     nrandopt->key = "random";
@@ -144,7 +144,7 @@ int main(int argc, char **argv)
 	_("Number of random categories matching vector objects to extract");
     nrandopt->description =
 	_("Number must be smaller than unique cat count in layer");
-    nrandopt->guisection = _("Query");
+    nrandopt->guisection = _("Selection");
 
     newopt = G_define_option();
     newopt->key = "new";

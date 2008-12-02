@@ -90,10 +90,12 @@ int main(int argc, char *argv[])
 
     cat_opt = G_define_standard_option(G_OPT_V_CAT);
     cat_opt->answer = "1";
+    cat_opt->guisection = _("Selection");
 
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
     field_opt->answer = "1";
     field_opt->multiple = YES;
+    field_opt->guisection = _("Selection");
 
     step_opt = G_define_option();
     step_opt->key = "step";

@@ -65,7 +65,7 @@ int main(int argc, char **argv)
     catlist->required = NO;
     catlist->multiple = YES;
     catlist->description = _("List of categories to be displayed (INT maps)");
-    catlist->guisection = _("Query");
+    catlist->guisection = _("Selection");
 
     vallist = G_define_option();
     vallist->key = "vallist";
@@ -74,7 +74,7 @@ int main(int argc, char **argv)
     vallist->required = NO;
     vallist->multiple = YES;
     vallist->description = _("List of values to be displayed (FP maps)");
-    vallist->guisection = _("Query");
+    vallist->guisection = _("Selection");
 
     bg = G_define_option();
     bg->key = "bg";
@@ -91,7 +91,7 @@ int main(int argc, char **argv)
     flag_i = G_define_flag();
     flag_i->key = 'i';
     flag_i->description = _("Invert catlist");
-    flag_i->guisection = _("Query");
+    flag_i->guisection = _("Selection");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
