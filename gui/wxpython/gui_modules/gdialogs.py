@@ -953,7 +953,7 @@ class MultiImportDialog(wx.Dialog):
                 cmd.append('--overwrite')
             
             # run in Layer Manager
-            self.parent.goutput.RunCmd(cmd)
+            self.parent.goutput.RunCmd(cmd, switchPage=True)
 
         if self.add.IsChecked():
             maptree = self.parent.curr_page.maptree
@@ -978,7 +978,7 @@ class MultiImportDialog(wx.Dialog):
                                      lcmd=['d.vect',
                                            'map=%s' % name])
         
-        wx.CallAfter(self.parent.notebook.SetSelection, 0)
+        ### wx.CallAfter(self.parent.notebook.SetSelection, 0)
         
         self.OnCancel()
         
