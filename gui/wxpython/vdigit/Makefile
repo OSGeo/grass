@@ -47,6 +47,10 @@ else
 	$(SHLIB_LD) -o $@ $(LDFLAGS) $^ $(EXTRA_LIBS)
 endif
 
-install_vdigit: $(SHLIB) $(LIB_NAME).py
-	$(INSTALL) $(SHLIB) $(ETCDIR)/vdigit/
-	$(INSTALL_DATA) $(LIB_NAME).py $(ETCDIR)/vdigit/
+install_vdigit: $(ETCDIR)/vdigit/_$(LIB_NAME).so $(ETCDIR)/vdigit/$(LIB_NAME).py
+
+$(ETCDIR)/vdigit/_$(LIB_NAME).so: $(SHLIB)
+	$(INSTALL) $< $@
+
+$(ETCDIR)/vdigit/$(LIB_NAME).py: $(LIB_NAME).py
+	$(INSTALL_DATA) $< $@
