@@ -117,6 +117,7 @@ int main(int argc, char **argv)
     typopt->guisection = _("Selection");
 
     fieldopt = G_define_standard_option(G_OPT_V_FIELD);
+    fieldopt->gisprompt = "old_layer,layer,layer_all";
     fieldopt->label =
 	_("Layer number (if -1, all features in all layers of given type " "are extracted)");
     fieldopt->guisection = _("Selection");
