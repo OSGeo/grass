@@ -202,14 +202,14 @@ elif [ "$NCOLUMN_TYPE" != "INTEGER" ] && [ "$NCOLUMN_TYPE" != "DOUBLE PRECISION"
     g.message -e "Column <$GIS_OPT_COLUMN> is not numeric"
     exit 1
 fi
-#echo "column <$GIS_OPT_COLUMN> is type [$NCOLUMN_TYPE]"
+#g.message "column <$GIS_OPT_COLUMN> is type [$NCOLUMN_TYPE]"
 
 # check if GRASSRGB column exists, make it if it doesn't
 TABLE=`v.db.connect -g map="$GIS_OPT_MAP" layer="$GIS_OPT_LAYER" fs=";" | cut -f2 -d';'`
 COLUMN_TYPE=`v.info -c map="$GIS_OPT_MAP" layer="$GIS_OPT_LAYER" | grep -i "|$GIS_OPT_RGB_COLUMN$" | cut -f1 -d'|'`
 if [ -z "$COLUMN_TYPE" ] ; then
     # RGB Column not found, create it
-    echo "Creating column <$GIS_OPT_RGB_COLUMN> ..."
+    g.message "Creating column <$GIS_OPT_RGB_COLUMN> ..."
     v.db.addcol map="$GIS_OPT_MAP" layer="$GIS_OPT_LAYER" column="$GIS_OPT_RGB_COLUMN varchar(11)"
     if [ $? -ne 0 ] ; then
        g.message -e "Creating color column"
@@ -233,11 +233,11 @@ if [ -n "$GIS_OPT_RANGE" ] ; then
    MINVAL=`echo "$GIS_OPT_RANGE" | grep '[[:digit:]]' | grep ',' | cut -f1 -d','`
    MAXVAL=`echo "$GIS_OPT_RANGE" | grep '[[:digit:]]' | grep ',' | cut -f2 -d','`
 else
-   echo "Scanning values ..."
+   g.message "Scanning values ..."
    MINVAL=`v.db.select map="$GIS_OPT_MAP" column="$GIS_OPT_COLUMN" layer="$GIS_OPT_LAYER" | sort -n | grep '^[-0-9]' | head -n 1`
    MAXVAL=`v.db.select map="$GIS_OPT_MAP" column="$GIS_OPT_COLUMN" layer="$GIS_OPT_LAYER" | sort -n | grep '^[-0-9]' | tail -n 1`
 fi
-echo " min=[$MINVAL]  max=[$MAXVAL]"
+g.message " min=[$MINVAL]  max=[$MAXVAL]"
 if [ -z "$MINVAL" ] || [ -z "$MAXVAL" ] ; then
    g.message -e "Scanning data range"
    exit 1
@@ -283,12 +283,12 @@ fi
 
 
 # calculate colors and write SQL command file
-echo "Looking up colors ..."
+g.message "Looking up colors ..."
 v.db.select map="$GIS_OPT_MAP" layer="$GIS_OPT_LAYER" column="$GIS_OPT_COLUMN" | \
   sort -n | grep '^[-0-9]' | uniq | \
   r.what.color -i in="tmp_colr_$$" | sed -e 's/: /|/' | grep -v '|\*$' | \
   ( while read LINE ; do
-      #echo "LINE=[$LINE]"
+      #g.message "LINE=[$LINE]"
       VALUE=`echo $LINE | cut -f1 -d'|'`
       COLR=`echo $LINE | cut -f2 -d'|'`
       echo "UPDATE $TABLE SET $GIS_OPT_RGB_COLUMN = '$COLR' WHERE $GIS_OPT_COLUMN = $VALUE;" >> "${TMP}_vcol.sql"
@@ -303,7 +303,7 @@ fi
 
 # apply SQL commands to update the table with values
 NUM_RULES=`wc -l < "${TMP}_vcol.sql"`
-echo "Writing $NUM_RULES colors ..."
+g.message "Writing $NUM_RULES colors ..."
 #less "$TMP"
 db.execute input="${TMP}_vcol.sql"
 if [ $? -ne 0 ] ; then
@@ -315,7 +315,7 @@ fi
 
 if [ $GIS_FLAG_S -eq 1 ] ; then
    g.rename rast="tmp_colr_$$","vcolors_$$"
-   echo "Raster map containing color rules saved to <vcolors_$$>"
+   g.message "Raster map containing color rules saved to <vcolors_$$>"
    # TODO save full v.colors command line history
    r.support map="vcolors_$$" history="" \
 	source1="vector map=$GIS_OPT_MAP" \
