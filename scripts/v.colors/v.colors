@@ -16,7 +16,7 @@
 
 #%Module
 #% description: Set color rules for features in a vector using a numeric attribute column.
-#% keywords: vector
+#% keywords: vector, color table
 #%End
 #% option
 #% key: map
@@ -30,12 +30,14 @@
 #% key: column
 #% type: string
 #% description: Name of column containg numeric data
+#% gisprompt: old_dbcolumn,dbcolumn,dbcolumn
 #% required : yes
 #%end
 #%option
 #% key: layer
 #% type: integer
 #% description: Layer number of data column
+#% gisprompt: old_layer,layer,layer
 #% answer: 1
 #% required: no
 #%end
@@ -44,6 +46,7 @@
 #% type: string
 #% required: no
 #% description: Name of color column to populate
+#% gisprompt: old_dbcolumn,dbcolumn,dbcolumn
 #% answer: GRASSRGB
 #% guisection: Colors
 #%End
