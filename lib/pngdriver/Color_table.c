@@ -70,7 +70,7 @@ static void init_colors_indexed(void)
     }
 }
 
-void init_color_table(void)
+void png_init_color_table(void)
 {
     if (png.true_color)
 	init_colors_rgb();
@@ -109,7 +109,7 @@ static void get_pixel_indexed(unsigned int pixel, int *r, int *g, int *b,
 }
 
 
-void get_pixel(unsigned int pixel, int *r, int *g, int *b, int *a)
+void png_get_pixel(unsigned int pixel, int *r, int *g, int *b, int *a)
 {
     if (png.true_color)
 	get_pixel_rgb(pixel, r, g, b, a);
@@ -117,7 +117,7 @@ void get_pixel(unsigned int pixel, int *r, int *g, int *b, int *a)
 	get_pixel_indexed(pixel, r, g, b, a);
 }
 
-unsigned int get_color(int r, int g, int b, int a)
+unsigned int png_get_color(int r, int g, int b, int a)
 {
     return png.true_color
 	? get_color_rgb(r, g, b, a)

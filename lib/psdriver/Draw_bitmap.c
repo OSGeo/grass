@@ -1,8 +1,8 @@
 
 #include "psdriver.h"
 
-void PS_draw_bitmap(int ncols, int nrows, int threshold,
-		    const unsigned char *buf)
+void PS_Bitmap(int ncols, int nrows, int threshold,
+	       const unsigned char *buf)
 {
     int i, j;
 

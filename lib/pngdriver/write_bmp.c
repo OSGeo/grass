@@ -67,7 +67,7 @@ void write_bmp(void)
 	    unsigned int c = *p;
 	    int r, g, b, a;
 
-	    get_pixel(c, &r, &g, &b, &a);
+	    png_get_pixel(c, &r, &g, &b, &a);
 
 	    fputc((unsigned char)b, output);
 	    fputc((unsigned char)g, output);

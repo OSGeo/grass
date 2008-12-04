@@ -101,7 +101,7 @@ static void set_matrix(void)
   
   \param str string to be drawn
 */
-void Cairo_draw_text(const char *str)
+void Cairo_Text(const char *str)
 {
     char *utf8 = convert(str);
 
@@ -116,8 +116,6 @@ void Cairo_draw_text(const char *str)
     G_free(utf8);
 
     ca.modified = 1;
-
-    return;
 }
 
 /*
@@ -144,8 +142,6 @@ void Cairo_text_box(const char *str, double *t, double *b, double *l, double *r)
     *r = cur_x + ext.x_bearing + ext.width;
     *t = cur_y + ext.y_bearing;
     *b = cur_y + ext.y_bearing + ext.height;
-
-    return;
 }
 
 static void set_font_toy(const char *name)
@@ -247,8 +243,6 @@ void Cairo_set_font(const char *name)
 #else
     set_font_toy(name);
 #endif
-
-    return;
 }
 
 static void font_list_toy(char ***list, int *count, int verbose)
@@ -281,8 +275,6 @@ void Cairo_font_list(char ***list, int *count)
 {
     font_list(list, count, 0);
     font_list_toy(list, count, 0);
-
-    return;
 }
 
 /*!
@@ -295,7 +287,5 @@ void Cairo_font_info(char ***list, int *count)
 {
     font_list(list, count, 1);
     font_list_toy(list, count, 1);
-
-    return;
 }
 

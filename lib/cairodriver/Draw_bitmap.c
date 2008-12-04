@@ -47,19 +47,19 @@ static cairo_surface_t *fix_surface(cairo_surface_t * src)
   \param threshold threshold value
   \param buf data buffer
 */
-void Cairo_draw_bitmap(int ncols, int nrows, int threshold,
+void Cairo_Bitmap(int ncols, int nrows, int threshold,
 		       const unsigned char *buf)
 {
     cairo_surface_t *surf;
 
-    G_debug(1, "Cairo_draw_bitmap: %d %d %d", ncols, nrows, threshold);
+    G_debug(1, "Cairo_Bitmap: %d %d %d", ncols, nrows, threshold);
 
     surf = cairo_image_surface_create_for_data((unsigned char *)buf,
 					       CAIRO_FORMAT_A8, ncols, nrows,
 					       ncols);
 
     if (cairo_surface_status(surf) != CAIRO_STATUS_SUCCESS)
-	G_fatal_error(_("Cairo_draw_bitmap: Failed to create source"));
+	G_fatal_error(_("Cairo_Bitmap: Failed to create source"));
 
     surf = fix_surface(surf);
 
@@ -67,6 +67,4 @@ void Cairo_draw_bitmap(int ncols, int nrows, int threshold,
 
     cairo_surface_destroy(surf);
     ca.modified = 1;
-
-    return;
 }

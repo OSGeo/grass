@@ -100,7 +100,7 @@ void read_png(void)
 		int g = *q++;
 		int b = *q++;
 		int a = *q++;
-		unsigned int c = get_color(r, g, b, a);
+		unsigned int c = png_get_color(r, g, b, a);
 
 		*p = c;
 	    }

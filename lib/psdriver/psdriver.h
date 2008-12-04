@@ -33,16 +33,19 @@ extern void PS_Graph_close(void);
 extern int PS_Graph_set(void);
 extern void PS_Line_width(double);
 extern void PS_Set_window(double, double, double, double);
-extern void PS_color_rgb(int, int, int);
-extern void PS_draw_bitmap(int, int, int, const unsigned char *);
-extern void PS_draw_line(double, double, double, double);
-extern void PS_draw_point(double, double);
-extern void PS_begin_scaled_raster(int, int[2][2], double[2][2]);
-extern int PS_scaled_raster(int, int, const unsigned char *,
-			    const unsigned char *, const unsigned char *,
-			    const unsigned char *);
-extern void PS_end_scaled_raster(void);
-extern void PS_Polygon(const double *, const double *, int);
-extern void PS_Polyline(const double *, const double *, int);
+extern void PS_Color(int, int, int);
+extern void PS_Bitmap(int, int, int, const unsigned char *);
+extern void PS_begin_raster(int, int[2][2], double[2][2]);
+extern int PS_raster(int, int, const unsigned char *,
+		     const unsigned char *, const unsigned char *,
+		     const unsigned char *);
+extern void PS_end_raster(void);
+extern void PS_Begin(void);
+extern void PS_Move(double, double);
+extern void PS_Cont(double, double);
+extern void PS_Close(void);
+extern void PS_Stroke(void);
+extern void PS_Fill(void);
+extern void PS_Point(double, double);
 
 #endif /* __PSDRIVER_H__ */

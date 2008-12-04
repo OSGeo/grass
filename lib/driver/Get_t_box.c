@@ -3,8 +3,8 @@
 
 void COM_Get_text_box(const char *text, double *t, double *b, double *l, double *r)
 {
-    if (driver->text_box) {
-	(*driver->text_box)(text, t, b, l, r);
+    if (driver->Text_box) {
+	(*driver->Text_box)(text, t, b, l, r);
 	return;
     }
 

@@ -38,3 +38,23 @@ extern int font_exists(const char *);
 extern struct GFONT_CAP *parse_freetypecap(void);
 extern void free_freetypecap(struct GFONT_CAP *);
 extern void free_font_list(char **, int);
+
+/* path.c */
+struct path {
+    double *px, *py;
+    int count;
+    int alloc;
+
+    int cur_offset;
+    int *offsets;
+    int o_count;
+    int o_alloc;
+};
+
+void path_begin(struct path *);
+void path_move(struct path *, double, double);
+void path_cont(struct path *, double, double);
+void path_close(struct path *);
+void path_fill(struct path *, void (*)(const double *, const double *, int));
+void path_stroke(struct path *, void (*)(double, double, double, double));
+void path_reset(struct path *);

@@ -5,12 +5,10 @@ void COM_Polyline_abs(const double *xarray, const double *yarray, int number)
 {
     int i;
 
-    if (driver->Polyline) {
-	(*driver->Polyline) (xarray, yarray, number);
-	return;
-    }
-
+    COM_Begin();
+    COM_Move(xarray[0], yarray[0]);
     for (i = 1; i < number; i++)
-	COM_Line_abs(xarray[i-1], yarray[i-1], xarray[i], yarray[i]);
+	COM_Cont(xarray[i], yarray[i]);
+    COM_Stroke();
 }
 

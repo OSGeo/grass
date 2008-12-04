@@ -25,23 +25,26 @@ struct driver
     int (*Graph_set)(void);
     void (*Graph_close)(void);
     void (*Line_width)(double);
-    void (*Polydots)(const double *, const double *, int);
-    void (*Polyline)(const double *, const double *, int);
-    void (*Polygon)(const double *, const double *, int);
     void (*Set_window)(double, double, double, double);
-    void (*Begin_scaled_raster)(int, int[2][2], double[2][2]);
-    int (*Scaled_raster)(int, int,
-			 const unsigned char *,
-			 const unsigned char *,
-			 const unsigned char *, const unsigned char *);
-    void (*End_scaled_raster)(void);
+    void (*Begin_raster)(int, int[2][2], double[2][2]);
+    int (*Raster)(int, int,
+		  const unsigned char *,
+		  const unsigned char *,
+		  const unsigned char *,
+		  const unsigned char *);
+    void (*End_raster)(void);
+    void (*Begin)(void);
+    void (*Move)(double, double);
+    void (*Cont)(double, double);
+    void (*Close)(void);
+    void (*Stroke)(void);
+    void (*Fill)(void);
+    void (*Point)(double, double);
 
-    void (*color_rgb)(int, int, int);
-    void (*draw_line)(double, double, double, double);
-    void (*draw_point)(double, double);
-    void (*draw_bitmap)(int, int, int, const unsigned char *);
-    void (*draw_text)(const char *);
-    void (*text_box)(const char *, double *, double *, double *, double *);
+    void (*Color)(int, int, int);
+    void (*Bitmap)(int, int, int, const unsigned char *);
+    void (*Text)(const char *);
+    void (*Text_box)(const char *, double *, double *, double *, double *);
     void (*Set_font)(const char *);
     void (*Font_list)(char ***, int *);
     void (*Font_info)(char ***, int *);
@@ -54,18 +57,12 @@ extern void LIB_init(const struct driver *drv);
 
 /* Commands */
 
-/* Bitmap.c */
-extern void COM_Bitmap(int, int, int, const unsigned char *);
-
 /* Box.c */
 extern void COM_Box_abs(double, double, double, double);
 
 /* Color.c */
 extern void COM_Color_RGB(unsigned char, unsigned char, unsigned char);
 extern void COM_Standard_color(int);
-
-/* Cont.c */
-extern void COM_Line_abs(double, double, double, double);
 
 /* Erase.c */
 extern void COM_Erase(void);
@@ -99,11 +96,11 @@ extern void COM_Polygon_abs(const double *, const double *, int);
 extern void COM_Polyline_abs(const double *, const double *, int);
 
 /* Raster.c */
-extern void COM_begin_scaled_raster(int, int[2][2], double[2][2]);
-extern int COM_scaled_raster(int, int, const unsigned char *,
-			     const unsigned char *, const unsigned char *,
-			     const unsigned char *);
-extern void COM_end_scaled_raster(void);
+extern void COM_begin_raster(int, int[2][2], double[2][2]);
+extern int COM_raster(int, int, const unsigned char *,
+		      const unsigned char *, const unsigned char *,
+		      const unsigned char *);
+extern void COM_end_raster(void);
 
 /* Set_window.c */
 extern void COM_Set_window(double, double, double, double);
@@ -119,8 +116,14 @@ extern void COM_Text_rotation(double);
 /* Driver Operations */
 
 /* Draw.c */
-extern void DRV_draw_bitmap(int, int, int, const unsigned char *);
-extern void DRV_draw_line(double, double, double, double);
-extern void DRV_draw_point(double, double);
+extern void COM_Bitmap(int, int, int, const unsigned char *);
+extern void COM_Line_abs(double, double, double, double);
+extern void COM_Begin(void);
+extern void COM_Move(double, double);
+extern void COM_Cont(double, double);
+extern void COM_Close(void);
+extern void COM_Stroke(void);
+extern void COM_Fill(void);
+extern void COM_Point(double, double);
 
 #endif /* _DRIVER_H */

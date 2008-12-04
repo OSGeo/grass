@@ -4,8 +4,8 @@
 
 void COM_Color_RGB(unsigned char r, unsigned char g, unsigned char b)
 {
-    if (driver->color_rgb)
-	(*driver->color_rgb)(r, g, b);
+    if (driver->Color)
+	(*driver->Color)(r, g, b);
 }
 
 void COM_Standard_color(int number)

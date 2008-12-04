@@ -45,7 +45,7 @@ void PNG_draw_bitmap(int ncols, int nrows, int threshold,
 	int r1, g1, b1, a1;
 	int i, j;
 
-	get_pixel(png.current_color, &r1, &g1, &b1, &a1);
+	png_get_pixel(png.current_color, &r1, &g1, &b1, &a1);
 
 	for (j = j0; j < j1; j++) {
 	    int y = cur_y + j;
@@ -57,14 +57,14 @@ void PNG_draw_bitmap(int ncols, int nrows, int threshold,
 		unsigned int a0, r0, g0, b0;
 		unsigned int a, r, g, b;
 
-		get_pixel(*p, &r0, &g0, &b0, &a0);
+		png_get_pixel(*p, &r0, &g0, &b0, &a0);
 
 		a = (a0 * (255 - k) + a1 * k) / 255;
 		r = (r0 * (255 - k) + r1 * k) / 255;
 		g = (g0 * (255 - k) + g1 * k) / 255;
 		b = (b0 * (255 - k) + b1 * k) / 255;
 
-		*p = get_color(r, g, b, a);
+		*p = png_get_color(r, g, b, a);
 	    }
 	}
     }

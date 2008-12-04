@@ -3,8 +3,8 @@
 
 void COM_Text(const char *text)
 {
-    if (driver->draw_text) {
-	(*driver->draw_text) (text);
+    if (driver->Text) {
+	(*driver->Text)(text);
 	return;
     }
 

@@ -123,7 +123,7 @@ static void poly(const struct point *p, int n)
 	line(p, n, y);
 }
 
-void PNG_Polygon(const double *xarray, const double *yarray, int count)
+void png_polygon(const double *xarray, const double *yarray, int count)
 {
     static struct point *points;
     static int max_points;

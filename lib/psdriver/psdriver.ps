@@ -35,12 +35,6 @@
   closepath fill
   pop pop pop pop
 } bind def
-/LINE {
-  newpath
-  4 2 roll moveto
-  lineto
-  stroke
-} bind def
 /POINT {
   newpath
   moveto
@@ -113,27 +107,6 @@
     3 RASTERMASK
   grestore
 } bind def
-/POLYGONSTART {
-  newpath
-  moveto
-} bind def
-/POLYGONVERTEX {
-  lineto
-} bind def
-/POLYGONEND {
-  closepath
-  eofill
-} bind def
-/POLYLINESTART {
-  newpath
-  moveto
-} bind def
-/POLYLINEVERTEX {
-  lineto
-} bind def
-/POLYLINEEND {
-  stroke
-} bind def
 /WINDOW {
   initclip
   exch
@@ -157,4 +130,22 @@
 /END {
   grestore
   showpage
+} bind def
+/NEW {
+  newpath
+} bind def
+/MOVE {
+  moveto
+} bind def
+/CONT {
+  lineto
+} bind def
+/CLOSE {
+  closepath
+} bind def
+/STROKE {
+  stroke
+} bind def
+/FILL {
+  eofill
 } bind def
