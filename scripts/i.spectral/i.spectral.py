@@ -22,21 +22,21 @@
 # this script needs gnuplot
 
 #%Module
-#%  description: displays spectral response at user specified locations in group or images
+#%  description: Displays spectral response at user specified locations in group or images.
 #%  keywords: imagery, raster, multispectral
 #%End
 #%option
 #% key: group
 #% type: string
 #% gisprompt: old,group
-#% description: group input
+#% description: Group input
 #% required : no
 #%end
 #%option
 #% key: raster
 #% type: string
 #% gisprompt: old,cell,raster
-#% description: raster input maps
+#% description: Raster input maps
 #% multiple : yes
 #% required : no
 #%end
@@ -44,7 +44,7 @@
 #% key: output
 #% type: string
 #% gisprompt: new_file,file,PNG
-#% description: write output to PNG image
+#% description: Write output to PNG image
 #% multiple : no
 #% required : no
 #%end
@@ -52,17 +52,17 @@
 #% key: coords
 #% type: double
 #% key_desc: east,north
-#% description: coordinates
+#% description: Coordinates
 #% multiple : yes
 #% required : yes
 #%end
 #%flag 
 #%key: c
-#%description: label with coordinates instead of numbering
+#%description: Label with coordinates instead of numbering
 #%end
 #%flag 
 #%key: g
-#%description: use gnuplot for display
+#%description: Use gnuplot for display
 #%end
 
 import sys
