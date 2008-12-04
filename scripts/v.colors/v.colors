@@ -1,0 +1,335 @@
+#!/bin/sh
+############################################################################
+#
+# MODULE:       v.colors
+# AUTHOR:       M. Hamish Bowman, Dept. Marine Science, Otago Univeristy,
+#                 New Zealand
+# PURPOSE:      Populate a GRASSRGB column with a color map and data column
+#		Helper script for thematic mapping tasks
+#
+# COPYRIGHT:    (c) 2008 Hamish Bowman, and the GRASS Development Team
+#               This program is free software under the GNU General Public
+#               License (>=v2). Read the file COPYING that comes with GRASS
+#               for details.
+#
+#############################################################################
+
+#%Module
+#% description: Set color rules for features in a vector using a numeric attribute column.
+#% keywords: vector
+#%End
+#% option
+#% key: map
+#% type: string
+#% gisprompt: old,vector,vector
+#% key_desc: name
+#% description: Name of input vector map 
+#% required: yes
+#%end
+#%option
+#% key: column
+#% type: string
+#% description: Name of column containg numeric data
+#% required : yes
+#%end
+#%option
+#% key: layer
+#% type: integer
+#% description: Layer number of data column
+#% answer: 1
+#% required: no
+#%end
+#%Option
+#% key: rgb_column
+#% type: string
+#% required: no
+#% description: Name of color column to populate
+#% answer: GRASSRGB
+#% guisection: Colors
+#%End
+#% option
+#% key: range
+#% type: double
+#% required: no
+#% multiple: no
+#% key_desc: min,max
+#% description: Manually set range (min,max)
+#%End
+#% option
+#% key: color
+#% type: string
+#% key_desc: style
+#% description: Type of color table
+#% required: no
+#% guisection: Colors
+#%end
+#%Option
+#% key: raster
+#% type: string
+#% required: no
+#% description: Raster map name from which to copy color table
+#% gisprompt: old,cell,raster
+#% guisection: Colors
+#%End
+#%Option
+#% key: rules
+#% type: string
+#% required: no
+#% description: Path to rules file
+#% gisprompt: old_file,file,input
+#% guisection: Colors
+#%End
+#%Flag
+#% key: s
+#% description: Save placeholder raster map for use with d.legend
+#%End
+#%Flag
+#% key: n
+#% description: Invert colors
+#% guisection: Colors
+#%End
+
+
+## TODO: implement -e (equalized) and -g (logarithmic) methods in r.colors
+##   'v.db.select column= | wc -l' to set region size (1xLength)
+##   then create r.in.ascii 1xLength matrix with data (WITHOUT uniq)
+##   and run r.colors on that raster map.
+##      or
+##   v.to.rast, r.colors -g, then parse colr/ file. But that's resolution dependent
+
+
+if  [ -z "$GISBASE" ] ; then
+    echo "You must be in GRASS GIS to run this program." 1>&2
+    exit 1
+fi
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+    exec g.parser "$0" "$@"
+fi
+
+
+GRASS_VERBOSE=0
+export GRASS_VERBOSE
+
+cleanup()
+{
+   if [ -n "$TMP" ] ; then
+      \rm "$TMP" "${TMP}_vcol.sql"
+   fi
+   eval `g.findfile elem=windows file="tmp_vcolors.$$" | grep '^name='`
+   if [ -n "$name" ] ; then
+      unset WIND_OVERRIDE
+      g.remove region="tmp_vcolors.$$"
+   fi
+   eval `g.findfile elem=cell file="tmp_colr_$$" | grep '^name='`
+   if [ -n "$name" ] ; then
+      g.remove rast="tmp_colr_$$"
+   fi
+}
+trap "cleanup" 2 3 15
+
+
+### setup enviro vars ###
+eval `g.gisenv`
+: ${GISBASE?} ${GISDBASE?} ${LOCATION_NAME?} ${MAPSET?}
+
+#### does map exist in CURRENT mapset?
+eval `g.findfile element=vector file="$GIS_OPT_MAP" mapset="$MAPSET"`
+VECT_MAPSET=`echo "$GIS_OPT_MAP" | grep '@' | cut -f2 -d'@'`
+if [ -z "$VECT_MAPSET" ] ; then
+   VECT_MAPSET="$MAPSET"
+fi
+if [ ! "$file" ] || [ "$VECT_MAPSET" != "$MAPSET" ] ; then
+   g.message -e "Vector map <$GIS_OPT_MAP> not found in current mapset"
+   exit 1
+else
+   VECTOR=`echo "$GIS_OPT_MAP" | cut -f1 -d'@'`
+fi
+
+
+
+# sanity check mutually exclusive color options
+CTEST=0
+for OPT in COLOR RASTER RULES ; do
+   eval "OPTNAME=\$GIS_OPT_${OPT}"
+   if [ -n "$OPTNAME" ] ; then
+      CTEST=`expr $CTEST + 1`
+   fi
+done
+if [ "$CTEST" -ne 1 ] ; then
+    g.message -e "Pick one of color, rules, or raster options"
+    exit 1
+fi
+
+if [ -n "$GIS_OPT_COLOR" ] ; then
+   #### check the color rule is valid
+   COLOR_OPTS=`ls $GISBASE/etc/colors/`
+   COLOR_OPTS="`echo $COLOR_OPTS | tr '\n' ' '` random grey.eq grey.log rules"
+
+   HAVE_COLR=0
+   for COLR in $COLOR_OPTS ; do
+       if [ "$COLR" = "$GIS_OPT_COLOR" ] ; then
+          HAVE_COLR=1
+          break
+       fi
+   done
+   if [ "$HAVE_COLR" -eq 0 ] ; then
+       g.message -e "Invalid color rule <$GIS_OPT_COLOR>"
+       echo "       Valid options are: $COLOR_OPTS"
+       exit 1
+   fi
+elif [ -n "$GIS_OPT_RASTER" ] ; then
+   r.info -r "$GIS_OPT_RASTER" > /dev/null
+   if [ $? -ne 0 ] ; then
+       g.message -e "Unable to open raster map <$GIS_OPT_RASTER>"
+       exit 1
+   fi
+elif [ -n "$GIS_OPT_RULES" ] ; then
+   if [ ! -r "$GIS_OPT_RULES" ] ; then
+       g.message -e "Unable to read color rules file <$GIS_OPT_RULES>"
+       exit 1
+   fi
+fi
+
+
+#### column checks
+# check input data column 
+NCOLUMN_TYPE=`v.info -c map="$GIS_OPT_MAP" layer="$GIS_OPT_LAYER" | grep -i "|$GIS_OPT_COLUMN$" | cut -f1 -d'|'`
+if [ -z "$NCOLUMN_TYPE" ] ; then
+    g.message -e "Column <$GIS_OPT_COLUMN> not found"
+    exit 1
+elif [ "$NCOLUMN_TYPE" != "INTEGER" ] && [ "$NCOLUMN_TYPE" != "DOUBLE PRECISION" ] ; then
+    g.message -e "Column <$GIS_OPT_COLUMN> is not numeric"
+    exit 1
+fi
+#echo "column <$GIS_OPT_COLUMN> is type [$NCOLUMN_TYPE]"
+
+# check if GRASSRGB column exists, make it if it doesn't
+TABLE=`v.db.connect -g map="$GIS_OPT_MAP" layer="$GIS_OPT_LAYER" fs=";" | cut -f2 -d';'`
+COLUMN_TYPE=`v.info -c map="$GIS_OPT_MAP" layer="$GIS_OPT_LAYER" | grep -i "|$GIS_OPT_RGB_COLUMN$" | cut -f1 -d'|'`
+if [ -z "$COLUMN_TYPE" ] ; then
+    # RGB Column not found, create it
+    echo "Creating column <$GIS_OPT_RGB_COLUMN> ..."
+    v.db.addcol map="$GIS_OPT_MAP" layer="$GIS_OPT_LAYER" column="$GIS_OPT_RGB_COLUMN varchar(11)"
+    if [ $? -ne 0 ] ; then
+       g.message -e "Creating color column"
+       exit 1
+    fi
+elif [ "$COLUMN_TYPE" != "CHARACTER" -a "$COLUMN_TYPE" != "TEXT" ] ; then
+    g.message -e "Column <$GIS_OPT_RGB_COLUMN> is not of compatible type (found $COLUMN_TYPE)"
+    exit 1
+else
+    NUM_CHARS=`db.describe -c "$TABLE" | grep -i " $GIS_OPT_RGB_COLUMN:" | cut -f4 -d':'`
+    if [ "$NUM_CHARS" -lt 11 ] ; then
+       g.message -e "Color column <$GIS_OPT_RGB_COLUMN> is not wide enough (needs 11 characters)"
+       exit 1
+    fi
+fi
+
+
+# find data range
+if [ -n "$GIS_OPT_RANGE" ] ; then
+   #order doesn't matter
+   MINVAL=`echo "$GIS_OPT_RANGE" | grep '[[:digit:]]' | grep ',' | cut -f1 -d','`
+   MAXVAL=`echo "$GIS_OPT_RANGE" | grep '[[:digit:]]' | grep ',' | cut -f2 -d','`
+else
+   echo "Scanning values ..."
+   MINVAL=`v.db.select map="$GIS_OPT_MAP" column="$GIS_OPT_COLUMN" layer="$GIS_OPT_LAYER" | sort -n | grep '^[-0-9]' | head -n 1`
+   MAXVAL=`v.db.select map="$GIS_OPT_MAP" column="$GIS_OPT_COLUMN" layer="$GIS_OPT_LAYER" | sort -n | grep '^[-0-9]' | tail -n 1`
+fi
+echo " min=[$MINVAL]  max=[$MAXVAL]"
+if [ -z "$MINVAL" ] || [ -z "$MAXVAL" ] ; then
+   g.message -e "Scanning data range"
+   exit 1
+fi
+
+
+# setup internal region
+g.region save="tmp_vcolors.$$"
+WIND_OVERRIDE="tmp_vcolors.$$"
+export WIND_OVERRIDE
+g.region rows=2 cols=2
+
+# create dummy raster map
+if [ "$NCOLUMN_TYPE" = "INTEGER" ] ; then
+   r.mapcalc "tmp_colr_$$ = if( row() == 1, $MINVAL, $MAXVAL)"
+else
+   r.mapcalc "tmp_colr_$$ = double( if( row() == 1, $MINVAL, $MAXVAL) )"
+fi
+
+
+if [ -n "$GIS_OPT_COLOR" ] ; then
+   COLOR_CMD="color=$GIS_OPT_COLOR"
+elif [ -n "$GIS_OPT_RASTER" ] ; then
+   COLOR_CMD="raster=$GIS_OPT_RASTER"
+elif [ -n "$GIS_OPT_RULES" ] ; then
+   COLOR_CMD="rules=$GIS_OPT_RULES"
+fi
+if [ $GIS_FLAG_N -eq 1 ] ; then
+   FLIP_FLAG="-n"
+else
+   FLIP_FLAG=""
+fi
+r.colors map="tmp_colr_$$" "$COLOR_CMD" $FLIP_FLAG
+
+
+
+TMP="`g.tempfile pid=$$`"
+if [ $? -ne 0 ] || [ -z "${TMP}" ] ; then
+    g.message -e "Unable to create temporary file"
+    cleanup
+    exit 1
+fi
+
+
+# calculate colors and write SQL command file
+echo "Looking up colors ..."
+v.db.select map="$GIS_OPT_MAP" layer="$GIS_OPT_LAYER" column="$GIS_OPT_COLUMN" | \
+  sort -n | grep '^[-0-9]' | uniq | \
+  r.what.color -i in="tmp_colr_$$" | sed -e 's/: /|/' | grep -v '|\*$' | \
+  ( while read LINE ; do
+      #echo "LINE=[$LINE]"
+      VALUE=`echo $LINE | cut -f1 -d'|'`
+      COLR=`echo $LINE | cut -f2 -d'|'`
+      echo "UPDATE $TABLE SET $GIS_OPT_RGB_COLUMN = '$COLR' WHERE $GIS_OPT_COLUMN = $VALUE;" >> "${TMP}_vcol.sql"
+  done )
+
+
+if [ ! -e "${TMP}_vcol.sql" ] ; then
+    g.message -e "No values found in color range"
+    cleanup
+    exit 1
+fi
+
+# apply SQL commands to update the table with values
+NUM_RULES=`wc -l < "${TMP}_vcol.sql"`
+echo "Writing $NUM_RULES colors ..."
+#less "$TMP"
+db.execute input="${TMP}_vcol.sql"
+if [ $? -ne 0 ] ; then
+   g.message -e "Processing SQL transaction"
+   cleanup
+   exit 1
+fi
+
+
+if [ $GIS_FLAG_S -eq 1 ] ; then
+   g.rename rast="tmp_colr_$$","vcolors_$$"
+   echo "Raster map containing color rules saved to <vcolors_$$>"
+   # TODO save full v.colors command line history
+   r.support map="vcolors_$$" history="" \
+	source1="vector map=$GIS_OPT_MAP" \
+	source2="column=$GIS_OPT_COLUMN" \
+	title="Dummy raster to use as thematic vector legend" \
+	description="generated by v.colors using r.mapcalc"
+   r.support map="vcolors_$$" \
+	history="RGB saved into <$GIS_OPT_RGB_COLUMN> using <$GIS_OPT_COLOR$GIS_OPT_RASTER$GIS_OPT_RULES>"
+else
+   g.remove rast="tmp_colr_$$"
+fi
+cleanup
+
+exit 0
+#v.db.dropcol map=vcol_test col=GRASSRGB
+#d.vect -a vcol_test icon=basic/circle color=none size=8
+

@@ -22,6 +22,7 @@ SUBDIRS = \
 	m.proj \
 	r.blend \
 	r.buffer \
+	r.colors.stddev \
 	r.fillnulls \
 	r.grow \
 	r.in.aster \
@@ -36,6 +37,7 @@ SUBDIRS = \
 	r.tileset \
 	v.build.all \
 	v.centroids \
+	v.colors \
 	v.convert.all \
 	v.db.addcol \
 	v.db.addtable \
