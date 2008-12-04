@@ -11,5 +11,5 @@
 
 void PNG_color_rgb(int r, int g, int b)
 {
-    png.current_color = get_color(r, g, b, 0);
+    png.current_color = png_get_color(r, g, b, 0);
 }

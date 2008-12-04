@@ -5,7 +5,13 @@
 
 void COM_Polygon_abs(const double *xarray, const double *yarray, int number)
 {
-    if (driver->Polygon)
-	(*driver->Polygon) (xarray, yarray, number);
+    int i;
+
+    COM_Begin();
+    COM_Move(xarray[0], yarray[0]);
+    for (i = 1; i < number; i++)
+	COM_Cont(xarray[i], yarray[i]);
+    COM_Close();
+    COM_Fill();
 }
 

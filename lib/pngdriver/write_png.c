@@ -79,7 +79,7 @@ void write_png(void)
 		unsigned int c = *p;
 		int r, g, b, a;
 
-		get_pixel(c, &r, &g, &b, &a);
+		png_get_pixel(c, &r, &g, &b, &a);
 		*q++ = (png_byte) r;
 		*q++ = (png_byte) g;
 		*q++ = (png_byte) b;

@@ -22,9 +22,9 @@
   
   \param color value
 */
-void Cairo_color_rgb(int r, int g, int b)
+void Cairo_Color(int r, int g, int b)
 {
-    G_debug(3, "Cairo_color: %d,%d,%d", r, g, b);
+    G_debug(3, "Cairo_Color: %d,%d,%d", r, g, b);
 
     cairo_set_source_rgba(cairo,
 			  CAIROCOLOR(r), CAIROCOLOR(g), CAIROCOLOR(b), 1.0);

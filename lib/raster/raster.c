@@ -377,19 +377,19 @@ void R_font_info(char ***list, int *count)
 
 void R_begin_scaled_raster(int mask, int src[2][2], double dst[2][2])
 {
-    COM_begin_scaled_raster(mask, src, dst);
+    COM_begin_raster(mask, src, dst);
 }
 
 int R_scaled_raster(int n, int row,
 		      const unsigned char *red, const unsigned char *grn,
 		      const unsigned char *blu, const unsigned char *nul)
 {
-    return COM_scaled_raster(n, row, red, grn, blu, nul);
+    return COM_raster(n, row, red, grn, blu, nul);
 }
 
 void R_end_scaled_raster(void)
 {
-    COM_end_scaled_raster();
+    COM_end_raster();
 }
 
 void R_bitmap(int ncols, int nrows, int threshold, const unsigned char *buf)

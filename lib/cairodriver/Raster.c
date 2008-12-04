@@ -32,9 +32,9 @@ static int masked;
   \param s
   \param d
 */
-void Cairo_begin_scaled_raster(int mask, int s[2][2], double d[2][2])
+void Cairo_begin_raster(int mask, int s[2][2], double d[2][2])
 {
-    G_debug(1, "Cairo_begin_scaled_raster: %d, %d %d %d %d, %f %f %f %f",
+    G_debug(1, "Cairo_begin_raster: %d, %d %d %d %d, %f %f %f %f",
 	    mask,
 	    s[0][0], s[0][1], s[1][0], s[1][1],
 	    d[0][0], d[0][1], d[1][0], d[1][1]);
@@ -65,12 +65,10 @@ void Cairo_begin_scaled_raster(int mask, int s[2][2], double d[2][2])
     /* create source surface */
     src_surf = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, src_w, src_h);
     if (cairo_surface_status(src_surf) != CAIRO_STATUS_SUCCESS)
-	G_fatal_error(_("Cairo_begin_scaled_raster: Failed to create surface"));
+	G_fatal_error(_("Cairo_begin_raster: Failed to create surface"));
 
     src_data = cairo_image_surface_get_data(src_surf);
     src_stride = cairo_image_surface_get_stride(src_surf);
-
-    return;
 }
 
 /*!
@@ -82,15 +80,15 @@ void Cairo_begin_scaled_raster(int mask, int s[2][2], double d[2][2])
 
   \return next row
 */
-int Cairo_scaled_raster(int n, int row,
-			const unsigned char *red, const unsigned char *grn,
-			const unsigned char *blu, const unsigned char *nul)
+int Cairo_raster(int n, int row,
+		 const unsigned char *red, const unsigned char *grn,
+		 const unsigned char *blu, const unsigned char *nul)
 {
     unsigned int *dst =
 	(unsigned int *)(src_data + (row - src_t) * src_stride);
     int i;
 
-    G_debug(3, "Cairo_scaled_raster: %d %d", n, row);
+    G_debug(3, "Cairo_raster: %d %d", n, row);
 
     for (i = 0; i < n; i++) {
 	unsigned int r = red[i];
@@ -108,9 +106,9 @@ int Cairo_scaled_raster(int n, int row,
 /*!
   \brief Finish drawing raster
 */
-void Cairo_end_scaled_raster(void)
+void Cairo_end_raster(void)
 {
-    G_debug(1, "Cairo_end_scaled_raster");
+    G_debug(1, "Cairo_end_raster");
 
     /* paint source surface onto dstination (scaled) */
     cairo_save(cairo);
@@ -124,6 +122,4 @@ void Cairo_end_scaled_raster(void)
     /* cleanup */
     cairo_surface_destroy(src_surf);
     ca.modified = 1;
-
-    return;
 }

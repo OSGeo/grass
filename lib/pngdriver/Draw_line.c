@@ -62,7 +62,7 @@ static void draw_line(double x1, double y1, double x2, double y2)
     }
 }
 
-void PNG_draw_line(double x1, double y1, double x2, double y2)
+void png_draw_line(double x1, double y1, double x2, double y2)
 {
     double ax[4], ay[4];
     double k = png.linewidth / 2;
@@ -87,6 +87,6 @@ void PNG_draw_line(double x1, double y1, double x2, double y2)
 	ax[3] = x2;	ay[3] = y2 - k;
     }
 
-    PNG_Polygon(ax, ay, 4);
+    png_polygon(ax, ay, 4);
 }
 

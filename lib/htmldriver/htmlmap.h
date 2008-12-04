@@ -38,6 +38,14 @@ struct html_state
 
 extern struct html_state html;
 
+/* Draw.c */
+extern void HTML_Begin(void);
+extern void HTML_Move(double, double);
+extern void HTML_Cont(double, double);
+extern void HTML_Close(void);
+extern void HTML_Fill(void);
+extern void HTML_Stroke(void);
+
 /* Driver.c */
 extern const struct driver *HTML_Driver(void);
 
@@ -51,7 +59,7 @@ extern int HTML_Graph_set(void);
 extern void HTML_Box(double, double, double, double);
 
 /* Polygon.c */
-extern void HTML_Polygon(const double *, const double *, int);
+extern void html_polygon(const double *, const double *, int);
 
 /* Text.c */
 extern void HTML_Text(const char *);

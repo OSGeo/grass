@@ -2,7 +2,7 @@
 #include <grass/gis.h>
 #include "psdriver.h"
 
-void PS_color_rgb(int r, int g, int b)
+void PS_Color(int r, int g, int b)
 {
     if (ps.true_color)
 	output("%d %d %d COLOR\n", r, g, b);

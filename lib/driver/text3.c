@@ -268,7 +268,7 @@ static void draw_bitmap(FT_Bitmap * bitmap, FT_Int x, FT_Int y)
 	    buf[j * w + i] = sbuf[offset + j * bw + i];
 
     COM_Pos_abs(x1, y1);
-    DRV_draw_bitmap(w, h, 128, buf);
+    COM_Bitmap(w, h, 128, buf);
 }
 #endif
 

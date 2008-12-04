@@ -5,7 +5,7 @@
 
 static int masked;
 
-void PS_begin_scaled_raster(int mask, int src[2][2], double dst[2][2])
+void PS_begin_raster(int mask, int src[2][2], double dst[2][2])
 {
     const char *type = ps.true_color ? (mask ? "RASTERRGBMASK" : "RASTERRGB")
 	: (mask ? "RASTERGRAYMASK" : "RASTERGRAY");
@@ -28,9 +28,9 @@ void PS_begin_scaled_raster(int mask, int src[2][2], double dst[2][2])
 	   type);
 }
 
-int PS_scaled_raster(int n, int row,
-		     const unsigned char *red, const unsigned char *grn,
-		     const unsigned char *blu, const unsigned char *nul)
+int PS_raster(int n, int row,
+	      const unsigned char *red, const unsigned char *grn,
+	      const unsigned char *blu, const unsigned char *nul)
 {
     int i;
 
@@ -59,7 +59,7 @@ int PS_scaled_raster(int n, int row,
     return row + 1;
 }
 
-void PS_end_scaled_raster(void)
+void PS_end_raster(void)
 {
     output("grestore\n");
 }

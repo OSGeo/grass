@@ -99,19 +99,19 @@ int PNG_Graph_set(void)
     p = getenv("GRASS_TRANSPARENT");
     png.has_alpha = p && strcmp(p, "TRUE") == 0;
 
-    init_color_table();
+    png_init_color_table();
 
     p = getenv("GRASS_BACKGROUNDCOLOR");
     if (p && *p && sscanf(p, "%02x%02x%02x", &red, &grn, &blu) == 3)
-	png.background = get_color(red, grn, blu, png.has_alpha ? 255 : 0);
+	png.background = png_get_color(red, grn, blu, png.has_alpha ? 255 : 0);
     else {
 	/* 0xffffff = white, 0x000000 = black */
 	if (strcmp(DEFAULT_FG_COLOR, "white") == 0)
 	    /* foreground: white, background: black */
-	    png.background = get_color(0, 0, 0, png.has_alpha ? 255 : 0);
+	    png.background = png_get_color(0, 0, 0, png.has_alpha ? 255 : 0);
 	else
 	    /* foreground: black, background: white */
-	    png.background = get_color(255, 255, 255, png.has_alpha ? 255 : 0);
+	    png.background = png_get_color(255, 255, 255, png.has_alpha ? 255 : 0);
     }
 
     G_verbose_message(_("PNG: collecting to file <%s>"), png.file_name);

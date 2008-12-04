@@ -42,9 +42,11 @@ extern void write_pgm(void);
 extern void write_bmp(void);
 extern void write_png(void);
 
-extern void init_color_table(void);
-extern unsigned int get_color(int, int, int, int);
-extern void get_pixel(unsigned int, int *, int *, int *, int *);
+extern void png_init_color_table(void);
+extern unsigned int png_get_color(int, int, int, int);
+extern void png_get_pixel(unsigned int, int *, int *, int *, int *);
+extern void png_draw_line(double, double, double, double);
+extern void png_polygon(const double *, const double *, int);
 
 extern const struct driver *PNG_Driver(void);
 
@@ -54,15 +56,19 @@ extern void PNG_Erase(void);
 extern void PNG_Graph_close(void);
 extern int PNG_Graph_set(void);
 extern void PNG_Line_width(double);
-extern void PNG_Polygon(const double *, const double *, int);
-extern void PNG_begin_scaled_raster(int, int[2][2], double[2][2]);
-extern int PNG_scaled_raster(int, int, const unsigned char *,
-			     const unsigned char *, const unsigned char *,
-			     const unsigned char *);
+extern void PNG_begin_raster(int, int[2][2], double[2][2]);
+extern int PNG_raster(int, int, const unsigned char *,
+		      const unsigned char *, const unsigned char *,
+		      const unsigned char *);
+extern void PNG_Begin(void);
+extern void PNG_Move(double, double);
+extern void PNG_Cont(double, double);
+extern void PNG_Close(void);
+extern void PNG_Stroke(void);
+extern void PNG_Fill(void);
+extern void PNG_Point(double, double);
 extern void PNG_Set_window(double, double, double, double);
 extern void PNG_color_rgb(int, int, int);
 extern void PNG_draw_bitmap(int, int, int, const unsigned char *);
-extern void PNG_draw_line(double, double, double, double);
-extern void PNG_draw_point(double, double);
 
 #endif /* __PNGDRIVER_H__ */

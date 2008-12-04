@@ -67,21 +67,23 @@ extern int Cairo_Graph_set(void);
 extern void Cairo_Graph_close(void);
 extern void Cairo_Box(double, double, double, double);
 extern void Cairo_Set_window(double, double, double, double);
-extern void Cairo_draw_line(double, double, double, double);
-extern void Cairo_draw_bitmap(int, int, int, const unsigned char *);
-extern void Cairo_draw_point(double, double);
-extern void Cairo_color_rgb(int, int, int);
+extern void Cairo_Bitmap(int, int, int, const unsigned char *);
+extern void Cairo_Color(int, int, int);
 extern void Cairo_Erase(void);
-extern void Cairo_begin_scaled_raster(int, int[2][2], double[2][2]);
-extern int Cairo_scaled_raster(int, int,
-			       const unsigned char *, const unsigned char *,
-			       const unsigned char *, const unsigned char *);
-extern void Cairo_end_scaled_raster(void);
+extern void Cairo_begin_raster(int, int[2][2], double[2][2]);
+extern int Cairo_raster(int, int,
+			const unsigned char *, const unsigned char *,
+			const unsigned char *, const unsigned char *);
+extern void Cairo_end_raster(void);
+extern void Cairo_Begin(void);
+extern void Cairo_Move(double, double);
+extern void Cairo_Cont(double, double);
+extern void Cairo_Close(void);
+extern void Cairo_Stroke(void);
+extern void Cairo_Fill(void);
+extern void Cairo_Point(double, double);
 extern void Cairo_Line_width(double);
-extern void Cairo_Polygon(const double *, const double *, int);
-extern void Cairo_Polyline(const double *, const double *, int);
-extern void Cairo_Polydots(const double *, const double *, int);
-extern void Cairo_draw_text(const char *);
+extern void Cairo_Text(const char *);
 extern void Cairo_text_box(const char *, double *, double *, double *, double *);
 extern void Cairo_set_font(const char *);
 extern void Cairo_font_list(char ***, int *);

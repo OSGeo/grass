@@ -90,7 +90,7 @@ void read_bmp(void)
 	    int g = fgetc(input);
 	    int r = fgetc(input);
 	    int a = fgetc(input);
-	    unsigned int c = get_color(r, g, b, a);
+	    unsigned int c = png_get_color(r, g, b, a);
 
 	    *p = c;
 	}
