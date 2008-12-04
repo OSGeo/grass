@@ -8,31 +8,49 @@
 #  include <io.h>
 #  include <fcntl.h>
 #  include <process.h>
+static int popen_pid[1024];
 #endif
 
 #include <grass/gis.h>
-
-#define READ      0
-#define WRITE     1
 
 FILE *G_popen(const char *cmd, const char *mode)
 {
 #ifndef __MINGW32__
     return popen(cmd, mode);
 #else
-    int thepipes[2];
-    FILE *rv = NULL;
+    RETSIGTYPE(*sigint)(int);
+    int pipe_fd[2];
+    FILE *rv;
+    int pid;
+    int dir, odir;
+    int oldfd;
 
     fflush(stdout);
     fflush(stderr);
 
-    /*setvbuf ( stdout, NULL, _IONBF, 0 ); */
-
-    if (_pipe(thepipes, 256, O_BINARY) != -1) {
-	execl("cmd", "cmd", "/c", cmd, (char *)NULL);
-	close(thepipes[WRITE]);
-	rv = fdopen(thepipes[READ], mode);
+    switch (mode[0]) {
+    case 'r':	dir = 0;	break;
+    case 'w':	dir = 1;	break;
+    default:	return NULL;
     }
+    odir = 1-dir;
+
+    if (_pipe(pipe_fd, 256, O_BINARY) < 0)
+	return NULL;
+
+    sigint = signal(SIGINT, SIG_IGN);
+
+    oldfd = _dup(odir);
+    _dup2(pipe_fd[odir], odir);
+    pid = spawnlp(_P_NOWAIT, "cmd", "cmd", "/c", cmd, (char *)NULL);
+    _dup2(oldfd, odir);
+    close(oldfd);
+
+    signal(SIGINT, sigint);
+
+    close(pipe_fd[odir]);
+    popen_pid[pipe_fd[dir]] = pid;
+    rv = fdopen(pipe_fd[dir], mode);
 
     return rv;
 #endif
