@@ -630,6 +630,11 @@ class Data:
                                  "self.OnMenuCmd",
                                  "r.colors"),
 
+                                (_("Color tables (stddev)"),
+                                 _("Set color rules based on stddev from a map's mean value."),
+                                 "self.OnMenuCmd",
+                                 "r.colors.stddev"),
+
                                 (_("Color rules"),
                                  _("Set colors interactively by entering color rules"),
                                  "self.RulesCmd",
@@ -1320,12 +1325,20 @@ class Data:
                                  "v.proj"),
                                 )
                          ),
-                        ("","","", ""),
+                        
+                        (_("Manage colors"), (
 
-                        (_("Manage colors"),
-                         _("Set colors interactively by entering color rules"),
-                         "self.RulesCmd",
-                         "vcolors"),
+                                (_("Color tables"),
+                                 _("Set color rules for features in a vector using a numeric attribute column."),
+                                 "self.OnMenuCmd",
+                                 "v.colors"),
+
+                                (_("Color rules"),
+                                 _("Set colors interactively by entering color rules"),
+                                 "self.RulesCmd",
+                                 "vcolors"),
+                                ),
+                         ),
                         ("","","", ""),
 
                         (_("Query with attributes"),
