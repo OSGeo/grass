@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
     struct field_info *Fi;
     struct cat_list *Clist;
     int i, j, ret, option, otype, type, with_z, step, id;
-    int n_areas, centr, new_centr;
+    int n_areas, centr, new_centr, nmodified;
     double x, y;
     int cat, ocat, *fields, nfields, field;
     struct GModule *module;
@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
     option_opt->answer = "add";
     option_opt->description = _("Action to be done");
     option_opt->descriptions = _("add;add a new category;"
-				 "del;delete category;"
+				 "del;delete category (-1 to delete all categories of given layer);"
 				 "chlayer;change layer number (e.g. layer=3,1 changes layer 3 to layer 1);"
 				 "sum;add the value specified by cat option to the current category value;"
 				 "report;print report (statistics), in shell style: layer type count min max;"
@@ -149,6 +149,10 @@ int main(int argc, char *argv[])
     step = atoi(step_opt->answer);
     otype = Vect_option_to_types(type_opt);
 
+    if (cat < 0 && option == O_ADD)
+	G_fatal_error(_("Invalid category number (must be equal to or greater than 0). "
+			"Normally category number starts at 1."));
+    
     /* collect ids */
     if (id_opt->answer) {
 	Clist = Vect_new_cat_list();
@@ -214,6 +218,13 @@ int main(int argc, char *argv[])
 
     id = 0;
 
+    nmodified = 0;
+
+    if (option == O_ADD || option == O_DEL || option == O_CHFIELD ||
+	option == O_SUM) {
+	G_message(_("Processing features..."));
+    }
+    
     switch (option) {
     case (O_ADD):
 	/* Lines */
@@ -223,8 +234,12 @@ int main(int argc, char *argv[])
 				 (Clist &&
 				  Vect_cat_in_cat_list(id, Clist) == TRUE))) {
 		if ((Vect_cat_get(Cats, fields[0], &ocat)) == 0) {
-		    Vect_cat_set(Cats, fields[0], cat);
-		    cat += step;
+		    if (ocat < 0) {
+			if (Vect_cat_set(Cats, fields[0], cat) > 0) {
+			    nmodified++;
+			}
+			cat += step;
+		    }
 		}
 	    }
 	    Vect_write_line(&Out, type, Points, Cats);
@@ -245,7 +260,9 @@ int main(int argc, char *argv[])
 		Vect_reset_line(Points);
 		Vect_reset_cats(Cats);
 		Vect_append_point(Points, x, y, 0.0);
-		Vect_cat_set(Cats, fields[0], cat);
+		if (Vect_cat_set(Cats, fields[0], cat) > 0) {
+		    nmodified++;
+		}
 		cat += step;
 		Vect_write_line(&Out, GV_CENTROID, Points, Cats);
 		new_centr++;
@@ -260,7 +277,10 @@ int main(int argc, char *argv[])
 	    if (type & otype && (!Clist ||
 				 (Clist &&
 				  Vect_cat_in_cat_list(id, Clist) == TRUE))) {
-		ret = Vect_cat_del(Cats, fields[0]);
+		ret = Vect_field_cat_del(Cats, fields[0], cat);
+		if (ret == 1) {
+		    nmodified++;
+		}
 	    }
 	    Vect_write_line(&Out, type, Points, Cats);
 	}
@@ -277,6 +297,7 @@ int main(int argc, char *argv[])
 			Cats->field[i] = fields[1];
 		    }
 		}
+		nmodified++;
 	    }
 	    Vect_write_line(&Out, type, Points, Cats);
 	}
@@ -293,6 +314,7 @@ int main(int argc, char *argv[])
 			Cats->cat[i] += cat;
 		    }
 		}
+		nmodified++;
 	    }
 	    Vect_write_line(&Out, type, Points, Cats);
 	}
@@ -344,6 +366,10 @@ int main(int argc, char *argv[])
 		    fld = nfreps - 1;
 		    freps[fld] = (FREPORT *) G_calloc(1, sizeof(FREPORT));
 		    freps[fld]->field = field;
+		    for (j = 0; j < FRTYPES; j++) {
+			/* cat '0' is valid category number */
+			freps[fld]->min[j] = -1;
+		    }
 		    if ((Fi = Vect_get_field(&In, field)) != NULL) {
 			freps[fld]->table = G_store(Fi->table);
 		    }
@@ -355,7 +381,7 @@ int main(int argc, char *argv[])
 		freps[fld]->count[rtype]++;
 		freps[fld]->count[FR_ALL]++;
 
-		if ((freps[fld]->min[rtype] == 0) ||
+		if (freps[fld]->min[rtype] == -1 ||
 		    freps[fld]->min[rtype] > cat)
 		    freps[fld]->min[rtype] = cat;
 
@@ -363,7 +389,7 @@ int main(int argc, char *argv[])
 		    freps[fld]->max[rtype] < cat)
 		    freps[fld]->max[rtype] = cat;
 
-		if ((freps[fld]->min[FR_ALL] == 0) ||
+		if (freps[fld]->min[FR_ALL] == -1 ||
 		    freps[fld]->min[FR_ALL] > cat)
 		    freps[fld]->min[FR_ALL] = cat;
 
@@ -377,33 +403,37 @@ int main(int argc, char *argv[])
 		if (freps[i]->count[FR_POINT] > 0)
 		    fprintf(stdout, "%d point %d %d %d\n", freps[i]->field,
 			    freps[i]->count[FR_POINT],
-			    freps[i]->min[FR_POINT], freps[i]->max[FR_POINT]);
+			    (freps[i]->min[FR_POINT] < 0 ? 0 : freps[i]->min[FR_POINT]),
+			    freps[i]->max[FR_POINT]);
 
 		if (freps[i]->count[FR_LINE] > 0)
 		    fprintf(stdout, "%d line %d %d %d\n", freps[i]->field,
-			    freps[i]->count[FR_LINE], freps[i]->min[FR_LINE],
+			    freps[i]->count[FR_LINE],
+			    (freps[i]->min[FR_LINE] < 0 ? 0 : freps[i]->min[FR_LINE]),
 			    freps[i]->max[FR_LINE]);
 
 		if (freps[i]->count[FR_BOUNDARY] > 0)
 		    fprintf(stdout, "%d boundary %d %d %d\n", freps[i]->field,
 			    freps[i]->count[FR_BOUNDARY],
-			    freps[i]->min[FR_BOUNDARY],
+			    (freps[i]->min[FR_BOUNDARY] < 0 ? 0 : freps[i]->min[FR_BOUNDARY]),
 			    freps[i]->max[FR_BOUNDARY]);
 
 		if (freps[i]->count[FR_CENTROID] > 0)
 		    fprintf(stdout, "%d centroid %d %d %d\n", freps[i]->field,
 			    freps[i]->count[FR_CENTROID],
-			    freps[i]->min[FR_CENTROID],
+			    (freps[i]->min[FR_BOUNDARY] < 0 ? 0 : freps[i]->min[FR_BOUNDARY]),
 			    freps[i]->max[FR_CENTROID]);
 
 		if (freps[i]->count[FR_AREA] > 0)
 		    fprintf(stdout, "%d area %d %d %d\n", freps[i]->field,
-			    freps[i]->count[FR_AREA], freps[i]->min[FR_AREA],
+			    freps[i]->count[FR_AREA],
+			    (freps[i]->min[FR_AREA] < 0 ? 0 : freps[i]->min[FR_AREA]),
 			    freps[i]->max[FR_AREA]);
 
 		if (freps[i]->count[FR_ALL] > 0)
 		    fprintf(stdout, "%d all %d %d %d\n", freps[i]->field,
-			    freps[i]->count[FR_ALL], freps[i]->min[FR_ALL],
+			    freps[i]->count[FR_ALL],
+			    (freps[i]->min[FR_ALL] < 0 ? 0 : freps[i]->min[FR_ALL]),
 			    freps[i]->max[FR_ALL]);
 	    }
 	    else {
@@ -414,27 +444,31 @@ int main(int argc, char *argv[])
 		else {
 		    fprintf(stdout, "%s: %d\n", _("Layer"), freps[i]->field);
 		}
-		fprintf(stdout, "type       count        min        max\n");
-		fprintf(stdout, "point    %7d %10d %10d\n",
+		fprintf(stdout, _("type       count        min        max\n"));
+		fprintf(stdout, "%s    %7d %10d %10d\n", _("point"),
 			freps[i]->count[FR_POINT],
-			freps[i]->min[FR_POINT], freps[i]->max[FR_POINT]);
-		fprintf(stdout, "line     %7d %10d %10d\n",
+			(freps[i]->min[FR_POINT] < 0) ? 0 : freps[i]->min[FR_POINT],
+			freps[i]->max[FR_POINT]);
+		fprintf(stdout, "%s     %7d %10d %10d\n", _("line"),
 			freps[i]->count[FR_LINE],
-			freps[i]->min[FR_LINE], freps[i]->max[FR_LINE]);
-		fprintf(stdout, "boundary %7d %10d %10d\n",
+			(freps[i]->min[FR_LINE] < 0) ? 0 : freps[i]->min[FR_LINE],
+			freps[i]->max[FR_LINE]);
+		fprintf(stdout, "%s %7d %10d %10d\n", _("boundary"),
 			freps[i]->count[FR_BOUNDARY],
-			freps[i]->min[FR_BOUNDARY],
+			(freps[i]->min[FR_BOUNDARY] < 0) ? 0 : freps[i]->min[FR_BOUNDARY],
 			freps[i]->max[FR_BOUNDARY]);
-		fprintf(stdout, "centroid %7d %10d %10d\n",
+		fprintf(stdout, "%s %7d %10d %10d\n", _("centroid"),
 			freps[i]->count[FR_CENTROID],
-			freps[i]->min[FR_CENTROID],
+			(freps[i]->min[FR_CENTROID] < 0) ? 0 : freps[i]->min[FR_CENTROID],
 			freps[i]->max[FR_CENTROID]);
-		fprintf(stdout, "area     %7d %10d %10d\n",
+		fprintf(stdout, "%s     %7d %10d %10d\n", _("area"),
 			freps[i]->count[FR_AREA],
-			freps[i]->min[FR_AREA], freps[i]->max[FR_AREA]);
-		fprintf(stdout, "all      %7d %10d %10d\n",
+			(freps[i]->min[FR_AREA] < 0) ? 0 : freps[i]->min[FR_AREA],
+			freps[i]->max[FR_AREA]);
+		fprintf(stdout, "%s      %7d %10d %10d\n", _("all"),
 			freps[i]->count[FR_ALL],
-			freps[i]->min[FR_ALL], freps[i]->max[FR_ALL]);
+			(freps[i]->min[FR_ALL] < 0) ? 0 : freps[i]->min[FR_ALL],
+			freps[i]->max[FR_ALL]);
 	    }
 	}
 	break;
@@ -484,10 +518,13 @@ int main(int argc, char *argv[])
 
     if (option == O_ADD || option == O_DEL || option == O_CHFIELD ||
 	option == O_SUM) {
+	G_message(_("Copying attribute table(s)..."));
         if (Vect_copy_tables(&In, &Out, 0))
             G_warning(_("Failed to copy attribute table to output map"));
 	Vect_build(&Out);
 	Vect_close(&Out);
+	
+	G_done_msg(_("%d features modified"), nmodified);
     }
     Vect_close(&In);
 
