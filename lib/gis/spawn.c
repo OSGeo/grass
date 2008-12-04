@@ -61,13 +61,13 @@
 int G_spawn(const char *command, ...)
 {
     va_list va;
-    char *args[MAX_ARGS];
+    const char *args[MAX_ARGS];
     int num_args = 0;
 
     va_start(va, command);
 
     for (num_args = 0; num_args < MAX_ARGS;) {
-	char *arg = va_arg(va, char *);
+	const char *arg = va_arg(va, const char *);
 
 	args[num_args++] = arg;
 	if (!arg)
@@ -81,7 +81,7 @@ int G_spawn(const char *command, ...)
 	return -1;
     }
 
-    return _spawnv(_P_WAIT, (char *)command, args);
+    return _spawnv(_P_WAIT, command, args);
 }
 
 #else
@@ -207,7 +207,7 @@ struct spawn
 
 #ifdef __MINGW32__
 
-static int do_redirects(struct redirect *redirects, int num_redirects)
+static void do_redirects(struct redirect *redirects, int num_redirects)
 {
     if (num_redirects > 0)
 	G_fatal_error
@@ -224,19 +224,18 @@ static char **do_bindings(char **env, struct binding *bindings,
     return env;
 }
 
-static int do_spawn(const char *command)
+static int do_spawn(struct spawn *sp, const char *command)
 {
     char **env;
     int status;
 
-    do_redirects(redirects, num_redirects);
-    env = do_bindings(_environ, bindings, num_bindings);
+    do_redirects(sp->redirects, sp->num_redirects);
+    env = do_bindings(_environ, sp->bindings, sp->num_bindings);
 
     status =
-	spawnvpe(background ? _P_NOWAIT : _P_WAIT, command, (char **)args,
-		 env);
+	spawnvpe(sp->background ? _P_NOWAIT : _P_WAIT, command, sp->args, env);
 
-    if (!background && status < 0)
+    if (!sp->background && status < 0)
 	G_warning(_("Unable to execute command"));
 
     return status;

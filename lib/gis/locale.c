@@ -30,9 +30,12 @@ void G_init_locale(void)
 	return;
 
     setlocale(LC_CTYPE, "");
-    setlocale(LC_MESSAGES, "");
 
 #if defined(HAVE_LIBINTL_H) && defined(USE_NLS)
+#ifdef LC_MESSAGES
+    setlocale(LC_MESSAGES, "");
+#endif
+
     gisbase = getenv("GISBASE");
     if (gisbase && *gisbase) {
 	char localedir[GPATH_MAX];

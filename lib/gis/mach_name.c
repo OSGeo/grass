@@ -31,7 +31,7 @@ const char *G__machine_name(void)
 	uname(&attname);
 	strcpy(name, attname.nodename);
     }
-#elif
+#else
     strcpy(name, "unknown");
 #endif
 
