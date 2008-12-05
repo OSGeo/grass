@@ -396,3 +396,39 @@ void R_bitmap(int ncols, int nrows, int threshold, const unsigned char *buf)
 {
     COM_Bitmap(ncols, nrows, threshold, buf);
 }
+
+void R_begin(void)
+{
+    COM_Begin();
+}
+
+void R_move(double x, double y)
+{
+    COM_Move(x, y);
+}
+
+void R_cont(double x, double y)
+{
+    COM_Cont(x, y);
+}
+
+void R_close(void)
+{
+    COM_Close();
+}
+
+void R_stroke(void)
+{
+    COM_Stroke();
+}
+
+void R_fill(void)
+{
+    COM_Fill();
+}
+
+void R_point(double x, double y)
+{
+    COM_Point(x, y);
+}
+

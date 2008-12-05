@@ -20,6 +20,14 @@ void R_polyline_abs(const double *, const double *, int);
 void R_polygon_abs(const double *, const double *, int);
 void R_box_abs(double, double, double, double);
 
+void R_begin(void);
+void R_move(double, double);
+void R_cont(double, double);
+void R_close(void);
+void R_stroke(void);
+void R_fill(void);
+void R_point(double, double);
+
 void R_text_size(double, double);
 void R_text_rotation(double);
 void R_text(const char *);
