@@ -16,6 +16,8 @@ SUBDIRS = \
 	db.select \
 	db.tables
 
+CLEAN_SUBDIRS = drivers
+
 PGM = databaseintro
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
