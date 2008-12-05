@@ -74,22 +74,33 @@ int PS_vlegend(void)
 	x = 72.0 * vector.x;
     else
 	x = PS.map_left;
+
     if (vector.y > 0.0)
 	y = 72.0 * (PS.page_height - vector.y);
     else if (vector.x <= 0.0)
 	y = PS.min_y;
     else
 	y = PS.map_bot;
+
     margin = 0.4 * fontsize;
-    if (x < PS.map_left + margin)
-	x = PS.map_left + margin;
+
+    if (x < PS.left_marg*72 + margin)
+	x = PS.left_marg*72 + margin;
 
     if (lcount < vector.cols)
 	vector.cols = lcount;
+
+/* FIXME (somehow): allow multi column to draw to the right margin would 
+    be nice, but for normal use locking to the right side of the map box
+    looks better. What's the correct compromise if the right side is always
+    automatically chosen? */
     dx = (PS.map_right - x) / vector.cols;
+/*    dx = ((PS.page_width-PS.right_marg)*72 - x) / vector.cols; */
+
     xs = x;			/*save x and y */
     ys = y;
     lc = (int)lcount / vector.cols;	/* lines per column */
+
     if (lcount % vector.cols)
 	lc++;
 
@@ -181,6 +192,7 @@ int PS_vlegend(void)
 			    eps_bbox(vector.layer[i].pat, &llx, &lly, &urx,
 				     &ury);
 			    sprintf(pat, "APATTEPS%d", i);
+			    pat_save(PS.fp, vector.layer[i].pat, pat);
 
 			    fprintf(PS.fp,
 				    "<<  /PatternType 1\n    /PaintType 1\n    /TilingType 1\n");
@@ -254,10 +266,11 @@ int PS_vlegend(void)
 
 	    /* plot the text */
 	    set_rgb_color(BLACK);
-	    fprintf(PS.fp, "a %d get %.1f %.1f MS\n", j - h * lc, x + width,
-		    y);
+	    fprintf(PS.fp, "a %d get %.1f %.1f MS\n",
+			j - h * lc, x + width, y);
 	}
-    }				/*h */
+    }	/* h */
+
     x = xs;
     y = ys - lc * dy;
 
