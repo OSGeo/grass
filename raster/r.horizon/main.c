@@ -188,36 +188,6 @@ int main(int argc, char *argv[])
 	 " The input for this is the angle (in degrees), which is measured "
 	 " counterclockwise with east=0, north=90 etc. The output is the horizon height in radians.");
 
-    G_get_set_window(&cellhd);
-
-    stepx = cellhd.ew_res;
-    stepy = cellhd.ns_res;
-    stepxhalf = stepx / 2.;
-    stepyhalf = stepy / 2.;
-    invstepx = 1. / stepx;
-    invstepy = 1. / stepy;
-    /*
-       offsetx = 2. *  invstepx;
-       offsety = 2. * invstepy;
-       offsetx = 0.5*stepx;
-       offsety = 0.5*stepy;
-     */
-    offsetx = 0.5;
-    offsety = 0.5;
-
-    n /*n_cols */  = cellhd.cols;
-    m /*n_rows */  = cellhd.rows;
-
-    n100 = ceil(n / 100.);
-    m100 = ceil(m / 100.);
-
-    xmin = cellhd.west;
-    ymin = cellhd.south;
-    xmax = cellhd.east;
-    ymax = cellhd.north;
-    deltx = fabs(cellhd.east - cellhd.west);
-    delty = fabs(cellhd.north - cellhd.south);
-
     parm.elevin = G_define_option();
     parm.elevin->key = "elevin";
     parm.elevin->type = TYPE_STRING;
@@ -328,6 +298,36 @@ int main(int argc, char *argv[])
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
+    G_get_set_window(&cellhd);
+
+    stepx = cellhd.ew_res;
+    stepy = cellhd.ns_res;
+    stepxhalf = stepx / 2.;
+    stepyhalf = stepy / 2.;
+    invstepx = 1. / stepx;
+    invstepy = 1. / stepy;
+    /*
+       offsetx = 2. *  invstepx;
+       offsety = 2. * invstepy;
+       offsetx = 0.5*stepx;
+       offsety = 0.5*stepy;
+     */
+    offsetx = 0.5;
+    offsety = 0.5;
+
+    n /*n_cols */  = cellhd.cols;
+    m /*n_rows */  = cellhd.rows;
+
+    n100 = ceil(n / 100.);
+    m100 = ceil(m / 100.);
+
+    xmin = cellhd.west;
+    ymin = cellhd.south;
+    xmax = cellhd.east;
+    ymax = cellhd.north;
+    deltx = fabs(cellhd.east - cellhd.west);
+    delty = fabs(cellhd.north - cellhd.south);
 
     degreeOutput = flag.degreeOutput->answer;
 

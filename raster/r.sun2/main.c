@@ -90,7 +90,6 @@ const char *glob_rad = NULL;
 const char *mapset = NULL;
 const char *per;
 const char *shade;
-char mapname[1024];
 
 struct Cell_head cellhd;
 struct pj_info iproj;
@@ -221,8 +220,8 @@ int main(int argc, char *argv[])
 
 
     G_gisinit(argv[0]);
-    module = G_define_module();
 
+    module = G_define_module();
     module->description =
 	_("Computes direct (beam), diffuse and reflected solar irradiation raster "
 	 "maps for given day, latitude, surface and atmospheric conditions. Solar "
@@ -231,21 +230,6 @@ int main(int argc, char *argv[])
 	 "Alternatively, a local time can be specified to compute solar "
 	 "incidence angle and/or irradiance raster maps. The shadowing effect of "
 	 "the topography is optionally incorporated.");
-
-    G_get_set_window(&cellhd);
-
-    gridGeom.stepx = cellhd.ew_res;
-    gridGeom.stepy = cellhd.ns_res;
-    invstepx = 1. / gridGeom.stepx;
-    invstepy = 1. / gridGeom.stepy;
-    n /*n_cols */  = cellhd.cols;
-    m /*n_rows */  = cellhd.rows;
-    xmin = cellhd.west;
-    ymin = cellhd.south;
-    xmax = cellhd.east;
-    ymax = cellhd.north;
-    gridGeom.deltx = fabs(cellhd.east - cellhd.west);
-    gridGeom.delty = fabs(cellhd.north - cellhd.south);
 
     parm.elevin = G_define_option();
     parm.elevin->key = "elevin";
@@ -510,6 +494,21 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
+
+    G_get_set_window(&cellhd);
+
+    gridGeom.stepx = cellhd.ew_res;
+    gridGeom.stepy = cellhd.ns_res;
+    invstepx = 1. / gridGeom.stepx;
+    invstepy = 1. / gridGeom.stepy;
+    n /*n_cols */  = cellhd.cols;
+    m /*n_rows */  = cellhd.rows;
+    xmin = cellhd.west;
+    ymin = cellhd.south;
+    xmax = cellhd.east;
+    ymax = cellhd.north;
+    gridGeom.deltx = fabs(cellhd.east - cellhd.west);
+    gridGeom.delty = fabs(cellhd.north - cellhd.south);
 
     setUseShadow(flag.shade->answer);
 
