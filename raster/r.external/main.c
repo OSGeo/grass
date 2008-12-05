@@ -42,6 +42,11 @@ struct band_info
     struct Colors colors;
 };
 
+enum flip {
+    FLIP_H = 1,
+    FLIP_V = 2,
+};
+
 static void list_formats(void)
 {
     /* -------------------------------------------------------------------- */
@@ -183,7 +188,7 @@ static void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int ove
     }
 }
 
-static void setup_window(struct Cell_head *cellhd, GDALDatasetH hDS)
+static void setup_window(struct Cell_head *cellhd, GDALDatasetH hDS, int *flip)
 {
     /* -------------------------------------------------------------------- */
     /*      Set up the window representing the data we have.                */
@@ -196,19 +201,26 @@ static void setup_window(struct Cell_head *cellhd, GDALDatasetH hDS)
     cellhd->cols = GDALGetRasterXSize(hDS);
     cellhd->cols3 = GDALGetRasterXSize(hDS);
 
-    if (GDALGetGeoTransform(hDS, adfGeoTransform) == CE_None &&
-	adfGeoTransform[5] < 0.0) {
+    if (GDALGetGeoTransform(hDS, adfGeoTransform) == CE_None) {
 	if (adfGeoTransform[2] != 0.0 || adfGeoTransform[4] != 0.0)
 	    G_fatal_error(_("Input raster map is rotated - cannot import. "
 			    "You may use 'gdalwarp' to transform the map to North-up."));
+	if (adfGeoTransform[1] <= 0.0) {
+	    G_message(_("Applying horizontal flip"));
+	    *flip |= FLIP_H;
+	}
+	if (adfGeoTransform[5] >= 0.0) {
+	    G_message(_("Applying vertical flip"));
+	    *flip |= FLIP_V;
+	}
 
 	cellhd->north = adfGeoTransform[3];
 	cellhd->ns_res = fabs(adfGeoTransform[5]);
 	cellhd->ns_res3 = fabs(adfGeoTransform[5]);
 	cellhd->south = cellhd->north - cellhd->ns_res * cellhd->rows;
 	cellhd->west = adfGeoTransform[0];
-	cellhd->ew_res = adfGeoTransform[1];
-	cellhd->ew_res3 = adfGeoTransform[1];
+	cellhd->ew_res = fabs(adfGeoTransform[1]);
+	cellhd->ew_res3 = fabs(adfGeoTransform[1]);
 	cellhd->east = cellhd->west + cellhd->cols * cellhd->ew_res;
 	cellhd->top = 1.;
 	cellhd->bottom = 0.;
@@ -365,7 +377,7 @@ static void make_cell(const char *output, const struct band_info *info)
 }
 
 static void make_link(const char *input, const char *output, int band,
-		      const struct band_info *info)
+		      const struct band_info *info, int flip)
 {
     struct Key_Value *key_val = G_create_key_value();
     char null_str[256], type_str[8], band_str[8];
@@ -388,6 +400,10 @@ static void make_link(const char *input, const char *output, int band,
     G_set_key_value("band", band_str, key_val);
     G_set_key_value("null", null_str, key_val);
     G_set_key_value("type", type_str, key_val);
+    if (flip & FLIP_H)
+	G_set_key_value("hflip", "yes", key_val);
+    if (flip & FLIP_V)
+	G_set_key_value("vflip", "yes", key_val);
 
     fp = G_fopen_new_misc("cell_misc", "gdal", output);
     if (!fp)
@@ -440,7 +456,7 @@ static void write_fp_quant(const char *output)
 
 static void create_map(const char *input, int band, const char *output,
 		       struct Cell_head *cellhd, struct band_info *info,
-		       const char *title)
+		       const char *title, int flip)
 {
     struct History history;
 
@@ -448,7 +464,7 @@ static void create_map(const char *input, int band, const char *output,
 
     make_cell(output, info);
 
-    make_link(input, output, band, info);
+    make_link(input, output, band, info, flip);
 
     if (info->data_type == CELL_TYPE) {
 	struct Range range;
@@ -495,9 +511,10 @@ int main(int argc, char *argv[])
     struct {
 	struct Option *input, *source, *output, *band, *title;
     } parm;
-    struct Flag *flag_o, *flag_f, *flag_e, *flag_r;
+    struct Flag *flag_o, *flag_f, *flag_e, *flag_r, *flag_h, *flag_v;
     int band;
     struct band_info info;
+    int flip;
 
     G_gisinit(argv[0]);
 
@@ -554,6 +571,14 @@ int main(int argc, char *argv[])
     flag_f->description = _("List supported formats and exit");
     flag_f->guisection = _("Print");
 
+    flag_h = G_define_flag();
+    flag_h->key = 'h';
+    flag_h->description = _("Flip horizontally");
+
+    flag_v = G_define_flag();
+    flag_v->key = 'v';
+    flag_v->description = _("Flip vertically");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -567,6 +592,12 @@ int main(int argc, char *argv[])
     input = parm.input->answer;
     source = parm.source->answer;
     output = parm.output->answer;
+
+    flip = 0;
+    if (flag_h->answer)
+	flip |= FLIP_H;
+    if (flag_v->answer)
+	flip |= FLIP_V;
 
     if (parm.title->answer) {
 	title = G_store(parm.title->answer);
@@ -604,7 +635,7 @@ int main(int argc, char *argv[])
     if (hDS == NULL)
 	return 1;
 
-    setup_window(&cellhd, hDS);
+    setup_window(&cellhd, hDS, &flip);
 
     check_projection(&cellhd, hDS, flag_o->answer);
 
@@ -619,7 +650,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Unable to set window"));
 
     query_band(hBand, output, flag_r->answer, &cellhd, &info);
-    create_map(input, band, output, &cellhd, &info, title);
+    create_map(input, band, output, &cellhd, &info, title, flip);
 
     if (flag_e->answer)
 	update_default_window(&cellhd);

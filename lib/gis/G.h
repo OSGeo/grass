@@ -23,6 +23,8 @@ struct GDAL_link
     char *filename;
     int band_num;
     DCELL null_val;
+    int hflip;
+    int vflip;
 #ifdef HAVE_GDAL
     GDALDatasetH data;
     GDALRasterBandH band;
