@@ -42,7 +42,6 @@ int main(int argc, char **argv)
     struct field_info *fi;
     int field, ret, num_dblinks, i, ncols, col;
     struct Map_info Map;
-    char *drv, *db;
 
     /* set up the options and flags for the command line parser */
 
@@ -55,12 +54,10 @@ int main(int argc, char **argv)
 
     dbdriver = G_define_standard_option(G_OPT_DB_DRIVER);
     dbdriver->options = db_list_drivers();
-    if ((drv = G__getenv2("DB_DRIVER", G_VAR_MAPSET)))
-	dbdriver->answer = G_store(drv);
+    dbdriver->answer = db_get_default_driver_name();
 
     dbdatabase = G_define_standard_option(G_OPT_DB_DATABASE);
-    if ((db = G__getenv2("DB_DATABASE", G_VAR_MAPSET)))
-	dbdatabase->answer = G_store(db);
+    dbdatabase->answer = db_get_default_database_name();
 
     dbtable = G_define_standard_option(G_OPT_DB_TABLE);
 

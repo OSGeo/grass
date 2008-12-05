@@ -44,7 +44,6 @@ int main(int argc, char **argv)
     struct Option *driver_opt, *database_opt, *table_opt, *thresh_opt;
     struct GModule *module;
     const char *mapset;
-    const char *drv, *db;
     struct Map_info LMap, PMap;
     struct line_cats *LCats, *PCats;
     struct line_pnts *LPoints, *PPoints;
@@ -83,16 +82,15 @@ int main(int argc, char **argv)
     driver_opt->type = TYPE_STRING;
     driver_opt->required = NO;
     driver_opt->description = _("Driver name for reference system table");
-    if ((drv = db_get_default_driver_name()))
-	driver_opt->answer = drv;
+    driver_opt->options = db_list_drivers();
+    driver_opt->answer = db_get_default_driver_name();
 
     database_opt = G_define_option();
     database_opt->key = "rsdatabase";
     database_opt->type = TYPE_STRING;
     database_opt->required = NO;
     database_opt->description = _("Database name for reference system table");
-    if ((db = db_get_default_database_name()))
-	database_opt->answer = db;
+    database_opt->answer = db_get_default_database_name();
 
     table_opt = G_define_option();
     table_opt->key = "rstable";
