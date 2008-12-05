@@ -150,6 +150,7 @@ struct GDAL_link *G_get_gdal_link(const char *name, const char *mapset)
     struct Key_Value *key_val;
     const char *p;
     DCELL null_val;
+    int hflip, vflip;
 
     if (!G_find_cell2(name, mapset))
 	return NULL;
@@ -185,6 +186,9 @@ struct GDAL_link *G_get_gdal_link(const char *name, const char *mapset)
 	G_set_d_null_value(&null_val, 1);
     else
 	null_val = atof(p);
+
+    hflip = G_find_key_value("hflip", key_val) ? 1 : 0;
+    vflip = G_find_key_value("vflip", key_val) ? 1 : 0;
 
 #ifdef GDAL_LINK
     p = G_find_key_value("type", key_val);
@@ -231,6 +235,8 @@ struct GDAL_link *G_get_gdal_link(const char *name, const char *mapset)
     gdal->filename = G_store(filename);
     gdal->band_num = band_num;
     gdal->null_val = null_val;
+    gdal->hflip = hflip;
+    gdal->vflip = vflip;
 #ifdef GDAL_LINK
     gdal->data = data;
     gdal->band = band;

@@ -208,13 +208,31 @@ static int read_data_uncompressed(int fd, int row, unsigned char *data_buf,
 static int read_data_gdal(int fd, int row, unsigned char *data_buf, int *nbytes)
 {
     struct fileinfo *fcb = &G__.fileinfo[fd];
+    unsigned char *buf;
     CPLErr err;
 
     *nbytes = fcb->nbytes;
 
+    if (fcb->gdal->vflip)
+	row = fcb->cellhd.rows - 1 - row;
+
+    buf = fcb->gdal->hflip
+	? G__alloca(fcb->cellhd.cols * fcb->cur_nbytes)
+	: data_buf;
+
     err = G_gdal_raster_IO(
-	fcb->gdal->band, GF_Read, 0, row, fcb->cellhd.cols, 1, data_buf,
+	fcb->gdal->band, GF_Read, 0, row, fcb->cellhd.cols, 1, buf,
 	fcb->cellhd.cols, 1, fcb->gdal->type, 0, 0);
+
+    if (fcb->gdal->hflip) {
+	int i;
+
+	for (i = 0; i < fcb->cellhd.cols; i++)
+	    memcpy(data_buf + i * fcb->cur_nbytes,
+		   buf + (fcb->cellhd.cols - 1 - i) * fcb->cur_nbytes,
+		   fcb->cur_nbytes);
+	G__freea(buf);
+    }
 
     return err == CE_None ? 0 : -1;
 }
