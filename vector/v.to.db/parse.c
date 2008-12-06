@@ -33,16 +33,18 @@ int parse_command_line(int argc, char *argv[])
     parms.type = G_define_standard_option(G_OPT_V_TYPE);
     parms.type->options = "point,line,boundary,centroid";
     parms.type->answer = "point,line,boundary,centroid";
+    parms.type->label = _("Feature type");
     parms.type->description =
-	_("Type of elements (for coor valid point/centroid, "
-	  "for length valid line/boundary)");
-    parms.type->label = _("Type of elements");
+	_("For coor valid point/centroid, "
+	  "for length valid line/boundary");
 
     parms.field = G_define_standard_option(G_OPT_V_FIELD);
+    parms.field->label = _("Layer number (write to)");
 
     parms.qfield = G_define_standard_option(G_OPT_V_FIELD);
     parms.qfield->key = "qlayer";
-    parms.qfield->label = _("Query layer (used by 'query' option)");
+    parms.qfield->label = _("Query layer number (read from)");
+    parms.qfield->guisection = _("Query");
 
     parms.option = G_define_option();
     parms.option->key = "option";
@@ -85,10 +87,15 @@ int parse_command_line(int argc, char *argv[])
 
     parms.col = G_define_standard_option(G_OPT_DB_COLUMNS);
 
-    parms.qcol = G_define_standard_option(G_OPT_DB_COLUMN);
+    parms.qcol = G_define_option();
     parms.qcol->key = "qcolumn";
     parms.qcol->label = _("Name of attribute column used for 'query' option");
     parms.qcol->description = _("E.g. 'cat', 'count(*)', 'sum(val)'");
+    parms.qcol->type = TYPE_STRING;
+    parms.qcol->key_desc = "name";
+    parms.qcol->required = NO;
+    parms.qcol->multiple = NO;
+    parms.qcol->guisection = _("Query");
 
     flags.p = G_define_flag();
     flags.p->key = 'p';
@@ -97,7 +104,7 @@ int parse_command_line(int argc, char *argv[])
 
     flags.s = G_define_flag();
     flags.s->key = 's';
-    flags.s->description = _("Only print sql statements");
+    flags.s->description = _("Only print SQL statements");
     flags.s->guisection = _("Print");
 
     flags.t = G_define_flag();

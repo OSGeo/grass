@@ -43,7 +43,7 @@ int update(struct Map_info *Map)
     db_begin_transaction(driver);
 
     /* select existing categories to array (array is sorted) */
-    vstat.select = db_select_int(driver, qFi->table, Fi->key, NULL, &catexst);
+    vstat.select = db_select_int(driver, qFi->table, qFi->key, NULL, &catexst);
     G_debug(3, "Existing categories: %d", vstat.select);
 
     /* create beginning of stmt */
@@ -73,8 +73,6 @@ int update(struct Map_info *Map)
     /* update */
     G_message(_("Updating database..."));
     for (i = 0; i < vstat.rcat; i++) {
-	G_percent(i + 1, vstat.rcat, 1);
-
 	fcat = Values[i].cat;
 	if (fcat < 0)
 	    continue;
@@ -103,7 +101,7 @@ int update(struct Map_info *Map)
 	case O_START:
 	case O_END:
 	    if (Values[i].count1 > 1) {
-		G_warning(_("More elements of category [%d], nothing loaded to DB"),
+		G_warning(_("More elements of category %d, nothing loaded to database"),
 			  Values[i].cat);
 		vstat.dupl++;
 		continue;
@@ -186,23 +184,23 @@ int update(struct Map_info *Map)
 		    break;
 		}
 	    }
+	    G_percent(i + 1, vstat.rcat, 2);
 	}
 
 	G_debug(3, "SQL: %s", buf2);
 	db_set_string(&stmt, buf2);
 
-	/* category exist in DB ? */
-	cex =
-	    (int *)bsearch((void *)&fcat, catexst, vstat.select, sizeof(int),
-			   srch);
-
+	/* category exist in DB table ? */
+	cex = (int *)bsearch((void *)&fcat, catexst, vstat.select, sizeof(int),
+			     srch);
+	
 	if (options.option == O_CAT) {
 	    if (cex == NULL) {	/* cat does not exist in DB */
 		upd = 1;
 		vstat.notexist++;
 	    }
 	    else {		/* cat exists in DB */
-		G_warning(_("Cat [%d]: row already exists (not inserted)"),
+		G_warning(_("Record (cat %d) already exists (not inserted)"),
 			  fcat);
 		upd = 0;
 		vstat.exist++;
@@ -210,7 +208,7 @@ int update(struct Map_info *Map)
 	}
 	else {
 	    if (cex == NULL) {	/* cat does not exist in DB */
-		G_warning(_("Cat [%d]: row does not exist (not updated)"),
+		G_warning(_("Record (cat %d) does not exist (not updated)"),
 			  fcat);
 		upd = 0;
 		vstat.notexist++;
@@ -239,6 +237,7 @@ int update(struct Map_info *Map)
     db_commit_transaction(driver);
 
     G_free(catexst);
+    
     db_close_database_shutdown_driver(driver);
     db_free_string(&stmt);
 

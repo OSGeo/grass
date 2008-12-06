@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <grass/glocale.h>
+
 #include "global.h"
 
 /* This function now does one of 3 things:
@@ -22,6 +24,9 @@ int read_areas(struct Map_info *Map)
 
     Cats = Vect_new_cats_struct();
     nareas = Vect_get_num_areas(Map);
+
+    G_message(_("Reading areas..."));
+
     /* Cycle through all areas */
     for (area_num = 1; area_num <= nareas; area_num++) {
 	Ppoints = Vect_new_line_struct();
@@ -72,6 +77,7 @@ int read_areas(struct Map_info *Map)
 		}
 	    }
 	}
+	G_percent(area_num, nareas, 2);
     }
 
     return 0;

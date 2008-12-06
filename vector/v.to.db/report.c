@@ -172,18 +172,22 @@ int report(void)
 int print_stat(void)
 {
     if (vstat.rcat > 0)
-	G_message(_("%d categories read from map"), vstat.rcat);
+	G_message(_("%d categories read from vector map (layer %d)"),
+		  vstat.rcat - 1, options.field); /* don't report cat -1 */
     if (vstat.select > 0)
-	G_message(_("%d records selected from table"), vstat.select);
+	G_message(_("%d records selected from table (layer %d)"),
+		  vstat.select, options.qfield);
     if (vstat.exist > 0)
-	G_message(_("%d categories read from map exist in selection from table"),
+	G_message(_("%d categories read from vector map exist in selection from table"),
 		  vstat.exist);
     if (vstat.notexist > 0)
-	G_message(_("%d categories read from map don't exist in selection from table"),
+	G_message(_("%d categories read from vector map don't exist in selection from table"),
 		  vstat.notexist);
-    G_message(_("%d records updated/inserted"), vstat.update);
+    G_message(_("%d records updated/inserted (layer %d)"),
+	      vstat.update, options.field);
     if (vstat.error > 0)
-	G_message(_("%d update/insert errors"), vstat.error);
+	G_message(_("%d update/insert errors (layer %d)"),
+		  vstat.error, options.field);
     if (vstat.dupl > 0)
 	G_message(_("%d categories with more points (coordinates not loaded)"),
 		  vstat.dupl);

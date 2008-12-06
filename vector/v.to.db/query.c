@@ -20,12 +20,11 @@ int query(struct Map_info *Map)
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
+    G_message(_("Reading features..."));
+
     /* Cycle through all lines and make a list of categories of 'qfield' for each category given by 'field' */
-    G_message(_("Reading data from the map..."));
     nlines = Vect_get_num_lines(Map);
     for (line_num = 1; line_num <= nlines; line_num++) {
-	G_percent(line_num, nlines, 1);
-
 	type = Vect_read_line(Map, Points, Cats, line_num);
 	if (!(type & options.type))
 	    continue;
@@ -73,6 +72,8 @@ int query(struct Map_info *Map)
 		}
 	    }
 	}
+
+	G_percent(line_num, nlines, 2);
     }
 
     db_init_string(&stmt);
