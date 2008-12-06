@@ -81,6 +81,10 @@ int line_overlap_area(struct Map_info *LMap, int line, struct Map_info *AMap,
 	}
     }
 
+    /* Skip points */
+    if (LPoints->n_points < 2)
+	return 0;
+    
     /* Try intersections of line with area/isles boundary */
     /* Outer boundary */
     Vect_get_area_points(AMap, area, APoints);
@@ -115,7 +119,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *in_opt[2], *out_opt, *type_opt[2], *field_opt[2],
 	*operator_opt;
-    struct Flag *table_flag;
+    struct Flag *table_flag, *r_flag;
     struct Map_info In[2], Out;
     struct field_info *IFi, *OFi;
     struct line_pnts *APoints, *BPoints;
@@ -140,10 +144,12 @@ int main(int argc, char *argv[])
     type_opt[0] = G_define_standard_option(G_OPT_V_TYPE);
     type_opt[0]->label = _("Feature type (vector map A)");
     type_opt[0]->key = "atype";
+    type_opt[0]->guisection = _("Selection");
 
     field_opt[0] = G_define_standard_option(G_OPT_V_FIELD);
     field_opt[0]->label = _("Layer number (vector map A)");
     field_opt[0]->key = "alayer";
+    field_opt[0]->guisection = _("Selection");
 
     in_opt[1] = G_define_standard_option(G_OPT_V_INPUT);
     in_opt[1]->description = _("Name of input vector map (B)");
@@ -152,11 +158,13 @@ int main(int argc, char *argv[])
     type_opt[1] = G_define_standard_option(G_OPT_V_TYPE);
     type_opt[1]->label = _("Feature type (vector map B)");
     type_opt[1]->key = "btype";
-
+    type_opt[1]->guisection = _("Selection");
+    
     field_opt[1] = G_define_standard_option(G_OPT_V_FIELD);
     field_opt[1]->label = _("Layer number (vector map B)");
     field_opt[1]->key = "blayer";
-
+    field_opt[1]->guisection = _("Selection");
+    
     out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
 
     operator_opt = G_define_option();
@@ -176,6 +184,11 @@ int main(int argc, char *argv[])
     table_flag = G_define_flag();
     table_flag->key = 't';
     table_flag->description = _("Do not create attribute table");
+
+    r_flag = G_define_flag();
+    r_flag->key = 'r';
+    r_flag->description = _("Reverse selection");
+    r_flag->guisection = _("Selection");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -428,7 +441,8 @@ int main(int argc, char *argv[])
 	G_debug(4, "aline = %d ALines[aline] = %d", aline, ALines[aline]);
 	G_percent(aline, nalines, 2);
 	
-	if (!(ALines[aline]))
+	if ((!r_flag->answer && !(ALines[aline])) ||
+	    (r_flag->answer && ALines[aline]))
 	    continue;
 
 	atype = Vect_read_line(&(In[0]), APoints, ACats, aline);
