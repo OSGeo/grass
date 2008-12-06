@@ -9,7 +9,7 @@
  * PURPOSE:      Produces a vector map of specified contours from a 
  *               raster map layer.
  *
- * COPYRIGHT:    (C) 2001 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2001-2008 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -82,9 +82,9 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("raster");
-    module->description = _("Produces a vector map layer of specified "
-			    "contours from a raster map layer.");
+    module->keywords = _("raster, DEM, contours, vector");
+    module->description = _("Produces a vector map of specified "
+			    "contours from a raster map.");
 
     map = G_define_standard_option(G_OPT_R_INPUT);
     vect = G_define_standard_option(G_OPT_V_OUTPUT);
@@ -136,7 +136,8 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
 
     if (G_read_fp_range(name, "", &range) < 0)
-	G_fatal_error(_("Could not read range file"));
+	G_fatal_error(_("Unable to read fp range of raster map <%s>"),
+		      name);
 
     /* get window info */
     G_get_window(&Wind);
@@ -166,11 +167,13 @@ int main(int argc, char *argv[])
     G_debug(1, "SQL: %s", db_get_string(&sql));
 
     if (db_execute_immediate(Driver, &sql) != DB_OK) {
-	G_fatal_error(_("Unable to create table: %s"), db_get_string(&sql));
+	G_fatal_error(_("Unable to create table: '%s'"),
+		      db_get_string(&sql));
     }
 
-    if (db_create_index2(Driver, Fi->table, "cat") != DB_OK)
-	G_warning(_("Cannot create index"));
+    if (db_create_index2(Driver, Fi->table, Fi->key) != DB_OK)
+	G_warning(_("Unable to create index for table <%s>, key <%s>"),
+		  Fi->table, Fi->key);
 
     if (db_grant_on_table
 	(Driver, Fi->table, DB_PRIV_SELECT, DB_GROUP | DB_PUBLIC) != DB_OK)
@@ -192,7 +195,7 @@ int main(int argc, char *argv[])
 	G_debug(3, "SQL: %s", db_get_string(&sql));
 
 	if (db_execute_immediate(Driver, &sql) != DB_OK) {
-	    G_fatal_error(_("Unable to insert row: %s"), db_get_string(&sql));
+	    G_fatal_error(_("Unable to insert new record: '%s'"), db_get_string(&sql));
 	}
     }
 
@@ -200,8 +203,6 @@ int main(int argc, char *argv[])
 
     Vect_build(&Map);
     Vect_close(&Map);
-
-    G_done_msg("");
 
     exit(EXIT_SUCCESS);
 }
@@ -214,13 +215,12 @@ DCELL **get_z_array(int fd, int nrow, int ncol)
 
     z_array = (DCELL **) G_malloc(nrow * sizeof(DCELL *));
 
-    G_message(_("Reading data: "));
+    G_message(_("Reading data..."));
 
     for (i = 0; i < nrow; i++) {
 	z_array[i] = (DCELL *) G_malloc(ncol * sizeof(DCELL));
 	G_get_d_raster_row(fd, z_array[i], i);
 	G_percent(i + 1, nrow, 2);
-
     }
     return z_array;
 }
@@ -241,9 +241,9 @@ double *getlevels(struct Option *levels,
     G_get_fp_range_min_max(range, &zmin, &zmax);
 
     if (!G_is_d_null_value(&zmin) && !G_is_d_null_value(&zmax))
-	G_message(_("Range of data:    min =  %f max = %f"), zmin, zmax);
+	G_verbose_message(_("Range of data: min=%f, max=%f"), zmin, zmax);
     else
-	G_message(_("Range of data:    empty"));
+	G_verbose_message(_("Range of data: empty"));
 
     nlevels = 0;
     if (levels->answers) {
@@ -269,11 +269,12 @@ double *getlevels(struct Option *levels,
 
 	dstep = atof(step->answer);
 	/* fix if step < 1, Roger Bivand 1/2001: */
+
 	dmax = (max->answer) ? atof(max->answer) :
-	    dstep == 0 ? (G_fatal_error(_("This step value is not allowed.")), 0) :
+	    dstep == 0 ? (G_fatal_error(_("This step value is not allowed")), 0) :
 	    zmax - fmod(zmax, dstep);
 	dmin = (min->answer) ? atof(min->answer) :
-	    dstep == 0 ? (G_fatal_error(_("This step value is not allowed.")), 0) :
+	    dstep == 0 ? (G_fatal_error(_("This step value is not allowed")), 0) :
 	    fmod(zmin, dstep) ? zmin - fmod(zmin, dstep) + dstep :
 	    zmin;
 
@@ -298,7 +299,7 @@ double *getlevels(struct Option *levels,
 	dmin = dmin < zmin ? zmin : dmin;
 	dmax = dmax > zmax ? zmax : dmax;
 
-	G_message(_("Range of levels: min = %f max = %f"), dmin, dmax);
+	G_verbose_message(_("Range of levels: min = %f, max = %f"), dmin, dmax);
 
 	nlevels = (dmax - dmin) / dstep + 2;
 	lev = (double *)G_malloc(nlevels * sizeof(double));
@@ -327,7 +328,7 @@ void displaceMatrix(DCELL ** z, int nrow, int ncol, double *lev, int nlevels)
     double *currRow;
     double currVal;
 
-    G_message(_("Displacing data: "));
+    G_message(_("Displacing data..."));
 
     for (i = 0; i < nrow; i++) {
 	currRow = z[i];
