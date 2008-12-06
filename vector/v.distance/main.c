@@ -117,37 +117,37 @@ int main(int argc, char *argv[])
 
     from_opt = G_define_standard_option(G_OPT_V_INPUT);
     from_opt->key = "from";
-    from_opt->description = _("Name of existing vector map");
-    from_opt->guisection = _("From_map");
+    from_opt->description = _("Name of existing vector map (from)");
+    from_opt->guisection = _("From");
 
     to_opt = G_define_standard_option(G_OPT_V_INPUT);
     to_opt->key = "to";
-    to_opt->description = _("Name of existing vector map");
-    to_opt->guisection = _("To_map");
+    to_opt->description = _("Name of existing vector map (to)");
+    to_opt->guisection = _("To");
 
     from_type_opt = G_define_standard_option(G_OPT_V_TYPE);
     from_type_opt->key = "from_type";
     from_type_opt->options = "point,centroid";
     from_type_opt->answer = "point";
-    from_type_opt->label = _("From type");
-    from_type_opt->guisection = _("From_map");
+    from_type_opt->label = _("Feature type (from)");
+    from_type_opt->guisection = _("From");
 
     to_type_opt = G_define_standard_option(G_OPT_V_TYPE);
     to_type_opt->key = "to_type";
     to_type_opt->options = "point,line,boundary,centroid,area";
     to_type_opt->answer = "point,line,area";
-    to_type_opt->label = _("To type");
-    to_type_opt->guisection = _("To_map");
+    to_type_opt->label = _("Feature type (to)");
+    to_type_opt->guisection = _("To");
 
     from_field_opt = G_define_standard_option(G_OPT_V_FIELD);
     from_field_opt->key = "from_layer";
-    from_field_opt->label = _("From layer");
-    from_field_opt->guisection = _("From_map");
+    from_field_opt->label = _("Layer number (from)");
+    from_field_opt->guisection = _("From");
 
     to_field_opt = G_define_standard_option(G_OPT_V_FIELD);
     to_field_opt->key = "to_layer";
-    to_field_opt->label = _("To layer");
-    to_field_opt->guisection = _("To_map");
+    to_field_opt->label = _("Layer number (to)");
+    to_field_opt->guisection = _("To");
 
     out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
     out_opt->key = "output";
@@ -203,9 +203,10 @@ int main(int argc, char *argv[])
     to_column_opt->key = "to_column";
     to_column_opt->description =
 	_("Column name of nearest feature (used with upload=to_attr)");
-    to_column_opt->guisection = _("To_map");
+    to_column_opt->guisection = _("To");
 
     table_opt = G_define_standard_option(G_OPT_DB_TABLE);
+    table_opt->gisprompt = "new_dbtable,dbtable,dbtable";
     table_opt->description =
 	_("Name of table created for output when the distance to all flag is used");
 
