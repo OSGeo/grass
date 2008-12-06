@@ -1219,9 +1219,14 @@ class cmdPanel(wx.Panel):
                             win.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
                             win.Bind(wx.EVT_TEXT, self.OnSetValue)
                         elif p.get('prompt', '') == 'dbtable':
-                            win = gselect.TableSelect(parent=which_panel)
-                            p['wxGetValue'] = win.GetStringSelection
-                            win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
+                            if p.get('age', 'old_dbtable') == 'old_dbtable':
+                                win = gselect.TableSelect(parent=which_panel)
+                                p['wxGetValue'] = win.GetStringSelection
+                                win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
+                            else:
+                                win = wx.TextCtrl(parent=which_panel, value = p.get('default',''),
+                                                  size=globalvar.DIALOG_TEXTCTRL_SIZE)
+                                win.Bind(wx.EVT_TEXT, self.OnSetValue)
                         elif p.get('prompt', '') == 'dbcolumn':
                             win = gselect.ColumnSelect(parent=which_panel)
                             p['wxGetValue'] = win.GetStringSelection
