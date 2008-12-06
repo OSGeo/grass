@@ -58,7 +58,7 @@ int specsyn(double *data[2],	/* Array holding complex data to transform. */
     /* Calculate all the preliminary random coefficients. */
     /* ================================================== */
 
-    G_message(_("Preliminary surface calculations."));
+    G_message(_("Preliminary surface calculations..."));
     data_reset(data, nn);
 
     for (row = 0; row <= nn / 2; row++)
@@ -117,7 +117,7 @@ int specsyn(double *data[2],	/* Array holding complex data to transform. */
     /* ========================================================= */
 
     for (coeff = 0; coeff < Steps; coeff++) {
-	G_message(_("Calculating surface %d (of %d)"), coeff + 1, Steps);
+	G_message(_("Calculating surface %d (of %d)..."), coeff + 1, Steps);
 	data_reset(temp, nn);
 
 	for (row = 0; row <= (coeff + 1) * nn / (Steps * 2); row++)
