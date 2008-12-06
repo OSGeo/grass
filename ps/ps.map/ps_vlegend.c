@@ -70,6 +70,7 @@ int PS_vlegend(void)
 
     /* get text location */
     dy = 1.5 * fontsize;
+
     if (vector.x > 0.0)
 	x = 72.0 * vector.x;
     else
@@ -90,12 +91,11 @@ int PS_vlegend(void)
     if (lcount < vector.cols)
 	vector.cols = lcount;
 
-/* FIXME (somehow): allow multi column to draw to the right margin would 
-    be nice, but for normal use locking to the right side of the map box
-    looks better. What's the correct compromise if the right side is always
-    automatically chosen? */
-    dx = (PS.map_right - x) / vector.cols;
-/*    dx = ((PS.page_width-PS.right_marg)*72 - x) / vector.cols; */
+    if(vector.span < 0)
+	dx = (PS.map_right - x) / vector.cols;
+	/* dx = ((PS.page_width-PS.right_marg)*72 - x) / vector.cols; */
+    else
+	dx = vector.span*72;
 
     xs = x;			/*save x and y */
     ys = y;

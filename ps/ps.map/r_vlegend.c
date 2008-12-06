@@ -18,6 +18,7 @@ static char *help[] = {
     "width	sample box width",
     "cols	number of columns",
     "border	color|none",
+    "span	column separation",
     ""
 };
 
@@ -26,13 +27,14 @@ int read_vlegend(void)
     char buf[1024];
     char *key, *data;
     int fontsize, cols, border;
-    double x, y, width;
+    double x, y, width, cseparation;
 
     fontsize = 0;
     x = y = 0.0;
     width = -1;
     cols = 1;
     border = -1;
+    cseparation = -1;
 
     while (input(2, buf, help)) {
 	if (!key_data(buf, &key, &data))
@@ -81,6 +83,12 @@ int read_vlegend(void)
 	    continue;
 	}
 
+	if (KEY("span")) {
+	    G_strip(data);
+	    cseparation = atof(data);
+	    continue;
+	}
+
 	error(key, data, "illegal vlegend sub-request");
     }
     vector.x = x;
@@ -95,6 +103,7 @@ int read_vlegend(void)
 
     vector.cols = cols;
     vector.border = border;
+    vector.span = cseparation;
 
     return 0;
 }
