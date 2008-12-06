@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <grass/glocale.h>
+
 #include "global.h"
 
 /* Read area cats for one side 
@@ -69,6 +71,8 @@ int read_lines(struct Map_info *Map)
     LCats = Vect_new_cats_struct();
     RCats = Vect_new_cats_struct();
 
+    G_message(_("Reading features..."));
+    
     /* Cycle through all lines */
     nlines = Vect_get_num_lines(Map);
     for (line_num = 1; line_num <= nlines; line_num++) {
@@ -265,6 +269,7 @@ int read_lines(struct Map_info *Map)
 		Values[idx].d1 = len / dist;
 	    }
 	}
+	G_percent(line_num, nlines, 2);
     }
 
     return 0;

@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     module->keywords = _("vector, database, attribute table");
-    module->description = _("Populate database values from vector features.");
+    module->description = _("Populates database values from vector features.");
 
     parse_command_line(argc, argv);
 
@@ -48,7 +48,8 @@ int main(int argc, char *argv[])
     Fi = Vect_get_field(&Map, options.field);
 
     if (!options.print && Fi == NULL) {
-	G_fatal_error(_("Database connection not defined for layer %d. Use v.db.connect first."),
+	G_fatal_error(_("Database connection not defined for layer %d. "
+			"Use v.db.connect first."),
 		      options.field);
     }
 
