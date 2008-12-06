@@ -21,6 +21,7 @@ SUBDIRS = \
 	r.distance \
 	r.drain \
 	r.external \
+	r.external.out \
 	r.fill.dir \
 	r.flow \
 	r.grow.distance \

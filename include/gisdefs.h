@@ -549,7 +549,9 @@ void G_fpreclass_perform_id(const struct FPReclass *, const CELL *, DCELL *,
 /* gdal.c */
 void G_init_gdal(void);
 struct GDAL_link *G_get_gdal_link(const char *, const char *);
+struct GDAL_link *G_create_gdal_link(const char *, RASTER_MAP_TYPE);
 void G_close_gdal_link(struct GDAL_link *);
+int G_close_gdal_write_link(struct GDAL_link *);
 
 /* geodesic.c */
 int G_begin_geodesic_equation(double, double, double, double);
@@ -932,7 +934,6 @@ int G_put_cellhd(const char *, struct Cell_head *);
 
 /* put_row.c */
 int G_put_map_row(int, const CELL *);
-int G__put_null_value_row(int, const char *);
 int G_put_raster_row(int, const void *, RASTER_MAP_TYPE);
 int G_put_c_raster_row(int, const CELL *);
 int G_put_f_raster_row(int, const FCELL *);

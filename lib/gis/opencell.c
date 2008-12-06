@@ -487,6 +487,70 @@ int G_open_fp_cell_new_uncompressed(const char *name)
     return G__open_raster_new(name, OPEN_NEW_UNCOMPRESSED, G__.fp_type);
 }
 
+#ifdef HAVE_GDAL
+static int G__open_raster_new_gdal(char *map, char *mapset, RASTER_MAP_TYPE map_type)
+{
+    int fd;
+    struct fileinfo *fcb;
+    int i;
+
+    /* dummy descriptor to reserve the fileinfo slot */
+    fd = open("/dev/null", O_RDONLY);
+    if (fd < 0)
+	return -1;
+
+    fcb = new_fileinfo(fd);
+
+    /* mark closed */
+    fcb->map_type = map_type;
+    fcb->open_mode = -1;
+
+    fcb->gdal = G_create_gdal_link(map, map_type);
+    if (!fcb->gdal)
+	return -1;
+
+    fcb->cellhd = G__.window;
+    fcb->cellhd.compressed = 0;
+    fcb->nbytes = G_raster_size(fcb->map_type);
+    /* for writing fcb->data is allocated to be G__.window.cols * 
+       sizeof(CELL or DCELL or FCELL)  */
+    fcb->data = G_calloc(G__.window.cols, fcb->nbytes);
+
+    fcb->name = map;
+    fcb->mapset = mapset;
+    fcb->cur_row = 0;
+
+    fcb->row_ptr = NULL;
+    fcb->temp_name = NULL;
+    fcb->null_temp_name = NULL;
+    fcb->null_cur_row = 0;
+    fcb->min_null_row = 0;
+    for (i = 0; i < NULL_ROWS_INMEM; i++)
+	fcb->NULL_ROWS[i] = NULL;
+
+    if (fcb->map_type != CELL_TYPE)
+	G_quant_init(&(fcb->quant));
+
+    /* init cell stats */
+    /* now works only for int maps */
+    if (fcb->map_type == CELL_TYPE)
+	if ((fcb->want_histogram = G__.want_histogram))
+	    G_init_cell_stats(&fcb->statf);
+
+    /* init range and if map is double/float init d/f_range */
+    G_init_range(&fcb->range);
+
+    if (fcb->map_type != CELL_TYPE)
+	G_init_fp_range(&fcb->fp_range);
+
+    /* mark file as open for write */
+    fcb->open_mode = OPEN_NEW_UNCOMPRESSED;
+    fcb->io_error = 0;
+
+    return fd;
+}
+#endif /* HAVE_GDAL */
+
 static int G__open_raster_new(const char *name, int open_mode,
 			      RASTER_MAP_TYPE map_type)
 {
@@ -532,6 +596,11 @@ static int G__open_raster_new(const char *name, int open_mode,
     /* make sure window is set */
     G__init_window();
 
+#ifdef HAVE_GDAL
+    if (G_find_file2("", "GDAL", G_mapset()))
+	return G__open_raster_new_gdal(map, mapset, map_type);
+#endif
+
     /* open a tempfile name */
     tempname = G_tempfile();
     fd = creat(tempname, 0666);
@@ -553,6 +622,7 @@ static int G__open_raster_new(const char *name, int open_mode,
     /* mark closed */
     fcb->map_type = map_type;
     fcb->open_mode = -1;
+    fcb->gdal = NULL;
 
     /* for writing fcb->data is allocated to be G__.window.cols * 
        sizeof(CELL or DCELL or FCELL)  */
