@@ -8,6 +8,7 @@
 #include "clr.h"
 
 #define PI M_PI
+
 /* #define MAXVECTORS 20 */
 
 /* layer type */
@@ -103,6 +104,7 @@ struct vector
     double width;		/* width of legend symbols */
     int cols;			/* number of colums  */
     int border;			/* border color number or -1 for none */
+    double span;		/* column separation in inches */
     LAYER *layer;
 };
 

@@ -1466,6 +1466,7 @@ USAGE:	<B>vlegend</B>
 	<B>fontsize</B> font size
 	<B>width</B> width of color symbol
 	<B>cols</B> number of columns to print
+	<B>span</B> column separation
 	<B>border</B> color|none
 	<B>end</B>
 </PRE>
@@ -1474,14 +1475,18 @@ scale, grid and region information, starting at the left edge of the map.
 If the <EM>where</EM> instruction is present and <EM>y</EM> is less than or
 equal to zero, the vector legend will be positioned immediately below
 the map, starting <EM>x</EM> inches from the left edge of the page.
-
 <P>
 <EM>width</EM> is the width in inches of the color symbol (for lines)
 in front of the  legend text. The default is 1/24 * fontsize inches.
 <P>
-<EM>cols</EM> is the number of columns to split the legend into. The default is one 
-column. The maximum number of colums is 10, or equal to the number of legend entries 
-if there are less than 10 entries.
+<EM>cols</EM> is the number of columns to split the legend into. The
+default is one column. The maximum number of colums is 10, or equal
+to the number of legend entries if there are less than 10 entries.
+<P>
+<EM>span</EM> is the column separation distance between the left edges of 
+two columns in a multicolumn legend. It is given in inches. 
+The default is automatic scaling based on the left margin and the right 
+hand side of the map box. 
 <P>
 <EM>border</EM> will draw a border around the legend using the specified color.
  (see <a href="#NAMED_COLORS">NAMED COLORS</a>)
