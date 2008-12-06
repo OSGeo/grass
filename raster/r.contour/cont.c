@@ -78,11 +78,10 @@ void contour(double levels[],
 
     ncrossing = 0;
 
-    G_message(_("Total levels: %4d"), nlevels);
+    G_message(_("Writing vector contours (total levels %d)..."), nlevels);
 
     for (n = 0; n < nlevels; n++) {
 	level = levels[n];
-	G_percent(n, nlevels, 2);	/* print progress */
 
 	/* initialize hit array */
 	for (i = 0; i < nrow - 1; i++) {
@@ -205,6 +204,7 @@ void contour(double levels[],
 		}		/* if ! hit */
 	    }			/* for rows */
 	}			/* for columns */
+	G_percent(n+1, nlevels, 2);	/* print progress */
     }				/* for levels */
 
     if (ncrossing > 0) {
