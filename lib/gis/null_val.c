@@ -240,14 +240,8 @@ int G_is_null_value(const void *rast, RASTER_MAP_TYPE data_type)
 
 int G_is_c_null_value(const CELL * cellVal)
 {
-    int i;			/* counter */
-
     /* Check if the CELL value matches the null pattern */
-    for (i = 0; i < sizeof(CELL); i++)
-	if (cellVal[i] != (CELL) 0x80000000)
-	    return FALSE;
-
-    return TRUE;
+    return *cellVal == (CELL) 0x80000000;
 }
 
 /****************************************************************************
