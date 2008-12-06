@@ -13,8 +13,9 @@
 
 /***************************************************************************/
 
-#include "frac.h"
 #include <grass/gmath.h>
+#include <grass/glocale.h>
+#include "frac.h"
 
 int process(void)
 {
@@ -47,6 +48,10 @@ int process(void)
 
     /*------------------------------------------------------------------*/
 
+    if (nn * nn * sizeof(double) < 1)
+	G_fatal_error(_("Unable to allocate data buffer. "
+			"Check current region with g.region."));
+    
     data[0] = (double *)G_malloc(nn * nn * sizeof(double));
     data[1] = (double *)G_malloc(nn * nn * sizeof(double));
 
