@@ -158,16 +158,177 @@ static int close_old(int fd)
     return 1;
 }
 
+static void write_support_files(int fd)
+{
+    struct fileinfo *fcb = &G__.fileinfo[fd];
+    struct Categories cats;
+    struct History hist;
+    CELL cell_min, cell_max;
+    char path[GPATH_MAX];
+
+    /* remove color table */
+    G_remove_colors(fcb->name, "");
+
+    /* create a history file */
+    G_short_history(fcb->name, "raster", &hist);
+    G_write_history(fcb->name, &hist);
+
+    /* write the range */
+    if (fcb->map_type == CELL_TYPE) {
+	G_write_range(fcb->name, &fcb->range);
+	G__remove_fp_range(fcb->name);
+    }
+    /*NOTE: int range for floating point maps is not written out */
+    else {			/* if(fcb->map_type != CELL_TYPE) */
+
+	G_write_fp_range(fcb->name, &fcb->fp_range);
+	G_construct_default_range(&fcb->range);
+	/* this range will be used to add default rule to quant structure */
+    }
+
+    if (fcb->map_type != CELL_TYPE)
+	fcb->cellhd.format = -1;
+    else			/* CELL map */
+	fcb->cellhd.format = fcb->nbytes - 1;
+
+    /* write header file */
+    G_put_cellhd(fcb->name, &fcb->cellhd);
+
+    /* if map is floating point write the quant rules, otherwise remove f_quant */
+    if (fcb->map_type != CELL_TYPE) {
+	/* DEFAULT RANGE QUANT
+	   G_get_fp_range_min_max(&fcb->fp_range, &dcell_min, &dcell_max);
+	   if(!G_is_d_null_value(&dcell_min) && !G_is_d_null_value(&dcell_max))
+	   {
+	   G_get_range_min_max(&fcb->range, &cell_min, &cell_max);
+	   G_quant_add_rule(&fcb->quant, dcell_min, dcell_max, 
+	   cell_min, cell_max);
+	   }
+	*/
+	G_quant_round(&fcb->quant);
+	if (G_write_quant(fcb->name, fcb->mapset, &fcb->quant) < 0)
+	    G_warning(_("unable to write quant file!"));
+    }
+    else {
+	/* remove cell_misc/name/f_quant */
+	G__file_name_misc(path, "cell_misc", QUANT_FILE, fcb->name,
+			  fcb->mapset);
+	remove(path);
+    }
+
+    /* create empty cats file */
+    G_get_range_min_max(&fcb->range, &cell_min, &cell_max);
+    if (G_is_c_null_value(&cell_max))
+	cell_max = 0;
+    G_init_cats(cell_max, (char *)NULL, &cats);
+    G_write_cats(fcb->name, &cats);
+    G_free_cats(&cats);
+
+    /* write the histogram */
+    /* only works for integer maps */
+    if ((fcb->map_type == CELL_TYPE)
+	&& (fcb->want_histogram)) {
+	G_write_histogram_cs(fcb->name, &fcb->statf);
+	G_free_cell_stats(&fcb->statf);
+    }
+    else {
+	G_remove_histogram(fcb->name);
+    }
+}
+
+static int close_new_gdal(int fd, int ok)
+{
+    struct fileinfo *fcb = &G__.fileinfo[fd];
+    char path[GPATH_MAX];
+    int stat = 1;
+
+    if (ok) {
+	int cell_fd;
+
+	G_debug(1, "close %s GDAL", fcb->name);
+
+	if (fcb->cur_row < fcb->cellhd.rows) {
+	    int row;
+
+	    G_zero_raster_buf(fcb->data, fcb->map_type);
+	    for (row = fcb->cur_row; row < fcb->cellhd.rows; row++)
+		G_put_raster_row(fd, fcb->data, fcb->map_type);
+	    G_free(fcb->data);
+	    fcb->data = NULL;
+	}
+
+	/* create path : full null file name */
+	G__make_mapset_element_misc("cell_misc", fcb->name);
+	G__file_name_misc(path, "cell_misc", NULL_FILE, fcb->name,
+			  G_mapset());
+	remove(path);
+
+	/* write 0-length cell file */
+	G__make_mapset_element("cell");
+	G__file_name(path, "cell", fcb->name, fcb->mapset);
+	cell_fd = creat(path, 0666);
+	close(cell_fd);
+
+	if (fcb->map_type != CELL_TYPE) {	/* floating point map */
+	    if (write_fp_format(fd) != 0) {
+		G_warning(_("Error writing floating point format file for map %s"),
+			  fcb->name);
+		stat = -1;
+	    }
+
+	    /* write 0-length fcell file */
+	    G__make_mapset_element("fcell");
+	    G__file_name(path, "fcell", fcb->name, fcb->mapset);
+	    cell_fd = creat(path, 0666);
+	    close(cell_fd);
+	}
+	else {
+	    /* remove fcell/name file */
+	    G__file_name(path, "fcell", fcb->name, fcb->mapset);
+	    remove(path);
+	    /* remove cell_misc/name/f_format */
+	    G__file_name_misc(path, "cell_misc", FORMAT_FILE, fcb->name,
+			      fcb->mapset);
+	    remove(path);
+	}
+
+	if (G_close_gdal_write_link(fcb->gdal) < 0)
+	    stat = -1;
+    }
+    else {
+	remove(fcb->gdal->filename);
+	G_close_gdal_link(fcb->gdal);
+    }
+
+    /* NOW CLOSE THE FILE DESCRIPTOR */
+    close(fd);
+    fcb->open_mode = -1;
+
+    if (fcb->data != NULL)
+	G_free(fcb->data);
+
+    if (ok)
+	write_support_files(fd);
+
+    G_free(fcb->name);
+    G_free(fcb->mapset);
+
+    if (fcb->map_type != CELL_TYPE)
+	G_quant_free(&fcb->quant);
+
+    return stat;
+}
+
 static int close_new(int fd, int ok)
 {
     struct fileinfo *fcb = &G__.fileinfo[fd];
     int stat;
-    struct Categories cats;
-    struct History hist;
     char path[GPATH_MAX];
-    CELL cell_min, cell_max;
-    int row, i, open_mode;
+    int row, i;
     const char *CELL_DIR;
+
+    if (fcb->gdal)
+	return close_new_gdal(fd, ok);
 
     if (ok) {
 	switch (fcb->open_mode) {
@@ -272,8 +433,6 @@ static int close_new(int fd, int ok)
     /* NOW CLOSE THE FILE DESCRIPTOR */
 
     close(fd);
-    /* remember open_mode */
-    open_mode = fcb->open_mode;
     fcb->open_mode = -1;
 
     if (fcb->data != NULL)
@@ -307,76 +466,8 @@ static int close_new(int fd, int ok)
 	G_free(fcb->temp_name);
     }
 
-    if (ok) {
-	/* remove color table */
-	G_remove_colors(fcb->name, "");
-
-	/* create a history file */
-	G_short_history(fcb->name, "raster", &hist);
-	G_write_history(fcb->name, &hist);
-
-	/* write the range */
-	if (fcb->map_type == CELL_TYPE) {
-	    G_write_range(fcb->name, &fcb->range);
-	    G__remove_fp_range(fcb->name);
-	}
-	/*NOTE: int range for floating point maps is not written out */
-	else {			/* if(fcb->map_type != CELL_TYPE) */
-
-	    G_write_fp_range(fcb->name, &fcb->fp_range);
-	    G_construct_default_range(&fcb->range);
-	    /* this range will be used to add default rule to quant structure */
-	}
-
-	if (fcb->map_type != CELL_TYPE)
-	    fcb->cellhd.format = -1;
-	else			/* CELL map */
-	    fcb->cellhd.format = fcb->nbytes - 1;
-
-	/* write header file */
-	G_put_cellhd(fcb->name, &fcb->cellhd);
-
-	/* if map is floating point write the quant rules, otherwise remove f_quant */
-	if (fcb->map_type != CELL_TYPE) {
-	    /* DEFAULT RANGE QUANT
-	       G_get_fp_range_min_max(&fcb->fp_range, &dcell_min, &dcell_max);
-	       if(!G_is_d_null_value(&dcell_min) && !G_is_d_null_value(&dcell_max))
-	       {
-	       G_get_range_min_max(&fcb->range, &cell_min, &cell_max);
-	       G_quant_add_rule(&fcb->quant, dcell_min, dcell_max, 
-	       cell_min, cell_max);
-	       }
-	     */
-	    G_quant_round(&fcb->quant);
-	    if (G_write_quant(fcb->name, fcb->mapset, &fcb->quant) < 0)
-		G_warning(_("unable to write quant file!"));
-	}
-	else {
-	    /* remove cell_misc/name/f_quant */
-	    G__file_name_misc(path, "cell_misc", QUANT_FILE, fcb->name,
-			      fcb->mapset);
-	    remove(path);
-	}
-
-	/* create empty cats file */
-	G_get_range_min_max(&fcb->range, &cell_min, &cell_max);
-	if (G_is_c_null_value(&cell_max))
-	    cell_max = 0;
-	G_init_cats(cell_max, (char *)NULL, &cats);
-	G_write_cats(fcb->name, &cats);
-	G_free_cats(&cats);
-
-	/* write the histogram */
-	/* only works for integer maps */
-	if ((fcb->map_type == CELL_TYPE)
-	    && (fcb->want_histogram)) {
-	    G_write_histogram_cs(fcb->name, &fcb->statf);
-	    G_free_cell_stats(&fcb->statf);
-	}
-	else {
-	    G_remove_histogram(fcb->name);
-	}
-    }				/* OK */
+    if (ok)
+	write_support_files(fd);
 
     G_free(fcb->name);
     G_free(fcb->mapset);

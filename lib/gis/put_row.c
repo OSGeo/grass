@@ -59,7 +59,7 @@
  *
  ***********************************************************************
  *
- *  G__put_null_value_row(fd, buf)
+ *  put_null_value_row(fd, buf)
  *      int fd                  File descriptor where data is to be written
  *      char *buf               Buffer holding null data
  *
@@ -107,9 +107,12 @@ static int put_raster_row(int fd, const void *buf, RASTER_MAP_TYPE data_type,
 
 /*--------------------------------------------------------------------------*/
 
-int G__put_null_value_row(int fd, const char *buf)
+static int put_null_value_row(int fd, const char *buf)
 {
     struct fileinfo *fcb = &G__.fileinfo[fd];
+
+    if (fcb->gdal)
+	G_fatal_error(_("GDAL output doesn't support writing null rows separately"));
 
     switch (put_null_data(fd, buf, fcb->null_cur_row)) {
     case -1:
@@ -562,6 +565,58 @@ static int put_data(int fd, char *null_buf, const CELL *cell,
 
 /*--------------------------------------------------------------------------*/
 
+static int put_data_gdal(int fd, const void *rast, int row, int n,
+			 int zeros_r_nulls, RASTER_MAP_TYPE map_type)
+{
+#ifdef HAVE_GDAL
+    struct fileinfo *fcb = &G__.fileinfo[fd];
+    int size = G_raster_size(map_type);
+    DCELL null_val = fcb->gdal->null_val;
+    const void *src;
+    void *work_buf, *dst;
+    GDALDataType datatype;
+    CPLErr err;
+    int i;
+
+    if (row < 0 || row >= fcb->cellhd.rows)
+	return 0;
+
+    if (n <= 0)
+	return 0;
+
+    work_buf = G__alloca(n * size);
+
+    switch (map_type) {
+    case CELL_TYPE:	datatype = GDT_Int32;	break;
+    case FCELL_TYPE:	datatype = GDT_Float32;	break;
+    case DCELL_TYPE:	datatype = GDT_Float64;	break;
+    }
+
+    src = rast;
+    dst = work_buf;
+
+    for (i = 0; i < n; i++) {
+	if (G_is_null_value(src, map_type) || zeros_r_nulls && !*(CELL *)src)
+	    G_set_raster_value_d(dst, null_val, map_type);
+	else
+	    memcpy(dst, src, size);
+	src = G_incr_void_ptr(src, size);
+	dst = G_incr_void_ptr(dst, size);
+    }
+
+    err = G_gdal_raster_IO(fcb->gdal->band, GF_Write, 0, row, n, 1, work_buf,
+			   n, 1, datatype, 0, 0);
+
+    G__freea(work_buf);
+
+    return err == CE_None ? 1 : -1;
+#else
+    return -1;
+#endif
+}
+
+/*--------------------------------------------------------------------------*/
+
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
@@ -570,6 +625,11 @@ static int put_raster_data(int fd, char *null_buf, const void *rast,
 			   int row, int n,
 			   int zeros_r_nulls, RASTER_MAP_TYPE map_type)
 {
+    struct fileinfo *fcb = &G__.fileinfo[fd];
+
+    if (fcb->gdal)
+	return put_data_gdal(fd, rast, row, n, zeros_r_nulls, map_type);
+
     return (map_type == CELL_TYPE)
 	? put_data(fd, null_buf, rast, row, n, zeros_r_nulls)
 	: put_fp_data(fd, null_buf, rast, row, n, map_type);
@@ -808,7 +868,10 @@ static int put_raster_row(int fd, const void *buf, RASTER_MAP_TYPE data_type,
     fcb->cur_row++;
 
     /* write the null row for the data row */
-    stat = G__put_null_value_row(fd, null_buf);
+    if (fcb->gdal)
+	stat = 0;
+    else
+	stat = put_null_value_row(fd, null_buf);
     G__freea(null_buf);
     return stat;
 }
