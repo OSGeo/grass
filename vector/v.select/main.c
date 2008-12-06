@@ -220,7 +220,7 @@ int main(int argc, char *argv[])
 
     /* Lines in A. Go through all lines and mark those that meets condition */
     if (type[0] & (GV_POINTS | GV_LINES)) {
-	G_message(_("Processing vector features..."));
+	G_message(_("Processing features..."));
 	
 	for (aline = 1; aline <= nalines; aline++) {
 	    BOUND_BOX abox;
@@ -300,7 +300,7 @@ int main(int argc, char *argv[])
     if (type[0] & GV_AREA) {
 	int aarea, naareas;
 
-	G_message(_("Processing vector areas..."));
+	G_message(_("Processing areas..."));
 	
 	naareas = Vect_get_num_areas(&(In[0]));
 
@@ -308,7 +308,7 @@ int main(int argc, char *argv[])
 	    int i;
 	    BOUND_BOX abox;
 
-	    G_percent(aarea, naareas, 1);	/* must be before any continue */
+	    G_percent(aarea, naareas, 2);	/* must be before any continue */
 
 	    if (Vect_get_area_cat(&(In[0]), aarea, field[0]) < 0)
 		continue;
@@ -420,11 +420,14 @@ int main(int argc, char *argv[])
 			    sizeof(int));
 	fields[i] = Vect_cidx_get_field_number(&(In[0]), i);
     }
+
+    G_message(_("Writing selected features..."));
     for (aline = 1; aline <= nalines; aline++) {
 	int atype;
 
 	G_debug(4, "aline = %d ALines[aline] = %d", aline, ALines[aline]);
-
+	G_percent(aline, nalines, 2);
+	
 	if (!(ALines[aline]))
 	    continue;
 
@@ -451,7 +454,7 @@ int main(int argc, char *argv[])
     if (!(table_flag->answer)) {
 	int ttype, ntabs = 0;
 
-	G_verbose_message(_("Writing attributes..."));
+	G_message(_("Writing attributes..."));
 
 	/* Number of output tabs */
 	for (i = 0; i < Vect_get_num_dblinks(&(In[0])); i++) {
