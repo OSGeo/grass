@@ -82,6 +82,7 @@ void contour(double levels[],
 
     for (n = 0; n < nlevels; n++) {
 	level = levels[n];
+	G_percent(n+1, nlevels, 2);	/* print progress */
 
 	/* initialize hit array */
 	for (i = 0; i < nrow - 1; i++) {
@@ -204,7 +205,6 @@ void contour(double levels[],
 		}		/* if ! hit */
 	    }			/* for rows */
 	}			/* for columns */
-	G_percent(n+1, nlevels, 2);	/* print progress */
     }				/* for levels */
 
     if (ncrossing > 0) {
