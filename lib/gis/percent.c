@@ -42,20 +42,17 @@ static struct state *st = &state;
   for (row = 0; row < nrows; row++)
   {
       G_percent (row+1, nrows, 10);
-      ...
-      ...
-      ...
+      do_calculation(row);
   }
 \endcode
  *
- * This will print completion messages at 10% increments; i.e., 10%, 20%, 30%,
- * etc., up to 100%. Each message does not appear on a new line, but rather erases
- * the previous message.
+ * This example code will print completion messages at 10% increments;
+ * i.e., 10%, 20%, 30%, etc., up to 100%. Each message does not appear
+ * on a new line, but rather erases the previous message.
  * 
- * G_percent() should stay at the start of the for loop. If the loop takes
- * a long time to run, 0% should print before the first iteration has begun,
- * and final 100% message in loop should not be printed before the last
- * iteration is complete. Otherwise it seems to stall at 99% done, etc.
+ * Note that to prevent the illusion of the module stalling, the G_percent()
+ * call is placed before the time consuming part of the for loop, and an
+ * additional call is added after the loop to "finish it off" at 100%.
  *
  * \param n current element
  * \param d total number of elements
