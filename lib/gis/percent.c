@@ -24,6 +24,46 @@ static struct state {
 
 static struct state *st = &state;
 
+/**
+ * \brief Print percent complete messages.
+ *
+ * This routine prints a percentage complete message to stderr. The
+ * percentage complete is <i>(<b>n</b>/<b>d</b>)*100</i>, and these are 
+ * printed only for each <b>s</b> percentage. This is perhaps best 
+ * explained by example:
+\code
+  #include <stdio.h>
+  #include <grass/gis.h>
+  int row;
+  int nrows;
+  nrows = 1352; // 1352 is not a special value - example only
+
+  G_message(_("Percent complete..."));
+  for (row = 0; row < nrows; row++)
+  {
+      G_percent (row+1, nrows, 10);
+      ...
+      ...
+      ...
+  }
+\endcode
+ *
+ * This will print completion messages at 10% increments; i.e., 10%, 20%, 30%,
+ * etc., up to 100%. Each message does not appear on a new line, but rather erases
+ * the previous message.
+ * 
+ * G_percent() should stay at the start of the for loop. If the loop takes
+ * a long time to run, 0% should print before the first iteration has begun,
+ * and final 100% message in loop should not be printed before the last
+ * iteration is complete. Otherwise it seems to stall at 99% done, etc.
+ *
+ * \param n current element
+ * \param d total number of elements
+ * \param s increment size
+ *
+ * \return always returns 0
+ */
+
 void G_percent(long n, long d, int s)
 {
     int x, format;
