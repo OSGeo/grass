@@ -18,7 +18,10 @@ for details.
 """
 
 import os
-import xml.etree.ElementTree as etree
+try:
+    import xml.etree.ElementTree as etree
+except ImportError:
+    import elementtree.ElementTree as etree # Python <= 2.4
 
 class Data:
     '''Data object that returns menu descriptions to be used in wxgui.py.'''
