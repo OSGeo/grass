@@ -138,7 +138,8 @@ def main():
 
     # finally we have to add cats into the attribute DB to make modules such as v.what.rast happy:
     # (creates new row for each vector line):
-    grass.run_command('v.to.db', map = map, layer = layer, option = 'cat', col = 'cat')
+    grass.run_command('v.to.db', map = map, layer = layer,
+                      option = 'cat', column = 'cat', qlayer = layer)
 
     if grass.verbosity() > 0:
 	grass.message("Current attribute table links:")
