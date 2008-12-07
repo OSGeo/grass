@@ -4,35 +4,43 @@
 map geometry. These categories (IDs) are used to link geometry
 object(s) to attribute records (from attribute table linked to vector map).
 
+
 <h2>NOTES</h2>
 
-Use <em><a href="v.to.db.html">v.to.db</a></em> to upload related categories to
-a linked attribute table.
+Use <em><a href="v.to.db.html">v.to.db</a></em> to upload related categories
+to a linked attribute table.
 
 <p>
-The <b>type</b> parameter specifies the type of geometry objects to which the category is added;
-it is similar to an input filter - only the geometry specified in 'type' is processed.
-
+The <b>type</b> parameter specifies the type of geometry objects to which
+the category is added; it is similar to an input filter - only the
+geometry specified in 'type' is processed.
 <p>
 If the <b>type</b> parameter is set to <b>centroid</b> and
 the <b>option</b> parameter set to <b>add</b>, new categories will be
 added to existing centroids. Note however, that new centroids cannot
 be created this way.  To do so, they must be added manually
 using <em><a href="v.digit.html">v.digit</a></em> or by
-running <em>v.category</em> with the type parameter set to area (see
-below also).
+running <em>v.category</em> with the type parameter set to area.
+<p>
+Areas are a special case because it is impossible to attach a cat to
+an area without a centroid; in this case, the module places new
+centroids in areas automatically.
 
 <p>
-Areas are a special case because it is impossible to attach a cat to an area without a centroid;
-in this case, the module places new centroids in areas automatically.
+The <b>cat</b> parameter is only used with <b>option</b>=<i>add</i> and
+<b>option</b>=<i>sum</i>.
 
 <p>
-The <b>id</b> parameter specifies the list of feature ids to which the
+The <b>ids</b> parameter specifies the list of feature IDs to which the
 operation is performed; by default, all vector feature ids are processed. 
-The <b>id</b> is an internal (unique) geometry id that all vector primitives possess, 
-and is separate from any category the feature may also possess. 
-Use <div class="code"><pre><em><a href="v.edit.html">v.edit</a></em> map=inputname tool=select</pre></div>
+The <i>feature ID</i> is an internal (unique) geometry ID that all vector
+primitives possess, and is separate from any category the feature may
+also possess. 
+Use <div class="code"><pre>
+  <em><a href="v.edit.html">v.edit</a></em> map=inputname tool=select
+</pre></div>
 to find out the geometry ids of certain features.
+
 
 <h2>EXAMPLES</h2>
 
@@ -91,17 +99,22 @@ Print vector categories from the first layer, only for feature ids 1-50.
 v.category input=roads option=print layer=1 id=1-50
 </pre></div>
 
+
 <h2>SEE ALSO</h2>
 
 <em>
+<a href="v.centroids.html">v.centroids</a>,
 <a href="v.db.connect.html">v.db.connect</a>,
+<a href="v.edit.html">v.edit</a>,
 <a href="v.to.db.html">v.to.db</a>
 </em>
+
 
 <h2>AUTHOR</h2>
 
 Radim Blazek, ITC-irst, Trento, Italy<br>
-Modified (the id parameter) by Martin Landa, FBK-irst (formerly ITC-irst), Trento, Italy, 2008/02
+Modified (the id parameter) by Martin Landa,
+  FBK-irst (formerly ITC-irst), Trento, Italy, 2008/02
 
 <p>
 <i>Last changed: $Date$</i>
