@@ -43,6 +43,7 @@ HEAP {
 
 extern struct Cell_head window;
 
+extern int mfd, c_fac;
 extern SSEG heap_index;
 extern int heap_size;
 extern int first_astar, first_cum, nxt_avail_pt, total_cells, do_points;
@@ -51,10 +52,11 @@ extern double half_res, diag, max_length, dep_slope;
 extern int bas_thres, tot_parts;
 extern SSEG astar_pts;
 extern BSEG worked, in_list, s_b, swale;
-extern CSEG dis, alt, wat, asp, bas, haf, r_h, dep;
+extern CSEG dis, alt, asp, bas, haf, r_h, dep;
+extern DSEG wat;
 extern DSEG slp, s_l, s_g, l_s, ril;
 extern CELL one, zero;
-extern double ril_value, dzero;
+extern double ril_value, d_zero, d_one;
 extern SHORT sides;
 extern SHORT drain[3][3];
 extern SHORT updrain[3][3];
@@ -87,11 +89,14 @@ CELL def_basin(int, int, CELL, double, CELL);
 int do_astar(void);
 int add_pt(SHORT, SHORT, SHORT, SHORT, CELL, CELL);
 int drop_pt(void);
+int sift_up(int, CELL);
 double get_slope(SHORT, SHORT, SHORT, SHORT, CELL, CELL);
 int replace(SHORT, SHORT, SHORT, SHORT);
 
 /* do_cum.c */
 int do_cum(void);
+int do_cum_mfd(void);
+double mfd_pow(double, int);
 
 /* find_pour.c */
 int find_pourpts(void);

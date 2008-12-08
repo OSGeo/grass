@@ -40,6 +40,7 @@ POINT {
 
 extern struct Cell_head window;
 
+extern int mfd, c_fac;
 extern int *heap_index, heap_size;
 extern int first_astar, first_cum, nxt_avail_pt, total_cells, do_points;
 extern SHORT nrows, ncols;
@@ -50,12 +51,13 @@ extern RAMSEG dis_seg, alt_seg, wat_seg, asp_seg, bas_seg, haf_seg;
 extern RAMSEG r_h_seg, dep_seg;
 extern RAMSEG slp_seg, s_l_seg, s_g_seg, l_s_seg;
 extern POINT *astar_pts;
-extern CELL *dis, *alt, *wat, *asp, *bas, *haf, *r_h, *dep;
+extern CELL *dis, *alt, *asp, *bas, *haf, *r_h, *dep;
+extern DCELL *wat;
 extern CELL *ril_buf;
 extern int ril_fd;
 extern double *s_l, *s_g, *l_s;
 extern CELL one, zero;
-extern double ril_value, dzero;
+extern double ril_value, d_one, d_zero;
 extern SHORT sides;
 extern SHORT drain[3][3];
 extern SHORT updrain[3][3];
@@ -87,11 +89,14 @@ CELL def_basin(int, int, CELL, double, CELL);
 int do_astar(void);
 int add_pt(SHORT, SHORT, SHORT, SHORT, CELL, CELL);
 int drop_pt(void);
+int sift_up(int, CELL);
 double get_slope(SHORT, SHORT, SHORT, SHORT, CELL, CELL);
 int replace(SHORT, SHORT, SHORT, SHORT);
 
 /* do_cum.c */
 int do_cum(void);
+int do_cum_mfd(void);
+double mfd_pow(double, int);
 
 /* find_pour.c */
 int find_pourpts(void);

@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 #include "Gwater.h"
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -15,12 +16,16 @@ int init_vars(int argc, char *argv[])
     ele_flag = wat_flag = asp_flag = pit_flag = run_flag = ril_flag = 0;
     ob_flag = bas_flag = seg_flag = haf_flag = arm_flag = dis_flag = 0;
     zero = sl_flag = sg_flag = ls_flag = er_flag = bas_thres = 0;
+    one = 1;
     nxt_avail_pt = 0;
     /* dep_flag = 0; */
-    max_length = dzero = 0.0;
+    max_length = d_zero = 0.0;
+    d_one = 1.0;
     ril_value = -1.0;
     /* dep_slope = 0.0; */
     sides = 8;
+    mfd = 1;
+    c_fac = 5;
     for (r = 1; r < argc; r++) {
 	if (sscanf(argv[r], "el=%[^\n]", ele_name) == 1)
 	    ele_flag++;
@@ -63,8 +68,14 @@ int init_vars(int argc, char *argv[])
 	    if (sides != 4)
 		usage(argv[0]);
 	}
+	else if (sscanf(argv[r], "conv=%d", &c_fac) == 1) ;
+	else if (strcmp(argv[r], "-s") == 0)
+	    mfd = 0;
 	else
 	    usage(argv[0]);
+    }
+    if (mfd == 1 && (c_fac < 1 || c_fac > 10)) {
+	G_fatal_error("Convergence factor must be between 1 and 10.");
     }
     if ((ele_flag != 1)
 	||
@@ -97,7 +108,7 @@ int init_vars(int argc, char *argv[])
     nrows = G_window_rows();
     ncols = G_window_cols();
     total_cells = nrows * ncols;
-    if (max_length <= dzero)
+    if (max_length <= d_zero)
 	max_length = 10 * nrows * window.ns_res + 10 * ncols * window.ew_res;
     if (window.ew_res < window.ns_res)
 	half_res = .5 * window.ew_res;
@@ -127,7 +138,8 @@ int init_vars(int argc, char *argv[])
     }
     G_close_cell(fd);
     wat =
-	(CELL *) G_malloc(sizeof(CELL) * size_array(&wat_seg, nrows, ncols));
+	(DCELL *) G_malloc(sizeof(DCELL) *
+			   size_array(&wat_seg, nrows, ncols));
 
     if (run_flag) {
 	fd = G_open_cell_old(run_name, "");
@@ -145,10 +157,11 @@ int init_vars(int argc, char *argv[])
     else {
 	for (r = 0; r < nrows; r++) {
 	    for (c = 0; c < ncols; c++)
-		wat[SEG_INDEX(wat_seg, r, c)] = 1;
+		wat[SEG_INDEX(wat_seg, r, c)] = 1.0;
 	}
     }
-    asp = (CELL *) G_malloc(size_array(&asp_seg, nrows, ncols) * sizeof(CELL));
+    asp =
+	(CELL *) G_malloc(size_array(&asp_seg, nrows, ncols) * sizeof(CELL));
 
     if (pit_flag) {
 	fd = G_open_cell_old(pit_name, "");

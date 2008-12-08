@@ -4,7 +4,8 @@
  * MODULE:       front end
  * AUTHOR(S):    Charles Ehlschlaeger, CERL (original contributor)
  *               Brad Douglas <rez touchofmadness.com>,
- *		 Hamish Bowman <hamish_b yahoo.com>
+ *               Hamish Bowman <hamish_b yahoo.com>
+ *               Markus Metz <markus.metz.giswork gmail.com>
  * PURPOSE:      Watershed determination
  * COPYRIGHT:    (C) 1999-2008 by the GRASS Development Team
  *
@@ -41,6 +42,8 @@ int main(int argc, char *argv[])
     struct Option *opt14;
     struct Option *opt15;
     struct Option *opt16;
+    struct Option *opt17;
+    struct Flag *flag_sfd;
     struct Flag *flag_flow;
     struct Flag *flag_seg;
     struct GModule *module;
@@ -178,12 +181,27 @@ int main(int argc, char *argv[])
     opt15->gisprompt = "new,cell,raster";
     opt15->guisection = _("Output_options");
 
-    opt16 = G_define_option() ;
-    opt16->key         = "memory";
-    opt16->type        = TYPE_INTEGER;
-    opt16->required    = NO;
-    opt16->answer      = "300"; /* 300MB default value, please keep in sync with r.terraflow */
-    opt16->description = _("Maximum memory to be used with -m flag (in MB)");
+    opt16 = G_define_option();
+    opt16->key = "convergence";
+    opt16->type = TYPE_INTEGER;
+    opt16->required = NO;
+    opt16->answer = "5";
+    opt16->label = _("Convergence factor for MFD (1-10)");
+    opt16->description =
+	_("1 = most diverging flow, 10 = most converging flow. Recommended: 5");
+
+    opt17 = G_define_option();
+    opt17->key = "memory";
+    opt17->type = TYPE_INTEGER;
+    opt17->required = NO;
+    opt17->answer = "300";	/* 300MB default value, please keep in sync with r.terraflow */
+    opt17->description = _("Maximum memory to be used with -m flag (in MB)");
+
+    flag_sfd = G_define_flag();
+    flag_sfd->key = 's';
+    flag_sfd->label = _("SFD (D8) flow (default is MFD)");	/* copied straight from terraflow */
+    flag_sfd->description =
+	_("SFD: single flow direction, MFD: multiple flow direction");
 
     flag_flow = G_define_flag();
     flag_flow->key = '4';
@@ -239,6 +257,10 @@ int main(int argc, char *argv[])
 	strcat(command, "r.watershed.seg");
     else
 	strcat(command, "r.watershed.ram");
+
+    if (flag_sfd->answer) {
+	strcat(command, " -s");
+    }
 
     if (flag_flow->answer)
 	strcat(command, " -4");
@@ -344,7 +366,14 @@ int main(int argc, char *argv[])
 	strcat(command, "\"");
     }
 
-    if (flag_seg->answer && opt16->answer) {
+    if (!flag_sfd->answer && opt16->answer) {
+	strcat(command, " conv=");
+	strcat(command, "\"");
+	strcat(command, opt16->answer);
+	strcat(command, "\"");
+    }
+
+    if (flag_seg->answer && opt17->answer) {
 	strcat(command, " mb=");
 	strcat(command, "\"");
 	strcat(command, opt16->answer);
@@ -356,7 +385,7 @@ int main(int argc, char *argv[])
 
     ret = system(command);
 
-    if(ret != EXIT_SUCCESS)
+    if (ret != EXIT_SUCCESS)
 	G_warning(_("Subprocess failed with exit code %d"), ret);
 
     /* record map metadata/history info */
@@ -373,7 +402,8 @@ int main(int argc, char *argv[])
 		   "Watershed basins", opt1->answer, flag_seg->answer);
     if (opt11->answer)
 	write_hist(opt11->answer,
-		   "Watershed stream segments", opt1->answer, flag_seg->answer);
+		   "Watershed stream segments", opt1->answer,
+		   flag_seg->answer);
     if (opt12->answer)
 	write_hist(opt12->answer,
 		   "Watershed half-basins", opt1->answer, flag_seg->answer);
