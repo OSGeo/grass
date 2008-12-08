@@ -45,7 +45,6 @@ DCELL **cell;
 int *cellfd;
 FILE *report;
 int sample_rows, sample_cols;
-int verbose;
 time_t start_time;
 
 static int interrupted = 0;
@@ -68,11 +67,6 @@ int main(int argc, char *argv[])
 	    *class, *sample_interval, *iterations, *separation,
 	    *convergence, *min_size, *report_file;
     } parm;
-
-    struct
-    {
-	struct Flag *q;
-    } flag;
 
     G_gisinit(argv[0]);
 
@@ -157,11 +151,7 @@ int main(int argc, char *argv[])
     parm.report_file->key = "reportfile";
     parm.report_file->required = NO;
     parm.report_file->description = _("Name for output file containing final report");
-
-    flag.q = G_define_flag();
-    flag.q->key = 'q';
-    flag.q->description = _("Quiet");
-
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -223,9 +213,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Illegal value of min_size (%s)"),
 		      parm.min_size->answer);
     }
-
-    verbose = !flag.q->answer;
-
+    
     if ((reportfile = parm.report_file->answer) == NULL)
 	report = fopen("/dev/null", "w");
     else
