@@ -1,38 +1,75 @@
+/**
+   \file sigfile.c
+   
+   \brief Imagery Library - Signature file functions.
+ 
+   (C) 2001-2008 by the GRASS Development Team
+   
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
+   
+   \author USA CERL
+*/
+
 #include <string.h>
 #include <grass/imagery.h>
 
+/**
+   \brief Create signature file
+
+   \param group group name
+   \param subgroup subgroup name in given group
+   \param name signature filename
+
+   \return pointer to FILE*
+   \return NULL on error
+*/
 FILE *I_fopen_signature_file_new(const char *group,
 				 const char *subgroup, const char *name)
 {
-    char element[GNAME_MAX * 2];
+    char element[GPATH_MAX];
+    char group_name[GNAME_MAX], group_mapset[GMAPSET_MAX];
     FILE *fd;
 
+    if (!G__name_is_fully_qualified(group, group_name, group_mapset)) {
+	strcpy(group_name, group);
+    }
+
     /* create sigset directory */
-    sprintf(element, "%s/subgroup/%s/sig", group, subgroup);
+    sprintf(element, "%s/subgroup/%s/sig", group_name, subgroup);
     G__make_mapset_element_misc("group", element);
 
     sprintf(element, "subgroup/%s/sig/%s", subgroup, name);
 
-    fd = G_fopen_new_misc("group", element, group);
-    if (fd == NULL)
-	G_warning
-	    ("unable to create signature file %s for subgroup %s of group %s",
-	     name, subgroup, group);
+    fd = G_fopen_new_misc("group", element, group_name);
+    
     return fd;
 }
 
+/**
+   \brief Open signature file
+
+   \param group group name
+   \param subgroup subgroup name in given group
+   \param name signature filename
+
+   \return pointer to FILE*
+   \return NULL on error
+*/
 FILE *I_fopen_signature_file_old(const char *group,
 				 const char *subgroup, const char *name)
 {
-    char element[GNAME_MAX * 2];
+    char element[GPATH_MAX];
+    char group_name[GNAME_MAX], group_mapset[GMAPSET_MAX];
     FILE *fd;
 
+    if (!G__name_is_fully_qualified(group, group_name, group_mapset)) {
+	strcpy(group_name, group);
+    }
+    
     sprintf(element, "subgroup/%s/sig/%s", subgroup, name);
 
-    fd = G_fopen_old_misc("group", element, group, G_mapset());
-    if (fd == NULL)
-	G_warning
-	    ("unable to open signature file %s for subgroup %s of group [%s in %s]",
-	     name, subgroup, group, G_mapset());
+    fd = G_fopen_old_misc("group", element, group_name, G_mapset());
+    
     return fd;
 }
