@@ -514,7 +514,7 @@ class GMFrame(wx.Frame):
         licenceFile.close()
         # credits
         authorsFile = open(os.path.join(os.getenv("GISBASE"), "AUTHORS"), 'r')
-        info.SetDevelopers([''.join(authorsFile.readlines())])
+        info.SetDevelopers([unicode(''.join(authorsFile.readlines()), "utf-8")])
         authorsFile.close()
 
         wx.AboutBox(info)
