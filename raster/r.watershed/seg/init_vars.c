@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 #include "Gwater.h"
 #include <grass/gis.h>
@@ -14,7 +15,8 @@ int init_vars(int argc, char *argv[])
 
     /* int page_block, num_cseg; */
     int max_bytes;
-    CELL *buf, alt_value, wat_value, asp_value, worked_value;
+    CELL *buf, alt_value, asp_value, worked_value;
+    DCELL wat_value;
     char MASK_flag;
 
     G_gisinit(argv[0]);
@@ -23,11 +25,14 @@ int init_vars(int argc, char *argv[])
     zero = sl_flag = sg_flag = ls_flag = er_flag = bas_thres = 0;
     nxt_avail_pt = 0;
     /* dep_flag = 0; */
-    max_length = dzero = 0.0;
+    max_length = d_zero = 0.0;
+    d_one = 1.0;
     ril_value = -1.0;
     /* dep_slope = 0.0; */
     max_bytes = 0;
     sides = 8;
+    mfd = 1;
+    c_fac = 5;
     segs_mb = 300;
     for (r = 1; r < argc; r++) {
 	if (sscanf(argv[r], "el=%[^\n]", ele_name) == 1)
@@ -72,8 +77,14 @@ int init_vars(int argc, char *argv[])
 	    if (sides != 4)
 		usage(argv[0]);
 	}
+	else if (sscanf(argv[r], "conv=%d", &c_fac) == 1) ;
+	else if (strcmp(argv[r], "-s") == 0)
+	    mfd = 0;
 	else
 	    usage(argv[0]);
+    }
+    if (mfd == 1 && (c_fac < 1 || c_fac > 10)) {
+	G_fatal_error("Convergence factor must be between 1 and 10.");
     }
     if ((ele_flag != 1)
 	||
@@ -107,7 +118,7 @@ int init_vars(int argc, char *argv[])
     G_get_set_window(&window);
     nrows = G_window_rows();
     ncols = G_window_cols();
-    if (max_length <= dzero)
+    if (max_length <= d_zero)
 	max_length = 10 * nrows * window.ns_res + 10 * ncols * window.ew_res;
     if (window.ew_res < window.ns_res)
 	half_res = .5 * window.ew_res;
@@ -158,15 +169,15 @@ int init_vars(int argc, char *argv[])
     cseg_open(&r_h, seg_rows, seg_cols, num_open_segs);
     cseg_read_cell(&alt, ele_name, "");
     cseg_read_cell(&r_h, ele_name, "");
-    cseg_open(&wat, seg_rows, seg_cols, num_open_segs);
+    dseg_open(&wat, seg_rows, seg_cols, num_open_segs);
 
     if (run_flag) {
-	cseg_read_cell(&wat, run_name, "");
+	dseg_read_cell(&wat, run_name, "");
     }
     else {
 	for (r = 0; r < nrows; r++) {
 	    for (c = 0; c < ncols; c++)
-		if (-1 == cseg_put(&wat, &one, r, c))
+		if (-1 == dseg_put(&wat, &d_one, r, c))
 		    exit(EXIT_FAILURE);
 	}
     }
@@ -243,21 +254,21 @@ int init_vars(int argc, char *argv[])
 
     if (MASK_flag) {
 	for (r = 0; r < nrows; r++) {
-	    G_percent(r, nrows, 3);
+	    G_percent(r, nrows, 2);
 	    for (c = 0; c < ncols; c++) {
 		bseg_get(&worked, &worked_value, r, c);
 		if (worked_value) {
-		    cseg_put(&wat, &zero, r, c);
+		    dseg_put(&wat, &d_zero, r, c);
 		}
 		else {
 		    dseg_put(&s_l, &half_res, r, c);
 		    cseg_get(&asp, &asp_value, r, c);
 		    if (r == 0 || c == 0 || r == nrows - 1 ||
 			c == ncols - 1 || asp_value != 0) {
-			cseg_get(&wat, &wat_value, r, c);
+			dseg_get(&wat, &wat_value, r, c);
 			if (wat_value > 0) {
 			    wat_value = -wat_value;
-			    cseg_put(&wat, &wat_value, r, c);
+			    dseg_put(&wat, &wat_value, r, c);
 			}
 			if (r == 0)
 			    asp_value = -2;
@@ -280,10 +291,10 @@ int init_vars(int argc, char *argv[])
 			add_pt(r, c, -1, -1, alt_value, alt_value);
 			asp_value = -2;
 			cseg_put(&asp, &asp_value, r, c);
-			cseg_get(&wat, &wat_value, r, c);
+			dseg_get(&wat, &wat_value, r, c);
 			if (wat_value > 0) {
 			    wat_value = -wat_value;
-			    cseg_put(&wat, &wat_value, r, c);
+			    dseg_put(&wat, &wat_value, r, c);
 			}
 		    }
 		    else if (!bseg_get(&worked, &worked_value, r + 1, c)
@@ -292,10 +303,10 @@ int init_vars(int argc, char *argv[])
 			add_pt(r, c, -1, -1, alt_value, alt_value);
 			asp_value = -6;
 			cseg_put(&asp, &asp_value, r, c);
-			cseg_get(&wat, &wat_value, r, c);
+			dseg_get(&wat, &wat_value, r, c);
 			if (wat_value > 0) {
 			    wat_value = -wat_value;
-			    cseg_put(&wat, &wat_value, r, c);
+			    dseg_put(&wat, &wat_value, r, c);
 			}
 		    }
 		    else if (!bseg_get(&worked, &worked_value, r, c - 1)
@@ -304,10 +315,10 @@ int init_vars(int argc, char *argv[])
 			add_pt(r, c, -1, -1, alt_value, alt_value);
 			asp_value = -4;
 			cseg_put(&asp, &asp_value, r, c);
-			cseg_get(&wat, &wat_value, r, c);
+			dseg_get(&wat, &wat_value, r, c);
 			if (wat_value > 0) {
 			    wat_value = -wat_value;
-			    cseg_put(&wat, &wat_value, r, c);
+			    dseg_put(&wat, &wat_value, r, c);
 			}
 		    }
 		    else if (!bseg_get(&worked, &worked_value, r, c + 1)
@@ -316,10 +327,10 @@ int init_vars(int argc, char *argv[])
 			add_pt(r, c, -1, -1, alt_value, alt_value);
 			asp_value = -8;
 			cseg_put(&asp, &asp_value, r, c);
-			cseg_get(&wat, &wat_value, r, c);
+			dseg_get(&wat, &wat_value, r, c);
 			if (wat_value > 0) {
 			    wat_value = -wat_value;
-			    cseg_put(&wat, &wat_value, r, c);
+			    dseg_put(&wat, &wat_value, r, c);
 			}
 		    }
 		    else if (sides == 8 &&
@@ -329,10 +340,10 @@ int init_vars(int argc, char *argv[])
 			add_pt(r, c, -1, -1, alt_value, alt_value);
 			asp_value = -3;
 			cseg_put(&asp, &asp_value, r, c);
-			cseg_get(&wat, &wat_value, r, c);
+			dseg_get(&wat, &wat_value, r, c);
 			if (wat_value > 0) {
 			    wat_value = -wat_value;
-			    cseg_put(&wat, &wat_value, r, c);
+			    dseg_put(&wat, &wat_value, r, c);
 			}
 		    }
 		    else if (sides == 8 &&
@@ -342,10 +353,10 @@ int init_vars(int argc, char *argv[])
 			add_pt(r, c, -1, -1, alt_value, alt_value);
 			asp_value = -1;
 			cseg_put(&asp, &asp_value, r, c);
-			cseg_get(&wat, &wat_value, r, c);
+			dseg_get(&wat, &wat_value, r, c);
 			if (wat_value > 0) {
 			    wat_value = -wat_value;
-			    cseg_put(&wat, &wat_value, r, c);
+			    dseg_put(&wat, &wat_value, r, c);
 			}
 		    }
 		    else if (sides == 8 &&
@@ -355,10 +366,10 @@ int init_vars(int argc, char *argv[])
 			add_pt(r, c, -1, -1, alt_value, alt_value);
 			asp_value = -5;
 			cseg_put(&asp, &asp_value, r, c);
-			cseg_get(&wat, &wat_value, r, c);
+			dseg_get(&wat, &wat_value, r, c);
 			if (wat_value > 0) {
 			    wat_value = -wat_value;
-			    cseg_put(&wat, &wat_value, r, c);
+			    dseg_put(&wat, &wat_value, r, c);
 			}
 		    }
 		    else if (sides == 8 &&
@@ -368,10 +379,10 @@ int init_vars(int argc, char *argv[])
 			add_pt(r, c, -1, -1, alt_value, alt_value);
 			asp_value = -7;
 			cseg_put(&asp, &asp_value, r, c);
-			cseg_get(&wat, &wat_value, r, c);
+			dseg_get(&wat, &wat_value, r, c);
 			if (wat_value > 0) {
 			    wat_value = -wat_value;
-			    cseg_put(&wat, &wat_value, r, c);
+			    dseg_put(&wat, &wat_value, r, c);
 			}
 		    }
 		    else {
@@ -384,17 +395,17 @@ int init_vars(int argc, char *argv[])
     }
     else {
 	for (r = 0; r < nrows; r++) {
-	    G_percent(r, nrows, 3);
+	    G_percent(r, nrows, 2);
 	    for (c = 0; c < ncols; c++) {
 		bseg_put(&worked, &zero, r, c);
 		dseg_put(&s_l, &half_res, r, c);
 		cseg_get(&asp, &asp_value, r, c);
 		if (r == 0 || c == 0 || r == nrows - 1 ||
 		    c == ncols - 1 || asp_value != 0) {
-		    cseg_get(&wat, &wat_value, r, c);
+		    dseg_get(&wat, &wat_value, r, c);
 		    if (wat_value > 0) {
 			wat_value = -wat_value;
-			if (-1 == cseg_put(&wat, &wat_value, r, c))
+			if (-1 == dseg_put(&wat, &wat_value, r, c))
 			    exit(EXIT_FAILURE);
 		    }
 		    if (r == 0)
@@ -419,8 +430,7 @@ int init_vars(int argc, char *argv[])
 	    }
 	}
     }
-    G_percent(r, nrows, 3);	/* finish it */
+    G_percent(r, nrows, 1);	/* finish it */
 
     return 0;
 }
-

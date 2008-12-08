@@ -40,7 +40,7 @@ int close_array_seg(void)
 	    r = 1;
 	    incr = 0;
 	    while (incr >= 0) {
-		G_percent(r, max, 3);
+		G_percent(r, max, 2);
 		for (gr = 130 + incr; gr <= 255; gr += 20) {
 		    for (rd = 90 + incr; rd <= 255; rd += 30) {
 			for (bl = 90 + incr; bl <= 255; bl += 40) {

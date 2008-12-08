@@ -25,6 +25,7 @@
 
 struct Cell_head window;
 
+int mfd, c_fac;
 SSEG heap_index;
 int heap_size;
 int first_astar, first_cum, nxt_avail_pt, total_cells, do_points;
@@ -33,15 +34,16 @@ double half_res, diag, max_length, dep_slope;
 int bas_thres, tot_parts;
 SSEG astar_pts;
 BSEG worked, in_list, s_b, swale;
-CSEG dis, alt, wat, asp, bas, haf, r_h, dep;
+CSEG dis, alt, asp, bas, haf, r_h, dep;
+DSEG wat;
 DSEG slp, s_l, s_g, l_s, ril;
 CELL one, zero;
-double ril_value, dzero;
+double ril_value, d_zero, d_one;
 SHORT sides;
-SHORT drain[3][3] = {{ 7,6,5 },{ 8,0,4 },{ 1,2,3 }};
-SHORT updrain[3][3]	= {{ 3,2,1 },{ 4,0,8 },{ 5,6,7 }};
-SHORT nextdr[8]	= { 1,-1,0,0,-1,1,1,-1 };
-SHORT nextdc[8]	= { 0,0,-1,1,1,-1,1,-1 };
+SHORT drain[3][3] = { {7, 6, 5}, {8, 0, 4}, {1, 2, 3} };
+SHORT updrain[3][3] = { {3, 2, 1}, {4, 0, 8}, {5, 6, 7} };
+SHORT nextdr[8] = { 1, -1, 0, 0, -1, 1, 1, -1 };
+SHORT nextdc[8] = { 0, 0, -1, 1, 1, -1, 1, -1 };
 char ele_name[GNAME_MAX], pit_name[GNAME_MAX];
 char run_name[GNAME_MAX], ob_name[GNAME_MAX];
 char ril_name[GNAME_MAX], dep_name[GNAME_MAX];
@@ -65,10 +67,16 @@ int main(int argc, char *argv[])
 {
     one = 1;
     zero = 0;
-    dzero = 0.0;
+    d_zero = 0.0;
+    d_one = 1.0;
     init_vars(argc, argv);
     do_astar();
-    do_cum();
+    if (mfd) {
+	do_cum_mfd();
+    }
+    else {
+	do_cum();
+    }
     if (sg_flag || ls_flag) {
 	sg_factor();
     }

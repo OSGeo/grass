@@ -3,8 +3,6 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-int sift_up(int, CELL);
-
 int do_astar(void)
 {
     POINT *point;
@@ -96,7 +94,9 @@ int do_astar(void)
 	}
     }
     G_percent(count, do_points, 3);	/* finish it */
-    flag_destroy(worked);
+    if (mfd == 0)
+	flag_destroy(worked);
+
     flag_destroy(in_list);
     G_free(heap_index);
 

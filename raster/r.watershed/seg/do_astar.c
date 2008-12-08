@@ -5,14 +5,13 @@
 #include "Gwater.h"
 #include "do_astar.h"
 
-int sift_up(int, CELL);
-
 int do_astar(void)
 {
     POINT point;
     int doer, count;
     SHORT upr, upc, r, c, ct_dir;
-    CELL work_val, alt_val, alt_up, asp_up, wat_val;
+    CELL work_val, alt_val, alt_up, asp_up;
+    DCELL wat_val;
     CELL in_val, drain_val;
     HEAP heap_pos;
 
@@ -75,10 +74,10 @@ int do_astar(void)
 			if (asp_up < -1) {
 			    drain_val = drain[upr - r + 1][upc - c + 1];
 			    cseg_put(&asp, &drain_val, upr, upc);
-			    cseg_get(&wat, &wat_val, r, c);
+			    dseg_get(&wat, &wat_val, r, c);
 			    if (wat_val > 0)
 				wat_val = -wat_val;
-			    cseg_put(&wat, &wat_val, r, c);
+			    dseg_put(&wat, &wat_val, r, c);
 			    cseg_get(&alt, &alt_up, upr, upc);
 			    replace(upr, upc, r, c);	/* alt_up used to be */
 			    /* slope = get_slope (upr, upc, r, c, alt_up, alt_val);
@@ -89,7 +88,10 @@ int do_astar(void)
 	    }
 	}
     }
-    bseg_close(&worked);
+
+    if (mfd == 0)
+	bseg_close(&worked);
+
     bseg_close(&in_list);
     seg_close(&heap_index);
 
@@ -288,6 +290,7 @@ int replace(			/* ele was in there */
 
     heap_run = 0;
 
+    /* this is dumb, works for ram, for seg make new index pt_index[row][col] */
     while (heap_run <= heap_size) {
 	seg_get(&heap_index, (char *)&heap_pos, 0, heap_run);
 	now = heap_pos.point;

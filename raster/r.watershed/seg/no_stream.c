@@ -6,7 +6,8 @@ no_stream(int row, int col, CELL basin_num, double stream_length,
 {
     int r, rr, c, cc, uprow = 0, upcol = 0;
     double slope;
-    CELL downdir, max_drain, value, asp_value, hih_ele, new_ele, aspect;
+    CELL downdir, asp_value, hih_ele, new_ele, aspect;
+    DCELL value, max_drain;	/* flow acc is now DCELL */
     SHORT updir, riteflag, leftflag, thisdir;
 
     while (1) {
@@ -17,10 +18,11 @@ no_stream(int row, int col, CELL basin_num, double stream_length,
 
 		    cseg_get(&asp, &aspect, r, c);
 		    if (aspect == drain[rr][cc]) {
-			cseg_get(&wat, &value, r, c);
+			dseg_get(&wat, &value, r, c);
+			/* here is the reason why MFD basins differ from SFD basins */
 			if (value < 0)
 			    value = -value;
-			if (value > max_drain) {
+			if ((value - max_drain) > 5E-8f) {	/* floating point comparison problem workaround */
 			    uprow = r;
 			    upcol = c;
 			    max_drain = value;
