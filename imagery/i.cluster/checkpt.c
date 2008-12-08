@@ -34,7 +34,7 @@ int checkpoint(struct Cluster *X, int n)
 	   print_class_means(report,X);
 	 */
 	print_distribution(report, X);
-	if (verbose) {
+	if (G_verbose() > G_verbose_std()) {
 	    cur_time = time(NULL);
 	    elapsed_time = cur_time - start_time;
 	    G_message(_("Iteration %.2d: convergence %.2f%% (%s elapsed, %s left)"),
