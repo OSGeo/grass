@@ -17,6 +17,7 @@ install_scripts:
 	if [ ! -d $(ETCDIR)/$$dir ] ; then $(MKDIR) $(ETCDIR)/$$dir ; fi ; \
 	done
 	$(MAKE) $(DSTFILES)
+	$(MAKE) menustrings.py
 
 $(ETCDIR)/scripts/wxgui: wxgui
 	$(INSTALL) $< $@
@@ -27,3 +28,5 @@ $(ETCDIR)/scripts/%: scripts/%
 $(ETCDIR)/%: %
 	$(INSTALL_DATA) $< $@
 
+menustrings.py: gui_modules/menudata.py xml/menudata.xml
+	python $< > $@

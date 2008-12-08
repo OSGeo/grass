@@ -25,6 +25,9 @@ except ImportError:
 
 class Data:
     '''Data object that returns menu descriptions to be used in wxgui.py.'''
+    def __init__(self):
+	filename = os.getenv('GISBASE') + '/etc/wxpython/xml/menudata.xml'
+	self.tree = etree.parse(filename)
 
     def getMenuItem(self, mi):
 	if mi.tag == 'separator':
@@ -56,6 +59,15 @@ class Data:
 	return list(map(self.getMenuBar, md.findall('menubar')))
 
     def GetMenu(self):
-	filename = os.getenv('GISBASE') + '/etc/wxpython/xml/menudata.xml'
-	tree = etree.parse(filename)
-	return self.getMenuData(tree.getroot())
+	return self.getMenuData(self.tree.getroot())
+
+    def PrintStrings(self, fh):
+	fh.write('menustrings = [\n')
+	for node in self.tree.getiterator():
+	    if node.tag in ['label', 'help']:
+		fh.write('     _(%r),\n' % node.text)
+	fh.write('    \'\']\n')
+
+if __name__ == "__main__":
+    import sys
+    Data().PrintStrings(sys.stdout)
