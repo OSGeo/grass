@@ -13,8 +13,6 @@
  *****************************************************************************/
 
 #include <grass/glocale.h>
-#include <grass/glocale.h>
-
 #include "frac.h"
 
 const char
