@@ -376,7 +376,7 @@ int main(int argc, char *argv[])
     if (flag_seg->answer && opt17->answer) {
 	strcat(command, " mb=");
 	strcat(command, "\"");
-	strcat(command, opt16->answer);
+	strcat(command, opt17->answer);
 	strcat(command, "\"");
     }
 
