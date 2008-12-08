@@ -52,10 +52,6 @@ int main(int argc, char *argv[])
     {
 	struct Option *group, *subgroup, *sigfile, *class, *reject;
     } parm;
-    struct
-    {
-	struct Flag *quiet;
-    } flag;
 
     G_gisinit(argv[0]);
 
@@ -91,11 +87,7 @@ int main(int argc, char *argv[])
     parm.reject->required = NO;
     parm.reject->description =
 	_("Name for raster map holding reject threshold results");
-
-    flag.quiet = G_define_flag();
-    flag.quiet->key = 'q';
-    flag.quiet->description = _("Run quietly");
-
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
