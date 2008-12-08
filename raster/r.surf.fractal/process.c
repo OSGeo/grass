@@ -13,9 +13,10 @@
 
 /***************************************************************************/
 
-#include <grass/gmath.h>
 #include <grass/glocale.h>
 #include "frac.h"
+/* gmath.h must go last, as it can interfere with ANSI headers */
+#include <grass/gmath.h>
 
 int process(void)
 {
