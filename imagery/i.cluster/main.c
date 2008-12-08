@@ -11,7 +11,7 @@
  *               Glynn Clements <glynn gclements.plus.com>, 
  *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      builds pixel clusters based on multi-image pixel values
- * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2008 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("imagery");
+    module->keywords = _("imagery, classification, signatures");
     module->label =
 	_("Generates spectral signatures for land cover "
 	  "types in an image using a clustering algorithm.");
@@ -86,19 +86,17 @@ int main(int argc, char *argv[])
 	  "to generate an unsupervised image classification.");
 
     parm.group_name = G_define_standard_option(G_OPT_I_GROUP);
-    parm.group_name->description =
-	_("Group of imagery files to be clustered");
 
     parm.subgroup_name = G_define_option();
     parm.subgroup_name->key = "subgroup";
     parm.subgroup_name->type = TYPE_STRING;
     parm.subgroup_name->required = YES;
-    parm.subgroup_name->description = _("Subgroup name in the above group");
+    parm.subgroup_name->description = _("Name of subgroup in the above group");
 
     parm.out_sig = G_define_standard_option(G_OPT_F_OUTPUT);
     parm.out_sig->key = "sigfile";
     parm.out_sig->required = YES;
-    parm.out_sig->description = _("File to contain result signatures");
+    parm.out_sig->description = _("Name for output file containing result signatures");
 
     parm.class = G_define_option();
     parm.class->key = "classes";
@@ -106,11 +104,12 @@ int main(int argc, char *argv[])
     parm.class->options = "1-255";
     parm.class->required = YES;
     parm.class->description = _("Initial number of classes");
+    parm.class->guisection = _("Settings");
 
     parm.seed_sig = G_define_standard_option(G_OPT_F_INPUT);
     parm.seed_sig->key = "seed";
     parm.seed_sig->required = NO;
-    parm.seed_sig->description = _("File containing initial signatures");
+    parm.seed_sig->description = _("Name of file containing initial signatures");
 
     parm.sample_interval = G_define_option();
     parm.sample_interval->key = "sample";
@@ -119,6 +118,7 @@ int main(int argc, char *argv[])
     parm.sample_interval->required = NO;
     parm.sample_interval->description =
 	_("Sampling intervals (by row and col); default: ~10,000 pixels");
+    parm.sample_interval->guisection = _("Settings");
 
     parm.iterations = G_define_option();
     parm.iterations->key = "iterations";
@@ -126,6 +126,7 @@ int main(int argc, char *argv[])
     parm.iterations->required = NO;
     parm.iterations->description = _("Maximum number of iterations");
     parm.iterations->answer = "30";
+    parm.iterations->guisection = _("Settings");
 
     parm.convergence = G_define_option();
     parm.convergence->key = "convergence";
@@ -134,6 +135,7 @@ int main(int argc, char *argv[])
     parm.convergence->options = "0-100";
     parm.convergence->description = _("Percent convergence");
     parm.convergence->answer = "98.0";
+    parm.convergence->guisection = _("Settings");
 
     parm.separation = G_define_option();
     parm.separation->key = "separation";
@@ -141,6 +143,7 @@ int main(int argc, char *argv[])
     parm.separation->required = NO;
     parm.separation->description = _("Cluster separation");
     parm.separation->answer = "0.0";
+    parm.separation->guisection = _("Settings");
 
     parm.min_size = G_define_option();
     parm.min_size->key = "min_size";
@@ -148,11 +151,12 @@ int main(int argc, char *argv[])
     parm.min_size->required = NO;
     parm.min_size->description = _("Minimum number of pixels in a class");
     parm.min_size->answer = "17";
+    parm.min_size->guisection = _("Settings");
 
     parm.report_file = G_define_standard_option(G_OPT_F_OUTPUT);
     parm.report_file->key = "reportfile";
     parm.report_file->required = NO;
-    parm.report_file->description = _("Output file to contain final report");
+    parm.report_file->description = _("Name for output file containing final report");
 
     flag.q = G_define_flag();
     flag.q->key = 'q';
@@ -175,10 +179,8 @@ int main(int argc, char *argv[])
 
     if (sscanf(parm.class->answer, "%d", &maxclass) != 1 || maxclass < 1
 	|| maxclass > 255) {
-	G_warning(_("\n<%s> -- illegal number of initial classes"),
-		  parm.class->answer);
-	G_usage();
-	exit(EXIT_FAILURE);
+	G_fatal_error(_("Illegal number of initial classes (%s)"),
+		      parm.class->answer);
     }
 
     insigfile = parm.seed_sig->answer;
@@ -188,10 +190,8 @@ int main(int argc, char *argv[])
 	    (parm.sample_interval->answer, "%d,%d", &sample_rows,
 	     &sample_cols) != 2 || sample_rows < 1 || sample_cols < 1 ||
 	    sample_rows > nrows || sample_cols > ncols) {
-	    G_warning(_("\n<%s> -- illegal value(s) of sample intervals"),
-		      parm.sample_interval->answer);
-	    G_usage();
-	    exit(EXIT_FAILURE);
+	    G_fatal_error(_("Illegal value(s) of sample intervals (%s)"),
+			  parm.sample_interval->answer);
 	}
     }
     else {
@@ -204,32 +204,24 @@ int main(int argc, char *argv[])
     }
 
     if (sscanf(parm.iterations->answer, "%d", &iters) != 1 || iters < 1) {
-	G_warning(_("\n<%s> -- illegal value of iterations"),
-		  parm.iterations->answer);
-	G_usage();
-	exit(EXIT_FAILURE);
+	G_fatal_error(_("Illegal value of iterations (%s>)"),
+		      parm.iterations->answer);
     }
 
     if (sscanf(parm.convergence->answer, "%lf", &conv) != 1 || conv < 0.0 ||
 	conv > 100.0) {
-	G_warning(_("\n<%s> -- illegal value of convergence"),
-		  parm.convergence->answer);
-	G_usage();
-	exit(EXIT_FAILURE);
+	G_fatal_error(_("Illegal value of convergence (%s)"),
+		      parm.convergence->answer);
     }
 
     if (sscanf(parm.separation->answer, "%lf", &sep) != 1 || sep < 0.0) {
-	G_warning(_("\n<%s> -- illegal value of separation"),
-		  parm.separation->answer);
-	G_usage();
-	exit(EXIT_FAILURE);
+	G_fatal_error(_("Illegal value of separation (%s)"),
+		      parm.separation->answer);
     }
 
     if (sscanf(parm.min_size->answer, "%d", &mcs) != 1 || mcs < 2) {
-	G_warning(_("\n<%s> -- illegal value of min_size"),
-		  parm.min_size->answer);
-	G_usage();
-	exit(EXIT_FAILURE);
+	G_fatal_error(_("Illegal value of min_size (%s)"),
+		      parm.min_size->answer);
     }
 
     verbose = !flag.q->answer;
@@ -239,9 +231,8 @@ int main(int argc, char *argv[])
     else
 	report = fopen(reportfile, "w");
     if (report == NULL) {
-	G_warning(_("Can't creat reportfile: "));
-	perror(reportfile);
-	exit(EXIT_FAILURE);
+	G_fatal_error(_("Unable to create report file <%s>"),
+		      reportfile);
     }
 
     open_files();
@@ -291,33 +282,33 @@ int main(int argc, char *argv[])
     I_cluster_begin(&C, ref.nfiles);
 
     count = 0;
-    if (verbose)
-	G_message(_("Reading image ... "));
+    G_message(_("Reading raster maps..."));
     for (row = sample_rows - 1; row < nrows; row += sample_rows) {
-	if (verbose)
-	    G_percent(row, nrows, 2);
+	G_percent(row, nrows, 2);
 	for (n = 0; n < ref.nfiles; n++)
 	    if (G_get_d_raster_row(cellfd[n], cell[n], row) < 0)
-		exit(EXIT_FAILURE);
+		G_fatal_error(_("Unable to read raster map row %d"),
+			      row);
 	for (col = sample_cols - 1; col < ncols; col += sample_cols) {
 	    count++;
 	    for (n = 0; n < ref.nfiles; n++)
 		x[n] = cell[n][col];
 	    if (I_cluster_point(&C, x) < 0)
-		G_fatal_error(_("Out of Memory. Please run again and choose a smaller sample size"));
+		G_fatal_error(_("Out of Memory. Please run again and choose a "
+				"smaller sample size."));
 	}
     }
-    if (verbose)
-	G_percent(nrows, nrows, 2);
+    G_percent(nrows, nrows, 2);
+
     fprintf(report, _("Sample size: %d points\n"), C.npoints);
     fprintf(report, "\n");
     if (count < 2)
 	G_fatal_error(_("Not enough sample points. Please run again and "
-			"choose a larger sample size"));
+			"choose a larger sample size."));
 
     if (C.npoints < 2)
 	G_fatal_error(_("Not enough non-zero sample data points. Check "
-			"your current region (and mask)"));
+			"your current region (and mask)."));
 
     for (n = 0; n < ref.nfiles; n++) {
 	G_free(cell[n]);
@@ -341,7 +332,7 @@ int main(int argc, char *argv[])
 	fclose(fd);
     }
     else {
-	G_fatal_error(_("Could not write signature file <%s> for group "
+	G_fatal_error(_("Unable to create signature file <%s> for group "
 			"<%s>, subsgroup <%s>"), outsigfile, group, subgroup);
     }
 
@@ -352,6 +343,9 @@ int main(int argc, char *argv[])
     fprintf(report, _("\n######## CLUSTER END (%s) ########\n"), G_date());
     fclose(report);
 
+    G_done_msg(_("File <%s> created."),
+	       outsigfile);
+    
     exit(EXIT_SUCCESS);
 
 }
