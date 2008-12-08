@@ -1,6 +1,7 @@
 MODULE_TOPDIR = ../..
 
 SUBDIRS = docs scripts vdigit nviz
+EXTRA_CLEAN_FILES = menustrings.py
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 
