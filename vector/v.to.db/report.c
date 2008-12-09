@@ -171,9 +171,16 @@ int report(void)
 
 int print_stat(void)
 {
-    if (vstat.rcat > 0)
+    if (vstat.rcat > 0) {
+	int rcat_report;
+	if(find_cat(-1, 0) != -1)
+	    rcat_report = vstat.rcat - 1;
+	else
+	    rcat_report = vstat.rcat;
+	
 	G_message(_("%d categories read from vector map (layer %d)"),
-		  vstat.rcat - 1, options.field); /* don't report cat -1 */
+		  rcat_report, options.field); /* don't report cat -1 */
+    }
     if (vstat.select > 0)
 	G_message(_("%d records selected from table (layer %d)"),
 		  vstat.select, options.qfield);

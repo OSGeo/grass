@@ -34,7 +34,7 @@ int query(struct Map_info *Map)
 
 		cat_no = Cats->cat[i];
 
-		idx = find_cat(cat_no);
+		idx = find_cat(cat_no, 1);
 
 		for (j = 0; j < Cats->n_cats; j++) {
 		    if (Cats->field[j] == options.qfield) {	/* Add to list */
@@ -56,7 +56,7 @@ int query(struct Map_info *Map)
 	Vect_cat_get(Cats, options.field, &cat_no);
 
 	if (cat_no == -1) {
-	    idx = find_cat(cat_no);
+	    idx = find_cat(cat_no, 1);
 
 	    for (j = 0; j < Cats->n_cats; j++) {
 		if (Cats->field[j] == options.qfield) {	/* Add to list */

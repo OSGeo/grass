@@ -91,12 +91,12 @@ int main(int argc, char *argv[])
 
     Vect_close(&Map);
 
-    /* free list */
-    G_free(Values);
-
     if (!(options.print && options.total)) {
 	print_stat();
     }
+
+    /* free list */
+    G_free(Values);
 
     exit(EXIT_SUCCESS);
 }

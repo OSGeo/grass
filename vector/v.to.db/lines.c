@@ -115,7 +115,7 @@ int read_lines(struct Map_info *Map)
 
 	for (i = 0; i < Cats->n_cats; i++) {
 	    if (Cats->field[i] == options.field) {
-		idx = find_cat(Cats->cat[i]);
+		idx = find_cat(Cats->cat[i], 1);
 		if (options.option == O_COUNT) {
 		    Values[idx].count1++;
 		}
@@ -198,7 +198,7 @@ int read_lines(struct Map_info *Map)
 	}
 
 	if (!found) {		/* Values for no category (cat = -1) are reported at the end */
-	    idx = find_cat(-1);
+	    idx = find_cat(-1, 1);
 	    if (options.option == O_COUNT) {
 		Values[idx].count1++;
 	    }
