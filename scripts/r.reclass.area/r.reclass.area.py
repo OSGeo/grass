@@ -21,32 +21,35 @@
 # 1998 from NRCS, slightly modified for GRASS 4.2.1
 
 #%Module
-#%  description: Reclasses a raster map greater or less than user specified area size (in hectares)
+#%  description: Reclasses a raster map greater or less than user specified area size (in hectares).
 #%  keywords: raster, statistics, aggregation
 #%End
+
 #%option
 #% key: input
 #% type: string
 #% gisprompt: old,cell,raster
-#% description: raster input map
+#% description: Name of input raster map
 #% required : yes
 #%END
-#%option
-#% key: lesser
-#% type: double
-#% description: lesser val option that sets the <= area size limit [hectares]
-#%END
-#%option
-#% key: greater
-#% type: double
-#% description: greater val option that sets the >= area size limit [hectares]
-#%END
+
 #%option
 #% key: output
 #% type: string
 #% gisprompt: new,cell,raster
-#% description: reclass raster output map
+#% description: Name for output raster map
 #% required : yes
+#%END
+
+#%option
+#% key: lesser
+#% type: double
+#% description: Lesser value option that sets the <= area size limit [hectares]
+#%END
+#%option
+#% key: greater
+#% type: double
+#% description: Greater value option that sets the >= area size limit [hectares]
 #%END
 
 import sys
@@ -63,11 +66,11 @@ def main():
     kv = grass.parse_key_val(s, sep = ':')
     s = kv['projection'].strip().split()
     if s == '0':
-	grass.fatal("xy-locations are not supported.")
-	grass.fatal("Need projected data with grids in meters.")
+	grass.fatal("xy-locations are not supported")
+	grass.fatal("Need projected data with grids in meters")
 
     if not lesser and not greater:
-	grass.fatal("you have to specify either lesser= or greater=")
+	grass.fatal("You have to specify either lesser= or greater=")
     if lesser and greater:
 	grass.fatal("lesser= and greater= are mutually exclusive")
     if lesser:
@@ -76,21 +79,21 @@ def main():
 	limit = float(greater)
 
     if not grass.find_file(infile)['name']:
-	grass.fatal("Raster map <%s> does not exist." % infile)
+	grass.fatal("Raster map <%s> not found" % infile)
 
     clumpfile = "%s.clump.%s" % (infile.split('@')[0], outfile)
 
     if not grass.overwrite():
 	if grass.find_file(clumpfile)['name']:
-	    grass.fatal("Temporary raster map <%s> exists." % clumpfile)
+	    grass.fatal("Temporary raster map <%s> exists" % clumpfile)
 
     grass.message("Generating a clumped raster file ...")
     grass.run_command('r.clump', input = infile, output = clumpfile)
 
     if lesser:
-	grass.message("Generating a reclass map with area size less than or equal to %f hectares" % limit)
+	grass.message("Generating a reclass map with area size less than or equal to %f hectares..." % limit)
     else:
-	grass.message("Generating a reclass map with area size greater than or equal to %f hectares" % limit)
+	grass.message("Generating a reclass map with area size greater than or equal to %f hectares..." % limit)
 
     recfile = outfile + '.recl'
 
@@ -111,7 +114,7 @@ def main():
     p2.stdin.close()
     p2.wait()
 
-    grass.message("Written: %s" % outfile)
+    grass.message("Generating output raster map <$outfile>..." % outfile)
 
     grass.mapcalc("$outfile = $recfile", outfile = outfile, recfile = recfile)
     grass.run_command('g.remove', rast = [recfile, clumpfile], quiet = True)
