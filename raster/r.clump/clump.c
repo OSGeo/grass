@@ -18,8 +18,8 @@
 
 #include <time.h>
 #include <grass/gis.h>
-#include "local_proto.h"
 #include <grass/glocale.h>
+#include "local_proto.h"
 
 #define INCR 1024
 
@@ -95,13 +95,13 @@ CELL clump(int in_fd, int out_fd)
 	/* initialize clump labels */
 	label = 0;
 
-	G_message(_("CLUMP PASS %d ... "), pass);
-	fflush(stderr);
+	G_message(_("Pass %d..."), pass);
 	for (row = 0; row < nrows; row++) {
 	    if (G_get_map_row(in_fd, cur_in + 1, row) < 0)
-		G_fatal_error(_("Unable to properly read input raster map"));
-
-	    G_percent(row, nrows, 2);
+		G_fatal_error(_("Unable to read raster map row %d "),
+			      row);
+	    
+	    G_percent(row+1, nrows, 2);
 	    X = 0;
 	    for (col = 1; col <= ncols; col++) {
 		LEFT = X;
@@ -235,7 +235,8 @@ CELL clump(int in_fd, int out_fd)
 			G_set_null_value(&out_cell[column], 1, CELL_TYPE);
 		}
 		if (G_put_raster_row(out_fd, out_cell, CELL_TYPE) < 0)
-		    G_fatal_error(_("Unable to properly write output raster map"));
+		    G_fatal_error(_("Failed writing raster map row %d"),
+				  row);
 	    }
 
 	    /* switch the buffers so that the current buffer becomes the previous */
@@ -247,9 +248,8 @@ CELL clump(int in_fd, int out_fd)
 	    cur_clump = prev_clump;
 	    prev_clump = temp_clump;
 	}
-	G_percent(row, nrows, 2);
-	print_time(&cur_time);
 
+	print_time(&cur_time);
     }
     return 0;
 }
@@ -269,11 +269,11 @@ int print_time(long *start)
     seconds = seconds % 60;
 
     if (hours)
-	G_message("%2d:%02d:%02d", hours, minutes, seconds);
+	G_verbose_message("%2d:%02d:%02d", hours, minutes, seconds);
     else if (minutes)
-	G_message("%d:%02d", minutes, seconds);
+	G_verbose_message("%d:%02d", minutes, seconds);
     else
-	G_message("%d seconds", seconds);
+	G_verbose_message("%d seconds", seconds);
 
     return 0;
 }
