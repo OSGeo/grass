@@ -55,7 +55,7 @@ negative values, or <em>range=-inf,-200.4</em> to ignore values above -200.4).
 Using <em>r.series</em> with wildcards:
 <br>
 <div class="code"><pre>
-r.series input="`g.mlist pattern='insitu_data.*' sep=,`"
+r.series input="`g.mlist pattern='insitu_data.*' fs=,`"
     output=insitu_data.stddev method=stddev
 </pre></div>
 <p>
