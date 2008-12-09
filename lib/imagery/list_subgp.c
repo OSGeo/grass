@@ -1,5 +1,19 @@
+/*!
+   \file list_subgp.c
+   
+   \brief Imagery Library - List subgroup
+ 
+   (C) 2001-2008 by the GRASS Development Team
+   
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
+   
+   \author USA CERL
+*/
+
 #include <string.h>
 #include <grass/imagery.h>
+#include <grass/glocale.h>
 
 /*!
  * \brief Prints maps in a subgroup (fancy version)
@@ -19,24 +33,24 @@ int I_list_subgroup(const char *group,
     int max;
 
     if (ref->nfiles <= 0) {
-	fprintf(fd, "subgroup [%s] of group [%s] is empty\n",
+	fprintf(fd, _("subgroup <%s> of group <%s> is empty\n"),
 		subgroup, group);
 	return 0;
     }
     max = 0;
     for (i = 0; i < ref->nfiles; i++) {
-	sprintf(buf, "%s in %s", ref->file[i].name, ref->file[i].mapset);
+	sprintf(buf, "<%s@%s>", ref->file[i].name, ref->file[i].mapset);
 	len = strlen(buf) + 4;
 	if (len > max)
 	    max = len;
     }
     fprintf(fd,
-	    "subgroup [%s] of group [%s] references the following cellfiles\n",
+	    _("subgroup <%s> of group <%s> references the following raster maps\n"),
 	    subgroup, group);
     fprintf(fd, "-------------\n");
     tot_len = 0;
     for (i = 0; i < ref->nfiles; i++) {
-	sprintf(buf, "%s in %s", ref->file[i].name, ref->file[i].mapset);
+	sprintf(buf, "<%s@%s>", ref->file[i].name, ref->file[i].mapset);
 	tot_len += max;
 	if (tot_len > 78) {
 	    fprintf(fd, "\n");
