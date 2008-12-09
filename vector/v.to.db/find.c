@@ -3,13 +3,16 @@
 #include  "global.h"
 
 /* returns index to array of values, inserts new if necessary */
-int find_cat(int cat)
+int find_cat(int cat, int add)
 {
     int i;
 
     for (i = 0; i < vstat.rcat; i++)
 	if (Values[i].cat == cat)
 	    return i;
+
+    if (!add)
+	return -1;
 
     /* Not found -> add new */
     Values[vstat.rcat].cat = cat;

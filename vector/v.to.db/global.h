@@ -82,7 +82,7 @@ int read_areas(struct Map_info *);
 double length(register int, register double *, register double *);
 
 /* find.c */
-int find_cat(int);
+int find_cat(int, int);
 
 /* line.c */
 int read_lines(struct Map_info *);

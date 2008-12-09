@@ -47,7 +47,7 @@ int read_areas(struct Map_info *Map)
 	if (Vect_get_area_cats(Map, area_num, Cats) == 0) {
 	    for (i = 0; i < Cats->n_cats; i++) {
 		if (Cats->field[i] == options.field) {
-		    idx = find_cat(Cats->cat[i]);
+		    idx = find_cat(Cats->cat[i], 1);
 		    switch (options.option) {
 		    case O_AREA:
 			Values[idx].d1 += area;
@@ -68,7 +68,7 @@ int read_areas(struct Map_info *Map)
 	    }
 	    /* why do we do this? */
 	    if (!found) {	/* no category found */
-		idx = find_cat(0);
+		idx = find_cat(0, 1);
 		if (options.option == O_AREA) {
 		    Values[idx].d1 += area;
 		}
