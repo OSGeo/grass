@@ -1,5 +1,19 @@
+/*!
+  \file list_gp.c
+  
+  \brief Imagery Library - List group
+  
+  (C) 2001-2008 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author USA CERL
+*/
+
 #include <string.h>
 #include <grass/imagery.h>
+#include <grass/glocale.h>
 
 /*!
  * \brief Prints maps in a group (fancy version)
@@ -17,21 +31,21 @@ int I_list_group(const char *group, const struct Ref *ref, FILE * fd)
     int max;
 
     if (ref->nfiles <= 0) {
-	fprintf(fd, "group [%s] is empty\n", group);
+	fprintf(fd, _("group <%s> is empty\n"), group);
 	return 0;
     }
     max = 0;
     for (i = 0; i < ref->nfiles; i++) {
-	sprintf(buf, "%s in %s", ref->file[i].name, ref->file[i].mapset);
+	sprintf(buf, "<%s@%s>", ref->file[i].name, ref->file[i].mapset);
 	len = strlen(buf) + 4;
 	if (len > max)
 	    max = len;
     }
-    fprintf(fd, "group [%s] references the following cellfiles\n", group);
+    fprintf(fd, _("group <%s> references the following raster maps\n"), group);
     fprintf(fd, "-------------\n");
     tot_len = 0;
     for (i = 0; i < ref->nfiles; i++) {
-	sprintf(buf, "%s in %s", ref->file[i].name, ref->file[i].mapset);
+	sprintf(buf, "<%s@%s>", ref->file[i].name, ref->file[i].mapset);
 	tot_len += max;
 	if (tot_len > 78) {
 	    fprintf(fd, "\n");
