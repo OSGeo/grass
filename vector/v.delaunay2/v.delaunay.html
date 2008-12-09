@@ -1,6 +1,6 @@
 <H2>DESCRIPTION</H2>
 
-<EM>v.delaunay2</EM> uses an existing vector points map (<B>input</B>)
+<EM>v.delaunay</EM> uses an existing vector points map (<B>input</B>)
 to create a Delaunay triangulation vector map (<B>output</B>).
 <P>
 
@@ -21,7 +21,7 @@ Delaunay triangulation example:
 Commands used with the Spearfish dataset to create the above figure.
 <div class="code"><pre>
   g.region n=4927250 s=4920000 w=588650 e=605850
-  v.delaunay2 -lr in=archsites out=arch_delaunay
+  v.delaunay -lr in=archsites out=arch_delaunay
   d.vect map=arch_delaunay color=0:0:255
 </pre></div>
 
