@@ -52,7 +52,8 @@ static struct state *st = &state;
  * 
  * Note that to prevent the illusion of the module stalling, the G_percent()
  * call is placed before the time consuming part of the for loop, and an
- * additional call is added after the loop to "finish it off" at 100%.
+ * additional call is generally needed after the loop to "finish it off"
+ * at 100%.
  *
  * \param n current element
  * \param d total number of elements
