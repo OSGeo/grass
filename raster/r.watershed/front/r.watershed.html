@@ -224,9 +224,9 @@ is always included and assigned the maxmimum observed weighing factor.
 As a result, depressions and obstacles are overflown with a gracefull 
 flow convergence before the overflow. The convergence factor causes flow 
 accumulation to converge more strongly with higher values. The supported 
-range is 1 to 10, recommended is a convergence factor of 5. Although 
-basins and half-basins are calculated when using MFD, it is strongly 
-recommended to use SFD for basin and half-basin determination.
+range is 1 to 10, recommended is a convergence factor of 5. If many 
+small sliver basins are created with MFD, setting the convergence factor 
+to a higher value can reduce the amount of small sliver basins.
 <br>See example below with the North Carolina dataset for using MFD mode.
 
 <h4>In-memory mode and disk swap mode</h4>

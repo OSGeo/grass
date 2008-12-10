@@ -13,6 +13,7 @@ int do_cum(void)
     int killer, threshold, count;
 
     G_message(_("SECTION 3: Accumulating Surface Flow with SFD."));
+    G_debug(1, "MFD convergence factor set to %d.", c_fac);
 
     count = 0;
     if (bas_thres <= 0)
@@ -87,7 +88,7 @@ int do_cum_mfd(void)
 {
     int r, c, dr, dc;
     CELL is_swale;
-    DCELL value, valued, value_sfd;
+    DCELL value, valued;
     POINT point;
     int killer, threshold, count;
 
@@ -106,7 +107,7 @@ int do_cum_mfd(void)
     weight = (double *)G_malloc(sides * sizeof(double));
 
     for (ct_dir = 0; ct_dir < sides; ct_dir++) {
-	/* get r, c (upr, upc) for neighbours */
+	/* get r, c (r_nbr, c_nbr) for neighbours */
 	r_nbr = nextdr[ct_dir];
 	c_nbr = nextdc[ct_dir];
 	/* account for rare cases when ns_res != ew_res */
@@ -116,8 +117,6 @@ int do_cum_mfd(void)
 	    dist_to_nbr[ct_dir] = dx + dy;
 	else
 	    dist_to_nbr[ct_dir] = sqrt(dx * dx + dy * dy);
-
-
     }
 
     /* reset worked, takes time... */
@@ -145,7 +144,7 @@ int do_cum_mfd(void)
 	    c = point.c;
 	    dc = point.downc;
 	    dseg_get(&wat, &value, r, c);
-	    dseg_get(&wat, &value_sfd, dr, dc);
+	    dseg_get(&wat, &valued, dr, dc);
 
 	    /* disabled for MFD */
 	    /* if (ABS(value) > threshold)
@@ -162,7 +161,7 @@ int do_cum_mfd(void)
 	    cseg_get(&alt, &ele, r, c);
 	    /* this loop is needed to get the sum of weights */
 	    for (ct_dir = 0; ct_dir < sides; ct_dir++) {
-		/* get r, c (upr, upc) for neighbours */
+		/* get r, c (r_nbr, c_nbr) for neighbours */
 		r_nbr = r + nextdr[ct_dir];
 		c_nbr = c + nextdc[ct_dir];
 		weight[ct_dir] = -1;
@@ -172,7 +171,6 @@ int do_cum_mfd(void)
 		    bseg_get(&worked, &in_val, r_nbr, c_nbr);
 		    if (in_val == 0) {
 			cseg_get(&alt, &ele_nbr, r_nbr, c_nbr);
-			/* to consider neighbours with equal ele, change if() */
 			if (ele_nbr < ele) {
 			    weight[ct_dir] =
 				mfd_pow(((ele -
@@ -252,16 +250,13 @@ int do_cum_mfd(void)
 		    }
 		}
 		if (ABS(prop - 1.0) > 5E-6f) {
-		    G_warning(_("3 cumulative proportion not 1.0 but %f"),
+		    G_warning(_("MFD: cumulative proportion of flow distribution not 1.0 but %f"),
 			      prop);
 		}
-		valued =
-		    ABS(value_sfd) +
-		    ABS(value) * weight[np_side] / sum_weight;
+		dseg_get(&wat, &valued, dr, dc);
 	    }
 
 	    if (mfd_cells < 2) {
-		valued = value_sfd;
 		if (value > 0) {
 		    if (valued > 0)
 			valued += value;
@@ -282,7 +277,7 @@ int do_cum_mfd(void)
 	    valued = ABS(valued) + 0.5;
 
 	    bseg_get(&swale, &is_swale, r, c);
-	    if (is_swale || (int)valued > threshold) {
+	    if (is_swale || (int)valued >= threshold) {
 		bseg_put(&swale, &one, dr, dc);
 	    }
 	    else {
@@ -294,8 +289,8 @@ int do_cum_mfd(void)
     }
     G_percent(count, do_points, 1);	/* finish it */
     if (workedon)
-	G_message(_("A * path already processed: %d of %d"), workedon,
-		  do_points);
+	G_warning(_("MFD: A * path already processed when distributing flow: %d of %d"),
+		  workedon, do_points);
 
     seg_close(&astar_pts);
 
