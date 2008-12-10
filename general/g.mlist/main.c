@@ -103,10 +103,14 @@ int main(int argc, char *argv[])
     opt.exclude->multiple = NO;
     opt.exclude->description = _("Map name exclusion pattern (default: none)");
 
-    opt.separator = G_define_standard_option(G_OPT_F_SEP);
+    opt.separator = G_define_option();
+    opt.separator->key = "separator";
+    opt.separator->type = TYPE_STRING;
+    opt.separator->required = NO;
+    opt.separator->multiple = NO;
     opt.separator->answer = "newline";
     opt.separator->description =
-	_("One-character output field separator, newline, comma, space, or tab");
+	_("One-character output separator, newline, comma, space, or tab");
 
     opt.mapset = G_define_option();
     opt.mapset->key = "mapset";

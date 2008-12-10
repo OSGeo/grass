@@ -89,7 +89,7 @@ all, and patch them together to create a mosaic. Overlapping maps will be
 used in the order listed.
 
 <div class="code"><pre>
-MAPS=`g.mlist type=rast fs=, pat="map_*"`
+MAPS=`g.mlist type=rast sep=, pat="map_*"`
 g.region rast=$MAPS
 r.patch in=$MAPS out=mosaic
 </pre></div>
