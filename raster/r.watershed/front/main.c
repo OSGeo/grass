@@ -368,16 +368,12 @@ int main(int argc, char *argv[])
 
     if (!flag_sfd->answer && opt16->answer) {
 	strcat(command, " conv=");
-	strcat(command, "\"");
 	strcat(command, opt16->answer);
-	strcat(command, "\"");
     }
 
     if (flag_seg->answer && opt17->answer) {
 	strcat(command, " mb=");
-	strcat(command, "\"");
 	strcat(command, opt17->answer);
-	strcat(command, "\"");
     }
 
     G_debug(1, "Mode: %s", flag_seg->answer ? "Segmented" : "All in RAM");

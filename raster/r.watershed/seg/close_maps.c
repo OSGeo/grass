@@ -5,7 +5,7 @@ int close_maps(void)
 {
     struct Colors colors, logcolors;
     int r, c;
-    CELL is_swale, value;
+    CELL is_swale;
     double dvalue;
     struct FPRange accRange;
     DCELL min, max;
@@ -100,7 +100,7 @@ int close_maps(void)
     /* error in gislib.a
        G_free_colors(&colors);
      */
-    cseg_close(&wat);
+    dseg_close(&wat);
     if (ls_flag) {
 	dseg_write_cellfile(&l_s, ls_name);
 	dseg_close(&l_s);
