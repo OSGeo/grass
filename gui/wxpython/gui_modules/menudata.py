@@ -25,8 +25,10 @@ except ImportError:
 
 class Data:
     '''Data object that returns menu descriptions to be used in wxgui.py.'''
-    def __init__(self):
-	filename = os.getenv('GISBASE') + '/etc/wxpython/xml/menudata.xml'
+    def __init__(self, gisbase=None):
+        if not gisbase:
+            gisbase = os.getenv('GISBASE')
+	filename = gisbase + '/etc/wxpython/xml/menudata.xml'
 	self.tree = etree.parse(filename)
 
     def getMenuItem(self, mi):
@@ -70,4 +72,9 @@ class Data:
 
 if __name__ == "__main__":
     import sys
-    Data().PrintStrings(sys.stdout)
+    if len(sys.argv) < 2:
+        sys.exit(1)
+    
+    Data(sys.argv[1]).PrintStrings(sys.stdout)
+    
+    sys.exit(0)

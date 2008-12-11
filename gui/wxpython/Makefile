@@ -30,4 +30,4 @@ $(ETCDIR)/%: %
 	$(INSTALL_DATA) $< $@
 
 menustrings.py: gui_modules/menudata.py xml/menudata.xml
-	python $< > $@
+	python $< $(GISBASE) > $@
