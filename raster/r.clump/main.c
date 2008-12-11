@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
     if (opt_title->answer != NULL)
 	strcpy(title, opt_title->answer);
     else
-	sprintf(title, "clump of <%s@%s>", name, mapset);
+	sprintf(title, "clump of <%s@%s>", name, G_mapset());
     
     G_put_cell_title(OUTPUT, title);
     G_read_range(OUTPUT, G_mapset(), &range);
