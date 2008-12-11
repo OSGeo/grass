@@ -229,18 +229,17 @@ int main(int argc, char **argv)
     size_opt->description = _("Symbol size");
 
     /* Labels */
+    lfield_opt = G_define_standard_option(G_OPT_V_FIELD);
+    lfield_opt->key = "llayer";
+    lfield_opt->guisection = _("Labels");
+    lfield_opt->description =
+	_("Layer number for labels (default: the given layer number)");
+    
     attrcol_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     attrcol_opt->key = "attrcol";
     attrcol_opt->multiple = NO;	/* or fix attr.c, around line 102 */
     attrcol_opt->guisection = _("Labels");
     attrcol_opt->description = _("Name of column to be displayed");
-
-    lfield_opt = G_define_option();
-    lfield_opt->key = "llayer";
-    lfield_opt->type = TYPE_INTEGER;
-    lfield_opt->guisection = _("Labels");
-    lfield_opt->description =
-	_("Layer for labels (default: the given layer number)");
 
     lcolor_opt = G_define_option();
     lcolor_opt->key = "lcolor";
