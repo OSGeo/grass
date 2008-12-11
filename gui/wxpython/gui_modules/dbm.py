@@ -1609,7 +1609,10 @@ class AttributeManager(wx.Frame):
         
         if event.GetSelection() == 0 and id:
             win = self.FindWindowById(id)
-            self.log.write(_("Number of loaded records: %d") % win.GetItemCount())
+            if win:
+                self.log.write(_("Number of loaded records: %d") % win.GetItemCount())
+            else:
+                self.log.write("")
         else:
             self.log.write("")
         
@@ -2160,7 +2163,12 @@ class LayerBook(wx.Notebook):
                                     (wx.StaticText(parent=self.addPanel, id=wx.ID_ANY,
                                                    label='%s:' % _("Key column")),
                                      wx.Choice(parent=self.addPanel, id=wx.ID_ANY, size=(200, -1),
-                                               choices=self.defaultColumns))}
+                                               choices=self.defaultColumns)),
+                                'addCat':
+                                    (wx.CheckBox(parent=self.addPanel, id=wx.ID_ANY,
+                                                 label=_("Insert record for each category into table")),
+                                     None),
+                                }
         
         # set default values for widgets
         self.addLayerWidgets['driver'][1].SetStringSelection(self.defaultConnect['driver'])
@@ -2172,6 +2180,9 @@ class LayerBook(wx.Notebook):
         self.addLayerWidgets['database'][1].Bind(wx.EVT_TEXT_ENTER, self.OnDatabaseChanged)
         self.addLayerWidgets['table'][1].Bind(wx.EVT_CHOICE, self.OnTableChanged)
 
+        # tooltips
+        self.addLayerWidgets['addCat'][0].SetToolTipString(_("You need to add categories "
+                                                             "by v.category module."))
         #
         # list of table widgets
         #
@@ -2215,19 +2226,33 @@ class LayerBook(wx.Notebook):
         layerSizer = wx.StaticBoxSizer(layerBox, wx.VERTICAL)
 
         # data area
-        dataSizer = wx.FlexGridSizer(cols=2, hgap=5, vgap=5)
+        dataSizer = wx.GridBagSizer(hgap=5, vgap=5)
         dataSizer.AddGrowableCol(1)
-        for key in ('layer', 'driver', 'database', 'table', 'key'):
+        row = 0
+        for key in ('layer', 'driver', 'database', 'table', 'key', 'addCat'):
             label, value = self.addLayerWidgets[key]
-            dataSizer.Add(item=label,
-                          flag=wx.ALIGN_CENTER_VERTICAL)
-            if label.GetLabel() == "Layer:":
-                dataSizer.Add(item=value,
-                              flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
+            if not value:
+                span = (1, 2)
             else:
-                dataSizer.Add(item=value,
-                              flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
+                span = (1, 1)
+            dataSizer.Add(item=label,
+                          flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0),
+                          span=span)
+            
+            if not value:
+                row += 1
+                continue
 
+            if label.GetLabel() == "Layer:":
+                style = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT
+            else:
+                style = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND
+            
+            dataSizer.Add(item=value,
+                          flag=style, pos=(row, 1))
+            
+            row += 1
+        
         layerSizer.Add(item=dataSizer,
                        proportion=1,
                        flag=wx.ALL | wx.EXPAND,
@@ -2239,7 +2264,7 @@ class LayerBook(wx.Notebook):
                      flag=wx.ALL | wx.ALIGN_LEFT,
                      border=5)
 
-        btnSizer.Add(item=(5,5),
+        btnSizer.Add(item=(5, 5),
                      proportion=1,
                      flag=wx.ALL | wx.EXPAND,
                      border=5)
@@ -2283,12 +2308,12 @@ class LayerBook(wx.Notebook):
 
 
         pageSizer.Add(item=layerSizer,
-                      proportion=1,
+                      proportion=3,
                       flag=wx.ALL | wx.EXPAND,
                       border=5)
 
         pageSizer.Add(item=tableSizer,
-                      proportion=1,
+                      proportion=2,
                       flag=wx.ALL | wx.EXPAND,
                       border=5)
 
@@ -2297,7 +2322,7 @@ class LayerBook(wx.Notebook):
     def __createDeletePage(self):
         """Delete layer"""
         self.deletePanel = wx.Panel(parent=self, id=wx.ID_ANY)
-        self.AddPage(page=self.deletePanel, text=_("Delete selected layer"))
+        self.AddPage(page=self.deletePanel, text=_("Delete layer"))
 
         label = wx.StaticText(parent=self.deletePanel, id=wx.ID_ANY,
                               label='%s:' % _("Layer to detele"))
@@ -2365,7 +2390,7 @@ class LayerBook(wx.Notebook):
     def __createModifyPage(self):
         """Modify layer"""
         self.modifyPanel = wx.Panel(parent=self, id=wx.ID_ANY)
-        self.AddPage(page=self.modifyPanel, text=_("Modify selected layer"))
+        self.AddPage(page=self.modifyPanel, text=_("Modify layer"))
 
         #
         # list of layer widgets (label, value)
@@ -2626,6 +2651,7 @@ class LayerBook(wx.Notebook):
                           caption=_("Error"), style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
             return
 
+        # add new layer
         connectCmd = gcmd.Command(['v.db.connect',
                                    '--q',
                                    'map=%s' % self.mapDBInfo.map,
@@ -2635,6 +2661,16 @@ class LayerBook(wx.Notebook):
                                    'key=%s' % key,
                                    'layer=%d' % layer])
         
+        # insert records into table if required
+        if self.addLayerWidgets['addCat'][0].IsChecked():
+            gcmd.Command(['v.to.db',
+                          '--q',
+                          'map=%s' % self.mapDBInfo.map,
+                          'layer=%d' % layer,
+                          'qlayer=%d' % layer,
+                          'option=cat',
+                          'columns=%s' % key])
+
         if connectCmd.returncode == 0:
             # update dialog (only for new layer)
             self.parentDialog.UpdateDialog(layer=layer) 
@@ -2652,7 +2688,6 @@ class LayerBook(wx.Notebook):
             
     def OnDeleteLayer(self, event):
         """Delete layer"""
-
         try:
             layer = int(self.deleteLayer.GetValue())
         except:
@@ -2676,6 +2711,11 @@ class LayerBook(wx.Notebook):
                           'database=%s' % database],
                          stdin=sql)
 
+            # update list of tables
+            tableList = self.addLayerWidgets['table'][1]
+            tableList.SetItems(self.__getTables(driver, database))
+            tableList.SetStringSelection(table)
+        
         # update dialog
         self.parentDialog.UpdateDialog(layer=layer) 
         # update db info
