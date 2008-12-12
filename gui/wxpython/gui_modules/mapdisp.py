@@ -2183,8 +2183,16 @@ class BufferedWindow(MapWindow, wx.Window):
 
         # if new region has been calculated, set the values
         if newreg != {}:
+            # LL locations
+            if self.parent.Map.projinfo['proj'] == 'll':
+                if newreg['n'] > 90.0:
+                    newreg['n'] = 90.0
+                if newreg['s'] < -90.0:
+                    newreg['s'] = -90.0
+            
             ce = newreg['w'] + (newreg['e'] - newreg['w']) / 2
             cn = newreg['s'] + (newreg['n'] - newreg['s']) / 2
+            
             if hasattr(self, "vdigitMove"):
                 # xo = self.Cell2Pixel((self.Map.region['center_easting'], self.Map.region['center_northing']))
                 # xn = self.Cell2Pixel(ce, cn))
@@ -2641,12 +2649,7 @@ class MapFrame(wx.Frame):
         # Init print module and classes
         #
         self.printopt = disp_print.PrintOptions(self, self.MapWindow)
-
-        #
-        # Current location information
-        #
-        self.projinfo = self.Map.ProjInfo()
-
+        
         #
         # Initialization of digitization tool
         #
@@ -2910,7 +2913,10 @@ class MapFrame(wx.Frame):
                 self.statusbar.SetStatusText("%.2f, %.2f (seg: %.2f; tot: %.2f)" % \
                                                  (e, n, distance_seg, distance_tot), 0)
             else:
-                self.statusbar.SetStatusText("%.2f, %.2f" % (e, n), 0)
+                if self.Map.projinfo['proj'] == 'll':
+                    self.statusbar.SetStatusText("%s" % utils.Deg2DMS(e, n), 0)
+                else:
+                    self.statusbar.SetStatusText("%.2f, %.2f" % (e, n), 0)
         
         event.Skip()
 
@@ -3658,8 +3664,8 @@ class MapFrame(wx.Frame):
                                            'to measure.%s'
                                            'Double click with left button to clear.') % \
                                              (os.linesep), style)
-        if self.projinfo['proj'] != 'xy':
-            units = self.projinfo['units']
+        if self.Map.projinfo['proj'] != 'xy':
+            units = self.Map.projinfo['units']
             style = self.gismanager.goutput.cmd_output.StyleCommand
             self.gismanager.goutput.WriteLog(_('Measuring distance') + ' ('
                                              + units + '):',
@@ -3688,7 +3694,7 @@ class MapFrame(wx.Frame):
         strdist = str(d)
         strtotdist = str(td)
 
-        if self.projinfo['proj'] == 'xy' or 'degree' not in self.projinfo['unit']:
+        if self.Map.projinfo['proj'] == 'xy' or 'degree' not in self.Map.projinfo['unit']:
             angle = int(math.degrees(math.atan2(north,east)) + 0.5)
             angle = angle+90
             if angle < 0: angle = 360+angle
@@ -3722,7 +3728,7 @@ class MapFrame(wx.Frame):
         as a function of length. From code by Hamish Bowman
         Grass Development Team 2006"""
 
-        mapunits = self.projinfo['units']
+        mapunits = self.Map.projinfo['units']
         if mapunits == 'metres': mapunits = 'meters'
         outunits = mapunits
         dist = float(dist)
@@ -3815,7 +3821,7 @@ class MapFrame(wx.Frame):
         id = 0 # unique index for overlay layer
 
         # If location is latlon, only display north arrow (scale won't work)
-        #        proj = self.projinfo['proj']
+        #        proj = self.Map.projinfo['proj']
         #        if proj == 'll':
         #            barcmd = 'd.barscale -n'
         #        else:
