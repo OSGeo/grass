@@ -240,7 +240,7 @@ int init_vars(int argc, char *argv[])
     seg_open(&astar_pts, 1, do_points, 1, seg_rows * seg_cols,
 	     num_open_segs, sizeof(POINT));
 
-    /* heap_index will track astar_pts in the binary min-heap */
+    /* heap_index will track astar_pts in ternary min-heap */
     /* heap_index is one-based */
     seg_open(&heap_index, 1, do_points + 1, 1, seg_rows * seg_cols,
 	     num_open_segs, sizeof(HEAP));
