@@ -7,39 +7,41 @@
      <label>Workspace</label>
      <items>
       <menuitem>
-       <label>New workspace</label>
-       <help>Create new workspace file (erase current workspace settings first)</help>
+       <label>New</label>
+       <help>Create new workspace</help>
        <handler>self.OnWorkspaceNew</handler>
        </menuitem>
       <menuitem>
-       <label>Open existing workspace</label>
-       <help>Open existing workspace file</help>
+       <label>Open</label>
+       <help>Load workspace from file</help>
        <handler>self.OnWorkspaceOpen</handler>
        </menuitem>
+      <menuitem>
+       <label>Save</label>
+       <help>Save workspace to open file</help>
+       <handler>self.OnWorkspaceSave</handler>
+       </menuitem>
+      <menuitem>
+       <label>Save as</label>
+       <help>Save workspace to file</help>
+       <handler>self.OnWorkspaceSaveAs</handler>
+       </menuitem>
+      <menuitem>
+       <label>Close</label>
+       <help>Close loaded workspace</help>
+       <handler>self.OnWorkspaceClose</handler>
+      </menuitem>
+      <separator/>
       <menuitem>
        <label>Load map layers</label>
        <help>Load map layers into layer tree</help>
        <handler>self.OnWorkspaceLoad</handler>
        </menuitem>
+      <separator/>
       <menuitem>
        <label>Load GRC file (Tcl/Tk GUI)</label>
-       <help>Load map layers from GRC file to layer tree (not fully implemented)</help>
+       <help>Load map layers from GRC file to layer tree</help>
        <handler>self.OnWorkspaceLoadGrcFile</handler>
-       </menuitem>
-      <menuitem>
-       <label>Save workspace</label>
-       <help>Save current workspace to file</help>
-       <handler>self.OnWorkspaceSave</handler>
-       </menuitem>
-      <menuitem>
-       <label>Save workspace as</label>
-       <help>Save current workspace as file</help>
-       <handler>self.OnWorkspaceSaveAs</handler>
-       </menuitem>
-      <menuitem>
-       <label>Close current workspace</label>
-       <help>Close current workspace file</help>
-       <handler>self.OnWorkspaceClose</handler>
        </menuitem>
       </items>
      </menu>
