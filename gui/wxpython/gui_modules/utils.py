@@ -260,6 +260,68 @@ def GetVectorNumberOfLayers(vector):
     
     return layers
 
+def Deg2DMS(lon, lat):
+    """Convert deg value to dms string
+
+    @param lat latitude
+    @param lon longitude
+
+    @return DMS string
+    @return empty string on error
+    """
+    try:
+        flat = float(lat)
+        flon = float(lon)
+    except ValueError:
+        return ''
+
+    # fix longitude
+    while flon > 180.0:
+        flon -= 360.0
+    while flon < -180.0:
+        flon += 360.0
+
+    # hemisphere
+    if flat < 0.0:
+        flat = abs(flat)
+        hlat = 'S'
+    else:
+        hlat = 'N'
+
+    if flon < 0.0:
+        hlon = 'W'
+        flon = abs(flon)
+    else:
+        hlon = 'E'
+
+    slat = __ll_parts(flat)
+    slon = __ll_parts(flon)
+
+    return slon + hlon + '; ' + slat + hlat
+
+def __ll_parts(value):
+    """Converts deg to d:m:s string"""
+    if value == 0.0:
+        return '00:00:00.0000'
+    
+    d = int(int(value))
+    m = int((value - d) * 60)
+    s = ((value - d) * 60 - m) * 60
+    if m < 0:
+        m = '00'
+    elif m < 10:
+        m = '0' + str(m)
+    else:
+        m = str(m)
+    if s < 0:
+        s = '00.0000'
+    elif s < 10.0:
+        s = '0%.4f' % s
+    else:
+        s = '%.4f' % s
+    
+    return str(d) + ':' + m + ':' + s
+
 def reexec_with_pythonw():
     """Re-execute Python on Mac OS"""
     if sys.platform == 'darwin' and \

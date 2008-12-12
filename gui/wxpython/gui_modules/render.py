@@ -381,6 +381,8 @@ class Map(object):
         os.environ["GRASS_TRANSPARENT"] = "TRUE"
         os.environ["GRASS_BACKGROUNDCOLOR"] = "ffffff"
 
+        self.projinfo = self.ProjInfo()
+        
     def InitRegion(self):
         """
         Initialize current region settings.
@@ -537,6 +539,13 @@ class Map(object):
         self.region['e'] = self.region['center_easting'] + ew
         self.region['w'] = self.region['center_easting'] - ew
 
+        # LL locations
+        if self.projinfo['proj'] == 'll':
+            if self.region['n'] > 90.0:
+                self.region['n'] = 90.0
+            if self.region['s'] < -90.0:
+                self.region['s'] = -90.0
+        
     def ChangeMapSize(self, (width, height)):
         """Change size of rendered map.
         
