@@ -92,6 +92,7 @@ class CmdThread(threading.Thread):
             time.sleep(.1)
             
             event = wxCmdDone(aborted=aborted,
+                              returncode=self.requestCmd.module.returncode,
                               time=requestTime,
                               pid=requestId)
             
@@ -513,7 +514,8 @@ class GMConsole(wx.Panel):
 
             dialog.btn_run.Enable(True)
 
-            if not event.aborted and hasattr(dialog, "addbox") and \
+            if event.returncode == 0 and \
+                    not event.aborted and hasattr(dialog, "addbox") and \
                     dialog.addbox.IsChecked():
                 # add new map into layer tree
                 if dialog.outputType in ('raster', 'vector'):
