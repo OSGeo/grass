@@ -92,12 +92,13 @@ int do_cum_mfd(void)
     POINT point;
     int killer, threshold, count;
 
-    int mfd_cells, astar_not_set;
+    /* MFD */
+    int mfd_cells, stream_cells, swale_cells, astar_not_set;
     double *dist_to_nbr, *weight, sum_weight, max_weight;
-    int r_nbr, c_nbr, ct_dir, np_side, in_val;
+    int r_nbr, c_nbr, r_max, c_max, r_swale, c_swale, ct_dir, np_side;
     double dx, dy;
-    CELL ele, ele_nbr;
-    double prop;
+    CELL ele, ele_nbr, aspect, asp_val, is_worked;
+    double prop, max_acc, max_swale;
     int workedon;
 
     G_message(_("SECTION 3: Accumulating Surface Flow with MFD."));
@@ -168,8 +169,8 @@ int do_cum_mfd(void)
 		/* check that neighbour is within region */
 		if (r_nbr >= 0 && r_nbr < nrows && c_nbr >= 0 &&
 		    c_nbr < ncols) {
-		    bseg_get(&worked, &in_val, r_nbr, c_nbr);
-		    if (in_val == 0) {
+		    bseg_get(&worked, &is_worked, r_nbr, c_nbr);
+		    if (is_worked == 0) {
 			cseg_get(&alt, &ele_nbr, r_nbr, c_nbr);
 			if (ele_nbr < ele) {
 			    weight[ct_dir] =
@@ -213,6 +214,15 @@ int do_cum_mfd(void)
 	    }
 
 	    /* set flow accumulation for neighbours */
+	    stream_cells = 0;
+	    swale_cells = 0;
+	    max_acc = -1;
+	    max_swale = -1;
+	    r_max = dr;
+	    c_max = dc;
+	    r_swale = dr;
+	    c_swale = dc;
+
 	    if (mfd_cells > 1) {
 		prop = 0.0;
 		for (ct_dir = 0; ct_dir < sides; ct_dir++) {
@@ -223,8 +233,9 @@ int do_cum_mfd(void)
 		    /* check that neighbour is within region */
 		    if (r_nbr >= 0 && r_nbr < nrows && c_nbr >= 0 &&
 			c_nbr < ncols && weight[ct_dir] > -0.5) {
-			bseg_get(&worked, &in_val, r_nbr, c_nbr);
-			if (in_val == 0) {
+			bseg_get(&worked, &is_worked, r_nbr, c_nbr);
+			bseg_get(&swale, &is_swale, r_nbr, c_nbr);
+			if (is_worked == 0) {
 
 			    weight[ct_dir] = weight[ct_dir] / sum_weight;
 			    prop += weight[ct_dir];	/* check everything sums up to 1.0 */
@@ -243,6 +254,20 @@ int do_cum_mfd(void)
 				    valued = value * weight[ct_dir] - valued;
 			    }
 			    dseg_put(&wat, &valued, r_nbr, c_nbr);
+
+			    if ((ABS(valued) + 0.5) >= threshold)
+				stream_cells++;
+			    if (ABS(valued) > max_acc) {
+				max_acc = ABS(valued);
+				r_max = r_nbr;
+				c_max = c_nbr;
+			    }
+			    /* assist in stream merging */
+			    if (is_swale && ABS(valued) > max_swale) {
+				max_swale = ABS(valued);
+				r_swale = r_nbr;
+				c_swale = c_nbr;
+			    }
 			}
 			else if (ct_dir == np_side) {
 			    workedon++;	/* check for consistency with A * path */
@@ -254,6 +279,10 @@ int do_cum_mfd(void)
 			      prop);
 		}
 		dseg_get(&wat, &valued, dr, dc);
+		if (max_swale > -0.5) {
+		    r_max = r_swale;
+		    c_max = c_swale;
+		}
 	    }
 
 	    if (mfd_cells < 2) {
@@ -275,14 +304,28 @@ int do_cum_mfd(void)
 	    /* MFD finished */
 
 	    valued = ABS(valued) + 0.5;
-
 	    bseg_get(&swale, &is_swale, r, c);
-	    if (is_swale || (int)valued >= threshold) {
+	    /* start new stream: only works with A * path */
+	    if (!is_swale && (int)valued >= threshold && stream_cells < 2 &&
+		swale_cells < 1) {
 		bseg_put(&swale, &one, dr, dc);
+	    }
+	    /* continue stream */
+	    if (is_swale) {
+		bseg_put(&swale, &one, r_max, c_max);
 	    }
 	    else {
 		if (er_flag && !is_swale)
-		    slope_length(r, c, dr, dc);
+		    slope_length(r, c, r_max, c_max);
+	    }
+	    /* update asp */
+	    if (dr != r_max || dc != c_max) {
+		aspect = drain[r - r_max + 1][c - c_max + 1];
+		cseg_get(&asp, &asp_val, r, c);
+		if (asp_val < 0)
+		    aspect = -aspect;
+		cseg_put(&asp, &aspect, r, c);
+
 	    }
 	    bseg_put(&worked, &one, r, c);
 	}
