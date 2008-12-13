@@ -1094,7 +1094,7 @@ class AttributeManager(wx.Frame):
         if digitToolbar and digitToolbar.GetLayer() and \
                 digitToolbar.GetLayer().GetName() == self.vectmap:
 
-            self.mapdisplay.digit.driver.SetSelected(cats, cats=True)
+            self.mapdisplay.digit.driver.SetSelected(cats, field=self.layer)
             if zoom:
                 n, s, w, e = self.mapdisplay.digit.driver.GetRegionSelected()
                 self.mapdisplay.Map.GetRegion(n=n, s=s, w=w, e=e,
@@ -1904,7 +1904,7 @@ class AttributeManager(wx.Frame):
             digitToolbar = self.mapdisplay.toolbars['vdigit']
             if digitToolbar and digitToolbar.GetLayer() and \
                     digitToolbar.GetLayer().GetName() == self.vectmap:
-                self.mapdisplay.digit.driver.SetSelected(map(int, cats), cats=True)
+                self.mapdisplay.digit.driver.SetSelected(map(int, cats), field=self.layer)
                 self.mapdisplay.digit.DeleteSelectedLines()
             else:
                 gcmd.Command(['v.edit',

@@ -48,9 +48,10 @@ private:
      */
     
     struct _selected {
-	struct ilist *cats;
-	struct ilist *ids;
-	struct ilist *idsDupl;
+	int field;              // field number
+	struct ilist *cats;     // list of cats
+	struct ilist *ids;      // list of ids
+	struct ilist *idsDupl;  // list of duplicated features
     } selected;
     
     bool drawSelected;
@@ -191,7 +192,7 @@ public:
     std::map<int, std::vector<double> > GetSelectedCoord();
     std::map<int, std::vector <int> > GetDuplicates();
     std::vector<double> GetRegionSelected();
-    int SetSelected(std::vector<int>, bool);
+    int SetSelected(std::vector<int>, int);
     int UnSelect(std::vector<int>);
     std::vector<int> GetSelectedVertex(double, double, double);
     void DrawSelected(bool);

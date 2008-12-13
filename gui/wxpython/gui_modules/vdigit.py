@@ -913,16 +913,16 @@ class CDisplayDriver(AbstractDisplayDriver):
 
         return id 
 
-    def SetSelected(self, id, cats=False):
+    def SetSelected(self, id, field=-1):
         """Set selected vector features
 
-        @param id line id to be selected
-        @param cats if True expect categories instead of feature ids
+        @param id list of feature ids/categories to be selected
+        @param field field(layer) number, -1 for ids instead of cats
         """
         Debug.msg(4, "CDisplayDriver.SetSelected(): id=%s" % \
                       id)
 
-        self.__display.SetSelected(id, cats)
+        self.__display.SetSelected(id, field)
 
     def UnSelect(self, id):
         """Unselect vector features
