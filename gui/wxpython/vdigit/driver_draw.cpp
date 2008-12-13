@@ -173,6 +173,7 @@ int DisplayDriver::DrawMap(bool force)
     /* reset list of selected features by cat 
        -> list of ids - see IsSelected()
     */
+    selected.field = -1;
     Vect_reset_list(selected.cats);
 	
     Vect_destroy_list(listLines);

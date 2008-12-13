@@ -196,7 +196,7 @@ bool DisplayDriver::IsSelected(int line, bool force)
     }
     else { /* select by cat */
 	for (int i = 0; i < cats->n_cats; i++) {
-	    if (cats->field[i] == 1 && /* TODO: field */
+	    if (cats->field[i] == selected.field &&
 		Vect_val_in_list(selected.cats, cats->cat[i])) {
 		/* remember id
 		   -> after drawing all features selected.cats is reseted */
@@ -337,19 +337,23 @@ bool DisplayDriver::IsDuplicated(int line)
 /**
    \brief Set selected vector objects
    
-   \param[in] list of GRASS ids to be set
-   \param[in] cat if True expect categories instead of feature ids
+   \param id list of feature ids to be set
+   \param field field number (-1 for ids instead of cats)
 
    \return 1
 */
-int DisplayDriver::SetSelected(std::vector<int> id, bool cat)
+int DisplayDriver::SetSelected(std::vector<int> id, int field)
 {
     drawSelected = true;
 
-    if (cat)
+    if (field > 0) {
+	selected.field = field;
 	VectorToList(selected.cats, id);
-    else
+    }
+    else {
+	field = -1;
 	VectorToList(selected.ids, id);
+    }
     
     if (id.size() < 1)
 	drawSegments = false;

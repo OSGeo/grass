@@ -42,7 +42,8 @@ DisplayDriver::DisplayDriver(void *device, void *deviceTmp)
     points = Vect_new_line_struct();
     pointsScreen = new wxList();
     cats = Vect_new_cats_struct();
-    
+
+    selected.field = -1;
     selected.cats = Vect_new_list();
     selected.ids = Vect_new_list();
     selected.idsDupl = Vect_new_list();
