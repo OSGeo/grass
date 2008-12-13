@@ -75,8 +75,8 @@ int Digit::AddActionsBefore(void)
 
     /* register changeset */
     changeset = changesets.size();
-    for (int i = 0; i < display->selected.values->n_values; i++) {
-	int line = display->selected.values->value[i];
+    for (int i = 0; i < display->selected.ids->n_values; i++) {
+	int line = display->selected.ids->value[i];
 	if (Vect_line_alive(display->mapInfo, line))
 	    AddActionToChangeset(changeset, DEL, line);
     }
@@ -89,8 +89,8 @@ int Digit::AddActionsBefore(void)
 */
 void Digit::AddActionsAfter(int changeset, int nlines)
 {
-    for (int i = 0; i < display->selected.values->n_values; i++) {
-	int line = display->selected.values->value[i];
+    for (int i = 0; i < display->selected.ids->n_values; i++) {
+	int line = display->selected.ids->value[i];
 	if (Vect_line_alive(display->mapInfo, line)) {
 	    RemoveActionFromChangeset(changeset, DEL, line);
 	}

@@ -170,8 +170,11 @@ int DisplayDriver::DrawMap(bool force)
     dcTmp->EndDrawing();
     dc->EndDrawing();
     
-    // PrintIds();
-    
+    /* reset list of selected features by cat 
+       -> list of ids - see IsSelected()
+    */
+    Vect_reset_list(selected.cats);
+	
     Vect_destroy_list(listLines);
 
     return listLines->n_values;
@@ -229,13 +232,6 @@ int DisplayDriver::DrawLine(int line)
 
     // read line
     type = Vect_read_line (mapInfo, points, cats, line);
-
-    // add ids
-    // -> node1, line1, vertex1, line2, ..., node2
-    // struct lineDesc desc = {points->n_points, dcId};
-    // ids[line] = desc;
-    // update id for next line
-    // dcId += points->n_points * 2 - 1;
 
     pdc = NULL;
 

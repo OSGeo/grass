@@ -50,7 +50,7 @@ int Digit::MoveVertex(double x, double y, double z,
 	return -1;
     }
 
-    if (display->selected.values->n_values != 1)
+    if (display->selected.ids->n_values != 1)
 	return 0;
 
     BgMap = NULL;
@@ -75,7 +75,7 @@ int Digit::MoveVertex(double x, double y, double z,
 
     /* move only first found vertex in bbox */
     ret = Vedit_move_vertex(display->mapInfo, BgMap, nbgmaps, 
-			    display->selected.values,
+			    display->selected.ids,
 			    point, thresh_coords, thresh_snap,
 			    move_x, move_y, move_z,
 			    1, snap);
@@ -125,7 +125,7 @@ int Digit::ModifyLineVertex(int add, double x, double y, double z,
 	return -1;
     }
 
-    if (display->selected.values->n_values != 1)
+    if (display->selected.ids->n_values != 1)
 	return 0;
 
     point = Vect_new_line_struct();
@@ -136,11 +136,11 @@ int Digit::ModifyLineVertex(int add, double x, double y, double z,
     changeset = AddActionsBefore();
 
     if (add) {
-	ret = Vedit_add_vertex(display->mapInfo, display->selected.values,
+	ret = Vedit_add_vertex(display->mapInfo, display->selected.ids,
 			       point, thresh);
     }
     else {
-	ret = Vedit_remove_vertex(display->mapInfo, display->selected.values,
+	ret = Vedit_remove_vertex(display->mapInfo, display->selected.ids,
 				  point, thresh);
     }
 

@@ -302,7 +302,7 @@ int Digit::SplitLine(double x, double y, double z,
 
     changeset = AddActionsBefore();
     
-    ret = Vedit_split_lines(display->mapInfo, display->selected.values,
+    ret = Vedit_split_lines(display->mapInfo, display->selected.ids,
 			    point, thresh, list);
 
     if (ret > 0) {
@@ -346,10 +346,10 @@ int Digit::DeleteLines(bool delete_records)
     if (delete_records) {
 	Cats = Vect_new_cats_struct();
 	Cats_del = Vect_new_cats_struct();
-	for (int i = 0; i < display->selected.values->n_values; i++) {
-	    if (Vect_read_line(display->mapInfo, NULL, Cats, display->selected.values->value[i]) < 0) {
+	for (int i = 0; i < display->selected.ids->n_values; i++) {
+	    if (Vect_read_line(display->mapInfo, NULL, Cats, display->selected.ids->value[i]) < 0) {
 		Vect_destroy_cats_struct(Cats_del);
-		display->ReadLineMsg(display->selected.values->value[i]);
+		display->ReadLineMsg(display->selected.ids->value[i]);
 		return -1;
 	    }
 	    for (int j = 0; j < Cats->n_cats; j++) {
@@ -377,9 +377,10 @@ int Digit::DeleteLines(bool delete_records)
 
     /* register changeset */
     changeset = AddActionsBefore();
-
-    ret = Vedit_delete_lines(display->mapInfo, display->selected.values);
     
+    ret = Vedit_delete_lines(display->mapInfo, display->selected.ids);
+    Vect_reset_list(display->selected.ids);
+
     if (ret > 0 && delete_records) {
 	struct field_info *fi;
 	char buf[GSQL_MAX];
@@ -490,7 +491,7 @@ int Digit::MoveLines(double move_x, double move_y, double move_z,
     changeset = AddActionsBefore();
     
     ret = Vedit_move_lines(display->mapInfo, BgMap, nbgmaps,
-			   display->selected.values,
+			   display->selected.ids,
 			   move_x, move_y, move_z,
 			   snap, thresh);
 
@@ -536,7 +537,7 @@ int Digit::FlipLines()
     /* register changeset */
     changeset = AddActionsBefore();
     
-    ret = Vedit_flip_lines(display->mapInfo, display->selected.values);
+    ret = Vedit_flip_lines(display->mapInfo, display->selected.ids);
 
     if (ret > 0) {
 	AddActionsAfter(changeset, nlines);
@@ -568,7 +569,7 @@ int Digit::MergeLines()
     
     changeset = AddActionsBefore();
 
-    ret = Vedit_merge_lines(display->mapInfo, display->selected.values);
+    ret = Vedit_merge_lines(display->mapInfo, display->selected.ids);
 
     if (ret > 0) {
 	AddActionsAfter(changeset, nlines);
@@ -602,7 +603,7 @@ int Digit::BreakLines()
     
     changeset = AddActionsBefore();
     
-    ret = Vect_break_lines_list(display->mapInfo, display->selected.values, NULL,
+    ret = Vect_break_lines_list(display->mapInfo, display->selected.ids, NULL,
 				GV_LINES, NULL);
 
     if (ret > 0) {
@@ -638,7 +639,7 @@ int Digit::SnapLines(double thresh)
     
     changeset = AddActionsBefore();
     
-    Vect_snap_lines_list (display->mapInfo, display->selected.values,
+    Vect_snap_lines_list (display->mapInfo, display->selected.ids,
 			  thresh, NULL);
 
     if (nlines < Vect_get_num_lines(display->mapInfo)) {
@@ -672,7 +673,7 @@ int Digit::ConnectLines(double thresh)
     /* register changeset */
     changeset = AddActionsBefore();
 
-    ret = Vedit_connect_lines(display->mapInfo, display->selected.values,
+    ret = Vedit_connect_lines(display->mapInfo, display->selected.ids,
 			      thresh);
 
     if (ret > 0) {
@@ -715,7 +716,7 @@ int Digit::ZBulkLabeling(double x1, double y1, double x2, double y2,
     /* register changeset */
     changeset = AddActionsBefore();
 
-    ret = Vedit_bulk_labeling (display->mapInfo, display->selected.values,
+    ret = Vedit_bulk_labeling (display->mapInfo, display->selected.ids,
 			       x1, y1, x2, y2, start, step);
 
     if (ret > 0) {
@@ -767,7 +768,7 @@ int Digit::CopyLines(std::vector<int> ids, const char* bgmap_name)
 	}
     }
     else {
-	list = display->selected.values;
+	list = display->selected.ids;
     }
 
     nlines = Vect_get_num_lines(display->mapInfo);
@@ -790,7 +791,7 @@ int Digit::CopyLines(std::vector<int> ids, const char* bgmap_name)
 	    BreakLineAtIntersection(nlines + i, NULL, changeset);
     }
 
-    if (list != display->selected.values) {
+    if (list != display->selected.ids) {
 	Vect_destroy_list(list);
     }
 
@@ -877,7 +878,7 @@ int Digit::TypeConvLines()
     /* register changeset */
     changeset = AddActionsBefore();
     
-    ret = Vedit_chtype_lines (display->mapInfo, display->selected.values);
+    ret = Vedit_chtype_lines (display->mapInfo, display->selected.ids);
 
     if(ret > 0) {
 	AddActionsAfter(changeset, nlines);

@@ -43,8 +43,9 @@ DisplayDriver::DisplayDriver(void *device, void *deviceTmp)
     pointsScreen = new wxList();
     cats = Vect_new_cats_struct();
     
-    selected.values = Vect_new_list();
-    selected.valuesDupl = Vect_new_list();
+    selected.cats = Vect_new_list();
+    selected.ids = Vect_new_list();
+    selected.idsDupl = Vect_new_list();
 
     drawSegments = false;
 
@@ -72,8 +73,9 @@ DisplayDriver::~DisplayDriver()
     Vect_destroy_line_struct(points);
     delete pointsScreen;
     Vect_destroy_cats_struct(cats);
-    Vect_destroy_list(selected.values);
-    Vect_destroy_list(selected.valuesDupl);
+    Vect_destroy_list(selected.cats);
+    Vect_destroy_list(selected.ids);
+    Vect_destroy_list(selected.idsDupl);
 }
 
 /**
@@ -392,8 +394,8 @@ void DisplayDriver::PrintIds()
 
     std::cerr << "selected: ";
 
-    for (int i = 0; i < selected.values->n_values; i++) {
-	std::cerr << selected.values->value[i] << " ";
+    for (int i = 0; i < selected.ids->n_values; i++) {
+	std::cerr << selected.ids->value[i] << " ";
     }
     std::cerr << std::endl;
 
