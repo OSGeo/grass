@@ -255,7 +255,11 @@ class VirtualAttributeList(wx.ListCtrl,
                     except ValueError:
                         self.itemDataMap[i].append('')
                 else:
-                    self.itemDataMap[i].append(unicodeValue(value))
+                    try:
+                        self.itemDataMap[i].append(unicodeValue(value))
+                    except UnicodeDecodeError:
+                        self.itemDataMap[i].append(_("Unable to decode value. "
+                                                     "Set encoding in GUI preferences ('Attributes')."))
                 
                 if keyId > -1 and keyId == j:
                     try:
@@ -1200,7 +1204,7 @@ class AttributeManager(wx.Frame):
                 values = dlg.GetValues() # values (need to be casted)
                 columnsString = ''
                 valuesString   = ''
-
+                
                 for i in range(len(values)):
                     if len(values[i]) == 0: # NULL
                         if columnName[i] == keyColumn:
@@ -3533,7 +3537,7 @@ class ModifyTableRecord(wx.Dialog):
         for labelId, valueId in self.widgets:
             column = self.FindWindowById(labelId).GetLabel().replace(':', '')
             if columns is None or column in columns:
-                value = self.FindWindowById(valueId).GetValue()
+                value = str(self.FindWindowById(valueId).GetValue())
                 valueList.append(value)
 
         # add key value
