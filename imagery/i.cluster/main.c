@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
     parm.subgroup_name->description = _("Name of subgroup in the above group");
 
     parm.out_sig = G_define_standard_option(G_OPT_F_OUTPUT);
-    parm.out_sig->key = "sigfile";
+    parm.out_sig->key = "signaturefile";
     parm.out_sig->required = YES;
     parm.out_sig->description = _("Name for output file containing result signatures");
 
