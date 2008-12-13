@@ -48,10 +48,9 @@ private:
      */
     
     struct _selected {
-	struct ilist *values;
-	struct ilist *valuesDupl;
-	
-	bool isId; /* id or cat ? */
+	struct ilist *cats;
+	struct ilist *ids;
+	struct ilist *idsDupl;
     } selected;
     
     bool drawSelected;

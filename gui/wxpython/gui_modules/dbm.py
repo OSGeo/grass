@@ -940,6 +940,7 @@ class AttributeManager(wx.Frame):
             self.popupDataID8 = wx.NewId()
             self.popupDataID9 = wx.NewId()
             self.popupDataID10 = wx.NewId()
+            self.popupDataID11 = wx.NewId()
 
             self.Bind(wx.EVT_MENU, self.OnDataItemEdit,       id=self.popupDataID1)
             self.Bind(wx.EVT_MENU, self.OnDataItemAdd,        id=self.popupDataID2)
@@ -950,6 +951,7 @@ class AttributeManager(wx.Frame):
             self.Bind(wx.EVT_MENU, self.OnDataDrawSelected,   id=self.popupDataID7)
             self.Bind(wx.EVT_MENU, self.OnDataDrawSelectedZoom, id=self.popupDataID8)
             self.Bind(wx.EVT_MENU, self.OnExtractSelected,    id=self.popupDataID9)
+            self.Bind(wx.EVT_MENU, self.OnDeleteSelected,     id=self.popupDataID11)
             self.Bind(wx.EVT_MENU, self.OnDataReload,         id=self.popupDataID10)
 
         list = self.FindWindowById(self.layerPage[self.layer]['data'])
@@ -966,15 +968,17 @@ class AttributeManager(wx.Frame):
         menu.Append(self.popupDataID5, _("Select all"))
         menu.Append(self.popupDataID6, _("Deselect all"))
         menu.AppendSeparator()
-        menu.Append(self.popupDataID7, _("Highlight selected"))
-        menu.Append(self.popupDataID8, _("Highlight selected and zoom"))
+        menu.Append(self.popupDataID7, _("Highlight selected features"))
+        menu.Append(self.popupDataID8, _("Highlight selected features and zoom"))
         if not self.map or len(list.GetSelectedItems()) == 0:
             menu.Enable(self.popupDataID7, False)
             menu.Enable(self.popupDataID8, False)
-        menu.Append(self.popupDataID9, _("Extract selected"))
+        menu.Append(self.popupDataID9, _("Extract selected features"))
+        menu.Append(self.popupDataID11, _("Delete selected features"))
         if list.GetFirstSelected() == -1:
             menu.Enable(self.popupDataID3, False)
             menu.Enable(self.popupDataID9, False)
+            menu.Enable(self.popupDataID11, False)
         menu.AppendSeparator()
         menu.Append(self.popupDataID10, _("Reload"))
 
@@ -1015,7 +1019,7 @@ class AttributeManager(wx.Frame):
                                          style=wx.YES_NO | wx.CENTRE)
             if deleteDialog != wx.YES:
                 self.listOfSQLStatements = []
-                return
+                return False
 
         # restore maps
         i = 0
@@ -1047,7 +1051,7 @@ class AttributeManager(wx.Frame):
         # submit SQL statements
         self.ApplyCommands()
         
-        event.Skip()
+        return True
 
     def OnDataItemDeleteAll(self, event):
         """Delete all items from the list"""
@@ -1864,23 +1868,48 @@ class AttributeManager(wx.Frame):
         Extract vector objects selected in attribute browse window
         to new vector map
         """
-        
         list = self.FindWindowById(self.layerPage[self.layer]['data'])
         # cats = list.selectedCats[:]
         cats = list.GetSelectedItems()
         if len(cats) == 0:
             wx.MessageBox(parent=self,
                           message=_('Nothing to extract.'),
-                          caption=_('Extract selected'), style=wx.CENTRE)
+                          caption=_('Message'), style=wx.CENTRE)
             return
         else:
             # dialog to get file name
-            gdialogs.CreateNewVector(parent=self, title=_('Extract selected'),
+            gdialogs.CreateNewVector(parent=self, title=_('Extract selected features'),
                                      log=self.cmdLog,
                                      cmdDef=(["v.extract",
                                               "input=%s" % self.vectmap,
                                               "list=%s" % utils.ListOfCatsToRange(cats)],
                                              "output"))
+    def OnDeleteSelected(self, event):
+        """
+        Delete vector objects selected in attribute browse window
+        (attribures and geometry)
+        """
+        list = self.FindWindowById(self.layerPage[self.layer]['data'])
+        cats = list.GetSelectedItems()
+        if len(cats) == 0:
+            wx.MessageBox(parent=self,
+                          message=_('Nothing to delete.'),
+                          caption=_('Message'), style=wx.CENTRE)
+        
+        if self.OnDataItemDelete(None):
+            digitToolbar = self.mapdisplay.toolbars['vdigit']
+            if digitToolbar and digitToolbar.GetLayer() and \
+                    digitToolbar.GetLayer().GetName() == self.vectmap:
+                self.mapdisplay.digit.driver.SetSelected(map(int, cats), cats=True)
+                self.mapdisplay.digit.DeleteSelectedLines()
+            else:
+                gcmd.Command(['v.edit',
+                              '--q',
+                              'map=%s' % self.vectmap,
+                              'tool=delete',
+                              'cats=%s' % utils.ListOfCatsToRange(cats)])
+        
+            self.mapdisplay.MapWindow.UpdateMap(render=True, renderVector=True)
         
     def AddQueryMapLayer(self):
         """Redraw a map
