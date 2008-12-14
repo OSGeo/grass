@@ -1,14 +1,14 @@
-
 MODULE_TOPDIR = ../..
 
-SUBDIRS = \
-	bouman \
-	shapiro
+PGM = i.smap
 
-include $(MODULE_TOPDIR)/include/Make/Dir.make
+LIBES     = $(IMAGERYLIB) $(GISLIB) $(GMATHLIB)
+DEPENDENCIES= $(IMAGERYDEP) $(GISDEP) $(GMATHDEP)
 
-default: parsubdirs
+include $(MODULE_TOPDIR)/include/Make/Module.make
+
+default: cmd
 
 
-shapiro: bouman
+
 
