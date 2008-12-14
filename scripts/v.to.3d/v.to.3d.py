@@ -96,7 +96,7 @@ def main():
             grass.fatal("Either 'height' or 'column' parameter have to be used")
         # attribute height, check column type
         try:
-            coltype = grass.vector_columns2(map = input, layer = layer)[column]
+            coltype = grass.vector_columns(map = input, layer = layer)[column]
         except KeyError:
             grass.fatal("Column <%s> not found" % column)
     

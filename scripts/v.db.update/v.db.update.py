@@ -85,13 +85,10 @@ def main():
     driver = f[4]
 
     # checking column types
-    coltype = None
-    for f in grass.vector_columns(map, layer):
-	if f[1] == column:
-	    coltype = f[0]
-
-    if not coltype:
-	grass.fatal('column <%s> not found' % column)
+    try:
+        coltype = grass.vector_columns(map, layer)[column]
+    except KeyError:
+	grass.fatal('Column <%s> not found' % column)
 
     if qcolumn:
 	if value:

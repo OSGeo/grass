@@ -490,15 +490,16 @@ def db_connection():
 # run "v.info -c ..." and parse output
 
 def vector_columns(map, layer = None, **args):
-    """Return the list of columns for the database table connected to
+    """Return the directory of columns for the database table connected to
     a vector map (interface to `v.info -c').
     """
     s = read_command('v.info', flags = 'c', map = map, layer = layer, quiet = True, **args)
-    result = []
+    result = {}
     for line in s.splitlines():
 	f = line.split('|')
 	if len(f) == 2:
-	    result.append(f)
+            result[f[1]] = f[0]
+    
     return result
 
 # add vector history

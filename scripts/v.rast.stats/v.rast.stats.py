@@ -194,7 +194,7 @@ def main():
 	if dbfdriver:
 	    currcolumn = currcolumn[:10]
 
-	if currcolumn in [f[1] for f in grass.vector_columns(vector, layer)]:
+	if currcolumn in grass.vector_columns(vector, layer).keys():
 	    if not flags['c']:
 		grass.fatal(("Cannot create column <%s> (already present)." % currcolumn) +
 			    "Use -c flag to update values in this column.")

@@ -86,7 +86,7 @@ def main():
     if not maptable:
 	grass.fatal("There is no table connected to this map. Cannot join any column.")
 
-    if column not in [f[1] for f in grass.vector_columns(map, layer)]:
+    if not grass.vector_columns(map, layer).has_key(column):
 	grass.fatal("Column <%> not found in table <%s> at layer <%s>" % (column, map, layer))
 
     cols = grass.db_describe(otable, driver = driver, database = database)['cols']

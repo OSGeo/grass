@@ -84,7 +84,7 @@ def main():
     table_exists = grass.vector_columns(mapname, layer, stderr = nuldev)
 
     if table_exists:
-	colnames = [f[1] for f in grass.vector_columns(mapname, layer, stderr = nuldev)]
+	colnames = table_exists.keys()
     else:
 	colnames = ['cat']
 

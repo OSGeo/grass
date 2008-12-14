@@ -77,7 +77,7 @@ def main():
     if column == keycol:
 	grass.fatal("Cannot delete <$col> column as it is needed to keep table <%s> connected to the input vector map <%s>" % (table, map))
 
-    if column not in [f[1] for f in grass.vector_columns(map, layer)]:
+    if not grass.vector_columns(map, layer).has_key(column):
 	grass.fatal("Column <%s> not found in table <%s>" % (column, table))
 
     if driver == "sqlite":

@@ -80,12 +80,12 @@ def main():
 	grass.run_command('v.extract', flags = 'd', input = input,
 			  output = output, type = 'area', layer = layer)
     else:
-	coltype = ''
-	for f in grass.vector_columns(map, layer):
-	    if f[1] == column:
-		coltype = f[0]
-
-	if coltype not in ['INTEGER', 'CHARACTER']:
+        try:
+            coltype = grass.vector_columns(map, layer)[column]
+        except KeyError:
+            grass.fatal('Column <%s> not found' % column)
+        
+	if coltype not in ('INTEGER', 'CHARACTER'):
 	    grass.fatal("Key column must be of type integer or string")
 
 	f = grass.vector_db(input, layer)
