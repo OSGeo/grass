@@ -34,6 +34,7 @@ int segment(struct SigSet *S,	/* class parameters */
     int quiet;			/* be quiet when running? */
 
     DCELL ***img;		/* multispectral image, img[band][i][j] */
+    int last_row;               
     int wd, ht;			/* image width and height */
     struct Region region;	/* specifies image subregion */
     int nbands;			/* number of bands */
@@ -66,7 +67,7 @@ int segment(struct SigSet *S,	/* class parameters */
 
     /* Check for too many classes */
     if (nclasses > 256)
-	G_fatal_error(_("Number of classes must be < 256!"));
+	G_fatal_error(_("Number of classes must be < 256"));
 
     /* allocate alpha_dec parameters */
     D = levels(block_size, block_size);
@@ -88,11 +89,12 @@ int segment(struct SigSet *S,	/* class parameters */
     /* tiled segmentation */
     init_reg(&region, wd, ht, block_size);
     extract_init(S);
+    last_row = -1;
     do {
-	if (vlevel >= 1)
-	    G_message(_("Processing rows %d-%d (of %d), cols=%d-%d (of %d)"),
-		      region.ymin + 1, region.ymax, ht,
-		      region.xmin + 1, region.xmax, wd);
+	if (vlevel >= 1 && last_row != region.ymin)
+	    G_message(_("Processing rows %d-%d (of %d)..."),
+		      region.ymin + 1, region.ymax, ht);
+	last_row = region.ymin;
 	shift_img(img, nbands, &region, block_size);
 	/* this reads grass images into the block defined in region */
 	read_block(img, &region, files);

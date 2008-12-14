@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/imagery.h>
+#include <grass/glocale.h>
 #include "local_proto.h"
 
-#define PI M_PI
 #define ZERO 1e-10
 #define SMALLEST_SUBCLUST 1
 
@@ -19,8 +19,6 @@ static int compute_constants();
 static void add_SubSigs();
 static void copy_ClassSig();
 static void copy_SubSig();
-static void list_Sig();
-static void print_class();
 
 static int total_nulls, *n_nulls;
 
@@ -66,15 +64,15 @@ subcluster(struct SigSet *S, int Class_Index, int *Max_num, int maxsubclasses)
     /* compute number of data points */
     ndata_points = Sig->ClassData.npixels * nbands - total_nulls;
     if (ndata_points <= 1)
-	G_fatal_error("Not enough data points!");
+	G_fatal_error("Not enough data points");
 
     /* Check for too few pixels */
     *Max_num = (ndata_points + 1) / nparams_clust - 1;
     if (maxsubclasses > *Max_num / 2)
 	maxsubclasses = *Max_num / 2;
     if (maxsubclasses < 1) {
-	fprintf(stderr, "\nWarning: Not enough pixels in class %d\n",
-		Class_Index + 1);
+	G_warning(_("Not enough pixels in class %d"),
+		  Class_Index + 1);
 	Sig->nsubclasses = 0;
 	Sig->used = 0;
 	return;
@@ -83,10 +81,10 @@ subcluster(struct SigSet *S, int Class_Index, int *Max_num, int maxsubclasses)
     /* check for too many subclasses */
     if (Sig->nsubclasses > maxsubclasses) {
 	Sig->nsubclasses = maxsubclasses;
-	fprintf(stderr, "\nWarning: Too many subclasses for class index %d\n",
-		Class_Index + 1);
-	fprintf(stderr, "         number of subclasses set to %d\n\n",
-		Sig->nsubclasses);
+	G_warning(_("Too many subclasses for class index %d"),
+		  Class_Index + 1);
+	G_message(_("Number of subclasses set to %d"),
+		  Sig->nsubclasses);
     }
 
 
@@ -95,16 +93,16 @@ subcluster(struct SigSet *S, int Class_Index, int *Max_num, int maxsubclasses)
 
     /* EM algorithm */
     min_riss = refine_clusters(Sig, nbands);
-    fprintf(stderr, "Subclasses = %d; Rissanen = %f; ", Sig->nsubclasses,
-	    min_riss);
+    G_debug(1, "Subclasses = %d Rissanen = %f", Sig->nsubclasses,
+	      min_riss);
     copy_ClassSig(Sig, min_Sig, nbands);
     while (Sig->nsubclasses > 1) {
 	reduce_order(Sig, nbands, &min_i, &min_j);
-	fprintf(stderr, "Combining Subclasses (%d,%d)\n", min_i + 1,
-		min_j + 1);
-
+	G_verbose_message(_("Combining subclasses (%d,%d)..."), min_i + 1,
+			  min_j + 1);
+	
 	rissanen = refine_clusters(Sig, nbands);
-	fprintf(stderr, "Subclasses = %d; Rissanen = %f; ", Sig->nsubclasses,
+	G_debug(1, "Subclasses = %d; Rissanen = %f", Sig->nsubclasses,
 		rissanen);
 	if (rissanen < min_riss) {
 	    min_riss = rissanen;
@@ -310,9 +308,9 @@ static int reestimate(struct ClassSig *Sig, int nbands)
 	}
 	/* For small subclusters */
 	else {
-	    fprintf(stderr, "Warning: subsignature %d only contains ", i);
-	    fprintf(stderr, " %f pixels\n", Sig->SubSig[i].N);
-
+	    G_warning(_("Subsignature %d only contains %f pixels"),
+		      i, Sig->SubSig[i].N);
+	    
 	    Sig->SubSig[i].pi = 0;
 
 	    for (b1 = 0; b1 < nbands; b1++)
@@ -545,8 +543,8 @@ static int compute_constants(
 	    if (Sig->nsubclasses == 1) {
 		Sig->nsubclasses--;
 		singular = 2;
-		fprintf(stderr, "\nError: unreliable clustering\n");
-		fprintf(stderr, "try a smaller initial number of clusters\n");
+		G_warning(_("Unreliable clustering. "
+			    "Try a smaller initial number of clusters"));
 	    }
 	    else {
 		for (j = i; j < Sig->nsubclasses - 1; j++)
@@ -554,17 +552,15 @@ static int compute_constants(
 				nbands);
 		Sig->nsubclasses--;
 		singular = 1;
-		fprintf(stderr,
-			"Warning: Removed a singular subsignature; number %d;",
-			i + 1);
-		fprintf(stderr, " %d remain\n", Sig->nsubclasses);
+		G_warning(_("Removed a singular subsignature number %d (%d remain)"),
+			  i + 1, Sig->nsubclasses);
 		if (Sig->nsubclasses < 0)	/* MN added 12/2001: to avoid endless loop */
 		    Sig->nsubclasses = 1;
 	    }
 	}
 	else {
 	    Sig->SubSig[i].cnst =
-		(-nbands / 2.0) * log(2 * PI) - 0.5 * log(det);
+		(-nbands / 2.0) * log(2 * M_PI) - 0.5 * log(det);
 	    i++;
 	}
     } while (i < Sig->nsubclasses);
@@ -654,42 +650,3 @@ static void copy_SubSig(
 	}
 }
 
-static void list_Sig(struct ClassSig *Sig, int nbands)
-{
-    int i, j, k;
-
-    for (i = 0; i < Sig->nsubclasses; i++) {
-	fprintf(stderr, "Subclass %d: pi = %f, ", i + 1, Sig->SubSig[i].pi);
-	fprintf(stderr, "cnst = %f\n", Sig->SubSig[i].cnst);
-	for (j = 0; j < nbands; j++) {
-	    fprintf(stderr, "%f;    ", Sig->SubSig[i].means[j]);
-	    for (k = 0; k < nbands; k++)
-		fprintf(stderr, "%f ", Sig->SubSig[i].R[j][k]);
-	    fprintf(stderr, "\n");
-	}
-	fprintf(stderr, "\n");
-    }
-}
-
-
-static void print_class(struct ClassSig *Sig, char *fname)
-{
-    FILE *fp;
-    int s, i;
-
-
-    if ((fp = fopen(fname, "w")) == NULL) {
-	fprintf(stderr, "can't open data file\n");
-	exit(1);
-    }
-
-    for (s = 0; s < Sig->ClassData.npixels; s++) {
-	/* fprintf(fp,"Pixel number %d:  ", s); */
-	for (i = 0; i < Sig->nsubclasses; i++)
-	    fprintf(fp, "%f  ", Sig->ClassData.p[s][i]);
-	fprintf(fp, "\n");
-    }
-
-    fclose(fp);
-
-}

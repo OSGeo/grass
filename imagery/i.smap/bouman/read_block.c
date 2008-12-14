@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <grass/imagery.h>
+#include <grass/glocale.h>
 #include "bouman.h"
 #include "region.h"
 
@@ -12,7 +13,8 @@ int read_block(DCELL *** img,	/* img[band][row[col] */
 	for (row = region->ymin; row < region->ymax; row++) {
 	    if (G_get_d_raster_row(files->band_fd[band], files->cellbuf, row)
 		< 0)
-		exit(1);
+		G_fatal_error(_("Unable to read raster map row %d"),
+			      row);
 	    for (col = region->xmin; col < region->xmax; col++)
 		img[band][row][col] = files->cellbuf[col];
 	}

@@ -9,34 +9,22 @@ int parse(int argc, char *argv[], struct parms *parms)
 {
     struct Option *group, *subgroup, *sigfile, *trainingmap;
 
-    trainingmap = G_define_option();
+    trainingmap = G_define_standard_option(G_OPT_R_MAP);
     trainingmap->key = "trainingmap";
     trainingmap->description = _("Ground truth training map");
-    trainingmap->required = YES;
-    trainingmap->type = TYPE_STRING;
-    trainingmap->gisprompt = "old,cell,raster";
 
-    group = G_define_option();
-    group->key = "group";
-    group->description = _("Imagery group");
-    group->required = YES;
-    group->type = TYPE_STRING;
-    group->gisprompt = "old,group,group";
+    group = G_define_standard_option(G_OPT_I_GROUP);
 
-    subgroup = G_define_option();
-    subgroup->key = "subgroup";
-    subgroup->description = _("Subgroup containing image files");
-    subgroup->required = YES;
-    subgroup->type = TYPE_STRING;
+    subgroup = G_define_standard_option(G_OPT_I_SUBGROUP);
 
     sigfile = G_define_option();
     sigfile->key = "signaturefile";
-    sigfile->description = _("Resultant signature file");
+    sigfile->description = _("Name for output file containing result signatures");
     sigfile->required = YES;
     sigfile->type = TYPE_STRING;
 
     if (G_parser(argc, argv))
-	exit(1);
+	exit(EXIT_FAILURE);
 
     parms->training_map = trainingmap->answer;
     parms->group = group->answer;

@@ -10,8 +10,7 @@ int closefiles(struct parms *parms, struct files *files)
 {
     int n;
 
-    if (parms->quiet)
-	G_message(_("Creating support files for <%s>..."), parms->output_map);
+    G_debug(1, "Creating support files for <%s>...", parms->output_map);
 
     for (n = 0; n < files->nbands; n++)
 	G_close_cell(files->band_fd[n]);

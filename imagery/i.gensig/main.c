@@ -36,9 +36,9 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("imagery");
+    module->keywords = _("imagery, classification, supervised, MLC");
     module->description =
-	_("Generates statistics for i.maxlik " "from raster map layer.");
+	_("Generates statistics for i.maxlik from raster map.");
 
     parse(argc, argv, &parms);
     openfiles(&parms, &files);
@@ -50,5 +50,7 @@ int main(int argc, char *argv[])
     check_signatures(&S);
     write_sigfile(&parms, &S);
 
-    exit(0);
+    G_done_msg(" ");
+    
+    exit(EXIT_SUCCESS);
 }

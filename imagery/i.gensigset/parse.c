@@ -1,47 +1,36 @@
 #include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/imagery.h>
+#include <grass/glocale.h>
 #include "parms.h"
 
 int parse(int argc, char *argv[], struct parms *parms)
 {
     struct Option *group, *subgroup, *sigfile, *trainingmap, *maxsig;
 
-    trainingmap = G_define_option();
+    trainingmap = G_define_standard_option(G_OPT_R_MAP);
     trainingmap->key = "trainingmap";
-    trainingmap->description = "ground truth training map";
-    trainingmap->required = YES;
-    trainingmap->type = TYPE_STRING;
-    trainingmap->gisprompt = "old,cell,raster";
+    trainingmap->description = _("Ground truth training map");
+    
+    group = G_define_standard_option(G_OPT_I_GROUP);
 
-    group = G_define_option();
-    group->key = "group";
-    group->description = "imagery group";
-    group->required = YES;
-    group->type = TYPE_STRING;
-    group->gisprompt = "old,group,group";
-
-    subgroup = G_define_option();
-    subgroup->key = "subgroup";
-    subgroup->description = "subgroup containing image files";
-    subgroup->required = YES;
-    subgroup->type = TYPE_STRING;
+    subgroup = G_define_standard_option(G_OPT_I_SUBGROUP);
 
     sigfile = G_define_option();
     sigfile->key = "signaturefile";
-    sigfile->description = "resultant signature file";
+    sigfile->description = _("Name for output file containing result signatures");
     sigfile->required = YES;
     sigfile->type = TYPE_STRING;
 
     maxsig = G_define_option();
     maxsig->key = "maxsig";
-    maxsig->description = "maximum number of sub-signatures in any class";
+    maxsig->description = _("Maximum number of sub-signatures in any class");
     maxsig->required = NO;
     maxsig->type = TYPE_INTEGER;
     maxsig->answer = "10";
 
     if (G_parser(argc, argv))
-	exit(1);
+	exit(EXIT_FAILURE);
 
     parms->training_map = trainingmap->answer;
     parms->group = group->answer;
@@ -50,23 +39,18 @@ int parse(int argc, char *argv[], struct parms *parms)
 
     /* check all the inputs */
     if (G_find_cell(parms->training_map, "") == NULL) {
-	fprintf(stderr, "ERROR: training map [%s] not found\n",
-		parms->training_map);
-	exit(1);
+	G_fatal_error(_("Raster map <%s> not found"), parms->training_map);
     }
     if (!I_find_group(parms->group)) {
-	fprintf(stderr, "ERROR: group [%s] not found\n", parms->group);
-	exit(1);
+	G_fatal_error(_("Group <%s> not found"), parms->group);
     }
     if (!I_find_subgroup(parms->group, parms->subgroup)) {
-	fprintf(stderr, "ERROR: subgroup [%s] not found\n", parms->subgroup);
-	exit(1);
+	G_fatal_error(_("Subgroup <%s> not found"), parms->subgroup);
     }
     if (sscanf(maxsig->answer, "%d", &parms->maxsubclasses) != 1 ||
 	parms->maxsubclasses <= 0) {
-	fprintf(stderr, "ERROR: illegal number of sub-signatures [%s]\n",
-		maxsig->answer);
-	exit(1);
+	G_fatal_error(_("Illegal number of sub-signatures (%s)"),
+		      maxsig->answer);
     }
 
     return 0;

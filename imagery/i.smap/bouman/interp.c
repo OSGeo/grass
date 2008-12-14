@@ -100,7 +100,7 @@ static void seq_MAP_routine(unsigned char ***sf_pym,	/* pyramid of segmentations
     /* Interpolate the classification at each resolution */
     for (D--; D >= 0; D--) {
 	if (vlevel >= 2)
-	    G_message(_("\nResolution = %d; period = %d"), D, period[D]);
+	    G_debug(1, "Resolution = %d; period = %d", D, period[D]);
 
 	for (j = 0; j < 3; j++)
 	    alpha[j] *= (1 - EM_PRECISION * 10);
@@ -114,7 +114,7 @@ static void seq_MAP_routine(unsigned char ***sf_pym,	/* pyramid of segmentations
 	    if (vlevel >= 4)
 		print_N(N);
 	    if (vlevel >= 4)
-		G_message("log likelihood = %f\n", log_like(N, alpha, M));
+		G_debug(1, "log likelihood = %f", log_like(N, alpha, M));
 	    for (j = 0; j < 3; j++)
 		tmp[j] = alpha[j];
 
@@ -122,7 +122,7 @@ static void seq_MAP_routine(unsigned char ***sf_pym,	/* pyramid of segmentations
 	    if (vlevel >= 2)
 		print_alpha(alpha);
 	    if (vlevel >= 4)
-		G_message("log likelihood = %f\n", log_like(N, alpha, M));
+		G_debug(1, "log likelihood = %f", log_like(N, alpha, M));
 
 	    for (diff1 = j = 0; j < 3; j++)
 		diff1 += fabs(tmp[j] - alpha[j]);
@@ -174,14 +174,12 @@ static void print_N(
 {
     int n0, n1, n2;
 
-    G_message(_("Class transition statistics."));
+    G_debug(2, "Class transition statistics");
     for (n0 = 0; n0 < 2; n0++) {
 	for (n1 = 0; n1 < 3; n1++) {
 	    for (n2 = 0; n2 < 2; n2++)
-		fprintf(stderr, "%f ", N[n0][n1][n2]);
-	    fprintf(stderr, "\n");
+		G_debug(3, "   %f", N[n0][n1][n2]);
 	}
-	fprintf(stderr, "\n");
     }
 }
 
@@ -190,9 +188,9 @@ static void print_alpha(
 			   /* prints out transition parameters. */
 			   double *alpha)
 {
-    G_message(_("Transition probabilities: %f %f %f; %f"),
-	      alpha[0], alpha[1], alpha[2],
-	      1.0 - alpha[0] - 2 * alpha[1] - alpha[2]);
+    G_debug(1, "Transition probabilities: %f %f %f; %f",
+	    alpha[0], alpha[1], alpha[2],
+	    1.0 - alpha[0] - 2 * alpha[1] - alpha[2]);
 }
 
 
@@ -236,7 +234,7 @@ static void interp(
     alpha2 = alpha[2];
     Constant = (1 - alpha0 - 2 * alpha1 - alpha2) / M;
     if (Constant < 0)
-	G_fatal_error(_("interp: invalid parameter values."));
+	G_fatal_error(_("Invalid parameter values"));
 
     /* precompute logs and zero static vector */
     for (nn0 = 0; nn0 < 2; nn0++)

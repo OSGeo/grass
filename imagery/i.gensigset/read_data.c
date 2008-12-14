@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <grass/imagery.h>
+#include <grass/glocale.h>
 #include "files.h"
 /* #include "local_proto.h" */
 
@@ -15,7 +16,7 @@ int read_data(struct files *files, struct SigSet *S)
     ncols = G_window_cols();
     class = (CELL *) G_calloc(ncols, sizeof(CELL));
 
-    fprintf(stderr, "Reading image data ...");
+    G_message(_("Reading raster maps..."));
 
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
@@ -23,7 +24,8 @@ int read_data(struct files *files, struct SigSet *S)
 	for (b = 0; b < files->nbands; b++)
 	    if (G_get_d_raster_row
 		(files->band_fd[b], files->band_cell[b], row) < 0)
-		exit(1);
+		G_fatal_error(_("Unable to read raster map row %d"),
+			      row);
 
 	for (col = 0; col < ncols; col++) {
 	    n = class[col];
@@ -39,7 +41,7 @@ int read_data(struct files *files, struct SigSet *S)
 	    Data->count++;
 	}
     }
-    G_percent(row, nrows, 2);
+    G_percent(nrows, nrows, 2);
     G_free(class);
 
     return 0;

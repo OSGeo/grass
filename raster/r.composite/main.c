@@ -7,7 +7,7 @@
  *               layer using a quantisation of the RGB color space.
  *               Using Floyd-Steinberg dithering
  *
- * COPYRIGHT:    (C) 2001 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2001-2008 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -70,24 +70,21 @@ int main(int argc, char **argv)
     module = G_define_module();
     module->keywords = _("raster, composite");
     module->description =
-	_("Combines red, green and blue map layers into "
+	_("Combines red, green and blue raster maps into "
 	  "a single composite raster map.");
 
     for (i = 0; i < 3; i++) {
 	struct Option *opt;
 	char buff[80];
 
-	B[i].opt_name = opt = G_define_option();
+	B[i].opt_name = opt = G_define_standard_option(G_OPT_R_INPUT);
 
 	sprintf(buff, "%s", color_names[i]);
 	opt->key = G_store(buff);
 
-	opt->type = TYPE_STRING;
 	opt->answer = NULL;
-	opt->required = YES;
-	opt->gisprompt = "old,cell,raster";
 
-	sprintf(buff, _("Name of raster map layer to be used for <%s>"),
+	sprintf(buff, _("Name of raster map to be used for <%s>"),
 		color_names[i]);
 	opt->description = G_store(buff);
     }
@@ -100,6 +97,7 @@ int main(int argc, char **argv)
     opt_lev->answer = "32";
     opt_lev->description =
 	_("Number of levels to be used for each component");
+    opt_lev->guisection = _("Levels");
 
     for (i = 0; i < 3; i++) {
 	struct Option *opt;
@@ -117,10 +115,10 @@ int main(int argc, char **argv)
 	sprintf(buff, _("Number of levels to be used for <%s>"),
 		color_names[i]);
 	opt->description = G_store(buff);
+	opt->guisection = _("Levels");
     }
 
     opt_out = G_define_standard_option(G_OPT_R_OUTPUT);
-    opt_out->description = _("Name of raster map to contain results");
 
     flg_d = G_define_flag();
     flg_d->key = 'd';
@@ -161,7 +159,7 @@ int main(int argc, char **argv)
 
 	/* Reading color lookup table */
 	if (G_read_colors(b->name, "", &b->colors) == -1)
-	    G_fatal_error(_("Color file for <%s> not available"), b->name);
+	    G_fatal_error(_("Unable to read color file of raster map <%s>"), b->name);
 
 	for (j = 0; j < 3; j++)
 	    b->array[j] = (i == j)
@@ -250,8 +248,7 @@ int main(int argc, char **argv)
 	if (G_put_raster_row(out_file, out_array, CELL_TYPE) < 0)
 	    G_fatal_error(_("Failed writing raster map <%s>"), out_name);
     }
-
-    G_percent(window.rows, window.rows, 5);
+    G_percent(window.rows, window.rows, 1);
 
     /* Close the input files */
     for (i = 0; i < 3; i++)
@@ -264,7 +261,7 @@ int main(int argc, char **argv)
     G_command_history(&history);
     G_write_history(out_name, &history);
 
-    G_done_msg(" ");
+    G_done_msg(_("Raster map <%s> created."), out_name);
 
     exit(EXIT_SUCCESS);
 }
@@ -305,6 +302,5 @@ static void make_color_cube(struct Colors *colors)
 	    i += nr;
 	}
     }
-
-    G_percent(nb, nb, 5);
+    G_percent(nb, nb, 1);
 }

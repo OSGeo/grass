@@ -18,19 +18,19 @@ int check_signatures(struct Signature *S)
 	copy_covariances(temp.sig[0].var, S->sig[i].var, S->nbands);
 	if (!can_invert(temp.sig[0].var, S->nbands)) {
 	    S->sig[i].status = -1;
-	    G_message(_("Signature [%d] not invertible."), i + 1);
+	    G_important_message(_("Signature %d not invertible"), i + 1);
 	    continue;
 	}
 	copy_covariances(temp.sig[0].var, S->sig[i].var, S->nbands);
 	if (!eigen(temp.sig[0].var, lambda, S->nbands)) {
 	    S->sig[i].status = -1;
-	    G_message(_("Signature [%d] can't get eigen values."), i + 1);
+	    G_important_message(_("Signature %d unable to get eigen values"), i + 1);
 	    continue;
 	}
 	for (j = 0; j < S->nbands; j++) {
 	    if (lambda[j] <= 0.0) {
 		S->sig[i].status = -1;
-		G_message(_("Signature [%d] not positive definite."), i + 1);
+		G_important_message(_("Signature %d not positive definite"), i + 1);
 		break;
 	    }
 	}

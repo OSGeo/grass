@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <grass/imagery.h>
+#include <grass/glocale.h>
 #include "files.h"
 #include "parms.h"
 
@@ -28,14 +29,15 @@ int get_training_classes(struct parms *parms,
     I_SetSigTitle(S, G_get_cats_title(&files->training_labels));
 
     G_init_cell_stats(&cell_stats);
-    fprintf(stderr, "Finding training classes ...");
+    G_message(_("Finding training classes..."));
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
 	if (G_get_c_raster_row(fd, cell, row) < 0)
-	    exit(1);
+	    G_fatal_error(_("Unable to read raster map <%s> row %d"), cell,
+			  row);
 	G_update_cell_stats(cell, ncols, &cell_stats);
     }
-    G_percent(row, nrows, 2);
+    G_percent(nrows, nrows, 2);
 
     /* convert this to an array */
     G_rewind_cell_stats(&cell_stats);
@@ -52,14 +54,12 @@ int get_training_classes(struct parms *parms,
 	    n++;
 	}
 	else
-	    fprintf(stderr,
-		    "WARNING: Training class [%d] only has one cell - this class will be ignored\n",
-		    cat);
+	    G_warning(_("Training class %d only has one cell - this class will be ignored"),
+		      cat);
     }
 
     if (n == 0) {
-	fprintf(stderr, "ERROR: training map has no classes\n");
-	exit(1);
+	G_fatal_error(_("Training map has no classes"));
     }
 
     list = (CELL *) G_calloc(n, sizeof(CELL));
@@ -73,8 +73,11 @@ int get_training_classes(struct parms *parms,
 
     files->ncats = n;
     files->training_cats = list;
-    fprintf(stderr, "%d class%s\n", files->ncats,
-	    files->ncats == 1 ? "" : "es");
 
+    if (files->ncats == 1)
+	G_message(_("1 class found"));
+    else
+	G_message(_("%d classes found"), files->ncats);
+    
     return 0;
 }

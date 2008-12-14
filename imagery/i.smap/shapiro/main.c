@@ -11,7 +11,7 @@
  *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      segment multispectral images using a spectral class model 
  *               known as a Gaussian mixture distribution
- * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2008 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("imagery");
+    module->keywords = _("imagery, classification, supervised, SMAP");
     module->description =
 	_("Performs contextual image classification "
 	  "using sequential maximum a posteriori (SMAP) estimation.");
@@ -48,5 +48,8 @@ int main(int argc, char *argv[])
     segment(&S, &parms, &files);
 
     closefiles(&parms, &files);
+
+    G_done_msg(" ");
+    
     exit(EXIT_SUCCESS);
 }

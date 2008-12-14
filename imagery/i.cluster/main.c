@@ -81,14 +81,12 @@ int main(int argc, char *argv[])
 
     parm.group_name = G_define_standard_option(G_OPT_I_GROUP);
 
-    parm.subgroup_name = G_define_option();
-    parm.subgroup_name->key = "subgroup";
-    parm.subgroup_name->type = TYPE_STRING;
-    parm.subgroup_name->required = YES;
-    parm.subgroup_name->description = _("Name of subgroup in the above group");
-
-    parm.out_sig = G_define_standard_option(G_OPT_F_OUTPUT);
+    parm.subgroup_name = G_define_standard_option(G_OPT_I_SUBGROUP);
+    
+    parm.out_sig = G_define_option();
     parm.out_sig->key = "signaturefile";
+    parm.out_sig->type = TYPE_STRING;
+    parm.out_sig->key_desc = "name";
     parm.out_sig->required = YES;
     parm.out_sig->description = _("Name for output file containing result signatures");
 
@@ -100,9 +98,11 @@ int main(int argc, char *argv[])
     parm.class->description = _("Initial number of classes");
     parm.class->guisection = _("Settings");
 
-    parm.seed_sig = G_define_standard_option(G_OPT_F_INPUT);
+    parm.seed_sig = G_define_option();
     parm.seed_sig->key = "seed";
     parm.seed_sig->required = NO;
+    parm.seed_sig->type = TYPE_STRING;
+    parm.seed_sig->key_desc = "name";
     parm.seed_sig->description = _("Name of file containing initial signatures");
 
     parm.sample_interval = G_define_option();
