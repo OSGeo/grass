@@ -104,6 +104,7 @@ class GMFrame(wx.Frame):
         wx.Frame.__init__(self, parent=parent, id=id, size=(500, 400),
                           style=wx.DEFAULT_FRAME_STYLE)
         self.SetTitle(self.baseTitle)
+        self.SetName("LayerManager")
 
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
 
