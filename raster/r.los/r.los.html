@@ -66,6 +66,7 @@ Spearfish example - calculation of viewshed from 50m tower
 on top of a mountain:
 
 <div class="code"><pre>
+g.region rast=elevation.dem -p
 r.los elevation.dem out=los coord=598869,4916642 obs_elev=50 max_dist=10000
 r.colors -e los color=bgyr
 d.shadedmap relief=aspect drape=los bright=10
@@ -74,7 +75,7 @@ echo "symbol extra/target 25 598869 4916642 red" | d.graph -m
 
 <h2>TODO</h2>
 
-Rewrite using ideas from <em>r.cva</em> and a method which scales better
+a) Rewrite using ideas from <em>r.cva</em> and a method which scales better
 to large regions.<br>A suggested method is detailed in:<br>
 Izraelevitz, David (USACE).<br>
 'A Fast Algorithm for Approximate Viewshed Computation'<br>
@@ -82,6 +83,8 @@ Izraelevitz, David (USACE).<br>
 <!-- http://article.gmane.org/gmane.comp.gis.grass.devel/1781
   Post by Paul Kelly 2003-08-13 to grass-dev, 
   "Re: [bug #2061] (grass) r.los needs FP update" -->
+
+b) or fix r.viewshed in Addons
 
 <h2>SEE ALSO</h2>
 
