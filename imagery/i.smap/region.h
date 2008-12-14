@@ -12,7 +12,7 @@ struct Region
 };
 
 /* decimate.c */
-void make_pyramid(LIKELIHOOD ****, struct Region *, int, double *, int);
+void make_pyramid(LIKELIHOOD ****, struct Region *, int, double *);
 char ***get_pyramid(int, int, size_t);
 void free_pyramid(char *, int, int);
 char ****get_cubic_pyramid(int, int, int, size_t);
@@ -21,7 +21,7 @@ int levels(int, int);
 
 /* interp.c */
 void seq_MAP(unsigned char ***, struct Region *, LIKELIHOOD ****, int,
-	     double *, int);
+	     double *);
 void MLE(unsigned char **, LIKELIHOOD ***, struct Region *, int);
 
 /* reg_util.c */
