@@ -436,9 +436,6 @@ class DecorationDialog(wx.Dialog):
         if  self.name == 'legend':
             if params and not self.btnOK.IsEnabled():
                 self.btnOK.Enable()
-        
-            #self.SetTitle(_('Legend of raster map <%s>') % \
-            #              utils.GetLayerNameFromCmd(self.parent.MapWindow.overlays[self.ovlId]['cmd']))
             
 class TextLayerDialog(wx.Dialog):
     """

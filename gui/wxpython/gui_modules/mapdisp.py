@@ -2514,9 +2514,6 @@ class MapFrame(wx.Frame):
         @param page notebook page with layer tree
         @param Map instance of render.Map
         """
-
-        wx.Frame.__init__(self, parent, id, title, pos, size, style)
-
         self.gismanager = gismgr    # GIS Manager object
         self.Map        = Map       # instance of render.Map
         self.tree       = tree      # GIS Manager layer tree object
@@ -2536,6 +2533,9 @@ class MapFrame(wx.Frame):
             "pencil"  : wx.StockCursor(wx.CURSOR_PENCIL),
             "sizenwse": wx.StockCursor(wx.CURSOR_SIZENWSE)
             }
+
+        wx.Frame.__init__(self, parent, id, title, pos, size, style)
+        self.SetName("MapWindow")
 
         #
         # set the size & system icon
