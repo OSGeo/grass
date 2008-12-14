@@ -9,7 +9,6 @@ int parse(int argc, char *argv[], struct parms *parms)
 {
     struct Option *group, *subgroup, *sigfile, *output;
     struct Option *blocksize;
-    struct Flag *quiet;
     struct Flag *ml;
 
     group = G_define_standard_option(G_OPT_I_GROUP);
@@ -38,14 +37,9 @@ int parse(int argc, char *argv[], struct parms *parms)
     ml->description =
 	_("Use maximum likelihood estimation (instead of smap)");
 
-    quiet = G_define_flag();
-    quiet->key = 'q';
-    quiet->description = _("Run quietly");
-
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    parms->quiet = quiet->answer;
     parms->ml = ml->answer;
 
     parms->output_map = output->answer;

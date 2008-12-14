@@ -9,7 +9,7 @@
 #define ML_PRECISION 1e-6
 
 static void seq_MAP_routine(unsigned char ***, struct Region *,
-			    LIKELIHOOD ****, int, double *, int);
+			    LIKELIHOOD ****, int, double *);
 static double alpha_dec_max(double ***);
 static void print_N(double ***);
 static void print_alpha(double *);
@@ -24,8 +24,7 @@ void seq_MAP(unsigned char ***sf_pym,	/* pyramid of segmentations */
 	     struct Region *region,	/* specifies image subregion */
 	     LIKELIHOOD **** ll_pym,	/* pyramid of class statistics */
 	     int M,		/* number of classes */
-	     double *alpha_dec,	/* decimation parameters returned by seq_MAP */
-	     int vlevel		/* verbose output */
+	     double *alpha_dec	/* decimation parameters returned by seq_MAP */
     )
 {
     int repeat;
@@ -33,12 +32,11 @@ void seq_MAP(unsigned char ***sf_pym,	/* pyramid of segmentations */
     /* Repeat segmentation to get values for alpha_dec */
     for (repeat = 0; repeat < 2; repeat++) {
 	/* Construct image log likelihood pyramid */
-	make_pyramid(ll_pym, region, M, alpha_dec, vlevel);
-	if (vlevel >= 2)
-	    G_message(_("pyramid constructed."));
+	make_pyramid(ll_pym, region, M, alpha_dec);
+	G_debug(1, "Pyramid constructed");
 
 	/* Perform sequential MAP segmentation using EM algorithm */
-	seq_MAP_routine(sf_pym, region, ll_pym, M, alpha_dec, vlevel);
+	seq_MAP_routine(sf_pym, region, ll_pym, M, alpha_dec);
     }
 }
 
@@ -46,8 +44,7 @@ static void seq_MAP_routine(unsigned char ***sf_pym,	/* pyramid of segmentations
 			    struct Region *region,	/* specifies image subregion */
 			    LIKELIHOOD **** ll_pym,	/* pyramid of class statistics */
 			    int M,	/* number of classes */
-			    double *alpha_dec,	/* decimation parameters returned by seq_MAP */
-			    int vlevel	/* verbose output */
+			    double *alpha_dec	/* decimation parameters returned by seq_MAP */
     )
 {
     int j, k;			/* loop index */
@@ -99,30 +96,24 @@ static void seq_MAP_routine(unsigned char ***sf_pym,	/* pyramid of segmentations
 
     /* Interpolate the classification at each resolution */
     for (D--; D >= 0; D--) {
-	if (vlevel >= 2)
-	    G_debug(1, "Resolution = %d; period = %d", D, period[D]);
+	G_debug(1, "Resolution = %d; period = %d", D, period[D]);
 
 	for (j = 0; j < 3; j++)
 	    alpha[j] *= (1 - EM_PRECISION * 10);
-	if (vlevel >= 4)
-	    print_alpha(alpha);
+	print_alpha(alpha);
 	/* Apply EM algorithm to estimate alpha. Continue for *
 	 * fixed number of iterations or until convergence.   */
 	do {
 	    interp(sf_pym[D], &(regionary[D]), sf_pym[D + 1], ll_pym[D], M,
 		   alpha, period[D], N, 1);
-	    if (vlevel >= 4)
-		print_N(N);
-	    if (vlevel >= 4)
-		G_debug(1, "log likelihood = %f", log_like(N, alpha, M));
+	    print_N(N);
+	    G_debug(4, "log likelihood = %f", log_like(N, alpha, M));
 	    for (j = 0; j < 3; j++)
 		tmp[j] = alpha[j];
 
 	    alpha_max(N, alpha, M, ML_PRECISION);
-	    if (vlevel >= 2)
-		print_alpha(alpha);
-	    if (vlevel >= 4)
-		G_debug(1, "log likelihood = %f", log_like(N, alpha, M));
+	    print_alpha(alpha);
+	    G_debug(4, "log likelihood = %f", log_like(N, alpha, M));
 
 	    for (diff1 = j = 0; j < 3; j++)
 		diff1 += fabs(tmp[j] - alpha[j]);
@@ -132,12 +123,9 @@ static void seq_MAP_routine(unsigned char ***sf_pym,	/* pyramid of segmentations
 	       1, N, 0);
 	alpha_dec[D] = alpha_dec_max(N);
 
-	if (vlevel >= 4)
-	    print_N(N);
-	if (vlevel >= 2) {
-	    alpha_max(N, alpha, M, ML_PRECISION);
-	    print_alpha(alpha);
-	}
+	print_N(N);
+	alpha_max(N, alpha, M, ML_PRECISION);
+	print_alpha(alpha);
     }
 
     /* free up N */
@@ -188,7 +176,7 @@ static void print_alpha(
 			   /* prints out transition parameters. */
 			   double *alpha)
 {
-    G_debug(1, "Transition probabilities: %f %f %f; %f",
+    G_debug(2, "Transition probabilities: %f %f %f; %f",
 	    alpha[0], alpha[1], alpha[2],
 	    1.0 - alpha[0] - 2 * alpha[1] - alpha[2]);
 }

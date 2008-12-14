@@ -31,8 +31,7 @@ int segment(struct SigSet *S,	/* class parameters */
 {
     int block_size;		/* size of subregion blocks */
     int ml;			/* max likelihood? */
-    int quiet;			/* be quiet when running? */
-
+    
     DCELL ***img;		/* multispectral image, img[band][i][j] */
     int last_row;               
     int wd, ht;			/* image width and height */
@@ -43,14 +42,11 @@ int segment(struct SigSet *S,	/* class parameters */
     unsigned char ***sf_pym;	/* pyramid of segmentations */
     int D;			/* number of levels in pyramid */
     double *alpha_dec;		/* class transition probabilities */
-    int vlevel;			/* level of verbose output */
     int i;
 
-    quiet = parms->quiet;	/* run quietly? */
     ml = parms->ml;		/* use maxl? */
     block_size = parms->blocksize;
 
-    vlevel = quiet ? 0 : 1;
     wd = G_window_cols();	/* get width from GRASS */
     ht = G_window_rows();	/* get height from GRASS */
 
@@ -91,7 +87,7 @@ int segment(struct SigSet *S,	/* class parameters */
     extract_init(S);
     last_row = -1;
     do {
-	if (vlevel >= 1 && last_row != region.ymin)
+	if (last_row != region.ymin)
 	    G_message(_("Processing rows %d-%d (of %d)..."),
 		      region.ymin + 1, region.ymax, ht);
 	last_row = region.ymin;
@@ -107,7 +103,7 @@ int segment(struct SigSet *S,	/* class parameters */
 	else {
 	    for (i = 0; i < D; i++)
 		alpha_dec[i] = 1.0;
-	    seq_MAP(sf_pym, &region, ll_pym, nclasses, alpha_dec, vlevel);
+	    seq_MAP(sf_pym, &region, ll_pym, nclasses, alpha_dec);
 	}
 
 

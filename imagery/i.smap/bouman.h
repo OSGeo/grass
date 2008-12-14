@@ -24,7 +24,6 @@ struct parms
     char *subgroup;
     char *sigfile;
     int blocksize;
-    int quiet;
     int ml;
 };
 

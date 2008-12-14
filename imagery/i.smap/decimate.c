@@ -11,8 +11,7 @@ static void up_ll(LIKELIHOOD *, int, double, LIKELIHOOD *);
 void make_pyramid(LIKELIHOOD **** ll_pym,	/* log likelihood pyramid, ll_pym[scale][i][j][class] */
 		  struct Region *region,	/* specifies image subregion */
 		  int M,	/* number of classes */
-		  double *alpha,	/* decimation parameters */
-		  int vlevel	/* verbose operation */
+		  double *alpha	/* decimation parameters */
     )
 {
     int D;
@@ -25,9 +24,8 @@ void make_pyramid(LIKELIHOOD **** ll_pym,	/* log likelihood pyramid, ll_pym[scal
     D = 0;
     reg_to_wdht(region, &wd, &ht);
     while ((wd > 2) && (ht > 2)) {
-	if (vlevel >= 2)
-	    G_debug(1, "D = %d  alpha = %f; 1-alpha = %f", D, alpha[D],
-		    1 - alpha[D]);
+	G_debug(1, "D = %d  alpha = %f; 1-alpha = %f", D, alpha[D],
+		1 - alpha[D]);
 	decimate(ll_pym[D], region, M, ll_pym[D + 1], alpha[D]);
 	dec_reg(region);
 	reg_to_wdht(region, &wd, &ht);
