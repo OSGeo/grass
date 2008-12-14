@@ -22,10 +22,7 @@ int compute_means(struct files *files, struct Signature *S)
     ncols = G_window_cols();
     class = (CELL *) G_calloc(ncols, sizeof(CELL));
 
-    if (S->nsigs == 1)
-	G_message(_("Calculating class mean ..."));
-    else
-	G_message(_("Calculating class means ..."));
+    G_message(_("Calculating class means..."));
 
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
@@ -46,7 +43,8 @@ int compute_means(struct files *files, struct Signature *S)
 	    }
 	}
     }
-    G_percent(row, nrows, 2);
+    G_percent(nrows, nrows, 2);
+
     for (n = 0; n < S->nsigs; n++)	/* for each signature (aka class) */
 	for (b = 0; b < S->nbands; b++)	/* for each band file */
 	    S->sig[n].mean[b] /= S->sig[n].npoints;

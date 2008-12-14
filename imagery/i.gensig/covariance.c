@@ -24,10 +24,7 @@ int compute_covariances(struct files *files, struct Signature *S)
     ncols = G_window_cols();
     class = (CELL *) G_calloc(ncols, sizeof(CELL));
 
-    if (S->nsigs == 1)
-	G_message(_("Calculating class covariance matrix..."));
-    else
-	G_message(_("Calculating class covariance matrices..."));
+    G_message(_("Calculating class covariance matrices..."));
 
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
@@ -35,7 +32,8 @@ int compute_covariances(struct files *files, struct Signature *S)
 	for (b = 0; b < files->nbands; b++)	/* NOTE: files->nbands == S->nbands */
 	    if (G_get_d_raster_row
 		(files->band_fd[b], files->band_cell[b], row) < 0)
-		exit(1);
+		G_fatal_error(_("Unable to read raster map row %d"),
+			      row);
 	for (b1 = 0; b1 < files->nbands; b1++) {
 	    cell1 = files->band_cell[b1];
 	    for (b2 = 0; b2 <= b1; b2++) {	/* only need to calculate the lower half */
@@ -52,7 +50,8 @@ int compute_covariances(struct files *files, struct Signature *S)
 	    }
 	}
     }
-    G_percent(row, nrows, 2);
+    G_percent(nrows, nrows, 2);
+
     for (n = 0; n < S->nsigs; n++)	/* for each signature (aka class) */
 	for (b1 = 0; b1 < S->nbands; b1++)
 	    for (b2 = 0; b2 <= b1; b2++) {

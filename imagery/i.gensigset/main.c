@@ -37,9 +37,9 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("imagery");
+    module->keywords = _("imagery, classification, supervised, SMAP");
     module->description =
-	"Generate statistics for i.smap from raster map layer.";
+	_("Generates statistics for i.smap from raster map.");
 
     parse(argc, argv, &parms);
     openfiles(&parms, &files);
@@ -49,12 +49,15 @@ int main(int argc, char *argv[])
     read_data(&files, &S);
 
     for (i = 0; i < S.nclasses; i++) {
-	fprintf(stderr, "Clustering class %d, with %d pixels\n",
-		i + 1, S.ClassSig[i].ClassData.npixels);
+	G_message(_("Clustering class %d (%d pixels)..."),
+		  i + 1, S.ClassSig[i].ClassData.npixels);
 	subcluster(&S, i, &junk, parms.maxsubclasses);
-	fprintf(stderr, " Solution: Number of subclasses is %d\n",
-		S.ClassSig[i].nsubclasses);
+	G_message(_("Number of subclasses is %d"),
+		  S.ClassSig[i].nsubclasses);
     }
     write_sigfile(&parms, &S);
-    exit(0);
+
+    G_done_msg(" ");
+
+    exit(EXIT_SUCCESS);
 }

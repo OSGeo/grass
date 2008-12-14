@@ -26,8 +26,8 @@ void make_pyramid(LIKELIHOOD **** ll_pym,	/* log likelihood pyramid, ll_pym[scal
     reg_to_wdht(region, &wd, &ht);
     while ((wd > 2) && (ht > 2)) {
 	if (vlevel >= 2)
-	    G_message("D = %d  alpha = %f; 1-alpha = %f", D, alpha[D],
-		      1 - alpha[D]);
+	    G_debug(1, "D = %d  alpha = %f; 1-alpha = %f", D, alpha[D],
+		    1 - alpha[D]);
 	decimate(ll_pym[D], region, M, ll_pym[D + 1], alpha[D]);
 	dec_reg(region);
 	reg_to_wdht(region, &wd, &ht);

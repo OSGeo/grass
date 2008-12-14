@@ -26,7 +26,7 @@ int get_training_classes(struct files *files, struct Signature *S)
     /* determine the categories in the map */
     I_init_signatures(S, files->nbands);
     G_init_cell_stats(&cell_stats);
-    G_message(_("Finding training classes ..."));
+    G_message(_("Finding training classes..."));
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
 	if (G_get_c_raster_row(fd, cell, row) < 0)
@@ -34,7 +34,7 @@ int get_training_classes(struct files *files, struct Signature *S)
 			  row);
 	G_update_cell_stats(cell, ncols, &cell_stats);
     }
-    G_percent(row, nrows, 2);
+    G_percent(nrows, nrows, 2);
 
     /* convert this to an array */
     G_rewind_cell_stats(&cell_stats);
@@ -51,12 +51,12 @@ int get_training_classes(struct files *files, struct Signature *S)
 	    n++;
 	}
 	else
-	    G_warning(_("Training class [%d] only has one cell - this class will be ignored."),
+	    G_warning(_("Training class %d only has one cell - this class will be ignored"),
 		      cat);
     }
 
     if (n == 0)
-	G_fatal_error(_("Training map has no classes."));
+	G_fatal_error(_("Training map has no classes"));
 
     list = (CELL *) G_calloc(n, sizeof(CELL));
     n = 0;
@@ -71,9 +71,9 @@ int get_training_classes(struct files *files, struct Signature *S)
     files->training_cats = list;
 
     if (files->ncats == 1)
-	G_message(_("1 class."));
+	G_message(_("1 class found"));
     else
-	G_message(_("%d classes."), files->ncats);
+	G_message(_("%d classes found"), files->ncats);
 
     return 0;
 }

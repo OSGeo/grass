@@ -112,7 +112,7 @@ unsigned char **get_img(int wd, int ht, size_t size)
     char *pt;
 
     if ((pt = multialloc(size, 2, ht, wd)) == NULL)
-	G_fatal_error(_("get_img: out of memory."));
+	G_fatal_error(_("Out of memory"));
 
     return ((unsigned char **)pt);
 }
