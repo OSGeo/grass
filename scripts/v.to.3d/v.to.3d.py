@@ -110,7 +110,9 @@ def main():
         grass.run_command('v.transform', input = input, output = output,
                           layer = layer, columns = columns,
                           table = table)
-    
+
+    grass.vector_history(map = output)
+
     return 0
                              
 if __name__ == "__main__":
