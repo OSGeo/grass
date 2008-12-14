@@ -482,6 +482,12 @@
 	      <command>v.to.rast3</command>
 	    </menuitem>
 	    <menuitem>
+	      <label>2D vector to 3D vector</label>
+	      <help>Performs transformation of 2D vector features to 3D.</help>
+	      <handler>self.OnMenuCmd</handler>
+	      <command>v.to.3d</command>
+	    </menuitem>
+	    <menuitem>
 	      <label>Sites to vector</label>
 	      <help>Converts a GRASS site_lists file into a vector map.</help>
 	      <handler>self.OnMenuCmd</handler>
