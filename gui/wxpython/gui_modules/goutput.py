@@ -110,7 +110,8 @@ class GMConsole(wx.Panel):
                  pos=wx.DefaultPosition, size=wx.DefaultSize,
                  style=wx.TAB_TRAVERSAL | wx.FULL_REPAINT_ON_RESIZE):
         wx.Panel.__init__(self, parent, id, pos, size, style)
-
+        self.SetName("GMConsole")
+        
         # initialize variables
         self.Map             = None
         self.parent          = parent # GMFrame | CmdPanel
@@ -522,7 +523,12 @@ class GMConsole(wx.Panel):
                     # add layer into layer tree
                     cmd = dialog.notebookpanel.createCmd(ignoreErrors = True)
                     name = utils.GetLayerNameFromCmd(cmd, fullyQualified=True, param='output')
-                    mapTree = self.parent.parent.parent.curr_page.maptree
+                    winName = self.parent.parent.parent.GetName()
+                    if winName == 'LayerManager':
+                        mapTree = self.parent.parent.parent.curr_page.maptree
+                    else: # GMConsole
+                        mapTree = self.parent.parent.parent.parent.curr_page.maptree
+                    
                     if dialog.outputType == 'raster':
                         lcmd = ['d.rast',
                                 'map=%s' % name]
