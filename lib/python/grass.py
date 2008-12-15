@@ -304,7 +304,11 @@ def list_grouped2(type, pattern=None):
     mapset = None
     for line in read_command("g.mlist", flags="m",
                              type = type, pattern = pattern).splitlines():
-        map, mapset = line.split('@')
+        try:
+            map, mapset = line.split('@')
+        except ValueError:
+            print >> sys.stderr, "Invalid element '%s'" % line
+            continue
         
         if result.has_key(mapset):
             result[mapset].append(map)
