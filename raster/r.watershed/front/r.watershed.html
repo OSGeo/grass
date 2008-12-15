@@ -40,7 +40,7 @@ For example, the two expressions below are equivalent inputs to <em>r.watershed<
 <dd>Without this flag set, the entire analysis is run in memory
 maintained by the operating system.  This can be limiting, but is
 relatively fast.  Setting the flag causes the program to manage memory
-on disk which allows larger maps to be processes but is considerably
+on disk which allows larger maps to be processed but is considerably
 slower.
 
 <dt><em>memory</em> 
@@ -51,6 +51,7 @@ speeds up the processes.
 <dt><em>-s</em> 
 
 <dd>Use single flow direction (SFD) instead of multiple flow direction (MFD).
+MFD is enabled by default.
 
 <dt><em>convergence</em> 
 
@@ -192,19 +193,19 @@ by 100 for the GRASS output map layer.
 
 <h4>A<sup>T</sup> least-cost search algorithm</h4>
 <em>r.watershed</em> uses an A<sup>T</sup> least-cost search algorithm 
-(see <a href="#references">REFERENCES</a> section) designed to minimize the 
-impact of DEM data errors. This algorithm works slower than 
-<em>r.terraflow</em> but provides more accurate results in 
-areas of low slope as well as DEMs constructed with techniques that 
-mistake canopy tops as the ground elevation. Kinner et al. (2005), for 
-example, used SRTM and IFSAR DEMs to compare <em>r.watershed</em> 
-against <em>r.terraflow</em> results in Panama. <em>r.terraflow</em> was 
-unable to replicate stream locations in the larger valleys while 
-<em>r.watershed</em> performed much better. Thus, if forest canopy exists 
-in valleys, SRTM, IFSAR, and similar data products will cause major 
-errors in <em>r.terraflow</em> stream output. Under similar conditions,
-<em>r.watershed</em> will generate better <b>stream</b> and <b>half_basin</b>
-results. If watershed divides contain flat to low slope, <em>r.watershed</em>
+(see <a href="#references">REFERENCES</a> section) designed to minimize 
+the impact of DEM data errors. Compared to <em>r.terraflow</em>, this 
+algorithm provides more accurate results in areas of low slope as well 
+as DEMs constructed with techniques that mistake canopy tops as the 
+ground elevation. Kinner et al. (2005), for example, used SRTM and IFSAR 
+DEMs to compare <em>r.watershed</em> against <em>r.terraflow</em> 
+results in Panama. <em>r.terraflow</em> was unable to replicate stream 
+locations in the larger valleys while <em>r.watershed</em> performed 
+much better. Thus, if forest canopy exists in valleys, SRTM, IFSAR, and 
+similar data products will cause major errors in <em>r.terraflow</em> 
+stream output. Under similar conditions, <em>r.watershed</em> will 
+generate better <b>stream</b> and <b>half_basin</b> results. If 
+watershed divides contain flat to low slope, <em>r.watershed</em>
 will generate better basin results than <em>r.terraflow</em>.
 (<em>r.terraflow</em> uses the same type of algorithm as ESRI's ArcGIS
 watershed software which fails under these conditions.) Also, if watershed
@@ -216,11 +217,13 @@ The algorithm produces results similar to those obtained when running
 <em><a href="r.drain.html">r.drain</a></em> on every cell on the map.
 
 <h4>Multiple flow direction (MFD)</h4>
-<p><em>r.watershed</em> has experimental support for multiple flow 
-direction (MFD). Water flow is distributed to all neighbouring cells with 
-lower elevation, using slope towards neighbouring cells as a weighing 
-factor for proportional distribution. The A<sup>T</sup> least-cost path 
-is always included and assigned the maxmimum observed weighing factor. 
+
+<em>r.watershed</em> offers two methods to calculate surface flow: 
+single flow direction (SFD, D8) and multiple flow direction (MFD). With 
+MFD, water flow is distributed to all neighbouring cells with lower 
+elevation, using slope towards neighbouring cells as a weighing factor 
+for proportional distribution. The A<sup>T</sup> least-cost path is 
+always included and assigned the maxmimum observed weighing factor. 
 As a result, depressions and obstacles are overflown with a gracefull 
 flow convergence before the overflow. The convergence factor causes flow 
 accumulation to converge more strongly with higher values. The supported 
@@ -230,7 +233,7 @@ to a higher value can reduce the amount of small sliver basins.
 <br>See example below with the North Carolina dataset for using MFD mode.
 
 <h4>In-memory mode and disk swap mode</h4>
-<p>There are two versions of this program: <em>ram</em> and <em>seg</em>.
+There are two versions of this program: <em>ram</em> and <em>seg</em>.
 <em>ram</em> is used by default, <em>seg</em> can be used by setting 
 the <em>-m</em> flag.
 <br>
@@ -244,12 +247,14 @@ current geographic region is huge.
 Due to memory requirements of both programs, it is quite easy to run out of
 memory when working with huge map regions. If the <em>ram</em> version runs
 out of memory and the resolution size of the current geographic region
-cannot be increased, either more memory  needs to be added to the computer,
+cannot be increased, either more memory needs to be added to the computer,
 or the swap space size needs to be increased. If <em>seg</em> runs out of
 memory, additional disk space needs to be freed up for the program to run.
+The <em>r.terraflow</em> module was specifically designed with huge
+regions in mind and may be useful here as an alternative.
 
 <h4>Large regions with many cells</h4>
-<p>In some situations, the region size (number of cells) may be too large for
+In some situations, the region size (number of cells) may be too large for
 the amount of time or memory available. Running <em>r.watershed</em> may
 then require use of a coarser resolution. To make the results more closely
 resemble the finer terrain data, create a map layer containing the
@@ -266,7 +271,7 @@ using the values from the <em>neighborhood</em> output map layer that
 represents the minimum elevation within the region of the coarser cell.
 
 <h4>High-resolution elevation maps with floating point values</h4>
-<p>To get better results with high resolution elevation maps with 
+To get better results with high resolution elevation maps with 
 floating point values, it may be necessary to multiply the original map 
 with e.g. 100 to change elevation units from meters to cm, because 
 <em>r.watershed</em> reads input elevation maps as integer. This allows 
@@ -277,7 +282,7 @@ output accordingly. See example below for using <em>r.mapcalc</em> to
 convert elevation from meter to millimeter.
 
 <h4>Basin threshold</h4>
-<p>The minimum size of drainage basins, defined by the <em>threshold</em>
+The minimum size of drainage basins, defined by the <em>threshold</em>
 parameter, is only relevant for those watersheds with a single stream
 having at least the <em>threshold</em> of cells flowing into it.
 (These watersheds are called exterior basins.)
@@ -413,7 +418,8 @@ Display output in a nice way
 <br>
 
 <i>This example uses the North Carolina sample dataset.</i>
-<p>Using MFD mode on a LIDAR elevation dataset:
+<p>
+Using MFD mode on a LIDAR elevation dataset:
 <br>Convert elevation values of elev_lid972_1m from meter to millimeter 
 then compare MFD mode with default medium flow convergence to SFD mode.
 <div class="code"><pre>
