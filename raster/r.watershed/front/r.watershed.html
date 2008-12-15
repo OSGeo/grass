@@ -7,9 +7,7 @@
 <p>
 <!-- Interactive mode not activated in GRASS 6.
 <em>r.watershed</em> can be run either interactively or non-interactively.
-If the user types <tt>r.watershed</tt>
-on the command line without program arguments, the program will prompt the user
-with a verbose description of the input maps.  The interactive version of
+The interactive version of
 <em>r.watershed</em> can prepare inputs to lumped-parameter hydrologic models.
 After a verbose interactive session, <em>r.watershed</em> will query the user
 for a number of
@@ -17,21 +15,8 @@ map layers.  Each map layer's values will be tabulated by watershed basin and se
 to an output file.  This output file is organized to ease data entry into a
 lumped-parameter hydrologic model program.  The non-interactive version of
 <em>r.watershed</em> cannot create this file.
-
-<p>
-The user can run the program non-interactively, by specifying input map names
-on the command line. Parameter names may be specified by their
-full names, or by any initial string that distinguish them from other parameter names.
-In <em>r.watershed</em>'s case, the first two letters of each name sufficiently
-distinguishes parameter names.
-For example, the two expressions below are equivalent inputs to <em>r.watershed</em>:
-<p>
-<pre>
- el=elev.map th=100 st=stream.map ba=basin.map
-
- elevation=elev.map threshold=100 stream=stream.map basin=basin.map
-</pre>
 -->
+
 <h2>OPTIONS</h2>
 
 <dl>
@@ -43,28 +28,28 @@ relatively fast.  Setting the flag causes the program to manage memory
 on disk which allows larger maps to be processed but is considerably
 slower.
 
-<dt><em>memory</em> 
-
-<dd>Maximum amount of memory in MB to be used with -m set. More memory 
-speeds up the processes.
-
 <dt><em>-s</em> 
 
 <dd>Use single flow direction (SFD) instead of multiple flow direction (MFD).
 MFD is enabled by default.
+
+<dt><em>-4</em> 
+
+<dd>Allow only horizontal and vertical flow of water.
+Stream and slope lengths are approximately the same as outputs from default
+surface flow (allows horizontal, vertical, and diagonal flow of water).
+This flag will also make the drainage basins look more homogeneous.
+
+<dt><em>memory</em> 
+
+<dd>Maximum amount of memory in MB to be used with -m set. More memory 
+speeds up the processes.
 
 <dt><em>convergence</em> 
 
 <dd>Convergence factor for MFD. Lower values result in higher divergence,
 flow is more widely distributed. Higher values result in higher convergence, 
 flow is less widely distributed, becoming more similar to SFD. 
-
-<dt><em>-4</em> 
-
-<dd>Allow only horizontal and vertical flow of water.
-Stream and slope lengths are approximately the same as outputs from default surface
-flow (allows horizontal, vertical, and diagonal flow of water).
-This flag will also make the drainage basins look more homogeneous.
 
 <dt><em>elevation</em> 
 
