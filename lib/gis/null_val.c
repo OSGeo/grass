@@ -189,12 +189,9 @@ void G_set_d_null_value(DCELL *dcellVals, int numVals)
 /*!
  * \brief 
  *
- * If the <em>data_type</em> is CELL_TYPE, calls G_is_c_null_value ((CELL *)
- * rast);
- * If the <em>data_type</em> is FCELL_TYPE, calls G_is_f_null_value ((FCELL
- * *) rast);
- * If the <em>data_type</em> is DCELL_TYPE, calls G_is_d_null_value ((DCELL
- * *) rast);
+ * If the <em>data_type</em> is CELL_TYPE, calls G_is_c_null_value ((CELL *) rast);
+ * If the <em>data_type</em> is FCELL_TYPE, calls G_is_f_null_value ((FCELL *) rast);
+ * If the <em>data_type</em> is DCELL_TYPE, calls G_is_d_null_value ((DCELL *) rast);
  *
  *  \param rast
  *  \param data_type
@@ -231,8 +228,8 @@ int G_is_null_value(const void *rast, RASTER_MAP_TYPE data_type)
 /*!
  * \brief 
  *
- * Returns 1 if <em>cell</em> is
- * NULL, 0 otherwise. This will test if the value <em>cell</em> is the largest <tt>int</tt>.
+ * Returns 1 if <em>cell</em> is NULL, 0 otherwise. This will test if the
+ * value <em>cell</em> is the largest <tt>int</tt>.
  *
  *  \param cell
  *  \return int
@@ -445,8 +442,8 @@ int G__check_null_bit(const unsigned char *flags, int bit_num, int n)
     /* find how many unsigned chars the buffer with bit_num+1 (counting from 0
        has and subtract 1 to get unsigned char index */
     if (ind > G__null_bitstream_size(n) - 1) {
-	G_warning
-	    ("G__check_null_bit: can't access index %d. Size of flags is %d (bit # is %d",
+	G_warning("G__check_null_bit: can't access index %d. "
+		  "Size of flags is %d (bit # is %d)",
 	     ind, G__null_bitstream_size(n) - 1, bit_num);
 	return -1;
     }
@@ -496,8 +493,7 @@ int G__set_flags_from_01_random(const char *zero_ones, unsigned char *flags,
 	    }
 	    else if (count < ncols) {
 		v = v |
-		    ((unsigned char)G__check_null_bit(flags, count, ncols) <<
-		     k);
+		    ((unsigned char)G__check_null_bit(flags, count, ncols) << k);
 	    }
 
 	    /* otherwise  keep this bit the same as it was */
