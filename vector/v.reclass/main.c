@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("vector, attribute table");
+    module->keywords = _("vector, reclass, attributes");
     module->description =
 	_("Changes vector category values for an existing vector map "
 	  "according to results of SQL queries or a value in attribute table column.");
@@ -70,22 +70,23 @@ int main(int argc, char *argv[])
 
     out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
 
-    rules_opt = G_define_standard_option(G_OPT_F_INPUT);
-    rules_opt->key = "rules";
-    rules_opt->required = NO;
-    rules_opt->description = _("Full path to the reclass rule file");
+    type_opt = G_define_standard_option(G_OPT_V_TYPE);
+    type_opt->options = "point,line,boundary,centroid";
+    type_opt->answer = "point,line,boundary,centroid";
+    type_opt->guisection = _("Selection");
+
+    field_opt = G_define_standard_option(G_OPT_V_FIELD);
+    field_opt->guisection = _("Selection");
 
     col_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     col_opt->label =
 	_("The name of the column whose values are to be used as new categories");
     col_opt->description = _("The source for the new key column must be type integer or string");
 
-    type_opt = G_define_standard_option(G_OPT_V_TYPE);
-    type_opt->description = _("Select type");
-    type_opt->options = "point,line,boundary,centroid";
-    type_opt->answer = "point,line,boundary,centroid";
-
-    field_opt = G_define_standard_option(G_OPT_V_FIELD);
+    rules_opt = G_define_standard_option(G_OPT_F_INPUT);
+    rules_opt->key = "rules";
+    rules_opt->required = NO;
+    rules_opt->description = _("Full path to the reclass rule file");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -115,7 +116,8 @@ int main(int argc, char *argv[])
 
     Fi = Vect_get_field(&In, field);
     if (Fi == NULL)
-	G_fatal_error(_("Unable to get layer info for vector map"));
+      G_fatal_error(_("Database connection not defined for layer %d"),
+		    field);
 
     Driver = db_start_driver_open_database(Fi->driver, Fi->database);
     if (Driver == NULL)
@@ -130,7 +132,8 @@ int main(int argc, char *argv[])
 	ctype = db_column_Ctype(Driver, Fi->table, col_opt->answer);
 
 	if (ctype == -1) {
-	    G_fatal_error(_("Column <%s> not found"), col_opt->answer);
+	    G_fatal_error(_("Column <%s> not found in table <%s>"),
+			  col_opt->answer, Fi->table);
 	}
 	else if (ctype == DB_C_TYPE_INT) {
 	    nrec =
@@ -171,13 +174,15 @@ int main(int argc, char *argv[])
 
 	    if (db_open_select_cursor(Driver, &stmt, &cursor, DB_SEQUENTIAL)
 		!= DB_OK)
-		G_fatal_error("Cannot open select cursor: %s",
+		G_fatal_error("Unable to open select cursor: '%s'",
 			      db_get_string(&stmt));
 
 	    nrows = db_get_num_rows(&cursor);
+
 	    G_debug(3, "  %d rows selected", nrows);
 	    if (nrows < 0)
-		G_fatal_error(_("Cannot select records from database"));
+		G_fatal_error(_("No records selected from table <%s>"),
+			      Fi->table);
 
 	    db_CatValArray_alloc(&cvarr, nrows);
 
@@ -208,17 +213,17 @@ int main(int argc, char *argv[])
 		Vect_close(&Out);
 		db_close_database_shutdown_driver(Driver);
 		db_close_database_shutdown_driver(Driver2);
-		G_fatal_error("Cannot create table: %s",
+		G_fatal_error("Unable to create table: '%s'",
 			      db_get_string(&stmt2));
 	    }
 
-	    if (db_create_index2(Driver2, NewFi->table, "cat") != DB_OK)
-		G_warning(_("Cannot create index"));
+	    if (db_create_index2(Driver2, NewFi->table, NewFi->key) != DB_OK)
+		G_warning(_("Unable to create index for table <%s>, key <%s>"),
+			  NewFi->table, NewFi->key);
 
-	    if (db_grant_on_table
-		(Driver2, NewFi->table, DB_PRIV_SELECT,
-		 DB_GROUP | DB_PUBLIC) != DB_OK) {
-		G_fatal_error(_("Cannot grant privileges on table <%s>"),
+	    if (db_grant_on_table(Driver2, NewFi->table, DB_PRIV_SELECT,
+				  DB_GROUP | DB_PUBLIC) != DB_OK) {
+		G_fatal_error(_("Unable to grant privileges on table <%s>"),
 			      NewFi->table);
 	    }
 
@@ -227,7 +232,8 @@ int main(int argc, char *argv[])
 	    /* fetch the data */
 	    for (i = 0; i < nrows; i++) {
 		if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK) {
-		    G_fatal_error(_("Cannot fetch data"));
+		    G_fatal_error(_("Unable to fetch data from table <%s>"),
+				  Fi->table);
 		}
 
 		column = db_get_table_column(table, 1);
@@ -417,7 +423,7 @@ int main(int argc, char *argv[])
     Vect_build(&Out);
     Vect_close(&Out);
 
-    G_message(_("%d features reclassed"), rclelem);
+    G_done_msg(_("%d features reclassed."), rclelem);
 
     exit(EXIT_SUCCESS);
 }

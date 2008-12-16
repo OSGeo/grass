@@ -421,7 +421,7 @@ class LayerSelect(wx.Choice):
     def __init__(self, parent,
                  id=wx.ID_ANY, pos=wx.DefaultPosition,
                  size=globalvar.DIALOG_LAYER_SIZE,
-                 vector=None, choices=[], all=False):
+                 vector=None, choices=[], all=False, default=None):
 
         super(LayerSelect, self).__init__(parent, id, pos=pos, size=size,
                                           choices=choices)
@@ -430,6 +430,9 @@ class LayerSelect(wx.Choice):
         
         self.SetName("LayerSelect")
 
+        # default value
+        self.default = default
+            
         if len(choices) > 1:
             return
 
@@ -454,7 +457,10 @@ class LayerSelect(wx.Choice):
         else:
             self.SetItems(['1'])
             self.SetStringSelection('1')
-
+        
+        if self.default:
+            self.SetStringSelection(str(self.default))
+        
 class DriverSelect(wx.ComboBox):
     """
     Creates combo box for selecting database driver.
