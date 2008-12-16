@@ -494,7 +494,7 @@ def db_connection():
 # run "v.info -c ..." and parse output
 
 def vector_columns(map, layer = None, **args):
-    """Return the directory of columns for the database table connected to
+    """Return a dictionary of the columns for the database table connected to
     a vector map (interface to `v.info -c').
     """
     s = read_command('v.info', flags = 'c', map = map, layer = layer, quiet = True, **args)
