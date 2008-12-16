@@ -42,10 +42,10 @@ int update(struct Map_info *Map)
 
     db_begin_transaction(driver);
 
-    /* select existing categories to array (array is sorted) */
-    vstat.select = db_select_int(driver, qFi->table, qFi->key, NULL, &catexst);
+    /* select existing categories (layer) to array (array is sorted) */
+    vstat.select = db_select_int(driver, Fi->table, Fi->key, NULL, &catexst);
     G_debug(3, "Existing categories: %d", vstat.select);
-
+    
     /* create beginning of stmt */
     switch (options.option) {
     case O_CAT:
@@ -73,7 +73,9 @@ int update(struct Map_info *Map)
     /* update */
     G_message(_("Updating database..."));
     for (i = 0; i < vstat.rcat; i++) {
-	fcat = Values[i].cat;
+	G_percent(i, vstat.rcat, 2);
+
+	fcat = Values[i].cat;	
 	if (fcat < 0)
 	    continue;
 	switch (options.option) {
@@ -184,8 +186,8 @@ int update(struct Map_info *Map)
 		    break;
 		}
 	    }
-	    G_percent(i + 1, vstat.rcat, 2);
 	}
+	G_percent(1, 1, 1);
 
 	G_debug(3, "SQL: %s", buf2);
 	db_set_string(&stmt, buf2);
