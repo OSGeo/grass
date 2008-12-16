@@ -41,13 +41,14 @@ static struct state *st = &state;
   G_message(_("Percent complete..."));
   for (row = 0; row < nrows; row++)
   {
-      G_percent (row+1, nrows, 10);
+      G_percent(row, nrows, 10);
       do_calculation(row);
   }
+  G_percent(1, 1, 1);
 \endcode
  *
  * This example code will print completion messages at 10% increments;
- * i.e., 10%, 20%, 30%, etc., up to 100%. Each message does not appear
+ * i.e., 0%, 10%, 20%, 30%, etc., up to 100%. Each message does not appear
  * on a new line, but rather erases the previous message.
  * 
  * Note that to prevent the illusion of the module stalling, the G_percent()
