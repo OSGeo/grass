@@ -189,8 +189,7 @@ int main(int argc, char *argv[])
     metaopt = G_define_option();
     metaopt->key = "metaopt";
     metaopt->type = TYPE_STRING;
-    metaopt->label =
-	_("Metadata key(s) and value(s) to include");
+    metaopt->label = _("Metadata key(s) and value(s) to include");
     metaopt->description =
 	_("In the form of \"META-TAG=VALUE\", separate multiple entries "
 	  "with a comma. Not supported by all output format drivers.");
@@ -376,7 +375,7 @@ int main(int argc, char *argv[])
 		    nodataval = (double)(short)0x8000;
 		}
 		else {
-		    datatype = GDT_Int32;  /* need to fine tune this more? */
+		    datatype = GDT_Int32;	/* need to fine tune this more? */
 		    nodataval = (double)(int)0x80000000;
 		}
 	    }
@@ -388,10 +387,10 @@ int main(int argc, char *argv[])
 	nodataval = atof(nodataopt->answer);
     }
 
-/* TODO:
-    if( nodata_used && nodataval is out_of_type_range )
-	G_fatal_error(_("No-data value out of range for type %s"), type->answer);
-*/
+    /* TODO:
+       if( nodata_used && nodataval is out_of_type_range )
+       G_fatal_error(_("No-data value out of range for type %s"), type->answer);
+     */
 
     G_debug(3, "Input map datatype=%s\n",
 	    (maptype == CELL_TYPE ? "CELL" :
@@ -472,7 +471,8 @@ int main(int argc, char *argv[])
 	}
 	if (export_band
 	    (hCurrDS, band + 1, ref.file[band].name, ref.file[band].mapset,
-	     &cellhead, maptype, nodataval, nodataopt->key, flag_c->answer) < 0)
+	     &cellhead, maptype, nodataval, nodataopt->key,
+	     flag_c->answer) < 0)
 	    G_warning(_("Unable to export raster map <%s>"),
 		      ref.file[band].name);
     }
