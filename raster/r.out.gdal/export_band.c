@@ -1,3 +1,4 @@
+
 /****************************************************************************
 *
 * MODULE:       r.out.gdal
@@ -62,8 +63,8 @@ int export_band(GDALDatasetH hMEMDS, int band, const char *name,
 	G_get_fp_range_min_max(&sRange, &dfCellMin, &dfCellMax);
     }
 
-/* TODO: if data range exceeds export TYPE range exit with an error.
-   Otherwise the module doesn't know what to write for those values */
+    /* TODO: if data range exceeds export TYPE range exit with an error.
+       Otherwise the module doesn't know what to write for those values */
 
     /* suppress useless warnings */
     CPLPushErrorHandler(CPLQuietErrorHandler);
@@ -106,22 +107,23 @@ int export_band(GDALDatasetH hMEMDS, int band, const char *name,
 	G_debug(3, "dfCellMin: %f, dfCellMax: %f, maxcolor: %d", dfCellMin,
 		dfCellMax, maxcolor);
 
-	if(!suppress_main_colortable) {
+	if (!suppress_main_colortable) {
 	    hCT = GDALCreateColorTable(GPI_RGB);
 
 	    for (iColor = 0; iColor <= maxcolor; iColor++) {
 		int nRed, nGreen, nBlue;
 		GDALColorEntry sColor;
 
-		if (G_get_color(iColor, &nRed, &nGreen, &nBlue, &sGrassColors)) {
+		if (G_get_color
+		    (iColor, &nRed, &nGreen, &nBlue, &sGrassColors)) {
 		    sColor.c1 = nRed;
 		    sColor.c2 = nGreen;
 		    sColor.c3 = nBlue;
 		    sColor.c4 = 255;
 
 		    G_debug(3,
-			"G_get_color: Y, rcount %d, nRed %d, nGreen %d, nBlue %d",
-			rcount, nRed, nGreen, nBlue);
+			    "G_get_color: Y, rcount %d, nRed %d, nGreen %d, nBlue %d",
+			    rcount, nRed, nGreen, nBlue);
 		    GDALSetColorEntry(hCT, iColor, &sColor);
 		}
 		else {
@@ -131,8 +133,8 @@ int export_band(GDALDatasetH hMEMDS, int band, const char *name,
 		    sColor.c4 = 0;
 
 		    G_debug(3,
-			"G_get_color: N, rcount %d, nRed %d, nGreen %d, nBlue %d",
-			rcount, nRed, nGreen, nBlue);
+			    "G_get_color: N, rcount %d, nRed %d, nGreen %d, nBlue %d",
+			    rcount, nRed, nGreen, nBlue);
 		    GDALSetColorEntry(hCT, iColor, &sColor);
 		}
 	    }
@@ -160,11 +162,11 @@ int export_band(GDALDatasetH hMEMDS, int band, const char *name,
 	    GDALSetMetadataItem(hBand, key, value, NULL);
 	}
 
-	if(!suppress_main_colortable)
+	if (!suppress_main_colortable)
 	    GDALSetRasterColorTable(hBand, hCT);
     }
     else {
-	if(!suppress_main_colortable) {
+	if (!suppress_main_colortable) {
 	    hCT = GDALCreateColorTable(GPI_RGB);
 	    GDALSetMetadataItem(hBand, "COLOR_TABLE_RULES_COUNT", "0", NULL);
 	    GDALSetRasterColorTable(hBand, hCT);
@@ -284,7 +286,7 @@ int export_band(GDALDatasetH hMEMDS, int band, const char *name,
 	}
     }
 
-    if (n_nulls > 0) {  /* TODO: && nodata_param NOT specified */
+    if (n_nulls > 0) {		/* TODO: && nodata_param NOT specified */
 	if (maptype == CELL_TYPE)
 	    G_warning(_("Input raster map contains cells with NULL-value (no-data). "
 		       "The value %d was used to represent no-data values in the input map. "
