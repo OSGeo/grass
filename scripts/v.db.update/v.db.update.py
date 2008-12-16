@@ -29,13 +29,15 @@
 #%option
 #% key: layer
 #% type: integer
+#% gisprompt: old_layer,layer,layer
 #% description: Layer to which the table to be changed is connected
 #% answer: 1
 #% required : no
 #%end
 #%option
 #% key: column
-#% type: string
+#% type: strin
+#% gisprompt: old_dbcolumn,dbcolumn,dbcolumng
 #% description: Column to update
 #% required : yes
 #%end
@@ -48,6 +50,7 @@
 #%option
 #% key: qcolumn
 #% type: string
+#% gisprompt: old_dbcolumn,dbcolumn,dbcolumn
 #% description: Column to query
 #% required : no
 #%end

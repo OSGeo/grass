@@ -1201,13 +1201,14 @@ class cmdPanel(wx.Panel):
                                 all = False
                             if p.get('age', 'old_layer') == 'old_layer':
                                 win = gselect.LayerSelect(parent=which_panel,
-                                                          all=all)
+                                                          all=all,
+                                                          default=p['default'])
                                 p['wxGetValue'] = win.GetStringSelection
                                 win.Bind(wx.EVT_CHOICE, self.OnUpdateSelection)
                                 win.Bind(wx.EVT_CHOICE, self.OnSetValue)
                             else:
                                 win = wx.SpinCtrl(parent=which_panel, id=wx.ID_ANY,
-                                                  min=1, max=100, initial=1)
+                                                  min=1, max=100, initial=int(p['default']))
                                 win.Bind(wx.EVT_SPINCTRL, self.OnSetValue)
                                 
                         elif p.get('prompt', '') == 'dbdriver':

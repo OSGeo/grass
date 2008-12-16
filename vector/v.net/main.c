@@ -9,7 +9,7 @@
  *               
  * PURPOSE:      Network maintenance
  *               
- * COPYRIGHT:    (C) 2001 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2001-2008 by the GRASS Development Team
  *
  *               This program is free software under the 
  *               GNU General Public License (>=v2). 
@@ -44,7 +44,7 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     module->keywords = _("vector, networking");
-    module->description = _("Network maintenance.");
+    module->description = _("Performs network maintenance.");
 
     /* Define the options */
     input = G_define_standard_option(G_OPT_V_INPUT);
@@ -77,12 +77,14 @@ int main(int argc, char **argv)
 
     afield_opt = G_define_standard_option(G_OPT_V_FIELD);
     afield_opt->key = "alayer";
-    afield_opt->label = _("Arc layer (network)");
+    afield_opt->gisprompt = "new_layer,layer,layer";
+    afield_opt->label = _("Arc layer");
 
     nfield_opt = G_define_standard_option(G_OPT_V_FIELD);
     nfield_opt->key = "nlayer";
     nfield_opt->answer = "2";
-    nfield_opt->label = _("Node layer (points)");
+    nfield_opt->gisprompt = "new_layer,layer,layer";
+    nfield_opt->label = _("Node layer");
 
     thresh_opt = G_define_option();
     thresh_opt->key = "thresh";
@@ -176,7 +178,7 @@ int main(int argc, char **argv)
 
 	    narcs = connect_arcs(&In, &Points, &Out, nfield, thresh);
 
-	    G_message(_("%d arcs added to network (nlayer: [%d])"), narcs,
+	    G_message(_("%d arcs added to network (nlayer %d)"), narcs,
 		      nfield);
 
 	    Vect_close(&Points);

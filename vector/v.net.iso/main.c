@@ -7,7 +7,7 @@
  *                
  *  PURPOSE:      Split net to bands between isolines.
  *                
- *  COPYRIGHT:    (C) 2001 by the GRASS Development Team
+ *  COPYRIGHT:    (C) 2001-2008 by the GRASS Development Team
  * 
  *                This program is free software under the 
  *                GNU General Public License (>=v2). 
@@ -68,7 +68,7 @@ int main(int argc, char **argv)
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->label = _("Split net by cost isolines");
+    module->label = _("Splits net by cost isolines.");
     module->keywords = _("vector, networking");
     module->description =
 	_("Splits net to bands between cost isolines (direction from centre). "
@@ -85,30 +85,24 @@ int main(int argc, char **argv)
 
     afield_opt = G_define_standard_option(G_OPT_V_FIELD);
     afield_opt->key = "alayer";
-    afield_opt->description = _("Arc layer");
+    afield_opt->label = _("Arc layer");
 
     nfield_opt = G_define_standard_option(G_OPT_V_FIELD);
     nfield_opt->key = "nlayer";
     nfield_opt->answer = "2";
-    nfield_opt->description = _("Node layer");
+    nfield_opt->label = _("Node layer");
 
-    afcol = G_define_option();
+    afcol = G_define_standard_option(G_OPT_DB_COLUMN);
     afcol->key = "afcolumn";
-    afcol->type = TYPE_STRING;
-    afcol->required = NO;
     afcol->description =
 	_("Arc forward/both direction(s) cost column (number)");
 
-    abcol = G_define_option();
+    abcol = G_define_standard_option(G_OPT_DB_COLUMN);
     abcol->key = "abcolumn";
-    abcol->type = TYPE_STRING;
-    abcol->required = NO;
     abcol->description = _("Arc backward direction cost column (number)");
 
-    ncol = G_define_option();
+    ncol = G_define_standard_option(G_OPT_DB_COLUMN);
     ncol->key = "ncolumn";
-    ncol->type = TYPE_STRING;
-    ncol->required = NO;
     ncol->description = _("Node cost column (number)");
 
     term_opt = G_define_standard_option(G_OPT_V_CATS);
@@ -166,7 +160,7 @@ int main(int argc, char **argv)
 	if (iso[niso] <= iso[niso - 1])
 	    G_fatal_error(_("Iso cost: %f less than previous"), iso[niso]);
 
-	G_message(_("Iso cost [%d] : [%f]"), niso, iso[niso]);
+	G_verbose_message(_("Iso cost %d: %f"), niso, iso[niso]);
 	niso++;
 	i++;
     }
@@ -221,7 +215,7 @@ int main(int argc, char **argv)
 	}
     }
 
-    G_message(_("Number of centres: [%d] (nlayer: [%d])"), ncentres, nfield);
+    G_message(_("Number of centres: %d (nlayer %d)"), ncentres, nfield);
 
     if (ncentres == 0)
 	G_warning(_("Not enough centres for selected nlayer. Nothing will be allocated."));
@@ -239,14 +233,14 @@ int main(int argc, char **argv)
     pnts2 = (ISOPOINT *) G_malloc(apnts2 * sizeof(ISOPOINT));
 
     /* Fill Nodes by neares centre and costs from that centre */
-    G_message(_("Calculating costs from centres..."));
     for (centre = 0; centre < ncentres; centre++) {
-	G_percent(centre, ncentres, 1);
 	node1 = Centers[centre].node;
 	Vect_net_get_node_cost(&Map, node1, &n1cost);
 	G_debug(2, "centre = %d node = %d cat = %d", centre, node1,
 		Centers[centre].cat);
+	G_message(_("Calculating costs from centre %d..."), centre + 1);
 	for (node2 = 1; node2 <= nnodes; node2++) {
+	    G_percent(node2, nnodes, 1);
 	    G_debug(5, "  node1 = %d node2 = %d", node1, node2);
 	    Vect_net_get_node_cost(&Map, node2, &n2cost);
 	    if (n2cost == -1) {
@@ -272,14 +266,16 @@ int main(int argc, char **argv)
 	    }
 	}
     }
-    G_percent(1, 1, 1);
 
     /* Write arcs to new map */
     Vect_open_new(&Out, output->answer, Vect_is_3d(&Map));
     Vect_hist_command(&Out);
 
+    G_message("Generating isolines...");
     nlines = Vect_get_num_lines(&Map);
     for (line = 1; line <= nlines; line++) {
+	G_percent(line, nlines, 2);
+	
 	ltype = Vect_read_line(&Map, Points, NULL, line);
 	if (!(ltype & type)) {
 	    continue;
