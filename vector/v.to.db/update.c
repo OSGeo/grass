@@ -187,7 +187,6 @@ int update(struct Map_info *Map)
 		}
 	    }
 	}
-	G_percent(1, 1, 1);
 
 	G_debug(3, "SQL: %s", buf2);
 	db_set_string(&stmt, buf2);
@@ -235,6 +234,7 @@ int update(struct Map_info *Map)
 	    }
 	}
     }
+    G_percent(1, 1, 1);
 
     db_commit_transaction(driver);
 
