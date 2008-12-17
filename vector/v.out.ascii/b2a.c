@@ -194,7 +194,7 @@ int bin_to_asc(FILE *ascii,
 		    for(i = 0; columns[i]; i++) {
 			if (db_select_value(driver, Fi->table, Fi->key, Cats->cat[0],
 					    columns[i], &value) < 0)
-			    G_fatal_error(_("bUnable to select record from table <%s> (key %s, column %s)"),
+			    G_fatal_error(_("Unable to select record from table <%s> (key %s, column %s)"),
 					  Fi->table, Fi->key, columns[i]);
 			
 			if (db_test_value_isnull(&value)) {
