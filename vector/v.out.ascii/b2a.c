@@ -1,11 +1,15 @@
 #include <grass/Vect.h>
 #include <grass/gis.h>
+#include <grass/dbmi.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-int bin_to_asc(FILE * ascii,
-	       FILE * att, struct Map_info *Map, int ver,
-	       int format, int dp, char *fs, int region_flag)
+static int srch(const void *pa, const void *pb);
+
+int bin_to_asc(FILE *ascii,
+	       FILE *att, struct Map_info *Map, int ver,
+	       int format, int dp, char *fs, int region_flag,
+	       int field, char* where, char **columns)
 {
     int type, ctype, i, cat, proj;
     double *xptr, *yptr, *zptr, x, y;
@@ -14,9 +18,47 @@ int bin_to_asc(FILE * ascii,
     char *xstring = NULL, *ystring = NULL, *zstring = NULL;
     struct Cell_head window;
 
+    /* where */
+    struct field_info *Fi;
+    dbDriver *driver;
+    dbValue value;
+    dbHandle handle;
+    int *cats, ncats;
+    
     /* get the region */
     G_get_window(&window);
 
+    ncats = 0;
+    cats = NULL;
+    
+    if (where || columns) {
+	Fi = Vect_get_field(Map, field);
+	if (!Fi) {
+	    G_fatal_error(_("Database connection not defined for layer %d"),
+			  field);
+	}
+
+	driver = db_start_driver(Fi->driver);
+	if (!driver)
+	    G_fatal_error(_("Unable to start driver <%s>"), Fi->driver);
+	
+	db_init_handle(&handle);
+	db_set_handle(&handle, Fi->database, NULL);
+	
+	if (db_open_database(driver, &handle) != DB_OK)
+	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+			  Fi->database, Fi->driver);
+	
+	/* select cats (sorted array) */
+	ncats = db_select_int(driver, Fi->table, Fi->key, where, &cats);
+	G_debug(3, "%d categories selected from table <%s>", ncats, Fi->table);
+
+	if (!columns) {
+	    db_close_database(driver);
+	    db_shutdown_driver(driver);
+	}
+    }
+    
     Points = Vect_new_line_struct();	/* init line_pnts struct */
     Cats = Vect_new_cats_struct();
 
@@ -29,14 +71,39 @@ int bin_to_asc(FILE * ascii,
     Vect_rewind(Map);
 
     while (1) {
-	if (-1 == (type = Vect_read_next_line(Map, Points, Cats)))
-	    return (-1);
+	if (-1 == (type = Vect_read_next_line(Map, Points, Cats))) {
+	    if (columns) {
+		db_close_database(driver);
+		db_shutdown_driver(driver);
+	    }
+	    
+	    return -1;
+	}
 
-	if (type == -2)		/* EOF */
-	    return (0);
+	if (type == -2)	{	/* EOF */
+	    if (columns) {
+		db_close_database(driver);
+		db_shutdown_driver(driver);
+	    }
+	    return 0;
+	}
 
 	if (format == FORMAT_POINT && !(type & GV_POINTS))
 	    continue;
+
+	if (cats) {
+	    /* check category */
+	    for (i = 0; i < Cats->n_cats; i++) {
+		if ((int *)bsearch((void *) &(Cats->cat[i]), cats, ncats, sizeof(int),
+				   srch)) {
+		    /* found */
+		    break;
+		}
+	    }
+	    
+	    if (i == Cats->n_cats) 
+		continue;
+	}
 
 	if (ver < 5) {
 	    Vect_cat_get(Cats, 1, &cat);
@@ -115,8 +182,49 @@ int bin_to_asc(FILE * ascii,
 	    else {
 		fprintf(ascii, "%s%s%s", xstring, fs, ystring);
 	    }
-	    if (Cats->n_cats > 0)
+	    if (Cats->n_cats > 0) {
+		if (Cats->n_cats > 1) {
+		    G_warning(_("Feature has more categories. Only first category (%d) "
+				"is exported."), Cats->cat[0]);
+		}
 		fprintf(ascii, "%s%d", fs, Cats->cat[0]);
+		
+		/* print attributes */
+		if (columns) {
+		    for(i = 0; columns[i]; i++) {
+			if (db_select_value(driver, Fi->table, Fi->key, Cats->cat[0],
+					    columns[i], &value) < 0)
+			    G_fatal_error(_("bUnable to select record from table <%s> (key %s, column %s)"),
+					  Fi->table, Fi->key, columns[i]);
+			
+			if (db_test_value_isnull(&value)) {
+			    fprintf(ascii, "%s", fs);
+			}
+			else {
+			    switch(db_column_Ctype(driver, Fi->table, columns[i]))
+			    {
+			    case DB_C_TYPE_INT: {
+				fprintf(ascii, "%s%d", fs, db_get_value_int(&value));
+				break;
+			    }
+			    case DB_C_TYPE_DOUBLE: {
+				fprintf(ascii, "%s%.*f", fs, dp, db_get_value_double(&value));
+				break;
+			    }
+			    case DB_C_TYPE_STRING: {
+				fprintf(ascii, "%s%s", fs, db_get_value_string(&value));
+				break;
+			    }
+			    case DB_C_TYPE_DATETIME: {
+				break;
+			    }
+			    default: G_fatal_error(_("Column <%s>: unsupported data type"),
+						   columns[i]);
+			    }
+			}
+		    }
+		}
+	    }
 
 	    fprintf(ascii, "\n");
 	}
@@ -186,4 +294,16 @@ int bin_to_asc(FILE * ascii,
     }
 
     /* not reached */
+}
+
+int srch(const void *pa, const void *pb)
+{
+    int *p1 = (int *)pa;
+    int *p2 = (int *)pb;
+    
+    if (*p1 < *p2)
+	return -1;
+    if (*p1 > *p2)
+	return 1;
+    return 0;
 }
