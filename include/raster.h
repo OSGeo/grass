@@ -14,10 +14,6 @@ void R_line_width(double);
 void R_erase(void);
 
 void R_pos_abs(double, double);
-void R_line_abs(double, double, double, double);
-void R_polydots_abs(const double *, const double *, int);
-void R_polyline_abs(const double *, const double *, int);
-void R_polygon_abs(const double *, const double *, int);
 void R_box_abs(double, double, double, double);
 
 void R_begin(void);

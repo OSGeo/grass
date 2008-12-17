@@ -8,14 +8,9 @@ void COM_Get_text_box(const char *text, double *t, double *b, double *l, double 
 	return;
     }
 
-    if (!font_is_freetype()) {
-	soft_text_ext(cur_x, cur_y,
-		      text_size_x, text_size_y, text_rotation, text);
-	get_text_ext(t, b, l, r);
-    }
-    else {
-	soft_text_ext_freetype(cur_x, cur_y,
-			       text_size_x, text_size_y, text_rotation, text);
-	get_text_ext_freetype(t, b, l, r);
-    }
+    if (!font_is_freetype())
+	get_text_ext(text, t, b, l, r);
+    else
+	get_text_ext_freetype(text, t, b, l, r);
 }
+

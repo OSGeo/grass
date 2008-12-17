@@ -13,16 +13,12 @@ int font_is_freetype(void);
 void font_list(char ***, int *, int);
 
 /* Text2.c */
-void drawchar(double, double, double, double, unsigned char);
-void soft_text_ext(double, double, double, double, double, const char *);
-void get_text_ext(double *, double *, double *, double *);
-void soft_text(double, double, double, double, double, const char *);
-void onechar(double, double, double, double, double, unsigned char);
+void get_text_ext(const char *, double *, double *, double *, double *);
+void soft_text(const char *);
 
 /* Text3.c */
-void soft_text_freetype(double, double, double, double, double, const char *);
-void soft_text_ext_freetype(double, double, double, double, double, const char *);
-void get_text_ext_freetype(double *, double *, double *, double *);
+void soft_text_freetype(const char *);
+void get_text_ext_freetype(const char *, double *, double *, double *, double *);
 
 /* font2.c */
 int font_init(const char *);
@@ -39,22 +35,3 @@ extern struct GFONT_CAP *parse_freetypecap(void);
 extern void free_freetypecap(struct GFONT_CAP *);
 extern void free_font_list(char **, int);
 
-/* path.c */
-struct path {
-    double *px, *py;
-    int count;
-    int alloc;
-
-    int cur_offset;
-    int *offsets;
-    int o_count;
-    int o_alloc;
-};
-
-void path_begin(struct path *);
-void path_move(struct path *, double, double);
-void path_cont(struct path *, double, double);
-void path_close(struct path *);
-void path_fill(struct path *, void (*)(const double *, const double *, int));
-void path_stroke(struct path *, void (*)(double, double, double, double));
-void path_reset(struct path *);

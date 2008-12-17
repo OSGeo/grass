@@ -4,6 +4,13 @@
 #include <grass/gis.h>
 #include <grass/symbol.h>
 
+enum clip_mode
+{
+    M_NONE,
+    M_CULL,
+    M_CLIP,
+};
+
 /* cnversions.c */
 void D_update_conversions(void);
 void D_fit_d_to_u(void);
@@ -72,6 +79,8 @@ double D_u_to_a_col(double);
 
 void D_set_clip(double, double, double, double);
 void D_clip_to_map(void);
+void D_set_clip_mode(int);
+void D_set_reduction(double);
 
 void D_line_width(double);
 void D_get_text_box(const char *, double *, double *, double *, double *);
@@ -98,6 +107,7 @@ void D_end(void);
 void D_close(void);
 void D_stroke(void);
 void D_fill(void);
+void D_dots(void);
 
 /* icon.c */
 void D_plot_icon(double, double, int, double, double);

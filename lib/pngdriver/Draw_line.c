@@ -64,7 +64,8 @@ static void draw_line(double x1, double y1, double x2, double y2)
 
 void png_draw_line(double x1, double y1, double x2, double y2)
 {
-    double ax[4], ay[4];
+    struct path path;
+    struct vertex vertices[5];
     double k = png.linewidth / 2;
     int dx, dy;
 
@@ -74,19 +75,26 @@ void png_draw_line(double x1, double y1, double x2, double y2)
 	return;
     }
 
+    path.vertices = vertices;
+    path.count = 0;
+    path.alloc = 5;
+    path.start = -1;
+
     if (dy > dx) {
-	ax[0] = x1 - k;	ay[0] = y1;
-	ax[1] = x1 + k;	ay[1] = y1;
-	ax[2] = x2 + k;	ay[2] = y2;
-	ax[3] = x2 - k;	ay[3] = y2;
+	path_move(&path, x1 - k, y1);
+	path_cont(&path, x1 + k, y1);
+	path_cont(&path, x2 + k, y2);
+	path_cont(&path, x2 - k, y2);
+	path_close(&path);
     }
     else {
-	ax[0] = x1;	ay[0] = y1 - k;
-	ax[1] = x1;	ay[1] = y1 + k;
-	ax[2] = x2;	ay[2] = y2 + k;
-	ax[3] = x2;	ay[3] = y2 - k;
+	path_move(&path, x1, y1 - k);
+	path_cont(&path, x1, y1 + k);
+	path_cont(&path, x2, y2 + k);
+	path_cont(&path, x2, y2 - k);
+	path_close(&path);
     }
 
-    png_polygon(ax, ay, 4);
+    png_polygon(&path);
 }
 

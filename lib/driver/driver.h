@@ -13,6 +13,8 @@ extern double cur_y;
 extern double text_size_x;
 extern double text_size_y;
 extern double text_rotation;
+extern double text_sinrot;
+extern double text_cosrot;
 extern int matrix_valid;
 
 extern struct GFONT_CAP *ftcap;
@@ -86,15 +88,6 @@ extern void COM_Line_width(double);
 /* Move.c */
 extern void COM_Pos_abs(double, double);
 
-/* Polydots.c */
-extern void COM_Polydots_abs(const double *, const double *, int);
-
-/* Polygon.c */
-extern void COM_Polygon_abs(const double *, const double *, int);
-
-/* Polyline.c */
-extern void COM_Polyline_abs(const double *, const double *, int);
-
 /* Raster.c */
 extern void COM_begin_raster(int, int[2][2], double[2][2]);
 extern int COM_raster(int, int, const unsigned char *,
@@ -117,7 +110,6 @@ extern void COM_Text_rotation(double);
 
 /* Draw.c */
 extern void COM_Bitmap(int, int, int, const unsigned char *);
-extern void COM_Line_abs(double, double, double, double);
 extern void COM_Begin(void);
 extern void COM_Move(double, double);
 extern void COM_Cont(double, double);

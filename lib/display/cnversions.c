@@ -29,7 +29,7 @@ struct vector
     double x, y;
 };
 
-struct rectangle
+struct rect
 {
     double west;
     double east;
@@ -39,9 +39,9 @@ struct rectangle
 };
 
 /* Bounding rectangles */
-static struct rectangle D;	/* Display coordinates, pixels, (0,0) towards NW */
-static struct rectangle A;	/* Map array coordinates, integers, (0,0) towards NW */
-static struct rectangle U;	/* UTM coordinates, meters, (0,0) towards SW */
+static struct rect D;	/* Display coordinates, pixels, (0,0) towards NW */
+static struct rect A;	/* Map array coordinates, integers, (0,0) towards NW */
+static struct rect U;	/* UTM coordinates, meters, (0,0) towards SW */
 
 /* Conversion factors */
 static struct vector D_to_A_conv;	/* Display to Array */
@@ -68,7 +68,7 @@ static int is_lat_lon;
  *  \return int
  */
 
-static void calc_size(struct rectangle *rect)
+static void calc_size(struct rect *rect)
 {
     rect->size.x = rect->east  - rect->west;
     rect->size.y = rect->south - rect->north;
@@ -81,7 +81,7 @@ static void calc_conv(struct vector *conv,
     conv->y = dst->y / src->y;
 }
 
-static void fit_aspect(struct rectangle *rect, const struct rectangle *ref)
+static void fit_aspect(struct rect *rect, const struct rect *ref)
 {
     struct vector conv;
     double scale, size, delta;

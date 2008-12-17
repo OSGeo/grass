@@ -51,8 +51,9 @@ static double find_azimuth(double x1, double y1, double x2, double y2)
 }
 
 
-void html_polygon(const double *px, const double *py, int n)
+void html_polygon(const struct path *p)
 {
+    int n = p->count;
     struct MapPoly *new;
     int i;
     int delta_x, delta_y;
@@ -64,8 +65,8 @@ void html_polygon(const double *px, const double *py, int n)
     int *y = G_malloc(n * sizeof(int));
 
     for (i = 0; i < n; i++) {
-	x[i] = (int) floor(px[i] + 0.5);
-	y[i] = (int) floor(py[i] + 0.5);
+	x[i] = (int) floor(p->vertices[i].x + 0.5);
+	y[i] = (int) floor(p->vertices[i].y + 0.5);
     }
 
     /* 

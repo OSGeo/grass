@@ -9,9 +9,8 @@ void COM_Text(const char *text)
     }
 
     if (!font_is_freetype())
-	soft_text(cur_x, cur_y, text_size_x, text_size_y, text_rotation,
-		  text);
+	soft_text(text);
     else
-	soft_text_freetype(cur_x, cur_y, text_size_x, text_size_y,
-			   text_rotation, text);
+	soft_text_freetype(text);
 }
+

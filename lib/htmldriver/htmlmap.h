@@ -1,5 +1,6 @@
 
 #include <stdio.h>
+#include "path.h"
 
 #define DEF_MINBBOX  2
 #define DEF_MINDIST  2
@@ -59,7 +60,7 @@ extern int HTML_Graph_set(void);
 extern void HTML_Box(double, double, double, double);
 
 /* Polygon.c */
-extern void html_polygon(const double *, const double *, int);
+extern void html_polygon(const struct path *);
 
 /* Text.c */
 extern void HTML_Text(const char *);

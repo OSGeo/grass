@@ -1,92 +1,111 @@
 
 #include <grass/gis.h>
-#include "driverlib.h"
+#include "path.h"
 
-static void begin_subpath(struct path *p)
+void path_init(struct path *p)
 {
-    if (p->o_count >= p->o_alloc) {
-	p->o_alloc += 100;
-	p->offsets = G_realloc(p->offsets, p->o_alloc * sizeof(int));
-    }
-
-    p->offsets[p->o_count++] = p->count;
-    p->cur_offset = p->count;
-}
-
-static void add_point(struct path *p, double x, double y)
-{
-    if (p->count >= p->alloc) {
-	p->alloc = p->alloc ? p->alloc * 2 : 100;
-	p->px = G_realloc(p->px, p->alloc * sizeof(double));
-	p->py = G_realloc(p->py, p->alloc * sizeof(double));
-    }
-
-    p->px[p->count] = x;
-    p->py[p->count] = y;
-    p->count++;
-}
-
-void path_begin(struct path *p)
-{
+    p->vertices = NULL;
     p->count = 0;
-    p->o_count = 0;
-    begin_subpath(p);
+    p->alloc = 0;
+    p->start = -1;
 }
 
-void path_move(struct path *p, double x, double y)
+void path_free(struct path *p)
 {
-    if (p->count > p->cur_offset)
-	begin_subpath(p);
-    add_point(p, x, y);
+    if (p->vertices)
+	G_free(p->vertices);
+
+    p->count = 0;
+    p->alloc = 0;
+    p->start = -1;
 }
 
-void path_cont(struct path *p, double x, double y)
+void path_alloc(struct path *p, int n)
 {
-    add_point(p, x, y);
-}
-
-void path_close(struct path *p)
-{
-    if (p->count <= p->cur_offset + 2)
+    if (p->alloc >= n)
 	return;
 
-    add_point(p, p->px[p->cur_offset], p->py[p->cur_offset]);
-    begin_subpath(p);
-}
-
-void path_fill(struct path *p, void (*polygon)(const double *, const double *, int))
-{
-    int i;
-
-    if (p->count > p->cur_offset)
-	begin_subpath(p);
-
-    for (i = 0; i < p->o_count - 1; i++) {
-	int start = p->offsets[i];
-	int end = p->offsets[i+1];
-	(*polygon)(&p->px[start], &p->py[start], end - start);
-    }
-
-    path_reset(p);
-}
-
-void path_stroke(struct path *p, void (*line)(double, double, double, double))
-{
-    int i, j;
-
-    if (p->count > p->cur_offset)
-	begin_subpath(p);
-
-    for (i = 0; i < p->o_count - 1; i++)
-	for (j = p->offsets[i] + 1; j < p->offsets[i+1]; j++)
-	    (*line)(p->px[j-1], p->py[j-1], p->px[j], p->py[j]);
-
-    path_reset(p);
+    p->alloc = n;
+    p->vertices = G_realloc(p->vertices, p->alloc * sizeof(struct vertex));
 }
 
 void path_reset(struct path *p)
 {
     p->count = 0;
-    p->o_count = 0;
+    p->start = -1;
+}
+
+void path_append(struct path *p, double x, double y, int mode)
+{
+    struct vertex *v;
+
+    if (p->count >= p->alloc)
+	path_alloc(p, p->alloc ? p->alloc * 2 : 100);
+
+    v = &p->vertices[p->count++];
+
+    v->x = x;
+    v->y = y;
+    v->mode = mode;
+}
+
+void path_copy(struct path *dst, const struct path *src)
+{
+    int i;
+
+    path_reset(dst);
+    path_alloc(dst, src->count);
+
+    for (i = 0; i < src->count; i++) {
+	struct vertex *v = &src->vertices[i];
+	path_append(dst, v->x, v->y, v->mode);
+    }
+
+    dst->start = src->start;
+}
+
+void path_begin(struct path *p)
+{
+    p->count = 0;
+    p->start = -1;
+}
+
+void path_move(struct path *p, double x, double y)
+{
+    p->start = p->count;
+    path_append(p, x, y, P_MOVE);
+}
+
+void path_cont(struct path *p, double x, double y)
+{
+    path_append(p, x, y, P_CONT);
+}
+
+void path_close(struct path *p)
+{
+    struct vertex *v;
+
+    if (p->start < 0)
+	return;
+
+    v = &p->vertices[p->start];
+    path_append(p, v->x, v->y, P_CLOSE);
+
+    p->start = -1;
+}
+
+void path_stroke(struct path *p, void (*line)(double, double, double, double))
+{
+    int i;
+
+    for (i = 1; i < p->count; i++) {
+	struct vertex *v0 = &p->vertices[i-1];
+	struct vertex *v1 = &p->vertices[i];
+
+	if (v1->mode != P_MOVE)
+	    (*line)(v0->x, v0->y, v1->x, v1->y);
+    }
+
+    path_reset(p);
 }
 

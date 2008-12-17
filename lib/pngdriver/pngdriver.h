@@ -5,6 +5,7 @@
 
 #include <grass/config.h>
 #include "driver.h"
+#include "path.h"
 
 #define FILE_NAME  "map.png"
 
@@ -46,7 +47,7 @@ extern void png_init_color_table(void);
 extern unsigned int png_get_color(int, int, int, int);
 extern void png_get_pixel(unsigned int, int *, int *, int *, int *);
 extern void png_draw_line(double, double, double, double);
-extern void png_polygon(const double *, const double *, int);
+extern void png_polygon(struct path *);
 
 extern const struct driver *PNG_Driver(void);
 
