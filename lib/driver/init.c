@@ -35,6 +35,8 @@ double cur_y;
 double text_size_x;
 double text_size_y;
 double text_rotation;
+double text_sinrot;
+double text_cosrot;
 int matrix_valid;
 
 void LIB_init(const struct driver *drv)

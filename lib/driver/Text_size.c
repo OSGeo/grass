@@ -1,3 +1,4 @@
+#include <math.h>
 #include "driver.h"
 #include "driverlib.h"
 
@@ -11,5 +12,7 @@ void COM_Text_size(double x, double y)
 void COM_Text_rotation(double val)
 {
     text_rotation = val;
+    text_sinrot = sin(M_PI * text_rotation / 180.0);
+    text_cosrot = cos(M_PI * text_rotation / 180.0);
     matrix_valid = 0;
 }

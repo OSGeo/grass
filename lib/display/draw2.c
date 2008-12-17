@@ -6,20 +6,21 @@
 #include <grass/raster.h>
 #include <grass/display.h>
 #include <grass/glocale.h>
-#include "driverlib.h"
-
-struct rectangle
-{
-    double left;
-    double rite;
-    double bot;
-    double top;
-};
+#include "path.h"
+#include "clip.h"
 
 struct vector
 {
     double x, y;
 };
+
+/******************************************************************************/
+
+static struct path path;
+
+static int clip_mode = M_NONE;
+static double epsilon = 0.0;
+static struct path ll_path, clip_path, raw_path, eps_path;
 
 static struct vector cur;
 
@@ -30,101 +31,7 @@ static int window_set;
 #define min(x,y) ((x) < (y) ? (x) : (y))
 #define max(x,y) ((x) > (y) ? (x) : (y))
 
-static double *xi, *yi;
-static int nalloc_i;
-
-static double *xf, *yf;
-static int nalloc_f;
-
 /******************************************************************************/
-
-static void alloc_dst(int n)
-{
-
-    if (nalloc_i >= n)
-	return;
-
-    nalloc_i = n;
-    xi = G_realloc(xi, nalloc_i * sizeof(double));
-    yi = G_realloc(yi, nalloc_i * sizeof(double));
-}
-
-static void alloc_src(int n)
-{
-
-    if (nalloc_f >= n)
-	return;
-
-    nalloc_f = n + 10;
-    xf = G_realloc(xf, nalloc_f * sizeof(double));
-    yf = G_realloc(yf, nalloc_f * sizeof(double));
-}
-
-static void dealloc_src(const double **x, const double **y, int release)
-{
-    if (release) {
-	G_free(*(double **)x);
-	G_free(*(double **)y);
-    }
-
-    *x = xf;
-    *y = yf;
-
-    nalloc_f = 0;
-
-    xf = NULL;
-    yf = NULL;
-}
-
-static int do_reduce(double *x, double *y, int n)
-{
-    static double eps = 0.5;
-    int i, j;
-
-    for (i = 0, j = 1; j < n; j++) {
-	if (fabs(x[j] - x[i]) < eps && fabs(y[j] - y[i]) < eps)
-	    continue;
-	i++;
-	if (i == j)
-	    continue;
-	x[i] = x[j];
-	y[i] = y[j];
-    }
-    return i + 1;
-}
-
-static int do_convert(const double *x, const double *y, int n)
-{
-    int i;
-
-    alloc_dst(n);
-
-    for (i = 0; i < n; i++) {
-	xi[i] = D_u_to_d_col(x[i]);
-	yi[i] = D_u_to_d_row(y[i]);
-    }
-
-    return do_reduce(xi, yi, n);
-}
-
-static void rel_to_abs(const double **px, const double **py, int n)
-{
-    const double *x = *px;
-    const double *y = *py;
-    int i;
-
-    alloc_src(n);
-
-    xf[0] = cur.x + x[0];
-    yf[0] = cur.y + y[0];
-
-    for (i = 1; i < n; i++) {
-	xf[i] = xf[i-1] + x[i];
-	yf[i] = yf[i-1] + y[i];
-    }
-
-    dealloc_src(px, py, 0);
-}
 
 static int shift_count(double dx)
 {
@@ -144,7 +51,7 @@ static double coerce(double x)
     return x;
 }
 
-static int euclidify(double *x, const double *y, int n, int no_pole)
+static int euclidify(struct path *p, int no_pole)
 {
     double ux0 = clip.left;
     double ux1 = clip.rite;
@@ -152,111 +59,78 @@ static int euclidify(double *x, const double *y, int n, int no_pole)
     int lo, hi, count;
     int i;
 
-    x0 = x1 = x[0];
+    x0 = x1 = p->vertices[0].x;
 
-    for (i = 1; i < n; i++) {
-	if (fabs(y[i]) < 89.9)
-	    x[i] = x[i - 1] + coerce(x[i] - x[i - 1]);
+    for (i = 1; i < p->count; i++) {
+	if (fabs(p->vertices[i].y) < 89.9)
+	    p->vertices[i].x = p->vertices[i-1].x + coerce(p->vertices[i].x - p->vertices[i-1].x);
 
-	x0 = min(x0, x[i]);
-	x1 = max(x1, x[i]);
+	x0 = min(x0, p->vertices[i].x);
+	x1 = max(x1, p->vertices[i].x);
     }
 
-    if (no_pole && fabs(x[n - 1] - x[0]) > 180)
+    if (no_pole && fabs(p->vertices[p->count-1].x - p->vertices[0].x) > 180)
 	return 0;
 
     lo = -shift_count(ux1 - x0);
     hi = shift_count(x1 - ux0);
     count = hi - lo + 1;
 
-    for (i = 0; i < n; i++)
-	x[i] -= lo * 360;
+    for (i = 0; i < p->count; i++)
+	p->vertices[i].x -= lo * 360;
 
     return count;
 }
 
-static void ll_wrap_path(const double *x, const double *y, int n,
-			 void (*func) (const double *, const double *, int))
+static void ll_wrap_path(struct path *dst, const struct path *src, int no_pole)
 {
-    double *xx = G_malloc(n * sizeof(double));
-    int count, i;
+    int count, i, j;
 
-    memcpy(xx, x, n * sizeof(double));
-    count = euclidify(xx, y, n, 0);
+    path_copy(dst, src);
+
+    count = euclidify(dst, no_pole);
 
     for (i = 0; i < count; i++) {
-	int j;
-
-	(*func) (xx, y, n);
-
-	for (j = 0; j < n; j++)
-	    xx[j] -= 360;
+	for (j = 0; j < src->count; j++) {
+	    struct vertex *v = &dst->vertices[j];
+	    path_append(dst, v->x - i * 360, v->y, v->mode);
+	}
     }
-
-    G_free(xx);
 }
 
-static void ll_wrap_line(double ax, double ay, double bx, double by,
-			 void (*func)(double, double, double, double))
+static void conv_path(struct path *dst, const struct path *src)
 {
-    double ux0 = clip.left;
-    double ux1 = clip.rite;
-    double x0, x1;
-    int lo, hi, i;
-    int ret;
+    int i;
 
-    bx = ax + coerce(bx - ax);
+    path_copy(dst, src);
 
-    x0 = min(ax, bx);
-    x1 = max(ax, bx);
-
-    lo = -shift_count(ux1 - x0);
-    hi = shift_count(x1 - ux0);
-
-    ret = 0;
-
-    for (i = lo; i <= hi; i++)
-	(*func)(ax - i * 360, ay, bx - i * 360, by);
+    for (i = 0; i < dst->count; i++) {
+	struct vertex *v = &dst->vertices[i];
+	v->x = D_u_to_d_col(v->x);
+	v->y = D_u_to_d_row(v->y);
+    }
 }
 
-/******************************************************************************/
-
-static void D_polydots_raw(const double *x, const double *y, int n)
+static void reduce_path(struct path *dst, const struct path *src, double eps)
 {
-    n = do_convert(x, y, n);
-    R_polydots_abs(xi, yi, n);
-}
+    struct vertex *v = &src->vertices[0];
+    int i;
 
-static void D_polyline_raw(const double *x, const double *y, int n)
-{
-    n = do_convert(x, y, n);
-    R_polyline_abs(xi, yi, n);
-}
+    path_reset(dst);
+    path_append(dst, v->x, v->y, v->mode);
 
-static void D_polygon_raw(const double *x, const double *y, int n)
-{
-    n = do_convert(x, y, n);
-    R_polygon_abs(xi, yi, n);
-}
+    for (i = 1; i < src->count - 1; i++) {
+	struct vertex *v0 = &dst->vertices[dst->count-1];
+	struct vertex *v1 = &src->vertices[i];
+	struct vertex *v2 = &src->vertices[i+1];
 
-static void D_line_raw(double x1, double y1, double x2, double y2)
-{
-    x1 = D_u_to_d_col(x1);
-    y1 = D_u_to_d_row(y1);
-    x2 = D_u_to_d_col(x2);
-    y2 = D_u_to_d_row(y2);
+	if (fabs(v1->x - v0->x) < eps && fabs(v1->y - v0->y) < eps &&
+	    fabs(v1->x - v2->x) < eps && fabs(v1->y - v2->y) < eps &&
+	    v0->mode != P_MOVE && v1->mode != P_MOVE && !v2->mode != P_MOVE)
+	    continue;
 
-    R_line_abs(x1, y1, x2, y2);
-}
-
-static void D_box_raw(double x1, double y1, double x2, double y2)
-{
-    x1 = D_u_to_d_col(x1);
-    x2 = D_u_to_d_col(x2);
-    y1 = D_u_to_d_row(y1);
-    y2 = D_u_to_d_row(y2);
-
-    R_box_abs(x1, y1, x2, y2);
+	path_append(dst, v1->x, v1->y, v1->mode);
+    }
 }
 
 /******************************************************************************/
@@ -300,6 +174,16 @@ void D_clip_to_map(void)
     D_set_clip(t, b, l, r);
 }
 
+void D_set_clip_mode(int mode)
+{
+    clip_mode = mode;
+}
+
+void D_set_reduction(double e)
+{
+    epsilon = e;
+}
+
 void D_line_width(double d)
 {
     R_line_width(d > 0 ? d : 0);
@@ -327,65 +211,249 @@ void D_get_text_box(const char *text, double *t, double *b, double *l, double *r
 
 /******************************************************************************/
 
-void D_polydots_abs(const double *x, const double *y, int n)
+void D_pos_abs(double x, double y)
 {
-    if (!window_set)
-	D_clip_to_map();
+    cur.x = x;
+    cur.y = y;
 
-    if (D_is_lat_lon())
-	ll_wrap_path(x, y, n, D_polydots_raw);
-    else
-	D_polydots_raw(x, y, n);
+    x = D_u_to_d_col(x);
+    y = D_u_to_d_row(y);
+
+    R_pos_abs(x, y);
 }
 
-void D_polyline_abs(const double *x, const double *y, int n)
+void D_pos_rel(double x, double y)
 {
+    D_pos_abs(cur.x + x, cur.y + y);
+}
+
+/******************************************************************************/
+
+static void do_path(int no_pole)
+{
+    struct path *p = &path;
+    struct clip planes;
+    int i;
+
     if (!window_set)
 	D_clip_to_map();
+
+    if (D_is_lat_lon()) {
+	ll_wrap_path(&ll_path, p, no_pole);
+	p = &ll_path;
+    }
+
+    switch (clip_mode) {
+    case M_NONE:
+	break;
+    case M_CULL:
+	D__set_clip_planes(&planes, &clip);
+	D__cull_path(&clip_path, p, &planes);
+	p = &clip_path;
+	break;
+    case M_CLIP:
+	D__set_clip_planes(&planes, &clip);
+	D__clip_path(&clip_path, p, &planes);
+	p = &clip_path;
+	break;
+    }
+
+    conv_path(&raw_path, p);
+    p = &raw_path;
+
+    if (epsilon > 0) {
+	reduce_path(&eps_path, p, epsilon);
+	p = &eps_path;
+    }
+
+    R_begin();
+    for (i = 0; i < p->count; i++) {
+	struct vertex *v = &p->vertices[i];
+	switch (v->mode)
+	{
+	case P_MOVE:
+	    R_move(v->x, v->y);
+	    break;
+	case P_CONT:
+	    R_cont(v->x, v->y);
+	    break;
+	case P_CLOSE:
+	    R_close();
+	    break;
+	}
+    }
+}
+
+void D_begin(void)
+{
+    path_begin(&path);
+}
+
+void D_end(void)
+{
+}
+
+void D_move_abs(double x, double y)
+{
+    path_move(&path, x, y);
+
+    cur.x = x;
+    cur.y = y;
+}
+
+void D_cont_abs(double x, double y)
+{
+    path_cont(&path, x, y);
+
+    cur.x = x;
+    cur.y = y;
+}
+
+void D_close(void)
+{
+    path_close(&path);
+}
+
+void D_stroke(void)
+{
+    do_path(0);
+    R_stroke();
+}
+
+void D_fill(void)
+{
+    do_path(1);
+    R_fill();
+}
+
+void D_dots(void)
+{
+    struct path *p = &path;
+    int i;
+
+    if (!window_set)
+	D_clip_to_map();
+
+    for (i = 0; i < p->count; i++) {
+	struct vertex *v = &p->vertices[i];
+	double x = v->x;
+	double y = v->y;
+
+	if (D_is_lat_lon())
+	    x = coerce(x);
+
+	if (clip_mode != M_NONE) {
+	    if (x < clip.left || x > clip.rite)
+		continue;
+	    if (y < clip.bot || y > clip.top)
+		continue;
+	}
+
+	x = D_u_to_d_col(x);
+	y = D_u_to_d_row(y);
+
+	R_point(x, y);
+    }
+}
+
+/******************************************************************************/
+
+static void poly_abs(const double *x, const double *y, int n)
+{
+    int i;
 
     if (n < 2)
 	return;
 
-    if (D_is_lat_lon())
-	ll_wrap_path(x, y, n, D_polyline_raw);
-    else
-	D_polyline_raw(x, y, n);
+    D_begin();
+    D_move_abs(x[0], y[0]);
+    for (i = 1; i < n; i++)
+	D_cont_abs(x[i], y[i]);
+}
+
+void D_polyline_abs(const double *x, const double *y, int n)
+{
+    poly_abs(x, y, n);
+    D_stroke();
 }
 
 void D_polygon_abs(const double *x, const double *y, int n)
 {
-    if (!window_set)
-	D_clip_to_map();
+    poly_abs(x, y, n);
+    D_close();
+    D_fill();
+}
 
-    if (D_is_lat_lon())
-	ll_wrap_path(x, y, n, D_polygon_raw);
-    else
-	D_polygon_raw(x, y, n);
+void D_polydots_abs(const double *x, const double *y, int n)
+{
+    poly_abs(x, y, n);
+    D_dots();
 }
 
 void D_line_abs(double x1, double y1, double x2, double y2)
 {
-    if (!window_set)
-	D_clip_to_map();
-
-    if (D_is_lat_lon())
-	ll_wrap_line(x1, y1, x2, y2, D_line_raw);
-    else
-	D_line_raw(x1, y1, x2, y2);
+    D_begin();
+    D_move_abs(x1, y1);
+    D_cont_abs(x2, y2);
+    D_end();
+    D_stroke();
 }
 
 void D_box_abs(double x1, double y1, double x2, double y2)
 {
-    if (!window_set)
-	D_clip_to_map();
-
-    if (D_is_lat_lon())
-	ll_wrap_line(x1, y1, x2, y2, D_box_raw);
-    else
-	D_box_raw(x1, y1, x2, y2);
+    D_begin();
+    D_move_abs(x1, y1);
+    D_cont_abs(x2, y1);
+    D_cont_abs(x2, y2);
+    D_cont_abs(x1, y2);
+    D_close();
+    D_end();
+    D_fill();
 }
 
 /******************************************************************************/
+
+static void poly_rel(const double *x, const double *y, int n)
+{
+    int i;
+
+    if (n < 2)
+	return;
+
+    D_begin();
+    D_move_abs(x[0], y[0]);
+    for (i = 1; i < n; i++)
+	D_cont_rel(x[i], y[i]);
+}
+
+void D_move_rel(double x, double y)
+{
+    D_move_abs(cur.x + x, cur.y + y);
+}
+
+void D_cont_rel(double x, double y)
+{
+    D_cont_abs(cur.x + x, cur.y + y);
+}
+
+void D_polydots_rel(const double *x, const double *y, int n)
+{
+    poly_rel(x, y, n);
+    D_dots();
+}
+
+void D_polyline_rel(const double *x, const double *y, int n)
+{
+    poly_rel(x, y, n);
+    D_stroke();
+}
+
+void D_polygon_rel(const double *x, const double *y, int n)
+{
+    poly_rel(x, y, n);
+    D_close();
+    D_fill();
+}
 
 void D_line_rel(double x1, double y1, double x2, double y2)
 {
@@ -404,102 +472,9 @@ void D_line_rel(double x1, double y1, double x2, double y2)
     D_line_abs(x1, y1, x2, y2);
 }
 
-void D_polydots_rel(const double *x, const double *y, int n)
-{
-    rel_to_abs(&x, &y, n);
-    D_polydots_abs(x, y, n);
-    dealloc_src(&x, &y, 1);
-}
-
-void D_polyline_rel(const double *x, const double *y, int n)
-{
-    rel_to_abs(&x, &y, n);
-    D_polyline_abs(x, y, n);
-    dealloc_src(&x, &y, 1);
-}
-
-void D_polygon_rel(const double *x, const double *y, int n)
-{
-    rel_to_abs(&x, &y, n);
-    D_polygon_abs(x, y, n);
-    dealloc_src(&x, &y, 1);
-}
-
 void D_box_rel(double x2, double y2)
 {
     D_box_abs(cur.x, cur.y, cur.x + x2, cur.y + y2);
-}
-
-/******************************************************************************/
-
-static struct path path;
-
-void D_pos_abs(double x, double y)
-{
-    cur.x = x;
-    cur.y = y;
-
-    x = D_u_to_d_col(x);
-    y = D_u_to_d_row(y);
-
-    R_pos_abs(x, y);
-}
-
-void D_pos_rel(double x, double y)
-{
-    D_pos_abs(cur.x + x, cur.y + y);
-}
-
-void D_move_abs(double x, double y)
-{
-    path_move(&path, x, y);
-
-    cur.x = x;
-    cur.y = y;
-}
-
-void D_move_rel(double x, double y)
-{
-    D_move_abs(cur.x + x, cur.y + y);
-}
-
-void D_cont_abs(double x, double y)
-{
-    path_cont(&path, x, y);
-
-    cur.x = x;
-    cur.y = y;
-}
-
-void D_cont_rel(double x, double y)
-{
-    D_cont_abs(cur.x + x, cur.y + y);
-}
-
-/******************************************************************************/
-
-void D_begin(void)
-{
-    path_begin(&path);
-}
-
-void D_end(void)
-{
-}
-
-void D_close(void)
-{
-    path_close(&path);
-}
-
-void D_stroke(void)
-{
-    path_fill(&path, D_polyline_abs);
-}
-
-void D_fill(void)
-{
-    path_fill(&path, D_polygon_abs);
 }
 
 /******************************************************************************/

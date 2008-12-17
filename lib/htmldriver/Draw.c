@@ -1,6 +1,6 @@
 
 #include <grass/gis.h>
-#include "driverlib.h"
+#include "path.h"
 #include "htmlmap.h"
 
 static struct path path;
@@ -27,7 +27,7 @@ void HTML_Close(void)
 
 void HTML_Fill(void)
 {
-    path_fill(&path, html_polygon);
+    html_polygon(&path);
 }
 
 void HTML_Stroke(void)

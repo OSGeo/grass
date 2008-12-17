@@ -20,25 +20,24 @@
 #include "driver.h"
 #include "driverlib.h"
 
-# define RpD ((2 * M_PI) / 360.)	/* radians/degree */
-# define D2R(d) (double)(d * RpD)	/* degrees->radians */
-
 /*#define DEBUG_LOG(S) {FILE *fp = fopen("debug.TXT","a");fputs(S,fp);fclose(fp);} */
 /*#define DEBUG_LOG_INT(D) {FILE *fp = fopen("debug.TXT","a");fprintf(fp,"%d",D);fclose(fp);} */
 /*#define DEBUG_LOG_DOUBLE(D) {FILE *fp = fopen("debug.TXT","a");fprintf(fp,"%f",D);fclose(fp);} */
 
+struct rectangle
+{
+    double t, b, l, r;
+};
+
 #ifdef HAVE_FT2BUILD_H
 static int convert_str(const char *, const char *, unsigned char **);
 static void release_convert_str(unsigned char *);
-static void set_matrix(FT_Matrix *, double);
+static void set_matrix(FT_Matrix *);
 static void draw_text(FT_Face, FT_Vector *, FT_Matrix *,
-		      const unsigned char *, int, int);
+		      const unsigned char *, int, int, struct rectangle *);
 static void draw_bitmap(FT_Bitmap *, FT_Int, FT_Int);
-static void set_text_box(FT_Bitmap *, FT_Int, FT_Int);
+static void set_text_box(FT_Bitmap *, FT_Int, FT_Int, struct rectangle *);
 #endif
-
-static int fdont_draw = 0;
-static double ft, fb, fl, fr;
 
 static const char *font_get_encoding(void)
 {
@@ -47,9 +46,8 @@ static const char *font_get_encoding(void)
     return encoding;
 }
 
-static void draw_main(double x, double y,
-		      double text_size_x, double text_size_y,
-		      double text_rotation, const char *string)
+static void draw_main(double x, double y, const char *string,
+		      struct rectangle *box)
 {
 #ifdef HAVE_FT2BUILD_H
     FT_Library library;
@@ -93,14 +91,11 @@ static void draw_main(double x, double y,
     /* ans = FT_Set_Char_Size(face,10*64,0,72,0); */
     /* ans = FT_Set_Char_Size(face,text_size_x*64,text_size_y*64,72,72); */
     ans =
-	FT_Set_Char_Size(face, (int)(text_size_x * 64),
-			 (int)(text_size_y * 64), 100, 100);
-    /*
-       ans = FT_Set_Pixel_Sizes(
-       face,
-       0,
-       (int)text_size_y );
-     */
+	FT_Set_Char_Size(face,
+			 (int)(text_size_x * 25 * 64),
+			 (int)(text_size_y * 25 * 64),
+			 100, 100);
+
     if (ans) {
 	/* DEBUG_LOG("Text3 error: ft set size\n"); */
 	FT_Done_Face(face);
@@ -117,9 +112,9 @@ static void draw_main(double x, double y,
     outlen = convert_str(encoding, string, &out);
 
     /* set matrix */
-    set_matrix(&matrix, D2R(text_rotation));
+    set_matrix(&matrix);
     /* draw */
-    draw_text(face, &pen, &matrix, out, outlen, 0);
+    draw_text(face, &pen, &matrix, out, outlen, 0, box);
 
     /* release */
     release_convert_str(out);
@@ -131,13 +126,13 @@ static void draw_main(double x, double y,
 }
 
 #ifdef HAVE_FT2BUILD_H
-static void set_matrix(FT_Matrix * matrix, double rotation)
+static void set_matrix(FT_Matrix * matrix)
 {
     /* rotation is in radians */
-    matrix->xx = (FT_Fixed) (cos(rotation) * 0x10000);
-    matrix->xy = (FT_Fixed) (-sin(rotation) * 0x10000);
-    matrix->yx = (FT_Fixed) (sin(rotation) * 0x10000);
-    matrix->yy = (FT_Fixed) (cos(rotation) * 0x10000);
+    matrix->xx = (FT_Fixed) ( text_cosrot * 0x10000);
+    matrix->xy = (FT_Fixed) (-text_sinrot * 0x10000);
+    matrix->yx = (FT_Fixed) ( text_sinrot * 0x10000);
+    matrix->yy = (FT_Fixed) ( text_cosrot * 0x10000);
 }
 
 static int convert_str(const char *from, const char *in, unsigned char **out)
@@ -184,7 +179,8 @@ static void release_convert_str(unsigned char *out)
 }
 
 static void draw_text(FT_Face face, FT_Vector * pen, FT_Matrix * matrix,
-		      const unsigned char *out, int len, int color)
+		      const unsigned char *out, int len, int color,
+		      struct rectangle *box)
 {
     FT_ULong ch;
     FT_Error ans;
@@ -205,12 +201,12 @@ static void draw_text(FT_Face face, FT_Vector * pen, FT_Matrix * matrix,
 	if (ans)
 	    continue;
 	/* draw bitmap */
-	if (!fdont_draw)
+	if (!box)
 	    draw_bitmap(&slot->bitmap, slot->bitmap_left,
 			screen_height - slot->bitmap_top);
 	else
 	    set_text_box(&slot->bitmap, slot->bitmap_left,
-			 screen_height - slot->bitmap_top);
+			 screen_height - slot->bitmap_top, box);
 
 	/* increment pen position */
 	pen->x += slot->advance.x;
@@ -218,21 +214,21 @@ static void draw_text(FT_Face face, FT_Vector * pen, FT_Matrix * matrix,
     }
 }
 
-static void set_text_box(FT_Bitmap * bitmap, FT_Int x, FT_Int y)
+static void set_text_box(FT_Bitmap *bitmap, FT_Int x, FT_Int y, struct rectangle *box)
 {
     FT_Int xMax = x + bitmap->width;
     FT_Int yMax = y + bitmap->rows;
 
     if ((x == xMax) || (y == yMax))
 	return;
-    if (x < fl)
-	fl = x;
-    if (xMax > fr)
-	fr = xMax;
-    if (y < ft)
-	ft = y;
-    if (yMax > fb)
-	fb = yMax;
+    if (x < box->l)
+	box->l = x;
+    if (xMax > box->r)
+	box->r = xMax;
+    if (y < box->t)
+	box->t = y;
+    if (yMax > box->b)
+	box->b = yMax;
 }
 
 static void draw_bitmap(FT_Bitmap * bitmap, FT_Int x, FT_Int y)
@@ -272,40 +268,25 @@ static void draw_bitmap(FT_Bitmap * bitmap, FT_Int x, FT_Int y)
 }
 #endif
 
-void soft_text_freetype(double x, double y,
-			double text_size_x, double text_size_y,
-			double text_rotation, const char *string)
+void soft_text_freetype(const char *string)
 {
-    text_size_x *= 25.0;
-    text_size_y *= 25.0;
-    draw_main(x, y, text_size_x, text_size_y, text_rotation, string);
+    draw_main(cur_x, cur_y, string, NULL);
 }
 
-void soft_text_ext_freetype(double x, double y,
-			    double text_size_x, double text_size_y,
-			    double text_rotation, const char *string)
+void get_text_ext_freetype(const char *string, double *top, double *bot, double *left, double *rite)
 {
-    fdont_draw = 1;
-    text_size_x *= 25.0;
-    text_size_y *= 25.0;
-    ft = 999999;
-    fb = 0;
-    fl = 999999;
-    fr = 0;
-    /* draw_main(x,y,text_size_x,text_size_y,text_rotation,string); */
-    /* draw_main(0,0,text_size_x,text_size_y,text_rotation,string); */
-    draw_main(0, y, text_size_x, text_size_y, text_rotation, string);
-    /* ft += y; */
-    /* fb += y; */
-    fl += x;
-    fr += x;
-    fdont_draw = 0;
+    struct rectangle box;
+
+    box.t = 1e300;
+    box.b = -1e300;
+    box.l = 1e300;
+    box.r = -1e300;
+
+    draw_main(cur_x, cur_y, string, &box);
+
+    *top = box.t;
+    *bot = box.b;
+    *left = box.l;
+    *rite = box.r;
 }
 
-void get_text_ext_freetype(double *top, double *bot, double *left, double *rite)
-{
-    *top = ft;
-    *bot = fb;
-    *left = fl;
-    *rite = fr;
-}

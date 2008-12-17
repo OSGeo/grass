@@ -13,6 +13,7 @@
 
 #include <grass/gis.h>
 #include "driverlib.h"
+#include "path.h"
 #include "pngdriver.h"
 
 static struct path path;
@@ -44,6 +45,6 @@ void PNG_Stroke(void)
 
 void PNG_Fill(void)
 {
-    path_fill(&path, png_polygon);
+    png_polygon(&path);
 }
 

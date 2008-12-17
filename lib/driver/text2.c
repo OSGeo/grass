@@ -4,144 +4,109 @@
 #include "driver.h"
 #include "driverlib.h"
 
-static int dont_draw;
-static double t, b, l, r;
-static double basex, basey;
-static double curx, cury;
-
-static void remember(double x, double y)
+struct rectangle
 {
-    if (x > r)
-	r = x;
-    if (x < l)
-	l = x;
-    if (y > b)
-	b = y;
-    if (y < t)
-	t = y;
+    double t, b, l, r;
+};
 
-    curx = x;
-    cury = y;
+static void remember(struct rectangle *box, double x, double y)
+{
+    if (x > box->r)
+	box->r = x;
+    if (x < box->l)
+	box->l = x;
+    if (y > box->b)
+	box->b = y;
+    if (y < box->t)
+	box->t = y;
 }
 
-static void text_draw(double x, double y)
+static void transform(double *x, double *y,
+		      int ix, int iy,
+		      double orig_x, double orig_y)
 {
-    COM_Line_abs(curx, cury, x, y);
-
-    curx = x;
-    cury = y;
+    double ax = text_size_x * ix;
+    double ay = text_size_y * iy;
+    double rx = ax * text_cosrot - ay * text_sinrot;
+    double ry = ax * text_sinrot + ay * text_cosrot;
+    *x = orig_x + rx;
+    *y = orig_y - ry;
 }
 
-static void text_move(double x, double y)
-{
-    curx = x;
-    cury = y;
-}
-
-void drawchar(double text_size_x, double text_size_y,
-	      double sinrot, double cosrot, unsigned char character)
+static void draw_char(double *px, double *py, unsigned char character, struct rectangle *box)
 {
     unsigned char *X;
     unsigned char *Y;
     int n_vects;
     int i;
-    double ax, ay;
-    double x, y;
-    void (*Do) (double, double);
-    int ix, iy;
-
-    x = basex;
-    y = basey;
+    void (*func)(double, double);
 
     get_char_vects(character, &n_vects, &X, &Y);
 
-    Do = text_move;
+    if (!box)
+	COM_Begin();
+
+    func = COM_Move;
 
     for (i = 1; i < n_vects; i++) {
+	int ix, iy;
+	double x, y;
+
 	if (X[i] == ' ') {
-	    Do = text_move;
+	    func = COM_Move;
 	    continue;
 	}
 
 	ix = 10 + X[i] - 'R';
 	iy = 10 - Y[i] + 'R';
-	ax = text_size_x * ix;
-	ay = text_size_y * iy;
 
-	if (dont_draw) {
-	    remember(x + (ax * cosrot - ay * sinrot),
-		     y - (ax * sinrot + ay * cosrot));
-	}
+	transform(&x, &y, ix, iy, *px, *py);
+
+	if (box)
+	    remember(box, x, y);
 	else {
-	    (*Do) (x + (ax * cosrot - ay * sinrot),
-		   y - (ax * sinrot + ay * cosrot));
-	    Do = text_draw;
+	    (*func)(x, y);
+	    func = COM_Cont;
 	}
     }
-    /*  This seems to do variable spacing
-       ix = 10 + X[i] - 'R';
-     */
-    ix = 20;
-    iy = 0;
-    ax = text_size_x * ix;
-    ay = text_size_y * iy;
 
-    if (!dont_draw)
-	text_move(basex + (ax * cosrot - ay * sinrot),
-		  basey - (ax * sinrot + ay * cosrot));
+    transform(px, py, 20, 0, *px, *py);
+
+    if (box)
+	remember(box, *px, *py);
     else
-	remember(basex + (ax * cosrot - ay * sinrot),
-		 basey - (ax * sinrot + ay * cosrot));
+	COM_Stroke();
 }
 
-void soft_text_ext(double x, double y,
-		   double text_size_x, double text_size_y,
-		   double text_rotation, const char *string)
+static void draw_text(const char *string, struct rectangle *box)
 {
-    t = 999999;
-    b = 0;
-    l = 999999;
-    r = 0;
-    dont_draw = 1;
-    soft_text(x, y, text_size_x, text_size_y, text_rotation, string);
-    dont_draw = 0;
+    double base_x = cur_x;
+    double base_y = cur_y;
+    const unsigned char *p;
+
+    for (p = (const unsigned char *) string; *p; p++)
+	draw_char(&base_x, &base_y, *p, box);
 }
 
-void get_text_ext(double *top, double *bot, double *left, double *rite)
+void get_text_ext(const char *string, double *top, double *bot, double *left, double *rite)
 {
-    *top = t;
-    *bot = b;
-    *left = l;
-    *rite = r;
+    struct rectangle box;
+
+    box.t = 1e300;
+    box.b = -1e300;
+    box.l = 1e300;
+    box.r = -1e300;
+
+    draw_text(string, &box);
+
+    *top = box.t;
+    *bot = box.b;
+    *left = box.l;
+    *rite = box.r;
 }
 
-# define RpD ((2 * M_PI) / 360.)	/* radians/degree */
-# define D2R(d) (double)(d * RpD)	/* degrees->radians */
-
-void soft_text(double x, double y,
-	       double text_size_x, double text_size_y, double text_rotation,
-	       const char *string)
+void soft_text(const char *string)
 {
-    double sinrot = sin(D2R(text_rotation));
-    double cosrot = cos(D2R(text_rotation));
-
-    curx = basex = x;
-    cury = basey = y;
-    while (*string) {
-	drawchar(text_size_x, text_size_y, sinrot, cosrot, *string++);
-	basex = curx;
-	basey = cury;
-    }
+    draw_text(string, NULL);
 }
 
-void onechar(double x, double y,
-	     double text_size_x, double text_size_y, double text_rotation,
-	     unsigned char achar)
-{
-    double sinrot = sin(D2R(text_rotation));
-    double cosrot = cos(D2R(text_rotation));
-
-    curx = basex = x;
-    cury = basey = y;
-    drawchar(text_size_x, text_size_y, sinrot, cosrot, achar);
-}

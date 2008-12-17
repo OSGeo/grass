@@ -3,12 +3,8 @@
 #include <math.h>
 #include <grass/gis.h>
 
+#include "path.h"
 #include "pngdriver.h"
-
-struct point
-{
-    double x, y;
-};
 
 static int cmp_double(const void *aa, const void *bb)
 {
@@ -50,17 +46,17 @@ static void fill(double x0, double x1, double y)
 	*p++ = png.current_color;
 }
 
-static void line(const struct point *p, int n, double y)
+static void line(const struct vertex *p, int n, double y)
 {
     static double *xs;
     static int max_x;
     int num_x = 0;
     int i;
 
-    for (i = 0; i < n; i++) {
-	const struct point *p0 = &p[i];
-	const struct point *p1 = &p[i + 1];
-	const struct point *tmp;
+    for (i = 1; i < n; i++) {
+	const struct vertex *p0 = &p[i - 1];
+	const struct vertex *p1 = &p[i];
+	const struct vertex *tmp;
 	double x;
 
 	if (p0->y == p1->y)
@@ -92,7 +88,7 @@ static void line(const struct point *p, int n, double y)
 	fill(xs[i], xs[i + 1], y);
 }
 
-static void poly(const struct point *p, int n)
+static void poly(const struct vertex *p, int n)
 {
     double y0, y1, y;
     int i;
@@ -123,26 +119,12 @@ static void poly(const struct point *p, int n)
 	line(p, n, y);
 }
 
-void png_polygon(const double *xarray, const double *yarray, int count)
+void png_polygon(struct path *p)
 {
-    static struct point *points;
-    static int max_points;
-    int i;
+    if (p->vertices[p->count - 1].mode != P_CLOSE)
+	path_close(p);
 
-    if (max_points < count + 1) {
-	max_points = count + 1;
-	points = G_realloc(points, sizeof(struct point) * max_points);
-    }
-
-    for (i = 0; i < count; i++) {
-	points[i].x = xarray[i];
-	points[i].y = yarray[i];
-    }
-
-    points[count].x = xarray[0];
-    points[count].y = yarray[0];
-
-    poly(points, count);
+    poly(p->vertices, p->count);
 
     png.modified = 1;
 }

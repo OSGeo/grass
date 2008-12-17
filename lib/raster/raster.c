@@ -43,6 +43,8 @@ static void init(void)
 	R_text_size(s, s);
     }
 
+    R_text_rotation(0);
+
     if (frame) {
 	double t, b, l, r;
 	sscanf(frame, "%lf,%lf,%lf,%lf", &t, &b, &l, &r);
@@ -159,80 +161,6 @@ void R_erase(void)
 void R_pos_abs(double x, double y)
 {
     COM_Pos_abs(x, y);
-}
-
-/*!
- * \brief draw line
- *
- * Draw a line using the current color, selected via <i>R_color</i>, from the 
- * current location to the location specified by <b>x,y.</b> The current location
- * is updated to <b>x,y.</b>
- *
- *  \param x
- *  \param y
- *  \return void
- */
-
-void R_line_abs(double x1, double y1, double x2, double y2)
-{
-    COM_Line_abs(x1, y1, x2, y2);
-}
-
-/*!
- * \brief draw a series of dots
- *
- * Pixels at the <b>num</b> absolute positions in the <b>x</b> and
- * <b>y</b> arrays are turned to the current color. The current location is
- * left updated to the position of the last dot.
- *
- *  \param xarray x
- *  \param yarray y
- *  \param number
- *  \return void
- */
-
-void R_polydots_abs(const double *xarray, const double *yarray, int number)
-{
-    COM_Polydots_abs(xarray, yarray, number);
-}
-
-/*!
- * \brief draw an open polygon
- *
- * The <b>number</b> absolute positions in the <b>x</b> and <b>y</b>
- * arrays are used to generate a multisegment line (often curved). This line is
- * drawn with the current color. The current location is left updated to the
- * position of the last point.
- * <b>Note.</b> It is not assumed that the line is closed, i.e., no line is
- * drawn from the last point to the first point.
- *
- *  \param xarray x
- *  \param yarray y
- *  \param number
- *  \return void
- */
-
-void R_polyline_abs(const double *xarray, const double *yarray, int number)
-{
-    COM_Polyline_abs(xarray, yarray, number);
-}
-
-/*!
- * \brief draw a closed polygon
- *
- * The <b>number</b> absolute positions in the <b>x</b> and <b>y</b> arrays
- * outline a closed polygon which is filled with the current color. The current
- * location is undefined afterwards.
- *
- *  \param xarray x
- *  \param yarray y
- *  \param number
- *  \return void
- */
-
-void R_polygon_abs(const double *xarray, const double *yarray, int number)
-{
-    COM_Polygon_abs(xarray, yarray, number);
 }
 
 /*!

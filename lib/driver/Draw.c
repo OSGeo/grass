@@ -8,14 +8,6 @@ void COM_Bitmap(int ncols, int nrows, int threshold,
 	(*driver->Bitmap) (ncols, nrows, threshold, buf);
 }
 
-void COM_Line_abs(double x0, double y0, double x1, double y1)
-{
-    COM_Begin();
-    COM_Move(x0, y0);
-    COM_Cont(x1, y1);
-    COM_Stroke();
-}
-
 void COM_Begin(void)
 {
     if (driver->Begin)
