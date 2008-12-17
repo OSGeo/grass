@@ -5,6 +5,7 @@
  * AUTHOR(S):  Michael Higgins, U.S. Army Construction Engineering Research Laboratory
  *             James Westervelt, U.S. Army Construction Engineering Research Laboratory
  *             Radim Blazek, ITC-Irst, Trento, Italy
+ *             Martin Landa, CTU in Prague, Czech Republic (v.out.ascii.db merged)
  *
  * PURPOSE:    v.out.ascii: writes GRASS vector data as ASCII files
  * COPYRIGHT:  (C) 2000-2008 by the GRASS Development Team
@@ -29,9 +30,10 @@
 int main(int argc, char *argv[])
 {
     FILE *ascii, *att;
-    struct Option *input, *output, *format_opt, *dp_opt, *delim_opt;
+    struct Option *input, *output, *format_opt, *dp_opt, *delim_opt,
+	*field_opt, *column_opt, *where_opt;
     struct Flag *verf, *region_flag;
-    int format, dp;
+    int format, dp, field;
     char *fs;
     struct Map_info Map;
     int ver = 5, pnt = 0;
@@ -40,18 +42,14 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("vector");
+    module->keywords = _("vector, export");
     module->description =
 	_("Converts a GRASS binary vector map to a GRASS ASCII vector map.");
 
     input = G_define_standard_option(G_OPT_V_INPUT);
 
-    output = G_define_option();
-    output->key = "output";
-    output->type = TYPE_STRING;
+    output = G_define_standard_option(G_OPT_F_OUTPUT);
     output->required = NO;
-    output->multiple = NO;
-    output->gisprompt = "new_file,file,output";
     output->description =
 	_("Path to resulting ASCII file or ASCII vector name if '-o' is defined");
 
@@ -64,21 +62,29 @@ int main(int argc, char *argv[])
     format_opt->answer = "point";
     format_opt->description = _("Output format");
 
-    delim_opt = G_define_option();
-    delim_opt->key = "fs";
-    delim_opt->type = TYPE_STRING;
-    delim_opt->required = NO;
+    delim_opt = G_define_standard_option(G_OPT_F_SEP);
     delim_opt->description = _("Field separator (points mode)");
-    delim_opt->answer = "|";
+    delim_opt->guisection = _("Points");
 
     dp_opt = G_define_option();
     dp_opt->key = "dp";
     dp_opt->type = TYPE_INTEGER;
     dp_opt->required = NO;
     dp_opt->options = "0-32";
-    dp_opt->answer = "8";	/*This value is taken from the lib settings in G_format_easting() */
+    dp_opt->answer = "8";	/* This value is taken from the lib settings in G_format_easting() */
     dp_opt->description =
 	_("Number of significant digits (floating point only)");
+    dp_opt->guisection = _("Points");
+
+    field_opt = G_define_standard_option(G_OPT_V_FIELD);
+    field_opt->guisection = _("Selection");
+
+    column_opt = G_define_standard_option(G_OPT_DB_COLUMNS);
+    column_opt->description = _("Name of attribute column(s) to be exported (point mode)");
+    column_opt->guisection = _("Points");
+    
+    where_opt = G_define_standard_option(G_OPT_DB_WHERE);
+    where_opt->guisection = _("Selection");
 
     verf = G_define_flag();
     verf->key = 'o';
@@ -88,14 +94,22 @@ int main(int argc, char *argv[])
     region_flag->key = 'r';
     region_flag->description =
 	_("Only export points falling within current 3D region (points mode)");
+    region_flag->guisection = _("Points");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
+    field = atoi(field_opt->answer);
+        
     if (format_opt->answer[0] == 'p')
 	format = FORMAT_POINT;
     else
 	format = FORMAT_ALL;
+
+    if (format == FORMAT_ALL) {
+	G_warning(_("Parameter '%s' ignored in standard mode"),
+		  column_opt->key);
+    }
 
     if (verf->answer)
 	ver = 4;
@@ -127,9 +141,10 @@ int main(int argc, char *argv[])
 
 
     Vect_set_open_level(1);	/* only need level I */
-    Vect_open_old(&Map, input->answer, "");
-
-
+    if (Vect_open_old(&Map, input->answer, "") < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"),
+		      input->answer);
+    
     if (output->answer) {
 	if (ver == 4) {
 	    ascii = G_fopen_new("dig_ascii", output->answer);
@@ -161,12 +176,14 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("dig_att file already exist"));
 
 	if ((att = G_fopen_new("dig_att", output->answer)) == NULL)
-	    G_fatal_error(_("Unable to open dig_att file <%s>\n"),
+	    G_fatal_error(_("Unable to open dig_att file <%s>"),
 			  output->answer);
     }
 
-    bin_to_asc(ascii, att, &Map, ver, format, dp, fs, region_flag->answer);
-
+    bin_to_asc(ascii, att, &Map, ver, format, dp, fs,
+	       region_flag->answer, field, where_opt->answer,
+	       column_opt->answers);
+    
     if (ascii != NULL)
 	fclose(ascii);
     if (att != NULL)
