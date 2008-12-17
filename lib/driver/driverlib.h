@@ -9,8 +9,8 @@ extern const struct driver *driver;
 /* Utility Functions */
 
 /* Font.c */
-int font_is_freetype(void);
-void font_list(char ***, int *, int);
+int font_get_type(void);
+const char *font_get_encoding(void);
 
 /* Text2.c */
 void get_text_ext(const char *, double *, double *, double *, double *);
@@ -31,7 +31,6 @@ int font_get_index(void);
 
 /* parse_ftcap.c */
 extern int font_exists(const char *);
-extern struct GFONT_CAP *parse_freetypecap(void);
-extern void free_freetypecap(struct GFONT_CAP *);
-extern void free_font_list(char **, int);
-
+extern int parse_fontcap_entry(struct GFONT_CAP *, const char *);
+extern struct GFONT_CAP *parse_fontcap(void);
+extern void free_fontcap(struct GFONT_CAP *);

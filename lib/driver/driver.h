@@ -2,7 +2,7 @@
 #ifndef _DRIVER_H
 #define _DRIVER_H
 
-#include <grass/freetypecap.h>
+#include <grass/fontcap.h>
 
 extern int screen_width;
 extern int screen_height;

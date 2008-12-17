@@ -18,7 +18,7 @@
 #include <stdlib.h>
 
 #include <grass/gis.h>
-#include <grass/freetypecap.h>
+#include <grass/fontcap.h>
 #include "driverlib.h"
 #include "driver.h"
 
@@ -44,7 +44,7 @@ void LIB_init(const struct driver *drv)
     const char *p;
 
     driver = drv;
-    ftcap = parse_freetypecap();
+    ftcap = parse_fontcap();
 
     /* initialize graphics */
 

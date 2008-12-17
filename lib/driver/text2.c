@@ -25,8 +25,8 @@ static void transform(double *x, double *y,
 		      int ix, int iy,
 		      double orig_x, double orig_y)
 {
-    double ax = text_size_x * ix;
-    double ay = text_size_y * iy;
+    double ax = text_size_x * ix / 25;
+    double ay = text_size_y * iy / 25;
     double rx = ax * text_cosrot - ay * text_sinrot;
     double ry = ax * text_sinrot + ay * text_cosrot;
     *x = orig_x + rx;

@@ -15,7 +15,7 @@
 #include <grass/Vect.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
-#include <grass/freetypecap.h>
+#include <grass/fontcap.h>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -178,8 +178,5 @@ void print_label(FILE * labelf, label_t * label, struct params *p);
  */
 struct line_pnts *skyline_trans_rot(struct line_pnts *skyline,
 				    label_point_t * p, double angle);
-
-void free_freetypecap(struct GFONT_CAP *ftcap);
-struct GFONT_CAP *find_font_from_freetypecap(const char *font);
 
 #endif /* _LABELS_H */
