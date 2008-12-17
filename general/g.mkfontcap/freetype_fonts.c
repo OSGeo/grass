@@ -23,7 +23,7 @@
 
 #include <grass/config.h>
 #include <grass/gis.h>
-#include <grass/freetypecap.h>
+#include <grass/fontcap.h>
 
 #include "local_proto.h"
 

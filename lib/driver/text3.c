@@ -39,13 +39,6 @@ static void draw_bitmap(FT_Bitmap *, FT_Int, FT_Int);
 static void set_text_box(FT_Bitmap *, FT_Int, FT_Int, struct rectangle *);
 #endif
 
-static const char *font_get_encoding(void)
-{
-    if (!encoding)
-	encoding = G_store("ISO-8859-1");
-    return encoding;
-}
-
 static void draw_main(double x, double y, const char *string,
 		      struct rectangle *box)
 {
@@ -90,11 +83,10 @@ static void draw_main(double x, double y, const char *string,
     /* ans = FT_Set_Char_Size(face,text_size_x*64,text_size_y*64,0,0); */
     /* ans = FT_Set_Char_Size(face,10*64,0,72,0); */
     /* ans = FT_Set_Char_Size(face,text_size_x*64,text_size_y*64,72,72); */
-    ans =
-	FT_Set_Char_Size(face,
-			 (int)(text_size_x * 25 * 64),
-			 (int)(text_size_y * 25 * 64),
-			 100, 100);
+    ans = FT_Set_Char_Size(face,
+			   (int)(text_size_x * 64),
+			   (int)(text_size_y * 64),
+			   100, 100);
 
     if (ans) {
 	/* DEBUG_LOG("Text3 error: ft set size\n"); */

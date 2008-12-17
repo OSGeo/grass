@@ -36,13 +36,11 @@ static char *convert(const char *in)
 
 #ifdef HAVE_ICONV_H
     {
+	const char *encoding = font_get_encoding();
 	char *p1 = (char *) in;
 	char *p2 = out;
 	size_t ret;
 	iconv_t cd;
-
-	if (!encoding)
-	    encoding = G_store("US-ASCII");
 
 	if ((cd = iconv_open("UTF-8", encoding)) < 0)
 	    G_fatal_error(_("Unable to convert from <%s> to UTF-8"),
@@ -88,7 +86,7 @@ static void set_matrix(void)
 	return;
 
     cairo_matrix_init_identity(&mat);
-    cairo_matrix_scale(&mat, text_size_x * 25, text_size_y * 25);
+    cairo_matrix_scale(&mat, text_size_x, text_size_y);
     cairo_matrix_rotate(&mat, -text_rotation * M_PI / 180);
 
     cairo_set_font_matrix(cairo, &mat);
@@ -174,17 +172,23 @@ static void set_font_toy(const char *name)
 
 #if CAIRO_HAS_FT_FONT
 
-static void set_font_fc(const char *name)
+static void fc_init(void)
 {
-    static cairo_font_face_t *face;
     static int initialized;
-    FcPattern *pattern;
-    FcResult result;
 
     if (!initialized) {
 	FcInit();
 	initialized = 1;
     }
+}
+
+static void set_font_fc(const char *name)
+{
+    static cairo_font_face_t *face;
+    FcPattern *pattern;
+    FcResult result;
+
+    fc_init();
 
     if (face) {
 	cairo_font_face_destroy(face);
@@ -197,6 +201,48 @@ static void set_font_fc(const char *name)
     pattern = FcFontMatch(FcConfigGetCurrent(), pattern, &result);
     face = cairo_ft_font_face_create_for_pattern(pattern);
     cairo_set_font_face(cairo, face);
+}
+
+static void font_list_fc(char ***list, int *count, int verbose)
+{
+    FcPattern *pattern;
+    FcObjectSet *objset;
+    FcFontSet *fontset;
+    char **fonts = *list;
+    int num_fonts = *count;
+    int i;
+
+    fc_init();
+
+    pattern = FcPatternCreate();
+    objset = FcObjectSetBuild(FC_FAMILY, FC_STYLE, (char *) NULL);
+    fontset = FcFontList(NULL, pattern, objset);
+
+    fonts = G_realloc(fonts, (num_fonts + fontset->nfont) * sizeof(char *));
+
+    for (i = 0; i < fontset->nfont; i++) {
+	char buf[1024];
+	FcPattern *pat = fontset->fonts[i];
+	FcChar8 *family = "", *style = "";
+
+	FcPatternGetString(pat, FC_FAMILY, 0, &family);
+	FcPatternGetString(pat, FC_STYLE , 0, &style );
+
+	if (verbose)
+	    sprintf(buf, "%s:%s|%s:%s|%d|%s|%d|%s|",
+		    family, style, family, style, GFONT_DRIVER, "", 0, "utf-8");
+	else
+	    sprintf(buf, "%s:%s", family, style);
+
+	fonts[num_fonts++] = G_store(buf);
+    }
+
+    FcObjectSetDestroy(objset);
+    FcPatternDestroy(pattern);
+    FcFontSetDestroy (fontset);
+
+    *list = fonts;
+    *count = num_fonts;
 }
 
 #endif
@@ -255,9 +301,11 @@ static void font_list_toy(char ***list, int *count, int verbose)
 
     for (i = 0; i < num_toy_fonts; i++) {
 	char buf[256];
-	sprintf(buf, "%s%s",
-		toy_fonts[i],
-		verbose ? "||1||0|utf-8|" : "");
+	if (verbose)
+	    sprintf(buf, "%s|%s|%d|%s|%d|%s|",
+		    toy_fonts[i], toy_fonts[i], GFONT_DRIVER, "", 0, "utf-8");
+	else
+	    strcpy(buf, toy_fonts[i]);
 	fonts[num_fonts++] = G_store(buf);
     }
 
@@ -273,8 +321,10 @@ static void font_list_toy(char ***list, int *count, int verbose)
 */
 void Cairo_font_list(char ***list, int *count)
 {
-    font_list(list, count, 0);
     font_list_toy(list, count, 0);
+#if CAIRO_HAS_FT_FONT
+    font_list_fc(list, count, 0);
+#endif
 }
 
 /*!
@@ -285,7 +335,9 @@ void Cairo_font_list(char ***list, int *count)
 */
 void Cairo_font_info(char ***list, int *count)
 {
-    font_list(list, count, 1);
     font_list_toy(list, count, 1);
+#if CAIRO_HAS_FT_FONT
+    font_list_fc(list, count, 1);
+#endif
 }
 
