@@ -49,60 +49,52 @@ static void map_file(void);
 static void init_xlib(void)
 {
 #if defined(USE_X11) && CAIRO_HAS_XLIB_SURFACE
-    Display *dpy;
-    Drawable win;
     unsigned long xid;
     XVisualInfo templ;
     XVisualInfo *vinfo;
+    int scrn;
     int count;
-    Window root;
-    unsigned int depth;
-    int si;
-    unsigned int ui;
-    Visual *visual;
     char *p;
 
-    p = getenv("GRASS_CAIRO_DRAWABLE");
-    if (!p || sscanf(p, "%li", &xid) != 1)
-	G_fatal_error(_("Invalid Drawable XID: %s"), p);
-    win = xid;
-
-    dpy = XOpenDisplay(NULL);
-    if (!dpy)
+    ca.dpy = XOpenDisplay(NULL);
+    if (!ca.dpy)
 	G_fatal_error(_("Unable to open display"));
+
+    p = getenv("GRASS_CAIRO_SCREEN");
+    if (!p || sscanf(p, "%i", &scrn) != 1)
+	scrn = DefaultScreen(ca.dpy);
 
     p = getenv("GRASS_CAIRO_VISUAL");
     if (!p || sscanf(p, "%li", &xid) != 1)
-	G_fatal_error(_("invalid Visual XID: %s"), p);
-    templ.visualid = xid;
+	xid = DefaultVisual(ca.dpy, scrn)->visualid;
 
-    vinfo = XGetVisualInfo(dpy, VisualIDMask, &templ, &count);
+    templ.visualid = xid;
+    templ.screen = scrn;
+
+    vinfo = XGetVisualInfo(ca.dpy, VisualIDMask, &templ, &count);
     if (!vinfo || !count)
 	G_fatal_error(_("Unable to obtain visual"));
-    visual = vinfo[0].visual;
+    ca.visual = vinfo[0].visual;
 
-    if (!XGetGeometry
-	(dpy, win, &root, &si, &si, &width, &height, &ui, &depth))
-	G_fatal_error(_("Unable to query drawable"));
+    if (!ca.win)
+	ca.win = XCreatePixmap(
+	    ca.dpy, RootWindow(ca.dpy, scrn),
+	    ca.width, ca.height, vinfo[0].depth);
+#endif
+}
 
-    surface = cairo_xlib_surface_create(dpy, win, visual, width, height);
-
-    if (cairo_surface_status(surface) != CAIRO_STATUS_SUCCESS)
-	G_fatal_error(_("Failed to initialize Xlib surface"));
-
-    cairo = cairo_create(surface);
-
-    ca.file_name = "<X11>";
-    file_type = FTYPE_X11;
-
-    screen_right = screen_left + ca.width;
-    screen_bottom = screen_top + ca.height;
+static void fini_xlib(void)
+{
+#if defined(USE_X11) && CAIRO_HAS_XLIB_SURFACE
+    XSetCloseDownMode(ca.dpy, RetainPermanent);
+    XCloseDisplay(ca.dpy);
 #endif
 }
 
 static void init_file(void)
 {
     int is_vector = 0;
+    int is_xlib = 0;
     int do_read = 0;
     int do_map = 0;
     char *p;
@@ -120,8 +112,7 @@ static void init_file(void)
     ca.file_name = p;
 
     /* get file type (from extension) */
-    if (ca.file_type == FTYPE_X11) ;	/* skip */
-    else if (ends_with(ca.file_name, ".ppm"))
+    if (ends_with(ca.file_name, ".ppm"))
 	ca.file_type = FTYPE_PPM;
     else if (ends_with(ca.file_name, ".bmp"))
 	ca.file_type = FTYPE_BMP;
@@ -141,6 +132,10 @@ static void init_file(void)
     else if (ends_with(ca.file_name, ".svg"))
 	ca.file_type = FTYPE_SVG;
 #endif
+#if defined(USE_X11) && CAIRO_HAS_XLIB_SURFACE
+    else if (ends_with(ca.file_name, ".xid"))
+	ca.file_type = FTYPE_X11;
+#endif
     else
 	G_fatal_error(_("Unknown file extension: %s"), p);
     G_debug(1, "File type: %s (%d)", ca.file_name, ca.file_type);
@@ -150,6 +145,9 @@ static void init_file(void)
     case FTYPE_PS:
     case FTYPE_SVG:
 	is_vector = 1;
+	break;
+    case FTYPE_X11:
+	is_xlib = 1;
 	break;
     }
 
@@ -174,6 +172,15 @@ static void init_file(void)
     
     if (do_read && do_map)
 	map_file();
+
+    if (is_xlib) {
+	if (do_read)
+	    cairo_read_image();
+	else
+	    ca.win = 0;
+	init_xlib();
+	ca.mapped = 1;
+    }
 
     if (!ca.mapped && !is_vector)
 	ca.grid = G_malloc(ca.height * ca.stride);
@@ -244,11 +251,7 @@ int Cairo_Graph_set(void)
     if (p && G_strcasecmp(p, "subpixel") == 0)
 	antialias = CAIRO_ANTIALIAS_SUBPIXEL;
 
-    p = getenv("GRASS_CAIRO_DRAWABLE");
-    if (p)
-	init_xlib();
-    else
-	init_file();
+    init_file();
 
     cairo_set_antialias(cairo, antialias);
 
@@ -262,6 +265,13 @@ void Cairo_Graph_close(void)
 {
     G_debug(1, "Cairo_Graph_close");
 
+#if defined(USE_X11) && CAIRO_HAS_XLIB_SURFACE
+    if (ca.file_type == FTYPE_X11) {
+	XFlush(cairo_xlib_surface_get_display(surface));
+	ca.mapped = 0;
+    }
+#endif
+
     cairo_write_image();
 
     if (cairo) {
@@ -272,6 +282,11 @@ void Cairo_Graph_close(void)
 	cairo_surface_destroy(surface);
 	surface = NULL;
     }
+
+#if defined(USE_X11) && CAIRO_HAS_XLIB_SURFACE
+    if (ca.file_type == FTYPE_X11)
+	fini_xlib();
+#endif
 }
 
 static void init_cairo(void)
@@ -306,6 +321,13 @@ static void init_cairo(void)
 	surface =
 	    (cairo_surface_t *) cairo_svg_surface_create(
 		ca.file_name, (double) ca.width, (double) ca.height);
+	break;
+#endif
+#if defined(USE_X11) && CAIRO_HAS_XLIB_SURFACE
+    case FTYPE_X11:
+	surface =
+	    (cairo_surface_t *) cairo_xlib_surface_create(
+		ca.dpy, ca.win, ca.visual, ca.width, ca.height);
 	break;
 #endif
     default:
@@ -356,3 +378,4 @@ static void map_file(void)
     ca.mapped = 1;
 #endif
 }
+

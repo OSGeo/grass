@@ -21,6 +21,13 @@
 
 #include <cairo.h>
 
+#if defined(USE_X11) && CAIRO_HAS_XLIB_SURFACE
+#include <X11/X.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <cairo-xlib.h>
+#endif
+
 #include <grass/config.h>
 #include <grass/gis.h>
 
@@ -56,6 +63,11 @@ struct cairo_state {
     double bgcolor_r, bgcolor_g, bgcolor_b, bgcolor_a;
     int modified;
     int mapped;
+#if defined(USE_X11) && CAIRO_HAS_XLIB_SURFACE
+    Display *dpy;
+    Drawable win;
+    Visual *visual;
+#endif
 };
 
 extern struct cairo_state ca;
@@ -93,10 +105,12 @@ extern void Cairo_font_info(char ***, int *);
 extern void cairo_read_image(void);
 extern void cairo_read_ppm(void);
 extern void cairo_read_bmp(void);
+extern void cairo_read_xid(void);
 
 /* write.c */
 extern void cairo_write_image(void);
 extern void cairo_write_ppm(void);
 extern void cairo_write_bmp(void);
+extern void cairo_write_xid(void);
 
 #endif /* __CAIRODRIVER_H__ */
