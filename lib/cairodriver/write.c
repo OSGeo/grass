@@ -14,7 +14,7 @@
 
 #include "cairodriver.h"
 
-#if CAIRO_HAS_XLIB_SURFACE
+#if defined(USE_X11) && CAIRO_HAS_XLIB_SURFACE
 #include <X11/Xlib.h>
 #include <cairo-xlib.h>
 #endif
@@ -46,9 +46,10 @@ void cairo_write_image(void)
 	cairo_surface_write_to_png(surface, ca.file_name);
     }
 #endif
-#if CAIRO_HAS_XLIB_SURFACE
+#if defined(USE_X11) && CAIRO_HAS_XLIB_SURFACE
     else if (ca.file_type == FTYPE_X11) {
-	XFlush(cairo_xlib_surface_get_display(surface));
+	G_debug(1, "Writing XID to %s", ca.file_name);
+	cairo_write_xid();
     }
 #endif
     /* vector format files are written directly to file */
