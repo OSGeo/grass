@@ -218,6 +218,9 @@ int bin_to_asc(FILE *ascii,
 			    case DB_C_TYPE_DATETIME: {
 				break;
 			    }
+			    case -1:
+				G_fatal_error(_("Column <%s> not found in table <%s>"),
+					      columns[i], Fi->table);
 			    default: G_fatal_error(_("Column <%s>: unsupported data type"),
 						   columns[i]);
 			    }
