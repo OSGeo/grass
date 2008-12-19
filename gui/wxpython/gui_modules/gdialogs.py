@@ -690,7 +690,7 @@ class LoadMapLayersDialog(wx.Dialog):
         @param mapset mapset name
         """
         try:
-            self.map_layers = grass.list_grouped2(type=type, mapset=mapset)[mapset]
+            self.map_layers = grass.mlist_grouped(type=type, mapset=mapset)[mapset]
         except KeyError:
             self.map_layers = []
         
