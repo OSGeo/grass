@@ -526,10 +526,10 @@ def raster_history(map):
     current_mapset = gisenv()['MAPSET']
     if find_file(name = map)['mapset'] == current_mapset:
         run_command('r.support', map = map, history = os.environ['CMDLINE'])
-        return 1
+        return True
     
     warning("Unable to write history for <%s>. Raster map <%s> not found in current mapset." % (map, map))
-    return 0
+    return False
     
 # run "r.info -rgstmpud ..." and parse output
 
