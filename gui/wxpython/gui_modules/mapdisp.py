@@ -48,12 +48,13 @@ except:
     sys.path.append(CompatPath)
     from compat import subprocess
 
+import grass
+
 gmpath = os.path.join(globalvar.ETCWXDIR, "icons")
 sys.path.append(gmpath)
 
 import render
 import toolbars
-import grassenv
 import track
 import menuform
 import gselect

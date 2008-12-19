@@ -30,13 +30,14 @@ import wx.combo
 import wx.lib.newevent
 import wx.lib.buttons  as  buttons
 
+import grass
+
 import gdialogs
 import globalvar
 import menuform
 import mapdisp
 import render
 import gcmd
-import grassenv
 import histogram
 import utils
 import profile
@@ -108,7 +109,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # title
         self.mapdisplay.SetTitle(_("GRASS GIS Map Display: " +
                                    str(self.disp_idx + 1) + 
-                                   " - Location: " + grassenv.GetGRASSVariable("LOCATION_NAME")))
+                                   " - Location: " + grass.gisenv()["LOCATION_NAME"]))
 
         # show new display
         if kargs['showMapDisplay'] is True:
@@ -302,7 +303,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                     internal=True) == layer.GetName():
                     self.popupMenu.Check(self.popupID14, True)
             
-            if layer.GetMapset() != grassenv.GetGRASSVariable("MAPSET"):
+            if layer.GetMapset() != grass.gisenv()['MAPSET']:
                 # only vector map in current mapset can be edited
                 self.popupMenu.Enable (self.popupID5, False)
                 self.popupMenu.Enable (self.popupID6, False)

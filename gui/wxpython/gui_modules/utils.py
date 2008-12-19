@@ -23,7 +23,6 @@ sys.path.append(grassPath)
 import grass
 
 import gcmd
-import grassenv
 try:
     import subprocess
 except:
@@ -118,9 +117,9 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None,
                     if result:
                         mapname = result['fullname']
                     else:
-                        mapname += '@' + grassenv.GetGRASSVariable('MAPSET')
+                        mapname += '@' + grass.gisenv()['MAPSET']
                 else:
-                    mapname += '@' + grassenv.GetGRASSVariable('MAPSET')
+                    mapname += '@' + grass.gisenv()['MAPSET']
                 dcmd[idx] = dcmd[idx].split('=')[0] + '=' + mapname
                 
     return mapname

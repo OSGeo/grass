@@ -24,7 +24,8 @@ import wx
 import os,sys
 import time
 
-import grassenv
+import grass
+
 import gcmd
 import globalvar
 
@@ -48,7 +49,7 @@ class SQLFrame(wx.Frame):
         #
         self.vectmap = vectmap
         if not "@" in self.vectmap:
-            self.vectmap = self.vectmap + "@" + grassenv.GetGRASSVariable ("MAPSET")
+            self.vectmap = self.vectmap + "@" + grass.gisenv()['MAPSET']
         self.mapname, self.mapset = self.vectmap.split("@")
         self.layer,self.tablename, self.column, self.database, self.driver =\
                  os.popen("v.db.connect -g map=%s" %\

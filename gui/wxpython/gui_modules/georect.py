@@ -32,6 +32,7 @@ import wx.lib.colourselect as  csel
 import wx.wizard as wiz
 
 import grass
+
 import globalvar
 import mapdisp
 import render
@@ -75,8 +76,7 @@ class GeorectWizard(object):
         #
         # get environmental variables
         #
-        p = gcmd.Command(['g.gisenv', 'get=GISDBASE'])
-        self.grassdatabase = p.ReadStdOutput()[0]
+        self.grassdatabase = grass.gisenv()['GISDBASE']
 
         #
         # read original environment settings

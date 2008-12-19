@@ -31,13 +31,13 @@ import wx
 import wx.lib.filebrowsebutton as filebrowse
 import wx.lib.mixins.listctrl as listmix
 
+import grass
+
 import gcmd
-import grassenv
 import globalvar
 import gselect
 import menuform
 import utils
-import grass
 from preferences import globalSettings as UserSettings
 
 class NewVectorDialog(wx.Dialog):
@@ -57,7 +57,7 @@ class NewVectorDialog(wx.Dialog):
         self.label = wx.StaticText(parent=self.panel, id=wx.ID_ANY,
                                    label=_("Name for new vector map:"))
         self.mapName = gselect.Select(parent=self.panel, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE,
-                                      type='vector', mapsets=[grassenv.GetGRASSVariable('MAPSET'),])
+                                      type='vector', mapsets=[grass.gisenv()['MAPSET'],])
         self.mapName.SetFocus()
         
         self.table = wx.CheckBox(parent=self.panel, id=wx.ID_ANY,
@@ -197,7 +197,7 @@ def CreateNewVector(parent, cmdDef, title=_('Create new vector map'),
 
         # return fully qualified map name
         if '@' not in outmap:
-            outmap += '@' + grassenv.GetGRASSVariable('MAPSET')
+            outmap += '@' + grass.gisenv()['MAPSET']
 
         if log:
             log.WriteLog(_("New vector map <%s> created") % outmap)
@@ -649,7 +649,7 @@ class LoadMapLayersDialog(wx.Dialog):
                                   style=wx.CB_SIMPLE | wx.CB_READONLY,
                                   choices=utils.ListOfMapsets(),
                                   size=(250,-1))
-        self.mapset.SetStringSelection(grassenv.GetGRASSVariable("MAPSET"))
+        self.mapset.SetStringSelection(grass.gisenv()['MAPSET'])
         bodySizer.Add(item=self.mapset,
                       pos=(1,1))
 

@@ -50,7 +50,6 @@ import wx.lib.flatnotebook as FN
 import wx.lib.scrolledpanel as scrolled
 
 import sqlbuilder
-import grassenv
 import gcmd
 import utils
 import gdialogs

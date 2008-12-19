@@ -37,6 +37,8 @@ import tempfile
 import wx
 from wx.lib.newevent import NewEvent
 
+import grass
+
 import globalvar
 import utils
 import gcmd
@@ -424,15 +426,8 @@ class Map(object):
         if self.gisrc:
             os.environ["GISRC"] = self.gisrc
 
-        gisenvCmd = gcmd.Command(["g.gisenv"])
-
-        for line in gisenvCmd.ReadStdOutput():
-            line = line.strip()
-            key, val = line.split("=")
-            val = val.replace(";","")
-            val = val.replace("'","")
-            self.env[key] = val
-
+        self.env = grass.gisenv()
+        
         # back to original gisrc
         if self.gisrc:
             os.environ["GISRC"] = gisrc_orig

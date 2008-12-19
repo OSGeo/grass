@@ -27,6 +27,7 @@ import wx
 import wx.combo
 
 import grass
+
 import globalvar
 import gcmd
 import utils
