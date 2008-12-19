@@ -519,9 +519,18 @@ def vector_history(map):
 def raster_history(map):
     """Set the command history for a raster map to the command used to
     invoke the script (interface to `r.support').
-    """
-    run_command('r.support', map = map, history = os.environ['CMDLINE'])
 
+    @return 1 on success
+    @return 0 on failure
+    """
+    current_mapset = gisenv()['MAPSET']
+    if find_file(name = map)['mapset'] == current_mapset:
+        run_command('r.support', map = map, history = os.environ['CMDLINE'])
+        return 1
+    
+    warning("Unable to write history for <%s>. Raster map <%s> not found in current mapset." % (map, map))
+    return 0
+    
 # run "r.info -rgstmpud ..." and parse output
 
 def raster_info(map):
