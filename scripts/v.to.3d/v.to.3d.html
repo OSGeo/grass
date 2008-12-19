@@ -5,11 +5,22 @@ to 3D. Height (z-coordinate) of 3D vector features can be specified
 by <b>height</b> parameter as fixed value or by <b>column</b>
 parameter.
 
+<h2>EXAMPLES</h2>
+
+<div class="code"><pre>
+# convert z-values from string to double
+v.db.addcol map=geodetic_pts columns="Z_VALUE_D double precision"
+v.db.update map=geodetic_pts column=Z_VALUE_D qcolumn=Z_VALUE
+v.db.select map=geodetic_pts columns=cat,Z_VALUE,Z_VALUE_
+
+# convert 2D vector point map to 3D based on attribute
+v.to.3d input=geodetic_pts out=geodetic_pts_3d column=Z_VALUE_D
+</pre></div>
+
 <h2>TODO</h2>
 
 <ul>
   <li>Implement reverse transformation</li>
-  <li>Some examples</li>
 </ul>
 
 <h2>SEE ALSO</h2>
