@@ -520,8 +520,8 @@ def raster_history(map):
     """Set the command history for a raster map to the command used to
     invoke the script (interface to `r.support').
 
-    @return 1 on success
-    @return 0 on failure
+    @return True on success
+    @return False on failure
     """
     current_mapset = gisenv()['MAPSET']
     if find_file(name = map)['mapset'] == current_mapset:
