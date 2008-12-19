@@ -296,24 +296,24 @@ def list_grouped(type):
             result[mapset].extend(line.split())
     return result
 
-def list_grouped2(type, pattern=None):
+def list_grouped2(type, mapset = None, pattern = None):
     """Returns the output from running g.mlist, as a dictionary where the keys
     are mapset names and the values are lists of maps in that mapset. 
     """
     result = {}
-    mapset = None
+    mapset_element = None
     for line in read_command("g.mlist", flags="m",
-                             type = type, pattern = pattern).splitlines():
+                             type = type, mapset = mapset, pattern = pattern).splitlines():
         try:
-            map, mapset = line.split('@')
+            map, mapset_element = line.split('@')
         except ValueError:
             print >> sys.stderr, "Invalid element '%s'" % line
             continue
         
-        if result.has_key(mapset):
-            result[mapset].append(map)
+        if result.has_key(mapset_element):
+            result[mapset_element].append(map)
         else:
-	    result[mapset] = [map, ]
+	    result[mapset_element] = [map, ]
     
     return result
 
