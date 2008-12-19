@@ -15,20 +15,25 @@
 #ifndef __CAIRODRIVER_H__
 #define __CAIRODRIVER_H__
 
+#include <grass/config.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include <cairo.h>
 
-#if defined(USE_X11) && CAIRO_HAS_XLIB_SURFACE
+#if !defined(USE_X11) || !CAIRO_HAS_XLIB_SURFACE
+#define CAIRO_HAS_XLIB_XRENDER_SURFACE 0
+#endif
+
+#if CAIRO_HAS_XLIB_XRENDER_SURFACE
 #include <X11/X.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
-#include <cairo-xlib.h>
+#include <X11/extensions/Xrender.h>
 #endif
 
-#include <grass/config.h>
 #include <grass/gis.h>
 
 #include "driver.h"
@@ -63,10 +68,12 @@ struct cairo_state {
     double bgcolor_r, bgcolor_g, bgcolor_b, bgcolor_a;
     int modified;
     int mapped;
-#if defined(USE_X11) && CAIRO_HAS_XLIB_SURFACE
+#if CAIRO_HAS_XLIB_XRENDER_SURFACE
     Display *dpy;
     Drawable win;
-    Visual *visual;
+    Screen *screen;
+    XRenderPictFormat *format;
+    int depth;
 #endif
 };
 

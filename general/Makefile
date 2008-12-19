@@ -3,6 +3,7 @@ MODULE_TOPDIR = ..
 
 SUBDIRS = \
 	g.access \
+	g.cairocomp \
 	g.copy \
 	g.dirseps \
 	g.filename \

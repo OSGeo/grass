@@ -14,11 +14,6 @@
 
 #include "cairodriver.h"
 
-#if defined(USE_X11) && CAIRO_HAS_XLIB_SURFACE
-#include <X11/Xlib.h>
-#include <cairo-xlib.h>
-#endif
-
 void cairo_write_image(void)
 {
     G_debug(1, "write_image");
@@ -46,7 +41,7 @@ void cairo_write_image(void)
 	cairo_surface_write_to_png(surface, ca.file_name);
     }
 #endif
-#if defined(USE_X11) && CAIRO_HAS_XLIB_SURFACE
+#if CAIRO_HAS_XLIB_XRENDER_SURFACE
     else if (ca.file_type == FTYPE_X11) {
 	G_debug(1, "Writing XID to %s", ca.file_name);
 	cairo_write_xid();

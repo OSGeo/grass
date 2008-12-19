@@ -4,7 +4,7 @@
 
 void cairo_read_xid(void)
 {
-#if defined(USE_X11) && CAIRO_HAS_XLIB_SURFACE
+#if CAIRO_HAS_XLIB_XRENDER_SURFACE
     FILE *fp;
     char buf[64];
     unsigned long xid;

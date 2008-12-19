@@ -47,8 +47,8 @@ void cairo_read_image(void)
 	cairo_surface_destroy(img_surf);
     }
 #endif
-#if defined(USE_X11) && CAIRO_HAS_XLIB_SURFACE
-    if (ca.file_type == FTYPE_X11) {
+#if CAIRO_HAS_XLIB_XRENDER_SURFACE
+    else if (ca.file_type == FTYPE_X11) {
 	G_debug(1, "Reading XID from %s", ca.file_name);
 	cairo_read_xid();
     }
