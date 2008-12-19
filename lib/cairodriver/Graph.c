@@ -13,11 +13,13 @@
 */
 
 #include "cairodriver.h"
+
 #include <cairo-ps.h>
 #include <cairo-pdf.h>
 #include <cairo-svg.h>
-#if defined(USE_X11) && CAIRO_HAS_XLIB_SURFACE
+#if CAIRO_HAS_XLIB_XRENDER_SURFACE
 #include <cairo-xlib.h>
+#include <cairo-xlib-xrender.h>
 #endif
 
 #include <unistd.h>
@@ -26,12 +28,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/mman.h>
-#endif
-
-#if defined(USE_X11) && CAIRO_HAS_XLIB_SURFACE
-#include <X11/X.h>
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
 #endif
 
 #include <grass/glocale.h>
@@ -48,13 +44,16 @@ static void map_file(void);
 
 static void init_xlib(void)
 {
-#if defined(USE_X11) && CAIRO_HAS_XLIB_SURFACE
+#if CAIRO_HAS_XLIB_XRENDER_SURFACE
+    char *p;
     unsigned long xid;
     XVisualInfo templ;
     XVisualInfo *vinfo;
-    int scrn;
     int count;
-    char *p;
+    Visual *visual;
+    int scrn;
+    Pixmap pix;
+    cairo_surface_t *s1, *s2;
 
     ca.dpy = XOpenDisplay(NULL);
     if (!ca.dpy)
@@ -71,22 +70,32 @@ static void init_xlib(void)
     templ.visualid = xid;
     templ.screen = scrn;
 
-    vinfo = XGetVisualInfo(ca.dpy, VisualIDMask, &templ, &count);
+    vinfo = XGetVisualInfo(ca.dpy, VisualIDMask|VisualScreenMask, &templ, &count);
     if (!vinfo || !count)
 	G_fatal_error(_("Unable to obtain visual"));
-    ca.visual = vinfo[0].visual;
+    visual = vinfo[0].visual;
+
+    ca.screen = ScreenOfDisplay(ca.dpy, scrn);
+    pix = XCreatePixmap(ca.dpy, RootWindow(ca.dpy, scrn), 1, 1, vinfo[0].depth);
+    s1 = cairo_xlib_surface_create(ca.dpy, pix, visual, 1, 1);
+    s2 = cairo_surface_create_similar(s1, CAIRO_CONTENT_COLOR_ALPHA, 1, 1);
+    ca.format = cairo_xlib_surface_get_xrender_format(s2);
+    ca.depth = cairo_xlib_surface_get_depth(s2);
+    cairo_surface_destroy(s2);
+    cairo_surface_destroy(s1);
+    XFreePixmap(ca.dpy, pix);
 
     if (!ca.win)
 	ca.win = XCreatePixmap(
 	    ca.dpy, RootWindow(ca.dpy, scrn),
-	    ca.width, ca.height, vinfo[0].depth);
+	    ca.width, ca.height, ca.depth);
 #endif
 }
 
 static void fini_xlib(void)
 {
-#if defined(USE_X11) && CAIRO_HAS_XLIB_SURFACE
-    XSetCloseDownMode(ca.dpy, RetainPermanent);
+#if CAIRO_HAS_XLIB_XRENDER_SURFACE
+    XSetCloseDownMode(ca.dpy, RetainTemporary);
     XCloseDisplay(ca.dpy);
 #endif
 }
@@ -132,7 +141,7 @@ static void init_file(void)
     else if (ends_with(ca.file_name, ".svg"))
 	ca.file_type = FTYPE_SVG;
 #endif
-#if defined(USE_X11) && CAIRO_HAS_XLIB_SURFACE
+#if CAIRO_HAS_XLIB_XRENDER_SURFACE
     else if (ends_with(ca.file_name, ".xid"))
 	ca.file_type = FTYPE_X11;
 #endif
@@ -265,7 +274,7 @@ void Cairo_Graph_close(void)
 {
     G_debug(1, "Cairo_Graph_close");
 
-#if defined(USE_X11) && CAIRO_HAS_XLIB_SURFACE
+#if CAIRO_HAS_XLIB_XRENDER_SURFACE
     if (ca.file_type == FTYPE_X11) {
 	XFlush(cairo_xlib_surface_get_display(surface));
 	ca.mapped = 0;
@@ -283,7 +292,7 @@ void Cairo_Graph_close(void)
 	surface = NULL;
     }
 
-#if defined(USE_X11) && CAIRO_HAS_XLIB_SURFACE
+#if CAIRO_HAS_XLIB_XRENDER_SURFACE
     if (ca.file_type == FTYPE_X11)
 	fini_xlib();
 #endif
@@ -323,11 +332,11 @@ static void init_cairo(void)
 		ca.file_name, (double) ca.width, (double) ca.height);
 	break;
 #endif
-#if defined(USE_X11) && CAIRO_HAS_XLIB_SURFACE
+#if CAIRO_HAS_XLIB_XRENDER_SURFACE
     case FTYPE_X11:
 	surface =
-	    (cairo_surface_t *) cairo_xlib_surface_create(
-		ca.dpy, ca.win, ca.visual, ca.width, ca.height);
+	    (cairo_surface_t *) cairo_xlib_surface_create_with_xrender_format(
+		ca.dpy, ca.win, ca.screen, ca.format, ca.width, ca.height);
 	break;
 #endif
     default:
