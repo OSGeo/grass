@@ -23,7 +23,6 @@ import wx
 import os,sys
 import time
 
-import grassenv
 import gcmd
 import gselect
 import subprocess

@@ -32,8 +32,8 @@ import wx.lib.colourselect as csel
 import wx.lib.mixins.listctrl as listmix
 from wx.lib.wordwrap import wordwrap
 
+import grass
 import gcmd
-import grassenv
 import utils
 import globalvar
 from debug import Debug as Debug
@@ -542,9 +542,10 @@ class Settings:
         # -> mapser
         #  -> location
         #   -> gisdbase
-        gisdbase = grassenv.GetGRASSVariable("GISDBASE")
-        location_name = grassenv.GetGRASSVariable("LOCATION_NAME")
-        mapset_name = grassenv.GetGRASSVariable("MAPSET")
+        gisenv = grass.gisenv()
+        gisdbase = gisenv['GISDBASE']
+        location_name = gisenv['LOCATION_NAME']
+        mapset_name = gisenv['MAPSET']
 
         mapset_file = os.path.join(gisdbase, location_name, mapset_name, self.fileName)
         location_file = os.path.join(gisdbase, location_name, self.fileName)
@@ -612,9 +613,11 @@ class Settings:
         
         loc = self.Get(group='advanced', key='settingsFile', subkey='type')
         home = os.path.expanduser("~") # MS Windows fix ?
-        gisdbase = grassenv.GetGRASSVariable("GISDBASE")
-        location_name = grassenv.GetGRASSVariable("LOCATION_NAME")
-        mapset_name = grassenv.GetGRASSVariable("MAPSET")
+        
+        gisenv = grass.gisenv()
+        gisdbase = gisenv['GISDBASE']
+        location_name = gisenv['LOCATION_NAME']
+        mapset_name = gisenv['MAPSET']
         filePath = None
         if loc == 'home':
             filePath = os.path.join(home, self.fileName)
@@ -1693,7 +1696,7 @@ class MapsetAccess(wx.Dialog):
 
         self.all_mapsets = utils.ListOfMapsets(all=True)
         self.accessible_mapsets = utils.ListOfMapsets(all=False)
-        self.curr_mapset = grassenv.GetGRASSVariable('MAPSET')
+        self.curr_mapset = grass.gisenv()['MAPSET']
 
         # make a checklistbox from available mapsets and check those that are active
         sizer = wx.BoxSizer(wx.VERTICAL)
@@ -1769,8 +1772,8 @@ class CheckListMapset(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.Check
         self.InsertColumn(0, _('Mapset'))
         self.InsertColumn(1, _('Owner'))
         self.InsertColumn(2, _('Group'))
-        locationPath = os.path.join(grassenv.GetGRASSVariable('GISDBASE'),
-                                    grassenv.GetGRASSVariable('LOCATION_NAME'))
+        gisenv = grass.gisenv()
+        locationPath = os.path.join(gisenv['GISDBASE'], gisenv['LOCATION_NAME'])
         for mapset in mapsets:
             index = self.InsertStringItem(sys.maxint, mapset)
             mapsetPath = os.path.join(locationPath,

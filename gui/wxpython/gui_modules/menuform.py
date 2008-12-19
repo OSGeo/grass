@@ -88,7 +88,8 @@ sys.path.append( wxbase)
 imagepath = os.path.join(wxbase, "images")
 sys.path.append(imagepath)
 
-import grassenv
+import grass
+
 import gselect
 import gcmd
 import goutput
@@ -1160,7 +1161,7 @@ class cmdPanel(wx.Panel):
                     else:
                         multiple = False
                     if p.get('age', '') == 'new':
-                        mapsets = [grassenv.GetGRASSVariable('MAPSET'),]
+                        mapsets = [grass.gisenv()['MAPSET'],]
                     else:
                         mapsets = None
                         
@@ -1707,7 +1708,7 @@ class GUI:
                     if self.grass_task.get_param(key)['element'] in ['cell', 'vector']:
                         # mapname -> mapname@mapset
                         if '@' not in value:
-                            value = value + '@' + grassenv.GetGRASSVariable('MAPSET')
+                            value = value + '@' + grass.gisenv()['MAPSET']
                     self.grass_task.set_param(key, value)
                     cmd_validated.append(key + '=' + value)
                     i = i + 1

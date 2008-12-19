@@ -24,9 +24,10 @@ COPYING that comes with GRASS for details.
 import wx
 import os, sys
 
+import grass
+
 import globalvar
 import gcmd
-import grassenv
 import gdialogs
 import vdigit
 from vdigit import VDigitSettingsDialog as VDigitSettingsDialog
@@ -1176,7 +1177,7 @@ class VDigitToolbar(AbstractToolbar):
         # select vector map layer in the current mapset
         layerNameList = []
         self.layers = self.mapcontent.GetListOfLayers(l_type="vector",
-                                                      l_mapset=grassenv.GetGRASSVariable('MAPSET'))
+                                                      l_mapset=grass.gisenv()['MAPSET'])
         for layer in self.layers:
             if not layer.name in layerNameList: # do not duplicate layer
                 layerNameList.append (layer.GetName())
