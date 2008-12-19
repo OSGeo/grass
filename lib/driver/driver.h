@@ -18,7 +18,6 @@ extern double text_cosrot;
 extern int matrix_valid;
 
 extern struct GFONT_CAP *ftcap;
-extern char *encoding;
 
 struct driver
 {
