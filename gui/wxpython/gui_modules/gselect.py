@@ -210,7 +210,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                 mapsets[i] = mapsets[0]
                 mapsets[0] = curr_mapset
 
-        filesdict = grass.list_grouped2(elementdict[element])
+        filesdict = grass.mlist_grouped(elementdict[element])
         
         for dir in mapsets:
             dir_node = self.AddItem('Mapset: '+dir)

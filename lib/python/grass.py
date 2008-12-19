@@ -296,7 +296,7 @@ def list_grouped(type):
             result[mapset].extend(line.split())
     return result
 
-def list_grouped2(type, mapset = None, pattern = None):
+def mlist_grouped(type, mapset = None, pattern = None):
     """Returns the output from running g.mlist, as a dictionary where the keys
     are mapset names and the values are lists of maps in that mapset. 
     """
