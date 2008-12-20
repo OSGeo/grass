@@ -74,7 +74,7 @@ def main():
 
     # does map exist?
     if not grass.find_file(input, element = 'vector')['file']:
-	grass.fatal("Vector map <%s> not found in mapset search path", input)
+	grass.fatal("Vector map <%s> not found" % input)
 
     if not column:
 	grass.run_command('v.extract', flags = 'd', input = input,
