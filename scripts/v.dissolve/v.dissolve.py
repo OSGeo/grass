@@ -94,11 +94,10 @@ def main():
 
 	tmpfile = '%s_%s' % (output, tmp)
 
-	grass.run_command('v.reclass', input = input, output = tmpfile,
-			  layer = layer, column = column)
-
-	grass.run_command('v.extract', flags = 'd', input = tmpfile,
-			  output = output, type = 'area', layer = layer)
+	if grass.run_command('v.reclass', input = input, output = tmpfile,
+                             layer = layer, column = column) == 0:
+            grass.run_command('v.extract', flags = 'd', input = tmpfile,
+                              output = output, type = 'area', layer = layer)
 
     # write cmd history:
     grass.vector_history(output)
