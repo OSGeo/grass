@@ -75,13 +75,13 @@ def main():
     # does map exist?
     if not grass.find_file(input, element = 'vector')['file']:
 	grass.fatal("Vector map <%s> not found" % input)
-
+    
     if not column:
 	grass.run_command('v.extract', flags = 'd', input = input,
 			  output = output, type = 'area', layer = layer)
     else:
         try:
-            coltype = grass.vector_columns(map, layer)[column]
+            coltype = grass.vector_columns(input, layer)[column]
         except KeyError:
             grass.fatal('Column <%s> not found' % column)
         
