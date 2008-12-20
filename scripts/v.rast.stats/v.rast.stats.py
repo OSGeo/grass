@@ -156,8 +156,9 @@ def main():
 	grass.fatal("No categories found in raster map")
 
     #check if DBF driver used, in this case cut to 10 chars col names:
-    f = grass.vector_db(vector, layer)
-    if not f:
+    try:
+        f = grass.vector_db(map = vector)[int(layer)]
+    except KeyError:
 	grass.fatal('There is no table connected to this map. Run v.db.connect or v.db.addtable first.')
     # we need this for non-DBF driver:
     table = f[1]

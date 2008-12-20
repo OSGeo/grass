@@ -441,21 +441,47 @@ def try_rmdir(path):
 
 # run "v.db.connect -g ..." and parse output
 
-def vector_db(map, layer = None, **args):
+def vector_db(map, **args):
     """Return the database connection details for a vector map
     (interface to `v.db.connect -g').
+
+    @param map vector map
+
+    @return dictionary { layer : { 'layer', 'table, 'database', 'driver', 'key' }
     """
-    s = read_command('v.db.connect', flags = 'g', map = map, layer = layer, fs = '|', **args)
-    result = []
+    s = read_command('v.db.connect', flags = 'g', map = map, fs = '|', **args)
+    result = {}
     for l in s.splitlines():
 	f = l.split('|')
 	if len(f) != 5:
 	    continue
-	if layer and int(layer) == int(f[0]):
-	    return f
-	result.append(f)
-    if not layer:
-	return result
+        if '/' in f[0]:
+            f1 = f.split('/')
+            layer = f1[0]
+            name = f1[1]
+        else:
+            layer = f[0]
+            name = ''
+            
+	result[int(layer)] = {
+            'layer'    : layer,
+            'name'     : name,
+            'table'    : f[1],
+            'key'      : f[2],
+            'database' : f[3],
+            'driver'   : f[4] }
+    
+    return result
+
+def vector_layer_db(map, layer):
+    """Return the database connection details for a vector map layer.
+    If db connection for given layer is not defined, fatal() is called."""
+    try:
+        f = vector_db(map)[int(layer)]
+    except KeyError:
+	grass.fatal("Database connection not defined for layer %s" % layer)
+
+    return f
 
 # run "db.describe -c ..." and parse output
 

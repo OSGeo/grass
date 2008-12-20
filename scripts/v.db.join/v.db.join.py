@@ -73,12 +73,11 @@ def main():
     otable = options['otable']
     ocolumn = options['ocolumn']
 
-    f = grass.vector_db(map, layer)
-    if not f:
-	grass.fatal("An error occured while running v.db.connect")
-    maptable = f[1]
-    database = f[3]
-    driver = f[4]
+    f = grass.vector_layer_db(map, layer)
+
+    maptable = f['table']
+    database = f['database']
+    driver = f['driver']
 
     if driver == 'dbf':
 	grass.fatal("JOIN is not supported for tables stored in DBF format.")

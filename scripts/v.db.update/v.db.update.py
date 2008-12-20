@@ -79,13 +79,14 @@ def main():
     if not grass.find_file(map, element = 'vector', mapset = mapset)['file']:
 	grass.fatal("Vector map '$GIS_OPT_MAP' not found in current mapset")
 
-    f = grass.vector_db(map, layer)
-    if not f:
+    try:
+        f = grass.vector_db(map)[int(layer)]
+    except KeyError:
 	grass.fatal('There is no table connected to this map. Run v.db.connect or v.db.addtable first.')
 
-    table = f[1]
-    database = f[3]
-    driver = f[4]
+    table = f['table']
+    database = f['database']
+    driver = f['driver']
 
     # checking column types
     try:

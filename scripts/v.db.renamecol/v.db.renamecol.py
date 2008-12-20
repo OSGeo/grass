@@ -62,13 +62,12 @@ def main():
     if not grass.find_file(map, element = 'vector', mapset = mapset):
 	grass.fatal("Vector map <%s> not found in current mapset" % map)
 
-    f = grass.vector_db(map, layer)
-    if not f:
-	grass.fatal("An error occured while running v.db.connect")
-    table = f[1]
-    keycol = f[2]
-    database = f[3]
-    driver = f[4]
+    f = grass.vector_layer_db(map, layer)
+
+    table = f['table']
+    keycol = f['key']
+    database = f['database']
+    driver = f['driver']
 
     if not table:
 	grass.fatal("There is no table connected to the input vector map. Cannot rename any column")

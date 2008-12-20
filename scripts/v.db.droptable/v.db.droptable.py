@@ -55,25 +55,23 @@ def main():
     layer = options['layer']
 
     # do some paranoia tests as well:
-    f = grass.vector_db(map, layer)
-    if not f:
-	grass.fatal("An error occured while running v.db.connect")
-
+    f = grass.vector_layer_db(map, layer)
+    
     if not table:
 	# Removing table name connected to selected layer
-	table = f[1]
+	table = f['table']
 	if not table:
-	    grass.fatal("No table assigned to layer <$GIS_OPT_LAYER>")
+	    grass.fatal("No table assigned to layer <%s>" % layer)
     else:
 	# Removing user specified table
-	existingtable = f[1]
+	existingtable = f['table']
 	if existingtable != table:
 	    grass.fatal("User selected table <%s> but the table <%s> is linked to layer <%s>"
 			% (table, existingtable, layer))
 
     # we use the DB settings selected layer 
-    database = f[3]
-    driver = f[4]
+    database = f['database']
+    driver = f['driver']
 
     grass.message("Removing table <%s> linked to layer <%s> of vector map <%s>"
 		  % (table, layer, map)) 
