@@ -104,7 +104,8 @@ def main():
                            'DOUBLE PRECISION'):
             grass.fatal("Column type must be numeric")
         
-        table = grass.vector_db(map = input, layer = layer)[1]
+        f = grass.vector_layer_db(map = input, layer = layer)
+        table = f['table']
         
         columns = "zshift:%s" % column
         grass.run_command('v.transform', input = input, output = output,

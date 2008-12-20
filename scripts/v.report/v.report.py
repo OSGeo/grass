@@ -116,11 +116,13 @@ def main():
 	records1.sort()
 
 	if len(records1) == 0:
-	    f = grass.vector_db(mapname, layer)
-	    key = f[2]
-	    grass.fatal("There is a table connected to input vector map '%s', but" +
-			"there are no categories present in the key column '%s'. Consider using" +
-			"v.to.db to correct this." % (mapname, key))
+            try:
+                f = grass.vector_db(map = mapname)[int(layer)]
+                grass.fatal("There is a table connected to input vector map '%s', but" +
+                            "there are no categories present in the key column '%s'. Consider using" +
+                            "v.to.db to correct this." % (mapname, f['key']))
+            except KeyError:
+                pass
 
 	#fetch the requested attribute sorted by cat:
 	p = grass.pipe_command('v.to.db', flags = 'p',

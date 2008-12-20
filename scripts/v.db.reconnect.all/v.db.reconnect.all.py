@@ -59,12 +59,12 @@ def main():
     for vect in grass.list_grouped('vect')[mapset]:
 	vect = "%s@%s" % (vect, mapset)
 	grass.message("Reconnecting vector <%s>" % vect)
-	for f in grass.vector_db(map, stderr = nuldev):
-	    layer = f[0]
-	    schema_table = f[1]
-	    key = f[2]
-	    database = f[3]
-	    driver = f[4]
+	for f in grass.vector_db(map, stderr = nuldev).itervalues():
+	    layer = f['layer']
+	    schema_table = f['table']
+	    key = f['key']
+	    database = f['database']
+	    driver = f['driver']
 	    if '.' in schema_table:
 		st = schema_table.split('.', 1)
 		schema = st[0]

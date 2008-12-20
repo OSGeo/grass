@@ -62,12 +62,13 @@ def main():
     if not exists:
 	grass.fatal("Vector map <%s> not found in current mapset" % map)
 
-    f = grass.vector_db(map, layer)
-    if not f:
+    try:
+        f = grass.vector_db(map)[int(layer)]
+    except KeyError:
 	grass.fatal("There is no table connected to this map. Run v.db.connect or v.db.addtable first.")
-    table = f[1]
-    database = f[3]
-    driver = f[4]
+    table = f['table']
+    database = f['database']
+    driver = f['driver']
 
     colnum = len(columns)
 

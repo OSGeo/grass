@@ -85,9 +85,9 @@ def main():
     nuldev = file(os.devnull, 'w')
     db = grass.vector_db(map, stderr = nuldev)
     if db:
-	f = db[0]
-	database = f[3]
-	driver = f[4]
+	f = db[min(db.keys())]
+	database = f['database']
+	driver = f['driver']
     else:
 	# nothing defined
 	grass.message("Creating new DB connection based on default mapset settings...")
@@ -96,9 +96,12 @@ def main():
 	driver = kv['driver']
 
     # maybe there is already a table linked to the selected layer?
-    if grass.vector_db(map, layer, stderr = nuldev):
+    try:
+        grass.vector_db(map, stderr = nuldev)[int(layer)]
 	grass.fatal("There is already a table linked to layer <%s>" % layer)
-
+    except KeyError:
+        pass
+    
     # maybe there is already a table with that name?
     found = False
     p = grass.pipe_command('db.tables', database = database, driver = driver, stderr = nuldev)

@@ -88,11 +88,9 @@ def main():
 	if coltype not in ('INTEGER', 'CHARACTER'):
 	    grass.fatal("Key column must be of type integer or string")
 
-	f = grass.vector_db(input, layer)
-	if not f:
-	    grass.fatal("There is no table connected to this map")
+        f = grass.vector_layer_db(input, layer)
 
-	table = f[1]
+	table = f['table']
 
 	tmpfile = '%s_%s' % (output, tmp)
 
