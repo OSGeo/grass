@@ -1012,7 +1012,7 @@ class cmdPanel(wx.Panel):
 
             if ( len(p.get('values', []) ) > 0):
                 valuelist      = map(str, p.get('values',[]))
-                valuelist_desc = map(str, p.get('values_desc',[]))
+                valuelist_desc = map(unicode, p.get('values_desc',[]))
 
                 if p.get('multiple', 'no') == 'yes' and \
                         p.get('gisprompt',False) == False and \
