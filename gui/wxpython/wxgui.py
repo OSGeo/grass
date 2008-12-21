@@ -1115,17 +1115,7 @@ class GMFrame(wx.Frame):
         dcmd = self.curr_page.maptree.GetPyData(layer)[0]['cmd']
         if not dcmd:
             return
-
-        size = icon = None
-
-        for option in dcmd:
-            if option.find('size') > -1:
-                size = option.split('=')[1]
-            elif option.find('icon') > -1:
-                icon = option.split('=')[1]
-
-        pointdata = (icon, size)
-
+        
         busy = wx.BusyInfo(message=_("Please wait, loading attribute data..."),
                            parent=self)
         wx.Yield()
