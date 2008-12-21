@@ -27,7 +27,6 @@
 
 static int width, height;
 static XID output;
-static XID visid;
 static Display *dpy;
 static cairo_surface_t *surface;
 static cairo_t *cairo;
@@ -73,7 +72,7 @@ static void write_xid(const char *filename, XID xid)
     fclose(fp);
 }
 
-static void init_xlib(const char *scr)
+static void init_xlib(const char *scr, const char *vis)
 {
     XVisualInfo templ;
     XVisualInfo *vinfo;
@@ -81,16 +80,30 @@ static void init_xlib(const char *scr)
     Visual *visual;
     Pixmap pix;
     int scrn;
+    long visid;
     cairo_surface_t *s1, *s2;
 
     dpy = XOpenDisplay(NULL);
     if (!dpy)
 	G_fatal_error(_("Unable to open display"));
 
-    scrn = scr
-	? atoi(scr)
-	: DefaultScreen(dpy);
+    if (scr)
+	scrn = atoi(scr);
+    else {
+	const char *p = getenv("GRASS_CAIRO_SCREEN");
+	if (!p || sscanf(p, "%i", &scrn) != 1)
+	    scrn = DefaultScreen(dpy);
+    }
+
     screen = ScreenOfDisplay(dpy, scrn);
+
+    if (vis)
+	visid = strtoul(vis, NULL, 0);
+    else {
+	const char *p = getenv("GRASS_CAIRO_VISUAL");
+	if (!p || sscanf(p, "%li", &visid) != 1)
+	    visid = DefaultVisual(dpy, scrn)->visualid;
+    }
 
     templ.visualid = visid;
     templ.screen = scrn;
@@ -198,7 +211,7 @@ int main(int argc, char *argv[])
     opt.visual = G_define_option();
     opt.visual->key = "visual";
     opt.visual->type = TYPE_INTEGER;
-    opt.visual->required = YES;
+    opt.visual->required = NO;
     opt.visual->description = _("Output Visual XID");
 
     opt.screen = G_define_option();
@@ -237,7 +250,6 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    visid = strtoul(opt.visual->answer, NULL, 0);
     width = atoi(opt.width->answer);
     height = atoi(opt.height->answer);
 
@@ -254,7 +266,7 @@ int main(int argc, char *argv[])
 	return 0;
     }
 
-    init_xlib(opt.screen->answer);
+    init_xlib(opt.screen->answer, opt.visual->answer);
 
     if (opt.bg->answer)
 	erase(opt.bg->answer);
