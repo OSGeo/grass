@@ -1117,7 +1117,6 @@ class GMFrame(wx.Frame):
             return
 
         size = icon = None
-        mapname = utils.GetLayerNameFromCmd(dcmd)
 
         for option in dcmd:
             if option.find('size') > -1:
@@ -1132,10 +1131,8 @@ class GMFrame(wx.Frame):
         wx.Yield()
         
         self.dbmanager = dbm.AttributeManager(parent=self, id=wx.ID_ANY,
-                                              title="%s - <%s>" % (_("GRASS GIS Attribute Table Manager"),
-                                                                   mapname),
-                                              size=wx.Size(500,300), vectmap=mapname,
-                                              pointdata=pointdata, log=self.goutput)
+                                              size=wx.Size(500, 300),
+                                              item=layer, log=self.goutput)
 
         busy.Destroy()
 

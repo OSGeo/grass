@@ -3517,8 +3517,12 @@ class MapFrame(wx.Frame):
                                                         useId=False,
                                                         addLayer=False))
             else:
-                self.AddTmpVectorMapLayer(mapName, cats, useId=False)
+                qlayer = self.AddTmpVectorMapLayer(mapName, cats, useId=False)
 
+            # set opacity based on queried layer
+            opacity = self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer'].GetOpacity(float=True)
+            qlayer.SetOpacity(opacity)
+            
             self.MapWindow.UpdateMap(render=False, renderVector=False)
             if not self.dialogs['attributes'].IsShown():
                 self.dialogs['attributes'].Show()
