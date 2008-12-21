@@ -969,7 +969,6 @@ class BufferedWindow(MapWindow, wx.Window):
         (if not given, self.polycoords is used)
 
         """
-
         if not pdc:
             pdc = self.pdcTmp
 
@@ -984,7 +983,7 @@ class BufferedWindow(MapWindow, wx.Window):
                 coords.append(self.Cell2Pixel(p))
 
             self.Draw(pdc, drawid=self.plineid, pdctype='polyline', coords=coords)
-
+            
             Debug.msg (4, "BufferedWindow.DrawLines(): coords=%s, id=%s" % \
                            (coords, self.plineid))
 
@@ -1414,13 +1413,11 @@ class BufferedWindow(MapWindow, wx.Window):
             # measure or profile
             if self.mouse["use"] == "measure":
                 self.parent.MeasureDist(self.mouse['begin'], self.mouse['end'])
-            try:
-                self.polycoords.append(self.Pixel2Cell(self.mouse['end']))
-                self.pdcTmp.ClearId(self.lineid)
-                self.DrawLines(pdc=self.pdcTmp)
-            except:
-                pass
 
+            self.polycoords.append(self.Pixel2Cell(self.mouse['end']))
+            self.ClearLines(pdc=self.pdcTmp)
+            self.DrawLines(pdc=self.pdcTmp)
+        
         elif self.mouse["use"] == "pointer" and self.parent.gismanager.georectifying:
             # -> georectifying
             coord = self.Pixel2Cell(self.mouse['end'])
@@ -2062,30 +2059,26 @@ class BufferedWindow(MapWindow, wx.Window):
         """
         Clears temporary drawn lines from PseudoDC
         """
-
         if not pdc:
-            return
-
-        exit = True
-
+            pdc=self.pdcTmp
         try:
             pdc.ClearId(self.lineid)
             pdc.RemoveId(self.lineid)
         except:
-            exit = False
+            pass
 
         try:
             pdc.ClearId(self.plineid)
             pdc.RemoveId(self.plineid)
         except:
-            exit = False
+            pass
 
         Debug.msg(4, "BufferedWindow.ClearLines(): lineid=%s, plineid=%s" %
                   (self.lineid, self.plineid))
 
         ### self.Refresh()
 
-        return exit
+        return True
 
     def Pixel2Cell(self, (x, y)):
         """
@@ -2936,6 +2929,11 @@ class MapFrame(wx.Frame):
         for layer in qlayer:
             self.Map.DeleteLayer(layer)
 
+        # delete tmp lines
+        if self.MapWindow.mouse["use"] in ["measure", "profile"]:
+            self.MapWindow.polycoords = []
+            self.MapWindow.ClearLines()
+        
         # deselect features in vdigit
         if self.toolbars['vdigit'] and self.digit:
             self.digit.driver.SetSelected([])
