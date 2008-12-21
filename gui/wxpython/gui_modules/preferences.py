@@ -124,7 +124,7 @@ class Settings:
                     'width' : 2
                     },
                 'leftDbClick' : {
-                    'selection' : 0
+                    'selection' : 1 # draw selected
                     },
                 'askOnDeleteRec' : {
                     'enabled' : True
