@@ -152,8 +152,8 @@ class ProfileFrame(wx.Frame):
         self.ptitle = _('Profile of')
 
         # determine units (axis labels)
-        if self.parent.projinfo['units'] != '':
-            self.xlabel = _('Distance (%s)') % self.parent.projinfo['units']
+        if self.parent.Map.projinfo['units'] != '':
+            self.xlabel = _('Distance (%s)') % self.parent.Map.projinfo['units']
         else:
             self.xlabel = _("Distance along transect")
         self.ylabel = _("Cell values")
