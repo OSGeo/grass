@@ -419,17 +419,30 @@ class AttributeManager(wx.Frame):
     """
     GRASS Attribute manager main window
     """
-    def __init__(self, parent, id, title, vectmap,
+    def __init__(self, parent, id=wx.ID_ANY,
                  size = wx.DefaultSize, style = wx.DEFAULT_FRAME_STYLE,
-                 pointdata=None, log=None):
+                 title=None, vectorName=None, item=None, log=None):
 
-        self.vectmap   = vectmap
-        self.pointdata = pointdata
-        self.parent    = parent # GMFrame
-        self.cmdLog    = log    # self.parent.goutput
+        self.vectorName = vectorName
+        self.parent     = parent # GMFrame
+        self.treeItem   = item   # item in layer tree
+        if self.parent and self.parent.GetName() == "LayerManager" and \
+                self.treeItem and not self.vectorName:
+            maptree = self.parent.curr_page.maptree
+            name = maptree.GetPyData(self.treeItem)[0]['maplayer'].GetName()
+            self.vectorName = name
+
+        self.cmdLog     = log    # self.parent.goutput
         
-        wx.Frame.__init__(self, parent, id, title, style=style)
+        wx.Frame.__init__(self, parent, id, style=style)
 
+        # title
+        if not title:
+            self.SetTitle("%s - <%s>" % (_("GRASS GIS Attribute Table Manager"),
+                                         self.vectorName))
+        else:
+            self.SetTitle(title)
+        
         # icon
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass_sql.ico'), wx.BITMAP_TYPE_ICO))
 
@@ -440,15 +453,7 @@ class AttributeManager(wx.Frame):
             self.mapdisplay = self.parent.curr_page.maptree.mapdisplay
         except:
             self.map = self.mapdisplay = None
-
-        if pointdata:
-            self.icon      = pointdata[0]
-            self.pointsize = pointdata[1]
-        else:
-            self.icon      = None
-            self.pointsize = None
-
-
+        
         # status bar log class
         self.log = Log(self) # -> statusbar
 
@@ -456,14 +461,14 @@ class AttributeManager(wx.Frame):
         self.qlayer = None
 
         # -> layers / tables description
-        self.mapDBInfo = VectorDBInfo(self.vectmap)
+        self.mapDBInfo = VectorDBInfo(self.vectorName)
 
         if len(self.mapDBInfo.layers.keys()) == 0:
             wx.MessageBox(parent=self.parent,
                           message=_("Database connection for vector map <%s> "
                                     "is not defined in DB file. "
                                     "You can define new connection in "
-                                    "'Manage layers' tab.") % self.vectmap,
+                                    "'Manage layers' tab.") % self.vectorName,
                           caption=_("Attribute Table Manager"),
                           style=wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
 
@@ -1091,7 +1096,7 @@ class AttributeManager(wx.Frame):
 
         digitToolbar = self.mapdisplay.toolbars['vdigit']
         if digitToolbar and digitToolbar.GetLayer() and \
-                digitToolbar.GetLayer().GetName() == self.vectmap:
+                digitToolbar.GetLayer().GetName() == self.vectorName:
 
             self.mapdisplay.digit.driver.SetSelected(cats, field=self.layer)
             if zoom:
@@ -1100,7 +1105,14 @@ class AttributeManager(wx.Frame):
                                               update=True)
         else:
             # add map layer with higlighted vector features
-            self.AddQueryMapLayer()
+            self.AddQueryMapLayer() # -> self.qlayer
+
+            # set opacity based on queried layer
+            if self.parent and self.parent.GetName() == "LayerManager" and \
+                    self.treeItem:
+                maptree = self.parent.curr_page.maptree
+                opacity = maptree.GetPyData(self.treeItem)[0]['maplayer'].GetOpacity(float=True)
+                self.qlayer.SetOpacity(opacity)
             if zoom:
                 keyColumn = self.mapDBInfo.layers[self.layer]['key']
                 where = ''
@@ -1434,7 +1446,7 @@ class AttributeManager(wx.Frame):
                     list.SetItemText(item, nameTo)
 
                     self.listOfCommands.append(['v.db.renamecol',
-                                                'map=%s' % self.vectmap,
+                                                'map=%s' % self.vectorName,
                                                 'layer=%d' % self.layer,
                                                 'column=%s,%s' % (name, nameTo)])
             else:
@@ -1484,7 +1496,7 @@ class AttributeManager(wx.Frame):
         item = list.GetFirstSelected()
         while item != -1:
             self.listOfCommands.append(['v.db.dropcol',
-                                        'map=%s' % self.vectmap,
+                                        'map=%s' % self.vectorName,
                                         'layer=%d' % self.layer,
                                         'column=%s' % list.GetItemText(item)])
             list.DeleteItem(item)
@@ -1506,7 +1518,7 @@ class AttributeManager(wx.Frame):
         cols = self.mapDBInfo.GetColumns(table)
         for col in cols:
             self.listOfCommands = [['v.db.dropcol',
-                                    'map=%s' % self.vectmap,
+                                    'map=%s' % self.vectorName,
                                     'layer=%d' % self.layer,
                                     'column=%s' % col]]
         self.FindWindowById(self.layerPage[self.layer]['tableData']).DeleteAllItems()
@@ -1568,7 +1580,7 @@ class AttributeManager(wx.Frame):
         if type == 'varchar':
             type += ' (%d)' % length
         self.listOfCommands.append(['v.db.addcol',
-                                    'map=%s' % self.vectmap,
+                                    'map=%s' % self.vectorName,
                                     'layer=%d' % self.layer,
                                     'columns=%s %s' % (name, type)])
 
@@ -1649,7 +1661,7 @@ class AttributeManager(wx.Frame):
                           ' '.join(cmd))
                 gcmd.Command(cmd)
 
-            self.mapDBInfo = VectorDBInfo(self.vectmap)
+            self.mapDBInfo = VectorDBInfo(self.vectorName)
             table = self.mapDBInfo.layers[self.layer]['table']
 
             # update table description
@@ -1853,7 +1865,7 @@ class AttributeManager(wx.Frame):
         """SQL Builder button pressed"""
         self.builder = sqlbuilder.SQLFrame(parent=self, id=wx.ID_ANY,
                                            title=_("SQL Builder"),
-                                           vectmap=self.vectmap)
+                                           vectorName=self.vectorName)
     def OnTextEnter(self, event):
         pass
 
@@ -1884,7 +1896,7 @@ class AttributeManager(wx.Frame):
             gdialogs.CreateNewVector(parent=self, title=_('Extract selected features'),
                                      log=self.cmdLog,
                                      cmdDef=(["v.extract",
-                                              "input=%s" % self.vectmap,
+                                              "input=%s" % self.vectorName,
                                               "list=%s" % utils.ListOfCatsToRange(cats)],
                                              "output"))
     def OnDeleteSelected(self, event):
@@ -1902,13 +1914,13 @@ class AttributeManager(wx.Frame):
         if self.OnDataItemDelete(None):
             digitToolbar = self.mapdisplay.toolbars['vdigit']
             if digitToolbar and digitToolbar.GetLayer() and \
-                    digitToolbar.GetLayer().GetName() == self.vectmap:
+                    digitToolbar.GetLayer().GetName() == self.vectorName:
                 self.mapdisplay.digit.driver.SetSelected(map(int, cats), field=self.layer)
                 self.mapdisplay.digit.DeleteSelectedLines()
             else:
                 gcmd.Command(['v.edit',
                               '--q',
-                              'map=%s' % self.vectmap,
+                              'map=%s' % self.vectorName,
                               'tool=delete',
                               'cats=%s' % utils.ListOfCatsToRange(cats)])
         
@@ -1928,10 +1940,12 @@ class AttributeManager(wx.Frame):
             self.qlayer = None
             
         if self.qlayer:
-            self.qlayer.SetCmd(self.mapdisplay.AddTmpVectorMapLayer(self.vectmap, cats, addLayer=False))
+            self.qlayer.SetCmd(self.mapdisplay.AddTmpVectorMapLayer(self.vectorName, cats, addLayer=False))
         else:
-            self.qlayer = self.mapdisplay.AddTmpVectorMapLayer(self.vectmap, cats)
-                
+            self.qlayer = self.mapdisplay.AddTmpVectorMapLayer(self.vectorName, cats)
+
+        return self.qlayer
+    
     def UpdateDialog(self, layer):
         """Updates dialog layout for given layer"""
         #
@@ -1949,7 +1963,7 @@ class AttributeManager(wx.Frame):
             self.notebook.SetSelection(2)
             
         # fetch fresh db info
-        self.mapDBInfo = VectorDBInfo(self.vectmap)    
+        self.mapDBInfo = VectorDBInfo(self.vectorName)    
 
         #
         # add new page
@@ -3565,7 +3579,7 @@ def main(argv=None):
     f = AttributeManager(parent=None, id=wx.ID_ANY,
                          title="%s - <%s>" % (_("GRASS GIS Attribute Table Manager"),
                                               argv[1]),
-                         size=(900,600), vectmap=argv[1])
+                         size=(900,600), vectorName=argv[1])
     f.Show()
 
     app.MainLoop()
