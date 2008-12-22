@@ -16,7 +16,6 @@ NT_TABLES = ntv1_can.dat nzgd2kgrid0005.gsb
 CSV_FILES := $(wildcard *.csv)
 
 NAD_DIR = $(ETC)/nad
-NAD2BIN = nad2bin
 CSV_DIR = $(ETC)/ogr_csv
 
 NAD_DSTFILES := $(patsubst %.lla,$(NAD_DIR)/%,$(NAD_TABLES))
