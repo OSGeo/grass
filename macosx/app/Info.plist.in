@@ -11,9 +11,9 @@
 	<key>CFBundleIconFile</key>
 	<string>app.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.osgeo.grass7</string>
+	<string>org.osgeo.grass@GRASS_VERSION_MAJOR@_@GRASS_VERSION_MINOR@</string>
 	<key>CFBundleInfoDictionaryVersion</key>
-	<string>7.0</string>
+	<string>6.0</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
