@@ -40,7 +40,7 @@ struct basecat
 
 static int num_quants;
 static DCELL *quants;
-static DCELL fmin, fmax;
+static DCELL f_min, f_max;
 static int num_slots;
 static DCELL slot_size;
 
@@ -491,8 +491,8 @@ int main(int argc, char *argv[])
 		      basemap, MAX_CATS);
 
     G_read_fp_range(covermap, "", &fprange);
-    G_get_fp_range_min_max(&fprange, &fmin, &fmax);
-    slot_size = (fmax - fmin) / num_slots;
+    G_get_fp_range_min_max(&fprange, &f_min, &f_max);
+    slot_size = (f_max - f_min) / num_slots;
 
     basecats = G_calloc(num_cats, sizeof(struct basecat));
 
