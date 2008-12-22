@@ -5,7 +5,7 @@
 	<key>CFBundleGetInfoString</key>
 	<string>GRASS-@GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@.@GRASS_VERSION_RELEASE@</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.osgeo.grass</string>
+	<string>org.osgeo.grass@GRASS_VERSION_MAJOR@_@GRASS_VERSION_MINOR@</string>
 	<key>CFBundleShortVersionString</key>
 	<string>@GRASS_VERSION_MAJOR@.@VER_MINOR_REL@.@VER_DATE@</string>
 	<key>IFMajorVersion</key>
