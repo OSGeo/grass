@@ -78,7 +78,11 @@ void parse_command(int argc, char *argv[], struct GParams *params)
     params->format = G_define_option();
     params->format->key = "format";
     params->format->type = TYPE_STRING;
+#ifdef HAVE_TIFFIO_H
     params->format->options = "ppm,tif";	/* TODO: png */
+#else
+    params->format->options = "ppm";
+#endif
     params->format->answer = "ppm";
     params->format->description = _("Graphics file format");
     params->format->required = YES;
