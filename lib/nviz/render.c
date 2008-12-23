@@ -51,7 +51,7 @@ void Nviz_init_render_window(struct render_window *rwin)
     rwin->pixelFmtId = NULL;
     rwin->contextId = NULL;
     rwin->pixmap = 0;
-    rwin->windowId = 0;
+    rwin->windowId = NULL;
 #elif defined(OPENGL_WINDOWS)
     rwin->displayId = NULL;
     rwin->contextId = NULL;
@@ -71,8 +71,9 @@ void Nviz_destroy_render_window(struct render_window *rwin)
     glXDestroyGLXPixmap(rwin->displayId, rwin->windowId);
     XFreePixmap(rwin->displayId, rwin->pixmap);
 #elif defined(OPENGL_AQUA)
+    aglDestroyPixelFormat(rwin->pixelFmtId);
     aglDestroyContext(rwin->contextId);
-    aglDestroyAGLPixmap(rwin->windowId);
+    aglDestroyPBuffer(rwin->windowId);
     /* TODO FreePixMap */
 #elif defined(OPENGL_WINDOWS)
     wglDeleteContext(rwin->contextId);
@@ -136,14 +137,14 @@ int Nviz_create_render_window(struct render_window *rwin, void *display,
     /* TODO: open mac display */
 
     /* TODO: dev = NULL, ndev = 0 ? */
-    rwin->pixelFmtId = aglChoosePixelFmt(NULL, 0, attributeList);
+    rwin->pixelFmtId = aglChoosePixelFormat(NULL, 0, attributeList);
 
     rwin->contextId = aglCreateContext(rwin->pixelFmtId, NULL);
 
     /* create win pixmap to render to (same depth as RootWindow) */
     rwin->pixmap = NULL;	/* TODO: create GWorldPtr */
     /* create an off-screen AGL rendering area */
-    rwin->windowId = aglCreateAGLPixmap(rwin->pixelFmtId, rwin->pixmap);
+    aglCreatePBuffer(width, height, GL_TEXTURE_2D, GL_RGBA, 0, &(rwin->windowId));
 #elif defined(OPENGL_WINDOWS)
     PIXELFORMATDESCRIPTOR pfd = {
 	sizeof(PIXELFORMATDESCRIPTOR),	//  size of this pfd 
@@ -197,11 +198,13 @@ int Nviz_make_current_render_window(const struct render_window *rwin)
 
     glXMakeCurrent(rwin->displayId, rwin->windowId, rwin->contextId);
 #elif defined(OPENGL_AQUA)
+    if (!rwin->contextId)
+	return 0;
+
     if (rwin->contextId == aglGetCurrentContext())
 	return 1;
 
-    /* TODO: mac_win */
-    aglMakeCurrent((AGLDrawable) mac_win, rwin->contextId);
+    aglSetCurrentContext(rwin->contextId);
 #elif defined(OPENGL_WINDOWS)
     if (!rwin->displayId || !rwin->contextId)
 	return 0;
