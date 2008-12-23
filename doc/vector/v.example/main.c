@@ -213,7 +213,7 @@ int main(int argc, char *argv[])
 			    Fin->database, Fin->driver);
 
     /* Build topology for vector map and close them */
-    Vect_build(&Out, stdout);
+    Vect_build(&Out);
     Vect_close(&In);
     Vect_close(&Out);
     db_close_database_shutdown_driver(driver);
