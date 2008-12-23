@@ -159,7 +159,6 @@ int main(int argc, char *argv[])
 {
     double xcoord, ycoord;
 
-
     struct GModule *module;
     struct
     {
@@ -1062,7 +1061,6 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
     int hor_numrows = m - (buffer_s + buffer_n);
     int hor_numcols = n - (buffer_e + buffer_w);
 
-    /*      char shad_filename[256]; */
     int arrayNumInt;
     double dfr_rad;
 
@@ -1135,6 +1133,8 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
 	sprintf(formatString, "%%s_%%0%dd", numDigits);
 
 	for (k = 0; k < arrayNumInt; k++) {
+	   struct History history; 
+
 	    if (step != 0.0)
 		sprintf(shad_filename, formatString, horizon, k);
 	    angle = (single_direction * deg2rad) + (dfr_rad * k);
@@ -1263,6 +1263,12 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
 		if (G_set_window(&new_cellhd) == -1)
 		    exit(0);
 	    }
+
+	    G_short_history(shad_filename, "raster", &history);
+	    G_command_history(&history);
+	    G_write_history(shad_filename, &history);
+
+
 	}
 
     }
