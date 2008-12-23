@@ -34,8 +34,10 @@ int write_img(const char *name, int format)
 {
     if (format == FORMAT_PPM)
 	GS_write_ppm(name);
+#ifdef HAVE_TIFFIO_H
     else if (format == FORMAT_TIF)
 	GS_write_tif(name);
+#endif
     else
 	return 0;
 
