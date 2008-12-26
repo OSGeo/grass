@@ -273,8 +273,8 @@ def send_all(p, data):
         data = buffer(data, sent)
 
 class Command:
-    """
-    Run GRASS command in separate thread
+    """Run command in separate thread. Used for commands launched
+    on the background.
 
     If stdout/err is redirected, write() method is required for the
     given classes.
@@ -289,21 +289,21 @@ class Command:
         else:
             print 'FAILURE (%d)' % cmd.returncode
     @endcode
-
-    @param cmd     command given as list
-    @param stdin   standard input stream
-    @param verbose verbose level [0, 3] (--q, --v)
-    @param wait    wait for child execution terminated
-    @param rerr    error handling (when CmdError raised).
-    True for redirection to stderr, False for GUI dialog,
-    None for no operation (quiet mode)
-    @param stdout  redirect standard output or None
-    @param stderr  redirect standard error output or None
     """
     def __init__ (self, cmd, stdin=None,
                   verbose=None, wait=True, rerr=False,
                   stdout=None, stderr=None):
-
+        """
+        @param cmd     command given as list
+        @param stdin   standard input stream
+        @param verbose verbose level [0, 3] (--q, --v)
+        @param wait    wait for child execution terminated
+        @param rerr    error handling (when CmdError raised).
+        True for redirection to stderr, False for GUI dialog,
+        None for no operation (quiet mode)
+        @param stdout  redirect standard output or None
+        @param stderr  redirect standard error output or None
+        """
         self.cmd = cmd
         self.stderr = stderr
 
@@ -478,16 +478,16 @@ class Command:
         return msgString
 
 class CommandThread(Thread):
-    """Create separate thread for command
-
-    @param cmd GRASS command (given as list)
-    @param stdin standard input stream 
-    @param stdout  redirect standard output or None
-    @param stderr  redirect standard error output or None
-    """
+    """Create separate thread for command. Used for commands launched
+    on the background."""
     def __init__ (self, cmd, stdin=None,
                   stdout=sys.stdout, stderr=sys.stderr):
-
+        """
+        @param cmd command (given as list)
+        @param stdin standard input stream 
+        @param stdout redirect standard output or None
+        @param stderr redirect standard error output or None
+        """
         Thread.__init__(self)
 
         self.cmd    = cmd
@@ -514,6 +514,7 @@ class CommandThread(Thread):
             del os.environ["GRASS_MESSAGE_FORMAT"]
         
     def run(self):
+        """Run command"""
         if len(self.cmd) == 0:
             return
 

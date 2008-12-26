@@ -2415,27 +2415,24 @@ class NvizToolWindow(wx.Frame):
         
     def UpdateVectorPage(self, layer, data):
         vInfo = gcmd.Command(['v.info',
+                              '-t',
                               'map=%s' % layer.name])
         npoints = nprimitives = 0
         for line in vInfo.ReadStdOutput():
-            if 'Map is 3D' in line:
-                mapIs3D = line.replace('|', '').split(':')[1].strip()
-                if mapIs3D == 'Yes':
-                    mapIs3D = 1
-                else:
-                    mapIs3D = 0
-            elif 'Number of points' in line:
-                npoints = int(line.replace('|', '').split(':')[1].strip().split(' ')[0])
+            key, value = line.split('=')
+            if key == 'map3d':
+                mapIs3D = int(value)
+            
+            elif key == 'points':
+                npoints = int(value)
                 nprimitives = npoints
-            elif 'Number of lines' in line:
-                nprimitives += int(line.replace('|', '').split(':')[1].strip().split(' ')[0])
-            elif 'Number of boundaries' in line:
-                nprimitives += int(line.replace('|', '').split(':')[1].strip().split(' ')[0]) # boundaries
-                nprimitives += int(line.replace('|', '').split(':')[2].strip()) # faces
-            elif 'Number of centroids' in line:
-                nprimitives += int(line.replace('|', '').split(':')[1].strip().split(' ')[0]) # centroids
-                nprimitives += int(line.replace('|', '').split(':')[2].strip()) # kernels
-
+            elif key in ('lines',
+                         'boundaries',
+                         'centroids',
+                         'faces',
+                         'kernels'):
+                nprimitives += int(value)
+        
         if mapIs3D:
             desc = _("Vector map <%s> is 3D") % layer.name
             enable = False

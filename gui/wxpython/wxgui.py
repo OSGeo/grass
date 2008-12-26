@@ -291,8 +291,10 @@ class GMFrame(wx.Frame):
 
         #create main notebook widget
         nbStyle = FN.FNB_FANCY_TABS | \
-                    FN.FNB_BOTTOM | \
-                    FN.FNB_NO_NAV_BUTTONS
+            FN.FNB_BOTTOM | \
+            FN.FNB_NO_NAV_BUTTONS | \
+            FN.FNB_NO_X_BUTTON
+        
         self.notebook = FN.FlatNotebook(parent=self, id=wx.ID_ANY, style=nbStyle)
 
         #self.notebook = wx.aui.AuiNotebook(parent=self, id=wx.ID_ANY, style=wx.aui.AUI_NB_BOTTOM)
@@ -517,7 +519,7 @@ class GMFrame(wx.Frame):
         authorsFile = open(os.path.join(os.getenv("GISBASE"), "AUTHORS"), 'r')
         info.SetDevelopers([unicode(''.join(authorsFile.readlines()), "utf-8")])
         authorsFile.close()
-
+        
         wx.AboutBox(info)
 
     def OnWorkspace(self, event):
@@ -1421,16 +1423,16 @@ class GMFrame(wx.Frame):
                 name = str(self.curr_page.maptree.GetItemText(item))
                 idx = name.find('(opacity')
                 if idx > -1:
-                    layerName += '<' + name[:idx].strip(' ') + '>, '
+                    layerName += '<' + name[:idx].strip(' ') + '>,\n'
                 else:
-                    layerName += '<' + name + '>, '
-            layerName = layerName.rstrip(', ')
+                    layerName += '<' + name + '>,\n'
+            layerName = layerName.rstrip(',\n')
             
-            if layerName:
-                message = _("Do you want to remove map layer %s "
+            if len(layerName) > 2: # <>
+                message = _("Do you want to remove map layer(s)\n%s\n"
                             "from layer tree?") % layerName
             else:
-                message = _("Do you want to remove selected map layer "
+                message = _("Do you want to remove selected map layer(s) "
                             "from layer tree?")
 
             dlg = wx.MessageDialog (parent=self, message=message,

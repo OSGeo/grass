@@ -742,7 +742,7 @@ class BufferedWindow(MapWindow, wx.Window):
                 item = self.tree.FindItemByData('maplayer', digitToolbar.GetLayer())
             except TypeError:
                 item = None
-
+            
             if item and self.tree.IsItemChecked(item):
                 self.parent.digit.driver.DrawMap()
 
@@ -1088,12 +1088,14 @@ class BufferedWindow(MapWindow, wx.Window):
             move = (current[0] - previous[0],
                     current[1] - previous[1])
 
+            digitToolbar = self.parent.toolbars['vdigit']
+
             # dragging or drawing box with left button
             if self.mouse['use'] == 'pan':
                 self.DragMap(move)
 
             # dragging decoration overlay item
-            elif (self.mouse['use'] == 'pointer' and not self.parent.toolbars['vdigit']) and \
+            elif (self.mouse['use'] == 'pointer' and not digitToolbar) and \
                     self.dragid != None and \
                     self.dragid != 99:
                 self.DragItem(self.dragid, event)
@@ -1101,7 +1103,11 @@ class BufferedWindow(MapWindow, wx.Window):
             # dragging anything else - rubber band box or line
             else:
                 self.mouse['end'] = event.GetPositionTuple()[:]
-                if event.LeftIsDown():
+                digitClass = self.parent.digit
+                if event.LeftIsDown() and not \
+                        (digitToolbar and \
+                             digitToolbar.GetAction() in ("moveLine",) and \
+                             digitClass.driver.GetSelected() > 0):
                     # draw box only when left mouse button is pressed
                     self.MouseDraw(pdc=self.pdcTmp)
 
@@ -1440,11 +1446,11 @@ class BufferedWindow(MapWindow, wx.Window):
             if hasattr(self, "vdigitMove"):
                 if len(digitClass.driver.GetSelected()) == 0:
                     self.vdigitMove['begin'] = pos1 # left down
-                else:
-                    dx = pos2[0] - pos1[0] ### ???
-                    dy = pos2[1] - pos1[1]
-                    self.vdigitMove = (self.vdigitMove['begin'][0] + dx,
-                                       self.vdigitMove['begin'][1] + dy)
+                ### else:
+                ###    dx = pos2[0] - pos1[0] ### ???
+                ###    dy = pos2[1] - pos1[1]
+                ###    self.vdigitMove = (self.vdigitMove['begin'][0] + dx,
+                ###                       self.vdigitMove['begin'][1] + dy)
                 
                 # eliminate initial mouse moving efect
                 self.mouse['begin'] = self.mouse['end'] 
@@ -1532,7 +1538,7 @@ class BufferedWindow(MapWindow, wx.Window):
                             if digitClass.driver.SelectLineByPoint(pos1,
                                                                    digitClass.GetSelectType()) is not None:
                                 nselected = 1
-                        
+                
                 if nselected > 0:
                     if digitToolbar.GetAction() in ["moveLine", "moveVertex"]:
                         # get pseudoDC id of objects which should be redrawn
@@ -1570,7 +1576,10 @@ class BufferedWindow(MapWindow, wx.Window):
                         self.UpdateMap(render=False)
 
                 else: # no vector object found
-                    self.UpdateMap(render=False, renderVector=False)
+                    if not (digitToolbar.GetAction() in ["moveLine", "moveVertex"] and \
+                                len(self.vdigitMove['id']) > 0):
+                        # avoid left-click when features are already selected
+                        self.UpdateMap(render=False, renderVector=False)
 
             elif digitToolbar.GetAction() in ["splitLine", "addVertex", "removeVertex"]:
                 pointOnLine = digitClass.driver.SelectLineByPoint(pos1,
@@ -2032,7 +2041,7 @@ class BufferedWindow(MapWindow, wx.Window):
                                 x, y = self.Pixel2Cell(self.pdcTmp.GetIdBounds(self.vdigitMove['id'][2])[0:2])
                                 self.pdcTmp.RemoveId(self.vdigitMove['id'][2]-1)
                                 self.polycoords.append((x, y))
-
+                            
                             self.ClearLines(pdc=self.pdcTmp)
                             self.DrawLines(pdc=self.pdcTmp)
 
