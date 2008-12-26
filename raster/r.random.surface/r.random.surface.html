@@ -9,7 +9,7 @@ using filter(s) of diameter distance.  The influence of each random value on
 nearby cells is determined by a distance decay function based on exponent.
 If multiple filters are passed over the output maps, each filter is given a
 weight based on the weight inputs.  The resulting random surface can have
-&quot;any&quot; mean and variance, but the theoretical mean of an infinitely
+<em>any</em> mean and variance, but the theoretical mean of an infinitely
 large map is 0.0 and a variance of 1.0. Description of the algorithm is in
 the <b>NOTES</b> section.
 
@@ -17,7 +17,7 @@ the <b>NOTES</b> section.
 The random surface generated are composed of floating point numbers, and
 saved in the category description files of the output map(s).  Cell values
 are uniformly or normally distributed between 1 and high values inclusive
-(determined by whether the <em>-u</em> flag is used). The category names
+(determined by whether the <b>-u</b> flag is used). The category names
 indicate the average floating point value and the range of floating point
 values that each cell value represents.
 
@@ -26,68 +26,68 @@ values that each cell value represents.
 spatial error modeling. A procedure to use <em>r.random.surface</em> in
 spatial error modeling is given in the <b>NOTES</b> section.
 
-<h3>Parameters:</h3>
+<h3>Parameters</h3>
 <dl>
-<dt><b>output</b>
-<dd>Output map(s): Random surface(s). The cell values are a random
-distribution between the low and high values inclusive.  The category values
-of the output map(s) are in the form &quot;#.# #.# to #.#&quot; where each
-#.# is a floating point number. The first number is the average of the
-random values the cell value represents. The other two numbers are the range
-of random values for that cell value. The &quot;average&quot; mean value of
-generated <tt>output</tt> map(s) is 0. The &quot;average&quot;
-variance of map(s) generated is 1. The random values represent the standard
-deviation from the mean of that random surface.
+<dt><b>output</b></dt>
+<dd>Random surface(s). The cell values are a random distribution
+between the low and high values inclusive.  The category values of the
+output map(s) are in the form <em>#.# #.# to #.#</em> where each #.#
+is a floating point number. The first number is the average of the
+random values the cell value represents. The other two numbers are the
+range of random values for that cell value. The <em>average</em> mean
+value of generated <tt>output</tt> map(s) is 0. The <em>average</em>
+variance of map(s) generated is 1. The random values represent the
+standard deviation from the mean of that random surface.</dd>
 
-<dt><b>distance</b>
-<dd>Input value(s) [default 0.0]: distance determines the spatial dependence
-of the output map(s). The distance value indicates the minimum distance at
-which two map cells have no relationship to each other. A distance value of
-0.0 indicates that there is no spatial dependence (i.e., adjacent cell
-values have no relationship to each other). As the distance value increases,
-adjacent cell values will have values closer to each other. But the range
-and distribution of cell values over the output map(s) will remain the same.
-Visually, the clumps of lower and higher values gets larger as distance
-increases. If multiple values are given, each output map will have multiple
-filters, one for each set of distance, exponent, and weight values.
+<dt><b>distance</b></dt>
+<dd>Distance determines the spatial dependence of the output
+map(s). The distance value indicates the minimum distance at which two
+map cells have no relationship to each other. A distance value of 0.0
+indicates that there is no spatial dependence (i.e., adjacent cell
+values have no relationship to each other). As the distance value
+increases, adjacent cell values will have values closer to each
+other. But the range and distribution of cell values over the output
+map(s) will remain the same.  Visually, the clumps of lower and higher
+values gets larger as distance increases. If multiple values are
+given, each output map will have multiple filters, one for each set of
+distance, exponent, and weight values.</dd>
 
-<dt><b>exponent</b>
-<dd>Input value(s) [default 1.0]: exponent determines the distance decay
-exponent for a particular filter. The exponent value(s) have the property of
-determining the &quot;texture&quot; of the random surface. Texture will
-decrease as the exponent value(s) get closer to 1.0. Normally, exponent will
-be 1.0 or less. If there are no exponent values given, each filter will be
-given an exponent value of 1.0. If there is at least one exponent value
-given, there must be one exponent value for each distance value.
+<dt><b>exponent</b></dt>
+<dd>Exponent determines the distance decay exponent for a particular
+filter. The exponent value(s) have the property of determining
+the <em>texture</em> of the random surface. Texture will decrease as
+the exponent value(s) get closer to 1.0. Normally, exponent will be
+1.0 or less. If there are no exponent values given, each filter will
+be given an exponent value of 1.0. If there is at least one exponent
+value given, there must be one exponent value for each distance value.</dd>
 
-<dt><b>flat</b>
-<dd>Input value(s) [default 0.0]: flat determines the distance at which the
-filter
+<dt><b>flat</b></dt>
+<dd>Flat determines the distance at which the filter.</dd>
 
-<dt><b>weight</b>
-<dd>Input value(s) [default 1.0]: weight determines the relative importance
-of each filter. For example, if there were two filters driving the algorithm
-and weight=1.0, 2.0 was given in the command line: The second filter would
-be twice as important as the first filter. If no weight values are given,
-each filter will be just as important as the other filters defining the
-random field. If weight values exist, there must be a weight value for each
-filter of the random field.
+<dt><b>weight</b></dt>
+<dd>Weight determines the relative importance of each filter. For
+example, if there were two filters driving the algorithm and
+weight=1.0, 2.0 was given in the command line: The second filter would
+be twice as important as the first filter. If no weight values are
+given, each filter will be just as important as the other filters
+defining the random field. If weight values exist, there must be a
+weight value for each filter of the random field.</dd>
 
-<dt><b>high</b>
-<dd>Input value [default 255]: Specifies the high end of the range of cell
-values in the output map(s). Specifying a very large high value will
-minimize the &quot;errors&quot; caused by the random surface's
-discretization. The word errors is in quotes because errors in
-discretization are often going to cancel each other out and the spatial
-statistics are far more sensitive to the initial independent random deviates
-than any potential discretization errors.
+<dt><b>high</b></dt>
+<dd>Specifies the high end of the range of cell values in the output
+map(s). Specifying a very large high value will minimize
+the <em>errors</em> caused by the random surface's discretization. The
+word errors is in quotes because errors in discretization are often
+going to cancel each other out and the spatial statistics are far more
+sensitive to the initial independent random deviates than any
+potential discretization errors.</dd>
 
-<dt><b>seed</b>
-<dd>Input value(s) [default random]: Specifies the random seed(s), one for
-each map, that <em>r.random.surface</em> will use to generate the initial
-set of random values that the resulting map is based on. If the random seed
-is not given, <em>r.random.surface</em> will get a seed from the process ID
-number.
+<dt><b>seed</b></dt>
+<dd>Specifies the random seed(s), one for each map,
+that <em>r.random.surface</em> will use to generate the initial set of
+random values that the resulting map is based on. If the random seed
+is not given, <em>r.random.surface</em> will get a seed from the
+process ID number.</dd>
 
 </dl>
 
@@ -110,65 +110,56 @@ ignore the current mask for the same reason.
 <p>
 One of the most important uses for <em>r.random.surface</em> is to determine
 how the error inherent in raster maps might effect the analyses done with
-those maps. If you wanted to check to see how sensitive your analysis is to
-the errors in the DEMs in your study area, see:
+those maps.
 
-<p>&quot;<a href="http://www.geo.hunter.cuny.edu/~chuck/CGFinal/paper.htm">Visualizing Spatial Data Uncertainty Using Animation (final draft)</a>,&quot; by Charles R. Ehlschlaeger, Ashton M. Shortridge, and Michael F. Goodchild. Submitted to Computers in GeoSciences in September, 1996, accepted October, 1996 for publication in June, 1997.
-
-<p>
-&quot;<a href="http://www.geo.hunter.cuny.edu/~chuck/SDH96/paper.html">Modeling Uncertainty in Elevation Data for Geographical Analysis</a>&quot;, by Charles R. Ehlschlaeger, and Ashton M. Shortridge. Proceedings of the 7th International Symposium on Spatial Data Handling, Delft, Netherlands, August 1996. </p>
+<h2>REFERENCES</h2>
+Random Field Software for GRASS by Chuck Ehlschlaeger
 
 <p>
-&quot;<a href="http://www.geo.hunter.cuny.edu/~chuck/acm/paper.html">Dealing with Uncertainty in Categorical Coverage Maps: Defining, Visualizing, and Managing Data Errors</a>&quot;, by Charles Ehlschlaeger and Michael Goodchild. Proceedings, Workshop on Geographic Information Systems at the Conference on Information and Knowledge Management, Gaithersburg MD, 1994.
+  As part of my dissertation, I put together several programs that help
+GRASS (4.1 and beyond) develop uncertainty models of spatial data. I hope
+you find it useful and dependable. The following papers might clarify their
+use:
 
-<p>
-&quot;<a href="http://www.geo.hunter.cuny.edu/~chuck/gislis/gislis.html">Uncertainty in Spatial Data: Defining, Visualizing, and Managing Data Errors</a>&quot;, by Charles Ehlschlaeger and Michael Goodchild. Proceedings, GIS/LIS'94, pp. 246-253, Phoenix AZ,
-1994.
+<ul>
+<li><a href="../../CGFinal/paper.htm">Visualizing Spatial Data
+Uncertainty Using Animation (final draft)</a>, by Charles R.
+Ehlschlaeger, Ashton M. Shortridge, and Michael F. Goodchild. Submitted to
+Computers in GeoSciences in September, 1996, accepted October, 1996 for
+publication in June, 1997.</li>
 
-<p>
-If you are interested in creating potential realizations of categorical
-coverage maps, see <em>r.random.model</em>.
+<li><a href="http://www.geo.hunter.cuny.edu/~chuck/paper.html">Modeling
+Uncertainty in Elevation Data for Geographical Analysis</a>, by
+Charles R. Ehlschlaeger, and Ashton M.  Shortridge. Proceedings of the
+7th International Symposium on Spatial Data Handling, Delft,
+Netherlands, August 1996.</li>
+
+<li><a href="http://www.geo.hunter.cuny.edu/~chuck/acm/paper.html">Dealing
+with Uncertainty in Categorical Coverage Maps: Defining, Visualizing,
+and Managing Data Errors</a>, by Charles Ehlschlaeger and Michael
+Goodchild.  Proceedings, Workshop on Geographic Information Systems at
+the Conference on Information and Knowledge Management, Gaithersburg
+MD, 1994.</li>
+
+<li><a href="http://www.geo.hunter.cuny.edu/~chuck/gislis/gislis.html">Uncertainty
+in Spatial Data: Defining, Visualizing, and Managing Data
+Errors</a>, by Charles Ehlschlaeger and Michael
+Goodchild. Proceedings, GIS/LIS'94, pp. 246-253, Phoenix AZ,
+1994.</li>
+</ul>
 
 <h2>SEE ALSO</h2>
 
-<em><a href="r.random.html">r.random</a>, 
-<a href="r.mapcalc.html">r.mapcalc</a>
+<em>
+  <a href="r.random.html">r.random</a>, 
+  <a href="r.random.cell.html">r.random.cell</a>, 
+  <a href="r.mapcalc.html">r.mapcalc</a>
 </em>
-
-<h2>REFERENCES</h2>
-Random Field Software for GRASS by Chuck Ehlschlaeger<p>
-
-<p>As part of my dissertation, I put together several programs that help
-GRASS (4.1 and beyond) develop uncertainty models of spatial data. I hope
-you find it useful and dependable. The following papers might clarify their
-use: </p>
-
-<p>&quot;<a href="../../CGFinal/paper.htm">Visualizing Spatial Data
-Uncertainty Using Animation (final draft)</a>,&quot; by Charles R.
-Ehlschlaeger, Ashton M. Shortridge, and Michael F. Goodchild. Submitted to
-Computers in GeoSciences in September, 1996, accepted October, 1996 for
-publication in June, 1997. </p>
-
-<p>&quot;<a href="http://www.geo.hunter.cuny.edu/~chuck/paper.html">Modeling Uncertainty in Elevation Data for
-Geographical Analysis</a>&quot;, by Charles R. Ehlschlaeger, and Ashton M.
-Shortridge. Proceedings of the 7th International Symposium on Spatial Data
-Handling, Delft, Netherlands, August 1996. </p>
-
-<p>&quot;<a href="http://www.geo.hunter.cuny.edu/~chuck/acm/paper.html">Dealing with Uncertainty in
-Categorical Coverage Maps: Defining, Visualizing, and Managing Data
-Errors</a>&quot;, by Charles Ehlschlaeger and Michael Goodchild.
-Proceedings, Workshop on Geographic Information Systems at the Conference on
-Information and Knowledge Management, Gaithersburg MD, 1994. </p>
-
-<p>&quot;<a href="http://www.geo.hunter.cuny.edu/~chuck/gislis/gislis.html">Uncertainty in Spatial Data:
-Defining, Visualizing, and Managing Data Errors</a>&quot;, by Charles
-Ehlschlaeger and Michael Goodchild. Proceedings, GIS/LIS'94, pp. 246-253,
-Phoenix AZ, 1994. </p>
-
 
 <h2>AUTHORS</h2>
 Charles Ehlschlaeger, Michael Goodchild, and Chih-chang Lin; National Center
 for Geographic Information and Analysis, University of California, Santa
 Barbara.
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>

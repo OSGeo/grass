@@ -1,11 +1,6 @@
 /* random.c                                                             */
-
-#undef TRACE
-#undef DEBUG
-
 #include <grass/gis.h>
 #include "ransurf.h"
-
 
 #define M1 259200
 #define IA1 7141
@@ -19,7 +14,6 @@
 #define IA3 4561
 #define IC3 51349
 
-
 /* ran1() returns a double with a value between 0.0 and 1.0             */
 double ran1(void)
 {
@@ -29,7 +23,7 @@ double ran1(void)
     static int iff = 0;
     int j;
 
-    FUNCTION(ran1);
+    G_debug(2, "ran1()");
 
     if (Seed < 0 || iff == 0) {
 	iff = 1;
@@ -59,15 +53,3 @@ double ran1(void)
 
     return temp;
 }
-
-#undef M1
-#undef IA1
-#undef IC1
-#undef RM1
-#undef M2
-#undef IA2
-#undef IC2
-#undef RM2
-#undef M3
-#undef IA3
-#undef IC3

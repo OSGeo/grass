@@ -1,18 +1,13 @@
 /* digits.c                                                             */
-
-#undef TRACE
-#undef DEBUG
-
 #include <math.h>
 #include "ransurf.h"
-
 
 int Digits(double Double, int MaxSig)
 {
     int I, Round;
     double Check, RD, Right;
 
-    FUNCTION(SigDigits);
+    G_debug(2, "SigDigits");
 
     I = 0;
     Double += 1.0;

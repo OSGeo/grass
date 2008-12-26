@@ -1,79 +1,93 @@
 <h2>DESCRIPTION</h2>
 
 <em>r.random.cells</em> generates a random sets of cells that are at
-least <var>distance</var> apart. The cells are numbered from 1 to the
-numbers of cells generated. Random cells will not be generated in areas
-masked off.
+least <b>distance</b> apart. The cells are numbered from 1 to the
+numbers of cells generated. Random cells will not be generated in
+areas masked off.
 
-<h2>PARAMETERS</h2>
+<h3>Parameters</h3>
 
-<b>output </b> Output map: Random cells. Each random cell has a unique
-non-zero cell value ranging from 1 to the number of cells generated. The
-heuristic for this algorithm is to randomly pick cells until there are no
-cells outside of the chosen cell's buffer of radius <b>distance</b>.
-<p>
+<dl>
+<dt><b>output</b></dt>
+<dd>Random cells. Each random cell has a unique non-zero cell value
+ranging from 1 to the number of cells generated. The heuristic for
+this algorithm is to randomly pick cells until there are no cells
+outside of the chosen cell's buffer of radius <b>distance</b>.</dd>
 
-<b>distance</b> Input value(s) [default 0.0]: <b>distance</b> determines the
-minimum distance the centers of the random cells will be apart.
-<p>
-<b>seed</b> Input value [default: random]: Specifies the random seed that
+<dt><b>distance</b></dt>
+<dd>Determines the minimum distance the centers of the random cells
+will be apart.</dd>
+
+<dt><b>seed</b></dt>
+<dd>Specifies the random seed that
 <em>r.random.cells</em> will use to generate the cells. If the random seed
 is not given,<em> r.random.cells</em> will get a seed from the process ID
-number.
+number.</dd>
+
+</dl>
 
 <h2>NOTES</h2>
 
-The original purpose for this program was to generate independent random
-samples of cells in a study area. The <b>distance</b> value is the amount of
-spatial autocorrelation for the map being studied. The amount of spatial
-autocorrelation can be determined by using <em>r.2Dcorrelogram</em> with
+The original purpose for this program was to generate independent
+random samples of cells in a study area. The <b>distance</b> value is
+the amount of spatial autocorrelation for the map being studied. 
+
+<!-- The amount of spatial autocorrelation can be determined by
+using <em>r.2Dcorrelogram</em> with
 <em>r.2Dto1D</em>, or <em>r.1Dcorrelogram</em>. With <b>distance</b> set to
 zero, the <b>output</b> map will number each non-masked cell from 1 to the
-number of non-masked cells in the study region.
+number of non-masked cells in the study region. -->
 
 <h2>REFERENCES</h2>
-Random Field Software for GRASS by Chuck Ehlschlaeger<p>
+Random Field Software for GRASS by Chuck Ehlschlaeger
 
-<p>As part of my dissertation, I put together several programs that help
+<p>
+  As part of my dissertation, I put together several programs that help
 GRASS (4.1 and beyond) develop uncertainty models of spatial data. I hope
 you find it useful and dependable. The following papers might clarify their
-use: </p>
+use:
 
-<p>&quot;<a href="http://www.wiu.edu/users/cre111/older/CGFinal/paper.htm">Visualizing Spatial Data
-Uncertainty Using Animation (final draft)</a>,&quot; by Charles R.
+<ul>
+<li><a href="../../CGFinal/paper.htm">Visualizing Spatial Data
+Uncertainty Using Animation (final draft)</a>, by Charles R.
 Ehlschlaeger, Ashton M. Shortridge, and Michael F. Goodchild. Submitted to
 Computers in GeoSciences in September, 1996, accepted October, 1996 for
-publication in June, 1997. </p>
+publication in June, 1997.</li>
 
-<p>&quot;<a href="http://www.wiu.edu/users/cre111/older/SDH96/paper.html">Modeling Uncertainty in Elevation Data for
-Geographical Analysis</a>&quot;, by Charles R. Ehlschlaeger, and Ashton M.
-Shortridge. Proceedings of the 7th International Symposium on Spatial Data
-Handling, Delft, Netherlands, August 1996. </p>
+<li><a href="http://www.geo.hunter.cuny.edu/~chuck/paper.html">Modeling
+Uncertainty in Elevation Data for Geographical Analysis</a>, by
+Charles R. Ehlschlaeger, and Ashton M.  Shortridge. Proceedings of the
+7th International Symposium on Spatial Data Handling, Delft,
+Netherlands, August 1996.</li>
 
-<p>&quot;<a href="http://www.wiu.edu/users/cre111/older/acm/paper.html">Dealing with Uncertainty in
-Categorical Coverage Maps: Defining, Visualizing, and Managing Data
-Errors</a>&quot;, by Charles Ehlschlaeger and Michael Goodchild.
-Proceedings, Workshop on Geographic Information Systems at the Conference on
-Information and Knowledge Management, Gaithersburg MD, 1994. </p>
+<li><a href="http://www.geo.hunter.cuny.edu/~chuck/acm/paper.html">Dealing
+with Uncertainty in Categorical Coverage Maps: Defining, Visualizing,
+and Managing Data Errors</a>, by Charles Ehlschlaeger and Michael
+Goodchild.  Proceedings, Workshop on Geographic Information Systems at
+the Conference on Information and Knowledge Management, Gaithersburg
+MD, 1994.</li>
 
-<p>&quot;<a href="http://www.wiu.edu/users/cre111/older/gislis/gislis.html">Uncertainty in Spatial Data:
-Defining, Visualizing, and Managing Data Errors</a>&quot;, by Charles
-Ehlschlaeger and Michael Goodchild. Proceedings, GIS/LIS'94, pp. 246-253,
-Phoenix AZ, 1994. </p>
+<li><a href="http://www.geo.hunter.cuny.edu/~chuck/gislis/gislis.html">Uncertainty
+in Spatial Data: Defining, Visualizing, and Managing Data
+Errors</a>, by Charles Ehlschlaeger and Michael
+Goodchild. Proceedings, GIS/LIS'94, pp. 246-253, Phoenix AZ,
+1994.</li>
+</ul>
 
 <h2>SEE ALSO</h2>
 
 <em>
-r.1Dcorrelogram, 
+<!--r.1Dcorrelogram, 
 r.2Dcorrelogram, 
-r.2Dto1D, 
+r.2Dto1D, -->
 <a href="r.random.surface.html">r.random.surface</a>,
-r.random.model, 
 <a href="r.random.html">r.random</a>
 </em> 
 
 <h2>AUTHOR</h2>
-<p>Charles Ehlschlaeger; National Center for Geographic Information and
+
+Charles Ehlschlaeger; National Center for Geographic Information and
 Analysis, University of California, Santa Barbara.
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
