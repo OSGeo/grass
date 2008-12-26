@@ -189,8 +189,8 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 
     line = 0;
     while (1) {
+	line++;
 	if (Vect_level(Map) >= 2) {
-	    line++;
 	    if (line > nlines)
 		break;
 	    if (!Vect_line_alive(Map, line))
@@ -199,11 +199,10 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 	}
 	else {
 	    ltype = Vect_read_next_line(Map, Points, Cats);
-	    switch (ltype) {
-	    case -1:
-		G_warning(_("Unable to read vector map"));
-		return -1;
-	    case -2:		/* EOF */
+	    if (ltype == -1) {
+		G_fatal_error(_("Unable to read vector map"));
+	    }
+	    else if (ltype == -2) { /* EOF */
 		break;
 	    }
 	}
@@ -264,12 +263,11 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 	}
 
 	if (table_colors_flag) {
-
 	    /* only first category */
-	    cat = Vect_get_line_cat(Map, line,
-				    (Clist->field > 0 ? Clist->field :
-				     (Cats->n_cats >
-				      0 ? Cats->field[0] : 1)));
+	    Vect_cat_get(Cats, 
+			 (Clist->field > 0 ? Clist->field :
+			  (Cats->n_cats >
+			   0 ? Cats->field[0] : 1)), &cat);
 
 	    if (cat >= 0) {
 		G_debug(3, "display element %d, cat %d", line, cat);
@@ -319,7 +317,7 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 	if (cats_color_flag) {
 	    custom_rgb = FALSE;
 	    if (Clist->field > 0) {
-		cat = Vect_get_line_cat(Map, line, Clist->field);
+		Vect_cat_get(Cats, Clist->field, &cat);
 		if (cat >= 0) {
 		    G_debug(3, "display element %d, cat %d", line, cat);
 		    /* fetch color number from category */
@@ -350,13 +348,12 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 
 
 	if (nrec_width) {
-
 	    /* only first category */
-	    cat = Vect_get_line_cat(Map, line,
-				    (Clist->field > 0 ? Clist->field :
-				     (Cats->n_cats >
-				      0 ? Cats->field[0] : 1)));
-
+	    Vect_cat_get(Cats,
+			 (Clist->field > 0 ? Clist->field :
+			  (Cats->n_cats >
+			   0 ? Cats->field[0] : 1)), &cat);
+	    
 	    if (cat >= 0) {
 		G_debug(3, "display element %d, cat %d", line, cat);
 
