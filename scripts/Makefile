@@ -60,7 +60,6 @@ SUBDIRS = \
 	v.out.gps \
 	v.rast.stats \
 	v.report \
-	v.to.3d \
 	v.what.vect
 
 #	d.vect.thematic \
