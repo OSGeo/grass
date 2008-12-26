@@ -5,7 +5,18 @@ to 3D. Height (z-coordinate) of 3D vector features can be specified
 by <b>height</b> parameter as fixed value or by <b>column</b>
 parameter.
 
+<p>
+Flag <b>-r</b> enables to perform reverse transformation, i.e.,
+transform 3D vector to 2D by omitting z-coordinate.
+
+<h2> NOTES</h2>
+
+When transforming 2D vector features to 3D based on attribute, all
+NULL values are silently converted to height 0.0.
+
 <h2>EXAMPLES</h2>
+
+<h3>Transform 2D vector features to 3D</h3>
 
 <div class="code"><pre>
 # convert z-values from string to double
@@ -17,11 +28,11 @@ v.db.select map=geodetic_pts columns=cat,Z_VALUE,Z_VALUE_
 v.to.3d input=geodetic_pts out=geodetic_pts_3d column=Z_VALUE_D
 </pre></div>
 
-<h2>TODO</h2>
+<h3>Transform 3D vector features to 2D</h3>
 
-<ul>
-  <li>Implement reverse transformation</li>
-</ul>
+<div class="code"><pre>
+v.to.3d -rt input=elev_lid792_bepts output=elev_lid_2d
+</pre></div>
 
 <h2>SEE ALSO</h2>
 

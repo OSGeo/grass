@@ -62,6 +62,7 @@ SUBDIRS = \
 	v.surf.idw \
 	v.surf.rst \
 	v.transform \
+	v.to.3d \
 	v.to.db \
 	v.to.points \
 	v.to.rast \
