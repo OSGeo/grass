@@ -1,55 +1,24 @@
 /* init.c                                                               */
-
-#undef TRACE
-#undef DEBUG
-
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <grass/gis.h>
+#include <grass/glocale.h>
+
 #include "ransurf.h"
 #include "local_proto.h"
-
 
 /* function prototypes */
 static int comp_array(const void *p1, const void *p2);
 
-
-void Init(int argc, char **argv)
+void Init()
 {
-    struct Option *SeedStuff;
     struct Cell_head Region;
     int Count;
     int FD, row, col;
     double MinRes;
 
-    FUNCTION(Init);
-
-    Output = G_define_option();
-    Output->key = "output";
-    Output->type = TYPE_STRING;
-    Output->required = YES;
-    Output->multiple = NO;
-    Output->description = "Name of indepent cells map";
-    Output->gisprompt = "new,cell,raster";
-
-    Distance = G_define_option();
-    Distance->key = "distance";
-    Distance->type = TYPE_DOUBLE;
-    Distance->required = YES;
-    Distance->multiple = NO;
-    Distance->description =
-	"Input value: max. distance of spatial correlation (value(s) >= 0.0)";
-
-    SeedStuff = G_define_option();
-    SeedStuff->key = "seed";
-    SeedStuff->type = TYPE_INTEGER;
-    SeedStuff->required = NO;
-    SeedStuff->description =
-	"Input value: random seed (SEED_MIN >= value >= SEED_MAX), default [random]";
-
-    if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+    G_debug(2, "Init()");
 
     Rs = G_window_rows();
     Cs = G_window_cols();
@@ -73,7 +42,7 @@ void Init(int argc, char **argv)
     CellCount = 0;
     if (NULL != G_find_file("cell", "MASK", G_mapset())) {
 	if ((FD = G_open_cell_old("MASK", G_mapset())) < 0) {
-	    G_fatal_error(" unable to open MASK");
+	    G_fatal_error(_("Unable to open raster map <%s>"), "MASK");
 	}
 	else {
 	    for (row = 0; row < Rs; row++) {
@@ -99,9 +68,9 @@ void Init(int argc, char **argv)
 
     sscanf(Distance->answer, "%lf", &MaxDist);
     if (MaxDist < 0.0)
-	G_fatal_error("distance must be >= 0.0");
-
-    DOUBLE(MaxDist);
+	G_fatal_error(_("Distance must be >= 0.0"));
+    
+    G_debug(3, "(MaxDist):%.12lf", MaxDist);
     MaxDistSq = MaxDist * MaxDist;
     if (!SeedStuff->answer) {
 	Seed = (int)getpid();
@@ -118,9 +87,13 @@ void Init(int argc, char **argv)
 	    Seed += SEED_MAX - SEED_MIN;
     }
 
+    G_message(_("Generating raster map <%s>..."),
+	      Output->answer);
+
     DoNext = (CELLSORTER *) G_malloc(CellCount * sizeof(CELLSORTER));
     Count = 0;
     for (row = 0; row < Rs; row++) {
+	G_percent(row, Rs, 2);
 	for (col = 0; col < Cs; col++) {
 	    if (0 != FlagGet(Cells, row, col)) {
 		DoNext[Count].R = row;
@@ -133,6 +106,8 @@ void Init(int argc, char **argv)
 	    }
 	}
     }
+    G_percent(1, 1, 1);
+    
     qsort(DoNext, CellCount, sizeof(CELLSORTER), comp_array);
 }
 

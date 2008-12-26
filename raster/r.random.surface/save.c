@@ -1,8 +1,4 @@
 /* save.c                                                               */
-
-#undef TRACE
-#undef DEBUG
-
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -19,15 +15,15 @@ void SaveMap(int NumMap, int MapSeed)
     char String[80], Label[240];
     struct History history;
 
-    FUNCTION(SaveMap);
+    G_debug(2, "SaveMap()");
 
     OutFD = G_open_cell_new(OutNames[NumMap]);
     if (OutFD < 0)
-	G_fatal_error("%s: unable to open new raster map [%s]",
-		      G_program_name(), OutNames[NumMap]);
+	G_fatal_error(_("Unable to create raster map <%s>"),
+		      OutNames[NumMap]);
 
     MeanMod = 0.0;
-    INT(FDM);
+    G_debug(3, "(FDM):%d", FDM);
     if (FDM == -1) {
 	for (Row = 0; Row < Rs; Row++) {
 	    for (Col = 0; Col < Cs; Col++) {
@@ -70,12 +66,12 @@ void SaveMap(int NumMap, int MapSeed)
 	}
 
 	MeanMod /= MapCount;
-	DOUBLE(MeanMod);
-	DOUBLE(FilterSD);
+	G_debug(3, "(MeanMod):%.12lf", MeanMod);
+	G_debug(3, "(FilterSD):%.12lf", FilterSD);
 	/* Value = (Value - MeanMod) / FilterSD + MeanMod / FilterSD; */
 	Value /= FilterSD;
-	DOUBLE(Value);
-	RETURN;
+	G_debug(3, "(Value):%.12lf", Value);
+
 	DownInterval = UpInterval = Value;
 
 	for (Row = 0; Row < Rs; Row++) {
@@ -100,8 +96,7 @@ void SaveMap(int NumMap, int MapSeed)
 	}
     }
 
-    G_message(_("%s: saving [%s] raster map layer.\nPercent complete:"),
-	      G_program_name(), OutNames[NumMap]);
+    G_message(_("Writing raster map <%s>..."), OutNames[NumMap]);
 
     for (Index = 0; Index < CatInfo.NumCat; Index++) {
 	CatInfo.Max[Index] = DownInterval;
@@ -114,7 +109,6 @@ void SaveMap(int NumMap, int MapSeed)
 	UpInterval += .1;
 
     if (!Uniform->answer) {
-	FUNCTION(NOT_UNIFORM);
 	/* normal distribution */
 	for (Row = 0; Row < Rs; Row++) {
 	    for (Col = 0; Col < Cs; Col++) {
@@ -170,12 +164,13 @@ void SaveMap(int NumMap, int MapSeed)
     }
 
     for (Row = 0; Row < Rs; Row++) {
+	G_percent(Row, Rs, 2);
 	for (Col = 0; Col < Cs; Col++) {
 	    CellBuffer[Col] = (CELL) Surface[Row][Col];
 	}
 	G_put_raster_row(OutFD, CellBuffer, CELL_TYPE);
-	G_percent(Row + 1, Rs, 1);
     }
+    G_percent(1, 1, 1);
 
     G_close_cell(OutFD);
     G_short_history(OutNames[NumMap], "raster", &history);
@@ -212,13 +207,13 @@ void SaveMap(int NumMap, int MapSeed)
 	LowColor = 0;
     if (Uniform->answer || HighColor > 255)
 	HighColor = 255;
-    INT(LowColor);
-    INT(HighColor);
+    G_debug(3, "(LowColor):%d", LowColor);
+    G_debug(3, "(HighColor):%d", HighColor);
 
     G_add_color_rule(1, LowColor, LowColor, LowColor,
 		     High, HighColor, HighColor, HighColor, &Colr);
 
     if (G_write_colors(OutNames[NumMap], G_mapset(), &Colr) == -1)
-	G_warning("%s: unable to write colr file for %s\n",
-		  G_program_name(), OutNames[NumMap]);
+	G_warning(_("Unable to write color table for raster map <%s>"),
+		  OutNames[NumMap]);
 }

@@ -1,12 +1,8 @@
 /* gasdev.c                                                             */
-
-#undef TRACE
-#undef DEBUG
-
 #include <math.h>
+
 #include "ransurf.h"
 #include "local_proto.h"
-
 
 /* GasDev() returns a random double with a mean of 0.0 and a standard   */
 /*      deviation of 1.0.                                               */
@@ -21,7 +17,7 @@ double GasDev(void)
     } while (r >= 1.0);
 
     fac = sqrt(-2.0 * log(r) / r);
-    DOUBLE(v2 * fac);
+    G_debug(3, "(v2 * fac):%.12lf", v2 * fac);
 
     return (v2 * fac);
 }

@@ -1,8 +1,4 @@
 /* makepp.c                                                             */
-
-#undef TRACE
-#undef DEBUG
-
 #include "ransurf.h"
 #include "local_proto.h"
 
@@ -14,7 +10,7 @@ double MakePP(int Row, int Col, int OutRows, int OutCols,
     int RRow, RCol;
     double Effect, Value;
 
-    FUNCTION(MakePP);
+    G_debug(2, "MakePP()");
 
     Value = 0.0;
     RRow = Row + BigF.RowPlus;
@@ -25,14 +21,13 @@ double MakePP(int Row, int Col, int OutRows, int OutCols,
 
 	for (DCol = RCol - BigF.ColPlus; DCol <= RCol + BigF.ColPlus; DCol++) {
 	    DistDecay(&Effect, RRow - DRow, RCol - DCol);
-	    INT(RRow - DRow);
-	    INT(RCol - DCol);
-	    DOUBLE(Effect);
-	    RETURN;
+	    G_debug(3, "(RRow - DRow):%d", RRow - DRow);
+	    G_debug(3, "(RCol - DCol):%d", RCol - DCol);
+	    G_debug(3, "(Effect):%.12lf", Effect);
+
 	    Value += Effect * Randoms[DRow][DCol];
 	}
     }
 
     return (Value);
-    FUNCTION(end MakePP);
 }
