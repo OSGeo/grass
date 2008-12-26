@@ -33,7 +33,7 @@ void parse_args(struct opts *opt)
     opt->field = G_define_standard_option(G_OPT_V_FIELD);
     opt->field->guisection = _("Height");
 
-    opt->column = G_define_standard_option(G_OPT_COLUMN);
+    opt->column = G_define_standard_option(G_OPT_DB_COLUMN);
     opt->column->label = _("Name of attribute column used for height");
     opt->column->description =
 	_("Can be used for reverse transformation, to store height of points");
