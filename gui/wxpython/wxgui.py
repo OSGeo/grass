@@ -72,7 +72,6 @@ import gui_modules.wxgui_utils as wxgui_utils
 import gui_modules.mapdisp as mapdisp
 import gui_modules.menudata as menudata
 import gui_modules.menuform as menuform
-import gui_modules.grassenv as grassenv
 import gui_modules.histogram as histogram
 import gui_modules.profile as profile
 import gui_modules.rules as rules
