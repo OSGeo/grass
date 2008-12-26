@@ -19,11 +19,11 @@ class Popen(subprocess.Popen):
 	    shell = (sys.platform == "win32")
 
 	subprocess.Popen.__init__(self, args, bufsize, executable,
-                 stdin, stdout, stderr,
-                 preexec_fn, close_fds, shell,
-                 cwd, env, universal_newlines,
-                 startupinfo, creationflags)
-
+                                  stdin, stdout, stderr,
+                                  preexec_fn, close_fds, shell,
+                                  cwd, env, universal_newlines,
+                                  startupinfo, creationflags)
+        
 PIPE = subprocess.PIPE
 STDOUT = subprocess.STDOUT
 
@@ -573,4 +573,4 @@ def mapcalc(exp, **kwargs):
     t = string.Template(exp)
     e = t.substitute(**kwargs)
     if run_command('r.mapcalc', expression = e) != 0:
-	grass.fatal("An error occurred while running r.mapcalc")
+	fatal("An error occurred while running r.mapcalc")
