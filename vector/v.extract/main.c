@@ -373,7 +373,8 @@ int main(int argc, char **argv)
 
     /* Read and write header info */
     Vect_copy_head_data(&In, &Out);
-
+    
+    G_message(_("Extracting features..."));
     xtract_line(cat_count, cat_array, &In, &Out, new_cat, type, dissolve,
 		field, type_only, r_flag->answer ? 1 : 0);
 
@@ -418,7 +419,7 @@ int main(int argc, char **argv)
 	}
 
 	/* Copy tables */
-	G_verbose_message(_("Writing attributes..."));
+	G_message(_("Writing attributes..."));
 
 	/* Number of output tabs */
 	for (i = 0; i < Vect_get_num_dblinks(&In); i++) {
