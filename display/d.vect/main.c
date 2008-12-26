@@ -418,13 +418,13 @@ int main(int argc, char **argv)
 	has_fcolor = 0;
     }
     else if (ret == 0) {	/* error */
-	G_fatal_error(_("Unknown color: [%s]"), fcolor_opt->answer);
+	G_fatal_error(_("Unknown color: '%s'"), fcolor_opt->answer);
     }
 
     size = atoi(size_opt->answer);
     Symb = S_read(icon_opt->answer);
     if (Symb == NULL)
-	G_warning(_("Cannot read symbol, cannot display points"));
+	G_warning(_("Unable to read symbol, unable todisplay points"));
     else
 	S_stroke(Symb, size, 0.0, 0);
 
@@ -623,12 +623,12 @@ int main(int argc, char **argv)
 		    D_line_width(default_width);
 	    }
 	    else
-		G_warning(_("Cannot display areas, topology not available"));
+		G_warning(_("Unable to display areas, topology not available"));
 	}
 
 	if (display & DISP_SHAPE) {
 	    if (id_flag->answer && level < 2) {
-		G_warning(_("Cannot display lines by id, topology not available"));
+		G_warning(_("Unable to display lines by id, topology not available"));
 	    }
 	    else {
 		stat = plot1(&Map, type, area, Clist,
@@ -670,7 +670,7 @@ int main(int argc, char **argv)
 	    if (level >= 2)
 		stat = topo(&Map, type, area, &lattr);
 	    else
-		G_warning(_("Cannot display topology, not available"));
+		G_warning(_("Unable to display topology, not available"));
 	}
     }
 
