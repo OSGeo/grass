@@ -9,32 +9,35 @@ http://grass.osgeo.org
 
 \section projintro GRASS and the PROJ4 projection library
 
-GRASS utilizes the PROJ4 library originally developed by Gerald
-Evenden/USGS (Cartographic Projection Procedures for the UNIX
-Environment -- A User's Manual, Evenden, 1990, Open-file report
-90-284). The PROJ4 (<a
-href="http://proj.maptools.org">http://proj.maptools.org</a>)
-functions are used through wrapper functions in a GRASS environment.
+GRASS utilizes the PROJ4 library (<a
+href="http://proj.osgeo.org">http://proj.osgeo.org</a>) originally
+developed by Gerald Evenden/USGS (Cartographic Projection Procedures
+for the UNIX Environment -- A User's Manual, Evenden, 1990, Open-file
+report 90-284). The PROJ4 functions are used through wrapper functions
+in a GRASS environment.
 
 Internally to the PROJ.4 library, projection may involve transformation to
 and from geodetic co-ordinates (latitude and longitude), and numerical
 corrections to account for different datums.
 
-This is transparent for the user as input and output parameters are either
-read from PROJ_INFO and PROJ_UNITS files (g.proj, v.proj, r.proj) or read from
-user prompts (g.proj and g.setproj).
+This is transparent for the user as input and output parameters are
+either read from PROJ_INFO and PROJ_UNITS files (<tt>g.proj</tt>,
+<tt>v.proj</tt>, <tt>r.proj</tt>) or read from user prompts (<tt>g.proj</tt>
+and <tt>g.setproj</tt>).
 
 In GRASS the wrapper functions in lib/proj/get_proj.c makes the
 preparations to set up the parameter strings and init the info-structures,
-while do_proj.c contains the actual projection calls.
+while lib/proj/do_proj.c contains the actual projection calls.
 
-ellipse.c and datum.c contain functions for querying GRASS locations
-and users for ellipsoid and datum information (some of these functions
-were included in the GIS library in earlier versions of GRASS).
+Files lib/proj/ellipse.c and lib/proj/datum.c contain functions for
+querying GRASS locations and users for ellipsoid and datum information
+(some of these functions were included in the GIS library in earlier
+versions of GRASS).
 
-convert.c contains functions for converting GRASS co-ordinate system
-descriptions to and from the formats used by other GIS. Heavy use is
-made of the OGR library, part of GDAL (http://www.gdal.org/ogr/).
+File lib/proj/convert.c contains functions for converting GRASS
+co-ordinate system descriptions to and from the formats used by other
+GIS. Heavy use is made of the OGR library, part of GDAL
+(http://www.gdal.osgeo.org/ogr/).
 
 \subsection datum_transformation Datum transformation
 
@@ -68,5 +71,36 @@ include $(MODULE_TOPDIR)/include/Make/Module.make
 default: cmd
 \endverbatim
 
+\section Function
+
+ - GPJ_ask_datum_params()
+ 
+ - GPJ_get_datum_by_name()
+
+ - GPJ__get_datum_params()
+
+ - GPJ_get_datum_params()
+ 
+ - GPJ_get_default_datum_params_by_name()
+
+ - GPJ_get_ellipsoid_by_name()
+ 
+ - GPJ_get_ellipsoid_params()
+ 
+ - GPJ_get_equivalent_latlong()
+ 
+ - GPJ_grass_to_osr()
+ 
+ - GPJ_grass_to_wkt()
+
+ - GPJ_free_datum()
+
+ - GPJ_free_ellps()
+ 
+ - GPJ_set_csv_loc()
+ 
+ - GPJ_osr_to_grass()
+
+ - GPJ_wkt_to_grass()
 */
 
