@@ -336,38 +336,28 @@ class VectorDBInfo:
         for layer in self.layers.keys():
             # determine column names and types
             table = self.layers[layer]["table"]
-            columnsCommand = gcmd.Command (cmd=["db.describe",
-                                                "-c", "--q",
-                                                "table=%s" % self.layers[layer]["table"],
-                                                "driver=%s" % self.layers[layer]["driver"],
-                                                "database=%s" % self.layers[layer]["database"]])
-
-
             columns = {} # {name: {type, length, [values], [ids]}}
+            i = 0
+            for item in grass.db_describe(table = self.layers[layer]["table"],
+                                          driver = self.layers[layer]["driver"],
+                                          database = self.layers[layer]["database"])['cols']:
+                name, type, length = item
+                # FIXME: support more datatypes
+                if type.lower() == "integer":
+                    ctype = int
+                elif type.lower() == "double precision":
+                    ctype = float
+                else:
+                    ctype = str
 
-            if columnsCommand.returncode == 0:
-                # skip nrows and ncols
-                i = 0
-                for line in columnsCommand.ReadStdOutput()[2:]:
-                    num, name, type, length = line.strip().split(':')
-                    # FIXME: support more datatypes
-                    if type.lower() == "integer":
-                        ctype = int
-                    elif type.lower() == "double precision":
-                        ctype = float
-                    else:
-                        ctype = str
-
-                    columns[name.strip()] = { 'index'  : i,
-                                              'type'   : type.lower(),
-                                              'ctype'  : ctype,
-                                              'length' : int(length),
-                                              'values' : [],
-                                              'ids'    : []}
-                    i += 1
-            else:
-                return False
-
+                columns[name.strip()] = { 'index'  : i,
+                                          'type'   : type.lower(),
+                                          'ctype'  : ctype,
+                                          'length' : int(length),
+                                          'values' : [],
+                                          'ids'    : []}
+                i += 1
+            
             # check for key column
             # v.db.connect -g/p returns always key column name lowercase
             if self.layers[layer]["key"] not in columns.keys():
@@ -530,10 +520,13 @@ class ColumnSelect(wx.ComboBox):
         try:
             table = dbInfo.layers[int(layer)]['table']
             columnchoices = dbInfo.tables[table]
+            columns = len(columnchoices.keys()) * ['']
+            for key, val in columnchoices.iteritems():
+                columns[val['index']] = key
         except (KeyError, ValueError):
-            columnchoices = {}
-        
-        self.SetItems(columnchoices.keys())
+            columns = []
+
+        self.SetItems(columns)
         self.SetValue('')
         
 class DbColumnSelect(wx.ComboBox):
