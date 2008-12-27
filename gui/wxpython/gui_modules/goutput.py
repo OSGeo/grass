@@ -85,6 +85,11 @@ class CmdThread(threading.Thread):
             self.resultQ.put((requestId, self.requestCmd.run()))
 
             try:
+                returncode = self.requestCmd.module.returncode
+            except AttributeError:
+                returncode = 0 # being optimistic
+            
+            try:
                 aborted = self.requestCmd.aborted
             except AttributeError:
                 aborted = False
@@ -92,7 +97,7 @@ class CmdThread(threading.Thread):
             time.sleep(.1)
             
             event = wxCmdDone(aborted=aborted,
-                              returncode=self.requestCmd.module.returncode,
+                              returncode=returncode,
                               time=requestTime,
                               pid=requestId)
             
