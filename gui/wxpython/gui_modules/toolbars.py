@@ -630,6 +630,11 @@ class VDigitToolbar(AbstractToolbar):
         # disable the toolbar
         self.parent.RemoveToolbar ("vdigit")
 
+        # set default mouse settings
+        self.parent.MapWindow.mouse['use'] = "pointer"
+        self.parent.MapWindow.mouse['box'] = "point"
+        self.parent.MapWindow.polycoords = []
+        
     def OnMoveVertex(self, event):
         """Move line vertex"""
         Debug.msg(2, "Digittoolbar.OnMoveVertex():")

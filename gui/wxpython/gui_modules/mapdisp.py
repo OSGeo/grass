@@ -3380,7 +3380,7 @@ class MapFrame(wx.Frame):
         self.toolbars['map'].action['desc'] = 'modifyAttrb'
         
         self.MapWindow.mouse['use'] = "queryVector"
-        self.MapWindow.mouse['box'] = "box"
+        self.MapWindow.mouse['box'] = "point"
         self.MapWindow.pen = wx.Pen(colour='Red', width=2, style=wx.SHORT_DASH)
         self.MapWindow.zoomtype = 0
 
