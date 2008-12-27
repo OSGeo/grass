@@ -487,15 +487,11 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         """
         Stop editing the current vector map layer
         """
-        try:
-            maplayer = self.GetPyData(self.layer_selected)[0]['maplayer']
-        except:
-            event.Skip()
-            return
-
+        maplayer = self.GetPyData(self.layer_selected)[0]['maplayer']
+        
         self.mapdisplay.toolbars['vdigit'].OnExit()
         self.mapdisplay.imgVectorMap = None
-
+        
     def OnSetBgMap(self, event):
         """Set background vector map for editing sesstion"""
         if event.IsChecked():
