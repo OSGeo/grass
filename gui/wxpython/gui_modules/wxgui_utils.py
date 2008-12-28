@@ -97,7 +97,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.reorder = False        # layer change requires a reordering
 
         # init associated map display
-        pos = wx.Point(self.disp_idx * 25, self.disp_idx * 25)
+        pos = wx.Point((self.disp_idx + 1) * 25, (self.disp_idx + 1) * 25)
         self.mapdisplay = mapdisp.MapFrame(self,
                                            id=wx.ID_ANY, pos=pos,
                                            size=globalvar.MAP_WINDOW_SIZE,
