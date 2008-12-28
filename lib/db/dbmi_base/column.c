@@ -375,4 +375,7 @@ void db_free_column(dbColumn * column)
 {
     db_free_string(&column->columnName);
     db_free_string(&column->value.s);
+    /* match init? */
+    db_free_string(&column->description);
+    db_free_string(&column->defaultValue.s);
 }
