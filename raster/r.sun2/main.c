@@ -2098,6 +2098,7 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
 	    " -----------------------------------------------------------------");
     hist.edlinecnt++;
 
+    G_command_history(&hist);
     /* don't call G_write_history() until after G_close_cell() or it just gets overwritten */
 
 }				/* End of ) function */
