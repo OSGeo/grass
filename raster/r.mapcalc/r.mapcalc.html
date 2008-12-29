@@ -3,14 +3,12 @@
 New raster map layers can be created which are arithmetic expressions
 involving existing raster map layers, integer or floating point constants,
 and functions.
+
 <h2>PROGRAM USE</h2>
-If used without command line arguments, <em>r.mapcalc</em> will read its
-input, one line at a time, from standard input
-(which is the keyboard, unless redirected from a file or across a pipe).
-Otherwise, the expression on the command line is evaluated.
+
 <em>r.mapcalc</em> expects its input to have the form:
 <p>
-<b>result=</b><em>expression</em>
+<b>result =</b><em> expression</em>
 <p>
 where <em>result</em> is the name of a raster map layer
 to contain the result of the calculation and
@@ -19,6 +17,55 @@ raster map layers, integer or floating point constants,
 and functions known to the calculator.
 Parentheses are allowed in the expression and may be nested to any depth.
 <em>result</em> will be created in the user's current mapset.
+<p>
+
+As <em>expression=</em> is the first option, it is the default. This
+means that passing an expression on the command line is possible
+as long as the expression is quoted and a space is included before the
+first <em>=</em> sign.
+
+Example ('foo' is the resulting map):
+<div class="code"><pre>
+r.mapcalc "foo = 1"
+</pre></div>
+or:
+<div class="code"><pre>
+r.mapcalc 'foo = 1'
+</pre></div>
+
+An unquoted expression (i.e. split over multiple arguments) won't
+work, nor will omitting the space before the = sign:
+
+<div class="code"><pre>
+r.mapcalc 'foo=1'
+Sorry, &lt;foo&gt; is not a valid parameter
+</pre></div>
+
+If no options are given, it manufactures "input=-" (which reads from
+stdin), so you can continue to use e.g.:
+
+<div class="code"><pre>
+r.mapcalc &lt; file
+</pre></div>
+or:
+<div class="code"><pre>
+r.mapcalc &lt;&lt;EOF
+foo = 1
+EOF
+</pre></div>
+But unless you need compatibility with previous versions, use input=
+explicitly, e.g.:
+
+<div class="code"><pre>
+r.mapcalc input=file
+</pre></div>
+or:
+<div class="code"><pre>
+r.mapcalc input=- &lt;&lt;EOF
+foo = 1
+EOF
+</pre></div>
+
 <p>
 The formula entered to <em>r.mapcalc</em> by the user is recorded both in the
 <em>result</em> map title (which appears in the category file for <em>result</em>)
@@ -350,7 +397,7 @@ If you want floating point division, at least one of the arguments has
 to be a floating point value. Multiplying one of them by 1.0 will
 produce a floating-point result, as will using float():
 <div class="code"><pre>
-      r.mapcalc "ndvi=float(lsat.4 - lsat.3) / (lsat.4 + lsat.3)"
+      r.mapcalc "ndvi = float(lsat.4 - lsat.3) / (lsat.4 + lsat.3)"
 </pre></div>
 <h2>NULL support</h2>
 <ul>
@@ -523,19 +570,10 @@ These include, among others:
 <p>
 It is advisable to put single quotes around the expression; e.g.:
 <div class="code"><pre>
-result = 'elevation * 2'
+'result = elevation * 2'
 </pre></div>
 Without the quotes, the *, which has special meaning to the UNIX shell,
 would be altered and <em>r.mapcalc</em> would see something other than the *.
-<p>
-If the input comes directly from the keyboard and the <em>result</em> raster
-map layer exists, the user will be asked if it can be overwritten.
-Otherwise, the <em>result</em> raster map layer will automatically be
-overwritten if it exists.
-<p>
-Quoting <em>result</em> is not allowed.
-However, it is never necessary to quote <em>result</em> since
-it is always taken to be a raster map layer name.
 <p>
 For formulas that the user enters from standard input
 (rather than from the command line), a line continuation feature now exists.
@@ -562,14 +600,7 @@ continuation lines, the error messages produced by <em>r.mapcalc</em> will
 be meaningless and the equation will not work as the user intended.
 This is important for the eval() function.
 <p>
-Error messages produced by <em>r.mapcalc</em> are almost useless.
-In future, <em>r.mapcalc</em> should make some attempt
-to point the user to the offending section of the equation, e.g.:
-<div class="code"><pre>
-x = a * b ++ c
-ERROR: somewhere in line 1: ...  b ++ c ...
-</pre></div>
-<p>
+<!-- STILL TRUE ??-->
 Currently, there is no comment mechanism in <em>r.mapcalc</em>.
 Perhaps adding a capability that would cause the entire line to be
 ignored when the user inserted a # at the start of a line
@@ -582,11 +613,11 @@ separable by white space.
 r.mapcalc does not print a warning in case of operations on NULL cells.
 It is left to the user to utilize the isnull() function.
 <h2>SEE ALSO</h2>
-<b><a href="http://grass.itc.it/gdp/raster/mapcalc-algebra.pdf">r.mapcalc: An Algebra for GIS and Image
+<b><a href="http://grass.osgeo.org/gdp/raster/mapcalc-algebra.pdf">r.mapcalc: An Algebra for GIS and Image
 Processing</a></b>, by Michael Shapiro and Jim Westervelt, U.S. Army
 Construction Engineering Research Laboratory (March/1991).
 <p> 
-<b><a href="http://grass.itc.it/gdp/raster/mapcalc.pdf">Performing Map Calculations on GRASS Data:
+<b><a href="http://grass.osgeo.org/gdp/raster/mapcalc.pdf">Performing Map Calculations on GRASS Data:
 r.mapcalc Program Tutorial</a></b>, by Marji Larson, Michael Shapiro and Scott
 Tweddale, U.S. Army Construction Engineering Research Laboratory (December
 1991)
