@@ -33,22 +33,22 @@ not applied.
 </dl>
 
 <H3>Input parameters:</H3>
-<P>The <I>elevin </I>parameter is an input elevation raster map. If
+<P>The <I>elevin</I> parameter is an input elevation raster map. If
 the buffer options are used (see below), this raster should extend
 over the area that accommodate the presently defined region plus
 defined buffer zones. 
 </P>
-<P>The <I>step </I>parameter gives the angle step (in degrees)
+<P>The <I>horizonstep</I> parameter gives the angle step (in degrees)
 between successive azimuthal directions for the calculation of the
-horizon. Thus, a value of 5 for the <I>step </I>will give a total of
+horizon. Thus, a value of 5 for the <I>horizonstep</I> will give a total of
 360/5=72 directions (72 rasters if used in the raster mode). 
 </P>
 <P>The <I>direction</I> parameter gives the initial direction of the
 first output. This parameter acts as an direction angle offset. For
 example, if you want to get horizon angles for directions 45 and 225
-degrees, the <I>direction</I> should be set to 45 and <I>step</I> to
+degrees, the <I>direction</I> should be set to 45 and <I>horizonstep</I> to
 180. If you only want one single direction, use this parameter to
-specify desired direction of horizon angle, and set the <I>step</I>
+specify desired direction of horizon angle, and set the <I>horizonstep</I>
 size to 0 degrees. 
 </P>
 <P>The <I>dist </I>controls the sampling distance step size for the
@@ -108,7 +108,7 @@ higher than any point in the region or until it reaches the border of
 the region (see also the <I>bufferzone,e_buff</I>, <I>n_buff</I>,
 <I>s_buff</I>, and <I>w_buff</I>). The the number of lines of sight (azimuth 
 directions) is determined from the <I>direction</I> and
-<I>step </I>parameters. The method takes into account the curvature
+<I>horizonstep</I> parameters. The method takes into account the curvature
 of the Earth whereby remote features will seem to be lower than they
 actually are. It also accounts for the changes of angles towards
 cardinal directions caused by the projection (see above). 
@@ -118,14 +118,14 @@ cardinal directions caused by the projection (see above).
 
 Single point mode:
 <div class="code"><pre>
-r.horizon elevin=DEM step=30 direction=15 bufferzone=200 coord=47.302,7.365 dist=0.7 &gt; horizon.out
+r.horizon elevin=DEM horizonstep=30 direction=15 bufferzone=200 coord=47.302,7.365 dist=0.7 &gt; horizon.out
 </pre></div>
 
 
 Raster map mode (for r.sun2):
 <div class="code"><pre>
 # we put a bufferzone of 10% of maxdistance around the study area
-r.horizon elevin=DEM step=30 bufferzone=200 horizon=horangle dist=0.7 maxdistance=2000
+r.horizon elevin=DEM horizonstep=30 bufferzone=200 horizon=horangle dist=0.7 maxdistance=2000
 </pre></div>
 
 
