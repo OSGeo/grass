@@ -102,6 +102,7 @@ class GMFrame(wx.Frame):
 
         wx.Frame.__init__(self, parent=parent, id=id, size=(500, 400),
                           style=wx.DEFAULT_FRAME_STYLE)
+                          
         self.SetTitle(self.baseTitle)
         self.SetName("LayerManager")
 
@@ -1177,7 +1178,7 @@ class GMFrame(wx.Frame):
         # use default window layout
         if UserSettings.Get(group='general', key='defWindowPos', subkey='enabled') is True:
             dim = UserSettings.Get(group='general', key='defWindowPos', subkey='dim')
-            idx = 4 + self.disp_idx * 4
+            idx = 4 + (self.disp_idx +1) * 4
             try:
                 x, y = map(int, dim.split(',')[idx:idx + 2])
                 w, h = map(int, dim.split(',')[idx + 2:idx + 4])
