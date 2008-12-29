@@ -492,7 +492,9 @@ int Vect_build_nat(struct Map_info *Map, int build)
     List = Vect_new_list();
 
     if (plus->built < GV_BUILD_BASE) {
-	int npoints;
+	int npoints, format;
+
+	format = G_info_format();
 
 	/* 
 	 *  We shall go through all primitives in coor file and 
@@ -543,13 +545,16 @@ int Vect_build_nat(struct Map_info *Map, int build)
 	    }
 
 	    if (G_verbose() > G_verbose_min() && i % 1000 == 0) {
-		fprintf(stderr, "%7d\b\b\b\b\b\b\b", i);
+		if (format == G_INFO_FORMAT_PLAIN)
+		    fprintf(stderr, "%d..", i);
+		else
+		    fprintf(stderr, "%7d\b\b\b\b\b\b\b", i);
 	    }
 	    
 	    i++;
 	}
 	
-	if (G_verbose() > G_verbose_min())
+	if ( (G_verbose() > G_verbose_min() ) && format != G_INFO_FORMAT_PLAIN )
 	    fprintf(stderr, "\r");
 
 	G_message(_("%d primitives registered"), plus->n_lines);
