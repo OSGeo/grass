@@ -1,30 +1,78 @@
 <h2>DESCRIPTION</h2>
-<em>r3.mapcalc</em> performs arithmetic on 3D grid volume data. New 3D grids
-can be created which are arithmetic expressions involving existing 3D grids, 
-integer or floating point constants, and functions.
+<em>r3.mapcalc</em> performs arithmetic on raster map layers.
+New raster map layers can be created which are arithmetic expressions
+involving existing raster map layers, integer or floating point constants,
+and functions.
+
 <h2>PROGRAM USE</h2>
-If used without command line arguments, <em>r3.mapcalc</em> will read its
-input, one line at a time, from standard input (which is the keyboard,
-unless redirected from a file or across a pipe).
-Otherwise, the expression on the command line is evaluated. <em>r3.mapcalc</em>
-expects its input to have the form:
+
+<em>r3.mapcalc</em> expects its input to have the form:
 <p>
-<b>result=</b><em>expression</em>
+<b>result =</b><em> expression</em>
 <p>
-where <em>result</em> is the name of a 3D grid to contain the result of
-the calculation and <em>expression</em> is any legal arithmetic expression
-involving existing 3D grid, floating point constants, and functions known
-to the calculator. Parentheses are allowed in the expression and may be
-nested to any depth. <em>result</em> will be created in the user's current
-mapset.
+where <em>result</em> is the name of a raster map layer
+to contain the result of the calculation and
+<em>expression</em> is any legal arithmetic expression involving existing
+raster map layers, integer or floating point constants,
+and functions known to the calculator.
+Parentheses are allowed in the expression and may be nested to any depth.
+<em>result</em> will be created in the user's current mapset.
 <p>
-The formula entered to <em>r3.mapcalc</em> by the user is recorded both
-in the <em>result</em> grid title (which appears in the category file for
-<em>result</em>)
+
+As <em>expression=</em> is the first option, it is the default. This
+means that passing an expression on the command line is possible
+as long as the expression is quoted and a space is included before the
+first <em>=</em> sign.
+
+Example ('foo' is the resulting map):
+<div class="code"><pre>
+r3.mapcalc "foo = 1"
+</pre></div>
+or:
+<div class="code"><pre>
+r3.mapcalc 'foo = 1'
+</pre></div>
+
+An unquoted expression (i.e. split over multiple arguments) won't
+work, nor will omitting the space before the = sign:
+
+<div class="code"><pre>
+r3.mapcalc 'foo=1'
+Sorry, &lt;foo&gt; is not a valid parameter
+</pre></div>
+
+If no options are given, it manufactures "input=-" (which reads from
+stdin), so you can continue to use e.g.:
+
+<div class="code"><pre>
+r3.mapcalc &lt; file
+</pre></div>
+or:
+<div class="code"><pre>
+r3.mapcalc &lt;&lt;EOF
+foo = 1
+EOF
+</pre></div>
+But unless you need compatibility with previous versions, use input=
+explicitly, e.g.:
+
+<div class="code"><pre>
+r3.mapcalc input=file
+</pre></div>
+or:
+<div class="code"><pre>
+r3.mapcalc input=- &lt;&lt;EOF
+foo = 1
+EOF
+</pre></div>
+
+<p>
+The formula entered to <em>r3.mapcalc</em> by the user is recorded both in the
+<em>result</em> map title (which appears in the category file for <em>result</em>)
 and in the history file for <em>result</em>.
 <p>
 Some characters have special meaning to the command shell. If the user
-is entering input to <em>r.mapcalc</em> on the command line, expressions
+is entering input to <em>r3.mapcalc</em> on the command line, expressions
 should be enclosed within single quotes.  See NOTES, below.
 <p>
 <h2>OPERATORS AND ORDER OF PRECEDENCE</h2>
@@ -234,7 +282,7 @@ If you want floating point division, at least one of the arguments has
 to be a floating point value. Multiplying one of them by 1.0 will
 produce a floating-point result, as will using float():
 <div class="code"><pre>
-      r.mapcalc "ndvi=float(lsat.4 - lsat.3) / (lsat.4 + lsat.3)"
+      r3.mapcalc "ratio = float(soil.4 - soil.3) / soil.3)"
 </pre></div>
 <h2>NULL support</h2>
 <ul>
@@ -406,17 +454,10 @@ These include, among others:
 <p>
 It is advisable to put single quotes around the expression; e.g.:
 <div class="code"><pre>
-result = 'elevation * 2'
+'result = elevation * 2'
 </pre></div>
 Without the quotes, the *, which has special meaning to the UNIX shell,
 would be altered and <em>r3.mapcalc</em> would see something other than the *.
-<p>
-If the input comes directly from the keyboard and the <em>result</em>
-3D grid exists, the user will be asked if it can be overwritten. Otherwise,
-the <em>result</em> 3D grid will automatically be overwritten if it exists.
-<p>
-Quoting <em>result</em> is not allowed. However, it is never necessary
-to quote <em>result</em> since it is always taken to be a 3D grid name.
 <p>
 For formulas that the user enters from standard input (rather than from
 the command line), a line continuation feature now exists. If the user
@@ -429,28 +470,16 @@ If the <em>r3.mapcalc</em> formula entered by the user is very long, the
 map title will contain only some of it, but most (if not all) of the formula
 will be placed into the history file for the <em>result</em> map.
 <p>
-When the user enters input to <em>r3.mapcalc</em> non-interactively on
-the command line, the program will not warn the user not to overwrite existing
-3D grids. Users should therefore take care to assign program outputs 3D
-grid file names that do not yet exist in their current mapsets.
-<p>
 The environment variable GRASS_RND_SEED is read to initialise the
 random number generator.
 <h2>BUGS</h2>
 Continuation lines must end with a \ and have NO trailing white space
 (blanks or tabs).  If the user does leave white space at the end of
-continuation lines, the error messages produced by <em>r.mapcalc</em> will
+continuation lines, the error messages produced by <em>r3.mapcalc</em> will
 be meaningless and the equation will not work as the user intended.
 This is important for the eval() function.
 <p>
-Error messages produced by <em>r.mapcalc</em> are almost useless.
-In future, <em>r.mapcalc</em> should make some attempt
-to point the user to the offending section of the equation, e.g.:
-<div class="code"><pre>
-x = a * b ++ c
-ERROR: somewhere in line 1: ...  b ++ c ...
-</pre></div>
-<p>
+<!-- STILL TRUE ??-->
 Currently, there is no comment mechanism in <em>r3.mapcalc</em>. Perhaps
 adding a capability that would cause the entire line to be ignored when
 the user inserted a # at the start of a line as if it were not present,
@@ -460,15 +489,15 @@ The function should require the user to type "end" or "exit" instead
 of simply a blank line. This would make separation of multiple scripts
 separable by white space.
 <p>
-r.mapcalc does not print a warning in case of operations on NULL cells.
+r3.mapcalc does not print a warning in case of operations on NULL cells.
 It is left to the user to utilize the isnull() function.
 
 <h2>SEE ALSO</h2>
-<b><a href="http://grass.itc.it/gdp/raster/mapcalc-algebra.pdf">r.mapcalc: An Algebra for GIS and Image
+<b><a href="http://grass.osgeo.org/gdp/raster/mapcalc-algebra.pdf">r3.mapcalc: An Algebra for GIS and Image
 Processing</a></b>, by Michael Shapiro and Jim Westervelt, U.S. Army
 Construction Engineering Research Laboratory (March/1991).
 <p> 
-<b><a href="http://grass.itc.it/gdp/raster/mapcalc.pdf">Performing Map Calculations on GRASS Data:
+<b><a href="http://grass.osgeo.org/gdp/raster/mapcalc.pdf">Performing Map Calculations on GRASS Data:
 r.mapcalc Program Tutorial</a></b>, by Marji Larson, Michael Shapiro and Scott
 Tweddale, U.S. Army Construction Engineering Research Laboratory (December
 1991)
