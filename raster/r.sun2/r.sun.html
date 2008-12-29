@@ -196,7 +196,7 @@ g.region rast=elevation.dem -p
 
 # calculate horizons
 # (we put a bufferzone of 10% of maxdistance around the study area)
-r.horizon elevin=elevation.dem step=30 bufferzone=200 horizon=horangle dist=0.7 maxdistance=2000
+r.horizon elevin=elevation.dem horizonstep=30 bufferzone=200 horizon=horangle dist=0.7 maxdistance=2000
 
 # slope + aspect
 r.slope.aspect elevation=elevation.dem aspect=aspect.dem slope=slope.dem
