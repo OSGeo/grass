@@ -366,7 +366,7 @@ int main(int argc, char *argv[])
     parm.horizonstep->type = TYPE_DOUBLE;
     parm.horizonstep->required = NO;
     parm.horizonstep->description =
-	_("Angle step size for the horizon information [degrees]");
+	_("Angle step size for multidirectional horizon [degrees]");
     parm.horizonstep->guisection = _("Input_options");
 
     parm.incidout = G_define_option();
