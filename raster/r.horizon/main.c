@@ -206,11 +206,11 @@ int main(int argc, char *argv[])
     parm.direction->guisection = _("Input_options");
 
     parm.step = G_define_option();
-    parm.step->key = "step";
+    parm.step->key = "horizonstep";
     parm.step->type = TYPE_DOUBLE;
     parm.step->required = NO;
     parm.step->description =
-	_("For multidirectional horizon: the step size in degrees");
+	_("Angle step size for multidirectional horizon [degrees]");
     parm.step->guisection = _("Input_options");
 
     parm.bufferzone = G_define_option();
