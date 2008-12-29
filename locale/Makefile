@@ -27,13 +27,11 @@ PO_DIR = po
 #distinguish between library messages and modules:
 LIBDOMAIN = grasslibs
 MODDOMAIN = grassmods
-TCLDOMAIN = grasstcl
 WXPYDOMAIN = grasswxpy
-DOMAINS = $(LIBDOMAIN) $(MODDOMAIN) $(TCLDOMAIN) $(WXPYDOMAIN)
+DOMAINS = $(LIBDOMAIN) $(MODDOMAIN) $(WXPYDOMAIN)
 
 LIB_POTFILES = find ../lib -name '*.c' | xargs grep -l "_(\""
 MOD_POTFILES = find ../ -name '*.c' | grep -v '../lib' | xargs grep -l "_(\""
-TCL_POTFILES = find ../ -name '*.tcl' | grep -v '../dist' | xargs grep -l "\\[_ \|\\[G_msg"
 WXPY_POTFILES = find ../gui/wxpython -name '*.py' | xargs grep -l "_(\""
 
 #The xgettext utility is used to automate the creation of
@@ -43,8 +41,6 @@ pot:
 	xgettext -k_ -o ./templates/$(LIBDOMAIN).pot `$(LIB_POTFILES)`
 	@echo "Generating $(MODDOMAIN)..."
 	xgettext -k_ -o ./templates/$(MODDOMAIN).pot `$(MOD_POTFILES)`
-	@echo "Generating $(TCLDOMAIN)..."
-	xgettext -k_ --keyword=G_msg -o ./templates/$(TCLDOMAIN).pot `$(TCL_POTFILES)`
 	@echo "Generating $(WXPYDOMAIN)..."
 	xgettext -k_ -o ./templates/$(WXPYDOMAIN).pot `$(WXPY_POTFILES)` 
 
