@@ -13,7 +13,7 @@ int add_point(struct dxf_file *dxf, struct Map_info *Map)
     strcpy(layer, UNIDENTIFIED_LAYER);
 
     zpnts[0] = 0.0;
-    /* read in lines and processes information until a 0 is read in */
+    /* read in lines and process information until a 0 is read in */
     while ((code = dxf_get_code(dxf)) != 0) {
 	if (code == -2)
 	    return -1;
