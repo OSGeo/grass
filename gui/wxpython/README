@@ -17,10 +17,9 @@ $Date$
 	             http://www.bitpim.org/developer.html -> "Install wxPython"
  * Fedora: http://www.wxpython.org/download.php
            http://mpa.itc.it/markus/wxpython_rpms/fedora/
- * Mandriva 2007.1 (spring): available from main/backports (see
-        http://club.mandriva.com/xwiki/bin/view/Downloads/MirrorFinder2 )
-      	Also http://www.wxpython.org/download.php
- * Mandriva >= 2008: urpmi wxpython
+ * Mandriva: included in main distribution. but the following fix is
+       required:
+       ln -s /usr/lib/wxPython/include/wx-2.8/wx /usr/lib64/wx/include/
  * MS-Windows: http://www.wxpython.org/download.php
  * OS X: http://www.wxpython.org/download.php
  * OpenSuSe: http://download.opensuse.org/repositories/Application:/Geo/
