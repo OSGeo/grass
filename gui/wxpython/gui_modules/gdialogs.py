@@ -466,37 +466,48 @@ class TextLayerDialog(wx.Dialog):
         sizer = wx.BoxSizer(wx.VERTICAL)
         box = wx.GridBagSizer(vgap=5, hgap=5)
 
+        # show/hide
+        self.chkbox = wx.CheckBox(parent=self, id=wx.ID_ANY, \
+            label='Show text object')
+        if self.parent.Map.GetOverlay(self.ovlId) is None:
+            self.chkbox.SetValue(True)
+        else:
+            self.chkbox.SetValue(self.parent.MapWindow.overlays[self.ovlId]['layer'].IsActive())
+        box.Add(item=self.chkbox, span=(1,2),
+                flag=wx.ALIGN_LEFT|wx.ALL, border=5,
+                pos=(0, 0))
+
         # text entry
         label = wx.StaticText(parent=self, id=wx.ID_ANY, label=_("Enter text:"))
         box.Add(item=label,
                 flag=wx.ALIGN_CENTER_VERTICAL,
-                pos=(0, 0))
+                pos=(1, 0))
 
         self.textentry = wx.TextCtrl(parent=self, id=wx.ID_ANY, value="", size=(300,-1))
         self.textentry.SetFont(self.currFont)
         self.textentry.SetForegroundColour(self.currClr)
         self.textentry.SetValue(self.currText)
         box.Add(item=self.textentry,
-                pos=(0, 1))
+                pos=(1, 1))
 
         # rotation
         label = wx.StaticText(parent=self, id=wx.ID_ANY, label=_("Rotation:"))
         box.Add(item=label,
                 flag=wx.ALIGN_CENTER_VERTICAL,
-                pos=(1, 0))
+                pos=(2, 0))
         self.rotation = wx.SpinCtrl(parent=self, id=wx.ID_ANY, value="", pos=(30, 50),
                                     size=(75,-1), style=wx.SP_ARROW_KEYS)
         self.rotation.SetRange(-360, 360)
         self.rotation.SetValue(int(self.currRot))
         box.Add(item=self.rotation,
                 flag=wx.ALIGN_RIGHT,
-                pos=(1, 1))
+                pos=(2, 1))
 
         # font
         fontbtn = wx.Button(parent=self, id=wx.ID_ANY, label=_("Set font"))
         box.Add(item=fontbtn,
                 flag=wx.ALIGN_RIGHT,
-                pos=(2, 1))
+                pos=(3, 1))
 
         sizer.Add(item=box, proportion=1,
                   flag=wx.ALL, border=10)
@@ -574,7 +585,8 @@ class TextLayerDialog(wx.Dialog):
                  'font' : self.currFont,
                  'color' : self.currClr,
                  'rotation' : self.currRot,
-                 'coords' : self.currCoords }
+                 'coords' : self.currCoords,
+                 'active' : self.chkbox.IsChecked() }
 
 class LoadMapLayersDialog(wx.Dialog):
     """Load selected map layers (raster, vector) into layer tree"""
