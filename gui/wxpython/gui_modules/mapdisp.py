@@ -1383,8 +1383,10 @@ class BufferedWindow(MapWindow, wx.Window):
                     begin = self.Pixel2Cell(self.mouse['begin'])
 
                     self.DrawLines(self.pdcTmp, begin, end)
-        else:
-            # get decoration id
+        elif self.mouse['use'] == 'pointer':
+            # get decoration or text id
+            self.idlist = []
+            self.dragid = ''
             self.lastpos = self.mouse['begin']
             idlist = self.pdc.FindObjects(x=self.lastpos[0], y=self.lastpos[1],
                                           radius=self.hitradius)
@@ -1392,6 +1394,8 @@ class BufferedWindow(MapWindow, wx.Window):
             if 99 in idlist: idlist.remove(99)                             
             if idlist != [] :
                 self.dragid = idlist[0] #drag whatever is on top
+        else:
+            pass
 
         event.Skip()
 
@@ -1690,10 +1694,13 @@ class BufferedWindow(MapWindow, wx.Window):
                 self.redrawAll = None
                 ### self.OnPaint(None)
                 
-        elif self.dragid != None:
+        elif self.mouse['use'] == 'pointer' and self.dragid != None:
             # end drag of overlay decoration
-            if self.overlays.has_key(self.dragid):
+            if self.dragid < 99 and self.overlays.has_key(self.dragid):
                 self.overlays[self.dragid]['coords'] = self.pdc.GetIdBounds(self.dragid)
+            elif self.dragid > 100:
+                self.textdict[self.dragid]['coords'] = self.pdc.GetIdBounds(self.dragid)
+                                
             self.dragid = None
             self.currtxtid = None
             self.UpdateMap(render=True)
@@ -3868,15 +3875,15 @@ class MapFrame(wx.Frame):
             gdialogs.DecorationDialog(parent=self, title=_('Scale and North arrow'),
                                       size=(350, 200),
                                       style=wx.DEFAULT_DIALOG_STYLE | wx.CENTRE,
-                                      cmd=['d.barscale'],
+                                      cmd=['d.barscale', 'at=0,5'],
                                       ovlId=id,
                                       name='barscale',
                                       checktxt = _("Show/hide scale and North arrow"),
                                       ctrltxt = _("scale object"))
 
         self.dialogs['barscale'].CentreOnParent()
-        self.dialogs['barscale'].Show()
-        self.MapWindow.mouse['use'] = 'pointer'
+        self.dialogs['barscale'].ShowModal()
+        self.MapWindow.mouse['use'] = 'pointer'        
 
     def OnAddLegend(self, event):
         """
@@ -3904,7 +3911,7 @@ class MapFrame(wx.Frame):
                                       ctrltxt = _("legend object")) 
 
         self.dialogs['legend'].CentreOnParent()
-        self.dialogs['legend'].Show()
+        self.dialogs['legend'].ShowModal()
         self.MapWindow.mouse['use'] = 'pointer'
 
     def OnAddText(self, event):
@@ -3923,7 +3930,6 @@ class MapFrame(wx.Frame):
         self.dialogs['text'] = gdialogs.TextLayerDialog(parent=self, ovlId=id, 
                                                     title=_('Add text layer'),
                                                     size=(400, 200))
-
         self.dialogs['text'].CenterOnParent()
 
         # If OK button pressed in decoration control dialog
