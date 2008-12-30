@@ -1245,12 +1245,12 @@ class ProfileToolbar(AbstractToolbar):
                 
         # tool, label, bitmap, kind, shortHelp, longHelp, handler
         return   (
-            (self.transect, 'transect', Icons["transect"].GetBitmap(),
-             wx.ITEM_NORMAL, Icons["transect"].GetLabel(), Icons["transect"].GetDesc(),
-             self.parent.OnDrawTransect),
             (self.addraster, 'raster', Icons["addrast"].GetBitmap(),
              wx.ITEM_NORMAL, Icons["addrast"].GetLabel(), Icons["addrast"].GetDesc(),
              self.parent.OnSelectRaster),
+            (self.transect, 'transect', Icons["transect"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["transect"].GetLabel(), Icons["transect"].GetDesc(),
+             self.parent.OnDrawTransect),
             (self.draw, 'profiledraw', Icons["profiledraw"].GetBitmap(),
              wx.ITEM_NORMAL, Icons["profiledraw"].GetLabel(), Icons["profiledraw"].GetDesc(),
              self.parent.OnCreateProfile),

@@ -55,6 +55,7 @@ import toolbars
 from debug import Debug as Debug
 from icon import Icons as Icons
 from preferences import globalSettings as UserSettings
+import grass
 
 class ProfileFrame(wx.Frame):
     """
@@ -250,11 +251,12 @@ class ProfileFrame(wx.Frame):
         #
         # create list of coordinate points for r.profile
         #
+                
         dist = 0
         cumdist = 0
         self.coordstr = ''
         lasteast = lastnorth = None
-
+        
         if len(self.mapwin.polycoords) > 0:
             for point in self.mapwin.polycoords:
                 # build string of coordinate points for r.profile
@@ -272,12 +274,12 @@ class ProfileFrame(wx.Frame):
         #
         # create datalist for each raster map
         #
+        
         for r in self.raster.itervalues():
             if r['name'] == '':
                 continue
             r['datalist'] = self.CreateDatalist(r['name'], self.coordstr)
             r['plegend'] = _('Profile of %s') % r['name']
-
 
             p = gcmd.Command(['r.info',
                               'map=%s' % r['name'],
@@ -295,6 +297,7 @@ class ProfileFrame(wx.Frame):
         #
         self.ylabel = ''
         i = 0
+        
         for r in self.raster.itervalues():
             if r['name'] == '':
                 continue
@@ -309,6 +312,7 @@ class ProfileFrame(wx.Frame):
         #
         # create list of coordinates for transect segment markers
         #
+
         if len(self.mapwin.polycoords) > 0:
             for point in self.mapwin.polycoords:
                 # get value of raster cell at coordinate point
@@ -400,16 +404,18 @@ class ProfileFrame(wx.Frame):
         Build a list of distance, value pairs for points along transect
         """
         datalist = []
+        import subprocess
+        
         try:
-            cmdlist = ['r.profile',
-                       'input=%s' % raster,
-                       'profile=%s' % coords,
-                       'null=nan',
-                       '--quiet']
-            p = gcmd.Command(cmdlist)
-            for outline in p.ReadStdOutput():
+            p = grass.read_command("r.profile",
+                       input=raster,
+                       profile=coords,
+                       null="nan",
+                       quiet=True
+                       )
+            for outline in p.strip().split('\n'):
                 dist, elev = outline.split(' ')
-                datalist.append((dist,elev))
+                if elev != 'nan': datalist.append((dist,elev))
 
             return datalist
         except gcmd.CmdError, e:
@@ -424,7 +430,7 @@ class ProfileFrame(wx.Frame):
         segments, these are drawn as points. Profile transect is drawn, using
         methods in mapdisp.py
         """
-        
+    
         if len(self.mapwin.polycoords) == 0 or self.raster[0]['name'] == '':
             dlg = wx.MessageDialog(parent=self,
                                    message=_('You must draw a transect to profile in the map display window.'),
