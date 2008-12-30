@@ -3734,6 +3734,9 @@ class MapFrame(wx.Frame):
                                             id=wx.ID_ANY, pos=wx.DefaultPosition, size=(700,300),
                                             style=wx.DEFAULT_FRAME_STYLE, rasterList=raster)
         self.profile.Show()
+        # Open raster select dialog to make sure that a raster (and the desired raster)
+        # is selected to be profiled
+        self.profile.OnSelectRaster(None)
 
     def FormatDist(self, dist):
         """Format length numbers and units in a nice way,
