@@ -29,7 +29,7 @@ int dxf_to_vect(struct dxf_file *dxf, struct Map_info *Map)
 		continue;
 
 	    if (strcmp(dxf_buf, "$EXTMAX") == 0) {
-		/* read in lines and processes information until a 9
+		/* read in lines and process information until a 9
 		 * or a 0 is read in */
 		while ((code = dxf_get_code(dxf)) != 9 && code != 0) {
 		    if (code == -2)	/* EOF */
@@ -54,7 +54,7 @@ int dxf_to_vect(struct dxf_file *dxf, struct Map_info *Map)
 		}
 	    }
 	    else if (strcmp(dxf_buf, "$EXTMIN") == 0) {
-		/* read in lines and processes information until a 9
+		/* read in lines and process information until a 9
 		 * or a 0 is read in */
 		while ((code = dxf_get_code(dxf)) != 9 && code != 0) {
 		    if (code == -2)	/* EOF */

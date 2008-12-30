@@ -19,7 +19,7 @@ int add_lwpolyline(struct dxf_file *dxf, struct Map_info *Map)
     strcpy(layer, UNIDENTIFIED_LAYER);
 
     zpnts[0] = 0.0;
-    /* read in lines and processes information until a 0 is read in */
+    /* read in lines and process information until a 0 is read in */
     while ((code = dxf_get_code(dxf)) != 0) {
 	if (code == -2)
 	    return -1;
@@ -57,11 +57,9 @@ int add_lwpolyline(struct dxf_file *dxf, struct Map_info *Map)
 	    bulge = atof(dxf_buf);
 	    break;
 	case 70:		/* polyline flag */
-
 	    /*******************************************************************
-	         Bit         Meaning
-	           1         closed
-	         128         plinegen
+	     Polyline flag (bit-coded); default is 0:
+	     1 = Closed; 128 = Plinegen
 	     ******************************************************************/
 	    polyline_flag = atoi(dxf_buf);
 	    break;

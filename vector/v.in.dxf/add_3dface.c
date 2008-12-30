@@ -15,7 +15,7 @@ int add_3dface(struct dxf_file *dxf, struct Map_info *Map)
 
     strcpy(layer, UNIDENTIFIED_LAYER);
 
-    /* read in lines and processes information until a 0 is read in */
+    /* read in lines and process information until a 0 is read in */
     while ((code = dxf_get_code(dxf)) != 0) {
 	if (code == -2)
 	    return -1;
@@ -92,13 +92,12 @@ int add_3dface(struct dxf_file *dxf, struct Map_info *Map)
 	case 70:		/* 3dface flag */
 	    dface_flag = atoi(dxf_buf);
 	    /* TODO: what does 'invisible' mean here? */
-
 	    /*******************************************************************
-                  Bit        Meaning
-                    1        First edge is invisible
-                    2        Second edge is invisible
-                    4        Third edge is invisible
-                    8        Fourth edge is invisible
+	     Invisible edge flags (optional; default = 0):
+	     1 = First edge is invisible
+	     2 = Second edge is invisible
+	     4 = Third edge is invisible
+	     8 = Fourth edge is invisible
 	     ******************************************************************/
 	    break;
 	}

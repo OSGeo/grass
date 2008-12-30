@@ -33,7 +33,7 @@ int add_polyline(struct dxf_file *dxf, struct Map_info *Map)
 
     strcpy(layer, UNIDENTIFIED_LAYER);
 
-    /* read in lines and processes information until a 0 is read in */
+    /* read in lines and process information until a 0 is read in */
     while ((code = dxf_get_code(dxf)) != 0) {
 	if (code == -2)
 	    return -1;
@@ -49,30 +49,22 @@ int add_polyline(struct dxf_file *dxf, struct Map_info *Map)
 	    break;
 	case 70:		/* polyline flag */
 	    polyline_flag = atoi(dxf_buf);
-
 	    /*******************************************************************
-                  Bit        Meaning
-                    1        This is a closed Polyline (or a polygon
-                             mesh closed in the M direction)
-                    2        Curve-fit vertices have been added
-                    4        Spline-fit vertices have been added
-                    8        This is a 3D Polyline
-                   16        This is a 3D polygon mesh.  Group 75 indi-
-                             cates the smooth surface type, as follows:
-
-                               0 = no smooth surface fitted
-                               5 = quadratic B-spline surface
-                               6 = cubic B-spline surface
-                               8 = Bezier surface
-
-                   32        The polygon mesh is closed in the N direc-
-                             tion
-                   64        The polyline is a polyface mesh
+	     Polyline flag (bit-coded); default is 0:
+	     1 = This is a closed polyline (or a polygon mesh closed in
+	         the M direction).
+	     2 = Curve-fit vertices have been added.
+	     4 = Spline-fit vertices have been added.
+	     8 = This is a 3D polyline.
+	     16 = This is a 3D polygon mesh.
+	     32 = The polygon mesh is closed in the N direction.
+	     64 = The polyline is a polyface mesh.
+	     128 = The linetype pattern is generated continuously around
+	           the vertices of this polyline.
 	     ******************************************************************/
 	    /* NOTE: code only exists for flag = 1 (closed polyline) or 0 */
 	    G_debug(1, "polyline_flag: %d", polyline_flag);
-	    if (polyline_flag & 8 || polyline_flag & 16 || polyline_flag & 17
-		|| polyline_flag & 32)
+	    if (polyline_flag & (8 | 16 | 32))
 		if (warn_flag70) {
 		    if (!flag_list)
 			G_warning(_("3-d data in dxf file. Polyline_flag: %d"),
@@ -143,20 +135,18 @@ int add_polyline(struct dxf_file *dxf, struct Map_info *Map)
 		    break;
 		case 70:	/* vertex flag */
 		    vertex_flag = atoi(dxf_buf);
-
 	    /*******************************************************************
-                 Bit         Meaning
-                   1         Extra vertex created by curve fitting
-                   2         Curve fit tangent defined for this vertex.
-                             A curve fit tangent direction of 0 may be
-                             omitted from the DXF output, but is signif-
-                             icant if this bit is set.
-                   4         Unused (never set in DXF files)
-                   8         Spline vertex created by spline fitting
-                  16         Spline frame control point
-                  32         3D Polyline vertex
-                  64         3D polygon mesh vertex
-                 128         Polyface mesh vertex
+	     Vertex flags:
+	     1 = Extra vertex created by curve-fitting
+	     2 = Curve-fit tangent defined for this vertex. A curve-fit tangent
+		 direction of 0 may be omitted from DXF output but is
+		 significant if this bit is set.
+	     4 = Not used
+	     8 = Spline vertex created by spline-fitting
+	     16 = Spline frame control point
+	     32 = 3D polyline vertex
+	     64 = 3D polygon mesh
+	     128 = Polyface mesh vertex
 	     ******************************************************************/
 		    if (vertex_flag == 16) {
 			/* spline frame control point: don't draw it! */
