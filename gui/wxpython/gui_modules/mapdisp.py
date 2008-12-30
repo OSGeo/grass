@@ -128,7 +128,8 @@ class Command(Thread):
         sys.exit()
 
 class MapWindow(object):
-    """Abstract map window class
+    """
+    Abstract map window class
 
     Parent for BufferedWindow class (2D display mode) and
     GLWindow (3D display mode)
@@ -169,7 +170,8 @@ class MapWindow(object):
         pass
 
     def GetSelectedLayer(self, type='layer'):
-        """Get selected layer from layer tree
+        """
+        Get selected layer from layer tree
 
         @param type 'item' / 'layer' / 'nviz'
 
@@ -808,7 +810,8 @@ class BufferedWindow(MapWindow, wx.Window):
         return True
 
     def DrawCompRegionExtent(self):
-        """Draw computational region extent in the display
+        """
+        Draw computational region extent in the display
         
         Display region is drawn as a blue box inside the computational region,
         computational region inside a display region as a red box).
@@ -835,7 +838,8 @@ class BufferedWindow(MapWindow, wx.Window):
             self.DrawLines(pdc=self.pdcDec, polycoords=self.regionCoords)
 
     def IsInRegion(self, region, refRegion):
-        """Test if 'region' is inside of 'refRegion'
+        """
+        Test if 'region' is inside of 'refRegion'
 
         @param region input region
         @param refRegion reference region (e.g. computational region)
@@ -886,30 +890,28 @@ class BufferedWindow(MapWindow, wx.Window):
         """
         Drag an overlay decoration item
         """
-        Debug.msg (5, "BufferedWindow.DragItem(): id=%d" % \
-                       id)
+        if id == 99: return
+        Debug.msg (5, "BufferedWindow.DragItem(): id=%d" % id)
         x, y = self.lastpos
         dx = event.GetX() - x
         dy = event.GetY() - y
         self.pdc.SetBackground(wx.Brush(self.GetBackgroundColour()))
         r = self.pdc.GetIdBounds(id)
-        if self.dragid > 100: # text dragging
+        if id > 100: # text dragging
             rtop = (r[0],r[1]-r[3],r[2],r[3])
             r = r.Union(rtop)
             rleft = (r[0]-r[2],r[1],r[2],r[3])
             r = r.Union(rleft)
         self.pdc.TranslateId(id, dx, dy)
-        r2 = self.pdc.GetIdBounds(id)
-        r = r.Union(r2)
-        r.Inflate(4,4)
 
-        self.Update()
-        self.RefreshRect(r, False)
-        self.lastpos = (event.GetX(), event.GetY())
-        
+        r2 = self.pdc.GetIdBounds(id)
         if id > 100: # text
             self.textdict[id]['coords'] = r2
-        
+        r = r.Union(r2)
+        r.Inflate(4,4)
+        self.RefreshRect(r, False)
+        self.lastpos = (event.GetX(), event.GetY())
+                
     def MouseDraw(self, pdc=None, begin=None, end=None):
         """
         Mouse box or line from 'begin' to 'end'
@@ -961,7 +963,8 @@ class BufferedWindow(MapWindow, wx.Window):
             self.Draw(pdc, drawid=self.lineid, pdctype='line', coords=mousecoords)
 
     def DrawLines(self, pdc=None, polycoords=None):
-        """Draw polyline in PseudoDC
+        """
+        Draw polyline in PseudoDC
 
         Set self.pline to wx.NEW_ID + 1
 
@@ -1040,37 +1043,9 @@ class BufferedWindow(MapWindow, wx.Window):
         ### if self.redrawAll is False:
         ###    self.redrawAll = True
         
-        wheel = event.GetWheelRotation()
         # zoom with mouse wheel
-        if wheel != 0:
-            self.processMouse = False
-            current  = event.GetPositionTuple()[:]
-            Debug.msg (5, "BufferedWindow.MouseAction(): wheel=%d" % wheel)
-            # zoom 1/2 of the screen, centered to current mouse position (TODO: settings)
-            begin = (current[0] - self.Map.width / 4,
-                     current[1] - self.Map.height / 4)
-            end   = (current[0] + self.Map.width / 4,
-                     current[1] + self.Map.height / 4)
-
-            if wheel > 0:
-                zoomtype = 1
-            else:
-                zoomtype = -1
-
-            # zoom
-            self.Zoom(begin, end, zoomtype)
-
-            # redraw map
-            self.UpdateMap()
-
-            ### self.OnPaint(None)
-           
-            # update statusbar
-            self.parent.StatusbarUpdate()
-
-            self.Refresh()
-            
-            self.processMouse = True
+        if event.GetWheelRotation() != 0:
+            self.OnMouseWheel(event)
             
         # left mouse button pressed
         elif event.LeftDown():
@@ -1082,34 +1057,7 @@ class BufferedWindow(MapWindow, wx.Window):
 
         # dragging
         elif event.Dragging():
-            Debug.msg (5, "BufferedWindow.MouseAction(): Dragging")
-            current  = event.GetPositionTuple()[:]
-            previous = self.mouse['begin']
-            move = (current[0] - previous[0],
-                    current[1] - previous[1])
-
-            digitToolbar = self.parent.toolbars['vdigit']
-
-            # dragging or drawing box with left button
-            if self.mouse['use'] == 'pan':
-                self.DragMap(move)
-
-            # dragging decoration overlay item
-            elif (self.mouse['use'] == 'pointer' and not digitToolbar) and \
-                    self.dragid != None and \
-                    self.dragid != 99:
-                self.DragItem(self.dragid, event)
-
-            # dragging anything else - rubber band box or line
-            else:
-                self.mouse['end'] = event.GetPositionTuple()[:]
-                digitClass = self.parent.digit
-                if event.LeftIsDown() and not \
-                        (digitToolbar and \
-                             digitToolbar.GetAction() in ("moveLine",) and \
-                             digitClass.driver.GetSelected() > 0):
-                    # draw box only when left mouse button is pressed
-                    self.MouseDraw(pdc=self.pdcTmp)
+            self.OnDragging(event)
 
         # double click
         elif event.ButtonDClick():
@@ -1130,6 +1078,77 @@ class BufferedWindow(MapWindow, wx.Window):
         elif event.Moving():
             self.OnMouseMoving(event)
 
+        event.Skip()
+        
+    def OnMouseWheel(self, event):
+        """
+        Mouse wheel moved
+        """
+        self.processMouse = False
+        current  = event.GetPositionTuple()[:]
+        wheel = event.GetWheelRotation()
+        Debug.msg (5, "BufferedWindow.MouseAction(): wheel=%d" % wheel)
+        # zoom 1/2 of the screen, centered to current mouse position (TODO: settings)
+        begin = (current[0] - self.Map.width / 4,
+                 current[1] - self.Map.height / 4)
+        end   = (current[0] + self.Map.width / 4,
+                 current[1] + self.Map.height / 4)
+
+        if wheel > 0:
+            zoomtype = 1
+        else:
+            zoomtype = -1
+
+        # zoom
+        self.Zoom(begin, end, zoomtype)
+
+        # redraw map
+        self.UpdateMap()
+
+        ### self.OnPaint(None)
+
+        # update statusbar
+        self.parent.StatusbarUpdate()
+
+        self.Refresh()
+        self.processMouse = True
+        event.Skip()
+
+    def OnDragging(self, event):
+        """
+        Mouse dragging with left button down
+        """
+        Debug.msg (5, "BufferedWindow.MouseAction(): Dragging")
+        current  = event.GetPositionTuple()[:]
+        previous = self.mouse['begin']
+        move = (current[0] - previous[0],
+                current[1] - previous[1])
+
+        digitToolbar = self.parent.toolbars['vdigit']
+
+        # dragging or drawing box with left button
+        if self.mouse['use'] == 'pan':
+            self.DragMap(move)
+
+        # dragging decoration overlay item
+        elif (self.mouse['use'] == 'pointer' and 
+                not digitToolbar and 
+                self.dragid != None):
+            self.DragItem(self.dragid, event)
+
+        # dragging anything else - rubber band box or line
+        else:
+            if (self.mouse['use'] == 'pointer' and 
+                not digitToolbar): return
+            self.mouse['end'] = event.GetPositionTuple()[:]
+            digitClass = self.parent.digit
+            if (event.LeftIsDown() and 
+                not (digitToolbar and 
+                    digitToolbar.GetAction() in ("moveLine",) and 
+                    digitClass.driver.GetSelected() > 0)):
+                # draw box only when left mouse button is pressed
+                self.MouseDraw(pdc=self.pdcTmp)
+      
         event.Skip()
 
     def OnLeftDown(self, event):
@@ -1368,8 +1387,10 @@ class BufferedWindow(MapWindow, wx.Window):
             self.lastpos = self.mouse['begin']
             idlist = self.pdc.FindObjects(x=self.lastpos[0], y=self.lastpos[1],
                                           radius=self.hitradius)
-            if idlist != []:
-                self.dragid = idlist[0]
+                                          
+            if 99 in idlist: idlist.remove(99)                             
+            if idlist != [] :
+                self.dragid = idlist[0] #drag whatever is on top
 
         event.Skip()
 
@@ -1674,8 +1695,8 @@ class BufferedWindow(MapWindow, wx.Window):
                 self.overlays[self.dragid]['coords'] = self.pdc.GetIdBounds(self.dragid)
             self.dragid = None
             self.currtxtid = None
-            self.Update()
-
+            self.UpdateMap(render=True)
+               
         event.Skip()
 
     def OnButtonDClick(self, event):
@@ -1722,7 +1743,7 @@ class BufferedWindow(MapWindow, wx.Window):
                 self.parent.OnAddBarscale(None)
             elif self.dragid == 1:
                 self.parent.OnAddLegend(None)
-
+                
         event.Skip()
 
     def OnRightDown(self, event):
@@ -1937,7 +1958,9 @@ class BufferedWindow(MapWindow, wx.Window):
         event.Skip()
 
     def OnMiddleDown(self, event):
-        """Middle mouse button pressed"""
+        """
+        Middle mouse button pressed
+        """
         digitToolbar = self.parent.toolbars['vdigit']
         # digitization tool
         if self.mouse["use"] == "pointer" and digitToolbar:
@@ -2000,7 +2023,9 @@ class BufferedWindow(MapWindow, wx.Window):
             self.redrawAll = True
             
     def OnMouseMoving(self, event):
-        """Motion event and no mouse buttons were pressed"""
+        """
+        Motion event and no mouse buttons were pressed
+        """
         digitToolbar = self.parent.toolbars['vdigit']
         if self.mouse["use"] == "pointer" and digitToolbar:
             digitClass = self.parent.digit
@@ -2341,8 +2366,9 @@ class BufferedWindow(MapWindow, wx.Window):
         self.parent.StatusbarUpdate()
 
     def ZoomToDefault(self, event):
-        """Set display geometry to match default
-        region settings"""
+        """
+        Set display geometry to match default region settings
+        """
         self.Map.region = self.Map.GetRegion(default=True)
         self.Map.AdjustRegion() # aling region extent to the display
 
@@ -2398,8 +2424,7 @@ class BufferedWindow(MapWindow, wx.Window):
 
         wind = dlg.wind
 
-        p = gcmd.Command (["g.region",
-	                   "-ugp", "region=%s" % wind])
+        p = gcmd.Command (["g.region", "-ugp", "region=%s" % wind])
 
         if p.returncode == 0:
             output = p.ReadStdOutput()
@@ -2449,7 +2474,9 @@ class BufferedWindow(MapWindow, wx.Window):
         dlg.Destroy()
 
     def SaveRegion(self, wind):
-        """Save region settings"""
+        """
+        Save region settings
+        """
         new = self.Map.AlignResolution()
 
         cmdRegion = ["g.region",
@@ -2571,7 +2598,7 @@ class MapFrame(wx.Frame):
         self.statusbar.SetStatusWidths([-5, -2, -1])
         self.toggleStatus = wx.Choice(self.statusbar, wx.ID_ANY,
                                       choices = globalvar.MAP_DISPLAY_STATUSBAR_MODE)
-	self.toggleStatus.SetSelection(UserSettings.Get(group='display', key='statusbarMode', subkey='selection'))
+        self.toggleStatus.SetSelection(UserSettings.Get(group='display', key='statusbarMode', subkey='selection'))
         self.statusbar.Bind(wx.EVT_CHOICE, self.OnToggleStatus, self.toggleStatus)
         # auto-rendering checkbox
         self.autoRender = wx.CheckBox(parent=self.statusbar, id=wx.ID_ANY,
@@ -2870,7 +2897,9 @@ class MapFrame(wx.Frame):
         # self.Map.SetRegion() # adjust region to match display window
 
     def OnUpdateProgress(self, event):
-        """Update progress bar info"""
+        """
+        Update progress bar info
+        """
         self.onRenderGauge.SetValue(event.value)
         
         event.Skip()
@@ -2954,7 +2983,9 @@ class MapFrame(wx.Frame):
         self.StatusbarUpdate()
 
     def OnPointer(self, event):
-        """Pointer button clicked"""
+        """
+        Pointer button clicked
+        """
         if self.toolbars['map']:
             if event:
                 self.toolbars['map'].OnTool(event)
@@ -3068,12 +3099,16 @@ class MapFrame(wx.Frame):
         # event.Skip()
 
     def OnToggleRender(self, event):
-        """Enable/disable auto-rendering"""
+        """
+        Enable/disable auto-rendering
+        """
         if self.autoRender.GetValue():
             self.OnRender(None)
 
     def OnToggleShowRegion(self, event):
-        """Show/Hide extent in map canvas"""
+        """
+        Show/Hide extent in map canvas
+        """
         if self.showRegion.GetValue():
             # show extent
             self.MapWindow.regionCoords = []
@@ -3085,18 +3120,24 @@ class MapFrame(wx.Frame):
             self.OnRender(None)
 
     def OnToggleResolution(self, event):
-        """Use resolution of computation region settings
-        for redering image instead of display resolution"""
+        """
+        Use resolution of computation region settings
+        for redering image instead of display resolution
+        """
         # redraw map if auto-rendering is enabled
         if self.autoRender.GetValue():
             self.OnRender(None)
         
     def OnToggleStatus(self, event):
-        """Toggle status text"""
+        """
+        Toggle status text
+        """
         self.StatusbarUpdate()
 
     def OnChangeMapScale(self, event):
-        """Map scale changed by user"""
+        """
+        Map scale changed by user
+        """
         scale = event.GetString()
 
         try:
@@ -3254,8 +3295,8 @@ class MapFrame(wx.Frame):
             else: # choice || auto-rendering
                 x, y = rect.x, rect.y - 1
                 w, h = rect.width, rect.height + 2
-		if idx == 2:
-		    x += 5
+                if idx == 2:
+                    x += 5
 
             win.SetPosition((x, y))
             win.SetSize((w, h))
@@ -3292,11 +3333,7 @@ class MapFrame(wx.Frame):
 
     def PrintMenu(self, event):
         """
-        Print map display
-        """
-
-        """
-        Print options and output menu
+        Print options and output menu for map display
         """
         point = wx.GetMousePosition()
         printmenu = wx.Menu()
@@ -3320,7 +3357,7 @@ class MapFrame(wx.Frame):
 
     def OnCloseWindow(self, event):
         """
-        Window closed
+        Window closed.
         Also close associated layer tree page
         """
         pgnum = None
@@ -3854,6 +3891,7 @@ class MapFrame(wx.Frame):
                                       ctrltxt = _("scale object"))
 
         self.dialogs['barscale'].Show()
+        self.MapWindow.mouse['use'] = 'pointer'
 
     def OnAddLegend(self, event):
         """
@@ -3881,6 +3919,7 @@ class MapFrame(wx.Frame):
                                       ctrltxt = _("legend object")) 
 
         self.dialogs['legend'].Show()
+        self.MapWindow.mouse['use'] = 'pointer'
 
     def OnAddText(self, event):
         """
@@ -3923,6 +3962,8 @@ class MapFrame(wx.Frame):
                                 drawid=id, pdctype='text', coords=coords)
             
             self.MapWindow.UpdateMap(render=False, renderVector=False)
+            
+        self.MapWindow.mouse['use'] = 'pointer'
 
     def GetOptData(self, dcmd, type, params, propwin):
         """
