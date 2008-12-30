@@ -421,6 +421,7 @@ class BufferedWindow(MapWindow, wx.Window):
                 # self.ovlcoords[drawid] = coords
 
         elif pdctype == 'text': # draw text on top of map
+            if not img['active']: return #only draw active text
             if img.has_key('rotation'):
                 rotation = float(img['rotation'])
             else:
@@ -1752,24 +1753,7 @@ class BufferedWindow(MapWindow, wx.Window):
         """
         Debug.msg (5, "BufferedWindow.OnRightDown(): use=%s" % \
                    self.mouse["use"])
-
-        x,y = event.GetPositionTuple()[:]
-        l = self.pdc.FindObjects(x=x, y=y, radius=self.hitradius)
-        if not l:
-            return
-
-        id = l[0]
-
-        if id != 99:
-            if self.pdc.GetIdGreyedOut(id) == True:
-                self.pdc.SetIdGreyedOut(id, False)
-            else:
-                self.pdc.SetIdGreyedOut(id, True)
-
-                r = self.pdc.GetIdBounds(id)
-                r.Inflate(4,4)
-                self.RefreshRect(r, False)
-
+                   
         digitToolbar = self.parent.toolbars['vdigit']
         if digitToolbar:
             digitClass = self.parent.digit
@@ -3890,6 +3874,7 @@ class MapFrame(wx.Frame):
                                       checktxt = _("Show/hide scale and North arrow"),
                                       ctrltxt = _("scale object"))
 
+        self.dialogs['barscale'].CentreOnParent()
         self.dialogs['barscale'].Show()
         self.MapWindow.mouse['use'] = 'pointer'
 
@@ -3918,6 +3903,7 @@ class MapFrame(wx.Frame):
                                       checktxt = _("Show/hide legend"),
                                       ctrltxt = _("legend object")) 
 
+        self.dialogs['legend'].CentreOnParent()
         self.dialogs['legend'].Show()
         self.MapWindow.mouse['use'] = 'pointer'
 
@@ -3934,18 +3920,20 @@ class MapFrame(wx.Frame):
             else:
                 id = 101
 
-        dlg = gdialogs.TextLayerDialog(parent=self, ovlId=id, title=_('Add text layer'),
-                                       size=(400, 200))
+        self.dialogs['text'] = gdialogs.TextLayerDialog(parent=self, ovlId=id, 
+                                                    title=_('Add text layer'),
+                                                    size=(400, 200))
 
-        dlg.CenterOnParent()
+        self.dialogs['text'].CenterOnParent()
 
         # If OK button pressed in decoration control dialog
-        if dlg.ShowModal() == wx.ID_OK:
-            text = dlg.GetValues()['text']
-            coords, w, h = self.MapWindow.TextBounds(dlg.GetValues())
+        if self.dialogs['text'].ShowModal() == wx.ID_OK:
+            text = self.dialogs['text'].GetValues()['text']
+            active = self.dialogs['text'].GetValues()['active']
+            coords, w, h = self.MapWindow.TextBounds(self.dialogs['text'].GetValues())
         
-            # delete object if it has no text
-            if text == '':
+            # delete object if it has no text or is not active
+            if text == '' or active == False:
                 try:
                     self.MapWindow.pdc.ClearId(id)
                     self.MapWindow.pdc.RemoveId(id)
@@ -3956,7 +3944,7 @@ class MapFrame(wx.Frame):
 
             self.MapWindow.pdc.ClearId(id)
             self.MapWindow.pdc.SetId(id)
-            self.MapWindow.textdict[id] = dlg.GetValues()
+            self.MapWindow.textdict[id] = self.dialogs['text'].GetValues()
             
             self.MapWindow.Draw(self.MapWindow.pdcDec, img=self.MapWindow.textdict[id],
                                 drawid=id, pdctype='text', coords=coords)
