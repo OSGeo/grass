@@ -73,24 +73,13 @@ int main(int argc, char **argv)
     scalebar->key = 's';
     scalebar->description = _("Draw a scale bar only");
 
-    opt1 = G_define_option();
+    opt1 = G_define_standard_option(G_OPT_C_BG);
     opt1->key = "bcolor";
-    opt1->type = TYPE_STRING;
-    opt1->answer = DEFAULT_BG_COLOR;
-    opt1->required = NO;
-    opt1->description =
-	_("Background color, either a standard GRASS color, R:G:B triplet, or \"none\"");
-    opt1->gisprompt = GISPROMPT_COLOR;
 
-    opt2 = G_define_option();
+    opt2 = G_define_standard_option(G_OPT_C_FG);
     opt2->key = "tcolor";
-    opt2->type = TYPE_STRING;
-    opt2->answer = DEFAULT_FG_COLOR;
-    opt2->required = NO;
-    opt2->description =
-	_("Text color, either a standard GRASS color or R:G:B triplet");
-    opt2->gisprompt = GISPROMPT_COLOR;
-
+    opt2->label = _("Text color");
+    
     opt3 = G_define_option();
     opt3->key = "at";
     opt3->key_desc = "x,y";
