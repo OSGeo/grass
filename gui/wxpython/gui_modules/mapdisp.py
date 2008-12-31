@@ -3889,7 +3889,9 @@ class MapFrame(wx.Frame):
                                       ctrltxt = _("scale object"))
 
         self.dialogs['barscale'].CentreOnParent()
-        self.dialogs['barscale'].ShowModal()
+        ### dialog cannot be show as modal - in the result d.barscale is not selectable
+        ### self.dialogs['barscale'].ShowModal()
+        self.dialogs['barscale'].Show()
         self.MapWindow.mouse['use'] = 'pointer'        
 
     def OnAddLegend(self, event):
@@ -3917,8 +3919,10 @@ class MapFrame(wx.Frame):
                                       checktxt = _("Show/hide legend"),
                                       ctrltxt = _("legend object")) 
 
-        self.dialogs['legend'].CentreOnParent()
-        self.dialogs['legend'].ShowModal()
+        self.dialogs['legend'].CentreOnParent() 
+        ### dialog cannot be show as modal - in the result d.legend is not selectable
+        ### self.dialogs['legend'].ShowModal()
+        self.dialogs['legend'].Show()
         self.MapWindow.mouse['use'] = 'pointer'
 
     def OnAddText(self, event):
