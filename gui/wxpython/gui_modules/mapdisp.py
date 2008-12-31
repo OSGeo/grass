@@ -891,7 +891,7 @@ class BufferedWindow(MapWindow, wx.Window):
         """
         Drag an overlay decoration item
         """
-        if id == 99: return
+        if id == 99 or id == '' or id == None: return
         Debug.msg (5, "BufferedWindow.DragItem(): id=%d" % id)
         x, y = self.lastpos
         dx = event.GetX() - x
@@ -1694,17 +1694,24 @@ class BufferedWindow(MapWindow, wx.Window):
                 self.redrawAll = None
                 ### self.OnPaint(None)
                 
-        elif self.mouse['use'] == 'pointer' and self.dragid != None:
+        elif (self.mouse['use'] == 'pointer' and 
+                self.dragid >= 0):
             # end drag of overlay decoration
+            
             if self.dragid < 99 and self.overlays.has_key(self.dragid):
                 self.overlays[self.dragid]['coords'] = self.pdc.GetIdBounds(self.dragid)
-            elif self.dragid > 100:
+            elif self.dragid > 100 and self.textdict.has_key(self.dragid):
                 self.textdict[self.dragid]['coords'] = self.pdc.GetIdBounds(self.dragid)
-                                
-            self.dragid = None
-            self.currtxtid = None
-            self.UpdateMap(render=True)
-               
+            else:
+                pass
+            
+        else:
+            pass
+
+        self.dragid = None
+        self.currtxtid = None
+        self.UpdateMap(render=True)
+                                                               
         event.Skip()
 
     def OnButtonDClick(self, event):
