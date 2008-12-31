@@ -354,9 +354,10 @@ class DecorationDialog(wx.Dialog):
             if mapName:
                 # enable 'OK' button
                 self.btnOK.Enable()
-                # set title
-                self.SetTitle(_('Legend of raster map <%s>') % \
-                              mapName)
+                if name == 'legend':
+                    # set title
+                    self.SetTitle(_('Legend of raster map <%s>') % \
+                                      mapName)
         
     def _CreateOverlay(self):
         if not self.parent.Map.GetOverlay(self.ovlId):
