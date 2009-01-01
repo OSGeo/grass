@@ -53,7 +53,6 @@ sys.path.append(gmpath)
 
 import render
 import toolbars
-import grassenv
 import track
 import menuform
 import gselect
