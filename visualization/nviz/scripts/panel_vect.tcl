@@ -38,7 +38,7 @@ proc mkvectPanel { BASE } {
 
     set curr [Nget_current vect]
     
-    if {0 != $curr}  {
+    if {$curr != 0}  {
 		set width [Nvect$curr get_att width]
 		set flat_state [Nvect$curr get_att flat]
 		set height [expr [lindex [Nvect$curr get_trans] 2] * 10]
@@ -66,8 +66,8 @@ proc mkvectPanel { BASE } {
 	
     mkMapList $tmp.list vect
     
-	button $tmp.new -text New -anchor center -width 4 -command "add_map vect" -bd 1
-	button $tmp.delete -text Delete -anchor center -width 4 -command "delete_map vect" -bd 1
+	button $tmp.new -text New -anchor center -command "add_map vect" -bd 1
+	button $tmp.delete -text Delete -anchor center -command "delete_map vect" -bd 1
 
 	pack $tmp.current $tmp.list -side left
     pack $tmp.list -side left 
@@ -374,25 +374,29 @@ proc set_ht {h} {
 
 #Procedure to update vect atts from radiobutton
 proc check_list {address} {
-    global Nv_ flat_state curr vect_height
+    global Nv_ 
+    global flat_state 
+    global curr 
+    global vect_height
 
     set state [winfo exists $address]
     set curr [Nget_current vect]
-    if {0 != $curr}  {
-	set maplist [Nget_map_list surf]
+
+    if {$curr != 0}  {
+        set maplist [Nget_map_list surf]
 
         if {$state == 0 && $flat_state == 0 } {
-        #display on surface
-	catch {destroy $address}
-        Nvect$curr set_att flat 0
-	Nv_mkSurfacelist $address $maplist Nvect$curr vect
-	pack $address
-	} 
-        if { $state == 1 && $flat_state == 1} {
-        #display on flat
-	catch {destroy $address}
-	Nvect$curr set_att flat 1
-	}
-     }
+            #display on surface
+            catch {destroy $address}
+            Nvect$curr set_att flat 0
+            Nv_mkSurfacelist $address $maplist Nvect$curr vect
+            pack $address
+        } 
+        if {$state == 1 && $flat_state == 1} {
+            #display on flat
+            catch {destroy $address}
+            Nvect$curr set_att flat 1
+        }
+    }
 	
 }

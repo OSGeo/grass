@@ -55,8 +55,8 @@ proc mksitePanel { BASE } {
 	Label $top.current -text "Current:" -anchor w
     mkMapList $top.list site
     
-	button $top.new -text New -anchor center -width 4 -command "add_map site" -bd 1
-	button $top.delete -text Delete -anchor center -width 4 -command "delete_map site" -bd 1
+	button $top.new -text New -anchor center -command "add_map site" -bd 1
+	button $top.delete -text Delete -anchor center -command "delete_map site" -bd 1
     
 	pack $top.current $top.list -side left
 	pack $top.delete $top.new -side right -expand 0
