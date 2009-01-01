@@ -456,15 +456,17 @@ proc create_constant_popup {{w .enter_constant} {mode 0}} {
     global cp_done
     
     set cp_done 0
+    set return_val ''
     
     toplevel $w
     wm title $w "Constant"
-    tkwait visibility $w
-    focus $w
-
-    puts "CONSTANT: $w MODE: $mode"
-    label $w.title -text "Enter value:"
-    entry $w.constant -bd 2 -relief sunken
+#    tkwait visibility $w
+#    focus $w
+    
+    set row2 [frame $w.constentry]
+#    puts "CONSTANT: $w MODE: $mode"
+    label $row2.title -text "Enter value:"
+    Entry $row2.const -bd 2 -relief sunken
     
     bind $w <Return> "set cp_done 1"
 
@@ -472,15 +474,17 @@ proc create_constant_popup {{w .enter_constant} {mode 0}} {
     button $row3.ok -bd 1 -width 5 -text "Accept" -command "set cp_done 1" -default active
     button $row3.cancel -bd 1 -width 5 -text "Cancel" -command "destroy $w"
 
-    pack $w.title $w.constant -side top -fill both -expand 1 \
+    pack $row2.title $row2.const -side top -fill both -expand 1 \
     	-padx 4 -pady 4
+    pack $row2 -side top -fill x -expand 1
     pack $row3.ok $row3.cancel -side left -fill none -expand 1
     pack $row3 -side top -padx 5 -pady 3 -fill x -expand 1
 
     if {$mode} then {grab $w}
+    focus $row2.const
     
     tkwait variable cp_done
-    set return_val [$w.constant get]
+    set return_val [$row2.const get]
 
     destroy $w
     return $return_val
