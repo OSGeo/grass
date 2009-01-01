@@ -324,6 +324,19 @@ proc Nv_mkFloatScale { S {orient v} {name ---} {from 10000} {to 0} {curr 500} {c
 		set text_side left
 		set orient h
 	}
+    
+    # permits loading of 3D points without surface
+    if {$name == "height" && $curr == inf} {
+        set from 10000
+        set to 0
+        set curr 5000
+    }
+    if {$name == "z-exag" && $from == 0.0 && $to == 0.0 && $curr == 0.0 } {
+        set from 10.0 
+        set to 0.0 
+        set curr 1.000000
+    }
+        
 	#calculate number length for digits var
 	set num [llength [split [expr int($curr * 1)] ""]]
 	if {$num == 1} {
