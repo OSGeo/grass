@@ -66,6 +66,7 @@ import profile
 import globalvar
 import utils
 import gdialogs
+import grass
 from vdigit import VDigitCategoryDialog as VDigitCategoryDialog
 from vdigit import VDigitZBulkDialog    as VDigitZBulkDialog
 from vdigit import VDigitDuplicatesDialog as VDigitDuplicatesDialog
@@ -4091,7 +4092,7 @@ if __name__ == "__main__":
     gm_map = MapApp(0)
     # set title
     gm_map.mapFrm.SetTitle ("GRASS GIS - Map Display: " + title + " - Location: " + \
-                                grassenv.GetGRASSVariable("LOCATION_NAME"))
+                                grass.gisenv()['LOCATION_NAME'])
     gm_map.MainLoop()
 
     os.remove(cmdfilename)
