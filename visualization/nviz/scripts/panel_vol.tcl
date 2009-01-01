@@ -50,8 +50,8 @@ proc mkvolPanel { BASE } {
 
     label $tmp.current -text "Current:" -anchor w
     mkMapList $tmp.list vol
-    button $tmp.new -text New -anchor center -bd 1 -width 4 -command new_vol
-    button $tmp.delete -text Delete -anchor center -bd 1 -width 4 -command delete_vol
+    button $tmp.new -text New -anchor center -bd 1 -command new_vol
+    button $tmp.delete -text Delete -anchor center -bd 1 -command delete_vol
 
 	pack $tmp.current $tmp.list -side left
 	pack $tmp.delete $tmp.new -side right -expand 0
