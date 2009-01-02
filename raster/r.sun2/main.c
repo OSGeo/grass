@@ -341,7 +341,7 @@ int main(int argc, char *argv[])
     parm.coefbh->required = NO;
     parm.coefbh->gisprompt = "old,cell,raster";
     parm.coefbh->description =
-	_("Name of real-sky beam radiation coefficient raster map [-]");
+	_("Name of real-sky beam radiation coefficient input raster map [-]");
     parm.coefbh->guisection = _("Input_options");
 
     parm.coefdh = G_define_option();
@@ -350,7 +350,7 @@ int main(int argc, char *argv[])
     parm.coefdh->required = NO;
     parm.coefdh->gisprompt = "old,cell,raster";
     parm.coefdh->description =
-	_("Name of real-sky diffuse radiation coefficient raster map [-]");
+	_("Name of real-sky diffuse radiation coefficient input raster map [-]");
     parm.coefdh->guisection = _("Input_options");
 
     parm.horizon = G_define_option();
@@ -358,7 +358,7 @@ int main(int argc, char *argv[])
     parm.horizon->type = TYPE_STRING;
     parm.horizon->required = NO;
     parm.horizon->gisprompt = "old,cell,raster";
-    parm.horizon->description = _("The horizon information file prefix");
+    parm.horizon->description = _("The horizon information input map prefix");
     parm.horizon->guisection = _("Input_options");
 
     parm.horizonstep = G_define_option();
