@@ -184,17 +184,19 @@ def CreateNewVector(parent, cmdDef, title=_('Create new vector map'),
             key = UserSettings.Get(group='atm', key='keycolumn', subkey='value')
             sql = 'CREATE TABLE %s (%s INTEGER)' % (outmap, key)
             
-            gcmd.Command(['db.execute',
-                          '--q'],
-                         stdin=sql)
+            gcmd.RunCommand('db.execute',
+                            quiet = True,
+                            parent = self,
+                            stdin = sql)
 
-            gcmd.Command(['v.db.connect',
-                          '--q',
-                          'map=%s' % outmap,
-                          'table=%s' % outmap,
-                          'key=%s' % key,
-                          'layer=1'])
-
+            gcmd.RunCommand('v.db.connect',
+                            quiet = True,
+                            parent = self,
+                            map = outmap,
+                            table = outmap,
+                            key = key,
+                            layer = '1')
+            
         # return fully qualified map name
         if '@' not in outmap:
             outmap += '@' + grass.gisenv()['MAPSET']

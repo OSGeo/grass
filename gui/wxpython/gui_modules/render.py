@@ -727,22 +727,26 @@ class Map(object):
 
         projinfo = {}
 
-        p = gcmd.Command(['g.proj', '-p'])
-
-        if p.returncode == 0:
-            for line in p.ReadStdOutput():
-                if ':' in line:
-                    key,val = line.split(':')
-                    key = key.strip()
-                    val = val.strip()
-                    projinfo[key] = val
-                elif "XY location (unprojected)" in line:
-                    projinfo['proj'] = "xy"
-                    projinfo['units'] = ''
+        ret = gcmd.RunCommand('g.proj',
+                              read = True,
+                              flags = 'p')
+        
+        if not ret:
             return projinfo
-        else:
-            return None
 
+        for line in ret.split('\n'):
+            if ':' in line:
+                key,val = line.split(':')
+                key = key.strip()
+                val = val.strip()
+                projinfo[key] = val
+            elif "XY location (unprojected)" in line:
+                projinfo['proj'] = "xy"
+                projinfo['units'] = ''
+                break
+        
+        return projinfo
+    
     def GetListOfLayers(self, l_type=None, l_mapset=None, l_name=None,
                         l_active=None, l_hidden=None):
         """
@@ -921,10 +925,17 @@ class Map(object):
             del os.environ["GRASS_REGION"]
         
         # run g.pngcomp to get composite image
-        try:
-            gcmd.Command(complist)
-        except gcmd.CmdError, e:
-            print >> sys.stderr, e
+        ret = gcmd.RunCommand('g.pnmcomp',
+                              input = '%s' % ",".join(maps),
+                              mask = '%s' % ",".join(masks),
+                              opacity = '%s' % ",".join(opacities),
+                              background = bgcolor,
+                              width = self.width,
+                              height = self.height,
+                              output = self.mapfile)
+        
+        if ret != 0:
+            print >> sys.stderr, _("ERROR: Rendering failed")
             return None
 
         # back to original gisrc

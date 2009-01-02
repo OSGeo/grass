@@ -220,10 +220,11 @@ class SQLFrame(wx.Frame):
 
     def GetColumns(self):
         """Get columns"""
-        dbDescribe = gcmd.Command(['db.describe',
-                                   '-c', '--q',
-                                   'table=%s' % self.tablename])
-
+        dbDescribe = gcmd.RunCommand('db.describe',
+                                     quiet = True,
+                                     flags = 'c',
+                                     table = self.tablename)
+        
         # skip ncols and nrows lines
         for line in dbDescribe.ReadStdOutput()[2:]:
             num, name, ctype, length = line.strip().split(":")

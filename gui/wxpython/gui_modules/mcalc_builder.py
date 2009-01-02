@@ -411,9 +411,9 @@ class MapCalcFrame(wx.Frame):
         """
         Launches r.mapcalc help
         """
-        cmdlist = ['g.manual','r.mapcalc']
-        gcmd.Command(cmdlist)
-
+        gcmd.RunCommand('g.manual',
+                        entry = 'r.mapcalc')
+        
     def OnClose(self,event):
         self.Destroy()
 

@@ -606,12 +606,14 @@
 	      <handler>self.OnMenuCmd</handler>
 	      <command>g.proj</command>
 	    </menuitem>
+<!--
 	    <menuitem>
 	      <label>Projection for current location</label>
 	      <help>Create/edit projection information for current location</help>
 	      <handler>self.OnXTerm</handler>
 	      <command>g.setproj</command>
 	    </menuitem>
+-->
 	    <separator/>
 	    <menuitem>
 	      <label>Convert coordinates</label>
@@ -634,12 +636,14 @@
 	<menu>
 	  <label>Develop raster map</label>
 	  <items>
+<!--
 	    <menuitem>
 	      <label>Digitize raster (requires XTerm)</label>
 	      <help>Digitize raster map</help>
 	      <handler>self.OnXTerm</handler>
 	      <command>r.digit</command>
 	    </menuitem>
+-->
 	    <separator/>
 	    <menuitem>
 	      <label>Compress/decompress</label>
@@ -1051,6 +1055,7 @@
 	<menu>
 	  <label>Landscape structure modeling</label>
 	  <items>
+<!--
 	    <menuitem>
 	      <label>Set up (requires XTerm)</label>
 	      <help>Set up sampling and analysis framework</help>
@@ -1058,6 +1063,7 @@
 	      <command>r.le.setup</command>
 	    </menuitem>
 	    <separator/>
+-->
 	    <menuitem>
 	      <label>Analyze landscape</label>
 	      <help>Contains a set of measures for attributes, diversity, texture, juxtaposition, and edge.</help>
@@ -1716,12 +1722,14 @@
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.net.path</command>
 	    </menuitem>
+<!--
 	    <menuitem>
 	      <label>Display shortest route (requires XTerm)</label>
 	      <help>Display shortest route along network between 2 nodes (visualization only, requires XTerm))</help>
 	      <handler>self.OnXTerm</handler>
 	      <command>d.path</command>
 	    </menuitem>
+-->
 	    <menuitem>
 	      <label>Split net</label>
 	      <help>Splits net to bands between cost isolines (direction from centre). Centre node must be opened (costs &gt;= 0). Costs of centre node are used in calculation.</help>
@@ -1994,12 +2002,14 @@
 	  <handler>self.OnMenuCmd</handler>
 	  <command>i.rectify</command>
 	</menuitem>
+<!--
 	<menuitem>
 	  <label>Ortho photo rectification (requires Xterm)</label>
 	  <help>Ortho Photo rectification</help>
 	  <handler>self.OnXTerm</handler>
 	  <command>i.ortho.photo</command>
 	</menuitem>
+-->
 	<separator/>
 	<menu>
 	  <label>Basic RS processing</label>
@@ -2074,12 +2084,14 @@
 	      <command>i.smap</command>
 	    </menuitem>
 	    <separator/>
+<!--
 	    <menuitem>
 	      <label>Interactive input for supervised classification (requires Xterm)</label>
 	      <help>Interactive input for supervised classification</help>
 	      <handler>self.OnXTerm</handler>
 	      <command>i.class</command>
 	    </menuitem>
+-->
 	    <menuitem>
 	      <label>Input for supervised MLC</label>
 	      <help>Generates statistics for i.maxlik from raster map layer.</help>

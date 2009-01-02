@@ -748,17 +748,18 @@ class GCP(wx.Frame):
         """
         # check to see if we are georectifying map in current working location/mapset
         if self.newlocation == self.currentlocation and self.newmapset == self.currentmapset:
-            cmdlist = ['i.target',
-                       '-c',
-                       'group=%s' % tgroup]
+            gcmd.RunCommand('i.target',
+                            parent = self,
+                            flags = 'c',
+                            group = tgroup)
         else:
             self.grwiz.SwitchEnv('new')
-            cmdlist = ['i.target',
-                       'group=%s' % tgroup,
-                       'location=%s' % tlocation,
-                       'mapset=%s' % tmapset]
-        gcmd.Command(cmd=cmdlist, stderr=None)
-
+            gcmd.RunCommand('i.target',
+                            parent = self,
+                            group = tgroup,
+                            location = tlocation,
+                            mapset = tmapset)
+            
         self.grwiz.SwitchEnv('original')
 
     def AddGCP(self, event):
@@ -1017,16 +1018,14 @@ class GCP(wx.Frame):
                 f.close()
             for vect in vectlist:
                 outname = vect+'_'+self.extension
-                cmdlist = ['v.transform', '--q', 'input=%s' % vect, 'output=%s' % outname, 'pointsfile=%s' % self.pointsfile]
-                                
-                p = gcmd.Command(cmd=cmdlist)
-                stdout = p.ReadStdOutput()
-                msg = '****'+outname+'****\n'
-                for line in stdout:
-                    msg = msg+line+'\n'
-                wx.MessageBox(msg)
+                p = gcmd.RunCommand('v.transform',
+                                    parent = self,
+                                    quiet = True,
+                                    input = vect,
+                                    output = outname, 
+                                    pointsfile = self.pointsfile)
                 
-            if p.returncode == 0:
+            if p == 0:
                 wx.MessageBox("All maps were georectified successfully")
                 for vect in vectlist:
                     outname = vect+'_'+self.extension
@@ -1103,13 +1102,17 @@ class GCP(wx.Frame):
         # get list of forward and reverse rms error values for each point
         self.grwiz.SwitchEnv('new')
         
-        p = gcmd.Command(['g.transform',
-                          'group=%s' % xygroup,
-                          'order=%s' % order])
+        ret = gcmd.RunCommand('g.transform',
+                              parent = self,
+                              read = True,
+                              group = xygroup,
+                              order = order)
         
         self.grwiz.SwitchEnv('original')
 
-        errlist = p.ReadStdOutput()
+        if ret:
+            errlist = ret.split('\n')
+        
         if errlist == []:
             return
         

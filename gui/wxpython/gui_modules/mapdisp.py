@@ -1244,9 +1244,10 @@ class BufferedWindow(MapWindow, wx.Window):
                             for sql in addRecordDlg.GetSQLString():
                                 sqlfile.file.write(sql + ";\n")
                             sqlfile.file.flush()
-                            executeCommand = gcmd.Command(cmd=["db.execute",
-                                                               "--q",
-                                                               "input=%s" % sqlfile.name])
+                            gcmd.RunCommand('db.execute',
+                                            parent = self,
+                                            quiet = True, 
+                                            input = sqlfile.name)
 
                 elif digitToolbar.GetAction('type') in ["line", "boundary"]:
                     # add new point to the line
@@ -1869,9 +1870,11 @@ class BufferedWindow(MapWindow, wx.Window):
                             for sql in addRecordDlg.GetSQLString():
                                 sqlfile.file.write(sql + ";\n")
                             sqlfile.file.flush()
-                            executeCommand = gcmd.Command(cmd=["db.execute",
-                                                              "--q",
-                                                              "input=%s" % sqlfile.name])
+                            gcmd.RunCommand('db.execute',
+                                            parent = True,
+                                            quiet = True,
+                                            input = sqlfile.name)
+                        
             elif digitToolbar.GetAction() == "deleteLine":
                 # -> delete selected vector features
                 if digitClass.DeleteSelectedLines() < 0:
@@ -2399,17 +2402,16 @@ class BufferedWindow(MapWindow, wx.Window):
         # We ONLY want to set extents here. Don't mess with resolution. Leave that
         # for user to set explicitly with g.region
         new = self.Map.AlignResolution()
+        gcmd.RunCommand('g.region',
+                        parent = self,
+                        overwrite = True,
+                        n = new['n'],
+                        s = new['s'],
+                        e = new['e'],
+                        w = new['w'],
+                        rows = int(new['rows']),
+                        cols = int(new['cols']))
         
-        cmdRegion = ["g.region", "--o",
-                     "n=%f"    % new['n'],
-                     "s=%f"    % new['s'],
-                     "e=%f"    % new['e'],
-                     "w=%f"    % new['w'],
-                     "rows=%d" % int(new['rows']),
-                     "cols=%d" % int(new['cols'])]
-        
-        p = gcmd.Command(cmdRegion)
-
         if tmpreg:
             os.environ["GRASS_REGION"] = tmpreg
 
@@ -2432,23 +2434,36 @@ class BufferedWindow(MapWindow, wx.Window):
 
         wind = dlg.wind
 
-        p = gcmd.Command (["g.region", "-ugp", "region=%s" % wind])
+        region = gcmd.RunCommand('g.region',
+                                 parent = self,
+                                 read = True,
+                                 flags = 'ugp',
+                                 region = wind)
+        
+        if not region:
+            dlg.Destroy()
+            return
+        
+        for line in region.split('\n'):
+            if '=' not in line:
+                continue
+            key, val = line.split('=')
+            zoomreg[key.strip()] = float(val.strip())
+        
+        self.Map.region['n'] = zoomreg['n']
+        self.Map.region['s'] = zoomreg['s']
+        self.Map.region['e'] = zoomreg['e']
+        self.Map.region['w'] = zoomreg['w']
 
-        if p.returncode == 0:
-            output = p.ReadStdOutput()
-            for line in output:
-                line = line.strip()
-                if '=' in line: key,val = line.split('=')
-                zoomreg[key] = float(val)
-            self.Map.region['n'] = zoomreg['n']
-            self.Map.region['s'] = zoomreg['s']
-            self.Map.region['e'] = zoomreg['e']
-            self.Map.region['w'] = zoomreg['w']
-            self.ZoomHistory(self.Map.region['n'],self.Map.region['s'],self.Map.region['e'],self.Map.region['w'])
-            self.UpdateMap()
-
+        self.ZoomHistory(self.Map.region['n'],
+                         self.Map.region['s'],
+                         self.Map.region['e'],
+                         self.Map.region['w'])
+        
+        self.UpdateMap()
+        
         dlg.Destroy()
-
+        
     def SaveDisplayRegion(self, event):
         """
         Save display extents to named region file.
@@ -2502,8 +2517,18 @@ class BufferedWindow(MapWindow, wx.Window):
         if tmpreg:
             del os.environ["GRASS_REGION"]
         
-        p = gcmd.Command(cmdRegion)
-
+        gcmd.RunCommand('g.region',
+                        overwrite = True,
+                        parent = self,
+                        flags = 'u',
+                        n = new['n'],
+                        s = new['s'],
+                        e = new['e'],
+                        w = new['w'],
+                        rows = int(new['rows']),
+                        cols = int(new['cols']),
+                        save = wind)
+        
         if tmpreg:
             os.environ["GRASS_REGION"] = tmpreg
 
@@ -3512,9 +3537,9 @@ class MapFrame(wx.Frame):
                 self.gismanager.goutput.RunCmd(vcmd)
         else:
             if rcmd:
-                gcmd.Command(rcmd)
+                gcmd.Command(rcmd) # TODO: -> grass.run_command
             if vcmd:
-                gcmd.Command(vcmd)
+                gcmd.Command(vcmd) # TODO: -> grass.run_command
 
         # restore GRASS_REGION
         if tmpreg:
