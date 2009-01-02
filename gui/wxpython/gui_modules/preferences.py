@@ -1672,9 +1672,14 @@ class DefaultFontDialog(wx.Dialog):
 
         cmd = ["d.font", "-l"]
 
-        p = gcmd.Command(cmd, stderr=None)
+        ret = gcmd.RunCommand('d.font',
+                              read = True,
+                              flags = 'l')
 
-        dfonts = p.ReadStdOutput()
+        if not ret:
+            return fontlist
+
+        dfonts = ret.split('\n')
         dfonts.sort(lambda x,y: cmp(x.lower(), y.lower()))
         for item in range(len(dfonts)):
            # ignore duplicate fonts and those starting with #

@@ -367,19 +367,19 @@ class ColorTable(wx.Frame):
             return
         
         if self.elem == 'cell':
-            cmdlist = ['r.info',
-                       '-r',
-                       'map=%s' % self.inmap]
+            info = gcmd.RunCommand('r.info',
+                                   parent = self,
+                                   read = True,
+                                   flags = 'r',
+                                   map = self.inmap)
 
-            try:
-                p = gcmd.Command(cmdlist)
-
-                for line in p.ReadStdOutput():
+            if info:
+                for line in info.split('\n'):
                     if 'min' in line:
                         self.rast['min'] = float(line.split('=')[1])
                     elif 'max' in line:
                         self.rast['max'] = float(line.split('=')[1])
-            except gcmd.CmdError:
+            else:
                 self.inmap = ''
                 self.rast['min'] = self.rast['max'] = None
                 self.btnPreview.Enable(False)
@@ -556,16 +556,18 @@ class ColorTable(wx.Frame):
                 shutil.copyfile(colrtemp, old_colrtable)
                 os.remove(colrtemp)
             else:
-                gcmd.Command(['r.colors',
-                              '-r',
-                              'map=%s' % self.inmap])
+                gcmd.RunCommand('r.colors',
+                                parent = self,
+                                flags = 'r',
+                                map = self.inmap)
         
     def OnHelp(self, event):
         """Show GRASS manual page"""
-        gcmd.Command(['g.manual',
-                      '--quiet', 
-                      '%s' % self.cmd])
-    
+        gcmd.RunCommand('g.manual',
+                        quiet = True,
+                        parent = self,
+                        entry = self.cmd)
+        
     def CreateColorTable(self, force=False):
         """Creates color table"""
         rulestxt = ''
@@ -592,19 +594,22 @@ class ColorTable(wx.Frame):
             output.close()
         
         if self.elem == 'cell': 
-            cmdlist = ['r.colors',
-                       'map=%s' % self.inmap,
-                       'rules=%s' % gtemp]
-            
             if not force and \
                     not self.ovrwrtcheck.IsChecked():
-                cmdlist.append('-w')
+                flags = 'w'
+            else:
+                flags = ''
         
+            gcmd.RunCommand('r.colors',
+                            parent = self,
+                            flags = flags,
+                            map = self.inmap,
+                            rules = gtemp)
+            
         elif self.elem == 'vector':
-            cmdlist = ['db.execute',
-                       'input=%s' % gtemp]
-        
-        p = gcmd.Command(cmdlist)
+            gcmd.RunCommand('db.execute',
+                            parent = self,
+                            input = gtemp)
         
 class BufferedWindow(wx.Window):
     """A Buffered window class"""

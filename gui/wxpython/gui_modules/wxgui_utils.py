@@ -37,7 +37,6 @@ import globalvar
 import menuform
 import mapdisp
 import render
-import gcmd
 import histogram
 import utils
 import profile

@@ -185,15 +185,17 @@ class AbstractDigit:
         x1, y1 = pos1
         x2, y2 = pos2
 
-        vEditCmd = gcmd.Command(['v.edit',
-                                 '--q',
-                                 'map=%s' % bgmap,
-                                 'tool=select',
-                                 'bbox=%f,%f,%f,%f' % (pos1[0], pos1[1], pos2[0], pos2[1])])
-                                 #'polygon=%f,%f,%f,%f,%f,%f,%f,%f,%f,%f' % \
-                                 #    (x1, y1, x2, y1, x2, y2, x1, y2, x1, y1)])
-                                             
-        output = vEditCmd.ReadStdOutput()[0] # first line
+        ret = gcmd.RunCommand('v.edit',
+                              parent = self,
+                              quiet = True,
+                              map = bgmap,
+                              tool = 'select',
+                              bbox= '%f,%f,%f,%f' % (pos1[0], pos1[1], pos2[0], pos2[1]))
+                              
+        if not ret:
+            return ids
+
+        output = ret.split('\n')[0] # first line
         ids = output.split(',') 
         ids = map(int, ids) # str -> int
         
@@ -1978,17 +1980,18 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
 
         Return True line found or False if not found"""
         
-        cmdWhat = gcmd.Command(cmd=['v.what',
-                                   '--q',
-                                   'map=%s' % self.map,
-                                   'east_north=%f,%f' % \
-                                       (float(coords[0]), float(coords[1])),
-                                   'distance=%f' % qdist])
+        ret = gcmd.RunCommand('v.what',
+                              parent = self,
+                              quiet = True,
+                              map = self.map,
+                              east_north = '%f,%f' % \
+                                  (float(coords[0]), float(coords[1])),
+                              distance = qdist)
 
-        if cmdWhat.returncode != 0:
+        if not ret:
             return False
 
-        for item in cmdWhat.ReadStdOutput():
+        for item in ret.split('\n'):
             litem = item.lower()
             if "id:" in litem: # get line id
                 self.line = int(item.split(':')[1].strip())

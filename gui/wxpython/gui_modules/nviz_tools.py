@@ -2414,11 +2414,19 @@ class NvizToolWindow(wx.Frame):
         color = self.FindWindowById(self.win['surface']['draw']['wire-color'])
         
     def UpdateVectorPage(self, layer, data):
-        vInfo = gcmd.Command(['v.info',
-                              '-t',
-                              'map=%s' % layer.name])
+        vInfo = gcmd.RunCommand('v.info',
+                                parent = self,
+                                read = True,
+                                flags = 't',
+                                map = layer.name)
+        
+        if not vInfo:
+            return
+        
         npoints = nprimitives = 0
-        for line in vInfo.ReadStdOutput():
+        for line in vInfo.split('\n'):
+            if '=' not in line:
+                continue
             key, value = line.split('=')
             if key == 'map3d':
                 mapIs3D = int(value)

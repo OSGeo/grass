@@ -27,6 +27,7 @@ import types
 import re
 import string
 import getopt
+import platform
 
 ### XML 
 import xml.sax
@@ -61,10 +62,8 @@ import wx.stc
 import wx.lib.customtreectrl as CT
 import wx.lib.flatnotebook as FN
 from wx.lib.wordwrap import wordwrap
-try:
-    import subprocess
-except:
-    import compat.subprocess as subprocess
+
+import grass
 
 import gui_modules.utils as utils
 import gui_modules.preferences as preferences
@@ -368,8 +367,9 @@ class GMFrame(wx.Frame):
         if dlg.ShowModal() == wx.ID_OK:
             ms = dlg.GetMapsets()
             # run g.mapsets with string of accessible mapsets
-            cmdlist = ['g.mapsets', 'mapset=%s' % ','.join(ms)]
-            gcmd.Command(cmdlist)
+            gcmd.RunCommand('g.mapsets',
+                            parent = self,
+                            mapset = '%s' % ','.join(ms))
             
     def OnRDigit(self, event):
         """
@@ -500,8 +500,8 @@ class GMFrame(wx.Frame):
         # name
         info.SetName("GRASS GIS")
         # version
-        versionCmd = gcmd.Command(['g.version'])
-        info.SetVersion(versionCmd.ReadStdOutput()[0].replace('GRASS', '').strip())
+        version = grass.read_command('g.version').replace('GRASS', '').strip()
+        info.SetVersion(version)
         # description
         copyrightFile = open(os.path.join(os.getenv("GISBASE"), "COPYING"), 'r')
         copyrightOut = []
@@ -628,7 +628,7 @@ class GMFrame(wx.Frame):
             fileStream = ''.join(file.readlines())
             p = re.compile('(grass-gxw.dtd)')
             p.search(fileStream)
-            if subprocess.mswindows:
+            if platform.system() == 'Windows':
                 # FIXME mixing '\' and '/' causes error in p.sub
                 dtdFilename = dtdFilename.replace("\\", "/") 
             fileStream = p.sub(dtdFilename, fileStream)
@@ -938,48 +938,6 @@ class GMFrame(wx.Frame):
                 dlg.Destroy()
     
                 self.goutput.RunCmd(cmdlist)
-
-    def OnXTerm(self, event):
-        """
-        Run commands that need interactive xmon
-        """
-        command = self.GetMenuCmd(event)
-
-        # unset display mode
-        del os.environ['GRASS_RENDER_IMMEDIATE']
-
-        # open next available xmon
-        xmonlist = []
-        gisbase = os.environ['GISBASE']
-
-        # make list of xmons that are not running
-        cmdlist = ["d.mon", "-L"]
-        p = gcmd.Command(cmdlist)
-
-        for line in p.ReadStdOutput():                
-            line = line.strip()
-            if line.startswith('x') and 'not running' in line:
-                xmonlist.append(line[0:2])
-
-        # open available xmon
-        xmon = xmonlist[0]
-        cmdlist = ["d.mon","start=%s" % xmon]
-        p = gcmd.Command(cmdlist)
-
-        # run the command        
-        runbat = os.path.join(gisbase,'etc','grass-run.bat')
-        xtermwrapper = os.path.join(gisbase,'etc','grass-xterm-wrapper')
-        grassrun = os.path.join(gisbase,'etc','grass-run.sh')
-        command = ' '.join(command)
-        
-        if 'OS' in os.environ and os.environ['OS'] == "Windows_NT":
-            cmdlist = ["cmd.exe", "/c", 'start "%s"' % runbat, command]
-        else:
-            cmdlist = [xtermwrapper, '-e "%s"' % grassrun, command]
-        p = gcmd.Command(cmdlist)
-
-        # reset display mode
-        os.environ['GRASS_RENDER_IMMEDIATE'] = 'TRUE'
 
     def OnPreferences(self, event):
         """General GUI preferences/settings"""

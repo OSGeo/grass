@@ -42,10 +42,11 @@ def GetTempfile(pref=None):
     """
     import gcmd
 
-    tempfileCmd = gcmd.Command(["g.tempfile",
-                                "pid=%d" % os.getpid()])
+    ret = gcmd.RunCommand('g.tempfile',
+                          read = True,
+                          pid = os.getpid())
 
-    tempfile = tempfileCmd.ReadStdOutput()[0].strip()
+    tempfile = tempfileCmd.split('\n')[0].strip()
 
     # FIXME
     # ugly hack for MSYS (MS Windows)
@@ -247,7 +248,16 @@ def GetVectorNumberOfLayers(vector):
                'option=report']
     
     layers = []
-    for line in gcmd.Command(cmdlist, rerr=None).ReadStdOutput():
+    
+    ret = gcmd.RunCommand('v.category',
+                          read = True,
+                          input = vector,
+                          option = 'report')
+
+    if not ret:
+        return layers
+    
+    for line in ret.split('\n'):
         if not 'Layer' in line:
             continue
         

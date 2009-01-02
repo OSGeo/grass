@@ -162,9 +162,9 @@ class RulesText(wx.Dialog):
             self.rules = self.rules + '%s' % os.linesep
 
     def OnHelp(self, event):
-        gcmd.Command(['g.manual',
-                      '--quiet', 
-                      '%s' % self.cmd[0]])
+        gcmd.RunCommand('g.manual',
+                        quiet = True,
+                        entry = self.cmd[0])
 
     def OnOverwrite(self, event):
         self.overwrite = event.IsChecked()

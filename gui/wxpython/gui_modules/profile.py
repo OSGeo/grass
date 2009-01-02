@@ -281,11 +281,15 @@ class ProfileFrame(wx.Frame):
             r['datalist'] = self.CreateDatalist(r['name'], self.coordstr)
             r['plegend'] = _('Profile of %s') % r['name']
 
-            p = gcmd.Command(['r.info',
-                              'map=%s' % r['name'],
-                              '-u',
-                              '--quiet'])
-            r['units'] = p.ReadStdOutput()[0].split('=')[1]
+            ret = gcmd.RunCommand('r.info',
+                                  parent = self,
+                                  read = True,
+                                  quiet = True,
+                                  flags = 'u',
+                                  map = r['name'])
+
+            if ret:
+                r['units'] = p.split('\n')[0].split('=')[1]
 
             # update title
             self.ptitle += ' %s and' % r['name']
@@ -316,10 +320,12 @@ class ProfileFrame(wx.Frame):
         if len(self.mapwin.polycoords) > 0:
             for point in self.mapwin.polycoords:
                 # get value of raster cell at coordinate point
-                p = gcmd.Command(['r.what',
-                                  'input=%s' % self.raster[0]['name'],
-                                  'east_north=%d,%d' % (point[0],point[1])])
-                outlist = p.ReadStdOutput()
+                ret = gcmd.RunCommand('r.what',
+                                      parent = self,
+                                      read = True,
+                                      input = self.raster[0]['name'],
+                                      east_north = '%d,%d' % (point[0],point[1]))
+                outlist = ret.split('\n')
                 val = outlist[0].split('|')[3]
                 
                 # calculate distance between coordinate points

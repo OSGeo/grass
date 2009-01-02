@@ -1982,9 +1982,12 @@ class LocationWizard(wx.Object):
                    'proj4=%s' % proj4string,
                    'location=%s' % self.startpage.location]
 
-        p = gcmd.Command(cmdlist, stderr=None)
+        ret = gcmd.RunCommand('g.proj',
+                              flags = 'c',
+                              proj4 = proj4string,
+                              location = self.startpage.location)
 
-        if p.returncode == 0:
+        if ret == 0:
             return True
 
         return False
@@ -1993,14 +1996,13 @@ class LocationWizard(wx.Object):
         """Create a new location based on given proj4 string"""
         proj4string = self.custompage.customstring
         location = self.startpage.location
+        
+        ret = gcmd.RunCommand('g.proj',
+                              flags = 'c',
+                              proj4 = proj4string,
+                              location = location)
 
-        cmdlist = ['g.proj', '-c',
-                   'proj4=%s' % proj4string,
-                   'location=%s' % location]
-
-        p = gcmd.Command(cmdlist, stderr=None)
-
-        if p.returncode == 0:
+        if ret == 0:
             return True
 
         return False
@@ -2026,11 +2028,14 @@ class LocationWizard(wx.Object):
                    'epsg=%s' % epsgcode,
                    'datumtrans=-1']
 
-        p = gcmd.Command(cmdlist)
+        ret = gcmd.RunCommand('g.proj',
+                              epsg = epsgcode,
+                              datumtrans = '-1')
 
         dtoptions = {}
-        try:
-            line = p.ReadStdOutput()
+
+        if ret:
+            line = ret.split('\n')
             i = 0
             while i < len(line):
                 if line[i] == '---':
@@ -2039,9 +2044,7 @@ class LocationWizard(wx.Object):
                                                 line[i+3],
                                                 line[i+4])
                     i += 5
-        except:
-            pass
-
+        
         if dtoptions != {}:
             dtrans = ''
             # open a dialog to select datum transform number
@@ -2061,19 +2064,17 @@ class LocationWizard(wx.Object):
                 dlg.Destroy()
                 return False
 
-            cmdlist = ['g.proj', '-c',
-                       'epsg=%s' % epsgcode,
-                       'location=%s' % location,
-                       'datumtrans=%s' % dtrans]
+            datumtrans = dtrans
         else:
-            cmdlist = ['g.proj','-c',
-                       'epsg=%s' % epsgcode,
-                       'location=%s' % location,
-                       'datumtrans=1']
+            datumtrans = '1'
 
-        p = gcmd.Command(cmdlist, stderr=None)
-
-        if p.returncode == 0:
+        ret = gcmd.RunCommand('g.proj',
+                              flags = 'c',
+                              epsg = epsgcode,
+                              location = location,
+                              datumtrans = datumtrans)
+        
+        if ret == 0:
             return True
 
         return False
@@ -2098,13 +2099,12 @@ class LocationWizard(wx.Object):
             return False
 
         # creating location
-        cmdlist = ['g.proj', '-c',
-                   'georef=%s' % georeffile,
-                   'location=%s' % location]
+        ret = gcmd.RunCommand('g.proj',
+                              flags = 'c',
+                              georef = georeffile,
+                              location = location)
 
-        p = gcmd.Command(cmdlist, stderr=None)
-
-        if p.returncode == 0:
+        if ret == 0:
             return True
 
         return False
@@ -2133,9 +2133,12 @@ class LocationWizard(wx.Object):
                    'wkt=%s' % wktfile,
                    'location=%s' % location]
 
-        p = gcmd.Command(cmdlist, stderr=None)
-
-        if p.returncode == 0:
+        ret = gcmd.RunCommand('g.proj',
+                              flags = 'c',
+                              wkt = wktfile,
+                              location = location)
+        
+        if ret == 0:
             return True
 
         return False
@@ -2205,10 +2208,10 @@ class RegionDef(BaseClass, wx.Frame):
         # in selected location in order to set default region (WIND)
         #
         envval = {}
-        cmdlist = ['g.gisenv']
-        p = gcmd.Command(cmdlist)
-        if p.returncode == 0:
-            output = p.ReadStdOutput()
+        ret = gcmd.RunCommand('g.gisenv',
+                              read = True)
+        if ret:
+            output = ret.split('\n')
             for line in output:
                 line = line.strip()
                 if '=' in line:
@@ -2219,10 +2222,10 @@ class RegionDef(BaseClass, wx.Frame):
             if self.currlocation != self.location or self.currmapset != 'PERMANENT':
                 # cmdlist = ['g.mapset', 'location=%s' % self.location, 'mapset=PERMANENT']
                 # gcmd.Command(cmdlist
-                gcmd.Command(["g.gisenv",
-                              "set=LOCATION_NAME=%s" % self.location])
-                gcmd.Command(["g.gisenv",
-                              "set=MAPSET=PERMANENT"])
+                gcmd.RunCommand('g.gisenv',
+                                set = 'LOCATION_NAME=%s' % self.location)
+                gcmd.RunCommand('g.gisenv',
+                                set = 'MAPSET=PERMANENT')
 
         else:
             dlg = wx.MessageBox(parent=self,
@@ -2234,10 +2237,11 @@ class RegionDef(BaseClass, wx.Frame):
         # get current region settings
         #
         region = {}
-        cmdlist = ['g.region', '-gp3']
-        p = gcmd.Command(cmdlist)
-        if p.returncode == 0:
-            output = p.ReadStdOutput()
+        ret = gcmd.RunCommand('g.region',
+                              read = True,
+                              flags = 'gp3')
+        if ret:
+            output = ret.split('\n')
             for line in output:
                 line = line.strip()
                 if '=' in line:
@@ -2600,8 +2604,18 @@ class RegionDef(BaseClass, wx.Frame):
                    'b=%f' % self.bottom,
                    'tbres=%f' % self.tbres]
 
-        p = gcmd.Command(cmdlist)
-        if p.returncode == 0:
+        ret = gcmd.RunCommand('g.region',
+                              flags = 'sgpa',
+                              n = self.north,
+                              s = self.south,
+                              e = self.east,
+                              w = self.west,
+                              nsres = self.nsres,
+                              ewres = self.ewres,
+                              t = self.top,
+                              b = self.bottom,
+                              tbres = self.tbres)
+        if ret == 0:
             self.Destroy()
 
     def OnCancel(self, event):

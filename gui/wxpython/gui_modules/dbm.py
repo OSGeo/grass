@@ -1126,16 +1126,21 @@ class AttributeManager(wx.Frame):
                         where += '%s = %d or ' % (keyColumn, int(range))
                 where = where.rstrip('or ')
                 
-                cmd = gcmd.Command(["v.db.select",
-                                    "-r", "--q",
-                                    "map=%s" % self.mapDBInfo.map,
-                                    "layer=%d" % self.layer,
-                                    "where=%s" % where])
+                select = gcmd.RunCommand('v.db.select',
+                                         parent = self,
+                                         read = True,
+                                         quiet = True,
+                                         flags = 'r',
+                                         map = self.mapDBInfo.map,
+                                         layer = int(self.layer),
+                                         where = where)
                 
                 region = {}
-                for line in cmd.ReadStdOutput():
+                for line in select.split('\n'):
+                    if '=' not in line:
+                        continue
                     key, value = line.split('=')
-                    region[key] = float(value)
+                    region[key.strip()] = float(value.strip())
                 
                 self.mapdisplay.Map.GetRegion(n=region['n'], s=region['s'],
                                               w=region['w'], e=region['e'],
@@ -1162,7 +1167,7 @@ class AttributeManager(wx.Frame):
         list      = self.FindWindowById(self.layerPage[self.layer]['data'])
         table     = self.mapDBInfo.layers[self.layer]['table']
         keyColumn = self.mapDBInfo.layers[self.layer]['key']
-
+        
         # (column name, value)
         data = []
 
@@ -1695,16 +1700,15 @@ class AttributeManager(wx.Frame):
             driver   = self.mapDBInfo.layers[self.layer]["driver"]
             database = self.mapDBInfo.layers[self.layer]["database"]
 
-            cmd = ['db.execute',
-                   'input=%s' % sqlFile.name,
-                   'driver=%s' % driver,
-                   'database=%s' % database]
-
             Debug.msg(3, 'AttributeManger.ApplyCommands(): %s' %
                       ';'.join(["%s" % s for s in self.listOfSQLStatements]))
 
-            gcmd.Command(cmd)
-
+            gcmd.RunCommand('db.execute',
+                            parent = self,
+                            input = sqlFile.name,
+                            driver = driver,
+                            database = database)
+            
             # reset list of statements
             self.listOfSQLStatements = []
 
@@ -1918,12 +1922,13 @@ class AttributeManager(wx.Frame):
                 self.mapdisplay.digit.driver.SetSelected(map(int, cats), field=self.layer)
                 self.mapdisplay.digit.DeleteSelectedLines()
             else:
-                gcmd.Command(['v.edit',
-                              '--q',
-                              'map=%s' % self.vectorName,
-                              'tool=delete',
-                              'cats=%s' % utils.ListOfCatsToRange(cats)])
-        
+                gcmd.RunCommand('v.edit',
+                                parent = self,
+                                quiet = True,
+                                map = self.vectorName,
+                                tool = 'delete',
+                                cats = utils.ListOfCatsToRange(cats))
+                
             self.mapdisplay.MapWindow.UpdateMap(render=True, renderVector=True)
         
     def AddQueryMapLayer(self):
@@ -2135,24 +2140,30 @@ class LayerBook(wx.Notebook):
         #
         # drivers
         #
-        cmdDriver = gcmd.Command(['db.drivers',
-                                  '-p',
-                                  '--q'])
+        drivers = gcmd.RunCommand('db.drivers',
+                                  quiet = True,
+                                  read = True,
+                                  flags = 'p')
+        
         self.listOfDrivers = []
-        for drv in cmdDriver.ReadStdOutput():
+        for drv in drivers.split('\n'):
             self.listOfDrivers.append(drv.strip())
-
+        
         #
         # get default values
         #
         self.defaultConnect = {}
-        cmdConnect = gcmd.Command(['db.connect',
-                                   '-p',
-                                   '--q'])
-        for line in cmdConnect.ReadStdOutput():
+        connect = gcmd.RunCommand('db.connect',
+                                  flags = 'p',
+                                  read = True,
+                                  quiet = True)
+        
+        for line in connect.split('\n'):
+            if ':' not in line:
+                continue
             item, value = line.split(':')
             self.defaultConnect[item.strip()] = value.strip()
-
+        
         if len(self.defaultConnect['driver']) == 0 or \
                len(self.defaultConnect['database']) == 0:
             raise gcmd.DBMError(_('Unable to determine default DB connection settings. '
@@ -2547,37 +2558,45 @@ class LayerBook(wx.Notebook):
         """Get list of tables for given driver and database"""
         tables = []
 
-        cmdTable = gcmd.Command(['db.tables',
-                                 '-p', '--q',
-                                 'driver=%s' % driver,
-                                 'database=%s' % database], rerr=None)
-
-        if cmdTable.returncode != 0:
+        ret = gcmd.RunCommand('db.tables',
+                              parent = self,
+                              read = True,
+                              flags = 'p',
+                              driver = driver,
+                              database = database)
+        
+        if ret is None:
             wx.MessageBox(parent=self,
                           message=_("Unable to get list of tables.\n"
                                     "Please use db.connect to set database parameters."),
                           caption=_("Error"), style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
-
+            
             return tables
         
-        for table in cmdTable.ReadStdOutput():
-            tables.append(table)
-
+        for table in ret.split('\n'):
+            if len(table) > 0:
+                tables.append(table)
+        
         return tables
 
     def __getColumns(self, driver, database, table):
         """Get list of column of given table"""
         columns = []
 
-        cmdColumn = gcmd.Command(['db.columns',
-                                  '--q',
-                                  'driver=%s' % driver,
-                                  'database=%s' % database,
-                                  'table=%s' % table])
+        ret = gcmd.RunCommand('db.columns',
+                              parent = self,
+                              quiet = True,
+                              driver = driver,
+                              database = database,
+                              table = table)
+        
+        if ret == None:
+            return columns
 
-        for column in cmdColumn.ReadStdOutput():
-            columns.append(column)
-
+        for column in ret.split('\n'):
+            if len(column) > 0:
+                columns.append(column)
+        
         return columns
 
     def OnDriverChanged(self, event):
@@ -2662,12 +2681,13 @@ class LayerBook(wx.Notebook):
         # create table
         sql = 'CREATE TABLE %s (%s INTEGER)' % (table, key)
 
-        gcmd.Command(['db.execute',
-                      '--q',
-                      'driver=%s' % driver,
-                      'database=%s' % database],
-                     stdin=sql)
-
+        gcmd.RunCommand('db.execute',
+                        quiet = True,
+                        parent = self,
+                        stdin = sql,
+                        driver = driver,
+                        database = database)
+        
         # update list of tables
         tableList = self.addLayerWidgets['table'][1]
         tableList.SetItems(self.__getTables(driver, database))
@@ -2698,26 +2718,28 @@ class LayerBook(wx.Notebook):
             return
 
         # add new layer
-        connectCmd = gcmd.Command(['v.db.connect',
-                                   '--q',
-                                   'map=%s' % self.mapDBInfo.map,
-                                   'driver=%s' % driver,
-                                   'database=%s' % database,
-                                   'table=%s' % table,
-                                   'key=%s' % key,
-                                   'layer=%d' % layer])
+        ret = gcmd.RunCommand('v.db.connect',
+                              parent = self,
+                              quiet = True,
+                              map = self.mapDBInfo.map,
+                              driver = driver,
+                              database = database,
+                              table = table,
+                              key = key,
+                              layer = layer)
         
         # insert records into table if required
         if self.addLayerWidgets['addCat'][0].IsChecked():
-            gcmd.Command(['v.to.db',
-                          '--q',
-                          'map=%s' % self.mapDBInfo.map,
-                          'layer=%d' % layer,
-                          'qlayer=%d' % layer,
-                          'option=cat',
-                          'columns=%s' % key])
+            gcmd.RunCommand('v.to.db',
+                            parent = self,
+                            quiet = True,
+                            map = self.mapDBInfo.map,
+                            layer = layer,
+                            qlayer = layer,
+                            option = 'cat',
+                            columns = key)
 
-        if connectCmd.returncode == 0:
+        if ret == 0:
             # update dialog (only for new layer)
             self.parentDialog.UpdateDialog(layer=layer) 
             # update db info
@@ -2739,10 +2761,11 @@ class LayerBook(wx.Notebook):
         except:
             return
 
-        gcmd.Command(['v.db.connect',
-                      '-d', '--q',
-                      'map=%s' % self.mapDBInfo.map,
-                      'layer=%d' % layer])
+        gcmd.RunCommand('v.db.connect',
+                        parent = self,
+                        flags = 'd',
+                        map = self.mapDBInfo.map,
+                        layer = layer)
 
         # drop also table linked to layer which is deleted
         if self.deleteTable.IsChecked():
@@ -2751,12 +2774,13 @@ class LayerBook(wx.Notebook):
             table    = self.mapDBInfo.layers[layer]['table']
             sql      = 'DROP TABLE %s' % (table)
 
-            gcmd.Command(['db.execute',
-                          '--q',
-                          'driver=%s' % driver,
-                          'database=%s' % database],
-                         stdin=sql)
-
+            gcmd.RunCommand('db.execute',
+                            parent = self,
+                            stdin = sql,
+                            quiet = True,
+                            driver = driver,
+                            database = database)
+            
             # update list of tables
             tableList = self.addLayerWidgets['table'][1]
             tableList.SetItems(self.__getTables(driver, database))
@@ -2820,25 +2844,23 @@ class LayerBook(wx.Notebook):
 
         if modify:
             # delete layer
-            gcmd.Command(['v.db.connect',
-                          '-d', '--q',
-                          'map=%s' % self.mapDBInfo.map,
-                          'layer=%d' % layer])
+            gcmd.RunCommand('v.db.connect',
+                            parent = self,
+                            quiet = True,
+                            flag = 'd',
+                            map = self.mapDBInfo.map,
+                            layer = layer)
 
             # add modified layer
-            gcmd.Command(['v.db.connect',
-                          '--q',
-                          'map=%s' % self.mapDBInfo.map,
-                          'driver=%s' % \
-                              self.modifyLayerWidgets['driver'][1].GetStringSelection(),
-                          'database=%s' % \
-                              self.modifyLayerWidgets['database'][1].GetValue(),
-                          'table=%s' % \
-                              self.modifyLayerWidgets['table'][1].GetStringSelection(),
-                          'key=%s' % \
-                              self.modifyLayerWidgets['key'][1].GetStringSelection(),
-                          'layer=%d' % layer])
-
+            gcmd.RunCommand('v.db.connect',
+                            quiet = True,
+                            map = self.mapDBInfo.map,
+                            driver = self.modifyLayerWidgets['driver'][1].GetStringSelection(),
+                            database = self.modifyLayerWidgets['database'][1].GetValue(),
+                            table = self.modifyLayerWidgets['table'][1].GetStringSelection(),
+                            key = self.modifyLayerWidgets['key'][1].GetStringSelection(),
+                            layer = int(layer))
+            
             # update dialog (only for new layer)
             self.parentDialog.UpdateDialog(layer=layer) 
             # update db info
@@ -3108,9 +3130,9 @@ class DisplayAttributesDialog(wx.Dialog):
                     sqlFile.file.write(sql)
                 sqlFile.file.write(os.linesep)
                 sqlFile.file.flush()
-                gcmd.Command(cmd=["db.execute",
-                                  "--q",
-                                  "input=%s" % sqlFile.name])
+                gcmd.RunCommand('db.execute',
+                                quiet = True,
+                                input = sqlFile.name)
 
         if self.closeDialog.IsChecked():
             self.OnCancel(event)
@@ -3326,17 +3348,19 @@ class VectorDBInfo(gselect.VectorDBInfo):
         Return line id or None if no line is found"""
         line = None
         nselected = 0
-        cmdWhat = gcmd.Command(cmd=['v.what',
-                                   '-a', '--q',
-                                    'map=%s' % self.map,
-                                    'east_north=%f,%f' % \
-                                        (float(queryCoords[0]), float(queryCoords[1])),
-                                    'distance=%f' % qdist], stderr=None)
-
+        ret = gcmd.RunCommand('v.what',
+                              quiet = True,
+                              read = True,
+                              flags = 'a',
+                              map = self.map,
+                              east_north = '%f,%f' % \
+                                  (float(queryCoords[0]), float(queryCoords[1])),
+                              distance =  float(qdist))
+        
         data = {}
-        if cmdWhat.returncode == 0:
+        if ret:
             readAttrb = False
-            for item in cmdWhat.ReadStdOutput():
+            for item in ret.split('\n'):
                 if len(item) < 1:
                     continue
                 
@@ -3387,14 +3411,18 @@ class VectorDBInfo(gselect.VectorDBInfo):
         else:
             sql="SELECT %s FROM %s WHERE %s" % (cols, table, where)
 
-        selectCommand = gcmd.Command(["db.select", "-v", "--q",
-                                      "sql=%s" % sql,
-                                      "database=%s" % self.layers[layer]["database"],
-                                      "driver=%s"   % self.layers[layer]["driver"]])
-
+        ret = gcmd.RunCommand('db.select',
+                              parent = self,
+                              read = True,
+                              quiet = True,
+                              flags = 'v',
+                              sql= sql,
+                              database = self.layers[layer]["database"],
+                              driver = self.layers[layer]["driver"])
+        
         # self.tables[table][key][1] = str(cat)
-        if selectCommand.returncode == 0:
-            for line in selectCommand.ReadStdOutput():
+        if ret:
+            for line in ret.split('\n'):
                 name, value = line.split('|')
                 # casting ...
                 if value:

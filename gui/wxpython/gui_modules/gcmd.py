@@ -15,6 +15,10 @@ Classes:
  - Command
  - CommandThread
 
+Functions:
+ 
+ - RunCommand
+
 (C) 2007-2008 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
@@ -64,7 +68,7 @@ class GException(Exception):
         self.parent = parent
         self.title = title
         
-    def __str__(self):
+    def Show(self):
         dlg = wx.MessageDialog(parent=self.parent,
                                caption=self.title,
                                message=self.message,
@@ -76,6 +80,9 @@ class GException(Exception):
             dlg.CentreOnScreen()
 
         dlg.ShowModal()
+        
+    def __str__(self):
+        self.Show()
         
         return ''
 
@@ -91,9 +98,8 @@ class CmdError(GException):
     See Command class (command exits with EXIT_FAILURE,
     G_fatal_error() is called)."""
     def __init__(self, cmd, message, parent=None):
-        self.cmd = cmd
         GException.__init__(self, message,
-                            title=_("Error in command execution %s" % self.cmd[0]),
+                            title=_("Error in command execution '%s'" % cmd),
                             parent=parent)
 
 class SettingsError(GException):
@@ -582,3 +588,31 @@ class CommandThread(Thread):
         """Abort running process, used by main thread to signal an abort"""
         self._want_abort = True
     
+def RunCommand(prog, flags = "", overwrite = False, quiet = False, verbose = False,
+               parent = None, read = False, stdin = None, **kwargs):
+    """Run GRASS command"""
+    kwargs['stderr'] = subprocess.PIPE
+    
+    if read:
+        kwargs['stdout'] = subprocess.PIPE
+    
+    if stdin:
+        kwargs['stdin'] = stdin
+    
+    ps = grass.start_command(prog, flags, overwrite, quiet, verbose, **kwargs)
+    
+    ret = ps.wait()
+
+    stdout, stderr = ps.communicate()
+
+    if ret != 0 and parent:
+        e = CmdError(cmd = prog,
+                     message = stderr,
+                     parent = parent)
+        e.Show()
+
+    if not read:
+        return ret
+
+    return stdout
+
