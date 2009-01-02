@@ -6,6 +6,12 @@ http://www.famfamfam.com/lab/icons/silk/
 __author__ = "Mark James"
 __version__ = "1.3"
 
+import os
+
+import globalvar
+
+iconpath = os.path.join(globalvar.ETCDIR, "gui", "icons", "silk")
+
 IconsSilk = {
     # map display
     "displaymap" : 'map_go.png',

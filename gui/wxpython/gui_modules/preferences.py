@@ -502,6 +502,7 @@ class Settings:
                                                                         'location',
                                                                         'mapset')
         self.internalSettings['advanced']['iconTheme']['choices'] = ('grass',
+                                                                     'grass2',
                                                                      'silk')
         self.internalSettings['cmd']['verbosity']['choices'] = ('grassenv',
                                                                 'verbose',

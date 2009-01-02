@@ -137,7 +137,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         trgif = Icons["addrgb"].GetBitmap(bmpsize)
         self.rgb_icon = il.Add(trgif)
-
+        
         trgif = Icons["addhis"].GetBitmap(bmpsize)
         self.his_icon = il.Add(trgif)
 
