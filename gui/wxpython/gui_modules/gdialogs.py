@@ -1008,7 +1008,7 @@ class MultiImportDialog(wx.Dialog):
                                   parent = self,
                                   flags = 'l',
                                   input = path)
-            if ret != 0
+            if ret != 0:
                 self.list.LoadData()
                 self.btn_run.Enable(False)
                 return
