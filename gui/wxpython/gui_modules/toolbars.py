@@ -150,8 +150,9 @@ class MapToolbar(AbstractToolbar):
         self.InitToolbar(self.mapdisplay, self.toolbar, self.ToolbarData())
         
         # optional tools
-        self.combo = wx.ComboBox(parent=self.toolbar, id=wx.ID_ANY, value='Tools',
-                                 choices=['Digitize', 'Nviz'], style=wx.CB_READONLY, size=(90, -1))
+        self.combo = wx.ComboBox(parent=self.toolbar, id=wx.ID_ANY, value='2D map',
+                                 choices=['2D map', '3D map', 'Digitize'], 
+                                 style=wx.CB_READONLY, size=(90, -1))
 
         self.comboid = self.toolbar.AddControl(self.combo)
         self.mapdisplay.Bind(wx.EVT_COMBOBOX, self.OnSelectTool, self.comboid)
@@ -243,12 +244,24 @@ class MapToolbar(AbstractToolbar):
         Select / enable tool available in tools list
         """
         tool =  event.GetString()
+        
+        if tool == "2D map":
+            self.ExitToolbars()
+            self.Enable2D(True)
 
-        if tool == "Digitize" and not self.mapdisplay.toolbars['vdigit']:
+        elif tool == "3D map" and not self.mapdisplay.toolbars['nviz']:
+            self.ExitToolbars()
+            self.mapdisplay.AddToolbar("nviz")
+            
+        elif tool == "Digitize" and not self.mapdisplay.toolbars['vdigit']:
+            self.ExitToolbars()
             self.mapdisplay.AddToolbar("vdigit")
 
-        elif tool == "Nviz" and not self.mapdisplay.toolbars['nviz']:
-            self.mapdisplay.AddToolbar("nviz")
+    def ExitToolbars(self):
+        if self.mapdisplay.toolbars['vdigit']:
+            self.mapdisplay.toolbars['vdigit'].OnExit()
+        if self.mapdisplay.toolbars['nviz']:       
+            self.mapdisplay.toolbars['nviz'].OnExit()
 
     def Enable2D(self, enabled):
         """Enable/Disable 2D display mode specific tools"""
@@ -1325,6 +1338,15 @@ class NvizToolbar(AbstractToolbar):
     def OnExit (self, event=None):
         """Quit nviz tool (swith to 2D mode)"""
 
+        # hide dialogs if still open
+        if self.parent.nvizToolWin:
+            self.parent.nvizToolWin.Hide()
+
         # disable the toolbar
         self.parent.RemoveToolbar ("nviz")
+
+        # set default mouse settings
+        self.parent.MapWindow.mouse['use'] = "pointer"
+        self.parent.MapWindow.mouse['box'] = "point"
+        self.parent.MapWindow.polycoords = []
 
