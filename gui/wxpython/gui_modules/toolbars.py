@@ -150,8 +150,8 @@ class MapToolbar(AbstractToolbar):
         self.InitToolbar(self.mapdisplay, self.toolbar, self.ToolbarData())
         
         # optional tools
-        self.combo = wx.ComboBox(parent=self.toolbar, id=wx.ID_ANY, value='2D map',
-                                 choices=['2D map', '3D map', 'Digitize'], 
+        self.combo = wx.ComboBox(parent=self.toolbar, id=wx.ID_ANY, value=_('2D view'),
+                                 choices=[_('2D view'), _('3D view'), _('Digitize')], 
                                  style=wx.CB_READONLY, size=(90, -1))
 
         self.comboid = self.toolbar.AddControl(self.combo)
@@ -243,17 +243,17 @@ class MapToolbar(AbstractToolbar):
         """
         Select / enable tool available in tools list
         """
-        tool =  event.GetString()
+        tool =  event.GetSelection()
         
-        if tool == "2D map":
+        if tool == 0:
             self.ExitToolbars()
             self.Enable2D(True)
 
-        elif tool == "3D map" and not self.mapdisplay.toolbars['nviz']:
+        elif tool == 1 and not self.mapdisplay.toolbars['nviz']:
             self.ExitToolbars()
             self.mapdisplay.AddToolbar("nviz")
             
-        elif tool == "Digitize" and not self.mapdisplay.toolbars['vdigit']:
+        elif tool == 2 and not self.mapdisplay.toolbars['vdigit']:
             self.ExitToolbars()
             self.mapdisplay.AddToolbar("vdigit")
 
