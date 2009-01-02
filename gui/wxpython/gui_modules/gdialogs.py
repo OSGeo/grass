@@ -1003,14 +1003,12 @@ class MultiImportDialog(wx.Dialog):
         path = event.GetString()
 
         if self.inputType == 'dxf':
-            try:
-                cmd = gcmd.Command(['v.in.dxf',
-                                    'input=%s' % path,
-                                    '-l', '--q'], stderr=None)
-            except gcmd.CmdError, e:
-                wx.MessageBox(parent=self, message=_("File <%(file)s>: Unable to get list of DXF layers.\n\n%(details)s") % \
-                              { 'file' : path, 'details' : e.message },
-                              caption=_("Error"), style=wx.ID_OK | wx.ICON_ERROR | wx.CENTRE)
+            ret = gcmd.RunCommand('v.in.dxf',
+                                  quiet = True,
+                                  parent = self,
+                                  flags = 'l',
+                                  input = path)
+            if ret != 0
                 self.list.LoadData()
                 self.btn_run.Enable(False)
                 return
