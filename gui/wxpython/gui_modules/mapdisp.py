@@ -3371,13 +3371,15 @@ class MapFrame(wx.Frame):
         pgnum = None
         self.Map.Clean()
         
-        # close edited map properly
-        digitToolbar = self.toolbars['vdigit']
-        if digitToolbar:
-            maplayer = digitToolbar.GetLayer()
+        # close edited map and 3D tools properly
+        if self.toolbars['vdigit']:
+            maplayer = self.toolbars['vdigit'].GetLayer()
             if maplayer:
                 self.toolbars['vdigit'].OnExit()
                 self.imgVectorMap = None
+
+        if self.toolbars['nviz']:
+            self.toolbars['nviz'].OnExit()
         
         if self.page:
             pgnum = self.layerbook.GetPageIndex(self.page)
