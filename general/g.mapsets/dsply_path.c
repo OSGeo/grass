@@ -1,8 +1,9 @@
 #include <string.h>
-#include "externs.h"
 #include <grass/gis.h>
+#include <grass/glocale.h>
+#include "externs.h"
 
-int display_mapset_path(int verbose)
+int display_mapset_path(const char *fs)
 {
     int n;
     int map;			/* pointer into list of available mapsets */
@@ -11,22 +12,22 @@ int display_mapset_path(int verbose)
     int len;
     int nleft;
 
-    if (verbose) {
+    if (!fs) {
 	/* account for largest mapset number in offset value */
 	for (n = nmapsets; n /= 10; offset++) ;
 
-	fprintf(stdout, "Your mapset search list:\n");
+	fprintf(stdout, _("Your mapset search list:\n"));
 	ncurr_mapsets = 0;
     }
 
     nleft = 78;
-    for (n = 0; name = G__mapset_name(n); n++) {
+    for (n = 0; (name = G__mapset_name(n)); n++) {
 	/* match each mapset to its numeric equivalent */
-	if (verbose) {
+	if (!fs) {
 	    for (map = 0; map < nmapsets && strcmp(mapset_name[map], name);
 		 map++) ;
 	    if (map == nmapsets)
-		G_fatal_error("%s not found in mapset list:  call greg",
+		G_fatal_error(_("<%s> not found in mapset list"),
 			      name);
 	}
 
@@ -36,7 +37,7 @@ int display_mapset_path(int verbose)
 	    nleft = 78;
 	}
 
-	if (verbose) {
+	if (!fs) {
 	    if (n)
 		fprintf(stdout, ", ");
 	    fprintf(stdout, "%s <%d>", name, map + 1);
@@ -45,12 +46,14 @@ int display_mapset_path(int verbose)
 	    ++ncurr_mapsets;
 	}
 	else {
-	    fprintf(stdout, "%s ", name);
+	    fprintf(stdout, "%s", name);
+	    if (G__mapset_name(n+1))
+		fprintf(stdout, "%s", fs);
 	    nleft -= (len + 1);
 	}
     }
     fprintf(stdout, "\n");
-    if (verbose)
+    if (!fs)
 	fprintf(stdout, "\n");
 
     return 0;
