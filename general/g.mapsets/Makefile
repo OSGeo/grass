@@ -2,7 +2,7 @@
 MODULE_TOPDIR = ../..
 
 PGM = g.mapsets
-GUI = $(ETC)/g.mapsets.tcl
+GUI = $(ETC)/gui/g.mapsets.py
 
 LIBES     = $(GISLIB)
 DEPENDENCIES= $(GISDEP)
@@ -11,6 +11,6 @@ include $(MODULE_TOPDIR)/include/Make/Module.make
 
 default: cmd $(GUI)
 
-$(ETC)/%: %
+$(ETC)/gui/%: %
 	if [ ! -d $(ETC) ]; then $(MKDIR) $(ETC); fi
 	$(INSTALL) $< $@
