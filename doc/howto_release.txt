@@ -108,10 +108,10 @@ Contents
 
    along with associated files:
      scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz INSTALL REQUIREMENTS.html SUBMITTING SUBMITTING_DOCS \
-         SUBMITTING_PYTHON SUBMITTING_TCLTK SUBMITTING_SCRIPTS neteler@$SERVER1
+         SUBMITTING_PYTHON SUBMITTING_SCRIPTS neteler@$SERVER1
      scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz INSTALL REQUIREMENTS.html SUBMITTING SUBMITTING_DOCS \
-         SUBMITTING_PYTHON SUBMITTING_TCLTK SUBMITTING_SCRIPTS neteler@$SERVER2
-     
+         SUBMITTING_PYTHON SUBMITTING_SCRIPTS neteler@$SERVER2
+    
 
  o update web site to new version (http://trac.osgeo.org/grass/browser/grass-web)
       - rss.xml (for news section)
