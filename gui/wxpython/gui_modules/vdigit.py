@@ -195,7 +195,7 @@ class AbstractDigit:
         if not ret:
             return ids
 
-        output = ret.split('\n')[0] # first line
+        output = ret.splitlines()[0] # first line
         ids = output.split(',') 
         ids = map(int, ids) # str -> int
         
@@ -1991,7 +1991,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         if not ret:
             return False
 
-        for item in ret.split('\n'):
+        for item in ret.splitlines():
             litem = item.lower()
             if "id:" in litem: # get line id
                 self.line = int(item.split(':')[1].strip())

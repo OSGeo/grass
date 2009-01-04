@@ -1136,9 +1136,7 @@ class AttributeManager(wx.Frame):
                                          where = where)
                 
                 region = {}
-                for line in select.split('\n'):
-                    if '=' not in line:
-                        continue
+                for line in select.splitlines():
                     key, value = line.split('=')
                     region[key.strip()] = float(value.strip())
                 
@@ -2146,7 +2144,7 @@ class LayerBook(wx.Notebook):
                                   flags = 'p')
         
         self.listOfDrivers = []
-        for drv in drivers.split('\n'):
+        for drv in drivers.splitlines():
             self.listOfDrivers.append(drv.strip())
         
         #
@@ -2158,9 +2156,7 @@ class LayerBook(wx.Notebook):
                                   read = True,
                                   quiet = True)
         
-        for line in connect.split('\n'):
-            if ':' not in line:
-                continue
+        for line in connect.splitlines():
             item, value = line.split(':')
             self.defaultConnect[item.strip()] = value.strip()
         
@@ -2573,9 +2569,8 @@ class LayerBook(wx.Notebook):
             
             return tables
         
-        for table in ret.split('\n'):
-            if len(table) > 0:
-                tables.append(table)
+        for table in ret.splitlines():
+            tables.append(table)
         
         return tables
 
@@ -2594,9 +2589,8 @@ class LayerBook(wx.Notebook):
         if ret == None:
             return columns
 
-        for column in ret.split('\n'):
-            if len(column) > 0:
-                columns.append(column)
+        for column in ret.splitlines():
+            columns.append(column)
         
         return columns
 
@@ -3361,10 +3355,7 @@ class VectorDBInfo(gselect.VectorDBInfo):
         data = {}
         if ret:
             readAttrb = False
-            for item in ret.split('\n'):
-                if len(item) < 1:
-                    continue
-                
+            for item in ret.splitlines():
                 key, value = item.split(':', 1)
                 
                 if key == 'Layer' and readAttrb:
@@ -3423,7 +3414,7 @@ class VectorDBInfo(gselect.VectorDBInfo):
         
         # self.tables[table][key][1] = str(cat)
         if ret:
-            for line in ret.split('\n'):
+            for line in ret.splitlines():
                 name, value = line.split('|')
                 # casting ...
                 if value:

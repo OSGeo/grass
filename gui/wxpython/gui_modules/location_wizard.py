@@ -2035,7 +2035,7 @@ class LocationWizard(wx.Object):
         dtoptions = {}
 
         if ret:
-            line = ret.split('\n')
+            line = ret.splitlines()
             i = 0
             while i < len(line):
                 if line[i] == '---':
@@ -2211,11 +2211,8 @@ class RegionDef(BaseClass, wx.Frame):
         ret = gcmd.RunCommand('g.gisenv',
                               read = True)
         if ret:
-            output = ret.split('\n')
-            for line in output:
-                line = line.strip()
-                if '=' in line:
-                    key, val = line.split('=')
+            for line in ret.splitlines():
+                key, val = line.split('=')
                 envval[key] = val
             self.currlocation = envval['LOCATION_NAME'].strip("';")
             self.currmapset = envval['MAPSET'].strip("';")
@@ -2241,11 +2238,8 @@ class RegionDef(BaseClass, wx.Frame):
                               read = True,
                               flags = 'gp3')
         if ret:
-            output = ret.split('\n')
-            for line in output:
-                line = line.strip()
-                if '=' in line:
-                    key, val = line.split('=')
+            for line in ret.splitlines():
+                key, val = line.split('=')
                 region[key] = float(val)
         else:
             dlg = wx.MessageBox(parent=self,

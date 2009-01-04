@@ -2342,9 +2342,7 @@ class BufferedWindow(MapWindow, wx.Window):
             dlg.Destroy()
             return
         
-        for line in region.split('\n'):
-            if '=' not in line:
-                continue
+        for line in region.splitlines():
             key, val = line.split('=')
             zoomreg[key.strip()] = float(val.strip())
         

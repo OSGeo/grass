@@ -2424,9 +2424,7 @@ class NvizToolWindow(wx.Frame):
             return
         
         npoints = nprimitives = 0
-        for line in vInfo.split('\n'):
-            if '=' not in line:
-                continue
+        for line in vInfo.splitlines():
             key, value = line.split('=')
             if key == 'map3d':
                 mapIs3D = int(value)

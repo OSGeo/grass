@@ -46,7 +46,7 @@ def GetTempfile(pref=None):
                           read = True,
                           pid = os.getpid())
 
-    tempfile = tempfileCmd.split('\n')[0].strip()
+    tempfile = tempfileCmd.splitlines()[0].strip()
 
     # FIXME
     # ugly hack for MSYS (MS Windows)
@@ -257,7 +257,7 @@ def GetVectorNumberOfLayers(vector):
     if not ret:
         return layers
     
-    for line in ret.split('\n'):
+    for line in ret.splitlines():
         if not 'Layer' in line:
             continue
         

@@ -374,7 +374,7 @@ class ColorTable(wx.Frame):
                                    map = self.inmap)
 
             if info:
-                for line in info.split('\n'):
+                for line in info.splitlines():
                     if 'min' in line:
                         self.rast['min'] = float(line.split('=')[1])
                     elif 'max' in line:

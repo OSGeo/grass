@@ -488,9 +488,8 @@ class TableSelect(wx.ComboBox):
                               database = database)
         
         if ret:
-            for table in ret.split('\n'):
-                if len(table) > 0:
-                    items.append(table)
+            for table in ret.splitlines():
+                items.append(table)
             
         self.SetItems(items)
         self.SetValue('')
@@ -567,9 +566,8 @@ class DbColumnSelect(wx.ComboBox):
 
         columnchoices = []
         if ret:
-            for item in ret.split('\n'):
-                if len(item) < 1:
-                    columnchoices.append(item)
+            for item in ret.splitlines():
+                columnchoices.append(item)
         
         # columnchoices.sort()
         self.SetItems(columnchoices)

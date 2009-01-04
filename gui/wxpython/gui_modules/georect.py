@@ -1111,7 +1111,7 @@ class GCP(wx.Frame):
         self.grwiz.SwitchEnv('original')
 
         if ret:
-            errlist = ret.split('\n')
+            errlist = ret.splitlines()
         
         if errlist == []:
             return
