@@ -77,7 +77,6 @@ SUBDIRS = \
 	v.out.ogr \
 	v.in.ogr \
 	v.external \
-	v.digit \
 	v.in.dwg
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
