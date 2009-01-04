@@ -39,28 +39,28 @@ IconsGrass2 = {
     "quit"       : 'quit.png',
     # digit
     ## add feature
-    "digAddPoint": None,
-    "digAddLine" : None,
-    "digAddBoundary": None,
-    "digAddCentroid": None,
+    "digAddPoint": 'point-create.png',
+    "digAddLine" : 'line-create.png',
+    "digAddBoundary": 'polygon-create.png',
+    "digAddCentroid": 'centroid-create.png',
     ## vertex
-    "digAddVertex" : None,
-    "digMoveVertex" : None,
-    "digRemoveVertex" : None,
-    "digSplitLine" : None,
+    "digAddVertex" : 'vertex-create.png',
+    "digMoveVertex" : 'vertex-move.png',
+    "digRemoveVertex" : 'vertex-delete.png',
+    "digSplitLine" : 'line-split.png',
     ## edit feature
-    "digEditLine" : None,
-    "digMoveLine" : None,
-    "digDeleteLine" : None,
+    "digEditLine" : 'line-edit.png',
+    "digMoveLine" : 'line-move.png',
+    "digDeleteLine" : 'line-delete.png',
     ## cats
-    "digDispCats" : None,
-    "digCopyCats" : None,
+    "digDispCats" : 'cats-display.png',
+    "digCopyCats" : 'cats-copy.png',
     ## attributes
-    "digDispAttr" : None,
+    "digDispAttr" : 'attributes-display.png',
     ## general
-    "digUndo" : None,
-    "digSettings" : None,
-    "digAdditionalTools" : None,
+    "digUndo" : 'undo.png',
+    "digSettings" : 'settings.png',
+    "digAdditionalTools" : 'tools.png',
     # layer manager
     "newdisplay" : 'monitor-create.png',
     "workspaceNew" : 'create.png',

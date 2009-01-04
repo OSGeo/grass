@@ -1714,7 +1714,7 @@ class MapsetAccess(wx.Dialog):
                   flag=wx.ALL, border=5)
 
         self.mapsetlb = CheckListMapset(parent=self)
-        self.mapsetlb.LoadData(self.all_mapsets)
+        self.mapsetlb.LoadData()
         
         sizer.Add(item=self.mapsetlb, proportion=1,
                   flag=wx.ALL | wx.EXPAND, border=5)
@@ -1773,13 +1773,22 @@ class CheckListMapset(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.Check
         # setup mixins
         listmix.ListCtrlAutoWidthMixin.__init__(self)
 
-    def LoadData(self, mapsets):
+    def LoadData(self):
         """Load data into list"""
         self.InsertColumn(0, _('Mapset'))
         self.InsertColumn(1, _('Owner'))
         self.InsertColumn(2, _('Group'))
         gisenv = grass.gisenv()
         locationPath = os.path.join(gisenv['GISDBASE'], gisenv['LOCATION_NAME'])
+
+        ret = grass.read_command('g.mapsets',
+                                 flags = 'l')
+        print ret
+
+        mapsets = []
+        if ret:
+            mapsets = ret.split('\n')
+        
         for mapset in mapsets:
             index = self.InsertStringItem(sys.maxint, mapset)
             mapsetPath = os.path.join(locationPath,
