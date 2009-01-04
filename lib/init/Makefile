@@ -42,9 +42,6 @@ FILES = \
 	$(ETC)/license \
 	$(ETC)/welcome \
 	$(ETC)/VERSIONNUMBER \
-	$(ETC)/gis_set.tcl \
-	$(ETC)/epsg_option.tcl \
-	$(ETC)/file_option.tcl \
 	$(HTMLDIR)/variables.html \
 	$(HTMLDIR)/grass7.html \
 	$(HTMLDIR)/helptext.html \
