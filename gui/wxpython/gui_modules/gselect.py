@@ -474,18 +474,21 @@ class TableSelect(wx.ComboBox):
     def InsertTables(self, driver=None, database=None):
         """Insert attribute tables into combobox"""
         items = []
+
+        if not driver or not database:
+            connect = grass.db_connection()
+            
+            driver = connect['driver']
+            database = connect['database']
+        
         ret = gcmd.RunCommand('db.tables',
-                              flag = 'p',
-                              parent = self,
+                              flags = 'p',
+                              read = True,
                               driver = driver,
                               database = database)
         
-        if ret != 0:
-            tableCmd = None
-        
-        if tableCmd and \
-                tableCmd.returncode == 0:
-            for table in tableCmd.ReadStdOutput():
+        if ret:
+            for table in ret.split('\n'):
                 if len(table) > 0:
                     items.append(table)
             
