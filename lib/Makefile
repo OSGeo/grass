@@ -20,6 +20,7 @@ SUBDIRS = \
 	db \
 	external \
 	fonts \
+	form \
 	imagery \
 	cluster \
 	proj \
