@@ -6,7 +6,7 @@ $Date$
 1 - REQUIREMENTS
 
  GRASS GIS >= 6.3
- Python >= 2.4
+ Python >= 2.4 (Python 3 not supported)
  wxPython >= 2.8.1.1
  swig >= 1.3.31 (required only for vector digitizer)
  
