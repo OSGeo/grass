@@ -1680,7 +1680,7 @@ class DefaultFontDialog(wx.Dialog):
         if not ret:
             return fontlist
 
-        dfonts = ret.split('\n')
+        dfonts = ret.splitlines()
         dfonts.sort(lambda x,y: cmp(x.lower(), y.lower()))
         for item in range(len(dfonts)):
            # ignore duplicate fonts and those starting with #
@@ -1787,7 +1787,7 @@ class CheckListMapset(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.Check
 
         mapsets = []
         if ret:
-            mapsets = ret.split('\n')
+            mapsets = ret.splitlines()
         
         for mapset in mapsets:
             index = self.InsertStringItem(sys.maxint, mapset)

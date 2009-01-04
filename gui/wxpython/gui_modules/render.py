@@ -734,7 +734,7 @@ class Map(object):
         if not ret:
             return projinfo
 
-        for line in ret.split('\n'):
+        for line in ret.splitlines():
             if ':' in line:
                 key,val = line.split(':')
                 key = key.strip()

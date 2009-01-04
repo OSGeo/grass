@@ -289,7 +289,7 @@ class ProfileFrame(wx.Frame):
                                   map = r['name'])
 
             if ret:
-                r['units'] = p.split('\n')[0].split('=')[1]
+                r['units'] = p.splitlines()[0].split('=')[1]
 
             # update title
             self.ptitle += ' %s and' % r['name']
@@ -325,8 +325,8 @@ class ProfileFrame(wx.Frame):
                                       read = True,
                                       input = self.raster[0]['name'],
                                       east_north = '%d,%d' % (point[0],point[1]))
-                outlist = ret.split('\n')
-                val = outlist[0].split('|')[3]
+                
+                val = ret.splitlines()[0].split('|')[3]
                 
                 # calculate distance between coordinate points
                 if lasteast and lastnorth:
@@ -413,15 +413,20 @@ class ProfileFrame(wx.Frame):
         import subprocess
         
         try:
-            p = grass.read_command("r.profile",
-                       input=raster,
-                       profile=coords,
-                       null="nan",
-                       quiet=True
-                       )
-            for outline in p.strip().split('\n'):
+            ret = RunCommand("r.profile",
+                             input=raster,
+                             profile=coords,
+                             null="nan",
+                             quiet=True,
+                             read = True)
+            
+            if not ret:
+                return dataset
+            
+            for line in ret.splitlines():
                 dist, elev = outline.split(' ')
-                if elev != 'nan': datalist.append((dist,elev))
+                if elev != 'nan':
+                    datalist.append((dist,elev))
 
             return datalist
         except gcmd.CmdError, e:

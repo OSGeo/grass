@@ -228,7 +228,7 @@ class GMConsole(wx.Panel):
         p1 = self.cmd_output.GetEndStyled()
         self.cmd_output.GotoPos(p1)
         
-        for line in text.split('\n'):
+        for line in text.splitlines():
             # fill space
             if len(line) < self.lineWidth:
                 diff = 80 - len(line) 
