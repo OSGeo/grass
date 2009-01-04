@@ -3677,7 +3677,6 @@ gis        : main GRASS library
 gmath      : generic mathematical functions (matrix, fft etc.)
              (later to be extended, BLAS/LAPACK library wrapper)
 gpde       : partial differential equations library
-gtcltk     : Tcl/Tk stuff	     
 image      : extra imagery library (image3)
 imagery    : imagery library
 init       : GRASS initialization code + scripts
