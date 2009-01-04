@@ -20,7 +20,6 @@ SUBDIRS = \
 	db \
 	external \
 	fonts \
-	gtcltk \
 	form \
 	imagery \
 	cluster \
