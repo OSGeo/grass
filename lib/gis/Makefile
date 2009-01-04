@@ -5,7 +5,7 @@ GDAL_DYNAMIC = 1
 
 LIB_NAME = $(GIS_LIBNAME)
 EXTRA_LIBS = $(XDRLIB) $(SOCKLIB) $(DATETIMELIB) $(PTHREADLIBPATH) $(PTHREADLIB) $(INTLLIB) $(MATHLIB)
-DATASRC = ellipse.table datum.table datumtransform.table FIPS.code state27 state83 projections gui.tcl
+DATASRC = ellipse.table datum.table datumtransform.table FIPS.code state27 state83 projections
 EXTRA_INC = $(ZLIBINCPATH) $(PTHREADINCPATH)
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
