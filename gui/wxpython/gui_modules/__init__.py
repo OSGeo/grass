@@ -11,6 +11,8 @@ all = [
     "gselect.py",
     "histogram.py",
     "location_wizard.py",
+    "mapdisp_command.py",
+    "mapdisp_window.py",
     "mapdisp.py",
     "mcalc_builder.py",
     "menudata.py",
