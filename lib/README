@@ -11,7 +11,6 @@ Current directory layout
 - display: library for CELL driver
 - edit: curses library
 - external: external libraries
-	- external/bwidget: BWidget is a high-level Widgets Set for Tcl/Tk
 	- external/shapelib: SHAPE file management functions
 - fonts: fonts
 	- fonts/fonts
@@ -23,7 +22,7 @@ Current directory layout
 - init: GRASS startup scripts and programs
 - linkm: linked list memory manager
 - ogsf: ported gsurf library (required for NVIZ)
-- proj: PROJ4.4.x projection library
+- proj: PROJ4 projection library wrapper
 - raster: GRASS raster display library
 - vask: Curses based cursor library
 - vector: GRASS vector library
