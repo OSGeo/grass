@@ -50,7 +50,6 @@ real-install-macosx:
 	${MAKE} macosx-support-dir
 	-cd ${GISBASE} ; tar cBf - ${MACOSX_APP_NAME} | (cd ${prefix} ; tar xBf - ) 2>/dev/null
 	-cd ${GISBASE} ; tar cBf - bin | (cd ${INST_DIR} ; tar xBf - ) 2>/dev/null
-	-cd ${GISBASE} ; tar cBf - bwidget | (cd ${INST_DIR} ; tar xBf - ) 2>/dev/null
 	-cd ${GISBASE} ; tar cBf - docs | (cd ${INST_DIR} ; tar xBf - ) 2>/dev/null
 	-cd ${GISBASE} ; tar cBf - driver | (cd ${INST_DIR} ; tar xBf - ) 2>/dev/null
 	-cd ${GISBASE} ; tar cBf - etc | (cd ${INST_DIR} ; tar xBf - ) 2>/dev/null
@@ -79,7 +78,6 @@ bindist-macosx:
 	${MAKE_DIR_CMD} ${GRASS_HOME}/macosx/dist
 	-cd ${GISBASE} ; tar cBf - ${MACOSX_APP_NAME} | (cd ${GRASS_HOME}/macosx/dist ; tar xBf - ) 2>/dev/null
 	-cd ${GISBASE} ; tar cBf - bin | (cd ${MACOSX_BUNDLE_PREFIX} ; tar xBf - ) 2>/dev/null
-	-cd ${GISBASE} ; tar cBf - bwidget | (cd ${MACOSX_BUNDLE_PREFIX} ; tar xBf - ) 2>/dev/null
 	-cd ${GISBASE} ; tar cBf - docs | (cd ${MACOSX_BUNDLE_PREFIX} ; tar xBf - ) 2>/dev/null
 	-cd ${GISBASE} ; tar cBf - driver | (cd ${MACOSX_BUNDLE_PREFIX} ; tar xBf - ) 2>/dev/null
 	-cd ${GISBASE} ; tar cBf - etc | (cd ${MACOSX_BUNDLE_PREFIX} ; tar xBf - ) 2>/dev/null

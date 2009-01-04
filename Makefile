@@ -64,7 +64,6 @@ FILES_DST = $(patsubst %,${ARCH_DISTDIR}/%,$(FILES))
 BIN_DIST_FILES = $(FILES) \
 	grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}.tmp \
 	bin \
-	bwidget \
 	docs \
 	driver \
 	etc \

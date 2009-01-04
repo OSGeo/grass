@@ -72,9 +72,8 @@ from GRASS 5 Programmer's manual) or are simply undocumented.</I>
 <li>%driver:     Graphics monitor driver
 <li>dspf:       DSPF libary - \ref dspf (obsolete?)
 <li>edit:	Raster edit library (cellhd, history, cats) - \ref edit
-<li>external:	External libraries from other projects (such as shapelib or bwidget) - \ref external
+<li>external:	External libraries from other projects (such as shapelib) - \ref external
 <li>fonts:	Hershey library - \ref fonts
-<li>form:	TCL/TK forms library - \ref form (obsolete?)
 <li>g3d:	\ref g3dlib
 <li>gmath: 	\ref gmathlib (generic mathematical functions and BLAS/LAPACK library wrapper)
 <li>gpde:       \ref gpdelib (partial differential equations library)
