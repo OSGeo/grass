@@ -3658,36 +3658,40 @@ Contents of  directory lib/:
 
 <P>
 <PRE>
+arraystats : statistical library
 bitmap     : bitmap library for X Window Bitmaps
 btree      : binary tree library
-bwidget    : tcl/tk extra library
 cdhc       : library for testing normality and exponentiality
-D          : display library
+cairodriver: CAIRO graphics driver
 datetime   : DateTime library
 db         : database management interface database drivers + SQL parser
 display    : library for CELL driver
 dspf       : G3D display files library
-edit       : edit library
 external   : external libraries from other projects (shapelib)
 fonts      : Hershey fonts
-form       : forms library
-front.end  : interface for interactive modules
 g3d        : G3D raster volume library
 gis        : main GRASS library
 gmath      : generic mathematical functions (matrix, fft etc.)
              (later to be extended, BLAS/LAPACK library wrapper)
 gpde       : partial differential equations library
-image      : extra imagery library (image3)
+htmldriver : HTML driver
 imagery    : imagery library
 init       : GRASS initialization code + scripts
+iostream   : fast I/O library
 linkm      : linked list memory manager
+manage     : general database maintenance routines
+nviz       : nviz visualization library
 ogsf       : openGL library (required for NVIZ)
+pngdriver  : PNG driver
+psdriver   : Postscript driver
 proj       : PROJ4 projection library wrapper
+python     : Python wrapper
 raster     : GRASS raster display library (raster map functions are in gis/)
 rowio      : row in/out library
 rst        : library for interpolation with regularized splines with tension 
 segment    : segment library
 sites      : old sites library (deprecated), now interfaced to vect library
+stats      : univariate statistics library
 symbol     : drawing symbols for point vector data
 vask       : Curses management library
 vect       : GRASS vector and Direct Graph library
