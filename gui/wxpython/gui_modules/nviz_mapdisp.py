@@ -32,9 +32,9 @@ from wx import glcanvas
 import gcmd
 import globalvar
 from debug import Debug as Debug
+from mapdisp_window import MapWindow
+from goutput import wxCmdOutput
 from preferences import globalSettings as UserSettings
-from mapdisp import MapWindow as MapWindow
-from goutput import wxCmdOutput as wxCmdOutput
 
 sys.path.append(os.path.join(globalvar.ETCWXDIR, "nviz"))
 import grass7_wxnviz as wxnviz
