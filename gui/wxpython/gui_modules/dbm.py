@@ -2586,6 +2586,7 @@ class LayerBook(wx.Notebook):
         ret = gcmd.RunCommand('db.columns',
                               parent = self,
                               quiet = True,
+                              read = True,
                               driver = driver,
                               database = database,
                               table = table)
