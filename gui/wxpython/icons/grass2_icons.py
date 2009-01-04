@@ -99,7 +99,7 @@ IconsGrass2 = {
     "grGcpAdd"     : None,
     "grGcpDelete"  : None,
     "grGcpReload"  : None,
-    "grSettings"   : None,
+    "grSettings"   : 'settings.png',
     # nviz
-    "nvizSettings"   : None,
+    "nvizSettings"   : 'settings.png',
     }
