@@ -1,9 +1,6 @@
-
 MODULE_TOPDIR = ../..
 
-SUBDIRS = \
-	bwidget \
-	shapelib
+SUBDIRS = shapelib
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 
