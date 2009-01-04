@@ -486,7 +486,8 @@ class TableSelect(wx.ComboBox):
         if tableCmd and \
                 tableCmd.returncode == 0:
             for table in tableCmd.ReadStdOutput():
-                items.append(table)
+                if len(table) > 0:
+                    items.append(table)
             
         self.SetItems(items)
         self.SetValue('')
