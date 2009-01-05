@@ -184,9 +184,28 @@ has to be used.
 
 <h3>Large maps and out of memory problems</h3>
 
+With a large number or columns and rows, <b>r.sun</b> can consume
+significant amount of memory. While output raster maps are not
+partitionable, the input raster maps are using the <em>numpartitions</em>
+parameter.
+
 In case of out of memory error (<tt>ERROR: G_malloc: out of memory</tt>), the
 <em>numpartitions</em> parameter can be used to run a segmented calculation
 which consumes less memory during the computations.
+
+The amount of memory by <b>r.sun</b> is estimated as follows:
+
+<div class="code"><pre>
+# without input raster map partitioning:
+#  memory requirements: 4 bytes per raster cell
+#  rows,cols: rows and columns of current region (find out with g.region)
+#  IR: number of input raster maps without horizon maps
+#  OR: number of output raster maps
+memory_bytes = rows*cols*(IR*4 + horizonsteps + OR*4)
+
+# with input raster map partitioning:
+memory_bytes = rows*cols*((IR*4+horizonsteps)/numpartitions  + OR*4)
+</pre></div>
 
 <h3>Example</h3>
 
