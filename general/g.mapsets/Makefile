@@ -13,4 +13,5 @@ default: cmd $(GUI)
 
 $(ETC)/gui/%: %
 	if [ ! -d $(ETC) ]; then $(MKDIR) $(ETC); fi
+	if [ ! -d $(ETC)/gui ]; then $(MKDIR) $(ETC)/gui; fi
 	$(INSTALL) $< $@
