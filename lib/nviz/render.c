@@ -205,6 +205,7 @@ int Nviz_make_current_render_window(const struct render_window *rwin)
 	return 1;
 
     aglSetCurrentContext(rwin->contextId);
+    aglSetPBuffer(rwin->contextId, rwin->windowId, 0, 0, 0);
 #elif defined(OPENGL_WINDOWS)
     if (!rwin->displayId || !rwin->contextId)
 	return 0;

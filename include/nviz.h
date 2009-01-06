@@ -131,7 +131,6 @@ struct render_window
     AGLPixelFormat pixelFmtId;
     AGLContext contextId;
     AGLPbuffer windowId;
-    GWorldPtr pixmap;
 #elif defined(OPENGL_WINDOWS)
     HDC displayId;		/* display context */
     HGLRC contextId;		/* rendering context */
