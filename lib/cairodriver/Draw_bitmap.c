@@ -33,7 +33,12 @@ void Cairo_Bitmap(int ncols, int nrows, int threshold,
 
     G_debug(1, "Cairo_Bitmap: %d %d %d", ncols, nrows, threshold);
 
+#if CAIRO_VERSION_MAJOR > 1 || CAIRO_VERSION_MAJOR == 1 && CAIRO_VERSION_MINOR >= 6
     stride = cairo_format_stride_for_width(CAIRO_FORMAT_A8, ncols);
+#else
+#define MULTIPLE 4
+    stride = (ncols + (MULTIPLE - 1)) / MULTIPLE * MULTIPLE;
+#endif
     data = malloc(stride * nrows);
     surf = cairo_image_surface_create_for_data(
 	data, CAIRO_FORMAT_A8, ncols, nrows, stride);
