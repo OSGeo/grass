@@ -138,19 +138,12 @@ lowest.
      &bull; Default value - wxpython
 </DL>
 
-<H3>Tcl/Tk and Python Environment Variables</H3>
+<H3>Python Environment Variables</H3>
 
 <P>
-If you choose to use the wxPython interface or Tcl/Tk modules, then
+If you choose to use the wxPython interface, then
 the following environment variables can be used to override your
-system default <tt>tclsh</tt>, <tt>wish</tt>, and <tt>python</tt> commands.
-
-<DL>
-<DT><B>GRASS_TCLSH</B>
-<DD> Command to use to override <tt>tclsh</tt>
-
-<DT><B>GRASS_WISH</B>
-<DD> Command to use to override <tt>wish</tt>
+system default <tt>python</tt> command.
 
 <DT><B>GRASS_PYTHON</B>
 <DD> Command to use to override <tt>python</tt>
@@ -254,7 +247,7 @@ The following are some examples of how you could start GRASS
     to choose the appropriate location and mapset.
 
 <DT><B>grass70 -gui</B>
-<DD> Start GRASS using the Tcl/Tk based user interface. The user will be
+<DD> Start GRASS using the wxPython based user interface. The user will be
     prompted to choose the appropriate location and mapset.
 
 <DT><B>grass70 -text</B>
@@ -266,7 +259,7 @@ The following are some examples of how you could start GRASS
    into the given mapset, bypassing the mapset selection menu.
 
 <DT><B>grass70 -gui -</B>
-<DD> Start GRASS using the Tcl/Tk based user interface and try to obtain
+<DD> Start GRASS using the wxPython based user interface and try to obtain
     the location and mapset from environment variables.
 
 </DL>
@@ -381,7 +374,7 @@ until it finds the first version of <tt>python</tt>.
 <EM>$WINDOWS_BIN/grass70.bat</EM> - GRASS startup program (MS-Windows)<BR>
 <EM>$GISBASE/etc/Init.sh</EM> - GRASS initialization script called by
     <EM>grass70</EM><BR>
-<EM>$GISBASE/etc/gis_set.tcl</EM> - Tcl/Tk script to set the
+<EM>$GISBASE/etc/wxpython/gis_set.py</EM> - Python script to set the
     location and mapset to use. Called by <EM>Init.sh</EM><BR><BR>
 
 <H2>SEE ALSO</H2>

@@ -96,7 +96,7 @@ read_gui()
 	GRASS_GUI="$DEFAULT_GUI"
     fi
 
-    # gis.m, d.m no longer exist
+    # FIXME oldtcltk, gis.m, d.m no longer exist
     case "$GRASS_GUI" in
     d.m | oldtcltk | gis.m)
 	GRASS_GUI="$DEFAULT_GUI"

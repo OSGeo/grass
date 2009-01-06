@@ -36,7 +36,7 @@ if [ -z "$GRASS_DEBUG" ] ; then
 fi
 
 # GRASS_SH is normally just for Windows when not started from a bourne 
-# shell. But when starting from Init.sh is still needed for Tcl/Tk.
+# shell. But when starting from Init.sh is still needed for GRASS_GUI (still true for GRASS 7?)
 GRASS_SH=/bin/sh
 export GRASS_SH
 
@@ -115,12 +115,6 @@ for i in "$@" ; do
     # Check if the -gui flag was given
     -gui)
         GRASS_GUI="$DEFAULT_GUI"
-        shift
-        ;;
-
-    # Check if the -tcltk flag was given
-    -tcltk)
-        GRASS_GUI="tcltk"
         shift
         ;;
 
