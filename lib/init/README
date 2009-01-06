@@ -2,8 +2,7 @@ o GRASS text mode startup
 
   "grass70" starts up d.m by default (if not first time user).
   "grass70 -text" will start up in text mode.
-  "grass70 -tcltk" or "grass70 -gui" will start up in tcltk mode.
-  "grass70 -wxpython" will start up in wxpython mode.
+  "grass70 -wxpython" or "grass70 -gui" will start up in wxpython mode.
 
   You can use alias "grass70" to "grass70 -text" to use text mode by default.
   Or set env var GRASS_GUI=text.

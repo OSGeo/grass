@@ -141,7 +141,6 @@ static int check_overwrite(void);
 static void split_gisprompt(const char *, char *, char *, char *);
 
 static void G_gui(void);
-static void G_tcltk(void);
 static void G_usage_xml(void);
 static void G_usage_html(void);
 static void G_script(void);
@@ -886,13 +885,6 @@ int G_parser(int argc, char **argv)
 	 * a html description of the task */
 	if (strcmp(argv[1], "--html-description") == 0) {
 	    G_usage_html();
-	    exit(EXIT_SUCCESS);
-	}
-
-	/* If first arg is "--tcltk" then generate
-	 * code for tcltkgrass */
-	if (strcmp(argv[1], "--tcltk") == 0) {
-	    G_tcltk();
 	    exit(EXIT_SUCCESS);
 	}
 
@@ -1861,145 +1853,6 @@ static void G_script(void)
 }
 
 /**
-  \brief Generates tcltk dialog.
-
-  \param[out] fp File to store tcltk code
-**/
-static void generate_tcl(FILE * fp)
-{
-    int new_prompt = uses_new_gisprompt();
-    const char *type;
-    int optn;
-
-    fprintf(fp, "begin_dialog {%s} {\n", st->pgm_name);
-    fprintf(fp, " label {%s}\n", st->module_info.label ? st->module_info.label : "");
-    fprintf(fp, " desc {%s}\n",
-	    st->module_info.description ? st->module_info.description : "");
-    fprintf(fp, " key {%s}\n",
-	    st->module_info.keywords ? st->module_info.keywords : "");
-    fprintf(fp, "}\n");
-
-    optn = 1;
-
-    if (st->n_flags) {
-	struct Flag *flag;
-
-	for (flag = &st->first_flag; flag; flag = flag->next_flag, optn++) {
-	    fprintf(fp, "add_flag %d {\n", optn);
-	    fprintf(fp, " name {%c}\n", flag->key);
-	    fprintf(fp, " desc {%s}\n", flag->description);
-	    fprintf(fp, " answer %d\n", flag->answer);
-	    /* It should be up to the gui as to what
-	       to do with the label and description */
-	    fprintf(fp, " label {%s}\n", flag->label ? flag->label : "");
-	    fprintf(fp, " guisection {%s}\n",
-		    flag->guisection ? flag->guisection : "");
-	    fprintf(fp, "}\n");
-	}
-    }
-
-    if (st->n_opts) {
-	struct Option *opt;
-
-	for (opt = &st->first_option; opt; opt = opt->next_opt, optn++) {
-	    if (opt->key_desc != NULL)
-		type = opt->key_desc;
-	    else
-		switch (opt->type) {
-		case TYPE_INTEGER:
-		    type = "integer";
-		    break;
-		case TYPE_DOUBLE:
-		    type = "float";
-		    break;
-		case TYPE_STRING:
-		    type = "string";
-		    break;
-		default:
-		    type = "string";
-		    break;
-		}
-
-	    fprintf(fp, "add_option %d {\n", optn);
-	    fprintf(fp, " name {%s}\n", opt->key);
-	    fprintf(fp, " type {%s}\n", type);
-	    fprintf(fp, " multi %d\n", opt->multiple);
-	    fprintf(fp, " desc {%s}\n", opt->description);
-	    fprintf(fp, " required %d\n", opt->required);
-	    fprintf(fp, " options {%s}\n", opt->options ? opt->options : "");
-	    fprintf(fp, " descs {%s}\n",
-		    opt->descriptions ? opt->descriptions : "");
-	    fprintf(fp, " answer {%s}\n", opt->answer ? opt->answer : "");
-	    fprintf(fp, " prompt {%s}\n",
-		    opt->gisprompt ? opt->gisprompt : "");
-	    /* It should be up to the gui as to what
-	       to do with the label and description */
-	    fprintf(fp, " label {%s}\n", opt->label ? opt->label : "");
-	    fprintf(fp, " guisection {%s}\n",
-		    opt->guisection ? opt->guisection : "");
-	    fprintf(fp, "}\n");
-	}
-    }
-
-    if (new_prompt) {
-	fprintf(fp, "add_xflag %d {\n", optn);
-	fprintf(fp, " name {overwrite}\n");
-	fprintf(fp, " desc {%s}\n",
-		_("Allow output files to overwrite existing files"));
-	fprintf(fp, " answer %d\n", st->overwrite);
-	fprintf(fp, " label {%s}\n", _("Allow overwrite"));
-	fprintf(fp, " guisection {}\n");
-	fprintf(fp, "}\n");
-	optn++;
-    }
-
-    fprintf(fp, "add_xflag %d {\n", optn);
-    fprintf(fp, " name {quiet}\n");
-    fprintf(fp, " desc {%s}\n", _("Run with minimal output messages"));
-    fprintf(fp, " answer %d\n", st->quiet);
-    fprintf(fp, " label {%s}\n", _("Run quietly"));
-    fprintf(fp, " guisection {}\n");
-    fprintf(fp, "}\n");
-    optn++;
-
-    fprintf(fp, "end_dialog %d\n", optn - 1);
-}
-
-/**
-   \brief Build Tcl/Tk GUI dialog
-**/
-static void G_gui_tcltk(void)
-{
-    FILE *fp;
-
-    if (!st->pgm_name)
-	st->pgm_name = G_program_name();
-    if (!st->pgm_name)
-	st->pgm_name = "??";
-
-#ifdef __MINGW32__
-    if (getenv("GRASS_DEBUG_GUI"))
-	fp = G_popen("tee gui_dump.tcl | %GRASS_WISH%", "w");
-    else
-	fp = G_popen("%GRASS_WISH%", "w");
-#else
-    if (getenv("GRASS_DEBUG_GUI"))
-	fp = G_popen("tee gui_dump.tcl | $GRASS_WISH", "w");
-    else
-	fp = G_popen("$GRASS_WISH", "w");
-#endif
-
-    if (!fp)
-	G_fatal_error(_("Unable to spawn the 'wish' program"));
-
-    fprintf(fp, "source $env(GISBASE)/etc/gui.tcl\n");
-
-    generate_tcl(fp);
-
-    G_pclose(fp);
-}
-
-/**
    \brief Build wxPython GUI dialog
 **/
 static void G_gui_wx(void)
@@ -2019,9 +1872,9 @@ static void G_gui_wx(void)
 /**
    \brief Invoke GUI dialog 
 
-   Use G_gui_wx() or G_gui_tcltk() to generate GUI dialog.
+   Use G_gui_wx() to generate GUI dialog.
 
-   G_gui_tcltk() is called by default (if GRASS_GUI is not defined)
+   G_gui_wx() is called by default (if GRASS_GUI is not defined)
 **/
 static void G_gui(void)
 {
@@ -2035,22 +1888,9 @@ static void G_gui(void)
     if (gui && strcmp(gui, "wxpython") == 0)
 	G_gui_wx();
     else
-	G_gui_tcltk();
+	G_fatal_error(_("No GUI defined in GRASS_GUI"));
 
     return;
-}
-
-/**
-   \brief Send Tcl/Tk code to tcltkgrass 
-**/
-static void G_tcltk(void)
-{
-    if (!st->pgm_name)
-	st->pgm_name = G_program_name();
-    if (!st->pgm_name)
-	st->pgm_name = "??";
-
-    generate_tcl(stdout);
 }
 
 /**************************************************************************
