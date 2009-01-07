@@ -3,6 +3,15 @@
 <em>r.quantile</em> computes quantiles in a manner suitable for use with large amounts of data.
 It is using two passes.
 
+<h2>EXAMPLE</h2>
+
+Calculation of elevation quantiles:
+
+<div class="code"><pre>
+g.region rast=elevation.dem -p
+r.quantile input=elevation.dem percentiles=0.1,1,10,25,50,75,90,99,99.9
+</pre></div>
+
 <h2>SEE ALSO</h2>
 
 <em>
