@@ -190,8 +190,8 @@
 	      <command>v.in.gpsbabel</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>Geoames import</label>
-	      <help>Imports Geonames country files into a GRASS vector points map.</help>
+	      <label>Geonames import</label>
+	      <help>Imports geonames.org country files into a GRASS vector points map.</help>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.in.geonames</command>
 	    </menuitem>
@@ -415,7 +415,7 @@
 	      <label>Multiple export formats using OGR</label>
 	      <help>Exports attribute tables in various formats.</help>
 	      <handler>self.OnMenuCmd</handler>
-	      <command>db.in.ogr</command>
+	      <command>db.out.ogr</command>
 	    </menuitem>
 	  </items>
 	</menu>
@@ -951,8 +951,8 @@
 	    </menuitem>
 	    <separator/>
 	    <menuitem>
-	      <label>Horizon</label>
-	      <help>Calculate horizon angle.</help>
+	      <label>Horizon angle</label>
+	      <help>Horizon angle computation from a digital elevation model.</help>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.horizon</command>
 	    </menuitem>
@@ -1430,7 +1430,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Quantiles for large data sets</label>
-	      <help>Calculate quantiles from large data sets.</help>
+	      <help>Compute quantiles using two passes.</help>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.quantile</command>
 	    </menuitem>
