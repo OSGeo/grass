@@ -334,8 +334,8 @@ int do_symbol(const char *str)
 	return (-1);
     }
 
-    ix = D_u_to_d_col(xper);
-    iy = D_u_to_d_row(yper);
+    ix = xper;
+    iy = yper;
     size *= yincr;
 
     /* parse line color */
