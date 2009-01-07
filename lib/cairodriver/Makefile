@@ -10,7 +10,8 @@ PGM = cairodriver
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 
 ifneq ($(USE_X11),)
-EXTRA_CFLAGS += -DUSE_X11=1
+EXTRA_LIBS += $(XLIBPATH) $(XLIB) $(XEXTRALIBS)
+EXTRA_CFLAGS += $(XCFLAGS) -DUSE_X11=1
 endif
 
 ifneq ($(USE_CAIRO),)
