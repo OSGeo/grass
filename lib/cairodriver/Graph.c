@@ -182,6 +182,7 @@ static void init_file(void)
     if (do_read && do_map)
 	map_file();
 
+#if CAIRO_HAS_XLIB_XRENDER_SURFACE
     if (is_xlib) {
 	if (do_read)
 	    cairo_read_image();
@@ -190,6 +191,7 @@ static void init_file(void)
 	init_xlib();
 	ca.mapped = 1;
     }
+#endif
 
     if (!ca.mapped && !is_vector)
 	ca.grid = G_malloc(ca.height * ca.stride);
