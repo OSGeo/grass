@@ -33,7 +33,7 @@ void Cairo_Bitmap(int ncols, int nrows, int threshold,
 
     G_debug(1, "Cairo_Bitmap: %d %d %d", ncols, nrows, threshold);
 
-#if CAIRO_VERSION_MAJOR > 1 || CAIRO_VERSION_MAJOR == 1 && CAIRO_VERSION_MINOR >= 6
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1,5,8)
     stride = cairo_format_stride_for_width(CAIRO_FORMAT_A8, ncols);
 #else
 #define MULTIPLE 4
