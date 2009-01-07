@@ -190,6 +190,12 @@
 	      <command>v.in.gpsbabel</command>
 	    </menuitem>
 	    <menuitem>
+	      <label>Geoames import</label>
+	      <help>Imports Geonames country files into a GRASS vector points map.</help>
+	      <handler>self.OnMenuCmd</handler>
+	      <command>v.in.geonames</command>
+	    </menuitem>
+	    <menuitem>
 	      <label>GEOnet import</label>
 	      <help>Imports US-NGA GEOnet Names Server (GNS) country files into a GRASS vector points map.</help>
 	      <handler>self.OnMenuCmd</handler>
@@ -399,6 +405,17 @@
 	      <help>Converts 3D raster maps (G3D) into the VTK-Ascii format</help>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r3.out.vtk</command>
+	    </menuitem>
+	  </items>
+	</menu>
+	<menu>
+	  <label>Export database table</label>
+	  <items>
+	    <menuitem>
+	      <label>Multiple export formats using OGR</label>
+	      <help>Exports attribute tables in various formats.</help>
+	      <handler>self.OnMenuCmd</handler>
+	      <command>db.in.ogr</command>
 	    </menuitem>
 	  </items>
 	</menu>
@@ -932,6 +949,13 @@
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.grow.distance</command>
 	    </menuitem>
+	    <separator/>
+	    <menuitem>
+	      <label>Horizon</label>
+	      <help>Calculate horizon angle.</help>
+	      <handler>self.OnMenuCmd</handler>
+	      <command>r.horizon</command>
+	    </menuitem>
 	  </items>
 	</menu>
 	<menu>
@@ -1405,6 +1429,12 @@
 	      <command>r.stats</command>
 	    </menuitem>
 	    <menuitem>
+	      <label>Quantiles for large data sets</label>
+	      <help>Calculate quantiles from large data sets.</help>
+	      <handler>self.OnMenuCmd</handler>
+	      <command>r.quantile</command>
+	    </menuitem>
+	    <menuitem>
 	      <label>Range of category values</label>
 	      <help>Prints terse list of category values found in a raster map layer.</help>
 	      <handler>self.OnMenuCmd</handler>
@@ -1495,7 +1525,7 @@
 	    </menuitem>
 	    <separator/>
 	    <menuitem>
-	      <label>Create/rebuild topology</label>
+	      <label>Create or rebuild topology</label>
 	      <help>Creates topology for GRASS vector map.</help>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.build</command>
@@ -1507,8 +1537,8 @@
 	      <command>v.clean</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>Generalization</label>
-	      <help>Vector based generalization.</help>
+	      <label>Smooth or simplify</label>
+	      <help>Smooth or simplify lines/boundaries (remove vertices).</help>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.generalize</command>
 	    </menuitem>
