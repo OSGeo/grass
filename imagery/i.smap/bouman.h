@@ -53,9 +53,6 @@ void free_img(unsigned char **);
 /* Subroutine in solve.c */
 double solve(double (*)(double), double, double, double, int *);
 
-/* Subroutine in eigen.c */
-int eigen(double **, double *, int);
-
 /* Subroutine in invert.c */
 int invert(double **, int);
 

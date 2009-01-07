@@ -23,6 +23,7 @@
 #include <math.h>
 #include <grass/gis.h>
 #include <grass/interpf.h>
+#include <grass/gmath.h>
 
 static int input_data(struct interp_params *,
 		      int, int, struct fcell_triple *, int, int, int, int,

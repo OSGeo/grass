@@ -393,16 +393,6 @@ void G_initialize_done(int *);
 void G_init_counter(struct Counter *, int);
 int G_counter_next(struct Counter *);
 
-/* dalloc.c */
-double *G_alloc_vector(size_t);
-double **G_alloc_matrix(int, int);
-float *G_alloc_fvector(size_t);
-float **G_alloc_fmatrix(int, int);
-void G_free_vector(double *);
-void G_free_matrix(double **);
-void G_free_fvector(float *);
-void G_free_fmatrix(float **);
-
 /* date.c */
 const char *G_date(void);
 
@@ -429,10 +419,6 @@ double G_distance_point_to_line_segment(double, double, double, double,
 
 /* done_msg.c */
 void G_done_msg(const char *, ...) __attribute__ ((format(printf, 1, 2)));
-
-/* eigen_tools.c */
-int G_tqli(double[], double[], int, double **);
-void G_tred2(double **, int, double[], double[]);
 
 /* endian.c */
 int G_is_little_endian(void);
@@ -651,12 +637,6 @@ int G_command_history(struct History *);
 const char *G_home(void);
 const char *G__home(void);
 
-/* ialloc.c */
-int *G_alloc_ivector(size_t);
-int **G_alloc_imatrix(int, int);
-void G_free_ivector(int *);
-void G_free_imatrix(int **);
-
 /* index.c */
 char *G_index(const char *, int);
 char *G_rindex(const char *, int);
@@ -739,10 +719,6 @@ void G_set_ls_exclude_filter(int (*)(const char *, void *), void *);
 char **G__ls(const char *, int *);
 void G_ls(const char *, FILE *);
 void G_ls_format(char **, int, int, FILE *);
-
-/* lu.c */
-int G_ludcmp(double **, int, int *, double *);
-void G_lubksb(double **, int, int *, double[]);
 
 /* mach_name.c */
 const char *G__machine_name(void);
@@ -1096,11 +1072,6 @@ void G_str_to_upper(char *);
 void G_str_to_lower(char *);
 int G_str_to_sql(char *);
 char *G_squeeze(char *);
-
-/* svd.c */
-int G_svdcmp(double **, int, int, double *, double **);
-int G_svbksb(double **, double[], double **, int, int, double[], double[]);
-int G_svelim(double *, int);
 
 /* system.c */
 int G_system(const char *);

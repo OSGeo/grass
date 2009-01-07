@@ -1,5 +1,6 @@
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/gmath.h>
 
 int invert(
 	      /* inverts a matrix of arbitrary size input as a 2D array. */

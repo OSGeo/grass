@@ -20,12 +20,12 @@
 #ifndef _POLIMIFUNCT_H_
 #define _POLIMIFUNCT_H_
 
+#include <grass/config.h>
 #include <grass/gis.h>
 #include <grass/Vect.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
-#include <grass/config.h>
-
+#include <grass/gmath.h>
 
 /*----------------------------------------------------------------------------------------------------------*/
 /*CONSTANS DECLARATION */

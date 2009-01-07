@@ -68,4 +68,33 @@ int transpose(double[MX][MX], long);
 int mult(double *v1[2], int size1, double *v2[2], int size2, double *v3[2],
 	 int size3);
 
+/* dalloc.c */
+double *G_alloc_vector(size_t);
+double **G_alloc_matrix(int, int);
+float *G_alloc_fvector(size_t);
+float **G_alloc_fmatrix(int, int);
+void G_free_vector(double *);
+void G_free_matrix(double **);
+void G_free_fvector(float *);
+void G_free_fmatrix(float **);
+
+/* eigen_tools.c */
+int G_tqli(double[], double[], int, double **);
+void G_tred2(double **, int, double[], double[]);
+
+/* ialloc.c */
+int *G_alloc_ivector(size_t);
+int **G_alloc_imatrix(int, int);
+void G_free_ivector(int *);
+void G_free_imatrix(int **);
+
+/* lu.c */
+int G_ludcmp(double **, int, int *, double *);
+void G_lubksb(double **, int, int *, double[]);
+
+/* svd.c */
+int G_svdcmp(double **, int, int, double *, double **);
+int G_svbksb(double **, double[], double **, int, int, double[], double[]);
+int G_svelim(double *, int);
+
 #endif /* GMATH_H_ */

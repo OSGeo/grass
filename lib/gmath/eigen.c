@@ -43,9 +43,10 @@ int eigen(double **M,		/* Input matrix */
     G_tqli(lambda, e, n, a);
 
     /* Returns eigenvectors */
-    for (i = 0; i < n; i++)
-	for (j = 0; j < n; j++)
-	    Vectors[i][j] = a[i][j];
+    if (Vectors)
+	for (i = 0; i < n; i++)
+	    for (j = 0; j < n; j++)
+		Vectors[i][j] = a[i][j];
 
     G_free_matrix(a);
     G_free_vector(e);

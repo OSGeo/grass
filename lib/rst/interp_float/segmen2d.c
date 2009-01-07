@@ -8,8 +8,8 @@
 #include <math.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
-
 #include <grass/interpf.h>
+#include <grass/gmath.h>
 
 static double smallest_segment(struct multtree *, int);
 
