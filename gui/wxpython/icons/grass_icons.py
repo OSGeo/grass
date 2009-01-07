@@ -90,7 +90,7 @@ IconsGrass = {
     "profile"    : 'gui-profile.gif',
     "transect"   : 'gui-profiledefine.gif',
     # "profiledraw": 'gui-profiledraw.gif',
-    "profiledraw" : 'gui-redraw.gif',
+    "profiledraw" : 'gui-display.gif',
     "profileopt" : 'gui-profileopt.gif',
     # georectify
     'grGcpClear'   : 'gui-gcperase.gif',
