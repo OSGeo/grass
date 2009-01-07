@@ -425,7 +425,7 @@ static void poly_rel(const double *x, const double *y, int n)
 	return;
 
     D_begin();
-    D_move_abs(x[0], y[0]);
+    D_move_rel(x[0], y[0]);
     for (i = 1; i < n; i++)
 	D_cont_rel(x[i], y[i]);
 }
