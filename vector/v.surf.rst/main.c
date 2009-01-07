@@ -44,6 +44,7 @@
 #include <grass/qtree.h>
 #include "surf.h"
 #include <grass/dataquad.h>
+#include <grass/gmath.h>
 
 
 #define SCIK1 1			/*100000 */

@@ -1,5 +1,6 @@
-#include <grass/gis.h>
 #include <math.h>
+#include <grass/gis.h>
+#include <grass/gmath.h>
 
 static double at, bt, ct;
 

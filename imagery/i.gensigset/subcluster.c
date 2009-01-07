@@ -3,6 +3,7 @@
 #include <grass/gis.h>
 #include <grass/imagery.h>
 #include <grass/glocale.h>
+#include <grass/gmath.h>
 #include "local_proto.h"
 
 #define ZERO 1e-10

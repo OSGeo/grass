@@ -1,6 +1,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include <grass/imagery.h>
+#include <grass/gmath.h>
 #include "bouman.h"
 #include "region.h"
 
@@ -42,7 +43,7 @@ void extract_init(struct SigSet *S)
 		}
 
 	    /* Test for positive definite matrix */
-	    eigen(SubS->Rinv, lambda, nbands);
+	    eigen(SubS->Rinv, NULL, lambda, nbands);
 	    for (b1 = 0; b1 < nbands; b1++) {
 		if (lambda[b1] <= 0.0)
 		    G_warning(_("Nonpositive eigenvalues for class %d subclass %d"),

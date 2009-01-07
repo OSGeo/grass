@@ -1,5 +1,6 @@
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/gmath.h>
 
 
 #define TINY 1.0e-20;

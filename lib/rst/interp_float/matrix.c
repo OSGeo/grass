@@ -25,6 +25,7 @@
 #include <unistd.h>
 #include <grass/gis.h>
 #include <grass/interpf.h>
+#include <grass/gmath.h>
 
 int IL_matrix_create(struct interp_params *params, struct triple *points,	/* points for interpolation */
 		     int n_points,	/* number of points */

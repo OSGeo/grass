@@ -42,6 +42,7 @@
 #include "surf.h"
 #include <grass/interpf.h>
 #include <grass/glocale.h>
+#include <grass/gmath.h>
 
 static double /* pargr */ ns_res, ew_res, inp_ew_res, inp_ns_res;
 static int inp_rows, inp_cols;
