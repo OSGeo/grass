@@ -436,7 +436,7 @@ int gsd_close_mpeg(void)
 
     if (!(fmt->flags & AVFMT_NOFILE)) {
 	/* close the output file */
-	url_fclose(&oc->pb);
+	url_fclose(oc->pb);
     }
 
     /* free the stream */
