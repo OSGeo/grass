@@ -401,6 +401,8 @@ void D_line_abs(double x1, double y1, double x2, double y2)
 
 void D_box_abs(double x1, double y1, double x2, double y2)
 {
+    struct vector save = cur;
+
     D_begin();
     D_move_abs(x1, y1);
     D_cont_abs(x2, y1);
@@ -409,6 +411,8 @@ void D_box_abs(double x1, double y1, double x2, double y2)
     D_close();
     D_end();
     D_fill();
+
+    cur = save;
 }
 
 /******************************************************************************/
