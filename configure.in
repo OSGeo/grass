@@ -189,8 +189,8 @@ LOC_ARG_WITH(odbc, ODBC, no)
 LOC_ARG_WITH(fftw, FFTW)
 LOC_ARG_WITH(blas, BLAS, no)
 LOC_ARG_WITH(lapack, LAPACK, no)
-LOC_ARG_WITH(cairo, Cairo, no)
-LOC_ARG_WITH(freetype, FreeType, no)
+LOC_ARG_WITH(cairo, Cairo)
+LOC_ARG_WITH(freetype, FreeType)
 LOC_ARG_WITH(nls, NLS, no)
 LOC_ARG_WITH(readline, Readline, no)
 LOC_ARG_WITH(opendwg, openDWG, no)
@@ -1392,9 +1392,15 @@ CAIROLIB=
 
 if test -n "$USE_CAIRO"; then
 
+if test -n "$USE_X11"; then
+	cairo=cairo\ cairo-xlib-xrender
+else
+	cairo=cairo
+fi
+
 # With Cairo includes directory
 
-CAIROINC=`pkg-config --cflags cairo`
+CAIROINC=`pkg-config --cflags $cairo`
 
 LOC_CHECK_INC_PATH(cairo,cairo,CAIROINC)
 
@@ -1402,7 +1408,7 @@ LOC_CHECK_INCLUDES(cairo.h,Cairo,$CAIROINC)
 
 # With Cairo library directory
 
-CAIROLIB=`pkg-config --libs cairo`
+CAIROLIB=`pkg-config --libs $cairo`
 
 LOC_CHECK_LIB_PATH(cairo,cairo,CAIROLIB)
 LOC_CHECK_LDFLAGS(cairo,cairo,CAIROLIB)
