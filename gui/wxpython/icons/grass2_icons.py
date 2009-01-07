@@ -84,11 +84,11 @@ IconsGrass2 = {
     "addhis"     : 'layer-his-add.png',
     "addthematic": None,
     "addchart"   : None,
-    "layeropts"  : None,
+    "layeropts"  : 'settings.png',
     # profile analysis
     "transect"   : 'layer-raster-profile.png',
-    "profiledraw"  : None,
-    "profileopt"   : None,
+    "profiledraw"  : 'show.png',
+    "profileopt"   : 'settings.png',
     # georectify
     "grGcpSet"     : None,
     'grGcpClear'   : None,
