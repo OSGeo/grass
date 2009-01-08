@@ -1,72 +1,78 @@
 MODULE_TOPDIR = ../..
 
-include $(MODULE_TOPDIR)/include/Make/Lib.make
+PACKAGE = "grasslibs"
+
+include $(MODULE_TOPDIR)/include/Make/Other.make
+include $(MODULE_TOPDIR)/include/Make/Compile.make
 include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 
-CFLAGS=-c -fpic -I. $(ARCH_INC) $(GDALCFLAGS) $(PYTHONCFLAGS)
-LDFLAGS=-shared -L$(ARCH_LIBDIR) $(GDALLIBS) $(PYTHONLDFLAGS)
+# doxygen:
+DOXNAME=
+DOXINPUT=grasspython.dox
 
-MODULES = grass math imagery vector proj raster display stats
+MODULES = utils date grass math proj imagery vector raster display stats
 
-vector_LIBS = $(VECTLIB)
+date_LIBS    = $(DATETIMELIB)
+grass_LIBS   = $(GISLIB)
+math_LIBS    = $(GMATHLIB)
+proj_LIBS    = $(GPROJLIB)
 imagery_LIBS = $(IMAGERYLIB)
-grass_LIBS = $(GISLIB)
-math_LIBS = $(GMATHLIB)
-proj_LIBS = $(GPROJLIB)
-raster_LIBS = $(RASTERLIB)
+vector_LIBS  = $(VECTLIB)
+raster_LIBS  = $(RASTERLIB)
 display_LIBS = $(DISPLAYLIB)
-stats_LIBS = $(STATSLIB)
+stats_LIBS   = $(STATSLIB)
 
+vector_wrap_c_FLAGS = $(VECT_INC)
+proj_wrap_c_FLAGS = $(PROJINC) $(GDALCFLAGS)
+
+EXTRA_SWIG = my_typemaps.i common.i
+EXTRA_CFLAGS = $(PYMOD_CFLAGS)
 EXTRA_CLEAN_FILES := $(foreach M,$(MODULES),$(M)_wrap.o $(M)_wrap.c $(M).pyc $(M).py)
 CLEAN_SUBDIRS = NumPtr
+
+include $(MODULE_TOPDIR)/include/Make/Python.make
 
 DSTDIR = $(ARCH_DISTDIR)/etc/python/swig
 
 LIBFILES := $(patsubst %,$(DSTDIR)/_%.so,$(MODULES))
-PYFILES  := $(patsubst %,$(DSTDIR)/%.py,$(MODULES))
-PYCFILES := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES))
+PYFILES  := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
+PYCFILES := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)
 
-default: $(LIBFILES) $(PYFILES) $(DSTDIR)/__init__.pyc numptr
+default:
+	$(MAKE) $(DSTDIR)
+	$(MAKE) $(LIBFILES) $(PYFILES) $(PYCFILES)
 
-%_wrap.c %.py: %.i my_typemaps.i renames.i common.i
-	$(SWIG) $(ARCH_INC) -python -shadow $<
+$(DSTDIR):
+	test -d $@ || $(MKDIR) -p $@
 
-$(OBJDIR)/%_wrap.o: %_wrap.c
-	test -d $(OBJDIR) || $(MKDIR) -p $(OBJDIR)
-	$(CC) $(CFLAGS) $(INCLUDE_DIRS) -o $@ $<
-
-$(DSTDIR)/_%.so: $(OBJDIR)/%_wrap.o
-	test -d $(DSTDIR) || $(MKDIR) -p $(DSTDIR)
-	$(SHLIB_LD) -o $@ $(LDFLAGS) $^ $($*_LIBS)
+$(DSTDIR)/_%.so: _%.so
+	$(INSTALL) $< $@
 
 $(DSTDIR)/%.py: %.py
-	test -d $(DSTDIR) || $(MKDIR) -p $(DSTDIR)
 	$(INSTALL_DATA) $< $@
 
-$(DSTDIR)/%.pyc: $(DSTDIR)/%.py $(DSTDIR)/_%.so
-	cd $(DSTDIR) && echo "import $*" | python; true
-
-$(DSTDIR)/__init__.pyc: $(DSTDIR)/__init__.py $(LIBFILES) $(PYCFILES)
-	cd $(DSTDIR) && echo "import __init__" | python; true
+$(DSTDIR)/%.pyc: %.pyc
+	$(INSTALL_DATA) $< $@
 
 numptr:
 	$(MAKE) -C NumPtr
 
 .PHONY: numptr
 
-# doxygen:
-DOXNAME=
-DOXINPUT=grasspython.dox
+.KEEP: $(patsubst %,$(OBJDIR)/%_wrap.o,$(MODULES))
 
-display_wrap.c: $(ARCH_INCDIR)/display.h
+date_wrap.c: $(ARCH_INCDIR)/datetime.h
+date_wrap.c: $(ARCH_INCDIR)/P_datetime.h
 grass_wrap.c: $(ARCH_INCDIR)/gis.h
 grass_wrap.c: $(ARCH_INCDIR)/gisdefs.h
-imagery_wrap.c: $(ARCH_INCDIR)/imagedefs.h
-imagery_wrap.c: $(ARCH_INCDIR)/imagery.h
 math_wrap.c: $(ARCH_INCDIR)/gmath.h
 proj_wrap.c: $(ARCH_INCDIR)/gprojects.h
-raster_wrap.c: $(ARCH_INCDIR)/raster.h
-stats_wrap.c: $(ARCH_INCDIR)/stats.h
+imagery_wrap.c: $(ARCH_INCDIR)/imagedefs.h
+imagery_wrap.c: $(ARCH_INCDIR)/imagery.h
 vector_wrap.c: $(ARCH_INCDIR)/Vect.h
 vector_wrap.c: $(ARCH_INCDIR)/vect/dig_defines.h
 vector_wrap.c: $(ARCH_INCDIR)/vect/dig_structs.h
+raster_wrap.c: $(ARCH_INCDIR)/raster.h
+display_wrap.c: $(ARCH_INCDIR)/display.h
+stats_wrap.c: $(ARCH_INCDIR)/stats.h
+utils_wrap.c:

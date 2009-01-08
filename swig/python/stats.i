@@ -1,4 +1,3 @@
-%module stats
 
 %include "common.i"
 

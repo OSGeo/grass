@@ -1,4 +1,3 @@
-%module proj
 
 %include "common.i"
 

@@ -1,4 +1,3 @@
-%module math
 
 %include "common.i"
 

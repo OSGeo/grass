@@ -1,4 +1,3 @@
-%module raster
 
 %include "common.i"
 
