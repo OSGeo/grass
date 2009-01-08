@@ -1878,19 +1878,7 @@ static void G_gui_wx(void)
 **/
 static void G_gui(void)
 {
-    /* read environment variables first then internal GRASS variable */
-    const char *gui = getenv("GRASS_GUI");
-
-    if (!gui) {
-	gui = G_getenv("GRASS_GUI");
-    }
-
-    if (gui && strcmp(gui, "wxpython") == 0)
-	G_gui_wx();
-    else
-	G_fatal_error(_("No GUI defined in GRASS_GUI"));
-
-    return;
+    G_gui_wx();
 }
 
 /**************************************************************************
