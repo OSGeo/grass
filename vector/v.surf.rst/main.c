@@ -377,6 +377,26 @@ int main(int argc, char *argv[])
     treefile = parm.treefile->answer;
     overfile = parm.overfile->answer;
 
+    if (devi) {
+	if (Vect_legal_filename(devi) == -1)
+	    G_fatal_error(_("Output vector map name <%s> is not valid map name"),
+			  devi);
+    }
+    if (cvdev) {
+	if (Vect_legal_filename(cvdev) == -1)
+	    G_fatal_error(_("Output vector map name <%s> is not valid map name"),
+			  cvdev);
+    }
+    if (treefile) {
+	if (Vect_legal_filename(treefile) == -1)
+	    G_fatal_error(_("Output vector map name <%s> is not valid map name"),
+			  treefile);
+    }
+    if (overfile) {
+	if (Vect_legal_filename(overfile) == -1)
+	    G_fatal_error(_("Output vector map name <%s> is not valid map name"),
+			  overfile);
+    }
     /*    if (treefile)
        Vect_check_input_output_name(input, treefile, GV_FATAL_EXIT);
 
