@@ -17,26 +17,26 @@ compiler = $(call compiler_x,$(CC))
 # default cc rules
 ifeq ($(BROKEN_MAKE),)
 
-$(OBJDIR)/%.o : %.c $(LOCAL_HEADERS) $(EXTRA_HEADERS) | $(OBJDIR)
+$(OBJDIR)/%.o : %.c $(LOCAL_HEADERS) $(EXTRA_HEADERS) $($*_c_FLAGS) | $(OBJDIR)
 	$(call compiler_c)
 
-$(OBJDIR)/%.o : %.cc $(LOCAL_HEADERS) $(EXTRA_HEADERS) | $(OBJDIR)
+$(OBJDIR)/%.o : %.cc $(LOCAL_HEADERS) $(EXTRA_HEADERS) $($*_cc_FLAGS) | $(OBJDIR)
 	$(call compiler_cxx)
 
-$(OBJDIR)/%.o : %.cpp $(LOCAL_HEADERS) $(EXTRA_HEADERS) | $(OBJDIR)
+$(OBJDIR)/%.o : %.cpp $(LOCAL_HEADERS) $(EXTRA_HEADERS) $($*_cpp_FLAGS) | $(OBJDIR)
 	$(call compiler_cxx)
 
 else
 
-$(OBJDIR)/%.o : %.c $(LOCAL_HEADERS) $(EXTRA_HEADERS)
+$(OBJDIR)/%.o : %.c $(LOCAL_HEADERS) $(EXTRA_HEADERS) $($*_c_FLAGS)
 	$(MAKE) $(OBJDIR)
 	$(call compiler_c)
 
-$(OBJDIR)/%.o : %.cc $(LOCAL_HEADERS) $(EXTRA_HEADERS)
+$(OBJDIR)/%.o : %.cc $(LOCAL_HEADERS) $(EXTRA_HEADERS) $($*_cc_FLAGS)
 	$(MAKE) $(OBJDIR)
 	$(call compiler_cxx)
 
-$(OBJDIR)/%.o : %.cpp $(LOCAL_HEADERS) $(EXTRA_HEADERS)
+$(OBJDIR)/%.o : %.cpp $(LOCAL_HEADERS) $(EXTRA_HEADERS) $($*_cpp_FLAGS)
 	$(MAKE) $(OBJDIR)
 	$(call compiler_cxx)
 

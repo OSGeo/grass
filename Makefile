@@ -52,6 +52,7 @@ DIRS = \
 	locale \
 	tools \
 	man \
+	swig \
 	gem \
 	macosx
 

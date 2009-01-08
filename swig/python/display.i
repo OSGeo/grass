@@ -1,4 +1,3 @@
-%module display
 
 %include "common.i"
 
