@@ -4,7 +4,7 @@
 #
 # MODULE:       d.rast.edit
 # AUTHOR(S):    Glynn Clements <glynn@gclements.plus.com>
-# COPYRIGHT:    (C) 2007,2008 Glynn Clements
+# COPYRIGHT:    (C) 2007,2008,2009 Glynn Clements
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -90,15 +90,26 @@
 #% answer: 100
 #%End
 
-import wxversion
-wxversion.select(['2.8','2.6'])
-#wxversion.select(['2.6','2.8'])
-import wx
-
 import sys
 import math
 import atexit
 import grass
+
+try:
+    import wxversion
+    wxversion.select(['2.8','2.6'])
+    # wxversion.select(['2.6','2.8'])
+    import wx
+except Exception:
+    # ensure that --help, --interface-description etc work even without wx
+    if __name__ == "__main__":
+	if len(sys.argv) == 2:
+	    arg = sys.argv[1]
+	    if arg[0:2] == '--' or arg in ["help", "-help"]:
+		grass.parser()
+    # Either we didn't call g.parser, or it returned
+    # At this point, there's nothing to be done except re-raise the exception
+    raise
 
 wind_keys = {
     'north': ('n', float),
