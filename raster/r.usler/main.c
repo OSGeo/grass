@@ -125,10 +125,10 @@ int main(int argc, char *argv[])
 		    d = elswaify_1985(d_annual_pmm);
 		outrast[col] = d ;
 	    }
+	}
 	if (G_put_d_raster_row(outfd, outrast) < 0)
 	    G_fatal_error(_("Failed writing raster map <%s> row %d"),
 			  result, row);
-	}
     }
     G_free(inrast_annual_pmm);
     G_close_cell(infd_annual_pmm);
