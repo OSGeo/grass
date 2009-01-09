@@ -186,12 +186,12 @@ def CreateNewVector(parent, cmdDef, title=_('Create new vector map'),
             
             gcmd.RunCommand('db.execute',
                             quiet = True,
-                            parent = self,
+                            parent = parent,
                             stdin = sql)
 
             gcmd.RunCommand('v.db.connect',
                             quiet = True,
-                            parent = self,
+                            parent = parent,
                             map = outmap,
                             table = outmap,
                             key = key,
@@ -205,7 +205,7 @@ def CreateNewVector(parent, cmdDef, title=_('Create new vector map'),
             log.WriteLog(_("New vector map <%s> created") % outmap)
 
         return (outmap, dlg.addbox.IsChecked())
-
+    
     return (None, dlg.addbox.IsChecked())
 
 class SavedRegion(wx.Dialog):

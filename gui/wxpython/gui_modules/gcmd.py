@@ -597,14 +597,19 @@ def RunCommand(prog, flags = "", overwrite = False, quiet = False, verbose = Fal
         kwargs['stdout'] = subprocess.PIPE
     
     if stdin:
-        kwargs['stdin'] = stdin
+        kwargs['stdin'] = subprocess.PIPE
     
     ps = grass.start_command(prog, flags, overwrite, quiet, verbose, **kwargs)
     
+    if stdin:
+        ps.stdin.write(stdin)
+        ps.stdin.close()
+        ps.stdin = None
+
     ret = ps.wait()
-
+    
     stdout, stderr = ps.communicate()
-
+        
     if ret != 0 and parent:
         e = CmdError(cmd = prog,
                      message = stderr,
