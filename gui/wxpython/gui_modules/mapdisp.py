@@ -59,10 +59,6 @@ import globalvar
 import utils
 import gdialogs
 import grass
-from vdigit import VDigitCategoryDialog
-from vdigit import VDigitZBulkDialog
-from vdigit import VDigitDuplicatesDialog
-from vdigit import GV_LINES
 from debug import Debug
 from icon  import Icons
 from preferences import globalSettings as UserSettings

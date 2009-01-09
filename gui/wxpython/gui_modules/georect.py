@@ -136,10 +136,16 @@ class GeorectWizard(object):
         if self.wizard.RunWizard(self.startpage):
             success = self.OnWizFinished()
             if success == False:
-                wx.MessageBox(_("Georectifying setup canceled."))
+                wx.MessageBox(parent=self.parent,
+                              message=_("Georectifying setup canceled."),
+                              caption=_("Georectify"),
+                              style=wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
                 self.Cleanup()
         else:
-            wx.MessageBox(_("Georectifying setup canceled."))
+            wx.MessageBox(parent=self.parent,
+                          message=_("Georectifying setup canceled."),
+                          caption=_("Georectify"),
+                          style=wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
             self.Cleanup()
 
         #
@@ -822,6 +828,7 @@ class GCP(wx.Frame):
             coord = mapWin.Cell2Pixel((gcp[coordtype][0], gcp[coordtype][1]))
             mapWin.DrawCross(pdc=mapWin.pdcTmp, coords=coord,
                              size=5, text={ 'text' : '%s' % str(idx + 1),
+                                            'active' : True,
                                             'font' : font,
                                             'color': wxCol,
                                             'coords': [coord[0] + 5,

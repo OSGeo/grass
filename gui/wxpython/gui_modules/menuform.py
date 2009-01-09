@@ -832,8 +832,7 @@ class mainFrame(wx.Frame):
         
         if self.get_dcmd and \
                 self.parent and \
-                self.parent.GetName() in ('LayerManager',
-                                          'LayerTree',
+                self.parent.GetName() in ('LayerTree',
                                           'MapWindow'):
             # display decorations and 
             # pressing OK or cancel after setting layer properties
