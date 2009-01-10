@@ -5,13 +5,13 @@
 # Markus Neteler <neteler itc.it>, 2004.
 # Stephan Holl <holl gdf-hannover.de>, 2004, 2005, 2006.
 # Robert Nuske <rnuske gwdg.de>, 2006, 2007.
-# Robert Nuske <rnuske@gwdg.de>, 2008.
+# Robert Nuske <rnuske@gwdg.de>, 2008, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-01-09 23:29+0100\n"
-"PO-Revision-Date: 2008-11-18 19:39+0100\n"
+"PO-Revision-Date: 2009-01-02 22:29+0100\n"
 "Last-Translator: Robert Nuske <rnuske@gwdg.de>\n"
 "Language-Team: Deutsch <grass-translations@lists.osgeo.org>\n"
 "MIME-Version: 1.0\n"
@@ -874,8 +874,8 @@ msgstr "ZU importierende ASCII Raster-Datei."
 #: ../raster3d/r3.in.ascii/main.c:90
 msgid "String representing NULL value data cell (use 'none' if no such value)"
 msgstr ""
-"Zeichenkette, die NULL-Werte repräsentiert (verwenden Sie 'none' wenn Sie "
-"keinen sezen wollen)."
+"Zeichenkette, die NULL-Werte repräsentiert (verwenden Sie 'none' wenn keiner "
+"existiert)."
 
 #: ../raster3d/r3.in.ascii/main.c:174
 #, c-format
@@ -891,6 +891,8 @@ msgstr "Ende der Datei erreicht während des Ladens der Daten."
 msgid ""
 "Data exists in input file after fully importing expected data.  [%.4f ...]"
 msgstr ""
+"Nach vollständigem Import der erwarteten Daten befinden sie sich in der "
+"Input-Datei.  [%.4f ...]"
 
 #: ../raster3d/r3.in.ascii/main.c:240
 msgid "raster3d, voxel, import"
@@ -919,15 +921,15 @@ msgstr "Erzeugt Volumenstatistiken für 3D-Rasterkarten."
 
 #: ../raster3d/r3.stats/main.c:580
 msgid "Number of sub-ranges to collect stats from"
-msgstr "Anzahl der Unterbereiche für die Statistiken berechnet werden sollen"
+msgstr "Anzahl der Bereiche, für die Statistiken berechnet werden sollen"
 
 #: ../raster3d/r3.stats/main.c:586
 msgid "Calculate statistics based on equal value groups"
-msgstr ""
+msgstr "Berechne Statistiken für Gruppen gleicher Werte."
 
 #: ../raster3d/r3.stats/main.c:606
 msgid "The number of subranges has to be equal or greater than 1"
-msgstr ""
+msgstr "Die Anzahl der Bereiche muß gleich oder größer 1 sein."
 
 #: ../raster3d/r3.stats/main.c:611 ../raster/r.univar/r3.univar_main.c:102
 #, c-format
@@ -973,9 +975,8 @@ msgid "Specific yield in 1/m"
 msgstr ""
 
 #: ../raster3d/r3.gwflow/main.c:108
-#, fuzzy
 msgid "Recharge raster map in m^3/s"
-msgstr "Lese Rasterkarte..."
+msgstr "Grundwasserneubildungskarte in m^3/s"
 
 #: ../raster3d/r3.gwflow/main.c:116
 msgid ""
@@ -1535,9 +1536,8 @@ msgid "Path to rules file"
 msgstr "Pfad zur Regel-Datei."
 
 #: ../locale/scriptstrings/v.colors_to_translate.c:15
-#, fuzzy
 msgid "Save placeholder raster map for use with d.legend"
-msgstr "Name der Rasterkarte, die angezeigt werden soll."
+msgstr ""
 
 #: ../locale/scriptstrings/v.colors_to_translate.c:16
 #: ../raster/r.colors/main.c:213
@@ -1832,18 +1832,16 @@ msgstr "LANDSAT roter Kanal"
 #: ../locale/scriptstrings/i.fusion.brovey_to_translate.c:4
 #: ../locale/scriptstrings/i.fusion.brovey_to_translate.c:6
 #: ../locale/scriptstrings/i.fusion.brovey_to_translate.c:8
-#, fuzzy
 msgid "Sensor"
-msgstr "LANDSAT roter Kanal"
+msgstr ""
 
 #: ../locale/scriptstrings/i.fusion.brovey_to_translate.c:5
 msgid "QuickBird sensor"
 msgstr ""
 
 #: ../locale/scriptstrings/i.fusion.brovey_to_translate.c:7
-#, fuzzy
 msgid "SPOT sensor"
-msgstr "LANDSAT roter Kanal"
+msgstr ""
 
 #: ../locale/scriptstrings/i.fusion.brovey_to_translate.c:9
 #, fuzzy
@@ -3401,9 +3399,9 @@ msgid "Unable to allocate memory for raster row"
 msgstr "Kann keinen Speicher allokieren für Rasterzeile."
 
 #: ../imagery/i.pca/main.c:397
-#, fuzzy, c-format
+#, c-format
 msgid "Rescaling the data <%s> to range %d,%d..."
-msgstr "Lese Rasterkarte <%s> ..."
+msgstr ""
 
 #: ../imagery/i.pca/support.c:27 ../raster/r.random.surface/save.c:217
 #, fuzzy, c-format
@@ -3525,9 +3523,8 @@ msgid "The output cell map <%s.%d> has values outside the 0-255 range."
 msgstr "Die Ausgabe-Rasterkarte <%s.%d> hat Werte außerhalb der Spanne 0-255."
 
 #: ../imagery/i.cluster/main.c:74
-#, fuzzy
 msgid "imagery, classification, signatures"
-msgstr "Punkt Klassifikation."
+msgstr ""
 
 #: ../imagery/i.cluster/main.c:76
 msgid ""
@@ -3597,7 +3594,7 @@ msgstr ""
 #: ../imagery/i.cluster/main.c:106
 #, fuzzy
 msgid "Name of file containing initial signatures"
-msgstr "Name der Datei, die SQL-Befehle enthält."
+msgstr "Datei die initiale Signatur enthält."
 
 #: ../imagery/i.cluster/main.c:114
 msgid "Sampling intervals (by row and col); default: ~10,000 pixels"
@@ -3622,7 +3619,7 @@ msgstr "Minimale Anzahl von Pixeln in einer Klasse."
 #: ../imagery/i.cluster/main.c:153
 #, fuzzy
 msgid "Name for output file containing final report"
-msgstr "Name der Ausgabedatei mit der Fehlermatrix und Kappawert."
+msgstr "Name der Ausgabedatei, die den Endbericht enthält."
 
 #: ../imagery/i.cluster/main.c:172
 #, fuzzy, c-format
@@ -3662,7 +3659,9 @@ msgstr ""
 #: ../imagery/i.cluster/main.c:213
 #, fuzzy, c-format
 msgid "Illegal value of min_size (%s)"
-msgstr "Ungültiger Wert für NULL."
+msgstr ""
+"\n"
+"<%s> -- Ungültiger Wert für min_size."
 
 #: ../imagery/i.cluster/main.c:222
 #, fuzzy, c-format
@@ -3901,7 +3900,7 @@ msgstr ""
 #: ../imagery/i.cluster/open_files.c:64
 #, fuzzy, c-format
 msgid "Unable to open seed signature file <%s>"
-msgstr "Kann die Eingabedatei <%s> nicht öffnen."
+msgstr "Kann die Start-Signaturdatei <%s> nicht öffnen."
 
 #: ../imagery/i.cluster/checkpt.c:16
 #, c-format
@@ -4077,9 +4076,8 @@ msgid "%d classes found"
 msgstr "%d Kreuzungen gefunden"
 
 #: ../imagery/i.gensig/main.c:39
-#, fuzzy
 msgid "imagery, classification, supervised, MLC"
-msgstr "Punkt Klassifikation."
+msgstr ""
 
 #: ../imagery/i.gensig/main.c:41
 #, fuzzy
@@ -5177,9 +5175,8 @@ msgid "Invalid parameter values"
 msgstr "interp: Ungültige Parameterwerte."
 
 #: ../imagery/i.smap/main.c:38 ../imagery/i.gensigset/main.c:40
-#, fuzzy
 msgid "imagery, classification, supervised, SMAP"
-msgstr "Punkt Klassifikation."
+msgstr ""
 
 #: ../imagery/i.smap/main.c:40
 msgid ""
@@ -5491,9 +5488,9 @@ msgid "Use numeric type for attribute \"layer\""
 msgstr ""
 
 #: ../vector/v.in.dwg/main.c:137
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to initialize OpenDWG Toolkit, error: %d: %s."
-msgstr "Kann die Eingabedatei <%s> nicht öffnen."
+msgstr ""
 
 #: ../vector/v.in.dwg/main.c:140
 #, fuzzy, c-format
@@ -7067,9 +7064,9 @@ msgid "Unable to open vector map <%s> at topology level %d"
 msgstr "Kann Vektorkarte <%s> in <%s> nicht öffnen."
 
 #: ../vector/v.net/main.c:181
-#, fuzzy, c-format
+#, c-format
 msgid "%d arcs added to network (nlayer %d)"
-msgstr "%d Kategorien aus der Karte gelesen."
+msgstr ""
 
 #: ../vector/v.select/main.c:136
 #, fuzzy
@@ -7982,9 +7979,8 @@ msgid "Layer 0 not supported"
 msgstr "Layer 0 wird nicht unterstützt."
 
 #: ../vector/v.drape/main.c:277
-#, fuzzy
 msgid "No features match Your query"
-msgstr "Keine Feature verändert"
+msgstr ""
 
 #: ../vector/v.drape/main.c:379 ../vector/v.drape/main.c:389
 msgid "Due to error attribute data to new map are not transferred"
@@ -8948,9 +8944,8 @@ msgid "Layer number (write to)"
 msgstr "Lesefehler in Vektordatei."
 
 #: ../vector/v.to.db/parse.c:46
-#, fuzzy
 msgid "Query layer number (read from)"
-msgstr "Layer-Nummer"
+msgstr ""
 
 #: ../vector/v.to.db/parse.c:47 ../vector/v.to.db/parse.c:98
 msgid "Query"
@@ -10314,9 +10309,8 @@ msgid "vector, transformation, 3D"
 msgstr "Vektor, Interpolation"
 
 #: ../vector/v.to.3d/main.c:38
-#, fuzzy
 msgid "Performs transformation of 2D vector features to 3D."
-msgstr "Verwende Transformationsregeln für LANDSAT-4."
+msgstr ""
 
 #: ../vector/v.to.3d/main.c:51
 #, fuzzy, c-format
@@ -10356,12 +10350,12 @@ msgstr "Kann Daten nicht aus der Tabelle selektieren."
 #: ../vector/v.to.3d/main.c:102
 #, fuzzy
 msgid "Transforming features..."
-msgstr "Lese Daten..."
+msgstr "Transponierte Eigen Matrix..."
 
 #: ../vector/v.to.3d/main.c:129
-#, fuzzy, c-format
+#, c-format
 msgid "Vertical extent of vector map <%s>: B: %f T: %f"
-msgstr "Kann die Vektorkarte <%s> in <%s> nicht öffnen."
+msgstr ""
 
 #: ../vector/v.to.3d/trans2.c:59 ../vector/v.to.3d/trans3.c:60
 #, fuzzy
@@ -10420,9 +10414,9 @@ msgid "Feature id %d has no category - skipping"
 msgstr "%d Punkte ohne Kategorie übersprungen."
 
 #: ../vector/v.to.3d/trans3.c:94
-#, fuzzy, c-format
+#, c-format
 msgid "Feature id %d has more categories. Using category %d."
-msgstr "%d Punkte ohne Kategorie übersprungen."
+msgstr ""
 
 #: ../vector/v.neighbors/main.c:47
 msgid "vector, raster, aggregation"
@@ -10611,7 +10605,7 @@ msgstr "Kann die MASKE nicht lesen."
 #: ../vector/v.kernel/main.c:424
 #, c-format
 msgid "Maximum value in output: %e."
-msgstr "Maximaler Wert der Ausgabekarte: %e."
+msgstr "Maximaler Wert der Ausgabe: %e."
 
 #: ../vector/v.out.ascii/b2a.c:148
 #, c-format
@@ -10672,9 +10666,9 @@ msgid "Only export points falling within current 3D region (points mode)"
 msgstr ""
 
 #: ../vector/v.out.ascii/main.c:110
-#, fuzzy, c-format
+#, c-format
 msgid "Parameter '%s' ignored in standard mode"
-msgstr "Parameterfehler"
+msgstr ""
 
 #: ../vector/v.out.ascii/main.c:118
 msgid "Format 'point' is not supported for old version"
@@ -11842,9 +11836,9 @@ msgid "Mean = %.5lf"
 msgstr ""
 
 #: ../vector/lidar/v.surf.bspline/crosscorr.c:289
-#, fuzzy, c-format
+#, c-format
 msgid "Root Means Square (RMS) = %.5lf"
-msgstr "Kreuzkorrelation: %d Punkte gelesen in der Region.\n"
+msgstr ""
 
 #: ../vector/lidar/v.surf.bspline/crosscorr.c:305
 msgid ""
@@ -12656,9 +12650,8 @@ msgstr ""
 "Kopiere die Attributtabelle nicht mit (bitte Parameter 'new' beachten)."
 
 #: ../vector/v.extract/main.c:116
-#, fuzzy
 msgid "Types to be extracted"
-msgstr "Zu importierende Rasterdatei."
+msgstr ""
 
 #: ../vector/v.extract/main.c:122
 #, fuzzy
@@ -14748,7 +14741,7 @@ msgstr "Kann SEARCH_PATH nicht zum Schreiben öffnen."
 #: ../general/g.cairocomp/main.c:48
 #, fuzzy, c-format
 msgid "Unable to read input file <%s>"
-msgstr "Kann die Eingabedatei <%s> nicht öffnen."
+msgstr "Kann Eingabe nicht von <%s> lesen."
 
 #: ../general/g.cairocomp/main.c:51
 #, fuzzy, c-format
@@ -14833,8 +14826,9 @@ msgid "Don't composite; just delete input Pixmaps"
 msgstr ""
 
 #: ../general/g.cairocomp/main.c:280
+#, fuzzy
 msgid "input= and opacity= must have the same number of values"
-msgstr ""
+msgstr "output= und method= müssen die selbe Anzahl von Werten haben."
 
 #: ../general/g.copy/main.c:42
 msgid ""
@@ -18156,6 +18150,9 @@ msgid ""
 "driver: %s\n"
 "database: %s"
 msgstr ""
+"Standard Treiber / Datenbank ist:\n"
+"Treiber: %s\n"
+"Datenbank: %s"
 
 #: ../db/db.connect/connect.c:144
 msgid "Default driver is not set"
@@ -18415,7 +18412,7 @@ msgstr "Listet alle Datenbanken für den angegebenen Treiber und Location auf."
 
 #: ../db/db.login/main.c:44
 msgid "Sets user/password for driver/database."
-msgstr ""
+msgstr "Setzt Benutzername/Passwort für Treiber/Datenbank."
 
 #: ../db/db.login/main.c:60
 msgid "Username"
@@ -18443,11 +18440,11 @@ msgstr "Drücke RETURN um Anfrage abzubrechen\n"
 
 #: ../db/db.login/main.c:95
 msgid "Exiting. Not changing current settings"
-msgstr ""
+msgstr "Ende, ohne aktuelle Einstellungen zu verändern."
 
 #: ../db/db.login/main.c:99
 msgid "New password set"
-msgstr ""
+msgstr "Neues Passwort gesetzt."
 
 #: ../db/db.login/main.c:108
 msgid "Unable to set user/password"
@@ -19044,11 +19041,12 @@ msgstr ""
 "in der Zukunft entfernt."
 
 #: ../raster/r.surf.contour/main.c:87
-#, fuzzy
 msgid ""
 "Invoke slow, but memory frugal operation (generally not needed, will be "
 "removed in future)"
-msgstr "in"
+msgstr ""
+"Rufe langsame aber speicherschonende Operation auf (im Allgemeinen nicht "
+"benötigt, wird in Zukunft entfernt)."
 
 #: ../raster/r.topmodel/main.c:64
 msgid "Simulates TOPMODEL which is a physically based hydrologic model."
@@ -19464,14 +19462,12 @@ msgid "Extracts terrain parameters from a DEM."
 msgstr "Extrahiert Terrainparameter aus einem DGM."
 
 #: ../raster/r.param.scale/interface.c:56
-#, fuzzy
 msgid ""
 "Uses a multi-scale approach by taking fitting quadratic parameters to any "
 "size window (via least squares)."
 msgstr ""
-"Extrahiert Reliefinformationen aus einem DEM. Dazu benutzt das Modul einen "
-"multi-skalaren Ansatz, in dem quadratische Parameter auf jede Fenstergröße "
-"angepasst werden (über kleinste Quadrate)."
+"Verwendet einen multi-skalaren Ansatz, in dem quadratische Parameter auf "
+"jede Fenstergröße angepasst werden (über die Methode der kleinsten Quadrate)."
 
 #: ../raster/r.param.scale/interface.c:74
 msgid "Output raster layer containing morphometric parameter"
@@ -20123,7 +20119,7 @@ msgstr "Lese <%s> in <%s>"
 #: ../raster/r.usler/main.c:50
 #, fuzzy
 msgid "raster, rainfall, erosion, USLE"
-msgstr "Raster, Sedimente, Erosion, Deposition"
+msgstr "Raster, Sedimenttransport, Erosion, Deposition"
 
 #: ../raster/r.usler/main.c:51
 msgid "Computes USLE R factor, Rainfall erosivity index."
@@ -20184,70 +20180,63 @@ msgstr ""
 #: ../raster/simwe/r.sim.water/main.c:125
 #: ../raster/simwe/r.sim.sediment/main.c:118
 msgid "Name of the elevation raster map [m]"
-msgstr "Name der Rasterkarte, die Höheninformation enthält [m]."
+msgstr "Name der Rasterkartem mit Höheninformation [m]."
 
 #: ../raster/simwe/r.sim.water/main.c:130
 #: ../raster/simwe/r.sim.sediment/main.c:128
 msgid "Name of the x-derivatives raster map [m/m]"
-msgstr "Name der Rasterkarte, die die Ableitung nach X enthält [m/m]."
+msgstr "Name der Rasterkarte mit Ableitung nach X [m/m]."
 
 #: ../raster/simwe/r.sim.water/main.c:135
 #: ../raster/simwe/r.sim.sediment/main.c:133
 msgid "Name of the y-derivatives raster map [m/m]"
-msgstr "Name der Rasterkarte, die die Ableitung nach Y enthält [m/m]."
+msgstr "Name der Rasterkarte mit Ableitung nach Y [m/m]."
 
 #: ../raster/simwe/r.sim.water/main.c:142
-#, fuzzy
 msgid "Name of the rainfall excess rate (rain-infilt) raster map [mm/hr]"
-msgstr "Name einer neuen Rasterkarte"
+msgstr ""
+"Name der Rasterkarte der Niederschlagsüberschussrate (rain-infilt) [mm/hr]."
 
 #: ../raster/simwe/r.sim.water/main.c:151
-#, fuzzy
 msgid "Rainfall excess rate unique value [mm/hr]"
-msgstr "Name einer neuen Rasterkarte"
+msgstr "Niederschlagsüberschussrate, einzelner Wert [mm/hr]."
 
 #: ../raster/simwe/r.sim.water/main.c:158
-#, fuzzy
 msgid "Name of the runoff infiltration rate raster map [mm/hr]"
-msgstr "Name der Eingabe-Rasterkarte"
+msgstr "Name der Rasterkarte der Abflußinfiltrationsrate [mm/hr]."
 
 #: ../raster/simwe/r.sim.water/main.c:167
-#, fuzzy
 msgid "Runoff infiltration rate unique value [mm/hr]"
-msgstr "Name der Eingabe-Rasterkarte"
+msgstr "Abflußinfiltrationsrate, einzelner Wert [mm/hr]."
 
 #: ../raster/simwe/r.sim.water/main.c:173
 #: ../raster/simwe/r.sim.sediment/main.c:157
 msgid "Name of the Mannings n raster map"
-msgstr "Name der Mannings n Rasterkarte"
+msgstr "Name der Rasterkarte mit Mannings n."
 
 #: ../raster/simwe/r.sim.water/main.c:181
 msgid "Mannings n unique value"
-msgstr "Mannings n eindeutiger Wert"
+msgstr "Mannings n, einzelner Wert."
 
 #: ../raster/simwe/r.sim.water/main.c:188
-#, fuzzy
 msgid "Name of the flow controls raster map (permeability ratio 0-1)"
-msgstr "Name der Eingabe-Rasterkarte"
+msgstr "Name Rasterkarte, die den Fluß kontrolliert (Permeabilität: 0-1)."
 
 #: ../raster/simwe/r.sim.water/main.c:203
-#, fuzzy
 msgid "Output water depth raster map [m]"
-msgstr "Ausgabekarte mit der Hangläne (Raster)."
+msgstr "Ausgabe-Rasterkarte der Wassertiefe [m]"
 
 #: ../raster/simwe/r.sim.water/main.c:209
-#, fuzzy
 msgid "Output water discharge raster map [m3/s]"
-msgstr "Ausgabekarte mit der mittleren Wölbung."
+msgstr "Ausgabe-Rasterkarte des Wasserabfluß [m3/s]."
 
 #: ../raster/simwe/r.sim.water/main.c:215
-#, fuzzy
 msgid "Output simulation error raster map [m]"
-msgstr "Ausgabekarte mit der Hangneigung."
+msgstr "Ausgabe-Rasterkarte des Simulationsfehlers [m]."
 
 #: ../raster/simwe/r.sim.water/main.c:232
 msgid "Number of walkers, default is twice the no. of cells"
-msgstr ""
+msgstr "Anzahl der Agenten, Standard ist das Doppelte der Anzahl der Zellen."
 
 #: ../raster/simwe/r.sim.water/main.c:233
 #: ../raster/simwe/r.sim.water/main.c:241
@@ -20271,35 +20260,37 @@ msgstr "Zeit verwendet für die Iterationen [Minuten]"
 #: ../raster/simwe/r.sim.water/main.c:249
 #: ../raster/simwe/r.sim.sediment/main.c:231
 msgid "Time interval for creating output maps [minutes]"
-msgstr "Zeit-Intervall für die Erstellung von Ausgabe-Karten [Minuten]"
+msgstr "Zeit-Intervall für die Erstellung von Ausgabekarten [Minuten]"
 
 #: ../raster/simwe/r.sim.water/main.c:267
 #: ../raster/simwe/r.sim.sediment/main.c:249
 msgid "Water diffusion constant"
-msgstr "Wasserdiffusionskonstante"
+msgstr "Wasserdiffusionskoeffizienten"
 
 #: ../raster/simwe/r.sim.water/main.c:276
 msgid ""
 "Threshold water depth [m] (diffusion increases after this water depth is "
 "reached)"
 msgstr ""
+"Schwellwert der Wassertiefe [m] (Diffusion steigt, nachdem diese Wassertiefe "
+"erreicht wurde)."
 
 #: ../raster/simwe/r.sim.water/main.c:284
 msgid "Diffusion increase constant"
-msgstr ""
+msgstr "Diffusions Steigerungsrate"
 
 #: ../raster/simwe/r.sim.water/main.c:293
 msgid "Weighting factor for water flow velocity vector"
-msgstr ""
+msgstr "Gewichtungsfaktor für den Geschwindigkeitsvektor des Wasserflusses."
 
 #: ../raster/simwe/r.sim.water/main.c:298
 msgid "Time-series output"
-msgstr ""
+msgstr "Ausgabe der Zeitreihe"
 
 #: ../raster/simwe/r.sim.water/main.c:444
 #: ../raster/simwe/r.sim.sediment/main.c:331
 msgid "More than 100 files are going to be created !!!!!"
-msgstr "Mehr als 100 Dateien sollen werden erstellt !!!!!"
+msgstr "Es sollen mehr als 100 Dateien erstellt werden !!!!!"
 
 #: ../raster/simwe/r.sim.water/main.c:450
 #: ../raster/simwe/r.sim.sediment/main.c:337
@@ -20314,9 +20305,8 @@ msgid "Using metric conversion factor %f, step=%f"
 msgstr "Verwende metrischen Umrechnungsfaktor %f, step=%f"
 
 #: ../raster/simwe/r.sim.water/main.c:477
-#, fuzzy
 msgid "You are not outputting any raster maps"
-msgstr "Es werden weder Vektor- noch Rasterdaten ausgegeben."
+msgstr "Sie produzieren keine Rasterkarten."
 
 #: ../raster/simwe/r.sim.water/main.c:525
 #: ../raster/simwe/r.sim.sediment/main.c:417
@@ -20401,65 +20391,60 @@ msgstr "Kann die et Datei nicht schreiben."
 
 #: ../raster/simwe/r.sim.sediment/main.c:111
 msgid "raster, sediment flow, erosion, deposition"
-msgstr "Raster, Sedimente, Erosion, Deposition"
+msgstr "Raster, Sedimenttransport, Erosion, Deposition"
 
 #: ../raster/simwe/r.sim.sediment/main.c:113
 msgid ""
 "Sediment transport and erosion/deposition simulation using path sampling "
 "method (SIMWE)"
 msgstr ""
+"Sedimenttransport und Erosions/Depositions Simulation unter Verwendung der "
+"\"path sampling method\" (SIMWE)."
 
 #: ../raster/simwe/r.sim.sediment/main.c:123
 msgid "Name of the water depth raster map [m]"
-msgstr "Name der Rasterkarte, die die Wasserhöhe angibt [m]."
+msgstr "Name der Rasterkarte mit Wassertiefe [m]."
 
 #: ../raster/simwe/r.sim.sediment/main.c:139
-#, fuzzy
 msgid "Name of the detachment capacity coefficient raster map [s/m]"
-msgstr "Die Karte mit dem Koeffizient der direkten Sonneneinstrahlung [-]."
+msgstr "Name der Rasterkarte mit Trennungs-Kapazitätskoeffizienten [s/m]."
 
 #: ../raster/simwe/r.sim.sediment/main.c:145
-#, fuzzy
 msgid "Name of the transport capacity coefficient raster map [s]"
-msgstr "Einabekarte des Grund-Albedokoeffizients [-]."
+msgstr "Name der Rasterkarte mit Transport-Kapazitätskoeffizienten [s/m]."
 
 #: ../raster/simwe/r.sim.sediment/main.c:151
-#, fuzzy
 msgid "Name of the critical shear stress raster map [Pa]"
-msgstr "Name einer neuen Rasterkarte"
+msgstr "Name der Rasterkarte mit kritische Scherrspannung [Pa]."
 
 #: ../raster/simwe/r.sim.sediment/main.c:165
 msgid "Name of the Mannings n value"
-msgstr "Name des Mannings n Wertes"
+msgstr "Name des Mannings n Parameters."
 
 #: ../raster/simwe/r.sim.sediment/main.c:180
-#, fuzzy
 msgid "Output transport capacity raster map [kg/ms]"
-msgstr "Ausgabekarte mit Hangexposition."
+msgstr "Ausgabe-Rasterkarte der Transportkapazität [kg/ms]."
 
 #: ../raster/simwe/r.sim.sediment/main.c:187
-#, fuzzy
 msgid "Output transp.limited erosion-deposition raster map [kg/m2s]"
-msgstr "section"
+msgstr ""
+"Ausgabe der \"transp.limited\" Erosions-Depositions Rasterkarte [kg/m2s]."
 
 #: ../raster/simwe/r.sim.sediment/main.c:194
-#, fuzzy
 msgid "Output sediment concentration raster map [particle/m3]"
-msgstr "Name der Fließrichtungskarte (Ausgabe)"
+msgstr "Ausgabe-Rasterkarte der Sedimentkonzentration [Partikel/m3]"
 
 #: ../raster/simwe/r.sim.sediment/main.c:200
-#, fuzzy
 msgid "Output sediment flux raster map [kg/ms]"
-msgstr "Name der Rasterkarte mit Abflussinformationen "
+msgstr "Ausgabe-Rasterkarte des Sedimentfluß [kg/ms]."
 
 #: ../raster/simwe/r.sim.sediment/main.c:207
-#, fuzzy
 msgid "Output erosion-deposition raster map [kg/m2s]"
-msgstr "section"
+msgstr "Ausgabe der Erosions-Depositions-Rasterkarte [kg/m2s]."
 
 #: ../raster/simwe/r.sim.sediment/main.c:214
 msgid "Number of walkers"
-msgstr "Anzahl der Geher"
+msgstr "Anzahl der Agenten."
 
 #: ../raster/simwe/r.sim.sediment/main.c:355
 msgid "You are not outputting any raster or site files"
@@ -21719,13 +21704,11 @@ msgid "Unknown method <%s>"
 msgstr "Unbekannte Methode <%s>."
 
 #: ../raster/r.rescale.eq/main.c:48
-#, fuzzy
 msgid ""
 "Rescales histogram equalized the range of category values in a raster map "
 "layer."
 msgstr ""
-"Reskaliert ein normalisiertes Histogram basierend auf der Spanne der "
-"Kategoriewerte einer Rasterkarte."
+"Reskaliert mit Histogrammnormalisierung die Kategoriewerte einer Rasterkarte."
 
 #: ../raster/r.rescale.eq/main.c:58 ../raster/r.rescale/main.c:54
 msgid "The name of the raster map to be rescaled"
@@ -21829,29 +21812,28 @@ msgid "Integer data range of %s is %d to %d"
 msgstr "Integer Wertebereich von %s ist %d bis %d."
 
 #: ../raster/r.recode/read_rules.c:59
-#, fuzzy
 msgid "Enter the rule or 'help' for the format description"
-msgstr "Bitte geben Sie eine Regel in einem der folgende Formate ein:\n"
+msgstr "Geben Sie die Regel oder 'help' für die Formatbeschreibung ein."
 
 #: ../raster/r.recode/read_rules.c:80
 msgid "Enter a rule in one of these formats:"
-msgstr "Bitte geben Sie eine Regel in einem dieser Formate ein:"
+msgstr "Geben Sie eine Regel in einem dieser Formate ein:"
 
 #: ../raster/r.recode/read_rules.c:81
 msgid "old_low:old_high:new_low:new_high"
-msgstr ""
+msgstr "alt_neidrig:alt_hoch:neu_niedrig:neu_hoch"
 
 #: ../raster/r.recode/read_rules.c:82
 msgid "old_low:old_high:new_val      (i.e. new_high == new_low)"
-msgstr ""
+msgstr "alt_niedrig:alt_hoch:neuer_wert      (z.B. neu_hoch == neu_niedrig)"
 
 #: ../raster/r.recode/read_rules.c:83
 msgid "*:old_val:new_val             (interval [inf, old_val])"
-msgstr ""
+msgstr "*:alt_wert:neu_wert             (Intervall [unendlich, alt_wert])"
 
 #: ../raster/r.recode/read_rules.c:84
 msgid "old_val:*:new_val             (interval [old_val, inf])"
-msgstr ""
+msgstr "alt_wertl:*:neu_wert             (Intervall [alt_wert, unendlich])"
 
 #: ../raster/r.recode/read_rules.c:123 ../raster/r.quant/read_rules.c:157
 #, fuzzy, c-format
@@ -22095,16 +22077,16 @@ msgid ""
 "Interactive tool used to setup the sampling and analysis framework that will "
 "be used by the other r.le programs."
 msgstr ""
+"Interaktives Werkzeug zur Erzeugung eine Stichproben- und Analyse-Rahmens, "
+"der von den anderen r.le-Progammen verwendet wird. "
 
 #: ../raster/r.le/r.le.setup/main.c:64
-#, fuzzy
 msgid "Raster map to use to setup sampling"
-msgstr "Rasterkarte, die umgeschlüsselt werden soll."
+msgstr "Rasterkarte, zur Erzeugung des Stichprobenrahmens."
 
 #: ../raster/r.le/r.le.setup/main.c:68
-#, fuzzy
 msgid "Vector map to overlay"
-msgstr "Vektorkartentyp."
+msgstr "Einzublendende Vektorkarte."
 
 #: ../raster/r.le/r.le.pixel/main.c:47
 msgid ""
@@ -22115,15 +22097,14 @@ msgstr ""
 "Nebeneinanderstellung und Kanten"
 
 #: ../raster/r.le/r.le.trace/main.c:59
-#, fuzzy
 msgid ""
 "Displays the boundary of each r.le patch and shows how the boundary is "
 "traced, displays the attribute, size, perimeter and shape indices for each "
 "patch and saves the data in an output file."
 msgstr ""
-"Zeige die Grenzen aller r.le-Patches und zeige wie die Grenzen nachverfolgt "
-"werden. Zeige Attribut, Größe, Umfang und Form jedes Patches und speichere "
-"die Daten in einer Ausgabedatei."
+"Zeigt die Grenzen aller r.le-Patches und wie die Grenze verfolgt wird. Zeigt "
+"außerdem die Attribute, Größe, Umfang und Form Indices jedes Patches und "
+"speichert die Daten in eine Ausgabedatei."
 
 #: ../raster/r.le/r.le.patch/main.c:50
 msgid ""
@@ -22579,7 +22560,7 @@ msgstr "Bereich der Stufen: min = %f max = %f"
 #: ../raster/r.contour/main.c:331
 #, fuzzy
 msgid "Displacing data..."
-msgstr "Drehe Daten..."
+msgstr "Verschiebe Daten:"
 
 #: ../raster/r.contour/cont.c:81
 #, fuzzy, c-format
@@ -22800,9 +22781,9 @@ msgid ""
 "Your color rules do not cover the whole range of data!\n"
 " (rules %f to %f but data %f to %f)"
 msgstr ""
-"Die ausgewählten Farbregeln erstrecken sich nicht über die gesamte "
-"Datenspanne!\n"
-"(Regelsatz: %f - %f aber Datenspanne: %f - %f)"
+"Die ausgewählten Farbregeln erstrecken sich nicht über den gesamten "
+"Wertebereich!\n"
+"(Regelsatz: %f - %f aber Daten: %f - %f)"
 
 #: ../raster/r.colors/rules.c:106 ../raster/r.reclass/parse.c:40
 #, c-format
@@ -24287,7 +24268,7 @@ msgstr "Reskaliere %s[%ld,%ld] nach %s[%ld,%ld]"
 #: ../raster/r.watershed/seg/do_astar.c:20
 #: ../raster/r.watershed/ram/do_astar.c:16
 msgid "SECTION 2: A * Search."
-msgstr ""
+msgstr "Abschnitt 2: A * Suche."
 
 #: ../raster/r.watershed/seg/do_astar.c:119
 #: ../raster/r.watershed/ram/do_astar.c:117
@@ -24333,7 +24314,7 @@ msgid "MFD: A * path already processed when distributing flow: %d of %d"
 msgstr ""
 
 #: ../raster/r.watershed/seg/usage.c:9 ../raster/r.watershed/ram/usage.c:9
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "USAGE for basin delineation:\n"
 "%s -4 el=elevation_map t=swale_threshold [ov=overland_flow_map] "
@@ -24351,7 +24332,23 @@ msgid ""
 "[de=depression_map] [ac=accumulation_map] [di=display_map] "
 "[ms=max_slope_length] [ob=overland_blocking_map] [S=slope_steepness_map] "
 "LS=length_slope_map [r=rill_erosion_map] [sd=slope_deposition value or map]"
-msgstr "S"
+msgstr ""
+"VERWENDUNG für Einzugsgebietskartierung:\n"
+"%s -4 el=elevation_map t=swale_threshold [ov=overland_flow_map] "
+"[dr=drain_direction_map] [de=depression_map] [ac=accumulation_map] "
+"[di=display_map] ba=watershed_basin_map [se=stream_segment_map]\n"
+"\n"
+"VERWENDUNG für ARMSED-Datei Erzeugung:\n"
+"%s [-4] el=elevation_map t=swale_threshold [ov=overland_flow_map] "
+"[dr=drain_direction_map] [de=depression_map] [ac=accumulation_map] "
+"[di=display_map] [ba=watershed_basin_map] [se=stream_segment_map] "
+"ha=half_basin_map ar=ARMSED_file_name\n"
+"\n"
+"VERWENDUNG für Hanglängenberechnung:\n"
+"%s [-4] el=elevation_map t=swale_threshold [dr=drain_direction_map] "
+"[de=depression_map] [ac=accumulation_map] [di=display_map] "
+"[ms=max_slope_length] [ob=overland_blocking_map] [S=slope_steepness_map] "
+"LS=length_slope_map [r=rill_erosion_map] [sd=slope_deposition value or map]"
 
 #: ../raster/r.watershed/seg/init_vars.c:105
 #, c-format
@@ -24375,9 +24372,8 @@ msgstr ""
 
 #: ../raster/r.watershed/ram/close_maps.c:27
 #: ../raster/r.watershed/ram/close_maps.c:115
-#, fuzzy
 msgid "unable to open new accum map layer."
-msgstr "Kann die Karte MASK nicht öffnen."
+msgstr "Kann neue accum-Karte nicht öffnen."
 
 #: ../raster/r.watershed/ram/close_maps.c:37
 #: ../raster/r.watershed/ram/close_maps.c:103
@@ -24397,9 +24393,8 @@ msgid "unable to open new L map layer."
 msgstr "Kann neue L-Karte nicht öffnen."
 
 #: ../raster/r.watershed/ram/close_maps.c:169
-#, fuzzy
 msgid "unable to open new slope length map layer."
-msgstr "Kann die Karte MASK nicht öffnen."
+msgstr "Kann neue slope-length-Karte nicht öffnen."
 
 #: ../raster/r.watershed/ram/close_maps.c:191
 msgid "unable to open new S map layer."
@@ -24417,27 +24412,23 @@ msgstr ""
 
 #: ../raster/r.watershed/ram/init_vars.c:129
 msgid "unable to open elevation map layer"
-msgstr "Kann die Rasterkarte mit Höhenwerten nicht öffnen."
+msgstr "Kann die elevation-Karte nicht öffnen."
 
 #: ../raster/r.watershed/ram/init_vars.c:155
-#, fuzzy
 msgid "unable to open runoff map layer"
-msgstr "Kann die Ausgabedatei nicht öffnen."
+msgstr "Kann die runoff-Karte nicht öffnen."
 
 #: ../raster/r.watershed/ram/init_vars.c:177
-#, fuzzy
 msgid "unable to open depression map layer"
-msgstr "Kann die Höhenkarte nicht schließen."
+msgstr "Kann die depression-Karte nicht öffnen."
 
 #: ../raster/r.watershed/ram/init_vars.c:191
-#, fuzzy
 msgid "unable to open blocking map layer"
-msgstr "Kann die Eingabekarte nicht schließen."
+msgstr "Kann die blocking-Karte nicht öffnen."
 
 #: ../raster/r.watershed/ram/init_vars.c:205
-#, fuzzy
 msgid "unable to open rill map layer"
-msgstr "Kann die Cell-Datei <%s> nicht öffnen."
+msgstr "Kann die rill-Karte nicht öffnen."
 
 #: ../raster/r.watershed/ram/init_vars.c:214
 msgid "unable to open MASK"
@@ -24450,16 +24441,16 @@ msgstr "Modul zur Analyse von Wassereinzugsgebieten."
 #: ../raster/r.watershed/front/main.c:60
 msgid "Input map: elevation on which entire analysis is based"
 msgstr ""
-"Eingabekarte: Höhenmodell, welches Grundlage dieser gesamten Analyse sein "
-"wird."
+"Eingabekarte mit Höheninformationen, welche die Grundlage der gesamten "
+"Analyse ist."
 
 #: ../raster/r.watershed/front/main.c:65
 msgid "Input map: locations of real depressions"
-msgstr "Eingabekarte: Orte realer Senken im Gebiet."
+msgstr "Eingabekarte mit Orten realer Senken im Gebiet."
 
 #: ../raster/r.watershed/front/main.c:73
 msgid "Input map: amount of overland flow per cell"
-msgstr "Eingabekarte: Anzahl von Oerflächenabfluss pro Zelle."
+msgstr "Eingabekarte mit der Größe des Oberflächenabfluss pro Zelle."
 
 #: ../raster/r.watershed/front/main.c:82
 msgid "Input map or value: percent of disturbed land, for USLE"
@@ -24468,8 +24459,7 @@ msgstr "Eingabekarte oder Wert: Prozent von gestörtem Land, (für ABAG/USLE)."
 #: ../raster/r.watershed/front/main.c:91
 msgid "Input map: terrain blocking overland surface flow, for USLE"
 msgstr ""
-"Eingabekarte: Linienhafte Strukturen, die Oberflächenabfluss blockieren (für "
-"ABAG/USLE)."
+"Eingabekarte mit Gelände, dass den Oberflächenabfluss blockiert, für USLE."
 
 #: ../raster/r.watershed/front/main.c:100
 msgid "Input value: minimum size of exterior watershed basin"
@@ -24481,35 +24471,36 @@ msgstr "Eingabewert: Maximale Länge des Oberflächenabflusses (für ABAG/USLE)."
 
 #: ../raster/r.watershed/front/main.c:118
 msgid "Output map: number of cells that drain through each cell"
-msgstr "Ausgabekarte: Anzahl der Zellen, die durch jede Zelle abfließt."
+msgstr "Ausgabekarte mit Anzahl der Zellen, die durch jede Zelle abfließt."
 
 #: ../raster/r.watershed/front/main.c:126
 msgid "Output map: drainage direction"
-msgstr "Ausgabekarte: Abflussrichtung"
+msgstr "Ausgabekarte mit Abflussrichtung."
 
 #: ../raster/r.watershed/front/main.c:135
 msgid "Output map: unique label for each watershed basin"
-msgstr "Ausgabekarte: Eindeutige Label für jedes Einzugsgebiet."
+msgstr "Ausgabekarte mit eindeutiger Kennzeichnung jedes Einzugsgebietes."
 
 #: ../raster/r.watershed/front/main.c:143
 msgid "Output map: stream segments"
-msgstr "Ausgabekarte: Flussnetzwerk"
+msgstr "Ausgabekarte der Flußsegmente. "
 
 #: ../raster/r.watershed/front/main.c:152
 msgid "Output map: each half-basin is given a unique value"
-msgstr "Ausgabekarte: Einzugegebietshälften mit einem eindeutigen Wert."
+msgstr "Ausgabekarte mit Einzugsgebietshälften mit eindeutigen Wert."
 
 #: ../raster/r.watershed/front/main.c:161
 msgid "Output map: useful for visual display of results"
-msgstr "Ausgabekarte: hilfreich für die visuelle Darstellung der Ergebnisse."
+msgstr ""
+"Ausgabekarte die hilfreich für die visuelle Darstellung der Ergebnisse ist."
 
 #: ../raster/r.watershed/front/main.c:170
 msgid "Output map: slope length and steepness (LS) factor for USLE"
-msgstr "Ausgabekarte: Hanglänge und -Neigungsfaktor (LS) für ABAG/USLE."
+msgstr "Ausgabekarte der Hanglängen und -Neigungsfaktoren (LS) für USLE."
 
 #: ../raster/r.watershed/front/main.c:178
 msgid "Output map: slope steepness (S) factor for USLE"
-msgstr "Ausgabekarte: Hangneigungsfaktor (S) für ABAG/USLE."
+msgstr "Ausgabekarte der Hangneigungsfaktoren (S) für USLE."
 
 #: ../raster/r.watershed/front/main.c:189
 #, fuzzy
@@ -24587,9 +24578,8 @@ msgid "divided by basin. %s will then run %s and create the report."
 msgstr ""
 
 #: ../raster/r.watershed/shed/read.c:23
-#, fuzzy
 msgid "unable to open basin/half basin map"
-msgstr "Kann die Höhenkarte nicht schließen."
+msgstr "Kann die basin/half basin-Karte nicht öffnen."
 
 #: ../raster/r.watershed/shed/com_line.c:21
 msgid ""
@@ -24670,7 +24660,7 @@ msgstr ""
 #: ../raster/r.watershed/shed/com_line.c:68
 #: ../raster/r.watershed/shed/com_line.c:180
 msgid "program will terminate."
-msgstr "Programm beendet."
+msgstr "Programm wird beendet."
 
 #: ../raster/r.watershed/shed/com_line.c:79
 #, c-format
@@ -24700,9 +24690,8 @@ msgid "have a depression map, prepare a map where non-zero values indicate the"
 msgstr ""
 
 #: ../raster/r.watershed/shed/com_line.c:85
-#, fuzzy
 msgid "locations where depressions occur.\n"
-msgstr "Eingabekarte: Orte realer Senken im Gebiet."
+msgstr "Orte an denen Senken vorkommen.\n"
 
 #: ../raster/r.watershed/shed/com_line.c:86
 msgid ""
@@ -24786,7 +24775,7 @@ msgstr " 1) Acres, 2) Quadratmeter, 3) Quadratmeilen, 4) Hektar,"
 
 #: ../raster/r.watershed/shed/com_line.c:118
 msgid " 5) kilometers sq., 6) map cells,  7) overland flow units"
-msgstr " 5) Quadratkilometer, 6) Zellen,  7) overland flow units"
+msgstr " 5) Quadratkilometer, 6) Zellen, 7) Oberflächenabflußeinheiten"
 
 #: ../raster/r.watershed/shed/com_line.c:119
 #, c-format
@@ -25063,7 +25052,7 @@ msgstr "Kann die ARMSED-Datei nicht öffnen."
 
 #: ../raster/r.watershed/shed/main.c:41
 msgid "Slow version of water analysis program starting now"
-msgstr ""
+msgstr "Langsame Version des Wasseranalyseprogramms startet jetzt. "
 
 #: ../raster/r.watershed/shed/main.c:46 ../raster/r.watershed/shed/main.c:55
 #, c-format
@@ -25075,14 +25064,12 @@ msgid "unable to open output file"
 msgstr "Kann die Ausgabedatei nicht öffnen."
 
 #: ../raster/r.watershed/shed/valid.c:24
-#, fuzzy
 msgid "accum file missing in valid_basins()"
-msgstr "in"
+msgstr "accum-Datei fehlt in valid_basins()"
 
 #: ../raster/r.watershed/shed/valid.c:28
-#, fuzzy
 msgid "unable to open accum file in valid_basins()"
-msgstr "Kann die Rules-Datei %s in %s nicht öffnen."
+msgstr "Kann die accum-Datei in valid_basins() nicht öffnen."
 
 #: ../raster/r.uslek/main.c:52
 #, fuzzy
@@ -25096,22 +25083,22 @@ msgstr ""
 #: ../raster/r.uslek/main.c:58
 #, fuzzy
 msgid "Name of the Soil sand fraction map [0.0-1.0]"
-msgstr "Name der Rasterkarte, die Höheninformation enthält [m]."
+msgstr "Name der Rasterkartem mit Höheninformation [m]."
 
 #: ../raster/r.uslek/main.c:62
 #, fuzzy
 msgid "Name of the Soil clay fraction map [0.0-1.0]"
-msgstr "Name der Rasterkarte, die Höheninformation enthält [m]."
+msgstr "Name der Rasterkartem mit Höheninformation [m]."
 
 #: ../raster/r.uslek/main.c:66
 #, fuzzy
 msgid "Name of the Soil silt fraction map [0.0-1.0]"
-msgstr "Name der Rasterkarte, die Höheninformation enthält [m]."
+msgstr "Name der Rasterkartem mit Höheninformation [m]."
 
 #: ../raster/r.uslek/main.c:70
 #, fuzzy
 msgid "Name of the Soil Organic Matter map [0.0-1.0]"
-msgstr "Name der Rasterkarte, die Höheninformation enthält [m]."
+msgstr "Name der Rasterkartem mit Höheninformation [m]."
 
 #: ../raster/r.uslek/main.c:74
 #, fuzzy
@@ -25224,9 +25211,8 @@ msgid "Maximum distance of spatial correlation (value >= 0.0)"
 msgstr "Maximale Distanz vom Punkt zum Netzwerk."
 
 #: ../raster/r.random.surface/main.c:82
-#, fuzzy
 msgid "Distance decay exponent (value > 0.0)"
-msgstr "'layer' muss > 0 sein."
+msgstr ""
 
 #: ../raster/r.random.surface/main.c:91
 msgid "Distance filter remains flat before beginning exponent"
@@ -25276,9 +25262,9 @@ msgid "Seed (%d) smaller than minimum (%d)"
 msgstr "Startwert [%d] kleiner als das Minimum [%d]."
 
 #: ../raster/r.random.surface/init.c:160
-#, fuzzy, c-format
+#, c-format
 msgid "Distance value (%d): %lf must be >= 0.0"
-msgstr "'layer' muss > 0 sein."
+msgstr ""
 
 #: ../raster/r.random.surface/init.c:188
 #, c-format
@@ -25867,7 +25853,7 @@ msgstr "Kann die Eingabedatei <%s> nicht öffnen."
 msgid ""
 "\n"
 "Enter the rule or 'help' for the format description or 'end' to exit:\n"
-msgstr "Bitte geben Sie eine Regel in einem der folgende Formate ein:\n"
+msgstr "Geben Sie die Regel oder 'help' für die Formatbeschreibung ein."
 
 #: ../raster/r.quant/read_rules.c:111
 #, fuzzy
@@ -26421,9 +26407,8 @@ msgstr ""
 "eingebunden werden."
 
 #: ../raster/r.sun2/main.c:256
-#, fuzzy
 msgid "A single value of the orientation (aspect), 270 is south"
-msgstr "Ein einfacher Wert des Breitengrads [in Grad]."
+msgstr ""
 
 #: ../raster/r.sun2/main.c:272
 #, fuzzy
@@ -27293,13 +27278,12 @@ msgid "Maximum difference between this and last increment: %g"
 msgstr "Maximale Distanz zwischen den Punkten in Karteneinheiten (mapunits)."
 
 #: ../raster/r.out.ppm/main.c:54
-#, fuzzy
 msgid ""
 "Converts a GRASS raster map to a PPM image file at the pixel resolution of "
 "the currently defined region."
 msgstr ""
-"Exportiere GRASS Rasterkarte in ein 8/24 bit TIFF-Bild. Die Pixelauflösung "
-"wird aus der aktuellen Region-Einstellung übernommen."
+"Konvertiert eine GRASS-Rasterkarte in eine PPM Bilddatei mit der Auflösung "
+"der aktuellen Region."
 
 #: ../raster/r.out.ppm/main.c:62
 msgid "Name for new PPM file (use '-' for stdout)"
@@ -27646,11 +27630,11 @@ msgstr "Aggregationsverfahren"
 
 #: ../raster/r.series/main.c:150
 msgid "Ignore values outside this range"
-msgstr ""
+msgstr "Ignoriere Werte außerhalb dieses Bereichs."
 
 #: ../raster/r.series/main.c:194
 msgid "output= and method= must have the same number of values"
-msgstr ""
+msgstr "output= und method= müssen die selbe Anzahl von Werten haben."
 
 #: ../raster/r.covar/main.c:52
 msgid ""
@@ -27984,9 +27968,8 @@ msgid "You didn't specify a horizon raster name. Aborting."
 msgstr ""
 
 #: ../raster/r.horizon/main.c:379
-#, fuzzy
 msgid "You didn't specify an angle step size. Aborting."
-msgstr "Kann die Range-Datei nicht lesen."
+msgstr ""
 
 #: ../raster/r.horizon/main.c:393
 #, fuzzy
@@ -27994,29 +27977,24 @@ msgid "Could not read bufferzone size. Aborting."
 msgstr "Kann die Range-Datei nicht lesen."
 
 #: ../raster/r.horizon/main.c:399
-#, fuzzy
 msgid "Could not read east bufferzone size. Aborting."
-msgstr "Kann die Range-Datei nicht lesen."
+msgstr ""
 
 #: ../raster/r.horizon/main.c:405
-#, fuzzy
 msgid "Could not read west bufferzone size. Aborting."
-msgstr "Kann die Range-Datei nicht lesen."
+msgstr ""
 
 #: ../raster/r.horizon/main.c:412
-#, fuzzy
 msgid "Could not read south bufferzone size. Aborting."
-msgstr "Kann die Range-Datei nicht lesen."
+msgstr ""
 
 #: ../raster/r.horizon/main.c:421
-#, fuzzy
 msgid "Could not read north bufferzone size. Aborting."
-msgstr "Kann die Range-Datei nicht lesen."
+msgstr ""
 
 #: ../raster/r.horizon/main.c:427
-#, fuzzy
 msgid "Could not read maximum distance. Aborting."
-msgstr "Kann die Range-Datei nicht lesen."
+msgstr ""
 
 #: ../raster/r.horizon/main.c:1144
 #, fuzzy, c-format
@@ -28868,6 +28846,165 @@ msgstr "Kann keine zufriedenstellenden Farben finden."
 #: ../visualization/ximgview/color.c:269
 msgid "Using private colormap for DirectColor visual."
 msgstr "Benutze private Farbtabelle für DirectColor Visualisierung."
+
+msgid "Found file <%s@%s> in group."
+msgstr "Habe Datei <%s@%s> in der Gruppe gefunden."
+
+msgid "Found file <%s@%s> in subgroup."
+msgstr "Habe Datei <%s@%s> in Untergruppe gefunden."
+
+msgid "defaulting to nearest neighbor sampling"
+msgstr "Setze Standard auf 'nearest neighbor sampling'."
+
+#, fuzzy
+msgid ""
+"If 'list', 'file' and 'where' options are not specified, all features of "
+"given type and layer are extracted. Categories are not changed in that case."
+msgstr ""
+"Selektiert Vektorobjekte aus einer vorhandenen Vektorkarte und schreibt "
+"diese in einen neuen Datensatz. Wenn die Parameter 'list', 'file' und "
+"'where' nicht angegeben werden, werden alle Objekte vom angegebenen Typ "
+"extrahiert. Kategoriewerte werden in diesem Fall nicht verändert."
+
+#, fuzzy
+msgid "Load categories from the database (table = %s, db = %s)."
+msgstr "Lade Kategorien von der Datenbank (Tabelle = %s, DB = %s).\n"
+
+#, fuzzy
+msgid ""
+"Load values from vector to database. For uploaded/printed category values '-"
+"1' is used for 'no category' and 'null'/'-' if category cannot be found or "
+"multiple categories were found."
+msgstr ""
+"Lade Werte von den Vektoren in die Datenbank. Im Upload/Print-Modus werden "
+"Kategoriewerte mit '-1' für 'keine Kategorie' gesetzt und 'null'/'-' wenn "
+"keine Kategorien gefunden werden konnte oder mehrere Kategorien enthalten "
+"sind."
+
+#, fuzzy
+msgid "map layer [%s] not legal for GRASS"
+msgstr "GRASS"
+
+msgid "%s in %s: %s"
+msgstr "%s in %s: %s"
+
+msgid "Category list: e.g. 1,3-8,13"
+msgstr "Kategorie-Liste, z.B.: 1,3-8,13"
+
+#, fuzzy
+msgid "Cannot copy line %d, editing terminated"
+msgstr "Kann nicht von <%s> lesen."
+
+#, fuzzy
+msgid ""
+"OGR output datasource name. For example:\n"
+"\t\tESRI Shapefile: filename or directory for storage\n"
+"\t\tMapInfo File: filename or directory for storage"
+msgstr ""
+"OGR Datenquelle.\n"
+"\t\tESRI Shapefile: Verzeichnis, welches die Shapes beinhaltet.\n"
+"\t\tMapInfo File: Verzeichnis, welches die MapInfo-Files enthält."
+
+msgid "CREATING SUPPORT FILES ..."
+msgstr "Erstelle Support-Dateien...."
+
+msgid "OUT OF MEMORY !!!\n"
+msgstr "Platz im Hauptspeicher reicht nicht aus !!!\n"
+
+msgid "Normalized"
+msgstr "Normalisiert"
+
+msgid "[%s] file name not legal"
+msgstr "[%s] ist ein ungültiger Name."
+
+msgid "[%s] file name not legal\n"
+msgstr "[%s] ist ein ungültiger Name.\n"
+
+msgid "Border not yet implemented for LatLong locations: border not drawn."
+msgstr ""
+"Kartenrand ist für eine LL-Location noch nicht implementiert; er wird somit "
+"nicht gezeichnet."
+
+#, fuzzy
+msgid "Both \"-i\" AND \"color\" specified - ignoring color"
+msgstr ""
+"Es wurden beide Optionen \"color\" UND \"rast\" angegeben - Ignoriere die "
+"Option \"rast\"."
+
+#, fuzzy
+msgid "Both \"-i\" AND \"rules\" specified - ignoring rules"
+msgstr ""
+"Es wurden beide Optionen \"color\" UND \"rules\" angegeben - Ignoriere die "
+"Option \"rules\". "
+
+#, fuzzy
+msgid "Both \"-i\" AND \"raster\" specified - ignoring raster"
+msgstr ""
+"Es wurden beide Optionen \"color\" UND \"rast\" angegeben - Ignoriere die "
+"Option \"rast\"."
+
+#, fuzzy
+msgid "Both options \"color\" AND \"raster\" specified - ignoring raster"
+msgstr ""
+"Es wurden beide Optionen \"color\" UND \"rast\" angegeben - Ignoriere die "
+"Option \"rast\"."
+
+msgid "Both options \"color\" AND \"rules\" specified - ignoring rules"
+msgstr ""
+"Es wurden beide Optionen \"color\" UND \"rules\" angegeben - Ignoriere die "
+"Option \"rules\". "
+
+#, fuzzy
+msgid "Both options \"raster\" AND \"rules\" specified - ignoring raster"
+msgstr ""
+"Es wurden beide Optionen \"rast\" UND \"rules\" angegeben - Ignoriere die "
+"Option \"rast\". "
+
+msgid "Raster map that represents the elevation, used for the 3D information"
+msgstr ""
+"Rasterkarte, die die Höheninformationen beinhaltet. Wird für die 3D-"
+"Informationen benötigt."
+
+msgid "CREATING SUPPORT FILES"
+msgstr "Erstelle Support-Dateien."
+
+msgid "Category ranges: e.g. 1,3-8,13"
+msgstr "Kategorie-Liste, z.B.: 1,3-8,13"
+
+msgid "R:G:B value(s) out of range [0..255]: %d:%d:%d"
+msgstr "R:G:B Werte liegen außerhalb der Spanne [0...255]: %d %d %d"
+
+msgid "R G B value(s) out of range [0..255]: %d %d %d"
+msgstr "R:G:B Werte liegen außerhalb der Spanne [0...255]: %d %d %d"
+
+msgid "no such value"
+msgstr "Solche Werte sind nicht vorhanden."
+
+msgid "%s:line %d:%s"
+msgstr "%s:Linie %d:%s"
+
+msgid ""
+"Font name (not supported interactively, see also -l flag) or path to "
+"TrueType font (including file name)"
+msgstr ""
+"Schriftname oder Pfad zu den TrueType-Schriften inklusive Dateiname. Eine "
+"interaktive Auswahl ist nicht möglich. Siehe auch Schalter -l."
+
+msgid "+---------------------------------+---------------+"
+msgstr "+---------------------------------+---------------+"
+
+msgid "| Tool                            | Threshold     |"
+msgstr "| Werkzeug                        | Schwellenwert |"
+
+msgid " %13e |"
+msgstr " %13e |"
+
+msgid "--------------------------------------------------"
+msgstr "--------------------------------------------------"
+
+#, fuzzy
+msgid "%s: Dropping <s>"
+msgstr "%s: Kann <%s> nicht öffnen."
 
 #~ msgid "Cannot open database %s by driver %s"
 #~ msgstr "Kann Datenbank '%s' mit Treiber '%s' nicht öffnen."
@@ -31042,15 +31179,15 @@ msgstr "Benutze private Farbtabelle für DirectColor Visualisierung."
 
 #, fuzzy
 #~ msgid "Name of the elevation raster map, same units as N,E: [m] or [ft] "
-#~ msgstr "Name der Rasterkarte, die Höheninformation enthält [m]."
+#~ msgstr "Name der Rasterkartem mit Höheninformation [m]."
 
 #, fuzzy
 #~ msgid "Name of the x-derivatives raster map [m/m] or [ft/ft]"
-#~ msgstr "Name der Rasterkarte, die die Ableitung nach X enthält [m/m]."
+#~ msgstr "Name der Rasterkarte mit Ableitung nach X [m/m]."
 
 #, fuzzy
 #~ msgid "Name of the y-derivatives raster map [m/m] or [ft/ft]"
-#~ msgstr "Name der Rasterkarte, die die Ableitung nach Y enthält [m/m]."
+#~ msgstr "Name der Rasterkarte mit Ableitung nach Y [m/m]."
 
 #, fuzzy
 #~ msgid "Threshold distance"
@@ -31129,12 +31266,6 @@ msgstr "Benutze private Farbtabelle für DirectColor Visualisierung."
 #~ msgid "Writing subgroup REF"
 #~ msgstr "Bilduntergruppe"
 
-#~ msgid "Found file <%s@%s> in group."
-#~ msgstr "Habe Datei <%s@%s> in der Gruppe gefunden."
-
-#~ msgid "Found file <%s@%s> in subgroup."
-#~ msgstr "Habe Datei <%s@%s> in Untergruppe gefunden."
-
 #, fuzzy
 #~ msgid "Unable to open file: <%s>"
 #~ msgstr "Kann die Datei <%s> nicht öffnen."
@@ -31191,9 +31322,6 @@ msgstr "Benutze private Farbtabelle für DirectColor Visualisierung."
 #~ msgid "Cannot create table: '%s'"
 #~ msgstr "Kann Tabelle '%s' nicht erzeugen."
 
-#~ msgid "defaulting to nearest neighbor sampling"
-#~ msgstr "Setze Standard auf 'nearest neighbor sampling'."
-
 #, fuzzy
 #~ msgid "Unable to get category list <%s>, editing terminated"
 #~ msgstr "Kann die Liste der Kategorien <%s> nicht bekommen."
@@ -31215,23 +31343,8 @@ msgstr "Benutze private Farbtabelle für DirectColor Visualisierung."
 #~ msgstr "Unbekannter Typ"
 
 #, fuzzy
-#~ msgid ""
-#~ "If 'list', 'file' and 'where' options are not specified, all features of "
-#~ "given type and layer are extracted. Categories are not changed in that "
-#~ "case."
-#~ msgstr ""
-#~ "Selektiert Vektorobjekte aus einer vorhandenen Vektorkarte und schreibt "
-#~ "diese in einen neuen Datensatz. Wenn die Parameter 'list', 'file' und "
-#~ "'where' nicht angegeben werden, werden alle Objekte vom angegebenen Typ "
-#~ "extrahiert. Kategoriewerte werden in diesem Fall nicht verändert."
-
-#, fuzzy
 #~ msgid "No layer database connection"
 #~ msgstr "Datenbankverbindung nicht definiert."
-
-#, fuzzy
-#~ msgid "Load categories from the database (table = %s, db = %s)."
-#~ msgstr "Lade Kategorien von der Datenbank (Tabelle = %s, DB = %s).\n"
 
 #, fuzzy
 #~ msgid "%d categories loaded from the database"
@@ -31253,17 +31366,6 @@ msgstr "Benutze private Farbtabelle für DirectColor Visualisierung."
 #~ msgid "Vector map <%s> in location <%s> in mapset <%s> not available"
 #~ msgstr ""
 #~ "Vektorkarte <%s> in der Location <%s> im Mapset <%s> nicht gefunden."
-
-#, fuzzy
-#~ msgid ""
-#~ "Load values from vector to database. For uploaded/printed category values "
-#~ "'-1' is used for 'no category' and 'null'/'-' if category cannot be found "
-#~ "or multiple categories were found."
-#~ msgstr ""
-#~ "Lade Werte von den Vektoren in die Datenbank. Im Upload/Print-Modus "
-#~ "werden Kategoriewerte mit '-1' für 'keine Kategorie' gesetzt und "
-#~ "'null'/'-' wenn keine Kategorien gefunden werden konnte oder mehrere "
-#~ "Kategorien enthalten sind."
 
 #, fuzzy
 #~ msgid "Column(s)"
@@ -31406,10 +31508,6 @@ msgstr "Benutze private Farbtabelle für DirectColor Visualisierung."
 #~ msgstr "Kann die Zeile nicht lesen."
 
 #, fuzzy
-#~ msgid "map layer [%s] not legal for GRASS"
-#~ msgstr "GRASS"
-
-#, fuzzy
 #~ msgid "[%s] map not found."
 #~ msgstr "[%s] nicht gefunden werden."
 
@@ -31482,9 +31580,6 @@ msgstr "Benutze private Farbtabelle für DirectColor Visualisierung."
 #, fuzzy
 #~ msgid "Can't read header for 3D raster <%s> in <%s>"
 #~ msgstr "Kann den Header der Rasterkarte <%s> in <%s> nicht lesen."
-
-#~ msgid "%s in %s: %s"
-#~ msgstr "%s in %s: %s"
 
 #, fuzzy
 #~ msgid "Can't write region <%s>"
@@ -31585,9 +31680,6 @@ msgstr "Benutze private Farbtabelle für DirectColor Visualisierung."
 #, fuzzy
 #~ msgid "Writing raster map... "
 #~ msgstr "Schreibe Rasterkarte..."
-
-#~ msgid "Category list: e.g. 1,3-8,13"
-#~ msgstr "Kategorie-Liste, z.B.: 1,3-8,13"
 
 #, fuzzy
 #~ msgid "Output separator character (default: tab)"
@@ -31805,10 +31897,6 @@ msgstr "Benutze private Farbtabelle für DirectColor Visualisierung."
 #, fuzzy
 #~ msgid "Close boundaries"
 #~ msgstr "Zerlege Grenzen:"
-
-#, fuzzy
-#~ msgid "Cannot copy line %d, editing terminated"
-#~ msgstr "Kann nicht von <%s> lesen."
 
 #, fuzzy
 #~ msgid "No layer database connection."
@@ -32070,16 +32158,6 @@ msgstr "Benutze private Farbtabelle für DirectColor Visualisierung."
 #~ msgstr "Kann Daten nicht aus der Tabelle laden."
 
 #, fuzzy
-#~ msgid ""
-#~ "OGR output datasource name. For example:\n"
-#~ "\t\tESRI Shapefile: filename or directory for storage\n"
-#~ "\t\tMapInfo File: filename or directory for storage"
-#~ msgstr ""
-#~ "OGR Datenquelle.\n"
-#~ "\t\tESRI Shapefile: Verzeichnis, welches die Shapes beinhaltet.\n"
-#~ "\t\tMapInfo File: Verzeichnis, welches die MapInfo-Files enthält."
-
-#, fuzzy
 #~ msgid "SVG file <%s> cannot be opened"
 #~ msgstr "3dview-Datei <%s> nicht gefunden."
 
@@ -32246,9 +32324,6 @@ msgstr "Benutze private Farbtabelle für DirectColor Visualisierung."
 #~ msgid "%s: Cannot open <%s>"
 #~ msgstr "Kann %s nicht öffnen."
 
-#~ msgid "CREATING SUPPORT FILES ..."
-#~ msgstr "Erstelle Support-Dateien...."
-
 #, fuzzy
 #~ msgid "<%s> is not a valid GRASS map name"
 #~ msgstr "%s ist keine gültige Regel."
@@ -32260,9 +32335,6 @@ msgstr "Benutze private Farbtabelle für DirectColor Visualisierung."
 #, fuzzy
 #~ msgid "could not read range file"
 #~ msgstr "Kann die Ausdehnungs-Datei nicht lesen."
-
-#~ msgid "OUT OF MEMORY !!!\n"
-#~ msgstr "Platz im Hauptspeicher reicht nicht aus !!!\n"
 
 #, fuzzy
 #~ msgid "Unable to create raster map [%s]."
@@ -32389,9 +32461,6 @@ msgstr "Benutze private Farbtabelle für DirectColor Visualisierung."
 #~ msgid "%s: can't create %s"
 #~ msgstr "Fehler: Kann %s nicht erzeugen."
 
-#~ msgid "Normalized"
-#~ msgstr "Normalisiert"
-
 #, fuzzy
 #~ msgid "Out of memory!"
 #~ msgstr "Speicher ist zu Ende (Out-of-memory)."
@@ -32407,12 +32476,6 @@ msgstr "Benutze private Farbtabelle für DirectColor Visualisierung."
 #, fuzzy
 #~ msgid "Error getting input null cells at row %d from %s"
 #~ msgstr "Fehler beim Holen der Eingabe NULL-Zellen."
-
-#~ msgid "[%s] file name not legal"
-#~ msgstr "[%s] ist ein ungültiger Name."
-
-#~ msgid "[%s] file name not legal\n"
-#~ msgstr "[%s] ist ein ungültiger Name.\n"
 
 #, fuzzy
 #~ msgid "Requested 3d raster map not found <%s>"
@@ -32584,11 +32647,6 @@ msgstr "Benutze private Farbtabelle für DirectColor Visualisierung."
 #~ "Sets the border color, either a standard GRASS color or R:G:B triplet"
 #~ msgstr "Textfarbe, entweder eine GRASS Standardfarbe oder ein R:G:B Tripel."
 
-#~ msgid "Border not yet implemented for LatLong locations: border not drawn."
-#~ msgstr ""
-#~ "Kartenrand ist für eine LL-Location noch nicht implementiert; er wird "
-#~ "somit nicht gezeichnet."
-
 #, fuzzy
 #~ msgid "Unable to open the temporary file."
 #~ msgstr "Kann temporäre Datei nicht öffnen."
@@ -32632,41 +32690,6 @@ msgstr "Benutze private Farbtabelle für DirectColor Visualisierung."
 #, fuzzy
 #~ msgid "unable to find raster map [%s]"
 #~ msgstr "Kann die Rasterkarte <%s> nicht öffnen."
-
-#, fuzzy
-#~ msgid "Both \"-i\" AND \"color\" specified - ignoring color"
-#~ msgstr ""
-#~ "Es wurden beide Optionen \"color\" UND \"rast\" angegeben - Ignoriere die "
-#~ "Option \"rast\"."
-
-#, fuzzy
-#~ msgid "Both \"-i\" AND \"rules\" specified - ignoring rules"
-#~ msgstr ""
-#~ "Es wurden beide Optionen \"color\" UND \"rules\" angegeben - Ignoriere "
-#~ "die Option \"rules\". "
-
-#, fuzzy
-#~ msgid "Both \"-i\" AND \"raster\" specified - ignoring raster"
-#~ msgstr ""
-#~ "Es wurden beide Optionen \"color\" UND \"rast\" angegeben - Ignoriere die "
-#~ "Option \"rast\"."
-
-#, fuzzy
-#~ msgid "Both options \"color\" AND \"raster\" specified - ignoring raster"
-#~ msgstr ""
-#~ "Es wurden beide Optionen \"color\" UND \"rast\" angegeben - Ignoriere die "
-#~ "Option \"rast\"."
-
-#~ msgid "Both options \"color\" AND \"rules\" specified - ignoring rules"
-#~ msgstr ""
-#~ "Es wurden beide Optionen \"color\" UND \"rules\" angegeben - Ignoriere "
-#~ "die Option \"rules\". "
-
-#, fuzzy
-#~ msgid "Both options \"raster\" AND \"rules\" specified - ignoring raster"
-#~ msgstr ""
-#~ "Es wurden beide Optionen \"rast\" UND \"rules\" angegeben - Ignoriere die "
-#~ "Option \"rast\". "
 
 #, fuzzy
 #~ msgid "<%s> raster map not found"
@@ -32728,12 +32751,6 @@ msgstr "Benutze private Farbtabelle für DirectColor Visualisierung."
 #~ msgid "%s: raster map not found"
 #~ msgstr "%s: Basis-Rasterkarte nicht gefunden."
 
-#~ msgid ""
-#~ "Raster map that represents the elevation, used for the 3D information"
-#~ msgstr ""
-#~ "Rasterkarte, die die Höheninformationen beinhaltet. Wird für die 3D-"
-#~ "Informationen benötigt."
-
 #, fuzzy
 #~ msgid "Problem opening input file [%s]"
 #~ msgstr "Fehler beim Öffnen der Displaydatei [%s]."
@@ -32771,9 +32788,6 @@ msgstr "Benutze private Farbtabelle für DirectColor Visualisierung."
 #~ msgid "Can't open raster map %s"
 #~ msgstr "Kann die Rasterkarte <%s> nicht öffnen."
 
-#~ msgid "CREATING SUPPORT FILES"
-#~ msgstr "Erstelle Support-Dateien."
-
 #, fuzzy
 #~ msgid "ELEVATION PRODUCTS for mapset [%s] in [%s]"
 #~ msgstr "Höhen-Ergebnisse für Mapset <%s> in <%s>."
@@ -32797,9 +32811,6 @@ msgstr "Benutze private Farbtabelle für DirectColor Visualisierung."
 #, fuzzy
 #~ msgid "Input vector map <%s> not found."
 #~ msgstr "Eingabevektorkarte wurde nicht gefunden."
-
-#~ msgid "Category ranges: e.g. 1,3-8,13"
-#~ msgstr "Kategorie-Liste, z.B.: 1,3-8,13"
 
 #, fuzzy
 #~ msgid "Writing attributes ...\n"
@@ -33071,18 +33082,6 @@ msgstr "Benutze private Farbtabelle für DirectColor Visualisierung."
 #~ msgid "Name of predefined rules file"
 #~ msgstr "Name der Filterdatei"
 
-#~ msgid "R:G:B value(s) out of range [0..255]: %d:%d:%d"
-#~ msgstr "R:G:B Werte liegen außerhalb der Spanne [0...255]: %d %d %d"
-
-#~ msgid "R G B value(s) out of range [0..255]: %d %d %d"
-#~ msgstr "R:G:B Werte liegen außerhalb der Spanne [0...255]: %d %d %d"
-
-#~ msgid "no such value"
-#~ msgstr "Solche Werte sind nicht vorhanden."
-
-#~ msgid "%s:line %d:%s"
-#~ msgstr "%s:Linie %d:%s"
-
 #, fuzzy
 #~ msgid "bad color specification"
 #~ msgstr "Punkt Klassifikation."
@@ -33147,13 +33146,6 @@ msgstr "Benutze private Farbtabelle für DirectColor Visualisierung."
 #~ msgid "Screen coordinates to place the legend (as percentage)"
 #~ msgstr ""
 #~ "Gibt Rahmenkoordinaten des aktuellen Grafik-Fensters in Prozent aus."
-
-#~ msgid ""
-#~ "Font name (not supported interactively, see also -l flag) or path to "
-#~ "TrueType font (including file name)"
-#~ msgstr ""
-#~ "Schriftname oder Pfad zu den TrueType-Schriften inklusive Dateiname. Eine "
-#~ "interaktive Auswahl ist nicht möglich. Siehe auch Schalter -l."
 
 #, fuzzy
 #~ msgid "%s: o_open_file: raster map %s not found"
@@ -33226,12 +33218,6 @@ msgstr "Benutze private Farbtabelle für DirectColor Visualisierung."
 #~ "Erlaubt dem Benutzer das interaktive Abfragen einer Vektorkarte in der "
 #~ "aktuellen Region."
 
-#~ msgid "+---------------------------------+---------------+"
-#~ msgstr "+---------------------------------+---------------+"
-
-#~ msgid "| Tool                            | Threshold     |"
-#~ msgstr "| Werkzeug                        | Schwellenwert |"
-
 #, fuzzy
 #~ msgid "| Break                           |  "
 #~ msgstr " lambda    | mean (m)    | rms (m)     |\n"
@@ -33255,12 +33241,6 @@ msgstr "Benutze private Farbtabelle für DirectColor Visualisierung."
 #, fuzzy
 #~ msgid "| Remove small angles at nodes    |  "
 #~ msgstr "Entfernen"
-
-#~ msgid " %13e |"
-#~ msgstr " %13e |"
-
-#~ msgid "--------------------------------------------------"
-#~ msgstr "--------------------------------------------------"
 
 #, fuzzy
 #~ msgid "%s: <%s> vector map not found"
@@ -33301,10 +33281,6 @@ msgstr "Benutze private Farbtabelle für DirectColor Visualisierung."
 #, fuzzy
 #~ msgid "Interpolation: (%d,%d): Bicubic interpolation..."
 #~ msgstr "Allokiere Speicher für die bikubische Interpolation."
-
-#, fuzzy
-#~ msgid "%s: Dropping <s>"
-#~ msgstr "%s: Kann <%s> nicht öffnen."
 
 #, fuzzy
 #~ msgid "%s: Dropping: Auxiliar Table could not be drop"
@@ -33613,3 +33589,7 @@ msgstr "Benutze private Farbtabelle für DirectColor Visualisierung."
 #, fuzzy
 #~ msgid "Short user prompt message"
 #~ msgstr "Gebe die Copyright-Informationen aus."
+
+#, fuzzy
+#~ msgid "Name of raster map to print in legend"
+#~ msgstr "Name der Rasterkarte, die angezeigt werden soll."
