@@ -288,12 +288,12 @@ int export_band(GDALDatasetH hMEMDS, int band, const char *name,
 
     if (n_nulls > 0) {		/* TODO: && nodata_param NOT specified */
 	if (maptype == CELL_TYPE)
-	    G_warning(_("Input raster map contains cells with NULL-value (no-data). "
+	    G_important_message(_("Input raster map contains cells with NULL-value (no-data). "
 		       "The value %d was used to represent no-data values in the input map. "
 		       "You can specify nodata value by %s parameter."),
 		      (int)nodataval, nodatakey);
 	else
-	    G_warning(_("Input raster map contains cells with NULL-value (no-data). "
+	    G_important_message(_("Input raster map contains cells with NULL-value (no-data). "
 		       "The value %g was used to represent no-data values in the input map. "
 		       "You can specify nodata value by %s parameter."),
 		      nodataval, nodatakey);
