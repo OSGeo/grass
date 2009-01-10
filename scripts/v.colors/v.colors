@@ -242,7 +242,7 @@ else
    MINVAL=`v.db.select map="$GIS_OPT_MAP" column="$GIS_OPT_COLUMN" layer="$GIS_OPT_LAYER" | sort -n | grep '^[-0-9]' | head -n 1`
    MAXVAL=`v.db.select map="$GIS_OPT_MAP" column="$GIS_OPT_COLUMN" layer="$GIS_OPT_LAYER" | sort -n | grep '^[-0-9]' | tail -n 1`
 fi
-g.message " min=[$MINVAL]  max=[$MAXVAL]"
+g.message message=" min=[$MINVAL]  max=[$MAXVAL]"
 if [ -z "$MINVAL" ] || [ -z "$MAXVAL" ] ; then
    g.message -e "Scanning data range"
    exit 1
@@ -293,7 +293,7 @@ v.db.select map="$GIS_OPT_MAP" layer="$GIS_OPT_LAYER" column="$GIS_OPT_COLUMN" |
   sort -n | grep '^[-0-9]' | uniq | \
   r.what.color -i in="tmp_colr_$$" | sed -e 's/: /|/' | grep -v '|\*$' | \
   ( while read LINE ; do
-      #g.message "LINE=[$LINE]"
+      #g.message message="LINE=[$LINE]"
       VALUE=`echo $LINE | cut -f1 -d'|'`
       COLR=`echo $LINE | cut -f2 -d'|'`
       echo "UPDATE $TABLE SET $GIS_OPT_RGB_COLUMN = '$COLR' WHERE $GIS_OPT_COLUMN = $VALUE;" >> "${TMP}_vcol.sql"
