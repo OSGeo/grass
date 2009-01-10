@@ -225,11 +225,6 @@ Select only relevant features which will be written to the output if
 'and,not,nor' operators are used. An inspiration is available in
 v.select.
 
-v.buffer 
---------
-Completely rewrite if possible or at least fix the bug which is
-probably in clean_parallel() in lib/vector/Vlib/buffer.c.
-
 v.pack/v.unpack
 ---------------
 Write it. New modules to pack/unpack a vector to/from single file
@@ -239,18 +234,7 @@ can lose precision and DBF has other limitations. It whould be
 probably better to use copy of 'coor' file and attributes written to
 SQLite database.
 
-v.in.ogr
---------
-It would be useful to split long boundaries to smaller
-pieces. Otherwise cleaning process can become very slow because
-bounding box of long boundaries can overlap large part of the map (for
-example outline around all areas) and cleaning process is checking
-intersection with all boundaries falling in the bounding box.
 
-v.out.ogr
----------
-v.out.ogr is very slow because it is using random access to the
-attributes. It should be rewritten so that all attributes are selected
-by one query, geometry for each attribute can be searched by category
-index (which is fast).
+1/2009: Other suggestions moved to
+ http://trac.osgeo.org/grass/
 
