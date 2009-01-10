@@ -1221,6 +1221,18 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         return layerName
     
+    def GetLayerData(self, type, name):
+        """Return layer item data
+
+        @return {} if no layer item found
+        """
+        for item in self.layers:
+            mapLayer = self.tree.GetPyData(item)[0]['maplayer'].GetName()
+            if mapLayer == name:
+                return self.tree.GetPyData(item)[0]['nviz']
+        
+        return {}
+    
     def GetLayerId(self, type, name):
         """Get layer object id or -1"""
         if len(name) < 1:
