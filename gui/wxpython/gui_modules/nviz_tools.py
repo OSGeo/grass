@@ -418,9 +418,8 @@ class NvizToolWindow(wx.Frame):
                       flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
                       border=5)
 
-        all = wx.Button(panel, id=wx.ID_ANY, label=_("All"))
-        all.SetToolTipString(_("Use for all loaded surfaces"))
-        # self.win['reset'] = reset.GetId()
+        all = wx.Button(panel, id=wx.ID_ANY, label=_("Set to all"))
+        all.SetToolTipString(_("Use draw settings for all loaded surfaces"))
         all.Bind(wx.EVT_BUTTON, self.OnSurfaceModeAll)
         gridSizer.Add(item=all, flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
                       pos=(2, 4))
@@ -1720,10 +1719,30 @@ class NvizToolWindow(wx.Frame):
 
     def OnSurfaceModeAll(self, event):
         """Set draw mode (including wire color) for all loaded surfaces"""
-        self.SetSurfaceMode(all=True)
-        self.SetSurfaceResolution(all=True)
-        ### color = self.FindWindowById(self.win['surface']['draw']['wire-color']).GetColour()
-
+        value, desc = self.SetSurfaceMode()
+        coarse = self.FindWindowById(self.win['surface']['draw']['res-coarse']).GetValue()
+        fine = self.FindWindowById(self.win['surface']['draw']['res-fine']).GetValue()
+        color = self.FindWindowById(self.win['surface']['draw']['wire-color']).GetColour()
+        cvalue = self._getColorString(color)
+        
+        for name in self.mapWindow.GetLayerNames(type='raster'):
+            data = self.mapWindow.GetLayerData(type='raster', name=name)
+            if not data:
+                continue # shouldy no happen
+            
+            data['surface']['draw']['mode'] = { 'value' : value,
+                                                'desc' : desc,
+                                                'update' : None, }
+            data['surface']['draw']['resolution'] = { 'coarse' : coarse,
+                                                      'fine' : fine,
+                                                      'update' : None, }
+            data['surface']['draw']['wire-color'] = { 'value' : cvalue,
+                                                      'update' : None }
+            
+            # update properties
+            event = wxUpdateProperties(data=data)
+            wx.PostEvent(self.mapWindow, event)
+            
         if apply and self.parent.autoRender.IsChecked():
             self.mapWindow.Refresh(False)
 

@@ -522,7 +522,8 @@ class MapFrame(wx.Frame):
             self.Map.DeleteLayer(layer)
 
         # delete tmp lines
-        if self.MapWindow.mouse["use"] in ["measure", "profile"]:
+        if self.MapWindow.mouse["use"] in ("measure",
+                                           "profile"):
             self.MapWindow.polycoords = []
             self.MapWindow.ClearLines()
         
