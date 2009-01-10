@@ -820,7 +820,7 @@ class mainFrame(wx.Frame):
         cmdstring = ' '.join(self.createCmd(ignoreErrors=True))
         cmddata.SetText(cmdstring)
         if wx.TheClipboard.Open():
-            wx.TheClipboard.UsePrimarySelection(True)
+#            wx.TheClipboard.UsePrimarySelection(True)
             wx.TheClipboard.SetData(cmddata)
             wx.TheClipboard.Close()
             self.SetStatusText( _("'%s' copied to clipboard") % \
