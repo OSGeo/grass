@@ -1,20 +1,20 @@
 <h2>DESCRIPTION</h2>
 
 <b>wxGUI</b> is a new generation of the GUI for GRASS GIS. It's a successor
-of the <em><a href="gis.m.html">Tcl/Tk GUI</a></em>.
+of the <em>Tcl/Tk GUI</em> from GRASS 6.
 
 <p>
 To start the wxGUI automatically for each session run GRASS with
-<tt>wxpython</tt> switch
+<tt>gui</tt> switch
 
 <div class="code"><pre>
-    grass -wxpython
+    grass -gui
 </pre></div>
 
 or define in your <tt>.grassrc7</tt> file 'GRASS_GUI' variable
 
 <div class="code"><pre>
-    GRASS_GUI: wxpython
+    GRASS_GUI: gui
 </pre></div>
 
 The GUI can be quit by selecting the 'File->Exit' menu item. The GUI
@@ -22,13 +22,13 @@ can be restarted from the GRASS command line prompt by
 typing
 
 <div class="code"><pre>
-    g.gui wxpython
+    g.gui
 </pre></div>
 
 or 
 
 <div class="code"><pre>
-    g.gui wxpython workspace=file.gxw
+    g.gui workspace=file.gxw
 </pre></div>
 
 to launch wxGUI and load workspace file on start-up.
