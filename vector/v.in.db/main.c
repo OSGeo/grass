@@ -6,7 +6,7 @@
  *               
  * PURPOSE:      Create new vector from db table.
  * 	    
- * COPYRIGHT:    (C) 2000-2007 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2000-2007, 2009 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -25,7 +25,7 @@
 
 int main(int argc, char *argv[])
 {
-    int i, cat, with_z, more, ctype, ret;
+    int i, cat, with_z, more, ctype, ret, nrows;
     char buf[2000];
     int count;
     double coor[3];
@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("vector, import");
+    module->keywords = _("vector, import, database, points");
     module->description =
 	_("Creates new vector (points) map from database table containing coordinates.");
 
@@ -59,10 +59,12 @@ int main(int argc, char *argv[])
 
     driver_opt = G_define_standard_option(G_OPT_DB_DRIVER);
     driver_opt->options = db_list_drivers();
-    driver_opt->answer = db_get_default_driver_name();
+    driver_opt->answer = (char *) db_get_default_driver_name();
+    driver_opt->guisection = _("Connection");
 
     database_opt = G_define_standard_option(G_OPT_DB_DATABASE);
-    database_opt->answer = db_get_default_database_name();
+    database_opt->answer = (char *) db_get_default_database_name();
+    database_opt->guisection = _("Connection");
 
     xcol_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     xcol_opt->key = "x";
@@ -81,7 +83,7 @@ int main(int argc, char *argv[])
     keycol_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     keycol_opt->key = "key";
     keycol_opt->required = YES;
-    keycol_opt->description = _("Name of column containing category number");
+    keycol_opt->label = _("Name of column containing category number");
     keycol_opt->description = _("Must refer to an integer column");
 
     where_opt = G_define_standard_option(G_OPT_DB_WHERE);
@@ -111,9 +113,8 @@ int main(int argc, char *argv[])
     fi = Vect_default_field_info(&Map, 1, NULL, GV_1TABLE);
 
     /* Open driver */
-    driver =
-	db_start_driver_open_database(driver_opt->answer,
-				      database_opt->answer);
+    driver = db_start_driver_open_database(driver_opt->answer,
+					   database_opt->answer);
     if (driver == NULL) {
 	G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 		      fi->database, fi->driver);
@@ -164,9 +165,14 @@ int main(int argc, char *argv[])
     }
 
     table = db_get_cursor_table(&cursor);
+    nrows = db_get_num_rows(&cursor);
 
+    G_debug(2, "%d points selected", nrows);
+    
     count = 0;
+    G_message(_("Writing features..."));
     while (db_fetch(&cursor, DB_NEXT, &more) == DB_OK && more) {
+	G_percent(count, nrows, 2);
 	/* key column */
 	column = db_get_table_column(table, 0);
 	ctype = db_sqltype_to_Ctype(db_get_column_sqltype(column));
@@ -186,8 +192,7 @@ int main(int argc, char *argv[])
 	    else
 		coor[i] = db_get_value_double(value);
 	}
-
-
+	
 	Vect_reset_line(Points);
 	Vect_reset_cats(Cats);
 
@@ -199,11 +204,12 @@ int main(int argc, char *argv[])
 
 	count++;
     }
+    G_percent(1, 1, 1);
 
-    G_message(_("%d points written to vector map"), count);
     db_close_database_shutdown_driver(driver);
 
     /* Copy table */
+    G_message(_("Copying attributes..."));
     if (where_opt->answer)
 	ret =
 	    db_copy_table_where(driver_opt->answer, database_opt->answer,
@@ -226,7 +232,7 @@ int main(int argc, char *argv[])
     Vect_build(&Map);
     Vect_close(&Map);
 
-    G_done_msg(" ");
+    G_done_msg(_("%d points written to vector map."), count);
 
     return (EXIT_SUCCESS);
 }
