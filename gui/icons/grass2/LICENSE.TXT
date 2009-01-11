@@ -5,7 +5,7 @@ licensed under a Creative Commons Attribution-Share Alike 3.0 Unported
 License [2].
 
 Fell free to use it for GIS software or for any other purposes. I only
-ask you to let me know about that and to include licence.txt file in
+ask you to let me know about that and to include license.txt file in
 your work.
 
 TITLE:			gis-0.1
