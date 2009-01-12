@@ -1,24 +1,25 @@
 #! /usr/bin/python
-"""Construct simple wx.Python GUI from a GRASS command interface description.
+"""
+@brief Construct simple wx.Python GUI from a GRASS command interface
+description.
 
 Classes:
- * testSAXContentHandler
- * grassTask
- * processTask
- * helpPanel
- * mainFrame
- * cmdPanel
- * GrassGUIApp
- * GUI
+ - testSAXContentHandler
+ - grassTask
+ - processTask
+ - helpPanel
+ - mainFrame
+ - cmdPanel
+ - GrassGUIApp
+ - GUI
 
- Copyright (C) 2000-2007 by the GRASS Development Team
+ Copyright (C) 2000-2009 by the GRASS Development Team
 
- This program is free software under the GPL (>=v2)
- Read the file COPYING coming with GRASS for details.
+ This program is free software under the GPL (>=v2) Read the file
+ COPYING coming with GRASS for details.
 
- This program is just a coarse approach to
- automatically build a GUI from a xml-based
- GRASS user interface description.
+ This program is just a coarse approach to automatically build a GUI
+ from a xml-based GRASS user interface description.
 
  You need to have Python 2.4, wxPython 2.8 and python-xml.
 
@@ -27,12 +28,12 @@ Classes:
 
  python <this file.py> r.basins.fill
 
- Or you set an alias or wrap the call up in a nice
- shell script, GUI environment ... please contribute your idea.
+ Or you set an alias or wrap the call up in a nice shell script, GUI
+ environment ... please contribute your idea.
 
- Updated to wxPython 2.8 syntax and contrib widgets.
- Methods added to make it callable by gui.
- Method added to automatically re-run with pythonw on a Mac.
+ Updated to wxPython 2.8 syntax and contrib widgets.  Methods added to
+ make it callable by gui.  Method added to automatically re-run with
+ pythonw on a Mac.
 
 @author Jan-Oliver Wagner <jan@intevation.de>
 @author Bernhard Reiter <bernhard@intevation.de>
@@ -1227,6 +1228,7 @@ class cmdPanel(wx.Panel):
                             if p.get('age', 'old_dbtable') == 'old_dbtable':
                                 win = gselect.TableSelect(parent=which_panel)
                                 p['wxGetValue'] = win.GetStringSelection
+                                win.Bind(wx.EVT_COMBOBOX, self.OnUpdateSelection)
                                 win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
                             else:
                                 win = wx.TextCtrl(parent=which_panel, value = p.get('default',''),
@@ -1363,7 +1365,7 @@ class cmdPanel(wx.Panel):
 
         if pTable and pColumn:
             pTable['wxId-bind'] = pColumn
-                
+        
 	#
 	# determine panel size
 	#
@@ -1537,14 +1539,19 @@ class cmdPanel(wx.Panel):
         pMap = self.task.get_param('map', raiseError=False)
         if not pMap:
             pMap = self.task.get_param('input', raiseError=False)
-        
-        map = pMap.get('value', '')
+
+        if pMap:
+            map = pMap.get('value', '')
+        else:
+            map = None
         
         for uid in p['wxId-bind']:
             win = self.FindWindowById(uid)
             name = win.GetName()
+            
             if name == 'LayerSelect':
                 win.InsertLayers(map)
+            
             elif name == 'TableSelect':
                 pDriver = self.task.get_param('dbdriver', element='prompt', raiseError=False)
                 driver = db = None
@@ -1565,9 +1572,20 @@ class cmdPanel(wx.Panel):
                         layer = int(pLayer.get('default', 1))
                 else:
                     layer = 1
+                if map:
+                    win.InsertColumns(map, layer)
+                else: # table
+                    pDriver = self.task.get_param('dbdriver', element='prompt', raiseError=False)
+                    if pDriver:
+                        driver = pDriver.get('value', None)
+                    pDb = self.task.get_param('dbname', element='prompt', raiseError=False)
+                    if pDb:
+                        db = pDb.get('value', None)
+                    pTable = self.task.get_param('dbtable', element='element', raiseError=False)
+                    if pTable and \
+                            pTable.get('value', '') != '':
+                        win.InsertTableColumns(pTable.get('value'), driver, db)
                 
-                win.InsertColumns(map, layer)
-        
         if event:
             event.Skip()
         
