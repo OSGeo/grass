@@ -10,7 +10,7 @@ Classes:
  - DefaultFontDialog
  - MapsetAccess
 
-(C) 2007-2008 by the GRASS Development Team
+(C) 2007-2009 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -112,8 +112,8 @@ class Settings:
                     'type' : 'home'
                     }, # home, gisdbase, location, mapset
                 'iconTheme' : {
-                    'type' : 'grass'
-                    }, # grass, silk
+                    'type' : 'grass2'
+                    }, # grass2, grass, silk
                 },
             #
             # Attribute Table Manager
