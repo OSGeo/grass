@@ -38,16 +38,12 @@ to actually create the final classified map.
 
 <P>
 
-This map must be prepared by the user in advance. Programs like
-<EM><A HREF="v.digit.html">v.digit</A></EM> or <EM>
-<A HREF="r.digit.html">r.digit</A></EM> can be 
-used to define representative
-areas of the classes the user defines to be in the image. 
-Of course other methods could be devised by the user for creating
-this training map - <EM>i.gensig</EM> makes no assumption about the origin
-of this map layer. It simply creates signatures for the classes defined
-in the training map for the image to be classified (the image is
-specified in other options - see below).
+This map must be prepared by the user in advance using vector or
+raster digitizer. Of course other methods could be devised by the user
+for creating this training map - <EM>i.gensig</EM> makes no assumption
+about the origin of this map layer. It simply creates signatures for
+the classes defined in the training map for the image to be classified
+(the image is specified in other options - see below).
 
 <DT><B>group=</B><EM>name</EM> 
 
@@ -113,7 +109,7 @@ for creating groups and subgroups.
 
 <P>
 
-<EM><A HREF="v.digit.html">v.digit</A></EM>
+<EM><A HREF="wxGUI.Vector_Digitizing_Tool.html">wxGUI vector digitizer</A></EM>
 and
 <EM><A HREF="r.digit.html">r.digit</A></EM>
 for interactively  creating the training map.
