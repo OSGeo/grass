@@ -13,7 +13,7 @@
  *               input raster map layer whose cell category values 
  *               represent cost.
  *
- * COPYRIGHT:    (C) 2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2006-2008 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -133,10 +133,10 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->keywords = _("raster, cost surface, cumulative costs");
     module->description =
-	_("Outputs a raster map layer showing the "
+	_("Creates a raster map showing the "
 	  "cumulative cost of moving between different "
 	  "geographic locations on an input raster map "
-	  "layer whose cell category values represent cost.");
+	  "whose cell category values represent cost.");
 
     opt2 = G_define_standard_option(G_OPT_R_INPUT);
     opt2->description =
@@ -144,26 +144,23 @@ int main(int argc, char *argv[])
 
     opt1 = G_define_standard_option(G_OPT_R_OUTPUT);
 
-    opt7 = G_define_option();
+    opt7 = G_define_standard_option(G_OPT_V_INPUT);
     opt7->key = "start_points";
-    opt7->type = TYPE_STRING;
-    opt7->gisprompt = "old,vector,vector";
     opt7->required = NO;
-    opt7->description = _("Starting points vector map");
+    opt7->description = _("Name of starting vector points map");
+    opt7->guisection = _("Start");
 
-    opt8 = G_define_option();
+    opt8 = G_define_standard_option(G_OPT_V_INPUT);
     opt8->key = "stop_points";
-    opt8->type = TYPE_STRING;
-    opt8->gisprompt = "old,vector,vector";
     opt8->required = NO;
-    opt8->description = _("Stop points vector map");
+    opt8->description = _("Name of stop vector points map");
+    opt8->guisection = _("Stop");
 
-    opt9 = G_define_option();
+    opt9 = G_define_standard_option(G_OPT_R_INPUT);
     opt9->key = "start_rast";
-    opt9->type = TYPE_STRING;
-    opt9->gisprompt = "old,cell,raster";
     opt9->required = NO;
-    opt9->description = _("Starting points raster map");
+    opt9->description = _("Name of starting raster points map");
+    opt9->guisection = _("Start");
 
     opt3 = G_define_option();
     opt3->key = "coordinate";
@@ -171,7 +168,8 @@ int main(int argc, char *argv[])
     opt3->key_desc = "x,y";
     opt3->multiple = YES;
     opt3->description =
-	_("The map E and N grid coordinates of a starting point (E,N)");
+	_("Map grid coordinates of a starting point (E,N)");
+    opt3->guisection = _("Start");
 
     opt4 = G_define_option();
     opt4->key = "stop_coordinate";
@@ -179,7 +177,8 @@ int main(int argc, char *argv[])
     opt4->key_desc = "x,y";
     opt4->multiple = YES;
     opt4->description =
-	_("The map E and N grid coordinates of a stopping point (E,N)");
+	_("Map grid coordinates of a stopping point (E,N)");
+    opt4->guisection = _("Stop");
 
     opt5 = G_define_option();
     opt5->key = "max_cost";
@@ -188,7 +187,7 @@ int main(int argc, char *argv[])
     opt5->required = NO;
     opt5->multiple = NO;
     opt5->answer = "0";
-    opt5->description = _("An optional maximum cumulative cost");
+    opt5->description = _("Optional maximum cumulative cost");
 
     opt6 = G_define_option();
     opt6->key = "null_cost";
@@ -215,11 +214,12 @@ int main(int argc, char *argv[])
 
     flag3 = G_define_flag();
     flag3->key = 'n';
-    flag3->description = _("Keep null values in output map");
+    flag3->description = _("Keep null values in output raster map");
 
     flag4 = G_define_flag();
     flag4->key = 'r';
     flag4->description = _("Start with values in raster map");
+    flag4->guisection = _("Start");
 
     /*   Parse command line */
     if (G_parser(argc, argv))
@@ -283,11 +283,11 @@ int main(int argc, char *argv[])
 
     if ((opt6->answer == NULL) ||
 	(sscanf(opt6->answer, "%lf", &null_cost) != 1)) {
-	G_message(_("Null cells excluded from cost evaluation."));
+	G_debug(1, "Null cells excluded from cost evaluation");
 	G_set_d_null_value(&null_cost, 1);
     }
     else if (keep_nulls)
-	G_message(_("Input null cell will be retained into output map"));
+	G_debug(1, "Null cell will be retained into output raster map");
 
     if (opt7->answer) {
 	search_mapset = G_find_vector(opt7->answer, "");
@@ -297,7 +297,7 @@ int main(int argc, char *argv[])
 
     if (!G_is_d_null_value(&null_cost)) {
 	if (null_cost < 0.0) {
-	    G_warning(_("Warning: assigning negative cost to null cell. Null cells excluded."));
+	    G_warning(_("Assigning negative cost to null cell. Null cells excluded."));
 	    G_set_d_null_value(&null_cost, 1);
 	}
     }
@@ -335,16 +335,16 @@ int main(int argc, char *argv[])
 
     switch (data_type) {
     case (CELL_TYPE):
-	G_message(_("Source map is: Integer cell type"));
+	G_debug(1, "Source map is: Integer cell type");
 	break;
     case (FCELL_TYPE):
-	G_message(_("Source map is: Floating point (float) cell type"));
+	G_debug(1, "Source map is: Floating point (float) cell type");
 	break;
     case (DCELL_TYPE):
-	G_message(_("Source map is: Floating point (double) cell type"));
+	G_debug(1, "Source map is: Floating point (double) cell type");
 	break;
     }
-    G_message(_(" %d rows, %d cols"), nrows, ncols);
+    G_debug(1, "  %d rows, %d cols", nrows, ncols);
 
     srows = scols = SEGCOLSIZE;
     if (maxmem > 0)
@@ -358,7 +358,7 @@ int main(int argc, char *argv[])
 
     /*   Create segmented format files for cost layer and output layer  */
 
-    G_message(_("Creating some temporary files..."));
+    G_verbose_message(_("Creating some temporary files..."));
 
     in_fd = creat(in_file, 0666);
     segment_format(in_fd, nrows, ncols, srows, scols, sizeof(double));
@@ -379,8 +379,8 @@ int main(int argc, char *argv[])
 
     /*   Write the cost layer in the segmented file  */
 
-    G_message(_("Reading %s"), cost_layer);
-
+    G_message(_("Reading raster map <%s>..."),
+	      G_fully_qualified_name(cost_layer, cost_mapset));
     {
 	int i;
 	double p;
@@ -436,24 +436,21 @@ int main(int argc, char *argv[])
 		break;
 	    }
 	}
+	G_percent(1, 1, 1);
     }
     segment_flush(&in_seg);
-    G_percent(row, nrows, 2);
 
     /* Initialize output map with NULL VALUES */
 
     /*   Initialize segmented output file  */
-    G_message(_("Initializing output "));
+    G_message(_("Initializing output..."));
 
     {
 	double *fbuff;
 	int i;
 
 	fbuff = (double *)G_malloc(ncols * sizeof(double));
-
-	if (fbuff == NULL)
-	    G_fatal_error(_("Unable to allocate memory for segment fbuff == NULL"));
-
+	
 	G_set_d_null_value(fbuff, ncols);
 
 	for (row = 0; row < nrows; row++) {
@@ -463,8 +460,8 @@ int main(int argc, char *argv[])
 		segment_put(&out_seg, &fbuff[i], row, i);
 	    }
 	}
+	G_percent(1, 1, 1);
 	segment_flush(&out_seg);
-	G_percent(row, nrows, 2);
 	G_free(fbuff);
     }
 
@@ -485,7 +482,7 @@ int main(int argc, char *argv[])
 	fp = G_fopen_sites_old(opt7->answer, search_mapset);
 
 	if (G_site_describe(fp, &dims, &cat, &strs, &dbls))
-	    G_fatal_error("Failed to guess site file format\n");
+	    G_fatal_error(_("Failed to guess site file format"));
 	site = G_site_new_struct(cat, dims, strs, dbls);
 
 	for (; (G_site_get(fp, site) != EOF);) {
@@ -535,7 +532,7 @@ int main(int argc, char *argv[])
 	fp = G_fopen_sites_old(opt8->answer, search_mapset);
 
 	if (G_site_describe(fp, &dims, &cat, &strs, &dbls))
-	    G_fatal_error("Failed to guess site file format\n");
+	    G_fatal_error(_("Failed to guess site file format\n"));
 	site = G_site_new_struct(cat, dims, strs, dbls);
 
 	for (; (G_site_get(fp, site) != EOF);) {
@@ -579,7 +576,7 @@ int main(int argc, char *argv[])
 
 	fd = G_open_cell_old(opt9->answer, search_mapset);
 	if (fd < 0)
-	    G_fatal_error(_("can't open raster map [%s] needed for input coordinates"),
+	    G_fatal_error(_("Unable to open raster map <%s>"),
 			  opt9->answer);
 
 	data_type2 = G_get_raster_map_type(fd);
@@ -591,7 +588,7 @@ int main(int argc, char *argv[])
 	if (!cell2)
 	    G_fatal_error(_("Unable to allocate memory"));
 
-	G_message(_("Reading %s"), opt9->answer);
+	G_message(_("Reading raster map <%s>..."), opt9->answer);
 	for (row = 0; row < nrows; row++) {
 	    G_percent(row, nrows, 2);
 	    if (G_get_raster_row(fd, cell2, row, data_type2) < 0)
@@ -618,7 +615,7 @@ int main(int argc, char *argv[])
 		ptr2 = G_incr_void_ptr(ptr2, dsize2);
 	    }
 	}
-	G_percent(row, nrows, 2);
+	G_percent(1, 1, 2);
 
 	G_close_cell(fd);
 	G_free(cell2);
@@ -655,7 +652,7 @@ int main(int argc, char *argv[])
      *   3) Free the memory allocated to the present cell.
      */
 
-    G_message(_("Finding cost path"));
+    G_message(_("Finding cost path..."));
     n_processed = 0;
     total_cells = nrows * ncols;
     at_percent = 0;
@@ -880,7 +877,7 @@ int main(int argc, char *argv[])
 
 	pres_cell = get_lowest();
 	if (pres_cell == NULL) {
-	    G_message(_("End of map!"));
+	    G_message(_("No data"));
 	    goto OUT;
 	}
 	if (ct == pres_cell)
@@ -896,10 +893,9 @@ int main(int argc, char *argv[])
     segment_flush(&out_seg);
 
     /*  Copy segmented map to output map  */
-    G_message(_("Writing %s"), cum_cost_layer);
+    G_message(_("Writing raster map <%s>..."), cum_cost_layer);
 
     if (keep_nulls) {
-	G_message(_("Will copy input map null values into output map"));
 	cell2 = G_allocate_raster_buf(data_type);
     }
 
@@ -907,12 +903,12 @@ int main(int argc, char *argv[])
 	int *p;
 	int *p2;
 
-	G_message(_("Integer cell type.\nWriting..."));
 	for (row = 0; row < nrows; row++) {
 	    G_percent(row, nrows, 2);
 	    if (keep_nulls) {
 		if (G_get_raster_row(cost_fd, cell2, row, data_type) < 0)
-		    G_fatal_error(_("Error getting input null cells"));
+		    G_fatal_error(_("Unable to read raster map <%s> row %d"),
+				  cost_layer, row);
 	    }
 	    p = cell;
 	    p2 = cell2;
@@ -940,12 +936,12 @@ int main(int argc, char *argv[])
 	float *p;
 	float *p2;
 
-	G_message(_("Float cell type.\nWriting..."));
 	for (row = 0; row < nrows; row++) {
 	    G_percent(row, nrows, 2);
 	    if (keep_nulls) {
 		if (G_get_raster_row(cost_fd, cell2, row, data_type) < 0)
-		    G_fatal_error(_("Error getting input null cells"));
+		    G_fatal_error(_("Unable to read raster map <%s> row %d"),
+				  cost_layer, row);
 	    }
 	    p = cell;
 	    p2 = cell2;
@@ -973,12 +969,12 @@ int main(int argc, char *argv[])
 	double *p;
 	double *p2;
 
-	G_message(_("Double cell type.\nWriting..."));
 	for (row = 0; row < nrows; row++) {
 	    G_percent(row, nrows, 2);
 	    if (keep_nulls) {
 		if (G_get_raster_row(cost_fd, cell2, row, data_type) < 0)
-		    G_fatal_error(_("Error getting input null cells"));
+		    G_fatal_error(_("Unable to read raster map <%s> row %d"),
+				  cost_layer, row);
 	    }
 	    p = cell;
 	    p2 = cell2;
@@ -1002,10 +998,7 @@ int main(int argc, char *argv[])
 	    G_put_raster_row(cum_fd, cell, data_type);
 	}
     }
-
-    G_percent(row, nrows, 2);
-
-    G_message(_("Peak cost value: %f"), peak);
+    G_percent(1, 1, 1);
 
     segment_release(&in_seg);	/* release memory  */
     segment_release(&out_seg);
@@ -1028,6 +1021,9 @@ int main(int argc, char *argv[])
      * G_make_color_wave(&colors,min, max);
      * G_write_colors (cum_cost_layer,current_mapset,&colors);
      */
+
+    G_done_msg(_("Peak cost value: %f."), peak);
+    
     exit(EXIT_SUCCESS);
 }
 
