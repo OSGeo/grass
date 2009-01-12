@@ -12,7 +12,7 @@ Classes:
  - DatabaseSelect
  - ColumnSelect
 
-(C) 2007-2008 by the GRASS Development Team This program is free
+(C) 2007-2009 by the GRASS Development Team This program is free
 software under the GNU General Public License (>=v2). Read the file
 COPYING that comes with GRASS for details.
 
@@ -527,48 +527,3 @@ class ColumnSelect(wx.ComboBox):
 
         self.SetItems(columns)
         self.SetValue('')
-        
-class DbColumnSelect(wx.ComboBox):
-    """
-    Creates combo box for selecting columns from any table.
-    """
-    def __init__(self, parent,
-                 id=wx.ID_ANY, value='', pos=wx.DefaultPosition,
-                 size=wx.DefaultSize, choices=[''], **kargs):
-
-        super(ColumnSelect, self).__init__(parent, id, value, pos, size, choices)
-
-        dbtable = kargs['table'] # table to check for columns
-        dbdriver = kargs['driver'] # driver for table
-        dbdatabase = kargs['database'] # database for table
-
-        if dbtable == '':
-            return
-        else:
-            self.InsertColumns(dbtable)
-                
-    def InsertColumns(self, table):
-        """insert columns for a table into the columns combobox"""
-        if table == '' : return
-        
-        cmd = ['db.columns',
-               'table=%s' % table]
-        
-        if dbdriver:
-            cmd.append('driver=%s' % dbdriver)
-        if dbdatabase:
-            cmd.append('database=%s' % dbdatabase)
-        
-        ret = gcmd.RunCommand('db.columns',
-                              read = True,
-                              driver = dbdriver,
-                              database = dbdatabase)
-
-        columnchoices = []
-        if ret:
-            for item in ret.splitlines():
-                columnchoices.append(item)
-        
-        # columnchoices.sort()
-        self.SetItems(columnchoices)
-    
