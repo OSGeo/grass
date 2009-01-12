@@ -1,35 +1,26 @@
-
 /****************************************************************************
-* COPYRIGHT:    (C) 2000 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*               License (>=v2). Read the file COPYING that comes with GRASS
-*               for details.
-*
-*****************************************************************************/
-
-/* This is the original attribution from r.drain */
-
-/************************************************************************ 
-*                                                                       *
-*      This is the main program for tracing out the path that a         *
-*      drop of water would take if released at a certain location       *
-*      on an input elevation map.  The program was written by           *
-*      Kewan Q. Khawaja                                                 *
-*      kewan@techlogix.com                                              *
-*                                                                       *
-* update to FP (2000): Pierre de Mouveaux <pmx@audiovu.com><pmx@free.fr>*
-* bugfix in FCELL, DCELL: Markus Neteler 12/2000                        *
-*************************************************************************/
-
-/************************************************************************
-*      Rewritten by Roger Miller 7/2001 based on subroutines from       *
-*      r.fill.dir and on the original r.drain.                          *
-*                                                                       *
-*      24 July 2004: WebValley 2004, error checking and vector points added by *
-*               Matteo Franchi          Liceo Leonardo Da Vinci Trento  *
-*               Roberto Flor            ITC-irst                        *
-*************************************************************************/
+ *
+ * MODULE:       r.drain
+ *               
+ * AUTHOR(S):    Kewan Q. Khawaja <kewan techlogix.com>
+ *               Update to FP (2000): Pierre de Mouveaux <pmx@audiovu.com> <pmx@free.fr>
+ *               bugfix in FCELL, DCELL: Markus Neteler 12/2000
+ *               Rewritten by Roger Miller 7/2001 based on subroutines from
+ *               r.fill.dir and on the original r.drain.
+ *               24 July 2004: WebValley 2004, error checking and vector points added by
+ *               Matteo Franchi          Liceo Leonardo Da Vinci Trento
+ *               Roberto Flor            ITC-irst
+ *               
+ * PURPOSE:      This is the main program for tracing out the path that a
+ *               drop of water would take if released at a certain location
+ *               on an input elevation map.  
+ * COPYRIGHT:    (C) 2000,2009 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -101,31 +92,27 @@ int main(int argc, char **argv)
     module = G_define_module();
     module->keywords = _("raster");
     module->description =
-	_("Traces a flow through an elevation model on a raster map layer.");
+	_("Traces a flow through an elevation model on a raster map.");
 
-    opt1 = G_define_standard_option(G_OPT_R_INPUT);
-    opt1->description =
-	_("Name of existing raster map containing elevation surface");
-
+    opt1 = G_define_standard_option(G_OPT_R_ELEV);
+    opt1->key = "input";
+    
     opt2 = G_define_standard_option(G_OPT_R_OUTPUT);
-    opt2->description = _("Output drain raster map");
-
+    
     coordopt = G_define_option();
     coordopt->key = "coordinate";
     coordopt->type = TYPE_STRING;
     coordopt->required = NO;
     coordopt->multiple = YES;
     coordopt->key_desc = "x,y";
-    coordopt->description = _("The E and N coordinates of starting point(s)");
+    coordopt->description = _("Map coordinates of starting point(s) (E,N)");
+    coordopt->guisection = _("Start");
 
-    vpointopt = G_define_option();
+    vpointopt = G_define_standard_option(G_OPT_V_INPUTS);
     vpointopt->key = "vector_points";
-    vpointopt->type = TYPE_STRING;
     vpointopt->required = NO;
-    vpointopt->multiple = YES;
-    vpointopt->gisprompt = "old,vector,vector";
-    vpointopt->key_desc = "name";
-    vpointopt->description = _("Vector map(s) containing starting point(s)");
+    vpointopt->description = _("Name of vector map(s) containing starting point(s)");
+    vpointopt->guisection = _("Start");
 
     flag1 = G_define_flag();
     flag1->key = 'c';
@@ -299,6 +286,8 @@ int main(int argc, char **argv)
     }
     G_close_cell(map_id);
 
+    G_verbose_message(_("Calculating flow directions..."));
+
     /* fill one-cell pits and take a first stab at flow directions */
     filldir(fe, fd, nrows, &bnd, m);
 
@@ -359,7 +348,10 @@ int main(int argc, char **argv)
 	}
 
 	/* build the output map */
+	G_message(_("Writing raster map <%s>..."),
+		  new_map_name);
 	for (i = 0; i < nrows; i++) {
+	    G_percent(i, nrows, 2);
 	    G_set_c_null_value(out_buf, ncols);
 	    thispoint = list;
 	    while (thispoint->next != NULL) {
@@ -368,12 +360,10 @@ int main(int argc, char **argv)
 		thispoint = thispoint->next;
 	    }
 	    G_put_c_raster_row(new_id, out_buf);
-
 	}
+	G_percent(1, 1, 1);
     }
     else {			/* mode = 1 or 2 */
-
-
 	/* Output will be of the same type as input */
 	/* open a new file and allocate an output buffer */
 	new_id = G_open_raster_new(new_map_name, in_type);
@@ -411,7 +401,10 @@ int main(int argc, char **argv)
 	}
 
 	/* build the output map */
+	G_message(_("Writing raster map <%s>..."),
+		  new_map_name);
 	for (i = 0; i < nrows; i++) {
+	    G_percent(i, nrows, 2);
 	    set_null_value(out_buf, ncols);
 	    thispoint = list;
 	    while (thispoint->next != NULL) {
@@ -422,6 +415,7 @@ int main(int argc, char **argv)
 	    }
 	    put_row(new_id, out_buf);
 	}
+	G_percent(1, 1, 1);
     }
 
     /* close files and free buffers */
@@ -441,6 +435,8 @@ int main(int argc, char **argv)
     G_free(in_buf);
     G_free(out_buf);
 
+    G_done_msg(" ");
+    
     exit(EXIT_SUCCESS);
 }
 
