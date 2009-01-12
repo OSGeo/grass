@@ -13,7 +13,7 @@
  *               input raster map layer whose cell category values
  *               represent cost.
  *
- * COPYRIGHT:    (C) 2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2006-2009 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -55,7 +55,8 @@ struct cost *insert(double min_cost, int row, int col)
     /*      new_cell = (struct cost *)(G_malloc(sizeof(struct cost))); */
     new_cell = get();
     if (new_cell == NULL) {
-	G_message(_("new_cell is NULL"));
+	G_message(_("NULL value computed (row %d, col %d)"),
+		  row, col);
     }
     new_cell->min_cost = min_cost;
     new_cell->row = row;
@@ -124,25 +125,26 @@ struct cost *find(double min_cost, int row, int col)
 		next_cell = next_cell->lower;
 		continue;
 	    }
-	    G_message("1 ");
+	    G_debug(2, "1 ");
 	    return NULL;
-	    do_quit(min_cost, row, col);
+	    do_quit(min_cost, row, col); /* ??? */
 	}
 	else {
 	    if (next_cell->higher != NULL) {
 		next_cell = next_cell->higher;
 		continue;
 	    }
-	    G_message("2 ");
+	    G_debug(2, "2 ");
 	    return NULL;
-	    do_quit(min_cost, row, col);
+	    do_quit(min_cost, row, col); /* ??? */
 	}
     }
 }
 
 static int do_quit(double min_cost, int row, int col)
 {
-    G_warning(_("Can't find %d,%d:%f"), row, col, min_cost);
+    G_warning(_("Unable to find row %d, col %d: %f"),
+	      row, col, min_cost);
     show_all();
     exit(EXIT_FAILURE);
 }
@@ -367,7 +369,7 @@ int delete(struct cost *delete_cell)
 int show_all(void)
 {
     if (start_cell == NULL) {
-	G_warning(_("Nothing to show"));
+	G_debug(1, "Nothing to show");
 	return 1;
     }
     show(start_cell);
@@ -382,13 +384,13 @@ int show(struct cost *next)
     if (next == NULL)
 	return 0;
     for (next_cell = next; next_cell != NULL; next_cell = next_cell->nexttie)
-	fprintf(stderr, "%p %d,%d,%f %p %p %p %p\n",
-		next_cell,
-		next_cell->row,
-		next_cell->col,
-		next_cell->min_cost,
-		next_cell->nexttie,
-		next_cell->lower, next_cell->higher, next_cell->above);
+	G_message("%p %d,%d,%f %p %p %p %p",
+		  next_cell,
+		  next_cell->row,
+		  next_cell->col,
+		  next_cell->min_cost,
+		  next_cell->nexttie,
+		  next_cell->lower, next_cell->higher, next_cell->above);
     show(next->lower);
     show(next->higher);
 
@@ -398,7 +400,7 @@ int show(struct cost *next)
 int check_all(char *str)
 {
     if (start_cell->above != NULL) {
-	G_fatal_error(_("Bad Start Cell"));
+	G_fatal_error(_("Bad start cell"));
     }
     check(str, start_cell);
 
