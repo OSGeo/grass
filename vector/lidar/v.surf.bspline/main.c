@@ -37,9 +37,11 @@ int main(int argc, char *argv[])
 {
 
     /* Variables' declarations */
-    int nsply, nsplx, nlines, nrows, ncols, subregion_row, subregion_col;
+    int nsply, nsplx, nlines, nrows, ncols;
+    int nsubregion_col, nsubregion_row, subregion_row, subregion_col;
     int last_row, last_column, grid, bilin, ext, flag_auxiliar, cross;	/* booleans */
     double passoN, passoE, lambda, mean;
+    double N_extension, E_extension, orloE, orloN;
 
     const char *mapset, *dvr, *db, *vector, *map;
     char table_name[1024], title[64];
@@ -217,7 +219,7 @@ int main(int argc, char *argv[])
 
     if (vector && map)
 	G_fatal_error(_("Choose either vector or raster output, not both"));
-#ifdef nodef
+#ifdef notdef
     if (!vector && !map && !cross_corr_flag->answer)
 	G_fatal_error(_("No raster nor vector output"));
 #endif
@@ -233,13 +235,13 @@ int main(int argc, char *argv[])
     /* Open input ext vector */
     if (!in_ext_opt->answer) {
 	ext = FALSE;
-	G_warning(_("No vector map to interpolate. "
+	G_message(_("No vector map of sparse points to interpolate. "
 		    "Interpolation will be done with <%s> vector map"),
 		  in_opt->answer);
     }
     else {
 	ext = TRUE;
-	G_warning(_("<%s> vector map will be interpolated"),
+	G_message(_("Vector map <%s> of sparse points will be interpolated"),
 		  in_ext_opt->answer);
 
 	if ((mapset = G_find_vector2(in_ext_opt->answer, "")) == NULL)
@@ -355,6 +357,16 @@ int main(int argc, char *argv[])
     /* Interpolation begins */
     G_debug(1, "Interpolation()");
 
+    if (map) {
+	nrows = G_window_rows();
+	ncols = G_window_cols();
+
+	if (!G_alloc_matrix(nrows, ncols))
+	    G_fatal_error(_("Interpolation: The region resolution is too high: "
+			   "%d cells. Consider to change it."),
+			  nrows * ncols);
+    }
+
     /* Open driver and database */
     driver = db_start_driver_open_database(dvr, db);
     if (driver == NULL)
@@ -369,20 +381,10 @@ int main(int argc, char *argv[])
     Vect_region_box(&elaboration_reg, &general_box);
 
     /* Alloc raster matrix */
-    if (raster) {
-	double nrows_ncols;
-
-	nrows = G_window_rows();
-	ncols = G_window_cols();
-	nrows_ncols = (double)nrows *ncols;
-
-	if ((nrows_ncols) > 30000000)	/* about 5500x5500 cells */
-	    G_fatal_error(_("Interpolation: The region resolution is too high: %d cells. "
-			   "Consider to change it."), nrows_ncols);
-
-	/*raster_matrix = G_alloc_fmatrix (nrows, ncols);  Is it neccesary a double precision?? */
-	raster_matrix = G_alloc_matrix(nrows, ncols);
-    }
+    if (map)
+	if (!(raster_matrix = G_alloc_matrix(nrows, ncols)))
+	    G_fatal_error(_("Cannot allocate memory for auxiliar matrix."
+			    "Consider changing region resolution"));
 
     /* Fixxing parameters of the elaboration region */
     P_zero_dim(&dims);		/* Set to zero the dim struct */
@@ -390,6 +392,18 @@ int main(int argc, char *argv[])
     dims.latoN = NSPLY_MAX * passoN;
     dims.overlap = OVERLAP_SIZE * passoE;
     P_get_orlo(bilin, &dims, passoE, passoN);	/* Set the last two dim elements */
+
+    N_extension = original_reg.ns_res * original_reg.rows;
+    E_extension = original_reg.ew_res * original_reg.cols;
+    orloE = dims.latoE - dims.overlap - 2 * dims.orlo_h;
+    orloN = dims.latoN - dims.overlap - 2 * dims.orlo_v;
+    nsubregion_col = 2 + ((E_extension - dims.latoE) / orloE);
+    nsubregion_row = 2 + ((N_extension - dims.latoN) / orloN);
+
+    if (nsubregion_col < 0)
+	nsubregion_col = 0;
+    if (nsubregion_row < 0)
+	nsubregion_row = 0;
 
     /* Creating line and categories structs */
     points = Vect_new_line_struct();
@@ -405,6 +419,7 @@ int main(int argc, char *argv[])
 
     elaboration_reg.south = original_reg.north;
 
+    G_percent(0, 1, 10);
     subregion_row = 0;
     last_row = FALSE;
     while (last_row == FALSE) {	/* For each row */
@@ -443,6 +458,7 @@ int main(int argc, char *argv[])
 	subregion_col = 0;
 	while (last_column == FALSE) {	/* For each column */
 	    int npoints = 0;
+	    int nsubzones = 0, subzone = 0;
 
 	    subregion_col++;
 	    P_set_regions(&elaboration_reg, &general_box, &overlap_box, dims,
@@ -520,6 +536,8 @@ int main(int argc, char *argv[])
 		    if (bspline_field > 0) {
 			int cat, ival, ret;
 
+			if (!(type & GV_POINTS))
+			    continue;
 			cat = observ[i].cat;
 			if (cat < 0)
 			    continue;
@@ -672,6 +690,14 @@ int main(int argc, char *argv[])
 		}
 		G_free_ivector(lineVect);
 	    }
+	    else
+		G_warning(_("No data within this subzone. "
+			    "Consider changing the spline step."));
+
+	    subzone = (subregion_row - 1) * nsubregion_col + subregion_col;
+	    nsubzones = nsubregion_row * nsubregion_col;
+	    G_percent(subzone, nsubzones, 10);
+
 	}			/*! END WHILE; last_column = TRUE */
     }				/*! END WHILE; last_row = TRUE */
 
@@ -715,7 +741,7 @@ int main(int argc, char *argv[])
 	G_write_history(out_map_opt->answer, &history);
     }
 
-    G_done_msg("");
+    G_done_msg(" ");
 
     exit(EXIT_SUCCESS);
 }				/*END MAIN */
