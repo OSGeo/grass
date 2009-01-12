@@ -84,7 +84,7 @@ IconsGrass2 = {
     "addhis"     : 'layer-his-add.png',
     "addthematic": 'layer-vector-thematic-add.png',
     "addchart"   : 'layer-vector-chart-add.png',
-    "layeropts"  : 'settings.png',
+    "layeropts"  : 'options.png',
     # profile analysis
     "transect"     : 'layer-raster-profile.png',
     "profiledraw"  : 'show.png',
