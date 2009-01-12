@@ -534,7 +534,7 @@ int main(int argc, char *argv[])
 		    obsVect[i][1] = observ[i].coordY;
 
 		    if (bspline_field > 0) {
-			int cat, ival, ret;
+			int cat, ival, ret, type;
 
 			if (!(type & GV_POINTS))
 			    continue;
