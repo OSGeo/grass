@@ -137,6 +137,7 @@ int output_raster(int fd)
     int i;
 
     for (i = 0; i < page.rows; i++, at_row++) {
+	G_percent(i, page.rows, 2);
 	switch (format) {
 	case USE_CELL:
 	    cell = raster.cell[i];
@@ -156,7 +157,8 @@ int output_raster(int fd)
 	    break;
 	}
     }
-
+    G_percent(1, 1, 1);
+    
     return configure_plot();
 }
 
