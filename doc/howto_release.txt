@@ -30,6 +30,8 @@ Contents
        find . -name '*.o'    | xargs rm
        chmod -R a+r *
 
+       svn status
+
    - Create release branch (only if not yet existing)
 
    - Update VERSION file to release version:
@@ -107,9 +109,11 @@ Contents
     echo $SERVER2
 
    along with associated files:
-     scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz INSTALL REQUIREMENTS.html SUBMITTING SUBMITTING_DOCS \
+     scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz \
+         INSTALL REQUIREMENTS.html SUBMITTING SUBMITTING_DOCS \
          SUBMITTING_PYTHON SUBMITTING_SCRIPTS neteler@$SERVER1
-     scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz INSTALL REQUIREMENTS.html SUBMITTING SUBMITTING_DOCS \
+     scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz \
+         INSTALL REQUIREMENTS.html SUBMITTING SUBMITTING_DOCS \
          SUBMITTING_PYTHON SUBMITTING_SCRIPTS neteler@$SERVER2
     
 
@@ -119,10 +123,10 @@ Contents
       - grass$MAJOR$MINOR/main.inc
       - devel/grasshist.html
       - devel/grassreleases.html
-      - bugtracking/bugreport.html (not always)
       - devel/svntags.inc (add tag)
 
      write announcement
+      - store in trac: http://trac.osgeo.org/grass/wiki/Release/6.XX.YY-News
       - store in Web as announces/announce_grass$MAJOR$MINOR$RELEASE.html
 
  o upload user HTML manual in case of *final release* from compiled English
