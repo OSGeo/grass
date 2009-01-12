@@ -503,7 +503,7 @@ class ColumnSelect(wx.ComboBox):
                  id=wx.ID_ANY, value='', pos=wx.DefaultPosition,
                  size=globalvar.DIALOG_COMBOBOX_SIZE, vector=None,
                  layer=1, choices=[]):
-
+        
         super(ColumnSelect, self).__init__(parent, id, value, pos, size, choices,
                                            style=wx.CB_READONLY)
 
@@ -527,3 +527,19 @@ class ColumnSelect(wx.ComboBox):
 
         self.SetItems(columns)
         self.SetValue('')
+    
+    def InsertTableColumns(self, table, driver=None, database=None):
+        """Insert table columns"""
+        columns = []
+        
+        ret = gcmd.RunCommand('db.columns',
+                              read = True,
+                              driver = driver,
+                              database = database,
+                              table = table)
+        
+        if ret:
+            columns = ret.splitlines()
+
+        self.SetItems(columns)
+        
