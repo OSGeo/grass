@@ -8,7 +8,7 @@
  *               Brad Douglas <rez touchofmadness.com>, Glynn Clements <glynn gclements.plus.com>,
  *               Hamish Bowman <hamish_nospam yahoo.com>, Markus Neteler <neteler itc.it>
  * PURPOSE:      
- * COPYRIGHT:    (C) 2003-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2009 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -37,8 +37,8 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     module->keywords = _("vector, raster, conversion");
-    module->description = _("Converts a binary GRASS vector map layer "
-			    "into a GRASS raster map layer.");
+    module->description = _("Converts a binary GRASS vector map "
+			    "into a GRASS raster map .");
 
     input = G_define_standard_option(G_OPT_V_INPUT);
     output = G_define_standard_option(G_OPT_R_OUTPUT);
@@ -136,7 +136,10 @@ int main(int argc, char *argv[])
     value = atof(val_opt->answer);
     value_type = (strchr(val_opt->answer, '.')) ? USE_DCELL : USE_CELL;
 
-    return vect_to_rast(input->answer, output->answer, field,
-			col->answer, nrows, use, value, value_type,
-			rgbcol_opt->answer, label_opt->answer, type);
+    if (vect_to_rast(input->answer, output->answer, field,
+		     col->answer, nrows, use, value, value_type,
+		     rgbcol_opt->answer, label_opt->answer, type))
+      exit(EXIT_FAILURE);
+   
+    exit(EXIT_SUCCESS);
 }

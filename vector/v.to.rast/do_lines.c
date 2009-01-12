@@ -32,7 +32,9 @@ int do_lines(struct Map_info *Map, struct line_pnts *Points,
     count = 0;
     *count_all = 0;
 
+    G_message(_("Reading features..."));
     for (index = 1; index <= nlines; index++) {
+	G_percent(index, nlines, 2);
 	type = Vect_read_line(Map, Points, Cats, index);
 	Vect_cat_get(Cats, field, &cat);
 
