@@ -125,8 +125,11 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
             if not root:
                 return
             item = self.FindItem(root, self.value[0])
-            self.seltree.EnsureVisible(item)
-            self.seltree.SelectItem(item)
+            try:
+                self.seltree.EnsureVisible(item)
+                self.seltree.SelectItem(item)
+            except:
+                pass
             
     def SetStringValue(self, value):
         # this assumes that item strings are unique...
