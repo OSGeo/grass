@@ -289,7 +289,7 @@ class ProfileFrame(wx.Frame):
                                   map = r['name'])
 
             if ret:
-                r['units'] = p.splitlines()[0].split('=')[1]
+                r['units'] = ret.splitlines()[0].split('=')[1]
 
             # update title
             self.ptitle += ' %s and' % r['name']
@@ -413,7 +413,7 @@ class ProfileFrame(wx.Frame):
         import subprocess
         
         try:
-            ret = RunCommand("r.profile",
+            ret = gcmd.RunCommand("r.profile",
                              input=raster,
                              profile=coords,
                              null="nan",
@@ -424,7 +424,7 @@ class ProfileFrame(wx.Frame):
                 return dataset
             
             for line in ret.splitlines():
-                dist, elev = outline.split(' ')
+                dist, elev = line.split(' ')
                 if elev != 'nan':
                     datalist.append((dist,elev))
 
