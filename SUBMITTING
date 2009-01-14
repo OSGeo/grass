@@ -44,20 +44,19 @@ following rules:
 
 /****************************************************************************
  *
- * MODULE:       d.rast (or new higher level module name (eg GRASS core) 
- *               for 6.1)
+ * MODULE:       d.rast (or new higher level module name (eg GRASS core))
  * AUTHOR(S):    Original author unknown - probably CERL
- *               John Doe - jdoe@some.where.org
+ *               John Doe <jdoe at somewhere org>
  * PURPOSE:      To provide storage and manipulation of colors used for 
  *               rendering the raster. The colors are stored in a doubly linked
  *               list which must be initialized with InitColors() before it can
  *               be used. Note that most linked list functionality (add,
- *               remove, get) is supported, but their is no sorting
+ *               remove, get) is supported, but there is no sorting
  *               functionality.
- * COPYRIGHT:    (C) 2008 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2009 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               License (>=v2). Read the COPYING file that comes with GRASS
  *               for details.
  *
  *****************************************************************************/
