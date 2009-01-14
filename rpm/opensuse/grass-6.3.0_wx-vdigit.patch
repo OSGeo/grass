@@ -1,0 +1,19 @@
+--- grass-6.3.0/gui/wxpython/Makefile	2008-04-16 15:31:47.000000000 +0200
++++ grass-6.3.0_new/gui/wxpython/Makefile	2008-04-19 14:06:28.000000000 +0200
+@@ -4,11 +4,11 @@
+ 
+ include $(MODULE_TOPDIR)/include/Make/Platform.make
+ 
+-ifneq ($(USE_WXWIDGETS),)
+-  ifneq ($(USE_PYTHON),)
+-    SUBDIRS += vdigit
+-  endif
+-endif
++#ifneq ($(USE_WXWIDGETS),)
++#  ifneq ($(USE_PYTHON),)
++#    SUBDIRS += vdigit
++#  endif
++#endif
+ 
+ include $(MODULE_TOPDIR)/include/Make/Dir.make
+ 
