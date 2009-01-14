@@ -1,6 +1,6 @@
 # For preparing GRASS Debian package run
 
-svn co svn://svn.debian.org/pkg-grass/packages/grass/branches/6.3/debian debiangis
+svn co svn://svn.debian.org/pkg-grass/packages/grass/branches/6.4/debian debiangis
 mv debiangis/* .
 
 # in this directory. It will download latest debian configuration files
