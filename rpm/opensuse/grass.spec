@@ -1,8 +1,8 @@
-%define shortver 63
+%define shortver 70
 
 Summary:	GRASS - Geographic Resources Analysis Support System
 Name:		grass
-Version:	6.3.0
+Version:	7.0.svn
 Release:	1
 License:	GPL
 Group:		Applications/GIS
