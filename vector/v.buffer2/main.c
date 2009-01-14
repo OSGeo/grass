@@ -153,8 +153,10 @@ int main(int argc, char *argv[])
     type_opt = G_define_standard_option(G_OPT_V_TYPE);
     type_opt->options = "point,line,boundary,centroid,area";
     type_opt->answer = "point,line,area";
+    type_opt->guisection = _("Selection");
 
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
+    field_opt->guisection = _("Selection");
 
     dista_opt = G_define_option();
     dista_opt->key = "distance";
@@ -162,6 +164,7 @@ int main(int argc, char *argv[])
     dista_opt->required = NO;
     dista_opt->description =
 	_("Buffer distance along major axis in map units");
+    dista_opt->guisection = _("Distance");
 
     distb_opt = G_define_option();
     distb_opt->key = "minordistance";
@@ -169,7 +172,7 @@ int main(int argc, char *argv[])
     distb_opt->required = NO;
     distb_opt->description =
 	_("Buffer distance along minor axis in map units");
-    distb_opt->guisection = _("Advanced");
+    distb_opt->guisection = _("Distance");
 
     angle_opt = G_define_option();
     angle_opt->key = "angle";
@@ -177,15 +180,12 @@ int main(int argc, char *argv[])
     angle_opt->required = NO;
     angle_opt->answer = "0";
     angle_opt->description = _("Angle of major axis in degrees");
-    angle_opt->guisection = _("Advanced");
 
-    bufcol_opt = G_define_option();
-    bufcol_opt->key = "bufcol";
-    bufcol_opt->type = TYPE_STRING;
-    bufcol_opt->required = NO;
+    bufcol_opt = G_define_standard_option(G_OPT_DB_COLUMN);
+    bufcol_opt->key = "bufcolumn";
     bufcol_opt->description =
-	_("Attribute column to use for buffer distances");
-    bufcol_opt->guisection = _("Advanced");
+	_("Name of column to use for buffer distances");
+    bufcol_opt->guisection = _("Distance");
 
     scale_opt = G_define_option();
     scale_opt->key = "scale";
@@ -193,16 +193,15 @@ int main(int argc, char *argv[])
     scale_opt->required = NO;
     scale_opt->answer = "1.0";
     scale_opt->description = _("Scaling factor for attribute column values");
-    scale_opt->guisection = _("Advanced");
 
     tol_opt = G_define_option();
     tol_opt->key = "tolerance";
     tol_opt->type = TYPE_DOUBLE;
     tol_opt->required = NO;
     tol_opt->answer = "0.01";
-    tol_opt->guisection = _("Advanced");
     tol_opt->description =
 	_("Maximum distance between theoretical arc and polygon segments as multiple of buffer");
+    tol_opt->guisection = _("Distance");
 
     straight_flag = G_define_flag();
     straight_flag->key = 's';
