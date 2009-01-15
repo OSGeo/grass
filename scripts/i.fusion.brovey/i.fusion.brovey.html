@@ -21,6 +21,43 @@ then restores the previous region settings. The current
 region coordinates are respected. The three pan-sharpened output
 channels may be combined with <em>d.rgb</em> or <em>r.composite</em>.
 
+<H2>EXAMPLE</H2>
+
+Calculation of Brovey fusion map from North Carolina Landsat scene:
+
+<div class="code"><pre>
+g.region rast=lsat7_2002_20 -p
+
+# R, G, B composite at 28.5m 
+d.rgb b=lsat7_2002_10 g=lsat7_2002_20 r=lsat7_2002_30
+
+# Brovey fusion
+i.fusion.brovey -l ms1=lsat7_2002_20 ms2=lsat7_2002_40 \
+                   ms3=lsat7_2002_50 pan=lsat7_2002_80 \
+                   outputprefix=brovey
+
+# display at 14.25m
+g.region rast=brovey.blue -p
+d.rgb b=brovey.blue g=brovey.green r=brovey.red
+</pre></div>
+
+Results:
+<p>
+<center>
+<img src="rgb_originals.png" alt="R, G, B composite of Landsat at 28.5m">
+<br>
+<i>R, G, B composite of Landsat at 28.5m</i>
+</center>
+<p>
+
+<center>
+<img src="rgb_brovey.png" alt="R, G, B composite of Landsat Brovey fusion at 14.25m">
+<br>
+<i>R, G, B composite of Landsat Brovey fusion at 14.25m</i>
+</center>
+
+Colors may be optionally optimized.
+
 <H2>SEE ALSO</H2>
 
 <EM>
@@ -52,5 +89,5 @@ channels may be combined with <em>d.rgb</em> or <em>r.composite</em>.
 
 <H2>AUTHOR</H2>
 
-Markus Neteler, ITC-irst
+Markus Neteler, ITC-irst, Italy
 <p><i>Last changed: $Date$</i>
