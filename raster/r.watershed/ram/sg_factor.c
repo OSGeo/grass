@@ -9,7 +9,7 @@ int sg_factor(void)
     CELL low_elev, hih_elev;
     double height, length, S, sin_theta;
 
-    G_message(_("SECTION 4: Length Slope determination."));
+    G_message(_("SECTION 4: RUSLE LS and/or S factor determination."));
 
     for (r = 0; r < nrows; r++) {
 	G_percent(r, nrows, 3);
@@ -38,7 +38,7 @@ int sg_factor(void)
 	    }
 	}
     }
-    G_percent(r, nrows, 3);	/* finish it */
+    G_percent(nrows, nrows, 1);	/* finish it */
 
     if (ril_flag) {
 	G_free(ril_buf);

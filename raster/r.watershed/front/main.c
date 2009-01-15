@@ -20,7 +20,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-int write_hist(char *, char *, char *, int);
+int write_hist(char *, char *, char *, int, int);
 
 int main(int argc, char *argv[])
 {
@@ -62,7 +62,8 @@ int main(int argc, char *argv[])
 
     opt2 = G_define_option();
     opt2->key = "depression";
-    opt2->description = _("Input map: locations of real depressions");
+    opt2->label = _("Input map: locations of real depressions");
+    opt2->description = _("All non-NULL cells are considered as real depressions");
     opt2->required = NO;
     opt2->type = TYPE_STRING;
     opt2->gisprompt = "old,cell,raster";
@@ -87,8 +88,10 @@ int main(int argc, char *argv[])
 
     opt5 = G_define_option();
     opt5->key = "blocking";
-    opt5->description =
+    opt5->label =
 	_("Input map: terrain blocking overland surface flow, for USLE");
+    opt5->description =
+	_("All non-NULL cells are considered as blocking terrain");
     opt5->required = NO;
     opt5->type = TYPE_STRING;
     opt5->gisprompt = "old,cell,raster";
@@ -232,18 +235,20 @@ int main(int argc, char *argv[])
     }
 
     err = 0;
-    /* basin and basin.thresh */
+    /* basin and basin threshold */
     err += (opt10->answer != NULL && opt6->answer == NULL);
-    /* stream and basin.thresh */
+    /* stream and basin threshold */
     err += (opt11->answer != NULL && opt6->answer == NULL);
-    /* half.basin and basin.thresh */
+    /* half_basin and basin threshold */
     err += (opt12->answer != NULL && opt6->answer == NULL);
-    /* slope and basin.thresh */
+    /* LS factor and basin threshold */
+    err += (opt14->answer != NULL && opt6->answer == NULL);
+    /* S factor and basin threshold */
     err += (opt15->answer != NULL && opt6->answer == NULL);
 
     if (err) {
 	G_message(_("Sorry, if any of the following options are set:\n"
-		    "    basin, stream, half.basin, slope, or lS\n"
+		    "    basin, stream, half_basin, length_slope, or slope_steepness\n"
 		    "    you MUST provide a value for the basin "
 		    "threshold parameter."));
 	G_usage();
@@ -388,39 +393,41 @@ int main(int argc, char *argv[])
     if (opt8->answer)
 	write_hist(opt8->answer,
 		   "Watershed accumulation: overland flow that traverses each cell",
-		   opt1->answer, flag_seg->answer);
+		   opt1->answer, flag_seg->answer, flag_sfd->answer);
     if (opt9->answer)
 	write_hist(opt9->answer,
 		   "Watershed drainage direction (divided by 45deg)",
-		   opt1->answer, flag_seg->answer);
+		   opt1->answer, flag_seg->answer, flag_sfd->answer);
     if (opt10->answer)
 	write_hist(opt10->answer,
-		   "Watershed basins", opt1->answer, flag_seg->answer);
+		   "Watershed basins", opt1->answer, flag_seg->answer, 
+		   flag_sfd->answer);
     if (opt11->answer)
 	write_hist(opt11->answer,
 		   "Watershed stream segments", opt1->answer,
-		   flag_seg->answer);
+		   flag_seg->answer, flag_sfd->answer);
     if (opt12->answer)
 	write_hist(opt12->answer,
-		   "Watershed half-basins", opt1->answer, flag_seg->answer);
+		   "Watershed half-basins", opt1->answer, flag_seg->answer, 
+		   flag_sfd->answer);
     if (opt13->answer)
 	write_hist(opt13->answer,
 		   "Watershed visualization map (filtered accumulation map)",
-		   opt1->answer, flag_seg->answer);
+		   opt1->answer, flag_seg->answer, flag_sfd->answer);
     if (opt14->answer)
 	write_hist(opt14->answer,
 		   "Watershed slope length and steepness (LS) factor",
-		   opt1->answer, flag_seg->answer);
+		   opt1->answer, flag_seg->answer, flag_sfd->answer);
     if (opt15->answer)
 	write_hist(opt15->answer,
 		   "Watershed slope steepness (S) factor",
-		   opt1->answer, flag_seg->answer);
+		   opt1->answer, flag_seg->answer, flag_sfd->answer);
 
     exit(ret);
 }
 
 /* record map history info */
-int write_hist(char *map_name, char *title, char *source_name, int mode)
+int write_hist(char *map_name, char *title, char *source_name, int mode, int sfd)
 {
     struct History history;
 
@@ -430,8 +437,10 @@ int write_hist(char *map_name, char *title, char *source_name, int mode)
     strncpy(history.datsrc_1, source_name, RECORD_LEN);
     history.datsrc_1[RECORD_LEN - 1] = '\0';	/* strncpy() doesn't null terminate if maxfill */
     sprintf(history.edhist[0],
-	    "Processing mode: %s", mode ? "Segmented" : "All in RAM");
-    history.edlinecnt = 1;
+	    "Processing mode: %s", sfd ? "SFD (D8)" : "MFD");
+    sprintf(history.edhist[1],
+	    "Memory mode: %s", mode ? "Segmented" : "All in RAM");
+    history.edlinecnt = 2;
     G_command_history(&history);
 
     return G_write_history(map_name, &history);

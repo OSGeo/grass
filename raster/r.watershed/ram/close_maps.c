@@ -6,21 +6,24 @@
 
 int close_maps(void)
 {
-    struct Colors colors, logcolors;
+    struct Colors colors;
     int value, r, c, fd;
     CELL *buf = NULL;
     DCELL *dbuf = NULL;
     struct FPRange accRange;
     DCELL min, max;
     DCELL clr_min, clr_max;
+    DCELL sum, sum_sqr, stddev, lstddev, dvalue;
 
-    if (wat_flag || asp_flag || dis_flag || ls_flag || sl_flag || sg_flag)
+    if (asp_flag || dis_flag)
 	buf = G_allocate_cell_buf();
-    dbuf = G_allocate_d_raster_buf();
+    if (wat_flag || ls_flag || sl_flag || sg_flag)
+	dbuf = G_allocate_d_raster_buf();
     G_free(alt);
     if (ls_flag || sg_flag)
 	G_free(r_h);
 
+    sum = sum_sqr = stddev = 0.0;
     if (wat_flag) {
 	fd = G_open_raster_new(wat_name, DCELL_TYPE);
 	if (fd < 0) {
@@ -28,65 +31,92 @@ int close_maps(void)
 	}
 	else {
 	    for (r = 0; r < nrows; r++) {
+		G_set_d_null_value(dbuf, ncols);	/* reset row to all NULL */
 		for (c = 0; c < ncols; c++) {
-		    dbuf[c] = wat[SEG_INDEX(wat_seg, r, c)];
+		    dvalue = wat[SEG_INDEX(wat_seg, r, c)];
+		    if (G_is_d_null_value(&dvalue) == 0 && dvalue) {
+			dbuf[c] = dvalue;
+			dvalue = ABS(dvalue);
+			sum += dvalue;
+			sum_sqr += dvalue * dvalue;
+		    }
 		}
 		G_put_raster_row(fd, dbuf, DCELL_TYPE);
 	    }
 	    if (G_close_cell(fd) < 0)
 		G_warning(_("Close failed."));
 
+	    stddev =
+		sqrt((sum_sqr - (sum + sum / do_points)) / (do_points - 1));
+	    G_debug(1, "stddev: %f", stddev);
+
 	    /* set nice color rules: yellow, green, cyan, blue, black */
+
+	    lstddev = log(stddev);
+
 	    G_read_fp_range(wat_name, this_mapset, &accRange);
 	    min = max = 0;
 	    G_get_fp_range_min_max(&accRange, &min, &max);
 
 	    G_init_colors(&colors);
-	    if (ABS(min) > max) {
-		clr_min = 1;
-		clr_max = 0.25 * max;
-		G_add_d_raster_color_rule(&clr_min, 255, 255, 0, &clr_max, 0,
-					  255, 0, &colors);
-		clr_min = 0.25 * max;
-		clr_max = 0.5 * max;
-		G_add_d_raster_color_rule(&clr_min, 0, 255, 0, &clr_max, 0,
-					  255, 255, &colors);
-		clr_min = 0.5 * max;
-		clr_max = 0.75 * max;
-		G_add_d_raster_color_rule(&clr_min, 0, 255, 255, &clr_max, 0,
+
+	    if (min < 0) {
+		if (min < (-stddev - 1)) {
+		    clr_min = min;
+		    clr_max = -stddev - 1;
+		    G_add_d_raster_color_rule(&clr_min, 0, 0, 0, &clr_max, 0,
+					      0, 0, &colors);
+		}
+		clr_min = -stddev - 1.;
+		clr_max = -1. * exp(lstddev * 0.75);
+		G_add_d_raster_color_rule(&clr_min, 0, 0, 0, &clr_max, 0,
 					  0, 255, &colors);
-		clr_min = 0.75 * max;
+		clr_min = clr_max;
+		clr_max = -1. * exp(lstddev * 0.5);
+		G_add_d_raster_color_rule(&clr_min, 0, 0, 255, &clr_max, 0,
+					  255, 255, &colors);
+		clr_min = clr_max;
+		clr_max = -1. * exp(lstddev * 0.35);
+		G_add_d_raster_color_rule(&clr_min, 0, 255, 255, &clr_max, 0,
+					  255, 0, &colors);
+		clr_min = clr_max;
+		clr_max = -1.;
+		G_add_d_raster_color_rule(&clr_min, 0, 255, 0, &clr_max, 255,
+					  255, 0, &colors);
+	    }
+	    clr_min = -1.;
+	    clr_max = 1.;
+	    G_add_d_raster_color_rule(&clr_min, 255, 255, 0, &clr_max, 255,
+				      255, 0, &colors);
+	    clr_min = 1;
+	    clr_max = exp(lstddev * 0.35);
+	    G_add_d_raster_color_rule(&clr_min, 255, 255, 0, &clr_max, 0,
+				      255, 0, &colors);
+	    clr_min = clr_max;
+	    clr_max = exp(lstddev * 0.5);
+	    G_add_d_raster_color_rule(&clr_min, 0, 255, 0, &clr_max, 0,
+				      255, 255, &colors);
+	    clr_min = clr_max;
+	    clr_max = exp(lstddev * 0.75);
+	    G_add_d_raster_color_rule(&clr_min, 0, 255, 255, &clr_max, 0,
+				      0, 255, &colors);
+	    clr_min = clr_max;
+	    clr_max = stddev + 1.;
+	    G_add_d_raster_color_rule(&clr_min, 0, 0, 255, &clr_max, 0, 0,
+				      0, &colors);
+
+	    if (max > 0 && max > stddev + 1) {
+		clr_min = stddev + 1;
 		clr_max = max;
-		G_add_d_raster_color_rule(&clr_min, 0, 0, 255, &clr_max, 0, 0,
-					  0, &colors);
-		max = -max;
-	    }
-	    else {
-		min = ABS(min);
-		clr_min = 1;
-		clr_max = 0.25 * min;
-		G_add_d_raster_color_rule(&clr_min, 255, 255, 0, &clr_max, 0,
-					  255, 0, &colors);
-		clr_min = 0.25 * min;
-		clr_max = 0.5 * min;
-		G_add_d_raster_color_rule(&clr_min, 0, 255, 0, &clr_max, 0,
-					  255, 255, &colors);
-		clr_min = 0.5 * min;
-		clr_max = 0.75 * min;
-		G_add_d_raster_color_rule(&clr_min, 0, 255, 255, &clr_max, 0,
-					  0, 255, &colors);
-		clr_min = 0.75 * min;
-		clr_max = min;
-		G_add_d_raster_color_rule(&clr_min, 0, 0, 255, &clr_max, 0, 0,
+		G_add_d_raster_color_rule(&clr_min, 0, 0, 0, &clr_max, 0, 0,
 					  0, &colors);
 	    }
-	    G_abs_log_colors(&logcolors, &colors, 5);
-	    G_add_d_raster_color_rule(&min, 0, 0, 0, &max, 0, 0, 0,
-				      &logcolors);
-	    G_write_colors(wat_name, this_mapset, &logcolors);
+	    G_write_colors(wat_name, this_mapset, &colors);
 	}
     }
 
+    /* TODO: elevation == NULL -> drainage direction == NULL (wat == 0 where ele == NULL) */
+    /* keep drainage direction == 0 for real depressions */
     if (asp_flag) {
 	fd = G_open_cell_new(asp_name);
 	if (fd < 0) {
@@ -94,6 +124,7 @@ int close_maps(void)
 	}
 	else {
 	    for (r = 0; r < nrows; r++) {
+		G_set_c_null_value(buf, ncols);	/* reset row to all NULL */
 		for (c = 0; c < ncols; c++) {
 		    buf[c] = asp[SEG_INDEX(asp_seg, r, c)];
 		}
@@ -146,16 +177,16 @@ int close_maps(void)
     G_free(wat);
 
     if (ls_flag) {
-	fd = G_open_cell_new(ls_name);
+	fd = G_open_raster_new(ls_name, DCELL_TYPE);
 	if (fd < 0) {
-	    G_warning(_("unable to open new L map layer."));
+	    G_warning(_("unable to open new LS factor map layer."));
 	}
 	else {
 	    for (r = 0; r < nrows; r++) {
 		for (c = 0; c < ncols; c++) {
-		    buf[c] = l_s[SEG_INDEX(l_s_seg, r, c)] + .5;
+		    dbuf[c] = l_s[SEG_INDEX(l_s_seg, r, c)];
 		}
-		G_put_raster_row(fd, buf, CELL_TYPE);
+		G_put_raster_row(fd, dbuf, DCELL_TYPE);
 	    }
 	    if (G_close_cell(fd) < 0)
 		G_warning(_("Close failed."));
@@ -164,18 +195,18 @@ int close_maps(void)
     }
 
     if (sl_flag) {
-	fd = G_open_cell_new(sl_name);
+	fd = G_open_raster_new(sl_name, DCELL_TYPE);
 	if (fd < 0) {
 	    G_warning(_("unable to open new slope length map layer."));
 	}
 	else {
 	    for (r = 0; r < nrows; r++) {
 		for (c = 0; c < ncols; c++) {
-		    buf[c] = s_l[SEG_INDEX(s_l_seg, r, c)] + .5;
-		    if (buf[c] > max_length)
-			buf[c] = max_length + .5;
+		    dbuf[c] = s_l[SEG_INDEX(s_l_seg, r, c)];
+		    if (dbuf[c] > max_length)
+			dbuf[c] = max_length;
 		}
-		G_put_raster_row(fd, buf, CELL_TYPE);
+		G_put_raster_row(fd, dbuf, DCELL_TYPE);
 	    }
 	    if (G_close_cell(fd) < 0)
 		G_warning(_("Close failed."));
@@ -186,16 +217,16 @@ int close_maps(void)
 	G_free(s_l);
 
     if (sg_flag) {
-	fd = G_open_cell_new(sg_name);
+	fd = G_open_raster_new(sg_name, DCELL_TYPE);
 	if (fd < 0) {
-	    G_warning(_("unable to open new S map layer."));
+	    G_warning(_("unable to open new S factor map layer."));
 	}
 	else {
 	    for (r = 0; r < nrows; r++) {
 		for (c = 0; c < ncols; c++) {
-		    buf[c] = s_g[SEG_INDEX(s_g_seg, r, c)] * 100 + .5;
+		    dbuf[c] = s_g[SEG_INDEX(s_g_seg, r, c)];
 		}
-		G_put_raster_row(fd, buf, CELL_TYPE);
+		G_put_raster_row(fd, dbuf, DCELL_TYPE);
 	    }
 	    if (G_close_cell(fd) < 0)
 		G_warning(_("Close failed."));

@@ -47,7 +47,6 @@ SHORT nextdc[8] = { 0, 0, -1, 1, 1, -1, 1, -1 };
 char ele_name[GNAME_MAX], pit_name[GNAME_MAX];
 char run_name[GNAME_MAX], ob_name[GNAME_MAX];
 char ril_name[GNAME_MAX], dep_name[GNAME_MAX];
-
 const char *this_mapset;
 char seg_name[GNAME_MAX], bas_name[GNAME_MAX], haf_name[GNAME_MAX],
     thr_name[8];
