@@ -1,8 +1,57 @@
 <H2>DESCRIPTION</H2>
 
 
-<EM>i.tasscap</EM> calculates Tasseled Cap (Kauth Thomas) transformation for
-LANDSAT-TM data (TM4, TM5, TM7).
+<EM>i.tasscap</EM> calculates Tasseled Cap (Kauth Thomas, TC) transformation for
+LANDSAT-TM data (TM4, TM5, TM7). The following TC components are generated:
+
+<ul>
+<li> tasscap.1: corresponds to brightness,
+<li> tasscap.2: corresponds to greenness,
+<li> tasscap.3: corresponds to wetness,
+<li> tasscap.4: corresponds to atmospheric haze.
+</ul>
+
+<H2>EXAMPLE</H2>
+
+Calculation of TC maps from North Carolina Landsat scene:
+
+<div class="code"><pre>
+g.region rast=lsat7_2002_10 -p
+i.tasscap -7 band1=lsat7_2002_10 band2=lsat7_2002_20 \
+             band3=lsat7_2002_30 band4=lsat7_2002_40 \
+             band5=lsat7_2002_50 band7=lsat7_2002_70 \
+	     outprefix=tasscap
+</pre></div>
+
+Results:
+<p>
+<center>
+<img src="tasscap1.png" alt="'Brightness' Tasseled Cap component 1">
+<br>
+<i>'Brightness' Tasseled Cap component 1</i>
+</center>
+<p>
+
+<center>
+<img src="tasscap2.png" alt="'Greenness' Tasseled Cap component 2">
+<br>
+<i>'Greenness' Tasseled Cap component 2</i>
+</center>
+<p>
+
+<center>
+<img src="tasscap3.png" alt="'Wetness' Tasseled Cap component 3">
+<br>
+<i>'Wetness' Tasseled Cap component 3</i>
+</center>
+<p>
+
+<center>
+<img src="tasscap4.png" alt="'Atmospheric haze' Tasseled Cap component 4">
+<br>
+<i>'Atmospheric haze' Tasseled Cap component 4</i>
+</center>
+
 
 <H2>REFERENCES</H2>
 
