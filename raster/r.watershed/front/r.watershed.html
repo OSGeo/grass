@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
 <em>r.watershed</em> generates a set of maps indicating:
-1) the location of watershed basins, and
+1) flow accumulation, drainage direction, the location of streams and watershed basins, and
 2) the LS and S factors of the Revised Universal Soil Loss Equation (RUSLE).
 
 <p>
@@ -24,13 +24,13 @@ lumped-parameter hydrologic model program.  The non-interactive version of
 
 <dd>Without this flag set, the entire analysis is run in memory
 maintained by the operating system.  This can be limiting, but is
-relatively fast.  Setting the flag causes the program to manage memory
+very fast.  Setting the flag causes the program to manage memory
 on disk which allows larger maps to be processed but is considerably
 slower.
 
 <dt><em>-s</em> 
 
-<dd>Use single flow direction (SFD) instead of multiple flow direction (MFD).
+<dd>Use single flow direction (SFD, D8) instead of multiple flow direction (MFD).
 MFD is enabled by default.
 
 <dt><em>-4</em> 
@@ -59,7 +59,8 @@ flow is less widely distributed, becoming more similar to SFD.
 
 <dd>Input map:  Map layer of actual depressions or sinkholes in the
 landscape that are large enough to slow and store surface runoff from 
-a storm event.  Any non-zero values indicate depressions.
+a storm event.  Any non-NULL (not nodata) values indicate depressions. 
+Water will flow into depressions, but not out of depressions.
 
 <dt><em>flow</em> 
 
@@ -67,7 +68,7 @@ a storm event.  Any non-zero values indicate depressions.
 amount of overland flow units that each cell will contribute to the
 watershed basin model.  Overland flow units represent the amount of
 overland flow each cell contributes to surface flow.  If omitted, a
-value of one (1) is assumed. The algorithm is D8 flow accumulation.
+value of one (1) is assumed.
 
 <dt><em>disturbed_land</em> 
 
@@ -80,7 +81,7 @@ assumes no disturbed land.  This input is used for the RUSLE calculations.
 
 <dd>Input map: terrain that will block overland surface flow.  Terrain
 that will block overland surface flow and restart the slope length
-for the RUSLE.  Any non-zero values indicate blocking terrain.
+for the RUSLE.  Any non-NULL (not nodata) values indicate blocking terrain.
 
 <dt><em>threshold</em> 
 
@@ -116,8 +117,8 @@ calculated accurately.
 <dd>Output map: drainage direction.  Provides the "aspect" for each
 cell.  Multiplying positive values by 45 will give the direction in
 degrees that the surface runoff will travel from that cell.  The
-value -1 indicates that the cell is a depression area (defined by
-the depression input map).  Other negative values indicate that
+value 0 (zero) indicates that the cell is a depression area (defined by
+the depression input map).  Negative values indicate that
 surface runoff is leaving the boundaries of the current geographic
 region.  The absolute value of these negative cells indicates the
 direction of flow.
@@ -154,22 +155,19 @@ are given the value of the <em>threshold</em> parameter.
 
 <dt><em>length_slope</em> 
 
-<dd>Output map: slope length and steepness (LS) factor.  Contains the LS
-factor for the Revised Universal Soil Loss Equation.  Equations taken
-from <em>Revised Universal Soil Loss Equation for Western Rangelands</em>
-(Weltz et al. 1987).
-Since the LS factor is a small number, it is multiplied by 100 for the
-GRASS output map.
+<dd>Output map: slope length and steepness (LS) factor for the Revised 
+Universal Soil Loss Equation (RUSLE).  Equations taken from <em>Revised 
+Universal Soil Loss Equation for Western Rangelands</em>
+(Weltz et al. 1987). Since the LS factor is a small number (usually less 
+than one), the GRASS output map is of type DCELL.
 
 <dt><em>slope_steepness</em> 
 
-<dd>Output map: slope steepness (S) factor for RUSLE.
-Contains the revised S factor for the Universal Soil
-Loss Equation.  Equations taken from article entitled
+<dd>Output map: slope steepness (S) factor for the Universal Soil
+Loss Equation (RUSLE).  Equations taken from article entitled
 <em>Revised Slope Steepness Factor for the Universal Soil
-Loss Equation</em> (McCool et al. 1987).  Since the S factor
-is a small number (usually less than one), it is multiplied
-by 100 for the GRASS output map layer.
+Loss Equation</em> (McCool et al. 1987).  Since the LS factor is a small 
+number (usually less than one), the GRASS output map is of type DCELL.
 </dd>
 </dl>
 
@@ -208,13 +206,13 @@ single flow direction (SFD, D8) and multiple flow direction (MFD). With
 MFD, water flow is distributed to all neighbouring cells with lower 
 elevation, using slope towards neighbouring cells as a weighing factor 
 for proportional distribution. The A<sup>T</sup> least-cost path is 
-always included and assigned the maxmimum observed weighing factor. 
-As a result, depressions and obstacles are overflown with a gracefull 
-flow convergence before the overflow. The convergence factor causes flow 
-accumulation to converge more strongly with higher values. The supported 
-range is 1 to 10, recommended is a convergence factor of 5. If many 
-small sliver basins are created with MFD, setting the convergence factor 
-to a higher value can reduce the amount of small sliver basins.
+always included. As a result, depressions and obstacles are overflown 
+with a gracefull flow convergence before the overflow. The convergence 
+factor causes flow accumulation to converge more strongly with higher 
+values. The supported range is 1 to 10, recommended is a convergence 
+factor of 5 (Holmgren, 1994). If many small sliver basins are created 
+with MFD, setting the convergence factor to a higher value can reduce 
+the amount of small sliver basins.
 <br>See example below with the North Carolina dataset for using MFD mode.
 
 <h4>In-memory mode and disk swap mode</h4>
@@ -222,12 +220,17 @@ There are two versions of this program: <em>ram</em> and <em>seg</em>.
 <em>ram</em> is used by default, <em>seg</em> can be used by setting 
 the <em>-m</em> flag.
 <br>
+The <em>ram</em> version requires a maximum of 31 MB of RAM for 1 million 
+cells. Together with the amount of system memory (RAM) available, this 
+value can be used to estimate whether the current region can be 
+processed with the <em>ram</em> version.
+<br>
 The <em>ram</em> version uses virtual memory managed by the operating
 system to store all the data structures and is faster than the <em>seg</em>
 version; <em>seg</em> uses the GRASS segmentation library which manages 
-data in disk files. Thus <em>seg</em> uses much less system memory (RAM) 
-allowing other processes to operate on the same CPU, even when the 
-current geographic region is huge.
+data in disk files. <em>seg</em> uses only as much system memory (RAM) as 
+specified with the <em>memory</em> option, allowing other processes to 
+operate on the same system, even when the current geographic region is huge.
 <br>
 Due to memory requirements of both programs, it is quite easy to run out of
 memory when working with huge map regions. If the <em>ram</em> version runs
@@ -280,15 +283,16 @@ tributaries flowing into it.
 <p>
 The <em>r.watershed</em> program does not require the user to have the
 current geographic region filled with elevation values.  Areas without
-elevation data MUST be masked out, by creating a raster map (or raster
-reclassification) named <tt>MASK</tt>.  Areas
-masked out will be treated as if they are off the edge of the region.
-MASKs will reduce the memory necessary to run the program.  Masking out 
-unimportant areas can significantly reduce processing time if the watersheds 
-of interest occupy a small percentage of the overall area.
+elevation data (masked or NULL cells) are ignored. It is NOT necessary to
+create a raster map (or raster reclassification) named <tt>MASK</tt> for 
+NULL cells.  Areas without elevation data will be treated as if they are 
+off the edge of the region. Such areas will reduce the memory necessary 
+to run the program.  Masking out unimportant areas can significantly 
+reduce processing time if the watersheds of interest occupy a small 
+percentage of the overall area.
 
 <p>
-Zero data values will be treated as elevation data (not no_data).
+Zero (0) and negative data values will be treated as elevation data (not no_data).
 
 <h4>Further processing of output layers</h4>
 <p>

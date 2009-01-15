@@ -20,7 +20,7 @@ int slope_length(SHORT r, SHORT c, SHORT dr, SHORT dc)
 	    if (asp_value == 2 || asp_value == 6)
 		res = window.ns_res;
 	    else		/* asp_value == 4, 8, -2, -4, -6, or -8 */
-		res = diag;
+		res = diag;     /* how can res be diag with sides == 4??? */
 	}
 	else {			/* c == dc */
 

@@ -1,69 +1,110 @@
 #include "Gwater.h"
 #include <unistd.h>
+#include <grass/glocale.h>
 
 int close_maps(void)
 {
-    struct Colors colors, logcolors;
+    struct Colors colors;
     int r, c;
     CELL is_swale;
-    double dvalue;
+    DCELL *dbuf = NULL;
+    int fd;
     struct FPRange accRange;
     DCELL min, max;
     DCELL clr_min, clr_max;
+    DCELL sum, sum_sqr, stddev, lstddev, dvalue;
 
     dseg_close(&slp);
     cseg_close(&alt);
     if (wat_flag) {
 	dseg_write_cellfile(&wat, wat_name);
 
+	/* get standard deviation */
+	fd = G_open_cell_old(wat_name, "");
+	if (fd < 0) {
+	    G_fatal_error(_("unable to open flow accumulation map layer"));
+	}
+
+	sum = sum_sqr = stddev = 0.0;
+	dbuf = G_allocate_d_raster_buf();
+	for (r = 0; r < nrows; r++) {
+	    G_get_d_raster_row(fd, dbuf, r);
+	    for (c = 0; c < ncols; c++) {
+		dvalue = dbuf[c];
+		if (G_is_d_null_value(&dvalue) == 0 && dvalue) {
+		    dvalue = ABS(dvalue);
+		    sum += dvalue;
+		    sum_sqr += dvalue * dvalue;
+		}
+	    }
+	}
+
+	stddev = sqrt((sum_sqr - (sum + sum / do_points)) / (do_points - 1));
+	G_debug(1, "stddev: %f", stddev);
+
 	/* set nice color rules: yellow, green, cyan, blue, black */
+	/* start with white to get more detail? NULL cells are white by default, may be confusing */
+
+	lstddev = log(stddev);
+
 	G_read_fp_range(wat_name, this_mapset, &accRange);
 	min = max = 0;
 	G_get_fp_range_min_max(&accRange, &min, &max);
 
 	G_init_colors(&colors);
-	if (ABS(min) > max) {
-	    clr_min = 1;
-	    clr_max = 0.25 * max;
-	    G_add_d_raster_color_rule(&clr_min, 255, 255, 0, &clr_max, 0, 255,
-				      0, &colors);
-	    clr_min = 0.25 * max;
-	    clr_max = 0.5 * max;
-	    G_add_d_raster_color_rule(&clr_min, 0, 255, 0, &clr_max, 0, 255,
-				      255, &colors);
-	    clr_min = 0.5 * max;
-	    clr_max = 0.75 * max;
-	    G_add_d_raster_color_rule(&clr_min, 0, 255, 255, &clr_max, 0, 0,
-				      255, &colors);
-	    clr_min = 0.75 * max;
-	    clr_max = max;
-	    G_add_d_raster_color_rule(&clr_min, 0, 0, 255, &clr_max, 0, 0, 0,
-				      &colors);
-	    max = -max;
-	}
-	else {
-	    min = ABS(min);
-	    clr_min = 1;
-	    clr_max = 0.25 * min;
-	    G_add_d_raster_color_rule(&clr_min, 255, 255, 0, &clr_max, 0, 255,
-				      0, &colors);
-	    clr_min = 0.25 * min;
-	    clr_max = 0.5 * min;
-	    G_add_d_raster_color_rule(&clr_min, 0, 255, 0, &clr_max, 0, 255,
-				      255, &colors);
-	    clr_min = 0.5 * min;
-	    clr_max = 0.75 * min;
-	    G_add_d_raster_color_rule(&clr_min, 0, 255, 255, &clr_max, 0, 0,
-				      255, &colors);
-	    clr_min = 0.75 * min;
-	    clr_max = min;
-	    G_add_d_raster_color_rule(&clr_min, 0, 0, 255, &clr_max, 0, 0, 0,
-				      &colors);
-	}
-	G_abs_log_colors(&logcolors, &colors, 5);
-	G_add_d_raster_color_rule(&min, 0, 0, 0, &max, 0, 0, 0, &logcolors);
-	G_write_colors(wat_name, this_mapset, &logcolors);
 
+	if (min < 0) {
+	    if (min < (-stddev - 1)) {
+		clr_min = min;
+		clr_max = -stddev - 1;
+		G_add_d_raster_color_rule(&clr_min, 0, 0, 0, &clr_max, 0,
+					  0, 0, &colors);
+	    }
+	    clr_min = -stddev - 1.;
+	    clr_max = -1. * exp(lstddev * 0.75);
+	    G_add_d_raster_color_rule(&clr_min, 0, 0, 0, &clr_max, 0,
+				      0, 255, &colors);
+	    clr_min = clr_max;
+	    clr_max = -1. * exp(lstddev * 0.5);
+	    G_add_d_raster_color_rule(&clr_min, 0, 0, 255, &clr_max, 0,
+				      255, 255, &colors);
+	    clr_min = clr_max;
+	    clr_max = -1. * exp(lstddev * 0.35);
+	    G_add_d_raster_color_rule(&clr_min, 0, 255, 255, &clr_max, 0,
+				      255, 0, &colors);
+	    clr_min = clr_max;
+	    clr_max = -1.;
+	    G_add_d_raster_color_rule(&clr_min, 0, 255, 0, &clr_max, 255,
+				      255, 0, &colors);
+	}
+	clr_min = -1.;
+	clr_max = 1.;
+	G_add_d_raster_color_rule(&clr_min, 255, 255, 0, &clr_max, 255,
+				  255, 0, &colors);
+	clr_min = 1;
+	clr_max = exp(lstddev * 0.35);
+	G_add_d_raster_color_rule(&clr_min, 255, 255, 0, &clr_max, 0,
+				  255, 0, &colors);
+	clr_min = clr_max;
+	clr_max = exp(lstddev * 0.5);
+	G_add_d_raster_color_rule(&clr_min, 0, 255, 0, &clr_max, 0,
+				  255, 255, &colors);
+	clr_min = clr_max;
+	clr_max = exp(lstddev * 0.75);
+	G_add_d_raster_color_rule(&clr_min, 0, 255, 255, &clr_max, 0,
+				  0, 255, &colors);
+	clr_min = clr_max;
+	clr_max = stddev + 1.;
+	G_add_d_raster_color_rule(&clr_min, 0, 0, 255, &clr_max, 0, 0,
+				  0, &colors);
+
+	if (max > 0 && max > stddev + 1) {
+	    clr_min = stddev + 1;
+	    clr_max = max;
+	    G_add_d_raster_color_rule(&clr_min, 0, 0, 0, &clr_max, 0, 0, 0,
+				      &colors);
+	}
+	G_write_colors(wat_name, this_mapset, &colors);
     }
     if (asp_flag) {
 	cseg_write_cellfile(&asp, asp_name);

@@ -36,7 +36,7 @@ int do_astar(void)
 	/* equivalent to first_astar = point->next in old code */
 	drop_pt();
 
-	/* can go, dragged on from old code */
+	/* can go, dragged on from old code: replace first_astar with heap_index[1] in line 22 */
 	first_astar = heap_index[1];
 
 	/* downhill path for flow accumulation is set here */
@@ -51,7 +51,6 @@ int do_astar(void)
 
 	index_doer = SEG_INDEX(alt_seg, r, c);
 	alt_val = alt[index_doer];
-	wat_val = wat[index_doer];
 
 	FLAG_SET(worked, r, c);
 
@@ -69,24 +68,24 @@ int do_astar(void)
 		if (in_val == 0) {
 		    alt_up = alt[index_up];
 		    /* flow direction is set here */
-		    add_pt(upr, upc, r, c, alt_up, alt_val);
+		    add_pt(upr, upc, alt_up, alt_val);
 		    drain_val = drain[upr - r + 1][upc - c + 1];
 		    asp[index_up] = drain_val;
-
 		}
 		else {
-		    /* check if neighbour has not been worked on,
-		     * update values for asp and wat */
+		    /* check if neighbour has been worked on,
+		     * if not, update values for asp and wat */
 		    in_val = FLAG_GET(worked, upr, upc);
 		    if (in_val == 0) {
 			asp_up = asp[index_up];
-			if (asp_up < -1) {
+			if (asp_up < 0) {
 			    asp[index_up] = drain[upr - r + 1][upc - c + 1];
 
+			    wat_val = wat[index_doer];
 			    if (wat_val > 0)
 				wat[index_doer] = -wat_val;
 
-			    replace(upr, upc, r, c);	/* alt_up used to be */
+			    /* replace(upr, upc, r, c); */	/* alt_up used to be */
 			}
 		    }
 		}
@@ -104,7 +103,7 @@ int do_astar(void)
 }
 
 /* new add point routine for min heap */
-int add_pt(SHORT r, SHORT c, SHORT downr, SHORT downc, CELL ele, CELL downe)
+int add_pt(SHORT r, SHORT c, CELL ele, CELL downe)
 {
 
     FLAG_SET(in_list, r, c);
@@ -120,8 +119,8 @@ int add_pt(SHORT r, SHORT c, SHORT downr, SHORT downc, CELL ele, CELL downe)
 
     astar_pts[nxt_avail_pt].r = r;
     astar_pts[nxt_avail_pt].c = c;
-    astar_pts[nxt_avail_pt].downr = downr;
-    astar_pts[nxt_avail_pt].downc = downc;
+/*    astar_pts[nxt_avail_pt].downr = downr;
+    astar_pts[nxt_avail_pt].downc = downc; */
 
     nxt_avail_pt++;
 
@@ -288,8 +287,8 @@ int replace(			/* ele was in there */
     while (heap_run <= heap_size) {
 	now = heap_index[heap_run];
 	if (astar_pts[now].r == upr && astar_pts[now].c == upc) {
-	    astar_pts[now].downr = r;
-	    astar_pts[now].downc = c;
+	    /*astar_pts[now].downr = r;
+	    astar_pts[now].downc = c; */
 	    return 0;
 	}
 	heap_run++;

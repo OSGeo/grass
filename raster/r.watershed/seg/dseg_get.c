@@ -4,7 +4,7 @@
 
 int dseg_get(DSEG * dseg, double *value, int row, int col)
 {
-    if (segment_get(&(dseg->seg), (CELL *) value, row, col) < 0) {
+    if (segment_get(&(dseg->seg), (DCELL *) value, row, col) < 0) {
 	G_warning("dseg_get(): could not read segment file");
 	return -1;
     }

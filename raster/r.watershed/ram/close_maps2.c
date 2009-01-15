@@ -112,7 +112,7 @@ int close_array_seg(void)
 	G_write_colors(bas_name, this_mapset, &colors);
     }
 
-    /* half.basins map */
+    /* half_basins map */
     if (haf_flag) {
 	map_fd = G_open_cell_new(haf_name);
 	for (r = 0; r < nrows; r++) {

@@ -31,7 +31,7 @@
 
 #define POINT       struct points
 POINT {
-    SHORT r, c, downr, downc;
+    SHORT r, c; /* , downr, downc */
     int nxt;
 };
 
@@ -87,7 +87,7 @@ CELL def_basin(int, int, CELL, double, CELL);
 
 /* do_astar.c */
 int do_astar(void);
-int add_pt(SHORT, SHORT, SHORT, SHORT, CELL, CELL);
+int add_pt(SHORT, SHORT, CELL, CELL);
 int drop_pt(void);
 int sift_up(int, CELL);
 double get_slope(SHORT, SHORT, SHORT, SHORT, CELL, CELL);
