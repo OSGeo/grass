@@ -12,7 +12,7 @@ etopo2: colors for ETOPO2 worldwide bathymetry/topography
 evi: enhanced vegetative index colors
 grey: grey scale
 grey1.0: grey scale for raster values between 0.0-1.0
-grey255: grey scale for raster values bewtween 0-255
+grey255: grey scale for raster values between 0-255
 grey.eq: histogram-equalized grey scale
 grey.log: histogram logarithmic transformed grey scale
 gyr: green through yellow to red
