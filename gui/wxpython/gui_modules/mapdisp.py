@@ -860,16 +860,27 @@ class MapFrame(wx.Frame):
         """
         Save image to file
         """
-        filetype =  "BMP file (*.bmp)|*.bmp|"\
-                    "GIF file (*.gif)|*.gif|"\
-                    "JPG file (*.jpg)|*.jpg|"\
-                    "PCX file (*.pcx)|*.pcx|"\
-                    "PNG file (*.png)|*.png|"\
-                    "PNM file (*.pnm)|*.pnm|"\
-                    "TIF file (*.tif)|*.tif|"\
-                    "XPM file (*.xpm)|*.xpm"
+        lext = []
+        for h in self.MapWindow.img.GetHandlers():
+            lext.append(h.GetExtension())
+        
+        filetype =  "BMP file (*.bmp)|*.bmp|"
+        if 'gif' in lext:
+            filetype += "GIF file (*.gif)|*.gif|"
+        if 'jpg' in lext:
+            filetype += "JPG file (*.jpg)|*.jpg|"
+        if 'pcx' in lext:
+            filetype += "PCX file (*.pcx)|*.pcx|"
+        if 'png' in lext:
+            filetype += "PNG file (*.png)|*.png|"
+        if 'pnm' in lext:
+            filetype += "PNM file (*.pnm)|*.pnm|"
+        if 'tif' in lext:
+            filetype += "TIF file (*.tif)|*.tif|"
+        if 'xpm' in lext:
+            filetype += "XPM file (*.xpm)|*.xpm"
 
-        dlg = wx.FileDialog(self, "Choose a file name to save the image (no need to add extension)",
+        dlg = wx.FileDialog(self, _("Choose a file name to save the image (no need to add extension)"),
             defaultDir = "",
             defaultFile = "",
             wildcard = filetype,
