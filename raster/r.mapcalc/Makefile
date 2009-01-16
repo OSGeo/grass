@@ -22,6 +22,6 @@ $(BIN)/$(PGM3)$(EXE): LIBES = $(LIBES3)
 
 $(OBJDIR)/mapcalc.yy.o: mapcalc.tab.h
 
-.INTERMEDIATE: mapcalc.tab.c mapcalc.tab.h mapcalc.output
+.SECONDARY: mapcalc.tab.c mapcalc.tab.h mapcalc.output
 
-.INTERMEDIATE: mapcalc.yy.c
+.SECONDARY: mapcalc.yy.c
