@@ -481,6 +481,13 @@ class BufferedWindow(MapWindow, wx.Window):
 
         # get the image to be rendered
         self.img = self.GetImage()
+        if self.img != None:
+            self.img.AddHandler(JPEGHandler)
+            self.img.AddHandler(GIFHandler)
+            self.img.AddHandler(BMPHandler)
+            self.img.AddHandler(XPMHandler)
+            self.img.AddHandler(PNMHandler)
+            self.img.AddHandler(PCXHandler)
 
         # update map display
         if self.img and self.Map.width + self.Map.height > 0: # scale image during resize
