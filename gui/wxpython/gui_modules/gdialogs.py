@@ -10,7 +10,7 @@ List of classes:
  - TextLayerDialog 
  - LoadMapLayersDialog
  - MultiImportDialog
- - LayerList (used by MultiImport) 
+ - LayersList (used by MultiImport) 
  - SetOpacityDialog
 
 (C) 2008 by the GRASS Development Team
