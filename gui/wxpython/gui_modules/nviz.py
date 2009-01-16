@@ -32,15 +32,16 @@ except ImportError, e:
 
 import globalvar
 try:
-    sys.path.append(os.path.join(globalvar.ETCWXDIR, "nviz"))
-    import grass7_wxnviz as wxnviz
+    import nviz_mapdisp
+    import nviz_tools
     haveNviz = True
 except ImportError, e:
     haveNviz = False
     errorMsg = e
 
-import nviz_mapdisp
-import nviz_tools
-
-GLWindow = nviz_mapdisp.GLWindow
-NvizToolWindow = nviz_tools.NvizToolWindow
+if haveNviz:
+    GLWindow = nviz_mapdisp.GLWindow
+    NvizToolWindow = nviz_tools.NvizToolWindow
+else:
+    GLWindow = None
+    NvizToolWindow = None
