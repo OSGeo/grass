@@ -759,6 +759,7 @@ void G__switch_search_path(void);
 void G_reset_mapsets(void);
 char **G_available_mapsets(void);
 void G_add_mapset_to_search_path(const char *);
+int G_is_mapset_in_search_path(const char *);
 
 /* mask_info.c */
 char *G_mask_info(void);
