@@ -13,10 +13,10 @@ EXTRA_LIBS = $(VECTLIB) $(GISLIB) $(GDALLIBS) $(VEDITLIB) $(WXWIDGETSLIB)
 ifeq ($(findstring darwin,$(ARCH)),darwin)
 EXTRA_LIBS := -bundle -undefined dynamic_lookup $(EXTRA_LIBS)
 else
-EXTRA_LIBS := $(PYTHONLDFLAGS) $(EXTRA_LIBS) -lgdi
+EXTRA_LIBS := $(PYTHONLDFLAGS) $(EXTRA_LIBS)
 endif
 
-LOCAL_HEADERS = digit.h driver.h
+LOCAL_HEADERS = digit.h driver.h pseudodc.h
 
 ETCDIR = $(ETC)/wxpython
 
