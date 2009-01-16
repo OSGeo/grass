@@ -27,7 +27,7 @@ proj_wrap_c_FLAGS = $(PROJINC) $(GDALCFLAGS)
 
 EXTRA_SWIG = my_typemaps.i common.i
 EXTRA_CFLAGS = $(PYMOD_CFLAGS)
-EXTRA_CLEAN_FILES := $(foreach M,$(MODULES),$(M)_wrap.o $(M)_wrap.c $(M).pyc $(M).py)
+EXTRA_CLEAN_FILES := $(foreach M,$(MODULES),$(M)_wrap.o $(M)_wrap.c $(M).pyc $(M).py _$(M).so)
 CLEAN_SUBDIRS = NumPtr
 
 include $(MODULE_TOPDIR)/include/Make/Python.make
@@ -59,7 +59,9 @@ numptr:
 
 .PHONY: numptr
 
-.KEEP: $(patsubst %,$(OBJDIR)/%_wrap.o,$(MODULES))
+.SECONDARY: $(patsubst %,$(OBJDIR)/%_wrap.o,$(MODULES))
+
+.SECONDARY: $(patsubst %,_%.so,$(MODULES))
 
 date_wrap.c: $(ARCH_INCDIR)/datetime.h
 date_wrap.c: $(ARCH_INCDIR)/P_datetime.h
