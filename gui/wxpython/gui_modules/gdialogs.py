@@ -157,15 +157,15 @@ def CreateNewVector(parent, cmdDef, title=_('Create new vector map'),
         
         if not UserSettings.Get(group='cmd', key='overwrite', subkey='enabled') and \
                 outmap in listOfVectors:
-            dlg = wx.MessageDialog(parent, message=_("Vector map <%s> already exists "
-                                                     "in the current mapset. "
-                                                     "Do you want to overwrite it?") % outmap,
-                                   caption=_("Overwrite?"),
-                                   style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
-            if dlg.ShowModal() == wx.ID_YES:
+            dlgOw = wx.MessageDialog(parent, message=_("Vector map <%s> already exists "
+                                                       "in the current mapset. "
+                                                       "Do you want to overwrite it?") % outmap,
+                                     caption=_("Overwrite?"),
+                                     style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
+            if dlgOw.ShowModal() == wx.ID_YES:
                 cmd.append('--overwrite')
             else:
-                dlg.Destroy()
+                dlgOw.Destroy()
                 return False
 
         if UserSettings.Get(group='cmd', key='overwrite', subkey='enabled') is True:
