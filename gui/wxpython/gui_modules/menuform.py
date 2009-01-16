@@ -1072,13 +1072,20 @@ class cmdPanel(wx.Panel):
                                 maxValue = 1e6
                             txt2 = wx.SpinCtrl(parent=which_panel, id=wx.ID_ANY, size=globalvar.DIALOG_SPIN_SIZE,
                                                min=minValue, max=maxValue)
+                            txt2.SetName("SpinCtrl")
                             style = wx.BOTTOM | wx.LEFT
                         else:
                             txt2 = wx.TextCtrl(parent=which_panel, value = p.get('default',''))
+                            txt.SetName("TextCtrl")
                             style = wx.EXPAND | wx.BOTTOM | wx.LEFT
                         
-                        if p.get('value','') != '':
-                            txt2.SetValue(p['value']) # parameter previously set
+                        if p.get('value', '') != '':
+                            # parameter previously set
+                            if txt2.GetName() == "SpinCtrl":
+                                txt2.SetValue(int(p['value']))
+                            else:
+                                txt2.SetValue(p['value'])
+                        
                         which_sizer.Add(item=txt2, proportion=0,
                                         flag=style, border=5)
 

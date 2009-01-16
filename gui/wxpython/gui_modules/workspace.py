@@ -664,7 +664,9 @@ class ProcessGrcFile(object):
                 self.inVector = False
             elif self.inGroup:
                 self.inGroup = False
-
+            elif self.inGridline:
+                self.inGridline = False
+        
         elif element == 'opacity':
             self.layers[-1]['opacity'] = float(self._get_value(line))
 
@@ -783,6 +785,64 @@ class ProcessGrcFile(object):
             if value != '':
                 self.layers[-1]['cmd'].append('cats=%s' % value)
 
+        # gridline
+        elif element == 'gridline':
+            self.inGridline = True
+            self.layers.append({
+                    "type"    : 'grid',
+                    "name"    : self._get_value(line),
+                    "checked" : None,
+                    "opacity" : None,
+                    "cmd"     : ['d.grid'],
+                    "group"   : self.inGroup,
+                    "display" : 0})
+
+        elif element == 'gridcolor':
+            value = self._get_value(line)
+            if value != '':
+                self.layers[-1]['cmd'].append('color=%s' % self._color_name_to_rgb(value))
+
+        elif element == 'gridborder':
+            value = self._get_value(line)
+            if value != '':
+                self.layers[-1]['cmd'].append('bordercolor=%s' % self._color_name_to_rgb(value))
+
+        elif element == 'textcolor':
+            value = self._get_value(line)
+            if value != '':
+                self.layers[-1]['cmd'].append('textcolor=%s' % self._color_name_to_rgb(value))
+
+        elif element in ('gridsize',
+                         'gridorigin'):
+            value = self._get_value(line)
+            if value != '':
+                self.layers[-1]['cmd'].append('%s=%s' % (element[4:], value))
+
+        elif element in 'fontsize':
+            value = self._get_value(line)
+            if value != '':
+                self.layers[-1]['cmd'].append('%s=%s' % (element, value))
+        
+        elif element == 'griddraw':
+            value = self._get_value(line)
+            if value == '0':
+                self.layers[-1]['cmd'].append('-n')
+                
+        elif element == 'gridgeo':
+            value = self._get_value(line)
+            if value == '1':
+                self.layers[-1]['cmd'].append('-g')
+        
+        elif element == 'borderdraw':
+            value = self._get_value(line)
+            if value == '0':
+                self.layers[-1]['cmd'].append('-b')
+
+        elif element == 'textdraw':
+            value = self._get_value(line)
+            if value == '0':
+                self.layers[-1]['cmd'].append('-t')
+        
         else:
             self.error += _(' row %d:') % line_id + line + os.linesep
             self.num_error += 1
