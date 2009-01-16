@@ -150,6 +150,10 @@ int main(int argc, char *argv[])
 	    char *mapset;
 
 	    mapset = *ptr;
+
+	    if (G_is_mapset_in_search_path(mapset))
+		continue;
+	    
 	    if (G__mapset_permissions(mapset) < 0)
 		G_fatal_error(_("Mapset <%s> not found"), mapset);
 	    else
