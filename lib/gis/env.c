@@ -1,17 +1,15 @@
-
 /**
-   \file env.c
+   \file lib/gis/env.c
 
    \brief GIS library - environment routines
    
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2009 by the GRASS Development Team
    
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
    
    \author Original author CERL
+   \author Updated for GRASS7 by Glynn Clements
 */
 
 #include <signal.h>
@@ -70,8 +68,6 @@ void G_set_gisrc_mode(int mode)
 /**
    \brief Get info where variables are stored
 
-   \param
-
    \return mode
 */
 int G_get_gisrc_mode(void)
@@ -79,6 +75,11 @@ int G_get_gisrc_mode(void)
     return (st->varmode);
 }
 
+/**
+  \brief Initialize variables
+
+  \return
+*/
 void G_init_env(void)
 {
     read_env(G_VAR_GISRC);
@@ -366,7 +367,7 @@ const char *G__getenv2(const char *name, int loc)
    \param name variable name
    \param value variable value
 
-   \return 0
+   \return
 */
 void G_setenv(const char *name, const char *value)
 {
@@ -385,7 +386,7 @@ void G_setenv(const char *name, const char *value)
    \param value variable value
    \param loc location id
 
-   \return 0
+   \return
 */
 void G_setenv2(const char *name, const char *value, int loc)
 {
@@ -400,7 +401,7 @@ void G_setenv2(const char *name, const char *value, int loc)
    \param name variable name
    \param value variable value
 
-   \return 0
+   \return
 */
 void G__setenv(const char *name, const char *value)
 {
@@ -415,7 +416,7 @@ void G__setenv(const char *name, const char *value)
    \param value variable value
    \param loc location id
 
-   \return 0
+   \return
 */
 void G__setenv2(const char *name, const char *value, int loc)
 {
@@ -430,7 +431,7 @@ void G__setenv2(const char *name, const char *value, int loc)
 
    \param name variable name
 
-   \return 0
+   \return
 */
 void G_unsetenv(const char *name)
 {
@@ -445,8 +446,9 @@ void G_unsetenv(const char *name)
    Updates .gisrc
 
    \param name variable name
-
-   \return 0
+   \param loc location id
+   
+   \return
 */
 void G_unsetenv2(const char *name, int loc)
 {
@@ -458,9 +460,7 @@ void G_unsetenv2(const char *name, int loc)
 /**
    \brief Writes current environment to .gisrc
 
-   \param
-
-   \return 0
+   \return
 */
 void G__write_env(void)
 {
@@ -481,6 +481,7 @@ void G__write_env(void)
    \param n index of variable
 
    \return pointer to variable name
+   \return NULL not found
 */
 const char *G__env_name(int n)
 {
@@ -497,9 +498,7 @@ const char *G__env_name(int n)
 /**
    \brief Initialize init array for G_VAR_GISRC.
 
-   \param
-
-   \return 0
+   \return
 */
 void G__read_env(void)
 {
@@ -509,9 +508,7 @@ void G__read_env(void)
 /**
    \brief Set up alternative environment variables
 
-   \param
-
-   \return 0
+   \return
 */
 void G__create_alt_env(void)
 {
@@ -534,9 +531,7 @@ void G__create_alt_env(void)
 /**
    \brief Switch environments
 
-   \param
-
-   \return 0
+   \return
 */
 void G__switch_env(void)
 {
