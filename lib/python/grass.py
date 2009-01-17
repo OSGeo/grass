@@ -455,8 +455,9 @@ def vector_db(map, **args):
 	f = l.split('|')
 	if len(f) != 5:
 	    continue
+        
         if '/' in f[0]:
-            f1 = f.split('/')
+            f1 = f[0].split('/')
             layer = f1[0]
             name = f1[1]
         else:
