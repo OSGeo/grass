@@ -518,10 +518,12 @@ void G__create_alt_env(void)
     int i;
 
     /* copy env to env2 */
-    st->env2 = st->env;
-
+    G_copy(&st->env2, &st->env, sizeof(st->env));
+    
     st->env.count = 0;
-
+    st->env.size = 0;
+    st->env.binds = NULL;
+    
     for (i = 0; i < st->env2.count; i++) {
 	struct bind *b = &st->env2.binds[i];
 	if (b->name)
