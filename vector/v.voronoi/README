@@ -58,3 +58,10 @@ UPDATE 4/2008
 - TODO: complete it for Voronoi if desired
 
 Benjamin Ducke
+
+-----------------------------------------
+Jan 2009
+
+Removed delaunay part as rewritten in ../v.delaunay2/
+
+Markus Neteler
