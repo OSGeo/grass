@@ -1580,7 +1580,6 @@ class cmdPanel(wx.Panel):
             
             elif name == 'ColumnSelect':
                 if not columns:
-                    print 'c'
                     pLayer = self.task.get_param('layer', element='element', raiseError=False)
                     if pLayer:
                         if pLayer.get('value', '') != '':
