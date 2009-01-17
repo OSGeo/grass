@@ -23,8 +23,17 @@ At the moment a prototype is implemented. There is a
 <li> vector
 </ul>
 
+Usage:
+<p>
+These can be imported individually with e.g. "import swig.grass", or the
+user can import all of them with "import swig" (then use e.g.
+swig.grass.G_gisinit etc), or it can be used e.g. "from swig.grass import *"
+to import all names from a module. The latter can be done for multiple
+modules, but currently, there's no way to import names from all sub-modules
+of a module with a single command. 
+
 <P>
-See: 
+See also:
 
 <ul>
 <li> common.i
