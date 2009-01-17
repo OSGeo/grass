@@ -50,5 +50,14 @@ See also:
 <li> vector.i
 </ul>
 
+Examples:
+
+<ul>
+<li> examples/m.distance
+<li> examples/rasteraccess.py
+<li> examples/vectoraccess.py
+<li> test.py
+</ul>
+
 */
 
