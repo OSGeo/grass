@@ -8,7 +8,7 @@
  * PURPOSE:      Converts a vector map in ASCII format to a vector map
  *               in binary format
  *
- * COPYRIGHT:    (C) 2000-2007 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2000-2009 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -51,11 +51,9 @@ int main(int argc, char *argv[])
 
     /************************** Command Parser ************************************/
     old = G_define_standard_option(G_OPT_F_INPUT);
-    old->required = NO;
-    old->description =
-	_("ASCII file to be imported, if not given reads from standard input");
-    old->guisection = _("Required");
-
+    old->label = _("Name of input file to be imported");
+    old->description = ("'-' for standard input");
+    
     new = G_define_standard_option(G_OPT_V_OUTPUT);
 
     format_opt = G_define_option();
@@ -65,12 +63,14 @@ int main(int argc, char *argv[])
     format_opt->multiple = NO;
     format_opt->options = "point,standard";
     format_opt->descriptions = _("point;simple x,y[,z] list;"
-				 "standard;GRASS's vector ASCII format");
+				 "standard;GRASS vector ASCII format");
     format_opt->answer = "point";
     format_opt->description = _("Input file format");
+    format_opt->guisection = _("Input format");
 
     delim_opt = G_define_standard_option(G_OPT_F_SEP);
-
+    delim_opt->guisection = _("Input format");
+    
     skip_opt = G_define_option();
     skip_opt->key = "skip";
     skip_opt->type = TYPE_INTEGER;
@@ -79,27 +79,28 @@ int main(int argc, char *argv[])
     skip_opt->answer = "0";
     skip_opt->description =
 	_("Number of header lines to skip at top of input file (points mode)");
+    skip_opt->guisection = _("Points");
 
     columns_opt = G_define_option();
     columns_opt->key = "columns";
     columns_opt->type = TYPE_STRING;
     columns_opt->required = NO;
     columns_opt->multiple = NO;
-    columns_opt->guisection = _("Columns");
+    columns_opt->guisection = _("Points");
     columns_opt->label = _("Column definition in SQL style (points mode)");
     columns_opt->description = _("For example: "
 				 "'x double precision, y double precision, cat int, "
 				 "name varchar(10)'");
-
+    
     xcol_opt = G_define_option();
     xcol_opt->key = "x";
     xcol_opt->type = TYPE_INTEGER;
     xcol_opt->required = NO;
     xcol_opt->multiple = NO;
     xcol_opt->answer = "1";
-    xcol_opt->guisection = _("Columns");
-    xcol_opt->description =
-	_("Number of column used as x coordinate (first column is 1) for points mode");
+    xcol_opt->guisection = _("Points");
+    xcol_opt->label = ("Number of column used as x coordinate (points mode)");
+    xcol_opt->description = _("First column is 1");
 
     ycol_opt = G_define_option();
     ycol_opt->key = "y";
@@ -107,9 +108,9 @@ int main(int argc, char *argv[])
     ycol_opt->required = NO;
     ycol_opt->multiple = NO;
     ycol_opt->answer = "2";
-    ycol_opt->guisection = _("Columns");
-    ycol_opt->description =
-	_("Number of column used as y coordinate (first column is 1) for points mode");
+    ycol_opt->guisection = _("Points");
+    ycol_opt->label = _("Number of column used as y coordinate (points mode)");
+    ycol_opt->description = _("First column is 1");
 
     zcol_opt = G_define_option();
     zcol_opt->key = "z";
@@ -117,11 +118,9 @@ int main(int argc, char *argv[])
     zcol_opt->required = NO;
     zcol_opt->multiple = NO;
     zcol_opt->answer = "0";
-    zcol_opt->guisection = _("Columns");
-    zcol_opt->label =
-	_("Number of column used as z coordinate (first column is 1) for "
-	  "points mode");
-    zcol_opt->description = _("If 0, z coordinate is not used");
+    zcol_opt->guisection = _("Points");
+    zcol_opt->label = _("Number of column used as z coordinate (points mode)");
+    zcol_opt->description = _("First column is 1. If 0, z coordinate is not used");
 
     catcol_opt = G_define_option();
     catcol_opt->key = "cat";
@@ -129,12 +128,12 @@ int main(int argc, char *argv[])
     catcol_opt->required = NO;
     catcol_opt->multiple = NO;
     catcol_opt->answer = "0";
-    catcol_opt->guisection = _("Columns");
+    catcol_opt->guisection = _("Points");
     catcol_opt->label =
-	_("Number of column used as category (first column is 1) for points mode");
+	_("Number of column used as category (points mode)");
     catcol_opt->description =
-	_("If 0, unique category is assigned to each row and written to new column 'cat'");
-
+	_("First column is 1. If 0, unique category is assigned to each row and written to new column 'cat'");
+    
     zcoorf = G_define_flag();
     zcoorf->key = 'z';
     zcoorf->description = _("Create 3D vector map");
@@ -142,27 +141,29 @@ int main(int argc, char *argv[])
     e_flag = G_define_flag();
     e_flag->key = 'e';
     e_flag->description =
-	_("Create a new empty vector map and exit. Nothing is read from input");
+	_("Create a new empty vector map and exit. Nothing is read from input.");
 
     noheader_flag = G_define_flag();
     noheader_flag->key = 'n';
     noheader_flag->description =
 	_("Don't expect a header when reading in standard format");
+    noheader_flag->guisection = _("Input format");
 
     t_flag = G_define_flag();
     t_flag->key = 't';
     t_flag->description = _("Do not create table in points mode");
-    t_flag->guisection = _("Columns");
+    t_flag->guisection = _("Points");
 
     notopol_flag = G_define_flag();
     notopol_flag->key = 'b';
     notopol_flag->description = _("Do not build topology in points mode");
+    notopol_flag->guisection = _("Points");
 
     region_flag = G_define_flag();
     region_flag->key = 'r';
     region_flag->description =
 	_("Only import points falling within current region (points mode)");
-
+    region_flag->guisection = _("Points");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -196,7 +197,7 @@ int main(int argc, char *argv[])
     if (xcol+1 < 1 || ycol+1 < 1 || zcol+1 < 0 || catcol+1 < 0)
 	G_fatal_error(_("Column numbers must not be negative"));
 
-    if (old->answer != NULL) {
+    if (strcmp(old->answer, "-")) {
 	if ((ascii = fopen(old->answer, "r")) == NULL) {
 	    G_fatal_error(_("Unable to open ASCII file <%s>"), old->answer);
 	}
@@ -204,7 +205,7 @@ int main(int argc, char *argv[])
     else {
 	ascii = stdin;
     }
-
+    
     fs = delim_opt->answer;
     if (strcmp(fs, "\\t") == 0)
 	fs = "\t";
@@ -531,7 +532,7 @@ int main(int argc, char *argv[])
 	asc_to_bin(ascii, &Map);
     }
 
-    if (old->answer != NULL)
+    if (ascii != stdin)
 	fclose(ascii);
 
     if (notopol_flag->answer) {
