@@ -3356,7 +3356,10 @@ class VectorDBInfo(gselect.VectorDBInfo):
         if ret:
             readAttrb = False
             for item in ret.splitlines():
-                key, value = item.split(':', 1)
+                try:
+                    key, value = item.split(':', 1)
+                except ValueError:
+                    continue
                 
                 if key == 'Layer' and readAttrb:
                     readAttrb = False
@@ -3364,6 +3367,7 @@ class VectorDBInfo(gselect.VectorDBInfo):
                 if readAttrb:
                     name, value = item.split(':', 1)
                     name = name.strip()
+                    value = value.strip()
                     # append value to the column
                     if len(value) < 1:
                         value = None
