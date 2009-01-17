@@ -7,9 +7,39 @@ some GRASS library functions directly from the PYTHON programming language.
 
 <h3>Status of GRASS SWIG/PYTHON implementation</h3>
 
-At the moment a prototype is implemented.
+At the moment a prototype is implemented. There is a 
+"swig" module with 10 separate sub-modules named:
+
+<ul>
+<li> date
+<li> display
+<li> grass
+<li> imagery
+<li> math
+<li> proj
+<li> raster
+<li> stats
+<li> utils
+<li> vector
+</ul>
+
 <P>
-See: gisdefs.i
+See: 
+
+<ul>
+<li> common.i
+<li> date.i
+<li> display.i
+<li> grass.i
+<li> imagery.i
+<li> math.i
+<li> my_typemaps.i
+<li> proj.i
+<li> raster.i
+<li> stats.i
+<li> utils.i
+<li> vector.i
+</ul>
 
 */
 
