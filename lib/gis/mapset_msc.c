@@ -138,11 +138,15 @@ int G__mapset_permissions2(const char *gisdbase, const char *location,
     if (!S_ISDIR(info.st_mode))
 	return -1;
 
+#ifndef SKIP_MAPSET_OWN_CHK
+
 #ifndef __MINGW32__
     if (info.st_uid != getuid())
 	return 0;
     if (info.st_uid != geteuid())
 	return 0;
+#endif
+
 #endif
 
     return 1;
