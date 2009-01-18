@@ -96,8 +96,6 @@ static void *pyseq_to_ptr(PyObject *input, int data_type)
 	len = PySequence_Length(input);
 	array = malloc(len * size);
 
-	fprintf(stderr, "sequence length is %d\n", len);
-
 	for (i = 0; i < len; i++) {
 		PyObject *val = PySequence_GetItem(input, i);
 		DCELL n;
