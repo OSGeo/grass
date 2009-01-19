@@ -255,7 +255,6 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             
         if self.render['quick'] is False:
             self.parent.onRenderGauge.SetValue(1)
-            wx.Yield()
             self.nvizClass.Draw(False, -1)
         elif self.render['quick'] is True:
             # quick
