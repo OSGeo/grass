@@ -4,12 +4,11 @@
  * MODULE:       v.net
  * 
  * AUTHOR(S):    Radim Blazek
- *               Operation 'connect' added by Martin Landa
- *                <landa.martin gmail.com>, 2007/07
+ *               Martin Landa <landa.martin gmail.com> (connect/arcs)
  *               
  * PURPOSE:      Network maintenance
  *               
- * COPYRIGHT:    (C) 2001-2008 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2001-2009 by the GRASS Development Team
  *
  *               This program is free software under the 
  *               GNU General Public License (>=v2). 
@@ -21,183 +20,155 @@
 #include <stdio.h>
 #include <string.h>
 #include <grass/gis.h>
-#include <grass/glocale.h>
 #include <grass/Vect.h>
+#include <grass/glocale.h>
 #include "proto.h"
 
 int main(int argc, char **argv)
 {
     struct GModule *module;
-    struct Option *input, *points;
-    struct Option *output;
-    struct Option *action;
-    struct Option *afield_opt, *nfield_opt, *thresh_opt;
-    struct Flag *cats_flag;
-    struct Map_info In, Out, Points;
+    struct opt opt;
+    struct Map_info *In, *Out, *Points;
+
+    FILE *file_arcs;
 
     int afield, nfield;
     int act;
     double thresh;
 
-    /*  Initialize the GIS calls */
+    char message[4096];
+    
+    /*  initialize the GIS calls */
     G_gisinit(argv[0]);
 
     module = G_define_module();
     module->keywords = _("vector, networking");
     module->description = _("Performs network maintenance.");
 
-    /* Define the options */
-    input = G_define_standard_option(G_OPT_V_INPUT);
-
-    points = G_define_standard_option(G_OPT_V_INPUT);
-    points->key = "points";
-    points->label = _("Name of input point vector map");
-    points->description = _("Required for operation 'connect'");
-    points->required = NO;
-
-    output = G_define_standard_option(G_OPT_V_OUTPUT);
-    output->required = NO;
-
-    action = G_define_option();
-    action->key = "operation";
-    action->type = TYPE_STRING;
-    action->required = NO;
-    action->multiple = NO;
-    action->answer = "nodes";
-    action->options = "nodes,connect,report,nreport";
-    action->description = _("Operation to be performed");
-    action->descriptions =
-	_("nodes;new point is placed on each node (line end) "
-	  "if doesn't exist;"
-	  "connect;connect still unconnected points to vector network "
-	  "by inserting new line(s);" "report;print to standard output "
-	  "{line_category start_point_category end_point_category};"
-	  "nreport;print to standard output "
-	  "{point_category line_category[,line_category...]}");
-
-    afield_opt = G_define_standard_option(G_OPT_V_FIELD);
-    afield_opt->key = "alayer";
-    afield_opt->gisprompt = "new_layer,layer,layer";
-    afield_opt->label = _("Arc layer");
-
-    nfield_opt = G_define_standard_option(G_OPT_V_FIELD);
-    nfield_opt->key = "nlayer";
-    nfield_opt->answer = "2";
-    nfield_opt->gisprompt = "new_layer,layer,layer";
-    nfield_opt->label = _("Node layer");
-
-    thresh_opt = G_define_option();
-    thresh_opt->key = "thresh";
-    thresh_opt->type = TYPE_DOUBLE;
-    thresh_opt->required = NO;
-    thresh_opt->multiple = NO;
-    thresh_opt->label = "Threshold";
-    thresh_opt->description =
-	_("Required for operation 'connect'. Connect points in given threshold.");
-
-    cats_flag = G_define_flag();
-    cats_flag->key = 'c';
-    cats_flag->label = _("Assign unique categories to new points");
-    cats_flag->description = _("For operation 'nodes'");
+    define_options(&opt);
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    afield = atoi(afield_opt->answer);
-    nfield = atoi(nfield_opt->answer);
-    thresh = 0.0;
+    parse_arguments(&opt, &afield, &nfield, &thresh, &act);
 
-    if (strcmp(action->answer, "nodes") == 0)
-	act = TOOL_NODES;
-    else if (strcmp(action->answer, "connect") == 0)
-	act = TOOL_CONNECT;
-    else if (strcmp(action->answer, "report") == 0)
-	act = TOOL_REPORT;
-    else if (strcmp(action->answer, "nreport") == 0)
-	act = TOOL_NREPORT;
-    else
-	G_fatal_error(_("Unknown operation"));
-
-    if (act == TOOL_NODES || act == TOOL_CONNECT) {
-	if (output->answer == NULL)
-	    G_fatal_error(_("Output vector map must be specified"));
-    }
-
-    if (act == TOOL_CONNECT) {
-	if (points->answer == NULL)
-	    G_fatal_error(_("Point vector map must be specified"));
-
-	if (thresh_opt->answer == NULL)
-	    G_fatal_error(_("Threshold value must be specified"));
-
-	thresh = atof(thresh_opt->answer);
-
-	if (thresh < 0.0)
-	    G_fatal_error(_("Threshold value must be >= 0"));
-    }
-
+    In = Points = Out = NULL;
+    file_arcs = NULL;
+    message[0] = '\0';
+    
     /* open input map */
-    Vect_set_open_level(2);
-    Vect_open_old(&In, input->answer, "");
+    if (act != TOOL_ARCS) {
+	In = (struct Map_info *)G_malloc(sizeof(struct Map_info));
+	Vect_set_open_level(2);
+	if (Vect_open_old(In, opt.input->answer, "") == -1)
+	    G_fatal_error(_("Unable to open vector map <%s>"),
+			  opt.input->answer);
+    }
 
-    if (act == TOOL_NODES || act == TOOL_CONNECT) {	/* nodes */
+    if (act == TOOL_NODES || act == TOOL_CONNECT || act == TOOL_ARCS) {
 	int is3d;
 
-	Vect_check_input_output_name(input->answer, output->answer,
-				     GV_FATAL_EXIT);
+	/* non-report operations */
+	if (act != TOOL_ARCS) {
+	    /* check input-output */
+	    Vect_check_input_output_name(opt.input->answer,
+					 opt.output->answer, GV_FATAL_EXIT);
+	}
 
-	if (act == TOOL_CONNECT) {
+	if (act == TOOL_CONNECT || act == TOOL_ARCS) {
 	    /* open points map */
-	    Vect_set_open_level(1);
-	    Vect_set_fatal_error(GV_FATAL_PRINT);
-	    if (Vect_open_old(&Points, points->answer, "") == -1) {
-		Vect_close(&In);
+	    Points = (struct Map_info *)G_malloc(sizeof(struct Map_info));
+	    if (act == TOOL_CONNECT)
+		Vect_set_open_level(1);
+	    else
+		Vect_set_open_level(2);
+	    if (Vect_open_old(Points, opt.points->answer, "") == -1) {
+		if (In)
+		    Vect_close(In);
 		G_fatal_error(_("Unable to open vector map <%s>"),
-			      points->answer);
+			      opt.points->answer);
+	    }
+
+	    if (act == TOOL_ARCS) {
+		/* open input file */
+		if (strcmp(opt.file->answer, "-")) {
+		    if ((file_arcs = fopen(opt.file->answer, "r")) == NULL) {
+			G_fatal_error(_("Unable to open file <%s>"),
+				      opt.file->answer);
+		    }
+		}
+		else {
+		    file_arcs = stdin;
+		}
 	    }
 	}
 
 	/* create output map */
-	is3d = Vect_is_3d(&In);
-	Vect_set_fatal_error(GV_FATAL_PRINT);
-	if (1 > Vect_open_new(&Out, output->answer, is3d)) {
-	    Vect_close(&In);
+	Out = (struct Map_info *)G_malloc(sizeof(struct Map_info));
+	is3d = WITHOUT_Z;
+	if (In)
+	    is3d = Vect_is_3d(In);
+	else if (Points)
+	    is3d = Vect_is_3d(Points);
+
+	if (Vect_open_new(Out, opt.output->answer, is3d) == -1) {
+	    if (In)
+		Vect_close(In);
 	    G_fatal_error(_("Unable to open vector map <%s> at topology level %d"),
-			  output->answer, 2);
+			  opt.output->answer, 2);
 	}
 
-	Vect_copy_head_data(&In, &Out);
-	Vect_hist_copy(&In, &Out);
-	Vect_hist_command(&Out);
+	/* copy header */
+	if (In) {
+	    Vect_copy_head_data(In, Out);
+	    Vect_hist_copy(In, Out);
+	}
+	Vect_hist_command(Out);
 
 	if (act == TOOL_NODES) {
-	    nodes(&In, &Out, cats_flag->answer, nfield);
+	    /* nodes */
+	    int nnodes;
+	    nnodes = nodes(In, Out, opt.cats_flag->answer, nfield);
+
+	    sprintf (message, _("%d new points (nodes) written to output."), nnodes);
 	}
-	else {			/* TOOL_CONNECT */
+	else {			/* connect or arcs */
 	    int narcs;
 
-	    narcs = connect_arcs(&In, &Points, &Out, nfield, thresh);
+	    if (act == TOOL_CONNECT)
+		narcs = connect_arcs(In, Points, Out, nfield, thresh);
+	    else
+		narcs = create_arcs(file_arcs, Points, Out, afield, nfield);
 
-	    G_message(_("%d arcs added to network (nlayer %d)"), narcs,
-		      nfield);
-
-	    Vect_close(&Points);
+	    sprintf(message, _("%d lines (arcs) written to output."), narcs, nfield);
 	}
 
-        if (Vect_copy_tables(&In, &Out, 0))
-            G_warning(_("Failed to copy attribute table to output map"));
-
+	if (In) {
+	  G_message (_("Copying attributes..."));
+	  if (Vect_copy_tables(In, Out, 0))
+	    G_warning(_("Failed to copy attribute table to output map"));
+	}
+	
 	/* support */
-	Vect_build_partial(&Out, GV_BUILD_NONE);
-	Vect_build(&Out);
+	Vect_build_partial(Out, GV_BUILD_NONE);
+	Vect_build(Out);
 
-	Vect_close(&In);
-	Vect_close(&Out);
+	if (Points)
+	    Vect_close(Points);
+	if (Out)
+	    Vect_close(Out);
     }
     else {			/* report */
-
-	report(&In, afield, nfield, act);
+	report(In, afield, nfield, act);
     }
+
+    if (In)
+	Vect_close(In);
+
+    if (file_arcs)
+	fclose(file_arcs);
+
+    G_done_msg(message);
 
     return (EXIT_SUCCESS);
 }

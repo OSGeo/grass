@@ -1,24 +1,6 @@
-
-/***************************************************************
- *
- * MODULE:       v.net
- * 
- * AUTHOR(S):    Martin Landa <landa.martin gmail.com>
- *               
- * PURPOSE:      Network maintenance
- *               
- * COPYRIGHT:    (C) 2007 by the GRASS Development Team
- *
- *               This program is free software under the 
- *               GNU General Public License (>=v2). 
- *               Read the file COPYING that comes with GRASS
- *               for details.
- *
- **************************************************************/
 #include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/Vect.h>
-#include <grass/glocale.h>
 #include "proto.h"
 
 /**
@@ -27,10 +9,10 @@
  * If there is no connection between network edge and point, new edge
  * is added, the line broken, and new point added to nfield layer
  *
- * \param[in] In,Points input vector maps
- * \param[in] Out output vector map
- * \param[in] nfield nodes layer 
- * \param[in] thresh threshold value to find neareast line
+ * \param In,Points input vector maps
+ * \param Out output vector map
+ * \param nfield nodes layer 
+ * \param thresh threshold value to find neareast line
  *
  * \return number of new arcs
  */

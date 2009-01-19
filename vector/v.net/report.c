@@ -1,20 +1,3 @@
-
-/***************************************************************
- *
- * MODULE:       v.net
- * 
- * AUTHOR(S):    Radim Blazek
- *               
- * PURPOSE:      Network maintenance 
- *               
- * COPYRIGHT:    (C) 2001 by the GRASS Development Team
- *
- *               This program is free software under the 
- *               GNU General Public License (>=v2). 
- *               Read the file COPYING that comes with GRASS
- *               for details.
- *
- **************************************************************/
 #include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/Vect.h>
@@ -25,7 +8,9 @@ int report(struct Map_info *In, int afield, int nfield, int action)
 {
     int i, j, k, line, ltype, nnodes;
     int cat_line, cat_node[2];
+
     struct line_cats *Cats, *Cats2;
+
     int node;
     double x, y, z;
 
