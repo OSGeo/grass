@@ -1,9 +1,9 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.net</em> is used for vector network maps maintenance.
-It reports about the current network graph status.
-It also permits to globally insert missing nodes and to connect
-unconnected nodes to the graph within a given distance threshold.
+<em>v.net</em> is used for vector network maps maintenance.  It
+reports the current network graph status. It also permits to globally
+insert missing nodes or arcs and to connect unconnected nodes to the
+graph within a given distance threshold.
 
 <h3>NOTES</h3>
 
@@ -11,37 +11,45 @@ If vector editing is required to modify the
 graph, <em><a href="wxGUI.Vector_Digitizing_Tool.html">wxGUI vector
 digitizer</a></em> or <em><a href="v.edit.html">v.edit</a></em> can be
 used. Separately,
-<a HREF="lrs.html">Linear Referencing System</a> is available
-in GRASS.
+<a href="lrs.html">Linear Referencing System</a> is available in
+GRASS.
 
 <h3>EXAMPLES</h3>
 
-Spearfish based examples:<P>
+<a href="http://www.grassbook.org/data_menu3rd.php">NC dataset</a> based examples.
 
+<p>
 Create nodes globally for all line ends and intersections:
-<br>
+
 <div class="code"><pre>
-v.net in=streams out=streams_node
+v.net input=streams output=streams_node operation=nodes
 </pre></div>
 
-<P>
 Merge in nodes from a separate map within given threshold:
-<br>
-<div class="code"><pre>
-echo "1|601653.5|4922869.2|start
-2|593330.8|4924096.6|end" | v.in.ascii cat=1 x=2 y=3 out=startend col="cat integer, \
-                         east double precision, north double precision, label varchar(43)"
 
-#create lines map connecting points to network (on layer 2)
-v.net myroads points=startend out=myroads_net op=connect thresh=200
+<div class="code"><pre>
+v.net input=streams points=firestations out=streems_net operation=connect thresh=500
 </pre></div>
 
+For generating network for given vector point map is required input file in format
+
+<div class="code"><pre>
+[category of edge] [category of start node] [category of end node]
+</pre></div>
+
+<div class="code"><pre>
+v.net points=geodetic_swwake_pts output=geodetic_swwake_pts_net operation=arcs file=- << EOF
+> 1 28000 28005
+> 2 27945 27958
+> 3 27886 27897
+> EOF
+</pre></div>
 
 <h2>SEE ALSO</h2>
 
 <em>
   <a href="wxGUI.Vector_Digitizing_Tool.html">wxGUI vector digitizer</a>,
-  <a HREF="v.edit.html">v.edit</a>,
+  <a HREF="v.edit.html">v.edit</a><br>
   <a HREF="v.net.iso.html">v.net.iso</a>,
   <a HREF="v.net.path.html">v.net.path</a>,
   <a HREF="v.net.steiner.html">v.net.steiner</a>,
@@ -50,7 +58,10 @@ v.net myroads points=startend out=myroads_net op=connect thresh=200
 
 <h2>AUTHORS</h2>
 
-Radim Blazek, ITC-Irst, Trento, Italy<BR>
-Martin Landa, FBK-Irst, Trento, Italy
+Radim Blazek, ITC-irst, Trento, Italy<br>
 
-<p><i>Last changed: $Date$</i>
+Martin Landa, FBK-irst (formerly ITC-irst), Trento, Italy and CTU in
+Prague, Czech Republic (operation 'connect' and 'arcs')
+
+<p>
+<i>Last changed: $Date$</i>

@@ -1,20 +1,3 @@
-
-/***************************************************************
- *
- * MODULE:       v.net
- * 
- * AUTHOR(S):    Radim Blazek
- *               
- * PURPOSE:      Network maintenance
- *               
- * COPYRIGHT:    (C) 2001 by the GRASS Development Team
- *
- *               This program is free software under the 
- *               GNU General Public License (>=v2). 
- *               Read the file COPYING that comes with GRASS
- *               for details.
- *
- **************************************************************/
 #include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/Vect.h>
@@ -25,8 +8,10 @@ int nodes(struct Map_info *In, struct Map_info *Out, int add_cats, int nfield)
 {
     int i, node, nnodes, line, nlines, count, type, found;
     double x, y, z;
+
     struct line_pnts *Points, *Pout;
     struct line_cats *Cats;
+
     int cat;
 
     Points = Vect_new_line_struct();
@@ -82,11 +67,9 @@ int nodes(struct Map_info *In, struct Map_info *Out, int add_cats, int nfield)
 	}
     }
 
-    G_message(_("%d new points written to output"), count);
-
     Vect_destroy_line_struct(Points);
     Vect_destroy_line_struct(Pout);
     Vect_destroy_cats_struct(Cats);
 
-    return 0;
+    return count;
 }
