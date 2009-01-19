@@ -6,7 +6,7 @@
 
 static int find_node(struct Map_info *, int, int);
 
-void field2n(struct line_cats *, int);
+static void field2n(struct line_cats *, int);
 
 /**
  * \brief Create network arcs (edge) based on given point vector map (nodes)
