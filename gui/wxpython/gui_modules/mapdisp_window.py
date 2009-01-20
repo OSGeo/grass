@@ -688,7 +688,8 @@ class BufferedWindow(MapWindow, wx.Window):
         if len(self.polycoords) > 0:
             self.DrawLines(self.pdcTmp)
         
-        if self.parent.gismanager.georectifying:
+        if self.parent.gismanager and \
+                self.parent.gismanager.georectifying:
             # -> georectifier (redraw GCPs)
             if self.parent.toolbars['georect']:
                 coordtype = 'gcpcoord'
