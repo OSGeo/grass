@@ -23,15 +23,22 @@ int update(struct Map_info *Map)
     db_init_string(&stmt);
 
     /* layer to find table to read from */
-    if ((qFi = Vect_get_field(Map, options.qfield)) == NULL)
+    qFi = Vect_get_field(Map, options.qfield);
+    if (options.option == O_QUERY && qFi == NULL)
         G_fatal_error(_("Database connection not defined for layer %d. Use v.db.connect first."),
                       options.qfield);
     /* layer to find table to write to */
     if ((Fi = Vect_get_field(Map, options.field)) == NULL)
 	G_fatal_error(_("Database connection not defined for layer %d. Use v.db.connect first."),
 		      options.field);
-    G_debug(3, "Reading from map <%s>, query layer %d (table <%s>): updating table <%s>, column <%s>", 
-            options.name, options.qfield, qFi->table, Fi->table, Fi->key);
+    if (qFi) {
+      G_debug(3, "Reading from map <%s>, query layer %d (table <%s>): updating table <%s>, column <%s>", 
+	      options.name, options.qfield, qFi->table, Fi->table, Fi->key);
+    }
+    else {
+      G_debug(3, "Reading from map <%s>, updating table <%s>, column <%s>", 
+	      options.name, Fi->table, Fi->key);
+    }
 
     /* Open driver */
     driver = db_start_driver_open_database(Fi->driver, Fi->database);
