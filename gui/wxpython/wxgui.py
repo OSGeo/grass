@@ -581,27 +581,37 @@ class GMFrame(wx.Frame):
         # start new map display if no display is available
         if not self.curr_page:
             self.NewDisplay()
-
+        
         maptree = self.curr_page.maptree
-
+        
         # ask user to save current settings
         if maptree.GetCount() > 0:
-             dlg = wx.MessageDialog(self, message=_("Workspace is not empty. "
+             dlg = wx.MessageDialog(self, message=_("Current workspace is not empty. "
                                                     "Do you want to store current settings "
                                                     "to workspace file?"),
-                                    caption=_("Save current settings?"),
-                                    style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
-             if dlg.ShowModal() == wx.ID_YES:
+                                    caption=_("Create new workspace?"),
+                                    style=wx.YES_NO | wx.YES_DEFAULT | \
+                                        wx.CANCEL | wx.ICON_QUESTION)
+             ret = dlg.ShowModal()
+             if ret == wx.ID_YES:
                  self.OnWorkspaceSaveAs()
+             elif ret == wx.ID_CANCEL:
+                 dlg.Destroy()
+                 return
+             
              dlg.Destroy()
-
+        
         # delete all items
         maptree.DeleteAllItems()
-
+        
         # add new root element
         maptree.root = maptree.AddRoot("Map Layers")
         self.curr_page.maptree.SetPyData(maptree.root, (None,None))
-
+        
+        # no workspace file loaded
+        self.workspaceFile = None
+        self.SetTitle(self.baseTitle)
+        
     def OnWorkspaceOpen(self, event=None):
         """Open file with workspace definition"""
         dlg = wx.FileDialog(parent=self, message=_("Choose workspace file"),
