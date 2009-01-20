@@ -58,7 +58,7 @@ $Date$
 2 - STARTUP WITH GRASS INITIALIZATION
 
 If you want to launch wxPython GUI automatically when you start
-GRASS, edit your .grassrc6 file to replace
+GRASS, edit your .grassrc7 file to replace
 
 GRASS_GUI: tcktk (or whatever you have here)
 
