@@ -65,7 +65,7 @@ static void parse_command_line(int argc, char **argv)
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
 
-    table = G_define_standard_option(G_OPT_DB_DRIVER);
+    table = G_define_standard_option(G_OPT_DB_TABLE);
     table->required = YES;
 
     driver = G_define_standard_option(G_OPT_DB_DRIVER);
