@@ -79,6 +79,10 @@ class Settings:
                 'askOnRemoveLayer' : {
                     'enabled' : True
                     },
+                # ask when quiting wxGUI or closing display
+                'askOnQuit' : {
+                    'enabled' : True
+                    },
                 },
             #
             # display
@@ -934,6 +938,16 @@ class PreferencesDialog(wx.Dialog):
         gridSizer.Add(item=askOnRemoveLayer,
                       pos=(row, 0), span=(1, 2))
 
+        row += 1
+        askOnQuit = wx.CheckBox(parent=panel, id=wx.ID_ANY,
+                                label=_("Ask when quiting wxGUI or closing display"),
+                                name='IsChecked')
+        askOnQuit.SetValue(self.settings.Get(group='manager', key='askOnQuit', subkey='enabled'))
+        self.winId['manager:askOnQuit:enabled'] = askOnQuit.GetId()
+
+        gridSizer.Add(item=askOnQuit,
+                      pos=(row, 0), span=(1, 2))
+        
         sizer.Add(item=gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
         border.Add(item=sizer, proportion=0, flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=3)
 
