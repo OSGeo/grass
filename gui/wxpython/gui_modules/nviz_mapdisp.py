@@ -97,9 +97,14 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         #
         # create nviz instance
         #
-        self.nvizThread = NvizThread(self.gismgr.goutput.cmd_stderr,
+        if self.gismgr:
+            logerr = self.gismgr.goutput.cmd_stderr
+            logmsg = self.gismgr.goutput.cmd_output
+        else:
+            logerr = logmsg = None
+        self.nvizThread = NvizThread(logerr,
                                      self.parent.onRenderGauge,
-                                     self.gismgr.goutput.cmd_output)
+                                     logmsg)
         self.nvizThread.start()
         time.sleep(.1)
         self.nvizClass =  self.nvizThread.nvizClass
@@ -338,6 +343,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
 
         @todo volumes
         """
+        if not self.tree:
+            return
+        
         listOfItems = []
         item = self.tree.GetFirstChild(self.tree.root)[0]
         self._GetDataLayers(item, listOfItems)

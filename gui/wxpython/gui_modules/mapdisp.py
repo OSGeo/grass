@@ -285,9 +285,13 @@ class MapFrame(wx.Frame):
                               CloseButton(False).Layer(2))
         # vector digitizer
         elif name == "vdigit":
+            if self.gismanager:
+                log = self.gismanager.goutput
+            else:
+                log = None
             self.toolbars['vdigit'] = toolbars.VDigitToolbar(parent=self, map=self.Map,
                                                              layerTree=self.tree,
-                                                             log=self.gismanager.goutput)
+                                                             log=log)
 
             for toolRow in range(0, self.toolbars['vdigit'].numOfRows):
                 self._mgr.AddPane(self.toolbars['vdigit'].toolbar[toolRow],
@@ -345,7 +349,8 @@ class MapFrame(wx.Frame):
             #
             # update layer tree (-> enable 3d-rasters)
             #
-            self.tree.EnableItemType(type='3d-raster', enable=True)
+            if self.tree:
+                self.tree.EnableItemType(type='3d-raster', enable=True)
             
             #
             # update status bar
@@ -436,7 +441,8 @@ class MapFrame(wx.Frame):
             #
             # update layer tree (-> disable 3d-rasters)
             #
-            self.tree.EnableItemType(type='3d-raster', enable=False)
+            if self.tree:
+                self.tree.EnableItemType(type='3d-raster', enable=False)
             
         self.toolbars['map'].combo.SetValue (_("2D view"))
         self.toolbars['map'].Enable2D(True)
@@ -573,7 +579,7 @@ class MapFrame(wx.Frame):
             else: # moveLine, deleteLine
                 self.MapWindow.mouse['box'] = 'box'
         
-        elif self.gismanager.georectifying:
+        elif self.gismanager and self.gismanager.georectifying:
             self.MapWindow.SetCursor(self.cursors["cross"])
         
         else:
@@ -1638,7 +1644,8 @@ class MapApp(wx.App):
         else:
             Map = None
 
-        self.mapFrm = MapFrame(parent=None, id=wx.ID_ANY, Map=Map, size=(640,480))
+        self.mapFrm = MapFrame(parent=None, id=wx.ID_ANY, Map=Map,
+                               size=globalvar.MAP_WINDOW_SIZE)
         #self.SetTopWindow(Map)
         self.mapFrm.Show()
 
@@ -1685,8 +1692,10 @@ if __name__ == "__main__":
 
     gm_map = MapApp(0)
     # set title
-    gm_map.mapFrm.SetTitle ("GRASS GIS - Map Display: " + title + " - Location: " + \
-                                grass.gisenv()['LOCATION_NAME'])
+    gm_map.mapFrm.SetTitle(_("GRASS GIS Map Display: " +
+                             title + 
+                             " - Location: " + grass.gisenv()["LOCATION_NAME"]))
+    
     gm_map.MainLoop()
     
     os.remove(cmdfilename)
