@@ -23,7 +23,7 @@ fi
 
 # CODE GOES HERE
 
-PYTHONPATH="$GISBASE/etc/wx"
+PYTHONPATH="$GISBASE/etc/wxpython"
 
 export PYTHONPATH
 
