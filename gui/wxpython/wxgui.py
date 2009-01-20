@@ -407,9 +407,38 @@ class GMFrame(wx.Frame):
         Page of notebook closed
         Also close associated map display
         """
-
+        if UserSettings.Get(group='manager', key='askOnQuit', subkey='enabled'):
+            maptree = self.curr_page.maptree
+            
+            if self.workspaceFile:
+                message = _("Do you want to save changes in the workspace?")
+            else:
+                message = _("Do you want to store current settings "
+                            "to workspace file?")
+            
+            # ask user to save current settings
+            if maptree.GetCount() > 0:
+                dlg = wx.MessageDialog(self,
+                                       message=_("Do you want to close display %d?\n\n%s") % \
+                                           (self.curr_pagenum + 1, message),
+                                       caption=_("Close display"),
+                                       style=wx.YES_NO | wx.YES_DEFAULT |
+                                       wx.CANCEL | wx.ICON_QUESTION | wx.CENTRE)
+                ret = dlg.ShowModal()
+                if ret == wx.ID_YES:
+                    if not self.workspaceFile:
+                        self.OnWorkspaceSaveAs()
+                    else:
+                        self.SaveToWorkspaceFile(self.workspaceFile)
+                elif ret == wx.ID_CANCEL:
+                    event.Veto()
+                    dlg.Destroy()
+                    return
+                dlg.Destroy()
+        
         self.gm_cb.GetPage(event.GetSelection()).maptree.Map.Clean()
         self.gm_cb.GetPage(event.GetSelection()).maptree.Close(True)
+        
         event.Skip()
 
     def OnRunCmd(self, event):
@@ -1410,13 +1439,44 @@ class GMFrame(wx.Frame):
         
     def OnCloseWindow(self, event):
         """Cleanup when wxgui.py is quit"""
+        if UserSettings.Get(group='manager', key='askOnQuit', subkey='enabled'):
+            maptree = self.curr_page.maptree
+            
+            if self.workspaceFile:
+                message = _("Do you want to save changes in the workspace?")
+            else:
+                message = _("Do you want to store current settings "
+                            "to workspace file?")
+            
+            # ask user to save current settings
+            if maptree.GetCount() > 0:
+                dlg = wx.MessageDialog(self,
+                                       message=message,
+                                       caption=_("Quit GRASS GUI"),
+                                       style=wx.YES_NO | wx.YES_DEFAULT |
+                                       wx.CANCEL | wx.ICON_QUESTION | wx.CENTRE)
+                ret = dlg.ShowModal()
+                if ret == wx.ID_YES:
+                    if not self.workspaceFile:
+                        self.OnWorkspaceSaveAs()
+                    else:
+                        self.SaveToWorkspaceFile(self.workspaceFile)
+                elif ret == wx.ID_CANCEL:
+                    event.Veto()
+                    dlg.Destroy()
+                    return
+                dlg.Destroy()
+        
+        # don't ask any more...
+        UserSettings.Set(group = 'manager', key = 'askOnQuit', subkey = 'enabled',
+                         value = False)
         for page in range(self.gm_cb.GetPageCount()):
-            self.gm_cb.GetPage(page).maptree.mapdisplay.OnCloseWindow(event)
+            self.gm_cb.GetPage(0).maptree.mapdisplay.OnCloseWindow(event)
         self.gm_cb.DeleteAllPages()
         # self.DestroyChildren()
         self._auimgr.UnInit()
         self.Destroy()
-
+        
     def MsgNoLayerSelected(self):
         """Show dialog message 'No layer selected'"""
         wx.MessageBox(parent=self,
