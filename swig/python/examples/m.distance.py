@@ -59,7 +59,7 @@ def main():
     # or:
     sys.path.append("/usr/src/grass70/swig/python")
     # FIXME: install the g7lib.py bindings in $GISBASE/lib/ ?
-    import python_grass7 as g7lib
+    import swig.grass as g7lib
  
     # for passing pointers
     import Numeric
