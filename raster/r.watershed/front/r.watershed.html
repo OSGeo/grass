@@ -53,14 +53,18 @@ flow is less widely distributed, becoming more similar to SFD.
 
 <dt><em>elevation</em> 
 
-<dd>Input map: Elevation on which entire analysis is based.
+<dd>Input map: Elevation on which entire analysis is based. NULL (nodata) 
+cells are ignored, zero and negative values are valid elevation data. 
+Gaps in the elevation map that are located within the area of interest 
+must be filled beforehand, e.g. with <em>r.fillnulls</em>, to avoid 
+distortions.
 
 <dt><em>depression</em> 
 
 <dd>Input map:  Map layer of actual depressions or sinkholes in the
 landscape that are large enough to slow and store surface runoff from 
-a storm event.  Any non-NULL (not nodata) values indicate depressions. 
-Water will flow into depressions, but not out of depressions.
+a storm event.  All cells that are not NULL and not zero indicate 
+depressions. Water will flow into but not out of depressions.
 
 <dt><em>flow</em> 
 
@@ -81,7 +85,8 @@ assumes no disturbed land.  This input is used for the RUSLE calculations.
 
 <dd>Input map: terrain that will block overland surface flow.  Terrain
 that will block overland surface flow and restart the slope length
-for the RUSLE.  Any non-NULL (not nodata) values indicate blocking terrain.
+for the RUSLE.  All cells that are not NULL and not zero indicate blocking 
+terrain.
 
 <dt><em>threshold</em> 
 
@@ -166,7 +171,7 @@ than one), the GRASS output map is of type DCELL.
 <dd>Output map: slope steepness (S) factor for the Universal Soil
 Loss Equation (RUSLE).  Equations taken from article entitled
 <em>Revised Slope Steepness Factor for the Universal Soil
-Loss Equation</em> (McCool et al. 1987).  Since the LS factor is a small 
+Loss Equation</em> (McCool et al. 1987).  Since the S factor is a small 
 number (usually less than one), the GRASS output map is of type DCELL.
 </dd>
 </dl>
@@ -290,9 +295,13 @@ off the edge of the region. Such areas will reduce the memory necessary
 to run the program.  Masking out unimportant areas can significantly 
 reduce processing time if the watersheds of interest occupy a small 
 percentage of the overall area.
-
 <p>
-Zero (0) and negative data values will be treated as elevation data (not no_data).
+Gaps (NULL cells) in the elevation map that are located within the area 
+of interest will heavily influence flow accumulation: water will 
+flow into but not out of these gaps. These gaps must be filled beforehand, 
+e.g. with <em>r.fillnulls</em>.
+<p>
+Zero (0) and negative values will be treated as elevation data (not no_data).
 
 <h4>Further processing of output layers</h4>
 <p>
@@ -460,8 +469,10 @@ Food Production In Arid Zones</b> (Tucson, AZ, 12-16 Oct. 1987).
 <a href="g.region.html">g.region</a>,
 <a href="r.cost.html">r.cost</a>,
 <a href="r.drain.html">r.drain</a>,
+<a href="r.fillnulls.html">r.fillnulls</a>,
 <a href="r.flow.html">r.flow</a>,
 <!-- <a href="r.flowmd.html">r.flowmd</a>, -->
+<a href="r.mask.html">r.mask</a>,
 <a href="r.neighbors.html">r.neighbors</a>,
 <a href="r.param.scale.html">r.param.scale</a>,
 <a href="r.resamp.interp.html">r.resamp.interp</a>,

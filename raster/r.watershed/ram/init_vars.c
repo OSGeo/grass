@@ -211,7 +211,7 @@ int init_vars(int argc, char *argv[])
 	    G_get_c_raster_row(fd, buf, r);
 	    for (c = 0; c < ncols; c++) {
 		asp_value = buf[c];
-		if (!G_is_c_null_value(&asp_value))
+		if (!G_is_c_null_value(&asp_value) && asp_value)
 		    asp[SEG_INDEX(asp_seg, r, c)] = 1;
 	    }
 	}
@@ -228,7 +228,7 @@ int init_vars(int argc, char *argv[])
 	    G_get_c_raster_row(fd, buf, r);
 	    for (c = 0; c < ncols; c++) {
 		block_value = buf[c];
-		if (!G_is_c_null_value(&block_value))
+		if (!G_is_c_null_value(&block_value) && block_value)
 		    FLAG_SET(swale, r, c);
 	    }
 	}
