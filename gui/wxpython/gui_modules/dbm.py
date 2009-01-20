@@ -493,7 +493,7 @@ class AttributeManager(wx.Frame):
         self.notebook = FN.FlatNotebook(parent=self.panel, id=wx.ID_ANY,
                                         style=FN.FNB_BOTTOM |
                                         FN.FNB_NO_NAV_BUTTONS |
-                                        FN.FNB_FANCY_TABS)
+                                        FN.FNB_FANCY_TABS | FN.FNB_NO_X_BUTTON)
 
         dbmStyle = globalvar.FNPageStyle
 
@@ -3350,7 +3350,7 @@ class VectorDBInfo(gselect.VectorDBInfo):
                               map = self.map,
                               east_north = '%f,%f' % \
                                   (float(queryCoords[0]), float(queryCoords[1])),
-                              distance =  float(qdist))
+                              distance = float(qdist))
         
         data = {}
         if ret:
