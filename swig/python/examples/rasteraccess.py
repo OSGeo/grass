@@ -14,10 +14,12 @@ if len(sys.argv)==2:
   input = sys.argv[1]
 else:
   input = raw_input("Raster Map Name? ")
-mapset = 'PERMANENT'
 
 # initialize
 grasslib.G_gisinit('')
+
+# find map in search path
+mapset = grasslib.G_find_cell2(input,'')
 
 # determine the inputmap type (CELL/FCELL/DCELL) */
 data_type = grasslib.G_raster_map_type(input, mapset)

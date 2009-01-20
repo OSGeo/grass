@@ -15,10 +15,11 @@ if len(sys.argv)==2:
 else:
   input = raw_input("Vector Map Name? ")
 
-mapset = 'PERMANENT'
-
 # initialize
 grasslib.G_gisinit('')
+
+# find map in search path
+mapset = grasslib.G_find_vector2(input,'')
 
 # define map structure
 map = grassvect.Map_info()
