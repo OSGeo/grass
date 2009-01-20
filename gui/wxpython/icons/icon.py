@@ -21,8 +21,8 @@ for details.
 import os
 import sys
 
-import wxversion
-wxversion.select('2.8')
+import gui_modules.globalvar as globalvar
+globalvar.CheckForWx()
 import wx
 
 gmPath = os.path.join(os.getenv("GISBASE"), "etc", "wxpython", "gui_modules")

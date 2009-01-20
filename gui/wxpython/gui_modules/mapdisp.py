@@ -32,6 +32,8 @@ import math
 import tempfile
 import copy
 
+import gui_modules.globalvar as globalvar
+globalvar.CheckForWx()
 import wx
 import wx.aui
 
@@ -45,6 +47,9 @@ except:
 
 gmpath = os.path.join(globalvar.ETCWXDIR, "icons")
 sys.path.append(gmpath)
+
+grassPath = os.path.join(globalvar.ETCDIR, "python")
+sys.path.append(grassPath)
 
 import render
 import toolbars
@@ -463,7 +468,8 @@ class MapFrame(wx.Frame):
         Change choicebook page to match display.
         Or set display for georectifying
         """
-        if self.gismanager.georectifying:
+        if self.gismanager and \
+                self.gismanager.georectifying:
             # in georectifying session; display used to get get geographic
             # coordinates for GCPs
             self.OnPointer(event)
@@ -959,15 +965,13 @@ class MapFrame(wx.Frame):
 
         if self.toolbars['nviz']:
             self.toolbars['nviz'].OnExit()
-        
-        if self.page:
+
+        if not self.gismanager:
+            self.Destroy()
+        elif self.page:
             pgnum = self.layerbook.GetPageIndex(self.page)
             if pgnum > -1:
                 self.layerbook.DeletePage(pgnum)
-        
-        ### self.Destroy()
-        # if event:
-        #    event.Skip() <- causes application crash
         
     def GetRender(self):
         """
@@ -1641,7 +1645,7 @@ class MapApp(wx.App):
         if __name__ == "__main__":
             # redraw map, if new command appears
             self.redraw = False
-            status = Command(self, Map)
+            status = Command(self, Map, cmdfilename)
             status.start()
             self.timer = wx.PyTimer(self.watcher)
             # check each 0.1s
@@ -1675,9 +1679,9 @@ if __name__ == "__main__":
     cmdfilename = sys.argv[2]
 
     import gettext
-    gettext.install("gm_map") # replace with the appropriate catalog name
+    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode=True)
 
-    print "Starting monitor <%s>" % (title)
+    print >> sys.stderr, "\nStarting monitor <%s>...\n" % (title)
 
     gm_map = MapApp(0)
     # set title
@@ -1688,6 +1692,6 @@ if __name__ == "__main__":
     os.remove(cmdfilename)
     os.system("""g.gisenv set="GRASS_PYCMDFILE" """)
 
-    print "Stoping monitor <%s>" % (title)
+    print >> sys.stderr, "\nStoping monitor <%s>...\n" % (title)
 
-    sys.exit()
+    sys.exit(0)
