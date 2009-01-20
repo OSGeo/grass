@@ -20,6 +20,7 @@ for details.
 import os
 import time
 import math
+import sys
 
 import wx
 
