@@ -1701,6 +1701,6 @@ if __name__ == "__main__":
     os.remove(cmdfilename)
     os.system("""g.gisenv set="GRASS_PYCMDFILE" """)
 
-    print >> sys.stderr, "\nStoping monitor <%s>...\n" % (title)
+    print >> sys.stderr, "\nStopping monitor <%s>...\n" % (title)
 
     sys.exit(0)
