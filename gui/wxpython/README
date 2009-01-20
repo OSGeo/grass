@@ -54,6 +54,7 @@ $Date$
  On Debian GNU/Linux install package:
  apt-get install python-opengl
 
+
 2 - STARTUP WITH GRASS INITIALIZATION
 
 If you want to launch wxPython GUI automatically when you start
@@ -69,6 +70,7 @@ or easier start new GRASS session with -wxpython switch.
 
 $ grass70 -wxpython
 
+
 3 - STARTUP FROM GRASS TERMINAL
 
 Simply run
@@ -80,6 +82,7 @@ from the GRASS terminal.
 You can also specify workspace file to load on startup.
 
 $ g.gui gui=wxpython workspace=myworkspace.gxw
+
 
 4 - CLI Display scripts
 
@@ -128,12 +131,14 @@ You should be able to zoom && pan through the map, once the layers are
 displayed. You should be also able to store the display content as well as
 clear the display and start from scratch.
 
+
 5 - DEBUGGING
 
 To enable GUI debug messages on given level set GRASS_DEBUG_WX
 environment variable, e.g.
 
 $ export GRASS_WX_DEBUG=3
+
 
 6 - ICON THEMES
 
@@ -145,28 +150,40 @@ Currently two icon themes are available:
 User can change icon theme in Preferences dialog
 ('Config->Preferences').
 
+
 7 - VECTOR DIGITIZER
 
 To enable digitizer you need to compile 'vdigit'
 component. Note that you must configure GRASS with C++ (--with-cxx),
 Python (--with-python) and wxWidgets (--with-wxwidgets) support.
 
-NOTE: There is no need to do the following symlink or ldconfig on OSX.
+NOTE: There is no need to do the following symlink or ldconfig on MacOSX.
 
 First, create a symlink to _gdi_.so shared library
 
-$ sudo ln -s `locate _gdi_.so` /usr/local/lib/libgdi.so
+- find out architecture (32 or 64bit):
+   $ echo "$HOSTTYPE"
 
-e.g.
+- find the _gdi_.so file and check if compliant:
+   $ locate _gdi_.so
+   $ file /path/to/_gdi_.so
 
-$ sudo ln -s /usr/lib/python2.4/site-packages/wx-2.8-gtk2-unicode/wx/_gdi_.so /usr/local/lib/libgdi.so
+  It will report "ELF 32-bit..." or "ELF 64-bit..". If you have
+  multiple results with locate, link below the appropriate file.
+
+- link as library:
+   $ sudo ln -s /path/to/_gdi_.so /usr/local/lib/libgdi.so
+
+  e.g.
+   $ sudo ln -s /usr/lib64/python2.4/site-packages/wx-2.8-gtk2-unicode/wx/_gdi_.so /usr/local/lib/libgdi.so
 
 Then update LD_LIBRARY_PATH or add '/usr/local/lib' to /etc/ld.so.conf
 (in this case run 'sudo ldconfig').
 
-TODO: Don't use direct linking here.
+TODO grass-dev: Avoid direct linking here, implement a better solution.
 
 Then you can compile the driver
 
 $ cd gui/wxpython/vdigit
 $ make
+
