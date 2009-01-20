@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
     opt2 = G_define_option();
     opt2->key = "depression";
     opt2->label = _("Input map: locations of real depressions");
-    opt2->description = _("All non-NULL cells are considered as real depressions");
+    opt2->description = _("All non-NULL and non-zero cells are considered as real depressions");
     opt2->required = NO;
     opt2->type = TYPE_STRING;
     opt2->gisprompt = "old,cell,raster";
@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
     opt5->label =
 	_("Input map: terrain blocking overland surface flow, for USLE");
     opt5->description =
-	_("All non-NULL cells are considered as blocking terrain");
+	_("All non-NULL and non-zero cells are considered as blocking terrain");
     opt5->required = NO;
     opt5->type = TYPE_STRING;
     opt5->gisprompt = "old,cell,raster";
