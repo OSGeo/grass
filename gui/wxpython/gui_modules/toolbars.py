@@ -1106,7 +1106,7 @@ class VDigitToolbar(AbstractToolbar):
             self.parent.MapWindow.SetCursor(self.parent.cursors["cross"])
         
         # create pseudoDC for drawing the map
-        self.parent.MapWindow.pdcVector = wx.PseudoDC()
+        self.parent.MapWindow.pdcVector = vdigit.PseudoDC()
         self.parent.digit.driver.SetDevice(self.parent.MapWindow.pdcVector)
 
         if not self.parent.MapWindow.resize:

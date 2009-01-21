@@ -57,9 +57,11 @@ try:
 except ImportError, err:
     GV_LINES = None
     digitErr = err
-    #    print >> sys.stderr, "%sWARNING: Digitization tool is disabled (%s). " \
-    #          "Detailed information in README file." % \
-    #          (os.linesep, err)
+    print >> sys.stderr, "%sWARNING: Digitization tool is disabled (%s). " \
+          "Detailed information in README file." % \
+          (os.linesep, err)
+
+PseudoDC = wxvdigit.PseudoDC
 
 class AbstractDigit:
     """
