@@ -1,8 +1,11 @@
 <H2>DESCRIPTION</H2>
 
+<EM>i.tasscap</EM> calculates Tasseled Cap (Kauth Thomas, TC) transformation
+for LANDSAT-TM data (TM4, TM5, TM7).
 
-<EM>i.tasscap</EM> calculates Tasseled Cap (Kauth Thomas, TC) transformation for
-LANDSAT-TM data (TM4, TM5, TM7). The following TC components are generated:
+<!-- ok, but what is Tasseled Cap ? -->
+
+The following TC components are generated:
 
 <ul>
 <li> tasscap.1: corresponds to brightness,
@@ -10,6 +13,7 @@ LANDSAT-TM data (TM4, TM5, TM7). The following TC components are generated:
 <li> tasscap.3: corresponds to wetness,
 <li> tasscap.4: corresponds to atmospheric haze.
 </ul>
+
 
 <H2>EXAMPLE</H2>
 
@@ -24,33 +28,45 @@ i.tasscap -7 band1=lsat7_2002_10 band2=lsat7_2002_20 \
 </pre></div>
 
 Results:
-<p>
-<center>
-<img src="tasscap1.png" alt="'Brightness' Tasseled Cap component 1">
-<br>
-<i>'Brightness' Tasseled Cap component 1</i>
-</center>
-<p>
 
-<center>
-<img src="tasscap2.png" alt="'Greenness' Tasseled Cap component 2">
-<br>
-<i>'Greenness' Tasseled Cap component 2</i>
-</center>
 <p>
-
 <center>
-<img src="tasscap3.png" alt="'Wetness' Tasseled Cap component 3">
-<br>
-<i>'Wetness' Tasseled Cap component 3</i>
+  <table border=1>
+  <tr>
+    <td align=center>
+      <img src="tasscap1.jpg" alt="'Brightness' Tasseled Cap component 1">
+      <br>
+      <font size="-1">
+      <i>'Brightness' Tasseled Cap component 1</i>
+      </font>
+    </td>
+    <td align=center>
+      <img src="tasscap2.jpg" alt="'Greenness' Tasseled Cap component 2">
+      <br>
+      <font size="-1">
+      <i>'Greenness' Tasseled Cap component 2</i>
+      </font>
+    </td>
+  </tr>
+  <tr>
+    <td align=center>
+      <img src="tasscap3.jpg" alt="'Wetness' Tasseled Cap component 3">
+      <br>
+      <font size="-1">
+      <i>'Wetness' Tasseled Cap component 3</i>
+      </font>
+    </td>
+    <td align=center>
+      <img src="tasscap4.jpg" alt="'Atmospheric haze' Tasseled Cap component 4">
+      <br>
+      <font size="-1">
+      <i>'Atmospheric haze' Tasseled Cap component 4</i>
+      </font>
+    </td>
+  </tr>
+  </table>
 </center>
-<p>
-
-<center>
-<img src="tasscap4.png" alt="'Atmospheric haze' Tasseled Cap component 4">
 <br>
-<i>'Atmospheric haze' Tasseled Cap component 4</i>
-</center>
 
 
 <H2>REFERENCES</H2>
@@ -70,7 +86,9 @@ Results:
  http://adis.cesnet.cz/cgi-bin/lwgate/IMAGRS-L/archives/imagrs-l.log0211/date/article-14.html
 </ul>
 
+
 <H2>AUTHOR</H2>
 
 Markus Neteler, ITC-irst
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
