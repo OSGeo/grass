@@ -1327,8 +1327,7 @@ class cmdPanel(wx.Panel):
         # set widget relations for OnUpdateSelection
         #
         pMap = None
-        pLayer = None
-        pLayerList = []
+        pLayer = []
         pDriver = None
         pDatabase = None
         pTable = None
@@ -1344,11 +1343,9 @@ class cmdPanel(wx.Panel):
                 if name in ('map', 'input'):
                     pMap = p
             elif prompt == 'layer':
-                pLayerList.append(p['wxId'])
-                if not pLayer: # TODO: check all 'layer' options
-                    pLayer = p
+                pLayer.append(p)
             elif prompt == 'dbcolumn':
-                pColumn.append(p['wxId'])
+                pColumn.append(p)
             elif prompt == 'dbdriver':
                 pDriver = p
             elif prompt == 'dbname':
@@ -1356,13 +1353,20 @@ class cmdPanel(wx.Panel):
             elif prompt == 'dbtable':
                 pTable = p
         
-        if pMap:
-            pMap['wxId-bind'] = copy.copy(pColumn)
-            if pLayer:
-                pMap['wxId-bind'] += pLayerList
+        pColumnIds = []
+        for p in pColumn:
+            pColumnIds.append(p['wxId'])
+        pLayerIds = []
+        for p in pLayer:
+            pLayerIds.append(p['wxId']) 
         
-        if pLayer:
-            p['wxId-bind'] = pColumn
+        if pMap:
+            pMap['wxId-bind'] = copy.copy(pColumnIds)
+            if pLayer:
+                pMap['wxId-bind'] += pLayerIds
+        
+        for p in pLayer:
+            p['wxId-bind'] = copy.copy(pColumnIds)
 
         if pDriver and pTable:
             pDriver['wxId-bind'] = [pTable['wxId'], ]
@@ -1537,6 +1541,7 @@ class cmdPanel(wx.Panel):
             id = event.GetId()
         
         p = self.task.get_param(id, element='wxId', raiseError=False)
+        
         if not p or \
                 not p.has_key('wxId-bind'):
             return
