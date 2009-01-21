@@ -169,7 +169,8 @@ static void main_loop(void)
 	    }
 	}
 
-	delay = (unsigned long)(last / fraction);
+	if (fraction > 0.001)
+	    delay = (unsigned long)(last / fraction);
 
 	tv.tv_sec = delay / 1000000;
 	tv.tv_usec = delay % 1000000;
