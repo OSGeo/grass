@@ -223,7 +223,7 @@ int DisplayDriver::DrawLine(int line)
     double x, y, z; // screen coordinates
     bool draw;      // draw object ?
     wxPen *pen;
-    wxvdigit::wxPseudoDC *pdc;
+    wxPseudoDC *pdc;
 
     pen = NULL;
     draw = false;
@@ -395,7 +395,7 @@ int DisplayDriver::DrawLineVerteces(int line)
     int dcId;
     wxPoint *point;
     wxPen *pen;
-    wxvdigit::wxPseudoDC *pdc;
+    wxPseudoDC *pdc;
 
     if (!IsSelected(line) && !settings.vertex.enabled)
 	return -1;
@@ -471,7 +471,7 @@ int DisplayDriver::DrawLineNodes(int line)
     bool draw;
 
     wxPen *pen;
-    wxvdigit::wxPseudoDC *pdc;
+    wxPseudoDC *pdc;
 
     pdc = NULL;
 
@@ -563,7 +563,7 @@ int DisplayDriver::DrawLineNodes(int line)
    \return 1 on success
    \return -1 on failure
 */
-int DisplayDriver::DrawCross(wxvdigit::wxPseudoDC *pdc, int line, const wxPoint* point, int size)
+int DisplayDriver::DrawCross(wxPseudoDC *pdc, int line, const wxPoint* point, int size)
 {
     if (!pdc || !point)
 	return -1;

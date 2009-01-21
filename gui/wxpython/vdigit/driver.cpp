@@ -36,8 +36,8 @@ DisplayDriver::DisplayDriver(void *device, void *deviceTmp)
 
     mapInfo = NULL;
 
-    dc = (wxvdigit::wxPseudoDC *) device;
-    dcTmp = (wxvdigit::wxPseudoDC *) deviceTmp;
+    dc = (wxPseudoDC *) device;
+    dcTmp = (wxPseudoDC *) deviceTmp;
 
     points = Vect_new_line_struct();
     pointsScreen = new wxList();
@@ -88,7 +88,7 @@ DisplayDriver::~DisplayDriver()
 */
 void DisplayDriver::SetDevice(void *device)
 {
-    dc = (wxvdigit::wxPseudoDC *) device;
+    dc = (wxPseudoDC *) device;
 
     return;
 }
