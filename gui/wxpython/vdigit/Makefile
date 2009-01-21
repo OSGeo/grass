@@ -13,10 +13,10 @@ EXTRA_LIBS = $(VECTLIB) $(GISLIB) $(GDALLIBS) $(VEDITLIB) $(WXWIDGETSLIB)
 ifeq ($(findstring darwin,$(ARCH)),darwin)
 EXTRA_LIBS := -bundle -undefined dynamic_lookup $(EXTRA_LIBS)
 else
-EXTRA_LIBS := $(PYTHONLDFLAGS) $(EXTRA_LIBS) -lgdi
+EXTRA_LIBS := $(PYTHONLDFLAGS) $(EXTRA_LIBS)
 endif
 
-LOCAL_HEADERS = digit.h driver.h
+LOCAL_HEADERS = digit.h driver.h pseudodc.h
 
 ETCDIR = $(ETC)/wxpython
 
@@ -32,8 +32,8 @@ endif
 endif
 endif
 
-$(LIB_NAME).i: digit.i dig_types.i driver.h digit.h
-	cat digit.i dig_types.i > $(LIB_NAME).i
+$(LIB_NAME).i: digit.i dig_types.i pseudodc.i driver.h digit.h
+	cat digit.i pseudodc.i dig_types.i > $(LIB_NAME).i
 	echo "/* auto-generated swig typedef file */" >> $(LIB_NAME).i
 	cat driver.h digit.h >> $(LIB_NAME).i
 
