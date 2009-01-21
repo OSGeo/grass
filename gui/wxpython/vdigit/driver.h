@@ -23,7 +23,7 @@
 #include <wx/string.h>
 
 #include <Python.h>
-#include "pseudodc.h"
+#include <wx/wxPython/pseudodc.h>
 
 extern "C" {
 #include <grass/gis.h>
@@ -34,7 +34,7 @@ class DisplayDriver
 {
 private:
     friend class Digit;
-    wxvdigit::wxPseudoDC *dc, *dcTmp;  // device content
+    wxPseudoDC *dc, *dcTmp;  // device content
     wxWindow *parentWin;
     
     /* disabled due to expensive calling dc->SetId()
@@ -135,7 +135,7 @@ private:
 		     double *, double *, double *);
     double DistanceInPixels(double);
 
-    int DrawCross(wxvdigit::wxPseudoDC *, int, const wxPoint *, int size=5);
+    int DrawCross(wxPseudoDC *, int, const wxPoint *, int size=5);
     int DrawArrow(double, double, double, double, double,
 		   int);
 
