@@ -231,8 +231,8 @@ class GMConsole(wx.Panel):
         for line in text.splitlines():
             # fill space
             if len(line) < self.lineWidth:
-                diff = 80 - len(line) 
-            line += diff * ' '
+                diff = self.lineWidth - len(line) 
+                line += diff * ' '
             
             self.cmd_output.AddTextWrapped(line, wrap=wrap) # adds os.linesep
             
