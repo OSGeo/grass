@@ -14,12 +14,14 @@ formula:
 The assignment of the channels depends on the satellite.
 The module's help text (above) suggests for LANDSAT-7, QuickBird and SPOT.
 
+
 <H2>NOTES</H2>
 The command changes temporarily to the high resolution of the
 panchromatic channels for creating the three output channels,
 then restores the previous region settings. The current
 region coordinates are respected. The three pan-sharpened output
 channels may be combined with <em>d.rgb</em> or <em>r.composite</em>.
+
 
 <H2>EXAMPLE</H2>
 
@@ -41,22 +43,35 @@ g.region rast=brovey.blue -p
 d.rgb b=brovey.blue g=brovey.green r=brovey.red
 </pre></div>
 
-Results:
-<p>
-<center>
-<img src="rgb_originals.png" alt="R, G, B composite of Landsat at 28.5m">
-<br>
-<i>R, G, B composite of Landsat at 28.5m</i>
-</center>
-<p>
 
+Results:
+
+<p>
 <center>
-<img src="rgb_brovey.png" alt="R, G, B composite of Landsat Brovey fusion at 14.25m">
-<br>
-<i>R, G, B composite of Landsat Brovey fusion at 14.25m</i>
+  <table border=1>
+  <tr>
+    <td align=center>
+      <img src="rgb_originals.jpg" alt="R, G, B composite of Landsat at 28.5m">
+      <br>
+      <font size="-1">
+      <i>R, G, B composite of Landsat at 28.5m</i>
+      </font>
+    </td>
+    <td align=center>
+      <img src="rgb_brovey.jpg" alt="R, G, B composite of Landsat Brovey fusion at 14.25m">
+      <br>
+      <font size="-1">
+      <i>R, G, B composite of Landsat Brovey fusion at 14.25m</i>
+      </font>
+    </td>
+  </tr>
+  </table>
 </center>
+<br>
+
 
 Colors may be optionally optimized.
+
 
 <H2>SEE ALSO</H2>
 
@@ -66,6 +81,7 @@ Colors may be optionally optimized.
 <A HREF="d.rgb.html">d.rgb</A>,
 <A HREF="r.composite.html">r.composite</A>
 </EM>
+
 
 <H2>REFERENCES</H2>
 
@@ -87,7 +103,9 @@ Colors may be optionally optimized.
    on <a href="http://gisws.media.osaka-cu.ac.jp/grass04/viewabstract.php?id=37">FOSS/GRASS 2004 & GIS-IDEAS 2004</a> (in press)
 </ul>
 
+
 <H2>AUTHOR</H2>
 
 Markus Neteler, ITC-irst, Italy
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
