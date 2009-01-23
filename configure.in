@@ -1684,7 +1684,6 @@ else
  WXWIDGETSCPPFLAGS=`"$WX_CONFIG" --cppflags`
 
  LOC_CHECK_INCLUDES(wx/wxprec.h,wxWidgets,$WXWIDGETSCPPFLAGS) 
- LOC_CHECK_INCLUDES(wx/wxPython/pseudodc.h,wxWidgets,$WXWIDGETSCPPFLAGS) 
 
  # With wxWidgets library directory 
 
