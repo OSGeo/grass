@@ -1,7 +1,7 @@
 MODULE_TOPDIR = ../..
 
 EXTRA_CFLAGS=-I../driver $(CAIROINC) $(FTINC)
-EXTRA_LIBS=$(DRIVERLIB) $(GISLIB) $(CAIROLIB) $(MATHLIB)
+EXTRA_LIBS=$(DRIVERLIB) $(GISLIB) $(CAIROLIB) $(FCLIB)
 
 # added constant to /include/Make/Grass.make.in
 LIB_NAME = $(CAIRODRIVER_LIBNAME)

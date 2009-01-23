@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ../..
 
-EXTRA_LIBS=$(GISLIB) $(G3DLIB) $(MATHLIB)
+EXTRA_LIBS=$(GISLIB) $(G3DLIB)
 LIB_NAME = $(GPDE_LIBNAME)
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
