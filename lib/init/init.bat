@@ -88,9 +88,17 @@ if "%GRASS_GUI%"=="text" goto text
 rem if return ok, wxpython start:
 if %errorlevel% == 2 goto exitinit
 
-"%WINGISBASE%\etc\wxpython\wxgui.py"
-
 "%WINGISBASE%\etc\clean_temp" > NUL:
+
+goto exitinit
+
+:wxpython
+
+set PYTHONPATH=%PYTHONPATH%;%WINGISBASE%\etc\python;%WINGISBASE%\etc\wxpython
+
+python "%GISBASE%/etc/wxpython/gis_set.py"
+if %errorlevel% == 2 goto exitinit
+python "%GISBASE%/etc/wxpython/wxgui.py"
 
 goto exitinit
 
