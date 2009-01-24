@@ -234,7 +234,7 @@ class GMConsole(wx.Panel):
                 diff = self.lineWidth - len(line) 
                 line += diff * ' '
             
-            self.cmd_output.AddTextWrapped(line, wrap=wrap) # adds os.linesep
+            self.cmd_output.AddTextWrapped(line, wrap=wrap) # adds '\n'
             
             p2 = self.cmd_output.GetCurrentPos()
             
@@ -374,8 +374,8 @@ class GMConsole(wx.Panel):
             self.history = self.cmd_output.GetText()
 
         # add newline if needed
-        if len(self.history) > 0 and self.history[-1] != os.linesep:
-            self.history += os.linesep
+        if len(self.history) > 0 and self.history[-1] != '\n':
+            self.history += '\n'
 
         wildcard = "Text file (*.txt)|*.txt"
         dlg = wx.FileDialog(
@@ -402,10 +402,6 @@ class GMConsole(wx.Panel):
         """Print command output"""
         message = event.text
         type  = event.type
-        
-        # switch to 'Command output'
-        ### if self.parent.notebook.GetSelection() != self.parent.goutput.pageid:
-        ### self.parent.notebook.SetSelection(self.parent.goutput.pageid)
         if self.parent.notebook.GetSelection() != self.parent.goutput.pageid:
             textP = self.parent.notebook.GetPageText(self.parent.goutput.pageid)
             if textP[-1] != ')':
@@ -444,11 +440,11 @@ class GMConsole(wx.Panel):
                 self.linepos = -1
         else:
             self.linepos = -1 # don't force position
-            if os.linesep not in message:
+            if '\n' not in message:
                 self.cmd_output.AddTextWrapped(message, wrap=60)
             else:
                 self.cmd_output.AddTextWrapped(message, wrap=None)
-        
+	    
         p2 = self.cmd_output.GetCurrentPos()
         
         if p2 >= p1:
@@ -571,14 +567,12 @@ class GMStdout:
     def write(self, s):
         if len(s) == 0 or s == '\n':
             return
-        
-        s = s.replace('\n', os.linesep)
-        
-        for line in s.split(os.linesep):
+
+        for line in s.splitlines():
             if len(line) == 0:
                 continue
             
-            evt = wxCmdOutput(text=line + os.linesep,
+            evt = wxCmdOutput(text=line + '\n',
                               type='')
             wx.PostEvent(self.parent.cmd_output, evt)
         
@@ -604,11 +598,10 @@ class GMStderr:
         if "GtkPizza" in s:
             return
         
-        s = s.replace('\n', os.linesep)
         # remove/replace escape sequences '\b' or '\r' from stream
         progressValue = -1
         
-        for line in s.split(os.linesep):
+        for line in s.splitlines():
             if len(line) == 0:
                 continue
 
@@ -636,7 +629,7 @@ class GMStderr:
                                   type='')
                 wx.PostEvent(self.parent.cmd_output, evt)
             elif len(line) > 0:
-                self.message += line.strip() + os.linesep
+                self.message += line.strip() + '\n'
 
             if self.printMessage and len(self.message) > 0:
                 evt = wxCmdOutput(text=self.message,
@@ -740,10 +733,10 @@ class GMStc(wx.stc.StyledTextCtrl):
         String is wrapped and linesep is also added to the end
         of the string"""
         if wrap:
-            txt = textwrap.fill(txt, wrap) + os.linesep
+            txt = textwrap.fill(txt, wrap) + '\n'
         else:
-            if txt[-1] != os.linesep:
-                txt += os.linesep
+            if txt[-1] != '\n':
+                txt += '\n'
         
         if '\r' in txt:
             self.parent.linePos = -1
@@ -765,7 +758,7 @@ class GMStc(wx.stc.StyledTextCtrl):
                 elif os.environ.has_key('GRASS_DB_ENCODING'):
                     txt = unicode(txt, os.environ['GRASS_DB_ENCODING'])
                 else:
-                    txt = _('Unable to encode text. Please set encoding in GUI preferences.') + os.linesep
+                    txt = _('Unable to encode text. Please set encoding in GUI preferences.') + '\n'
                     
                 self.AddText(txt) 
     

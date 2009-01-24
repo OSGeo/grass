@@ -312,13 +312,7 @@ class Command:
         """
         self.cmd = cmd
         self.stderr = stderr
-
-	# hack around platform-specific extension for binaries
-	if self.cmd[0] in globalvar.grassCmd['script']:
-	    self.cmd[0] = self.cmd[0] + globalvar.EXT_SCT
-	else:
-	    self.cmd[0] = self.cmd[0] + globalvar.EXT_BIN
-
+	
         #
         # set verbosity level
         #
@@ -495,8 +489,15 @@ class CommandThread(Thread):
         @param stderr redirect standard error output or None
         """
         Thread.__init__(self)
-
+	
         self.cmd    = cmd
+	
+	# hack around platform-specific extension for binaries
+	if self.cmd[0] in globalvar.grassCmd['script']:
+	    self.cmd[0] = self.cmd[0] + globalvar.EXT_SCT
+	else:
+	    self.cmd[0] = self.cmd[0] + globalvar.EXT_BIN
+        
         self.stdin  = stdin
         self.stdout = stdout
         self.stderr = stderr
