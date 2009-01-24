@@ -670,7 +670,9 @@ char *G_get_raster_cat(void *rast,
     *label = 0;
     val = G_get_raster_value_d(rast, data_type);
     i = G_quant_get_cell_value(&pcats->q, val);
-    /* DEBUG fprintf (stderr, "val %lf found i %d\n", val, i); */
+
+    G_debug(5, "G_get_raster_cat(): val %lf found i %d", val, i);
+
     if (!G_is_c_null_value(&i) && i < pcats->ncats) {
 	if (pcats->labels[i] != NULL)
 	    return pcats->labels[i];
