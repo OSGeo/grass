@@ -48,16 +48,55 @@ A list of translators is available in
 ./translators.csv
 
 
-New contributions specific to GRASS 6.1 - 6.3:
--------------------------------------------------
-(work in progress: please complete and correct, this list may be incomplete)
+
+GRASS 7.0 major project contributers
+------------------------------------
+
+LEAD ARCHITECT
+ - Glynn Clements <glynn at gclements plus com>
+
+GUI
+ - Martin Landa <landa.martin gmail com>: wxPython GUI lead
+
+PROJECT INTEGRATION
+ - Markus Neteler <neteler osgeo org>: GRASS project coordination and chair
+ - M. Hamish Bowman <hamish.bowman otago ac nz>: General sanitation
+
+
+[please complete and correct as needed !]
+
+
+
+Contributions specific to GRASS 6.2 - 6.4
+-----------------------------------------
+[work in progress: please complete and correct, this list may be incomplete]
+
 
 Additional authors:
-NVIZ
- - ACS - Massimo Cuomo <m.cuomo at acsys.it>: New flythrough navigation
+GUI
+ - Martin Landa <landa.martin gmail com>: wxPython GUI lead
+ - Michael Barton <michael.barton asu edu>: Tcl/Tk GUI lead
+ - Cedrik Shock <cedricpublic at shockfamily.net>: Tcl/Tk enhancements
 
-gis.m/tcltk module GUI:
- - Cedrik Shock <cedricpublic at shockfamily.net>
+Google Summer of Code awards:
+ - Wolf Bergenheim: Mentor team lead
+ - Rosen Matev: v.buffer, v.parallel; 2008
+ - Martin Pavlovsky: v.voronoi; 2008
+ - Martin Landa: wxNVIZ; 2008
+ - Daniel Bundala: v.generalize; 2007
+ - Maximilian Maldacke:r v.net.visibility; 2007
+
+NVIZ
+ - ACS/Massimo Cuomo <m.cuomo at acsys.it>: New flythrough navigation
+
+PACKAGING
+ - Linux:
+     o DebianGIS Project <pkg-grass-devel lists.alioth.debian.org>
+     o Mandriva:
+     o SuSE: Otto Dassau
+     o Ubuntu: Jachym Cepicky
+ - Mac OSX: William Kyngesburye
+ - MS-Windows: Marco Pasetti
 
 Source code Quality assessment system
  - SOCCER Labs at Ecole Polytechnique de Montreal, Canada
@@ -68,69 +107,11 @@ Power user tester:
    Maciej "Maciek" Sieczka <msieczka at sieczka.org>
 
 
-
-GRASS 5.7/6.0: Primary authors of new source code
--------------------------------------------------
-
-Institutions:
- ITC-IRST, Trento, Italy   Providing web structure and various mailing lists
- Intevation GmbH, Germany  Providing CVS and Request Tracker
- Baylor University, USA    Providing user mailing list 1998-5/2006
-
-VECTOR
- - Radim Blazek <blazek itc it>: vector engine core developer
- - David D Gray: vector engine contributions
- - modules: see individual authors and ./contributors.csv
- 
-DBMI
- - based on original code from GRASS 5.0 (developer unknown, CERL?)
- - Radim Blazek <blazek itc it>: core developer of 5.7 enhancements
- - Alexander Shevlakov: drivers and sqlp contributions
- - modules: see individual authors and ./contributors.csv
-
-DGLib: vector networking
- - Roberto Micarelli <mi ro iol it>: LIBDGL - graph library for vector
-     network analysis
-
-FORMS library
- - Radim Blazek <blazek itc it>: core developer 
-
-RASTER
- - Modules: see 5.4 authors below + individual modules
- - Integration of raster modules: Markus Neteler <neteler itc it>
- - Large file support (LFS): Glynn Clements  <glynn gclements.plus.com>
- - modules: see individual authors and ./contributors.csv
-
-3D RASTER
- - Grid3D library by CERL and GMSL/University of Illinois
- - Jaro Hofierka <hofierka geomodel sk>
- - Helena Mitasova <hmitaso unity ncsu edu>
- - Alfonso Vitti <alfonso vitti ing unitn it>: important bugfixes
- - Soeren Gebbert <soeren.gebbert gmx de>: important bugfixes
- - modules: see individual authors and ./contributors.csv
-
-PROJ
- - Integrated by Paul Kelly <paul-grass stjohnspoint co uk>
-
-NEW DOCUMENTATION:
- - existing documentation: see 5.4 authors below + individual modules
- - Markus Neteler <neteler itc it>
- - Otto Dassau <dassau gdf-hannover de>
- - M. Hamish Bowman <hamish.bowman otago ac nz>
- - Radim Blazek <blazek itc it>
-
-WEB SITE
- - Markus Neteler <neteler itc it>: setup and maintenance since 1998,
-     cron jobs for auto-update, PHP migration, mailing lists, etc
- - Scott Mitchell <smitch mac com>: contributions
- - M. Hamish Bowman <hamish.bowman otago ac nz>: contributions
-
-
 GRASS 6.0 - 6.2 major project contributers
 ------------------------------------------
 
 PROJECT INTEGRATION
- - Markus Neteler <neteler itc it>: GRASS project coordination
+ - Markus Neteler <neteler osgeo org>: GRASS project coordination
  - Radim Blazek <blazek itc it>: driving force for vector enhancements
  - M. Hamish Bowman <hamish.bowman otago ac nz>: General sanitation
  - Bernhard Reiter <bernhard intevation de>: Maintain CVS, Bug-tracker
@@ -196,6 +177,65 @@ Linux (SuSE):    GDF Hannover bR, see http://www.gdf-hannover.de
 Mac OS/X:        Lorenzo Moretti <lorenzo.moretti bologna enea it>
                  Jeshua Lacock <jeshua OpenOSX com>
 MS-Windows/Cygwin:  Huidae Cho <grass4u gmail com>
+
+
+
+GRASS 5.7/6.0: Primary authors of new source code
+-------------------------------------------------
+
+Institutions:
+ ITC-IRST, Trento, Italy   Providing web structure and various mailing lists
+ Intevation GmbH, Germany  Providing CVS and Request Tracker
+ Baylor University, USA    Providing user mailing list 1998-5/2006
+
+VECTOR
+ - Radim Blazek <blazek itc it>: vector engine core developer
+ - David D Gray: vector engine contributions
+ - modules: see individual authors and ./contributors.csv
+ 
+DBMI
+ - based on original code from GRASS 5.0 (developer unknown, CERL?)
+ - Radim Blazek <blazek itc it>: core developer of 5.7 enhancements
+ - Alexander Shevlakov: drivers and sqlp contributions
+ - modules: see individual authors and ./contributors.csv
+
+DGLib: vector networking
+ - Roberto Micarelli <mi ro iol it>: LIBDGL - graph library for vector
+     network analysis
+
+FORMS library
+ - Radim Blazek <blazek itc it>: core developer 
+
+RASTER
+ - Modules: see 5.4 authors below + individual modules
+ - Integration of raster modules: Markus Neteler <neteler itc it>
+ - Large file support (LFS): Glynn Clements  <glynn gclements.plus.com>
+ - modules: see individual authors and ./contributors.csv
+
+3D RASTER
+ - Grid3D library by CERL and GMSL/University of Illinois
+ - Jaro Hofierka <hofierka geomodel sk>
+ - Helena Mitasova <hmitaso unity ncsu edu>
+ - Alfonso Vitti <alfonso vitti ing unitn it>: important bugfixes
+ - Soeren Gebbert <soeren.gebbert gmx de>: important bugfixes
+ - modules: see individual authors and ./contributors.csv
+
+PROJ
+ - Integrated by Paul Kelly <paul-grass stjohnspoint co uk>
+
+NEW DOCUMENTATION:
+ - existing documentation: see 5.4 authors below + individual modules
+ - Markus Neteler <neteler itc it>
+ - Otto Dassau <dassau gdf-hannover de>
+ - M. Hamish Bowman <hamish.bowman otago ac nz>
+ - Radim Blazek <blazek itc it>
+
+WEB SITE
+ - Markus Neteler <neteler itc it>: setup and maintenance since 1998,
+     cron jobs for auto-update, PHP migration, mailing lists, etc
+ - Scott Mitchell <smitch mac com>: contributions
+ - M. Hamish Bowman <hamish.bowman otago ac nz>: contributions
+
 
 
 GRASS GIS 5.4 Author List
