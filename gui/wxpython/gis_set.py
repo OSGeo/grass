@@ -201,7 +201,8 @@ class GRASSStartup(wx.Frame):
             # list of locations
             self.UpdateLocations(self.gisdbase)
             try:
-                self.lblocations.SetSelection(self.listOfLocations.index(location))
+                self.lblocations.SetSelection(self.listOfLocations.index(location),
+                                              force=True)
                 self.lblocations.EnsureVisible(self.listOfLocations.index(location))
             except ValueError:
                 print >> sys.stderr, _("ERROR: Location <%s> not found") % \
@@ -212,7 +213,8 @@ class GRASSStartup(wx.Frame):
             mapset = self._getRCValue("MAPSET")
             if mapset:
                 try:
-                    self.lbmapsets.SetSelection(self.listOfMapsets.index(mapset))
+                    self.lbmapsets.SetSelection(self.listOfMapsets.index(mapset),
+                                                force=True)
                     self.lbmapsets.EnsureVisible(self.listOfMapsets.index(mapset))
                 except ValueError:
                     self.lbmapsets.Clear()
@@ -778,8 +780,9 @@ class GListBox(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
     def InsertItems(self, choices, pos, disabled=[]):
         self.__LoadData(choices, disabled)
 
-    def SetSelection(self, item):
-        if item != wx.NOT_FOUND and platform.system() != 'Windows':
+    def SetSelection(self, item, force = False):
+        if item != wx.NOT_FOUND and \
+                (platform.system() != 'Windows' or force):
             ### Windows -> FIXME
             self.SetItemState(item, wx.LIST_STATE_SELECTED, wx.LIST_STATE_SELECTED)
 	
