@@ -37,7 +37,10 @@ from goutput import wxCmdOutput
 from preferences import globalSettings as UserSettings
 
 sys.path.append(os.path.join(globalvar.ETCWXDIR, "nviz"))
-import grass7_wxnviz as wxnviz
+try:
+    import grass7_wxnviz as wxnviz
+except ImportError:
+    pass
 
 wxUpdateProperties, EVT_UPDATE_PROP = NewEvent()
 wxUpdateView,       EVT_UPDATE_VIEW = NewEvent()
