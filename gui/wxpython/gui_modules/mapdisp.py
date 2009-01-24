@@ -283,7 +283,8 @@ class MapFrame(wx.Frame):
                               LeftDockable(False).RightDockable(False).
                               BottomDockable(False).TopDockable(True).
                               CloseButton(False).Layer(2).
-                              BestSize((globalvar.MAP_WINDOW_SIZE[0]-15, -1)))
+                              BestSize((self.toolbars['map'].GetToolbar().GetSize())))
+	
         # vector digitizer
         elif name == "vdigit":
             if self.gismanager:
@@ -302,8 +303,8 @@ class MapFrame(wx.Frame):
                                   LeftDockable(False).RightDockable(False).
                                   BottomDockable(False).TopDockable(True).
                                   CloseButton(False).Layer(2).
-                                  BestSize((globalvar.MAP_WINDOW_SIZE[0]-15, -1)))
-
+                                  BestSize((self.toolbars['vdigit'].GetToolbar().GetSize())))
+	
             # change mouse to draw digitized line
             self.MapWindow.mouse['box'] = "point"
             self.MapWindow.zoomtype = 0
@@ -319,8 +320,7 @@ class MapFrame(wx.Frame):
                               ToolbarPane().Top().
                               LeftDockable(False).RightDockable(False).
                               BottomDockable(False).TopDockable(True).
-                              CloseButton(False).Layer(2).
-                              BestSize((globalvar.MAP_WINDOW_SIZE[0]-15, -1)))
+                              CloseButton(False).Layer(2))
         # nviz
         elif name == "nviz":
             import nviz
@@ -399,8 +399,7 @@ class MapFrame(wx.Frame):
                               ToolbarPane().Top().Row(1).
                               LeftDockable(False).RightDockable(False).
                               BottomDockable(False).TopDockable(True).
-                              CloseButton(False).Layer(2).
-                              BestSize((globalvar.MAP_WINDOW_SIZE[0]-15, -1)))
+                              CloseButton(False).Layer(2))
             
             self.MapWindow = self.MapWindow3D
             self.SetStatusText("", 0)

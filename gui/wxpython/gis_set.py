@@ -25,6 +25,7 @@ import sys
 import glob
 import shutil
 import copy
+import platform
 
 ### i18N
 import gettext
@@ -778,8 +779,10 @@ class GListBox(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         self.__LoadData(choices, disabled)
 
     def SetSelection(self, item):
-        if item != wx.NOT_FOUND:
+        if item != wx.NOT_FOUND and platform.system() != 'Windows':
+            ### Windows -> FIXME
             self.SetItemState(item, wx.LIST_STATE_SELECTED, wx.LIST_STATE_SELECTED)
+	
         self.selected = item
         
     def GetSelection(self):
