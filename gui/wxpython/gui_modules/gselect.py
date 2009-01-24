@@ -22,6 +22,7 @@ COPYING that comes with GRASS for details.
 
 import os
 import sys
+import platform
 
 import wx
 import wx.combo
@@ -212,8 +213,11 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
             if i > 0 and mapsets[i] == curr_mapset:
                 mapsets[i] = mapsets[0]
                 mapsets[0] = curr_mapset
-
-        filesdict = grass.mlist_grouped(elementdict[element])
+        
+	if platform.system() == 'Windows':
+            filesdict = grass.list_grouped(elementdict[element])
+	else:
+            filesdict = grass.mlist_grouped(elementdict[element])
         
         for dir in mapsets:
             dir_node = self.AddItem('Mapset: '+dir)
