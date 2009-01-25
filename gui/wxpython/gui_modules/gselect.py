@@ -213,7 +213,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                 mapsets[i] = mapsets[0]
                 mapsets[0] = curr_mapset
         
-        if 'g.mlist' in globalvar.grassCmd['all']:
+        if globalvar.have_mlist:
             filesdict = grass.mlist_grouped(elementdict[element])
         else:
             filesdict = grass.list_grouped(elementdict[element])
