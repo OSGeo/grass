@@ -7,7 +7,7 @@ Classes:
  - NvizToolWindow
  - ViewPositionWindow
 
-(C) 2008 by the GRASS Development Team
+(C) 2008-2009 by the GRASS Development Team
 
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
@@ -91,7 +91,9 @@ class NvizToolWindow(wx.Frame):
         # bindings
         #
         self.Bind(wx.EVT_CLOSE, self.OnClose)
-
+        # avoid focusing map display window
+        self.notebook.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, lambda x: None)
+        
         #
         # layout
         #
