@@ -1434,8 +1434,8 @@ class PreferencesDialog(wx.Dialog):
         
         row += 1
         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Note: To change icon theme, "
-                                                 "you must save settings and restart the GUI.")),
+                                         label=_("Note: For changing the icon theme, "
+                                                 "you must save the settings and restart this GUI.")),
                       flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(row, 0), span=(1, 2))
                       
