@@ -194,6 +194,15 @@ class MapFrame(wx.Frame):
                                     size=(150, -1))
         self.mapScale.Hide()
         self.statusbar.Bind(wx.EVT_TEXT_ENTER, self.OnChangeMapScale, self.mapScale)
+
+        # go to
+        self.goTo = wx.TextCtrl(parent=self.statusbar, id=wx.ID_ANY,
+                                value="", style=wx.TE_PROCESS_ENTER,
+                                size=(200, -1))
+        self.goTo.Hide()
+        self.statusbar.Bind(wx.EVT_TEXT_ENTER, self.OnGoTo, self.goTo)
+
+
         # on-render gauge
         self.onRenderGauge = wx.Gauge(parent=self.statusbar, id=wx.ID_ANY,
                                       range=0, style=wx.GA_HORIZONTAL)
@@ -734,12 +743,45 @@ class MapFrame(wx.Frame):
         self.MapWindow.UpdateMap()
         self.mapScale.SetFocus()
         
+    def OnGoTo(self, event):
+        """
+        Go to position
+        """
+        try:
+            e, n = map(float, self.goTo.GetValue().split(','))
+        except ValueError:
+            region = self.Map.GetCurrentRegion()
+            self.goTo.SetValue("%.2f, %.2f" % (region['center_northing'],
+                                               region['center_easting']))
+            return
+
+        region = self.Map.GetCurrentRegion()
+        region['center_northing'] = n
+        region['center_easting'] = e
+        dn = (region['nsres'] * region['rows']) / 2.
+        region['n'] = region['center_northing'] + dn
+        region['s'] = region['center_northing'] - dn
+        de = (region['ewres'] * region['cols']) / 2.
+        region['e'] = region['center_easting'] + de
+        region['w'] = region['center_easting'] - de
+        
+        self.Map.AdjustRegion()
+
+        # add to zoom history
+        self.MapWindow.ZoomHistory(region['n'], region['s'],
+                                   region['e'], region['w'])
+        
+        # redraw a map
+        self.MapWindow.UpdateMap()
+        self.goTo.SetFocus()
+        
     def StatusbarUpdate(self):
         """Update statusbar content"""
 
         self.showRegion.Hide()
         self.compResolution.Hide()
         self.mapScale.Hide()
+        self.goTo.Hide()
         self.mapScaleValue = self.ppm = None
 
         if self.toggleStatus.GetSelection() == 0: # Coordinates
@@ -831,6 +873,16 @@ class MapFrame(wx.Frame):
             # disable long help
             self.StatusbarEnableLongHelp(False)
 
+        elif self.toggleStatus.GetSelection() == 7: # go to
+            self.statusbar.SetStatusText("")
+            region = self.Map.GetCurrentRegion()
+            self.goTo.SetValue("%.2f, %.2f" % (region['center_northing'],
+                                              region['center_easting']))
+            self.goTo.Show()
+
+            # disable long help
+            self.StatusbarEnableLongHelp(False)
+        
         else:
             self.statusbar.SetStatusText("", 1)
 
