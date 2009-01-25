@@ -22,7 +22,7 @@ Classes:
  - VDigitDuplicatesDialog
  - VDigitVBuildDialog
 
-(C) 2007-2008 by the GRASS Development Team
+(C) 2007-2009 by the GRASS Development Team
 
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
@@ -53,15 +53,15 @@ try:
     sys.path.append(digitPath)
     import grass7_wxvdigit as wxvdigit
     GV_LINES = wxvdigit.GV_LINES
+    PseudoDC = wxvdigit.PseudoDC
     digitErr = ''
 except ImportError, err:
     GV_LINES = None
+    PseudoDC = None
     digitErr = err
     print >> sys.stderr, "%sWARNING: Digitization tool is disabled (%s). " \
           "Detailed information in README file." % \
           (os.linesep, err)
-
-PseudoDC = wxvdigit.PseudoDC
 
 class AbstractDigit:
     """
