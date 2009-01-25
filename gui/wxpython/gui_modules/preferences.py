@@ -1433,16 +1433,12 @@ class PreferencesDialog(wx.Dialog):
                       pos=(row, 1))
         
         row += 1
-        iconNote = wordwrap(_("Note: Requires GUI restart."),
-                            self.GetSize()[0]-50, wx.ClientDC(self))
-
         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=iconNote),
-                      flag=wx.ALIGN_LEFT |
-                      wx.ALIGN_CENTER_VERTICAL,
+                                         label=_("Note: To change icon theme, "
+                                                 "you must save settings and restart the GUI.")),
+                      flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(row, 0), span=(1, 2))
-        row += 1
-        
+                      
         sizer.Add(item=gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
         border.Add(item=sizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=3)
 
