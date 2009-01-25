@@ -1,18 +1,11 @@
 
 /************************************************************************/
-
 /*** 								      ***/
-
 /***				param.h				      ***/
-
 /***  Header file for use with r.param.scale			      ***/
-
 /***  Jo Wood, ASSIST, Dept of Geography, University of Leicester     ***/
-
 /***  V1.0  - 7th February, 1993				      ***/
-
 /***								      ***/
-
 /************************************************************************/
 
 #include <grass/gis.h>
