@@ -139,3 +139,9 @@ grassCmd['script'] = GetGRASSCmds(bin=False)
 
 """@Toolbar icon size"""
 toolbarSize = (24, 24)
+
+"""@Is g.mlist available?"""
+if 'g.mlist' in grassCmd['all']:
+    have_mlist = True
+else:
+    have_mlist = False
