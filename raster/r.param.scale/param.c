@@ -5,19 +5,12 @@
  */
 
 /*****************************************************************************/
-
 /***                                                                       ***/
-
 /***                                param()                                ***/
-
 /***     Returns a terrain parameter based on the 6 quadratic coefficents  ***/
-
 /***	 that define a local trend surface. 			    	   ***/
-
 /***     Jo Wood, Department of Geography, V2.0 15th December, 1994        ***/
-
 /***                                                                       ***/
-
 /*****************************************************************************/
 
 #include "param.h"
