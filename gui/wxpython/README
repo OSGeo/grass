@@ -157,33 +157,3 @@ To enable digitizer you need to compile 'vdigit'
 component. Note that you must configure GRASS with C++ (--with-cxx),
 Python (--with-python) and wxWidgets (--with-wxwidgets) support.
 
-NOTE: There is no need to do the following symlink or ldconfig on MacOSX.
-
-First, create a symlink to _gdi_.so shared library
-
-- find out architecture (32 or 64bit):
-   $ echo "$HOSTTYPE"
-
-- find the _gdi_.so file and check if compliant:
-   $ locate _gdi_.so
-   $ file /path/to/_gdi_.so
-
-  It will report "ELF 32-bit..." or "ELF 64-bit..". If you have
-  multiple results with locate, link below the appropriate file.
-
-- link as library:
-   $ sudo ln -s /path/to/_gdi_.so /usr/local/lib/libgdi.so
-
-  e.g.
-   $ sudo ln -s /usr/lib64/python2.4/site-packages/wx-2.8-gtk2-unicode/wx/_gdi_.so /usr/local/lib/libgdi.so
-
-Then update LD_LIBRARY_PATH or add '/usr/local/lib' to /etc/ld.so.conf
-(in this case run 'sudo ldconfig').
-
-TODO grass-dev: Avoid direct linking here, implement a better solution.
-
-Then you can compile the driver
-
-$ cd gui/wxpython/vdigit
-$ make
-
