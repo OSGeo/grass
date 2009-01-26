@@ -93,7 +93,7 @@ terrain.
 <dd>The minimum size of an exterior watershed basin in cells, if no flow
 map is input, or overland flow units when a flow map is given.
 Warning: low threshold values will dramactically increase run time and
-generate difficult too read basin and half_basin results.
+generate difficult to read basin and half_basin results.
 This parameter also controls the level of detail in the <em>stream</em>
 segments map.
 
@@ -120,10 +120,10 @@ calculated accurately.
 <dt><em>drainage</em> 
 
 <dd>Output map: drainage direction.  Provides the "aspect" for each
-cell.  Multiplying positive values by 45 will give the direction in
-degrees that the surface runoff will travel from that cell.  The
-value 0 (zero) indicates that the cell is a depression area (defined by
-the depression input map).  Negative values indicate that
+cell measured CCW from East.  Multiplying positive values by 45 will give 
+the direction in degrees that the surface runoff will travel from that 
+cell.  The value 0 (zero) indicates that the cell is a depression area 
+(defined by the depression input map).  Negative values indicate that
 surface runoff is leaving the boundaries of the current geographic
 region.  The absolute value of these negative cells indicates the
 direction of flow.
@@ -139,7 +139,8 @@ in the current geographic region.
 <dt><em>stream</em> 
 
 <dd>Output map: stream segments.  Values correspond to the watershed
-basin values.
+basin values.  Can be vectorized after thinning (<em>r.thin</em>) with 
+<em>r.to.vect</em>.
 
 <dt><em>half_basin</em> 
 
@@ -297,7 +298,7 @@ reduce processing time if the watersheds of interest occupy a small
 percentage of the overall area.
 <p>
 Gaps (NULL cells) in the elevation map that are located within the area 
-of interest will heavily influence flow accumulation: water will 
+of interest will heavily influence the analysis: water will 
 flow into but not out of these gaps. These gaps must be filled beforehand, 
 e.g. with <em>r.fillnulls</em>.
 <p>
@@ -321,7 +322,15 @@ a number of approaches may be considered.
 <p>
 To create <i>river mile</i> segmentation from a vectorized streams map,
 try the <em>v.net.iso</em> or <em>v.lrs.segment</em> modules.
-
+<p>
+The stream segments output can be easily vectorized after thinning with 
+<em>r.thin</em>. Each stream segment in the vector map will have the 
+value of the associated basin. To isolate subbasins and streams for a 
+larger basin, a MASK for the larger basin can be created with 
+<em>r.water.outlet</em>. The stream segments output serves as a guide 
+where to place the outlet point used as input to <em>r.water.outlet</em>. 
+The basin threshold must have been sufficiently small to isolate a 
+stream network and subbasins within the larger basin.
 
 <h2>EXAMPLES</h2>
 <i>These examples use the Spearfish sample dataset.</i>
