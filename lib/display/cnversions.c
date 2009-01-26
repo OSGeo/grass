@@ -51,22 +51,6 @@ static struct vector U_to_D_conv;	/* UTM to Display   */
 /* others */
 static int is_lat_lon;
 
-/*!
- * \brief initialize conversions
- *
- * The relationship between the
- * earth <b>region</b> and the <b>top, bottom, left</b>, and <b>right</b>
- * screen coordinates is established, which then allows conversions between all
- * three coordinate systems to be performed.
- * Note this routine is called by <i>D_setup.</i>
- *
- *  \param region
- *  \param top
- *  \param bottom
- *  \param left
- *  \param right
- *  \return int
- */
 
 static void calc_size(struct rect *rect)
 {
@@ -150,6 +134,21 @@ void D_show_conversions(void)
 	    U_to_D_conv.x, U_to_D_conv.y);
 }
 
+/*!
+ * \brief initialize conversions
+ *
+ * The relationship between the earth <b>region</b> and the <b>top, bottom,
+ * left</b>, and <b>right</b> screen coordinates is established, which then
+ * allows conversions between all three coordinate systems to be performed.
+ * Note this routine is called by <i>D_setup</i>.
+ *
+ *  \param region
+ *  \param top
+ *  \param bottom
+ *  \param left
+ *  \param right
+ *  \return none
+ */
 void D_do_conversions(const struct Cell_head *window,
 		      double t, double b, double l, double r)
 {
@@ -161,6 +160,7 @@ void D_do_conversions(const struct Cell_head *window,
     D_show_conversions();
 #endif /* DEBUG */
 }
+
 
 int D_is_lat_lon(void)			{    return (is_lat_lon);		}
 
@@ -211,6 +211,18 @@ void D_set_src(double t, double b, double l, double r)
     calc_size(&U);
 }
 
+/*!
+ * \brief returns frame bounds in source coordinate system
+ *
+ * D_get_src() returns the frame bounds in the source coordinate system
+ * (used by D_* functions)
+ *
+ *  \param top
+ *  \param bottom
+ *  \param left
+ *  \param right
+ *  \return void
+ */
 void D_get_src(double *t, double *b, double *l, double *r)
 {
     *t = U.north;
@@ -245,6 +257,20 @@ void D_set_dst(double t, double b, double l, double r)
     calc_size(&D);
 }
 
+/*!
+ * \brief returns frame bounds in destination coordinate system
+ *
+ * D_get_dst() returns the frame bounds in the destination coordinate system
+ * (used by R_* commands).
+ * The various D_setup() commands all set the destination coordinate
+ * system to the current frame reported by R_get_window().
+ *
+ *  \param top
+ *  \param bottom
+ *  \param left
+ *  \param right
+ *  \return none
+ */
 void D_get_dst(double *t, double *b, double *l, double *r)
 {
     *t = D.north;
