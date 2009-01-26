@@ -10,7 +10,7 @@ include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 ifeq ($(OPENGL_WINDOWS),1)
 EXTRA_LIBS += -lgdi32
 endif
-ifneq ($(USE_X11),)
+ifneq ($(OPENGL_X11),)
 EXTRA_LIBS += $(XLIBPATH) $(XLIB) $(XEXTRALIBS)
 EXTRA_CFLAGS += $(XCFLAGS)
 endif
