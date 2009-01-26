@@ -101,8 +101,6 @@ int do_cum_mfd(void)
     CELL is_swale;
     DCELL value, valued;
     int killer, threshold, count;
-    SHORT asp_r[9] = { 0, -1, -1, -1, 0, 1, 1, 1, 0 };
-    SHORT asp_c[9] = { 0, 1, 0, -1, -1, -1, 0, 1, 1 };
 
     /* MFD */
     int mfd_cells, stream_cells, swale_cells, astar_not_set, is_null;
@@ -111,7 +109,9 @@ int do_cum_mfd(void)
     double dx, dy;
     CELL ele, ele_nbr, aspect, is_worked;
     double prop, max_acc;
-    int workedon;
+    int workedon, edge;
+    SHORT asp_r[9] = { 0, -1, -1, -1, 0, 1, 1, 1, 0 };
+    SHORT asp_c[9] = { 0, 1, 0, -1, -1, -1, 0, 1, 1 };
 
     G_message(_("SECTION 3: Accumulating Surface Flow with MFD."));
     G_debug(1, "MFD convergence factor set to %d.", c_fac);
@@ -172,6 +172,7 @@ int do_cum_mfd(void)
 	    astar_not_set = 1;
 	    ele = alt[SEG_INDEX(alt_seg, r, c)];
 	    is_null = 0;
+	    edge = 0;
 	    /* this loop is needed to get the sum of weights */
 	    for (ct_dir = 0; ct_dir < sides; ct_dir++) {
 		/* get r, c (r_nbr, c_nbr) for neighbours */
@@ -194,6 +195,7 @@ int do_cum_mfd(void)
 		    if (is_worked == 0) {
 			ele_nbr = alt[SEG_INDEX(alt_seg, r_nbr, c_nbr)];
 			is_null = G_is_c_null_value(&ele_nbr);
+			edge = is_null;
 			if (!is_null && ele_nbr <= ele) {
 			    if (ele_nbr < ele) {
 				weight[ct_dir] =
@@ -221,6 +223,19 @@ int do_cum_mfd(void)
 		    if (dr == r_nbr && dc == c_nbr)
 			np_side = ct_dir;
 		}
+		else
+		    edge = 1;
+		if (edge)
+		    break;
+	    }
+	    /* do not distribute flow along edges, this causes artifacts */
+	    if (edge) {
+		is_swale = FLAG_GET(swale, r, c);
+		if (is_swale && aspect > 0) {
+		    aspect = -1 * drain[r - r_nbr + 1][c - c_nbr + 1];
+		    asp[SEG_INDEX(asp_seg, r, c)] = aspect;
+		}
+		continue;
 	    }
 
 	    /* honour A * path 

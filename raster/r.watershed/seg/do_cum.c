@@ -114,7 +114,7 @@ int do_cum_mfd(void)
     double dx, dy;
     CELL ele, ele_nbr, asp_val, asp_val2, cvalue, *worked_nbr;
     double prop, max_acc;
-    int workedon;
+    int workedon, edge;
     SHORT asp_r[9] = { 0, -1, -1, -1, 0, 1, 1, 1, 0 };
     SHORT asp_c[9] = { 0, 1, 0, -1, -1, -1, 0, 1, 1 };
 
@@ -187,6 +187,7 @@ int do_cum_mfd(void)
 	    astar_not_set = 1;
 	    cseg_get(&alt, &ele, r, c);
 	    is_null = 0;
+	    edge = 0;
 	    /* this loop is needed to get the sum of weights */
 	    for (ct_dir = 0; ct_dir < sides; ct_dir++) {
 		/* get r, c (r_nbr, c_nbr) for neighbours */
@@ -211,6 +212,7 @@ int do_cum_mfd(void)
 		    if (worked_nbr[ct_dir] == 0) {
 			cseg_get(&alt, &ele_nbr, r_nbr, c_nbr);
 			is_null = G_is_c_null_value(&ele_nbr);
+			edge = is_null;
 			if (!is_null && ele_nbr <= ele) {
 			    if (ele_nbr < ele) {
 				weight[ct_dir] =
@@ -238,6 +240,19 @@ int do_cum_mfd(void)
 		    if (dr == r_nbr && dc == c_nbr)
 			np_side = ct_dir;
 		}
+		else
+		    edge = 1;
+		if (edge)
+		    break;
+	    }
+	    /* do not distribute flow along edges, this causes artifacts */
+	    if (edge) {
+		bseg_get(&swale, &is_swale, r, c);
+		if (is_swale && asp_val > 0) {
+		    asp_val = -1 * drain[r - r_nbr + 1][c - c_nbr + 1];
+		    cseg_put(&asp, &asp_val, r, c);
+		}
+		continue;
 	    }
 
 	    /* honour A * path 
