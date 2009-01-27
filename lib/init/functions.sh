@@ -570,7 +570,7 @@ check_batch_job()
        else
           # right file, but ...
           if [ ! -x "$GRASS_BATCH_JOB" ] ; then
-             echo "Please change file permission to 'executable' for '$GRASS_BATCH_JOB'"
+             echo "ERROR: change file permission to 'executable' for '$GRASS_BATCH_JOB'"
              cleanup_tmpdir
              exit 1
           else
