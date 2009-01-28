@@ -155,7 +155,7 @@ GetTiles() {
 #Get the data from the WMS server
 GetData() {
    g.message "Downloading data"
-   g.message -v message="Requesting Data from <${SERVER}:>"
+   g.message -v message="Requesting Data from <${SERVER}>:"
    g.message -v message="$STRING"
 
    if [ "$POST_DATA_OK" -eq 1 ] ; then
