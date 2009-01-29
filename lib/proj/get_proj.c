@@ -213,12 +213,12 @@ int pj_get_kv(struct pj_info *info, struct Key_Value *in_proj_keys,
 	    alloc_options(buffa);
 	    returnval = 3;
 	}
-	G_free(datum);
 	/* else there'll be no datum transformation taking place here... */
     }
     else {
 	returnval = 4;
     }
+    G_free(datum);
 
     /* Set finder function for locating datum conversion tables PK */
     pj_set_finder(FINDERFUNC);

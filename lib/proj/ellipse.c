@@ -55,7 +55,7 @@ GPJ__get_ellipsoid_params(struct Key_Value *proj_keys,
     struct gpj_ellps estruct;
     struct gpj_datum dstruct;
     const char *str, *str3;
-    char *str1;
+    char *str1, *ellps;
 
     str = G_find_key_value("datum", proj_keys);
 
@@ -63,25 +63,25 @@ GPJ__get_ellipsoid_params(struct Key_Value *proj_keys,
 	/* If 'datum' key is present, look up correct ellipsoid
 	 * from datum.table */
 
-	str = G_store(dstruct.ellps);
+	ellps = G_store(dstruct.ellps);
 	GPJ_free_datum(&dstruct);
 
     }
     else
 	/* else use ellipsoid defined in PROJ_INFO */
-	str = G_find_key_value("ellps", proj_keys);
+	ellps = G_store(G_find_key_value("ellps", proj_keys));
 
-    if (str != NULL) {
-	if (GPJ_get_ellipsoid_by_name(str, &estruct) < 0) {
-	    G_fatal_error(_("Invalid ellipsoid <%s> in file"), str);
-	}
-	else {
-	    *a = estruct.a;
-	    *e2 = estruct.es;
-	    *rf = estruct.rf;
-	    GPJ_free_ellps(&estruct);
-	    return 1;
-	}
+    if (ellps != NULL) {
+	if (GPJ_get_ellipsoid_by_name(ellps, &estruct) < 0)
+	    G_fatal_error(_("Invalid ellipsoid <%s> in file"), ellps);
+
+	*a = estruct.a;
+	*e2 = estruct.es;
+	*rf = estruct.rf;
+	GPJ_free_ellps(&estruct);
+	G_free(ellps);
+
+	return 1;
     }
     else {
 	str3 = G_find_key_value("a", proj_keys);

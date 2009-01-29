@@ -17,6 +17,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
+
+#include <proj_api.h>
+
 #include <grass/gis.h>
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
@@ -102,6 +105,7 @@ void print_proj4(int dontprettify)
 
     pj_get_kv(&pjinfo, projinfo, projunits);
     proj4 = pj_get_def(pjinfo.pj, 0);
+    pj_free(pjinfo.pj);
 
     /* GRASS-style PROJ.4 strings don't include a unit factor as this is
      * handled separately in GRASS - must include it here though */
@@ -109,7 +113,8 @@ void print_proj4(int dontprettify)
     if (unfact != NULL && (strcmp(pjinfo.proj, "ll") != 0))
 	G_asprintf(&proj4mod, "%s +to_meter=%s", proj4, unfact);
     else
-	proj4mod = proj4;
+	proj4mod = G_store(proj4);
+    pj_dalloc(proj4);
 
     for (i = proj4mod; *i; i++) {
 	/* Don't print the first space */
@@ -122,6 +127,7 @@ void print_proj4(int dontprettify)
 	    fputc(*i, stdout);
     }
     fputc('\n', stdout);
+    G_free(proj4mod);
 
     return;
 }

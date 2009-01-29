@@ -42,15 +42,16 @@ int set_datumtrans(int datumtrans, int force)
 {
     char *params, *datum = NULL;
     int paramsets, status;
-    struct gpj_datum dstruct;
 
     if (cellhd.proj == PROJECTION_XY)
 	return 0;
 
     status = GPJ__get_datum_params(projinfo, &datum, &params);
+    G_free(params);
     if (datum) {
 	/* A datum name is specified; need to determine if
 	 * there are parameters to choose from for this datum */
+	struct gpj_datum dstruct;
 
 	if (GPJ_get_datum_by_name(datum, &dstruct) > 0) {
 	    char *defparams;
@@ -58,6 +59,8 @@ int set_datumtrans(int datumtrans, int force)
 	    paramsets =
 		GPJ_get_default_datum_params_by_name(dstruct.name,
 						     &defparams);
+	    G_free(defparams);
+	    GPJ_free_datum(&dstruct);
 
 	    if (status == 1 && paramsets > 1)
 		/* Parameters are missing and there is a choice to be made */
@@ -94,21 +97,23 @@ int set_datumtrans(int datumtrans, int force)
 	    if (list != NULL) {
 		if (datumtrans == -1) {
 		    do {
+			struct gpj_datum_transform_list *old = list;
 			fprintf(stdout, "---\n%d\nUsed in %s\n%s\n%s\n",
 				list->count, list->where_used,
 				list->params, list->comment);
 			list = list->next;
+		        GPJ_free_datum_transform(old);
 		    } while (list != NULL);
 
 		    exit(EXIT_SUCCESS);
 		}
 		else {
 		    do {
-			if (list->count == datumtrans) {
+			struct gpj_datum_transform_list *old = list;
+			if (list->count == datumtrans)
 			    chosenparams = G_store(list->params);
-			    break;
-			}
 			list = list->next;
+		        GPJ_free_datum_transform(old);
 		    } while (list != NULL);
 		}
 	    }
@@ -146,6 +151,7 @@ int set_datumtrans(int datumtrans, int force)
 	projinfo = temp_projinfo;
 
     }
+    G_free(datum);
 
     return force;
 }
