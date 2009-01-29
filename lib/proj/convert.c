@@ -93,9 +93,9 @@ OGRSpatialReferenceH GPJ_grass_to_osr(struct Key_Value * proj_info,
     struct gpj_datum dstruct;
     struct gpj_ellps estruct;
     size_t len;
-    const char *ellps, *unit, *unfact;
-    char *ellpslong, *datum, *params, *towgs84, *datumlongname,
-	*start, *end, *buff;
+    const char *ellpskv, *unit, *unfact;
+    char *ellps, *ellpslong, *datum, *params, *towgs84, *datumlongname,
+	*start, *end;
     const char *sysname, *osrunit, *osrunfact;
     double a, es, rf;
     int haveparams = 0;
@@ -114,19 +114,22 @@ OGRSpatialReferenceH GPJ_grass_to_osr(struct Key_Value * proj_info,
 	G_warning(_("Unable get PROJ.4-style parameter string"));
 	return NULL;
     }
+    pj_free(pjinfo.pj);
 
     unit = G_find_key_value("unit", proj_units);
     unfact = G_find_key_value("meters", proj_units);
     if (unfact != NULL && (strcmp(pjinfo.proj, "ll") != 0))
 	G_asprintf(&proj4mod, "%s +to_meter=%s", proj4, unfact);
     else
-	proj4mod = proj4;
+	proj4mod = G_store(proj4);
+    pj_dalloc(proj4);
 
     if ((errcode = OSRImportFromProj4(hSRS, proj4mod)) != OGRERR_NONE) {
 	G_warning(_("OGR can't parse PROJ.4-style parameter string: "
 		    "%s (OGR Error code was %d)"), proj4mod, errcode);
 	return NULL;
     }
+    G_free(proj4mod);
 
     if ((errcode = OSRExportToWkt(hSRS, &wkt)) != OGRERR_NONE) {
 	G_warning(_("OGR can't get WKT-style parameter string "
@@ -134,14 +137,19 @@ OGRSpatialReferenceH GPJ_grass_to_osr(struct Key_Value * proj_info,
 	return NULL;
     }
 
-    ellps = G_find_key_value("ellps", proj_info);
+    ellpskv = G_find_key_value("ellps", proj_info);
     GPJ__get_ellipsoid_params(proj_info, &a, &es, &rf);
     haveparams = GPJ__get_datum_params(proj_info, &datum, &params);
 
+    if(ellpskv != NULL)
+	ellps = G_store(ellpskv);
+    else
+	ellps = NULL;
+
     if ((datum == NULL) || (GPJ_get_datum_by_name(datum, &dstruct) < 0)) {
-	datumlongname = "unknown";
+	datumlongname = G_store("unknown");
 	if (ellps == NULL)
-	    ellps = "unnamed";
+	    ellps = G_store("unnamed");
     }
     else {
 	datumlongname = G_store(dstruct.longname);
@@ -149,6 +157,7 @@ OGRSpatialReferenceH GPJ_grass_to_osr(struct Key_Value * proj_info,
 	    ellps = G_store(dstruct.ellps);
 	GPJ_free_datum(&dstruct);
     }
+    G_free(datum);
     if (GPJ_get_ellipsoid_by_name(ellps, &estruct) > 0) {
 	ellpslong = G_store(estruct.longname);
 	DatumNameMassage(&ellpslong);
@@ -171,16 +180,17 @@ OGRSpatialReferenceH GPJ_grass_to_osr(struct Key_Value * proj_info,
 	if (G_strcasecmp(paramkey, "towgs84") == 0)
 	    G_asprintf(&towgs84, ",TOWGS84[%s]", paramvalue);
 	else
-	    towgs84 = "";
+	    towgs84 = G_store("");
+	G_free(params);
     }
     else
-	towgs84 = "";
+	towgs84 = G_store("");
 
     sysname = OSRGetAttrValue(hSRS, "PROJCS", 0);
     if (sysname == NULL) {
 	/* Not a projected co-ordinate system */
-	start = "";
-	end = "";
+	start = G_store("");
+	end = G_store("");
     }
     else {
 	if ((strcmp(sysname, "unnamed") == 0) &&
@@ -194,8 +204,9 @@ OGRSpatialReferenceH GPJ_grass_to_osr(struct Key_Value * proj_info,
 	osrunfact = OSRGetAttrValue(hSRS, "UNIT", 1);
 
 	if ((unfact == NULL) || (G_strcasecmp(osrunit, "unknown") != 0))
-	    end = "";
+	    end = G_store("");
 	else {
+	    char *buff;
 	    double unfactf = atof(unfact);
 
 	    G_asprintf(&buff, ",UNIT[\"%s\",", osrunit);
@@ -203,6 +214,7 @@ OGRSpatialReferenceH GPJ_grass_to_osr(struct Key_Value * proj_info,
 	    startmod = strstr(lastpart, buff);
 	    len = strlen(lastpart) - strlen(startmod);
 	    lastpart[len] = '\0';
+	    G_free(buff);
 
 	    if (unit == NULL)
 		unit = "unknown";
@@ -210,27 +222,21 @@ OGRSpatialReferenceH GPJ_grass_to_osr(struct Key_Value * proj_info,
 	}
 
     }
-
+    OSRDestroySpatialReference(hSRS);
     G_asprintf(&modwkt,
 	       "%sGEOGCS[\"%s\",DATUM[\"%s\",SPHEROID[\"%s\",%.16g,%.16g]%s],%s%s",
 	       start, ellps, datumlongname, ellpslong, a, rf, towgs84,
 	       lastpart, end);
-
     hSRS2 = OSRNewSpatialReference(modwkt);
-
-    OSRDestroySpatialReference(hSRS);
     G_free(modwkt);
+
     CPLFree(wkt);
-    if (proj4 != proj4mod)
-	G_free(proj4);
-    G_free(proj4mod);
-    G_free(datum);
-    G_free(params);
+    G_free(start);
+    G_free(ellps);
     G_free(datumlongname);
-    pj_free(pjinfo.pj);
     G_free(ellpslong);
-    /* Other string pointers may or may not need to be freed depending
-     * on sequence of execution so just leave them. */
+    G_free(towgs84);
+    G_free(end);
 
     return hSRS2;
 }
@@ -451,13 +457,11 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 
 			if (list != NULL) {
 			    do {
-				if (list->count == datumtrans) {
+				if (list->count == datumtrans)
 				    chosenparams = G_store(list->params);
-				    break;
-				}
 				old = list;
 				list = list->next;
-				G_free(old);
+				GPJ_free_datum_transform(old);
 			    } while (list != NULL);
 			}
 		    }
@@ -476,6 +480,7 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 		}
 
 	    }
+	    G_free(pszDatumName);
 	}
     }
 

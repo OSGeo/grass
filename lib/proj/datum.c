@@ -85,7 +85,7 @@ int GPJ_get_datum_by_name(const char *name, struct gpj_datum *dstruct)
 int GPJ_get_default_datum_params_by_name(const char *name, char **params)
 {
     struct gpj_datum_transform_list *list, *old;
-    int count = 1;
+    int count = 0;
 
     list = GPJ_get_datum_transform_by_name(name);
 
@@ -98,14 +98,13 @@ int GPJ_get_default_datum_params_by_name(const char *name, char **params)
      * (will normally be a 3-parameter transformation)        */
     *params = G_store(list->params);
 
-    while (list->next != NULL) {
+    while (list != NULL) {
 	count++;
 	old = list;
 	list = list->next;
-	G_free(old);
+	GPJ_free_datum_transform(old);
     }
 
-    G_free(list);
     return count;
 
 }
@@ -308,6 +307,21 @@ struct gpj_datum_transform_list *GPJ_get_datum_transform_by_name(const char
 
     return outputlist;
 
+}
+
+/**
+ * \brief Free the memory used by a gpj_datum_transform_list struct
+ *
+ * \param item gpj_datum_transform_list struct to be freed
+ **/
+
+void GPJ_free_datum_transform(struct gpj_datum_transform_list *item)
+{
+    G_free(item->params);
+    G_free(item->where_used);
+    G_free(item->comment);
+    G_free(item);
+    return;
 }
 
 /**
