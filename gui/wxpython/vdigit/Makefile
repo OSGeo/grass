@@ -9,11 +9,11 @@ SOURCES := $(wildcard *.cpp) $(LIB_NAME)_wrap.cpp
 SHLIB_OBJS := $(patsubst %.cpp, $(OBJDIR)/%.o, $(SOURCES))
 
 EXTRA_CFLAGS = $(SHLIB_CFLAGS) $(GDALCFLAGS) $(PYTHONCFLAGS) $(WXWIDGETSCXXFLAGS)
-EXTRA_LIBS = $(VECTLIB) $(GISLIB) $(GDALLIBS) $(VEDITLIB) $(WXWIDGETSLIB)
+EXTRA_LIBS = $(VECTLIB) $(GISLIB) $(GDALLIBS) $(VEDITLIB)
 ifeq ($(findstring darwin,$(ARCH)),darwin)
 EXTRA_LIBS := -bundle -undefined dynamic_lookup $(EXTRA_LIBS)
 else
-EXTRA_LIBS := $(PYTHONLDFLAGS) $(EXTRA_LIBS)
+EXTRA_LIBS := $(PYTHONLDFLAGS) $(WXWIDGETSLIB) $(EXTRA_LIBS)
 endif
 
 LOCAL_HEADERS = digit.h driver.h pseudodc.h
