@@ -86,37 +86,54 @@ class MapWindow(object):
 
     def OnZoomToRaster(self, event):
         pass
-
-    def GetSelectedLayer(self, type='layer'):
+    
+    def GetSelectedLayer(self, type = 'layer', multi = False):
         """
         Get selected layer from layer tree
 
         @param type 'item' / 'layer' / 'nviz'
-
+        @param multi return first selected layer or all
+        
         @return layer / map layer properties / nviz properties
-        @return None on failure
+        @return None / [] on failure
         """
-        # get currently selected map layer
-        if not self.tree or not self.tree.GetSelection():
-            return None
-        
-        item = self.tree.GetSelection()
-        if not item.IsChecked():
-            return None
-
-        if type == 'item':
-            return item
-        
-        try:
-            if type == 'nviz':
-                layer = self.tree.GetPyData(item)[0]['nviz']
+        ret = []
+        if not self.tree or \
+                not self.tree.GetSelection():
+            if multi:
+                return []
             else:
-                layer = self.tree.GetPyData(item)[0]['maplayer']
-        except:
-            layer = None
-            
-        return layer
+                return None
+        
+        if multi and \
+                type == 'item':
+            return self.tree.GetSelections()
+        
+        for item in self.tree.GetSelections():
+            if not item.IsChecked():
+                if multi:
+                    continue
+                else:
+                    return None
 
+            if type == 'item': # -> multi = False
+                return item
+        
+            try:
+                if type == 'nviz':
+                    layer = self.tree.GetPyData(item)[0]['nviz']
+                else:
+                    layer = self.tree.GetPyData(item)[0]['maplayer']
+            except:
+                layer = None
+
+            if multi:
+                ret.append(layer)
+            else:
+                return layer
+            
+        return ret
+    
 class BufferedWindow(MapWindow, wx.Window):
     """
     A Buffered window class.
@@ -2342,7 +2359,7 @@ class BufferedWindow(MapWindow, wx.Window):
         """
         self.ZoomToMap(zoom=True)
         
-    def ZoomToMap(self, layer=None, zoom=False):
+    def ZoomToMap(self, layer = None, zoom = False):
         """
         Set display extents to match selected raster
         or vector map.
@@ -2350,40 +2367,40 @@ class BufferedWindow(MapWindow, wx.Window):
         zoomreg = {}
 
         if not layer:
-            layer = self.GetSelectedLayer()
+            layer = self.GetSelectedLayer(multi = True)
         
-        if layer is None:
+        if not layer:
             return
+        
+        rast = []
+        vect = []
+        updated = False
+        for l in layer:
+            # only raster/vector layers are currently supported
+            if l.type == 'raster':
+                rast.append(l.name)
+            elif l.type == 'vector':
+                if self.parent.digit and l.name == self.parent.digit.map and \
+                        self.parent.digit.type == 'vdigit':
+                    w, s, b, e, n, t = self.parent.digit.driver.GetMapBoundingBox()
+                    self.Map.GetRegion(n=n, s=s, w=w, e=e,
+                                       update=True)
+                    updated = True
+                else:
+                    vect.append(l.name)
 
-        Debug.msg (3, "BufferedWindow.ZoomToMap(): layer=%s, type=%s" % \
-                   (layer.name, layer.type))
-
-        # selected layer must be a valid map
-        if layer.type in ('raster', 'rgb', 'his', 'shaded', 'arrow'):
-            if layer.type == 'raster':
-                self.Map.region = self.Map.GetRegion(rast="%s" % layer.name)
-            else:
-                self.Map.region = self.Map.GetRegion(rast="%s" % layer.name)
-        elif layer.type in ('vector', 'thememap', 'themechart'):
-            if self.parent.digit and layer.name == self.parent.digit.map and \
-               self.parent.digit.type == 'vdigit':
-                w, s, b, e, n, t = self.parent.digit.driver.GetMapBoundingBox()
-                self.Map.region = self.Map.GetRegion(n=n, s=s, w=w, e=e)
-            else:
-                self.Map.region = self.Map.GetRegion(vect="%s" % layer.name)
-        else:
-            return
-
-        ### self.Map.SetRegion()
-        ### self.Map.AlignExtentFromDisplay()
-
+        if not updated:
+            self.Map.GetRegion(rast = rast,
+                               vect = vect,
+                               update = True)
+        
         self.ZoomHistory(self.Map.region['n'], self.Map.region['s'],
                          self.Map.region['e'], self.Map.region['w'])
 
         self.UpdateMap()
 
         self.parent.StatusbarUpdate()
-
+        
     def ZoomToWind(self, event):
         """
         Set display geometry to match computational

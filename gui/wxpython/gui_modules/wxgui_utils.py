@@ -228,9 +228,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         Debug.msg (4, "LayerTree.OnContextMenu: layertype=%s" % \
                        ltype)
 
-        ## pos = event.GetPosition()
-        ## pos = self.ScreenToClient(pos)
-
         if not hasattr (self, "popupID1"):
             self.popupID1 = wx.NewId()
             self.popupID2 = wx.NewId()
@@ -249,6 +246,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.popupID15 = wx.NewId()
 
         self.popupMenu = wx.Menu()
+
+        numSelected = len(self.GetSelections())
+        
         # general item
         self.popupMenu.Append(self.popupID1, text=_("Remove"))
         self.Bind(wx.EVT_MENU, self.gismgr.OnDeleteLayer, id=self.popupID1)
@@ -256,7 +256,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if ltype != "command": # rename
             self.popupMenu.Append(self.popupID2, text=_("Rename"))
             self.Bind(wx.EVT_MENU, self.RenameLayer, id=self.popupID2)
-
+            if numSelected > 1:
+                self.popupMenu.Enable(self.popupID2, False)
+            
         # map layer items
         if ltype != "group" and \
                 ltype != "command": # properties
@@ -265,11 +267,14 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.Bind(wx.EVT_MENU, self.OnPopupOpacityLevel, id=self.popupID8)
             self.popupMenu.Append(self.popupID3, text=_("Properties"))
             self.Bind(wx.EVT_MENU, self.OnPopupProperties, id=self.popupID3)
-            self.popupMenu.Append(self.popupID9, text=_("Zoom to selected map"))
+            self.popupMenu.Append(self.popupID9, text=_("Zoom to selected map(s)"))
             self.Bind(wx.EVT_MENU, self.mapdisplay.MapWindow.OnZoomToMap, id=self.popupID9)
-            self.popupMenu.Append(self.popupID10, text=_("Set computational region from selected map"))
+            self.popupMenu.Append(self.popupID10, text=_("Set computational region from selected map(s)"))
             self.Bind(wx.EVT_MENU, self.OnSetCompRegFromMap, id=self.popupID10)
-
+            if numSelected > 1:
+                self.popupMenu.Enable(self.popupID8, False)
+                self.popupMenu.Enable(self.popupID3, False)
+            
         # specific items
         try:
             mltype = self.GetPyData(self.layer_selected)[0]['type']
@@ -328,14 +333,20 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             
             self.popupMenu.Append(self.popupID7, _("Metadata"))
             self.Bind (wx.EVT_MENU, self.OnMetadata, id=self.popupID7)
-
+            if numSelected > 1:
+                self.popupMenu.Enable(self.popupID4, False)
+                self.popupMenu.Enable(self.popupID5, False)
+                self.popupMenu.Enable(self.popupID6, False)
+                self.popupMenu.Enable(self.popupID7, False)
+                self.popupMenu.Enable(self.popupID14, False)
+        
         #
         # raster layers (specific items)
         #
         elif mltype and mltype == "raster":
-            self.popupMenu.Append(self.popupID12, text=_("Zoom to selected map (ignore NULLs)"))
+            self.popupMenu.Append(self.popupID12, text=_("Zoom to selected map(s) (ignore NULLs)"))
             self.Bind(wx.EVT_MENU, self.mapdisplay.MapWindow.OnZoomToRaster, id=self.popupID12)
-            self.popupMenu.Append(self.popupID13, text=_("Set computational region from selected map (ignore NULLs)"))
+            self.popupMenu.Append(self.popupID13, text=_("Set computational region from selected map(s) (ignore NULLs)"))
             self.Bind(wx.EVT_MENU, self.OnSetCompRegFromRaster, id=self.popupID13)
             self.popupMenu.AppendSeparator()
             self.popupMenu.Append(self.popupID15, _("Set color table"))
@@ -350,6 +361,13 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 self.popupMenu.Append(self.popupID11, _("Nviz properties"))
                 self.Bind (wx.EVT_MENU, self.OnNvizProperties, id=self.popupID11)
 
+            if numSelected > 1:
+                self.popupMenu.Enable(self.popupID15, False)
+                self.popupMenu.Enable(self.popupID4, False)
+                self.popupMenu.Enable(self.popupID5, False)
+                self.popupMenu.Enable(self.popupID6, False)
+                self.popupMenu.Enable(self.popupID11, False)
+        
         ## self.PopupMenu(self.popupMenu, pos)
         self.PopupMenu(self.popupMenu)
         self.popupMenu.Destroy()

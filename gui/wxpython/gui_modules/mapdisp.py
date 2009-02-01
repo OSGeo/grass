@@ -1646,7 +1646,7 @@ class MapFrame(wx.Frame):
         point = wx.GetMousePosition()
         zoommenu = wx.Menu()
         # Add items to the menu
-        zoommap = wx.MenuItem(zoommenu, wx.ID_ANY, _('Zoom to selected map'))
+        zoommap = wx.MenuItem(zoommenu, wx.ID_ANY, _('Zoom to selected map(s)'))
         zoommenu.AppendItem(zoommap)
         self.Bind(wx.EVT_MENU, self.MapWindow.OnZoomToMap, zoommap)
 
