@@ -91,27 +91,30 @@ class VirtualAttributeList(wx.ListCtrl,
     Support virtual list class
     """
     def __init__(self, parent, log, mapDBInfo, layer):
-        wx.ListCtrl.__init__(self, parent=parent, id=wx.ID_ANY,
-                             style=wx.LC_REPORT | wx.LC_HRULES |
-                             wx.LC_VRULES | wx.LC_VIRTUAL | wx.LC_SORT_ASCENDING)
-
         #
         # initialize variables
         #
+        self.parent  = parent
         self.log     = log
         self.mapDBInfo = mapDBInfo
         self.layer   = layer
-
-        self.columns = {} # <- LoadData()
         
-        # self.selectedCats         = []
-        # self.lastTurnSelectedCats = [] # just temporary, for comparation
+        self.columns = {} # <- LoadData()
 
+        wx.ListCtrl.__init__(self, parent=parent, id=wx.ID_ANY,
+                             style=wx.LC_REPORT | wx.LC_HRULES |
+                             wx.LC_VRULES | wx.LC_VIRTUAL | wx.LC_SORT_ASCENDING)
+        
+        try:
+            keyColumn = self.LoadData(layer)
+        except gcmd.DBMError, e:
+            e.Show()
+            return
+        
         #
         # add some attributes (colourful background for each item rows)
         #
         self.attr1 = wx.ListItemAttr()
-        # self.attr1.SetBackgroundColour("light blue")
         self.attr1.SetBackgroundColour(wx.Colour(238,238,238))
         self.attr2 = wx.ListItemAttr()
         self.attr2.SetBackgroundColour("white")
@@ -121,9 +124,7 @@ class VirtualAttributeList(wx.ListCtrl,
         self.sm_dn = self.il.Add(wx.ArtProvider_GetBitmap(wx.ART_GO_DOWN, wx.ART_TOOLBAR,
                                                           (16,16)))
         self.SetImageList(self.il, wx.IMAGE_LIST_SMALL)
-
-        keyColumn = self.LoadData(layer)
-
+        
         # setup mixins
         listmix.ListCtrlAutoWidthMixin.__init__(self)
         listmix.ColumnSorterMixin.__init__(self, len(self.columns))
@@ -133,20 +134,12 @@ class VirtualAttributeList(wx.ListCtrl,
             self.SortListItems(col=keyColumn, ascending=True) 
         else:
             self.SortListItems(col=0, ascending=True) 
-
+        
         # events
         self.Bind(wx.EVT_LIST_ITEM_SELECTED,   self.OnItemSelected)
         self.Bind(wx.EVT_LIST_ITEM_DESELECTED, self.OnItemDeselected)
         self.Bind(wx.EVT_LIST_COL_CLICK,       self.OnColumnClick)     # sorting
-        # self.Bind(wx.EVT_LIST_DELETE_ITEM, self.OnItemDelete, self.list)
-        # self.Bind(wx.EVT_LIST_COL_RIGHT_CLICK, self.OnColRightClick, self.list)
-        # self.Bind(wx.EVT_LIST_COL_BEGIN_DRAG, self.OnColBeginDrag, self.list)
-        # self.Bind(wx.EVT_LIST_COL_DRAGGING, self.OnColDragging, self.list)
-        # self.Bind(wx.EVT_LIST_COL_END_DRAG, self.OnColEndDrag, self.list)
-        # self.Bind(wx.EVT_LIST_BEGIN_LABEL_EDIT, self.OnBeginEdit, self.list)
-        # self.list.Bind(wx.EVT_LEFT_DCLICK, self.OnDoubleClick)
-        # self.list.Bind(wx.EVT_RIGHT_DOWN, self.OnRightDown)
-
+        
     def Update(self, mapDBInfo):
         """Update list according new mapDBInfo description"""
         self.mapDBInfo = mapDBInfo
@@ -166,7 +159,13 @@ class VirtualAttributeList(wx.ListCtrl,
         
         tableName    = self.mapDBInfo.layers[layer]['table']
         keyColumn    = self.mapDBInfo.layers[layer]['key']
-        self.columns = self.mapDBInfo.tables[tableName]
+        try:
+            self.columns = self.mapDBInfo.tables[tableName]
+        except KeyError:
+            raise gcmd.DBMError(message=_("Attribute table <%s> not found. "
+                                          "For creating the table switch to "
+                                          "'Manage layers' tab.") % tableName,
+                                parent=self.parent)
         
         cmd = ["v.db.select",
                "-c", "--q",
@@ -415,6 +414,13 @@ class VirtualAttributeList(wx.ListCtrl,
         """Used by the ColumnSorterMixin, see wx/lib/mixins/listctrl.py"""
         return (self.sm_dn, self.sm_up)
 
+    def IsEmpty(self):
+        """Check if list if empty"""
+        if self.columns:
+            return False
+        
+        return True
+    
 class AttributeManager(wx.Frame):
     """
     GRASS Attribute manager main window
@@ -549,6 +555,14 @@ class AttributeManager(wx.Frame):
                 continue
 
             panel = wx.Panel(parent=self.browsePage, id=wx.ID_ANY)
+            win = VirtualAttributeList(panel, self.log,
+                                       self.mapDBInfo, layer)
+            if win.IsEmpty():
+                del panel
+                continue
+            
+            win.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.OnDataItemActivated)
+
             self.layerPage[layer] = {'browsePage': panel.GetId()}
 
             self.browsePage.AddPage(page=panel, text=" %d / %s %s" % \
@@ -566,9 +580,6 @@ class AttributeManager(wx.Frame):
 
             sqlSizer = wx.StaticBoxSizer(sqlBox, wx.VERTICAL)
 
-            win = VirtualAttributeList(panel, self.log,
-                                       self.mapDBInfo, layer)
-            win.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.OnDataItemActivated)
             win.Bind(wx.EVT_COMMAND_RIGHT_CLICK, self.OnDataRightUp) #wxMSW
             win.Bind(wx.EVT_RIGHT_UP,            self.OnDataRightUp) #wxGTK
             if UserSettings.Get(group='atm', key='leftDbClick', subkey='selection') == 0:
@@ -671,7 +682,7 @@ class AttributeManager(wx.Frame):
             self.OnChangeSql(None)
             self.log.write(_("Number of loaded records: %d") % \
                            self.FindWindowById(self.layerPage[self.layer]['data']).GetItemCount())
-        except IndexError:
+        except (IndexError, KeyError):
             self.layer = None
         
     def __createManageTablePage(self, onlyLayer=-1):
@@ -680,9 +691,15 @@ class AttributeManager(wx.Frame):
             if onlyLayer > 0 and layer != onlyLayer:
                 continue
             
+            if not self.layerPage.has_key(layer):
+                continue
+            
             panel = wx.Panel(parent=self.manageTablePage, id=wx.ID_ANY)
             self.layerPage[layer]['tablePage'] = panel.GetId()
-            self.manageTablePage.AddPage(page=panel, text=" %d / %s %s" % (layer, _("Table"), self.mapDBInfo.layers[layer]['table']))
+            self.manageTablePage.AddPage(page=panel,
+                                         text=" %d / %s %s" % (layer,
+                                                               _("Table"),
+                                                               self.mapDBInfo.layers[layer]['table']))
             
             pageSizer = wx.BoxSizer(wx.VERTICAL)
             
@@ -2588,7 +2605,7 @@ class LayerBook(wx.Notebook):
         
         if ret == None:
             return columns
-
+        
         for column in ret.splitlines():
             columns.append(column)
         
@@ -3331,7 +3348,11 @@ class VectorDBInfo(gselect.VectorDBInfo):
         
     def GetColumns(self, table):
         """Return list of columns names (based on their index)"""
-        names = [''] * len(self.tables[table].keys())
+        try:
+            names = [''] * len(self.tables[table].keys())
+        except KeyError:
+            return []
+        
         for name, desc in self.tables[table].iteritems():
             names[desc['index']] = name
 

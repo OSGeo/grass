@@ -61,17 +61,17 @@ class CmdThread(threading.Thread):
 
         self.start()
 
-    def RunCmd(self, callable, *args, **kwds):
+    def RunCmd(self, callable, onDone, *args, **kwds):
         CmdThread.requestId += 1
 
         self.requestCmd = None
-        self.requestQ.put((CmdThread.requestId, callable, args, kwds))
+        self.requestQ.put((CmdThread.requestId, callable, onDone, args, kwds))
         
         return CmdThread.requestId
 
     def run(self):
         while True:
-            requestId, callable, args, kwds = self.requestQ.get()
+            requestId, callable, onDone, args, kwds = self.requestQ.get()
             
             requestTime = time.time()
             event = wxCmdRun(cmd=args[0],
@@ -96,10 +96,11 @@ class CmdThread(threading.Thread):
             
             time.sleep(.1)
             
-            event = wxCmdDone(aborted=aborted,
-                              returncode=returncode,
-                              time=requestTime,
-                              pid=requestId)
+            event = wxCmdDone(aborted = aborted,
+                              returncode = returncode,
+                              time = requestTime,
+                              pid = requestId,
+                              onDone = onDone)
             
             wx.PostEvent(self.parent, event)
 
@@ -213,7 +214,8 @@ class GMConsole(wx.Panel):
 
         return False
 
-    def WriteLog(self, text, style=None, wrap=None):
+    def WriteLog(self, text, style = None, wrap = None,
+                 switchPage = False):
         """Generic method for writing log message in 
         given style
 
@@ -221,6 +223,10 @@ class GMConsole(wx.Panel):
         @param style text style (see GMStc)
         @param stdout write to stdout or stderr
         """
+        if switchPage and \
+                self.parent.notebook.GetSelection() != self.parent.goutput.pageid:
+            self.parent.notebook.SetSelection(self.parent.goutput.pageid)
+        
         if not style:
             style = self.cmd_output.StyleDefault
         
@@ -244,16 +250,21 @@ class GMConsole(wx.Panel):
         self.cmd_output.EnsureCaretVisible()
         
     def WriteCmdLog(self, line, pid=None):
-        """Write out line in selected style"""
+        """Write message in selected style"""
         if pid:
             line = '(' + str(pid) + ') ' + line
         self.WriteLog(line, style=self.cmd_output.StyleCommand)
 
     def WriteWarning(self, line):
-        """Write out line in warning style"""
+        """Write message in warning style"""
         self.WriteLog(line, style=self.cmd_output.StyleWarning)
 
-    def RunCmd(self, command, compReg=True, switchPage=False):
+    def WriteError(self, line):
+        """Write message in error style"""
+        self.WriteLog(line, style=self.cmd_output.StyleError)
+
+    def RunCmd(self, command, compReg=True, switchPage=False,
+               onDone = None):
         """
         Run in GUI GRASS (or other) commands typed into
         console command text widget, and send stdout output to output
@@ -269,6 +280,7 @@ class GMConsole(wx.Panel):
         @param command command (list)
         @param compReg if true use computation region
         @param switchPage switch to output page
+        @param onDone function to be called when command is finished
         """
         
         # map display window available ?
@@ -320,10 +332,13 @@ class GMConsole(wx.Panel):
                 #
                 
                 # switch to 'Command output'
-                if switchPage and \
-                        self.parent.notebook.GetSelection() != self.parent.goutput.pageid:
-                    self.parent.notebook.SetSelection(self.parent.goutput.pageid)
-
+                if switchPage:
+                    if self.parent.notebook.GetSelection() != self.parent.goutput.pageid:
+                        self.parent.notebook.SetSelection(self.parent.goutput.pageid)
+                    
+                    self.parent.SetFocus() # -> set focus
+                    self.parent.Raise()
+                
                 # activate computational region (set with g.region)
                 # for all non-display commands.
                 if compReg:
@@ -338,8 +353,9 @@ class GMConsole(wx.Panel):
                 else:
                     # process GRASS command with argument
                     self.cmdThread.RunCmd(GrassCmd,
+                                          onDone,
                                           cmdlist,
-                                          self.cmd_stdout, self.cmd_stderr)
+                                          self.cmd_stdout, self.cmd_stderr)                                          
                     
                     self.cmd_output_timer.Start(50)
 
@@ -493,6 +509,9 @@ class GMConsole(wx.Panel):
             except KeyError:
                 # stopped deamon
                 pass
+        
+        if event.onDone:
+            event.onDone(returncode = event.returncode)
         
         self.console_progressbar.SetValue(0) # reset progress bar on '0%'
 

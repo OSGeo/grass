@@ -85,7 +85,7 @@ class GException(Exception):
         self.Show()
         
         return ''
-
+    
 class GStdError(GException):
     """Generic exception"""
 
