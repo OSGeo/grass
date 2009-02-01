@@ -419,8 +419,10 @@ class GMFrame(wx.Frame):
             # ask user to save current settings
             if maptree.GetCount() > 0:
                 dlg = wx.MessageDialog(self,
-                                       message=_("Do you want to close display %d?\n\n%s") % \
-                                           (self.curr_pagenum + 1, message),
+                                       message=_("Do you want to close display %(display)d?"
+                                                 "\n\n%(message)s") % \
+                                           { 'display' : self.curr_pagenum + 1,
+                                             'message' : message },
                                        caption=_("Close display"),
                                        style=wx.YES_NO | wx.YES_DEFAULT |
                                        wx.CANCEL | wx.ICON_QUESTION | wx.CENTRE)
