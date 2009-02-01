@@ -48,8 +48,7 @@ int isosurf_get_res(int id, Tcl_Interp * interp, int argc, char *argv[])
     list[2] = z;
     list[3] = NULL;
 
-    interp->result = Tcl_Merge(3, list);
-    interp->freeProc = TCL_DYNAMIC;
+    Tcl_SetResult(interp, Tcl_Merge(3, list), TCL_DYNAMIC);
 
     return (TCL_OK);
 }
@@ -332,6 +331,7 @@ int isosurf_att_atoi(char *attname)
 int isosurf_get_mask_mode(int id, Tcl_Interp * interp, int argc, char *argv[])
 {
     int mode, isosurf_id;
+    char tmp[128];
 
     if (argc != 4) {
 	Tcl_SetResult(interp,
@@ -343,7 +343,8 @@ int isosurf_get_mask_mode(int id, Tcl_Interp * interp, int argc, char *argv[])
     isosurf_id = atoi(argv[3]);
 
     GVL_isosurf_get_maskmode(id, isosurf_id, &mode);
-    sprintf(interp->result, "%d", mode);
+    sprintf(tmp, "%d", mode);
+    Tcl_SetResult(interp, tmp, TCL_VOLATILE);
 
     return (TCL_OK);
 }
@@ -454,8 +455,7 @@ int slice_get_res(int id, Tcl_Interp * interp, int argc, char *argv[])
     list[2] = z;
     list[3] = NULL;
 
-    interp->result = Tcl_Merge(3, list);
-    interp->freeProc = TCL_DYNAMIC;
+    Tcl_SetResult(interp, Tcl_Merge(3, list), TCL_DYNAMIC);
 
     return (TCL_OK);
 }
@@ -577,8 +577,7 @@ int slice_get_pos(int id, Tcl_Interp * interp, int argc, char *argv[])
     list[6] = rdir;
     list[7] = NULL;
 
-    interp->result = Tcl_Merge(7, list);
-    interp->freeProc = TCL_DYNAMIC;
+    Tcl_SetResult(interp, Tcl_Merge(7, list), TCL_DYNAMIC);
 
     return (TCL_OK);
 }
@@ -699,6 +698,7 @@ int slice_move_down(int id, Tcl_Interp * interp, int argc, char *argv[])
 int slice_get_transp(int id, Tcl_Interp * interp, int argc, char *argv[])
 {
     int slice_id, transp;
+    char tmp[128];
 
     if (argc != 4) {
 	Tcl_SetResult(interp,
@@ -711,7 +711,8 @@ int slice_get_transp(int id, Tcl_Interp * interp, int argc, char *argv[])
 
     GVL_slice_get_transp(id, slice_id, &transp);
 
-    sprintf(interp->result, "%d", transp);
+    sprintf(tmp, "%d", transp);
+    Tcl_SetResult(interp, tmp, TCL_VOLATILE);
 
     return (TCL_OK);
 }

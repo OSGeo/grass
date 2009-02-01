@@ -33,7 +33,7 @@ int Nset_SDsurf_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter.
 
     /* Parse Arguments */
     if (argc != 2) {
-	interp->result = "Error: should be Nset_SDsurf id";
+	Tcl_SetResult(interp, "Error: should be Nset_SDsurf id", TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -51,7 +51,7 @@ int Nunset_SDsurf_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interprete
     )
 {
     if (argc != 1) {
-	interp->result = "Error: should be Nunset_SDsurf";
+	Tcl_SetResult(interp, "Error: should be Nunset_SDsurf", TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -69,7 +69,7 @@ int Nset_SDscale_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter
     float scale;
 
     if (argc != 2) {
-	interp->result = "Error: should be Nset_SDscale scale";
+	Tcl_SetResult(interp, "Error: should be Nset_SDscale scale", TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 

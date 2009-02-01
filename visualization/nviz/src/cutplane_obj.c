@@ -19,8 +19,8 @@ Nset_fence_color_cmd(Nv_data * data, Tcl_Interp * interp, int argc,
 {
     /* Verify arguments */
     if (argc != 2) {
-	sprintf(interp->result,
-		"Usage: Nset_fence_color ABOVE | BELOW | BLEND | GREY | OFF");
+	Tcl_SetResult(interp,
+		"Usage: Nset_fence_color ABOVE | BELOW | BLEND | GREY | OFF", TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -41,8 +41,8 @@ Nset_fence_color_cmd(Nv_data * data, Tcl_Interp * interp, int argc,
 	GS_set_fencecolor(FC_OFF);
     }
     else {
-	sprintf(interp->result,
-		"Error in Nset_fence_color, second argument must be one of ABOVE, BELOW, BLEND, GREY or OFF.");
+	Tcl_SetResult(interp,
+		"Error in Nset_fence_color, second argument must be one of ABOVE, BELOW, BLEND, GREY or OFF.", TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -133,6 +133,7 @@ int Ncutplane_obj_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interprete
     )
 {
     int id;
+    char tmp[128];
 
     id = get_cp_idnum(argv[0]);
 
@@ -153,9 +154,10 @@ int Ncutplane_obj_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interprete
     else if (!strcmp(argv[1], "get_trans"))
 	return (cp_get_trans(data, interp, id, argv, argc));
     else {
-	sprintf(interp->result,
+	sprintf(tmp,
 		"Usage: %s \tdraw [surf1 surf2]\n\t\ton\n\t\toff\n\t\tset_rot dx dy dz\n\t\tset_trans dx dy dz\n\t\tget_rot\n\t\tget_trans",
 		argv[0]);
+	Tcl_SetResult(interp, tmp, TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 }
@@ -189,7 +191,7 @@ int Nnew_cutplane_obj_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interp
     int num_id;
 
     if (argc != 2) {
-	interp->result = "Usage: Nnew_cutplane_obj id_num";
+	Tcl_SetResult(interp, "Usage: Nnew_cutplane_obj id_num", TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -367,10 +369,12 @@ draw_cp_obj(Nv_data * data, Tcl_Interp * interp, int id, char **argv,
 	    int argc)
 {
     int bound1, bound2;
+    char tmp[128];
 
     /* Verify arguments */
     if ((argc != 2) && (argc != 4)) {
-	sprintf(interp->result, "Usage: %s draw [surf1 surf2]", argv[0]);
+	sprintf(tmp, "Usage: %s draw [surf1 surf2]", argv[0]);
+	Tcl_SetResult(interp, tmp, TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -380,16 +384,18 @@ draw_cp_obj(Nv_data * data, Tcl_Interp * interp, int id, char **argv,
     }
     else {
 	if (Tcl_GetInt(interp, argv[2], &bound1) != TCL_OK) {
-	    sprintf(interp->result,
+	    sprintf(tmp,
 		    "Error in %s draw %s %s, expected integer argument in surf1 field",
 		    argv[0], argv[2], argv[3]);
+	    Tcl_SetResult(interp, tmp, TCL_VOLATILE);
 	    return (TCL_ERROR);
 	}
 
 	if (Tcl_GetInt(interp, argv[3], &bound2) != TCL_OK) {
-	    sprintf(interp->result,
+	    sprintf(tmp,
 		    "Error in %s draw %s %s, expected integer argument in surf2 field",
 		    argv[0], argv[2], argv[3]);
+	    Tcl_SetResult(interp, tmp, TCL_VOLATILE);
 	    return (TCL_ERROR);
 	}
     }
@@ -416,9 +422,11 @@ draw_cp_obj(Nv_data * data, Tcl_Interp * interp, int id, char **argv,
 int
 on_cp_obj(Nv_data * data, Tcl_Interp * interp, int id, char **argv, int argc)
 {
+    char tmp[128];
     /* Verify arguments are correct */
     if (argc != 2) {
-	sprintf(interp->result, "Usage: %s on", argv[0]);
+	sprintf(tmp, "Usage: %s on", argv[0]);
+	Tcl_SetResult(interp, tmp, TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -445,9 +453,11 @@ on_cp_obj(Nv_data * data, Tcl_Interp * interp, int id, char **argv, int argc)
 int
 off_cp_obj(Nv_data * data, Tcl_Interp * interp, int id, char **argv, int argc)
 {
+    char tmp[128];
     /* Verify arguments */
     if (argc != 2) {
-	sprintf(interp->result, "Usage: %s off", argv[0]);
+	sprintf(tmp, "Usage: %s off", argv[0]);
+	Tcl_SetResult(interp, tmp, TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -474,9 +484,11 @@ int
 state_cp_obj(Nv_data * data, Tcl_Interp * interp, int id, char **argv,
 	     int argc)
 {
+    char tmp[128];
     /* Verify arguments */
     if (argc != 2) {
-	sprintf(interp->result, "Usage: %s state", argv[0]);
+	sprintf(tmp, "Usage: %s state", argv[0]);
+	Tcl_SetResult(interp, tmp, TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -505,32 +517,37 @@ int
 cp_set_rot(Nv_data * data, Tcl_Interp * interp, int id, char **argv, int argc)
 {
     double dx, dy, dz;
+    char tmp[128];
 
     /* Verify arguments */
     if (argc != 5) {
-	sprintf(interp->result, "Usage: %s set_rot dx dy dz", argv[0]);
+	sprintf(tmp, "Usage: %s set_rot dx dy dz", argv[0]);
+	Tcl_SetResult(interp, tmp, TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
     /* Extract nummerical arguments */
     if (Tcl_GetDouble(interp, argv[2], &dx) != TCL_OK) {
-	sprintf(interp->result,
+	sprintf(tmp,
 		"Error in %s set_rot %s %s %s, expected numerical argument in dx field",
 		argv[0], argv[2], argv[3], argv[4]);
+	Tcl_SetResult(interp, tmp, TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
     if (Tcl_GetDouble(interp, argv[3], &dy) != TCL_OK) {
-	sprintf(interp->result,
+	sprintf(tmp,
 		"Error in %s set_rot %s %s %s, expected numerical argument in dy field",
 		argv[0], argv[2], argv[3], argv[4]);
+	Tcl_SetResult(interp, tmp, TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
     if (Tcl_GetDouble(interp, argv[4], &dz) != TCL_OK) {
-	sprintf(interp->result,
+	sprintf(tmp,
 		"Error in %s set_rot %s %s %s, expected numerical argument in dz field",
 		argv[0], argv[2], argv[3], argv[4]);
+	Tcl_SetResult(interp, tmp, TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -563,32 +580,37 @@ cp_set_trans(Nv_data * data, Tcl_Interp * interp, int id, char **argv,
 	     int argc)
 {
     double dx, dy, dz;
+    char tmp[128];
 
     /* Verify arguments */
     if (argc != 5) {
-	sprintf(interp->result, "Usage: %s set_trans dx dy dz", argv[0]);
+	sprintf(tmp, "Usage: %s set_trans dx dy dz", argv[0]);
+	Tcl_SetResult(interp, tmp, TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
     /* Extract nummerical arguments */
     if (Tcl_GetDouble(interp, argv[2], &dx) != TCL_OK) {
-	sprintf(interp->result,
+	sprintf(tmp,
 		"Error in %s set_trans %s %s %s, expected numerical argument in dx field",
 		argv[0], argv[2], argv[3], argv[4]);
+	Tcl_SetResult(interp, tmp, TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
     if (Tcl_GetDouble(interp, argv[3], &dy) != TCL_OK) {
-	sprintf(interp->result,
+	sprintf(tmp,
 		"Error in %s set_trans %s %s %s, expected numerical argument in dy field",
 		argv[0], argv[2], argv[3], argv[4]);
+	Tcl_SetResult(interp, tmp, TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
     if (Tcl_GetDouble(interp, argv[4], &dz) != TCL_OK) {
-	sprintf(interp->result,
+	sprintf(tmp,
 		"Error in %s set_trans %s %s %s, expected numerical argument in dz field",
 		argv[0], argv[2], argv[3], argv[4]);
+	Tcl_SetResult(interp, tmp, TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -614,9 +636,11 @@ int
 cp_get_rot(Nv_data * data, Tcl_Interp * interp, int id, char **argv, int argc)
 {
     char x[32], y[32], z[32];
+    char tmp[128];
 
     if (argc != 2) {
-	sprintf(interp->result, "Usage: %s get_rot", argv[0]);
+	sprintf(tmp, "Usage: %s get_rot", argv[0]);
+	Tcl_SetResult(interp, tmp, TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -642,9 +666,11 @@ cp_get_trans(Nv_data * data, Tcl_Interp * interp, int id, char **argv,
 	     int argc)
 {
     char x[32], y[32], z[32];
+    char tmp[128];
 
     if (argc != 2) {
-	sprintf(interp->result, "Usage: %s get_trans", argv[0]);
+	sprintf(tmp, "Usage: %s get_trans", argv[0]);
+	Tcl_SetResult(interp, tmp, TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 

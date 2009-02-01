@@ -905,8 +905,7 @@ int get_drawmode(int type, int id, Nv_data * data, Tcl_Interp * interp)
     list[2] = wire;
     list[3] = NULL;
 
-    interp->result = Tcl_Merge(3, list);
-    interp->freeProc = TCL_DYNAMIC;
+    Tcl_SetResult(interp, Tcl_Merge(3, list), TCL_DYNAMIC);
     return (TCL_OK);
 
 }
@@ -1028,8 +1027,7 @@ int get_res(int id, int type, Tcl_Interp * interp, int argc, char *argv[])
 	return (TCL_ERROR);
     }
 
-    interp->result = Tcl_Merge(n, list);
-    interp->freeProc = TCL_DYNAMIC;
+    Tcl_SetResult(interp, Tcl_Merge(n, list), TCL_DYNAMIC);
 
     return (TCL_OK);
 }
@@ -1193,8 +1191,7 @@ int get_trans(int id, int type, Tcl_Interp * interp)
     list[2] = ztrans;
     list[3] = NULL;
 
-    interp->result = Tcl_Merge(3, list);
-    interp->freeProc = TCL_DYNAMIC;
+    Tcl_SetResult(interp, Tcl_Merge(3, list), TCL_DYNAMIC);
 
     return (TCL_OK);
 }
@@ -2020,6 +2017,7 @@ int unset_att(int id, int type, Tcl_Interp * interp, int argc, char *argv[])
 int get_mask_mode(int id, int type, Nv_data * data, Tcl_Interp * interp)
 {
     int mode;
+    char tmp[10];
 
     if (type != SURF) {
 	Tcl_SetResult(interp, "Type must be SURF for get_mask_mode",
@@ -2028,7 +2026,9 @@ int get_mask_mode(int id, int type, Nv_data * data, Tcl_Interp * interp)
     }
 
     GS_get_maskmode(id, &mode);
-    sprintf(interp->result, "%d", mode);
+    sprintf(tmp, "%d", mode);
+    Tcl_ResetResult(interp);
+    Tcl_AppendResult(interp, tmp);
 
     return (TCL_OK);
 }
