@@ -9,4 +9,6 @@ DEPENDENCIES = $(GISDEP)
 
 LINK = $(CXX)
 
+ifneq ($(CXX),)
 default: cmd
+endif
