@@ -362,6 +362,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 self.Bind (wx.EVT_MENU, self.OnNvizProperties, id=self.popupID11)
 
             if numSelected > 1:
+                self.popupMenu.Enable(self.popupID12, False)
+                self.popupMenu.Enable(self.popupID13, False)
                 self.popupMenu.Enable(self.popupID15, False)
                 self.popupMenu.Enable(self.popupID4, False)
                 self.popupMenu.Enable(self.popupID5, False)
@@ -401,19 +403,28 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
          
     def OnSetCompRegFromMap(self, event):
         """Set computational region from selected raster/vector map"""
-        mapLayer = self.GetPyData(self.layer_selected)[0]['maplayer']
-        mltype = self.GetPyData(self.layer_selected)[0]['type']
-        
-        cmd = ['g.region']
-        
-        # TODO: other elements
-        if mltype == 'raster':
-            cmd.append('rast=%s' % mapLayer.name)
-        elif mltype == 'vector':
-            cmd.append('vect=%s' % mapLayer.name)
-        elif mltype == '3d-raster':
-            cmd.append('rast3d=%s' % mapLayer.name)
+        rast = []
+        vect = []
+        rast3d = []
+        for layer in self.GetSelections():
+            mapLayer = self.GetPyData(layer)[0]['maplayer']
+            mltype = self.GetPyData(layer)[0]['type']
+                
+            if mltype == 'raster':
+                rast.append(mapLayer.name)
+            elif mltype == 'vector':
+                vect.append(mapLayer.name)
+            elif mltype == '3d-raster':
+                rast3d.append(mapLayer.name)
 
+        cmd = ['g.region']
+        if rast:
+            cmd.append('rast=%s' % ','.join(rast))
+        if vect:
+            cmd.append('vect=%s' % ','.join(vect))
+        if rast3d:
+            cmd.append('rast3d=%s' % ','.join(rast3d))
+        
         # print output to command log area
         if len(cmd) > 1:
             cmd.append('-p')
