@@ -46,7 +46,7 @@ def GetTempfile(pref=None):
                           read = True,
                           pid = os.getpid())
 
-    tempfile = tempfileCmd.splitlines()[0].strip()
+    tempfile = ret.splitlines()[0].strip()
 
     # FIXME
     # ugly hack for MSYS (MS Windows)

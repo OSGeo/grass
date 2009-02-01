@@ -35,7 +35,7 @@ from preferences import globalSettings as UserSettings
 
 class Select(wx.combo.ComboCtrl):
     def __init__(self, parent, id, size,
-                 type, multiple=False, mapsets=None, exceptOf=[]):
+                 type=None, multiple=False, mapsets=None, exceptOf=[]):
         """
         Custom control to create a ComboBox with a tree control
         to display and select GIS elements within acessible mapsets.
@@ -51,13 +51,17 @@ class Select(wx.combo.ComboCtrl):
 
         self.SetPopupControl(self.tcp)
         self.SetPopupExtents(0,100)
-        self.tcp.GetElementList(type, mapsets, exceptOf)
-        self.tcp.SetData(type, mapsets, exceptOf, multiple)
+        if type:
+            self.tcp.GetElementList(type, mapsets, exceptOf)
+            self.tcp.SetData(type = type, mapsets = mapsets,
+                             exceptOf = exceptOf, multiple = multiple)
 
-    def SetElementList(self, type):
+    def SetElementList(self, type, mapsets = None, exceptOf = []):
         self.tcp.seltree.DeleteAllItems()
         self.tcp.GetElementList(type)
-
+        self.tcp.SetData(type = type, mapsets = mapsets,
+                         exceptOf = exceptOf)
+        
 class TreeCtrlComboPopup(wx.combo.ComboPopup):
     """
     Create a tree ComboBox for selecting maps and other GIS elements
@@ -303,12 +307,16 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
 
         evt.Skip()
 
-    def SetData(self, type, mapsets, exceptOf, multiple):
-        """Select multiple items?"""
-        self.type = type
-        self.mapsets = mapsets
-        self.exceptOf = exceptOf
-        self.multiple = multiple
+    def SetData(self, **kargs):
+        """Set object properties"""
+        if kargs.has_key('type'):
+            self.type = kargs['type']
+        if kargs.has_key('mapsets'):
+            self.mapsets = kargs['mapsets']
+        if kargs.has_key('exceptOf'):
+            self.exceptOf = kargs['exceptOf']
+        if kargs.has_key('multiple'):
+            self.multiple = kargs['multiple']
         
 class VectorDBInfo:
     """Class providing information about attribute tables

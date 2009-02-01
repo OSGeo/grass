@@ -1,25 +1,29 @@
 """
 @package georect.py
 
-Georectification module for GRASS GIS. Includes ground control
+@brief Georectification module for GRASS GIS. Includes ground control
 point management and interactive point and click GCP creation
 
 Classes:
- - Georectify
+ - GeorectWizard
+ - LocationPage
+ - GroupPage
+ - DispMapPage
  - GCP
- - GRMap
+ - GCPList
+ - VectGroup
+ - EditGCP
  - GrSettingsDialog
 
-COPYRIGHT: (C) 2006-2008 by the GRASS Development Team
-           This program is free software under the GNU General Public
-           License (>=v2). Read the file COPYING that comes with GRASS
-           for details.
+(C) 2006-2008 by the GRASS Development Team
+
+This program is free software under the GNU General Public License
+(>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Michael Barton
-Updated by Martin Landa <landa.martin gmail.com>
+@author Updated by Martin Landa <landa.martin gmail.com>
 """
 
-# recheck once completed to see how many of these are still needed
 import os
 import sys
 import tempfile
@@ -111,12 +115,14 @@ class GeorectWizard(object):
         self.grouppage = GroupPage(self.wizard, self)
         self.mappage = DispMapPage(self.wizard, self)
 
-        # Set the initial order of the pages
+        #
+        # set the initial order of the pages
+        #
         self.startpage.SetNext(self.grouppage)
         self.grouppage.SetPrev(self.startpage)
         self.grouppage.SetNext(self.mappage)
         self.mappage.SetPrev(self.grouppage)
-        
+
         #
         # do pages layout
         #
@@ -164,14 +170,14 @@ class GeorectWizard(object):
             if maptype == 'cell':
                 rendertype = 'raster'
                 cmdlist = ['d.rast', 'map=%s' % xy_map]
-            elif maptype == 'vector':
+            else: # -> vector layer
                 rendertype = 'vector'
                 cmdlist = ['d.vect', 'map=%s' % xy_map]
-
+            
             self.Map.AddLayer(type=rendertype, command=cmdlist, l_active=True,
                               name=utils.GetLayerNameFromCmd(cmdlist),
                               l_hidden=False, l_opacity=1.0, l_render=False)
-
+            
             #
             # start GCP form
             #
@@ -307,8 +313,10 @@ class LocationPage(TitledPage):
         #
         self.sizer.AddGrowableCol(2)
         # map type
-        self.rb_maptype = wx.RadioBox(parent=self, id=wx.ID_ANY, label=' %s ' % _("Map type to georectify"),
-                                      choices=[_('raster'), _('vector')], majorDimension=wx.RA_SPECIFY_COLS)
+        self.rb_maptype = wx.RadioBox(parent=self, id=wx.ID_ANY,
+                                      label=' %s ' % _("Map type to georectify"),
+                                      choices=[_('raster'), _('vector')],
+                                      majorDimension=wx.RA_SPECIFY_COLS)
         self.sizer.Add(item=self.rb_maptype,
                        flag=wx.ALIGN_CENTER | wx.ALL | wx.EXPAND, border=5,
                        pos=(1, 1), span=(1, 2))
@@ -353,7 +361,7 @@ class LocationPage(TitledPage):
             maptype = 'cell'
         else:
             maptype = 'vector'
-
+        
     def OnLocation(self, event):
         """Sets source location for map(s) to georectify"""
         self.xylocation = event.GetString()
@@ -393,9 +401,9 @@ class LocationPage(TitledPage):
             wx.MessageBox(_('You must select a valid location and mapset in order to continue'))
             event.Veto()
             return
-        else:
-            self.parent.SetSrcEnv(self.xylocation, self.xymapset)
-
+        
+        self.parent.SetSrcEnv(self.xylocation, self.xymapset)
+        
     def OnEnterPage(self, event=None):
         if self.xylocation == '' or self.xymapset == '':
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
@@ -440,8 +448,17 @@ class GroupPage(TitledPage):
         self.sizer.Add(item=wx.StaticText(parent=self, id=wx.ID_ANY, label=_('Create group if none exists')),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5,
                        pos=(2, 1))
+        btnSizer = wx.BoxSizer(wx.HORIZONTAL)
         self.btn_mkgroup = wx.Button(parent=self, id=wx.ID_ANY, label=_("Create/edit group..."))
-        self.sizer.Add(item=self.btn_mkgroup,
+        self.btn_vgroup = wx.Button(parent=self, id=wx.ID_ANY, label=_("Add vector map to group..."))
+        self.btn_vgroup.Hide()
+        btnSizer.Add(item=self.btn_mkgroup,
+                     flag=wx.RIGHT, border=5)
+
+        btnSizer.Add(item=self.btn_vgroup,
+                     flag=wx.LEFT, border=5)
+        
+        self.sizer.Add(item=btnSizer,
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5,
                        pos=(2, 2))
         
@@ -459,7 +476,6 @@ class GroupPage(TitledPage):
         # bindings
         #
         self.Bind(wx.EVT_COMBOBOX, self.OnGroup, self.cb_group)
-        self.Bind(wx.EVT_BUTTON, self.OnMkGroup, self.btn_mkgroup)
         self.Bind(wx.EVT_TEXT, self.OnExtension, self.ext_txt)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
@@ -470,19 +486,25 @@ class GroupPage(TitledPage):
         
     def OnMkGroup(self, event):
         """Create new group in source location/mapset"""
-        global maptype
+        menuform.GUI().ParseCommand(['i.group'],
+                                    completed=(self.GetOptData, None, ''),
+                                    parentframe=self.parent.parent, modal=True)
 
-        # open dialog
-        if maptype == 'cell':
-            menuform.GUI().ParseCommand(['i.group'],
-                                        completed=(self.GetOptData, None, ''),
-                                        parentframe=self.parent.parent, modal=True)
-        elif maptype == 'vector':
-            dlg = VectGroup(self, wx.ID_ANY, self.grassdatabase, self.xylocation, self.xymapset, self.xygroup)
-            if dlg.ShowModal() == wx.ID_OK:
-                dlg.MakeVGroup()
-                self.OnEnterPage()
+    def OnVGroup(self, event):
+        """Add vector maps to group"""
+        dlg = VectGroup(parent = self,
+                        id = wx.ID_ANY,
+                        grassdb = self.grassdatabase,
+                        location = self.xylocation,
+                        mapset = self.xymapset,
+                        group = self.xygroup)
 
+        if dlg.ShowModal() != wx.ID_OK:
+            return
+
+        dlg.MakeVGroup()
+        self.OnEnterPage()
+        
     def GetOptData(self, dcmd, layer, params, propwin):
         """Process i.group"""
         # update the page
@@ -507,47 +529,64 @@ class GroupPage(TitledPage):
             return
 
     def OnEnterPage(self, event=None):
+        global maptype
+        
         self.groupList = []
-        tmplist = []
 
         self.xylocation = self.parent.gisrc_dict['LOCATION_NAME']
         self.xymapset = self.parent.gisrc_dict['MAPSET']
 
         # create a list of groups in selected mapset
-        if os.path.isdir(os.path.join(self.grassdatabase,self.xylocation,self.xymapset,'group')):
-            tmplist = os.listdir(os.path.join(self.grassdatabase, self.xylocation, self.xymapset, 'group'))
-        else:
-            tmplist = []
-        # if (event and event.GetDirection()) and self.xygroup == '':
-        #             if tmplist == []:
-        #                 wx.MessageBox(_('No map/imagery groups exist to georectify. '
-        #                                 'You will need to create one.'))
-        #             else:
-        for item in tmplist:
-            if os.path.isdir(os.path.join(self.grassdatabase, self.xylocation, self.xymapset, 'group', item)):
-                self.groupList.append(item)
-                
+        if os.path.isdir(os.path.join(self.grassdatabase,
+                                      self.xylocation,
+                                      self.xymapset,
+                                      'group')):
+            tmplist = os.listdir(os.path.join(self.grassdatabase,
+                                              self.xylocation,
+                                              self.xymapset,
+                                              'group'))
+            for item in tmplist:
+                if os.path.isdir(os.path.join(self.grassdatabase,
+                                              self.xylocation,
+                                              self.xymapset,
+                                              'group',
+                                              item)):
+                    self.groupList.append(item)
+        
+        if maptype == 'cell':
+            self.btn_vgroup.Hide()
+            self.Bind(wx.EVT_BUTTON, self.OnMkGroup, self.btn_mkgroup)
+
+        elif maptype == 'vector':
+            self.btn_vgroup.Show()
+            self.Bind(wx.EVT_BUTTON, self.OnMkGroup, self.btn_mkgroup)
+            self.Bind(wx.EVT_BUTTON, self.OnVGroup, self.btn_vgroup)
+        
         utils.ListSortLower(self.groupList)
         self.cb_group.SetItems(self.groupList)
-        if len(self.groupList) > 0:
+        
+        if len(self.groupList) > 0 and \
+                self.xygroup == '':
             self.cb_group.SetSelection(0)
             self.xygroup = self.groupList[0]
-            
-        if self.xygroup == '' or self.extension == '':
+        
+        if self.xygroup == '' or \
+                self.extension == '':
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
         else:
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
-
+        
         # switch to source
         self.parent.SwitchEnv('new')
-
+    
 class DispMapPage(TitledPage):
     """
     Select ungeoreferenced map to display for interactively
     setting ground control points (GCPs).
     """
     def __init__(self, wizard, parent):
-        TitledPage.__init__(self, wizard, _("Select image/map to display for ground control point (GCP) creation"))
+        TitledPage.__init__(self, wizard,
+                            _("Select image/map to display for ground control point (GCP) creation"))
 
         self.parent = parent
         global maptype
@@ -558,8 +597,10 @@ class DispMapPage(TitledPage):
         self.sizer.Add(item=wx.StaticText(parent=self, id=wx.ID_ANY, label=_('Select display image/map:')),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5,
                        pos=(1, 1))
-        self.selection = gselect.Select(self, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE,
-                                        type=maptype)
+        
+        self.selection = gselect.Select(self, id=wx.ID_ANY,
+                                        size=globalvar.DIALOG_GSELECT_SIZE)
+        
         self.sizer.Add(item=self.selection,
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5,
                        pos=(1, 2))
@@ -597,7 +638,8 @@ class DispMapPage(TitledPage):
         global maptype
         global xy_map
         
-        self.selection.SetElementList(maptype)
+        self.selection.SetElementList(maptype,
+                                      mapsets = [self.parent.newmapset, ])
 
         if xy_map == '':
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
@@ -999,7 +1041,7 @@ class GCP(wx.Frame):
         
         if self.CheckGCPcount(msg=True) == False:
             return
-                
+
         if maptype == 'cell':
             self.grwiz.SwitchEnv('new')
             cmdlist = ['i.rectify','-a','group=%s' % self.xygroup,
@@ -1009,45 +1051,99 @@ class GCP(wx.Frame):
             
             self.parent.goutput.RunCmd(cmdlist, compReg=False,
                                        switchPage=True)
-
+            
             time.sleep(.1)
             self.grwiz.SwitchEnv('original')
 
         elif maptype == 'vector':
-            # loop through all vectors in VREF and move resulting vector to target location
-            f = open(self.vgrpfile)
+            # loop through all vectors in VREF
+            # and move resulting vector to target location
+            f = open(self.file['vgrp'])
             vectlist = []
             try:
-                for vect in f:
-                    vect = vect.strip(' \n')
+                for vect in f.readlines():
+                    vect = vect.strip('\n')
+                    if len(vect) < 1:
+                        continue
                     vectlist.append(vect)
             finally:
                 f.close()
             for vect in vectlist:
-                outname = vect+'_'+self.extension
-                p = gcmd.RunCommand('v.transform',
-                                    parent = self,
-                                    quiet = True,
-                                    input = vect,
-                                    output = outname, 
-                                    pointsfile = self.pointsfile)
-                
-            if p == 0:
-                wx.MessageBox("All maps were georectified successfully")
-                for vect in vectlist:
-                    outname = vect+'_'+self.extension
-                    xyvpath = os.path.join(self.grassdatabase,self.xylocation,self.xymapset,'vector',outname)
-                    vpath = os.path.join(self.grassdatabase,self.currentlocation,self.currentmapset,'vector',outname)
-                    if os.path.isfile(vpath):
-                        wx.MessageBox("%s already exists. Change extension name and georectify again" % outname)
-                    else:
-                        shutil.move(xyvpath, vpath)                
-                                    
-                wx.MessageBox('For vector files with attribute tables, you will need to manually copy the tables to the new location')
-            else:
-                wx.MessageBox('Some maps were not georectified successfully')
-        else:
+                self.grwiz.SwitchEnv('new')
+                self.outname = vect + '_' + self.extension
+                self.parent.goutput.WriteLog(text = _('Transforming <%s>...') % vect,
+                                             switchPage = True)
+                xyLayer = []
+                for layer in grass.vector_db(map = vect).itervalues():
+                    xyLayer.append((layer['driver'],
+                                    layer['database'],
+                                    layer['table']))
+                self.parent.goutput.RunCmd(['v.transform',
+                                            '--o',
+                                            'input=%s' % vect,
+                                            'output=%s' % self.outname,
+                                            'pointsfile=%s' % self.file['points']],
+                                           switchPage = True,
+                                           onDone = self.OnGeorectDone)
+
+                dbConnect = grass.db_connection()
+                for layer in xyLayer:                
+                    self.parent.goutput.RunCmd(['db.copy',
+                                                '--q',
+                                                '--o',
+                                                'from_driver=%s' % layer[0],
+                                                'from_database=%s' % layer[1],
+                                                'from_table=%s' % layer[2],
+                                                'to_driver=%s' % dbConnect['driver'],
+                                                'to_database=%s' % dbConnect['database'],
+                                                'to_table=%s' % layer[2] + '_' + self.extension])
+            
+    def OnGeorectDone(self, **kargs):
+        """Print final message"""
+        global maptype
+        if maptype == 'cell':
             return
+        
+        returncode = kargs['returncode']
+        
+        xyvpath = os.path.join(self.grassdatabase,
+                               self.xylocation,
+                               self.xymapset,
+                               'vector',
+                               self.outname)
+        vpath = os.path.join(self.grassdatabase,
+                             self.currentlocation,
+                             self.currentmapset,
+                             'vector',
+                             self.outname)
+        
+        if os.path.isdir(vpath):
+            self.parent.goutput.WriteWarning(_('Vector map <%s> already exists. '
+                                               'Change extension name and '
+                                               'georectify again.') % self.outname)
+        else:
+            if returncode == 0:
+                if not os.path.isdir(os.path.join(self.grassdatabase,
+                                                  self.currentlocation,
+                                                  self.currentmapset,
+                                                  'vector')):
+                    os.mkdir(os.path.join(self.grassdatabase,
+                                          self.currentlocation,
+                                          self.currentmapset,
+                                          'vector'))
+                shutil.move(xyvpath, vpath)        
+                
+                self.parent.goutput.WriteCmdLog(_('Vector map <%s> georectified '
+                                                  'successfully') % self.outname)
+                # copy attributes
+                self.parent.goutput.WriteLog(_('Copying attributes...'))
+                
+            else:
+                self.parent.goutput.WriteError(_('Georectification of vector map <%s> failed') %
+                                               self.outname)
+                
+        del self.outname
+        self.grwiz.SwitchEnv('original')
         
     def OnSettings(self, event):
         """Georectifier settings"""
@@ -1298,97 +1394,131 @@ class GCPList(wx.ListCtrl,
 class VectGroup(wx.Dialog):
     """
     Dialog to create a vector group (VREF file) for georectifying
-    """
 
+    @todo Replace by g.group
+    """
     def __init__(self, parent, id, grassdb, location, mapset, group,
-                style=wx.DEFAULT_DIALOG_STYLE):
-  
-        wx.Dialog.__init__(self, parent, id, style=style)
+                 style=wx.DEFAULT_DIALOG_STYLE):
+        
+        wx.Dialog.__init__(self, parent, id, style=style,
+                           title = _("Create vector map group"))
         
         self.grassdatabase = grassdb
         self.xylocation = location
         self.xymapset = mapset
         self.xygroup = group
         
+        #
         # get list of valid vector directories
-        vectlist = os.listdir(os.path.join(self.grassdatabase,self.xylocation,self.xymapset,'vector'))
+        #
+        vectlist = os.listdir(os.path.join(self.grassdatabase,
+                                           self.xylocation,
+                                           self.xymapset,
+                                           'vector'))
         for dir in vectlist:
-            if os.path.isfile(os.path.join(self.grassdatabase,self.xylocation,self.xymapset,'vector',dir,'coor')):
-                pass
-            else:
+            if not os.path.isfile(os.path.join(self.grassdatabase,
+                                           self.xylocation,
+                                           self.xymapset,
+                                           'vector',
+                                           dir,
+                                           'coor')):
                 vectlist.remove(dir)
         
-        self.vgrouplist = []
-        self.vgrpfile = os.path.join(self.grassdatabase,self.xylocation,self.xymapset,'group',self.xygroup,'VREF')
+        utils.ListSortLower(vectlist)
+        
+        # path to vref file
+        self.vgrpfile = os.path.join(self.grassdatabase,
+                                     self.xylocation,
+                                     self.xymapset,
+                                     'group',
+                                     self.xygroup,
+                                     'VREF')
+        
+        #
+        # buttons
+        #
+        self.btnCancel = wx.Button(parent = self,
+                                   id = wx.ID_CANCEL)
+        self.btnOK = wx.Button(parent = self,
+                                   id = wx.ID_OK)
+        self.btnOK.SetDefault()
+
+
+        #
+        # list of vector maps
+        #
+        self.listMap = wx.CheckListBox(parent = self, id = wx.ID_ANY,
+                                      choices = vectlist)
+        
         if os.path.isfile(self.vgrpfile):
             f = open(self.vgrpfile)
             try:
-                for line in f:
-                    if line != '':
-                        self.vgrouplist.append(line.strip(' \n'))
+                checked = []
+                for line in f.readlines():
+                    line = line.replace('\n', '')
+                    if len(line) < 1:
+                        continue
+                    checked.append(line)
+                self.listMap.SetCheckedStrings(checked)
             finally:
                 f.close()
-        
-        self.btnCancel = wx.Button(self, wx.ID_CANCEL)
-        self.btnSubmit = wx.Button(self, wx.ID_OK)
-        self.btnSubmit.SetDefault()
+                
+        line = wx.StaticLine(parent = self,
+                             id = wx.ID_ANY, size = (20, -1),
+                             style = wx.LI_HORIZONTAL)
 
+        #
+        # layout
+        #
         sizer = wx.BoxSizer(wx.VERTICAL)
         
         box = wx.BoxSizer(wx.HORIZONTAL)
-        label = wx.StaticText(parent=self, id=wx.ID_ANY,
-                              label='Select vector map(s) to add to group:')
-        box.Add(label, flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT | wx.LEFT, border=5)
-        self.addmap = wx.CheckListBox(self, -1, wx.DefaultPosition, wx.DefaultSize, vectlist)
-        box.Add(self.addmap, flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT| wx.LEFT, border=5)
-        sizer.Add(box, flag=wx.ALIGN_RIGHT | wx.ALL, border=3)
-        
-        box = wx.BoxSizer(wx.HORIZONTAL)
-        label = wx.StaticText(parent=self, id=wx.ID_ANY,
-                              label='Select vector map(s) to remove from group:')
-        box.Add(label, flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT | wx.LEFT, border=5)
-        self.remmap = wx.CheckListBox(self, -1, wx.DefaultPosition, wx.DefaultSize, self.vgrouplist)
-        box.Add(self.remmap, flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT| wx.LEFT, border=5)
-        sizer.Add(box, flag=wx.ALIGN_RIGHT | wx.ALL, border=3)
+        box.Add(item = wx.StaticText(parent = self, id = wx.ID_ANY,
+                                     label = _('Select vector map(s) to add to group:')),
+                flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT | wx.LEFT,
+                border = 5)
 
+        box.Add(item = self.listMap,
+                flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT | wx.LEFT,
+                border = 5)
+
+        
+        sizer.Add(box, flag = wx.ALIGN_RIGHT | wx.ALL,
+                  border = 3)
+        
+        sizer.Add(item = line, proportion = 0,
+                  flag = wx.GROW | wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
+                  border = 5)
+        
         # buttons
         btnSizer = wx.StdDialogButtonSizer()
         btnSizer.AddButton(self.btnCancel)
-        btnSizer.AddButton(self.btnSubmit)
+        btnSizer.AddButton(self.btnOK)
         btnSizer.Realize()
 
-        sizer.Add(item=btnSizer, proportion=0,
-                  flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
-
+        sizer.Add(item = btnSizer, proportion = 0,
+                  flag = wx.EXPAND | wx.ALL | wx.ALIGN_CENTER,
+                  border = 5)
+        
         self.SetSizer(sizer)
         sizer.Fit(self)
         self.Layout()
         
-        self.Bind(wx.EVT_CHECKLISTBOX, self.AddVect, self.addmap)
-        self.Bind(wx.EVT_CHECKLISTBOX, self.RemoveVect, self.remmap)
-
-    def AddVect(self, event):
-        index = event.GetSelection()
-        label = self.addmap.GetString(index)
-        if self.addmap.IsChecked(index):
-            self.vgrouplist.append(label)
-        self.addmap.SetSelection(index)    
-        event.Skip()
-        
-    def RemoveVect(self, event):
-        index = event.GetSelection()
-        label = self.remmap.GetString(index)
-        if self.remmap.IsChecked(index):
-            self.vgrouplist.remove(label)
-        self.remmap.SetSelection(index)    
-        event.Skip()
-        
     def MakeVGroup(self):
+        """Create VREF file"""
+        vgrouplist = []
+        for item in range(self.listMap.GetCount()):
+            if not self.listMap.IsChecked(item):
+                continue
+            vgrouplist.append(self.listMap.GetString(item))
+        
         f = open(self.vgrpfile, mode='w')
-        for vect in self.vgrouplist:
-            f.write(vect+'\n')
-         
-
+        try:
+            for vect in vgrouplist:
+                f.write(vect + '\n')
+        finally:
+            f.close()
+        
 class EditGPC(wx.Dialog):
     def __init__(self, parent, data, id=wx.ID_ANY,
                  title=_("Edit GCP"),
