@@ -10,6 +10,7 @@ $Date$
  	Python ElementTree (only for Python <= 2.4)
  wxPython >= 2.8.1.1
  swig >= 1.3.31 (required only for vector digitizer)
+ NumPy >= 1.0.4
  
  Get wxPython 2.8.x packages from:
  * Source: http://www.wxpython.org/download.php
@@ -37,15 +38,16 @@ $Date$
  apt-get install libwxbase2.8-0 libwxbase2.8-dbg libwxbase2.8-dev \
  	 libwxgtk2.8-0 libwxgtk2.8-dbg libwxgtk2.8-dev \
 	 python-wxgtk2.8 wx2.8-doc wx2.8-examples \
-	 wx2.8-headers wx2.8-i18n
+	 wx2.8-headers wx2.8-i18n python-numpy
 	 
  MS-WINDOWS ONLY REQUIREMENTS
  
  Python Extensions for MS-Windows >= Build 210
- NumPy >= 1.0.4
  
- Get Python Extensions for MS-Windows from: http://sourceforge.net/project/platformdownload.php?group_id=78018 
- Get NumPy from: http://sourceforge.net/project/showfiles.php?group_id=1369&package_id=175103  
+ Get Python Extensions for MS-Windows from:
+  http://sourceforge.net/project/platformdownload.php?group_id=78018 
+ Get NumPy from:
+  http://sourceforge.net/project/showfiles.php?group_id=1369&package_id=175103  
 
  NVIZ EXTENSION REQUIREMENTS
 
@@ -53,7 +55,6 @@ $Date$
  
  On Debian GNU/Linux install package:
  apt-get install python-opengl
-
 
 2 - STARTUP WITH GRASS INITIALIZATION
 
