@@ -36,8 +36,7 @@ int Nget_to_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. */
     list[3] = NULL;
 
 
-    interp->result = Tcl_Merge(3, list);
-    interp->freeProc = TCL_DYNAMIC;
+    Tcl_SetResult(interp, Tcl_Merge(3, list), TCL_DYNAMIC);
     return (TCL_OK);
 }
 
@@ -61,8 +60,7 @@ int Nget_from_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. *
     list[3] = NULL;
 
 
-    interp->result = Tcl_Merge(3, list);
-    interp->freeProc = TCL_DYNAMIC;
+    Tcl_SetResult(interp, Tcl_Merge(3, list), TCL_DYNAMIC);
 
 
     return (TCL_OK);
@@ -283,7 +281,7 @@ int Nset_focus_state_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpr
     else if (state_flag == 0)
 	GS_set_nofocus();	/* no center of view -- use viewdir */
     else {
-	interp->result = "Error: Flag must be either 0|1";
+	Tcl_SetResult(interp, "Error: Flag must be either 0|1", TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -459,8 +457,7 @@ int Nget_fov_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. */
     sprintf(fov_name, "%d", fov);
     list[0] = fov_name;
     list[1] = NULL;
-    interp->result = Tcl_Merge(1, list);
-    interp->freeProc = TCL_DYNAMIC;
+    Tcl_SetResult(interp, Tcl_Merge(1, list), TCL_DYNAMIC);
 
 
     return (TCL_OK);
@@ -498,8 +495,7 @@ int Nget_twist_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. 
     sprintf(twist_name, "%d", twist);
     list[0] = twist_name;
     list[1] = NULL;
-    interp->result = Tcl_Merge(1, list);
-    interp->freeProc = TCL_DYNAMIC;
+    Tcl_SetResult(interp, Tcl_Merge(1, list), TCL_DYNAMIC);
 
     return (TCL_OK);
 }
@@ -525,8 +521,7 @@ int Nget_region_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter.
     list[3] = west;
     list[4] = NULL;
 
-    interp->result = Tcl_Merge(4, list);
-    interp->freeProc = TCL_DYNAMIC;
+    Tcl_SetResult(interp, Tcl_Merge(4, list), TCL_DYNAMIC);
 
     return (TCL_OK);
 }
@@ -551,8 +546,7 @@ int Nget_point_on_surf_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current inter
 
     if (!GS_get_selected_point_on_surface(sx, sy, &id, &x, &y, &z)) {
 	list[0] = NULL;
-	interp->result = Tcl_Merge(0, list);
-	interp->freeProc = TCL_DYNAMIC;
+	Tcl_SetResult(interp, Tcl_Merge(0, list), TCL_DYNAMIC);
 
 	return (TCL_OK);
     }
@@ -568,8 +562,7 @@ int Nget_point_on_surf_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current inter
     list[3] = idname;
     list[4] = NULL;
 
-    interp->result = Tcl_Merge(4, list);
-    interp->freeProc = TCL_DYNAMIC;
+    Tcl_SetResult(interp, Tcl_Merge(4, list), TCL_DYNAMIC);
 
     return (TCL_OK);
 
@@ -600,8 +593,7 @@ int Nget_point_on_surf_vect(Nv_data * data, Tcl_Interp * interp, int argc,
 
     if (!GS_get_selected_point_on_surface(sx, sy, &id, &x, &y, &z)) {
 	list[0] = NULL;
-	interp->result = Tcl_Merge(0, list);
-	interp->freeProc = TCL_DYNAMIC;
+	Tcl_SetResult(interp, Tcl_Merge(0, list), TCL_DYNAMIC);
 
 	return (TCL_OK);
     }
@@ -618,8 +610,7 @@ int Nget_point_on_surf_vect(Nv_data * data, Tcl_Interp * interp, int argc,
     list[4] = (char *)query_vect(name, x, y);
     list[5] = NULL;
 
-    interp->result = Tcl_Merge(5, list);
-    interp->freeProc = TCL_DYNAMIC;
+    Tcl_SetResult(interp, Tcl_Merge(5, list), TCL_DYNAMIC);
 
     return (TCL_OK);
 
@@ -791,8 +782,7 @@ int Nget_zrange_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter.
     list[2] = NULL;
 
 
-    interp->result = Tcl_Merge(2, list);
-    interp->freeProc = TCL_DYNAMIC;
+    Tcl_SetResult(interp, Tcl_Merge(2, list), TCL_DYNAMIC);
     return (TCL_OK);
 }
 
@@ -802,7 +792,7 @@ Nget_xyrange_cmd(Nv_data * data, Tcl_Interp * interp, int argc, char **argv)
     char temp[40];
 
     if (argc != 1) {
-	interp->result = "Usage: Nget_xyrange";
+	Tcl_SetResult(interp, "Usage: Nget_xyrange", TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -834,8 +824,7 @@ int Nget_zextents_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interprete
     list[2] = cmid;
     list[3] = NULL;
 
-    interp->result = Tcl_Merge(3, list);
-    interp->freeProc = TCL_DYNAMIC;
+    Tcl_SetResult(interp, Tcl_Merge(3, list), TCL_DYNAMIC);
 
     return (TCL_OK);
 }
@@ -894,7 +883,7 @@ int Nsave_3dview_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter
 
     /* Try and find a surface to use as a reference */
     if ((Tcl_Eval(interp, "Nget_surf_list") != TCL_OK) ||
-	(Tcl_SplitList(interp, interp->result, &list_count, &list_space) !=
+	(Tcl_SplitList(interp, Tcl_GetStringResult(interp), &list_count, &list_space) !=
 	 TCL_OK)) {
 	Tcl_SetResult(interp,
 		      "Internal Error: Parse failure in Nsave_3dview_cmd",
@@ -941,7 +930,7 @@ int Nload_3dview_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter
 
     /* Try and find a surface to use as a reference */
     if ((Tcl_Eval(interp, "Nget_surf_list") != TCL_OK) ||
-	(Tcl_SplitList(interp, interp->result, &list_count, &list_space) !=
+	(Tcl_SplitList(interp, Tcl_GetStringResult(interp), &list_count, &list_space) !=
 	 TCL_OK)) {
 	Tcl_SetResult(interp,
 		      "Internal Error: Parse failure in Nsave_3dview_cmd",

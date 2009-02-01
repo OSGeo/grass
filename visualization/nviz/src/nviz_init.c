@@ -165,7 +165,7 @@ static int parse_command(Nv_data * data, Tcl_Interp * interp,	/* Current interpr
     /* Put in the "please wait..." message unless we are in demo mode */
     if ((strstr(argv[0], "nviz") != NULL) && (!demo->answer)) {
 	if (Tcl_Eval(interp, startup_script) != TCL_OK)
-	    G_fatal_error("%s", interp->result);
+	    G_fatal_error("%s", Tcl_GetStringResult(interp));
 
     }
 
@@ -219,7 +219,7 @@ static int parse_command(Nv_data * data, Tcl_Interp * interp,	/* Current interpr
     /* Look for scriptkill flag */
     if (script_kill->answer) {
 	if (Tcl_VarEval(interp, "set NvizScriptKill 1 ", NULL) != TCL_OK)
-	    G_fatal_error("%s", interp->result);
+	    G_fatal_error("%s", Tcl_GetStringResult(interp));
     }
 
     /* See if an alternative panel path is specified */
@@ -228,14 +228,14 @@ static int parse_command(Nv_data * data, Tcl_Interp * interp,	/* Current interpr
 	 */
 	if (Tcl_VarEval(interp, "set NvizAltPath ", panel_path->answer,
 			NULL) != TCL_OK)
-	    G_fatal_error("%s", interp->result);
+	    G_fatal_error("%s", Tcl_GetStringResult(interp));
     }
 
     /* Get State file from command line */
     if (state->answer) {
 	if (Tcl_VarEval(interp, "set NvizLoadState ", state->answer,
 			NULL) != TCL_OK)
-	    G_fatal_error("%s", interp->result);
+	    G_fatal_error("%s", Tcl_GetStringResult(interp));
     }
 
     /* See if a script file was specified */
@@ -243,7 +243,7 @@ static int parse_command(Nv_data * data, Tcl_Interp * interp,	/* Current interpr
 	/* If so then set the variable NvizPlayScript to the file */
 	if (Tcl_VarEval(interp, "set NvizPlayScript ", script->answer,
 			NULL) != TCL_OK)
-	    G_fatal_error("%s", interp->result);
+	    G_fatal_error("%s", Tcl_GetStringResult(interp));
     }
 
 #ifdef XSCRIPT
@@ -294,16 +294,16 @@ static int parse_command(Nv_data * data, Tcl_Interp * interp,	/* Current interpr
 
 	    /* See if we should autoload the color file */
 	    if (aload) {
-		strncpy(tmp, interp->result, 29);
+		strncpy(tmp, Tcl_GetStringResult(interp), 29);
 		if (colr->answers) {
 		    if (Tcl_VarEval(interp, tmp, " set_att color ",
 				    colr->answers[i], NULL) != TCL_OK)
-			G_fatal_error("%s", interp->result);
+			G_fatal_error("%s", Tcl_GetStringResult(interp));
 		}
 		else {
 		    if (Tcl_VarEval(interp, tmp, " set_att color ",
 				    elev->answers[i], NULL) != TCL_OK)
-			G_fatal_error("%s", interp->result);
+			G_fatal_error("%s", Tcl_GetStringResult(interp));
 		}
 	    }
 	}

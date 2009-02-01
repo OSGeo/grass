@@ -39,7 +39,7 @@ int Nset_interp_mode_cmd(Nv_data * data,	/* Local data */
     int mode;
 
     if (argc != 2) {
-	interp->result = "Error: should be Nset_interp_mode linear | spline";
+	Tcl_SetResult(interp, "Error: should be Nset_interp_mode linear | spline", TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -48,8 +48,9 @@ int Nset_interp_mode_cmd(Nv_data * data,	/* Local data */
     else if (!strncmp(argv[1], "spline", 6))
 	mode = KF_SPLINE;
     else {
-	interp->result =
-	    "Error: interpoloation type must be either linear or spline";
+	Tcl_SetResult(interp,
+	    "Error: interpoloation type must be either linear or spline",
+	    TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -83,7 +84,7 @@ int Nset_tension_cmd(Nv_data * data,	/* Local data */
     double tension;
 
     if (argc != 2) {
-	interp->result = "Error: should be Nset_tension float_value";
+	Tcl_SetResult(interp, "Error: should be Nset_tension float_value", TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -91,8 +92,9 @@ int Nset_tension_cmd(Nv_data * data,	/* Local data */
 	return (TCL_ERROR);
 
     if ((tension < 0) || (tension > 1)) {
-	interp->result =
-	    "Error: float_value should be between 0 and 1 inclusive";
+	Tcl_SetResult(interp,
+	    "Error: float_value should be between 0 and 1 inclusive",
+		TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -129,7 +131,7 @@ int Nshowtension_start_cmd(Nv_data * data,	/* Local data */
     /* Parse arguments */
 
     if (argc != 1) {
-	interp->result = "Error: should be Nshowtension_start";
+	Tcl_SetResult(interp, "Error: should be Nshowtension_start", TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -148,7 +150,7 @@ int Nupdate_tension_cmd(Nv_data * data,	/* Local data */
     /* Parse arguments */
 
     if (argc != 1) {
-	interp->result = "Error: should be Nupdate_tension";
+	Tcl_SetResult(interp, "Error: should be Nupdate_tension", TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -167,7 +169,7 @@ int Nshowtension_stop_cmd(Nv_data * data,	/* Local data */
     /* Parse arguments */
 
     if (argc != 1) {
-	interp->result = "Error: should be Nshowtension_stop";
+	Tcl_SetResult(interp, "Error: should be Nshowtension_stop", TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -203,7 +205,7 @@ int Nupdate_frames_cmd(Nv_data * data,	/* Local data */
     /* Parse arguments */
 
     if (argc != 1) {
-	interp->result = "Error: should be Nupdate_frames";
+	Tcl_SetResult(interp, "Error: should be Nupdate_frames", TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -239,7 +241,7 @@ int Nset_numsteps_cmd(Nv_data * data,	/* Local data */
     long num_frames;
 
     if (argc != 2) {
-	interp->result = "Error: should be Nset_numsteps #_frames";
+	Tcl_SetResult(interp, "Error: should be Nset_numsteps #_frames", TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -276,7 +278,7 @@ int Nclear_keys_cmd(Nv_data * data,	/* Local data */
     /* Parse arguments */
 
     if (argc != 1) {
-	interp->result = "Error: should be Nclear_keys";
+	Tcl_SetResult(interp, "Error: should be Nclear_keys", TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -349,10 +351,11 @@ int Nadd_key_cmd(Nv_data * data,	/* Local data */
     int force_replace;
     const char **listels;
     int numels, i;
+    char tmp[128];
 
     if (argc != 5) {
-	interp->result =
-	    "Error: should be Nadd_key pos fmask_list force_replace precis";
+	Tcl_SetResult(interp,
+	    "Error: should be Nadd_key pos fmask_list force_replace precis", TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -401,8 +404,9 @@ int Nadd_key_cmd(Nv_data * data,	/* Local data */
 	    fmask |= KF_ALL_MASK;
 	}
 	else {
-	    sprintf(interp->result, "Error: mask constant %s not understood",
+	    sprintf(tmp, "Error: mask constant %s not understood",
 		    listels[i]);
+	    Tcl_SetResult(interp, tmp, TCL_VOLATILE);
 	    Tcl_Free((char *)listels);
 	    return (TCL_ERROR);
 	}
@@ -446,9 +450,10 @@ int Ndelete_key_cmd(Nv_data * data,	/* Local data */
     double pos, precis;
     int justone;
     int num_deleted;
+    char tmp[10];
 
     if (argc != 4) {
-	interp->result = "Error: should be Ndelete_key pos precis justone";
+	Tcl_SetResult(interp, "Error: should be Ndelete_key pos precis justone", TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -462,7 +467,8 @@ int Ndelete_key_cmd(Nv_data * data,	/* Local data */
     /* Call the function */
     num_deleted = GK_delete_key((float)pos, (float)precis, justone);
 
-    sprintf(interp->result, "%d", num_deleted);
+    sprintf(tmp, "%d", num_deleted);
+    Tcl_SetResult(interp, tmp, TCL_VOLATILE);
     return (TCL_OK);
 
 }
@@ -494,9 +500,10 @@ int Nmove_key_cmd(Nv_data * data,	/* Local data */
     /* Parse arguments */
     double new_pos, old_pos, precis;
     int num_moved;
+    char tmp[10];
 
     if (argc != 4) {
-	interp->result = "Error: should be Nmove_key oldpos precis newpos";
+	Tcl_SetResult(interp, "Error: should be Nmove_key oldpos precis newpos", TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -515,7 +522,8 @@ int Nmove_key_cmd(Nv_data * data,	/* Local data */
 	    (float)old_pos, (float)precis, (float)new_pos);
     G_debug(3, "Frames moved = %d\n", num_moved);
 
-    sprintf(interp->result, "%d", num_moved);
+    sprintf(tmp, "%d", num_moved);
+    Tcl_SetResult(interp, tmp, TCL_VOLATILE);
     return (TCL_OK);
 
 }
@@ -547,8 +555,8 @@ int Ndo_framestep_cmd(Nv_data * data,	/* Local data */
     int render_type;
 
     if (argc != 3) {
-	interp->result =
-	    "Error: should be Ndo_framestep frame_# [TRUE | FALSE]";
+	Tcl_SetResult(interp,
+	    "Error: should be Ndo_framestep frame_# [TRUE | FALSE]", TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -589,7 +597,7 @@ int Nshow_site_cmd(Nv_data * data,	/* Local data */
 
     /* Parse arguments */
     if (argc != 2) {
-	interp->result = "Error: should be Nshow_site [ TRUE | FALSE] ";
+	Tcl_SetResult(interp, "Error: should be Nshow_site [ TRUE | FALSE] ", TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -612,7 +620,7 @@ int Nprint_keys_cmd(Nv_data * data,	/* Local data */
 {
     /* Parse arguments */
     if (argc != 2) {
-	interp->result = "Error: should be Nprint_keys filename";
+	Tcl_SetResult(interp, "Error: should be Nprint_keys filename", TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -633,7 +641,7 @@ int Nshow_vect_cmd(Nv_data * data,	/* Local data */
 
     /* Parse arguments */
     if (argc != 2) {
-	interp->result = "Error: should be Nshow_vect [ TRUE | FALSE] ";
+	Tcl_SetResult(interp, "Error: should be Nshow_vect [ TRUE | FALSE] ", TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -658,7 +666,7 @@ int Nshow_vol_cmd(Nv_data * data,	/* Local data */
 
     /* Parse arguments */
     if (argc != 2) {
-	interp->result = "Error: should be Nshow_vol [ TRUE | FALSE] ";
+	Tcl_SetResult(interp, "Error: should be Nshow_vol [ TRUE | FALSE] ", TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -683,7 +691,7 @@ int Nshow_lab_cmd(Nv_data * data,	/* Local data */
 
     /* Parse arguments */
     if (argc != 2) {
-	interp->result = "Error: should be Nshow_lab [ TRUE | FALSE] ";
+	Tcl_SetResult(interp, "Error: should be Nshow_lab [ TRUE | FALSE] ", TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -709,7 +717,7 @@ int Nshow_path_cmd(Nv_data * data,	/* Local data */
 
     /* Parse arguments */
     if (argc != 2) {
-	interp->result = "Error: should be Nshow_path [ TRUE | FALSE] ";
+	Tcl_SetResult(interp, "Error: should be Nshow_path [ TRUE | FALSE] ", TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -746,7 +754,7 @@ int Nwrite_ppm_cmd(Nv_data * data,	/* Local data */
 {
     /* Parse arguments */
     if (argc != 2) {
-	interp->result = "Error: should be Nwrite_ppm file_name";
+	Tcl_SetResult(interp, "Error: should be Nwrite_ppm file_name", TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -779,7 +787,7 @@ int Nwrite_tif_cmd(Nv_data * data,	/* Local data */
 {
     /* Parse arguments */
     if (argc != 2) {
-	interp->result = "Error: should be Nwrite_ppm file_name";
+	Tcl_SetResult(interp, "Error: should be Nwrite_ppm file_name", TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -787,7 +795,7 @@ int Nwrite_tif_cmd(Nv_data * data,	/* Local data */
     /* Call the function */
     GS_write_tif(argv[1]);
 #else
-    interp->result = "Error: no TIFF support";
+    Tcl_SetResult(interp, "Error: no TIFF support", TCL_VOLATILE);
     return (TCL_ERROR);
 #endif
 
@@ -809,7 +817,7 @@ int Noff_screen_cmd(Nv_data * data,	/* Local data */
 
     /* Parse arguments */
     if (argc != 2) {
-	interp->result = "Error: should be Noff_screen flag";
+	Tcl_SetResult(interp, "Error: should be Noff_screen flag", TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -818,14 +826,14 @@ int Noff_screen_cmd(Nv_data * data,	/* Local data */
 
     if (flag == 1) {
 	if (Create_OS_Ctx(width, height) == -1) {
-	    interp->result = "Error: Off screen context returned error";
+	    Tcl_SetResult(interp, "Error: Off screen context returned error", TCL_VOLATILE);
 	    return (TCL_ERROR);
 	}
 
     }
     else {
 	if (Destroy_OS_Ctx() == -1) {
-	    interp->result = "Error: Destroy context returned error";
+	    Tcl_SetResult(interp, "Error: Destroy context returned error", TCL_VOLATILE);
 	    return (TCL_ERROR);
 	}
     }
@@ -846,14 +854,14 @@ int Ninit_mpeg_cmd(Nv_data * data,	/* Local data */
 {
     /* Parse arguments */
     if (argc != 2) {
-	interp->result = "Error: should be Ninit_mpeg file_name";
+	Tcl_SetResult(interp, "Error: should be Ninit_mpeg file_name", TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
     /* Call the function */
     if (gsd_init_mpeg(argv[1])) {
-	interp->result =
-	    "Error: gsd_init_mpeg failed to initialize MPEG stream";
+	Tcl_SetResult(interp,
+	    "Error: gsd_init_mpeg failed to initialize MPEG stream", TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -872,7 +880,7 @@ int Nwrite_mpeg_frame_cmd(Nv_data * data,	/* Local data */
 {
     /* Parse arguments */
     if (argc != 1) {
-	interp->result = "Error: should be Nwrite_mpeg_frame";
+	Tcl_SetResult(interp, "Error: should be Nwrite_mpeg_frame", TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -894,7 +902,7 @@ int Nclose_mpeg_cmd(Nv_data * data,	/* Local data */
 {
     /* Parse arguments */
     if (argc != 1) {
-	interp->result = "Error: should be Nclose_mpeg";
+	Tcl_SetResult(interp, "Error: should be Nclose_mpeg", TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 

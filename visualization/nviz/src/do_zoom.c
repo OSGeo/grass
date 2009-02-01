@@ -67,8 +67,8 @@ int Nstart_zoom_cmd(Nv_data * data,	/* Local data */
 
     /* Parse arguments */
     if (argc != 4) {
-	interp->result =
-	    "Error: should be Nstart_zoom file_name width height";
+	Tcl_SetResult(interp,
+	    "Error: should be Nstart_zoom file_name width height", TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 

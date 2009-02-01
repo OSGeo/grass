@@ -193,8 +193,7 @@ int Nget_fly_scale_cmd(Nv_data * data, Tcl_Interp * interp, int argc,
     list[0] = scale0;
     list[1] = scale1;
 
-    interp->result = Tcl_Merge(2, list);
-    interp->freeProc = TCL_DYNAMIC;
+    Tcl_SetResult(interp, Tcl_Merge(2, list), TCL_DYNAMIC);
     return (TCL_OK);
 }
 
