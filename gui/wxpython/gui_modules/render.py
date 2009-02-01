@@ -560,9 +560,9 @@ class Map(object):
             self.height = 480
             return False
 
-    def GetRegion(self, rast=None, zoom=False, vect=None,
-                  n=None, s=None, e=None, w=None, default=False,
-                  update=False):
+    def GetRegion(self, rast = [], zoom = False, vect = [],
+                  n = None, s = None, e = None, w = None, default = False,
+                  update = False):
         """
         Get region settings (g.region -upgc)
 
@@ -607,21 +607,21 @@ class Map(object):
 
         if rast:
             if zoom:
-                cmdList.append('zoom=%s' % rast)
+                cmdList.append('zoom=%s' % ','.join(rast))
             else:
-                cmdList.append('rast=%s' % rast)
+                cmdList.append('rast=%s' % ','.join(rast))
 
         if vect:
-            cmdList.append('vect=%s' % vect)
+            cmdList.append('vect=%s' % ','.join(vect))
         
         try:
             cmdRegion = gcmd.Command(cmdList)
         except gcmd.CmdError, e:
             if rast:
-                e.message = _("Unable to zoom to raster map <%s>.") % rast + \
+                e.message = _("Unable to zoom to raster map <%s>.") % rast[0] + \
                 '%s%s' % (os.linesep, os.linesep) + e.message
             elif vect:
-                e.message = _("Unable to zoom to vector map <%s>.") % vect + \
+                e.message = _("Unable to zoom to vector map <%s>.") % vect[0] + \
                 '%s%s' % (os.linesep, os.linesep) + e.message
 
             print >> sys.stderr, e

@@ -399,6 +399,7 @@ class WriteWorkspaceFile(object):
     def __writeLayer(self, mapTree, item):
         """Write bunch of layers to GRASS Workspace XML file"""
         self.indent += 4
+        itemSelected = mapTree.GetSelections()
         while item and item.IsOk():
             type = mapTree.GetPyData(item)[0]['type']
             if type != 'group':
@@ -433,7 +434,7 @@ class WriteWorkspaceFile(object):
 
                 self.indent += 4
                 # selected ?
-                if item == mapTree.layer_selected:
+                if item in itemSelected:
                     self.file.write('%s<selected />\n' % (' ' * self.indent))
                 # layer properties
                 self.file.write('%s<task name="%s">\n' % (' ' * self.indent, cmd[0]))
