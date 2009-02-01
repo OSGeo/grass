@@ -1392,10 +1392,9 @@ CAIROLIB=
 
 if test -n "$USE_CAIRO"; then
 
+cairo="cairo cairo-ft"
 if test -n "$USE_X11"; then
-	cairo=cairo\ cairo-xlib-xrender
-else
-	cairo=cairo
+	cairo="$cairo cairo-xlib-xrender"
 fi
 
 # With Cairo includes directory
@@ -1414,6 +1413,9 @@ LOC_CHECK_LIB_PATH(cairo,cairo,CAIROLIB)
 LOC_CHECK_LDFLAGS(cairo,cairo,CAIROLIB)
 
 LOC_CHECK_FUNC(cairo_create,,,,,$CAIROLIB,[:])
+LOC_CHECK_FUNC(cairo_xlib_surface_create_with_xrender_format,,,,,$CAIROLIB,
+[CAIRO_HAS_XRENDER=1],[CAIRO_HAS_XRENDER=0])
+AC_SUBST(CAIRO_HAS_XRENDER)
 
 CAIROLIB="$CAIROLIB $CAIROLDFLAGS"
 
