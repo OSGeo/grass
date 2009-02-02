@@ -387,20 +387,15 @@ class MapCalcFrame(wx.Frame):
             wx.MessageBox("You must enter a mapcalc statement to create a new map")
             return
 
-        try:
-            mctxt = self.text_mcalc.GetValue().strip().replace("\n"," ")
-            mctxt = mctxt.replace(" ","")
-            if self.dimension == 3:
-                cmdlist = ["r3.mapcalc"," %s=%s" % (self.newmap,mctxt)]
-            else:
-                cmdlist = ["r.mapcalc"," %s=%s" % (self.newmap,mctxt)]
-
-            p = gcmd.Command(cmdlist)
-            if p.returncode == 0:
-                wx.MessageBox("Map %s created successfully" % self.newmap)
-        except:
-            pass
-
+        mctxt = self.text_mcalc.GetValue().strip().replace("\n"," ")
+        mctxt = mctxt.replace(" ","")
+        if self.dimension == 3:
+            gcmd.RunCommand('r3.mapcalc',
+                            expression = "%s=%s" % (self.newmap,mctxt))
+        else:
+            gcmd.RunCommand('r.mapcalc',
+                            expression = "%s=%s" % (self.newmap,mctxt))
+        
     def OnClear(self, event):
         """
         Clears text area

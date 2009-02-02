@@ -124,16 +124,15 @@ class NewVectorDialog(wx.Dialog):
 
         return mapName
     
-def CreateNewVector(parent, cmdDef, title=_('Create new vector map'),
+def CreateNewVector(parent, cmd, title=_('Create new vector map'),
                     exceptMap=None, log=None, disableAdd=False):
     """Create new vector map layer
 
-    @cmdList tuple/list (cmd list, output paramater)
+    @cmd cmd (prog, **kwargs)
     
     @return tuple (name of create vector map, add to layer tree)
     @return None of failure
     """
-    cmd = cmdDef[0]
     dlg = NewVectorDialog(parent, wx.ID_ANY, title,
                           disableAdd)
     if dlg.ShowModal() == wx.ID_OK:
@@ -148,13 +147,14 @@ def CreateNewVector(parent, cmdDef, title=_('Create new vector map'),
         if outmap == '': # should not happen
             return False
         
-        cmd.append("%s=%s" % (cmdDef[1], outmap))
+        cmd[1][cmd[2]] = outmap
         
         try:
             listOfVectors = grass.list_grouped('vect')[grass.gisenv()['MAPSET']]
         except KeyError:
             listOfVectors = []
         
+        overwrite = False
         if not UserSettings.Get(group='cmd', key='overwrite', subkey='enabled') and \
                 outmap in listOfVectors:
             dlgOw = wx.MessageDialog(parent, message=_("Vector map <%s> already exists "
@@ -163,18 +163,21 @@ def CreateNewVector(parent, cmdDef, title=_('Create new vector map'),
                                      caption=_("Overwrite?"),
                                      style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
             if dlgOw.ShowModal() == wx.ID_YES:
-                cmd.append('--overwrite')
+                overwrite = True
             else:
                 dlgOw.Destroy()
                 return False
 
         if UserSettings.Get(group='cmd', key='overwrite', subkey='enabled') is True:
-            cmd.append('--overwrite')
+            overwrite = True
         
         try:
-            gcmd.Command(cmd)
+            print cmd
+            gcmd.RunCommand(prog = cmd[0],
+                            overwrite = overwrite,
+                            **cmd[1])
         except gcmd.CmdError, e:
-            print >> sys.stderr, e
+            e.Show()
             return None
 
         #

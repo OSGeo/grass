@@ -514,9 +514,11 @@ class GMFrame(wx.Frame):
 
     def OnNewVector(self, event):
         """Create new vector map layer"""
-        name, add = gdialogs.CreateNewVector(self, log=self.goutput,
-                                             cmdDef=(['v.edit', 'tool=create'], "map"))
-
+        name, add = gdialogs.CreateNewVector(self, log = self.goutput,
+                                             cmd = (('v.edit',
+                                                     { 'tool' : 'create' },
+                                                     'map')))
+        
         if name and add:
             # add layer to map layer tree
             self.curr_page.maptree.AddLayer(ltype='vector',

@@ -65,7 +65,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None,
                         layerType=None):
     """Get map name from GRASS command
 
-    @param dcmd GRASS command (given as list)
+    @param dcmd GRASS command (given as tuple)
     @param fullyQualified change map name to be fully qualified
     @param force parameter otherwise 'input'/'map'
     @param update change map name in command
@@ -76,7 +76,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None,
     """
     mapname = ''
 
-    if len(dcmd) < 1:
+    if not dcmd:
         return mapname
     
     if 'd.grid' == dcmd[0]:
@@ -201,38 +201,27 @@ def ListOfMapsets(all=False):
     @return list of mapsets
     """
     mapsets = []
-
-    ### FIXME
-    # problem using Command here (see preferences.py)
-    # cmd = gcmd.Command(['g.mapsets', '-l'])
+    
     if all:
-        cmd = subprocess.Popen(['g.mapsets' + globalvar.EXT_BIN, '-l'],
-                               stdout=subprocess.PIPE)
+        ret = gcmd.RunCommand('g.mapsets',
+                              read = True,
+                              flags = 'l')
     
-        try:
-            # for mset in cmd.ReadStdOutput()[0].split(' '):
-            for line in cmd.stdout.readlines():
-                for mset in line.strip('%s' % os.linesep).split(' '):
-                    if len(mset) == 0:
-                        continue
-                    mapsets.append(mset)
-        except:
-            raise gcmd.CmdError(_('Unable to get list of available mapsets.'))
-    
+        if ret:
+            mapsets = ret.rstrip('\n').split(' ')
+        else:
+            raise gcmd.CmdError(cmd = 'g.mapsets',
+                                message = _('Unable to get list of available mapsets.'))
     else:
-        # cmd = gcmd.Command(['g.mapsets', '-p'])
-        cmd = subprocess.Popen(['g.mapsets' + globalvar.EXT_BIN, '-p'],
-                               stdout=subprocess.PIPE)
-        try:
-            # for mset in cmd.ReadStdOutput()[0].split(' '):
-            for line in cmd.stdout.readlines():
-                for mset in line.strip('%s' % os.linesep).split(' '):
-                    if len(mset) == 0:
-                        continue
-                    mapsets.append(mset)
-        except:
-            raise gcmd.CmdError(_('Unable to get list of accessible mapsets.'))
-
+        ret = gcmd.RunCommand('g.mapsets',
+                              read = True,
+                              flags = 'p')
+        if ret:
+            mapsets = ret.rstrip('\n').split(' ')
+        else:
+            raise gcmd.CmdError(cmd = 'g.mapsets',
+                                message = _('Unable to get list of accessible mapsets.'))
+        
         ListSortLower(mapsets)
     
     return mapsets
@@ -330,6 +319,40 @@ def __ll_parts(value):
         s = '%.4f' % s
     
     return str(d) + ':' + m + ':' + s
+
+def GetCmdString(cmd):
+    """
+    Get GRASS command as string.
+    
+    @param cmd GRASS command given as tuple
+    
+    @return command string
+    """
+    scmd = ''
+    if not cmd:
+        return ''
+    scmd = cmd[0]
+    for k, v in cmd[1].iteritems():
+        scmd += ' %s=%s' % (k, v)
+    return scmd
+
+def CmdToTuple(self, cmd):
+    """Convert command list to tuple for gcmd.RunCommand()"""
+    if len(cmd) < 1:
+        return None
+        
+    dcmd = {}
+    for item in cmd[1:]:
+        if '=' in item:
+            key, value = item.split('=')
+            dcmd[str(key)] = str(value)
+        else: # -> flags
+            if not dmcd.has_key('flags'):
+                dcmd['flags'] = ''
+            dmcd['flags'] += item.replace('-', '')
+                
+    return (cmd[0],
+            dcmd)
 
 def reexec_with_pythonw():
     """Re-execute Python on Mac OS"""
