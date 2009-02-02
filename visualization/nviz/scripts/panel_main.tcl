@@ -130,12 +130,12 @@ proc mkmainPanel { BASE } {
 	menubutton $BASE.redrawf.f11.m1 -menu $BASE.redrawf.f11.m1.m \
 		-text "Main features..." -underline 0 -justify left \
 		-indicator on -anchor center -relief raised -bd 1
-	help $BASE.redrawf.f11.m1 balloon "Select main draw features"
+	#help $BASE.redrawf.f11.m1 balloon "Select main draw features"
 
 	menubutton $BASE.redrawf.f11.m2 -menu $BASE.redrawf.f11.m2.m \
 		-text "Decorations..." -underline 0	 -justify left \
 		-indicator on -anchor center -relief raised -bd 1
-	help $BASE.redrawf.f11.m2 balloon "Select misc. draw features"
+	#help $BASE.redrawf.f11.m2 balloon "Select misc. draw features"
 
 	menu $BASE.redrawf.f11.m1.m
 

@@ -121,7 +121,7 @@ proc Nv_mksdiffSurfacelist { P } {
     set name [Nget_current sdiff]
 
     if {$name == 0} {
-	set name "none selected"
+	set name "None selected   "
     } else {
 	set n [lsearch $list $name]
 	set list [lreplace $list $n $n]
