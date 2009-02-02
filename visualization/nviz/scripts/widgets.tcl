@@ -420,7 +420,7 @@ proc Nv_mkMenu { P mname bnames underlines commands} {
 		}
 		incr j
 	}
-
+	
 	return $P
 }
 
@@ -593,7 +593,7 @@ proc mkMapList { P type {cmd null}} {
 	set name [Nget_current $type]
 
 	if {[llength $list] == 0} {
-		set name "None Loaded"
+		set name "None Loaded   "
 	} else {
 		set n [lsearch $list $name]
 		set list [lreplace $list $n $n]
