@@ -336,7 +336,7 @@ def GetCmdString(cmd):
         scmd += ' %s=%s' % (k, v)
     return scmd
 
-def CmdToTuple(self, cmd):
+def CmdToTuple(cmd):
     """Convert command list to tuple for gcmd.RunCommand()"""
     if len(cmd) < 1:
         return None
