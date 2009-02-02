@@ -49,6 +49,12 @@ extern void p_cubic(struct cache *, void *, int, double *, double *,
 /* nearest.c */
 extern void p_nearest(struct cache *, void *, int, double *, double *,
 		      struct Cell_head *);
+/* bilinear_f.c */
+extern void p_bilinear_f(struct cache *, void *, int, double *, double *,
+		       struct Cell_head *);
+/* cubic_f.c */
+extern void p_cubic_f(struct cache *, void *, int, double *, double *,
+		    struct Cell_head *);
 
 #if 1
 

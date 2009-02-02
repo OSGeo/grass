@@ -108,8 +108,16 @@ The bilinear and cubic interpolation methods are most appropriate for
 continuous data and cause some smoothing. Both options should not be used
 with categorical data, since the cell values will be altered.
 <p>
+In the bilinear and cubic methods, if any of the surrounding cells used to
+interpolate the new cell value are null, the resulting cell will be null, even if
+the nearest cell is not null. This will cause some thinning along null borders,
+such as the coasts of land areas in a DEM. The bilinear_f and cubic_f
+interpolation methods can be used if thinning along null edges is not desired.
+These methods "fall back" to simpler interpolation methods along null borders.
+That is, from cubic to bilinear to nearest.
+<p>
 If nearest neighbor assignment is used, the output map has the same raster
-format as the input map. If any of the both interpolations is used, the
+format as the input map. If any of the interpolations is used, the
 output map is written as floating point.
 
 <p>

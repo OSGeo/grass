@@ -67,6 +67,8 @@ struct menu menu[] = {
     {p_nearest, "nearest", "nearest neighbor"},
     {p_bilinear, "bilinear", "bilinear"},
     {p_cubic, "cubic", "cubic convolution"},
+    {p_bilinear_f, "bilinear_f", "bilinear with fallback"},
+    {p_cubic_f, "cubic_f", "cubic convolution with fallback"},
     {NULL, NULL, NULL}
 };
 
