@@ -72,9 +72,9 @@ class Layer(object):
         @param hidden layer is hidden, won't be listed in Layer Manager if True
         @param opacity layer opacity <0;1>
         """
-        self.type    = type
-        self.name    = name
-        self.cmdlist = cmd
+        self.type = type
+        self.name = name
+        self.cmd  = utils.CmdToTuple(cmd)
 
         self.active  = active
         self.hidden  = hidden
@@ -105,7 +105,7 @@ class Layer(object):
         @return rendered image filename
         @return None on error
         """
-        if len(self.cmdlist) == 0:
+        if not self.cmd:
             return None
         
         # ignore in 2D
@@ -140,20 +140,22 @@ class Layer(object):
         try:
             if self.type == 'command':
                 read = False
-                for cmd in self.cmdlist:
-                    runcmd = gcmd.Command(cmd=cmd + ['--q'],
-                                          stderr=None)
-                    if runcmd.returncode != 0:
+                for cmd in self.cmd:
+                    ret = gcmd.RunCommand(self.cmd[0],
+                                          quiet = True,
+                                          **self.cmd[1])
+                    if ret.returncode != 0:
                         break
                     if not read:
                         os.environ["GRASS_PNG_READ"] = "TRUE"
                 
                 os.environ["GRASS_PNG_READ"] = "FALSE"
             else:
-                runcmd = gcmd.Command(cmd=self.cmdlist + ['--q'],
-                                      stderr=None)
-            
-            if runcmd.returncode != 0:
+                ret = gcmd.RunCommand(self.cmd[0],
+                                      quiet = True,
+                                      **self.cmd[1])
+                
+            if ret != 0:
                 #clean up after probley
                 try:
                     os.remove(self.mapfile)
@@ -196,14 +198,14 @@ class Layer(object):
         """
         if string:
             if self.type == 'command':
-                cmdStr = ''
-                for cmd in self.cmdlist:
-                    cmdStr += ' '.join(cmd) + ';'
-                return cmdStr.rstrip(';')
+                scmd = []
+                for cmd in self.cmd:
+                    scmd.append(utils.GetCmdString(self.cmd))
+                return ';'.join(scmd)
             else:
-                return ' '.join(self.cmdlist)
+                return utils.GetCmdString(self.cmd)
         else:
-            return self.cmdlist
+            return self.cmd
 
     def GetType(self):
         """Get map layer type"""
@@ -256,11 +258,7 @@ class Layer(object):
     def SetName(self, name):
         """Set layer name"""
         self.name = name
-
-    def SetCmd(self, cmd):
-        """Set layer name"""
-        self.cmdlist = cmd
-
+        
     def SetActive(self, enable=True):
         """Active or deactive layer"""
         self.active = bool(enable)
@@ -280,7 +278,7 @@ class Layer(object):
         
     def SetCmd(self, cmd):
         """Set new command for layer"""
-        self.cmdlist = cmd
+        self.cmd = utils.CmdToTuple(cmd)
         Debug.msg(3, "Layer.SetCmd(): cmd='%s'" % self.GetCmd(string=True))
         
         # for re-rendering
@@ -591,32 +589,35 @@ class Map(object):
             os.environ["GISRC"] = self.gisrc
 
         # do not update & shell style output
-        cmdList = ["g.region", "-u", "-g", "-p", "-c"]
+        cmd = {}
+        cmd['flags'] = 'ugpc'
 
         if default:
-            cmdList.append('-d')
+            cmd['flags'] += 'd'
             
         if n:
-            cmdList.append('n=%s' % n)
+            cmd['n'] = n
         if s:
-            cmdList.append('s=%s' % s)
+            cmd['s'] = s
         if e:
-            cmdList.append('e=%s' % e)
+            cmd['e'] = e
         if w:
-            cmdList.append('w=%s' % w)
+            cmd['w'] = w
 
         if rast:
             if zoom:
-                cmdList.append('zoom=%s' % ','.join(rast))
+                cmd['zoom'] = rast[0]
             else:
-                cmdList.append('rast=%s' % ','.join(rast))
+                cmd['rast'] = ','.join(rast)
 
         if vect:
-            cmdList.append('vect=%s' % ','.join(vect))
+            cmd['vect'] = ','.join(vect)
         
-        try:
-            cmdRegion = gcmd.Command(cmdList)
-        except gcmd.CmdError, e:
+        ret = gcmd.RunCommand('g.region',
+                              read = True,
+                              **cmd)
+        if not ret:
+            e  = gcmd.CmdError(cmd = 'g.region', message = '')
             if rast:
                 e.message = _("Unable to zoom to raster map <%s>.") % rast[0] + \
                 '%s%s' % (os.linesep, os.linesep) + e.message
@@ -627,7 +628,7 @@ class Map(object):
             print >> sys.stderr, e
             return self.region
 
-        for reg in cmdRegion.ReadStdOutput():
+        for reg in ret.splitlines():
             key, val = reg.split("=", 1)
             try:
                 region[key] = float(val)

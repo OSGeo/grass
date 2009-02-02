@@ -370,9 +370,9 @@ class GMConsole(wx.Panel):
 
             # if command is not a GRASS command, treat it like a shell command
             try:
-                generalCmd = gcmd.Command(cmdlist,
-                                          stdout=self.cmd_stdout,
-                                          stderr=self.cmd_stderr)
+                gcmd.Command(cmdlist,
+                             stdout=self.cmd_stdout,
+                             stderr=self.cmd_stderr)
             except gcmd.CmdError, e:
                 print >> sys.stderr, e
 

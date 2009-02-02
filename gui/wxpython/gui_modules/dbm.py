@@ -167,16 +167,10 @@ class VirtualAttributeList(wx.ListCtrl,
                                           "'Manage layers' tab.") % tableName,
                                 parent=self.parent)
         
-        cmd = ["v.db.select",
-               "-c", "--q",
-               "map=%s" % self.mapDBInfo.map,
-               "layer=%d" % layer]
-               
         if not columns:
             columns = self.mapDBInfo.GetColumns(tableName)
         else:
             all = self.mapDBInfo.GetColumns(tableName)
-            cmd.append("columns=%s" % ','.join(columns))
             for col in columns:
                 if col not in all:
                     wx.MessageBox(parent=self,
@@ -185,10 +179,6 @@ class VirtualAttributeList(wx.ListCtrl,
                                       { 'column' : col, 'table' : tableName },
                                   caption=_("Error"), style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
                     return
-
-
-        if where:
-            cmd.append("where=%s" % where)
         
         try:
             # for maps connected via v.external
@@ -205,9 +195,24 @@ class VirtualAttributeList(wx.ListCtrl,
         # TODO: more effective way should be implemented...
         outFile = tempfile.NamedTemporaryFile(mode='w+b')
         
-        selectCommand = gcmd.Command(cmd,
-                                     stdout=outFile)
-
+        if columns:
+            ret = gcmd.RunCommand('v.db.select',
+                                  quiet = True,
+                                  flags = 'c',
+                                  map = self.mapDBInfo.map,
+                                  layer = layer,
+                                  columns = ','.join(columns),
+                                  where = where,
+                                  stdout=outFile)
+        else:
+           ret = gcmd.RunCommand('v.db.select',
+                                 quiet = True,
+                                 flags = 'c',
+                                 map = self.mapDBInfo.map,
+                                 layer = layer,
+                                 where = where,
+                                 stdout=outFile) 
+        
         # These two should probably be passed to init more cleanly
         # setting the numbers of items = number of elements in the dictionary
         self.itemDataMap  = {}
@@ -1465,10 +1470,11 @@ class AttributeManager(wx.Frame):
                 else:
                     list.SetItemText(item, nameTo)
 
-                    self.listOfCommands.append(['v.db.renamecol',
-                                                'map=%s' % self.vectorName,
-                                                'layer=%d' % self.layer,
-                                                'column=%s,%s' % (name, nameTo)])
+                    self.listOfCommands.append(('v.db.renamecol',
+                                                { 'map'    : self.vectorName,
+                                                  'layer'  : self.layer,
+                                                  'column' : '%s,%s' % (name, nameTo) }
+                                                ))
             else:
                 wx.MessageBox(parent=self,
                               message=_("Unable to rename column. "
@@ -1515,10 +1521,11 @@ class AttributeManager(wx.Frame):
 
         item = list.GetFirstSelected()
         while item != -1:
-            self.listOfCommands.append(['v.db.dropcol',
-                                        'map=%s' % self.vectorName,
-                                        'layer=%d' % self.layer,
-                                        'column=%s' % list.GetItemText(item)])
+            self.listOfCommands.append(('v.db.dropcol',
+                                        { 'map' : self.vectorName,
+                                          'layer' : self.layer,
+                                          'column' : list.GetItemText(item) }
+                                        ))
             list.DeleteItem(item)
             item = list.GetFirstSelected()
 
@@ -1537,10 +1544,11 @@ class AttributeManager(wx.Frame):
         table = self.mapDBInfo.layers[self.layer]['table']
         cols = self.mapDBInfo.GetColumns(table)
         for col in cols:
-            self.listOfCommands = [['v.db.dropcol',
-                                    'map=%s' % self.vectorName,
-                                    'layer=%d' % self.layer,
-                                    'column=%s' % col]]
+            self.listOfCommands.append(('v.db.dropcol',
+                                        { 'map' : self.vectorName,
+                                          'layer' : self.layer,
+                                          'column' : col }
+                                        ))
         self.FindWindowById(self.layerPage[self.layer]['tableData']).DeleteAllItems()
 
         # apply changes
@@ -1599,11 +1607,11 @@ class AttributeManager(wx.Frame):
         # add v.db.addcol command to the list
         if type == 'varchar':
             type += ' (%d)' % length
-        self.listOfCommands.append(['v.db.addcol',
-                                    'map=%s' % self.vectorName,
-                                    'layer=%d' % self.layer,
-                                    'columns=%s %s' % (name, type)])
-
+        self.listOfCommands.append(('v.db.addcol',
+                                    { 'map' : self.vectorName,
+                                      'layer' : self.layer,
+                                      'columns' : (name, type) }
+                                    ))
         # apply changes
         self.ApplyCommands()
         
@@ -1677,10 +1685,11 @@ class AttributeManager(wx.Frame):
         # perform GRASS commands (e.g. v.db.addcol)
         if len(self.listOfCommands) > 0:
             for cmd in self.listOfCommands:
-                Debug.msg(3, 'AttributeManager.ApplyCommands() cmd=\'%s\'' %
-                          ' '.join(cmd))
-                gcmd.Command(cmd)
-
+                gcmd.RunCommand(prog = cmd[0],
+                                quiet = True,
+                                parent = self,
+                                **cmd[1])
+            
             self.mapDBInfo = VectorDBInfo(self.vectorName)
             table = self.mapDBInfo.layers[self.layer]['table']
 
@@ -1912,12 +1921,12 @@ class AttributeManager(wx.Frame):
             return
         else:
             # dialog to get file name
-            gdialogs.CreateNewVector(parent=self, title=_('Extract selected features'),
-                                     log=self.cmdLog,
-                                     cmdDef=(["v.extract",
-                                              "input=%s" % self.vectorName,
-                                              "list=%s" % utils.ListOfCatsToRange(cats)],
-                                             "output"))
+            gdialogs.CreateNewVector(parent = self, title = _('Extract selected features'),
+                                     log = self.cmdLog,
+                                     cmd = (('v.extract',
+                                             { 'input' : self.vectorName,
+                                               'list' : utils.ListOfCatsToRange(cats) },
+                                             'output')))
     def OnDeleteSelected(self, event):
         """
         Delete vector objects selected in attribute browse window

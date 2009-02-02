@@ -1034,8 +1034,10 @@ class VDigitToolbar(AbstractToolbar):
             else:
                 openVectorMap = None
             mapName = gdialogs.CreateNewVector(self.parent,
-                                               exceptMap=openVectorMap, log=self.log,
-                                               cmdDef=(['v.edit', 'tool=create'], "map"),
+                                               exceptMap = openVectorMap, log = self.log,
+                                               cmd = (('v.edit',
+                                                       { 'tool' : 'create' },
+                                                       'map')),
                                                disableAdd=True)[0]
             if mapName:
                 # add layer to map layer tree

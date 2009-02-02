@@ -1101,8 +1101,8 @@ class MapFrame(wx.Frame):
         mapname = None
         raststr = ''
         vectstr = ''
-        rcmd = []
-        vcmd = []
+        rcmd = ['r.what', { 'quiet' : True }]
+        vcmd = ['v.what', { 'quiet' : True }]
         for layer in self.tree.GetSelections():
             type = self.tree.GetPyData(layer)[0]['maplayer'].type
             dcmd = self.tree.GetPyData(layer)[0]['cmd']
@@ -1120,11 +1120,10 @@ class MapFrame(wx.Frame):
         
         # build query commands for any selected rasters and vectors
         if raststr != '':
-            rcmd = ['r.what', '--q',
-                    '-f',
-                    'input=%s' % raststr.rstrip(','),
-                    'east_north=%f,%f' % (float(east), float(north))]
-
+            rcmd[1]['flags'] = 'f'
+            rcmd[1]['input'] = raststr.rstrip(',')
+            rcmd[1]['east_north'] = '%f,%f' % (float(east), float(north))
+        
         if vectstr != '':
             # check for vector maps open to be edited
             digitToolbar = self.toolbars['vdigit']
@@ -1143,23 +1142,25 @@ class MapFrame(wx.Frame):
                 self.gismanager.goutput.WriteCmdLog("Nothing to query.")
                 return
             
-            vcmd = ['v.what', '--q',
-                    '-a',
-                    'map=%s' % vectstr.rstrip(','),
-                    'east_north=%f,%f' % (float(east), float(north)),
-                    'distance=%f' % qdist]
-
+            vcmd[1]['flags'] = 'a'
+            vcmd[1]['map'] = vectstr.rstrip(',')
+            vcmd[1]['east_north'] = '%f,%f' % (float(east), float(north)),
+            vcmd[1]['distance'] = qdist
+        
         # parse query command(s)
         if self.gismanager:
             if rcmd:
-                self.gismanager.goutput.RunCmd(rcmd, compReg=False)
+                self.gismanager.goutput.RunCmd(prog = rcmd[0],
+                                               compReg=False,
+                                               **rcmd[1])
             if vcmd:
-                self.gismanager.goutput.RunCmd(vcmd)
+                self.gismanager.goutput.RunCmd(prog = vcmd[0],
+                                               **vcmd)
         else:
             if rcmd:
-                gcmd.Command(rcmd) # TODO: -> grass.run_command
+                gcmd.RunCommand(rcmd)
             if vcmd:
-                gcmd.Command(vcmd) # TODO: -> grass.run_command
+                gcmd.RunCommand(vcmd)
 
         # restore GRASS_REGION
         if tmpreg:

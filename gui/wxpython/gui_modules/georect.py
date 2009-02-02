@@ -509,8 +509,8 @@ class GroupPage(TitledPage):
         """Process i.group"""
         # update the page
         if dcmd:
-            gcmd.Command(dcmd, stderr=None)
-
+            gcmd.RunCommand(utils.CmdToTuple(dcmd))
+        
         self.OnEnterPage()
         self.Update()
         

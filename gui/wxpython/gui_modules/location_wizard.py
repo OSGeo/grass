@@ -2217,8 +2217,6 @@ class RegionDef(BaseClass, wx.Frame):
             self.currlocation = envval['LOCATION_NAME'].strip("';")
             self.currmapset = envval['MAPSET'].strip("';")
             if self.currlocation != self.location or self.currmapset != 'PERMANENT':
-                # cmdlist = ['g.mapset', 'location=%s' % self.location, 'mapset=PERMANENT']
-                # gcmd.Command(cmdlist
                 gcmd.RunCommand('g.gisenv',
                                 set = 'LOCATION_NAME=%s' % self.location)
                 gcmd.RunCommand('g.gisenv',

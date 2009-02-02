@@ -75,8 +75,6 @@ class GRASSStartup(wx.Frame):
 
         # labels
         ### crashes when LOCATION doesn't exist
-        # versionCmd = gcmd.Command(['g.version'], log=None)
-        # grassVersion = versionCmd.ReadStdOutput()[0].replace('GRASS', '').strip()
         versionFile = open(os.path.join(globalvar.ETCDIR, "VERSIONNUMBER"))
         grassVersion = versionFile.readline().replace('%s' % os.linesep, '').strip()
         versionFile.close()
@@ -565,21 +563,24 @@ class GRASSStartup(wx.Frame):
         locationName = os.path.basename(location)
 
         try:
-            mapsets = gcmd.Command(['g.mapset',
-                                    '-l',
-                                    'location=%s' % locationName,
-                                    'gisdbase=%s' % self.gisdbase],
-                                   stderr=None)
+            ret = gcmd.RunCommand('g.mapset',
+                                  read = True
+                                  flags = '-l',
+                                  location = locationName,
+                                  gisdbase = self.gisdbase)
             
-            for line in mapsets.ReadStdOutput():
+            if not ret:
+                raise gcmd.CmdError("")
+            
+            for line in ret.splitlines():
                 self.listOfMapsetsSelectable += line.split(' ')
-        except gcmd.CmdError:
-            gcmd.Command(["g.gisenv",
-                          "set=GISDBASE=%s" % self.gisdbase])
-            gcmd.Command(["g.gisenv",
-                          "set=LOCATION_NAME=%s" % locationName])
-            gcmd.Command(["g.gisenv",
-                          "set=MAPSET=PERMANENT"])
+        except:
+            gcmd.RunCommand("g.gisenv",
+                            set= "GISDBASE=%s" % self.gisdbase)
+            gcmd.RunCommand("g.gisenv",
+                            set = "LOCATION_NAME=%s" % locationName)
+            gcmd.RunCommand("g.gisenv",
+                            set = "MAPSET=PERMANENT")
             # first run only
             self.listOfMapsetsSelectable = copy.copy(self.listOfMapsets)
         
@@ -681,13 +682,16 @@ class GRASSStartup(wx.Frame):
 
     def OnStart(self, event):
         """'Start GRASS' button clicked"""
-        gcmd.Command(["g.gisenv",
-                      "set=GISDBASE=%s" % self.tgisdbase.GetValue()])
-        gcmd.Command(["g.gisenv",
-                      "set=LOCATION_NAME=%s" % self.listOfLocations[self.lblocations.GetSelection()]])
-        gcmd.Command(["g.gisenv",
-                      "set=MAPSET=%s" % self.listOfMapsets[self.lbmapsets.GetSelection()]])
-
+        gcmd.RunCommand("g.gisenv",
+                        set = "GISDBASE=%s" % \
+                            self.tgisdbase.GetValue())
+        gcmd.RunCommand("g.gisenv",
+                        set = "LOCATION_NAME=%s" % \
+                            self.listOfLocations[self.lblocations.GetSelection()])
+        gcmd.RunCommand("g.gisenv",
+                        set = "MAPSET=%s" % \
+                            self.listOfMapsets[self.lbmapsets.GetSelection()])
+        
         self.Destroy()
         sys.exit(0)
 
