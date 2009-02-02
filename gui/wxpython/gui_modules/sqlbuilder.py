@@ -220,13 +220,14 @@ class SQLFrame(wx.Frame):
 
     def GetColumns(self):
         """Get columns"""
-        dbDescribe = gcmd.RunCommand('db.describe',
-                                     quiet = True,
-                                     flags = 'c',
-                                     table = self.tablename)
+        ret = gcmd.RunCommand('db.describe',
+                              quiet = True,
+                              read = True,
+                              flags = 'c',
+                              table = self.tablename)
         
         # skip ncols and nrows lines
-        for line in dbDescribe.ReadStdOutput()[2:]:
+        for line in ret.splitlines():
             num, name, ctype, length = line.strip().split(":")
             name.strip()
             #self.columns_names.append(name)

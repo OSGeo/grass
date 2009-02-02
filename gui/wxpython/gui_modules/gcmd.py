@@ -358,11 +358,11 @@ class Command:
                                     os.linesep, os.linesep,
                                     _("Details:"),
                                     os.linesep,
-                                    _("Error: ") + self.GetError()))
+                                    _("Error: ") + self.__GetError()))
                 elif rerr == sys.stderr: # redirect message to sys
                     stderr.write("Execution failed: '%s'" % (' '.join(self.cmd)))
                     stderr.write("%sDetails:%s%s" % (os.linesep,
-                                                     _("Error: ") + self.GetError(),
+                                                     _("Error: ") + self.__GetError(),
                                                      os.linesep))
             else:
                 pass # nop
@@ -394,17 +394,7 @@ class Command:
 
         return lineList
                     
-    def ReadStdOutput(self):
-        """Read standard output and return list of lines"""
-        if self.cmdThread.stdout:
-            stream = self.cmdThread.stdout # use redirected stream instead
-            stream.seek(0)
-        else:
-            stream = self.cmdThread.module.stdout
-
-        return self.__ReadOutput(stream)
-    
-    def ReadErrOutput(self):
+    def __ReadErrOutput(self):
         """Read standard error output and return list of lines"""
         return self.__ReadOutput(self.cmdThread.module.stderr)
 
@@ -415,7 +405,7 @@ class Command:
         @return list of (type, message)
         """
         if self.stderr is None:
-            lines = self.ReadErrOutput()
+            lines = self.__ReadErrOutput()
         else:
             lines = self.cmdThread.error.strip('%s' % os.linesep). \
                 split('%s' % os.linesep)
@@ -444,7 +434,7 @@ class Command:
 
         return msg
 
-    def GetError(self):
+    def __GetError(self):
         """Get error message or ''"""
         if not self.cmdThread.module:
             return _("Unable to exectute command: '%s'") % ' '.join(self.cmd)
@@ -455,28 +445,6 @@ class Command:
 
         return ''
     
-    def PrintModuleOutput(self, error=True, warning=False, message=False):
-        """Print module errors, warnings, messages to output
-
-        @param error print errors
-        @param warning print warnings
-        @param message print messages
-
-        @return string
-        """
-
-        msgString = ""
-        for type, msg in self.__ProcessStdErr():
-            if type:
-                if (type == 'ERROR' and error) or \
-                        (type == 'WARNING' and warning) or \
-                        (type == 'MESSAGE' and message):
-                    msgString += " " + type + ": " + msg + "%s" % os.linesep
-            else:
-                msgString += " " + msg + "%s" % os.linesep
-
-        return msgString
-
 class CommandThread(Thread):
     """Create separate thread for command. Used for commands launched
     on the background."""

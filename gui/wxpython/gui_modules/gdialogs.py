@@ -1009,16 +1009,17 @@ class MultiImportDialog(wx.Dialog):
             ret = gcmd.RunCommand('v.in.dxf',
                                   quiet = True,
                                   parent = self,
+                                  read = True,
                                   flags = 'l',
                                   input = path)
-            if ret != 0:
+            if not ret:
                 self.list.LoadData()
                 self.btn_run.Enable(False)
                 return
 
         data = []
         if self.inputType == 'dxf':
-            for line in cmd.ReadStdOutput():
+            for line in ret.splitlines():
                 layerId = line.split(':')[0].split(' ')[1]
                 layerName = line.split(':')[1].strip()
                 grassName = utils.GetValidLayerName(layerName)
