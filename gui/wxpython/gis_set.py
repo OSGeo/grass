@@ -564,8 +564,8 @@ class GRASSStartup(wx.Frame):
 
         try:
             ret = gcmd.RunCommand('g.mapset',
-                                  read = True
-                                  flags = '-l',
+                                  read = True,
+                                  flags = 'l',
                                   location = locationName,
                                   gisdbase = self.gisdbase)
             
