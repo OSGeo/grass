@@ -439,17 +439,17 @@ class WriteWorkspaceFile(object):
                 # layer properties
                 self.file.write('%s<task name="%s">\n' % (' ' * self.indent, cmd[0]))
                 self.indent += 4
-                for option in cmd[1:]:
-                    if option[0] == '-': # flag
-                        self.file.write('%s<flag name="%s" />\n' %
-                                   (' ' * self.indent, option[1]))
+                for key, val in cmd[1].iteritems():
+                    if key == 'flags':
+                        for f in opt['flags']:
+                            self.file.write('%s<flag name="%s" />\n' %
+                                            (' ' * self.indent, f))
                     else: # parameter
-                        key, value = option.split('=', 1)
                         self.file.write('%s<parameter name="%s">\n' %
                                    (' ' * self.indent, key))
                         self.indent += 4
                         self.file.write('%s<value>%s</value>\n' %
-                                   (' ' * self.indent, value))
+                                   (' ' * self.indent, val))
                         self.indent -= 4
                         self.file.write('%s</parameter>\n' % (' ' * self.indent));
                 self.indent -= 4

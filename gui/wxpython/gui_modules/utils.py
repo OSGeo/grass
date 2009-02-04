@@ -208,7 +208,7 @@ def ListOfMapsets(all=False):
                               flags = 'l')
     
         if ret:
-            mapsets = ret.rstrip('\n').split(' ')
+            mapsets = ret.rstrip('\n').strip().split(' ')
         else:
             raise gcmd.CmdError(cmd = 'g.mapsets',
                                 message = _('Unable to get list of available mapsets.'))
@@ -217,7 +217,7 @@ def ListOfMapsets(all=False):
                               read = True,
                               flags = 'p')
         if ret:
-            mapsets = ret.rstrip('\n').split(' ')
+            mapsets = ret.rstrip('\n').strip().split(' ')
         else:
             raise gcmd.CmdError(cmd = 'g.mapsets',
                                 message = _('Unable to get list of accessible mapsets.'))
