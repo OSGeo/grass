@@ -139,7 +139,7 @@ void patch_fore()
 void open_files()
 {
     FILE *fp;
-    char path[30];
+    char path[GPATH_MAX];
     int i;
 
     if (choice->att[1] || choice->att[2] || choice->att[3] || choice->att[4]) {
@@ -2465,7 +2465,7 @@ void read_para(char *name, int line, float *value, int *count)
 {
     FILE *fp;
     int i = 0, cnt = 1;
-    char *buf, path[30];
+    char *buf, path[GPATH_MAX];
 
     /* VARIABLES
        Incoming
@@ -2542,7 +2542,7 @@ void read_line(char *name, int line, int n, int *value, int *fvalue,
 {
     FILE *fp;
     int i;
-    char path[30], *buf;
+    char path[GPATH_MAX], *buf;
 
     sprintf(path, "r.le.para/%s", name);
 
