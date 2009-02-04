@@ -42,7 +42,7 @@ void df_patch(PATCH * patch_list)
 {
     PATCH *tmp = patch_list;
     int *type_dens, type_coh;
-    char path[30];
+    char path[GNAME_MAX+10];
 
     if (!total_patches)
 	return;

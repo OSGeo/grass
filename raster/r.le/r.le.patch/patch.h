@@ -78,7 +78,7 @@ typedef struct patch
 
 struct CHOICE
 {
-    char fn[30], reg[30], out[30], wrum;
+    char fn[GNAME_MAX], reg[GMAPSET_MAX], out[GNAME_MAX], wrum;
     int core2, size2, shape2, edge, fb, coremap, units;
     int perim2, trace, patchmap;
     int Mx[4];
