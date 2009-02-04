@@ -1168,20 +1168,10 @@ class GMFrame(wx.Frame):
         self.curr_page.Layout()
         self.curr_page.maptree.Layout()
 
-        #        self._auimgr.SetManagedWindow(self.curr_page.maptree.testframe)
-        #
-        #        self._auimgr.AddPane(self.curr_page.maptree.testframe,
-        #                             wx.aui.AuiPaneInfo().Right().
-        #                             BestSize((-1,-1)).
-        #                             CloseButton(True).MinimizeButton(True).
-        #                             DestroyOnClose(True).Layer(2))
-        #
-        #        self._auimgr.Update()
-
         # use default window layout
         if UserSettings.Get(group='general', key='defWindowPos', subkey='enabled') is True:
             dim = UserSettings.Get(group='general', key='defWindowPos', subkey='dim')
-            idx = 4 + (self.disp_idx +1) * 4
+            idx = 4 + self.disp_idx * 4
             try:
                 x, y = map(int, dim.split(',')[idx:idx + 2])
                 w, h = map(int, dim.split(',')[idx + 2:idx + 4])
