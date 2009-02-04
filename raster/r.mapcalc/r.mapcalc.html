@@ -75,6 +75,8 @@ Some characters have special meaning to the command shell. If the user
 is entering input to <em>r.mapcalc</em> on the command line, expressions
 should be enclosed within single quotes.  See NOTES, below.
 <p>
+
+
 <h2>OPERATORS AND ORDER OF PRECEDENCE</h2>
 The following operators are supported:
 <div class="code"><pre>
@@ -118,6 +120,8 @@ Division by 0 and modulus by 0 are acceptable and give a NULL result.
 The logical operators give a 1 result if the comparison is true, 0 otherwise.
 <p>
 <p>
+
+
 <h2>RASTER MAP LAYER NAMES</h2>
 Anything in the expression which is not a number, operator, or function name
 is taken to be a raster map layer name.
@@ -185,6 +189,8 @@ The mapset specified does not have to be in the mapset search path.
 (This method of overriding the mapset search path is common to all
 GRASS commands, not just <em>r.mapcalc</em>.)
 <p>
+
+
 <h2>THE NEIGHBORHOOD MODIFIER</h2>
 Maps and images are data base files stored in raster format, i.e.,
 two-dimensional matrices of integer values.
@@ -197,8 +203,9 @@ two rows above and one column to the left of the current cell,
 and <em>map[0,1]</em> refers to the cell one column to the right of the current cell.
 This syntax permits the development of neighborhood-type filters within a single
 map or across multiple maps.
-
 <p>
+
+
 <h2>RASTER MAP LAYER VALUES FROM THE CATEGORY FILE</h2>
 Sometimes it is desirable to use a value associated with a category's
 <em>label</em> instead of the category value itself.  If a raster
@@ -238,6 +245,8 @@ If the category label is integer, it will be represented by
 a floating point number. I the category label does not start
 with a number or is missing, it will be represented by NULL
 (no data) in the resulting raster map. 
+
+
 <h2>GREY SCALE EQUIVALENTS AND COLOR SEPARATES</h2>
 It is often helpful to manipulate the colors assigned to map categories.
 This is particularly useful when the spectral properties of cells have meaning
@@ -316,6 +325,8 @@ black
 red
 </pre></div>
 <p>
+
+
 <h2>FUNCTIONS</h2>
 The functions currently supported are listed in the table below.
 The type of the result is indicated in the last column.
@@ -375,6 +386,8 @@ Internal variables:
  null()                 NULL value
 </pre></div>
 Note, that the row() and col() indexing starts with 1.
+
+
 <h2>FLOATING POINT VALUES IN THE EXPRESSION</h2>
 Floating point numbers are allowed in the expression. A floating point
 number is a number which contains a decimal point:
@@ -399,6 +412,8 @@ produce a floating-point result, as will using float():
 <div class="code"><pre>
       r.mapcalc "ndvi = float(lsat.4 - lsat.3) / (lsat.4 + lsat.3)"
 </pre></div>
+
+
 <h2>NULL support</h2>
 <ul>
 <li>Division by zero should result in NULL. 
@@ -508,6 +523,8 @@ The behaviour makes sense if the user considers NULL as representing an
 unknown quantity. E.g. if x and y are both unknown, then the values of
 "x == y" and "x != y" are also unknown; if they both have unknown
 values, the user doesn't know whether or not they both have the same value.
+
+
 <h2>EXAMPLES</h2>
 To compute the average of two raster map layers
 <em>a</em> and <em>b</em>:
@@ -561,6 +578,8 @@ X (map) values supplied and y (newmap) values returned:
 4, 50
 100, 50
 </pre></div>
+
+
 <h2>NOTES</h2>
 Extra care must be taken if the expression is given on the command line.
 Some characters have special meaning to the UNIX shell.
@@ -593,6 +612,8 @@ outputs raster map names that do not yet exist in their current mapsets.
 <p>
 The environment variable GRASS_RND_SEED is read to initialise the
 random number generator.
+
+
 <h2>BUGS</h2>
 Continuation lines must end with a \ and have NO trailing white space
 (blanks or tabs).  If the user does leave white space at the end of
@@ -612,6 +633,8 @@ separable by white space.
 <p>
 r.mapcalc does not print a warning in case of operations on NULL cells.
 It is left to the user to utilize the isnull() function.
+
+
 <h2>SEE ALSO</h2>
 <b><a href="http://grass.osgeo.org/gdp/raster/mapcalc-algebra.pdf">r.mapcalc: An Algebra for GIS and Image
 Processing</a></b>, by Michael Shapiro and Jim Westervelt, U.S. Army
@@ -633,10 +656,13 @@ by Anil K. Jain (Prentice Hall, NJ, 1989; p 67).
 <a href="r.colors.html">r.colors</a>,
 <a href="r.fillnulls.html">r.fillnulls</a>
 </em>
+
+
 <h2>AUTHORS</h2>
 Michael Shapiro, U.S.Army Construction Engineering 
 Research Laboratory
 <p>
 Glynn Clements
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
