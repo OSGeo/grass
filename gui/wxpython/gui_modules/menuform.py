@@ -470,12 +470,12 @@ class processTask(HandlerBase):
             self.inKeywordsContent = False
 
         if name == 'keydesc':
-            self.param_key_desc = self.param_key_desc.split()
             self.inKeyDesc = False
 
         if name == 'item':
             if self.inKeyDesc:
-                self.param_key_desc = normalize_whitespace(self.key_desc)
+                self.param_key_desc.append(normalize_whitespace(self.key_desc))
+                self.key_desc = ''
                 self.addKeyDesc = False
 
 class helpPanel(wx.html.HtmlWindow):
