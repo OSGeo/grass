@@ -347,9 +347,9 @@ def CmdToTuple(cmd):
             key, value = item.split('=')
             dcmd[str(key)] = str(value)
         else: # -> flags
-            if not dmcd.has_key('flags'):
+            if not dcmd.has_key('flags'):
                 dcmd['flags'] = ''
-            dmcd['flags'] += item.replace('-', '')
+            dcmd['flags'] += item.replace('-', '')
                 
     return (cmd[0],
             dcmd)
