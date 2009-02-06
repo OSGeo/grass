@@ -25920,8 +25920,8 @@ msgstr "Spline typ interpolace"
 
 #: ../vector/lidar/v.surf.bspline/main.c:142
 #: ../vector/lidar/v.outlier/main.c:111
-msgid "Thychonov regularization weigth"
-msgstr "Váha Thychonovy regularizace"
+msgid "Tychonov regularization weight"
+msgstr "Váha Tychonovy regularizace"
 
 #: ../vector/lidar/v.surf.bspline/main.c:159
 msgid "Attribute table column with values to interpolate (if layer>0)"
