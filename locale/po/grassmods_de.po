@@ -11567,7 +11567,7 @@ msgstr "in"
 
 #: ../vector/lidar/v.outlier/main.c:111
 #: ../vector/lidar/v.surf.bspline/main.c:140
-msgid "Thychonov regularization weigth"
+msgid "Tychonov regularization weight"
 msgstr ""
 
 #: ../vector/lidar/v.outlier/main.c:118
