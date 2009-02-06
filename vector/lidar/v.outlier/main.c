@@ -108,7 +108,7 @@ int main(int argc, char *argv[])
     lambda_f_opt->key = "lambda_i";
     lambda_f_opt->type = TYPE_DOUBLE;
     lambda_f_opt->required = NO;
-    lambda_f_opt->description = _("Thychonov regularization weigth");
+    lambda_f_opt->description = _("Tykhonov regularization weight");
     lambda_f_opt->answer = "0.1";
 
     Thres_O_opt = G_define_option();
