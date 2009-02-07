@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
     nrows = G_window_rows();
     ncols = G_window_cols();
     i_val_l_f = nrows + ncols;
-    cseg_open(&con, 16, 16, 8);
+    cseg_open(&con, 256, 256, 64);
     cseg_read_cell(&con, con_name, con_mapset);
     alt_row = (CELL *) G_malloc(ncols * sizeof(CELL));
     if (fast_mode) {
