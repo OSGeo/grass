@@ -1793,25 +1793,25 @@ class CheckListMapset(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.Check
 
         ret = grass.read_command('g.mapsets',
                                  flags = 'l')
-        print ret
+        ret = ret.strip(' \n')
 
         mapsets = []
         if ret:
-            mapsets = ret.splitlines()
+            mapsets = ret.split()
         
         for mapset in mapsets:
             index = self.InsertStringItem(sys.maxint, mapset)
             mapsetPath = os.path.join(locationPath,
                                       mapset)
             stat_info = os.stat(mapsetPath)
-	    if os.name in ('posix', 'mac'):
-                self.SetStringItem(index, 1, "%s" % pwd.getpwuid(stat_info.st_uid)[0])
-                # FIXME: get group name
-                self.SetStringItem(index, 2, "%-8s" % stat_info.st_gid) 
-	    else:
-                # FIXME: no pwd under MS Windows (owner: 0, group: 0)
-                self.SetStringItem(index, 1, "%-8s" % stat_info.st_uid)
-                self.SetStringItem(index, 2, "%-8s" % stat_info.st_gid)
+        if os.name in ('posix', 'mac'):
+            self.SetStringItem(index, 1, "%s" % pwd.getpwuid(stat_info.st_uid)[0])
+            # FIXME: get group name
+            self.SetStringItem(index, 2, "%-8s" % stat_info.st_gid) 
+        else:
+            # FIXME: no pwd under MS Windows (owner: 0, group: 0)
+            self.SetStringItem(index, 1, "%-8s" % stat_info.st_uid)
+            self.SetStringItem(index, 2, "%-8s" % stat_info.st_gid)
                 
         self.SetColumnWidth(col=0, width=wx.LIST_AUTOSIZE)
         self.SetColumnWidth(col=1, width=wx.LIST_AUTOSIZE)
