@@ -1398,11 +1398,11 @@ class BufferedWindow(MapWindow, wx.Window):
             self.idlist = []
             self.dragid = ''
             self.lastpos = self.mouse['begin']
-            idlist = self.pdc.FindObjects(x=self.lastpos[0], y=self.lastpos[1],
-                                          radius=self.hitradius)
-                                          
-            if 99 in idlist: idlist.remove(99)                             
-            if idlist != [] :
+            idlist = self.pdc.FindObjects(self.lastpos[0], self.lastpos[1],
+                                          self.hitradius)
+            if 99 in idlist:
+                idlist.remove(99)                             
+            if idlist != []:
                 self.dragid = idlist[0] #drag whatever is on top
         else:
             pass

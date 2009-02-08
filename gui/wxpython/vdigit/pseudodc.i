@@ -47,5 +47,9 @@ public:
 		void TranslateId(int id, int dx, int dy) {
 		        self->TranslateId(id, (wxCoord) dx, (wxCoord) dy);
 		}
+		PyObject *FindObjects(int x, int y, int radius) {
+		        return self->FindObjects((wxCoord) x, (wxCoord) y,
+			                         (wxCoord) radius, *wxWHITE);
+                }
 	}
 };
