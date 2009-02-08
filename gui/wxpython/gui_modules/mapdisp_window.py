@@ -33,6 +33,7 @@ from vdigit import GV_LINES as VDigit_Lines_Type
 from vdigit import VDigitCategoryDialog
 from vdigit import VDigitZBulkDialog
 from vdigit import VDigitDuplicatesDialog
+from vdigit import PseudoDC
 
 class MapWindow(object):
     """
@@ -217,13 +218,13 @@ class BufferedWindow(MapWindow, wx.Window):
         ### self.OnSize(None)
 
         # create PseudoDC used for background map, map decorations like scales and legends
-        self.pdc = wx.PseudoDC()
+        self.pdc = PseudoDC()
         # used for digitization tool
         self.pdcVector = None
         # decorations (region box, etc.)
-        self.pdcDec = wx.PseudoDC()
+        self.pdcDec = PseudoDC()
         # pseudoDC for temporal objects (select box, measurement tool, etc.)
-        self.pdcTmp = wx.PseudoDC()
+        self.pdcTmp = PseudoDC()
         # redraw all pdc's, pdcTmp layer is redrawn always (speed issue)
         self.redrawAll = True
 
@@ -283,8 +284,8 @@ class BufferedWindow(MapWindow, wx.Window):
         if pdctype == 'image': # draw selected image
             bitmap = wx.BitmapFromImage(img)
             w,h = bitmap.GetSize()
-            pdc.DrawBitmap(bitmap, coords[0], coords[1], True) # draw the composite map
-            pdc.SetIdBounds(drawid, (coords[0],coords[1], w, h))
+            pdc.DrawBitmap(bitmap, wx.Point(coords[0], coords[1]), True) # draw the composite map
+            pdc.SetIdBounds(drawid, wx.Rect(coords[0],coords[1], w, h))
 
         elif pdctype == 'box': # draw a box on top of the map
             if self.pen:
@@ -298,22 +299,30 @@ class BufferedWindow(MapWindow, wx.Window):
                 rheight = y2-y1
                 rect = wx.Rect(x1,y1,rwidth,rheight)
                 pdc.DrawRectangleRect(rect)
-                pdc.SetIdBounds(drawid,rect)
+                pdc.SetIdBounds(drawid, rect)
                 # self.ovlcoords[drawid] = coords
 
         elif pdctype == 'line': # draw a line on top of the map
             if self.pen:
                 pdc.SetBrush(wx.Brush(wx.CYAN, wx.TRANSPARENT))
                 pdc.SetPen(self.pen)
-                pdc.DrawLine(coords[0], coords[1], coords[2], coords[3])
-                pdc.SetIdBounds(drawid,(coords[0], coords[1], coords[2], coords[3]))
+                pdc.DrawLine(wx.Point(coords[0], coords[1]),
+                             wx.Point(coords[2], coords[3]))
+                pdc.SetIdBounds(drawid, wx.Rect(coords[0], coords[1], coords[2], coords[3]))
                 # self.ovlcoords[drawid] = coords
 
         elif pdctype == 'polyline': # draw a polyline on top of the map
             if self.polypen:
                 pdc.SetBrush(wx.Brush(wx.CYAN, wx.TRANSPARENT))
                 pdc.SetPen(self.polypen)
-                pdc.DrawLines(coords)
+                ### pdc.DrawLines(coords)
+                if (len(coords) < 2):
+                    return
+                i = 1
+                while i < len(coords):
+                    pdc.DrawLine(wx.Point(coords[i-1][0], coords[i-1][1]),
+                                 wx.Point(coords[i][0], coords[i][1]))
+                    i += 1
 
                 # get bounding rectangle for polyline
                 xlist = []
@@ -327,7 +336,7 @@ class BufferedWindow(MapWindow, wx.Window):
                     x2=max(xlist)
                     y1=min(ylist)
                     y2=max(ylist)
-                    pdc.SetIdBounds(drawid,(x1,y1,x2,y2))
+                    pdc.SetIdBounds(drawid, wx.Rect(x1,y1,x2,y2))
                     # self.ovlcoords[drawid] = [x1,y1,x2,y2]
 
         elif pdctype == 'point': # draw point
@@ -338,7 +347,7 @@ class BufferedWindow(MapWindow, wx.Window):
                                coords[1] - 5,
                                coords[0] + 5,
                                coords[1] + 5)
-                pdc.SetIdBounds(drawid, coordsBound)
+                pdc.SetIdBounds(drawid, wx.Rect(coordsBound))
                 # self.ovlcoords[drawid] = coords
 
         elif pdctype == 'text': # draw text on top of map
@@ -356,7 +365,7 @@ class BufferedWindow(MapWindow, wx.Window):
                 pdc.DrawText(img['text'], coords[0], coords[1])
             else:
                 pdc.DrawRotatedText(img['text'], coords[0], coords[1], rotation)
-            pdc.SetIdBounds(drawid, (coords[0], coords[1], w, h))
+            pdc.SetIdBounds(drawid, wx.Rect(coords[0], coords[1], w, h))
             
         pdc.EndDrawing()
         
@@ -462,8 +471,8 @@ class BufferedWindow(MapWindow, wx.Window):
                 # self.bufferLast = wx.BitmapFromImage(self.buffer.ConvertToImage())
                 self.bufferLast = dc.GetAsBitmap(wx.Rect(0, 0, self.Map.width, self.Map.height))
 
-            pdcLast = wx.PseudoDC()
-            pdcLast.DrawBitmap(bmp=self.bufferLast, x=0, y=0)
+            pdcLast = PseudoDC()
+            pdcLast.DrawBitmap(self.bufferLast, wx.Point(0, 0), False)
             pdcLast.DrawToDC(dc)
 
         # draw decorations (e.g. region box)
@@ -895,7 +904,6 @@ class BufferedWindow(MapWindow, wx.Window):
                 pass
             self.RefreshRect(r, False)
             pdc.SetId(self.lineid)
-
             self.Draw(pdc, drawid=self.lineid, pdctype='line', coords=mousecoords)
 
     def DrawLines(self, pdc=None, polycoords=None):
@@ -1380,7 +1388,7 @@ class BufferedWindow(MapWindow, wx.Window):
                 self.OnLeftDownVDigitCopyCA(event)
             
             elif digitToolbar.GetAction() == "copyLine":
-                self.OnLeftDownCopyLine(event)
+                self.OnLeftDownVDigitCopyLine(event)
             
             elif digitToolbar.GetAction() == "zbulkLine":
                 self.OnLeftDownVDigitBulkLine(event)
@@ -1579,6 +1587,9 @@ class BufferedWindow(MapWindow, wx.Window):
         """
         digitToolbar = self.parent.toolbars['vdigit']
         digitClass   = self.parent.digit
+        
+        pos1 = self.Pixel2Cell(self.mouse['begin'])
+        pos2 = self.Pixel2Cell(self.mouse['end'])
         
         if UserSettings.Get(group='vdigit', key='bgmap',
                             subkey='value', internal=True) == '':

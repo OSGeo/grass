@@ -57,7 +57,7 @@ try:
     digitErr = ''
 except ImportError, err:
     GV_LINES = None
-    PseudoDC = None
+    PseudoDC = wx.PseudoDC
     digitErr = err
     print >> sys.stderr, "%sWARNING: Digitization tool is disabled (%s). " \
           "Detailed information in README file." % \

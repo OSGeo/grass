@@ -44,7 +44,7 @@ private:
     int RemoveActionFromChangeset(int, action_type, int);
 
 public:
-    Digit(DisplayDriver *, void *);
+    Digit(DisplayDriver *, wxWindow *);
     ~Digit();
 
     int InitCats();

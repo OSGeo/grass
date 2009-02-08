@@ -23,10 +23,10 @@
    \param driver display driver instance
    \param window parent window for message dialog
 */
-Digit::Digit(DisplayDriver *ddriver, void *window)
+Digit::Digit(DisplayDriver *ddriver, wxWindow *window)
 {
     display = ddriver;
-    display->parentWin = (wxWindow *) window;
+    display->parentWin = window;
 
     if (display->mapInfo) {
 	InitCats();
