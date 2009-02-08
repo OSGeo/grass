@@ -162,7 +162,7 @@ def main():
 	a=round(atan(x,y)), \
 	a=if(isnull(a),1,a), \
 	aspect=if(x!=0||y!=0,if(a,a,360.)), \
-	cang = sin($alt)*sin(slope) + cos($alt)*cos(slope) * cos($az-aspect), \
+	cang = sin($alt)*sin(slope) + cos($alt)*cos(slope) * cos($az-aspect) \
 	)
 	$elev_out = if(isnull(cang), null(), 100.*cang)''')
     expr = t.substitute(alt = alt, az = az, elev = elev, elev_out = elev_out, scale = scale, zmult = zmult)
