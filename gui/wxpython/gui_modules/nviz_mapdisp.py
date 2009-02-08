@@ -190,9 +190,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
     def OnMouseAction(self, event):
         # change position
         if event.Dragging() and event.LeftIsDown():
-            self.lastX = self.lastY = self.x = self.y
-            self.x, self.y = event.GetPosition()
-            self.Refresh(False)
+            ### self.lastX = self.lastY = self.x = self.y
+            ### self.x, self.y = event.GetPosition()
+            ### self.Refresh(False)
+            pass
 
         # change perspective with mouse wheel
         wheel = event.GetWheelRotation()
@@ -228,7 +229,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
 
     def OnLeftDown(self, event):
         self.CaptureMouse()
-        self.x, self.y = self.lastX, self.lastY = event.GetPosition()
+        ### self.x, self.y = self.lastX, self.lastY = event.GetPosition()
         
     def OnLeftUp(self, event):
         self.ReleaseMouse()
