@@ -2,7 +2,6 @@
 #include <math.h>
 #include <grass/gis.h>
 #include "flag.h"
-#include "cseg.h"
 
 #define NODE		struct _n_o_d_e_
 #define INIT_AR		64
@@ -25,20 +24,20 @@ extern int maxc;
 extern int maxr;
 extern int array_size;
 extern double i_val_l_f;
-extern CSEG con;
+extern CELL **con;
 extern FLAG *seen, *mask;
-extern BSEG bseen, bmask;
 extern NODE *zero;
 extern CELL on, off;
 
 /* add_in.c */
-NODE *add_in_slow(int, int, int, int, NODE *, int *);
 NODE *add_in(int, int, int, int, NODE *, int *);
 
 /* addpts.c */
-NODE *addpts_slow(NODE *, int, int, int, int, int *);
 NODE *addpts(NODE *, int, int, int, int, int *);
 
 /* find_con.c */
-int find_con_slow(int, int, double *, double *, CELL *, CELL *);
 int find_con(int, int, double *, double *, CELL *, CELL *);
+
+/* read_cell.c */
+CELL **read_cell(const char *, const char *);
+void free_cell(CELL **);

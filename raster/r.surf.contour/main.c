@@ -35,9 +35,8 @@ int maxc;
 int maxr;
 int array_size;
 double i_val_l_f;
-CSEG con;
+CELL **con;
 FLAG *seen, *mask;
-BSEG bseen, bmask;
 NODE *zero;
 CELL on, off;
 
@@ -49,11 +48,10 @@ int main(int argc, char *argv[])
     CELL *alt_row;
     const char *con_name, *alt_name, *con_mapset;
     int file_fd;
-    int fast_mode;
     CELL value;
     struct History history;
     struct GModule *module;
-    struct Flag *flag1, *flag_slow;
+    struct Flag *flag1;
     struct Option *opt1, *opt2;
 
     G_gisinit(argv[0]);
@@ -82,11 +80,6 @@ int main(int argc, char *argv[])
     flag1->description = _("Unused; retained for compatibility purposes, "
 			   "will be removed in future");
 
-    flag_slow = G_define_flag();
-    flag_slow->key = 's';
-    flag_slow->description = _("Invoke slow, but memory frugal operation "
-			       "(generally not needed, will be removed in future)");
-
     on = 1;
     off = 0;
 
@@ -96,12 +89,6 @@ int main(int argc, char *argv[])
     con_name = opt1->answer;
     alt_name = opt2->answer;
 
-    if (flag_slow->answer)
-	fast_mode = 0;
-    else
-	fast_mode = 1;
-
-
     con_mapset = G_find_cell2(con_name, "");
     if (!con_mapset)
 	G_fatal_error("Contour raster map [%s] not found", con_name);
@@ -109,35 +96,18 @@ int main(int argc, char *argv[])
     nrows = G_window_rows();
     ncols = G_window_cols();
     i_val_l_f = nrows + ncols;
-    cseg_open(&con, 256, 256, 64);
-    cseg_read_cell(&con, con_name, con_mapset);
+    con = read_cell(con_name, con_mapset);
     alt_row = (CELL *) G_malloc(ncols * sizeof(CELL));
-    if (fast_mode) {
-	seen = flag_create(nrows, ncols);
-	mask = flag_create(nrows, ncols);
-    }
-    else {
-	bseg_open(&bseen, 64, 64, 16);
-	bseg_open(&bmask, 64, 64, 16);
-    }
+    seen = flag_create(nrows, ncols);
+    mask = flag_create(nrows, ncols);
     if (NULL != G_find_file("cell", "MASK", G_mapset())) {
 	if ((file_fd = G_open_cell_old("MASK", G_mapset())) < 0)
 	    G_fatal_error("Unable to open MASK");
-	if (fast_mode) {
-	    for (r = 0; r < nrows; r++) {
-		G_get_map_row_nomask(file_fd, alt_row, r);
-		for (c = 0; c < ncols; c++)
-		    if (!alt_row[c])
-			FLAG_SET(mask, r, c);
-	    }
-	}
-	else {
-	    for (r = 0; r < nrows; r++) {
-		G_get_map_row_nomask(file_fd, alt_row, r);
-		for (c = 0; c < ncols; c++)
-		    if (!alt_row[c])
-			bseg_put(&bmask, &off, r, c);
-	    }
+	for (r = 0; r < nrows; r++) {
+	    G_get_map_row_nomask(file_fd, alt_row, r);
+	    for (c = 0; c < ncols; c++)
+		if (!alt_row[c])
+		    FLAG_SET(mask, r, c);
 	}
 	G_close_cell(file_fd);
     }
@@ -152,24 +122,14 @@ int main(int argc, char *argv[])
     for (r = 0; r < nrows; r++) {
 	G_percent(r, nrows, 1);
 	for (c = 0; c < ncols; c++) {
-	    if (fast_mode) {
-		if (FLAG_GET(mask, r, c))
-		    continue;
-	    }
-	    else {
-		bseg_get(&bmask, &value, r, c);
-		if (value)
-		    continue;
-	    }
-	    cseg_get(&con, r, c, &value);
+	    if (FLAG_GET(mask, r, c))
+		continue;
+	    value = con[r][c];
 	    if (value != 0) {
 		alt_row[c] = value;
 		continue;
 	    }
-	    if (fast_mode)
-		find_con(r, c, &d1, &d2, &con1, &con2);
-	    else
-		find_con_slow(r, c, &d1, &d2, &con1, &con2);
+	    find_con(r, c, &d1, &d2, &con1, &con2);
 	    if (con2 > 0)
 		alt_row[c] = (CELL) (d2 * con1 / (d1 + d2) +
 				     d1 * con2 / (d1 + d2) + 0.5);
@@ -179,15 +139,9 @@ int main(int argc, char *argv[])
 	G_put_raster_row(file_fd, alt_row, CELL_TYPE);
     }
     G_percent(r, nrows, 1);
-    cseg_close(&con);
-    if (fast_mode) {
-	flag_destroy(seen);
-	flag_destroy(mask);
-    }
-    else {
-	bseg_close(&bseen);
-	bseg_close(&bmask);
-    }
+    free_cell(con);
+    flag_destroy(seen);
+    flag_destroy(mask);
     G_close_cell(file_fd);
 
     G_short_history(alt_name, "raster", &history);
