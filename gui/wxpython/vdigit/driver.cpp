@@ -30,14 +30,14 @@
    
    \return
 */
-DisplayDriver::DisplayDriver(void *device, void *deviceTmp)
+DisplayDriver::DisplayDriver(gwxPseudoDC *device, gwxPseudoDC *deviceTmp)
 {
     G_gisinit(""); /* GRASS functions */
 
     mapInfo = NULL;
 
-    dc = (gwxPseudoDC *) device;
-    dcTmp = (gwxPseudoDC *) deviceTmp;
+    dc = device;
+    dcTmp = deviceTmp;
 
     points = Vect_new_line_struct();
     pointsScreen = new wxList();

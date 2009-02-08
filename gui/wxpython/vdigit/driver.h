@@ -175,7 +175,7 @@ private:
     
 public:
     /* constructor */
-    DisplayDriver(void *, void *);
+    DisplayDriver(gwxPseudoDC *, gwxPseudoDC *);
     /* destructor */
     ~DisplayDriver();
 
