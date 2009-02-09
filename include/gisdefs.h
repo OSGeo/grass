@@ -44,6 +44,8 @@
 # define G__freea(p) G_free(p)
 #endif
 
+#include <sys/types.h>
+
 /* adj_cellhd.c */
 const char *G_adjust_Cell_head(struct Cell_head *, int, int);
 const char *G_adjust_Cell_head3(struct Cell_head *, int, int, int);
@@ -1049,6 +1051,10 @@ DCELL G_get_raster_sample_cubic(
 DCELL G_get_raster_sample(
     int, const struct Cell_head *, struct Categories *, double, double, int,
     INTERP_TYPE);
+
+/* seek.c */
+off_t G_ftell(FILE *);
+void G_fseek(FILE *, off_t, int);
 
 /* set_window.c */
 void G_get_set_window(struct Cell_head *);
