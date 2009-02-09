@@ -63,7 +63,6 @@
 #% type: string
 #% key_desc: style
 #% options: aspect,aspectcolr,bcyr,bgyr,byg,byr,celsius,curvature,differences,elevation,etopo2,evi,grey,grey1.0,grey255,gyr,ndvi,population,precipitation,rainbow,ramp,ryb,ryg,sepia,slope,srtm,terrain,wave,random
-#% answer: bcyr
 #% description: Type of color table
 #% required: no
 #% guisection: Colors

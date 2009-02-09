@@ -57,6 +57,22 @@ d.mon x0
 d.vect -a tin
 </pre></div>
 
+<p>
+Colorizing the roads map in Spearfish:
+<div class="code"><pre>
+g.copy vect=roads,myroads
+echo "1 red
+2 green
+3 blue
+4 orange
+5 purple" &gt; colors.txt
+
+v.colors myroads column=cat rules=colors.txt
+# display colorized roads map
+d.mon x0
+d.vect -a myroads
+</pre></div>
+
 
 <H2>SEE ALSO</H2>
 
