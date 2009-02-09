@@ -38,7 +38,7 @@ double i_val_l_f;
 CELL **con;
 FLAG *seen, *mask;
 NODE *zero;
-CELL on, off;
+
 
 int main(int argc, char *argv[])
 {
@@ -51,8 +51,8 @@ int main(int argc, char *argv[])
     CELL value;
     struct History history;
     struct GModule *module;
-    struct Flag *flag1;
     struct Option *opt1, *opt2;
+
 
     G_gisinit(argv[0]);
 
@@ -75,16 +75,9 @@ int main(int argc, char *argv[])
     opt2->gisprompt = "new,cell,raster";
     opt2->description = _("Output elevation raster map");
 
-    flag1 = G_define_flag();
-    flag1->key = 'f';
-    flag1->description = _("Unused; retained for compatibility purposes, "
-			   "will be removed in future");
-
-    on = 1;
-    off = 0;
-
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
 
     con_name = opt1->answer;
     alt_name = opt2->answer;
