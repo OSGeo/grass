@@ -205,19 +205,21 @@ def ListOfMapsets(all=False):
     if all:
         ret = gcmd.RunCommand('g.mapsets',
                               read = True,
-                              flags = 'l')
+                              flags = 'l',
+                              fs = '|')
     
         if ret:
-            mapsets = ret.rstrip('\n').strip().split(' ')
+            mapsets = ret.rstrip('\n').split('|')
         else:
             raise gcmd.CmdError(cmd = 'g.mapsets',
                                 message = _('Unable to get list of available mapsets.'))
     else:
         ret = gcmd.RunCommand('g.mapsets',
                               read = True,
-                              flags = 'p')
+                              flags = 'p',
+                              fs = '|')
         if ret:
-            mapsets = ret.rstrip('\n').strip().split(' ')
+            mapsets = ret.rstrip('\n').split('|')
         else:
             raise gcmd.CmdError(cmd = 'g.mapsets',
                                 message = _('Unable to get list of accessible mapsets.'))

@@ -97,7 +97,7 @@ class CheckListMapset(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.Check
         """Load data into list"""
         self.InsertColumn(0, 'Mapset')
         self.InsertColumn(1, 'Owner')
-        self.InsertColumn(2, 'Group')
+        ### self.InsertColumn(2, 'Group')
 
         gisenv = grass.gisenv()
         locationPath = os.path.join(gisenv['GISDBASE'], gisenv['LOCATION_NAME'])
@@ -105,18 +105,18 @@ class CheckListMapset(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.Check
         
         ret = grass.read_command('g.mapsets',
                                  flags = 'l',
-                                 fs = ';')
+                                 fs = '|')
         self.mapsets = []
         if ret:
-            self.mapsets = ret.replace('\n', '').split(';')
+            self.mapsets = ret.rstrip('\n').split('|')
             
 
         ret = grass.read_command('g.mapsets',
                                  flags = 'p',
-                                 fs = ';')
+                                 fs = '|')
         mapsets_access = []
         if ret:
-            mapsets_access = ret.replace('\n', '').split(';')
+            mapsets_access = ret.rstrip('\n').split('|')
             
         for mapset in self.mapsets:
             index = self.InsertStringItem(sys.maxint, mapset)
@@ -126,11 +126,11 @@ class CheckListMapset(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.Check
 	    if os.name in ('posix', 'mac'):
                 self.SetStringItem(index, 1, "%s" % pwd.getpwuid(stat_info.st_uid)[0])
                 # FIXME: get group name
-                self.SetStringItem(index, 2, "%-8s" % stat_info.st_gid) 
+                ### self.SetStringItem(index, 2, "%-8s" % stat_info.st_gid) 
 	    else:
                 # FIXME: no pwd under MS Windows (owner: 0, group: 0)
                 self.SetStringItem(index, 1, "%-8s" % stat_info.st_uid)
-                self.SetStringItem(index, 2, "%-8s" % stat_info.st_gid)
+                ### self.SetStringItem(index, 2, "%-8s" % stat_info.st_gid)
 
             if mapset in mapsets_access:
                 self.CheckItem(self.mapsets.index(mapset), True)
