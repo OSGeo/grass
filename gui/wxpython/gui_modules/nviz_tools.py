@@ -91,8 +91,7 @@ class NvizToolWindow(wx.Frame):
         # bindings
         #
         self.Bind(wx.EVT_CLOSE, self.OnClose)
-        # avoid focusing map display window
-        self.notebook.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, lambda x: None)
+        self.notebook.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
         
         #
         # layout
@@ -102,6 +101,9 @@ class NvizToolWindow(wx.Frame):
 
         self.SetSize(size)
 
+    def OnPageChanged(self, event):
+        pass # do nothing, avoid focusing map display window
+    
     def PostViewEvent(self, zExag=False):
         """Change view settings"""
         event = wxUpdateView(zExag=zExag)
