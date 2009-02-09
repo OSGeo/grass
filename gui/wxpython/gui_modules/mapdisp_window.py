@@ -686,7 +686,6 @@ class BufferedWindow(MapWindow, wx.Window):
                         self.vdigitMove.has_key('beginDiff'):
                     # move line
                     for id in self.vdigitMove['id']:
-                        # print self.pdcTmp.GetIdBounds(id)
                         self.pdcTmp.TranslateId(id,
                                                 self.vdigitMove['beginDiff'][0],
                                                 self.vdigitMove['beginDiff'][1])

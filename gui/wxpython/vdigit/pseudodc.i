@@ -1,6 +1,7 @@
 %{
 #include <wx/wxPython/wxPython.h>
 #include <wx/wxPython/pyclasses.h>
+#include <wx/dcbuffer.h>
 %}
 
 %{
@@ -33,10 +34,16 @@ public:
 	void SetIdBounds(int, wxRect&);
 	void DrawLine(const wxPoint&, const wxPoint&);
 	%extend {
-		void DrawToDC(void *dc) {
+		void DrawToDC(wxBufferedPaintDC *dc) {
 			self->DrawToDC((wxDC *) dc);
 		}
-		void DrawToDCClipped(void *dc, const wxRect& rect) {
+		void DrawToDC(wxGCDC *dc) {
+			self->DrawToDC((wxDC *) dc);
+		}
+		void DrawToDCClipped(wxBufferedPaintDC *dc, const wxRect& rect) {
+			self->DrawToDCClipped((wxDC *) dc, rect);
+		}
+		void DrawToDCClipped(wxGCDC *dc, const wxRect& rect) {
 			self->DrawToDCClipped((wxDC *) dc, rect);
 		}
 		wxRect GetIdBounds(int id) {
