@@ -1,5 +1,5 @@
 """
-@package workspace
+@package workspace.py
 
 @brief Open/save workspace definition file
 
@@ -8,14 +8,12 @@ Classes:
  - WriteWorkspaceFile
  - ProcessGrcFile
 
-(C) 2007-2008 by the GRASS Development Team
+(C) 2007-2009 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 @author Martin Landa <landa.martin gmail.com>
-
-@date 2007-2008
 """
 
 import os
@@ -70,6 +68,13 @@ class ProcessWorkspaceFile(HandlerBase):
         self.cmd    = []
         self.displayIndex = -1 # first display has index '0'
 
+    def __filterValue(self, value):
+        """Translate value"""
+        value = value.replace('&lt;', '<')
+        value = value.replace('&gt;', '>')
+        
+        return value
+    
     def startElement(self, name, attrs):
         if name == 'display':
             self.displayIndex += 1
@@ -252,7 +257,8 @@ class ProcessWorkspaceFile(HandlerBase):
                 self.Opacity = self.cmd = None
 
         elif name == 'parameter':
-            self.cmd.append('%s=%s' % (self.parameterName, self.value))
+            self.cmd.append('%s=%s' % (self.parameterName,
+                                       self.__filterValue(self.value)))
             self.parameterName = self.value = None
 
         #
@@ -396,6 +402,13 @@ class WriteWorkspaceFile(object):
         self.indent =- 4
         file.write('%s</gxw>\n' % (' ' * self.indent))
 
+    def __filterValue(self, value):
+        """Make value XML-valid"""
+        value = value.replace('<', '&lt;')
+        value = value.replace('>', '&gt;')
+        
+        return value
+    
     def __writeLayer(self, mapTree, item):
         """Write bunch of layers to GRASS Workspace XML file"""
         self.indent += 4
@@ -449,7 +462,7 @@ class WriteWorkspaceFile(object):
                                    (' ' * self.indent, key))
                         self.indent += 4
                         self.file.write('%s<value>%s</value>\n' %
-                                   (' ' * self.indent, val))
+                                   (' ' * self.indent, self.__filterValue(val)))
                         self.indent -= 4
                         self.file.write('%s</parameter>\n' % (' ' * self.indent));
                 self.indent -= 4
