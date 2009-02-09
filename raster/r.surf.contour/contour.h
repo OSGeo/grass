@@ -27,7 +27,6 @@ extern double i_val_l_f;
 extern CELL **con;
 extern FLAG *seen, *mask;
 extern NODE *zero;
-extern CELL on, off;
 
 /* add_in.c */
 NODE *add_in(int, int, int, int, NODE *, int *);
