@@ -1795,14 +1795,14 @@ class CheckListMapset(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.Check
         locationPath = os.path.join(gisenv['GISDBASE'], gisenv['LOCATION_NAME'])
 
         ret = gcmd.RunCommand('g.mapsets',
+                              parent = self,
                               flags = 'l',
                               fs = '|',
                               read = True)
-        ret = ret.rstrip('\n')
         
         mapsets = []
         if ret:
-            mapsets = ret.split('|')
+            mapsets = ret.rstrip('\n').split('|')
         
         for mapset in mapsets:
             index = self.InsertStringItem(sys.maxint, mapset)
