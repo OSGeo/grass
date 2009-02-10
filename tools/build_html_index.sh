@@ -123,7 +123,7 @@ cat <<EOF
 <BR><BR>
 <hr>
 <p><a href="$2">Help Index</a> | <a href="full_index.html">Full Index</a><br>
-&copy; 2003-2008 <a href="http://grass.osgeo.org">GRASS Development Team</a></p>
+&copy; 2003-2009 <a href="http://grass.osgeo.org">GRASS Development Team</a></p>
 </body>
 </html>
 EOF
