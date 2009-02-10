@@ -9,6 +9,16 @@ extern "C" {
 #ifdef WIN32
 #pragma warning(disable:4305)	/* disable warning about initialization of a float by a double */
 #endif
+
+/* Adding new band filters:
+ *
+ * o bands are defined by their discrete filter function
+ * o 1500 is the number of wavelength spectral description slots.
+ *   - a 'for' loop fills up the slots with 0
+ *   - then the ffu.s array is filled with each of the spectral bands data one after the other.
+ */
+
+
 /*
   spectral band of meteosat
 */
@@ -67,7 +77,7 @@ void IWave::meteo()
     int i;
     for(i = 0; i < 40; i++)	ffu.s[0] = 0;
     for(i = 0; i < 305; i++)	ffu.s[40+i] = sr[i];
-    for(i = 345; i < 1501; i++)ffu.s[i] = 0;
+    for(i = 345; i < 1501; i++) ffu.s[i] = 0;
 }
 
 
@@ -103,7 +113,7 @@ void IWave::goes_east()
     ffu.wlinf = 0.49f;
     ffu.wlsup = 0.8999999f;
     int i = 0;
-    for(i = 0; i < 96; i++)		ffu.s[i] = 0;
+    for(i = 0; i < 96; i++)	ffu.s[i] = 0;
     for(i = 0; i < 165; i++)	ffu.s[96+i] = sr[i];
     for(i = 261; i < 1501; i++) ffu.s[i] = 0;
 }
@@ -141,7 +151,7 @@ void IWave::goes_west()
     ffu.wlinf = 0.49f;
     ffu.wlsup = 0.8999999f;
     int i = 0;
-    for(i = 0; i < 96; i++)		ffu.s[i] = 0;
+    for(i = 0; i < 96; i++)	ffu.s[i] = 0;
     for(i = 0; i < 165; i++)	ffu.s[96+i] = sr[i];
     for(i = 261; i < 1501; i++) ffu.s[i] = 0;
 }
@@ -577,7 +587,7 @@ void IWave::avhrr(int iwa)
 
     switch(iwa)
     {
-    case 1: for(i = 0; i < 80; i++)	 ffu.s[120+i] = sr1[i];
+    case 1: for(i = 0; i < 80; i++)  ffu.s[120+i] = sr1[i];
 	break;
     case 2: for(i = 0; i < 173; i++) ffu.s[176+i] = sr2[i];
 	break;
@@ -754,7 +764,7 @@ void IWave::hrv(int iwa)
 	break;
     case 3: for(i = 0; i < 81; i++)	 ffu.s[192+i] = sr3[i];
 	break;
-    case 4: for(i = 0; i < 129; i++) ffu.s[88+i] = sr4[i];
+    case 4: for(i = 0; i < 129; i++)	 ffu.s[88+i] = sr4[i];
 	break;
     case 5: for(i = 0; i < 73; i++)	 ffu.s[88+i] = sr5[i];
 	break;
@@ -762,7 +772,7 @@ void IWave::hrv(int iwa)
 	break;
     case 7: for(i = 0; i < 81; i++)	 ffu.s[196+i] = sr7[i];
 	break;
-    case 8: for(i = 0; i < 129; i++) ffu.s[88+i] = sr8[i];
+    case 8: for(i = 0; i < 129; i++)	 ffu.s[88+i] = sr8[i];
 	break;
     }
 }
@@ -893,9 +903,9 @@ void IWave::tm(int iwa)
 	break;
     case 4: for(i = 0; i < 89; i++)	 ffu.s[192+i] = sr4[i];
 	break;
-    case 5: for(i = 0; i < 156; i++) ffu.s[501+i] = sr5[i];
+    case 5: for(i = 0; i < 156; i++)	 ffu.s[501+i] = sr5[i];
 	break;
-    case 6: for(i = 0; i < 185; i++) ffu.s[680+i] = sr6[i];
+    case 6: for(i = 0; i < 185; i++)	 ffu.s[680+i] = sr6[i];
 	break;
     }
 }
@@ -908,7 +918,7 @@ void IWave::mss(int iwa)
 	.09,    .13,    .21,    .29,    .45,    .61,    .72,
 	.82,    .85,    .89,    .92,    .95,    .96,    .98,
 	.99,    .99,   1.00,   1.00,   1.00,   1.00,   1.00,
-	1.00,   1.00,    .99,    .99,    .98,    .98,    .98,
+	1.00,   1.00,   .99,    .99,    .98,    .98,    .98,
 	.97,    .97,    .96,    .96,    .96,    .96,    .95,
 	.95,    .93,    .91,    .89,    .87,    .85,    .82,
 	.73,    .65,    .54,    .43,    .38,    .33,    .24,
@@ -936,7 +946,7 @@ void IWave::mss(int iwa)
 	.03,    .03,    .05,    .07,    .10,    .14,    .17,
 	.20,    .31,    .41,    .48,    .56,    .66,    .75,
 	.83,    .90,    .93,    .97,    .98,    .99,   1.00,
-	1.00,   1.00,    .99,    .99,    .98,    .97,    .96,
+	1.00,   1.00,   .99,    .99,    .98,    .97,    .96,
 	.94,    .93,    .90,    .88,    .87,    .86,    .84,
 	.83,    .82,    .82,    .82,    .82,    .82,    .83,
 	.83,    .83,    .83,    .83,    .81,    .80,    .78,
@@ -952,7 +962,7 @@ void IWave::mss(int iwa)
 	.45,    .68,    .76,    .83,    .89,    .94,    .94,
 	.94,    .94,    .95,    .95,    .96,    .97,    .98,
 	.99,    .99,   1.00,   1.00,   1.00,   1.00,   1.00,
-	1.00,   1.00,    .99,    .98,    .97,    .96,    .95,
+	1.00,   1.00,   .99,    .98,    .97,    .96,    .95,
 	.94,    .93,    .92,    .92,    .91,    .90,    .89,
 	.88,    .87,    .86,    .86,    .85,    .83,    .82,
 	.81,    .80,    .78,    .77,    .76,    .76,    .75,
@@ -986,7 +996,7 @@ void IWave::mss(int iwa)
 	break;
     case 3: for(i = 0; i < 81; i++)	 ffu.s[162+i] = sr3[i];
 	break;
-    case 4: for(i = 0; i < 127; i++) ffu.s[214+i] = sr4[i];
+    case 4: for(i = 0; i < 127; i++)	 ffu.s[214+i] = sr4[i];
 	break;
     }
 }
@@ -1115,13 +1125,13 @@ void IWave::mas(int iwa)
 	break;
     case 6: for(i = 0; i < 40; i++)	 ffu.s[738+i] = sr6[i];
 	break;
-    case 7: for(i = 0; i < 117; i++) ffu.s[1332+i] = sr7[i];
+    case 7: for(i = 0; i < 117; i++)	 ffu.s[1332+i] = sr7[i];
 	break;
     case 8: for(i = 0; i < 13; i++)	 ffu.s[82+i] = sr8[i];
 	break;
     case 9: for(i = 0; i < 25; i++)	 ffu.s[384+i] = sr9[i];
 	break;
-    case 10: for(i = 0; i < 27; i++) ffu.s[543+i] = sr10[i];
+    case 10: for(i = 0; i < 27; i++)	 ffu.s[543+i] = sr10[i];
 	break;
     }
 }
@@ -1447,11 +1457,11 @@ void IWave::etmplus(int iwa)
 	break;
     case 4: for(i = 0; i < 70; i++)	 ffu.s[196+i] = sr4[i];
 	break;
-    case 5: for(i = 0; i < 116; i++) ffu.s[502+i] = sr5[i];
+    case 5: for(i = 0; i < 116; i++)	 ffu.s[502+i] = sr5[i];
 	break;
-    case 6: for(i = 0; i < 147; i++) ffu.s[706+i] = sr6[i];
+    case 6: for(i = 0; i < 147; i++)	 ffu.s[706+i] = sr6[i];
 	break;
-    case 7: for(i = 0; i < 164; i++) ffu.s[101+i] = sr7[i];
+    case 7: for(i = 0; i < 164; i++)	 ffu.s[101+i] = sr7[i];
     }
 }
 
@@ -1742,9 +1752,9 @@ void IWave::parse()
 	    cin.ignore(numeric_limits<int>::max(),'\n');
 	    /* moved rest further on */
 	}
-	else if(iwave == 2)		meteo();
-	else if(iwave == 3)		goes_east();
-	else if(iwave == 4)		goes_west();
+	else if(iwave == 2)	meteo();
+	else if(iwave == 3)	goes_east();
+	else if(iwave == 4)	goes_west();
 	else if(iwave <= 16)	avhrr(iwave - 4);
 	else if(iwave <= 24)	hrv(iwave - 16);
 	else if(iwave <= 30)	tm(iwave - 24);
