@@ -237,7 +237,7 @@ cat << EOF >> "${TMP}.html"
 <hr>
 <p>
 <a href="index.html">Help Index</a><br>
-&copy; 2007-2008 <a href="http://grass.osgeo.org">GRASS Development Team</a>
+&copy; 2007-2009 <a href="http://grass.osgeo.org">GRASS Development Team</a>
 </p>
 
 </BODY>
