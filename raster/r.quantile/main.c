@@ -51,7 +51,7 @@ static inline int get_slot(DCELL c)
 
 static inline double get_quantile(int n)
 {
-    return (double)total *quants[n];
+    return (double)total * quants[n];
 }
 
 static void get_slot_counts(int infile)
@@ -190,26 +190,37 @@ static void sort_bins(void)
 
 static void compute_quantiles(int recode)
 {
-    struct bin *b = &bins[0];
+    int bin = 0;
     double prev_v = min;
     int quant;
 
     for (quant = 0; quant < num_quants; quant++) {
+	struct bin *b;
 	double next = get_quantile(quant);
 	double k, v;
 	int i0, i1;
 
-	while (b->origin + b->count < next)
-	    b++;
+	for (; bin < num_bins; bin++) {
+	    b = &bins[bin];
+	    if (b->origin + b->count >= next)
+		break;
+	}
 
-	k = next - b->origin;
-	i0 = (int)floor(k);
-	i1 = (int)ceil(k);
+	if (bin < num_bins) {
+	    k = next - b->origin;
+	    i0 = (int)floor(k);
+	    i1 = (int)ceil(k);
 
-	v = (i0 == i1)
-	    ? values[b->base + i0]
-	    : values[b->base + i0] * (i1 - k) + values[b->base + i1] * (k -
-									i0);
+	    if (i1 > b->count - 1)
+		i1 = b->count - 1;
+
+	    v = (i0 == i1)
+		? values[b->base + i0]
+		: values[b->base + i0] * (i1 - k) +
+		  values[b->base + i1] * (k - i0);
+	}
+	else
+	    v = max;
 
 	if (recode)
 	    printf("%f:%f:%i\n", prev_v, v, quant + 1);
