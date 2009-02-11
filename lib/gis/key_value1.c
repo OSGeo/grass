@@ -129,9 +129,13 @@ const char *G_find_key_value(const char *key, const struct Key_Value *kv)
 {
     int n;
 
+    if (!kv)
+	return NULL;
+    
     for (n = 0; n < kv->nitems; n++)
 	if (strcmp(key, kv->key[n]) == 0)
 	    return kv->value[n][0] ? kv->value[n] : NULL;
+    
     return NULL;
 }
 
