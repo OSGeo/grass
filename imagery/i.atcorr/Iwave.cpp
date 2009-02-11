@@ -10,12 +10,22 @@ extern "C" {
 #pragma warning(disable:4305)	/* disable warning about initialization of a float by a double */
 #endif
 
-/* Adding new band filters:
+/* Adding new band filters (see also Iwave.h):
+ *
+ * Note: the spectral range ranges 250 to 4000 nm (see Iwave.h) which is 
+ *   4000-250=3750nm, and (4000-250)/1500=2.5. Hence, the resulting step 
+ *   size is 2.5 nm in the ffu.s array.
  *
  * o bands are defined by their discrete filter function
+ * o to compute a band position in the 1500 slots of ffu.s array, start
+ *   with 250nm using 2.5nm increments. The result is the starting index
+ *   for the spectral band.
  * o 1500 is the number of wavelength spectral description slots.
  *   - a 'for' loop fills up the slots with 0
  *   - then the ffu.s array is filled with each of the spectral bands data one after the other.
+ *     Example Lsat TM: (435-250) / 2.5 = 74
+ * o add iwave value, also in Iwave.h
+ * o add to GeomCond.cpp and GeomCond.h
  */
 
 
@@ -1699,6 +1709,89 @@ float IWave::solirr(const float wl) const
     return si[0];
 }
 
+void IWave::irs_1c_liss(int iwa)
+{
+    /* 2nd spectral band of IRS 1C LISS III */
+    static const float sr2[61] = {
+	.0006, .0009, .0012, .0020, .0036, .0080, .0216, .0655,
+	.1690, .3080, .4280, .5600, .7010, .7600, .7640, .7690,
+	.7960, .8400, .8760, .8820, .8670, .8560, .8620, .8890,
+	.9240, .9480, .9590, .9540, .9460, .9490, .9660, .9860,
+	1.0000,.9960, .9740, .9490, .9340, .9340, .9340, .9210,
+	.8820, .8300, .7880, .7770, .7670, .6640, .4190, .1980,
+	.0882, .0396, .0192, .0107, .0066, .0041, .0026, .0018,
+	.0012, .0010, .0007, .0006
+    };
+
+    /* 3rd spectral band of IRS 1C LISS III */
+    static const float sr3[45] = { 
+	.0041, .0110, .0357, .1310, .4020, .7200, .8300, .8700,
+	.8980, .9120, .9230, .9300, .9320, .9310, .9270, .9300,
+	.9390, .9510, .9580, .9600, .9630, .9700, .9890,1.0000,
+	.9880, .9390, .8740, .8220, .8040, .8350, .9000, .9620,
+	.9730, .9410, .9170, .8790, .6460, .2940, .1050, .0390,
+	.0105, .0040, .0020, .0010, .0000
+    };
+
+    /* 4th spectral band of IRS 1C LISS III */
+    static const float sr4[65] = {  
+	.0090, .0149, .0244, .0400, .0649, .1020, .1520, .2170,
+	.2940, .3820, .4830, .6120, .7270, .8320, .9180, .9760,
+	1.0000,.9970, .9800, .9590, .9410, .9330, .9330, .9390,
+	.9480, .9550, .9620, .9580, .9500, .9380, .9270, .9150,
+	.9100, .9050, .9050, .9020, .8970, .8900, .8830, .8740,
+	.8690, .8700, .8720, .8740, .8680, .8490, .8150, .7720,
+	.7310, .6990, .6840, .6800, .6640, .5750, .4060, .2280,
+	.1240, .0641, .0356, .0206, .0126, .0080, .0052, .0035,
+	.0025
+    };
+	 
+    /* 5th spectral band of IRS 1C LISS III */
+    static const float sr5[155] = { 
+	.0000, .0000, .0000, .0000, .0001, .0001, .0001, .0001,
+	.0000, .0001, .0001, .0021, .0001, .0000, .0001, .0001,
+	.0001, .0001, .0001, .0002, .0002, .0002, .0001, .0005,
+	.0004, .0006, .0007, .0010, .0011, .0015, .0020, .0024,
+	.0030, .0039, .0051, .0068, .0088, .0114, .0153, .0206,
+	.0281, .0372, .0515, .0708, .0983, .1370, .1870, .2580,
+	.3470, .4410, .5340, .6190, .6920, .7510, .7940, .8270,
+	.8500, .8680, .8800, .8920, .9010, .9090, .9170, .9250,
+	.9310, .9400, .9490, .9590, .9700, .9760, .9850, .9920,
+	.9960,1.0000,1.0000, .9960, .9910, .9860, .9790, .9730,
+	.9680, .9660, .9620, .9640, .9670, .9700, .9750, .9810,
+	.9850, .9880, .9840, .9770, .9690, .9560, .9400, .9240,
+	.9080, .8880, .8710, .8570, .8410, .8300, .8220, .8180,
+	.8170, .8220, .8290, .8370, .8460, .8550, .8450, .8310,
+	.8110, .7870, .7580, .7180, .6780, .6380, .5990, .5640,
+	.5280, .4930, .4590, .4210, .3770, .3320, .2770, .2160,
+	.1580, .1110, .0772, .0528, .0357, .0242, .0165, .0117,
+	.0083, .0059, .0042, .0031, .0023, .0017, .0013, .0009,
+	.0007, .0005, .0004, .0002, .0002, .0001, .0001, .0001,
+	.0001, .0000, .0000
+    };
+
+    static const float wli[4] = { 0.502, 0.612, 0.752, 1.452 };
+    static const float wls[4] = { 0.620, 0.700, 0.880, 1.760 };
+
+    ffu.wlinf = wli[iwa-1];
+    ffu.wlsup = wls[iwa-1];
+
+    int i;
+    for(i = 0; i < 1501; i++) ffu.s[i] = 0; 
+
+    switch(iwa)
+    {
+    case 1: for(i = 0; i < 61; i++)	 ffu.s[101+i] = sr2[i];
+	break;
+    case 2: for(i = 0; i < 45; i++)	 ffu.s[145+i] = sr3[i];
+	break;
+    case 3: for(i = 0; i < 65; i++)	 ffu.s[201+i] = sr4[i];
+	break;
+    case 4: for(i = 0; i < 155; i++)	 ffu.s[481+i] = sr5[i];
+	break;
+    }
+}
+
 float IWave::equivwl() const
 {
     float seb = 0;
@@ -1764,6 +1857,7 @@ void IWave::parse()
 	else if(iwave <= 52)	avhrr(iwave - 36);
 	else if(iwave <= 60)	polder(iwave - 52);
 	else if(iwave <= 67)	etmplus(iwave - 60);
+	else if(iwave <= 71)	irs_1c_liss(iwave - 67);
 	else G_warning(_("Unsupported iwave value: %d"), iwave);
     }
 
@@ -1780,7 +1874,7 @@ void IWave::parse()
 /* --- spectral condition ---- */
 void IWave::print()
 {
-    static const string nsat[68] = {
+    static const string nsat[72] = {
 	string(" constant        "), string(" user s          "),
 	string(" meteosat        "), string(" goes east       "), string(" goes west       "),
 	string(" avhrr 1 (noaa6) "), string(" avhrr 2 (noaa6) "),
@@ -1809,7 +1903,9 @@ void IWave::print()
 	string(" polder 6        "), string(" polder 7        "), string(" polder 8        "),
 	string(" etm+ 1          "), string(" etm+ 2          "), string(" etm+ 3          "),
 	string(" etm+ 4          "), string(" etm+ 5          "), string(" etm+ 7          "),
-	string(" etm+ 8          ")
+	string(" etm+ 8          "),
+	string(" liss 2          "), string(" liss 3          "), string(" liss 4          "),
+	string(" liss 5          ")
     };
 
 

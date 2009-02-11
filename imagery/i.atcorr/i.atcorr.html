@@ -41,7 +41,7 @@ An example 6s parameters <em>icnd</em> file for <b>i.atcorr</b>:
 64                           - 4th band of ETM+ Landsat 7
 </pre></div>
 
-
+<i>
 <h2><font color="red">REMAINING DOCUMENTATION ISSUES</font></h2>
 1. Using the target elevation and visibility parameters in the <em>icnd</em>
 file overrides <em>ialt</em> and <em>ivis</em> input rasters. It is not clear
@@ -49,10 +49,10 @@ what to do to force <b>i.atcorr</b> to use the rasters instead though.
 <p>
 2. The "example 6s parameters file" explains that "-.600" in line 6 means
 "target at 600 m ASL". However, in the section E of "6S CODE PARAMETER CHOICES"
-it reads: "xps <=0. means the target is at the sea level". This is contrary.
+it reads: "xps &lt;=0. means the target is at the sea level". This is contrary.
 <p>
-3. In section E, I'm not sure if the "-100< xpp <0" shouldn't actually be
-"-1000< xpp <0". ?
+3. In section E, I'm not sure if the "-100 &lt; xpp &lt; 0" shouldn't actually be
+"-1000 &lt; xpp &lt; 0". ?
 <p>
 4. It is not explained what is the "iaer" parameter that section D refers to.
 <p>
@@ -65,7 +65,7 @@ in conjuction with flag <em>-o</em> can slow down the calculations instead of
 speeding them up.
 <p>
 7. "This should not affect the user's current region settings" sounds ambigious.
-
+</i>
 <p>
 
 <H2>6S CODE PARAMETER CHOICES</H2>
@@ -130,33 +130,33 @@ the ascendant node at equator</td>
 
 <tr>
 <td>6</td>
-
 <td><b>hrv</b> (spot)</td>
-
 <td>enter month,day,hh.ddd,long.,lat. *</td>
 </tr>
 
 <tr>
 <td>7</td>
-
 <td><b>tm</b> (landsat)</td>
-
 <td>enter month,day,hh.ddd,long.,lat. *</td>
 </tr>
 
 <tr>
 <td>8</td>
-
 <td><b>etm+</b> (landsat7)</td>
+<td>enter month,day,hh.ddd,long.,lat. *</td>
+</tr>
 
+<tr>
+<td>9</td>
+<td><b>liss</b> (IRS 1C)</td>
 <td>enter month,day,hh.ddd,long.,lat. *</td>
 </tr>
 </table>
 
 <blockquote>
-* NOTE: for hrv, tm and etm+ experiments, longitude and lattitude
-are the coordinates of the scene center. Lattitude must be >0 for northern
-hemisphere and &lt;0 for southern. Longitude must be >0 for eastern hemisphere
+* NOTE: for hrv, tm, etm+ and liss experiments, longitude and latitude
+are the coordinates of the scene center. Latitude must be &gt;0 for northern
+hemisphere and &lt;0 for southern. Longitude must be &gt;0 for eastern hemisphere
 and &lt;0 for western.
 </blockquote>
 
@@ -347,7 +347,7 @@ visibility and enter the aerosol optical depth at 550nm.
 <br><h3>E. Target altitude (xps), sensor platform (xpp)</h3>
 
 <blockquote>xps &lt;=0 means the target is at the sea level.
-<br>xps >0 means you know the altitude of the target expressed
+<br>xps &gt;0 means you know the altitude of the target expressed
 in km, and you put that value as xps.
 <br>
 
@@ -499,6 +499,10 @@ micrometer.</td>
 <tr><td>66</td><td>etm+ (landsat7) band 7 (2.020-2.380)</td></tr>
 <tr><td>67</td><td>etm+ (landsat7) band 8 (0.504-0.909)</td></tr>
 
+<tr><td>68</td><td><b>liss (IRC 1C)</b> band 2 (0.502-0.620)</td></tr>
+<tr><td>69</td><td>liss (IRC 1C) band 3 (0.612-0.700)</td></tr>
+<tr><td>70</td><td>liss (IRC 1C) band 4 (0.752-0.880)</td></tr>
+<tr><td>71</td><td>liss (IRC 1C) band 5 (1.452-1.760)</td></tr>
 </table>
 
 <H2>AUTHORS</H2>

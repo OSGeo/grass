@@ -45,6 +45,8 @@
 /*                                                                      c */
 /*         8       etm+  ( landsat7) * enter month,day,hh.ddd,long.,lat.c */
 /*                                                                      c */
+/*         9       liss  ( IRC 1C )  * enter month,day,hh.ddd,long.,lat.c */
+/*                                                                      c */
 /*                                                                      c */
 /*     note:       for hrv and tm experiments long. and lat. are the    c */
 /*                 coordinates of the scene center.                     c */
