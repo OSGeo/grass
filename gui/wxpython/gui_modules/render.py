@@ -624,9 +624,15 @@ class Map(object):
             elif vect:
                 e.message = _("Unable to zoom to vector map <%s>.") % vect[0] + \
                 '%s%s' % (os.linesep, os.linesep) + e.message
-
-            print >> sys.stderr, e
-            return self.region
+            else:
+                e.message = _("Unable to get current geographic extent. "
+                              "Force quiting wxGUI. Please run manually g.region to "
+                              "fix the problem.")
+            e.Show()
+            if not rast and not vect:
+                sys.exit(1)
+            else:
+                return self.region
 
         for reg in ret.splitlines():
             key, val = reg.split("=", 1)
