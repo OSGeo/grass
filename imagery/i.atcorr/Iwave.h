@@ -89,6 +89,10 @@ c        64  4th      "               ( 0.751-0.911 )                  c
 c        65  5th      "               ( 1.512-1.792 )                  c
 c        66  7th      "               ( 2.020-2.380 )                  c
 c        67  8th      "               ( 0.504-0.909 )                  c
+c        68  2nd band of liss (IRC 1C)( 0.502-0.620 )                  c
+c        69  3rd      "               ( 0.612-0.700 )                  c
+c        70  4th      "               ( 0.752-0.880 )                  c
+c        71  5th      "               ( 1.452-1.760 )                  c
 c  note: wl has to be in micrometer                                    c
 c**********************************************************************/
 
@@ -123,6 +127,7 @@ private:
 	void modis(int iwa);
 	void polder(int iwa);
 	void etmplus(int iwa);
+	void irs_1c_liss(int iwa);
 
 
 public:
