@@ -48,8 +48,7 @@ int init_6S(char* icnd_name)
     ifstream inText;
     inText.open(icnd_name);
     if(!inText.is_open()) {
-	G_warning(_("Unable to open file <%s>"), icnd_name);
-	return -1;
+	G_fatal_error(_("Unable to open file <%s>"), icnd_name);
     }
 
     /* redirect cin to the input text file */
