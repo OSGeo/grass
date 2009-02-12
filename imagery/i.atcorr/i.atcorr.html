@@ -32,7 +32,7 @@ An example 6s parameters <em>icnd</em> file for <b>i.atcorr</b>:
 <p>
 <div class="code"><pre>
 8                            - geometrical conditions=Landsat ETM+
-2 19 13.00 -47.410 -20.234   - month day hh.ddd longitude lattitude ("hh.ddd" is a decimal hour GMT)
+2 19 13.00 -47.410 -20.234   - month day hh.ddd longitude latitude ("hh.ddd" is a decimal hour GMT)
 1                            - atmospheric mode=tropical
 1                            - aerosols model=continental
 15                           - visibility [km] (aerosol model concentration)
@@ -70,7 +70,7 @@ speeding them up.
 
 <h3>A. Geometrical conditions:</h3>
 
-<table CELLPADDING="3">
+<table CELLPADDING="3" border="1">
 
 <tr>
 <td>Code</td>
@@ -160,7 +160,7 @@ and &lt;0 for western.
 
 <br><h3>B. Atmospheric model</h3>
 
-<table CELLPADDING="3">
+<table CELLPADDING="3" border="1">
 
 <tr>
 <td>Code</td>
@@ -232,7 +232,7 @@ ozone content:
 
 <br><h3>C. Aerosols model</h3>
 
-<table CELLPADDING="3">
+<table CELLPADDING="3" border="1">
 
 <tr>
 <td>Code</td>
@@ -375,7 +375,7 @@ pre-defined satellites.
 
 <p>Define your own spectral conditions:
 <p>
-<table CELLPADDING="3">
+<table CELLPADDING="3" border="1">
 
 <tr>
 <td>Code</td>
@@ -409,7 +409,7 @@ micrometer.</td>
 
 <p>Pre-defined satellite bands:
 <p>
-<table CELLPADDING="3">
+<table CELLPADDING="3" border="1">
 
 <tr><td>Code</td><td>Meaning</td></tr>
 
@@ -503,6 +503,30 @@ micrometer.</td>
 <tr><td>71</td><td>liss (IRC 1C) band 5 (1.452-1.760)</td></tr>
 </table>
 
+<h2>EXAMPLES</h2>
+
+North Carolina sample dataset: Atmospheric correction of LANDSAT-7 channels:
+
+<div class="code"><pre>
+g.region rast=lsat7_2002_40 -p
+r.info lsat7_2002_40
+
+# create control file for channel 1 (blue)
+echo "8                            - geometrical conditions=Landsat ETM+
+5 24 14.30 -78.691 35.749    - month day hh.ddd longitude latitude ("hh.ddd" is a decimal hour GMT)
+2                            - atmospheric mode=midlatitude summer
+1                            - aerosols model=continental
+50                           - visibility [km] (aerosol model concentration)
+-.600                        - target at 600m above sea level
+-1000                        - sensor on board a satellite
+61                           - 1th band of ETM+ Landsat 7" > icnd.txt
+
+# run atmospheric correction
+i.atcorr lsat7_2002_40 ialt=elevation icnd=icnd.txt oimg=lsat7_2002_40_atcorr
+</pre></div>
+
+Note that the process is computationally intensive.
+
 <H2>AUTHORS</H2>
 
 <p><em>Original version of the program for GRASS 5:</em>
@@ -517,7 +541,7 @@ micrometer.</td>
 Second simulation of the satellite signal in the solar spectrum, 6S: An
 overview., IEEE Trans. Geosc. and Remote Sens. 35(3):675-686.
 
-<p><a href="http://modis-sr.ltdri.org/6S_code/6S_code2_thinner_stuff/6S_ltdri_org_manual.html">6s manual</a> at the <a href="http://modis-sr.ltdri.org/6S_code/index.html">6s homepage</a> of the Land Surface Reflectance Science Computing Facility
+<p><a href="http://modis-sr.ltdri.org/6S_code/6S_code2_thinner_stuff/6S_ltdri_org_manual.html">6s manual</a> at the <a href="http://modis-sr.ltdri.org/6S_code/index.html">6s homepage</a> of the Land Surface Reflectance Science Computing Facility (also <a href="www.rsgis.ait.ac.th/~honda/textbooks/advrs/6smanv2.0_P1.pdf">PDF1</a>, <a href="www.rsgis.ait.ac.th/~honda/textbooks/advrs/6smanv2.0_P2.pdf">PDF2</a>, and <a href="www.rsgis.ait.ac.th/~honda/textbooks/advrs/6smanv2.0_P3.pdf">PDF3</a>)
 
 <p>Mauro A. Homem Antunes <a href="http://www.ltid.inpe.br/dsr/mauro/6s/download_6s.html">website about his 6s version</a>
 

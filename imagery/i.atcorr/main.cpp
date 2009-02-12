@@ -22,6 +22,13 @@
     supplying an elevation map has not been run to completion, because it
     takes to long and no sensible data for the test data was at hand.
     Testing would be welcomed. :)  
+**********
+
+* Code clean-up and port to GRASS 6.3, 15.12.2006:
+  Yann Chemin, ychemin(at)gmail.com 
+
+* Addition of IRS-1C LISS, Feb 2009: Markus Neteler
+
 ***************************************************************************/
 
 #include <cstdlib>
@@ -265,7 +272,7 @@ static void process_raster (int ifd, InputMask imask, ScaleRange iscale,
     FCELL* vis = NULL;         /* buffer for the visibility values */
     FCELL  prev_alt = -1.f;
     FCELL  prev_vis = -1.f;
-    int row, col;
+    int row, col, nrows, ncols;
 
     /* do initial computation with global elevation and visibility values */
     TransformInput ti;
@@ -279,10 +286,12 @@ static void process_raster (int ifd, InputMask imask, ScaleRange iscale,
     if(ivis_fd >= 0) vis = (FCELL*)G_allocate_raster_buf(FCELL_TYPE);
 
     G_verbose_message(_("Percent complete..."));
+    nrows = G_window_rows();
+    ncols = G_window_cols();
 
-    for(row = 0; row < G_window_rows(); row++)
+    for(row = 0; row < nrows; row++)
     {
-	G_percent(row, G_window_rows(), 1);     /* keep the user informed of our progress */
+	G_percent(row, nrows, 1);     /* keep the user informed of our progress */
 		
         /* read the next row */
 	if(G_get_raster_row(ifd, buf, row, FCELL_TYPE) < 0)
@@ -302,7 +311,7 @@ static void process_raster (int ifd, InputMask imask, ScaleRange iscale,
 			       row);
 
         /* loop over all the values in the row */
-	for(col = 0; col < G_window_cols(); col++)
+	for(col = 0; col < ncols; col++)
 	{
 	    if(vis && G_is_f_null_value(&vis[col]) || 
 	       alt && G_is_f_null_value(&alt[col]) || 
@@ -372,7 +381,7 @@ static void process_raster (int ifd, InputMask imask, ScaleRange iscale,
                     }
                 }
             }
-
+	    G_debug(3, "Computed r%d, c%d", row, col);
             /* transform from iscale.[min,max] to [0,1] */
             buf[col] = (buf[col] - iscale.min) / ((float)iscale.max - (float)iscale.min);
             buf[col] = transform(ti, imask, buf[col]);
