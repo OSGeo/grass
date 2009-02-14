@@ -660,9 +660,15 @@ class VDigit(AbstractDigit):
 
     def UpdateSettings(self):
         """Update digit settigs"""
-        if self.digit:
-            self.digit.UpdateSettings(UserSettings.Get(group='vdigit', key='breakLines',
-                                                       subkey='enabled'))
+        if not self.digit:
+            return
+        
+        self.digit.UpdateSettings(UserSettings.Get(group='vdigit', key='breakLines',
+                                                   subkey='enabled'),
+                                  UserSettings.Get(group='vdigit', key='addCentroid',
+                                                   subkey='enabled'),
+                                  UserSettings.Get(group='vdigit', key='catBoundary',
+                                                   subkey='enabled'))
         
     def __getSnapThreshold(self):
         """Get snap mode and threshold value
@@ -1423,6 +1429,26 @@ class VDigitSettingsDialog(wx.Dialog):
                    flag=wx.ALL | wx.EXPAND, border=5)
 
         #
+        # digitize new area
+        #
+        box   = wx.StaticBox (parent=panel, id=wx.ID_ANY, label=" %s " % _("Digitize new area"))
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        
+        # add centroid
+        self.addCentroid = wx.CheckBox(parent=panel, id=wx.ID_ANY,
+                                       label=_("Add centroid to left/right area"))
+        self.addCentroid.SetValue(UserSettings.Get(group='vdigit', key="addCentroid", subkey='enabled'))
+        sizer.Add(item=self.addCentroid, proportion=0, flag=wx.ALL | wx.EXPAND, border=1)
+        
+        # attach category to boundary
+        self.catBoundary = wx.CheckBox(parent=panel, id=wx.ID_ANY,
+                                       label=_("Do not attach category to boundaries"))
+        self.catBoundary.SetValue(UserSettings.Get(group='vdigit', key="catBoundary", subkey='enabled'))
+        sizer.Add(item=self.catBoundary, proportion=0, flag=wx.ALL | wx.EXPAND, border=1)
+        border.Add(item=sizer, proportion=0,
+                   flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=5)
+        
+        #
         # delete existing record
         #
         box   = wx.StaticBox (parent=panel, id=wx.ID_ANY, label=" %s " % _("Delete existing feature(s)"))
@@ -1626,6 +1652,12 @@ class VDigitSettingsDialog(wx.Dialog):
         UserSettings.Set(group='vdigit', key="categoryMode", subkey='selection',
                          value=self.categoryMode.GetSelection())
 
+        # digitize new area
+        UserSettings.Set(group='vdigit', key="addCentroid", subkey='enabled',
+                         value=self.addCentroid.IsChecked())
+        UserSettings.Set(group='vdigit', key="catBoundary", subkey='enabled',
+                         value=self.catBoundary.IsChecked())
+        
         # delete existing feature
         UserSettings.Set(group='vdigit', key="delRecord", subkey='enabled',
                          value=self.deleteRecord.IsChecked())
