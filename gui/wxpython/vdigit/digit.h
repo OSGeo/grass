@@ -24,6 +24,8 @@ private:
     /* settings */
     struct _settings {
 	bool breakLines;
+	bool addCentroid;
+	bool catBoundary;
     } settings;
 
     /* undo/redo */
@@ -89,7 +91,8 @@ public:
     int Undo(int);
     int GetUndoLevel();
 
-    void UpdateSettings(bool);
+    void UpdateSettings(bool, 
+			bool, bool);
 };
 
 #endif /* WXVDIGIT_DIGIT_H */

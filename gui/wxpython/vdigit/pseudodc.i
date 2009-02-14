@@ -58,5 +58,8 @@ public:
 		        return self->FindObjects((wxCoord) x, (wxCoord) y,
 			                         (wxCoord) radius, *wxWHITE);
                 }
+		void DrawRectangleRect(const wxRect& rect) {
+		        return self->DrawRectangle(rect);
+                }
 	}
 };

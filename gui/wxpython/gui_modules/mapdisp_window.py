@@ -297,11 +297,10 @@ class BufferedWindow(MapWindow, wx.Window):
                 y1 = min(coords[1],coords[3])
                 rwidth = x2-x1
                 rheight = y2-y1
-                rect = wx.Rect(x1,y1,rwidth,rheight)
+                rect = wx.Rect(x1, y1, rwidth, rheight)
                 pdc.DrawRectangleRect(rect)
                 pdc.SetIdBounds(drawid, rect)
-                # self.ovlcoords[drawid] = coords
-
+                
         elif pdctype == 'line': # draw a line on top of the map
             if self.pen:
                 pdc.SetBrush(wx.Brush(wx.CYAN, wx.TRANSPARENT))
@@ -882,7 +881,8 @@ class BufferedWindow(MapWindow, wx.Window):
             mousecoords = [begin[0], begin[1],
                            end[0], end[1]]
             r = pdc.GetIdBounds(boxid)
-            r.Inflate(4,4)
+            r = wx.Rect(r[0], r[1], r[2], r[3])
+            r.Inflate(4, 4)
             pdc.ClearId(boxid)
             self.RefreshRect(r, False)
             pdc.SetId(boxid)
@@ -1900,7 +1900,9 @@ class BufferedWindow(MapWindow, wx.Window):
                     self.redrawAll = True
                     
                     # add new record into atribute table
-                    if UserSettings.Get(group='vdigit', key="addRecord", subkey='enabled') is True:
+                    if UserSettings.Get(group='vdigit', key="addRecord", subkey='enabled') and \
+                            (line is True or \
+                                 (not line and fid > 0)):
                         posWindow = self.ClientToScreen((position[0] + self.dialogOffset,
                                                          position[1] + self.dialogOffset))
 
