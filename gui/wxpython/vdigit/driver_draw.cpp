@@ -1,19 +1,18 @@
 /**
    \file driver_draw.cpp
    
-   \brief Experimental C++ wxWidgets display driver
+   \brief wxvdigit - Display driver (draw methods)
 
-   This driver is designed for wxPython GRASS GUI (digitization tool).
-   Draw vector map layer to PseudoDC.
+   This driver is designed for wxGUI (vector digitizer) - to draw
+   vector map layer to PseudoDC.
 
-   (C) by the GRASS Development Team
    This program is free software under the GNU General Public
    License (>=v2). Read the file COPYING that comes with GRASS
    for details.
 
-   \author Martin Landa <landa.martin gmail.com>
+   (C) 2008-2009 by Martin Landa, and the GRASS development team
 
-   \date 2007-2008 
+   \author Martin Landa <landa.martin gmail.com>
 */
 
 #include <cmath>

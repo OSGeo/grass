@@ -1,17 +1,15 @@
 /**
    \file digit.cpp
 
-   \brief Experimental C++ interace for vector digitization used
-   by wxPython GUI.
+   \brief wxvdigit - C++ interace for wxGUI vector digitizer.
 
    This program is free software under the GNU General Public
    License (>=v2). Read the file COPYING that comes with GRASS
    for details.
 
-   \author (C) by the GRASS Development Team
-   Martin Landa <landa.martin gmail.com>
+   (C) 2008-2009 by Martin Landa, and the GRASS development team
 
-   \date 2008
+   \author Martin Landa <landa.martin gmail.com>
 */
 
 #include "driver.h"
