@@ -172,7 +172,6 @@ def CreateNewVector(parent, cmd, title=_('Create new vector map'),
             overwrite = True
         
         try:
-            print cmd
             gcmd.RunCommand(prog = cmd[0],
                             overwrite = overwrite,
                             **cmd[1])
