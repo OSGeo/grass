@@ -4,6 +4,7 @@ SUBDIRS = docs scripts vdigit nviz
 EXTRA_CLEAN_FILES = menustrings.py
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
+include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 
 ETCDIR = $(ETC)/wxpython
 
@@ -31,3 +32,6 @@ $(ETCDIR)/%: %
 
 menustrings.py: gui_modules/menudata.py xml/menudata.xml
 	python $< $(GISBASE) > $@
+
+#doxygen:
+DOXNAME=wxpython
