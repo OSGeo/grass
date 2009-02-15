@@ -1,19 +1,15 @@
 /**
-   \file load.cpp
+   \file nviz/load.cpp
+
+   \brief wxNviz extension (3D view mode) - load data layers
    
-   \brief Experimental C++ wxWidgets Nviz prototype -- load data layers
-
-   Used by wxGUI Nviz extension.
-
-   Copyright: (C) by the GRASS Development Team
-
    This program is free software under the GNU General Public
    License (>=v2). Read the file COPYING that comes with GRASS
    for details.
-
+   
+   (C) 2008-2009 by Martin Landa, and the GRASS development team
+   
    \author Martin Landa <landa.martin gmail.com> (Google SoC 2008)
-
-   \date 2008
 */
 
 #include "nviz.h"

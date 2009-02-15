@@ -1,5 +1,5 @@
 /**
-   \file undo.cpp
+   \file vdigit/undo.cpp
 
    \brief wxvdigit - Undo/Redo functionality
 

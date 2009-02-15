@@ -1,5 +1,5 @@
 /**
-   \file digit.cpp
+   \file vdigit/digit.cpp
 
    \brief wxvdigit - C++ interace for wxGUI vector digitizer.
 

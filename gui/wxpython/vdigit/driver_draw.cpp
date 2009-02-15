@@ -1,5 +1,5 @@
 /**
-   \file driver_draw.cpp
+   \file vdigit/driver_draw.cpp
    
    \brief wxvdigit - Display driver (draw methods)
 

@@ -1,5 +1,5 @@
 /**
-   \file vertex.cpp
+   \file vdigit/vertex.cpp
 
    \brief wxvdigit - Vertex manipulation
 

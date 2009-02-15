@@ -1,5 +1,5 @@
 /**
-   \file driver.cpp
+   \file vdigit/driver.cpp
    
    \brief wxvdigit - Display driver
 

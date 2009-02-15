@@ -1,5 +1,5 @@
 /**
-   \file message.cpp
+   \file vdigit/message.cpp
 
    \brief wxvdigit - Error message dialogs
 
