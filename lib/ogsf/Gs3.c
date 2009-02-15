@@ -155,6 +155,7 @@ int Gs_loadmap_as_float(struct Cell_head *wind, const char *map_name,
 	    /* set nm */
 	}
     }
+    G_percent(1, 1, 1);
 
     G_debug(4, "  has_null=%d", *has_null);
 
@@ -230,7 +231,8 @@ int Gs_loadmap_as_int(struct Cell_head *wind, const char *map_name, int *buff,
 	    /* set nm */
 	}
     }
-
+    G_percent(1, 1, 1);
+    
     G_close_cell(cellfile);
 
     G_free(nullflags);
@@ -408,7 +410,8 @@ int Gs_loadmap_as_short(struct Cell_head *wind, const char *map_name,
 	    ts++;
 	}
     }
-
+    G_percent(1, 1, 1);
+    
     G_close_cell(cellfile);
 
     G_free(tmp_buf);
@@ -524,7 +527,8 @@ int Gs_loadmap_as_char(struct Cell_head *wind, const char *map_name,
 	    tc++;
 	}
     }
-
+    G_percent(1, 1, 1);
+    
     G_close_cell(cellfile);
 
     G_free(tmp_buf);
@@ -721,7 +725,8 @@ void Gs_pack_colors(const char *filename, int *buff, int rows, int cols)
 
 	cur = &(cur[cols]);
     }
-
+    G_percent(1, 1, 1);
+    
     G_free_colors(&colrules);
 
     G_free(r);
@@ -792,7 +797,8 @@ void Gs_pack_colors_float(const char *filename, float *fbuf, int *ibuf,
 	icur = &(icur[cols]);
 	fcur = &(fcur[cols]);
     }
-
+    G_percent(1, 1, 1);
+    
     G_free_colors(&colrules);
 
     G_free(r);
