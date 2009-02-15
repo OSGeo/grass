@@ -1,19 +1,15 @@
 /**
-   \file init.cpp
+   \file nviz/init.cpp
    
-   \brief Experimental C++ wxWidgets Nviz prototype -- initialization
-
-   Used by wxGUI Nviz extension.
-
-   Copyright: (C) by the GRASS Development Team
+   \brief wxNviz extension (3D view mode) - initialization
 
    This program is free software under the GNU General Public
    License (>=v2). Read the file COPYING that comes with GRASS
    for details.
 
-   \author Martin Landa <landa.martin gmail.com> (Google SoC 2008)
+   (C) 2008-2009 by Martin Landa, and the GRASS development team
 
-   \date 2008
+   \author Martin Landa <landa.martin gmail.com> (Google SoC 2008)
 */
 
 #include "nviz.h"

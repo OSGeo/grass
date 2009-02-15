@@ -1,5 +1,5 @@
 /**
-   \file select.cpp
+   \file vdigit/select.cpp
 
    \brief wxvdigit - Select lines (by query)
 

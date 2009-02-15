@@ -1,5 +1,5 @@
 /**
-   \file line.cpp
+   \file vdigit/line.cpp
 
    \brief wxvdigit - Feature manipulation (add, delete, move)
 

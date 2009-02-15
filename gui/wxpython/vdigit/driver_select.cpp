@@ -1,5 +1,5 @@
 /**
-   \file driver_select.cpp
+   \file vdigit/driver_select.cpp
    
    \brief wxvdigit - Display driver (selection methods)
 

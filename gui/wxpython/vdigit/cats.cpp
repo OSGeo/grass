@@ -1,5 +1,5 @@
 /**
-   \file cats.cpp
+   \file vdigit/cats.cpp
 
    \brief wxvdigit - category management
 
