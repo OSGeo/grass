@@ -587,10 +587,13 @@ class GRASSStartup(wx.Frame):
         disabled = []
         idx = 0
         for mapset in self.listOfMapsets:
-            if mapset not in self.listOfMapsetsSelectable:
+            if mapset not in self.listOfMapsetsSelectable or \
+                    os.path.isfile(os.path.join(self.gisdbase,
+                                                locationName,
+                                                mapset, ".gislock")):
                 disabled.append(idx)
             idx += 1
-
+        
         self.lbmapsets.InsertItems(self.listOfMapsets, 0, disabled=disabled)
         
         return self.listOfMapsets
@@ -608,8 +611,12 @@ class GRASSStartup(wx.Frame):
 
         disabled = []
         idx = 0
+        locationName = self.listOfLocations[self.lblocations.GetSelection()]
         for mapset in self.listOfMapsets:
-            if mapset not in self.listOfMapsetsSelectable:
+            if mapset not in self.listOfMapsetsSelectable or \
+                    os.path.isfile(os.path.join(self.gisdbase,
+                                                locationName,
+                                                mapset, ".gislock")):
                 disabled.append(idx)
             idx += 1
 
@@ -772,6 +779,7 @@ class GListBox(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         for item in choices:
             index = self.InsertStringItem(sys.maxint, item)
             self.SetStringItem(index, 0, item)
+            
             if idx in disabled:
                 self.SetItemTextColour(idx, wx.Colour(150, 150, 150))
             idx += 1
