@@ -1291,8 +1291,9 @@ class BufferedWindow(MapWindow, wx.Window):
         digitToolbar = self.parent.toolbars['vdigit']
         digitClass   = self.parent.digit
         
-        self.copyIds = []
-        self.layerTmp = None
+        if not hasattr(self, "copyIds"):
+            self.copyIds = []
+            self.layerTmp = None
         
     def OnLeftDownVDigitBulkLine(self, event):
         """
@@ -1605,7 +1606,7 @@ class BufferedWindow(MapWindow, wx.Window):
                 self.UpdateMap(render=False, renderVector=False)
         else:
             # copy features from background map
-            self.copyIds = digitClass.SelectLinesFromBackgroundMap(pos1, pos2)
+            self.copyIds += digitClass.SelectLinesFromBackgroundMap(pos1, pos2)
             if len(self.copyIds) > 0:
                 color = UserSettings.Get(group='vdigit', key='symbol',
                                          subkey=['highlight', 'color'])
@@ -1622,9 +1623,13 @@ class BufferedWindow(MapWindow, wx.Window):
                             'type=point,line,boundary,centroid',
                             'width=2']
                         
-                self.layerTmp = self.Map.AddLayer(type='vector',
-                                                  name=globalvar.QUERYLAYER,
-                                                  command=dVectTmp)
+                if not self.layerTmp:
+                    self.layerTmp = self.Map.AddLayer(type='vector',
+                                                      name=globalvar.QUERYLAYER,
+                                                      command=dVectTmp)
+                else:
+                    self.layerTmp.SetCmd(dVectTmp)
+                
                 self.UpdateMap(render=True, renderVector=False)
             else:
                 self.UpdateMap(render=False, renderVector=False)

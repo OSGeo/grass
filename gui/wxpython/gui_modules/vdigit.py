@@ -175,7 +175,7 @@ class AbstractDigit:
     def SelectLinesFromBackgroundMap(self, pos1, pos2):
         """Select features from background map
 
-        @param pos1,pos2 bounding box defifinition
+        @param pos1,pos2 bounding box
         """
         bgmap = str(UserSettings.Get(group='vdigit', key='bgmap', subkey='value',
                                      internal=True))
@@ -186,15 +186,25 @@ class AbstractDigit:
 
         x1, y1 = pos1
         x2, y2 = pos2
-
         ret = gcmd.RunCommand('v.edit',
                               parent = self,
                               quiet = True,
                               read = True,
                               map = bgmap,
                               tool = 'select',
-                              bbox= '%f,%f,%f,%f' % (pos1[0], pos1[1], pos2[0], pos2[1]))
-                              
+                              bbox = '%f,%f,%f,%f' % (x1, y1, x2, y2))
+
+        if not ret:
+            x, y = pos1
+            ret = gcmd.RunCommand('v.edit',
+                                  parent = self,
+                                  quiet = True,
+                                  read = True,
+                                  map = bgmap,
+                                  tool = 'select',
+                                  coords = '%f,%f' % (x, y),
+                                  thresh = self.driver.GetThreshold(type='selectThresh'))
+        
         if not ret:
             return []
         
