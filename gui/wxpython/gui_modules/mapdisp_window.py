@@ -27,6 +27,8 @@ import wx
 import dbm
 import gdialogs
 import gcmd
+import utils
+import globalvar
 from debug import Debug
 from preferences import globalSettings as UserSettings
 from vdigit import GV_LINES as VDigit_Lines_Type
