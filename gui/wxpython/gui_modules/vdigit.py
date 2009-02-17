@@ -190,13 +190,14 @@ class AbstractDigit:
         ret = gcmd.RunCommand('v.edit',
                               parent = self,
                               quiet = True,
+                              read = True,
                               map = bgmap,
                               tool = 'select',
                               bbox= '%f,%f,%f,%f' % (pos1[0], pos1[1], pos2[0], pos2[1]))
                               
         if not ret:
-            return ids
-
+            return []
+        
         output = ret.splitlines()[0] # first line
         ids = output.split(',') 
         ids = map(int, ids) # str -> int
