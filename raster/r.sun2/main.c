@@ -27,6 +27,7 @@ email: hofierka@geomodel.sk,marcel.suri@jrc.it,suri@geomodel.sk Thomas.Huld@jrc.
 
 /*v. 2.0 July 2002, NULL data handling, JH */
 /*v. 2.1 January 2003, code optimization by Thomas Huld, JH */
+/*v. 3.0 February 2006, several changes (shadowing algorithm, earth's curvature JH */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -63,12 +64,8 @@ const double pi2 = M_PI * 2.;
 const double deg2rad = M_PI / 180.;
 const double rad2deg = 180. / M_PI;
 
-
-
 FILE *felevin, *faspin, *fslopein, *flinkein, *falbedo, *flatin;
 FILE *fincidout, *fbeam_rad, *finsol_time, *fdiff_rad, *frefl_rad;
-FILE *fw;
-
 
 const char *elevin;
 const char *aspin;
@@ -220,11 +217,13 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
+    module->keywords = _("raster");
+    module->label = _("Solar irradiance and irradiation model.");
     module->description =
 	_("Computes direct (beam), diffuse and reflected solar irradiation raster "
 	 "maps for given day, latitude, surface and atmospheric conditions. Solar "
 	 "parameters (e.g. sunrise, sunset times, declination, extraterrestrial "
-	 "irradiance, daylight length) are saved in a local text file. "
+	 "irradiance, daylight length) are saved in the map history file. "
 	 "Alternatively, a local time can be specified to compute solar "
 	 "incidence angle and/or irradiance raster maps. The shadowing effect of "
 	 "the topography is optionally incorporated.");
@@ -371,6 +370,7 @@ int main(int argc, char *argv[])
     parm.incidout->key = "incidout";
     parm.incidout->type = TYPE_STRING;
     parm.incidout->required = NO;
+    parm.incidout->gisprompt = "new,cell,raster";
     parm.incidout->description = _("Output incidence angle raster map (mode 1 only)");
     parm.incidout->guisection = _("Output_options");
 
@@ -378,6 +378,7 @@ int main(int argc, char *argv[])
     parm.beam_rad->key = "beam_rad";
     parm.beam_rad->type = TYPE_STRING;
     parm.beam_rad->required = NO;
+    parm.beam_rad->gisprompt = "new,cell,raster";
     parm.beam_rad->description =
 	_("Output beam irradiance [W.m-2] (mode 1) or irradiation raster map [Wh.m-2.day-1] (mode 2)");
     parm.beam_rad->guisection = _("Output_options");
@@ -386,6 +387,7 @@ int main(int argc, char *argv[])
     parm.insol_time->key = "insol_time";
     parm.insol_time->type = TYPE_STRING;
     parm.insol_time->required = NO;
+    parm.insol_time->gisprompt = "new,cell,raster";
     parm.insol_time->description = _("Output insolation time raster map [h] (mode 2 only)");
     parm.insol_time->guisection = _("Output_options");
 
@@ -393,6 +395,7 @@ int main(int argc, char *argv[])
     parm.diff_rad->key = "diff_rad";
     parm.diff_rad->type = TYPE_STRING;
     parm.diff_rad->required = NO;
+    parm.diff_rad->gisprompt = "new,cell,raster";
     parm.diff_rad->description =
 	_("Output diffuse irradiance [W.m-2] (mode 1) or irradiation raster map [Wh.m-2.day-1] (mode 2)");
     parm.diff_rad->guisection = _("Output_options");
@@ -401,6 +404,7 @@ int main(int argc, char *argv[])
     parm.refl_rad->key = "refl_rad";
     parm.refl_rad->type = TYPE_STRING;
     parm.refl_rad->required = NO;
+    parm.refl_rad->gisprompt = "new,cell,raster";
     parm.refl_rad->description =
 	_("Output ground reflected irradiance [W.m-2] (mode 1) or irradiation raster map [Wh.m-2.day-1] (mode 2)");
     parm.refl_rad->guisection = _("Output_options");
@@ -409,6 +413,7 @@ int main(int argc, char *argv[])
     parm.glob_rad->key = "glob_rad";
     parm.glob_rad->type = TYPE_STRING;
     parm.glob_rad->required = NO;
+    parm.glob_rad->gisprompt = "new,cell,raster";
     parm.glob_rad->description =
 	_("Output global (total) irradiance/irradiation [W.m-2] (mode 1) or irradiance/irradiation raster map [Wh.m-2.day-1] (mode 2)");
     parm.glob_rad->guisection = _("Output_options");
@@ -581,11 +586,10 @@ int main(int argc, char *argv[])
 	    setHorizonInterval(deg2rad * horizonStep);
 	else
 	    G_fatal_error(_("The horizon step size must be greater than 0."));
-
     }
-	else if(useHorizonData()) {
+    else if(useHorizonData()) {
 		G_fatal_error(_("If you use the horizon option you must also set the 'horizonstep' parameter."));
-	     }
+         }
 
 
     tt = parm.ltime->answer;
@@ -597,8 +601,8 @@ int main(int argc, char *argv[])
     }
     else {
 	if (incidout != NULL)
-	    G_fatal_error(_("incidout requres time parameter to be set"));
-	G_message(_("Mode 2: integrated daily irradiation"));
+	    G_fatal_error(_("incidout requires time parameter to be set"));
+	G_message(_("Mode 2: integrated daily irradiation for a given day of the year"));
     }
 
     /*      
@@ -630,7 +634,9 @@ int main(int argc, char *argv[])
      */
 /* HB 6/2008: why is the above commented out? instead of sscanf, maybe nicer to use:
     G_scan_lat(parm.lat->answer, &latitude);
-*/
+   MN 2/2009: latitude doesn't exist! also G_scan_lat() does not exist in GRASS
+*/                                                                                                                                     
+
     if (parm.slopein->answer == NULL)
 	sscanf(parm.slope->answer, "%lf", &singleSlope);
     singleSlope *= deg2rad;
@@ -652,9 +658,7 @@ int main(int argc, char *argv[])
 	     * must be one.
 	     */
 	    G_fatal_error(_("If you use -s and no horizon rasters, numpartitions must be =1"));
-
 	}
-
     }
 
     gridGeom.stepxy = dist * 0.5 * (gridGeom.stepx + gridGeom.stepy);
@@ -686,7 +690,6 @@ int main(int argc, char *argv[])
 	}
 	else if (useHorizonData()) {
 	    arrayNumInt = (int)(360. / horizonStep);
-
 	}
     }
     else {
@@ -709,7 +712,7 @@ int main(int argc, char *argv[])
 
     /* Set up parameters for projection to lat/long if necessary */
 
-
+    if (latin == NULL && lt == NULL && (G_projection() != PROJECTION_LL)) {
     struct Key_Value *in_proj_info, *in_unit_info;
 
     if ((in_proj_info = G_get_projinfo()) == NULL)
@@ -731,7 +734,7 @@ int main(int argc, char *argv[])
     sprintf(oproj.proj, "ll");
     if ((oproj.pj = pj_latlong_from_proj(iproj.pj)) == NULL)
 	G_fatal_error(_("Unable to set up lat/long projection parameters"));
-
+    }
 
 /**********end of parser - ******************************/
 
@@ -1822,6 +1825,9 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
 		    la_min = AMIN1(la_min, latitude);
 		    latitude *= deg2rad;
 		}
+		/* MN 2/2009: should it be?? 
+		  if (latin == NULL && lt == NULL && (G_projection() != PROJECTION_LL)) { 
+		*/
 		if ((G_projection() != PROJECTION_LL)) {
 
 			longitude = gridGeom.xp;
