@@ -3,12 +3,12 @@
 
 @brief Nviz extension for wxGUI
 
-This module adds to Map Display 2.5/3D visualization mode.
+This module implements 3D visualization mode of map display.
 
 List of classes:
  - GLWindow
 
-(C) 2008 by the GRASS Development Team
+(C) 2008-2009 by the GRASS Development Team
 
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
@@ -76,9 +76,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         glcanvas.GLCanvas.__init__(self, parent, id)
         MapWindow.__init__(self, parent, id, pos, size, style,
                            Map, tree, gismgr)
-
-
-        self.parent = parent # MapFrame
+        self.Hide()
         
         self.init = False
         self.initView = False
@@ -110,15 +108,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                                      logmsg)
         self.nvizThread.start()
         time.sleep(.1)
-        self.nvizClass =  self.nvizThread.nvizClass
+        self.nvizClass = self.nvizThread.nvizClass
 
         # GRASS_REGION needed only for initialization
         del os.environ['GRASS_REGION']
-
-        #
-        # set current display
-        #
-        self.nvizClass.SetDisplay(self)
         
         #
         # default values
@@ -923,7 +916,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 self.UnloadRaster3d(item)
             elif type == 'vector':
                 self.UnloadVector(item)
-            
+        
         self.init = False
 
     def OnZoomToMap(self, event):

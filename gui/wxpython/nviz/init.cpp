@@ -35,8 +35,7 @@ Nviz::Nviz(PyObject *log)
     logStream = log;
 
     G_set_error_routine(&print_error);
-    // TODO
-    // G_set_percent_routine(&print_percent);
+    G_set_percent_routine(&print_percent);
 
     GS_libinit();
     GVL_libinit();
@@ -44,10 +43,7 @@ Nviz::Nviz(PyObject *log)
     GS_set_swap_func(swap_gl);
 
     data = (nv_data*) G_malloc(sizeof (nv_data));
-
-    /* GLCanvas */
-    glCanvas = NULL;
-
+    
     G_debug(1, "Nviz::Nviz()");
 }
 
@@ -57,31 +53,13 @@ Nviz::Nviz(PyObject *log)
 Nviz::~Nviz()
 {
     G_unset_error_routine();
-    // TODO
-    // G_unset_percent_routine();
+    G_unset_percent_routine();
 
     G_free((void *) data);
 
     data = NULL;
-    glCanvas = NULL;
-
+    
     logStream = NULL;
-}
-
-/*!
-  \brief Associate display with render window
-
-  \return 1 on success
-  \return 0 on failure
-*/
-int Nviz::SetDisplay(void *display)
-{
-    glCanvas = (wxGLCanvas *) display;
-    // glCanvas->SetCurrent();
-
-    G_debug(1, "Nviz::SetDisplay()");
-
-    return 1;
 }
 
 void Nviz::InitView()
@@ -125,6 +103,73 @@ void Nviz::SetBgColor(const char *color_str)
     return;
 }
 
+/*
+  \brief Print one message, prefix inserted before each new line
+
+  From lib/gis/error.c
+*/
+void print_sentence (PyObject *pyFd, const int type, const char *msg)
+{
+    char prefix[256];
+    const char *start;
+    char* sentence;
+
+    switch (type) {
+    case MSG: 
+	sprintf (prefix, "GRASS_INFO_MESSAGE(%d,%d): Nviz: ", getpid(), message_id);
+	break;
+    case WARN:
+	sprintf (prefix, "GRASS_INFO_WARNING(%d,%d): Nviz: ", getpid(), message_id);
+	break;
+    case ERR:
+	sprintf (prefix, "GRASS_INFO_ERROR(%d,%d): Nviz: ", getpid(), message_id);
+	break;
+    }
+
+    start = msg;
+    
+    PyFile_WriteString("\n", pyFd);
+
+    while (*start != '\0') {
+	const char *next = start;
+	
+	PyFile_WriteString(prefix, pyFd);
+	
+	while ( *next != '\0' ) {
+	    next++;
+	    
+	    if ( *next == '\n' ) {
+	        next++;
+		break;
+	    }
+	}
+	
+	sentence = (char *) G_malloc((next - start + 1) * sizeof (char));
+	strncpy(sentence, start, next - start + 1);
+	sentence[next-start] = '\0';
+	
+	PyFile_WriteString(sentence, pyFd);
+	G_free((void *)sentence);
+	
+	PyFile_WriteString("\n", pyFd);
+	start = next;
+    }
+    
+    PyFile_WriteString("\n", pyFd);
+    sprintf(prefix, "GRASS_INFO_END(%d,%d)\n", getpid(), message_id);
+    PyFile_WriteString(prefix, pyFd);
+    
+    message_id++;
+}
+
+/*!
+  \brief Print error/warning/message
+
+  \param msg message buffer
+  \param type message type
+
+  \return 0
+*/
 int print_error(const char *msg, const int type)
 {
     if (logStream) {
@@ -137,71 +182,24 @@ int print_error(const char *msg, const int type)
     return 0;
 }
 
-/*
-  \brief Print one message, prefix inserted before each new line
+/*!
+  \brief Print percentage information
 
-  From lib/gis/error.c
+  \param x value
+
+  \return 0
 */
-void print_sentence (PyObject *pyFd, const int type, const char *msg)
-{
-    char prefix[256];
-    const char *start;
-    char* sentence;
-
-    switch ( type ) {
-	case MSG: 
-    	    sprintf (prefix, "GRASS_INFO_MESSAGE(%d,%d): Nviz: ", getpid(), message_id);
-	    break;
-	case WARN:
-    	    sprintf (prefix, "GRASS_INFO_WARNING(%d,%d): Nviz: ", getpid(), message_id);
-	    break;
-	case ERR:
-    	    sprintf (prefix, "GRASS_INFO_ERROR(%d,%d): Nviz: ", getpid(), message_id);
-	    break;
-    }
-
-    start = msg;
-
-    PyFile_WriteString("\n", pyFd);
-
-    while ( *start != '\0' ) {
-	const char *next = start;
-
-	PyFile_WriteString(prefix, pyFd);
-
-	while ( *next != '\0' ) {
-	    next++;
-		
-	    if ( *next == '\n' ) {
-	        next++;
-		break;
-	    }
-	}
-
-	sentence = (char *) G_malloc ((next - start + 1) * sizeof (char));
-	strncpy(sentence, start, next - start + 1);
-	sentence[next-start] = '\0';
-
-	PyFile_WriteString(sentence, pyFd);
-	G_free((void *)sentence);
-
-	PyFile_WriteString("\n", pyFd);
-	start = next;
-    }
-
-    PyFile_WriteString("\n", pyFd);
-    sprintf(prefix, "GRASS_INFO_END(%d,%d)\n", getpid(), message_id);
-    PyFile_WriteString(prefix, pyFd);
-
-    message_id++;
-}
-
 int print_percent(int x)
 {
     char msg[256];
 
-    sprintf(msg, "GRASS_INFO_PERCENT: %d\n", x);
-    PyFile_WriteString(msg, logStream);
-
+    if (logStream) {
+	sprintf(msg, "GRASS_INFO_PERCENT: %d\n", x);
+	PyFile_WriteString(msg, logStream);
+    }
+    else {
+	fprintf(stderr, "GRASS_INFO_PERCENT: %d\n", x);
+    }
+    
     return 0;
 }
