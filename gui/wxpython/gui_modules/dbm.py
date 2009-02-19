@@ -1610,7 +1610,7 @@ class AttributeManager(wx.Frame):
         self.listOfCommands.append(('v.db.addcol',
                                     { 'map' : self.vectorName,
                                       'layer' : self.layer,
-                                      'columns' : (name, type) }
+                                      'columns' : '%s %s' % (name, type) }
                                     ))
         # apply changes
         self.ApplyCommands()
