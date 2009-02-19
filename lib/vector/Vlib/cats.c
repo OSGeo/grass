@@ -5,7 +5,7 @@
  *
  * Higher level functions for reading/writing/manipulating vectors.
  *
- * (C) 2001-2008 by the GRASS Development Team
+ * (C) 2001-2009 by the GRASS Development Team
  *
  * This program is free software under the 
  * GNU General Public License (>=v2). 
@@ -13,9 +13,9 @@
  * for details.
  *
  * \author Original author CERL, probably Dave Gerdes or Mike
- * Higgins. Update to GRASS 5.7 Radim Blazek and David D. Gray.
- *
- * \date 2001-2008
+ * Higgins
+ * \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
+ * \author Various updates by Martin Landa <landa.martin gmail.com>
  */
 
 #include <stdlib.h>
@@ -48,7 +48,7 @@ struct line_cats *Vect_new_cats_struct()
 }
 
 /*!
-   \brief Creates and initializes line_cats structure.
+   \brief Creates and initializes line_cats structure (lower level fn)
 
    This structure is used for reading and writing vector cats. The
    library routines handle all memory allocation.
@@ -176,6 +176,37 @@ int Vect_cat_get(struct line_cats *Cats, int field, int *cat)
 
     /* field was not found */
     return (0);
+}
+
+/*!
+   \brief Get list of categories of given field.
+
+   \param Cats line_cats structure
+   \param field layer number
+   \param[out] cats pointer to list where cats will be written
+
+   \return number of found categories
+   \return -1 on invalid field
+ */
+int Vect_field_cat_get(struct line_cats *Cats, int field, struct ilist *cats)
+{
+    int n;
+    
+    /* reset list of categories */
+    Vect_reset_list(cats);
+
+    /* check input value */
+    if (field < 1 || field > GV_FIELD_MAX)
+	return -1;
+    
+    /* go through cats and find if field exist */
+    for (n = 0; n < Cats->n_cats; n++) {
+	if (Cats->field[n] != field)
+	    continue;
+	Vect_list_append(cats, Cats->cat[n]);
+    }
+
+    return cats->n_values;
 }
 
 /*!

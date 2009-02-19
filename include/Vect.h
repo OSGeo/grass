@@ -58,6 +58,7 @@ int Vect_cat_set(struct line_cats *, int, int);
 int Vect_cat_get(struct line_cats *, int, int *);
 int Vect_cat_del(struct line_cats *, int);
 int Vect_field_cat_del(struct line_cats *, int, int);
+int Vect_field_cat_get(struct line_cats *, int, struct ilist *);
 int Vect_cat_in_array(int, int *, int);
 int Vect_reset_cats(struct line_cats *);
 int Vect_destroy_cats_struct(struct line_cats *);
