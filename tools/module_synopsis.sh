@@ -65,13 +65,16 @@ for DIR in bin scripts ; do
 #    echo "[$MODULE]"
 
     case "$MODULE" in
-      g.parser | r.mapcalc | r3.mapcalc | mkftcap | p.out.vrml| d.paint.labels)
+      g.parser | "r3.*" | g.module_to_skip)
 	continue
 	;;
     esac
 
-    eval `$MODULE --tcltk | head -n 3 | tail -n 2 |  tr '"' "'" | \
-        sed -e 's/^ //' -e 's/ {/="/' -e 's/}$/"/'`
+    eval `$MODULE --interface-description | head -n 5 | tail -n 1 | \
+        tr '"' "'" | sed -e 's/^[ \t]./desc="/' -e 's/$/"/'`
+
+#    echo "mod=[$MODULE]  desc=[$desc]"
+
     if [ -z "$label" ] && [ -z "$desc" ] ; then
 	continue
     fi
@@ -90,8 +93,8 @@ for MODULE in ps.map ; do
     unset label
     unset desc
 
-    eval `$MODULE --tcltk | head -n 3 | tail -n 2 |  tr '"' "'" | \
-	sed -e 's/^ //' -e 's/ {/="/' -e 's/}$/"/'`
+    eval `$MODULE --interface-description | head -n 5 | tail -n 1 | \
+        tr '"' "'" | sed -e 's/^[ \t]./desc="/' -e 's/$/"/'`
     if [ -z "$label" ] && [ -z "$desc" ] ; then
 	continue
     fi
@@ -106,8 +109,6 @@ done
 # these don't use the parser at all.
 cat << EOF >> "$TMP"
 g.parser: Full parser support for GRASS scripts.
-r.mapcalc: Performs arithmetic on raster map layers.
-r3.mapcalc: Performs arithmetic on 3D grid volume data.
 photo.2image: Marks fiducial or reseau points on an image to be ortho-rectified and then computes the image-to-photo coordinate transformation parameters.
 photo.2target: Create control points on an image to be ortho-rectified.
 photo.camera: Creates or modifies entries in a camera reference file.
@@ -253,7 +254,7 @@ g.message "Generating LaTeX source (writing to \$GISBASE/etc/) ..."
 
 #### write header
 cat << EOF > "${TMP}.tex"
-%% Adapted from LyX 1.3 LaTeX export. (c) 2007 The GRASS Development Team
+%% Adapted from LyX 1.3 LaTeX export. (c) 2009 The GRASS Development Team
 \documentclass[a4paper]{article}
 \usepackage{palatino}
 \usepackage[T1]{fontenc}
@@ -276,7 +277,7 @@ cat << EOF > "${TMP}.tex"
 \makeatother
 \begin{document}
 \begin{center}\includegraphics[%
-  width=0.5\textwidth]{grasslogo_vector.pdf}\end{center}
+  width=0.3\textwidth]{grasslogo_vector.pdf}\end{center}
 
 \begin{center}{\huge `g.version | cut -f1 -d'('` Command list}\end{center}{\huge \par}
 
@@ -399,6 +400,9 @@ if [ ! -d "$GISBASE/docs/pdf" ] ; then
 fi
 \mv module_synopsis.pdf "$GISBASE/docs/pdf/"
 
+# Convert to pretty two-up version:
+# Open PDF in Acrobat, print-to-file as postscript, then run:
+# a2ps module_list.ps -o module_list_2up.ps
+# ps2pdf13 module_list_2up.ps
 
 g.message "Done."
-
