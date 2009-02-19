@@ -87,7 +87,8 @@ int main(int argc, char *argv[])
 		continue;
 	    }
 	    if (G_strcasecmp(old, new) == 0) {
-		G_warning(_("%s=%s,%s: files are the same, no rename required"),
+		/* avoid problems on case-insensitive file systems (FAT, NTFS, ...) */
+		G_warning(_("%s=%s,%s: files could be the same, no rename possible"),
 			  parm[n]->key, old, new);
 		continue;
 	    }
