@@ -19,6 +19,16 @@
 
 #include "driver.h"
 
+#define MSG  0
+#define WARN 1
+#define ERR  2
+
+static int print_error(const char *, const int);
+static int print_percent(int);
+static void print_sentence (PyObject*, const int, const char *);
+static PyObject *logStream;
+static int message_id = 1;
+
 /**
    \brief Initialize driver
 
@@ -29,7 +39,8 @@
    
    \return
 */
-DisplayDriver::DisplayDriver(gwxPseudoDC *device, gwxPseudoDC *deviceTmp)
+DisplayDriver::DisplayDriver(gwxPseudoDC *device, gwxPseudoDC *deviceTmp,
+			     PyObject *log)
 {
     G_gisinit(""); /* GRASS functions */
 
@@ -37,7 +48,8 @@ DisplayDriver::DisplayDriver(gwxPseudoDC *device, gwxPseudoDC *deviceTmp)
 
     dc = device;
     dcTmp = deviceTmp;
-
+    logStream = log;
+    
     points = Vect_new_line_struct();
     pointsScreen = new wxList();
     cats = Vect_new_cats_struct();
@@ -49,11 +61,11 @@ DisplayDriver::DisplayDriver(gwxPseudoDC *device, gwxPseudoDC *deviceTmp)
 
     drawSegments = false;
 
-    G_set_verbose(0);
-    
+    G_set_error_routine(&print_error);
+    G_set_percent_routine(&print_percent);
+
     // avoid GUI crash when G_fatal_error() is called (opening the vector map)
     // Vect_set_fatal_error(GV_FATAL_PRINT);
-    // G_set_error_routine(print_error);
 }
 
 /**
@@ -70,6 +82,9 @@ DisplayDriver::~DisplayDriver()
     if (mapInfo)
 	CloseMap();
 
+    G_unset_error_routine();
+    G_unset_percent_routine();
+    
     Vect_destroy_line_struct(points);
     delete pointsScreen;
     Vect_destroy_cats_struct(cats);
@@ -502,17 +517,103 @@ std::vector<double> DisplayDriver::GetMapBoundingBox()
     return region;
 }
 
-/**
-   \brief Error messages handling 
+/*
+  \brief Print one message, prefix inserted before each new line
 
-   \param msg message
-   \param type type message (MSG, WARN, ERR)
-
-   \return 0
+  From lib/gis/error.c
 */
-int print_error(const char *msg, int type)
+void print_sentence (PyObject *pyFd, const int type, const char *msg)
 {
-    fprintf(stderr, "%s", msg);
+    char prefix[256];
+    const char *start;
+    char* sentence;
+
+    switch (type) {
+    case MSG: 
+	sprintf (prefix, "GRASS_INFO_MESSAGE(%d,%d): Vdigit: ", getpid(), message_id);
+	break;
+    case WARN:
+	sprintf (prefix, "GRASS_INFO_WARNING(%d,%d): Vdigit: ", getpid(), message_id);
+	break;
+    case ERR:
+	sprintf (prefix, "GRASS_INFO_ERROR(%d,%d): Vdigit: ", getpid(), message_id);
+	break;
+    }
+
+    start = msg;
+    
+    PyFile_WriteString("\n", pyFd);
+
+    while (*start != '\0') {
+	const char *next = start;
+	
+	PyFile_WriteString(prefix, pyFd);
+	
+	while ( *next != '\0' ) {
+	    next++;
+	    
+	    if ( *next == '\n' ) {
+	        next++;
+		break;
+	    }
+	}
+	
+	sentence = (char *) G_malloc((next - start + 1) * sizeof (char));
+	strncpy(sentence, start, next - start + 1);
+	sentence[next-start] = '\0';
+	
+	PyFile_WriteString(sentence, pyFd);
+	G_free((void *)sentence);
+	
+	PyFile_WriteString("\n", pyFd);
+	start = next;
+    }
+    
+    PyFile_WriteString("\n", pyFd);
+    sprintf(prefix, "GRASS_INFO_END(%d,%d)\n", getpid(), message_id);
+    PyFile_WriteString(prefix, pyFd);
+    
+    message_id++;
+}
+
+/*!
+  \brief Print error/warning/message
+
+  \param msg message buffer
+  \param type message type
+
+  \return 0
+*/
+int print_error(const char *msg, const int type)
+{
+    if (logStream) {
+	print_sentence(logStream, type, msg);
+    }
+    else {
+	fprintf(stderr, "Vdigit: %s\n", msg);
+    }
+
+    return 0;
+}
+
+/*!
+  \brief Print percentage information
+
+  \param x value
+
+  \return 0
+*/
+int print_percent(int x)
+{
+    char msg[256];
+
+    if (logStream) {
+	sprintf(msg, "GRASS_INFO_PERCENT: %d\n", x);
+	PyFile_WriteString(msg, logStream);
+    }
+    else {
+	fprintf(stderr, "GRASS_INFO_PERCENT: %d\n", x);
+    }
     
     return 0;
 }

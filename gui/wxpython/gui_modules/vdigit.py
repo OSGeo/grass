@@ -766,10 +766,16 @@ class CDisplayDriver(AbstractDisplayDriver):
 
         self.mapWindow = mapwindow
 
+        if self.mapwindow.gismanager:
+            logerr = self.mapwindow.gismanager.goutput.cmd_stderr
+        else:
+            logerr = None
+
         # initialize wx display driver
         try:
             self.__display = wxvdigit.DisplayDriver(mapwindow.pdcVector,
-                                                    mapwindow.pdcTmp)
+                                                    mapwindow.pdcTmp,
+                                                    logerr)
         except:
             self.__display = None
             
