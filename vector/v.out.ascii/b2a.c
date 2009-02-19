@@ -17,6 +17,7 @@ int bin_to_asc(FILE *ascii,
     struct line_cats *Cats;
     char *xstring = NULL, *ystring = NULL, *zstring = NULL;
     struct Cell_head window;
+    struct ilist *fcats;
 
     /* where */
     struct field_info *Fi;
@@ -61,6 +62,7 @@ int bin_to_asc(FILE *ascii,
     
     Points = Vect_new_line_struct();	/* init line_pnts struct */
     Cats = Vect_new_cats_struct();
+    fcats = Vect_new_list();
 
     proj = Vect_get_proj(Map);
 
@@ -182,17 +184,20 @@ int bin_to_asc(FILE *ascii,
 	    else {
 		fprintf(ascii, "%s%s%s", xstring, fs, ystring);
 	    }
-	    if (Cats->n_cats > 0) {
-		if (Cats->n_cats > 1) {
+
+	    Vect_field_cat_get(Cats, field, fcats);
+	    
+	    if (fcats->n_values > 0) {
+		if (fcats->n_values > 1) {
 		    G_warning(_("Feature has more categories. Only first category (%d) "
-				"is exported."), Cats->cat[0]);
+				"is exported."), fcats->value[0]);
 		}
-		fprintf(ascii, "%s%d", fs, Cats->cat[0]);
+		fprintf(ascii, "%s%d", fs, fcats->value[0]);
 		
 		/* print attributes */
 		if (columns) {
 		    for(i = 0; columns[i]; i++) {
-			if (db_select_value(driver, Fi->table, Fi->key, Cats->cat[0],
+			if (db_select_value(driver, Fi->table, Fi->key, fcats->value[0],
 					    columns[i], &value) < 0)
 			    G_fatal_error(_("Unable to select record from table <%s> (key %s, column %s)"),
 					  Fi->table, Fi->key, columns[i]);
