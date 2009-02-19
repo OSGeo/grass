@@ -870,6 +870,8 @@ int G_stat(const char *, struct stat *);
 /* percent.c */
 void G_percent(long, long, int);
 void G_percent_reset(void);
+void G_set_percent_routine(int (*) (int));
+void G_unset_percent_routine(void);
 
 /* plot.c */
 void G_setup_plot(double, double, double, double, int (*)(int, int),

@@ -1,17 +1,15 @@
 
 /**
- * \file percent.c
+ * \file gis/percent.c
  *
  * \brief GIS Library - percentage progress functions.
  *
- * (C) 2001-2008 by the GRASS Development Team
+ * (C) 2001-2009 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
- *
- * \date 1999-2008
  */
 
 #include <stdio.h>
@@ -23,6 +21,7 @@ static struct state {
 } state = {-1, 1};
 
 static struct state *st = &state;
+static int (*ext_percent) (int);
 
 /**
  * \brief Print percent complete messages.
@@ -79,29 +78,37 @@ void G_percent(long n, long d, int s)
     if (n <= 0 || n >= d || x > st->prev + s) {
 	st->prev = x;
 
-	if (format == G_INFO_FORMAT_STANDARD) {
-	    fprintf(stderr, "%4d%%\b\b\b\b\b", x);
+	if (ext_percent) {
+	    ext_percent(x);
 	}
 	else {
-	    if (format == G_INFO_FORMAT_PLAIN) {
-		if (x == 100)
-		    fprintf(stderr, "%d\n", x);
-		else
-		    fprintf(stderr, "%d..", x);
+	    if (format == G_INFO_FORMAT_STANDARD) {
+		fprintf(stderr, "%4d%%\b\b\b\b\b", x);
 	    }
-	    else {		/* GUI */
-		if (st->first) {
-		    fprintf(stderr, "\n");
+	    else {
+		if (format == G_INFO_FORMAT_PLAIN) {
+		    if (x == 100)
+			fprintf(stderr, "%d\n", x);
+		    else
+			fprintf(stderr, "%d..", x);
 		}
-		fprintf(stderr, "GRASS_INFO_PERCENT: %d\n", x);
-		fflush(stderr);
-		st->first = 0;
+		else {		/* GUI */
+		    if (st->first) {
+			fprintf(stderr, "\n");
+		    }
+		    fprintf(stderr, "GRASS_INFO_PERCENT: %d\n", x);
+		    fflush(stderr);
+		    st->first = 0;
+		}
 	    }
 	}
     }
 
     if (x >= 100) {
-	if (format == G_INFO_FORMAT_STANDARD) {
+	if (ext_percent) {
+	    ext_percent(100);
+	}
+	else if (format == G_INFO_FORMAT_STANDARD) {
 	    fprintf(stderr, "\n");
 	}
 	st->prev = -1;
@@ -120,4 +127,26 @@ void G_percent_reset(void)
 {
     st->prev = -1;
     st->first = 1;
+}
+
+/**
+ * \brief Establishes percent_routine as the routine that will handle
+ * the printing of percentage progress messages.
+ * 
+ * \param percent_routine routine will be called like this: percent_routine(x)
+ */
+void G_set_percent_routine(int (*percent_routine) (int))
+{
+    ext_percent = percent_routine;
+}
+
+/**
+ * \brief After this call subsequent percentage progress messages will
+ * be handled in the default method.
+ * 
+ * Percentage progress messages are printed directly to stderr.
+ */
+void G_unset_percent_routine(void)
+{
+    ext_percent = NULL;
 }
