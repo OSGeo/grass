@@ -1058,7 +1058,7 @@ class TextDialog(wx.Dialog):
         UserSettings.ReadSettingsFile(settings=fileSettings)
         fileSettings['profile'] = UserSettings.Get(group='profile')
         file = UserSettings.SaveToFile(fileSettings)
-        self.parent.parent.gismanager.goutput.WriteLog(_('Profile settings saved to file \'%s\'.') % file)
+        self.parent.parent.GetLayerManager().goutput.WriteLog(_('Profile settings saved to file \'%s\'.') % file)
         self.Close()
 
     def OnApply(self, event):
@@ -1403,7 +1403,7 @@ class OptDialog(wx.Dialog):
         UserSettings.ReadSettingsFile(settings=fileSettings)
         fileSettings['profile'] = UserSettings.Get(group='profile')
         file = UserSettings.SaveToFile(fileSettings)
-        self.parent.parent.gismanager.goutput.WriteLog(_('Profile settings saved to file \'%s\'.') % file)
+        self.parent.parent.GetLayerManager().goutput.WriteLog(_('Profile settings saved to file \'%s\'.') % file)
         self.Close()
 
     def OnApply(self, event):

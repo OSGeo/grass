@@ -1157,7 +1157,7 @@ class GMFrame(wx.Frame):
                                                        size=wx.DefaultSize, style=wx.TR_HAS_BUTTONS
                                                        |wx.TR_LINES_AT_ROOT|wx.TR_HIDE_ROOT
                                                        |wx.TR_DEFAULT_STYLE|wx.NO_BORDER|wx.FULL_REPAINT_ON_RESIZE,
-                                                       idx=self.disp_idx, gismgr=self, notebook=self.gm_cb,
+                                                       idx=self.disp_idx, lmgr=self, notebook=self.gm_cb,
                                                        auimgr=self._auimgr, showMapDisplay=show)
 
         # layout for controls

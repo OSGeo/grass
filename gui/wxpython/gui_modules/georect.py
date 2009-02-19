@@ -190,7 +190,7 @@ class GeorectWizard(object):
             self.xy_mapdisp = mapdisp.MapFrame(self.gcpmgr, title=_("Set ground control points (GCPs)"),
                                                size=globalvar.MAP_WINDOW_SIZE,
                                                toolbars=["georect"],
-                                               Map=self.Map, gismgr=self.parent)
+                                               Map=self.Map, lmgr=self.parent)
 
             self.gcpmgr.SetMapDisplay(self.xy_mapdisp)
             

@@ -45,7 +45,7 @@ class NvizToolWindow(wx.Frame):
                  style=wx.DEFAULT_FRAME_STYLE, mapWindow=None):
         
         self.parent = parent # MapFrame
-        self.lmgr = self.parent.gismanager # GMFrame
+        self.lmgr = self.parent.GetLayerManager() # GMFrame
         self.mapWindow = mapWindow
 
         wx.Frame.__init__(self, parent, id, title, pos, size, style)

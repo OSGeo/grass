@@ -88,7 +88,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.first = True          # indicates if a layer is just added or not
         self.flag = ''             # flag for drag and drop hittest
         self.disp_idx = kargs['idx']
-        self.gismgr = kargs['gismgr']
+        self.lmgr = kargs['lmgr']
         self.notebook = kargs['notebook']   # GIS Manager notebook for layer tree
         self.treepg = parent        # notebook page holding layer tree
         self.auimgr = kargs['auimgr']       # aui manager
@@ -102,7 +102,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                            size=globalvar.MAP_WINDOW_SIZE,
                                            style=wx.DEFAULT_FRAME_STYLE,
                                            tree=self, notebook=self.notebook,
-                                           gismgr=self.gismgr, page=self.treepg,
+                                           lmgr=self.lmgr, page=self.treepg,
                                            Map=self.Map, auimgr=self.auimgr)
 
         # title
@@ -208,8 +208,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     def OnKeyUp(self, event):
         """Key pressed"""
         key = event.GetKeyCode()
-        if key == wx.WXK_DELETE and self.gismgr:
-            self.gismgr.OnDeleteLayer(None)
+        if key == wx.WXK_DELETE and self.lmgr:
+            self.lmgr.OnDeleteLayer(None)
 
         event.Skip()
 
@@ -251,7 +251,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
         # general item
         self.popupMenu.Append(self.popupID1, text=_("Remove"))
-        self.Bind(wx.EVT_MENU, self.gismgr.OnDeleteLayer, id=self.popupID1)
+        self.Bind(wx.EVT_MENU, self.lmgr.OnDeleteLayer, id=self.popupID1)
 
         if ltype != "command": # rename
             self.popupMenu.Append(self.popupID2, text=_("Rename"))
@@ -286,7 +286,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if mltype and mltype == "vector":
             self.popupMenu.AppendSeparator()
             self.popupMenu.Append(self.popupID4, text=_("Show attribute data"))
-            self.Bind (wx.EVT_MENU, self.gismgr.OnShowAttributeTable, id=self.popupID4)
+            self.Bind (wx.EVT_MENU, self.lmgr.OnShowAttributeTable, id=self.popupID4)
 
             self.popupMenu.Append(self.popupID5, text=_("Start editing"))
             self.popupMenu.Append(self.popupID6, text=_("Stop editing"))
@@ -388,7 +388,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         cmd.append('map=%s' % mapLayer.name)
 
         # print output to command log area
-        self.gismgr.goutput.RunCmd(cmd, switchPage=True)
+        self.lmgr.goutput.RunCmd(cmd, switchPage=True)
 
     def OnSetCompRegFromRaster(self, event):
         """Set computational region from selected raster map (ignore NULLs)"""
@@ -399,7 +399,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                'zoom=%s' % mapLayer.name]
         
         # print output to command log area
-        self.gismgr.goutput.RunCmd(cmd)
+        self.lmgr.goutput.RunCmd(cmd)
          
     def OnSetCompRegFromMap(self, event):
         """Set computational region from selected raster/vector map"""
@@ -428,7 +428,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # print output to command log area
         if len(cmd) > 1:
             cmd.append('-p')
-            self.gismgr.goutput.RunCmd(cmd)
+            self.lmgr.goutput.RunCmd(cmd)
         
     def OnProfile(self, event):
         """Plot profile of given raster map layer"""
@@ -1064,7 +1064,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if self.GetPyData(layer) and self.GetPyData(layer)[0]['maplayer']:
             cmd = self.GetPyData(layer)[0]['maplayer'].GetCmd(string=True)
             if len(cmd) > 0:
-                self.gismgr.SetStatusText(cmd)
+                self.lmgr.SetStatusText(cmd)
         
         #
         # update nviz tools

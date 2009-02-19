@@ -66,16 +66,16 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                  pos=wx.DefaultPosition,
                  size=wx.DefaultSize,
                  style=wx.NO_FULL_REPAINT_ON_RESIZE,
-                 Map=None, tree=None, gismgr=None):
+                 Map=None, tree=None, lmgr=None):
 
         self.parent = parent # MapFrame
         self.Map = Map
         self.tree = tree
-        self.gismgr = gismgr
+        self._layermanager = lmgr
         
         glcanvas.GLCanvas.__init__(self, parent, id)
         MapWindow.__init__(self, parent, id, pos, size, style,
-                           Map, tree, gismgr)
+                           Map, tree, self._layermanager)
         self.Hide()
         
         self.init = False
@@ -98,9 +98,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         #
         # create nviz instance
         #
-        if self.gismgr:
-            logerr = self.gismgr.goutput.cmd_stderr
-            logmsg = self.gismgr.goutput.cmd_output
+        if self._layermanager:
+            logerr = self._layermanager.goutput.cmd_stderr
+            logmsg = self._layermanager.goutput.cmd_output
         else:
             logerr = logmsg = None
         self.nvizThread = NvizThread(logerr,

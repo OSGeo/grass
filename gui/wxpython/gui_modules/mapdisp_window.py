@@ -48,7 +48,7 @@ class MapWindow(object):
                  pos=wx.DefaultPosition,
                  size=wx.DefaultSize,
                  style=wx.NO_FULL_REPAINT_ON_RESIZE,
-                 Map=None, tree=None, gismgr=None):
+                 Map=None, tree=None, lmgr=None):
         self.parent = parent # MapFrame
  
         #
@@ -151,16 +151,15 @@ class BufferedWindow(MapWindow, wx.Window):
                  pos = wx.DefaultPosition,
                  size = wx.DefaultSize,
                  style=wx.NO_FULL_REPAINT_ON_RESIZE,
-                 Map=None, tree=None, gismgr=None):
+                 Map=None, tree=None, lmgr=None):
 
         MapWindow.__init__(self, parent, id, pos, size, style,
-                           Map, tree, gismgr)
+                           Map, tree, lmgr)
         wx.Window.__init__(self, parent, id, pos, size, style)
 
         self.Map = Map
         self.tree = tree
-        self.gismanager = gismgr
-
+        
         #
         # Flags
         #
@@ -715,14 +714,14 @@ class BufferedWindow(MapWindow, wx.Window):
         if len(self.polycoords) > 0:
             self.DrawLines(self.pdcTmp)
         
-        if self.parent.gismanager and \
-                self.parent.gismanager.georectifying:
+        if not self.parent.IsStandalone() and \
+                self.parent.GetLayerManager().georectifying:
             # -> georectifier (redraw GCPs)
             if self.parent.toolbars['georect']:
                 coordtype = 'gcpcoord'
             else:
                 coordtype = 'mapcoord'
-            self.parent.gismanager.georectifying.DrawGCP(coordtype)
+            self.parent.GetLayerManager().georectifying.DrawGCP(coordtype)
             
         # 
         # clear measurement
@@ -1717,7 +1716,8 @@ class BufferedWindow(MapWindow, wx.Window):
             self.ClearLines(pdc=self.pdcTmp)
             self.DrawLines(pdc=self.pdcTmp)
         
-        elif self.mouse["use"] == "pointer" and self.parent.gismanager.georectifying:
+        elif self.mouse["use"] == "pointer" and \
+                self.parent.GetLayerManager().georectifying:
             # -> georectifying
             coord = self.Pixel2Cell(self.mouse['end'])
             if self.parent.toolbars['georect']:
@@ -1725,7 +1725,7 @@ class BufferedWindow(MapWindow, wx.Window):
             else:
                 coordtype = 'mapcoord'
 
-            self.parent.gismanager.georectifying.SetGCPData(coordtype, coord, self)
+            self.parent.GetLayerManager().georectifying.SetGCPData(coordtype, coord, self)
             self.UpdateMap(render=False, renderVector=False)
 
         elif self.mouse["use"] == "pointer" and self.parent.toolbars['vdigit']:

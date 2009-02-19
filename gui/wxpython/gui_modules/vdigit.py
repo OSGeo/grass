@@ -766,8 +766,8 @@ class CDisplayDriver(AbstractDisplayDriver):
 
         self.mapWindow = mapwindow
 
-        if self.mapwindow.gismanager:
-            logerr = self.mapwindow.gismanager.goutput.cmd_stderr
+        if not self.mapwindow.parent.IsStandalone():
+            logerr = self.mapwindow.parent.GetLayerManager().goutput.cmd_stderr
         else:
             logerr = None
 
@@ -1613,7 +1613,7 @@ class VDigitSettingsDialog(wx.Dialog):
         fileSettings['vdigit'] = UserSettings.Get(group='vdigit')
         
         file = UserSettings.SaveToFile(fileSettings)
-        self.parent.gismanager.goutput.WriteLog(_('Vector digitizer settings saved to file <%s>.') % file)
+        self.parent.GetLayerManager().goutput.WriteLog(_('Vector digitizer settings saved to file <%s>.') % file)
         
         self.Destroy()
 
