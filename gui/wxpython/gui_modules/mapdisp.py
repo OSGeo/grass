@@ -8,7 +8,6 @@ view).
 Can be used either from Layer Manager or as p.mon backend.
 
 Classes:
- - MapWindow
  - MapFrame
  - MapApp
 
@@ -90,7 +89,7 @@ class MapFrame(wx.Frame):
     def __init__(self, parent=None, id=wx.ID_ANY, title=_("GRASS GIS - Map display"),
                  pos=wx.DefaultPosition, size=wx.DefaultSize,
                  style=wx.DEFAULT_FRAME_STYLE, toolbars=["map"],
-                 tree=None, notebook=None, gismgr=None, page=None,
+                 tree=None, notebook=None, lmgr=None, page=None,
                  Map=None, auimgr=None):
         """
         Main map display window with toolbars, statusbar and
@@ -99,15 +98,15 @@ class MapFrame(wx.Frame):
         @param toolbars array of activated toolbars, e.g. ['map', 'digit']
         @param tree reference to layer tree
         @param notebook control book ID in Layer Manager
-        @param gismgr Layer Manager panel
+        @param mgr Layer Manager
         @param page notebook page with layer tree
         @param Map instance of render.Map
         """
-        self.gismanager = gismgr    # GIS Manager object
+        self._layerManager = lmgr   # Layer Manager object
         self.Map        = Map       # instance of render.Map
-        self.tree       = tree      # GIS Manager layer tree object
+        self.tree       = tree      # Layer Manager layer tree object
         self.page       = page      # Notebook page holding the layer tree
-        self.layerbook  = notebook  # GIS Manager layer tree notebook
+        self.layerbook  = notebook  # Layer Manager layer tree notebook
         self.parent     = parent
 
         #
@@ -214,7 +213,7 @@ class MapFrame(wx.Frame):
         # Init map display (buffered DC & set default cursor)
         #
         self.MapWindow2D = BufferedWindow(self, id=wx.ID_ANY,
-                                          Map=self.Map, tree=self.tree, gismgr=self.gismanager)
+                                          Map=self.Map, tree=self.tree, lmgr=self._layerManager)
         # default is 2D display mode
         self.MapWindow = self.MapWindow2D
         self.MapWindow.Bind(wx.EVT_MOTION, self.OnMotion)
@@ -296,8 +295,8 @@ class MapFrame(wx.Frame):
 	
         # vector digitizer
         elif name == "vdigit":
-            if self.gismanager:
-                log = self.gismanager.goutput
+            if self._layerManager:
+                log = self._layerManager.goutput
             else:
                 log = None
             self.toolbars['vdigit'] = toolbars.VDigitToolbar(parent=self, map=self.Map,
@@ -381,7 +380,7 @@ class MapFrame(wx.Frame):
             #
             if not self.MapWindow3D:
                 self.MapWindow3D = nviz.GLWindow(self, id=wx.ID_ANY,
-                                                 Map=self.Map, tree=self.tree, gismgr=self.gismanager)
+                                                 Map=self.Map, tree=self.tree, lmgr=self._layerManager)
                 # -> show after paint
                 self.nvizToolWin = nviz.NvizToolWindow(self, id=wx.ID_ANY,
                                                        mapWindow=self.MapWindow3D)
@@ -485,8 +484,8 @@ class MapFrame(wx.Frame):
         Change choicebook page to match display.
         Or set display for georectifying
         """
-        if self.gismanager and \
-                self.gismanager.georectifying:
+        if self._layerManager and \
+                self._layerManager.georectifying:
             # in georectifying session; display used to get get geographic
             # coordinates for GCPs
             self.OnPointer(event)
@@ -590,7 +589,7 @@ class MapFrame(wx.Frame):
             else: # moveLine, deleteLine
                 self.MapWindow.mouse['box'] = 'box'
         
-        elif self.gismanager and self.gismanager.georectifying:
+        elif self._layerManager and self._layerManager.georectifying:
             self.MapWindow.SetCursor(self.cursors["cross"])
         
         else:
@@ -1026,7 +1025,7 @@ class MapFrame(wx.Frame):
         if self.toolbars['nviz']:
             self.toolbars['nviz'].OnExit()
 
-        if not self.gismanager:
+        if not self._layerManager:
             self.Destroy()
         elif self.page:
             pgnum = self.layerbook.GetPageIndex(self.page)
@@ -1050,7 +1049,7 @@ class MapFrame(wx.Frame):
         self.toolbars['map'].action['desc'] = 'displayAttrb'
         
         # switch GIS Manager to output console to show query results
-        self.gismanager.notebook.SetSelection(1)
+        self._layerManager.notebook.SetSelection(1)
 
         self.MapWindow.mouse['use'] = "query"
         self.MapWindow.mouse['box'] = "point"
@@ -1130,14 +1129,14 @@ class MapFrame(wx.Frame):
                 vect = []
                 for vector in vectstr.split(','):
                     if map == vector:
-                        self.gismanager.goutput.WriteWarning("Vector map <%s> "
+                        self._layerManager.goutput.WriteWarning("Vector map <%s> "
                                                              "opened for editing - skipped." % map)
                         continue
                     vect.append(vector)
                 vectstr = ','.join(vect)
                 
             if len(vectstr) <= 1:
-                self.gismanager.goutput.WriteCmdLog("Nothing to query.")
+                self._layerManager.goutput.WriteCmdLog("Nothing to query.")
                 return
             
             vcmd.append('-a')
@@ -1146,12 +1145,12 @@ class MapFrame(wx.Frame):
             vcmd.append('distance=%f' % float(qdist))
         
         # parse query command(s)
-        if self.gismanager:
+        if self._layerManager:
             if raststr:
-                self.gismanager.goutput.RunCmd(rcmd,
+                self._layerManager.goutput.RunCmd(rcmd,
                                                compReg=False)
             if vectstr:
-                self.gismanager.goutput.RunCmd(vcmd)
+                self._layerManager.goutput.RunCmd(vcmd)
         else:
             if raststr:
                 gcmd.RunCommand(rcmd)
@@ -1349,7 +1348,7 @@ class MapFrame(wx.Frame):
         self.totaldist = 0.0 # total measured distance
 
         # switch GIS Manager to output console to show measure results
-        self.gismanager.notebook.SetSelection(1)
+        self._layerManager.notebook.SetSelection(1)
 
         # change mouse to draw line for measurement
         self.MapWindow.mouse['use'] = "measure"
@@ -1362,19 +1361,19 @@ class MapFrame(wx.Frame):
         self.MapWindow.SetCursor(self.cursors["pencil"])
 
         # initiating output
-        style = self.gismanager.goutput.cmd_output.StyleWarning
-        self.gismanager.goutput.WriteLog(_('Click and drag with left mouse button '
+        style = self._layerManager.goutput.cmd_output.StyleWarning
+        self._layerManager.goutput.WriteLog(_('Click and drag with left mouse button '
                                            'to measure.%s'
                                            'Double click with left button to clear.') % \
                                              (os.linesep), style)
         if self.Map.projinfo['proj'] != 'xy':
             units = self.Map.projinfo['units']
-            style = self.gismanager.goutput.cmd_output.StyleCommand
-            self.gismanager.goutput.WriteLog(_('Measuring distance') + ' ('
+            style = self._layerManager.goutput.cmd_output.StyleCommand
+            self._layerManager.goutput.WriteLog(_('Measuring distance') + ' ('
                                              + units + '):',
                                              style)
         else:
-            self.gismanager.goutput.WriteLog(_('Measuring distance:'),
+            self._layerManager.goutput.WriteLog(_('Measuring distance:'),
                                              style)
 
     def MeasureDist(self, beginpt, endpt):
@@ -1383,8 +1382,8 @@ class MapFrame(wx.Frame):
         and print to output window
         """
 
-        if self.gismanager.notebook.GetSelection() != 1:
-            self.gismanager.notebook.SetSelection(1)
+        if self._layerManager.notebook.GetSelection() != 1:
+            self._layerManager.notebook.SetSelection(1)
 
         dist, (north, east) = self.MapWindow.Distance(beginpt, endpt)
 
@@ -1408,7 +1407,7 @@ class MapFrame(wx.Frame):
             mstring = 'segment = %s %s\ttotal distance = %s %s' \
                 % (strdist,dunits,strtotdist,tdunits)
 
-        self.gismanager.goutput.WriteLog(mstring)
+        self._layerManager.goutput.WriteLog(mstring)
 
         return dist
 
@@ -1684,7 +1683,22 @@ class MapFrame(wx.Frame):
         self.compResolution.SetValue(constrainRes)
         if showCompExtent:
             self.MapWindow.regionCoords = []
+
+    def IsStandalone(self):
+        """Check if Map display is standalone"""
+        if self._layerManager:
+            return False
         
+        return True
+    
+    def GetLayerManager(self):
+        """Get reference to Layer Manager
+
+        @return window reference
+        @return None (if standalone)
+        """
+        return self._layerManager
+    
 # end of class MapFrame
 
 class MapApp(wx.App):
