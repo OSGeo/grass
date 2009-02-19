@@ -175,7 +175,7 @@ private:
     
 public:
     /* constructor */
-    DisplayDriver(gwxPseudoDC *, gwxPseudoDC *);
+    DisplayDriver(gwxPseudoDC *, gwxPseudoDC *, PyObject *);
     /* destructor */
     ~DisplayDriver();
 
@@ -229,7 +229,5 @@ public:
 			bool, unsigned long,
 			int, int);
 };
-
-int print_error(const char *, int);
 
 #endif /* WXVDIGIT_DRIVER_H */
