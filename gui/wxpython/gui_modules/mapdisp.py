@@ -374,22 +374,20 @@ class MapFrame(wx.Frame):
             #
             self.MapWindow.EraseMap()
 
-            busy = wx.BusyInfo(message=_("Please wait, loading data..."),
-                               parent=self)
-            wx.Yield()
-        
+            self.statusbar.SetStatusText(_("Please wait, loading data..."), 0)
+            
             #
             # create GL window & NVIZ toolbar
             #
             if not self.MapWindow3D:
                 self.MapWindow3D = nviz.GLWindow(self, id=wx.ID_ANY,
                                                  Map=self.Map, tree=self.tree, gismgr=self.gismanager)
+                # -> show after paint
                 self.nvizToolWin = nviz.NvizToolWindow(self, id=wx.ID_ANY,
                                                        mapWindow=self.MapWindow3D)
                 self.MapWindow3D.OnPaint(None) # -> LoadData
-
-            busy.Destroy()
-
+                self.MapWindow3D.Show()
+            
             self.nvizToolWin.Show()
 
             #

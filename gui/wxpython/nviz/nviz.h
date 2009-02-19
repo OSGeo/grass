@@ -30,8 +30,7 @@ class Nviz
 {
 private:
     nv_data *data;
-    wxGLCanvas *glCanvas;
-
+    
     /* surface.cpp */
     int SetSurfaceAttr(int, int, bool, const char *);
     int UnsetSurfaceAttr(int, int);
@@ -55,7 +54,6 @@ public:
     int SetZExag(float);
 
     /* init.cpp */
-    int SetDisplay(void *);
     void InitView();
     void SetBgColor(const char *);
 
