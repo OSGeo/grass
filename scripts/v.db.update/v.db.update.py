@@ -36,7 +36,7 @@
 #%end
 #%option
 #% key: column
-#% type: strin
+#% type: string
 #% gisprompt: old_dbcolumn,dbcolumn,dbcolumng
 #% description: Column to update
 #% required : yes
