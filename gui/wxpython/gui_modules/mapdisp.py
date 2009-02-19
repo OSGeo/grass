@@ -1182,10 +1182,11 @@ class MapFrame(wx.Frame):
         posWindow = self.ClientToScreen((x + self.MapWindow.dialogOffset,
                                          y + self.MapWindow.dialogOffset))
 
-        qdist = 10.0 * ((self.Map.region['e'] - self.Map.region['w']) / \
-                            self.Map.width)
+        qdist = 10.0 * ((self.Map.region['e'] - self.Map.region['w']) /
+                        self.Map.width)
+        
         east, north = self.MapWindow.Pixel2Cell((x, y))
-
+        
         mapName = self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer'].name
         
         if self.dialogs['attributes'] is None:
@@ -1197,12 +1198,13 @@ class MapFrame(wx.Frame):
         else:
             # selection changed?
             if not self.dialogs['attributes'].mapDBInfo or \
-                   self.dialogs['attributes'].mapDBInfo.map != mapName:
+                    self.dialogs['attributes'].mapDBInfo.map != mapName:
                 self.dialogs['attributes'].UpdateDialog(map=mapName, query=((east, north), qdist))
             else:
                 self.dialogs['attributes'].UpdateDialog(query=((east, north), qdist))
-
+                
         cats = self.dialogs['attributes'].GetCats()
+        
         try:
             qlayer = self.Map.GetListOfLayers(l_name=globalvar.QUERYLAYER)[0]
         except IndexError:
@@ -1216,7 +1218,7 @@ class MapFrame(wx.Frame):
                                                         addLayer=False))
             else:
                 qlayer = self.AddTmpVectorMapLayer(mapName, cats, useId=False)
-
+            
             # set opacity based on queried layer
             opacity = self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer'].GetOpacity(float=True)
             qlayer.SetOpacity(opacity)
@@ -1230,7 +1232,7 @@ class MapFrame(wx.Frame):
                 self.MapWindow.UpdateMap(render=False, renderVector=False)
             if self.dialogs['attributes'].IsShown():
                 self.dialogs['attributes'].Hide()
-
+        
     def OnQuery(self, event):
         """Query tools menu"""
         if self.toolbars['map']:

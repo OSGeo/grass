@@ -64,6 +64,8 @@ class Layer(object):
     def __init__(self, type, cmd, name=None,
                  active=True, hidden=False, opacity=1.0):
         """
+        @todo pass cmd as tuple instead of list
+        
         @param type layer type ('raster', 'vector', 'overlay', 'command', etc.)
         @param cmd GRASS command to render layer,
         given as list, e.g. ['d.rast', 'map=elevation@PERMANENT']
@@ -74,8 +76,14 @@ class Layer(object):
         """
         self.type = type
         self.name = name
-        self.cmd  = utils.CmdToTuple(cmd)
 
+        if self.type == 'command':
+            self.cmd = []
+            for c in cmd:
+                self.cmd.append(utils.CmdToTuple(c))
+        else:
+            self.cmd  = utils.CmdToTuple(cmd)
+        
         self.active  = active
         self.hidden  = hidden
         self.opacity = opacity
@@ -140,11 +148,11 @@ class Layer(object):
         try:
             if self.type == 'command':
                 read = False
-                for cmd in self.cmd:
-                    ret = gcmd.RunCommand(self.cmd[0],
+                for c in self.cmd:
+                    ret = gcmd.RunCommand(c[0],
                                           quiet = True,
-                                          **self.cmd[1])
-                    if ret.returncode != 0:
+                                          **c[1])
+                    if ret != 0:
                         break
                     if not read:
                         os.environ["GRASS_PNG_READ"] = "TRUE"
@@ -199,8 +207,9 @@ class Layer(object):
         if string:
             if self.type == 'command':
                 scmd = []
-                for cmd in self.cmd:
-                    scmd.append(utils.GetCmdString(self.cmd))
+                for c in self.cmd:
+                    scmd.append(utils.GetCmdString(c))
+                
                 return ';'.join(scmd)
             else:
                 return utils.GetCmdString(self.cmd)
@@ -278,7 +287,12 @@ class Layer(object):
         
     def SetCmd(self, cmd):
         """Set new command for layer"""
-        self.cmd = utils.CmdToTuple(cmd)
+        if self.type == 'command':
+            self.cmd = []
+            for c in cmd:
+                self.cmd.append(utils.CmdToTuple(c))
+        else:
+            self.cmd  = utils.CmdToTuple(cmd)
         Debug.msg(3, "Layer.SetCmd(): cmd='%s'" % self.GetCmd(string=True))
         
         # for re-rendering
