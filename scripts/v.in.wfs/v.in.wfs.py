@@ -18,7 +18,7 @@
 #############################################################################
 
 #%Module
-#% description: import GetFeature from WFS
+#% description: Import GetFeature from WFS.
 #%End
 #%option
 #% key: wfs
