@@ -161,6 +161,8 @@ int Vect_build_sidx_from_topo(struct Map_info *Map)
 
     /* Nodes */
     for (i = 1; i <= plus->n_nodes; i++) {
+	G_percent(i, total, 3);
+
 	Node = plus->Node[i];
 	if (!Node)
 	    G_fatal_error(_("BUG (Vect_build_sidx_from_topo): node does not exist"));
@@ -171,6 +173,8 @@ int Vect_build_sidx_from_topo(struct Map_info *Map)
     /* Lines */
     done = plus->n_nodes;
     for (i = 1; i <= plus->n_lines; i++) {
+	G_percent(done + i, total, 3);
+
 	Line = plus->Line[i];
 	if (!Line)
 	    G_fatal_error(_("BUG (Vect_build_sidx_from_topo): line does not exist"));
@@ -188,6 +192,8 @@ int Vect_build_sidx_from_topo(struct Map_info *Map)
     /* Areas */
     done += plus->n_lines;
     for (i = 1; i <= plus->n_areas; i++) {
+	G_percent(done + i, total, 3);
+
 	Area = plus->Area[i];
 	if (!Area)
 	    G_fatal_error(_("BUG (Vect_build_sidx_from_topo): area does not exist"));
@@ -205,6 +211,8 @@ int Vect_build_sidx_from_topo(struct Map_info *Map)
     /* Isles */
     done += plus->n_areas;
     for (i = 1; i <= plus->n_isles; i++) {
+	G_percent(done + i, total, 3);
+
 	Isle = plus->Isle[i];
 	if (!Isle)
 	    G_fatal_error(_("BUG (Vect_build_sidx_from_topo): isle does not exist"));
