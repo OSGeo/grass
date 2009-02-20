@@ -90,10 +90,12 @@ class GeorectWizard(object):
         try:
             f = open(self.orig_gisrc, 'r')
             for line in f.readlines():
-                if line != '':
-                    line = line.replace('\n', '').strip()
-                    key, value = line.split(':')
-                    self.gisrc_dict[key.strip()] = value.strip()
+                line = line.replace('\n', '').strip()
+                if len(line) < 1:
+                    continue
+                print line
+                key, value = line.split(':', 1)
+                self.gisrc_dict[key.strip()] = value.strip()
         finally:
             f.close()
             
