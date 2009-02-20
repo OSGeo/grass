@@ -632,13 +632,13 @@ class GMStderr:
                     progressValue = 0
             elif 'GRASS_INFO_MESSAGE' in line:
                 self.type = 'message'
-                self.message = line.split(':', 1)[1].strip()
+                self.message += line.split(':', 1)[1].strip() + '\n'
             elif 'GRASS_INFO_WARNING' in line:
                 self.type = 'warning'
-                self.message = line.split(':', 1)[1].strip()
+                self.message += line.split(':', 1)[1].strip() + '\n'
             elif 'GRASS_INFO_ERROR' in line:
                 self.type = 'error'
-                self.message = line.split(':', 1)[1].strip()
+                self.message += line.split(':', 1)[1].strip() + '\n'
             elif 'GRASS_INFO_END' in line:
                 self.printMessage = True
             elif self.type == '':
