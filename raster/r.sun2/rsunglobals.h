@@ -1,3 +1,4 @@
+
 /*******************************************************************************
 r.sun: rsunglobals.h. This program was writen by Jaro Hofierka in Summer 1993 and re-engineered
 in 1996-1999. In cooperation with Marcel Suri and Thomas Huld from JRC in Ispra
@@ -30,9 +31,9 @@ email: hofierka@geomodel.sk,marcel.suri@jrc.it,suri@geomodel.sk
 
 #define EARTHRADIUS 6371000.
 /* undefined value for terrain aspect */
-#define UNDEF    0.        
+#define UNDEF    0.
 /* internal undefined value for NULL */
-#define UNDEFZ   -9999.        
+#define UNDEFZ   -9999.
 
 /* Constant for calculating angular loss */
 #define a_r 0.155
@@ -42,9 +43,9 @@ extern int bitCount_global;
 extern int arrayNumInt;
 
 /*
-extern double xp;
-extern double yp;
-*/
+   extern double xp;
+   extern double yp;
+ */
 
 extern double angular_loss_denom;
 
@@ -59,4 +60,3 @@ extern struct pj_info oproj;
 
 
 extern void (*func) (int, int);
-
