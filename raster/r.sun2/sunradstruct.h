@@ -1,3 +1,4 @@
+
 /*******************************************************************************
 r.sun: sunradstruct.h. This program was writen by Jaro Hofierka in Summer 1993 and re-engineered
 in 1996-1999. In cooperation with Marcel Suri and Thomas Huld from JRC in Ispra
@@ -32,78 +33,78 @@ email: hofierka@geomodel.sk,marcel.suri@jrc.it,suri@geomodel.sk
 #define HOURANGLE M_PI/12.
 
 
-struct SunGeometryConstDay 
-	{
-	double lum_C11;
-	double lum_C13;
-	double lum_C22;
-	double lum_C31;
-	double lum_C33;
-	double sunrise_time;
-	double sunset_time;
-	double timeAngle;
-	double sindecl;
-	double cosdecl;
-	
-	};
+struct SunGeometryConstDay
+{
+    double lum_C11;
+    double lum_C13;
+    double lum_C22;
+    double lum_C31;
+    double lum_C33;
+    double sunrise_time;
+    double sunset_time;
+    double timeAngle;
+    double sindecl;
+    double cosdecl;
+
+};
 
 
-struct SunGeometryVarDay 
-	{
-	int isShadow;
-	double z_orig;
-	double zmax;
-	double zp;
-	double solarAltitude;
-	double sinSolarAltitude;
-	double tanSolarAltitude;
-	double solarAzimuth;
-	double sunAzimuthAngle;
-	double stepsinangle;
-	double stepcosangle;
-	
-	};
+struct SunGeometryVarDay
+{
+    int isShadow;
+    double z_orig;
+    double zmax;
+    double zp;
+    double solarAltitude;
+    double sinSolarAltitude;
+    double tanSolarAltitude;
+    double solarAzimuth;
+    double sunAzimuthAngle;
+    double stepsinangle;
+    double stepcosangle;
+
+};
 
 
-struct SunGeometryVarSlope 
-	{
-	double longit_l; /* The "longitude" difference between the inclined */
-			/* and orientated plane and the instantaneous solar position */
-	double lum_C31_l;
-	double lum_C33_l;
-	double slope;
-	double aspect;
-	
-	};
+struct SunGeometryVarSlope
+{
+    double longit_l;		/* The "longitude" difference between the inclined */
+    /* and orientated plane and the instantaneous solar position */
+    double lum_C31_l;
+    double lum_C33_l;
+    double slope;
+    double aspect;
+
+};
 
 
 
-struct SolarRadVar 
-	{
-	double cbh;
-	double cdh;
-	double linke;
-	double G_norm_extra;
-	double alb;
-	
-	};
+struct SolarRadVar
+{
+    double cbh;
+    double cdh;
+    double linke;
+    double G_norm_extra;
+    double alb;
 
-	
-	
+};
+
+
+
 struct GridGeometry
-	{
-	double xp;
-	double yp;
-	double xx0;
-	double yy0;
-	double xg0;
-	double yg0;
-	double stepx;
-	double stepy;
-	double deltx;
-	double delty;
-	double stepxy;
-	double sinlat;
-	double coslat;
-	
-	};
+{
+    double xp;
+    double yp;
+    double xx0;
+    double yy0;
+    double xg0;
+    double yg0;
+    double stepx;
+    double stepy;
+    double deltx;
+    double delty;
+    double stepxy;
+    double sinlat;
+    double coslat;
+
+};
