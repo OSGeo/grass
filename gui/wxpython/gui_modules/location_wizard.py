@@ -37,6 +37,7 @@ import re
 import string
 import sys
 import locale
+import platform
 
 import wx
 import wx.lib.mixins.listctrl as listmix
@@ -261,6 +262,7 @@ class CoordinateSystemPage(TitledPage):
                                              "coordinate system (XY)"))
         # layout
         self.sizer.AddGrowableCol(1)
+        self.sizer.SetVGap(10)
         self.sizer.Add(item=self.radio1,
                        flag=wx.ALIGN_LEFT, pos=(1, 1))
         self.sizer.Add(item=self.radio2,
@@ -1238,7 +1240,7 @@ class EPSGPage(TitledPage):
                                        style=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL)
 
         # text input
-        epsgdir = os.path.join(os.environ["GRASS_PROJSHARE"], 'epsg')
+        epsgdir = utils.PathJoin(os.environ["GRASS_PROJSHARE"], 'epsg')
         self.tfile = self.MakeTextCtrl(text=epsgdir, size=(200,-1))
         self.tcode = self.MakeTextCtrl(size=(200,-1))
 
@@ -1397,9 +1399,10 @@ class EPSGPage(TitledPage):
             i = 0
             code = None
             for line in f.readlines():
-
                 line = line.strip()
-
+                if len(line) < 1:
+                    continue
+                
                 if line[0] == '#':
                     descr = line[1:].strip()
                 elif line[0] == '<':

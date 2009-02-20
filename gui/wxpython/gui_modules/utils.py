@@ -16,6 +16,7 @@ for details.
 
 import os
 import sys
+import platform
 
 import globalvar
 grassPath = os.path.join(globalvar.ETCDIR, "python")
@@ -50,7 +51,7 @@ def GetTempfile(pref=None):
 
     # FIXME
     # ugly hack for MSYS (MS Windows)
-    if subprocess.mswindows:
+    if platform.system() == 'Windows':
 	tempfile = tempfile.replace("/", "\\")
     try:
         path, file = os.path.split(tempfile)
@@ -356,6 +357,15 @@ def CmdToTuple(cmd):
     return (cmd[0],
             dcmd)
 
+def PathJoin(*args):
+    """Check path created by os.path.join"""
+    path = os.path.join(*args)
+    if platform.system() == 'Windows' and \
+            '/' in path:
+        return path[1].upper() + ':\\' + path[3:].replace('/', '\\')
+    
+    return path
+    
 def reexec_with_pythonw():
     """Re-execute Python on Mac OS"""
     if sys.platform == 'darwin' and \
