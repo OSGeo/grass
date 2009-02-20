@@ -781,8 +781,8 @@ class mainFrame(wx.Frame):
     def OnRun(self, event):
         """Run the command"""
         cmd = self.createCmd()
-
-        if cmd == [] or cmd == None:
+        
+        if cmd == None or len(cmd) < 2:
             return
 
         if cmd[0][0:2] != "d.":
