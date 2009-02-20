@@ -66,6 +66,7 @@
 #% key: input
 #% type: string
 #% description: Device or file used to import data
+#% gisprompt: old_file,file,file
 #%end
 #%option
 #% key: output
