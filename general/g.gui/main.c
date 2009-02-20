@@ -25,7 +25,7 @@
 int main(int argc, char *argv[])
 {
     struct Option *type, *rc_file;
-    struct Flag *oneoff;
+    struct Flag *update, *nolaunch;
     struct GModule *module;
     const char *gui_type_env;
     char progname[GPATH_MAX];
@@ -42,23 +42,38 @@ int main(int argc, char *argv[])
     type->type = TYPE_STRING;
     type->label = _("GUI type");
     type->description = _("Default value: GRASS_GUI if defined otherwise wxpython");
-    type->descriptions = _("wxpython;wxPython based GUI");
-    type->options = "wxpython";
+    type->descriptions = _("wxpython;wxPython based GUI;"
+			   "text;command line interface only");
+    type->options = "wxpython,text";
 
     rc_file = G_define_standard_option(G_OPT_F_INPUT);
     rc_file->key = "workspace";
     rc_file->required = NO;
     rc_file->description = _("Name of workspace file");
 
-    oneoff = G_define_flag();
-    oneoff->key = 'u';
-    oneoff->description = _("Update default GUI setting");
+    update = G_define_flag();
+    update->key = 'u';
+    update->description = _("Update default GUI setting");
+
+    nolaunch = G_define_flag();
+    nolaunch->key = 'n';
+    nolaunch->description =
+	_("Do not launch GUI after updating the default GUI setting");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
+
+    if( type->answer && strcmp(type->answer, "text") == 0
+					&& !nolaunch->answer)
+	nolaunch->answer = TRUE;
+
+    if(nolaunch->answer && !update->answer)
+	update->answer = TRUE;
+
+
     gui_type_env = G__getenv("GRASS_GUI");
-    
+
     if (!type->answer) {
 	if (gui_type_env && strcmp(gui_type_env, "text")) {
 	    type->answer = G_store(gui_type_env);
@@ -68,12 +83,16 @@ int main(int argc, char *argv[])
 	}
     }
 
-    if (((gui_type_env && oneoff->answer) &&
+    if (((gui_type_env && update->answer) &&
 	 strcmp(gui_type_env, type->answer) != 0) || !gui_type_env) {
 	G_message(_("<%s> is now the default GUI"), type->answer);
 	G_setenv("GRASS_GUI", type->answer);
 
     }
+
+    if(nolaunch->answer)
+	exit(EXIT_SUCCESS);
+
 
     if (strcmp(type->answer, "wxpython") == 0) {
 	sprintf(progname, "%s/etc/wxpython/wxgui.py", G_gisbase());
