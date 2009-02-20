@@ -449,10 +449,11 @@ def vector_db(map, **args):
 
     @return dictionary { layer : { 'layer', 'table, 'database', 'driver', 'key' }
     """
-    s = read_command('v.db.connect', flags = 'g', map = map, fs = '|', **args)
+    s = read_command('v.db.connect', flags = 'g', map = map, fs = ';', **args)
     result = {}
+    
     for l in s.splitlines():
-	f = l.split('|')
+	f = l.split(';')
 	if len(f) != 5:
 	    continue
         
