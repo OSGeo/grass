@@ -53,7 +53,7 @@ int RTreeSearch(struct Node *N, struct Rect *R, SearchHitCallback shcb,
     if (n->level > 0) {		/* this is an internal node in the tree */
 	for (i = 0; i < NODECARD; i++)
 	    if (n->branch[i].child && RTreeOverlap(r, &n->branch[i].rect)) {
-		hitCount += RTreeSearch(n->branch[i].child, R, shcb, cbarg);
+		hitCount += RTreeSearch(n->branch[i].child, r, shcb, cbarg);
 	    }
     }
     else {			/* this is a leaf node */
@@ -79,7 +79,7 @@ int RTreeSearch(struct Node *N, struct Rect *R, SearchHitCallback shcb,
  * level to insert; e.g. a data rectangle goes in at level = 0.
  */
 static int RTreeInsertRect2(struct Rect *r,
-			    int tid, struct Node *n, struct Node **new_node,
+			    struct Node *child, struct Node *n, struct Node **new_node,
 			    int level)
 {
     /*
@@ -99,7 +99,7 @@ static int RTreeInsertRect2(struct Rect *r,
     /* Still above level for insertion, go down tree recursively */
     if (n->level > level) {
 	i = RTreePickBranch(r, n);
-	if (!RTreeInsertRect2(r, tid, n->branch[i].child, &n2, level)) {
+	if (!RTreeInsertRect2(r, child, n->branch[i].child, &n2, level)) {
 	    /* child was not split */
 	    n->branch[i].rect = RTreeCombineRect(r, &(n->branch[i].rect));
 	    return 0;
@@ -116,7 +116,7 @@ static int RTreeInsertRect2(struct Rect *r,
     /* Have reached level for insertion. Add rect, split if necessary */
     else if (n->level == level) {
 	b.rect = *r;
-	b.child = (struct Node *)tid;
+	b.child = child;
 	/* child field of leaves contains tid of data record */
 	return RTreeAddBranch(&b, n, new_node);
     }
@@ -137,8 +137,14 @@ static int RTreeInsertRect2(struct Rect *r,
  */
 int RTreeInsertRect(struct Rect *R, int Tid, struct Node **Root, int Level)
 {
+    assert(Level == 0);
+    return RTreeInsertRect1(R, (struct Node *) Tid, Root, Level);
+}
+
+int RTreeInsertRect1(struct Rect *R, struct Node *Child, struct Node **Root, int Level)
+{
     register struct Rect *r = R;
-    register int tid = Tid;
+    register struct Node *child = Child;
     register struct Node **root = Root;
     register int level = Level;
     register int i;
@@ -153,7 +159,7 @@ int RTreeInsertRect(struct Rect *R, int Tid, struct Node **Root, int Level)
 	assert(r->boundary[i] <= r->boundary[NUMDIMS + i]);
     }
 
-    if (RTreeInsertRect2(r, tid, *root, &newnode, level)) {	/* root split */
+    if (RTreeInsertRect2(r, child, *root, &newnode, level)) {	/* root split */
 	newroot = RTreeNewNode();	/* grow a new root, & tree taller */
 	newroot->level = (*root)->level + 1;
 	b.rect = RTreeNodeCover(*root);
@@ -208,23 +214,23 @@ static void RTreeReInsert(struct Node *n, struct ListNode **ee)
  * Returns 1 if record not found, 0 if success.
  */
 static int
-RTreeDeleteRect2(struct Rect *R, int Tid, struct Node *N,
+RTreeDeleteRect2(struct Rect *R, struct Node *Child, struct Node *N,
 		 struct ListNode **Ee)
 {
     register struct Rect *r = R;
-    register int tid = Tid;
+    register struct Node *child = Child;
     register struct Node *n = N;
     register struct ListNode **ee = Ee;
     register int i;
 
     assert(r && n && ee);
-    assert(tid >= 0);
+    assert(child);
     assert(n->level >= 0);
 
     if (n->level > 0) {		/* not a leaf node */
 	for (i = 0; i < NODECARD; i++) {
 	    if (n->branch[i].child && RTreeOverlap(r, &(n->branch[i].rect))) {
-		if (!RTreeDeleteRect2(r, tid, n->branch[i].child, ee)) {
+		if (!RTreeDeleteRect2(r, child, n->branch[i].child, ee)) {
 		    if (n->branch[i].child->count >= MinNodeFill) {
 			n->branch[i].rect =
 			    RTreeNodeCover(n->branch[i].child);
@@ -244,7 +250,7 @@ RTreeDeleteRect2(struct Rect *R, int Tid, struct Node *N,
 
 	for (i = 0; i < LEAFCARD; i++) {
 	    if (n->branch[i].child &&
-		n->branch[i].child == (struct Node *)tid) {
+		n->branch[i].child == child) {
 		RTreeDisconnectBranch(n, i);
 		return 0;
 	    }
@@ -261,8 +267,15 @@ RTreeDeleteRect2(struct Rect *R, int Tid, struct Node *N,
  */
 int RTreeDeleteRect(struct Rect *R, int Tid, struct Node **Nn)
 {
+    /* wrapper not really needed, but restricts compile warnings to rtree lib */
+    /* this way it's easier to fix if necessary? */
+    return RTreeDeleteRect1(R, (struct Node *) Tid, Nn);
+}
+
+int RTreeDeleteRect1(struct Rect *R, struct Node *Child, struct Node **Nn)
+{
     register struct Rect *r = R;
-    register int tid = Tid;
+    register struct Node *child = Child;
     register struct Node **nn = Nn;
     register int i;
     struct Node *tmp_nptr = NULL;
@@ -271,9 +284,9 @@ int RTreeDeleteRect(struct Rect *R, int Tid, struct Node **Nn)
 
     assert(r && nn);
     assert(*nn);
-    assert(tid >= 0);
+    assert(child);
 
-    if (!RTreeDeleteRect2(r, tid, *nn, &reInsertList)) {
+    if (!RTreeDeleteRect2(r, child, *nn, &reInsertList)) {
 	/* found and deleted a data item */
 
 	/* reinsert any branches from eliminated nodes */
@@ -281,8 +294,8 @@ int RTreeDeleteRect(struct Rect *R, int Tid, struct Node **Nn)
 	    tmp_nptr = reInsertList->node;
 	    for (i = 0; i < MAXKIDS(tmp_nptr); i++) {
 		if (tmp_nptr->branch[i].child) {
-		    RTreeInsertRect(&(tmp_nptr->branch[i].rect),
-				    (int)tmp_nptr->branch[i].child,
+		    RTreeInsertRect1(&(tmp_nptr->branch[i].rect),
+				    tmp_nptr->branch[i].child,
 				    nn, tmp_nptr->level);
 		}
 	    }
