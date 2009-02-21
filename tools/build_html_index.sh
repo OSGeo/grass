@@ -88,29 +88,93 @@ consulting companies.</p>
 Geographic Resources Analysis Support System (GRASS), an open source (GNU
 GPLed), image processing and geographic information system (GIS).</p>
 
-<BR><BR>
-<h3>Quick Introduction</h3>
+EOF
+}
 
+write_html_cmd_overview()
+{
+cat <<EOF
 <!-- the files grass7.html & helptext.html file live in lib/init/ -->
-<ul>
-<li><a href="grass7.html">GRASS startup manual page</a></li>
-<li><a href="helptext.html">How to start with GRASS</a></li>
-<li>Introductions
- <ul>
-  <li><a href="rasterintro.html">2D raster map processing</a></li>
-  <li><a href="raster3dintro.html">3D raster map (voxel) processing</a></li>
-  <li><a href="imageryintro.html">Image processing</a></li>
-  <li><a href="databaseintro.html">Database management</a></li>
-  <li><a href="vectorintro.html">Vector map processing and network analysis</a></li>
-  <li><a href="projectionintro.html">Projections and spatial transformations</a></li>
-  <li><a href="sql.html">SQL support</a></li>
-  <li><a href="displaydrivers.html">Display drivers</a></li>
-  <li><a href="variables.html">GRASS variables and environment variables</a></li>
- </ul>
- <li><a href="gem/index.html">The GRASS Extensions Manager (GEM)</a></li>
-</ul>
-<P>
 
+<table align="center" border="0" cellspacing="8">
+  <tbody>
+    <tr>
+      <td valign="top" bgcolor="#ddffaa"><h3>Quick Introduction</h3>
+      <ul>
+      <li><a href="grass6.html">GRASS startup manual page</a></li>
+      <li><a href="helptext.html">How to start with GRASS</a></li>
+      </ul></td>
+
+      <td valign="top" bgcolor="#ddffaa"><h3>General</h3>
+      <ul>
+      <li><a href="general.html">General commands manual</a></li>
+      </ul></td>
+    </tr>
+    <tr>
+      <td valign="top" bgcolor="#ddffaa"><h3>Raster/Image processing</h3>
+
+       <ul>
+        <li><a href="rasterintro.html">Intro 2D raster map processing</a></li>
+        <li><a href="raster.html">Raster commands manual</a></li>
+        <li><a href="raster3dintro.html">Intro 3D raster map (voxel) processing</a></li>
+        <li><a href="raster3D.html">Raster3D commands manual</a></li>
+      </ul></td>
+      <td valign="top" bgcolor="#ddffaa"><h3>Vector processing</h3>
+
+       <ul>
+        <li><a href="vectorintro.html">Intro vector map processing and network analysis</a></li>
+        <li><a href="vector.html">Vector commands manual</a></li>
+       </ul></td>
+    </tr>
+    <tr>
+      <td valign="top" bgcolor="#ddffaa"><h3>Display/Graphical User Interfaces</h3>
+
+       <ul>
+       <li><a href="displaydrivers.html">Display drivers</a></li>
+        <li><a href="gis.m.html">gis.m</a> and <a href="d.m.html">d.m</a> GIS managers</li>
+        <li><a href="wxGUI.html">wxGUI</a> wxPython-based GUI frontend</li>
+
+        <li><a href="nviz.html">nviz</a> visualization and animation tool</li>
+        <li><a href="xganim.html">xganim</a> tool  for animating a raster map series</li>
+        <li><a href="display.html">Display commands manual</a></li>
+       </ul></td>
+      <td valign="top" bgcolor="#ddffaa"><h3>Database</h3>
+
+       <ul>
+       <li><a href="databaseintro.html">Intro database management</a></li>
+       <li><a href="sql.html">SQL support in GRASS GIS</a></li>
+       <li><a href="database.html">Database commands manual</a></li>
+       </ul></td>
+    </tr>
+    <tr>
+
+      <td valign="top" bgcolor="#ddffaa"><h3>Projections</h3>
+       <ul>
+        <li><a href="projectionintro.html">Intro projections and spatial transformations</a></li>
+       </ul></td>
+      <td valign="top" bgcolor="#ddffaa"><h3>Miscellaneous</h3>
+       <ul>
+        <li><a href="variables.html">GRASS variables and environment variables</a></li>
+
+        <li><a href="gem/index.html">The GRASS Extensions Manager (GEM)</a></li>
+        <li><a href="misc.html">Misc. commands manual</a></li>
+       </ul></td>
+    </tr>
+    <tr>
+      <td valign="top" bgcolor="#ddffaa"><h3>Image processing</h3>
+       <ul>
+
+        <li><a href="imageryintro.html">Intro image processing</a></li>
+        <li><a href="imagery.html">Imagery commands manual</a></li>
+      </ul></td>
+      <td valign="top" bgcolor="#ddffaa"><h3>Printing</h3>
+       <ul>
+        <li><a href="postscript.html">Postscript commands manual</a></li>
+       </ul></td>
+
+    </tr>
+  </tbody>
+</table>
 
 EOF
 }
@@ -203,26 +267,10 @@ echo "Generating HTML manual pages index (help system)..." >&2
 (
 write_html_header - "GRASS GIS $GRASSVERSION Reference Manual: Full index"
 
-cat <<EOF
-<BR><h3>Full command index:</h3>
-<table border=0>
-<tr><td>&nbsp;&nbsp;d.*  </td><td>display commands</td></tr>
-<tr><td>&nbsp;&nbsp;db.* </td><td>database commands</td></tr>
-<tr><td>&nbsp;&nbsp;g.*  </td><td>general commands</td></tr>
-<tr><td>&nbsp;&nbsp;i.*  </td><td>imagery commands</td></tr>
-<tr><td>&nbsp;&nbsp;m.*  </td><td>miscellaneous commands</td></tr>
-<tr><td>&nbsp;&nbsp;ps.* </td><td>postscript commands</td></tr>
-<tr><td>&nbsp;&nbsp;r.*  </td><td>raster commands</td></tr>
-<tr><td>&nbsp;&nbsp;r3.* </td><td>raster3D commands</td></tr>
-<tr><td>&nbsp;&nbsp;v.*  </td><td>vector commands</td></tr>
-<tr><td>&nbsp;&nbsp;<a href="nviz.html">nviz</a> </td><td>visualization suite</td></tr>
-<tr><td>&nbsp;&nbsp;<a href="wxGUI.html">wxGUI</a> </td><td>wxPython-based GUI frontend</td></tr>
-<tr><td>&nbsp;&nbsp;<a href="xganim.html">xganim</a> </td><td>raster map slideshow</td></tr>
-</table>
-EOF
-
 #generate main index of all modules:
-echo "<BR><BR>[ "
+echo "Go <a href=\"index.html\">back to help overview</a><BR>"
+echo "<BR><h3>Full command index:</h3>"
+echo "[ "
 k=0
 for i in $CMDLIST
 do
@@ -234,8 +282,26 @@ do
 done
 
 echo " ]"
-echo "<BR>"
+echo "<BR><BR>"
 echo ""
+
+cat <<EOF
+<table border=0>
+<tr><td>&nbsp;&nbsp;<a href="full_index.html#d">d.*</a> </td><td>display commands</td></tr>
+<tr><td>&nbsp;&nbsp;<a href="full_index.html#db">db.*</a> </td><td>database commands</td></tr>
+<tr><td>&nbsp;&nbsp;<a href="full_index.html#g">g.*</a> </td><td>general commands</td></tr>
+<tr><td>&nbsp;&nbsp;<a href="full_index.html#i">i.*</a> </td><td>imagery commands</td></tr>
+
+<tr><td>&nbsp;&nbsp;<a href="full_index.html#m">m.*</a> </td><td>miscellaneous commands</td></tr>
+<tr><td>&nbsp;&nbsp;<a href="full_index.html#ps">ps.*</a> </td><td>postscript commands</td></tr>
+<tr><td>&nbsp;&nbsp;<a href="full_index.html#r">r.*</a> </td><td>raster commands</td></tr>
+<tr><td>&nbsp;&nbsp;<a href="full_index.html#r3">r3.*</a> </td><td>raster3D commands</td></tr>
+<tr><td>&nbsp;&nbsp;<a href="full_index.html#v">v.*</a> </td><td>vector commands</td></tr>
+<tr><td>&nbsp;&nbsp;<a href="nviz.html">nviz</a> </td><td>visualization suite</td></tr>
+<tr><td>&nbsp;&nbsp;<a href="wxGUI.html">wxGUI</a> </td><td>wxPython-based GUI frontend</td></tr>
+<tr><td>&nbsp;&nbsp;<a href="xganim.html">xganim</a> </td><td>raster map slideshow</td></tr>
+</table>
+EOF
 
 #for all module groups:
 for i in $CMDLIST
@@ -274,6 +340,7 @@ do
 
   (
   write_html_header - "GRASS GIS $GRASSVERSION Reference Manual: $MODCLASS"
+  echo "Go <a href="index.html">back to help overview</a><BR><BR><BR>"
   echo "<b>$MODCLASS commands:</b>"
   echo "<table>"
   #for all modules:
@@ -298,24 +365,9 @@ done
 FILENAME=index.html
 (
 write_html_header - "GRASS GIS $GRASSVERSION Reference Manual" 1
+write_html_cmd_overview 
 
-#modules:
-echo "<h3>Manual sections:</h3>"
-echo "<ul>"
-#for all module groups:
-for k in $CMDLIST
-do 
-  MODCLASS=`expand_module_class_name $k`
-  echo "<li><a href=\"$MODCLASS.html\">$MODCLASS commands</a></li>"
-done
-
-#extra stuff for 'nviz' and 'xganim' and GUI:
 cat <<EOF
-<li><a href="nviz.html">nviz</a> visualization and animation tool</li>
-<li><a href="wxGUI.html">wxGUI</a> wxPython-based GUI frontend</li>
-<li><a href="xganim.html">xganim</a> tool  for animating a raster map series</li>
-</ul>
-
 <!-- GEM Extensions StartHTML. Do not delete or change this comment! -->
 
 EOF
