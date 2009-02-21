@@ -14,6 +14,7 @@ double crs();
 double crsd();
 double crsdr2();
 double crsdd();
+void crs_full();
 int COGRR1();
 int POINT();
 int LINEQS();

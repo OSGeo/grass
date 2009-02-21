@@ -235,6 +235,7 @@ COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
     double wm, dx, dy, dz, dxx, dyy, dxy, dxz, dyz, dzz, h, bmgd1,
 	bmgd2, etar, zcon, r, ww, wz, r2, hcell, zzcell2,
 	etarcell, rcell, wwcell, zzcell;
+    double x_crs,x_crsd,x_crsdd,x_crsdr2;
     int n1, k1, k2, k, i1, l, l1, n4, n5, m, i;
     int NGST, LSIZE, ngstc, nszc, ngstr, nszr, ngstl, nszl;
     int POINT();
@@ -244,6 +245,8 @@ COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
     int bmask = 1;
     static FCELL *cell = NULL;
 
+    int cond1 = (gradient != NULL) || (aspect1 != NULL) || (aspect2 != NULL);
+    int cond2 = (ncurv != NULL) || (gcurv != NULL) || (mcurv != NULL);
 
 #define CEULER .57721566
     /*
@@ -450,25 +453,31 @@ COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
 			    r = sqrt(r2);
 			    etar = (fi * r) / 2.;
 
-			    h = h + b[m] * crs(etar);
-			    /* partial derivatives */
-			    bmgd1 = b[m] * crsd(etar, fi);
+                            crs_full(
+                              etar,fi,
+                              &x_crs,
+                              cond1?&x_crsd:NULL,
+                              cond2?&x_crsdr2:NULL,
+                              cond2?&x_crsdd:NULL
+                            );
+                            h = h + b[m] * x_crs;
+                            if(cond1)
+                            {
+                                   bmgd1 = b[m] * x_crsd;
 			    dx = dx + bmgd1 * xx;
 			    dy = dy + bmgd1 * w[m];
-			    /* dz = dz + bmgd1 * sqrt(wz2[m]); */
 			    dz = dz + bmgd1 * wz1[m];
-			    bmgd2 = b[m] * crsdd(etar, fi);
-			    bmgd1 = b[m] * crsdr2(etar, fi);
-			    dxx = dxx + bmgd2 * xx2 + bmgd1 * xx2;
+                            }
+                            if(cond2)
+                            {
+                                   bmgd2 = b[m] * x_crsdd;
+                                   bmgd1 = b[m] * x_crsdr2;
 			    dyy = dyy + bmgd2 * w2[m] + bmgd1 * w2[m];
 			    dzz = dzz + bmgd2 * wz2[m] + bmgd1 * wz2[m];
 			    dxy = dxy + bmgd2 * xx * w[m] + bmgd1 * xx * w[m];
-			    dxz =
-				dxz + bmgd2 * xx * wz1[m] +
-				bmgd1 * xx * wz1[m];
-			    dyz =
-				dyz + bmgd2 * w[m] * wz1[m] +
-				bmgd1 * w[m] * wz1[m];
+                                   dxz = dxz + bmgd2 * xx * wz1[m] + bmgd1 * xx * wz1[m];
+                                   dyz = dyz + bmgd2 * w[m] * wz1[m] + bmgd1 * w[m] * wz1[m];
+                            }                            
 			}
 			ww = h + wmin;
 			if ((cellinp != NULL) && (cellout != NULL) &&
