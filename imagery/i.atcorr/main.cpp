@@ -381,7 +381,7 @@ static void process_raster (int ifd, InputMask imask, ScaleRange iscale,
                     }
                 }
             }
-	    G_debug(3, "Computed r%d, c%d", row, col);
+	    G_debug(3, "Computed r%d (%d), c%d (%d)", row, nrows, col, ncols);
             /* transform from iscale.[min,max] to [0,1] */
             buf[col] = (buf[col] - iscale.min) / ((float)iscale.max - (float)iscale.min);
             buf[col] = transform(ti, imask, buf[col]);
