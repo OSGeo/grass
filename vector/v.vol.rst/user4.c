@@ -145,7 +145,7 @@ double erfr(double rf2)
     static double a[5] = { 0.254829592, -0.284496736, 1.421413741,
 	-1.453152027, 1.061405429
     };
-    double p = 0.3275911;
+    static double p = 0.3275911;
     double erf, t;
 
 
@@ -167,20 +167,20 @@ double crs(double x)
  */
 {
 
-    static double a[10];
-    double tp = 1.1283791671 / 2.;
+    static double a[10] = {
+      1.,
+      -1. / 3.,
+      1. / 10.,
+      -1. / 42.,
+      1. / (24. * 9.),
+      -1. / (120. * 11.),
+      1. / (720. * 13.),
+      -1. / (5040. * 15.),
+      1. / (40320. * 17.),
+      -1. / (362880. * 19.),
+    };
+    static double tp = 1.1283791671 / 2.;
     double xx, res;
-
-    a[0] = 1.;
-    a[1] = -1. / 3.;
-    a[2] = 1. / 10.;
-    a[3] = -1. / 42.;
-    a[4] = 1. / (24. * 9.);
-    a[5] = -1. / (120. * 11.);
-    a[6] = 1. / (720. * 13.);
-    a[7] = -1. / (5040. * 15.);
-    a[8] = 1. / (40320. * 17.);
-    a[9] = -1. / (362880. * 19.);
 
     if (x < XA) {
 	xx = x * x;
@@ -204,37 +204,24 @@ double crs(double x)
 }
 
 
+void crs_full(double x, double fi, double *crs, double *crsd, double *crsdr2, double *crsdd){
+    static double a[10] = { 1., -1. / 3., 1. / 10., -1. / 42., 1. / (24. * 9.), -1. / (120. * 11.),
+      1. / (720. * 13.), -1. / (5040. * 15.), 1. / (40320. * 17.), -1. / (362880. * 19.) };
+    static double b[10] = { 0, -2. / 3., 4. / 10., -6. / 42., 8. / (24. * 9.), -10. / (120. * 11.),
+      12. / (720. * 13.), -14. / (5040. * 15.), 16. / (40320. * 17.), -18. / (362880. * 19.) };
+    static double c[10] = { 0, 0, 8. / 10., -24. / 42., 48. / (24. * 9.), -80. / (120. * 11.),
+      120. / (720. * 13.), -168. / (5040. * 15.), 16. * 14. / (40320. * 17.), -18. * 16. / (362880. * 19.) };
+    static double tp = 1.1283791671 / 2.;
+    double xx, r, r2, fi2, fi4, fi8, tmp1, tmp2;
 
-
-double crsd(double x, double fi)
-/*
-   function for first derivatives 
- */
-{
-
-    static double a[10];
-    double tp = 1.1283791671 / 2.;
-    double xx, r, r2, fi2, fi4, res;
-
-    a[1] = -2. / 3.;
-    a[2] = 4. / 10.;
-    a[3] = -6. / 42.;
-    a[4] = 8. / (24. * 9.);
-    a[5] = -10. / (120. * 11.);
-    a[6] = 12. / (720. * 13.);
-    a[7] = -14. / (5040. * 15.);
-    a[8] = 16. / (40320. * 17.);
-    a[9] = -18. / (362880. * 19.);
-
-    r = 2. * x / fi;
-    r2 = r * r;
     fi2 = fi / 2.;
     fi4 = fi2 * fi2;
+    fi8 = fi4 * fi4;
 
     if (x < XA) {
 	xx = x * x;
-	res =
-	    tp * fi4 * (a[1] +
+	*crs =
+	    tp * xx * (a[1] +
 			xx * (a[2] +
 			      xx * (a[3] +
 				    xx * (a[4] +
@@ -243,108 +230,49 @@ double crsd(double x, double fi)
 						      xx * (a[7] +
 							    xx * (a[8] +
 								  xx *
-								  a
-								  [9]))))))));
-    }
-    else {
-	res = (2. * tp * exp(-x * x) - (erf(x) / x)) / (2. * r2);
-    }
-    return (res);
-}
-
-double crsdr2(double x, double fi)
-/*
-   function for first derivatives
- */
-{
-
-    static double a[10];
-    double tp = 1.1283791671 / 2.;
-    double xx, r, r2, fi2, fi4, res;
-
-    a[1] = -2. / 3.;
-    a[2] = 4. / 10.;
-    a[3] = -6. / 42.;
-    a[4] = 8. / (24. * 9.);
-    a[5] = -10. / (120. * 11.);
-    a[6] = 12. / (720. * 13.);
-    a[7] = -14. / (5040. * 15.);
-    a[8] = 16. / (40320. * 17.);
-    a[9] = -18. / (362880. * 19.);
-
-    r = 2. * x / fi;
-    r2 = r * r;
-    fi2 = fi / 2.;
-    fi4 = fi2 * fi2;
-
-    if (x < XA) {
-	xx = x * x;
-	res =
-	    tp * fi4 * (a[1] +
-			xx * (a[2] +
-			      xx * (a[3] +
-				    xx * (a[4] +
-					  xx * (a[5] +
-						xx * (a[6] +
-						      xx * (a[7] +
-							    xx * (a[8] +
+                                                                      a[9]))))))));
+	if(crsd!=NULL){
+          *crsd =
+              tp * fi4 * (b[1] +
+                          xx * (b[2] +
+                                xx * (b[3] +
+                                      xx * (b[4] +
+                                            xx * (b[5] +
+                                                  xx * (b[6] +
+                                                        xx * (b[7] +
+                                                              xx * (b[8] +
 								  xx *
-								  a
-								  [9]))))))));
+                                                                    b[9]))))))));
     }
-    else {
-	res = (2. * tp * exp(-x * x) - (erf(x) / x)) / (2. * r2 * r2);
+	if(crsdr2!=NULL){
+	  *crsdr2 = *crsd;
     }
-    return (res);
-}
-
-double crsdd(double x, double fi)
-/*
-   function for second derivatives 
- */
-{
-
-    static double a[10];
-    double tp = 1.1283791671 / 2.;
-    double xx, r, r2, fi8, res;
-
-    a[2] = 8. / 10.;
-    a[3] = -24. / 42.;
-    a[4] = 48. / (24. * 9.);
-    a[5] = -80. / (120. * 11.);
-    a[6] = 120. / (720. * 13.);
-    a[7] = -168. / (5040. * 15.);
-    a[8] = 16. * 14. / (40320. * 17.);
-    a[9] = -18. * 16. / (362880. * 19.);
-
+	if(crsdd!=NULL){
+          *crsdd =
+              tp * fi8 * (c[2] +
+                          xx * (c[3] +
+                                xx * (c[4] +
+                                      xx * (c[5] +
+                                            xx * (c[6] +
+                                                  xx * (c[7] +
+                                                        xx * (c[8] +
+                                                              xx * c[9])))))));
+        }
+    } else {
+        tmp1 = erf(x) / x;
+	*crs = tmp1 / 2. - tp;
+        if((crsd!=NULL)||(crsdr2!=NULL)||(crsdd!=NULL)){
     r = 2. * x / fi;
     r2 = r * r;
-    fi8 = fi * fi * fi * fi / 16.;
-
-    if (x < XA) {
-	xx = x * x;
-	res =
-	    tp * fi8 * (a[2] +
-			xx * (a[3] +
-			      xx * (a[4] +
-				    xx * (a[5] +
-					  xx * (a[6] +
-						xx * (a[7] +
-						      xx * (a[8] +
-							    xx * a[9])))))));
+          tmp2 = exp(-x * x);
     }
-    else {
+        if(crsd!=NULL){ *crsd   = (2. * tp * tmp2 - tmp1) / (2. * r2); }
+	if(crsdr2!=NULL){ *crsdr2 = *crsd / r2; }
 	/* Jarov vzorec */
-	res =
-	    (erf(x) / (x * r2) -
-	     exp(-x * x) * (2 / r2 + fi * fi / 2) * tp) / (r2 * r2);;
+	if(crsdd!=NULL){ *crsdd  = (tmp1 / r2 - tmp2 * (2 / r2 + fi * fi / 2) * tp) / (r2 * r2); }
     }
-    return (res);
+    return;
 }
-
-
-
-
 
 
 
