@@ -62,3 +62,10 @@ SPAN.code{	width: 95%;
 	padding-left: 10px;
 }
 
+.BOX {
+	border:  1px solid #c9c9c9;
+	margin: 0px 2px 2px 10px;
+	padding: 0px 4px 2px 6px;
+	-moz-border-radius: 6px ;
+}
+
