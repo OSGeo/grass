@@ -354,7 +354,7 @@ int RTreeContained(struct Rect *R, struct Rect *S)
     register struct Rect *r = R, *s = S;
     register int i, j, result;
 
-    assert((int)r && (int)s);
+    assert(r && s); /* same as in RTreeOverlap() */
 
     /* undefined rect is contained in any other */
     if (Undefined(r))
