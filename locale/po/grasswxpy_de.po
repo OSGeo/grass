@@ -1,4 +1,4 @@
-# translation of grasswxpy_de.po to Deutsch
+# translation of grasswxpy_de.po to deutsch
 # This file is distributed under the same license as the GRASS package.
 # Copyright (C) 2008, GRASS Development Team
 #
@@ -12,9 +12,9 @@ msgstr ""
 "Project-Id-Version: grasswxpy_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-01-09 23:29+0100\n"
-"PO-Revision-Date: 2009-02-19 18:05+0100\n"
-"Last-Translator: Robert Nuske <rnuske@gwdg.de>\n"
-"Language-Team: Deutsch <grass-translations@lists.osgeo.org>\n"
+"PO-Revision-Date: 2009-02-22 13:21+0100\n"
+"Last-Translator: Markus Neteler <neteler osgeo.org>\n"
+"Language-Team: deutsch <grass-translations@lists.osgeo.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-15\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1191,7 +1191,7 @@ msgid ""
 "No attribute table linked to vector map <%(vector)s> found. %(msg)s\n"
 "You can disable this message from digitization settings. Or you can create "
 "and link attribute table to the vector map using Attribute Table Manager."
-msgstr "Vektor Vektor Vektor."
+msgstr ""
 
 #: ../gui/wxpython/gui_modules/dbm.py:2927
 msgid "Close dialog on submit"
@@ -2137,7 +2137,7 @@ msgstr "Vektor"
 #: ../gui/wxpython/gui_modules/toolbars.py:1078
 #, fuzzy, python-format
 msgid "Please wait, opening vector map <%s> for editing..."
-msgstr "Vektor."
+msgstr ""
 
 #: ../gui/wxpython/gui_modules/toolbars.py:1138
 #, fuzzy, python-format
@@ -2152,7 +2152,7 @@ msgstr "Speichern?"
 #: ../gui/wxpython/gui_modules/toolbars.py:1147
 #, fuzzy, python-format
 msgid "Please wait, closing and rebuilding topology of vector map <%s>..."
-msgstr "Vektor."
+msgstr ""
 
 #: ../gui/wxpython/gui_modules/toolbars.py:1211
 #: ../gui/wxpython/gui_modules/toolbars.py:1216
@@ -3481,7 +3481,7 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/vdigit.py:1571
 #, fuzzy, python-format
 msgid "Vector digitizer settings saved to file <%s>."
-msgstr "Vektor."
+msgstr ""
 
 #: ../gui/wxpython/gui_modules/vdigit.py:1730
 #, fuzzy
@@ -3524,7 +3524,7 @@ msgstr "Alle löschen"
 #: ../gui/wxpython/gui_modules/vdigit.py:2075
 #, fuzzy
 msgid "Unable to update vector map."
-msgstr "Vektor."
+msgstr ""
 
 #: ../gui/wxpython/gui_modules/vdigit.py:2237
 #, fuzzy, python-format
@@ -4118,7 +4118,7 @@ msgstr "Zeige Nviz Einstellungsdialog"
 
 #: ../gui/wxpython/gis_set.py:84
 msgid "Choose project location and mapset"
-msgstr ""
+msgstr "Wählen Sie eine existierende Location mit Mapset"
 
 #: ../gui/wxpython/gis_set.py:87
 msgid "Manage"
@@ -4130,41 +4130,52 @@ msgid ""
 "Welcome to GRASS GIS %s\n"
 "The world's leading open source GIS"
 msgstr ""
+"Willkommen in GRASS GIS %s\n"
+"Das weltweit führende quelloffene GIS"
 
 #: ../gui/wxpython/gis_set.py:95
 msgid ""
 "Select an existing project location and mapset\n"
 "or define a new location"
 msgstr ""
+"Wählen Sie eine existierende Location mit Mapset\n"
+"oder definieren Sie eine neue Location"
 
 #: ../gui/wxpython/gis_set.py:101
 msgid ""
 "Project location\n"
 "(projection/coordinate system)"
 msgstr ""
+"Projekt Location\n"
+"(Projektion/Koordinatensystem)"
 
 #: ../gui/wxpython/gis_set.py:104
 msgid ""
 "Accessible mapsets\n"
 "(directories of GIS files)"
 msgstr ""
+"Verfügbare Mapsets\n"
+"(Ordner mit GIS-Daten)"
 
 #: ../gui/wxpython/gis_set.py:107
 msgid ""
 "Create new mapset\n"
 "in selected location"
 msgstr ""
+"Neues Mapset in der ausge-\n"
+"wählten Location erstellen"
 
 #: ../gui/wxpython/gis_set.py:110
 msgid "Define new location"
-msgstr ""
+msgstr "Neue Location definieren"
 
 #: ../gui/wxpython/gis_set.py:113
-#, fuzzy
 msgid ""
 "Rename/delete selected\n"
 "mapset or location"
-msgstr "Nenne Karten um"
+msgstr ""
+"Benenne um/Lösche selektierte\n"
+"Mapset oder Location"
 
 #: ../gui/wxpython/gis_set.py:118
 msgid "Start GRASS"
@@ -4487,7 +4498,7 @@ msgstr "Vektor"
 #: ../gui/wxpython/menustrings.py:49
 #, fuzzy
 msgid "Converts selected OGR layers to GRASS vector maps using v.in.ogr."
-msgstr "Vektor."
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:50
 msgid "ASCII points/GRASS ASCII vector import"
@@ -4520,7 +4531,7 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:57
 #, fuzzy
 msgid "Converts selected DXF layers to GRASS vector maps (using v.in.dxf)."
-msgstr "Vektor."
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:58
 msgid "ESRI e00 import"
@@ -7081,7 +7092,7 @@ msgstr "Grundlegende Vektor-Metadaten"
 #: ../gui/wxpython/menustrings.py:577
 #, fuzzy
 msgid "Outputs basic information about a user-specified vector map layer."
-msgstr "Vektor."
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:578
 #, fuzzy
@@ -7101,7 +7112,7 @@ msgstr "Topologie"
 #: ../gui/wxpython/menustrings.py:581
 #, fuzzy
 msgid "Populate database values from vector features."
-msgstr "Vektor."
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:582
 #, fuzzy
