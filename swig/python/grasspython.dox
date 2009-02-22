@@ -8,37 +8,16 @@ some GRASS library functions directly from the PYTHON programming language.
 <h3>Status of GRASS SWIG/PYTHON implementation</h3>
 
 At the moment a prototype is implemented. There is a 
-"swig" module with 10 separate sub-modules named:
+"swig" module with a series of separate sub-modules available:
 
 <ul>
-<li> date
-<li> display
-<li> grass
-<li> imagery
-<li> math
-<li> proj
-<li> raster
-<li> stats
-<li> utils
-<li> vector
-</ul>
-
-Usage:
-<p>
-These can be imported individually with e.g. "import swig.grass", or the
-user can import all of them with "import swig" (then use e.g.
-swig.grass.G_gisinit etc), or it can be used e.g. "from swig.grass import *"
-to import all names from a module. The latter can be done for multiple
-modules, but currently, there's no way to import names from all sub-modules
-of a module with a single command. 
-
-<P>
-See also:
-
-<ul>
+<li> arraystats.i
+<li> cluster.i
 <li> common.i
 <li> date.i
+<li> dbmi.i
 <li> display.i
+<li> g3d.i
 <li> grass.i
 <li> imagery.i
 <li> math.i
@@ -46,14 +25,26 @@ See also:
 <li> proj.i
 <li> raster.i
 <li> stats.i
+<li> trans.i
 <li> utils.i
 <li> vector.i
+<li> vedit.i
 </ul>
 
-Examples:
+<h3>Usage</h3>
+
+These can be imported individually with e.g. "import swig.grass", or the
+user can import all of them with "import swig" (then use e.g.
+swig.grass.G_gisinit etc), or it can be used e.g. "from swig.grass import *"
+to import all names from a module. The latter can be done for multiple
+modules, but currently, there's no way to import names from all sub-modules
+of a module with a single command. 
+
+
+<h3>Examples</h3>
 
 <ul>
-<li> examples/m.distance
+<li> examples/m.distance.py
 <li> examples/rasteraccess.py
 <li> examples/vectoraccess.py
 <li> test.py
