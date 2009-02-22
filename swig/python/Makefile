@@ -10,17 +10,24 @@ include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 DOXNAME=
 DOXINPUT=grasspython.dox
 
-MODULES = utils date grass math proj imagery vector raster display stats
+MODULES = utils date grass math proj imagery vector raster display stats \
+	dbmi g3d arraystats cluster trans vedit
 
-date_LIBS    = $(DATETIMELIB)
-grass_LIBS   = $(GISLIB)
-math_LIBS    = $(GMATHLIB)
-proj_LIBS    = $(GPROJLIB)
-imagery_LIBS = $(IMAGERYLIB)
-vector_LIBS  = $(VECTLIB)
-raster_LIBS  = $(RASTERLIB)
-display_LIBS = $(DISPLAYLIB)
-stats_LIBS   = $(STATSLIB)
+date_LIBS       = $(DATETIMELIB)
+grass_LIBS      = $(GISLIB)
+math_LIBS       = $(GMATHLIB)
+proj_LIBS       = $(GPROJLIB)
+imagery_LIBS    = $(IMAGERYLIB)
+vector_LIBS     = $(VECTLIB)
+raster_LIBS     = $(RASTERLIB)
+display_LIBS    = $(DISPLAYLIB)
+stats_LIBS      = $(STATSLIB)
+dbmi_LIBS       = $(DBMILIB)
+g3d_LIBS        = $(G3DLIB)
+arraystats_LIBS = $(ARRAYSTATSLIB)
+cluster_LIBS    = $(CLUSTERLIB)
+trans_LIBS      = $(TRANSLIB)
+vedit_LIBS      = $(VEDITLIB)
 
 vector_wrap_c_FLAGS = $(VECT_INC)
 proj_wrap_c_FLAGS = $(PROJINC) $(GDALCFLAGS)
@@ -77,4 +84,11 @@ vector_wrap.c: $(ARCH_INCDIR)/vect/dig_structs.h
 raster_wrap.c: $(ARCH_INCDIR)/raster.h
 display_wrap.c: $(ARCH_INCDIR)/display.h
 stats_wrap.c: $(ARCH_INCDIR)/stats.h
+dbmi_wrap.c: $(ARCH_INCDIR)/dbmi.h
+dbmi_wrap.c: $(ARCH_INCDIR)/proto_dbmi.h
+g3d_wrap.c: $(ARCH_INCDIR)/G3d.h
+arraystats_wrap.c: $(ARCH_INCDIR)/arraystats.h
+cluster_wrap.c: $(ARCH_INCDIR)/cluster.h
+trans_wrap.c: $(ARCH_INCDIR)/transform.h
+vedit_wrap.c: $(ARCH_INCDIR)/vedit.h
 utils_wrap.c:
