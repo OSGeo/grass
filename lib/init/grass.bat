@@ -29,5 +29,5 @@ rem Path to the proj files (notably the epsg projection list)
 rem set GRASS_PROJSHARE=c:/grass/share/proj
 
 set WINGISBASE=GISBASE_VALUE
-"%WINGISBASE%\etc\init.bat" %*
+"%WINGISBASE%\etc\Init.bat" %*
 

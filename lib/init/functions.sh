@@ -10,7 +10,7 @@ help_message()
     cat <<-EOF
 	Usage:
 	  $CMD_NAME [-h | -help | --help] [-v | --version] [-c]
-		  [-text | -gui | -wxpython]
+		  [-text | -gui | -wxpython | -wx]
 		  [[[<GISDBASE>/]<LOCATION_NAME>/]<MAPSET>]
 	
 	Flags:
@@ -21,7 +21,7 @@ help_message()
 	                                   and set as default
 	  -gui                           use graphical user interface ($DEFAULT_GUI by default)
 	                                   and set as default
-	  -wxpython                      use wxPython based graphical user interface
+	  -wxpython or -wx               use wxPython based graphical user interface
 	                                   and set as default
 	
 	Parameters:
