@@ -24,7 +24,8 @@ outputs the difference (see <a href="#minuse.html">NOTES</a> below).
 The <b>npoints</b> parameter defines the number of nearest data points used
 to determine the interpolated value of an output raster cell.
 
-<A NAME="notes.html"></a><h2>NOTES</h2>
+<A NAME="notes.html"></a>
+<h2>NOTES</h2>
 
 <em>r.surf.idw</em> is a surface generation utility which
 uses inverse distance squared weighting (as described in
@@ -47,13 +48,13 @@ and does not increase appreciably with the number of input data points.
 
 <p>
 
-<em>r.surf.idw</em> will generally outperform <em><A
-HREF="r.surf.idw2.html">r.surf.idw2</a></em> except when the input data
+<em>r.surf.idw</em> will generally outperform 
+<em><a href="r.surf.idw2.html">r.surf.idw2</a></em> except when the input data
 layer contains few non-zero data, i.e. when the cost of the search exceeds
-the cost of the additional distance calculations performed by <em><A
-HREF="r.surf.idw2.html">r.surf.idw2</a></em>. The relative performance of
-these utilities will depend on the comparative speed of boolean, integer and
-floating point operations on a particular platform.
+the cost of the additional distance calculations performed by 
+<em><A HREF="r.surf.idw2.html">r.surf.idw2</a></em>. The relative performance
+of these utilities will depend on the comparative speed of boolean, integer
+and floating point operations on a particular platform.
 
 <p>
 
@@ -85,6 +86,7 @@ the input raster map to analyze the distribution of interpolation error.
 This procedure may be helpful in choosing the number of nearest neighbors
 considered for surface generation.
 
+
 <h2>SEE ALSO</h2>
 
 <em><a href="r.surf.contour.html">r.surf.contour</a></em>,
@@ -95,16 +97,14 @@ considered for surface generation.
 <em><a href="v.surf.idw.html">v.surf.idw</a></em>,
 <em><a href="v.surf.rst.html">v.surf.rst</a></em>
 
+
 <h2>AUTHOR</h2>
 
-Greg Koerper 
-<br>
-Global Climate Research Project 
-<br>
-U.S. EPA Environmental Research Laboratory 
-<br>
-200 S.W. 35th Street, JSB 
-<br>
+Greg Koerper <br>
+Global Climate Research Project <br>
+U.S. EPA Environmental Research Laboratory <br>
+200 S.W. 35th Street, JSB <br>
 Corvallis, OR 97333 
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
