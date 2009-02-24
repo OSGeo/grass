@@ -119,7 +119,7 @@ for i in "$@" ; do
         ;;
 
     # Check if the -wxpython flag was given
-    -wxpython)
+    -wxpython | -wx)
         GRASS_GUI="wxpython"
         shift
         ;;

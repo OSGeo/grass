@@ -53,23 +53,28 @@ if "%1" == "-text" goto settextmode
 :aftertextcheck
 
 if "%1" == "-gui" goto setguimode
+if "%1" == "-wx" goto setguimode
+if "%1" == "-wxpython" goto setguimode
+
 :afterguicheck
 
+if exist "%WINGISRC%" (
+   set HAVE_GISRC=true
+   goto aftercreategisrc
+)
 
-if exist "%WINGISRC%" goto aftercreategisrc
-
+set HAVE_GISRC=false
 rem Create an initial GISRC file based on current directory
 "%WINGISBASE%\etc\echo" "GISDBASE: %CD%" | g.dirseps -g > "%WINGISRC%"
 "%WINGISBASE%\etc\echo" "LOCATION_NAME: <UNKNOWN>" >> "%WINGISRC%"
 "%WINGISBASE%\etc\echo" "MAPSET: <UNKNOWN>" >> "%WINGISRC%"
-	    
+
 :aftercreategisrc
 
 rem Now set the real GISRC
 FOR /F "usebackq delims==" %%i IN (`g.dirseps -g "%WINGISRC%"`) DO @set GISRC=%%i
 
 rem Set GRASS_GUI
-
 if "%GRASS_GUI%" == "" (
   FOR /F "usebackq delims==" %%i IN (`g.gisenv "get=GRASS_GUI"`) DO @set GRASS_GUI=%%i
 ) else (
@@ -79,9 +84,11 @@ if "%GRASS_GUI%" == "" (
 rem Set wxpython as default if not specified elsewhere
 if "%GRASS_GUI%"=="" set GRASS_GUI=wxpython
 
-
-"%WINGISBASE%\etc\clean_temp" > NUL:
-
+rem Clean out old .tmp files from the mapset
+if "%HAVE_GISRC%"=="true" (
+  "%WINGISBASE%\etc\clean_temp" > NUL:
+)
+set HAVE_GISRC=
 
 if "%GRASS_GUI%"=="text" goto text
 
@@ -121,7 +128,7 @@ type "%WINGISBASE%\etc\welcome"
 "%WINGISBASE%\etc\echo" "See the licence terms with:              g.version -c"
 "%WINGISBASE%\etc\echo" ""
 
-prompt GRASS %GRASS_VERSION% $C%LOCATION_NAME%$F:$P $G
+prompt GRASS %GRASS_VERSION% $C%LOCATION_NAME%$F$G 
 
 cmd.exe
 
@@ -148,6 +155,9 @@ shift
 goto afterguicheck
 
 :exitinit
+
+rem Clean out old .tmp files from the mapset
+"%WINGISBASE%\etc\clean_temp" > NUL:
 
 set PATH=%SAVEPATH%
 set SAVEPATH=
