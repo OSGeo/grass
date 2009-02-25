@@ -1172,9 +1172,17 @@ class MapFrame(wx.Frame):
                 self.tree.GetPyData(self.tree.layer_selected)[0]['type'] != 'vector':
             wx.MessageBox(parent=self,
                           message=_("No vector map selected for querying."),
-                          caption=_("Message"),
+                          caption=_("Vector querying"),
                           style=wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
-            return 
+            return
+        
+        if self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer'].GetMapset() != \
+                grass.gisenv()['MAPSET']:
+            wx.MessageBox(parent=self,
+                          message=_("Only vector map from the current mapset can be modified."),
+                          caption=_("Vector querying"),
+                          style=wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
+            return
         
         posWindow = self.ClientToScreen((x + self.MapWindow.dialogOffset,
                                          y + self.MapWindow.dialogOffset))
@@ -1255,8 +1263,9 @@ class MapFrame(wx.Frame):
         digitToolbar = self.toolbars['vdigit']
         if self.tree.layer_selected:
             layer_selected = self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer']
-            if digitToolbar and \
-                   digitToolbar.GetLayer() == layer_selected:
+            if layer_selected.GetType() != 'vector' or \
+                    (digitToolbar and \
+                         digitToolbar.GetLayer() == layer_selected):
                 modify.Enable(False)
             else:
                 if action == "modifyAttrb":
