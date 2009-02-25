@@ -87,7 +87,13 @@ int main(int argc, char *argv[])
 	 strcmp(gui_type_env, type->answer) != 0) || !gui_type_env) {
 	G_message(_("<%s> is now the default GUI"), type->answer);
 	G_setenv("GRASS_GUI", type->answer);
-
+    }
+    else {
+	if(update->answer)
+	    if(gui_type_env) {
+		G_debug(1, "No change: old gui_type_env=[%s], new type->ans=[%s]",
+			gui_type_env, type->answer);
+	    }
     }
 
     if(nolaunch->answer)
