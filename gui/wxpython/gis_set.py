@@ -48,7 +48,7 @@ class GRASSStartup(wx.Frame):
         #
         self.gisbase  = os.getenv("GISBASE")
         self.grassrc  = self._read_grassrc()
-        self.gisdbase = self._getRCValue("GISDBASE")
+        self.gisdbase = self.GetRCValue("GISDBASE")
 
         #
         # list of locations/mapsets
@@ -166,7 +166,7 @@ class GRASSStartup(wx.Frame):
         self.lbmapsets.Bind(wx.EVT_LIST_ITEM_SELECTED,   self.OnSelectMapset)
         self.tgisdbase.Bind(wx.EVT_TEXT_ENTER, self.OnSetDatabase)
         self.Bind(wx.EVT_CLOSE,               self.OnCloseWindow)
-
+        
     def _set_properties(self):
         """Set frame properties"""
         self.SetTitle(_("Welcome to GRASS GIS"))
@@ -191,7 +191,7 @@ class GRASSStartup(wx.Frame):
         self.tgisdbase.SetValue(self.gisdbase)
 
         self.OnSetDatabase(None)
-        location = self._getRCValue("LOCATION_NAME")
+        location = self.GetRCValue("LOCATION_NAME")
         if location == "<UNKNOWN>" or \
                 not os.path.isdir(os.path.join(self.gisdbase, location)):
             location = None
@@ -208,7 +208,7 @@ class GRASSStartup(wx.Frame):
                 
             # list of mapsets
             self.UpdateMapsets(os.path.join(self.gisdbase,location))
-            mapset = self._getRCValue("MAPSET")
+            mapset = self.GetRCValue("MAPSET")
             if mapset:
                 try:
                     self.lbmapsets.SetSelection(self.listOfMapsets.index(mapset),
@@ -383,7 +383,7 @@ class GRASSStartup(wx.Frame):
 
         return grassrc
 
-    def _getRCValue(self, value):
+    def GetRCValue(self, value):
         "Return GRASS variable (read from GISRC)"""
 
         if self.grassrc.has_key(value):
@@ -611,7 +611,11 @@ class GRASSStartup(wx.Frame):
 
         disabled = []
         idx = 0
-        locationName = self.listOfLocations[self.lblocations.GetSelection()]
+        try:
+            locationName = self.listOfLocations[self.lblocations.GetSelection()]
+        except IndexError:
+            locationName = ''
+        
         for mapset in self.listOfMapsets:
             if mapset not in self.listOfMapsetsSelectable or \
                     os.path.isfile(os.path.join(self.gisdbase,
@@ -812,6 +816,18 @@ class StartUp(wx.App):
         StartUp.CenterOnScreen()
         self.SetTopWindow(StartUp)
         StartUp.Show()
+        
+        if StartUp.GetRCValue("LOCATION_NAME") == "<UNKNOWN>":
+            wx.MessageBox(parent=StartUp,
+                          caption=_('Starting GRASS for the first time'),
+                          message=_('GRASS needs a directory in which to store its data. '
+                                    'Create one now if you have not already done so. '
+                                    'A popular choice is "grassdata", located in '
+                                    'your home directory.'),
+                          style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
+            
+            StartUp.OnBrowse(None)
+        
         return 1
 
 if __name__ == "__main__":
