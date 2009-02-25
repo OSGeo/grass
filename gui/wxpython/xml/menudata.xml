@@ -607,6 +607,12 @@
 	      <command>g.gisenv</command>
 	    </menuitem>
 	    <menuitem>
+	      <label>Change default GUI</label>
+	      <help>Changes the default GRASS graphical user interface (GUI) setting.</help>
+	      <handler>self.OnMenuCmd</handler>
+	      <command>g.change.gui.py</command>
+	    </menuitem>
+	    <menuitem>
 	      <label>Version</label>
 	      <help>Displays version and copyright information.</help>
 	      <handler>self.RunMenuCmd</handler>
