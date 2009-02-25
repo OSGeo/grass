@@ -4,16 +4,15 @@
 # Markus Neteler, 2003, 2004, 2005, 2006
 
 
-## TODO: better fix this in include/Make/Html.make, see bug #5361
+## TODO: better fix this in include/Make/Html.make, see bug RT #5361
 
 #exclude following list of modules from help index:
 EXCLUDEMODS="\
-v.topo.check \
-i.ask \
 i.find \
-helptext.html \
 r.watershed.ram \
 r.watershed.seg \
+v.topo.check \
+helptext.html \
 wxGUI.*"
 
 # these modules don't use G_parser()
