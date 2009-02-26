@@ -432,9 +432,8 @@ Vect_net_build_graph(struct Map_info *Map,
 	G_fatal_error(_("GngFlatten error"));
 
     /* init SP cache */
-    /* Disabled because of BUG1 in dglib. Without cache it is terribly slow, but with cache there
-     *  are too many errors. */
-    /* dglInitializeSPCache( gr, &(Map->spCache) ); */
+    /* disable to debug dglib cache */
+    dglInitializeSPCache(gr, &(Map->spCache));
 
     G_message(_("Graph was built"));
 
@@ -487,16 +486,22 @@ Vect_net_shortest_path(struct Map_info *Map, int from, int to,
 
     pclip = NULL;
     if (List != NULL) {
-	/*nRet = dglShortestPath ( &(Map->graph), &pSPReport, from, to, clipper, pclip, &(Map->spCache)); */
 	nRet =
 	    dglShortestPath(&(Map->graph), &pSPReport, (dglInt32_t) from,
-			    (dglInt32_t) to, clipper, pclip, NULL);
+			    (dglInt32_t) to, clipper, pclip, &(Map->spCache));
+	/* comment out above and uncomment below to debug dglib cache */
+	/* nRet =
+	    dglShortestPath(&(Map->graph), &pSPReport, (dglInt32_t) from,
+			    (dglInt32_t) to, clipper, pclip, NULL); */
     }
     else {
-	/*nRet = dglShortestDistance ( &(Map->graph), &nDistance, from, to, clipper, pclip, &(Map->spCache)); */
 	nRet =
 	    dglShortestDistance(&(Map->graph), &nDistance, (dglInt32_t) from,
-				(dglInt32_t) to, clipper, pclip, NULL);
+				(dglInt32_t) to, clipper, pclip, &(Map->spCache));
+	/* comment out above and uncomment below to debug dglib cache */
+	/* nRet =
+	    dglShortestDistance(&(Map->graph), &nDistance, (dglInt32_t) from,
+				(dglInt32_t) to, clipper, pclip, NULL); */
     }
 
     if (nRet == 0) {
