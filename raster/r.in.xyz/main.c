@@ -234,6 +234,8 @@ int main(int argc, char *argv[])
     percent_opt->options = "1-100";
     percent_opt->description = _("Percent of map to keep in memory");
 
+    /* I would prefer to call the following "percentile", but that has too
+     * much namespace overlap with the "percent" option above */
     pth_opt = G_define_option();
     pth_opt->key = "pth";
     pth_opt->type = TYPE_INTEGER;
