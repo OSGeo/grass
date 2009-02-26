@@ -368,6 +368,17 @@ int DGL_SP_DIJKSTRA_FUNC(dglGraph_s * pgraph,
 	else if (pgraph->iErrno != DGL_ERR_TailNodeNotFound) {
 	    goto sp_error;
 	}
+	/*
+	 * reset visited status for existing cache: fix for BUG1
+	 */
+	if (pCache->pvVisited) {
+	    avl_destroy(pCache->pvVisited, dglTreeTouchI32Cancel);
+
+	    if ((pCache->pvVisited =
+		avl_create(dglTreeTouchI32Compare, NULL,
+			dglTreeGetAllocator())) == NULL)
+		return -1;
+	}
     }
 
     /*

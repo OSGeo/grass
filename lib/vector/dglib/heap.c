@@ -64,6 +64,7 @@ int dglHeapInsertMin(dglHeap_s * pheap,
 
     i = ++pheap->index;
 
+
     while (i != 1 && key < pheap->pnode[i / 2].key) {
 	pheap->pnode[i] = pheap->pnode[i / 2];
 	i /= 2;
@@ -86,7 +87,7 @@ int dglHeapExtractMin(dglHeap_s * pheap, dglHeapNode_s * pnoderet)
 
     *pnoderet = pheap->pnode[1];
 
-    temp = pheap->pnode[pheap->index--];
+    temp = pheap->pnode[pheap->index--]; /* keep last item */
 
     iparent = 1;
     ichild = 2;
@@ -97,13 +98,13 @@ int dglHeapExtractMin(dglHeap_s * pheap, dglHeapNode_s * pnoderet)
 	    ichild++;
 	}
 	if (temp.key <= pheap->pnode[ichild].key)
-	    break;
+	    break;    /* are you sure ? */
 
 	pheap->pnode[iparent] = pheap->pnode[ichild];
 	iparent = ichild;
 	ichild *= 2;
     }
-    pheap->pnode[iparent] = temp;
+    pheap->pnode[iparent] = temp; /* reinsert last item */
 
     return 1;
 }
@@ -156,7 +157,7 @@ int dglHeapExtractMax(dglHeap_s * pheap, dglHeapNode_s * pnoderet)
 	    ichild++;
 	}
 	if (temp.key >= pheap->pnode[ichild].key)
-	    break;
+	    break;     /* are you sure ? */
 
 	pheap->pnode[iparent] = pheap->pnode[ichild];
 	iparent = ichild;
