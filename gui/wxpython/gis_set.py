@@ -172,7 +172,7 @@ class GRASSStartup(wx.Frame):
                              wx.BITMAP_TYPE_ICO))
 
         self.lwelcome.SetForegroundColour(wx.Colour(35, 142, 35))
-        self.lwelcome.SetFont(wx.Font(14, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
+        self.lwelcome.SetFont(wx.Font(13, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
 
         self.bstart.SetForegroundColour(wx.Colour(35, 142, 35))
         self.bstart.SetToolTipString(_("Enter GRASS session"))
@@ -235,23 +235,23 @@ class GRASSStartup(wx.Frame):
         dbase_sizer.Add(item=self.ldbase, proportion=0,
                         flag=wx.ALIGN_CENTER_VERTICAL |
                         wx.ALIGN_CENTER_HORIZONTAL | wx.ALL,
-                        border=5)
+                        border=3)
         dbase_sizer.Add(item=self.tgisdbase, proportion=0,
                         flag=wx.ALIGN_CENTER_VERTICAL |
                         wx.ALIGN_CENTER_HORIZONTAL | wx.ALL,
-                        border=5)
+                        border=3)
         dbase_sizer.Add(item=self.bbrowse, proportion=0,
                         flag=wx.ALIGN_CENTER_VERTICAL |
                         wx.ALIGN_CENTER_HORIZONTAL | wx.ALL,
-                        border=5)
+                        border=3)
 
         # select sizer
         select_sizer.Add(item=self.llocation, proportion=0,
                          flag=label_style | wx.ALL,
-                         border=5)
+                         border=3)
         select_sizer.Add(item=self.lmapset, proportion=0,
                          flag=label_style | wx.ALL,
-                         border=5)
+                         border=3)
         select_sizer.Add(item=self.lpanel, proportion=0,
                          flag=wx.ADJUST_MINSIZE |
                          wx.ALIGN_CENTER_VERTICAL |
@@ -266,22 +266,22 @@ class GRASSStartup(wx.Frame):
         # define new location and mapset
         manage_sizer.Add(item=self.ldefine, proportion=0,
                          flag=label_style | wx.ALL,
-                         border=5)
+                         border=3)
         manage_sizer.Add(item=self.bwizard, proportion=0,
                          flag=label_style | wx.BOTTOM,
-                         border=8)
+                         border=5)
         manage_sizer.Add(item=self.lcreate, proportion=0,
                          flag=label_style | wx.ALL,
-                         border=5)
+                         border=3)
         manage_sizer.Add(item=self.bmapset, proportion=0,
                          flag=label_style | wx.BOTTOM,
-                         border=8)
+                         border=5)
         manage_sizer.Add(item=self.lmanageloc, proportion=0,
                          flag=label_style | wx.ALL,
-                         border=5)
+                         border=3)
         manage_sizer.Add(item=self.manageloc, proportion=0,
                          flag=label_style | wx.BOTTOM,
-                         border=8)
+                         border=5)
 
         manage_boxsizer.Add(item=manage_sizer, proportion=0)
 
@@ -291,62 +291,60 @@ class GRASSStartup(wx.Frame):
                            wx.ALIGN_CENTER_VERTICAL |
                            wx.ALIGN_CENTER_HORIZONTAL |
                            wx.RIGHT | wx.LEFT | wx.EXPAND,
-                           border=5) # GISDBASE setting
+                           border=3) # GISDBASE setting
         location_sizer.Add(item=manage_boxsizer, proportion=0,
                            flag=wx.ADJUST_MINSIZE |
                            wx.ALIGN_TOP |
                            wx.ALIGN_CENTER_HORIZONTAL |
                            wx.RIGHT | wx.EXPAND,
-                           border=5)
+                           border=3)
 
         # buttons
         btns_sizer.Add(item=self.bstart, proportion=0,
                        flag=wx.ALIGN_CENTER_HORIZONTAL |
                        wx.ALL,
-                       border=10)
+                       border=5)
         btns_sizer.Add(item=self.bexit, proportion=0,
                        flag=wx.ALIGN_CENTER_HORIZONTAL |
                        wx.ALL,
-                       border=10)
+                       border=5)
         btns_sizer.Add(item=self.bhelp, proportion=0,
                        flag=wx.ALIGN_CENTER_HORIZONTAL |
                        wx.ALL,
-                       border=10)
+                       border=5)
 
         # main sizer
         sizer.Add(item=self.hbitmap, proportion=0,
                   flag=wx.ALIGN_CENTER_VERTICAL |
                   wx.ALIGN_CENTER_HORIZONTAL |
                   wx.ALL,
-                  border=5) # image
+                  border=3) # image
         sizer.Add(item=self.lwelcome, # welcome message
                   proportion=0,
                   flag=wx.ALIGN_CENTER_VERTICAL |
                   wx.ALIGN_CENTER_HORIZONTAL |
                   wx.EXPAND |
                   wx.BOTTOM,
-                  border=10)
+                  border=1)
         sizer.Add(item=self.ltitle, # title
                   proportion=0,
                   flag=wx.ALIGN_CENTER_VERTICAL |
                   wx.ALIGN_CENTER_HORIZONTAL |
-                  wx.EXPAND |
-                  wx.BOTTOM,
-                  border=5)
+                  wx.EXPAND)
         sizer.Add(item=dbase_sizer, proportion=0,
                   flag=wx.ALIGN_CENTER_HORIZONTAL |
                   wx.RIGHT | wx.LEFT,
-                  border=5) # GISDBASE setting
+                  border=1) # GISDBASE setting
         sizer.Add(item=location_sizer, proportion=1,
                   flag=wx.ALIGN_CENTER_VERTICAL |
                   wx.ALIGN_CENTER_HORIZONTAL |
                   wx.RIGHT | wx.LEFT,
-                  border=5)
+                  border=1)
         sizer.Add(item=btns_sizer, proportion=0,
                   flag=wx.ALIGN_CENTER_VERTICAL |
                   wx.ALIGN_CENTER_HORIZONTAL |
                   wx.RIGHT | wx.LEFT,
-                  border=5)
+                  border=1)
 
         self.panel.SetAutoLayout(True)
         self.panel.SetSizer(sizer)
