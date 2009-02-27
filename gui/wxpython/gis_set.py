@@ -88,8 +88,6 @@ class GRASSStartup(wx.Frame):
                                       label=_("Welcome to GRASS GIS %s\n"
                                               "The world's leading open source GIS") % grassVersion,
                                       style=wx.ALIGN_CENTRE)
-        #self.SetFont(wx.Font(pointSize=9, family=wx.FONTFAMILY_DEFAULT,
-        #                     style=wx.NORMAL, weight=wx.NORMAL))
         self.ltitle = wx.StaticText(parent=self.panel, id=wx.ID_ANY,
                                     label=_("Select an existing project location and mapset\n"
                                             "or define a new location"),
@@ -317,36 +315,30 @@ class GRASSStartup(wx.Frame):
 
         # main sizer
         sizer.Add(item=self.hbitmap, proportion=0,
-                  flag=wx.ADJUST_MINSIZE |
-                  wx.ALIGN_CENTER_VERTICAL |
+                  flag=wx.ALIGN_CENTER_VERTICAL |
                   wx.ALIGN_CENTER_HORIZONTAL |
                   wx.ALL,
                   border=5) # image
         sizer.Add(item=self.lwelcome, # welcome message
                   proportion=0,
-                  flag= wx.ADJUST_MINSIZE |
-                  wx.ALIGN_CENTER_VERTICAL |
+                  flag=wx.ALIGN_CENTER_VERTICAL |
                   wx.ALIGN_CENTER_HORIZONTAL |
                   wx.EXPAND |
                   wx.BOTTOM,
                   border=10)
         sizer.Add(item=self.ltitle, # title
                   proportion=0,
-                  flag=wx.ADJUST_MINSIZE |
-                  wx.ALIGN_CENTER_VERTICAL |
+                  flag=wx.ALIGN_CENTER_VERTICAL |
                   wx.ALIGN_CENTER_HORIZONTAL |
                   wx.EXPAND |
                   wx.BOTTOM,
                   border=5)
         sizer.Add(item=dbase_sizer, proportion=0,
-                  flag=wx.ADJUST_MINSIZE |
-                  wx.ALIGN_CENTER_VERTICAL |
-                  wx.ALIGN_CENTER_HORIZONTAL |
+                  flag=wx.ALIGN_CENTER_HORIZONTAL |
                   wx.RIGHT | wx.LEFT,
                   border=5) # GISDBASE setting
         sizer.Add(item=location_sizer, proportion=1,
-                  flag=wx.ADJUST_MINSIZE |
-                  wx.ALIGN_CENTER_VERTICAL |
+                  flag=wx.ALIGN_CENTER_VERTICAL |
                   wx.ALIGN_CENTER_HORIZONTAL |
                   wx.RIGHT | wx.LEFT,
                   border=5)
