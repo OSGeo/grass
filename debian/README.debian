@@ -1,12 +1,13 @@
 # For preparing GRASS Debian package run
 
-svn co svn://svn.debian.org/pkg-grass/packages/grass/branches/6.4/debian debiangis
+svn co svn://svn.debian.org/pkg-grass/packages/grass/trunk/debian debiangis
 mv debiangis/* .
 
 # in this directory. It will download latest debian configuration files
 # from debian Subversion server (http://svn.debian.org).
 # The grass debian/ dir is under SVN control so you can't just checkout over
 # the top of it from another repo. 
+# You may need to adapt it to work with GRASS 7 (it's for the latest stable)
 
 # After that, you can build current version of GRASS with
 
