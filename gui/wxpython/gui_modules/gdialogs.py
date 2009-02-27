@@ -13,7 +13,7 @@ List of classes:
  - LayersList (used by MultiImport) 
  - SetOpacityDialog
 
-(C) 2008 by the GRASS Development Team
+(C) 2008-2009 by the GRASS Development Team
 
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
@@ -733,14 +733,17 @@ class LoadMapLayersDialog(wx.Dialog):
         if not hasattr(self, "popupID1"):
             self.popupDataID1 = wx.NewId()
             self.popupDataID2 = wx.NewId()
+            self.popupDataID3 = wx.NewId()
 
-            self.Bind(wx.EVT_MENU, self.OnSelectAll,   id=self.popupDataID1)
-            self.Bind(wx.EVT_MENU, self.OnDeselectAll, id=self.popupDataID2)
+            self.Bind(wx.EVT_MENU, self.OnSelectAll,    id=self.popupDataID1)
+            self.Bind(wx.EVT_MENU, self.OnSelectInvert, id=self.popupDataID2)
+            self.Bind(wx.EVT_MENU, self.OnDeselectAll,  id=self.popupDataID3)
 
         # generate popup-menu
         menu = wx.Menu()
         menu.Append(self.popupDataID1, _("Select all"))
-        menu.Append(self.popupDataID2, _("Deselect all"))
+        menu.Append(self.popupDataID2, _("Invert selection"))
+        menu.Append(self.popupDataID3, _("Deselect all"))
 
         self.PopupMenu(menu)
         menu.Destroy()
@@ -750,6 +753,14 @@ class LoadMapLayersDialog(wx.Dialog):
         for item in range(self.layers.GetCount()):
             self.layers.Check(item, True)
 
+    def OnSelectInvert(self, event):
+        """Invert current selection"""
+        for item in range(self.layers.GetCount()):
+            if self.layers.IsChecked(item):
+                self.layers.Check(item, False)
+            else:
+                self.layers.Check(item, True)
+        
     def OnDeselectAll(self, event):
         """Select all map layer from list"""
         for item in range(self.layers.GetCount()):
