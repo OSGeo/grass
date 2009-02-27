@@ -614,13 +614,7 @@ class LoadMapLayersDialog(wx.Dialog):
         btnCancel = wx.Button(self, wx.ID_CANCEL)
         btnOk = wx.Button(self, wx.ID_OK, _("Load") )
         btnOk.SetDefault()
-
-        #
-        # bindigs
-        #
-        #btnOk.Bind(wx.EVT_BUTTON, self.OnOK)
-        #btnCancel.Bind(wx.EVT_BUTTON, self.OnCancel)
-
+        
         #
         # sizers & do layout
         #
@@ -656,6 +650,14 @@ class LoadMapLayersDialog(wx.Dialog):
         self.layerType.SetSelection(0)
         bodySizer.Add(item=self.layerType,
                       pos=(0,1))
+
+        # select toggle
+        self.toggle = wx.CheckBox(parent=self, id=wx.ID_ANY,
+                                  label=_("Select toggle"))
+        self.toggle.SetValue(True)
+        bodySizer.Add(item=self.toggle,
+                      flag=wx.ALIGN_CENTER_VERTICAL,
+                      pos=(0,2))
         
         # mapset filter
         bodySizer.Add(item=wx.StaticText(parent=self, label=_("Mapset:")),
@@ -668,7 +670,7 @@ class LoadMapLayersDialog(wx.Dialog):
                                   size=(250,-1))
         self.mapset.SetStringSelection(grass.gisenv()['MAPSET'])
         bodySizer.Add(item=self.mapset,
-                      pos=(1,1))
+                      pos=(1,1), span=(1, 2))
 
         # map name filter
         bodySizer.Add(item=wx.StaticText(parent=self, label=_("Filter:")),
@@ -680,7 +682,7 @@ class LoadMapLayersDialog(wx.Dialog):
                                   size=(250,-1))
         bodySizer.Add(item=self.filter,
                       flag=wx.EXPAND,
-                      pos=(2,1))
+                      pos=(2,1), span=(1, 2))
 
         # layer list 
         bodySizer.Add(item=wx.StaticText(parent=self, label=_("List of maps:")),
@@ -691,13 +693,14 @@ class LoadMapLayersDialog(wx.Dialog):
                                       choices=[])
         bodySizer.Add(item=self.layers,
                       flag=wx.EXPAND,
-                      pos=(3,1))
+                      pos=(3,1), span=(1, 2))
 
         # bindings
         self.layerType.Bind(wx.EVT_CHOICE, self.OnChangeParams)
         self.mapset.Bind(wx.EVT_COMBOBOX, self.OnChangeParams)
         self.layers.Bind(wx.EVT_RIGHT_DOWN, self.OnMenu)
         self.filter.Bind(wx.EVT_TEXT, self.OnFilter)
+        self.toggle.Bind(wx.EVT_CHECKBOX, self.OnToggle)
         return bodySizer
 
     def LoadMapLayers(self, type, mapset):
@@ -771,6 +774,14 @@ class LoadMapLayersDialog(wx.Dialog):
         
         event.Skip()
 
+    def OnToggle(self, event):
+        """Select toggle (check or uncheck all layers)"""
+        check = event.Checked()
+        for item in range(self.layers.GetCount()):
+            self.layers.Check(item, check)
+
+        event.Skip()
+        
     def GetMapLayers(self):
         """Return list of checked map layers"""
         layerNames = []
