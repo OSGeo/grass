@@ -1988,10 +1988,6 @@ class LocationWizard(wx.Object):
         Create a new location for selected projection
         """
         # creating location from PROJ.4 string passed to g.proj
-        cmdlist = ['g.proj', '-c',
-                   'proj4=%s' % proj4string,
-                   'location=%s' % self.startpage.location]
-
         ret = gcmd.RunCommand('g.proj',
                               flags = 'c',
                               proj4 = proj4string,
@@ -2024,8 +2020,7 @@ class LocationWizard(wx.Object):
         epsgcode = self.epsgpage.epsgcode
         epsgdesc = self.epsgpage.epsgdesc
         location = self.startpage.location
-        cmdlist = []
-
+        
         # should not happend
         if epsgcode == '':
             wx.MessageBox(parent=self,
@@ -2034,11 +2029,8 @@ class LocationWizard(wx.Object):
             return False
         
         # creating location
-        cmdlist = ['g.proj',
-                   'epsg=%s' % epsgcode,
-                   'datumtrans=-1']
-
         ret = gcmd.RunCommand('g.proj',
+                              read = True,
                               epsg = epsgcode,
                               datumtrans = '-1')
 
@@ -2096,8 +2088,6 @@ class LocationWizard(wx.Object):
         georeffile = self.filepage.georeffile
         location = self.startpage.location
 
-        cmdlist = []
-
         # this should not happen
         if not georeffile or not os.path.isfile(georeffile):
             dlg = wx.MessageBox(parent=self.wizard,
@@ -2125,9 +2115,7 @@ class LocationWizard(wx.Object):
         """
         wktfile = self.wktpage.wktfile
         location = self.startpage.location
-
-        cmdlist = []
-
+        
         # this should not happen
         if not wktfile or not os.path.isfile(wktfile):
             dlg = wx.MessageBox(parent=self.wizard,
@@ -2139,10 +2127,6 @@ class LocationWizard(wx.Object):
             return False
 
         # creating location
-        cmdlist = ['g.proj', '-c',
-                   'wkt=%s' % wktfile,
-                   'location=%s' % location]
-
         ret = gcmd.RunCommand('g.proj',
                               flags = 'c',
                               wkt = wktfile,
@@ -2596,17 +2580,6 @@ class RegionDef(BaseClass, wx.Frame):
 
     def OnSetButton(self, event=None):
         """Set default region"""
-        cmdlist = ['g.region', '-sgpa',
-                   'n=%f' % self.north,
-                   's=%f' % self.south,
-                   'e=%f' % self.east,
-                   'w=%f' % self.west,
-                   'nsres=%f' % self.nsres,
-                   'ewres=%f' % self.ewres,
-                   't=%f' % self.top,
-                   'b=%f' % self.bottom,
-                   'tbres=%f' % self.tbres]
-
         ret = gcmd.RunCommand('g.region',
                               flags = 'sgpa',
                               n = self.north,
