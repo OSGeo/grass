@@ -57,7 +57,16 @@ dig_build_area_with_line(struct Plus_head *plus, plus_t first_line, int side,
     int n_lines;
     P_LINE *Line;
     int node;
+    const char *dstr;
+    int debug_level;
 
+    dstr = G__getenv("DEBUG");
+
+    if (dstr != NULL)
+	debug_level = atoi(dstr);
+    else
+	debug_level = 0;
+	
     G_debug(3, "dig_build_area_with_line(): first_line = %d, side = %d",
 	    first_line, side);
 
@@ -106,8 +115,11 @@ dig_build_area_with_line(struct Plus_head *plus, plus_t first_line, int side,
 	    /* GOT ONE!  fill area struct  and return */
 	    G_debug(3, "Got one! :");
 
-	    for (i = 0; i < n_lines; i++) {
-		G_debug(3, " area line (%d) = %d", i, array[i]);
+	    /* avoid loop when not debugging */
+	    if (debug_level > 2) {
+		for (i = 0; i < n_lines; i++) {
+		    G_debug(3, " area line (%d) = %d", i, array[i]);
+		}
 	    }
 
 	    *lines = array;
@@ -468,6 +480,15 @@ dig_angle_next_line(struct Plus_head *plus, plus_t current_line, int side,
     plus_t node;
     P_NODE *Node;
     P_LINE *Line;
+    const char *dstr;
+    int debug_level;
+
+    dstr = G__getenv("DEBUG");
+
+    if (dstr != NULL)
+	debug_level = atoi(dstr);
+    else
+	debug_level = 0;
 
     G_debug(3, "dig__angle_next_line: line = %d, side = %d, type = %d",
 	    current_line, side, type);
@@ -482,9 +503,12 @@ dig_angle_next_line(struct Plus_head *plus, plus_t current_line, int side,
 
     Node = plus->Node[node];
     G_debug(3, "  n_lines = %d", Node->n_lines);
-    for (i = 0; i < Node->n_lines; i++) {
-	G_debug(3, "  i = %d line = %d angle = %f", i, Node->lines[i],
-		Node->angles[i]);
+    /* avoid loop when not debugging */
+    if (debug_level > 2) {
+	for (i = 0; i < Node->n_lines; i++) {
+	    G_debug(3, "  i = %d line = %d angle = %f", i, Node->lines[i],
+		    Node->angles[i]);
+	}
     }
 
     /* first find index for that line */
