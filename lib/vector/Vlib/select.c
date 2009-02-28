@@ -93,6 +93,15 @@ Vect_select_areas_by_box(struct Map_info *Map, BOUND_BOX * Box,
 			 struct ilist *list)
 {
     int i;
+    const char *dstr;
+    int debug_level;
+
+    dstr = G__getenv("DEBUG");
+
+    if (dstr != NULL)
+	debug_level = atoi(dstr);
+    else
+	debug_level = 0;
 
     G_debug(3, "Vect_select_areas_by_box()");
     G_debug(3, "Box(N,S,E,W,T,B): %e, %e, %e, %e, %e, %e", Box->N, Box->S,
@@ -105,12 +114,15 @@ Vect_select_areas_by_box(struct Map_info *Map, BOUND_BOX * Box,
 
     dig_select_areas(&(Map->plus), Box, list);
     G_debug(3, "  %d areas selected", list->n_values);
-    for (i = 0; i < list->n_values; i++) {
-	G_debug(3, "  area = %d pointer to area structure = %lx",
-		list->value[i],
-		(unsigned long)Map->plus.Area[list->value[i]]);
-
+    /* avoid loop when not debugging */
+    if (debug_level > 2) {
+	for (i = 0; i < list->n_values; i++) {
+	    G_debug(3, "  area = %d pointer to area structure = %lx",
+		    list->value[i],
+		    (unsigned long)Map->plus.Area[list->value[i]]);
+	}
     }
+    
     return list->n_values;
 }
 
