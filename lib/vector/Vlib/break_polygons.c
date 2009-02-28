@@ -23,14 +23,37 @@
 #include <grass/Vect.h>
 #include <grass/glocale.h>
 
+/* TODO: 3D support
+ *
+ * atan2() gives angle from x-axis
+ * this is unambiguous only in 2D, not in 3D
+ *
+ * one possibility would be to store unit vectors of length 1
+ * in struct XPNT
+ * double a1[3], a2[3];
+ * 
+ * length = sqrt(dx * dx + dy * dy + dz * dz);
+ * dx /= length; dy /= length; dz /=length;
+ * a1[0] = dx; a1[1] = dy; a1[2] = dz;
+ *
+ * get second dx, dy, dz
+ * length = sqrt(dx * dx + dy * dy + dz * dz);
+ * dx /= length; dy /= length; dz /=length;
+ * a2[0] = dx; a2[1] = dy; a2[2] = dz;
+ *
+ * equal angles
+ * if (a1[0] == a2[0] && a1[1] == a2[1] && a1[2] == a2[2])
+ *
+ * disadvantage: increased memory consumption
+ *
+ * new function Vect_break_faces() ?
+ * 
+ */
+
 typedef struct
 {
-    double x, y;
     double a1, a2;		/* angles */
     char cross;			/* 0 - do not break, 1 - break */
-    char used;			/* 0 - was not used to break line, 1 - was used to break line
-				 *   this is stored because points are automaticaly marked as cross, even if not used 
-				 *   later to break lines */
 } XPNT;
 
 static int fpoint;
@@ -62,7 +85,7 @@ void
 Vect_break_polygons(struct Map_info *Map, int type, struct Map_info *Err)
 {
     struct line_pnts *BPoints, *Points;
-    struct line_cats *Cats;
+    struct line_cats *Cats, *ErrCats;
     int i, j, k, ret, ltype, broken, last, nlines;
     int nbreaks;
     struct Node *RTree;
@@ -77,6 +100,7 @@ Vect_break_polygons(struct Map_info *Map, int type, struct Map_info *Err)
     BPoints = Vect_new_line_struct();
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
+    ErrCats = Vect_new_cats_struct();
 
     nlines = Vect_get_num_lines(Map);
 
@@ -187,9 +211,6 @@ Vect_break_polygons(struct Map_info *Map, int type, struct Map_info *Err)
 			(XPNT *) G_realloc(XPnts,
 					   (apoints + 1) * sizeof(XPNT));
 		}
-		XPnts[npoints].x = Points->x[j];
-		XPnts[npoints].y = Points->y[j];
-		XPnts[npoints].used = 0;
 		if (j == 0 || j == (Points->n_points - 1) ||
 		    Points->n_points < 3) {
 		    XPnts[npoints].a1 = 0;
@@ -255,10 +276,6 @@ Vect_break_polygons(struct Map_info *Map, int type, struct Map_info *Err)
 	    RTreeSearch(RTree, &rect, (void *)srch, 0);
 	    G_debug(3, "fpoint =  %d", fpoint);
 
-	    if (XPnts[fpoint].cross) {	/* realy use to break line */
-		XPnts[fpoint].used = 1;
-	    }
-
 	    /* break or write last segment of broken line */
 	    if ((j == (Points->n_points - 1) && broken) ||
 		XPnts[fpoint].cross) {
@@ -280,6 +297,15 @@ Vect_break_polygons(struct Map_info *Map, int type, struct Map_info *Err)
 		if (!broken)
 		    Vect_delete_line(Map, i);	/* not yet deleted */
 
+		/* Write points on breaks */
+		if (Err) {
+		    if (j < (Points->n_points - 1)) {
+			Vect_reset_line(BPoints);
+			Vect_append_point(BPoints, Points->x[j], Points->y[j], 0);
+			Vect_write_line(Err, GV_POINT, BPoints, ErrCats);
+		    }
+		}
+
 		last = j;
 		broken = 1;
 		nbreaks++;
@@ -298,18 +324,6 @@ Vect_break_polygons(struct Map_info *Map, int type, struct Map_info *Err)
 	}
 	else {
 	    G_debug(3, "Line %d was not changed", i);
-	}
-    }
-
-    /* Write points on breaks */
-    if (Err) {
-	Vect_reset_cats(Cats);
-	for (i = 1; i < npoints; i++) {
-	    if (XPnts[i].used) {
-		Vect_reset_line(Points);
-		Vect_append_point(Points, XPnts[i].x, XPnts[i].y, 0);
-		Vect_write_line(Err, GV_POINT, Points, Cats);
-	    }
 	}
     }
 
