@@ -1374,8 +1374,8 @@ class cmdPanel(wx.Panel):
         if pDatabase and pTable:
             pDatabase['wxId-bind'] = [pTable['wxId'], ]
 
-        if pTable and pColumn:
-            pTable['wxId-bind'] = pColumn
+        if pTable and pColumnIds:
+            pTable['wxId-bind'] = pColumnIds
         
 	#
 	# determine panel size
@@ -1607,7 +1607,10 @@ class cmdPanel(wx.Panel):
                         pTable = self.task.get_param('dbtable', element='element', raiseError=False)
                         if pTable and \
                                 pTable.get('value', '') != '':
-                            win.InsertTableColumns(pTable.get('value'), driver, db)
+                            if driver and db:
+                                win.InsertTableColumns(pTable.get('value'), driver, db)
+                            else:
+                                win.InsertTableColumns(pTable.get('value'))
                             columns = win.GetItems()
                 else:
                    win.SetItems(columns) 
