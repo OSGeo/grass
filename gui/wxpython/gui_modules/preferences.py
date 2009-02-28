@@ -506,10 +506,12 @@ class Settings:
                 self.internalSettings[group][key] = {}
 
         # self.internalSettings['general']["mapsetPath"]['value'] = self.GetMapsetPath()
-        self.internalSettings['general']['elementListExpand']['choices'] = (_("Collapse all except PERMANENT and current"),
-                                                                            _("Collapse all except PERMANENT"),
-                                                                            _("Collapse all"),
-                                                                            _("Expand all"))
+        self.internalSettings['general']['elementListExpand']['choices'] = \
+            (_("Collapse all except PERMANENT and current"),
+             _("Collapse all except PERMANENT"),
+             _("Collapse all except current"),
+             _("Collapse all"),
+             _("Expand all"))
         self.internalSettings['atm']['leftDbClick']['choices'] = (_('Edit selected record'),
                                                                   _('Display selected'))
         self.internalSettings['advanced']['settingsFile']['choices'] = ('home',
