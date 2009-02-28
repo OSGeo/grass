@@ -242,15 +242,18 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                                        subkey='selection')
                 collapse = True
 
-                if sel == 0: # collapse all expect PERMANENT and current
+                if sel == 0: # collapse all except PERMANENT and current
                     if dir in ('PERMANENT', curr_mapset):
                         collapse = False
-                elif sel == 1: # collapse all expect PERMANENT
+                elif sel == 1: # collapse all except PERMANENT
                     if dir == 'PERMANENT':
                         collapse = False
-                elif sel == 2: # collapse all
+                elif sel == 2: # collapse all except current
+                    if dir == curr_mapset:
+                        collapse = False
+                elif sel == 3: # collapse all
                     pass
-                elif sel == 3: # expand all
+                elif sel == 4: # expand all
                     collapse = False
                 
                 if collapse:
