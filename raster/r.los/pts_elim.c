@@ -201,7 +201,20 @@ struct point *hidden_point_elimination(struct point *head, int viewpt_elev,
 	    segment_get(seg_patt_p, &mask, row_viewpt - BLOCKING_PT_Y,
 			col_viewpt + BLOCKING_PT_X);
 	    if (mask == 0 || G_is_null_value(&mask, CELL_TYPE)) {
-		if (NEXT_BLOCKING_PT != NULL)
+	    
+	      /* Commenting out the following fixes a bug in r.los.
+		 In that program the 8 cells around the viewpoint
+		 are marked as visible (when visible)
+		 even if they fall outside the area of interest 
+		 specified by the patt_map.  This occurs because
+		 these cells are always the last blocking points
+		 on the segment lists, and therefore don't get 
+		 deleted when they should.  This fix allows them
+		 to be deleted, but it required modifications
+		 to delete.c.  MWL 25/6/99 */	    
+	    
+		/* if (NEXT_BLOCKING_PT != NULL) */
+		
 		    head = delete(BLOCKING_PT, head, seg_out_p,
 				  row_viewpt, col_viewpt);
 	    }

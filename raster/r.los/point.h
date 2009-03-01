@@ -48,6 +48,12 @@ struct point *hidden_point_elimination(struct point *, int, SEGMENT *,
 struct point *segment(int, int, int, double, double,
 		      int, int, int, int, SEGMENT *, SEGMENT *, SEGMENT *,
 		      int, int, int, int, double);
+/* 	
+	For delayed deletion of points (see delete3.c).
+	Initially set to NULL in main.c.
+*/
+struct point *DELAYED_DELETE;
+
 #endif
 
 /****************************************************************/
