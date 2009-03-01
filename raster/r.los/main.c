@@ -133,6 +133,8 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
+    /* initialize delayed point deletion */
+    DELAYED_DELETE =  NULL;
 
     G_scan_easting(opt3->answers[0], &east, G_projection());
     G_scan_northing(opt3->answers[1], &north, G_projection());
@@ -413,6 +415,11 @@ int main(int argc, char *argv[])
     G_short_history(out_layer, "raster", &history);
     G_command_history(&history);
     G_write_history(out_layer, &history);
+
+    /* release that last tiny bit of memory ... */
+    if ( DELAYED_DELETE != NULL ) {
+        G_free ( DELAYED_DELETE );
+    }
 
     exit(EXIT_SUCCESS);
 }
