@@ -2239,7 +2239,7 @@ static int check_required(void)
 	if (opt->required && opt->answer == NULL) {
 	    fprintf(stderr,
 		    _("\nERROR: Required parameter <%s> not set:\n    (%s).\n"),
-		    opt->key, opt->description);
+		    opt->key, (opt->label ? opt->label : opt->description) );
 	    err++;
 	}
 	opt = opt->next_opt;
