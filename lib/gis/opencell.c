@@ -258,7 +258,7 @@ int G__open_cell_old(const char *name, const char *mapset)
     if (gdal) {
 #ifdef HAVE_GDAL
 	/* dummy descriptor to reserve the fileinfo slot */
-	fd = open("/dev/null", O_RDONLY);
+	fd = open(G_DEV_NULL, O_RDONLY);
 #else
 	G_warning(_("map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"),
 		  r_name, r_mapset);
