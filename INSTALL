@@ -58,6 +58,7 @@ GRASS source code is currently distributed in 2 forms:
   (*.tar.gz package) of that SVN repository. The SVN snapshot name
   contains the date when the snapshot was created (checked out from
   the SVN repository), e.g. grass-7.0.svn_src_snapshot_2008_10_19.tar.gz
+  Further instructions at http://trac.osgeo.org/grass/wiki/DownloadSource
 
 
 (B) COMPILATION
