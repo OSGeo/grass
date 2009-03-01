@@ -38,7 +38,7 @@ void gregion(void)
     }
 
     if (hdmap) {
-	sprintf(buf, "g.region rast=%s > /dev/null", hdmap);
+	sprintf(buf, "g.region rast=%s --quiet", hdmap);
 	G_message("g.region rast=%s ... ", hdmap);
 
 	if (run(buf))
@@ -50,7 +50,7 @@ void gregion(void)
 void depressionless(void)
 {
     char buf[GPATH_MAX];
-    sprintf(buf, "r.fill.dir input=%s elev=%s dir=%s type=grass > /dev/null",
+    sprintf(buf, "r.fill.dir input=%s elev=%s dir=%s type=grass --quiet",
 	    map.elev, map.fill, map.dir);
     G_message("r.fill.dir input=%s elev=%s dir=%s type=grass ... ",
 	      map.elev, map.fill, map.dir);
@@ -68,7 +68,7 @@ void depressionless(void)
 void basin_elevation(void)
 {
     char buf[GPATH_MAX];
-    sprintf(buf, "r.mapcalc '%s = if(%s == 0 || isnull(%s), null(), %s)' > /dev/null",
+    sprintf(buf, "r.mapcalc '%s = if(%s == 0 || isnull(%s), null(), %s)' --quiet",
 	    map.belev, map.basin, map.basin, map.elev);
     G_message("r.mapcalc '%s = if(%s == 0 || isnull(%s), null(), %s)'"
 	      " ... ", map.belev, map.basin, map.basin, map.elev);
@@ -85,7 +85,7 @@ void top_index(void)
 {
     char buf[GPATH_MAX];
     if (map.belev) {
-	sprintf(buf, "r.topidx input=%s output=%s > /dev/null",
+	sprintf(buf, "r.topidx input=%s output=%s --quiet",
 		map.belev, map.topidx);
 	G_message("r.topidx input=%s output=%s ... ", map.belev, map.topidx);
 
