@@ -68,7 +68,7 @@ void depressionless(void)
 void basin_elevation(void)
 {
     char buf[GPATH_MAX];
-    sprintf(buf, "r.mapcalc '%s = if(%s == 0 || isnull(%s), null(), %s)' --quiet",
+    sprintf(buf, "r.mapcalc expression='%s = if(%s == 0 || isnull(%s), null(), %s)' --quiet",
 	    map.belev, map.basin, map.basin, map.elev);
     G_message("r.mapcalc '%s = if(%s == 0 || isnull(%s), null(), %s)'"
 	      " ... ", map.belev, map.basin, map.basin, map.elev);
