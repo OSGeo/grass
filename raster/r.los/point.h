@@ -52,7 +52,12 @@ struct point *segment(int, int, int, double, double,
 	For delayed deletion of points (see delete3.c).
 	Initially set to NULL in main.c.
 */
+
+#ifdef MAIN
 struct point *DELAYED_DELETE;
+#else
+extern struct point *DELAYED_DELETE;
+#endif
 
 #endif
 
