@@ -1,5 +1,9 @@
 MODULE_TOPDIR = ../..
 
+# GCC >4.2: openMP support
+#EXTRA_CFLAGS=-fopenmp
+#EXTRA_LIBS=$(GISLIB) $(G3DLIB) -lgomp $(MATHLIB)
+
 EXTRA_LIBS=$(GISLIB) $(G3DLIB)
 LIB_NAME = $(GPDE_LIBNAME)
 
