@@ -12,6 +12,8 @@ EXTRA_CFLAGS = $(SHLIB_CFLAGS) $(GDALCFLAGS) $(PYTHONCFLAGS) $(WXWIDGETSCXXFLAGS
 EXTRA_LIBS = $(GISLIB) $(OGSFLIB) $(NVIZLIB) $(OPENGLLIB) $(OPENGLULIB)
 ifeq ($(findstring darwin,$(ARCH)),darwin)
 EXTRA_LIBS := -bundle -undefined dynamic_lookup $(EXTRA_LIBS)
+CXXFLAGS := $(subst -arch ppc64,,$(subst -arch x86_64,,$(CXXFLAGS)))
+LDFLAGS := $(subst -arch ppc64,,$(subst -arch x86_64,,$(LDFLAGS)))
 else
 EXTRA_LIBS := $(PYTHONLDFLAGS) $(WXWIDGETSLIB) $(EXTRA_LIBS)
 endif
