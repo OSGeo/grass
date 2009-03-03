@@ -190,6 +190,7 @@ Contents
    http://www.directionsmag.com/pressreleases.php (News -> Post Press Release)
    http://www.gnu.org/directory/science/geography/grass.html
    http://www.kde-apps.org/content/show.php?content=19776
+   http://www.opendesktop.org/content/show.php?content=19776
    http://news.eoportal.org/share_news.html (MN) 
             -> Share your news with the EO community
    http://www.osdir.com/Downloads+index-req-viewsdownload-sid-206.phtml
