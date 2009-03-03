@@ -26,12 +26,30 @@ care of following rules:
 
    The easiest way to do this is to study an existing HTML page
    (to get the page style, e.g. vector/v.to.db/v.to.db.html).
-   With a few exceptions header and footer are NOT allowed.
-   You can add figures (PNG format), the figure name prefix should be the 
+   With a few exceptions, header and footer are NOT allowed.
+   You can add figures (PNG format); the figure name prefix should be the 
    module name. See raster/r.terraflow/r.terraflow.html for an example.
 
+   A number of major sections should be present in each help page.
+
+   * = Required
+   ! = Suggested
+   . = Optional
+
+   In recommended order
+   --------------------
+
+   * <h2>DESCRIPTION</h2>
+   ! <h2>NOTE</H2>, <h2>NOTES</h2>
+   ! <h2>EXAMPLE</h2>, <h2>EXAMPLES</h2>
+   . <h2>TODO</h2>
+   . <h2>BUGS</h2>
+   . <h2>REFERENCE</h2>, <h2>REFERENCES</h2>
+   * <h2>SEE ALSO</h2>
+   * <h2>AUTHOR</h2>, <h2>AUTHORS</h2>
+
    Note that the parameter information is auto-generated upon
-   compilation. This is done by running module in a virtual session
+   compilation. This is done by running the module in a virtual session
    after compilation (see the output of 'make'). To subsequently
    verify the final HTML page, check the resulting HTML pages which
    will be stored with the name of the module.
