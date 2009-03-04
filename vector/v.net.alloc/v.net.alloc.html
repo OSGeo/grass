@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
 <em>v.net.alloc</em> allocates subnets for nearest centres (direction from 
-centre). Centre node must be opened (costs >= 0). Costs of centre node are 
+centre). Centre node must be opened (costs &gt;= 0). Costs of centre node are 
 used in calculation. Supported are cost assignments for both arcs and nodes, 
 and also different in both directions of a vector line. For areas cost will 
 be calculated along boundary lines.
@@ -10,22 +10,49 @@ be calculated along boundary lines.
 
 Center nodes have to be assigned to vector nodes
 using <em><a href="wxGUI.Vector_Digitizing_Tool.html">wxGUI vector
-digitizer</a></em>. Nodes and arcs can be closed using cost = -1.
+digitizer</a></em>. Nodes and arcs can be closed using cost = -1. 
 
-<h2>EXAMPLE</h2>
+<h2>EXAMPLES</h2>
 
+Example 1: <em>Calculating subnets for 3 centre nodes using distances</em>
 <div class="code"><pre>
-# nlayer=1 if no extra table for nodes:
-v.net.alloc network out=network_alloc ccats=0-13 nlayer=1
+#Spearfish
+
+# centre nodes:
+echo "591235.5|4926306.62|1
+596591.8|4917042.5|2
+602722.9|4923544.2|3" | v.in.ascii out=centrenodes
+
+g.copy vect=roads,myroads
+
+#connect points to network
+v.net myroads points=centrenodes out=myroads_net op=connect thresh=200
+
+# view map
+g.region vect=myroads_net
+d.mon x0
+d.vect myroads_net
+d.vect myroads_net col=red icon=basic/triangle fcol=green size=12 layer=2
+
+# allocate, specifying range of center cats (easier to catch all):
+v.net.alloc myroads_net out=myroads_net_alloc ccats=1-100000 nlayer=2
+
+# report categories
+v.category myroads_net_alloc option=report
 
 # the result has to be selected by category number of the relevant node:
-d.vect network_alloc cat=9 col=red
-d.vect network_alloc cat=11 col=green
-d.vect network_alloc cat=2492 col=yellow
+d.vect myroads_net_alloc cat=1 col=red
+d.vect myroads_net_alloc cat=2 col=green
+d.vect myroads_net_alloc cat=3 col=yellow
+d.vect myroads_net col=red icon=basic/triangle fcol=green size=12 layer=2
 </pre></div>
 <p>
 
-<em>Calculating subnets for 7 centre nodes using cost assigned to vector length
+<img src="v_net_alloc.png" alt="v.net.alloc example" border="1">
+
+
+<p>
+Example 2: <em>Calculating subnets for 7 centre nodes using cost assigned to vector length
 </em><br>
 <div class="code"><pre>
 v.net.alloc in=vectmap out=vectmap.alloc ccats=1-7
@@ -33,7 +60,7 @@ v.net.alloc in=vectmap out=vectmap.alloc ccats=1-7
 
 <p>
 
-<em>Calculating subnets for 7 centre nodes using cost assignments in both 
+Example 3: <em>Calculating subnets for 7 centre nodes using cost assignments in both 
 directions</em><br>
 <div class="code"><pre>
 v.net.alloc in=vectmap afcol=INDEX abcol=INDEXBACK out=vectmap.alloc ccats=1-7
