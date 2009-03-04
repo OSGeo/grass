@@ -560,6 +560,15 @@ class AttributeManager(wx.Frame):
                 continue
 
             panel = wx.Panel(parent=self.browsePage, id=wx.ID_ANY)
+            
+            #IMPORTANT NOTE: wx.StaticBox MUST be defined BEFORE any of the 
+            #   controls that are placed IN the wx.StaticBox, or it will freeze
+            #   on the Mac
+            
+            listBox = wx.StaticBox(parent=panel, id=wx.ID_ANY,
+                       label=" %s " % _("Attribute data - right-click to edit/manage records"))
+            listSizer = wx.StaticBoxSizer(listBox, wx.VERTICAL)
+            
             win = VirtualAttributeList(panel, self.log,
                                        self.mapDBInfo, layer)
             if win.IsEmpty():
@@ -575,11 +584,7 @@ class AttributeManager(wx.Frame):
 
             pageSizer = wx.BoxSizer(wx.VERTICAL)
 
-            # attribute data
-            listBox = wx.StaticBox(parent=panel, id=wx.ID_ANY,
-                                   label=" %s " % _("Attribute data - right-click to edit/manage records"))
-            listSizer = wx.StaticBoxSizer(listBox, wx.VERTICAL)
-            
+            # attribute data            
             sqlBox = wx.StaticBox(parent=panel, id=wx.ID_ANY,
                                   label=" %s " % _("SQL Query"))
 
