@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: grasswxpy_pl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-01-09 23:29+0100\n"
-"PO-Revision-Date: 2008-11-11 01:19+0100\n"
+"PO-Revision-Date: 2009-03-05 18:10+0100\n"
 "Last-Translator: Milena Nowotarska <do.milenki*gmail.com>\n"
 "Language-Team: Polish <grass-translations@lists.osgeo.org>\n"
 "MIME-Version: 1.0\n"
@@ -1705,7 +1705,7 @@ msgstr "Mapa wektorowa <%s> jest 2D"
 #: ../gui/wxpython/gui_modules/nviz_tools.py:2448
 #, python-format
 msgid "%(primitives)d primitives (%(points)d points)"
-msgstr "%d "
+msgstr ""
 
 #: ../gui/wxpython/gui_modules/preferences.py:362
 msgid "Segment break"
