@@ -646,6 +646,8 @@ class mainFrame(wx.Frame):
         self.btn_help = wx.Button(parent=self.panel, id=wx.ID_HELP)
         self.btn_help.SetToolTipString(_("Show manual page of the command"))
         self.btn_help.Bind(wx.EVT_BUTTON, self.OnHelp)
+        if not hasattr(self.notebookpanel, "manual_tab_id"):
+            self.btn_help.Hide()
         if self.get_dcmd is not None: # A callback has been set up
             btn_apply = wx.Button(parent=self.panel, id=wx.ID_APPLY)
             btn_ok = wx.Button(parent=self.panel, id=wx.ID_OK)
