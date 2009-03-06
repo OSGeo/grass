@@ -928,12 +928,15 @@ class cmdPanel(wx.Panel):
         else:
             self.goutput = None
             self.goutputId = -1
-            
+        
         self.manual_tab = helpPanel(parent = self.notebook, grass_command = self.task.name)
         self.manual_tabsizer = wx.BoxSizer(wx.VERTICAL)
-        self.notebook.AddPage(self.manual_tab, text=_("Manual"))
-        self.manual_tab_id = self.notebook.GetPageCount() - 1
-
+        if not os.path.isfile(self.manual_tab.fspath + self.task.name + ".html"):
+            self.manual_tab.Hide()
+        else:
+            self.notebook.AddPage(self.manual_tab, text=_("Manual"))
+            self.manual_tab_id = self.notebook.GetPageCount() - 1
+        
         self.notebook.SetSelection(0)
 
         panelsizer.Add(item=self.notebook, proportion=1, flag=wx.EXPAND )
