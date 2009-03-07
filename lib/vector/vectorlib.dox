@@ -108,7 +108,7 @@ The current implementation includes:
 <ul>
 <li> multi-layer: features in one vector map may represent more layers and 
     may be linked to more external tables (see \ref vlib_categories_layers);
-<li> 2D and 3D vector geometry with topology (see \ref vlib_topology_management);
+<li> 2D and 3D vector geometry with full topology support for 2D and partial topology support for 3D (see \ref vlib_topology_management);
 <li> multi-format: external data formats supported (SHAPE-file, OGR sources etc.);
 <li> portability: platform independent internal format, read- and writable on 32bit,
       64bit etc. computer architectures;
@@ -149,7 +149,11 @@ The following vector objects are defined:
 </ul>
 
 Note that all lines and boundaries can be polylines (with nodes in
-between). 
+between).
+
+Topology also holds information about isles. Isles are located within an area, not
+touching the boundaries of the outer area. Isles consist of one or more areas
+and are used internally by the vector libraries to maintain correct topology of areas.
 
 \section libraries Vector libraries
 
@@ -410,9 +414,9 @@ For each isle (n_isle):
 <TR><TD>Name</TD><TD>Type</TD><TD>Number</TD><TD>Description</TD></TR>
 <TR><TD>n_lines</TD><TD>I</TD><TD>1</TD><TD>number of boundaries</TD></TR>
 <TR><TD>lines</TD><TD>I</TD><TD>n_lines</TD><TD>Line ids</TD></TR>
-<TR><TD>area</TD><TD>I</TD><TD>1</TD><TD>Area id</TD></TR>
-<TR><TD>N,S,E,W</TD><TD>D</TD><TD>4</TD><TD>Area bounding box</TD></TR>
-<TR><TD>T,B</TD><TD>D</TD><TD>2</TD><TD>Area bounding box for 3D (only if with_z=1)</TD></TR>
+<TR><TD>area</TD><TD>I</TD><TD>1</TD><TD>Outer area id</TD></TR>
+<TR><TD>N,S,E,W</TD><TD>D</TD><TD>4</TD><TD>Isle bounding box</TD></TR>
+<TR><TD>T,B</TD><TD>D</TD><TD>2</TD><TD>Isle bounding box for 3D (only if with_z=1)</TD></TR>
 </TABLE>
 
 <b>Feature types:</b>
@@ -495,12 +499,34 @@ This is handled correctly in GRASS: A can be filled, B filled differently.
 \endverbatim
 
 In GRASS, whenever an 'inner' ring touches the boundary of an outside area, even in
-one point, it is no longer an 'inner' ring, it is simply another area.
-A, B above can never be exported from GRASS as polygon A with inner ring B
-because there are only 2 areas A and B and no island.
+one point, it is no longer an 'inner' ring (Isle in GRASS topology), it is
+simply another area. A, B above can never be exported from GRASS as polygon A
+with inner ring B because there are only 2 areas A and B and no island.
 
 
 \subsection Topology_Example_3 Topology Example 3:
+
+This is handled correctly in GRASS: Areas A1, A2, and A3 can be filled differently.
+
+\verbatim
++---------------------+
+|  A1                 |
++   +------+------+   |
+|   |  A2  |  A3  |   |
++   +------+------+   |
+|          I1         |
++---------------------+
+\endverbatim
+
+In GRASS, whenever an 'inner' ring does not touch the boundary of an outside area,
+also not in one point, it is an 'inner' ring (Isle). The areas A2 and A3 form a
+single Isle I1 located within area A1. The size of Isle I1 is substracted from
+the size of Area A1 when calculating the size of Area A1. Any centroids falling
+into Isle I1 are excluded when searching for a centroid that can be attached to
+Area A1. A1 above can be exported from GRASS as polygon A1 with inner ring I1.
+
+
+\subsection Topology_Example_4 Topology Example 4:
 
 v.in.ogr/v.clean can identify dangles and change the type from boundary
 to line (in TIGER data for example). 
