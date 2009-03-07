@@ -12,6 +12,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <grass/gis.h>
@@ -54,11 +55,14 @@ int G__make_mapset_element(const char *p_element)
     while (1) {
 	if (*element == '/' || *element == 0) {
 	    *p = 0;
-	    if (access(path, 0) != 0)
-		G_mkdir(path);
-	    if (access(path, 0) != 0)
-		G_fatal_error(_("Unable to make mapset element %s (%s)"),
-			      p_element, path);
+	    if (access(path, 0) != 0) { /* directory not yet created */
+		if (G_mkdir(path) != 0)
+		    G_fatal_error(_("Unable to make mapset element %s (%s): %s"),
+				  p_element, path, strerror(errno));
+	    }
+	    if (access(path, 0) != 0)  /* directory not accessible */
+		G_fatal_error(_("Unable to make mapset element %s (%s): %s"),
+			      p_element, path, strerror(errno));
 	    if (*element == 0)
 		return 1;
 	}
