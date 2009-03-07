@@ -180,7 +180,7 @@ int Vedit_snap_lines(struct Map_info *Map, struct Map_info **BgMap,
 		     int to_vertex)
 {
     int i, line, type;
-    int nlines_modified;
+    int nlines_modified = 0;
 
     struct line_pnts *Points;
     struct line_cats *Cats;
