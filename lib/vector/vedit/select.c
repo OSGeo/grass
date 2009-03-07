@@ -139,6 +139,12 @@ int select_by_query(struct Map_info *Map, int line, int type, double thresh,
 {
     int ltype;
     double length;
+    int i, cat_curr;
+    int node1, node2, node;	/* nodes */
+    int nnode1, nnode2;	/* number of line in node */
+    double nx, ny, nz;	/* node coordinates */
+    struct ilist *exclude, *found;	/* line id of nearest lines */
+    struct line_cats *Cats_curr;
 
     if (!Vect_line_alive(Map, line))
 	return -1;
@@ -171,13 +177,6 @@ int select_by_query(struct Map_info *Map, int line, int type, double thresh,
 	if (!(type & GV_LINES))
 	    return -1;
 	/* check if line is dangle */
-
-	int i, cat_curr;
-	int node1, node2, node;	/* nodes */
-	int nnode1, nnode2;	/* number of line in node */
-	double nx, ny, nz;	/* node coordinates */
-	struct ilist *exclude, *found;	/* line id of nearest lines */
-	struct line_cats *Cats_curr;
 
 	Vect_get_line_nodes(Map, line, &node1, &node2);
 
