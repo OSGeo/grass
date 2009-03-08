@@ -34,16 +34,10 @@ public:
 	void SetIdBounds(int, wxRect&);
 	void DrawLine(const wxPoint&, const wxPoint&);
 	%extend {
-		void DrawToDC(wxBufferedPaintDC *dc) {
+		void DrawToDC(void *dc) {
 			self->DrawToDC((wxDC *) dc);
 		}
-		void DrawToDC(wxGCDC *dc) {
-			self->DrawToDC((wxDC *) dc);
-		}
-		void DrawToDCClipped(wxBufferedPaintDC *dc, const wxRect& rect) {
-			self->DrawToDCClipped((wxDC *) dc, rect);
-		}
-		void DrawToDCClipped(wxGCDC *dc, const wxRect& rect) {
+		void DrawToDCClipped(void *dc, const wxRect& rect) {
 			self->DrawToDCClipped((wxDC *) dc, rect);
 		}
 		wxRect GetIdBounds(int id) {
