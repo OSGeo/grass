@@ -15,6 +15,12 @@
 #include "driver.h"
 #include "digit.h"
 
+#ifdef _WIN32
+#ifndef _CPPRTTI
+#error "compile with /GR!"
+#endif
+#endif
+
 /**
    \brief Initialize digit interface used by SWIG
 

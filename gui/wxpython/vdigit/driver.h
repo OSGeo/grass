@@ -24,6 +24,7 @@
 
 #include <Python.h>
 #include "pseudodc.h"
+#include <wx/gdicmn.h>
 
 extern "C" {
 #include <grass/gis.h>

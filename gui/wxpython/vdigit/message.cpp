@@ -91,8 +91,7 @@ void DisplayDriver::DeadLineMsg(int line)
 void DisplayDriver::BackgroundMapMsg(const char *bgmap)
 {
     wxString msg;
-    msg.Printf(_("Unable to open background vector map <%s>. "
-		 "Please check digitizer settings."),
+    msg.Printf(_("Unable to open background vector map <%s>. Please check digitizer settings."),
 	       wxString (bgmap, wxConvUTF8).c_str());
     wxMessageDialog dlg(parentWin, msg,
 			msgCaption, wxOK | wxICON_ERROR | wxCENTRE);
