@@ -1010,17 +1010,23 @@ class cmdPanel(wx.Panel):
                 text_style = wx.FONTWEIGHT_BOLD
 
             # title sizer (description, name, type)
-            title_sizer = wx.BoxSizer(wx.HORIZONTAL)
-            title_txt = wx.StaticText(parent=which_panel)
+            if (len(p.get('values', []) ) > 0) and \
+                    p.get('multiple', 'no') == 'yes' and \
+                    p.get('gisprompt',False) == False and \
+                    p.get('type', '') == 'string':
+                title_txt = wx.StaticBox (parent=which_panel, id=wx.ID_ANY)
+            else:
+                title_sizer = wx.BoxSizer(wx.HORIZONTAL)
+                title_txt = wx.StaticText(parent=which_panel)
+                rtitle_txt = wx.StaticText(parent=which_panel,
+                                           label = '(' + p['name'] + ', ' + p['type'] + ')')
+                title_sizer.Add(item=title_txt, proportion=1,
+                                flag=wx.LEFT | wx.TOP | wx.EXPAND, border=5)
+                title_sizer.Add(item=rtitle_txt, proportion=0,
+                                flag=wx.ALIGN_RIGHT | wx.RIGHT | wx.TOP, border=5)
+                which_sizer.Add(item=title_sizer, proportion=0,
+                                flag=wx.EXPAND)
             self.label_id.append(title_txt.GetId())
-            rtitle_txt = wx.StaticText(parent=which_panel,
-                                 label = '(' + p['name'] + ', ' + p['type'] + ')')
-            title_sizer.Add(item=title_txt, proportion=1,
-                            flag=wx.LEFT | wx.TOP | wx.EXPAND, border=5)
-            title_sizer.Add(item=rtitle_txt, proportion=0,
-                            flag=wx.ALIGN_RIGHT | wx.RIGHT | wx.TOP, border=5)
-            which_sizer.Add(item=title_sizer, proportion=0,
-                            flag=wx.EXPAND)
 
             # title expansion
             if p.get('multiple','no') == 'yes' and len( p.get('values','') ) == 0:
