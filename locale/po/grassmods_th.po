@@ -8822,8 +8822,8 @@ msgid "Output partial derivatives instead of topographic parameters"
 msgstr "ออกผลลัพธ์ partial derivatives แทน ตัวแปร topographic"
 
 #: ../vector/v.surf.rst/main.c:174 ../vector/lidar/v.surf.bspline/main.c:147
-msgid "Field value. If set to 0, z coordinates are used. (3D vector only)"
-msgstr "ค่า Field. ถ้ากำหนดเป็น 0, จะใช้ค่าพิกัด z แทน. (เท่านั้น 3D vector)"
+msgid "If set to 0, z coordinates are used. (3D vector only)"
+msgstr "ถ้ากำหนดเป็น 0, จะใช้ค่าพิกัด z แทน. (เท่านั้น 3D vector)"
 
 #: ../vector/v.surf.rst/main.c:182
 msgid ""

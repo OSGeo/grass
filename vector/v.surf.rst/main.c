@@ -171,7 +171,7 @@ int main(int argc, char *argv[])
 
     parm.field = G_define_standard_option(G_OPT_V_FIELD);
     parm.field->description =
-	_("Field value. If set to 0, z coordinates are used. (3D vector only)");
+	_("If set to 0, z coordinates are used. (3D vector only)");
     parm.field->answer = "1";
 
     parm.zcol = G_define_option();
