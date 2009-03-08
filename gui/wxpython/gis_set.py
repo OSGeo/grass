@@ -229,7 +229,7 @@ class GRASSStartup(wx.Frame):
         select_sizer    = wx.FlexGridSizer(rows=2, cols=2, vgap=4, hgap=4)
         manage_boxsizer = wx.StaticBoxSizer(self.manage_box, wx.VERTICAL)
         manage_sizer    = wx.BoxSizer(wx.VERTICAL)
-        btns_sizer    = wx.BoxSizer(wx.HORIZONTAL)
+        btns_sizer      = wx.BoxSizer(wx.HORIZONTAL)
 
         # gis data directory
         dbase_sizer.Add(item=self.ldbase, proportion=0,
@@ -314,7 +314,8 @@ class GRASSStartup(wx.Frame):
                        border=5)
 
         # main sizer
-        sizer.Add(item=self.hbitmap, proportion=0,
+        sizer.Add(item=self.hbitmap,
+                  proportion=0,
                   flag=wx.ALIGN_CENTER_VERTICAL |
                   wx.ALIGN_CENTER_HORIZONTAL |
                   wx.ALL,
@@ -323,14 +324,12 @@ class GRASSStartup(wx.Frame):
                   proportion=0,
                   flag=wx.ALIGN_CENTER_VERTICAL |
                   wx.ALIGN_CENTER_HORIZONTAL |
-                  wx.EXPAND |
                   wx.BOTTOM,
                   border=1)
         sizer.Add(item=self.ltitle, # title
                   proportion=0,
                   flag=wx.ALIGN_CENTER_VERTICAL |
-                  wx.ALIGN_CENTER_HORIZONTAL |
-                  wx.EXPAND)
+                  wx.ALIGN_CENTER_HORIZONTAL)
         sizer.Add(item=dbase_sizer, proportion=0,
                   flag=wx.ALIGN_CENTER_HORIZONTAL |
                   wx.RIGHT | wx.LEFT,
