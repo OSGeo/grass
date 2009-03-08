@@ -1009,6 +1009,19 @@ class cmdPanel(wx.Panel):
             else:
                 text_style = wx.FONTWEIGHT_BOLD
 
+            # title sizer (description, name, type)
+            title_sizer = wx.BoxSizer(wx.HORIZONTAL)
+            title_txt = wx.StaticText(parent=which_panel)
+            self.label_id.append(title_txt.GetId())
+            rtitle_txt = wx.StaticText(parent=which_panel,
+                                 label = '(' + p['name'] + ', ' + p['type'] + ')')
+            title_sizer.Add(item=title_txt, proportion=1,
+                            flag=wx.LEFT | wx.TOP | wx.EXPAND, border=5)
+            title_sizer.Add(item=rtitle_txt, proportion=0,
+                            flag=wx.ALIGN_RIGHT | wx.RIGHT | wx.TOP, border=5)
+            which_sizer.Add(item=title_sizer, proportion=0,
+                            flag=wx.EXPAND)
+
             # title expansion
             if p.get('multiple','no') == 'yes' and len( p.get('values','') ) == 0:
                 title = _("[multiple]") + " " + title
@@ -1022,12 +1035,11 @@ class cmdPanel(wx.Panel):
                 if p.get('multiple', 'no') == 'yes' and \
                         p.get('gisprompt',False) == False and \
                         p.get('type', '') == 'string':
-                    txt = wx.StaticBox (parent=which_panel, id=0, label=" " + title + ": ")
-                    self.label_id.append(txt.GetId())
+                    title_txt.SetLabel(" " + title + ": ")
                     if len(valuelist) > 6:
-                        hSizer=wx.StaticBoxSizer ( box=txt, orient=wx.VERTICAL )
+                        hSizer=wx.StaticBoxSizer ( box=title_txt, orient=wx.VERTICAL )
                     else:
-                        hSizer=wx.StaticBoxSizer ( box=txt, orient=wx.HORIZONTAL )
+                        hSizer=wx.StaticBoxSizer ( box=title_txt, orient=wx.HORIZONTAL )
                     isEnabled = {}
                     # copy default values
                     if p['value'] == '':
@@ -1057,15 +1069,11 @@ class cmdPanel(wx.Panel):
                         
                     which_sizer.Add( item=hSizer, proportion=0,
                                      flag=wx.EXPAND | wx.TOP | wx.RIGHT | wx.LEFT, border=5 )
-                elif p.get('gisprompt',False) == False:
+                elif p.get('gisprompt', False) == False:
                     if len(valuelist) == 1: # -> textctrl
-                        txt = wx.StaticText(parent=which_panel,
-                                            label = "%s. %s %s" % (title, _('Valid range'),
-                                                                   str(valuelist[0]) + ':'))
-                        self.label_id.append(txt.GetId())
-                        which_sizer.Add(item=txt, proportion=0,
-                                        flag=wx.ADJUST_MINSIZE | wx.TOP | wx.RIGHT | wx.LEFT, border=5)
-
+                        title_txt.SetLabel("%s. %s %s" % (title, _('Valid range'),
+                                                          str(valuelist[0]) + ':'))
+                        
                         if p.get('type','') == 'integer' and \
                                 p.get('multiple','no') == 'no':
 
@@ -1081,7 +1089,7 @@ class cmdPanel(wx.Panel):
                             style = wx.BOTTOM | wx.LEFT
                         else:
                             txt2 = wx.TextCtrl(parent=which_panel, value = p.get('default',''))
-                            txt.SetName("TextCtrl")
+                            txt2.SetName("TextCtrl")
                             style = wx.EXPAND | wx.BOTTOM | wx.LEFT
                         
                         if p.get('value', '') != '':
@@ -1098,10 +1106,7 @@ class cmdPanel(wx.Panel):
                         txt2.Bind(wx.EVT_TEXT, self.OnSetValue)
                     else:
                         # list of values (combo)
-                        txt = wx.StaticText(parent=which_panel, label = title + ':' )
-                        self.label_id.append(txt.GetId())
-                        which_sizer.Add(item=txt, proportion=0,
-                                        flag=wx.ADJUST_MINSIZE | wx.TOP | wx.RIGHT | wx.LEFT, border=5)
+                        title_txt.SetLabel(title + ':')
                         cb = wx.ComboBox(parent=which_panel, id=wx.ID_ANY, value=p.get('default',''),
                                          size=globalvar.DIALOG_COMBOBOX_SIZE,
                                          choices=valuelist, style=wx.CB_DROPDOWN | wx.CB_READONLY)
@@ -1118,11 +1123,7 @@ class cmdPanel(wx.Panel):
                 and p.get('gisprompt',False) == False
                 and p.get('prompt','') != 'color'):
 
-                txt = wx.StaticText(parent=which_panel, label = title + ':' )
-                self.label_id.append(txt.GetId())
-                which_sizer.Add(item=txt, proportion=0,
-                                flag=wx.EXPAND | wx.RIGHT | wx.LEFT | wx.TOP, border=5)
-
+                title_txt.SetLabel(title + ':' )
                 if p.get('multiple','yes') == 'yes' or \
                         p.get('type', 'string') in ('string', 'float') or \
                         len(p.get('key_desc', [])) > 1:
@@ -1154,10 +1155,7 @@ class cmdPanel(wx.Panel):
             # element selection tree combobox (maps, icons, regions, etc.)
             #
             if p.get('gisprompt', False) == True:
-                txt = wx.StaticText(parent=which_panel, label = title + ':')
-                self.label_id.append(txt.GetId())
-                which_sizer.Add(item=txt, proportion=0,
-                                flag=wx.ADJUST_MINSIZE | wx.RIGHT | wx.LEFT | wx.TOP, border=5)
+                title_txt.SetLabel(title + ':')
                 # GIS element entry
                 if p.get('prompt','') not in ('color',
                                               'color_none',
@@ -1309,8 +1307,7 @@ class cmdPanel(wx.Panel):
                     # we have to target the button here
                     p['wxId'] = fbb.GetChildren()[1].GetId()
 
-            if txt is not None:
-                # txt.SetFont( wx.Font( fontsize, wx.FONTFAMILY_DEFAULT, wx.NORMAL, text_style, 0, ''))
+            if title_txt is not None:
                 # create tooltip if given
                 if len(p['values_desc']) > 0:
                     if tooltip:
@@ -1322,7 +1319,7 @@ class cmdPanel(wx.Panel):
                             tooltip += p['values'][i] + ': ' + p['values_desc'][i] + os.linesep
                     tooltip.strip(os.linesep)
                 if tooltip:
-                    txt.SetToolTipString(tooltip)
+                    title_txt.SetToolTipString(tooltip)
 
             if p == first_param:
                 if type(p['wxId']) == type(1):
