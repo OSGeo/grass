@@ -99,7 +99,8 @@ class NvizToolWindow(wx.Frame):
         self.SetSize(size)
 
     def OnPageChanged(self, event):
-        pass # do nothing, avoid focusing map display window
+        new = event.GetSelection()
+        self.notebook.ChangeSelection(new)
     
     def PostViewEvent(self, zExag=False):
         """Change view settings"""
