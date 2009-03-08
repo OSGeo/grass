@@ -149,6 +149,8 @@ class ProfileFrame(wx.Frame):
         self.ppoints = '' 
         # plot draw object
         self.profile = None 
+        # total transect length
+        self.transect_length = 0.0
 
         # title of window
         self.ptitle = _('Profile of')
@@ -273,6 +275,41 @@ class ProfileFrame(wx.Frame):
         self.ptitle = _('Profile of')
 
         #
+        # create list of coordinates for transect segment markers
+        #
+
+        if len(self.mapwin.polycoords) > 0:
+            for point in self.mapwin.polycoords:
+                # get value of raster cell at coordinate point
+                ret = gcmd.RunCommand('r.what',
+                                      parent = self,
+                                      read = True,
+                                      input = self.raster[0]['name'],
+                                      east_north = '%d,%d' % (point[0],point[1]))
+                
+                val = ret.splitlines()[0].split('|')[3]
+                
+                # calculate distance between coordinate points
+                if lasteast and lastnorth:
+                    dist = math.sqrt(math.pow((lasteast-point[0]),2) + math.pow((lastnorth-point[1]),2))
+                cumdist += dist
+                
+                #store total transect length
+                self.transect_length = cumdist
+
+                # build a list of distance,value pairs for each segment of transect
+                self.seglist.append((cumdist,val))
+                lasteast = point[0]
+                lastnorth = point[1]
+
+            # delete first and last segment point
+            try:
+                self.seglist.pop(0)
+                self.seglist.pop()
+            except:
+                pass
+
+        #
         # create datalist for each raster map
         #
         
@@ -314,37 +351,6 @@ class ProfileFrame(wx.Frame):
         else:
             self.ylabel = self.ylabel.rstrip(',')
 
-        #
-        # create list of coordinates for transect segment markers
-        #
-
-        if len(self.mapwin.polycoords) > 0:
-            for point in self.mapwin.polycoords:
-                # get value of raster cell at coordinate point
-                ret = gcmd.RunCommand('r.what',
-                                      parent = self,
-                                      read = True,
-                                      input = self.raster[0]['name'],
-                                      east_north = '%d,%d' % (point[0],point[1]))
-                
-                val = ret.splitlines()[0].split('|')[3]
-                
-                # calculate distance between coordinate points
-                if lasteast and lastnorth:
-                    dist = math.sqrt(math.pow((lasteast-point[0]),2) + math.pow((lastnorth-point[1]),2))
-                cumdist += dist
-
-                # build a list of distance,value pairs for each segment of transect
-                self.seglist.append((cumdist,val))
-                lasteast = point[0]
-                lastnorth = point[1]
-
-            # delete first and last segment point
-            try:
-                self.seglist.pop(0)
-                self.seglist.pop()
-            except:
-                pass
 
     def SetGraphStyle(self):
         """
@@ -412,11 +418,24 @@ class ProfileFrame(wx.Frame):
         """
         datalist = []
         import subprocess
-        
+                
+        # keep total number of transect points to 500 or less to avoid 
+        # freezing with large, high resolution maps
+        region = grass.region()
+        curr_res = min(float(region['nsres']),float(region['ewres']))
+        transect_rec = 0
+        print "transect length=",self.transect_length
+        print "current res=",curr_res
+        if self.transect_length / curr_res > 500:
+            transect_res = self.transect_length / 500
+        else: transect_res = curr_res
+        print "transect res=",transect_res
+                
         try:
             ret = gcmd.RunCommand("r.profile",
                              input=raster,
                              profile=coords,
+                             res=transect_res,
                              null="nan",
                              quiet=True,
                              read = True)
