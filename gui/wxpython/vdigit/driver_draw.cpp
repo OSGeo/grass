@@ -19,6 +19,7 @@
 
 #include "driver.h"
 
+
 /**
    \brief Draw content of the vector map to device
    
@@ -193,7 +194,7 @@ int DisplayDriver::DrawArea(const line_pnts* points)
     double x, y, z;
 
     // convert EN -> xy
-    wxPoint wxPoints[points->n_points];
+    wxPoint *wxPoints = new wxPoint[points->n_points];
 
     for (int i = 0; i < points->n_points; i++) {
 	Cell2Pixel(points->x[i], points->y[i], points->z[i],
@@ -203,6 +204,8 @@ int DisplayDriver::DrawArea(const line_pnts* points)
 
     // draw polygon
     dc->DrawPolygon(points->n_points, wxPoints);
+
+    delete [] wxPoints;
 
     return 1;
 }
@@ -352,13 +355,15 @@ int DisplayDriver::DrawLine(int line)
 		}
 	    }
 	    else {
-		wxPoint wxPoints[pointsScreen->GetCount()];
+		wxPoint *wxPoints = new wxPoint[pointsScreen->GetCount()];
 		for (size_t i = 0; i < pointsScreen->GetCount(); i++) {
 		    wxPoint *point_beg = (wxPoint *) pointsScreen->Item(i)->GetData();
 		    wxPoints[i] = *point_beg;
 		}
 		
 		pdc->DrawLines(pointsScreen->GetCount(), wxPoints);
+
+		delete [] wxPoints;
 
 		if (!IsSelected(line) && settings.direction.enabled) {
 		    DrawDirectionArrow();
@@ -679,13 +684,13 @@ int DisplayDriver::DrawArrow(double x0, double y0,
     double angle_symb;
 
     angle_symb = angle - M_PI / 2.;
-    x = x1 + size * std::cos(angle_symb);
-    y = y1 - size * std::sin(angle_symb);
+    x = x1 + size * cos(angle_symb);
+    y = y1 - size * sin(angle_symb);
     dc->DrawLine((wxCoord) x, (wxCoord) y, (wxCoord) x0, (wxCoord) y0);
     
     angle_symb = M_PI / 2. + angle;
-    x = x1 + size * std::cos(angle_symb);
-    y = y1 - size * std::sin(angle_symb);
+    x = x1 + size * cos(angle_symb);
+    y = y1 - size * sin(angle_symb);
     dc->DrawLine((wxCoord) x0, (wxCoord) y0, (wxCoord) x, (wxCoord) y);
 
     return 1;
