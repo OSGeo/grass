@@ -8984,10 +8984,9 @@ msgid "Output partial derivatives instead of topographic parameters"
 msgstr "Вывод частных производных вместо топографических параметров"
 
 #: ../vector/v.surf.rst/main.c:174 ../vector/lidar/v.surf.bspline/main.c:147
-msgid "Field value. If set to 0, z coordinates are used. (3D vector only)"
+msgid "If set to 0, z coordinates are used. (3D vector only)"
 msgstr ""
-"Значение поля. Если установлено в 0, используются координаты z (только 3D "
-"вектор)"
+"Если установлено в 0, используются координаты z (только 3D вектор)"
 
 #: ../vector/v.surf.rst/main.c:182
 msgid ""

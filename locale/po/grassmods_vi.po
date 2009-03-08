@@ -9314,9 +9314,9 @@ msgid "Output partial derivatives instead of topographic parameters"
 msgstr "Các đạo hàm riêng ở đầu ra thay vì các tham số địa hình"
 
 #: ../vector/v.surf.rst/main.c:174 ../vector/lidar/v.surf.bspline/main.c:147
-msgid "Field value. If set to 0, z coordinates are used. (3D vector only)"
+msgid "If set to 0, z coordinates are used. (3D vector only)"
 msgstr ""
-"Giá trị trường. Nếu là 0, các tọa độ z được dùng. (Chỉ áp dụng cho vector 3D)"
+"Nếu là 0, các tọa độ z được dùng. (Chỉ áp dụng cho vector 3D)"
 
 #: ../vector/v.surf.rst/main.c:182
 msgid ""

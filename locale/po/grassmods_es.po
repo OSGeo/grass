@@ -9073,10 +9073,9 @@ msgid "Output partial derivatives instead of topographic parameters"
 msgstr "Producir derivadas parciales en vez de parámetros topográficos"
 
 #: ../vector/v.surf.rst/main.c:174 ../vector/lidar/v.surf.bspline/main.c:147
-msgid "Field value. If set to 0, z coordinates are used. (3D vector only)"
+msgid "If set to 0, z coordinates are used. (3D vector only)"
 msgstr ""
-"Valor de campo. Si se establece a 0, se usarán las coordenadas Z (sólo "
-"vectoriales 3D)"
+"Si se establece a 0, se usarán las coordenadas Z (sólo vectoriales 3D)"
 
 #: ../vector/v.surf.rst/main.c:182
 msgid ""

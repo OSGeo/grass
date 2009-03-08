@@ -9706,10 +9706,9 @@ msgstr ""
 "Affiche les dérivées partielles à la place des paramètres topographiques"
 
 #: ../vector/v.surf.rst/main.c:174 ../vector/lidar/v.surf.bspline/main.c:149
-msgid "Field value. If set to 0, z coordinates are used. (3D vector only)"
+msgid "If set to 0, z coordinates are used. (3D vector only)"
 msgstr ""
-"Valeur du champ. Si fixée à 0, les coordonnées z sont utilisées (vecteur 3D "
-"seulement)"
+"Si fixée à 0, les coordonnées z sont utilisées (vecteur 3D seulement)"
 
 #: ../vector/v.surf.rst/main.c:182
 msgid ""
