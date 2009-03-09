@@ -31,13 +31,12 @@ import math
 import tempfile
 import copy
 
-import gui_modules.globalvar as globalvar
+import globalvar
 if not os.getenv("GRASS_WXBUNDLED"):
     globalvar.CheckForWx()
 import wx
 import wx.aui
 
-import globalvar
 try:
     import subprocess
 except:
