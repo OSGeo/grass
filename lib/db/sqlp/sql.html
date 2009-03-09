@@ -90,6 +90,13 @@ v.db.select mysites where="id IN ('P04', 'P05')"
 
 <p>Example of pattern matching:
 <div class="code"><pre>
+
+# field contains string:
+#  for DBF driver:
+v.extract rivers out=rivers_noce where="DES LIKE 'NOCE'"
+#  for SQLite driver:
+v.extract rivers out=rivers_noce where="DES LIKE '%NOCE%'"
+
 # match exactly number of characters (here: 2), does not work for DBF driver:
 v.db.select mysites where="id LIKE 'P__'"
 
