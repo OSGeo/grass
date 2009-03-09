@@ -31,7 +31,8 @@ import platform
 import gettext
 
 from gui_modules import globalvar
-globalvar.CheckForWx()
+if not os.getenv("GRASS_WXBUNDLED"):
+    globalvar.CheckForWx()
 
 import wx
 import wx.html
