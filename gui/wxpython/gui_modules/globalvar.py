@@ -51,7 +51,8 @@ def CheckForWx():
 
     check = False
 
-CheckForWx()
+if not os.getenv("GRASS_WXBUNDLED"):
+    CheckForWx()
 import wx
 import wx.lib.flatnotebook as FN
 
