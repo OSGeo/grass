@@ -126,6 +126,8 @@ fi # X11
 ### end X11 block
 
 # set PYTHONPATH for GUI when bundling wxpython
+GRASS_WXBUNDLED=
+export GRASS_WXBUNDLED
 if [ -d "$GISBASE/etc/wxpython" ] && [ "$GRASS_WXBUNDLED" = "1" ] ; then
 if [ "$PYTHONPATH" ] ; then
 	PYTHONPATH="$GISBASE/etc/wxpython:$PYTHONPATH"
