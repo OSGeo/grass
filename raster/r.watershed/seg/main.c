@@ -8,8 +8,8 @@
  *               Brad Douglas <rez touchofmadness.com>, 
  *               Hamish Bowman <hamish_b yahoo.com>,
  *               Markus Metz <markus.metz.giswork gmail.com>
- * PURPOSE:      Watershed determination using the GRASS segmentation lib
- * COPYRIGHT:    (C) 1999-2008 by the GRASS Development Team
+ * PURPOSE:      Hydrological analysis using the GRASS segmentation lib
+ * COPYRIGHT:    (C) 1999-2009 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -25,7 +25,7 @@
 
 struct Cell_head window;
 
-int mfd, c_fac;
+int mfd, c_fac, abs_acc, ele_scale;
 SSEG heap_index;
 int heap_size;
 int first_astar, first_cum, nxt_avail_pt, total_cells, do_points;

@@ -40,7 +40,7 @@ POINT {
 
 extern struct Cell_head window;
 
-extern int mfd, c_fac;
+extern int mfd, c_fac, abs_acc, ele_scale;
 extern int *heap_index, heap_size;
 extern int first_astar, first_cum, nxt_avail_pt, total_cells, do_points;
 extern SHORT nrows, ncols;
@@ -53,7 +53,6 @@ extern RAMSEG slp_seg, s_l_seg, s_g_seg, l_s_seg;
 extern POINT *astar_pts;
 extern CELL *dis, *alt, *asp, *bas, *haf, *r_h, *dep;
 extern DCELL *wat;
-extern CELL *ril_buf;
 extern int ril_fd;
 extern double *s_l, *s_g, *l_s;
 extern CELL one, zero;

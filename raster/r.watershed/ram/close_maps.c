@@ -30,18 +30,37 @@ int close_maps(void)
 	    G_warning(_("unable to open new accum map layer."));
 	}
 	else {
-	    for (r = 0; r < nrows; r++) {
-		G_set_d_null_value(dbuf, ncols);	/* reset row to all NULL */
-		for (c = 0; c < ncols; c++) {
-		    dvalue = wat[SEG_INDEX(wat_seg, r, c)];
-		    if (G_is_d_null_value(&dvalue) == 0 && dvalue) {
-			dbuf[c] = dvalue;
-			dvalue = ABS(dvalue);
-			sum += dvalue;
-			sum_sqr += dvalue * dvalue;
+	    if (abs_acc) {
+		G_warning("Writing out only positive flow accumulation values.");
+		G_warning("Cells with a likely underestimate for flow accumulation can no longer be identified.");
+		for (r = 0; r < nrows; r++) {
+		    G_set_d_null_value(dbuf, ncols);	/* reset row to all NULL */
+		    for (c = 0; c < ncols; c++) {
+			dvalue = wat[SEG_INDEX(wat_seg, r, c)];
+			if (G_is_d_null_value(&dvalue) == 0 && dvalue) {
+			    dvalue = ABS(dvalue);
+			    dbuf[c] = dvalue;
+			    sum += dvalue;
+			    sum_sqr += dvalue * dvalue;
+			}
 		    }
+		    G_put_raster_row(fd, dbuf, DCELL_TYPE);
 		}
-		G_put_raster_row(fd, dbuf, DCELL_TYPE);
+	    }
+	    else {
+		for (r = 0; r < nrows; r++) {
+		    G_set_d_null_value(dbuf, ncols);	/* reset row to all NULL */
+		    for (c = 0; c < ncols; c++) {
+			dvalue = wat[SEG_INDEX(wat_seg, r, c)];
+			if (G_is_d_null_value(&dvalue) == 0 && dvalue) {
+			    dbuf[c] = dvalue;
+			    dvalue = ABS(dvalue);
+			    sum += dvalue;
+			    sum_sqr += dvalue * dvalue;
+			}
+		    }
+		    G_put_raster_row(fd, dbuf, DCELL_TYPE);
+		}
 	    }
 	    if (G_close_cell(fd) < 0)
 		G_warning(_("Close failed."));

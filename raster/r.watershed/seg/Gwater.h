@@ -43,7 +43,7 @@ HEAP {
 
 extern struct Cell_head window;
 
-extern int mfd, c_fac;
+extern int mfd, c_fac, abs_acc, ele_scale;
 extern SSEG heap_index;
 extern int heap_size;
 extern int first_astar, first_cum, nxt_avail_pt, total_cells, do_points;

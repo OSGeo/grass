@@ -7,8 +7,8 @@
  *               Brad Douglas <rez touchofmadness.com>,
  *               Hamish Bowman <hamish_b yahoo com>,
  *               Markus Metz <markus.metz.giswork gmail.com>
- * PURPOSE:      Watershed determination
- * COPYRIGHT:    (C) 1999-2008 by the GRASS Development Team
+ * PURPOSE:      Hydrological analysis
+ * COPYRIGHT:    (C) 1999-2009 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -24,7 +24,7 @@
 
 struct Cell_head window;
 
-int mfd, c_fac;
+int mfd, c_fac, abs_acc, ele_scale;
 int *heap_index, heap_size;
 int first_astar, first_cum, nxt_avail_pt, total_cells, do_points;
 SHORT nrows, ncols;
@@ -37,7 +37,6 @@ RAMSEG slp_seg, s_l_seg, s_g_seg, l_s_seg;
 POINT *astar_pts;
 CELL *dis, *alt, *asp, *bas, *haf, *r_h, *dep;
 DCELL *wat;
-CELL *ril_buf;
 int ril_fd;
 double *s_l, *s_g, *l_s;
 CELL one, zero;
