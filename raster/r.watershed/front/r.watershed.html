@@ -40,6 +40,13 @@ Stream and slope lengths are approximately the same as outputs from default
 surface flow (allows horizontal, vertical, and diagonal flow of water).
 This flag will also make the drainage basins look more homogeneous.
 
+<dt><em>-a</em> 
+
+<dd>Use positive flow accumulation even for likely underestimates. When this
+flag is not set, cells with a flow accumulation value that is likely to be
+an underestimate are converted to the negative. See below for a detailed
+description of flow accumulation output.
+
 <dt><em>memory</em> 
 
 <dd>Maximum amount of memory in MB to be used with -m set. More memory 
@@ -151,14 +158,6 @@ corresponding to the values in basin.  The left-hand side
 cells of the watershed basin are given odd values which are one less
 than the value of the watershed basin.
 
-<dt><em>visual</em> 
-
-<dd>Output map: useful for visual display of results.
-Surface runoff accumulation with the values
-modified to provide for easy display.  All negative accumulation values
-are changed to zero.  All positive values above the basin threshold
-are given the value of the <em>threshold</em> parameter.
-
 <dt><em>length_slope</em> 
 
 <dd>Output map: slope length and steepness (LS) factor for the Revised 
@@ -212,14 +211,13 @@ single flow direction (SFD, D8) and multiple flow direction (MFD). With
 MFD, water flow is distributed to all neighbouring cells with lower 
 elevation, using slope towards neighbouring cells as a weighing factor 
 for proportional distribution. The A<sup>T</sup> least-cost path is 
-always included. As a result, depressions and obstacles are overflown 
+always included. As a result, depressions and obstacles are traversed 
 with a gracefull flow convergence before the overflow. The convergence 
 factor causes flow accumulation to converge more strongly with higher 
 values. The supported range is 1 to 10, recommended is a convergence 
 factor of 5 (Holmgren, 1994). If many small sliver basins are created 
 with MFD, setting the convergence factor to a higher value can reduce 
 the amount of small sliver basins.
-<br>See example below with the North Carolina dataset for using MFD mode.
 
 <h4>In-memory mode and disk swap mode</h4>
 There are two versions of this program: <em>ram</em> and <em>seg</em>.
@@ -264,17 +262,6 @@ which <em>r.watershed</em> will be run, <em>r.watershed</em> should be run
 using the values from the <em>neighborhood</em> output map layer that
 represents the minimum elevation within the region of the coarser cell.
 
-<h4>High-resolution elevation maps with floating point values</h4>
-To get better results with high resolution elevation maps with 
-floating point values, it may be necessary to multiply the original map 
-with e.g. 100 to change elevation units from meters to cm, because 
-<em>r.watershed</em> reads input elevation maps as integer. This allows 
-control over how much detail is required to obtain useful results with a 
-given dataset and region setting. Remember to adjust any <em>slope length 
-and steepness (LS) factor</em> or <em>slope steepness (S) factor</em> 
-output accordingly. See example below for using <em>r.mapcalc</em> to 
-convert elevation from meter to millimeter.
-
 <h4>Basin threshold</h4>
 The minimum size of drainage basins, defined by the <em>threshold</em>
 parameter, is only relevant for those watersheds with a single stream
@@ -306,6 +293,16 @@ Zero (0) and negative values will be treated as elevation data (not no_data).
 
 <h4>Further processing of output layers</h4>
 <p>
+Problem areas, i.e. those parts of a basin with a likely underestimate of
+flow accumulation, can be easily identified with e.g.
+<div class="code"><pre>
+  r.mapcalc "problems = if(flow_acc < 0, basin, null())"
+</pre></div>
+If the region of interest contains such problem areas, and this is not
+desired, the computational region must be expanded until the catchment
+area for the region of interest is completely included.
+
+<p>
 To isolate an individual river network using the output of this module,
 a number of approaches may be considered.
 <ol>
@@ -318,6 +315,11 @@ a number of approaches may be considered.
   starting point.
 </ol>
 
+All individual river networks in the stream segments output can be
+identified through their ultimate outlet points. These points are all
+cells in the stream segments output with negative drainage direction.
+These points can be used as start points for <em>r.water.outlet</em> or
+<em>v.net.iso</em>.
 
 <p>
 To create <i>river mile</i> segmentation from a vectorized streams map,
@@ -349,7 +351,7 @@ catchment ID as the vector category number.
 <br>
 
 <p>
-Set a nice color table for the accumulation map:
+Set a different color table for the accumulation map:
 <div class="code"><pre>
   MAP=rwater.accum
   r.watershed elev=elevation.dem accum=$MAP
@@ -380,7 +382,7 @@ Create a more detailed stream map using the accumulation map and convert
 it to a vector output map. The accumulation cut-off, and therefore fractal
 dimension, is arbitrary; in this example we use the map's mean number of
 upstream catchment cells (calculated in the above example by <em>r.univar</em>)
-as the cut-off value.
+as the cut-off value. This only works with SFD, not with MFD.
 <div class="code"><pre>
   r.watershed elev=elevation.dem accum=rwater.accum
 
@@ -423,18 +425,6 @@ Display output in a nice way
   d.vect rwater_course color=orange
 </pre></div>
 <br>
-
-<i>This example uses the North Carolina sample dataset.</i>
-<p>
-Using MFD mode on a LIDAR elevation dataset:
-<br>Convert elevation values of elev_lid972_1m from meter to millimeter 
-then compare MFD mode with default medium flow convergence to SFD mode.
-<div class="code"><pre>
-  r.mapcalc "elev_lid972_1m.1mm = round(elev_lid972_1m * 1000.0)"
-  r.watershed elevation=elev_lid972_1m.1mm accumulation=elev_lid972_1m.1mm.acc drainage=elev_lid972_1m.1mm.dir convergence=5
-  r.watershed -s elevation=elev_lid972_1m.1mm accumulation=elev_lid972_1m.1mm.acc.sfd drainage=elev_lid972_1m.1mm.dir.sfd
-</pre></div>
-
 
 <a name="references"></a>
 <h2>REFERENCES</h2>
@@ -496,7 +486,7 @@ Food Production In Arid Zones</b> (Tucson, AZ, 12-16 Oct. 1987).
 Original version:
 Charles Ehlschlaeger, U.S. Army Construction Engineering Research Laboratory
 <br>
-Faster sorting algorithm:
+Faster sorting algorithm and MFD support:
 Markus Metz &lt;markus.metz.giswork at gmail.com&gt;
 
 <p>

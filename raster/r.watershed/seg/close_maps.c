@@ -17,24 +17,50 @@ int close_maps(void)
     dseg_close(&slp);
     cseg_close(&alt);
     if (wat_flag) {
-	dseg_write_cellfile(&wat, wat_name);
-
-	/* get standard deviation */
-	fd = G_open_cell_old(wat_name, "");
-	if (fd < 0) {
-	    G_fatal_error(_("unable to open flow accumulation map layer"));
-	}
-
 	sum = sum_sqr = stddev = 0.0;
 	dbuf = G_allocate_d_raster_buf();
-	for (r = 0; r < nrows; r++) {
-	    G_get_d_raster_row(fd, dbuf, r);
-	    for (c = 0; c < ncols; c++) {
-		dvalue = dbuf[c];
-		if (G_is_d_null_value(&dvalue) == 0 && dvalue) {
-		    dvalue = ABS(dvalue);
-		    sum += dvalue;
-		    sum_sqr += dvalue * dvalue;
+	if (abs_acc) {
+	    G_warning("Writing out only positive flow accumulation values.");
+	    G_warning("Cells with a likely underestimate for flow accumulation can no longer be identified.");
+
+	    fd = G_open_raster_new(wat_name, DCELL_TYPE);
+	    if (fd < 0) {
+		G_warning(_("unable to open new accum map layer."));
+	    }
+	    for (r = 0; r < nrows; r++) {
+		G_set_d_null_value(dbuf, ncols);	/* reset row to all NULL */
+		for (c = 0; c < ncols; c++) {
+		    dseg_get(&wat, &dvalue, r, c);
+		    if (G_is_d_null_value(&dvalue) == 0 && dvalue) {
+			dvalue = ABS(dvalue);
+			dbuf[c] = dvalue;
+			sum += dvalue;
+			sum_sqr += dvalue * dvalue;
+		    }
+		}
+		G_put_raster_row(fd, dbuf, DCELL_TYPE);
+	    }
+	    if (G_close_cell(fd) < 0)
+		G_warning(_("Close failed."));
+	}
+	else {
+	    dseg_write_cellfile(&wat, wat_name);
+
+	    /* get standard deviation */
+	    fd = G_open_cell_old(wat_name, "");
+	    if (fd < 0) {
+		G_fatal_error(_("unable to open flow accumulation map layer"));
+	    }
+
+	    for (r = 0; r < nrows; r++) {
+		G_get_d_raster_row(fd, dbuf, r);
+		for (c = 0; c < ncols; c++) {
+		    dvalue = dbuf[c];
+		    if (G_is_d_null_value(&dvalue) == 0 && dvalue) {
+			dvalue = ABS(dvalue);
+			sum += dvalue;
+			sum_sqr += dvalue * dvalue;
+		    }
 		}
 	    }
 	}

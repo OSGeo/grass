@@ -6,8 +6,8 @@
  *               Brad Douglas <rez touchofmadness.com>,
  *               Hamish Bowman <hamish_b yahoo.com>
  *               Markus Metz <markus.metz.giswork gmail.com>
- * PURPOSE:      Watershed determination
- * COPYRIGHT:    (C) 1999-2008 by the GRASS Development Team
+ * PURPOSE:      Hydrological analysis
+ * COPYRIGHT:    (C) 1999-2009 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -38,7 +38,6 @@ int main(int argc, char *argv[])
     struct Option *opt10;
     struct Option *opt11;
     struct Option *opt12;
-    struct Option *opt13;
     struct Option *opt14;
     struct Option *opt15;
     struct Option *opt16;
@@ -46,6 +45,7 @@ int main(int argc, char *argv[])
     struct Flag *flag_sfd;
     struct Flag *flag_flow;
     struct Flag *flag_seg;
+    struct Flag *flag_abs;
     struct GModule *module;
 
     G_gisinit(argv[0]);
@@ -103,16 +103,14 @@ int main(int argc, char *argv[])
 	_("Input value: minimum size of exterior watershed basin");
     opt6->required = NO;
     opt6->type = TYPE_INTEGER;
-    opt6->gisprompt = "new,cell,raster";
     opt6->guisection = _("Input_options");
 
     opt7 = G_define_option();
     opt7->key = "max_slope_length";
     opt7->description =
-	_("Input value: maximum length of surface flow, for USLE");
+	_("Input value: maximum length of surface flow in map units, for USLE");
     opt7->required = NO;
     opt7->type = TYPE_DOUBLE;
-    opt7->gisprompt = "new,cell,raster";
     opt7->guisection = _("Input_options");
 
     opt8 = G_define_option();
@@ -158,6 +156,7 @@ int main(int argc, char *argv[])
     opt12->gisprompt = "new,cell,raster";
     opt12->guisection = _("Output_options");
 
+/* to be removed completely. visual display of results is now done with accumulation output
     opt13 = G_define_option();
     opt13->key = "visual";
     opt13->description =
@@ -166,7 +165,7 @@ int main(int argc, char *argv[])
     opt13->type = TYPE_STRING;
     opt13->gisprompt = "new,cell,raster";
     opt13->guisection = _("Output_options");
-
+*/
     opt14 = G_define_option();
     opt14->key = "length_slope";
     opt14->description =
@@ -213,8 +212,17 @@ int main(int argc, char *argv[])
 
     flag_seg = G_define_flag();
     flag_seg->key = 'm';
-    flag_seg->description =
+    flag_seg->label =
 	_("Enable disk swap memory option: Operation is slow");
+    flag_seg->description =
+	_("Only needed if memory requirements exceed available RAM; see manual on how to calculate memory requirements");
+
+    flag_abs = G_define_flag();
+    flag_abs->key = 'a';
+    flag_abs->label =
+	_("Use positive flow accumulation even for likely underestimates");
+    flag_abs->description =
+	_("See manual for a detailed description of flow accumulation output");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -228,7 +236,6 @@ int main(int argc, char *argv[])
 	&& (opt10->answer == NULL)
 	&& (opt11->answer == NULL)
 	&& (opt12->answer == NULL)
-	&& (opt13->answer == NULL)
 	&& (opt14->answer == NULL)
 	&& (opt15->answer == NULL)) {
 	G_fatal_error(_("Sorry, you must choose an output map."));
@@ -269,6 +276,9 @@ int main(int argc, char *argv[])
 
     if (flag_flow->answer)
 	strcat(command, " -4");
+
+    if (flag_abs->answer)
+	strcat(command, " -a");
 
     if (opt1->answer) {
 	strcat(command, " el=");
@@ -350,12 +360,13 @@ int main(int argc, char *argv[])
 	strcat(command, "\"");
     }
 
-    if (opt13->answer) {
+/*    if (opt13->answer) {
 	strcat(command, " di=");
 	strcat(command, "\"");
 	strcat(command, opt13->answer);
 	strcat(command, "\"");
     }
+*/
 
     if (opt14->answer) {
 	strcat(command, " LS=");
@@ -410,10 +421,10 @@ int main(int argc, char *argv[])
 	write_hist(opt12->answer,
 		   "Watershed half-basins", opt1->answer, flag_seg->answer, 
 		   flag_sfd->answer);
-    if (opt13->answer)
+    /* if (opt13->answer)
 	write_hist(opt13->answer,
 		   "Watershed visualization map (filtered accumulation map)",
-		   opt1->answer, flag_seg->answer, flag_sfd->answer);
+		   opt1->answer, flag_seg->answer, flag_sfd->answer); */
     if (opt14->answer)
 	write_hist(opt14->answer,
 		   "Watershed slope length and steepness (LS) factor",

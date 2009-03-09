@@ -92,6 +92,8 @@ int do_astar(void)
 	    }
 	}
     }
+    /* this was a lot of indentation, all in the sake of speed... */
+    /* improve code aesthetics? */
     G_percent(count, do_points, 3);	/* finish it */
     if (mfd == 0)
 	flag_destroy(worked);
@@ -134,9 +136,9 @@ int add_pt(SHORT r, SHORT c, CELL ele, CELL downe)
 /* new drop point routine for min heap */
 int drop_pt(void)
 {
-    int child, childr, parent;
+    register int child, childr, parent;
     CELL ele, eler;
-    int i;
+    register int i;
 
     if (heap_size == 1) {
 	heap_index[1] = -1;
@@ -152,17 +154,15 @@ int drop_pt(void)
 
     while ((child = GET_CHILD(parent)) <= heap_size) {
 	/* select child with lower ele, if equal, older child
-	 * older child is older startpoint for flow path, important
-	 * chances are good that the left child will be the older child,
-	 * but just to make sure we test */
+	 * older child is older startpoint for flow path, important */
 	ele =
 	    alt[SEG_INDEX
 		(alt_seg, astar_pts[heap_index[child]].r,
 		 astar_pts[heap_index[child]].c)];
 	if (child < heap_size) {
 	    childr = child + 1;
-	    i = 1;
-	    while (childr <= heap_size && i < 3) {
+	    i = child + 3; /* change the number, GET_CHILD() and GET_PARENT() to play with different d-ary heaps */
+	    while (childr <= heap_size && childr < i) {
 		eler =
 		    alt[SEG_INDEX
 			(alt_seg, astar_pts[heap_index[childr]].r,
@@ -170,15 +170,23 @@ int drop_pt(void)
 		if (eler < ele) {
 		    child = childr;
 		    ele = eler;
-		    /* make sure we get the oldest child */
 		}
+		/* make sure we get the oldest child */
 		else if (ele == eler &&
 			 heap_index[child] > heap_index[childr]) {
 		    child = childr;
 		}
 		childr++;
-		i++;
+		/* i++; */
 	    }
+	    /* break if childr > last entry? that saves sifting up again
+	     * OTOH, this is another comparison
+	     * we have a max heap height of 20: log(INT_MAX)/log(n children per node)
+	     * that would give us in the worst case 20*2 additional comparisons with 3 children
+	     * the last entry will never go far up again, less than half the way
+	     * so the additional comparisons for going all the way down
+	     * and then a bit up again are likely less than 20*2 */
+	    /* find the error in this reasoning */
 	}
 
 	/* move hole down */
@@ -210,7 +218,7 @@ int drop_pt(void)
 /* standard sift-up routine for d-ary min heap */
 int sift_up(int start, CELL ele)
 {
-    int parent, parentp, child, childp;
+    register int parent, parentp, child, childp;
     CELL elep;
 
     child = start;

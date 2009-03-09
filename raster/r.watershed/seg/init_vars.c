@@ -5,6 +5,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
+int ele_round(double);
 
 int init_vars(int argc, char *argv[])
 {
@@ -17,7 +18,11 @@ int init_vars(int argc, char *argv[])
     int max_bytes;
     CELL *buf, alt_value, asp_value, worked_value, block_value;
     DCELL wat_value;
+    DCELL dvalue;
     char MASK_flag;
+    void *elebuf, *ptr;
+    int ele_map_type;
+    size_t ele_size;
 
     G_gisinit(argv[0]);
     ele_flag = wat_flag = asp_flag = pit_flag = run_flag = ril_flag = 0;
@@ -33,6 +38,8 @@ int init_vars(int argc, char *argv[])
     sides = 8;
     mfd = 1;
     c_fac = 5;
+    abs_acc = 0;
+    ele_scale = 1;
     segs_mb = 300;
     for (r = 1; r < argc; r++) {
 	if (sscanf(argv[r], "el=%[^\n]", ele_name) == 1)
@@ -80,6 +87,8 @@ int init_vars(int argc, char *argv[])
 	else if (sscanf(argv[r], "conv=%d", &c_fac) == 1) ;
 	else if (strcmp(argv[r], "-s") == 0)
 	    mfd = 0;
+	else if (strcmp(argv[r], "-a") == 0)
+	    abs_acc = 1;
 	else
 	    usage(argv[0]);
     }
@@ -171,31 +180,63 @@ int init_vars(int argc, char *argv[])
 	cseg_read_cell(&r_h, ele_name, "");
     }
     
-    /* NULL cells in input elevation map */
+    /* read elevation input and mark NULL/masked cells */
     bseg_open(&in_list, seg_rows, seg_cols, num_open_segs);
     bseg_open(&worked, seg_rows, seg_cols, num_open_segs);
-    G_debug(1, "Checking for masked and NULL cells in input elevation <%s>.", ele_name);
-    MASK_flag = 0;
-    do_points = nrows * ncols;
+    G_verbose_message("Checking for masked and NULL cells in input elevation <%s>", ele_name);
+
+    /* open elevation input */
     fd = G_open_cell_old(ele_name, "");
     if (fd < 0) {
 	G_fatal_error(_("unable to open elevation map layer"));
     }
-    buf = G_allocate_cell_buf();
+
+    ele_map_type = G_get_raster_map_type(fd);
+    ele_size = G_raster_size(ele_map_type);
+    elebuf = G_allocate_raster_buf(ele_map_type);
+
+    if (ele_map_type == FCELL_TYPE || ele_map_type == DCELL_TYPE)
+	ele_scale = 1000; 	/* should be enough to do the trick */
+
+    /* read elevation input and mark NULL/masked cells */
+    MASK_flag = 0;
+    do_points = nrows * ncols;
     for (r = 0; r < nrows; r++) {
-	G_get_c_raster_row(fd, buf, r);
+	G_get_raster_row(fd, elebuf, r, ele_map_type);
+	ptr = elebuf;
 	for (c = 0; c < ncols; c++) {
+
 	    /* check for masked and NULL cells */
-	    alt_value = buf[c];
-	    if (G_is_c_null_value(&alt_value)) {
+	    if (G_is_null_value(ptr, ele_map_type)) {
 		bseg_put(&worked, &one, r, c);
 		bseg_put(&in_list, &one, r, c);
+		G_set_c_null_value(&alt_value, 1);
 		do_points--;
 	    }
+	    else {
+		if (ele_map_type == CELL_TYPE) {
+		    alt_value = *((CELL *)ptr);
+		}
+		else if (ele_map_type == FCELL_TYPE) {
+		    dvalue = *((FCELL *)ptr);
+		    dvalue *= ele_scale;
+		    alt_value = ele_round(dvalue);
+		}
+		else if (ele_map_type == DCELL_TYPE) {
+		    dvalue = *((DCELL *)ptr);
+		    dvalue *= ele_scale;
+		    alt_value = ele_round(dvalue);
+		}
+	    }
+	    cseg_put(&alt, &alt_value, r, c);
+	    if (er_flag) {
+		cseg_put(&r_h, &alt_value, r, c);
+	    }
+	    ptr = G_incr_void_ptr(ptr, ele_size);
 	}
     }
     G_close_cell(fd);
-    G_free(buf);
+    G_free(elebuf);
     if (do_points < nrows * ncols)
 	MASK_flag = 1;
     
@@ -514,4 +555,18 @@ int init_vars(int argc, char *argv[])
     G_percent(r, nrows, 1);	/* finish it */
 
     return 0;
+}
+
+int ele_round(double x)
+{
+    int n;
+
+    if (x >= 0.0)
+	n = x + .5;
+    else {
+	n = -x + .5;
+	n = -n;
+    }
+
+    return n;
 }

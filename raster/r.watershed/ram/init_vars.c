@@ -4,12 +4,16 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
+int ele_round(double);
 
 int init_vars(int argc, char *argv[])
 {
     SHORT r, c;
     CELL *buf, alt_value, wat_value, asp_value, block_value;
-    int fd, index;
+    DCELL dvalue;
+    void *elebuf, *ptr;
+    int fd, index, ele_map_type;
+    size_t ele_size;
     char MASK_flag;
 
     G_gisinit(argv[0]);
@@ -26,6 +30,8 @@ int init_vars(int argc, char *argv[])
     sides = 8;
     mfd = 1;
     c_fac = 5;
+    abs_acc = 0;
+    ele_scale = 1;
     for (r = 1; r < argc; r++) {
 	if (sscanf(argv[r], "el=%[^\n]", ele_name) == 1)
 	    ele_flag++;
@@ -71,6 +77,8 @@ int init_vars(int argc, char *argv[])
 	else if (sscanf(argv[r], "conv=%d", &c_fac) == 1) ;
 	else if (strcmp(argv[r], "-s") == 0)
 	    mfd = 0;
+	else if (strcmp(argv[r], "-a") == 0)
+	    abs_acc = 1;
 	else
 	    usage(argv[0]);
     }
@@ -118,7 +126,7 @@ int init_vars(int argc, char *argv[])
 		window.ns_res * window.ns_res);
     if (sides == 4)
 	diag *= 0.5;
-    buf = G_allocate_cell_buf();
+
     alt =
 	(CELL *) G_malloc(sizeof(CELL) * size_array(&alt_seg, nrows, ncols));
     if (er_flag) {
@@ -126,45 +134,79 @@ int init_vars(int argc, char *argv[])
 	    (CELL *) G_malloc(sizeof(CELL) * size_array(&r_h_seg, nrows, ncols));
     }
 
+    swale = flag_create(nrows, ncols);
+    in_list = flag_create(nrows, ncols);
+    worked = flag_create(nrows, ncols);
+
+    /* open elevation input */
     fd = G_open_cell_old(ele_name, "");
     if (fd < 0) {
 	G_fatal_error(_("unable to open elevation map layer"));
     }
 
-    swale = flag_create(nrows, ncols);
-    in_list = flag_create(nrows, ncols);
-    worked = flag_create(nrows, ncols);
+    ele_map_type = G_get_raster_map_type(fd);
+    ele_size = G_raster_size(ele_map_type);
+    elebuf = G_allocate_raster_buf(ele_map_type);
 
+    if (ele_map_type == FCELL_TYPE || ele_map_type == DCELL_TYPE)
+	ele_scale = 1000; 	/* should be enough to do the trick */
+
+    /* read elevation input and mark NULL/masked cells */
     MASK_flag = 0;
     do_points = nrows * ncols;
     for (r = 0; r < nrows; r++) {
-	G_get_c_raster_row(fd, buf, r);
+	G_get_raster_row(fd, elebuf, r, ele_map_type);
+	ptr = elebuf;
 	for (c = 0; c < ncols; c++) {
 	    index = SEG_INDEX(alt_seg, r, c);
-	    alt_value = alt[index] = buf[c];
-	    if (er_flag) {
-		r_h[index] = buf[c];
-	    }
+
 	    /* all flags need to be manually set to zero */
 	    flag_unset(swale, r, c);
 	    flag_unset(in_list, r, c);
 	    flag_unset(worked, r, c);
-	    /* check for masked and NULL cells here */
-	    if (G_is_c_null_value(&alt_value)) {
+
+	    /* check for masked and NULL cells */
+	    if (G_is_null_value(ptr, ele_map_type)) {
 		FLAG_SET(worked, r, c);
 		FLAG_SET(in_list, r, c);
+		G_set_c_null_value(&alt_value, 1);
 		do_points--;
 	    }
+	    else {
+		if (ele_map_type == CELL_TYPE) {
+		    alt_value = *((CELL *)ptr);
+		}
+		else if (ele_map_type == FCELL_TYPE) {
+		    dvalue = *((FCELL *)ptr);
+		    dvalue *= ele_scale;
+		    alt_value = ele_round(dvalue);
+		}
+		else if (ele_map_type == DCELL_TYPE) {
+		    dvalue = *((DCELL *)ptr);
+		    dvalue *= ele_scale;
+		    alt_value = ele_round(dvalue);
+		}
+	    }
+	    alt[index] = alt_value;
+	    if (er_flag) {
+		r_h[index] = alt_value;
+	    }
+	    ptr = G_incr_void_ptr(ptr, ele_size);
 	}
     }
     G_close_cell(fd);
+    G_free(elebuf);
     if (do_points < nrows * ncols)
 	MASK_flag = 1;
+
+    /* initialize flow accumulation ... */
     wat =
 	(DCELL *) G_malloc(sizeof(DCELL) *
 			   size_array(&wat_seg, nrows, ncols));
 
+    buf = G_allocate_cell_buf();
     if (run_flag) {
+	/* ... with input map flow: amount of overland flow per cell */
 	fd = G_open_cell_old(run_name, "");
 	if (fd < 0) {
 	    G_fatal_error(_("unable to open runoff map layer"));
@@ -186,6 +228,7 @@ int init_vars(int argc, char *argv[])
 	G_close_cell(fd);
     }
     else {
+	/* ... with 1.0 */
 	for (r = 0; r < nrows; r++) {
 	    for (c = 0; c < ncols; c++) {
 		if (MASK_flag) {
@@ -234,6 +277,8 @@ int init_vars(int argc, char *argv[])
 	}
 	G_close_cell(fd);
     }
+    G_free(buf);
+
     if (ril_flag) {
 	ril_fd = G_open_cell_old(ril_name, "");
 	if (ril_fd < 0) {
@@ -409,4 +454,18 @@ int init_vars(int argc, char *argv[])
     G_percent(r, nrows, 1);	/* finish it */
 
     return 0;
+}
+
+int ele_round(double x)
+{
+    int n;
+
+    if (x >= 0.0)
+	n = x + .5;
+    else {
+	n = -x + .5;
+	n = -n;
+    }
+
+    return n;
 }

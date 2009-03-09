@@ -17,7 +17,7 @@ int sg_factor(void)
 	    cseg_get(&r_h, &hih_elev, r, c);
 	    dseg_get(&s_l, &length, r, c);
 	    cseg_get(&asp, &downer, r, c);
-	    height = hih_elev - low_elev;
+	    height = 1.0 * (hih_elev - low_elev) / ele_scale;
 	    if (length > max_length) {
 		height *= max_length / length;
 		length = max_length;
@@ -32,7 +32,6 @@ int sg_factor(void)
 		len_slp_equ(length, sin_theta, S, r, c);
 	    }
 	    if (sg_flag) {
-		S *= 100.0;
 		dseg_put(&s_g, &S, r, c);
 	    }
 	}
@@ -60,7 +59,7 @@ int len_slp_equ(double slope_length, double sin_theta, double S, int r, int c)
     /* rill_ratio equation from Steve Warren */
     rill_ratio *= .5 + .005 * rill + .0001 * rill * rill;
     s_l_exp = rill_ratio / (1 + rill_ratio);
-    LS = S * 100 * pow((slope_length / 72.6), s_l_exp);
+    LS = S * pow((slope_length / 72.6), s_l_exp);
     dseg_put(&l_s, &LS, r, c);
 
     return 0;
