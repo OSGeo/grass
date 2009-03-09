@@ -125,6 +125,16 @@ fi # X11
 
 ### end X11 block
 
+# set PYTHONPATH for GUI when bundling wxpython
+if [ -d "$GISBASE/etc/wxpython" ] && [ "$GRASS_WXBUNDLED" = "1" ] ; then
+if [ "$PYTHONPATH" ] ; then
+	PYTHONPATH="$GISBASE/etc/wxpython:$PYTHONPATH"
+else
+	PYTHONPATH="$GISBASE/etc/wxpython"
+fi
+export PYTHONPATH
+fi
+
 # if gisrc has text startup, switch back to Terminal (gotta duplicate some init.sh stuff)
 # eventually, when TclTk optional, can run appropriate apps per GUI here (ie X11)
 GISRCRC="$HOME/.grassrc7"
