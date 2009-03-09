@@ -52,7 +52,8 @@ gmpath = icons.__path__[0]
 sys.path.append(gmpath)
 
 import gui_modules.globalvar as globalvar
-globalvar.CheckForWx()
+if not os.getenv("GRASS_WXBUNDLED"):
+    globalvar.CheckForWx()
 
 import wx
 import wx.aui

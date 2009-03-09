@@ -32,7 +32,8 @@ import tempfile
 import copy
 
 import gui_modules.globalvar as globalvar
-globalvar.CheckForWx()
+if not os.getenv("GRASS_WXBUNDLED"):
+    globalvar.CheckForWx()
 import wx
 import wx.aui
 
