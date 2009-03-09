@@ -158,7 +158,7 @@ text
   <dt>GRASS_HTML_BROWSER</dt>
   <dd>[init.sh, wxgui]<br>
     defines name of HTML browser. For most platforms this should be
-    an executable in your PATH, or the full path to an executable.<br><br>
+    an executable in your PATH, or the full path to an executable.<br>
     Mac OS X runs applications differently from the CLI.
     Therefore, GRASS_HTML_BROWSER should be the application's signature,
     which is a domain-like name, just reversed, i.e. com.apple.Safari. To
@@ -233,9 +233,15 @@ text
   <dd>[wxGUI, Python SWIG]<br>
     set to override Python executable.</dd>
   
+  <dt>GRASS_WXBUNDLED</dt>
+  <dd>[wxGUI]<br>
+    set to tell wxGUI that a bundled wxPython will be used.<br>
+    When set, the wxGUI will not check the wxPython version, as this
+    function is incompatible with a bundled wxPython.  It is up to the
+    packager to make sure that a compatible wxPython version is bundled.</dd>
+  
   <dt>GRASS_XTERM</dt>
-  <dd>lib/init/grass-xterm-wrapper<br>
-    lib/init/grass-xterm-mac<br>
+  <dd>[lib/init/grass-xterm-wrapper, lib/init/grass-xterm-mac]<br>
     set to any value (e.g. rxvt, aterm, gnome-terminal, konsole) to
     substitute 'x-terminal-emulator' or 'xterm'. The Mac OS X app
     startup defaults to an internal '$GISBASE/etc/grass-xterm-mac',
