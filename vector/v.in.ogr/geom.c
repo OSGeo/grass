@@ -25,7 +25,6 @@
 #include "ogr_api.h"
 #include "global.h"
 
-int split_line(struct Map_info *Map, int otype, struct line_pnts *Points, struct line_cats *Cats);
 
 /* Add categories to centroids inside polygon */
 int
@@ -207,11 +206,7 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 	    otype = GV_BOUNDARY;
 	else
 	    otype = GV_LINE;
-
-	if (split_distance > 0 && otype == GV_BOUNDARY)
-	    split_line(Map, otype, Points, Cats);
-	else
-	    Vect_write_line(Map, otype, Points, Cats);
+	Vect_write_line(Map, otype, Points, Cats);
     }
 
     else if (eType == wkbPolygon) {
@@ -248,11 +243,7 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 	    otype = GV_LINE;
 	else
 	    otype = GV_BOUNDARY;
-
-	if (split_distance > 0 && otype == GV_BOUNDARY)
-	    split_line(Map, otype, Points, Cats);
-	else
-	    Vect_write_line(Map, otype, Points, Cats);
+	Vect_write_line(Map, otype, Points, BCats);
 
 	/* Isles */
 	IPoints =
@@ -283,11 +274,7 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 		    otype = GV_LINE;
 		else
 		    otype = GV_BOUNDARY;
-
-		if (split_distance > 0 && otype == GV_BOUNDARY)
-		    split_line(Map, otype, IPoints[i - 1], BCats);
-		else
-		    Vect_write_line(Map, otype, IPoints[i - 1], BCats);
+		Vect_write_line(Map, otype, IPoints[i - 1], BCats);
 	    }
 	}
 
@@ -359,37 +346,6 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
     else {
 	G_fatal_error(_("Unknown geometry type"));
     }
-
-    return 0;
-}
-
-int split_line(struct Map_info *Map, int otype, struct line_pnts *Points, struct line_cats *Cats)
-{
-    int i;
-    double dist = 0., dx, dy;
-    struct line_pnts *OutPoints;
-
-    OutPoints = Vect_new_line_struct();
-    Vect_reset_line(OutPoints);
-    i = 0;
-    Vect_append_point(OutPoints, Points->x[i], Points->y[i], Points->z[i]);
-
-    for (i = 1; i < Points->n_points; i++) {
-	dx = Points->x[i] - Points->x[i - 1];
-	dy = Points->y[i] - Points->y[i - 1];
-	dist += sqrt(dx * dx + dy * dy);
-	if (OutPoints->n_points > 1 && dist > split_distance) {
-	    Vect_write_line(Map, otype, OutPoints, Cats);
-	    Vect_reset_line(OutPoints);
-	    dist = sqrt(dx * dx + dy * dy);
-	    Vect_append_point(OutPoints, Points->x[i - 1], Points->y[i - 1], Points->z[i - 1]);
-	}
-	Vect_append_point(OutPoints, Points->x[i], Points->y[i], Points->z[i]);
-    }
-    Vect_write_line(Map, otype, OutPoints, Cats);
-
-    Vect_destroy_line_struct(OutPoints);
-    /* G_free(OutPoints); */
 
     return 0;
 }

@@ -25,7 +25,6 @@
 
 
 extern int n_polygons;
-extern double split_distance;
 
 /* centroid structure */
 typedef struct

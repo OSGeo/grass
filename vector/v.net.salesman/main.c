@@ -88,7 +88,6 @@ int main(int argc, char **argv)
     struct cat_list *Clist;
     struct line_cats *Cats;
     struct line_pnts *Points;
-    FILE *fp;
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
@@ -210,8 +209,6 @@ int main(int argc, char **argv)
     Vect_net_build_graph(&Map, type, afield, 0, afcol->answer, NULL, NULL,
 			 geo, 0);
 
-    fp = fopen("salesman_costs", "w+");
-
     /* Create sorted lists of costs */
     for (i = 0; i < ncities; i++) {
 	k = 0;
@@ -225,22 +222,17 @@ int main(int argc, char **argv)
 		G_fatal_error(_("Destination node [%d] is unreachable "
 				"from node [%d]"), cities[i], cities[j]);
 
-	    fprintf(fp, "%f\n", cost);
-
 	    costs[i][k].city = j;
 	    costs[i][k].cost = cost;
 	    k++;
 	}
 	qsort((void *)costs[i], k, sizeof(COST), cmp);
     }
-
-    fclose(fp);
-
     /* debug: print sorted */
     for (i = 0; i < ncities; i++) {
 	for (j = 0; j < ncities - 1; j++) {
 	    city = costs[i][j].city;
-	    G_debug(3, "%d -> %d = %f\n", cities[i], cities[city],
+	    G_debug(2, "%d -> %d = %f\n", cities[i], cities[city],
 		    costs[i][j].cost);
 	}
     }
