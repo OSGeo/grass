@@ -427,8 +427,6 @@ class ProjectionsPage(TitledPage):
         except:
             self.proj = self.projdesc = ''
 
-        self.tproj.SetValue(self.proj)
-
         event.Skip()
 
     def OnItemSelected(self, event):
@@ -674,16 +672,16 @@ class ProjTypePage(TitledPage):
                        border=5, pos=(4, 1), span=(1, 2))
         self.sizer.Add(item=self.label_utm,
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
-                       border=5, pos=(5, 1))
+                       border=5, pos=(5, 1), span=(1, 1))
         self.sizer.Add(item=self.text_utm,
                        flag=wx.ALIGN_LEFT | wx.ALL, border=5,
-                       pos=(5, 2))
+                       pos=(5, 2), span=(1, 1))
         self.sizer.Add(item=self.label_hemisphere,
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
-                       border=5, pos=(6, 1))
+                       border=5, pos=(6, 1), span=(1, 1))
         self.sizer.Add(item=self.hemisphere,
                        flag=wx.ALIGN_LEFT|wx.ALL,
-                       border=5, pos=(6, 2))
+                       border=5, pos=(6, 2), span=(1, 1))
 
         self.title_utm.Hide()
         self.text_utm.Hide()
@@ -2617,7 +2615,7 @@ class SelectDatumDialog(wx.Dialog):
         bodySizer = wx.StaticBoxSizer(bodyBox, wx.HORIZONTAL)
         gridSizer = wx.GridBagSizer(vgap=5, hgap=5)
         
-        gridSizer.Add(item=wx.StaticText(parent=panel, label=_("Datums:")),
+        gridSizer.Add(item=wx.StaticText(parent=panel, label=_("Datums (select to see description):")),
                       flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 0))
 
         items = self.datums.keys()
@@ -2625,14 +2623,16 @@ class SelectDatumDialog(wx.Dialog):
         self.cdatums = wx.ComboBox(parent=panel, id=wx.ID_ANY,
                               style=wx.CB_SIMPLE | wx.CB_READONLY,
                               choices=items,
-                              size=(300,-1))
+                              size=(60,-1))
         self.cdatums.SetSelection(0)
         self.cdatums.Bind(wx.EVT_COMBOBOX, self.OnChangeDatum)
         gridSizer.Add(item=self.cdatums, pos=(0, 1))
 
         self.textWidth = self.GetSize()[0]
-        self.datumDesc = wx.StaticText(parent=panel,
-                                       label='\n'.join(self.datums[self.cdatums.GetStringSelection()]))
+
+        self.datumDesc = wx.StaticText(parent=panel, size=(self.textWidth,-1),
+                                label='\n'.join(self.datums[self.cdatums.GetStringSelection()]))
+                                
         self.datumDesc.Wrap(self.textWidth)
 
         gridSizer.Add(item=self.datumDesc, flag=wx.EXPAND,
@@ -2670,7 +2670,8 @@ class SelectDatumDialog(wx.Dialog):
     def OnChangeDatum(self, event):
         """Datum changed, update description text"""
         self.datumDesc.SetLabel('\n'.join(self.datums[event.GetString()]))
-        self.datumDesc.Wrap(self.textWidth)
+#        self.textWidth = self.GetSize()[0]
+#        self.datumDesc.Wrap(self.textWidth)
 
         event.Skip()
 
