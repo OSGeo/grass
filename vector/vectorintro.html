@@ -136,7 +136,7 @@ meta-feature type.
 GRASS vectors can be linked to one or many database management systems
 (DBMS). The <em>db.*</em> set of commands provides basic SQL support for
 attribute management, while the <em>v.db.*</em> set of commands operates
-on the vector map.
+on a table linked to a vector map.
 
 <ul>
 <li><b>Categories</b><br>
@@ -147,13 +147,12 @@ each vector object, several vector objects can share the same category.
 <br>Category numbers are stored both within the geometry file for each
 vector object and within the attribute table(s) (usually the "cat"
 column). It is not required that attribute table(s) hold an entry for
-each category (although desirable), and attribute table(s) can hold
+each category, and attribute table(s) can hold
 information about categories not present in the vector geometry file.
 This means that e.g. an attribute table can be populated first and then
 vector objects can be added to the geometry file with category numbers.
 Using <a href="v.category.html">v.category</a>, category numbers can be
-printed or maintained. In order to link one vector object to several
-attribute tables, several category numbers per vector object are needed.
+printed or maintained. 
 <br><br></li>
 
 <li><b>Layers</b><br>
