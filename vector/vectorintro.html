@@ -83,7 +83,7 @@ other module which works with level 1 data is
 <a href="v.surf.rst.html">v.surf.rst</a> which enables spatial
 approximation and topographic analysis from a point or isoline file.
 
-<p> In GRASS, the following vector objects are defined:
+<p> In GRASS, the following vector object types are defined:
 
 <ul>
 <li> point: a point; </li>
@@ -97,6 +97,11 @@ approximation and topographic analysis from a point or isoline file.
 </ul>
 <p>
 Note that all lines and boundaries can be polylines (with nodes in between).
+<p>
+Topology also holds information about isles. Isles are located within an
+area, not touching the boundaries of the outer area. Isles consist of
+one or more areas and are used internally to maintain correct topology
+for areas.
 
 <P>
 The <a href="v.type.html">v.type</a> module can be used to convert
@@ -126,51 +131,61 @@ data types and the user can work directly and more simply with the "area"
 meta-feature type.
 
 
-<h3>Attribute management</h3>
+<h3>Vector object categories and attribute management</h3>
 
-GRASS can be linked to one or many database management systems (DBMS).
-The <em>db.*</em> set of commands provides basic SQL support for
+GRASS vectors can be linked to one or many database management systems
+(DBMS). The <em>db.*</em> set of commands provides basic SQL support for
 attribute management, while the <em>v.db.*</em> set of commands operates
 on the vector map.
 
 <ul>
-<li><b>Categories:</b> The category number is the vector ID. It is
-used to link attribute(s) to each vector object. A vector object can
-have zero, one, two, or more categories. Category numbers are stored
-both within the geometry file and within the attribute table(s) for each
-vector object (usually the "cat" column).
+<li><b>Categories</b><br>
+Categories are used to categorize vector objects and link
+attribute(s) to each category. Each vector object can have zero, one or
+several categories. Category numbers do not have to be unique for
+each vector object, several vector objects can share the same category.
+<br>Category numbers are stored both within the geometry file for each
+vector object and within the attribute table(s) (usually the "cat"
+column). It is not required that attribute table(s) hold an entry for
+each category (although desirable), and attribute table(s) can hold
+information about categories not present in the vector geometry file.
+This means that e.g. an attribute table can be populated first and then
+vector objects can be added to the geometry file with category numbers.
 Using <a href="v.category.html">v.category</a>, category numbers can be
 printed or maintained. In order to link one vector object to several
 attribute tables, several category numbers per vector object are needed.
-</li>
+<br><br></li>
 
-<li><b>Layers:</b> It is possible to link the geographic objects in
+<li><b>Layers</b><br>
+It is possible to link the geographic objects in
 a vector map to one or more tables. Each link to a distinct
 attribute table is called a layer. A link defines which database
-driver, database and table is to be used. Each category numbers
+driver, database and table is to be used. Each category number
 in a geometry file corresponds to a row in the attribute table
 (the linking column is usually the "cat" key column). Using
 <a href="v.db.connect.html">v.db.connect</a> layers can be listed
 or maintained.<br>
-GRASS layers do not contain any geographic objects, but they
-consist of links to attribute tables in which vector objects
-can have zero, one or more categories. If a vector object
-has zero categories in a layer, then it does not appear in that
-layer. In this fashion some vector objects may appear in some layers
-but not in others. The practical benefit of this system is that it
-allows placement of thematically distinct but topologically related
-objects into a single map (e.g. forests and lakes). These virtual
-layers are also useful for linking time series attribute data to a
-series of locations that did not change over time. By default the
-first layer is active, i.e. the first table corresponds to the first
+Vector objects are not organized in layers. All vector
+objects are kept in one geometry file, and topology is maintained for
+all vector objects together. GRASS layers only consist of links to
+different attribute tables in which vector objects can have zero, one or
+more categories. If a vector object has zero categories in a layer, then
+it does not appear in that layer. In this fashion some vector objects
+may appear in some layers but not in others. The practical benefit of
+this system is that it allows placement of thematically distinct but
+topologically related objects into a single map (e.g. forests and lakes).
+These virtual layers are also useful for linking time series attribute
+data to a series of locations that did not change over time. By default
+the first layer is active, i.e. the first table corresponds to the first
 layer. Further tables are linked to subsequent layers.
-</li>
+<br><br></li>
 
-<li><b>SQL support:</b> The DBF driver provides only very limited SQL
-support (as DBF is not an SQL DB) while the other DBMS backends (such
-as PostgreSQL, MySQL etc) provide full SQL support since the SQL
-commands are sent directly to the DBMI. SQL commands can be directly
-executed with <a href="db.execute.html">db.execute</a>,
+<li><b>SQL support</b><br>
+The DBF driver provides only very limited SQL support (as DBF is not an
+SQL DB) while the other DBMS backends (such as SQLite, PostgreSQL, MySQL
+etc) provide full SQL support since the SQL commands are sent directly
+to the DBMI. SQL commands can be directly executed with
+<a href="db.execute.html">db.execute</a>,
 <a href="db.select.html">db.select</a> and the other db.* modules.
 </li>
 </ul>
