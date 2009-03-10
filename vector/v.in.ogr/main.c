@@ -38,6 +38,7 @@
 #endif
 
 int n_polygons;
+double split_distance;
 
 int geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 	 double min_area, int type, int mk_centr);
@@ -55,9 +56,9 @@ int main(int argc, char *argv[])
 	*min_area_opt;
     struct Option *snap_opt, *type_opt, *outloc_opt, *cnames_opt;
     struct Flag *list_flag, *no_clean_flag, *z_flag, *notab_flag,
-	*region_flag;
+	*region_flag, *split_flag;
     struct Flag *over_flag, *extend_flag, *formats_flag, *tolower_flag;
-    char buf[2000], namebuf[2000];
+    char buf[2000], namebuf[2000], tempvect[GNAME_MAX];
     char *separator;
     struct Key_Value *loc_proj_info = NULL, *loc_proj_units = NULL;
     struct Key_Value *proj_info, *proj_units;
@@ -65,7 +66,7 @@ int main(int argc, char *argv[])
     char error_msg[8192];
 
     /* Vector */
-    struct Map_info Map;
+    struct Map_info Map, Out;
     int cat;
 
     /* Attributes */
@@ -95,7 +96,13 @@ int main(int argc, char *argv[])
     int layer_id;
     int overwrite;
 
+    int feature, nfeatures;
+
+    double area_size = 0.;
+
     G_gisinit(argv[0]);
+ 
+    split_distance = -1.;
 
     module = G_define_module();
     module->keywords = _("vector, import");
@@ -232,6 +239,11 @@ int main(int argc, char *argv[])
     tolower_flag->description =
 	_("Change column names to lowercase characters");
     tolower_flag->guisection = _("Attributes");
+
+    split_flag = G_define_flag();
+    split_flag->key = 's';
+    split_flag->description =
+	_("Split long boundaries to speed up cleaning");
 
     /* The parser checks if the map already exists in current mapset, this is
      * wrong if location options is used, so we switch out the check and do it
@@ -452,6 +464,11 @@ int main(int argc, char *argv[])
 	cellhd.tb_res = 1.;
     }
 
+    if (split_flag->answer) {
+	split_distance = 0.;
+	area_size = sqrt((cellhd.east - cellhd.west) * (cellhd.north - cellhd.south));
+    }
+
     /* Fetch input map projection in GRASS form. */
     proj_info = NULL;
     proj_units = NULL;
@@ -581,13 +598,23 @@ int main(int argc, char *argv[])
     db_init_string(&sql);
     db_init_string(&strval);
 
-    /* open output vector */
+    /* open temporary vector, do the work in the temporary vector
+     * at the end copy alive lines to output vector
+     * in case of polygons this reduces the coor file size by a factor of 2 to 5
+     * only needed for polygons, but the presence of polygons can be detected
+     * only during OGR feature import, not before */
+    sprintf(buf, "%s", out_opt->answer);
+    /* strip any @mapset from vector output name */
+    G_find_vector(buf, G_mapset());
+    sprintf(tempvect, "%s_tmp", buf);
+    G_message(_("Using temporary vector <%s>"), tempvect);
     if (z_flag->answer)
-	Vect_open_new(&Map, out_opt->answer, 1);
+	Vect_open_new(&Map, tempvect, 1);
     else
-	Vect_open_new(&Map, out_opt->answer, 0);
+	Vect_open_new(&Map, tempvect, 0);
 
     Vect_hist_command(&Map);
+
 
     /* Points and lines are written immediately with categories. Boundaries of polygons are
      * written to the vector then cleaned and centroids are calculated for all areas in cleaan vector.
@@ -778,9 +805,18 @@ int main(int argc, char *argv[])
 	cat = 1;
 	nogeom = 0;
 	OGR_L_ResetReading(Ogr_layer);
+	nfeatures = OGR_L_GetFeatureCount(Ogr_layer, 1);
+	feature = 0;
+	if (split_distance > -0.5 && nfeatures > 500) {
+	    split_distance = area_size / log(OGR_L_GetFeatureCount(Ogr_layer, 1));
+	    split_distance = split_distance / 3.; /* divisor is the handle */
+	    G_debug(1,"root of area size: %f", area_size);
+	    G_message(_("Boundary splitting distance in map units: %G"), split_distance);
+	}
 	G_important_message(_("Importing map %d features..."),
-			    OGR_L_GetFeatureCount(Ogr_layer, 1));
+			    nfeatures);
 	while ((Ogr_feature = OGR_L_GetNextFeature(Ogr_layer)) != NULL) {
+	    G_percent(feature++, nfeatures, 1);
 	    /* Geometry */
 	    Ogr_geometry = OGR_F_GetGeometryRef(Ogr_feature);
 	    if (Ogr_geometry == NULL) {
@@ -867,6 +903,7 @@ int main(int argc, char *argv[])
 	    OGR_F_Destroy(Ogr_feature);
 	    cat++;
 	}
+	G_percent(nfeatures, nfeatures, 1); /* finish it */
 
 	if (!notab_flag->answer) {
 	    db_commit_transaction(driver);
@@ -883,7 +920,7 @@ int main(int argc, char *argv[])
     G_message("%s", separator);
 
     /* TODO: is it necessary to build here? probably not, consumes time */
-    Vect_build(&Map);
+    Vect_build_partial(&Map, GV_BUILD_BASE);
 
     if (!no_clean_flag->answer &&
 	Vect_get_num_primitives(&Map, GV_BOUNDARY) > 0) {
@@ -898,12 +935,19 @@ int main(int argc, char *argv[])
 	Points = Vect_new_line_struct();
 
 	G_message("%s", separator);
-	G_warning(_("Cleaning polygons, result is not guaranteed!"));
 
+	/* first check if coor file size exceeds current 2GB limit */
+	/* coor file won't be opened if too large */
+	/* drawback: vector <tempvect> will persist as corrupted vector */
 	Vect_set_release_support(&Map);
 	Vect_close(&Map);
-	Vect_open_update(&Map, out_opt->answer, G_mapset());
-	Vect_build_partial(&Map, GV_BUILD_BASE);	/* Downgrade topo */
+	G_warning(_("Checking file size limits. On ERROR please delete vector <%s>"), tempvect);
+	Vect_open_update(&Map, tempvect, G_mapset());
+	/* topo was not fully built, build BASE again, is fast */
+	Vect_build_partial(&Map, GV_BUILD_BASE);
+
+	G_message("%s", separator);
+	G_warning(_("Cleaning polygons, result is not guaranteed!"));
 
 	if (snap >= 0) {
 	    G_message("%s", separator);
@@ -995,6 +1039,9 @@ int main(int argc, char *argv[])
 	    Vect_spatial_index_add_item(&si, centr, &box);
 	}
 
+	G_message("%s", separator);
+	G_message(_("Write centroids:"));
+
 	/* Go through all layers and find centroids for each polygon */
 	for (layer = 0; layer < nlayers; layer++) {
 	    G_message(_("Layer: %s"), layer_names[layer]);
@@ -1021,6 +1068,8 @@ int main(int argc, char *argv[])
 	total_area = overlap_area = nocat_area = 0.0;
 	for (centr = 1; centr <= ncentr; centr++) {
 	    double area;
+
+	    G_percent(centr, ncentr, 1);
 
 	    area = Vect_get_area_area(&Map, centr);
 	    total_area += area;
@@ -1052,11 +1101,11 @@ int main(int argc, char *argv[])
 	}
 	if (Centr)
 	    G_free(Centr);
-	G_message("%s", separator);
-	Vect_build_partial(&Map, GV_BUILD_NONE);
+	/* G_message("%s", separator); */
+	/* Vect_build_partial(&Map, GV_BUILD_NONE);
 
 	G_message("%s", separator);
-	Vect_build(&Map);
+	Vect_build(&Map); */
 
 	G_message("%s", separator);
 
@@ -1067,22 +1116,26 @@ int main(int argc, char *argv[])
 		      n_overlaps, nlayers + 1);
 	}
 
-	sprintf(buf, _("%d input polygons"), n_polygons);
-	G_message(buf);
+	Vect_hist_write(&Map, separator);
+	Vect_hist_write(&Map, "\n");
+	sprintf(buf, _("%d input polygons\n"), n_polygons);
+	G_message(_("%d input polygons"), n_polygons);
 	Vect_hist_write(&Map, buf);
 
-	sprintf(buf, _("Total area: %e (%d areas)"), total_area, ncentr);
-	G_message(buf);
+	sprintf(buf, _("Total area: %G (%d areas)\n"), total_area, ncentr);
+	G_message(_("Total area: %G (%d areas)"), total_area, ncentr);
 	Vect_hist_write(&Map, buf);
 
-	sprintf(buf, _("Overlapping area: %e (%d areas)"), overlap_area,
+	sprintf(buf, _("Overlapping area: %G (%d areas)\n"), overlap_area,
 		n_overlaps);
-	G_message(buf);
+	G_message(_("Overlapping area: %G (%d areas)"), overlap_area,
+		n_overlaps);
 	Vect_hist_write(&Map, buf);
 
-	sprintf(buf, _("Area without category: %e (%d areas)"), nocat_area,
+	sprintf(buf, _("Area without category: %G (%d areas)\n"), nocat_area,
 		n_nocat);
-	G_message(buf);
+	G_message(_("Area without category: %G (%d areas)"), nocat_area,
+		n_nocat);
 	Vect_hist_write(&Map, buf);
     }
 
@@ -1090,8 +1143,40 @@ int main(int argc, char *argv[])
      * OGR_DS_Destroy( Ogr_ds );
      */
 
+    /* second check if coor file size exceeds current 2GB limit */
+    /* coor file won't be opened if too large */
+    /* drawback: vector <tempvect> will persist as corrupted vector */
+    Vect_set_release_support(&Map);
     Vect_close(&Map);
+    G_message("%s", separator);
+    G_warning(_("Checking file size limits. On ERROR please delete vector <%s>"), tempvect);
+    Vect_open_old(&Map, tempvect, G_mapset());
 
+    /* Open output vector */
+    
+    /* Copy temporary vector to output vector */
+    G_message("%s", separator);
+    G_message(_("Copy temporary vector to output vector:"));
+    G_message("%s", separator);
+
+    if (z_flag->answer)
+	Vect_open_new(&Out, out_opt->answer, 1);
+    else
+	Vect_open_new(&Out, out_opt->answer, 0);
+
+    Vect_copy_head_data(&Map, &Out);
+    /* reduce coor file size by factor 2 to 5 in case of shapefile area import */
+    Vect_copy_map_lines(&Map, &Out);
+    Vect_copy_tables(&Map, &Out, 0);
+    Vect_hist_copy(&Map, &Out);
+
+    Vect_build(&Out);
+    
+    Vect_set_release_support(&Map);
+    Vect_set_release_support(&Out);
+    Vect_close(&Map);
+    Vect_close(&Out);
+    Vect_delete(tempvect);
 
     /* -------------------------------------------------------------------- */
     /*      Extend current window based on dataset.                         */
