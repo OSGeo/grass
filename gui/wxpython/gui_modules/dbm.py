@@ -883,6 +883,8 @@ class AttributeManager(wx.Frame):
     def __createManageLayerPage(self):
         """Create manage page"""
         splitterWin = wx.SplitterWindow(parent=self.manageLayerPage, id=wx.ID_ANY)
+        splitterWin.SetMinimumPaneSize(100)
+        
         self.manageLayerPage.AddPage(page=splitterWin,
                                      text=_("Layers of vector map")) # dummy page
         
@@ -899,7 +901,7 @@ class AttributeManager(wx.Frame):
         self.layerList = self.__createLayerDesc(panelList)
         self.layerList.Bind(wx.EVT_COMMAND_RIGHT_CLICK, self.OnLayerRightUp) #wxMSW
         self.layerList.Bind(wx.EVT_RIGHT_UP,            self.OnLayerRightUp) #wxGTK
-
+        
         layerSizer.Add(item=self.layerList,
                        flag=wx.ALL | wx.EXPAND,
                        proportion=1,
@@ -916,7 +918,7 @@ class AttributeManager(wx.Frame):
         # manage part
         #
         panelManage = wx.Panel(parent=splitterWin, id=wx.ID_ANY)
-
+         
         manageSizer = wx.BoxSizer(wx.VERTICAL)
 
         self.manageLayerBook = LayerBook(parent=panelManage, id=wx.ID_ANY,
@@ -928,7 +930,6 @@ class AttributeManager(wx.Frame):
                         border=5)
 
         panelManage.SetSizer(manageSizer)
-
         splitterWin.SplitHorizontally(panelList, panelManage, 100) 
         splitterWin.Fit()
 
@@ -936,6 +937,7 @@ class AttributeManager(wx.Frame):
         """Create list of linked layers"""
         list = LayerListCtrl(parent=parent, id=wx.ID_ANY,
                              layers=self.mapDBInfo.layers)
+        
         list.Populate()
         # sorter
         # itemDataMap = list.Populate()
@@ -2214,7 +2216,7 @@ class LayerBook(wx.Notebook):
         """Add new layer"""
         self.addPanel = wx.Panel(parent=self, id=wx.ID_ANY)
         self.AddPage(page=self.addPanel, text=_("Add layer"))
-
+        
         try:
             maxLayer = max(self.mapDBInfo.layers.keys())
         except ValueError:
@@ -2264,7 +2266,7 @@ class LayerBook(wx.Notebook):
         self.addLayerWidgets['driver'][1].Bind(wx.EVT_CHOICE, self.OnDriverChanged)
         self.addLayerWidgets['database'][1].Bind(wx.EVT_TEXT_ENTER, self.OnDatabaseChanged)
         self.addLayerWidgets['table'][1].Bind(wx.EVT_CHOICE, self.OnTableChanged)
-
+        
         # tooltips
         self.addLayerWidgets['addCat'][0].SetToolTipString(_("You need to add categories "
                                                              "by v.category module."))
@@ -2285,31 +2287,29 @@ class LayerBook(wx.Notebook):
         # events
         self.tableWidgets['table'][1].Bind(wx.EVT_TEXT_ENTER, self.OnCreateTable)
         self.tableWidgets['key'][1].Bind(wx.EVT_TEXT_ENTER, self.OnCreateTable)
-
+        
         btnTable   = wx.Button(self.addPanel, wx.ID_ANY, _("&Create table"),
                              size=(125,-1))
         btnTable.Bind(wx.EVT_BUTTON, self.OnCreateTable)
-
+        
         btnLayer   = wx.Button(self.addPanel, wx.ID_ANY, _("&Add layer"),
                              size=(125,-1))
         btnLayer.Bind(wx.EVT_BUTTON, self.OnAddLayer)
-
+        
         btnDefault = wx.Button(self.addPanel, wx.ID_ANY, _("&Set default"),
                                size=(125,-1))
         btnDefault.Bind(wx.EVT_BUTTON, self.OnSetDefault)
-
-        #
+        
         # do layout
-        #
+        
         pageSizer = wx.BoxSizer(wx.HORIZONTAL)
-
-        #
+                
         # layer description
-        #
+        
         layerBox = wx.StaticBox (parent=self.addPanel, id=wx.ID_ANY,
                                  label=" %s " % (_("Layer description")))
         layerSizer = wx.StaticBoxSizer(layerBox, wx.VERTICAL)
-
+        
         # data area
         dataSizer = wx.GridBagSizer(hgap=5, vgap=5)
         dataSizer.AddGrowableCol(1)
@@ -2342,35 +2342,33 @@ class LayerBook(wx.Notebook):
                        proportion=1,
                        flag=wx.ALL | wx.EXPAND,
                        border=5)
-
+        
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
         btnSizer.Add(item=btnDefault,
                      proportion=0,
                      flag=wx.ALL | wx.ALIGN_LEFT,
                      border=5)
-
+        
         btnSizer.Add(item=(5, 5),
                      proportion=1,
                      flag=wx.ALL | wx.EXPAND,
                      border=5)
-
+        
         btnSizer.Add(item=btnLayer,
                      proportion=0,
                      flag=wx.ALL | wx.ALIGN_RIGHT,
                      border=5)
-
+        
         layerSizer.Add(item=btnSizer,
                        proportion=0,
                        flag=wx.ALL | wx.EXPAND,
                        border=0)
-
-        #
+                
         # table description
-        #
         tableBox = wx.StaticBox (parent=self.addPanel, id=wx.ID_ANY,
                                  label=" %s " % (_("Table description")))
         tableSizer = wx.StaticBoxSizer(tableBox, wx.VERTICAL)
-
+        
         # data area
         dataSizer = wx.FlexGridSizer(cols=2, hgap=5, vgap=5)
         dataSizer.AddGrowableCol(1)
@@ -2391,19 +2389,20 @@ class LayerBook(wx.Notebook):
                        flag=wx.ALL | wx.ALIGN_BOTTOM | wx.ALIGN_RIGHT,
                        border=5)
 
-
         pageSizer.Add(item=layerSizer,
                       proportion=3,
                       flag=wx.ALL | wx.EXPAND,
-                      border=5)
-
+                      border=3)
+        
         pageSizer.Add(item=tableSizer,
                       proportion=2,
-                      flag=wx.ALL | wx.EXPAND,
-                      border=5)
-
+                      flag=wx.TOP | wx.BOTTOM | wx.RIGHT | wx.EXPAND,
+                      border=3)
+        
+        self.addPanel.SetAutoLayout(True)
         self.addPanel.SetSizer(pageSizer)
-
+        pageSizer.Fit(self.addPanel)
+        
     def __createDeletePage(self):
         """Delete layer"""
         self.deletePanel = wx.Panel(parent=self, id=wx.ID_ANY)
@@ -2453,12 +2452,12 @@ class LayerBook(wx.Notebook):
         dataSizer.Add(item=flexSizer,
                       proportion=0,
                       flag=wx.ALL | wx.EXPAND,
-                      border=5)
+                      border=1)
 
         dataSizer.Add(item=self.deleteTable,
                       proportion=0,
                       flag=wx.ALL | wx.EXPAND,
-                      border=5)
+                      border=1)
 
         pageSizer.Add(item=dataSizer,
                       proportion=1,
@@ -2466,9 +2465,9 @@ class LayerBook(wx.Notebook):
                       border=5)
 
         pageSizer.Add(item=btnDelete,
-                       proportion=0,
-                       flag=wx.ALL | wx.ALIGN_RIGHT,
-                       border=5)
+                      proportion=0,
+                      flag=wx.ALL | wx.ALIGN_RIGHT,
+                      border=5)
 
         self.deletePanel.SetSizer(pageSizer)
 
