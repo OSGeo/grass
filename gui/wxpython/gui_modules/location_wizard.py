@@ -46,6 +46,7 @@ import wx.wizard as wiz
 import gcmd
 import globalvar
 import utils
+import grass
 try:
     import subprocess
 except:
@@ -1850,6 +1851,21 @@ class LocationWizard(wx.Object):
             dlg.ShowModal()
             dlg.Destroy()
             return False
+        
+        # current GISDbase or a new one?
+        current_gdb = grass.gisenv()['GISDBASE']
+        if current_gdb != database:
+            # change to new GISDbase or create new one
+            if os.path.isdir(database) != True:
+                # create new directory
+                os.mkdir(database)
+                
+            # change to new GISDbase directory
+            grass.run_command('g.gisenv', set='GISDBASE=%s' % database)
+            wx.MessageBox(parent=self.wizard,
+                                message=_("You will need to change the default GIS data directory in the GRASS startup screen"),
+                                caption=("Location <%s> will be created in GIS data directory <%s>") % \
+                                    (location,database), style=wx.OK | wx.ICON_ERROR)
 
         if coordsys == "xy":
             success = self.XYCreate()
