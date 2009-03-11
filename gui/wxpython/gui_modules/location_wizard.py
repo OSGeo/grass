@@ -1861,12 +1861,19 @@ class LocationWizard(wx.Object):
                 os.mkdir(database)
                 
             # change to new GISDbase directory
-            grass.run_command('g.gisenv', set='GISDBASE=%s' % database)
+            gcmd.RunCommand('g.gisenv',
+                            parent = self.wizard,
+                            set='GISDBASE=%s' % database)
+            
             wx.MessageBox(parent=self.wizard,
-                                message=_("You will need to change the default GIS data directory in the GRASS startup screen"),
-                                caption=("Location <%s> will be created in GIS data directory <%s>") % \
-                                    (location,database), style=wx.OK | wx.ICON_ERROR)
-
+                          message=_("Location <%(loc)s> will be created "
+                                    "in GIS data directory <%(dir)s>."
+                                    "You will need to change the default GIS "
+                                    "data directory in the GRASS startup screen.") % \
+                              { 'loc' : location, 'dir' : database},
+                          caption=_("New GIS data directory"), 
+                          style=wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
+            
         if coordsys == "xy":
             success = self.XYCreate()
         elif coordsys == "latlong":
