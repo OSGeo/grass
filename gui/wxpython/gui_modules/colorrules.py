@@ -517,6 +517,7 @@ class ColorTable(wx.Frame):
         if self.elem == 'cell':
             cmdlist = ['d.rast',
                        'map=%s' % self.inmap]
+            ltype = 'raster'
             
             # find existing color table and copy to temp file
             try:
@@ -531,20 +532,20 @@ class ColorTable(wx.Frame):
         # vector
         elif self.elem == 'vector':
             cmdlist = ['d.vect',
-                       '-a',
-                       '--q',
+                        '-a',
                        'map=%s' % self.inmap,
-                       'rgb_column=%s' % self.vect['rgb'],
-                       'type=point,line,boundary,area,face']
+                       'rgb_column=%s' % self.vect["rgb"],
+                       'type=point,line,boundary,area']
+            ltype = 'vector'
         else:
             return
         
         if not self.layer:
-            self.layer = self.Map.AddLayer(type="command", name='preview', command=[cmdlist],
+            self.layer = self.Map.AddLayer(type=ltype, name='preview', command=cmdlist,
                                            l_active=True, l_hidden=False, l_opacity=1.0,
                                            l_render=False) 
         else:
-            self.layer.SetCmd([cmdlist])
+            self.layer.SetCmd(cmdlist)
         
         # apply new color table and display preview
         self.CreateColorTable(force=True)
