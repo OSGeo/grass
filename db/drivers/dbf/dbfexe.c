@@ -66,10 +66,10 @@ int execute(char *sql, cursor * c)
     sqpInitParser(st);
 
     if (yyparse() != 0) {
-	sqpFreeStmt(st);
 	G_free(tmpsql);
 	append_error("SQL parser error: %s\n", st->errmsg);
 	append_error("in statement:\n%s\n", sql);
+	sqpFreeStmt(st);
 	return DB_FAILED;
     }
     G_free(tmpsql);
