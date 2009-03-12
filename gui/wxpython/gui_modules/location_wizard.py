@@ -624,13 +624,17 @@ class ItemList(wx.ListCtrl,
             return None
 
         data = []
+        str = str.lower()
         for i in range(len(self.sourceData)):
-            value = self.sourceData[i][index]
-            if str.lower() in value.lower():
-                data.append(self.sourceData[i])
-
+            try:
+                value = self.sourceData[i][index].lower()
+                if str in value:
+                    data.append(self.sourceData[i])
+            except UnicodeDecodeError:
+                # osgeo4w problem (should be fixed)
+                pass
         self.Populate(data)
-
+        
         if len(data) > 0:
             return data[0]
         else:
@@ -1251,7 +1255,7 @@ class EPSGPage(TitledPage):
 
         # buttons
         self.bbrowse = self.MakeButton(_("Browse"))
-        self.bbcodes = self.MakeButton(_("Browse EPSG Codes"))
+        self.bbcodes = self.MakeButton(_("Reload EPSG Codes"))
 
         # search box
         self.searchb = wx.SearchCtrl(self, size=(200,-1),
@@ -1352,15 +1356,15 @@ class EPSGPage(TitledPage):
             self.epsgdesc = self.epsgparams = ''
 
     def OnSearch(self, event):
-        str =  self.searchb.GetValue()
+        value =  self.searchb.GetValue()
         if self.epsglist.GetItemCount() == 0:
             event.Skip()
             return
         
         try:
-            self.epsgcode = self.epsglist.Search(index=1, str=str)[0]
+            self.epsgcode = self.epsglist.Search(index=1, str=value)[0]
             self.tcode.SetValue(str(self.epsgcode))
-        except:
+        except IndexError:
             self.epsgcode = None
             self.tcode.SetValue('')
 
