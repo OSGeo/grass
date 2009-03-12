@@ -50,6 +50,8 @@
 
 struct Cell_head window;	/*      database window         */
 
+struct point *DELAYED_DELETE;
+
 double east;
 double north;
 double obs_elev;

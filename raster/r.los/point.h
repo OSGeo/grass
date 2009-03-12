@@ -53,11 +53,7 @@ struct point *segment(int, int, int, double, double,
 	Initially set to NULL in main.c.
 */
 
-#ifdef MAIN
-struct point *DELAYED_DELETE;
-#else
 extern struct point *DELAYED_DELETE;
-#endif
 
 #endif
 
