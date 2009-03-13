@@ -227,7 +227,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
             self.seltree.SetItemTextColour(dir_node,wx.Colour(50,50,200))
             try:
                 elem_list = filesdict[dir]
-                elem_list.sort()
+                elem_list.sort(key=str.lower)
                 for elem in elem_list:
                     if elem != '':
                         fullqElem = elem + '@' + dir
