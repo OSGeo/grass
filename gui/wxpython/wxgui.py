@@ -9,7 +9,7 @@ Classes:
  - GMFrame
  - GMApp
 
-(C) 2006-2008 by the GRASS Development Team
+(C) 2006-2009 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -204,27 +204,30 @@ class GMFrame(wx.Frame):
         """Creates command-line input area"""
         self.cmdprompt = wx.Panel(self)
 
-        label = wx.StaticText(parent=self.cmdprompt, id=wx.ID_ANY, label="Cmd >")
-	# label.SetFont(wx.Font(pointSize=11, family=wx.FONTFAMILY_DEFAULT,
-        #                      style=wx.NORMAL, weight=wx.BOLD))
-        input = wx.TextCtrl(parent=self.cmdprompt, id=wx.ID_ANY,
-                            value="",
-                            style=wx.TE_LINEWRAP | wx.TE_PROCESS_ENTER,
-                            size=(-1, 25))
+        label = wx.Button(parent=self.cmdprompt, id=wx.ID_ANY,
+                          label=_("Cmd >"), size=(-1, 25))
+        label.SetToolTipString(_("Click for erasing command prompt"))
 
-        input.SetFont(wx.Font(10, wx.FONTFAMILY_MODERN, wx.NORMAL, wx.NORMAL, 0, ''))
+        self.cmdinput = wx.TextCtrl(parent=self.cmdprompt, id=wx.ID_ANY,
+                                    value="",
+                                    style=wx.TE_LINEWRAP | wx.TE_PROCESS_ENTER,
+                                    size=(-1, 25))
 
-        wx.CallAfter(input.SetInsertionPoint, 0)
+        self.cmdinput.SetFont(wx.Font(10, wx.FONTFAMILY_MODERN, wx.NORMAL, wx.NORMAL, 0, ''))
 
-        self.Bind(wx.EVT_TEXT_ENTER, self.OnRunCmd,        input)
-        self.Bind(wx.EVT_TEXT,       self.OnUpdateStatusBar, input)
+        wx.CallAfter(self.cmdinput.SetInsertionPoint, 0)
+        
+        label.Bind(wx.EVT_BUTTON,    self.OnCmdErase)
+        self.Bind(wx.EVT_TEXT_ENTER, self.OnRunCmd,          self.cmdinput)
+        self.Bind(wx.EVT_TEXT,       self.OnUpdateStatusBar, self.cmdinput)
 
         # layout
         sizer = wx.BoxSizer(wx.HORIZONTAL)
         sizer.Add(item=label, proportion=0,
-                  flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER,
-                  border=4)
-        sizer.Add(item=input, proportion=1,
+                  flag=wx.EXPAND | wx.LEFT | wx.RIGHT | \
+                      wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER,
+                  border=3)
+        sizer.Add(item=self.cmdinput, proportion=1,
                   flag=wx.EXPAND | wx.ALL,
                   border=1)
 
@@ -460,6 +463,10 @@ class GMFrame(wx.Frame):
         
         self.OnUpdateStatusBar(None)
 
+    def OnCmdErase(self, event):
+        """Erase command prompt"""
+        self.cmdinput.SetValue('')
+        
     def GetLogWindow(self):
         """Get widget for command output"""
         return self.goutput
