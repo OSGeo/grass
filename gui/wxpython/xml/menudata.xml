@@ -2155,7 +2155,7 @@
 	      <label>Matrix/convolving filter</label>
 	      <help>Raster map matrix filter.</help>
 	      <handler>self.OnMenuCmd</handler>
-	      <command>r.mfilter</command>
+	      <command>r.mfilter.fp</command>
 	    </menuitem>
 	  </items>
 	</menu>
