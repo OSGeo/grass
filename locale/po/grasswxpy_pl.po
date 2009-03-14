@@ -509,11 +509,11 @@ msgstr "Mapa <%s> nie odnaleziona."
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:89
 msgid "GRASS GIS - Map display"
-msgstr "GRASS GIS Okno mapy: "
+msgstr "GRASS GIS - Okno mapy"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:163
 msgid "Render"
-msgstr "_Renderuj"
+msgstr "Renderuj"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:166
 msgid "Enable/disable auto-rendering"
