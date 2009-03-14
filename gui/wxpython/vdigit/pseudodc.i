@@ -10,8 +10,39 @@
 
 %rename(PseudoDC) gwxPseudoDC;
 
+%typemap(in) wxString& (bool temp=false) {
+    $1 = wxString_in_helper($input);
+    if ($1 == NULL) SWIG_fail;
+    temp = true;
+}
+%typemap(freearg) wxString& {
+    if (temp$argnum)
+        delete $1;
+}
+
+%apply wxString& { wxString* };
+
+
+%typemap(in) wxRect& (wxRect temp) {
+    $1 = &temp;
+    if ( ! wxRect_helper($input, &$1)) SWIG_fail;
+}
+%typemap(typecheck, precedence=SWIG_TYPECHECK_POINTER) wxRect& {
+    $1 = wxPySimple_typecheck($input, wxT("wxRect"), 4);
+}
+
+%apply wxRect& { wxRect* };
+
 %typemap(out) wxRect {
-	$result = Py_BuildValue("iiii", $1.x, $1.y, $1.width, $1.height);
+    $result = Py_BuildValue("[iiii]", $1.x, $1.y, $1.width, $1.height);
+}
+
+%typemap(out) wxArrayInt& {
+    $result = wxArrayInt2PyList_helper(*$1);
+}
+
+%typemap(out) wxArrayInt {
+    $result = wxArrayInt2PyList_helper($1);
 }
 
 class gwxPseudoDC
@@ -33,6 +64,8 @@ public:
         void SetPen(const wxPen&);
 	void SetIdBounds(int, wxRect&);
 	void DrawLine(const wxPoint&, const wxPoint&);
+	void SetFont(const wxFont&);
+	void SetTextForeground(const wxColour&);
 	%extend {
 		void DrawToDC(void *dc) {
 			self->DrawToDC((wxDC *) dc);
@@ -55,5 +88,11 @@ public:
 		void DrawRectangleRect(const wxRect& rect) {
 		        return self->DrawRectangle(rect);
                 }
+		void DrawText(const wxString& text, int x, int y) {
+		        return self->DrawText(text, (wxCoord) x, (wxCoord) y);
+		}
+		void DrawRotatedText(const wxString& text, int x, int y, double angle) {
+		        return self->DrawRotatedText(text, (wxCoord) x, (wxCoord) y, angle);
+		}
 	}
 };

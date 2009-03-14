@@ -841,6 +841,9 @@ class BufferedWindow(MapWindow, wx.Window):
         dy = event.GetY() - y
         self.pdc.SetBackground(wx.Brush(self.GetBackgroundColour()))
         r = self.pdc.GetIdBounds(id)
+        ### FIXME in vdigit/pseudodc.i
+        if type(r) is list:
+            r = wx.Rect(r[0], r[1], r[2], r[3])
         if id > 100: # text dragging
             rtop = (r[0],r[1]-r[3],r[2],r[3])
             r = r.Union(rtop)
@@ -849,6 +852,8 @@ class BufferedWindow(MapWindow, wx.Window):
         self.pdc.TranslateId(id, dx, dy)
 
         r2 = self.pdc.GetIdBounds(id)
+        if type(r2) is list:
+            r2 = wx.Rect(r[0], r[1], r[2], r[3])
         if id > 100: # text
             self.textdict[id]['coords'] = r2
         r = r.Union(r2)
@@ -882,7 +887,8 @@ class BufferedWindow(MapWindow, wx.Window):
             mousecoords = [begin[0], begin[1],
                            end[0], end[1]]
             r = pdc.GetIdBounds(boxid)
-            r = wx.Rect(r[0], r[1], r[2], r[3])
+            if type(r) is list:
+                r = wx.Rect(r[0], r[1], r[2], r[3])
             r.Inflate(4, 4)
             pdc.ClearId(boxid)
             self.RefreshRect(r, False)
