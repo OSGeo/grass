@@ -3142,24 +3142,18 @@ class DisplayAttributesDialog(wx.Dialog):
 
     def OnSubmit(self, event):
         """Submit records"""
-        sqlCommands = self.GetSQLString(updateValues=True)
-        if len(sqlCommands) > 0:
-            sqlFile = tempfile.NamedTemporaryFile(mode="w")
-            for sql in sqlCommands:
-                enc = UserSettings.Get(group='atm', key='encoding', subkey='value')
-                if not enc and \
-                        os.environ.has_key('GRASS_DB_ENCODING'):
-                    enc = os.environ['GRASS_DB_ENCODING']
-                if enc:
-                    sqlFile.file.write(sql.encode(enc))
-                else:
-                    sqlFile.file.write(sql)
-                sqlFile.file.write(os.linesep)
-                sqlFile.file.flush()
-                gcmd.RunCommand('db.execute',
-                                quiet = True,
-                                input = sqlFile.name)
-
+        for sql in self.GetSQLString(updateValues=True):
+            enc = UserSettings.Get(group='atm', key='encoding', subkey='value')
+            if not enc and \
+                    os.environ.has_key('GRASS_DB_ENCODING'):
+                enc = os.environ['GRASS_DB_ENCODING']
+            if enc:
+                sql = sql.encode(enc)
+            
+            gcmd.RunCommand('db.execute',
+                            quiet = True,
+                            stdin = sql)
+        
         if self.closeDialog.IsChecked():
             self.OnCancel(event)
 
@@ -3378,6 +3372,12 @@ class VectorDBInfo(gselect.VectorDBInfo):
         Return line id or None if no line is found"""
         line = None
         nselected = 0
+        
+        if os.environ.has_key("LC_ALL"):
+            locale = os.environ["LC_ALL"]
+            os.environ["LC_ALL"] = "C"
+        
+        ### FIXME (implement script-style output)        
         ret = gcmd.RunCommand('v.what',
                               quiet = True,
                               read = True,
@@ -3386,6 +3386,9 @@ class VectorDBInfo(gselect.VectorDBInfo):
                               east_north = '%f,%f' % \
                                   (float(queryCoords[0]), float(queryCoords[1])),
                               distance = float(qdist))
+        
+        if os.environ.has_key("LC_ALL"):
+            os.environ["LC_ALL"] = locale
         
         data = {}
         if ret:
