@@ -1,6 +1,7 @@
 all = [
     "colorrules.py",
     "dbm.py",
+    "dbm_dialogs.py",
     "debug.py",
     "disp_print.py",
     "gcmd.py",

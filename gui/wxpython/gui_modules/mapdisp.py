@@ -57,6 +57,7 @@ import gselect
 import disp_print
 import gcmd
 import dbm
+import dbm_dialogs
 import histogram
 import profile
 import globalvar
@@ -1195,11 +1196,12 @@ class MapFrame(wx.Frame):
         mapName = self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer'].name
         
         if self.dialogs['attributes'] is None:
-            self.dialogs['attributes'] = dbm.DisplayAttributesDialog(parent=self.MapWindow,
-                                                                     map=mapName,
-                                                                     query=((east, north), qdist),
-                                                                     pos=posWindow,
-                                                                     action="update")
+            self.dialogs['attributes'] = \
+                dbm_dialogs.DisplayAttributesDialog(parent=self.MapWindow,
+                                                    map=mapName,
+                                                    query=((east, north), qdist),
+                                                    pos=posWindow,
+                                                    action="update")
         else:
             # selection changed?
             if not self.dialogs['attributes'].mapDBInfo or \
