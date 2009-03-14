@@ -25,6 +25,7 @@ import sys
 import wx
 
 import dbm
+import dbm_dialogs
 import gdialogs
 import gcmd
 import utils
@@ -1139,10 +1140,10 @@ class BufferedWindow(MapWindow, wx.Window):
                 posWindow = self.ClientToScreen((self.mouse['end'][0] + self.dialogOffset,
                                                  self.mouse['end'][1] + self.dialogOffset))
                 
-                addRecordDlg = dbm.DisplayAttributesDialog(parent=self, map=mapLayer,
-                                                           cats=cats,
-                                                           pos=posWindow,
-                                                           action="add")
+                addRecordDlg = dbm_dialogs.DisplayAttributesDialog(parent=self, map=mapLayer,
+                                                                   cats=cats,
+                                                                   pos=posWindow,
+                                                                   action="add")
                 if addRecordDlg.mapDBInfo and \
                         addRecordDlg.ShowModal() == wx.ID_OK:
                     sqlfile = tempfile.NamedTemporaryFile(mode="w")
@@ -1234,9 +1235,10 @@ class BufferedWindow(MapWindow, wx.Window):
         if digitToolbar.GetAction() == "displayAttrs":
             # select attributes based on coordinates (all layers)
             if self.parent.dialogs['attributes'] is None:
-                self.parent.dialogs['attributes'] = dbm.DisplayAttributesDialog(parent=self, map=mapLayer,
-                                                                                cats=cats,
-                                                                                action="update")
+                self.parent.dialogs['attributes'] = \
+                    dbm_dialogs.DisplayAttributesDialog(parent=self, map=mapLayer,
+                                                        cats=cats,
+                                                        action="update")
             else:
                 # upgrade dialog
                 self.parent.dialogs['attributes'].UpdateDialog(cats=cats)
@@ -1925,10 +1927,10 @@ class BufferedWindow(MapWindow, wx.Window):
                                     (UserSettings.Get(group='vdigit', key="category", subkey='value'), )
                                 }}
                         
-                        addRecordDlg = dbm.DisplayAttributesDialog(parent=self, map=map,
-                                                                   cats=cats,
-                                                                   pos=posWindow,
-                                                                   action="add")
+                        addRecordDlg = dbm_dialogs.DisplayAttributesDialog(parent=self, map=map,
+                                                                           cats=cats,
+                                                                           pos=posWindow,
+                                                                           action="add")
                         if addRecordDlg.mapDBInfo and \
                                addRecordDlg.ShowModal() == wx.ID_OK:
                             sqlfile = tempfile.NamedTemporaryFile(mode="w")
