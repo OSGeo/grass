@@ -18,10 +18,15 @@ int parse_fontcap_entry(struct GFONT_CAP *e, const char *str)
     int type, index;
 
     if (sscanf(str, "%[^|]|%[^|]|%d|%[^|]|%d|%[^|]|",
-	       name, longname, &type, path, &index, encoding) != 6)
-	return 0;
-
-    if (!font_exists(path))
+	       name, longname, &type, path, &index, encoding) == 6) {
+        if (!font_exists(path))
+	    return 0;
+    }
+    /* GFONT_DRIVER type fonts do not have path. */
+    else if (sscanf(str, "%[^|]|%[^|]|%d||%d|%[^|]|",
+	       name, longname, &type, &index, encoding) == 5)
+	path[0] = '\0';
+    else
 	return 0;
 
     e->name = G_store(name);

@@ -109,11 +109,11 @@ void COM_Set_font(const char *name)
     }
 
 
-    if (driver->Font_list && driver->Set_font) {
+    if (driver->Font_info && driver->Set_font) {
 	char **list = NULL;
 	int count = 0;
 
-	(*driver->Font_list)(&list, &count);
+	(*driver->Font_info)(&list, &count);
 
 	for (i = 0; i < count; i++) {
 	    struct GFONT_CAP cap;
