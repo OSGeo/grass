@@ -121,7 +121,7 @@ void COM_Set_font(const char *name)
 	    if (!parse_fontcap_entry(&cap, list[i]))
 		continue;
 
-	    if (cap.type != GFONT_DRIVER)
+	    if (cap.type != GFONT_DRIVER || strcmp(name, cap.name) != 0)
 		continue;
 
 	    driver_set(cap.name);
@@ -157,4 +157,3 @@ void COM_Font_info(char ***list, int *count)
     if (driver->Font_info)
 	(*driver->Font_info)(list, count);
 }
-
