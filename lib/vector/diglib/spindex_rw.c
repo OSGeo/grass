@@ -14,6 +14,8 @@
  *              for details.
  *
  *****************************************************************************/
+#include <grass/config.h>
+#include <sys/types.h>
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
@@ -37,6 +39,21 @@ int dig_Wr_spindx_head(GVFILE * fp, struct Plus_head *ptr)
     if (0 >= dig__fwrite_port_C(buf, 5, fp))
 	return (-1);
 
+    /* get required offset size */
+    if (ptr->off_t_size == 0) {
+	/* should not happen, topo is written first */
+	if (ptr->coor_size > (off_t)PORT_LONG_MAX)
+	    ptr->off_t_size = 8;
+	else
+	    ptr->off_t_size = 4;
+    }
+
+    /* adjust header size for large files */
+    if (ptr->off_t_size == 8) {
+	/* 7 offset values and coor file size: add 8 * 4 */
+	length += 32;
+    }
+
     /* bytes 6 - 9 : header size */
     if (0 >= dig__fwrite_port_L(&length, 1, fp))
 	return (0);
@@ -46,28 +63,28 @@ int dig_Wr_spindx_head(GVFILE * fp, struct Plus_head *ptr)
     if (0 >= dig__fwrite_port_C(buf, 1, fp))
 	return (-1);
 
-    /* bytes 11 - 38 : Offsets */
-    if (0 >= dig__fwrite_port_L(&(ptr->Node_spidx_offset), 1, fp))
+    /* bytes 11 - 38 (large files 11 - 66) : Offsets */
+    if (0 >= dig__fwrite_port_O(&(ptr->Node_spidx_offset), 1, fp, ptr->off_t_size))
 	return (-1);
-    if (0 >= dig__fwrite_port_L(&(ptr->Edge_spidx_offset), 1, fp))
+    if (0 >= dig__fwrite_port_O(&(ptr->Edge_spidx_offset), 1, fp, ptr->off_t_size))
 	return (-1);
-    if (0 >= dig__fwrite_port_L(&(ptr->Line_spidx_offset), 1, fp))
+    if (0 >= dig__fwrite_port_O(&(ptr->Line_spidx_offset), 1, fp, ptr->off_t_size))
 	return (-1);
-    if (0 >= dig__fwrite_port_L(&(ptr->Area_spidx_offset), 1, fp))
+    if (0 >= dig__fwrite_port_O(&(ptr->Area_spidx_offset), 1, fp, ptr->off_t_size))
 	return (-1);
-    if (0 >= dig__fwrite_port_L(&(ptr->Isle_spidx_offset), 1, fp))
+    if (0 >= dig__fwrite_port_O(&(ptr->Isle_spidx_offset), 1, fp, ptr->off_t_size))
 	return (-1);
-    if (0 >= dig__fwrite_port_L(&(ptr->Volume_spidx_offset), 1, fp))
+    if (0 >= dig__fwrite_port_O(&(ptr->Volume_spidx_offset), 1, fp, ptr->off_t_size))
 	return (-1);
-    if (0 >= dig__fwrite_port_L(&(ptr->Hole_spidx_offset), 1, fp))
+    if (0 >= dig__fwrite_port_O(&(ptr->Hole_spidx_offset), 1, fp, ptr->off_t_size))
 	return (-1);
 
     G_debug(3, "spidx offset node = %ld line = %ld, area = %ld isle = %ld",
 	    ptr->Node_spidx_offset, ptr->Line_spidx_offset,
 	    ptr->Area_spidx_offset, ptr->Isle_spidx_offset);
 
-    /* bytes 39 - 42 : Offsets */
-    if (0 >= dig__fwrite_port_L(&(ptr->coor_size), 1, fp))
+    /* bytes 39 - 42 (large files 67 - 74) : Offsets */
+    if (0 >= dig__fwrite_port_O(&(ptr->coor_size), 1, fp, ptr->off_t_size))
 	return (-1);
 
     G_debug(2, "spidx body offset %ld", dig_ftell(fp));
@@ -135,24 +152,34 @@ int dig_Rd_spindx_head(GVFILE * fp, struct Plus_head *ptr)
     ptr->spidx_with_z = buf[0];
     G_debug(2, "  with_z %d", ptr->spidx_with_z);
 
-    /* bytes 11 - 38 : Offsets */
-    if (0 >= dig__fread_port_L(&(ptr->Node_spidx_offset), 1, fp))
+   /* get required offset size */
+    if (ptr->off_t_size == 0) {
+	/* should not happen, topo is opened first */
+	if (ptr->coor_size > (off_t)PORT_LONG_MAX)
+	    ptr->off_t_size = 8;
+	else
+	    ptr->off_t_size = 4;
+    }
+    /* as long as topo is always opened first, off_t size check is not needed here */
+
+    /* bytes 11 - 38 (large files 11 - 66) : Offsets */
+    if (0 >= dig__fread_port_O(&(ptr->Node_spidx_offset), 1, fp, ptr->off_t_size))
 	return (-1);
-    if (0 >= dig__fread_port_L(&(ptr->Edge_spidx_offset), 1, fp))
+    if (0 >= dig__fread_port_O(&(ptr->Edge_spidx_offset), 1, fp, ptr->off_t_size))
 	return (-1);
-    if (0 >= dig__fread_port_L(&(ptr->Line_spidx_offset), 1, fp))
+    if (0 >= dig__fread_port_O(&(ptr->Line_spidx_offset), 1, fp, ptr->off_t_size))
 	return (-1);
-    if (0 >= dig__fread_port_L(&(ptr->Area_spidx_offset), 1, fp))
+    if (0 >= dig__fread_port_O(&(ptr->Area_spidx_offset), 1, fp, ptr->off_t_size))
 	return (-1);
-    if (0 >= dig__fread_port_L(&(ptr->Isle_spidx_offset), 1, fp))
+    if (0 >= dig__fread_port_O(&(ptr->Isle_spidx_offset), 1, fp, ptr->off_t_size))
 	return (-1);
-    if (0 >= dig__fread_port_L(&(ptr->Volume_spidx_offset), 1, fp))
+    if (0 >= dig__fread_port_O(&(ptr->Volume_spidx_offset), 1, fp, ptr->off_t_size))
 	return (-1);
-    if (0 >= dig__fread_port_L(&(ptr->Hole_spidx_offset), 1, fp))
+    if (0 >= dig__fread_port_O(&(ptr->Hole_spidx_offset), 1, fp, ptr->off_t_size))
 	return (-1);
 
-    /* bytes 39 - 42 : Offsets */
-    if (0 >= dig__fread_port_L(&coor_size, 1, fp))
+    /* bytes 39 - 42 (large files 67 - 74) : Offsets */
+    if (0 >= dig__fread_port_O(&coor_size, 1, fp, ptr->off_t_size))
 	return (-1);
     G_debug(2, "  coor size %ld", coor_size);
 
@@ -226,7 +253,7 @@ int rtree_write_branch(GVFILE * fp, struct Branch *b, int with_z, int level)
 	    return (-1);
     }
     if (level == 0) {		/* write data (element id) */
-	i = (int)b->child;
+	i = (int) b->child;
 	if (0 >= dig__fwrite_port_I(&i, 1, fp))
 	    return (-1);
     }
@@ -301,7 +328,7 @@ int rtree_read_branch(GVFILE * fp, struct Branch *b, int with_z, int level)
     return 0;
 }
 
-/* Read RTree node to file */
+/* Read RTree node from file */
 int rtree_read_node(GVFILE * fp, struct Node *n, int with_z)
 {
     int level, count, i;

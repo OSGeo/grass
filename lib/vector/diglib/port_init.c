@@ -15,7 +15,9 @@
  *              for details.
  *
  *****************************************************************************/
+#include <grass/config.h>
 #include <stdio.h>
+#include <sys/types.h>
 #include <grass/Vect.h>
 
 /*
@@ -30,7 +32,7 @@
  **  binary data files.
  **  The approach is to take known values and compare them against
  **  the current machine's internal representation.   A cross reference
- **  table is then built, and then all file reads and writes must go through
+ **  table is then built, and then all file reads and writes must go
  **  through these routines to correct the numbers if need be.
  **
  **  As long as the byte switching is symetrical, the conversion routines
@@ -56,12 +58,14 @@
  */
 
 #define TEST_PATTERN 1.3333
+#define OFF_T_TEST 0x0102030405060708
 #define LONG_TEST 0x01020304
 #define INT_TEST 0x01020304
 #define SHORT_TEST 0x0102
 
 static double u_d = TEST_PATTERN;
 static float u_f = TEST_PATTERN;
+off_t u_o;			/* depends on sizeof(off_t) */
 static long u_l = LONG_TEST;
 static int u_i = INT_TEST;
 static short u_s = SHORT_TEST;
@@ -71,6 +75,7 @@ static const unsigned char dbl_cmpr[] =
     { 0x3f, 0xf5, 0x55, 0x32, 0x61, 0x7c, 0x1b, 0xda };
 /* flt_cmpr holds the bytes of an IEEE representation of  TEST_PATTERN */
 static const unsigned char flt_cmpr[] = { 0x3f, 0xaa, 0xa9, 0x93 };
+static const unsigned char off_t_cmpr[] = { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08 };
 static const unsigned char lng_cmpr[] = { 0x01, 0x02, 0x03, 0x04 };
 static const unsigned char int_cmpr[] = { 0x01, 0x02, 0x03, 0x04 };
 static const unsigned char shrt_cmpr[] = { 0x01, 0x02 };
@@ -78,18 +83,21 @@ static const unsigned char shrt_cmpr[] = { 0x01, 0x02 };
 /* Find native sizes */
 int nat_dbl = sizeof(double);
 int nat_flt = sizeof(float);
+int nat_off_t = sizeof(off_t);
 int nat_lng = sizeof(long);
 int nat_int = sizeof(int);
 int nat_shrt = sizeof(short);
 
 int dbl_order;
 int flt_order;
+int off_t_order;
 int lng_order;
 int int_order;
 int shrt_order;
 
 unsigned char dbl_cnvrt[sizeof(double)];
 unsigned char flt_cnvrt[sizeof(float)];
+unsigned char off_t_cnvrt[sizeof(off_t)];
 unsigned char lng_cnvrt[sizeof(long)];
 unsigned char int_cnvrt[sizeof(int)];
 unsigned char shrt_cnvrt[sizeof(short)];
@@ -160,6 +168,7 @@ void port_init(void)
 	G_fatal_error("sizeof(double) != %d", PORT_DOUBLE);
     if (nat_flt != PORT_FLOAT)
 	G_fatal_error("sizeof(float) != %d", PORT_DOUBLE);
+    /* off_t size is variable, depending on the vector size and LFS support */
     if (nat_lng < PORT_LONG)
 	G_fatal_error("sizeof(long) < %d", PORT_LONG);
     if (nat_int < PORT_INT)
@@ -173,11 +182,18 @@ void port_init(void)
      * endian.
      */
 
+    if (nat_off_t == 8)
+	u_o = OFF_T_TEST;
+    else
+	u_o = LONG_TEST;
+
     dbl_order =
 	find_offsets(&u_d, dbl_cnvrt, dbl_cmpr, PORT_DOUBLE, nat_dbl,
 		     "double");
     flt_order =
 	find_offsets(&u_f, flt_cnvrt, flt_cmpr, PORT_FLOAT, nat_flt, "float");
+    off_t_order =
+	find_offsets(&u_o, off_t_cnvrt, off_t_cmpr, nat_off_t, nat_off_t, "off_t");
     lng_order =
 	find_offsets(&u_l, lng_cnvrt, lng_cmpr, PORT_LONG, nat_lng, "long");
     int_order =
@@ -186,3 +202,46 @@ void port_init(void)
 	find_offsets(&u_s, shrt_cnvrt, shrt_cmpr, PORT_SHORT, nat_shrt,
 		     "short");
 }
+
+/*
+    comment copied from port_test.c
+    MM Feb 2009
+
+   The 3.0 dig, and dig_plus files are inherently non-portable.  This 
+   can be seen in moving files between a SUN 386i and other SUN machines.
+   The recommended way to transport files was always to convert to ASCII
+   (b.a.vect) and copy the ASCII files:  dig_ascii and dig_att to the 
+   destination machine.
+
+   The problem lies in the way that different architectures internally
+   represent data.   If a number is internally store as  0x01020304 on
+   a 680x0 family machine, the same number will be stored as
+   0x04030201 on an 80386 class machine.
+
+   The CERL port of GRASS to the Compaq 386 already has code to deal
+   with this incompatibility.  This code converts all files that are written
+   out to conform to the 680x0 standard.  These binary files can then be 
+   shared between machines without conversion.
+   This code is designed to work with the majority of computers in use
+   today that fit the following requirements:
+   byte     ==  8 bits
+   int      ==  4 bytes
+   long     ==  4 bytes
+   double   ==  IEEE standard 64 bit
+   float    ==  IEEE standard 32 bit
+   
+   bytes can be swapped around in any reasonable way, but bits within each
+   byte must be maintained in normal high to low ordering:  76543210
+   is this a problem?
+
+   If this ability is desired on a SUN 386i, for example, you simply
+   define the compiler flag  CERL_PORTABLE in the src/CMD/makehead  file
+   and recompile all of the mapdev programs.
+   needs update, makehead/mapdev no longer exist
+
+   Binary DLG files are NOT supported by this code, and will continue to
+   be non-portable between different architectures.
+   applies to the files coor/topo/cidx, needs testing
+
+   -dave gerdes
+ */

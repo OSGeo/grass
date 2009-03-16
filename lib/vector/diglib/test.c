@@ -15,7 +15,9 @@
  *              for details.
  *
  *****************************************************************************/
+#include <grass/config.h>
 #include <stdio.h>
+#include <sys/types.h>
 #include <grass/Vect.h>
 
 /* Test portable r/w functions */
@@ -32,6 +34,7 @@ int main(int argc, char **argv)
     int byte_order;
     struct Port_info port;
     GVFILE fp;
+    int port_off_t;
 
     double db, td[] = { -(PORT_DOUBLE_MAX), -(D_TEST), -(PORT_DOUBLE_MIN),
 	0, PORT_DOUBLE_MIN, D_TEST, PORT_DOUBLE_MAX
@@ -44,6 +47,9 @@ int main(int argc, char **argv)
     short sb, ts[] = { PORT_SHORT_MIN, -(S_TEST), 0, S_TEST, PORT_SHORT_MAX };
     char cb, tc[] = { PORT_CHAR_MIN, -(C_TEST), 0, C_TEST, PORT_CHAR_MAX };
 
+    off_t ob, to[] = { PORT_LONG_MIN, -(L_TEST), 0, L_TEST, PORT_LONG_MAX };
+
+    port_off_t = sizeof(off_t);
 
     if (NULL == (fp.file = fopen("test.tmp", "wb+"))) {
 	fprintf(stderr, "ERROR, cannot open test.tmp file.\n");
@@ -85,6 +91,23 @@ int main(int argc, char **argv)
 			byte_order);
 		fprintf(stderr, "  Written: %.8e3E\n  Read   : %.8e3E\n",
 			tf[j], fb);
+		err = 1;
+	    }
+	}
+
+	for (j = 0; j < 5; j++) {
+	    dig_fseek(&fp, 0, SEEK_CUR);
+	    fprintf(fp.file, "off_t        ");
+	    dig__fwrite_port_O(&(to[j]), 1, &fp, port_off_t);
+	    dig_fseek(&fp, -(port_off_t), SEEK_CUR);
+	    dig__fread_port_O(&ob, 1, &fp, port_off_t);
+	    dig_fflush(&fp);
+	    if (ob != to[j]) {
+		fprintf(stderr,
+			"ERROR in read/write portable off_t, byte_order = %d\n",
+			byte_order);
+		fprintf(stderr, "  Written: %ld\n  Read   : %ld\n", to[j],
+			ob);
 		err = 1;
 	    }
 	}

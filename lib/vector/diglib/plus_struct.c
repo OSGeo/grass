@@ -15,6 +15,8 @@
  *              for details.
  *
  *****************************************************************************/
+#include <grass/config.h>
+#include <sys/types.h>
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/Vect.h>
@@ -165,10 +167,12 @@ int dig_Rd_P_line(struct Plus_head *Plus, int n, GVFILE * fp)
 
     ptr = dig_alloc_line();
 
+    /* type */
     ptr->type = dig_type_from_store(tp);
     G_debug(5, "    line type  %d -> %d", tp, ptr->type);
 
-    if (0 >= dig__fread_port_L(&(ptr->offset), 1, fp))
+    /* offset */
+    if (0 >= dig__fread_port_O(&(ptr->offset), 1, fp, Plus->off_t_size))
 	return (-1);
 
     /* First node */
@@ -266,11 +270,14 @@ int dig_Wr_P_line(struct Plus_head *Plus, int n, GVFILE * fp)
 	return 0;
     }
 
+    /* type */
     ch = (char)dig_type_to_store(ptr->type);
     G_debug(5, "    line type  %d -> %d", ptr->type, ch);
     if (0 >= dig__fwrite_port_C(&ch, 1, fp))
 	return (-1);
-    if (0 >= dig__fwrite_port_L(&(ptr->offset), 1, fp))
+
+    /* offset */
+    if (0 >= dig__fwrite_port_O(&(ptr->offset), 1, fp, Plus->off_t_size))
 	return (-1);
 
     /* First node */
@@ -615,6 +622,21 @@ int dig_Rd_Plus_head(GVFILE * fp, struct Plus_head *ptr)
 	return (-1);
     G_debug(2, "  header size %ld", ptr->head_size);
 
+    /* determine required offset size from header size */
+    /* this is not safe in case new fields get added in later versions */
+    /* better: add a new field with off_t_size after byte_order? */
+    if (ptr->head_size >= 142 + 32) /* keep in sync with dig_Wr_Plus_head() */
+	ptr->off_t_size = 8;
+    else
+	ptr->off_t_size = 4;
+
+    if (sizeof(off_t) < ptr->off_t_size) {
+	G_warning("Vector exceeds supported file size limit");
+	return (-1);
+    }
+
+    G_debug(1, "topo off_t size = %d", ptr->off_t_size);
+
     /* byte 10 : dimension 2D or 3D */
     if (0 >= dig__fread_port_C(buf, 1, fp))
 	return (-1);
@@ -666,23 +688,23 @@ int dig_Rd_Plus_head(GVFILE * fp, struct Plus_head *ptr)
 	return (-1);
 
     /* bytes 111 - 138 : Offset */
-    if (0 >= dig__fread_port_L(&(ptr->Node_offset), 1, fp))
+    if (0 >= dig__fread_port_O(&(ptr->Node_offset), 1, fp, ptr->off_t_size))
 	return (-1);
-    if (0 >= dig__fread_port_L(&(ptr->Edge_offset), 1, fp))
+    if (0 >= dig__fread_port_O(&(ptr->Edge_offset), 1, fp, ptr->off_t_size))
 	return (-1);
-    if (0 >= dig__fread_port_L(&(ptr->Line_offset), 1, fp))
+    if (0 >= dig__fread_port_O(&(ptr->Line_offset), 1, fp, ptr->off_t_size))
 	return (-1);
-    if (0 >= dig__fread_port_L(&(ptr->Area_offset), 1, fp))
+    if (0 >= dig__fread_port_O(&(ptr->Area_offset), 1, fp, ptr->off_t_size))
 	return (-1);
-    if (0 >= dig__fread_port_L(&(ptr->Isle_offset), 1, fp))
+    if (0 >= dig__fread_port_O(&(ptr->Isle_offset), 1, fp, ptr->off_t_size))
 	return (-1);
-    if (0 >= dig__fread_port_L(&(ptr->Volume_offset), 1, fp))
+    if (0 >= dig__fread_port_O(&(ptr->Volume_offset), 1, fp, ptr->off_t_size))
 	return (-1);
-    if (0 >= dig__fread_port_L(&(ptr->Hole_offset), 1, fp))
+    if (0 >= dig__fread_port_O(&(ptr->Hole_offset), 1, fp, ptr->off_t_size))
 	return (-1);
 
     /* bytes 139 - 142 : Coor size and time */
-    if (0 >= dig__fread_port_L(&(ptr->coor_size), 1, fp))
+    if (0 >= dig__fread_port_O(&(ptr->coor_size), 1, fp, ptr->off_t_size))
 	return (-1);
 
     G_debug(2, "  coor size %ld", ptr->coor_size);
@@ -708,6 +730,22 @@ int dig_Wr_Plus_head(GVFILE * fp, struct Plus_head *ptr)
     buf[4] = ptr->port.byte_order;
     if (0 >= dig__fwrite_port_C(buf, 5, fp))
 	return (-1);
+
+    /* determine required offset size from coor file size */
+    if (ptr->coor_size > (off_t)PORT_LONG_MAX) {
+	/* can only happen when sizeof(off_t) == 8 */
+	ptr->off_t_size = 8;
+    }
+    else
+	ptr->off_t_size = 4;
+
+    /* add a new field with off_t_size after byte_order? */
+
+    /* adjust header size for large files */
+    if (ptr->off_t_size == 8) {
+	/* 7 offset values and coor file size: add 8 * 4 */
+	length += 32;
+    }
 
     /* bytes 6 - 9 : header size */
     if (0 >= dig__fwrite_port_L(&length, 1, fp))
@@ -763,23 +801,23 @@ int dig_Wr_Plus_head(GVFILE * fp, struct Plus_head *ptr)
 	return (-1);
 
     /* bytes 111 - 138 : Offset */
-    if (0 >= dig__fwrite_port_L(&(ptr->Node_offset), 1, fp))
+    if (0 >= dig__fwrite_port_O(&(ptr->Node_offset), 1, fp, ptr->off_t_size))
 	return (-1);
-    if (0 >= dig__fwrite_port_L(&(ptr->Edge_offset), 1, fp))
+    if (0 >= dig__fwrite_port_O(&(ptr->Edge_offset), 1, fp, ptr->off_t_size))
 	return (-1);
-    if (0 >= dig__fwrite_port_L(&(ptr->Line_offset), 1, fp))
+    if (0 >= dig__fwrite_port_O(&(ptr->Line_offset), 1, fp, ptr->off_t_size))
 	return (-1);
-    if (0 >= dig__fwrite_port_L(&(ptr->Area_offset), 1, fp))
+    if (0 >= dig__fwrite_port_O(&(ptr->Area_offset), 1, fp, ptr->off_t_size))
 	return (-1);
-    if (0 >= dig__fwrite_port_L(&(ptr->Isle_offset), 1, fp))
+    if (0 >= dig__fwrite_port_O(&(ptr->Isle_offset), 1, fp, ptr->off_t_size))
 	return (-1);
-    if (0 >= dig__fwrite_port_L(&(ptr->Volume_offset), 1, fp))
+    if (0 >= dig__fwrite_port_O(&(ptr->Volume_offset), 1, fp, ptr->off_t_size))
 	return (-1);
-    if (0 >= dig__fwrite_port_L(&(ptr->Hole_offset), 1, fp))
+    if (0 >= dig__fwrite_port_O(&(ptr->Hole_offset), 1, fp, ptr->off_t_size))
 	return (-1);
 
     /* bytes 139 - 142 : Coor size and time */
-    if (0 >= dig__fwrite_port_L(&(ptr->coor_size), 1, fp))
+    if (0 >= dig__fwrite_port_O(&(ptr->coor_size), 1, fp, ptr->off_t_size))
 	return (-1);
 
     G_debug(2, "topo body offset %ld", dig_ftell(fp));

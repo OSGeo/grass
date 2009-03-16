@@ -17,11 +17,13 @@
    \date 2001
  */
 
+#include <grass/config.h>
+#include <sys/types.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include <grass/Vect.h>
 
-static long write_dummy()
+static off_t write_dummy()
 {
     G_warning("Vect_write_line() %s",
 	      _("for this format/level not supported"));
@@ -54,7 +56,7 @@ static int format()
     return 0;
 }
 
-static long format_l()
+static off_t format_l()
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
@@ -62,7 +64,7 @@ static long format_l()
 
 #endif
 
-static long (*Write_line_array[][3]) () = {
+static off_t (*Write_line_array[][3]) () = {
     {
     write_dummy, V1_write_line_nat, V2_write_line_nat}
 #ifdef HAVE_OGR
@@ -120,13 +122,13 @@ static int (*Vect_restore_line_array[][3]) () = {
    \param points feature geometry
    \param cats feature categories
 
-   \return offset into file where the feature starts
+   \return new feature id (level 2) or offset into file where the feature starts (level 1)
  */
-long
+off_t
 Vect_write_line(struct Map_info *Map,
 		int type, struct line_pnts *points, struct line_cats *cats)
 {
-    long offset;
+    off_t offset;
 
     G_debug(3, "Vect_write_line(): name = %s, format = %d, level = %d",
 	    Map->name, Map->format, Map->level);
@@ -147,6 +149,7 @@ Vect_write_line(struct Map_info *Map,
     if (offset == -1)
 	G_fatal_error(_("Unable to write feature (negative offset)"));
 
+    /* NOTE: returns new line id on level 2 and file offset on level 1 */
     return offset;
 }
 
@@ -255,7 +258,7 @@ int Vect_delete_line(struct Map_info *Map, int line)
    \return 0 on success
    \return -1 on error
  */
-int Vect_restore_line(struct Map_info *Map, int line, long offset)
+int Vect_restore_line(struct Map_info *Map, int line, off_t offset)
 {
     int ret;
 

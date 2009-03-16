@@ -23,13 +23,15 @@
    \date 2001
  */
 
+#include <grass/config.h>
+#include <sys/types.h>
 #include <grass/gis.h>
 #include <grass/Vect.h>
 #include <grass/glocale.h>
 
 static int
 Vect__Read_line_nat(struct Map_info *,
-		    struct line_pnts *, struct line_cats *, long);
+		    struct line_pnts *, struct line_cats *, off_t);
 
 /*!
  * \brief Read line from coor file on given offset.
@@ -47,7 +49,7 @@ Vect__Read_line_nat(struct Map_info *,
 int
 V1_read_line_nat(struct Map_info *Map,
 		 struct line_pnts *Points,
-		 struct line_cats *Cats, long offset)
+		 struct line_cats *Cats, off_t offset)
 {
     return Vect__Read_line_nat(Map, Points, Cats, offset);
 }
@@ -69,7 +71,7 @@ V1_read_next_line_nat(struct Map_info *Map,
 		      struct line_pnts *line_p, struct line_cats *line_c)
 {
     int itype;
-    long offset;
+    off_t offset;
     BOUND_BOX lbox, mbox;
 
     G_debug(3, "V1_read_next_line_nat()");
@@ -210,11 +212,11 @@ V2_read_next_line_nat(struct Map_info *Map,
  */
 int
 Vect__Read_line_nat(struct Map_info *Map,
-		    struct line_pnts *p, struct line_cats *c, long offset)
+		    struct line_pnts *p, struct line_cats *c, off_t offset)
 {
     int i, dead = 0;
     int n_points;
-    long size;
+    off_t size;
     int n_cats, do_cats;
     int type;
     char rhead, nc;
@@ -285,10 +287,10 @@ Vect__Read_line_nat(struct Map_info *Map,
 	}
 	else {
 	    if (Map->head.Version_Minor == 1) {	/* coor format 5.1 */
-		size = (2 * PORT_INT) * n_cats;
+		size = (off_t) (2 * PORT_INT) * n_cats;
 	    }
 	    else {		/* coor format 5.0 */
-		size = (PORT_SHORT + PORT_INT) * n_cats;
+		size = (off_t) (PORT_SHORT + PORT_INT) * n_cats;
 	    }
 
 	    dig_fseek(&(Map->dig_fp), size, SEEK_CUR);
@@ -326,9 +328,9 @@ Vect__Read_line_nat(struct Map_info *Map,
     }
     else {
 	if (Map->head.with_z)
-	    size = n_points * 3 * PORT_DOUBLE;
+	    size = (off_t) n_points * 3 * PORT_DOUBLE;
 	else
-	    size = n_points * 2 * PORT_DOUBLE;
+	    size = (off_t) n_points * 2 * PORT_DOUBLE;
 
 	dig_fseek(&(Map->dig_fp), size, SEEK_CUR);
     }

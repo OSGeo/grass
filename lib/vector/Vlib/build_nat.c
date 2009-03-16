@@ -16,9 +16,11 @@
    \date 2001-2008
  */
 
+#include <grass/config.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <sys/types.h>
 #include <grass/glocale.h>
 #include <grass/gis.h>
 #include <grass/Vect.h>
@@ -38,7 +40,7 @@ int Vect_build_line_area(struct Map_info *Map, int iline, int side)
 {
     int j, area, isle, n_lines, line, type, direction;
     static int first = 1;
-    long offset;
+    off_t offset;
     struct Plus_head *plus;
     P_LINE *BLine;
     static struct line_pnts *Points, *APoints;
@@ -427,7 +429,7 @@ int Vect_build_nat(struct Map_info *Map, int build)
 {
     struct Plus_head *plus;
     int i, s, type, lineid;
-    long offset;
+    off_t offset;
     int side, line, area;
     struct line_pnts *Points, *APoints;
     struct line_cats *Cats;
@@ -553,7 +555,7 @@ int Vect_build_nat(struct Map_info *Map, int build)
 		if (format == G_INFO_FORMAT_PLAIN)
 		    fprintf(stderr, "%d..", i);
 		else
-		    fprintf(stderr, "%7d\b\b\b\b\b\b\b", i);
+		    fprintf(stderr, "%11d\b\b\b\b\b\b\b\b\b\b\b", i);
 	    }
 	    
 	    i++;

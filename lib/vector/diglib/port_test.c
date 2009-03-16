@@ -15,7 +15,9 @@
  *              for details.
  *
  *****************************************************************************/
+#include <grass/config.h>
 #include <stdio.h>
+#include <sys/types.h>
 #include <grass/Vect.h>
 
 /*
@@ -56,6 +58,7 @@
  */
 
 #define TEST_PATTERN 1.3333
+#define OFF_T_TEST 0x0102030405060708
 #define LONG_TEST 0x01020304
 #define INT_TEST 0x01020304
 #define SHORT_TEST 0x0102
@@ -64,6 +67,7 @@ union type_conv
 {
     double d;
     float f;
+    off_t o;
     long l;
     int i;
     short s;
@@ -76,17 +80,19 @@ static unsigned char dbl_cmpr[] =
     { 0x3f, 0xf5, 0x55, 0x32, 0x61, 0x7c, 0x1b, 0xda };
 /* flt_cmpr holds the bytes of an IEEE representation of  TEST_PATTERN */
 static unsigned char flt_cmpr[] = { 0x3f, 0xaa, 0xa9, 0x93 };
+static unsigned char off_t_cmpr[] = { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08 };
 static unsigned char lng_cmpr[] = { 0x01, 0x02, 0x03, 0x04 };
 static unsigned char int_cmpr[] = { 0x01, 0x02, 0x03, 0x04 };
 static unsigned char shrt_cmpr[] = { 0x01, 0x02 };
 
 static char dbl_cnvrt[sizeof(double)];
 static char flt_cnvrt[sizeof(float)];
+static char off_t_cnvrt[sizeof(off_t)];
 static char lng_cnvrt[sizeof(long)];
 static char int_cnvrt[sizeof(int)];
 static char shrt_cnvrt[sizeof(short)];
 
-static int nat_dbl, nat_flt, nat_lng, nat_int, nat_shrt, nat_char;
+static int nat_dbl, nat_flt, nat_lng, nat_off_t, nat_int, nat_shrt, nat_char;
 
 
 /* function prototypes */
@@ -105,6 +111,7 @@ int main(int argc, char **argv)
     printf("\n/* Native machine sizes */\n");
     printf("#define NATIVE_DOUBLE %d\n", (nat_dbl = sizeof(double)));
     printf("#define NATIVE_FLOAT  %d\n", (nat_flt = sizeof(float)));
+    printf("#define NATIVE_OFF_T  %d\n", (nat_off_t = sizeof(off_t)));
     printf("#define NATIVE_LONG   %d\n", (nat_lng = sizeof(long)));
     printf("#define NATIVE_INT    %d\n", (nat_int = sizeof(int)));
     printf("#define NATIVE_SHORT  %d\n", (nat_shrt = sizeof(short)));
@@ -117,9 +124,10 @@ int main(int argc, char **argv)
 	err = 1;
     }
     if (nat_flt != PORT_FLOAT) {
-	fprintf(stderr, "ERROR, sizeof (float) != %d\n", PORT_DOUBLE);
+	fprintf(stderr, "ERROR, sizeof (float) != %d\n", PORT_FLOAT);
 	err = 1;
     }
+    /* port_off_t is variable */
     if (nat_lng < PORT_LONG) {
 	fprintf(stderr, "ERROR, sizeof (long) < %d\n", PORT_LONG);
 	err = 1;
@@ -191,6 +199,34 @@ int main(int argc, char **argv)
 	flt_order = ENDIAN_LITTLE;
     else
 	flt_order = ENDIAN_OTHER;
+
+    /* Find off_t order */
+    if (nat_off_t == 8)
+	u.o = OFF_T_TEST;
+    else
+	u.o = LONG_TEST;
+    for (i = 0; i < nat_off_t; i++) {
+	tmp = find_offset(u.c, off_t_cmpr[i], nat_off_t);
+	if (-1 == tmp) {
+	    fprintf(stderr, "ERROR, could not find '%x' in off_t\n",
+		    off_t_cmpr[i]);
+	    err = 1;
+	}
+	off_t_cnvrt[i] = tmp;
+    }
+    tmp = tmp2 = 1;
+    for (i = 0; i < nat_off_t; i++) {
+	if (off_t_cnvrt[i] != (i + (nat_off_t - nat_off_t)))
+	    tmp = 0;
+	if (off_t_cnvrt[i] != (nat_off_t - i - 1))
+	    tmp2 = 0;
+    }
+    if (tmp)
+	off_t_order = ENDIAN_BIG;
+    else if (tmp2)
+	off_t_order = ENDIAN_LITTLE;
+    else
+	off_t_order = ENDIAN_OTHER;
 
     /* Find long order */
     u.l = LONG_TEST;
@@ -270,6 +306,7 @@ int main(int argc, char **argv)
     printf("\n/* Native machine byte orders */\n");
     printf("#define DOUBLE_ORDER %d\n", dbl_order);
     printf("#define FLOAT_ORDER  %d\n", flt_order);
+    printf("#define OFF_T_ORDER  %d\n", off_t_order);
     printf("#define LONG_ORDER   %d\n", lng_order);
     printf("#define INT_ORDER    %d\n", int_order);
     printf("#define SHORT_ORDER  %d\n", shrt_order);
@@ -316,6 +353,15 @@ static int dumpflags(void)
     while (i < nat_flt) {
 	fprintf(stdout, "%d", flt_cnvrt[i]);
 	if (++i < nat_flt)
+	    fprintf(stdout, ", ");
+    }
+    fprintf(stdout, "};\n\n");
+
+    fprintf(stdout, "/* off_t format  : */\nstatic int off_t_cnvrt[] = {");
+    i = 0;
+    while (i < nat_off_t) {
+	fprintf(stdout, "%d", off_t_cnvrt[i]);
+	if (++i < nat_off_t)
 	    fprintf(stdout, ", ");
     }
     fprintf(stdout, "};\n\n");

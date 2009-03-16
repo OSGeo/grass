@@ -14,11 +14,13 @@
  * \date 2001-2008
  */
 
+#include <grass/config.h>
+#include <sys/types.h>
 #include <stdlib.h>
 #include <grass/Vect.h>
 
 static int add_line(struct Plus_head *plus, int lineid, int type, struct line_pnts *Points,
-		    long offset)
+		    off_t offset)
 {
     int node, lp;
     P_LINE *line;
@@ -100,7 +102,7 @@ static int add_line(struct Plus_head *plus, int lineid, int type, struct line_pn
  */
 int
 dig_add_line(struct Plus_head *plus, int type, struct line_pnts *Points,
-	     long offset)
+	     off_t offset)
 {
     int ret;
     
@@ -156,7 +158,7 @@ dig_add_line(struct Plus_head *plus, int type, struct line_pnts *Points,
 int
 dig_restore_line(struct Plus_head *plus, int lineid,
 		 int type, struct line_pnts *Points,
-		 long offset)
+		 off_t offset)
 {
     if (lineid < 1 || lineid > plus->n_lines) {
 	return -1;

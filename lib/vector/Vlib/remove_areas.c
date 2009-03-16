@@ -40,7 +40,7 @@ int
 Vect_remove_small_areas(struct Map_info *Map, double thresh,
 			struct Map_info *Err, double *removed_area)
 {
-    int area;
+    int area, nareas;
     int nremoved = 0;
     struct ilist *List;
     struct ilist *AList;
@@ -53,10 +53,13 @@ Vect_remove_small_areas(struct Map_info *Map, double thresh,
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
+    nareas = Vect_get_num_areas(Map);
     for (area = 1; area <= Vect_get_num_areas(Map); area++) {
 	int i, j, centroid, dissolve_neighbour;
 	double length, size;
 
+	if (area <= nareas)
+	    G_percent(area, nareas, 1);
 	G_debug(3, "area = %d", area);
 	if (!Vect_area_alive(Map, area))
 	    continue;

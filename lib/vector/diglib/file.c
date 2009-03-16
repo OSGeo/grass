@@ -14,6 +14,7 @@
 *   	    	for details.
 *
 *****************************************************************************/
+#include <grass/config.h>
 #include <string.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -32,19 +33,19 @@
  *
  *  Returns: current file position
  */
-long dig_ftell(GVFILE * file)
+off_t dig_ftell(GVFILE * file)
 {
     if (file->loaded)		/* using memory */
 	return (file->current - file->start);
 
-    return (ftell(file->file));
+    return (G_ftell(file->file));
 }
 
 /* Set GVFILE position.
  *
  *  Returns: 0 OK, -1 error
  */
-int dig_fseek(GVFILE * file, long offset, int whence)
+int dig_fseek(GVFILE * file, off_t offset, int whence)
 {
     if (file->loaded) {		/* using memory */
 	switch (whence) {
@@ -61,7 +62,9 @@ int dig_fseek(GVFILE * file, long offset, int whence)
 	return 0;
     }
 
-    return (fseek(file->file, offset, whence));
+    G_fseek(file->file, offset, whence);
+
+    return  0;
 }
 
 /* Rewind  GVFILE position.
@@ -184,7 +187,7 @@ int dig_file_load(GVFILE * file)
     fstat(fileno(file->file), &sbuf);
     size = sbuf.st_size;
 
-    G_debug(2, "  size = %u", size);
+    G_debug(2, "  size = %ld", size);
 
     /* Decide if the file should be loaded */
     /* TODO: I don't know how to get size of free memory (portability) to decide if load or not for auto */
