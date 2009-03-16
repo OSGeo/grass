@@ -222,7 +222,7 @@ int Vect_close(struct Map_info *);
 /* Level 1 and 2 */
 int Vect_read_next_line(struct Map_info *, struct line_pnts *,
 			struct line_cats *);
-long Vect_write_line(struct Map_info *, int, struct line_pnts *,
+off_t Vect_write_line(struct Map_info *, int, struct line_pnts *,
 		     struct line_cats *);
 
 int Vect_get_num_dblinks(struct Map_info *);
@@ -233,7 +233,7 @@ int Vect_read_line(struct Map_info *, struct line_pnts *, struct line_cats *,
 int Vect_rewrite_line(struct Map_info *, int, int, struct line_pnts *,
 		      struct line_cats *);
 int Vect_delete_line(struct Map_info *, int);
-int Vect_restore_line(struct Map_info *, int, long);
+int Vect_restore_line(struct Map_info *, int, off_t);
 
 int Vect_line_alive(struct Map_info *, int);
 int Vect_node_alive(struct Map_info *, int);
@@ -241,7 +241,7 @@ int Vect_area_alive(struct Map_info *, int);
 int Vect_isle_alive(struct Map_info *, int);
 int Vect_get_line_nodes(struct Map_info *, int, int *, int *);
 int Vect_get_line_areas(struct Map_info *, int, int *, int *);
-long Vect_get_line_offset(const struct Map_info *, int);
+off_t Vect_get_line_offset(const struct Map_info *, int);
 
 int Vect_get_node_coor(struct Map_info *, int, double *, double *, double *);
 int Vect_get_node_n_lines(struct Map_info *, int);
@@ -421,7 +421,7 @@ int V2_close_ogr(struct Map_info *);
 
 /* Read/write lines */
 int V1_read_line_nat(struct Map_info *, struct line_pnts *,
-		     struct line_cats *, long);
+		     struct line_cats *, off_t);
 int V1_read_next_line_nat(struct Map_info *, struct line_pnts *,
 			  struct line_cats *);
 int V1_read_next_line_ogr(struct Map_info *, struct line_pnts *,
@@ -434,19 +434,19 @@ int V2_read_next_line_nat(struct Map_info *, struct line_pnts *,
 			  struct line_cats *);
 int V2_read_next_line_ogr(struct Map_info *, struct line_pnts *,
 			  struct line_cats *);
-int V1_delete_line_nat(struct Map_info *, long);
+int V1_delete_line_nat(struct Map_info *, off_t);
 int V2_delete_line_nat(struct Map_info *, int);
-int V1_restore_line_nat(struct Map_info *, long);
-int V2_restore_line_nat(struct Map_info *, int, long);
-long V1_write_line_nat(struct Map_info *, int type, struct line_pnts *,
+int V1_restore_line_nat(struct Map_info *, off_t);
+int V2_restore_line_nat(struct Map_info *, int, off_t);
+off_t V1_write_line_nat(struct Map_info *, int type, struct line_pnts *,
 		       struct line_cats *);
-long V2_write_line_nat(struct Map_info *, int type, struct line_pnts *,
+off_t V2_write_line_nat(struct Map_info *, int type, struct line_pnts *,
 		       struct line_cats *);
 #if 0
 long V1_write_line_ogr(struct Map_info *, int type, struct line_pnts *,
 		       struct line_cats *);
 #endif
-long V1_rewrite_line_nat(struct Map_info *, long offset, int type,
+off_t V1_rewrite_line_nat(struct Map_info *, off_t offset, int type,
 			 struct line_pnts *, struct line_cats *);
 int V2_rewrite_line_nat(struct Map_info *, int line, int type,
 			struct line_pnts *, struct line_cats *);

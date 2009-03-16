@@ -12,6 +12,8 @@
 #include <stdio.h>
 #endif
 
+#include <sys/types.h>
+
 #include <grass/dgl.h>
 #include <grass/shapefil.h>
 #include <grass/btree.h>
@@ -66,8 +68,8 @@ typedef struct
     char *start;		/* pointer to beginnig of the file in the memory */
     char *current;		/* current position set by dig_seek */
     char *end;			/* end of file in the memory (pointer to first byte after) */
-    long size;			/* size of the file loaded to memory */
-    long alloc;			/* allocated space */
+    off_t size;			/* size of the file loaded to memory */
+    off_t alloc;		/* allocated space */
     int loaded;			/* 0 - not loaded, 1 - loaded */
 } GVFILE;
 
@@ -101,6 +103,7 @@ struct Port_info
     unsigned char lng_cnvrt[PORT_LONG];
     unsigned char int_cnvrt[PORT_INT];
     unsigned char shrt_cnvrt[PORT_SHORT];
+    unsigned char off_t_cnvrt[PORT_OFF_T];
 
     /* *_quick specify if native byte order of that type 
      * is the same as byte order of vector file (TRUE) 
@@ -110,6 +113,7 @@ struct Port_info
     int lng_quick;
     int int_quick;
     int shrt_quick;
+    int off_t_quick;
 };
 
 /* List of dead lines in the file, the space can be reused, not yet used */
@@ -145,12 +149,12 @@ struct dig_head
     int Back_Minor;
     int with_z;
 
-    long size;			/* coor file size */
+    off_t size;			/* coor file size */
     long head_size;		/* coor header size */
 
     struct Port_info port;	/* Portability information */
 
-    long last_offset;		/* offset of last read line */
+    off_t last_offset;		/* offset of last read line */
 
     struct recycle *recycle;
 
@@ -160,7 +164,7 @@ struct dig_head
 /* Coor info */
 struct Coor_info
 {
-    long size;			/* total size, in bytes */
+    off_t size;			/* total size, in bytes */
     long mtime;			/* time of last modification */
 };
 
@@ -229,7 +233,7 @@ struct Cat_index
     int n_ucats;		/* number of unique cats (not updated) */
     int n_types;		/* number of types in type */
     int type[7][2];		/* number of elements for each type (point, line, boundary, centroid, area, face, kernel) */
-    long offset;		/* offset of the beginning of this index in cidx file */
+    off_t offset;		/* offset of the beginning of this index in cidx file */
 };
 
 struct Plus_head
@@ -251,6 +255,8 @@ struct Plus_head
 
     int with_z;
     int spidx_with_z;
+
+    int off_t_size;        /* offset size here because Plus_head is available to all releveant functions */
 
     long head_size;		/* topo header size */
     long spidx_head_size;	/* spatial index header size */
@@ -296,13 +302,13 @@ struct Plus_head
     plus_t alloc_volumes;
     plus_t alloc_holes;
 
-    long Node_offset;		/* offset of array of nodes in topo file */
-    long Edge_offset;
-    long Line_offset;
-    long Area_offset;
-    long Isle_offset;
-    long Volume_offset;
-    long Hole_offset;
+    off_t Node_offset;		/* offset of array of nodes in topo file */
+    off_t Edge_offset;
+    off_t Line_offset;
+    off_t Area_offset;
+    off_t Isle_offset;
+    off_t Volume_offset;
+    off_t Hole_offset;
 
     /* Spatial index */
     /* Spatial index is never saved, it is built automaticaly for new and updated vectors.
@@ -311,13 +317,13 @@ struct Plus_head
 
     int Spidx_built;		/* set to 1 if spatial index is available and to 0 if it is not */
 
-    long Node_spidx_offset;	/* offset of spindex */
-    long Edge_spidx_offset;
-    long Line_spidx_offset;
-    long Area_spidx_offset;
-    long Isle_spidx_offset;
-    long Volume_spidx_offset;
-    long Hole_spidx_offset;
+    off_t Node_spidx_offset;	/* offset of spindex */
+    off_t Edge_spidx_offset;
+    off_t Line_spidx_offset;
+    off_t Area_spidx_offset;
+    off_t Isle_spidx_offset;
+    off_t Volume_spidx_offset;
+    off_t Hole_spidx_offset;
 
     struct Node *Node_spidx;
     struct Node *Line_spidx;
@@ -333,7 +339,7 @@ struct Plus_head
     struct Cat_index *cidx;	/* Array of category indexes */
     int cidx_up_to_date;	/* set to 1 when cidx is created and reset to 0 whenever any line is changed */
 
-    long coor_size;		/* size of coor file */
+    off_t coor_size;		/* size of coor file */
     long coor_mtime;		/* time of last coor modification */
 
     /* Level2 update: list of lines and nodes updated (topo info for the line was changed) 
@@ -447,7 +453,7 @@ struct P_line
     double T;			/* top */
     double B;			/* bottom */
 
-    long offset;		/* offset in coor file for line */
+    off_t offset;		/* offset in coor file for line */
     int type;
 };
 
