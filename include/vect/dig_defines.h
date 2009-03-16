@@ -27,6 +27,7 @@
 #define PORT_INT    4
 #define PORT_SHORT  2
 #define PORT_CHAR   1
+#define PORT_OFF_T  8
 
 /* replace by PORT_* in Vlib later and remove : */
 #define DBL_SIZ  8

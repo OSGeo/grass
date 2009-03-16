@@ -50,6 +50,7 @@ int dig__read_head(struct Map_info *);
 
 int dig__fread_port_D(double *, int, GVFILE *);
 int dig__fread_port_F(float *, int, GVFILE *);
+int dig__fread_port_O(off_t *, int, GVFILE *, int);
 int dig__fread_port_L(long *, int, GVFILE *);
 int dig__fread_port_S(short *, int, GVFILE *);
 int dig__fread_port_I(int *, int, GVFILE *);
@@ -57,6 +58,7 @@ int dig__fread_port_P(plus_t *, int, GVFILE *);
 int dig__fread_port_C(char *, int, GVFILE *);
 int dig__fwrite_port_D(double *, int, GVFILE *);
 int dig__fwrite_port_F(float *, int, GVFILE *);
+int dig__fwrite_port_O(off_t *, int, GVFILE *, int);
 int dig__fwrite_port_L(long *, int, GVFILE *);
 int dig__fwrite_port_S(short *, int, GVFILE *);
 int dig__fwrite_port_I(int *, int, GVFILE *);
@@ -125,9 +127,9 @@ int dig_spindex_init(struct Plus_head *);
 int dig_add_node(struct Plus_head *, double, double, double);
 int dig_which_node(struct Plus_head *, double, double, double);
 int dig_add_line(struct Plus_head *, int, struct line_pnts *,
-		 long);
+		 off_t);
 int dig_restore_line(struct Plus_head *, int, int, struct line_pnts *,
-		     long);
+		     off_t);
 int dig_del_line(struct Plus_head *, int);
 int dig_node_add_line(struct Plus_head *, int, int, struct line_pnts *, int);
 float dig_node_line_angle(struct Plus_head *, int, int);
@@ -238,8 +240,8 @@ int dig_Rd_Plus_head(GVFILE *, struct Plus_head *);
 int dig_Wr_Plus_head(GVFILE *, struct Plus_head *);
 
 /* file loaded to memory */
-long dig_ftell(GVFILE * file);
-int dig_fseek(GVFILE * file, long offset, int whence);
+off_t dig_ftell(GVFILE * file);
+int dig_fseek(GVFILE * file, off_t offset, int whence);
 void dig_rewind(GVFILE * file);
 int dig_fflush(GVFILE * file);
 size_t dig_fread(void *ptr, size_t size, size_t nmemb, GVFILE * file);
