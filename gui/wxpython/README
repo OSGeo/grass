@@ -8,7 +8,7 @@ $Date$
  GRASS GIS >= 6.3
  Python >= 2.4 (Python 3 not supported)
  	Python ElementTree (only for Python <= 2.4)
- wxPython >= 2.8.1.1
+ wxPython >= 2.8.1.1 (wxPython <= 2.8.9.2 requires swig <= 1.3.36)
  swig >= 1.3.31 (required only for vector digitizer)
  NumPy >= 1.0.4
  
@@ -61,7 +61,7 @@ $Date$
 If you want to launch wxPython GUI automatically when you start
 GRASS, edit your .grassrc7 file to replace
 
-GRASS_GUI: tcktk (or whatever you have here)
+GRASS_GUI: tcltk (or whatever you have here)
 
 with
 
