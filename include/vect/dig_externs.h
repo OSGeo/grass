@@ -102,6 +102,7 @@ int dig_do_file_checks(struct Map_info *, char *, char *);
 /* int dig_find_area (struct Map_info *, P_AREA *, double *, double *, double *, double);
    int dig_find_area2 (struct Map_info *, P_AREA *, double *); */
 int dig_find_area_poly(struct line_pnts *, double *);
+double dig_find_poly_orientation(struct line_pnts *);
 int dig_get_poly_points(int, struct line_pnts **, int *, struct line_pnts *);
 int dig_add_isle(struct Plus_head *, int, plus_t *);
 int dig_del_isle(struct Plus_head *, int);
