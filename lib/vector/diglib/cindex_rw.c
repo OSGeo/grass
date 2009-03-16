@@ -14,7 +14,9 @@
 *   	    	for details.
 *
 *****************************************************************************/
+#include <grass/config.h>
 #include <stdlib.h>
+#include <sys/types.h>
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/Vect.h>
@@ -39,6 +41,15 @@ int dig_write_cidx_head(GVFILE * fp, struct Plus_head *plus)
     buf[4] = plus->cidx_port.byte_order;
     if (0 >= dig__fwrite_port_C(buf, 5, fp))
 	return (-1);
+
+    /* get required offset size */
+    if (plus->off_t_size == 0) {
+	/* should not happen, topo is written first */
+	if (plus->coor_size > (off_t)PORT_LONG_MAX)
+	    plus->off_t_size = 8;
+	else
+	    plus->off_t_size = 4;
+    }
 
     /* bytes 6 - 9 : header size */
     if (0 >= dig__fwrite_port_L(&length, 1, fp))
@@ -89,7 +100,7 @@ int dig_write_cidx_head(GVFILE * fp, struct Plus_head *plus)
 	}
 
 	/* Offset */
-	if (0 >= dig__fwrite_port_L(&(ci->offset), 1, fp))
+	if (0 >= dig__fwrite_port_O(&(ci->offset), 1, fp, plus->off_t_size))
 	    return (0);
 	G_debug(3, "cidx %d offset: %ld", i, ci->offset);
     }
@@ -152,6 +163,15 @@ int dig_read_cidx_head(GVFILE * fp, struct Plus_head *plus)
 	return (-1);
     G_debug(3, "  header size %ld", plus->cidx_head_size);
 
+    /* get required offset size */
+    if (plus->off_t_size == 0) {
+	/* should not happen, topo is opened first */
+	if (plus->coor_size > (off_t)PORT_LONG_MAX)
+	    plus->off_t_size = 8;
+	else
+	    plus->off_t_size = 4;
+    }
+
     /* Body of header - info about all fields */
     /* Number of fields */
     if (0 >= dig__fread_port_I(&(plus->n_cidx), 1, fp))
@@ -201,7 +221,7 @@ int dig_read_cidx_head(GVFILE * fp, struct Plus_head *plus)
 	}
 
 	/* Offset */
-	if (0 >= dig__fread_port_L(&(ci->offset), 1, fp))
+	if (0 >= dig__fread_port_O(&(ci->offset), 1, fp, plus->off_t_size))
 	    return (0);
     }
 

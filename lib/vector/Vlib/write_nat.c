@@ -23,7 +23,9 @@
    \date 2001
  */
 
+#include <grass/config.h>
 #include <stdio.h>
+#include <sys/types.h>
 #include <stdlib.h>
 #include <math.h>
 
@@ -297,7 +299,7 @@ static void add_line_to_topo(struct Map_info *Map, int line,
     return;
 }
 
-long V1__rewrite_line_nat(struct Map_info *Map, long offset, int type,
+off_t V1__rewrite_line_nat(struct Map_info *Map, off_t offset, int type,
 			  struct line_pnts *points, struct line_cats *cats);
 
 /*!
@@ -311,10 +313,10 @@ long V1__rewrite_line_nat(struct Map_info *Map, long offset, int type,
   \return feature offset into file
   \return -1 on error
 */
-long V1_write_line_nat(struct Map_info *Map,
+off_t V1_write_line_nat(struct Map_info *Map,
 		       int type, struct line_pnts *points, struct line_cats *cats)
 {
-    long offset;
+    off_t offset;
 
     if (dig_fseek(&(Map->dig_fp), 0L, SEEK_END) == -1)	/* set to  end of file */
 	return -1;
@@ -337,11 +339,11 @@ long V1_write_line_nat(struct Map_info *Map,
   \return new feature id
   \return -1 on error
 */
-long V2_write_line_nat(struct Map_info *Map,
+off_t V2_write_line_nat(struct Map_info *Map,
 		       int type, struct line_pnts *points, struct line_cats *cats)
 {
     int line;
-    long offset;
+    off_t offset;
     struct Plus_head *plus;
     BOUND_BOX box;
 
@@ -371,7 +373,9 @@ long V2_write_line_nat(struct Map_info *Map,
 
     G_debug(3, "updated lines : %d , updated nodes : %d", plus->n_uplines,
 	    plus->n_upnodes);
-    
+
+    /* returns int line, but is defined as off_t for compatibility with
+     * Write_line_array in write.c */
     return line;
 }
 
@@ -394,15 +398,15 @@ long V2_write_line_nat(struct Map_info *Map,
   \return feature offset (rewriten feature)
   \return -1 on error
 */
-long V1_rewrite_line_nat(struct Map_info *Map,
-			 long offset,
+off_t V1_rewrite_line_nat(struct Map_info *Map,
+			 off_t offset,
 			 int type,
 			 struct line_pnts *points, struct line_cats *cats)
 {
     int old_type;
     struct line_pnts *old_points;
     struct line_cats *old_cats;
-    long new_offset;
+    off_t new_offset;
     
     /* TODO: enable points and cats == NULL  */
 
@@ -482,8 +486,8 @@ int V2_rewrite_line_nat(struct Map_info *Map,
   \return feature offset
   \return -1 on error
 */
-long V1__rewrite_line_nat(struct Map_info *Map,
-			  long offset,
+off_t V1__rewrite_line_nat(struct Map_info *Map,
+			  off_t offset,
 			  int type,
 			  struct line_pnts *points, struct line_cats *cats)
 {
@@ -579,7 +583,7 @@ long V1__rewrite_line_nat(struct Map_info *Map,
   \return  0 on success
   \return -1 on error
 */
-int V1_delete_line_nat(struct Map_info *Map, long offset)
+int V1_delete_line_nat(struct Map_info *Map, off_t offset)
 {
     char rhead;
     GVFILE *dig_fp;
@@ -818,7 +822,7 @@ int V2_delete_line_nat(struct Map_info *Map, int line)
   \return  0 on success
   \return -1 on error
 */
-int V1_restore_line_nat(struct Map_info *Map, long offset)
+int V1_restore_line_nat(struct Map_info *Map, off_t offset)
 {
     char rhead;
     GVFILE *dig_fp;
@@ -861,7 +865,7 @@ int V1_restore_line_nat(struct Map_info *Map, long offset)
   \return 0 on success
   \return -1 on error
 */
-int V2_restore_line_nat(struct Map_info *Map, int line, long offset)
+int V2_restore_line_nat(struct Map_info *Map, int line, off_t offset)
 {
     int i, ret, type;
     P_LINE *Line;

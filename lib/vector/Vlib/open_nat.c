@@ -18,6 +18,7 @@
    \date 2001
  */
 
+#include <grass/config.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -43,6 +44,7 @@ static int check_coor(struct Map_info *Map);
 int V1_open_old_nat(struct Map_info *Map, int update)
 {
     char buf[1000];
+    struct Coor_info CInfo;
 
     G_debug(1, "V1_open_old_nat(): name = %s mapset = %s", Map->name,
 	    Map->mapset);
@@ -55,11 +57,18 @@ int V1_open_old_nat(struct Map_info *Map, int update)
 	Map->dig_fp.file =
 	    G_fopen_old(buf, GRASS_VECT_COOR_ELEMENT, Map->mapset);
 
-    if (Map->dig_fp.file == NULL)
-	return -1;
+    if (Map->dig_fp.file == NULL) {
+        G_warning("Could not open coor file for vector map <%s>", Map->name);
+        return -1;
+    }
+
+    /* needed to determine file size, Map->head.size will be updated by dig__read_head(Map) */
+    Vect_coor_info(Map, &CInfo);
+    Map->head.size = CInfo.size;
 
     if (!(dig__read_head(Map)))
 	return (-1);
+
     check_coor(Map);
 
     /* set conversion matrices */
@@ -67,7 +76,7 @@ int V1_open_old_nat(struct Map_info *Map, int update)
 
     /* load to memory */
     if (!update)
-	dig_file_load(&(Map->dig_fp));
+	dig_file_load(&(Map->dig_fp)); /* has currently no effect, file never loaded */
 
     return (0);
 }
@@ -118,7 +127,7 @@ int V1_open_new_nat(struct Map_info *Map, const char *name, int with_z)
     G__file_name(name_buf, buf, GRASS_VECT_COOR_ELEMENT, G_mapset());
 
     Map->head.size = 0;
-    Map->head.head_size = GV_COOR_HEAD_SIZE;
+    Map->head.head_size = GV_COOR_HEAD_SIZE + 4;
     Vect__write_head(Map);
 
     /* set conversion matrices */
@@ -134,7 +143,7 @@ int V1_open_new_nat(struct Map_info *Map, const char *name, int with_z)
 int check_coor(struct Map_info *Map)
 {
     struct Coor_info CInfo;
-    long dif;
+    off_t dif;
 
     Vect_coor_info(Map, &CInfo);
     dif = CInfo.size - Map->head.size;

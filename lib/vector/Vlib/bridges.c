@@ -113,6 +113,7 @@ remove_bridges(struct Map_info *Map, int chtype, struct Map_info *Err)
     G_debug(1, "nlines =  %d", nlines);
 
     for (line = 1; line <= nlines; line++) {
+	G_percent(line, nlines, 1);
 	if (!Vect_line_alive(Map, line))
 	    continue;
 
@@ -189,4 +190,6 @@ remove_bridges(struct Map_info *Map, int chtype, struct Map_info *Err)
 	    bridges_removed++;
 	}
     }
+    G_verbose_message("Removed lines: %d", lines_removed);
+    G_verbose_message("Removed bridges: %d", bridges_removed);
 }

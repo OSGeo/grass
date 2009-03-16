@@ -64,6 +64,7 @@ Vect_remove_duplicates(struct Map_info *Map, int type, struct Map_info *Err)
     ndupl = 0;
 
     for (i = 1; i <= nlines; i++) {
+	G_percent(i, nlines, 1);
 	if (!Vect_line_alive(Map, i))
 	    continue;
 
@@ -113,6 +114,7 @@ Vect_remove_duplicates(struct Map_info *Map, int type, struct Map_info *Err)
 	nlines = Vect_get_num_lines(Map);	/* For future when lines with cats will be rewritten */
 	G_debug(3, "nlines =  %d\n", nlines);
     }
+    G_verbose_message("Removed duplicates: %d", ndupl);
 }
 
 /*!

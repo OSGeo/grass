@@ -484,7 +484,7 @@ int Vect_delete(const char *map)
 		    ret =
 			db_delete_table(Fi->driver, Fi->database, Fi->table);
 		    if (ret == DB_FAILED) {
-			G_warning(_("Unable to delete table <%s>"));
+			G_warning(_("Unable to delete table <%s>"), Fi->table);
 			Vect_close(&Map);
 			return -1;
 		    }

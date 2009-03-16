@@ -118,7 +118,7 @@ Vect_select_dangles(struct Map_info *Map, int type, double maxlength,
    2 for update at least on GV_BUILD_BASE.
 
    Parameters:
-   Map input map where have to be deleted
+   Map input map where dangles have to be deleted
    type type of dangles 
    option dangle option (REMOVE_DANGLE, CHTYPE_DANGLE, SELECT_DANGLE)
    maxlength maxlength of dangles or -1 for all dangles
@@ -168,6 +168,7 @@ static void dangles(struct Map_info *Map, int type, int option,
     G_debug(2, "nnodes =  %d", nnodes);
 
     for (node = 1; node <= nnodes; node++) {
+	G_percent(node, nnodes, 1);
 	G_debug(3, "node =  %d", node);
 	if (!Vect_node_alive(Map, node))
 	    continue;
@@ -261,4 +262,6 @@ static void dangles(struct Map_info *Map, int type, int option,
 	    dangles_removed++;
 	}			/* lcount == 1 */
     }				/* node <= nnodes */
+    G_verbose_message("Removed lines: %d", lines_removed);
+    G_verbose_message("Removed dangles: %d", dangles_removed);
 }

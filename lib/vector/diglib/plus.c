@@ -14,6 +14,8 @@
  * \date 2001-2006
  */
 
+#include <grass/config.h>
+#include <sys/types.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -37,6 +39,8 @@ int dig_init_plus(struct Plus_head *Plus)
     Plus->Back_Major = 0;
     Plus->Back_Minor = 0;
     Plus->with_z = 0;
+
+    Plus->off_t_size = 0;
 
     Plus->box.N = 0;
     Plus->box.S = 0;

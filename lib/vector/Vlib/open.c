@@ -17,6 +17,7 @@
  *
  * \date 2001-2008
  */
+#include <grass/config.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -179,6 +180,9 @@ Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
 	G_warning(_("Vector map which is not in the current mapset cannot be opened for update"));
 	return -1;
     }
+
+    G_debug(1, "Map name: %s", Map->name);
+    G_debug(1, "Map mapset: %s", Map->mapset);
 
     /* Read vector format information */
     format = 0;
@@ -355,7 +359,7 @@ Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
 	    fatal_error(ferror, errmsg);
 	    return (-1);
 	}
-	fseek(Map->hist_fp, (long)0, SEEK_END);
+	fseek(Map->hist_fp, (off_t)0, SEEK_END);
 	Vect_hist_write(Map,
 			"---------------------------------------------------------------------------------\n");
 
@@ -624,7 +628,7 @@ int Vect_coor_info(struct Map_info *Map, struct Coor_info *Info)
 	    Info->mtime = -1L;
 	}
 	else {
-	    Info->size = (long)stat_buf.st_size;	/* file size */
+	    Info->size = (off_t)stat_buf.st_size;	/* file size */
 	    Info->mtime = (long)stat_buf.st_mtime;	/* last modified time */
 	}
 	/* stat does not give correct size on MINGW 

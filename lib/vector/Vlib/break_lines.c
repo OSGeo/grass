@@ -115,6 +115,7 @@ Vect_break_lines_list(struct Map_info *Map, struct ilist *List_break,
     G_verbose_message(_("Intersections: %5d"), nbreaks);
 
     for (iline = 0; iline < nlines; iline++) {
+	G_percent(iline, nlines, 1);
 	if (List_break) {
 	    aline = List_break->value[iline];
 	}
@@ -367,7 +368,8 @@ Vect_break_lines_list(struct Map_info *Map, struct ilist *List_break,
 	G_debug(3, "nlines =  %d", nlines);
     }				/* for each line */
 
-    G_verbose_message(_("Intersections: %5d"), nbreaks);
+    G_percent(nlines, nlines, 1); /* finish it */
+    G_verbose_message(_("Intersections: %d"), nbreaks);
 
     Vect_destroy_list(List);
 

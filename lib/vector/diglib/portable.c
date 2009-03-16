@@ -15,6 +15,8 @@
  *              for details.
  *
  *****************************************************************************/
+#include <grass/config.h>
+#include <sys/types.h>
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/Vect.h>
@@ -24,17 +26,20 @@ extern void port_init(void);
 extern int nat_dbl;
 extern int nat_flt;
 extern int nat_lng;
+extern int nat_off_t;
 extern int nat_int;
 extern int nat_shrt;
 
 extern int dbl_order;
 extern int flt_order;
+extern int off_t_order;
 extern int lng_order;
 extern int int_order;
 extern int shrt_order;
 
 extern unsigned char dbl_cnvrt[sizeof(double)];
 extern unsigned char flt_cnvrt[sizeof(float)];
+extern unsigned char off_t_cnvrt[sizeof(off_t)];
 extern unsigned char lng_cnvrt[sizeof(long)];
 extern unsigned char int_cnvrt[sizeof(int)];
 extern unsigned char shrt_cnvrt[sizeof(short)];
@@ -128,6 +133,88 @@ int dig__fread_port_F(float *buf, int cnt, GVFILE * fp)
 	    }
 	    c1 += PORT_FLOAT;
 	    c2 += sizeof(float);
+	}
+    }
+    return 1;
+}
+
+/* read off_ts from the PVF file */
+int dig__fread_port_O(off_t *buf, int cnt, GVFILE * fp, int port_off_t_size)
+{
+    int i, j, ret;
+    unsigned char *c1, *c2;
+
+    if (Cur_Head->off_t_quick) {
+	if (nat_off_t == port_off_t_size) {
+	    ret = dig_fread(buf, port_off_t_size, cnt, fp);
+	    if (ret != cnt)
+		return 0;
+	}
+	else if (nat_off_t > port_off_t_size) {
+	    /* read into buffer */
+	    buf_alloc(cnt * port_off_t_size);
+	    ret = dig_fread(buffer, port_off_t_size, cnt, fp);
+	    if (ret != cnt)
+		return 0;
+	    /* set buffer to zero (positive numbers) */
+	    memset(buf, 0, cnt * sizeof(off_t));
+	    /* read from buffer in changed order */
+	    c1 = (unsigned char *)buffer;
+	    if (off_t_order == ENDIAN_LITTLE)
+		c2 = (unsigned char *)buf;
+	    else
+		c2 = (unsigned char *)buf + nat_off_t - port_off_t_size;
+	    for (i = 0; i < cnt; i++) {
+		/* set to FF if the value is negative */
+		if (off_t_order == ENDIAN_LITTLE) {
+		    if (c1[port_off_t_size - 1] & 0x80)
+			memset(c2, 0xff, sizeof(off_t));
+		}
+		else {
+		    if (c1[0] & 0x80)
+			memset(c2, 0xff, sizeof(off_t));
+		}
+		memcpy(c2, c1, port_off_t_size);
+		c1 += port_off_t_size;
+		c2 += sizeof(off_t);
+	    }
+	}
+	else if (nat_off_t < port_off_t_size) {
+	    /* should never happen */
+	    G_fatal_error("Vector exceeds supported file size limit");
+	}
+    }
+    else {
+	if (nat_off_t >= port_off_t_size) {
+	    /* read into buffer */
+	    buf_alloc(cnt * port_off_t_size);
+	    ret = dig_fread(buffer, port_off_t_size, cnt, fp);
+	    if (ret != cnt)
+		return 0;
+	    /* set buffer to zero (positive numbers) */
+	    memset(buf, 0, cnt * sizeof(off_t));
+	    /* read from buffer in changed order */
+	    c1 = (unsigned char *)buffer;
+	    c2 = (unsigned char *)buf;
+	    for (i = 0; i < cnt; i++) {
+		/* set to FF if the value is negative */
+		if (Cur_Head->byte_order == ENDIAN_LITTLE) {
+		    if (c1[port_off_t_size - 1] & 0x80)
+			memset(c2, 0xff, sizeof(off_t));
+		}
+		else {
+		    if (c1[0] & 0x80)
+			memset(c2, 0xff, sizeof(off_t));
+		}
+		for (j = 0; j < port_off_t_size; j++)
+		    c2[Cur_Head->off_t_cnvrt[j]] = c1[j];
+		c1 += port_off_t_size;
+		c2 += sizeof(off_t);
+	    }
+	}
+	else if (nat_off_t < port_off_t_size) {
+	    /* should never happen */
+	    G_fatal_error("Vector exceeds supported file size limit");
 	}
     }
     return 1;
@@ -425,6 +512,59 @@ int dig__fwrite_port_F(float *buf,	/* FLOAT */
     return 0;
 }
 
+int dig__fwrite_port_O(off_t *buf,	/* OFF_T */
+		       int cnt, GVFILE * fp, int port_off_t_size)
+{
+    int i, j;
+    unsigned char *c1, *c2;
+
+    if (Cur_Head->off_t_quick) {
+	if (nat_off_t == port_off_t_size) {
+	    if (dig_fwrite(buf, port_off_t_size, cnt, fp) == cnt)
+		return 1;
+	}
+	else if (nat_off_t > port_off_t_size) {
+	    buf_alloc(cnt * port_off_t_size);
+	    if (off_t_order == ENDIAN_LITTLE)
+		c1 = (unsigned char *)buf;
+	    else
+		c1 = (unsigned char *)buf + nat_off_t - port_off_t_size;
+	    c2 = (unsigned char *)buffer;
+	    for (i = 0; i < cnt; i++) {
+		memcpy(c2, c1, port_off_t_size);
+		c1 += port_off_t_size;
+		c2 += sizeof(off_t);
+	    }
+	    if (dig_fwrite(buffer, port_off_t_size, cnt, fp) == cnt)
+		return 1;
+	}
+	else if (nat_off_t < port_off_t_size) {
+	    /* should never happen */
+	    G_fatal_error("Vector exceeds supported file size limit");
+	}
+    }
+    else {
+	if (nat_off_t >= port_off_t_size) {
+    	    buf_alloc(cnt * port_off_t_size);
+	    c1 = (unsigned char *)buf;
+	    c2 = (unsigned char *)buffer;
+	    for (i = 0; i < cnt; i++) {
+		for (j = 0; j < port_off_t_size; j++)
+		    c2[j] = c1[Cur_Head->off_t_cnvrt[j]];
+		c1 += sizeof(off_t);
+		c2 += port_off_t_size;
+	    }
+	    if (dig_fwrite(buffer, port_off_t_size, cnt, fp) == cnt)
+		return 1;
+	}
+	else if (nat_off_t < port_off_t_size) {
+	    /* should never happen */
+	    G_fatal_error("Vector exceeds supported file size limit");
+	}
+    }
+    return 0;
+}
+
 int dig__fwrite_port_L(long *buf,	/* LONG */
 		       int cnt, GVFILE * fp)
 {
@@ -579,6 +719,7 @@ void dig_init_portable(struct Port_info *port, int byte_order)
 
     port->byte_order = byte_order;
 
+    /* double */
     if (port->byte_order == dbl_order)
 	port->dbl_quick = TRUE;
     else
@@ -591,6 +732,7 @@ void dig_init_portable(struct Port_info *port, int byte_order)
 	    port->dbl_cnvrt[i] = dbl_cnvrt[PORT_DOUBLE - i - 1];
     }
 
+    /* float */
     if (port->byte_order == flt_order)
 	port->flt_quick = TRUE;
     else
@@ -603,6 +745,7 @@ void dig_init_portable(struct Port_info *port, int byte_order)
 	    port->flt_cnvrt[i] = flt_cnvrt[PORT_FLOAT - i - 1];
     }
 
+    /* long */
     if (port->byte_order == lng_order)
 	port->lng_quick = TRUE;
     else
@@ -615,6 +758,7 @@ void dig_init_portable(struct Port_info *port, int byte_order)
 	    port->lng_cnvrt[i] = lng_cnvrt[PORT_LONG - i - 1];
     }
 
+    /* int */
     if (port->byte_order == int_order)
 	port->int_quick = TRUE;
     else
@@ -627,6 +771,7 @@ void dig_init_portable(struct Port_info *port, int byte_order)
 	    port->int_cnvrt[i] = int_cnvrt[PORT_INT - i - 1];
     }
 
+    /* short */
     if (port->byte_order == shrt_order)
 	port->shrt_quick = TRUE;
     else
@@ -637,6 +782,19 @@ void dig_init_portable(struct Port_info *port, int byte_order)
 	    port->shrt_cnvrt[i] = shrt_cnvrt[i];
 	else
 	    port->shrt_cnvrt[i] = shrt_cnvrt[PORT_SHORT - i - 1];
+    }
+
+    /* off_t */
+    if (port->byte_order == off_t_order)
+	port->off_t_quick = TRUE;
+    else
+	port->off_t_quick = FALSE;
+
+    for (i = 0; i < nat_off_t; i++) {
+	if (port->byte_order == ENDIAN_BIG)
+	    port->off_t_cnvrt[i] = off_t_cnvrt[i];
+	else
+	    port->off_t_cnvrt[i] = off_t_cnvrt[nat_off_t - i - 1];
     }
 
     return;

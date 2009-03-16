@@ -16,6 +16,8 @@
    \date 2001-2008
  */
 
+#include <grass/config.h>
+#include <sys/types.h>
 #include <grass/Vect.h>
 #include <grass/glocale.h>
 
@@ -185,7 +187,7 @@ int Vect_isle_alive(struct Map_info *Map, int isle)
   \return feature offset
   \return -1 on error
 */
-long Vect_get_line_offset(const struct Map_info *Map, int line)
+off_t Vect_get_line_offset(const struct Map_info *Map, int line)
 {
     if (line < 1 || line > Map->plus.n_lines)
 	return -1;
