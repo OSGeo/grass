@@ -24,8 +24,8 @@
 #endif
 
 /*
- **  fills BPoints (must be inited previously) by points from imput
- **  array LPoints. Each imput points must have at least 2 points.
+ **  fills BPoints (must be inited previously) by points from input
+ **  array LPoints. Each input LPoints[i] must have at least 2 points.
  **   
  **  returns number of points or -1 on error
  */
@@ -86,31 +86,72 @@ int dig_get_poly_points(int n_lines, struct line_pnts **LPoints, int *direction,
 }
 
 /*
- **  Calculate area size for polygon. 
+ **  Calculate signed area size for polygon. 
  **
- **  Total area is positive for clockwise and negative for counter clockwise ?
+ **  Total area is positive for clockwise and negative for counterclockwise
  */
 int dig_find_area_poly(struct line_pnts *Points, double *totalarea)
 {
-    int i;
+    int i, n = Points->n_points - 1;
     double *x, *y;
-    double tot_area, sum_area;
-
-
-    *totalarea = 0.;
-
-    tot_area = 0.0;
+    double tot_area;
 
     x = Points->x;
     y = Points->y;
 
-    sum_area = 0.0;
-    for (i = 1; i < Points->n_points; i++) {
-	sum_area += (x[i] - x[i - 1]) * (y[i] + y[i - 1]);
+    tot_area = 0.0;
+    for (i = 1; i < n; i++) {
+        tot_area += y[i] * (x[i + 1] - x[i - 1]);
     }
-    tot_area += sum_area;
+    /* add last point with i == Points->n_points - 1 */
+    tot_area += y[i] * (x[1] - x[i - 1]);
 
     *totalarea = 0.5 * tot_area;
 
     return (0);
+}
+
+/*
+ * find orientation of polygon
+ * faster than signed area
+ * 
+ * return value is positive for CW, negative for CCW, 0 for degenerate
+ *
+ * Points must be closed polygon
+ * only works with pruned lines (no consecutive duplicate vertices)
+ */
+double dig_find_poly_orientation(struct line_pnts *Points)
+{
+    unsigned int i, pcur = 0;
+    unsigned int n = Points->n_points -1; /* skip last point == first point */
+    double *x, *y;
+
+    /* first find leftmost highest vertex of the polygon */
+    /* could also be leftmost lowest, rightmost highest or rightmost lowest */
+
+    x = Points->x;
+    y = Points->y;
+
+    for (i = 1; i < n; i++) {
+	
+	if (y[i] < y[pcur])
+	    continue;
+	else if (y[i] == y[pcur]) {    /* just as high */
+	    if (x[i] < x[pcur])   	/* but to the right */
+		continue;
+	}
+	pcur = i;          /* a new leftmost highest vertex */
+    }
+
+    /* orientation at vertex pcur == signed area for triangle
+     * rather use robust determinant of Olivier Dilliers? */
+    if (pcur > 0) {
+	return (x[pcur + 1] - x[pcur - 1]) * (y[pcur] - y[pcur - 1])
+             - (x[pcur] - x[pcur - 1]) * (y[pcur + 1] - y[pcur - 1]);
+    }
+    else { 
+	n -= 1;
+	return (x[1] - x[n]) * (y[0] - y[n])
+             - (x[0] - x[n]) * (y[1] - y[n]);
+    }
 }

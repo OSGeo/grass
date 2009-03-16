@@ -32,7 +32,7 @@
    \param iline line id
    \param side side (GV_LEFT or GV_RIGHT)
 
-   \return > 0 number of  area
+   \return > 0 number of area
    \return < 0 number of isle
    \return 0 not created (may also already exist)
  */
@@ -84,10 +84,15 @@ int Vect_build_line_area(struct Map_info *Map, int iline, int side)
 	Vect_append_points(APoints, Points, direction);
     }
 
-    dig_find_area_poly(APoints, &area_size);
+    /* dig_find_area_poly(APoints, &area_size); */
+
+    Vect_line_prune(APoints);
+    area_size = dig_find_poly_orientation(APoints);
+    /* area_size is not real area size, we are only interested in the sign */
+
     G_debug(3, "  area/isle size = %f", area_size);
 
-    if (area_size > 0) {	/* area */
+    if (area_size > 0) {	/* CW: area */
 	/* add area structure to plus */
 	area = dig_add_area(plus, n_lines, lines);
 	if (area == -1) {	/* error */
@@ -97,7 +102,7 @@ int Vect_build_line_area(struct Map_info *Map, int iline, int side)
 	G_debug(3, "  -> area %d", area);
 	return area;
     }
-    else if (area_size < 0) {	/* island */
+    else if (area_size < 0) {	/* CCW: island */
 	isle = dig_add_isle(plus, n_lines, lines);
 	if (isle == -1) {	/* error */
 	    Vect_close(Map);
@@ -191,7 +196,7 @@ int Vect_isle_find_area(struct Map_info *Map, int isle)
 
 	/* Check box */
 	/* Note: If build is run on large files of areas imported from nontopo format (shapefile)
-	 * attaching of isles takes very  long time because each area is also isle and select by
+	 * attaching of isles takes very long time because each area is also isle and select by
 	 * box all overlapping areas selects all areas with box overlapping first node. 
 	 * Then reading coordinates for all those areas would take a long time -> check first 
 	 * if isle's box is completely within area box */
