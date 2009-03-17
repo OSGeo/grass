@@ -424,7 +424,8 @@ int dig_del_area(struct Plus_head *plus, int area)
 	}
     }
 
-    /* TODO: free structures */
+    /* free structures */
+    dig_free_area(Area);
     plus->Area[area] = NULL;
     return 1;
 }
@@ -778,8 +779,8 @@ int dig_del_isle(struct Plus_head *plus, int isle)
 	}
     }
 
-    /* TODO: free structures */
-
+    /* free structures */
+    dig_free_isle(Isle);
     plus->Isle[isle] = NULL;
 
     return 1;
