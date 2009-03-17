@@ -86,7 +86,6 @@ int Vect_build_line_area(struct Map_info *Map, int iline, int side)
 
     /* dig_find_area_poly(APoints, &area_size); */
 
-    Vect_line_prune(APoints);
     area_size = dig_find_poly_orientation(APoints);
     /* area_size is not real area size, we are only interested in the sign */
 
@@ -210,7 +209,7 @@ int Vect_isle_find_area(struct Map_info *Map, int isle)
 	poly = Vect_point_in_area_outer_ring(Node->x, Node->y, Map, area);
 	G_debug(3, "  poly = %d", poly);
 
-	if (poly == 1) {	/* pint in area, but node is not part of area inside isle (would be poly == 2) */
+	if (poly == 1) {	/* point in area, but node is not part of area inside isle (would be poly == 2) */
 	    /* In rare case island is inside more areas in that case we have to calculate area
 	     * of outer ring and take the smaller */
 	    if (sel_area == 0) {	/* first */
@@ -220,23 +219,27 @@ int Vect_isle_find_area(struct Map_info *Map, int isle)
 		if (cur_size < 0) {	/* second area */
 		    /* This is slow, but should not be called often */
 		    Vect_get_area_points(Map, sel_area, APoints);
-		    G_begin_polygon_area_calculations();
+		    /* G_begin_polygon_area_calculations();
 		    cur_size =
 			G_area_of_polygon(APoints->x, APoints->y,
-					  APoints->n_points);
+					  APoints->n_points); */
+		    /* this is faster, but there may be latlon problems: the poles */
+		    dig_find_area_poly(APoints, &cur_size);
 		    G_debug(3, "  first area size = %f (n points = %d)",
 			    cur_size, APoints->n_points);
 
 		}
 
 		Vect_get_area_points(Map, area, APoints);
-		size =
+		/* size =
 		    G_area_of_polygon(APoints->x, APoints->y,
-				      APoints->n_points);
-		G_debug(3, "  area size = %f (n points = %d)", cur_size,
+				      APoints->n_points); */
+		/* this is faster, but there may be latlon problems: the poles */
+		dig_find_area_poly(APoints, &size);
+		G_debug(3, "  area size = %f (n points = %d)", size,
 			APoints->n_points);
 
-		if (size < cur_size) {
+		if (size > 0 && size < cur_size) {
 		    sel_area = area;
 		    cur_size = size;
 		}
