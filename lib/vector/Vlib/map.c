@@ -174,7 +174,8 @@ Vect_copy(const char *in, const char *mapset, const char *out)
     if (Vect_legal_filename(out) < 0)
 	G_fatal_error(_("Vector map name is not SQL compliant"));
 
-    xmapset = G_find_vector2(in, mapset);
+    /* remove mapset from fully qualified name with G_find_vector(), confuses G__file_name() */
+    xmapset = G_find_vector(in, mapset);
     if (!xmapset) {
 	G_warning(_("Unable to find vector map <%s> in <%s>"), in, mapset);
 	return -1;

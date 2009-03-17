@@ -215,7 +215,7 @@ Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
 		_("Unable to open vector map <%s> on level %d. "
 		  "Try to rebuild vector topology by v.build."),
 		Vect_get_full_name(Map), level_request);
-	G_warning(_("Unable to read head file"));
+	G_warning(_("Unable to read head file of vector <%s>"), Vect_get_full_name(Map));
     }
 
     G_debug(1, "Level request = %d", level_request);

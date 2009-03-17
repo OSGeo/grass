@@ -8,11 +8,11 @@
  *
  * PURPOSE:      Lower level functions for reading/writing/manipulating vectors.
  *
- * COPYRIGHT:    (C) 2001 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2009 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *              License (>=v2). Read the file COPYING that comes with GRASS
- *              for details.
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
  *****************************************************************************/
 #include <math.h>
@@ -89,6 +89,9 @@ int dig_get_poly_points(int n_lines, struct line_pnts **LPoints, int *direction,
  **  Calculate signed area size for polygon. 
  **
  **  Total area is positive for clockwise and negative for counterclockwise
+ **  Formula modified from
+ **  Sunday, Daniel. 2002. Fast Polygon Area and Newell Normal Computation.
+ **  Journal of Graphics Tools; 7(2):9-13.
  */
 int dig_find_area_poly(struct line_pnts *Points, double *totalarea)
 {
@@ -96,15 +99,16 @@ int dig_find_area_poly(struct line_pnts *Points, double *totalarea)
     double *x, *y;
     double tot_area;
 
+    /* prune first with Vect_line_prune(Points) for speed? */
+
     x = Points->x;
     y = Points->y;
 
-    tot_area = 0.0;
+    /* first point 0 == point n */
+    tot_area = y[0] * (x[1] - x[n - 1]);
     for (i = 1; i < n; i++) {
         tot_area += y[i] * (x[i + 1] - x[i - 1]);
     }
-    /* add last point with i == Points->n_points - 1 */
-    tot_area += y[i] * (x[1] - x[i - 1]);
 
     *totalarea = 0.5 * tot_area;
 
@@ -118,12 +122,15 @@ int dig_find_area_poly(struct line_pnts *Points, double *totalarea)
  * return value is positive for CW, negative for CCW, 0 for degenerate
  *
  * Points must be closed polygon
- * only works with pruned lines (no consecutive duplicate vertices)
+ *
+ * this code uses bits and pieces from softSurfer and GEOS
+ * (C) 2000 softSurfer (www.softsurfer.com)
+ * (C) 2006 Refractions Research Inc.
  */
 double dig_find_poly_orientation(struct line_pnts *Points)
 {
-    unsigned int i, pcur = 0;
-    unsigned int n = Points->n_points -1; /* skip last point == first point */
+    unsigned int pnext, pprev, pcur = 0;
+    unsigned int npoints = Points->n_points - 1; /* skip last point == first point */
     double *x, *y;
 
     /* first find leftmost highest vertex of the polygon */
@@ -132,26 +139,43 @@ double dig_find_poly_orientation(struct line_pnts *Points)
     x = Points->x;
     y = Points->y;
 
-    for (i = 1; i < n; i++) {
-	
-	if (y[i] < y[pcur])
+    for (pnext = 1; pnext < npoints; pnext++) {
+	if (y[pnext] < y[pcur])
 	    continue;
-	else if (y[i] == y[pcur]) {    /* just as high */
-	    if (x[i] < x[pcur])   	/* but to the right */
+	else if (y[pnext] == y[pcur]) {    /* just as high */
+	    if (x[pnext] < x[pcur])   	/* but to the right */
 		continue;
 	}
-	pcur = i;          /* a new leftmost highest vertex */
+	pcur = pnext;          /* a new leftmost highest vertex */
     }
 
-    /* orientation at vertex pcur == signed area for triangle
-     * rather use robust determinant of Olivier Dilliers? */
-    if (pcur > 0) {
-	return (x[pcur + 1] - x[pcur - 1]) * (y[pcur] - y[pcur - 1])
-             - (x[pcur] - x[pcur - 1]) * (y[pcur + 1] - y[pcur - 1]);
+    /* Points are not pruned, so ... */
+    
+    /* find next distinct point */
+    pnext = pcur + 1;
+    while (pnext != pcur) {
+	if (pnext == npoints)
+	    pnext = 0;
+	if (x[pcur] != x[pnext] || y[pcur] != y[pnext])
+	    break;
+	pnext++;
     }
-    else { 
-	n -= 1;
-	return (x[1] - x[n]) * (y[0] - y[n])
-             - (x[0] - x[n]) * (y[1] - y[n]);
+
+    /* find previous distinct point */
+    if (pcur == 0)
+	pprev = npoints - 1;
+    else
+	pprev = pcur - 1;
+    while (pprev != pcur) {
+	if (pprev == 0)
+	    pprev = npoints;
+	if (x[pcur] != x[pprev] || y[pcur] != y[pprev])
+	    break;
+	pprev--;
     }
+
+    /* orientation at vertex pcur == signed area for triangle pprev, pcur, pnext
+     * rather use robust determinant of Olivier Devillers? */
+    return (x[pnext] - x[pprev]) * (y[pcur] - y[pprev])
+         - (x[pcur] - x[pprev]) * (y[pnext] - y[pprev]);
 }
