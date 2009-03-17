@@ -188,7 +188,6 @@ int dig_del_line(struct Plus_head *plus, int line)
     P_LINE *Line;
     P_NODE *Node;
 
-    /* TODO: free structures */
     G_debug(3, "dig_del_line() line =  %d", line);
 
     Line = plus->Line[line];
@@ -211,6 +210,8 @@ int dig_del_line(struct Plus_head *plus, int line)
     if (Node->n_lines == 0) {
 	G_debug(3, "    node %d has 0 lines -> delete", Line->N1);
 	dig_spidx_del_node(plus, Line->N1);
+	/* free structures */
+	dig_free_node(Node);
 	plus->Node[Line->N1] = NULL;
     }
     else {
@@ -235,6 +236,8 @@ int dig_del_line(struct Plus_head *plus, int line)
 	if (Node->n_lines == 0) {
 	    G_debug(3, "    node %d has 0 lines -> delete", Line->N2);
 	    dig_spidx_del_node(plus, Line->N2);
+	    /* free structures */
+	    dig_free_node(Node);
 	    plus->Node[Line->N2] = NULL;
 	}
 	else {
@@ -244,6 +247,7 @@ int dig_del_line(struct Plus_head *plus, int line)
     }
 
     /* Delete line */
+    dig_free_line(Line);
     plus->Line[line] = NULL;
 
     return 0;

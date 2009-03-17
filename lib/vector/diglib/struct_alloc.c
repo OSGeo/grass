@@ -35,6 +35,7 @@
  ** Allocate array space to add 'add' elements
  */
 
+/* TODO: use G_malloc and friends instead of malloc et al.? */
 
 /* allocate new node structure */
 P_NODE *dig_alloc_node()
@@ -51,6 +52,14 @@ P_NODE *dig_alloc_node()
     Node->angles = NULL;
 
     return (Node);
+}
+
+/* free node structure */
+void dig_free_node(P_NODE *Node)
+{
+    free(Node->lines);
+    free(Node->angles);
+    free(Node);
 }
 
 /* dig_node_alloc_line (node, add)
@@ -116,6 +125,12 @@ P_LINE *dig_alloc_line()
 	return NULL;
 
     return (Line);
+}
+
+/* free line structure */
+void dig_free_line(P_LINE *Line)
+{
+    free(Line);
 }
 
 /* Reallocate array of pointers to lines.
@@ -207,6 +222,14 @@ P_AREA *dig_alloc_area()
     return (Area);
 }
 
+/* free area structure */
+void dig_free_area(P_AREA *Area)
+{
+    free(Area->lines);
+    free(Area->isles);
+    free(Area);
+}
+
 /* alloc new isle structure */
 P_ISLE *dig_alloc_isle()
 {
@@ -225,6 +248,12 @@ P_ISLE *dig_alloc_isle()
     return (Isle);
 }
 
+/* free isle structure */
+void dig_free_isle(P_ISLE *Isle)
+{
+    free(Isle->lines);
+    free(Isle);
+}
 
 /* allocate room for  'num'   X and Y  arrays in struct line_pnts 
  **   returns -1 on out of memory 
