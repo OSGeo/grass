@@ -82,7 +82,9 @@ int Vect_build_line_area(struct Map_info *Map, int iline, int side)
 	else
 	    direction = GV_BACKWARD;
 	Vect_append_points(APoints, Points, direction);
+	APoints->n_points--; /* skip last point, avoids duplicates */
     }
+    APoints->n_points++; /* close polygon */
 
     /* dig_find_area_poly(APoints, &area_size); */
 

@@ -154,11 +154,11 @@ double dig_find_poly_orientation(struct line_pnts *Points)
     /* find next distinct point */
     pnext = pcur + 1;
     while (pnext != pcur) {
-	if (pnext == npoints)
-	    pnext = 0;
 	if (x[pcur] != x[pnext] || y[pcur] != y[pnext])
 	    break;
 	pnext++;
+	if (pnext == npoints)
+	    pnext = 0;
     }
 
     /* find previous distinct point */
