@@ -209,7 +209,7 @@ fi
 #g.message "column <$GIS_OPT_COLUMN> is type [$NCOLUMN_TYPE]"
 
 # check if GRASSRGB column exists, make it if it doesn't
-TABLE=`v.db.connect -g map="$GIS_OPT_MAP" layer="$GIS_OPT_LAYER" fs=";" | cut -f2 -d';'`
+TABLE=`v.db.connect -g map="$GIS_OPT_MAP" layer="$GIS_OPT_LAYER" fs=";" | grep "^$GIS_OPT_LAYER;" | cut -f2 -d';'`
 COLUMN_TYPE=`v.info -c map="$GIS_OPT_MAP" layer="$GIS_OPT_LAYER" | grep -i "|$GIS_OPT_RGB_COLUMN$" | cut -f1 -d'|'`
 if [ -z "$COLUMN_TYPE" ] ; then
     # RGB Column not found, create it
