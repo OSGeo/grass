@@ -130,7 +130,7 @@ int dig_find_area_poly(struct line_pnts *Points, double *totalarea)
 double dig_find_poly_orientation(struct line_pnts *Points)
 {
     unsigned int pnext, pprev, pcur = 0;
-    unsigned int npoints = Points->n_points - 1; /* skip last point == first point */
+    unsigned int lastpoint = Points->n_points - 1;
     double *x, *y;
 
     /* first find leftmost highest vertex of the polygon */
@@ -139,7 +139,7 @@ double dig_find_poly_orientation(struct line_pnts *Points)
     x = Points->x;
     y = Points->y;
 
-    for (pnext = 1; pnext < npoints; pnext++) {
+    for (pnext = 1; pnext < lastpoint; pnext++) {
 	if (y[pnext] < y[pcur])
 	    continue;
 	else if (y[pnext] == y[pcur]) {    /* just as high */
@@ -150,30 +150,34 @@ double dig_find_poly_orientation(struct line_pnts *Points)
     }
 
     /* Points are not pruned, so ... */
-    
+
     /* find next distinct point */
-    pnext = pcur + 1;
+    if (pcur == lastpoint)
+	pnext = 0;
+    else
+	pnext = pcur + 1;
     while (pnext != pcur) {
 	if (x[pcur] != x[pnext] || y[pcur] != y[pnext])
 	    break;
-	pnext++;
-	if (pnext == npoints)
+	if (pnext < lastpoint - 1)
+	    pnext++;
+	else
 	    pnext = 0;
     }
 
     /* find previous distinct point */
     if (pcur == 0)
-	pprev = npoints - 1;
-    else
-	pprev = pcur - 1;
+	pcur = lastpoint;
+    pprev = pcur - 1;
     while (pprev != pcur) {
-	if (pprev == 0)
-	    pprev = npoints;
 	if (x[pcur] != x[pprev] || y[pcur] != y[pprev])
 	    break;
-	pprev--;
+	if (pprev > 1)
+	    pprev--;
+	else
+	    pprev = lastpoint;
     }
-
+    
     /* orientation at vertex pcur == signed area for triangle pprev, pcur, pnext
      * rather use robust determinant of Olivier Devillers? */
     return (x[pnext] - x[pprev]) * (y[pcur] - y[pprev])
