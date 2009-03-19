@@ -86,7 +86,7 @@ void IL_init_params_2d(struct interp_params *, FILE *, int, int, double,
 		       char *, char *, char *, char *, char *, char *,
 		       double, double, double, int, double, double,
 		       FILE *, FILE *, FILE *, FILE *, FILE *, FILE *, FILE *,
-		       struct TimeStamp *, int, char *);
+		       struct TimeStamp *, int, const char *);
 
 void IL_init_func_2d(struct interp_params *, int (*)(), int (*)(), int (*)(),
 		     int (*)(), double (*)(), int (*)(), int (*)());

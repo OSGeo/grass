@@ -138,7 +138,7 @@ int main(int argc, char *argv[])
     } parm;
     struct
     {
-	struct Flag *deriv, *cprght, *cv;
+	struct Flag *deriv, *cprght, *cv, *withz;
     } flag;
 
 
@@ -168,11 +168,14 @@ int main(int argc, char *argv[])
 	_("Output partial derivatives instead of topographic parameters");
     flag.deriv->guisection = _("Outputs");
 
+    flag.withz = G_define_flag();
+    flag.withz->key = 'z';
+    flag.withz->description = _("Use z coordinates for approximation");
+    flag.withz->guisection = _("Parameters");
+    
     parm.input = G_define_standard_option(G_OPT_V_INPUT);
 
     parm.field = G_define_standard_option(G_OPT_V_FIELD);
-    parm.field->description =
-	_("If set to 0, z coordinates are used. (3D vector only)");
     parm.field->answer = "1";
     parm.field->guisection = _("Selection");
 
@@ -255,7 +258,7 @@ int main(int argc, char *argv[])
     parm.zcol->type = TYPE_STRING;
     parm.zcol->required = NO;
     parm.zcol->description =
-	_("Name of the attribute column with values to be used for approximation (if layer>0)");
+	_("Name of the attribute column with values to be used for approximation");
     parm.zcol->guisection = _("Parameters");
 
     parm.fi = G_define_option();
@@ -414,11 +417,7 @@ int main(int argc, char *argv[])
 	&& (slope == NULL) && (aspect == NULL) && (devi == NULL)
 	&& (cvdev == NULL))
 	G_warning(_("You are not outputting any raster or vector maps"));
-
-    if (parm.wheresql->answer != NULL) {
-	if (field < 1)
-	    G_fatal_error(_("'layer' must be > 0 for 'where'."));
-    }
+    
     cond2 = ((pcurv != NULL) || (tcurv != NULL) || (mcurv != NULL));
     cond1 = ((slope != NULL) || (aspect != NULL) || cond2);
     deriv = flag.deriv->answer;
@@ -599,7 +598,8 @@ int main(int argc, char *argv[])
 		    IL_crstg, IL_write_temp_2d);
 
     totsegm =
-	IL_vector_input_data_2d(&params, &Map, field, zcol, scol,
+	IL_vector_input_data_2d(&params, &Map, flag.withz ? 0 : field,
+				zcol, scol,
 				info, &xmin, &xmax,
 				&ymin, &ymax, &zmin, &zmax, &NPOINT, &dmax);
     if (totsegm <= 0) {

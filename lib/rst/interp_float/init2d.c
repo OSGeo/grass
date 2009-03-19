@@ -43,7 +43,7 @@ void IL_init_params_2d(
 			  FILE * t1, FILE * t2, FILE * t3, FILE * t4, FILE * t5, FILE * t6,	/* temp files for writing interp. values */
 			  FILE * dev,	/* pointer to deviations file */
 			  struct TimeStamp *ts, int c,	/* cross validation */
-			  char *wheresql	/* SQL WHERE */
+			  const char *wheresql	/* SQL WHERE */
     )
 {
     params->fdinp = inp;
