@@ -607,6 +607,10 @@ class VDigitToolbar(AbstractToolbar):
         # clear tmp canvas
         if self.action['id'] != id:
             self.parent.MapWindow.ClearLines(pdc=self.parent.MapWindow.pdcTmp)
+            if self.parent.digit and \
+                    len(self.parent.digit.driver.GetSelected()) > 0:
+                # cancel action
+                self.parent.MapWindow.OnMiddleDown(None)
         
     def OnAddPoint(self, event):
         """Add point to the vector map Laier"""
