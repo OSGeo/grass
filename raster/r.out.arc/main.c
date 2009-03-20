@@ -50,6 +50,7 @@ int main(int argc, char *argv[])
     {
 	struct Flag *noheader;
 	struct Flag *singleline;
+	struct Flag *ccenter;
     } flag;
 
     G_gisinit(argv[0]);
@@ -91,6 +92,12 @@ int main(int argc, char *argv[])
     flag.singleline->key = '1';
     flag.singleline->description =
 	_("List one entry per line instead of full row");
+
+    /* use cell center in header instead of cell corner */
+    flag.ccenter = G_define_flag();
+    flag.ccenter->key = 'c';
+    flag.ccenter->description =
+	_("Use cell center reference in header instead of cell corner");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -136,20 +143,27 @@ int main(int argc, char *argv[])
 	G_get_window(&region);
 	fprintf(fp, "ncols %d\n", region.cols);
 	fprintf(fp, "nrows %d\n", region.rows);
+	cellsize = fabs(region.east - region.west) / region.cols;
 
-	if (G_projection() != 3) {	/* Is Projection != LL (3) */
-	    G_format_easting(region.west, buf, region.proj);
-	    fprintf(fp, "xllcorner %s\n", buf);
-	    G_format_northing(region.south, buf, region.proj);
-	    fprintf(fp, "yllcorner %s\n", buf);
+	if (G_projection() != PROJECTION_LL) {	/* Is Projection != LL (3) */
+	    if (!flag.ccenter->answer) {
+		G_format_easting(region.west, buf, region.proj);
+		fprintf(fp, "xllcorner %s\n", buf);
+		G_format_northing(region.south, buf, region.proj);
+		fprintf(fp, "yllcorner %s\n", buf);
+	    }
+	    else {
+		G_format_easting(region.west + cellsize / 2., buf, region.proj);
+		fprintf(fp, "xllcenter %s\n", buf);
+		G_format_northing(region.south + cellsize / 2., buf, region.proj);
+		fprintf(fp, "yllcenter %s\n", buf);
+	    }
 	}
 	else {			/* yes, lat/long */
-
 	    fprintf(fp, "xllcorner %f\n", region.west);
 	    fprintf(fp, "yllcorner %f\n", region.south);
 	}
 
-	cellsize = fabs(region.east - region.west) / region.cols;
 	fprintf(fp, "cellsize %f\n", cellsize);
 	fprintf(fp, "NODATA_value %s\n", null_str);
     }
