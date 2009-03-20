@@ -63,16 +63,16 @@ int dig__write_head(struct Map_info *Map)
 	}
 	else {
 	    /* write twice to fill the space and set offset (account for sizeof(off_t) == 4) */
-	    if (0 >= dig__fwrite_port_L(&(Map->head.size), 1, &(Map->dig_fp)))
+	    if (0 >= dig__fwrite_port_O(&(Map->head.size), 1, &(Map->dig_fp), 4))
 		return (0);
-	    if (0 >= dig__fwrite_port_L(&(Map->head.size), 1, &(Map->dig_fp)))
+	    if (0 >= dig__fwrite_port_O(&(Map->head.size), 1, &(Map->dig_fp), 4))
 		return (0);
 	}
     }
     else {
 	/* old vector with shorter coor head size got modified */
 	/* bytes 11 - 14 : size of coordinate file */
-	if (0 >= dig__fwrite_port_L(&(Map->head.size), 1, &(Map->dig_fp)))
+	if (0 >= dig__fwrite_port_O(&(Map->head.size), 1, &(Map->dig_fp), 4))
 	    return (0);
     }
 
@@ -147,7 +147,7 @@ int dig__read_head(struct Map_info *Map)
     }
     else {
 	/* bytes 11 - 14 : size of coordinate file */
-	if (0 >= dig__fread_port_L(&(Map->head.size), 1, &(Map->dig_fp)))
+	if (0 >= dig__fread_port_O(&(Map->head.size), 1, &(Map->dig_fp), 4))
 	    return (0);
     }
     G_debug(2, "  coor size %ld", Map->head.size);
