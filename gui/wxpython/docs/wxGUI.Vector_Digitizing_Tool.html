@@ -34,26 +34,7 @@ Manager and opened for editing. "Select vector map" combobox in
 digitizer toolbar also allows switching easily between vector maps to be
 edited.
 
-<h2>NOTES</h2>
-
-<i>Dead (deleted)</i> are internally only marked in the geometry file
-as 'dead' but it remains there and occupies space. Any vector module
-used afterwards on this vector map which really reads and writes
-vector geometry (so not <em><a href="g.copy.html">g.copy</a></em>)
-will writes only features which are 'alive'.
-
-<p>
-<i>Added or modified</i> vector features are <i>snapped</i> to
-existing vector features ('Settings-&gt;General-&gt;Snapping', nodes or vertices)
-based on 'Settings-&gt;General-&gt;Snapping threshold' value. To
-disable snapping set the snapping threshold to '0'.
-
-<p>
-If the digitizer crashes for some reason you can repair the vector map
-which was left open with the <em>v.build</em> module.
-
-
-<h2>Digitizer toolbar</h2>
+<h3>DIGITIZER TOOLBAR</h3>
 
 <center>
 <br><img src="wxGUI_vector_digitizer_toolbar.jpg" border="1"><br><br>
@@ -220,6 +201,28 @@ which was left open with the <em>v.build</em> module.
   digitizing session is quited.</dd>
 
 </dl>
+
+<h2>NOTES</h2>
+
+<i>Dead (deleted)</i> are internally only marked in the geometry file
+as 'dead' but it remains there and occupies space. Any vector module
+used afterwards on this vector map which really reads and writes
+vector geometry (so not <em><a href="g.copy.html">g.copy</a></em>)
+will writes only features which are 'alive'.
+
+<p>
+<i>Added or modified</i> vector features are <i>snapped</i> to
+existing vector features ('Settings-&gt;General-&gt;Snapping', nodes or vertices)
+based on 'Settings-&gt;General-&gt;Snapping threshold' value. To
+disable snapping set the snapping threshold to '0'.
+
+<p>
+If the digitizer crashes for some reason you can repair the vector map
+which was left open with the <em>v.build</em> module.
+
+<p>
+<b>Please note that vector digitizer is under active development and
+distributed as &quot;Experimental Prototype&quot;.</b>
 
 <h2>SEE ALSO</h2>
 
