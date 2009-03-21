@@ -547,7 +547,7 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
     }
 
     /* Check if map already exists */
-    if (G_find_file2(GRASS_VECT_DIRECTORY, name, G_mapset()) != NULL) {
+    if (G_find_vector2(name, G_mapset()) != NULL) {
 	G_warning(_("Vector map <%s> already exists and will be overwritten"),
 		  name);
 
