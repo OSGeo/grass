@@ -165,7 +165,8 @@ Vect_copy(const char *in, const char *mapset, const char *out)
 	GV_TOPO_ELEMENT, GV_SIDX_ELEMENT, GV_CIDX_ELEMENT,
 	NULL
     };
-    const char *xmapset;
+    const char *inmapset;
+    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
     dbDriver *driver;
 
@@ -174,13 +175,17 @@ Vect_copy(const char *in, const char *mapset, const char *out)
     if (Vect_legal_filename(out) < 0)
 	G_fatal_error(_("Vector map name is not SQL compliant"));
 
-    /* remove mapset from fully qualified name with G_find_vector(), confuses G__file_name() */
-    xmapset = G_find_vector(in, mapset);
-    if (!xmapset) {
+    inmapset = G_find_vector2(in, mapset);
+    if (!inmapset) {
 	G_warning(_("Unable to find vector map <%s> in <%s>"), in, mapset);
 	return -1;
     }
-    mapset = xmapset;
+    mapset = inmapset;
+
+    /* remove mapset from fully qualified name, confuses G__file_name() */
+    if (G__name_is_fully_qualified(in, xname, xmapset)) {
+	in = xname;
+    }
 
     /* Delete old vector if it exists */
     if (G_find_vector2(out, G_mapset())) {
@@ -305,6 +310,7 @@ int Vect_rename(const char *in, const char *out)
     struct field_info *Fin, *Fout;
     int *fields;
     dbDriver *driver;
+    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
     G_debug(2, "Rename vector '%s' to '%s'", in, out);
     /* check for [A-Za-z][A-Za-z0-9_]* in name */
@@ -316,6 +322,11 @@ int Vect_rename(const char *in, const char *out)
 	G_warning(_("Vector map <%s> already exists and will be overwritten"),
 		  out);
 	Vect_delete(out);
+    }
+
+    /* remove mapset from fully qualified name */
+    if (G__name_is_fully_qualified(in, xname, xmapset)) {
+	in = xname;
     }
 
     /* Move the directory */
@@ -435,8 +446,14 @@ int Vect_delete(const char *map)
     DIR *dir;
     struct dirent *ent;
     const char *tmp;
+    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
     G_debug(3, "Delete vector '%s'", map);
+
+    /* remove mapset from fully qualified name */
+    if (G__name_is_fully_qualified(map, xname, xmapset)) {
+	map = xname;
+    }
 
     if (map == NULL || strlen(map) == 0) {
 	G_warning(_("Invalid vector map name <%s>"), map ? map : "null");
