@@ -495,10 +495,14 @@ class ModifyTableRecord(wx.Dialog):
           is editable(True) or not.
         """
         wx.Dialog.__init__(self, parent, id, title, style=style)
-
+        
+        self.CenterOnParent()
+        
         self.keyId = keyEditable[0]
         
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
+
+        box = wx.StaticBox(parent=self.panel, id=wx.ID_ANY, label='')
 
         self.dataPanel = scrolled.ScrolledPanel(parent=self.panel, id=wx.ID_ANY,
                                             style=wx.TAB_TRAVERSAL)
@@ -516,13 +520,15 @@ class ModifyTableRecord(wx.Dialog):
         #
         self.widgets = []
         id = 0
-        self.box = False
+        self.usebox = False
         self.cat = None
         for column, value in data:
             if keyEditable[0] == id:
                 self.cat = int(value)
                 if keyEditable[1] == False:
-                    self.box = True
+                    self.usebox = True
+                    box.SetLabel =" %s %d " % (_("Category"), self.cat)
+                    self.boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
                     id += 1
                     continue
                 else:
@@ -553,11 +559,6 @@ class ModifyTableRecord(wx.Dialog):
         """Do layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
 
-        if self.box:
-            box = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
-                               label=" %s %d " % (_("Category"), self.cat))
-            boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
-
         # data area
         dataSizer = wx.FlexGridSizer (cols=2, hgap=3, vgap=3)
         dataSizer.AddGrowableCol(1)
@@ -575,8 +576,8 @@ class ModifyTableRecord(wx.Dialog):
         self.dataPanel.SetSizer(dataSizer)
         dataSizer.Fit(self.dataPanel)
 
-        if self.box:
-            boxSizer.Add(item=self.dataPanel, proportion=1,
+        if self.usebox:
+            self.boxSizer.Add(item=self.dataPanel, proportion=1,
                          flag=wx.EXPAND | wx.ALL, border=5)
             
         # buttons
@@ -585,37 +586,48 @@ class ModifyTableRecord(wx.Dialog):
         btnSizer.AddButton(self.btnSubmit)
         btnSizer.Realize()
 
-        if not self.box:
+        if not self.usebox:
             sizer.Add(item=self.dataPanel, proportion=1,
                       flag=wx.EXPAND | wx.ALL, border=5)
         else:
-            sizer.Add(item=boxSizer, proportion=1,
+            sizer.Add(item=self.boxSizer, proportion=1,
                       flag=wx.EXPAND | wx.ALL, border=5)
             
 
         sizer.Add(item=btnSizer, proportion=0,
                  flag=wx.EXPAND | wx.ALL, border=5)
 
+        framewidth = self.GetSize()[0]
+        self.SetMinSize((framewidth,150))
+        self.SetMaxSize((framewidth,300))
+        
         #sizer.SetSizeHints(self.panel)
         self.panel.SetAutoLayout(True)
         self.panel.SetSizer(sizer)
         sizer.Fit(self.panel)
 
         self.Layout()
+        
+#        # set window frame size (min & max)
+#        minFrameHeight = 150
+#        maxFrameHeight = 2 * minFrameHeight
+#        if self.GetSize()[1] > minFrameHeight:
+#            print 'size ='+str(self.GetSize()[1])
+#            print 'if 1'
+#            self.SetMinSize((self.GetSize()[0], minFrameHeight))
+#        else:
+#            print 'else 1'
+#            self.SetMinSize(self.GetSize())
 
-        # set window frame size (min & max)
-        minFrameHeight = 150
-        maxFrameHeight = 2 * minFrameHeight
-        if self.GetSize()[1] > minFrameHeight:
-            self.SetMinSize((self.GetSize()[0], minFrameHeight))
-        else:
-            self.SetMinSize(self.GetSize())
-
-        if self.GetSize()[1] > maxFrameHeight:
-            self.SetSize((self.GetSize()[0], maxFrameHeight))
-        else:
-            self.SetSize(self.panel.GetSize())
+#        if self.GetSize()[1] > maxFrameHeight:
+#            print 'if 2'
+#            self.SetSize((self.GetSize()[0], maxFrameHeight))
+#        else:
+#            print 'else 2'
+#            self.SetSize(self.panel.GetSize())
             
+
+                
     def GetValues(self, columns=None):
         """Return list of values (casted to string).
 
@@ -629,7 +641,7 @@ class ModifyTableRecord(wx.Dialog):
                 valueList.append(value)
 
         # add key value
-        if self.box:
+        if self.usebox:
             valueList.insert(self.keyId, str(self.cat))
                              
         return valueList
