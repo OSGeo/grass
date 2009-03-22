@@ -73,8 +73,8 @@ int dig_get_poly_points(int n_lines, struct line_pnts **LPoints, int *direction,
 	for (j = start; j != end; j += inc) {
 	    BPoints->x[point] = Points->x[j];
 	    BPoints->y[point] = Points->y[j];
+	    point++;
 	}
-	point++;
     }
     /* last point */
     BPoints->x[point] = Points->x[j];
@@ -117,7 +117,7 @@ int dig_find_area_poly(struct line_pnts *Points, double *totalarea)
 
 /*
  * find orientation of polygon
- * faster than signed area
+ * faster than signed area for > 4 vertices
  * 
  * return value is positive for CW, negative for CCW, 0 for degenerate
  *
@@ -150,33 +150,23 @@ double dig_find_poly_orientation(struct line_pnts *Points)
     }
 
     /* Points are not pruned, so ... */
+    pprev = pnext = pcur;
 
     /* find next distinct point */
-    if (pcur == lastpoint)
-	pnext = 0;
-    else
-	pnext = pcur + 1;
-    while (pnext != pcur) {
-	if (x[pcur] != x[pnext] || y[pcur] != y[pnext])
-	    break;
+    do {
 	if (pnext < lastpoint - 1)
 	    pnext++;
 	else
 	    pnext = 0;
-    }
+    } while (pnext != pcur && x[pcur] == x[pnext] && y[pcur] == y[pnext]);
 
     /* find previous distinct point */
-    if (pcur == 0)
-	pcur = lastpoint;
-    pprev = pcur - 1;
-    while (pprev != pcur) {
-	if (x[pcur] != x[pprev] || y[pcur] != y[pprev])
-	    break;
-	if (pprev > 1)
+    do {
+	if (pprev > 0)
 	    pprev--;
 	else
-	    pprev = lastpoint;
-    }
+	    pprev = lastpoint - 1;
+    } while (pprev != pcur && x[pcur] == x[pprev] && y[pcur] == y[pprev]);
     
     /* orientation at vertex pcur == signed area for triangle pprev, pcur, pnext
      * rather use robust determinant of Olivier Devillers? */
