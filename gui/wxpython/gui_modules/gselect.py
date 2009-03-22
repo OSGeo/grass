@@ -43,7 +43,6 @@ class Select(wx.combo.ComboCtrl):
         argument multiple=True. Multiple selections are separated by commas.
         """
         wx.combo.ComboCtrl.__init__(self, parent=parent, id=id, size=size)
-
         self.GetChildren()[0].SetName("Select")
         self.GetChildren()[0].type = type
         
@@ -222,9 +221,13 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         else:
             filesdict = grass.list_grouped(elementdict[element])
         
+        first_dir = None
         for dir in mapsets:
-            dir_node = self.AddItem('Mapset: '+dir)
-            self.seltree.SetItemTextColour(dir_node,wx.Colour(50,50,200))
+            dir_node = self.AddItem('Mapset: ' + dir)
+            if not first_dir:
+                first_dir = dir_node
+            
+            self.seltree.SetItemTextColour(dir_node, wx.Colour(50, 50, 200))
             try:
                 elem_list = filesdict[dir]
                 elem_list.sort(key=str.lower)
@@ -260,7 +263,11 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                     self.seltree.Collapse(dir_node)
                 else:
                     self.seltree.Expand(dir_node)
-                
+        
+        if first_dir:
+            # select first mapset (MSW hack)
+            self.seltree.SelectItem(first_dir)
+    
     # helpers
     def FindItem(self, parentItem, text):
         item, cookie = self.seltree.GetFirstChild(parentItem)
