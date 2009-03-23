@@ -110,15 +110,10 @@ static int comp_double(double *i, double *j)
 
 static int V__within(double a, double x, double b)
 {
-    double tmp;
-
-    if (a > b) {
-	tmp = a;
-	a = b;
-	b = tmp;
-    }
-
-    return (x >= a && x <= b);
+    if (a < b)
+	return (x >= a && x <= b);
+    else
+	return (x >= b && x <= a);
 }
 
 /*
@@ -485,7 +480,7 @@ Vect_get_point_in_poly_isl(struct line_pnts *Points,
 	if (Points->y[i] >= cent_y)
 	    hi_y = Points->y[i];
     }
-    /* first going throught boundary points */
+    /* first going through boundary points */
     for (i = 0; i < Points->n_points; i++) {
 	if ((Points->y[i] < cent_y) &&
 	    ((cent_y - Points->y[i]) < (cent_y - lo_y)))
@@ -565,17 +560,27 @@ static int segments_x_ray(double X, double Y, struct line_pnts *Points)
      * Coordinates exactly on ray are considered to be slightly above. */
 
     n_intersects = 0;
-    for (n = 0; n < Points->n_points - 1; n++) {
-	x1 = Points->x[n];
-	y1 = Points->y[n];
-	x2 = Points->x[n + 1];
-	y2 = Points->y[n + 1];
+    for (n = 1; n < Points->n_points; n++) {
+	x1 = Points->x[n - 1];
+	y1 = Points->y[n - 1];
+	x2 = Points->x[n];
+	y2 = Points->y[n];
 
 	G_debug(3, "X = %f Y = %f x1 = %f y1 = %f x2 = %f y2 = %f", X, Y, x1,
 		y1, x2, y2);
 
-	/* I know, it should be possible to do that with less conditions, but it should be 
-	 * enough readable also! */
+	/* I know, it should be possible to do that with less conditions,
+	 * but it should be enough readable also! */
+
+	/* first, skip segments that obviously do not intersect with test ray */
+
+	/* segment above (X is not important) */
+	if (y1 > Y && y2 > Y)
+	    continue;
+
+	/* segment below (X is not important) */
+	if (y1 < Y && y2 < Y)
+	    continue;
 
 	/* segment left from X -> no intersection */
 	if (x1 < X && x2 < X)
@@ -586,32 +591,28 @@ static int segments_x_ray(double X, double Y, struct line_pnts *Points)
 	    return -1;
 
 	/* on vertical boundary */
-	if ((x1 == x2 && x1 == X) &&
-	    ((y1 <= Y && y2 >= Y) || (y1 >= Y && y2 <= Y)))
-	    return -1;
+	if (x1 == x2 && x1 == X) {
+	    if ((y1 <= Y && y2 >= Y) || (y1 >= Y && y2 <= Y))
+		return -1;
+	}
 
 	/* on horizontal boundary */
-	if ((y1 == y2 && y1 == Y) &&
-	    ((x1 <= X && x2 >= X) || (x1 >= X && x2 <= X)))
-	    return -1;
+	if (y1 == y2 && y1 == Y) {
+	    if ((x1 <= X && x2 >= X) || (x1 >= X && x2 <= X))
+		return -1;
+	    else
+		continue; 	/* segment on ray (X is not important) */
+	}
 
 	/* segment on ray (X is not important) */
-	if (y1 == Y && y2 == Y)
-	    continue;
-
-	/* segment above (X is not important) */
-	if (y1 > Y && y2 > Y)
-	    continue;
-
-	/* segment below (X is not important) */
-	if (y1 < Y && y2 < Y)
-	    continue;
+	/* if (y1 == Y && y2 == Y)
+	    continue; */
 
 	/* one end on Y second above (X is not important) */
 	if ((y1 == Y && y2 > Y) || (y2 == Y && y1 > Y))
 	    continue;
 
-	/* For following cases we know that at least one of x1 and x2 is  >= X */
+	/* For following cases we know that at least one of x1 and x2 is >= X */
 
 	/* one end of segment on Y second below Y */
 	if (y1 == Y && y2 < Y) {
@@ -636,13 +637,13 @@ static int segments_x_ray(double X, double Y, struct line_pnts *Points)
 	    x_inter = dig_x_intersect(x1, x2, y1, y2, Y);
 	    G_debug(3, "x_inter = %f", x_inter);
 	    if (x_inter == X)
-		return 1;
+		return 1;	/* point on segment, but assume inside ? */
 	    else if (x_inter > X)
 		n_intersects++;
 
 	    continue;		/* would not be necessary, just to check, see below */
 	}
-	/* should not be reached (one condition is not necessary, but it is may be better readable
+	/* should not be reached (one condition is not necessary, but it is maybe better readable
 	 * and it is a check) */
 	G_warning
 	    ("segments_x_ray() %s: X = %f Y = %f x1 = %f y1 = %f x2 = %f y2 = %f",
