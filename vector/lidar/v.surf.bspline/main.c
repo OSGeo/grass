@@ -235,7 +235,7 @@ int main(int argc, char *argv[])
     /* Open input ext vector */
     if (!in_ext_opt->answer) {
 	ext = FALSE;
-	G_message(_("No vector map of sparse points to interpolate. "
+	G_message(_("No vector map of sparse points to interpolate was specified. "
 		    "Interpolation will be done with <%s> vector map"),
 		  in_opt->answer);
     }
