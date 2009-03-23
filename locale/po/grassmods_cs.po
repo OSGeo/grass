@@ -25609,7 +25609,7 @@ msgstr "Vektorová mapa <%s> nemohla být otevøena na úrovní topologie"
 #: ../vector/lidar/v.surf.bspline/main.c:238
 #, c-format
 msgid ""
-"No vector map of sparse points to interpolate. Interpolation will be done "
+"No vector map of sparse points to interpolate was specified. Interpolation will be done "
 "with <%s> vector map"
 msgstr ""
 "®ádná vektorová mapa pro interpolaci. Interpolace bude aplikována na "
