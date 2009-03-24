@@ -29,7 +29,9 @@
 #include <grass/dbmi.h>
 #include <grass/Vect.h>
 
+#ifdef HAVE_GDAL
 #include <gdal_version.h>	/* needed for FID detection */
+#endif	/* HAVE_GDAL */
 
 /*!
    \brief Create and init new dblinks ctructure
@@ -444,6 +446,10 @@ int Vect_read_dblinks(struct Map_info *Map)
     G_debug(3, "Searching for FID column in OGR DB");
     if (Map->format == GV_FORMAT_OGR) {
 
+#ifndef HAVE_GDAL
+	G_fatal_error(_("The support for OGR vector maps wasn't"
+			" compiled in."));
+#else
 #if GDAL_VERSION_NUM > 1320	/* seems to be fixed after 1320 release */
 	int layer, nLayers;
 	OGRDataSourceH Ogr_ds;
@@ -596,6 +602,7 @@ int Vect_read_dblinks(struct Map_info *Map)
 	}
 #endif /* GDAL_VERSION_NUM > 1320 */
 	return (1);
+#endif	/* HAVE_GDAL */
     }
     else if (Map->format != GV_FORMAT_NATIVE) {
 	G_fatal_error(_("Don't know how to read links for format %d"),
