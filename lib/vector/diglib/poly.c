@@ -99,7 +99,8 @@ int dig_find_area_poly(struct line_pnts *Points, double *totalarea)
     double *x, *y;
     double tot_area;
 
-    /* prune first with Vect_line_prune(Points) for speed? */
+    /* TODO: check if results are still accurate without pruning *Points first
+     * consecutive duplicate vertices should in theory result in wrong area size */
 
     x = Points->x;
     y = Points->y;
