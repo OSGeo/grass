@@ -5,14 +5,14 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2009 by the GRASS Development Team
 
    This program is free software under the 
    GNU General Public License (>=v2). 
    Read the file COPYING that comes with GRASS
    for details.
 
-   \author Radim Blazek
+   \author Radim Blazek, update for GRASS 7 Markus Metz
 
    \date 2001-2008
  */
@@ -21,6 +21,7 @@
 #include <math.h>
 #include <grass/gis.h>
 #include <grass/Vect.h>
+#include <grass/vect/rbtree.h>
 #include <grass/glocale.h>
 
 /* TODO: 3D support
@@ -52,16 +53,36 @@
 
 typedef struct
 {
+    double x, y;		/* coords */
     double a1, a2;		/* angles */
     char cross;			/* 0 - do not break, 1 - break */
 } XPNT;
 
-static int fpoint;
+/* function used by binary tree to compare items */
+extern int compare_xpnts(const void *Xpnta, const void *Xpntb);
 
-/* Function called from RTreeSearch for point found */
-void srch(int id, int *arg)
+int compare_xpnts(const void *Xpnta, const void *Xpntb)
 {
-    fpoint = id;
+    XPNT *a, *b;
+
+    a = (XPNT *)Xpnta;
+    b = (XPNT *)Xpntb;
+
+    if (a->x > b->x)
+	return 0;
+    else if (a->x < b->x)
+	return 1;
+    else {
+	if (a->y > b->y)
+	    return 0;
+	else if (a->y < b->y)
+	    return 1;
+	else
+	    return 2;
+    }
+
+    G_warning("Break polygons: Bug in binary tree!");
+    return 1;
 }
 
 /*!
@@ -81,6 +102,7 @@ void srch(int id, int *arg)
 
    \return
  */
+
 void
 Vect_break_polygons(struct Map_info *Map, int type, struct Map_info *Err)
 {
@@ -88,14 +110,13 @@ Vect_break_polygons(struct Map_info *Map, int type, struct Map_info *Err)
     struct line_cats *Cats, *ErrCats;
     int i, j, k, ret, ltype, broken, last, nlines;
     int nbreaks;
-    struct Node *RTree;
+    struct RB_TREE *RBTree;
     int apoints, npoints, nallpoints, nmarks;
-    XPNT *XPnts;
-    struct Rect rect;
+    XPNT *XPnt_found, XPnt_search;
     double dx, dy, a1 = 0, a2 = 0;
     int closed, last_point, cross;
 
-    RTree = RTreeNewIndex();
+    RBTree = rbtree_create(compare_xpnts, sizeof(XPNT));
 
     BPoints = Vect_new_line_struct();
     Points = Vect_new_line_struct();
@@ -112,7 +133,6 @@ Vect_break_polygons(struct Map_info *Map, int type, struct Map_info *Err)
     nmarks = 0;
     npoints = 1;		/* index starts from 1 ! */
     nallpoints = 0;
-    XPnts = NULL;
 
     for (i = 1; i <= nlines; i++) {
 	G_percent(i, nlines, 1);
@@ -145,18 +165,11 @@ Vect_break_polygons(struct Map_info *Map, int type, struct Map_info *Err)
 	    if (j == last_point && closed)
 		continue;	/* do not register last of close polygon */
 
-	    /* Box */
-	    rect.boundary[0] = Points->x[j];
-	    rect.boundary[3] = Points->x[j];
-	    rect.boundary[1] = Points->y[j];
-	    rect.boundary[4] = Points->y[j];
-	    rect.boundary[2] = 0;
-	    rect.boundary[5] = 0;
+	    XPnt_search.x = Points->x[j];
+	    XPnt_search.y = Points->y[j];
 
 	    /* Already in DB? */
-	    fpoint = -1;
-	    RTreeSearch(RTree, &rect, (void *)srch, 0);
-	    G_debug(3, "fpoint =  %d", fpoint);
+	    XPnt_found = rbtree_find(RBTree, &XPnt_search);
 
 	    if (Points->n_points <= 2 ||
 		(!closed && (j == 0 || j == last_point))) {
@@ -182,48 +195,43 @@ Vect_break_polygons(struct Map_info *Map, int type, struct Map_info *Err)
 		}
 	    }
 
-	    if (fpoint > 0) {	/* Found */
-		if (XPnts[fpoint].cross == 1)
+	    if (XPnt_found) {	/* found */
+		if (XPnt_found->cross == 1)
 		    continue;	/* already marked */
 
-		/* Check angles */
+		/* check angles */
 		if (cross) {
-		    XPnts[fpoint].cross = 1;
+		    XPnt_found->cross = 1;
 		    nmarks++;
 		}
 		else {
 		    G_debug(3, "a1 = %f xa1 = %f a2 = %f xa2 = %f", a1,
-			    XPnts[fpoint].a1, a2, XPnts[fpoint].a2);
-		    if ((a1 == XPnts[fpoint].a1 && a2 == XPnts[fpoint].a2) || (a1 == XPnts[fpoint].a2 && a2 == XPnts[fpoint].a1)) {	/* identical */
+			    XPnt_found->a1, a2, XPnt_found->a2);
+		    if ((a1 == XPnt_found->a1 && a2 == XPnt_found->a2) ||
+		        (a1 == XPnt_found->a2 && a2 == XPnt_found->a1)) {	/* identical */
 
 		    }
 		    else {
-			XPnts[fpoint].cross = 1;
+			XPnt_found->cross = 1;
 			nmarks++;
 		    }
 		}
 	    }
 	    else {
-		/* Add to tree and to structure */
-		RTreeInsertRect(&rect, npoints, &RTree, 0);
-		if (npoints >= apoints) {
-		    apoints += 10000;
-		    XPnts =
-			(XPNT *) G_realloc(XPnts,
-					   (apoints + 1) * sizeof(XPNT));
-		}
 		if (j == 0 || j == (Points->n_points - 1) ||
 		    Points->n_points < 3) {
-		    XPnts[npoints].a1 = 0;
-		    XPnts[npoints].a2 = 0;
-		    XPnts[npoints].cross = 1;
+		    XPnt_search.a1 = 0;
+		    XPnt_search.a2 = 0;
+		    XPnt_search.cross = 1;
 		    nmarks++;
 		}
 		else {
-		    XPnts[npoints].a1 = a1;
-		    XPnts[npoints].a2 = a2;
-		    XPnts[npoints].cross = 0;
+		    XPnt_search.a1 = a1;
+		    XPnt_search.a2 = a2;
+		    XPnt_search.cross = 0;
 		}
+		/* Add to tree */
+		rbtree_insert(RBTree, &XPnt_search);
 
 		npoints++;
 	    }
@@ -234,6 +242,10 @@ Vect_break_polygons(struct Map_info *Map, int type, struct Map_info *Err)
 
     nbreaks = 0;
     nallpoints = 0;
+
+    /* uncomment to check if search tree is healthy */
+    /* if (rbtree_debug(RBTree, RBTree->root) == 0)
+	G_warning("Break polygons: RBTree not ok"); */
 
     /* Second loop through lines (existing when loop is started, no need to process lines written again)
      * and break at points marked for break */
@@ -262,26 +274,24 @@ Vect_break_polygons(struct Map_info *Map, int type, struct Map_info *Err)
 	    G_debug(3, "j =  %d", j);
 	    nallpoints++;
 
-	    /* Box */
-	    rect.boundary[0] = Points->x[j];
-	    rect.boundary[3] = Points->x[j];
-	    rect.boundary[1] = Points->y[j];
-	    rect.boundary[4] = Points->y[j];
-	    rect.boundary[2] = 0;
-	    rect.boundary[5] = 0;
-
 	    if (Points->n_points <= 1 ||
 		(j == (Points->n_points - 1) && !broken))
 		break;
 	    /* One point only or 
 	     * last point and line is not broken, do nothing */
 
-	    RTreeSearch(RTree, &rect, (void *)srch, 0);
-	    G_debug(3, "fpoint =  %d", fpoint);
+	    XPnt_search.x = Points->x[j];
+	    XPnt_search.y = Points->y[j];
+
+	    XPnt_found = rbtree_find(RBTree, &XPnt_search);
+
+	    /* all points must be in the search tree, without duplicates */
+	    if (XPnt_found == NULL)
+		G_fatal_error(_("Point not in search tree!"));
 
 	    /* break or write last segment of broken line */
 	    if ((j == (Points->n_points - 1) && broken) ||
-		XPnts[fpoint].cross) {
+		XPnt_found->cross) {
 		Vect_reset_line(BPoints);
 		for (k = last; k <= j; k++) {
 		    Vect_append_point(BPoints, Points->x[k], Points->y[k],
@@ -330,7 +340,6 @@ Vect_break_polygons(struct Map_info *Map, int type, struct Map_info *Err)
 	}
     }
 
-    G_free(XPnts);
-    RTreeDestroyNode(RTree);
-    G_verbose_message("Breaks: %d", nbreaks);
+    rbtree_destroy(RBTree);
+    G_verbose_message(_("Breaks: %d"), nbreaks);
 }
