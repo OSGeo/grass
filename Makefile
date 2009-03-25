@@ -87,7 +87,7 @@ default: builddemolocation
 	done
 	$(MAKE) $(FILES_DST)
 	$(MAKE) ${ARCH_DISTDIR}/grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}.tmp
-	@if [ `cat "$(ERRORLOG)" | wc -l` -gt 5 ] ; then \
+	@if [ `wc -l < "$(ERRORLOG)"` -gt 5 ] ; then \
 		echo "--"     >> $(ERRORLOG) ; \
 		echo "In case of errors please change into the directory with error and run 'make'." >> $(ERRORLOG) ; \
 		echo "If you get multiple errors, you need to deal with them in the order they"      >> $(ERRORLOG) ; \
@@ -99,7 +99,7 @@ default: builddemolocation
 	@echo "--"  >> $(ERRORLOG)
 	@echo "Finished compilation: `date`" >> $(ERRORLOG)
 	@cat $(ERRORLOG)
-	@if [ `cat "$(ERRORLOG)" | wc -l` -gt 8 ] ; then false ; else true ; fi
+	@if [ `wc -l < "$(ERRORLOG)"` -gt 8 ] ; then false ; else true ; fi
 
 ${ARCH_DISTDIR}/%: %
 	$(INSTALL_DATA) $< $@
@@ -230,7 +230,7 @@ endif
 	-tar cBf - gem/skeleton | tar xBCf ${INST_DIR}/etc - 2>/dev/null
 	-${INSTALL} gem/gem7 ${BINDIR} 2>/dev/null
 	@# enable OSX Help Viewer
-	@if [ "`cat include/Make/Platform.make | grep -i '^ARCH.*darwin'`" ] ; then /bin/ln -sfh "${INST_DIR}/docs/html" /Library/Documentation/Help/GRASS-${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR} ; fi
+	@if [ "`grep -i '^ARCH.*darwin' < include/Make/Platform.make`" ] ; then /bin/ln -sfh "${INST_DIR}/docs/html" /Library/Documentation/Help/GRASS-${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR} ; fi
 
 
 install-strip:
