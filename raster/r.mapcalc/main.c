@@ -26,7 +26,7 @@
 /****************************************************************************/
 
 int overflow_occurred;
-int overwrite;
+int overwrite_flag;
 
 volatile int floating_point_exception;
 volatile int floating_point_exception_occurred;
@@ -135,7 +135,7 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    overwrite = module->overwrite;
+    overwrite_flag = module->overwrite;
 
     if (expr->answer)
 	result = parse_string(expr->answer);
