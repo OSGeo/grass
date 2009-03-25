@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
     cross_corr_flag = G_define_flag(); {
 	cross_corr_flag->key = 'c';
 	cross_corr_flag->description =
-	    _("Find best parameters using a cross validation method");
+	    _("Find the best Tykhonov regularizing parameter using a \"leave-one-out\" cross validation method");
     }
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
@@ -111,7 +111,7 @@ int main(int argc, char *argv[])
 	passoE_opt->required = NO;
 	passoE_opt->answer = "4";
 	passoE_opt->description =
-	    _("Interpolation spline step value in east direction");
+	    _("Length of each spline step in the east-west direction");
 	passoE_opt->guisection = _("Settings");
     }
 
@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
 	passoN_opt->required = NO;
 	passoN_opt->answer = "4";
 	passoN_opt->description =
-	    _("Interpolation spline step value in north direction");
+	    _("Length of each spline step in the north-south direction");
 	passoN_opt->guisection = _("Settings");
     }
 
@@ -129,7 +129,7 @@ int main(int argc, char *argv[])
 	type->key = "type";
 	type->type = TYPE_STRING;
 	type->required = NO;
-	type->description = _("Spline type of interpolation");
+	type->description = _("Spline interpolation algorithm");
 	type->options = "bilinear,bicubic";
 	type->answer = "bilinear";
 	type->guisection = _("Settings");
@@ -139,7 +139,7 @@ int main(int argc, char *argv[])
 	lambda_f_opt->key = "lambda_i";
 	lambda_f_opt->type = TYPE_DOUBLE;
 	lambda_f_opt->required = NO;
-	lambda_f_opt->description = _("Tykhonov regularization weight");
+	lambda_f_opt->description = _("Tykhonov regularization parameter (affects smoothing)");
 	lambda_f_opt->answer = "1";
 	lambda_f_opt->guisection = _("Settings");
     }
