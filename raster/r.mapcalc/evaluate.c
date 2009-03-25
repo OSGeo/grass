@@ -305,7 +305,7 @@ void execute(expr_list * ee)
 
 	var = e->data.bind.var;
 
-	if (!overwrite && check_output_map(var))
+	if (!overwrite_flag && check_output_map(var))
 	    G_fatal_error(_("output map <%s> exists"), var);
     }
 

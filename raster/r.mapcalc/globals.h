@@ -5,7 +5,7 @@
 extern volatile int floating_point_exception;
 extern volatile int floating_point_exception_occurred;
 extern int overflow_occurred;
-extern int overwrite;
+extern int overwrite_flag;
 
 extern int current_depth, current_row;
 extern int depths, rows, columns;
