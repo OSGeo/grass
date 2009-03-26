@@ -38,6 +38,7 @@ int rmdac(struct Map_info *Out, struct Map_info *Err)
 	fprintf(stderr, _("Duplicate area centroids: %5d"), ndupl);
 
     for (i = 1; i <= nlines; i++) {
+	G_percent(i, nlines, 2);
 	if (!Vect_line_alive(Out, i))
 	    continue;
 
