@@ -37,6 +37,7 @@ int remove_zero_line(struct Map_info *Map, int otype, struct Map_info *Err)
     G_debug(1, "nlines =  %d", nlines);
 
     for (line = 1; line <= nlines; line++) {
+	G_percent(line, nlines, 2);
 	if (!Vect_line_alive(Map, line))
 	    continue;
 
@@ -45,7 +46,7 @@ int remove_zero_line(struct Map_info *Map, int otype, struct Map_info *Err)
 	if (!((type & GV_LINES) && (type & otype)))
 	    continue;
 
-	if (Vect_line_length(Points) > 0.0)
+	if (Vect_line_prune(Points) > 1)
 	    continue;
 
 	Vect_delete_line(Map, line);
