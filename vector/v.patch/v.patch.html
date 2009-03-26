@@ -9,10 +9,21 @@ transferred to the new table.
 
 Any vectors that are duplicated among the maps being
 patched together (e.g., border lines) will have to be
-edited or removed after <em>v.patch</em> is run.  Such
+edited or removed after <em>v.patch</em> is run. Such
 editing can be done automatically using
-<em><a HREF="v.clean.html">v.clean</a></em> (tool=snap,break,rmdupl).
-
+<em><a HREF="v.clean.html">v.clean</a></em>.
+<p>
+Lines may need to be
+snapped with <em><a HREF="v.clean.html">v.clean</a>
+tool=snap,break,rmdupl</em>.
+<p>
+Boundaries may need to be cleaned with
+<em><a HREF="v.clean.html">v.clean</a> tool=break,rmdupl,rmsa</em>
+repeatedly until the <em>rmsa</em> tool (Remove small angles at nodes)
+does no longer modify any boundaries. If vector topology is still not
+clean, boundaries may also need to be snapped with
+<em><a HREF="v.clean.html">v.clean</a> tool=snap,break,rmdupl</em>.
+<p>
 When using the <em>-a</em> flag, the user has to make sure that the
 features in the different maps added to the output map do not have
 overlapping category numbers, unless identical category numbers
