@@ -61,6 +61,8 @@ int remove_zero_line(struct Map_info *Map, int otype, struct Map_info *Err)
     Vect_destroy_line_struct(Points);
     Vect_destroy_cats_struct(Cats);
 
+    G_verbose_message(_("Lines / boundaries removed: %d"), count);
+
     return count;
 
 }

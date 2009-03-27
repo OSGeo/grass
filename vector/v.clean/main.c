@@ -349,18 +349,15 @@ int main(int argc, char *argv[])
 	    G_message(_("Tool: Remove small areas"));
 	    count =
 		Vect_remove_small_areas(&Out, threshs[i], pErr, &size);
-	    G_message(_("%d areas of total size %g removed"), count, size);
 	    break;
 	case TOOL_RMSA:
 	    G_message(_("Tool: Remove small angles at nodes"));
 	    count =
 		Vect_clean_small_angles_at_nodes(&Out, otype, pErr);
-	    G_message(_("%d modifications done"), count);
 	    break;
 	case TOOL_RMLINE:
 	    G_message(_("Tool: Remove all lines and boundaries of zero length"));
 	    count = remove_zero_line(&Out, otype, pErr);
-	    G_message(_("%d lines / boundaries removed"), count);
 	    break;
 	}
 
