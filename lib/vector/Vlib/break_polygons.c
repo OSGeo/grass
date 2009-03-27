@@ -59,7 +59,6 @@ typedef struct
 } XPNT;
 
 /* function used by binary tree to compare items */
-extern int compare_xpnts(const void *Xpnta, const void *Xpntb);
 
 int compare_xpnts(const void *Xpnta, const void *Xpntb)
 {
@@ -133,6 +132,8 @@ Vect_break_polygons(struct Map_info *Map, int type, struct Map_info *Err)
     nmarks = 0;
     npoints = 1;		/* index starts from 1 ! */
     nallpoints = 0;
+
+    G_verbose_message(_("Break polygons Pass 1: select break points"));
 
     for (i = 1; i <= nlines; i++) {
 	G_percent(i, nlines, 1);
@@ -249,6 +250,9 @@ Vect_break_polygons(struct Map_info *Map, int type, struct Map_info *Err)
 
     /* Second loop through lines (existing when loop is started, no need to process lines written again)
      * and break at points marked for break */
+
+    G_verbose_message(_("Break polygons Pass 2: break at selected points"));
+
     for (i = 1; i <= nlines; i++) {
 	int n_orig_points;
 
