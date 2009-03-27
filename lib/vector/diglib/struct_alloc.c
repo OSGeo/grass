@@ -44,7 +44,7 @@ P_NODE *dig_alloc_node()
 
     Node = (P_NODE *) malloc(sizeof(P_NODE));
     if (Node == NULL)
-	return NULL;
+        return NULL;
 
     Node->n_lines = 0;
     Node->alloc_lines = 0;
@@ -57,8 +57,11 @@ P_NODE *dig_alloc_node()
 /* free node structure */
 void dig_free_node(P_NODE *Node)
 {
-    free(Node->lines);
-    free(Node->angles);
+    if (Node->alloc_lines > 0) {
+        free(Node->lines);
+        free(Node->angles);
+    }
+
     free(Node);
 }
 
@@ -80,12 +83,12 @@ int dig_node_alloc_line(P_NODE * node, int add)
 
     p = realloc(node->lines, num * sizeof(plus_t));
     if (p == NULL)
-	return -1;
+        return -1;
     node->lines = (plus_t *) p;
 
     p = realloc(node->angles, num * sizeof(float));
     if (p == NULL)
-	return -1;
+        return -1;
     node->angles = (float *)p;
 
     node->alloc_lines = num;
@@ -107,7 +110,7 @@ int dig_alloc_nodes(struct Plus_head *Plus, int add)
     size = Plus->alloc_nodes + 1 + add;
     p = realloc(Plus->Node, size * sizeof(P_NODE *));
     if (p == NULL)
-	return -1;
+        return -1;
 
     Plus->Node = (P_NODE **) p;
     Plus->alloc_nodes = size - 1;
@@ -122,7 +125,7 @@ P_LINE *dig_alloc_line()
 
     Line = (P_LINE *) malloc(sizeof(P_LINE));
     if (Line == NULL)
-	return NULL;
+        return NULL;
 
     return (Line);
 }
@@ -147,7 +150,7 @@ int dig_alloc_lines(struct Plus_head *Plus, int add)
     size = Plus->alloc_lines + 1 + add;
     p = realloc(Plus->Line, size * sizeof(P_LINE *));
     if (p == NULL)
-	return -1;
+        return -1;
 
     Plus->Line = (P_LINE **) p;
     Plus->alloc_lines = size - 1;
@@ -169,7 +172,7 @@ int dig_alloc_areas(struct Plus_head *Plus, int add)
     size = Plus->alloc_areas + 1 + add;
     p = realloc(Plus->Area, size * sizeof(P_AREA *));
     if (p == NULL)
-	return -1;
+        return -1;
 
     Plus->Area = (P_AREA **) p;
     Plus->alloc_areas = size - 1;
@@ -192,7 +195,7 @@ int dig_alloc_isles(struct Plus_head *Plus, int add)
     size = Plus->alloc_isles + 1 + add;
     p = realloc(Plus->Isle, size * sizeof(P_ISLE *));
     if (p == NULL)
-	return -1;
+        return -1;
 
     Plus->Isle = (P_ISLE **) p;
     Plus->alloc_isles = size - 1;
@@ -207,7 +210,7 @@ P_AREA *dig_alloc_area()
 
     Area = (P_AREA *) malloc(sizeof(P_AREA));
     if (Area == NULL)
-	return NULL;
+        return NULL;
 
     Area->n_lines = 0;
     Area->alloc_lines = 0;
@@ -225,8 +228,12 @@ P_AREA *dig_alloc_area()
 /* free area structure */
 void dig_free_area(P_AREA *Area)
 {
-    free(Area->lines);
-    free(Area->isles);
+    if (Area->alloc_lines > 0)
+        free(Area->lines);
+
+    if (Area->alloc_isles > 0)
+        free(Area->isles);
+
     free(Area);
 }
 
@@ -237,7 +244,7 @@ P_ISLE *dig_alloc_isle()
 
     Isle = (P_ISLE *) malloc(sizeof(P_ISLE));
     if (Isle == NULL)
-	return NULL;
+        return NULL;
 
     Isle->n_lines = 0;
     Isle->alloc_lines = 0;
@@ -251,7 +258,9 @@ P_ISLE *dig_alloc_isle()
 /* free isle structure */
 void dig_free_isle(P_ISLE *Isle)
 {
-    free(Isle->lines);
+    if (Isle->alloc_lines > 0)
+        free(Isle->lines);
+
     free(Isle);
 }
 
@@ -268,7 +277,7 @@ int dig_alloc_points(struct line_pnts *points, int num)
     if (!(p =
 	  dig__alloc_space(num, &alloced, 50, (char *)points->x,
 			   sizeof(double)))) {
-	return (dig_out_of_memory());
+        return (dig_out_of_memory());
     }
     points->x = (double *)p;
 
@@ -277,7 +286,7 @@ int dig_alloc_points(struct line_pnts *points, int num)
     if (!(p =
 	  dig__alloc_space(num, &alloced, 50, (char *)points->y,
 			   sizeof(double)))) {
-	return (dig_out_of_memory());
+        return (dig_out_of_memory());
     }
     points->y = (double *)p;
 
@@ -286,7 +295,7 @@ int dig_alloc_points(struct line_pnts *points, int num)
     if (!(p =
 	  dig__alloc_space(num, &alloced, 50, (char *)points->z,
 			   sizeof(double)))) {
-	return (dig_out_of_memory());
+        return (dig_out_of_memory());
     }
     points->z = (double *)p;
 
@@ -308,7 +317,7 @@ int dig_alloc_cats(struct line_cats *cats, int num)
     if (!(p =
 	  dig__alloc_space(num, &alloced, 1, (int *)cats->field,
 			   sizeof(int)))) {
-	return (dig_out_of_memory());
+        return (dig_out_of_memory());
     }
     cats->field = (int *)p;
 
@@ -316,7 +325,7 @@ int dig_alloc_cats(struct line_cats *cats, int num)
     if (!(p =
 	  dig__alloc_space(num, &alloced, 1, (int *)cats->cat,
 			   sizeof(int)))) {
-	return (dig_out_of_memory());
+        return (dig_out_of_memory());
     }
     cats->cat = (int *)p;
 
@@ -338,7 +347,7 @@ int dig_area_alloc_line(P_AREA * area, int add)
 
     p = realloc(area->lines, num * sizeof(plus_t));
     if (p == NULL)
-	return -1;
+        return -1;
     area->lines = (plus_t *) p;
 
     area->alloc_lines = num;
@@ -361,7 +370,7 @@ int dig_area_alloc_isle(P_AREA * area, int add)
 
     p = realloc(area->isles, num * sizeof(plus_t));
     if (p == NULL)
-	return -1;
+        return -1;
     area->isles = (plus_t *) p;
 
     area->alloc_isles = num;
@@ -384,7 +393,7 @@ int dig_isle_alloc_line(P_ISLE * isle, int add)
 
     p = realloc(isle->lines, num * sizeof(plus_t));
     if (p == NULL)
-	return -1;
+        return -1;
     isle->lines = (plus_t *) p;
 
     isle->alloc_lines = num;
