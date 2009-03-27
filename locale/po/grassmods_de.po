@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: grassmods_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-01-09 23:29+0100\n"
-"PO-Revision-Date: 2009-03-24 18:04+0100\n"
+"PO-Revision-Date: 2009-03-25 10:47+0100\n"
 "Last-Translator: Robert Nuske <rnuske@gwdg.de>\n"
 "Language-Team: Deutsch <grass-translations@lists.osgeo.org>\n"
 "MIME-Version: 1.0\n"
@@ -22069,8 +22069,8 @@ msgid ""
 "Finds the mode of values in a cover map within areas assigned the same "
 "category value in a user-specified base map."
 msgstr ""
-"Findet den Modus der Werte einer Coverkarte innerhalb der Flächen mit "
-"gleichen Werten in einer benutzerdefinierten Basiskarte."
+"Findet den Modalwert der Werte einer Bedeckungskarte innerhalb der Flächen "
+"mit gleichen Werten in einer benutzerdefinierten Basiskarte."
 
 #: ../raster/r.mode/main.c:58
 msgid "Base map to be reclassified"
@@ -32102,6 +32102,12 @@ msgstr ""
 "basiertes GUI - Display Manager (d.m);wxpython;wxPython basiertes GUI der "
 "nächsten Generation"
 
+#, fuzzy
+msgid ""
+"No vector map of sparse points to interpolate. Interpolation will be done "
+"with <%s> vector map"
+msgstr "Nein"
+
 #~ msgid "pyramid constructed."
 #~ msgstr "Pyramide erstellt."
 
@@ -34227,12 +34233,6 @@ msgstr ""
 #~ msgstr "** keine %s Dateien gefunden **\n"
 
 #, fuzzy
-#~ msgid ""
-#~ "No vector map of sparse points to interpolate. Interpolation will be done "
-#~ "with <%s> vector map"
-#~ msgstr "Nein"
-
-#, fuzzy
 #~ msgid "Vector map <%s> of sparse points will be interpolated"
 #~ msgstr "<%s> Vektorkarte wird interpoliert."
 
@@ -34397,3 +34397,110 @@ msgstr ""
 
 #~ msgid "2nd map for mosaic."
 #~ msgstr "2. Bild für das Mosaik."
+
+#~ msgid "Name of output raster map to contain movement directions"
+#~ msgstr "Name der Ausgabe-Rasterkarte mit Bewegungsrichtungen."
+
+#~ msgid "Initializing directional output "
+#~ msgstr "Initialisiere die Ausgabe der Richtung "
+
+#~ msgid "Writing movement direction file %s..."
+#~ msgstr "Schreibe Bewegungsrichtungs Datei %s..."
+
+#~ msgid "Name of movement direction map associated with the cost surface"
+#~ msgstr "Name der Bewegungsrichtungskarte verbunden mit der Kostenkarte."
+
+#~ msgid ""
+#~ "Output drain vector map (recommended for cost surface made using knight's "
+#~ "move)"
+#~ msgstr ""
+#~ "Ausgabe Abflußvektorkarte (empfohlen für Kostenkarten erstellt mittels "
+#~ "Rösselsprung)."
+
+#~ msgid ""
+#~ "The input surface is a cost surface (if checked, a direction surface must "
+#~ "also be specified"
+#~ msgstr ""
+#~ "Die Eingabe-Oberfläche ist eine Kostenkarte (wenn aktiviert, muß auch "
+#~ "eine Richtungskarte angegeben werden)."
+
+#~ msgid "Directional drain selected... checking for direction raster"
+#~ msgstr "gerichteter Abfluß ausgewählt... prüfe die Richtungskarte"
+
+#~ msgid "Surface/Hydrology drain selected"
+#~ msgstr "Oberflächen-/Hydrologischer-Abfluß ausgewählt"
+
+#~ msgid ""
+#~ "Direction raster not specified, if direction flag is on, a direction "
+#~ "raster must be given"
+#~ msgstr ""
+#~ "Richtungskarte nicht angegeben. Wenn der Richtungsschalter aktiviert ist, "
+#~ "muß eine Richtungskarte angegeben werden."
+
+#~ msgid "Direction raster found <%s>"
+#~ msgstr "Richtungskarte gefunden <%s>."
+
+#~ msgid ""
+#~ "Direction map <%s> should not be specified for Surface/Hydrology drains"
+#~ msgstr ""
+#~ "Richtungskarte <%s> sollte bei Oberflächen-/Hydrologischem-Abfluß nicht "
+#~ "angegeben werden."
+
+#~ msgid "Outputting a vector path"
+#~ msgstr "Gebe ein Vektorpfad aus."
+
+#~ msgid "direction read: %lf, neighbour found: %i"
+#~ msgstr "Richtung gelesen: %lf, Nachbar gefunden: %i"
+
+#, fuzzy
+#~ msgid "Input value: maximum length of surface flow in map units, for USLE"
+#~ msgstr ""
+#~ "Eingabewert: Maximale Länge des Oberflächenabflusses (für ABAG/USLE)."
+
+#, fuzzy
+#~ msgid "Output map: useful for visual display of results. DEPRECATED."
+#~ msgstr ""
+#~ "Ausgabekarte die hilfreich für die visuelle Darstellung der Ergebnisse "
+#~ "ist."
+
+#~ msgid "Use cell center reference in header instead of cell corner"
+#~ msgstr ""
+#~ "Verwende als Referenz im Header den Zellmittelpunkt anstelle der Zellecke."
+
+#~ msgid "Name of two or more input raster maps"
+#~ msgstr "Namen einer oder mehrerer Eingabe-Rasterkarten."
+
+#~ msgid "Base name for output raster maps"
+#~ msgstr "Basisname der Ausgabe-Rasterkarten."
+
+#~ msgid "A numerical suffix will be added for each component map"
+#~ msgstr "Ein numerischer Suffix wird an jede Komponentenkarte angehängt."
+
+#~ msgid "Rescaling range for output maps (for no rescaling use 0,0)"
+#~ msgstr ""
+#~ "Skaliere den Wertebereich der Ausgabekarten (Für keine Skalierung "
+#~ "verwenden Sie 0,0)."
+
+#~ msgid "Eigen values, (vectors), and [percent importance]:"
+#~ msgstr "Eigenwerte, (Vektoren), und [Prozent Wichtigkeit]:"
+
+#, fuzzy
+#~ msgid "Length of each spline step in the east-west direction"
+#~ msgstr "Spline-Interpolations-Schrittweite in Ost-Richtung."
+
+#, fuzzy
+#~ msgid "Length of each spline step in the north-south direction"
+#~ msgstr "Spline-Interpolations-Schrittweite in Nord-Richtung"
+
+#, fuzzy
+#~ msgid "Spline interpolation algorithm"
+#~ msgstr "Generalisierungs Algorithmus"
+
+#, fuzzy
+#~ msgid ""
+#~ "No vector map of sparse points to interpolate was specified. "
+#~ "Interpolation will be done with <%s> vector map"
+#~ msgstr "Nein"
+
+#~ msgid "Outputs"
+#~ msgstr "Ausgaben"
