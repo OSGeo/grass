@@ -34,8 +34,6 @@ int rmdac(struct Map_info *Out, struct Map_info *Err)
     G_debug(1, "nlines =  %d", nlines);
 
     ndupl = 0;
-    if (G_verbose() > G_verbose_min())
-	fprintf(stderr, _("Duplicate area centroids: %5d"), ndupl);
 
     for (i = 1; i <= nlines; i++) {
 	G_percent(i, nlines, 2);
@@ -53,18 +51,13 @@ int rmdac(struct Map_info *Out, struct Map_info *Err)
 	    Vect_delete_line(Out, i);
 	    ndupl++;
 
-	    if (G_verbose() > G_verbose_min())
-		fprintf(stderr, "\r%s: %5d", _("Duplicate area centroids"),
-			ndupl);
-
 	    if (Err) {
 		Vect_write_line(Err, type, Points, Cats);
 	    }
 	}
     }
 
-    if (G_verbose() > G_verbose_min())
-	fprintf(stderr, "\n");
+    G_verbose_message(_("Duplicate area centroids: %d"), ndupl);
 
     Vect_destroy_line_struct(Points);
     Vect_destroy_cats_struct(Cats);
