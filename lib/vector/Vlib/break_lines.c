@@ -101,6 +101,7 @@ Vect_break_lines_list(struct Map_info *Map, struct ilist *List_break,
 
     /* TODO: It seems that lines/boundaries are not broken at intersections
      * with points/centroids. Check if true, if yes, skip GV_POINTS
+     */
 
     /* To find intersection of two lines (Vect_line_intersection) is quite slow.
      * Fortunately usual lines/boundaries in GIS often forms a network where lines
