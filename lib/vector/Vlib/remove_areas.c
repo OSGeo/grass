@@ -179,5 +179,8 @@ Vect_remove_small_areas(struct Map_info *Map, double thresh,
     if (removed_area)
 	*removed_area = size_removed;
 
+    G_verbose_message(_("%d areas of total size %g removed"), nremoved,
+		size_removed);
+
     return (nremoved);
 }
