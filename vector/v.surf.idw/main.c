@@ -42,12 +42,11 @@ struct Point ***points;
 struct Point *noidxpoints = NULL;
 struct list_Point *list;
 static struct Cell_head window;
-static struct Flag *noindex;
 void calculate_distances(int, int, double, double, int *);
 void calculate_distances_noindex(double, double);
 
 /* read_sites.c */
-void read_sites(char *, int, char *);
+void read_sites(char *, int, char *, int);
 
 int main(int argc, char *argv[])
 {
@@ -68,6 +67,10 @@ int main(int argc, char *argv[])
     {
 	struct Option *input, *npoints, *output, *dfield, *col;
     } parm;
+    struct
+    {
+	struct Flag *noindex, *withz;
+    } flag;
     struct cell_list
     {
 	int row, column;
@@ -98,24 +101,25 @@ int main(int argc, char *argv[])
     parm.npoints->answer = "12";
 
     parm.dfield = G_define_standard_option(G_OPT_V_FIELD);
-    parm.dfield->description =
-	_("If set to 0, z coordinates are used (3D vector only)");
     parm.dfield->answer = "1";
 
     parm.col = G_define_option();
     parm.col->key = "column";
     parm.col->type = TYPE_STRING;
     parm.col->required = NO;
-    parm.col->label = _("Attribute table column with values to interpolate");
-    parm.col->description = _("Required if layer > 0");
+    parm.col->description = _("Attribute table column with values to interpolate");
 
-    noindex = G_define_flag();
-    noindex->key = 'n';
-    noindex->label = _("Don't index points by raster cell");
-    noindex->description = _("Slower but uses"
+    flag.noindex = G_define_flag();
+    flag.noindex->key = 'n';
+    flag.noindex->label = _("Don't index points by raster cell");
+    flag.noindex->description = _("Slower but uses"
 			     " less memory and includes points from outside region"
 			     " in the interpolation");
 
+    flag.withz = G_define_flag();
+    flag.withz->key = 'z';
+    flag.withz->description = _("Use z coordinates for approximation");
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -126,7 +130,7 @@ int main(int argc, char *argv[])
 
     sscanf(parm.dfield->answer, "%d", &field);
 
-    if (field > 0 && !parm.col->answer)
+    if (!flag.withz->answer && !parm.col->answer)
 	G_fatal_error(_("No attribute column specified"));
 
     list =
@@ -137,7 +141,7 @@ int main(int argc, char *argv[])
     /* get the window, dimension arrays */
     G_get_window(&window);
 
-    if (!noindex->answer) {
+    if (!flag.noindex->answer) {
 	npoints_currcell = (long **)G_malloc(window.rows * sizeof(long *));
 	points =
 	    (struct Point ***)G_malloc(window.rows * sizeof(struct Point **));
@@ -158,13 +162,14 @@ int main(int argc, char *argv[])
     }
 
     /* read the elevation points from the input sites file */
-    read_sites(parm.input->answer, field, parm.col->answer);
+    read_sites(parm.input->answer, flag.withz->answer ? 0 : field,
+	       parm.col->answer, flag.noindex->answer);
 
     if (npoints == 0)
 	G_fatal_error(_("No data points found"));
     nsearch = npoints < search_points ? npoints : search_points;
 
-    if (!noindex->answer) {
+    if (!flag.noindex->answer) {
 	/* Arbitrary point to switch between searching algorithms. Could do
 	 * with refinement PK */
 	if ((window.rows * window.cols) / npoints > 400) {
@@ -270,7 +275,7 @@ int main(int argc, char *argv[])
 	    /* If current cell contains more than nsearch points just average
 	     * all the points in this cell and don't look in any others */
 
-	    if (!(noindex->answer) && npoints_currcell[row][col] >= nsearch) {
+	    if (!(flag.noindex->answer) && npoints_currcell[row][col] >= nsearch) {
 		sum1 = 0.0;
 		for (i = 0; i < npoints_currcell[row][col]; i++)
 		    sum1 += points[row][col][i].z;
@@ -278,7 +283,7 @@ int main(int argc, char *argv[])
 		interp_value = sum1 / npoints_currcell[row][col];
 	    }
 	    else {
-		if (noindex->answer)
+		if (flag.noindex->answer)
 		    calculate_distances_noindex(north, east);
 		else {
 		    pointsfound = 0;
@@ -396,19 +401,19 @@ int main(int argc, char *argv[])
     G_command_history(&history);
     G_write_history(parm.output->answer, &history);
 
-    G_done_msg("");
+    G_done_msg(" ");
 
     exit(EXIT_SUCCESS);
 }
 
-void newpoint(double z, double east, double north)
+void newpoint(double z, double east, double north, int noindex)
 {
     int row, column;
 
     row = (int)((window.north - north) / window.ns_res);
     column = (int)((east - window.west) / window.ew_res);
 
-    if (!noindex->answer) {
+    if (!noindex) {
 	if (row < 0 || row >= window.rows || column < 0 ||
 	    column >= window.cols) ;
 	else {			/* Ignore sites outside current region as can't be indexed */
