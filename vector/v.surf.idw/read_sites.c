@@ -13,7 +13,7 @@
  * mccauley
  */
 
-void read_sites(char *name, int field, char *col)
+void read_sites(char *name, int field, char *col, int noindex)
 {
     extern long npoints;
     int nrec, ctype = 0, type;
@@ -90,7 +90,7 @@ void read_sites(char *name, int field, char *col)
 	else
 	    dval = Points->z[0];
 
-	newpoint(dval, Points->x[0], Points->y[0]);
+	newpoint(dval, Points->x[0], Points->y[0], noindex);
     }
 
     if (field > 0)
