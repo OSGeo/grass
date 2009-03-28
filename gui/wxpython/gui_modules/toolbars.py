@@ -357,7 +357,7 @@ class GRToolbar(AbstractToolbar):
 
     def OnZoomMap(self, event):
         """Zoom to selected map"""
-        layer = self.mapcontent.GetListOfLayers()[0]
+        layer = self.mapcontent.GetListOfLayers()
 
         self.mapdisplay.MapWindow.ZoomToMap(layer=layer)
 

@@ -81,7 +81,7 @@ class GeorectWizard(object):
         # get environmental variables
         #
         self.grassdatabase = grass.gisenv()['GISDBASE']
-
+        
         #
         # read original environment settings
         #
@@ -93,7 +93,6 @@ class GeorectWizard(object):
                 line = line.replace('\n', '').strip()
                 if len(line) < 1:
                     continue
-                print line
                 key, value = line.split(':', 1)
                 self.gisrc_dict[key.strip()] = value.strip()
         finally:
