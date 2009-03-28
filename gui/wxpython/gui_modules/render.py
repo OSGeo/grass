@@ -126,11 +126,11 @@ class Layer(object):
         #
         # prepare command for each layer
         #
-        layertypes = ['raster', 'rgb', 'his', 'shaded', 'rastarrow', 'rastnum',
+        layertypes = ('raster', 'rgb', 'his', 'shaded', 'rastarrow', 'rastnum',
                       'vector','thememap','themechart',
                       'grid', 'geodesic', 'rhumb', 'labels',
                       'command',
-                      'overlay']
+                      'overlay')
         
         if self.type not in layertypes:
             raise gcmd.GStdError(_("<%(name)s>: layer type <%(type)s> is not supported yet.") % \
@@ -1210,8 +1210,7 @@ class Map(object):
 
         return self.overlays[-1]
 
-    def ChangeOverlay(self, id, type, command,
-                      l_active=True, l_hidden=False, l_opacity=1, l_render=False):
+    def ChangeOverlay(self, id, render=False, **kargs):
         """
         Change overlay properities
 
@@ -1228,20 +1227,27 @@ class Map(object):
         """
         overlay = self.GetOverlay(id, list=False)
         if  overlay is None:
-            overlay = Overlay(id, type, command,
-                              l_active, l_hidden, l_opacity)
-        else:
-            overlay.id = id
-            overlay.name = type
-            overlay.cmdlist = command
-            overlay.active = l_active
-            overlay.hidden = l_hidden
-            overlay.opacity = l_opacity
+            overlay = Overlay(id, type = None, cmd = None)
+        
+        if kargs.has_key('type'):
+            overlay.SetName(kargs['type']) # type -> overlay
+        
+        if kargs.has_key('command'):
+            overlay.SetCmd(kargs['command'])
+        
+        if kargs.has_key('active'):
+            overlay.SetActive(kargs['active'])
 
-        if l_render and command != [] and not overlay.Render():
+        if kargs.has_key('hidden'):
+            overlay.SetHidden(kargs['hidden'])
+
+        if kargs.has_key('opacity'):
+            overlay.SetOpacity(kargs['opacity'])
+        
+        if render and command != [] and not overlay.Render():
             raise gcmd.GException(_("Unable render overlay <%s>") % 
                                   (name))
-
+        
         return overlay
 
     def GetOverlay(self, id, list=False):
