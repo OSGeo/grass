@@ -45,7 +45,6 @@ int main(int argc, char *argv[])
     struct Option *in_opt, *fieldopt;
     struct Flag *histf, *columns, *gflag, *tflag, *mflag;
     struct Map_info Map;
-    struct dig_head v_head;
     BOUND_BOX box;
     const char *mapset;
     char line[200], buf[1001];
@@ -108,7 +107,6 @@ int main(int argc, char *argv[])
     Vect_set_open_level(2);
     Vect_open_old_head(&Map, in_opt->answer, "");
     with_z = Vect_is_3d(&Map);
-    v_head = Map.head;
 
     if (histf->answer) {
 	Vect_hist_rewind(&Map);
@@ -330,7 +328,7 @@ int main(int argc, char *argv[])
 	    printline(line);
 	    sprintf(line, _("  Comments:"));
 	    printline(line);
-	    sprintf(line, "    %s", v_head.line_3);
+	    sprintf(line, "    %s", Vect_get_comment(&Map));
 	    printline(line);
 	    divider('+');
 	    fprintf(stdout, "\n");
