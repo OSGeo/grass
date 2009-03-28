@@ -451,6 +451,7 @@ class TextLayerDialog(wx.Dialog):
                  pos=wx.DefaultPosition, size=wx.DefaultSize, style=wx.DEFAULT_DIALOG_STYLE):
 
         wx.Dialog.__init__(self, parent, wx.ID_ANY, title, pos, size, style)
+        from wx.lib.expando import ExpandoTextCtrl, EVT_ETC_LAYOUT_NEEDED
 
         self.ovlId = ovlId
         self.parent = parent
@@ -468,7 +469,7 @@ class TextLayerDialog(wx.Dialog):
             self.currRot = 0.0
             self.currCoords = [10, 10, 10, 10]
 
-        sizer = wx.BoxSizer(wx.VERTICAL)
+        self.sizer = wx.BoxSizer(wx.VERTICAL)
         box = wx.GridBagSizer(vgap=5, hgap=5)
 
         # show/hide
@@ -488,10 +489,13 @@ class TextLayerDialog(wx.Dialog):
                 flag=wx.ALIGN_CENTER_VERTICAL,
                 pos=(1, 0))
 
-        self.textentry = wx.TextCtrl(parent=self, id=wx.ID_ANY, value="", size=(300,-1))
+        self.textentry = ExpandoTextCtrl(parent=self, id=wx.ID_ANY, value="", size=(300,-1))
         self.textentry.SetFont(self.currFont)
         self.textentry.SetForegroundColour(self.currClr)
         self.textentry.SetValue(self.currText)
+        # get rid of unneeded scrollbar when text box first opened
+        self.textentry.SetClientSize((300,-1))
+        
         box.Add(item=self.textentry,
                 pos=(1, 1))
 
@@ -514,7 +518,7 @@ class TextLayerDialog(wx.Dialog):
                 flag=wx.ALIGN_RIGHT,
                 pos=(3, 1))
 
-        sizer.Add(item=box, proportion=1,
+        self.sizer.Add(item=box, proportion=1,
                   flag=wx.ALL, border=10)
 
         # note
@@ -524,12 +528,12 @@ class TextLayerDialog(wx.Dialog):
                                       "to position.\nDouble-click to change options"))
         box.Add(item=label, proportion=0,
                 flag=wx.ALIGN_CENTRE | wx.ALL, border=5)
-        sizer.Add(item=box, proportion=0,
+        self.sizer.Add(item=box, proportion=0,
                   flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER | wx.ALL, border=5)
 
         line = wx.StaticLine(parent=self, id=wx.ID_ANY,
                              size=(20,-1), style=wx.LI_HORIZONTAL)
-        sizer.Add(item=line, proportion=0,
+        self.sizer.Add(item=line, proportion=0,
                   flag=wx.EXPAND | wx.ALIGN_CENTRE | wx.ALL, border=5)
 
         btnsizer = wx.StdDialogButtonSizer()
@@ -542,16 +546,21 @@ class TextLayerDialog(wx.Dialog):
         btnsizer.AddButton(btn)
         btnsizer.Realize()
 
-        sizer.Add(item=btnsizer, proportion=0,
+        self.sizer.Add(item=btnsizer, proportion=0,
                   flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
 
-        self.SetSizer(sizer)
-        sizer.Fit(self)
+        self.SetSizer(self.sizer)
+        self.sizer.Fit(self)
 
         # bindings
+        self.Bind(EVT_ETC_LAYOUT_NEEDED, self.OnRefit, self.textentry)
         self.Bind(wx.EVT_BUTTON,     self.OnSelectFont, fontbtn)
         self.Bind(wx.EVT_TEXT,       self.OnText,       self.textentry)
         self.Bind(wx.EVT_SPINCTRL,   self.OnRotation,   self.rotation)
+
+    def OnRefit(self, event):
+        """Resize text entry to match text"""
+        self.sizer.Fit(self)
 
     def OnText(self, event):
         """Change text string"""
