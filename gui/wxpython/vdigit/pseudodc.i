@@ -78,20 +78,20 @@ public:
 			self->GetIdBounds(id, rect);
 			return rect;
 		}
-		void TranslateId(int id, int dx, int dy) {
+		void TranslateId(int id, float dx, float dy) {
 		        self->TranslateId(id, (wxCoord) dx, (wxCoord) dy);
 		}
-		PyObject *FindObjects(int x, int y, int radius) {
+		PyObject *FindObjects(float x, float y, int radius) {
 		        return self->FindObjects((wxCoord) x, (wxCoord) y,
 			                         (wxCoord) radius, *wxWHITE);
                 }
 		void DrawRectangleRect(const wxRect& rect) {
 		        return self->DrawRectangle(rect);
                 }
-		void DrawText(const wxString& text, int x, int y) {
+		void DrawText(const wxString& text, float x, float y) {
 		        return self->DrawText(text, (wxCoord) x, (wxCoord) y);
 		}
-		void DrawRotatedText(const wxString& text, int x, int y, double angle) {
+		void DrawRotatedText(const wxString& text, float x, float y, double angle) {
 		        return self->DrawRotatedText(text, (wxCoord) x, (wxCoord) y, angle);
 		}
 	}
