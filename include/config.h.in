@@ -143,6 +143,9 @@
 /* define if OGR is to be used */
 #undef HAVE_OGR
 
+/* define if GEOS is to be used */
+#undef HAVE_GEOS
+
 /* define if postgres client header exists */
 #undef HAVE_LIBPQ_FE_H
 

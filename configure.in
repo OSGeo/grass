@@ -209,6 +209,10 @@ AC_ARG_WITH(gdal,
 [  --with-gdal[=path/gdal-config] enable GDAL/OGR support (gdal-config with path, \
 e.g. '--with-gdal=/usr/local/bin/gdal-config')])
 
+AC_ARG_WITH(geos,
+[  --with-geos[=path/geos-config] enable GEOS support (geos-config with path, \
+e.g. '--with-geos=/usr/local/bin/geos-config')])
+
 AC_ARG_WITH(includes,
 [  --with-includes=DIRS    site include files are in DIRS])
 
@@ -724,6 +728,41 @@ AC_SUBST(GDAL_LIBS)
 AC_SUBST(GDAL_CFLAGS)
 AC_SUBST(USE_GDAL)
 AC_SUBST(USE_OGR)
+
+# GEOS option
+
+AC_MSG_CHECKING(whether to use GEOS)
+
+GEOS_LIBS=
+GGEOS_CFLAGS=
+USE_GEOS=
+
+if test "`basename xx/$with_geos`" = "geos-config" ; then
+  GEOS_CONFIG="$with_geos"
+fi
+
+if test "$with_geos" = "no" ; then
+  AC_MSG_RESULT(no)
+else
+  AC_MSG_RESULT(yes)
+  AC_PATH_PROG(GEOS_CONFIG, geos-config, no)
+
+  if test "$GEOS_CONFIG" = "no" ; then
+    AC_MSG_ERROR([*** couldn't find geos-config])
+  fi
+
+  if test "$GEOS_CONFIG" != "" ; then
+    GEOS_LIBS=`"$GEOS_CONFIG" --libs`
+    GEOS_CFLAGS=`"$GEOS_CONFIG" --cflags`
+    USE_GEOS=1
+  fi
+  
+  AC_DEFINE(HAVE_GEOS)
+fi
+
+AC_SUBST(GEOS_LIBS)
+AC_SUBST(GEOS_CFLAGS)
+AC_SUBST(USE_GEOS)
 
 # Enable TIFF option
 
@@ -1746,6 +1785,7 @@ LOC_MSG_USE(FFMPEG support,USE_FFMPEG)
 LOC_MSG_USE(FFTW support,USE_FFTW)
 LOC_MSG_USE(FreeType support,USE_FREETYPE)
 LOC_MSG_USE(GDAL support,USE_GDAL)
+LOC_MSG_USE(GEOS support,USE_GEOS)
 LOC_MSG_USE(JPEG support,USE_JPEG)
 LOC_MSG_USE(LAPACK support,USE_LAPACK)
 LOC_MSG_USE(Large File support (LFS), USE_LARGEFILES)
