@@ -3,6 +3,10 @@
 #include <grass/gis.h>
 #include <grass/vect/digit.h>
 
+#ifdef HAVE_GEOS
+#include <geos_c.h>
+#endif
+
 /* --- ANSI prototypes for the lib/vector/Vlib functions --- */
 
 /*
@@ -463,5 +467,12 @@ int Vect_isle_find_area(struct Map_info *, int);
 int Vect_attach_isle(struct Map_info *, int);
 int Vect_attach_isles(struct Map_info *, BOUND_BOX *);
 int Vect_attach_centroids(struct Map_info *, BOUND_BOX *);
+
+    /* GEOS support */
+#ifdef HAVE_GEOS
+GEOSGeometry *Vect_read_line_geos(const struct Map_info *, int);
+GEOSGeometry *Vect_read_area_geos(const struct Map_info *, int);
+GEOSGeometry *Vect_line_to_geos(const struct Map_info *, const struct line_pnts*, int);
+#endif
 
 #endif /* GRASS_VECT_H */
