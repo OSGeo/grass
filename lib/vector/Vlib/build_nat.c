@@ -344,7 +344,6 @@ int Vect_attach_centroids(struct Map_info *Map, BOUND_BOX * box)
     static int first = 1;
     static struct ilist *List;
     P_AREA *Area;
-    P_NODE *Node;
     P_LINE *Line;
     struct Plus_head *plus;
 
@@ -390,7 +389,6 @@ int Vect_attach_centroids(struct Map_info *Map, BOUND_BOX * box)
 
 	centr = List->value[i];
 	Line = plus->Line[centr];
-	Node = plus->Node[Line->N1];
 
 	/* only attach unregistered and duplicate centroids because 
 	 * 1) all properly attached centroids are properly attached, really! Don't touch.
@@ -402,7 +400,7 @@ int Vect_attach_centroids(struct Map_info *Map, BOUND_BOX * box)
 
 	orig_area = Line->left;
 
-	sel_area = Vect_find_area(Map, Node->x, Node->y);
+	sel_area = Vect_find_area(Map, Line->E, Line->N);
 	G_debug(3, "  centroid %d is in area %d", centr, sel_area);
 	if (sel_area > 0) {
 	    Area = plus->Area[sel_area];
@@ -447,7 +445,6 @@ int Vect_build_nat(struct Map_info *Map, int build)
     struct line_pnts *Points, *APoints;
     struct line_cats *Cats;
     P_LINE *Line;
-    P_NODE *Node;
     P_AREA *Area;
     BOUND_BOX box;
     struct ilist *List;
@@ -650,9 +647,7 @@ int Vect_build_nat(struct Map_info *Map, int build)
 	    if (Line->type != GV_CENTROID)
 		continue;
 
-	    Node = plus->Node[Line->N1];
-
-	    area = Vect_find_area(Map, Node->x, Node->y);
+	    area = Vect_find_area(Map, Line->E, Line->N);
 
 	    if (area > 0) {
 		G_debug(3, "Centroid (line=%d) in area %d", line, area);
