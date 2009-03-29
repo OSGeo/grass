@@ -8,11 +8,13 @@
 #define OP_OVERLAPS   7
 #define OP_RELATE     8
 
+#ifdef HAVE_GEOS
 /* geos.c */
 int line_relate_geos(const struct Map_info *, const GEOSGeometry *,
 		     int, int, const char *);
 int area_relate_geos(const struct Map_info *, const GEOSGeometry *,
 		     int, int, const char *);
+#endif
 
 /* overlap.c */
 void add_aarea(struct Map_info *, int, int *);
