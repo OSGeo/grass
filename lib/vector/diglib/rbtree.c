@@ -1,34 +1,33 @@
-/****************************************************************************
+/*!
+ * \file rbtree.c
  *
- * MODULE:       Vector library 
- *              
- * AUTHOR(S):    Markus Metz
+ * \brief binary search tree 
  *
- * PURPOSE:      Lower level functions for reading/writing/manipulating vectors.
+ * Generic balanced binary search tree (Red Black Tree) implementation
  *
- * COPYRIGHT:    (C) 2009 by the GRASS Development Team
+ * (C) 2009 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * This program is free software under the GNU General Public License
+ * (>=v2).  Read the file COPYING that comes with GRASS for details.
  *
- *****************************************************************************/
+ * \author Original author Julienne Walker 2003, 2008
+ *         GRASS implementation Markus Metz, 2009
+ */
 
 /* balanced binary search tree implementation
+ * 
  * this one is a Red Black Tree, the bare version, no parent pointers, no threads
- * The core code comes from Julienne Walker's tutorials on
- * binary search trees: insert, remove, balance
- * support for any kind of data structures comes from libavl (GPL >= 2)
- *
+ * The core code comes from Julienne Walker's tutorials on binary search trees
+ * original license: public domain
+ * http://eternallyconfuzzled.com/tuts/datastructures/jsw_tut_rbtree.aspx
+ * some ideas come from libavl (GPL >= 2)
  * I could have used some off-the-shelf solution, but that's boring
  *
- * Red Black Trees are used to maintain a data structure that allows
+ * Red Black Trees are used to maintain a data structure with
  * search, insertion and deletion in O(log N) time
- * This is needed for large vectors with many features
  */
 
 #include <assert.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
@@ -46,17 +45,18 @@ int is_red(struct RB_NODE *);
 
 
 /* create new tree and initialize
- * return pointer to new tree or NULL for memory allocation error
+ * returns pointer to new tree, NULL for memory allocation error
  */
-
 struct RB_TREE *rbtree_create(rb_compare_fn *compare, size_t rb_datasize)
 {
     struct RB_TREE *tree = malloc(sizeof(*tree));
 
     if (tree == NULL) {
-	G_warning("RB Search Tree: Out of memory!");
+	G_warning("RB tree: Out of memory!");
 	return NULL;
     }
+
+    assert(compare);
 
     tree->datasize = rb_datasize;
     tree->rb_compare = compare;
@@ -67,12 +67,14 @@ struct RB_TREE *rbtree_create(rb_compare_fn *compare, size_t rb_datasize)
 } 
 
 /* add an item to a tree
- * returns 1 on success, 0 on failure
  * non-recursive top-down insertion
  * the algorithm does not allow duplicates and also does not warn about a duplicate
+ * returns 1 on success, 0 on failure
  */
 int rbtree_insert(struct RB_TREE *tree, void *data)
 {
+    assert(tree && data);
+    
     if (tree->root == NULL) {
 	/* create a new root node for tree */
 	tree->root = rbtree_make_node(tree->datasize, data);
@@ -119,11 +121,13 @@ int rbtree_insert(struct RB_TREE *tree, void *data)
 	    last = dir;
 	    dir = tree->rb_compare(q->data, data);
 
-	    /* Stop if found */
-	    if (dir == 2)
+	    /* Stop if found. This check also disallows duplicates in the tree */
+	    if (dir == 0)
 		break;
 
-	    /* Update helpers */
+	    dir = dir < 0;
+
+	    /* Move the helpers down */
 	    if (g != NULL)
 		t = g;
 
@@ -143,17 +147,19 @@ int rbtree_insert(struct RB_TREE *tree, void *data)
     return 1;
 }
 
-/* delete an item from a tree
- * returns 1 on successful deletion
+/* remove an item from a tree that matches given data
+ * non-recursive top-down removal
+ * returns 1 on successful removal
  * returns 0 if data item was not found
- * non-recursive top-down deletion
  */
 int rbtree_remove(struct RB_TREE *tree, const void *data)
 {
     struct RB_NODE head = {0}; /* False tree root */
     struct RB_NODE *q, *p, *g; /* Helpers */
     struct RB_NODE *f = NULL;  /* Found item */
-    int dir = 1, found = 0;
+    int dir = 1, removed = 0;
+
+    assert(tree && data);
 
     if (tree->root == NULL) {
 	return 0; /* empty tree, nothing to remove */
@@ -174,10 +180,10 @@ int rbtree_remove(struct RB_TREE *tree, const void *data)
 	dir = tree->rb_compare(q->data, data);
 
 	/* Save found node */
-	if (dir == 2) {
+	if (dir == 0)
 	    f = q;
-	    dir = 0;
-	}
+
+	dir = dir < 0;
 
 	/* Push the red node down */
 	if (!is_red(q) && !is_red(q->link[dir])) {
@@ -214,39 +220,40 @@ int rbtree_remove(struct RB_TREE *tree, const void *data)
 
     /* Replace and remove if found */
     if (f != NULL) {
+	free(f->data);
+	f->data = q->data;
 	p->link[p->link[1] == q] = q->link[q->link[0] == NULL];
-	free(q->data);
 	free(q);
 	tree->count--;
-	found = 1;
+	removed = 1;
     }
     else
-	G_debug(2, "data not found in search tree");
+	G_debug(2, "RB tree: data not found in search tree");
 
     /* Update root and make it black */
     tree->root = head.link[1];
     if ( tree->root != NULL)
 	tree->root->red = 0;
 
-    return found;
+    return removed;
 }
 
 /* find data item in tree
- * return pointer to data item if found else NULL
+ * returns pointer to data item if found else NULL
  */
 void *rbtree_find(struct RB_TREE *tree, const void *data)
 {
     struct RB_NODE *curr_node = tree->root;
-    int dir = 0;
+    int cmp = 0;
 
     assert(tree && data);
 
     while (curr_node != NULL) {
-	dir = tree->rb_compare(curr_node->data, data);
-	if (dir == 2)
-	    return curr_node->data;
+	cmp = tree->rb_compare(curr_node->data, data);
+	if (cmp == 0)
+	    return curr_node->data;   /* found */
 	else {
-	    curr_node = curr_node->link[dir];
+	    curr_node = curr_node->link[cmp < 0];
 	}
     }
     return NULL;
@@ -254,9 +261,9 @@ void *rbtree_find(struct RB_TREE *tree, const void *data)
 
 /* initialize tree traversal
  * (re-)sets trav structure
- * return pointer to trav struct or NULL on memory allocation error
+ * returns 0
  */
-void rbtree_init_trav(struct RB_TRAV *trav, struct RB_TREE *tree)
+int rbtree_init_trav(struct RB_TRAV *trav, struct RB_TREE *tree)
 {
     int i;
 
@@ -268,21 +275,24 @@ void rbtree_init_trav(struct RB_TRAV *trav, struct RB_TREE *tree)
 
     for (i = 0; i < RBTREE_MAX_HEIGHT; i++)
 	trav->up[i] = NULL;
+
+    return 0;
 }
 
 /* traverse the tree in ascending order
  * useful to get all items in the tree non-recursively
- * return pointer to data
  * struct RB_TRAV *trav needs to be initialized first
+ * returns pointer to data, NULL when finished
  */
 void *rbtree_traverse(struct RB_TRAV *trav)
 {
     assert(trav);
+    
     if (trav->curr_node == NULL) {
 	if (trav->first)
-	    G_warning("empty tree");
+	    G_warning("RB tree: empty tree");
 	else
-	    G_warning("finished traversing");
+	    G_warning("RB tree: finished traversing");
 
 	return NULL;
     }
@@ -295,6 +305,53 @@ void *rbtree_traverse(struct RB_TRAV *trav)
 	return rbtree_next(trav);
 }
 
+/* find start point to traverse the tree in ascending order
+ * useful to get a selection of items in the tree
+ * magnitudes faster than traversing the whole tree
+ * may return first item that's smaller or first item that's larger
+ * struct RB_TRAV *trav needs to be initialized first
+ * returns pointer to data, NULL on error
+ */
+void *rbtree_traverse_start(struct RB_TRAV *trav, const void *data)
+{
+    int dir = 0;
+
+    assert(trav && data);
+
+    if (trav->first == 0) {
+	G_debug(1, "RB tree: trav must be initialised first");
+	return NULL;
+    }
+
+    if (trav->curr_node == NULL) {
+	G_warning("RB tree: empty tree");
+	return NULL;
+    }
+	
+    trav->first = 0;
+    trav->top = 0;
+
+    while (trav->curr_node != NULL) {
+	dir = trav->tree->rb_compare(trav->curr_node->data, data);
+	/* exact match, great! */
+	if (dir == 0)
+	    return trav->curr_node->data;
+	else {
+	    dir = dir < 0;
+	    /* end of branch, also reached if
+	     * smallest item is larger than search template or
+	     * largest item is smaller than search template */
+	    if (trav->curr_node->link[dir] == NULL)
+		return trav->curr_node->data;
+		
+	    trav->up[trav->top++] = trav->curr_node;
+	    trav->curr_node = trav->curr_node->link[dir];
+	}
+    }
+
+    return NULL; /* should not happen */
+}
+
 /* two functions needed to fully traverse the tree: initialize and continue
  * useful to get all items in the tree non-recursively
  * this one here uses a stack
@@ -303,27 +360,25 @@ void *rbtree_traverse(struct RB_TRAV *trav)
  * -> more memory needed for standard operations
  */
 
-/* start traversing the tree */
+/* start traversing the tree
+ * returns pointer to smallest data item
+ */
 void *rbtree_first(struct RB_TRAV *trav)
 {
     trav->top = 0;
 
     /* get smallest item */
-    if (trav->curr_node != NULL) {
-	while (trav->curr_node->link[0] != NULL) {
-	    trav->up[trav->top++] = trav->curr_node;
-	    trav->curr_node = trav->curr_node->link[0];
-	}
+    while (trav->curr_node->link[0] != NULL) {
+	trav->up[trav->top++] = trav->curr_node;
+	trav->curr_node = trav->curr_node->link[0];
     }
 
-    if (trav->curr_node != NULL) {
-	return trav->curr_node->data; /* return smallest item */
-    }
-    else
-	return NULL; /* empty tree */
+    return trav->curr_node->data; /* return smallest item */
 }
 
-/* continue traversing the tree */
+/* continue traversing the tree in ascending order
+ * returns pointer to data item, NULL when finished
+ */
 void *rbtree_next(struct RB_TRAV *trav)
 {
     if (trav->curr_node->link[1] != NULL) {
@@ -360,6 +415,7 @@ void *rbtree_next(struct RB_TRAV *trav)
 /* destroy the tree */
 void rbtree_destroy(struct RB_TREE *tree) {
     rbtree_destroy2(tree->root);
+    free(tree);
 }
 
 void rbtree_destroy2(struct RB_NODE *root)
@@ -372,27 +428,81 @@ void rbtree_destroy2(struct RB_NODE *root)
     }
 }
 
-/*!
- * internal funtions used for Red Black Tree maintenance
- */
+/* used for debugging: check for errors in tree structure */
+int rbtree_debug(struct RB_TREE *tree, struct RB_NODE *root)
+{
+    int lh, rh;
+ 
+    if (root == NULL)
+	return 1;
+    else {
+	struct RB_NODE *ln = root->link[0];
+	struct RB_NODE *rn = root->link[1];
+	int lcmp = 0, rcmp = 0;
+
+	/* Consecutive red links */
+	if (is_red(root)) {
+	    if (is_red(ln) || is_red(rn)) {
+		G_warning("Red Black Tree debugging: Red violation");
+		return 0;
+	    }
+	}
+
+	lh = rbtree_debug(tree, ln);
+	rh = rbtree_debug(tree, rn);
+
+	if (ln) {
+	    lcmp = tree->rb_compare(ln->data, root->data);
+	}
+	
+	if (rn) {
+	    rcmp = tree->rb_compare(rn->data, root->data);
+	}
+
+	/* Invalid binary search tree:
+	 * left node >= parent or right node <= parent */
+	if ((ln != NULL && lcmp > -1)
+	 || (rn != NULL && rcmp < 1)) {
+	    G_warning("Red Black Tree debugging: Binary tree violation" );
+	    return 0;
+	}
+
+	/* Black height mismatch */
+	if (lh != 0 && rh != 0 && lh != rh) {
+	    G_warning("Red Black Tree debugging: Black violation");
+	    return 0;
+	}
+
+	/* Only count black links */
+	if (lh != 0 && rh != 0)
+	    return is_red(root) ? lh : lh + 1;
+	else
+	    return 0;
+    }
+}
+
+/*******************************************************
+ *                                                     *
+ *  internal functions for Red Black Tree maintenance  *
+ *                                                     *
+ *******************************************************/
 
 /* add a new node to the tree */
 struct RB_NODE *rbtree_make_node(size_t datasize, void *data)
 {
     struct RB_NODE *new_node = malloc(sizeof(*new_node));
 
-    if (new_node != NULL) {
-	new_node->data = malloc(datasize);
-	if (new_node->data == NULL)
-	    G_fatal_error("RB Search Tree: Out of memory!");
-	    
-	memcpy(new_node->data, data, datasize);
-	new_node->red = 1; /* 1 is red, 0 is black */
-	new_node->link[0] = NULL;
-	new_node->link[1] = NULL;
-    }
-    else
+    if (new_node == NULL)
 	G_fatal_error("RB Search Tree: Out of memory!");
+
+    new_node->data = malloc(datasize);
+    if (new_node->data == NULL)
+	G_fatal_error("RB Search Tree: Out of memory!");
+	
+    memcpy(new_node->data, data, datasize);
+    new_node->red = 1;            /* 1 is red, 0 is black */
+    new_node->link[0] = NULL;
+    new_node->link[1] = NULL;
 
     return new_node;
 }
@@ -425,64 +535,4 @@ struct RB_NODE *rbtree_double(struct RB_NODE *root, int dir)
 {
     root->link[!dir] = rbtree_single(root->link[!dir], !dir);
     return rbtree_single(root, dir);
-}
-
-/* only used for debugging */
-/* check for errors */
-int rbtree_debug(struct RB_TREE *tree, struct RB_NODE *root)
-{
-    int lh, rh;
- 
-    if (root == NULL)
-	return 1;
-    else {
-	struct RB_NODE *ln = root->link[0];
-	struct RB_NODE *rn = root->link[1];
-	int lcmp, rcmp;
-
-	/* Consecutive red links */
-	if (is_red(root)) {
-	    if (is_red(ln) || is_red(rn)) {
-		G_warning("Red Black Tree debugging: Red violation");
-		return 0;
-	    }
-	}
-
-	lh = rbtree_debug(tree, ln);
-	rh = rbtree_debug(tree, rn);
-
-	if (ln) {
-	    lcmp = tree->rb_compare(ln->data, root->data);
-	}
-	else {
-	    lcmp = 1;
-	}
-	
-	if (rn) {
-	    rcmp = tree->rb_compare(rn->data, root->data);
-	}
-	else {
-	    rcmp = 1;
-	}
-	
-
-	/* Invalid binary search tree */
-	if ((ln != NULL && (lcmp == 0 || lcmp == 2))
-	 || (rn != NULL && (rcmp == 1 || rcmp == 2))) {
-	    G_warning("Red Black Tree debugging: Binary tree violation" );
-	    return 0;
-	}
-
-	/* Black height mismatch */
-	if (lh != 0 && rh != 0 && lh != rh) {
-	    G_warning("Red Black Tree debugging: Black violation");
-	    return 0;
-	}
-
-	/* Only count black links */
-	if (lh != 0 && rh != 0)
-	    return is_red(root) ? lh : lh + 1;
-	else
-	    return 0;
-    }
 }
