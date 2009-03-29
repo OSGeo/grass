@@ -1,17 +1,37 @@
 <h2>DESCRIPTION</h2>
 
 <em>v.select</em> allows the user to select features from a vector 
-by features from another one.
+map by features from another one.
+
+<p>
+Supported operators (without GEOS):
+<ul>
+  <li><tt>overlaps</tt> - features partially or completely overlap
+</ul>
+
+Supported operators (with GEOS):
+<ul>
+  <li><tt>equals</tt> - features are spatially equals</li>
+  <li><tt>disjoint</tt> - features do not spatially intersect</li>
+  <li><tt>intersects</tt> - features spatially intersect</li>
+  <li><tt>touches</tt> - features spatially touches</li>
+  <li><tt>crosses</tt> - features spatially crosses</li>
+  <li><tt>within</tt> - feature A is completely inside feature B</li>
+  <li><tt>contains</tt> - feature B is completely inside feature A</li>
+  <li><tt>overlaps</tt> - features spatilly overlap</li>
+  <li><tt>relate</tt> - feature A is spatially related to feature B</li>
+</ul>
 
 <h2>NOTES</h2>
 
 Only features with category numbers will be considered. If required
-the <em>v.category</em> module can be used to add them. Typically
-boundaries do not need to be given a category number, as an area's
-attributes are inherited from the centroid. Typically points, lines, and
-centroids will always want to have a cat number.
+the <a href="v.category.html">v.category</a> module can be used to add
+them. Typically boundaries do not need to be given a category number,
+as an area's attributes are inherited from the centroid. Typically
+points, lines, and centroids will always want to have a cat number.
+
 <p>
-e.g. take a road which separates two farms. It is ambiguous as to which
+E.g. take a road which separates two farms. It is ambiguous as to which
 farm an attribute that is attached to the road belongs to. The boundary
 only needs a cat number if it will hold its own attributes, such as road
 name or pavement form. A centroid in each paddock holds the information
@@ -20,18 +40,17 @@ with respect to ownership, area, etc.
 
 <h2>EXAMPLES</h2>
 
-Extract forest fire points from larger fire map:
+Extract forest fire points from larger fire vector map:
 
 <div class="code"><pre>
-v.select ainput=fire binput=forest output=forest_fire
+v.select ainput=fire binput=forest output=forest_fire operator=overlaps
 </pre></div>
-<P>
 
 Extract Italian rivers from VMAP0 watercourses map:
 
 <div class="code"><pre>
 v.select ainput=watrcrsl_eurnasia_wgs84 binput=italy_area \
-         output=watrcrsl_italy operator=overlap
+         output=watrcrsl_italy operator=overlaps
 </pre></div>
 
 
@@ -39,13 +58,20 @@ v.select ainput=watrcrsl_eurnasia_wgs84 binput=italy_area \
 
 <em>
 <a HREF="v.category.html">v.category</a>,
-<a HREF="v.overlay.html">v.overlay</a>,
-<a HREF="sql.html">GRASS SQL interface</a></em>
+<a HREF="v.overlay.html">v.overlay</a>
+</em>
+
+<p>
+<em>
+<a HREF="sql.html">GRASS SQL interface</a>
+</em>
 
 
 <h2>AUTHORS</h2>
 
-Radim Blazek
+Radim Blazek<br>
+
+Updated by Martin Landa, CTU in Prague, Czech Republic (GEOS support)
 
 <p>
 <i>Last changed: $Date$</i>
