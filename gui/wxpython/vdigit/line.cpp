@@ -61,7 +61,7 @@ int Digit::AddLine(int type, std::vector<double> coords, int layer, int cat,
     npoints = coords.size() / (Vect_is_3d(display->mapInfo) ? 3 : 2);
     if (coords.size() != npoints * (Vect_is_3d(display->mapInfo) ? 3 : 2)) {
 	wxString msg;
-	msg.Printf(_("Incorrent number of points (%d)"), coords.size());
+	msg.Printf(_("Incorrect number of points (%d)"), coords.size());
 	wxMessageDialog dlg(display->parentWin, msg,
 			    display->msgCaption, wxOK | wxICON_ERROR | wxCENTRE);
 	dlg.ShowModal();
