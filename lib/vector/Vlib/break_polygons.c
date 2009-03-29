@@ -68,16 +68,16 @@ int compare_xpnts(const void *Xpnta, const void *Xpntb)
     b = (XPNT *)Xpntb;
 
     if (a->x > b->x)
-	return 0;
-    else if (a->x < b->x)
 	return 1;
+    else if (a->x < b->x)
+	return -1;
     else {
 	if (a->y > b->y)
-	    return 0;
-	else if (a->y < b->y)
 	    return 1;
+	else if (a->y < b->y)
+	    return -1;
 	else
-	    return 2;
+	    return 0;
     }
 
     G_warning("Break polygons: Bug in binary tree!");
@@ -130,7 +130,7 @@ Vect_break_polygons(struct Map_info *Map, int type, struct Map_info *Err)
 
     apoints = 0;
     nmarks = 0;
-    npoints = 1;		/* index starts from 1 ! */
+    npoints = 0;
     nallpoints = 0;
 
     G_verbose_message(_("Break polygons Pass 1: select break points"));
@@ -231,9 +231,9 @@ Vect_break_polygons(struct Map_info *Map, int type, struct Map_info *Err)
 		    XPnt_search.a2 = a2;
 		    XPnt_search.cross = 0;
 		}
+
 		/* Add to tree */
 		rbtree_insert(RBTree, &XPnt_search);
-
 		npoints++;
 	    }
 	}
