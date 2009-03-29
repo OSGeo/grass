@@ -209,6 +209,8 @@ int main(int argc, char *argv[])
 #ifdef HAVE_GEOS
     initGEOS(G_message, G_fatal_error);
     GEOSGeometry *AGeom = NULL;
+#else
+    void *AGeom = NULL;
 #endif
 
     /* Alloc space for input lines array */
@@ -242,7 +244,9 @@ int main(int argc, char *argv[])
 	    if (flag.geos && flag.geos->answer) {
 		if (!(ltype & (GV_POINT | GV_LINE)))
 		    continue;
+#ifdef HAVE_GEOS
 		AGeom = Vect_line_to_geos(&(In[0]), APoints, ltype);
+#endif
 		if (!AGeom)
 		    G_fatal_error(_("Unable to read line id %d from vector map <%s>"),
 				  aline, Vect_get_full_name(&(In[0])));
@@ -269,11 +273,14 @@ int main(int argc, char *argv[])
 		    }
 		    
 		    if (flag.geos && flag.geos->answer) {
+#ifdef HAVE_GEOS
 			if(line_relate_geos(&(In[1]), AGeom,
 					    bline, operator, parm.relate->answer)) {
+
 			    found = 1;
 			    break;
 			}
+#endif
 		    }
 		    else {
 			Vect_read_line(&(In[1]), BPoints, NULL, bline);
@@ -308,11 +315,13 @@ int main(int argc, char *argv[])
 		    }
 
 		    if (flag.geos && flag.geos->answer) {
+#ifdef HAVE_GEOS
 			if(area_relate_geos(&(In[1]), AGeom,
 					    barea, operator, parm.relate->answer)) {
 			    ALines[aline] = 1;
 			    break;
 			}
+#endif
 		    }
 		    else {
 			if (line_overlap_area(&(In[0]), aline, &(In[1]), barea)) {
@@ -323,7 +332,9 @@ int main(int argc, char *argv[])
 		}
 	    }
 	    if (flag.geos && flag.geos->answer) {
+#ifdef HAVE_GEOS
 		GEOSGeom_destroy(AGeom);
+#endif
 		AGeom = NULL;
 	    }
 	}
@@ -338,7 +349,6 @@ int main(int argc, char *argv[])
 	naareas = Vect_get_num_areas(&(In[0]));
 
 	for (aarea = 1; aarea <= naareas; aarea++) {
-	    int i;
 	    BOUND_BOX abox;
 
 	    G_percent(aarea, naareas, 2);	/* must be before any continue */
@@ -352,8 +362,10 @@ int main(int argc, char *argv[])
 	    abox.T = PORT_DOUBLE_MAX;
 	    abox.B = -PORT_DOUBLE_MAX;
 
-	    if (flag.geos && flag.geos->answer) {
+	    if (flag.geos && flag.geos->answer) { 
+#ifdef HAVE_GEOS
 		AGeom = Vect_read_area_geos(&(In[0]), aarea);
+#endif
 		if (!AGeom)
 		    G_fatal_error(_("Unable to read area id %d from vector map <%s>"),
 				  aline, Vect_get_full_name(&(In[0])));
@@ -374,11 +386,13 @@ int main(int argc, char *argv[])
 		    }
 		    
 		    if (flag.geos && flag.geos->answer) {
+#ifdef HAVE_GEOS
 			if(line_relate_geos(&(In[1]), AGeom,
 					    bline, operator, parm.relate->answer)) {
 			    add_aarea(&(In[0]), aarea, ALines);
 			    break;
 			}
+#endif
 		    }
 		    else {
 			if (line_overlap_area(&(In[1]), bline, &(In[0]), aarea)) {
@@ -441,11 +455,13 @@ int main(int argc, char *argv[])
 			Vect_read_line(&(In[1]), BPoints, NULL, bcentroid);
 
 			if (flag.geos && flag.geos->answer) {
+#ifdef HAVE_GEOS
 			    if(area_relate_geos(&(In[1]), AGeom,
 						barea, operator, parm.relate->answer)) {
 				found = 1;
 				break;
 			    }
+#endif
 			}
 			else {
 			    if (Vect_point_in_area(&(In[0]), aarea,
@@ -469,7 +485,9 @@ int main(int argc, char *argv[])
 		}
 	    }
 	    if (flag.geos && flag.geos->answer) {
+#ifdef HAVE_GEOS
 		GEOSGeom_destroy(AGeom);
+#endif
 		AGeom = NULL;
 	    }
 	}
