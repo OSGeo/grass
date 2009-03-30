@@ -265,16 +265,12 @@ void *rbtree_find(struct RB_TREE *tree, const void *data)
  */
 int rbtree_init_trav(struct RB_TRAV *trav, struct RB_TREE *tree)
 {
-    int i;
-
     assert(trav && tree);
 
     trav->tree = tree;
     trav->curr_node = tree->root;
     trav->first = 1;
-
-    for (i = 0; i < RBTREE_MAX_HEIGHT; i++)
-	trav->up[i] = NULL;
+    trav->top = 0;
 
     return 0;
 }
@@ -290,19 +286,19 @@ void *rbtree_traverse(struct RB_TRAV *trav)
     
     if (trav->curr_node == NULL) {
 	if (trav->first)
-	    G_warning("RB tree: empty tree");
+	    G_debug(1, "RB tree: empty tree");
 	else
-	    G_warning("RB tree: finished traversing");
+	    G_debug(1, "RB tree: finished traversing");
 
 	return NULL;
     }
 	
-    if (trav->first) {
+    if (!trav->first)
+	return rbtree_next(trav);
+    else {
 	trav->first = 0;
 	return rbtree_first(trav);
     }
-    else
-	return rbtree_next(trav);
 }
 
 /* find start point to traverse the tree in ascending order
@@ -310,7 +306,7 @@ void *rbtree_traverse(struct RB_TRAV *trav)
  * magnitudes faster than traversing the whole tree
  * may return first item that's smaller or first item that's larger
  * struct RB_TRAV *trav needs to be initialized first
- * returns pointer to data, NULL on error
+ * returns pointer to data, NULL when finished
  */
 void *rbtree_traverse_start(struct RB_TRAV *trav, const void *data)
 {
@@ -318,16 +314,20 @@ void *rbtree_traverse_start(struct RB_TRAV *trav, const void *data)
 
     assert(trav && data);
 
-    if (trav->first == 0) {
-	G_debug(1, "RB tree: trav must be initialised first");
-	return NULL;
-    }
-
     if (trav->curr_node == NULL) {
-	G_warning("RB tree: empty tree");
+	if (trav->first)
+	    G_warning("RB tree: empty tree");
+	else
+	    G_warning("RB tree: finished traversing");
+
 	return NULL;
     }
 	
+    if (!trav->first)
+	return rbtree_next(trav);
+
+    /* else first time, get start node */
+
     trav->first = 0;
     trav->top = 0;
 
@@ -365,8 +365,6 @@ void *rbtree_traverse_start(struct RB_TRAV *trav, const void *data)
  */
 void *rbtree_first(struct RB_TRAV *trav)
 {
-    trav->top = 0;
-
     /* get smallest item */
     while (trav->curr_node->link[0] != NULL) {
 	trav->up[trav->top++] = trav->curr_node;
