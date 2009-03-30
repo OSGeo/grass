@@ -128,13 +128,19 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.Bind(EVT_UPDATE_PROP, self.UpdateMapObjProperties)
         self.Bind(EVT_UPDATE_VIEW, self.UpdateView)
         
+        self.Bind(wx.EVT_CLOSE, self.OnClose)
+        
+    def OnClose(self, event):
+        # cleanup when window actually closes (on quit) and not just is hidden
+        self.Reset()
+
     def OnEraseBackground(self, event):
         pass # do nothing, to avoid flashing on MSW
 
     def OnSize(self, event):
         self.size = self.parent.GetClientSize()
         if self.GetContext():
-            Debug.msg(3, "GLCanvas.OnPaint(): w=%d, h=%d" % \
+            Debug.msg(3, "GLCanvas.OnSize(): w=%d, h=%d" % \
                       (self.size.width, self.size.height))
             self.SetCurrent()
             self.nvizClass.ResizeWindow(self.size.width,
@@ -152,9 +158,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.nvizClass.InitView()
             self.initView = True
 
+        self.LoadDataLayers()
+        self.UnloadDataLayers()
+        
         if not self.init:
-            self.LoadDataLayers()
-
             self.ResetView()
             
             if hasattr(self.parent, "nvizToolWin"):
@@ -174,7 +181,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 win.SetItems(self.GetLayerNames('raster'))
 
             self.init = True
-            
+                        
         self.UpdateMap()
 
     def OnMouseAction(self, event):
@@ -231,10 +238,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                                self.view['persp']['value'],
                                self.view['twist']['value'])
 
-        if event.zExag:
+        if event and event.zExag:
             self.nvizClass.SetZExag(self.view['z-exag']['value'])
         
-        event.Skip()
+        if event: event.Skip()
         
     def UpdateMap(self, render=True):
         """
@@ -343,38 +350,77 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         listOfItems = []
         item = self.tree.GetFirstChild(self.tree.root)[0]
         self._GetDataLayers(item, listOfItems)
-
+        
         start = time.time()
 
         while(len(listOfItems) > 0):
             item = listOfItems.pop()
             type = self.tree.GetPyData(item)[0]['type']
-            
-            try:
-                if type == 'raster':
-                    self.LoadRaster(item)
-                elif type == '3d-raster':
-                    self.LoadRaster3d(item)
-            except gcmd.NvizError, e:
-                print >> sys.stderr, "Nviz:" + e.message
+            if item not in self.layers:
+                try:
+                    if type == 'raster':
+                        self.LoadRaster(item)
+                    elif type == '3d-raster':
+                        self.LoadRaster3d(item)
+                except gcmd.NvizError, e:
+                    print >> sys.stderr, "Nviz:" + e.message
 
-            try:
-                if type == 'vector':
-                    data = self.tree.GetPyData(item)[0]['nviz']
-                    vecType = []
-                    if data and data.has_key('vector'):
-                        for v in ('lines', 'points'):
-                            if data['vector'][v]:
-                                vecType.append(v)
-                    self.LoadVector(item, vecType)
-            except gcmd.NvizError, e:
-                print >> sys.stderr, "Nviz:" + e.message
+                try:
+                    if type == 'vector':
+                        data = self.tree.GetPyData(item)[0]['nviz']
+                        vecType = []
+                        if data and data.has_key('vector'):
+                            for v in ('lines', 'points'):
+                                if data['vector'][v]:
+                                    vecType.append(v)
+                        self.LoadVector(item, vecType)
+                except gcmd.NvizError, e:
+                    print >> sys.stderr, "Nviz:" + e.message
+                self.init = False
             
         stop = time.time()
         
         Debug.msg(3, "GLWindow.LoadDataLayers(): time=%f" % (stop-start))
 
         # print stop - start
+        
+    def UnloadDataLayers(self):
+        """Unload any layers that have been deleted from layer tree"""
+        if not self.tree:
+            return
+        
+        listOfItems = []
+        item = self.tree.GetFirstChild(self.tree.root)[0]
+        self._GetDataLayers(item, listOfItems)
+        
+        start = time.time()
+        
+        for layer in self.layers:
+            if layer not in listOfItems:
+                ltype = self.tree.GetPyData(layer)[0]['type']
+                try:
+                    if ltype == 'raster':
+                        self.UnloadRaster(layer)
+                    elif ltype == '3d-raster':
+                        self.UnloadRaster3d(layer) 
+                    elif ltype == 'vector':
+                        data = self.tree.GetPyData(layer)[0]['nviz']
+                        vecType = []
+                        if data and data.has_key('vector'):
+                            for v in ('lines', 'points'):
+                                if data['vector'][v]:
+                                    vecType.append(v)
+                        self.UnloadVector(layer, vecType)
+                    
+                    self.UpdateView(None)
+                except gcmd.NvizError, e:
+                    print >> sys.stderr, "Nviz:" + e.message
+
+                self.parent.nvizToolWin.UpdateSettings()        
+                            
+        stop = time.time()
+        
+        Debug.msg(3, "GLWindow.UnloadDataLayers(): time=%f" % (stop-start))        
 
     def SetMapObjProperties(self, item, id, nvizType):
         """Set map object properties

@@ -387,6 +387,7 @@ class MapFrame(wx.Frame):
                                                        mapWindow=self.MapWindow3D)
                 self.MapWindow3D.OnPaint(None) # -> LoadData
                 self.MapWindow3D.Show()
+                self.MapWindow3D.UpdateView(None)
             
             self.nvizToolWin.Show()
 
@@ -438,7 +439,7 @@ class MapFrame(wx.Frame):
             # hide nviz tools
             self.nvizToolWin.Hide()
             # unload data
-            self.MapWindow3D.Reset()
+#            self.MapWindow3D.Reset()
             # switch from MapWindowGL to MapWindow
             self._mgr.DetachPane(self.MapWindow3D)
             self.MapWindow3D.Hide()
@@ -454,6 +455,7 @@ class MapFrame(wx.Frame):
             #
             if self.tree:
                 self.tree.EnableItemType(type='3d-raster', enable=False)
+            self.MapWindow.UpdateMap()
             
         self.toolbars['map'].combo.SetValue (_("2D view"))
         self.toolbars['map'].Enable2D(True)

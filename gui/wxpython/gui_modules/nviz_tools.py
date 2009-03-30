@@ -39,7 +39,8 @@ class NvizToolWindow(wx.Frame):
     """
     def __init__(self, parent=None, id=wx.ID_ANY, title=_("Nviz tools"),
                  pos=wx.DefaultPosition, size=wx.DefaultSize,
-                 style=wx.DEFAULT_FRAME_STYLE, mapWindow=None):
+                 mapWindow=None, 
+                 style=wx.CAPTION|wx.MINIMIZE_BOX|wx.RESIZE_BORDER):
         
         self.parent = parent # MapFrame
         self.lmgr = self.parent.GetLayerManager() # GMFrame
@@ -2304,60 +2305,32 @@ class NvizToolWindow(wx.Frame):
                                                                                   max)
                 self.FindWindowById(self.win['view']['height'][control]).SetRange(hmin,
                                                                                   hmax)
-        elif pageId == 'surface':
-            if self.notebook.GetSelection() != self.page['surface']['id']:
-                for page in ('vector', 'volume'):
+        elif pageId in ('surface', 'vector', 'volume'):
+            if self.notebook.GetSelection() != self.page[pageId]['id']:
+                for page in ('surface', 'vector', 'volume'):
                     if self.page[page]['id'] > -1:
                         self.notebook.RemovePage(self.page[page]['id'])
                         self.page[page]['id'] = -1
+                        oldpanel = wx.FindWindowById(self.page[page]['panel'])
+                        oldpanel.Hide()
 
-                self.page['surface']['id'] = 1
+                self.page[pageId]['id'] = 1
                 self.page['settings']['id'] = 2
 
-                panel = wx.FindWindowById(self.page['surface']['panel'])
-                self.notebook.InsertPage(n=self.page['surface']['id'],
+                panel = wx.FindWindowById(self.page[pageId]['panel'])
+                self.notebook.InsertPage(n=self.page[pageId]['id'],
                                          page=panel,
                                          text=" %s " % _("Layer properties"),
                                          select=True)
-            
-            self.UpdateSurfacePage(layer, data['surface'])
+            if pageId == 'surface':
+                self.UpdateSurfacePage(layer, data['surface'])
+            elif pageId == 'vector':
+                self.UpdateVectorPage(layer, data['vector'])
+            elif pageId == 'volume':
+                self.UpdateVectorPage(layer, data['vector'])
         
-        elif pageId == 'vector':
-            if self.notebook.GetSelection() != self.page['vector']['id']:
-                for page in ('surface', 'volume'):
-                    if self.page[page]['id'] > -1:
-                        self.notebook.RemovePage(self.page[page]['id'])
-                        self.page[page]['id'] = -1
-                    
-                self.page['vector']['id'] = 1
-                self.page['settings']['id'] = 2
-                
-                panel = wx.FindWindowById(self.page['vector']['panel'])
-                self.notebook.InsertPage(n=self.page['vector']['id'],
-                                         page=panel,
-                                         text=" %s " % _("Layer properties"),
-                                         select=True)
             
-            self.UpdateVectorPage(layer, data['vector'])
-            
-        elif pageId == 'volume':
-            if self.notebook.GetSelection() != self.page['volume']['id']:
-                for page in ('surface', 'vector'):
-                    if self.page[page]['id'] > -1:
-                        self.notebook.RemovePage(self.page[page]['id'])
-                        self.page[page]['id'] = -1
-                    
-                self.page['volume']['id'] = 1
-                self.page['settings']['id'] = 2
-
-                panel = wx.FindWindowById(self.page['volume']['panel'])
-                self.notebook.InsertPage(n=self.page['volume']['id'],
-                                         page=panel,
-                                         text=" %s " % _("Layer properties"),
-                                         select=True)
-                
-            self.UpdateVolumePage(layer, data['volume'])
-            
+        self.notebook.Update()
         self.pageChanging = False
         
     def UpdateSurfacePage(self, layer, data):
