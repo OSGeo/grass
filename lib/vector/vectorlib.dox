@@ -1,4 +1,4 @@
-/*! \page Vector_Library GRASS 6 Vector Architecture
+/*! \page Vector_Library GRASS Vector Architecture
 
 by GRASS Development Team
 
@@ -91,7 +91,7 @@ map maintenance.
 
 \section intro Introduction
 
-The GRASS 6 vector format is very similar to old GRASS 4.x (5.0/5.3)
+The GRASS 6/7 vector format is very similar to old GRASS 4.x (5.0/5.3)
 vector format.
 
 This description covers the new GRASS 6 vector library architecture.
@@ -172,20 +172,20 @@ For historical reasons, there are two internal libraries for vector:
 </ul>
 
 The vector library was introduced in GRASS 4.0 to hide internal vector
-files' formats and structures.  In GRASS 6, everything is accessed via
+files' formats and structures.  In GRASS 6/7, everything is accessed via
 Vect_*() functions, for example:
 
 Old 4.x code:
 \verbatim
     xx = Map.Att[Map.Area[area_num].att].x;
 \endverbatim
-New 6.x functions:
+New 6.x/7.x functions:
 \verbatim
     Vect_get_area_centroid()
     Vect_get_centroid_coor()
 \endverbatim
 
-In GRASS 6, all internal, mostly non-topological vector functions are
+In GRASS 6/7, all internal, mostly non-topological vector functions are
 hidden from the modules' API (mainly dig_*(), V1_*() and V2_*()
 functions). All available Vect_*() functions are topological vector
 functions.
@@ -1581,6 +1581,17 @@ programming.
 \subsection write2 Level 2 only
 
  - Vect_rewrite_line()
+
+\section geos GEOS support
+
+Note: The functions are available only if GRASS is compiled with
+<tt>--with-geos</tt> switch.
+
+ - Vect_read_line_geos()
+
+ - Vect_read_area_geos()
+
+ - Vect_line_to_geos()
 
 
 \section contacts Contacts
