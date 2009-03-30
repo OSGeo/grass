@@ -211,7 +211,7 @@ e.g. '--with-gdal=/usr/local/bin/gdal-config')])
 
 AC_ARG_WITH(geos,
 [  --with-geos[=path/geos-config] enable GEOS support (geos-config with path, \
-e.g. '--with-geos=/usr/local/bin/geos-config')])
+e.g. '--with-geos=/usr/local/bin/geos-config', default: no)],, with_geos="no")
 
 AC_ARG_WITH(includes,
 [  --with-includes=DIRS    site include files are in DIRS])
@@ -1773,6 +1773,7 @@ LOC_MSG([  C++ compiler:                ${CXX} ${CXXFLAGS}])
 LOC_MSG([  Building shared libraries:   ${shared_ok}])
 LOC_MSG([  64bit support:               ${do64bit}])
 LOC_MSG([  OpenGL platform:             ${OPENGL_TYPE}])
+LOC_MSG()
 LOC_MSG_USE(MacOSX application,MACOSX_APP)
 LOC_MSG()
 LOC_MSG_USE(NVIZ,USE_TOGL)
