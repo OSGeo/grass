@@ -37,9 +37,7 @@ static struct line_pnts *Points;
 GEOSGeometry *Vect_read_line_geos(const struct Map_info *Map, int line)
 {
     int type, dim;
-    GEOSGeometry *geom;
-    GEOSCoordSequence *pseq;
-
+    
     if (!Points)
 	Points = Vect_new_line_struct();
 
@@ -70,7 +68,7 @@ GEOSGeometry *Vect_read_line_geos(const struct Map_info *Map, int line)
  */
 GEOSGeometry *Vect_read_area_geos(const struct Map_info * Map, int area)
 {
-    int i, type, dim, nholes, isle;
+    int i, dim, nholes, isle;
     GEOSGeometry *boundary, **holes;
 
     if (!Points)
