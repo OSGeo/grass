@@ -51,7 +51,7 @@ GEOSGeometry *Vect_read_line_geos(const struct Map_info *Map, int line)
 	dim = 2;
 
     type = Vect_read_line(Map, Points, NULL, line);
-    if (type < 0)
+    if (type < 1) /* ignore dead lines */
 	return NULL;
 
     return Vect_line_to_geos(Map, Points, type);

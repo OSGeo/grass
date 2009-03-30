@@ -75,7 +75,7 @@ int Vect_build_line_area(struct Map_info *Map, int iline, int side)
 	line = abs(lines[j]);
 	BLine = plus->Line[line];
 	offset = BLine->offset;
-	G_debug(3, "  line[%d] = %d, offset = %ld", j, line, offset);
+	G_debug(3, "  line[%d] = %d, offset = %lu", j, line, (unsigned long) offset);
 	type = Vect_read_line(Map, Points, NULL, line);
 	if (lines[j] > 0)
 	    direction = GV_FORWARD;
@@ -541,7 +541,7 @@ int Vect_build_nat(struct Map_info *Map, int build)
 
 	    offset = Map->head.last_offset;
 
-	    G_debug(3, "Register line: offset = %ld", offset);
+	    G_debug(3, "Register line: offset = %lu", (unsigned long) offset);
 	    lineid = dig_add_line(plus, type, Points, offset);
 	    dig_line_box(Points, &box);
 	    if (lineid == 1)
