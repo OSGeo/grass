@@ -5,7 +5,7 @@
  *
  * Higher level functions for reading/writing/manipulating vectors.
  *
- * (C) 2001-2008 by the GRASS Development Team
+ * (C) 2001-2009 by the GRASS Development Team
  *
  * This program is free software under the 
  * GNU General Public License (>=v2). 
@@ -13,8 +13,9 @@
  * for details.
  *
  * \author Radim Blazek
+ *         update to GRASS 7 Markus Metz
  *
- * \date 2001
+ * \date 2009
  */
 
 #include <stdlib.h>
@@ -22,6 +23,7 @@
 #include <grass/gis.h>
 #include <grass/Vect.h>
 #include <grass/glocale.h>
+#include <grass/vect/rbtree.h>
 
 /* function prototypes */
 static int sort_new(const void *pa, const void *pb);
@@ -30,6 +32,7 @@ static int sort_new(const void *pa, const void *pb);
 typedef struct
 {
     double x, y;
+    double anchor_x, anchor_y;
     int anchor;			/* 0 - anchor, do not snap this point, that means snap others to this */
     /* >0  - index of anchor to which snap this point */
     /* -1  - init value */
@@ -37,6 +40,7 @@ typedef struct
 
 typedef struct
 {
+    double anchor_x, anchor_y;
     int anchor;
     double along;
 } NEW;
@@ -45,6 +49,32 @@ typedef struct
 int add_item(int id, struct ilist *list)
 {
     dig_list_add(list, id);
+    return 1;
+}
+
+/* function used by binary tree to compare items */
+
+int compare_snappnts(const void *Xpnta, const void *Xpntb)
+{
+    XPNT *a, *b;
+
+    a = (XPNT *)Xpnta;
+    b = (XPNT *)Xpntb;
+
+    if (a->x > b->x)
+	return 1;
+    else if (a->x < b->x)
+	return -1;
+    else {
+	if (a->y > b->y)
+	    return 1;
+	else if (a->y < b->y)
+	    return -1;
+	else
+	    return 0;
+    }
+
+    G_warning("Break polygons: Bug in binary tree!");
     return 1;
 }
 
@@ -76,6 +106,13 @@ int add_item(int id, struct ilist *list)
    |
    | 2
    |    
+
+   The algorithm selects anchor vertices and snaps non-anchor vertices
+   to these anchors.
+   The distance between anchor vertices is always > threshold.
+   If there is more than one anchor vertex within threshold around a
+   non-anchor vertex, this vertex is snapped to the nearest anchor
+   vertex within threshold.
  */
 void
 Vect_snap_lines_list(struct Map_info *Map, struct ilist *List_lines,
@@ -85,19 +122,17 @@ Vect_snap_lines_list(struct Map_info *Map, struct ilist *List_lines,
     struct line_cats *Cats;
     int line, ltype, line_idx;
     double thresh2;
+    double xmin, xmax, ymin, ymax;
 
-    struct Node *RTree;
+    struct RB_TREE *RBTree;
+    struct RB_TRAV RBTrav1, RBTrav2;
     int point;			/* index in points array */
     int nanchors, ntosnap;	/* number of anchors and number of points to be snapped */
     int nsnapped, ncreated;	/* number of snapped verices, number of new vertices (on segments) */
     int apoints, npoints, nvertices;	/* number of allocated points, registered points, vertices */
-    XPNT *XPnts;		/* Array of points */
+    XPNT *XPnt_found, *XPnt_found2, XPnt_search;	/* snap points */
     NEW *New = NULL;		/* Array of new points */
     int anew = 0, nnew;		/* allocated new points , number of new points */
-    struct Rect rect;
-    struct ilist *List;
-    int *Index = NULL;		/* indexes of anchors for vertices */
-    int aindex = 0;		/* allocated Index */
 
     if (List_lines->n_values < 1)
 	return;
@@ -105,16 +140,15 @@ Vect_snap_lines_list(struct Map_info *Map, struct ilist *List_lines,
     Points = Vect_new_line_struct();
     NPoints = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
-    List = Vect_new_list();
-    RTree = RTreeNewIndex();
+    RBTree = rbtree_create(compare_snappnts, sizeof(XPNT));
 
     thresh2 = thresh * thresh;
 
-    /* Go through all lines in vector, and add each point to structure of points */
+    /* Go through all lines in vector, and add each point to search tree
+     * points are kept sorted in search tree first by x, then by y */
     apoints = 0;
     point = 1;			/* index starts from 1 ! */
     nvertices = 0;
-    XPnts = NULL;
 
     G_verbose_message(_("Snap vertices Pass 1: select points"));
 
@@ -135,87 +169,105 @@ Vect_snap_lines_list(struct Map_info *Map, struct ilist *List_lines,
 	    G_debug(3, "  vertex v = %d", v);
 	    nvertices++;
 
-	    /* Box */
-	    rect.boundary[0] = Points->x[v];
-	    rect.boundary[3] = Points->x[v];
-	    rect.boundary[1] = Points->y[v];
-	    rect.boundary[4] = Points->y[v];
-	    rect.boundary[2] = 0;
-	    rect.boundary[5] = 0;
+	    XPnt_search.x = Points->x[v];
+	    XPnt_search.y = Points->y[v];
 
 	    /* Already registered ? */
-	    Vect_reset_list(List);
-	    RTreeSearch(RTree, &rect, (void *)add_item, List);
-	    G_debug(3, "List : nvalues =  %d", List->n_values);
+	    XPnt_found = rbtree_find(RBTree, &XPnt_search);
 
-	    if (List->n_values == 0) {	/* Not found */
-		/* Add to tree and to structure */
-		RTreeInsertRect(&rect, point, &RTree, 0);
-		if ((point - 1) == apoints) {
-		    apoints += 10000;
-		    XPnts =
-			(XPNT *) G_realloc(XPnts,
-					   (apoints + 1) * sizeof(XPNT));
-		}
-		XPnts[point].x = Points->x[v];
-		XPnts[point].y = Points->y[v];
-		XPnts[point].anchor = -1;
+	    if (XPnt_found == NULL) {	/* Not found */
+		/* Add to tree */
+		XPnt_search.anchor = -1;
+		XPnt_search.anchor_x = Points->x[v];
+		XPnt_search.anchor_y = Points->y[v];
+		rbtree_insert(RBTree, &XPnt_search);
 		point++;
 	    }
 	}
-    }
+    } /* end of points selection */
     G_percent(line_idx, List_lines->n_values, 2); /* finish it */
 
     npoints = point - 1;
 
-    /* Go through all registered points and if not yet marked mark it as anchor and assign this anchor
-     * to all not yet marked points in threshold */
-    G_verbose_message(_("Snap vertices Pass 2: assign points to snap to"));
+    /* Go through all registered points and if not yet marked,
+     * mark it as anchor and assign this anchor to all not yet marked
+     * points within threshold.
+     * Update anchor for marked points if new anchor is closer. */
+
+    G_verbose_message(_("Snap vertices Pass 2: assign anchor vertices"));
 
     nanchors = ntosnap = 0;
-    for (point = 1; point <= npoints; point++) {
-	int i;
+    rbtree_init_trav(&RBTrav1, RBTree);
+    rbtree_init_trav(&RBTrav2, RBTree);
+    point = 1;
+    /* XPnts in the old version were not sorted, this causes subtle differences */
+    while ((XPnt_found = rbtree_traverse(&RBTrav1)) != NULL) {
+	double dx, dy, dist2;
 
 	G_percent(point, npoints, 2);
 
 	G_debug(3, "  point = %d", point);
 
-	if (XPnts[point].anchor >= 0)
-	    continue;
+	point++;
 
-	XPnts[point].anchor = 0;	/* make it anchor */
+	if (XPnt_found->anchor >= 0)
+	    continue;
+	
+	XPnt_found->anchor = 0;	/* make it anchor */
 	nanchors++;
 
 	/* Find points in threshold */
-	rect.boundary[0] = XPnts[point].x - thresh;
-	rect.boundary[3] = XPnts[point].x + thresh;
-	rect.boundary[1] = XPnts[point].y - thresh;
-	rect.boundary[4] = XPnts[point].y + thresh;
-	rect.boundary[2] = 0;
-	rect.boundary[5] = 0;
+	xmin = XPnt_found->x - thresh;
+	xmax = XPnt_found->x + thresh;
+	ymin = XPnt_found->y - thresh;
+	ymax = XPnt_found->y + thresh;
 
-	Vect_reset_list(List);
-	RTreeSearch(RTree, &rect, (void *)add_item, List);
-	G_debug(4, "  %d points in threshold box", List->n_values);
+	XPnt_search.x = xmin;
+	XPnt_search.y = ymin;
 
-	for (i = 0; i < List->n_values; i++) {
-	    int pointb;
-	    double dx, dy, dist2;
+	/* traverse search tree from start point onwards */
+	rbtree_init_trav(&RBTrav2, RBTree);
+	while ((XPnt_found2 = rbtree_traverse_start(&RBTrav2, &XPnt_search)) != NULL) {
+	    if (XPnt_found2->x > xmax)
+		break;   /* outside x search limit */
+		
+	    /* not an anchor, and within y search limits */
+	    if (XPnt_found2->anchor != 0 &&
+		XPnt_found2->y >= ymin && XPnt_found2->y <= ymax) {
 
-	    pointb = List->value[i];
-	    if (pointb == point)
-		continue;
+		dx = XPnt_found2->x - XPnt_found->x;
+		dy = XPnt_found2->y - XPnt_found->y;
+		if (dx == 0 && dy == 0)    /* XPnt_found2 == XPnt_found */
+		    continue;
+		    
+		dist2 = dx * dx + dy * dy;
 
-	    dx = XPnts[pointb].x - XPnts[point].x;
-	    dy = XPnts[pointb].y - XPnts[point].y;
-	    dist2 = dx * dx + dy * dy;
+		if (dist2 > thresh2) /* outside threshold */
+		    continue;
+		    
+		/* doesn't have an anchor yet */
+		if (XPnt_found2->anchor == -1) {
+		    XPnt_found2->anchor = 1;
+		    XPnt_found2->anchor_x = XPnt_found->x;
+		    XPnt_found2->anchor_y = XPnt_found->y;
+		    ntosnap++;
+		}
+		else {   /* check distance to previously assigned anchor */
+		    double dist2_a;
 
-	    if (dist2 <= thresh2) {
-		XPnts[pointb].anchor = point;
-		ntosnap++;
+		    dx = XPnt_found2->anchor_x - XPnt_found2->x;
+		    dy = XPnt_found2->anchor_y - XPnt_found2->y;
+		    dist2_a = dx * dx + dy * dy;
+
+		    /* replace old anchor */
+		    if (dist2 < dist2_a) {
+			XPnt_found2->anchor_x = XPnt_found->x;
+			XPnt_found2->anchor_y = XPnt_found->y;
+		    }
+		}
 	    }
 	}
-    }
+    } /* end of anchor assignment */
 
     /* Go through all lines and: 
      *   1) for all vertices: if not anchor snap it to its anchor
@@ -226,7 +278,7 @@ Vect_snap_lines_list(struct Map_info *Map, struct ilist *List_lines,
     G_verbose_message(_("Snap vertices Pass 3: snap to assigned points"));
 
     for (line_idx = 0; line_idx < List_lines->n_values; line_idx++) {
-	int v, spoint, anchor;
+	int v;
 	int changed = 0;
 
 	G_percent(line_idx, List_lines->n_values, 2);
@@ -239,38 +291,24 @@ Vect_snap_lines_list(struct Map_info *Map, struct ilist *List_lines,
 
 	ltype = Vect_read_line(Map, Points, Cats, line);
 
-	if (Points->n_points >= aindex) {
-	    aindex = Points->n_points;
-	    Index = (int *)G_realloc(Index, aindex * sizeof(int));
-	}
-
 	/* Snap all vertices */
+	G_debug(2, "snap vertices");
 	for (v = 0; v < Points->n_points; v++) {
-	    /* Box */
-	    rect.boundary[0] = Points->x[v];
-	    rect.boundary[3] = Points->x[v];
-	    rect.boundary[1] = Points->y[v];
-	    rect.boundary[4] = Points->y[v];
-	    rect.boundary[2] = 0;
-	    rect.boundary[5] = 0;
 
 	    /* Find point ( should always find one point ) */
-	    Vect_reset_list(List);
+	    XPnt_search.x = Points->x[v];
+	    XPnt_search.y = Points->y[v];
 
-	    RTreeSearch(RTree, &rect, (void *)add_item, List);
+	    XPnt_found = rbtree_find(RBTree, &XPnt_search);
 
-	    spoint = List->value[0];
-	    anchor = XPnts[spoint].anchor;
+	    if (XPnt_found == NULL)
+		G_fatal_error("Snap lines: could not find vertex");
 
-	    if (anchor > 0) {	/* to be snapped */
-		Points->x[v] = XPnts[anchor].x;
-		Points->y[v] = XPnts[anchor].y;
+	    if (XPnt_found->anchor > 0) {	/* to be snapped */
+		Points->x[v] = XPnt_found->anchor_x;
+		Points->y[v] = XPnt_found->anchor_y;
 		nsnapped++;
 		changed = 1;
-		Index[v] = anchor;	/* point on new location */
-	    }
-	    else {
-		Index[v] = spoint;	/* old point */
 	    }
 	}
 
@@ -278,12 +316,12 @@ Vect_snap_lines_list(struct Map_info *Map, struct ilist *List_lines,
 	Vect_reset_line(NPoints);
 
 	/* Snap all segments to anchors in threshold */
+	G_debug(2, "snap segments");
 	for (v = 0; v < Points->n_points - 1; v++) {
 	    int i;
-	    double x1, x2, y1, y2, xmin, xmax, ymin, ymax;
-
-	    G_debug(3, "  segment = %d end anchors : %d  %d", v, Index[v],
-		    Index[v + 1]);
+	    double x1, x2, y1, y2;
+	    double dist2, along;
+	    int status;
 
 	    x1 = Points->x[v];
 	    x2 = Points->x[v + 1];
@@ -293,72 +331,62 @@ Vect_snap_lines_list(struct Map_info *Map, struct ilist *List_lines,
 	    Vect_append_point(NPoints, Points->x[v], Points->y[v],
 			      Points->z[v]);
 
-	    /* Box */
-	    if (x1 <= x2) {
-		xmin = x1;
-		xmax = x2;
-	    }
-	    else {
-		xmin = x2;
-		xmax = x1;
-	    }
-	    if (y1 <= y2) {
-		ymin = y1;
-		ymax = y2;
-	    }
-	    else {
-		ymin = y2;
-		ymax = y1;
-	    }
+	    /* Search limits */
+	    xmin = (x1 < x2 ? x1 : x2) - thresh;
+	    xmax = (x1 > x2 ? x1 : x2) + thresh;
+	    ymin = (y1 < y2 ? y1 : y2) - thresh;
+	    ymax = (y1 > y2 ? y1 : y2) + thresh;
 
-	    rect.boundary[0] = xmin - thresh;
-	    rect.boundary[3] = xmax + thresh;
-	    rect.boundary[1] = ymin - thresh;
-	    rect.boundary[4] = ymax + thresh;
-	    rect.boundary[2] = 0;
-	    rect.boundary[5] = 0;
+	    XPnt_search.x = xmin;
+	    XPnt_search.y = ymin;
 
-	    /* Find points */
-	    Vect_reset_list(List);
-	    RTreeSearch(RTree, &rect, (void *)add_item, List);
-
-	    G_debug(3, "  %d points in box", List->n_values);
-
-	    /* Snap to anchor in threshold different from end points */
+	    /* Find points within search limits */
 	    nnew = 0;
-	    for (i = 0; i < List->n_values; i++) {
-		double dist2, along;
+	    rbtree_init_trav(&RBTrav2, RBTree);
+	    G_debug(3, "snap segment");
+	    while ((XPnt_found2 = rbtree_traverse_start(&RBTrav2, &XPnt_search)) != NULL) {
 
-		spoint = List->value[i];
-		G_debug(4, "    spoint = %d anchor = %d", spoint,
-			XPnts[spoint].anchor);
+		if (XPnt_found2->x > xmax)
+		    break;   /* outside x search limit */
+		    
+		/* found point must be within y search limits */
+		if (XPnt_found2->y < ymin || XPnt_found2->y > ymax)
+		    continue;
 
-		if (spoint == Index[v] || spoint == Index[v + 1])
-		    continue;	/* end point */
-		if (XPnts[spoint].anchor > 0)
+		/* found point must be anchor */
+		if (XPnt_found2->anchor > 0)
 		    continue;	/* point is not anchor */
+
+		/* found point must not be end point */
+		if ((XPnt_found2->x == x1 && XPnt_found2->y == y1) ||
+		    (XPnt_found2->x == x2 && XPnt_found2->y == y2))
+		    continue;	/* end point */
 
 		/* Check the distance */
 		dist2 =
-		    dig_distance2_point_to_line(XPnts[spoint].x,
-						XPnts[spoint].y, 0, x1, y1, 0,
+		    dig_distance2_point_to_line(XPnt_found2->x,
+						XPnt_found2->y, 0, x1, y1, 0,
 						x2, y2, 0, 0, NULL, NULL,
-						NULL, &along, NULL);
+						NULL, &along, &status);
 
 		G_debug(4, "      distance = %lf", sqrt(dist2));
 
-		if (dist2 <= thresh2) {
+		/* status == 0 if point is w/in segment space
+		 * avoids messy lines and boundaries */
+		if (status == 0 && dist2 <= thresh2) {
 		    G_debug(4, "      anchor in thresh, along = %lf", along);
 
 		    if (nnew == anew) {
 			anew += 100;
 			New = (NEW *) G_realloc(New, anew * sizeof(NEW));
 		    }
-		    New[nnew].anchor = spoint;
+		    New[nnew].anchor_x = XPnt_found2->x;
+		    New[nnew].anchor_y = XPnt_found2->y;
 		    New[nnew].along = along;
 		    nnew++;
 		}
 	    }
+	    
 	    G_debug(3, "  nnew = %d", nnew);
 	    /* insert new vertices */
 	    if (nnew > 0) {
@@ -366,10 +394,8 @@ Vect_snap_lines_list(struct Map_info *Map, struct ilist *List_lines,
 		qsort(New, sizeof(char) * nnew, sizeof(NEW), sort_new);
 
 		for (i = 0; i < nnew; i++) {
-		    anchor = New[i].anchor;
-		    /* Vect_line_insert_point ( Points, ++v, XPnts[anchor].x, XPnts[anchor].y, 0); */
-		    Vect_append_point(NPoints, XPnts[anchor].x,
-				      XPnts[anchor].y, 0);
+		    Vect_append_point(NPoints, New[i].anchor_x,
+				      New[i].anchor_y, 0);
 		    ncreated++;
 		}
 		changed = 1;
@@ -399,10 +425,8 @@ Vect_snap_lines_list(struct Map_info *Map, struct ilist *List_lines,
     Vect_destroy_line_struct(Points);
     Vect_destroy_line_struct(NPoints);
     Vect_destroy_cats_struct(Cats);
-    G_free(XPnts);
-    G_free(Index);
     G_free(New);
-    RTreeDestroyNode(RTree);
+    rbtree_destroy(RBTree);
 
     G_verbose_message(_("Snapped vertices: %d"), nsnapped);
     G_verbose_message(_("New vertices: %d"), ncreated);
