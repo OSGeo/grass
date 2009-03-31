@@ -383,7 +383,7 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
 
 	sprintf(name, "%s.%d", out_basename, i + 1);
 
-	G_verbose_message("Transforming <%s>...", name);
+	G_verbose_message(_("Transforming <%s>..."), name);
 
 	/* open a new file for output */
 	if (scale)
