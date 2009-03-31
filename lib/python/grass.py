@@ -216,7 +216,7 @@ def tempfile():
 
 # key-value parsers
 
-def parse_key_val(s, sep = '=', dflt = None):
+def parse_key_val(s, sep = '=', dflt = None, val_type = None):
     """Parse a string into a dictionary, where entries are separated
     by newlines and the key and value are separated by `sep' (default: `=')
     """
@@ -228,7 +228,10 @@ def parse_key_val(s, sep = '=', dflt = None):
 	    v = kv[1]
 	else:
 	    v = dflt
-	result[k] = v
+        if val_type:
+            result[k] = val_type(v)
+        else:
+            result[k] = v
     return result
 
 # interface to g.gisenv
@@ -542,6 +545,13 @@ def vector_history(map):
     """
     run_command('v.support', map = map, cmdhist = os.environ['CMDLINE'])
 
+# run "v.info -t" and parse output
+
+def vector_info_topo(map):
+    """Return information about a vector map (interface to `v.info -t')."""
+    s = read_command('v.info', flags = 't', map = map)
+    return parse_key_val(s, val_type = int)
+    
 # add raster history
 
 def raster_history(map):

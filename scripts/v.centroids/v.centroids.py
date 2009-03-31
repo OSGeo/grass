@@ -78,13 +78,7 @@ def main():
 	num_bound = 0
 	tenv = os.environ.copy()
 	tenv['LC_ALL'] = 'C'
-	lines = grass.read_command("v.info -t", map = options['input'], env = tenv).splitlines()
-	e = re.compile("boundaries= +([0-9]+) +")
-	for line in lines:
-	    mo = e.search(line)
-	    if mo:
-		num_bound = int(mo.group(1))
-		break
+        num_bound = grass.vector_info_topo(map = options['input'])['boundaries']
 	if num_bound == 0:
 	    grass.fatal("Input vector map contains no boundaries.")
 
