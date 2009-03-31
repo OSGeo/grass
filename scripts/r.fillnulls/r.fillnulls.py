@@ -123,10 +123,10 @@ def main():
 	grass.fatal("abandoned. Removing temporary maps, restoring user mask if needed:")
 
     # count number of points to control segmax parameter for interpolation:
-    s = grass.read_command('v.info', map = vecttmp)
+    s = grass.read_command('v.info -t', map = vecttmp)
     for l in s.splitlines():
-	if "Number of points:" in l:
-	    s = l.split(':')[1].strip()
+	if "points" in l:
+	    s = l.split('=')[1].strip()
 	    s = s.split()[0].strip()
 	    pointsnumber = int(s)
 	    break
