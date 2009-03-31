@@ -78,8 +78,8 @@ def main():
 	num_bound = 0
 	tenv = os.environ.copy()
 	tenv['LC_ALL'] = 'C'
-	lines = grass.read_command("v.info", map = options['input'], env = tenv).splitlines()
-	e = re.compile("Number of boundaries: +([0-9]+) +")
+	lines = grass.read_command("v.info -t", map = options['input'], env = tenv).splitlines()
+	e = re.compile("boundaries= +([0-9]+) +")
 	for line in lines:
 	    mo = e.search(line)
 	    if mo:
