@@ -244,11 +244,12 @@ static int calc_mu(int *fds, double *mu, int bands)
 	if ((rowbuf = G_allocate_raster_buf(maptype)) == NULL)
 	    G_fatal_error(_("Unable allocate memory for row buffer"));
 
-	G_message(_("Computing Means for band %d..."), i + 1);
+	G_verbose_message(_("Computing means for band %d..."), i + 1);
 	for (row = 0; row < rows; row++) {
 	    void *ptr = rowbuf;
 
-	    G_percent(row, rows - 1, 2);
+	    if(G_verbose() > G_verbose_std())
+		G_percent(row, rows - 1, 2);
 
 	    if (G_get_raster_row(fds[i], rowbuf, row, maptype) < 0)
 		G_fatal_error(_("Unable to read raster map row %d"), row);
@@ -293,11 +294,13 @@ static int calc_covariance(int *fds, double **covar, double *mu, int bands)
 	if ((rowbuf1 = G_allocate_raster_buf(maptype)) == NULL)
 	    G_fatal_error(_("Unable allocate memory for row buffer"));
 
-	G_message(_("Computing row %d of covariance matrix..."), j + 1);
+	G_verbose_message(_("Computing row %d of covariance matrix..."),
+			  j + 1);
 	for (row = 0; row < rows; row++) {
 	    void *ptr1, *ptr2;
 
-	    G_percent(row, rows - 1, 2);
+	    if(G_verbose() > G_verbose_std())
+		G_percent(row, rows - 1, 2);
 
 	    if (G_get_raster_row(fds[j], rowbuf1, row, maptype) < 0)
 		G_fatal_error(_("Unable to read raster map row %d"), row);
@@ -329,8 +332,7 @@ static int calc_covariance(int *fds, double **covar, double *mu, int bands)
 		    covar[j][k] +=
 			((double)G_get_raster_value_d(ptr1, maptype) -
 			 mu[j]) * ((double)G_get_raster_value_d(ptr2,
-								maptype2) -
-				   mu[k]);
+						   maptype2) - mu[k]);
 
 		    ptr1 = G_incr_void_ptr(ptr1, G_raster_size(maptype));
 		    ptr2 = G_incr_void_ptr(ptr2, G_raster_size(maptype2));
@@ -381,7 +383,7 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
 
 	sprintf(name, "%s.%d", out_basename, i + 1);
 
-	G_message("Transforming <%s>...", name);
+	G_verbose_message("Transforming <%s>...", name);
 
 	/* open a new file for output */
 	if (scale)
@@ -400,7 +402,7 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
 	    int row, col;
 
 	    if (scale && (pass == PASSES)) {
-		G_message(_("Rescaling the data <%s> to range %d,%d..."),
+		G_verbose_message(_("Rescaling <%s> to range %d,%d..."),
 			  name, scale_min, scale_max);
 
 		old_range = max - min;
@@ -410,7 +412,8 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
 	    for (row = 0; row < rows; row++) {
 		void *rowptr;
 
-		G_percent(row, rows, 2);
+		if(G_verbose() > G_verbose_std())
+		    G_percent(row, rows, 2);
 
 		/* reset d_buf */
 		for (col = 0; col < cols; col++)
@@ -512,7 +515,8 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
 		}
 	    }
 
-	    G_percent(row, rows, 2);
+	    if(G_verbose() > G_verbose_std())
+		G_percent(row, rows, 2);
 
 	    /* close output file */
 	    if (pass == PASSES)
