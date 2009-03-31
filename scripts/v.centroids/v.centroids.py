@@ -75,9 +75,6 @@ import grass
 
 def main():
     if options['option'] == 'add':
-	num_bound = 0
-	tenv = os.environ.copy()
-	tenv['LC_ALL'] = 'C'
         num_bound = grass.vector_info_topo(map = options['input'])['boundaries']
 	if num_bound == 0:
 	    grass.fatal("Input vector map contains no boundaries.")
