@@ -131,9 +131,9 @@
    - remove cva, install again: WARNING: list item 'cva' exists in index.html (?)
    - superfluous warning upon uninstall of extension w/o "entries-gisman"
    - due to bad command line parsing, listing installed extensions only works like this:
-   ./gem --grass=/usr/local/grass-7.0.svn -q
+   ./gem70 --grass=/usr/local/grass-7.0.svn -q
    NOT like this:
-   ./gem -q --grass=/usr/local/grass-7.0.svn
+   ./gem70 -q --grass=/usr/local/grass-7.0.svn
 
 
  */
@@ -257,7 +257,7 @@ void show_license(char *package)
 
 void show_version(void)
 {
-    fprintf(stdout, "gem (GRASS extensions manager) %.2f\n", PROGVERSION);
+    fprintf(stdout, "gem70 (GRASS extensions manager) %.2f\n", PROGVERSION);
     fprintf(stdout, "Written by Benjamin Ducke\n");
     fprintf(stdout, "\nCopyright (C) 2005 Benjamin Ducke\n");
     fprintf(stdout,
