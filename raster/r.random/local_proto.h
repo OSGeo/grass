@@ -29,6 +29,7 @@ struct rr_state
     struct RASTER_MAP_PTR nulls, cnulls, buf, cover, min, max, cmin, cmax;
     FILE *fsites;
     int z_geometry;
+    int notopol;
 };
 
 
