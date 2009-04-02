@@ -1,3 +1,5 @@
+GRASS_VERSION_MAJOR=7
+GRASS_VERSION_MINOR=0
 CC=gcc
 CFLAGS=-g -Wall -pedantic -Werror-implicit-function-declaration -fno-common
 CLIBS=
@@ -29,10 +31,10 @@ OBJS =	at_exit_funcs.o \
 	actions.o \
 	main.o
 
-default: gem7
+default: gem
 
-gem7: $(SRCS) $(HDRS) $(OBJS)
-	$(CC) $(OBJS) -o $@ $(CFLAGS) $(CLIBS) $(LDFLAGS)
+gem: $(SRCS) $(HDRS) $(OBJS)
+	$(CC) $(OBJS) -o $@$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR) $(CFLAGS) $(CLIBS) $(LDFLAGS)
 
 %.o: %.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -c $<
@@ -53,10 +55,10 @@ actions.o: actions.h globals.h
 
 main.o:	globals.h
 
-install: gem7
-	strip gem7;
-	cp gem7 /usr/local/bin
+install: gem
+	strip gem$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR);
+	cp gem$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR) /usr/local/bin
 
 clean:
-	-rm -f *.o *.bak core *~ gem7
+	-rm -f *.o *.bak core *~ gem$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR)
 

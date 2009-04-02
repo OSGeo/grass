@@ -147,7 +147,7 @@
 
 void show_help(void)
 {
-    fprintf(stdout, "Usage: gem [OPTION] [ACTION] [FILE|DIR]\n");
+    fprintf(stdout, "Usage: gem70 [OPTION] [ACTION] [FILE|DIR]\n");
     fprintf(stdout, "Install a GRASS extension from FILE or DIR.\n");
     fprintf(stdout, "Manage (installed) GRASS extension(s).\n");
     fprintf(stdout, "\nPossible ACTIONs are:\n");
@@ -203,7 +203,7 @@ void show_help(void)
 	    "For installation from source code, a C compiler and make tools are needed.\n");
     fprintf(stdout, "\nExample:\n");
     fprintf(stdout,
-	    "\tgem -b macosx --grass=/usr/local/grass-7.0.0 -i myExtension\n");
+	    "\tgem70 -b macosx --grass=/usr/local/grass-7.0.0 -i myExtension\n");
     fprintf(stdout,
 	    "Installs the MacOS X binaries for 'myExtension' in /usr/local/grass-7.0.0.\n");
     exit(0);
