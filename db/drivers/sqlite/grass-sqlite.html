@@ -15,13 +15,15 @@
 <H2>Creating a SQLite database</H2>
 
 GRASS is automatically creating the SQLite database if it is not yet
-existing. It is sufficient to define the connection (see next step).
+existing when the first table is created in the SQLite database. It
+is sufficient to define the connection (see next step).
 
 <H2>Connecting GRASS to SQLite</H2>
 
 The database name 'sqlite.db' is at user's choice.
 Also the file storage location can be freely chosen. If the database
-does not exist, it will be automatically created:
+does not exist, it will be automatically created when database content
+is created:
 
 <div class="code"><pre>
 # example for storing DB in mapset directory (keep single quotes):
