@@ -76,12 +76,19 @@ tables for all output files (presently only on features).
 
 <h2>EXAMPLE</h2>
 
-The next commands will create a morphology map of the Spearfish region:
+The next commands will create a geomorphological map of the Spearfish region:
 
 <div class="code"><pre>
 g.region rast=elevation.10m -p
-r.param.scale in=elevation.10m output=morphology param=feature
+r.param.scale in=elevation.10m output=morphology param=feature size=9
 </pre></div>
+
+<p>
+<center>
+<img src="r_param_scale_morph.jpg" alt="r.param.scale generated geomorphological map"><br>
+<i>Geomorphological map of a subregion in the Spearfish (SD) area</i>
+</center>
+
 
 <h2>SEE ALSO</h2>
 <!-- not ported to GRASS 6 due to non-GPLness of numerical recipes.
