@@ -44,6 +44,7 @@ tables.
   DROP TABLE table
   SELECT columns FROM table
   SELECT columns FROM table WHERE condition
+  SELECT columns FROM table ORDER BY column
   DELETE FROM table
   DELETE FROM table WHERE condition
   INSERT INTO table VALUES (value1[,value2,...])
@@ -79,6 +80,8 @@ Type conversion is performed if necessary (experimental). </p>
     with the usual precedence rules. </p>
 
 <p> NULLs can be tested by 'colname IS NULL' in conditions. The negation is 'colname NOT NULL'.</p>
+
+<p> Sorting: Empty fields in a character column are sorted to the end.</p>
 
 <h2>ERROR MESSAGES</h2>
 
