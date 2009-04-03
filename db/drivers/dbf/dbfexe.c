@@ -477,32 +477,47 @@ static int cmp_row_asc(const void *pa, const void *pb)
 
     tbl = &(db.tables[cur_cmp_table]);
 
-    switch (tbl->cols[cur_cmp_ocol].type) {
-    case DBF_CHAR:
-	c1 = tbl->rows[*row1].values[cur_cmp_ocol].c;
-	c2 = tbl->rows[*row2].values[cur_cmp_ocol].c;
-	return (strcmp(c1, c2));
-	break;
-    case DBF_INT:
-	i1 = tbl->rows[*row1].values[cur_cmp_ocol].i;
-	i2 = tbl->rows[*row2].values[cur_cmp_ocol].i;
-	if (i1 < i2)
-	    return -1;
-	if (i1 > i2)
+    if (tbl->rows[*row1].values[cur_cmp_ocol].is_null) {
+	if (tbl->rows[*row2].values[cur_cmp_ocol].is_null) {
+	    return 0;
+	}
+	else {
 	    return 1;
-	return 0;
-	break;
-    case DBF_DOUBLE:
-	d1 = tbl->rows[*row1].values[cur_cmp_ocol].d;
-	d2 = tbl->rows[*row2].values[cur_cmp_ocol].d;
-	if (d1 < d2)
-	    return -1;
-	if (d1 > d2)
-	    return 1;
-	return 0;
-	break;
+	}
     }
-    return 0;
+    else {
+	if (tbl->rows[*row2].values[cur_cmp_ocol].is_null) {
+	    return -1;
+	}
+	else {
+	    switch (tbl->cols[cur_cmp_ocol].type) {
+	    case DBF_CHAR:
+		c1 = tbl->rows[*row1].values[cur_cmp_ocol].c;
+		c2 = tbl->rows[*row2].values[cur_cmp_ocol].c;
+		return (strcmp(c1, c2));
+		break;
+	    case DBF_INT:
+		i1 = tbl->rows[*row1].values[cur_cmp_ocol].i;
+		i2 = tbl->rows[*row2].values[cur_cmp_ocol].i;
+		if (i1 < i2)
+		    return -1;
+		if (i1 > i2)
+		    return 1;
+		return 0;
+		break;
+	    case DBF_DOUBLE:
+		d1 = tbl->rows[*row1].values[cur_cmp_ocol].d;
+		d2 = tbl->rows[*row2].values[cur_cmp_ocol].d;
+		if (d1 < d2)
+		    return -1;
+		if (d1 > d2)
+		    return 1;
+		return 0;
+		break;
+	    }
+	    return 0;
+	}
+    }
 }
 
 static int cmp_row_desc(const void *pa, const void *pb)
