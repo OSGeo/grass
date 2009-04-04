@@ -3,43 +3,6 @@
 <i>r.colors</i> allows the user to create and/or modify the color table for a
 raster map layer. The map layer (specified on the command line by
 <b>map=</b><i>name</i>) must exist in the user's current mapset search path.
-The color table specified by <b>color=</b><i>type</i> must be one of the
-following:
-
-<pre>
-     color type  description
-     -----------+----------------------------------------------------------
-     aspect      aspect oriented grey colors
-     aspectcolr  aspect oriented rainbow colors
-     bcyr        blue through cyan through yellow to red
-     bgyr        blue through green through yellow to red
-     byg         blue through yellow to green
-     byr         blue through yellow to red
-     celsius     blue to red for degree Celsius temperature
-     curvature   for terrain curvatures (from v.surf.rst and r.slope.aspect)
-     differences differences oriented colors
-     elevation   maps relative ranges of raster values to elevation color ramp
-     etopo2      colors for ETOPO2 worldwide bathymetry/topography
-     evi         enhanced vegetative index colors
-     grey        grey scale
-     grey1.0     grey scale for raster values between 0.0-1.0
-     grey255     grey scale for raster values bewtween 0-255
-     gyr         green through yellow to red
-     ndvi        Normalized Difference Vegetation Index colors
-     population  color table covering human population classification breaks
-     rainbow     rainbow color table
-     ramp        color ramp
-     ryb         red through yellow to blue
-     ryg         red through yellow to green
-     sepia       yellowish-brown through to white
-     slope       r.slope.aspect-type slope colors for raster values 0-90
-     srtm        color palette for Shuttle Radar Topography Mission elevation
-     terrain     global elevation color table covering -11000 to +8850m
-     wave        color wave
-     random      random color table
-     grey.eq     histogram-equalized grey scale
-     grey.log    histogram logarithmic transformed grey scale
-</pre>
 
 <p>
 The <b>rast</b> option allows user to specify a raster map <i>name</i> from which
