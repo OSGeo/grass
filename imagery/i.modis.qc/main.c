@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
 
     /* Define the different options */ 
     input = G_define_option();
-    input->key = _("productname");
+    input->key = "productname";
     input->type = TYPE_STRING;
     input->required = YES;
     input->gisprompt = _("Name of MODIS product type");
@@ -96,10 +96,10 @@ int main(int argc, char *argv[])
                             "mod09A1;surf. refl. 500m 8-days;"
                             "mod09A1s;surf. refl. 500m 8-days, State QA;"
                             "mod11A2;LST 1Km 8-days (Day/Night);");
-    input->answer = _("mod09Q1");
+    input->answer = "mod09Q1";
 
     input1 = G_define_option();
-    input1->key = _("qcname");
+    input1->key = "qcname";
     input1->type = TYPE_STRING;
     input1->required = YES;
     input1->gisprompt = _("Name of QC type to extract");
@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
                             "mod35_snow_ice;mod09A1s: StateQA Internal Snow Mask"
                             "pixel_adjacent_to_cloud;mod09A1s: StateQA Internal Snow Mask"
 );
-    input1->answer = _("modland_qa_bits");
+    input1->answer = "modland_qa_bits";
 
     input2 = G_define_standard_option(G_OPT_R_INPUT);
     input2->description =
@@ -148,10 +148,10 @@ int main(int argc, char *argv[])
                                 "7;mod09A1 Band 7: SWIR 3;");
 
     output = G_define_standard_option(G_OPT_R_OUTPUT);
-    output->key = _("output");
+    output->key = "output";
     output->description =
 	_("Name of the output QC type classification layer");
-    output->answer = _("qc");
+    output->answer = "qc";
 
     /********************/ 
     if (G_parser(argc, argv))
