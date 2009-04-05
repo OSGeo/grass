@@ -1,16 +1,16 @@
-/* Adjacency correction 500m long Int bit[31]
+/* Adjacency correction 250m Unsigned Int bit[13]
  * 0 -> class 0: Not Corrected product
  * 1 -> class 1: Corrected product
  */  
 
 #include "grass/gis.h"
 
-CELL qc500e(CELL pixel) 
+CELL mod09Q1e(CELL pixel) 
 {
     CELL qctemp;
 
-    pixel >>= 31;		/* bit no 31 becomes 0 */
-    qctemp = pixel & 0x01; 
+    pixel >>= 13;		/* bit no 13 becomes 0 */
+    qctemp = pixel & 0x01;
     
     return qctemp;
 }

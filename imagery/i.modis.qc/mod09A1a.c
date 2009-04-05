@@ -7,7 +7,7 @@
 
 #include "grass/gis.h"
 
-CELL qc500a(CELL pixel) 
+CELL mod09A1a(CELL pixel) 
 {
     CELL qctemp;
 

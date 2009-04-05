@@ -15,7 +15,7 @@
 
 #include "grass/gis.h"
 
-CELL qc500c(CELL pixel, int bandno) 
+CELL mod09A1c(CELL pixel, int bandno) 
 {
     CELL qctemp;
 
