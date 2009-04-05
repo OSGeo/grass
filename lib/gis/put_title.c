@@ -25,10 +25,9 @@ int G_put_cell_title(const char *name, const char *title)
     in = out = 0;
     in = G_fopen_old("cats", name, mapset);
     if (!in) {
-	sprintf(buf,
-		_("category information for [%s] in [%s] missing or invalid"),
-		name, mapset);
-	G_warning(buf);
+	G_warning (_("category information for [%s] in [%s]"
+		     " missing or invalid"),
+		   name, mapset);
 	return -1;
     }
 
@@ -36,8 +35,7 @@ int G_put_cell_title(const char *name, const char *title)
     out = fopen(tempfile, "w");
     if (!out) {
 	fclose(in);
-	sprintf(buf, _("G_put_title - can't create a temp file"));
-	G_warning(buf);
+	G_warning (_("G_put_title - can't create a temp file"));
 	return -1;
     }
 
@@ -53,25 +51,22 @@ int G_put_cell_title(const char *name, const char *title)
 
     /* must be #cats line, title line, and label for cat 0 */
     if (line < 3) {
-	sprintf(buf, _("category information for [%s] in [%s] invalid"), name,
-		mapset);
-	G_warning(buf);
+	G_warning (_("category information for [%s] in [%s] invalid"),
+		   name, mapset);
 	return -1;
     }
 
     in = fopen(tempfile, "r");
     if (!in) {
-	sprintf(buf, _("G_put_title - can't reopen temp file"));
-	G_warning(buf);
+	G_warning (_("G_put_title - can't reopen temp file"));
 	return -1;
     }
 
     out = G_fopen_new("cats", name);
     if (!out) {
 	fclose(in);
-	sprintf(buf, _("can't write category information for [%s] in [%s]"),
-		name, mapset);
-	G_warning(buf);
+	G_warning (_("can't write category information for [%s] in [%s]"),
+		   name, mapset);
 	return -1;
     }
 
