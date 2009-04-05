@@ -196,10 +196,10 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("This flag is only available for MOD09A1s @ 500m products"));
 
     if ((infd = G_open_cell_old(qcchan, "")) < 0)
-	G_fatal_error(_("Cannot open cell file [%s]"), qcchan);
+	G_fatal_error(_("Unable to open raster map %s"), qcchan);
 
     if (G_get_cellhd(qcchan, "", &cellhd) < 0)
-	G_fatal_error(_("Cannot read file header of [%s]"), qcchan);
+	G_fatal_error(_("Unable to open raster map %s header"), qcchan);
 
     inrast = G_allocate_c_raster_buf();
 
