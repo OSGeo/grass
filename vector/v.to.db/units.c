@@ -3,7 +3,7 @@
 
 int conv_units()
 {
-    int i;
+    int i, rad = 0;
     double f = 1.0, sq_f = 1.0;
 
     switch (options.units) {
@@ -34,6 +34,12 @@ int conv_units()
 	f = 3.28083989501312;	/*  1 / (0.0254 * 12)    */
 	sq_f = 10.7639104167097;	/*  1 / (0.0254 * 12)^2  */
 	break;
+    case U_RADIANS:
+	rad = 1;
+	break;
+    case U_DEGREES:
+	rad = 0;
+	break;
     }
 
     switch (options.option) {
@@ -45,6 +51,14 @@ int conv_units()
     case O_AREA:
 	for (i = 0; i < vstat.rcat; i++)
 	    Values[i].d1 *= sq_f;
+	break;
+    case O_AZIMUTH:
+	    if (rad == 0) {
+		    for (i = 0; i < vstat.rcat; i++) {
+			    if (Values[i].d1 > 0)
+				   Values[i].d1 = Values[i].d1*(180/M_PI);
+		    }
+	    }
 	break;
 
     }

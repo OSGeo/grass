@@ -68,12 +68,16 @@ extern struct vstat vstat;
 
 #define O_SINUOUS       14	/* sinuousity of a line (length / <distance between end points>) */
 
+#define O_AZIMUTH	15	/* line azimuth */
+
 #define U_ACRES		1
 #define U_HECTARES	2
 #define U_KILOMETERS	3
 #define U_METERS	4
 #define U_MILES		5
 #define U_FEET		6
+#define U_RADIANS	7
+#define U_DEGREES	8
 
 /* areas.c */
 int read_areas(struct Map_info *);

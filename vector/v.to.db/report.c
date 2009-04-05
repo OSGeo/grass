@@ -164,6 +164,12 @@ int report(void)
 	    }
 	}
 	break;
+    case O_AZIMUTH:
+	if (G_verbose() > G_verbose_min())
+	    fprintf(stdout, "cat|azimuth\n");
+	for (i = 0; i < vstat.rcat; i++)
+		fprintf(stdout, "%d|%.15g\n", Values[i].cat, Values[i].d1);
+	break;
     }
 
     return 0;

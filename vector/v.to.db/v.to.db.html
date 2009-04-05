@@ -4,7 +4,8 @@
 table, or prints them (or the SQL queries used to obtain them) in a
 form of a human-readable report. For uploaded/printed category values
 '-1' is used for 'no category' and 'null'/'-' if category cannot be
-found or multiple categories were found.
+found or multiple categories were found. For line azimuths '-1' is used
+for closed lines (start equals end).
 
 <H2>NOTES</H2>
 The units <em>miles</em>, <em>feet</em>, <em>meters</em> and
@@ -20,20 +21,27 @@ distance between the vertices is used.
 When using <em>option=coor</em> on a vector area map, 
 only coordinates of centroids with unique category will be reported.
 <p>
+Line azimuth is calculaded as angle from the North direction to the line endnode
+direction at the line statnode. By default it's reported in decimal degrees (0-360, CW) but
+it also may be repored in radians with <em>unit=radians</em>. Azimuth value
+<b>-1</b> is used to report closed line with it's startnode and endnode being in
+same place. Azimuth values make sense only if every vector line has only one
+entry in database (unique CAT value).
+<p>
 If the module is apparently slow <em>and</em> the map attributes are
 stored in an external DBMS such as PostgreSQL, it is highly recommended
 to create an index on the key (category) column.
 <p>
 Uploading the vector map attributes to a database requires a table attached to
 a given input vector <em>layer</em>. The <b>print only</b> (<b>-p</b>) mode
-doesn't require a table. Use <em><a href=db.execute.html>db.execute</a></em>
-or <em><a href=v.db.addtable.html>v.db.addtable</a></em> to create a table if
+doesn't require a table. Use <em><a href="db.execute.html">db.execute</a></em>
+or <em><a href="v.db.addtable.html">v.db.addtable</a></em> to create a table if
 needed.
 <p>
 Updating the table has to be done column-wise. The <em>column</em> must be
 present in the table, except when using the <b>print only</b> (<b>-p</b>)
-mode. Use <em><a href=db.execute.html>db.execute</a></em> or
-<em><a href=v.db.addcol.html>v.db.addcol</a></em> to add new columns if
+mode. Use <em><a href="db.execute.html">db.execute</a></em> or
+<em><a href="v.db.addcol.html">v.db.addcol</a></em> to add new columns if
 needed.
 
 <H2>EXAMPLES</H2>
