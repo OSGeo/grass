@@ -5,16 +5,12 @@
  *
  * Higher level functions for reading/writing/manipulating vectors.
  *
- * (C) 2001-2008 by the GRASS Development Team
+ * (C) 2001-2009 by the GRASS Development Team
  *
- * This program is free software under the 
- * GNU General Public License (>=v2). 
- * Read the file COPYING that comes with GRASS
- * for details.
+ * This program is free software under the GNU General Public License
+ * (>=v2).  Read the file COPYING that comes with GRASS for details.
  *
  * \author Radim Blazek
- *
- * \date 2001-2008
  */
 
 #include<stdlib.h>
@@ -554,7 +550,7 @@ Vect_net_shortest_path(struct Map_info *Map, int from, int to,
    \return 0 does not exist (was not inserted)
  */
 int
-Vect_net_get_line_cost(struct Map_info *Map, int line, int direction,
+Vect_net_get_line_cost(const struct Map_info *Map, int line, int direction,
 		       double *cost)
 {
     /* dglInt32_t *pEdge; */
@@ -607,7 +603,7 @@ Vect_net_get_line_cost(struct Map_info *Map, int line, int direction,
 
    \return 1
  */
-int Vect_net_get_node_cost(struct Map_info *Map, int node, double *cost)
+int Vect_net_get_node_cost(const struct Map_info *Map, int node, double *cost)
 {
     G_debug(3, "Vect_net_get_node_cost(): node = %d", node);
 
@@ -625,14 +621,14 @@ int Vect_net_get_node_cost(struct Map_info *Map, int node, double *cost)
    \param x,y,z point coordinates (z coordinate NOT USED !)
    \param direction (GV_FORWARD - from point to net, GV_BACKWARD - from net to point)
    \param maxdist maximum distance to the network
-   \param node1 pointer where to store the node number (or NULL)
-   \param node2 pointer where to store the node number (or NULL)
-   \param ln    pointer where to store the nearest line number (or NULL)
-   \param costs1 pointer where to store costs on nearest line to node1 (not costs from x,y,z to the line) (or NULL)
-   \param costs2 pointer where to store costs on nearest line to node2 (not costs from x,y,z to the line) (or NULL)
-   \param Points1 pointer to structure where to store vertices on nearest line to node1 (or NULL)
-   \param Points2 pointer to structure where to store vertices on nearest line to node2 (or NULL)
-   \param pointer where to distance to the line (or NULL)
+   \param[out] node1 pointer where to store the node number (or NULL)
+   \param[out] node2 pointer where to store the node number (or NULL)
+   \param[out] ln    pointer where to store the nearest line number (or NULL)
+   \param[out] costs1 pointer where to store costs on nearest line to node1 (not costs from x,y,z to the line) (or NULL)
+   \param[out] costs2 pointer where to store costs on nearest line to node2 (not costs from x,y,z to the line) (or NULL)
+   \param[out] Points1 pointer to structure where to store vertices on nearest line to node1 (or NULL)
+   \param[out] Points2 pointer to structure where to store vertices on nearest line to node2 (or NULL)
+   \param[out] pointer where to distance to the line (or NULL)
 
    \return number of nodes found (0,1,2)
  */
@@ -844,15 +840,16 @@ int Vect_net_nearest_nodes(struct Map_info *Map,
    \param tx,ty,tz to point x coordinate (z ignored)
    \param fmax maximum distance to the network from 'from'
    \param tmax maximum distance to the network from 'to'
-   \param costs pointer where to store costs on the network (or NULL)
-   \param Points pointer to the structure where to store vertices of shortest path (or NULL)
-   \param List pointer to the structure where list of lines on the network is stored (or NULL)
-   \param FPoints pointer to the structure where to store line from 'from' to first network node (or NULL)
-   \param TPoints pointer to the structure where to store line from last network node to 'to' (or NULL)
-   \param fdist distance from 'from' to the net (or NULL)
-   \param tdist distance from 'to' to the net (or NULL)
+   \param[out] costs pointer where to store costs on the network (or NULL)
+   \param[out] Points pointer to the structure where to store vertices of shortest path (or NULL)
+   \param[out] List pointer to the structure where list of lines on the network is stored (or NULL)
+   \param[out] FPoints pointer to the structure where to store line from 'from' to first network node (or NULL)
+   \param[out] TPoints pointer to the structure where to store line from last network node to 'to' (or NULL)
+   \param[out] fdist distance from 'from' to the net (or NULL)
+   \param[out] tdist distance from 'to' to the net (or NULL)
 
-   \return 1 OK, 0 not reachable
+   \return 1 OK
+   \return 0 not reachable
  */
 int
 Vect_net_shortest_path_coor(struct Map_info *Map,

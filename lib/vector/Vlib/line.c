@@ -3,18 +3,14 @@
 
    \brief Vector library - geometry manipulation
 
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2009 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
-   Update to GRASS 5.7 Radim Blazek and David D. Gray.
-
-   \date 2001-2008
- */
+   \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
+*/
 
 #include <stdlib.h>
 #include <math.h>
@@ -110,8 +106,8 @@ int Vect_destroy_line_struct(struct line_pnts *p)
    \return -1 on out of memory
  */
 int
-Vect_copy_xyz_to_pnts(struct line_pnts *Points, double *x, double *y,
-		      double *z, int n)
+Vect_copy_xyz_to_pnts(struct line_pnts *Points, const double *x, const double *y,
+		      const double *z, int n)
 {
     register int i;
 
@@ -307,7 +303,7 @@ int Vect_line_prune_thresh(struct line_pnts *Points, double threshold)
    \return -1 on out of memory
  */
 int
-Vect_append_points(struct line_pnts *Points, struct line_pnts *APoints,
+Vect_append_points(struct line_pnts *Points, const struct line_pnts *APoints,
 		   int direction)
 {
     int i, n, on, an;
@@ -354,7 +350,7 @@ Vect_append_points(struct line_pnts *Points, struct line_pnts *APoints,
    \return number of points copied
  */
 int
-Vect_copy_pnts_to_xyz(struct line_pnts *Points, double *x, double *y,
+Vect_copy_pnts_to_xyz(const struct line_pnts *Points, double *x, double *y,
 		      double *z, int *n)
 {
     register int i;
@@ -388,7 +384,7 @@ Vect_copy_pnts_to_xyz(struct line_pnts *Points, double *x, double *y,
 
  */
 int
-Vect_point_on_line(struct line_pnts *Points, double distance,
+Vect_point_on_line(const struct line_pnts *Points, double distance,
 		   double *x, double *y, double *z, double *angle,
 		   double *slope)
 {
@@ -492,7 +488,7 @@ Vect_point_on_line(struct line_pnts *Points, double distance,
    \return 0 error when start > length or end < 0 or start < 0 or end > length
  */
 int
-Vect_line_segment(struct line_pnts *InPoints, double start, double end,
+Vect_line_segment(const struct line_pnts *InPoints, double start, double end,
 		  struct line_pnts *OutPoints)
 {
     int i, seg1, seg2;
@@ -545,11 +541,11 @@ Vect_line_segment(struct line_pnts *InPoints, double start, double end,
 
    For Lat-Long use Vect_line_geodesic_length() instead.
 
-   \param Points line
+   \param Points line geometry
 
    \return line length
  */
-double Vect_line_length(struct line_pnts *Points)
+double Vect_line_length(const struct line_pnts *Points)
 {
     int j;
     double dx, dy, dz, len = 0;
@@ -573,11 +569,11 @@ double Vect_line_length(struct line_pnts *Points)
 
    If projection is LL, the length is measured along the geodesic.
 
-   \param Points line
+   \param Points line geometry
 
    \return line length
  */
-double Vect_line_geodesic_length(struct line_pnts *Points)
+double Vect_line_geodesic_length(const struct line_pnts *Points)
 {
     int j, dc;
     double dx, dy, dz, dxy, len = 0;
@@ -606,7 +602,7 @@ double Vect_line_geodesic_length(struct line_pnts *Points)
 }
 
 /*!
-   \brief calculate line distance.
+   \brief Calculate line distance.
 
    Sets (if not null):
    - px, py - point on line,
@@ -625,7 +621,7 @@ double Vect_line_geodesic_length(struct line_pnts *Points)
    \return nearest segment (first is 1)
  */
 int
-Vect_line_distance(struct line_pnts *points,
+Vect_line_distance(const struct line_pnts *points,
 		   double ux, double uy, double uz,
 		   int with_z,
 		   double *px, double *py, double *pz,
@@ -765,7 +761,7 @@ double Vect_points_distance(double x1, double y1, double z1,	/* point 1 */
 
    \return 0
  */
-int Vect_line_box(struct line_pnts *Points, BOUND_BOX * Box)
+int Vect_line_box(const struct line_pnts *Points, BOUND_BOX * Box)
 {
     dig_line_box(Points, Box);
     return 0;
@@ -809,7 +805,7 @@ void Vect_line_reverse(struct line_pnts *Points)
    \return -1 no category
    \return category number (>=0)
  */
-int Vect_get_line_cat(struct Map_info *Map, int line, int field)
+int Vect_get_line_cat(const struct Map_info *Map, int line, int field)
 {
 
     static struct line_cats *cats = NULL;

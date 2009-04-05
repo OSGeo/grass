@@ -5,21 +5,18 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   TODO: see Vect_read_dblinks; activate auto-FID detection once 
-   OGR_L_GetFIDColumn() is working or solution found if FID not available
+   \todo see Vect_read_dblinks(); activate auto-FID detection once
+   OGR_L_GetFIDColumn() is working or solution found if FID not
+   available
 
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2009 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
-   Update to GRASS 5.7 Radim Blazek and David D. Gray.
-
-   \date 2001-2008
- */
+   \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
+*/
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -158,7 +155,7 @@ int Vect_map_del_dblink(struct Map_info *Map, int field)
 }
 
 /*!
-   \brief Check if db connection exists in dblinks structure
+   \brief Check if DB connection exists in dblinks structure
 
    \param Map vector map
    \param field layer number
@@ -166,13 +163,13 @@ int Vect_map_del_dblink(struct Map_info *Map, int field)
    \return 1 dblink for field exists
    \return 0 dblink does not exist for field
  */
-int Vect_map_check_dblink(struct Map_info *Map, int field)
+int Vect_map_check_dblink(const struct Map_info *Map, int field)
 {
     return Vect_check_dblink(Map->dblnk, field);
 }
 
 /*!
-   \brief Check if db connection exists in dblinks structure
+   \brief Check if DB connection exists in dblinks structure
 
    \param p pointer to existing dblinks structure
    \param field layer number
@@ -180,7 +177,7 @@ int Vect_map_check_dblink(struct Map_info *Map, int field)
    \return 1 dblink for field exists
    \return 0 dblink does not exist for field
  */
-int Vect_check_dblink(struct dblinks *p, int field)
+int Vect_check_dblink(const struct dblinks *p, int field)
 {
     int i;
 
@@ -196,7 +193,7 @@ int Vect_check_dblink(struct dblinks *p, int field)
 
 
 /*!
-   \brief Add new db connection to dblinks structure
+   \brief Add new DB connection to dblinks structure
 
    \param p pointer to existing dblinks structure
    \param number layer number
@@ -205,7 +202,7 @@ int Vect_check_dblink(struct dblinks *p, int field)
    \param db database name
    \param driver driver name
 
-   \return 0 OK
+   \return 0 on success
    \return -1 error
  */
 int
@@ -359,7 +356,7 @@ struct field_info
 
    \return pointer to new field_info structure
  */
-struct field_info *Vect_get_dblink(struct Map_info *Map, int link)
+struct field_info *Vect_get_dblink(const struct Map_info *Map, int link)
 {
     struct field_info *fi;
 
@@ -390,8 +387,8 @@ struct field_info *Vect_get_dblink(struct Map_info *Map, int link)
 /*!
    \brief Get information about link to database.
 
-   Variables are substituted by values,
-   field is number of requested field
+   Variables are substituted by values, field is number of requested
+   field
 
    \param Map vector map
    \param field layer number
@@ -399,7 +396,7 @@ struct field_info *Vect_get_dblink(struct Map_info *Map, int link)
    \return pointer to new field_info structure
    \return NULL if not found
  */
-struct field_info *Vect_get_field(struct Map_info *Map, int field)
+struct field_info *Vect_get_field(const struct Map_info *Map, int field)
 {
     int i;
     struct field_info *fi = NULL;
@@ -668,7 +665,7 @@ int Vect_read_dblinks(struct Map_info *Map)
 
    \param Map vector map
 
-   \return 0 OK
+   \return 0 on success
    \return -1 on error
  */
 int Vect_write_dblinks(struct Map_info *Map)
@@ -722,7 +719,7 @@ int Vect_write_dblinks(struct Map_info *Map)
 
    \return pointer to new string
  */
-char *Vect_subst_var(const char *in, struct Map_info *Map)
+char *Vect_subst_var(const char *in, const struct Map_info *Map)
 {
     char *c;
     char buf[1000], str[1000];
@@ -767,9 +764,9 @@ char *Vect_subst_var(const char *in, struct Map_info *Map)
 /*!
    \brief Rewrite 'dbln' file
 
-   Should be used by GRASS modules which update
-   database tables, so that other applications know that tables
-   were changed and can reload data.
+   Should be used by GRASS modules which update database tables, so
+   that other applications know that tables were changed and can
+   reload data.
 
    \param Map vector map
 

@@ -5,17 +5,13 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2009 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
-   Update to GRASS 5.7 Radim Blazek and David D. Gray.
-
-   \date 2001
+   \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
  */
 
 #include <math.h>
@@ -37,10 +33,9 @@ static int comp_double(double *, double *);
 static int V__within(double, double, double);
 int Vect__intersect_line_with_poly();
 static void destroy_links(struct Slink *);
-static int Vect__divide_and_conquer(struct Slink *, struct line_pnts *,
+static int Vect__divide_and_conquer(struct Slink *, const struct line_pnts *,
 				    struct link_head *, double *, double *,
 				    int);
-
 
 /*!
    \brief Get point inside area and outside all islands.
@@ -58,7 +53,7 @@ static int Vect__divide_and_conquer(struct Slink *, struct line_pnts *,
    \return -1 on error
  */
 int
-Vect_get_point_in_area(struct Map_info *Map, int area, double *X, double *Y)
+Vect_get_point_in_area(const struct Map_info *Map, int area, double *X, double *Y)
 {
     static struct line_pnts *Points;
     static struct line_pnts **IPoints;
@@ -92,7 +87,8 @@ Vect_get_point_in_area(struct Map_info *Map, int area, double *X, double *Y)
 				 IPoints[i]))
 	    return -1;
     }
-    return (Vect_get_point_in_poly_isl(Points, IPoints, n_isles, X, Y));
+    return (Vect_get_point_in_poly_isl((const struct line_pnts*) Points,
+				       (const struct line_pnts**) IPoints, n_isles, X, Y));
 
     return -1;
 }
@@ -133,7 +129,7 @@ static int V__within(double a, double x, double b)
    \return -1 on error 
  */
 int
-Vect__intersect_line_with_poly(struct line_pnts *Points,
+Vect__intersect_line_with_poly(const struct line_pnts *Points,
 			       double y, struct line_pnts *Inter)
 {
     int i;
@@ -172,7 +168,7 @@ Vect__intersect_line_with_poly(struct line_pnts *Points,
    \return 0 on success
    \return -1 on error
  */
-int Vect_get_point_in_poly(struct line_pnts *Points, double *X, double *Y)
+int Vect_get_point_in_poly(const struct line_pnts *Points, double *X, double *Y)
 {
     double cent_x, cent_y;
     struct Slink *Head;
@@ -260,7 +256,7 @@ int Vect_get_point_in_poly(struct line_pnts *Points, double *X, double *Y)
  */
 static int
 Vect__divide_and_conquer(struct Slink *Head,
-			 struct line_pnts *Points,
+			 const struct line_pnts *Points,
 			 struct link_head *Token,
 			 double *X, double *Y, int levels)
 {
@@ -322,7 +318,7 @@ static void destroy_links(struct Slink *Head)
    \return -1 on error
  */
 int
-Vect_find_poly_centroid(struct line_pnts *points,
+Vect_find_poly_centroid(const struct line_pnts *points,
 			double *cent_x, double *cent_y)
 {
     int i;
@@ -416,8 +412,8 @@ Vect_find_poly_centroid(struct line_pnts *points,
    \return -1 on error
  */
 int
-Vect_get_point_in_poly_isl(struct line_pnts *Points,
-			   struct line_pnts **IPoints, int n_isles,
+Vect_get_point_in_poly_isl(const struct line_pnts *Points,
+			   const struct line_pnts **IPoints, int n_isles,
 			   double *att_x, double *att_y)
 {
     static struct line_pnts *Intersects;
@@ -546,7 +542,7 @@ Vect_get_point_in_poly_isl(struct line_pnts *Points,
  * Returns: -1 point exactly on segment
  *          number of intersections
  */
-static int segments_x_ray(double X, double Y, struct line_pnts *Points)
+static int segments_x_ray(double X, double Y, const struct line_pnts *Points)
 {
     double x1, x2, y1, y2;
     double x_inter;
@@ -663,7 +659,7 @@ static int segments_x_ray(double X, double Y, struct line_pnts *Points)
    \return 1 - inside 
    \return 2 - on the boundary (exactly may be said only for vertex of vertical/horizontal line)
  */
-int Vect_point_in_poly(double X, double Y, struct line_pnts *Points)
+int Vect_point_in_poly(double X, double Y, const struct line_pnts *Points)
 {
     int n_intersects;
 
@@ -693,14 +689,14 @@ int Vect_point_in_poly(double X, double Y, struct line_pnts *Points)
    \return 2 - on the boundary (exactly may be said only for vertex of vertical/horizontal line)
  */
 int
-Vect_point_in_area_outer_ring(double X, double Y, struct Map_info *Map,
+Vect_point_in_area_outer_ring(double X, double Y, const struct Map_info *Map,
 			      int area)
 {
     static int first = 1;
     int n_intersects, inter;
     int i, line;
     static struct line_pnts *Points;
-    struct Plus_head *Plus;
+    const struct Plus_head *Plus;
     P_LINE *Line;
     P_AREA *Area;
 
@@ -758,13 +754,13 @@ Vect_point_in_area_outer_ring(double X, double Y, struct Map_info *Map,
    \return 1 - inside 
    \return 2 - on the boundary (exactly may be said only for vertex of vertical/horizontal line)
  */
-int Vect_point_in_island(double X, double Y, struct Map_info *Map, int isle)
+int Vect_point_in_island(double X, double Y, const struct Map_info *Map, int isle)
 {
     static int first = 1;
     int n_intersects, inter;
     int i, line;
     static struct line_pnts *Points;
-    struct Plus_head *Plus;
+    const struct Plus_head *Plus;
     P_LINE *Line;
     P_ISLE *Isle;
 

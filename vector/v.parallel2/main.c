@@ -21,7 +21,6 @@
 #include <grass/gis.h>
 #include <grass/Vect.h>
 #include <grass/glocale.h>
-#include "local_proto.h"
 
 int main(int argc, char *argv[])
 {

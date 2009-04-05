@@ -7,10 +7,8 @@
  *
  * (C) 2001-2009 by the GRASS Development Team
  *
- * This program is free software under the 
- * GNU General Public License (>=v2). 
- * Read the file COPYING that comes with GRASS
- * for details.
+ * This program is free software under the GNU General Public License
+ * (>=v2).  Read the file COPYING that comes with GRASS for details.
  *
  * \author Original author CERL, probably Dave Gerdes or Mike
  * Higgins
@@ -72,7 +70,8 @@ struct line_cats *Vect__new_cats_struct()
 }
 
 /*!
-   \brief Frees all memory associated with line_cats structure, including the struct itself.
+   \brief Frees all memory associated with line_cats structure,
+   including the struct itself.
 
    \param p line_cats structure
 
@@ -92,7 +91,8 @@ int Vect_destroy_cats_struct(struct line_cats *p)
 }
 
 /*!
-   \brief Add new field/cat to category structure if doesn't exist yet.
+   \brief Add new field/cat to category structure if doesn't exist
+   yet.
 
    \param[in] Cats line_cats structure
    \param[in] field layer number
@@ -145,16 +145,16 @@ int Vect_cat_set(struct line_cats *Cats, int field, int cat)
 /*!
    \brief Get first found category of given field.
 
-   'cat' is set to first category found or -1 if field was not found
+   <em>cat</em> is set to first category found or -1 if field was not found
 
-   \param[in] Cats line_cats structure
-   \param[in] field layer number
-   \param[in] cat pointer to variable where cat will be written
+   \param Cats line_cats structure
+   \param field layer number
+   \param[out] cat pointer to variable where cat will be written
 
    \return 1 found
    \return 0 layer does not exist
  */
-int Vect_cat_get(struct line_cats *Cats, int field, int *cat)
+int Vect_cat_get(const struct line_cats *Cats, int field, int *cat)
 {
     register int n;
 
@@ -188,7 +188,7 @@ int Vect_cat_get(struct line_cats *Cats, int field, int *cat)
    \return number of found categories
    \return -1 on invalid field
  */
-int Vect_field_cat_get(struct line_cats *Cats, int field, struct ilist *cats)
+int Vect_field_cat_get(const struct line_cats *Cats, int field, struct ilist *cats)
 {
     int n;
     
@@ -212,8 +212,8 @@ int Vect_field_cat_get(struct line_cats *Cats, int field, struct ilist *cats)
 /*!
    \brief Delete all categories of given layer
 
-   \param[in] Cats line_cats structure
-   \param[in] field layer number
+   \param[in,out] Cats line_cats structure
+   \param field layer number
 
    \return 1 deleted
    \return 0 layer does not exist
@@ -247,9 +247,9 @@ int Vect_cat_del(struct line_cats *Cats, int field)
 /*!
    \brief Delete field/cat from line_cats structure
 
-   \param[in] Cats line_cats structure
-   \param[in] field layer number
-   \param[in] cat category to be deleted or -1 to delete all cats of given field
+   \param[in,out] Cats line_cats structure
+   \param field layer number
+   \param cat category to be deleted or -1 to delete all cats of given field
 
    \return 1 deleted
    \return 0 field/category number does not exist
@@ -423,13 +423,13 @@ int Vect_str_to_cat_list(const char *str, struct cat_list *list)
 /*!
    \brief Convert ordered array of integers to cat_list structure.
 
-   \param[in] vals array of integers
-   \param[in] nvals number of values
+   \param vals array of integers
+   \param nvals number of values
    \param[out] list result cat_list structure
 
    \return number of ranges
  */
-int Vect_array_to_cat_list(int *vals, int nvals, struct cat_list *list)
+int Vect_array_to_cat_list(const int *vals, int nvals, struct cat_list *list)
 {
     int i, range;
 
@@ -463,13 +463,13 @@ int Vect_array_to_cat_list(int *vals, int nvals, struct cat_list *list)
 /*!
    \brief Check if category number is in list.
 
-   \param[in] cat category number
-   \param[in] list cat_list structure
+   \param cat category number
+   \param list cat_list structure
 
    \return TRUE if cat is in list
    \return FALSE if it is not
  */
-int Vect_cat_in_cat_list(int cat, struct cat_list *list)
+int Vect_cat_in_cat_list(int cat, const struct cat_list *list)
 {
     int i;
 
@@ -483,14 +483,14 @@ int Vect_cat_in_cat_list(int cat, struct cat_list *list)
 /*!
    \brief Check if category is in ordered array of integers.
 
-   \param[in] cat category number
-   \param[in] array ordered array of integers
-   \param[in] ncats number of categories in array
+   \param cat category number
+   \param array ordered array of integers
+   \param ncats number of categories in array
 
    \return TRUE if cat is in list
    \return FALSE if it is not
  */
-int Vect_cat_in_array(int cat, int *array, int ncats)
+int Vect_cat_in_array(int cat, const int *array, int ncats)
 {
     int *i;
 

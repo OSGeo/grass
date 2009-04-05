@@ -10,17 +10,13 @@
    - Vect_read_constraint_type()
    - Vect_remove_constraints()
 
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2009 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
-   Update to GRASS 5.7 Radim Blazek and David D. Gray.
-
-   \date 2001
+   \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
  */
 
 #include <grass/config.h>
@@ -37,8 +33,8 @@ Vect__Read_line_nat(struct Map_info *,
  * \brief Read line from coor file on given offset.
  *
  * \param Map vector map 
- * \param Points container used to store line points within
- * \param Cats container used to store line categories within
+ * \param[out] Points container used to store line points within
+ * \param[out] Cats container used to store line categories within
  * \param offset given offset 
  *
  * \return line type
@@ -58,8 +54,8 @@ V1_read_line_nat(struct Map_info *Map,
  * \brief Read next line from coor file.
  *
  * \param Map vector map layer
- * \param line_p container used to store line points within
- * \param line_c container used to store line categories within
+ * \param[out] line_p container used to store line points within
+ * \param[out] line_c container used to store line categories within
  *
  * \return line type
  * \return 0 dead line
@@ -113,8 +109,8 @@ V1_read_next_line_nat(struct Map_info *Map,
  * \brief Reads any specified line, this is NOT affected by constraints
  *
  * \param Map vector map layer
- * \param line_p container used to store line points within
- * \param line_c container used to store line categories within
+ * \param[out] line_p container used to store line points within
+ * \param[out] line_c container used to store line categories within
  * \param line line id
  *
  * \return line type ( > 0 )
@@ -144,8 +140,8 @@ V2_read_line_nat(struct Map_info *Map,
  * \brief Reads next unread line each time called.  Use Vect_rewind to reset.
  *
  * \param Map vector map layer
- * \param line_p container used to store line points within
- * \param line_c container used to store line categories within
+ * \param[out] line_p container used to store line points within
+ * \param[out] line_c container used to store line categories within
  * 
  * \return line type ( > 0 )
  * \return 0 dead line
@@ -201,8 +197,8 @@ V2_read_next_line_nat(struct Map_info *Map,
  * \brief Read line from coor file 
  *
  * \param Map vector map layer
- * \param p container used to store line points within
- * \param c container used to store line categories within
+ * \param[out] p container used to store line points within
+ * \param[out] c container used to store line categories within
  * \param offset given offset
  *
  * \return line type ( > 0 )
@@ -222,7 +218,7 @@ Vect__Read_line_nat(struct Map_info *Map,
     char rhead, nc;
     short field;
 
-    G_debug(3, "Vect__Read_line_nat: offset = %ld", offset);
+    G_debug(3, "Vect__Read_line_nat: offset = %lu", (unsigned long) offset);
 
     Map->head.last_offset = offset;
 
@@ -335,7 +331,7 @@ Vect__Read_line_nat(struct Map_info *Map,
 	dig_fseek(&(Map->dig_fp), size, SEEK_CUR);
     }
 
-    G_debug(3, "    off = %ld", dig_ftell(&(Map->dig_fp)));
+    G_debug(3, "    off = %lu", (unsigned long) dig_ftell(&(Map->dig_fp)));
 
     if (dead)
 	return 0;

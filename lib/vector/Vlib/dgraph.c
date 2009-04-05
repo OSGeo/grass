@@ -1,6 +1,22 @@
+/*!
+   \file dgraph.c
+
+   \brief Vector library - intersection (lower level functions)
+
+   Higher level functions for reading/writing/manipulating vectors.
+
+   (C) 2008-2009 by the GRASS Development Team
+
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
+
+   \author Rewritten by Rosen Matev (Google Summer of Code 2008)
+*/
+
 #include <stdlib.h>
 #include <grass/Vect.h>
 #include <grass/gis.h>
+#include <grass/glocale.h>
 #include "dgraph.h"
 #include "e_intersect.h"
 
@@ -80,7 +96,7 @@ void destroy_si_struct(struct seg_intersections *si)
 
 /* internal use */
 void add_ipoint1(struct seg_intersection_list *il, int with, double dist,
-		 int ip)
+			int ip)
 {
     struct seg_intersection *s;
 
@@ -100,8 +116,8 @@ void add_ipoint1(struct seg_intersection_list *il, int with, double dist,
 }
 
 /* adds intersection point to the structure */
-void add_ipoint(struct line_pnts *Points, int first_seg, int second_seg,
-		double x, double y, struct seg_intersections *si)
+void add_ipoint(const struct line_pnts *Points, int first_seg, int second_seg,
+		       double x, double y, struct seg_intersections *si)
 {
     struct intersection_point *t;
 
@@ -134,7 +150,6 @@ void add_ipoint(struct line_pnts *Points, int first_seg, int second_seg,
 void sort_intersection_list(struct seg_intersection_list *il)
 {
     int n, i, j, min;
-
     struct seg_intersection t;
 
     G_debug(4, "sort_intersection_list()");
@@ -158,7 +173,7 @@ void sort_intersection_list(struct seg_intersection_list *il)
     return;
 }
 
-static int compare(const void *a, const void *b)
+int compare(const void *a, const void *b)
 {
     struct intersection_point *aa, *bb;
 
@@ -199,20 +214,14 @@ double get_epsilon(struct line_pnts *Points)
 }
 
 /* currently O(n*n); future implementation O(nlogn) */
-struct seg_intersections *find_all_intersections(struct line_pnts *Points)
+struct seg_intersections *find_all_intersections(const struct line_pnts *Points)
 {
     int i, j, np;
-
     int group, t;
-
     int looped;
-
     double EPSILON = 0.00000001;
-
     double *x, *y;
-
     double x1, y1, x2, y2;
-
     int res;
 
     /*int res2
@@ -371,9 +380,7 @@ void pg_destroy_struct(struct planar_graph *pg)
 int pg_existsedge(struct planar_graph *pg, int v1, int v2)
 {
     struct pg_vertex *v;
-
     struct pg_edge *e;
-
     int i, ecount;
 
     if (pg->v[v1].ecount <= pg->v[v2].ecount)
@@ -420,8 +427,8 @@ void pg_addedge(struct planar_graph *pg, int v1, int v2)
 	return;
 
     if (pg->ecount == pg->eallocated) {
-	G_fatal_error
-	    ("Trying to add more edges to the planar_graph than the initial allocation size allows");
+	G_fatal_error(_("Trying to add more edges to the planar_graph "
+			"than the initial allocation size allows"));
     }
     e = &(pg->e[pg->ecount]);
     e->v1 = v1;
@@ -437,16 +444,12 @@ void pg_addedge(struct planar_graph *pg, int v1, int v2)
     return;
 }
 
-struct planar_graph *pg_create(struct line_pnts *Points)
+struct planar_graph *pg_create(const struct line_pnts *Points)
 {
     struct seg_intersections *si;
-
     struct planar_graph *pg;
-
     struct intersection_point *ip;
-
     struct pg_vertex *vert;
-
     struct pg_edge *edge;
 
     int i, j, t, v;

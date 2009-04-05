@@ -5,7 +5,7 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2009 by the GRASS Development Team
 
    This program is free software under the 
    GNU General Public License (>=v2). 
@@ -13,9 +13,7 @@
    for details.
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
-   Update to GRASS 5.7 Radim Blazek and David D. Gray.
-
-   \date 2001-2008
+   \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
  */
 #include <stdlib.h>
 #include <stdio.h>
@@ -63,7 +61,7 @@ int Vect_build(struct Map_info *Map)
 
    \return current highest built level
  */
-int Vect_get_built(struct Map_info *Map)
+int Vect_get_built(const struct Map_info *Map)
 {
     return (Map->plus.built);
 }
@@ -82,27 +80,30 @@ int Vect_get_built(struct Map_info *Map)
    - GV_BUILD_CENTROIDS - assign centroids to areas;
    - GV_BUILD_ALL - top level, the same as GV_BUILD_CENTROIDS.
 
-   If functions is called with build lower than current value of the Map, the level is downgraded to 
-   requested value.
+   If functions is called with build lower than current value of the
+   Map, the level is downgraded to requested value.
 
-   All calls to Vect_write_line(), Vect_rewrite_line(), Vect_delete_line() respect the last value of 
-   build used in this function.
+   All calls to Vect_write_line(), Vect_rewrite_line(),
+   Vect_delete_line() respect the last value of build used in this
+   function.
 
-   Values lower than GV_BUILD_ALL are supported only by GV_FORMAT_NATIVE,
-   other formats ignore build and build always GV_BUILD_ALL
+   Values lower than GV_BUILD_ALL are supported only by
+   GV_FORMAT_NATIVE, other formats ignore build and build always
+   GV_BUILD_ALL
 
-   Note that the functions has effect only if requested level is higher than current level, to rebuild
-   part of topology, call first downgrade and then upgrade, for example:
+   Note that the functions has effect only if requested level is
+   higher than current level, to rebuild part of topology, call first
+   downgrade and then upgrade, for example:
 
-   Vect_build()
-   Vect_build_partial(,GV_BUILD_BASE,)
-   Vect_build_partial(,GV_BUILD_AREAS,) 
-
+   - Vect_build()
+   - Vect_build_partial(,GV_BUILD_BASE,)
+   - Vect_build_partial(,GV_BUILD_AREAS,) 
 
    \param Map vector map
    \param build highest level of build
 
-   \return 1 on success, 0 on error
+   \return 1 on success
+   \return 0 on error
  */
 int Vect_build_partial(struct Map_info *Map, int build)
 {
@@ -234,7 +235,8 @@ int Vect_build_partial(struct Map_info *Map, int build)
 
    \param Map vector map
 
-   \return 1 on success, 0 on error
+   \return 1 on success
+   \return 0 on error
  */
 int Vect_save_topo(struct Map_info *Map)
 {
@@ -279,7 +281,7 @@ int Vect_save_topo(struct Map_info *Map)
    \return 1 on success
    \return 0 on error
  */
-int Vect_topo_dump(struct Map_info *Map, FILE * out)
+int Vect_topo_dump(const struct Map_info *Map, FILE * out)
 {
     int i, j, line, isle;
     P_NODE *Node;
@@ -287,7 +289,7 @@ int Vect_topo_dump(struct Map_info *Map, FILE * out)
     P_AREA *Area;
     P_ISLE *Isle;
     BOUND_BOX box;
-    struct Plus_head *plus;
+    const struct Plus_head *plus;
 
     plus = &(Map->plus);
 
@@ -322,9 +324,9 @@ int Vect_topo_dump(struct Map_info *Map, FILE * out)
 	    continue;
 	}
 	Line = plus->Line[i];
-	fprintf(out, "line = %d, type = %d, offset = %ld n1 = %d, n2 = %d, "
+	fprintf(out, "line = %d, type = %d, offset = %lu n1 = %d, n2 = %d, "
 		"left/area = %d, right = %d\n",
-		i, Line->type, Line->offset, Line->N1, Line->N2,
+		i, Line->type, (unsigned long) Line->offset, Line->N1, Line->N2,
 		Line->left, Line->right);
 	fprintf(out, "N,S,E,W,T,B: %f, %f, %f, %f, %f, %f\n", Line->N,
 		Line->S, Line->E, Line->W, Line->T, Line->B);

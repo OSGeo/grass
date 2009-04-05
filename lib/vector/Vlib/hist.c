@@ -5,16 +5,12 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2009 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author Radim Blazek
-
-   \date 2001-2008
  */
 
 #include <stdlib.h>
@@ -27,7 +23,7 @@
 
    \param Map vector map
 
-   \return 0 OK
+   \return 0 on success
    \return -1 error
  */
 int Vect_hist_command(struct Map_info *Map)
@@ -45,7 +41,8 @@ int Vect_hist_command(struct Map_info *Map)
     sprintf(buf, "GISDBASE: %s\n", G_gisdbase());	/* Needed ? */
     Vect_hist_write(Map, buf);
 
-    sprintf(buf, "LOCATION: %s MAPSET: %s USER: %s DATE: %s\n", G_location(), G_mapset(), G_whoami(), G_date());	/* Needed ? */
+    sprintf(buf, "LOCATION: %s MAPSET: %s USER: %s DATE: %s\n",
+	    G_location(), G_mapset(), G_whoami(), G_date());	/* Needed ? */
     Vect_hist_write(Map, buf);
 
     return 0;
@@ -73,7 +70,7 @@ int Vect_hist_write(struct Map_info *Map, const char *str)
 /*!
    \brief Reads one line from history file without newline character
 
-   \param s buffer, allocated space must be size+1
+   \param[out] s buffer, allocated space must be size+1
    \param size maximum number of character
    \param Map vector map
 
@@ -81,7 +78,7 @@ int Vect_hist_write(struct Map_info *Map, const char *str)
    \return NULL on error
    \return EOF end of file
  */
-char *Vect_hist_read(char *s, int size, struct Map_info *Map)
+char *Vect_hist_read(char *s, int size, const struct Map_info *Map)
 {
     int ret;
 
@@ -117,12 +114,12 @@ void Vect_hist_rewind(struct Map_info *Map)
    \brief Copy history from one map to another
 
    \param In input vector map
-   \param Out output vector map
+   \param[out] Out output vector map
 
-   \return 0 OK
-   \return -1 error
+   \return 0 on success
+   \return -1 on error
  */
-int Vect_hist_copy(struct Map_info *In, struct Map_info *Out)
+int Vect_hist_copy(const struct Map_info *In, struct Map_info *Out)
 {
     size_t red, ret;
     char buf[1000];

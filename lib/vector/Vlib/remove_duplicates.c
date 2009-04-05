@@ -5,16 +5,12 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2009 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author Radim Blazek
-
-   \date 2001
  */
 
 #include <stdlib.h>
@@ -23,14 +19,15 @@
 #include <grass/glocale.h>
 
 /*!
-   \brief Remove duplicate lines from vector map.
+   \brief Remove duplicate features from vector map.
 
-   Remove duplicate lines of given types from vector map. Duplicate lines may be optionally 
-   written to error map. Input map must be opened on level 2 for update. Categories are merged.
+   Remove duplicate lines of given types from vector map. Duplicate
+   lines may be optionally written to error map. Input map must be
+   opened on level 2 for update. Categories are merged.
 
-   \param Map vector map where duplicate lines will be deleted
+   \param[in,out] Map vector map where duplicate lines will be deleted
    \param type type of line to be delete
-   \param Err vector map where duplicate lines will be written or NULL
+   \param[out] Err vector map where duplicate lines will be written or NULL
 
    \return void
  */

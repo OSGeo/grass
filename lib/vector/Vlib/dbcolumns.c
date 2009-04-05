@@ -5,17 +5,13 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2005-2008 by the GRASS Development Team
+   (C) 2005-2009 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author Markus Neteler
-
-   \date 2005-2008
- */
+*/
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -37,7 +33,7 @@
    \return list of column(s) names on success
    \return NULL on error 
  */
-const char *Vect_get_column_names(struct Map_info *Map, int field)
+const char *Vect_get_column_names(const struct Map_info *Map, int field)
 {
     int num_dblinks, ncols, col;
     struct field_info *fi;
@@ -96,7 +92,7 @@ const char *Vect_get_column_names(struct Map_info *Map, int field)
    \return list of column(s) types on success
    \return NULL on error 
  */
-const char *Vect_get_column_types(struct Map_info *Map, int field)
+const char *Vect_get_column_types(const struct Map_info *Map, int field)
 {
     int num_dblinks, ncols, col;
     struct field_info *fi;
@@ -158,7 +154,7 @@ const char *Vect_get_column_types(struct Map_info *Map, int field)
    \return list of column(s) types on success
    \retutn NULL on error 
  */
-const char *Vect_get_column_names_types(struct Map_info *Map, int field)
+const char *Vect_get_column_names_types(const struct Map_info *Map, int field)
 {
     int num_dblinks, ncols, col;
     struct field_info *fi;

@@ -3,7 +3,7 @@
 
    \brief Vector library - Building topology for native format
 
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2009 by the GRASS Development Team
 
    This program is free software under the 
    GNU General Public License (>=v2). 
@@ -11,9 +11,7 @@
    for details.
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
-   Update to GRASS 5.7 Radim Blazek and David D. Gray.
-
-   \date 2001-2008
+   \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
  */
 
 #include <grass/config.h>
@@ -135,7 +133,7 @@ int Vect_isle_find_area(struct Map_info *Map, int isle)
 {
     int j, line, node, sel_area, first, area, poly;
     static int first_call = 1;
-    struct Plus_head *plus;
+    const struct Plus_head *plus;
     P_LINE *Line;
     P_NODE *Node;
     P_ISLE *Isle;
@@ -297,14 +295,14 @@ int Vect_attach_isle(struct Map_info *Map, int isle)
 }
 
 /*!
-   \brief (Re)Attach isles to areas in given box
+   \brief (Re)Attach isles to areas in given bounding box
 
    \param Map_info vector map
    \param box bounding box
 
    \return 0
  */
-int Vect_attach_isles(struct Map_info *Map, BOUND_BOX * box)
+int Vect_attach_isles(struct Map_info *Map, const BOUND_BOX * box)
 {
     int i, isle;
     static int first = 1;
@@ -331,14 +329,14 @@ int Vect_attach_isles(struct Map_info *Map, BOUND_BOX * box)
 }
 
 /*!
-   \brief (Re)Attach centroids to areas in given box
+   \brief (Re)Attach centroids to areas in given bouding box
 
    \param Map_info vector map
    \param box bounding box
 
    \return 0
  */
-int Vect_attach_centroids(struct Map_info *Map, BOUND_BOX * box)
+int Vect_attach_centroids(struct Map_info *Map, const BOUND_BOX * box)
 {
     int i, sel_area, centr;
     static int first = 1;

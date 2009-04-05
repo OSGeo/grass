@@ -1,21 +1,19 @@
 
-/**
+/*!
  * \file list.c
  *
  * \brief Vector library - list definition
  *
  * Higher level functions for reading/writing/manipulating vectors.
  *
- * (C) 2001-2008 by the GRASS Development Team
+ * (C) 2001-2009 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public
  * License (>=v2). Read the file COPYING that comes with GRASS
  * for details.
  *
  * \author Original author CERL, probably Dave Gerdes or Mike Higgins.
- * Update to GRASS 5.7 Radim Blazek and David D. Gray
- *
- * \date 2001-2008
+ * \author Update to GRASS 5.7 Radim Blazek and David D. Gray
  */
 
 #include <stdlib.h>
@@ -88,7 +86,7 @@ int Vect_destroy_list(struct ilist *list)
  * \brief Append new item to the end of list if not yet present 
  *
  * \param[in,out] list pointer to ilist structure
- * \param[in] val new item to append to the end of list
+ * \param val new item to append to the end of list
  *
  * \return 0 on success
  * \return 1 on error
@@ -122,12 +120,12 @@ int Vect_list_append(struct ilist *list, int val)
  * \brief Append new items to the end of list if not yet present 
  *
  * \param[in,out] alist pointer to ilist structure where items will be appended
- * \param[in] blist pointer to ilist structure with new items
+ * \param blist pointer to ilist structure with new items
  *
  * \return 0 on success
  * \return 1 on error
  */
-int Vect_list_append_list(struct ilist *alist, struct ilist *blist)
+int Vect_list_append_list(struct ilist *alist, const struct ilist *blist)
 {
     int i;
 
@@ -144,7 +142,7 @@ int Vect_list_append_list(struct ilist *alist, struct ilist *blist)
  * \brief Remove a given value (item) from list
  *
  * \param[in,out] list pointer to ilist structure
- * \param[in] val to remove
+ * \param val to remove
  *
  * \return 0 on success
  * \return 1 on error
@@ -173,12 +171,12 @@ int Vect_list_delete(struct ilist *list, int val)
  * \brief Delete list from existing list 
  *
  * \param[in,out] alist pointer to original ilist structure,
- * \param[in] blist pointer to ilist structure with items to delete
+ * \param blist pointer to ilist structure with items to delete
  *
  * \return 0 on success
  * \return 1 on error
  */
-int Vect_list_delete_list(struct ilist *alist, struct ilist *blist)
+int Vect_list_delete_list(struct ilist *alist, const struct ilist *blist)
 {
     int i;
 
@@ -194,13 +192,13 @@ int Vect_list_delete_list(struct ilist *alist, struct ilist *blist)
 /**
  * \brief Find a given item in the list
  *
- * \param[in] list pointer to ilist structure
- * \param[in] val value of item
+ * \param list pointer to ilist structure
+ * \param val value of item
  *
  * \return 1 if an item is found
  * \return 0 no found item in the list
 */
-int Vect_val_in_list(struct ilist *list, int val)
+int Vect_val_in_list(const struct ilist *list, int val)
 {
     int i;
 

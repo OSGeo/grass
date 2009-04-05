@@ -8,17 +8,13 @@
    This is file is just example and starting point for writing overlay
    functions!!!
 
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2009 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author Radim Blazek
-
-   \date 2001
- */
+*/
 
 #include <string.h>
 #include <grass/Vect.h>
@@ -57,7 +53,7 @@ int Vect_overlay_str_to_operator(const char *str)
    \param BList unused ?
    \param BAList unused ?
    \param operator operator code
-   \param OMap output vector map
+   \param[out] OMap output vector map
 
    \return 0 on success
  */
@@ -94,6 +90,7 @@ int Vect_overlay(struct Map_info *AMap, int atype, struct ilist *AList, struct i
    \param BList unused ?
    \param BAList unused ?
    \param operator operator code
+   \param OMap output vector map
 
    \return 1 on success
    \return 0 on error

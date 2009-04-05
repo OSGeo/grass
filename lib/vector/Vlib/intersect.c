@@ -5,17 +5,64 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2008 by the GRASS Development Team
+   Some parts of code taken from grass50 v.spag/linecros.c
+   
+   Based on the following:
+   
+   <code>
+   (ax2-ax1)r1 - (bx2-bx1)r2 = ax2 - ax1
+   (ay2-ay1)r1 - (by2-by1)r2 = ay2 - ay1
+   </code>
+ 
+   Solving for r1 and r2, if r1 and r2 are between 0 and 1, then line
+   segments (ax1,ay1)(ax2,ay2) and (bx1,by1)(bx2,by2) intersect.
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   Intersect 2 line segments.
+ 
+   Returns: 0 - do not intersect
+            1 - intersect at one point
+   <pre>
+                 \  /    \  /  \  /
+                  \/      \/    \/
+                  /\             \
+                 /  \             \
+           2 - partial overlap         ( \/                      )
+                ------      a          (    distance < threshold )
+                   ------   b          (                         )
+           3 - a contains b            ( /\                      )
+                ----------  a    ----------- a
+                   ----     b          ----- b
+	     4 - b contains a
+                   ----     a          ----- a
+                ----------  b    ----------- b
+            5 - identical
+                ----------  a
+                ----------  b
+  </pre>
+  Intersection points: 
+  <pre>
+  return  point1 breakes: point2 breaks:    distance1 on:   distance2 on:
+      0        -              -                  -              -  
+      1        a,b            -                  a              b
+      2        a              b                  a              b
+      3        a              a                  a              a
+      4        b              b                  b              b
+      5        -              -                  -              -
+  </pre>
+   Sometimes (often) is important to get the same coordinates for a x
+   b and b x a.  To reach this, the segments a,b are 'sorted' at the
+   beginning, so that for the same switched segments, results are
+   identical. (reason is that double values are always rounded because
+   of limited number of decimal places and for different order of
+   coordinates, the results would be different)
+
+   (C) 2001-2009 by the GRASS Development Team
+
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
-   Update to GRASS 5.7 Radim Blazek.
-
-   \date 2001-2008
+   \author Update to GRASS 5.7 Radim Blazek.
  */
 
 #include <stdlib.h>
@@ -36,68 +83,18 @@ static int ident(double x1, double y1, double x2, double y2, double thresh);
 static int cross_seg(int id, int *arg);
 static int find_cross(int id, int *arg);
 
-
-/* Some parts of code taken from grass50 v.spag/linecros.c
- * 
- * Based on the following:
- * 
- *     (ax2-ax1)r1 - (bx2-bx1)r2 = ax2 - ax1
- *     (ay2-ay1)r1 - (by2-by1)r2 = ay2 - ay1
- * 
- * Solving for r1 and r2, if r1 and r2 are between 0 and 1,
- * then line segments (ax1,ay1)(ax2,ay2) and (bx1,by1)(bx2,by2)
- * intersect
- * ****************************************************************/
-
 #define D  ((ax2-ax1)*(by1-by2) - (ay2-ay1)*(bx1-bx2))
 #define D1 ((bx1-ax1)*(by1-by2) - (by1-ay1)*(bx1-bx2))
 #define D2 ((ax2-ax1)*(by1-ay1) - (ay2-ay1)*(bx1-ax1))
 
-/* Intersect 2 line segments.
- *
- *  Returns: 0 - do not intersect
- *           1 - intersect at one point
- *                 \  /    \  /  \  /
- *                  \/      \/    \/
- *                  /\             \
- *                 /  \             \
- *           2 - partial overlap         ( \/                      )
- *                ------      a          (    distance < threshold )
- *                   ------   b          (                         )
- *           3 - a contains b            ( /\                      )
- *                ----------  a    ----------- a
- *                   ----     b          ----- b
- *           4 - b contains a
- *                   ----     a          ----- a
- *                ----------  b    ----------- b
- *           5 - identical
- *                ----------  a
- *                ----------  b
- *
- *  Intersection points: 
- *  return  point1 breakes: point2 breaks:    distance1 on:   distance2 on:
- *     0        -              -                  -              -  
- *     1        a,b            -                  a              b
- *     2        a              b                  a              b
- *     3        a              a                  a              a
- *     4        b              b                  b              b
- *     5        -              -                  -              -
- *     
- *  Sometimes (often) is important to get the same coordinates for a x b and b x a.
- *  To reach this, the segments a,b are 'sorted' at the beginning, so that for the same switched segments,
- *  results are identical. (reason is that double values are always rounded because of limited number
- *  of decimal places and for different order of coordinates, the results would be different)
- *     
- */
-
 /*!
  * \brief Check for intersect of 2 line segments.
  *
- * \param[in] ax1,ay1,az1,ax2,ay2,az2 input line a
- * \param[in] bx1,by1,bz1,bx2,by2,bz2 input line b
+ * \param ax1,ay1,az1,ax2,ay2,az2 input line a
+ * \param bx1,by1,bz1,bx2,by2,bz2 input line b
  * \param[out] x1,y1,z1 intersection point1 (case 2-4)
  * \param[out] x2,y2,z2 intersection point2 (case 2-4)
- * \param[in] with_z use z coordinate (3D) (TODO)
+ * \param with_z use z coordinate (3D) (TODO)
  *
  * \return 0 - do not intersect,
  * \return 1 - intersect at one point,
@@ -586,13 +583,13 @@ static int cross_seg(int id, int *arg)
  * intersection with B line. Points (Points->n_points == 1) are not
  * supported.
  *
- * \param[in] APoints first input line 
- * \param[in] BPoints second input line 
+ * \param APoints first input line 
+ * \param BPoints second input line 
  * \param[out] ALines array of new lines created from original A line
  * \param[out] BLines array of new lines created from original B line
  * \param[out] nalines number of new lines (ALines)
  * \param[out] nblines number of new lines (BLines)
- * \param[in] with_z 3D, not supported!
+ * \param with_z 3D, not supported!
  *
  * \return 0 no intersection 
  * \return 1 intersection found
@@ -1120,9 +1117,9 @@ static int find_cross(int id, int *arg)
  *
  * Points (Points->n_points == 1) are also supported.
  *
- * \param[in] APoints first input line 
- * \param[in] BPoints second input line 
- * \param[in] with_z 3D, not supported (only if one or both are points)!
+ * \param APoints first input line 
+ * \param BPoints second input line 
+ * \param with_z 3D, not supported (only if one or both are points)!
  *
  * \return 0 no intersection 
  * \return 1 intersection found
@@ -1294,10 +1291,10 @@ Vect_line_check_intersection(struct line_pnts *APoints,
  * 
  * A wrapper around Vect_line_check_intersection() function.
  *
- * \param[in] APoints first input line 
- * \param[in] BPoints second input line 
+ * \param APoints first input line 
+ * \param BPoints second input line 
  * \param[out] IPoints output with intersection points
- * \param[in] with_z 3D, not supported (only if one or both are points)!
+ * \param with_z 3D, not supported (only if one or both are points)!
  *
  * \return 0 no intersection 
  * \return 1 intersection found

@@ -5,15 +5,13 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2009 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
    \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
-
-   \date 2001-2008
  */
 
 #include <grass/config.h>
@@ -66,7 +64,7 @@ static int (*V2_read_line_array[]) () = {
    \return -1 out of memory
    \return -2 EOF   
  */
-int Vect_read_next_line(struct Map_info *Map,
+int Vect_read_next_line(const struct Map_info *Map,
 			struct line_pnts *line_p, struct line_cats *line_c)
 {
 
@@ -91,7 +89,7 @@ int Vect_read_next_line(struct Map_info *Map,
    \return -1 out of memory,
    \return -2 EOF   
  */
-int Vect_read_line(struct Map_info *Map,
+int Vect_read_line(const struct Map_info *Map,
 		   struct line_pnts *line_p, struct line_cats *line_c, int line)
 {
 
@@ -117,7 +115,7 @@ int Vect_read_line(struct Map_info *Map,
    \return 1 if feature alive
    \return 0 if feature is dead
  */
-int Vect_line_alive(struct Map_info *Map, int line)
+int Vect_line_alive(const struct Map_info *Map, int line)
 {
     if (Map->plus.Line[line] != NULL)
 	return 1;
@@ -134,7 +132,7 @@ int Vect_line_alive(struct Map_info *Map, int line)
    \return 1 if node alive
    \return 0 if node is dead
  */
-int Vect_node_alive(struct Map_info *Map, int node)
+int Vect_node_alive(const struct Map_info *Map, int node)
 {
     if (Map->plus.Node[node] != NULL)
 	return 1;
@@ -151,7 +149,7 @@ int Vect_node_alive(struct Map_info *Map, int node)
    \return 1 if area alive
    \return 0 if area is dead
  */
-int Vect_area_alive(struct Map_info *Map, int area)
+int Vect_area_alive(const struct Map_info *Map, int area)
 {
     if (Map->plus.Area[area] != NULL)
 	return 1;
@@ -168,7 +166,7 @@ int Vect_area_alive(struct Map_info *Map, int area)
    \return 1 if isle alive
    \return 0 if isle is dead
  */
-int Vect_isle_alive(struct Map_info *Map, int isle)
+int Vect_isle_alive(const struct Map_info *Map, int isle)
 {
     if (Map->plus.Isle[isle] != NULL)
 	return 1;
@@ -187,7 +185,7 @@ int Vect_isle_alive(struct Map_info *Map, int isle)
   \return feature offset
   \return -1 on error
 */
-off_t Vect_get_line_offset(const struct Map_info *Map, int line)
+off_t Vect_get_line_offset(const const struct Map_info *Map, int line)
 {
     if (line < 1 || line > Map->plus.n_lines)
 	return -1;

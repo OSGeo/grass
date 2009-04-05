@@ -56,14 +56,14 @@ int dig__fread_port_S(short *, int, GVFILE *);
 int dig__fread_port_I(int *, int, GVFILE *);
 int dig__fread_port_P(plus_t *, int, GVFILE *);
 int dig__fread_port_C(char *, int, GVFILE *);
-int dig__fwrite_port_D(double *, int, GVFILE *);
-int dig__fwrite_port_F(float *, int, GVFILE *);
-int dig__fwrite_port_O(off_t *, int, GVFILE *, int);
-int dig__fwrite_port_L(long *, int, GVFILE *);
-int dig__fwrite_port_S(short *, int, GVFILE *);
-int dig__fwrite_port_I(int *, int, GVFILE *);
-int dig__fwrite_port_P(plus_t *, int, GVFILE *);
-int dig__fwrite_port_C(char *, int, GVFILE *);
+int dig__fwrite_port_D(const double *, int, GVFILE *);
+int dig__fwrite_port_F(const float *, int, GVFILE *);
+int dig__fwrite_port_O(const off_t *, int, GVFILE *, int);
+int dig__fwrite_port_L(const long *, int, GVFILE *);
+int dig__fwrite_port_S(const short *, int, GVFILE *);
+int dig__fwrite_port_I(const int *, int, GVFILE *);
+int dig__fwrite_port_P(const plus_t *, int, GVFILE *);
+int dig__fwrite_port_C(const char *, int, GVFILE *);
 
 
 /******************************************************************************/
@@ -81,7 +81,7 @@ int dig_bound_box2(struct line_pnts *, double *, double *, double *, double *,
 		   long);
 int dig_box_copy(BOUND_BOX *, BOUND_BOX *);
 int dig_box_extend(BOUND_BOX *, BOUND_BOX *);
-int dig_line_box(struct line_pnts *, BOUND_BOX *);
+int dig_line_box(const struct line_pnts *, BOUND_BOX *);
 int dig_line_set_box(struct Plus_head *, plus_t, BOUND_BOX *);
 int dig_line_get_box(struct Plus_head *, plus_t, BOUND_BOX *);
 int dig_area_set_box(struct Plus_head *, plus_t, BOUND_BOX *);
@@ -127,12 +127,12 @@ int dig_spindex_init(struct Plus_head *);
 
 int dig_add_node(struct Plus_head *, double, double, double);
 int dig_which_node(struct Plus_head *, double, double, double);
-int dig_add_line(struct Plus_head *, int, struct line_pnts *,
+int dig_add_line(struct Plus_head *, int, const struct line_pnts *,
 		 off_t);
 int dig_restore_line(struct Plus_head *, int, int, struct line_pnts *,
 		     off_t);
 int dig_del_line(struct Plus_head *, int);
-int dig_node_add_line(struct Plus_head *, int, int, struct line_pnts *, int);
+int dig_node_add_line(struct Plus_head *, int, int, const struct line_pnts *, int);
 float dig_node_line_angle(struct Plus_head *, int, int);
 int dig_node_angle_check(struct Plus_head *, int, int);
 
@@ -164,10 +164,10 @@ int dig_spidx_del_line(struct Plus_head *, int);
 int dig_spidx_del_area(struct Plus_head *, int);
 int dig_spidx_del_isle(struct Plus_head *, int);
 
-int dig_select_nodes(struct Plus_head *, BOUND_BOX *, struct ilist *);
-int dig_select_lines(struct Plus_head *, BOUND_BOX *, struct ilist *);
-int dig_select_areas(struct Plus_head *, BOUND_BOX *, struct ilist *);
-int dig_select_isles(struct Plus_head *, BOUND_BOX *, struct ilist *);
+int dig_select_nodes(struct Plus_head *, const BOUND_BOX *, struct ilist *);
+int dig_select_lines(struct Plus_head *, const BOUND_BOX *, struct ilist *);
+int dig_select_areas(struct Plus_head *, const BOUND_BOX *, struct ilist *);
+int dig_select_isles(struct Plus_head *, const BOUND_BOX *, struct ilist *);
 int dig_find_node(struct Plus_head *, double, double, double);
 
 int dig_spidx_init(struct Plus_head *);

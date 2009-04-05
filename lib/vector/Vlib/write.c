@@ -5,16 +5,13 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2009 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
 
    \author Radim Blazek
-
-   \date 2001
+   \author Updated by Martin Landa <landa.martin gmail.com> (restore lines)
  */
 
 #include <grass/config.h>
@@ -126,7 +123,7 @@ static int (*Vect_restore_line_array[][3]) () = {
  */
 off_t
 Vect_write_line(struct Map_info *Map,
-		int type, struct line_pnts *points, struct line_cats *cats)
+		int type, const struct line_pnts *points, const struct line_cats *cats)
 {
     off_t offset;
 
@@ -174,7 +171,7 @@ Vect_write_line(struct Map_info *Map,
 int
 Vect_rewrite_line(struct Map_info *Map,
 		  int line,
-		  int type, struct line_pnts *points, struct line_cats *cats)
+		  int type, const struct line_pnts *points, const struct line_cats *cats)
 {
     long ret;
 

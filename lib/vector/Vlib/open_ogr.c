@@ -5,17 +5,13 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2009 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
-   Update to GRASS 5.7 Radim Blazek and David D. Gray.
-
-   \date 2001
+   \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
  */
 
 #include <unistd.h>
@@ -35,7 +31,7 @@
 
    Map->name and Map->mapset must be set before.
 
-   \param Map pointer to vector map
+   \param[out] Map pointer to vector map
    \param update non-zero for write mode, otherwise read-only
    (write mode is currently not supported)
 
@@ -106,7 +102,7 @@ int V1_open_old_ogr(struct Map_info *Map, int update)
 /**
    \brief Open OGR specific level 2 files (feature index)
 
-   \param Map pointer to vector map
+   \param[out] Map pointer to vector map
 
    \return 0 success
    \return -1 error

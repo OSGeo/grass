@@ -1,11 +1,11 @@
 /*!
    \file box.c
 
-   \brief Vector library - bounding box related fns
+   \brief Vector library - bounding box
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2009 by the GRASS Development Team
 
    This program is free software under the 
    GNU General Public License (>=v2). 
@@ -13,8 +13,6 @@
    for details.
 
    \author Radim Blazek
-
-   \date 2001-2008
  */
 
 #include <stdlib.h>
@@ -30,7 +28,7 @@
    \return 1 point is in box
    \return 0 point is not in box
  */
-int Vect_point_in_box(double x, double y, double z, BOUND_BOX * Box)
+int Vect_point_in_box(double x, double y, double z, const BOUND_BOX * Box)
 {
 
     if (x >= Box->W && x <= Box->E &&
@@ -50,7 +48,7 @@ int Vect_point_in_box(double x, double y, double z, BOUND_BOX * Box)
    \return 1 boxes overlap
    \return 0 boxes do not overlap
  */
-int Vect_box_overlap(BOUND_BOX * A, BOUND_BOX * B)
+int Vect_box_overlap(const BOUND_BOX * A, const BOUND_BOX * B)
 {
 
     if (A->E < B->W || A->W > B->E ||
@@ -69,7 +67,7 @@ int Vect_box_overlap(BOUND_BOX * A, BOUND_BOX * B)
 
    \return 1
  */
-int Vect_box_copy(BOUND_BOX * A, BOUND_BOX * B)
+int Vect_box_copy(BOUND_BOX * A, const BOUND_BOX * B)
 {
 
     A->N = B->N;
@@ -90,7 +88,7 @@ int Vect_box_copy(BOUND_BOX * A, BOUND_BOX * B)
 
    \return 1
  */
-int Vect_box_extend(BOUND_BOX * A, BOUND_BOX * B)
+int Vect_box_extend(BOUND_BOX * A, const BOUND_BOX * B)
 {
 
     if (B->N > A->N)
@@ -113,18 +111,18 @@ int Vect_box_extend(BOUND_BOX * A, BOUND_BOX * B)
 /*!
  * \brief Clip coordinates to box, if necessary, lines extending outside of a box.
  *
- * A line represented by the coordinates <b>x, y</b> and <b>c_x, c_y</b> is clipped to
- * the window defined by <b>s</b> (south), <b>n</b> (north), <b>w</b>
- * (west), and <b>e</b> (east). Note that the following constraints must be
+ * A line represented by the coordinates <em>x, y</em> and <em>c_x, c_y</em> is clipped to
+ * the window defined by <em>s</em> (south), <em>n</em> (north), <em>w</em>
+ * (west), and <em>e</em> (east). Note that the following constraints must be
  * true:
  * w <e
  * s <n
- * The <b>x</b> and <b>c_x</b> are values to be compared to <b>w</b> and
- * <b>e.</b> The <b>y</b> and <b>c_y</b> are values to be compared to
- * <b>s</b> and <b>n.</b>
- * The <b>x</b> and <b>c_x</b> values returned lie between <b>w</b> and 
- * <b>e.</b> The <b>y</b> and <b>c_y</b> values returned lie between 
- * <b>s</b> and <b>n.</b>
+ * The <em>x</em> and <em>c_x</em> are values to be compared to <em>w</em> and
+ * <em>e.</em> The <em>y</em> and <em>c_y</em> are values to be compared to
+ * <em>s</em> and <em>n.</em>
+ * The <em>x</em> and <em>c_x</em> values returned lie between <em>w</em> and 
+ * <em>e.</em> The <em>y</em> and <em>c_y</em> values returned lie between 
+ * <em>s</em> and <em>n.</em>
  *
  *  \param x, y coordinates (w, e)
  *  \param c_x,c_y coordinates (s, n)
@@ -135,7 +133,7 @@ int Vect_box_extend(BOUND_BOX * A, BOUND_BOX * B)
  */
 
 int
-Vect_box_clip(double *x, double *y, double *c_x, double *c_y, BOUND_BOX * Box)
+Vect_box_clip(double *x, double *y, double *c_x, double *c_y, const BOUND_BOX * Box)
 {
     int mod;
 
@@ -196,18 +194,18 @@ Vect_box_clip(double *x, double *y, double *c_x, double *c_y, BOUND_BOX * Box)
 
 
 /*!
-   \brief Get boundary box of line
+   \brief Get bounding box of given feature
 
    \param Map vector map
-   \param line line id
+   \param line feature id
    \param[out] Box bounding box
 
    \return 1 on success
    \return 0 line is dead
  */
-int Vect_get_line_box(struct Map_info *Map, int line, BOUND_BOX * Box)
+int Vect_get_line_box(const struct Map_info *Map, int line, BOUND_BOX * Box)
 {
-    struct Plus_head *Plus;
+    const struct Plus_head *Plus;
     P_LINE *Line;
 
     Plus = &(Map->plus);
@@ -235,7 +233,7 @@ int Vect_get_line_box(struct Map_info *Map, int line, BOUND_BOX * Box)
 }
 
 /*!
-   \brief Get boundary box of area
+   \brief Get bounding box of area
 
    \param Map vector map
    \param area area id
@@ -244,9 +242,9 @@ int Vect_get_line_box(struct Map_info *Map, int line, BOUND_BOX * Box)
    \return 1 on success
    \return 0 area is dead
  */
-int Vect_get_area_box(struct Map_info *Map, int area, BOUND_BOX * Box)
+int Vect_get_area_box(const struct Map_info *Map, int area, BOUND_BOX * Box)
 {
-    struct Plus_head *Plus;
+    const struct Plus_head *Plus;
     P_AREA *Area;
 
     Plus = &(Map->plus);
@@ -274,7 +272,7 @@ int Vect_get_area_box(struct Map_info *Map, int area, BOUND_BOX * Box)
 }
 
 /*!
-   \brief Get boundary box of isle
+   \brief Get bounding box of isle
 
    \param Map vector map
    \param isle isle id
@@ -283,9 +281,9 @@ int Vect_get_area_box(struct Map_info *Map, int area, BOUND_BOX * Box)
    \return 1 on success
    \return 0 isle is dead
  */
-int Vect_get_isle_box(struct Map_info *Map, int isle, BOUND_BOX * Box)
+int Vect_get_isle_box(const struct Map_info *Map, int isle, BOUND_BOX * Box)
 {
-    struct Plus_head *Plus;
+    const struct Plus_head *Plus;
     P_ISLE *Isle;
 
     Plus = &(Map->plus);
@@ -313,16 +311,17 @@ int Vect_get_isle_box(struct Map_info *Map, int isle, BOUND_BOX * Box)
 }
 
 /*!
-   \brief Get boundary box of map
+   \brief Get bounding box of map (all features in the map)
 
    \param Map vector map
    \param[out] Box bouding box
 
-   \return 1 on success, 0 on error
+   \return 1 on success
+   \return 0 on error
  */
-int Vect_get_map_box(struct Map_info *Map, BOUND_BOX * Box)
+int Vect_get_map_box(const struct Map_info *Map, BOUND_BOX * Box)
 {
-    struct Plus_head *Plus;
+    const struct Plus_head *Plus;
 
     Plus = &(Map->plus);
 
@@ -338,14 +337,15 @@ int Vect_get_map_box(struct Map_info *Map, BOUND_BOX * Box)
 
 
 /*!
-   \brief Copy region Window to Box
+   \brief Copy region window to bounding box
 
    \param Window region structure (raster-based)
    \param[out] Box boundary box (vector-based)
 
-   \return 1 on success, 0 on error
+   \return 1 on success
+   \return 0 on error
  */
-int Vect_region_box(struct Cell_head *Window, BOUND_BOX * Box)
+int Vect_region_box(const struct Cell_head *Window, BOUND_BOX * Box)
 {
 
     Box->N = Window->north;

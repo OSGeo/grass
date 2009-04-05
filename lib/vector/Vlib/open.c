@@ -5,17 +5,14 @@
  *
  * Higher level functions for reading/writing/manipulating vectors.
  *
- * (C) 2001-2008 by the GRASS Development Team
+ * (C) 2001-2009 by the GRASS Development Team
  *
- * This program is free software under the 
- * GNU General Public License (>=v2). 
- * Read the file COPYING that comes with GRASS
- * for details.
+ * This program is free software under the GNU General Public License
+ * (>=v2).  Read the file COPYING that comes with GRASS for details.
  *
  * \author Original author CERL, probably Dave Gerdes or Mike
- * Higgins. Update to GRASS 5.7 Radim Blazek and David D. Gray.
- *
- * \date 2001-2008
+ * Higgins.
+ * \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
  */
 #include <grass/config.h>
 #include <stdlib.h>
@@ -88,7 +85,7 @@ static void fatal_error(int ferror, char *errmsg)
  * will be downward compatible and which your programs should 
  * support by default.
  *
- * \param[in] level vector (topo) level
+ * \param level vector (topo) level
  *
  * \return 0 on success
  * \return 1 on error
@@ -114,10 +111,10 @@ int Vect_set_open_level(int level)
  * In case of error, the functions respect fatal error settings.
  *
  * \param[out] Map vector map
- * \param[in] name name of vector map to open
- * \param[in] mapset mapset name
- * \param[in] update open for update
- * \param[in] head_only read only header info from 'head', 'dbln', 'topo', 'cidx' is not opened. The header may be opened on level 2 only. 
+ * \param name name of vector map to open
+ * \param mapset mapset name
+ * \param update open for update
+ * \param head_only read only header info from 'head', 'dbln', 'topo', 'cidx' is not opened. The header may be opened on level 2 only. 
  *
  * \return level of openness (1, 2)
  * \return -1 in error
@@ -408,8 +405,8 @@ Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
  * In case of error, the functions respect fatal error settings.
  *
  * \param[out] Map vector map
- * \param[in] name name of vector map
- * \param[in] mapset mapset name
+ * \param name name of vector map
+ * \param mapset mapset name
  *
  * \return level of openness [1, 2, (3)]
  * \return -1 on error
@@ -425,8 +422,8 @@ int Vect_open_old(struct Map_info *Map, const char *name, const char *mapset)
  * In case of error, the functions respect fatal error settings.
  *
  * \param[out] Map vector map
- * \param[in] name name of vector map to update
- * \param[in] mapset mapset name
+ * \param name name of vector map to update
+ * \param mapset mapset name
  *
  * \return level of openness [1, 2, (3)]
  * \return -1 on error
@@ -462,8 +459,8 @@ Vect_open_update(struct Map_info *Map, const char *name, const char *mapset)
  * In case of error, the functions respect fatal error settings.
  * 
  * \param[out] Map vector map
- * \param[in] name name of vector map to read
- * \param[in] mapset mapset name
+ * \param name name of vector map to read
+ * \param mapset mapset name
  *
  * \return level of openness [1, 2, (3)]
  * \return -1 on error
@@ -480,8 +477,8 @@ Vect_open_old_head(struct Map_info *Map, const char *name, const char *mapset)
  * In case of error, the functions respect fatal error settings.
  *
  * \param[out] Map vector map
- * \param[in] name name of vector map to update
- * \param[in] mapset mapset name
+ * \param name name of vector map to update
+ * \param mapset mapset name
  *
  * \return level of openness [1, 2, (3)]
  * \return -1 on error
@@ -512,8 +509,8 @@ Vect_open_update_head(struct Map_info *Map, const char *name,
  * \brief Open new vector for reading/writing
  *
  * \param[out] Map vector map
- * \param[in] name name of vector map
- * \param[in] with_z 2D/3D vector map
+ * \param name name of vector map
+ * \param with_z 2D/3D vector map
  *
  * \return 1 on success
  * \return -1 on error
@@ -606,13 +603,13 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
 /*!
  * \brief Update Coor_info structure
  *
- * \param[in] Map vector map
+ * \param Map vector map
  * \param[out] Info Coor_info structure
  *
  * \return 1 on success
  * \return 0 on error
  */
-int Vect_coor_info(struct Map_info *Map, struct Coor_info *Info)
+int Vect_coor_info(const struct Map_info *Map, struct Coor_info *Info)
 {
     char buf[2000], path[2000];
     struct stat stat_buf;
@@ -646,7 +643,7 @@ int Vect_coor_info(struct Map_info *Map, struct Coor_info *Info)
 	Info->mtime = 0L;
 	break;
     }
-    G_debug(1, "Info->size = %ld, Info->mtime = %ld", Info->size,
+    G_debug(1, "Info->size = %lu, Info->mtime = %ld", (unsigned long) Info->size,
 	    Info->mtime);
 
     return 1;
@@ -655,12 +652,15 @@ int Vect_coor_info(struct Map_info *Map, struct Coor_info *Info)
 /*!
  * \brief Gets maptype (native, shape, postgis)
  *
- * \param[in] Map vector map
+ * Note: string is allocated by G_store(). Free allocated memory with
+ * G_free().
+ *
+ * \param Map vector map
  *
  * \return maptype string on success
  * \return error message on error
  */
-const char *Vect_maptype_info(struct Map_info *Map)
+const char *Vect_maptype_info(const struct Map_info *Map)
 {
     char maptype[1000];
 
@@ -684,7 +684,7 @@ const char *Vect_maptype_info(struct Map_info *Map)
  * \brief Open topo file
  *
  * \param[in,out] Map vector map
- * \param[in] head_only open only head
+ * \param head_only open only head
  *
  * \return 0 on success
  * \return 1 file does not exist
@@ -726,8 +726,8 @@ int Vect_open_topo(struct Map_info *Map, int head_only)
     if (dig_Rd_Plus_head(&fp, Plus) == -1)
 	return -1;
 
-    G_debug(1, "Topo head: coor size = %ld, coor mtime = %ld",
-	    Plus->coor_size, Plus->coor_mtime);
+    G_debug(1, "Topo head: coor size = %lu, coor mtime = %ld",
+	    (unsigned long) Plus->coor_size, Plus->coor_mtime);
 
     /* do checks */
     err = 0;
