@@ -67,6 +67,7 @@ int update(struct Map_info *Map)
     case O_PERIMETER:
     case O_SLOPE:
     case O_SINUOUS:
+    case O_AZIMUTH:
 	sprintf(buf1, "update %s set %s =", Fi->table, options.col[0]);
 	break;
     case O_COOR:
@@ -102,6 +103,7 @@ int update(struct Map_info *Map)
 	case O_PERIMETER:
 	case O_SLOPE:
 	case O_SINUOUS:
+	case O_AZIMUTH:
 	    sprintf(buf2, "%s %f where %s = %d", buf1, Values[i].d1, Fi->key,
 		    Values[i].cat);
 	    break;

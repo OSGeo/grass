@@ -62,7 +62,7 @@ int read_lines(struct Map_info *Map)
     register int line_num;
     struct line_pnts *Points, *EndPoints;
     struct line_cats *Cats, *LCats, *RCats;
-    double len, slope, dist;
+    double len, slope, dist, dx, dy, azimuth;
 
     /* Initialize the Point struct */
     Points = Vect_new_line_struct();
@@ -191,6 +191,18 @@ int read_lines(struct Map_info *Map)
 		    Vect_destroy_line_struct(EndPoints);
 		    EndPoints = Vect_new_line_struct();
 		    Values[idx].d1 = len / dist;
+		}
+		else if (options.option == O_AZIMUTH && (type & GV_LINES)) {
+			/* Calculate azimuth between line start and end points in degrees */
+			dx = (Points->x[Points->n_points - 1] - Points->x[0]);
+			dy = (Points->y[Points->n_points - 1] - Points->y[0]);
+			/* If line is closed... */
+			if (dx == 0.0 && dy == 0.0) azimuth = -1;
+			else {
+				azimuth = atan2(dx,dy);
+				if (azimuth < 0) azimuth = azimuth + 2*M_PI;
+			}
+			Values[idx].d1 = azimuth;
 		}
 
 		found = 1;

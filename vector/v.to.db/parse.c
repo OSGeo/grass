@@ -52,7 +52,7 @@ int parse_command_line(int argc, char *argv[])
     parms.option->required = YES;
     parms.option->multiple = NO;
     parms.option->options =
-	"cat,area,compact,fd,perimeter,length,count,coor,start,end,sides,query,slope,sinuous";
+	"cat,area,compact,fd,perimeter,length,count,coor,start,end,sides,query,slope,sinuous,azimuth";
     parms.option->description = _("Value to upload");
     parms.option->descriptions =
 	"cat;insert new row for each category if doesn't exist yet;"
@@ -72,7 +72,8 @@ int parse_command_line(int argc, char *argv[])
 	"query;result of a database query for all records of the geometry"
 	"(or geometries) from table specified by 'qlayer' option;"
 	"slope;slope steepness of vector line or boundary;"
-	"sinuous;line sinuousity, calculated as line length / distance between end points;";
+	"sinuous;line sinuousity, calculated as line length / distance between end points;"
+	"azimuth;line azimuth, calculated as angle between North direction and endnode direction at startnode";
 
     parms.units = G_define_option();
     parms.units->key = "units";
@@ -80,10 +81,10 @@ int parse_command_line(int argc, char *argv[])
     parms.units->required = NO;
     parms.units->multiple = NO;
     parms.units->options =
-	"mi,miles,f,feet,me,meters,k,kilometers,a,acres,h,hectares";
+	"mi,miles,f,feet,me,meters,k,kilometers,a,acres,h,hectares,r,radians,d,degrees";
     parms.units->label = _("Units");
     parms.units->description =
-	_("mi(les),f(eet),me(ters),k(ilometers),a(cres),h(ectares)");
+	_("mi(les),f(eet),me(ters),k(ilometers),a(cres),h(ectares),r(adians),d(egrees)");
 
     parms.col = G_define_standard_option(G_OPT_DB_COLUMNS);
 
@@ -140,7 +141,7 @@ int parse_command_line(int argc, char *argv[])
     }
 
     if (!options.print) {
-	if (options.option == O_AREA || options.option == O_LENGTH || options.option == O_COUNT || options.option == O_QUERY || options.option == O_COMPACT || options.option == O_FD || options.option == O_PERIMETER || options.option == O_SLOPE || options.option == O_SINUOUS) {	/* one column required */
+	if (options.option == O_AREA || options.option == O_LENGTH || options.option == O_COUNT || options.option == O_QUERY || options.option == O_COMPACT || options.option == O_FD || options.option == O_PERIMETER || options.option == O_SLOPE || options.option == O_SINUOUS || options.option == O_AZIMUTH) {	/* one column required */
 	    if (ncols != 1) {
 		G_fatal_error(_("This option requires one column"));
 	    }
@@ -167,6 +168,9 @@ int parse_command_line(int argc, char *argv[])
 
     if (options.option == O_SINUOUS && !(options.type | GV_LINES))
 	G_fatal_error(_("The 'sinuous' option makes sense only for lines"));
+    
+    if (options.option == O_AZIMUTH && !(options.type | GV_LINES))
+	G_fatal_error(_("The 'azimuth' option makes sense only for lines"));
 
 
     return 0;
@@ -188,6 +192,10 @@ int parse_units(char *s)
 	x = U_ACRES;
     else if (match(s, "hectares", 1))
 	x = U_HECTARES;
+    else if (match(s, "radians", 1))
+	x = U_RADIANS;
+    else if (match(s, "degrees", 1))
+	x = U_DEGREES;
 
     return x;
 }
@@ -224,6 +232,8 @@ int parse_option(char *s)
 	x = O_SLOPE;
     else if (strcmp(s, "sinuous") == 0)
 	x = O_SINUOUS;
+    else if (strcmp(s, "azimuth") == 0)
+	x = O_AZIMUTH;
 
     return x;
 }
