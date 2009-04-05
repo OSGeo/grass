@@ -86,9 +86,8 @@ quant_load_range(struct Quant *quant, const char *name, const char *mapset)
 	return 0;
     G_get_fp_range_min_max(&fprange, &dMin, &dMax);
     if (G_is_d_null_value(&dMin) || G_is_d_null_value(&dMax)) {
-	sprintf(buf, _("The floating data range for %s@%s is empty"), name,
-		mapset);
-	G_warning(buf);
+	G_warning (_("The floating data range for %s@%s is empty"),
+		   name, mapset);
 	return -3;
     }
 
@@ -96,9 +95,8 @@ quant_load_range(struct Quant *quant, const char *name, const char *mapset)
 	return 0;
     G_get_range_min_max(&range, &min, &max);
     if (G_is_c_null_value(&min) && G_is_c_null_value(&max)) {
-	sprintf(buf, _("The integer data range for %s@%s is empty"), name,
-		mapset);
-	G_warning(buf);
+	G_warning (_("The integer data range for %s@%s is empty"),
+		   name, mapset);
 	return -3;
     }
 
@@ -121,10 +119,9 @@ int G__quant_import(const char *name, const char *mapset, struct Quant *quant)
     G_quant_free(quant);
 
     if (G_raster_map_type(name, mapset) == CELL_TYPE) {
-	sprintf(buf,
-		"G__quant_import: attempt to open quantization table for CELL_TYPE file [%s] in mapset {%s]",
-		name, mapset);
-	G_warning(buf);
+	G_warning (_("G__quant_import: attempt to open quantization"
+		     " table for CELL_TYPE file [%s] in mapset {%s]"),
+		   name, mapset);
 	return -2;
     }
 
@@ -164,9 +161,8 @@ int G__quant_import(const char *name, const char *mapset, struct Quant *quant)
 	err = "empty";
     }
 
-    sprintf(buf,
-	    _("quantization file [%s] in mapset [%s] %s"), name, mapset, err);
-    G_warning(buf);
+    G_warning (_("quantization file [%s] in mapset [%s] %s"),
+	       name, mapset, err);
 
     return 0;
 }

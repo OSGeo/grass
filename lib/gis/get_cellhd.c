@@ -77,7 +77,7 @@ int G_get_cellhd(const char *name, const char *mapset,
 		sprintf(tail, _("which is missing."));
 	    else
 		sprintf(tail, _("whose header file can't be opened."));
-	    G_warning(buf);
+	    G_warning ("%s", buf);
 	    return -1;
 	}
     }
