@@ -1,11 +1,9 @@
 <H2>DESCRIPTION</H2>
 
-<EM>i.modis.qc</EM> Extracts Requested Quality Assessment flags from Modis 09 A and Q products 
-(Surface_reflectance_250/500m_quality_control_flags).
-This does not yet include QA_state_500m layer (see Notes and TODO).
+<EM>i.modis.qc</EM> Extracts Requested Quality Assessment flags from the following Modis products: MOD09A1, MOD09Q1 and MOD11A2. This does include MOD09A1 QA_state_500m layer (see Notes).
 
 <pre>
-<EM>MODLAND QA Bits 250m/500m bits[0-1]</EM>
+<EM>MOD09A1/Q1: MODLAND QA Bits. bits=[0-1]</EM>
 </pre>
 <ul>
  <li>[00]= class 0: Corrected product produced at ideal quality -- all bands</li>
@@ -15,7 +13,7 @@ This does not yet include QA_state_500m layer (see Notes and TODO).
 </ul>
 
 <pre>
-<EM>Cloud State 250m Unsigned Int bits[2-3] </EM>
+<EM>MOD09Q1: Cloud State. bits=[2-3] </EM>
 </pre>
 <ul>
  <li>[00]= class 0: Clear -- No clouds</li>
@@ -25,8 +23,8 @@ This does not yet include QA_state_500m layer (see Notes and TODO).
 </ul>
 
 <pre>
-<EM>Band-wise Data Quality 250m Unsigned Int bits[4-7][8-11]</EM>
-<EM>Band-wise Data Quality 500m long Int bits[2-5][6-9][10-13][14-17][18-21][22-25][26-29]</EM>
+<EM>MOD09Q1: Band-wise Data Quality 250m bits=[4-7][8-11]</EM>
+<EM>MOD09A1: Band-wise Data Quality 500m bits=[2-5][6-9][10-13][14-17][18-21][22-25][26-29]</EM>
 </pre>
 <ul>
  <li>[0000]= class 0: highest quality</li>
@@ -43,7 +41,7 @@ This does not yet include QA_state_500m layer (see Notes and TODO).
 </ul>
 
 <pre>
-<EM>Atmospheric correction 250m/500m bit[12]/[30]</EM>
+<EM>MOD09A1/Q1: Atmospheric correction bit=[12]/[30]</EM>
 </pre>
 <ul>
  <li>[0]= class 0: Not Corrected product</li>
@@ -51,7 +49,7 @@ This does not yet include QA_state_500m layer (see Notes and TODO).
 </ul>
 
 <pre>
-<EM>Adjacency correction 250m/500m bit[13][31]</EM>
+<EM>MOD09A1/Q1: Adjacency correction bit=[13]/[31]</EM>
 </pre>
 <ul>
  <li>[0]= class 0: Not Corrected product</li>
@@ -59,39 +57,180 @@ This does not yet include QA_state_500m layer (see Notes and TODO).
 </ul>
 
 <pre>
-<EM>Different orbit from 500m product, 250m Unsigned Int bit[14]</EM>
+<EM>MOD09Q1: Different orbit from 500m product, bit=[14]</EM>
 </pre>
 <ul>
  <li>[0]= class 0: same orbit as 500m</li>
  <li>[1]= class 1: different orbit from 500m</li>
 </ul>
 
+<pre>
+<EM>MOD11A2: Mandatory QA Flags bits=[0-1]</EM>
+</pre>
+<ul>
+ <li>[00]= class 0: LST produced, good quality, not necessary to examine more detailed QA</li>
+ <li>[01]= class 1: LST produced, other quality, recommend examination of more detailed QA</li>
+ <li>[10]= class 2: LST not produced due to cloud effects</li>
+ <li>[11]= class 3: LST not produced primarily due to reasons other than cloud</li>
+</ul>
+
+<pre>
+<EM>MOD11A2: Data Quality Flag bits=[2-3]</EM>
+</pre>
+<ul>
+ <li>[00]= class 0: Good data quality of L1B in 7 TIR bands</li>
+ <li>[01]= class 1: Other quality data</li>
+ <li>[10]= class 2: TBD</li>
+ <li>[11]= class 3: TBD</li>
+</ul>
+
+<pre>
+<EM>MOD11A2: Emis Error Flag bits=[4-5]</EM>
+</pre>
+<ul>
+ <li>[00]= class 0: Average emissivity error le 0.01</li>
+ <li>[01]= class 1: Average emissivity error le 0.02</li>
+ <li>[10]= class 2: Average emissivity error le 0.04</li>
+ <li>[11]= class 3: Average emissivity error gt 0.04</li>
+</ul>
+
+<pre>
+<EM>MOD11A2: LST Error Flag bits=[4-5]</EM>
+</pre>
+<ul>
+ <li>[00]= class 0: Average LST error le 1</li>
+ <li>[01]= class 1: Average LST error le 2</li>
+ <li>[10]= class 2: Average LST error le 3</li> 
+ <li>[11]= class 3: Average LST error gt 3</li>
+</ul>
+
+<pre>
+<EM>MOD09A1s: Cloud State bits=[0-1]</EM>
+</pre>
+<ul>
+ <li>[00]= class 0: clear</li>
+ <li>[01]= class 1: cloudy</li>
+ <li>[10]= class 2: mixed</li>
+ <li>[11]= class 3: not set, assumed clear</li>
+</ul>
+
+<pre>
+<EM>MOD09A1s: Cloud shadow bits=[2]</EM>
+</pre>
+<ul>
+ <li>[0]= class 0: yes</li>
+ <li>[1]= class 1: no</li>
+</ul>
+
+<pre>
+<EM>MOD09A1s: Land/Water Flag bits=[3-5]</EM>
+</pre>
+<ul>
+ <li>[000]= class 0: Shallow ocean</li>
+ <li>[001]= class 1: Land</li>
+ <li>[010]= class 2: Ocean coastlines and lake shorelines</li>
+ <li>[011]= class 3: Shallow inland water</li>
+ <li>[100]= class 4: Ephemeral water</li>
+ <li>[101]= class 5: Deep inland water</li>
+ <li>[110]= class 6: Continental/moderate ocean</li>
+ <li>[111]= class 7: Deep ocean</li>
+</ul>
+
+<pre>
+<EM>MOD09A1s: Aerosol Quantity bits=[6-7]</EM>
+</pre>
+<ul>
+ <li>[00]= class 0: Climatology</li>
+ <li>[01]= class 1: Low</li>
+ <li>[10]= class 2: Average</li>
+ <li>[11]= class 3: High</li>
+</ul>
+
+<pre>
+<EM>MOD09A1s: Cirrus detected bits=[8-9]</EM>
+</pre>
+<ul>
+ <li>[00]= class 0: None</li>
+ <li>[01]= class 1: Small</li>
+ <li>[10]= class 2: Average</li>
+ <li>[11]= class 3: High</li>
+</ul>
+
+<pre>
+<EM>MOD09A1s: Internal Cloud Algorithm Flag bits=[10]</EM>
+</pre>
+<ul>
+ <li>[0]= class 0: Cloud</li>
+ <li>[1]= class 1: No cloud</li>
+</ul>
+
+<pre>
+<EM>MOD09A1s: Internal Fire Algorithm Flag bits=[11]</EM>
+</pre>
+<ul>
+ <li>[0]= class 0: Fire</li>
+ <li>[1]= class 1: No fire</li>
+</ul>
+
+<pre>
+<EM>MOD09A1s: MOD35 snow/ice flag bits=[12]</EM>
+</pre>
+<ul>
+ <li>[0]= class 0: Yes</li>
+ <li>[1]= class 1: No</li>
+</ul>
+
+<pre>
+<EM>MOD09A1s: Pixel adjacent to cloud bits=[13]</EM>
+</pre>
+<ul>
+ <li>[0]= class 0: Yes</li>
+ <li>[1]= class 1: No</li>
+</ul>
+
+<pre>
+<EM>MOD09A1s: BRDF correction performed bits=[14]</EM>
+</pre>
+<ul>
+ <li>[0]= class 0: Yes</li>
+ <li>[1]= class 1: No</li>
+</ul>
+
+<pre>
+<EM>MOD09A1s: Internal Snow Mask bits=[15]</EM>
+</pre>
+<ul>
+ <li>[0]= class 0: Snow</li>
+ <li>[1]= class 1: No snow</li>
+</ul>
+
+
 
 <H2>NOTES</H2>
-It seems that cloud related info is not filled properly since version 3.
-State-QA 500m images should be used (see Vermote et al., 2008).
+In MOD09A1: It seems that cloud related info is not filled properly in the standard QC (MOD09A1 in this module) since version 3, State-QA 500m images (MOD09A1s in this module) should be used (see Vermote et al., 2008).<br>
 
 <H2>TODO</H2>
-STATE-QA500m flag Processing should be included for detailed cloud status. 
-More testing is required.
+Add one Day products.<br>
 
 <H2>SEE ALSO</H2>
-
-Vermote E.F., Kotchenova S.Y., Ray J.P.
-MODIS Surface Reflectance User's Guide.
-Version 1.2. June 2008.
-MODIS Land Surface Reflectance Science Computing Facility.
+<br>
+<A HREF="https://lpdaac.usgs.gov/lpdaac/products/modis_products_table">MODIS Products</A><br>
+<br>
+Vermote E.F., Kotchenova S.Y., Ray J.P.<br>
+MODIS Surface Reflectance User's Guide.<br>
+Version 1.2. June 2008.<br>
+MODIS Land Surface Reflectance Science Computing Facility.<br>
 <A HREF="http://modis-sr.ltdri.org">Homepage</A><br>
 
 
-<em>
+<EM>
 <A HREF="i.vi.html">i.vi</A><br>
-</em>
+</EM>
 
 
 <H2>AUTHORS</H2>
-Yann Chemin, International Rice Research Institute, The Philippines.<BR>
+Yann Chemin<BR>
 
 
 <p>
-<i>Last changed: $Date: 2008/07/28 15:33:42 $</i>
+<i>Last changed: $Date: 2009/04/05 15:09:33 $</i>
