@@ -98,7 +98,6 @@ int main(int argc, char *argv[])
                             "mod11A2;LST 1Km 8-days (Day/Night);");
     input->answer = _("mod09Q1");
 
-    input1->answer = _("modland_qa_bits");
     input1 = G_define_option();
     input1->key = _("qcname");
     input1->type = TYPE_STRING;
