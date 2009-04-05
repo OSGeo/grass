@@ -89,8 +89,7 @@ int main(int argc, char *argv[])
     input->key = "productname";
     input->type = TYPE_STRING;
     input->required = YES;
-    input->gisprompt = _("Name of MODIS product type");
-    input->description = _("Name of MODIS product");
+    input->description = _("Name of MODIS product type");
     input->descriptions =_("mod09Q1;surf. refl. 250m 8-days;"
                             "mod09A1;surf. refl. 500m 8-days;"
                             "mod09A1s;surf. refl. 500m 8-days, State QA;"
@@ -101,8 +100,7 @@ int main(int argc, char *argv[])
     input1->key = "qcname";
     input1->type = TYPE_STRING;
     input1->required = YES;
-    input1->gisprompt = _("Name of QC type to extract");
-    input1->description = _("Name of QC");
+    input1->description = _("Name of QC type to extract");
     input1->descriptions =_("adjcorr;mod09: Adjacency Correction;"
                             "atcorr;mod09: Atmospheric Correction;"
                             "cloud;mod09: Cloud State;"
