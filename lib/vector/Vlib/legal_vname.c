@@ -3,16 +3,12 @@
 
    \brief Vector library - Check if map name is legal vector map name
 
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2009 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author Radim Blazek
-
-   \date 2001-2008
  */
 
 #include <string.h>
@@ -27,7 +23,7 @@
 
    Check also for SQL keywords.
 
-   \param[in] s filename to be checked
+   \param s filename to be checked
 
    \return 1 OK
    \return -1 if name does not start with letter A..Za..z or if name does not continue with A..Za..z0..9_@
@@ -83,9 +79,9 @@ int Vect_legal_filename(const char *s)
    - if can find input map
    - if input was found in current mapset, check if input != output
 
-   \param[in] input input name
-   \param[in] output output name
-   \param[in] error error type GV_FATAL_EXIT, GV_FATAL_PRINT, GV_FATAL_RETURN
+   \param input input name
+   \param output output name
+   \param error error type GV_FATAL_EXIT, GV_FATAL_PRINT, GV_FATAL_RETURN
 
    \return 0 OK
    \return 1 error

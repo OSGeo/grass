@@ -5,18 +5,14 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   TODO: Vect_graph_free ( GRAPH *graph )
+   \todo Vect_graph_free ( GRAPH *graph )
 
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2009 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author Radim Blazek
-
-   \date 2001-2008
  */
 
 #include <stdlib.h>
@@ -92,8 +88,8 @@ void Vect_graph_init(GRAPH * graph, int nodes_costs)
    \brief Build network graph.
 
    Internal format for edge costs is integer, costs are multiplied
-   before conversion to int by 1000. 
-   Costs -1 for infinity i.e. arc or node is closed and cannot be traversed.
+   before conversion to int by 1000.  Costs -1 for infinity i.e. arc
+   or node is closed and cannot be traversed.
 
    \param graph poiter to graph structure
 
@@ -114,8 +110,8 @@ void Vect_graph_build(GRAPH * graph)
    \brief Add edge to graph. 
 
    Internal format for edge costs is integer, costs are multiplied
-   before conversion to int by 1000.  Costs -1 for infinity i.e. arc or
-   node is closed and cannot be traversed.
+   before conversion to int by 1000.  Costs -1 for infinity i.e. arc
+   or node is closed and cannot be traversed.
 
    \param graph poiter to graph structure
    \param from from node
@@ -147,8 +143,8 @@ Vect_graph_add_edge(GRAPH * graph, int from, int to, double costs, int id)
    \brief Set node costs
 
    Internal format for edge costs is integer, costs are multiplied
-   before conversion to int by 1000.  Costs -1 for infinity i.e. arc or
-   node is closed and cannot be traversed.
+   before conversion to int by 1000.  Costs -1 for infinity i.e. arc
+   or node is closed and cannot be traversed.
 
    \param graph poiter to graph structure
    \param node node id

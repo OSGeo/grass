@@ -21,7 +21,7 @@
  *  dig_line_box ()
  *  set box to points extent
  */
-int dig_line_box(struct line_pnts *Points, BOUND_BOX * Box)
+int dig_line_box(const struct line_pnts *Points, BOUND_BOX * Box)
 {
     int i;
 

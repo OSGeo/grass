@@ -5,14 +5,14 @@
  *
  * Higher level functions for reading/writing/manipulating vectors.
  *
+ * (C) 2001-2009 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public License
+ * (>=v2). Read the file COPYING that comes with GRASS for details.
+
  * \author Original author CERL, probably Dave Gerdes or Mike
- * Higgins. Update to GRASS 5.7 Radim Blazek and David D. Gray.
- *
- * (C) 2001-2007 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public
- *              License (>=v2). Read the file COPYING that comes with GRASS
- *              for details.
+ * Higgins.
+ * \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
  */
 
 #include <math.h>
@@ -26,10 +26,10 @@
 /*!
  * \brief Find the nearest node.
  *
- * \param[in] Map vector map
- * \param[in] ux,uy,uz point coordinates 
- * \param[in] maxdist max distance from the line
- * \param[in] with_z 3D (WITH_Z, WITHOUT_Z)
+ * \param Map vector map
+ * \param ux,uy,uz point coordinates 
+ * \param maxdist max distance from the line
+ * \param with_z 3D (WITH_Z, WITHOUT_Z)
  *
  * \return number of nearest node
  * \return 0 if not found
@@ -92,20 +92,19 @@ Vect_find_node(struct Map_info *Map,
 /*!
  * \brief Find the nearest line.
  *
- * \param[in] map vector map
- * \param[in] ux,uy,uz points coordinates
- * \param[in] type feature type (GV_LINE, GV_POINT, GV_BOUNDARY or GV_CENTROID)
+ * \param map vector map
+ * \param ux,uy,uz points coordinates
+ * \param type feature type (GV_LINE, GV_POINT, GV_BOUNDARY or GV_CENTROID)
  * if only want to search certain types of lines or -1 if search all lines
- * \param[in] maxdist max distance from the line
- * \param[in] with_z 3D (WITH_Z, WITHOUT_Z)
- * \param[in] exclude if > 0 number of line which should be excluded from selection.
+ * \param maxdist max distance from the line
+ * \param with_z 3D (WITH_Z, WITHOUT_Z)
+ * \param exclude if > 0 number of line which should be excluded from selection.
  * May be useful if we need line nearest to other one. 
  *
  * \return number of nearest line
  * \return 0 if not found
  *
  */
-/* original dig_point_to_line() in grass50 */
 int
 Vect_find_line(struct Map_info *map,
 	       double ux, double uy, double uz,
@@ -129,14 +128,14 @@ Vect_find_line(struct Map_info *map,
 /*!
  * \brief Find the nearest line(s).
  *
- * \param[in] map vector map
- * \param[in] ux,uy,uz points coordinates
- * \param[in] type feature type (GV_LINE, GV_POINT, GV_BOUNDARY or GV_CENTROID)
+ * \param map vector map
+ * \param ux,uy,uz points coordinates
+ * \param type feature type (GV_LINE, GV_POINT, GV_BOUNDARY or GV_CENTROID)
  * if only want to search certain types of lines or -1 if search all lines
- * \param[in] maxdist max distance from the line
- * \param[in] with_z 3D (WITH_Z, WITHOUT_Z)
- * \param[in] exclude list of lines which should be excluded from selection
- * \param[in] found list of found lines (or NULL)
+ * \param maxdist max distance from the line
+ * \param with_z 3D (WITH_Z, WITHOUT_Z)
+ * \param exclude list of lines which should be excluded from selection
+ * \param found list of found lines (or NULL)
  *
  * \return number of nearest line
  * \return 0 if not found
@@ -145,7 +144,7 @@ int
 Vect_find_line_list(struct Map_info *map,
 		    double ux, double uy, double uz,
 		    int type, double maxdist, int with_z,
-		    struct ilist *exclude, struct ilist *found)
+		    const struct ilist *exclude, struct ilist *found)
 {
     int choice;
     double new_dist;
@@ -154,7 +153,7 @@ Vect_find_line_list(struct Map_info *map,
     int i, line;
     static struct line_pnts *Points;
     static int first_time = 1;
-    struct Plus_head *Plus;
+    const struct Plus_head *Plus;
     BOUND_BOX box;
     struct ilist *List;
 
@@ -238,13 +237,12 @@ Vect_find_line_list(struct Map_info *map,
 /*!
  * \brief Find the nearest area
  *
- * \param[in] Map vector map
- * \param[in] x,y point coordinates
+ * \param Map vector map
+ * \param x,y point coordinates
  *
  * \return area number
  * \return 0 if not found
  */
-/* original dig_point_to_area() in grass50 */
 int Vect_find_area(struct Map_info *Map, double x, double y)
 {
     int i, ret, area;
@@ -285,13 +283,12 @@ int Vect_find_area(struct Map_info *Map, double x, double y)
 /*!
  * \brief Find the nearest island
  * 
- * \param[in] Map vector map
- * \param[in] x,y points coordinates
+ * \param Map vector map
+ * \param x,y points coordinates
  *
  * \return island number,
  * \return 0 if not found
  */
-/* original dig_point_to_area() in grass50 */
 int Vect_find_island(struct Map_info *Map, double x, double y)
 {
     int i, ret, island, current, current_size, size;

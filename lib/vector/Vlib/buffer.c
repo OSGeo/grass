@@ -5,7 +5,9 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2008 by the GRASS Development Team
+   See buffer2.c for replacement.
+
+   (C) 2001-2009 by the GRASS Development Team
 
    This program is free software under the 
    GNU General Public License (>=v2). 
@@ -13,8 +15,6 @@
    for details.
 
    \author Radim Blazek
-
-   \date 2001-2008
  */
 
 #include <stdlib.h>
@@ -342,6 +342,8 @@ static void parallel_line(struct line_pnts *Points, double d, double tol,
 /*!
    \brief Create parrallel line
 
+   This function is replaced by Vect_line_parallel2().
+
    \param InPoints input line
    \param distance create parrallel line in distance
    \param tolerance maximum distance between theoretical arc and polygon segments
@@ -368,8 +370,10 @@ Vect_line_parallel(struct line_pnts *InPoints, double distance,
 /*!
    \brief Create buffer around the line line.
 
-   Buffer is closed counter clockwise polygon.
-   Warning: output line may contain loops!
+   This function is replaced by Vect_line_buffer().
+
+   Buffer is closed counter clockwise polygon. Warning: output line
+   may contain loops!
 
    \param InPoints input line
    \param distance create buffer in distance
@@ -377,7 +381,7 @@ Vect_line_parallel(struct line_pnts *InPoints, double distance,
    \param[out] OutPoints output line
  */
 void
-Vect_line_buffer(struct line_pnts *InPoints, double distance,
+Vect_line_buffer(const struct line_pnts *InPoints, double distance,
 		 double tolerance, struct line_pnts *OutPoints)
 {
     double dangle;

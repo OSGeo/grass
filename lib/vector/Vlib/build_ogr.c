@@ -5,7 +5,7 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2009 by the GRASS Development Team
 
    This program is free software under the 
    GNU General Public License (>=v2). 
@@ -13,8 +13,6 @@
    for details.
 
    \author Radim Blazek, Piero Cavalieri
-
-   \date 2001-2008
  */
 
 #include <string.h>
@@ -266,8 +264,9 @@ static int add_geometry(struct Map_info *Map, OGRGeometryH hGeom, int FID,
 
 	/* create virtual centroid */
 	ret =
-	    Vect_get_point_in_poly_isl(Points[0], Points + 1, nRings - 1, &x,
-				       &y);
+	    Vect_get_point_in_poly_isl((const struct line_pnts *) Points[0],
+				       (const struct line_pnts **) Points + 1, nRings - 1,
+				       &x, &y);
 	if (ret < -1) {
 	    G_warning(_("Unable to calculate centroid for area %d"),
 		      outer_area);

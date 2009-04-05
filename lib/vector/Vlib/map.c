@@ -5,17 +5,14 @@
  *
  * Higher level functions for reading/writing/manipulating vectors.
  *
- * (C) 2001-2008 by the GRASS Development Team
+ * (C) 2001-2009 by the GRASS Development Team
  *
- * This program is free software under the 
- * GNU General Public License (>=v2). 
- * Read the file COPYING that comes with GRASS
- * for details.
+ * This program is free software under the GNU General Public License
+ * (>=v2).  Read the file COPYING that comes with GRASS for details.
  *
  * \author Original author CERL, probably Dave Gerdes or Mike
- * Higgins. Update to GRASS 5.7 Radim Blazek and David D. Gray.
- *
- * \date 2001-2008
+ * Higgins.
+ * \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
  */
 
 #include <stdlib.h>
@@ -35,7 +32,7 @@
 /*!
    \brief Copy all alive elements of opened vector map to another opened vector map
 
-   \param[in] In input vector map
+   \param In input vector map
    \param[out] Out output vector map
 
    \return 0 on success
@@ -101,7 +98,7 @@ int Vect_copy_map_lines(struct Map_info *In, struct Map_info *Out)
 /*
    \brief Copy file
 
-   \param[in] src source file
+   \param src source file
    \param[out] dst destination file
 
    \return 0 OK
@@ -145,9 +142,9 @@ static int copy_file(const char *src, const char *dst)
 
    Old vector is deleted
 
-   \param[in] in input vector map name
-   \param[in] mapset mapset name
-   \param[in] out output vector map name
+   \param in input vector map name
+   \param mapset mapset name
+   \param out output vector map name
 
    \return -1 error
    \return 0 success
@@ -297,8 +294,8 @@ Vect_copy(const char *in, const char *mapset, const char *out)
    The original format (native/OGR) is used.
    Old map ('out') is deleted!!!
 
-   \param[in] in input vector map name
-   \param[in] out output vector map name
+   \param in input vector map name
+   \param out output vector map name
 
    \return -1 error
    \return 0 success
@@ -432,7 +429,7 @@ int Vect_rename(const char *in, const char *out)
 /*!
    \brief Delete vector map including attribute tables
 
-   \param[in] map vector map name
+   \param map vector map name
 
    \return -1 error
    \return 0 success
@@ -575,14 +572,14 @@ int Vect_delete(const char *map)
    Notice, that if input map has no tables defined, it will copy
    nothing and return 0 (success).
 
-   \param[in] In input vector map
+   \param In input vector map
    \param[out] Out output vector map
-   \param[in] field layer number
+   \param field layer number
 
    \return 0 on success
    \return -1 on error
  */
-int Vect_copy_tables(struct Map_info *In, struct Map_info *Out, int field)
+int Vect_copy_tables(const struct Map_info *In, struct Map_info *Out, int field)
 {
     int i, n, ret, type;
     struct field_info *Fi, *Fin;
@@ -650,18 +647,18 @@ int Vect_copy_tables(struct Map_info *In, struct Map_info *Out, int field)
 /*!
    \brief Copy table linked to vector map based on type.
 
-   \param[in] In input vector map
+   \param In input vector map
    \param[out] Out output vector map
-   \param[in] field_in input layer number
-   \param[in] field_out output layer number
-   \param[in] field_name layer name
-   \param[in] type feature type
+   \param field_in input layer number
+   \param field_out output layer number
+   \param field_name layer name
+   \param type feature type
 
    \return 0 on success
    \return -1 on error
  */
 int
-Vect_copy_table(struct Map_info *In, struct Map_info *Out, int field_in,
+Vect_copy_table(const struct Map_info *In, struct Map_info *Out, int field_in,
 		int field_out, const char *field_name, int type)
 {
     return Vect_copy_table_by_cats(In, Out, field_in, field_out, field_name,
@@ -671,20 +668,20 @@ Vect_copy_table(struct Map_info *In, struct Map_info *Out, int field_in,
 /*!
    \brief Copy table linked to vector map based on category numbers.
 
-   \param[in] In input vector map
+   \param In input vector map
    \param[out] Out output vector map
-   \param[in] field_in input layer number
-   \param[in] field_out output layer number
-   \param[in] field_name layer name
-   \param[in] type feature type
-   \param[in] cats pointer to array of cats or NULL
-   \param[in] ncats number of cats in 'cats'
+   \param field_in input layer number
+   \param field_out output layer number
+   \param field_name layer name
+   \param type feature type
+   \param cats pointer to array of cats or NULL
+   \param ncats number of cats in 'cats'
 
    \return 0 on success
    \return -1 on error
  */
 int
-Vect_copy_table_by_cats(struct Map_info *In, struct Map_info *Out,
+Vect_copy_table_by_cats(const struct Map_info *In, struct Map_info *Out,
 			int field_in, int field_out, const char *field_name,
 			int type, int *cats, int ncats)
 {
@@ -753,7 +750,8 @@ void Vect_set_release_support(struct Map_info *Map)
 }
 
 /*!
-   \brief By default, category index is not updated if vector is changed, this function sets category index update.
+   \brief By default, category index is not updated if vector is
+   changed, this function sets category index update.
 
    WARNING: currently only category for elements is updated 
    not for areas

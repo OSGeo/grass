@@ -7,15 +7,11 @@
  *
  * (C) 2001-2009 by the GRASS Development Team
  *
- * This program is free software under the 
- * GNU General Public License (>=v2). 
- * Read the file COPYING that comes with GRASS
- * for details.
+ * This program is free software under the GNU General Public License
+ * (>=v2).  Read the file COPYING that comes with GRASS for details.
  *
  * \author Radim Blazek
- *         update to GRASS 7 Markus Metz
- *
- * \date 2009
+ * \author update to GRASS 7 Markus Metz
  */
 
 #include <stdlib.h>
@@ -79,24 +75,17 @@ int compare_snappnts(const void *Xpnta, const void *Xpntb)
 }
 
 /*!
- * \brief Snap selected lines to existing vertex in threshold.
- *
- * Snap selected lines to existing vertices.
- * 
- * \warning Lines are not necessarily snapped to nearest vertex, but to vertex in threshold! 
- *
- * Lines showing how vertices were snapped may be optionally written to error map. 
- * Input map must be opened on level 2 for update at least on GV_BUILD_BASE.
- *
- * \param[in] Map input map where vertices will be snapped
- * \param[in] List_lines list of lines to snap
- * \param[in] thresh threshold in which snap vertices
- * \param[out] Err vector map where lines representing snap are written or NULL
- *
- * \return void
- */
-
-/* As mentioned above, lines are not necessarily snapped to nearest vertex! For example:
+  \brief Snap selected lines to existing vertex in threshold.
+  
+  Snap selected lines to existing vertices.
+  
+  \warning Lines are not necessarily snapped to nearest vertex, but to vertex in threshold! 
+  
+  Lines showing how vertices were snapped may be optionally written to error map. 
+  Input map must be opened on level 2 for update at least on GV_BUILD_BASE.
+  
+  As mentioned above, lines are not necessarily snapped to nearest vertex! For example:
+  <pre>
    |                    
    | 1         line 3 is snapped to line 1,
    |           then line 2 is not snapped to common node at lines 1 and 3,
@@ -106,16 +95,24 @@ int compare_snappnts(const void *Xpnta, const void *Xpntb)
    |
    | 2
    |    
-
+   </pre>
+   
    The algorithm selects anchor vertices and snaps non-anchor vertices
    to these anchors.
    The distance between anchor vertices is always > threshold.
    If there is more than one anchor vertex within threshold around a
    non-anchor vertex, this vertex is snapped to the nearest anchor
    vertex within threshold.
- */
+
+   \param Map input map where vertices will be snapped
+   \param List_lines list of lines to snap
+   \param thresh threshold in which snap vertices
+   \param[out] Err vector map where lines representing snap are written or NULL
+   
+   \return void
+*/
 void
-Vect_snap_lines_list(struct Map_info *Map, struct ilist *List_lines,
+Vect_snap_lines_list(struct Map_info *Map, const struct ilist *List_lines,
 		     double thresh, struct Map_info *Err)
 {
     struct line_pnts *Points, *NPoints;

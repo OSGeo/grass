@@ -5,16 +5,12 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2009 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author Radim Blazek
-
-   \date 2001
  */
 
 #include <stdlib.h>
@@ -25,13 +21,12 @@
 /*!
    \brief Remove small areas from the map map.
 
-   Centroid of the area and the longest boundary 
-   with adjacent area is removed.
-   Map topology must be built GV_BUILD_CENTROIDS.
+   Centroid of the area and the longest boundary with adjacent area is
+   removed.  Map topology must be built GV_BUILD_CENTROIDS.
 
-   \param Map vector map
+   \param[in,out] Map vector map
    \param thresh maximum area size for removed areas
-   \param Err vector map where removed lines and centroids are written
+   \param[out] Err vector map where removed lines and centroids are written
    \param removed_area  pointer to where total size of removed area is stored or NULL
 
    \return number of removed areas 

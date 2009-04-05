@@ -5,16 +5,12 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2009 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author Radim Blazek
-
-   \date 2001
  */
 
 #include <stdlib.h>
@@ -24,8 +20,8 @@
 /*!
    \brief Select lines by box.
 
-   Select lines whose boxes overlap specified box!!!
-   It means that selected line may or may not overlap the box.
+   Select lines whose boxes overlap specified box!!!  It means that
+   selected line may or may not overlap the box.
 
    \param Map vector map
    \param Box bounding box
@@ -35,7 +31,7 @@
    \return number of lines
  */
 int
-Vect_select_lines_by_box(struct Map_info *Map, BOUND_BOX * Box,
+Vect_select_lines_by_box(struct Map_info *Map, const BOUND_BOX * Box,
 			 int type, struct ilist *list)
 {
     int i, line, nlines;
@@ -89,7 +85,7 @@ Vect_select_lines_by_box(struct Map_info *Map, BOUND_BOX * Box,
    \return number of areas
  */
 int
-Vect_select_areas_by_box(struct Map_info *Map, BOUND_BOX * Box,
+Vect_select_areas_by_box(struct Map_info *Map, const BOUND_BOX * Box,
 			 struct ilist *list)
 {
     int i;
@@ -140,7 +136,7 @@ Vect_select_areas_by_box(struct Map_info *Map, BOUND_BOX * Box,
    \return number of isles
  */
 int
-Vect_select_isles_by_box(struct Map_info *Map, BOUND_BOX * Box,
+Vect_select_isles_by_box(struct Map_info *Map, const BOUND_BOX * Box,
 			 struct ilist *list)
 {
     G_debug(3, "Vect_select_isles_by_box()");
@@ -168,7 +164,7 @@ Vect_select_isles_by_box(struct Map_info *Map, BOUND_BOX * Box,
    \return number of nodes
  */
 int
-Vect_select_nodes_by_box(struct Map_info *Map, BOUND_BOX * Box,
+Vect_select_nodes_by_box(struct Map_info *Map, const BOUND_BOX * Box,
 			 struct ilist *list)
 {
     struct Plus_head *plus;
@@ -292,8 +288,7 @@ Vect_select_lines_by_polygon(struct Map_info *Map, struct line_pnts *Polygon,
    Polygons should be closed, i.e. first and last points must be identical.
 
    Warning : values in list may be duplicate!
-
-
+   
    \param Map vector map
    \param Polygon outer ring
    \param nisles number of islands or 0

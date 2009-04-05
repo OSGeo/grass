@@ -5,7 +5,7 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2009 by the GRASS Development Team
 
    This program is free software under the 
    GNU General Public License (>=v2). 
@@ -14,8 +14,6 @@
 
    \author Original author Radim Blazek (see buffer.c)
    \author Rewritten by Rosen Matev (Google Summer of Code 2008)
-
-   \date 2008
  */
 
 #include <stdlib.h>
@@ -186,19 +184,12 @@ static void parallel_line(struct line_pnts *Points, double da, double db,
 			  double tol, struct line_pnts *nPoints)
 {
     int i, j, res, np;
-
     double *x, *y;
-
     double tx, ty, vx, vy, wx, wy, nx, ny, mx, my, rx, ry;
-
     double vx1, vy1, wx1, wy1;
-
     double a0, b0, c0, a1, b1, c1;
-
     double phi1, phi2, delta_phi;
-
     double nsegments, angular_tol, angular_step;
-
     int inner_corner, turns360;
 
     G_debug(3, "parallel_line()");
@@ -347,21 +338,13 @@ static void convolution_line(struct line_pnts *Points, double da, double db,
 			     double tol, struct line_pnts *nPoints)
 {
     int i, j, res, np;
-
     double *x, *y;
-
     double tx, ty, vx, vy, wx, wy, nx, ny, mx, my, rx, ry;
-
     double vx1, vy1, wx1, wy1;
-
     double a0, b0, c0, a1, b1, c1;
-
     double phi1, phi2, delta_phi;
-
     double nsegments, angular_tol, angular_step;
-
     double angle0, angle1;
-
     int inner_corner, turns360;
 
     G_debug(3, "convolution_line() side = %d", side);
@@ -454,9 +437,8 @@ static void convolution_line(struct line_pnts *Points, double da, double db,
 		/* no need to append point in this case */
 	    }
 	    else
-		G_fatal_error
-		    ("unexpected result of line_intersection() res = %d",
-		     res);
+		G_fatal_error(_("Unexpected result of line_intersection() res = %d"),
+			      res);
 	}
 
 	if (round && (!inner_corner) && (!turns360 || caps)) {
@@ -509,29 +491,21 @@ static void extract_contour(struct planar_graph *pg, struct pg_edge *first,
 			    struct line_pnts *nPoints)
 {
     int j;
-
     int v;			/* current vertex number */
-
     int v0;
-
     int eside;			/* side of the current edge */
-
     double eangle;		/* current edge angle with Ox (according to the current direction) */
 
     struct pg_vertex *vert;	/* current vertex */
-
     struct pg_vertex *vert0;	/* last vertex */
-
     struct pg_edge *edge;	/* current edge; must be edge of vert */
 
     /*    int cs; *//* on which side are we turning along the contour */
     /* we will always turn right and dont need that one */
     double opt_angle, tangle;
-
     int opt_j, opt_side, opt_flag;
 
-    G_debug(3,
-	    "extract_contour(): v1=%d, v2=%d, side=%d, stop_at_line_end=%d",
+    G_debug(3, "extract_contour(): v1=%d, v2=%d, side=%d, stop_at_line_end=%d",
 	    first->v1, first->v2, side, stop_at_line_end);
 
     Vect_reset_line(nPoints);
@@ -712,7 +686,6 @@ static int extract_inner_contour(struct planar_graph *pg, int *winding,
 				 struct line_pnts *nPoints)
 {
     int i, w;
-
     struct pg_edge *edge;
 
     G_debug(3, "extract_inner_contour()");
@@ -749,13 +722,9 @@ static int point_in_buf(struct line_pnts *Points, double px, double py, double d
 			double db, double dalpha)
 {
     int i, np;
-
     double cx, cy;
-
     double delta, delta_k, k;
-
     double vx, vy, wx, wy, mx, my, nx, ny;
-
     double len, tx, ty, d, da2;
 
     G_debug(3, "point_in_buf()");
@@ -824,7 +793,6 @@ static int point_in_buf(struct line_pnts *Points, double px, double py, double d
 static int get_polygon_orientation(const double *x, const double *y, int n)
 {
     double x1, y1, x2, y2;
-
     double area;
 
     x2 = x[n - 1];
@@ -877,21 +845,14 @@ static void buffer_lines(struct line_pnts *area_outer, struct line_pnts **area_i
 			 int *inner_count)
 {
     struct planar_graph *pg2;
-
     struct line_pnts *sPoints, *cPoints;
-
     struct line_pnts **arrPoints;
 
     int i, count = 0;
-
     int res, winding;
-
     int auto_side;
-
     int more = 8;
-
     int allocated = 0;
-
     double px, py;
 
     G_debug(3, "buffer_lines()");
@@ -995,23 +956,18 @@ static void buffer_lines(struct line_pnts *area_outer, struct line_pnts **area_i
    \param[out] inner_count number of holes
    \param[out] iPoints array of output polygon's holes (cw order)
  */
-void Vect_line_buffer2(struct line_pnts *Points, double da, double db,
+void Vect_line_buffer2(const struct line_pnts *Points, double da, double db,
 		       double dalpha, int round, int caps, double tol,
 		       struct line_pnts **oPoints,
 		       struct line_pnts ***iPoints, int *inner_count)
 {
     struct planar_graph *pg;
-
     struct line_pnts *tPoints, *outer;
-
     struct line_pnts **isles;
 
     int isles_count = 0;
-
     int res, winding;
-
     int more = 8;
-
     int isles_allocated = 0;
 
     G_debug(2, "Vect_line_buffer()");
@@ -1060,21 +1016,17 @@ void Vect_line_buffer2(struct line_pnts *Points, double da, double db,
    \param[out] inner_count number of holes
    \param[out] iPoints array of output polygon's holes (cw order)
  */
-void Vect_area_buffer2(struct Map_info *Map, int area, double da, double db,
+void Vect_area_buffer2(const struct Map_info *Map, int area, double da, double db,
 		       double dalpha, int round, int caps, double tol,
 		       struct line_pnts **oPoints,
 		       struct line_pnts ***iPoints, int *inner_count)
 {
     struct line_pnts *tPoints, *outer;
-
     struct line_pnts **isles;
 
     int isles_count = 0;
-
     int i, isle;
-
     int more = 8;
-
     int isles_allocated = 0;
 
     G_debug(2, "Vect_area_buffer()");

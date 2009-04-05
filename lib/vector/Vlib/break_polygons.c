@@ -12,9 +12,8 @@
    Read the file COPYING that comes with GRASS
    for details.
 
-   \author Radim Blazek, update for GRASS 7 Markus Metz
-
-   \date 2001-2008
+   \author Radim Blazek
+   \author Update for GRASS 7 Markus Metz
  */
 
 #include <stdlib.h>
@@ -60,7 +59,7 @@ typedef struct
 
 /* function used by binary tree to compare items */
 
-int compare_xpnts(const void *Xpnta, const void *Xpntb)
+static int compare_xpnts(const void *Xpnta, const void *Xpntb)
 {
     XPNT *a, *b;
 
@@ -80,20 +79,22 @@ int compare_xpnts(const void *Xpnta, const void *Xpntb)
 	    return 0;
     }
 
-    G_warning("Break polygons: Bug in binary tree!");
+    G_warning(_("Break polygons: Bug in binary tree!"));
     return 1;
 }
 
 /*!
    \brief Break polygons in vector map.
 
-   Breaks lines specified by type in vector map. Points at intersections may be optionally 
-   written to error map. Input map must be opened on level 2 for update at least on GV_BUILD_BASE.
+   Breaks lines specified by type in vector map. Points at
+   intersections may be optionally written to error map. Input map
+   must be opened on level 2 for update at least on GV_BUILD_BASE.
 
-   Function is optimized for closed polygons rigs (e.g. imported from OGR) but with clean geometry -
-   adjacent polygons mostly have identical boundary. Function creates database of ALL points
-   in the map, and then is looking for those where polygons should be broken. 
-   Lines may be broken only at points existing in input map! 
+   Function is optimized for closed polygons rigs (e.g. imported from
+   OGR) but with clean geometry - adjacent polygons mostly have
+   identical boundary. Function creates database of ALL points in the
+   map, and then is looking for those where polygons should be broken.
+   Lines may be broken only at points existing in input map!
 
    \param Map input map where polygons will be broken
    \param type type of line to be broken

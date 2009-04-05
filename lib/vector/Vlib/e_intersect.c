@@ -1,3 +1,18 @@
+/*!
+   \file e_intersect.c
+
+   \brief Vector library - intersection (lower level functions)
+
+   Higher level functions for reading/writing/manipulating vectors.
+
+   (C) 2008-2009 by the GRASS Development Team
+
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
+
+   \author Rewritten by Rosen Matev (Google Summer of Code 2008)
+*/
+
 #include <stdlib.h>
 #include <math.h>
 #include <grass/gis.h>
@@ -17,9 +32,7 @@
 
 #ifdef ASDASDASFDSAFFDAS
 mpf_t p11, p12, p21, p22, t1, t2;
-
 mpf_t dd, dda, ddb, delta;
-
 mpf_t rra, rrb;
 
 int initialized = 0;

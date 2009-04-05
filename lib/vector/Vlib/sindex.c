@@ -5,16 +5,12 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2009 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author Radim Blazek
-
-   \date 2001
  */
 
 #include <stdlib.h>
@@ -31,7 +27,7 @@
 
    \return void
  */
-void Vect_spatial_index_init(SPATIAL_INDEX * si)
+void Vect_spatial_index_init(SPATIAL_INDEX *si)
 {
     G_debug(1, "Vect_spatial_index_init()");
 
@@ -47,7 +43,7 @@ void Vect_spatial_index_init(SPATIAL_INDEX * si)
 
    \return void
  */
-void Vect_spatial_index_destroy(SPATIAL_INDEX * si)
+void Vect_spatial_index_destroy(SPATIAL_INDEX *si)
 {
     G_debug(1, "Vect_spatial_index_destroy()");
 
@@ -57,13 +53,13 @@ void Vect_spatial_index_destroy(SPATIAL_INDEX * si)
 /*!
    \brief Add a new item to spatial index
 
-   \param  si pointer to spatial index structure
+   \param[in,out] si pointer to spatial index structure
    \param id item identifier
    \param box pointer to item bounding box
 
    \return void
  */
-void Vect_spatial_index_add_item(SPATIAL_INDEX * si, int id, BOUND_BOX * box)
+void Vect_spatial_index_add_item(SPATIAL_INDEX *si, int id, const BOUND_BOX *box)
 {
     struct Rect rect;
 
@@ -81,7 +77,7 @@ void Vect_spatial_index_add_item(SPATIAL_INDEX * si, int id, BOUND_BOX * box)
 /*!
    \brief Delete item from spatial index
 
-   \param  si pointer to spatial index structure
+   \param[in,out] si pointer to spatial index structure
    \param id item identifier
 
    \return void
@@ -115,7 +111,7 @@ void Vect_spatial_index_del_item(SPATIAL_INDEX * si, int id)
    To be used in modules.
    Map must be opened on level 2.
 
-   \param Map pointer to vector map
+   \param[in,out] Map pointer to vector map
    \param out print progress here
 
    \return 0 OK
@@ -245,14 +241,14 @@ static int _add_item(int id, struct ilist *list)
 /*!
    \brief Select items by bounding box to list
 
-   \param  si pointer to spatial index structure
+   \param si pointer to spatial index structure
    \param box bounding box
    \param list pointer to list where selected items are stored
 
    \return number of selected items
  */
 int
-Vect_spatial_index_select(SPATIAL_INDEX * si, BOUND_BOX * box,
+Vect_spatial_index_select(const SPATIAL_INDEX * si, const BOUND_BOX * box,
 			  struct ilist *list)
 {
     struct Rect rect;

@@ -5,21 +5,17 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   Initialize Head structure.  To make sure that we are not writing
-   out garbage to a file.
+   Initialize Head structure. To make sure that we are not writing out
+   garbage to a file.
 
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2009 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
-   Update to GRASS 5.7 Radim Blazek and David D. Gray.
-
-   \date 2001-2008
- */
+   \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
+*/
 
 #include <string.h>
 #include <grass/gis.h>
@@ -66,11 +62,11 @@ int Vect__init_head(struct Map_info *Map)
    \brief Copy header data from one to another map
 
    \param from target vector map 
-   \param to destination vector map
+   \param[out] to destination vector map
 
-   \return 0 on success
+   \return 0
  */
-int Vect_copy_head_data(struct Map_info *from, struct Map_info *to)
+int Vect_copy_head_data(const struct Map_info *from, struct Map_info *to)
 {
     Vect_set_organization(to, Vect_get_organization(from));
     Vect_set_date(to, Vect_get_date(from));

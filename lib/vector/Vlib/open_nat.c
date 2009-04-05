@@ -5,17 +5,13 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2009 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
-   Update to GRASS 5.7 Radim Blazek and David D. Gray.
-
-   \date 2001
+   \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
  */
 
 #include <grass/config.h>
@@ -58,7 +54,7 @@ int V1_open_old_nat(struct Map_info *Map, int update)
 	    G_fopen_old(buf, GRASS_VECT_COOR_ELEMENT, Map->mapset);
 
     if (Map->dig_fp.file == NULL) {
-        G_warning("Could not open coor file for vector map <%s>", Map->name);
+        G_warning(_("Unable to open coor file for vector map <%s>"), Map->name);
         return -1;
     }
 
@@ -78,13 +74,13 @@ int V1_open_old_nat(struct Map_info *Map, int update)
     if (!update)
 	dig_file_load(&(Map->dig_fp)); /* has currently no effect, file never loaded */
 
-    return (0);
+    return 0;
 }
 
 /**
    \brief Open/Create new vector map.
 
-   \param Map pointer to vector map
+   \param[out] Map pointer to vector map
    \param name map name
    \param with_z 2D or 3D (unused?)
 
@@ -147,8 +143,8 @@ int check_coor(struct Map_info *Map)
 
     Vect_coor_info(Map, &CInfo);
     dif = CInfo.size - Map->head.size;
-    G_debug(1, "coor size in head = %ld, real coor file size= %ld",
-	    Map->head.size, CInfo.size);
+    G_debug(1, "coor size in head = %lu, real coor file size= %lu",
+	    (unsigned long) Map->head.size, (unsigned long) CInfo.size);
 
     if (dif > 0) {
 	G_warning(_("Coor files of vector map <%s@%s> is larger than it should be "

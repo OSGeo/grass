@@ -19,7 +19,7 @@
 #include <stdlib.h>
 #include <grass/Vect.h>
 
-static int add_line(struct Plus_head *plus, int lineid, int type, struct line_pnts *Points,
+static int add_line(struct Plus_head *plus, int lineid, int type, const struct line_pnts *Points,
 		    off_t offset)
 {
     int node, lp;
@@ -101,7 +101,7 @@ static int add_line(struct Plus_head *plus, int lineid, int type, struct line_pn
  * \return line id
  */
 int
-dig_add_line(struct Plus_head *plus, int type, struct line_pnts *Points,
+dig_add_line(struct Plus_head *plus, int type, const struct line_pnts *Points,
 	     off_t offset)
 {
     int ret;

@@ -5,16 +5,12 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2009 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author Radim Blazek
-
-   \date 2001-2008
  */
 
 #include <stdlib.h>
@@ -25,13 +21,13 @@
 /*!
    \brief Clean small angles at nodes.
 
-   It may happen that even if the angle between 2 boundaries at node is
-   very small, the calculated angle is 0 because of
-   representation error.  The map must be built at least on level
-   GV_BUILD_BASE
+   It may happen that even if the angle between 2 boundaries at node
+   is very small, the calculated angle is 0 because of representation
+   error. The map must be built at least on level GV_BUILD_BASE
 
    \param Map input map
-   \param Err vector map where error line segments are written
+   \param otype feature type
+   \param[out] Err vector map where error line segments are written
 
    \return number of line modifications
  */

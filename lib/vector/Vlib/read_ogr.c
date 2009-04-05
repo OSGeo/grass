@@ -5,16 +5,12 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2009 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author Radim Blazek, Piero Cavalieri
-
-   \date 2001
  */
 
 #include <grass/gis.h>
@@ -30,7 +26,7 @@
  * ftype : if > 0 use this type (because parts of Polygon are read as wkbLineString)
  *
  * \param Map vector map layer
- * \param hGeom OGR geometry
+ * \param[out] hGeom OGR geometry
  * \param ftype feature type
  * 
  * \return 0 OK
@@ -132,8 +128,8 @@ static int cache_feature(struct Map_info *Map, OGRGeometryH hGeom, int ftype)
  *   - Vect_remove_constraints()
  *
  * \param Map vector map layer
- * \param line_p container used to store line points within
- * \param line_c container used to store line categories within
+ * \param[out] line_p container used to store line points within
+ * \param[out] line_c container used to store line categories within
  *
  * \return  line type
  * \return  -2 no more features (EOF)
@@ -231,8 +227,8 @@ V1_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
  * \brief Read next line from OGR layer.
  *
  * \param Map vector map layer
- * \param line_p container used to store line points within
- * \param line_c container used to store line categories within
+ * \param[out] line_p container used to store line points within
+ * \param[out] line_c container used to store line categories within
  *
  * \return  line type
  * \return  -2 no more features (EOF)
@@ -254,12 +250,12 @@ V2_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
  * \param Map vector map layer
  * \param hGeom OGR geometry
  * \param offset given offset
- * \param Points container used to store line pointes within
+ * \param[out] Points container used to store line pointes within
  *
  * \return 0 OK
  * \return 1 error
  */
-static int read_line(struct Map_info *Map, OGRGeometryH hGeom, long offset,
+static int read_line(const struct Map_info *Map, OGRGeometryH hGeom, long offset,
 		     struct line_pnts *Points)
 {
     int i, nPoints;
@@ -313,8 +309,8 @@ static int read_line(struct Map_info *Map, OGRGeometryH hGeom, long offset,
  * \brief Read line from layer on given offset.
  *
  * \param Map vector map layer
- * \param line_p container used to store line points within
- * \param line_c container used to store line categories within
+ * \param[out] line_p container used to store line points within
+ * \param[out] line_c container used to store line categories within
  * \param line line id
  *
  * \return line type

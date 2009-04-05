@@ -460,7 +460,7 @@ int dig__fread_port_P(plus_t * buf, int cnt, GVFILE * fp)
 
 /***************************** WRITE ************************************/
 
-int dig__fwrite_port_D(double *buf,	/* DOUBLE */
+int dig__fwrite_port_D(const double *buf,	/* DOUBLE */
 		       int cnt, GVFILE * fp)
 {
     int i, j;
@@ -486,7 +486,7 @@ int dig__fwrite_port_D(double *buf,	/* DOUBLE */
     return 0;
 }
 
-int dig__fwrite_port_F(float *buf,	/* FLOAT */
+int dig__fwrite_port_F(const float *buf,	/* FLOAT */
 		       int cnt, GVFILE * fp)
 {
     int i, j;
@@ -512,7 +512,7 @@ int dig__fwrite_port_F(float *buf,	/* FLOAT */
     return 0;
 }
 
-int dig__fwrite_port_O(off_t *buf,	/* OFF_T */
+int dig__fwrite_port_O(const off_t *buf,	/* OFF_T */
 		       int cnt, GVFILE * fp, int port_off_t_size)
 {
     int i, j;
@@ -565,7 +565,7 @@ int dig__fwrite_port_O(off_t *buf,	/* OFF_T */
     return 0;
 }
 
-int dig__fwrite_port_L(long *buf,	/* LONG */
+int dig__fwrite_port_L(const long *buf,	/* LONG */
 		       int cnt, GVFILE * fp)
 {
     int i, j;
@@ -608,7 +608,7 @@ int dig__fwrite_port_L(long *buf,	/* LONG */
     return 0;
 }
 
-int dig__fwrite_port_I(int *buf,	/* INT */
+int dig__fwrite_port_I(const int *buf,	/* INT */
 		       int cnt, GVFILE * fp)
 {
     int i, j;
@@ -651,7 +651,7 @@ int dig__fwrite_port_I(int *buf,	/* INT */
     return 0;
 }
 
-int dig__fwrite_port_S(short *buf,	/* SHORT */
+int dig__fwrite_port_S(const short *buf,	/* SHORT */
 		       int cnt, GVFILE * fp)
 {
     int i, j;
@@ -695,13 +695,13 @@ int dig__fwrite_port_S(short *buf,	/* SHORT */
 }
 
 /* plus_t is defined as int so we only retype pointer and use int function */
-int dig__fwrite_port_P(plus_t * buf,	/* PLUS_T->INT */
+int dig__fwrite_port_P(const plus_t * buf,	/* PLUS_T->INT */
 		       int cnt, GVFILE * fp)
 {
     return (dig__fwrite_port_I((int *)buf, cnt, fp));
 }
 
-int dig__fwrite_port_C(char *buf,	/* CHAR */
+int dig__fwrite_port_C(const char *buf,	/* CHAR */
 		       int cnt, GVFILE * fp)
 {
     if (dig_fwrite(buf, PORT_CHAR, cnt, fp) == cnt)

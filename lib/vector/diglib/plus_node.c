@@ -40,7 +40,7 @@ static double dist_squared(double, double, double, double);
  */
 int
 dig_node_add_line(struct Plus_head *plus, int nodeid, int lineid,
-		  struct line_pnts *points, int type)
+		  const struct line_pnts *points, int type)
 {
     register int i, j, nlines;
     float angle;

@@ -382,7 +382,7 @@ static int _add_item(int id, struct ilist *list)
    \return -1 on error
  */
 int
-dig_select_nodes(struct Plus_head *Plus, BOUND_BOX * box, struct ilist *list)
+dig_select_nodes(struct Plus_head *Plus, const BOUND_BOX * box, struct ilist *list)
 {
     struct Rect rect;
 
@@ -450,7 +450,7 @@ int dig_find_node(struct Plus_head *Plus, double x, double y, double z)
    \return number of selected lines
  */
 int
-dig_select_lines(struct Plus_head *Plus, BOUND_BOX * box, struct ilist *list)
+dig_select_lines(struct Plus_head *Plus, const BOUND_BOX * box, struct ilist *list)
 {
     struct Rect rect;
 
@@ -479,7 +479,7 @@ dig_select_lines(struct Plus_head *Plus, BOUND_BOX * box, struct ilist *list)
    \return number of selected areas
  */
 int
-dig_select_areas(struct Plus_head *Plus, BOUND_BOX * box, struct ilist *list)
+dig_select_areas(struct Plus_head *Plus, const BOUND_BOX * box, struct ilist *list)
 {
     struct Rect rect;
 
@@ -508,7 +508,7 @@ dig_select_areas(struct Plus_head *Plus, BOUND_BOX * box, struct ilist *list)
    \return number of selected isles
  */
 int
-dig_select_isles(struct Plus_head *Plus, BOUND_BOX * box, struct ilist *list)
+dig_select_isles(struct Plus_head *Plus, const BOUND_BOX * box, struct ilist *list)
 {
     struct Rect rect;
 

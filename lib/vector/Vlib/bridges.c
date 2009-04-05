@@ -5,7 +5,7 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2009 by the GRASS Development Team
 
    This program is free software under the 
    GNU General Public License (>=v2). 
@@ -13,8 +13,6 @@
    for details.
 
    \author Radim Blazek
-
-   \date 2001-2008
  */
 
 #include <stdlib.h>
@@ -28,18 +26,17 @@ remove_bridges(struct Map_info *Map, int chtype, struct Map_info *Err);
 /*!
    \brief Remove bridges from vector map.
 
-   Remove bridges (type boundary) connecting areas to islands or 2 islands.
-   Islands and areas must be already clean, i.e. without dangles.
-   Bridge may be formed by more lines.
-   Optionally deleted bridges are written to error map. 
-   Input map must be opened on level 2 for update at least on level GV_BUILD_BASE
+   Remove bridges (type boundary) connecting areas to islands or 2
+   islands.  Islands and areas must be already clean, i.e. without
+   dangles.  Bridge may be formed by more lines.  Optionally deleted
+   bridges are written to error map.  Input map must be opened on
+   level 2 for update at least on level GV_BUILD_BASE
 
    \param Map input map where bridges are deleted
    \param Err vector map where deleted bridges are written or NULL
 
    \return
  */
-
 void
 Vect_remove_bridges(struct Map_info *Map, struct Map_info *Err)
 {
@@ -49,11 +46,12 @@ Vect_remove_bridges(struct Map_info *Map, struct Map_info *Err)
 /*!
    \brief Change type of bridges in vector map.
 
-   Change the type of bridges (type boundary) connecting areas to islands or 2 islands.
-   Islands and areas must be already clean, i.e. without dangles.
-   Bridge may be formed by more lines.
-   Optionally changed bridges are written to error map. 
-   Input map must be opened on level 2 for update at least on level GV_BUILD_BASE.
+   Change the type of bridges (type boundary) connecting areas to
+   islands or 2 islands. Islands and areas must be already clean,
+   i.e. without dangles. Bridge may be formed by more lines.
+   Optionally changed bridges are written to error map.  Input map
+   must be opened on level 2 for update at least on level
+   GV_BUILD_BASE.
 
    \param Map input map where bridges are changed
    \param Err vector map where changed bridges are written or NULL

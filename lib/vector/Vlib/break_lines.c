@@ -3,7 +3,7 @@
  *
  * \brief Vector library - Clean vector map (break lines)
  *
- * (C) 2001-2008 by the GRASS Development Team
+ * (C) 2001-2009 by the GRASS Development Team
  *
  * This program is free software under the 
  * GNU General Public License (>=v2). 
@@ -11,8 +11,6 @@
  * for details.
  *
  * \author Radim Blazek
- *
- * \date 2001
  */
 
 #include <stdlib.h>

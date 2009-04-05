@@ -1,29 +1,34 @@
+/*!
+   \file close_ogr.c
 
-/*****************************************************************************
-*
-* MODULE:       Vector library 
-*   	    	
-* AUTHOR(S):    Radim Blazek, Piero Cavalieri 
-*
-* PURPOSE:      Higher level functions for reading/writing/manipulating vectors.
-*
-* COPYRIGHT:    (C) 2001 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*   	    	License (>=v2). Read the file COPYING that comes with GRASS
-*   	    	for details.
-*
-*****************************************************************************/
-#include <grass/Vect.h>
+   \brief Vector library - Close map (OGR)
+
+   Higher level functions for reading/writing/manipulating vectors.
+
+   (C) 2001-2009 by the GRASS Development Team
+
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
+
+   \author Original author CERL, probably Dave Gerdes or Mike Higgins.
+   \author Update to GRASS 5.7 Radim Blazek and Piero Cavalieri.
+*/
+
 #include <stdlib.h>
+#include <grass/Vect.h>
+#include <grass/glocale.h>
 
 #ifdef HAVE_OGR
 #include <ogr_api.h>
 
-/* 
- ** return 0 on success
- **         non-zero on error
- */
+/*!
+  \brief Close OGR layer
+
+  \param Map vector map
+
+  \return 0 on success
+  \return non-zero on error
+*/
 int V1_close_ogr(struct Map_info *Map)
 {
     int i;
@@ -43,21 +48,23 @@ int V1_close_ogr(struct Map_info *Map)
 	Vect_destroy_line_struct(Map->fInfo.ogr.lines[i]);
     }
 
-    free(Map->fInfo.ogr.lines);
-    free(Map->fInfo.ogr.lines_types);
+    G_free(Map->fInfo.ogr.lines);
+    G_free(Map->fInfo.ogr.lines_types);
 
-    free(Map->fInfo.ogr.dsn);
-    free(Map->fInfo.ogr.layer_name);
+    G_free(Map->fInfo.ogr.dsn);
+    G_free(Map->fInfo.ogr.layer_name);
 
     return 0;
 }
 
-/* 
- *  Write OGR specific files (fidx)
- * 
- *  return 0 on success
- *         non-zero on error
- */
+/*!
+  \brief Write OGR specific files (fidx)
+
+  \param Map vector map
+  
+  \return 0 on success
+  \return non-zero on error
+*/
 int V2_close_ogr(struct Map_info *Map)
 {
     char fname[1000], elem[1000];
@@ -79,7 +86,7 @@ int V2_close_ogr(struct Map_info *Map)
 	dig_file_init(&fp);
 	fp.file = fopen(fname, "w");
 	if (fp.file == NULL) {
-	    G_warning("Can't open fidx file for write: %s\n", fname);
+	    G_warning(_("Unable to open fidx file for write <%s>"), fname);
 	    return 1;
 	}
 
@@ -114,7 +121,7 @@ int V2_close_ogr(struct Map_info *Map)
 
     }
 
-    free(Map->fInfo.ogr.offset);
+    G_free(Map->fInfo.ogr.offset);
 
     return 0;
 }

@@ -11,7 +11,7 @@
     - Delete feature
     - Restore feature
 
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2009 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -19,8 +19,6 @@
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
    \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
    \author V*_restore_line() by Martin Landa <landa.martin gmail.com> (2008)
-
-   \date 2001
  */
 
 #include <grass/config.h>
@@ -131,7 +129,7 @@ static void add_area_cats_to_cidx(struct Map_info *Map, int area)
     Note that 1) and 2) is done by the same code.
 */
 static void add_line_to_topo(struct Map_info *Map, int line,
-			     struct line_pnts *points, struct line_cats *cats)
+			     const struct line_pnts *points, const struct line_cats *cats)
 {
     int first, s, n, i;
     int type, node, next_line, area, side, sel_area, new_area[2];
@@ -299,8 +297,8 @@ static void add_line_to_topo(struct Map_info *Map, int line,
     return;
 }
 
-off_t V1__rewrite_line_nat(struct Map_info *Map, off_t offset, int type,
-			  struct line_pnts *points, struct line_cats *cats);
+static off_t V1__rewrite_line_nat(struct Map_info *Map, off_t offset, int type,
+				  const struct line_pnts *points, const struct line_cats *cats);
 
 /*!
   \brief Writes feature to 'coor' file
@@ -314,7 +312,7 @@ off_t V1__rewrite_line_nat(struct Map_info *Map, off_t offset, int type,
   \return -1 on error
 */
 off_t V1_write_line_nat(struct Map_info *Map,
-		       int type, struct line_pnts *points, struct line_cats *cats)
+		       int type, const struct line_pnts *points, const struct line_cats *cats)
 {
     off_t offset;
 
@@ -340,7 +338,7 @@ off_t V1_write_line_nat(struct Map_info *Map,
   \return -1 on error
 */
 off_t V2_write_line_nat(struct Map_info *Map,
-		       int type, struct line_pnts *points, struct line_cats *cats)
+			int type, const struct line_pnts *points, const struct line_cats *cats)
 {
     int line;
     off_t offset;
@@ -399,9 +397,9 @@ off_t V2_write_line_nat(struct Map_info *Map,
   \return -1 on error
 */
 off_t V1_rewrite_line_nat(struct Map_info *Map,
-			 off_t offset,
-			 int type,
-			 struct line_pnts *points, struct line_cats *cats)
+			  off_t offset,
+			  int type,
+			  const struct line_pnts *points, const struct line_cats *cats)
 {
     int old_type;
     struct line_pnts *old_points;
@@ -461,7 +459,7 @@ off_t V1_rewrite_line_nat(struct Map_info *Map,
 int V2_rewrite_line_nat(struct Map_info *Map,
 			int line,
 			int type,
-			struct line_pnts *points, struct line_cats *cats)
+			const struct line_pnts *points, const struct line_cats *cats)
 {
     /* TODO: this is just quick shortcut because we have already V2_delete_nat()
      *        and V2_write_nat() this function first deletes old line
@@ -487,9 +485,9 @@ int V2_rewrite_line_nat(struct Map_info *Map,
   \return -1 on error
 */
 off_t V1__rewrite_line_nat(struct Map_info *Map,
-			  off_t offset,
-			  int type,
-			  struct line_pnts *points, struct line_cats *cats)
+			   off_t offset,
+			   int type,
+			   const struct line_pnts *points, const struct line_cats *cats)
 {
     int i, n_points;
     char rhead, nc;
@@ -588,7 +586,7 @@ int V1_delete_line_nat(struct Map_info *Map, off_t offset)
     char rhead;
     GVFILE *dig_fp;
 
-    G_debug(3, "V1_delete_line_nat(), offset = %ld", offset);
+    G_debug(3, "V1_delete_line_nat(), offset = %lu", (unsigned long) offset);
 
     dig_set_cur_port(&(Map->head.port));
     dig_fp = &(Map->dig_fp);
@@ -827,7 +825,7 @@ int V1_restore_line_nat(struct Map_info *Map, off_t offset)
     char rhead;
     GVFILE *dig_fp;
     
-    G_debug(3, "V1_restore_line_nat(), offset = %ld", offset);
+    G_debug(3, "V1_restore_line_nat(), offset = %lu", (unsigned long) offset);
     
     dig_set_cur_port(&(Map->head.port));
     dig_fp = &(Map->dig_fp);

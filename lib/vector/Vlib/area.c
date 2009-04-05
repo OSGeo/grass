@@ -1,11 +1,11 @@
 /*!
    \file area.c
 
-   \brief Vector library - area feature related fns
+   \brief Vector library - area-related functions 
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2009 by the GRASS Development Team
 
    This program is free software under the 
    GNU General Public License (>=v2). 
@@ -13,9 +13,7 @@
    for details.
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
-   Update to GRASS 5.7 Radim Blazek and David D. Gray.
-
-   \date 2001-2008
+   \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
  */
 
 #include <stdlib.h>
@@ -24,7 +22,7 @@
 #include <grass/glocale.h>
 
 /*!
-   \brief Returns the polygon array of points in BPoints
+   \brief Returns polygon array of points of given area
 
    \param Map vector map
    \param area area id
@@ -34,11 +32,11 @@
    \return -1 on error
  */
 int
-Vect_get_area_points(struct Map_info *Map,
+Vect_get_area_points(const struct Map_info *Map,
 		     int area, struct line_pnts *BPoints)
 {
     int i, line, aline, dir;
-    struct Plus_head *Plus;
+    const struct Plus_head *Plus;
     P_AREA *Area;
     static int first_time = 1;
     static struct line_pnts *Points;
@@ -86,20 +84,21 @@ Vect_get_area_points(struct Map_info *Map,
 }
 
 /*!
-   \brief Returns the polygon array of points in BPoints
+   \brief Returns polygon array of points for given isle
 
    \param Map vector map
    \param isle island id
    \param[out] BPoints points array
 
-   \return number of points or -1 on error
+   \return number of points
+   \return -1 on error
  */
 int
-Vect_get_isle_points(struct Map_info *Map,
+Vect_get_isle_points(const struct Map_info *Map,
 		     int isle, struct line_pnts *BPoints)
 {
     int i, line, aline, dir;
-    struct Plus_head *Plus;
+    const struct Plus_head *Plus;
     P_ISLE *Isle;
     static int first_time = 1;
     static struct line_pnts *Points;
@@ -142,7 +141,7 @@ Vect_get_isle_points(struct Map_info *Map,
 }
 
 /*!
-   \brief Returns centroid number of area
+   \brief Returns centroid id for given area
 
    \param Map vector map
    \param area area id
@@ -150,9 +149,9 @@ Vect_get_isle_points(struct Map_info *Map,
    \return centroid number of area
    \return 0 if no centroid found
  */
-int Vect_get_area_centroid(struct Map_info *Map, int area)
+int Vect_get_area_centroid(const struct Map_info *Map, int area)
 {
-    struct Plus_head *Plus;
+    const struct Plus_head *Plus;
     P_AREA *Area;
 
     G_debug(3, "Vect_get_area_centroid(): area = %d", area);
@@ -167,19 +166,19 @@ int Vect_get_area_centroid(struct Map_info *Map, int area)
 }
 
 /*!
-   \brief Creates list of boundaries for area
+   \brief Creates list of boundaries for given area
 
    \param Map vector map
    \param area area id
-   \param List pointer to list of boundaries
+   \param[out] List pointer to list of boundaries
 
    \return number of boundaries
  */
 int
-Vect_get_area_boundaries(struct Map_info *Map, int area, struct ilist *List)
+Vect_get_area_boundaries(const struct Map_info *Map, int area, struct ilist *List)
 {
     int i, line;
-    struct Plus_head *Plus;
+    const struct Plus_head *Plus;
     P_AREA *Area;
 
     G_debug(3, "Vect_get_area_boundaries(): area = %d", area);
@@ -201,19 +200,19 @@ Vect_get_area_boundaries(struct Map_info *Map, int area, struct ilist *List)
 }
 
 /*!
-   \brief Creates list of boundaries for isle
+   \brief Creates list of boundaries for given isle
 
    \param Map vector map
    \param isle island number
-   \param List pointer to list where boundaries are stored
+   \param[out] List pointer to list where boundaries are stored
 
    \return number of boundaries
  */
 int
-Vect_get_isle_boundaries(struct Map_info *Map, int isle, struct ilist *List)
+Vect_get_isle_boundaries(const struct Map_info *Map, int isle, struct ilist *List)
 {
     int i, line;
-    struct Plus_head *Plus;
+    const struct Plus_head *Plus;
     P_ISLE *Isle;
 
     G_debug(3, "Vect_get_isle_boundaries(): isle = %d", isle);
@@ -224,7 +223,7 @@ Vect_get_isle_boundaries(struct Map_info *Map, int isle, struct ilist *List)
     Isle = Plus->Isle[isle];
 
     if (Isle == NULL)
-	G_fatal_error("Attempt to read topo for dead isle (%d)", isle);
+	G_fatal_error(_("Attempt to read topo for dead isle (%d)"), isle);
 
     for (i = 0; i < Isle->n_lines; i++) {
 	line = Isle->lines[i];
@@ -235,7 +234,7 @@ Vect_get_isle_boundaries(struct Map_info *Map, int isle, struct ilist *List)
 }
 
 /*!
-   \brief Returns number of isles for area
+   \brief Returns number of isles for given area
 
    \param Map vector map
    \param area area id
@@ -243,9 +242,9 @@ Vect_get_isle_boundaries(struct Map_info *Map, int isle, struct ilist *List)
    \return number of isles for area
    \return 0 if area not found
  */
-int Vect_get_area_num_isles(struct Map_info *Map, int area)
+int Vect_get_area_num_isles(const struct Map_info *Map, int area)
 {
-    struct Plus_head *Plus;
+    const struct Plus_head *Plus;
     P_AREA *Area;
 
     G_debug(3, "Vect_get_area_num_isles(): area = %d", area);
@@ -263,18 +262,18 @@ int Vect_get_area_num_isles(struct Map_info *Map, int area)
 }
 
 /*!
-   \brief Returns isle for area
+   \brief Returns isle id for area
 
    \param Map vector map
    \param area area id
-   \param isle isle id
+   \param isle isle index (0 .. nisles - 1)
 
-   \return isles for area
+   \return isle id
    \return 0 if no isle found
  */
-int Vect_get_area_isle(struct Map_info *Map, int area, int isle)
+int Vect_get_area_isle(const struct Map_info *Map, int area, int isle)
 {
-    struct Plus_head *Plus;
+    const struct Plus_head *Plus;
     P_AREA *Area;
 
     G_debug(3, "Vect_get_area_isle(): area = %d isle = %d", area, isle);
@@ -291,17 +290,17 @@ int Vect_get_area_isle(struct Map_info *Map, int area, int isle)
 }
 
 /*!
-   \brief Returns area for isle
+   \brief Returns area id for isle
 
    \param Map vector
-   \param isle island number
+   \param isle isle number (0 .. nisles - 1)
 
    \return area id
    \return 0 area not found
  */
-int Vect_get_isle_area(struct Map_info *Map, int isle)
+int Vect_get_isle_area(const struct Map_info *Map, int isle)
 {
-    struct Plus_head *Plus;
+    const struct Plus_head *Plus;
     P_ISLE *Isle;
 
     G_debug(3, "Vect_get_isle_area(): isle = %d", isle);
@@ -325,14 +324,14 @@ int Vect_get_isle_area(struct Map_info *Map, int isle)
 
    \return area perimeter
  */
-double Vect_area_perimeter(struct line_pnts *Points)
+double Vect_area_perimeter(const struct line_pnts *Points)
 {
     return Vect_line_length(Points);
 }
 
 
 /*!
-   \brief Returns 1 if point is in area
+   \brief Check if point is in area
 
    \param Map vector map
    \param area area id
@@ -341,10 +340,10 @@ double Vect_area_perimeter(struct line_pnts *Points)
    \return 1 if point is in area
    \return 0 if not 
  */
-int Vect_point_in_area(struct Map_info *Map, int area, double x, double y)
+int Vect_point_in_area(const struct Map_info *Map, int area, double x, double y)
 {
     int i, isle;
-    struct Plus_head *Plus;
+    const struct Plus_head *Plus;
     P_AREA *Area;
     int poly;
 
@@ -376,9 +375,9 @@ int Vect_point_in_area(struct Map_info *Map, int area, double x, double y)
 
    \return area of area without areas of isles
  */
-double Vect_get_area_area(struct Map_info *Map, int area)
+double Vect_get_area_area(const struct Map_info *Map, int area)
 {
-    struct Plus_head *Plus;
+    const struct Plus_head *Plus;
     P_AREA *Area;
     struct line_pnts *Points;
     double size;
@@ -419,10 +418,10 @@ double Vect_get_area_area(struct Map_info *Map, int area)
    \param area area id
    \param[out] Cats list of categories
 
-   \return 0 OK centroid found (but may be without categories)
+   \return 0 centroid found (but may be without categories)
    \return 1 no centroid found
  */
-int Vect_get_area_cats(struct Map_info *Map, int area, struct line_cats *Cats)
+int Vect_get_area_cats(const struct Map_info *Map, int area, struct line_cats *Cats)
 {
     int centroid;
 
@@ -450,7 +449,7 @@ int Vect_get_area_cats(struct Map_info *Map, int area, struct line_cats *Cats)
    \return first found category of given field
    \return -1 no centroid or no category found
  */
-int Vect_get_area_cat(struct Map_info *Map, int area, int field)
+int Vect_get_area_cat(const struct Map_info *Map, int area, int field)
 {
     int i;
     static struct line_cats *Cats = NULL;

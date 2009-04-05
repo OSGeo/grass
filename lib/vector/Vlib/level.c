@@ -3,17 +3,13 @@
 
    \brief Vector library - level info
 
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2009 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
-   Update to GRASS 5.7 Radim Blazek and David D. Gray.
-
-   \date 2001-2008
+   \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
  */
 
 #include <grass/Vect.h>
@@ -30,7 +26,7 @@
    \return open level 
    \return -1 on error
  */
-int Vect_level(struct Map_info *Map)
+int Vect_level(const struct Map_info *Map)
 {
     if (Map->open != VECT_OPEN_CODE) {
 	if (Map->open != VECT_CLOSED_CODE)
