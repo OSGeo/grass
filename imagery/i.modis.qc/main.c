@@ -62,7 +62,6 @@ int main(int argc, char *argv[])
     char *qcflag;		/*Switch for particular index */
     struct GModule *module;
     struct Option *input, *input1, *input2, *input_band, *output;
-    struct Flag *flag1;
     struct History history;	/*metadata */
     struct Colors colors;	/*Color rules */
 
@@ -171,7 +170,7 @@ int main(int argc, char *argv[])
 
     if (!strcmp(qcflag, "data_quality")) {
 	if (bandno < 1 || bandno > 7)
-	    G_fatal_error(_("band number out of allowed range [1-7]"));
+	    G_fatal_error(_("Band number out of allowed range [1-7]"));
 	if (!strcmp(product, "mod09Q1") && bandno > 2)
 	    G_fatal_error(_("mod09Q1 product only has 2 bands"));
     }
@@ -196,10 +195,10 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("This flag is only available for MOD09A1s @ 500m products"));
 
     if ((infd = G_open_cell_old(qcchan, "")) < 0)
-	G_fatal_error(_("Unable to open raster map %s"), qcchan);
+	G_fatal_error(_("Unable to open raster map <%s>"), qcchan);
 
     if (G_get_cellhd(qcchan, "", &cellhd) < 0)
-	G_fatal_error(_("Unable to open raster map %s header"), qcchan);
+	G_fatal_error(_("Unable to read header of raster map <%s> "), qcchan);
 
     inrast = G_allocate_c_raster_buf();
 
@@ -210,15 +209,16 @@ int main(int argc, char *argv[])
 
     /* Create New raster files */ 
     if ((outfd = G_open_raster_new(result, data_type_output)) < 0)
-	G_fatal_error(_("Could not open <%s>"), result);
+	G_fatal_error(_("Unable to create raster map <%s>"), result);
 
     /* Process pixels */ 
     for (row = 0; row < nrows; row++)
     {
-	CELL c, out;
+	CELL c;
 	G_percent(row, nrows, 2);
 	if (G_get_c_raster_row(infd, inrast, row) < 0)
-	    G_fatal_error(_("Could not read from <%s>"), qcchan);
+	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
+			  qcchan, row);
 
 	/*process the data */ 
 	for (col = 0; col < ncols; col++)
@@ -321,7 +321,8 @@ int main(int argc, char *argv[])
 	}
 
 	if (G_put_c_raster_row(outfd, outrast) < 0)
-	    G_fatal_error(_("Cannot write to output raster file"));
+	    G_fatal_error(_("Failed writing raster map <%s> row %d"),
+			  output->answer, row);
     }
 
     G_free(inrast);
