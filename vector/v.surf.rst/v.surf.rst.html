@@ -1,14 +1,15 @@
 <h2>DESCRIPTION</h2>
 
 <em>v.surf.rst</em>
-<br>This program performs spatial approximation based on z-values or attributes 
-of point or isoline data given in a vector map named <em>input</em> to grid cells in the
-output raster map <em>elev</em> representing a surface. As an option, simultaneously
+<br>This program performs spatial approximation based on z-values (<em>-z</em>
+flag) or attributes (<em>zcolumn</em> parameter) of point or isoline data 
+given in a vector map named <em>input</em> to grid cells in the output 
+raster map <em>elev</em> representing a surface. As an option, simultaneously
 with approximation, topographic parameters slope, aspect, profile curvature
 (measured in the direction of the steepest slope), tangential curvature (measured
 in the direction of a tangent to contour line) or mean curvature are computed
 and saved as raster maps specified by the options <em>slope, aspect, pcurv,
-tcurv, mcurv</em> respectively. If <b><em>-d</em></b> flag is set, the program
+tcurv, mcurv</em> respectively. If <em>-d</em> flag is set, the program
 outputs partial derivatives f<sub>x</sub>,f<sub>y</sub>,f<sub>xx</sub>,
 f<sub>yy</sub>,f<sub>xy</sub>
 instead of slope, aspect, profile, tangential and mean curvatures respectively.
@@ -166,7 +167,7 @@ perpendicular to the previous example. Please note that anisotropy
 option has not been extensively tested and may include bugs (for example , topographic
 parameters may not be computed correctly) - if there are
 problems, please report to GRASS bugtracker 
-(accessible from <a href="http://grass.itc.it/">http://grass.itc.it/</a>).<br>
+(accessible from <a href="http://grass.osgeo.org/">http://grass.osgeo.org/</a>).<br>
 </p>
 
 <!--
@@ -275,19 +276,18 @@ outside <em>v.surf.rst</em>.
 
 <p>For examples of applications see
 <a href="http://skagit.meas.ncsu.edu/~helena/gmslab/">GRASS4 implementation</a> and
-<a href="http://skagit.meas.ncsu.edu/~helena/">GRASS5 and GRASS6 implementation</a>
+<a href="http://skagit.meas.ncsu.edu/~helena/">GRASS5 and GRASS6 implementation</a>.
 </p><p>The user must run <a href="g.region.html">g.region</a> before the program
 to set the region and resolution for approximation.
 </p>
 
-<h2>
-SEE ALSO</h2>
-<a href="v.vol.rst.html">v.vol.rst</a>
+<h2>SEE ALSO</h2>
 
-<h2>
-AUTHORS</h2>
+<em><a href="v.vol.rst.html">v.vol.rst</a></em>
 
-<p><br><em>Original version of program (in FORTRAN) and GRASS enhancements</em>:
+<h2>AUTHORS</h2>
+
+<p><em>Original version of program (in FORTRAN) and GRASS enhancements</em>:
 <br>Lubos Mitas, NCSA, University of Illinois at Urbana Champaign, Illinois,
 USA (1990-2000); Department of Physics, North Carolina State University, Raleigh
 <br>Helena Mitasova, USA CERL, Department of Geography, University of Illinois at
@@ -299,8 +299,8 @@ procedure):</em>
 <br>Darrel McCauley, Purdue University, Bill Brown, US Army CERL
 </p><p><em>Update for GRASS5.7, GRASS6 and addition of crossvalidation:</em>
 Jaroslav Hofierka, University of Presov; Radim Blazek, ITC-irst
-<br>
 </p>
+
 <h2> REFERENCES</h2>
 <P>
 <a href="http://skagit.meas.ncsu.edu/~helena/gmslab/papers/IEEEGRSL2005.pdf">
@@ -343,9 +343,8 @@ problem, Computers and Mathematics with Applications, v.16, p. 983-992.
 
 <p>
 <a href="http://www.grassbook.org">
-Neteler, M. and Mitasova, H., 2004, Open Source GIS: A GRASS GIS Approach, Second Edition, </a> 
-Kluwer International Series in Engineering and Computer Science, 773, Kluwer Academic Press / Springer, 
-Boston, Dordrecht, 424 pages.
+Neteler, M. and Mitasova, H., 2008, Open Source GIS: A GRASS GIS Approach, 3rd Edition, </a> 
+Springer, New York, 406 pages.
 </p>
 
 <p>Talmi, A. and Gilat, G., 1977 : Method for Smooth Approximation of Data,
