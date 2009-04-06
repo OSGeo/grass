@@ -36,7 +36,7 @@ struct Map_info *Map;
 
 int main(int argc, char **argv)
 {
-    struct Flag *printattributes, *topo_flag;
+    struct Flag *printattributes, *topo_flag, *shell_flag;
     struct Option *opt1, *coords_opt, *maxdistance;
     struct Cell_head window;
     struct GModule *module;
@@ -81,6 +81,10 @@ int main(int argc, char **argv)
     printattributes = G_define_flag();
     printattributes->key = 'a';
     printattributes->description = _("Print attribute information");
+
+    shell_flag = G_define_flag();
+    shell_flag->key = 'g';
+    shell_flag->description = _("Print the stats in shell script style");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -149,7 +153,7 @@ int main(int argc, char **argv)
 	    ret = sscanf(buf, "%lf%c%lf", &xval, &ch, &yval);
 	    if (ret == 3 && (ch == ',' || ch == ' ' || ch == '\t')) {
 		what(xval, yval, maxd, topo_flag->answer,
-		     printattributes->answer);
+		     printattributes->answer, shell_flag->answer);
 	    }
 	    else {
 		G_warning(_("Unknown input format, skipping: '%s'"), buf);
@@ -162,7 +166,7 @@ int main(int argc, char **argv)
 	for (i = 0; coords_opt->answers[i] != NULL; i += 2) {
 	    xval = atof(coords_opt->answers[i]);
 	    yval = atof(coords_opt->answers[i + 1]);
-	    what(xval, yval, maxd, topo_flag->answer, printattributes->answer);
+	    what(xval, yval, maxd, topo_flag->answer, printattributes->answer, shell_flag->answer);
 	}
     }
 
