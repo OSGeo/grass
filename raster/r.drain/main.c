@@ -10,6 +10,9 @@
  *               24 July 2004: WebValley 2004, error checking and vector points added by
  *               Matteo Franchi          Liceo Leonardo Da Vinci Trento
  *               Roberto Flor            ITC-irst
+ *               New code added by Colin Nielsen <colin.nielsen at gmail dot com> *
+ *               to use movement direction surface from r.walk and r.cost, and to 
+ *               output vector paths 2/2009
  *               
  * PURPOSE:      This is the main program for tracing out the path that a
  *               drop of water would take if released at a certain location
@@ -39,6 +42,7 @@
 #include <grass/gis.h>
 #include <grass/site.h>
 #include <grass/glocale.h>
+#include <grass/Vect.h>
 
 #define DEBUG
 #include "tinf.h"
@@ -59,22 +63,23 @@ struct point
 int main(int argc, char **argv)
 {
 
-    int fe, fd;
+    int fe, fd, dir_fd;
     int i, have_points = 0;
     int new_id;
     int nrows, ncols, points_row[MAX_POINTS], points_col[MAX_POINTS], npoints;
     int cell_open(), cell_open_new();
-    int map_id;
-    char map_name[GNAME_MAX], new_map_name[GNAME_MAX];
-    char *tempfile1, *tempfile2;
+    int map_id, dir_id;
+    char map_name[GNAME_MAX], new_map_name[GNAME_MAX], dir_name[GNAME_MAX];
+    char *tempfile1, *tempfile2, *tempfile3;
     struct History history;
 
     struct Cell_head window;
-    struct Option *opt1, *opt2, *coordopt, *vpointopt;
-    struct Flag *flag1, *flag2, *flag3;
+    struct Option *opt1, *opt2, *coordopt, *vpointopt, *opt3, *opt4;
+    struct Flag *flag1, *flag2, *flag3, *flag4;
     struct GModule *module;
-    int in_type;
+    int in_type, dir_data_type;
     void *in_buf;
+	void *dir_buf;
     CELL *out_buf;
     struct band3 bnd, bndC;
     struct metrics *m = NULL;
@@ -82,10 +87,17 @@ int main(int argc, char **argv)
     struct point *list;
     struct point *thispoint;
     int ival, bsz, start_row, start_col, mode;
+    int costmode = 0;
     double east, north, val;
     struct point *drain(int, struct point *, int, int);
+    struct point *drain_cost(int, struct point *, int, int);
     int bsort(int, struct point *);
 
+    struct line_pnts *Points;
+    struct line_cats *Cats;
+    struct Map_info vout;
+    int cat;
+    double x, y;
 
     G_gisinit(argv[0]);
 
@@ -97,7 +109,22 @@ int main(int argc, char **argv)
     opt1 = G_define_standard_option(G_OPT_R_ELEV);
     opt1->key = "input";
     
+    opt3 = G_define_option();
+    opt3->key = "indir";
+    opt3->type = TYPE_STRING;
+    opt3->gisprompt = "old,cell,raster";
+    opt3->description =
+	_("Name of movement direction map associated with the cost surface");
+    opt3->required = NO;
     opt2 = G_define_standard_option(G_OPT_R_OUTPUT);
+    
+    opt4 = G_define_option();
+    opt4->key = "voutput";
+    opt4->type = TYPE_STRING;
+    opt4->gisprompt = "new,vector,vector";
+    opt4->required = NO;
+    opt4->description =
+	_("Output drain vector map (recommended for cost surface made using knight's move)");
     
     coordopt = G_define_option();
     coordopt->key = "coordinate";
@@ -126,6 +153,11 @@ int main(int argc, char **argv)
     flag3->key = 'n';
     flag3->description = _("Count cell numbers along the path");
 
+    flag4 = G_define_flag();
+    flag4->key = 'd';
+    flag4->description =
+	_("The input surface is a cost surface (if checked, a direction surface must also be specified");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -133,6 +165,42 @@ int main(int argc, char **argv)
     strcpy(map_name, opt1->answer);
     strcpy(new_map_name, opt2->answer);
 
+    if (flag4->answer) {
+	costmode = 1;
+	G_message(_
+		  ("Directional drain selected... checking for direction raster"));
+    }
+    else {
+	G_message(_("Surface/Hydrology drain selected"));
+    }
+
+    if (costmode == 1) {
+	if (!opt3->answer) {
+	    G_fatal_error(_
+			  ("Direction raster not specified, if direction flag is on, a direction raster must be given"));
+	}
+	strcpy(dir_name, opt3->answer);
+	dir_data_type = G_raster_map_type(dir_name, "");
+    }
+    if (costmode == 0) {
+	if (opt3->answer) {
+	    G_fatal_error(_
+			  ("Direction map <%s> should not be specified for Surface/Hydrology drains"),
+			  opt3->answer);
+	}
+    }
+
+    if (opt4->answer) {
+	G_message(_("Outputting a vector path"));
+	if (G_legal_filename(opt4->answer) < 0)
+	    G_fatal_error(_("<%s> is an illegal file name"), opt4->answer);
+	/*G_ask_vector_new("",vect); */
+	if (0 > Vect_open_new(&vout, opt4->answer, 0)) {
+	    G_fatal_error(_("Unable to create vector map <%s>"),
+			  opt4->answer);
+	}
+	Vect_hist_command(&vout);
+    }
     /*      allocate cell buf for the map layer */
     in_type = G_raster_map_type(map_name, "");
 
@@ -154,6 +222,10 @@ int main(int argc, char **argv)
     G_get_window(&window);
     nrows = G_window_rows();
     ncols = G_window_cols();
+    if (opt4->answer) {
+	Points = Vect_new_line_struct();
+	Cats = Vect_new_cats_struct();
+    }
 
     /* calculate true cell resolution */
     m = (struct metrics *)G_malloc(nrows * sizeof(struct metrics));
@@ -286,6 +358,21 @@ int main(int argc, char **argv)
     }
     G_close_cell(map_id);
 
+    if (costmode == 1) {
+	dir_buf = G_allocate_d_raster_buf();
+	dir_id = G_open_cell_old(dir_name, "");
+	tempfile3 = G_tempfile();
+	dir_fd = open(tempfile3, O_RDWR | O_CREAT);
+
+	for (i = 0; i < nrows; i++) {
+	    G_get_d_raster_row(dir_id, dir_buf, i);
+	    write(dir_fd, dir_buf, ncols * sizeof(DCELL));
+	}
+	G_close_cell(dir_id);
+    }
+
+    /* only necessary for non-dir drain */
+    if (costmode == 0) {
     G_verbose_message(_("Calculating flow directions..."));
 
     /* fill one-cell pits and take a first stab at flow directions */
@@ -293,6 +380,7 @@ int main(int argc, char **argv)
 
     /* determine flow directions for more ambiguous cases */
     resolve(fd, nrows, &bndC);
+}
 
     /* free the buffers already used */
     G_free(bndC.b[0]);
@@ -312,7 +400,13 @@ int main(int argc, char **argv)
 	thispoint->row = points_row[i];
 	thispoint->col = points_col[i];
 	thispoint->next = NULL;
-	thispoint = drain(fd, thispoint, nrows, ncols);
+	/* drain algorithm selection (dir or non-dir) */
+	if (costmode == 0) {
+	    thispoint = drain(fd, thispoint, nrows, ncols);
+	}
+	if (costmode == 1) {
+	    thispoint = drain_cost(dir_fd, thispoint, nrows, ncols);
+	}
     }
 
     /* do the output */
@@ -418,6 +512,38 @@ int main(int argc, char **argv)
 	G_percent(1, 1, 1);
     }
 
+    /* Output a vector path */
+    if (opt4->answer) {
+	/* Need to modify for multiple paths */
+	thispoint = list;
+	i = 1;
+	while (thispoint->next != NULL) {
+	    if (thispoint->row == INT_MAX) {
+		thispoint = thispoint->next;
+		Vect_cat_set(Cats, 1, i);
+		Vect_write_line(&vout, GV_LINE, Points, Cats);
+		Vect_reset_line(Points);
+		Vect_reset_cats(Cats);
+		i++;
+		continue;
+	    }
+	    if (Vect_cat_get(Cats, 1, &cat) == 0) {
+		Vect_cat_set(Cats, 1, i);
+	    }
+	    /* Need to convert row and col to coordinates 
+	     *      y = cell_head.north - ((double) p->row + 0.5) * cell_head.ns_res;
+	     *  x = cell_head.west + ((double) p->col + 0.5) * cell_head.ew_res;
+	     */
+
+	    x = window.west + ((double)thispoint->col + 0.5) * window.ew_res;
+	    y = window.north - ((double)thispoint->row + 0.5) * window.ns_res;
+	    Vect_append_point(Points, x, y, 0.0);
+	    thispoint = thispoint->next;
+	}			/* End while */
+	Vect_build(&vout);
+	Vect_close(&vout);
+    }
+
     /* close files and free buffers */
     G_close_cell(new_id);
 
@@ -435,6 +561,11 @@ int main(int argc, char **argv)
     G_free(in_buf);
     G_free(out_buf);
 
+    if (costmode == 1) {
+	close(dir_fd);
+	unlink(tempfile3);
+	G_free(dir_buf);
+    }
     G_done_msg(" ");
     
     exit(EXIT_SUCCESS);
@@ -495,6 +626,137 @@ struct point *drain(int fd, struct point *list, int nrow, int ncol)
     list->next = NULL;
 
     G_free(dir);
+
+    return list;
+}
+
+struct point *drain_cost(int dir_fd, struct point *list, int nrow, int ncol)
+{
+    /*
+     * The idea is that each cell of the direction surface has a value representing
+     * the direction towards the next cell in the path. The direction is read from 
+     * the input raster, and a simple case/switch is used to determine which cell to
+     * read next. This is repeated via a while loop until a null direction is found.
+     */
+
+    int neighbour, next_row, next_col, go = 1;
+    DCELL direction;
+    DCELL *dir_buf;
+
+    dir_buf = G_allocate_d_raster_buf();
+
+    next_row = list->row;
+    next_col = list->col;
+
+    while (go) {
+	go = 0;
+	/* Directional algorithm
+	 * 1) read cell direction               
+	 * 2) shift to cell in that direction           
+	 */
+	/* find the direction recorded at row,col */
+	lseek(dir_fd, (off_t) list->row * ncol * sizeof(DCELL), SEEK_SET);
+	read(dir_fd, dir_buf, ncol * sizeof(DCELL));
+	direction = *(dir_buf + list->col);
+	neighbour = direction * 10;
+	if (G_verbose() > 2)
+	    G_message(_("direction read: %lf, neighbour found: %i"),
+		      direction, neighbour);
+	switch (neighbour) {
+	case 1800:
+	    next_row = list->row;
+	    next_col = list->col + 1;
+	    break;
+	case 0:
+	    next_row = list->row;
+	    next_col = list->col - 1;
+	    break;
+	case 900:
+	    next_row = list->row + 1;
+	    next_col = list->col;
+	    break;
+	case 2700:
+	    next_row = list->row - 1;
+	    next_col = list->col;
+	    break;
+	case 1350:
+	    next_col = list->col + 1;
+	    next_row = list->row + 1;
+	    break;
+	case 450:
+	    next_col = list->col - 1;
+	    next_row = list->row + 1;
+	    break;
+	case 3150:
+	    next_row = list->row - 1;
+	    next_col = list->col - 1;
+	    break;
+	case 2250:
+	    next_row = list->row - 1;
+	    next_col = list->col + 1;
+	    break;
+	case 1125:
+	    next_row = list->row + 2;
+	    next_col = list->col + 1;
+	    break;
+	case 675:
+	    next_row = list->row + 2;
+	    next_col = list->col - 1;
+	    break;
+	case 2925:
+	    next_row = list->row - 2;
+	    next_col = list->col - 1;
+	    break;
+	case 2475:
+	    next_row = list->row - 2;
+	    next_col = list->col + 1;
+	    break;
+	case 1575:
+	    next_row = list->row + 1;
+	    next_col = list->col + 2;
+	    break;
+	case 225:
+	    next_row = list->row + 1;
+	    next_col = list->col - 2;
+	    break;
+	case 3375:
+	    next_row = list->row - 1;
+	    next_col = list->col - 2;
+	    break;
+	case 2025:
+	    next_row = list->row - 1;
+	    next_col = list->col + 2;
+	    break;
+	    /* default:
+	       break;
+	       Should probably add something here for the possibility of a non-direction map
+	       G_fatal_error(_("Invalid direction given (possibly not a direction map)")); */
+	}			/* end switch/case */
+
+	if (next_col >= 0 && next_col < ncol && next_row >= 0 &&
+	    next_row < nrow) {
+	    list->next = (struct point *)G_malloc(sizeof(struct point));
+	    list = list->next;
+	    list->row = next_row;
+	    list->col = next_col;
+	    next_row = -1;
+	    next_col = -1;
+	    go = 1;
+	}
+
+    }				/* end while */
+
+    /* allocate and fill the end-of-path flag */
+    list->next = (struct point *)G_malloc(sizeof(struct point));
+    list = list->next;
+    list->row = INT_MAX;
+
+    /* return a pointer to an empty structure */
+    list->next = (struct point *)G_malloc(sizeof(struct point));
+    list = list->next;
+    list->next = NULL;
+
+    G_free(dir_buf);
 
     return list;
 }
