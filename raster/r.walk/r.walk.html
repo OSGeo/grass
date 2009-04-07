@@ -1,8 +1,10 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.walk</em> outputs a raster map layer showing the lowest
+<em>r.walk</em> outputs 1) a raster map layer showing the lowest
 cumulative cost of moving between each cell and the user-specified
-starting points. It uses an input elevation raster map layer whose
+starting points and 2) a second raster map layer showing the movement 
+direction to the next cell on the path back to the start point (see 
+<a href="#move">Movement Direction</a>). It uses an input elevation raster map layer whose
 cell category values represent elevation, combined with a second input
 raster map layer whose cell values represent friction costs.
 
@@ -69,11 +71,28 @@ K x x x K
 The minimum cumulative costs are computed using Dijkstra's
 algorithm, that find an optimum solution (for more details see
 <em>r.cost</em>, that uses the same algorithm).
+<a name="move"></a>
+<H2>Movement Direction</H2>
+<p>
+The movement direction surface is created to record the sequence of
+movements that created the cost accumulation surface. Without it 
+<EM>r.drain</EM> would not correctly create a path from an end point 
+back to the start point. The direction shown in each cell points <b>away</b> 
+from the cell that came before it. The directions are recorded as
+GRASS standard directions:<div class="code"><pre>
+       112.5 90  67.5         i.e. a cell with the value 135 
+157.5  135   0   45   22.5    means the cell <b>before</b> it is 
+       180   x   0            to the south-east.
+202.5  225  270  315  337.5
+       247.5     292.5
+</pre></div>
 <p>
 Once <em>r.walk</em> computes the cumulative cost map as a linear
 combination of friction cost (from friction map) and the altitude and
 distance covered (from the digital elevation model), <em>r.drain</em>
-can be used to find the minimum cost path.
+can be used to find the minimum cost path. Make sure to use the <b>-d</b> flag
+and the movement direction raster map when running r.drain to ensure
+the path is computed according to the proper movement directions.
 
 
 <h2>SEE ALSO</h2>

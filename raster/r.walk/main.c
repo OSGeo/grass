@@ -25,6 +25,8 @@
  *               Updated for GRASS 6.1
  *                 Roberto Flor and Markus Neteler
  *                 Glynn Clements <glynn gclements.plus.com>, Soeren Gebbert <soeren.gebbert gmx.de>
+ *               Updated for calculation errors and directional surface generation
+ *                 Colin Nielsen <colin.nielsen gmail com>
  * PURPOSE:      anisotropic movements on cost surfaces
  * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
  *
@@ -112,7 +114,8 @@ struct variables
 } variables[] = {
     {"output", CUM_COST_LAYER},
     {"input", COST_LAYER},
-    {"coor", START_PT}
+    {"coor", START_PT},
+    {"outdir", MOVE_DIR_LAYER}
 };
 
 struct start_pt *head_start_pt = NULL;
@@ -126,27 +129,28 @@ struct Cell_head window;
 /* *************************************************************** */
 int main(int argc, char *argv[])
 {
-    const char *cum_cost_layer;
+    const char *cum_cost_layer, *move_dir_layer;
     const char *start_layer, *cost_layer, *dtm_layer;
-    void *dtm_cell, *cost_cell, *cum_cell, *cell2 = NULL;
-    SEGMENT dtm_in_seg, cost_in_seg, out_seg;
-    char *dtm_in_file, *cost_in_file, *out_file;
+    void *dtm_cell, *cost_cell, *cum_cell, *dir_cell, *cell2 = NULL;
+    SEGMENT dtm_in_seg, cost_in_seg, out_seg, out_seg2;
+    char *dtm_in_file, *cost_in_file, *out_file, *dir_out_file;
     double *dtm_value, *cost_value, *value_start_pt;
     char buf[400];
     extern struct Cell_head window;
     double NS_fac, EW_fac, DIAG_fac, H_DIAG_fac, V_DIAG_fac;
     double fcost_dtm, fcost_cost;
     double min_cost, old_min_cost;
+    double cur_dir, old_cur_dir;
     double zero = 0.0;
     int at_percent = 0;
     int col = 0, row = 0, nrows = 0, ncols = 0;
     int maxcost, par_number;
     int maxmem;
     int nseg;
-    int cost_fd, cum_fd, dtm_fd;
-    int have_start_points;
+    int cost_fd, cum_fd, dtm_fd, dir_fd;
+    int have_start_points, dir = 0;
     int have_stop_points;
-    int dtm_in_fd, cost_in_fd, out_fd;
+    int dtm_in_fd, cost_in_fd, out_fd, dir_out_fd;
     double my_dtm, my_cost;
     double null_cost;
     double a, b, c, d, lambda, slope_factor;
@@ -161,7 +165,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Flag *flag2, *flag3, *flag4;
     struct Option *opt1, *opt2, *opt3, *opt4, *opt5, *opt6, *opt7, *opt8;
-    struct Option *opt9, *opt10, *opt11, *opt12, *opt13, *opt14;
+    struct Option *opt9, *opt10, *opt11, *opt12, *opt13, *opt14, *opt15,*opt16;
     struct cost *pres_cell, *new_cell;
     struct History history;
     struct start_pt *pres_start_pt = NULL;
@@ -169,7 +173,7 @@ int main(int argc, char *argv[])
 
     void *ptr2;
     RASTER_MAP_TYPE dtm_data_type, data_type2, cost_data_type, cum_data_type =
-	DCELL_TYPE, cat;
+	DCELL_TYPE, dir_data_type = DCELL_TYPE, cat;
     double peak = 0.0;
     int dtm_dsize, cost_dsize;
 
@@ -211,12 +215,20 @@ int main(int argc, char *argv[])
     opt1->gisprompt = "new,cell,raster";
     opt1->description = _("Name of raster map to contain results");
 
-    opt14 = G_define_option();
-    opt14->key = "start_map";
-    opt14->type = TYPE_STRING;
-    opt14->required = NO;
-    opt14->gisprompt = "old,cell,raster";
-    opt14->description =
+    opt15 = G_define_option();
+    opt15->key = "outdir";
+    opt15->type = TYPE_STRING;
+    opt15->required = NO;
+    opt15->gisprompt = "new,cell,raster";
+    opt15->description =
+	_("Name of output raster map to contain movement directions");
+
+    opt16 = G_define_option();
+    opt16->key = "start_map";
+    opt16->type = TYPE_STRING;
+    opt16->required = NO;
+    opt16->gisprompt = "old,cell,raster";
+    opt16->description =
 	_("Name of input raster map containing starting points");
 
     opt7 = G_define_option();
@@ -327,11 +339,17 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
+    /* If no outdir is specified, set flag to skip all dir */
+    if (opt15->answer != NULL)
+	dir = 1;
+
     /* Initalize access to database and create temporary files */
 
     dtm_in_file = G_tempfile();
     cost_in_file = G_tempfile();
     out_file = G_tempfile();
+    if (dir == 1)
+	dir_out_file = G_tempfile();
 
     /*  Get database window parameters      */
 
@@ -507,10 +525,12 @@ int main(int argc, char *argv[])
 	keep_nulls = 0;		/* handled automagically... */
     }
 
-    start_layer = opt14->answer;
+    start_layer = opt16->answer;
     dtm_layer = opt2->answer;
     cost_layer = opt12->answer;
     cum_cost_layer = opt1->answer;
+    if (dir == 1)
+	move_dir_layer = opt15->answer;
 
     /*  Find number of rows and columns in window    */
 
@@ -647,6 +667,12 @@ int main(int argc, char *argv[])
     segment_format(out_fd, nrows, ncols, srows, scols, sizeof(double));
     close(out_fd);
 
+    if (dir == 1) {
+	dir_out_fd = creat(dir_out_file, 0600);
+	segment_format(dir_out_fd, nrows, ncols, srows, scols,
+		       sizeof(double));
+	close(dir_out_fd);
+    }
     /*   Open initialize and segment all files  */
 
     dtm_in_fd = open(dtm_in_file, 2);
@@ -657,6 +683,11 @@ int main(int argc, char *argv[])
 
     out_fd = open(out_file, 2);
     segment_init(&out_seg, out_fd, segments_in_memory);
+
+    if (dir == 1) {
+	dir_out_fd = open(dir_out_file, 2);
+	segment_init(&out_seg2, dir_out_fd, segments_in_memory);
+    }
 
     /*   Write the cost layer in the segmented file  */
 
@@ -817,6 +848,33 @@ int main(int argc, char *argv[])
 	G_percent(row, nrows, 2);
 	G_free(fbuff);
     }
+    if (dir == 1) {
+	G_message(_("Initializing directional output "));
+	{
+	    double *fbuff;
+	    int i;
+
+	    fbuff =
+		(double *)G_malloc((unsigned int)(ncols * sizeof(double)));
+
+	    if (fbuff == NULL)
+		G_fatal_error(_("Unable to allocate memory for segment fbuff == NULL"));
+
+	    G_set_d_null_value(fbuff, ncols);
+
+	    for (row = 0; row < nrows; row++) {
+		{
+		    G_percent(row, nrows, 2);
+		}
+		for (i = 0; i < ncols; i++) {
+		    segment_put(&out_seg2, &fbuff[i], row, i);
+		}
+	    }
+	    segment_flush(&out_seg2);
+	    G_percent(row, nrows, 2);
+	    G_free(fbuff);
+	}
+    }
 
     /*   Scan the existing cum_cost_layer searching for starting points.
      *   Create a btree of starting points ordered by increasing costs.
@@ -952,66 +1010,82 @@ int main(int argc, char *argv[])
 	    case 1:
 		row = pres_cell->row;
 		col = pres_cell->col - 1;
+		cur_dir = 180.0;
 		break;
 	    case 2:
 		row = pres_cell->row;
 		col = pres_cell->col + 1;
+		cur_dir = 0.0;
 		break;
 	    case 3:
 		row = pres_cell->row - 1;
 		col = pres_cell->col;
+		cur_dir = 90.0;
 		break;
 	    case 4:
 		row = pres_cell->row + 1;
 		col = pres_cell->col;
+		cur_dir = 270.0;
 		break;
 	    case 5:
 		row = pres_cell->row - 1;
 		col = pres_cell->col - 1;
+		cur_dir = 135.0;
 		break;
 	    case 6:
 		row = pres_cell->row - 1;
 		col = pres_cell->col + 1;
+		cur_dir = 45.0;
 		break;
 	    case 7:
 		col = pres_cell->col + 1;
 		row = pres_cell->row + 1;
+		cur_dir = 315.0;
 		break;
 	    case 8:
 		col = pres_cell->col - 1;
 		row = pres_cell->row + 1;
+		cur_dir = 225.0;
 		break;
 	    case 9:
 		row = pres_cell->row - 2;
 		col = pres_cell->col - 1;
+		cur_dir = 112.5;
 		break;
 	    case 10:
 		row = pres_cell->row - 2;
 		col = pres_cell->col + 1;
+		cur_dir = 67.5;
 		break;
 	    case 11:
 		row = pres_cell->row + 2;
 		col = pres_cell->col + 1;
+		cur_dir = 292.5;
 		break;
 	    case 12:
 		row = pres_cell->row + 2;
 		col = pres_cell->col - 1;
+		cur_dir = 247.5;
 		break;
 	    case 13:
 		row = pres_cell->row - 1;
 		col = pres_cell->col - 2;
+		cur_dir = 157.5;
 		break;
 	    case 14:
 		row = pres_cell->row - 1;
 		col = pres_cell->col + 2;
+		cur_dir = 22.5;
 		break;
 	    case 15:
 		row = pres_cell->row + 1;
 		col = pres_cell->col + 2;
+		cur_dir = 337.5;
 		break;
 	    case 16:
 		row = pres_cell->row + 1;
 		col = pres_cell->col - 2;
+		cur_dir = 202.5;
 		break;
 	    }
 
@@ -1034,7 +1108,7 @@ int main(int argc, char *argv[])
 		    fcost_dtm = (double)((double)(W_dtm - my_dtm) * d);
 		else
 		    fcost_dtm = (double)((double)(W_dtm - my_dtm) * c);
-		fcost_cost = ((double)(W_cost + my_cost) / 2.0);
+		fcost_cost = (double)((W_cost / 2.0) + (my_cost / 2.0));
 		min_cost =
 		    pres_cell->min_cost + fcost_dtm + (EW_fac * a) +
 		    lambda * fcost_cost * EW_fac;
@@ -1052,7 +1126,7 @@ int main(int argc, char *argv[])
 		    fcost_dtm = (double)(E_dtm - my_dtm) * d;
 		else
 		    fcost_dtm = (double)(E_dtm - my_dtm) * c;
-		fcost_cost = (double)(E_cost + my_cost) / 2.0;
+		fcost_cost = (double)((E_cost / 2.0) + (my_cost / 2.0));
 		min_cost =
 		    pres_cell->min_cost + fcost_dtm + (EW_fac * a) +
 		    lambda * fcost_cost * EW_fac;
@@ -1070,7 +1144,7 @@ int main(int argc, char *argv[])
 		    fcost_dtm = (double)(N_dtm - my_dtm) * d;
 		else
 		    fcost_dtm = (double)(N_dtm - my_dtm) * c;
-		fcost_cost = (double)(N_cost + my_cost) / 2.0;
+		fcost_cost = (double)((N_cost / 2.0) + (my_cost / 2.0));
 		min_cost =
 		    pres_cell->min_cost + fcost_dtm + (NS_fac * a) +
 		    lambda * fcost_cost * NS_fac;
@@ -1088,7 +1162,7 @@ int main(int argc, char *argv[])
 		    fcost_dtm = (double)(S_dtm - my_dtm) * d;
 		else
 		    fcost_dtm = (double)(S_dtm - my_dtm) * c;
-		fcost_cost = (double)(S_cost + my_cost) / 2.0;
+		fcost_cost = (double)((S_cost / 2.0) + (my_cost / 2.0));
 		min_cost =
 		    pres_cell->min_cost + fcost_dtm + (NS_fac * a) +
 		    lambda * fcost_cost * NS_fac;
@@ -1106,7 +1180,7 @@ int main(int argc, char *argv[])
 		    fcost_dtm = (double)(NW_dtm - my_dtm) * d;
 		else
 		    fcost_dtm = (double)(NW_dtm - my_dtm) * c;
-		fcost_cost = (double)(NW_cost + my_cost) / 2.0;
+		fcost_cost = (double)((NW_cost / 2.0) + (my_cost / 2.0));
 		min_cost =
 		    pres_cell->min_cost + fcost_dtm + (DIAG_fac * a) +
 		    lambda * fcost_cost * DIAG_fac;
@@ -1124,7 +1198,7 @@ int main(int argc, char *argv[])
 		    fcost_dtm = (double)(NE_dtm - my_dtm) * d;
 		else
 		    fcost_dtm = (double)(NE_dtm - my_dtm) * c;
-		fcost_cost = (double)(NE_cost + my_cost) / 2.0;
+		fcost_cost = (double)((NE_cost / 2.0) + (my_cost / 2.0));
 		min_cost =
 		    pres_cell->min_cost + fcost_dtm + (DIAG_fac * a) +
 		    lambda * fcost_cost * DIAG_fac;
@@ -1142,7 +1216,7 @@ int main(int argc, char *argv[])
 		    fcost_dtm = (double)(SE_dtm - my_dtm) * d;
 		else
 		    fcost_dtm = (double)(SE_dtm - my_dtm) * c;
-		fcost_cost = (double)(SE_cost + my_cost) / 2.0;
+		fcost_cost = (double)((SE_cost / 2.0) + (my_cost / 2.0));
 		min_cost =
 		    pres_cell->min_cost + fcost_dtm + (DIAG_fac * a) +
 		    lambda * fcost_cost * DIAG_fac;
@@ -1160,7 +1234,7 @@ int main(int argc, char *argv[])
 		    fcost_dtm = (double)(SW_dtm - my_dtm) * d;
 		else
 		    fcost_dtm = (double)(SW_dtm - my_dtm) * c;
-		fcost_cost = (double)(SW_cost + my_cost) / 2.0;
+		fcost_cost = (double)((SW_cost / 2.0) + (my_cost / 2.0));
 		min_cost =
 		    pres_cell->min_cost + fcost_dtm + (DIAG_fac * a) +
 		    lambda * fcost_cost * DIAG_fac;
@@ -1179,7 +1253,8 @@ int main(int argc, char *argv[])
 		else
 		    fcost_dtm = (double)(NNW_dtm - my_dtm) * c;
 		fcost_cost =
-		    (double)(N_cost + NW_cost + NNW_cost + my_cost) / 4.0;
+		    (double)((N_cost / 4.0) + (NW_cost / 4.0) +
+			     (NNW_cost / 4.0) + (my_cost / 4.0));
 		min_cost =
 		    pres_cell->min_cost + fcost_dtm + (V_DIAG_fac * a) +
 		    lambda * fcost_cost * V_DIAG_fac;
@@ -1198,7 +1273,8 @@ int main(int argc, char *argv[])
 		else
 		    fcost_dtm = (double)(NNE_dtm - my_dtm) * c;
 		fcost_cost =
-		    (double)(N_cost + NE_cost + NNE_cost + my_cost) / 4.0;
+		    (double)((N_cost / 4.0) + (NE_cost / 4.0) +
+			     (NNE_cost / 4.0) + (my_cost / 4.0));
 		min_cost =
 		    pres_cell->min_cost + fcost_dtm + (V_DIAG_fac * a) +
 		    lambda * fcost_cost * V_DIAG_fac;
@@ -1217,7 +1293,8 @@ int main(int argc, char *argv[])
 		else
 		    fcost_dtm = (double)(SSE_dtm - my_dtm) * c;
 		fcost_cost =
-		    (double)(S_cost + SE_cost + SSE_cost + my_cost) / 4.0;
+		    (double)((S_cost / 4.0) + (SE_cost / 4.0) +
+			     (SSE_cost / 4.0) + (my_cost / 4.0));
 		min_cost =
 		    pres_cell->min_cost + fcost_dtm + (V_DIAG_fac * a) +
 		    lambda * fcost_cost * V_DIAG_fac;
@@ -1236,7 +1313,8 @@ int main(int argc, char *argv[])
 		else
 		    fcost_dtm = (double)(SSW_dtm - my_dtm) * c;
 		fcost_cost =
-		    (double)(S_cost + SW_cost + SSW_cost + my_cost) / 4.0;
+		    (double)((S_cost / 4.0) + (SW_cost / 4.0) +
+			     (SSW_cost / 4.0) + (my_cost / 4.0));
 		min_cost =
 		    pres_cell->min_cost + fcost_dtm + (V_DIAG_fac * a) +
 		    lambda * fcost_cost * V_DIAG_fac;
@@ -1255,7 +1333,8 @@ int main(int argc, char *argv[])
 		else
 		    fcost_dtm = (double)(WNW_dtm - my_dtm) * c;
 		fcost_cost =
-		    (double)(W_cost + NW_cost + WNW_cost + my_cost) / 4.0;
+		    (double)((W_cost / 4.0) + (NW_cost / 4.0) +
+			     (WNW_cost / 4.0) + (my_cost / 4.0));
 		min_cost =
 		    pres_cell->min_cost + fcost_dtm + (H_DIAG_fac * a) +
 		    lambda * fcost_cost * H_DIAG_fac;
@@ -1274,7 +1353,8 @@ int main(int argc, char *argv[])
 		else
 		    fcost_dtm = (double)(ENE_dtm - my_dtm) * c;
 		fcost_cost =
-		    (double)(E_cost + NE_cost + ENE_cost + my_cost) / 4.0;
+		    (double)((E_cost / 4.0) + (NE_cost / 4.0) +
+			     (ENE_cost / 4.0) + (my_cost / 4.0));
 		min_cost =
 		    pres_cell->min_cost + fcost_dtm + (H_DIAG_fac * a) +
 		    lambda * fcost_cost * H_DIAG_fac;
@@ -1293,7 +1373,8 @@ int main(int argc, char *argv[])
 		else
 		    fcost_dtm = (double)(ESE_dtm - my_dtm) * c;
 		fcost_cost =
-		    (double)(E_cost + SE_cost + ESE_cost + my_cost) / 4.0;
+		    (double)((E_cost / 4.0) + (SE_cost / 4.0) +
+			     (ESE_cost / 4.0) + (my_cost / 4.0));
 		min_cost =
 		    pres_cell->min_cost + fcost_dtm + (H_DIAG_fac * a) +
 		    lambda * fcost_cost * H_DIAG_fac;
@@ -1312,7 +1393,8 @@ int main(int argc, char *argv[])
 		else
 		    fcost_dtm = (double)(WSW_dtm - my_dtm) * c;
 		fcost_cost =
-		    (double)(W_cost + SW_cost + WSW_cost + my_cost) / 4.0;
+		    (double)((W_cost / 4.0) + (SW_cost / 4.0) +
+			     (WSW_cost / 4.0) + (my_cost / 4.0));
 		min_cost =
 		    pres_cell->min_cost + fcost_dtm + (H_DIAG_fac * a) +
 		    lambda * fcost_cost * H_DIAG_fac;
@@ -1323,15 +1405,21 @@ int main(int argc, char *argv[])
 		continue;
 
 	    segment_get(&out_seg, &old_min_cost, row, col);
+	    if (dir == 1)
+		segment_get(&out_seg2, &old_cur_dir, row, col);
 
 	    if (G_is_d_null_value(&old_min_cost)) {
 		segment_put(&out_seg, &min_cost, row, col);
 		new_cell = insert(min_cost, row, col);
+		if (dir == 1)
+		    segment_put(&out_seg2, &cur_dir, row, col);
 	    }
 	    else {
 		if (old_min_cost > min_cost) {
 		    segment_put(&out_seg, &min_cost, row, col);
 		    new_cell = insert(min_cost, row, col);
+		    if (dir == 1)
+			segment_put(&out_seg2, &cur_dir, row, col);
 		}
 		else {
 		}
@@ -1358,9 +1446,16 @@ int main(int argc, char *argv[])
 
     cum_fd = G_open_raster_new(cum_cost_layer, cum_data_type);
     cum_cell = G_allocate_raster_buf(cum_data_type);
+    if (dir == 1) {
+	dir_fd = G_open_raster_new(move_dir_layer, dir_data_type);
+	dir_cell = G_allocate_raster_buf(dir_data_type);
+    }
+
     /*  Write pending updates by segment_put() to output map   */
 
     segment_flush(&out_seg);
+    if (dir == 1)
+	segment_flush(&out_seg2);
 
     /*  Copy segmented map to output map  */
 
@@ -1478,23 +1573,43 @@ int main(int argc, char *argv[])
 	}
     }
 
+    double *p;
 
-    G_percent(row, nrows, 2);
+    if (dir == 1) {
+	G_message(_("Writing movement direction file %s..."), move_dir_layer);
+	for (row = 0; row < nrows; row++) {
+	    p = dir_cell;
+	    for (col = 0; col < ncols; col++) {
+		segment_get(&out_seg2, &cur_dir, row, col);
+		*(p + col) = cur_dir;
+	    }
+	    G_put_raster_row(dir_fd, dir_cell, dir_data_type);
+	}
+	G_percent(row, nrows, 2);
+    }
 
 
     G_message(_("Peak cost value: %f"), peak);
 
     segment_release(&dtm_in_seg);	/* release memory  */
     segment_release(&out_seg);
+    if (dir == 1)
+	segment_release(&out_seg2);
     G_close_cell(dtm_fd);
     G_close_cell(cost_fd);
     G_close_cell(cum_fd);
+    if (dir == 1)
+	G_close_cell(dir_fd);
     close(dtm_in_fd);		/* close all files */
     close(out_fd);
     close(cost_in_fd);
+    if (dir == 1)
+	close(dir_out_fd);
     unlink(dtm_in_file);	/* remove submatrix files  */
     unlink(cost_in_file);
     unlink(out_file);
+    if (dir == 1)
+	unlink(dir_out_file);
 
     /*  Create colours for output map    */
 
@@ -1509,6 +1624,12 @@ int main(int argc, char *argv[])
     G_short_history(cum_cost_layer, "raster", &history);
     G_command_history(&history);
     G_write_history(cum_cost_layer, &history);
+
+    if (dir == 1) {
+	G_short_history(move_dir_layer, "raster", &history);
+    G_command_history(&history);
+    G_write_history(move_dir_layer, &history);
+	}
 
     exit(EXIT_SUCCESS);
 }
