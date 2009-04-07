@@ -29,6 +29,7 @@
 #define      CUM_COST_LAYER        1
 #define      COST_LAYER            2
 #define      START_PT              3
+#define      MOVE_DIR_LAYER        4
 
 struct start_pt
 {
@@ -37,7 +38,7 @@ struct start_pt
     struct start_pt *next;
 };
 
-extern char cum_cost_layer[];
+extern char cum_cost_layer[], move_dir_layer[];
 extern char cost_layer[];
 extern struct start_pt *head_start_pt;
 extern struct start_pt *head_end_pt;

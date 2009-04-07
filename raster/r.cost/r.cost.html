@@ -6,11 +6,13 @@ cell on a <em>cost surface</em> (the <b>input</b> raster map) from
 other user-specified cell(s) whose locations are specified by their
 geographic coordinate(s). Each cell in the original cost surface map
 will contain a category value which represents the cost of traversing
-that cell. <em>r.cost</em> will produce an <b>output</b> raster map in
+that cell. <em>r.cost</em> will produce 1) an <b>output</b> raster map in
 which each cell contains the lowest total cost of traversing the
-space between each cell and the user-specified points. (Diagonal
+space between each cell and the user-specified points (diagonal
 costs are multiplied by a factor that depends on the dimensions of
-the cell.) This program uses the current geographic region settings.
+the cell) and 2) a second raster map layer showing the movement 
+direction to the next cell on the path back to the start point (see 
+<a href="#move">Movement Direction</a>). This program uses the current geographic region settings.
 The <b>output</b> map will be of the same data format as the <b>input</b>
 map, integer or floating point.</p>
 
@@ -18,7 +20,8 @@ map, integer or floating point.</p>
 
 The <b>input</b> <em>name</em> is the name of a raster map whose category values
 represent the surface cost. The <b>output</b> <em>name</em> is the name of the
-resultant raster map of cumulative cost.
+resultant raster map of cumulative cost. The <b>outdir</b> <em>name</em> is the 
+name of the resultant raster map of movement directions (see <a href="#move">Movement Direction</a>).
 
 <p>
 <em>r.cost</em> can be run with three different methods of identifying the
@@ -203,11 +206,11 @@ Knight's move (<b>-k</b>) option.
 
 The output map can be viewed, for example, as an elevation model in which
 the starting location(s) is/are the lowest point(s). Outputs from  <em>r.cost</em>
-can be used as inputs to <em><a href="r.drain.html">r.drain</a></em>, in order
-to trace the least-cost path given by this model between any given cell
-and the <em>r.cost</em> starting location(s). The two programs, when
-used together, generate least-cost paths or corridors between any two
-map locations (cells). 
+can be used as inputs to <em><a href="r.drain.html">r.drain</a></em> with
+the direction flag <b>-d</b>, in order to trace the least-cost path given by this 
+model between any given cell and the <em>r.cost</em> starting location(s). The 
+two programs, when used together, generate least-cost paths or corridors between any 
+two map locations (cells).
 
 <h4>Shortest distance surfaces</h4>
 The <em>r.cost</em> module allows for computing the shortest distance 
@@ -228,6 +231,26 @@ used. The calculation is done with <em>r.cost</em> as follows
   d.rast dist_meters
 </pre></div>
 
+<a name="move"></a>
+<h2>Movement Direction</h2>
+<p>
+The movement direction surface is created to record the sequence of
+movements that created the cost accumulation surface. Without it 
+<em>r.drain</em> would not correctly create a path from an end point 
+back to the start point. The direction shown in each cell points <b>away</b> 
+from the cell that came before it. The directions are recorded as
+GRASS standard directions:<div class="code"><pre>
+       112.5 90  67.5         i.e. a cell with the value 135 
+157.5  135   0   45   22.5    means the cell <b>before</b> it is 
+       180   x   0            to the south-east.
+202.5  225  270  315  337.5
+       247.5     292.5
+</pre></div>
+<p>
+Once <em>r.cost</em> computes the cumulative cost map, <em>r.drain</em>
+can be used to find the minimum cost path. Make sure to use the <b>-d</b> flag
+and the movement direction raster map when running r.drain to ensure
+the path is computed according to the proper movement directions.
 
 <h2>BUGS</h2>
 
