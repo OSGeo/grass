@@ -177,6 +177,7 @@ void field_info(MYSQL_FIELD * field, int *sqltype, int *length)
 	break;
 
     case MYSQL_TYPE_DECIMAL:
+    case MYSQL_TYPE_NEWDECIMAL:
 	*sqltype = DB_SQL_TYPE_DECIMAL;
 	break;
 
