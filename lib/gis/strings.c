@@ -299,7 +299,7 @@ int G_str_to_sql(char *str)
 
     count = 0;
 
-    if (!str)
+    if (!str || !*str)
 	return 0;
 
     c = str;
