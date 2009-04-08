@@ -119,10 +119,11 @@ void write_done(struct Map_info *Map)
     return;
 }
 
-static int get_field_cat(struct Map_info *Map, char *field_name, int *field,
+static int get_field_cat(struct Map_info *Map, char *layer, int *field,
 			 int *cat)
 {
     int i, type;
+    char field_name[DXF_BUF_SIZE];
     char x = 0;
 
     /* make table name SQL compliant: Vect_default_field_info returns
@@ -130,6 +131,7 @@ static int get_field_cat(struct Map_info *Map, char *field_name, int *field,
      * Because layername is followed by mapname_, it (field_name here) can
      * start with [a-zA-Z0-9]. No need to change the first digit to 'x'.
      */
+    strcpy(field_name, layer);
     if (field_name[0] >= '0' && field_name[0] <= '9')
 	x = field_name[0];
     G_str_to_sql(field_name);
