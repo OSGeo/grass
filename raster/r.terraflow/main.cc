@@ -54,7 +54,7 @@ extern struct Cell_head region;
 /* #define JUMP2FLOW */
 /* define it only if you want to skip the flow direction computation
    and jump directly to computing flow accumulation; the flowstream
-   must exist in /var/tmp/flowStream */
+   must exist in /STREAM_DIR/flowStream */
 
 
 /* ---------------------------------------------------------------------- */
@@ -130,7 +130,7 @@ parse_args(int argc, char *argv[]) {
   streamdir->key        = "stream_dir";
   streamdir->type       = TYPE_STRING;
   streamdir->required   = NO;
-  streamdir->answer     = G_store("/var/tmp"); 
+  streamdir->answer     = G_store("/var/tmp/");
   streamdir->description=
      _("Directory to hold temporary files (they can be large)");
 
@@ -558,7 +558,7 @@ main(int argc, char *argv[]) {
   
 #else 
   AMI_STREAM<waterWindowBaseType> *flowStream;
-  flowStream = new AMI_STREAM<waterWindowBaseType>("/var/tmp/flowStream");
+  flowStream = new AMI_STREAM<waterWindowBaseType>(streamdir->answer);
   fprintf(stderr, "flowStream opened: len=%d\n", flowStream->stream_len());
   fprintf(stderr, "jumping to flow accumulation computation\n");
 #endif
@@ -586,7 +586,7 @@ main(int argc, char *argv[]) {
   stats->recordTime("Total running time: ", rtTotal);
   stats->timestamp("end");
 
-  G_done_msg("");
+  G_done_msg(" ");
   
   /* free the globals */
   free(region);
