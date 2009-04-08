@@ -219,8 +219,9 @@ int main(int argc, char **argv)
 
     setname = imapset->answer ? imapset->answer : G_store(G_mapset());
 
-    if (strcmp(inlocation->answer, G_location()) == 0)
-	G_fatal_error(_("You have to use a different location for input than the current"));
+    if (strcmp(inlocation->answer, G_location()) == 0 &&
+        (!indbase->answer || strcmp(indbase->answer, G_gisdbase()) == 0))
+	G_fatal_error(_("Input and output locations can not be the same"));
 
     G_get_window(&outcellhd);
 
