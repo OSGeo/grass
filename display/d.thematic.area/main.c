@@ -442,36 +442,55 @@ int main(int argc, char **argv)
 
 	}
 
+        if(stats.min > breakpoints[0]){
+	fprintf(stdout, "<%f|%i|%d:%d:%d\n",
+		breakpoints[0], frequencies[0], colors[0].r,
+		colors[0].g, colors[0].b);
+
+        } else {
 	fprintf(stdout, "%f|%f|%i|%d:%d:%d\n",
 		stats.min, breakpoints[0], frequencies[0], colors[0].r,
 		colors[0].g, colors[0].b);
+        }
 
 	for (i = 1; i < nbreaks; i++) {
 	    fprintf(stdout, "%f|%f|%i|%d:%d:%d\n",
 		    breakpoints[i - 1], breakpoints[i], frequencies[i],
 		    colors[i].r, colors[i].g, colors[i].b);
 	}
+
+        if(stats.max < breakpoints[nbreaks-1]){
+	fprintf(stdout, ">%f|%i|%d:%d:%d\n",
+		breakpoints[nbreaks - 1], frequencies[nbreaks],
+		colors[nbreaks].r, colors[nbreaks].g, colors[nbreaks].b);
+        } else {
 	fprintf(stdout, "%f|%f|%i|%d:%d:%d\n",
 		breakpoints[nbreaks - 1], stats.max, frequencies[nbreaks],
 		colors[nbreaks].r, colors[nbreaks].g, colors[nbreaks].b);
+        }
     }
 
     if (legend_file_opt->answer) {
 	fd = fopen(legend_file_opt->answer, "w");
 	boxsize = 25;
-	textsize = boxsize / 10;
+	textsize = 8;
 	fprintf(fd, "size %i %i\n", textsize, textsize);
 	ypos = 10;
 	fprintf(fd, "symbol basic/box %i 5 %i black %d:%d:%d\n", boxsize,
 		ypos, colors[0].r, colors[0].g, colors[0].b);
-	fprintf(fd, "move 8 %f \n", ypos - textsize / 2.5);
+	fprintf(fd, "move 8 %i \n", ypos-1);
+        if(stats.min > breakpoints[0]){
+	fprintf(fd, "text <%f | %i\n", breakpoints[0],
+		frequencies[0]);
+        } else {
 	fprintf(fd, "text %f - %f | %i\n", stats.min, breakpoints[0],
 		frequencies[0]);
+        }
 	for (i = 1; i < nbreaks; i++) {
 	    ypos = 10 + i * 6;
 	    fprintf(fd, "symbol basic/box %i 5 %i black %d:%d:%d\n", boxsize,
 		    ypos, colors[i].r, colors[i].g, colors[i].b);
-	    fprintf(fd, "move 8 %f\n", ypos - textsize / 2.5);
+	    fprintf(fd, "move 8 %i\n", ypos-1);
 	    fprintf(fd, "text %f - %f | %i\n", breakpoints[i - 1],
 		    breakpoints[i], frequencies[i]);
 	}
@@ -479,9 +498,14 @@ int main(int argc, char **argv)
 	fprintf(fd, "symbol basic/box %i 5 %i black %d:%d:%d\n", boxsize,
 		ypos, colors[nbreaks].r, colors[nbreaks].g,
 		colors[nbreaks].b);
-	fprintf(fd, "move 8 %f\n", ypos - textsize / 2.5);
+	fprintf(fd, "move 8 %i\n", ypos -1);
+        if(stats.max < breakpoints[nbreaks-1]){
+	fprintf(fd, "text >%f | %i\n", breakpoints[nbreaks - 1],
+		frequencies[nbreaks]);
+        } else {
 	fprintf(fd, "text %f - %f | %i\n", breakpoints[nbreaks - 1],
 		stats.max, frequencies[nbreaks]);
+        }
 	fclose(fd);
     }
 
