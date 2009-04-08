@@ -53,17 +53,11 @@ it reads: "xps &lt;=0. means the target is at the sea level". This is contrary.
 3. In section E, I'm not sure if the "-100 &lt; xpp &lt; 0" shouldn't actually be
 "-1000 &lt; xpp &lt; 0". ?
 <p>
-4. It is not explained what is the "iaer" parameter that section D refers to.
-<p>
-5. Section D's "Aerosol model concentration" title could use a better wording I
-suppose. The current one seems to mean "the concentration of the model of the
-aerosol". Should it be "Aerosol concentration model"?
-<p>
-6. It should be explained under what circumstances the use of categorized maps
+4. It should be explained under what circumstances the use of categorized maps
 in conjuction with flag <em>-o</em> can slow down the calculations instead of
 speeding them up.
 <p>
-7. "This should not affect the user's current region settings" sounds ambigious.
+5. "This should not affect the user's current region settings" sounds ambigious.
 <p>
 
 <H2>6S CODE PARAMETER CHOICES</H2>
@@ -333,13 +327,14 @@ refractive index.</td>
 </tr>
 </table>
 
-<br><h3>D. Aerosol model concentration (visibility)</h3>
+<br><h3>D. Aerosol concentration model (visibility)</h3>
 
 <blockquote>If you have an estimate of the meteorological parameter visibility
 v, enter directly the value of v [km] (the aerosol optical depth will be
 computed from a standard aerosol profile).
 <p>If you have an estimate of aerosol optical depth, enter v=0 for the
-visibility and enter the aerosol optical depth at 550nm.
+visibility and enter the aerosol optical depth at 550nm (iaer means 'i' for input
+and 'aer' for aerosol).
 <p>NOTE: if iaer=0, enter v=-1.</blockquote>
 
 <br><h3>E. Target altitude (xps), sensor platform (xpp)</h3>
