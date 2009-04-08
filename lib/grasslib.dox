@@ -39,6 +39,12 @@ Main web site: <a href="http://grass.osgeo.org">http://grass.osgeo.org</a>
 <I>Missing entries below are either not yet uploaded to SVN (need to be migrated
 from GRASS 5 Programmer's manual) or are simply undocumented.</I>
 
+<!-- original:
+  http://trac.osgeo.org/grass/browser/grass-web/trunk/images/grass7_arch.odp
+-->
+\image html "grass7_arch.png" "GRASS 7 Architecture"
+
+
 <P>
 <I>PLEASE UPDATE FOR GRASS 7</I>
 
@@ -157,6 +163,9 @@ as follows:
   storage in database (DBMS).</li>
 </ul>
 
+<!-- original: 
+  http://trac.osgeo.org/grass/browser/grass-web/trunk/images/loc_struct.odg
+-->
 \image html "loc_struct.png" "Diagram of GRASS file structure"
 
 */
