@@ -123,9 +123,18 @@ static int get_field_cat(struct Map_info *Map, char *field_name, int *field,
 			 int *cat)
 {
     int i, type;
+    char x = 0;
 
-    /* make table name SQL compliant */
+    /* make table name SQL compliant: Vect_default_field_info returns
+     * mapname_layername in ->table, and mapname is always SQL compliant.
+     * Because layername is followed by mapname_, it (field_name here) can
+     * start with [a-zA-Z0-9]. No need to change the first digit to 'x'.
+     */
+    if (field_name[0] >= '0' && field_name[0] <= '9')
+	x = field_name[0];
     G_str_to_sql(field_name);
+    if (x)
+        field_name[0] = x;
 
     for (i = 0; i < num_fields; i++) {
 	/* field name already exists */
