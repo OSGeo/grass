@@ -14,6 +14,7 @@ int add_line(struct dxf_file *dxf, struct Map_info *Map)
 
     strcpy(layer, UNIDENTIFIED_LAYER);
 
+    zpnts[0] = zpnts[1] = 0.0;
     /* read in lines and process information until a 0 is read in */
     while ((code = dxf_get_code(dxf)) != 0) {
 	if (code == -2)
