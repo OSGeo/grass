@@ -1,172 +1,189 @@
 <h2>DESCRIPTION</h2>
+
 <i>r.sim.water</i> is a landscape scale simulation model 
-of  overland  flow   designed for spatially variable terrain, soil, cover 
-and  rainfall excess conditions. A 2D shallow water flow is described by 
-the  bivariate form of Saint Venant equations. The numerical solution is based
+of overland flow designed for spatially variable terrain, soil, cover 
+and rainfall excess conditions. A 2D shallow water flow is described by 
+the bivariate form of Saint Venant equations. The numerical solution is based
 on the concept of duality between the field and particle representation of
 the modeled quantity. Green's function Monte Carlo method, used to solve the equation,
 provides robustness necessary for spatially variable conditions and high
-resolutions   (Mitas and Mitasova 1998).  The key inputs of the model include
+resolutions (Mitas and Mitasova 1998). The key inputs of the model include
 elevation (<i>elevin</i> raster map), flow gradient vector given by
-first-order partial derivatives of elevation field (<i>dxin</i> and <i>dyin</i> raster maps), rainfall
-excess rate (<i>rain</i> raster map or <i>rain_val</i> single value) 
-and a surface  roughness coefficient given by Manning's n 
+first-order partial derivatives of elevation field (<i>dxin</i> and <i>dyin</i>
+raster maps), rainfall excess rate (<i>rain</i> raster map or <i>rain_val</i> single
+value) and a surface roughness coefficient given by Manning's n 
 (<i>manin</i> raster map or <i>manin_val</i> single value). Partial
 derivatives raster maps can be computed along with interpolation of a DEM using
-the -d option in <a href="v.surf.rst.html">
-v.surf.rst</a> module. If elevation raster is already provided, partial derivatives
-can  be computed using <a href="r.slope.aspect.html">r.slope.aspect</a> module. 
-Partial derivatives are used to determine the direction and magnitude of water flow velocity. 
-To include a predefined direction of flow, map algebra can be used 
-to replace terrain-derived partial derivatives with pre-defined
-partial derivatives in selected grid cells such as man-made channels, ditches
-or culverts. Equations (2) and (3) from 
-<a href="http://skagit.meas.ncsu.edu/~helena/gmslab/reports/cerl99/rep99.html">
-this report</a> can be used to compute partial derivates 
-of the predefined flow using its direction given by aspect and slope.
-<br><p>
+the -d option in <a href="v.surf.rst.html">v.surf.rst</a> module. If elevation raster 
+map is already provided, partial derivatives can be computed using
+<a href="r.slope.aspect.html">r.slope.aspect</a> module. Partial derivatives are used
+to determine the direction and magnitude of water flow velocity. To include a 
+predefined direction of flow, map algebra can be used to replace terrain-derived
+partial derivatives with pre-defined partial derivatives in selected grid cells such 
+as man-made channels, ditches or culverts. Equations (2) and (3) from 
+<a href="http://skagit.meas.ncsu.edu/~helena/gmslab/reports/cerl99/rep99.html">this report</a>
+can be used to compute partial derivates of the predefined flow using its direction given
+by aspect and slope.
+
+<p>
 The module automatically converts horizontal distances from feet to metric system using
 database/projection information. Rainfall excess is defined as rainfall intensity
 - infiltration rate and should be provided in [mm/hr].
-<!-- and can be  computed using   several available infiltration
-models (e.g.  Green-Ampt,  Holtan, etc.). (<font color="#ff0000">   find
-infiltration module in GRASS  - topmodel, casc2d</font> )-->
- Rainfall intensities are usually available from  meteorological  stations. 
-Infiltration rate depends  on soil properties and  land cover. It  varies in space and time.
-For saturated  soil and steady-state  water flow it can be estimated  using
-saturated hydraulic  conductivity rates  based on field measurements or using
+<!-- and can be computed using several available infiltration
+ models (e.g. Green-Ampt, Holtan, etc.). (<font color="#ff0000"> find
+ infiltration module in GRASS - topmodel, casc2d</font> )
+-->
+Rainfall intensities are usually available from meteorological stations. 
+Infiltration rate depends on soil properties and land cover. It varies in space and time.
+For saturated soil and steady-state water flow it can be estimated using
+saturated hydraulic conductivity rates based on field measurements or using
 reference values which can be found in literature.
 Optionally, user can provide an overland flow infiltration rate map 
-<i>infil</i> or a single value <i>infil_val</i> in [mm/hr]
-that control the rate of infiltration for the already flowing water, effectively 
-reducing the flow depth and discharge.
+<i>infil</i> or a single value <i>infil_val</i> in [mm/hr] that control the rate of
+infiltration for the already flowing water, effectively reducing the flow depth and 
+discharge.
 Overland flow can be further controled by permeable check dams or similar type of structures,
 the user can provide a map of these structures and their permeability ratio
 in the map <i>traps</i> that defines the probability of particles to pass
 through the structure (the values will be 0-1).
-<br> </p>
+
 <p>
-Output includes a water depth raster map <i>depth</i>  in [m], 
-anda water discharge raster map <i>disch</i> in [m3/s]. Error of the numerical
-solution can  be analyzed using the <i>err</i> raster map  (the resulting water depth is an average, 
-and err is its RMSE). The output vector points map <i>outwalk</i> can be used to analyze and visualize 
+Output includes a water depth raster map <i>depth</i> in [m], anda water discharge 
+raster map <i>disch</i> in [m3/s]. Error of the numerical solution can be analyzed using 
+the <i>err</i> raster map (the resulting water depth is an average, and err is its RMSE).
+The output vector points map <i>outwalk</i> can be used to analyze and visualize 
 spatial distribution of walkers at different simulation times (note that 
 the resulting water depth is based on the density of these walkers). Number 
 of the output walkers is controled by the <i>density</i> parameter, which controls
 how many walkers used in simulation should be written into the output. 
 <!--(<font color="#ff0000"> toto treba upresnit/zmenit, lebo nwalk ide prec</font>). -->
-Duration of simulation is controled by the <i>niter</i> parameter.  The default value 
+Duration of simulation is controled by the <i>niter</i> parameter. The default value 
 is 10 minutes, reaching the steady-state may require much longer time, 
 depending on the time step, complexity of terrain, land cover and size of the area. 
 Output water depth and discharge maps can be saved during simulation using 
 the time series flag <i>-t</i> and <i>outiter</i> parameter 
 defining the time step in minutes for writing output files. 
 Files are saved with a suffix representing time since the start of simulation in seconds 
-(e.g. wdepth.500, wdepth.1000).<br>
+(e.g. wdepth.500, wdepth.1000).
+
 <P>
-Overland flow is routed based on partial derivatives  of elevation
+Overland flow is routed based on partial derivatives of elevation
 field or other landscape features influencing water flow. Simulation
 equations include a diffusion term (<i>diffc</i> parameter) which enables 
 water flow to overcome elevation depressions or obstacles when water depth exceeds 
-a threshold water depth value (<i>hmax)</i>, given in [m]. When it is reached,  
+a threshold water depth value (<i>hmax)</i>, given in [m]. When it is reached, 
 diffusion term increases as given by <i>halpha</i> and advection term 
 (direction of flow) is given as "prevailing" direction of flow computed
-as  average of flow directions from the previous <i>hbeta</i> number of grid cells.
-<br>
-<h2>
-NOTES</h2>
-<p>
-A 2D shallow water flow is described by the  bivariate form of Saint
+as average of flow directions from the previous <i>hbeta</i> number of grid cells.
+
+<h2>NOTES</h2>
+
+A 2D shallow water flow is described by the bivariate form of Saint
 Venant equations (e.g., Julien et al., 1995). The continuity of water
 flow relation is coupled with the momentum conservation equation and
 for a shallow water overland flow, the hydraulic radius is approximated
-by the normal flow depth. The system of  equations is closed using the
+by the normal flow depth. The system of equations is closed using the
 Manning's relation. Model assumes that the flow is close to the kinematic
 wave approximation, but we include a diffusion-like term to incorporate the
 impact of diffusive wave effects. Such an incorporation of diffusion
-in the water flow  simulation is not new and  a similar term has been obtained
-in  derivations of diffusion-advection equations  for overland flow, e.g.,
- by Lettenmeier and Wood, (1992). In our  reformulation,  we simplify the
+in the water flow simulation is not new and a similar term has been obtained
+in derivations of diffusion-advection equations for overland flow, e.g.,
+by Lettenmeier and Wood, (1992). In our reformulation, we simplify the
 diffusion coefficient to a constant and we use a modified diffusion term.
 The diffusion constant which we have used is rather small (approximately
-one order of magnitude smaller than the reciprocal Manning's  coefficient)
+one order of magnitude smaller than the reciprocal Manning's coefficient)
 and therefore the resulting flow is close to the kinematic regime. However,
-the diffusion term improves  the kinematic solution, by overcoming small
-shallow pits common in  digital elevation models (DEM) and by smoothing out
-the flow over slope  discontinuities or abrupt changes in Manning's coefficient
-(e.g., due  to a road, or other anthropogenic changes in elevations or cover).
-</p>
-<p><b>
-Green's function stochastic method of solution.</b> The Saint Venant
-equations are solved by a stochastic method called Monte Carlo (very
-similar to Monte Carlo methods in computational fluid dynamics or to
-quantum Monte  Carlo  approaches for  solving the Schrodinger equation (Schmidt
-and Ceperley,  1992,  Hammond  et al., 1994; Mitas, 1996)). It is assumed
-that these equations  are a  representation of stochastic processes with
-diffusion and drift  components  (Fokker-Planck equations). </p>
-The Monte Carlo technique has several unique advantages which are
-becoming   even more important due to new developments in computer  technology. 
-Perhaps   one of the most significant Monte Carlo properties  is robustness 
-which enables  us to solve the equations for complex  cases, such as discontinuities
-in the coefficients of differential  operators (in our case, abrupt slope
-or cover changes, etc). Also,  rough solutions can be estimated rather
-quickly,    which allows us to  carry out preliminary quantitative studies
-or to rapidly    extract  qualitative trends by parameter scans. In addition,
-the stochastic     methods are tailored to the new generation of computers
-as they provide    scalability from a single workstation to large parallel
-machines due to   the independence of sampling points. Therefore, the methods
-are useful  both for everyday exploratory work using a desktop computer and
-for  large, cutting-edge applications using high performance computing. <br>
-<h2>
-SEE ALSO</h2>
-<a href="v.surf.rst.html">v.surf.rst</a>
-<a href="r.slope.aspect.html">r.slope.aspect</a>
-<a href="r.sim.sediment.html">r.sim.sediment</a>
+the diffusion term improves the kinematic solution, by overcoming small
+shallow pits common in digital elevation models (DEM) and by smoothing out
+the flow over slope discontinuities or abrupt changes in Manning's coefficient
+(e.g., due to a road, or other anthropogenic changes in elevations or cover).
 
-<h2>
-AUTHORS</h2>
+<p>
+<b>Green's function stochastic method of solution.</b><br>
+The Saint Venant equations are solved by a stochastic method called Monte Carlo
+(very similar to Monte Carlo methods in computational fluid dynamics or to
+quantum Monte Carlo approaches for solving the Schrodinger equation (Schmidt
+and Ceperley, 1992, Hammond et al., 1994; Mitas, 1996)). It is assumed
+that these equations are a representation of stochastic processes with
+diffusion and drift components (Fokker-Planck equations).
+
+<p>
+The Monte Carlo technique has several unique advantages which are
+becoming even more important due to new developments in computer technology. 
+Perhaps one of the most significant Monte Carlo properties is robustness 
+which enables us to solve the equations for complex cases, such as discontinuities
+in the coefficients of differential operators (in our case, abrupt slope
+or cover changes, etc). Also, rough solutions can be estimated rather
+quickly, which allows us to carry out preliminary quantitative studies
+or to rapidly extract qualitative trends by parameter scans. In addition,
+the stochastic methods are tailored to the new generation of computers
+as they provide scalability from a single workstation to large parallel
+machines due to the independence of sampling points. Therefore, the methods
+are useful both for everyday exploratory work using a desktop computer and
+for large, cutting-edge applications using high performance computing.
+
+<h2>ERROR MESSAGES</h2>
+
+If the module fails with
+
+<div class="code"><pre>
+ERROR: nwalk (7000001) &gt; maxw (7000000)!
+</pre></div>
+
+then a lower <em>nwalk</em> parameter value has to be selected.
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="v.surf.rst.html">v.surf.rst</a>,
+<a href="r.slope.aspect.html">r.slope.aspect</a>,
+<a href="r.sim.sediment.html">r.sim.sediment</a>
+</em>
+
+<h2>AUTHORS</h2>
+
 Helena Mitasova, Lubos Mitas<br>
 North Carolina State University<br>
-<a href="mailto:hmitaso@unity.ncsu.edu">hmitaso@unity.ncsu.edu</a><br>
-<br>
+<i><a href="mailto:hmitaso@unity.ncsu.edu">hmitaso@unity.ncsu.edu</a></i>
+
+<p>
 Jaroslav Hofierka<br>
-GeoModel, s.r.o. Bratislava, Slovakia <br>
-<address><a href="mailto:hofi@geomodel.sk">
-hofierka@geomodel.sk</a>
-</address>
-<br>
+GeoModel, s.r.o. Bratislava, Slovakia<br>
+<i><a href="mailto:hofi@geomodel.sk">hofierka@geomodel.sk</a></i>
+
+<p>
 Chris Thaxton<br>
 North Carolina State University<br>
-csthaxto@unity.ncsu.edu<br>
-<address><a href="mailto:csthaxto@unity.ncsu.edu">
-csthaxto@unity.ncsu.edu</a>
-</address>
-<h2>
-REFERENCES</h2>
-<P>
+<i><a href="mailto:csthaxto@unity.ncsu.edu">csthaxto@unity.ncsu.edu</a></i>
+
+<h2>REFERENCES</h2>
+
+<ul>
+<li> Mitasova, H., Thaxton, C., Hofierka, J., McLaughlin, R., Moore, A., Mitas L., 2004,
 <a href="http://skagit.meas.ncsu.edu/~helena/gmslab/papers/II.6.8_Mitasova_044.pdf">
-Mitasova, H., Thaxton, C., Hofierka, J., McLaughlin, R., Moore, A., Mitas L., 2004,</a> 
 Path sampling method for modeling overland water flow, sediment transport 
-and short term terrain evolution in Open Source GIS. 
+and short term terrain evolution in Open Source GIS.</a>  
 In: C.T. Miller, M.W. Farthing, V.G. Gray, G.F. Pinder eds., 
 Proceedings of the XVth International Conference on Computational Methods in Water 
 Resources (CMWR XV), June 13-17 2004, Chapel Hill, NC, USA, Elsevier, pp. 1479-1490.
-<P>
-<a href="http://skagit.meas.ncsu.edu/~helena/gmslab/gisc00/duality.html">
-Mitasova H, Mitas, L., 2000, Modeling spatial processes in multiscale framework: 
-exploring duality between particles and fields, </a>
+
+<li> Mitasova H, Mitas, L., 2000,
+<a href="http://skagit.meas.ncsu.edu/~helena/gmslab/gisc00/duality.html">Modeling spatial
+processes in multiscale framework: exploring duality between particles and fields,</a>
 plenary talk at GIScience2000 conference, Savannah, GA. 
-<P>
-Mitas, L., and Mitasova, H., 1998, Distributed soil erosion simulation 
+
+<li> Mitas, L., and Mitasova, H., 1998, Distributed soil erosion simulation 
 for effective erosion prevention. Water Resources Research, 34(3), 505-516.
-<P>
+
+<li> Mitasova, H., Mitas, L., 2001,
 <a href="http://skagit.meas.ncsu.edu/~helena/gmslab/papers/LLEmiterev1.pdf">
- Mitasova, H., Mitas, L., 2001, Multiscale soil erosion simulations for land use management, </a>
+Multiscale soil erosion simulations for land use management,</a>
 In: Landscape erosion and landscape evolution modeling, Harmon R. and Doe W. eds., 
 Kluwer Academic/Plenum Publishers, pp. 321-347.
-<p>
-<a href="http://www.grassbook.org">
-Neteler, M. and Mitasova, H., 2008, Open Source GIS: A GRASS GIS Approach. Third Edition.</a>
+
+<li> Neteler, M. and Mitasova, H., 2008,
+<a href="http://www.grassbook.org">Open Source GIS: A GRASS GIS Approach. Third Edition.</a>
 The International Series in Engineering and Computer Science: Volume 773. Springer New York Inc, p. 406.
-<P>
-Last changed: Date: 2008/02/16 15:55:10 $<p></p>
+</ul>
+
+<p><i>Last changed: $Date$</i>
