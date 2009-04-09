@@ -561,6 +561,7 @@ int main(int argc, char* argv[])
     int ialt_fd = -1;       /* input elevation map's file descriptor */
     int ivis_fd = -1;       /* input visibility map's file descriptor */
     const char *iimg_mapset, *ialt_mapset, *iviz_mapset;
+    struct History hist;
     
     /* Define module */
     define_module();
@@ -632,10 +633,14 @@ int main(int argc, char* argv[])
 
 
     /* Close the input and output file descriptors */
+    G_short_history(opts.oimg->answer, "raster", &hist);
     G_close_cell(iimg_fd);
     if(opts.ialt->answer) G_close_cell(ialt_fd);
     if(opts.ivis->answer) G_close_cell(ivis_fd);
     G_close_cell(oimg_fd);
+
+    G_command_history(&hist);
+    G_write_history(opts.oimg->answer, &hist);
 
     /* Copy the colors of the input raster to the output raster.
        Scaling is ignored and color ranges might not be correct. */
