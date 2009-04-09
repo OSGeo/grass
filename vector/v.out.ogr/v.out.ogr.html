@@ -31,24 +31,28 @@ holes as holes, the flag <em>-c</em> has to be used.
 
 <h3>Export to Shapefile</h3>
 
-Export lines from GRASS vector map to Shapefile format (generates /tmp/testogr.shp and related files):
+Export lines from GRASS vector map to Shapefile format
+ (generates /tmp/testogr.shp and related files):
 <div class="code"><pre>
 v.out.ogr input=multi type=line dsn=/tmp olayer=testogr 
 </pre></div>
 
-Export areas from GRASS vector map to Shapefile format (generates /tmp/testogr.shp and related files):
+Export areas from GRASS vector map to Shapefile format, preserving islands
+ (generates /tmp/testogr.shp and related files):
 <div class="code"><pre>
-v.out.ogr input=multi type=area dsn=/tmp olayer=testogr 
+v.out.ogr -c input=multi type=area dsn=/tmp olayer=testogr 
 </pre></div>
 
-Export 3D lines from GRASS vector map to Shapefile format (use <tt>SHPT=POLYGONZ</tt> for 3D faces):
+Export 3D lines from GRASS vector map to Shapefile format
+ (use <tt>SHPT=POLYGONZ</tt> for 3D faces):
 <div class="code"><pre>
 v.out.ogr input=lines_3d type=line dsn=/tmp olayer=testogr lco="SHPT=ARCZ"
 </pre></div>
 
 <h3>Export to GML</h3>
 
-Export lines from GRASS vector map to GML format (generates /tmp/testogr.gml file with layer 'testogr'):
+Export lines from GRASS vector map to GML format
+ (generates /tmp/testogr.gml file with layer 'testogr'):
 <div class="code"><pre>
 v.out.ogr input=multi type=line dsn=/tmp/testogr.gml olayer=testogr format=GML 
 </pre></div>
@@ -73,7 +77,8 @@ v.out.ogr input=buildings_3d dsn=buildings_3d.kml olayer=buildings_3d \
 
 <p>
 <b>Example 2 (Latitude-Longitude location):</b><br>
-Generate and export GRASS vector "asteroid" map (faces, 3D vectors) to KML format for Google Earth:
+Generate and export GRASS vector "asteroid" map (faces, 3D vectors) to
+ KML format for Google Earth:
 <div class="code"><pre>
 # near Raleigh (NC, USA)
 g.region n=35.73952587 s=35.73279182 w=-78.68263928 e=-78.67499517
@@ -116,4 +121,6 @@ documentation
 
 Radim Blazek, ITC-Irst, Trento, Italy<br>
 Some contributions: Markus Neteler, Martin Landa
-<p><i>Last changed: $Date$</i></p>
+<p>
+<i>Last changed: $Date$</i>
+</p>
