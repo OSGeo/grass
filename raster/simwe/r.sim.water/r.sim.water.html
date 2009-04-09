@@ -48,7 +48,7 @@ in the map <i>traps</i> that defines the probability of particles to pass
 through the structure (the values will be 0-1).
 
 <p>
-Output includes a water depth raster map <i>depth</i> in [m], anda water discharge 
+Output includes a water depth raster map <i>depth</i> in [m], and a water discharge 
 raster map <i>disch</i> in [m3/s]. Error of the numerical solution can be analyzed using 
 the <i>err</i> raster map (the resulting water depth is an average, and err is its RMSE).
 The output vector points map <i>outwalk</i> can be used to analyze and visualize 
@@ -121,6 +121,32 @@ as they provide scalability from a single workstation to large parallel
 machines due to the independence of sampling points. Therefore, the methods
 are useful both for everyday exploratory work using a desktop computer and
 for large, cutting-edge applications using high performance computing.
+
+<h2>EXAMPLE</h2>
+
+Spearfish region:
+
+<div class="code"><pre>
+g.region rast=elevation.10m -p
+r.slope.aspect elevation=elevation.10m elev_dx=elev_dx elev_dy=elev_dy
+
+# synthetic maps
+r.mapcalc "rain    = if(elevation.10m, 5.0, null())"
+r.mapcalc "manning = if(elevation.10m, 0.05, null())"
+r.mapcalc "infilt  = if(elevation.10m, 0.0, null())"
+
+# simulate
+r.sim.water elevin=elevation.10m elev_dxin=elev_dx elev_dyin=elev_dy \
+            rain=rain manin=manning infil=infilt \
+            nwalk=5000000 depth=depth
+</pre></div>
+
+<p>
+<center>
+<img src="r_sim_water.png" alt="r.sim.water generated depth map"><br>
+<i>Water depth map in the Spearfish (SD) area</i>
+</center>
+
 
 <h2>ERROR MESSAGES</h2>
 
