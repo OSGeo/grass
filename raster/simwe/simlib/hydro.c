@@ -116,7 +116,7 @@ void main_loop(void)
 			++lw;
 
 			if (lw > MAXW)
-			    G_fatal_error(_("nwalk > maxw!"));
+			    G_fatal_error(_("nwalk (%d) > maxw (%d)!"), lw, MAXW);
 
 			w[lw][1] = x + stepx * (ulec() - 0.5);
 			w[lw][2] = y + stepy * (ulec() - 0.5);
