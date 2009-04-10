@@ -13,8 +13,9 @@ void add_layer_to_list(const char *layer, int print)
     layers[num_layers] = G_store(layer);
     G_str_to_lower(layers[num_layers]);
     if (print) {
-        fprintf(stdout, _("Layer %d: %s\n"), num_layers+1, layers[num_layers]);
-        fflush(stdout);
+	fprintf(stdout, _("Layer %d: %s\n"), num_layers + 1,
+		layers[num_layers]);
+	fflush(stdout);
     }
     num_layers++;
     layers[num_layers] = NULL;

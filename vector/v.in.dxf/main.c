@@ -123,19 +123,20 @@ int main(int argc, char *argv[])
     opt_layers = opt.layers->answers;
 
     if (flag_invert && !opt_layers)
-        G_fatal_error(_("Please specify list of layers to exclude"));
+	G_fatal_error(_("Please specify list of layers to exclude"));
 
     /* open DXF file */
     if (!(dxf = dxf_open(opt.input->answer)))
 	G_fatal_error(_("Unable to open DXF file <%s>"), opt.input->answer);
 
     if (flag_list)
-	G_verbose_message(_("Layer number: layer name / GRASS compliant name"));
+	G_verbose_message(_
+			  ("Layer number: layer name / GRASS compliant name"));
     else {
 	int i;
 
-	if (opt_layers){
-	    for(i=0; opt_layers[i]; i++)
+	if (opt_layers) {
+	    for (i = 0; opt_layers[i]; i++)
 		add_layer_to_list(opt_layers[i], 0);
 	}
 

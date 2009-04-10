@@ -64,7 +64,7 @@ void add_point(struct dxf_file *dxf, struct Map_info *Map)
 	 * ypnts[1] = ypnts[0];
 	 * zpnts[1] = zpnts[0];
 	 */
-        write_vect(Map, layer, "POINT", handle, "", 1, GV_POINT);
+	write_vect(Map, layer, "POINT", handle, "", 1, GV_POINT);
     }
 
     return;

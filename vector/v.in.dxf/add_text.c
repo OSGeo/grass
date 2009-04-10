@@ -113,9 +113,9 @@ void add_text(struct dxf_file *dxf, struct Map_info *Map)
 	ypnts[3] = ypnts[0] + (length * sin(theta));
 	zpnts[3] = zpnts[0];
 
-        write_vect(Map, layer, "TEXT", handle, "", 5, GV_LINE);
+	write_vect(Map, layer, "TEXT", handle, "", 5, GV_LINE);
 #endif
-        write_vect(Map, layer, "TEXT", handle, label, 1, GV_POINT);
+	write_vect(Map, layer, "TEXT", handle, label, 1, GV_POINT);
     }
 
     return;
