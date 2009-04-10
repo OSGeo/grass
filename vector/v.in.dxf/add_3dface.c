@@ -95,6 +95,7 @@ void add_3dface(struct dxf_file *dxf, struct Map_info *Map)
 	case 70:		/* 3dface flag */
 	    dface_flag = atoi(dxf_buf);
 	    /* TODO: what does 'invisible' mean here? */
+
 	    /*******************************************************************
 	     Invisible edge flags (optional; default = 0):
 	     1 = First edge is invisible

@@ -60,6 +60,7 @@ void add_lwpolyline(struct dxf_file *dxf, struct Map_info *Map)
 	    bulge = atof(dxf_buf);
 	    break;
 	case 70:		/* polyline flag */
+
 	    /*******************************************************************
 	     Polyline flag (bit-coded); default is 0:
 	     1 = Closed; 128 = Plinegen

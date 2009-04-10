@@ -51,6 +51,7 @@ void add_polyline(struct dxf_file *dxf, struct Map_info *Map)
 	    break;
 	case 70:		/* polyline flag */
 	    polyline_flag = atoi(dxf_buf);
+
 	    /*******************************************************************
 	     Polyline flag (bit-coded); default is 0:
 	     1 = This is a closed polyline (or a polygon mesh closed in
@@ -69,7 +70,8 @@ void add_polyline(struct dxf_file *dxf, struct Map_info *Map)
 	    if (polyline_flag & (8 | 16 | 32))
 		if (warn_flag70) {
 		    if (!flag_list)
-			G_warning(_("3-d data in dxf file. Polyline_flag: %d"),
+			G_warning(_
+				  ("3-d data in dxf file. Polyline_flag: %d"),
 				  polyline_flag);
 		    warn_flag70 = 0;
 		}
@@ -93,7 +95,7 @@ void add_polyline(struct dxf_file *dxf, struct Map_info *Map)
 		    return;
 
 		switch (code) {
-		case 5:		/* entity handle */
+		case 5:	/* entity handle */
 		    strcpy(handle, dxf_buf);
 		    break;
 		case 8:	/* layer name */
@@ -109,7 +111,8 @@ void add_polyline(struct dxf_file *dxf, struct Map_info *Map)
 			 * (flag_invert == 1 && is_layer_in_list == 1)
 			 * )
 			 */
-			if (opt_layers && flag_invert == is_layer_in_list(dxf_buf))
+			if (opt_layers &&
+			    flag_invert == is_layer_in_list(dxf_buf))
 			    return;
 			strcpy(layer, dxf_buf);
 			layer_flag = 1;
@@ -137,6 +140,7 @@ void add_polyline(struct dxf_file *dxf, struct Map_info *Map)
 		    break;
 		case 70:	/* vertex flag */
 		    vertex_flag = atoi(dxf_buf);
+
 	    /*******************************************************************
 	     Vertex flags:
 	     1 = Extra vertex created by curve-fitting
@@ -202,9 +206,11 @@ void add_polyline(struct dxf_file *dxf, struct Map_info *Map)
 			    zpnts[arr_size] = zpnts[0];
 			    arr_size++;
 			    if (flag_frame)
-				write_vect(Map, layer, "POLYFACE FRAME", handle, "", arr_size, GV_LINE);
+				write_vect(Map, layer, "POLYFACE FRAME",
+					   handle, "", arr_size, GV_LINE);
 			    else
-				write_vect(Map, layer, "POLYFACE", handle, "", arr_size, GV_FACE);
+				write_vect(Map, layer, "POLYFACE", handle, "",
+					   arr_size, GV_FACE);
 			    arr_size = 0;
 			}
 			mesh_pnts = 0;
@@ -240,7 +246,7 @@ void add_polyline(struct dxf_file *dxf, struct Map_info *Map)
 }
 
 static void write_pnts(struct Map_info *Map, char *layer, char *handle,
-		int polyline_flag, int zflag, int arr_size)
+		       int polyline_flag, int zflag, int arr_size)
 {
     /* done reading vertices */
     if (polyline_flag & 1) {	/* only dealing with polyline_flag = 1 */

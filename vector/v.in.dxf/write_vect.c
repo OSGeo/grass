@@ -49,8 +49,8 @@ void write_vect(struct Map_info *Map, char *layer, char *entity, char *handle,
 
 	if (handle) {
 	    if (strlen(handle) > 16) {
-		    G_warning(_("Entity handle truncated to 16 characters."));
-		    handle[16] = 0;
+		G_warning(_("Entity handle truncated to 16 characters."));
+		handle[16] = 0;
 	    }
 	    db_set_string(&str, handle);
 	    db_double_quote_string(&str);
@@ -148,7 +148,7 @@ static int get_field_cat(struct Map_info *Map, char *layer, int *field,
 	x = field_name[0];
     G_str_to_sql(field_name);
     if (x)
-        field_name[0] = x;
+	field_name[0] = x;
 
     for (i = 0; i < num_fields; i++) {
 	/* field name already exists */
