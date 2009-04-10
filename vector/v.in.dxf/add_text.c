@@ -2,10 +2,11 @@
 #include <string.h>
 #include "global.h"
 
-int add_text(struct dxf_file *dxf, struct Map_info *Map)
+void add_text(struct dxf_file *dxf, struct Map_info *Map)
 {
     int code;
-    char layer[DXF_BUF_SIZE];
+    char handle[DXF_BUF_SIZE];	/* entity handle, 16 hexadecimal digits */
+    char layer[DXF_BUF_SIZE];	/* layer name */
     int layer_flag = 0;		/* indicates if a layer name has been found */
     int xflag = 0;		/* indicates if a x value has been found */
     int yflag = 0;		/* indicates if a y value has been found */
@@ -14,35 +15,37 @@ int add_text(struct dxf_file *dxf, struct Map_info *Map)
     char label[DXF_BUF_SIZE];	/* read in from dxf file */
     int label_len = 0;
 
+    handle[0] = 0;
     strcpy(layer, UNIDENTIFIED_LAYER);
 
     zpnts[0] = 0.0;
     /* read in lines and process information until a 0 is read in */
     while ((code = dxf_get_code(dxf)) != 0) {
 	if (code == -2)
-	    return -1;
+	    return;
 
 	switch (code) {
 	case 1:		/* label value */
 	    label_len = strlen(dxf_buf);
 	    strcpy(label, dxf_buf);
 	    break;
+	case 5:		/* entity handle */
+	    strcpy(handle, dxf_buf);
+	    break;
 	case 8:		/* layer name */
 	    if (!layer_flag && *dxf_buf) {
 		if (flag_list) {
-		    if (!is_layer_in_list(dxf_buf)) {
-			add_layer_to_list(dxf_buf);
-			print_layer(dxf_buf);
-		    }
-		    return 0;
+		    if (!is_layer_in_list(dxf_buf))
+			add_layer_to_list(dxf_buf, 1);
+		    return;
 		}
-		/* skip if layers != NULL && (
+		/* skip if (opt_layers != NULL && (
 		 * (flag_invert == 0 && is_layer_in_list == 0) ||
 		 * (flag_invert == 1 && is_layer_in_list == 1)
 		 * )
 		 */
-		if (layers && flag_invert == is_layer_in_list(dxf_buf))
-		    return 0;
+		if (opt_layers && flag_invert == is_layer_in_list(dxf_buf))
+		    return;
 		strcpy(layer, dxf_buf);
 		layer_flag = 1;
 	    }
@@ -78,7 +81,7 @@ int add_text(struct dxf_file *dxf, struct Map_info *Map)
     }
 
     if (label_len == 0)
-	return -2;
+	return;
 
     if (xflag && yflag) {
 	/* TODO */
@@ -110,10 +113,10 @@ int add_text(struct dxf_file *dxf, struct Map_info *Map)
 	ypnts[3] = ypnts[0] + (length * sin(theta));
 	zpnts[3] = zpnts[0];
 
-	write_line(Map, layer, 5);
+        write_vect(Map, layer, "TEXT", handle, "", 5, GV_LINE);
 #endif
-	write_text(Map, layer, label);
+        write_vect(Map, layer, "TEXT", handle, label, 1, GV_POINT);
     }
 
-    return 0;
+    return;
 }

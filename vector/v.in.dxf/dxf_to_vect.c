@@ -12,6 +12,7 @@ static void make_head(struct Map_info *);
 
 static BOUND_BOX ext, dxf_ext;
 
+/* returns 1 on success, otherwise 0 */
 int dxf_to_vect(struct dxf_file *dxf, struct Map_info *Map)
 {
     int code;
@@ -22,7 +23,7 @@ int dxf_to_vect(struct dxf_file *dxf, struct Map_info *Map)
 	code = dxf_get_code(dxf);
 	while (code != 0) {
 	    if (code == -2)	/* EOF */
-		return -1;
+		return 0;
 
 	    /* only looking for header groups (code == 9) */
 	    if (code != 9)
@@ -33,7 +34,7 @@ int dxf_to_vect(struct dxf_file *dxf, struct Map_info *Map)
 		 * or a 0 is read in */
 		while ((code = dxf_get_code(dxf)) != 9 && code != 0) {
 		    if (code == -2)	/* EOF */
-			return -1;
+			return 0;
 
 		    switch (code) {
 		    case 10:
@@ -58,7 +59,7 @@ int dxf_to_vect(struct dxf_file *dxf, struct Map_info *Map)
 		 * or a 0 is read in */
 		while ((code = dxf_get_code(dxf)) != 9 && code != 0) {
 		    if (code == -2)	/* EOF */
-			return -1;
+			return 0;
 
 		    switch (code) {
 		    case 10:
@@ -80,7 +81,7 @@ int dxf_to_vect(struct dxf_file *dxf, struct Map_info *Map)
 	    else {
 		while ((code = dxf_get_code(dxf)) != 9 && code != 0) {
 		    if (code == -2)	/* EOF */
-			return -1;
+			return 0;
 		}
 	    }
 
@@ -91,20 +92,18 @@ int dxf_to_vect(struct dxf_file *dxf, struct Map_info *Map)
     else
 	code = dxf_get_code(dxf);
 
-    ARR_MAX = ARR_INCR;
+    arr_max = ARR_INCR;
     ext.E = ext.N = ext.T = DBL_MIN;
     ext.W = ext.S = ext.B = DBL_MAX;
 
-    xpnts = (double *)G_malloc(ARR_MAX * sizeof(double));
-    ypnts = (double *)G_malloc(ARR_MAX * sizeof(double));
-    zpnts = (double *)G_malloc(ARR_MAX * sizeof(double));
+    xpnts = (double *)G_malloc(arr_max * sizeof(double));
+    ypnts = (double *)G_malloc(arr_max * sizeof(double));
+    zpnts = (double *)G_malloc(arr_max * sizeof(double));
 
     if (!flag_list)
 	Points = Vect_new_line_struct();
 
     while (!feof(dxf->fp)) {
-	set_entity(dxf_buf);
-
 	/* avoid TEXT having object names: '0' should be followed by objects */
 	if (code != 0)
 	    code = dxf_get_code(dxf);
@@ -141,11 +140,14 @@ int dxf_to_vect(struct dxf_file *dxf, struct Map_info *Map)
     G_free(ypnts);
     G_free(zpnts);
 
-    if (!flag_list) {
-	Vect_destroy_line_struct(Points);
-	write_done(Map);
-	if (found_layers)
-	    make_head(Map);
+    if (flag_list)
+	return 1;
+
+    Vect_destroy_line_struct(Points);
+
+    if (write_done(Map)) {
+	make_head(Map);
+	return 1;
     }
 
     return 0;
@@ -167,15 +169,6 @@ int check_ext(double x, double y, double z)
 	ext.T = z;
 
     return 0;
-}
-
-void set_entity(char *str)
-{
-    strcpy(entity, str);
-    for (str = entity; *str; str++)
-	*str = tolower(*str);
-
-    return;
 }
 
 static void make_head(struct Map_info *Map)

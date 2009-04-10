@@ -11,8 +11,8 @@ static dbDriver *driver = NULL;
 static dbString sql, str;
 static char buf[1000];
 
-void write_vect(struct Map_info *Map, char *layer, char *entity, char *label,
-		int arr_size, int type)
+void write_vect(struct Map_info *Map, char *layer, char *entity, char *handle,
+		char *label, int arr_size, int type)
 {
     struct line_cats *Cats;
     int i, field, cat;
@@ -30,6 +30,7 @@ void write_vect(struct Map_info *Map, char *layer, char *entity, char *label,
 	sprintf(buf, "insert into %s (%s"
 		", layer"
 		", entity"
+		", handle"
 		", label" ") values (%d, '", Fi[i]->table, Fi[i]->key, cat);
 
 	if (layer) {
@@ -41,6 +42,17 @@ void write_vect(struct Map_info *Map, char *layer, char *entity, char *label,
 
 	if (entity) {
 	    db_set_string(&str, entity);
+	    db_double_quote_string(&str);
+	    strcat(buf, db_get_string(&str));
+	}
+	strcat(buf, "', '");
+
+	if (handle) {
+	    if (strlen(handle) > 16) {
+		    G_warning(_("Entity handle truncated to 16 characters."));
+		    handle[16] = 0;
+	    }
+	    db_set_string(&str, handle);
 	    db_double_quote_string(&str);
 	    strcat(buf, db_get_string(&str));
 	}
@@ -71,13 +83,13 @@ void write_vect(struct Map_info *Map, char *layer, char *entity, char *label,
     return;
 }
 
-void write_done(struct Map_info *Map)
+int write_done(struct Map_info *Map)
 {
     int i;
 
-    if (!(found_layers = (num_fields > 0))) {
+    if (!num_fields) {
 	G_warning(_("No DXF layers found!"));
-	return;
+	return 0;
     }
 
     if (!flag_table) {
@@ -116,7 +128,7 @@ void write_done(struct Map_info *Map)
 	driver = NULL;
     }
 
-    return;
+    return 1;
 }
 
 static int get_field_cat(struct Map_info *Map, char *layer, int *field,
@@ -211,6 +223,7 @@ static int get_field_cat(struct Map_info *Map, char *layer, int *field,
     sprintf(buf, "create table %s (cat integer"
 	    ", layer varchar(%d)"
 	    ", entity varchar(%d)"
+	    ", handle varchar(16)"
 	    ", label varchar(%d)"
 	    ")", Fi[i]->table, DXF_BUF_SIZE, DXF_BUF_SIZE, DXF_BUF_SIZE);
     db_set_string(&sql, buf);
