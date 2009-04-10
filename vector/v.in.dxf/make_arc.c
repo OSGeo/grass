@@ -32,11 +32,11 @@ int make_arc(int offset,	/* offset into array of points */
 	    ypnts[arr_size] = radius * sin(alpha) + centery;
 	    zpnts[arr_size] = zcoor;
 	    theta -= RSTEP;
-	    if (arr_size == ARR_MAX) {
-		ARR_MAX += ARR_INCR;
-		xpnts = (double *)G_realloc(xpnts, ARR_MAX * sizeof(double));
-		ypnts = (double *)G_realloc(ypnts, ARR_MAX * sizeof(double));
-		zpnts = (double *)G_realloc(zpnts, ARR_MAX * sizeof(double));
+	    if (arr_size == arr_max) {
+		arr_max += ARR_INCR;
+		xpnts = (double *)G_realloc(xpnts, arr_max * sizeof(double));
+		ypnts = (double *)G_realloc(ypnts, arr_max * sizeof(double));
+		zpnts = (double *)G_realloc(zpnts, arr_max * sizeof(double));
 	    }
 	    arr_size++;
 	}
@@ -49,11 +49,11 @@ int make_arc(int offset,	/* offset into array of points */
 	    ypnts[arr_size] = radius * sin(alpha) + centery;
 	    zpnts[arr_size] = zcoor;
 	    theta += RSTEP;
-	    if (arr_size == ARR_MAX) {
-		ARR_MAX += ARR_INCR;
-		xpnts = (double *)G_realloc(xpnts, ARR_MAX * sizeof(double));
-		ypnts = (double *)G_realloc(ypnts, ARR_MAX * sizeof(double));
-		zpnts = (double *)G_realloc(zpnts, ARR_MAX * sizeof(double));
+	    if (arr_size == arr_max) {
+		arr_max += ARR_INCR;
+		xpnts = (double *)G_realloc(xpnts, arr_max * sizeof(double));
+		ypnts = (double *)G_realloc(ypnts, arr_max * sizeof(double));
+		zpnts = (double *)G_realloc(zpnts, arr_max * sizeof(double));
 	    }
 	    arr_size++;
 	}
@@ -63,11 +63,11 @@ int make_arc(int offset,	/* offset into array of points */
     xpnts[arr_size] = radius * cos(alpha) + centerx;
     ypnts[arr_size] = radius * sin(alpha) + centery;
     zpnts[arr_size] = zcoor;
-    if (arr_size == ARR_MAX) {
-	ARR_MAX += ARR_INCR;
-	xpnts = (double *)G_realloc(xpnts, ARR_MAX * sizeof(double));
-	ypnts = (double *)G_realloc(ypnts, ARR_MAX * sizeof(double));
-	zpnts = (double *)G_realloc(zpnts, ARR_MAX * sizeof(double));
+    if (arr_size == arr_max) {
+	arr_max += ARR_INCR;
+	xpnts = (double *)G_realloc(xpnts, arr_max * sizeof(double));
+	ypnts = (double *)G_realloc(ypnts, arr_max * sizeof(double));
+	zpnts = (double *)G_realloc(zpnts, arr_max * sizeof(double));
     }
     arr_size++;
 
@@ -88,11 +88,11 @@ int make_arc_from_polyline(int arr_size, double bulge, double prev_bulge)
 	arc_tan = (-1.0) * prev_bulge;
 
     if (arc_tan == 0.0) {	/* straight line segment */
-	if (arr_size >= ARR_MAX - 1) {
-	    ARR_MAX += ARR_INCR;
-	    xpnts = (double *)G_realloc(xpnts, ARR_MAX * sizeof(double));
-	    ypnts = (double *)G_realloc(ypnts, ARR_MAX * sizeof(double));
-	    zpnts = (double *)G_realloc(zpnts, ARR_MAX * sizeof(double));
+	if (arr_size >= arr_max - 1) {
+	    arr_max += ARR_INCR;
+	    xpnts = (double *)G_realloc(xpnts, arr_max * sizeof(double));
+	    ypnts = (double *)G_realloc(ypnts, arr_max * sizeof(double));
+	    zpnts = (double *)G_realloc(zpnts, arr_max * sizeof(double));
 	}
 	arr_size++;
     }
@@ -161,11 +161,11 @@ int make_arc_from_polyline(int arr_size, double bulge, double prev_bulge)
 	    arc_arr_size = make_arc(arr_size, cent_x, cent_y,
 				    rad, ang1, ang2, zpnts[0]);
 	arr_size += arc_arr_size;
-	while (arr_size >= ARR_MAX) {
-	    ARR_MAX += ARR_INCR;
-	    xpnts = (double *)G_realloc(xpnts, ARR_MAX * sizeof(double));
-	    ypnts = (double *)G_realloc(ypnts, ARR_MAX * sizeof(double));
-	    zpnts = (double *)G_realloc(zpnts, ARR_MAX * sizeof(double));
+	while (arr_size >= arr_max) {
+	    arr_max += ARR_INCR;
+	    xpnts = (double *)G_realloc(xpnts, arr_max * sizeof(double));
+	    ypnts = (double *)G_realloc(ypnts, arr_max * sizeof(double));
+	    zpnts = (double *)G_realloc(zpnts, arr_max * sizeof(double));
 	}
     }				/* arc */
 

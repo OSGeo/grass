@@ -15,34 +15,30 @@
  *               Rewrite for GRASS 6:
  *               Huidae Cho <grass4u gmail.com>
  *
+ *               Enhancements:
+ *               Benjamin Ducke <benjamin.ducke@oadigital.net>
+ *
  * PURPOSE:      Import DXF file
  *
- * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2009 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  */
 
+#define _MAIN_C_
 #include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include "global.h"
 
-int flag_list, flag_extent, flag_table, flag_topo, flag_invert,
-    flag_one_layer, flag_frame;
-int num_layers, found_layers;
-char **layers;
-char dxf_buf[DXF_BUF_SIZE], entity[DXF_BUF_SIZE];
-int ARR_MAX;
-double *xpnts, *ypnts, *zpnts;
-struct line_pnts *Points;
-
 int main(int argc, char *argv[])
 {
     struct dxf_file *dxf;
     struct Map_info *Map;
-    char *output = NULL;
+    char *output;
+    int ret;
 
     struct GModule *module;
     struct
@@ -112,7 +108,7 @@ int main(int argc, char *argv[])
     opt.layers->type = TYPE_STRING;
     opt.layers->required = NO;
     opt.layers->multiple = YES;
-    opt.layers->description = _("List of layers to import");
+    opt.layers->description = _("List of layers to import (default: all)");
     opt.layers->guisection = _("DXF layers");
 
     if (G_parser(argc, argv))
@@ -124,21 +120,26 @@ int main(int argc, char *argv[])
     flag_invert = flag.invert->answer;
     flag_one_layer = flag.one_layer->answer;
     flag_frame = flag.frame->answer;
+    opt_layers = opt.layers->answers;
+
+    if (flag_invert && !opt_layers)
+        G_fatal_error(_("Please specify list of layers to exclude"));
 
     /* open DXF file */
     if (!(dxf = dxf_open(opt.input->answer)))
 	G_fatal_error(_("Unable to open DXF file <%s>"), opt.input->answer);
 
-    if (flag_list) {
-	num_layers = 0;
-	layers = NULL;
-	Map = NULL;
+    if (flag_list)
 	G_verbose_message(_("Layer number: layer name / GRASS compliant name"));
-    }
     else {
-	output = G_store(opt.output->answer);
+	int i;
 
-	layers = opt.layers->answers;
+	if (opt_layers){
+	    for(i=0; opt_layers[i]; i++)
+		add_layer_to_list(opt_layers[i], 0);
+	}
+
+	output = opt.output->answer;
 
 	/* create vector map */
 	Map = (struct Map_info *)G_malloc(sizeof(struct Map_info));
@@ -151,7 +152,7 @@ int main(int argc, char *argv[])
     }
 
     /* import */
-    dxf_to_vect(dxf, Map);
+    ret = dxf_to_vect(dxf, Map);
 
     dxf_close(dxf);
 
@@ -160,7 +161,7 @@ int main(int argc, char *argv[])
     else {
 	Vect_close(Map);
 
-	if (found_layers) {
+	if (ret) {
 	    if (Vect_open_old(Map, output, G_mapset())) {
 		if (!flag_topo)
 		    if (!Vect_build(Map))
@@ -173,7 +174,6 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Failed to import DXF file!"));
 	}
 
-	G_free(output);
 	G_free(Map);
     }
 
