@@ -209,6 +209,9 @@ int main(int argc, char *argv[])
     Vect_set_open_level(2);
     Vect_open_old(&In, in_opt->answer, "");
 
+    if (Vect_get_num_islands(&In) > 0 && !cat_flag->answer)
+	G_warning(_("The map contains islands. To preserve them in the output map, use the -c flag"));
+
     /* fetch PROJ info */
     G_get_default_window(&cellhd);
     if (cellhd.proj == PROJECTION_XY)
