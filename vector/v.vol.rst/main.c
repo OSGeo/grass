@@ -90,7 +90,7 @@ G3D_Region current_region;
 /* pargr */
 double ns_res, ew_res, tb_res;
 double dmin, ertre;
-int nsizr, nsizc, nsizl, KMAX2, KMIN, KMAX;
+int nsizr, nsizc, nsizl, KMAX2, KMIN, KMAX, KMAXPOINTS;
 
 /* datgr */
 double *az, *adx, *ady, *adxx, *adyy, *adxy, *adz, *adxz, *adyz, *adzz;
@@ -221,7 +221,7 @@ int main(int argc, char *argv[])
     struct
     {
 	struct Option *input, *colnum, *scol, *wheresql, *rescalex, *fi,
-	    *segmax, *dmin1, *npmin, *wmult, *outz, *rsm, *maskmap, *zmult,
+	    *segmax, *dmin1, *npmin, *npmax, *wmult, *outz, *rsm, *maskmap, *zmult,
 	    *cvdev, *gradient, *aspect1, *aspect2, *ncurv, *gcurv, *mcurv,
 	    *cellinp, *cellout, *devi;
     } parm;
@@ -329,6 +329,15 @@ int main(int argc, char *argv[])
     parm.npmin->description =
 	_("Minimum number of points for approximation in a segment (>segmax)");
     parm.npmin->guisection = _("Settings");
+
+    parm.npmax = G_define_option();
+    parm.npmax->key = "npmax";
+    parm.npmax->type = TYPE_INTEGER;
+    parm.npmax->answer = MAXPOINTS;
+    parm.npmax->required = NO;
+    parm.npmax->description =
+	_("Maximum number of points for approximation in a segment (>npmin)");
+    parm.npmax->guisection = _("Settings");
 
     parm.dmin1 = G_define_option();
     parm.dmin1->key = "dmin";
@@ -488,6 +497,7 @@ int main(int argc, char *argv[])
     sscanf(parm.rsm->answer, "%lf", &rsm);
     sscanf(parm.segmax->answer, "%d", &KMAX);
     sscanf(parm.npmin->answer, "%d", &npmin);
+    sscanf(parm.npmax->answer, "%d", &KMAXPOINTS);
     sscanf(parm.wmult->answer, "%lf", &wmult);
     sscanf(parm.zmult->answer, "%lf", &zmult);
 
@@ -518,7 +528,6 @@ int main(int argc, char *argv[])
     tb_res_in = tb_res;
     z_orig = z_orig * zmult;
     tb_res = tb_res * zmult;
-    KMAX2 = MAXPOINTS;
 
     /*    fprintf (stderr, "DMIN = %f\n", dmin); */
 
@@ -587,6 +596,9 @@ int main(int argc, char *argv[])
 
     ii = INPUT(&In, parm.colnum->answer, parm.scol->answer,
 	       parm.wheresql->answer);
+
+    /* now NPOINT is available */
+    KMAX2 =(NPOINT >= KMAXPOINTS ? KMAXPOINTS : NPOINT);
 
     Vect_close(&In);
 
@@ -839,8 +851,8 @@ int main(int argc, char *argv[])
 		    sprintf(hist.edhist[1],
 			    "dnorm=%f, dmin=%f, wmult=%f, zmult=%f", dnorm,
 			    atof(parm.dmin1->answer), wmult, zmult);
-		    sprintf(hist.edhist[2], "segmax=%d, npmin=%d, rmsdevi=%f",
-			    KMAX, npmin, sqrt(ertot / KMAX2));
+		    sprintf(hist.edhist[2], "segmax=%d, npmin=%d, npmax=%d, rmsdevi=%f",
+			    KMAX, npmin, KMAXPOINTS, sqrt(ertot / KMAX2));
 		    sprintf(hist.edhist[3], "wmin_data=%f, wmax_data=%f",
 			    wmin, wmax);
 		    /* ? sprintf (hist.edhist[4], "wmin_int=%f, wmax_int=%f", wminac, wmaxac); */

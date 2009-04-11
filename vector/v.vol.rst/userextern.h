@@ -1,7 +1,7 @@
 #ifndef __USEREXTERNS_H__
 #define __USEREXTERNS_H__
 
-extern int KMAX2, KMIN, KMAX;
+extern int KMAX2, KMIN, KMAX, KMAXPOINTS;
 extern struct octtree *root;
 extern int NPOINT;
 extern int OUTRANGE;
