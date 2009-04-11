@@ -322,7 +322,7 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
 	    return -1;
 	}
     }
-    if (NPOINT > MAXPOINTS && KMIN <= KMAX) {
+    if (NPOINT > KMAXPOINTS && KMIN <= KMAX) {
 	fprintf(stderr,
 		"ERROR: segmentation parameters set to invalid values: npmin = %d, segmax = %d \n",
 		KMIN, KMAX);
@@ -331,10 +331,10 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
 	return -1;
     }
 
-    if (NPOINT < MAXPOINTS && KMAX != MAXPOINTS)
+    if (NPOINT < KMAXPOINTS && KMAX != KMAXPOINTS)
 	G_warning
 	    ("There is less than %d points for interpolation, no segmentation is necessary, to run the program faster, set segmax=%d (see manual)",
-	     MAXPOINTS, MAXPOINTS);
+	     KMAXPOINTS, KMAXPOINTS);
 
     deltx = xmax - xmin;
     delty = ymax - ymin;

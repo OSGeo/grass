@@ -30,7 +30,7 @@
 #define SMOOTH "0.1"
 #define MAXSEGM "50"
 #define MINPOINTS "200"
-#define MAXPOINTS  700
+#define MAXPOINTS "700"
 #define TOPPARAM "0"
 #define PREPROCESS "0"
 #define ZMULT   "1.0"
