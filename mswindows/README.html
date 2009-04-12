@@ -1,0 +1,289 @@
+<html>
+
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta http-equiv="Content-Language" content="en" />
+<meta name="Author" content="Marco Pasetti" />
+<meta name="Description" content="SVN mswindows README" />
+
+<title>SVN mswindows README</title>
+
+<style type="text/css" />
+
+/* Wiki Pages Styles */
+
+/* TableOfContents */
+
+.table-of-contents	{ 
+					border: 1px solid #bbbbbb;
+					color: black; background-color: #eeeeee;
+					font-size: small;
+					text-align:left;
+					margin: 0.5em; padding-left: 1em;
+					width: 360;
+					}
+
+/* Contents */
+
+html	{
+		background-color: white;
+		color: black;
+		font-family: Arial, Lucida Grande, sans-serif;
+		font-size: 10pt;
+		}
+		
+body	{
+		margin: 30;
+		}
+		
+ol	{
+	font-family: Arial, Lucida Grande, sans-serif;
+	font-size: 10pt;
+	margin-top: 0;
+	margin-bottom: 0;
+	margin-left: 0;
+	}
+
+h1	{
+	font-family: Arial, Lucida Grande, sans-serif;
+	font-size: 18pt;
+	margin-top: 0;
+	margin-bottom: 50;
+	}
+
+h2	{
+	font-family: Arial, Lucida Grande, sans-serif;
+	font-size: 16pt;
+	margin-top: 60;
+	margin-bottom: 20;
+	}
+	
+h3	{
+	font-family: Arial, Lucida Grande, sans-serif;
+	font-size: 14pt;
+	margin-top: 60;
+	margin-bottom: 20;
+	}
+
+h4	{
+	font-family: Arial, Lucida Grande, sans-serif;
+	font-size: 11pt;
+	margin-top: 0;
+	margin-bottom: 0;
+	}
+
+p	{
+	font-family: Arial, Lucida Grande, sans-serif;
+	font-size: 10pt;
+	margin-top: 10;
+	margin-bottom: 10;
+	}
+
+code	{
+		font-family: Courier-new, monospace;
+		font-size: 10pt;
+		margin-top: 10;
+		margin-bottom: 10;
+		}
+		
+pre	{
+	padding: 1em;
+	border: 1px dashed #2f6fab;
+	color: black;
+	background-color: #f9f9f9;
+	line-height: 1.1em;
+	}
+	
+	
+/* Tables */
+
+table
+{
+	margin: 0.5em 0 0 0.5em;
+	border-collapse: collapse;
+}
+
+td
+{
+	padding: 0.25em 0.5em 0.25em 0.5em;
+	border: 0pt solid #ADB9CC;
+	font-family: Arial, Lucida Grande, sans-serif;
+	font-size: 10pt;
+}
+		
+
+/* Links */
+
+a	{
+	text-decoration: none;
+	color: #002bb8;
+	background: none;
+	}
+	
+a:hover {
+		text-decoration: underline;
+		color: green;
+		}
+	
+a:visited:hover	{
+				text-decoration: underline;
+				color: red;
+				}
+</style>
+
+</head>
+
+<body>
+
+<h1>How to prepare a WinGRASS Release</h1>
+
+<div class="table-of-contents">
+
+<p><strong>Table of Contents</strong></p>
+
+<p><a href="#Introduction">Introduction</a></p>
+
+<p><ol>
+<li><a href="#Install OSGeo4w Tree and Compile Grass">Install OSGeo4w Tree and Compile Grass</a></li>
+<li><a href="#Create a GRASS self-contained Package">Create a GRASS self-contained Package</a></li>
+<li><a href="#Remove OSGeo4W Traces from Package">Remove OSGeo4W Traces from Package</a></li>
+<li><a href="#Install NSIS">Install NSIS</a></li>
+<li><a href="#Install NSIS: Untgz Plugin">Install NSIS: Untgz Plugin</a></li>
+<li><a href="#Create the WinGRASS Installer">Create the WinGRASS Installer</a></li>
+</ol></p>
+
+<p><a href="#Credits and Contacts">Credits and Contacts</a></p>
+
+<br>
+
+</div>
+
+
+
+<div id="Introduction">
+
+<p><h3>Introduction</h3></p>
+
+
+<p>This document explains how to prepare a WinGRASS release (as a self-contained package installer) using the scripts contained
+in the mswindows folder. In order to avoid mistakes or misunderstandings, I highly recommend to follow each step and command
+exactly as they are written in this document.</p>
+
+</div>
+
+
+
+
+<div id="Install OSGeo4w Tree and Compile Grass">
+
+<p><h3>1. Install OSGeo4w Tree and Compile Grass</h3></p>
+
+<p>Follow the instructions <a target="_blank" href="http://trac.osgeo.org/grass/wiki/CompileOnWindows">here</a> to download the OSGeo4W installer, install the required dependencies, and build Grass from source.</p>
+
+<p>Do not move on to step two until you have successfully <a target="_blank" href="http://trac.osgeo.org/grass/wiki/HowToTestGrass6">tested</a> your new version of Grass.</p>
+</div>
+
+
+
+
+<div id="Create a GRASS self-contained Package">
+
+<p><h3>2. Create a GRASS self-contained Package</h3></p>
+
+<p>Copy all the content of the mswindows folder to a temporary directory, for example <code>c:\temp</code>.</p>
+
+<p>Edit lines 11-15 in the file <code>c:\temp\GRASS-Packager.bat</code> to reflect the path to your OSGeo4W tree (eg. <code>c:\OSGeo4W</code>), 
+and the Grass version being packaged (eg. <code>grass-7.0.svn</code>.</p>
+
+<p>Launch the file <code>c:\temp\GRASS-Packager.bat</code> and select the option number 1.</p>
+
+<p>When finished, you should have a GRASS self-contained release package in <code>c:\temp\GRASS-Release-Package</code>.</p>
+
+</div>
+
+
+
+
+<div id="Remove OSGeo4W Traces from Package">
+
+<p><h3>3. Remove OSGeo4W Traces from Package</h3></p>
+
+<p>Open <code>c:\temp\GRASS-Release-Package\msys\msys.bat</code> and remove lines 11-16.</p>
+
+<p>At the end of line 88 change:
+<pre><code>--login -i</code></pre>
+To:
+<pre><code>--login -c "%*"</code></pre>
+
+</div>
+
+
+
+
+<div id="Install NSIS">
+
+<p><h3>4. Install NSIS (2.38)</h3></p>
+
+<p>Download the <a target="_blank" href="http://prdownloads.sourceforge.net/nsis/nsis-2.38-setup.exe">NSIS installer</a></p>
+
+<p>Install to <code>c:\DevTools</code></p>
+
+</div>
+
+
+
+
+<div id="Install NSIS: Untgz Plugin">
+
+<p><h3>5. Install NSIS: Untgz Plugin (1.0.15)</h3></p>
+
+<p>Download the <a target="_blank" href="http://nsis.sourceforge.net/mediawiki/images/9/9d/Untgz.zip">NSIS Untgz Plugin</a></p>
+
+<p>Unzip to <code>c:\DevTools\Plugins\</code></p>
+
+<p>Copy <code>c:\DevTools\Plugins\untgz\untgz.dll</code> to <code>c:\DevTools\Plugins\</code></p>
+
+</div>
+
+
+
+
+<div id="Create the WinGRASS Installer">
+
+<p><h3>6. Create the WinGRASS Installer</h3></p>
+
+<p>Open the the file <code>c:\temp\GRASS-Installer.nsi</code>.</p>
+
+<p>At line 13 set the <code>DEMOLOCATION_PATH</code> varibale to the demolocation folder in the source tree.
+For example, <code>c:\msys\local\src\grass-6.4.0RC3\demolocation</code>
+
+<p>At line 18 set the <code>INSTALLER_TYPE</code> variable to <code>"Release"</code>, then, at lines 24-26, set the
+<code>RELEASE_VERSION_NUMBER</code>, the <code>RELEASE_SVN_REVISION</code> and the <code>RELEASE_BINARY_REVISION</code> variables.</p>
+
+<p>Finally, right click on the file <code>c:\temp\GRASS-Installer.nsi</code> and select <code>Compile NSIS Script</code>.</p>
+
+<p>When finished, you should have the WinGRASS release installer in <code>c:\temp</code>.</p>
+
+</div>
+
+
+
+
+<div id="Credits and Contacts">
+
+<p><h3>Credits and Contacts</h3></p>
+
+<p>The GRASS MSYS Environment and the GRASS Packager and Installer scripts were created by Marco Pasetti, and updated for use on the
+osgeo4w tree by Colin Nielsen</p>
+
+<p>To contact them, e-mail to: GRASS Development Mailing List
+(<a target="_blank" href="http://lists.osgeo.org/mailman/listinfo/grass-dev">http://lists.osgeo.org/mailman/listinfo/grass-dev</a>).</p>
+
+<p>Last edited by Colin Nielsen on 06 April 2009.</p>
+
+</div>
+
+</body>
+
+</html>
