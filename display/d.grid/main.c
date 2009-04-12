@@ -97,7 +97,7 @@ int main(int argc, char **argv)
 
     align = G_define_flag();
     align->key = 'a';
-    align->description = _("Align the origin to the east-north vertex of the current region");
+    align->description = _("Align the origin to the east-north corner of the current region");
 
     geogrid = G_define_flag();
     geogrid->key = 'g';
