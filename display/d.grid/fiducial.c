@@ -25,12 +25,8 @@ void plot_symbol(double easting, double northing, int color, double rotation,
     SYMBOL *Symb;
     RGBA_Color *line_color, *fill_color;
     int R, G, B;
-    int x0, y0;
     int size = 16;
     int tolerance = 0;
-
-    x0 = (int)(D_u_to_d_col(easting) + 0.5);
-    y0 = (int)(D_u_to_d_row(northing) + 0.5);
 
     line_color = G_malloc(sizeof(RGBA_Color));
     fill_color = G_malloc(sizeof(RGBA_Color));
@@ -52,7 +48,7 @@ void plot_symbol(double easting, double northing, int color, double rotation,
 	G_fatal_error(_("Reading symbol"));
 
     S_stroke(Symb, size, rotation, tolerance);
-    D_symbol(Symb, x0, y0, line_color, fill_color);
+    D_symbol(Symb, easting, northing, line_color, fill_color);
 
     G_free(line_color);
     G_free(fill_color);
