@@ -185,8 +185,12 @@ int main(int argc, char **argv)
     }
 
     if (align->answer) {
-	east = wind.east;
-	north = wind.north;
+	/* reduce accumulated errors when ew_res is not the same as ns_res. */
+	struct Cell_head w;
+
+	G_get_set_window(&w);
+	east = wind.west + (int)((w.west - wind.west) / wind.ew_res) * wind.ew_res;
+	north = wind.south + (int)((w.south - wind.south) / wind.ns_res) * wind.ns_res;
     } else {
         /* get grid easting start */
         if (!G_scan_easting(opt3->answers[0], &east, G_projection())) {
