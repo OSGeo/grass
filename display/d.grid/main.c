@@ -40,9 +40,10 @@ int main(int argc, char **argv)
     struct GModule *module;
     struct Option *opt1, *opt2, *opt3, *opt4, *fsize, *tcolor;
     struct Flag *noborder, *notext, *geogrid, *nogrid, *wgs84, *cross,
-	*fiducial;
+	*fiducial, *align;
     struct pj_info info_in;	/* Proj structures */
     struct pj_info info_out;	/* Proj structures */
+    struct Cell_head wind;
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
@@ -58,7 +59,7 @@ int main(int argc, char **argv)
     opt2->key_desc = "value";
     opt2->type = TYPE_STRING;
     opt2->required = YES;
-    opt2->label = _("Size of grid to be drawn");
+    opt2->label = _("Size of grid to be drawn (0: north-south resolution of the current region)");
     opt2->description = _("In map units or DDD:MM:SS format. "
 			  "Example: \"1000\" or \"0:10\"");
 
@@ -93,6 +94,10 @@ int main(int argc, char **argv)
     fsize->answer = "9";
     fsize->options = "1-72";
     fsize->description = _("Font size for gridline coordinate labels");
+
+    align = G_define_flag();
+    align->key = 'a';
+    align->description = _("Align the origin to the east-north vertex of the current region");
 
     geogrid = G_define_flag();
     geogrid->key = 'g';
@@ -157,28 +162,43 @@ int main(int argc, char **argv)
     if (fiducial->answer)
 	mark_type = MARK_FIDUCIAL;
 
-    /* get grid size */
-    if (geogrid->answer) {
-	if (!G_scan_resolution(opt2->answer, &gsize, PROJECTION_LL) ||
-	    gsize <= 0.0)
-	    G_fatal_error(_("Invalid geo-grid size <%s>"), opt2->answer);
-    }
-    else {
-	if (!G_scan_resolution(opt2->answer, &size, G_projection()) ||
-	    size <= 0.0)
-	    G_fatal_error(_("Invalid grid size <%s>"), opt2->answer);
+    if (align->answer || strcmp(opt2->answer, "0") == 0)
+	G__get_window(&wind, "", "WIND", G_mapset());
+
+    if (strcmp(opt2->answer, "0") == 0) {
+	if (geogrid->answer)
+	    gsize = wind.ns_res;
+	else
+	    size = wind.ns_res;
+    } else {
+        /* get grid size */
+        if (geogrid->answer) {
+	    if (!G_scan_resolution(opt2->answer, &gsize, PROJECTION_LL) ||
+    	        gsize <= 0.0)
+    	        G_fatal_error(_("Invalid geo-grid size <%s>"), opt2->answer);
+        }
+        else {
+    	    if (!G_scan_resolution(opt2->answer, &size, G_projection()) ||
+    	        size <= 0.0)
+    	        G_fatal_error(_("Invalid grid size <%s>"), opt2->answer);
+        }
     }
 
-    /* get grid easting start */
-    if (!G_scan_easting(opt3->answers[0], &east, G_projection())) {
-	G_usage();
-	G_fatal_error(_("Illegal east coordinate <%s>"), opt3->answers[0]);
-    }
-
-    /* get grid northing start */
-    if (!G_scan_northing(opt3->answers[1], &north, G_projection())) {
-	G_usage();
-	G_fatal_error(_("Illegal north coordinate <%s>"), opt3->answers[1]);
+    if (align->answer) {
+	east = wind.east;
+	north = wind.north;
+    } else {
+        /* get grid easting start */
+        if (!G_scan_easting(opt3->answers[0], &east, G_projection())) {
+    	    G_usage();
+    	    G_fatal_error(_("Illegal east coordinate <%s>"), opt3->answers[0]);
+        }
+    
+        /* get grid northing start */
+        if (!G_scan_northing(opt3->answers[1], &north, G_projection())) {
+    	    G_usage();
+    	    G_fatal_error(_("Illegal north coordinate <%s>"), opt3->answers[1]);
+        }
     }
 
     /* Setup driver and check important information */
