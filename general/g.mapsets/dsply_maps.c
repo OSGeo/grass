@@ -1,9 +1,7 @@
 #include <string.h>
 #include <stdio.h>
-
 #include <grass/glocale.h>
-
-#include "externs.h"
+#include "local_proto.h"
 
 static int display1(void);
 static int display2(const char *fs);

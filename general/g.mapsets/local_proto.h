@@ -1,3 +1,12 @@
+#ifdef _MAIN_C_
+#define GLOBAL
+#else
+#define GLOBAL extern
+#endif
+
+GLOBAL char **mapset_name;
+GLOBAL int nmapsets;
+
 /* dsply_maps.c */
 int display_available_mapsets(const char *);
 

@@ -7,8 +7,9 @@
  *               Glynn Clements <glynn gclements.plus.com>
  *               Hamish Bowman <hamish_nospam yahoo.com>, 
  *               Markus Neteler <neteler itc.it>, 
- *               Moritz Lennert <mlennert club.worldonline.be>
- *               Martin Landa <landa.martin gmail.com>
+ *               Moritz Lennert <mlennert club.worldonline.be>,
+ *               Martin Landa <landa.martin gmail.com>,
+ *               Huidae Cho <grass4u gmail.com>
  * PURPOSE:      set current mapset path
  * COPYRIGHT:    (C) 1994-2009 by the GRASS Development Team
  *
@@ -18,6 +19,7 @@
  *
  *****************************************************************************/
 
+#define _MAIN_C_
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -25,16 +27,8 @@
 #include <grass/spawn.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
-#include "externs.h"
 
-char *mapset_name[GMAPSET_MAX];
-int nmapsets;
-int choice[GMAPSET_MAX];
-int nchoices;
-int curr_mapset[GMAPSET_MAX];
-int ncurr_mapsets;
-
-static char Path[GPATH_MAX];
+static void append_mapset(char **, const char *);
 
 int main(int argc, char *argv[])
 {
@@ -47,6 +41,8 @@ int main(int argc, char *argv[])
     int no_tokens;
     FILE *fp;
     char path[GPATH_MAX];
+    char *Path;
+    int nchoices;
 
     struct GModule *module;    
     struct _opt {
@@ -104,7 +100,7 @@ int main(int argc, char *argv[])
     opt.dialog->key = 's';
     opt.dialog->description = _("Show mapset selection dialog");
 
-    Path[0] = '\0';
+    Path = NULL;
     nchoices = 0;
 
     if (G_parser(argc, argv))
@@ -128,8 +124,7 @@ int main(int argc, char *argv[])
 	    if (G__mapset_permissions(mapset) < 0)
 		G_fatal_error(_("Mapset <%s> not found"), mapset);
 	    nchoices++;
-	    strcat(Path, mapset);
-	    strcat(Path, " ");
+	    append_mapset(&Path, mapset);
 	}
     }
 
@@ -137,13 +132,14 @@ int main(int argc, char *argv[])
     if (opt.add->answer) {
 	const char *oldname;
 
-	Path[0] = '\0';
+	if (Path) {
+	    G_free(Path);
+	    Path = NULL;
+	}
 
 	/* read existing mapsets from SEARCH_PATH */
-	for (n = 0; (oldname = G__mapset_name(n)); n++) {
-	    strcat(Path, oldname);
-	    strcat(Path, " ");
-	}
+	for (n = 0; (oldname = G__mapset_name(n)); n++)
+	    append_mapset(&Path, oldname);
 
 	/* fetch and add new mapsets from param list */
 	for (ptr = opt.add->answers; *ptr != NULL; ptr++) {
@@ -161,8 +157,7 @@ int main(int argc, char *argv[])
 				  mapset);
 
 	    nchoices++;
-	    strcat(Path, mapset);
-	    strcat(Path, " ");
+	    append_mapset(&Path, mapset);
 	}
     }
 
@@ -170,7 +165,10 @@ int main(int argc, char *argv[])
     if (opt.remove->answer) {
 	const char *oldname;
 
-	Path[0] = '\0';
+	if (Path) {
+	    G_free(Path);
+	    Path = NULL;
+	}
 
 	/* read existing mapsets from SEARCH_PATH */
 	for (n = 0; (oldname = G__mapset_name(n)); n++) {
@@ -187,8 +185,7 @@ int main(int argc, char *argv[])
 	    }
 
 	    nchoices++;
-	    strcat(Path, oldname);
-	    strcat(Path, " ");
+	    append_mapset(&Path, oldname);
 	}
     }
 
@@ -248,4 +245,16 @@ int main(int argc, char *argv[])
     G_free_tokens(tokens);
 
     exit(EXIT_SUCCESS);
+}
+
+static void append_mapset(char **path, const char *mapset)
+{
+    int init = (*path == NULL);
+
+    *path = (char *)G_realloc(*path, (init ? 0 : strlen(*path)) + strlen(mapset) + 2);
+    if (init)
+        *path[0] = '\0';
+    strcat(*path, mapset);
+    strcat(*path, " ");
+    return;
 }
