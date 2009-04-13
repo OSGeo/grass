@@ -3,10 +3,6 @@
 
 Please read *all* text below.
 
-Note: During the development stages, this version of GRASS was
-      previously called GRASS 5.1 and 5.7.
-
-
 Table of contents
 PREREQUISITES
 (A) SOURCE CODE DISTRIBUTION
@@ -15,7 +11,7 @@ PREREQUISITES
 (D) INSTALLATION (first time)
 (E) INSTALLATION ON MACOSX
 (F) RUNNING GRASS
-(G) UPDATE OF SOURCE CODE (CVS or CVS snapshot only)
+(G) UPDATE OF SOURCE CODE (SVN or SVN snapshot only)
 (H) COMPILING INDIVIDUAL MODULES - OWN MODULES
 (I) CODE OPTIMIZATION
 (J) DEBUGGING OPTIONS
@@ -73,7 +69,7 @@ The command,
 explains the options used to disable the compilation of non-mandatory
 GRASS modules. See REQUIREMENTS.html for details.
   
-First step of the compilation:
+First step of the compilation (-g for debugging, or -O2 for optimization):
 
     CFLAGS="-g -Wall" ./configure
 
@@ -93,7 +89,7 @@ Explanation of make targets:
     make distclean     - 'make clean' + delete all files created by './configure'
     make libsclean     - clean libraries compiled by 'make libs'
 
-    make htmldocs      - generate programmer's documentation in HTML
+    make htmldocs      - generate programmer's documentation as HTML files
     make packagehtmldocs - package programmer's documentation in HTML
     make pdfdocs       - generate programmer's documentation as PDF files
 
@@ -170,8 +166,9 @@ See the ReadMe.rtf in the ./macosx/ folder.
 
 (F) RUNNING GRASS
 
-Download a sample data package from the GRASS web site, for example the
-Spearfish60 data set. Extract the data set and point "database" in the
+Download a sample data package from the GRASS web site, see
+http://grass.osgeo.org/download/data.php
+Extract the data set and point "database" in the
 GRASS startup menu to the directory.
 
 Enjoy.
@@ -269,12 +266,11 @@ See also the file
 
 (K) LARGE FILE SUPPORT (for raster maps)
 
-GRASS >= 6.0 includes experimental support for reading and writing large files
+GRASS >= 7.0 includes improved support for reading and writing large files
 (> 2GB) if it is possible in your operating system. If you compile with
   configure [...] --enable-largefile
-you should be able to have raster maps which are larger than 2GB.
+you should be able to have raster and vector maps which are larger than 2GB.
 
-Note that the support currently only applies to the core raster I/O code.
 Individual programs may or may not work with large files - please report.
 
 
@@ -292,19 +288,18 @@ developers mailing list. See http://grass.osgeo.org/devel/index.php
 
 The Programmer's manual is generated with doxygen from the source code.
 Please see the README file and the files at:
-http://grass.osgeo.org/devel/index.php#prog
-
+http://download.osgeo.org/grass/grass6_progman/
 
 (N) CONTRIBUTING CODE AND PATCHES
 
-Please see ./SUBMITTING, ./SUBMITTING_DOCS, ./SUBMITTING_TCLTK
-./SUBMITTING_PYTHON and ./SUBMITTING_SCRIPTS in this directory.
+Please see ./SUBMITTING, ./SUBMITTING_DOCS, ./SUBMITTING_PYTHON,
+and ./SUBMITTING_SCRIPTS in this directory.
 
 
 (O) DRAFT TUTORIAL
 
-http://grass.gdf-hannover.de/twiki/bin/view/GRASS/GrassSixTutorial
+http://grass.osgeo.org/wiki/GRASS_6_Tutorial
 
 ------------------
-(C) 1999-2008 by The GRASS Development Team
+(C) 1999-2009 by The GRASS Development Team
 $Date$
