@@ -101,6 +101,7 @@ int main(int argc, char *argv[])
     opt.dialog->description = _("Show mapset selection dialog");
 
     Path = NULL;
+    nmapsets = 0;
     nchoices = 0;
 
     if (G_parser(argc, argv))
@@ -195,6 +196,15 @@ int main(int argc, char *argv[])
 	if (opt.print->answer)
 	    display_mapset_path(opt.fs->answer);
 
+	if (Path)
+	    G_free(Path);
+
+	if (nmapsets) {
+	    for(nmapsets--; nmapsets >= 0; nmapsets--)
+		G_free(mapset_name[nmapsets]);
+	    G_free(mapset_name);
+	}
+
 	exit(EXIT_SUCCESS);
     }
 
@@ -243,6 +253,15 @@ int main(int argc, char *argv[])
 
     fclose(fp);
     G_free_tokens(tokens);
+
+    if (Path)
+	G_free(Path);
+
+    if (nmapsets) {
+	for(nmapsets--; nmapsets >= 0; nmapsets--)
+	    G_free(mapset_name[nmapsets]);
+	G_free(mapset_name);
+    }
 
     exit(EXIT_SUCCESS);
 }
