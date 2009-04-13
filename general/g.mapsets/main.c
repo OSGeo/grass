@@ -268,10 +268,10 @@ int main(int argc, char *argv[])
 
 static void append_mapset(char **path, const char *mapset)
 {
-    int init = (*path == NULL);
+    int len = (*path == NULL ? 0 : strlen(*path));
 
-    *path = (char *)G_realloc(*path, (init ? 0 : strlen(*path)) + strlen(mapset) + 2);
-    if (init)
+    *path = (char *)G_realloc(*path, len + strlen(mapset) + 2);
+    if (!len)
         *path[0] = '\0';
     strcat(*path, mapset);
     strcat(*path, " ");
