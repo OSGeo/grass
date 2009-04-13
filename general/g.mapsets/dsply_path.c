@@ -1,7 +1,7 @@
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
-#include "externs.h"
+#include "local_proto.h"
 
 int display_mapset_path(const char *fs)
 {
@@ -17,7 +17,6 @@ int display_mapset_path(const char *fs)
 	for (n = nmapsets; n /= 10; offset++) ;
 
 	fprintf(stdout, _("Your mapset search list:\n"));
-	ncurr_mapsets = 0;
     }
 
     nleft = 78;
@@ -42,8 +41,6 @@ int display_mapset_path(const char *fs)
 		fprintf(stdout, ", ");
 	    fprintf(stdout, "%s <%d>", name, map + 1);
 	    nleft -= (len + offset);
-	    curr_mapset[n] = map;
-	    ++ncurr_mapsets;
 	}
 	else {
 	    fprintf(stdout, "%s", name);
