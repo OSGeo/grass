@@ -88,9 +88,7 @@ list all available tables for a given database, run <a href="db.tables.html">db.
 To drop a column from a selected attribute table, use <a href="db.dropcol.html">db.dropcol</a>.
 With <a href="db.droptable.html">db.droptable</a> an attribute table can be deleted.
 
-
 <h3>Database Schema</h3>
-
 Currently schema support only works for PostgreSQL connections. Default schema
 can be set with <a href="db.connect.html">db.connect</a>. Note that the default 
 schema will be used by all db.* modules.
@@ -98,6 +96,14 @@ schema will be used by all db.* modules.
 <a href="db.tables.html">db.tables</a> returns 'schema.table' if schemas are
 available in the database.
 
+<h3>Migrating to a different database engine</h3>
+
+To migrate a GRASS database table (or a GRASS vector map) to a different DBMI engine,
+the best solution is to create a new MAPSET, define the DBMI settings accordingly
+with <a href="db.connect.html">db.connect</a> and if needed, <a href="db.login.html">db.login</a>.
+Then the table of interest can be copied over with <a href="db.copy.html">db.copy</a> from
+the original MAPSET. Likewise, a vector map including its table(s) are copied from
+the original MAPSET to the current MAPSET with <a href="g.copy.html">g.copy</a>.
 
 <h3>See also</h3>
 
