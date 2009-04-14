@@ -23,9 +23,9 @@ For further available drivers go
 
 <h2>NOTES</h2>
 
-To export areas with holes into, e.g., a Shapefile, while keeping the 
-holes as holes, the flag <em>-c</em> has to be used.
-
+By default, islands will appear as holes inside surrounding areas.
+To export areas with holes into, e.g., a Shapefile, and make the 
+holes appear as filled areas, the flag <em>-c</em> has to be used.
 
 <h2>EXAMPLES</h2>
 
@@ -37,8 +37,8 @@ Export lines from GRASS vector map to Shapefile format
 v.out.ogr input=multi type=line dsn=/tmp olayer=testogr 
 </pre></div>
 
-Export areas from GRASS vector map to Shapefile format, preserving islands
- (generates /tmp/testogr.shp and related files):
+Export areas from GRASS vector map to Shapefile format, converting
+islands (holes) to filled areas (generates /tmp/testogr.shp and related files):
 <div class="code"><pre>
 v.out.ogr -c input=multi type=area dsn=/tmp olayer=testogr 
 </pre></div>
