@@ -148,8 +148,8 @@ int main(int argc, char *argv[])
 
     cat_flag = G_define_flag();
     cat_flag->key = 'c';
-    cat_flag->description = _("Export features with category (labeled) only. "
-			      "Otherwise all features are exported");
+    cat_flag->description = _("Also export features without category (not labeled). "
+			      "Otherwise only features with category are exported");
 
     esristyle = G_define_flag();
     esristyle->key = 'e';
@@ -198,9 +198,9 @@ int main(int argc, char *argv[])
 
 
     if (cat_flag->answer)
-	donocat = 0;
-    else
 	donocat = 1;
+    else
+	donocat = 0;
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
@@ -209,8 +209,9 @@ int main(int argc, char *argv[])
     Vect_set_open_level(2);
     Vect_open_old(&In, in_opt->answer, "");
 
-    if (Vect_get_num_islands(&In) > 0 && !cat_flag->answer)
-	G_warning(_("The map contains islands. To preserve them in the output map, use the -c flag"));
+    if ((GV_AREA & otype) && Vect_get_num_islands(&In) > 0 && cat_flag->answer)
+	G_warning(_("The map contains islands. With the -c flag, "
+	            "islands will appear as filled areas, not holes in the output map."));
 
     /* fetch PROJ info */
     G_get_default_window(&cellhd);
@@ -642,7 +643,7 @@ int main(int argc, char *argv[])
     if (noatt > 0)
 	G_warning(_("%d features without attributes were written"), noatt);
     if (nocatskip > 0)
-	G_warning(_("%d features found without category were skipped"),
+	G_message(_("%d features found without category were skipped"),
 		nocatskip);
 
     /* Enable this? May be confusing that for area type are not reported
