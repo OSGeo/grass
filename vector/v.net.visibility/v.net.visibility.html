@@ -89,6 +89,17 @@ d.vect new_graph
 d.vect lines col=red
 </pre></div>
 
+
+<h2>EXAMPLE 5</h2>
+An example for connections of points (Spearfish):
+<div class="code"><pre>
+v.net.visibility input=archsites output=graph
+g.region vect=archsites
+d.mon x0
+d.vect graph
+d.vect archsites col=red
+</pre></div>
+
 <h2>KNOWN BUGS</h2>
 In some cases when 3 points or nodes are collinear, some wrong edges are added.
 This happens only really rarly and shouldn't be a big problem.
