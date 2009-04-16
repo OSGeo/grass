@@ -161,7 +161,7 @@ if [ -n "$GIS_OPT_OUTPUT" ] ; then
     fi
 fi
 if [ -n "$GIS_OPT_INPUT" ] ; then
-    GPSdevice="-f $GIS_OPT_INPUT"
+    GPSdevice="$GIS_OPT_INPUT"
     if [ $VERBOSE -eq 1 ] ; then
 	g.message message="file=$GIS_OPT_INPUT"
     fi
@@ -249,7 +249,7 @@ if [ $CREATE_POINTS -eq 1 ] ; then
 	TYPE="-t"
     fi
 
-    gpsbabel $TYPE -i $GIS_OPT_FORMAT $GPSdevice $PROGVERBOSE \
+    gpsbabel $TYPE -i $GIS_OPT_FORMAT -f "$GPSdevice" $PROGVERBOSE \
 	-o xcsv,style="$STYLE" -F "$TMP".xcsv
     EXITCODE=$?
 
@@ -269,7 +269,7 @@ else
 	TYPE="-t"
 	EXITCODE=$?
     fi
-    gpsbabel $TYPE -i $GIS_OPT_FORMAT $GPSdevice $PROGVERBOSE \
+    gpsbabel $TYPE -i $GIS_OPT_FORMAT -f "$GPSdevice" $PROGVERBOSE \
 	-o gpx -F "$TMP".gpx
     EXITCODE=$?
 
