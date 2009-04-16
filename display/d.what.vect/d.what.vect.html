@@ -5,13 +5,15 @@ outputs the category value(s) associated with user-specified location(s)
 in user-specified vector map layer(s). 
 
 <p>
-
 The program activates the mouse, and expects the user to indicate the 
 location(s) to be queried by depressing a mouse button over desired location(s) 
 within the current geographic region in the active display frame on the 
 graphic monitor. Query results from map(s) are by default displayed in a new 
 monitor, where label values can be added or changed. Using parameter <b>-x</b> 
 informations will be displayed as plain text to terminal window.
+<P>
+This module always reports standard acres, even when the location uses
+US Survey feet as the map unit.
 
 <h2>EXAMPLE</h2>
 
@@ -41,17 +43,23 @@ The query may be repeated as often as desired using the left mouse button. The
 middle mouse button toggles the flash color.
 The right button on the mouse is used to quit the <em>d.what.vect</em> session. 
 
+
 <h2>SEE ALSO</h2>
 
-<em><a HREF="d.rast.html">d.rast</a></em><br>
-<em><a HREF="d.vect.html">d.vect</a></em><br>
-<em><a HREF="d.what.rast.html">d.what.rast</a></em><br>
-<em><a HREF="g.region.html">g.region</a></em><br>
+<em><a HREF="d.rast.html">d.rast</a><br>
+<a HREF="d.vect.html">d.vect</a><br>
+<a HREF="d.what.rast.html">d.what.rast</a><br>
+<a HREF="g.region.html">g.region</a><br>
+<a HREF="v.what.html">v.what</a>
+</em>
+
 
 <h2>AUTHOR</h2>
 
 Jim Hinthorne,
 Central Washington University<br>
-Upgrades by Dennis Finch, National Park Service and Radim Blazek, ITC-Irst, Trento, Italy
+Upgrades by Dennis Finch, National Park Service
+ and Radim Blazek, ITC-Irst, Trento, Italy
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
