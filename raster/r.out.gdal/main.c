@@ -30,7 +30,6 @@
 #include <grass/dbmi.h>
 
 #include "cpl_string.h"
-#include "gdal.h"
 #include "local_proto.h"
 
 
@@ -132,7 +131,7 @@ int main(int argc, char *argv[])
 
     flag_c = G_define_flag();
     flag_c->key = 'c';
-    flag_c->label = _("Do not export long colortable");
+    flag_c->label = _("Do not write GDAL standard colortable");
     flag_c->description = _("Only applicable to Byte or UInt16 data types.");
 
     input = G_define_standard_option(G_OPT_R_INPUT);
@@ -274,69 +273,75 @@ int main(int argc, char *argv[])
     GDALDataType datatype = GDT_Unknown;
     double nodataval;
 
+    maptype = CELL_TYPE;
+
     if (type->answer) {
 	/* reduce number of strcmps ... */
 	if (type->answer[0] == 'B') {
 	    datatype = GDT_Byte;
 	    maptype = CELL_TYPE;
-	    nodataval = (double)(unsigned char)0xFFu;
+	    nodataval = TYPE_BYTE_MIN;
 	}
 	else if (type->answer[0] == 'I') {
 	    if (strcmp(type->answer, "Int16") == 0) {
 		datatype = GDT_Int16;
 		maptype = CELL_TYPE;
-		nodataval = (double)(short)0x8000;
+		nodataval = TYPE_INT16_MIN;
 	    }
 	    else if (strcmp(type->answer, "Int32") == 0) {
 		datatype = GDT_Int32;
 		maptype = CELL_TYPE;
-		nodataval = (double)(int)0x80000000;
+		nodataval = TYPE_INT32_MIN;
 	    }
 	}
 	else if (type->answer[0] == 'U') {
 	    if (strcmp(type->answer, "UInt16") == 0) {
 		datatype = GDT_UInt16;
 		maptype = CELL_TYPE;
-		nodataval = (double)(unsigned short)0xFFFFu;
+		nodataval = TYPE_UINT16_MIN;
 	    }
 	    else if (strcmp(type->answer, "UInt32") == 0) {
 		datatype = GDT_UInt32;
 		maptype = DCELL_TYPE;
-		nodataval = (double)(unsigned int)0xFFFFFFFFu;
+		nodataval = TYPE_UINT32_MIN;
 	    }
 	}
 	else if (type->answer[0] == 'F') {
 	    if (strcmp(type->answer, "Float32") == 0) {
 		datatype = GDT_Float32;
 		maptype = FCELL_TYPE;
-		nodataval = -1E37f;
+		/* nodataval = TYPE_FLOAT32_MIN; */
+		nodataval = 0.0/0.0;
 	    }
 	    else if (strcmp(type->answer, "Float64") == 0) {
 		datatype = GDT_Float64;
 		maptype = DCELL_TYPE;
-		nodataval = -1E37f;
+		/* nodataval = TYPE_FLOAT64_MIN; */
+		nodataval = 0.0/0.0;
 	    }
 	}
 	else if (type->answer[0] == 'C') {
 	    if (strcmp(type->answer, "CInt16") == 0) {
 		datatype = GDT_CInt16;
 		maptype = CELL_TYPE;
-		nodataval = (double)(short)0x8000;
+		nodataval = TYPE_INT16_MIN;
 	    }
 	    else if (strcmp(type->answer, "CInt32") == 0) {
 		datatype = GDT_CInt32;
 		maptype = CELL_TYPE;
-		nodataval = (double)(int)0x80000000;
+		nodataval = TYPE_INT32_MIN;
 	    }
 	    else if (strcmp(type->answer, "CFloat32") == 0) {
 		datatype = GDT_CFloat32;
 		maptype = FCELL_TYPE;
-		nodataval = -1E37f;
+		/* nodataval = TYPE_FLOAT32_MIN; */
+		nodataval = 0.0/0.0;
 	    }
 	    else if (strcmp(type->answer, "CFloat64") == 0) {
 		datatype = GDT_CFloat64;
 		maptype = DCELL_TYPE;
-		nodataval = -1E37f;
+		/* nodataval = TYPE_FLOAT64_MIN; */
+		nodataval = 0.0/0.0;
 	    }
 	}
     }
@@ -357,40 +362,43 @@ int main(int argc, char *argv[])
 	maptype = G_raster_map_type(ref.file[0].name, ref.file[0].mapset);
 	if (maptype == FCELL_TYPE) {
 	    datatype = GDT_Float32;
-	    nodataval = -1E37f;
+	    /* nodataval = TYPE_FLOAT32_MIN; */
+	    nodataval = 0.0/0.0;
 	}
 	else if (maptype == DCELL_TYPE) {
 	    datatype = GDT_Float64;
-	    nodataval = -1E37f;
+	    /* nodataval = TYPE_FLOAT64_MIN; */
+	    nodataval = 0.0/0.0;
 	}
 	else {
 	    /* Special tricks for GeoTIFF color table support and such */
 	    if (dfCellMin >= 0 && dfCellMax < 256) {
 		datatype = GDT_Byte;
-		nodataval = (double)(unsigned char)0xFFu;
+		nodataval = TYPE_BYTE_MIN;
 	    }
 	    else {
 		if (dfCellMin >= 0 && dfCellMax < 65536) {
 		    datatype = GDT_UInt16;
-		    nodataval = (double)(short)0x8000;
+		    nodataval = TYPE_UINT16_MIN;
 		}
 		else {
 		    datatype = GDT_Int32;	/* need to fine tune this more? */
-		    nodataval = (double)(int)0x80000000;
+		    nodataval = TYPE_INT32_MIN;
 		}
 	    }
 	}
     }
 
-    /* force nodata-value if needed */
+    /* default or user-specified nodata-value ? */
+    int default_nodataval = 1;
+
     if (nodataopt->answer) {
 	nodataval = atof(nodataopt->answer);
+	default_nodataval = 0;
+	/* check nodataval here, not in export_band(), because it is specified only once */
+	if (nullvalue_check(nodataval, datatype))
+	    G_fatal_error("Raster export aborted.");
     }
-
-    /* TODO:
-       if( nodata_used && nodataval is out_of_type_range )
-       G_fatal_error(_("No-data value out of range for type %s"), type->answer);
-     */
 
     G_debug(3, "Input map datatype=%s\n",
 	    (maptype == CELL_TYPE ? "CELL" :
@@ -469,10 +477,27 @@ int main(int argc, char *argv[])
 						     ref.file[band].mapset),
 			      band + 1);
 	}
+	/* do range check here because we don't have GDALDataType in export_band() */
+	if (G_read_fp_range
+	    (ref.file[band].name, ref.file[band].mapset, &sRange) == -1) {
+	    bHaveMinMax = FALSE;
+	}
+	else {
+	    bHaveMinMax = TRUE;
+	    G_get_fp_range_min_max(&sRange, &dfCellMin, &dfCellMax);
+	}
+	G_debug(3, "Range: min: %f, max: %f", dfCellMin, dfCellMax);
+	if (bHaveMinMax == TRUE) {
+	    if (range_check
+		(dfCellMin, dfCellMax, datatype, ref.file[band].name))
+		G_fatal_error("Raster export aborted");
+	}
+
+	/* ready to export */
 	if (export_band
 	    (hCurrDS, band + 1, ref.file[band].name, ref.file[band].mapset,
-	     &cellhead, maptype, nodataval, nodataopt->key,
-	     flag_c->answer) < 0)
+	     &cellhead, maptype, nodataval, nodataopt->key, flag_c->answer,
+	     default_nodataval) < 0)
 	    G_warning(_("Unable to export raster map <%s>"),
 		      ref.file[band].name);
     }
@@ -496,4 +521,203 @@ int main(int argc, char *argv[])
 
     G_done_msg(" ");
     exit(EXIT_SUCCESS);
+}
+
+
+int range_check(double min, double max, GDALDataType datatype, char *name)
+{
+    /* what accuracy to use to print min max for FLOAT32 and FLOAT64? %g enough? */
+
+    switch (datatype) {
+    case GDT_Byte:
+	if (min < TYPE_BYTE_MIN || max > TYPE_BYTE_MAX) {
+	    G_warning(_("Selected GDAL datatype does not cover data range."));
+	    G_warning(_("GDAL datatype: %s, range: %d - %d"),
+		      GDALGetDataTypeName(datatype), TYPE_BYTE_MIN,
+		      TYPE_BYTE_MAX);
+	    G_warning(_("Raster map <%s> range: %g - %g"), name, min, max);
+	    return 1;
+	}
+	else
+	    return 0;
+
+    case GDT_UInt16:
+	if (min < TYPE_UINT16_MIN || max > TYPE_UINT16_MAX) {
+	    G_warning(_("Selected GDAL datatype does not cover data range."));
+	    G_warning(_("GDAL datatype: %s, range: %d - %d"),
+		      GDALGetDataTypeName(datatype), TYPE_UINT16_MIN,
+		      TYPE_UINT16_MAX);
+	    G_warning(_("Raster map <%s> range: %g - %g"), name, min, max);
+	    return 1;
+	}
+	else
+	    return 0;
+
+    case GDT_Int16:
+    case GDT_CInt16:
+	if (min < TYPE_INT16_MIN || max > TYPE_INT16_MAX) {
+	    G_warning(_("Selected GDAL datatype does not cover data range."));
+	    G_warning(_("GDAL datatype: %s, range: %d - %d"),
+		      GDALGetDataTypeName(datatype), TYPE_INT16_MIN,
+		      TYPE_INT16_MAX);
+	    G_warning(_("Raster map <%s> range: %g - %g"), name, min, max);
+	    return 1;
+	}
+	else
+	    return 0;
+
+    case GDT_Int32:
+    case GDT_CInt32:
+	if (min < TYPE_INT32_MIN || max > TYPE_INT32_MAX) {
+	    G_warning(_("Selected GDAL datatype does not cover data range."));
+	    G_warning(_("GDAL datatype: %s, range: %d - %d"),
+		      GDALGetDataTypeName(datatype), TYPE_INT32_MIN,
+		      TYPE_INT32_MAX);
+	    G_warning(_("Raster map <%s> range: %g - %g"), name, min, max);
+	    return 1;
+	}
+	else
+	    return 0;
+
+    case GDT_UInt32:
+	if (min < TYPE_UINT32_MIN || max > TYPE_UINT32_MAX) {
+	    G_warning(_("Selected GDAL datatype does not cover data range."));
+	    G_warning(_("GDAL datatype: %s, range: %u - %u"),
+		      GDALGetDataTypeName(datatype), TYPE_UINT32_MIN,
+		      TYPE_UINT32_MAX);
+	    G_warning(_("Raster map <%s> range: %g - %g"), name, min, max);
+	    return 1;
+	}
+	else
+	    return 0;
+
+    case GDT_Float32:
+    case GDT_CFloat32:
+	if (min < TYPE_FLOAT32_MIN || max > TYPE_FLOAT32_MAX) {
+	    G_warning(_("Selected GDAL datatype does not cover data range."));
+	    G_warning(_("GDAL datatype: %s, range: %g - %g"),
+		      GDALGetDataTypeName(datatype), TYPE_FLOAT32_MIN,
+		      TYPE_FLOAT32_MAX);
+	    G_warning(_("Raster map <%s> range: %g - %g"), name, min, max);
+	    return 1;
+	}
+	else
+	    return 0;
+
+    case GDT_Float64:
+    case GDT_CFloat64:
+	/* not possible because DCELL is FLOAT64, not 128bit floating point, but anyway... */
+	if (min < TYPE_FLOAT64_MIN || max > TYPE_FLOAT64_MAX) {
+	    G_warning(_("Selected GDAL datatype does not cover data range."));
+	    G_warning(_("GDAL datatype: %s, range: %g - %g"),
+		      GDALGetDataTypeName(datatype), TYPE_FLOAT64_MIN,
+		      TYPE_FLOAT64_MAX);
+	    G_warning(_("Raster map <%s> range: %g - %g"), name, min, max);
+	    return 1;
+	}
+	else
+	    return 0;
+
+    default:
+	return 0;
+    }
+}
+
+int nullvalue_check(double nodataval, GDALDataType datatype)
+{
+    /* what accuracy to use to print nodataval for FLOAT32 and FLOAT64? %g enough? */
+
+    switch (datatype) {
+    case GDT_Byte:
+	if (nodataval < TYPE_BYTE_MIN || nodataval > TYPE_BYTE_MAX) {
+	    G_warning(_("Specified nodata value %d is not covered by range of selected GDAL datatype."),
+		      (int) nodataval);
+	    G_warning(_("GDAL datatype: %s, range: %d - %d"),
+		      GDALGetDataTypeName(datatype), TYPE_BYTE_MIN,
+		      TYPE_BYTE_MAX);
+	    return 1;
+	}
+	else
+	    return 0;
+
+    case GDT_UInt16:
+	if (nodataval < TYPE_UINT16_MIN || nodataval > TYPE_UINT16_MAX) {
+	    G_warning(_("Specified nodata value %d is not covered by range of selected GDAL datatype."),
+		      (int) nodataval);
+	    G_warning(_("GDAL datatype: %s, range: %d - %d"),
+		      GDALGetDataTypeName(datatype), TYPE_UINT16_MIN,
+		      TYPE_UINT16_MAX);
+	    return 1;
+	}
+	else
+	    return 0;
+
+    case GDT_Int16:
+    case GDT_CInt16:
+	if (nodataval < TYPE_INT16_MIN || nodataval > TYPE_INT16_MAX) {
+	    G_warning(_("Specified nodata value %d is not covered by range of selected GDAL datatype."),
+		      (int) nodataval);
+	    G_warning(_("GDAL datatype: %s, range: %d - %d"),
+		      GDALGetDataTypeName(datatype), TYPE_INT16_MIN,
+		      TYPE_INT16_MAX);
+	    return 1;
+	}
+	else
+	    return 0;
+
+    case GDT_Int32:
+    case GDT_CInt32:
+	if (nodataval < TYPE_INT32_MIN || nodataval > TYPE_INT32_MAX) {
+	    G_warning(_("Specified nodata value %lld is not covered by range of selected GDAL datatype."),
+		      (long long) nodataval);
+	    G_warning(_("GDAL datatype: %s, range: %d - %d"),
+		      GDALGetDataTypeName(datatype), TYPE_INT32_MIN,
+		      TYPE_INT32_MAX);
+	    return 1;
+	}
+	else
+	    return 0;
+
+    case GDT_UInt32:
+	if (nodataval < TYPE_UINT32_MIN || nodataval > TYPE_UINT32_MAX) {
+	    G_warning(_("Specified nodata value %lld is not covered by range of selected GDAL datatype."),
+		      (long long) nodataval);
+	    G_warning(_("GDAL datatype: %s, range: %u - %u"),
+		      GDALGetDataTypeName(datatype), TYPE_UINT32_MIN,
+		      TYPE_UINT32_MAX);
+	    return 1;
+	}
+	else
+	    return 0;
+
+    case GDT_Float32:
+    case GDT_CFloat32:
+	if (nodataval < TYPE_FLOAT32_MIN || nodataval > TYPE_FLOAT32_MAX) {
+	    G_warning(_("Specified nodata value %g is not covered by range of selected GDAL datatype."),
+		      nodataval);
+	    G_warning(_("GDAL datatype: %s, range: %g - %g"),
+		      GDALGetDataTypeName(datatype), TYPE_FLOAT32_MIN,
+		      TYPE_FLOAT32_MAX);
+	    return 1;
+	}
+	else
+	    return 0;
+
+    case GDT_Float64:
+    case GDT_CFloat64:
+	/* not possible because double is FLOAT64, not 128bit floating point */
+	if (nodataval < TYPE_FLOAT64_MIN || nodataval > TYPE_FLOAT64_MAX) {
+	    G_warning(_("Specified nodata value %g is not covered by range of selected GDAL datatype."),
+		      nodataval);
+	    G_warning(_("GDAL datatype: %s, range: %g - %g"),
+		      GDALGetDataTypeName(datatype), TYPE_FLOAT64_MIN,
+		      TYPE_FLOAT64_MAX);
+	    return 1;
+	}
+	else
+	    return 0;
+
+    default:
+	return 0;
+    }
 }
