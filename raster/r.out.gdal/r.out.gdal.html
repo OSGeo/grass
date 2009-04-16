@@ -1,11 +1,18 @@
 <h2>DESCRIPTION</h2>
 
 <em>r.out.gdal</em> allows a user to export a GRASS raster map layer
-into any GDAL supported raster map format.
-
-For possible <em>metaopt</em> parameters see the individual
-<a href="http://www.gdal.org/formats_list.html">supported formats</a> pages
-on the GDAL website.
+into any GDAL supported raster map format. If a GRASS raster map is
+exported for a particular application, the application's native format
+would be preferrable. GeoTIFF is supported by a wide range of
+applications (see also <b>NOTES</b> on GeoTIFF below).
+<p>
+To specify multiple creation options use a comma separated list
+(<em>createopt="TFW=YES,COMPRESS=DEFLATE"</em>).
+<p>
+For possible <em>createopt</em> and <em>metaopt</em> parameters please
+consult the individual
+<a href="http://www.gdal.org/formats_list.html">supported formats</a>
+pages on the GDAL website.
 The <em>createopt</em> parameter may be used to create TFW or World files
 ("TFW=YES","WORLDFILE=ON").
 <p>
@@ -56,18 +63,6 @@ local GDAL installation. Available may be (incomplete list):<p>
 
 <h2>NOTES</h2>
 
-When writing out multi-band GeoTIFF images for users of ESRI software or
-ImageMagick, the interleaving mode should be set to "pixel" using
-<em>createopt="INTERLEAVE=PIXEL"</em>. BAND interleaving is slightly more
-efficient, but not supported by some applications.
-<!-- GDAL switched default from BAND to PIXEL interleave on 08/01/07 (r11823) -->
-This issue only arises when writing out multi-band imagery groups.
-Some software may not recognize all of the compression methods available.
-<!-- e.g. data destined for ESRI software should use COMPRESS=LZW/PACKBITS/DEFLATE ??? -->
-
-<p>
-To specify multiple options use a comma separated list
-(<em>createopt="TFW=YES,COMPRESS=DEFLATE"</em>).
 <p>
 Out of the GDAL data types, the closest match for GRASS CELL, FCELL and
 DCELL rasters are respectively Int32, Float32 and Float64. These are not
@@ -80,8 +75,8 @@ possible in GDAL and GRASS. Use <em><a href="r.info.html">r.info</a></em> to
 check the data type and range for your GRASS raster, refer to specific
 format documentation (on the <a href="http://www.gdal.org/">GDAL website</a>),
 format vendor's documentation, and e.g. the Wikipedia article
-<em><a href="http://en.wikipedia.org/wiki/C_syntax#Typical_boundaries_of_primitive_integral_types">Typical
-  boundaries of primitive integral types</a></em>
+<em><a href="http://en.wikipedia.org/wiki/C_syntax#Typical_boundaries_of_primitive_integral_types">
+Typical boundaries of primitive integral types</a></em>
 for details.
 
 
@@ -104,16 +99,45 @@ covering the data range of the raster(s) to be exported, e.g., if suitable
 use Byte rather than UInt16; use Int16 rather than Int32; or use Float32
 rather than Float64. In addition, the COMPRESS <b>createopt</b> used can
 have a very large impact on the size of the output file.
+<p>
+Some software may not recognize all of the compression methods
+available for a given file format, and certain compression methods may
+only be supported for certain data types (depends on vendor and version).
+<!-- e.g. data destined for ESRI software should use COMPRESS=LZW/PACKBITS/DEFLATE ??? -->
+<p>
+<em>r.out.gdal</em> exports may appear all black or gray on initial
+display in other GIS software. This is not a bug of <em>r.out.gdal</em>,
+but often caused by the default color table assigned by that software.
+The dafault color table may be grayscale covering the whole range of
+possible values which is very large for e.g. Int32 or Float32. E.g.
+stretching the color table to actual min/max would help (sometimes under
+symbology).
 
+<h4>GeoTIFF caveats</h4>
+
+GeoTIFF exports can only be displayed by standard image viewers
+if the GDAL data type was set to Byte and the GeoTIFF contains either
+one or three bands. All other data types and numbers of bands can be
+properly read with GIS software only. Although GeoTIFF files usually
+have a .tif extension, these files are not necessarily images but
+first of all spatial raster datasets, e.g. SRTM DEM version 4.
+<p>
+When writing out multi-band GeoTIFF images for users of ESRI software or
+ImageMagick, the interleaving mode should be set to "pixel" using
+<em>createopt="INTERLEAVE=PIXEL"</em>. BAND interleaving is slightly more
+efficient, but not supported by some applications.
+<!-- GDAL switched default from BAND to PIXEL interleave on 08/01/07 (r11823) -->
+This issue only arises when writing out multi-band imagery groups.
+<p>
 
 <h4>Improving GeoTIFF compatibility</h4>
 
-To create a highly compatibility GeoTIFF with various other GIS software 
-packages, it is recommended to keep the GeoTIFF file as simple as possible.
-You will have to experiment with which options your software is compatible
-with, as this varies widely between vendors and versions. Long term, the
-less metadata you have to remove the more self-documenting (and useful)
-the dataset will be.
+To create a GeoTIFF that is highly compatibility with various other GIS
+software packages, it is recommended to keep the GeoTIFF file as simple
+as possible. You will have to experiment with which options your
+software is compatible with, as this varies widely between vendors and
+versions. Long term, the less metadata you have to remove the more
+self-documenting (and useful) the dataset will be.
 <p>
 Here are some things to try:
 
@@ -127,8 +151,10 @@ this means the output image can be rather huge, but the file can be
 compressed with software like <tt>zip</tt>, <tt>gnuzip</tt>, or <tt>bzip2</tt>.
 
 <li>Skip exporting the color table. Color tables are not always properly
-rendered and the GeoTIFF file can appear completely black. If you are lucky
-the problematic software package has a method to reset the color table.
+rendered, particularly for type UInt16, and the GeoTIFF file can appear
+completely black. If you are lucky the problematic software package has
+a method to reset the color table and assign a new color table
+(sometimes called symbology).
 
 <li>Keep metadata simple with <tt>createopt="PROFILE=GeoTIFF"</tt> or 
 <tt>createopt="PROFILE=BASELINE"</tt>. With BASELINE no GDAL or GeoTIFF
@@ -150,14 +176,14 @@ r.out.gdal input=roads output=roads.tif type=UInt16
 
 <h4>Export a DCELL raster map in GeoTIFF format suitable for ESRI software:</h4>
 <div class="code"><pre>
-r.out.gdal in=elevation.10m out=ned_elev10m.tif type=Float64 createopt="TFW=YES"
+r.out.gdal in=elevation.10m out=ned_elev10m.tif type=Float64 createopt="PROFILE=GeoTIFF,TFW=YES"
 </pre></div>
 <p>
 
 <h4>Export R,G,B imagery bands in GeoTIFF format suitable for ESRI software:</h4>
 <div class="code"><pre>
 i.group group=nc_landsat_rgb input=lsat7_2002_30,lsat7_2002_20,lsat7_2002_10
-r.out.gdal in=nc_landsat_rgb out=nc_landsat_rgb.tif type=Byte createopt="INTERLEAVE=PIXEL,TFW=YES"
+r.out.gdal in=nc_landsat_rgb out=nc_landsat_rgb.tif type=Byte createopt="PROFILE=GeoTIFF,INTERLEAVE=PIXEL,TFW=YES"
 </pre></div>
 <p>
 

@@ -25,7 +25,8 @@
 int export_band(GDALDatasetH hMEMDS, int band, const char *name,
 		const char *mapset, struct Cell_head *cellhead,
 		RASTER_MAP_TYPE maptype, double nodataval,
-		const char *nodatakey, int suppress_main_colortable)
+		const char *nodatakey, int suppress_main_colortable,
+		int default_nodataval)
 {
 
     struct Colors sGrassColors;
@@ -63,14 +64,12 @@ int export_band(GDALDatasetH hMEMDS, int band, const char *name,
 	G_get_fp_range_min_max(&sRange, &dfCellMin, &dfCellMax);
     }
 
-    /* TODO: if data range exceeds export TYPE range exit with an error.
-       Otherwise the module doesn't know what to write for those values */
-
     /* suppress useless warnings */
     CPLPushErrorHandler(CPLQuietErrorHandler);
     GDALSetRasterColorInterpretation(hBand, GPI_RGB);
     CPLPopErrorHandler();
 
+    /* use default color rules if no color rules are given */
     if (G_read_colors(name, mapset, &sGrassColors) >= 0) {
 	int maxcolor, i;
 	CELL min, max;
@@ -165,13 +164,6 @@ int export_band(GDALDatasetH hMEMDS, int band, const char *name,
 	if (!suppress_main_colortable)
 	    GDALSetRasterColorTable(hBand, hCT);
     }
-    else {
-	if (!suppress_main_colortable) {
-	    hCT = GDALCreateColorTable(GPI_RGB);
-	    GDALSetMetadataItem(hBand, "COLOR_TABLE_RULES_COUNT", "0", NULL);
-	    GDALSetRasterColorTable(hBand, hCT);
-	}
-    }
 
     /* Create GRASS raster buffer */
     void *bufer = G_allocate_raster_buf(maptype);
@@ -189,11 +181,11 @@ int export_band(GDALDatasetH hMEMDS, int band, const char *name,
 
     /* Copy data form GRASS raster to memory raster */
     int row, col;
-    int n_nulls = 0;
+    int n_nulls = 0, nodatavalmatch = 0;
 
     if (maptype == FCELL_TYPE) {
 
-	/* Source datatype understandible by GDAL */
+	/* Source datatype understandable by GDAL */
 	GDALDataType datatype = GDT_Float32;
 	FCELL fnullval = (FCELL) nodataval;
 
@@ -212,6 +204,9 @@ int export_band(GDALDatasetH hMEMDS, int band, const char *name,
 			GDALSetRasterNoDataValue(hBand, nodataval);
 		    }
 		    n_nulls++;
+		}
+		else if (((FCELL *) bufer)[col] == fnullval) {
+		    nodatavalmatch = 1;
 		}
 
 	    if (GDALRasterIO
@@ -244,6 +239,9 @@ int export_band(GDALDatasetH hMEMDS, int band, const char *name,
 		    }
 		    n_nulls++;
 		}
+		else if (((DCELL *) bufer)[col] == dnullval) {
+		    nodatavalmatch = 1;
+		}
 
 	    if (GDALRasterIO
 		(hBand, GF_Write, 0, row, cols, 1, bufer, cols, 1, datatype,
@@ -275,6 +273,9 @@ int export_band(GDALDatasetH hMEMDS, int band, const char *name,
 		    }
 		    n_nulls++;
 		}
+		else if (((CELL *) bufer)[col] == inullval) {
+		    nodatavalmatch = 1;
+		}
 
 	    if (GDALRasterIO
 		(hBand, GF_Write, 0, row, cols, 1, bufer, cols, 1, datatype,
@@ -286,16 +287,31 @@ int export_band(GDALDatasetH hMEMDS, int band, const char *name,
 	}
     }
 
-    if (n_nulls > 0) {		/* TODO: && nodata_param NOT specified */
+    if (nodatavalmatch && n_nulls) {
+	if (default_nodataval) {  /* default nodataval didn't work */
+	    G_fatal_error(_("Raster band <%s> contains NULL cells and "
+	    "the default nodata value would lead to data loss. Please "
+	    "specify a nodata value with the %s parameter."),
+	     name, nodatakey);
+	}
+	else {  /* user-specified nodataval didn't work */
+	    G_fatal_error(_("Raster band <%s> contains NULL cells and "
+	    "the given nodata value would lead to data loss. Please "
+	    "specify a different nodata value with the %s parameter."),
+	     name, nodatakey);
+	}
+    }
+
+    if (n_nulls > 0 && default_nodataval) {
 	if (maptype == CELL_TYPE)
 	    G_important_message(_("Input raster map contains cells with NULL-value (no-data). "
 		       "The value %d was used to represent no-data values in the input map. "
-		       "You can specify nodata value by %s parameter."),
+		       "You can specify a nodata value with the %s option."),
 		      (int)nodataval, nodatakey);
 	else
 	    G_important_message(_("Input raster map contains cells with NULL-value (no-data). "
 		       "The value %g was used to represent no-data values in the input map. "
-		       "You can specify nodata value by %s parameter."),
+		       "You can specify a nodata value with the %s option."),
 		      nodataval, nodatakey);
     }
 
