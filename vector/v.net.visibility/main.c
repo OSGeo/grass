@@ -248,6 +248,8 @@ void load_lines(struct Map_info *map, struct Point **points, int *num_points,
     *num_points = index_point;
     *num_lines = index_line;
 
+    Vect_destroy_line_struct(sites);
+    Vect_destroy_cats_struct(cats);
 }
 
 void process_point(struct line_pnts *sites, struct Point **points,
