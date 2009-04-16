@@ -219,6 +219,8 @@ void report(struct Point *p, struct Point *q, struct Map_info *out)
     Vect_copy_xyz_to_pnts(sites, tmpx, tmpy, 0, 2);
     Vect_write_line(out, GV_LINE, sites, cats);
 
+    Vect_destroy_line_struct(sites);
+    Vect_destroy_cats_struct(cats);
     G_free(tmpx);
     G_free(tmpy);
 }

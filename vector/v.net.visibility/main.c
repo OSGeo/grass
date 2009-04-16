@@ -121,6 +121,7 @@ int main(int argc, char *argv[])
     Vect_build(&out);
     Vect_close(&out);
     Vect_close(&in);
+
     exit(EXIT_SUCCESS);
 }
 
@@ -209,6 +210,8 @@ void count(struct Map_info *map, int *num_points, int *num_lines)
     *num_points = index_point;
     *num_lines = index_line;
 
+    Vect_destroy_line_struct(sites);
+    Vect_destroy_cats_struct(cats);
 }
 
 
