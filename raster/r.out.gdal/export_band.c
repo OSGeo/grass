@@ -287,21 +287,6 @@ int export_band(GDALDatasetH hMEMDS, int band, const char *name,
 	}
     }
 
-    if (nodatavalmatch && n_nulls) {
-	if (default_nodataval) {  /* default nodataval didn't work */
-	    G_fatal_error(_("Raster band <%s> contains NULL cells and "
-	    "the default nodata value would lead to data loss. Please "
-	    "specify a nodata value with the %s parameter."),
-	     name, nodatakey);
-	}
-	else {  /* user-specified nodataval didn't work */
-	    G_fatal_error(_("Raster band <%s> contains NULL cells and "
-	    "the given nodata value would lead to data loss. Please "
-	    "specify a different nodata value with the %s parameter."),
-	     name, nodatakey);
-	}
-    }
-
     if (n_nulls > 0 && default_nodataval) {
 	if (maptype == CELL_TYPE)
 	    G_important_message(_("Input raster map contains cells with NULL-value (no-data). "
@@ -313,6 +298,23 @@ int export_band(GDALDatasetH hMEMDS, int band, const char *name,
 		       "The value %g was used to represent no-data values in the input map. "
 		       "You can specify a nodata value with the %s option."),
 		      nodataval, nodatakey);
+    }
+
+    if (nodatavalmatch && n_nulls) {
+	if (default_nodataval) {  /* default nodataval didn't work */
+	    G_warning(_("The default nodata value is present in raster"
+	    "band <%s> and would lead to data loss. Please specify a "
+	    "different nodata value with the %s parameter."),
+	     name, nodatakey);
+	}
+	else {  /* user-specified nodataval didn't work */
+	    G_warning(_("The given nodata value is present in raster"
+	    "band <%s> and would lead to data loss. Please specify a "
+	    "different nodata value with the %s parameter."),
+	     name, nodatakey);
+	}
+
+	return -2;
     }
 
     return 0;
