@@ -11,13 +11,13 @@ Classes:
  - HelpWindow
  - StartUp
 
-COPYRIGHT: (C) 2006-2008 by the GRASS Development Team
-           This program is free software under the GNU General Public
-           License (>=v2). Read the file COPYING that comes with GRASS
-           for details.
+(C) 2006-2009 by the GRASS Development Team
+
+This program is free software under the GNU General Public License
+(>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Michael Barton and Jachym Cepicky (original author)
-Martin Landa <landa.martin gmail.com> (various updates)
+@author Martin Landa <landa.martin gmail.com> (various updates)
 """
 
 import os
@@ -163,6 +163,7 @@ class GRASSStartup(wx.Frame):
         self.manageloc.Bind(wx.EVT_CHOICE,    self.OnManageLoc)
         self.lblocations.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnSelectLocation)
         self.lbmapsets.Bind(wx.EVT_LIST_ITEM_SELECTED,   self.OnSelectMapset)
+        self.lbmapsets.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.OnStart)
         self.tgisdbase.Bind(wx.EVT_TEXT_ENTER, self.OnSetDatabase)
         self.Bind(wx.EVT_CLOSE,               self.OnCloseWindow)
         
@@ -177,8 +178,9 @@ class GRASSStartup(wx.Frame):
 
         self.bstart.SetForegroundColour(wx.Colour(35, 142, 35))
         self.bstart.SetToolTipString(_("Enter GRASS session"))
-        # self.bstart.Enable(False)
-        # self.bmapset.Enable(False)
+        self.bstart.Enable(False)
+        self.bmapset.Enable(False)
+        self.manageloc.Enable(False)
 
         # set database
         if not self.gisdbase:
@@ -619,9 +621,17 @@ class GRASSStartup(wx.Frame):
 
         if len(self.listOfMapsets) > 0:
             self.lbmapsets.SetSelection(0)
+            if locationName:
+                # enable start button when location and mapset is selected
+                self.bstart.Enable()
+                self.bmapset.Enable()
+                self.manageloc.Enable()
         else:
             self.lbmapsets.SetSelection(wx.NOT_FOUND)
-
+            self.bstart.Enable(False)
+            self.bmapset.Enable(False)
+            self.manageloc.Enable(False)
+        
     def OnSelectMapset(self, event):
         """Mapset selected"""
         self.lbmapsets.SetSelection(event.GetIndex())
