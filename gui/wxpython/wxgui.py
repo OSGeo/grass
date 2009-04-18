@@ -539,7 +539,7 @@ class GMFrame(wx.Frame):
         """Display 'About GRASS' dialog"""
         info = wx.AboutDialogInfo()
 
-        rev = "$Revision$"
+        rev = "$Revision: 36354 $"
         # name
         info.SetName("GRASS GIS")
         # version

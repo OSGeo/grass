@@ -2,29 +2,11 @@ MODULE_TOPDIR = ../../..
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 
-SHLIB_LD = $(CXX) -shared
-
 LIB_NAME = grass7_wxnviz
-SOURCES := $(wildcard *.cpp) $(LIB_NAME)_wrap.cpp
-SHLIB_OBJS := $(patsubst %.cpp, $(OBJDIR)/%.o, $(SOURCES))
-
-EXTRA_CFLAGS = $(SHLIB_CFLAGS) $(GDALCFLAGS) $(PYTHONCFLAGS) $(WXWIDGETSCXXFLAGS) $(XCFLAGS) $(XMINC)
-EXTRA_LIBS = $(GISLIB) $(OGSFLIB) $(NVIZLIB) $(OPENGLLIB) $(OPENGLULIB)
-ifeq ($(findstring darwin,$(ARCH)),darwin)
-EXTRA_LIBS := -bundle -undefined dynamic_lookup $(EXTRA_LIBS)
-CXXFLAGS := $(subst -arch ppc64,,$(subst -arch x86_64,,$(CXXFLAGS)))
-LDFLAGS := $(subst -arch ppc64,,$(subst -arch x86_64,,$(LDFLAGS)))
-else
-EXTRA_LIBS := $(PYTHONLDFLAGS) $(WXWIDGETSLIB) $(EXTRA_LIBS)
-endif
-
-LOCAL_HEADERS = nviz.h
-
-ETCDIR = $(ETC)/wxpython
 
 SHLIB = $(OBJDIR)/_$(LIB_NAME).so
 
-EXTRA_CLEAN_FILES = $(SHLIB) $(LIB_NAME).i $(LIB_NAME).py $(LIB_NAME)_wrap.cpp
+ETCDIR = $(ETC)/wxpython
 
 ifneq ($(USE_WXWIDGETS),)
 ifneq ($(USE_PYTHON),)
@@ -41,24 +23,18 @@ $(LIB_NAME).i: nviz.i nviz_types.i nviz.h
 	echo "/* auto-generated swig typedef file */" >> $(LIB_NAME).i
 	cat nviz.h >> $(LIB_NAME).i
 
-$(LIB_NAME).py $(LIB_NAME)_wrap.cpp: $(LIB_NAME).i
-	$(SWIG) -c++ -python -shadow -o $(LIB_NAME)_wrap.cpp $<
+$(LIB_NAME).py: $(SHLIB)
 
-$(SHLIB): $(SHLIB_OBJS)
-ifeq ($(findstring darwin,$(ARCH)),darwin)
-	$(CXX) -o $@ $(LDFLAGS) $^ $(EXTRA_LIBS)
-else
-	$(SHLIB_LD) -o $@ $(LDFLAGS) $^ $(EXTRA_LIBS)
-endif
+$(SHLIB): $(LIB_NAME).i
+	python setup.py build_ext --swig=$(SWIG) --build-lib=$(OBJDIR) --build-temp=$(OBJDIR)
 
-install_nviz:
-	$(MAKE) $(ETCDIR)/nviz/_$(LIB_NAME).so $(ETCDIR)/nviz/$(LIB_NAME).py
+.NOTPARALLEL: $(LIB_NAME).py $(LIB_NAME)_wrap.cpp
+
+install_nviz: $(ETCDIR)/nviz/_$(LIB_NAME).so $(ETCDIR)/nviz/$(LIB_NAME).py
 
 $(ETCDIR)/nviz/_$(LIB_NAME).so: $(SHLIB)
 	$(INSTALL) $< $@
 
 $(ETCDIR)/nviz/$(LIB_NAME).py: $(LIB_NAME).py
 	$(INSTALL_DATA) $< $@
-
-.PHONY: install_nviz
 
