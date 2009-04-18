@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
 {
 
     struct GModule *module;
-    struct Flag *flag_l, *flag_c;
+    struct Flag *flag_l, *flag_c, *flag_f;
     struct Option *input, *format, *type, *output, *createopt, *metaopt,
 	*nodataopt;
 
@@ -116,6 +116,7 @@ int main(int argc, char *argv[])
     double dfCellMin;
     double dfCellMax;
     struct FPRange sRange;
+    int retval;
 
     G_gisinit(argv[0]);
 
@@ -133,6 +134,11 @@ int main(int argc, char *argv[])
     flag_c->key = 'c';
     flag_c->label = _("Do not write GDAL standard colortable");
     flag_c->description = _("Only applicable to Byte or UInt16 data types.");
+
+    flag_f = G_define_flag();
+    flag_f->key = 'f';
+    flag_f->label = _("Force raster export also if data loss may occur");
+    flag_f->description = _("Overrides saftey checks.");
 
     input = G_define_standard_option(G_OPT_R_INPUT);
     input->required = NO;
@@ -396,8 +402,12 @@ int main(int argc, char *argv[])
 	nodataval = atof(nodataopt->answer);
 	default_nodataval = 0;
 	/* check nodataval here, not in export_band(), because it is specified only once */
-	if (nullvalue_check(nodataval, datatype))
-	    G_fatal_error("Raster export aborted.");
+	if (nullvalue_check(nodataval, datatype)) {
+	    if (flag_f->answer)
+		G_warning(_("Forcing raster export."));
+	    else
+		G_fatal_error(_("Raster export aborted."));
+	}
     }
 
     G_debug(3, "Input map datatype=%s\n",
@@ -489,17 +499,29 @@ int main(int argc, char *argv[])
 	G_debug(3, "Range: min: %f, max: %f", dfCellMin, dfCellMax);
 	if (bHaveMinMax == TRUE) {
 	    if (range_check
-		(dfCellMin, dfCellMax, datatype, ref.file[band].name))
-		G_fatal_error("Raster export aborted");
+		(dfCellMin, dfCellMax, datatype, ref.file[band].name)) {
+		if (flag_f->answer)
+		    G_warning(_("Forcing raster export."));
+		else
+		    G_fatal_error(_("Raster export aborted."));
+		}
 	}
 
 	/* ready to export */
-	if (export_band
+	retval = export_band
 	    (hCurrDS, band + 1, ref.file[band].name, ref.file[band].mapset,
 	     &cellhead, maptype, nodataval, nodataopt->key, flag_c->answer,
-	     default_nodataval) < 0)
+	     default_nodataval);
+	if (retval == -1) {
 	    G_warning(_("Unable to export raster map <%s>"),
 		      ref.file[band].name);
+	}
+	else if (retval == -2) {
+	    if (flag_f->answer)
+		G_warning(_("Forcing raster export."));
+	    else
+		G_fatal_error(_("Raster export aborted."));
+	}
     }
 
     /* Finaly create user required raster format from memory raster if in-memory driver was used */
