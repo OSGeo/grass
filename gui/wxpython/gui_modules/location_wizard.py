@@ -621,7 +621,7 @@ class ItemList(wx.ListCtrl,
         """
         if str == '':
             self.Populate(self.sourceData)
-            return None
+            return []
 
         data = []
         str = str.lower()
@@ -633,12 +633,13 @@ class ItemList(wx.ListCtrl,
             except UnicodeDecodeError:
                 # osgeo4w problem (should be fixed)
                 pass
-        self.Populate(data)
         
         if len(data) > 0:
+            self.Populate(data)
             return data[0]
         else:
-            return None
+            self.Populate(self.sourceData)
+            return []
 
 class ProjTypePage(TitledPage):
     """
@@ -1351,10 +1352,11 @@ class EPSGPage(TitledPage):
             if not nextButton.IsEnabled():
                 nextButton.Enable(True)
         else:
+            self.epsgcode = None # not found
             if nextButton.IsEnabled():
                 nextButton.Enable(False)
             self.epsgdesc = self.epsgparams = ''
-
+        
     def OnSearch(self, event):
         value =  self.searchb.GetValue()
         if self.epsglist.GetItemCount() == 0:
@@ -1364,9 +1366,10 @@ class EPSGPage(TitledPage):
         try:
             self.epsgcode = self.epsglist.Search(index=1, str=value)[0]
             self.tcode.SetValue(str(self.epsgcode))
-        except IndexError:
+        except IndexError: # -> no item found
             self.epsgcode = None
             self.tcode.SetValue('')
+            self.searchb.SetValue('')
 
         event.Skip()
         
