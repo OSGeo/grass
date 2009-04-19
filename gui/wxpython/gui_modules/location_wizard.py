@@ -424,7 +424,7 @@ class ProjectionsPage(TitledPage):
         """Search projection by desc"""
         str = event.GetString()
         try:
-            self.proj, self.projdesc = self.projlist.Search(index=1, str=event.GetString())
+            self.proj, self.projdesc = self.projlist.Search(index=1, pattern=event.GetString())
         except:
             self.proj = self.projdesc = ''
 
@@ -614,21 +614,21 @@ class ItemList(wx.ListCtrl,
         """Used by listmix.ColumnSorterMixin"""
         return self
 
-    def Search (self, index, str):
+    def Search (self, index, pattern):
         """Search projection by description
 
         Return first found item or None
         """
-        if str == '':
+        if pattern == '':
             self.Populate(self.sourceData)
             return []
 
         data = []
-        str = str.lower()
+        pattern = pattern.lower()
         for i in range(len(self.sourceData)):
             try:
-                value = self.sourceData[i][index].lower()
-                if str in value:
+                value = str(self.sourceData[i][index]).lower()
+                if pattern in value:
                     data.append(self.sourceData[i])
             except UnicodeDecodeError:
                 # osgeo4w problem (should be fixed)
@@ -866,7 +866,7 @@ class DatumPage(TitledPage):
 
     def OnDText(self, event):
         self.datum = event.GetString()
-        self.transformlist.Search(index=1, str=self.datum)
+        self.transformlist.Search(index=1, pattern=self.datum)
         if self.transformlist.GetItemCount() > 0:
             self.hastransform = True
         else:
@@ -909,8 +909,8 @@ class DatumPage(TitledPage):
     def OnDSearch(self, event):
         str =  self.searchb.GetValue()
         try:
-            self.datum, self.datumdesc, self.ellipsoid = self.datumlist.Search(index=1, str=str)
-            self.transformlist.Search(index=1, str=self.datum)
+            self.datum, self.datumdesc, self.ellipsoid = self.datumlist.Search(index=1, pattern=str)
+            self.transformlist.Search(index=1, pattern=self.datum)
         except:
             self.datum = self.datumdesc = self.ellipsoid = ''
 
@@ -1050,7 +1050,7 @@ class EllipsePage(TitledPage):
         str =  event.GetString()
         try:
             self.ellipse, self.ellipsedesc = \
-                self.ellipselist.Search(index=1, str=event.GetString())
+                self.ellipselist.Search(index=1, pattern=event.GetString())
             self.ellipseparams = self.parent.ellipsoids[self.ellipse][1]
             self.proj4params = self.parent.ellipsoids[self.ellipse][2]
         except:
@@ -1246,9 +1246,11 @@ class EPSGPage(TitledPage):
                                     style=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL)
         self.lcode= self.MakeLabel(_("EPSG code:"),
                                     style=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL)
-        self.lsearch = self.MakeLabel(_("Search in description:"),
+        self.lsearch = self.MakeLabel(_("Search in"),
                                        style=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL)
-
+        self.csearch = wx.Choice(parent = self, id = wx.ID_ANY,
+                                 choices = [_("codes"), _("description"), _("parameters")])
+        
         # text input
         epsgdir = utils.PathJoin(os.environ["GRASS_PROJSHARE"], 'epsg')
         self.tfile = self.MakeTextCtrl(text=epsgdir, size=(200,-1))
@@ -1270,42 +1272,46 @@ class EPSGPage(TitledPage):
         self.sizer.Add(item=self.lfile,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
-                       wx.ALL, border=5, pos=(1, 1))
+                       wx.ALL, border=5, pos=(1, 1), span=(1, 2))
         self.sizer.Add(item=self.tfile,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
-                       wx.ALL, border=5, pos=(1, 2))
+                       wx.ALL, border=5, pos=(1, 3))
         self.sizer.Add(item=self.bbrowse,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
-                       wx.ALL, border=5, pos=(1, 3))
+                       wx.ALL, border=5, pos=(1, 4))
 
         self.sizer.Add(item=self.lcode,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
-                       wx.ALL, border=5, pos=(2, 1))
+                       wx.ALL, border=5, pos=(2, 1), span=(1, 2))
         self.sizer.Add(item=self.tcode,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
-                       wx.ALL, border=5, pos=(2, 2))
+                       wx.ALL, border=5, pos=(2, 3))
 
         self.sizer.Add(item=self.lsearch,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5, pos=(3, 1))
-        self.sizer.Add(item=self.searchb,
+        self.sizer.Add(item=self.csearch,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5, pos=(3, 2))
-        self.sizer.Add(item=self.bbcodes,
+        self.sizer.Add(item=self.searchb,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5, pos=(3, 3))
+        self.sizer.Add(item=self.bbcodes,
+                       flag=wx.ALIGN_LEFT |
+                       wx.ALIGN_CENTER_VERTICAL |
+                       wx.ALL, border=5, pos=(3, 4))
 
         self.sizer.AddGrowableRow(4)
         self.sizer.Add(item=self.epsglist,
                        flag=wx.ALIGN_LEFT | wx.EXPAND, pos=(4, 1),
-                       span=(1, 3))
+                       span=(1, 4))
 
         # events
         self.bbrowse.Bind(wx.EVT_BUTTON, self.OnBrowse)
@@ -1364,7 +1370,8 @@ class EPSGPage(TitledPage):
             return
         
         try:
-            self.epsgcode = self.epsglist.Search(index=1, str=value)[0]
+            self.epsgcode = self.epsglist.Search(index=self.csearch.GetSelection(),
+                                                 pattern=value)[0]
             self.tcode.SetValue(str(self.epsgcode))
         except IndexError: # -> no item found
             self.epsgcode = None
