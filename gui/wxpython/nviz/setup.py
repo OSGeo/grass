@@ -28,7 +28,11 @@ libs = ['grass_gis',
 for flag in ('GDALCFLAGS',
              'GDALLIBS',
              'WXWIDGETSCXXFLAGS',
-             'WXWIDGETSLIB'):
+             'WXWIDGETSLIB',
+             'XCFLAGS',
+             'XMINC',
+             'OPENGLLIB',
+             'OPENGLULIB'):
     update_opts(flag, macros, inc_dirs, lib_dirs, libs)
 
 setup(
