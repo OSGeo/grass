@@ -362,7 +362,7 @@ int main(int argc, char **argv)
 	dir_buf = G_allocate_d_raster_buf();
 	dir_id = G_open_cell_old(dir_name, "");
 	tempfile3 = G_tempfile();
-	dir_fd = open(tempfile3, O_RDWR | O_CREAT);
+	dir_fd = open(tempfile3, O_RDWR | O_CREAT, 0666);
 
 	for (i = 0; i < nrows; i++) {
 	    G_get_d_raster_row(dir_id, dir_buf, i);
