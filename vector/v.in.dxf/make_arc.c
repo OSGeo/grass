@@ -32,7 +32,7 @@ int make_arc(int offset,	/* offset into array of points */
 	    ypnts[arr_size] = radius * sin(alpha) + centery;
 	    zpnts[arr_size] = zcoor;
 	    theta -= RSTEP;
-	    if (arr_size == arr_max) {
+	    if (arr_size >= arr_max - 1) {
 		arr_max += ARR_INCR;
 		xpnts = (double *)G_realloc(xpnts, arr_max * sizeof(double));
 		ypnts = (double *)G_realloc(ypnts, arr_max * sizeof(double));
@@ -49,7 +49,7 @@ int make_arc(int offset,	/* offset into array of points */
 	    ypnts[arr_size] = radius * sin(alpha) + centery;
 	    zpnts[arr_size] = zcoor;
 	    theta += RSTEP;
-	    if (arr_size == arr_max) {
+	    if (arr_size >= arr_max - 1) {
 		arr_max += ARR_INCR;
 		xpnts = (double *)G_realloc(xpnts, arr_max * sizeof(double));
 		ypnts = (double *)G_realloc(ypnts, arr_max * sizeof(double));
@@ -63,7 +63,7 @@ int make_arc(int offset,	/* offset into array of points */
     xpnts[arr_size] = radius * cos(alpha) + centerx;
     ypnts[arr_size] = radius * sin(alpha) + centery;
     zpnts[arr_size] = zcoor;
-    if (arr_size == arr_max) {
+    if (arr_size >= arr_max - 1) {
 	arr_max += ARR_INCR;
 	xpnts = (double *)G_realloc(xpnts, arr_max * sizeof(double));
 	ypnts = (double *)G_realloc(ypnts, arr_max * sizeof(double));
