@@ -11,6 +11,7 @@ void add_lwpolyline(struct dxf_file *dxf, struct Map_info *Map)
     int polyline_flag = 0;	/* indicates the type of polyline */
     int xflag = 0;		/* indicates if a x value has been found */
     int yflag = 0;		/* indicates if a y value has been found */
+    double elevation = 0.0;	/* elevation */
     int arr_size = 0;
 
     /* variables to create arcs */
@@ -20,7 +21,6 @@ void add_lwpolyline(struct dxf_file *dxf, struct Map_info *Map)
     handle[0] = 0;
     strcpy(layer, UNIDENTIFIED_LAYER);
 
-    zpnts[0] = 0.0;
     /* read in lines and process information until a 0 is read in */
     while ((code = dxf_get_code(dxf)) != 0) {
 	if (code == -2)
@@ -56,6 +56,9 @@ void add_lwpolyline(struct dxf_file *dxf, struct Map_info *Map)
 	    ypnts[arr_size] = atof(dxf_buf);
 	    yflag = 1;
 	    break;
+	case 38:
+	    elevation = atof(dxf_buf);
+	    break;
 	case 42:		/* bulge */
 	    bulge = atof(dxf_buf);
 	    break;
@@ -83,6 +86,13 @@ void add_lwpolyline(struct dxf_file *dxf, struct Map_info *Map)
 	}
     }
 
+    {
+	int i;
+
+	for (i = 0; i < arr_size; i++)
+	    zpnts[i] = elevation;
+    }
+
     if (polyline_flag & 1) {
 	if (xpnts[0] != xpnts[arr_size - 1] ||
 	    ypnts[0] != ypnts[arr_size - 1]) {
@@ -100,13 +110,6 @@ void add_lwpolyline(struct dxf_file *dxf, struct Map_info *Map)
 	    }
 	    arr_size++;
 	}
-    }
-
-    {
-	int i;
-
-	for (i = 0; i < arr_size; i++)
-	    zpnts[i] = 0.0;
     }
 
     write_vect(Map, layer, "LWPOLYLINE", handle, "", arr_size, GV_LINE);
