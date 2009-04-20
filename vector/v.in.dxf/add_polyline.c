@@ -257,15 +257,15 @@ static void write_pnts(struct Map_info *Map, char *layer, char *handle,
 	    xpnts[arr_size] = xpnts[0];
 	    ypnts[arr_size] = ypnts[0];
 	    zpnts[arr_size] = zpnts[0];
+	    arr_size++;
 
 	    /* arr_size incremented to be consistent with polyline_flag != 1 */
-	    if (arr_size >= arr_max - 1) {
+	    if (arr_size == arr_max) {
 		arr_max += ARR_INCR;
 		xpnts = (double *)G_realloc(xpnts, arr_max * sizeof(double));
 		ypnts = (double *)G_realloc(ypnts, arr_max * sizeof(double));
 		zpnts = (double *)G_realloc(zpnts, arr_max * sizeof(double));
 	    }
-	    arr_size++;
 	}
     }
 
