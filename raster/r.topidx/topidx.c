@@ -1,5 +1,7 @@
-#include "global.h"
+#include <math.h>
+#include <grass/gis.h>
 #include <grass/glocale.h>
+#include "global.h"
 
 int natb;
 
@@ -36,7 +38,7 @@ void atanb(void)
     ncells = window.rows * window.cols;
     snatb = natb;
 
-    G_important_message("Calculating...");
+    G_important_message(_("Calculating..."));
 
     nsink = 0;
     for (iter = 1; natb < ncells; iter++) {
@@ -179,7 +181,7 @@ void atanb(void)
 		}
 
 		if (!nroute) {
-		    G_debug(1, "Sink or boundary node " "at %d, %d\n", i, j);
+		    G_debug(1, "Sink or boundary node at %d, %d\n", i, j);
 		    nsink++;
 		    sumtb = 0.0;
 		    nslp = 0;
@@ -272,5 +274,5 @@ void atanb(void)
 	}
     }
     G_percent(natb - snatb, ncells - snatb, 1);
-    G_important_message("Number of sinks or boundaries: %d", nsink);
+    G_important_message(_("Number of sinks or boundaries: %d"), nsink);
 }

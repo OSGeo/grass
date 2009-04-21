@@ -10,7 +10,7 @@
  * PURPOSE:      Creates topographic index map from elevation map.
  *               Based on GRIDATB.FOR.
  *
- * COPYRIGHT:    (C) 2000-2007 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2000-2009 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -18,13 +18,11 @@
  *
  *****************************************************************************/
 
+#define _MAIN_C_
+#include <stdlib.h>
+#include <grass/gis.h>
 #include <grass/glocale.h>
 #include "global.h"
-
-char *iname, *oname;
-struct Cell_head window;
-DCELL **cell;
-DCELL **atb, **a;
 
 int main(int argc, char **argv)
 {
