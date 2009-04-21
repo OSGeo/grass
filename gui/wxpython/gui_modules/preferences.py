@@ -1238,7 +1238,7 @@ class PreferencesDialog(wx.Dialog):
         flexSizer = wx.FlexGridSizer (cols=2, hgap=5, vgap=5)
         flexSizer.AddGrowableCol(0)
         
-        label = wx.StaticText(parent=panel, id=wx.ID_ANY, label="Color")
+        label = wx.StaticText(parent=panel, id=wx.ID_ANY, label=_("Color:"))
         hlColor = csel.ColourSelect(parent=panel, id=wx.ID_ANY,
                                     colour=self.settings.Get(group='atm', key='highlight', subkey='color'),
                                     size=(35, 35))
@@ -1248,7 +1248,7 @@ class PreferencesDialog(wx.Dialog):
         flexSizer.Add(label, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL)
         flexSizer.Add(hlColor, proportion=0, flag=wx.ALIGN_RIGHT | wx.FIXED_MINSIZE)
 
-        label = wx.StaticText(parent=panel, id=wx.ID_ANY, label=_("Line width (in pixels)"))
+        label = wx.StaticText(parent=panel, id=wx.ID_ANY, label=_("Line width (in pixels):"))
         hlWidth = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(50, -1),
                               initial=self.settings.Get(group='atm', key='highlight',subkey='width'),
                               min=1, max=1e6)
@@ -1276,7 +1276,7 @@ class PreferencesDialog(wx.Dialog):
 
         flexSizer = wx.FlexGridSizer (cols=2, hgap=5, vgap=5)
         flexSizer.AddGrowableCol(0)
-        label = wx.StaticText(parent=panel, id=wx.ID_ANY, label=_("Left mouse double click"))
+        label = wx.StaticText(parent=panel, id=wx.ID_ANY, label=_("Left mouse double click:"))
         leftDbClick = wx.Choice(parent=panel, id=wx.ID_ANY,
                                 choices=self.settings.Get(group='atm', key='leftDbClick', subkey='choices', internal=True),
                                 name="GetSelection")
@@ -1287,7 +1287,8 @@ class PreferencesDialog(wx.Dialog):
         flexSizer.Add(leftDbClick, proportion=0, flag=wx.ALIGN_RIGHT | wx.FIXED_MINSIZE)
 
         # encoding
-        label = wx.StaticText(parent=panel, id=wx.ID_ANY, label=_("Encoding"))
+        label = wx.StaticText(parent=panel, id=wx.ID_ANY,
+                              label=_("Encoding (e.g. utf-8, ascii, iso8859-1, koi8-r):"))
         encoding = wx.TextCtrl(parent=panel, id=wx.ID_ANY,
                                value=self.settings.Get(group='atm', key='encoding', subkey='value'),
                                name="GetValue", size=(200, -1))
@@ -1326,7 +1327,7 @@ class PreferencesDialog(wx.Dialog):
         flexSizer.AddGrowableCol(0)
 
         label = wx.StaticText(parent=panel, id=wx.ID_ANY,
-                              label=_("Key column"))
+                              label=_("Key column:"))
         keyColumn = wx.TextCtrl(parent=panel, id=wx.ID_ANY,
                                 size=(250, -1))
         keyColumn.SetValue(self.settings.Get(group='atm', key='keycolumn', subkey='value'))
