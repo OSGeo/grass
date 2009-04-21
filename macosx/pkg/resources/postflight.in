@@ -20,7 +20,7 @@ mkdir -p "$MACOSX_SUPPDIR/Modules/docs/html"
 
 # modbuild
 
-cp -Rf "$PACKAGE_PATH/Contents/Resources/modbuild" "$MACOSX_SUPPDIR"
+#cp -Rf "$PACKAGE_PATH/Contents/Resources/modbuild" "$MACOSX_SUPPDIR"
 
 # readme
 # needs a better home?
