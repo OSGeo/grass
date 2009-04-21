@@ -49,7 +49,7 @@ int is_red(struct RB_NODE *);
  */
 struct RB_TREE *rbtree_create(rb_compare_fn *compare, size_t rb_datasize)
 {
-    struct RB_TREE *tree = malloc(sizeof(*tree));
+    struct RB_TREE *tree = G_malloc(sizeof(*tree));
 
     if (tree == NULL) {
 	G_warning("RB tree: Out of memory!");
@@ -220,10 +220,10 @@ int rbtree_remove(struct RB_TREE *tree, const void *data)
 
     /* Replace and remove if found */
     if (f != NULL) {
-	free(f->data);
+	G_free(f->data);
 	f->data = q->data;
 	p->link[p->link[1] == q] = q->link[q->link[0] == NULL];
-	free(q);
+	G_free(q);
 	tree->count--;
 	removed = 1;
     }
@@ -413,7 +413,7 @@ void *rbtree_next(struct RB_TRAV *trav)
 /* destroy the tree */
 void rbtree_destroy(struct RB_TREE *tree) {
     rbtree_destroy2(tree->root);
-    free(tree);
+    G_free(tree);
 }
 
 void rbtree_destroy2(struct RB_NODE *root)
@@ -421,8 +421,8 @@ void rbtree_destroy2(struct RB_NODE *root)
     if (root != NULL) {
 	rbtree_destroy2(root->link[0]);
 	rbtree_destroy2(root->link[1]);
-	free(root->data);
-	free(root);
+	G_free(root->data);
+	G_free(root);
     }
 }
 
@@ -488,12 +488,12 @@ int rbtree_debug(struct RB_TREE *tree, struct RB_NODE *root)
 /* add a new node to the tree */
 struct RB_NODE *rbtree_make_node(size_t datasize, void *data)
 {
-    struct RB_NODE *new_node = malloc(sizeof(*new_node));
+    struct RB_NODE *new_node = G_malloc(sizeof(*new_node));
 
     if (new_node == NULL)
 	G_fatal_error("RB Search Tree: Out of memory!");
 
-    new_node->data = malloc(datasize);
+    new_node->data = G_malloc(datasize);
     if (new_node->data == NULL)
 	G_fatal_error("RB Search Tree: Out of memory!");
 	

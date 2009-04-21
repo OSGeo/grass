@@ -37,7 +37,7 @@ int dig_list_add(struct ilist *list, int val)
 
     if (list->n_values == list->alloc_values) {
 	size = (list->n_values + 1000) * sizeof(int);
-	p = realloc((void *)list->value, size);
+	p = G_realloc((void *)list->value, size);
 	if (p == NULL)
 	    return 0;
 	list->value = (int *)p;
