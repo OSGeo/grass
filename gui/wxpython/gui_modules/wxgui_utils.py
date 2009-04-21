@@ -811,10 +811,13 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if self.GetPyData(layer)[0].has_key('propwin') and \
                 self.GetPyData(layer)[0]['propwin'] is not None:
             # recycle GUI dialogs
-            if self.GetPyData(layer)[0]['propwin'].IsShown():
-                self.GetPyData(layer)[0]['propwin'].SetFocus()
+            win = self.GetPyData(layer)[0]['propwin']
+            # update properties (columns, layers)
+            win.notebookpanel.OnUpdateSelection(None)
+            if win.IsShown():
+                win.SetFocus()
             else:
-                self.GetPyData(layer)[0]['propwin'].Show()
+                win.Show()
             
             return
         
