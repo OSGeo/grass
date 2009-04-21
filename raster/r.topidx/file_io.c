@@ -28,8 +28,8 @@ void getcells(void)
     atb = (DCELL **) G_malloc(sizeof(DCELL *) * window.rows);
     a = (DCELL **) G_malloc(sizeof(DCELL *) * window.rows);
 
-    if ((window.ew_res < inhead.ew_res) || (window.ns_res < inhead.ns_res))
-        G_fatal_error(_("Current region resolution [%.2fx%.2f] lower than input map resolution [%.2fx%.2f]! Needs to be at least identical or the current region resolution lower than the input map resolution"),window.ew_res, window.ns_res, inhead.ew_res, inhead.ns_res);
+    if (window.ew_res < inhead.ew_res || window.ns_res < inhead.ns_res)
+        G_fatal_error(_("Current region resolution [%.2fx%.2f] lower than input map resolution [%.2fx%.2f]! Needs to be at least identical or the current region resolution lower than the input map resolution"), window.ew_res, window.ns_res, inhead.ew_res, inhead.ns_res);
 
     G_important_message(_("Reading elevation map..."));
 
