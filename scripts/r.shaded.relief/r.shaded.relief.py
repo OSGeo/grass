@@ -68,7 +68,7 @@
 #% end
 #% option
 #%  key: altitude
-#%  type: integer
+#%  type: double
 #%  description: Altitude of the sun in degrees above the horizon
 #%  required : no
 #%  options : 0-90
@@ -76,7 +76,7 @@
 #% end
 #% option
 #%  key: azimuth
-#%  type: integer
+#%  type: double
 #%  description: Azimuth of the sun in degrees to the east of north
 #%  required : no
 #%  options : 0-360
@@ -148,6 +148,7 @@ def main():
 	scale *= 6076.12 * 60
 
     #correct azimuth to East (GRASS convention):
+    #  this seems to be backwards, but in fact it works so leave it.
     az = float(azimuth) - 90
 
     grass.message("Calculating shading, please stand by.")
