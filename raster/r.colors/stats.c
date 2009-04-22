@@ -101,7 +101,7 @@ void get_fp_stats(const char *name, const char *mapset,
     statf->count = 1000;
     statf->min = min;
     statf->max = max;
-    statf->stats = G_calloc(statf->count, sizeof(unsigned long));
+    statf->stats = G_calloc(statf->count + 1, sizeof(unsigned long));
     statf->total = 0;
 
     G_verbose_message(_("Reading raster map <%s>..."),
