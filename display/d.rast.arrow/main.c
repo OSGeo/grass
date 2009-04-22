@@ -85,6 +85,9 @@ int main(int argc, char **argv)
     struct GModule *module;
     struct Option *opt1, *opt2, *opt3, *opt4, *opt5,
 	*opt6, *opt7, *opt8, *opt9;
+    struct Flag *align;
+
+    double t, b, l, r;
 
     G_gisinit(argv[0]);
 
@@ -165,6 +168,10 @@ int main(int argc, char **argv)
     opt8->answer = "1.0";
     opt8->description = _("Scale factor for arrows (magnitude map)");
 
+    align = G_define_flag();
+    align->key = 'a';
+    align->description = _("Align grids with raster cells");
+
 
     /* Check command line */
     if (G_parser(argc, argv))
@@ -221,10 +228,45 @@ int main(int argc, char **argv)
     /* Read in the map window associated with window */
     G_get_window(&window);
 
-    nrows = window.rows;
-    ncols = window.cols;
+    if (align->answer) {
+	struct Cell_head head, wind;
 
-    D_set_src(0, nrows, 0, ncols);
+	if (G_get_cellhd(layer_name, "", &head) < 0)
+	    G_fatal_error(_("Unable to read header of raster map <%s>"), layer_name);
+
+	G_copy(&wind, &head, sizeof(struct Cell_head));
+
+	/* expand window extent by one head resolution */
+	wind.west = head.west + head.ew_res * ((int)((window.west - head.west) / head.ew_res) - (window.west < head.west));
+	wind.east = head.east + head.ew_res * ((int)((window.east - head.east) / head.ew_res) + (window.west > head.west));
+	wind.south = head.south + head.ns_res * ((int)((window.south - head.south) / head.ns_res) - (window.south < head.south));
+	wind.north = head.north + head.ns_res * ((int)((window.north - head.north) / head.ns_res) + (window.north > head.north));
+
+	wind.ew_res = head.ew_res;
+	wind.ns_res = head.ns_res;
+	wind.rows = (wind.north - wind.south) / wind.ns_res;
+	wind.cols = (wind.east - wind.west) / wind.ew_res;
+
+	G_set_window(&wind);
+
+	nrows = wind.rows;
+	ncols = wind.cols;
+
+	t = (wind.north - window.north) * nrows / (wind.north - wind.south);
+	b = t + (window.north - window.south) * nrows / (wind.north - wind.south);
+	l = (window.west - wind.west) * ncols / (wind.east - wind.west);
+	r = l + (window.east - window.west) * ncols / (wind.east - wind.west);
+    } else {
+        nrows = window.rows;
+        ncols = window.cols;
+
+	t = 0;
+	b = nrows;
+	l = 0;
+	r = ncols;
+    }
+
+    D_set_src(t, b, l, r);
     D_update_conversions();
 
     /* figure out arrow scaling if using a magnitude map */
