@@ -229,21 +229,17 @@ int main(int argc, char **argv)
     G_get_window(&window);
 
     if (align->answer) {
-	struct Cell_head head, wind;
+	struct Cell_head wind;
 
-	if (G_get_cellhd(layer_name, "", &head) < 0)
+	if (G_get_cellhd(layer_name, "", &wind) < 0)
 	    G_fatal_error(_("Unable to read header of raster map <%s>"), layer_name);
 
-	G_copy(&wind, &head, sizeof(struct Cell_head));
+	/* expand window extent by one wind resolution */
+	wind.west += wind.ew_res * ((int)((window.west - wind.west) / wind.ew_res) - (window.west < wind.west));
+	wind.east += wind.ew_res * ((int)((window.east - wind.east) / wind.ew_res) + (window.east > wind.east));
+	wind.south += wind.ns_res * ((int)((window.south - wind.south) / wind.ns_res) - (window.south < wind.south));
+	wind.north += wind.ns_res * ((int)((window.north - wind.north) / wind.ns_res) + (window.north > wind.north));
 
-	/* expand window extent by one head resolution */
-	wind.west = head.west + head.ew_res * ((int)((window.west - head.west) / head.ew_res) - (window.west < head.west));
-	wind.east = head.east + head.ew_res * ((int)((window.east - head.east) / head.ew_res) + (window.west > head.west));
-	wind.south = head.south + head.ns_res * ((int)((window.south - head.south) / head.ns_res) - (window.south < head.south));
-	wind.north = head.north + head.ns_res * ((int)((window.north - head.north) / head.ns_res) + (window.north > head.north));
-
-	wind.ew_res = head.ew_res;
-	wind.ns_res = head.ns_res;
 	wind.rows = (wind.north - wind.south) / wind.ns_res;
 	wind.cols = (wind.east - wind.west) / wind.ew_res;
 
