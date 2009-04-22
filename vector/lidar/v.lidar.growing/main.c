@@ -175,7 +175,7 @@ int main(int argc, char *argv[])
     db_append_string(&sql, buf);
 
     if (db_open_select_cursor(driver, &sql, &cursor, DB_SEQUENTIAL) != DB_OK)
-	G_fatal_error(_("It was impossible to open table"));
+	G_fatal_error(_("Unable to create table <%s_edge_Interpolation>"), in_opt->answer);
 
     count_obj = 1;
 
