@@ -91,8 +91,11 @@ void get_fp_stats(const char *name, const char *mapset,
     if (statf->geom_abs) {
 	double a = log(fabs(min) + 1);
 	double b = log(fabs(max) + 1);
+	int has_zero = min * max < 0;
 	min = a < b ? a : b;
 	max = a > b ? a : b;
+	if (has_zero)
+	    min = 0;
     }
 
     statf->count = 1000;
