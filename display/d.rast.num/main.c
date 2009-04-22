@@ -60,8 +60,9 @@ int main(int argc, char **argv)
     struct Colors colors;
     struct GModule *module;
     struct Option *opt1, *opt2, *opt3, *prec;
-    struct Flag *text_color;
+    struct Flag *text_color, *align;
     RASTER_MAP_TYPE map_type, inmap_type;
+    double t, b, l, r;
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
@@ -101,6 +102,10 @@ int main(int argc, char **argv)
     prec->description =
 	_("Number of significant digits (floating point only)");
 
+    align = G_define_flag();
+    align->key = 'a';
+    align->description = _("Align grids with raster cells");
+
     text_color = G_define_flag();
     text_color->key = 'f';
     text_color->description = _("Get text color from cell color value");
@@ -133,8 +138,43 @@ int main(int argc, char **argv)
 
     G_get_window(&window);
 
-    nrows = window.rows;
-    ncols = window.cols;
+    if (align->answer) {
+	struct Cell_head head, wind;
+
+	if (G_get_cellhd(map_name, "", &head) < 0)
+	    G_fatal_error(_("Unable to read header of raster map <%s>"), map_name);
+
+	G_copy(&wind, &head, sizeof(struct Cell_head));
+
+	/* expand window extent by one head resolution */
+	wind.west = head.west + head.ew_res * ((int)((window.west - head.west) / head.ew_res) - (window.west < head.west));
+	wind.east = head.east + head.ew_res * ((int)((window.east - head.east) / head.ew_res) + (window.west > head.west));
+	wind.south = head.south + head.ns_res * ((int)((window.south - head.south) / head.ns_res) - (window.south < head.south));
+	wind.north = head.north + head.ns_res * ((int)((window.north - head.north) / head.ns_res) + (window.north > head.north));
+
+	wind.ew_res = head.ew_res;
+	wind.ns_res = head.ns_res;
+	wind.rows = (wind.north - wind.south) / wind.ns_res;
+	wind.cols = (wind.east - wind.west) / wind.ew_res;
+
+	G_set_window(&wind);
+
+	nrows = wind.rows;
+	ncols = wind.cols;
+
+	t = (wind.north - window.north) * nrows / (wind.north - wind.south);
+	b = t + (window.north - window.south) * nrows / (wind.north - wind.south);
+	l = (window.west - wind.west) * ncols / (wind.east - wind.west);
+	r = l + (window.east - window.west) * ncols / (wind.east - wind.west);
+    } else {
+        nrows = window.rows;
+        ncols = window.cols;
+
+	t = 0;
+	b = nrows;
+	l = 0;
+	r = ncols;
+    }
 
     /* number of rows and cols in window */
 
@@ -158,7 +198,7 @@ int main(int argc, char **argv)
     if (R_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
-    D_setup2(0, 0, 0, nrows, 0, ncols);
+    D_setup2(0, 0, t, b, l, r);
 
     D_ns = fabs(D_get_u_to_d_yconv());
     D_ew = fabs(D_get_u_to_d_xconv());
