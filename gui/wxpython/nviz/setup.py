@@ -30,7 +30,6 @@ for flag in ('GDALCFLAGS',
              'WXWIDGETSCXXFLAGS',
              'WXWIDGETSLIB',
              'XCFLAGS',
-             'XMINC',
              'OPENGLLIB',
              'OPENGLULIB'):
     update_opts(flag, macros, inc_dirs, lib_dirs, libs)
