@@ -1,8 +1,6 @@
 <h2>DESCRIPTION</h2>
 
-<em>d.path</em> enables shortest path vector networking - based on DGLib
-(Directed Graph Library) vector network library  
-(see <a href="http://grass.gdf-hannover.de/wiki/Vector_network_analysis">screenshot</a>).
+<em>d.path</em> enables shortest path vector networking.
 Costs may be either line lengths, or attributes saved in a database table.
 Supported are cost assignments for both arcs and nodes, and also different
 in both directions of a vector line. For areas cost will be calculated along
@@ -21,18 +19,22 @@ map, use the <em>v.net.path</em> module.
 
 <h2>EXAMPLE</h2>
 
+Interactive shortest path routing on road network (Spearfish region):
 <div class="code"><pre>
-# Spearfish
-
+g.region vector=roads
 d.vect roads
-d.path -b roads coor="601653.5,4922869.2","593330.8,4924096.6"
+d.path roads
+</pre></div>
+
+Non-interactive shortest path routing on road network (Spearfish region):
+<div class="code"><pre>
+d.path -b roads coor=601653.5,4922869.2,593330.8,4924096.6
 </pre></div>
 
 <h2>SEE ALSO</h2>
 
 <em>
-<a HREF="v.net.path.html">v.net.path</a>,
-<a HREF="http://grass.itc.it/dglib/">DGLib</a>
+<a HREF="v.net.path.html">v.net.path</a>
 </em>
 
 <h2>AUTHOR</h2>
