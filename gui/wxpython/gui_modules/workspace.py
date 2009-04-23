@@ -454,7 +454,7 @@ class WriteWorkspaceFile(object):
                 self.indent += 4
                 for key, val in cmd[1].iteritems():
                     if key == 'flags':
-                        for f in opt['flags']:
+                        for f in val:
                             self.file.write('%s<flag name="%s" />\n' %
                                             (' ' * self.indent, f))
                     else: # parameter
