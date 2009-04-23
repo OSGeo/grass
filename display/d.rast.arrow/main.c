@@ -126,7 +126,7 @@ int main(int argc, char **argv)
     opt4->type = TYPE_STRING;
     opt4->required = NO;
     opt4->answer = "gray";
-    opt4->gisprompt = GISPROMPT_COLOR;
+    opt4->gisprompt = "old_color,color,color_none";
     opt4->description = _("Color for drawing grid or \"none\"");
 
     opt5 = G_define_option();
@@ -134,7 +134,7 @@ int main(int argc, char **argv)
     opt5->type = TYPE_STRING;
     opt5->required = NO;
     opt5->answer = DEFAULT_FG_COLOR;
-    opt5->gisprompt = GISPROMPT_COLOR;
+    opt5->gisprompt = "old_color,color,color_none";
     opt5->description = _("Color for drawing X's (Null values)");
 
     opt6 = G_define_option();
@@ -142,7 +142,7 @@ int main(int argc, char **argv)
     opt6->type = TYPE_STRING;
     opt6->required = NO;
     opt6->answer = "red";
-    opt6->gisprompt = GISPROMPT_COLOR;
+    opt6->gisprompt = "old_color,color,color_none";
     opt6->description = _("Color for showing unknown information");
 
     opt9 = G_define_option();
