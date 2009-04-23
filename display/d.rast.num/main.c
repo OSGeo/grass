@@ -80,7 +80,7 @@ int main(int argc, char **argv)
     opt2->type = TYPE_STRING;
     opt2->required = NO;
     opt2->answer = "gray";
-    opt2->gisprompt = GISPROMPT_COLOR;
+    opt2->gisprompt = "old_color,color,color_none";
     opt2->key_desc = "color";
     opt2->description = _("Color for drawing grid, or \"none\"");
 
