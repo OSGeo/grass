@@ -5,29 +5,31 @@ have a category in the given <b>layer</b>. The <b>tolerance</b> controls
 the number of vector segments being generated (the smaller the value, the more
 vector segments are generated).
 
+
 <h2>NOTES</h2>
 
 Attributes are not transferred due to potential buffer overlap, which
 cannot be resolved automatically.
+
 
 <h2>EXAMPLES</h2>
 
 <h3>Buffer around input lines</h3>
 
 <div class="code"><pre>
-v.buffer input=map output=buffer type=line buffer=100
+v.buffer input=map output=buffer type=line distance=100
 </pre></div>
 
 <h3>Circles around input points</h3>
 
 <div class="code"><pre>
-v.buffer input=pointsmap output=circles type=point buffer=1000 
+v.buffer input=pointsmap output=circles type=point distance=1000 
 </pre></div>
 
 <h3>Non-overlapping circles around input points with attribute transfer</h3>
 
 <div class="code"><pre>
-v.buffer input=archsites output=circles type=point buffer=200 
+v.buffer input=archsites output=circles type=point distance=200 
 # change original points to centroids: 
 v.type in=archsites out=archcentroids type=point,centroid 
 # patch circles and centroids: 
@@ -39,6 +41,7 @@ v.db.connect map=circles_db table=archsites field=1 key=cat driver=dbf \
 database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf'
 </pre></div>
 
+
 <h2>SEE ALSO</h2>
 
 <em>
@@ -49,9 +52,11 @@ database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf'
 <a HREF="v.db.connect.html">v.db.connect</a>
 </em>
 
+
 <h2>AUTHORS</h2>
 
 Radim Blazek<br>
-Rewritten by Rosen Matev (with support through the Google Summer of Code program 2008)
+Rewritten by Rosen Matev (with support through the
+ Google Summer of Code program 2008)
 <p>
 <i>Last changed: $Date: 2008-03-16 16:29:33 +0100 (Sun, 16 Mar 2008) $</i>
