@@ -239,7 +239,7 @@ int main(int argc, char *argv[])
     }
     else if (parm.gauss->answer) {
 	if (!newvalue_w)
-	    G_fatal_error(_("method %s not compatible with Gaussian filter"));
+	    G_fatal_error(_("Method %s not compatible with Gaussian filter"), parm.method->answer);
 	gaussian_weights(atof(parm.gauss->answer));
     }
     else
