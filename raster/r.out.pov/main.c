@@ -122,17 +122,9 @@ int main(int argc, char *argv[])
 	_("Converts a raster map layer into a height-field file for POVRAY.");
 
     /* Define the different options */
-    parm.map = G_define_option();
-    parm.map->key = "map";
-    parm.map->type = TYPE_STRING;
-    parm.map->required = YES;
-    parm.map->gisprompt = "old,cell,raster";
-    parm.map->description = _("Name of an existing raster map");
+    parm.map = G_define_standard_option(G_OPT_R_INPUT);
 
-    parm.tga = G_define_option();
-    parm.tga->key = "tga";
-    parm.tga->type = TYPE_STRING;
-    parm.tga->required = YES;
+    parm.tga = G_define_standard_option(G_OPT_F_OUTPUT);
     parm.tga->description =
 	_("Name of output povray file (TGA height field file)");
 
