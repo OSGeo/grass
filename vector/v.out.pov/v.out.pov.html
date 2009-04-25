@@ -4,7 +4,12 @@
 
 <h2>EXAMPLE</h2>
 <div class="code"><pre>
-v.out.pov input=tin output=tin.pov objmod="pigment { color red 0 green 1 blue 0 }"
+v.out.pov input=vector3d output=vector3d.pov objmod="pigment { color red 0 green 1 blue 0 }"
+</pre></div>
+
+The generated file can be included in an existing .pov file with the following statement:
+<div class="code"><pre>
+#include "vector3d.pov"
 </pre></div>
 
 <H2>REFERENCES</H2>
@@ -14,7 +19,7 @@ v.out.pov input=tin output=tin.pov objmod="pigment { color red 0 green 1 blue 0 
 
 <h2>SEE ALSO</h2>
 
-<em><a HREF="r.out.pov.html">r.out.pov</a></em>,
+<em><a HREF="r.out.pov.html">r.out.pov</a></em>
 
 <h2>AUTHOR</h2>
 
