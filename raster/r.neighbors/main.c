@@ -89,6 +89,7 @@ int main(int argc, char *argv[])
 	struct Option *method, *size;
 	struct Option *title;
 	struct Option *weight;
+	struct Option *gauss;
     } parm;
     struct
     {
@@ -152,6 +153,12 @@ int main(int argc, char *argv[])
     parm.weight->gisprompt = "old_file,file,input";
     parm.weight->description = _("File containing weights");
 
+    parm.gauss = G_define_option();
+    parm.gauss->key = "gauss";
+    parm.gauss->type = TYPE_DOUBLE;
+    parm.gauss->required = NO;
+    parm.gauss->description = _("Sigma (in cells) for Gaussian filter");
+
     flag.align = G_define_flag();
     flag.align->key = 'a';
     flag.align->description = _("Do not align output with the input");
@@ -173,6 +180,9 @@ int main(int argc, char *argv[])
 
     if (parm.weight->answer && flag.circle->answer)
 	G_fatal_error(_("weight= and -c are mutually exclusive"));
+
+    if (parm.weight->answer && parm.gauss->answer)
+	G_fatal_error(_("weight= and gauss= are mutually exclusive"));
 
     ncb.oldcell = parm.input->answer;
     ncb.newcell = parm.output->answer;
@@ -226,6 +236,11 @@ int main(int argc, char *argv[])
 	read_weights(parm.weight->answer);
 	if (!newvalue_w)
 	    weights_mask();
+    }
+    else if (parm.gauss->answer) {
+	if (!newvalue_w)
+	    G_fatal_error(_("method %s not compatible with Gaussian filter"));
+	gaussian_weights(atof(parm.gauss->answer));
     }
     else
 	newvalue_w = NULL;

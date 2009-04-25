@@ -22,3 +22,4 @@ extern int null_cats(void);
 
 /* read_weights.c */
 extern void read_weights(const char *);
+extern void gaussian_weights(double);
