@@ -4,7 +4,7 @@ MODULE_TOPDIR = ..
 PGM = vectorintro
 
 SUBDIRS = \
-	v.buffer2 \
+	v.buffer \
 	v.build \
 	v.build.polylines \
 	v.category \
@@ -13,7 +13,7 @@ SUBDIRS = \
 	v.convert \
 	v.db.connect \
 	v.db.select \
-	v.delaunay2 \
+	v.delaunay \
 	v.distance \
 	v.drape \
 	v.edit \
@@ -49,7 +49,7 @@ SUBDIRS = \
 	v.out.svg \
 	v.out.vtk \
 	v.overlay \
-	v.parallel2 \
+	v.parallel \
 	v.patch \
 	v.perturb \
 	v.split \
