@@ -14,11 +14,23 @@ to the edges of the next nearest cell in the named raster map -- not to the
 named map's edges.  To perform the latter function, use the
 <b>raster=</b><em>name</em> option.
 
-<h2>NOTE</h2>
+<h2>NOTES</h2>
 
 After all updates have been applied, the raster map's resolution
 settings are recomputed from the boundaries and the number of rows and
 columns in the raster map.
+
+<h2>EXAMPLES</h2>
+
+Assign absolute coordinates to map:
+<div class="code"><pre>
+r.region map=mymap n=220750 s=220000 w=638300 e=639000
+</pre></div>
+
+Shift map (using offset, here by 100 map units in two directions):
+<div class="code"><pre>
+r.region map=mymap n=n+100 e=e+100 w=w+100 s=s+100
+</pre></div>
 
 <h2>SEE ALSO</h2>
 
