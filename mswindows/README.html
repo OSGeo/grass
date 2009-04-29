@@ -167,7 +167,7 @@ a:visited:hover	{
 
 
 <p>This document explains how to prepare a WinGRASS release (as a self-contained package installer) using the scripts contained
-in the mswindows folder. In order to avoid mistakes or misunderstandings, I highly recommend to follow each step and command
+in the mswindows folder. In order to avoid mistakes or misunderstandings, we highly recommend to follow each step and command
 exactly as they are written in this document.</p>
 
 </div>
@@ -193,8 +193,7 @@ exactly as they are written in this document.</p>
 
 <p>Copy all the content of the mswindows folder to a temporary directory, for example <code>c:\temp</code>.</p>
 
-<p>Edit lines 11-15 in the file <code>c:\temp\GRASS-Packager.bat</code> to reflect the path to your OSGeo4W tree (eg. <code>c:\OSGeo4W</code>), 
-and the Grass version being packaged (eg. <code>grass-7.0.svn</code>.</p>
+<p>Edit lines 11-15 in the file <code>c:\temp\GRASS-Packager.bat</code> to reflect the paths to your OSGeo4W tree (eg. <code>c:\OSGeo4W</code>) and the GRASS version being packaged (eg. <code>grass-7.0.svn</code>).</p>
 
 <p>Launch the file <code>c:\temp\GRASS-Packager.bat</code> and select the option number 1.</p>
 
@@ -211,10 +210,13 @@ and the Grass version being packaged (eg. <code>grass-7.0.svn</code>.</p>
 
 <p>Open <code>c:\temp\GRASS-Release-Package\msys\msys.bat</code> and remove lines 11-16.</p>
 
-<p>At the end of line 88 change:
-<pre><code>--login -i</code></pre>
+<p>At the end of line 88 (also in msys.bat) change:
+<pre><code>start %WD%rxvt -backspacekey  -sl 2500 -fg %FGCOLOR% -bg %BGCOLOR% -sr -fn Courier-12 -tn msys -geometry 80x25 -e /bin/sh --login -c "%*"</code></pre>
 To:
-<pre><code>--login -c "%*"</code></pre>
+<pre><code>if "x%*" == "x" start %WD%rxvt -backspacekey  -sl 2500 -fg %FGCOLOR% -bg %BGCOLOR% -sr -fn Courier-12 -tn msys -geometry 80x25 -e /bin/sh --login -i
+if NOT "x%*" == "x" start %WD%rxvt -backspacekey  -sl 2500 -fg %FGCOLOR% -bg %BGCOLOR% -sr -fn Courier-12 -tn msys -geometry 80x25 -e /bin/sh --login -c "%*"</code></pre>
+
+<p>Delete <code>c:\temp\GRASS-Release-Package\msys\etc\fstab</code></p>
 
 </div>
 
@@ -256,7 +258,7 @@ To:
 <p>Open the the file <code>c:\temp\GRASS-Installer.nsi</code>.</p>
 
 <p>At line 13 set the <code>DEMOLOCATION_PATH</code> varibale to the demolocation folder in the source tree.
-For example, <code>c:\msys\local\src\grass-6.4.0RC3\demolocation</code>
+For example, <code>c:\msys\local\src\grass-7.0.svn\demolocation</code>
 
 <p>At line 18 set the <code>INSTALLER_TYPE</code> variable to <code>"Release"</code>, then, at lines 24-26, set the
 <code>RELEASE_VERSION_NUMBER</code>, the <code>RELEASE_SVN_REVISION</code> and the <code>RELEASE_BINARY_REVISION</code> variables.</p>
@@ -280,10 +282,11 @@ osgeo4w tree by Colin Nielsen</p>
 <p>To contact them, e-mail to: GRASS Development Mailing List
 (<a target="_blank" href="http://lists.osgeo.org/mailman/listinfo/grass-dev">http://lists.osgeo.org/mailman/listinfo/grass-dev</a>).</p>
 
-<p>Last edited by Colin Nielsen on 06 April 2009.</p>
+<p>Last edited by Colin Nielsen on 29 April 2009.</p>
 
 </div>
 
 </body>
 
 </html>
+

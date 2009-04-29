@@ -482,7 +482,7 @@ Section "GRASS" SecGRASS
 	SetShellVarContext current
 	
 	CreateShortCut "$DESKTOP\GRASS ${VERSION_NUMBER}.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-wxpython"\
-	"$INSTALL_DIR\icons\GRASS.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER}"
+	"$INSTALL_DIR\icons\GRASS.ico" "" SW_SHOWMINIMIZED "" "Launch GRASS ${VERSION_NUMBER}"
 
 	CreateShortCut "$DESKTOP\GRASS ${VERSION_NUMBER} msys.lnk" "$INSTALL_DIR\msys\msys.bat" "/grass/bin/${GRASS_COMMAND} -wxpython"\
 	"$INSTALL_DIR\icons\GRASS.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} with msys Terminal"
@@ -493,13 +493,13 @@ Section "GRASS" SecGRASS
 	CreateDirectory "$SMPROGRAMS\${GRASS_BASE}"
 	
 	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS Old GUI.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-tcltk"\
-	"$INSTALL_DIR\icons\GRASS.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER}"
+	"$INSTALL_DIR\icons\GRASS.ico" "" SW_SHOWMINIMIZED "" "Launch GRASS ${VERSION_NUMBER}"
 
 	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS ${VERSION_NUMBER}.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-wxpython"\
-	"$INSTALL_DIR\icons\GRASS.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER}"
+	"$INSTALL_DIR\icons\GRASS.ico" "" SW_SHOWMINIMIZED "" "Launch GRASS ${VERSION_NUMBER}"
 
 	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS Command Line.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-text"\
-	"$INSTALL_DIR\icons\GRASS_CMD.ico" "" SW_SHOWNORMAL "" "Launch GRASS in Text Mode on the Command Line"
+	"$INSTALL_DIR\icons\GRASS_CMD.ico" "" SW_SHOWMINIMIZED "" "Launch GRASS in Text Mode on the Command Line"
 	
 	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS MSYS Console.lnk" "$INSTALL_DIR\msys\msys.bat" ""\
 	"$INSTALL_DIR\icons\MSYS_Custom_Icon.ico" "" SW_SHOWNORMAL "" "Open the GRASS MSYS Console"
@@ -661,6 +661,10 @@ Section "GRASS" SecGRASS
 	FileWrite $0 'export PYTHONPATH$\r$\n'
 	FileWrite $0 'PYTHONHOME="$INSTALL_DIR\Python25"$\r$\n'
 	FileWrite $0 'export PYTHONHOME$\r$\n'
+	FileWrite $0 '$\r$\n'
+	FileWrite $0 '# Set the GRASS_PROJSHARE variable$\r$\n'
+	FileWrite $0 'GRASS_PROJSHARE="$INSTALL_DIR\proj"$\r$\n'
+	FileWrite $0 'export GRASS_PROJSHARE$\r$\n'
 	FileWrite $0 '$\r$\n'
 	FileWrite $0 'exec "$$GISBASE/etc/Init.sh" "$$@"'
 	FileClose $0
