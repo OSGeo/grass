@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
 <em>r.reclass</em> creates an <em>output</em> map layer
-based on an <em>input</em> raster map layer.  The output
+based on an <em>input</em> integer raster map layer.  The output
 map layer will be a reclassification of the input map layer
 based on reclass rules input to <em>r.reclass</em>, and can
 be treated in much the same way that raster maps are
@@ -22,7 +22,70 @@ which new categories.
 <li>The names of the new categories.
 </ol>
 
-<h2>INTERACTIVE PROGRAM USE: EXAMPLE</h2>
+<h2>NOTES</h2>
+
+In fact, the <em>r.reclass</em> program does <em>not</em> generate any new
+raster map layers (in the interests of disk space conservation).  Instead, a
+<b>reclass table</b> is stored which will be used to reclassify the
+original raster map layer each time the new (reclassed) map name
+is requested.  As far as the user (and programmer) is concerned, that
+raster map has been created.
+
+<p>
+<em>r.reclass</em> only works on an <i>integer</i> input raster map; if the
+input map is instead floating point data, you must multiply the input data by some
+factor to acheive whole number input data, otherwise <em>r.reclass</em> will round
+the raster values down to the next integer.
+
+<p>
+Also note that although the user can generate a <em>r.reclass</em> map
+which is based on another <em>r.reclass</em> map,
+the new <em>r.reclass</em> map map will be stored in GRASS as a reclass
+of the <em>original</em> raster map on which the first reclassed map was
+based.  Therefore, while GRASS allows the user to provide <em>r.reclass</em> 
+map layer information which is based on an already reclassified map
+(for the user's convenience), no <em>r.reclass</em> map layer
+(i.e., <em>reclass table</em>) will ever be <em>stored</em>
+as a <em>r.reclass</em> of a <em>r.reclass</em>.
+
+<p>
+To convert a reclass map to a regular raster map layer, set your
+geographic region settings to match the settings in the header for the
+reclass map (an ASCII file found under the <em>cellhd</em> directory, or
+viewable by running <em><a href="r.support.html">r.support</a></em>) and then run <em><a href="r.resample.html">r.resample</a></em>.
+
+<p>
+<em><a href="r.mapcalc.html">r.mapcalc</a></em> can be used to convert
+a reclass map to a regular raster map layer:
+
+<div class="code"><pre>
+  r.mapcalc raster_map=reclass_map
+</pre></div>
+
+
+<p>
+where <em>raster_map</em> is the name to be given to the new raster map,
+and <em>reclass_map</em> is an existing reclass map.
+
+<p>
+Because <em>r.reclass</em> generates a table referencing some original
+raster map layer rather than creating a reclassed raster map layer,
+a <em>r.reclass</em> map layer will no longer be accessible if
+the original raster map layer upon which it was based is later removed.
+
+<p>
+A <em>r.reclass</em> map is not a true raster map layer.
+Rather, it is a table of reclassification values which reference the
+input raster map layer.  Therefore, users who wish to retain reclassified
+map layers must also save the original input raster map layers
+from which they were generated. Alternatively r.recode can be used.
+
+<p>
+Category values which are not explicitly reclassified to a new value.
+
+<h2>EXAMPLES</h2>
+
+<h3>Interactive Program Use</h3>
 
 Suppose we want to reclassify the raster map layer
 <em>roads</em>, consisting of five categories, into the
@@ -97,7 +160,7 @@ Based upon the information supplied by the user in the above sample screens,
 the new output map, supporting category, color, history, and header files
 are created.
 
-<h2>NON-INTERACTIVE PROGRAM USE: RECLASS RULES</h2>
+<h3>Non-Interactive Program Use: Reclass Rules</h3>
 
 In non-interactive program use, the names of an input map, output map,
 and output map TITLE are given on the command line.
@@ -144,7 +207,7 @@ No data have to be spcified with NULL.
 A line containing only the word <b>end</b> terminates the
 input.
 
-<h2>NON-INTERACTIVE PROGRAM USE: EXAMPLES</h2>
+<h3>Non-Interactive Program Use</h3>
 
 The following examples may help clarify the reclass rules.
 <p>
@@ -219,59 +282,6 @@ category values 1 and 2),
 the last label which was specified becomes the label for that category.
 In this case the labels are assigned exactly as in the two previous examples.
 
-<h2>NOTES</h2>
-
-In fact, the <em>r.reclass</em> program does <em>not</em> generate any new
-raster map layers (in the interests of disk space conservation).  Instead, a
-<b>reclass table</b> is stored which will be used to reclassify the
-original raster map layer each time the new (reclassed) map name
-is requested.  As far as the user (and programmer) is concerned, that
-raster map has been created.
-Also note that although the user can generate a <em>r.reclass</em> map
-which is based on another <em>r.reclass</em> map,
-the new <em>r.reclass</em> map map will be stored in GRASS as a reclass
-of the <em>original</em> raster map on which the first reclassed map was
-based.  Therefore, while GRASS allows the user to provide <em>r.reclass</em> 
-map layer information which is based on an already reclassified map
-(for the user's convenience), no <em>r.reclass</em> map layer
-(i.e., <em>reclass table</em>) will ever be <em>stored</em>
-as a <em>r.reclass</em> of a <em>r.reclass</em>.
-
-<p>
-To convert a reclass map to a regular raster map layer, set your
-geographic region settings to match the settings in the header for the
-reclass map (an ASCII file found under the <em>cellhd</em> directory, or
-viewable by running <em><a href="r.support.html">r.support</a></em>) and then run <em><a href="r.resample.html">r.resample</a></em>.
-
-<p>
-<em><a href="r.mapcalc.html">r.mapcalc</a></em> can be used to convert
-a reclass map to a regular raster map layer:
-
-<div class="code"><pre>
-  r.mapcalc raster_map=reclass_map
-</pre></div>
-
-
-<p>
-where <em>raster_map</em> is the name to be given to the new raster map,
-and <em>reclass_map</em> is an existing reclass map.
-
-<h2>BEWARE</h2>
-
-Because <em>r.reclass</em> generates a table referencing some original
-raster map layer rather than creating a reclassed raster map layer,
-a <em>r.reclass</em> map layer will no longer be accessible if
-the original raster map layer upon which it was based is later removed.
-
-<p>
-A <em>r.reclass</em> map is not a true raster map layer.
-Rather, it is a table of reclassification values which reference the
-input raster map layer.  Therefore, users who wish to retain reclassified
-map layers must also save the original input raster map layers
-from which they were generated. Alternatively r.recode can be used.
-
-<p>
-Category values which are not explicitly reclassified to a new value
 by the user will be reclassified to NULL.
 
 <h2>SEE ALSO</h2>
