@@ -30,7 +30,6 @@ SUBDIRS = \
 	v.kcv \
 	v.kernel \
 	v.label \
-	v.label.sa \
 	v.lrs \
 	v.proj \
 	v.mkgrid \
