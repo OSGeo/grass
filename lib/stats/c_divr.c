@@ -1,7 +1,7 @@
 #include <grass/gis.h>
 #include <grass/stats.h>
 
-void c_divr(DCELL * result, DCELL * values, int n)
+void c_divr(DCELL * result, DCELL * values, int n, const void *closure)
 {
     int count;
     DCELL prev;

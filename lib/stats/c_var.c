@@ -1,6 +1,6 @@
 #include <grass/gis.h>
 
-void c_var(DCELL * result, DCELL * values, int n)
+void c_var(DCELL * result, DCELL * values, int n, const void *closure)
 {
     DCELL sum, ave, sumsq;
     int count;
@@ -39,7 +39,7 @@ void c_var(DCELL * result, DCELL * values, int n)
     *result = sumsq / count;
 }
 
-void w_var(DCELL * result, DCELL(*values)[2], int n)
+void w_var(DCELL * result, DCELL(*values)[2], int n, const void *closure)
 {
     DCELL sum, ave, sumsq;
     int count;

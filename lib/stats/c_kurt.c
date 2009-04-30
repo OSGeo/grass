@@ -1,6 +1,6 @@
 #include <grass/gis.h>
 
-void c_kurt(DCELL * result, DCELL * values, int n)
+void c_kurt(DCELL * result, DCELL * values, int n, const void *closure)
 {
     DCELL sum, ave, sumsq, sumqt, var;
     int count;
@@ -42,7 +42,7 @@ void c_kurt(DCELL * result, DCELL * values, int n)
     *result = sumqt / (count * var * var) - 3;
 }
 
-void w_kurt(DCELL * result, DCELL(*values)[2], int n)
+void w_kurt(DCELL * result, DCELL(*values)[2], int n, const void *closure)
 {
     DCELL sum, ave, sumsq, sumqt, var;
     int count;

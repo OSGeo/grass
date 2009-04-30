@@ -73,17 +73,17 @@ static void regression(DCELL * result, DCELL * values, int n, int which)
 	G_set_d_null_value(result, 1);
 }
 
-void c_reg_m(DCELL * result, DCELL * values, int n)
+void c_reg_m(DCELL * result, DCELL * values, int n, const void *closure)
 {
     regression(result, values, n, REGRESSION_SLOPE);
 }
 
-void c_reg_c(DCELL * result, DCELL * values, int n)
+void c_reg_c(DCELL * result, DCELL * values, int n, const void *closure)
 {
     regression(result, values, n, REGRESSION_OFFSET);
 }
 
-void c_reg_r2(DCELL * result, DCELL * values, int n)
+void c_reg_r2(DCELL * result, DCELL * values, int n, const void *closure)
 {
     regression(result, values, n, REGRESSION_COEFF_DET);
 }
@@ -157,17 +157,17 @@ static void regression_w(DCELL * result, DCELL(*values)[2], int n, int which)
 	G_set_d_null_value(result, 1);
 }
 
-void w_reg_m(DCELL * result, DCELL(*values)[2], int n)
+void w_reg_m(DCELL * result, DCELL(*values)[2], int n, const void *closure)
 {
     regression_w(result, values, n, REGRESSION_SLOPE);
 }
 
-void w_reg_c(DCELL * result, DCELL(*values)[2], int n)
+void w_reg_c(DCELL * result, DCELL(*values)[2], int n, const void *closure)
 {
     regression_w(result, values, n, REGRESSION_OFFSET);
 }
 
-void w_reg_r2(DCELL * result, DCELL(*values)[2], int n)
+void w_reg_r2(DCELL * result, DCELL(*values)[2], int n, const void *closure)
 {
     regression_w(result, values, n, REGRESSION_COEFF_DET);
 }

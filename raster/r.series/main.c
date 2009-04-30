@@ -47,6 +47,7 @@ struct menu
     {c_quart1, 0, "quart1",     "first quartile"},
     {c_quart3, 0, "quart3",     "third quartile"},
     {c_perc90, 0, "perc90",     "ninetieth percentile"},
+    {c_quant,  0, "quantile",   "arbitrary quantile"},
     {c_skew,   0, "skewness",   "skewness"},
     {c_kurt,   0, "kurtosis",   "kurtosis"},
     {NULL,     0, NULL,         NULL}
@@ -65,6 +66,7 @@ struct output
     int fd;
     DCELL *buf;
     stat_func *method_fn;
+    double quantile;
 };
 
 static char *build_method_list(void)
@@ -104,7 +106,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct
     {
-	struct Option *input, *output, *method, *range;
+	struct Option *input, *output, *method, *quantile, *range;
     } parm;
     struct
     {
@@ -142,6 +144,14 @@ int main(int argc, char *argv[])
     parm.method->options = build_method_list();
     parm.method->description = _("Aggregate operation");
     parm.method->multiple = YES;
+
+    parm.quantile = G_define_option();
+    parm.quantile->key = "quantile";
+    parm.quantile->type = TYPE_DOUBLE;
+    parm.quantile->required = NO;
+    parm.quantile->description = _("Quantile to calculate for method=quantile");
+    parm.quantile->options = "0.0-1.0";
+    parm.quantile->multiple = YES;
 
     parm.range = G_define_option();
     parm.range->key = "range";
@@ -203,6 +213,9 @@ int main(int argc, char *argv[])
 
 	out->name = output_name;
 	out->method_fn = menu[method].method;
+	out->quantile = (parm.quantile->answer && parm.quantile->answers[i])
+	    ? atof(parm.quantile->answers[i])
+	    : 0;
 	out->buf = G_allocate_d_raster_buf();
 	out->fd = G_open_raster_new(
 	    output_name, menu[method].is_int ? CELL_TYPE : DCELL_TYPE);
@@ -249,7 +262,7 @@ int main(int argc, char *argv[])
 		    G_set_d_null_value(&out->buf[col], 1);
 		else {
 		    memcpy(values_tmp, values, num_inputs * sizeof(DCELL));
-		    (*out->method_fn)(&out->buf[col], values_tmp, num_inputs);
+		    (*out->method_fn)(&out->buf[col], values_tmp, num_inputs, &out->quantile);
 		}
 	    }
 	}

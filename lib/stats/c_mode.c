@@ -1,7 +1,7 @@
 #include <grass/gis.h>
 #include <grass/stats.h>
 
-void c_mode(DCELL * result, DCELL * values, int n)
+void c_mode(DCELL * result, DCELL * values, int n, const void *closure)
 {
     DCELL mode;
     int max;
@@ -34,7 +34,7 @@ void c_mode(DCELL * result, DCELL * values, int n)
 	*result = mode;
 }
 
-void w_mode(DCELL * result, DCELL(*values)[2], int n)
+void w_mode(DCELL * result, DCELL(*values)[2], int n, const void *closure)
 {
     DCELL mode;
     DCELL max;
