@@ -1,6 +1,6 @@
 #include <grass/gis.h>
 
-void c_sum(DCELL * result, DCELL * values, int n)
+void c_sum(DCELL * result, DCELL * values, int n, const void *closure)
 {
     DCELL sum;
     int count;
@@ -23,7 +23,7 @@ void c_sum(DCELL * result, DCELL * values, int n)
 	*result = sum;
 }
 
-void w_sum(DCELL * result, DCELL(*values)[2], int n)
+void w_sum(DCELL * result, DCELL(*values)[2], int n, const void *closure)
 {
     DCELL sum;
     DCELL count;

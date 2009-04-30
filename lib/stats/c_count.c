@@ -1,6 +1,6 @@
 #include <grass/gis.h>
 
-void c_count(DCELL * result, DCELL * values, int n)
+void c_count(DCELL * result, DCELL * values, int n, const void *closure)
 {
     int count;
     int i;
@@ -14,7 +14,7 @@ void c_count(DCELL * result, DCELL * values, int n)
     *result = count;
 }
 
-void w_count(DCELL * result, DCELL(*values)[2], int n)
+void w_count(DCELL * result, DCELL(*values)[2], int n, const void *closure)
 {
     DCELL count;
     int i;

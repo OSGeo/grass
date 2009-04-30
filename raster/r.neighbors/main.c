@@ -56,6 +56,10 @@ static struct menu menu[] = {
      "number of different values"},
     {c_intr, NULL, intr_cats, 0, 0, "interspersion",
      "number of values different than center value"},
+    {c_quart1, w_quart1, NO_CATS, 1, 0, "quart1", "first quartile"},
+    {c_quart3, w_quart3, NO_CATS, 1, 0, "quart3", "third quartile"},
+    {c_perc90, w_perc90, NO_CATS, 1, 0, "perc90", "ninetieth percentile"},
+    {c_quant, w_quant, NO_CATS, 1, 0, "quantile", "arbitrary quantile"},
     {0, 0, 0, 0, 0, 0, 0}
 };
 
@@ -78,6 +82,8 @@ int main(int argc, char *argv[])
     stat_func *newvalue;
     stat_func_w *newvalue_w;
     ifunc cat_names;
+    double quantile;
+    const void *closure;
     struct Colors colr;
     struct Cell_head cellhd;
     struct Cell_head window;
@@ -90,6 +96,7 @@ int main(int argc, char *argv[])
 	struct Option *title;
 	struct Option *weight;
 	struct Option *gauss;
+	struct Option *quantile;
     } parm;
     struct
     {
@@ -159,6 +166,14 @@ int main(int argc, char *argv[])
     parm.gauss->required = NO;
     parm.gauss->description = _("Sigma (in cells) for Gaussian filter");
 
+    parm.quantile = G_define_option();
+    parm.quantile->key = "quantile";
+    parm.quantile->type = TYPE_DOUBLE;
+    parm.quantile->required = NO;
+    parm.quantile->description = _("Quantile to calculate for method=quantile");
+    parm.quantile->options = "0.0-1.0";
+    parm.quantile->answer = "0.5";
+
     flag.align = G_define_flag();
     flag.align->key = 'a';
     flag.align->description = _("Do not align output with the input");
@@ -214,6 +229,11 @@ int main(int argc, char *argv[])
 		  parm.method->key, parm.method->answer, parm.method->key);
 	G_usage();
 	exit(EXIT_FAILURE);
+    }
+
+    if (menu[method].method == c_quant) {
+	quantile = atoi(parm.quantile->answer);
+	closure = &quantile;
     }
 
     half = (map_type == CELL_TYPE) ? menu[method].half : 0;
@@ -297,9 +317,9 @@ int main(int argc, char *argv[])
 		G_set_d_null_value(rp, 1);
 	    else {
 		if (newvalue_w)
-		    newvalue_w(rp, values_w, n);
+		    newvalue_w(rp, values_w, n, closure);
 		else
-		    newvalue(rp, values, n);
+		    newvalue(rp, values, n, closure);
 
 		if (half && !G_is_d_null_value(rp))
 		    *rp += 0.5;

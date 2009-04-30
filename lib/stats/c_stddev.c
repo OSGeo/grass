@@ -2,11 +2,11 @@
 #include <grass/gis.h>
 #include <grass/stats.h>
 
-void c_stddev(DCELL * result, DCELL * values, int n)
+void c_stddev(DCELL * result, DCELL * values, int n, const void *closure)
 {
     DCELL var;
 
-    c_var(&var, values, n);
+    c_var(&var, values, n, closure);
 
     if (G_is_d_null_value(&var))
 	G_set_d_null_value(result, 1);
@@ -14,11 +14,11 @@ void c_stddev(DCELL * result, DCELL * values, int n)
 	*result = sqrt(var);
 }
 
-void w_stddev(DCELL * result, DCELL(*values)[2], int n)
+void w_stddev(DCELL * result, DCELL(*values)[2], int n, const void *closure)
 {
     DCELL var;
 
-    w_var(&var, values, n);
+    w_var(&var, values, n, closure);
 
     if (G_is_d_null_value(&var))
 	G_set_d_null_value(result, 1);

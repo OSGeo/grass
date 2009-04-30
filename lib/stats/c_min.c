@@ -1,6 +1,6 @@
 #include <grass/gis.h>
 
-void c_min(DCELL * result, DCELL * values, int n)
+void c_min(DCELL * result, DCELL * values, int n, const void *closure)
 {
     DCELL min;
     int i;
@@ -21,7 +21,7 @@ void c_min(DCELL * result, DCELL * values, int n)
 	*result = min;
 }
 
-void w_min(DCELL * result, DCELL(*values)[2], int n)
+void w_min(DCELL * result, DCELL(*values)[2], int n, const void *closure)
 {
     DCELL min;
     int i;

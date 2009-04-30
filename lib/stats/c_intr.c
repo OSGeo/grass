@@ -1,7 +1,7 @@
 #include <grass/gis.h>
 #include <grass/stats.h>
 
-void c_intr(DCELL * result, DCELL * values, int n)
+void c_intr(DCELL * result, DCELL * values, int n, const void *closure)
 {
     DCELL center;
     int count;

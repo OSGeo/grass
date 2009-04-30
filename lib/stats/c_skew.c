@@ -1,7 +1,7 @@
 #include <math.h>
 #include <grass/gis.h>
 
-void c_skew(DCELL * result, DCELL * values, int n)
+void c_skew(DCELL * result, DCELL * values, int n, const void *closure)
 {
     DCELL sum, ave, sumsq, sumcb, sdev;
     int count;
@@ -43,7 +43,7 @@ void c_skew(DCELL * result, DCELL * values, int n)
     *result = sumcb / (count * sdev * sdev * sdev);
 }
 
-void w_skew(DCELL * result, DCELL(*values)[2], int n)
+void w_skew(DCELL * result, DCELL(*values)[2], int n, const void *closure)
 {
     DCELL sum, ave, sumsq, sumcb, sdev;
     int count;
