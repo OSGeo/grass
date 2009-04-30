@@ -8,7 +8,7 @@
 # PURPOSE:  	This configure runs all the tests to determine what components
 #   	    	are installed on the current system. It also defines certain
 #   	    	configuration variables for compilation and installation.
-# COPYRIGHT:    (C) 2000-2008 by the GRASS Development Team
+# COPYRIGHT:    (C) 2000-2009 by the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #   	    	License (>=v2). Read the file COPYING that comes with GRASS
@@ -1455,8 +1455,11 @@ LOC_CHECK_LDFLAGS(cairo,cairo,CAIROLIB)
 
 LOC_CHECK_FUNC(cairo_create,,,,,$CAIROLIB,[:])
 LOC_CHECK_FUNC(cairo_xlib_surface_create_with_xrender_format,,,,,$CAIROLIB,
-[CAIRO_HAS_XRENDER=1],[CAIRO_HAS_XRENDER=0])
+[CAIRO_HAS_XRENDER=1],[CAIRO_HAS_XRENDER=])
 AC_SUBST(CAIRO_HAS_XRENDER)
+LOC_CHECK_FUNC(cairo_xlib_surface_get_xrender_format,,,,,$CAIROLIB,
+[CAIRO_HAS_XRENDER_SURFACE=1],[CAIRO_HAS_XRENDER_SURFACE=])
+AC_SUBST(CAIRO_HAS_XRENDER_SURFACE)
 
 CAIROLIB="$CAIROLIB $CAIROLDFLAGS"
 
