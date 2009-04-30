@@ -21,9 +21,7 @@ int G_put_cellhd(const char *name, struct Cell_head *cellhd)
     FILE *fd;
 
     if (!(fd = G_fopen_new("cellhd", name))) {
-	char buf[1024];
-
-	G_warning (_("Unable to create header file for [%s]"), name);
+	G_warning(_("Unable to create header file for [%s]"), name);
 	return -1;
     }
 

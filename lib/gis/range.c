@@ -137,7 +137,7 @@ int G_read_fp_range(const char *name, const char *mapset,
 {
     struct Range range;
     int fd;
-    char buf[200], xdr_buf[100];
+    char xdr_buf[100];
     DCELL dcell1, dcell2;
     XDR xdr_str;
 
@@ -185,8 +185,8 @@ int G_read_fp_range(const char *name, const char *mapset,
   error:
     if (fd > 0)
 	close(fd);
-    G_warning (_("can't read f_range file for [%s in %s]"),
-	       name, mapset);
+    G_warning(_("can't read f_range file for [%s in %s]"),
+	      name, mapset);
     return -1;
 }
 
@@ -236,8 +236,8 @@ int G_read_range(const char *name, const char *mapset, struct Range *range)
 	DCELL dmin, dmax;
 
 	if (G_read_quant(name, mapset, &quant) < 0) {
-	    G_warning (_("G_read_range(): can't read quant rules"
-			 " for fp map %s@%s"),
+	    G_warning(_("G_read_range(): can't read quant rules"
+			" for fp map %s@%s"),
 		       name, mapset);
 	    return -1;
 	}
@@ -300,8 +300,8 @@ int G_read_range(const char *name, const char *mapset, struct Range *range)
   error:
     if (fd)
 	fclose(fd);
-    G_warning (_("can't read range file for [%s in %s]"),
-	       name, mapset);
+    G_warning(_("can't read range file for [%s in %s]"),
+	      name, mapset);
     return -1;
 }
 
