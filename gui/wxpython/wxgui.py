@@ -100,7 +100,7 @@ class GMFrame(wx.Frame):
         self.baseTitle = title
         self.iconsize  = (16, 16)
 
-        wx.Frame.__init__(self, parent=parent, id=id, size=(500, 400),
+        wx.Frame.__init__(self, parent=parent, id=id, size=(550, 400),
                           style=wx.DEFAULT_FRAME_STYLE)
                           
         self.SetTitle(self.baseTitle)
@@ -1060,16 +1060,18 @@ class GMFrame(wx.Frame):
                  ('', '', '', ''),
                  ('addrast', Icons["addrast"].GetBitmap(),
                   Icons["addrast"].GetLabel(), self.OnAddRaster),
+                 ('addshaded', Icons["addshaded"].GetBitmap(),
+                  _("Add various raster-based map layers"), self.OnAddRasterMisc),
                  ('addvect', Icons["addvect"].GetBitmap(),
                   Icons["addvect"].GetLabel(), self.OnAddVector),
+                 ('addthematic', Icons["addthematic"].GetBitmap(),
+                  _("Add various vector-based map layer"), self.OnAddVectorMisc),
                  ('addcmd',  Icons["addcmd"].GetBitmap(),
                   Icons["addcmd"].GetLabel(),  self.OnAddCommand),
                  ('addgrp',  Icons["addgrp"].GetBitmap(),
                   Icons["addgrp"].GetLabel(), self.OnAddGroup),
                  ('addovl',  Icons["addovl"].GetBitmap(),
                   Icons["addovl"].GetLabel(), self.OnAddOverlay),
-                 ('addlabels',  Icons["addlabels"].GetBitmap(),
-                  Icons["addlabels"].GetLabel(), self.OnAddLabels),
                  ('delcmd',  Icons["delcmd"].GetBitmap(),
                   Icons["delcmd"].GetLabel(), self.OnDeleteLayer),
                  ('', '', '', ''),
@@ -1194,6 +1196,14 @@ class GMFrame(wx.Frame):
 
     # toolBar button handlers
     def OnAddRaster(self, event):
+        """Add raster map layer"""
+        # start new map display if no display is available
+        if not self.curr_page:
+            self.NewDisplay(show=False)
+        
+        self.AddRaster(event)
+        
+    def OnAddRasterMisc(self, event):
         """Add raster menu"""
         # start new map display if no display is available
         if not self.curr_page:
@@ -1203,11 +1213,6 @@ class GMFrame(wx.Frame):
         rastmenu = wx.Menu()
 
         # add items to the menu
-        addrast = wx.MenuItem(rastmenu, -1, Icons["addrast"].GetLabel())
-        addrast.SetBitmap(Icons["addrast"].GetBitmap(self.iconsize))
-        rastmenu.AppendItem(addrast)
-        self.Bind(wx.EVT_MENU, self.AddRaster, addrast)
-
         if self.curr_page.maptree.mapdisplay.toolbars['nviz']:
             addrast3d = wx.MenuItem(rastmenu, -1, Icons ["addrast3d"].GetLabel())
             addrast3d.SetBitmap(Icons["addrast3d"].GetBitmap (self.iconsize))
@@ -1248,6 +1253,14 @@ class GMFrame(wx.Frame):
         self.curr_page.maptree.mapdisplay.Show()
 
     def OnAddVector(self, event):
+        """Add vector map layer"""
+        # start new map display if no display is available
+        if not self.curr_page:
+            self.NewDisplay(show=False)
+        
+        self.AddVector(event)
+        
+    def OnAddVectorMisc(self, event):
         """Add vector menu"""
         # start new map display if no display is available
         if not self.curr_page:
@@ -1255,12 +1268,7 @@ class GMFrame(wx.Frame):
 
         point = wx.GetMousePosition()
         vectmenu = wx.Menu()
-
-        addvect = wx.MenuItem(vectmenu, -1, Icons["addvect"].GetLabel())
-        addvect.SetBitmap(Icons["addvect"].GetBitmap(self.iconsize))
-        vectmenu.AppendItem(addvect)
-        self.Bind(wx.EVT_MENU, self.AddVector, addvect)
-
+        
         addtheme = wx.MenuItem(vectmenu, -1, Icons["addthematic"].GetLabel())
         addtheme.SetBitmap(Icons["addthematic"].GetBitmap(self.iconsize))
         vectmenu.AppendItem(addtheme)
@@ -1288,17 +1296,22 @@ class GMFrame(wx.Frame):
         point = wx.GetMousePosition()
         ovlmenu = wx.Menu()
 
-        addgrid = wx.MenuItem(ovlmenu, -1, Icons["addgrid"].GetLabel())
+        addgrid = wx.MenuItem(ovlmenu, wx.ID_ANY, Icons["addgrid"].GetLabel())
         addgrid.SetBitmap(Icons["addgrid"].GetBitmap(self.iconsize))
         ovlmenu.AppendItem(addgrid)
         self.Bind(wx.EVT_MENU, self.AddGrid, addgrid)
-
-        addgeodesic = wx.MenuItem(ovlmenu, -1, Icons["addgeodesic"].GetLabel())
+        
+        addlabels = wx.MenuItem(ovlmenu, wx.ID_ANY, Icons["addlabels"].GetLabel())
+        addlabels.SetBitmap(Icons["addlabels"].GetBitmap(self.iconsize))
+        ovlmenu.AppendItem(addlabels)
+        self.Bind(wx.EVT_MENU, self.OnAddLabels, addlabels)
+        
+        addgeodesic = wx.MenuItem(ovlmenu, wx.ID_ANY, Icons["addgeodesic"].GetLabel())
         addgeodesic.SetBitmap(Icons["addgeodesic"].GetBitmap(self.iconsize))
         ovlmenu.AppendItem(addgeodesic)
         self.Bind(wx.EVT_MENU, self.AddGeodesic, addgeodesic)
-
-        addrhumb = wx.MenuItem(ovlmenu, -1, Icons["addrhumb"].GetLabel())
+        
+        addrhumb = wx.MenuItem(ovlmenu, wx.ID_ANY, Icons["addrhumb"].GetLabel())
         addrhumb.SetBitmap(Icons["addrhumb"].GetBitmap(self.iconsize))
         ovlmenu.AppendItem(addrhumb)
         self.Bind(wx.EVT_MENU, self.AddRhumb, addrhumb)
