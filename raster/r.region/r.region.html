@@ -14,11 +14,20 @@ to the edges of the next nearest cell in the named raster map -- not to the
 named map's edges.  To perform the latter function, use the
 <b>raster=</b><em>name</em> option.
 
+
 <h2>NOTES</h2>
 
 After all updates have been applied, the raster map's resolution
 settings are recomputed from the boundaries and the number of rows and
 columns in the raster map.
+
+<P>
+The n=<em>value</em> may also be specified as a
+function of its current value:  n=n+<em>value</em>
+increases the current northing, while n=n-<em>value</em>
+decreases it.  This is also true for s=<em>value</em>,
+e=<em>value</em>, and w=<em>value</em>.
+
 
 <h2>EXAMPLES</h2>
 
@@ -32,16 +41,19 @@ Shift map (using offset, here by 100 map units in two directions):
 r.region map=mymap n=n+100 e=e+100 w=w+100 s=s+100
 </pre></div>
 
+
 <h2>SEE ALSO</h2>
 
 <em><a href="r.support.html">r.support</a></em><br>
 <em><a href="g.region.html">g.region</a></em>
+
 
 <h2>AUTHOR</h2>
 
 Glynn Clements
 
 <br>
-Based upon g.region
+Based upon <em>g.region</em>
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
