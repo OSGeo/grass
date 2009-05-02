@@ -135,10 +135,10 @@ def message(msg, flag = None):
     """Display a message using g.message"""
     run_command("g.message", flags = flag, message = msg)
 
-def debug(msg):
+def debug(msg, debug = 1):
     """Display a debugging message using g.message -d"""
-    message(msg, flag = 'd')
-
+    run_command("g.message", flags = 'd', message = msg, debug = debug)
+    
 def verbose(msg):
     """Display a verbose message using g.message -v"""
     message(msg, flag = 'v')
