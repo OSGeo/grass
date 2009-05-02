@@ -1691,7 +1691,7 @@ if test "$with_wxwidgets" = "no" ; then
 else
   AC_MSG_RESULT(yes)
   USE_WXWIDGETS="1"
-  if test "`basename $with_wxwidgets`" = "wx-config" ; then
+  if test "`basename $with_wxwidgets`" != "yes" ; then
     WX_CONFIG="$with_wxwidgets"
   fi
 

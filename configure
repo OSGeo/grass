@@ -15119,7 +15119,7 @@ if test "$with_wxwidgets" = "no" ; then
 else
   echo "$ac_t""yes" 1>&6
   USE_WXWIDGETS="1"
-  if test "`basename $with_wxwidgets`" = "wx-config" ; then
+  if test "`basename $with_wxwidgets`" != "yes" ; then
     WX_CONFIG="$with_wxwidgets"
   fi
 
