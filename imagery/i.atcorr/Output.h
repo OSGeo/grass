@@ -1,6 +1,7 @@
 #ifndef MY_OUTPUT_H
 #define MY_OUTPUT_H
 
+#include <cstdio>
 #include <iostream>
 #include <sstream>
 #include <string>
