@@ -196,18 +196,21 @@ LOC_ARG_WITH(readline, Readline, no)
 LOC_ARG_WITH(opendwg, openDWG, no)
 LOC_ARG_WITH(regex, regex)
 LOC_ARG_WITH(pthread, POSIX threads, no)
+
+AC_ARG_WITH(gdal,
+[  --with-gdal[=path/gdal-config] enable GDAL/OGR support (gdal-config with path, \
+e.g. '--with-gdal=/usr/local/bin/gdal-config')])
+
 AC_ARG_WITH(python,
-[  --with-python[=path/python-config] enable support for Python SWIG bindings (python-config with path, \
-e.g. '--with-python=/usr/bin/python2.5-config', default: no)],, with_python="no")
+[  --with-python[=path/python-config] enable support for Python SWIG bindings \
+(python-config with path, e.g. '--with-python=/usr/bin/python2.5-config', \
+default: no)],, with_python="no")
+
 AC_ARG_WITH(wxwidgets,
 [  --with-wxwidgets[=path/wx-config] enable wxWidgets support (wx-config with path, \
 e.g. '--with-wxwidgets=/usr/local/bin/wx-config', default: no)],, with_wxwidgets="no")
 
 # With includes and libs options
-
-AC_ARG_WITH(gdal,
-[  --with-gdal[=path/gdal-config] enable GDAL/OGR support (gdal-config with path, \
-e.g. '--with-gdal=/usr/local/bin/gdal-config')])
 
 AC_ARG_WITH(geos,
 [  --with-geos[=path/geos-config] enable GEOS support (geos-config with path, \
@@ -1691,7 +1694,7 @@ if test "$with_wxwidgets" = "no" ; then
 else
   AC_MSG_RESULT(yes)
   USE_WXWIDGETS="1"
-  if test "`basename $with_wxwidgets`" != "yes" ; then
+  if test "$with_wxwidgets" != "yes" ; then
     WX_CONFIG="$with_wxwidgets"
   fi
 
