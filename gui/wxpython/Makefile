@@ -2,6 +2,7 @@ MODULE_TOPDIR = ../..
 
 SUBDIRS = docs scripts vdigit nviz
 EXTRA_CLEAN_FILES = menustrings.py
+CLEAN_SUBDIRS = vdigit nviz
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 include $(MODULE_TOPDIR)/include/Make/Doxygen.make
