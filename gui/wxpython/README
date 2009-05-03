@@ -39,6 +39,11 @@ $Date$
  	 libwxgtk2.8-0 libwxgtk2.8-dbg libwxgtk2.8-dev \
 	 python-wxgtk2.8 wx2.8-doc wx2.8-examples \
 	 wx2.8-headers wx2.8-i18n python-numpy
+
+ On Mandriva 2009 GNU/Linux, install
+ urpmi lib64wxgtk2.8 lib64wxgtk2.8-devel lib64wxgtkgl2.8 wxgtk2.8 \
+	lib64wxPythonGTK2.8 lib64wxPythonGTK2.8-devel wxPythonGTK wxPythonGTK-wxversion
+
 	 
  MS-WINDOWS ONLY REQUIREMENTS
  
@@ -48,6 +53,7 @@ $Date$
   http://sourceforge.net/project/platformdownload.php?group_id=78018 
  Get NumPy from:
   http://sourceforge.net/project/showfiles.php?group_id=1369&package_id=175103  
+
 
 2 - STARTUP WITH GRASS INITIALIZATION
 
