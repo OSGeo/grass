@@ -99,6 +99,7 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
+
     field = atoi(field_opt->answer);
         
     if (format_opt->answer[0] == 'p')
@@ -106,7 +107,7 @@ int main(int argc, char *argv[])
     else
 	format = FORMAT_ALL;
 
-    if (format == FORMAT_ALL) {
+    if (format == FORMAT_ALL && column_opt->answer) {
 	G_warning(_("Parameter '%s' ignored in standard mode"),
 		  column_opt->key);
     }
