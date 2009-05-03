@@ -18,15 +18,13 @@ $Date$
 		     [ deb http://apt.wxwidgets.org/ etch-wx main ]
 	             http://www.bitpim.org/developer.html -> "Install wxPython"
  * Fedora: http://www.wxpython.org/download.php
-           http://mpa.itc.it/markus/wxpython_rpms/fedora/
- * Mandriva: included in main distribution. but the following fix is
-       required:
-       ln -s /usr/lib/wxPython/include/wx-2.8/wx /usr/lib64/wx/include/
- * MS-Windows: http://www.wxpython.org/download.php
- * OS X: http://www.wxpython.org/download.php
+ * Mandriva: included in main distribution
  * OpenSuSe: http://download.opensuse.org/repositories/Application:/Geo/
  * Ubuntu: deb http://wxpython.wxcommunity.com/apt/ubuntu/dapper /
            deb http://wxpython.wxcommunity.com/apt/ubuntu/feisty /
+
+ * MacOSX: http://www.wxpython.org/download.php
+ * MS-Windows: http://www.wxpython.org/download.php
 
  Get Python from:
  * Python.org for Source, MS-Windows, OS X: http://www.python.org/download/
@@ -40,7 +38,7 @@ $Date$
 	 python-wxgtk2.8 wx2.8-doc wx2.8-examples \
 	 wx2.8-headers wx2.8-i18n python-numpy
 
- On Mandriva 2009 GNU/Linux, install
+ On Mandriva 2009 GNU/Linux, install these packages:
  urpmi lib64wxgtk2.8 lib64wxgtk2.8-devel lib64wxgtkgl2.8 wxgtk2.8 \
 	lib64wxPythonGTK2.8 lib64wxPythonGTK2.8-devel wxPythonGTK wxPythonGTK-wxversion
 
