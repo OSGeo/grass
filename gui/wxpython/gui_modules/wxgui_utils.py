@@ -10,7 +10,7 @@ Classes:
  - Layer
  - LayerTree
 
-(C) 2007-2008 by the GRASS Development Team
+(C) 2007-2009 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -43,6 +43,7 @@ import profile
 from debug import Debug as Debug
 from icon import Icons as Icons
 from preferences import globalSettings as UserSettings
+from vdigit import hasVDigit
 try:
     import subprocess
 except:
@@ -289,7 +290,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.Bind (wx.EVT_MENU, self.lmgr.OnShowAttributeTable, id=self.popupID4)
 
             self.popupMenu.Append(self.popupID5, text=_("Start editing"))
-            self.popupMenu.Enable(self.popupID5, False)
+            if not hasVDigit:
+                self.popupMenu.Enable(self.popupID5, False)
             self.popupMenu.Append(self.popupID6, text=_("Stop editing"))
             self.popupMenu.Enable(self.popupID6, False)
             self.Bind (wx.EVT_MENU, self.OnStartEditing, id=self.popupID5)
