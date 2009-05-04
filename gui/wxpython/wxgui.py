@@ -184,6 +184,7 @@ class GMFrame(wx.Frame):
         self.goutput.Redirect()
         
         # start with layer manager on top
+        self.curr_page.maptree.mapdisplay.Raise()
         self.Raise()
 
     def __doLayout(self):
