@@ -54,8 +54,10 @@ try:
     import grass7_wxvdigit as wxvdigit
     GV_LINES = wxvdigit.GV_LINES
     PseudoDC = wxvdigit.PseudoDC
+    hasVDigit = True
     digitErr = ''
 except ImportError, err:
+    hasVDigit = False
     GV_LINES = None
     PseudoDC = wx.PseudoDC
     digitErr = err

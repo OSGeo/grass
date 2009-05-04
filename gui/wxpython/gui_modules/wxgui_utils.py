@@ -289,6 +289,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.Bind (wx.EVT_MENU, self.lmgr.OnShowAttributeTable, id=self.popupID4)
 
             self.popupMenu.Append(self.popupID5, text=_("Start editing"))
+            self.popupMenu.Enable(self.popupID5, False)
             self.popupMenu.Append(self.popupID6, text=_("Stop editing"))
             self.popupMenu.Enable(self.popupID6, False)
             self.Bind (wx.EVT_MENU, self.OnStartEditing, id=self.popupID5)
