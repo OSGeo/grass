@@ -58,8 +58,6 @@ public:
 	void EndDrawing();
         void SetBackground(const wxBrush&);
 	void SetId(int);
-        void DrawBitmap(const wxBitmap&, const wxPoint&,
-	                bool);
         void SetBrush(const wxBrush&);
         void SetPen(const wxPen&);
 	void SetIdBounds(int, wxRect&);
@@ -94,5 +92,9 @@ public:
 		void DrawRotatedText(const wxString& text, float x, float y, double angle) {
 		        return self->DrawRotatedText(text, (wxCoord) x, (wxCoord) y, angle);
 		}
+                void DrawBitmap(const wxBitmap& bitmap, float x, float y, bool useMask) {
+                        return self->DrawBitmap(bitmap, (wxCoord) x, (wxCoord) y, useMask);
+                }
+
 	}
 };
