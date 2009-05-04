@@ -151,12 +151,7 @@ int main(int argc, char *argv[])
 	  "different resolution) using regularized spline with "
 	  "tension and smoothing.");
 
-    parm.input = G_define_option();
-    parm.input->key = "input";
-    parm.input->type = TYPE_STRING;
-    parm.input->required = YES;
-    parm.input->gisprompt = "old,cell,raster";
-    parm.input->description = _("Name of input raster map");
+    parm.input = G_define_standard_option(G_OPT_R_INPUT);
 
     parm.res_ew = G_define_option();
     parm.res_ew->key = "ew_res";
@@ -176,6 +171,7 @@ int main(int argc, char *argv[])
     parm.elev->required = NO;
     parm.elev->gisprompt = "new,cell,raster";
     parm.elev->description = _("Output z-file (elevation) map");
+    parm.elev->guisection = _("Output");
 
     parm.slope = G_define_option();
     parm.slope->key = "slope";
@@ -183,7 +179,7 @@ int main(int argc, char *argv[])
     parm.slope->required = NO;
     parm.slope->gisprompt = "new,cell,raster";
     parm.slope->description = _("Output slope map (or fx)");
-    parm.slope->guisection = _("Output_options");
+    parm.slope->guisection = _("Output");
 
     parm.aspect = G_define_option();
     parm.aspect->key = "aspect";
@@ -191,7 +187,7 @@ int main(int argc, char *argv[])
     parm.aspect->required = NO;
     parm.aspect->gisprompt = "new,cell,raster";
     parm.aspect->description = _("Output aspect map (or fy)");
-    parm.aspect->guisection = _("Output_options");
+    parm.aspect->guisection = _("Output");
 
     parm.pcurv = G_define_option();
     parm.pcurv->key = "pcurv";
@@ -199,7 +195,7 @@ int main(int argc, char *argv[])
     parm.pcurv->required = NO;
     parm.pcurv->gisprompt = "new,cell,raster";
     parm.pcurv->description = _("Output profile curvature map (or fxx)");
-    parm.pcurv->guisection = _("Output_options");
+    parm.pcurv->guisection = _("Output");
 
     parm.tcurv = G_define_option();
     parm.tcurv->key = "tcurv";
@@ -207,7 +203,7 @@ int main(int argc, char *argv[])
     parm.tcurv->required = NO;
     parm.tcurv->gisprompt = "new,cell,raster";
     parm.tcurv->description = _("Output tangential curvature map (or fyy)");
-    parm.tcurv->guisection = _("Output_options");
+    parm.tcurv->guisection = _("Output");
 
     parm.mcurv = G_define_option();
     parm.mcurv->key = "mcurv";
@@ -215,7 +211,7 @@ int main(int argc, char *argv[])
     parm.mcurv->required = NO;
     parm.mcurv->gisprompt = "new,cell,raster";
     parm.mcurv->description = _("Output mean curvature map (or fxy)");
-    parm.mcurv->guisection = _("Output_options");
+    parm.mcurv->guisection = _("Output");
 
     parm.smooth = G_define_option();
     parm.smooth->key = "smooth";
@@ -279,7 +275,7 @@ int main(int argc, char *argv[])
     flag.deriv->key = 'd';
     flag.deriv->description =
 	_("Output partial derivatives instead of topographic parameters");
-    flag.deriv->guisection = _("Output_options");
+    flag.deriv->guisection = _("Output");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
