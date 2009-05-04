@@ -188,7 +188,7 @@ class UpdateThread(Thread):
             if eventId is None:
                 return
         
-        p = self.task.get_param(self.eventId, element='wxId', raiseError=True)
+        p = self.task.get_param(self.eventId, element='wxId', raiseError=False)
         
         if not p or \
                 not p.has_key('wxId-bind'):
