@@ -286,7 +286,7 @@ class BufferedWindow(MapWindow, wx.Window):
         if pdctype == 'image': # draw selected image
             bitmap = wx.BitmapFromImage(img)
             w,h = bitmap.GetSize()
-            pdc.DrawBitmap(bitmap, wx.Point(coords[0], coords[1]), True) # draw the composite map
+            pdc.DrawBitmap(bitmap, coords[0], coords[1], True) # draw the composite map
             pdc.SetIdBounds(drawid, wx.Rect(coords[0],coords[1], w, h))
 
         elif pdctype == 'box': # draw a box on top of the map
