@@ -5,6 +5,7 @@ import subprocess
 import re
 import atexit
 import string
+import types
 
 # subprocess wrapper that uses shell on Windows
 
@@ -108,8 +109,22 @@ def feed_command(*args, **kwargs):
 def read_command(*args, **kwargs):
     """Passes all arguments to pipe_command, then waits for the process to
     complete, returning its stdout (i.e. similar to shell `backticks`).
+
+    Output can be automatically parsed if <b>parse</b> parameter is
+    given. Use True for default parse function -- parse_key_val().
     """
+    parse = None # do not parse output
+    if kwargs.has_key('parse'):
+        if type(parse) is types.FunctionType:
+            parse = kwargs['parse']
+        else:
+            parse = parse_key_val # use default fn
+        del kwargs['parse']
+    
     ps = pipe_command(*args, **kwargs)
+    if parse:
+        return parse(ps.communicate()[0])
+    
     return ps.communicate()[0]
 
 def write_command(*args, **kwargs):
@@ -221,6 +236,9 @@ def parse_key_val(s, sep = '=', dflt = None, val_type = None):
     by newlines and the key and value are separated by `sep' (default: `=')
     """
     result = {}
+    if not s:
+        return result
+    
     for line in s.splitlines():
 	kv = line.split(sep, 1)
 	k = kv[0].strip()
