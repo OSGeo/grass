@@ -1,8 +1,7 @@
 TODO
 -----
-
 urgent:
-- get rid of local copies in include files
+- move out *.i files into ../include/
 
 important:
 - enable calls from outside GRASS
