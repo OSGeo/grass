@@ -91,6 +91,7 @@ from GRASS 5 Programmer's manual) or are simply undocumented.</I>
 <li>pngdriver:  PNG display driver library - \ref pngdriver
 <li>proj:	\ref projlib (wrapper to PROJ4 projection library)
 <li>psdriver:   PostScript display driver library - \ref psdriver
+<li>python:     \ref pythonlib
 <li>raster:	\ref rastergraphicslib (note: raster map functions are in \ref gislib)
 <li>rowio:	Raster row in/out library - \ref rowio
 <li>rst:	Library for interpolation with regularized splines with tension - \ref rst
