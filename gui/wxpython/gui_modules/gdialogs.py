@@ -1092,7 +1092,7 @@ class LayersList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin,
         
         self.InsertColumn(0, _('Layer'))
         self.InsertColumn(1, _('Layer name'))
-        self.InsertColumn(2, _('Output vector map name'))
+        self.InsertColumn(2, _('Name for GRASS map'))
         
         self.Bind(wx.EVT_COMMAND_RIGHT_CLICK, self.OnPopupMenu) #wxMSW
         self.Bind(wx.EVT_RIGHT_UP,            self.OnPopupMenu) #wxGTK
