@@ -1,6 +1,8 @@
-/*! \page GRASS_LIB_PYTHON GRASS 6 Python library
+/*! \page pythonlib GRASS 7 Python library
 
-<h2>GRASS 7 Python library</h2>
+by GRASS Development Team
+
+http://grass.osgeo.org
 
 See code in: grass.py
 
