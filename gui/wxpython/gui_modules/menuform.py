@@ -190,8 +190,8 @@ class UpdateThread(Thread):
                 if prompt == 'vector':
                     name = p.get('name', '')
                     if name in ('map', 'input'):
-                        eventId = p['wxId']
-            if eventId is None:
+                        self.eventId = p['wxId']
+            if self.eventId is None:
                 return
         
         p = self.task.get_param(self.eventId, element='wxId', raiseError=False)
