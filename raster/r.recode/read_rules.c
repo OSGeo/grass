@@ -62,9 +62,12 @@ int read_rules(FILE * fp)
     for (line = 1;; line++) {
 	if (isatty(fileno(fp)))
 	    fprintf(stderr, "> ");
+
 	if (!G_getl2(buf, 1024, fp))
 	    return nrules;
-	buf[strlen(buf) - 1] = '\0';
+
+	G_debug(5, "buf = [%s], strlen(buf)=%d", buf, strlen(buf));
+
 	for (n = 0; buf[n]; n++)
 	    if (buf[n] == ',')
 		buf[n] = ' ';
