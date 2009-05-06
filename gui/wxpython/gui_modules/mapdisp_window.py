@@ -2384,25 +2384,29 @@ class BufferedWindow(MapWindow, wx.Window):
         """
         Set display extents to match selected raster map (ignore NULLs)
         """
-        self.ZoomToMap(zoom=True)
+        self.ZoomToMap(ignoreNulls = True)
         
-    def ZoomToMap(self, layer = None, zoom = False):
+    def ZoomToMap(self, layers = None, ignoreNulls = False, render = True):
         """
         Set display extents to match selected raster
-        or vector map.
+        or vector map(s).
+
+        @param layer list of layers to be zoom to
+        @param ignoreNulls True to ignore null-values
+        @param render True to re-render display
         """
         zoomreg = {}
 
-        if not layer:
-            layer = self.GetSelectedLayer(multi = True)
+        if not layers:
+            layers = self.GetSelectedLayer(multi = True)
         
-        if not layer:
+        if not layers:
             return
         
         rast = []
         vect = []
         updated = False
-        for l in layer:
+        for l in layers:
             # only raster/vector layers are currently supported
             if l.type == 'raster':
                 rast.append(l.name)
@@ -2423,8 +2427,9 @@ class BufferedWindow(MapWindow, wx.Window):
         
         self.ZoomHistory(self.Map.region['n'], self.Map.region['s'],
                          self.Map.region['e'], self.Map.region['w'])
-
-        self.UpdateMap()
+        
+        if render:
+            self.UpdateMap()
 
         self.parent.StatusbarUpdate()
         
