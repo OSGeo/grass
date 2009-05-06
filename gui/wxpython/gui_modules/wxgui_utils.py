@@ -1071,6 +1071,15 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             cmd = self.GetPyData(layer)[0]['maplayer'].GetCmd(string=True)
             if len(cmd) > 0:
                 self.lmgr.SetStatusText(cmd)
+
+        # set region if auto-zooming is enabled
+        if self.GetPyData(layer) and self.GetPyData(layer)[0]['cmd'] and \
+               UserSettings.Get(group = 'display', key = 'autoZooming', subkey = 'enabled'):
+            mapLayer = self.GetPyData(layer)[0]['maplayer']
+            if mapLayer.GetType() in ('raster', 'vector'):
+                render = self.mapdisplay.autoRender.IsChecked()
+                self.mapdisplay.MapWindow.ZoomToMap(layers = [mapLayer,],
+                                                    render = render)
         
         #
         # update nviz tools
@@ -1280,6 +1289,14 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
         # change parameters for item in layers list in render.Map
         self.ChangeLayer(layer)
+
+        # set region if auto-zooming is enabled
+        if dcmd and UserSettings.Get(group = 'display', key = 'autoZooming', subkey = 'enabled'):
+            mapLayer = self.GetPyData(layer)[0]['maplayer']
+            if mapLayer.GetType() in ('raster', 'vector'):
+                render = UserSettings.Get(group = 'display', key = 'autoRendering', subkey = 'enabled')
+                self.mapdisplay.MapWindow.ZoomToMap(layers = [mapLayer,],
+                                                    render = render)
         
         if self.mapdisplay.toolbars['nviz'] and dcmd:
             # update nviz session

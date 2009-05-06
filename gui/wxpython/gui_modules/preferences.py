@@ -104,6 +104,9 @@ class Settings:
                 'autoRendering': {
                     'enabled' : False
                     },
+                'autoZooming' : {
+                    'enabled' : False
+                    },
                 'statusbarMode': {
                     'selection' : 0
                     },
@@ -1093,10 +1096,23 @@ class PreferencesDialog(wx.Dialog):
 
         gridSizer.Add(item=autoRendering,
                       pos=(row, 0), span=(1, 2))
+        
+        #
+        # auto-zoom
+        #
+        row += 1
+        autoZooming = wx.CheckBox(parent=panel, id=wx.ID_ANY,
+                                  label=_("Enable auto-zooming to selected map layer"),
+                                  name="IsChecked")
+        autoZooming.SetValue(self.settings.Get(group='display', key='autoZooming', subkey='enabled'))
+        self.winId['display:autoZooming:enabled'] = autoZooming.GetId()
+
+        gridSizer.Add(item=autoZooming,
+                      pos=(row, 0), span=(1, 2))
 
         sizer.Add(item=gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
         border.Add(item=sizer, proportion=0, flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=3)
-
+        
         panel.SetSizer(border)
         
         # bindings
