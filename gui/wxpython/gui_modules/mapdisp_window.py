@@ -473,7 +473,7 @@ class BufferedWindow(MapWindow, wx.Window):
                 self.bufferLast = dc.GetAsBitmap(wx.Rect(0, 0, self.Map.width, self.Map.height))
 
             pdcLast = PseudoDC()
-            pdcLast.DrawBitmap(self.bufferLast, wx.Point(0, 0), False)
+            pdcLast.DrawBitmap(self.bufferLast, 0, 0, False)
             pdcLast.DrawToDC(dc)
 
         # draw decorations (e.g. region box)
