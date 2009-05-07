@@ -35,6 +35,7 @@ import grass
 import gdialogs
 import globalvar
 import menuform
+import toolbars
 import mapdisp
 import render
 import histogram
@@ -43,7 +44,7 @@ import profile
 from debug import Debug as Debug
 from icon import Icons as Icons
 from preferences import globalSettings as UserSettings
-from vdigit import hasVDigit
+from vdigit import haveVDigit
 try:
     import subprocess
 except:
@@ -290,7 +291,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.Bind (wx.EVT_MENU, self.lmgr.OnShowAttributeTable, id=self.popupID4)
 
             self.popupMenu.Append(self.popupID5, text=_("Start editing"))
-            if not hasVDigit:
+            if not haveVDigit:
                 self.popupMenu.Enable(self.popupID5, False)
             self.popupMenu.Append(self.popupID6, text=_("Stop editing"))
             self.popupMenu.Enable(self.popupID6, False)

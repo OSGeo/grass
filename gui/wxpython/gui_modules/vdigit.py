@@ -54,16 +54,14 @@ try:
     import grass7_wxvdigit as wxvdigit
     GV_LINES = wxvdigit.GV_LINES
     PseudoDC = wxvdigit.PseudoDC
-    hasVDigit = True
+    haveVDigit = True
     digitErr = ''
 except ImportError, err:
-    hasVDigit = False
+    haveVDigit = False
     GV_LINES = None
     PseudoDC = wx.PseudoDC
     digitErr = err
-    print >> sys.stderr, "%sWARNING: Digitization tool is disabled (%s). " \
-          "Detailed information in README file." % \
-          (os.linesep, err)
+    print >> sys.stderr, "\nWARNING: Vector digitizer is not available (%s). " % err
 
 class AbstractDigit:
     """
