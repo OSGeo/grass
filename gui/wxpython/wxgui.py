@@ -64,6 +64,8 @@ import wx.lib.customtreectrl as CT
 import wx.lib.flatnotebook as FN
 from wx.lib.wordwrap import wordwrap
 
+grassPath = os.path.join(globalvar.ETCDIR, "python")
+sys.path.append(grassPath)
 import grass
 
 import gui_modules.utils as utils
