@@ -31,7 +31,7 @@ int
 centroid(OGRGeometryH hGeom, CENTR * Centr, SPATIAL_INDEX * Sindex, int field,
 	 int cat, double min_area, int type)
 {
-    int i, j, np, nr, ret;
+    int i, valid_isles, j, np, nr, ret;
     static int first = 1;
     static struct line_pnts *Points;
     struct line_pnts **IPoints;
@@ -90,15 +90,17 @@ centroid(OGRGeometryH hGeom, CENTR * Centr, SPATIAL_INDEX * Sindex, int field,
 	IPoints =
 	    (struct line_pnts **)G_malloc((nr - 1) *
 					  sizeof(struct line_pnts *));
+	valid_isles = 0;
 	for (i = 1; i < nr; i++) {
 
-	    IPoints[i - 1] = Vect_new_line_struct();
 	    hRing = OGR_G_GetGeometryRef(hGeom, i);
-	    np = OGR_G_GetPointCount(hRing);
-
-	    for (j = 0; j < np; j++) {
-		Vect_append_point(IPoints[i - 1], OGR_G_GetX(hRing, j),
-				  OGR_G_GetY(hRing, j), OGR_G_GetZ(hRing, j));
+	    if ((np = OGR_G_GetPointCount(hRing)) > 0) {
+		IPoints[valid_isles] = Vect_new_line_struct();
+		for (j = 0; j < np; j++) {
+		    Vect_append_point(IPoints[valid_isles], OGR_G_GetX(hRing, j),
+				      OGR_G_GetY(hRing, j), OGR_G_GetZ(hRing, j));
+		}
+		valid_isles++;
 	    }
 	}
 
@@ -119,8 +121,8 @@ centroid(OGRGeometryH hGeom, CENTR * Centr, SPATIAL_INDEX * Sindex, int field,
 		    continue;	/* outside */
 
 		in = 1;
-		for (j = 1; j < nr; j++) {
-		    ret = Vect_point_in_poly(x, y, IPoints[j - 1]);
+		for (j = 0; j < valid_isles; j++) {
+		    ret = Vect_point_in_poly(x, y, IPoints[j]);
 		    if (ret == 1) {	/* centroid in inner ring */
 			in = 0;
 			break;	/* inside isle */
@@ -135,11 +137,10 @@ centroid(OGRGeometryH hGeom, CENTR * Centr, SPATIAL_INDEX * Sindex, int field,
 	    }
 	}
 
-	for (i = 1; i < nr; i++) {
-	    Vect_destroy_line_struct(IPoints[i - 1]);
+	for (i = 0; i < valid_isles; i++) {
+	    Vect_destroy_line_struct(IPoints[i]);
 	}
-	if (nr > 1)
-	    G_free(IPoints);
+	G_free(IPoints);
     }
 
     /* I did not test this because I did not have files of these types */
@@ -161,7 +162,7 @@ int
 geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
      double min_area, int type, int mk_centr)
 {
-    int i, j, np, nr, ret, otype;
+    int i, valid_isles, j, np, nr, ret, otype;
     static int first = 1;
     static struct line_pnts *Points;
     struct line_pnts **IPoints;
@@ -187,6 +188,10 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
     eType = wkbFlatten(OGR_G_GetGeometryType(hGeom));
 
     if (eType == wkbPoint) {
+	if ((np = OGR_G_GetPointCount(hGeom)) == 0) {
+	    G_warning(_("Skipping empty geometry feature"));
+	    return 0;
+	}
 	Vect_append_point(Points, OGR_G_GetX(hGeom, 0), OGR_G_GetY(hGeom, 0),
 			  OGR_G_GetZ(hGeom, 0));
 	if (type & GV_CENTROID)
@@ -196,7 +201,10 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 	Vect_write_line(Map, otype, Points, Cats);
     }
     else if (eType == wkbLineString) {
-	np = OGR_G_GetPointCount(hGeom);
+	if ((np = OGR_G_GetPointCount(hGeom)) == 0) {
+	    G_warning(_("Skipping empty geometry feature"));
+	    return 0;
+	}
 
 	for (i = 0; i < np; i++) {
 	    Vect_append_point(Points, OGR_G_GetX(hGeom, i),
@@ -212,15 +220,19 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
     else if (eType == wkbPolygon) {
 	G_debug(3, "Polygon");
 
-	n_polygons++;
-	nr = OGR_G_GetGeometryCount(hGeom);
-
 	/* SFS: 1 exterior boundary and 0 or more interior boundaries.
 	 *  So I hope that exterior is the first one, even if it is not explicitly told  */
 
 	/* Area */
 	hRing = OGR_G_GetGeometryRef(hGeom, 0);
-	np = OGR_G_GetPointCount(hRing);
+	if ((np = OGR_G_GetPointCount(hRing)) == 0) {
+	    G_warning(_("Skipping empty geometry feature"));
+	    return 0;
+	}
+
+	n_polygons++;
+	nr = OGR_G_GetGeometryCount(hGeom);
+
 	Vect_reset_line(Points);
 	for (j = 0; j < np; j++) {
 	    Vect_append_point(Points, OGR_G_GetX(hRing, j),
@@ -249,41 +261,48 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 	IPoints =
 	    (struct line_pnts **)G_malloc((nr - 1) *
 					  sizeof(struct line_pnts *));
+	valid_isles = 0;
 	for (i = 1; i < nr; i++) {
 	    G_debug(3, "Inner ring %d", i);
 
-	    IPoints[i - 1] = Vect_new_line_struct();
 	    hRing = OGR_G_GetGeometryRef(hGeom, i);
-	    np = OGR_G_GetPointCount(hRing);
 
-	    for (j = 0; j < np; j++) {
-		Vect_append_point(IPoints[i - 1], OGR_G_GetX(hRing, j),
-				  OGR_G_GetY(hRing, j), OGR_G_GetZ(hRing, j));
-	    }
-
-	    if (IPoints[i - 1]->n_points < 4)
-		G_warning(_("Degenerate island ([%d] vertices)"),
-			  IPoints[i - 1]->n_points);
-
-	    size = G_area_of_polygon(Points->x, Points->y, Points->n_points);
-	    if (size < min_area) {
-		G_warning(_("Island size [%.1e], island not imported"), size);
+	    if ((np = OGR_G_GetPointCount(hRing)) == 0) {
+		G_warning(_("Skipping empty geometry feature"));
 	    }
 	    else {
-		if (type & GV_LINE)
-		    otype = GV_LINE;
-		else
-		    otype = GV_BOUNDARY;
-		Vect_write_line(Map, otype, IPoints[i - 1], BCats);
+		IPoints[valid_isles] = Vect_new_line_struct();
+
+		for (j = 0; j < np; j++) {
+		    Vect_append_point(IPoints[valid_isles], OGR_G_GetX(hRing, j),
+				      OGR_G_GetY(hRing, j), OGR_G_GetZ(hRing, j));
+		}
+
+		if (IPoints[valid_isles]->n_points < 4)
+		    G_warning(_("Degenerate island ([%d] vertices)"),
+			      IPoints[i - 1]->n_points);
+
+		size = G_area_of_polygon(Points->x, Points->y, Points->n_points);
+		if (size < min_area) {
+		    G_warning(_("Island size [%.1e], island not imported"), size);
+		}
+		else {
+		    if (type & GV_LINE)
+			otype = GV_LINE;
+		    else
+			otype = GV_BOUNDARY;
+		    Vect_write_line(Map, otype, IPoints[valid_isles], BCats);
+		}
+		valid_isles++;
 	    }
-	}
+	}	/* inner rings done */
 
 	/* Centroid */
 	/* Vect_get_point_in_poly_isl() would fail for degenerate polygon */
 	if (mk_centr) {
 	    if (Points->n_points >= 4) {
 		ret =
-		    Vect_get_point_in_poly_isl(Points, IPoints, nr - 1, &x,
+		    Vect_get_point_in_poly_isl(Points, IPoints, valid_isles, &x,
 					       &y);
 		if (ret == -1) {
 		    G_warning(_("Cannot calculate centroid"));
@@ -321,8 +340,8 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 	    }
 	}
 
-	for (i = 1; i < nr; i++) {
-	    Vect_destroy_line_struct(IPoints[i - 1]);
+	for (i = 0; i < valid_isles; i++) {
+	    Vect_destroy_line_struct(IPoints[i]);
 	}
 	G_free(IPoints);
     }
