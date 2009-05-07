@@ -38,6 +38,7 @@ try:
 except ImportError, e:
     haveNviz = False
     errorMsg = e
+    print >> sys.stderr, "\nWARNING: Nviz extension (3D view) is not available (%s). " % e
 
 if haveNviz:
     GLWindow = nviz_mapdisp.GLWindow
