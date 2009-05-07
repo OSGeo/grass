@@ -1250,7 +1250,8 @@ class EPSGPage(TitledPage):
                                        style=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL)
         self.csearch = wx.Choice(parent = self, id = wx.ID_ANY,
                                  choices = [_("codes"), _("description"), _("parameters")])
-        
+        self.csearch.SetStringSelection(_("description"))
+
         # text input
         epsgdir = utils.PathJoin(os.environ["GRASS_PROJSHARE"], 'epsg')
         self.tfile = self.MakeTextCtrl(text=epsgdir, size=(200,-1))
