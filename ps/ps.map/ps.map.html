@@ -179,9 +179,20 @@ yellow
 For vectors and some plotting commands you can also specify
 '<tt>none</tt>' or '<tt>R:G:B</tt>' (e.g '<tt>255:0:0</tt>').
 </DD>
+
+<DT><B>yes|no</B>
+<DD>For options that take a yes or no answer, you can simply use the
+letters "y" or "n", or type out the full words "Yes" or "No" if you
+prefer. It is not case-sensitive. Typically the option with have a
+default answer and you only need to specify one if you wish to
+override it.
+</DD>
+
+
 </DL>
 <P>
 <BR>
+
 
 <h3>Command usage</h3>
 
@@ -220,7 +231,7 @@ EXAMPLE:
 <a name="colortable"></a>
 <H2>colortable</H2>
 
-Prints the color table for the raster map layer anywhere on the page.
+Prints the color table legend for the raster map layer anywhere on the page.
 <PRE>
 USAGE:	<B>colortable</B> [y|n]
 	<B>where</B> x y
@@ -234,50 +245,79 @@ USAGE:	<B>colortable</B> [y|n]
 	<B>color</B> text color
 	<B>nodata</B> [Y|n]
 	<B>tickbar</B> [y|N]
+	<B>discrete</B> [y|n]
 	<B>end</B>
 </PRE>
-The color table will display the colors for each raster map layer
-category value and the category label.
-If <B>raster</B> is omitted, the colortable defaults to a previously
+
+For a categorical (CELL) map the color table will create a legend displaying
+the colors for each of a raster map's category values along with its
+associated category label. For a floating point (FCELL or DCELL) map a
+continuous gradient legend will be created.
+<P>
+If <B>raster</B> is omitted, the colortable defaults to the previously
 registered raster layer.
-The legend's <B>range</B> can be adjusted for floating point rasters, but if 
-set beyond the extent of the map's range be sure that you have set up color 
-rules with <em>r.colors</em> which cover this range.
+
 The default location for the colortable is immediately below any other
 map legend information, starting at the left margin.
 The default text color is black.
 
 Omitting the <B>colortable</B> instruction would result in
-no color table. For floating point legends <B>width</B> is width of color
-band only. <B>height</B> is used only for floating point legend.
-Adding the <B>nodata n</B> instruction will prevent the "no data" box 
-from being drawn (category based legends only).
+no color table.
+<P>
+If the colortable is turned off with a &quot;<tt>colortable&nbsp;N</tt>&quot;
+instruction the <B>end</B> command should not be given as the  
+main command will be treated as a single line instruction.
+<P>
+See also the <a href="#vlegend">vlegend</a> command for creating vector map
+legends.
 
-Adding the <B>tickbar y</B> instruction will change the tick mark style
-so that ticks are drawn across the color table instead of protruding out 
-to the right (floating point legends only).
 
-If the map has been given a data units label with r.support then this
-label will be displayed.
-<!-- bonus prize for code explorers: you can switch the label placement by
-    editing the label_posn variable in ps.map/ps_fclrtbl.c -->
+<h4>Categorical (CELL) Maps</h4>
+
+Adding the <B>nodata N</B> instruction will prevent the "no data" box 
+from being drawn (category based legends only). If you have manually
+added a "no data" label to the cats/ file it will be shown regardless.
 <P> 
 <B>Note</B>:  Be careful about asking for color tables for integer
 raster map layers which have many categories, such as elevation.
 This could result in the printing of an extremely long color table!
+In this situation it is useful to use the <B>discrete N</B> instruction
+to force a continuous color gradient legend.
 <P>
-Another issue is that the color table only includes categories which
-have a label. You can use the r.category module to add labels.
-<P>
-If the colortable is turned off with a &quot;<tt>colortable&nbsp;n</tt>&quot;
-instruction the <B>end</B> command should not be given as the  
-main command will be treated as a single line instruction.
+Be aware that the color table only includes categories which
+have a label. You can use the <em>r.category</em> module to add labels.
 
+
+<h4>Floating point (FCELL and DCELL) Maps</h4>
+
+The legend's <B>range</B> can be adjusted for floating point rasters, but if
+set beyond the extent of the map's range be sure that you have set up color 
+rules with <em>r.colors</em> which cover this range.
+
+If the map has been given a data-units label with <em>r.support</em>
+then this label will be displayed.
+<!-- bonus prize for code explorers: you can switch the label placement by
+    editing the label_posn variable in ps.map/ps_fclrtbl.c -->
+
+For floating point legends <B>width</B> is width of color
+band only. <B>height</B> is used only for floating point legend.
+
+Adding the <B>tickbar Y</B> instruction will change the tick mark style
+so that ticks are drawn across the color table instead of protruding out 
+to the right (floating point legends only).
+
+Adding the <B>discrete Y</B> instruction will command the program to treat
+the map as a categorical map. In this way the legend can be created with
+discrete range bands instead of a continuous gradient. You must use the
+<em>r.category</em> or <em>r.support</em> module to set up the range labels
+first.
+
+<BR>
 <P>
 This example would print a color table immediately below any other map legend
 information, starting at the left margin, with 4 columns:
 <PRE>
-EXAMPLE:	
+EXAMPLE:
 	<B>colortable</B> y
         <B>cols</B> 4
         <B>width</B> 4
@@ -1477,16 +1517,16 @@ equal to zero, the vector legend will be positioned immediately below
 the map, starting <EM>x</EM> inches from the left edge of the page.
 <P>
 <EM>width</EM> is the width in inches of the color symbol (for lines)
-in front of the  legend text. The default is 1/24 * fontsize inches.
+in front of the legend text. The default is 1/24 * fontsize inches.
 <P>
 <EM>cols</EM> is the number of columns to split the legend into. The
 default is one column. The maximum number of colums is 10, or equal
 to the number of legend entries if there are less than 10 entries.
 <P>
-<EM>span</EM> is the column separation distance between the left edges of 
-two columns in a multicolumn legend. It is given in inches. 
-The default is automatic scaling based on the left margin and the right 
-hand side of the map box. 
+<EM>span</EM> is the column separation distance between the left edges of
+two columns in a multicolumn legend. It is given in inches.
+The default is automatic scaling based on the left margin and the right
+hand side of the map box.
 <P>
 <EM>border</EM> will draw a border around the legend using the specified color.
  (see <a href="#NAMED_COLORS">NAMED COLORS</a>)
@@ -1494,6 +1534,9 @@ hand side of the map box.
 Alternatively, the user can create a custom legend by using the 
 <a href="#rectangle">rectangle</a>, <a href="#point">point</a>, and 
 <a href="#text">text</a> instructions.
+<P>
+See also the <a href="#colortable">colortable</a> command for creating
+raster map legends.
 <P>
 This example prints the vector legend
 immediately below the map and starting 4.5 inches from the left edge

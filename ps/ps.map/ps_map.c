@@ -145,10 +145,10 @@ int ps_map(void)
 
     /* do the colortable, if requested */
     if (PS.do_colortable) {
-	if (G_raster_map_is_fp(ct.name, ct.mapset))
-	    PS_fcolortable();
-	else
+	if (ct.discrete == TRUE)
 	    PS_colortable();
+	else
+	    PS_fcolortable();
     }
 
     /* do comments, if any */
