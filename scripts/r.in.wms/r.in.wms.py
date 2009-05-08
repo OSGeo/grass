@@ -222,17 +222,17 @@ def main():
     if options['region']:
         if not grass.find_file(name = options['region'], element = 'windows')['name']:
             grass.fatal("Region <%s> not found" % options['region'])
-    
+
+    request = wms_request.WMSRequest(flags, options)    
     if not flags['d']:
         # request data first
-        request = wms_request.WMSRequest(flags, options)
         request.GetTiles()
-        if not request:
-            grass.fatal("WMS request failed")
+    if not request:
+        grass.fatal("WMS request failed")
     
     # download data
     download = wms_download.WMSDownload(flags, options)
-    download.GetTiles(request.GetRequests()) ## ??
+    download.GetTiles(request.GetRequests())
     
     # list of files
     files = []
