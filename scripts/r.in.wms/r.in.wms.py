@@ -193,6 +193,9 @@ from xml.sax import make_parser
 
 import grass
 
+wmsPath = os.path.join(os.getenv('GISBASE'), 'etc', 'r.in.wms')
+sys.path.append(wmsPath)
+print wmsPath
 import wms_request
 import wms_download
 
