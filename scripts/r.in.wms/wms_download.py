@@ -35,19 +35,17 @@ class WMSDownload:
                     os.path.getsize(item['output']) > 0:
                 grass.verbose("Tile already downloaded")
             else:
-                self.GetData(i, item['server'] + '?' + item['string'], item['output'])
+                self.GetData(i, item['server'], item['string'], item['output'])
             i += 1
         
-    def GetData(self, idx, url, output):
+    def GetData(self, idx, server, query, output):
         """Download data"""
         grass.message("Downloading data (tile %d)..." % idx)
         grass.verbose("Requesting data: %s" % self.options['mapserver'])
-        grass.verbose(url)
-        
+                
         if not self.flags['g']: # -> post
-            print url
             try:
-                urllib.urlretrieve(url, output, data="POST")
+                urllib.urlretrieve(server, output, data = query)
             except IOError:
                 grass.fatal("Failed while downloading the data")
             

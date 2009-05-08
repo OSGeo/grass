@@ -141,7 +141,7 @@ class WMSRequest:
             nc = int(dtile['cols'])
             
             size = "bbox=%f,%f,%f,%f&width=%d&height=%d" % \
-                (w, s, e, n, nr, nc)
+                (w, s, e, n, nc, nr)
             xres = (e - w) / nc
             yres = (s - n) / nr
             # center of top left cell
@@ -157,11 +157,9 @@ class WMSRequest:
                 wf.close()
             
             # request for data
-            string = "request=GetMap&layers=%s&srs=%s&%s&format=%s&%s&%s" % \
-                (self.options['layers'], self.options['srs'],
+            string = "service=WMS&request=GetMap&layers=%s&styles=%s&srs=%s&%s&format=%s&%s&%s" % \
+                (self.options['layers'], self.options['styles'], self.options['srs'],
                  size, self.format, self.transparency, self.options['wmsquery'])
-            if self.options['styles']:
-                string += "&styles=%s" % self.options['styles']
             rf.write('output=%s;server=%s;string=%s\n' % \
                          (outputfile, self.options['mapserver'], string))
             i += 1

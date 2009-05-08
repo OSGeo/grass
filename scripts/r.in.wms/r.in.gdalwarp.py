@@ -62,8 +62,8 @@
 #% key: method
 #% type: string
 #% description: Reprojection method to use
-#% options:nearest,bilinear,cubic,cubicspline
-#% answer:nearest
+#% options:near,bilinear,cubic,cubicspline
+#% answer:near
 #% required: yes
 #%end
 #%option

@@ -43,18 +43,7 @@ class GDALWarp():
             self.gdal_flags += 'e'
         if flags['k']:
             self.gdal_flags += 'k'
-    
-        # options for gdalwarp
-        method_opt = options['method']
-        if method_opt == 'nearest':
-            self.gdal_method = '-rn'
-        elif method_opt == 'bilinear':
-            self.gdal_method = '-rb'
-        elif method_opt == 'cubic':
-            self.gdal_method = '-rc'
-        elif method_opt == 'cubicspline':
-            self.gdal_method = '-rcs'
-
+        
     def run(self):
         # import tiles
         tiler = 0
@@ -63,25 +52,25 @@ class GDALWarp():
             if not os.path.exists(input):
                 grass.warning("Missing input '%s'" % input)
                 continue
-            grass.info('Importing tile <%s>...' % os.path.basename(input))
+            grass.info("Importing tile '%s'..." % os.path.basename(input))
             if self.flags['p']:
-                self.nowarp_import(input, tmptilename, self.gdal_flags)
+                self.nowarp_import(input, tmptilename)
             else:
-                self.warp_import(input, tmptilename, self.gdal_method)
+                self.warp_import(input, tmptilename)
             
-            maplist.append(tmptilename)
+            self.maplist.append(tmptilename)
             tiler += 1
         
         if tiler < 1:
             grass.message("Nothing imported")
             return 0
-    
+        
         # if there's more than one tile patch them together, otherwise
         # just rename that tile.
         if tiler == 1:
-            if len(channel_suffixes) > 0:
+            if len(self.channel_suffixes) > 0:
                 # multi-band
-                for suffix in channel_suffixes:
+                for suffix in self.channel_suffixes:
                     # rename tile 0 to be the output
                     ffile = self.options['output'] + '_tile_0' + suffix
                     tfile = self.options['output'] + suffix
@@ -168,25 +157,25 @@ class GDALWarp():
 
         # there's already a no suffix, can't make colors
         # can only go up from here ;)
-        colors = 4 # ???
-        for suffix in suffixes:
+        colors = 0
+        for suffix in self.suffixes:
             if suffix in ('.red', '.green', '.blue'):
                 colors += 1
-
+        
         # make a composite image if asked for and colors exist
-        if colors == 3 or self.flags['c']:
+        if colors == 3 and self.flags['c']:
             grass.message("Building color image <%s>..." % self.options['output'])
             if grass.run_command('r.composite',
                                  quiet = True,
                                  red = self.options['output'] + '.red',
                                  green = self.options['output'] + '.green',
                                  blue = self.options['output'] + '.blue',
-                                 output = option['output']) != 0:
+                                 output = self.options['output']) != 0:
                 grass.fatal('r.composite failed')
         
         return 0
     
-    def warp_import(self, file, map, method):
+    def warp_import(self, file, map):
         """Wrap raster file using gdalwarp and import wrapped file
         into GRASS"""
         warpfile = self.tmp + 'warped.geotiff'
@@ -194,55 +183,64 @@ class GDALWarp():
 
         t_srs = grass.read_command('g.proj',
                                    quiet = True,
-                                   flags = 'wf')
+                                   flags = 'jf').rstrip('\n')
         if not t_srs:
             grass.fatal('g.proj failed')
         
-        grass.debug('gdalwarp -s_srs "%s" -t_srs "%s" "%s" "%s" %s %s' % \
-                        (self.options['srs'], t_srs, file,
-                         warpfile, self.options['warpoptions'], method))
-        grass.verbose("Warping input file '%s'..." % file)
-        ps = subprocess.Popen(['gdalwarp',
-                               '-s_srs', self.options['srs'],
-                               '-t_srs', t_srs,
-                               file, warpfile,
-                               self.options['warpoptions'],
-                               method])
+        grass.debug("gdalwarp -s_srs '%s' -t_srs '%s' -r %s %s %s %s" % \
+                        (self.options['srs'], t_srs,
+                         self.options['method'], self.options['warpoptions'],
+                         file, warpfile))
+        grass.verbose("Warping input file '%s'..." % os.path.basename(file))
+        if self.options['warpoptions']:
+            ps = subprocess.Popen(['gdalwarp',
+                                   '-s_srs', '%s' % self.options['srs'],
+                                   '-t_srs', '%s' % t_srs,
+                                   '-r', self.options['method'],
+                                   self.options['warpoptions'],
+                                   file, warpfile])
+        else:
+            ps = subprocess.Popen(['gdalwarp',
+                                   '-s_srs', '%s' % self.options['srs'],
+                                   '-t_srs', '%s' % t_srs,
+                                   '-r', self.options['method'],
+                                   file, warpfile])
+            
         if ps.wait() != 0:
             grass.fatal('gdalwarp failed')
     
         # import it into a temporary map
-        grass.info('Importing temporary raster map...')
+        grass.info('Importing raster map...')
         if grass.run_command('r.in.gdal',
                              quiet = True,
-                             flags = gdal_flags,
+                             flags = self.gdal_flags,
                              input = warpfile,
                              output = tmpmapname) != 0:
             grass.fatal('r.in.gdal failed')
-    
+        
         os.remove(warpfile)
 
         # get list of channels
-        pattern = tmpmapfile + '*'
+        pattern = tmpmapname + '*'
         grass.debug('Pattern: %s' % pattern)
         mapset = grass.gisenv()['MAPSET']
-        channel_list = grass.mlist_grouped(type = 'rast', pattern = pattern, mapset = mapset)
+        channel_list = grass.mlist_grouped(type = 'rast', pattern = pattern, mapset = mapset)[mapset]
         grass.debug('Channel list: %s' % ','.join(channel_list))
         
         if len(channel_list) < 2: # test for single band data
-            channel_suffixes = []
+            self.channel_suffixes = []
         else:
-            channel_suffixes = channel_list # ???
-
-        grass.debug('Channel suffixes: %s', ','.join(channel_suffixes))
-
+            self.channel_suffixes = channel_list # ???
+        
+        grass.debug('Channel suffixes: %s' % ','.join(self.channel_suffixes))
+        
         # add to the list of all suffixes
-        self.suffixes = self.suffixes + channel_suffixes
+        self.suffixes = self.suffixes + self.channel_suffixes
         self.suffixes.sort()
         
         # get last suffix
-        if len(channel_suffixes) > 0:
-            last_suffix = channel_suffixes[-1]
+        if len(self.channel_suffixes) > 0:
+            last_suffix = self.channel_suffixes[-1]
         else:
             last_suffix = ''
 
@@ -253,11 +251,11 @@ class GDALWarp():
             alphalayer = tmpmapname + '.alpha'
         
         # test to see if the alpha map exists
-        if not grass.find_file(element = 'cell', file = alphalayer)['name']:
+        if not grass.find_file(element = 'cell', name = alphalayer)['name']:
             alphalayer = ''
         
         # calculate the new maps:
-        for suffix in channel_suffixes:
+        for suffix in self.channel_suffixes:
             grass.debug("alpha=%s MAPsfx=%s% tmpname=%s%s" % \
                             (alphalayer, map, suffix, tmpmapname, suffix))
             if alphalayer:
@@ -292,7 +290,7 @@ class GDALWarp():
     
         # if no suffix, processing is simple (e.g. elevation has only 1
         # band)
-        if len(channel_list) < 1:
+        if len(channel_list) < 2:
             # run r.mapcalc to crop to region
             if grass.run_command('r.mapcalc',
                                  quiet = True,
@@ -309,14 +307,14 @@ class GDALWarp():
         # remove the old channels
         if grass.run_command('g.remove',
                              quiet = True,
-                             rast = ','.channel_list) != 0:
+                             rast = ','.join(channel_list)) != 0:
             grass.fatal('g.remove failed')
         
-    def nowarp_import(self, file, map, gdal_flags):
+    def nowarp_import(self, file, map):
         """Import raster file into GRASS"""
         if grass.run_command('r.in.gdal',
                              quiet = True,
-                             flags = 'o' + gdal_flags,
+                             flags = 'o' + self.gdal_flags,
                              input = file,
                              output = map) != 0:
             grass.fatal('r.in.gdal failed')
@@ -330,15 +328,15 @@ class GDALWarp():
 
         if len(channel_list) < 2:
             # test for single band data
-            channel_suffixes = []
+            self.channel_suffixes = []
         else:
-            channel_suffixes = channel_list # ???
+            self.channel_suffixes = channel_list # ???
     
         # add to the list of all suffixes:
         self.suffixes = self.suffixes + channel.suffixes
         self.suffixes.sort()
     
-        for suffix in channel_suffixes:
+        for suffix in self.channel_suffixes:
             # make patch lists
             suffix = suffix.replace('.', '_')
             # this is a hack to make the patch lists empty
