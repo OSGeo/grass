@@ -248,7 +248,9 @@ nowarpimport () {
 	g.message -d message="channel list: [$CHANNEL_LIST]"
 
 	# Get a list of suffixes:
+	echo $CHANNEL_LIST
 	CHANNEL_SUFFIXES=`echo "$CHANNEL_LIST" | sed "s/^${MAP}/sfx=/"`
+	echo $CHANNEL_SUFFIXES
 	# test for single band data
 	if [ "$CHANNEL_SUFFIXES" = 'sfx=' ] ; then
 	   CHANNEL_SUFFIXES=""
@@ -256,11 +258,14 @@ nowarpimport () {
 	g.message -d message="channel suffixes: [$CHANNEL_SUFFIXES]"
 
 	# Add to the list of all suffixes:
+	echo $SUFFIXES
 	SUFFIXES=`echo "$SUFFIXES
 $CHANNEL_SUFFIXES" | sort -u`
 
 	IFS="$defaultIFS"
+	echo $CHANNEL_SUFFIXES
 	for SUFFIX in $CHANNEL_SUFFIXES ; do
+	    echo 'x', $sfx
 		eval "$SUFFIX"
 
 		# skip if only one band ($sfx is empty)
@@ -343,6 +348,7 @@ if [ $NUM_TILES -eq 1 ] ; then
 		  g.rename rast="${GIS_OPT_OUTPUT}_tile_0${sfx}","${GIS_OPT_OUTPUT}${sfx}"
 	    done
 	else  # single-band, single-tile
+	    echo 'x', $sfx
 	    #Rename tile 0 to be the output
 	    GRASS_VERBOSE=1 \
 	      g.rename rast="${GIS_OPT_OUTPUT}_tile_0${sfx}","${GIS_OPT_OUTPUT}${sfx}" --quiet
@@ -418,6 +424,7 @@ for SUFFIX in $SUFFIXES ; do
 	fi
 done
 
+echo $COLORS
 # Make a composite image if asked for and colors exist
 if [ $COLORS -eq 3 ] && [ $GIS_FLAG_C -eq 1 ] ; then
 	g.message "Building Color Image" 
