@@ -4,7 +4,7 @@ PGM=r.in.wms
 
 include $(MODULE_TOPDIR)/include/Make/Script.make
 
-SRCFILES = r.in.gdalwarp.py wms_request.py wms_download.py
+SRCFILES = wms_parse.py wms_request.py wms_download.py gdalwarp.py r.in.gdalwarp.py
 DSTFILES := $(patsubst %,$(ETC)/r.in.wms/%,$(SRCFILES))
 
 default: script

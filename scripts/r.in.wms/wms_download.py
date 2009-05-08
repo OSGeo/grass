@@ -1,11 +1,9 @@
-#!/usr/bin/env python
-
 ############################################################################
 #
-# MODULE:       r.in.wms
+# MODULE:       r.in.wms / wms_download.py
 #
 # AUTHOR(S):    Cedric Shock, 2006
-#               Pythonized by Martin Landa <landa.martin gmail.com>, 2009
+#               Updated for GRASS 7 by Martin Landa <landa.martin gmail.com>, 2009
 #
 # PURPOSE:      To import data from web mapping servers
 #               (based on Bash script by Cedric Shock)
@@ -35,9 +33,9 @@ class WMSDownload:
         for item in requests:
             if os.path.exists(item['output']) and \
                     os.path.getsize(item['output']) > 0:
-                grass.message("Tile already downloaded")
+                grass.verbose("Tile already downloaded")
             else:
-                self.GetData(i, item['server'] + item['string'], item['output'])
+                self.GetData(i, item['server'] + '?' + item['string'], item['output'])
             i += 1
         
     def GetData(self, idx, url, output):
@@ -45,8 +43,9 @@ class WMSDownload:
         grass.message("Downloading data (tile %d)..." % idx)
         grass.verbose("Requesting data: %s" % self.options['mapserver'])
         grass.verbose(url)
-
+        
         if not self.flags['g']: # -> post
+            print url
             try:
                 urllib.urlretrieve(url, output, data="POST")
             except IOError:
@@ -54,13 +53,13 @@ class WMSDownload:
             
             if not os.path.exists(output):
                 grass.fatal("Failed while downloading the data")
-
+            
             # work-around for brain-dead ArcIMS servers which want POST-data as part of the GET URL
             #   (this is technically allowed by OGC WMS def v1.3.0 Sec6.3.4)
             if os.path.getsize(output) == 0:
                 grass.warning("Downloaded image file is empty -- trying another method")
                 self.flags['g'] = True
-        
+            
         if self.flags['g']: # -> get
             try:
                 urllib.urlretrieve(url, output, data="GET")
@@ -69,4 +68,4 @@ class WMSDownload:
             
             if not os.path.exists(output) or os.path.getsize(output) == 0:
                 grass.fatal("Failed while downloading the data")
-        
+
