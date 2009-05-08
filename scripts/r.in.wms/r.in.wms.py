@@ -5,7 +5,7 @@
 # MODULE:       r.in.wms
 #
 # AUTHOR(S):    Cedric Shock, 2006
-#               Pythonized by Martin Landa <landa.martin gmail.com>, 2009
+#               Upgraded for GRASS 7 by Martin Landa <landa.martin gmail.com>, 2009
 #
 # PURPOSE:      To import data from web mapping servers
 #               (based on Bash script by Cedric Shock)
@@ -149,22 +149,6 @@
 #% guisection: Download
 #%end
 #%option
-#% key: wgetoptions
-#% type: string
-#% description: Additional options for wget
-#% answer: -c -t 5 -nv
-#% required : no
-#% guisection: Download
-#%end
-#%option
-#% key: curloptions
-#% type: string
-#% description: Additional options for curl
-#% answer: -C - --retry 5 -s -S
-#% required : no
-#% guisection: Download
-#%end
-#%option
 #% key: method
 #% type: string
 #% description: Reprojection method to use
@@ -195,7 +179,6 @@ import grass
 
 wmsPath = os.path.join(os.getenv('GISBASE'), 'etc', 'r.in.wms')
 sys.path.append(wmsPath)
-print wmsPath
 import wms_request
 import wms_download
 
@@ -247,7 +230,10 @@ class ProcessCapFile(HandlerBase):
     def getLayers(self):
         """Print list of layers"""
         for ly in self.layers:
-            print "LAYER: " + ly['name']
+            if ly.has_key('name'):
+                print "LAYER: " + ly['name']
+            else:
+                print "LAYER: ???"
             if ly.has_key('title'):
                 print "  Title: " + ly['title']
             if ly.has_key('srs'):
@@ -258,15 +244,15 @@ class ProcessCapFile(HandlerBase):
                     print "    Style title: " + ly['style']['title'][idx]
         
 def list_layers():
-    """Get available layers from WMS server"""
+    """Get list of available layers from WMS server"""
     qstring = "service=WMS&request=GetCapabilities&" + options['wmsquery']
     grass.debug("POST-data: %s" % qstring)
     
     # download capabilities file
     grass.verbose("List of layers for server <%s>:" % options['mapserver'])
-    cap_file = urllib.urlopen(options['mapserver'] + qstring)
+    cap_file = urllib.urlopen(options['mapserver'] + '?' + qstring)
     if not cap_file:
-        grass.fatal("Unable to get capabilities of <%s>" % options['mapserver'])
+        grass.fatal("Unable to get capabilities of '%s'" % options['mapserver'])
 
     # parse file with sax
     cap_xml = ProcessCapFile()
@@ -275,7 +261,7 @@ def list_layers():
     except xml.sax.SAXParseException, err:
         grass.fatal("Reading capabilities failed. "
                     "Unable to parse XML document: %s" % err)
-
+    
     cap_xml.getLayers()
     
 def main():
