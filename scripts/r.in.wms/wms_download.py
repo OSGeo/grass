@@ -42,7 +42,7 @@ class WMSDownload:
         """Download data"""
         grass.message("Downloading data (tile %d)..." % idx)
         grass.verbose("Requesting data: %s" % self.options['mapserver'])
-                
+
         if not self.flags['g']: # -> post
             try:
                 urllib.urlretrieve(server, output, data = query)
@@ -60,7 +60,7 @@ class WMSDownload:
             
         if self.flags['g']: # -> get
             try:
-                urllib.urlretrieve(url, output, data="GET")
+                urllib.urlretrieve(server + '?' + query, output, data = None)
             except IOError:
                 grass.fatal("Failed while downloading the data")
             
