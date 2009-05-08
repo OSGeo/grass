@@ -1,15 +1,15 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.in.wms</em>  handles all of downloading and importing raster data from
-an <a href="http://www.opengeospatial.org/specs/?page=specs">OpenGIS</a>
-WMS web mapping server. It need only be told the desired data to collect
-(bounds and resolution) via a region, the server to get the data from, and
-the layer or layers to get. It downloads the data in tiles, reprojects it,
-imports it, and patches it back together.
+<em>r.in.wms</em> handles all of downloading and importing raster data
+from an <a href="http://www.opengeospatial.org/standards/wms">OGC
+WMS</a> web mapping server. It need only be told the desired data to
+collect (bounds and resolution) via a region, the server to get the
+data from, and the layer or layers to get. It downloads the data in
+tiles, reprojects it, imports it, and patches it back together.
 
 <h2>NOTES</h2>
 
-By default data is downloaded to $GISDBASE/wms_download. This can be changed
+By default data is downloaded to <tt>$GISDBASE/wms_download</tt>. This can be changed
 by setting the <b>folder</b> option when using <em>r.in.wms</em>.
 
 <p>
@@ -37,13 +37,11 @@ is where you should start. It tells you what data is offered, the projections
 it is in,  where to find meta data, resolutions, scales, and bounds for
 data, etc.
 
-<h3>NASA OnEarth server: Get Capabilities Request</h3>
+E.g. lists the layers available from the NASA OnEarth server.
 
 <div class="code"><pre>
 r.in.wms mapserver=http://wms.jpl.nasa.gov/wms.cgi -l
 </pre></div>
-
-Lists the layers available from the NASA OnEarth server.
 
 <h3>US NED Elevation from OnEarth server download (metric units)</h3>
 
