@@ -170,79 +170,21 @@ import os
 import sys
 import tempfile
 import urllib
+
 import xml.sax
-import xml.sax.handler
-HandlerBase=xml.sax.handler.ContentHandler
-from xml.sax import make_parser
 
 import grass
 
 wmsPath = os.path.join(os.getenv('GISBASE'), 'etc', 'r.in.wms')
 sys.path.append(wmsPath)
-import wms_request
-import wms_download
+try:
+    import wms_parse
+    import wms_request
+    import wms_download
+    import gdalwarp
+except ImportError:
+    pass
 
-class ProcessCapFile(HandlerBase):
-    """
-    A SAX handler for the capabilities file
-    """
-    def __init__(self):
-        self.inTag = {}
-        for tag in ('layer', 'name', 'style',
-                    'title', 'srs'):
-            self.inTag[tag] = False
-        self.value = ''
-        
-        self.layers = []
-        
-    def startElement(self, name, attrs):
-        if self.inTag.has_key(name.lower()):
-            self.inTag[name.lower()] = True
-        
-        if name.lower() == 'layer':
-            self.layers.append({})
-        
-    def endElement(self, name):
-        if self.inTag.has_key(name.lower()):
-            self.inTag[name.lower()] = False
-
-        for tag in ('name', 'title', 'srs'):
-            if name.lower() != tag:
-                continue
-            if self.inTag['style']:
-                if not self.layers[-1].has_key('style'):
-                    self.layers[-1]['style'] = {}
-                if not self.layers[-1]['style'].has_key(tag):
-                    self.layers[-1]['style'][tag] = []
-                self.layers[-1]['style'][tag].append(self.value)
-            elif self.inTag['layer']:
-                self.layers[-1][tag] = self.value
-            
-        if name.lower() in ('name', 'title', 'srs'):
-            self.value = ''
-        
-    def characters(self, ch):
-        if self.inTag['name'] or \
-                self.inTag['title'] or \
-                self.inTag['srs']:
-            self.value += ch
-    
-    def getLayers(self):
-        """Print list of layers"""
-        for ly in self.layers:
-            if ly.has_key('name'):
-                print "LAYER: " + ly['name']
-            else:
-                print "LAYER: ???"
-            if ly.has_key('title'):
-                print "  Title: " + ly['title']
-            if ly.has_key('srs'):
-                print "  SRS: " + ly['srs']
-            if ly.has_key('style'):
-                for idx in range(len(ly['style']['name'])):
-                    print "  STYLE: " + ly['style']['name'][idx]
-                    print "    Style title: " + ly['style']['title'][idx]
-        
 def list_layers():
     """Get list of available layers from WMS server"""
     qstring = "service=WMS&request=GetCapabilities&" + options['wmsquery']
@@ -253,9 +195,9 @@ def list_layers():
     cap_file = urllib.urlopen(options['mapserver'] + '?' + qstring)
     if not cap_file:
         grass.fatal("Unable to get capabilities of '%s'" % options['mapserver'])
-
+    
     # parse file with sax
-    cap_xml = ProcessCapFile()
+    cap_xml = wms_parse.ProcessCapFile()
     try:
         xml.sax.parse(cap_file, cap_xml)
     except xml.sax.SAXParseException, err:
@@ -271,7 +213,7 @@ def main():
         return 0
     elif not options['output']:
         grass.fatal("No output map specified")
-
+    
     # set directory for download
     if not options['folder']:
         options['folder'] = os.path.join(grass.gisenv()['GISDBASE'], 'wms_download')
@@ -297,10 +239,14 @@ def main():
     for item in request.GetRequests():
         files.append(item['output'])
     files = ','.join(files)
+
+    # add flags for r.in.gdalwarp
+    options['input'] = files
+    flags['e'] = False
+    flags['c'] = True
+    options['warpoptions'] = ''
     
-    gdalwarp.GDALWarp(flags, options)
-    
-    return 0
+    return gdalwarp.GDALWarp(flags, options).run()
 
 if __name__ == "__main__":
     options, flags = grass.parser()
