@@ -267,8 +267,8 @@ int PS_fcolortable(void)
 	/* select label position */
 	label_posn = 3;
 	/*  1 2
-	       3
-	     5 4 */
+	      3
+	    5 4 */
 	switch (label_posn) {
 	case 1:
 	    /* above the tick numbers */

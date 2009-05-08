@@ -44,10 +44,10 @@ int PS_colortable(void)
     num_cats = G_number_of_raster_cats(&PS.cats);
     G_debug(3, "clrtbl: %d categories", num_cats);
     if (!num_cats) {
-	G_warning(_("Your cats/ file is invalid. A cats/ file with "
-		    "categories and labels is required for 'colortable' when using "
-		    "CELL rasters. No colortable will be assigned to this output "
-		    "postscript file."));
+	G_warning(_("Your cats/ file is invalid. A cats/ file with categories "
+		    "and labels is required for 'colortable' when using "
+		    "categorical legends; see the r.category help page. "
+		    "Colortable creation has been skipped."));
 	return 1;
     }
 
