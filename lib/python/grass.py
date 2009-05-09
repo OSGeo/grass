@@ -220,7 +220,10 @@ def parser():
 	else:
 	    argv[0] = os.path.join(sys.path[0], name)
 
-    os.execvp("g.parser", [name] + argv)
+    if sys.platform == "win32":
+       os.execvp("g.parser.exe", [name] + argv)
+    else:
+       os.execvp("g.parser", [name] + argv)
     raise OSError("error executing g.parser")
 
 # interface to g.tempfile
