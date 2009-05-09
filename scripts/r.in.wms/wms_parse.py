@@ -72,7 +72,7 @@ class ProcessCapFile(HandlerBase):
             if ly.has_key('name'):
                 print "LAYER: " + ly['name']
             else:
-                print "LAYER: ???"
+                print "LAYER: unknown"
             if ly.has_key('title'):
                 print "  Title: " + ly['title']
             if ly.has_key('srs'):
