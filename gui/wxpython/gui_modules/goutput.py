@@ -253,15 +253,15 @@ class GMConsole(wx.Panel):
         """Write message in selected style"""
         if pid:
             line = '(' + str(pid) + ') ' + line
-        self.WriteLog(line, style=self.cmd_output.StyleCommand)
+        self.WriteLog(line, style=self.cmd_output.StyleCommand, switchPage = True)
 
     def WriteWarning(self, line):
         """Write message in warning style"""
-        self.WriteLog(line, style=self.cmd_output.StyleWarning)
+        self.WriteLog(line, style=self.cmd_output.StyleWarning, switchPage = True)
 
     def WriteError(self, line):
         """Write message in error style"""
-        self.WriteLog(line, style=self.cmd_output.StyleError)
+        self.WriteLog(line, style=self.cmd_output.StyleError, switchPage = True)
 
     def RunCmd(self, command, compReg=True, switchPage=False,
                onDone = None):
