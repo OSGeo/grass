@@ -124,20 +124,13 @@ set_paths()
     fi
     export PATH
 
-    # Set LD_LIBRARY_PATH to find GRASS shared libraries
-    if [ ! "GRASS_LD_LIBRARY_PATH" ] ; then
-	GRASS_LD_LIBRARY_PATH="$GISBASE/lib"
+    # Set PYTHONPATH to find GRASS Python modules
+    if [ ! "$PYTHONPATH" ] ; then
+	PYTHONPATH="$GISBASE/etc/python"
     else
-	GRASS_LD_LIBRARY_PATH="$GISBASE/lib:$GRASS_LD_LIBRARY_PATH"
+	PYTHONPATH="$GISBASE/etc/python:$PYTHONPATH"
     fi
-
-# Set PYTHONPATH to find GRASS Python modules
-if [ ! "$PYTHONPATH" ] ; then
-  PYTHONPATH="$GISBASE/etc/python"
-else
-  PYTHONPATH="$GISBASE/etc/python:$PYTHONPATH"
-fi
-export PYTHONPATH
+    export PYTHONPATH
 }
 
 set_defaults()
