@@ -202,7 +202,7 @@ AC_ARG_WITH(gdal,
 e.g. '--with-gdal=/usr/local/bin/gdal-config')])
 
 AC_ARG_WITH(python,
-[  --with-python[=path/python-config] enable support for Python SWIG bindings \
+[  --with-python[=path/python-config] enable support for Python SWIG bindings and wxGUI Python extensions \
 (python-config with path, e.g. '--with-python=/usr/bin/python2.5-config', \
 default: no)],, with_python="no")
 
@@ -1649,20 +1649,18 @@ else
 
   AC_PATH_PROG(PY_CONFIG, python-config, no)
 
-  if test "$PY_CONFIG" = "no" ; then
-    AC_MSG_ERROR([*** couldn't find python-config])
+  if test "$PY_CONFIG" != "no" ; then
+    # With Python includes directory 
+
+    PYTHONINC=`"$PY_CONFIG" --includes`
+    LOC_CHECK_INCLUDES(Python.h,Python,$PYTHONINC)
+
+    PYTHONCFLAGS=`"$PY_CONFIG" --cflags`
+
+    # With Python library directory
+
+    PYTHONLDFLAGS=`"$PY_CONFIG" --ldflags`
   fi
-
-  # With Python includes directory 
-
-  PYTHONINC=`"$PY_CONFIG" --includes`
-  LOC_CHECK_INCLUDES(Python.h,Python,$PYTHONINC)
-
-  PYTHONCFLAGS=`"$PY_CONFIG" --cflags`
-
-  # With Python library directory
-
-  PYTHONLDFLAGS=`"$PY_CONFIG" --ldflags`
 
   # look for the swig program
   AC_PATH_PROG(SWIG, swig, no)
