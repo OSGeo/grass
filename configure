@@ -68,7 +68,7 @@ ac_help="$ac_help
   --with-gdal[=path/gdal-config] enable GDAL/OGR support (gdal-config with path, \
 e.g. '--with-gdal=/usr/local/bin/gdal-config')"
 ac_help="$ac_help
-  --with-python[=path/python-config] enable support for Python SWIG bindings \
+  --with-python[=path/python-config] enable support for Python SWIG bindings and wxGUI Python extensions \
 (python-config with path, e.g. '--with-python=/usr/bin/python2.5-config', \
 default: no)"
 ac_help="$ac_help
@@ -15001,29 +15001,26 @@ else
 fi
 
 
-  if test "$PY_CONFIG" = "no" ; then
-    { echo "configure: error: *** couldn't find python-config" 1>&2; exit 1; }
-  fi
+  if test "$PY_CONFIG" != "no" ; then
+    # With Python includes directory 
 
-  # With Python includes directory 
-
-  PYTHONINC=`"$PY_CONFIG" --includes`
-  
+    PYTHONINC=`"$PY_CONFIG" --includes`
+    
 ac_save_cppflags="$CPPFLAGS"
 CPPFLAGS="$PYTHONINC $CPPFLAGS"
 for ac_hdr in Python.h
 do
 ac_safe=`echo "$ac_hdr" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for $ac_hdr""... $ac_c" 1>&6
-echo "configure:15019: checking for $ac_hdr" >&5
+echo "configure:15016: checking for $ac_hdr" >&5
 
 cat > conftest.$ac_ext <<EOF
-#line 15022 "configure"
+#line 15019 "configure"
 #include "confdefs.h"
 #include <$ac_hdr>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:15027: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:15024: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -15053,17 +15050,18 @@ done
 CPPFLAGS=$ac_save_cppflags
 
 
-  PYTHONCFLAGS=`"$PY_CONFIG" --cflags`
+    PYTHONCFLAGS=`"$PY_CONFIG" --cflags`
 
-  # With Python library directory
+    # With Python library directory
 
-  PYTHONLDFLAGS=`"$PY_CONFIG" --ldflags`
+    PYTHONLDFLAGS=`"$PY_CONFIG" --ldflags`
+  fi
 
   # look for the swig program
   # Extract the first word of "swig", so it can be a program name with args.
 set dummy swig; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:15067: checking for $ac_word" >&5
+echo "configure:15065: checking for $ac_word" >&5
 
 case "$SWIG" in
   /*)
@@ -15109,7 +15107,7 @@ fi # Done checking Python
 # Enable wxWidgets support (for wxGUI)
 
 echo $ac_n "checking whether to use wxWidgets""... $ac_c" 1>&6
-echo "configure:15113: checking whether to use wxWidgets" >&5
+echo "configure:15111: checking whether to use wxWidgets" >&5
 
 WXVERSION=
 WXWIDGETSCXXFLAGS= 
@@ -15129,7 +15127,7 @@ else
   # Extract the first word of "wx-config", so it can be a program name with args.
 set dummy wx-config; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:15133: checking for $ac_word" >&5
+echo "configure:15131: checking for $ac_word" >&5
 
 case "$WX_CONFIG" in
   /*)
@@ -15177,7 +15175,7 @@ fi
  REQWX="2.8.1"
 
  echo $ac_n "checking wxWidgets version""... $ac_c" 1>&6
-echo "configure:15181: checking wxWidgets version" >&5
+echo "configure:15179: checking wxWidgets version" >&5
  if WXVERSION=`"$WX_CONFIG" --version`; then
    echo "$ac_t""$WXVERSION" 1>&6
  else
@@ -15200,15 +15198,15 @@ for ac_hdr in wx/wxprec.h
 do
 ac_safe=`echo "$ac_hdr" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for $ac_hdr""... $ac_c" 1>&6
-echo "configure:15204: checking for $ac_hdr" >&5
+echo "configure:15202: checking for $ac_hdr" >&5
 
 cat > conftest.$ac_ext <<EOF
-#line 15207 "configure"
+#line 15205 "configure"
 #include "confdefs.h"
 #include <$ac_hdr>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:15212: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:15210: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
 if test -z "$ac_err"; then
   rm -rf conftest*
