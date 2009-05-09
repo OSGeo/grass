@@ -85,6 +85,7 @@ import gui_modules.workspace as workspace
 import gui_modules.goutput as goutput
 import gui_modules.gdialogs as gdialogs
 import gui_modules.colorrules as colorrules
+import gui_modules.ogc_services as ogc_services
 from   gui_modules.debug import Debug as Debug
 from   icons.icon import Icons as Icons
 
@@ -1099,6 +1100,29 @@ class GMFrame(wx.Frame):
         dlg = gdialogs.MultiImportDialog(parent=self, type='ogr',
                                          title=_("Import OGR layers"))
         dlg.ShowModal()
+    
+    def OnImportWMS(self, event):
+        """Import data from OGC WMS server"""
+        dlg = ogc_services.WMSDialog(parent = self, service = 'wms')
+        dlg.CenterOnScreen()
+        
+        if dlg.ShowModal() == wx.ID_OK: # -> import layers
+            layers = dlg.GetLayers()
+            
+            if len(layers.keys()) > 0:
+                for layer in layers.keys():
+                    cmd = ['r.in.wms',
+                           'mapserver=%s' % dlg.GetSettings()['server'],
+                           'layers=%s' % layer,
+                           'output=%s' % layer]
+                    styles = ','.join(layers[layer])
+                    if styles:
+                        cmd.append('styles=%s' % styles)
+                    self.goutput.RunCmd(cmd, switchPage = True)
+            else:
+                self.goutput.WriteWarning(_("Nothing to import. No WMS layer selected."))
+        
+        dlg.Destroy()
         
     def OnShowAttributeTable(self, event):
         """

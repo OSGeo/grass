@@ -21,6 +21,7 @@ all = [
     "nviz_mapdisp.py",
     "nviz.py",
     "nviz_tools.py",
+    "ogc_services.py",
     "preferences.py",
     "profile.py",
     "render.py",

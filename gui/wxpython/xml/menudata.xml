@@ -126,8 +126,7 @@
 	    <menuitem>
 	      <label>WMS import</label>
 	      <help>Downloads and imports data from WMS servers.</help>
-	      <handler>self.OnMenuCmd</handler>
-	      <command>r.in.wms</command>
+	      <handler>self.OnImportWMS</handler>
 	    </menuitem>
 	  </items>
 	</menu>
