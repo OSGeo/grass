@@ -21,7 +21,7 @@ import wx
 from wx.gizmos import TreeListCtrl
 import wx.lib.mixins.listctrl as listmix
 
-import grass
+import gcmd
 
 from preferences import globalSettings as UserSettings
 
@@ -54,9 +54,8 @@ class WMSDialog(wx.Dialog):
                                         label = _(" Server settings "))
 
         self.serverText = wx.StaticText(parent = self.panel, id = wx.ID_ANY, label = _("Server:"))
-        self.server  = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY,
-                                   value = 'http://wms.jpl.nasa.gov/wms.cgi')
-
+        self.server  = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY)
+        
         #
         # list of layers
         #
@@ -168,14 +167,17 @@ class WMSDialog(wx.Dialog):
             return # not reachable
 
         layers = {}
-        ret = grass.read_command('r.in.wms',
-                                 quiet = True,
-                                 flags = 'l',
-                                 mapserver = server)
+        ret = gcmd.RunCommand('r.in.wms',
+                              quiet = True,
+                              parent = self,
+                              read = True,
+                              flags = 'l',
+                              mapserver = server)
         
         if not ret:
+            self.list.LoadData()
             self.btn_import.Enable(False)
-            return layers # no layers found
+            return # no layers found
 
         lastLayer = lastStyle = ''
         for line in ret.splitlines():
