@@ -16,8 +16,8 @@ htmldesc = \
 	LC_ALL=C \
 	$(1) --html-description < /dev/null | grep -v '</body>\|</html>' > $(2)
 
-ifneq ($(MINGW32),)
-mkpath = $(shell g.dirseps -h $(1))\;$(2)
+ifneq ($(MINGW),)
+mkpath = $(shell PATH="$(BIN):$(ARCH_LIBDIR):$$PATH" GISRC=$(RUN_GISRC) $(BIN)/g.dirseps$(EXE) -h $(1));$(2)
 else
 mkpath = $(1):$(2)
 endif
