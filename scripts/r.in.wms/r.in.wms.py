@@ -195,23 +195,24 @@ def list_layers():
     url = options['mapserver'] + '?' + qstring
     try:
         if options['cap_file']:
-            cap_file = urllib.urlretrieve(url, options['cap_file'])
+            cap_file, headers = urllib.urlretrieve(url, options['cap_file'])
         else:
             cap_file = urllib.urlopen(url, options['mapserver'] + '?' + qstring)
     except IOError:
         grass.fatal("Unable to get capabilities of '%s'" % options['mapserver'])
     
     # check DOCTYPE first
-    if cap_file.info()['content-type'] != 'application/vnd.ogc.wms_xml':
-        grass.fatal("Unable to get capabilities: %s" % url)
+    if options['cap_file']:
+        if headers['content-type'] != 'application/vnd.ogc.wms_xml':
+            grass.fatal("Unable to get capabilities: %s" % url)
+    else:
+        if cap_file.info()['content-type'] != 'application/vnd.ogc.wms_xml':
+            grass.fatal("Unable to get capabilities: %s" % url)
 
     # parse file with sax
     cap_xml = wms_parse.ProcessCapFile()
     try:
-        if options['cap_file']:
-            xml.sax.parse(options['cap_file'], cap_xml)
-        else:
-            xml.sax.parse(cap_file, cap_xml)
+        xml.sax.parse(cap_file, cap_xml)
     except xml.sax.SAXParseException, err:
         grass.fatal("Reading capabilities failed. "
                     "Unable to parse XML document: %s" % err)
