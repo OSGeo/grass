@@ -201,6 +201,10 @@ def list_layers():
     except IOError:
         grass.fatal("Unable to get capabilities of '%s'" % options['mapserver'])
     
+    # check DOCTYPE first
+    if cap_file.info()['content-type'] != 'application/vnd.ogc.wms_xml':
+        grass.fatal("Unable to get capabilities: %s" % url)
+
     # parse file with sax
     cap_xml = wms_parse.ProcessCapFile()
     try:
