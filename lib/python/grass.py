@@ -589,15 +589,20 @@ def raster_history(map):
     
     warning("Unable to write history for <%s>. Raster map <%s> not found in current mapset." % (map, map))
     return False
-    
+
+def float_or_dms(s):
+    return sum(float(x) / 60 ** n for (n, x) in enumerate(s.split(':')))
+
 # run "r.info -rgstmpud ..." and parse output
 
 def raster_info(map):
     """Return information about a raster map (interface to `r.info')."""
     s = read_command('r.info', flags = 'rgstmpud', map = map)
     kv = parse_key_val(s)
-    for k in ['min', 'max', 'north', 'south', 'east', 'west', 'nsres', 'ewres']:
+    for k in ['min', 'max', 'north', 'south', 'east', 'west']:
 	kv[k] = float(kv[k])
+    for k in ['nsres', 'ewres']:
+	kv[k] = float_or_dms(kv[k])
     return kv
 
 # interface to r.mapcalc
