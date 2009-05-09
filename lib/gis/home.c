@@ -68,7 +68,6 @@ const char *G__home(void)
 #else
     home = getenv("HOME");
 #endif
-    G_debug(2, "G__home home = %s", home);
     G_initialize_done(&initialized);
     return home;
 }
