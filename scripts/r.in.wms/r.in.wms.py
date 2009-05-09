@@ -192,14 +192,22 @@ def list_layers():
     
     # download capabilities file
     grass.verbose("List of layers for server <%s>:" % options['mapserver'])
-    cap_file = urllib.urlopen(options['mapserver'] + '?' + qstring)
-    if not cap_file:
+    url = options['mapserver'] + '?' + qstring
+    try:
+        if options['cap_file']:
+            cap_file = urllib.urlretrieve(url, options['cap_file'])
+        else:
+            cap_file = urllib.urlopen(url, options['mapserver'] + '?' + qstring)
+    except IOError:
         grass.fatal("Unable to get capabilities of '%s'" % options['mapserver'])
     
     # parse file with sax
     cap_xml = wms_parse.ProcessCapFile()
     try:
-        xml.sax.parse(cap_file, cap_xml)
+        if options['cap_file']:
+            xml.sax.parse(options['cap_file'], cap_xml)
+        else:
+            xml.sax.parse(cap_file, cap_xml)
     except xml.sax.SAXParseException, err:
         grass.fatal("Reading capabilities failed. "
                     "Unable to parse XML document: %s" % err)
@@ -213,6 +221,9 @@ def main():
         return 0
     elif not options['output']:
         grass.fatal("No output map specified")
+    
+    if options['cap_file'] and not flags['l']:
+        grass.warning("Option <cap_file> ignored. It requires '-l' flag.")
     
     # set directory for download
     if not options['folder']:
