@@ -81,7 +81,7 @@ int G_spawn(const char *command, ...)
 	return -1;
     }
 
-    return _spawnv(_P_WAIT, command, args);
+    return _spawnvp(_P_WAIT, command, args);
 }
 
 #else
