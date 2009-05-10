@@ -522,8 +522,8 @@ echo "8                            - geometrical conditions=Landsat ETM+
 -1000                        - sensor on board a satellite
 64                           - 4th band of ETM+ Landsat 7" > icnd.txt
 
-# run atmospheric correction
-i.atcorr lsat7_2002_40 ialt=elev_int icnd=icnd.txt oimg=lsat7_2002_40_atcorr
+# run atmospheric correction (-a for &gt; July 2000; -o to use cache acceleration):
+i.atcorr -a -o lsat7_2002_40 ialt=elev_int icnd=icnd.txt oimg=lsat7_2002_40_atcorr
 </pre></div>
 
 Note that the process is computationally intensive.
