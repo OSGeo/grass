@@ -291,8 +291,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.Bind (wx.EVT_MENU, self.lmgr.OnShowAttributeTable, id=self.popupID4)
 
             self.popupMenu.Append(self.popupID5, text=_("Start editing"))
-            if not haveVDigit:
-                self.popupMenu.Enable(self.popupID5, False)
             self.popupMenu.Append(self.popupID6, text=_("Stop editing"))
             self.popupMenu.Enable(self.popupID6, False)
             self.Bind (wx.EVT_MENU, self.OnStartEditing, id=self.popupID5)
@@ -501,6 +499,18 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         """
         Start editing vector map layer requested by the user
         """
+        if not haveVDigit:
+            from vdigit import errorMsg
+            msg = _("Unable to start vector digitizer.\nThe VDigit python extension "
+                    "was not found or loaded properly.\n"
+                    "Switching back to 2D display mode.\n\nDetails: %s" % errorMsg)
+            
+            self.mapdisplay.toolbars['map'].combo.SetValue (_("2D view"))
+            wx.MessageBox(parent=self.mapdisplay,
+                          message=msg,
+                          caption=_("Error"))
+            return
+        
         try:
             maplayer = self.GetPyData(self.layer_selected)[0]['maplayer']
         except:

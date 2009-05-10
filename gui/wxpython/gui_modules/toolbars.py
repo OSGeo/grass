@@ -32,8 +32,6 @@ import gcmd
 import gdialogs
 import vdigit
 from vdigit import VDigitSettingsDialog as VDigitSettingsDialog
-from vdigit import haveVDigit
-from nviz import haveNviz
 from debug import Debug as Debug
 from icon import Icons as Icons
 from preferences import globalSettings as UserSettings
@@ -163,12 +161,8 @@ class MapToolbar(AbstractToolbar):
         
         # optional tools
         self.combo = wx.ComboBox(parent=self.toolbar, id=wx.ID_ANY, value=_('2D view'),
-                                 choices=[_('2D view'), ], 
+                                 choices=[_('2D view'), _('3D view'), _('Digitize')],
                                  style=wx.CB_READONLY, size=(90, -1))
-        if haveNviz:
-            self.combo.Append(_('3D view'))
-        if haveVDigit:
-            self.combo.Append(_('Digitize'))
         
         self.comboid = self.toolbar.AddControl(self.combo)
         self.mapdisplay.Bind(wx.EVT_COMBOBOX, self.OnSelectTool, self.comboid)
