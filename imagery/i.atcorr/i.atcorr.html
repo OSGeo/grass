@@ -500,24 +500,30 @@ micrometer.</td>
 
 <h2>EXAMPLES</h2>
 
-North Carolina sample dataset: Atmospheric correction of LANDSAT-7 channels:
+North Carolina sample dataset: Atmospheric correction of a LANDSAT-7 channel:
 
 <div class="code"><pre>
 g.region rast=lsat7_2002_40 -p
 r.info lsat7_2002_40
 
-# create control file for channel 1 (blue)
+# using an integer DEM greatly accelerates the i.atcorr computations
+r.mapcalc "elev_int = round(elevation)"
+
+# find mean elevation (target above sea level)
+r.univar elev_int
+
+# create control file for channel 4 (NIR)
 echo "8                            - geometrical conditions=Landsat ETM+
 5 24 14.30 -78.691 35.749    - month day hh.ddd longitude latitude ("hh.ddd" is a decimal hour GMT)
 2                            - atmospheric mode=midlatitude summer
 1                            - aerosols model=continental
 50                           - visibility [km] (aerosol model concentration)
--.600                        - target at 600m above sea level
+-.110                        - target at 110m above sea level
 -1000                        - sensor on board a satellite
-61                           - 1th band of ETM+ Landsat 7" > icnd.txt
+64                           - 1th band of ETM+ Landsat 7" > icnd.txt
 
 # run atmospheric correction
-i.atcorr lsat7_2002_40 ialt=elevation icnd=icnd.txt oimg=lsat7_2002_40_atcorr
+i.atcorr lsat7_2002_40 ialt=elev_int icnd=icnd.txt oimg=lsat7_2002_40_atcorr
 </pre></div>
 
 Note that the process is computationally intensive.
