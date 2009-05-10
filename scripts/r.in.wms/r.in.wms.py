@@ -58,6 +58,11 @@
 #% description: This may be needed to connect to servers which lack POST capability
 #% guisection: Request
 #%end
+#%flag
+#% key: a
+#% description: Use GDAL WMS driver
+#% guisection: Request
+#%end
 #%option
 #% key: output
 #% type: string
@@ -170,7 +175,6 @@ import os
 import sys
 import tempfile
 import urllib
-
 import xml.sax
 
 import grass
@@ -182,6 +186,7 @@ try:
     import wms_request
     import wms_download
     import gdalwarp
+    import wms_gdal
 except ImportError:
     pass
 
@@ -246,23 +251,35 @@ def main():
     if not request:
         grass.fatal("WMS request failed")
     
-    # download data
-    download = wms_download.WMSDownload(flags, options)
-    download.GetTiles(request.GetRequests())
+    if flags['a']:
+        # use GDAL WMS driver
+        ### TODO: use GDAL Python bindings instead
+        if not wms_gdal.checkGdalWms():
+            grass.fatal("GDAL WMS driver is not available")
+
+        # create local service description XML file
+        gdalWms = wms_gdal.GdalWms(options, request)
+        options['input'] = gdalWms.GetFile()
+    else:
+        # download data
+        download = wms_download.WMSDownload(flags, options)
+        download.GetTiles(request.GetRequests())
     
-    # list of files
-    files = []
-    for item in request.GetRequests():
-        files.append(item['output'])
-    files = ','.join(files)
+        # list of files
+        files = []
+        for item in request.GetRequests():
+            files.append(item['output'])
+        files = ','.join(files)
+        options['input'] = files
 
     # add flags for r.in.gdalwarp
-    options['input'] = files
     flags['e'] = False
     flags['c'] = True
     options['warpoptions'] = ''
     
     return gdalwarp.GDALWarp(flags, options).run()
+    
+    return 0
 
 if __name__ == "__main__":
     options, flags = grass.parser()

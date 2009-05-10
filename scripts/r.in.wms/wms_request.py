@@ -26,6 +26,8 @@ class WMSRequest:
         self.options = options
         
         self.__set_options()
+
+        self.data = {}
         
     def __set_options(self):
         # if the user asserts that this projection is the same as the
@@ -134,11 +136,17 @@ class WMSRequest:
             worldfile = os.path.join(self._tdir, str(i) + self.worldfile)
             dtile = grass.parse_key_val(tile, vsep=';')
             n = float(dtile['n'])
+            self.data['n'] = n
             s = float(dtile['s'])
+            self.data['s'] = s
             e = float(dtile['e'])
+            self.data['e'] = e
             w = float(dtile['w'])
+            self.data['w'] = w
             nr = int(dtile['rows'])
             nc = int(dtile['cols'])
+            self.data['width'] = nc
+            self.data['height'] = nr
             
             size = "bbox=%f,%f,%f,%f&width=%d&height=%d" % \
                 (w, s, e, n, nc, nr)
@@ -166,3 +174,7 @@ class WMSRequest:
             
         rf.close()
         grass.message("Done: requesting %d tiles" % len(tiles))
+
+    def Get(self, key):
+        """Get value"""
+        return self.data[key]
