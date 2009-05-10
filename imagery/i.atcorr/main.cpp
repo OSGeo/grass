@@ -131,7 +131,7 @@ class TICache
 {
     enum TICacheSize
     {
-        MAX_TIs = 128 /* this value is a guess, increase it if in general more categories are used */
+        MAX_TIs = 1024 /* this value is a guess, increase it if in general more categories are used */
     };
     TransformInput tis[MAX_TIs];
     float alts[MAX_TIs];
@@ -167,7 +167,7 @@ class TIMap
 {
     enum TIMapSize
     {
-	MAX_TICs = 128 /* this value is a guess. It means that 1024 TI's will be the max combinations of vis/alt pairs */
+	MAX_TICs = 1024 /* this value is a guess. It means that 1024 TI's will be the max combinations of vis/alt pairs */
     };
 
     TICache tic[MAX_TICs]; /* array of TICaches */
