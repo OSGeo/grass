@@ -114,28 +114,30 @@ def read_command(*args, **kwargs):
     return ps.communicate()[0]
 
 def parse_command(*args, **kwargs):
-    """Passes all arguments to read_command, then optionally parses
-    the output.
+    """Passes all arguments to read_command, then parses the output by
+    parse_key_val().
 
-    Output can be automatically parsed if <b>parse</b> parameter is
-    given. Use True for default parse function -- parse_key_val().
+    Parsing function can be optionally given by <b>parse</b> parameter
+    including its arguments, e.g.
+
+    @code
+    parse_command(..., parse = (grass.parse_key_val, { 'sep' : ':' }))
+    @endcode
     """
-    parse = None # do not parse output
+    parse = None
     if kwargs.has_key('parse'):
         if type(kwargs['parse']) is types.TupleType:
             parse = kwargs['parse'][0]
             parse_args = kwargs['parse'][1]
-        else:
-            parse = parse_key_val # use default fn
-            parse_args = {}
         del kwargs['parse']
-
+    
+    if not parse:
+        parse = parse_key_val # use default fn
+        parse_args = {}
+        
     res = read_command(*args, **kwargs)
 
-    if parse:
-        return parse(res, **parse_args)
-
-    return res
+    return parse(res, **parse_args)
 
 def write_command(*args, **kwargs):
     """Passes all arguments to feed_command, with the string specified
