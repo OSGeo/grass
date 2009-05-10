@@ -16,6 +16,10 @@
 #
 #############################################################################
 
+#
+# This file needs major rewrite...
+#
+
 import os
 import subprocess
 
@@ -206,7 +210,9 @@ class GDALWarp():
                                    '-r', self.options['method'],
                                    file, warpfile])
             
-        if ps.wait() != 0:
+        ps.wait()
+        if ps.returncode != 0 or \
+                not os.path.exists(warpfile):
             grass.fatal('gdalwarp failed')
     
         # import it into a temporary map
@@ -256,7 +262,7 @@ class GDALWarp():
         
         # calculate the new maps:
         for suffix in self.channel_suffixes:
-            grass.debug("alpha=%s MAPsfx=%s% tmpname=%s%s" % \
+            grass.debug("alpha=%s MAPsfx=%s%s tmpname=%s%s" % \
                             (alphalayer, map, suffix, tmpmapname, suffix))
             if alphalayer:
                 # Use alpha channel for nulls: problem: I've seen a map
