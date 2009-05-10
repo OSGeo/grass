@@ -133,7 +133,7 @@ def parse_command(*args, **kwargs):
     res = read_command(*args, **kwargs)
 
     if parse:
-        res parse(res, **parse_args)
+        return parse(res, **parse_args)
 
     return res
 
