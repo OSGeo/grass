@@ -109,6 +109,13 @@ def feed_command(*args, **kwargs):
 def read_command(*args, **kwargs):
     """Passes all arguments to pipe_command, then waits for the process to
     complete, returning its stdout (i.e. similar to shell `backticks`).
+    """
+    ps = pipe_command(*args, **kwargs)
+    return ps.communicate()[0]
+
+def parse_command(*args, **kwargs):
+    """Passes all arguments to read_command, then optionally parses
+    the output.
 
     Output can be automatically parsed if <b>parse</b> parameter is
     given. Use True for default parse function -- parse_key_val().
@@ -122,12 +129,13 @@ def read_command(*args, **kwargs):
             parse = parse_key_val # use default fn
             parse_args = {}
         del kwargs['parse']
-    
-    ps = pipe_command(*args, **kwargs)
+
+    res = read_command(*args, **kwargs)
+
     if parse:
-        return parse(ps.communicate()[0], **parse_args)
-    
-    return ps.communicate()[0]
+        res parse(res, **parse_args)
+
+    return res
 
 def write_command(*args, **kwargs):
     """Passes all arguments to feed_command, with the string specified
@@ -241,7 +249,7 @@ def parse_key_val(s, sep = '=', dflt = None, val_type = None, vsep = None):
     by newlines and the key and value are separated by `sep' (default: `=')
     """
     result = {}
-    
+
     if not s:
         return result
     
