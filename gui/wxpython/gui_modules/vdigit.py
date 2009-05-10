@@ -55,12 +55,12 @@ try:
     GV_LINES = wxvdigit.GV_LINES
     PseudoDC = wxvdigit.PseudoDC
     haveVDigit = True
-    digitErr = ''
+    errorMsg = ''
 except ImportError, err:
     haveVDigit = False
     GV_LINES = None
     PseudoDC = wx.PseudoDC
-    digitErr = err
+    errorMsg = err
     print >> sys.stderr, "\nWARNING: Vector digitizer is not available (%s). " % err
 
 class AbstractDigit:
@@ -122,7 +122,7 @@ class AbstractDigit:
             raise gcmd.DigitError(parent=self.mapWindow.parent,
                                   message="%s %s (%s)" % (_('Unable to initialize display driver, '
                                                             'see README file for more information.\n\n'
-                                                            'Details:'), e, digitErr))
+                                                            'Details:'), e, errorMsg))
         
         if map and ret == -1:
             raise gcmd.DigitError(parent=self.mapWindow.parent,
