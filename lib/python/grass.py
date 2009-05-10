@@ -115,15 +115,17 @@ def read_command(*args, **kwargs):
     """
     parse = None # do not parse output
     if kwargs.has_key('parse'):
-        if type(parse) is types.FunctionType:
-            parse = kwargs['parse']
+        if type(kwargs['parse']) is types.TupleType:
+            parse = kwargs['parse'][0]
+            parse_args = kwargs['parse'][1]
         else:
             parse = parse_key_val # use default fn
+            parse_args = {}
         del kwargs['parse']
     
     ps = pipe_command(*args, **kwargs)
     if parse:
-        return parse(ps.communicate()[0])
+        return parse(ps.communicate()[0], **parse_args)
     
     return ps.communicate()[0]
 
@@ -234,15 +236,25 @@ def tempfile():
 
 # key-value parsers
 
-def parse_key_val(s, sep = '=', dflt = None, val_type = None):
+def parse_key_val(s, sep = '=', dflt = None, val_type = None, vsep = None):
     """Parse a string into a dictionary, where entries are separated
     by newlines and the key and value are separated by `sep' (default: `=')
     """
     result = {}
+    
     if not s:
         return result
     
-    for line in s.splitlines():
+    if vsep:
+        lines = s.split(vsep)
+        try:
+            lines.remove('\n')
+        except ValueError:
+            pass
+    else:
+        lines = s.splitlines()
+    
+    for line in lines:
 	kv = line.split(sep, 1)
 	k = kv[0].strip()
 	if len(kv) > 1:
