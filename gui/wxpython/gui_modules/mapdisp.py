@@ -306,7 +306,8 @@ class MapFrame(wx.Frame):
                 self.toolbars['map'].combo.SetValue (_("2D view"))
                 wx.MessageBox(parent=self,
                               message=msg,
-                              caption=_("Error"))
+                              caption=_("Error"),
+                              style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
                 return
             
             if self._layerManager:
@@ -363,7 +364,8 @@ class MapFrame(wx.Frame):
                 self.toolbars['map'].combo.SetValue (_("2D view"))
                 wx.MessageBox(parent=self,
                               message=msg,
-                              caption=_("Error"))
+                              caption=_("Error"),
+                              style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
                 return
 
             #
