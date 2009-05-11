@@ -1866,7 +1866,7 @@ static void G_gui_wx(void)
 
     sprintf(script, "%s/etc/wxpython/gui_modules/menuform.py",
 	    getenv("GISBASE"));
-    G_spawn("python", "menuform.py", script, st->pgm_name, NULL);
+    G_spawn(getenv("GRASS_PYTHON"), "menuform.py", script, st->pgm_name, NULL);
 }
 
 /**
