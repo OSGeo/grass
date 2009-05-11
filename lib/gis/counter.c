@@ -64,6 +64,11 @@ int G_is_initialized(int *p)
 #ifdef HAVE_PTHREAD_H
     make_mutex();
     pthread_mutex_lock(&mutex);
+
+    if (*p) {
+	pthread_mutex_unlock(&mutex);
+	return 1;
+    }
 #endif
     return 0;
 }
