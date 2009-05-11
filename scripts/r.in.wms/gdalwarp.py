@@ -25,7 +25,7 @@ import subprocess
 
 import grass
 
-class GDALWarp():
+class GDALWarp:
     def __init__(self, flags, options):
         self.flags   = flags
         self.options = options
