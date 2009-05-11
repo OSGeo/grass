@@ -499,16 +499,16 @@ Section "GRASS" SecGRASS
 	"$INSTALL_DIR\icons\GRASS.ico" "" SW_SHOWMINIMIZED "" "Launch GRASS ${VERSION_NUMBER}"
 
 	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS Command Line.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-text"\
-	"$INSTALL_DIR\icons\GRASS_CMD.ico" "" SW_SHOWMINIMIZED "" "Launch GRASS in Text Mode on the Command Line"
+	"$INSTALL_DIR\icons\GRASS_CMD.ico" "" SW_SHOWNORMAL "" "Launch GRASS in Text Mode on the Command Line"
 	
 	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS MSYS Console.lnk" "$INSTALL_DIR\msys\msys.bat" ""\
-	"$INSTALL_DIR\icons\MSYS_Custom_Icon.ico" "" SW_SHOWNORMAL "" "Open the GRASS MSYS Console"
+	"$INSTALL_DIR\icons\MSYS_Custom_Icon.ico" "" SW_SHOWNORMAL "" "Open the MSYS Console"
 	
 	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS Web Site.lnk" "$INSTALL_DIR\GRASS-WebSite.url" ""\
 	"$INSTALL_DIR\icons\GRASS_Web.ico" "" SW_SHOWNORMAL "" "Visit the GRASS Web Site"
 	
 	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS ${VERSION_NUMBER} msys.lnk" "$INSTALL_DIR\msys\msys.bat" "/grass/bin/${GRASS_COMMAND} -wxpython"\
-	"$INSTALL_DIR\icons\GRASS.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} with msys Terminal"
+	"$INSTALL_DIR\icons\GRASS.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} with MSYS Terminal"
  
 	!if ${INSTALLER_TYPE} == "Release"
 		CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\Release Notes.lnk" "$INSTALL_DIR\WinGRASS-README.url" ""\
@@ -629,9 +629,9 @@ Section "GRASS" SecGRASS
 	FileWrite $0 '#   	    	requires a source file because the definition of GISBASE$\r$\n'
 	FileWrite $0 '#   	    	is not known until compile time and is substituted from the$\r$\n'
 	FileWrite $0 '#   	    	Makefile. Any command line options are passed to Init.sh.$\r$\n'
-	FileWrite $0 '# COPYRIGHT:    (C) 2000-2005 by the GRASS Development Team$\r$\n'
+	FileWrite $0 '# COPYRIGHT:  	(C) 2000-2009 by the GRASS Development Team$\r$\n'
 	FileWrite $0 '#$\r$\n'
-	FileWrite $0 '#               This program is free software under the GNU General Public$\r$\n'
+	FileWrite $0 '#             	This program is free software under the GNU General Public$\r$\n'
 	FileWrite $0 '#   	    	License (>=v2). Read the file COPYING that comes with GRASS$\r$\n'
 	FileWrite $0 '#   	    	for details.$\r$\n'
 	FileWrite $0 '#$\r$\n'
@@ -655,6 +655,9 @@ Section "GRASS" SecGRASS
 	FileWrite $0 'PATH="$$GISBASE/extrabin:$$GISBASE/extralib:$$PATH"$\r$\n'
 	FileWrite $0 'PATH="$$GISBASE/tcl-tk/bin:$$GISBASE/sqlite/bin:$$GISBASE/gpsbabel:$$PATH"$\r$\n'
 	FileWrite $0 'export PATH$\r$\n'
+	FileWrite $0 '# Add python scripts to the PATHEXT variable$\r$\n'
+	FileWrite $0 'PATHEXT="$$PATHEXT:.PY"$\r$\n'
+	FileWrite $0 'export PATHEXT$\r$\n'
 	FileWrite $0 '$\r$\n'
 	FileWrite $0 '# Set the PYTHONPATH variable$\r$\n'
 	FileWrite $0 'PYTHONPATH="$$GISBASE/etc/python:$$GISBASE/Python25:$$PYTHONPATH"$\r$\n'
@@ -753,7 +756,7 @@ Function DownloadDataSet
 
 FunctionEnd
 
-Section /O "North Carolina Data Set" SecNorthCarolinaSDB
+Section /O "North Carolina (Wake County) Data Set" SecNorthCarolinaSDB
 
 	;Set the size (in KB)  of the archive file
 	StrCpy $ARCHIVE_SIZE_KB 138629
@@ -763,7 +766,7 @@ Section /O "North Carolina Data Set" SecNorthCarolinaSDB
   
   	StrCpy $HTTP_PATH "http://grass.osgeo.org/sampledata"
 	StrCpy $ARCHIVE_NAME "nc_spm_latest.tar.gz"
-	StrCpy $EXTENDED_ARCHIVE_NAME "North Carolina"
+	StrCpy $EXTENDED_ARCHIVE_NAME "North Carolina (Wake County)"
 	StrCpy $ORIGINAL_UNTAR_FOLDER "nc_spm_08"
 	StrCpy $CUSTOM_UNTAR_FOLDER "North-Carolina"
 	
@@ -771,7 +774,7 @@ Section /O "North Carolina Data Set" SecNorthCarolinaSDB
 	
 SectionEnd
 
-Section /O "South Dakota (Spearfish) Data Set" SecSpearfishSDB
+Section /O "South Dakota (Spearfish County) Data Set" SecSpearfishSDB
 
 	;Set the size (in KB)  of the archive file
 	StrCpy $ARCHIVE_SIZE_KB 20803
@@ -781,7 +784,7 @@ Section /O "South Dakota (Spearfish) Data Set" SecSpearfishSDB
 	
 	StrCpy $HTTP_PATH "http://grass.osgeo.org/sampledata"
 	StrCpy $ARCHIVE_NAME "spearfish_grass60data-0.3.tar.gz"
-	StrCpy $EXTENDED_ARCHIVE_NAME "South Dakota (Spearfish)"
+	StrCpy $EXTENDED_ARCHIVE_NAME "South Dakota (Spearfish County)"
 	StrCpy $ORIGINAL_UNTAR_FOLDER "spearfish60"
 	StrCpy $CUSTOM_UNTAR_FOLDER "Spearfish60"
 	
@@ -854,8 +857,8 @@ SectionEnd
 ;Installer Section Descriptions
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
 	!insertmacro MUI_DESCRIPTION_TEXT ${SecGRASS} "Install GRASS ${VERSION_NUMBER}"
-	!insertmacro MUI_DESCRIPTION_TEXT ${SecNorthCarolinaSDB} "Download and install the North Carolina sample data set"
-	!insertmacro MUI_DESCRIPTION_TEXT ${SecSpearfishSDB} "Download and install the South Dakota (Spearfish) sample data set"
+	!insertmacro MUI_DESCRIPTION_TEXT ${SecNorthCarolinaSDB} "Download and install the North Carolina (Wake County) sample data set"
+	!insertmacro MUI_DESCRIPTION_TEXT ${SecSpearfishSDB} "Download and install the South Dakota (Spearfish County) sample data set"
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ;----------------------------------------------------------------------------------------------------------------------------
