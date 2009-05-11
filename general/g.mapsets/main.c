@@ -113,8 +113,8 @@ int main(int argc, char *argv[])
     }
 
     if (opt.dialog->answer) {
-	sprintf(path, "%s/etc/gui/g.mapsets.py", G_gisbase());
-	G_spawn("python", "g.mapsets.py", path, NULL);
+	sprintf(path, "%s/etc/gui/scripts/g.mapsets.py", G_gisbase());
+	G_spawn(getenv("GRASS_PYTHON"), "g.mapsets.py", path, NULL);
     }
 
     if (opt.mapset->answer) {
