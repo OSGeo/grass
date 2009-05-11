@@ -2,7 +2,7 @@
 MODULE_TOPDIR = ../..
 
 PGM = g.mapsets
-GUI = $(ETC)/gui/scripts/g.mapsets.py
+GUI = $(ETC)/gui/scripts/g.mapsets_picker.py
 
 LIBES     = $(GISLIB)
 DEPENDENCIES= $(GISDEP)
