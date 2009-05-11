@@ -84,8 +84,8 @@
 
 if [ $# -eq 0 ] ; then
   ##nviz is opened in GUI
-  exec $GISBASE/etc/nviz2.2/nviz -f $GISBASE/etc/nviz2.2/scripts/nviz2.2_script
+  exec "$GISBASE/etc/nviz2.2/nviz" -f "$GISBASE/etc/nviz2.2/scripts/nviz2.2_script"
   exit 0
 fi
 
-exec $GISBASE/etc/nviz2.2/nviz -f $GISBASE/etc/nviz2.2/scripts/nviz2.2_script ${1+"$@"}
+exec "$GISBASE/etc/nviz2.2/nviz" -f "$GISBASE/etc/nviz2.2/scripts/nviz2.2_script" ${1+"$@"}
