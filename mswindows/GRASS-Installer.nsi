@@ -562,8 +562,11 @@ Section "GRASS" SecGRASS
 	FileWrite $0 'rem Path to the python directory$\r$\n'	
 	FileWrite $0 'set PYTHONHOME=%GRASSDIR%\Python25$\r$\n'
 	FileWrite $0 '$\r$\n'
+	FileWrite $0 'rem Add python scripts to the PATHEXT variable$\r$\n'
+	FileWrite $0 'set PATHEXT=%PATHEXT%;.PY$\r$\n'
+	FileWrite $0 '$\r$\n'
 	FileWrite $0 'set WINGISBASE=%GRASSDIR%$\r$\n'
-	FileWrite $0 '"%WINGISBASE%\etc\init.bat" %*'
+	FileWrite $0 '"%WINGISBASE%\etc\Init.bat" %*'
 	FileClose $0
 	done_create_grass_command.bat:
 	
@@ -655,10 +658,6 @@ Section "GRASS" SecGRASS
 	FileWrite $0 'PATH="$$GISBASE/extrabin:$$GISBASE/extralib:$$PATH"$\r$\n'
 	FileWrite $0 'PATH="$$GISBASE/tcl-tk/bin:$$GISBASE/sqlite/bin:$$GISBASE/gpsbabel:$$PATH"$\r$\n'
 	FileWrite $0 'export PATH$\r$\n'
-	FileWrite $0 '# Add python scripts to the PATHEXT variable$\r$\n'
-	FileWrite $0 'PATHEXT="$$PATHEXT:.PY"$\r$\n'
-	FileWrite $0 'export PATHEXT$\r$\n'
-	FileWrite $0 '$\r$\n'
 	FileWrite $0 '# Set the PYTHONPATH variable$\r$\n'
 	FileWrite $0 'PYTHONPATH="$$GISBASE/etc/python:$$GISBASE/Python25:$$PYTHONPATH"$\r$\n'
 	FileWrite $0 'export PYTHONPATH$\r$\n'
