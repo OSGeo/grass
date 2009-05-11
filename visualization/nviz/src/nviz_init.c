@@ -25,7 +25,7 @@ static int parse_command(Nv_data * data, Tcl_Interp * interp,	/* Current interpr
 {
     struct Option *elev, *colr, *vct, *pnt, *vol;
     struct Option *panel_path, *script, *state;
-    struct Flag *no_args, *script_kill, *demo, *verbose;
+    struct Flag *no_args, *script_kill, *demo;
     struct GModule *module;
     char *arglist[3];
     const char *autoload;
@@ -102,15 +102,13 @@ static int parse_command(Nv_data * data, Tcl_Interp * interp,	/* Current interpr
 
     script_kill = G_define_flag();
     script_kill->key = 'k';
-    script_kill->description = _("Script kill option");
+    script_kill->description =
+	_("Exit after completing script launched from the command line");
 
     demo = G_define_flag();
     demo->key = 'x';
-    demo->description = _("Start in Demo mode");
-
-    verbose = G_define_flag();
-    verbose->key = 'v';
-    verbose->description = _("Output more comments (default=quiet)");
+    demo->description =
+	_("Start in Demo mode (skip the \"please wait\" message)");
 
     panel_path = G_define_option();
     panel_path->key = "path";
@@ -169,44 +167,42 @@ static int parse_command(Nv_data * data, Tcl_Interp * interp,	/* Current interpr
 
     }
 
-    if (verbose->answer) {
-	fprintf(stderr, "\n");
-	fprintf(stderr, "\n");
-	fprintf(stderr, "Version: %s\n", GRASS_VERSION_STRING);
-	fprintf(stderr, "\n");
-	fprintf(stderr,
-		"Authors: Bill Brown, Terry Baker, Mark Astley, David Gerdes\n");
-	fprintf(stderr, "\tmodifications: Jaro Hofierka, Bob Covill\n");
-	fprintf(stderr, "\n");
-	fprintf(stderr, "\n");
-	fprintf(stderr,
-		"Please cite one or more of the following references in publications\n");
-	fprintf(stderr, "where the results of this program were used:\n");
-	fprintf(stderr,
-		"Brown, W.M., Astley, M., Baker, T., Mitasova, H. (1995).\n");
-	fprintf(stderr,
-		"GRASS as an Integrated GIS and Visualization System for\n");
-	fprintf(stderr,
-		"Spatio-Temporal Modeling, Proceedings of Auto Carto 12, Charlotte, N.C.\n");
-	fprintf(stderr, "\n");
-	fprintf(stderr,
-		"Mitasova, H., W.M. Brown, J. Hofierka, 1994, Multidimensional\n");
-	fprintf(stderr,
-		"dynamic cartography. Kartograficke listy, 2, p. 37-50.\n");
-	fprintf(stderr, "\n");
-	fprintf(stderr,
-		"Mitas L., Brown W. M., Mitasova H., 1997, Role of dynamic\n");
-	fprintf(stderr,
-		"cartography in simulations of landscape processes based on multi-variate\n");
-	fprintf(stderr,
-		"fields. Computers and Geosciences, Vol. 23, No. 4, pp. 437-446\n");
-	fprintf(stderr, "\n");
-	fprintf(stderr,
-		"http://www2.gis.uiuc.edu:2280/modviz/viz/nviz.html\n");
-	fprintf(stderr, "\n");
-	fprintf(stderr, "The papers are available at\n");
-	fprintf(stderr, "http://www2.gis.uiuc.edu:2280/modviz/\n");
-    }				/* done verbose */
+    G_verbose_message(" ");
+    G_verbose_message(" ");
+    G_verbose_message("Version: %s", GRASS_VERSION_STRING);
+    G_verbose_message(" ");
+    G_verbose_message(
+		"Authors: Bill Brown, Terry Baker, Mark Astley, David Gerdes");
+    G_verbose_message("\tmodifications: Jaro Hofierka, Bob Covill");
+    G_verbose_message(" ");
+    G_verbose_message(" ");
+    G_verbose_message(
+		"Please cite one or more of the following references in publications");
+    G_verbose_message("where the results of this program were used:");
+    G_verbose_message(
+		"Brown, W.M., Astley, M., Baker, T., Mitasova, H. (1995).");
+    G_verbose_message(
+		"GRASS as an Integrated GIS and Visualization System for");
+    G_verbose_message(
+		"Spatio-Temporal Modeling, Proceedings of Auto Carto 12, Charlotte, N.C.");
+    G_verbose_message(" ");
+    G_verbose_message(
+		"Mitasova, H., W.M. Brown, J. Hofierka, 1994, Multidimensional");
+    G_verbose_message(
+		"dynamic cartography. Kartograficke listy, 2, p. 37-50.");
+    G_verbose_message(" ");
+    G_verbose_message(
+		"Mitas L., Brown W. M., Mitasova H., 1997, Role of dynamic");
+    G_verbose_message(
+		"cartography in simulations of landscape processes based on multi-variate");
+    G_verbose_message(
+		"fields. Computers and Geosciences, Vol. 23, No. 4, pp. 437-446");
+    G_verbose_message(" ");
+    G_verbose_message(
+		"http://www2.gis.uiuc.edu:2280/modviz/viz/nviz.html");
+    G_verbose_message(" ");
+    G_verbose_message("The papers are available at");
+    G_verbose_message("http://www2.gis.uiuc.edu:2280/modviz/");
 
 
     /* Look for quickstart flag */
@@ -396,7 +392,7 @@ int Ngetargs(Tcl_Interp * interp,	/* Current interpreter. */
 	strstr(argv0, "script_play") != NULL ||
 	strstr(argv0, "script_get_line") != NULL ||
 	strstr(argv0, "script_file_tools") != NULL) {
-	fprintf(stderr, "Entering script mode ...\n");
+	G_message(_("Entering script mode ..."));
 	tmp2 = (char *)G_malloc((strlen(cmd) + 2) * (sizeof(char)));
 	sprintf(tmp2, "%s", cmd);
 	script_mode = 1;
