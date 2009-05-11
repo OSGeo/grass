@@ -20,15 +20,15 @@
 #  - if you send cs2cs a third data column, beware it might be treated as "z"
 
 #%Module
-#%  description: Convert coordinates from one projection to another (cs2cs frontend).
+#%  description: Converts coordinates from one projection to another (cs2cs frontend).
 #%  keywords: miscellaneous, projection
 #%End
 #%option
 #% key: input
 #% type: string
 #% gisprompt: old_file,file,file
-#% description: Input coordinate file (omit to read from stdin)
-#% required : no
+#% description: Input coordinate file ('-' to read from stdin)
+#% required : yes
 #% key_desc : filename
 #%end
 #%option
@@ -42,10 +42,10 @@
 #%option
 #% key: fs
 #% type: string
-#% description: Field separator
+#% description: Field separator (format: input,output)
 #% required : no
-#% key_desc : character
-#% answer : |
+#% key_desc : character,character
+#% answer : |,|
 #%end
 #%option
 #% key: proj_in
@@ -92,34 +92,41 @@ def main():
 
     #### check for overenthusiasm
     if proj_in and ll_in:
-	grass.fatal("Chose only one input parameter method")
+	grass.fatal("Choose only one input parameter method")
 
     if proj_out and ll_out:
-	grass.fatal("Chose only one output parameter method") 
+	grass.fatal("Choose only one output parameter method") 
 
     if ll_in and ll_out:
-	grass.fatal("Chose only one auto-projection parameter method")
+	grass.fatal("Choise only one auto-projection parameter method")
 
     if output and not grass.overwrite() and os.path.exists(output):
 	grass.fatal("Output file already exists") 
 
     #### parse field separator
-    if fs.lower() in ["space", "tab"]:
-	fs = ' '
+    ifs, ofs = fs.split(',')
+    if ifs.lower() in ["space", "tab"]:
+	ifs = ' '
     else:
-	fs = fs[0]
-
+	ifs = ifs[0]
+    if ofs.lower() == "space":
+        ofs = ' '
+    elif ofs.lower() == "tab":
+        ofs = '\t'
+    else:
+        ofs = ofs[0]
+    
     #### set up projection params
     s = grass.read_command("g.proj", flags='j')
     kv = grass.parse_key_val(s)
     if "XY location" in kv['+proj'] and (ll_in or ll_out):
-	grass.fatal("Cannot project to or from a XY location.") 
+	grass.fatal("Unable to project to or from a XY location") 
 
     in_proj = None
 
     if ll_in:
 	in_proj = "+proj=longlat +datum=WGS84"
-	grass.verbose("Assuming LL WGS84 as input, current projection as output.")
+	grass.verbose("Assuming LL WGS84 as input, current projection as output ")
 
     if ll_out:
 	in_proj = grass.read_command('g.proj', flags = 'jf')
@@ -128,14 +135,15 @@ def main():
 	in_proj = proj_in
 
     if not in_proj:
-	grass.fatal("Missing input projection parameters.")
+	grass.fatal("Missing input projection parameters ")
     in_proj = in_proj.strip()
+    grass.verbose("Input parameters: '%s'" % in_proj)
 
     out_proj = None
 
     if ll_out:
 	out_proj = "+proj=longlat +datum=WGS84"
-	grass.verbose("Assuming current projection as input, LL WGS84 as output.")
+	grass.verbose("Assuming current projection as input, LL WGS84 as output ")
 
     if ll_in:
 	out_proj = grass.read_command('g.proj', flags = 'jf')
@@ -144,20 +152,20 @@ def main():
 	out_proj = proj_out
 
     if not out_proj:
-	grass.fatal("Missing output projection parameters.")
+	grass.fatal("Missing output projection parameters ")
     out_proj = out_proj.strip()
-    grass.verbose("output parameters=[%s]" % out_proj)
+    grass.verbose("Output parameters: '%s'" % out_proj)
 
     #### set up input file
-    if input in ['', '-']:
+    if input == '-':
 	infile = None
 	inf = sys.stdin
     else:
 	infile = input
 	if not os.path.exists(infile):
-	    grass.fatal("Unable to read input data.") 
+	    grass.fatal("Unable to read input data")
 	inf = file(infile)
-	grass.verbose("input file=[%s]" % infile)
+	grass.debug("input file=[%s]" % infile)
 
     #### set up output file
     if not output:
@@ -165,8 +173,8 @@ def main():
 	outf = sys.stdout
     else:
 	outfile = output
-	outf = file(outfile)
-	grass.message("output file=[%s]" % outfile) 
+	outf = open(outfile, 'w')
+	grass.debug("output file=[%s]" % outfile) 
 
     #### set up output style
     if not decimal:
@@ -179,23 +187,30 @@ def main():
     #   cs2cs | sed -e 's/d/:/g' -e "s/'/:/g"  -e 's/"//g'
 
     cmd = ['cs2cs'] + outfmt + in_proj.split() + ['+to'] + out_proj.split()
-    p = grass.Popen(cmd, stdin = grass.PIPE, stdout = outf)
+    p = grass.Popen(cmd, stdin = grass.PIPE, stdout = grass.PIPE)
 
     while True:
 	line = inf.readline()
 	if not line:
 	    break
-	line = line.replace(fs, ' ')
+	line = line.replace(ifs, ' ')
 	p.stdin.write(line)
 	p.stdin.flush()
 
     p.stdin.close()
-
+    p.stdin = None
+    
     exitcode = p.wait()
 
     if exitcode != 0:
-	grass.warning("Projection transform probably failed, please investigate.")
+	grass.warning("Projection transform probably failed, please investigate")
 
+    for line in p.communicate()[0].splitlines():
+        x, yz = line.split('\t')
+        y, z = yz.split(' ')
+        outf.write('%s%s%s%s%s\n' % \
+                       (x.strip(), ofs, y.strip(), ofs, z.strip()))
+    
 if __name__ == "__main__":
     options, flags = grass.parser()
     main()
