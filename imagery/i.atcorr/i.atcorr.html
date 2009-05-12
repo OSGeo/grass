@@ -10,8 +10,8 @@ href="http://www.ltid.inpe.br/dsr/mauro/6s/download_6s.html">website about his
 
 <p>
 Current region settings are ignored. The region is adjusted to cover the input
-raster before the atmospheric correction is performed. This should not affect
-the user's current region settings.
+raster before the atmospheric correction is performed. The previous settings
+are restored afterwards.
 
 <p>
 Because using a continuous elevation <em>ialt</em> (input altitude map) or 
@@ -42,23 +42,12 @@ An example 6s parameters <em>icnd</em> file for <b>i.atcorr</b>:
 </pre></div>
 
 <h2><font color="red">REMAINING DOCUMENTATION ISSUES</font></h2>
-1. Using the target elevation and visibility parameters in the <em>icnd</em>
-file overrides <em>ialt</em> and <em>ivis</em> input rasters. It is not clear
-what to do to force <b>i.atcorr</b> to use the rasters instead though.
+1. In section E of "6S CODE PARAMETER CHOICES", it is unclear if the 
+"-100 &lt; xpp &lt; 0" shouldn't actually be "-1000 &lt; xpp &lt; 0". ?
 <p>
-2. The "example 6s parameters file" explains that "-.600" in line 6 means
-"target at 600 m ASL". However, in the section E of "6S CODE PARAMETER CHOICES"
-it reads: "xps &lt;=0. means the target is at the sea level". This is contrary.
-<p>
-3. In section E, I'm not sure if the "-100 &lt; xpp &lt; 0" shouldn't actually be
-"-1000 &lt; xpp &lt; 0". ?
-<p>
-4. It should be explained under what circumstances the use of categorized maps
+2. It should be explained under what circumstances the use of categorized maps
 in conjuction with flag <em>-o</em> can slow down the calculations instead of
 speeding them up.
-<p>
-5. "This should not affect the user's current region settings" sounds ambigious.
-<p>
 
 <H2>6S CODE PARAMETER CHOICES</H2>
 
@@ -509,10 +498,10 @@ r.info lsat7_2002_40
 # using an integer DEM greatly accelerates the i.atcorr computations
 r.mapcalc "elev_int = round(elevation)"
 
-# find mean elevation (target above sea level)
+# find mean elevation (target above sea level, used as initialization value in control file)
 r.univar elev_int
 
-# create control file for channel 4 (NIR)
+# create control file 'icnd.txt' for channel 4 (NIR)
 echo "8                            - geometrical conditions=Landsat ETM+
 5 24 14.30 -78.691 35.749    - month day hh.ddd longitude latitude ("hh.ddd" is a decimal hour GMT)
 2                            - atmospheric mode=midlatitude summer
@@ -522,10 +511,16 @@ echo "8                            - geometrical conditions=Landsat ETM+
 -1000                        - sensor on board a satellite
 64                           - 4th band of ETM+ Landsat 7" > icnd.txt
 
-# run atmospheric correction (-a for &gt; July 2000; -o to use cache acceleration):
-i.atcorr -a -o lsat7_2002_40 ialt=elev_int icnd=icnd.txt oimg=lsat7_2002_40_atcorr
+# run atmospheric correction (-r for reflectance input map; -a for date &gt;July 2000;
+#                             -o to use cache acceleration):
+i.atcorr -r -a -o lsat7_2002_40 ialt=elev_int icnd=icnd.txt oimg=lsat7_2002_40_atcorr
 </pre></div>
 
+Note that the altitude value from 'icnd.txtx' file is read at the beginning
+to compute the initial transform. It is necessary to give a value which could
+the the mean value of the elevation model. For the atmospheric correction then
+the raster elevation values are used from the map.
+<p>
 Note that the process is computationally intensive.
 
 <H2>AUTHORS</H2>
@@ -538,13 +533,17 @@ Note that the process is computationally intensive.
 
 <h2>REFERENCES</h2>
 
-<p>Vermote, E.F., Tanre, D., Deuze, J.L., Herman, M., and Morcrette, J.J., 1997,
+<ul>
+<li> Vermote, E.F., Tanre, D., Deuze, J.L., Herman, M., and Morcrette, J.J., 1997,
 Second simulation of the satellite signal in the solar spectrum, 6S: An
 overview., IEEE Trans. Geosc. and Remote Sens. 35(3):675-686.
 
-<p><a href="http://modis-sr.ltdri.org/6S_code/6S_code2_thinner_stuff/6S_ltdri_org_manual.html">6s manual</a> at the <a href="http://modis-sr.ltdri.org/6S_code/index.html">6s homepage</a> of the Land Surface Reflectance Science Computing Facility (also <a href="www.rsgis.ait.ac.th/~honda/textbooks/advrs/6smanv2.0_P1.pdf">PDF1</a>, <a href="www.rsgis.ait.ac.th/~honda/textbooks/advrs/6smanv2.0_P2.pdf">PDF2</a>, and <a href="www.rsgis.ait.ac.th/~honda/textbooks/advrs/6smanv2.0_P3.pdf">PDF3</a>)
+<li> <a href="http://modis-sr.ltdri.org/6S_code/6S_code2_thinner_stuff/6S_ltdri_org_manual.html">6s manual</a> at the <a href="http://modis-sr.ltdri.org/6S_code/index.html">6s homepage</a> of the Land Surface Reflectance Science Computing Facility (also <a href="www.rsgis.ait.ac.th/~honda/textbooks/advrs/6smanv2.0_P1.pdf">PDF1</a>, <a href="www.rsgis.ait.ac.th/~honda/textbooks/advrs/6smanv2.0_P2.pdf">PDF2</a>, and <a href="www.rsgis.ait.ac.th/~honda/textbooks/advrs/6smanv2.0_P3.pdf">PDF3</a>)
 
-<p>Mauro A. Homem Antunes <a href="http://www.ltid.inpe.br/dsr/mauro/6s/download_6s.html">website about his 6s version</a>
+<li>Mauro A. Homem Antunes <a href="http://www.ltid.inpe.br/dsr/mauro/6s/download_6s.html">website about his 6s version</a>
+
+<li> GRASS Wiki page about <a href="http://grass.osgeo.org/wiki/Atmospheric_correction">Atmospheric correction</a>
+</ul>
 
 <p><i>Last changed: $Date$</i>
 
