@@ -46,6 +46,9 @@ rem a new g.manual.bat too so leaving it like this for now...
 if "%GRASS_HTML_BROWSER%"=="" set GRASS_HTML_BROWSER=%SYSTEMDRIVE%/PROGRA~1/INTERN~1/IEXPLORE.EXE
 if "%GRASS_PROJSHARE%"=="" set GRASS_PROJSHARE=CONFIG_PROJSHARE
 
+rem Add python scripts to the PATHEXT variable
+set PATHEXT=%PATHEXT%;.PY
+
 if "%1" == "-version" goto displaylicence
 if "%1" == "-v" goto displaylicence
 
@@ -102,6 +105,7 @@ goto exitinit
 :wxpython
 
 set PYTHONPATH=%PYTHONPATH%;%WINGISBASE%\etc\python;%WINGISBASE%\etc\wxpython
+set PATHEXT=%PATHEXT%;.PY
 
 python "%GISBASE%/etc/wxpython/gis_set.py"
 if %errorlevel% == 2 goto exitinit
