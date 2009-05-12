@@ -11,74 +11,93 @@
 #               for details.
 #############################################################################
 
-#% Module
-#%  description: nviz - Visualization and animation tool for GRASS data
-#%  keywords: raster, vector, visualization
-#% End
-#%flag
-#%  key: q
-#%  description: Quickstart - Do not load any data
-#% End
-#%  key: k
-#%  description: Script kill option
-#% End
-#%  key: x
-#%  description: Start in Demo mode
-#% End
-#%  key: v
-#%  description: Output more comments (default=quiet)
-#% End
-#%option
+## template generated 'with nviz --script'
+#%Module
+#% description: nviz - Visualization and animation tool for GRASS data.
+#% keywords: raster, vector, visualization
+#%End
+#%Flag
+#% key: q
+#% description: Quickstart - Do not load any data
+#%End
+#%Flag
+#% key: k
+#% description: Exit after completing script launched from the command line
+#%End
+#%Flag
+#% key: x
+#% description: Start in Demo mode (skip the "please wait" message)
+#%End
+#%Flag
+#% key: v
+#% description: Verbose module output (default=quiet)
+#%End
+#%Option
 #% key: elevation
 #% type: string
+#% required: no
+#% multiple: yes
+#% key_desc: name
+#% description: Name of raster map(s) for Elevation
 #% gisprompt: old,cell,raster
-#% description: Raster file(s) for elevation
-#% required : no
+#% guisection: Raster
 #%End
-#%option
+#%Option
 #% key: color
 #% type: string
+#% required: no
+#% multiple: yes
+#% description: Name of raster map(s) for Color
 #% gisprompt: old,cell,raster
-#% description: Raster file(s) for color
-#% required : no
+#% guisection: Raster
 #%End
-#%option
+#%Option
 #% key: vector
 #% type: string
+#% required: no
+#% multiple: yes
+#% description: Name of vector lines/areas overlay map(s)
 #% gisprompt: old,vector,vector
-#% description: Vector lines/areas overlay file(s)
-#% required : no
+#% guisection: Vector
 #%End
-#%option
+#%Option
 #% key: points
 #% type: string
+#% required: no
+#% multiple: yes
+#% description: Name of vector points overlay file(s)
 #% gisprompt: old,vector,vector
-#% description: Vector points overlay file(s)
-#% required : no
+#% guisection: Vector
 #%End
-#%option
+#%Option
 #% key: volume
 #% type: string
+#% required: no
+#% multiple: yes
 #% description: Name of existing 3d raster map
-#% required : no
+#% gisprompt: old,grid3,3d-raster
+#% guisection: Raster
 #%End
-#%option
+#%Option
 #% key: path
 #% type: string
+#% required: no
+#% multiple: no
 #% description: Set alternative panel path
-#% required : no
 #%End
-#%option
+#%Option
 #% key: script
 #% type: string
+#% required: no
+#% multiple: no
 #% description: Execute script file at startup
-#% required : no
 #%End
-#%option
+#%Option
 #% key: state
 #% type: string
-#% description: Load previosly saved state file
-#% required : no
+#% required: no
+#% multiple: no
+#% description: Load previously saved state file
 #%End
 
 
