@@ -131,6 +131,12 @@ set_paths()
 	PYTHONPATH="$GISBASE/etc/python:$PYTHONPATH"
     fi
     export PYTHONPATH
+
+    # Add python to list of executable extensions to search for in MS-Windows PATH
+    if [ "$MINGW" ] ; then
+	PATHEXT="${PATHEXT};.PY"
+	export PATHEXT
+    fi
 }
 
 set_defaults()

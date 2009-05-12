@@ -482,34 +482,37 @@ Section "GRASS" SecGRASS
 	SetShellVarContext current
 	
 	CreateShortCut "$DESKTOP\GRASS ${VERSION_NUMBER}.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-wxpython"\
-	"$INSTALL_DIR\icons\GRASS.ico" "" SW_SHOWMINIMIZED "" "Launch GRASS ${VERSION_NUMBER}"
+	"$INSTALL_DIR\icons\GRASS.ico" "" SW_SHOWMINIMIZED "" "Launch GRASS ${VERSION_NUMBER} with the new wxPython GUI"
 
-	CreateShortCut "$DESKTOP\GRASS ${VERSION_NUMBER} msys.lnk" "$INSTALL_DIR\msys\msys.bat" "/grass/bin/${GRASS_COMMAND} -wxpython"\
-	"$INSTALL_DIR\icons\GRASS.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} with msys Terminal"
+	CreateShortCut "$DESKTOP\GRASS ${VERSION_NUMBER} with MSYS.lnk" "$INSTALL_DIR\msys\msys.bat" "/grass/bin/${GRASS_COMMAND} -wxpython"\
+	"$INSTALL_DIR\icons\GRASS.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} with the new wxPython GUI and a MSYS UNIX terminal"
  
 	;Create the Windows Start Menu Shortcuts
 	SetShellVarContext all
 	
 	CreateDirectory "$SMPROGRAMS\${GRASS_BASE}"
 	
-	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS Old GUI.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-tcltk"\
-	"$INSTALL_DIR\icons\GRASS.ico" "" SW_SHOWMINIMIZED "" "Launch GRASS ${VERSION_NUMBER}"
+	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS Old TclTk GUI.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-tcltk"\
+	"$INSTALL_DIR\icons\GRASS.ico" "" SW_SHOWMINIMIZED "" "Launch GRASS ${VERSION_NUMBER} with the old TclTk GUI"
 
 	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS ${VERSION_NUMBER}.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-wxpython"\
-	"$INSTALL_DIR\icons\GRASS.ico" "" SW_SHOWMINIMIZED "" "Launch GRASS ${VERSION_NUMBER}"
+	"$INSTALL_DIR\icons\GRASS.ico" "" SW_SHOWMINIMIZED "" "Launch GRASS ${VERSION_NUMBER} with the new wxPython GUI"
 
 	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS Command Line.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-text"\
-	"$INSTALL_DIR\icons\GRASS_CMD.ico" "" SW_SHOWNORMAL "" "Launch GRASS in Text Mode on the Command Line"
+	"$INSTALL_DIR\icons\GRASS_CMD.ico" "" SW_SHOWNORMAL "" "Launch GRASS in text mode"
 	
-	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS MSYS Console.lnk" "$INSTALL_DIR\msys\msys.bat" ""\
-	"$INSTALL_DIR\icons\MSYS_Custom_Icon.ico" "" SW_SHOWNORMAL "" "Open the MSYS Console"
+	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\MSYS UNIX Console.lnk" "$INSTALL_DIR\msys\msys.bat" ""\
+	"$INSTALL_DIR\icons\MSYS_Custom_Icon.ico" "" SW_SHOWNORMAL "" "Open a MSYS UNIX console"
 	
 	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS Web Site.lnk" "$INSTALL_DIR\GRASS-WebSite.url" ""\
-	"$INSTALL_DIR\icons\GRASS_Web.ico" "" SW_SHOWNORMAL "" "Visit the GRASS Web Site"
+	"$INSTALL_DIR\icons\GRASS_Web.ico" "" SW_SHOWNORMAL "" "Visit the GRASS website"
 	
-	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS ${VERSION_NUMBER} msys.lnk" "$INSTALL_DIR\msys\msys.bat" "/grass/bin/${GRASS_COMMAND} -wxpython"\
-	"$INSTALL_DIR\icons\GRASS.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} with MSYS Terminal"
- 
+	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS ${VERSION_NUMBER} with MSYS.lnk" "$INSTALL_DIR\msys\msys.bat" "/grass/bin/${GRASS_COMMAND} -wxpython"\
+	"$INSTALL_DIR\icons\GRASS.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} with the new wxPython GUI and a MSYS UNIX terminal"
+	
+; FIXME: ship the WinGrass release notes .html file instead of URL
+; http://trac.osgeo.org/grass/browser/grass-web/trunk/grass64/binary/mswindows/native/README.html?format=raw
+; probably ship with devel versions too? ie Release Notes, not the Release Announcement press release.
 	!if ${INSTALLER_TYPE} == "Release"
 		CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\Release Notes.lnk" "$INSTALL_DIR\WinGRASS-README.url" ""\
 		"$INSTALL_DIR\icons\WinGRASS.ico" "" SW_SHOWNORMAL "" "Visit the WinGRASS Project Web Page"
@@ -561,9 +564,6 @@ Section "GRASS" SecGRASS
 	FileWrite $0 '$\r$\n'
 	FileWrite $0 'rem Path to the python directory$\r$\n'	
 	FileWrite $0 'set PYTHONHOME=%GRASSDIR%\Python25$\r$\n'
-	FileWrite $0 '$\r$\n'
-	FileWrite $0 'rem Add python scripts to the PATHEXT variable$\r$\n'
-	FileWrite $0 'set PATHEXT=%PATHEXT%;.PY$\r$\n'
 	FileWrite $0 '$\r$\n'
 	FileWrite $0 'set WINGISBASE=%GRASSDIR%$\r$\n'
 	FileWrite $0 '"%WINGISBASE%\etc\Init.bat" %*'
