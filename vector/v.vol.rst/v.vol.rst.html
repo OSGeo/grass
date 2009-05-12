@@ -1,68 +1,68 @@
 <h2>DESCRIPTION</h2>
 
-<p><i>v.vol.rst</i> interpolates values to a 3-dimensional raster map from
+<p><em>v.vol.rst</em> interpolates values to a 3-dimensional raster map from
 3-dimensional point data (e.g. temperature, rainfall data from climatic
 stations, concentrations from drill holes etc.) given in a 3-D vector
-point file named <i>input</i>.&nbsp; The size of the output 
-3d raster map <i>elev</i> is given by the current 3D region. Sometimes, the
+point file named <b>input</b>.&nbsp; The size of the output 
+3d raster map <b>elev</b> is given by the current 3D region. Sometimes, the
 user
 may want to get a 2-D map showing a modelled phenomenon at a
-crossection surface. In that case, <i>cellinp</i> and <i>cellout</i>
-options must be specified and then the output 2D raster map <i>cellout</i>
-contains crossection of the interpolated volume with a surface 
-defined by <i>cellinp</i>
+crossection surface. In that case, <b>cellinp</b> and <b>cellout</b>
+options must be specified, with the output 2D raster map <b>cellout</b>
+containing the crossection of the interpolated volume with a surface 
+defined by <b>cellinp</b>
 2D raster map. As an option, simultaneously with interpolation, 
 geometric parameters of the interpolated
 phenomenon can be computed (magnitude of gradient, direction of
 gradient defined by horizontal and vertical angles), change of gradient,
 Gauss-Kronecker curvature, or mean curvature). These geometric
 parameteres are saved as
-3d raster maps <i>gradient, aspect1, aspect2, ncurv, gcurv, mcurv</i>,
+3d raster maps <b>gradient, aspect1, aspect2, ncurv, gcurv, mcurv</b>,
 respectively.
 </p>
-<p>At first, data points are checked for identical points and points
-that are closer to each other than given <i>dmin</i> are removed.
-Parameters <i>wmult</i> and <i>zmult</i> allow user to re-scale 
+<p>At first, data points are checked for identical positions and points
+that are closer to each other than given <b>dmin</b> are removed.
+Parameters <b>wmult</b> and <b>zmult</b> allow the user to re-scale 
 the w-values and z-coordinates of the point data (useful e.g. for 
 transformation of elevations given in feet to meters, so that the 
 proper values of gradient and curvatures can be computed).
-Rescaling of z-coordinates (<i>zmult</i>) is also needed when the distances
+Rescaling of z-coordinates (<b>zmult</b>) is also needed when the distances
 in vertical direction are much smaller than the horizontal
-distances, if that is the case, the value of <i>zmult</i>
+distances; if that is the case, the value of <b>zmult</b>
 should be selected so that the vertical and horizontal distances
 have about the same magnitude.
 </p>
 <p>Regularized spline with tension method is used in the interpolation.
-The <i>tension</i> parameter controls the distance over which 
+The <b>tension</b> parameter controls the distance over which 
 each given point influences the resulting volume (with very high tension, 
 each point influences only its close neighborhood and the volume goes
 rapidly to trend between the points).
 Higher values of tension parameter reduce the overshoots that
 can appear in volumes with rapid change of gradient. For noisy data, it
-is possible to define a global smoothing parameter, <i>smooth</i>.
+is possible to define a global smoothing parameter, <b>smooth</b>.
 With the
-smoothing parameter set to zero (<i>smooth=0</i>) the resulting volume
+smoothing parameter set to zero (<b>smooth=0</b>) the resulting volume
 passes exactly through the data points. 
-When smoothing is used, it is possible to output a vector map <i>devi</i>
+When smoothing is used, it is possible to output a vector map <b>devi</b>
 containing deviations of the resulting volume from the given data. </p>
-<p>User can define a 2D raster map named <i>maskmap</i>, which will
+<p>The user can define a 2D raster map named <b>maskmap</b>, which will
 be used as a mask. The interpolation is skipped for 3-dimensional cells
-whose 2-dimensional projection has zero value in mask. Zero values will
+whose 2-dimensional projection has a zero value in the mask. Zero values will
 be assigned to these cells in all output 3d raster maps. </p>
 <p>If the number of given points is greater than 700, segmented
 processing is used. The region is split into 3-dimensional "box"
-segments, each having less than <i>segmax</i> points and interpolation
+segments, each having less than <b>segmax</b> points and interpolation
 is performed on each segment of the region. To ensure the smooth
-connection of segments the interpolation function for each segment is
-computed using the points in given segment
+connection of segments, the interpolation function for each segment is
+computed using the points in the given segment
 and the points in its neighborhood. The minimum number of points taken
-for interpolation is controlled by <i>npmin</i> , the value of which
+for interpolation is controlled by <b>npmin</b> , the value of which
 must
-be larger than <i>segmax</i> and less than 700. This limit of 700 was
+be larger than <b>segmax</b> and less than 700. This limit of 700 was
 selected to ensure the numerical stability and efficiency of the
 algorithm. </p>
 
-<h3>EXAMPLE</h3>
+<h2>EXAMPLES</h2>
 
 <!-- TODO: find better data -->
 Spearfish example (we simulate 3D soil range data):
@@ -116,7 +116,7 @@ paraview
 
 <h3>SQL support</h3>
 
-Using the <em>where</em> parameter, the interpolation can be limited to use
+Using the <b>where</b> parameter, the interpolation can be limited to use
 only a subset of the input vectors.
 
 <div class="code"><pre>
@@ -129,7 +129,7 @@ v.vol.rst elevrand_3d wcol=soilrange elev=soilrange zmult=100 where="soilrange >
 
 Sometimes it can be difficult to figure out the proper values of
 interpolation parameters. In this case, the user can use a
-crossvalidation procedure using <i>-c</i> flag (a.k.a. "jack-knife"
+crossvalidation procedure using <b>-c</b> flag (a.k.a. "jack-knife"
 method) to find optimal parameters for given data. In this method,
 every point in the input point file is temporarily excluded from the
 computation and interpolation error for this point location is
@@ -149,16 +149,16 @@ v.db.select cvdevmap
 v.univar cvdevmap col=flt1 type=point
 </pre></div>
 
-From the results, parameters have to be optimized. It is
+Based on these results, the parameters will have to be optimized. It is
 recommended to plot the CV error as curve while modifying
 the parameters.
 <P>
-The best approach is to start with <em>tension</em>, <em>smooth</em>
-and <em>zmult</em> with rough steps, or to set <em>zmult</em> to a
+The best approach is to start with <b>tension</b>, <b>smooth</b>
+and <b>zmult</b> with rough steps, or to set <b>zmult</b> to a
 constant somewhere between 30-60. This helps to find minimal RMSE
 values while then finer steps can be used in all parameters. The
-reasonable range is <em>tension</em>=10...100,
-<em>smooth</em>=0.1...1.0, <em>zmult</em>=10...100.
+reasonable range is <b>tension</b>=10...100,
+<b>smooth</b>=0.1...1.0, <b>zmult</b>=10...100.
 <p>
 In <em>v.vol.rst</em> the tension parameter is much more sensitive to
 changes than in <em>v.surf.rst</em>, 
@@ -167,17 +167,24 @@ result by visual inspection. Minimizing CV does not always provide the best
 result, especially when the density of data are insufficient. Then
 the optimal result found by CV is an oversmoothed surface.
 
+<h2>NOTES</h2>
+The vector points map must be a 3D vector map (x, y, z as geometry).
+The module <a href="v.in.db.html">v.in.db</a> can be used to generate
+a 3D vector map from a table containing x,y,z columns.
 
-<h3>Further notes</h3>
+Also, the input data should be in a projected coodinate system, such as
+Univeral Transverse Mercator. The module does not appear to have support for 
+geographic (Lat/Long) coordinates as of May 2009.
+
 <p><em>v.vol.rst</em> uses regularized spline with tension for
 interpolation from point data (as described in Mitasova and Mitas,
 1993). The implementation has an improved segmentation procedure based
-on Oct-trees which enhances
-the efficiency for large data sets. </p>
-<p>Geometric parameters - magnitude of gradient (<i>gradient</i>),
-horizontal (<i>aspect1</i>) and vertical (<i>aspect2) </i>aspects,
-change of gradient (<i>ncurv</i>), Gauss-Kronecker (<i>gcurv</i>) and
-mean curvatures (<i>mcurv</i>) are computed directly from the
+on Oct-trees which enhances the efficiency for large data sets. </p>
+
+<p>Geometric parameters - magnitude of gradient (<b>gradient</b>),
+horizontal (<b>aspect1</b>) and vertical (<b>aspect2) </b>aspects,
+change of gradient (<b>ncurv</b>), Gauss-Kronecker (<b>gcurv</b>) and
+mean curvatures (<b>mcurv</b>) are computed directly from the
 interpolation function so that the important relationships between
 these parameters are preserved. More information on these parameters
 can be found in Mitasova et al., 1995 or Thorpe, 1979.</p>
@@ -185,63 +192,33 @@ can be found in Mitasova et al., 1995 or Thorpe, 1979.</p>
 <p>The program gives warning when significant overshoots appear and
 higher tension should be used. However, with tension too high the
 resulting volume will have local maximum in each given point
-and everywhere else the volume goes rapidly to trend. With smoothing
-parameter greater than zero the volume
-will not pass through the data points and the higher the parameter the
-closer
-the volume will be to the trend. For theory on smoothing with splines
-see Talmi and Gilat, 1977 or Wahba, 1990. </p>
+and everywhere else the volume goes rapidly to trend. With a smoothing
+parameter greater than zero, the volume will not pass through the data 
+points and the higher the parameter the closer the volume will be to the 
+trend. For theory on smoothing with splines see Talmi and Gilat, 1977 or Wahba, 1990. </p>
+
 <p>If a visible connection of segments appears, the program should be
-rerun with higher <i>npmin</i> to get more points from the
+rerun with higher <b>npmin</b> to get more points from the
 neighborhood of given segment. </p>
-<p>If the number of points in a vector map is less then 400, <i>segmax</i>
+
+<p>If the number of points in a vector map is less than 400, <b>segmax</b>
 should be set to 400 so that segmentation is not performed when it is
 not necessary. </p>
-<p>The program gives warning when user wants to interpolate outside the
-"box" given by minimum and maximum coordinates in vector map, zoom into
-the area where the points are is suggested in this case. </p>
-<p>For large data sets (thousands of data points) it is suggested to
+
+<p>The program gives a warning when the user wants to interpolate outside the
+"box" given by minimum and maximum coordinates in the input vector map. 
+To remedy this, zoom into the area encompassing the input vector data points.
+</p>
+
+<p>For large data sets (thousands of data points), it is suggested to
 zoom into a smaller representative area and test whether the parameters
 chosen (e.g. defaults) are appropriate. </p>
-<p>The user must run <i>g.region</i> before the program to set the
-3D region for interpolation. </p>
 
-<h2>NOTES</h2>
-The vector points map must be a 3D vector map (x, y, z as geometry).
-The module <a href="v.in.db.html">v.in.db</a> can be used to generate
-a 3D vector map from a table containing x,y,z columns.
+<p>The user must run <em>g.region</em> before the program to set the
+3D region for interpolation. </p>
 
 <h2>BUGS</h2>
 <b>devi</b> file is written as 2D and deviations are not written as attributes.
-
-<h2>SEE ALSO</h2>
-<a href="g.region.html">g.region</a>,
-<a href="v.in.ascii.html">v.in.ascii</a>,
-<a href="r3.mask.html">r3.mask</a>,
-<a href="v.in.db.html">v.in.db</a>,
-<a href="v.surf.rst.html">v.surf.rst</a>,
-<a href="v.univar.html">v.univar</a>
-
-<h2>AUTHOR</h2>
-<p>Original version of program (in FORTRAN) and GRASS enhancements: <br>
-Lubos Mitas, NCSA, University of Illinois at Urbana-Champaign,
-Illinois, USA, since 2000 at Department of Physics, 
-North Carolina State University, Raleigh, USA
-<a href="mailto:lubos_mitas@ncsu.edu">lubos_mitas@ncsu.edu</a><br>
-Helena Mitasova, Department of Marine, Earth and Atmospheric Sciences,
-North Carolina State University, Raleigh, USA, <a
- href="mailto:hmitaso@unity.ncsu.edu">hmitaso@unity.ncsu.edu</a></p>
-<p>Modified program (translated to C, adapted for GRASS, new
-segmentation procedure): <br>
-Irina Kosinovsky, US Army CERL, Champaign, Illinois, USA <br>
-Dave Gerdes, US Army CERL, Champaign, Illinois, USA </p>
-<p>Modifications for g3d library, geometric parameters,
-cross-validation, deviations: <br>
-Jaro Hofierka, Department of Geography and Regional Development,
-University of Presov, Presov, Slovakia, <a
- href="MAILTO:hofierka@fhpv.unipo.sk">hofierka@fhpv.unipo.sk</a>, <a
- href="http://www.geomodel.sk">http://www.geomodel.sk</a> <br>
-&nbsp; </p>
 
 <h2>REFERENCES</h2>
 <p>Hofierka J., Parajka J., Mitasova H., Mitas L., 2002, Multivariate
@@ -290,5 +267,35 @@ p. 983 </p>
 Data, Journal of Computational Physics, 23, p.93-123. </p>
 <p>Thorpe, J. A. (1979): Elementary Topics in Differential Geometry.
 Springer-Verlag, New York, pp. 6-94.</p>
+
+<h2>SEE ALSO</h2>
+<a href="g.region.html">g.region</a>,
+<a href="v.in.ascii.html">v.in.ascii</a>,
+<a href="r3.mask.html">r3.mask</a>,
+<a href="v.in.db.html">v.in.db</a>,
+<a href="v.surf.rst.html">v.surf.rst</a>,
+<a href="v.univar.html">v.univar</a>
+
+<h2>AUTHOR</h2>
+<p>Original version of program (in FORTRAN) and GRASS enhancements: <br>
+Lubos Mitas, NCSA, University of Illinois at Urbana-Champaign,
+Illinois, USA, since 2000 at Department of Physics, 
+North Carolina State University, Raleigh, USA
+<a href="mailto:lubos_mitas@ncsu.edu">lubos_mitas@ncsu.edu</a><br>
+Helena Mitasova, Department of Marine, Earth and Atmospheric Sciences,
+North Carolina State University, Raleigh, USA, <a
+ href="mailto:hmitaso@unity.ncsu.edu">hmitaso@unity.ncsu.edu</a></p>
+<p>Modified program (translated to C, adapted for GRASS, new
+segmentation procedure): <br>
+Irina Kosinovsky, US Army CERL, Champaign, Illinois, USA <br>
+Dave Gerdes, US Army CERL, Champaign, Illinois, USA </p>
+<p>Modifications for g3d library, geometric parameters,
+cross-validation, deviations: <br>
+Jaro Hofierka, Department of Geography and Regional Development,
+University of Presov, Presov, Slovakia, <a
+ href="MAILTO:hofierka@fhpv.unipo.sk">hofierka@fhpv.unipo.sk</a>, <a
+ href="http://www.geomodel.sk">http://www.geomodel.sk</a> <br>
+&nbsp; </p>
+
 
 <p><i>Last changed: $Date$</i> </p>
