@@ -1552,7 +1552,7 @@
 	      <label>Convert object types</label>
 	      <help>Change the type of geometry elements.</help>
 	      <handler>self.OnMenuCmd</handler>
-	      <command>v.type.py</command>
+	      <command>v.type_wrapper.py</command>
 	    </menuitem>
 	    <separator/>
 	    <menuitem>
