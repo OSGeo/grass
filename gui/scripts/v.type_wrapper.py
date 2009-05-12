@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 ############################################################################
 #
-# MODULE:       v.type.py (v.type wrapper script)
+# MODULE:       v.type_wrapper.py (v.type wrapper script)
 #
 # AUTHOR(S):    Hamish Bowman  (Otago University, New Zealand)
 #               (original contributor, v.type.sh)
