@@ -1117,10 +1117,3 @@ proc CheckScriptDone {} {
 
 	after 5000 CheckScriptDone
 }
-
-
-
-
-
-
-
