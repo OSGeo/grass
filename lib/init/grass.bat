@@ -23,7 +23,7 @@ rem (adjust to where you installed msys, gnuwin32, or other similar utilises)
 rem set PATH=c:\msys\1.0\bin;c:\msys\1.0\lib;%PATH%
 
 rem Path to your web browser
-rem set GRASS_HTML_BROWSER=%SYSTEMDRIVE%/PROGRA~1/INTERN~1/IEXPLORE.EX
+rem set GRASS_HTML_BROWSER=%SYSTEMDRIVE%/PROGRA~1/INTERN~1/IEXPLORE.EXE
 
 rem Path to the proj files (notably the epsg projection list)
 rem set GRASS_PROJSHARE=c:/grass/share/proj
