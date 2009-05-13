@@ -18,6 +18,11 @@
 # notes:
 #  - cs2cs expects "x y" data so be sure to send it "lon lat" not "lat lon"
 #  - if you send cs2cs a third data column, beware it might be treated as "z"
+# todo:
+#  - `cut` away x,y columns into a temp file, feed to cs2cs, then `paste`
+#    back to input file. see method in v.in.garmin.sh. that way additional
+#    numeric and string columns would survive the trip, and 3rd column would
+#    not be modified as z.
 
 #%Module
 #%  description: Converts coordinates from one projection to another (cs2cs frontend).
@@ -71,6 +76,9 @@
 #% key: d
 #% description: Output long/lat in decimal degrees or other projections with many decimal places
 #%end
+#% key: e
+#% description: Include input coordinates in output file
+#%end
 
 import sys
 import os
@@ -85,6 +93,7 @@ def main():
     ll_in = flags['i']
     ll_out = flags['o']
     decimal = flags['d']
+    copy_input = flags['e']
 
     #### check for cs2cs
     if not grass.find_program('cs2cs'):
@@ -181,12 +190,16 @@ def main():
 	outfmt = []
     else:
 	outfmt = ["-f", "%.8f"]
+    if not copy_input:
+	copyinp = []
+    else:
+	copyinp = ["-E"]
 
     #### do the conversion
     # Convert cs2cs DMS format to GRASS DMS format:
     #   cs2cs | sed -e 's/d/:/g' -e "s/'/:/g"  -e 's/"//g'
 
-    cmd = ['cs2cs'] + outfmt + in_proj.split() + ['+to'] + out_proj.split()
+    cmd = ['cs2cs'] + copyinp + outfmt + in_proj.split() + ['+to'] + out_proj.split()
     p = grass.Popen(cmd, stdin = grass.PIPE, stdout = grass.PIPE)
 
     while True:
