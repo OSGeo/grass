@@ -373,7 +373,7 @@ void GeomCond::parse()
 	landsat(tu);
 	break;
     }
-    default: G_warning(_("Unsupported format"));
+    default: G_fatal_error(_("Unsupported/unreadable format in control file (found igeom=%d)"), igeom);
     }
 
 
