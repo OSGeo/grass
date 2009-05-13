@@ -36,16 +36,13 @@ An example 6s parameters <em>icnd</em> file for <b>i.atcorr</b>:
 1                            - atmospheric mode=tropical
 1                            - aerosols model=continental
 15                           - visibility [km] (aerosol model concentration)
--.600                        - target at 600m above sea level
--1000                        - sensor on board a satellite
+-0.600                       - mean target elevation above sea level [km] (here 600m asl)
+-1000                        - sensor height (here, sensor on board a satellite)
 64                           - 4th band of ETM+ Landsat 7
 </pre></div>
 
 <h2><font color="red">REMAINING DOCUMENTATION ISSUES</font></h2>
-1. In section E of "6S CODE PARAMETER CHOICES", it is unclear if the 
-"-100 &lt; xpp &lt; 0" shouldn't actually be "-1000 &lt; xpp &lt; 0". ?
-<p>
-2. It should be explained under what circumstances the use of categorized maps
+1. It should be explained under what circumstances the use of categorized maps
 in conjuction with flag <em>-o</em> can slow down the calculations instead of
 speeding them up.
 
@@ -328,18 +325,21 @@ and 'aer' for aerosol).
 
 <br><h3>E. Target altitude (xps), sensor platform (xpp)</h3>
 
+Target altitude (xps, in negative [km]):
 <blockquote>xps &lt;=0 means the target is at the sea level.
-<br>xps &gt;0 means you know the altitude of the target expressed
-in km, and you put that value as xps.
-<br>
+<br>otherwise xps expresses the altitude of the target (e.g., mean elevation)
+in [km], given as negative value
+</blockquote>
 
+<p>
+Sensor platform (xpp, in negative [km] or -1000):
+<blockquote>
 <br>xpp=-1000 means that the sensor is on board a satellite.
 <br>xpp=0 means that the sensor is at the ground level.
-<br>-100&lt;xpp&lt;0 means you know the altitude of the sensor
-expressed in kilometers; this altitude is <b>relative to the target</b>
-altitude.
+<br>-100&lt;xpp&lt;0 defines the altitude of the sensor expressed in [km];
+ this altitude is given <b>relative to the target</b> altitude as negative value.
 
-<p>For aircraft simulations only (xpp is neither 0 nor -1000):
+<p>For aircraft simulations only (xpp is neither equal to 0 nor equal to -1000):
 <blockquote>
 puw,po3 (water vapor content,ozone content between the aircraft and the surface)
 <br>taerp (the aerosol optical thickness at 550nm between the aircraft and the
@@ -347,9 +347,9 @@ surface)
 <p>If these data are not available, enter negative values for all of them.
 puw,po3 will then be interpolated from the us62 standard profile according
 to the values at the ground level. taerp will be computed according to a 2km
-exponential profile for aerosol.</blockquote>
+exponential profile for aerosol.
 </blockquote>
-
+</blockquote>
 
 <br><h3>F. Sensor band</h3>
 
@@ -493,6 +493,8 @@ North Carolina sample dataset: Atmospheric correction of a LANDSAT-7 channel:
 
 <div class="code"><pre>
 g.region rast=lsat7_2002_40 -p
+
+# check metadata for sun position (use to verify overpass time with i.atcorr output):
 r.info lsat7_2002_40
 
 # using an integer DEM greatly accelerates the i.atcorr computations
@@ -501,13 +503,13 @@ r.mapcalc "elev_int = round(elevation)"
 # find mean elevation (target above sea level, used as initialization value in control file)
 r.univar elev_int
 
-# create control file 'icnd.txt' for channel 4 (NIR)
+# create control file 'icnd.txt' for channel 4 (NIR), based on <a href="ftp://ftp.glcf.umiacs.umd.edu/glcf/Landsat/WRS2/p016/r035/p016r035_7x20020524.ETM-EarthSat-Orthorectified/p016r035_7x20020524.met">metadata</a>
 echo "8                            - geometrical conditions=Landsat ETM+
-5 24 14.30 -78.691 35.749    - month day hh.ddd longitude latitude ("hh.ddd" is a decimal hour GMT)
+5 24 15.70 -78.691 35.749    - month day hh.ddd longitude latitude ("hh.ddd" is a decimal hour GMT)
 2                            - atmospheric mode=midlatitude summer
 1                            - aerosols model=continental
 50                           - visibility [km] (aerosol model concentration)
--.110                        - target at 110m above sea level
+-0.110                       - mean target elevation above sea level [km]
 -1000                        - sensor on board a satellite
 64                           - 4th band of ETM+ Landsat 7" > icnd.txt
 
@@ -516,7 +518,7 @@ echo "8                            - geometrical conditions=Landsat ETM+
 i.atcorr -r -a -o lsat7_2002_40 ialt=elev_int icnd=icnd.txt oimg=lsat7_2002_40_atcorr
 </pre></div>
 
-Note that the altitude value from 'icnd.txtx' file is read at the beginning
+Note that the altitude value from 'icnd.txt' file is read at the beginning
 to compute the initial transform. It is necessary to give a value which could
 the the mean value of the elevation model. For the atmospheric correction then
 the raster elevation values are used from the map.
@@ -530,6 +532,9 @@ Note that the process is computationally intensive.
 
 <p><em>Code clean-up and port to GRASS 6.3, 15.12.2006:</em>
 <br>Yann Chemin, ychemin(at)gmail.com
+
+<p><em>Documentation clean-up, 5/2009:</em>
+<br>Markus Neteler, FEM
 
 <h2>REFERENCES</h2>
 
