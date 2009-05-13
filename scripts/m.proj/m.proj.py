@@ -76,6 +76,7 @@
 #% key: d
 #% description: Output long/lat in decimal degrees or other projections with many decimal places
 #%end
+#%flag
 #% key: e
 #% description: Include input coordinates in output file
 #%end
