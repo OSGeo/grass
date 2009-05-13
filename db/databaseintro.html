@@ -26,10 +26,11 @@ on the vector map (see <a href="vectorintro.html">Vector introduction</a>).
 Available drivers are listed in <a href="sql.html">SQL support in GRASS GIS</a>.
 <p>
 <b>Notes</b>:<br>
-The default DBF driver provides only very limited SQL
+The DBF driver provides only very limited SQL
 support (as DBF is not an SQL DB) while the other DBMS backends (such
-as PostgreSQL, MySQL etc) provide full SQL support since the SQL
-commands are sent directly to the DBMS. 
+as SQLite, PostgreSQL, MySQL etc) provide full SQL support since the SQL
+commands are sent directly to the DBMS. For this reason, the SQLite driver
+is the default DBMI backend.
 
 <h3>DB connection management</h3>
 
@@ -48,8 +49,8 @@ copy a a full table or selectively parts of it, use <a href="db.copy.html">db.co
 
 Further conversion tools:
 <ul>
-<li><a href="http://mdbtools.sourceforge.net/">MDB Tools</a>: Convert MS-Access data to SQL, DBF, etc.</li>
-<li><a href="http://grass.osgeo.org/wiki/Openoffice.org_with_SQL_Databases">Openoffice.org with SQL Databases</a>
+<li><a href="http://sourceforge.net/projects/mdbtools">MDB Tools</a>: Convert MS-Access data to SQL, DBF, etc.</li>
+<li><a href="http://grass.osgeo.org/wiki/Openoffice.org_with_SQL_Databases">Using OpenOffice.org with SQL Databases</a>
 </ul>
 
 
@@ -62,7 +63,7 @@ See the <a href="sql.html">SQL help page</a> for examples.
 
 <h3>Managing the default DBMI settings</h3>
  
-Per default vector map attributes are stored in DBF table files. This default
+Per default vector map attributes are stored in SQLite tables. This default
 definition can be modified with <a href="db.connect.html">db.connect</a>. If an
 external DBMS is used, <a href="db.login.html">db.login</a> may be required.
 
