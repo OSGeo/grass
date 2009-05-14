@@ -140,12 +140,14 @@ void G_reset_mapsets(void)
 char **G_available_mapsets(void)
 {
     char **mapsets = NULL;
-    int alloc = 0;
+    int alloc = 50;
     int n = 0;
     DIR *dir;
     struct dirent *ent;
 
     G_debug(3, "G_available_mapsets");
+
+    mapsets = G_calloc(alloc, sizeof(char *));
 
     dir = opendir(G_location_path());
     if (!dir)
@@ -170,6 +172,7 @@ char **G_available_mapsets(void)
 	}
 
 	mapsets[n++] = G_store(ent->d_name);
+	mapsets[n] = NULL;
     }
 
     closedir(dir);
