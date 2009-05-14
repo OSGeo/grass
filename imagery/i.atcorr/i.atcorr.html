@@ -503,9 +503,15 @@ r.mapcalc "elev_int = round(elevation)"
 # find mean elevation (target above sea level, used as initialization value in control file)
 r.univar elev_int
 
-# create control file 'icnd.txt' for channel 4 (NIR), based on <a href="ftp://ftp.glcf.umiacs.umd.edu/glcf/Landsat/WRS2/p016/r035/p016r035_7x20020524.ETM-EarthSat-Orthorectified/p016r035_7x20020524.met">metadata</a>
+# check satellite overpass time with sun position reported in <a href="ftp://ftp.glcf.umiacs.umd.edu/glcf/Landsat/WRS2/p016/r035/p016r035_7x20020524.ETM-EarthSat-Orthorectified/p016r035_7x20020524.met">metadata</a>
+# here: SUN_AZIMUTH = 120.8810347, SUN_ELEVATION = 64.7730999
+r.sunmask -s elev=elevation out=dummy year=2002 month=5 day=24 hour=11 min=40 sec=0 timezone=-4
+# .. reports: sun azimuth: 120.555206, sun angle above horz.(refraction corrected): 65.028458
+
+# create control file 'icnd.txt' for channel 4 (NIR), based on metadata
+# 11:40 local time is 15.66 decimal hour GMT(decimal minutes: 40 * 100 / 60):
 echo "8                            - geometrical conditions=Landsat ETM+
-5 24 15.70 -78.691 35.749    - month day hh.ddd longitude latitude ("hh.ddd" is a decimal hour GMT)
+5 24 15.66 -78.691 35.749     - month day hh.ddd longitude latitude ("hh.ddd" is a decimal hour GMT)
 2                            - atmospheric mode=midlatitude summer
 1                            - aerosols model=continental
 50                           - visibility [km] (aerosol model concentration)
@@ -523,7 +529,8 @@ to compute the initial transform. It is necessary to give a value which could
 the the mean value of the elevation model. For the atmospheric correction then
 the raster elevation values are used from the map.
 <p>
-Note that the process is computationally intensive.
+Note that the process is computationally intensive.<br>
+Note also, that <em>i.atcorr</em> reports solar elevation angle above horizon rather than solar zenith angle.
 
 <H2>AUTHORS</H2>
 
