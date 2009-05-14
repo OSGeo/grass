@@ -542,18 +542,21 @@ class GMFrame(wx.Frame):
     def OnAboutGRASS(self, event):
         """Display 'About GRASS' dialog"""
         info = wx.AboutDialogInfo()
-
-        rev = "$Revision$"
+        
         # name
         info.SetName("GRASS GIS")
         # version
-        version = grass.read_command('g.version').replace('GRASS', '').strip()
+        version, svn_gis_h_rev, svn_gis_h_date = gcmd.RunCommand('g.version',
+                                                                 flags = 'r',
+                                                                 read = True).splitlines()
+        version = version.replace('GRASS', '').strip()
         info.SetVersion(version)
         # description
         copyrightFile = open(os.path.join(os.getenv("GISBASE"), "COPYING"), 'r')
         copyrightOut = []
         copyright = copyrightFile.readlines()
-        info.SetCopyright(rev + '\n\n' + wordwrap(''.join(copyright[:11] + copyright[26:-3]),
+        info.SetCopyright('GIS Library: '+ svn_gis_h_rev + 
+                          '\n\n' + wordwrap(''.join(copyright[:11] + copyright[26:-3]),
                                                   550, wx.ClientDC(self)))
         copyrightFile.close()
         # website
@@ -568,7 +571,7 @@ class GMFrame(wx.Frame):
         authorsFile.close()
         
         wx.AboutBox(info)
-
+        
     def OnWorkspace(self, event):
         """Workspace menu (new, load)"""
         point = wx.GetMousePosition()
