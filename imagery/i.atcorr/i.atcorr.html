@@ -517,14 +517,14 @@ echo "8                            - geometrical conditions=Landsat ETM+
 50                           - visibility [km] (aerosol model concentration)
 -0.110                       - mean target elevation above sea level [km]
 -1000                        - sensor on board a satellite
-64                           - 4th band of ETM+ Landsat 7" > icnd.txt
+64                           - 4th band of ETM+ Landsat 7" > icnd_lsat4.txt
 
 # run atmospheric correction (-r for reflectance input map; -a for date &gt;July 2000;
 #                             -o to use cache acceleration):
-i.atcorr -r -a -o lsat7_2002_40 ialt=elev_int icnd=icnd.txt oimg=lsat7_2002_40_atcorr
+i.atcorr -r -a -o lsat7_2002_40 ialt=elev_int icnd=icnd_lsat4.txt oimg=lsat7_2002_40_atcorr
 </pre></div>
 
-Note that the altitude value from 'icnd.txt' file is read at the beginning
+Note that the altitude value from 'icnd_lsat4.txt' file is read at the beginning
 to compute the initial transform. It is necessary to give a value which could
 the the mean value of the elevation model. For the atmospheric correction then
 the raster elevation values are used from the map.
