@@ -42,12 +42,11 @@ extern "C" {
 #include "Transform.h"
 #include "6s.h"
 
-
 /* Input options and flags */
 struct Options
 {
     /* options */
-    struct Option *iimg;    /* input satelite image */
+    struct Option *iimg;    /* input satellite image */
     struct Option *iscl;    /* input data is scaled to this range */
     struct Option *ialt;    /* an input elevation map in km used to increase */
                             /* atmospheric correction accuracy, including this */
@@ -127,11 +126,12 @@ static void write_fp_to_cell (int ofd, FCELL* buf)
 }
 
 
+/* See also Cache note below */
 class TICache
 {
     enum TICacheSize
     {
-        MAX_TIs = 1024 /* this value is a guess, increase it if in general more categories are used */
+        MAX_TIs = 8192 /* this value is a guess, increase it if in general more categories are used */
     };
     TransformInput tis[MAX_TIs];
     float alts[MAX_TIs];
@@ -163,11 +163,18 @@ public:
 /* the transform input map, is a array of ticaches.
    The first key is the visibility which matches to a TICache for the altitudes.
    This code is horrible, i just spent 20min writing and 5min debugging it. */
+
+/* Cache note:
+   The DEM cases are in range 0 < DEM < 8888 for the World in case of using an 
+   integer DEM values in meters. So the cache should ideally store 8888 different
+   cases for the World-type conditions if all happen in the same image. */
+
 class TIMap
 {
     enum TIMapSize
     {
-	MAX_TICs = 1024 /* this value is a guess. It means that 1024 TI's will be the max combinations of vis/alt pairs */
+	MAX_TICs = 8192  /* this value is a guess. It means that <size> TI's will be 
+                          * the max combinations of vis/alt pairs */
     };
 
     TICache tic[MAX_TICs]; /* array of TICaches */
