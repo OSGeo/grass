@@ -29,6 +29,7 @@
 
 * Addition of IRS-1C LISS, Feb 2009: Markus Neteler
 
+TODO: use dynamic allocation for TiCache 
 ***************************************************************************/
 
 #include <cstdlib>
@@ -131,7 +132,9 @@ class TICache
 {
     enum TICacheSize
     {
-        MAX_TIs = 8192 /* this value is a guess, increase it if in general more categories are used */
+        MAX_TIs = 4096 /* this value is a guess, increase it if in general 
+                        * more categories are used. TODO: use dynamic allocation
+                        * since 4096 is the limit on 32bit */
     };
     TransformInput tis[MAX_TIs];
     float alts[MAX_TIs];
@@ -173,8 +176,9 @@ class TIMap
 {
     enum TIMapSize
     {
-	MAX_TICs = 8192  /* this value is a guess. It means that <size> TI's will be 
-                          * the max combinations of vis/alt pairs */
+	MAX_TICs = 4096  /* this value is a guess. It means that <size> TI's will be 
+                          * the max combinations of vis/alt pairs. TODO: use dynamic allocation
+                          * since 4096 is the limit on 32bit */
     };
 
     TICache tic[MAX_TICs]; /* array of TICaches */
