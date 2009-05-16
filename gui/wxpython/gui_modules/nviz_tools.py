@@ -1328,7 +1328,7 @@ class NvizToolWindow(wx.Frame):
         # no 'changed' event ... (FIXME)
         spin.SetName('spin')
         spin.Bind(wx.EVT_SPINCTRL, bind[2])
-        spin.Bind(wx.EVT_TEXT, bind[2])
+        ### spin.Bind(wx.EVT_TEXT, bind[2])
         dict[name]['spin'] = spin.GetId()
 
     def UpdateSettings(self):
