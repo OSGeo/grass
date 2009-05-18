@@ -27,13 +27,14 @@ echo "1|601653.5|4922869.2|a
 6|598005.5|4921439.2|f" | v.in.ascii cat=1 x=2 y=3 out=centers col="cat integer, \
                          east double precision, north double precision, label varchar(43)"
 
+# verify data preparation
 v.db.select centers
 v.category centers op=report
 # type       count        min        max
 # point          6          1          6
 
 
-#create lines map connecting points to network (on layer 2)
+# create lines map connecting points to network (on layer 2)
 v.net myroads points=centers out=myroads_net op=connect thresh=500
 v.category myroads_net op=report
 # Layer / table: 1 / myroads_net
@@ -44,7 +45,7 @@ v.category myroads_net op=report
 # type       count        min        max
 # point          6          1          5
 
-# The network is now prepared.
+# The network is now prepared. Visualize it
 g.region vect=myroads_net
 d.mon x0
 d.vect myroads_net
