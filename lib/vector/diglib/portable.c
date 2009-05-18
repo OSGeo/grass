@@ -1,32 +1,32 @@
-/*
- ****************************************************************************
- *
- * MODULE:       Vector library 
- *              
- * AUTHOR(S):    Original author CERL, probably Dave Gerdes.
- *               Update to GRASS 5.7 Radim Blazek.
- *
- * PURPOSE:      Lower level functions for reading/writing/manipulating vectors.
- *
- * COPYRIGHT:    (C) 2001 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *              License (>=v2). Read the file COPYING that comes with GRASS
- *              for details.
- *
- *****************************************************************************/
+/*!
+   \file diglib/file.c
+
+   \brief Vector library (diglib) - portability
+
+   Lower level functions for reading/writing/manipulating vectors.
+   
+   (C) 2001-2009 by the GRASS Development Team
+
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
+
+   \author Original author CERL, probably Dave Gerdes
+   \author Update to GRASS 5.7 Radim Blazek
+*/
+
 #include <grass/config.h>
 #include <sys/types.h>
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/Vect.h>
+#include <grass/glocale.h>
 
 extern void port_init(void);
 
 extern int nat_dbl;
 extern int nat_flt;
 extern int nat_lng;
-extern int nat_off_t;
+extern size_t nat_off_t;
 extern int nat_int;
 extern int nat_shrt;
 
@@ -65,33 +65,35 @@ static int buf_alloc(int needed)
     return (0);
 }
 
-/***************************** READ ************************************/
-/*  These are the routines to read from the Portable Vector Format.
+/*!
+  \brief Read doubles from the Portable Vector Format
+
    These routines must handle any type size conversions between the
    portable format and the native machine.
 
-   Return:  0 error
-   1 OK
+   \param[out] buf data buffer
+   \param cnt number of members
+   \param fp pointer to GVFILE
 
- */
-
-
-/* read doubles from the PVF file */
-int dig__fread_port_D(double *buf, int cnt, GVFILE * fp)
+   \return 0 error
+   \return 1 OK
+*/
+int dig__fread_port_D(double *buf, size_t cnt, GVFILE * fp)
 {
-    int i, j, ret;
+    unsigned int i, j;
+    int ret;
     unsigned char *c1, *c2;
 
     if (Cur_Head->dbl_quick) {
 	ret = dig_fread(buf, PORT_DOUBLE, cnt, fp);
-	if (ret != cnt)
+	if (ret != (int) cnt)
 	    return 0;
     }
     else {
 	/* read into buffer */
 	buf_alloc(cnt * PORT_DOUBLE);
 	ret = dig_fread(buffer, PORT_DOUBLE, cnt, fp);
-	if (ret != cnt)
+	if (ret != (int) cnt)
 	    return 0;
 	/* read from buffer in changed order */
 	c1 = (unsigned char *)buffer;
@@ -107,22 +109,35 @@ int dig__fread_port_D(double *buf, int cnt, GVFILE * fp)
     return 1;
 }
 
-/* read floats from the PVF file */
-int dig__fread_port_F(float *buf, int cnt, GVFILE * fp)
+/*!
+  \brief Read floats from the Portable Vector Format
+
+   These routines must handle any type size conversions between the
+   portable format and the native machine.
+
+   \param[out] buf data buffer
+   \param cnt number of members
+   \param fp pointer to GVFILE
+
+   \return 0 error
+   \return 1 OK
+*/
+int dig__fread_port_F(float *buf, size_t cnt, GVFILE * fp)
 {
-    int i, j, ret;
+    unsigned int i, j;
+    int ret;
     unsigned char *c1, *c2;
 
     if (Cur_Head->flt_quick) {
 	ret = dig_fread(buf, PORT_FLOAT, cnt, fp);
-	if (ret != cnt)
+	if (ret != (int) cnt)
 	    return 0;
     }
     else {
 	/* read into buffer */
 	buf_alloc(cnt * PORT_FLOAT);
 	ret = dig_fread(buffer, PORT_FLOAT, cnt, fp);
-	if (ret != cnt)
+	if (ret != (int) cnt)
 	    return 0;
 	/* read from buffer in changed order */
 	c1 = (unsigned char *)buffer;
@@ -138,23 +153,36 @@ int dig__fread_port_F(float *buf, int cnt, GVFILE * fp)
     return 1;
 }
 
-/* read off_ts from the PVF file */
-int dig__fread_port_O(off_t *buf, int cnt, GVFILE * fp, int port_off_t_size)
+/*!
+  \brief Read off_ts from the Portable Vector Format
+
+   These routines must handle any type size conversions between the
+   portable format and the native machine.
+
+   \param[out] buf data buffer
+   \param cnt number of members
+   \param fp pointer to GVFILE
+   \param port_off_t_size offset
+   \return 0 error
+   \return 1 OK
+*/
+int dig__fread_port_O(off_t *buf, size_t cnt, GVFILE * fp, size_t port_off_t_size)
 {
-    int i, j, ret;
+    unsigned int i, j;
+    int ret;
     unsigned char *c1, *c2;
 
     if (Cur_Head->off_t_quick) {
 	if (nat_off_t == port_off_t_size) {
 	    ret = dig_fread(buf, port_off_t_size, cnt, fp);
-	    if (ret != cnt)
+	    if (ret != (int) cnt)
 		return 0;
 	}
 	else if (nat_off_t > port_off_t_size) {
 	    /* read into buffer */
 	    buf_alloc(cnt * port_off_t_size);
 	    ret = dig_fread(buffer, port_off_t_size, cnt, fp);
-	    if (ret != cnt)
+	    if (ret != (int) cnt)
 		return 0;
 	    /* set buffer to zero (positive numbers) */
 	    memset(buf, 0, cnt * sizeof(off_t));
@@ -181,7 +209,7 @@ int dig__fread_port_O(off_t *buf, int cnt, GVFILE * fp, int port_off_t_size)
 	}
 	else if (nat_off_t < port_off_t_size) {
 	    /* should never happen */
-	    G_fatal_error("Vector exceeds supported file size limit");
+	    G_fatal_error(_("Vector exceeds supported file size limit"));
 	}
     }
     else {
@@ -189,7 +217,7 @@ int dig__fread_port_O(off_t *buf, int cnt, GVFILE * fp, int port_off_t_size)
 	    /* read into buffer */
 	    buf_alloc(cnt * port_off_t_size);
 	    ret = dig_fread(buffer, port_off_t_size, cnt, fp);
-	    if (ret != cnt)
+	    if (ret != (int) cnt)
 		return 0;
 	    /* set buffer to zero (positive numbers) */
 	    memset(buf, 0, cnt * sizeof(off_t));
@@ -214,29 +242,42 @@ int dig__fread_port_O(off_t *buf, int cnt, GVFILE * fp, int port_off_t_size)
 	}
 	else if (nat_off_t < port_off_t_size) {
 	    /* should never happen */
-	    G_fatal_error("Vector exceeds supported file size limit");
+	    G_fatal_error(_("Vector exceeds supported file size limit"));
 	}
     }
     return 1;
 }
 
-/* read longs from the PVF file */
-int dig__fread_port_L(long *buf, int cnt, GVFILE * fp)
+/*!
+  \brief Read longs from the Portable Vector Format
+
+   These routines must handle any type size conversions between the
+   portable format and the native machine.
+
+   \param[out] buf data buffer
+   \param cnt number of members
+   \param fp pointer to GVFILE
+
+   \return 0 error
+   \return 1 OK
+*/
+int dig__fread_port_L(long *buf, size_t cnt, GVFILE * fp)
 {
-    int i, j, ret;
+    unsigned int i, j;
+    int ret;
     unsigned char *c1, *c2;
 
     if (Cur_Head->lng_quick) {
 	if (nat_lng == PORT_LONG) {
 	    ret = dig_fread(buf, PORT_LONG, cnt, fp);
-	    if (ret != cnt)
+	    if (ret != (int) cnt)
 		return 0;
 	}
 	else {
 	    /* read into buffer */
 	    buf_alloc(cnt * PORT_LONG);
 	    ret = dig_fread(buffer, PORT_LONG, cnt, fp);
-	    if (ret != cnt)
+	    if (ret != (int) cnt)
 		return 0;
 	    /* set buffer to zero (positive numbers) */
 	    memset(buf, 0, cnt * sizeof(long));
@@ -266,7 +307,7 @@ int dig__fread_port_L(long *buf, int cnt, GVFILE * fp)
 	/* read into buffer */
 	buf_alloc(cnt * PORT_LONG);
 	ret = dig_fread(buffer, PORT_LONG, cnt, fp);
-	if (ret != cnt)
+	if (ret != (int) cnt)
 	    return 0;
 	/* set buffer to zero (positive numbers) */
 	memset(buf, 0, cnt * sizeof(long));
@@ -292,23 +333,36 @@ int dig__fread_port_L(long *buf, int cnt, GVFILE * fp)
     return 1;
 }
 
-/* read ints from the PVF file */
-int dig__fread_port_I(int *buf, int cnt, GVFILE * fp)
+/*!
+  \brief Read integers from the Portable Vector Format
+
+   These routines must handle any type size conversions between the
+   portable format and the native machine.
+
+   \param[out] buf data buffer
+   \param cnt number of members
+   \param fp pointer to GVFILE
+
+   \return 0 error
+   \return 1 OK
+*/
+int dig__fread_port_I(int *buf, size_t cnt, GVFILE * fp)
 {
-    int i, j, ret;
+    unsigned int i, j;
+    int ret;
     unsigned char *c1, *c2;
 
     if (Cur_Head->int_quick) {
 	if (nat_int == PORT_INT) {
 	    ret = dig_fread(buf, PORT_INT, cnt, fp);
-	    if (ret != cnt)
+	    if (ret != (int) cnt)
 		return 0;
 	}
 	else {
 	    /* read into buffer */
 	    buf_alloc(cnt * PORT_INT);
 	    ret = dig_fread(buffer, PORT_INT, cnt, fp);
-	    if (ret != cnt)
+	    if (ret != (int) cnt)
 		return 0;
 	    /* set buffer to zero (positive numbers) */
 	    memset(buf, 0, cnt * sizeof(int));
@@ -338,7 +392,7 @@ int dig__fread_port_I(int *buf, int cnt, GVFILE * fp)
 	/* read into buffer */
 	buf_alloc(cnt * PORT_INT);
 	ret = dig_fread(buffer, PORT_INT, cnt, fp);
-	if (ret != cnt)
+	if (ret != (int) cnt)
 	    return 0;
 	/* set buffer to zero (positive numbers) */
 	memset(buf, 0, cnt * sizeof(int));
@@ -364,23 +418,36 @@ int dig__fread_port_I(int *buf, int cnt, GVFILE * fp)
     return 1;
 }
 
-/* read shorts from the PVF file */
-int dig__fread_port_S(short *buf, int cnt, GVFILE * fp)
+/*!
+  \brief Read shorts from the Portable Vector Format
+
+   These routines must handle any type size conversions between the
+   portable format and the native machine.
+
+   \param[out] buf data buffer
+   \param cnt number of members
+   \param fp pointer to GVFILE
+
+   \return 0 error
+   \return 1 OK
+*/
+int dig__fread_port_S(short *buf, size_t cnt, GVFILE * fp)
 {
-    int i, j, ret;
+    unsigned int i, j;
+    int ret;
     unsigned char *c1, *c2;
 
     if (Cur_Head->shrt_quick) {
 	if (nat_shrt == PORT_SHORT) {
 	    ret = dig_fread(buf, PORT_SHORT, cnt, fp);
-	    if (ret != cnt)
+	    if (ret != (int) cnt)
 		return 0;
 	}
 	else {
 	    /* read into buffer */
 	    buf_alloc(cnt * PORT_SHORT);
 	    if (0 >= (ret = dig_fread(buffer, PORT_SHORT, cnt, fp)))
-		if (ret != cnt)
+		if (ret != (int) cnt)
 		    return 0;
 	    /* set buffer to zero (positive numbers) */
 	    memset(buf, 0, cnt * sizeof(short));
@@ -410,7 +477,7 @@ int dig__fread_port_S(short *buf, int cnt, GVFILE * fp)
 	/* read into buffer */
 	buf_alloc(cnt * PORT_SHORT);
 	ret = dig_fread(buffer, PORT_SHORT, cnt, fp);
-	if (ret != cnt)
+	if (ret != (int) cnt)
 	    return 0;
 	/* set buffer to zero (positive numbers) */
 	memset(buf, 0, cnt * sizeof(short));
@@ -436,20 +503,46 @@ int dig__fread_port_S(short *buf, int cnt, GVFILE * fp)
     return 1;
 }
 
-/* read chars from the PVF file */
-int dig__fread_port_C(char *buf, int cnt, GVFILE * fp)
+/*!
+  \brief Read chars from the Portable Vector Format
+
+   These routines must handle any type size conversions between the
+   portable format and the native machine.
+
+   \param[out] buf data buffer
+   \param cnt number of members
+   \param fp pointer to GVFILE
+
+   \return 0 error
+   \return 1 OK
+*/
+int dig__fread_port_C(char *buf, size_t cnt, GVFILE * fp)
 {
     int ret;
 
     ret = dig_fread(buf, PORT_CHAR, cnt, fp);
-    if (ret != cnt)
+    if (ret != (int) cnt)
 	return 0;
     return 1;
 }
 
-/* read plus_t from the PVF file */
-/* plus_t is defined as int so we only retype pointer and use int function */
-int dig__fread_port_P(plus_t * buf, int cnt, GVFILE * fp)
+/*!
+  \brief Read plus_t from the Portable Vector Format
+
+   These routines must handle any type size conversions between the
+   portable format and the native machine.
+   
+   plus_t is defined as int so we only retype pointer and use int
+   function.
+
+   \param[out] buf data buffer
+   \param cnt number of members
+   \param fp pointer to GVFILE
+
+   \return 0 error
+   \return 1 OK
+*/
+int dig__fread_port_P(plus_t * buf, size_t cnt, GVFILE * fp)
 {
     int *ibuf;
 
@@ -458,12 +551,23 @@ int dig__fread_port_P(plus_t * buf, int cnt, GVFILE * fp)
     return (dig__fread_port_I(ibuf, cnt, fp));
 }
 
-/***************************** WRITE ************************************/
+/*!
+  \brief Write doubles to the Portable Vector Format
 
-int dig__fwrite_port_D(const double *buf,	/* DOUBLE */
-		       int cnt, GVFILE * fp)
+   These routines must handle any type size conversions between the
+   portable format and the native machine.
+
+   \param buf data buffer
+   \param cnt number of members
+   \param[in,out] fp pointer to GVFILE
+
+   \return 0 error
+   \return 1 OK
+*/
+int dig__fwrite_port_D(const double *buf,
+		       size_t cnt, GVFILE * fp)
 {
-    int i, j;
+    unsigned int i, j;
     unsigned char *c1, *c2;
 
     if (Cur_Head->dbl_quick) {
@@ -486,10 +590,23 @@ int dig__fwrite_port_D(const double *buf,	/* DOUBLE */
     return 0;
 }
 
-int dig__fwrite_port_F(const float *buf,	/* FLOAT */
-		       int cnt, GVFILE * fp)
+/*!
+  \brief Write floats to the Portable Vector Format
+
+   These routines must handle any type size conversions between the
+   portable format and the native machine.
+
+   \param buf data buffer
+   \param cnt number of members
+   \param[in,out] fp pointer to GVFILE
+
+   \return 0 error
+   \return 1 OK
+*/
+int dig__fwrite_port_F(const float *buf,
+		       size_t cnt, GVFILE * fp)
 {
-    int i, j;
+    unsigned int i, j;
     unsigned char *c1, *c2;
 
     if (Cur_Head->flt_quick) {
@@ -512,10 +629,23 @@ int dig__fwrite_port_F(const float *buf,	/* FLOAT */
     return 0;
 }
 
-int dig__fwrite_port_O(const off_t *buf,	/* OFF_T */
-		       int cnt, GVFILE * fp, int port_off_t_size)
+/*!
+  \brief Write off_ts to the Portable Vector Format
+
+   These routines must handle any type size conversions between the
+   portable format and the native machine.
+
+   \param buf data buffer
+   \param cnt number of members
+   \param[in,out] fp pointer to GVFILE
+
+   \return 0 error
+   \return 1 OK
+*/
+int dig__fwrite_port_O(const off_t *buf,
+		       size_t cnt, GVFILE * fp, size_t port_off_t_size)
 {
-    int i, j;
+    unsigned int i, j;
     unsigned char *c1, *c2;
 
     if (Cur_Head->off_t_quick) {
@@ -559,16 +689,29 @@ int dig__fwrite_port_O(const off_t *buf,	/* OFF_T */
 	}
 	else if (nat_off_t < port_off_t_size) {
 	    /* should never happen */
-	    G_fatal_error("Vector exceeds supported file size limit");
+	    G_fatal_error(_("Vector exceeds supported file size limit"));
 	}
     }
     return 0;
 }
 
-int dig__fwrite_port_L(const long *buf,	/* LONG */
-		       int cnt, GVFILE * fp)
+/*!
+  \brief Write longs to the Portable Vector Format
+
+   These routines must handle any type size conversions between the
+   portable format and the native machine.
+
+   \param buf data buffer
+   \param cnt number of members
+   \param[in,out] fp pointer to GVFILE
+
+   \return 0 error
+   \return 1 OK
+*/
+int dig__fwrite_port_L(const long *buf,
+		       size_t cnt, GVFILE * fp)
 {
-    int i, j;
+    unsigned int i, j;
     unsigned char *c1, *c2;
 
     if (Cur_Head->lng_quick) {
@@ -608,10 +751,23 @@ int dig__fwrite_port_L(const long *buf,	/* LONG */
     return 0;
 }
 
-int dig__fwrite_port_I(const int *buf,	/* INT */
-		       int cnt, GVFILE * fp)
+/*!
+  \brief Write integers to the Portable Vector Format
+
+   These routines must handle any type size conversions between the
+   portable format and the native machine.
+
+   \param buf data buffer
+   \param cnt number of members
+   \param[in,out] fp pointer to GVFILE
+
+   \return 0 error
+   \return 1 OK
+*/
+int dig__fwrite_port_I(const int *buf,
+		       size_t cnt, GVFILE * fp)
 {
-    int i, j;
+    unsigned int i, j;
     unsigned char *c1, *c2;
 
     if (Cur_Head->int_quick) {
@@ -651,10 +807,23 @@ int dig__fwrite_port_I(const int *buf,	/* INT */
     return 0;
 }
 
-int dig__fwrite_port_S(const short *buf,	/* SHORT */
-		       int cnt, GVFILE * fp)
+/*!
+  \brief Write shorts to the Portable Vector Format
+
+   These routines must handle any type size conversions between the
+   portable format and the native machine.
+
+   \param buf data buffer
+   \param cnt number of members
+   \param[in,out] fp pointer to GVFILE
+
+   \return 0 error
+   \return 1 OK
+*/
+int dig__fwrite_port_S(const short *buf,
+		       size_t cnt, GVFILE * fp)
 {
-    int i, j;
+    unsigned int i, j;
     unsigned char *c1, *c2;
 
     if (Cur_Head->shrt_quick) {
@@ -694,15 +863,41 @@ int dig__fwrite_port_S(const short *buf,	/* SHORT */
     return 0;
 }
 
-/* plus_t is defined as int so we only retype pointer and use int function */
-int dig__fwrite_port_P(const plus_t * buf,	/* PLUS_T->INT */
-		       int cnt, GVFILE * fp)
+
+/*!
+  \brief Write plus_t to the Portable Vector Format
+
+   These routines must handle any type size conversions between the
+   portable format and the native machine.
+
+   \param buf data buffer
+   \param cnt number of members
+   \param[in,out] fp pointer to GVFILE
+
+   \return 0 error
+   \return 1 OK
+*/
+int dig__fwrite_port_P(const plus_t * buf,
+		       size_t cnt, GVFILE * fp)
 {
     return (dig__fwrite_port_I((int *)buf, cnt, fp));
 }
 
-int dig__fwrite_port_C(const char *buf,	/* CHAR */
-		       int cnt, GVFILE * fp)
+/*!
+  \brief Write chars to the Portable Vector Format
+
+   These routines must handle any type size conversions between the
+   portable format and the native machine.
+
+   \param buf data buffer
+   \param cnt number of members
+   \param[in,out] fp pointer to GVFILE
+
+   \return 0 error
+   \return 1 OK
+*/
+int dig__fwrite_port_C(const char *buf,
+		       size_t cnt, GVFILE * fp)
 {
     if (dig_fwrite(buf, PORT_CHAR, cnt, fp) == cnt)
 	return 1;
@@ -710,10 +905,15 @@ int dig__fwrite_port_C(const char *buf,	/* CHAR */
     return 0;
 }
 
-/* set portable info structure to byte order of file */
+/*!
+  \brief Set portable info structure to byte order of file
+
+  \param port pointer to Port_info
+  \param byte_order ENDIAN_BIG or ENDIAN_LITTLE
+*/
 void dig_init_portable(struct Port_info *port, int byte_order)
 {
-    int i;
+    unsigned int i;
 
     port_init();
 
@@ -800,13 +1000,25 @@ void dig_init_portable(struct Port_info *port, int byte_order)
     return;
 }
 
-/* set current portable info */
+/*!
+  \brief set current portable info
+
+  \param port pointer to Port_info
+
+  \return 0
+*/
 int dig_set_cur_port(struct Port_info *port)
 {
     Cur_Head = port;
     return 0;
 }
 
+/*!
+  \brief Get byte order
+
+  \return ENDIAN_LITTLE
+  \return ENDIAN_BIG
+*/
 int dig__byte_order_out()
 {
     if (dbl_order == ENDIAN_LITTLE)

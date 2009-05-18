@@ -14,7 +14,8 @@
    This program is free software under the GNU General Public License
    (>=v2).  Read the file COPYING that comes with GRASS for details.
 
-   \author Dave Gerdes, Radim Blazek
+   \author Original author CERL, probably Dave Gerdes
+   \author Update to GRASS 5.7 Radim Blazek
  */
 
 #include <grass/config.h>
@@ -154,7 +155,7 @@ size_t dig_fread(void *ptr, size_t size, size_t nmemb, GVFILE *file)
 
   \return number of items written
  */
-size_t dig_fwrite(void *ptr, size_t size, size_t nmemb, GVFILE *file)
+size_t dig_fwrite(const void *ptr, size_t size, size_t nmemb, GVFILE *file)
 {
     if (file->loaded) {	/* using memory */
 	G_fatal_error(_("Writing to file loaded to memory not supported"));
