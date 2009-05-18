@@ -236,7 +236,7 @@ This directory contains these files:
 <TR><TD>byte_order</TD><TD>C</TD><TD>1</TD><TD>little or big endian
                   flag; files are written in machine native order but
                   files in both little and big endian order may be
-                  readl; zero for little endian</TD></TR>
+                  read; zero for little endian</TD></TR>
 
 <TR><TD>size</TD><TD>L</TD><TD>1</TD><TD>coor file size</TD></TR>
 
@@ -269,7 +269,7 @@ The body consists of line records:
     (written only if categories exist) </TD></TR>
 
 <TR><TD>field</TD><TD>I</TD><TD>ncats</TD><TD>field identifier,
-    distinguishes between more categories append to one line (written
+    distinguishes between more categories append to one feature (written
     only if categories exist; field is called "layer" at user
     level)</TD></TR>
 
@@ -319,12 +319,12 @@ MAP THRESH
 \section vlib_topology_management Vector library topology management
 
 Topology general characteristics:
-<ol>
+<ul>
 <li> geometry and attributes are stored separately
    (don't read both if it is not necessary (usually it is not))</li>
 <li> the format is topological (areas build from boundaries)</li>
 <li>currently only 2D topology is supported
-</ol>
+</ul>
 
 <p>
 Topology is written for native format while pseudo-topology is written
@@ -445,12 +445,12 @@ volumetric figures.
 
 \verbatim
 /* Topology level details */
-#define GV_BUILD_NONE  0
-#define GV_BUILD_BASE  1
-#define GV_BUILD_AREAS  2
+#define GV_BUILD_NONE         0
+#define GV_BUILD_BASE         1
+#define GV_BUILD_AREAS        2
 #define GV_BUILD_ATTACH_ISLES 3  /* Attach islands to areas */
-#define GV_BUILD_CENTROIDS 4 /* Assign centroids to areas */
-#define GV_BUILD_ALL GV_BUILD_CENTROIDS
+#define GV_BUILD_CENTROIDS    4 /* Assign centroids to areas */
+#define GV_BUILD_ALL          GV_BUILD_CENTROIDS
 \endverbatim
 
 GV_BOUNDARY contains geometry and it is used to build areas.
@@ -589,14 +589,13 @@ Currently most of the modules do not release the memory occupied for
 spatial index and work like this (pseudocode):
 
 \verbatim
-int 
-main
+int main
 {
-     Vect_open_new()
+     Vect_open_new();
      //writing new vector
 
-     Vect_build()
-     Vect_close()  // memory is not released
+     Vect_build();
+     Vect_close();  // memory is not released
 }
 \endverbatim
 
@@ -604,15 +603,14 @@ In general it is possible to free the memory with Vect_set_release_support()
 such as:
 
 \verbatim
-int 
-main
+int main
 {
-     Vect_open_new()
+     Vect_open_new();
      // writing new vector
 
-     Vect_build()
-     Vect_set_release_support()
-     Vect_close()  // memory is released
+     Vect_build();
+     Vect_set_release_support();
+     Vect_close();  // memory is released
 }
 \endverbatim
 
@@ -623,13 +621,12 @@ of a module or in permanently running programs like QGIS.
 For example:
 
 \verbatim
-int 
-main
+int main
 {
-     Vect_open_old()
+     Vect_open_old();
      // select features using spatial index, e.g.  Vect_select_lines_by_box()
-     Vect_set_release_support()
-     Vect_close()  // memory is released
+     Vect_set_release_support();
+     Vect_close();  // memory is released
 
      // do some processing which needs memory
 }
@@ -672,9 +669,9 @@ Categories start with 1. Categories do not have to be continuous.
 The category index (stored in the cidx file) improves the performance of all
 selections by cats/attributes (SQL, e.g. 'd.vect cats=27591', 'v.extract list=20000-21000').
 This avoids that all selections have to be made by looping through all vector lines.
-Cidx is also essential for simple feature representation of GRASS vectors.
+Category index is also essential for simple feature representation of GRASS vectors.
 
-Cidx is created for each field. In memory, it is stored in
+Category index is created for each field. In memory, it is stored in
 
 \verbatim
 struct Cat_index {
@@ -689,8 +686,8 @@ struct Cat_index {
 };
 \endverbatim
 
-Cidx is built with topology, but it is not updated if vector is edited on level 2.
-Cidx is stored in 'cidx' file, 'cat' array is written/read by one call of
+Category index is built with topology, but it is <b>not updated</b> if vector is edited on level 2.
+Category index is stored in 'cidx' file, 'cat' array is written/read by one call of
 dig__fwrite_port_I( (int *)ci->cat, 3 * ci->n_cats, fp) or
 dig__fread_port_I( (int *)ci->cat, 3 * ci->n_cats, fp).
 
@@ -698,14 +695,14 @@ Stored values can be retrieved either by index in 'cat' array
 (if all features of given field are required) or by category value
 (one or few features), always by Vect_cidx_*() functions.
 
-To create cidx, it will be necessary to rebuild topology for all existing vectors.
+To create category index, it will be necessary to rebuild topology for all existing vectors.
 This is an opportunity to make (hopefully) last changes in 'topo', 'cidx' formats.
 
 
 \section vlibtin Vector TINs
 
 TINs are simply created as 2D/3D vector polygons consisting of 
-3 vertices.
+3 vertices. See Vect_tin_get_z().
 
 
 \section vlib_attributes Vector library and attributes
@@ -766,7 +763,7 @@ Attributes must be joined with geometry.
 
 <P>
 <B>Examples:</B>
-Examples are written mostly for the dbf driver, where database is full path to
+Examples are written mostly for the DBF driver, where database is full path to
 the directory with dbf files and table name is the name of dbf file without
 .dbf extension:
 
