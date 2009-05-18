@@ -1,5 +1,5 @@
 /*!
-   \file sindex.c
+   \file Vlib/sindex.c
 
    \brief Vector library - spatial index
 
@@ -11,6 +11,7 @@
    (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author Radim Blazek
+   \author Martin Landa <landa.martin gmail.com> (storing sidx to file)
  */
 
 #include <stdlib.h>
@@ -21,7 +22,7 @@
 #include <grass/glocale.h>
 
 /*!
-   \brief Init spatial index
+   \brief Initialize spatial index structure
 
    \param si pointer to spatial index structure
 
@@ -51,7 +52,7 @@ void Vect_spatial_index_destroy(SPATIAL_INDEX *si)
 }
 
 /*!
-   \brief Add a new item to spatial index
+   \brief Add a new item to spatial index structure
 
    \param[in,out] si pointer to spatial index structure
    \param id item identifier
@@ -75,7 +76,7 @@ void Vect_spatial_index_add_item(SPATIAL_INDEX *si, int id, const BOUND_BOX *box
 }
 
 /*!
-   \brief Delete item from spatial index
+   \brief Delete item from spatial index structure
 
    \param[in,out] si pointer to spatial index structure
    \param id item identifier
@@ -112,8 +113,7 @@ void Vect_spatial_index_del_item(SPATIAL_INDEX * si, int id)
    Map must be opened on level 2.
 
    \param[in,out] Map pointer to vector map
-   \param out print progress here
-
+   
    \return 0 OK
    \return 1 error
  */
@@ -121,7 +121,7 @@ int Vect_build_spatial_index(struct Map_info *Map)
 {
     if (Map->level < 2) {
 	G_fatal_error(_("Unable to build spatial index from topology, "
-			"vector map is not opened at topo level 2"));
+			"vector map is not opened at topology level 2"));
     }
     if (!(Map->plus.Spidx_built)) {
 	return (Vect_build_sidx_from_topo(Map));
@@ -130,7 +130,7 @@ int Vect_build_spatial_index(struct Map_info *Map)
 }
 
 /*!
-   \brief Create spatial index from topo if necessary
+   \brief Create spatial index from topology if necessary
 
    \param Map pointer to vector map
 
@@ -243,7 +243,7 @@ static int _add_item(int id, struct ilist *list)
 
    \param si pointer to spatial index structure
    \param box bounding box
-   \param list pointer to list where selected items are stored
+   \param[out] list pointer to list where selected items are stored
 
    \return number of selected items
  */
@@ -255,7 +255,7 @@ Vect_spatial_index_select(const SPATIAL_INDEX * si, const BOUND_BOX * box,
 
     G_debug(3, "Vect_spatial_index_select()");
 
-    list->n_values = 0;
+    Vect_reset_list(list);
 
     rect.boundary[0] = box->W;
     rect.boundary[1] = box->S;
@@ -266,5 +266,7 @@ Vect_spatial_index_select(const SPATIAL_INDEX * si, const BOUND_BOX * box,
     RTreeSearch(si->root, &rect, (void *)_add_item, list);
 
     G_debug(3, "  %d items selected", list->n_values);
+
     return (list->n_values);
 }
+

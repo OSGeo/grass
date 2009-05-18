@@ -1,7 +1,7 @@
 /*!
  * \file Vlib/cindex.c
  *
- * \brief Vector library - Category index.
+ * \brief Vector library - category index.
  *
  * Higher level functions for reading/writing/manipulating vectors.
  *
@@ -432,7 +432,7 @@ int Vect_cidx_dump(const struct Map_info *Map, FILE * out)
 }
 
 /*!
-   \brief Save category index
+   \brief Save category index to file (cidx)
 
    \param Map vector map
 

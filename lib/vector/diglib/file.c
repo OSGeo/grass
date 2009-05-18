@@ -1,7 +1,7 @@
 /*!
    \file diglib/file.c
 
-   \brief Vector library (diglib) - file management
+   \brief Vector library - file management (lower level functions)
 
    Lower level functions for reading/writing/manipulating vectors.
 
