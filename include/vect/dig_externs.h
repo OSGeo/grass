@@ -48,22 +48,22 @@ int dig_set_cur_port(struct Port_info *);
 int dig__write_head(struct Map_info *);
 int dig__read_head(struct Map_info *);
 
-int dig__fread_port_D(double *, int, GVFILE *);
-int dig__fread_port_F(float *, int, GVFILE *);
-int dig__fread_port_O(off_t *, int, GVFILE *, int);
-int dig__fread_port_L(long *, int, GVFILE *);
-int dig__fread_port_S(short *, int, GVFILE *);
-int dig__fread_port_I(int *, int, GVFILE *);
-int dig__fread_port_P(plus_t *, int, GVFILE *);
-int dig__fread_port_C(char *, int, GVFILE *);
-int dig__fwrite_port_D(const double *, int, GVFILE *);
-int dig__fwrite_port_F(const float *, int, GVFILE *);
-int dig__fwrite_port_O(const off_t *, int, GVFILE *, int);
-int dig__fwrite_port_L(const long *, int, GVFILE *);
-int dig__fwrite_port_S(const short *, int, GVFILE *);
-int dig__fwrite_port_I(const int *, int, GVFILE *);
-int dig__fwrite_port_P(const plus_t *, int, GVFILE *);
-int dig__fwrite_port_C(const char *, int, GVFILE *);
+int dig__fread_port_D(double *, size_t, GVFILE *);
+int dig__fread_port_F(float *, size_t, GVFILE *);
+int dig__fread_port_O(off_t *, size_t, GVFILE *, size_t);
+int dig__fread_port_L(long *, size_t, GVFILE *);
+int dig__fread_port_S(short *, size_t, GVFILE *);
+int dig__fread_port_I(int *, size_t, GVFILE *);
+int dig__fread_port_P(plus_t *, size_t, GVFILE *);
+int dig__fread_port_C(char *, size_t, GVFILE *);
+int dig__fwrite_port_D(const double *, size_t, GVFILE *);
+int dig__fwrite_port_F(const float *, size_t, GVFILE *);
+int dig__fwrite_port_O(const off_t *, size_t, GVFILE *, size_t);
+int dig__fwrite_port_L(const long *, size_t, GVFILE *);
+int dig__fwrite_port_S(const short *, size_t, GVFILE *);
+int dig__fwrite_port_I(const int *, size_t, GVFILE *);
+int dig__fwrite_port_P(const plus_t *, size_t, GVFILE *);
+int dig__fwrite_port_C(const char *, size_t, GVFILE *);
 
 
 /******************************************************************************/
@@ -250,7 +250,7 @@ int dig_fseek(GVFILE * file, off_t offset, int whence);
 void dig_rewind(GVFILE * file);
 int dig_fflush(GVFILE * file);
 size_t dig_fread(void *ptr, size_t size, size_t nmemb, GVFILE * file);
-size_t dig_fwrite(void *ptr, size_t size, size_t nmemb, GVFILE * file);
+size_t dig_fwrite(const void *ptr, size_t size, size_t nmemb, GVFILE * file);
 void dig_file_init(GVFILE * file);
 int dig_file_load(GVFILE * file);
 void dig_file_free(GVFILE * file);
