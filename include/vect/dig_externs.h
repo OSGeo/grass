@@ -177,7 +177,7 @@ void dig_spidx_free_areas(struct Plus_head *);
 void dig_spidx_free_isles(struct Plus_head *);
 void dig_spidx_free(struct Plus_head *);
 int dig_write_spidx(GVFILE *, struct Plus_head *);
-int dig_dump_spidx(FILE *, struct Plus_head *);
+int dig_dump_spidx(FILE *, const struct Plus_head *);
 int dig_read_spidx(GVFILE *, struct Plus_head *);
 
 /* category index */

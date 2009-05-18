@@ -1,18 +1,18 @@
-
-/**
- * \file spindex.c
- *
- * \brief Vector library - spatial index (lower level functions)
- *
- * Lower level functions for reading/writing/manipulating vectors.
- *
- * (C) 2001 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
- *
- * \author CERL (probably Dave Gerdes), Radim Blazek
- */
+/*!
+  \file diglib/spindex.c
+ 
+  \brief Vector library - spatial index (lower level functions)
+  
+  Lower level functions for reading/writing/manipulating vectors.
+  
+  (C) 2001-2009 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Original author CERL, probably Dave Gerdes
+  \author Update to GRASS 5.7 Radim Blazek
+*/
 
 #include <stdlib.h>
 #include <string.h>

@@ -1,28 +1,37 @@
-/*
- ****************************************************************************
- *
- * MODULE:       Vector library 
- *              
- * AUTHOR(S):    Radim Blazek.
- *
- * PURPOSE:      Lower level functions for reading/writing/manipulating vectors.
- *
- * COPYRIGHT:    (C) 2001 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *              License (>=v2). Read the file COPYING that comes with GRASS
- *              for details.
- *
- *****************************************************************************/
+/*!
+  \file diglib/spindex.c
+ 
+  \brief Vector library - spatial index - read/write (lower level functions)
+  
+  Lower level functions for reading/writing/manipulating vectors.
+  
+  (C) 2001-2009 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Original author CERL, probably Dave Gerdes
+  \author Update to GRASS 5.7 Radim Blazek
+*/
+
 #include <grass/config.h>
 #include <sys/types.h>
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/Vect.h>
+#include <grass/glocale.h>
 
+/*!
+  \brief Write spatial index to the file
+  
+  \param[in,out] fp pointer to GVFILE
+  \param ptr pointer to Plus_head structure
 
-int dig_Wr_spindx_head(GVFILE * fp, struct Plus_head *ptr)
+  \return 0 on success
+  \return -1 on error
+*/
+static int dig_Wr_spindx_head(GVFILE * fp, struct Plus_head *ptr)
 {
     unsigned char buf[5];
     long length = 42;
@@ -36,7 +45,7 @@ int dig_Wr_spindx_head(GVFILE * fp, struct Plus_head *ptr)
     buf[2] = GV_SIDX_EARLIEST_MAJOR;
     buf[3] = GV_SIDX_EARLIEST_MINOR;
     buf[4] = ptr->spidx_port.byte_order;
-    if (0 >= dig__fwrite_port_C(buf, 5, fp))
+    if (0 >= dig__fwrite_port_C((const char *)buf, 5, fp))
 	return (-1);
 
     /* get required offset size */
@@ -60,7 +69,7 @@ int dig_Wr_spindx_head(GVFILE * fp, struct Plus_head *ptr)
 
     /* byte 10 : dimension 2D or 3D */
     buf[0] = ptr->spidx_with_z;
-    if (0 >= dig__fwrite_port_C(buf, 1, fp))
+    if (0 >= dig__fwrite_port_C((const char*) buf, 1, fp))
 	return (-1);
 
     /* bytes 11 - 38 (large files 11 - 66) : Offsets */
@@ -79,30 +88,38 @@ int dig_Wr_spindx_head(GVFILE * fp, struct Plus_head *ptr)
     if (0 >= dig__fwrite_port_O(&(ptr->Hole_spidx_offset), 1, fp, ptr->off_t_size))
 	return (-1);
 
-    G_debug(3, "spidx offset node = %ld line = %ld, area = %ld isle = %ld",
-	    ptr->Node_spidx_offset, ptr->Line_spidx_offset,
-	    ptr->Area_spidx_offset, ptr->Isle_spidx_offset);
+    G_debug(3, "spidx offset node = %lu line = %lu, area = %lu isle = %lu",
+	    (long unsigned) ptr->Node_spidx_offset, (long unsigned) ptr->Line_spidx_offset,
+	    (long unsigned) ptr->Area_spidx_offset, (long unsigned) ptr->Isle_spidx_offset);
 
     /* bytes 39 - 42 (large files 67 - 74) : Offsets */
     if (0 >= dig__fwrite_port_O(&(ptr->coor_size), 1, fp, ptr->off_t_size))
 	return (-1);
 
-    G_debug(2, "spidx body offset %ld", dig_ftell(fp));
+    G_debug(2, "spidx body offset %lu", (long unsigned) dig_ftell(fp));
 
     return (0);
 }
 
+/*!
+  \brief Read spatial index to the file
+  
+  \param fp pointer to GVFILE
+  \param[in,out] ptr pointer to Plus_head structure
 
-int dig_Rd_spindx_head(GVFILE * fp, struct Plus_head *ptr)
+  \return 0 on success
+  \return -1 on error
+*/
+static int dig_Rd_spindx_head(GVFILE * fp, struct Plus_head *ptr)
 {
     unsigned char buf[5];
     int byte_order;
-    long coor_size;
+    off_t coor_size;
 
     dig_rewind(fp);
 
     /* bytes 1 - 5 */
-    if (0 >= dig__fread_port_C(buf, 5, fp))
+    if (0 >= dig__fread_port_C((char*) buf, 5, fp))
 	return (-1);
     ptr->spidx_Version_Major = buf[0];
     ptr->spidx_Version_Minor = buf[1];
@@ -110,8 +127,7 @@ int dig_Rd_spindx_head(GVFILE * fp, struct Plus_head *ptr)
     ptr->spidx_Back_Minor = buf[3];
     byte_order = buf[4];
 
-    G_debug(2,
-	    "Sidx header: file version %d.%d , supported from GRASS version %d.%d",
+    G_debug(2, "Sidx header: file version %d.%d , supported from GRASS version %d.%d",
 	    ptr->spidx_Version_Major, ptr->spidx_Version_Minor,
 	    ptr->spidx_Back_Major, ptr->spidx_Back_Minor);
 
@@ -125,17 +141,17 @@ int dig_Rd_spindx_head(GVFILE * fp, struct Plus_head *ptr)
 	if (ptr->spidx_Back_Major > GV_SIDX_VER_MAJOR ||
 	    ptr->spidx_Back_Minor > GV_SIDX_VER_MINOR) {
 	    /* This version of GRASS lib is lower than the oldest which can read this format */
-	    G_fatal_error
-		("Spatial index format version %d.%d is not supported by this release."
-		 " Try to rebuild topology or upgrade GRASS.",
-		 ptr->spidx_Version_Major, ptr->spidx_Version_Minor);
+	    G_fatal_error(_("Spatial index format version %d.%d is not "
+			    "supported by this release."
+			    " Try to rebuild topology or upgrade GRASS."),
+			    ptr->spidx_Version_Major, ptr->spidx_Version_Minor);
 	    return (-1);
 	}
 
-	G_warning
-	    ("Your GRASS version does not fully support spatial index format %d.%d of the vector."
-	     " Consider to rebuild topology or upgrade GRASS.",
-	     ptr->spidx_Version_Major, ptr->spidx_Version_Minor);
+	G_warning(_("Your GRASS version does not fully support "
+		    "spatial index format %d.%d of the vector."
+		    " Consider to rebuild topology or upgrade GRASS."),
+		  ptr->spidx_Version_Major, ptr->spidx_Version_Minor);
     }
 
     dig_init_portable(&(ptr->spidx_port), byte_order);
@@ -147,7 +163,7 @@ int dig_Rd_spindx_head(GVFILE * fp, struct Plus_head *ptr)
     G_debug(2, "  header size %ld", ptr->spidx_head_size);
 
     /* byte 10 : dimension 2D or 3D */
-    if (0 >= dig__fread_port_C(buf, 1, fp))
+    if (0 >= dig__fread_port_C((char *)buf, 1, fp))
 	return (-1);
     ptr->spidx_with_z = buf[0];
     G_debug(2, "  with_z %d", ptr->spidx_with_z);
@@ -181,19 +197,28 @@ int dig_Rd_spindx_head(GVFILE * fp, struct Plus_head *ptr)
     /* bytes 39 - 42 (large files 67 - 74) : Offsets */
     if (0 >= dig__fread_port_O(&coor_size, 1, fp, ptr->off_t_size))
 	return (-1);
-    G_debug(2, "  coor size %ld", coor_size);
+    G_debug(2, "  coor size %lu", (long unsigned) coor_size);
 
     dig_fseek(fp, ptr->spidx_head_size, SEEK_SET);
 
     return (0);
 }
 
-int rtree_dump_node(FILE * fp, struct Node *n, int with_z);
+static int rtree_dump_node(FILE *, const struct Node *, int);
 
-/* Dump RTree branch to file */
-int rtree_dump_branch(FILE * fp, struct Branch *b, int with_z, int level)
+/*!
+  \brief Dump R-tree branch to the file
+
+  \param fp pointer to FILE
+  \param b pointer to Branch structure
+  \param with_z non-zero value for 3D vector data
+  \param level level value
+
+  \return 0
+*/
+static int rtree_dump_branch(FILE * fp, const struct Branch *b, int with_z, int level)
 {
-    struct Rect *r;
+    const struct Rect *r;
 
     r = &(b->rect);
 
@@ -209,8 +234,16 @@ int rtree_dump_branch(FILE * fp, struct Branch *b, int with_z, int level)
     return 0;
 }
 
-/* Dump RTree node to file */
-int rtree_dump_node(FILE * fp, struct Node *n, int with_z)
+/*!
+  \brief Dump R-tree node to the file
+
+  \param fp pointer to FILE
+  \param n pointer to Node structure
+  \param with_z non-zero value for 3D vector data
+
+  \return 0
+*/
+int rtree_dump_node(FILE * fp, const struct Node *n, int with_z)
 {
     int i, nn;
 
@@ -231,12 +264,22 @@ int rtree_dump_node(FILE * fp, struct Node *n, int with_z)
     return 0;
 }
 
-int rtree_write_node(GVFILE * fp, struct Node *n, int with_z);
+static int rtree_write_node(GVFILE *, const struct Node *, int);
 
-/* Write RTree branch to file */
-int rtree_write_branch(GVFILE * fp, struct Branch *b, int with_z, int level)
+/*!
+  \brief Write R-tree node to the file
+
+  \param fp pointer to GVFILE
+  \param b pointer to Branch structure
+  \param with_z non-zero value for 3D vector data
+  \param level level value
+
+  \return -1 on error
+  \return 0 on success
+*/
+static int rtree_write_branch(GVFILE * fp, const struct Branch *b, int with_z, int level)
 {
-    struct Rect *r;
+    const struct Rect *r;
     int i;
 
     r = &(b->rect);
@@ -263,8 +306,17 @@ int rtree_write_branch(GVFILE * fp, struct Branch *b, int with_z, int level)
     return 0;
 }
 
-/* Write RTree node to file */
-int rtree_write_node(GVFILE * fp, struct Node *n, int with_z)
+/*!
+  \brief Write R-tree node to the file
+
+  \param fp pointer to GVFILE
+  \param n pointer to Node structure
+  \param with_z non-zero value for 3D vector data
+  
+  \return -1 on error
+  \return 0 on success
+*/
+int rtree_write_node(GVFILE * fp, const struct Node *n, int with_z)
 {
     int i, nn;
 
@@ -289,10 +341,20 @@ int rtree_write_node(GVFILE * fp, struct Node *n, int with_z)
     return 0;
 }
 
-int rtree_read_node(GVFILE * fp, struct Node *n, int with_z);
+static int rtree_read_node(GVFILE * fp, struct Node *n, int with_z);
 
-/* Read RTree branch from file */
-int rtree_read_branch(GVFILE * fp, struct Branch *b, int with_z, int level)
+/*!
+  \brief Read R-tree branch from the file
+
+  \param fp pointer to GVFILE
+  \param b pointer to Branch structure
+  \param with_z non-zero value for 3D vector data
+  \param level level value
+
+  \return -1 on error
+  \return 0 on success
+*/
+static int rtree_read_branch(GVFILE * fp, struct Branch *b, int with_z, int level)
 {
     struct Rect *r;
     int i;
@@ -328,7 +390,17 @@ int rtree_read_branch(GVFILE * fp, struct Branch *b, int with_z, int level)
     return 0;
 }
 
-/* Read RTree node from file */
+/*!
+  \brief Read R-tree node from the file
+
+  \param fp pointer to GVFILE
+  \param n pointer to Node structure
+  \param with_z non-zero value for 3D vector data
+  \param level level value
+
+  \return -1 on error
+  \return 0 on success
+*/
 int rtree_read_node(GVFILE * fp, struct Node *n, int with_z)
 {
     int level, count, i;
@@ -353,7 +425,14 @@ int rtree_read_node(GVFILE * fp, struct Node *n, int with_z)
     return 0;
 }
 
-/* Write spatial index */
+/*!
+  \brief Write spatial index to the file
+
+  \param[out] fp pointer to GVFILE
+  \param Plus pointer to Plus_head structure
+
+  \return 0
+*/
 int dig_write_spidx(GVFILE * fp, struct Plus_head *Plus)
 {
     dig_set_cur_port(&(Plus->spidx_port));
@@ -379,7 +458,14 @@ int dig_write_spidx(GVFILE * fp, struct Plus_head *Plus)
     return 0;
 }
 
-/* Read spatial index file */
+/*!
+  \brief Read spatial index from the file
+
+  \param fp pointer to GVFILE
+  \param[in,out] Plus pointer to Plus_head structure
+
+  \return 0
+*/
 int dig_read_spidx(GVFILE * fp, struct Plus_head *Plus)
 {
     G_debug(1, "dig_read_spindx()");
@@ -406,8 +492,15 @@ int dig_read_spidx(GVFILE * fp, struct Plus_head *Plus)
     return 0;
 }
 
-/* Dump spatial index */
-int dig_dump_spidx(FILE * fp, struct Plus_head *Plus)
+/*!
+  \brief Dump spatial index
+
+  \param[out] fp pointe to FILE
+  \param Plus pointer to Plus_head structure
+
+  \return 0
+*/
+int dig_dump_spidx(FILE * fp, const struct Plus_head *Plus)
 {
 
     fprintf(fp, "Nodes\n");

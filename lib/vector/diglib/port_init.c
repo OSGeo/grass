@@ -1,61 +1,86 @@
-/*
- ****************************************************************************
- *
- * MODULE:       Vector library 
- *              
- * AUTHOR(S):    Original author CERL, probably Dave Gerdes.
- *               Update to GRASS 5.7 Radim Blazek.
- *
- * PURPOSE:      Lower level functions for reading/writing/manipulating vectors.
- *
- * COPYRIGHT:    (C) 2001 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *              License (>=v2). Read the file COPYING that comes with GRASS
- *              for details.
- *
- *****************************************************************************/
+/*!
+   \file diglib/port_init.c
+
+   \brief Vector library - portability (lower level functions)
+
+   Lower level functions for reading/writing/manipulating vectors.
+
+   This code is a quick hack to allow the writing of portable
+   binary data files.
+   The approach is to take known values and compare them against
+   the current machine's internal representation.   A cross reference
+   table is then built, and then all file reads and writes must go
+   through these routines to correct the numbers if need be.
+
+   As long as the byte switching is symetrical, the conversion routines
+   will work both directions.
+   
+   The integer test patterns are quite simple, and their choice was
+   arbitrary, but the float and double valued were more critical.
+
+   I did not have a specification for IEEE to go by, so it is possible
+   that I have missed something.  My criteria were:
+
+   First, true IEEE numbers had to be chosen to avoid getting an FPE.
+   Second, every byte in the test pattern had to be unique.   And
+   finally, the number had to not be sensitive to rounding by the 
+   specific hardware implementation.
+   
+   By experimentation it was found that the number  1.3333  met
+   all these criteria for both floats and doubles
+
+   See the discourse at the end of this file for more information
+   
+   The 3.0 dig, and dig_plus files are inherently non-portable.  This 
+   can be seen in moving files between a SUN 386i and other SUN machines.
+   The recommended way to transport files was always to convert to ASCII
+   (b.a.vect) and copy the ASCII files:  dig_ascii and dig_att to the 
+   destination machine.
+
+   The problem lies in the way that different architectures internally
+   represent data.   If a number is internally store as  0x01020304 on
+   a 680x0 family machine, the same number will be stored as
+   0x04030201 on an 80386 class machine.
+
+   The CERL port of GRASS to the Compaq 386 already has code to deal
+   with this incompatibility.  This code converts all files that are written
+   out to conform to the 680x0 standard.  These binary files can then be 
+   shared between machines without conversion.
+   This code is designed to work with the majority of computers in use
+   today that fit the following requirements:
+   byte     ==  8 bits
+   int      ==  4 bytes
+   long     ==  4 bytes
+   double   ==  IEEE standard 64 bit
+   float    ==  IEEE standard 32 bit
+   
+   bytes can be swapped around in any reasonable way, but bits within each
+   byte must be maintained in normal high to low ordering:  76543210
+   is this a problem?
+
+   If this ability is desired on a SUN 386i, for example, you simply
+   define the compiler flag  CERL_PORTABLE in the src/CMD/makehead  file
+   and recompile all of the mapdev programs.
+   needs update, makehead/mapdev no longer exist
+
+   Binary DLG files are NOT supported by this code, and will continue to
+   be non-portable between different architectures.
+   applies to the files coor/topo/cidx, needs testing
+   
+   (C) 2001-2009 by the GRASS Development Team
+
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
+
+   \author Original author CERL, probably Dave Gerdes
+   \author Update to GRASS 5.7 Radim Blazek
+*/
+
 #include <grass/config.h>
 #include <stdio.h>
 #include <sys/types.h>
 #include <grass/Vect.h>
-
-/*
- **  Written by Dave Gerdes  9/1988
- **  US Army Construction Engineering Research Lab
- */
-
-
-/* 
- ** 
- **  This code is a quick hack to allow the writing of portable
- **  binary data files.
- **  The approach is to take known values and compare them against
- **  the current machine's internal representation.   A cross reference
- **  table is then built, and then all file reads and writes must go
- **  through these routines to correct the numbers if need be.
- **
- **  As long as the byte switching is symetrical, the conversion routines
- **  will work both directions.
-
- **  The integer test patterns are quite simple, and their choice was
- **  arbitrary, but the float and double valued were more critical.
-
- **  I did not have a specification for IEEE to go by, so it is possible
- **  that I have missed something.  My criteria were:
- **
- **  First, true IEEE numbers had to be chosen to avoid getting an FPE.
- **  Second, every byte in the test pattern had to be unique.   And
- **  finally, the number had to not be sensitive to rounding by the 
- **  specific hardware implementation.
- **
- **  By experimentation it was found that the number  1.3333  met
- **  all these criteria for both floats and doubles
-
- **  See the discourse at the end of this file for more information
- **  
- **
- */
+#include <grass/glocale.h>
 
 #define TEST_PATTERN 1.3333
 #define OFF_T_TEST 0x0102030405060708
@@ -106,7 +131,6 @@ unsigned char shrt_cnvrt[sizeof(short)];
  * match search_value against each char in basis. 
  * return offset or -1 if not found
  */
-
 static int find_offset(const unsigned char *basis, unsigned char search_value,
 		       int size)
 {
@@ -130,7 +154,7 @@ static int find_offsets(const void *pattern, unsigned char *cnvrt,
 	int off = find_offset(pattern, cmpr[i], nat_size);
 
 	if (off < 0)
-	    G_fatal_error("could not find '%x' in %s", cmpr[i], typename);
+	    G_fatal_error(_("Unable to find '%x' in %s"), cmpr[i], typename);
 
 	cnvrt[i] = off;
     }
@@ -153,6 +177,9 @@ static int find_offsets(const void *pattern, unsigned char *cnvrt,
     return ENDIAN_OTHER;
 }
 
+/*!
+  \brief Initialize structures
+*/
 void port_init(void)
 {
     static int done;
@@ -202,46 +229,3 @@ void port_init(void)
 	find_offsets(&u_s, shrt_cnvrt, shrt_cmpr, PORT_SHORT, nat_shrt,
 		     "short");
 }
-
-/*
-    comment copied from port_test.c
-    MM Feb 2009
-
-   The 3.0 dig, and dig_plus files are inherently non-portable.  This 
-   can be seen in moving files between a SUN 386i and other SUN machines.
-   The recommended way to transport files was always to convert to ASCII
-   (b.a.vect) and copy the ASCII files:  dig_ascii and dig_att to the 
-   destination machine.
-
-   The problem lies in the way that different architectures internally
-   represent data.   If a number is internally store as  0x01020304 on
-   a 680x0 family machine, the same number will be stored as
-   0x04030201 on an 80386 class machine.
-
-   The CERL port of GRASS to the Compaq 386 already has code to deal
-   with this incompatibility.  This code converts all files that are written
-   out to conform to the 680x0 standard.  These binary files can then be 
-   shared between machines without conversion.
-   This code is designed to work with the majority of computers in use
-   today that fit the following requirements:
-   byte     ==  8 bits
-   int      ==  4 bytes
-   long     ==  4 bytes
-   double   ==  IEEE standard 64 bit
-   float    ==  IEEE standard 32 bit
-   
-   bytes can be swapped around in any reasonable way, but bits within each
-   byte must be maintained in normal high to low ordering:  76543210
-   is this a problem?
-
-   If this ability is desired on a SUN 386i, for example, you simply
-   define the compiler flag  CERL_PORTABLE in the src/CMD/makehead  file
-   and recompile all of the mapdev programs.
-   needs update, makehead/mapdev no longer exist
-
-   Binary DLG files are NOT supported by this code, and will continue to
-   be non-portable between different architectures.
-   applies to the files coor/topo/cidx, needs testing
-
-   -dave gerdes
- */

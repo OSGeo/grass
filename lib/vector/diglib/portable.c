@@ -1,7 +1,7 @@
 /*!
    \file diglib/file.c
 
-   \brief Vector library (diglib) - portability
+   \brief Vector library - portability (lower level functions)
 
    Lower level functions for reading/writing/manipulating vectors.
    
