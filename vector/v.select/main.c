@@ -102,6 +102,8 @@ int main(int argc, char *argv[])
     parm.operator->options = "overlaps";
     parm.operator->answer = "overlaps";
     parm.operator->descriptions = _("overlaps;features partially or completely overlap");
+
+    parm.relate = NULL;
 #else
     parm.operator->options = "equals,disjoint,intersects,touches,crosses,within,contains,overlaps,relate";
     parm.operator->descriptions = _("equals;features are spatially equals (requires flag 'g');"
@@ -114,15 +116,15 @@ int main(int argc, char *argv[])
 				    "overlaps;features spatilly overlap;"
 				    "relate;feature A is spatially related to feature B "
 				    "(requires 'relate' option and flag 'g');");
-#endif
-
+    
     parm.relate = G_define_option();
     parm.relate->key = "relate";
     parm.relate->type = TYPE_STRING;
     parm.relate->required = NO;
     parm.relate->multiple = NO;
     parm.relate->description = _("Intersection Matrix Pattern used for 'relate' operator");
-    
+#endif
+
     flag.table = G_define_flag();
     flag.table->key = 't';
     flag.table->description = _("Do not create attribute table");
