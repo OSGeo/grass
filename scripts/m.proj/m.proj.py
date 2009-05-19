@@ -8,7 +8,7 @@
 #               Converted to Python by Glynn Clements
 # PURPOSE:      cs2cs reprojection frontend for a list of coordinates.
 #		Replacement for m.proj2 from GRASS 5
-# COPYRIGHT:	(c) 2006,2008 Hamish Bowman, and the GRASS Development Team
+# COPYRIGHT:	(c) 2006-2009 Hamish Bowman, and the GRASS Development Team
 #		This program is free software under the GNU General Public
 #		License (>=v2). Read the file COPYING that comes with GRASS
 #		for details.
@@ -48,10 +48,10 @@
 #% key: fs
 #% type: string
 #% label: Field separator (format: input[,output])
-#% description: Valid field separators are also "space", "tab" or "comma"
+#% description: Valid field separators are also "space", "tab", or "comma"
 #% required : no
 #% key_desc : string
-#% answer : |,|
+#% answer : |
 #%end
 #%option
 #% key: proj_in
@@ -81,6 +81,11 @@
 #% key: e
 #% description: Include input coordinates in output file
 #%end
+#%flag
+#% key: c
+#% description: Include column names in output file
+#%end
+
 
 import sys
 import os
@@ -96,6 +101,7 @@ def main():
     ll_out = flags['o']
     decimal = flags['d']
     copy_input = flags['e']
+    include_header = flags['c']
 
     #### check for cs2cs
     if not grass.find_program('cs2cs'):
@@ -115,11 +121,12 @@ def main():
 	grass.fatal("Output file already exists") 
 
     #### parse field separator
+    # FIXME: input_x,y needs to split on multiple whitespace between them
     try:
         ifs, ofs = fs.split(',')
     except ValueError:
         ifs = ofs = fs
-    
+
     ifs = ifs.lower()
     ofs = ofs.lower()
     
@@ -134,7 +141,7 @@ def main():
             ifs = ifs[0]
         except IndexError:
             grass.fatal("Invalid field separator '%s'" % ifs)
-        
+   
     if ofs.lower() == 'space':
         ofs = ' '
     elif ofs.lower() == 'tab':
@@ -148,7 +155,7 @@ def main():
             ofs = ofs[0]
         except IndexError:
             grass.fatal("Invalid field separator '%s'" % ifs)
-    
+
     #### set up projection params
     s = grass.read_command("g.proj", flags='j')
     kv = grass.parse_key_val(s)
@@ -242,12 +249,26 @@ def main():
     if exitcode != 0:
 	grass.warning("Projection transform probably failed, please investigate")
 
-    for line in p.communicate()[0].splitlines():
-        x, yz = line.split('\t')
-        y, z = yz.split(' ')
-        outf.write('%s%s%s%s%s\n' % \
+
+    if not copy_input:
+	if include_header:
+	    outf.write("x%sy%sz\n" % (ofs, ofs))
+	for line in p.communicate()[0].splitlines():
+	    x, yz = line.split('\t')
+	    y, z = yz.split(' ')
+	    outf.write('%s%s%s%s%s\n' % \
                        (x.strip(), ofs, y.strip(), ofs, z.strip()))
-    
+    else:
+	if include_header:
+	    outf.write("input_x%sinput_y%sx%sy%sz\n" % (ofs, ofs, ofs, ofs))
+	for line in p.communicate()[0].splitlines():
+	    inX, therest, z = line.split(' ')
+	    inY, x, y = therest.split('\t')
+	    outf.write('%s%s%s%s%s%s%s%s%s\n' % \
+                       (inX.strip(), ofs, inY.strip(), ofs, x.strip(), \
+		        ofs, y.strip(), ofs, z.strip()))
+
+
 if __name__ == "__main__":
     options, flags = grass.parser()
     main()
