@@ -122,10 +122,13 @@ def main():
 
     #### parse field separator
     # FIXME: input_x,y needs to split on multiple whitespace between them
-    try:
-        ifs, ofs = fs.split(',')
-    except ValueError:
-        ifs = ofs = fs
+    if fs == ',':
+        ifs = ofs = ','
+    else:
+	try:
+	    ifs, ofs = fs.split(',')
+	except ValueError:
+	    ifs = ofs = fs
 
     ifs = ifs.lower()
     ofs = ofs.lower()
