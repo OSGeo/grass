@@ -86,12 +86,22 @@ A default, single value of Linke factor is <i>lin</i>=3.0 and
 is near the annual average for rural-city areas. The Linke
 factor for an absolutely clear atmosphere is <i>lin</i>=1.0. See notes below
 to learn more about this factor. The incidence solar angle is the angle between
-horizon and solar beam vector. The solar radiation maps for given day are
-computed integrating the relevant irradiance between sunrise and sunset times
-for given day. The user can set finer or coarser time step <i>step</i> used 
-for all-day radiation calculations. A default value of <i>step</i> is 0.5 
-hour. Larger steps (e.g. 1.0-2.0) can speed-up calculations but produce less
-reliable results. The output units are in Wh per squared meter per given
+horizon and solar beam vector. 
+<P>
+The solar radiation maps for a given day are computed by integrating the
+relevant irradiance between sunrise and sunset times for that day. The
+user can set a finer or coarser time step used for all-day radiation
+calculations with the <i>step</i> option. The default value of <i>step</i> is
+0.5 hour. Larger steps (e.g. 1.0-2.0) can speed-up calculations but produce
+less reliable (and more jagged) results. As the sun moves through approx.
+15&deg of the sky in an hour, the default <i>step</i> of half an hour will
+produce 7.5&deg; steps in the data. For relatively smooth output with the
+sun placed for every degree of movement in the sky you should set the
+<i>step</i> to 4 minutes or less. <i>step</i><tt>=0.05</tt> is equivalent
+to every 3 minutes. Of course setting the time step to be very fine
+proportionally increases the module's running time.
+<P>
+The output units are in Wh per squared meter per given
 day [Wh/(m*m)/day]. The incidence angle and irradiance/irradiation maps can
 be computed without shadowing influence of relief by default or they can
 be computed with this influence using the flag <i>-s</i>. In mountainous areas
