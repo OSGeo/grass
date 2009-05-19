@@ -47,9 +47,10 @@
 #%option
 #% key: fs
 #% type: string
-#% description: Field separator (format: input,output)
+#% label: Field separator (format: input[,output])
+#% description: Valid field separators are also "space", "tab" or "comma"
 #% required : no
-#% key_desc : character,character
+#% key_desc : string
 #% answer : |,|
 #%end
 #%option
@@ -114,17 +115,39 @@ def main():
 	grass.fatal("Output file already exists") 
 
     #### parse field separator
-    ifs, ofs = fs.split(',')
-    if ifs.lower() in ["space", "tab"]:
+    try:
+        ifs, ofs = fs.split(',')
+    except ValueError:
+        ifs = ofs = fs
+    
+    ifs = ifs.lower()
+    ofs = ofs.lower()
+    
+    if ifs in ('space', 'tab'):
 	ifs = ' '
+    elif ifs == 'comma':
+        ifs = ','
     else:
-	ifs = ifs[0]
-    if ofs.lower() == "space":
+        if len(ifs) > 1:
+            grass.warning("Invalid field separator, using '%s'" % ifs[0])
+        try:
+            ifs = ifs[0]
+        except IndexError:
+            grass.fatal("Invalid field separator '%s'" % ifs)
+        
+    if ofs.lower() == 'space':
         ofs = ' '
-    elif ofs.lower() == "tab":
+    elif ofs.lower() == 'tab':
         ofs = '\t'
+    elif ofs.lower() == 'comma':
+        ofs = ','
     else:
-        ofs = ofs[0]
+        if len(ofs) > 1:
+            grass.warning("Invalid field separator, using '%s'" % ofs[0])
+        try:
+            ofs = ofs[0]
+        except IndexError:
+            grass.fatal("Invalid field separator '%s'" % ifs)
     
     #### set up projection params
     s = grass.read_command("g.proj", flags='j')
