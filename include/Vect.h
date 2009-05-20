@@ -470,9 +470,11 @@ int Vect_attach_centroids(struct Map_info *, const BOUND_BOX *);
 
     /* GEOS support */
 #ifdef HAVE_GEOS
-GEOSGeometry *Vect_read_line_geos(const struct Map_info *, int);
-GEOSGeometry *Vect_read_area_geos(const struct Map_info *, int);
-GEOSGeometry *Vect_line_to_geos(const struct Map_info *, const struct line_pnts*, int);
+GEOSGeometry *Vect_read_line_geos(struct Map_info *, int);
+GEOSGeometry *Vect_line_to_geos(struct Map_info *, const struct line_pnts*, int);
+GEOSGeometry *Vect_read_area_geos(struct Map_info *, int);
+GEOSCoordSequence *Vect_get_area_points_geos(struct Map_info *, int);
+GEOSCoordSequence *Vect_get_isle_points_geos(struct Map_info *, int);
 #endif
 
 #endif /* GRASS_VECT_H */
