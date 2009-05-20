@@ -1299,9 +1299,10 @@ first vector is used.
 <B>pat</B> - full path to pattern file. The pattern file contains header and
 simple PostScript commands. It is similar to EPS but more limited, meaning that
 while each pattern file is a true EPS file, most EPS files are not useful as pattern
-files because they contain restricted commands. Color and width of patterns are set
-by <B>fcolor</B> (red, green, ..., none, R:G:B) and <B>width</B> until
-overwritten in the pattern file.
+files because they contain restricted commands. Color <!-- and width --> of patterns
+are set by <B>fcolor</B> (red, green, ..., none, R:G:B)<!-- no?  and <B>width</B>
+until overwritten in the pattern file -->. Color of the boundaries remain set
+by the <B>color</B> instruction.
 Pattern may be scaled with the <b>scale</b> command. Several standard hatching
 patterns are provided in <tt>$GISBASE/etc/paint/patterns/</tt>.
 Demonstrative images can be found on the
