@@ -170,7 +170,7 @@ int read_vareas(char *name, char *mapset)
 	    continue;
 	}
 
-	if (KEY("pat")) {
+	if (KEY("pat") || KEY("pattern")) {
 	    G_chop(data);
 	    vector.layer[vec].pat = G_store(data);
 	    continue;
