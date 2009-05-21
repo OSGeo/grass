@@ -24,6 +24,7 @@
 static GEOSGeometry *Vect__read_line_geos(struct Map_info *, long, int *);
 static GEOSCoordSequence *V1_read_line_geos(struct Map_info *, long, int *);
 static GEOSCoordSequence *V2_read_line_geos(struct Map_info *, int);
+static GEOSCoordSequence *read_polygon_points(struct Map_info *, int, int*);
 
 /*!
    \brief Read vector feature and stores it as GEOSGeometry instance
@@ -96,8 +97,10 @@ GEOSGeometry *Vect_read_area_geos(struct Map_info * Map, int area)
     holes = (GEOSGeometry **) G_malloc(nholes * sizeof(GEOSGeometry *));
     for (i = 0; i < nholes; i++) {
 	isle = Vect_get_area_isle(Map, area, i);
-	if (isle < 1)
+	if (isle < 1) {
+	    nholes--;
 	    continue;
+	}
 	holes[i] = GEOSGeom_createLinearRing(Vect_get_isle_points_geos(Map, isle));
 	if (!(holes[i]))
 	    G_fatal_error(_("Vect_read_area_geos(): unable to read isle id %d of area id %d"),
@@ -396,15 +399,8 @@ GEOSCoordSequence *V1_read_line_geos(struct Map_info *Map, long offset, int *typ
  */
 GEOSCoordSequence *Vect_get_area_points_geos(struct Map_info *Map, int area)
 {
-    int i, j, k;
-    int line, aline;
-    unsigned int n_points, n_points_shell;
-    double x, y, z;
-
     struct Plus_head *Plus;
     P_AREA *Area;
-    
-    GEOSCoordSequence **pseq, *pseq_shell;
     
     G_debug(3, "Vect_get_area_points_geos(): area = %d", area);
     
@@ -416,53 +412,7 @@ GEOSCoordSequence *Vect_get_area_points_geos(struct Map_info *Map, int area)
 	return NULL;		/* error , because we should not read dead areas */
     }
     
-    G_debug(3, "  n_lines = %d", Area->n_lines);
-    pseq = (GEOSCoordSequence **) G_malloc(Area->n_lines * sizeof(GEOSCoordSequence *));
-
-    n_points_shell = 0;
-    for (i = 0; i < Area->n_lines; i++) {
-	line = Area->lines[i];
-	aline = abs(line);
-	G_debug(3, "  append line(%d) = %d", i, line);
-
-	/*
-	  TODO
-	if (line > 0)
-	    dir = GV_FORWARD;
-	else
-	    dir = GV_BACKWARD;
-	*/
-
-	pseq[i] = V2_read_line_geos(Map, aline);
-	if (!(pseq[i])) {
-	    G_fatal_error(_("Unable to read feature id %d"), aline);
-	}
-	
-	GEOSCoordSeq_getSize(pseq[i], &n_points);
-	G_debug(3, "  line n_points = %d", n_points);
-	n_points_shell += n_points;
-    }
-
-    /* create shell (outer ring) */
-    pseq_shell = GEOSCoordSeq_create(n_points_shell, Map->head.with_z ? 3 : 2);
-    k = 0;
-    for (i = 0; i < Area->n_lines; i++) {
-	GEOSCoordSeq_getSize(pseq[i], &n_points);
-	for (j = 0; j < (int) n_points; j++, k++) {
-	    GEOSCoordSeq_getX(pseq[i], j, &x);
-	    GEOSCoordSeq_setX(pseq_shell, k, x);
-	    GEOSCoordSeq_getY(pseq[i], j, &y);
-	    GEOSCoordSeq_setY(pseq_shell, k, y);
-	    if (Map->head.with_z) {
-		GEOSCoordSeq_getY(pseq[i], j, &z);
-		GEOSCoordSeq_setZ(pseq_shell, k, z);
-	    }
-	}
-    }
-    
-    G_free((void *) pseq);
-
-    return pseq_shell;
+    return read_polygon_points(Map, Area->n_lines, Area->lines);
 }
 
 /*!
@@ -480,66 +430,90 @@ GEOSCoordSequence *Vect_get_area_points_geos(struct Map_info *Map, int area)
  */
 GEOSCoordSequence *Vect_get_isle_points_geos(struct Map_info *Map, int isle)
 {
-    int i, j, k;
-    int line, aline;
-    unsigned n_points, n_points_shell;
-    double x, y, z;
-
     struct Plus_head *Plus;
     P_ISLE *Isle;
-
-    GEOSCoordSequence **pseq, *pseq_shell;
-
+    
     G_debug(3, "Vect_get_isle_points_geos(): isle = %d", isle);
 
     Plus = &(Map->plus);
     Isle = Plus->Isle[isle];
+
+    return read_polygon_points(Map, Isle->n_lines, Isle->lines);
+}
+
+GEOSCoordSequence *read_polygon_points(struct Map_info *Map, int n_lines, int *lines)
+{
+    int i, j, k;
+    int line, aline;
+    unsigned int n_points, n_points_shell;
+    double x, y, z;
+    int *dir;
     
-    G_debug(3, "  n_lines = %d", Isle->n_lines);
-    for (i = 0; i < Isle->n_lines; i++) {
-	line = Isle->lines[i];
+    GEOSCoordSequence **pseq, *pseq_shell;
+
+    G_debug(3, "  n_lines = %d", n_lines);
+    pseq = (GEOSCoordSequence **) G_malloc(n_lines * sizeof(GEOSCoordSequence *));
+    dir  = (int*) G_malloc(n_lines * sizeof(int));
+
+    n_points_shell = 0;
+    for (i = 0; i < n_lines; i++) {
+	line = lines[i];
 	aline = abs(line);
 	G_debug(3, "  append line(%d) = %d", i, line);
 
-
+	if (line > 0)
+	    dir[i] = GV_FORWARD;
+	else
+	    dir[i] = GV_BACKWARD;
+	
 	pseq[i] = V2_read_line_geos(Map, aline);
 	if (!(pseq[i])) {
 	    G_fatal_error(_("Unable to read feature id %d"), aline);
 	}
-
+	
 	GEOSCoordSeq_getSize(pseq[i], &n_points);
 	G_debug(3, "  line n_points = %d", n_points);
 	n_points_shell += n_points;
-
-	/*
-	  TODO
-	if (line > 0)
-	    dir = GV_FORWARD;
-	else
-	    dir = GV_BACKWARD;
-	*/
     }
 
     /* create shell (outer ring) */
     pseq_shell = GEOSCoordSeq_create(n_points_shell, Map->head.with_z ? 3 : 2);
     k = 0;
-    for (i = 0; i < Isle->n_lines; i++) {
+    for (i = 0; i < n_lines; i++) {
 	GEOSCoordSeq_getSize(pseq[i], &n_points);
-	for (j = 0; j < (int) n_points; j++, k++) {
-	    GEOSCoordSeq_getX(pseq[i], j, &x);
-	    GEOSCoordSeq_setX(pseq_shell, k, x);
-	    GEOSCoordSeq_getY(pseq[i], j, &y);
-	    GEOSCoordSeq_setY(pseq_shell, k, y);
-	    if (Map->head.with_z) {
-		GEOSCoordSeq_getY(pseq[i], j, &z);
-		GEOSCoordSeq_setZ(pseq_shell, k, z);
+	if (dir[i] == GV_FORWARD) {
+	    for (j = 0; j < (int) n_points; j++, k++) {
+		GEOSCoordSeq_getX(pseq[i], j, &x);
+		GEOSCoordSeq_setX(pseq_shell, k, x);
+		
+		GEOSCoordSeq_getY(pseq[i], j, &y);
+		GEOSCoordSeq_setY(pseq_shell, k, y);
+		
+		if (Map->head.with_z) {
+		    GEOSCoordSeq_getY(pseq[i], j, &z);
+		    GEOSCoordSeq_setZ(pseq_shell, k, z);
+		}
+	    }
+	}
+	else { /* GV_BACKWARD */
+	    for (j = (int) n_points - 1; j > -1; j--, k++) {
+		GEOSCoordSeq_getX(pseq[i], j, &x);
+		GEOSCoordSeq_setX(pseq_shell, k, x);
+		
+		GEOSCoordSeq_getY(pseq[i], j, &y);
+		GEOSCoordSeq_setY(pseq_shell, k, y);
+		
+		if (Map->head.with_z) {
+		    GEOSCoordSeq_getY(pseq[i], j, &z);
+		    GEOSCoordSeq_setZ(pseq_shell, k, z);
+		}
 	    }
 	}
     }
     
     G_free((void *) pseq);
-
+    G_free((void *) dir);
+    
     return pseq_shell;
 }
-
 #endif /* HAVE_GEOS */
