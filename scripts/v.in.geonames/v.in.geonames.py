@@ -45,7 +45,7 @@
 
 import sys
 import os
-import grass
+from grass.script import core, db as grass
 
 def main():
     infile  = options['input']

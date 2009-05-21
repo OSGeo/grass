@@ -76,7 +76,7 @@
 
 import sys
 import os
-import grass
+from grass.script import core as grass
 
 bands = [1,2,3,4,5,7]
 

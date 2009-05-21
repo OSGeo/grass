@@ -71,7 +71,7 @@
 import sys
 import os
 import re
-import grass
+from grass.script import core, vector as grass
 
 def main():
     if options['option'] == 'add':

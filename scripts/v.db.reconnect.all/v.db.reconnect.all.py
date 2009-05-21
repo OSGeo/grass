@@ -44,7 +44,7 @@
 
 import sys
 import os
-import grass
+from grass.script import core, vector as grass
 
 def main():
     old_database = options['old_database']

@@ -56,7 +56,7 @@
 
 import sys
 import os
-import grass
+from grass.script import core, vector as grass
 
 def uniq(l):
     result = []

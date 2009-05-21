@@ -18,7 +18,7 @@
 #%End
 
 import sys
-import grass
+from grass.script import core as grass
 
 def main():
     env = grass.gisenv()

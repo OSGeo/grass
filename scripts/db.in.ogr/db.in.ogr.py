@@ -52,7 +52,7 @@
 
 import sys
 import os
-import grass
+from grass.script import core, db as grass
 
 def main():
     dsn = options['dsn']

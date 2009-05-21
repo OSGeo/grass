@@ -43,7 +43,7 @@
 
 import sys
 import os
-import grass
+from grass.script import core, raster as grass
 import atexit
 
 def cleanup():

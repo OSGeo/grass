@@ -84,7 +84,7 @@
 
 import sys
 import os
-import grass
+from grass.script import core, raster as grass
 
 def main():
     global tmp

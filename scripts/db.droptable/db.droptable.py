@@ -36,7 +36,7 @@
 
 import sys
 import os
-import grass
+from grass.script import core, db, vector as grass
 
 def main():
     table = options['table']

@@ -69,7 +69,7 @@
 #%end
 
 import sys
-import grass
+from grass.script import core as grass
 
 def main():
     grass.exec_command(

@@ -56,7 +56,7 @@ import math
 import atexit
 import glob
 import shutil
-import grass
+from grass.script import core as grass
 
 def cleanup():
     grass.try_remove(tmp)

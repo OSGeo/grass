@@ -23,7 +23,7 @@
 import os
 import subprocess
 
-import grass
+from grass.script import core as grass
 
 class GDALWarp:
     def __init__(self, flags, options):

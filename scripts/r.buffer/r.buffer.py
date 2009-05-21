@@ -61,7 +61,7 @@ import sys
 import os
 import atexit
 import math
-import grass
+from grass.script import core, raster as grass
 
 scales = {
     'meters': 1.0,

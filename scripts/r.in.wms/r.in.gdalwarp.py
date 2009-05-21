@@ -77,7 +77,7 @@ import os
 import sys
 import atexit
 
-import grass
+from grass.script import core as grass
 
 path = os.path.join(os.getenv('GISBASE'), 'etc', 'r.in.wms')
 sys.path.append(path)

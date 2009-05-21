@@ -71,7 +71,7 @@
 
 import sys
 import os
-import grass
+from grass.script import core as grass
 
 def make_frame(f, b, t, l, r):
     (ft, fb, fl, fr) = f

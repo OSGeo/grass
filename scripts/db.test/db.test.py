@@ -27,7 +27,7 @@
 
 import sys
 import os
-import grass
+from grass.script import core as grass
 
 def main():
     test_file = options['test']
