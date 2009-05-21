@@ -10,9 +10,9 @@
 
 #ifdef HAVE_GEOS
 /* geos.c */
-int line_relate_geos(const struct Map_info *, const GEOSGeometry *,
+int line_relate_geos(struct Map_info *, const GEOSGeometry *,
 		     int, int, const char *);
-int area_relate_geos(const struct Map_info *, const GEOSGeometry *,
+int area_relate_geos(struct Map_info *, const GEOSGeometry *,
 		     int, int, const char *);
 #endif
 

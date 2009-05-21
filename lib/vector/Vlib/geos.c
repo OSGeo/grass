@@ -192,7 +192,6 @@ GEOSGeometry *Vect_line_to_geos(struct Map_info *Map,
 GEOSGeometry *Vect__read_line_geos(struct Map_info *Map, long offset, int *type)
 {
     int ftype;
-    double *x, *y, *z;
     
     GEOSGeometry *geom;
     GEOSCoordSequence *pseq;
@@ -220,12 +219,7 @@ GEOSGeometry *Vect__read_line_geos(struct Map_info *Map, long offset, int *type)
 	    G_debug(3, "    geos_type = linestring");
 	}
     }
-    
-    G_free((void *) x);
-    G_free((void *) y);
-    if (z)
-	G_free((void *) z);
-    
+        
     /* GEOSCoordSeq_destroy(pseq); */
     
     if (type)
@@ -282,7 +276,9 @@ GEOSCoordSequence *V2_read_line_geos(struct Map_info *Map, int line)
 GEOSCoordSequence *V1_read_line_geos(struct Map_info *Map, long offset, int *type)
 {
     int i, n_points;
-    char rhead;
+    int do_cats, n_cats;
+    char rhead, nc;
+    long size;
     double *x, *y, *z;
     
     GEOSCoordSequence *pseq;
@@ -301,6 +297,11 @@ GEOSCoordSequence *V1_read_line_geos(struct Map_info *Map, long offset, int *typ
     
     if (!(rhead & 0x01))	/* dead line */
 	return GEOSCoordSeq_create(0, (Map->head.with_z) ? 3 : 2);
+
+    if (rhead & 0x02)		/* categories exists */
+	do_cats = 1;		/* do not return here let file offset moves forward to next */
+    else			/* line */
+	do_cats = 0;
     
     rhead >>= 2;
     *type = dig_type_from_store((int) rhead);
@@ -308,9 +309,31 @@ GEOSCoordSequence *V1_read_line_geos(struct Map_info *Map, long offset, int *typ
     /* read only points / lines / boundaries */
     if (!(*type & (GV_POINT | GV_LINES)))
 	return GEOSCoordSeq_create(0, (Map->head.with_z) ? 3 : 2);
-    
+ 
+    /* skip categories */
+    if (do_cats) {
+	if (Map->head.Version_Minor == 1) {	/* coor format 5.1 */
+	    if (0 >= dig__fread_port_I(&n_cats, 1, &(Map->dig_fp)))
+		return NULL;
+	}
+	else {			                /* coor format 5.0 */
+	    if (0 >= dig__fread_port_C(&nc, 1, &(Map->dig_fp)))
+		return NULL;
+	    n_cats = (int) nc;
+	}
+	G_debug(3, "    n_cats = %d", n_cats);
+
+	if (Map->head.Version_Minor == 1) {	/* coor format 5.1 */
+	    size = (2 * PORT_INT) * n_cats;
+	}
+	else {		                /* coor format 5.0 */
+	    size = (PORT_SHORT + PORT_INT) * n_cats;
+	}
+	dig_fseek(&(Map->dig_fp), size, SEEK_CUR);
+    }
+
     if (*type & GV_POINTS) {
-	n_points = 1;
+	    n_points = 1;
     }
     else {
 	if (0 >= dig__fread_port_I(&n_points, 1, &(Map->dig_fp)))
