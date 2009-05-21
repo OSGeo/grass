@@ -6,16 +6,17 @@
  * AUTHOR(S):    Original author CERL, probably Dave Gerdes.
  *               Update to GRASS 5.7 Radim Blazek.
  *
- * PURPOSE:      Lower level functions for reading/writing/manipulating vectors.
+ * PURPOSE:      Test portable r/w functions 
  *
- * COPYRIGHT:    (C) 2001 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2001-2009 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *              License (>=v2). Read the file COPYING that comes with GRASS
- *              for details.
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
  *****************************************************************************/
 #include <grass/config.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>
 #include <grass/Vect.h>
@@ -27,10 +28,10 @@
 #define S_TEST 12345
 #define C_TEST 123
 
-int main(int argc, char **argv)
+int main()
 {
     int i, j;
-    int err = 0;
+    int err;
     int byte_order;
     struct Port_info port;
     GVFILE fp;
@@ -49,11 +50,12 @@ int main(int argc, char **argv)
 
     off_t ob, to[] = { PORT_LONG_MIN, -(L_TEST), 0, L_TEST, PORT_LONG_MAX };
 
+    err = EXIT_SUCCESS;
+
     port_off_t = sizeof(off_t);
 
     if (NULL == (fp.file = fopen("test.tmp", "wb+"))) {
-	fprintf(stderr, "ERROR, cannot open test.tmp file.\n");
-	return (1);
+	G_fatal_error("Unable tp open test.tmp file");
     }
     fp.loaded = 0;
 
@@ -70,12 +72,10 @@ int main(int argc, char **argv)
 	    dig__fread_port_D(&db, 1, &fp);
 	    dig_fflush(&fp);
 	    if (db != td[j]) {
-		fprintf(stderr,
-			"ERROR in read/write portable double, byte_order = %d\n",
-			byte_order);
-		fprintf(stderr, "  Written: %.16e3E\n  Read   : %.16e3E\n",
-			td[j], db);
-		err = 1;
+		G_warning("Error in read/write portable double, byte_order = %d"
+			  " Written: %.16e3E Read: %.16e3E",
+			  byte_order, td[j], db);
+		err = EXIT_FAILURE;
 	    }
 	}
 	for (j = 0; j < 7; j++) {
@@ -86,12 +86,10 @@ int main(int argc, char **argv)
 	    dig__fread_port_F(&fb, 1, &fp);
 	    dig_fflush(&fp);
 	    if (fb != tf[j]) {
-		fprintf(stderr,
-			"ERROR in read/write portable float, byte_order = %d\n",
-			byte_order);
-		fprintf(stderr, "  Written: %.8e3E\n  Read   : %.8e3E\n",
-			tf[j], fb);
-		err = 1;
+		G_warning("Error in read/write portable float, byte_order = %d"
+			  " Written: %.8e3E Read: %.8e3E",
+			  byte_order, tf[j], fb);
+		err = EXIT_FAILURE;
 	    }
 	}
 
@@ -103,12 +101,10 @@ int main(int argc, char **argv)
 	    dig__fread_port_O(&ob, 1, &fp, port_off_t);
 	    dig_fflush(&fp);
 	    if (ob != to[j]) {
-		fprintf(stderr,
-			"ERROR in read/write portable off_t, byte_order = %d\n",
-			byte_order);
-		fprintf(stderr, "  Written: %ld\n  Read   : %ld\n", to[j],
-			ob);
-		err = 1;
+		G_warning("Error in read/write portable off_t, byte_order = %d"
+			  " Written: %lu Read: %lu",
+			  byte_order, (long unsigned) to[j], (long unsigned) ob);
+		err = EXIT_FAILURE;
 	    }
 	}
 
@@ -120,12 +116,10 @@ int main(int argc, char **argv)
 	    dig__fread_port_L(&lb, 1, &fp);
 	    dig_fflush(&fp);
 	    if (lb != tl[j]) {
-		fprintf(stderr,
-			"ERROR in read/write portable long, byte_order = %d\n",
-			byte_order);
-		fprintf(stderr, "  Written: %ld\n  Read   : %ld\n", tl[j],
-			lb);
-		err = 1;
+		G_warning("Error in read/write portable long, byte_order = %d"
+			  " Written: %lu Read: %lu", 
+			  byte_order, (long unsigned) tl[j], (long unsigned) lb);
+		err = EXIT_FAILURE;
 	    }
 	}
 
@@ -137,11 +131,11 @@ int main(int argc, char **argv)
 	    dig__fread_port_I(&ib, 1, &fp);
 	    dig_fflush(&fp);
 	    if (ib != ti[j]) {
-		fprintf(stderr,
-			"ERROR in read/write portable int, byte_order = %d\n",
-			byte_order);
-		fprintf(stderr, "  Written: %d\n  Read   : %d\n", ti[j], ib);
-		err = 1;
+		G_warning("Error in read/write portable int, byte_order = %d"
+			  " Written: %d Read: %d", 
+			  byte_order, ti[j], ib);
+		
+		err = EXIT_FAILURE;
 	    }
 	}
 
@@ -153,11 +147,11 @@ int main(int argc, char **argv)
 	    dig__fread_port_S(&sb, 1, &fp);
 	    dig_fflush(&fp);
 	    if (sb != ts[j]) {
-		fprintf(stderr,
-			"ERROR in read/write portable short, byte_order = %d\n",
-			byte_order);
-		fprintf(stderr, "  Written: %d\n  Read   : %d\n", ts[j], sb);
-		err = 1;
+		G_warning("Error in read/write portable short, byte_order = %d"
+			  " Written: %d Read: %d",
+			  byte_order,  ts[j], sb);
+		
+		err = EXIT_FAILURE;
 	    }
 	}
 	for (j = 0; j < 5; j++) {
@@ -168,11 +162,10 @@ int main(int argc, char **argv)
 	    dig__fread_port_C(&cb, 1, &fp);
 	    dig_fflush(&fp);
 	    if (cb != tc[j]) {
-		fprintf(stderr,
-			"ERROR in read/write portable char, byte_order = %d\n",
-			byte_order);
-		fprintf(stderr, "  Written: %d\n  Read   : %d\n", tc[j], cb);
-		err = 1;
+		G_warning("Error in read/write portable char, byte_order = %d"
+			  " Written: %d Read: %d",
+			  byte_order, tc[j], cb);
+		err = EXIT_FAILURE;
 	    }
 
 
@@ -182,5 +175,6 @@ int main(int argc, char **argv)
 
     fclose(fp.file);
 
-    return (err);
+    exit(err);
 }
+
