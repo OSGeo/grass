@@ -120,7 +120,7 @@ import subprocess
 import tempfile
 import math
 
-import grass
+from grass.script import core as grass
 
 def bboxToPoints(bbox):
     """Make points that are the corners of a bounding box"""

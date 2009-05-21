@@ -35,7 +35,7 @@
 
 import sys
 import os
-import grass
+from grass.script import core as grass
 
 def start_browser(entry):
     path = os.path.join(gisbase, 'docs', 'html', entry + '.html')

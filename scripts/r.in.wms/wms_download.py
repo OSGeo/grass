@@ -19,7 +19,7 @@
 import os
 import urllib
 
-import grass
+from grass.script import core as grass
 
 class WMSDownload:
     def __init__(self, flags, options):

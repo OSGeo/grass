@@ -51,7 +51,7 @@
 
 import sys
 import os
-import grass
+from grass.script import core, db, vector as grass
 
 def main():
     map = options['map']

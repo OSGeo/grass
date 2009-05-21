@@ -108,7 +108,7 @@
 import sys
 import os
 import string
-import grass
+from grass.script import core, raster as grass
 
 def main():
     input = options['input']

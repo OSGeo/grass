@@ -18,7 +18,7 @@
 
 import os
 import glob
-import grass
+from grass.script import core as grass
 
 class WMSRequest:
     def __init__(self, flags, options):

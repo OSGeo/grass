@@ -89,7 +89,7 @@
 
 import sys
 import os
-import grass
+from grass.script import core as grass
 
 def main():
     input = options['input']

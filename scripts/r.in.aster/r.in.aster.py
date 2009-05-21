@@ -61,7 +61,7 @@
 import sys
 import os
 import platform
-import grass
+from grass.script import core, raster as grass
 
 bands = {
     'L1A': {

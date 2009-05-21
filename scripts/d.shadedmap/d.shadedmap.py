@@ -40,7 +40,7 @@
 #%end
 
 import sys
-import grass
+from grass.script import core as grass
 
 def main():
     drape_map = options['drapemap']

@@ -69,7 +69,7 @@ import sys
 import os
 import atexit
 import glob
-import grass
+from grass.script import core as grass
 
 def cleanup():
     grass.try_remove('spectrum.gnuplot')

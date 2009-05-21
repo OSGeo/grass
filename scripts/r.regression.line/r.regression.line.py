@@ -53,7 +53,7 @@
 import sys
 import os
 import math
-import grass
+from grass.script import core as grass
 
 def main():
     shell = flags['g']

@@ -56,7 +56,7 @@
 import sys
 import os
 import atexit
-import grass
+from grass.script import core, raster as grass
 
 # what to do in case of user break:
 def cleanup():

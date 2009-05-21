@@ -73,7 +73,7 @@ import sys
 import os
 import math
 import string
-import grass
+from grass.script import core, raster as grass
 
 def main():
     name = options['name']

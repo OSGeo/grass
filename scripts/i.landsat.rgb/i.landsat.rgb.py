@@ -69,7 +69,7 @@
 import sys
 import os
 import string
-import grass
+from grass.script import core, raster as grass
 
 def get_percentile(map, percentile):
     s = grass.read_command('r.univar', flags = 'ge', map = map, percentile = percentile)

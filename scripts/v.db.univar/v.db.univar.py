@@ -59,7 +59,7 @@ import sys
 import os
 import atexit
 import math
-import grass
+from grass.script import core as grass
 
 def cleanup():
     for ext in ['', '.sort']:

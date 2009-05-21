@@ -50,7 +50,7 @@
 import sys
 import os
 import string
-import grass
+from grass.script import core, db as grass
 
 def main():
     map = options['map']
