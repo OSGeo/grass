@@ -31,7 +31,7 @@ import wx
 import wx.lib.filebrowsebutton as filebrowse
 import wx.lib.mixins.listctrl as listmix
 
-import grass
+from grass.script import core as grass
 
 import gcmd
 import globalvar

@@ -30,7 +30,7 @@ import wx.combo
 import wx.lib.newevent
 import wx.lib.buttons  as  buttons
 
-import grass
+from grass.script import core as grass
 
 import gdialogs
 import globalvar

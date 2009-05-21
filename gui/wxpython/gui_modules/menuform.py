@@ -93,7 +93,7 @@ sys.path.append( wxbase)
 imagepath = os.path.join(wxbase, "images")
 sys.path.append(imagepath)
 
-import grass
+from grass.script import core as grass
 
 import gselect
 import gcmd

@@ -35,7 +35,7 @@ from wx.lib.mixins.listctrl import CheckListCtrlMixin, ListCtrlAutoWidthMixin, T
 import wx.lib.colourselect as  csel
 import wx.wizard as wiz
 
-import grass
+from grass.script import core as grass
 
 import globalvar
 import mapdisp

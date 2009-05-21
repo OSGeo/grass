@@ -66,7 +66,7 @@ from wx.lib.wordwrap import wordwrap
 
 grassPath = os.path.join(globalvar.ETCDIR, "python")
 sys.path.append(grassPath)
-import grass
+from grass.script import core as grass
 
 import gui_modules.utils as utils
 import gui_modules.preferences as preferences

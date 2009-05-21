@@ -24,7 +24,7 @@ import wx
 import os,sys
 import time
 
-import grass
+from grass.script import core as grass
 
 import gcmd
 import globalvar
