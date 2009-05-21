@@ -35,6 +35,8 @@ def raster_history(map):
     """Set the command history for a raster map to the command used to
     invoke the script (interface to `r.support').
 
+    @param map map name
+
     @return True on success
     @return False on failure
     """
@@ -49,7 +51,12 @@ def raster_history(map):
 # run "r.info -rgstmpud ..." and parse output
 
 def raster_info(map):
-    """Return information about a raster map (interface to `r.info')."""
+    """Return information about a raster map (interface to `r.info').
+
+    @param map map name
+    
+    @return parsed modile output
+    """
     s = read_command('r.info', flags = 'rgstmpud', map = map)
     kv = parse_key_val(s)
     for k in ['min', 'max', 'north', 'south', 'east', 'west']:
@@ -61,6 +68,11 @@ def raster_info(map):
 # interface to r.mapcalc
 
 def mapcalc(exp, **kwargs):
+    """Interface to r.mapcalc.
+
+    @param exp expression
+    @param kwargs
+    """
     t = string.Template(exp)
     e = t.substitute(**kwargs)
     if run_command('r.mapcalc', expression = e) != 0:

@@ -73,8 +73,19 @@ def make_command(prog, flags = "", overwrite = False, quiet = False, verbose = F
     """Return a list of strings suitable for use as the args parameter to
     Popen() or call(). Example:
 
+    @code
     >>> grass.make_command("g.message", flags = 'w', message = 'this is a warning')
     ['g.message', '-w', 'message=this is a warning']
+    @endcode
+
+    @param prog GRASS module
+    @param flag flags to be used
+    @param overwrite True to enable overwriting the output (--o)
+    @param quiet run quietly (--q)
+    @param verbose run verbosely (--v)
+    @param options
+
+    @return list of arguments
     """
     args = [prog]
     if overwrite:
@@ -96,6 +107,15 @@ def start_command(prog, flags = "", overwrite = False, quiet = False, verbose = 
     """Returns a Popen object with the command created by make_command.
     Accepts any of the arguments which Popen() accepts apart from "args"
     and "shell".
+
+    @param prog GRASS module
+    @param flag flags to be used
+    @param overwrite True to enable overwriting the output (--o)
+    @param quiet run quietly (--q)
+    @param verbose run verbosely (--v)
+    @param kwargs
+
+    @return Popen object
     """
     options = {}
     popts = {}
@@ -111,6 +131,11 @@ def run_command(*args, **kwargs):
     """Passes all arguments to start_command, then waits for the process to
     complete, returning its exit code. Similar to subprocess.call(), but
     with the make_command() interface.
+
+    @param args
+    @param kwargs
+
+    @return exit code
     """
     ps = start_command(*args, **kwargs)
     return ps.wait()
@@ -118,6 +143,11 @@ def run_command(*args, **kwargs):
 def pipe_command(*args, **kwargs):
     """Passes all arguments to start_command, but also adds
     "stdout = PIPE". Returns the Popen object.
+
+    @param args
+    @param kwargs
+
+    @return Popen object
     """
     kwargs['stdout'] = PIPE
     return start_command(*args, **kwargs)
@@ -125,6 +155,11 @@ def pipe_command(*args, **kwargs):
 def feed_command(*args, **kwargs):
     """Passes all arguments to start_command, but also adds
     "stdin = PIPE". Returns the Popen object.
+
+    @param args
+    @param kwargs
+
+    @return Popen object
     """
     kwargs['stdin'] = PIPE
     return start_command(*args, **kwargs)
@@ -132,6 +167,11 @@ def feed_command(*args, **kwargs):
 def read_command(*args, **kwargs):
     """Passes all arguments to pipe_command, then waits for the process to
     complete, returning its stdout (i.e. similar to shell `backticks`).
+
+    @param args
+    @param kwargs
+
+    @return stdout
     """
     ps = pipe_command(*args, **kwargs)
     return ps.communicate()[0]
@@ -146,6 +186,11 @@ def parse_command(*args, **kwargs):
     @code
     parse_command(..., parse = (grass.parse_key_val, { 'sep' : ':' }))
     @endcode
+
+    @param args
+    @param kwargs
+
+    @return parsed module output
     """
     parse = None
     if kwargs.has_key('parse'):
@@ -165,6 +210,11 @@ def parse_command(*args, **kwargs):
 def write_command(*args, **kwargs):
     """Passes all arguments to feed_command, with the string specified
     by the 'stdin' argument fed to the process' stdin.
+
+    @param args
+    @param kwargs
+
+    @return return code
     """
     stdin = kwargs['stdin']
     p = feed_command(*args, **kwargs)
@@ -173,7 +223,16 @@ def write_command(*args, **kwargs):
     return p.wait()
 
 def exec_command(prog, flags = "", overwrite = False, quiet = False, verbose = False, env = None, **kwargs):
-    """Interface to os.execvpe(), but with the make_command() interface."""
+    """Interface to os.execvpe(), but with the make_command() interface.
+
+    @param prog GRASS module
+    @param flag flags to be used
+    @param overwrite True to enable overwriting the output (--o)
+    @param quiet run quietly (--q)
+    @param verbose run verbosely (--v)
+    @param env environment variable (default os.environ)
+    @param kwargs
+    """
     args = make_command(prog, flags, overwrite, quiet, verbose, **kwargs)
     if env == None:
 	env = os.environ
@@ -182,31 +241,68 @@ def exec_command(prog, flags = "", overwrite = False, quiet = False, verbose = F
 # interface to g.message
 
 def message(msg, flag = None):
-    """Display a message using g.message"""
+    """Display a message using g.message
+
+    @param msg message to be displayed
+    @param flag flags (given as string)
+
+    @return g.message's exit code
+    """
     run_command("g.message", flags = flag, message = msg)
 
 def debug(msg, debug = 1):
-    """Display a debugging message using g.message -d"""
+    """Display a debugging message using g.message -d
+
+    @param msg message to be displayed
+    @param debug debug level (0-5)
+
+    @return g.message's exit code
+    """
     run_command("g.message", flags = 'd', message = msg, debug = debug)
     
 def verbose(msg):
-    """Display a verbose message using g.message -v"""
+    """Display a verbose message using g.message -v
+    
+    @param msg message to be displayed
+
+    @return g.message's exit code
+    """
     message(msg, flag = 'v')
 
 def info(msg):
-    """Display an informational message using g.message -i"""
+    """Display an informational message using g.message -i
+
+    @param msg message to be displayed
+
+    @return g.message's exit code
+    """
     message(msg, flag = 'i')
 
 def warning(msg):
-    """Display a warning message using g.message -w"""
+    """Display a warning message using g.message -w
+
+    @param msg message to be displayed
+
+    @return g.message's exit code
+    """
     message(msg, flag = 'w')
 
 def error(msg):
-    """Display an error message using g.message -e"""
+    """Display an error message using g.message -e
+
+    @param msg message to be displayed
+
+    @return g.message's exit code
+    """
     message(msg, flag = 'e')
 
 def fatal(msg):
-    """Display an error message using g.message -e, then abort"""
+    """Display an error message using g.message -e, then abort
+
+    @param msg message to be displayed
+
+    @return g.message's exit code
+    """
     error(msg)
     sys.exit(1)
 
@@ -227,9 +323,11 @@ def _parse_env():
 def parser():
     """Interface to g.parser, intended to be run from the top-level, e.g.:
 
+    @code
 	if __name__ == "__main__":
 	    options, flags = grass.parser()
 	    main()
+    @endcode
 
     Thereafter, the global variables "options" and "flags" will be
     dictionaries containing option/flag values, keyed by lower-case
@@ -272,6 +370,14 @@ def tempfile():
 def parse_key_val(s, sep = '=', dflt = None, val_type = None, vsep = None):
     """Parse a string into a dictionary, where entries are separated
     by newlines and the key and value are separated by `sep' (default: `=')
+
+    @param s string to be parsed
+    @param sep key/value separator
+    @param dflt default value to be used
+    @param val_type value type (None for no cast)
+    @param vsep vertical separator (default os.linesep)
+
+    @return parsed input (dictionary of keys/values)
     """
     result = {}
 
@@ -337,7 +443,14 @@ def del_temp_region():
 # interface to g.findfile
 
 def find_file(name, element = 'cell', mapset = None):
-    """Returns the output from running g.findfile as a dictionary."""
+    """Returns the output from running g.findfile as a dictionary.
+
+    @param name file name
+    @param element element type (default 'cell')
+    @param mapset mapset name (default all mapsets in search path)
+
+    @return parsed output of g.findfile
+    """
     s = read_command("g.findfile", flags='n', element = element, file = name, mapset = mapset)
     return parse_key_val(s)
 
@@ -345,7 +458,9 @@ def find_file(name, element = 'cell', mapset = None):
 
 def list_grouped(type):
     """Returns the output from running g.list, as a dictionary where the keys
-    are mapset names and the values are lists of maps in that mapset. 
+    are mapset names and the values are lists of maps in that mapset.
+
+    @param type element type
     """
     dashes_re = re.compile("^----+$")
     mapset_re = re.compile("<(.*)>")
@@ -368,6 +483,9 @@ def list_grouped(type):
 def mlist_grouped(type, mapset = None, pattern = None):
     """Returns the output from running g.mlist, as a dictionary where the keys
     are mapset names and the values are lists of maps in that mapset. 
+
+    @param type element type
+    @param mapset mapset name (default all mapset in search path)
     """
     result = {}
     mapset_element = None
@@ -395,12 +513,17 @@ def _concat(xs):
 def list_pairs(type):
     """Returns the output from running g.list, as a list of (map, mapset)
     pairs.
+
+    @param type element type
     """
     return _concat([[(map, mapset) for map in maps]
 		    for mapset, maps in list_grouped(type).iteritems()])
 
 def list_strings(type):
-    """Returns the output from running g.list, as a list of qualified names."""
+    """Returns the output from running g.list, as a list of qualified names.
+
+    @param element type
+    """
     return ["%s@%s" % pair for pair in list_pairs(type)]
 
 # color parsing
@@ -428,6 +551,9 @@ def parse_color(val, dflt = None):
     the named colours or an R:G:B tuple e.g. 255:255:255. Returns an
     (r,g,b) triple whose components are floating point values between 0
     and 1.
+
+    @param val color value
+    @param dflt default color value
     """
     if val in named_colors:
         return named_colors[val]
@@ -462,6 +588,9 @@ def verbosity():
 def basename(path, ext = None):
     """Remove leading directory components and an optional extension
     from the specified path
+
+    @param path path
+    @param ext extension
     """
     name = os.path.basename(path)
     if not ext:
@@ -476,6 +605,9 @@ def basename(path, ext = None):
 def find_program(pgm, args = []):
     """Attempt to run a program, with optional arguments. Return False
     if the attempt failed due to a missing executable, True otherwise
+
+    @param pgm program name
+    @param args list of arguments
     """
     nuldev = file(os.devnull, 'w+')
     try:
@@ -491,6 +623,8 @@ def find_program(pgm, args = []):
 def try_remove(path):
     """Attempt to remove a file; no exception is generated if the
     attempt fails.
+
+    @param path path
     """
     try:
 	os.remove(path)
@@ -502,6 +636,8 @@ def try_remove(path):
 def try_rmdir(path):
     """Attempt to remove a directory; no exception is generated if the
     attempt fails.
+
+    @param path path
     """
     try:
 	os.rmdir(path)
@@ -509,4 +645,10 @@ def try_rmdir(path):
 	pass
 
 def float_or_dms(s):
+    """Convert DMS to float.
+
+    @param s DMS value
+
+    @return float value
+    """
     return sum(float(x) / 60 ** n for (n, x) in enumerate(s.split(':')))

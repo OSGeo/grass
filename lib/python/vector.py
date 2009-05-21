@@ -35,6 +35,7 @@ def vector_db(map, **args):
     (interface to `v.db.connect -g').
 
     @param map vector map
+    @param args
 
     @return dictionary { layer : { 'layer', 'table, 'database', 'driver', 'key' }
     """
@@ -66,7 +67,13 @@ def vector_db(map, **args):
 
 def vector_layer_db(map, layer):
     """Return the database connection details for a vector map layer.
-    If db connection for given layer is not defined, fatal() is called."""
+    If db connection for given layer is not defined, fatal() is called.
+
+    @param map map name
+    @param layer layer number
+
+    @return parsed output
+    """
     try:
         f = vector_db(map)[int(layer)]
     except KeyError:
@@ -79,6 +86,12 @@ def vector_layer_db(map, layer):
 def vector_columns(map, layer = None, **args):
     """Return a dictionary of the columns for the database table connected to
     a vector map (interface to `v.info -c').
+
+    @param map map name
+    @param layer layer number (None for all layers)
+    @param args
+    
+    @return parsed output
     """
     s = read_command('v.info', flags = 'c', map = map, layer = layer, quiet = True, **args)
     result = {}
@@ -94,12 +107,21 @@ def vector_columns(map, layer = None, **args):
 def vector_history(map):
     """Set the command history for a vector map to the command used to
     invoke the script (interface to `v.support').
+
+    @param map mapname
+
+    @return v.support output
     """
     run_command('v.support', map = map, cmdhist = os.environ['CMDLINE'])
 
 # run "v.info -t" and parse output
 
 def vector_info_topo(map):
-    """Return information about a vector map (interface to `v.info -t')."""
+    """Return information about a vector map (interface to `v.info -t').
+
+    @param map map name
+
+    @return parsed output
+    """
     s = read_command('v.info', flags = 't', map = map)
     return parse_key_val(s, val_type = int)
