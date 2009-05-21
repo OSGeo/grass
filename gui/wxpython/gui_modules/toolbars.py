@@ -25,7 +25,7 @@ import wx
 import os, sys
 import platform
 
-import grass
+from grass.script import core as grass
 
 import globalvar
 import gcmd

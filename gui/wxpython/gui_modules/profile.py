@@ -56,7 +56,7 @@ import toolbars
 from debug import Debug as Debug
 from icon import Icons as Icons
 from preferences import globalSettings as UserSettings
-import grass
+from grass.script import core as grass
 
 class ProfileFrame(wx.Frame):
     """

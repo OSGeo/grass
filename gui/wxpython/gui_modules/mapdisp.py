@@ -63,7 +63,7 @@ import profile
 import globalvar
 import utils
 import gdialogs
-import grass
+from grass.script import core as grass
 from debug import Debug
 from icon  import Icons
 from preferences import globalSettings as UserSettings

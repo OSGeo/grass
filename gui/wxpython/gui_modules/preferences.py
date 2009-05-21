@@ -35,7 +35,7 @@ import wx.lib.colourselect as csel
 import wx.lib.mixins.listctrl as listmix
 from wx.lib.wordwrap import wordwrap
 
-import grass
+from grass.script import core as grass
 import gcmd
 import utils
 import globalvar

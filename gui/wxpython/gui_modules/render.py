@@ -37,7 +37,7 @@ import tempfile
 import wx
 from wx.lib.newevent import NewEvent
 
-import grass
+from grass.script import core as grass
 
 import globalvar
 import utils

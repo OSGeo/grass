@@ -46,7 +46,7 @@ import wx.wizard as wiz
 import gcmd
 import globalvar
 import utils
-import grass
+from grass.script import core as grass
 try:
     import subprocess
 except:

@@ -21,7 +21,7 @@ import platform
 import globalvar
 grassPath = os.path.join(globalvar.ETCDIR, "python")
 sys.path.append(grassPath)
-import grass
+from grass.script import core as grass
 
 import gcmd
 try:

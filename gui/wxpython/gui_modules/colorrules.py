@@ -24,7 +24,7 @@ import wx
 import wx.lib.colourselect as csel
 import wx.lib.scrolledpanel as scrolled
 
-import grass
+from grass.script import core as grass
 
 import dbm
 import gcmd
