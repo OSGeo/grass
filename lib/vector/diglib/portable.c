@@ -26,7 +26,7 @@ extern void port_init(void);
 extern int nat_dbl;
 extern int nat_flt;
 extern int nat_lng;
-extern size_t nat_off_t;
+extern int nat_off_t;
 extern int nat_int;
 extern int nat_shrt;
 
