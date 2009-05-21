@@ -239,24 +239,27 @@ int main(int argc, char *argv[])
 	    }
 
 	    /* Read line and check type */
-	    ltype = Vect_read_line(&(In[0]), APoints, NULL, aline);
-	    if (!(ltype & itype[0]))
-		continue;
-
-	    Vect_get_line_box(&(In[0]), aline, &abox);
-	    abox.T = PORT_DOUBLE_MAX;
-	    abox.B = -PORT_DOUBLE_MAX;
-
 	    if (flag.geos && flag.geos->answer) {
+#ifdef HAVE_GEOS
+		AGeom = Vect_read_line_geos(&(In[0]), aline, &ltype);
+#endif
 		if (!(ltype & (GV_POINT | GV_LINE)))
 		    continue;
-#ifdef HAVE_GEOS
-		AGeom = Vect_line_to_geos(&(In[0]), APoints, ltype);
-#endif
+
 		if (!AGeom)
 		    G_fatal_error(_("Unable to read line id %d from vector map <%s>"),
 				  aline, Vect_get_full_name(&(In[0])));
 	    }
+	    else {
+		ltype = Vect_read_line(&(In[0]), APoints, NULL, aline);
+	    }
+	    
+	    if (!(ltype & itype[0]))
+		continue;
+	    
+	    Vect_get_line_box(&(In[0]), aline, &abox);
+	    abox.T = PORT_DOUBLE_MAX;
+	    abox.B = -PORT_DOUBLE_MAX;
 
 	    /* Check if this line overlaps any feature in B */
 	    /* x Lines in B */

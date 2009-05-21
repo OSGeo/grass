@@ -7,22 +7,22 @@
 
 #ifdef HAVE_GEOS
 
-static int relate_geos(const struct Map_info *, const GEOSGeometry *,
+static int relate_geos(struct Map_info *, const GEOSGeometry *,
 		       int, int, const char *, int);
 
-int line_relate_geos(const struct Map_info *BIn, const GEOSGeometry * AGeom,
+int line_relate_geos(struct Map_info *BIn, const GEOSGeometry * AGeom,
 		     int bline, int operator, const char *relate)
 {
     return relate_geos(BIn, AGeom, bline, operator, relate, 0);
 }
 
-int area_relate_geos(const struct Map_info *BIn, const GEOSGeometry * AGeom,
+int area_relate_geos(struct Map_info *BIn, const GEOSGeometry * AGeom,
 		     int barea, int operator, const char *relate)
 {
     return relate_geos(BIn, AGeom, barea, operator, relate, 1);
 }
 
-int relate_geos(const struct Map_info *BIn, const GEOSGeometry * AGeom,
+int relate_geos(struct Map_info *BIn, const GEOSGeometry * AGeom,
 		int bfid, int operator, const char *relate, int area)
 {
     GEOSGeometry *BGeom = NULL;
@@ -32,7 +32,7 @@ int relate_geos(const struct Map_info *BIn, const GEOSGeometry * AGeom,
     if (area)
 	BGeom = Vect_read_area_geos(BIn, bfid);
     else
-	BGeom = Vect_read_line_geos(BIn, bfid);
+	BGeom = Vect_read_line_geos(BIn, bfid, NULL);
 
     if (!BGeom)
 	return 0;
