@@ -94,14 +94,19 @@ COPYRIGHT: (C) 2007 by the GRASS Development Team
    http://svnbook.red-bean.com/en/1.4/svn.advanced.props.html
 
 
-8. Tell the other developers about the new code using the following e-mail:
+9. wxGUI (gui/wxpython)
+
+   See http://wiki.wxpython.org/wxPython Style Guide
+
+
+10. Tell the other developers about the new code using the following e-mail:
    grass-dev@lists.osgeo.org
  
    To subscribe to this mailing list, see
    http://lists.osgeo.org/mailman/listinfo/grass-dev
 
 
-9. In case of questions feel free to contact the developers at the above
+11. In case of questions feel free to contact the developers at the above
    mailing list.
    http://www.grass-gis.org/devel/index.php#submission
 
