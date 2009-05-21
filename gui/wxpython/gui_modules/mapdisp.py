@@ -1427,8 +1427,9 @@ class MapFrame(wx.Frame):
 
         if self.Map.projinfo['proj'] == 'xy' or 'degree' not in self.Map.projinfo['unit']:
             angle = int(math.degrees(math.atan2(north,east)) + 0.5)
-            angle = angle+90
-            if angle < 0: angle = 360+angle
+            angle = 180 - angle
+            if angle < 0:
+                angle = 360+angle
 
             mstring = 'segment = %s %s\ttotal distance = %s %s\tbearing = %d deg' \
                 % (strdist,dunits,strtotdist,tdunits,angle)
