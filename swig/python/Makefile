@@ -39,26 +39,32 @@ CLEAN_SUBDIRS = NumPtr
 
 include $(MODULE_TOPDIR)/include/Make/Python.make
 
-DSTDIR = $(ARCH_DISTDIR)/etc/python/swig
+PYDIR = $(ETC)/python
+GDIR = $(PYDIR)/grass
+DSTDIR = $(GDIR)/lib
 
 LIBFILES := $(patsubst %,$(DSTDIR)/_%.so,$(MODULES))
 PYFILES  := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
-PYCFILES := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)
 
 default:
 	$(MAKE) $(DSTDIR)
-	$(MAKE) $(LIBFILES) $(PYFILES) $(PYCFILES)
+	$(MAKE) $(LIBFILES) $(PYFILES)
 
-$(DSTDIR):
+$(PYDIR):
 	test -d $@ || $(MKDIR) -p $@
+
+$(GDIR): $(PYDIR)
+	test -d $@ || $(MKDIR) -p $@
+
+$(DSTDIR): $(GDIR)
+	test -d $@ || $(MKDIR) -p $@
+	test -f __init__.py || touch $(GDIR)/__init__.py
+	@echo "import lib" >> $(GDIR)/__init__.py
 
 $(DSTDIR)/_%.so: _%.so
 	$(INSTALL) $< $@
 
 $(DSTDIR)/%.py: %.py
-	$(INSTALL_DATA) $< $@
-
-$(DSTDIR)/%.pyc: %.pyc
 	$(INSTALL_DATA) $< $@
 
 numptr:

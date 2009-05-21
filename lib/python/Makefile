@@ -3,13 +3,29 @@ MODULE_TOPDIR = ../..
 include $(MODULE_TOPDIR)/include/Make/Other.make
 include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 
-default: $(ETC)/python
-	$(MAKE) $(ETC)/python/grass.py $(ETC)/python/README.txt
+PYDIR = $(ETC)/python
+GDIR = $(PYDIR)/grass
+DSTDIR = $(GDIR)/script
 
-$(ETC)/python:
-	-if [ ! -d $@ ]; then $(MKDIR) $@; fi
+MODULES = grass core db raster vector
 
-$(ETC)/python/%: %
+PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
+
+default: $(DSTDIR)
+	$(MAKE) $(PYFILES) $(DSTDIR)/README.txt
+
+$(PYDIR):
+	test -d $@ || $(MKDIR) -p $@
+
+$(GDIR): $(PYDIR)
+	test -d $@ || $(MKDIR) -p $@
+
+$(DSTDIR): $(GDIR)
+	test -d $@ || $(MKDIR) -p $@
+	test -f __init__.py || touch $(GDIR)/__init__.py
+	@echo "import script" >> $(GDIR)/__init__.py
+
+$(DSTDIR)/%: %
 	$(INSTALL_DATA) $< $@
 
 #doxygen:
