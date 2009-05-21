@@ -392,6 +392,8 @@ proc Gronsole::readeof {path ci mark fh} {
 
 proc Gronsole::readout {path ci mark fh} {
 
+#	global mingw
+
 	set lines {}
 	
 	while {[gets $fh line] >= 0} {
@@ -400,6 +402,10 @@ proc Gronsole::readout {path ci mark fh} {
 	
 	if {[llength $lines] != 0} {
 		Gronsole::add_data_tag $path $ci out
+#		if { $mingw == "1" } {
+		    # FIXME bug #606
+#		    Gronsole::output_to_gronsole $path $mark $ci [list cmd$ci cmd$ci-out] "\n"
+#		}
 	}
 	foreach line $lines {
 		Gronsole::output_to_gronsole $path $mark $ci [list cmd$ci cmd$ci-out] "$line\n"
@@ -522,9 +528,12 @@ proc Gronsole::run_xterm {path cmd tags} {
 	Gronsole::annotate $path $cmd [concat xterm $tags]
 
 	if { $mingw == "1" } {
-	    exec -- cmd.exe /c start $env(GISBASE)/etc/grass-run.bat $cmd &
+	    eval [list exec -- cmd.exe /c start \
+	    	$env(GISBASE)/etc/grass-run.bat ] $cmd &
 	} else {
-	    exec -- $env(GISBASE)/etc/grass-xterm-wrapper -name xterm-grass -e $env(GISBASE)/etc/grass-run.sh $cmd &
+	    eval [list exec -- $env(GISBASE)/etc/grass-xterm-wrapper \
+		-name xterm-grass -e $env(GISBASE)/etc/grass-run.sh ] \
+		$cmd &
 	}
 
 	update idletasks
