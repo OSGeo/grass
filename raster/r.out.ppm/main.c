@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
     ppm_file->description = _("Name for new PPM file (use '-' for stdout)");
 
     gscale = G_define_flag();
-    gscale->key = 'G';
+    gscale->key = 'g';
     gscale->description = _("Output greyscale instead of color");
 
     if (G_parser(argc, argv))
