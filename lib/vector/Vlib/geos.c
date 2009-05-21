@@ -21,8 +21,8 @@
 #ifdef HAVE_GEOS
 #include <geos_c.h>
 
-static GEOSGeometry *Vect__read_line_geos(struct Map_info *, long);
-static GEOSCoordSequence *V1_read_line_geos(struct Map_info *, long);
+static GEOSGeometry *Vect__read_line_geos(struct Map_info *, long, int *);
+static GEOSCoordSequence *V1_read_line_geos(struct Map_info *, long, int *);
 static GEOSCoordSequence *V2_read_line_geos(struct Map_info *, int);
 
 /*!
@@ -37,12 +37,13 @@ static GEOSCoordSequence *V2_read_line_geos(struct Map_info *, int);
 
    \param Map pointer to Map_info structure
    \param line feature id
-
+   \param[out] type feature type or NULL
+   
    \return pointer to GEOSGeometry instance
    \return empty GEOSGeometry for unsupported feature type
    \return NULL on error
  */
-GEOSGeometry *Vect_read_line_geos(struct Map_info *Map, int line)
+GEOSGeometry *Vect_read_line_geos(struct Map_info *Map, int line, int *type)
 {
     P_LINE *Line;
     
@@ -64,7 +65,7 @@ GEOSGeometry *Vect_read_line_geos(struct Map_info *Map, int line)
 	G_fatal_error("Vect_read_line_geos(): %s %d",
 		      _("Attempt to read dead line"), line);
     
-    return Vect__read_line_geos(Map, Line->offset);
+    return Vect__read_line_geos(Map, Line->offset, type);
 }
 
 /*!
@@ -122,8 +123,8 @@ GEOSGeometry *Vect_read_area_geos(struct Map_info * Map, int area)
    \return pointer to GEOSGeometry instance
    \return NULL on error
  */
-GEOSGeometry *Vect_line_to_geos(struct Map_info * Map,
-				const struct line_pnts * points, int type)
+GEOSGeometry *Vect_line_to_geos(struct Map_info *Map,
+				const struct line_pnts *points, int type)
 {
     int i, with_z;
     GEOSGeometry *geom;
@@ -181,29 +182,30 @@ GEOSGeometry *Vect_line_to_geos(struct Map_info * Map,
 
   \param Map pointer to Map_info
   \param offset line offset
- 
+  \param[out] type feature type or NULL
+
   \return pointer to GEOSGeometry
   \return NULL on error
   \return NULL dead line
   \return NULL end of file
 */
-GEOSGeometry *Vect__read_line_geos(struct Map_info *Map, long offset)
+GEOSGeometry *Vect__read_line_geos(struct Map_info *Map, long offset, int *type)
 {
-    int type;
+    int ftype;
     double *x, *y, *z;
     
     GEOSGeometry *geom;
     GEOSCoordSequence *pseq;
     
-    pseq = V1_read_line_geos(Map, offset);
+    pseq = V1_read_line_geos(Map, offset, &ftype);
     if (!pseq)
 	G_fatal_error(_("Unable to read line offset %ld"), offset);
     
-    if (type & GV_POINT) {
+    if (ftype & GV_POINT) {
 	G_debug(3, "    geos_type = point");
 	geom = GEOSGeom_createPoint(pseq);
     }
-    else if (type & GV_LINE) {
+    else if (ftype & GV_LINE) {
 	G_debug(3, "    geos_type = linestring");
 	geom = GEOSGeom_createLineString(pseq);
     }
@@ -226,6 +228,9 @@ GEOSGeometry *Vect__read_line_geos(struct Map_info *Map, long offset)
     
     /* GEOSCoordSeq_destroy(pseq); */
     
+    if (type)
+      *type = ftype;
+    
     return geom;
 }
 
@@ -243,6 +248,7 @@ GEOSGeometry *Vect__read_line_geos(struct Map_info *Map, long offset)
 */
 GEOSCoordSequence *V2_read_line_geos(struct Map_info *Map, int line)
 {
+    int ftype;
     P_LINE *Line;
     
     G_debug(3, "V2_read_line_geos(): line = %d", line);
@@ -253,7 +259,7 @@ GEOSCoordSequence *V2_read_line_geos(struct Map_info *Map, int line)
 	G_fatal_error("V2_read_line_geos(): %s %d",
 		      _("Attempt to read dead line"), line);
     
-    return V1_read_line_geos(Map, Line->offset);
+    return V1_read_line_geos(Map, Line->offset, &ftype);
 }
 
 
@@ -267,14 +273,15 @@ GEOSCoordSequence *V2_read_line_geos(struct Map_info *Map, int line)
   
   \param Map pointer to Map_info
   \param offset line offset
- 
+  \param[out] type feature type
+  
   \return pointer to GEOSCoordSequence
   \return empty GEOSCoordSequence for dead line or unsuppored feature type
   \return NULL end of file
 */
-GEOSCoordSequence *V1_read_line_geos(struct Map_info *Map, long offset)
+GEOSCoordSequence *V1_read_line_geos(struct Map_info *Map, long offset, int *type)
 {
-    int i, n_points, type;
+    int i, n_points;
     char rhead;
     double *x, *y, *z;
     
@@ -296,13 +303,13 @@ GEOSCoordSequence *V1_read_line_geos(struct Map_info *Map, long offset)
 	return GEOSCoordSeq_create(0, (Map->head.with_z) ? 3 : 2);
     
     rhead >>= 2;
-    type = dig_type_from_store((int)rhead);
+    *type = dig_type_from_store((int) rhead);
     
     /* read only points / lines / boundaries */
-    if (!(type & (GV_POINT | GV_LINES)))
+    if (!(*type & (GV_POINT | GV_LINES)))
 	return GEOSCoordSeq_create(0, (Map->head.with_z) ? 3 : 2);
     
-    if (type & GV_POINTS) {
+    if (*type & GV_POINTS) {
 	n_points = 1;
     }
     else {
