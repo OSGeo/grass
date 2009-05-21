@@ -1,17 +1,27 @@
-/*! \page pythonlib GRASS 7 Python library
+/*! \page pythonlib GRASS 7 Python scripting library
 
 by GRASS Development Team
 
 http://grass.osgeo.org
 
-See code in: grass.py
+See code in:
 
+<ul>
+<li>core.py</li>
+<li>db.py</li>
+<li>raster.py</li>
+<li>vector.py</li>
 
-\section scripting GRASS scripting tasks for Python provided by "grass.py".
+\section scripting GRASS scripting tasks for Python provided by "grass.script".
 
-Usage: "import grass"
+Usage:
+
+\code
+from grass.script import core[,db[,raster,[vector]]] as grass
+\endcode
 
 \section make_command
+
 \code
 def make_command(prog, flags = "", overwrite = False, quiet = False, verbose = False, **options):
 \endcode
