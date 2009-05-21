@@ -7,7 +7,7 @@ PYDIR = $(ETC)/python
 GDIR = $(PYDIR)/grass
 DSTDIR = $(GDIR)/script
 
-MODULES = grass core db raster vector
+MODULES = core db raster vector
 
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
 
