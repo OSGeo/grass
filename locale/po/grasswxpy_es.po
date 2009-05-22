@@ -7839,6 +7839,22 @@ msgstr ""
 msgid "No map layer selected. Operation cancelled."
 msgstr ""
 
+#, fuzzy
+msgid "Close current workspace"
+msgstr "Cerrar archivo de entorno de trabajo actual"
+
+#, fuzzy
+msgid "Modify selected layer"
+msgstr "Importar las capas seleccionadas"
+
+#, fuzzy
+msgid "About wxPython GRASS GUI"
+msgstr "Acerca de la GUI wxPython de GRASS"
+
+#, fuzzy
+msgid "Adding new feature to vector map <%s> failed."
+msgstr "vectorial."
+
 #~ msgid ""
 #~ "File <%(file)s>: Unable to get list of DXF layers.\n"
 #~ "\n"
@@ -7870,10 +7886,6 @@ msgstr ""
 #~ msgid "Save current workspace as file"
 #~ msgstr "Guardar entorno de trabajo actual como archivo"
 
-#, fuzzy
-#~ msgid "Close current workspace"
-#~ msgstr "Cerrar archivo de entorno de trabajo actual"
-
 #~ msgid "Close current workspace file"
 #~ msgstr "Cerrar archivo de entorno de trabajo actual"
 
@@ -7903,10 +7915,6 @@ msgstr ""
 #~ msgid "Interactive input for supervised classification"
 #~ msgstr "Clasificación supervisada de entrada interactiva"
 
-#, fuzzy
-#~ msgid "Modify selected layer"
-#~ msgstr "Importar las capas seleccionadas"
-
 #~ msgid "Query selected vector map in editable mode"
 #~ msgstr "Consultar el mapa vectorial seleccionado en modo editable"
 
@@ -7926,10 +7934,6 @@ msgstr ""
 #~ "el análisis de la interfaz de órdenes de GRASS\n"
 #~ "y la construcción automática de la GUI.\n"
 #~ "%s"
-
-#, fuzzy
-#~ msgid "About wxPython GRASS GUI"
-#~ msgstr "Acerca de la GUI wxPython de GRASS"
 
 #~ msgid ""
 #~ "Unable to start Nviz. The OpenGL package was not found. You can get it at "
@@ -7965,10 +7969,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Undo is not implemented in vedit component. Use vdigit instead."
 #~ msgstr "Usar."
-
-#, fuzzy
-#~ msgid "Adding new feature to vector map <%s> failed."
-#~ msgstr "vectorial."
 
 #~ msgid "List of categories"
 #~ msgstr "Lista de categorías"
@@ -8022,3 +8022,208 @@ msgstr ""
 #, fuzzy
 #~ msgid "Create new workspace?"
 #~ msgstr "Crear nuevo archivo de entorno de trabajo"
+
+#, fuzzy
+#~ msgid "codes"
+#~ msgstr "Código"
+
+#, fuzzy
+#~ msgid "description"
+#~ msgstr "Descripción"
+
+#, fuzzy
+#~ msgid "parameters"
+#~ msgstr "Parámetros"
+
+#, fuzzy
+#~ msgid "Reload EPSG Codes"
+#~ msgstr "Explorar códigos EPSG"
+
+#, fuzzy
+#~ msgid "New GIS data directory"
+#~ msgstr "Directorio de datos de SIG:"
+
+#, fuzzy
+#~ msgid "Add vector map to group..."
+#~ msgstr "Añadir capa de mapa vectorial"
+
+#, fuzzy
+#~ msgid ""
+#~ "Insufficient points defined and active (checked) for selected "
+#~ "rectification method.\n"
+#~ "3+ points needed for 1st order,\n"
+#~ "6+ points for 2nd order, and\n"
+#~ "10+ points for 3rd order."
+#~ msgstr ""
+#~ "Puntos definidos y activos (marcados) insuficientes para el método de "
+#~ "rectificación seleccionado.\n"
+#~ "Se necesitan 3+ puntos para primer orden,\n"
+#~ "6+ puntos para segundo orden y\n"
+#~ "10+ puntos para tercer orden."
+
+#, fuzzy
+#~ msgid "Transforming <%s>..."
+#~ msgstr "Transformar imagen"
+
+#, fuzzy
+#~ msgid ""
+#~ "Vector map <%s> already exists. Change extension name and georectify "
+#~ "again."
+#~ msgstr "El archivo de región <%s> ya existe. ¿Quiere sobrescribirlo?"
+
+#, fuzzy
+#~ msgid "Copying attributes..."
+#~ msgstr "Cambiar atributos"
+
+#, fuzzy
+#~ msgid "Georectification of vector map <%s> failed"
+#~ msgstr "vectorial."
+
+#, fuzzy
+#~ msgid "Create vector map group"
+#~ msgstr "Crear nuevo mapa vectorial"
+
+#, fuzzy
+#~ msgid "Select vector map(s) to add to group:"
+#~ msgstr "Seleccionar mapa vectorial"
+
+#, fuzzy
+#~ msgid "Select toggle"
+#~ msgstr "Seleccionar color"
+
+#, fuzzy
+#~ msgid "Invert selection"
+#~ msgstr "Cambiar nombre de la localización seleccionada"
+
+#, fuzzy
+#~ msgid "Name for GRASS map"
+#~ msgstr "Nombre para el nuevo mapa vectorial:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to start vector digitizer.\n"
+#~ "The VDigit python extension was not found or loaded properly.\n"
+#~ "Switching back to 2D display mode.\n"
+#~ "\n"
+#~ "Details: %s"
+#~ msgstr ""
+#~ "No se puede iniciar Nviz. No se encontró la extensión de Python para "
+#~ "Nviz. Se vuelve al modo de visualización 2D.\n"
+#~ "\n"
+#~ "Detalles: %s"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to switch to 3D display mode.\n"
+#~ "The GLCanvas class has not been included with this build of wxPython!\n"
+#~ "Switching back to 2D display mode.\n"
+#~ "\n"
+#~ "Details: %s"
+#~ msgstr ""
+#~ "No se puede iniciar Zviz. !No se ha incluido la clase GLCanvas en esta "
+#~ "compilación de wxPython¡ Se vuelve al modo de visualización 2D.\n"
+#~ "\n"
+#~ "Detalles: %s"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to switch to 3D display mode.\n"
+#~ "The Nviz python extension was not found or loaded properly.\n"
+#~ "Switching back to 2D display mode.\n"
+#~ "\n"
+#~ "Details: %s"
+#~ msgstr ""
+#~ "No se puede iniciar Nviz. No se encontró la extensión de Python para "
+#~ "Nviz. Se vuelve al modo de visualización 2D.\n"
+#~ "\n"
+#~ "Detalles: %s"
+
+#, fuzzy
+#~ msgid "Vector querying"
+#~ msgstr "Configuración de tipo de letra"
+
+#, fuzzy
+#~ msgid "Zoom to selected map(s)"
+#~ msgstr "Zum al mapa seleccionado"
+
+#, fuzzy
+#~ msgid "Enable auto-zooming to selected map layer"
+#~ msgstr "ráster."
+
+#, fuzzy
+#~ msgid "Line width (in pixels):"
+#~ msgstr "Línea"
+
+#, fuzzy
+#~ msgid "Key column:"
+#~ msgstr "Cambiar nombre de columna"
+
+#, fuzzy
+#~ msgid "Unknown value"
+#~ msgstr "desconocido"
+
+#, fuzzy
+#~ msgid "Set computational region from selected map(s)"
+#~ msgstr "mostrar"
+
+#, fuzzy
+#~ msgid "Zoom to selected map(s) (ignore NULLs)"
+#~ msgstr "Zum"
+
+#, fuzzy
+#~ msgid "Set computational region from selected map(s) (ignore NULLs)"
+#~ msgstr "mostrar"
+
+#, fuzzy
+#~ msgid "Digitize new area"
+#~ msgstr "Digitalizar"
+
+#, fuzzy
+#~ msgid "Import data from WMS server"
+#~ msgstr "Descarga e importa datos de servidores WMS."
+
+#, fuzzy
+#~ msgid " Server settings "
+#~ msgstr "ráster"
+
+#, fuzzy
+#~ msgid " List of layers "
+#~ msgstr "Lista de capas"
+
+#, fuzzy
+#~ msgid "Layer / Style"
+#~ msgstr "Capa a borrar"
+
+#, fuzzy
+#~ msgid "Title"
+#~ msgstr "Archivo"
+
+#, fuzzy
+#~ msgid "Layers"
+#~ msgstr "Capa"
+
+#, fuzzy
+#~ msgid "GRASS GIS Layer Manager"
+#~ msgstr "Tabla"
+
+#, fuzzy
+#~ msgid ""
+#~ "Current workspace is not empty. Do you want to store current settings to "
+#~ "workspace file?"
+#~ msgstr "Entorno de trabajo?"
+
+#, fuzzy
+#~ msgid "Add various raster-based map layers"
+#~ msgstr "Añadir capa de mapa ráster"
+
+#, fuzzy
+#~ msgid "Add various vector-based map layer"
+#~ msgstr "Añadir capa de mapa vectorial"
+
+#, fuzzy
+#~ msgid "Quit GRASS GUI"
+#~ msgstr "Acerca de la GUI wxPython de GRASS"
+
+#, fuzzy
+#~ msgid "Create or rebuild topology"
+#~ msgstr "Crear/reconstruir topología"

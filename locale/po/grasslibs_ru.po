@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: grasslibs_ru\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-01-09 23:29+0100\n"
-"PO-Revision-Date: 2008-10-08 20:46-0600\n"
+"PO-Revision-Date: 2009-01-27 22:58-0600\n"
 "Last-Translator: Maxim Dubinin <sim@gis-lab.info>\n"
 "Language-Team: Russian <grass-translations@lists.osgeo.org>\n"
 "MIME-Version: 1.0\n"
@@ -18,12 +18,12 @@ msgstr ""
 #: ../lib/imagery/list_gp.c:34
 #, c-format
 msgid "group <%s> is empty\n"
-msgstr ""
+msgstr "группа <%s> пуста\n"
 
 #: ../lib/imagery/list_gp.c:44
 #, c-format
 msgid "group <%s> references the following raster maps\n"
-msgstr ""
+msgstr "группа <%s> ссылается на следующие растровые слои\n"
 
 #: ../lib/imagery/target.c:38
 #, c-format
@@ -63,12 +63,12 @@ msgstr "Невозможно найти файл [%s] или подгруппу 
 #: ../lib/imagery/list_subgp.c:36
 #, c-format
 msgid "subgroup <%s> of group <%s> is empty\n"
-msgstr ""
+msgstr "подгруппа <%s> группы <%s> пуста\n"
 
 #: ../lib/imagery/list_subgp.c:48
 #, c-format
 msgid "subgroup <%s> of group <%s> references the following raster maps\n"
-msgstr ""
+msgstr "подгруппа <%s> группы <%s> ссылается на следующие растровые слои\n"
 
 #: ../lib/rst/interp_float/vinput2d.c:73
 msgid "Vector is not 3D"
@@ -230,9 +230,9 @@ msgid "Unknown query tool"
 msgstr "Неизвестный инструмент запроса"
 
 #: ../lib/vector/vedit/cats.c:66
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to set category %d for (feature id %d)"
-msgstr "Невозможно установить категорию %d для линии %d"
+msgstr "Невозможно установить категорию %d для (id объекта %d)"
 
 #: ../lib/vector/Vlib/sindex.c:97
 msgid "not implemented"
@@ -417,7 +417,7 @@ msgstr ""
 #: ../lib/vector/Vlib/intersect.c:1164 ../lib/vector/Vlib/intersect.c:1185
 #: ../lib/vector/Vlib/intersect.c:1202
 msgid "Error while adding point to array. Out of memory"
-msgstr ""
+msgstr "Ошибка добавления точки в массив. Нет памяти"
 
 #: ../lib/vector/Vlib/close.c:134
 #, c-format
@@ -538,9 +538,9 @@ msgid "Bug: attempt to update map which is not in current mapset"
 msgstr "Ошибка: попытка обновить слой не содержащийся в текущем наборе ."
 
 #: ../lib/vector/Vlib/break_lines.c:115 ../lib/vector/Vlib/break_lines.c:370
-#, fuzzy, c-format
+#, c-format
 msgid "Intersections: %5d"
-msgstr "Пересечения: "
+msgstr "Пересечения: %5d"
 
 #: ../lib/vector/Vlib/open_ogr.c:53
 msgid "OGR format cannot be updated"
@@ -676,94 +676,91 @@ msgid "Please rebuild topology for vector map <%s@%s>"
 msgstr "Пожалуйста, перестройте топологию для векторного слоя <%s@%s>"
 
 #: ../lib/vector/Vlib/build.c:123
-#, fuzzy, c-format
+#, c-format
 msgid "Building topology for vector map <%s>..."
-msgstr "Построение топологии для векторного слоя  <%s>...\n"
+msgstr "Построение топологии для векторного слоя  <%s>..."
 
 #: ../lib/vector/Vlib/build.c:141
-#, fuzzy
 msgid "Topology was built"
-msgstr "Топология построена\n"
+msgstr "Топология построена"
 
 #: ../lib/vector/Vlib/build.c:153
-#, fuzzy, c-format
+#, c-format
 msgid "Number of nodes: %d"
-msgstr "Количество узлов     :   %d\n"
+msgstr "Количество узлов: %d"
 
 #: ../lib/vector/Vlib/build.c:154
-#, fuzzy, c-format
+#, c-format
 msgid "Number of primitives: %d"
-msgstr "Количество примитивов:   %d\n"
+msgstr "Количество примитивов: %d"
 
 #: ../lib/vector/Vlib/build.c:155
-#, fuzzy, c-format
+#, c-format
 msgid "Number of points: %d"
-msgstr "Количество точек    :   %d\n"
+msgstr "Количество точек: %d"
 
 #: ../lib/vector/Vlib/build.c:156
-#, fuzzy, c-format
+#, c-format
 msgid "Number of lines: %d"
-msgstr "Количество линий     :   %d\n"
+msgstr "Количество линий: %d"
 
 #: ../lib/vector/Vlib/build.c:157
-#, fuzzy, c-format
+#, c-format
 msgid "Number of boundaries: %d"
-msgstr "Количество границ:   %d\n"
+msgstr "Количество границ: %d"
 
 #: ../lib/vector/Vlib/build.c:158
-#, fuzzy, c-format
+#, c-format
 msgid "Number of centroids: %d"
-msgstr "Количество центроидов :   %d\n"
+msgstr "Количество центроидов: %d"
 
 #: ../lib/vector/Vlib/build.c:161
-#, fuzzy, c-format
+#, c-format
 msgid "Number of faces: %d"
-msgstr "Количество граней     :   %d\n"
+msgstr "Количество граней: %d"
 
 #: ../lib/vector/Vlib/build.c:164
-#, fuzzy, c-format
+#, c-format
 msgid "Number of kernels: %d"
-msgstr "Количество ядер   :   %d\n"
+msgstr "Количество ядер: %d"
 
 #: ../lib/vector/Vlib/build.c:205
-#, fuzzy, c-format
+#, c-format
 msgid "Number of areas: %d"
-msgstr "Количество полигонов     :   %d\n"
+msgstr "Количество полигонов: %d"
 
 #: ../lib/vector/Vlib/build.c:206
-#, fuzzy, c-format
+#, c-format
 msgid "Number of isles: %d"
-msgstr "Количество островов     :   %d\n"
+msgstr "Количество островов: %d"
 
 #: ../lib/vector/Vlib/build.c:209
-#, fuzzy, c-format
+#, c-format
 msgid "Number of incorrect boundaries: %d"
-msgstr "Количество неправильных границ   :   %d\n"
+msgstr "Количество неправильных границ: %d"
 
 #: ../lib/vector/Vlib/build.c:213
-#, fuzzy, c-format
+#, c-format
 msgid "Number of centroids outside area: %d"
-msgstr "Количество центроидов вне полигонов :   %d\n"
+msgstr "Количество центроидов вне полигонов: %d"
 
 #: ../lib/vector/Vlib/build.c:217
-#, fuzzy, c-format
+#, c-format
 msgid "Number of duplicate centroids: %d"
-msgstr "Количество центроидов-дупликатов    :   %d\n"
+msgstr "Количество центроидов-дупликатов: %d"
 
 #: ../lib/vector/Vlib/build.c:221
-#, fuzzy, c-format
+#, c-format
 msgid "Number of areas without centroid: %d"
-msgstr "Количество полигонов без центроидов :   %d\n"
+msgstr "Количество полигонов без центроидов: %d"
 
 #: ../lib/vector/Vlib/build.c:226
-#, fuzzy
 msgid "Number of areas: -"
-msgstr "Количество полигонов     :   -\n"
+msgstr "Количество полигонов: -"
 
 #: ../lib/vector/Vlib/build.c:227
-#, fuzzy
 msgid "Number of isles: -"
-msgstr "Количество островов     :   -\n"
+msgstr "Количество островов: -"
 
 #: ../lib/vector/Vlib/build.c:256
 #, c-format
@@ -822,53 +819,48 @@ msgid "Area of size = 0.0 ignored"
 msgstr "Полигон площадью 0.0 пропущен"
 
 #: ../lib/vector/Vlib/build_nat.c:148
-#, fuzzy
 msgid "Request to find area outside nonexistent isle"
-msgstr "Попытка найти полигон вокруг несуществующего острова"
+msgstr "Запрос найти полигон вне несуществующего острова"
 
 #: ../lib/vector/Vlib/build_nat.c:507
-#, fuzzy
 msgid "Registering primitives..."
-msgstr "Регистрируются примитивы:"
+msgstr "Регистрируются примитивы..."
 
 #: ../lib/vector/Vlib/build_nat.c:516
 msgid "Unable to read vector map"
 msgstr "Невозможно прочитать векторный слой"
 
 #: ../lib/vector/Vlib/build_nat.c:560
-#, fuzzy, c-format
+#, c-format
 msgid "%d primitives registered"
-msgstr "примитивов зарегистрировано"
+msgstr "%d примитивов зарегистрировано"
 
 #: ../lib/vector/Vlib/build_nat.c:561
-#, fuzzy, c-format
+#, c-format
 msgid "%d vertices registered"
-msgstr "узлов зарегистрировано"
+msgstr "%d узлов зарегистрировано"
 
 #: ../lib/vector/Vlib/build_nat.c:572
-#, fuzzy
 msgid "Building areas..."
-msgstr "Построение полигонов:"
+msgstr "Построение полигонов..."
 
 #: ../lib/vector/Vlib/build_nat.c:595
-#, fuzzy, c-format
+#, c-format
 msgid "%d areas built"
-msgstr "полигонов построено"
+msgstr "%d полигонов построено"
 
 #: ../lib/vector/Vlib/build_nat.c:596
-#, fuzzy, c-format
+#, c-format
 msgid "%d isles built"
-msgstr "островов создано"
+msgstr "%d островов создано"
 
 #: ../lib/vector/Vlib/build_nat.c:605
-#, fuzzy
 msgid "Attaching islands..."
-msgstr "Назначаются острова:"
+msgstr "Назначаются острова..."
 
 #: ../lib/vector/Vlib/build_nat.c:620
-#, fuzzy
 msgid "Attaching centroids..."
-msgstr "Назначаются центроиды:"
+msgstr "Назначаются центроиды..."
 
 #: ../lib/vector/Vlib/read_nat.c:136
 msgid "Attempt to read dead line"
@@ -1159,25 +1151,25 @@ msgstr ""
 #: ../lib/vector/Vlib/buffer2.c:375
 #, fuzzy
 msgid "Line is not looped"
-msgstr "Матрицы не разрешены"
+msgstr "Линия не зациклена"
 
 #: ../lib/vector/Vlib/buffer2.c:610 ../lib/vector/Vlib/buffer2.c:621
+#, fuzzy
 msgid "Next edge was visited but it is not the first one !!! breaking loop"
-msgstr ""
+msgstr "Следующая грань была проверена, но она не первая !!! выход из цикла"
 
 #: ../lib/vector/Vlib/buffer2.c:673
 #, fuzzy
 msgid "side != 0 feature not implemented"
-msgstr "не предусмотрено"
+msgstr "сторона != 0 возможность непредусмотрена"
 
 #: ../lib/vector/Vlib/buffer2.c:923 ../lib/vector/Vlib/buffer2.c:956
 msgid "Vect_get_point_in_poly() failed"
-msgstr ""
+msgstr "Vect_get_point_in_poly() не выполнен"
 
 #: ../lib/vector/Vlib/area.c:53
-#, fuzzy
 msgid "Attempt to read points of nonexistent area"
-msgstr "Попытка получить точки из несуществующего полигона"
+msgstr "Попытка считать точки из несуществующего полигона"
 
 #: ../lib/vector/Vlib/area.c:125
 #, c-format
@@ -1352,31 +1344,33 @@ msgid "Attempt to delete isle %d info from dead area %d"
 msgstr "Попытка удалить информацию об острове %d из уже удаленного полигона %d"
 
 #: ../lib/sites/sites.c:97
-#, fuzzy, c-format
+#, c-format
 msgid "Attributes for category %d not found"
-msgstr "Для категории %d не найдена запись в БД"
+msgstr "Атрибуты для категории %d не найдены"
 
 #: ../lib/sites/sites.c:136
 msgid "Category must be integer"
-msgstr ""
+msgstr "Категория должна быть целочисленной"
 
 #: ../lib/sites/sites.c:210
 msgid "Memory error in writing timestamp"
-msgstr ""
+msgstr "Ошибка памяти при записи временной метки"
 
 #: ../lib/sites/sites.c:212
 msgid "Illegal TimeStamp string"
-msgstr ""
+msgstr "Неверная строка временной метки"
 
 #: ../lib/sites/sites.c:241
 msgid "Memory error in allocating timestamp"
-msgstr ""
+msgstr "Ошибка памяти при работе с временной меткой"
 
 #: ../lib/sites/sites.c:296 ../lib/sites/sites.c:426
 msgid ""
 "Dev note: Adapted sites library used for vector points. (module should be "
 "updated to GRASS 6 vector library)"
 msgstr ""
+"Заметка разреботчика: Библиотека сайтов адаптированная для векторных точек. "
+"(модуль должен быть обновлен для векторной библиотеки GRASS 6)"
 
 #: ../lib/sites/sites.c:329 ../lib/db/dbmi_client/copy_tab.c:199
 #: ../lib/db/dbmi_client/copy_tab.c:276 ../lib/db/dbmi_client/table.c:110
@@ -1385,23 +1379,21 @@ msgid "Unable to open select cursor: '%s'"
 msgstr "Невозможно открыть выбранный курсор: '%s'"
 
 #: ../lib/sites/sites.c:345
-#, fuzzy
 msgid "Cannot fetch row"
-msgstr "Невозможно получить информацию о слое"
+msgstr "Невозможно получить ряд"
 
 #: ../lib/sites/sites.c:527
 msgid "G_oldsite_new_struct: invalid # dims or fields"
-msgstr ""
+msgstr "G_oldsite_new_struct: неправильное число размерностей или полей"
 
 #: ../lib/sites/sites.c:1197
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot open database %s by driver %s"
-msgstr " "
+msgstr "Невозможно открыть базу данных %s с помощью драйвера %s"
 
 #: ../lib/sites/sites.c:1205
-#, fuzzy
 msgid "Cannot select attributes"
-msgstr "Невозможно описать таблицу <%s>"
+msgstr "Невозможно выбрать атрибуты"
 
 #: ../lib/proj/convert.c:109
 msgid "Unable parse GRASS PROJ_INFO file"
@@ -1443,13 +1435,13 @@ msgstr ""
 "Датум <%s> распознан GRASS, но параметры не найдены. Необходимо ваше участие."
 
 #: ../lib/proj/convert.c:441
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid transformation number %d; valid range is 1 to %d. Leaving datum "
 "transform parameters unspecified."
 msgstr ""
-"Неправильный номер трансформации %d; валидный диапазон от 1 до %d. Параметры "
-"трансформации датума оставлены незаполненными."
+"Неправильный номер трансформации %d; правильный диапазон от 1 до %d. "
+"Параметры трансформации датума оставлены незаполненными."
 
 #: ../lib/proj/do_proj.c:106 ../lib/proj/do_proj.c:180
 #, c-format
@@ -2204,14 +2196,13 @@ msgid "LOCATION << %s >> not available"
 msgstr "Область << %s >> недоступна"
 
 #: ../lib/gis/gdal.c:64
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to locate symbol <%s>"
-msgstr "Невозможно создать таблицу <%s>"
+msgstr "Невозможно найти символ <%s>"
 
 #: ../lib/gis/gdal.c:104
-#, fuzzy
 msgid "Unable to load GDAL library"
-msgstr "Невозможно добавить сетевую дугу"
+msgstr "Невозможно загрузить библиотеку GDAL"
 
 #: ../lib/gis/gdal.c:301
 #, fuzzy
@@ -2383,17 +2374,17 @@ msgstr "%s не установлен"
 #: ../lib/gis/alloc.c:43
 #, c-format
 msgid "G_malloc: unable to allocate %lu bytes at %s:%d"
-msgstr ""
+msgstr "G_malloc: невозможно выделить %lu байт в %s:%d"
 
 #: ../lib/gis/alloc.c:76
 #, c-format
 msgid "G_calloc: unable to allocate %lu * %lu bytes at %s:%d"
-msgstr ""
+msgstr "G_calloc: невозможно выделить %lu * %lu байт в %s:%d"
 
 #: ../lib/gis/alloc.c:114
 #, c-format
 msgid "G_realloc: unable to allocate %lu bytes at %s:%d"
-msgstr ""
+msgstr "G_realloc: невозможно выделить %lu байт в %s:%d"
 
 #: ../lib/gis/range.c:188
 #, c-format
@@ -2545,9 +2536,8 @@ msgid "Name for output vector map"
 msgstr "Имя выходного векторного слоя"
 
 #: ../lib/gis/parser.c:597
-#, fuzzy
 msgid "Feature type"
-msgstr "Тип(ы) объекта(ов)"
+msgstr "Тип объекта"
 
 #: ../lib/gis/parser.c:604
 msgid "Layer number"
@@ -2574,14 +2564,12 @@ msgid "Example: 1,3,7-9,13"
 msgstr "Пример: 1,3,7-9,13"
 
 #: ../lib/gis/parser.c:628
-#, fuzzy
 msgid "Feature id"
-msgstr "Объект: "
+msgstr "Id объекта"
 
 #: ../lib/gis/parser.c:635
-#, fuzzy
 msgid "Feature ids"
-msgstr "Объект: "
+msgstr "Id объектов"
 
 #: ../lib/gis/parser.c:646
 msgid "Name of input file"
@@ -3166,12 +3154,12 @@ msgstr "ОШИБКА чтения файла %s для области <%s>"
 #: ../lib/gis/find_file.c:74
 #, c-format
 msgid "'%s/%s' was found in more mapsets (also found in <%s>)"
-msgstr ""
+msgstr "'%s/%s' был найден в нескольких наборах (также найден в <%s>)"
 
 #: ../lib/gis/find_file.c:82
-#, fuzzy, c-format
+#, c-format
 msgid "Using <%s@%s>"
-msgstr "Невозможно найти <%s@%s>"
+msgstr "Используется<%s@%s>"
 
 #: ../lib/gis/quant_io.c:89
 #, c-format
@@ -3397,9 +3385,9 @@ msgid "Unable to get list tables in database <%s>"
 msgstr "Невозможно получить список таблиц базы данных <%s>"
 
 #: ../lib/db/dbmi_client/copy_tab.c:157
-#, fuzzy, c-format
+#, c-format
 msgid "Table <%s> already exists in database <%s>"
-msgstr "Таблица <%s> уже присутствует в базе данных <%s>"
+msgstr "Таблица <%s> уже есть в базе данных <%s>"
 
 #: ../lib/db/dbmi_client/copy_tab.c:231
 #, c-format
@@ -3968,7 +3956,7 @@ msgstr "Записать 2d массив в растровый слой <%s>"
 
 #: ../lib/gpde/N_arrays_io.c:227 ../lib/gpde/N_arrays_io.c:232
 #: ../lib/gpde/N_arrays_io.c:237
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write raster row %i"
 msgstr "Невозможно записать строку растра %i"
 
@@ -4512,6 +4500,14 @@ msgstr ""
 msgid "PNG: collecting to file <%s>"
 msgstr ""
 
+#, fuzzy
+msgid "Unable to query drawable"
+msgstr "Невозможно скопировать таблицу <%s>"
+
+#, fuzzy
+msgid "Failed to initialize Xlib surface"
+msgstr "Невозможно инициализировать pj причину: %s"
+
 #~ msgid "Unable to delete layer/category %d/%d line %d"
 #~ msgstr "Невозможно удалить слой/категорию %d/%d линии %d"
 
@@ -4629,14 +4625,6 @@ msgstr ""
 
 #~ msgid "Cannot open database %s"
 #~ msgstr "Невозможно открыть базу данных %s"
-
-#, fuzzy
-#~ msgid "Unable to query drawable"
-#~ msgstr "Невозможно скопировать таблицу <%s>"
-
-#, fuzzy
-#~ msgid "Failed to initialize Xlib surface"
-#~ msgstr "Невозможно инициализировать pj причину: %s"
 
 #, fuzzy
 #~ msgid "Cannot describe table <%s>"
@@ -5115,3 +5103,44 @@ msgstr ""
 
 #~ msgid "unable to find [%s] in [%s]"
 #~ msgstr "невозможно найти [%s] в [%s]"
+
+#, fuzzy
+#~ msgid "Unable to load file to memory, file not open"
+#~ msgstr "Невозможно открыть временный файл"
+
+#, fuzzy
+#~ msgid ""
+#~ "Vect_read_line_geos(): feature id %d is not reasonable (max features in "
+#~ "vector map <%s>: %d)"
+#~ msgstr ""
+#~ "Vect_read_line(): линия с id %d невозможна (максимальное количество "
+#~ "объектом в векторном слое <%s>: %d)"
+
+#, fuzzy
+#~ msgid "only native format supported"
+#~ msgstr "для этого формата/уровня не поддерживается "
+
+#, fuzzy
+#~ msgid "Unable to read line offset %ld"
+#~ msgstr "Невозможно прочитать линию %d"
+
+#, fuzzy
+#~ msgid "Attempt to read points of nonexistent area id %d"
+#~ msgstr "Попытка считать точки из несуществующего полигона"
+
+#, fuzzy
+#~ msgid "Unable to read feature id %d"
+#~ msgstr "Невозможно перезаписать объект %d"
+
+#~ msgid "Unable to open file %s"
+#~ msgstr "Невозможно открыть файл %s"
+
+#, fuzzy
+#~ msgid "Unable to make mapset element %s (%s): %s"
+#~ msgstr "Невозможно создать элемент набора %s (%s)"
+
+#~ msgid " options: %s\n"
+#~ msgstr " опции: %s\n"
+
+#~ msgid "Cannot find input map '%s'"
+#~ msgstr "Невозможно найти исходный слой '%s'"

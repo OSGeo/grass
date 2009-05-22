@@ -9075,7 +9075,8 @@ msgstr "Producir derivadas parciales en vez de parámetros topográficos"
 #: ../vector/v.surf.rst/main.c:174 ../vector/lidar/v.surf.bspline/main.c:147
 msgid "If set to 0, z coordinates are used. (3D vector only)"
 msgstr ""
-"Si se establece a 0, se usarán las coordenadas Z (sólo vectoriales 3D)"
+"Valor de campo. Si se establece a 0, se usarán las coordenadas Z (sólo "
+"vectoriales 3D)"
 
 #: ../vector/v.surf.rst/main.c:182
 msgid ""
@@ -29204,6 +29205,238 @@ msgstr "No se pueden conseguir suficientes colores."
 msgid "Using private colormap for DirectColor visual."
 msgstr "Usando mapa de color privado para DirectColor visual."
 
+#, fuzzy
+msgid "Unable to find the real-image map <%s>"
+msgstr "%s: %s - No fue posible encontrar el mapa de imagen real."
+
+#, fuzzy
+msgid ""
+"Unable to open real-image in the cell_misc directory.\n"
+"Input map probably wasn't created by i.fft"
+msgstr ""
+"No fue posible abrir el mapa de imagen real en el directorio cell_misc \n"
+"El mapa de entrada posiblemente no fue creado por ifft"
+
+#, fuzzy
+msgid "Unable to find the imaginary-image <%s>"
+msgstr "%s: %s - No se pudo encontrar la imagen imaginaria."
+
+#, fuzzy
+msgid ""
+"Unable to open imaginary-image in the cell_misc directory.\n"
+"Input map probably wasn't created by i.fft"
+msgstr ""
+"No fue posible abrir el mapa de imagen imaginaria en el directorio "
+"cell_misc \n"
+"El mapa de entrada posiblemente no fue creado por ifft"
+
+#, fuzzy
+msgid "Writing data to file..."
+msgstr "Escribiendo los datos transformados a archivo..."
+
+#, fuzzy
+msgid "Subgroup [%s] in group [%s] contains no files."
+msgstr "El subgrupo [%s] en el grupo [%s] no contiene archivos."
+
+#, fuzzy
+msgid "Transposing eigen matrix..."
+msgstr "Trasponiendo la matriz de valores propios..."
+
+#, fuzzy
+msgid "Cannot allocate memory for raster row"
+msgstr "No se puede asignar memoria para la cadena"
+
+#, fuzzy
+msgid "1 class."
+msgstr "%d clases."
+
+#, fuzzy
+msgid "Range less than or equal to zero not allowed."
+msgstr "Rango menor o igual a cero no permitido."
+
+#, fuzzy
+msgid "Writing viewable versions of transformed data to files..."
+msgstr ""
+"Escribiendo versiones visibles de los datos transformados a archivos..."
+
+#, fuzzy
+msgid "Unable to open file in the cell_misc directory."
+msgstr "No se puede abrir el archivo en el directorio cell_misc."
+
+#, fuzzy
+msgid "Subgroup [%s] doesn't have any files"
+msgstr "El subgrupo [%s] no tiene ningún archivo"
+
+#, fuzzy
+msgid "The subgroup must have at least 2 files to run %s"
+msgstr "El subgrupo debe tener al menos dos archivos para ejecutarse"
+
+#, fuzzy
+msgid "Can't open seed signature file <%s>"
+msgstr "** No se puede abrir el archivo de firmas semilla <%s> **"
+
+#, fuzzy
+msgid "File containing initial signatures"
+msgstr "Archivo que contiene las firmas iniciales"
+
+#, fuzzy
+msgid "Output file to contain final report"
+msgstr "Archivo de salida para contener el informe final"
+
+#, fuzzy
+msgid ""
+"\n"
+"<%s> -- illegal value of min_size"
+msgstr ""
+"\n"
+"<%s> -- valor no admitido de tamaño mínimo"
+
+#, fuzzy
+msgid "Name of image to be rectified which will  be initially drawn on screen."
+msgstr ""
+"El nombre de la imagen para rectificar que se dibujará inicialmente en "
+"pantalla."
+
+#, fuzzy
+msgid ""
+"Name of a map from target mapset which  will be initially drawn on screen."
+msgstr ""
+"Nombre de un mapa del conjunto de mapas de destino que se dibujará "
+"inicialmente en pantalla"
+
+#, fuzzy
+msgid "raster, imagery, fusion"
+msgstr "ráster, imaginería, importar"
+
+#, fuzzy
+msgid ""
+"Name of old database. The database must be in form printed by v.db.connect -"
+"g, i.e. with substituted variables"
+msgstr ""
+"Nombre de la antigua base de datos. La base de datos debe estar en la forma "
+"impresa por v.db.connect -g, esto es, con variables sustituidas"
+
+#, fuzzy
+msgid "Can't make random color table for floating point map"
+msgstr ""
+"No se puede hacer tabla de colores logarítmica para mapas de coma flotante"
+
+#, fuzzy
+msgid "Can't make grey.eq color table for floating point map"
+msgstr ""
+"No se puede hacer tabla de colores logarítmica para mapas de coma flotante"
+
+#, fuzzy
+msgid "%s - unknown color request"
+msgstr "%s - solicitud de color desconocido"
+
+#, fuzzy
+msgid "Could not read range file"
+msgstr "No se puede leer el archivo de intervalo"
+
+#, fuzzy
+msgid "The column must be type integer or string"
+msgstr "Nombre de columna (debe ser de tipo numérico)"
+
+#, fuzzy
+msgid "%d update/insert errors"
+msgstr "%d errores al insertar"
+
+#, fuzzy
+msgid "Processing ainput areas ..."
+msgstr "Procesando líneas de la entrada A..."
+
+#, fuzzy
+msgid ""
+"Elevation raster map <%s> does not cover the entire area of the input vector "
+"map <%s>. "
+msgstr "%d categorías con más de un elemento en el mapa vectorial <%s>"
+
+#, fuzzy
+msgid "name for new map image (lives in ~/.gpsdrive)"
+msgstr "nombre para el nuevo mapa de imagen (reside en ~/.gpsdrive)"
+
+#, fuzzy
+msgid "Displays thematic vectormap"
+msgstr "Visualizar mapa vectorial temático"
+
+#, fuzzy
+msgid "display, legend"
+msgstr "Dar la vuelta a la leyenda"
+
+#, fuzzy
+msgid "Theme_prefs"
+msgstr "Preferencias de tema"
+
+#, fuzzy
+msgid "Attribute column to use for thematic display (must be numeric)"
+msgstr ""
+"Columna de atributos a usar para presentación temática (debe ser numérico)"
+
+#, fuzzy
+msgid ""
+"Break points for custom breaks option. Separate values by spaces. (0 10 20 "
+"30 ...)"
+msgstr ""
+"Puntos de ruptura para la opción de ruptura personalizada. Separar valores "
+"por espacios (0 10 20 30...)"
+
+#, fuzzy
+msgid ""
+"Color scheme for graduated color mapping (select 'single_color' for "
+"graduated point/line display)"
+msgstr ""
+"Esquema de colores para mapas en gradiente de color (seleccionar "
+"'single_color' para mostrar gradiente de puntos/líneas)"
+
+#, fuzzy
+msgid ""
+"Color for graduated points map (grass named color or R:G:B triplet). Set "
+"color scheme to single color."
+msgstr ""
+"Color para mapa de gradiente de líneas o puntos/bordes de área (nombre de "
+"color de grass o triplete R:G:B). Establecer esquema de color a un color."
+
+#, fuzzy
+msgid ""
+"Beginning color for custom color gradient. Must be expressed as R:G:B "
+"triplet."
+msgstr ""
+"Color inicial para gradiente de color personalizado. Se debe expresar como "
+"triplete R:G:B."
+
+#, fuzzy
+msgid ""
+"Ending color for custom color gradient. Must be expressed as R:G:B triplet"
+msgstr ""
+"Color final para gradiente de color personalizado. Se debe expresar como "
+"triplete R:G:B."
+
+#, fuzzy
+msgid ""
+"Root for the name of psmap instruction files to be in current directory (if "
+"not set, no psmap instruction files will be created)"
+msgstr ""
+"Raíz para el nombre de los archivos de instrucciones psmap para estar en el "
+"directorio actual ((si no se indica, no se creará ningún archivo de "
+"instrucciones psmap)"
+
+#, fuzzy
+msgid "raster input maps"
+msgstr "Mapa ráster de entrada"
+
+#, fuzzy
+msgid "Name of input raster map(s)"
+msgstr "Nombre del mapa ráster de entrada"
+
+#, fuzzy
+msgid "Terrain raster map (DEM)"
+msgstr "Mapa ráster de terreno (MDT)"
+
+#, fuzzy
+msgid "imagery group"
+msgstr "Grupo de imaginería"
+
 #~ msgid "Cannot open database %s by driver %s"
 #~ msgstr "No se puede abrir la base de datos %s por el controlador %s"
 
@@ -29239,31 +29472,6 @@ msgstr "Usando mapa de color privado para DirectColor visual."
 #~ msgid "Output inverse raster map after IFFT"
 #~ msgstr "Producir mapa ráster inverso después de IFFT"
 
-#, fuzzy
-#~ msgid "Unable to find the real-image map <%s>"
-#~ msgstr "%s: %s - No fue posible encontrar el mapa de imagen real."
-
-#, fuzzy
-#~ msgid ""
-#~ "Unable to open real-image in the cell_misc directory.\n"
-#~ "Input map probably wasn't created by i.fft"
-#~ msgstr ""
-#~ "No fue posible abrir el mapa de imagen real en el directorio cell_misc \n"
-#~ "El mapa de entrada posiblemente no fue creado por ifft"
-
-#, fuzzy
-#~ msgid "Unable to find the imaginary-image <%s>"
-#~ msgstr "%s: %s - No se pudo encontrar la imagen imaginaria."
-
-#, fuzzy
-#~ msgid ""
-#~ "Unable to open imaginary-image in the cell_misc directory.\n"
-#~ "Input map probably wasn't created by i.fft"
-#~ msgstr ""
-#~ "No fue posible abrir el mapa de imagen imaginaria en el directorio "
-#~ "cell_misc \n"
-#~ "El mapa de entrada posiblemente no fue creado por ifft"
-
 #~ msgid "Power 2 values : [%d] rows [%d] columns."
 #~ msgstr "Power 2 valores : [%d] filas [%d] columnas."
 
@@ -29278,10 +29486,6 @@ msgstr "Usando mapa de color privado para DirectColor visual."
 
 #~ msgid "Unable to open output file."
 #~ msgstr "No fue posible abrir el archivo de salida"
-
-#, fuzzy
-#~ msgid "Writing data to file..."
-#~ msgstr "Escribiendo los datos transformados a archivo..."
 
 #~ msgid "Transform successful."
 #~ msgstr "Transformación exitosa."
@@ -29361,10 +29565,6 @@ msgstr "Usando mapa de color privado para DirectColor visual."
 #~ msgid "get_img: out of memory."
 #~ msgstr "get_img: sin memoria"
 
-#, fuzzy
-#~ msgid "Subgroup [%s] in group [%s] contains no files."
-#~ msgstr "El subgrupo [%s] en el grupo [%s] no contiene archivos."
-
 #~ msgid "Writing [%s] ..."
 #~ msgstr "Escribiendo [%s] ..."
 
@@ -29390,14 +29590,6 @@ msgstr "Usando mapa de color privado para DirectColor visual."
 #~ msgid "Ordering eigenvalues in descending order..."
 #~ msgstr "Organizando los valores propios en orden descendente..."
 
-#, fuzzy
-#~ msgid "Transposing eigen matrix..."
-#~ msgstr "Trasponiendo la matriz de valores propios..."
-
-#, fuzzy
-#~ msgid "Cannot allocate memory for raster row"
-#~ msgstr "No se puede asignar memoria para la cadena"
-
 #~ msgid "Cannot write color table of raster map <%s>"
 #~ msgstr "No se puede escribir la tabla de colores de mapa ráster <%s>"
 
@@ -29416,10 +29608,6 @@ msgstr "Usando mapa de color privado para DirectColor visual."
 #~ msgid "Resultant signature file"
 #~ msgstr "Archivo de firma resultante"
 
-#, fuzzy
-#~ msgid "1 class."
-#~ msgstr "%d clases."
-
 #~ msgid "%d classes."
 #~ msgstr "%d clases."
 
@@ -29435,10 +29623,6 @@ msgstr "Usando mapa de color privado para DirectColor visual."
 #~ msgid "Range of values in output display files"
 #~ msgstr "Rango de valores en los archivos de visualización de salida"
 
-#, fuzzy
-#~ msgid "Range less than or equal to zero not allowed."
-#~ msgstr "Rango menor o igual a cero no permitido."
-
 #~ msgid "Initializing data...\n"
 #~ msgstr "Inicializando datos...\n"
 
@@ -29447,15 +29631,6 @@ msgstr "Usando mapa de color privado para DirectColor visual."
 
 #~ msgid "FFT completed..."
 #~ msgstr "FFT completada..."
-
-#, fuzzy
-#~ msgid "Writing viewable versions of transformed data to files..."
-#~ msgstr ""
-#~ "Escribiendo versiones visibles de los datos transformados a archivos..."
-
-#, fuzzy
-#~ msgid "Unable to open file in the cell_misc directory."
-#~ msgstr "No se puede abrir el archivo en el directorio cell_misc."
 
 #~ msgid ""
 #~ "\n"
@@ -29467,20 +29642,8 @@ msgstr "Usando mapa de color privado para DirectColor visual."
 #~ msgid "subgroup <%s> not found"
 #~ msgstr "subgrupo <%s> no encontrado"
 
-#, fuzzy
-#~ msgid "Subgroup [%s] doesn't have any files"
-#~ msgstr "El subgrupo [%s] no tiene ningún archivo"
-
-#, fuzzy
-#~ msgid "The subgroup must have at least 2 files to run %s"
-#~ msgstr "El subgrupo debe tener al menos dos archivos para ejecutarse"
-
 #~ msgid "Unable to proceed"
 #~ msgstr "No se puede proceder"
-
-#, fuzzy
-#~ msgid "Can't open seed signature file <%s>"
-#~ msgstr "** No se puede abrir el archivo de firmas semilla <%s> **"
 
 #, fuzzy
 #~ msgid "Can't read signature file <%s>"
@@ -29492,22 +29655,6 @@ msgstr "Usando mapa de color privado para DirectColor visual."
 #~ msgid "Subgroup name in the above group"
 #~ msgstr "Nombre de subgrupo en el grupo de arriba"
 
-#, fuzzy
-#~ msgid "File containing initial signatures"
-#~ msgstr "Archivo que contiene las firmas iniciales"
-
-#, fuzzy
-#~ msgid "Output file to contain final report"
-#~ msgstr "Archivo de salida para contener el informe final"
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "<%s> -- illegal value of min_size"
-#~ msgstr ""
-#~ "\n"
-#~ "<%s> -- valor no admitido de tamaño mínimo"
-
 #~ msgid "Can't creat reportfile: "
 #~ msgstr "No se puede crear el informe: "
 
@@ -29516,20 +29663,6 @@ msgstr "Usando mapa de color privado para DirectColor visual."
 
 #~ msgid "Creates control points on an image to be ortho-rectified."
 #~ msgstr "Crea puntos de control en una imagen para su orto-rectificación."
-
-#, fuzzy
-#~ msgid ""
-#~ "Name of image to be rectified which will  be initially drawn on screen."
-#~ msgstr ""
-#~ "El nombre de la imagen para rectificar que se dibujará inicialmente en "
-#~ "pantalla."
-
-#, fuzzy
-#~ msgid ""
-#~ "Name of a map from target mapset which  will be initially drawn on screen."
-#~ msgstr ""
-#~ "Nombre de un mapa del conjunto de mapas de destino que se dibujará "
-#~ "inicialmente en pantalla"
 
 #~ msgid "Unable to read head of %s"
 #~ msgstr "No se puede leer la cabecera de %s"
@@ -29579,10 +29712,6 @@ msgstr "Usando mapa de color privado para DirectColor visual."
 #~ msgid "Raster map to hold classification results"
 #~ msgstr "Mapa ráster que recoge los resultados de la clasificación"
 
-#, fuzzy
-#~ msgid "raster, imagery, fusion"
-#~ msgstr "ráster, imaginería, importar"
-
 #~ msgid "sensor: LANDSAT"
 #~ msgstr "sensor: LANDSAT"
 
@@ -29608,14 +29737,6 @@ msgstr "Usando mapa de color privado para DirectColor visual."
 
 #~ msgid "run non-interactively"
 #~ msgstr "ejecutar de forma no interactiva"
-
-#, fuzzy
-#~ msgid ""
-#~ "Name of old database. The database must be in form printed by v.db."
-#~ "connect -g, i.e. with substituted variables"
-#~ msgstr ""
-#~ "Nombre de la antigua base de datos. La base de datos debe estar en la "
-#~ "forma impresa por v.db.connect -g, esto es, con variables sustituidas"
 
 #~ msgid "Run non-interactively"
 #~ msgstr "Ejecutar de forma no interactiva"
@@ -29738,23 +29859,9 @@ msgstr "Usando mapa de color privado para DirectColor visual."
 #~ msgid "%s - color table not found"
 #~ msgstr "%s - tabla de colores no encontrada"
 
-#, fuzzy
-#~ msgid "Can't make random color table for floating point map"
-#~ msgstr ""
-#~ "No se puede hacer tabla de colores logarítmica para mapas de coma flotante"
-
-#, fuzzy
-#~ msgid "Can't make grey.eq color table for floating point map"
-#~ msgstr ""
-#~ "No se puede hacer tabla de colores logarítmica para mapas de coma flotante"
-
 #~ msgid "Can't make logarithmic color table for floating point map"
 #~ msgstr ""
 #~ "No se puede hacer tabla de colores logarítmica para mapas de coma flotante"
-
-#, fuzzy
-#~ msgid "%s - unknown color request"
-#~ msgstr "%s - solicitud de color desconocido"
 
 #~ msgid ""
 #~ "%s: saving [%s] raster map layer.\n"
@@ -29793,10 +29900,6 @@ msgstr "Usando mapa de color privado para DirectColor visual."
 
 #~ msgid "Total levels: %4d"
 #~ msgstr "Niveles totales: %4d"
-
-#, fuzzy
-#~ msgid "Could not read range file"
-#~ msgstr "No se puede leer el archivo de intervalo"
 
 #~ msgid "Reading data: "
 #~ msgstr "Leyendo datos: "
@@ -29890,10 +29993,6 @@ msgstr "Usando mapa de color privado para DirectColor visual."
 #~ msgstr "vectorial, tabla de atributos"
 
 #, fuzzy
-#~ msgid "The column must be type integer or string"
-#~ msgstr "Nombre de columna (debe ser de tipo numérico)"
-
-#, fuzzy
 #~ msgid "Select type"
 #~ msgstr "Tipo de archivo"
 
@@ -29981,10 +30080,6 @@ msgstr "Usando mapa de color privado para DirectColor visual."
 #~ msgid "%d categories read from map"
 #~ msgstr "%d categorías leídas del mapa"
 
-#, fuzzy
-#~ msgid "%d update/insert errors"
-#~ msgstr "%d errores al insertar"
-
 #~ msgid ""
 #~ "Operator defines required relation between features. A feature is written "
 #~ "to output if the result of operation 'ainput operator binput' is true. An "
@@ -30001,21 +30096,11 @@ msgstr "Usando mapa de color privado para DirectColor visual."
 #~ msgid "Processing ainput lines ..."
 #~ msgstr "Procesando líneas de la entrada A..."
 
-#, fuzzy
-#~ msgid "Processing ainput areas ..."
-#~ msgstr "Procesando líneas de la entrada A..."
-
 #~ msgid "Writing attributes ..."
 #~ msgstr "Escribiendo atributos..."
 
 #, fuzzy
 #~ msgid "Current region does not include the entire input vector map <%s>"
-#~ msgstr "%d categorías con más de un elemento en el mapa vectorial <%s>"
-
-#, fuzzy
-#~ msgid ""
-#~ "Elevation raster map <%s> does not cover the entire area of the input "
-#~ "vector map <%s>. "
 #~ msgstr "%d categorías con más de un elemento en el mapa vectorial <%s>"
 
 #~ msgid "Reading file [%s]..."
@@ -30073,10 +30158,6 @@ msgstr "Usando mapa de color privado para DirectColor visual."
 
 #~ msgid "display, export, GPS"
 #~ msgstr "muestra, exporta, GPS"
-
-#, fuzzy
-#~ msgid "name for new map image (lives in ~/.gpsdrive)"
-#~ msgstr "nombre para el nuevo mapa de imagen (reside en ~/.gpsdrive)"
 
 #~ msgid "Make JPEG instead of PNG image"
 #~ msgstr "Crea una imagen JPG en lugar de PNG"
@@ -30189,42 +30270,17 @@ msgstr "Usando mapa de color privado para DirectColor visual."
 #~ msgid "Number of subframes"
 #~ msgstr "Número de fotogramas"
 
-#, fuzzy
-#~ msgid "Displays thematic vectormap"
-#~ msgstr "Visualizar mapa vectorial temático"
-
-#, fuzzy
-#~ msgid "display, legend"
-#~ msgstr "Dar la vuelta a la leyenda"
-
 #~ msgid "Vector map to display thematically"
 #~ msgstr "Mapa vectorial a mostrar temáticamente"
 
-#, fuzzy
-#~ msgid "Theme_prefs"
-#~ msgstr "Preferencias de tema"
-
 #~ msgid "Vector map type"
 #~ msgstr "Tipo de mapa vectorial"
-
-#, fuzzy
-#~ msgid "Attribute column to use for thematic display (must be numeric)"
-#~ msgstr ""
-#~ "Columna de atributos a usar para presentación temática (debe ser numérico)"
 
 #~ msgid "Type of thematic display"
 #~ msgstr "Tipo de visualización temática"
 
 #~ msgid "Thematic divisions of data for display"
 #~ msgstr "Divisiones temáticas de los datos a mostrar"
-
-#, fuzzy
-#~ msgid ""
-#~ "Break points for custom breaks option. Separate values by spaces. (0 10 "
-#~ "20 30 ...)"
-#~ msgstr ""
-#~ "Puntos de ruptura para la opción de ruptura personalizada. Separar "
-#~ "valores por espacios (0 10 20 30...)"
 
 #~ msgid "Layer to use for thematic display"
 #~ msgstr "Capa a usar para visualización temática"
@@ -30246,43 +30302,12 @@ msgstr "Usando mapa de color privado para DirectColor visual."
 #~ msgid "Number of classes for interval theme (integer)"
 #~ msgstr "Número de clases para tema de intervalo (entero)"
 
-#, fuzzy
-#~ msgid ""
-#~ "Color scheme for graduated color mapping (select 'single_color' for "
-#~ "graduated point/line display)"
-#~ msgstr ""
-#~ "Esquema de colores para mapas en gradiente de color (seleccionar "
-#~ "'single_color' para mostrar gradiente de puntos/líneas)"
-
-#, fuzzy
-#~ msgid ""
-#~ "Color for graduated points map (grass named color or R:G:B triplet). Set "
-#~ "color scheme to single color."
-#~ msgstr ""
-#~ "Color para mapa de gradiente de líneas o puntos/bordes de área (nombre de "
-#~ "color de grass o triplete R:G:B). Establecer esquema de color a un color."
-
 #~ msgid ""
 #~ "Color for graduated lines or point/area outlines (grass named color or R:"
 #~ "G:B triplet). Set color scheme to single color."
 #~ msgstr ""
 #~ "Color para mapa de gradiente de líneas o puntos/bordes de área (nombre de "
 #~ "color de grass o triplete R:G:B). Establecer esquema de color a un color."
-
-#, fuzzy
-#~ msgid ""
-#~ "Beginning color for custom color gradient. Must be expressed as R:G:B "
-#~ "triplet."
-#~ msgstr ""
-#~ "Color inicial para gradiente de color personalizado. Se debe expresar "
-#~ "como triplete R:G:B."
-
-#, fuzzy
-#~ msgid ""
-#~ "Ending color for custom color gradient. Must be expressed as R:G:B triplet"
-#~ msgstr ""
-#~ "Color final para gradiente de color personalizado. Se debe expresar como "
-#~ "triplete R:G:B."
 
 #~ msgid "Misc"
 #~ msgstr "Miscelánea"
@@ -30294,15 +30319,6 @@ msgstr "Usando mapa de color privado para DirectColor visual."
 #~ msgstr ""
 #~ "Guardar comandos de mapa temático en archivo de grupo para el "
 #~ "Administrador GIS"
-
-#, fuzzy
-#~ msgid ""
-#~ "Root for the name of psmap instruction files to be in current directory "
-#~ "(if not set, no psmap instruction files will be created)"
-#~ msgstr ""
-#~ "Raíz para el nombre de los archivos de instrucciones psmap para estar en "
-#~ "el directorio actual ((si no se indica, no se creará ningún archivo de "
-#~ "instrucciones psmap)"
 
 #~ msgid "Name of group file where thematic map commands will be saved"
 #~ msgstr ""
@@ -30365,10 +30381,6 @@ msgstr "Usando mapa de color privado para DirectColor visual."
 
 #~ msgid "Group to remove"
 #~ msgstr "Grupo a eliminar"
-
-#, fuzzy
-#~ msgid "raster input maps"
-#~ msgstr "Mapa ráster de entrada"
 
 #~ msgid "Use image list and not group"
 #~ msgstr "Usar lista de imágenes y no grupo"
@@ -31407,10 +31419,6 @@ msgstr "Usando mapa de color privado para DirectColor visual."
 #~ msgid "Cannot link table: %s"
 #~ msgstr "No se puede conectar la tabla: %s"
 
-#, fuzzy
-#~ msgid "Name of input raster map(s)"
-#~ msgstr "Nombre del mapa ráster de entrada"
-
 #~ msgid "Output file extension (inputfile(s) + extension)"
 #~ msgstr ""
 #~ "La extensión del archivo de salida (archivo(s) de salida + extensión)"
@@ -31465,10 +31473,6 @@ msgstr "Usando mapa de color privado para DirectColor visual."
 
 #~ msgid "Cell area: %f"
 #~ msgstr "Área de celda: %f"
-
-#, fuzzy
-#~ msgid "Terrain raster map (DEM)"
-#~ msgstr "Mapa ráster de terreno (MDT)"
 
 #~ msgid "Output raster map with lake"
 #~ msgstr "Producir mapa ráster con lago"
@@ -31574,10 +31578,6 @@ msgstr "Usando mapa de color privado para DirectColor visual."
 #, fuzzy
 #~ msgid "Specified group does not exist"
 #~ msgstr "El grupo especificado no existe... Saliendo."
-
-#, fuzzy
-#~ msgid "imagery group"
-#~ msgstr "Grupo de imaginería"
 
 #~ msgid "imagery subgroup"
 #~ msgstr "subgrupo de imágenes"
@@ -32175,3 +32175,589 @@ msgstr "Usando mapa de color privado para DirectColor visual."
 #, fuzzy
 #~ msgid "Cannot generate the transformation equation."
 #~ msgstr "Imprimir la matriz de transformación a stdout"
+
+#~ msgid ""
+#~ "Cannot create mask file: G3D_MASK already exists!\n"
+#~ " Use 'g.remove rast3d=G3D_MASK' to remove the existing mask."
+#~ msgstr ""
+#~ "No se puede crear archivo de máscara: ¡G3D_MASK ya existe!\n"
+#~ " Usa 'g.remove rast3d=G3D_MASK' para eliminar la máscara existente."
+
+#, fuzzy
+#~ msgid "Lat/Long locations are not supported by this module"
+#~ msgstr "Localización latitud/longitud no soportada"
+
+#, fuzzy
+#~ msgid "Traces a flow through an elevation model on a raster map."
+#~ msgstr ""
+#~ "Traza un flujo mediante un modelo de elevación sobre una capa de mapa "
+#~ "ráster."
+
+#, fuzzy
+#~ msgid "Name of vector map(s) containing starting point(s)"
+#~ msgstr "Mapa(s) vectorial que contiene el punto(s) de inicio"
+
+#, fuzzy
+#~ msgid "Direction raster found <%s>"
+#~ msgstr "Escribiendo mapa ráster <%s>"
+
+#, fuzzy
+#~ msgid "Outputting a vector path"
+#~ msgstr "Producir mapa vectorial de líneas de flujo"
+
+#, fuzzy
+#~ msgid "Name of terrain raster map (DEM)"
+#~ msgstr "Mapa ráster de terreno (MDT)"
+
+#, fuzzy
+#~ msgid "Do not write GDAL standard colortable"
+#~ msgstr "Eliminar la tabla de colores existente"
+
+#, fuzzy
+#~ msgid "Forcing raster export."
+#~ msgstr "ráster, exportar"
+
+#, fuzzy
+#~ msgid "Raster export aborted."
+#~ msgstr "ráster, exportar"
+
+#, fuzzy
+#~ msgid "Raster map <%s> range: %g - %g"
+#~ msgstr "El mapa ráster <%s> ya existe"
+
+#, fuzzy
+#~ msgid ""
+#~ "Input raster map contains cells with NULL-value (no-data). The value %d "
+#~ "was used to represent no-data values in the input map. You can specify a "
+#~ "nodata value with the %s option."
+#~ msgstr ""
+#~ "El mapa ráster de entrada contiene celdas con valor NULO (sin datos). "
+#~ "Para los valores sin datos se usó el valor %d. Puede especificar el valor "
+#~ "para para las celdas sin datos con el parámetro %s."
+
+#, fuzzy
+#~ msgid ""
+#~ "Input raster map contains cells with NULL-value (no-data). The value %g "
+#~ "was used to represent no-data values in the input map. You can specify a "
+#~ "nodata value with the %s option."
+#~ msgstr ""
+#~ "El mapa ráster de entrada contiene celdas con valor NULO (sin datos). "
+#~ "Para los valores sin datos se usó el valor %d. Puede especificar el valor "
+#~ "para para las celdas sin datos con el parámetro %s."
+
+#, fuzzy
+#~ msgid "Interpolating raster map <%s> (%d rows)... "
+#~ msgstr "Interpolando mapa ráster <%s>... %d filas... "
+
+#, fuzzy
+#~ msgid "Use cell center reference in header instead of cell corner"
+#~ msgstr "Listar un vacío por línea en vez de fila completa"
+
+#~ msgid "Cannot read ew_res value"
+#~ msgstr "No se puede leer el valor ew_res (resolución EW)"
+
+#~ msgid "Cannot read ns_res value"
+#~ msgstr "No se puede leer el valor ns_res (resolución NS)"
+
+#~ msgid "[%s]: Map is the wrong resolution"
+#~ msgstr "[%s]: el mapa está en la resolución incorrecta"
+
+#~ msgid "Cannot get row %d (error = %d)"
+#~ msgstr "No se puede obtener la fila %d (error = %d)"
+
+#~ msgid "Cannot set region to back to the initial region !!!"
+#~ msgstr "¡No se puede establecer la región para volver a la región inicial!"
+
+#~ msgid ""
+#~ "One of \"-i\" or \"-r\" or options \"color\", \"rast\" or \"rules\" must "
+#~ "be specified!"
+#~ msgstr ""
+#~ "¡Se debe especificar \"-i\" o \"-r\" o una de las opciones \"color\", "
+#~ "\"ráster\" o \"reglas\"!"
+
+#~ msgid "%s: can only do up to %d raster maps, sorry\n"
+#~ msgstr "%s: sólo puede hacer hasta %d mapas ráster, lo siento\n"
+
+#, fuzzy
+#~ msgid "Bad start cell"
+#~ msgstr "Celda de inicio incorrecta"
+
+#, fuzzy
+#~ msgid ""
+#~ "Creates a raster map showing the cumulative cost of moving between "
+#~ "different geographic locations on an input raster map whose cell category "
+#~ "values represent cost."
+#~ msgstr ""
+#~ "Produce una capa de mapa ráster que muestre el coste acumulado de moverse "
+#~ "entre diferentes localizaciones geográficas en una capa de mapa ráster de "
+#~ "entrada cuyos valores de categoría de celdas representan coste."
+
+#, fuzzy
+#~ msgid "Name of output raster map to contain movement directions"
+#~ msgstr "Nombre del mapa ráster de entrada que contiene costes de fricción"
+
+#, fuzzy
+#~ msgid "Initializing directional output "
+#~ msgstr "Inicializando la salida "
+
+#, fuzzy
+#~ msgid "Writing movement direction file %s..."
+#~ msgstr "Escribiendo vértices..."
+
+#~ msgid "Update the statistics (histogram, range) for [%s]? "
+#~ msgstr "¿Actualizar las estadísticas (histograma, rango) de [%s]?"
+
+#, fuzzy
+#~ msgid "Sigma (in cells) for Gaussian filter"
+#~ msgstr "Sensibilidad del filtro de Gauss"
+
+#, fuzzy
+#~ msgid "weight= and gauss= are mutually exclusive"
+#~ msgstr "weight= y -c son excluyentes mutuamente"
+
+#, fuzzy
+#~ msgid "Method %s not compatible with Gaussian filter"
+#~ msgstr "Extensión X-Y del filtro de Gauss"
+
+#, fuzzy
+#~ msgid "SECTION 4: RUSLE LS and/or S factor determination."
+#~ msgstr "SECCIÓN 4: determinación de la pendiente de la longitud."
+
+#, fuzzy
+#~ msgid "unable to open new LS factor map layer."
+#~ msgstr "no se puede abrir nueva capa de mapa L."
+
+#, fuzzy
+#~ msgid "unable to open new S factor map layer."
+#~ msgstr "no se puede abrir nueva capa de mapa S."
+
+#, fuzzy
+#~ msgid "Input value: maximum length of surface flow in map units, for USLE"
+#~ msgstr "Valor de entrada: longitud máxima de flujo de superficie, para USLE"
+
+#, fuzzy
+#~ msgid "Output map: useful for visual display of results. DEPRECATED."
+#~ msgstr "Mapa de salida: útil para  visualizar los resultados"
+
+#, fuzzy
+#~ msgid ""
+#~ "Sorry, if any of the following options are set:\n"
+#~ "    basin, stream, half.basin, length.slope, or slope.steepness\n"
+#~ "    you MUST provide a value for the basin threshold parameter."
+#~ msgstr ""
+#~ "Lo siento, si alguna de las siguientes opciones es establecida:\n"
+#~ "    cuenca, corriente, semicuenca, pendiente o IS\n"
+#~ "    DEBE proporcionar un valor para el parámetro de umbral de cuenca."
+
+#, fuzzy
+#~ msgid "unable to open flow accumulation map layer"
+#~ msgstr "no se puede abrir nueva capa de mapa de acumulación."
+
+#~ msgid "Setting quant rules for input map(s) to (%f %f) -> (%d,%d)"
+#~ msgstr ""
+#~ "Configurar reglar de cuantización para el(los) mapa(s) a (%f %f) -> (%d,%"
+#~ "d)"
+
+#~ msgid ""
+#~ "Raster map <%s> in mapset <%s> is a floating point map. Decimal values "
+#~ "will be rounded to integer!"
+#~ msgstr ""
+#~ "El mapa ráster <%s> en el directorio de mapas <%s> es de coma flotante. "
+#~ "¡Los valores decimales se redondearán a entero!"
+
+#, fuzzy
+#~ msgid "Data range of raster map <%s> is %s to %s (entire map)"
+#~ msgstr "El intervalo de datos de %s es de %s a %s (mapa completo)"
+
+#, fuzzy
+#~ msgid "Unable to read range of raster map <%s>"
+#~ msgstr "No se puede leer el intervalo fp del mapa ráster <%s>"
+
+#, fuzzy
+#~ msgid "Integer data range of raster map <%s> is empty"
+#~ msgstr "El intervalo de datos enteros de %s está vacío"
+
+#, fuzzy
+#~ msgid "Integer data range of raster mao <%s> is %d to %d"
+#~ msgstr "El intervalo de datos enteros de %s es de %d a %d"
+
+#, fuzzy
+#~ msgid "'%s' is not a valid rule"
+#~ msgstr "%s no es una regla válida"
+
+#, fuzzy
+#~ msgid "Tykhonov regularization weight"
+#~ msgstr "Peso de regularización Tychonov"
+
+#, fuzzy
+#~ msgid "Unable to create table <%s_edge_Interpolation>"
+#~ msgstr "No se puede crear la tabla <%s>"
+
+#, fuzzy
+#~ msgid ""
+#~ "Find the best Tykhonov regularizing parameter using a \"leave-one-out\" "
+#~ "cross validation method"
+#~ msgstr ""
+#~ "Encontrar los mejores parámetros usando un método de validación cruzada"
+
+#, fuzzy
+#~ msgid "Length of each spline step in the east-west direction"
+#~ msgstr "Valor de paso spline de interpolación en dirección Este"
+
+#, fuzzy
+#~ msgid "Length of each spline step in the north-south direction"
+#~ msgstr "Valor de paso spline de interpolación en dirección Norte"
+
+#, fuzzy
+#~ msgid "Spline interpolation algorithm"
+#~ msgstr "Algoritmo de generalización"
+
+#, fuzzy
+#~ msgid "Tykhonov regularization parameter (affects smoothing)"
+#~ msgstr "Peso de regularización Tychonov"
+
+#, fuzzy
+#~ msgid ""
+#~ "No vector map of sparse points to interpolate was specified. "
+#~ "Interpolation will be done with <%s> vector map"
+#~ msgstr ""
+#~ "Ningún mapa vectorial a interpolar. La interpolación se hará con el mapa "
+#~ "vectorial <%s>"
+
+#, fuzzy
+#~ msgid "First column is 1. If 0, z coordinate is not used"
+#~ msgstr "Si es 0, no se usará la coordenada Z"
+
+#, fuzzy
+#~ msgid ""
+#~ "First column is 1. If 0, unique category is assigned to each row and "
+#~ "written to new column 'cat'"
+#~ msgstr ""
+#~ "Si es 0, se asignará una categoría única a cada fila y se escribirá en "
+#~ "una nueva columna 'cat'."
+
+#, fuzzy
+#~ msgid "Create a new empty vector map and exit. Nothing is read from input."
+#~ msgstr "Crear un mapa nuevo vacío y salir. No se lee nada de la entrada"
+
+#~ msgid "Patching vector map <%s@%s>..."
+#~ msgstr "Parcheando el mapa vectorial <%s@%s>..."
+
+#, fuzzy
+#~ msgid "Maximum number of points for approximation in a segment (>npmin)"
+#~ msgstr "Número mínimo de puntos para aproximación en un segmento (>segmax)"
+
+#, fuzzy
+#~ msgid ""
+#~ "add;add a new category;del;delete all categories of given layer;chlayer;"
+#~ "change layer number (e.g. layer=3,1 changes layer 3 to layer 1);sum;add "
+#~ "the value specified by cat option to the current category value;report;"
+#~ "print report (statistics), in shell style: layer type count min max;print;"
+#~ "print category values, more cats in the same layer are separated by '/'"
+#~ msgstr ""
+#~ "añadir;añadir una categoría nueva;borrar; borrar categoría;cambiar capa;"
+#~ "cambiar número de capa (ej.: capa=3,1 cambia la capa 3 a la 1);sumar;"
+#~ "añadir el valor especificado por la opción categoría a valor de la "
+#~ "categoría actual;informar;imprimir informe (estadísticas) en estilo "
+#~ "consola: capa tipo cuenta mínimo máximo;imprimir;imprimir valores de "
+#~ "categoría, más categorías en la misma capa son separadas por '/'"
+
+#, fuzzy
+#~ msgid ""
+#~ "Node[%d]=%d\n"
+#~ "Number_lines=%d\n"
+#~ "Coordinates=%.6f,%.6f,%.6f\n"
+#~ msgstr ""
+#~ "  Nodo[%d]: %d  \n"
+#~ "Número de líneas: %d\n"
+#~ "Coordenadas: %.6f, %.6f, %.6f\n"
+
+#, fuzzy
+#~ msgid ""
+#~ "mi(les),f(eet),me(ters),k(ilometers),a(cres),h(ectares),r(adians),d"
+#~ "(egrees)"
+#~ msgstr ""
+#~ "mi(llas),f(pies),me(tros),k(ilómetros),a(cres),h(ectáreas),p(orcentaje)"
+
+#, fuzzy
+#~ msgid "The 'azimuth' option makes sense only for lines"
+#~ msgstr "La opción 'lados' sólo tiene sentido para perímetros"
+
+#, fuzzy
+#~ msgid "vector, spatial query"
+#~ msgstr "vectorial, consultar"
+
+#, fuzzy
+#~ msgid "Unknown operator"
+#~ msgstr "Operación desconocida"
+
+#, fuzzy
+#~ msgid "Output from v.select"
+#~ msgstr "Formato de salida"
+
+#, fuzzy
+#~ msgid "Unable to read line id %d from vector map <%s>"
+#~ msgstr ""
+#~ "No se puede obtener información de la capa para el mapa vectorial <%s>"
+
+#, fuzzy
+#~ msgid "Unable to read area id %d from vector map <%s>"
+#~ msgstr "No se pueden procesar las áreas del mapa vectorial<%s>"
+
+#, fuzzy
+#~ msgid "%d features without category skipped"
+#~ msgstr "%d puntos sin categoría saltados"
+
+#, fuzzy
+#~ msgid "%d features written to output."
+#~ msgstr "%ld bytes escritos a '%s'"
+
+#, fuzzy
+#~ msgid "Outputs"
+#~ msgstr "Salida:"
+
+#, fuzzy
+#~ msgid "%d points written to vector map."
+#~ msgstr "%d puntos escritos en mapa vectorial"
+
+#, fuzzy
+#~ msgid "Converts a binary GRASS vector map into a GRASS raster map ."
+#~ msgstr ""
+#~ "Convierte un mapa vectorial binario de GRASS en una capa de mapa ráster "
+#~ "de GRASS."
+
+#, fuzzy
+#~ msgid "Use the distance option instead of the buffer option."
+#~ msgstr "Usar radianes en vez de grados para la rotación"
+
+#, fuzzy
+#~ msgid ""
+#~ "Your cats/ file is invalid. A cats/ file with categories and labels is "
+#~ "required for 'colortable' when using categorical legends; see the r."
+#~ "category help page. Colortable creation has been skipped."
+#~ msgstr ""
+#~ "Su archivo de categorías no es válido. Se requiere un archivo de "
+#~ "categorías y etiquetas para la 'tabla de color' cuando se usan rásters "
+#~ "CELL. No se asignará ninguna tabla de colores a este archivo PostScript "
+#~ "de salida."
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to open real-image in the 'cell_misc' directory. Raster map "
+#~ "probably wasn't created by i.fft"
+#~ msgstr ""
+#~ "No fue posible abrir el mapa de imagen real en el directorio cell_misc \n"
+#~ "El mapa de entrada posiblemente no fue creado por ifft"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to open imaginary-image in the 'cell_misc' directory. Raster map "
+#~ "probably wasn't created by i.fft"
+#~ msgstr ""
+#~ "No fue posible abrir el mapa de imagen imaginaria en el directorio "
+#~ "cell_misc \n"
+#~ "El mapa de entrada posiblemente no fue creado por ifft"
+
+#, fuzzy
+#~ msgid "Name of two or more input raster maps"
+#~ msgstr "Nombre del mapa ráster de entrada"
+
+#, fuzzy
+#~ msgid "Base name for output raster maps"
+#~ msgstr "Nombre para el mapa ráster de salida"
+
+#, fuzzy
+#~ msgid "A numerical suffix will be added for each component map"
+#~ msgstr "Número de niveles a usar para cada componente"
+
+#, fuzzy
+#~ msgid "Rescaling range for output maps (for no rescaling use 0,0)"
+#~ msgstr "Re-escalar rango de salida (para no re-escalar use 0,0)"
+
+#, fuzzy
+#~ msgid "Computing means for band %d..."
+#~ msgstr "Calculando medias para la banda %d:"
+
+#, fuzzy
+#~ msgid "Transforming <%s>..."
+#~ msgstr "Trasponiendo la matriz de valores propios..."
+
+#, fuzzy
+#~ msgid "Rescaling <%s> to range %d,%d..."
+#~ msgstr "%s: reescalando los datos al rango [%d, %d]:"
+
+#, fuzzy
+#~ msgid "Range less than or equal to zero not allowed"
+#~ msgstr "Rango menor o igual a cero no permitido."
+
+#, fuzzy
+#~ msgid "Writing viewable versions of transformed data..."
+#~ msgstr ""
+#~ "Escribiendo versiones visibles de los datos transformados a archivos..."
+
+#, fuzzy
+#~ msgid "Unable to open file in the 'cell_misc' directory"
+#~ msgstr "No se puede abrir el archivo en el directorio cell_misc."
+
+#, fuzzy
+#~ msgid ""
+#~ "Name of image to be rectified which will be initially drawn on screen"
+#~ msgstr ""
+#~ "El nombre de la imagen para rectificar que se dibujará inicialmente en "
+#~ "pantalla."
+
+#, fuzzy
+#~ msgid ""
+#~ "Name of a map from target mapset which will be initially drawn on screen"
+#~ msgstr ""
+#~ "Nombre de un mapa del conjunto de mapas de destino que se dibujará "
+#~ "inicialmente en pantalla"
+
+#, fuzzy
+#~ msgid "Verbose module output"
+#~ msgstr "Modo verboso"
+
+#~ msgid "%s: Couldn't read color table for <%s@%s>"
+#~ msgstr "%s: No se pudo leer tabla de colores para <%s@%s>"
+
+#~ msgid "Command mode (Compatibility with d.text)"
+#~ msgstr "Modo comando (Compatibilidad con d.text)"
+
+#, fuzzy
+#~ msgid "Unable to create face"
+#~ msgstr "No se puede crear el índice"
+
+#~ msgid ""
+#~ "Identifies the geographic coordinates associated with point locations in "
+#~ "the active frame on the graphics monitor."
+#~ msgstr ""
+#~ "Identifica las coordenadas geográficas asociadas con las localizaciones "
+#~ "de los puntos en el marco activo de la pantalla."
+
+#~ msgid "name"
+#~ msgstr "nombre"
+
+#, fuzzy
+#~ msgid "%s=%s,%s: files could be the same, no rename possible"
+#~ msgstr ""
+#~ "%s=%s,%s: los archivos son iguales, no se necesita cambiar el nombre"
+
+#~ msgid "Display monitor to start"
+#~ msgstr "Muestra el monitor para lanzar"
+
+#, fuzzy
+#~ msgid "name for new map image (lives in ~/.gpsdrive/maps/)"
+#~ msgstr "nombre para el nuevo mapa de imagen (reside en ~/.gpsdrive)"
+
+#~ msgid "Name of PNG file"
+#~ msgstr "Nombre del archivo PNG"
+
+#, fuzzy
+#~ msgid "Displays thematic vector map"
+#~ msgstr "Visualizar mapa vectorial temático"
+
+#~ msgid "Files"
+#~ msgstr "Archivos"
+
+#, fuzzy
+#~ msgid "Theme"
+#~ msgstr "Preferencias de tema"
+
+#, fuzzy
+#~ msgid ""
+#~ "Name of attribute column to use for thematic display (must be numeric)"
+#~ msgstr ""
+#~ "Columna de atributos a usar para presentación temática (debe ser numérico)"
+
+#, fuzzy
+#~ msgid "Separate values by spaces (0 10 20 30 ...)"
+#~ msgstr ""
+#~ "Puntos de ruptura para la opción de ruptura personalizada. Separar "
+#~ "valores por espacios (0 10 20 30...)"
+
+#, fuzzy
+#~ msgid "Select 'single_color' for graduated point/line display"
+#~ msgstr ""
+#~ "Esquema de colores para mapas en gradiente de color (seleccionar "
+#~ "'single_color' para mostrar gradiente de puntos/líneas)"
+
+#, fuzzy
+#~ msgid "Beginning color for custom color gradient"
+#~ msgstr ""
+#~ "Color inicial para gradiente de color personalizado. Se debe expresar "
+#~ "como triplete R:G:B."
+
+#, fuzzy
+#~ msgid "Ending color for custom color gradient"
+#~ msgstr ""
+#~ "Color final para gradiente de color personalizado. Se debe expresar como "
+#~ "triplete R:G:B."
+
+#, fuzzy
+#~ msgid ""
+#~ "Root for the name of psmap instruction files to be in current directory"
+#~ msgstr ""
+#~ "Raíz para el nombre de los archivos de instrucciones psmap para estar en "
+#~ "el directorio actual ((si no se indica, no se creará ningún archivo de "
+#~ "instrucciones psmap)"
+
+#, fuzzy
+#~ msgid "Name of input raster map (NIR: tm4 | qbird_nir | spot2)"
+#~ msgstr "Mapa ráster entrada (NIR: tm4 | qbird_nir | spot2)"
+
+#, fuzzy
+#~ msgid "Name of input raster map (MIR; tm5 | qbird_red | spot3)"
+#~ msgstr "Mapa ráster de entrada (MIR: tm5 | qbird_red | spot3)"
+
+#~ msgid "Mosaics up to 4 images and extends colormap; creates map *.mosaic"
+#~ msgstr ""
+#~ "Hace mosaicos de hasta 4 imágenes y extiende colormap; crea mapas *."
+#~ "mosaico"
+
+#~ msgid "2nd map for mosaic."
+#~ msgstr "Segundo mapa para mosaico."
+
+#~ msgid ""
+#~ "Georeference, rectify and import Terra-ASTER imagery and relative DEM's "
+#~ "using gdalwarp."
+#~ msgstr ""
+#~ "Georreferenciar, rectificar e importar imaginería Terra ASTER y MDT "
+#~ "relativos usando gdalwarp."
+
+#~ msgid ""
+#~ "L1A or L1B band to translate (1, 2, 3n, 3b, 4-14). Can only translate a "
+#~ "single band"
+#~ msgstr ""
+#~ "Banda L1A o L1B a traducir (1, 2, 3n, 3b, 4-14). Sólo se puede traducir "
+#~ "una banda"
+
+#~ msgid "Overwrite existing MASK"
+#~ msgstr "Sobrescribir MÁSCARA existente"
+
+#~ msgid "Region sensitive output"
+#~ msgstr "Salida sensible a región"
+
+#, fuzzy
+#~ msgid ""
+#~ "The database must be in form printed by v.db.connect -g, i.e. with "
+#~ "substituted variables"
+#~ msgstr ""
+#~ "Nombre de la antigua base de datos. La base de datos debe estar en la "
+#~ "forma impresa por v.db.connect -g, esto es, con variables sustituidas"
+
+#, fuzzy
+#~ msgid ""
+#~ "Value to update the column with (varchar values have to be in single "
+#~ "quotes, e.g. 'grass')"
+#~ msgstr ""
+#~ "Valor con el que actualizar la columna (los valores varchar tienen que "
+#~ "estar entre comillas simples, ej.: 'grass')"
+
+#~ msgid "%s: %s - Unable to find the real-image map."
+#~ msgstr "%s: %s - No fue posible encontrar el mapa de imagen real."
+
+#~ msgid "%s: %s - Unable to find the imaginary-image."
+#~ msgstr "%s: %s - No se pudo encontrar la imagen imaginaria."
+
+#~ msgid "Create 3D file"
+#~ msgstr "Crear archivo 3D"
