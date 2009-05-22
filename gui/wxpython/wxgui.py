@@ -86,6 +86,7 @@ import gui_modules.goutput as goutput
 import gui_modules.gdialogs as gdialogs
 import gui_modules.colorrules as colorrules
 import gui_modules.ogc_services as ogc_services
+import gui_modules.prompt as prompt
 from   gui_modules.debug import Debug as Debug
 from   icons.icon import Icons as Icons
 
@@ -189,58 +190,11 @@ class GMFrame(wx.Frame):
         # start with layer manager on top
         self.curr_page.maptree.mapdisplay.Raise()
         self.Raise()
-
-    def __doLayout(self):
-        """Do Layout (unused bacause of aui manager...)"""
-        # self.panel = wx.Panel(self,-1, style= wx.EXPAND)
-        # sizer= wx.BoxSizer(wx.VERTICAL)
-        # self.cmdsizer = wx.BoxSizer(wx.HORIZONTAL)
-
-        # item, proportion, flag, border, userData
-        # self.sizer.Add(self.notebook, proportion=1, flag=wx.EXPAND, border=1)
-        # self.sizer.Add(self.cmdinput, proportion=0, flag=wx.EXPAND, border=1)
-        # self.SetSizer(self.sizer)
-
-        # self.sizer.Fit(self)
-        # self.Layout()
-
+        
     def __createCommandPrompt(self):
         """Creates command-line input area"""
-        self.cmdprompt = wx.Panel(self)
-
-        label = wx.Button(parent=self.cmdprompt, id=wx.ID_ANY,
-                          label=_("Cmd >"), size=(-1, 25))
-        label.SetToolTipString(_("Click for erasing command prompt"))
-
-        self.cmdinput = wx.TextCtrl(parent=self.cmdprompt, id=wx.ID_ANY,
-                                    value="",
-                                    style=wx.TE_LINEWRAP | wx.TE_PROCESS_ENTER,
-                                    size=(-1, 25))
-
-        self.cmdinput.SetFont(wx.Font(10, wx.FONTFAMILY_MODERN, wx.NORMAL, wx.NORMAL, 0, ''))
-
-        wx.CallAfter(self.cmdinput.SetInsertionPoint, 0)
-        
-        label.Bind(wx.EVT_BUTTON,    self.OnCmdErase)
-        self.Bind(wx.EVT_TEXT_ENTER, self.OnRunCmd,          self.cmdinput)
-        self.Bind(wx.EVT_TEXT,       self.OnUpdateStatusBar, self.cmdinput)
-
-        # layout
-        sizer = wx.BoxSizer(wx.HORIZONTAL)
-        sizer.Add(item=label, proportion=0,
-                  flag=wx.EXPAND | wx.LEFT | wx.RIGHT | \
-                      wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER,
-                  border=3)
-        sizer.Add(item=self.cmdinput, proportion=1,
-                  flag=wx.EXPAND | wx.ALL,
-                  border=1)
-
-        self.cmdprompt.SetSizer(sizer)
-        sizer.Fit(self.cmdprompt)
-        self.cmdprompt.Layout()
-
-        return self.cmdprompt
-
+        return prompt.GPrompt(self).GetPanel()
+    
     def __createMenuBar(self):
         """Creates menubar"""
 
@@ -452,35 +406,11 @@ class GMFrame(wx.Frame):
         self.curr_page = None
         
         event.Skip()
-
-    def OnRunCmd(self, event):
-        """Run command"""
-        cmd = event.GetString()
-
-        if cmd[:2] == 'd.' and not self.curr_page:
-            self.NewDisplay(show=True)
-        
-        if len(cmd.split(' ')) > 1:
-            self.goutput.RunCmd(cmd, switchPage=True)
-        else:
-            self.goutput.RunCmd(cmd, switchPage=False)
-        
-        self.OnUpdateStatusBar(None)
-
-    def OnCmdErase(self, event):
-        """Erase command prompt"""
-        self.cmdinput.SetValue('')
         
     def GetLogWindow(self):
         """Get widget for command output"""
         return self.goutput
-
-    def OnUpdateStatusBar(self, event):
-        if event is None:
-            self.statusbar.SetStatusText("")
-        else:
-            self.statusbar.SetStatusText(_("Type GRASS command and run by pressing ENTER"))
-
+    
     def GetMenuCmd(self, event):
         """Get GRASS command from menu item
 
