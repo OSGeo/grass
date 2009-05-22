@@ -82,15 +82,16 @@ static int plot_area(struct Map_info *P_map, int area, double shift)
     return 1;
 }
 
-/* set pscolor based on rgb color definition stored in rgbcolumn */
-void set_ps_color_rgbcol_varea(struct Map_info *map, int vec, int area,
-			       dbCatValArray * cvarr_rgb)
+
+/* get pscolor based on rgb color definition stored in rgbcolumn */
+/*   sets *color and returns 1 on success, -1 if no color found */
+int get_ps_color_rgbcol_varea(struct Map_info *map, int vec, int area,
+			       dbCatValArray * cvarr_rgb, PSCOLOR *color)
 {
     int cat, ret;
     dbCatVal *cv_rgb;
     int red, grn, blu;
     char *rgbstring = NULL;
-    PSCOLOR color;
 
     cat = Vect_get_area_cat(map, area, vector.layer[vec].field);
 
@@ -110,20 +111,17 @@ void set_ps_color_rgbcol_varea(struct Map_info *map, int vec, int area,
     }
 
     if (rgbstring) {
-	G_debug(3, "    dynamic symbol rgb color = %s", rgbstring);
-
-	set_color(&color, red, grn, blu);
-	set_ps_color(&color);
+	G_debug(3, "    dynamic varea fill rgb color = %s", rgbstring);
+	set_color(color, red, grn, blu);
     }
-    else {			/* use default symbol */
-	G_debug(3, "    static symbol rgb color = %d:%d:%d",
-		vector.layer[vec].color.r,
-		vector.layer[vec].color.g, vector.layer[vec].color.b);
-
-	set_ps_color(&(vector.layer[vec].fcolor));
+    else {
+	set_color(color, 0, 0, 0);
+	return -1;
     }
-    return;
+
+    return 1;
 }
+
 
 /* plot areas */
 int PS_vareas_plot(struct Map_info *P_map, int vec)
@@ -135,6 +133,8 @@ int PS_vareas_plot(struct Map_info *P_map, int vec)
     struct line_cats *Cats;
     BOUND_BOX box;
     VARRAY *Varray = NULL;
+    PSCOLOR color;
+    int centroid;
 
     /* rgbcol */
     dbCatValArray cvarr_rgb;
@@ -172,8 +172,18 @@ int PS_vareas_plot(struct Map_info *P_map, int vec)
     /* read and plot areas */
     na = Vect_get_num_areas(P_map);
     for (area = 1; area <= na; area++) {
+	G_debug(4, "area = %d", area);
+
 	if (Varray != NULL && Varray->c[area] == 0)
 	    continue;		/* is not in array */
+
+	if (!Vect_area_alive(P_map, area))
+	    continue;
+
+	centroid = Vect_get_area_centroid(P_map, area);
+	G_debug(4, "centroid = %d", centroid);
+	if (centroid < 1)  /* area is an island */
+	    continue;
 
 	Vect_get_area_box(P_map, area, &box);
 	n = box.N;
@@ -209,9 +219,21 @@ int PS_vareas_plot(struct Map_info *P_map, int vec)
 	    if (ret != 1)
 		return 0;
 	}
+
 	if (vector.layer[vec].pat != NULL ||
 	    (!color_none(&vector.layer[vec].fcolor) ||
 	     vector.layer[vec].rgbcol != NULL)) {
+
+	    if (vector.layer[vec].rgbcol != NULL) {
+		/* load fill color from rgbcol */
+		/* if data column is empty or cat is missing don't fill */
+		if (get_ps_color_rgbcol_varea(P_map, vec, area, &cvarr_rgb, &color) != 1)
+		    return 0;
+	    }
+	    else {
+		color = vector.layer[vec].fcolor;
+	    }
+
 	    if (vector.layer[vec].pat != NULL) {	/* use pattern */
 		sc = vector.layer[vec].scale;
 		/* DEBUG */
@@ -231,13 +253,9 @@ int PS_vareas_plot(struct Map_info *P_map, int vec)
 			(urx - llx) * sc, (ury - lly) * sc);
 		fprintf(PS.fp, "    /PaintProc\n      { begin\n");
 		fprintf(PS.fp, "        %f %f scale\n", sc, sc);
-		/* load line color from rgbcol */
-		if (vector.layer[vec].rgbcol != NULL) {
-		    set_ps_color_rgbcol_varea(P_map, vec, area, &cvarr_rgb);
-		}
-		else {
-		    set_ps_color(&(vector.layer[vec].fcolor));
-		}
+
+		set_ps_color(&color);
+
 		fprintf(PS.fp, "        %.8f W\n", vector.layer[vec].pwidth);
 		fprintf(PS.fp, "        %s\n", pat);
 		fprintf(PS.fp, "        end\n");
@@ -247,13 +265,7 @@ int PS_vareas_plot(struct Map_info *P_map, int vec)
 		fprintf(PS.fp, "/Pattern setcolorspace\n %s setcolor\n", pat);
 	    }
 	    else {
-		/* load line color from rgbcol */
-		if (vector.layer[vec].rgbcol != NULL) {
-		    set_ps_color_rgbcol_varea(P_map, vec, area, &cvarr_rgb);
-		}
-		else {
-		    set_ps_color(&(vector.layer[vec].fcolor));
-		}
+		set_ps_color(&color);
 	    }
 
 	    fprintf(PS.fp, "F\n");
