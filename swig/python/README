@@ -1,9 +1,7 @@
 What is this?
 -------------
 	 This is SWIG based python wrapping for GRASS API
-which allows to call GRASS functions from python programs.
-Currently only a limited set of functions (those needed for
-me) are wrapped.
+which allows to call GRASS library functions from Python programs.
 
 
 How to INSTALL?
@@ -11,7 +9,7 @@ How to INSTALL?
 1. Install SWIG, the Simplified Wrapper and Interface Generator
      http://www.swig.org
 
-2. Be sure you configured GRASS with support for Python:
+2. Be sure you configured GRASS with support for Python (example):
      ./configure --with-python=/usr/bin/python2.5-config
 
 3. Run make in the swig/python/ directory
@@ -41,7 +39,7 @@ Eg:
 See examples/m.distance for an example of a working SWIG-Python module.
 
 More examples can be found on the GRASS Wiki site's Python page:
-  http://grass.gdf-hannover.de/wiki/GRASS_and_Python#Python-SWIG-GRASS_interface
+  http://grass.osgeo.org/wiki/GRASS_and_Python#Python-SWIG-GRASS_interface
 
 
 DEBUGGING
@@ -58,10 +56,16 @@ TODO
 See TODO in this directory.
 
 
-AUTHOR
+AUTHORS
 -----
 
-Sajith VK  sajithvk at gmail.com
-Thu, 9 Mar 2006 16:02:50 +0530
-http://grass.itc.it/pipermail/grass-dev/2006-March/021651.html
-http://freegis.gnu.org.in/temporary/python_grass6.tar.bz2
+Initial version:
+  Sajith VK  sajithvk at gmail.com
+  Thu, 9 Mar 2006 16:02:50 +0530
+  http://lists.osgeo.org/pipermail/grass-dev/2006-March/021800.html
+  http://freegis.gnu.org.in/temporary/python_grass6.tar.bz2
+
+Further work:
+  Markus Landa
+  Glynn Clements
+  ...
