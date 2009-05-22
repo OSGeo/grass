@@ -9,7 +9,8 @@
 # FIXME: install the grass bindings in $GISBASE/lib/ ?
 
 import os, sys
-import grass
+from grass.lib import grass
+from grass.lib import vector as grassvect
 
 if not os.environ.has_key("GISBASE"):
     print "You must be in GRASS GIS to run this program."
@@ -27,29 +28,29 @@ grass.G_gisinit('')
 mapset = grass.G_find_vector2(input,'')
 
 # define map structure
-map = grass.Map_info()
+map = grassvect.Map_info()
 
 # define open level (level 2: topology)
-grass.Vect_set_open_level (2)
+grassvect.Vect_set_open_level (2)
 
 # open existing map
-grass.Vect_open_old(map, input, mapset)
+grassvect.Vect_open_old(map, input, mapset)
 
 # query
 print 'Vect map: ', input
-print 'Vect is 3D: ', grass.Vect_is_3d (map)
-print 'Vect DB links: ', grass.Vect_get_num_dblinks(map)
-print 'Map Scale:  1:', grass.Vect_get_scale(map)
+print 'Vect is 3D: ', grassvect.Vect_is_3d (map)
+print 'Vect DB links: ', grassvect.Vect_get_num_dblinks(map)
+print 'Map Scale:  1:', grassvect.Vect_get_scale(map)
 # misleading:
-# print 'Number of lines:', grass.Vect_get_num_lines(map)
+# print 'Number of lines:', grassvect.Vect_get_num_lines(map)
 # how to access GV_POINT?
-# print 'Number of points: ', grass.Vect_get_num_primitives(map,GV_POINT)
+# print 'Number of points: ', grassvect.Vect_get_num_primitives(map,GV_POINT)
 # confusing:
-#print 'Number of lines: ', grass.Vect_get_num_primitives(map,GV_LINE)
-#print 'Number of areas:', grass.Vect_get_num_primitives(map,GV_AREA)
-print 'Number of areas:', grass.Vect_get_num_areas(map)
+#print 'Number of lines: ', grassvect.Vect_get_num_primitives(map,GV_LINE)
+#print 'Number of areas:', grassvect.Vect_get_num_primitives(map,GV_AREA)
+print 'Number of areas:', grassvect.Vect_get_num_areas(map)
 
 # close map
-grass.Vect_close(map)
+grassvect.Vect_close(map)
 ## end of the python script
 
