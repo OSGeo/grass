@@ -50,7 +50,7 @@ and "shell". Example:
 <subprocess.Popen object at 0xb7c12f6c>
 >>> print p.communicate()[0]
 GISDBASE='/opt/grass-data';
-LOCATION_NAME='spearfish57';
+LOCATION_NAME='spearfish60';
 MAPSET='glynn';
 GRASS_DB_ENCODING='ascii';
 GRASS_GUI='text';
@@ -72,7 +72,7 @@ Passes all arguments to start_command, but also adds
 <subprocess.Popen object at 0xb7c12f6c>
 >>> print p.communicate()[0]
 GISDBASE='/opt/grass-data';
-LOCATION_NAME='spearfish57';
+LOCATION_NAME='spearfish60';
 MAPSET='glynn';
 GRASS_DB_ENCODING='ascii';
 GRASS_GUI='text';

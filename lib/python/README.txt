@@ -27,7 +27,7 @@ and "shell". Example:
 <subprocess.Popen object at 0xb7c12f6c>
 >>> print p.communicate()[0]
 GISDBASE='/opt/grass-data';
-LOCATION_NAME='spearfish57';
+LOCATION_NAME='spearfish60';
 MAPSET='glynn';
 GRASS_DB_ENCODING='ascii';
 GRASS_GUI='text';
@@ -46,7 +46,7 @@ Passes all arguments to start_command, but also adds
 <subprocess.Popen object at 0xb7c12f6c>
 >>> print p.communicate()[0]
 GISDBASE='/opt/grass-data';
-LOCATION_NAME='spearfish57';
+LOCATION_NAME='spearfish60';
 MAPSET='glynn';
 GRASS_DB_ENCODING='ascii';
 GRASS_GUI='text';
@@ -164,7 +164,7 @@ Returns the output from running g.findfile as a dictionary. Example:
 >>> print result['fullname']
 fields@PERMANENT
 >>> print result['file']
-/opt/grass-data/spearfish57/PERMANENT/vector/fields
+/opt/grass-data/spearfish60/PERMANENT/vector/fields
 
 
 
