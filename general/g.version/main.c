@@ -66,9 +66,14 @@ int main(int argc, char *argv[])
 	fprintf(stdout, "\n");
     }
 
-    if (gish_rev->answer)
-	fprintf(stdout, "%s\n%s\n", GIS_H_VERSION, GIS_H_DATE);
-	/* use G_tokenize() if you want to get rid of the '$'s */
+    if (gish_rev->answer) {
+	/* fprintf(stdout, "%s\n%s\n", GIS_H_VERSION, GIS_H_DATE); */
+	char **rev_ver = G_tokenize(GIS_H_VERSION, "$");
+	char **rev_time = G_tokenize(GIS_H_DATE, "$");
+	fprintf(stdout, "%s\n%s\n", rev_ver[1], rev_time[1]);
+	G_free_tokens(rev_ver);
+	G_free_tokens(rev_time);
+    }
 
     return (EXIT_SUCCESS);
 }
