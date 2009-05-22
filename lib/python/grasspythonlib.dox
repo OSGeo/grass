@@ -1,16 +1,20 @@
 /*! \page pythonlib GRASS 7 Python scripting library
 
-by GRASS Development Team
+by GRASS Development Team (http://grass.osgeo.org)
 
-http://grass.osgeo.org
+\section intro Introduction
+
+The code in lib/python/ provides "grass.script" in order to support GRASS 
+scripts written in Python. The scripts/ directory of GRASS contains a
+series of examples actually provided to the end users.
 
 See code in:
-
 <ul>
 <li>core.py</li>
 <li>db.py</li>
 <li>raster.py</li>
 <li>vector.py</li>
+</ul>
 
 \section scripting GRASS scripting tasks for Python provided by "grass.script".
 
