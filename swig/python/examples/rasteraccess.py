@@ -1,10 +1,15 @@
 #!/usr/bin/python
 
 # run within GRASS Spearfish session
+# run this before starting python to append module search path:
+#   export PYTHONPATH=/usr/src/grass70/swig/python
+#   check with "import sys; sys.path"
+# or:
+#   sys.path.append("/usr/src/grass70/swig/python")
+# FIXME: install the grass bindings in $GISBASE/lib/ ?
 
 import os, sys
-import swig.grass as grasslib
-import swig.raster as grassrast
+import grass
 
 if not os.environ.has_key("GISBASE"):
     print "You must be in GRASS GIS to run this program."
@@ -16,23 +21,23 @@ else:
   input = raw_input("Raster Map Name? ")
 
 # initialize
-grasslib.G_gisinit('')
+grass.G_gisinit('')
 
 # find map in search path
-mapset = grasslib.G_find_cell2(input,'')
+mapset = grass.G_find_cell2(input,'')
 
 # determine the inputmap type (CELL/FCELL/DCELL) */
-data_type = grasslib.G_raster_map_type(input, mapset)
+data_type = grass.G_raster_map_type(input, mapset)
 
-infd = grasslib.G_open_cell_old(input, mapset)
-inrast = grasslib.G_allocate_raster_buf(data_type)
+infd = grass.G_open_cell_old(input, mapset)
+inrast = grass.G_allocate_raster_buf(data_type)
 
 rown=0
 while 1:
-    myrow = grasslib.G_get_raster_row(infd, inrast, rown, data_type)
+    myrow = grass.G_get_raster_row(infd, inrast, rown, data_type)
     print rown,myrow[0:10]
     rown = rown+1
     if rown==476:break
 
-grasslib.G_close_cell(inrast)
-grasslib.G_free(cell)
+grass.G_close_cell(inrast)
+grass.G_free(cell)
