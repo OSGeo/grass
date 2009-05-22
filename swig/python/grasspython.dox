@@ -45,6 +45,11 @@ In detail:
 
 <h3>Usage</h3>
 
+Access to GRASS library functions (example: Vector functions):
+\code
+from grass.lib import vector as grassvect
+\endcode
+
 Scripts:
 \code 
 from grass.script import core[,db[,raster,[vector]]] as grass 
