@@ -1,3 +1,4 @@
+#!nviz -f
 ##########################################################################
 #
 # Main startup script for NVIZ
@@ -16,7 +17,6 @@
 #
 ##########################################################################
 #
-#!nviz -f
 # Please log changes in the ChangeLog file in this directory
 # (Use "C-x 4 a" from emacs to add an entry)
 #
