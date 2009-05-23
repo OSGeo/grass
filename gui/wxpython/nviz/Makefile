@@ -2,6 +2,13 @@ MODULE_TOPDIR = ../../..
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 
+ifeq ($(findstring darwin,$(ARCH)),darwin)
+ifneq ($(WX_ISOSX64BIT),1)
+CFLAGS := $(subst -arch ppc64,,$(subst -arch x86_64,,$(CFLAGS)))
+LDFLAGS := $(subst -arch ppc64,,$(subst -arch x86_64,,$(LDFLAGS)))
+endif
+endif
+
 LIB_NAME = grass7_wxnviz
 
 SHLIB = $(OBJDIR)/_$(LIB_NAME).so
