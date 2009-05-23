@@ -59,8 +59,8 @@ to make time intervals equal (see example).
 Using <em>r.series</em> with wildcards:
 <br>
 <div class="code"><pre>
-r.series input="`g.mlist pattern='insitu_data.*' sep=,`"
-    output=insitu_data.stddev method=stddev
+r.series input="`g.mlist pattern='insitu_data.*' sep=,`" \
+         output=insitu_data.stddev method=stddev
 </pre></div>
 <p>
 Note the <em>g.mlist</em> script also supports regular expressions for
@@ -69,8 +69,9 @@ selecting map names.
 Using <em>r.series</em> with NULL raster maps:
 <br>
 <div class="code"><pre>
-r.mapcalc "dummy=null()"
-r.series in=map2001,map2002,dummy,dummy,map2005,map2006,dummy,map2008 out=res_slope,res_offset,res_coeff meth=slope,offset,detcoeff
+r.mapcalc "dummy = null()"
+r.series in=map2001,map2002,dummy,dummy,map2005,map2006,dummy,map2008 \
+         out=res_slope,res_offset,res_coeff meth=slope,offset,detcoeff
 </pre></div>
 
 <p>
