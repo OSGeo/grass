@@ -197,8 +197,9 @@ class Formatter:
 			  in_tr = False,
 			  index = [])
 	self.stack = []
-	self.strip_re = re.compile("\n[ \t]+")
+	self.strip_re = re.compile("^[ \t]+")
 	self.filename = filename
+	self.at_bol = True
 
     def warning(self, msg):
 	sys.stderr.write(msg + '\n')
@@ -218,6 +219,8 @@ class Formatter:
 
     def show(self, s):
 	self.stream.write(s)
+	if s != '':
+	    self.at_bol = s.endswith('\n')
 
     def pp_with(self, content, var, val):
 	self.push()
@@ -226,8 +229,11 @@ class Formatter:
 	self.pop()
 
     def fmt(self, format, content, var = None):
-#	String.format is only in 2.5+
-#	(pre,sep,post) = format.partition("@")
+	# String.partition is only in 2.5+
+	# (pre,sep,post) = format.partition("@")
+	if self.get('no_nl') and '\n' in format:
+	    self.warning("can't handle line breaks in <dt>...</dt>")
+	    format = "@"
 	f = format.split('@', 1)
 	pre = f[0]
 	if len(f) > 1:
@@ -351,6 +357,8 @@ class Formatter:
 	    self.pp(content)
 
     def pp_string(self, content):
+	if content == "":
+	    return
 	s = content
 	if self.get('no_nl'):
 	    s = s.replace("\n"," ")
@@ -358,15 +366,23 @@ class Formatter:
 	s = s.replace("'", "\\(cq")
 	s = s.replace("\"", "\\(dq")
 	s = s.replace("`", "\\(ga")
+	if self.at_bol and s[0] in [".","'"]:
+	    s = "\\&" + s
 	self.show(s)
 
     def pp_text(self, content):
-	if content != "":
-	    if self.get('preformat'):
-		self.pp_string(content)
-	    else:
-		s = self.strip_re.sub('\n', content)
-		self.pp_string(s)
+	if content == "":
+	    return
+	lines = content.splitlines(True)
+	if len(lines) != 1:
+	    for line in lines:
+		self.pp_text(line)
+	    return
+	else:
+	    content = lines[0]
+	if self.at_bol and not self.get('preformat'):
+	    content = self.strip_re.sub('', content)
+	self.pp_string(content)
 
     def pp_list(self, content):
 	for item in content:
@@ -468,7 +484,7 @@ def main():
     sf.close()
 
     # strip excess whitespace
-    blank_re = re.compile("[ \t\n]*\n[ \t\n]*")
+    blank_re = re.compile("[ \t\n]*\n([ \t]*\n)*")
     s = blank_re.sub('\n', s)
     s = s.lstrip()
 
