@@ -6,13 +6,15 @@
 Classes:
  - GPrompt
 
-(C) 2009 by the GRASS Development Team
+(C) 2008-2009 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 @author Martin Landa <landa.martin gmail.com>
 """
+
+import shlex
 
 import wx
 
@@ -70,15 +72,16 @@ class GPrompt:
         
     def OnRunCmd(self, event):
         """Run command"""
-        cmd = event.GetString()
+        cmdString = event.GetString()
         
         if self.parent.GetName() != "LayerManager":
             return
-
-        if cmd[:2] == 'd.' and not self.parent.curr_page:
+        
+        if cmdString[:2] == 'd.' and not self.parent.curr_page:
             self.parent.NewDisplay(show=True)
-            
-        if len(cmd.split(' ')) > 1:
+        
+        cmd = shlex.split(str(cmdString))
+        if len(cmd) > 1:
             self.parent.goutput.RunCmd(cmd, switchPage = True)
         else:
             self.parent.goutput.RunCmd(cmd, switchPage = False)
