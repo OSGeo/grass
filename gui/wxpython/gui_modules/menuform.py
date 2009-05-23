@@ -335,6 +335,22 @@ class grassTask:
         if grassModule is not None:
             xml.sax.parseString( getInterfaceDescription( grassModule ) , processTask( self ) )
 
+    def get_list_params(self, element = 'name'):
+        """Get list of parameters"""
+        params = []
+        for p in self.params:
+            params.append(p['name'])
+        
+        return params
+
+    def get_list_flags(self, element = 'name'):
+        """Get list of parameters"""
+        flags = []
+        for p in self.flags:
+            flags.append(p['name'])
+        
+        return flags
+    
     def get_param(self, value, element='name', raiseError=True):
         """Find and return a param by name."""
         for p in self.params:
@@ -353,7 +369,7 @@ class grassTask:
         param = self.get_param(aParam)
         param['value'] = aValue
             
-    def get_flag( self, aFlag ):
+    def get_flag(self, aFlag):
         """
         Find and return a flag by name.
         """
@@ -368,8 +384,7 @@ class grassTask:
         """
         param = self.get_flag(aFlag)
         param['value'] = aValue
-            
-
+        
     def getCmd(self, ignoreErrors = False):
         """
         Produce an array of command name and arguments for feeding
@@ -1777,6 +1792,23 @@ class GUI:
         self.parent = parent
         self.grass_task = None
 
+    def ParseInterface(self, cmd):
+        """Parse interface
+
+        @param cmd command to be parsed (given as list)
+        """
+        grass_task = grassTask()
+        handler = processTask(grass_task)
+        enc = locale.getdefaultlocale()[1]
+        if enc and enc.lower() not in ("utf8", "utf-8"):
+            xml.sax.parseString(getInterfaceDescription(cmd[0]).decode(enc).encode("utf-8"),
+                                handler)
+        else:
+            xml.sax.parseString(getInterfaceDescription(cmd[0]),
+                                handler)
+        
+        return grass_task
+    
     def ParseCommand(self, cmd, gmpath=None, completed=None, parentframe=None,
                      show=True, modal=False):
         """
@@ -1803,16 +1835,8 @@ class GUI:
         self.parent = parentframe
 
         # parse the interface decription
-        self.grass_task = grassTask()
-        handler = processTask(self.grass_task)
-        enc = locale.getdefaultlocale()[1]
-        if enc and enc.lower() not in ("utf8", "utf-8"):
-            xml.sax.parseString(getInterfaceDescription(cmd[0]).decode(enc).encode("utf-8"),
-                                handler)
-        else:
-            xml.sax.parseString(getInterfaceDescription(cmd[0]),
-                                handler)
-        
+        self.grass_task = self.ParseInterface(cmd)
+
         # if layer parameters previously set, re-insert them into dialog
         if completed is not None:
             if 'params' in dcmd_params:

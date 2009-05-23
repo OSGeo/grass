@@ -24,6 +24,7 @@ import wx.lib.mixins.listctrl as listmix
 
 import globalvar
 import utils
+import menuform
 
 class GPrompt:
     """Interactive GRASS prompt"""
@@ -131,6 +132,8 @@ class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
         # some variables
         self._choices = choices
         self._hideOnNoMatch = True
+        self._module = None # currently selected module
+        self._params = None # params or flags ?
         self._screenheight = wx.SystemSettings.GetMetric(wx.SYS_SCREEN_Y)
         
         # sort variable needed by listmix
@@ -148,7 +151,8 @@ class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
         listmix.ColumnSorterMixin.__init__(self, 1)
         
         # set choices (list of GRASS modules)
-        self.SetChoices(globalvar.grassCmd['all'])
+        self._choicesCmd = globalvar.grassCmd['all']
+        self.SetChoices(self._choicesCmd)
 
         # bindings...
         self.Bind(wx.EVT_KILL_FOCUS, self.OnControlChanged, self)
@@ -238,7 +242,21 @@ class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
             ###    values = [dd.GetItem(sel, x).GetText()
             ###        for x in xrange(dd.GetColumnCount())]
             ###    self._selectCallback(values)
-            self.SetValue(itemtext)
+            
+            cmd = shlex.split(str(self.GetValue()))
+            if len(cmd) > 1:
+                # -> append text (skip last item)
+                if self._params is True:
+                    self.SetValue(' '.join(cmd[:-1]) + ' ' + itemtext + '=')
+                else:
+                    if len(itemtext) > 1:
+                        prefix = '--'
+                    else:
+                        prefix = '-'
+                    self.SetValue(' '.join(cmd[:-1]) + ' ' + prefix + itemtext)
+            else:
+                # -> reset text
+                self.SetValue(itemtext)
             self.SetInsertionPointEnd()
             
             self._showDropDown(False)
@@ -312,13 +330,35 @@ class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
             event.Skip()
             return
         
+        cmd = shlex.split(str(text))
+        if len(cmd) > 1:
+            # search for module's options
+            if not self._module:
+                self._module = menuform.GUI().ParseInterface(cmd = cmd)
+            
+            if cmd[-1][0] == '-':
+                # -> flags
+                self.SetChoices(self._module.get_list_flags())
+                self._params = False
+            else:
+                # -> options
+                self.SetChoices(self._module.get_list_params())
+                self._params = True
+        else:
+            # search for GRASS modules
+            if self._module:
+                # -> switch back to GRASS modules list
+                self.SetChoices(self._choicesCmd)
+                self._module = None
+                self._params = None
+        
         found = False
         choices = self._choices
         for numCh, choice in enumerate(choices):
             ### if self._matchFunction and self._matchFunction(text, choice):
             ###    found = True
             ### elif
-            if choice.lower().startswith(text.lower()):
+            if choice.lower().startswith(cmd[-1].lower().lstrip('-')):
                 found = True
             if found:
                 self._showDropDown(True)
