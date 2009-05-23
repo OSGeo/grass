@@ -490,7 +490,7 @@ class GMFrame(wx.Frame):
                                                   550, wx.ClientDC(self)))
         copyrightFile.close()
         # website
-        info.SetWebSite(("http://grass.osgeo.org", "The official GRASS site"))
+        info.SetWebSite(("http://grass.osgeo.org", _("The official GRASS site")))
         # licence
         licenceFile = open(os.path.join(os.getenv("GISBASE"), "GPL.TXT"), 'r')
         info.SetLicence(''.join(licenceFile.readlines()))
