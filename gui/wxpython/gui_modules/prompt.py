@@ -8,7 +8,7 @@ Classes:
  - PromptListCtrl
  - TextCtrlAutoComplete
 
-(C) 2008-2009 by the GRASS Development Team
+(C) 2009 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -104,8 +104,7 @@ class GPrompt:
             self.parent.statusbar.SetStatusText("")
         else:
             self.parent.statusbar.SetStatusText(_("Type GRASS command and run by pressing ENTER"))
-
-        event.Skip()
+            event.Skip()
         
 class PromptListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
     def __init__(self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition,
