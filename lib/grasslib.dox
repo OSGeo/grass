@@ -113,7 +113,7 @@ from GRASS 5 Programmer's manual) or are simply undocumented.</I>
 <h3>Interfaces</h3>
 
 <ul>
-<li> GRASS <a href="/grass/grass7_progman/swig/index.html">SWIG interface</a>.
+<li> GRASS <a href="../../swig/html/index.html">SWIG interface</a>.
 </ul>
 
 <h3>File structure of GRASS Location</h3>
