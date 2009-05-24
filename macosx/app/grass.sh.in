@@ -28,8 +28,8 @@ GISBASE=`dirname "$0"`
 export GISBASE
 grass_ver=`cut -d . -f 1-2 "$GISBASE/etc/VERSIONNUMBER"`
 
-GISBASE_USER="$HOME/Library/GRASS/$grass_ver"
-GISBASE_SYSTEM="/Library/GRASS/$grass_ver"
+GISBASE_USER="$HOME/Library/Application Support/GRASS/$grass_ver"
+GISBASE_SYSTEM="/Library/Application Support/GRASS/$grass_ver"
 
 # for extra utils
 # ideally user should have these in their PATH, but make sure here
