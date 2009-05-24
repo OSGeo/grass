@@ -21,13 +21,17 @@ def __read_variables(file, dict={}):
         
         dict[var.strip()] = val.strip()
         
-def update_opts(flag, macros, inc_dirs, lib_dirs, libs):
+def update_opts(flag, macros, inc_dirs, lib_dirs, libs, extras):
     """Update Extension options"""
     global variables
     line = variables[flag]
+    fw_next = False
     for val in line.split(' '):
         key = val[:2]
-        if key == '-I': # includes
+        if fw_next:
+            extras.append(val)
+            fw_next = False
+        elif key == '-I': # includes
             inc_dirs.append(val[2:])
         elif key == '-D': # macros
             if '=' in val[2:]:
@@ -38,6 +42,11 @@ def update_opts(flag, macros, inc_dirs, lib_dirs, libs):
             lib_dirs.append(val[2:])
         elif key == '-l':
             libs.append(val[2:])
+        elif key == '-F': # frameworks dir
+            extras.append(val)
+        elif val == '-framework':
+            extras.append(val)
+            fw_next = True
 
 try:
     Platform_make = open(os.path.join('..', '..', '..',
