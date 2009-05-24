@@ -23,12 +23,14 @@ libs = ['grass_dbmibase',
         'grass_vect',
         'grass_gis',
         'grass_vedit']
+extras = []
 
 for flag in ('GDALCFLAGS',
              'GDALLIBS',
+             'GEOSCFLAGS',
              'WXWIDGETSCXXFLAGS',
              'WXWIDGETSLIB'):
-    update_opts(flag, macros, inc_dirs, lib_dirs, libs)
+    update_opts(flag, macros, inc_dirs, lib_dirs, libs, extras)
 
 setup(
     ext_modules= [
@@ -52,6 +54,7 @@ setup(
             include_dirs = inc_dirs,
             library_dirs = lib_dirs,
             libraries = libs,
+            extra_link_args = extras,
             )
 	]
     )
