@@ -35,20 +35,27 @@ who provides the GRASS main infrastructure.
 
 Main web site: <a href="http://grass.osgeo.org">http://grass.osgeo.org</a>
 
-<P>
-<I>Missing entries below are either not yet uploaded to SVN (need to be migrated
-from GRASS 5 Programmer's manual) or are simply undocumented.</I>
+<h2>Table of contents</h2>
+
+- \subpage corelibs
+- \subpage libs
+- \subpage interfaces
+- \subpage gui
+- \subpage location
+
+<p>
+<i>Missing entries below are either not yet uploaded to SVN (need to be migrated
+from GRASS 5 Programmer's manual) or are simply undocumented.</i>
 
 <!-- original:
   http://trac.osgeo.org/grass/browser/grass-web/trunk/images/grass7_arch.odp
 -->
 \image html "grass7_arch.png" "GRASS 7 Architecture"
 
+<p>
+<b>PLEASE UPDATE FOR GRASS 7</b>
 
-<P>
-<I>PLEASE UPDATE FOR GRASS 7</I>
-
-<h3>Principal library</h3>
+\section corelibs Principal library
 
 (the name refers to the directory name in lib/ in the source code)
 
@@ -61,7 +68,7 @@ from GRASS 5 Programmer's manual) or are simply undocumented.</I>
  </ul>
 </ul>
 
-<h3>Further libraries</h3>
+\section libs Further libraries
 
 (the name refers to the directory name in lib/ in the source code)
 
@@ -83,7 +90,6 @@ from GRASS 5 Programmer's manual) or are simply undocumented.</I>
 <li>g3d:	\ref g3dlib
 <li>gmath: 	\ref gmathlib (generic mathematical functions and BLAS/LAPACK library wrapper)
 <li>gpde:       \ref gpdelib (partial differential equations library)
-<li>gui/wxpython: <a href="/grass/grass7_progman/gui/wxpython/index.html">wxpython based graphical user interface</a> (GUI)
 <li>imagery:	\ref imagerylib 
 <li>init:	\ref init (GRASS initialization code + scripts)
 <li>linkm:	Linked list memory manager - \ref linkm (obsolete?)
@@ -110,13 +116,19 @@ from GRASS 5 Programmer's manual) or are simply undocumented.</I>
 <!--<li>D:		display library - \ref d_displaylib-->
 <!--<li>front.end:	interface for interactive modules library - \ref frontend-->
 
-<h3>Interfaces</h3>
+\section interfaces Interfaces
 
 <ul>
 <li> GRASS <a href="../../swig/html/index.html">SWIG interface</a>.
 </ul>
 
-<h3>File structure of GRASS Location</h3>
+\section gui GUI
+
+<ul>
+<li> <a href="../../gui/wxpython/html/index.html">wxGUI</a></li>
+</ul>
+
+\section location File structure of GRASS Location
 
 A GRASS <b>raster map</b> consists of several files in several subdirectories in a mapset,
 organized as follows:
