@@ -158,7 +158,11 @@ class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
         self.itemDataMap = dict()
         
         # widgets
-        self.dropdown = wx.PopupWindow(self)
+        try:
+            self.dropdown = wx.PopupWindow(self)
+        except NotImplementedError:
+            self.Destroy()
+            raise NotImplementedError
         
         # create the list and bind the events
         self.dropdownlistbox = PromptListCtrl(parent = self.dropdown,
