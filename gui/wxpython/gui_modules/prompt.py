@@ -21,7 +21,6 @@ for details.
 
 import sys
 import shlex
-import platform
 
 import wx
 import wx.lib.mixins.listctrl as listmix
@@ -48,12 +47,14 @@ class GPrompt:
 
         ### todo: fix TextCtrlAutoComplete to work also on Macs
         ### reason: missing wx.PopupWindow()
-        if not platform.mac_ver()[0]:
+        try:
             cmdinput = TextCtrlAutoComplete(parent = cmdprompt, id = wx.ID_ANY,
                                             value = "",
                                             style = wx.TE_LINEWRAP | wx.TE_PROCESS_ENTER,
                                             size = (-1, 25))
-        else:
+        except NotImplementedError:
+            # wx.PopupWindow may be not available in wxMac
+            # see http://trac.wxwidgets.org/ticket/9377
             cmdinput = wx.TextCtrl(parent = cmdprompt, id = wx.ID_ANY,
                                    value = "",
                                    style=wx.TE_LINEWRAP | wx.TE_PROCESS_ENTER,
