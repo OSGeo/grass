@@ -396,7 +396,13 @@ class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
             self.dropdownlistbox.Select(self.dropdownlistbox.GetFirstSelected(), False)
             if self._hideOnNoMatch:
                 self._showDropDown(False)
-        
+            
+            if self._module and cmd[-1][-2] == '=':
+                optType = self._module.get_param(cmd[-1][:-2])['prompt']
+                if optType in ('raster', 'vector'):
+                    # -> raster/vector map
+                    self.SetChoices(self._choicesMap[optType], optType)
+                                            
         self._listItemVisible()
         
         event.Skip()
