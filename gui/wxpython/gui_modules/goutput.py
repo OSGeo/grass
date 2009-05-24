@@ -101,9 +101,10 @@ class CmdThread(threading.Thread):
                               time = requestTime,
                               pid = requestId,
                               onDone = onDone)
-            
-            wx.PostEvent(self.parent, event)
 
+            # send event
+            wx.PostEvent(self.parent, event)
+            
     def abort(self):
         self.requestCmd.abort()
     
@@ -517,8 +518,11 @@ class GMConsole(wx.Panel):
 
         self.cmd_output_timer.Stop()
 
-        # updated command dialog
-        if hasattr(self.parent.parent, "btn_run"):
+        # set focus on prompt
+        if self.parent.GetName() == "LayerManager":
+            self.parent.cmdinput.SetFocus()
+        else:
+            # updated command dialog
             dialog = self.parent.parent
 
             if hasattr(self.parent.parent, "btn_abort"):
