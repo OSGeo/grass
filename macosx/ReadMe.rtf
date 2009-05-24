@@ -1,4 +1,4 @@
-{\rtf1\ansi\ansicpg1252\cocoartf949\cocoasubrtf350
+{\rtf1\ansi\ansicpg1252\cocoartf949\cocoasubrtf460
 {\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 Monaco;}
 {\colortbl;\red255\green255\blue255;}
 \margl1440\margr1440\vieww8720\viewh11500\viewkind0
@@ -196,6 +196,22 @@ export LDFLAGS="-arch ppc -arch i386 -isysroot $SDKROOT"\
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 
 \f0\fs24 \cf0 \
+For OSX 10.5, you can also build for 64bit (all processors except the first Intel Core Duo), just add:\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li180\fi-180\ql\qnatural\pardirnatural
+
+\f1\fs20 \cf0 -arch ppc64 -arch x86_64\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
+
+\f0\fs24 \cf0 \
+Due to a small configure issue in FFMPEG, you may just have to build 32+64bit for one processor.  ie:\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li180\fi-180\ql\qnatural\pardirnatural
+
+\f1\fs20 \cf0 -arch i386 -arch x86_64
+\f0\fs24 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
+\cf0 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 \cf0 \ul Optimization\ulnone \
 \
@@ -227,7 +243,7 @@ As an example, to build GRASS using my frameworks and Tcl/Tk as built in the bui
 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li180\fi-180\ql\qnatural\pardirnatural
 
-\f1\fs20 \cf0 ./configure --with-freetype --with-freetype-includes="/Library/Frameworks/FreeType.framework/unix/include/freetype2 /Library/Frameworks/FreeType.framework/unix/include" --with-freetype-libs=/Library/Frameworks/FreeType.framework/unix/lib --with-gdal=/Library/Frameworks/GDAL.framework/Programs/gdal-config --with-proj --with-proj-includes=/Library/Frameworks/PROJ.framework/unix/include --with-proj-libs=/Library/Frameworks/PROJ.framework/unix/lib --with-proj-share=/Library/Frameworks/PROJ.framework/Resources/proj --with-jpeg-includes=/Library/Frameworks/UnixImageIO.framework/unix/include --with-jpeg-libs=/Library/Frameworks/UnixImageIO.framework/unix/lib --with-png-includes=/Library/Frameworks/UnixImageIO.framework/unix/include --with-png-libs=/Library/Frameworks/UnixImageIO.framework/unix/lib --with-tiff-includes=/Library/Frameworks/UnixImageIO.framework/unix/include --with-tiff-libs=/Library/Frameworks/UnixImageIO.framework/unix/lib --without-postgres --without-mysql --with-odbc --with-sqlite --with-sqlite-libs=/Library/Frameworks/SQLite3.framework/unix/lib --with-sqlite-includes=/Library/Frameworks/SQLite3.framework/unix/include --with-fftw-includes=/Library/Frameworks/FFTW3.framework/unix/include --with-fftw-libs=/Library/Frameworks/FFTW3.framework/unix/lib --with-cxx --with-tcltk-includes="/Library/Frameworks/Tcl.framework/Headers /Library/Frameworks/Tk.framework/Headers /Library/Frameworks/Tk.framework/PrivateHeaders" --with-tcltk-libs=/usr/local/lib --with-x --without-motif --without-glw --with-opengl=aqua --without-readline --prefix=/Applications --enable-macosx-app
+\f1\fs20 \cf0 ./configure --with-freetype --with-freetype-includes="/Library/Frameworks/FreeType.framework/unix/include/freetype2 /Library/Frameworks/FreeType.framework/unix/include" --with-freetype-libs=/Library/Frameworks/FreeType.framework/unix/lib --with-gdal=/Library/Frameworks/GDAL.framework/Programs/gdal-config --with-geos=/Library/Frameworks/GEOS.framework/Programs/geos-config --with-proj --with-proj-includes=/Library/Frameworks/PROJ.framework/unix/include --with-proj-libs=/Library/Frameworks/PROJ.framework/unix/lib --with-proj-share=/Library/Frameworks/PROJ.framework/Resources/proj --with-jpeg-includes=/Library/Frameworks/UnixImageIO.framework/unix/include --with-jpeg-libs=/Library/Frameworks/UnixImageIO.framework/unix/lib --with-png-includes=/Library/Frameworks/UnixImageIO.framework/unix/include --with-png-libs=/Library/Frameworks/UnixImageIO.framework/unix/lib --with-tiff-includes=/Library/Frameworks/UnixImageIO.framework/unix/include --with-tiff-libs=/Library/Frameworks/UnixImageIO.framework/unix/lib --without-postgres --without-mysql --with-odbc --with-sqlite --with-sqlite-libs=/Library/Frameworks/SQLite3.framework/unix/lib --with-sqlite-includes=/Library/Frameworks/SQLite3.framework/unix/include --with-fftw-includes=/Library/Frameworks/FFTW3.framework/unix/include --with-fftw-libs=/Library/Frameworks/FFTW3.framework/unix/lib --with-cxx --with-tcltk-includes="/Library/Frameworks/Tcl.framework/Headers /Library/Frameworks/Tk.framework/Headers /Library/Frameworks/Tk.framework/PrivateHeaders" --with-tcltk-libs=/usr/local/lib --with-x --without-motif --without-glw --with-opengl=aqua --without-readline --prefix=/Applications --enable-macosx-app
 \f0\fs24 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 \cf0 \
@@ -260,13 +276,7 @@ To install the new Python GUI (see REQUIREMENTS.html and gui/wxpython/README, wx
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 
 \f0\fs24 \cf0 \
-Note 1: as of wxpython 2.8.8.0 you can use an external wxpython with the system Python on Leopard.\
-\
-Note 2: DO NOT apply the gdi patch mentioned in the wxgui README.\
-\
-Note 3: for now, disable lib/nviz/render.c - either delete it, or add something to the filename 
-\i after
-\i0  the .c.  You will get an error in visualization/nviz2/cmd, but this does not work on OSX yet.\
+Note: as of wxpython 2.8.8.0 you can use an external wxpython with the system Python on Leopard.\
 \
 If you want ffmpeg support (see build instructions below), add this:\
 \
@@ -277,7 +287,16 @@ If you want ffmpeg support (see build instructions below), add this:\
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 \cf0 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
-\cf0 \ul Leopard Notes\
+\cf0 For cairo support (see build instructions at {\field{\*\fldinst{HYPERLINK "http://www.kyngchaos.com/macosx:build:cairo"}}{\fldrslt kyngchaos.com}}), add this:\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li180\fi-180\ql\qnatural\pardirnatural
+
+\f1\fs20 \cf0 --with-cairo --with-cairo-includes=/usr/local/include/cairo --with-cairo-libs=/usr/local/lib --with-cairo-ldflags=-lcairo
+\f0\fs24 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
+\cf0 \ul \ulc0 Leopard Notes\
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 \cf0 \ulnone \
 \'95 Linker Problem\
@@ -291,16 +310,6 @@ The linker in Leopard's GCC from Xcode 3.0 has a bit of a problem with some libr
 
 \f0\fs24 \cf0 \
 Xcode 3.1 does not have this problem.  In other words, make sure to install the latest Xcode.\
-\
-\'95 64bits\
-\
-Almost all of GRASS can be built 64bits. Use the above universal flags section and set the arch's to "
-\f1\fs20 ppc64
-\f0\fs24 " for PPC processors (I believe all are inherently 64bits), and "
-\f1\fs20 x86_64
-\f0\fs24 " for Intel processors (ie Core 2 Duo, but not Core Duo).  You don't need to build universal, but can have only one arch flag if desired. The SDK flag is not needed.\
-\
-The wxPython parts(ie vdigit) cannot be built 64bits.  This is due to Carbon not being 64bit, which wx depends on.  Because gui/wxpython shares CXXFLAGS with the rest of GRASS, vdigit will fail unless the makefile it patched.\
 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 \cf0 \ul Building an Installer Package\
@@ -340,7 +349,10 @@ There is NO need to bundle
 \
 - GPSBabel (CLI)\
 - NetPBM programs (just what is used in GRASS)\
-- ffmpeg libraries\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
+\cf0 - other support CLI programs for script modules\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
+\cf0 - ffmpeg libraries\
 - Postgres library (libpq)\
 \
 Things to leave out:\
@@ -377,31 +389,7 @@ Since they are linked to the help system, if GRASS.app is moved or renamed, the 
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 
 \b0\fs24 \cf0 \
-Do not use GEM (at this time) for building and installing addon modules.  It installs in the app dir, which is not the right thing to do in OSX.  It is still installed - the gem executable is in 
-\f1\fs20 Contents/MacOS
-\f0\fs24  - and may work, but it's untested.\
-\
-GRASS.app is setup to find addon modules in 
-\f1\fs20 /Library/GRASS/$VERSION/Modules
-\f0\fs24  and 
-\f1\fs20 ~/Library/GRASS/$VERSION/Modules
-\f0\fs24 .  The version is the Major.minor version of GRASS.  /Library modules are globally available to all users, but require admin privileges to install.  Home/Library modules are only available to the user that installed them.\
-\
-When GRASS is started, grass.sh adds these to the 
-\f1\fs20 GRASS_ADDON_PATH
-\f0\fs24 , 
-\f1\fs20 GRASS_ADDON_ETC
-\f0\fs24  and 
-\f1\fs20 DYLD_LIBRARY_PATH
-\f0\fs24 .  It also rebuilds the html help index, and GUI menu file.\
-\
-GRASS_ADDON_ETC is fairly new, and many addon modules may not make use of it yet.  Instead of accessing it's etc/ support files from $GISBASE/etc, the function G_find_etc("file") should be used to locate the file wherever it may be in any of the folders listed in GRASS_ADDON_ETC.  $GISBASE/etc is searched last and does not need to be included in GRASS_ADDON_ETC.\
-\
-Help indexes and GUI menus for both global and user modules are maintained in the user's Library/GRASS folder, so the user doesn't need admin privs to write to the global folder.\
-\
-The 
-\b modbuild
-\b0  target creates a GEM-like build skeleton that can be used to build modules from the Terminal.  It does not require any special setup of the module source.  It does not install, or rather I haven't tested that, but it uses standard GRASS make files so it should be able to.\
+modbuild deprecated (not installed now).  Makefile changes in progress to allow compiling external modules.\
 \
 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
@@ -732,6 +720,11 @@ sudo lipo -create build-ppc/ffmpeg build-i386/ffmpeg -output /usr/local/bin/ffmp
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 
 \f0\fs24 \cf0 \
+For a 64bit build, just repeat the i386 and ppc parts with x86_64 and ppc64.  One problem with this, is that, similar to Intel tests failing when built 
+\i on
+\i0  a PPC Mac, Rosetta doesn't do 64bit PPC, so some tests will fail for a PPC build on Intel.  The cleanest option is to build PPC64 on PPC, then merge with the Intel-built parts.  Or just build 32+64bit for one processor.\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
+\cf0 \
 Done.\
 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural
