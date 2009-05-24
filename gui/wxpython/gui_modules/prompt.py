@@ -25,6 +25,7 @@ import wx.lib.mixins.listctrl as listmix
 import globalvar
 import utils
 import menuform
+from grass.script import core as grass
 
 class GPrompt:
     """Interactive GRASS prompt"""
@@ -73,6 +74,10 @@ class GPrompt:
     def GetPanel(self):
         """Get main widget panel"""
         return self.panel
+
+    def GetInput(self):
+        """Get main prompt widget"""
+        return self.input
     
     def OnCmdErase(self, event):
         """Erase command prompt"""
@@ -133,7 +138,7 @@ class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
         self._choices = choices
         self._hideOnNoMatch = True
         self._module = None # currently selected module
-        self._params = None # params or flags ?
+        self._choiceType = None # type of choice (module, params, flags, raster, vector ...)
         self._screenheight = wx.SystemSettings.GetMetric(wx.SYS_SCREEN_Y)
         
         # sort variable needed by listmix
@@ -152,6 +157,10 @@ class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
         
         # set choices (list of GRASS modules)
         self._choicesCmd = globalvar.grassCmd['all']
+        self._choicesMap = dict()
+        for type in ('raster', 'vector'):
+            self._choicesMap[type] = grass.list_strings(type = type[:4])
+        # first search for GRASS module
         self.SetChoices(self._choicesCmd)
 
         # bindings...
@@ -160,8 +169,6 @@ class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
         self.Bind(wx.EVT_KEY_DOWN , self.OnKeyDown, self)
 
         # if need drop down on left click
-        ### self.Bind ( wx.EVT_LEFT_DOWN , self.onClickToggleDown, self )
-        ### self.Bind ( wx.EVT_LEFT_UP , self.onClickToggleUp, self )
         self.dropdown.Bind(wx.EVT_LISTBOX , self.OnListItemSelected, self.dropdownlistbox)
         self.dropdownlistbox.Bind(wx.EVT_LEFT_DOWN, self.OnListClick)
         self.dropdownlistbox.Bind(wx.EVT_LEFT_DCLICK, self.OnListDClick)
@@ -237,26 +244,27 @@ class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
             else:
                 col = self._colSearch
             itemtext = self.dropdownlistbox.GetItem(sel, col).GetText()
-            ### if self._selectCallback:
-            ###    dd = self.dropdownlistbox
-            ###    values = [dd.GetItem(sel, x).GetText()
-            ###        for x in xrange(dd.GetColumnCount())]
-            ###    self._selectCallback(values)
             
             cmd = shlex.split(str(self.GetValue()))
             if len(cmd) > 1:
                 # -> append text (skip last item)
-                if self._params is True:
+                if self._choiceType == 'param':
                     self.SetValue(' '.join(cmd[:-1]) + ' ' + itemtext + '=')
-                else:
+                    optType = self._module.get_param(itemtext)['prompt']
+                    if optType in ('raster', 'vector'):
+                        # -> raster/vector map
+                        self.SetChoices(self._choicesMap[optType], optType)
+                elif self._choiceType == 'flag':
                     if len(itemtext) > 1:
                         prefix = '--'
                     else:
                         prefix = '-'
                     self.SetValue(' '.join(cmd[:-1]) + ' ' + prefix + itemtext)
+                elif self._choiceType in ('raster', 'vector'):
+                    self.SetValue(' '.join(cmd[:-1]) + ' ' + cmd[-1].split('=', 1)[0] + '=' + itemtext)
             else:
                 # -> reset text
-                self.SetValue(itemtext)
+                self.SetValue(itemtext + ' ')
             self.SetInsertionPointEnd()
             
             self._showDropDown(False)
@@ -265,18 +273,21 @@ class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
         """Method required by listmix.ColumnSorterMixin"""
         return self.dropdownlistbox
     
-    def SetChoices(self, choices):
+    def SetChoices(self, choices, type = 'module'):
         """
         Sets the choices available in the popup wx.ListBox.
         The items will be sorted case insensitively.
         """
         self._choices = choices
+        self._choiceType = type
         
         self.dropdownlistbox.SetWindowStyleFlag(wx.LC_REPORT | wx.LC_SINGLE_SEL | \
                                                     wx.LC_SORT_ASCENDING | wx.LC_NO_HEADER)
         if not isinstance(choices, list):
             self._choices = [ x for x in choices ]
-        utils.ListSortLower(self._choices)
+        if self._choiceType not in ('raster', 'vector'):
+            # do not sort raster/vector maps
+            utils.ListSortLower(self._choices)
         
         self._updateDataList(self._choices)
         
@@ -321,8 +332,6 @@ class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
         """Text entered"""
         text = event.GetString()
         
-        ### if self._entryCallback:
-        ###    self._entryCallback()
         if not text:
             # control is empty; hide dropdown if shown:
             if self.dropdown.IsShown():
@@ -331,34 +340,36 @@ class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
             return
         
         cmd = shlex.split(str(text))
+        pattern = str(text)
         if len(cmd) > 1:
             # search for module's options
             if not self._module:
                 self._module = menuform.GUI().ParseInterface(cmd = cmd)
-            
-            if cmd[-1][0] == '-':
-                # -> flags
-                self.SetChoices(self._module.get_list_flags())
-                self._params = False
+            if len(cmd[-1].split('=', 1)) == 1:
+                # new option
+                if cmd[-1][0] == '-':
+                    # -> flags
+                    self.SetChoices(self._module.get_list_flags(), type = 'flag')
+                    pattern = cmd[-1].lstrip('-')
+                else:
+                    # -> options
+                    self.SetChoices(self._module.get_list_params(), type = 'param')
+                    pattern = cmd[-1]
             else:
-                # -> options
-                self.SetChoices(self._module.get_list_params())
-                self._params = True
+                # value
+                pattern = cmd[-1].split('=', 1)[1]
         else:
             # search for GRASS modules
             if self._module:
                 # -> switch back to GRASS modules list
                 self.SetChoices(self._choicesCmd)
                 self._module = None
-                self._params = None
+                self._choiceType = None
         
         found = False
         choices = self._choices
         for numCh, choice in enumerate(choices):
-            ### if self._matchFunction and self._matchFunction(text, choice):
-            ###    found = True
-            ### elif
-            if choice.lower().startswith(cmd[-1].lower().lstrip('-')):
+            if choice.lower().startswith(pattern):
                 found = True
             if found:
                 self._showDropDown(True)
@@ -397,10 +408,7 @@ class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
                 self._listItemVisible()
             self._showDropDown ()
             skip = False
-        elif KC == wx.WXK_LEFT:
-            return
-        elif KC == wx.WXK_RIGHT:
-            return 
+        
         if visible:
             if event.GetKeyCode() == wx.WXK_RETURN:
                 self._setValueFromSelected()
@@ -408,7 +416,7 @@ class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
             if event.GetKeyCode() == wx.WXK_ESCAPE:
                 self._showDropDown(False)
                 skip = False
-        if skip :
+        if skip:
             event.Skip()
         
     def OnControlChanged(self, event):

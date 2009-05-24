@@ -126,7 +126,7 @@ class GMFrame(wx.Frame):
         # creating widgets
         # -> self.notebook, self.goutput, self.outpage
         self.notebook  = self.__createNoteBook()
-        self.cmdprompt = self.__createCommandPrompt()
+        self.cmdprompt, self.cmdinput = self.__createCommandPrompt()
         self.menubar   = self.__createMenuBar()
         self.toolbar   = self.__createToolBar()
         self.statusbar = self.CreateStatusBar(number=1)
@@ -154,7 +154,8 @@ class GMFrame(wx.Frame):
         self._auimgr.Update()
 
         wx.CallAfter(self.notebook.SetSelection, 0)
-
+        wx.CallAfter(self.cmdinput.SetFocus)
+        
         # use default window layout ?
         if UserSettings.Get(group='general', key='defWindowPos', subkey='enabled') is True:
             dim = UserSettings.Get(group='general', key='defWindowPos', subkey='dim')
@@ -193,7 +194,9 @@ class GMFrame(wx.Frame):
         
     def __createCommandPrompt(self):
         """Creates command-line input area"""
-        return prompt.GPrompt(self).GetPanel()
+        p = prompt.GPrompt(self)
+
+        return p.GetPanel(), p.GetInput()
     
     def __createMenuBar(self):
         """Creates menubar"""
