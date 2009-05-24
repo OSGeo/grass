@@ -8,6 +8,9 @@ Classes:
  - PromptListCtrl
  - TextCtrlAutoComplete
 
+@todo: fix TextCtrlAutoComplete to work also on Macs (missing
+wx.PopupWindow())
+
 (C) 2009 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
@@ -18,6 +21,7 @@ for details.
 
 import sys
 import shlex
+import platform
 
 import wx
 import wx.lib.mixins.listctrl as listmix
@@ -41,11 +45,19 @@ class GPrompt:
         label = wx.Button(parent = cmdprompt, id = wx.ID_ANY,
                           label = _("Cmd >"), size = (-1, 25))
         label.SetToolTipString(_("Click for erasing command prompt"))
-        
-        cmdinput = TextCtrlAutoComplete(parent = cmdprompt, id = wx.ID_ANY,
-                                        value = "",
-                                        style = wx.TE_LINEWRAP | wx.TE_PROCESS_ENTER,
-                                        size = (-1, 25))
+
+        ### todo: fix TextCtrlAutoComplete to work also on Macs
+        ### reason: missing wx.PopupWindow()
+        if not platform.mac_ver()[0]:
+            cmdinput = TextCtrlAutoComplete(parent = cmdprompt, id = wx.ID_ANY,
+                                            value = "",
+                                            style = wx.TE_LINEWRAP | wx.TE_PROCESS_ENTER,
+                                            size = (-1, 25))
+        else:
+            cmdinput = wx.TextCtrl(parent = cmdprompt, id = wx.ID_ANY,
+                                   value = "",
+                                   style=wx.TE_LINEWRAP | wx.TE_PROCESS_ENTER,
+                                   size = (-1, 25))
         
         cmdinput.SetFont(wx.Font(10, wx.FONTFAMILY_MODERN, wx.NORMAL, wx.NORMAL, 0, ''))
         
