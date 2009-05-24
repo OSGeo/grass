@@ -355,21 +355,23 @@ class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
         pattern = str(text)
         if len(cmd) > 1:
             # search for module's options
-            if not self._module:
+            if cmd[0] in self._choicesCmd and not self._module:
                 self._module = menuform.GUI().ParseInterface(cmd = cmd)
-            if len(cmd[-1].split('=', 1)) == 1:
-                # new option
-                if cmd[-1][0] == '-':
-                    # -> flags
-                    self.SetChoices(self._module.get_list_flags(), type = 'flag')
-                    pattern = cmd[-1].lstrip('-')
+
+            if self._module:
+                if len(cmd[-1].split('=', 1)) == 1:
+                    # new option
+                    if cmd[-1][0] == '-':
+                        # -> flags
+                        self.SetChoices(self._module.get_list_flags(), type = 'flag')
+                        pattern = cmd[-1].lstrip('-')
+                    else:
+                        # -> options
+                        self.SetChoices(self._module.get_list_params(), type = 'param')
+                        pattern = cmd[-1]
                 else:
-                    # -> options
-                    self.SetChoices(self._module.get_list_params(), type = 'param')
-                    pattern = cmd[-1]
-            else:
-                # value
-                pattern = cmd[-1].split('=', 1)[1]
+                    # value
+                    pattern = cmd[-1].split('=', 1)[1]
         else:
             # search for GRASS modules
             if self._module:
