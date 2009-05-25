@@ -71,7 +71,7 @@
 
 import sys
 import os
-from grass.script import core as grass
+from grass.script import core as grass, raster
 
 def make_frame(f, b, t, l, r):
     (ft, fb, fl, fr) = f
@@ -123,7 +123,7 @@ def main():
     else:
 	lmap = map
 
-    kv = grass.raster_info(map = lmap)
+    kv = raster.raster_info(map = lmap)
     if kv['datatype'] is 'CELL':
 	leg_at = None
     else:
