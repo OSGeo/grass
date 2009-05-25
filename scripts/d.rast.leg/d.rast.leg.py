@@ -52,11 +52,11 @@
 #% key: map
 #% type: string
 #% gisprompt: old,cell,raster
-#% description: Name of raster map
+#% description: Name of raster map to display
 #% required : yes
 #%end
 #%option
-#% key: num_of_lines
+#% key: lines
 #% type: integer
 #% description: Number of lines to appear in the legend
 #% required : no
@@ -90,7 +90,7 @@ def make_frame(f, b, t, l, r):
 
 def main():
     map = options['map']
-    nlines = options['num_of_lines']
+    nlines = options['lines']
     rast = options['rast']
     omit = flags['n']
     flip = flags['f']
@@ -110,7 +110,8 @@ def main():
     os.environ['GRASS_PNG_READ'] = 'TRUE'
 
     #draw title
-    make_frame(f, 90, 100, 65, 100)
+    # set vertical divide at 65 instead of 80 if real labels in cats/ file??
+    make_frame(f, 90, 100, 80, 100)
     grass.write_command('d.text', color = 'black', size = 30, stdin = map)
 
     #draw legend
@@ -122,6 +123,12 @@ def main():
     else:
 	lmap = map
 
+    kv = grass.raster_info(map = lmap)
+    if kv['datatype'] is 'CELL':
+	leg_at = None
+    else:
+	leg_at = '7,93,3,18'	
+
     histfiledir = grass.find_file(lmap, 'cell_misc')['file']
     has_hist = os.path.isfile(os.path.join(histfiledir, 'histogram'))
 
@@ -132,7 +139,7 @@ def main():
 	lflags += 'n'
 
     make_frame(f, 0, 90, 65, 100)
-    grass.run_command('d.legend', flags = lflags, map = lmap, lines = nlines)
+    grass.run_command('d.legend', flags = lflags, map = lmap, lines = nlines, at = leg_at)
 
     #draw map
     make_frame(f, 0, 100, 0, 65)
