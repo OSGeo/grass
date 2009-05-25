@@ -38,7 +38,11 @@ following rules:
 3.  Add a header section to each file you submit and make sure you include
     the copyright. The purpose section is meant to contain a general
     overview of the code in the file to assist other programmers that will
-    need to make changes to your code.
+    need to make changes to your code. If you are modifying an existing
+    file you may under no circumstances remove prior copyright or licensing
+    text that is not your own, even for a major rewrite. If any original
+    code or code that is in part derived from another's original work
+    remains, it must be properly cited.
 
     Example (ficticious header for a file called color.c) :
 
@@ -238,6 +242,7 @@ following rules:
     commit! Do add the indent switches and any indent warning messages to the 
     SVN log. Any change or fix mixed in with an indent is very hard to track 
     making it hard for others to follow the change or fix any new bugs.
+    For your convenience use the tools/grass_indent.sh script.
 
 
 16. Platform dependent code:
@@ -307,7 +312,7 @@ following rules:
 
 23. Add/update, if required the related GUI menus:
      gui/tcltk/gis.m/gmmenu.tcl
-     gui/wxpython/gui_modules/menudata.py
+     gui/wxpython/xml/menudata.xml
 
 
 24. For consistency, use README rather than README.txt for any README files.
@@ -417,6 +422,7 @@ following rules:
       Makefiles: text/x-makefile
       PNG files (.png): image/png
       Python files (.py): text/x-python
+      Shell scripts (.sh): text/x-sh
       Text files (.txt): text/plain
       XML files (.xml): text/xml
       
