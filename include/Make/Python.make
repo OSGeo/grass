@@ -1,7 +1,12 @@
 
 PYTHON = python
-PYMOD_LD = $(SHLIB_LD)
-PYMOD_LDFLAGS = $(SHLIB_LDFLAGS) -L$(ARCH_LIBDIR) $(PYTHONLDFLAGS)
+PYMOD_LD = $(CXX) -shared
+PYMOD_LDFLAGS = $(SHLIB_LDFLAGS) -L$(ARCH_LIBDIR)
+ifeq ($(findstring darwin,$(ARCH)),darwin)
+PYMOD_LDFLAGS := $(PYMOD_LDFLAGS) -bundle -undefined dynamic_lookup
+else
+PYMOD_LDFLAGS := $(PYMOD_LDFLAGS) $(PYTHONLDFLAGS)
+endif
 PYMOD_CFLAGS = $(SHLIB_CFLAGS) $(PYTHONINC) $(PYTHON_CFLAGS)
 
 %.pyc: %.py
