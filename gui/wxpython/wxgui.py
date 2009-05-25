@@ -488,9 +488,9 @@ class GMFrame(wx.Frame):
         copyrightFile = open(os.path.join(os.getenv("GISBASE"), "COPYING"), 'r')
         copyrightOut = []
         copyright = copyrightFile.readlines()
-        info.SetCopyright('GIS Library: '+ svn_gis_h_rev + '(' + svn_gis_h_date.split(' ')[1] + ')' + 
+        info.SetCopyright('GIS Library '+ svn_gis_h_rev + '(' + svn_gis_h_date.split(' ')[1] + ')' + 
                           '\n\n' + wordwrap(''.join(copyright[:11] + copyright[26:-3]),
-                                                  550, wx.ClientDC(self)))
+                                                  575, wx.ClientDC(self)))
         copyrightFile.close()
         # website
         info.SetWebSite(("http://grass.osgeo.org", _("The official GRASS site")))
