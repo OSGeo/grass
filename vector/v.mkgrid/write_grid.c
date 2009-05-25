@@ -5,7 +5,7 @@
 #include "grid_structs.h"
 #include "local_proto.h"
 
-int write_grid(struct grid_description *grid_info, struct Map_info *Map)
+int write_grid(struct grid_description *grid_info, struct Map_info *Map, int nbreaks)
 {
 
     int i, k, j;
@@ -35,8 +35,8 @@ int write_grid(struct grid_description *grid_info, struct Map_info *Map)
      * to make sure that each section of the grid
      * line is less than half way around the globe
      */
-    x_len = length / 3.;
-    x_cols = cols * 3.;
+    x_len = length / (1. * nbreaks);
+    x_cols = cols * (1. * nbreaks);
 
     /* write out all the vector lengths (x vectors) of the entire grid  */
     G_verbose_message(_("Writing out vector rows..."));
@@ -50,8 +50,8 @@ int write_grid(struct grid_description *grid_info, struct Map_info *Map)
 
 	for (k = 0; k < cols; k++) {
 	    x = startx;
-	    for (j = 0; j < 3; j++) {
-		if (j < 2)
+	    for (j = 0; j < nbreaks; j++) {
+		if (j < nbreaks -1)
 		    next_x = x + x_len;
 		else
 		    next_x = startx + length;
@@ -113,8 +113,8 @@ static double yarray[10];
 
 #define  NUM_POINTS  2
 
-int write_vect(double x1, double y1, double x2, double y2, struct Map_info *Map, struct line_pnts *Points	/* new with Vlib */
-    )
+int write_vect(double x1, double y1, double x2, double y2,
+	       struct Map_info *Map, struct line_pnts *Points) /* new with Vlib */
 {
     static struct line_cats *Cats = NULL;
 
