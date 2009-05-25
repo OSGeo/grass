@@ -828,75 +828,6 @@ AC_SUBST(USE_PNG)
 
 # Done checking PNG
 
-# Enable TCLTK option
-
-LOC_CHECK_USE(tcltk,Tcl/Tk,USE_TCLTK)
-
-TCLINCDIR=
-TCLTKLIBPATH=
-TCLTKLIBS=
-
-if test -n "$USE_TCLTK"; then
-
-# With Tcl/Tk includes directory
-
-LOC_CHECK_INC_PATH(tcltk,Tcl/Tk,TCLINCDIR)
-
-LOC_CHECK_INCLUDES(tcl.h,Tcl,$TCLINCDIR)
-
-LOC_CHECK_INCLUDES(tk.h,Tk,$TCLINCDIR $X_CFLAGS)
-
-# Tcl/Tk version checks
-
-LOC_CHECK_VERSION_STRING(tcl.h,TCL_VERSION,Tcl,tcl_ver,$TCLINCDIR,UNKNOWN)
-
-LOC_CHECK_VERSION_STRING(tk.h,TK_VERSION,Tk,tk_ver,$TCLINCDIR $X_CFLAGS,UNKNOWN)
-
-if test "$tcl_ver" = "$tk_ver" ; then
-    tcltk_ver=$tcl_ver
-else
-    AC_MSG_ERROR([*** Tcl/Tk version mismatch.])
-fi
-
-# FreeBSD and CygWin don't have a "dot" between major/minor version number
-tcltk_ver2=`echo $tcltk_ver | sed 's/\.//g'`
-
-# With Tcl/Tk library directory
-
-LOC_CHECK_LIB_PATH(tcltk,Tcl/Tk,TCLTKLIBPATH)
-
-TCLLIB=
-TKLIB=
-
-LOC_CHECK_LIBS(tcl,           Tcl_Init,Tcl,$TCLTKLIBPATH,TCLLIB,,$MATHLIB,[
-LOC_CHECK_LIBS(tcl$tcltk_ver, Tcl_Init,Tcl,$TCLTKLIBPATH,TCLLIB,,$MATHLIB,[
-LOC_CHECK_LIBS(tcl$tcltk_ver2,Tcl_Init,Tcl,$TCLTKLIBPATH,TCLLIB,,$MATHLIB,[
-],$DLLIB)
-],$DLLIB)
-],$DLLIB)
-
-LOC_CHECK_LIBS(tk,           Tk_MainWindow,Tk,$TCLTKLIBPATH,TKLIB,$TCLLIB,$MATHLIB,[
-LOC_CHECK_LIBS(tk$tcltk_ver, Tk_MainWindow,Tk,$TCLTKLIBPATH,TKLIB,$TCLLIB,$MATHLIB,[
-LOC_CHECK_LIBS(tk$tcltk_ver2,Tk_MainWindow,Tk,$TCLTKLIBPATH,TKLIB,$TCLLIB,$MATHLIB,[
-],$X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS)
-],$X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS)
-],$X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS)
-
-
-TCLTKLIBS="$TKLIB $TCLLIB"
-AC_DEFINE(HAVE_TCLTK)
-
-fi # $USE_TCLTK
-
-TKINCDIR=$TCLINCDIR
-
-AC_SUBST(TCLINCDIR)
-AC_SUBST(TKINCDIR)
-AC_SUBST(TCLTKLIBPATH)
-AC_SUBST(TCLTKLIBS)
-
-# Done checking Tcl/Tk
-
 # Enable PostgreSQL option
 
 LOC_CHECK_USE(postgres,PostgreSQL,USE_POSTGRES)
@@ -1083,7 +1014,6 @@ AC_SUBST(FFMPEGLIB)
 
 # Done checking FFMPEG
 
-
 # Enable OpenGL option
 
 OPENGLINC=
@@ -1201,6 +1131,100 @@ AC_SUBST(OPENGLLIB)
 AC_SUBST(OPENGLULIB)
 
 # Done checking OpenGL
+
+# Enable TCLTK option
+
+LOC_CHECK_USE(tcltk,Tcl/Tk,USE_TCLTK)
+
+TCLINCDIR=
+TCLTKLIBPATH=
+TCLTKLIBS=
+
+if test -n "$USE_TCLTK"; then
+
+# With Tcl/Tk includes directory
+
+LOC_CHECK_INC_PATH(tcltk,Tcl/Tk,TCLINCDIR)
+
+LOC_CHECK_INCLUDES(tcl.h,Tcl,$TCLINCDIR)
+
+LOC_CHECK_INCLUDES(tk.h,Tk,$TCLINCDIR $X_CFLAGS)
+
+# Tcl/Tk version checks
+
+LOC_CHECK_VERSION_STRING(tcl.h,TCL_VERSION,Tcl,tcl_ver,$TCLINCDIR,UNKNOWN)
+
+LOC_CHECK_VERSION_STRING(tk.h,TK_VERSION,Tk,tk_ver,$TCLINCDIR $X_CFLAGS,UNKNOWN)
+
+if test "$tcl_ver" = "$tk_ver" ; then
+    tcltk_ver=$tcl_ver
+else
+    AC_MSG_ERROR([*** Tcl/Tk version mismatch.])
+fi
+
+# FreeBSD and CygWin don't have a "dot" between major/minor version number
+tcltk_ver2=`echo $tcltk_ver | sed 's/\.//g'`
+
+# With Tcl/Tk library directory
+
+LOC_CHECK_LIB_PATH(tcltk,Tcl/Tk,TCLTKLIBPATH)
+
+TCLLIB=
+TKLIB=
+
+# Can't test tcl/tk libs on 64bit OSX Aqua for now
+# assume that if OpenGL Aqua, then user specifies TclTk Aqua,
+# as there is no test for Tcl/Tk Aqua and Tck/Tk X11 won't work
+TCLTKAQUA_IS64BIT=
+if test "$OPENGL_AQUA" = 1 ; then
+    temp_CFLAGS="$CFLAGS"
+    CFLAGS="`echo \"$CFLAGS\" | sed -E 's/-arch +x86_64//g' | sed -E 's/-arch +ppc64//g'`"
+    # can't save LDFLAGS, need to remember arch flags to insert back later
+    temp_ARCHES=
+    for a in x86_64 ppc64
+    do
+        if test -n "`echo \"$LDFLAGS\" | grep -E -e '-arch +'$a`" ; then
+            temp_ARCHES="$temp_ARCHES -arch $a"
+        fi
+    done
+    LDFLAGS="`echo \"$LDFLAGS\" | sed -E 's/-arch +x86_64//g' | sed -E 's/-arch +ppc64//g'`"
+fi
+
+LOC_CHECK_LIBS(tcl,           Tcl_Init,Tcl,$TCLTKLIBPATH,TCLLIB,,$MATHLIB,[
+LOC_CHECK_LIBS(tcl$tcltk_ver, Tcl_Init,Tcl,$TCLTKLIBPATH,TCLLIB,,$MATHLIB,[
+LOC_CHECK_LIBS(tcl$tcltk_ver2,Tcl_Init,Tcl,$TCLTKLIBPATH,TCLLIB,,$MATHLIB,[
+],$DLLIB)
+],$DLLIB)
+],$DLLIB)
+
+LOC_CHECK_LIBS(tk,           Tk_MainWindow,Tk,$TCLTKLIBPATH,TKLIB,$TCLLIB,$MATHLIB,[
+LOC_CHECK_LIBS(tk$tcltk_ver, Tk_MainWindow,Tk,$TCLTKLIBPATH,TKLIB,$TCLLIB,$MATHLIB,[
+LOC_CHECK_LIBS(tk$tcltk_ver2,Tk_MainWindow,Tk,$TCLTKLIBPATH,TKLIB,$TCLLIB,$MATHLIB,[
+],$X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS)
+],$X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS)
+],$X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS)
+
+# restore CFLAGS/LDLFAGS from Aqua 64bit strip
+# only Tcl/Tk-based makefiles will strip 64bit out during compile
+if test "$OPENGL_AQUA" = 1 ; then
+   CFLAGS="$temp_CFLAGS"
+   LDFLAGS="$temp_ARCHES $LDFLAGS"
+fi
+
+TCLTKLIBS="$TKLIB $TCLLIB"
+AC_DEFINE(HAVE_TCLTK)
+
+fi # $USE_TCLTK
+
+TKINCDIR=$TCLINCDIR
+
+AC_SUBST(TCLINCDIR)
+AC_SUBST(TKINCDIR)
+AC_SUBST(TCLTKLIBPATH)
+AC_SUBST(TCLTKLIBS)
+AC_SUBST(TCLTKAQUA_IS64BIT)
+
+# Done checking Tcl/Tk
 
 # Enable ODBC option
 
