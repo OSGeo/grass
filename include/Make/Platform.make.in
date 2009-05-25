@@ -173,6 +173,8 @@ TKINCDIR            = @TKINCDIR@
 TCLTKLIBPATH        = @TCLTKLIBPATH@
 TCLTKLIBS           = @TCLTKLIBS@
 USE_TCLTK           = @USE_TCLTK@
+# set from configure when 64bit TclTk Aqua becomes possible on OSX
+TCLTKAQUA_IS64BIT    = @TCLTKAQUA_IS64BIT@
 
 #FFTW:
 FFTWINC             = @FFTWINC@
