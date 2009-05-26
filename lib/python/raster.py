@@ -51,11 +51,21 @@ def raster_history(map):
 # run "r.info -rgstmpud ..." and parse output
 
 def raster_info(map):
-    """Return information about a raster map (interface to `r.info').
+    """Return information about a raster map (interface to
+    `r.info'). Example:
+
+    \code
+    >>> grass.raster_info('elevation')
+    {'north': 228500.0, 'timestamp': '"none"', 'min': 55.578792572021499,
+    'datatype': 'FCELL', 'max': 156.32986450195301, 'ewres': 10.0,
+    'vertical_datum': '', 'west': 630000.0, 'units': '',
+    'title': 'South-West Wake county: Elevation NED 10m (elev_ned10m)',
+    'east': 645000.0, 'nsres': 10.0, 'south': 215000.0}
+    \endcode
 
     @param map map name
     
-    @return parsed modile output
+    @return parsed raster info
     """
     s = read_command('r.info', flags = 'rgstmpud', map = map)
     kv = parse_key_val(s)

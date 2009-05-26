@@ -189,5 +189,49 @@ Returns the name of a temporary file, created with g.tempfile.
 
  - float_or_dms()
 
+\section db Database
+
+Interface for <tt>db.*</tt> modules.
+
+\code
+from grass.script import db as grass
+\endcode
+
+ - db_connection()
+
+ - db_describe()
+
+\section raster Raster
+
+Interface for <tt>r.*</tt> modules.
+
+\code
+from grass.script import raster as grass
+\endcode
+
+ - raster_history()
+
+ - raster_info()
+
+ - mapcalc()
+
+\section vector Vector
+
+Interface for <tt>v.*</tt> modules.
+
+\code
+from grass.script import vector as grass
+\endcode
+
+ - vector_columns()
+
+ - vector_db()
+
+ - vector_history()
+
+ - vector_info_topo()
+
+ - vector_layer_db()
+
 */
 

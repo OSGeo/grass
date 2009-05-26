@@ -32,7 +32,14 @@ from core import *
 
 def vector_db(map, **args):
     """Return the database connection details for a vector map
-    (interface to `v.db.connect -g').
+    (interface to `v.db.connect -g'). Example:
+    
+    \code
+    >>> grass.vector_db('lakes')
+    {1: {'layer': '1', 'name': '',
+    'database': '/home/martin/grassdata/nc_spm_08/PERMANENT/dbf/',
+    'driver': 'dbf', 'key': 'cat', 'table': 'lakes'}}
+    \endcode
 
     @param map vector map
     @param args
@@ -117,8 +124,16 @@ def vector_history(map):
 # run "v.info -t" and parse output
 
 def vector_info_topo(map):
-    """Return information about a vector map (interface to `v.info -t').
+    """Return information about a vector map (interface to `v.info
+    -t'). Example:
 
+    \code
+    >>> grass.vector_info_topo('lakes')
+    {'kernels': 0, 'lines': 0, 'centroids': 15279,
+    'boundaries': 27764, 'points': 0, 'faces': 0,
+    'primitives': 43043, 'islands': 7470, 'nodes': 35234, 'map3d': 0, 'areas': 15279}
+    \endcode
+    
     @param map map name
 
     @return parsed output
