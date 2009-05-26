@@ -1,22 +1,31 @@
-/*! \page pythonlib GRASS 7 Python scripting library
+/*! \page pythonlib GRASS Python scripting library
 
 by GRASS Development Team (http://grass.osgeo.org)
 
 \section intro Introduction
 
-The code in lib/python/ provides "grass.script" in order to support GRASS 
-scripts written in Python. The scripts/ directory of GRASS contains a
-series of examples actually provided to the end users.
+The code in <tt>lib/python/</tt> provides <b>grass.script</b> in order
+to support GRASS scripts written in Python. The <tt>scripts/</tt>
+directory of GRASS contains a series of examples actually provided to
+the end users.
 
 See code in:
-<ul>
-<li>core.py</li>
-<li>db.py</li>
-<li>raster.py</li>
-<li>vector.py</li>
-</ul>
 
-\section scripting GRASS scripting tasks for Python provided by "grass.script".
+ - core.py
+ - db.py
+ - raster.py
+ - vector.py
+
+<h2>Table of content</h2>
+
+ - \subpage scripting
+ - \subpage modules
+  - \subpage core
+  - \subpage db
+  - \subpage raster
+  - \subpage vector
+
+\section scripting GRASS scripting tasks for Python provided by "grass.script"
 
 Usage:
 
@@ -24,112 +33,95 @@ Usage:
 from grass.script import core[,db[,raster,[vector]]] as grass
 \endcode
 
-\section make_command
+e.g. to import functions from "core" and "vector" modules use
 
 \code
-def make_command(prog, flags = "", overwrite = False, quiet = False, verbose = False, **options):
+from grass.script import core, vector as grass
 \endcode
 
-Return a list of strings suitable for use as the args parameter to
-Popen() or call(). Example:
+Sample script
 
 \code
->>> grass.make_command("g.message", flags = 'w', message = 'this is a warning')
-['g.message', '-w', 'message=this is a warning']
+#!/usr/bin/env python
+
+#%Module
+#% description: Checks if vector map is 3D
+#% keywords: vector
+#%End
+#%option
+#% key: map
+#% type: string
+#% gisprompt: old,vector,vector
+#% key_desc: name
+#% description: Name of vector map 
+#% required: yes
+#%end
+
+import sys
+from grass.script import core as grass
+
+def main():
+    info = grass.parse_command('v.info',
+                               flags = 't',
+                               map = options['map'])
+    if info['map3d'] == '1':
+        print 'Vector map is 3D'
+    else:
+        print 'Vector map is 2D'
+
+    return 0
+
+if __name__ == "__main__":
+    options, flags = grass.parser()
+    sys.exit(main())
 \endcode
 
+\section modules List of modules
 
-\section start_command
-\code
-def start_command(prog, flags = "", overwrite = False, quiet = False, verbose = False, **kwargs):
-\endcode
+\subsection core Core
 
-Returns a Popen object with the command created by make_command.
-Accepts any of the arguments which Popen() accepts apart from "args"
-and "shell". Example:
+<b>GRASS-oriented interface to subprocess module</b>
 
-\code
->>> p = grass.start_command("g.gisenv", stdout = subprocess.PIPE)
->>> print p
-<subprocess.Popen object at 0xb7c12f6c>
->>> print p.communicate()[0]
-GISDBASE='/opt/grass-data';
-LOCATION_NAME='spearfish60';
-MAPSET='glynn';
-GRASS_DB_ENCODING='ascii';
-GRASS_GUI='text';
-MONITOR='x0';
-\endcode
+ - exec_command()
 
+ - feed_command()
 
-\section pipe_command
-\code
-def pipe_command(*args, **kwargs):
-\endcode
+ - make_command()
 
-Passes all arguments to start_command, but also adds
-"stdout = subprocess.PIPE". Returns the Popen object. Example:
+ - parse_command()
 
-\code
->>> p = grass.pipe_command("g.gisenv")
->>> print p
-<subprocess.Popen object at 0xb7c12f6c>
->>> print p.communicate()[0]
-GISDBASE='/opt/grass-data';
-LOCATION_NAME='spearfish60';
-MAPSET='glynn';
-GRASS_DB_ENCODING='ascii';
-GRASS_GUI='text';
-MONITOR='x0';
-\endcode
+ - pipe_command()
 
+ - read_command()
 
-\section run_command
-\code
-def run_command(*args, **kwargs):
-\endcode
+ - run_command()
 
-Passes all arguments to start_command, then waits for the process to
-complete, returning its exit code. Similar to subprocess.call(), but
-with the make_command() interface.
+ - start_command()
 
+ - write_command()
 
-\section read_command
-\code
-def read_command(*args, **kwargs):
-\endcode
+<b>Interface to g.message</b>
 
-Passes all arguments to start_command, then waits for the process to
-complete, returning its stdout (i.e. similar to shell "backticks").
+These all run g.message, differing only in which flag (if any) is
+used. fatal() is error(), but also calls sys.exit(1).
 
+ - debug()
 
-\section messages
-\code
-def message(msg, flag = None):
-def debug(msg):
-def verbose(msg):
-def info(msg):
-def warning(msg):
-def error(msg):
-\endcode
+ - error()
 
-These all run g.message, differing only in which flag (if any) is used.
+ - fatal()
 
+ - info()
 
-\section fatal
-\code
-def fatal(msg):
-\endcode
+ - message()
 
-Like error(), but also calls sys.exit(1).
+ - verbose()
 
+ - warning()
 
-\section parser
-\code
-def parser():
-\endcode
+<b>Interface to g.parser</b>
 
-Interface to g.parser, intended to be run from the top-level, e.g.:
+Interface to g.parser, intended to be run from the top-level, e.g.
 
 \code
 	if __name__ == "__main__":
@@ -137,144 +129,65 @@ Interface to g.parser, intended to be run from the top-level, e.g.:
 	    main()
 \endcode
 
-Thereafter, the global variables "options" and "flags" will be
-dictionaries containing option/flag values, keyed by lower-case
-option/flag names. The values in "options" are strings, those in
-"flags" are Python booleans.
+ - parser()
 
-
-\section tempfile
-\code
-def tempfile():
-\endcode
+<b>Interface to g.tempfile</b>
 
 Returns the name of a temporary file, created with g.tempfile.
 
+ - tempfile()
 
-\section gisenv
-\code
-def gisenv():
-\endcode
+<b>Key-value parsers</b>
 
-Returns the output from running g.gisenv (with no arguments), as a
-dictionary. Example:
+ - parse_key_val()
 
-\code
->>> env = grass.gisenv()
->>> print env['GISDBASE']
-/opt/grass-data
-\endcode
+<b>Interface to g.gisenv</b>
 
+ - gisenv()
 
-\section region
-\code
-def region():
-\endcode
+<b>Interface to g.region</b>
 
-Returns the output from running "g.region -g", as a dictionary. 
-Example:
+ - del_temp_region()
 
-\code
->>> region = grass.region()
->>> [region[key] for key in "nsew"]
-['4928000', '4914020', '609000', '590010']
->>> (region['nsres'], region['ewres'])
-('30', '30')
-\endcode
+ - region()
 
+ - use_temp_region()
 
-\section use_temp_region
-\code
-def use_temp_region():
-\endcode
+<b>Interface to g.findfile</b>
 
-Copies the current region to a temporary region with "g.region save=",
-then sets WIND_OVERRIDE to refer to that region. Installs an atexit
-handler to delete the temporary region upon termination.
+ - find_file()
 
+<b>Interface to g.list</b>
 
-\section del_temp_region
-\code
-def del_temp_region():
-\endcode
+ - list_grouped()
 
-Unsets WIND_OVERRIDE and removes any region named by it.
+ - list_pairs()
 
+ - list_strings()
 
-\section find_file
-\code
-def find_file(name, element = 'cell'):
-\endcode
+ - mlist_grouped()
 
-Returns the output from running g.findfile as a dictionary. Example:
+<b>Color parsing</b>
 
-\code
->>> result = grass.find_file('fields', element = 'vector')
->>> print result['fullname']
-fields@PERMANENT
->>> print result['file']
-/opt/grass-data/spearfish60/PERMANENT/vector/fields
-\endcode
+ - parse_color()
 
+<b>Check GRASS environment variables</b>
 
-\section list_grouped
-\code
-def list_grouped(type):
-\endcode
+ - overwrite()
 
-Returns the output from running g.list, as a dictionary where the keys
-are mapset names and the values are lists of maps in that mapset. 
-Example:
+ - verbosity()
 
-\code
->>> grass.list_grouped('rast')['PERMANENT']
-['aspect', 'erosion1', 'quads', 'soils', 'strm.dist', ...
-\endcode
+<b>Various utilities, not specific to GRASS</b>
+ 
+ - basename()
 
+ - find_program()
 
-\section list_pairs
-\code
-def list_pairs(type):
+ - try_remove()
 
-Returns the output from running g.list, as a list of (map, mapset)
-pairs. Example:
+ - try_rmdir()
 
-\code
->>> grass.list_pairs('rast')
-[('aspect', 'PERMANENT'), ('erosion1', 'PERMANENT'), ('quads', 'PERMANENT'), ...
-\endcode
-
-
-\section list_strings
-\code
-def list_strings(type):
-\endcode
-
-Returns the output from running g.list, as a list of qualified names. 
-Example:
-
-\code
->>> grass.list_strings('rast')
-['aspect@PERMANENT', 'erosion1@PERMANENT', 'quads@PERMANENT', 'soils@PERMANENT', ...
-\endcode
-
-
-\section parse_color
-\code
-def parse_color(val, dflt = None):
-\endcode
-
-Parses the string "val" as a GRASS colour, which can be either one of
-the named colours or an R:G:B tuple e.g. 255:255:255. Returns an
-(r,g,b) triple whose components are floating point values between 0
-and 1. Example:
-
-\code
->>> grass.parse_color("red")
-(1.0, 0.0, 0.0)
->>> grass.parse_color("255:0:0")
-(1.0, 0.0, 0.0)
-\endcode
+ - float_or_dms()
 
 */
 

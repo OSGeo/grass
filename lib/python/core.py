@@ -108,6 +108,19 @@ def start_command(prog, flags = "", overwrite = False, quiet = False, verbose = 
     Accepts any of the arguments which Popen() accepts apart from "args"
     and "shell".
 
+    \code
+    >>> p = grass.start_command("g.gisenv", stdout = subprocess.PIPE)
+    >>> print p
+    <subprocess.Popen object at 0xb7c12f6c>
+    >>> print p.communicate()[0]
+    GISDBASE='/opt/grass-data';
+    LOCATION_NAME='spearfish60';
+    MAPSET='glynn';
+    GRASS_DB_ENCODING='ascii';
+    GRASS_GUI='text';
+    MONITOR='x0';
+    \endcode
+    
     @param prog GRASS module
     @param flag flags to be used
     @param overwrite True to enable overwriting the output (--o)
@@ -144,6 +157,19 @@ def pipe_command(*args, **kwargs):
     """Passes all arguments to start_command, but also adds
     "stdout = PIPE". Returns the Popen object.
 
+    \code
+    >>> p = grass.pipe_command("g.gisenv")
+    >>> print p
+    <subprocess.Popen object at 0xb7c12f6c>
+    >>> print p.communicate()[0]
+    GISDBASE='/opt/grass-data';
+    LOCATION_NAME='spearfish60';
+    MAPSET='glynn';
+    GRASS_DB_ENCODING='ascii';
+    GRASS_GUI='text';
+    MONITOR='x0';
+    \endcode
+    
     @param args
     @param kwargs
 
@@ -410,7 +436,15 @@ def parse_key_val(s, sep = '=', dflt = None, val_type = None, vsep = None):
 
 def gisenv():
     """Returns the output from running g.gisenv (with no arguments), as a
-    dictionary.
+    dictionary. Example:
+
+    \code
+    >>> env = grass.gisenv()
+    >>> print env['GISDBASE']
+    /opt/grass-data
+    \endcode
+
+    @return list of GRASS variables
     """
     s = read_command("g.gisenv", flags='n')
     return parse_key_val(s)
@@ -418,7 +452,19 @@ def gisenv():
 # interface to g.region
 
 def region():
-    """Returns the output from running "g.region -g", as a dictionary."""
+    """Returns the output from running "g.region -g", as a
+    dictionary. Example:
+
+    \code
+    >>> region = grass.region()
+    >>> [region[key] for key in "nsew"]
+    ['4928000', '4914020', '609000', '590010']
+    >>> (region['nsres'], region['ewres'])
+    ('30', '30')
+    \endcode
+
+    @return dictionary of region values
+    """
     s = read_command("g.region", flags='g')
     return parse_key_val(s, val_type = float)
 
@@ -443,8 +489,17 @@ def del_temp_region():
 # interface to g.findfile
 
 def find_file(name, element = 'cell', mapset = None):
-    """Returns the output from running g.findfile as a dictionary.
+    """Returns the output from running g.findfile as a
+    dictionary. Example:
 
+    \code
+    >>> result = grass.find_file('fields', element = 'vector')
+    >>> print result['fullname']
+    fields@PERMANENT
+    >>> print result['file']
+    /opt/grass-data/spearfish60/PERMANENT/vector/fields
+    \endcode
+    
     @param name file name
     @param element element type (default 'cell')
     @param mapset mapset name (default all mapsets in search path)
@@ -458,8 +513,13 @@ def find_file(name, element = 'cell', mapset = None):
 
 def list_grouped(type):
     """Returns the output from running g.list, as a dictionary where the keys
-    are mapset names and the values are lists of maps in that mapset.
+    are mapset names and the values are lists of maps in that mapset. Example:
 
+    \code
+    >>> grass.list_grouped('rast')['PERMANENT']
+    ['aspect', 'erosion1', 'quads', 'soils', 'strm.dist', ...
+    \endcode
+    
     @param type element type
     """
     dashes_re = re.compile("^----+$")
@@ -512,17 +572,32 @@ def _concat(xs):
 
 def list_pairs(type):
     """Returns the output from running g.list, as a list of (map, mapset)
-    pairs.
+    pairs. Example:
+
+    \code
+    >>> grass.list_pairs('rast')
+    [('aspect', 'PERMANENT'), ('erosion1', 'PERMANENT'), ('quads', 'PERMANENT'), ...
+    \endcode
 
     @param type element type
+
+    @return list of tuples (map, mapset)
     """
     return _concat([[(map, mapset) for map in maps]
 		    for mapset, maps in list_grouped(type).iteritems()])
 
 def list_strings(type):
-    """Returns the output from running g.list, as a list of qualified names.
+    """Returns the output from running g.list, as a list of qualified
+    names. Example:
+
+    \code
+    >>> grass.list_strings('rast')
+    ['aspect@PERMANENT', 'erosion1@PERMANENT', 'quads@PERMANENT', 'soils@PERMANENT', ...
+    \endcode
 
     @param element type
+
+    @return list of strings ('map@mapset')
     """
     return ["%s@%s" % pair for pair in list_pairs(type)]
 
@@ -550,10 +625,19 @@ def parse_color(val, dflt = None):
     """Parses the string "val" as a GRASS colour, which can be either one of
     the named colours or an R:G:B tuple e.g. 255:255:255. Returns an
     (r,g,b) triple whose components are floating point values between 0
-    and 1.
+    and 1. Example:
+
+    \code
+    >>> grass.parse_color("red")
+    (1.0, 0.0, 0.0)
+    >>> grass.parse_color("255:0:0")
+    (1.0, 0.0, 0.0)
+    \endcode
 
     @param val color value
     @param dflt default color value
+
+    @return tuple RGB
     """
     if val in named_colors:
         return named_colors[val]
