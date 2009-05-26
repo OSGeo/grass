@@ -28,7 +28,15 @@ from core import *
 
 def db_describe(table, **args):
     """Return the list of columns for a database table
-    (interface to `db.describe -c').
+    (interface to `db.describe -c'). Example:
+
+    \code
+    >>> grass.db_describe('lakes')
+    {'nrows': 15279, 'cols': [['cat', 'INTEGER', '11'], ['AREA', 'DOUBLE PRECISION', '20'],
+    ['PERIMETER', 'DOUBLE PRECISION', '20'], ['FULL_HYDRO', 'DOUBLE PRECISION', '20'],
+    ['FULL_HYDR2', 'DOUBLE PRECISION', '20'], ['FTYPE', 'CHARACTER', '24'],
+    ['FCODE', 'INTEGER', '11'], ['NAME', 'CHARACTER', '99']], 'ncols': 8}
+    \endcode
 
     @param table table name
     @param args
@@ -58,7 +66,14 @@ def db_describe(table, **args):
 
 def db_connection():
     """Return the current database connection parameters
-    (interface to `db.connect -p').
+    (interface to `db.connect -p'). Example:
+
+    \code
+    >>> grass.db_connection()
+    {'group': 'x', 'schema': '', 'driver': 'dbf', 'database': '$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/'}
+    \endcode
+
+    @return parsed output of db.connect
     """
     s = read_command('db.connect', flags = 'p')
     return parse_key_val(s, sep = ':')
