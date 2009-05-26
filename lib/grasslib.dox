@@ -4,8 +4,6 @@
      * updated 8/2005, 2006, 2007, 2008
   -->
 
-<h2>GRASS 7 Programmer's Manual</h2>
-
 <a href="http://grass.osgeo.org">GRASS GIS</a> (Geographic Resources
 Analysis Support System) is an open source, Free Software
 <em>Geographical Information System</em> (GIS) with raster,
@@ -59,122 +57,107 @@ from GRASS 5 Programmer's manual) or are simply undocumented.</i>
 
 (the name refers to the directory name in lib/ in the source code)
 
-<ul>
- <li>gis: \ref gislib, with following subsection -
- <ul>
-   <li> \ref gisrasterlib
-   <li> \ref gisvectorlib
-   <li> Sites File Processing (legacy, merged into \ref gisvectorlib)
- </ul>
-</ul>
+ - gis: \ref gislib, with following subsection
+  - \ref gisrasterlib
+  - \ref gisvectorlib
+  - Sites File Processing (legacy, merged into \ref gisvectorlib)
 
 \section libs Further libraries
 
 (the name refers to the directory name in lib/ in the source code)
 
-<ul>
-<li>arraystats: Library of statistics for arrays of doubles - \ref arraystats (new, under development)
-<li>bitmap:	Bitmap library for X Window Bitmaps - \ref bitmap
-<li>btree:	Binary tree library - \ref btree
-<li>cairodriver: \ref cairodriver
-<li>cdhc:	Library for testing normality and exponentiality - \ref cdhc 
-<li>cluster:    Library for cluster analysis (image processing) - \ref cluster
-<li>datetime:	DateTime library - \ref datetime
-<li>db:		\ref dbmilib
-<li>display:	\ref displaylib
-<li>%driver:     Graphics monitor driver
-<li>dspf:       DSPF libary - \ref dspf (obsolete?)
-<li>edit:	Raster edit library (cellhd, history, cats) - \ref edit
-<li>external:	External libraries from other projects (such as shapelib) - \ref external
-<li>fonts:	Hershey library - \ref fonts
-<li>g3d:	\ref g3dlib
-<li>gmath: 	\ref gmathlib (generic mathematical functions and BLAS/LAPACK library wrapper)
-<li>gpde:       \ref gpdelib (partial differential equations library)
-<li>imagery:	\ref imagerylib 
-<li>init:	\ref init (GRASS initialization code + scripts)
-<li>linkm:	Linked list memory manager - \ref linkm (obsolete?)
-<li>ogsf:	\ref ogsflib (OpenGL (R) ported gsurf library (required for NVIZ))
-<li>pngdriver:  PNG display driver library - \ref pngdriver
-<li>proj:	\ref projlib (wrapper to PROJ4 projection library)
-<li>psdriver:   PostScript display driver library - \ref psdriver
-<li>python:     \ref pythonlib
-<li>raster:	\ref rastergraphicslib (note: raster map functions are in \ref gislib)
-<li>rowio:	Raster row in/out library - \ref rowio
-<li>rst:	Library for interpolation with regularized splines with tension - \ref rst
-<li>segment:	\ref segmentlib (segment library for segmented raster reading)
-<li>sites:	Old Sites library, now interfaced to \ref Vector_Library - \ref sites
-<li>stats:      Raster stats library - \ref stats
-<li>symbol:	Drawing symbols for %point %vector data library - \ref symbol
-<li>vask:	Cursor management library - \ref vask
-<li>%vector:	\ref Vector_Library (GRASS Vector and Direct Graph Library)
-<ul>
-<li>vedit: \ref Vedit_Library - %vector editing
-</ul>
-<li>nviz:       \ref nvizlib (used by wxGUI Nviz extension and CLI-based Nviz module)
-</ul>
+ - arraystats:  Library of statistics for arrays of doubles - \ref arraystats (new, under development)
+ - bitmap:	Bitmap library for X Window Bitmaps - \ref bitmap
+ - btree:	Binary tree library - \ref btree
+ - cairodriver: \ref cairodriver
+ - cdhc:	Library for testing normality and exponentiality - \ref cdhc 
+ - cluster:     Library for cluster analysis (image processing) - \ref cluster
+ - datetime:	DateTime library - \ref datetime
+ - db:		\ref dbmilib
+ - display:	\ref displaylib
+ - %driver:     Graphics monitor driver
+ - dspf:        DSPF libary - \ref dspf (obsolete?)
+ - edit:	Raster edit library (cellhd, history, cats) - \ref edit
+ - external:	External libraries from other projects (such as shapelib) - \ref external
+ - fonts:	Hershey library - \ref fonts
+ - g3d:	        \ref g3dlib
+ - gmath: 	\ref gmathlib (generic mathematical functions and BLAS/LAPACK library wrapper)
+ - gpde:        \ref gpdelib (partial differential equations library)
+ - imagery:	\ref imagerylib 
+ - init:	\ref init (GRASS initialization code + scripts)
+ - linkm:	Linked list memory manager - \ref linkm (obsolete?)
+ - ogsf:	\ref ogsflib (OpenGL (R) ported gsurf library (required for NVIZ))
+ - pngdriver:   PNG display driver library - \ref pngdriver
+ - proj:	\ref projlib (wrapper to PROJ4 projection library)
+ - psdriver:    PostScript display driver library - \ref psdriver
+ - python:      \ref pythonlib
+ - raster:	\ref rastergraphicslib (note: raster map functions are in \ref gislib)
+ - rowio:	Raster row in/out library - \ref rowio
+ - rst:	Library for interpolation with regularized splines with tension - \ref rst
+ - segment:	\ref segmentlib (segment library for segmented raster reading)
+ - sites:	Old Sites library, now interfaced to \ref Vector_Library - \ref sites
+ - stats:       Raster stats library - \ref stats
+ - symbol:	Drawing symbols for %point %vector data library - \ref symbol
+ - vask:	Cursor management library - \ref vask
+ - %vector:	\ref Vector_Library (GRASS Vector and Direct Graph Library)
+  - vedit:      \ref Vedit_Library - %vector editing
+ - nviz:        \ref nvizlib (used by wxGUI Nviz extension and CLI-based Nviz module)
 <!--<li>image3:	extra imagery library (mainly still unused) - \ref image3lib-->
 <!--<li>D:		display library - \ref d_displaylib-->
 <!--<li>front.end:	interface for interactive modules library - \ref frontend-->
 
 \section interfaces Interfaces
 
-<ul>
-<li> GRASS <a href="../../swig/html/index.html">SWIG interface</a>.
-</ul>
+ - GRASS <a href="../../swig/html/index.html">SWIG interface</a>
+ - \ref pythonlib
 
 \section gui GUI
 
-<ul>
-<li> <a href="../../gui/wxpython/html/index.html">wxGUI</a></li>
-</ul>
+ - <a href="../../gui/wxpython/html/index.html">wxGUI</a></li>
 
 \section location File structure of GRASS Location
 
 A GRASS <b>raster map</b> consists of several files in several subdirectories in a mapset,
 organized as follows:
 
-<ul>
-<li> <b>cellhd/</b>:
+ - <b>cellhd/</b>:
   map header including projection code, coordinates representing
   the spatial extent of the raster map, number of rows and columns, resolution, 
   and information about map compression;</li>
-<li> <b>cell/, fcell/ or grid3/</b>:
+ - <b>cell/, fcell/ or grid3/</b>:
   generic matrix of values in a compressed, portable
   format which depends on the raster data type (integer, floating %point or 3D grid);</li>
-<li> <b>hist/</b>:
+ - <b>hist/</b>:
   history file which contains metadata such as the data source,
   the command that was used to generate the raster map, or
   other information provided by the user;</li>
-<li> <b>cats/</b>: 
+ - <b>cats/</b>: 
   optional category file which contains text or numeric labels assigned
   to the raster map categories;</li>
-<li> <b>colr/</b>: 
+ - <b>colr/</b>: 
   optional color table;</li>
-<li> <b>cell_misc/</b>: 
+ - <b>cell_misc/</b>: 
   optional timestamp, range of values, quantization rules (for floating %point maps)
   and null (no-data) files; </li>
-</ul>
 
 A GRASS <b>%vector maps</b> are stored in several separate files in a single
 directory. While the attributes are stored in either a DBF file, a SQLite file
 or in an external DBMS (PostgreSQL, MySQL, ODBC), the geometric data are saved
 as follows:
 
-<ul>
-<li><b>head</b>: %vector map ASCII header with information about the map creation
+ - <b>head</b>: %vector map ASCII header with information about the map creation
   (date and name), its scale and threshold;</li>
-<li><b>coor</b>: binary geometry file which includes the coordinates of graphic
+ - <b>coor</b>: binary geometry file which includes the coordinates of graphic
   elements (primitives) that define the %vector feature;</li>
-<li><b>topo</b>: binary topology file describes the spatial relationships between the
+ - <b>topo</b>: binary topology file describes the spatial relationships between the
   map's graphic elements;</li>
-<li><b>hist</b>: history ASCII file with complete commands that were used to
+ - <b>hist</b>: history ASCII file with complete commands that were used to
   create the %vector map, as well as the name and date/time of the map
   creation;</li>
-<li><b>cidx</b>: binary category index file which is used to %link the %vector
+ - <b>cidx</b>: binary category index file which is used to %link the %vector
   object IDs to the attribute table rows;</li>
-<li><b>dbln</b>: ASCII file which contains definition(s) of %link to attribute
+ - <b>dbln</b>: ASCII file which contains definition(s) of %link to attribute
   storage in database (DBMS).</li>
-</ul>
 
 <!-- original: 
   http://trac.osgeo.org/grass/browser/grass-web/trunk/images/loc_struct.odg
