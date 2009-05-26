@@ -169,7 +169,7 @@ def vector_db_select(map, layer = 1, **kwargs):
     if kwargs.has_key('columns'):
         if key not in kwargs['columns'].split(','):
             # add key column if missing
-            info("Adding key column to the output")
+            debug("Adding key column to the output")
             kwargs['columns'] += ',' + key
     
     ret = read_command('v.db.select',
