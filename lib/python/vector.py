@@ -140,3 +140,58 @@ def vector_info_topo(map):
     """
     s = read_command('v.info', flags = 't', map = map)
     return parse_key_val(s, val_type = int)
+
+# interface for v.db.select
+
+def vector_db_select(map, layer = 1, **kwargs):
+    """Get attribute data of selected vector map layer.
+
+    Function returns list of columns and dictionary of values ordered by
+    key column value. Example:
+
+    \code
+    >>> print grass.vector_select('lakes')['values'][3]
+    ['3', '19512.86146', '708.44683', '4', '55652', 'LAKE/POND', '39000', '']
+    \endcode
+
+    @param map map name
+    @param layer layer number
+    @param kwargs v.db.select options
+
+    @return dictionary ('columns' and 'values')
+    """
+    try:
+        key = vector_db(map = map)[layer]['key']
+    except KeyError:
+        error('Missing layer %d in vector map <%s>' % (layer, map))
+        return { 'columns' : [], 'values' : {} }
+        
+    if kwargs.has_key('columns'):
+        if key not in kwargs['columns'].split(','):
+            # add key column if missing
+            info("Adding key column to the output")
+            kwargs['columns'] += ',' + key
+    
+    ret = read_command('v.db.select',
+                       map = map,
+                       layer = layer,
+                       fs = '|', **kwargs)
+    
+    if not ret:
+        error('vector_select() failed')
+        return { 'columns' : [], 'values' : {} }
+    
+    columns = []
+    values = {}
+    for line in ret.splitlines():
+        if not columns:
+            columns = line.split('|')
+            key_index = columns.index(key)
+            continue
+        
+        value = line.split('|')
+        key_value = int(value[key_index])
+        values[key_value] = line.split('|')
+    
+    return { 'columns' : columns,
+             'values' : values }

@@ -227,6 +227,8 @@ from grass.script import vector as grass
 
  - vector_db()
 
+ - vector_db_select()
+
  - vector_history()
 
  - vector_info_topo()
