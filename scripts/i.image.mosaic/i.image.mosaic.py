@@ -44,7 +44,7 @@
 
 import sys
 import os
-from grass.script import core, raster as grass
+from grass.script import all as grass
 
 def copy_colors(fh, map, offset):
     p = grass.pipe_command('r.colors.out', map = map)

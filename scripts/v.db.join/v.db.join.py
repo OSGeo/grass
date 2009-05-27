@@ -64,7 +64,7 @@
 import sys
 import os
 import string
-from grass.script import core, db as grass
+from grass.script import all as grass
 
 def main():
     map = options['map']
