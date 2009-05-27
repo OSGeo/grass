@@ -9,7 +9,7 @@
 # Licensed to PSF under a Contributor Agreement.
 # See http://www.python.org/2.4/license for licensing details.
 
-r"""subprocess - Subprocesses with accessible I/O streams
+r"""!subprocess - Subprocesses with accessible I/O streams
 
 This module allows you to spawn processes, connect to their
 input/output/error pipes, and obtain their return codes.  This module
@@ -402,7 +402,7 @@ STDOUT = -2
 
 
 def call(*args, **kwargs):
-    """Run command with arguments.  Wait for command to complete, then
+    """!Run command with arguments.  Wait for command to complete, then
     return the returncode attribute.
 
     The arguments are the same as for the Popen constructor.  Example:
@@ -486,7 +486,7 @@ class Popen(object):
                  preexec_fn=None, close_fds=False, shell=False,
                  cwd=None, env=None, universal_newlines=False,
                  startupinfo=None, creationflags=0):
-        """Create new Popen instance."""
+        """!Create new Popen instance."""
         _cleanup()
 
         if not isinstance(bufsize, (int, long)):
@@ -568,7 +568,7 @@ class Popen(object):
         # Windows methods
         #
         def _get_handles(self, stdin, stdout, stderr):
-            """Construct and return tupel with IO objects:
+            """!Construct and return tupel with IO objects:
             p2cread, p2cwrite, c2pread, c2pwrite, errread, errwrite
             """
             if stdin == None and stdout == None and stderr == None:
@@ -628,14 +628,14 @@ class Popen(object):
 
 
         def _make_inheritable(self, handle):
-            """Return a duplicate of handle, which is inheritable"""
+            """!Return a duplicate of handle, which is inheritable"""
             return DuplicateHandle(GetCurrentProcess(), handle,
                                    GetCurrentProcess(), 0, 1,
                                    DUPLICATE_SAME_ACCESS)
 
 
         def _find_w9xpopen(self):
-            """Find and return absolut path to w9xpopen.exe"""
+            """!Find and return absolut path to w9xpopen.exe"""
             w9xpopen = os.path.join(os.path.dirname(GetModuleFileName(0)),
                                     "w9xpopen.exe")
             if not os.path.exists(w9xpopen):
@@ -656,7 +656,7 @@ class Popen(object):
                            p2cread, p2cwrite,
                            c2pread, c2pwrite,
                            errread, errwrite):
-            """Execute program (MS Windows version)"""
+            """!Execute program (MS Windows version)"""
 
             if not isinstance(args, types.StringTypes):
                 args = list2cmdline(args)
@@ -731,7 +731,7 @@ class Popen(object):
 
 
         def poll(self):
-            """Check if child process has terminated.  Returns returncode
+            """!Check if child process has terminated.  Returns returncode
             attribute."""
             if self.returncode == None:
                 if WaitForSingleObject(self._handle, 0) == WAIT_OBJECT_0:
@@ -741,7 +741,7 @@ class Popen(object):
 
 
         def wait(self):
-            """Wait for child process to terminate.  Returns returncode
+            """!Wait for child process to terminate.  Returns returncode
             attribute."""
             if self.returncode == None:
                 obj = WaitForSingleObject(self._handle, INFINITE)
@@ -755,7 +755,7 @@ class Popen(object):
 
 
         def communicate(self, input=None):
-            """Interact with process: Send data to stdin.  Read data from
+            """!Interact with process: Send data to stdin.  Read data from
             stdout and stderr, until end-of-file is reached.  Wait for
             process to terminate.  The optional input argument should be a
             string to be sent to the child process, or None, if no data
@@ -812,7 +812,7 @@ class Popen(object):
         # POSIX methods
         #
         def _get_handles(self, stdin, stdout, stderr):
-            """Construct and return tupel with IO objects:
+            """!Construct and return tupel with IO objects:
             p2cread, p2cwrite, c2pread, c2pwrite, errread, errwrite
             """
             p2cread, p2cwrite = None, None
@@ -882,7 +882,7 @@ class Popen(object):
                            p2cread, p2cwrite,
                            c2pread, c2pwrite,
                            errread, errwrite):
-            """Execute program (POSIX version)"""
+            """!Execute program (POSIX version)"""
 
             if isinstance(args, types.StringTypes):
                 args = [args]
@@ -988,7 +988,7 @@ class Popen(object):
 
 
         def poll(self):
-            """Check if child process has terminated.  Returns returncode
+            """!Check if child process has terminated.  Returns returncode
             attribute."""
             if self.returncode == None:
                 try:
@@ -1001,7 +1001,7 @@ class Popen(object):
 
 
         def wait(self):
-            """Wait for child process to terminate.  Returns returncode
+            """!Wait for child process to terminate.  Returns returncode
             attribute."""
             if self.returncode == None:
                 pid, sts = os.waitpid(self.pid, 0)
@@ -1010,7 +1010,7 @@ class Popen(object):
 
 
         def communicate(self, input=None):
-            """Interact with process: Send data to stdin.  Read data from
+            """!Interact with process: Send data to stdin.  Read data from
             stdout and stderr, until end-of-file is reached.  Wait for
             process to terminate.  The optional input argument should be a
             string to be sent to the child process, or None, if no data

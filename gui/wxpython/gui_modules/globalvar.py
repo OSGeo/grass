@@ -27,7 +27,7 @@ gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unico
 check = True
 
 def CheckForWx():
-    """Try to import wx module and check its version"""
+    """!Try to import wx module and check its version"""
     global check
     if not check:
         return
@@ -75,14 +75,14 @@ ETCDIR = os.path.join(os.getenv("GISBASE"), "etc")
 ETCICONDIR = os.path.join(os.getenv("GISBASE"), "etc", "gui", "icons")
 ETCWXDIR = os.path.join(ETCDIR, "wxpython")
 
-"""Style definition for FlatNotebook pages"""
+"""!Style definition for FlatNotebook pages"""
 FNPageStyle = FN.FNB_VC8 | \
     FN.FNB_BACKGROUND_GRADIENT | \
     FN.FNB_NODRAG | \
     FN.FNB_TABS_BORDER_SIMPLE 
 FNPageColor = wx.Colour(125,200,175)
 
-"""Dialog widget dimension"""
+"""!Dialog widget dimension"""
 DIALOG_SPIN_SIZE = (150, -1)
 DIALOG_COMBOBOX_SIZE = (300, -1)
 DIALOG_GSELECT_SIZE = (400, -1)
@@ -101,7 +101,7 @@ MAP_DISPLAY_STATUSBAR_MODE = [_("Coordinates"),
                               _("Map scale"),
                               _("Go to")]
 
-"""File name extension binaries/scripts"""
+"""!File name extension binaries/scripts"""
 if subprocess.mswindows:
     EXT_BIN = '.exe'
     EXT_SCT = '.bat'

@@ -42,7 +42,7 @@ import globalvar
 from debug import Debug as Debug
 
 class Settings:
-    """Generic class where to store settings"""
+    """!Generic class where to store settings"""
     def __init__(self):
         #
         # settings filename
@@ -555,7 +555,7 @@ class Settings:
         self.internalSettings['vdigit']['bgmap']['value'] = ''
         
     def ReadSettingsFile(self, settings=None):
-        """Reads settings file (mapset, location, gisdbase)"""
+        """!Reads settings file (mapset, location, gisdbase)"""
         if settings is None:
             settings = self.userSettings
 
@@ -592,7 +592,7 @@ class Settings:
                                                 key='font', subkey='encoding')
         
     def __ReadFile(self, filename, settings=None):
-        """Read settings from file to dict"""
+        """!Read settings from file to dict"""
         if settings is None:
             settings = self.userSettings
 
@@ -628,7 +628,7 @@ class Settings:
         file.close()
 
     def SaveToFile(self, settings=None):
-        """Save settings to the file"""
+        """!Save settings to the file"""
         if settings is None:
             settings = self.userSettings
         
@@ -690,7 +690,7 @@ class Settings:
         return filePath
 
     def __parseValue(self, value, read=False):
-        """Parse value to be store in settings file"""
+        """!Parse value to be store in settings file"""
         if read: # -> read settings (cast values)
             if value == 'True':
                 value = True
@@ -720,7 +720,7 @@ class Settings:
         return value
 
     def Get(self, group, key=None, subkey=None, internal=False):
-        """Get value by key/subkey
+        """!Get value by key/subkey
 
         Raise KeyError if key is not found
         
@@ -756,7 +756,7 @@ class Settings:
                 (group, key, subkey)
         
     def Set(self, group, value, key=None, subkey=None, internal=False):
-        """Set value of key/subkey
+        """!Set value of key/subkey
 
         Raise KeyError if group/key is not found
         
@@ -786,7 +786,7 @@ class Settings:
             raise gcmd.SettingsError("%s '%s:%s:%s'" % (_("Unable to set "), group, key, subkey))
 
     def Append(self, dict, group, key, subkey, value):
-        """Set value of key/subkey
+        """!Set value of key/subkey
 
         Create group/key/subkey if not exists
         
@@ -811,13 +811,13 @@ class Settings:
             dict[group][key][subkey] = value
 
     def GetDefaultSettings(self):
-        """Get default user settings"""
+        """!Get default user settings"""
         return self.defaultSettings
 
 globalSettings = Settings()
 
 class PreferencesDialog(wx.Dialog):
-    """User preferences dialog"""
+    """!User preferences dialog"""
     def __init__(self, parent, title=_("User GUI settings"),
                  settings=globalSettings,
                  style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
@@ -883,7 +883,7 @@ class PreferencesDialog(wx.Dialog):
         self.SetSize((500, 375))
 
     def __CreateGeneralPage(self, notebook):
-        """Create notebook page for general settings"""
+        """!Create notebook page for general settings"""
         panel = wx.Panel(parent=notebook, id=wx.ID_ANY)
         notebook.AddPage(page=panel, text=_("General"))
 
@@ -975,7 +975,7 @@ class PreferencesDialog(wx.Dialog):
         return panel
 
     def __CreateDisplayPage(self, notebook):
-        """Create notebook page for display settings"""
+        """!Create notebook page for display settings"""
         panel = wx.Panel(parent=notebook, id=wx.ID_ANY)
         notebook.AddPage(page=panel, text=_("Display"))
 
@@ -1121,7 +1121,7 @@ class PreferencesDialog(wx.Dialog):
         return panel
 
     def __CreateCmdPage(self, notebook):
-        """Create notebook page for commad dialog settings"""
+        """!Create notebook page for commad dialog settings"""
         panel = wx.Panel(parent=notebook, id=wx.ID_ANY)
         notebook.AddPage(page=panel, text=_("Command"))
         
@@ -1238,7 +1238,7 @@ class PreferencesDialog(wx.Dialog):
         return panel
 
     def __CreateAttributeManagerPage(self, notebook):
-        """Create notebook page for 'Attribute Table Manager' settings"""
+        """!Create notebook page for 'Attribute Table Manager' settings"""
         panel = wx.Panel(parent=notebook, id=wx.ID_ANY)
         notebook.AddPage(page=panel, text=_("Attributes"))
 
@@ -1367,7 +1367,7 @@ class PreferencesDialog(wx.Dialog):
         return panel
 
     def __CreateWorkspacePage(self, notebook):
-        """Create notebook page for workspace settings"""
+        """!Create notebook page for workspace settings"""
         panel = wx.Panel(parent=notebook, id=wx.ID_ANY)
         notebook.AddPage(page=panel, text=_("Workspace"))
 
@@ -1411,7 +1411,7 @@ class PreferencesDialog(wx.Dialog):
         return panel
 
     def __CreateAdvancedPage(self, notebook):
-        """Create notebook page for advanced settings"""
+        """!Create notebook page for advanced settings"""
         panel = wx.Panel(parent=notebook, id=wx.ID_ANY)
         notebook.AddPage(page=panel, text=_("Advanced"))
 
@@ -1503,23 +1503,23 @@ class PreferencesDialog(wx.Dialog):
         event.Skip()
         
     def OnSave(self, event):
-        """Button 'Save' pressed"""
+        """!Button 'Save' pressed"""
         if self.__UpdateSettings():
             file = self.settings.SaveToFile()
             self.parent.goutput.WriteLog(_('Settings saved to file \'%s\'.') % file)
             self.Close()
 
     def OnApply(self, event):
-        """Button 'Apply' pressed"""
+        """!Button 'Apply' pressed"""
         if self.__UpdateSettings():
             self.Close()
 
     def OnCancel(self, event):
-        """Button 'Cancel' pressed"""
+        """!Button 'Cancel' pressed"""
         self.Close()
 
     def OnDefault(self, event):
-        """Button 'Set to default' pressed"""
+        """!Button 'Set to default' pressed"""
         self.settings.userSettings = copy.deepcopy(self.settings.defaultSettings)
         
         # update widgets
@@ -1541,7 +1541,7 @@ class PreferencesDialog(wx.Dialog):
                 value = win.SetValue(value)
 
     def __UpdateSettings(self):
-        """Update user settings"""
+        """!Update user settings"""
         for item in self.winId.keys():
             try:
                 group, key, subkey = item.split(':')
@@ -1792,7 +1792,7 @@ class MapsetAccess(wx.Dialog):
         self.SetMinSize(size)
         
     def GetMapsets(self):
-        """Get list of checked mapsets"""
+        """!Get list of checked mapsets"""
         ms = []
         i = 0
         for mset in self.all_mapsets:
@@ -1803,7 +1803,7 @@ class MapsetAccess(wx.Dialog):
         return ms
 
 class CheckListMapset(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.CheckListCtrlMixin):
-    """List of mapset/owner/group"""
+    """!List of mapset/owner/group"""
     def __init__(self, parent, pos=wx.DefaultPosition,
                  log=None):
         self.parent = parent
@@ -1817,7 +1817,7 @@ class CheckListMapset(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.Check
         listmix.ListCtrlAutoWidthMixin.__init__(self)
 
     def LoadData(self):
-        """Load data into list"""
+        """!Load data into list"""
         self.InsertColumn(0, _('Mapset'))
         self.InsertColumn(1, _('Owner'))
         ### self.InsertColumn(2, _('Group'))
@@ -1852,7 +1852,7 @@ class CheckListMapset(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.Check
         ### self.SetColumnWidth(col=1, width=wx.LIST_AUTOSIZE)
         
     def OnCheckItem(self, index, flag):
-        """Mapset checked/unchecked"""
+        """!Mapset checked/unchecked"""
         mapset = self.parent.all_mapsets[index]
         if mapset == 'PERMANENT' or mapset == self.parent.curr_mapset:
             self.CheckItem(index, True)

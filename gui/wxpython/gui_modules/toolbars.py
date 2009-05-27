@@ -40,12 +40,12 @@ gmpath = os.path.join(globalvar.ETCWXDIR, "icons")
 sys.path.append(gmpath)
 
 class AbstractToolbar(object):
-    """Abstract toolbar class"""
+    """!Abstract toolbar class"""
     def __init__(self):
         pass
     
     def InitToolbar(self, parent, toolbar, toolData):
-        """Initialize toolbar, i.e. add tools to the toolbar
+        """!Initialize toolbar, i.e. add tools to the toolbar
 
         @return list of ids (of added tools)
         """
@@ -59,12 +59,12 @@ class AbstractToolbar(object):
         self.parent = parent
         
     def ToolbarData(self):
-        """Toolbar data"""
+        """!Toolbar data"""
         return None
 
     def CreateTool(self, parent, toolbar, tool, label, bitmap, kind,
                    shortHelp, longHelp, handler):
-        """Add tool to the toolbar
+        """!Add tool to the toolbar
 
         @return id of tool
         """
@@ -84,11 +84,11 @@ class AbstractToolbar(object):
         return tool
 
     def GetToolbar(self):
-        """Get toolbar widget reference"""
+        """!Get toolbar widget reference"""
         return self._toolbar
 
     def EnableLongHelp(self, enable=True):
-        """Enable/disable long help
+        """!Enable/disable long help
 
         @param enable True for enable otherwise disable
         """
@@ -102,7 +102,7 @@ class AbstractToolbar(object):
                 self._toolbar.SetToolLongHelp(tool[0], "")
 
     def OnTool(self, event):
-        """Tool selected"""
+        """!Tool selected"""
         if self.parent.toolbars['vdigit']:
             # update vdigit toolbar (unselect currently selected tool)
             id = self.parent.toolbars['vdigit'].GetAction(type='id')
@@ -124,18 +124,18 @@ class AbstractToolbar(object):
             self._toolbar.ToggleTool(self.action['id'], True)
     
     def GetAction(self, type='desc'):
-        """Get current action info"""
+        """!Get current action info"""
         return self.action.get(type, '')
 
     def SelectDefault(self, event):
-        """Select default tool"""
+        """!Select default tool"""
         self._toolbar.ToggleTool(self.defaultAction['id'], True)
         self.defaultAction['bind'](event)
         self.action = { 'id' : self.defaultAction['id'],
                         'desc' : self.defaultAction.get('desc', '') }
         
     def FixSize(self, width):
-	"""Fix toolbar width on Windows
+	"""!Fix toolbar width on Windows
         
 	@todo Determine why combobox causes problems here
 	"""
@@ -183,7 +183,7 @@ class MapToolbar(AbstractToolbar):
         self.FixSize(width = 90)
         
     def ToolbarData(self):
-        """Toolbar data"""
+        """!Toolbar data"""
 
         self.displaymap = wx.NewId()
         self.rendermap = wx.NewId()
@@ -276,7 +276,7 @@ class MapToolbar(AbstractToolbar):
             self.mapdisplay.toolbars['nviz'].OnExit()
 
     def Enable2D(self, enabled):
-        """Enable/Disable 2D display mode specific tools"""
+        """!Enable/Disable 2D display mode specific tools"""
         for tool in (self.pointer,
                      self.query,
                      self.pan,
@@ -310,7 +310,7 @@ class GRToolbar(AbstractToolbar):
         self.toolbar.Realize()
 
     def ToolbarData(self):
-        """Toolbar data"""
+        """!Toolbar data"""
 
         self.displaymap = wx.NewId()
         self.rendermap = wx.NewId()
@@ -356,7 +356,7 @@ class GRToolbar(AbstractToolbar):
             )
 
     def OnZoomMap(self, event):
-        """Zoom to selected map"""
+        """!Zoom to selected map"""
         self.mapdisplay.MapWindow.ZoomToMap(layers = self.mapcontent.GetListOfLayers())
 
         event.Skip()
@@ -576,7 +576,7 @@ class VDigitToolbar(AbstractToolbar):
         return data
 
     def OnTool(self, event):
-        """Tool selected -> disable selected tool in map toolbar"""
+        """!Tool selected -> disable selected tool in map toolbar"""
         # update map toolbar (unselect currently selected tool)
         id = self.parent.toolbars['map'].GetAction(type='id')
         self.parent.toolbars['map'].toolbar.ToggleTool(id, False)
@@ -611,7 +611,7 @@ class VDigitToolbar(AbstractToolbar):
                 self.parent.MapWindow.OnMiddleDown(None)
         
     def OnAddPoint(self, event):
-        """Add point to the vector map Laier"""
+        """!Add point to the vector map Laier"""
         Debug.msg (2, "VDigitToolbar.OnAddPoint()")
         self.action = { 'desc' : "addLine",
                         'type' : "point",
@@ -619,7 +619,7 @@ class VDigitToolbar(AbstractToolbar):
         self.parent.MapWindow.mouse['box'] = 'point'
 
     def OnAddLine(self, event):
-        """Add line to the vector map layer"""
+        """!Add line to the vector map layer"""
         Debug.msg (2, "VDigitToolbar.OnAddLine()")
         self.action = { 'desc' : "addLine",
                         'type' : "line",
@@ -628,7 +628,7 @@ class VDigitToolbar(AbstractToolbar):
         ### self.parent.MapWindow.polycoords = [] # reset temp line
 
     def OnAddBoundary(self, event):
-        """Add boundary to the vector map layer"""
+        """!Add boundary to the vector map layer"""
         Debug.msg (2, "VDigitToolbar.OnAddBoundary()")
         if self.action['desc'] != 'addLine' or \
                 self.action['type'] != 'boundary':
@@ -639,7 +639,7 @@ class VDigitToolbar(AbstractToolbar):
         self.parent.MapWindow.mouse['box'] = 'line'
 
     def OnAddCentroid(self, event):
-        """Add centroid to the vector map layer"""
+        """!Add centroid to the vector map layer"""
         Debug.msg (2, "VDigitToolbar.OnAddCentroid()")
         self.action = { 'desc' : "addLine",
                         'type' : "centroid",
@@ -647,7 +647,7 @@ class VDigitToolbar(AbstractToolbar):
         self.parent.MapWindow.mouse['box'] = 'point'
 
     def OnExit (self, event=None):
-        """Quit digitization tool"""
+        """!Quit digitization tool"""
         # stop editing of the currently selected map layer
         if self.mapLayer:
             self.StopEditing()
@@ -665,14 +665,14 @@ class VDigitToolbar(AbstractToolbar):
         self.parent.MapWindow.polycoords = []
         
     def OnMoveVertex(self, event):
-        """Move line vertex"""
+        """!Move line vertex"""
         Debug.msg(2, "Digittoolbar.OnMoveVertex():")
         self.action = { 'desc' : "moveVertex",
                         'id'   : self.moveVertex }
         self.parent.MapWindow.mouse['box'] = 'point'
 
     def OnAddVertex(self, event):
-        """Add line vertex"""
+        """!Add line vertex"""
         Debug.msg(2, "Digittoolbar.OnAddVertex():")
         self.action = { 'desc' : "addVertex",
                         'id'   : self.addVertex }
@@ -680,7 +680,7 @@ class VDigitToolbar(AbstractToolbar):
 
 
     def OnRemoveVertex(self, event):
-        """Remove line vertex"""
+        """!Remove line vertex"""
         Debug.msg(2, "Digittoolbar.OnRemoveVertex():")
         self.action = { 'desc' : "removeVertex",
                         'id'   : self.removeVertex }
@@ -688,49 +688,49 @@ class VDigitToolbar(AbstractToolbar):
 
 
     def OnSplitLine(self, event):
-        """Split line"""
+        """!Split line"""
         Debug.msg(2, "Digittoolbar.OnSplitLine():")
         self.action = { 'desc' : "splitLine",
                         'id'   : self.splitLine }
         self.parent.MapWindow.mouse['box'] = 'point'
 
     def OnEditLine(self, event):
-        """Edit line"""
+        """!Edit line"""
         Debug.msg(2, "Digittoolbar.OnEditLine():")
         self.action = { 'desc' : "editLine",
                         'id'   : self.editLine }
         self.parent.MapWindow.mouse['box'] = 'line'
 
     def OnMoveLine(self, event):
-        """Move line"""
+        """!Move line"""
         Debug.msg(2, "Digittoolbar.OnMoveLine():")
         self.action = { 'desc' : "moveLine",
                         'id'   : self.moveLine }
         self.parent.MapWindow.mouse['box'] = 'box'
 
     def OnDeleteLine(self, event):
-        """Delete line"""
+        """!Delete line"""
         Debug.msg(2, "Digittoolbar.OnDeleteLine():")
         self.action = { 'desc' : "deleteLine",
                         'id'   : self.deleteLine }
         self.parent.MapWindow.mouse['box'] = 'box'
 
     def OnDisplayCats(self, event):
-        """Display/update categories"""
+        """!Display/update categories"""
         Debug.msg(2, "Digittoolbar.OnDisplayCats():")
         self.action = { 'desc' : "displayCats",
                         'id'   : self.displayCats }
         self.parent.MapWindow.mouse['box'] = 'point'
 
     def OnDisplayAttr(self, event):
-        """Display/update attributes"""
+        """!Display/update attributes"""
         Debug.msg(2, "Digittoolbar.OnDisplayAttr():")
         self.action = { 'desc' : "displayAttrs",
                         'id'   : self.displayAttr }
         self.parent.MapWindow.mouse['box'] = 'point'
 
     def OnCopyCA(self, event):
-        """Copy categories/attributes menu"""
+        """!Copy categories/attributes menu"""
         point = wx.GetMousePosition()
         toolMenu = wx.Menu()
         # Add items to the menu
@@ -759,7 +759,7 @@ class VDigitToolbar(AbstractToolbar):
             self.toolbar[0].ToggleTool(self.copyCats, False)
         
     def OnCopyCats(self, event):
-        """Copy categories"""
+        """!Copy categories"""
         if self.action['desc'] == 'copyCats': # select previous action
             self.toolbar[0].ToggleTool(self.addPoint, True)
             self.toolbar[0].ToggleTool(self.copyCats, False)
@@ -784,13 +784,13 @@ class VDigitToolbar(AbstractToolbar):
         self.parent.MapWindow.mouse['box'] = 'point'
         
     def OnUndo(self, event):
-        """Undo previous changes"""
+        """!Undo previous changes"""
         self.parent.digit.Undo()
 
         event.Skip()
 
     def EnableUndo(self, enable=True):
-        """Enable 'Undo' in toolbar
+        """!Enable 'Undo' in toolbar
 
         @param enable False for disable
         """
@@ -802,7 +802,7 @@ class VDigitToolbar(AbstractToolbar):
                 self.toolbar[0].EnableTool(self.undo, False)
         
     def OnSettings(self, event):
-        """Show settings dialog"""
+        """!Show settings dialog"""
 
         if self.parent.digit is None:
             reload(vdigit)
@@ -815,7 +815,7 @@ class VDigitToolbar(AbstractToolbar):
             self.settingsDialog.Show()
 
     def OnAdditionalToolMenu(self, event):
-        """Menu for additional tools"""
+        """!Menu for additional tools"""
         point = wx.GetMousePosition()
         toolMenu = wx.Menu()
         # Add items to the menu
@@ -900,7 +900,7 @@ class VDigitToolbar(AbstractToolbar):
             self.toolbar[0].ToggleTool(self.additionalTools, False)
         
     def OnCopy(self, event):
-        """Copy selected features from (background) vector map"""
+        """!Copy selected features from (background) vector map"""
         if self.action['desc'] == 'copyLine': # select previous action
             self.toolbar[0].ToggleTool(self.addPoint, True)
             self.toolbar[0].ToggleTool(self.additionalTools, False)
@@ -913,7 +913,7 @@ class VDigitToolbar(AbstractToolbar):
         self.parent.MapWindow.mouse['box'] = 'box'
 
     def OnFlip(self, event):
-        """Flip selected lines/boundaries"""
+        """!Flip selected lines/boundaries"""
         if self.action['desc'] == 'flipLine': # select previous action
             self.toolbar[0].ToggleTool(self.addPoint, True)
             self.toolbar[0].ToggleTool(self.additionalTools, False)
@@ -926,7 +926,7 @@ class VDigitToolbar(AbstractToolbar):
         self.parent.MapWindow.mouse['box'] = 'box'
 
     def OnMerge(self, event):
-        """Merge selected lines/boundaries"""
+        """!Merge selected lines/boundaries"""
         if self.action['desc'] == 'mergeLine': # select previous action
             self.toolbar[0].ToggleTool(self.addPoint, True)
             self.toolbar[0].ToggleTool(self.additionalTools, False)
@@ -939,7 +939,7 @@ class VDigitToolbar(AbstractToolbar):
         self.parent.MapWindow.mouse['box'] = 'box'
 
     def OnBreak(self, event):
-        """Break selected lines/boundaries"""
+        """!Break selected lines/boundaries"""
         if self.action['desc'] == 'breakLine': # select previous action
             self.toolbar[0].ToggleTool(self.addPoint, True)
             self.toolbar[0].ToggleTool(self.additionalTools, False)
@@ -952,7 +952,7 @@ class VDigitToolbar(AbstractToolbar):
         self.parent.MapWindow.mouse['box'] = 'box'
 
     def OnSnap(self, event):
-        """Snap selected features"""
+        """!Snap selected features"""
         if self.action['desc'] == 'snapLine': # select previous action
             self.toolbar[0].ToggleTool(self.addPoint, True)
             self.toolbar[0].ToggleTool(self.additionalTools, False)
@@ -965,7 +965,7 @@ class VDigitToolbar(AbstractToolbar):
         self.parent.MapWindow.mouse['box'] = 'box'
 
     def OnConnect(self, event):
-        """Connect selected lines/boundaries"""
+        """!Connect selected lines/boundaries"""
         if self.action['desc'] == 'connectLine': # select previous action
             self.toolbar[0].ToggleTool(self.addPoint, True)
             self.toolbar[0].ToggleTool(self.additionalTools, False)
@@ -978,7 +978,7 @@ class VDigitToolbar(AbstractToolbar):
         self.parent.MapWindow.mouse['box'] = 'box'
 
     def OnQuery(self, event):
-        """Query selected lines/boundaries"""
+        """!Query selected lines/boundaries"""
         if self.action['desc'] == 'queryLine': # select previous action
             self.toolbar[0].ToggleTool(self.addPoint, True)
             self.toolbar[0].ToggleTool(self.additionalTools, False)
@@ -992,7 +992,7 @@ class VDigitToolbar(AbstractToolbar):
         self.parent.MapWindow.mouse['box'] = 'box'
 
     def OnZBulk(self, event):
-        """Z bulk-labeling selected lines/boundaries"""
+        """!Z bulk-labeling selected lines/boundaries"""
         if self.action['desc'] == 'zbulkLine': # select previous action
             self.toolbar[0].ToggleTool(self.addPoint, True)
             self.toolbar[0].ToggleTool(self.additionalTools, False)
@@ -1005,7 +1005,7 @@ class VDigitToolbar(AbstractToolbar):
         self.parent.MapWindow.mouse['box'] = 'line'
 
     def OnTypeConversion(self, event):
-        """Feature type conversion
+        """!Feature type conversion
 
         Supported conversions:
          - point <-> centroid
@@ -1138,7 +1138,7 @@ class VDigitToolbar(AbstractToolbar):
         return True
 
     def StopEditing (self):
-        """Stop editing of selected vector map layer.
+        """!Stop editing of selected vector map layer.
 
         @return True on success
         @return False on failure
@@ -1240,7 +1240,7 @@ class VDigitToolbar(AbstractToolbar):
         return layerNameList
 
     def GetLayer(self):
-        """Get selected layer for editing -- MapLayer instance"""
+        """!Get selected layer for editing -- MapLayer instance"""
         return self.mapLayer
 
 class ProfileToolbar(AbstractToolbar):
@@ -1262,7 +1262,7 @@ class ProfileToolbar(AbstractToolbar):
         self.toolbar.Realize()
 
     def ToolbarData(self):
-        """Toolbar data"""
+        """!Toolbar data"""
 
         self.transect = wx.NewId()
         self.addraster = wx.NewId()
@@ -1333,7 +1333,7 @@ class NvizToolbar(AbstractToolbar):
         self.toolbar.Realize()
 
     def ToolbarData(self):
-        """Toolbar data"""
+        """!Toolbar data"""
 
         self.settings = wx.NewId()
         self.quit = wx.NewId()
@@ -1356,7 +1356,7 @@ class NvizToolbar(AbstractToolbar):
             self.parent.nvizToolWin.Hide()
 
     def OnExit (self, event=None):
-        """Quit nviz tool (swith to 2D mode)"""
+        """!Quit nviz tool (swith to 2D mode)"""
 
         # hide dialogs if still open
         if self.parent.nvizToolWin:

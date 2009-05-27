@@ -61,7 +61,7 @@ def read_menudata():
         print '                 ),'
 
 def get_description(item):
-    """Return command desctiption based on interface
+    """!Return command desctiption based on interface
     description"""
     print 
     desc, type, cmd = item

@@ -296,12 +296,12 @@ class ColorTable(wx.Frame):
         return cr_panel        
 
     def OnAddRules(self, event):
-        """Add rules button pressed"""
+        """!Add rules button pressed"""
         nrules = self.numRules.GetValue()
         self.AddRules(nrules)
         
     def AddRules(self, nrules):
-        """Add rules"""
+        """!Add rules"""
         snum = len(self.ruleslines.keys())
         for num in range(snum, snum+nrules):
             # enable
@@ -422,7 +422,7 @@ class ColorTable(wx.Frame):
         self.vect['rgb'] = event.GetString()
         
     def OnRuleEnable(self, event):
-        """Rule enabled/disabled"""
+        """!Rule enabled/disabled"""
         id = event.GetId()
         
         if event.IsChecked():
@@ -439,7 +439,7 @@ class ColorTable(wx.Frame):
             del self.ruleslines[id]
         
     def OnRuleValue(self, event):
-        """Rule value changed"""
+        """!Rule value changed"""
         num = event.GetId()
         vals = event.GetString().strip()
 
@@ -477,7 +477,7 @@ class ColorTable(wx.Frame):
                     return
         
     def OnRuleColor(self, event):
-        """Rule color changed"""
+        """!Rule color changed"""
         num = event.GetId()
         
         rgba_color = event.GetValue()
@@ -512,7 +512,7 @@ class ColorTable(wx.Frame):
         self.Destroy()
         
     def OnPreview(self, event):
-        """Update preview"""
+        """!Update preview"""
         # raster
         if self.elem == 'cell':
             cmdlist = ['d.rast',
@@ -563,14 +563,14 @@ class ColorTable(wx.Frame):
                                 map = self.inmap)
         
     def OnHelp(self, event):
-        """Show GRASS manual page"""
+        """!Show GRASS manual page"""
         gcmd.RunCommand('g.manual',
                         quiet = True,
                         parent = self,
                         entry = self.cmd)
         
     def CreateColorTable(self, force=False):
-        """Creates color table"""
+        """!Creates color table"""
         rulestxt = ''
         
         for rule in self.ruleslines.itervalues():
@@ -613,7 +613,7 @@ class ColorTable(wx.Frame):
                             input = gtemp)
         
 class BufferedWindow(wx.Window):
-    """A Buffered window class"""
+    """!A Buffered window class"""
     def __init__(self, parent, id,
                  pos = wx.DefaultPosition,
                  size = wx.DefaultSize,
@@ -654,7 +654,7 @@ class BufferedWindow(wx.Window):
         self.Map.SetRegion()
 
     def Draw(self, pdc, img=None, pdctype='image'):
-        """Draws preview or clears window"""
+        """!Draws preview or clears window"""
         pdc.BeginDrawing()
 
         Debug.msg (3, "BufferedWindow.Draw(): pdctype=%s" % (pdctype))
@@ -678,7 +678,7 @@ class BufferedWindow(wx.Window):
         self.Refresh()
 
     def OnPaint(self, event):
-        """Draw pseudo DC to buffer"""
+        """!Draw pseudo DC to buffer"""
         self._Buffer = wx.EmptyBitmap(self.Map.width, self.Map.height)
         dc = wx.BufferedPaintDC(self, self._Buffer)
         
@@ -699,7 +699,7 @@ class BufferedWindow(wx.Window):
         self.pdc.DrawToDCClipped(dc, r)
         
     def OnSize(self, event):
-        """Init image size to match window size"""
+        """!Init image size to match window size"""
         # set size of the input image
         self.Map.width, self.Map.height = self.GetClientSize()
 
@@ -721,7 +721,7 @@ class BufferedWindow(wx.Window):
         self.resize = True
 
     def OnIdle(self, event):
-        """Only re-render a preview image from GRASS during
+        """!Only re-render a preview image from GRASS during
         idle time instead of multiple times during resizing.
         """
         if self.resize:
@@ -730,7 +730,7 @@ class BufferedWindow(wx.Window):
         event.Skip()
 
     def GetImage(self):
-        """Converts files to wx.Image"""
+        """!Converts files to wx.Image"""
         if self.Map.mapfile and os.path.isfile(self.Map.mapfile) and \
                 os.path.getsize(self.Map.mapfile):
             img = wx.Image(self.Map.mapfile, wx.BITMAP_TYPE_ANY)
@@ -740,7 +740,7 @@ class BufferedWindow(wx.Window):
         return img
     
     def UpdatePreview(self, img=None):
-        """Update canvas if window changes geometry"""
+        """!Update canvas if window changes geometry"""
         Debug.msg (2, "BufferedWindow.UpdatePreview(%s): render=%s" % (img, self.render))
         oldfont = ""
         oldencoding = ""
@@ -767,6 +767,6 @@ class BufferedWindow(wx.Window):
         self.resize = False
         
     def EraseMap(self):
-        """Erase preview"""
+        """!Erase preview"""
         self.Draw(self.pdc, pdctype='clear')
     

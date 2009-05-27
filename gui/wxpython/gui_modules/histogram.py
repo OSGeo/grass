@@ -343,7 +343,7 @@ class HistFrame(wx.Frame):
 
 
     def __createToolBar(self):
-        """Creates toolbar"""
+        """!Creates toolbar"""
 
         toolbar = self.CreateToolBar()
         for each in self.toolbarData():
@@ -351,7 +351,7 @@ class HistFrame(wx.Frame):
         toolbar.Realize()
 
     def AddToolbarButton(self, toolbar, label, icon, help, handler):
-        """Adds buttons to the toolbar"""
+        """!Adds buttons to the toolbar"""
 
         if not label:
             toolbar.AddSeparator()
@@ -400,7 +400,7 @@ class HistFrame(wx.Frame):
         self.Map.geom = self.width, self.height
 
     def OnOptions(self, event):
-        """Change histogram settings"""
+        """!Change histogram settings"""
 
         cmd = ['d.histogram']
         if self.mapname != '':

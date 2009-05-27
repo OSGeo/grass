@@ -4,7 +4,7 @@ import os
 import sys
 
 def __read_variables(file, dict={}):
-    """Read variables from file (e.g. Platform.make)
+    """!Read variables from file (e.g. Platform.make)
     
     @param file file descriptor
     @param dict dictionary to store (variable, value)
@@ -22,7 +22,7 @@ def __read_variables(file, dict={}):
         dict[var.strip()] = val.strip()
         
 def update_opts(flag, macros, inc_dirs, lib_dirs, libs, extras):
-    """Update Extension options"""
+    """!Update Extension options"""
     global variables
     line = variables[flag]
     fw_next = False

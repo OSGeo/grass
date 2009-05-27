@@ -103,11 +103,11 @@ class MetaIcon:
             self.description = ''
 
     def __str__(self):
-        """Debugging"""
+        """!Debugging"""
         return "label=%s, img=%s, type=%s" % (self.label, self.imagepath, self.type)
 
     def GetBitmap(self, size=None):
-        """Get bitmap"""
+        """!Get bitmap"""
         bmp = None
 
         if self.type == 'wx':

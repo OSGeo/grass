@@ -147,7 +147,7 @@ def color_resolve(color):
 
 
 def normalize_whitespace(text):
-    """Remove redundant whitespace from a string"""
+    """!Remove redundant whitespace from a string"""
     return string.join( string.split(text), ' ')
 
 def text_beautify( someString , width=70):
@@ -163,11 +163,11 @@ def text_beautify( someString , width=70):
         return escape_ampersand( string.strip(normalize_whitespace(someString ), ".,;:" ))
     
 def escape_ampersand(text):
-    """Escapes ampersands with additional ampersand for GUI"""
+    """!Escapes ampersands with additional ampersand for GUI"""
     return string.replace(text, "&", "&&")
 
 class UpdateThread(Thread):
-    """Update dialog widgets in the thread"""
+    """!Update dialog widgets in the thread"""
     def __init__(self, parent, event, eventId, task):
         Thread.__init__(self)
         
@@ -268,7 +268,7 @@ def UpdateDialog(parent, event, eventId, task):
     return UpdateThread(parent, event, eventId, task)
 
 class UpdateQThread(Thread):
-    """Update dialog widgets in the thread"""
+    """!Update dialog widgets in the thread"""
     requestId = 0
     def __init__(self, parent, requestQ, resultQ, **kwds):
         Thread.__init__(self, **kwds)
@@ -336,7 +336,7 @@ class grassTask:
             xml.sax.parseString( getInterfaceDescription( grassModule ) , processTask( self ) )
 
     def get_list_params(self, element = 'name'):
-        """Get list of parameters"""
+        """!Get list of parameters"""
         params = []
         for p in self.params:
             params.append(p['name'])
@@ -344,7 +344,7 @@ class grassTask:
         return params
 
     def get_list_flags(self, element = 'name'):
-        """Get list of parameters"""
+        """!Get list of parameters"""
         flags = []
         for p in self.flags:
             flags.append(p['name'])
@@ -352,7 +352,7 @@ class grassTask:
         return flags
     
     def get_param(self, value, element='name', raiseError=True):
-        """Find and return a param by name."""
+        """!Find and return a param by name."""
         for p in self.params:
             if p[element] == value:
                 return p
@@ -920,17 +920,17 @@ class mainFrame(wx.Frame):
         self.Layout()
 
     def updateValuesHook(self):
-        """Update status bar data"""
+        """!Update status bar data"""
         self.SetStatusText(' '.join(self.notebookpanel.createCmd(ignoreErrors = True)) )
 
     def OnOK(self, event):
-        """OK button pressed"""
+        """!OK button pressed"""
         cmd = self.OnApply(event)
         if cmd is not None and self.get_dcmd is not None:
             self.OnCancel(event)
 
     def OnApply(self, event):
-        """Apply the command"""
+        """!Apply the command"""
         cmd = self.createCmd()
 
         if cmd is not None and self.get_dcmd is not None:
@@ -944,7 +944,7 @@ class mainFrame(wx.Frame):
         return cmd
 
     def OnRun(self, event):
-        """Run the command"""
+        """!Run the command"""
         cmd = self.createCmd()
         
         if cmd == None or len(cmd) < 2:
@@ -975,12 +975,12 @@ class mainFrame(wx.Frame):
         self.btn_abort.Enable(True)
 
     def OnAbort(self, event):
-        """Abort running command"""
+        """!Abort running command"""
         event = goutput.wxCmdAbort(aborted=True)
         wx.PostEvent(self.goutput, event)
 
     def OnCopy(self, event):
-        """Copy the command"""
+        """!Copy the command"""
         cmddata = wx.TextDataObject()
         # list -> string
         cmdstring = ' '.join(self.createCmd(ignoreErrors=True))
@@ -993,7 +993,7 @@ class mainFrame(wx.Frame):
                                     (cmdstring))
 
     def OnCancel(self, event):
-        """Cancel button pressed"""
+        """!Cancel button pressed"""
         self.MakeModal(False)
         
         if self.get_dcmd and \
@@ -1014,7 +1014,7 @@ class mainFrame(wx.Frame):
             self.Destroy()
 
     def OnHelp(self, event):
-        """Show manual page (switch to the 'Manual' notebook page)"""
+        """!Show manual page (switch to the 'Manual' notebook page)"""
         if hasattr(self.notebookpanel, "manual_tab_id"):
             self.notebookpanel.notebook.SetSelection(self.notebookpanel.manual_tab_id)
             self.notebookpanel.OnPageChange(None)
@@ -1022,7 +1022,7 @@ class mainFrame(wx.Frame):
         event.Skip()
         
     def createCmd(self, ignoreErrors = False):
-        """Create command string (python list)"""
+        """!Create command string (python list)"""
         return self.notebookpanel.createCmd(ignoreErrors=ignoreErrors)
 
 class cmdPanel(wx.Panel):
@@ -1584,7 +1584,7 @@ class cmdPanel(wx.Panel):
             fn(**kwargs)
         
     def OnVerbosity(self, event):
-        """Verbosity level changed"""
+        """!Verbosity level changed"""
         verbose = self.FindWindowById(self.task.get_flag('verbose')['wxId'])
         quiet = self.FindWindowById(self.task.get_flag('quiet')['wxId'])
         if event.IsChecked():
@@ -1793,7 +1793,7 @@ class GUI:
         self.grass_task = None
 
     def ParseInterface(self, cmd):
-        """Parse interface
+        """!Parse interface
 
         @param cmd command to be parsed (given as list)
         """
@@ -1895,7 +1895,7 @@ class GUI:
         return cmd
 
     def GetCommandInputMapParamKey(self, cmd):
-        """Get parameter key for input raster/vector map
+        """!Get parameter key for input raster/vector map
         
         @param cmd module name
         

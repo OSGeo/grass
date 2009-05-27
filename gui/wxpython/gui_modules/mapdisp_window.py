@@ -947,7 +947,7 @@ class BufferedWindow(MapWindow, wx.Window):
 
     def DrawCross(self, pdc, coords, size, rotation=0,
                   text=None, textAlign='lr', textOffset=(5, 5)):
-        """Draw cross in PseudoDC
+        """!Draw cross in PseudoDC
 
         @todo implement rotation
 
@@ -2603,7 +2603,7 @@ class BufferedWindow(MapWindow, wx.Window):
             os.environ["GRASS_REGION"] = tmpreg
 
     def Distance(self, beginpt, endpt, screen=True):
-        """Calculete distance
+        """!Calculete distance
 
         LL-locations not supported
 

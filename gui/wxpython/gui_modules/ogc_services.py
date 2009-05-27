@@ -29,7 +29,7 @@ class WMSDialog(wx.Dialog):
     def __init__(self, parent, service = 'wms',
                  id=wx.ID_ANY,
                  style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
-        """Dialog to import data from WMS server"""
+        """!Dialog to import data from WMS server"""
         self.parent  = parent  # GMFrame 
         self.service = service # currently only WMS is implemented
         
@@ -46,7 +46,7 @@ class WMSDialog(wx.Dialog):
         self.SetMinSize((550, 400))
         
     def __createWidgets(self):
-        """Create dialog widgets"""
+        """!Create dialog widgets"""
         #
         # settings
         #
@@ -94,7 +94,7 @@ class WMSDialog(wx.Dialog):
         self.server.Bind(wx.EVT_TEXT, self.OnServer)
         
     def __doLayout(self):
-        """Do dialog layout"""
+        """!Do dialog layout"""
         dialogSizer = wx.BoxSizer(wx.VERTICAL)
         
         #
@@ -156,11 +156,11 @@ class WMSDialog(wx.Dialog):
         self.Layout()
 
     def OnCancel(self, event):
-        """Button 'Cancel' pressed -> close the dialog"""
+        """!Button 'Cancel' pressed -> close the dialog"""
         self.Close()
 
     def OnConnect(self, event):
-        """Button 'Connect' pressed"""
+        """!Button 'Connect' pressed"""
         server = self.server.GetValue()
         if not server:
             self.btn_import.Enable(False)
@@ -207,7 +207,7 @@ class WMSDialog(wx.Dialog):
             self.btn_import.Enable(False)
         
     def OnServer(self, event):
-        """Server settings changed"""
+        """!Server settings changed"""
         value = event.GetString()
         if value:
             self.btn_connect.Enable(True)
@@ -215,16 +215,16 @@ class WMSDialog(wx.Dialog):
             self.btn_connect.Enable(False)
         
     def GetLayers(self):
-        """Get list of selected layers/styles to be imported"""
+        """!Get list of selected layers/styles to be imported"""
         return self.list.GetSelectedLayers()
 
     def GetSettings(self):
-        """Get connection settings"""
+        """!Get connection settings"""
         return { 'server' : self.server.GetValue() }
     
 class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
     def __init__(self, parent, pos=wx.DefaultPosition):
-        """List of layers to be imported (dxf, shp...)"""
+        """!List of layers to be imported (dxf, shp...)"""
         self.parent = parent
         
         TreeListCtrl.__init__(self, parent, wx.ID_ANY,
@@ -242,7 +242,7 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
         self.root = None
         
     def LoadData(self, data = {}):
-        """Load data into list"""
+        """!Load data into list"""
         # detete first all items
         self.DeleteAllItems()
         self.root = self.AddRoot(_("Layers"))
@@ -270,15 +270,15 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
         self.Expand(self.root)
         
     def GetItemCount(self):
-        """Required for listmix.ListCtrlAutoWidthMixin"""
+        """!Required for listmix.ListCtrlAutoWidthMixin"""
         return 0
 
     def GetCountPerPage(self):
-        """Required for listmix.ListCtrlAutoWidthMixin"""
+        """!Required for listmix.ListCtrlAutoWidthMixin"""
         return 0
 
     def GetSelectedLayers(self):
-        """Get selected layers/styles"""
+        """!Get selected layers/styles"""
         layers = {}
 
         for item in self.GetSelections():

@@ -62,7 +62,7 @@ import utils
 from debug import Debug as Debug
 
 class GException(Exception):
-    """Generic exception"""
+    """!Generic exception"""
     def __init__(self, message, title=_("Error"), parent=None):
         self.message = message
         self.parent = parent
@@ -87,13 +87,13 @@ class GException(Exception):
         return ''
     
 class GStdError(GException):
-    """Generic exception"""
+    """!Generic exception"""
 
     def __init__(self, message, title=_("Error"), parent=None):
         GException.__init__(self, message, title=title, parent=parent)
 
 class CmdError(GException):
-    """Exception used for GRASS commands.
+    """!Exception used for GRASS commands.
 
     See Command class (command exits with EXIT_FAILURE,
     G_fatal_error() is called)."""
@@ -103,7 +103,7 @@ class CmdError(GException):
                             parent=parent)
 
 class SettingsError(GException):
-    """Exception used for GRASS settings, see
+    """!Exception used for GRASS settings, see
     gui_modules/preferences.py."""
     def __init__(self, message, parent=None):
         GException.__init__(self, message,
@@ -111,28 +111,28 @@ class SettingsError(GException):
                             parent=parent)
 
 class DigitError(GException):
-    """Exception raised during digitization session"""
+    """!Exception raised during digitization session"""
     def __init__(self, message, parent=None):
         GException.__init__(self, message,
                             title=_("Vector digitizer error"),
                             parent=parent)
 
 class DBMError(GException):
-    """Attribute Table Manager exception class"""
+    """!Attribute Table Manager exception class"""
     def __init__(self, message, parent=None):
         GException.__init__(self, message,
                             title=_("Attribute table manager error"),
                             parent=parent)
 
 class NvizError(GException):
-    """Nviz exception class"""
+    """!Nviz exception class"""
     def __init__(self, message, parent=None):
         GException.__init__(self, message,
                             title=_("Nviz error"),
                             parent=parent)
 
 class Popen(subprocess.Popen):
-    """Subclass subprocess.Popen"""
+    """!Subclass subprocess.Popen"""
     def recv(self, maxsize=None):
         return self._recv('stdout', maxsize)
     
@@ -154,7 +154,7 @@ class Popen(subprocess.Popen):
         setattr(self, which, None)
 
     def kill(self):
-        """Try to kill running process"""
+        """!Try to kill running process"""
         if subprocess.mswindows:
             import win32api
             handle = win32api.OpenProcess(1, 0, self.pid)
@@ -279,7 +279,7 @@ def send_all(p, data):
         data = buffer(data, sent)
 
 class Command:
-    """Run command in separate thread. Used for commands launched
+    """!Run command in separate thread. Used for commands launched
     on the background.
 
     If stdout/err is redirected, write() method is required for the
@@ -376,7 +376,7 @@ class Command:
             del os.environ["GRASS_VERBOSE"]
             
     def __ReadOutput(self, stream):
-        """Read stream and return list of lines
+        """!Read stream and return list of lines
 
         @param stream stream to be read
         """
@@ -395,7 +395,7 @@ class Command:
         return lineList
                     
     def __ReadErrOutput(self):
-        """Read standard error output and return list of lines"""
+        """!Read standard error output and return list of lines"""
         return self.__ReadOutput(self.cmdThread.module.stderr)
 
     def __ProcessStdErr(self):
@@ -435,7 +435,7 @@ class Command:
         return msg
 
     def __GetError(self):
-        """Get error message or ''"""
+        """!Get error message or ''"""
         if not self.cmdThread.module:
             return _("Unable to exectute command: '%s'") % ' '.join(self.cmd)
 
@@ -446,7 +446,7 @@ class Command:
         return ''
     
 class CommandThread(Thread):
-    """Create separate thread for command. Used for commands launched
+    """!Create separate thread for command. Used for commands launched
     on the background."""
     def __init__ (self, cmd, stdin=None,
                   stdout=sys.stdout, stderr=sys.stderr):
@@ -489,7 +489,7 @@ class CommandThread(Thread):
             del os.environ["GRASS_MESSAGE_FORMAT"]
         
     def run(self):
-        """Run command"""
+        """!Run command"""
         if len(self.cmd) == 0:
             return
 
@@ -513,7 +513,7 @@ class CommandThread(Thread):
             self.__redirect_stream()
 
     def __redirect_stream(self):
-        """Redirect stream"""
+        """!Redirect stream"""
         if self.stdout:
             # make module stdout/stderr non-blocking
             out_fileno = self.module.stdout.fileno()
@@ -554,12 +554,12 @@ class CommandThread(Thread):
                 self.error = line
             
     def abort(self):
-        """Abort running process, used by main thread to signal an abort"""
+        """!Abort running process, used by main thread to signal an abort"""
         self._want_abort = True
     
 def RunCommand(prog, flags = "", overwrite = False, quiet = False, verbose = False,
                parent = None, read = False, stdin = None, **kwargs):
-    """Run GRASS command"""
+    """!Run GRASS command"""
     kwargs['stderr'] = subprocess.PIPE
     
     if read:

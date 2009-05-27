@@ -41,7 +41,7 @@ import utils
 from preferences import globalSettings as UserSettings
 
 class NewVectorDialog(wx.Dialog):
-    """Create new vector map layer"""
+    """!Create new vector map layer"""
     def __init__(self, parent, id, title, disableAdd=False, 
                 style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
 
@@ -79,14 +79,14 @@ class NewVectorDialog(wx.Dialog):
         self.SetMinSize(self.GetSize())
 
     def OnMapName(self, event):
-        """Name for vector map layer given"""
+        """!Name for vector map layer given"""
         if len(event.GetString()) > 0:
             self.btnOK.Enable(True)
         else:
             self.btnOK.Enable(False)
 
     def __Layout(self):
-        """Do layout"""
+        """!Do layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         dataSizer = wx.BoxSizer(wx.VERTICAL)
@@ -119,14 +119,14 @@ class NewVectorDialog(wx.Dialog):
         sizer.Fit(self)
 
     def GetName(self):
-        """Return (mapName, overwrite)"""
+        """!Return (mapName, overwrite)"""
         mapName = self.mapName.GetValue().split('@', 1)[0]
 
         return mapName
     
 def CreateNewVector(parent, cmd, title=_('Create new vector map'),
                     exceptMap=None, log=None, disableAdd=False):
-    """Create new vector map layer
+    """!Create new vector map layer
 
     @cmd cmd (prog, **kwargs)
     
@@ -401,13 +401,13 @@ class DecorationDialog(wx.Dialog):
                 self.parent.MapWindow.overlays[self.ovlId]['propwin'].Show()
 
     def OnCancel(self, event):
-        """Cancel dialog"""
+        """!Cancel dialog"""
         self.parent.dialogs['barscale'] = None
 
         self.Destroy()
 
     def OnOK(self, event):
-        """Button 'OK' pressed"""
+        """!Button 'OK' pressed"""
         # enable or disable overlay
         self.parent.Map.GetOverlay(self.ovlId).SetActive(self.chkbox.IsChecked())
 
@@ -418,7 +418,7 @@ class DecorationDialog(wx.Dialog):
         self.OnCancel(None)
 
     def GetOptData(self, dcmd, layer, params, propwin):
-        """Process decoration layer data"""
+        """!Process decoration layer data"""
         # update layer data
         if params:
             self.parent.MapWindow.overlays[self.ovlId]['params'] = params
@@ -559,21 +559,21 @@ class TextLayerDialog(wx.Dialog):
         self.Bind(wx.EVT_SPINCTRL,   self.OnRotation,   self.rotation)
 
     def OnRefit(self, event):
-        """Resize text entry to match text"""
+        """!Resize text entry to match text"""
         self.sizer.Fit(self)
 
     def OnText(self, event):
-        """Change text string"""
+        """!Change text string"""
         self.currText = event.GetString()
 
     def OnRotation(self, event):
-        """Change rotation"""
+        """!Change rotation"""
         self.currRot = event.GetInt()
 
         event.Skip()
 
     def OnSelectFont(self, event):
-        """Change font"""
+        """!Change font"""
         data = wx.FontData()
         data.EnableEffects(True)
         data.SetColour(self.currClr)         # set colour
@@ -594,7 +594,7 @@ class TextLayerDialog(wx.Dialog):
         dlg.Destroy()
 
     def GetValues(self):
-        """Get text properties"""
+        """!Get text properties"""
         return { 'text' : self.currText,
                  'font' : self.currFont,
                  'color' : self.currClr,
@@ -603,7 +603,7 @@ class TextLayerDialog(wx.Dialog):
                  'active' : self.chkbox.IsChecked() }
 
 class LoadMapLayersDialog(wx.Dialog):
-    """Load selected map layers (raster, vector) into layer tree"""
+    """!Load selected map layers (raster, vector) into layer tree"""
     def __init__(self, parent, title, style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
         wx.Dialog.__init__(self, parent=parent, id=wx.ID_ANY, title=title, style=style)
 
@@ -713,7 +713,7 @@ class LoadMapLayersDialog(wx.Dialog):
         return bodySizer
 
     def LoadMapLayers(self, type, mapset):
-        """Load list of map layers
+        """!Load list of map layers
 
         @param type layer type ('raster' or 'vector')
         @param mapset mapset name
@@ -730,7 +730,7 @@ class LoadMapLayersDialog(wx.Dialog):
             self.layers.Check(item)
 
     def OnChangeParams(self, event):
-        """Filter parameters changed by user"""
+        """!Filter parameters changed by user"""
         # update list of layer to be loaded
         self.LoadMapLayers(self.layerType.GetStringSelection()[:4],
                            self.mapset.GetStringSelection())
@@ -738,7 +738,7 @@ class LoadMapLayersDialog(wx.Dialog):
         event.Skip()
 
     def OnMenu(self, event):
-        """Table description area, context menu"""
+        """!Table description area, context menu"""
         if not hasattr(self, "popupID1"):
             self.popupDataID1 = wx.NewId()
             self.popupDataID2 = wx.NewId()
@@ -758,12 +758,12 @@ class LoadMapLayersDialog(wx.Dialog):
         menu.Destroy()
 
     def OnSelectAll(self, event):
-        """Select all map layer from list"""
+        """!Select all map layer from list"""
         for item in range(self.layers.GetCount()):
             self.layers.Check(item, True)
 
     def OnSelectInvert(self, event):
-        """Invert current selection"""
+        """!Invert current selection"""
         for item in range(self.layers.GetCount()):
             if self.layers.IsChecked(item):
                 self.layers.Check(item, False)
@@ -771,12 +771,12 @@ class LoadMapLayersDialog(wx.Dialog):
                 self.layers.Check(item, True)
         
     def OnDeselectAll(self, event):
-        """Select all map layer from list"""
+        """!Select all map layer from list"""
         for item in range(self.layers.GetCount()):
             self.layers.Check(item, False)
 
     def OnFilter(self, event):
-        """Apply filter for map names"""
+        """!Apply filter for map names"""
         if len(event.GetString()) == 0:
            self.layers.Set(self.map_layers) 
            return 
@@ -795,7 +795,7 @@ class LoadMapLayersDialog(wx.Dialog):
         event.Skip()
 
     def OnToggle(self, event):
-        """Select toggle (check or uncheck all layers)"""
+        """!Select toggle (check or uncheck all layers)"""
         check = event.Checked()
         for item in range(self.layers.GetCount()):
             self.layers.Check(item, check)
@@ -803,7 +803,7 @@ class LoadMapLayersDialog(wx.Dialog):
         event.Skip()
         
     def GetMapLayers(self):
-        """Return list of checked map layers"""
+        """!Return list of checked map layers"""
         layerNames = []
         for indx in self.layers.GetSelections():
             # layers.append(self.layers.GetStringSelec(indx))
@@ -819,11 +819,11 @@ class LoadMapLayersDialog(wx.Dialog):
         return layerNames
     
     def GetLayerType(self):
-        """Get selected layer type"""
+        """!Get selected layer type"""
         return self.layerType.GetStringSelection()
     
 class MultiImportDialog(wx.Dialog):
-    """Import dxf layers"""
+    """!Import dxf layers"""
     def __init__(self, parent, type,
                  id=wx.ID_ANY, title=_("Multiple import"), 
                  style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
@@ -970,11 +970,11 @@ class MultiImportDialog(wx.Dialog):
         self.list.SetColumnWidth(col=1, width=width/2 - 50)
 
     def OnCancel(self, event=None):
-        """Close dialog"""
+        """!Close dialog"""
         self.Close()
 
     def OnRun(self, event):
-        """Import data (each layes as separate vector map)"""
+        """!Import data (each layes as separate vector map)"""
         data = self.list.GetLayers()
         
         # hide dialog
@@ -1029,14 +1029,14 @@ class MultiImportDialog(wx.Dialog):
         self.OnCancel()
         
     def OnAbort(self, event):
-        """Abort running import
+        """!Abort running import
 
         @todo not yet implemented
         """
         pass
         
     def OnSetInput(self, event):
-        """Input DXF file/OGR dsn defined, update list of layer widget"""
+        """!Input DXF file/OGR dsn defined, update list of layer widget"""
         path = event.GetString()
 
         if self.inputType == 'dxf':
@@ -1076,7 +1076,7 @@ class MultiImportDialog(wx.Dialog):
 class LayersList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin,
                  listmix.CheckListCtrlMixin):
 #                 listmix.CheckListCtrlMixin, listmix.TextEditMixin):
-    """List of layers to be imported (dxf, shp...)"""
+    """!List of layers to be imported (dxf, shp...)"""
     def __init__(self, parent, pos=wx.DefaultPosition,
                  log=None):
         self.parent = parent
@@ -1098,7 +1098,7 @@ class LayersList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin,
         self.Bind(wx.EVT_RIGHT_UP,            self.OnPopupMenu) #wxGTK
 
     def LoadData(self, data=None):
-        """Load data into list"""
+        """!Load data into list"""
         if data is None:
             return
 
@@ -1114,7 +1114,7 @@ class LayersList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin,
         self.SetColumnWidth(col=0, width=wx.LIST_AUTOSIZE_USEHEADER)
 
     def OnPopupMenu(self, event):
-        """Show popup menu"""
+        """!Show popup menu"""
         if self.GetItemCount() < 1:
             return
         
@@ -1134,7 +1134,7 @@ class LayersList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin,
         menu.Destroy()
 
     def OnSelectAll(self, event):
-        """Select all items"""
+        """!Select all items"""
         item = -1
         
         while True:
@@ -1146,7 +1146,7 @@ class LayersList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin,
         event.Skip()
         
     def OnSelectNone(self, event):
-        """Deselect items"""
+        """!Deselect items"""
         item = -1
         
         while True:
@@ -1158,7 +1158,7 @@ class LayersList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin,
         event.Skip()
         
     def GetLayers(self):
-        """Get list of layers (layer name, output name)"""
+        """!Get list of layers (layer name, output name)"""
         data = []
         item = -1
         while True:
@@ -1173,7 +1173,7 @@ class LayersList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin,
         return data
 
 class SetOpacityDialog(wx.Dialog):
-    """Set opacity of map layers"""
+    """!Set opacity of map layers"""
     def __init__(self, parent, id=wx.ID_ANY, title=_("Set Map Layer Opacity"),
                  size=wx.DefaultSize, pos=wx.DefaultPosition,
                  style=wx.DEFAULT_DIALOG_STYLE, opacity=100):
@@ -1235,7 +1235,7 @@ class SetOpacityDialog(wx.Dialog):
         self.Layout()
 
     def GetOpacity(self):
-        """Button 'OK' pressed"""
+        """!Button 'OK' pressed"""
         # return opacity value
         opacity = float(self.value.GetValue()) / 100
         return opacity

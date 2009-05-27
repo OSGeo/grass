@@ -31,14 +31,14 @@ import menuform
 from grass.script import core as grass
 
 class GPrompt:
-    """Interactive GRASS prompt"""
+    """!Interactive GRASS prompt"""
     def __init__(self, parent):
         self.parent = parent
                 
         self.panel, self.input = self.__create()
         
     def __create(self):
-        """Create widget"""
+        """!Create widget"""
         cmdprompt = wx.Panel(self.parent)
         
         label = wx.Button(parent = cmdprompt, id = wx.ID_ANY,
@@ -85,19 +85,19 @@ class GPrompt:
         return cmdprompt, cmdinput
 
     def GetPanel(self):
-        """Get main widget panel"""
+        """!Get main widget panel"""
         return self.panel
 
     def GetInput(self):
-        """Get main prompt widget"""
+        """!Get main prompt widget"""
         return self.input
     
     def OnCmdErase(self, event):
-        """Erase command prompt"""
+        """!Erase command prompt"""
         self.input.SetValue('')
         
     def OnRunCmd(self, event):
-        """Run command"""
+        """!Run command"""
         cmdString = event.GetString()
         
         if self.parent.GetName() != "LayerManager":
@@ -115,7 +115,7 @@ class GPrompt:
         self.OnUpdateStatusBar(None)
         
     def OnUpdateStatusBar(self, event):
-        """Update Layer Manager status bar"""
+        """!Update Layer Manager status bar"""
         if self.parent.GetName() != "LayerManager":
             return
         
@@ -192,7 +192,7 @@ class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
         self.dropdownlistbox.Bind(wx.EVT_LIST_COL_CLICK, self.OnListColClick)
         
     def _updateDataList(self, choices):
-        """Update data list"""
+        """!Update data list"""
         # delete, if need, all the previous data
         if self.dropdownlistbox.GetColumnCount() != 0:
             self.dropdownlistbox.DeleteAllColumns()
@@ -206,7 +206,7 @@ class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
         self.SetColumnCount(numVal)
     
     def _setListSize(self):
-        """Set list size"""
+        """!Set list size"""
         choices = self._choices
         longest = 0
         for choice in choices:
@@ -287,7 +287,7 @@ class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
             self._showDropDown(False)
          
     def GetListCtrl(self):
-        """Method required by listmix.ColumnSorterMixin"""
+        """!Method required by listmix.ColumnSorterMixin"""
         return self.dropdownlistbox
     
     def SetChoices(self, choices, type = 'module'):
@@ -320,18 +320,18 @@ class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
         self._colFetch = -1
         
     def OnListClick(self, evt):
-        """Left mouse button pressed"""
+        """!Left mouse button pressed"""
         toSel, flag = self.dropdownlistbox.HitTest( evt.GetPosition() )
         #no values on poition, return
         if toSel == -1: return
         self.dropdownlistbox.Select(toSel)
 
     def OnListDClick(self, evt):
-        """Mouse button double click"""
+        """!Mouse button double click"""
         self._setValueFromSelected()
 
     def OnListColClick(self, evt):
-        """Left mouse button pressed on column"""
+        """!Left mouse button pressed on column"""
         col = evt.GetColumn()
         # reverse the sort
         if col == self._colSearch:
@@ -341,12 +341,12 @@ class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
         evt.Skip()
 
     def OnListItemSelected(self, event):
-        """Item selected"""
+        """!Item selected"""
         self._setValueFromSelected()
         event.Skip()
 
     def OnEnteredText(self, event):
-        """Text entered"""
+        """!Text entered"""
         text = event.GetString()
         
         if not text:
@@ -445,7 +445,7 @@ class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
             event.Skip()
         
     def OnControlChanged(self, event):
-        """Control changed"""
+        """!Control changed"""
         if self.IsShown():
             self._showDropDown(False)
         
