@@ -29,7 +29,7 @@
 #% required : yes
 #%end
 
-import grass
+from grass.script import core as grass
 
 if __name__ == "__main__":
     options, flags = grass.parser()

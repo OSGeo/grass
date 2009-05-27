@@ -52,8 +52,8 @@
 #% answer: boundary to line
 #%end
 
-import grass
 import sys
+from grass.script import core as grass
 
 def main():
     if options['type'] == "point to centroid":
