@@ -557,7 +557,12 @@ Section "GRASS" SecGRASS
 	FileWrite $0 'set PATH=%GRASSDIR%\tcl-tk\bin;%GRASSDIR%\sqlite\bin;%GRASSDIR%\gpsbabel;%PATH%$\r$\n'
 	FileWrite $0 '$\r$\n'
 	FileWrite $0 'rem Set Path to MSIE web browser$\r$\n'	
+	; FIXME
+	; ${If} exist %PROGRAMFILES%/Mozilla Firefox/firefox.exe
+	;FileWrite $0 'set GRASS_HTML_BROWSER=%PROGRAMFILES%/Mozilla Firefox/firefox.exe$\r$\n'
+	; ${Else}
 	FileWrite $0 'set GRASS_HTML_BROWSER=%PROGRAMFILES%/Internet Explorer/iexplore.exe$\r$\n'
+	; ${EndIf}
 	FileWrite $0 '$\r$\n'
 	FileWrite $0 'rem Path to the proj files (notably the epsg projection list)$\r$\n'	
 	FileWrite $0 'set GRASS_PROJSHARE=%GRASSDIR%\proj$\r$\n'
