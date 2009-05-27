@@ -64,7 +64,7 @@ def GetTempfile(pref=None):
 
 def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None,
                         layerType=None):
-    """Get map name from GRASS command
+    """!Get map name from GRASS command
 
     @param dcmd GRASS command (given as tuple)
     @param fullyQualified change map name to be fully qualified
@@ -127,7 +127,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None,
     return mapname
 
 def GetValidLayerName(name):
-    """Make layer name SQL compliant, based on G_str_to_sql()
+    """!Make layer name SQL compliant, based on G_str_to_sql()
     
     @todo: Better use directly GRASS Python SWIG...
     """
@@ -157,7 +157,7 @@ def GetValidLayerName(name):
     return retName
 
 def ListOfCatsToRange(cats):
-    """Convert list of category number to range(s)
+    """!Convert list of category number to range(s)
 
     Used for example for d.vect cats=[range]
 
@@ -195,7 +195,7 @@ def ListOfCatsToRange(cats):
     return catstr.strip(',')
 
 def ListOfMapsets(all=False):
-    """Get list of available/accessible mapsets
+    """!Get list of available/accessible mapsets
 
     @param all if True get list of all mapsets
 
@@ -230,11 +230,11 @@ def ListOfMapsets(all=False):
     return mapsets
 
 def ListSortLower(list):
-    """Sort list items (not case-sensitive)"""
+    """!Sort list items (not case-sensitive)"""
     list.sort(cmp=lambda x, y: cmp(x.lower(), y.lower()))
 
 def GetVectorNumberOfLayers(vector):
-    """Get list of vector layers"""
+    """!Get list of vector layers"""
     cmdlist = ['v.category',
                'input=%s' % vector,
                'option=report']
@@ -262,7 +262,7 @@ def GetVectorNumberOfLayers(vector):
     return layers
 
 def Deg2DMS(lon, lat):
-    """Convert deg value to dms string
+    """!Convert deg value to dms string
 
     @param lat latitude
     @param lon longitude
@@ -301,7 +301,7 @@ def Deg2DMS(lon, lat):
     return slon + hlon + '; ' + slat + hlat
 
 def __ll_parts(value):
-    """Converts deg to d:m:s string"""
+    """!Converts deg to d:m:s string"""
     if value == 0.0:
         return '00:00:00.0000'
     
@@ -340,7 +340,7 @@ def GetCmdString(cmd):
     return scmd
 
 def CmdToTuple(cmd):
-    """Convert command list to tuple for gcmd.RunCommand()"""
+    """!Convert command list to tuple for gcmd.RunCommand()"""
     if len(cmd) < 1:
         return None
         
@@ -358,7 +358,7 @@ def CmdToTuple(cmd):
             dcmd)
 
 def PathJoin(*args):
-    """Check path created by os.path.join"""
+    """!Check path created by os.path.join"""
     path = os.path.join(*args)
     if platform.system() == 'Windows' and \
             '/' in path:
@@ -367,7 +367,7 @@ def PathJoin(*args):
     return path
     
 def reexec_with_pythonw():
-    """Re-execute Python on Mac OS"""
+    """!Re-execute Python on Mac OS"""
     if sys.platform == 'darwin' and \
             not sys.executable.endswith('MacOS/Python'):
         print >> sys.stderr, 're-executing using pythonw'

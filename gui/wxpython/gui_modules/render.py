@@ -54,7 +54,7 @@ wxUpdateProgressBar, EVT_UPDATE_PRGBAR = NewEvent()
 USE_GPNMCOMP = True
 
 class Layer(object):
-    """Virtual class which stores information about layers (map layers and
+    """!Virtual class which stores information about layers (map layers and
     overlays) of the map composition.
 
     For map layer use MapLayer class.
@@ -108,7 +108,7 @@ class Layer(object):
                    (self.name, self.GetCmd(string=True)))
 
     def Render(self):
-        """Render layer to image
+        """!Render layer to image
 
         @return rendered image filename
         @return None on error
@@ -217,7 +217,7 @@ class Layer(object):
             return self.cmd
 
     def GetType(self):
-        """Get map layer type"""
+        """!Get map layer type"""
         return self.type
     
     def GetOpacity(self, float=False):
@@ -234,7 +234,7 @@ class Layer(object):
         return int (self.opacity * 100)
 
     def GetName(self, fullyQualified=True):
-        """Get map layer name
+        """!Get map layer name
 
         @param fullyQualified if True return 'name@mapset' otherwise
         ('name', 'mapset')
@@ -250,11 +250,11 @@ class Layer(object):
                          'mapset' : '' }
         
     def IsActive(self):
-        """Check if layer is activated for rendering"""
+        """!Check if layer is activated for rendering"""
         return self.active
 
     def SetType(self, type):
-        """Set layer type"""
+        """!Set layer type"""
         if type not in ('raster', '3d-raster', 'vector',
                         'overlay', 'command',
                         'shaded', 'rgb', 'his', 'rastarrow', 'rastnum',
@@ -265,19 +265,19 @@ class Layer(object):
         self.type = type
 
     def SetName(self, name):
-        """Set layer name"""
+        """!Set layer name"""
         self.name = name
         
     def SetActive(self, enable=True):
-        """Active or deactive layer"""
+        """!Active or deactive layer"""
         self.active = bool(enable)
 
     def SetHidden(self, enable=False):
-        """Hide or show map layer in Layer Manager"""
+        """!Hide or show map layer in Layer Manager"""
         self.hidden = bool(enable)
 
     def SetOpacity(self, value):
-        """Set opacity value"""
+        """!Set opacity value"""
         if value < 0:
             value = 0.
         elif value > 1:
@@ -286,7 +286,7 @@ class Layer(object):
         self.opacity = float(value)
         
     def SetCmd(self, cmd):
-        """Set new command for layer"""
+        """!Set new command for layer"""
         if self.type == 'command':
             self.cmd = []
             for c in cmd:
@@ -299,7 +299,7 @@ class Layer(object):
         self.force_render = True
         
 class MapLayer(Layer):
-    """Represents map layer in the map canvas"""
+    """!Represents map layer in the map canvas"""
     def __init__(self, type, cmd, name=None,
                  active=True, hidden=False, opacity=1.0):
         """
@@ -332,7 +332,7 @@ class MapLayer(Layer):
             return self.name
 
 class Overlay(Layer):
-    """Represents overlay displayed in map canvas"""
+    """!Represents overlay displayed in map canvas"""
     def __init__(self, id, type, cmd,
                  active=True, hidden=True, opacity=1.0):
         """
@@ -445,7 +445,7 @@ class Map(object):
             os.environ["GISRC"] = gisrc_orig
 
     def GetWindow(self):
-        """Read WIND file and set up self.wind dictionary"""
+        """!Read WIND file and set up self.wind dictionary"""
         # FIXME: duplicated region WIND == g.region (at least some values)
         filename = os.path.join (self.env['GISDBASE'],
                                  self.env['LOCATION_NAME'],
@@ -526,7 +526,7 @@ class Map(object):
         return new
 
     def AlignExtentFromDisplay(self):
-        """Align region extent based on display size from center point"""
+        """!Align region extent based on display size from center point"""
 
         # calculate new bounding box based on center of display
         if self.region["ewres"] > self.region["nsres"]:
@@ -554,7 +554,7 @@ class Map(object):
                 self.region['s'] = -90.0
         
     def ChangeMapSize(self, (width, height)):
-        """Change size of rendered map.
+        """!Change size of rendered map.
         
         @param width,height map size
 
@@ -671,7 +671,7 @@ class Map(object):
         return region
 
     def GetCurrentRegion(self):
-        """Get current display region settings"""
+        """!Get current display region settings"""
         return self.region
 
     def SetRegion(self, windres=False):
@@ -1251,7 +1251,7 @@ class Map(object):
         return overlay
 
     def GetOverlay(self, id, list=False):
-        """Return overlay(s) with 'id'
+        """!Return overlay(s) with 'id'
 
         @param id overlay id
         @param list return list of overlays of True
@@ -1275,7 +1275,7 @@ class Map(object):
         return ovl
 
     def DeleteOverlay(self, overlay):
-        """Delete overlay
+        """!Delete overlay
 
         @param id overlay id
 
@@ -1320,7 +1320,7 @@ class Map(object):
         self.layers = []
 
     def ReverseListOfLayers(self):
-        """Reverse list of layers"""
+        """!Reverse list of layers"""
         return self.layers.reverse()
 
 if __name__ == "__main__":

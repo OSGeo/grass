@@ -36,7 +36,7 @@ imagepath = images.__path__[0]
 sys.path.append(imagepath)
 
 class SQLFrame(wx.Frame):
-    """SQL Frame class"""
+    """!SQL Frame class"""
     def __init__(self, parent, id, title, vectmap, qtype="select"):
 
         wx.Frame.__init__(self, parent, id, title)
@@ -219,7 +219,7 @@ class SQLFrame(wx.Frame):
         self.Show(True)
 
     def GetColumns(self):
-        """Get columns"""
+        """!Get columns"""
         ret = gcmd.RunCommand('db.describe',
                               quiet = True,
                               read = True,
@@ -243,7 +243,7 @@ class SQLFrame(wx.Frame):
         self.list_values.Clear()
         column = self.list_columns.GetString(idx)
         i = 0
-        for line in os.popen("""db.select -c database=%s driver=%s sql="SELECT %s FROM %s" """ %\
+        for line in os.popen("""!db.select -c database=%s driver=%s sql="SELECT %s FROM %s" """ %\
                 (self.database,self.driver,column,self.tablename)):
                 if justsample and i < 256 or \
                    not justsample:
@@ -314,7 +314,7 @@ class SQLFrame(wx.Frame):
                 pass
     def OnVerify(self,event):
         if self.text_sql.GetValue():
-            if os.system("""db.select -t driver=%s database=%s sql="SELECT * FROM %s WHERE %s" """ % \
+            if os.system("""!db.select -t driver=%s database=%s sql="SELECT * FROM %s WHERE %s" """ % \
                     (self.driver, self.database,self.tablename,
                         self.text_sql.GetValue().strip().replace("\n"," "))):
                 # FIXME: LOG

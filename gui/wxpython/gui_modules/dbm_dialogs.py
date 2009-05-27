@@ -166,15 +166,15 @@ class DisplayAttributesDialog(wx.Dialog):
             ### self.mapDBInfo = None
 
     def __SelectAttributes(self, layer):
-        """Select attributes"""
+        """!Select attributes"""
         pass
 
     def OnSQLStatement(self, event):
-        """Update SQL statement"""
+        """!Update SQL statement"""
         pass
 
     def GetSQLString(self, updateValues=False):
-        """Create SQL statement string based on self.sqlStatement
+        """!Create SQL statement string based on self.sqlStatement
 
         If updateValues is True, update dataFrame according to values
         in textfields.
@@ -248,7 +248,7 @@ class DisplayAttributesDialog(wx.Dialog):
         return sqlCommands
 
     def OnReset(self, event):
-        """Reset form"""
+        """!Reset form"""
         for layer in self.mapDBInfo.layers.keys():
             table = self.mapDBInfo.layers[layer]["table"]
             key = self.mapDBInfo.layers[layer]["key"]
@@ -266,7 +266,7 @@ class DisplayAttributesDialog(wx.Dialog):
                         self.FindWindowById(id).SetValue(str(value))
 
     def OnCancel(self, event):
-        """Cancel button pressed"""
+        """!Cancel button pressed"""
         self.parent.parent.dialogs['attributes'] = None
         if self.parent.parent.digit:
             self.parent.parent.digit.driver.SetSelected([])
@@ -277,7 +277,7 @@ class DisplayAttributesDialog(wx.Dialog):
         self.Close()
 
     def OnSubmit(self, event):
-        """Submit records"""
+        """!Submit records"""
         for sql in self.GetSQLString(updateValues=True):
             enc = UserSettings.Get(group='atm', key='encoding', subkey='value')
             if not enc and \
@@ -298,7 +298,7 @@ class DisplayAttributesDialog(wx.Dialog):
         self.UpdateDialog(cats=self.cats, fid=self.fid)
         
     def GetCats(self):
-        """Get id of selected vector object or 'None' if nothing selected
+        """!Get id of selected vector object or 'None' if nothing selected
 
         @param id if true return ids otherwise cats
         """
@@ -308,11 +308,11 @@ class DisplayAttributesDialog(wx.Dialog):
         return self.cats[self.fid]
 
     def GetFid(self):
-        """Get selected feature id"""
+        """!Get selected feature id"""
         return self.fid
     
     def UpdateDialog(self, map=None, query=None, cats=None, fid=-1):
-        """Update dialog
+        """!Update dialog
 
         Return True if updated otherwise False
         """
@@ -485,7 +485,7 @@ class DisplayAttributesDialog(wx.Dialog):
         return True
 
 class ModifyTableRecord(wx.Dialog):
-    """Dialog for inserting/updating table record"""
+    """!Dialog for inserting/updating table record"""
     def __init__(self, parent, id, title, data, keyEditable=(-1, True),
                 style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
         """
@@ -556,7 +556,7 @@ class ModifyTableRecord(wx.Dialog):
         # self.SetMinSize(winSize)
 
     def __Layout(self):
-        """Do layout"""
+        """!Do layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         # data area
@@ -629,7 +629,7 @@ class ModifyTableRecord(wx.Dialog):
 
                 
     def GetValues(self, columns=None):
-        """Return list of values (casted to string).
+        """!Return list of values (casted to string).
 
         If columns is given (list), return only values of given columns.
         """

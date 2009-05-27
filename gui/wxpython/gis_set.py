@@ -41,7 +41,7 @@ import wx.lib.filebrowsebutton as filebrowse
 import wx.lib.mixins.listctrl as listmix
 
 class GRASSStartup(wx.Frame):
-    """GRASS start-up screen"""
+    """!GRASS start-up screen"""
     def __init__(self, parent=None, id=wx.ID_ANY, style=wx.DEFAULT_FRAME_STYLE):
 
         #
@@ -168,7 +168,7 @@ class GRASSStartup(wx.Frame):
         self.Bind(wx.EVT_CLOSE,               self.OnCloseWindow)
         
     def _set_properties(self):
-        """Set frame properties"""
+        """!Set frame properties"""
         self.SetTitle(_("Welcome to GRASS GIS"))
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, "grass.ico"),
                              wx.BITMAP_TYPE_ICO))
@@ -384,7 +384,7 @@ class GRASSStartup(wx.Frame):
             return None
 
     def OnWizard(self, event):
-        """Location wizard started"""
+        """!Location wizard started"""
         from gui_modules import location_wizard
         gWizard = location_wizard.LocationWizard(self, self.tgisdbase.GetValue())
         if gWizard.location != None:
@@ -511,7 +511,7 @@ class GRASSStartup(wx.Frame):
         dlg.Destroy()
 
     def UpdateLocations(self, dbase):
-        """Update list of locations"""
+        """!Update list of locations"""
         self.listOfLocations = []
 
         for location in glob.glob(os.path.join(dbase, "*")):
@@ -534,7 +534,7 @@ class GRASSStartup(wx.Frame):
         return self.listOfLocations
 
     def UpdateMapsets(self, location):
-        """Update list of mapsets"""
+        """!Update list of mapsets"""
         self.FormerMapsetSelection = wx.NOT_FOUND # for non-selectable item
 
         self.listOfMapsets = []
@@ -591,7 +591,7 @@ class GRASSStartup(wx.Frame):
         return self.listOfMapsets
 
     def OnSelectLocation(self, event):
-        """Location selected"""
+        """!Location selected"""
         if event:
             self.lblocations.SetSelection(event.GetIndex())
             
@@ -633,7 +633,7 @@ class GRASSStartup(wx.Frame):
             self.manageloc.Enable(False)
         
     def OnSelectMapset(self, event):
-        """Mapset selected"""
+        """!Mapset selected"""
         self.lbmapsets.SetSelection(event.GetIndex())
 
         if event.GetText() not in self.listOfMapsetsSelectable:
@@ -643,7 +643,7 @@ class GRASSStartup(wx.Frame):
             event.Skip()
 
     def OnSetDatabase(self, event):
-        """Database set"""
+        """!Database set"""
         self.gisdbase = self.tgisdbase.GetValue()
         
         self.UpdateLocations(self.gisdbase)
@@ -664,7 +664,7 @@ class GRASSStartup(wx.Frame):
         dlg.Destroy()
 
     def OnCreateMapset(self,event):
-        """Create new mapset"""
+        """!Create new mapset"""
         self.gisdbase = self.tgisdbase.GetValue()
         location = self.listOfLocations[self.lblocations.GetSelection()]
 
@@ -725,12 +725,12 @@ class GRASSStartup(wx.Frame):
         event.Skip()
 
     def OnCloseWindow(self, event):
-        """Close window event"""
+        """!Close window event"""
         event.Skip()
         sys.exit(2)
 
 class HelpWindow(wx.Frame):
-    """GRASS Quickstart help window"""
+    """!GRASS Quickstart help window"""
     def __init__(self, parent, id, title, size, file):
 
         wx.Frame.__init__(self, parent=parent, id=id, title=title, size=size)
@@ -755,7 +755,7 @@ class HelpWindow(wx.Frame):
         self.Layout()
 
 class GListBox(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
-    """Use wx.ListCtrl instead of wx.ListBox, different style for
+    """!Use wx.ListCtrl instead of wx.ListBox, different style for
     non-selectable items (e.g. mapsets with denied permission)"""
     def __init__(self, parent, id, size,
                  choices, disabled=[]):
@@ -808,7 +808,7 @@ class GListBox(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         return self.selected
         
 class StartUp(wx.App):
-    """Start-up application"""
+    """!Start-up application"""
 
     def OnInit(self):
         wx.InitAllImageHandlers()

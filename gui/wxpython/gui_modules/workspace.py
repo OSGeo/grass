@@ -69,7 +69,7 @@ class ProcessWorkspaceFile(HandlerBase):
         self.displayIndex = -1 # first display has index '0'
 
     def __filterValue(self, value):
-        """Translate value"""
+        """!Translate value"""
         value = value.replace('&lt;', '<')
         value = value.replace('&gt;', '>')
         
@@ -342,7 +342,7 @@ class ProcessWorkspaceFile(HandlerBase):
             self.value += ch
 
 class WriteWorkspaceFile(object):
-    """Generic class for writing workspace file"""
+    """!Generic class for writing workspace file"""
     def __init__(self, lmgr, file):
         self.file =  file
         self.lmgr = lmgr
@@ -403,14 +403,14 @@ class WriteWorkspaceFile(object):
         file.write('%s</gxw>\n' % (' ' * self.indent))
 
     def __filterValue(self, value):
-        """Make value XML-valid"""
+        """!Make value XML-valid"""
         value = value.replace('<', '&lt;')
         value = value.replace('>', '&gt;')
         
         return value
     
     def __writeLayer(self, mapTree, item):
-        """Write bunch of layers to GRASS Workspace XML file"""
+        """!Write bunch of layers to GRASS Workspace XML file"""
         self.indent += 4
         itemSelected = mapTree.GetSelections()
         while item and item.IsOk():
@@ -481,7 +481,7 @@ class WriteWorkspaceFile(object):
         self.indent -= 4
 
     def __writeNvizSurface(self, data):
-        """Save Nviz raster layer properties to workspace
+        """!Save Nviz raster layer properties to workspace
 
         @param data Nviz layer properties
         """
@@ -555,7 +555,7 @@ class WriteWorkspaceFile(object):
         self.indent -= 4
 
     def __writeNvizVector(self, data):
-        """Save Nviz vector layer properties (lines/points) to workspace
+        """!Save Nviz vector layer properties (lines/points) to workspace
 
         @param data Nviz layer properties
         """
@@ -601,7 +601,7 @@ class WriteWorkspaceFile(object):
 
 class ProcessGrcFile(object):
     def __init__(self, filename):
-        """Process GRC file"""
+        """!Process GRC file"""
         self.filename = filename
 
         # elements
@@ -617,7 +617,7 @@ class ProcessGrcFile(object):
         self.num_error = 0
 
     def read(self, parent):
-        """Read GRC file
+        """!Read GRC file
 
         @param parent parent window
 
@@ -651,7 +651,7 @@ class ProcessGrcFile(object):
         return self.layers
 
     def process_line(self, line, line_id):
-        """Process line definition"""
+        """!Process line definition"""
         element = self._get_element(line)
         if element == 'Group':
             self.groupName = self._get_value(line)
@@ -862,18 +862,18 @@ class ProcessGrcFile(object):
             self.num_error += 1
 
     def _get_value(self, line):
-        """Get value of element"""
+        """!Get value of element"""
         try:
             return line.strip(' ').split(' ')[1].strip(' ')
         except:
             return ''
 
     def _get_element(self, line):
-        """Get element tag"""
+        """!Get element tag"""
         return line.strip(' ').split(' ')[0].strip(' ')
 
     def _get_cmd_param_index(self, cmd, name):
-        """Get index of parameter in cmd list
+        """!Get index of parameter in cmd list
 
         @param cmd cmd list
         @param name parameter name
@@ -894,7 +894,7 @@ class ProcessGrcFile(object):
         return -1
 
     def _color_name_to_rgb(self, value):
-        """Convert color name (#) to rgb values"""
+        """!Convert color name (#) to rgb values"""
         col = wx.NamedColour(value)
         return str(col.Red()) + ':' + \
             str(col.Green()) + ':' + \

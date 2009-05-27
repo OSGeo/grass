@@ -57,7 +57,7 @@ from dbm_dialogs import ModifyTableRecord
 from preferences import globalSettings as UserSettings
 
 def unicodeValue(value):
-    """Encode value"""
+    """!Encode value"""
     enc = UserSettings.Get(group='atm', key='encoding', subkey='value')
     if enc:
         value = unicode(value, enc)
@@ -79,7 +79,7 @@ class Log:
         self.parent = parent
 
     def write(self, text_string):
-        """Update status bar"""
+        """!Update status bar"""
         self.parent.SetStatusText(text_string.strip())
 
 
@@ -140,12 +140,12 @@ class VirtualAttributeList(wx.ListCtrl,
         self.Bind(wx.EVT_LIST_COL_CLICK,       self.OnColumnClick)     # sorting
         
     def Update(self, mapDBInfo):
-        """Update list according new mapDBInfo description"""
+        """!Update list according new mapDBInfo description"""
         self.mapDBInfo = mapDBInfo
         self.LoadData(self.layer)
 
     def LoadData(self, layer, columns=None, where=None):
-        """Load data into list
+        """!Load data into list
 
         @param layer layer number
         @param columns list of columns for output
@@ -317,7 +317,7 @@ class VirtualAttributeList(wx.ListCtrl,
         return keyId
     
     def OnItemSelected(self, event):
-        """Item selected. Add item to selected cats..."""
+        """!Item selected. Add item to selected cats..."""
         #         cat = int(self.GetItemText(event.m_itemIndex))
         #         if cat not in self.selectedCats:
         #             self.selectedCats.append(cat)
@@ -326,7 +326,7 @@ class VirtualAttributeList(wx.ListCtrl,
         event.Skip()
 
     def OnItemDeselected(self, event):
-        """Item deselected. Remove item from selected cats..."""
+        """!Item deselected. Remove item from selected cats..."""
         #         cat = int(self.GetItemText(event.m_itemIndex))
         #         if cat in self.selectedCats:
         #             self.selectedCats.remove(cat)
@@ -335,7 +335,7 @@ class VirtualAttributeList(wx.ListCtrl,
         event.Skip()
 
     def GetSelectedItems(self):
-        """Return list of selected items (category numbers)"""
+        """!Return list of selected items (category numbers)"""
         cats = []
         item = self.GetFirstSelected()
         while item != -1:
@@ -345,22 +345,22 @@ class VirtualAttributeList(wx.ListCtrl,
         return cats
 
     def GetColumnText(self, index, col):
-        """Return column text"""
+        """!Return column text"""
         item = self.GetItem(index, col)
         return item.GetText()
 
     def GetListCtrl(self):
-        """Returt list"""
+        """!Returt list"""
         return self
 
     def OnGetItemText(self, item, col):
-        """Get item text"""
+        """!Get item text"""
         index = self.itemIndexMap[item]
         s = self.itemDataMap[index][col]
         return s
 
     def OnGetItemAttr(self, item):
-        """Get item attributes"""
+        """!Get item attributes"""
         index = self.itemIndexMap[item]
         if ( index % 2) == 0:
             return self.attr2
@@ -368,7 +368,7 @@ class VirtualAttributeList(wx.ListCtrl,
             return self.attr1
 
     def OnColumnClick(self, event):
-        """Column heading clicked -> sorting"""
+        """!Column heading clicked -> sorting"""
         self._col = event.GetColumn()
 
         # remove duplicated arrow symbol from column header
@@ -383,7 +383,7 @@ class VirtualAttributeList(wx.ListCtrl,
         event.Skip()
 
     def SortItems(self, sorter=cmp):
-        """Sort items"""
+        """!Sort items"""
         items = list(self.itemDataMap.keys())
         items.sort(self.Sorter)
         self.itemIndexMap = items
@@ -417,11 +417,11 @@ class VirtualAttributeList(wx.ListCtrl,
             return -cmpVal
 
     def GetSortImages(self):
-        """Used by the ColumnSorterMixin, see wx/lib/mixins/listctrl.py"""
+        """!Used by the ColumnSorterMixin, see wx/lib/mixins/listctrl.py"""
         return (self.sm_dn, self.sm_up)
 
     def IsEmpty(self):
-        """Check if list if empty"""
+        """!Check if list if empty"""
         if self.columns:
             return False
         
@@ -552,7 +552,7 @@ class AttributeManager(wx.Frame):
         self.SetMinSize(self.GetSize())
 
     def __createBrowsePage(self, onlyLayer=-1):
-        """Create browse tab page"""
+        """!Create browse tab page"""
         for layer in self.mapDBInfo.layers.keys():
             if onlyLayer > 0 and layer != onlyLayer:
                 continue
@@ -694,7 +694,7 @@ class AttributeManager(wx.Frame):
             self.layer = None
         
     def __createManageTablePage(self, onlyLayer=-1):
-        """Create manage page (create/link and alter tables)"""
+        """!Create manage page (create/link and alter tables)"""
         for layer in self.mapDBInfo.layers.keys():
             if onlyLayer > 0 and layer != onlyLayer:
                 continue
@@ -864,7 +864,7 @@ class AttributeManager(wx.Frame):
             self.layer = None
         
     def __createTableDesc(self, parent, table):
-        """Create list with table description"""
+        """!Create list with table description"""
         list = TableListCtrl(parent=parent, id=wx.ID_ANY,
                              table=self.mapDBInfo.tables[table],
                              columns=self.mapDBInfo.GetColumns(table))
@@ -876,7 +876,7 @@ class AttributeManager(wx.Frame):
         return list
 
     def __createManageLayerPage(self):
-        """Create manage page"""
+        """!Create manage page"""
         splitterWin = wx.SplitterWindow(parent=self.manageLayerPage, id=wx.ID_ANY)
         splitterWin.SetMinimumPaneSize(100)
         
@@ -929,7 +929,7 @@ class AttributeManager(wx.Frame):
         splitterWin.Fit()
 
     def __createLayerDesc(self, parent):
-        """Create list of linked layers"""
+        """!Create list of linked layers"""
         list = LayerListCtrl(parent=parent, id=wx.ID_ANY,
                              layers=self.mapDBInfo.layers)
         
@@ -941,7 +941,7 @@ class AttributeManager(wx.Frame):
         return list
 
     def __layout(self):
-        """Do layout"""
+        """!Do layout"""
         # frame body
         mainSizer = wx.BoxSizer(wx.VERTICAL)
 
@@ -961,7 +961,7 @@ class AttributeManager(wx.Frame):
         self.Layout()
         
     def OnDataRightUp(self, event):
-        """Table description area, context menu"""
+        """!Table description area, context menu"""
         if not hasattr(self, "popupDataID1"):
             self.popupDataID1 = wx.NewId()
             self.popupDataID2 = wx.NewId()
@@ -1023,7 +1023,7 @@ class AttributeManager(wx.Frame):
                            list.GetItemCount())
 
     def OnDataItemDelete(self, event):
-        """Delete selected item(s) from the list (layer/category pair)"""
+        """!Delete selected item(s) from the list (layer/category pair)"""
         list = self.FindWindowById(self.layerPage[self.layer]['data'])
         item = list.GetFirstSelected()
 
@@ -1087,7 +1087,7 @@ class AttributeManager(wx.Frame):
         return True
 
     def OnDataItemDeleteAll(self, event):
-        """Delete all items from the list"""
+        """!Delete all items from the list"""
         list = self.FindWindowById(self.layerPage[self.layer]['data'])
         if UserSettings.Get(group='atm', key='askOnDeleteRec', subkey='enabled'):
             deleteDialog = wx.MessageBox(parent=self,
@@ -1112,7 +1112,7 @@ class AttributeManager(wx.Frame):
         event.Skip()
 
     def _drawSelected(self, zoom):
-        """Highlight selected features"""
+        """!Highlight selected features"""
         if not self.map or not self.mapdisplay:
             return
         
@@ -1177,7 +1177,7 @@ class AttributeManager(wx.Frame):
             self.mapdisplay.MapWindow.UpdateMap(render=False, renderVector=True)
         
     def OnDataDrawSelected(self, event):
-        """Reload table description"""
+        """!Reload table description"""
         self._drawSelected(zoom=False)
         event.Skip()
 
@@ -1186,7 +1186,7 @@ class AttributeManager(wx.Frame):
         event.Skip()
         
     def OnDataItemAdd(self, event):
-        """Add new record to the attribute table"""
+        """!Add new record to the attribute table"""
         list      = self.FindWindowById(self.layerPage[self.layer]['data'])
         table     = self.mapDBInfo.layers[self.layer]['table']
         keyColumn = self.mapDBInfo.layers[self.layer]['key']
@@ -1299,7 +1299,7 @@ class AttributeManager(wx.Frame):
             self.ApplyCommands()
             
     def OnDataItemEdit(self, event):
-        """Edit selected record of the attribute table"""
+        """!Edit selected record of the attribute table"""
         list      = self.FindWindowById(self.layerPage[self.layer]['data'])
         item      = list.GetFirstSelected()
         if item == -1:
@@ -1395,12 +1395,12 @@ class AttributeManager(wx.Frame):
             list.Update(self.mapDBInfo)
                         
     def OnDataReload(self, event):
-        """Reload list of records"""
+        """!Reload list of records"""
         self.OnApplySqlStatement(None)
         self.listOfSQLStatements = []
 
     def OnDataSelectAll(self, event):
-        """Select all items"""
+        """!Select all items"""
         list = self.FindWindowById(self.layerPage[self.layer]['data'])
         item = -1
 
@@ -1413,7 +1413,7 @@ class AttributeManager(wx.Frame):
         event.Skip()
 
     def OnDataSelectNone(self, event):
-        """Deselect items"""
+        """!Deselect items"""
         list = self.FindWindowById(self.layerPage[self.layer]['data'])
         item = -1
 
@@ -1427,7 +1427,7 @@ class AttributeManager(wx.Frame):
 
 
     def OnTableChangeType(self, event):
-        """Data type for new column changed. Enable or disable
+        """!Data type for new column changed. Enable or disable
         data length widget"""
         win = self.FindWindowById(self.layerPage[self.layer]['addColLength'])
         if event.GetString() == "varchar":
@@ -1436,7 +1436,7 @@ class AttributeManager(wx.Frame):
             win.Enable(False)
 
     def OnTableRenameColumnName(self, event):
-        """Editing column name to be added to the table"""
+        """!Editing column name to be added to the table"""
         btn  = self.FindWindowById(self.layerPage[self.layer]['renameColButton'])
         col  = self.FindWindowById(self.layerPage[self.layer]['renameCol'])
         colTo = self.FindWindowById(self.layerPage[self.layer]['renameColTo'])
@@ -1448,7 +1448,7 @@ class AttributeManager(wx.Frame):
         event.Skip()
 
     def OnTableAddColumnName(self, event):
-        """Editing column name to be added to the table"""
+        """!Editing column name to be added to the table"""
         btn = self.FindWindowById(self.layerPage[self.layer]['addColButton'])
         if len(event.GetString()) > 0:
             btn.Enable(True)
@@ -1458,7 +1458,7 @@ class AttributeManager(wx.Frame):
         event.Skip()
 
     def OnTableItemChange(self, event):
-        """Rename column in the table"""
+        """!Rename column in the table"""
         list   = self.FindWindowById(self.layerPage[self.layer]['tableData'])
         name   = self.FindWindowById(self.layerPage[self.layer]['renameCol']).GetValue()
         nameTo = self.FindWindowById(self.layerPage[self.layer]['renameColTo']).GetValue()
@@ -1510,7 +1510,7 @@ class AttributeManager(wx.Frame):
         event.Skip()
 
     def OnTableRightUp(self, event):
-        """Table description area, context menu"""
+        """!Table description area, context menu"""
         if not hasattr(self, "popupTableID"):
             self.popupTableID1 = wx.NewId()
             self.popupTableID2 = wx.NewId()
@@ -1532,7 +1532,7 @@ class AttributeManager(wx.Frame):
         menu.Destroy()
 
     def OnTableItemDelete(self, event):
-        """Delete selected item(s) from the list"""
+        """!Delete selected item(s) from the list"""
         list = self.FindWindowById(self.layerPage[self.layer]['tableData'])
 
         item = list.GetFirstSelected()
@@ -1556,7 +1556,7 @@ class AttributeManager(wx.Frame):
         event.Skip()
 
     def OnTableItemDeleteAll(self, event):
-        """Delete all items from the list"""
+        """!Delete all items from the list"""
         table = self.mapDBInfo.layers[self.layer]['table']
         cols = self.mapDBInfo.GetColumns(table)
         for col in cols:
@@ -1578,12 +1578,12 @@ class AttributeManager(wx.Frame):
         event.Skip()
 
     def OnTableReload(self, event=None):
-        """Reload table description"""
+        """!Reload table description"""
         self.FindWindowById(self.layerPage[self.layer]['tableData']).Populate(update=True)
         self.listOfCommands = []
 
     def OnTableItemAdd(self, event):
-        """Add new column to the table"""
+        """!Add new column to the table"""
 	table = self.mapDBInfo.layers[self.layer]['table']
         name = self.FindWindowById(self.layerPage[self.layer]['addColName']).GetValue()
 
@@ -1639,7 +1639,7 @@ class AttributeManager(wx.Frame):
         event.Skip()
         
     def OnLayerPageChanged(self, event):
-        """Layer tab changed"""
+        """!Layer tab changed"""
         pageNum = event.GetSelection()
         self.layer = self.mapDBInfo.layers.keys()[pageNum]
         
@@ -1682,11 +1682,11 @@ class AttributeManager(wx.Frame):
         event.Skip()
         
     def OnLayerRightUp(self, event):
-        """Layer description area, context menu"""
+        """!Layer description area, context menu"""
         pass
 
     def OnChangeSql(self, event):
-        """Switch simple/advanced sql statement"""
+        """!Switch simple/advanced sql statement"""
         if self.FindWindowById(self.layerPage[self.layer]['simple']).GetValue():
             self.FindWindowById(self.layerPage[self.layer]['where']).Enable(True)
             self.FindWindowById(self.layerPage[self.layer]['statement']).Enable(False)
@@ -1697,7 +1697,7 @@ class AttributeManager(wx.Frame):
             self.FindWindowById(self.layerPage[self.layer]['builder']).Enable(True)
 
     def ApplyCommands(self):
-        """Apply changes"""
+        """!Apply changes"""
         # perform GRASS commands (e.g. v.db.addcol)
         if len(self.listOfCommands) > 0:
             for cmd in self.listOfCommands:
@@ -1753,7 +1753,7 @@ class AttributeManager(wx.Frame):
             self.listOfSQLStatements = []
 
     def OnApplySqlStatement(self, event):
-        """Apply simple/advanced sql statement"""
+        """!Apply simple/advanced sql statement"""
         keyColumn = -1 # index of key column
         listWin = self.FindWindowById(self.layerPage[self.layer]['data'])
         if self.FindWindowById(self.layerPage[self.layer]['simple']).GetValue():
@@ -1805,7 +1805,7 @@ class AttributeManager(wx.Frame):
                            self.FindWindowById(self.layerPage[self.layer]['data']).GetItemCount())
 
     def ValidateSelectStatement(self, statement):
-        """Validate SQL select statement
+        """!Validate SQL select statement
 
         @return (columns, where)
         @return None on error
@@ -1844,7 +1844,7 @@ class AttributeManager(wx.Frame):
         return (cols, where)
     
     def __createDbInfoDesc(self, panel, layer):
-        """Create database connection information content"""
+        """!Create database connection information content"""
         infoFlexSizer = wx.FlexGridSizer (cols=2, hgap=1, vgap=1)
         infoFlexSizer.AddGrowableCol(1)
         
@@ -1868,12 +1868,12 @@ class AttributeManager(wx.Frame):
         return infoFlexSizer
         
     def OnCloseWindow(self, event):
-        """Cancel button pressed"""
+        """!Cancel button pressed"""
         self.Close()
         event.Skip()
 
     def OnBuilder(self,event):
-        """SQL Builder button pressed"""
+        """!SQL Builder button pressed"""
         self.builder = sqlbuilder.SQLFrame(parent=self, id=wx.ID_ANY,
                                            title=_("SQL Builder"),
                                            vectorName=self.vectorName)
@@ -1884,7 +1884,7 @@ class AttributeManager(wx.Frame):
         pass
 
     def OnDataItemActivated(self, event):
-        """Item activated, highlight selected item"""
+        """!Item activated, highlight selected item"""
         self.OnDataDrawSelected(event)
 
         event.Skip()
@@ -1939,7 +1939,7 @@ class AttributeManager(wx.Frame):
             self.mapdisplay.MapWindow.UpdateMap(render=True, renderVector=True)
         
     def AddQueryMapLayer(self):
-        """Redraw a map
+        """!Redraw a map
 
         Return True if map has been redrawn, False if no map is given
         """
@@ -1959,7 +1959,7 @@ class AttributeManager(wx.Frame):
         return self.qlayer
     
     def UpdateDialog(self, layer):
-        """Updates dialog layout for given layer"""
+        """!Updates dialog layout for given layer"""
         #
         # delete page
         #
@@ -2018,7 +2018,7 @@ class AttributeManager(wx.Frame):
 class TableListCtrl(wx.ListCtrl,
                     listmix.ListCtrlAutoWidthMixin):
                     #                    listmix.TextEditMixin):
-    """Table description list"""
+    """!Table description list"""
 
     def __init__(self, parent, id, table, columns, pos=wx.DefaultPosition,
                  size=wx.DefaultSize):
@@ -2034,12 +2034,12 @@ class TableListCtrl(wx.ListCtrl,
         # listmix.TextEditMixin.__init__(self)
 
     def Update(self, table, columns):
-        """Update column description"""
+        """!Update column description"""
         self.table   = table
         self.columns = columns
 
     def Populate(self, update=False):
-        """Populate the list"""
+        """!Populate the list"""
         itemData = {} # requested by sorter
 
         if not update:
@@ -2072,7 +2072,7 @@ class LayerListCtrl(wx.ListCtrl,
                     listmix.ListCtrlAutoWidthMixin):
                     # listmix.ColumnSorterMixin):
                     # listmix.TextEditMixin):
-    """Layer description list"""
+    """!Layer description list"""
 
     def __init__(self, parent, id, layers,
                  pos=wx.DefaultPosition,
@@ -2088,11 +2088,11 @@ class LayerListCtrl(wx.ListCtrl,
         # listmix.TextEditMixin.__init__(self)
 
     def Update(self, layers):
-        """Update description"""
+        """!Update description"""
         self.layers = layers
 
     def Populate(self, update=False):
-        """Populate the list"""
+        """!Populate the list"""
         itemData = {} # requested by sorter
 
         if not update:
@@ -2134,7 +2134,7 @@ class LayerListCtrl(wx.ListCtrl,
         return itemData
 
 class LayerBook(wx.Notebook):
-    """Manage layers (add, delete, modify)"""
+    """!Manage layers (add, delete, modify)"""
     def __init__(self, parent, id,
                  parentDialog,
                  style=wx.BK_DEFAULT):
@@ -2188,7 +2188,7 @@ class LayerBook(wx.Notebook):
         self.__createModifyPage()
 
     def __createAddPage(self):
-        """Add new layer"""
+        """!Add new layer"""
         self.addPanel = wx.Panel(parent=self, id=wx.ID_ANY)
         self.AddPage(page=self.addPanel, text=_("Add layer"))
         
@@ -2379,7 +2379,7 @@ class LayerBook(wx.Notebook):
         pageSizer.Fit(self.addPanel)
         
     def __createDeletePage(self):
-        """Delete layer"""
+        """!Delete layer"""
         self.deletePanel = wx.Panel(parent=self, id=wx.ID_ANY)
         self.AddPage(page=self.deletePanel, text=_("Delete layer"))
 
@@ -2447,7 +2447,7 @@ class LayerBook(wx.Notebook):
         self.deletePanel.SetSizer(pageSizer)
 
     def __createModifyPage(self):
-        """Modify layer"""
+        """!Modify layer"""
         self.modifyPanel = wx.Panel(parent=self, id=wx.ID_ANY)
         self.AddPage(page=self.modifyPanel, text=_("Modify layer"))
 
@@ -2557,7 +2557,7 @@ class LayerBook(wx.Notebook):
         self.modifyPanel.SetSizer(pageSizer)
 
     def __getTables(self, driver, database):
-        """Get list of tables for given driver and database"""
+        """!Get list of tables for given driver and database"""
         tables = []
 
         ret = gcmd.RunCommand('db.tables',
@@ -2581,7 +2581,7 @@ class LayerBook(wx.Notebook):
         return tables
 
     def __getColumns(self, driver, database, table):
-        """Get list of column of given table"""
+        """!Get list of column of given table"""
         columns = []
 
         ret = gcmd.RunCommand('db.columns',
@@ -2601,7 +2601,7 @@ class LayerBook(wx.Notebook):
         return columns
 
     def OnDriverChanged(self, event):
-        """Driver selection changed, update list of tables"""
+        """!Driver selection changed, update list of tables"""
         driver = event.GetString()
         database = self.addLayerWidgets['database'][1].GetValue()
 
@@ -2618,11 +2618,11 @@ class LayerBook(wx.Notebook):
         event.Skip()
 
     def OnDatabaseChanged(self, event):
-        """Database selection changed, update list of tables"""
+        """!Database selection changed, update list of tables"""
         event.Skip()
 
     def OnTableChanged(self, event):
-        """Table name changed, update list of columns"""
+        """!Table name changed, update list of columns"""
         driver   = self.addLayerWidgets['driver'][1].GetStringSelection()
         database = self.addLayerWidgets['database'][1].GetValue()
         table    = event.GetString()
@@ -2635,7 +2635,7 @@ class LayerBook(wx.Notebook):
         event.Skip()
 
     def OnSetDefault(self, event):
-        """Set default values"""
+        """!Set default values"""
         driver   = self.addLayerWidgets['driver'][1]
         database = self.addLayerWidgets['database'][1]
         table    = self.addLayerWidgets['table'][1]
@@ -2659,7 +2659,7 @@ class LayerBook(wx.Notebook):
         event.Skip()
 
     def OnCreateTable(self, event):
-        """Create new table (name and key column given)"""
+        """!Create new table (name and key column given)"""
         driver   = self.addLayerWidgets['driver'][1].GetStringSelection()
         database = self.addLayerWidgets['database'][1].GetValue()
         table    = self.tableWidgets['table'][1].GetValue()
@@ -2702,7 +2702,7 @@ class LayerBook(wx.Notebook):
         event.Skip()
 
     def OnAddLayer(self, event):
-        """Add new layer to vector map"""
+        """!Add new layer to vector map"""
         layer    = int(self.addLayerWidgets['layer'][1].GetValue())
         layerWin = self.addLayerWidgets['layer'][1]
         driver   = self.addLayerWidgets['driver'][1].GetStringSelection()
@@ -2756,7 +2756,7 @@ class LayerBook(wx.Notebook):
                 self.modifyLayerWidgets[label][1].Enable()
             
     def OnDeleteLayer(self, event):
-        """Delete layer"""
+        """!Delete layer"""
         try:
             layer = int(self.deleteLayer.GetValue())
         except:
@@ -2802,7 +2802,7 @@ class LayerBook(wx.Notebook):
         event.Skip()
 
     def OnChangeLayer(self, event):
-        """Layer number of layer to be deleted is changed"""
+        """!Layer number of layer to be deleted is changed"""
         try:
             layer = int(event.GetString())
         except:
@@ -2828,7 +2828,7 @@ class LayerBook(wx.Notebook):
             event.Skip()
 
     def OnModifyLayer(self, event):
-        """Modify layer connection settings"""
+        """!Modify layer connection settings"""
 
         layer = int(self.modifyLayerWidgets['layer'][1].GetStringSelection())
 
@@ -2870,13 +2870,13 @@ class LayerBook(wx.Notebook):
         event.Skip()
 
 class VectorDBInfo(gselect.VectorDBInfo):
-    """Class providing information about attribute tables
+    """!Class providing information about attribute tables
     linked to the vector map"""
     def __init__(self, map):
         gselect.VectorDBInfo.__init__(self, map)
         
     def GetColumns(self, table):
-        """Return list of columns names (based on their index)"""
+        """!Return list of columns names (based on their index)"""
         try:
             names = [''] * len(self.tables[table].keys())
         except KeyError:
@@ -2888,7 +2888,7 @@ class VectorDBInfo(gselect.VectorDBInfo):
         return names
 
     def SelectByPoint(self, queryCoords, qdist):
-        """Get attributes by coordinates (all available layers)
+        """!Get attributes by coordinates (all available layers)
 
         Return line id or None if no line is found"""
         line = None
@@ -2950,7 +2950,7 @@ class VectorDBInfo(gselect.VectorDBInfo):
         return data
     
     def SelectFromTable(self, layer, cols='*', where=None):
-        """Select records from the table
+        """!Select records from the table
 
         Return number of selected records, -1 on error
         """

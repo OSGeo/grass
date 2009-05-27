@@ -42,12 +42,12 @@ wxCmdDone,     EVT_CMD_DONE     = NewEvent()
 wxCmdAbort,    EVT_CMD_ABORT    = NewEvent()
 
 def GrassCmd(cmd, stdout, stderr):
-    """Return GRASS command thread"""
+    """!Return GRASS command thread"""
     return gcmd.CommandThread(cmd,
                               stdout=stdout, stderr=stderr)
 
 class CmdThread(threading.Thread):
-    """Thread for GRASS commands"""
+    """!Thread for GRASS commands"""
     requestId = 0
     def __init__(self, parent, requestQ, resultQ, **kwds):
         threading.Thread.__init__(self, **kwds)
@@ -176,7 +176,7 @@ class GMConsole(wx.Panel):
         self.__layout()
 
     def __layout(self):
-        """Do layout"""
+        """!Do layout"""
         boxsizer1 = wx.BoxSizer(wx.VERTICAL)
         gridsizer1 = wx.GridSizer(rows=1, cols=2, vgap=0, hgap=0)
         boxsizer1.Add(item=self.cmd_output, proportion=1,
@@ -201,7 +201,7 @@ class GMConsole(wx.Panel):
         self.SetSizer(boxsizer1)
 
     def Redirect(self):
-        """Redirect stderr
+        """!Redirect stderr
 
         @return True redirected
         @return False failed
@@ -217,7 +217,7 @@ class GMConsole(wx.Panel):
 
     def WriteLog(self, text, style = None, wrap = None,
                  switchPage = False):
-        """Generic method for writing log message in 
+        """!Generic method for writing log message in 
         given style
 
         @param line text line
@@ -251,17 +251,17 @@ class GMConsole(wx.Panel):
         self.cmd_output.EnsureCaretVisible()
         
     def WriteCmdLog(self, line, pid=None):
-        """Write message in selected style"""
+        """!Write message in selected style"""
         if pid:
             line = '(' + str(pid) + ') ' + line
         self.WriteLog(line, style=self.cmd_output.StyleCommand, switchPage = True)
 
     def WriteWarning(self, line):
-        """Write message in warning style"""
+        """!Write message in warning style"""
         self.WriteLog(line, style=self.cmd_output.StyleWarning, switchPage = True)
 
     def WriteError(self, line):
-        """Write message in error style"""
+        """!Write message in error style"""
         self.WriteLog(line, style=self.cmd_output.StyleError, switchPage = True)
 
     def RunCmd(self, command, compReg=True, switchPage=False,
@@ -380,12 +380,12 @@ class GMConsole(wx.Panel):
         return None
 
     def ClearHistory(self, event):
-        """Clear history of commands"""
+        """!Clear history of commands"""
         self.cmd_output.ClearAll()
         self.console_progressbar.SetValue(0)
 
     def SaveHistory(self, event):
-        """Save history of commands"""
+        """!Save history of commands"""
         self.history = self.cmd_output.GetSelectedText()
         if self.history == '':
             self.history = self.cmd_output.GetText()
@@ -412,11 +412,11 @@ class GMConsole(wx.Panel):
         dlg.Destroy()
 
     def GetCmd(self):
-        """Get running command or None"""
+        """!Get running command or None"""
         return self.requestQ.get()
         
     def OnCmdOutput(self, event):
-        """Print command output"""
+        """!Print command output"""
         message = event.text
         type  = event.type
         if self.parent.notebook.GetSelection() != self.parent.goutput.pageid:
@@ -479,19 +479,19 @@ class GMConsole(wx.Panel):
         self.cmd_output.EnsureCaretVisible()
         
     def OnCmdProgress(self, event):
-        """Update progress message info"""
+        """!Update progress message info"""
         self.console_progressbar.SetValue(event.value)
 
     def OnCmdAbort(self, event):
-        """Abort running command"""
+        """!Abort running command"""
         self.cmdThread.abort()
 
     def OnCmdRun(self, event):
-        """Run command"""
+        """!Run command"""
         self.WriteCmdLog('(%s)\n%s' % (str(time.ctime()), ' '.join(event.cmd)))
 
     def OnCmdDone(self, event):
-        """Command done (or aborted)"""
+        """!Command done (or aborted)"""
         if event.aborted:
             # Thread aborted (using our convention of None return)
             self.WriteLog(_('Please note that the data are left in incosistent stage '
@@ -574,7 +574,7 @@ class GMConsole(wx.Panel):
         self.ProcessPendingEvents()
 
 class GMStdout:
-    """GMConsole standard output
+    """!GMConsole standard output
 
     Based on FrameOutErr.py
 
@@ -600,7 +600,7 @@ class GMStdout:
             wx.PostEvent(self.parent.cmd_output, evt)
         
 class GMStderr:
-    """GMConsole standard error output
+    """!GMConsole standard error output
 
     Based on FrameOutErr.py
 
@@ -670,7 +670,7 @@ class GMStderr:
             wx.PostEvent(self.parent.console_progressbar, evt)
             
 class GMStc(wx.stc.StyledTextCtrl):
-    """Styled GMConsole
+    """!Styled GMConsole
 
     Based on FrameOutErr.py
 
@@ -744,14 +744,14 @@ class GMStc(wx.stc.StyledTextCtrl):
         self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy)
 
     def OnDestroy(self, evt):
-        """The clipboard contents can be preserved after
+        """!The clipboard contents can be preserved after
         the app has exited"""
         
         wx.TheClipboard.Flush()
         evt.Skip()
 
     def AddTextWrapped(self, txt, wrap=None):
-        """Add string to text area.
+        """!Add string to text area.
 
         String is wrapped and linesep is also added to the end
         of the string"""

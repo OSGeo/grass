@@ -594,7 +594,7 @@ class ProfileFrame(wx.Frame):
         self.client.SaveFile()
 
     def DrawPointLabel(self, dc, mDataDict):
-        """This is the fuction that defines how the pointLabels are plotted
+        """!This is the fuction that defines how the pointLabels are plotted
             dc - DC that will be passed
             mDataDict - Dictionary of data that you want to use for the pointLabel
 
@@ -891,7 +891,7 @@ class TextDialog(wx.Dialog):
         self._do_layout()
         
     def _do_layout(self):
-        """Do layout"""
+        """!Do layout"""
         # dialog layout
         sizer = wx.BoxSizer(wx.VERTICAL)
 
@@ -1071,7 +1071,7 @@ class TextDialog(wx.Dialog):
         self.properties['font']['wxfont'].SetWeight(weight)
 
     def OnSave(self, event):
-        """Button 'Save' pressed"""
+        """!Button 'Save' pressed"""
         self.UpdateSettings()
         fileSettings = {}
         UserSettings.ReadSettingsFile(settings=fileSettings)
@@ -1081,12 +1081,12 @@ class TextDialog(wx.Dialog):
         self.Close()
 
     def OnApply(self, event):
-        """Button 'Apply' pressed"""
+        """!Button 'Apply' pressed"""
         self.UpdateSettings()
         self.Close()
 
     def OnCancel(self, event):
-        """Button 'Cancel' pressed"""
+        """!Button 'Cancel' pressed"""
         self.Close()
         
 class OptDialog(wx.Dialog):
@@ -1125,7 +1125,7 @@ class OptDialog(wx.Dialog):
         self._do_layout()
 
     def _do_layout(self):
-        """Do layout"""
+        """!Do layout"""
         # dialog layout
         sizer = wx.BoxSizer(wx.VERTICAL)
 
@@ -1416,7 +1416,7 @@ class OptDialog(wx.Dialog):
         self.properties['legend']['enabled'] = self.FindWindowById(self.wxId['legend']['enabled']).IsChecked()
 
     def OnSave(self, event):
-        """Button 'Save' pressed"""
+        """!Button 'Save' pressed"""
         self.UpdateSettings()
         fileSettings = {}
         UserSettings.ReadSettingsFile(settings=fileSettings)
@@ -1426,10 +1426,10 @@ class OptDialog(wx.Dialog):
         self.Close()
 
     def OnApply(self, event):
-        """Button 'Apply' pressed"""
+        """!Button 'Apply' pressed"""
         self.UpdateSettings()
         self.Close()
 
     def OnCancel(self, event):
-        """Button 'Cancel' pressed"""
+        """!Button 'Cancel' pressed"""
         self.Close()

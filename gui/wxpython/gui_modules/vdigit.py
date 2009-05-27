@@ -68,7 +68,7 @@ class AbstractDigit:
     Abstract digitization class
     """
     def __init__(self, mapwindow):
-        """Initialization
+        """!Initialization
 
         @param mapwindow reference to mapwindow (MapFrame) instance
         @param settings  initial settings of digitization tool
@@ -87,7 +87,7 @@ class AbstractDigit:
         pass
     
     def SetCategoryNextToUse(self):
-        """Find maximum category number in the map layer
+        """!Find maximum category number in the map layer
         and update Digit.settings['category']
 
         @return 'True' on success, 'False' on failure
@@ -102,14 +102,14 @@ class AbstractDigit:
                              value=cat)
         
     def SetCategory(self):
-        """Return category number to use (according Settings)"""
+        """!Return category number to use (according Settings)"""
         if UserSettings.Get(group='vdigit', key="categoryMode", subkey='selection') == 0:
             self.SetCategoryNextToUse()
 
         return UserSettings.Get(group='vdigit', key="category", subkey='value')
 
     def SetMapName(self, map):
-        """Set map name
+        """!Set map name
 
         @param map map name to be set up or None (will close currently edited map)
         """
@@ -142,7 +142,7 @@ class AbstractDigit:
         self.digit.InitCats()
         
     def SelectLinesByQueryThresh(self):
-        """Generic method used for SelectLinesByQuery()
+        """!Generic method used for SelectLinesByQuery()
         -- to get threshold value"""
         thresh = 0.0
         if UserSettings.Get(group='vdigit', key='query', subkey='selection') == 0:
@@ -157,7 +157,7 @@ class AbstractDigit:
         return thresh
 
     def GetSelectType(self):
-        """Get type(s) to be selected
+        """!Get type(s) to be selected
 
         Used by SelectLinesByBox() and SelectLinesByPoint()"""
 
@@ -173,7 +173,7 @@ class AbstractDigit:
         return type
 
     def SelectLinesFromBackgroundMap(self, pos1, pos2):
-        """Select features from background map
+        """!Select features from background map
 
         @param pos1,pos2 bounding box
         """
@@ -224,7 +224,7 @@ class VDigit(AbstractDigit):
     Under development (wxWidgets C/C++ background)
     """
     def __init__(self, mapwindow):
-        """Initialization
+        """!Initialization
 
         @param mapwindow reference to mapwindow (MapFrame) instance
         @param settings  initial settings of digitization tool
@@ -245,7 +245,7 @@ class VDigit(AbstractDigit):
         del self.digit
         
     def AddPoint (self, map, point, x, y, z=None):
-        """Add new point/centroid
+        """!Add new point/centroid
 
         @param map   map name (unused, for compatability with VEdit)
         @param point feature type (if true point otherwise centroid)
@@ -278,7 +278,7 @@ class VDigit(AbstractDigit):
         return ret
         
     def AddLine (self, map, line, coords):
-        """Add line/boundary
+        """!Add line/boundary
 
         @param map    map name (unused, for compatability with VEdit)
         @param line   feature type (if True line, otherwise boundary)
@@ -317,7 +317,7 @@ class VDigit(AbstractDigit):
         return ret
     
     def DeleteSelectedLines(self):
-        """Delete selected features
+        """!Delete selected features
 
         @return number of deleted lines
         """
@@ -329,7 +329,7 @@ class VDigit(AbstractDigit):
         return nlines
 
     def MoveSelectedLines(self, move):
-        """Move selected features
+        """!Move selected features
 
         @param move direction (x, y)
         """
@@ -350,7 +350,7 @@ class VDigit(AbstractDigit):
         return nlines
 
     def MoveSelectedVertex(self, coords, move):
-        """Move selected vertex of the line
+        """!Move selected vertex of the line
 
         @param coords click coordinates
         @param move   X,Y direction
@@ -374,7 +374,7 @@ class VDigit(AbstractDigit):
         return moved
 
     def AddVertex(self, coords):
-        """Add new vertex to the selected line/boundary on position 'coords'
+        """!Add new vertex to the selected line/boundary on position 'coords'
 
         @param coords coordinates to add vertex
 
@@ -391,7 +391,7 @@ class VDigit(AbstractDigit):
         return added
 
     def RemoveVertex(self, coords):
-        """Remove vertex from the selected line/boundary on position 'coords'
+        """!Remove vertex from the selected line/boundary on position 'coords'
 
         @param coords coordinates to remove vertex
 
@@ -409,7 +409,7 @@ class VDigit(AbstractDigit):
 
 
     def SplitLine(self, coords):
-        """Split selected line/boundary on position 'coords'
+        """!Split selected line/boundary on position 'coords'
 
         @param coords coordinates to split line
 
@@ -426,7 +426,7 @@ class VDigit(AbstractDigit):
         return ret
 
     def EditLine(self, line, coords):
-        """Edit existing line/boundary
+        """!Edit existing line/boundary
 
         @param line id of line to be modified
         @param coords list of coordinates of modified line
@@ -465,7 +465,7 @@ class VDigit(AbstractDigit):
         return ret
 
     def FlipLine(self):
-        """Flip selected lines/boundaries
+        """!Flip selected lines/boundaries
 
         @return number of modified lines
         @return -1 on error
@@ -478,7 +478,7 @@ class VDigit(AbstractDigit):
         return ret
 
     def MergeLine(self):
-        """Merge selected lines/boundaries
+        """!Merge selected lines/boundaries
 
         @return number of modified lines
         @return -1 on error
@@ -491,7 +491,7 @@ class VDigit(AbstractDigit):
         return ret
 
     def BreakLine(self):
-        """Break selected lines/boundaries
+        """!Break selected lines/boundaries
 
         @return number of modified lines
         @return -1 on error
@@ -504,7 +504,7 @@ class VDigit(AbstractDigit):
         return ret
 
     def SnapLine(self):
-        """Snap selected lines/boundaries
+        """!Snap selected lines/boundaries
 
         @return on success
         @return -1 on error
@@ -518,7 +518,7 @@ class VDigit(AbstractDigit):
         return ret
 
     def ConnectLine(self):
-        """Connect selected lines/boundaries
+        """!Connect selected lines/boundaries
 
         @return 1 lines connected
         @return 0 lines not connected
@@ -533,7 +533,7 @@ class VDigit(AbstractDigit):
         return ret
         
     def CopyLine(self, ids=[]):
-        """Copy features from (background) vector map
+        """!Copy features from (background) vector map
 
         @param ids list of line ids to be copied
 
@@ -554,7 +554,7 @@ class VDigit(AbstractDigit):
         return ret
 
     def CopyCats(self, fromId, toId, copyAttrb=False):
-        """Copy given categories to objects with id listed in ids
+        """!Copy given categories to objects with id listed in ids
 
         @param cats ids of 'from' feature
         @param ids  ids of 'to' feature(s)
@@ -573,7 +573,7 @@ class VDigit(AbstractDigit):
         return ret
 
     def SelectLinesByQuery(self, pos1, pos2):
-        """Select features by query
+        """!Select features by query
 
         @param pos1, pos2 bounding box definition
         """
@@ -600,14 +600,14 @@ class VDigit(AbstractDigit):
         return ids
 
     def GetLineCats(self, line=-1):
-        """Get layer/category pairs from given (selected) line
+        """!Get layer/category pairs from given (selected) line
         
         @param line feature id (-1 for first selected line)
         """
         return dict(self.digit.GetLineCats(line))
 
     def SetLineCats(self, line, layer, cats, add=True):
-        """Set categories for given line and layer
+        """!Set categories for given line and layer
 
         @param line feature id
         @param layer layer number (-1 for first selected line)
@@ -625,11 +625,11 @@ class VDigit(AbstractDigit):
         return ret
 
     def GetLayers(self):
-        """Get list of layers"""
+        """!Get list of layers"""
         return self.digit.GetLayers()
 
     def TypeConvForSelectedLines(self):
-        """Feature type conversion for selected objects.
+        """!Feature type conversion for selected objects.
 
         Supported conversions:
          - point <-> centroid
@@ -646,7 +646,7 @@ class VDigit(AbstractDigit):
         return ret
 
     def Undo(self, level=-1):
-        """Undo action
+        """!Undo action
 
         @param level levels to undo (0 to revert all)
 
@@ -666,11 +666,11 @@ class VDigit(AbstractDigit):
             self.toolbar.EnableUndo(False)
 
     def GetUndoLevel(self):
-        """Get undo level (number of active changesets)"""
+        """!Get undo level (number of active changesets)"""
         return self.digit.GetUndoLevel()
 
     def UpdateSettings(self):
-        """Update digit settigs"""
+        """!Update digit settigs"""
         if not self.digit:
             return
         
@@ -682,7 +682,7 @@ class VDigit(AbstractDigit):
                                                    subkey='enabled'))
         
     def __getSnapThreshold(self):
-        """Get snap mode and threshold value
+        """!Get snap mode and threshold value
 
         @return (snap, thresh)
         """
@@ -699,7 +699,7 @@ class VDigit(AbstractDigit):
         return (snap, thresh)
 
 class Digit(VDigit):
-    """Default digit class"""
+    """!Default digit class"""
     def __init__(self, mapwindow):
         VDigit.__init__(self, mapwindow)
         self.type = 'vdigit'
@@ -708,9 +708,9 @@ class Digit(VDigit):
         VDigit.__del__(self)
         
 class AbstractDisplayDriver:
-    """Abstract classs for display driver"""
+    """!Abstract classs for display driver"""
     def __init__(self, parent, mapwindow):
-        """Initialization
+        """!Initialization
 
         @param parent
         @param mapwindow reference to mapwindow (MFrame)
@@ -722,7 +722,7 @@ class AbstractDisplayDriver:
         self.selected    = []   # list of selected objects (grassId!)
 
     def GetThreshold(self, type='snapping', value=None, units=None):
-        """Return threshold in map units
+        """!Return threshold in map units
 
         @param value threshold to be set up
         @param units units (map, screen)
@@ -757,7 +757,7 @@ class CDisplayDriver(AbstractDisplayDriver):
     Display driver using grass7_wxdriver module
     """
     def __init__(self, parent, mapwindow):
-        """Initialization
+        """!Initialization
 
         @param parent
         @param mapwindow reference to mapwindow (MFrame)
@@ -782,18 +782,18 @@ class CDisplayDriver(AbstractDisplayDriver):
         self.UpdateSettings()
 
     def GetDevice(self):
-        """Get device"""
+        """!Get device"""
         return self.__display
     
     def SetDevice(self, pdc):
-        """Set device for driver
+        """!Set device for driver
 
         @param pdc wx.PseudoDC instance
         """
         self.__display.SetDevice(pdc)
             
     def Reset(self, map):
-        """Reset map
+        """!Reset map
 
         Open or close the vector map by driver.
 
@@ -816,7 +816,7 @@ class CDisplayDriver(AbstractDisplayDriver):
         return ret
     
     def ReloadMap(self):
-        """Reload map (close and re-open).
+        """!Reload map (close and re-open).
 
         Needed for v.edit, TODO: get rid of that..."""
         
@@ -824,7 +824,7 @@ class CDisplayDriver(AbstractDisplayDriver):
         self.__display.ReloadMap()
 
     def DrawMap(self):
-        """Draw vector map layer content
+        """!Draw vector map layer content
 
         @return wx.Image instance
         """
@@ -834,7 +834,7 @@ class CDisplayDriver(AbstractDisplayDriver):
         return nlines
 
     def SelectLinesByBox(self, begin, end, type=0, drawSeg=False):
-        """Select vector features by given bounding box.
+        """!Select vector features by given bounding box.
 
         If type is given, only vector features of given type are selected.
 
@@ -856,7 +856,7 @@ class CDisplayDriver(AbstractDisplayDriver):
         return nselected
 
     def SelectLineByPoint(self, point, type=0):
-        """Select vector feature by coordinates of click point (in given threshold).
+        """!Select vector feature by coordinates of click point (in given threshold).
 
         If type is given, only vector features of given type are selected.
 
@@ -876,7 +876,7 @@ class CDisplayDriver(AbstractDisplayDriver):
             return None
         
     def GetSelected(self, grassId=True):
-        """Return ids of selected vector features
+        """!Return ids of selected vector features
         
         @param grassId if grassId is True returns GRASS ids, otherwise
         internal ids of objects drawn in PseudoDC"""
@@ -891,15 +891,15 @@ class CDisplayDriver(AbstractDisplayDriver):
         return selected
 
     def GetSelectedCoord(self):
-        """Return ids of selected vector features and their coordinates"""
+        """!Return ids of selected vector features and their coordinates"""
         return dict(self.__display.GetSelectedCoord())
         
     def GetRegionSelected(self):
-        """Get minimal region extent of selected features (ids/cats)"""
+        """!Get minimal region extent of selected features (ids/cats)"""
         return self.__display.GetRegionSelected()
     
     def GetDuplicates(self):
-        """Return ids of (selected) duplicated vector features
+        """!Return ids of (selected) duplicated vector features
         """
         # -> id : (list of ids)
         dupl = dict(self.__display.GetDuplicates())
@@ -926,7 +926,7 @@ class CDisplayDriver(AbstractDisplayDriver):
         return dupl_full
 
     def GetSelectedVertex(self, coords):
-        """Get PseudoDC id(s) of vertex (of selected line)
+        """!Get PseudoDC id(s) of vertex (of selected line)
         on position 'coords'
 
         @param coords click position
@@ -941,7 +941,7 @@ class CDisplayDriver(AbstractDisplayDriver):
         return id 
 
     def SetSelected(self, id, field=-1):
-        """Set selected vector features
+        """!Set selected vector features
 
         @param id list of feature ids/categories to be selected
         @param field field(layer) number, -1 for ids instead of cats
@@ -952,7 +952,7 @@ class CDisplayDriver(AbstractDisplayDriver):
         self.__display.SetSelected(id, field)
 
     def UnSelect(self, id):
-        """Unselect vector features
+        """!Unselect vector features
 
         @param id list of feature id(s)
         """
@@ -963,7 +963,7 @@ class CDisplayDriver(AbstractDisplayDriver):
         self.__display.UnSelect(id)
 
     def UpdateRegion(self):
-        """Set geographical region
+        """!Set geographical region
         
         Needed for 'cell2pixel' conversion"""
         
@@ -981,7 +981,7 @@ class CDisplayDriver(AbstractDisplayDriver):
                                  map.width, map.height)
 
     def GetMapBoundingBox(self):
-        """Return bounding box of given vector map layer
+        """!Return bounding box of given vector map layer
 
         @return (w,s,b,e,n,t)
         """
@@ -989,11 +989,11 @@ class CDisplayDriver(AbstractDisplayDriver):
         return self.__display.GetMapBoundingBox()
 
     def DrawSelected(self, draw=True):
-        """Show/hide selected features"""
+        """!Show/hide selected features"""
         self.__display.DrawSelected(draw)
         
     def UpdateSettings(self, alpha=255):
-        """Update display driver settings"""
+        """!Update display driver settings"""
         # TODO map units
 
         if not self.__display:
@@ -1119,7 +1119,7 @@ class VDigitSettingsDialog(wx.Dialog):
         mainSizer.Fit(self)
 
     def __CreateSymbologyPage(self, notebook):
-        """Create notebook page concerning with symbology settings"""
+        """!Create notebook page concerning with symbology settings"""
 
         panel = wx.Panel(parent=notebook, id=wx.ID_ANY)
         notebook.AddPage(page=panel, text=_("Symbology"))
@@ -1157,7 +1157,7 @@ class VDigitSettingsDialog(wx.Dialog):
         return panel
 
     def __CreateGeneralPage(self, notebook):
-        """Create notebook page concerning with symbology settings"""
+        """!Create notebook page concerning with symbology settings"""
 
         panel = wx.Panel(parent=notebook, id=wx.ID_ANY)
         notebook.AddPage(page=panel, text=_("General"))
@@ -1303,7 +1303,7 @@ class VDigitSettingsDialog(wx.Dialog):
         return panel
 
     def __CreateQueryPage(self, notebook):
-        """Create notebook page for query tool"""
+        """!Create notebook page for query tool"""
 
         panel = wx.Panel(parent=notebook, id=wx.ID_ANY)
         notebook.AddPage(page=panel, text=_("Query tool"))
@@ -1385,7 +1385,7 @@ class VDigitSettingsDialog(wx.Dialog):
         return panel
 
     def __CreateAttributesPage(self, notebook):
-        """Create notebook page for query tool"""
+        """!Create notebook page for query tool"""
 
         panel = wx.Panel(parent=notebook, id=wx.ID_ANY)
         notebook.AddPage(page=panel, text=_("Attributes"))
@@ -1514,7 +1514,7 @@ class VDigitSettingsDialog(wx.Dialog):
             (_("Direction"), "direction"),)
 
     def OnChangeCategoryMode(self, event):
-        """Change category mode"""
+        """!Change category mode"""
 
         mode = event.GetSelection()
         UserSettings.Set(group='vdigit', key="categoryMode", subkey='selection', value=mode)
@@ -1530,7 +1530,7 @@ class VDigitSettingsDialog(wx.Dialog):
         self.category.SetValue(UserSettings.Get(group='vdigit', key='category', subkey='value'))
 
     def OnChangeLayer(self, event):
-        """Layer changed"""
+        """!Layer changed"""
         layer = int(event.GetString())
         if layer > 0:
             UserSettings.Set(group='vdigit', key='layer', subkey='value', value=layer)
@@ -1540,11 +1540,11 @@ class VDigitSettingsDialog(wx.Dialog):
         event.Skip()
 
     def OnChangeAddRecord(self, event):
-        """Checkbox 'Add new record' status changed"""
+        """!Checkbox 'Add new record' status changed"""
         self.category.SetValue(self.parent.digit.SetCategory())
             
     def OnChangeSnappingValue(self, event):
-        """Change snapping value - update static text"""
+        """!Change snapping value - update static text"""
         value = self.snappingValue.GetValue()
         
         if value < 0:
@@ -1572,7 +1572,7 @@ class VDigitSettingsDialog(wx.Dialog):
         event.Skip()
 
     def OnChangeSnappingUnits(self, event):
-        """Snapping units change -> update static text"""
+        """!Snapping units change -> update static text"""
         value = self.snappingValue.GetValue()
         units = self.snappingUnit.GetStringSelection()
         threshold = self.parent.digit.driver.GetThreshold(value=value, units=units)
@@ -1589,7 +1589,7 @@ class VDigitSettingsDialog(wx.Dialog):
         event.Skip()
 
     def OnChangeQuery(self, event):
-        """Change query"""
+        """!Change query"""
         if self.queryLength.GetValue():
             # length
             self.queryLengthSL.Enable(True)
@@ -1604,7 +1604,7 @@ class VDigitSettingsDialog(wx.Dialog):
             self.queryDangleValue.Enable(True)
 
     def OnSave(self, event):
-        """Button 'Save' clicked"""
+        """!Button 'Save' clicked"""
         self.UpdateSettings()
         self.parent.toolbars['vdigit'].settingsDialog = None
 
@@ -1620,11 +1620,11 @@ class VDigitSettingsDialog(wx.Dialog):
         event.Skip()
         
     def OnApply(self, event):
-        """Button 'Apply' clicked"""
+        """!Button 'Apply' clicked"""
         self.UpdateSettings()
 
     def OnCancel(self, event):
-        """Button 'Cancel' clicked"""
+        """!Button 'Cancel' clicked"""
         self.parent.toolbars['vdigit'].settingsDialog = None
         self.Destroy()
 
@@ -1632,7 +1632,7 @@ class VDigitSettingsDialog(wx.Dialog):
             event.Skip()
         
     def UpdateSettings(self):
-        """Update UserSettings"""
+        """!Update UserSettings"""
 
         # symbology
         for key, (enabled, color) in self.symbology.iteritems():
@@ -1907,19 +1907,19 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         self.Bind(wx.EVT_LIST_COL_CLICK, self.OnColClick, self.list)
 
     def GetListCtrl(self):
-        """Used by ColumnSorterMixin"""
+        """!Used by ColumnSorterMixin"""
         return self.list
 
     def OnColClick(self, event):
-        """Click on column header (order by)"""
+        """!Click on column header (order by)"""
         event.Skip()
         
     def OnBeginEdit(self, event):
-        """Editing of item started"""
+        """!Editing of item started"""
         event.Allow()
 
     def OnEndEdit(self, event):
-        """Finish editing of item"""
+        """!Finish editing of item"""
         itemIndex = event.GetIndex()
         layerOld = int (self.list.GetItem(itemIndex, 0).GetText())
         catOld = int (self.list.GetItem(itemIndex, 1).GetText())
@@ -1951,7 +1951,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
             return False
 
     def OnRightDown(self, event):
-        """Mouse right button down"""
+        """!Mouse right button down"""
         x = event.GetX()
         y = event.GetY()
         item, flags = self.list.HitTest((x, y))
@@ -1963,7 +1963,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         event.Skip()
 
     def OnRightUp(self, event):
-        """Mouse right button up"""
+        """!Mouse right button up"""
         if not hasattr(self, "popupID1"):
             self.popupID1 = wx.NewId()
             self.popupID2 = wx.NewId()
@@ -1986,11 +1986,11 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         menu.Destroy()
 
     def OnItemSelected(self, event):
-        """Item selected"""
+        """!Item selected"""
         event.Skip()
 
     def OnItemDelete(self, event):
-        """Delete selected item(s) from the list (layer/category pair)"""
+        """!Delete selected item(s) from the list (layer/category pair)"""
         item = self.list.GetFirstSelected()
         while item != -1:
             layer = int (self.list.GetItem(item, 0).GetText())
@@ -2003,14 +2003,14 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         event.Skip()
         
     def OnItemDeleteAll(self, event):
-        """Delete all items from the list"""
+        """!Delete all items from the list"""
         self.list.DeleteAllItems()
         self.cats[self.fid] = {}
 
         event.Skip()
 
     def OnFeature(self, event):
-        """Feature id changed (on duplicates)"""
+        """!Feature id changed (on duplicates)"""
         self.fid = int(event.GetString())
         
         self.itemDataMap = self.list.Populate(self.cats[self.fid],
@@ -2026,7 +2026,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         event.Skip()
         
     def __GetCategories(self, coords, qdist):
-        """Get layer/category pairs for all available
+        """!Get layer/category pairs for all available
         layers
 
         Return True line found or False if not found"""
@@ -2056,7 +2056,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         return True
 
     def OnReload(self, event):
-        """Reload button pressed"""
+        """!Reload button pressed"""
         # restore original list
         self.cats = copy.deepcopy(self.cats_orig)
 
@@ -2067,7 +2067,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         event.Skip()
 
     def OnCancel(self, event):
-        """Cancel button pressed"""
+        """!Cancel button pressed"""
         self.parent.parent.dialogs['category'] = None
         if self.parent.parent.digit:
             self.parent.parent.digit.driver.SetSelected([])
@@ -2078,7 +2078,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         self.Close()
 
     def OnApply(self, event):
-        """Apply button pressed"""
+        """!Apply button pressed"""
         for fid in self.cats.keys():
             newfid = self.ApplyChanges(fid)
             if fid == self.fid:
@@ -2131,12 +2131,12 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         return newfid
 
     def OnOK(self, event):
-        """OK button pressed"""
+        """!OK button pressed"""
         self.OnApply(event)
         self.OnCancel(event)
 
     def OnAddCat(self, event):
-        """Button 'Add' new category pressed"""
+        """!Button 'Add' new category pressed"""
         try:
             layer = int(self.layerNew.GetStringSelection())
             cat   = int(self.catNew.GetValue())
@@ -2170,11 +2170,11 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         return True
 
     def GetLine(self):
-        """Get id of selected line of 'None' if no line is selected"""
+        """!Get id of selected line of 'None' if no line is selected"""
         return self.cats.keys()
 
     def UpdateDialog(self, query=None, cats=None):
-        """Update dialog
+        """!Update dialog
         
         @param query {coordinates, distance} - v.edit/v.what
         @param cats  directory layer/cats    - vdigit
@@ -2229,7 +2229,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
 class CategoryListCtrl(wx.ListCtrl,
                        listmix.ListCtrlAutoWidthMixin,
                        listmix.TextEditMixin):
-    """List of layers/categories"""
+    """!List of layers/categories"""
 
     def __init__(self, parent, id, pos=wx.DefaultPosition,
                  size=wx.DefaultSize, style=0):
@@ -2242,7 +2242,7 @@ class CategoryListCtrl(wx.ListCtrl,
         listmix.TextEditMixin.__init__(self)
 
     def Populate(self, cats, update=False):
-        """Populate the list"""
+        """!Populate the list"""
 
         itemData = {} # requested by sorter
 
@@ -2395,7 +2395,7 @@ class VDigitDuplicatesDialog(wx.Dialog):
         self.SetMinSize((250, 180))
 
     def GetUnSelected(self):
-        """Get unselected items (feature id)
+        """!Get unselected items (feature id)
 
         @return list of ids
         """
@@ -2410,7 +2410,7 @@ class VDigitDuplicatesDialog(wx.Dialog):
         return ids
 
 class CheckListFeature(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.CheckListCtrlMixin):
-    """List of mapset/owner/group"""
+    """!List of mapset/owner/group"""
     def __init__(self, parent, data,
                  pos=wx.DefaultPosition, log=None):
         self.parent = parent
@@ -2429,7 +2429,7 @@ class CheckListFeature(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.Chec
         self.LoadData(self.data)
 
     def LoadData(self, data):
-        """Load data into list"""
+        """!Load data into list"""
         self.InsertColumn(0, _('Feature id'))
         self.InsertColumn(1, _('Layer (Categories)'))
 
@@ -2445,5 +2445,5 @@ class CheckListFeature(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.Chec
         self.SetColumnWidth(col=1, width=wx.LIST_AUTOSIZE_USEHEADER)
                 
     def OnCheckItem(self, index, flag):
-        """Mapset checked/unchecked"""
+        """!Mapset checked/unchecked"""
         pass

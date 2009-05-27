@@ -792,7 +792,7 @@ class MapFrame(wx.Frame):
         self.goTo.SetFocus()
         
     def StatusbarUpdate(self):
-        """Update statusbar content"""
+        """!Update statusbar content"""
 
         self.showRegion.Hide()
         self.compResolution.Hide()
@@ -903,13 +903,13 @@ class MapFrame(wx.Frame):
             self.statusbar.SetStatusText("", 1)
 
     def StatusbarEnableLongHelp(self, enable=True):
-        """Enable/disable toolbars long help"""
+        """!Enable/disable toolbars long help"""
         for toolbar in self.toolbars.itervalues():
             if toolbar:
                 toolbar.EnableLongHelp(enable)
                 
     def StatusbarReposition(self):
-        """Reposition checkbox in statusbar"""
+        """!Reposition checkbox in statusbar"""
         # reposition checkbox
         widgets = [(0, self.showRegion),
                    (0, self.compResolution),
@@ -1259,7 +1259,7 @@ class MapFrame(wx.Frame):
                 self.dialogs['attributes'].Hide()
         
     def OnQuery(self, event):
-        """Query tools menu"""
+        """!Query tools menu"""
         if self.toolbars['map']:
             self.toolbars['map'].OnTool(event)
             action = self.toolbars['map'].GetAction()
@@ -1459,7 +1459,7 @@ class MapFrame(wx.Frame):
         self.profile.OnSelectRaster(None)
 
     def FormatDist(self, dist):
-        """Format length numbers and units in a nice way,
+        """!Format length numbers and units in a nice way,
         as a function of length. From code by Hamish Bowman
         Grass Development Team 2006"""
 
@@ -1705,7 +1705,7 @@ class MapFrame(wx.Frame):
 
     def SetProperties(self, render=False, mode=0, showCompExtent=False,
                       constrainRes=False):
-        """Set properies of map display window"""
+        """!Set properies of map display window"""
         self.autoRender.SetValue(render)
         self.toggleStatus.SetSelection(mode)
         self.StatusbarUpdate()
@@ -1715,14 +1715,14 @@ class MapFrame(wx.Frame):
             self.MapWindow.regionCoords = []
 
     def IsStandalone(self):
-        """Check if Map display is standalone"""
+        """!Check if Map display is standalone"""
         if self._layerManager:
             return False
         
         return True
     
     def GetLayerManager(self):
-        """Get reference to Layer Manager
+        """!Get reference to Layer Manager
 
         @return window reference
         @return None (if standalone)
@@ -1764,10 +1764,10 @@ class MapApp(wx.App):
             # stop the timer
             self.timer.Stop()
             # terminate thread (a bit ugly)
-            os.system("""echo "quit" >> %s""" % (cmdfilename))
+            os.system("""!echo "quit" >> %s""" % (cmdfilename))
 
     def watcher(self):
-        """Redraw, if new layer appears"""
+        """!Redraw, if new layer appears"""
         if self.redraw:
             self.mapFrm.OnDraw(None)
         self.redraw = False
@@ -1798,7 +1798,7 @@ if __name__ == "__main__":
     gm_map.MainLoop()
     
     os.remove(cmdfilename)
-    os.system("""g.gisenv set="GRASS_PYCMDFILE" """)
+    os.system("""!g.gisenv set="GRASS_PYCMDFILE" """)
 
     print >> sys.stderr, "\nStopping monitor <%s>...\n" % (title)
 

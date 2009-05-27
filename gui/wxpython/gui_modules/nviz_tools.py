@@ -33,7 +33,7 @@ sys.path.append(os.path.join(globalvar.ETCWXDIR, "nviz"))
 import grass7_wxnviz as wxnviz
 
 class NvizToolWindow(wx.Frame):
-    """Experimental window for Nviz tools
+    """!Experimental window for Nviz tools
 
     @todo integrate with Map display
     """
@@ -104,12 +104,12 @@ class NvizToolWindow(wx.Frame):
         self.notebook.ChangeSelection(new)
     
     def PostViewEvent(self, zExag=False):
-        """Change view settings"""
+        """!Change view settings"""
         event = wxUpdateView(zExag=zExag)
         wx.PostEvent(self.mapWindow, event)
 
     def __createViewPage(self):
-        """Create view settings page"""
+        """!Create view settings page"""
         panel = wx.Panel(parent=self.notebook, id=wx.ID_ANY)
         self.notebook.AddPage(page=panel,
                               text=" %s " % _("View"))
@@ -229,7 +229,7 @@ class NvizToolWindow(wx.Frame):
         return panel.GetBestSize()
 
     def __createSurfacePage(self):
-        """Create view settings page"""
+        """!Create view settings page"""
         panel = wx.Panel(parent=self.notebook, id=wx.ID_ANY)
         self.page['surface'] = {}
         self.page['surface']['id'] = -1
@@ -500,7 +500,7 @@ class NvizToolWindow(wx.Frame):
         return panel.GetBestSize()
 
     def __createVectorPage(self):
-        """Create view settings page"""
+        """!Create view settings page"""
         panel = wx.Panel(parent=self.notebook, id=wx.ID_ANY)
         self.page['vector'] = {}
         self.page['vector']['id'] = -1
@@ -725,7 +725,7 @@ class NvizToolWindow(wx.Frame):
         return panel.GetBestSize()
 
     def __createVolumePage(self):
-        """Create view settings page"""
+        """!Create view settings page"""
         panel = wx.Panel(parent=self.notebook, id=wx.ID_ANY)
         self.page['volume'] = {}
         self.page['volume']['id'] = -1
@@ -944,7 +944,7 @@ class NvizToolWindow(wx.Frame):
         return panel.GetBestSize()
     
     def __createSettingsPage(self):
-        """Create settings page"""
+        """!Create settings page"""
         panel = wx.Panel(parent=self.notebook, id=wx.ID_ANY)
         self.notebook.AddPage(page=panel,
                               text=" %s " % _("Settings"))
@@ -1291,7 +1291,7 @@ class NvizToolWindow(wx.Frame):
         return panel.GetBestSize()
 
     def CreateControl(self, parent, dict, name, range, bind, sliderHor=True, size=200):
-        """Add control (Slider + SpinCtrl)"""
+        """!Add control (Slider + SpinCtrl)"""
         dict[name] = {}
         if sliderHor:
             style = wx.SL_HORIZONTAL | wx.SL_AUTOTICKS | \
@@ -1332,7 +1332,7 @@ class NvizToolWindow(wx.Frame):
         dict[name]['spin'] = spin.GetId()
 
     def UpdateSettings(self):
-        """Update dialog settings"""
+        """!Update dialog settings"""
         for control in ('height',
                         'persp',
                         'twist',
@@ -1363,7 +1363,7 @@ class NvizToolWindow(wx.Frame):
         return None
 
     def OnViewChange(self, event):
-        """Change view, render in quick mode"""
+        """!Change view, render in quick mode"""
         # find control
         winName = self.__GetWindowName(self.win['view'], event.GetId())
         if not winName:
@@ -1389,25 +1389,25 @@ class NvizToolWindow(wx.Frame):
         self.mapWindow.Refresh(False)
 
     def OnViewChanged(self, event):
-        """View changed, render in full resolution"""
+        """!View changed, render in full resolution"""
         self.mapWindow.render['quick'] = False
         self.mapWindow.Refresh(False)
 
     def OnViewChangedSpin(self, event):
-        """View changed, render in full resolution"""
+        """!View changed, render in full resolution"""
         # TODO: use step value instead
 
         self.OnViewChange(event)
         self.OnViewChanged(None)
 
     def OnResetView(self, event):
-        """Reset to default view (view page)"""
+        """!Reset to default view (view page)"""
         self.mapWindow.ResetView()
         self.UpdateSettings()
         self.mapWindow.Refresh(False)
 
     def OnLookAt(self, event):
-        """Look at (view page)"""
+        """!Look at (view page)"""
         sel = event.GetSelection()
         if sel == 0: # top
             self.mapWindow.view['pos']['x'] = 0.5
@@ -1444,7 +1444,7 @@ class NvizToolWindow(wx.Frame):
         self.mapWindow.Refresh(False)
 
     def OnDefault(self, event):
-        """Restore default settings"""
+        """!Restore default settings"""
         settings = copy.deepcopy(UserSettings.GetDefaultSettings()['nviz'])
         UserSettings.Set(group='nviz',
                          value=settings)
@@ -1464,7 +1464,7 @@ class NvizToolWindow(wx.Frame):
         event.Skip()
 
     def OnApply(self, event):
-        """Apply button pressed"""
+        """!Apply button pressed"""
         if self.notebook.GetSelection() == self.page['settings']['id']:
             self.ApplySettings()
         
@@ -1472,7 +1472,7 @@ class NvizToolWindow(wx.Frame):
             event.Skip()
 
     def ApplySettings(self):
-        """Apply Nviz settings for current session"""
+        """!Apply Nviz settings for current session"""
         settings = UserSettings.Get(group='nviz')
         for subgroup, key in settings.iteritems(): # view, surface, vector...
             for subkey, value in key.iteritems():
@@ -1495,7 +1495,7 @@ class NvizToolWindow(wx.Frame):
                     settings[subgroup][subkey][subvalue] = value
                     
     def OnSave(self, event):
-        """OK button pressed
+        """!OK button pressed
         
         Apply changes, update map and save settings of selected layer
         """
@@ -1512,7 +1512,7 @@ class NvizToolWindow(wx.Frame):
             self.lmgr.goutput.WriteLog(_('Nviz settings saved to file <%s>.') % file)
 
     def OnBgColor(self, event):
-        """Background color changed"""
+        """!Background color changed"""
         color = event.GetValue()
         color = str(color[0]) + ':' + str(color[1]) + ':' + str(color[2])
 
@@ -1522,14 +1522,14 @@ class NvizToolWindow(wx.Frame):
             self.mapWindow.Refresh(False)
         
     def OnClose(self, event):
-        """Close button pressed
+        """!Close button pressed
         
         Close dialog
         """
         self.Hide()
 
     def OnMapObjUse(self, event):
-        """Set surface attribute -- use -- map/constant"""
+        """!Set surface attribute -- use -- map/constant"""
         if not self.mapWindow.init:
             return
 
@@ -1583,7 +1583,7 @@ class NvizToolWindow(wx.Frame):
             self.mapWindow.Refresh(False)
 
     def SetMapObjUseMap(self, nvizType, attrb, map=None):
-        """Update dialog widgets when attribute type changed"""
+        """!Update dialog widgets when attribute type changed"""
         if attrb in ('topo', 'color', 'shine'):
             incSel = -1 # decrement selection (no 'unset')
         else:
@@ -1608,11 +1608,11 @@ class NvizToolWindow(wx.Frame):
             self.FindWindowById(self.win[nvizType][attrb]['use']).SetSelection(0)
 
     def OnSurfaceMap(self, event):
-        """Set surface attribute"""
+        """!Set surface attribute"""
         self.SetMapObjAttrb(nvizType='surface', winId=event.GetId())
         
     def SetMapObjAttrb(self, nvizType, winId):
-        """Set map object (surface/isosurface) attribute (map/constant)"""
+        """!Set map object (surface/isosurface) attribute (map/constant)"""
         if not self.mapWindow.init:
             return
 
@@ -1663,14 +1663,14 @@ class NvizToolWindow(wx.Frame):
                 self.mapWindow.Refresh(False)
 
     def OnSurfaceResolution(self, event):
-        """Draw resolution changed"""
+        """!Draw resolution changed"""
         self.SetSurfaceResolution()
 
         if apply and self.parent.autoRender.IsChecked():
             self.mapWindow.Refresh(False)
 
     def SetSurfaceResolution(self):
-        """Set draw resolution"""
+        """!Set draw resolution"""
         coarse = self.FindWindowById(self.win['surface']['draw']['res-coarse']).GetValue()
         fine = self.FindWindowById(self.win['surface']['draw']['res-fine']).GetValue()
         
@@ -1684,7 +1684,7 @@ class NvizToolWindow(wx.Frame):
         wx.PostEvent(self.mapWindow, event)
         
     def SetSurfaceMode(self):
-        """Set draw mode
+        """!Set draw mode
 
         @param apply allow auto-rendering
         """
@@ -1708,7 +1708,7 @@ class NvizToolWindow(wx.Frame):
         return value, desc
 
     def OnSurfaceMode(self, event):
-        """Set draw mode"""
+        """!Set draw mode"""
         value, desc = self.SetSurfaceMode()
         
         data = self.mapWindow.GetSelectedLayer(type='nviz')
@@ -1724,7 +1724,7 @@ class NvizToolWindow(wx.Frame):
             self.mapWindow.Refresh(False)
 
     def OnSurfaceModeAll(self, event):
-        """Set draw mode (including wire color) for all loaded surfaces"""
+        """!Set draw mode (including wire color) for all loaded surfaces"""
         value, desc = self.SetSurfaceMode()
         coarse = self.FindWindowById(self.win['surface']['draw']['res-coarse']).GetValue()
         fine = self.FindWindowById(self.win['surface']['draw']['res-fine']).GetValue()
@@ -1753,11 +1753,11 @@ class NvizToolWindow(wx.Frame):
             self.mapWindow.Refresh(False)
 
     def _getColorString(self, color):
-        """Set wire color"""
+        """!Set wire color"""
         return str(color[0]) + ':' + str(color[1]) + ':' + str(color[2])
 
     def OnSurfaceWireColor(self, event):
-        """Set wire color"""
+        """!Set wire color"""
         data = self.mapWindow.GetSelectedLayer(type='nviz')
         value = self._getColorString(event.GetValue())
         data['surface']['draw']['wire-color'] = { 'value' : value,
@@ -1771,7 +1771,7 @@ class NvizToolWindow(wx.Frame):
             self.mapWindow.Refresh(False)
 
     def OnSurfaceAxis(self, event):
-        """Surface position, axis changed"""
+        """!Surface position, axis changed"""
         mapLayer = self.mapWindow.GetSelectedLayer()
         data = self.mapWindow.GetSelectedLayer(type='nviz')
         id = data['object']['id']
@@ -1792,7 +1792,7 @@ class NvizToolWindow(wx.Frame):
             win.SetValue(z)
 
     def OnSurfacePosition(self, event):
-        """Surface position"""
+        """!Surface position"""
         axis = self.FindWindowById(self.win['surface']['position']['axis']).GetSelection()
         value = event.GetInt()
 
@@ -1821,7 +1821,7 @@ class NvizToolWindow(wx.Frame):
             self.mapWindow.Refresh(False)
 
     def UpdateVectorShow(self, vecType, enabled):
-        """Enable/disable lines/points widgets
+        """!Enable/disable lines/points widgets
 
         @param vecType vector type (lines, points)
         """
@@ -1846,7 +1846,7 @@ class NvizToolWindow(wx.Frame):
         return True
     
     def OnVectorShow(self, event):
-        """Show vector lines/points"""
+        """!Show vector lines/points"""
         winId = event.GetId()
         if winId == self.win['vector']['lines']['show']:
             vecType = 'lines'
@@ -1883,7 +1883,7 @@ class NvizToolWindow(wx.Frame):
         event.Skip()
     
     def OnVectorDisplay(self, event):
-        """Display vector lines on surface/flat"""
+        """!Display vector lines on surface/flat"""
         if event.GetSelection() == 0: # surface
             if len(self.mapWindow.layers['raster']['name']) < 1:
                 event.Veto()
@@ -1903,7 +1903,7 @@ class NvizToolWindow(wx.Frame):
         event.Skip()
 
     def OnVectorLines(self, event):
-        """Set vector lines mode, apply changes if auto-rendering is enabled"""
+        """!Set vector lines mode, apply changes if auto-rendering is enabled"""
         width = self.FindWindowById(self.win['vector']['lines']['width']).GetValue()
 
         color = self.FindWindowById(self.win['vector']['lines']['color']).GetColour()
@@ -1961,7 +1961,7 @@ class NvizToolWindow(wx.Frame):
         self.mapWindow.Refresh(False)
     
     def OnVectorHeightFull(self, event):
-        """Vector height changed, render in full resolution"""
+        """!Vector height changed, render in full resolution"""
         id = event.GetId()
         if id == self.win['vector']['lines']['height']['spin'] or \
                 id == self.win['vector']['lines']['height']['slider']:
@@ -1974,14 +1974,14 @@ class NvizToolWindow(wx.Frame):
         self.mapWindow.Refresh(False)
 
     def OnVectorHeightSpin(self, event):
-        """Vector height changed, render in full resolution"""
+        """!Vector height changed, render in full resolution"""
         # TODO: use step value instead
 
         self.OnVectorHeight(event)
         self.OnVectorHeightFull(event)
 
     def OnVectorSurface(self, event):
-        """Reference surface for vector map (lines/points)"""
+        """!Reference surface for vector map (lines/points)"""
         id = event.GetId()
         if id == self.win['vector']['lines']['surface']:
             vtype = 'lines'
@@ -1999,7 +1999,7 @@ class NvizToolWindow(wx.Frame):
             self.mapWindow.Refresh(False)
         
     def OnVectorPoints(self, event):
-        """Set vector points mode, apply changes if auto-rendering is enabled"""
+        """!Set vector points mode, apply changes if auto-rendering is enabled"""
         size  = self.FindWindowById(self.win['vector']['points']['size']).GetValue()
         width = self.FindWindowById(self.win['vector']['points']['width']).GetValue()
 
@@ -2024,7 +2024,7 @@ class NvizToolWindow(wx.Frame):
             self.mapWindow.Refresh(False)
 
     def UpdateIsosurfButtons(self, list):
-        """Enable/disable buttons 'add', 'delete',
+        """!Enable/disable buttons 'add', 'delete',
         'move up', 'move down'"""
         nitems = list.GetCount()
         add = self.parent.FindWindowById(self.win['volume']['btnIsosurfAdd'])
@@ -2056,11 +2056,11 @@ class NvizToolWindow(wx.Frame):
             moveUp.Enable(True)
         
     def OnVolumeIsosurfMode(self, event):
-        """Set isosurface draw mode"""
+        """!Set isosurface draw mode"""
         self.SetIsosurfaceMode(event.GetSelection())
     
     def SetIsosurfaceMode(self, selection):
-        """Set isosurface draw mode"""
+        """!Set isosurface draw mode"""
         layer = self.mapWindow.GetSelectedLayer()
         data = self.mapWindow.GetSelectedLayer(type='nviz')['volume']
         id = data['object']['id']
@@ -2077,11 +2077,11 @@ class NvizToolWindow(wx.Frame):
             self.mapWindow.Refresh(False)
         
     def OnVolumeIsosurfResolution(self, event):
-        """Set isosurface draw resolution"""
+        """!Set isosurface draw resolution"""
         self.SetIsosurfaceResolution(event.GetInt())
     
     def SetIsosurfaceResolution(self, res):
-        """Set isosurface draw resolution"""
+        """!Set isosurface draw resolution"""
         layer = self.mapWindow.GetSelectedLayer()
         data = self.mapWindow.GetSelectedLayer(type='nviz')['volume']
         id = data['object']['id']
@@ -2091,11 +2091,11 @@ class NvizToolWindow(wx.Frame):
             self.mapWindow.Refresh(False)
 
     def OnVolumeIsosurfMap(self, event):
-        """Set surface attribute"""
+        """!Set surface attribute"""
         self.SetMapObjAttrb(nvizType='volume', winId=event.GetId())
 
     def OnVolumeIsosurfCheck(self, event):
-        """Isosurface checked (->load) or unchecked (->unload)"""
+        """!Isosurface checked (->load) or unchecked (->unload)"""
         index = event.GetSelection()
         list = self.FindWindowById(self.win['volume']['isosurfs'])
         data = self.mapWindow.GetSelectedLayer(type='nviz')['volume']
@@ -2113,7 +2113,7 @@ class NvizToolWindow(wx.Frame):
             self.mapWindow.Refresh(False)
         
     def OnVolumeIsosurfSelect(self, event):
-        """Isosurface item selected"""
+        """!Isosurface item selected"""
         winUp = self.FindWindowById(self.win['volume']['btnIsosurfMoveUp'])
         winDown = self.FindWindowById(self.win['volume']['btnIsosurfMoveDown'])
         selection = event.GetSelection()
@@ -2138,7 +2138,7 @@ class NvizToolWindow(wx.Frame):
         self.UpdateVolumeIsosurfPage(layer, data)
 
     def OnVolumeIsosurfAdd(self, event):
-        """Add new isosurface to the list"""
+        """!Add new isosurface to the list"""
         list = self.FindWindowById(self.win['volume']['isosurfs'])
         level = self.FindWindowById(self.win['volume']['topo']['const']).GetValue()
         
@@ -2203,7 +2203,7 @@ class NvizToolWindow(wx.Frame):
         event.Skip()
         
     def OnVolumeIsosurfDelete(self, event):
-        """Remove isosurface from list"""
+        """!Remove isosurface from list"""
         list = self.FindWindowById(self.win['volume']['isosurfs'])
         
         # remove item from list
@@ -2231,7 +2231,7 @@ class NvizToolWindow(wx.Frame):
         event.Skip()
         
     def OnVolumeIsosurfMoveUp(self, event):
-        """Move isosurface up in the list"""
+        """!Move isosurface up in the list"""
         list = self.FindWindowById(self.win['volume']['isosurfs'])
         sel = list.GetSelection()
 
@@ -2261,7 +2261,7 @@ class NvizToolWindow(wx.Frame):
         event.Skip()
         
     def OnVolumeIsosurfMoveDown(self, event):
-        """Move isosurface dowm in the list"""
+        """!Move isosurface dowm in the list"""
         list = self.FindWindowById(self.win['volume']['isosurfs'])
         sel = list.GetSelection()
 
@@ -2291,7 +2291,7 @@ class NvizToolWindow(wx.Frame):
         event.Skip()
         
     def UpdatePage(self, pageId):
-        """Update dialog (selected page)"""
+        """!Update dialog (selected page)"""
         self.pageChanging = True
         layer = self.mapWindow.GetSelectedLayer()
         data = self.mapWindow.GetSelectedLayer(type='nviz')
@@ -2526,7 +2526,7 @@ class NvizToolWindow(wx.Frame):
             win.SetValue(data['points']['height']['value'])
 
     def UpdateVolumePage(self, layer, data):
-        """Update volume layer properties page"""
+        """!Update volume layer properties page"""
         list = self.FindWindowById(self.win['volume']['isosurfs'])
 
         #
@@ -2557,7 +2557,7 @@ class NvizToolWindow(wx.Frame):
         self.UpdateVolumeIsosurfPage(layer, data['attribute'])
         
     def UpdateVolumeIsosurfPage(self, layer, data):
-        """Update dialog -- isosurface attributes"""
+        """!Update dialog -- isosurface attributes"""
         #
         # isosurface attributes
         #
@@ -2598,11 +2598,11 @@ class NvizToolWindow(wx.Frame):
                                  attrb=attrb, map=data[attrb]['map'])
             
     def SetPage(self, name):
-        """Get named page"""
+        """!Get named page"""
         self.notebook.SetSelection(self.page[name]['id'])
 
 class ViewPositionWindow(wx.Window):
-    """Position control window (for NvizToolWindow)"""
+    """!Position control window (for NvizToolWindow)"""
     def __init__(self, parent, id, mapwindow,
                  pos=wx.DefaultPosition,
                  size=wx.DefaultSize):

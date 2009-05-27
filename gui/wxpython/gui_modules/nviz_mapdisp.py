@@ -58,7 +58,7 @@ class NvizThread(Thread):
         self.nvizClass = wxnviz.Nviz(self.log)
         
 class GLWindow(MapWindow, glcanvas.GLCanvas):
-    """OpenGL canvas for Map Display Window"""
+    """!OpenGL canvas for Map Display Window"""
     def __init__(self, parent, id,
                  pos=wx.DefaultPosition,
                  size=wx.DefaultSize,
@@ -232,7 +232,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.ReleaseMouse()
 
     def UpdateView(self, event):
-        """Change view settings"""
+        """!Change view settings"""
         self.nvizClass.SetView(self.view['pos']['x'], self.view['pos']['y'],
                                self.iview['height']['value'],
                                self.view['persp']['value'],
@@ -300,7 +300,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.SwapBuffers()
 
     def IsLoaded(self, item):
-        """Check if layer (item) is already loaded
+        """!Check if layer (item) is already loaded
 
         @param item layer item
         """
@@ -321,7 +321,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         return 1
 
     def _GetDataLayers(self, item, litems):
-        """Return get list of enabled map layers"""
+        """!Return get list of enabled map layers"""
         # load raster & vector maps
         while item and item.IsOk():
             type = self.tree.GetPyData(item)[0]['type']
@@ -340,7 +340,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             item = self.tree.GetNextSibling(item)
         
     def LoadDataLayers(self):
-        """Load raster/vector from current layer tree
+        """!Load raster/vector from current layer tree
 
         @todo volumes
         """
@@ -385,7 +385,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         # print stop - start
         
     def UnloadDataLayers(self):
-        """Unload any layers that have been deleted from layer tree"""
+        """!Unload any layers that have been deleted from layer tree"""
         if not self.tree:
             return
         
@@ -423,7 +423,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         Debug.msg(3, "GLWindow.UnloadDataLayers(): time=%f" % (stop-start))        
 
     def SetMapObjProperties(self, item, id, nvizType):
-        """Set map object properties
+        """!Set map object properties
 
         Properties must be afterwards updated by
         UpdateMapObjProperties().
@@ -497,21 +497,21 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         return data
 
     def LoadRaster(self, item):
-        """Load 2d raster map and set surface attributes
+        """!Load 2d raster map and set surface attributes
 
         @param layer item
         """
         return self._loadRaster(item)
 
     def LoadRaster3d(self, item):
-        """Load 3d raster map and set surface attributes
+        """!Load 3d raster map and set surface attributes
 
         @param layer item
         """
         return self._loadRaster(item)
 
     def _loadRaster(self, item):
-        """Load 2d/3d raster map and set its attributes
+        """!Load 2d/3d raster map and set its attributes
 
         @param layer item
         """
@@ -561,21 +561,21 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         return id
 
     def UnloadRaster(self, item):
-        """Unload 2d raster map
+        """!Unload 2d raster map
 
         @param layer item
         """
         return self._unloadRaster(item)
 
     def UnloadRaster3d(self, item):
-        """Unload 3d raster map
+        """!Unload 3d raster map
 
         @param layer item
         """
         return self._unloadRaster(item)
 
     def _unloadRaster(self, item):
-        """Unload 2d/3d raster map
+        """!Unload 2d/3d raster map
 
         @param item layer item
         """
@@ -623,7 +623,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 toolWin.page['settings']['id'] = 1
 
     def LoadVector(self, item, vecType=None):
-        """Load 2D or 3D vector map overlay
+        """!Load 2D or 3D vector map overlay
 
         @param item layer item
         @param vecType vector type (lines / points)
@@ -678,7 +678,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         return id
 
     def UnloadVector(self, item, vecType=None):
-        """Unload vector map overlay
+        """!Unload vector map overlay
 
         @param item layer item
         @param vecType vector type (lines, points)
@@ -726,7 +726,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 toolWin.page['settings']['id'] = 1
         
     def GetDrawMode(self, mode=None, style=None, shade=None, string=False):
-        """Get surface draw mode (value) from description/selection
+        """!Get surface draw mode (value) from description/selection
 
         @param mode,style,shade modes
         @param string if True input parameters are strings otherwise
@@ -789,7 +789,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         return (value, desc)
     
     def SetSurfaceDefaultProp(self, data):
-        """Set default surface data properties"""
+        """!Set default surface data properties"""
         #
         # attributes
         #
@@ -832,7 +832,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                                  'update': None }
 
     def SetVolumeDefaultProp(self, data):
-        """Set default volume data properties"""
+        """!Set default volume data properties"""
         #
         # draw
         #
@@ -869,12 +869,12 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 data['attribute'][attrb][key] = value
         
     def SetVectorDefaultProp(self, data):
-        """Set default vector data properties"""
+        """!Set default vector data properties"""
         self.SetVectorLinesDefaultProp(data['lines'])
         self.SetVectorPointsDefaultProp(data['points'])
 
     def SetVectorLinesDefaultProp(self, data):
-        """Set default vector properties -- lines"""
+        """!Set default vector properties -- lines"""
         # width
         data['width'] = {'value' : UserSettings.Get(group='nviz', key='vector',
                                                     subkey=['lines', 'width']) }
@@ -914,7 +914,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 data[attrb]['update'] = None
         
     def SetVectorPointsDefaultProp(self, data):
-        """Set default vector properties -- points"""
+        """!Set default vector properties -- points"""
         # size
         data['size'] = { 'value' : UserSettings.Get(group='nviz', key='vector',
                                                     subkey=['points', 'size']) }
@@ -950,7 +950,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 data[attrb]['update'] = None
         
     def Reset(self):
-        """Reset (unload data)"""
+        """!Reset (unload data)"""
         for item in self.layers:
             type = self.tree.GetPyData(item)[0]['maplayer'].type
             if type == 'raster':
@@ -980,7 +980,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.nvizClass.SetViewportDefault()
 
     def ResetView(self):
-        """Reset to default view"""
+        """!Reset to default view"""
         self.view['z-exag']['value'], \
             self.iview['height']['value'], \
             self.iview['height']['min'], \
@@ -1000,7 +1000,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         wx.PostEvent(self, event)
         
     def UpdateMapObjProperties(self, event):
-        """Generic method to update data layer properties"""
+        """!Generic method to update data layer properties"""
         data = event.data
         
         if data.has_key('surface'):
@@ -1024,7 +1024,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                     data['vector'][type]['object']['init'] = True
         
     def UpdateSurfaceProperties(self, id, data):
-        """Update surface map object properties"""
+        """!Update surface map object properties"""
         # surface attributes
         for attrb in ('topo', 'color', 'mask',
                      'transp', 'shine', 'emit'):
@@ -1109,7 +1109,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             data['position'].pop('update')
         
     def UpdateVolumeProperties(self, id, data, isosurfId=None):
-        """Update volume (isosurface/slice) map object properties"""
+        """!Update volume (isosurface/slice) map object properties"""
         #
         # draw
         #
@@ -1167,7 +1167,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             isosurfId += 1
         
     def UpdateVectorProperties(self, id, data, type):
-        """Update vector layer properties
+        """!Update vector layer properties
 
         @param id layer id
         @param data properties
@@ -1179,7 +1179,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.UpdateVectorLinesProperties(id, data[type])
     
     def UpdateVectorLinesProperties(self, id, data):
-        """Update vector line map object properties"""
+        """!Update vector line map object properties"""
         # mode
         if data['color'].has_key('update') or \
                 data['width'].has_key('update') or \
@@ -1218,7 +1218,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             data['mode'].pop('update')
         
     def UpdateVectorPointsProperties(self, id, data):
-        """Update vector point map object properties"""
+        """!Update vector point map object properties"""
         if data['size'].has_key('update') or \
                 data['width'].has_key('update') or \
                 data['marker'].has_key('update') or \
@@ -1256,7 +1256,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             data['mode'].pop('update')
 
     def GetLayerNames(self, type):
-        """Return list of map layer names of given type"""
+        """!Return list of map layer names of given type"""
         layerName = []
         
         for item in self.layers:
@@ -1269,7 +1269,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         return layerName
     
     def GetLayerData(self, type, name):
-        """Return layer item data
+        """!Return layer item data
 
         @return {} if no layer item found
         """
@@ -1281,7 +1281,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         return {}
     
     def GetLayerId(self, type, name):
-        """Get layer object id or -1"""
+        """!Get layer object id or -1"""
         if len(name) < 1:
             return -1
         

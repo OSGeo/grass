@@ -118,7 +118,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         return str
 
     def OnPopup(self):
-        """Limited only for first selected"""
+        """!Limited only for first selected"""
         # update list
         self.seltree.DeleteAllItems()
         self.GetElementList(self.type, self.mapsets, self.exceptOf)
@@ -318,7 +318,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         evt.Skip()
 
     def SetData(self, **kargs):
-        """Set object properties"""
+        """!Set object properties"""
         if kargs.has_key('type'):
             self.type = kargs['type']
         if kargs.has_key('mapsets'):
@@ -329,7 +329,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
             self.multiple = kargs['multiple']
         
 class VectorDBInfo:
-    """Class providing information about attribute tables
+    """!Class providing information about attribute tables
     linked to a vector map"""
     def __init__(self, map):
         self.map = map
@@ -345,7 +345,7 @@ class VectorDBInfo:
         self.__DescribeTables() # -> self.tables
 
     def __CheckDBConnection(self):
-        """Check DB connection"""
+        """!Check DB connection"""
         nuldev = file(os.devnull, 'w+')
         self.layers = grass.vector_db(map=self.map, stderr=nuldev)
         nuldev.close()
@@ -356,7 +356,7 @@ class VectorDBInfo:
         return True
 
     def __DescribeTables(self):
-        """Describe linked tables"""
+        """!Describe linked tables"""
         for layer in self.layers.keys():
             # determine column names and types
             table = self.layers[layer]["table"]
@@ -395,7 +395,7 @@ class VectorDBInfo:
         return True
     
     def Reset(self):
-        """Reset"""
+        """!Reset"""
         for layer in self.layers:
             table = self.layers[layer]["table"] # get table desc
             columns = self.tables[table]
@@ -436,7 +436,7 @@ class LayerSelect(wx.Choice):
             self.SetStringSelection('1')
         
     def InsertLayers(self, vector):
-        """Insert layers for a vector into the layer combobox"""
+        """!Insert layers for a vector into the layer combobox"""
         layerchoices = utils.GetVectorNumberOfLayers(vector)
         
         if self.all:
@@ -496,7 +496,7 @@ class TableSelect(wx.ComboBox):
             self.InsertTables()
                 
     def InsertTables(self, driver=None, database=None):
-        """Insert attribute tables into combobox"""
+        """!Insert attribute tables into combobox"""
         items = []
 
         if not driver or not database:
@@ -537,7 +537,7 @@ class ColumnSelect(wx.ComboBox):
             self.InsertColumns(vector, layer)
                 
     def InsertColumns(self, vector, layer):
-        """Insert columns for a vector attribute table into the columns combobox"""
+        """!Insert columns for a vector attribute table into the columns combobox"""
         dbInfo = VectorDBInfo(vector)
         
         try:
@@ -553,7 +553,7 @@ class ColumnSelect(wx.ComboBox):
         self.SetValue('')
     
     def InsertTableColumns(self, table, driver=None, database=None):
-        """Insert table columns"""
+        """!Insert table columns"""
         columns = []
         
         ret = gcmd.RunCommand('db.columns',
