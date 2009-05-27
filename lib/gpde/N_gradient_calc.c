@@ -263,10 +263,10 @@ N_compute_gradient_field_components_2d(N_gradient_field_2d * field,
     /*Check the array sizes */
     if (x->cols != cols || x->rows != rows)
 	G_fatal_error
-	    ("N_compute_gradient_components_2d: the size of the x array dont fit the gradient field size");
+	    ("N_compute_gradient_components_2d: the size of the x array doesn't fit the gradient field size");
     if (y->cols != cols || y->rows != rows)
 	G_fatal_error
-	    ("N_compute_gradient_components_2d: the size of the y array dont fit the gradient field size");
+	    ("N_compute_gradient_components_2d: the size of the y array doesn't fit the gradient field size");
 
     for (j = 0; j < rows; j++)
 	for (i = 0; i < cols; i++) {
@@ -604,13 +604,13 @@ N_compute_gradient_field_components_3d(N_gradient_field_3d * field,
     /*Check the array sizes */
     if (x->cols != cols || x->rows != rows || x->depths != depths)
 	G_fatal_error
-	    ("N_compute_gradient_components_3d: the size of the x array dont fit the gradient field size");
+	    ("N_compute_gradient_components_3d: the size of the x array doesn't fit the gradient field size");
     if (y->cols != cols || y->rows != rows || y->depths != depths)
 	G_fatal_error
-	    ("N_compute_gradient_components_3d: the size of the y array dont fit the gradient field size");
+	    ("N_compute_gradient_components_3d: the size of the y array doesn't fit the gradient field size");
     if (z->cols != cols || z->rows != rows || z->depths != depths)
 	G_fatal_error
-	    ("N_compute_gradient_components_3d: the size of the z array dont fit the gradient field size");
+	    ("N_compute_gradient_components_3d: the size of the z array doesn't fit the gradient field size");
 
     for (k = 0; k < depths; k++)
 	for (j = 0; j < rows; j++)
