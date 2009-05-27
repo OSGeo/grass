@@ -1,8 +1,6 @@
 /*! \page cairodriver GRASS Cairo Display Driver
 
-by GRASS Development Team
-
-http://grass.osgeo.org
+by GRASS Development Team (http://grass.osgeo.org)
 
 \section cairointro Introduction to Cairo display driver
 
@@ -17,54 +15,66 @@ href="http://lists.osgeo.org/pipermail/grass-dev/2007-October/033524.html">annou
 
 \section cairofunctions List of functions
 
+ - Cairo_Begin()
+
+ - Cairo_begin_raster()
+
+ - Cairo_Bitmap()
+
  - Cairo_Box()
+
+ - Cairo_Close()
+ 
+ - Cairo_Color()
+
+ - Cairo_Cont()
 
  - Cairo_Driver()
 
+ - Cairo_end_raster()
+
  - Cairo_Erase()
- 
+
+ - Cairo_font_info()
+
+ - Cairo_font_list()
+
+ - Cairo_Fill()
+
  - Cairo_Graph_close()
 
  - Cairo_Graph_set()
 
  - Cairo_Line_width()
 
- - Cairo_Polydots()
- 
- - Cairo_Polygon()
+ - Cairo_Move()
 
- - Cairo_Polyline()
+ - Cairo_Point()
 
- - Cairo_Respond()
+ - Cairo_raster()
+
+ - cairo_read_bmp()
+
+ - cairo_read_image()
+
+ - cairo_read_xid()
 
  - Cairo_Set_window()
 
- - Cairo_begin_scaled_raster()
- 
- - Cairo_color()
-
- - Cairo_draw_bitmap()
-
- - Cairo_draw_line()
-
- - Cairo_draw_point()
-
- - Cairo_draw_text()
-
- - Cairo_end_scaled_raster()
- 
- - Cairo_font_info()
-
- - Cairo_font_list()
-
- - Cairo_lookup_color()
-
- - Cairo_scaled_raster()
-
- - Cairo_set_encoding()
-
  - Cairo_set_font()
 
+ - Cairo_Stroke()
+ 
+ - Cairo_Text()
+
  - Cairo_text_box()
+
+ - cairo_write_bmp()
+
+ - cairo_write_image()
+
+ - cairo_write_ppm()
+
+ - cairo_write_xid()
 
 */
