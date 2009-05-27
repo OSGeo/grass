@@ -4,7 +4,7 @@ import os
 import sys
 import pwd
 
-import grass
+from grass.script import core as grass
 
 import wx
 import wx.lib.mixins.listctrl as listmix
