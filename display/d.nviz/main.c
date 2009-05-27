@@ -271,7 +271,7 @@ int main(int argc, char *argv[])
 	buf[strlen(outfile) - 6] = '\0';	/* skip extension */
 	strcat(buf, ".kanim");
 	fprintf(fp, "\n## The following saves the animation to a format\n");
-	fprintf(fp, "## suitable for editting with the kanimator panel\n");
+	fprintf(fp, "## suitable for editing with the kanimator panel\n");
 	fprintf(fp, "SendScriptLine \"Nprint_keys %s\"\n", buf);
 	fprintf(fp, "puts \"Saving Key Frame file %s\"\n", buf);
     }

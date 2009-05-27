@@ -55,7 +55,7 @@ The principle to create and solve a linear equation systems with this library:
 3.) Solve the linear equation system with the gauss, lu, jacobi, sor, cg or bicgstab method
     - always prefer the iterative krylov-space methods for solving
     - if the linear equation systems are in a bad condition try the jacobian solver
-    - the available direct solvers dont support sparse matrices
+    - the available direct solvers don't support sparse matrices
 4.) Write the result back as raster/volume map
 \endverbatim
 
