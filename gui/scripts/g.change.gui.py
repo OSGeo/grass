@@ -35,8 +35,8 @@
 
 # simple front end to g.gui to be used from within the GUI.
 
-import grass
 import sys
+from grass.script import core as grass
 
 def main():
     grass.exec_command("g.gui", flags = 'nu', gui = options['gui'])
