@@ -30,13 +30,13 @@ See code in:
 Usage:
 
 \code
-from grass.script import core[,db[,raster,[vector]]] as grass
+from grass.script import all as grass
 \endcode
 
-e.g. to import functions from "core" and "vector" modules use
+or just import selected module, e.g.
 
 \code
-from grass.script import core, vector as grass
+from grass.script import core as grass
 \endcode
 
 Sample script

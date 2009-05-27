@@ -1,4 +1,6 @@
-import core
-import db
-import raster
-import vector
+all = ['core',
+       'db',
+       'raster',
+       'vector',
+       'all'
+       ]
