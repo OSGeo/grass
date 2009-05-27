@@ -1,69 +1,43 @@
 /*! \page GRASS_SWIG_PYTHON GRASS SWIG/PYTHON interface
 
-<h2>GRASS SWIG/PYTHON interface</h2>
+At the moment a prototype is implemented. It permits to use some GRASS
+library functions directly from the PYTHON programming language.
 
-At the moment a prototype is implemented. It permits to use
-some GRASS library functions directly from the PYTHON programming language.
+\section status Status of GRASS SWIG/PYTHON implementation
 
-<h3>Status of GRASS SWIG/PYTHON implementation</h3>
+There is a <b>grass.lib</b> package with a series of separate modules
+available. Python SWIG modules are organized as follows:
 
-At the moment a prototype is implemented. There is a 
-"grass" module with a series of separate sub-modules available.
-Python swig and script modules are organized as follows:
+ - grass.lib
+  - arraystats.py
+  - cluster.py
+  - date.py
+  - dbmi.py
+  - display.py
+  - g3d.py
+  - grass.py
+  - imagery.py
+  - math.py
+  - proj.py
+  - raster.py
+  - stats.py
+  - trans.py
+  - utils.py
+  - vector.py
+  - vedit.py
 
-<ul>
-<li> grass
-<li> grass.lib
-<li> grass.lib.*
-<li> grass.script
-<li> grass.script.core
-<li> grass.script.db
-<li> grass.script.raster
-<li> grass.script.vector 
-</ul>
-
-In detail:
-<ul>
-<li> arraystats.py
-<li> cluster.py
-<li> date.py
-<li> dbmi.py
-<li> display.py
-<li> g3d.py
-<li> grass.py
-<li> imagery.py
-<li> __init__.py
-<li> math.py
-<li> proj.py
-<li> raster.py
-<li> stats.py
-<li> trans.py
-<li> utils.py
-<li> vector.py
-<li> vedit.py
-</ul>
-
-<h3>Usage</h3>
+\section usage Usage
 
 Access to GRASS library functions (example: Vector functions):
+
 \code
 from grass.lib import vector as grassvect
 \endcode
 
-Scripts:
-\code 
-from grass.script import core[,db[,raster,[vector]]] as grass 
-\endcode 
+\section examples Examples
 
-<h3>Examples</h3>
+ - examples/m.distance.py
+ - examples/rasteraccess.py
+ - examples/vectoraccess.py
 
-<ul>
-<li> test.py
-<li> examples/m.distance.py
-<li> examples/rasteraccess.py
-<li> examples/vectoraccess.py
-</ul>
-
-<hr>
-<i>Last changed: $Date$</i>
 */
