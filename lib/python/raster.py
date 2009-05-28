@@ -1,5 +1,4 @@
-"""
-@package grass.script.raster
+"""!@package grass.script.raster
 
 @brief GRASS Python scripting module
 
@@ -32,7 +31,7 @@ from core import *
 # add raster history
 
 def raster_history(map):
-    """Set the command history for a raster map to the command used to
+    """!Set the command history for a raster map to the command used to
     invoke the script (interface to `r.support').
 
     @param map map name
@@ -51,7 +50,7 @@ def raster_history(map):
 # run "r.info -rgstmpud ..." and parse output
 
 def raster_info(map):
-    """Return information about a raster map (interface to
+    """!Return information about a raster map (interface to
     `r.info'). Example:
 
     \code
@@ -78,7 +77,7 @@ def raster_info(map):
 # interface to r.mapcalc
 
 def mapcalc(exp, **kwargs):
-    """Interface to r.mapcalc.
+    """!Interface to r.mapcalc.
 
     @param exp expression
     @param kwargs
