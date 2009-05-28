@@ -481,6 +481,7 @@ int main(int argc, char *argv[])
 
 
     /* memory allocation for output grids */
+    G_debug(2, "beginning memory allocation for output grids");
 
     gama = (double **)G_malloc(sizeof(double *) * (my));
     for (l = 0; l < my; l++) {
@@ -515,6 +516,7 @@ int main(int argc, char *argv[])
        bitmask = BM_create (cols, rows);
        IL_create_bitmask (&params, bitmask);
      */
+    G_debug(2, "seeding randoms");
     seeds(rand1, rand2);
     grad_check();
     main_loop();
