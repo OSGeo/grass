@@ -68,7 +68,7 @@
 import sys
 import os
 import atexit
-from grass.script import all as grass
+import grass.script as grass
 
 def has_column(vector, col):
     return 

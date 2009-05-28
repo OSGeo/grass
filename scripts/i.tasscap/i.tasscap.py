@@ -100,7 +100,7 @@
 
 import sys
 import os
-from grass.script import all as grass
+import grass.script as grass
 
 parms = [[( 0.3037, 0.2793, 0.4743, 0.5585, 0.5082, 0.1863),
 	  (-0.2848,-0.2435,-0.5435, 0.7243, 0.0840,-0.1800),

@@ -63,7 +63,7 @@
 
 import sys
 import os
-from grass.script import all as grass
+import grass.script as grass
 
 def main():
     map = options['map']

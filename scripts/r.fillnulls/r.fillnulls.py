@@ -56,7 +56,7 @@
 import sys
 import os
 import atexit
-from grass.script import all as grass
+import grass.script as grass
 
 # what to do in case of user break:
 def cleanup():

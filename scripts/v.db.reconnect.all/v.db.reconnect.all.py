@@ -44,7 +44,7 @@
 
 import sys
 import os
-from grass.script import all as grass
+import grass.script as grass
 
 def main():
     old_database = options['old_database']

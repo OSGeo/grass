@@ -71,7 +71,7 @@
 import sys
 import os
 import re
-from grass.script import all as grass
+import grass.script as grass
 
 def main():
     if options['option'] == 'add':

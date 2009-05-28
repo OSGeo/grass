@@ -177,7 +177,7 @@ import tempfile
 import urllib
 import xml.sax
 
-from grass.script import all as grass
+import grass.script as grass
 
 wmsPath = os.path.join(os.getenv('GISBASE'), 'etc', 'r.in.wms')
 sys.path.append(wmsPath)
