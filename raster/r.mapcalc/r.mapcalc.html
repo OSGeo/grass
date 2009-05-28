@@ -546,17 +546,18 @@ r.mapcalc command. E.g. rather than:
         r.mapcalc "$GIS_OPT_OUTPUT.g = g#$GIS_OPT_FIRST * .$GIS_OPT_PERCENT + (1.0 - .$GIS_OPT_PERCENT) * g#$GIS_OPT_SECOND"
         r.mapcalc "$GIS_OPT_OUTPUT.b = b#$GIS_OPT_FIRST * .$GIS_OPT_PERCENT + (1.0 - .$GIS_OPT_PERCENT) * b#$GIS_OPT_SECOND"
 </pre></div>
+<p>
 use:
 <div class="code"><pre>
-		r.mapcalc &#60&#60EOF
+	r.mapcalc &lt;&lt;EOF
         $GIS_OPT_OUTPUT.r = r#$GIS_OPT_FIRST * .$GIS_OPT_PERCENT + (1.0 - .$GIS_OPT_PERCENT) * r#$GIS_OPT_SECOND
         $GIS_OPT_OUTPUT.g = g#$GIS_OPT_FIRST * .$GIS_OPT_PERCENT + (1.0 - .$GIS_OPT_PERCENT) * g#$GIS_OPT_SECOND
         $GIS_OPT_OUTPUT.b = b#$GIS_OPT_FIRST * .$GIS_OPT_PERCENT + (1.0 - .$GIS_OPT_PERCENT) * b#$GIS_OPT_SECOND
         EOF
 </pre></div>
+<p>
 as the latter will read each input map only once.
-</p>
-
+<p>
 For formulas that the user enters from standard input
 (rather than from the command line), a line continuation feature now exists.
 If the user adds \e to the end of an input line, <em>r.mapcalc</em> assumes that
