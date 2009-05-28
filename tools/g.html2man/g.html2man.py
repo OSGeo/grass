@@ -366,6 +366,7 @@ class Formatter:
 	s = s.replace("'", "\\(cq")
 	s = s.replace("\"", "\\(dq")
 	s = s.replace("`", "\\(ga")
+	s = s.replace("-", "\\-")
 	if self.at_bol and s[0] in [".","'"]:
 	    s = "\\&" + s
 	self.show(s)
@@ -450,6 +451,9 @@ class MyHTMLParser(HTMLParser):
 	    self.handle_data(entitydefs[name])
 	else:
 	    sys.stderr.write("unrecognized entity: %s\n" % name)
+
+    def handle_charref(self, name):
+	sys.stderr.write('unsupported character reference <%s>' % name);
 
     def handle_data(self, data):
 	self.append(data)
