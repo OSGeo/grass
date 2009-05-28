@@ -30,7 +30,7 @@ See code in:
 Usage:
 
 \code
-from grass.script import all as grass
+import grass.script as grass
 \endcode
 
 or just import selected module, e.g.
@@ -58,7 +58,7 @@ Sample script
 #%end
 
 import sys
-from grass.script import core as grass
+import grass.script as grass
 
 def main():
     info = grass.parse_command('v.info',
