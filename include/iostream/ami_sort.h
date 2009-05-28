@@ -30,7 +30,7 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  General Public License for more details.  *
+ *  General Public License for more details.
  *  **************************************************************************/
 
 
@@ -97,7 +97,7 @@ AMI_sort(AMI_STREAM<T> *instream, AMI_STREAM<T> **outstream, Compare *cmp,
 {
   char* name=NULL;
   queue<char*>* runList;
-  int instreamLength;
+  off_t instreamLength;
 
   assert(instream && outstream && cmp); 
   instreamLength = instream->stream_len();
