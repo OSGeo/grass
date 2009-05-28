@@ -112,7 +112,7 @@ import sys
 import os
 import shutil
 import atexit
-from grass.script import all as grass
+import grass.script as grass
 
 def cleanup():
     if not in_temp:

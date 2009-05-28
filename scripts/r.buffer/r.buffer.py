@@ -61,7 +61,7 @@ import sys
 import os
 import atexit
 import math
-from grass.script import all as grass
+import grass.script as grass
 
 scales = {
     'meters': 1.0,

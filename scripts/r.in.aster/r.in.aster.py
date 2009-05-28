@@ -61,7 +61,7 @@
 import sys
 import os
 import platform
-from grass.script import all as grass
+import grass.script as grass
 
 bands = {
     'L1A': {

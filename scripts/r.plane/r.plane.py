@@ -73,7 +73,7 @@ import sys
 import os
 import math
 import string
-from grass.script import all as grass
+import grass.script as grass
 
 def main():
     name = options['name']

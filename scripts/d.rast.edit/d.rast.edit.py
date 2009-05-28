@@ -93,7 +93,7 @@
 import sys
 import math
 import atexit
-from grass.script import all as grass
+import grass.script as grass
 
 try:
     import wxversion

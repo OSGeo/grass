@@ -47,7 +47,7 @@
 import sys
 import os
 import string
-from grass.script import all as grass
+import grass.script as grass
 
 def main():
     table = options['table']
