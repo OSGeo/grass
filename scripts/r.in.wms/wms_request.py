@@ -174,6 +174,13 @@ class WMSRequest:
             
         rf.close()
         grass.message("Done: requesting %d tiles" % len(tiles))
+        if len(tiles) > 200:
+	    grass.warning("Proceed with care. This number of tiles may \
+	      exceed the maximum command line arguments available from \
+	      the operating system later on in the r.in.gdalwarp step. \
+	      In addition it may be considered abusive behaivor by the \
+	      server providers - check their terms of use.")
+
 
     def Get(self, key):
         """Get value"""
