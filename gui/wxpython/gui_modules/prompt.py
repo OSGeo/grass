@@ -1,4 +1,4 @@
-"""
+"""!
 @package prompt.py
 
 @brief GRASS prompt
@@ -25,21 +25,39 @@ import shlex
 import wx
 import wx.lib.mixins.listctrl as listmix
 
+from grass.script import core as grass
+
 import globalvar
 import utils
 import menuform
-from grass.script import core as grass
+import menudata
 
 class GPrompt:
     """!Interactive GRASS prompt"""
     def __init__(self, parent):
-        self.parent = parent
-                
+        self.parent = parent # GMFrame
+        
+        # dictionary of modules (description, keywords, ...)
+        self.modules = self.parent.menudata.GetModules()
+        
         self.panel, self.input = self.__create()
         
     def __create(self):
         """!Create widget"""
         cmdprompt = wx.Panel(self.parent)
+        
+        #
+        # search
+        #
+        searchTxt = wx.StaticText(parent = cmdprompt, id = wx.ID_ANY,
+                                  label = _("Search:"))
+        
+        self.searchBy = wx.Choice(parent = cmdprompt, id = wx.ID_ANY,
+                             choices = [_("description"),
+                                        _("keywords")])
+        
+        self.search = wx.TextCtrl(parent = cmdprompt, id = wx.ID_ANY,
+                             value = "", size = (-1, 25))
         
         label = wx.Button(parent = cmdprompt, id = wx.ID_ANY,
                           label = _("Cmd >"), size = (-1, 25))
@@ -59,24 +77,45 @@ class GPrompt:
                                    value = "",
                                    style=wx.TE_LINEWRAP | wx.TE_PROCESS_ENTER,
                                    size = (-1, 25))
+            self.searchBy.Enable(False)
+            self.search.Enable(False)
         
         cmdinput.SetFont(wx.Font(10, wx.FONTFAMILY_MODERN, wx.NORMAL, wx.NORMAL, 0, ''))
         
         wx.CallAfter(cmdinput.SetInsertionPoint, 0)
         
+        # bidnings
         label.Bind(wx.EVT_BUTTON,        self.OnCmdErase)
         cmdinput.Bind(wx.EVT_TEXT_ENTER, self.OnRunCmd)
         cmdinput.Bind(wx.EVT_TEXT,       self.OnUpdateStatusBar)
+        self.search.Bind(wx.EVT_TEXT,    self.OnSearchModule)
         
         # layout
-        sizer = wx.BoxSizer(wx.HORIZONTAL)
-        sizer.Add(item = label, proportion = 0,
-                  flag = wx.EXPAND | wx.LEFT | wx.RIGHT |
-                  wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER,
-                  border = 3)
-        sizer.Add(item = cmdinput, proportion = 1,
-                  flag = wx.EXPAND | wx.ALL,
-                  border = 1)
+        sizer = wx.GridBagSizer(hgap=5, vgap=5)
+        sizer.AddGrowableCol(2)
+
+        sizer.Add(item = searchTxt,
+                  flag = wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL,
+                  pos = (0, 0))
+
+        sizer.Add(item = self.searchBy,
+                  flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER,
+                  pos = (0, 1))
+        
+        sizer.Add(item = self.search,
+                  flag = wx.EXPAND | wx.RIGHT | wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER,
+                  border = 5,
+                  pos = (0, 2))
+        
+        sizer.Add(item = label, 
+                  flag = wx.LEFT | wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER,
+                  border = 5,
+                  pos = (1, 0))
+        
+        sizer.Add(item = cmdinput,
+                  flag = wx.EXPAND | wx.RIGHT,
+                  border = 5,
+                  pos = (1, 1), span = (1, 2))
         
         cmdprompt.SetSizer(sizer)
         sizer.Fit(cmdprompt)
@@ -125,6 +164,21 @@ class GPrompt:
             self.parent.statusbar.SetStatusText(_("Type GRASS command and run by pressing ENTER"))
             event.Skip()
         
+    def OnSearchModule(self, event):
+        """!Search module by metadata"""
+        text = event.GetString()
+        if not text:
+            self.input.SetChoices(globalvar.grassCmd['all'])
+            return
+        
+        modules = []
+        for module, data in self.modules.iteritems():
+            if text in data['desc']:
+                modules.append(module)
+        
+        self.parent.statusbar.SetStatusText(_("%d modules found") % len(modules))
+        self.input.SetChoices(modules)
+                    
 class PromptListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
     def __init__(self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition,
                  size = wx.DefaultSize, style = 0):
@@ -133,8 +187,7 @@ class PromptListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         
 class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
     def __init__ (self, parent, id = wx.ID_ANY, choices = [], **kwargs):
-        """
-        Constructor works just like wx.TextCtrl except you can pass in a
+        """!Constructor works just like wx.TextCtrl except you can pass in a
         list of choices.  You can also change the choice list at any time
         by calling setChoices.
         
@@ -146,7 +199,7 @@ class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
             kwargs['style'] = wx.TE_PROCESS_ENTER
         
         wx.TextCtrl.__init__(self, parent, id, **kwargs)
-        
+
         # some variables
         self._choices = choices
         self._hideOnNoMatch = True
@@ -220,8 +273,7 @@ class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
         self.dropdown.SetClientSize(self.popupsize)
 
     def _showDropDown(self, show = True):
-        """
-        Eit`her display the drop down list (show = True) or hide it
+        """!Either display the drop down list (show = True) or hide it
         (show = False).
         """
         if show:
@@ -240,8 +292,7 @@ class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
         self.dropdown.Show(show)
     
     def _listItemVisible(self):
-        """
-        Moves the selected item to the top of the list ensuring it is
+        """!Moves the selected item to the top of the list ensuring it is
         always visible.
         """
         toSel = self.dropdownlistbox.GetFirstSelected()
@@ -250,8 +301,7 @@ class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
         self.dropdownlistbox.EnsureVisible(toSel)
     
     def _setValueFromSelected(self):
-         """
-         Sets the wx.TextCtrl value from the selected wx.ListCtrl item.
+         """!Sets the wx.TextCtrl value from the selected wx.ListCtrl item.
          Will do nothing if no item is selected in the wx.ListCtrl.
          """
          sel = self.dropdownlistbox.GetFirstSelected()
@@ -291,8 +341,7 @@ class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
         return self.dropdownlistbox
     
     def SetChoices(self, choices, type = 'module'):
-        """
-        Sets the choices available in the popup wx.ListBox.
+        """!Sets the choices available in the popup wx.ListBox.
         The items will be sorted case insensitively.
         """
         self._choices = choices
