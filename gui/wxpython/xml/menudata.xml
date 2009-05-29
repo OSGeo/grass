@@ -593,6 +593,7 @@
 	      <handler>self.OnMenuCmd</handler>
 	      <command>g.access</command>
 	    </menuitem>
+	    <separator/>
 	    <menuitem>
 	      <label>Show settings</label>
 	      <help>Outputs and modifies the user's current GRASS variable settings.</help>
@@ -611,6 +612,7 @@
 	      <handler>self.OnMenuCmd</handler>
 	      <command>g.change.gui.py</command>
 	    </menuitem>
+	    <separator/>
 	    <menuitem>
 	      <label>Version</label>
 	      <help>Displays version and copyright information.</help>
@@ -628,15 +630,6 @@
 	      <handler>self.OnMenuCmd</handler>
 	      <command>g.proj</command>
 	    </menuitem>
-<!--
-	    <menuitem>
-	      <label>Projection for current location</label>
-	      <help>Create/edit projection information for current location</help>
-	      <handler>self.OnXTerm</handler>
-	      <command>g.setproj</command>
-	    </menuitem>
--->
-	    <separator/>
 	    <menuitem>
 	      <label>Convert coordinates</label>
 	      <help>Convert coordinates from one projection to another (cs2cs frontend).</help>

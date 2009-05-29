@@ -1792,13 +1792,13 @@ class GUI:
         self.parent = parent
         self.grass_task = None
 
-    def ParseInterface(self, cmd):
+    def ParseInterface(self, cmd, parser = processTask):
         """!Parse interface
 
         @param cmd command to be parsed (given as list)
         """
         grass_task = grassTask()
-        handler = processTask(grass_task)
+        handler = parser(grass_task)
         enc = locale.getdefaultlocale()[1]
         if enc and enc.lower() not in ("utf8", "utf-8"):
             xml.sax.parseString(getInterfaceDescription(cmd[0]).decode(enc).encode("utf-8"),

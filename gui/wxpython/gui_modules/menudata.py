@@ -1,4 +1,4 @@
-"""
+"""!
 @package menudata.py
 
 @brief Complex list for main menu entries for GRASS wxPython GUI.
@@ -6,7 +6,7 @@
 Classes:
  - Data
 
-COPYRIGHT:  (C) 2007-2008 by the GRASS Development Team
+(C) 2007-2009 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -24,11 +24,11 @@ except ImportError:
     import elementtree.ElementTree as etree # Python <= 2.4
 
 class Data:
-    '''Data object that returns menu descriptions to be used in wxgui.py.'''
+    '''!Data object that returns menu descriptions to be used in wxgui.py.'''
     def __init__(self, gisbase=None):
         if not gisbase:
             gisbase = os.getenv('GISBASE')
-	filename = gisbase + '/etc/wxpython/xml/menudata.xml'
+	filename = os.path.join(gisbase, 'etc', 'wxpython', 'xml', 'menudata.xml')
 	self.tree = etree.parse(filename)
 
     def getMenuItem(self, mi):
@@ -69,6 +69,24 @@ class Data:
 	    if node.tag in ['label', 'help']:
 		fh.write('     _(%r),\n' % node.text)
 	fh.write('    \'\']\n')
+
+    def GetModules(self):
+        """!Create dictionary of modules used to search module by
+        keywords, description, etc."""
+        modules = dict()
+        
+        for node in self.tree.getiterator():
+            if node.tag == 'menuitem':
+                module = description = ''
+                for child in node.getchildren():
+                    if child.tag == 'help':
+                        description = child.text
+                    if child.tag == 'command':
+                        module = child.text
+                if module:
+                    modules[module] = { 'desc': description }
+        
+        return modules
 
 if __name__ == "__main__":
     import sys

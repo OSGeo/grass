@@ -104,7 +104,7 @@ class GMFrame(wx.Frame):
         self.baseTitle = title
         self.iconsize  = (16, 16)
 
-        wx.Frame.__init__(self, parent=parent, id=id, size=(550, 400),
+        wx.Frame.__init__(self, parent=parent, id=id, size=(550, 450),
                           style=wx.DEFAULT_FRAME_STYLE)
                           
         self.SetTitle(self.baseTitle)
@@ -126,8 +126,8 @@ class GMFrame(wx.Frame):
         # creating widgets
         # -> self.notebook, self.goutput, self.outpage
         self.notebook  = self.__createNoteBook()
+        self.menubar, self.menudata = self.__createMenuBar()
         self.cmdprompt, self.cmdinput = self.__createCommandPrompt()
-        self.menubar   = self.__createMenuBar()
         self.toolbar   = self.__createToolBar()
         self.statusbar = self.CreateStatusBar(number=1)
 
@@ -146,7 +146,7 @@ class GMFrame(wx.Frame):
                              Left().CentrePane().BestSize((-1,-1)).Dockable(False).
                              CloseButton(False).DestroyOnClose(True).Row(1).Layer(0))
         self._auimgr.AddPane(self.cmdprompt, wx.aui.AuiPaneInfo().
-                             Bottom().BestSize((-1,25)).Dockable(False).
+                             Bottom().BestSize((-1, 60)).Dockable(False).
                              CloseButton(False).DestroyOnClose(True).
                              PaneBorder(False).Row(1).Layer(0).Position(0).
                              CaptionVisible(False))
@@ -202,15 +202,15 @@ class GMFrame(wx.Frame):
         """!Creates menubar"""
 
         self.menubar = wx.MenuBar()
-        menud = menudata.Data()
-        for eachMenuData in menud.GetMenu():
+        self.menudata = menudata.Data()
+        for eachMenuData in self.menudata.GetMenu():
             for eachHeading in eachMenuData:
                 menuLabel = eachHeading[0]
                 menuItems = eachHeading[1]
                 self.menubar.Append(self.__createMenu(menuItems), menuLabel)
         self.SetMenuBar(self.menubar)
 
-        return self.menubar
+        return (self.menubar, self.menudata)
 
     def __createMenu(self, menuData):
         """!Creates menu"""
@@ -935,7 +935,7 @@ class GMFrame(wx.Frame):
     def OnPreferences(self, event):
         """!General GUI preferences/settings"""
         preferences.PreferencesDialog(parent=self).ShowModal()
-
+        
     def DispHistogram(self, event):
         """
         Init histogram display canvas and tools
@@ -1481,17 +1481,21 @@ class GMFrame(wx.Frame):
                       style=wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
 
 class GMApp(wx.App):
-    """
-    GMApp class
-    """
-    def __init__(self, workspace=None):
+    def __init__(self, workspace = None):
+        """!Main GUI class.
+
+        @param workspace path to the workspace file
+        """
         self.workspaceFile = workspace
         
         # call parent class initializer
         wx.App.__init__(self, False)
         
     def OnInit(self):
-        # initialize all available image handlers
+        """!Initialize all available image handlers
+
+        @return True
+        """
         wx.InitAllImageHandlers()
 
         # create splash screen
@@ -1501,7 +1505,7 @@ class GMApp(wx.App):
         wx.SplashScreen (bitmap=introBmp, splashStyle=wx.SPLASH_CENTRE_ON_SCREEN | wx.SPLASH_TIMEOUT,
                          milliseconds=1500, parent=None, id=wx.ID_ANY)
         wx.Yield()
-
+        
         # create and show main frame
         mainframe = GMFrame(parent=None, id=wx.ID_ANY,
                             workspace = self.workspaceFile)
