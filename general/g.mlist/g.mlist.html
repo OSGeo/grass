@@ -1,6 +1,11 @@
 <h2>DESCRIPTION</h2>
 
-<em>g.mlist</em> searches for data files matching a pattern given by wildcards or POSIX Extended Regular Expressions.
+<em>g.mlist</em> searches for data files matching a pattern given by
+wildcards or POSIX Extended Regular Expressions.
+
+<P>
+See the <EM>g.list</EM> help page for discussion of module options.
+
 
 <h2>EXAMPLES</h2>
 
@@ -59,12 +64,14 @@ Print out "tmp" if "tmp" raster map exists:
   g.mlist -r pattern='^tmp$'
 </pre></div>
 
-Print out "tmp0" ..."tmp9" if corresponding vector map exists (each map name linewise):
+Print out "tmp0" ..."tmp9" if corresponding vector map exists
+ (each map name linewise):
 <div class="code"><pre>
   g.mlist -r type=vect pattern='^tmp[0-9]$'
 </pre></div>
 
-Print out "tmp0" ..."tmp9" if corresponding vector map exists (each map name comma separated):
+Print out "tmp0" ..."tmp9" if corresponding vector map exists
+ (each map name comma separated):
 <div class="code"><pre>
   g.mlist -r type=vect separator=, pattern='^tmp[0-9]$'
 </pre></div>
@@ -72,15 +79,19 @@ Print out "tmp0" ..."tmp9" if corresponding vector map exists (each map name com
 This may be useful for other programs' parameter input 
 (e.g. <em><a href="r.series.html">r.series</a></em>).
 
+
 <h2>SEE ALSO</h2>
 
 <em><a href="g.list.html">g.list</a></em>
 <p>
-<a href="http://en.wikipedia.org/wiki/Regular_expression">Regular expression</a> (from Wikipedia, the free encyclopedia)
+<a href="http://en.wikipedia.org/wiki/Regular_expression">Regular expressions</a>
+(aka regex) -  from Wikipedia, the free encyclopedia
+
 
 <h2>AUTHOR</h2>
 
 Huidae Cho<br>
 grass4u@gmail.com
 
-<p><i>Last changed: $Date: 2008-06-28 04:37:22 -0500 (Sat, 28 Jun 2008) $</i>
+<p>
+<i>Last changed: $Date: 2008-06-28 04:37:22 -0500 (Sat, 28 Jun 2008) $</i>
