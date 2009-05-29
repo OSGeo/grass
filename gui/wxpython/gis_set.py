@@ -113,9 +113,10 @@ class GRASSStartup(wx.Frame):
 
         # buttons
         self.bstart = wx.Button(parent=self.panel, id=wx.ID_ANY,
-                                label=_("Start GRASS"), size=(180, -1))
+                                label=_("Start GRASS"))
         self.bstart.SetDefault()
         self.bexit = wx.Button(parent=self.panel, id=wx.ID_EXIT)
+        self.bstart.SetMinSize((180, self.bexit.GetSize()[1]))
         self.bhelp = wx.Button(parent=self.panel, id=wx.ID_HELP)
         self.bbrowse = wx.Button(parent=self.panel, id=wx.ID_ANY,
                                  label=_("Browse"))
@@ -305,14 +306,17 @@ class GRASSStartup(wx.Frame):
         # buttons
         btns_sizer.Add(item=self.bstart, proportion=0,
                        flag=wx.ALIGN_CENTER_HORIZONTAL |
+                       wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL,
                        border=5)
         btns_sizer.Add(item=self.bexit, proportion=0,
                        flag=wx.ALIGN_CENTER_HORIZONTAL |
+                       wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL,
                        border=5)
         btns_sizer.Add(item=self.bhelp, proportion=0,
                        flag=wx.ALIGN_CENTER_HORIZONTAL |
+                       wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL,
                        border=5)
 
