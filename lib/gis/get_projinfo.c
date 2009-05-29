@@ -30,8 +30,10 @@ struct Key_Value *G_get_projunits(void)
 
     G__file_name(path, "", UNIT_FILE, PERMANENT);
     if (access(path, 0) != 0) {
-	G_warning(_("<%s> file not found for location <%s>"),
-		  UNIT_FILE, G_location());
+	if (G_projection() != PROJECTION_XY) {
+	    G_warning(_("<%s> file not found for location <%s>"),
+		      UNIT_FILE, G_location());
+	}
 	return NULL;
     }
     in_units_keys = G_read_key_value_file(path, &stat);
@@ -57,8 +59,10 @@ struct Key_Value *G_get_projinfo(void)
 
     G__file_name(path, "", PROJECTION_FILE, PERMANENT);
     if (access(path, 0) != 0) {
-	G_warning(_("<%s> file not found for location <%s>"),
-		  PROJECTION_FILE, G_location());
+	if (G_projection() != PROJECTION_XY) {
+	    G_warning(_("<%s> file not found for location <%s>"),
+		      PROJECTION_FILE, G_location());
+	}
 	return NULL;
     }
     in_proj_keys = G_read_key_value_file(path, &stat);
