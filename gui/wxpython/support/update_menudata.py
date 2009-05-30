@@ -24,26 +24,30 @@ try:
 except ImportError:
     import elementtree.ElementTree as etree # Python <= 2.4
 
+from grass.script import core as grass
+
 def parseModules():
     """!Parse modules' interface"""
     modules = dict()
     
     # list of modules to be ignored
     ignore =  [ 'g.mapsets_picker.py',
-                'v.type_wrapper.py' ]
+                'v.type_wrapper.py',
+                'g.parser',
+                'vcolors' ]
     
     count = len(globalvar.grassCmd['all'])
     i = 0
     for module in globalvar.grassCmd['all']:
         i += 1
         if i % 10 == 0:
-            print '   %d/%d' % (i, count)
+            grass.info('* %d/%d' % (i, count))
         if module in ignore:
             continue
         try:
             interface = menuform.GUI().ParseInterface(cmd = [module])
         except IOError, e:
-            print >> sys.stderr, e
+            grass.error(e)
             continue
         modules[interface.name] = { 'label'   : interface.label,
                                     'desc'    : interface.description,
@@ -66,7 +70,7 @@ def updateData(data, modules):
         
         module = item['command'].split(' ')[0]
         if not modules.has_key(module):
-            print 'WARNING: \'%s\' not found in modules' % item['command']
+            grass.warning("'%s' not found in modules" % item['command'])
             continue
         
         if modules[module]['label']:
@@ -74,7 +78,10 @@ def updateData(data, modules):
         else:
             desc = modules[module]['desc']
         node.find('help').text = desc
-        node.find('keywords').text = ','.join(modules[module]['keywords'])
+        if node.find('keywords') is not None:
+            node.find('keywords').text = ','.join(modules[module]['keywords'])
+        else:
+            grass.warning('%s: keywords missing' % module)
         
 def writeData(data):
     """!Write updated menudata.xml"""
@@ -89,14 +96,14 @@ def main(argv = None):
         print >> sys.stderr, __doc__
         return 1
     
-    print "Step 1: parse modules..."
+    grass.info("Step 1: parsing modules...")
     modules = dict()
     modules = parseModules()
-    print "Step 2: read menu data..."
+    grass.info("Step 2: reading menu data...")
     data = menudata.Data()
-    print "Step 3: update menu data..."
+    grass.info("Step 3: updating menu data...")
     updateData(data, modules)
-    print "Step 4: write menu data (menudata.xml)..."
+    grass.info("Step 4: writing menu data (menudata.xml)...")
     writeData(data)
     
     return 0

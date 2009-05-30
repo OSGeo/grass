@@ -4,7 +4,6 @@
 description.
 
 Classes:
- - testSAXContentHandler
  - grassTask
  - processTask
  - helpPanel
@@ -43,7 +42,6 @@ Classes:
 
 @todo
  - verify option value types
- - use DOM instead of SAX (is it really necessary? ML)
 """
 
 import sys
@@ -73,11 +71,10 @@ import wx.lib.filebrowsebutton as filebrowse
 from wx.lib.expando import ExpandoTextCtrl, EVT_ETC_LAYOUT_NEEDED
 from wx.lib.newevent import NewEvent
 
-# Do the python 2.0 standard xml thing and map it on the old names
-import xml.sax
-import xml.sax.handler
-HandlerBase=xml.sax.handler.ContentHandler
-from xml.sax import make_parser
+try:
+    import xml.etree.ElementTree as etree
+except ImportError:
+    import elementtree.ElementTree as etree # Python <= 2.4
 
 import utils
 
@@ -302,21 +299,6 @@ class UpdateQThread(Thread):
             event = wxUpdateDialog(data = self.request.data)
             wx.PostEvent(self.parent, event)
 
-class testSAXContentHandler(HandlerBase):
-# SAX compliant
-    def characters(self, ch, start, length):
-        pass
-
-def test_for_broken_SAX():
-    ch=testSAXContentHandler()
-    try:
-        xml.sax.parseString("""<?xml version="1.0"?>
-            <child1 name="paul">Text goes here</child1>
-            """,ch)
-    except TypeError:
-        return 1
-    return 0
-
 class grassTask:
     """
     This class holds the structures needed for both filling by the parser and
@@ -333,8 +315,9 @@ class grassTask:
         self.flags = []
         self.keywords = []
         if grassModule is not None:
-            xml.sax.parseString( getInterfaceDescription( grassModule ) , processTask( self ) )
-
+            processTask(tree = etree.fromstring(getInterfaceDescription(grassModule)),
+                        task = self)
+        
     def get_list_params(self, element = 'name'):
         """!Get list of parameters"""
         params = []
@@ -421,220 +404,106 @@ class grassTask:
 
         return cmd
 
-class processTask(HandlerBase):
-    """
-    A SAX handler for the --interface-description output, as
-    defined in grass-interface.dtd. Extend or modify this and the
+class processTask():
+    """!A ElementTree handler for the --interface-description output,
+    as defined in grass-interface.dtd. Extend or modify this and the
     DTD if the XML output of GRASS' parser is extended or modified.
+
+    @param tree root tree node
+    @param task grassTask instance or None
+    @return grassTask instance
     """
-    def __init__(self, task_description):
-        self.inLabelContent = False
-        self.inDescriptionContent = False
-        self.inDefaultContent = False
-        self.inValueContent = False
-        self.inParameter = False
-        self.inFlag = False
-        self.inGispromptContent = False
-        self.inGuisection = False
-        self.inKeywordsContent = False
-        self.inKeyDesc = False
-        self.addKeyDesc = False
-        self.inFirstParameter = True
-        self.task = task_description
+    def __init__(self, tree, task = None):
+        if task:
+            self.task = task
+        else:
+            self.task = grassTask()
+        
+        self.root = tree
+        
+        self.__processModule()
+        self.__processParams()
+        self.__processFlags()
 
-    def startElement(self, name, attrs):
-
-        if name == 'task':
-            self.task.name = attrs.get('name', None)
-
-        if name == 'parameter':
-            self.inParameter = True
-            self.label = '' # tmp variable
-            self.param_label = ''
-            self.param_description = ''
-            self.param_default = ''
-            self.param_values = []
-            self.param_values_description = []
-            self.param_gisprompt = False
-            self.param_age = ''
-            self.param_element = ''
-            self.param_prompt = ''
-            self.param_guisection = ''
-            self.param_key_desc = []
-            # Look for the parameter name, type, requiredness
-            self.param_name = attrs.get('name', None)
-            self.param_type = attrs.get('type', None)
-            self.param_required = attrs.get('required', None)
-            self.param_multiple = attrs.get('multiple', None)
-
-        if name == 'flag':
-            self.inFlag = True
-            self.label = '' # tmp variable
-            self.flag_label = ''
-            self.flag_description = ''
-            self.flag_default = ''
-            self.flag_guisection = ''
-            self.flag_values = []
-            # Look for the flag name
-            self.flag_name = attrs.get('name', None)
-
-        if name == 'label':
-            self.inLabelContent = True
-            self.label = ''
-
-        if name == 'description':
-            self.inDescriptionContent = True
-            self.description = ''
-
-        if name == 'default':
-            self.inDefaultContent = True
-            self.param_default = ''
-
-        if name == 'value':
-            self.inValueContent = True
-            self.value_tmp = ''
-
-        if name == 'gisprompt':
-            self.param_gisprompt = True
-            self.param_age = attrs.get('age', None)
-            self.param_element = attrs.get('element', None)
-            self.param_prompt = attrs.get('prompt', None)
-
-        if name == 'guisection':
-            self.inGuisection = True
-            self.guisection = ''
-
-        if name == 'keywords':
-            self.inKeywordsContent = True
-            self.keyword = ''
-
-        if name == 'keydesc':
-            self.inKeyDesc = True
-            self.key_desc = ''
+    def __processModule(self):
+        """!Process module description"""
+        self.task.name = self.root.get('name', default = 'unknown')
+        
+        # keywords
+        for keyword in self.__getNodeText(self.root, 'keywords').split(','):
+            self.task.keywords.append(keyword.strip())
+        
+        self.task.label       = self.__getNodeText(self.root, 'label')
+        self.task.description = self.__getNodeText(self.root, 'description')
+        
+    def __processParams(self):
+        """!Process parameters description"""
+        for p in self.root.findall('parameter'):
+            # gisprompt
+            node_gisprompt = p.find('gisprompt')
+            gisprompt = False
+            age = element = prompt = None
+            if node_gisprompt is not None:
+                gisprompt = True
+                age     = node_gisprompt.get('age')
+                element = node_gisprompt.get('element')
+                prompt  = node_gisprompt.get('prompt')
             
-        if name == 'item':
-            if self.inKeyDesc:
-                self.addKeyDesc = True
-
-    # works with python 2.0, but is not SAX compliant
-    def characters(self, ch):
-        self.my_characters(ch)
-
-    def my_characters(self, ch):
-        if self.inLabelContent:
-            self.label = self.label + ch
-        if self.inDescriptionContent:
-            self.description = self.description + ch
-        if self.inDefaultContent:
-            self.param_default = self.param_default + ch
-        if self.inValueContent and not self.inDescriptionContent:
-            # Beware: value_tmp will get anything outside of a <description>
-            # so in this snippet:
-            # <values>
-            #   <value>
-            #     <name> a </name>
-            #     <description> a desc </description>
-            #   </value>
-            # </values>
-            # 'a desc' will not be recorded anwhere; this unburdens further
-            # handling of value sets to distinguish between those that do define
-            # descriptions and those that do not.
-            #
-            # TODO: a set of flags to treat this case of a description sub-element
-            self.value_tmp = self.value_tmp + ch
-        if self.inGuisection:
-            self.guisection = self.guisection + ch
-        if self.inKeywordsContent:
-            self.keyword = self.keyword + ch
-        if self.addKeyDesc:
-            self.key_desc = self.key_desc + ch
-
-    def endElement(self, name):
-        # If it's not a parameter element, ignore it
-        if name == 'parameter':
-            self.inParameter = False;
-            # description -> label substitution is delegated to the client;
-            # we deal in the parser only with getting interface-description
-            # verbatim
-            self.task.params.append({
-                "name" : self.param_name,
-                "type" : self.param_type,
-                "required" : self.param_required,
-                "multiple" : self.param_multiple,
-                "label" : self.param_label,
-                "description" : self.param_description,
-                'gisprompt' : self.param_gisprompt,
-                'age' : self.param_age,
-                'element' :self.param_element,
-                'prompt' : self.param_prompt,
-                "guisection" : self.param_guisection,
-                "default" : self.param_default,
-                "values" : self.param_values,
-                "values_desc" : self.param_values_description,
-                "value" : '',
-                "key_desc": self.param_key_desc})
-
-            if self.inFirstParameter:
-                self.task.firstParam = self.param_name # store name of first parameter
-            self.inFirstParameter = False;
-
-        if name == 'flag':
-            self.inFlag = False;
-            self.task.flags.append({
-                "name" : self.flag_name,
-                "label" : self.flag_label,
-                "description" : self.flag_description,
-                "guisection" : self.flag_guisection } )
-
-        if name == 'label':
-            if self.inParameter:
-                self.param_label = normalize_whitespace(self.label)
-            elif self.inFlag:
-                self.flag_label = normalize_whitespace(self.label)
-            else:
-                self.task.label = normalize_whitespace(self.label)
-
-        if name == 'description':
-            if self.inValueContent:
-                self.param_values_description.append(normalize_whitespace(self.description))
-            elif self.inParameter:
-                self.param_description = normalize_whitespace(self.description)
-            elif self.inFlag:
-                self.flag_description = normalize_whitespace(self.description)
-            else:
-                self.task.description = normalize_whitespace(self.description)
-            self.inDescriptionContent = False
-
-        if name == 'default':
-            self.param_default = normalize_whitespace(self.param_default)
-            self.inDefaultContent = False
-
-        if name == 'value':
-            v = normalize_whitespace(self.value_tmp)
-            self.param_values.append(normalize_whitespace(self.value_tmp))
-            self.inValueContent = False
-
-        if name == 'guisection':
-            if self.inParameter:
-                self.param_guisection = normalize_whitespace(self.guisection)
-            elif self.inFlag:
-                self.flag_guisection = normalize_whitespace(self.guisection)
-            self.inGuisection = False
-
-        if name == 'keywords':
-            for keyword in self.keyword.split(','):
-                self.task.keywords.append (normalize_whitespace(keyword))
-            self.inKeywordsContent = False
-
-        if name == 'keydesc':
-            self.inKeyDesc = False
-
-        if name == 'item':
-            if self.inKeyDesc:
-                self.param_key_desc.append(normalize_whitespace(self.key_desc))
-                self.key_desc = ''
-                self.addKeyDesc = False
-
+            # value(s)
+            values = []
+            values_desc = []
+            for pv in p.findall('value'):
+                values.append(pv.text)
+                pvd = pv.find('description')
+                if pvd:
+                    values_desc.append(pvd.text)
+            
+            # keydesc
+            key_desc = []
+            node_key_desc = p.find('keydesc')
+            if node_key_desc:
+                for ki in node_key_desc.findall('item'):
+                    key_desc.append(ki.text)
+            
+            self.task.params.append( {
+                "name"        : p.get('name'),
+                "type"        : p.get('type'),
+                "required"    : p.get('required'),
+                "multiple"    : p.get('multiple'),
+                "label"       : self.__getNodeText(p, 'label'),
+                "description" : self.__getNodeText(p, 'description'),
+                'gisprompt'   : gisprompt,
+                'age'         : age,
+                'element'     : element,
+                'prompt'      : prompt,
+                "guisection"  : self.__getNodeText(p, 'guisection'),
+                "default"     : self.__getNodeText(p, 'default'),
+                "values"      : values,
+                "values_desc" : values_desc,
+                "value"       : '',
+                "key_desc"    : key_desc } )
+            
+    def __processFlags(self):
+        """!Process flags description"""
+        for p in self.root.findall('flag'):
+            self.task.flags.append( {
+                    "name"        : p.get('name'),
+                    "label"       : self.__getNodeText(p, 'label'),
+                    "description" : self.__getNodeText(p, 'description'),
+                    "guisection"  : self.__getNodeText(p, 'guisection') } )
+        
+    def __getNodeText(self, node, tag, default = ''):
+        """!Get node text"""
+        p = node.find(tag)
+        if p is not None:
+            return normalize_whitespace(p.text)
+        
+        return default
+    
+    def GetTask(self):
+        """!Get grassTask intance"""
+        return self.task
+    
 class helpPanel(wx.html.HtmlWindow):
     """
     This panel holds the text from GRASS docs.
@@ -1797,17 +1666,13 @@ class GUI:
 
         @param cmd command to be parsed (given as list)
         """
-        grass_task = grassTask()
-        handler = parser(grass_task)
         enc = locale.getdefaultlocale()[1]
         if enc and enc.lower() not in ("utf8", "utf-8"):
-            xml.sax.parseString(getInterfaceDescription(cmd[0]).decode(enc).encode("utf-8"),
-                                handler)
+            tree = etree.fromstring(getInterfaceDescription(cmd[0]).decode(enc).encode("utf-8"))
         else:
-            xml.sax.parseString(getInterfaceDescription(cmd[0]),
-                                handler)
-        
-        return grass_task
+            tree = etree.fromstring(getInterfaceDescription(cmd[0]))
+            
+        return processTask(tree).GetTask()
     
     def ParseCommand(self, cmd, gmpath=None, completed=None, parentframe=None,
                      show=True, modal=False):
@@ -1904,10 +1769,9 @@ class GUI:
         """
         # parse the interface decription
         if not self.grass_task:
-            self.grass_task = grassTask()
-            handler = processTask(self.grass_task)
-            xml.sax.parseString(getInterfaceDescription(cmd), handler)
-
+            tree = etree.fromstring(getInterfaceDescription(cmd))
+            self.grass_task = processTask(tree).GetTask()
+            
             for p in self.grass_task.params:
                 if p.get('name', '') in ('input', 'map'):
                     age = p.get('age', '')
