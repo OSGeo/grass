@@ -127,11 +127,23 @@ class GPrompt:
         """!Check if text is in keywords"""
         found = 0
         keys = text.split(',')
-        for k in keys:
-            k = k.strip()
-            for key in keywords: 
-                if k in key:
-                    found += 1
+        if len(keys) > 1: # -> multiple keys
+            for k in keys[:-1]:
+                k = k.strip()
+                for key in keywords: 
+                    if k == key: # full match
+                        found += 1
+                        break
+            k = keys[-1].strip()
+            for key in keywords:
+                if k in key: # partial match
+                    found +=1
+                    break
+        else:
+            for key in keywords:
+                if text in key: # partial match
+                    found +=1
+                    break
         
         if found == len(keys):
             return True
