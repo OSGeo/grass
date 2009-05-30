@@ -166,8 +166,10 @@ a:visited:hover	{
 <p><h3>Introduction</h3></p>
 
 
-<p>This document explains how to prepare a WinGRASS release (as a self-contained package installer) using the scripts contained
-in the mswindows folder. In order to avoid mistakes or misunderstandings, we highly recommend to follow each step and command
+<p>This document explains how to prepare a WinGRASS release (as a
+self-contained package installer) using the scripts contained
+in the mswindows folder. In order to avoid mistakes or misunderstandings,
+we highly recommend to follow each step and command
 exactly as they are written in this document.</p>
 
 </div>
@@ -179,9 +181,14 @@ exactly as they are written in this document.</p>
 
 <p><h3>1. Install OSGeo4w Tree and Compile Grass</h3></p>
 
-<p>Follow the instructions <a target="_blank" href="http://trac.osgeo.org/grass/wiki/CompileOnWindows">here</a> to download the OSGeo4W installer, install the required dependencies, and build Grass from source.</p>
+<p>Follow the instructions
+ <a target="_blank" href="http://trac.osgeo.org/grass/wiki/CompileOnWindows">here</a>
+to download the OSGeo4W installer, install the required dependencies, and
+build Grass from source.</p>
 
-<p>Do not move on to step two until you have successfully <a target="_blank" href="http://trac.osgeo.org/grass/wiki/HowToTestGrass6">tested</a> your new version of Grass.</p>
+<p>Do not move on to step two until you have successfully
+ <a target="_blank" href="http://trac.osgeo.org/grass/wiki/HowToTestGrass6">tested</a>
+your new version of Grass.</p>
 </div>
 
 
@@ -191,13 +198,19 @@ exactly as they are written in this document.</p>
 
 <p><h3>2. Create a GRASS self-contained Package</h3></p>
 
-<p>Copy all the content of the mswindows folder to a temporary directory, for example <code>c:\temp</code>.</p>
+<p>Copy all the content of the mswindows folder to a temporary directory, for
+example <code>c:\temp</code>.</p>
 
-<p>Edit lines 11-15 in the file <code>c:\temp\GRASS-Packager.bat</code> to reflect the paths to your OSGeo4W tree (eg. <code>c:\OSGeo4W</code>) and the GRASS version being packaged (eg. <code>grass-7.0.svn</code>).</p>
+<p>Edit lines 11-15 in the file <code>c:\temp\GRASS-Packager.bat</code> to
+reflect the paths to your OSGeo4W tree (eg. <code>c:\OSGeo4W</code>) and
+the GRASS version being packaged (eg. <code>grass-7.0.svn</code>).</p>
 
-<p>Launch the file <code>c:\temp\GRASS-Packager.bat</code> and select the option number 1.</p>
 
-<p>When finished, you should have a GRASS self-contained release package in <code>c:\temp\GRASS-Release-Package</code>.</p>
+<p>Launch the file <code>c:\temp\GRASS-Packager.bat</code> and select
+the option number 1.</p>
+
+<p>When finished, you should have a GRASS self-contained release package
+in <code>c:\temp\GRASS-Release-Package</code>.</p>
 
 </div>
 
@@ -208,7 +221,8 @@ exactly as they are written in this document.</p>
 
 <p><h3>3. Remove OSGeo4W Traces from Package</h3></p>
 
-<p>Open <code>c:\temp\GRASS-Release-Package\msys\msys.bat</code> and remove lines 11-16.</p>
+<p>Open <code>c:\temp\GRASS-Release-Package\msys\msys.bat</code> and remove
+lines 11-16.</p>
 
 <p>At the end of line 88 (also in msys.bat) change:
 <pre><code>start %WD%rxvt -backspacekey  -sl 2500 -fg %FGCOLOR% -bg %BGCOLOR% -sr -fn Courier-12 -tn msys -geometry 80x25 -e /bin/sh --login -c "%*"</code></pre>
@@ -244,7 +258,8 @@ if NOT "x%*" == "x" start %WD%rxvt -backspacekey  -sl 2500 -fg %FGCOLOR% -bg %B
 
 <p>Unzip to <code>c:\DevTools\Plugins\</code></p>
 
-<p>Copy <code>c:\DevTools\Plugins\untgz\untgz.dll</code> to <code>c:\DevTools\Plugins\</code></p>
+<p>Copy <code>c:\DevTools\Plugins\untgz\untgz.dll</code> to
+ <code>c:\DevTools\Plugins\</code></p>
 
 </div>
 
@@ -257,15 +272,20 @@ if NOT "x%*" == "x" start %WD%rxvt -backspacekey  -sl 2500 -fg %FGCOLOR% -bg %B
 
 <p>Open the the file <code>c:\temp\GRASS-Installer.nsi</code>.</p>
 
-<p>At line 13 set the <code>DEMOLOCATION_PATH</code> varibale to the demolocation folder in the source tree.
+<p>At line 13 set the <code>DEMOLOCATION_PATH</code> varibale to the
+demolocation folder in the source tree.
 For example, <code>c:\msys\local\src\grass-7.0.svn\demolocation</code>
 
-<p>At line 18 set the <code>INSTALLER_TYPE</code> variable to <code>"Release"</code>, then, at lines 24-26, set the
-<code>RELEASE_VERSION_NUMBER</code>, the <code>RELEASE_SVN_REVISION</code> and the <code>RELEASE_BINARY_REVISION</code> variables.</p>
+<p>At line 18 set the <code>INSTALLER_TYPE</code> variable to <code>"Release"</code>,
+then, at lines 24-26, set the <code>RELEASE_VERSION_NUMBER</code>, the
+<code>RELEASE_SVN_REVISION</code> and the <code>RELEASE_BINARY_REVISION</code>
+variables.</p>
 
-<p>Finally, right click on the file <code>c:\temp\GRASS-Installer.nsi</code> and select <code>Compile NSIS Script</code>.</p>
+<p>Finally, right click on the file <code>c:\temp\GRASS-Installer.nsi</code>
+and select <code>Compile NSIS Script</code>.</p>
 
-<p>When finished, you should have the WinGRASS release installer in <code>c:\temp</code>.</p>
+<p>When finished, you should have the WinGRASS release installer in
+<code>c:\temp</code>.</p>
 
 </div>
 
@@ -276,7 +296,8 @@ For example, <code>c:\msys\local\src\grass-7.0.svn\demolocation</code>
 
 <p><h3>Credits and Contacts</h3></p>
 
-<p>The GRASS MSYS Environment and the GRASS Packager and Installer scripts were created by Marco Pasetti, and updated for use on the
+<p>The GRASS MSYS Environment and the GRASS Packager and Installer scripts
+were created by Marco Pasetti, and updated for use on the
 osgeo4w tree by Colin Nielsen</p>
 
 <p>To contact them, e-mail to: GRASS Development Mailing List
