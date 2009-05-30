@@ -78,13 +78,18 @@ class Data:
         for node in self.tree.getiterator():
             if node.tag == 'menuitem':
                 module = description = ''
+                keywords = []
                 for child in node.getchildren():
                     if child.tag == 'help':
                         description = child.text
                     if child.tag == 'command':
                         module = child.text
+                    if child.tag == 'keywords':
+                        keywords = child.text.split(',')
+                
                 if module:
-                    modules[module] = { 'desc': description }
+                    modules[module] = { 'desc': description,
+                                        'keywords' : keywords }
         
         return modules
 
