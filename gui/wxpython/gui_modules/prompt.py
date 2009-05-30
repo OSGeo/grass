@@ -55,12 +55,13 @@ class GPrompt:
         self.searchBy = wx.Choice(parent = cmdprompt, id = wx.ID_ANY,
                              choices = [_("description"),
                                         _("keywords")])
-        
+        winHeight = self.searchBy.GetSize()[1]
+
         self.search = wx.TextCtrl(parent = cmdprompt, id = wx.ID_ANY,
                              value = "", size = (-1, 25))
         
         label = wx.Button(parent = cmdprompt, id = wx.ID_ANY,
-                          label = _("Cmd >"), size = (-1, 25))
+                          label = _("Cmd >"), size = (-1, winHeight))
         label.SetToolTipString(_("Click for erasing command prompt"))
 
         ### todo: fix TextCtrlAutoComplete to work also on Macs
@@ -69,7 +70,7 @@ class GPrompt:
             cmdinput = TextCtrlAutoComplete(parent = cmdprompt, id = wx.ID_ANY,
                                             value = "",
                                             style = wx.TE_LINEWRAP | wx.TE_PROCESS_ENTER,
-                                            size = (-1, 25))
+                                            size = (-1, winHeight))
         except NotImplementedError:
             # wx.PopupWindow may be not available in wxMac
             # see http://trac.wxwidgets.org/ticket/9377
