@@ -1597,7 +1597,7 @@ class cmdPanel(wx.Panel):
             cmd = self.task.getCmd( ignoreErrors=ignoreErrors )
         except ValueError, err:
             dlg = wx.MessageDialog(parent=self,
-                                   message=str(err),
+                                   message=unicode(err),
                                    caption=_("Error in %s") % self.task.name,
                                    style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
             dlg.ShowModal()
