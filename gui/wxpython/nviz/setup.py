@@ -27,11 +27,15 @@ extras = []
 for flag in ('GDALCFLAGS',
              'GDALLIBS',
              'WXWIDGETSCXXFLAGS',
-             'WXWIDGETSLIB',
-             'XCFLAGS',
+             'OPENGLINC',
              'OPENGLLIB',
              'OPENGLULIB'):
     update_opts(flag, macros, inc_dirs, lib_dirs, libs, extras)
+if sys.platform != 'darwin':
+    update_opts('WXWIDGETSLIB', macros, inc_dirs, lib_dirs, libs, extras)
+if variables['OPENGL_X11'] == '1':
+    for flag in ('XCFLAGS', 'XMINC'):
+        update_opts(flag, macros, inc_dirs, lib_dirs, libs, extras)
 
 setup(
     ext_modules= [
