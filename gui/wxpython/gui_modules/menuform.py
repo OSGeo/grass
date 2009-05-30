@@ -445,23 +445,25 @@ class processTask():
             age = element = prompt = None
             if node_gisprompt is not None:
                 gisprompt = True
-                age     = node_gisprompt.get('age')
-                element = node_gisprompt.get('element')
-                prompt  = node_gisprompt.get('prompt')
+                age     = node_gisprompt.get('age', '')
+                element = node_gisprompt.get('element', '')
+                prompt  = node_gisprompt.get('prompt', '')
             
             # value(s)
             values = []
             values_desc = []
-            for pv in p.findall('value'):
-                values.append(pv.text)
-                pvd = pv.find('description')
-                if pvd:
-                    values_desc.append(pvd.text)
+            node_values = p.find('values')
+            if node_values is not None:
+                for pv in node_values.findall('value'):
+                    values.append(self.__getNodeText(pv, 'name'))
+                    desc = self.__getNodeText(pv, 'description')
+                    if desc:
+                        values_desc.append(desc)
             
             # keydesc
             key_desc = []
             node_key_desc = p.find('keydesc')
-            if node_key_desc:
+            if node_key_desc is not None:
                 for ki in node_key_desc.findall('item'):
                     key_desc.append(ki.text)
             
