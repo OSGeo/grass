@@ -146,7 +146,7 @@ class GMFrame(wx.Frame):
                              Left().CentrePane().BestSize((-1,-1)).Dockable(False).
                              CloseButton(False).DestroyOnClose(True).Row(1).Layer(0))
         self._auimgr.AddPane(self.cmdprompt, wx.aui.AuiPaneInfo().
-                             Bottom().BestSize((-1, 60)).Dockable(False).
+                             Bottom().BestSize((-1, 65)).Dockable(False).
                              CloseButton(False).DestroyOnClose(True).
                              PaneBorder(False).Row(1).Layer(0).Position(0).
                              CaptionVisible(False))
