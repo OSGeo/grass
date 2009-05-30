@@ -173,9 +173,14 @@ class GPrompt:
         
         modules = []
         for module, data in self.modules.iteritems():
-            if text in data['desc']:
+            if self.searchBy.GetSelection() == 0: # -> description
+                ref = data['desc']
+            else: # -> keywords
+                ref = ','.join(data['keywords'])
+            
+            if text in ref:
                 modules.append(module)
-        
+            
         self.parent.statusbar.SetStatusText(_("%d modules found") % len(modules))
         self.input.SetChoices(modules)
                     
