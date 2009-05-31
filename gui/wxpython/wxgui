@@ -16,8 +16,13 @@ if [ -z "$GISBASE" ] ; then
     exit 1
 fi
 
+if [ -z "$GRASS_PYTHON" ] ; then
+    g.message -e "GRASS_PYTHON environment variable not set"
+    exit 1
+fi
+
 if [ $# -eq 0 ] ; then
-    python "$GISBASE/etc/wxpython/wxgui.py" &
+    "$GRASS_PYTHON" "$GISBASE/etc/wxpython/wxgui.py" &
     exit 0
 fi
 
@@ -27,9 +32,9 @@ fi
 
 if test -n "$GIS_OPT_WORKSPACE" ; then
     # load workspace file
-    python "$GISBASE/etc/wxpython/wxgui.py" "--workspace" "$GIS_OPT_WORKSPACE" &
+    "$GRASS_PYTHON" "$GISBASE/etc/wxpython/wxgui.py" "--workspace" "$GIS_OPT_WORKSPACE" &
 else
-    python "$GISBASE/etc/wxpython/wxgui.py" &
+    "$GRASS_PYTHON" "$GISBASE/etc/wxpython/wxgui.py" &
 fi
 
 exit 0

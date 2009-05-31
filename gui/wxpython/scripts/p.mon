@@ -64,8 +64,11 @@ fi
 
 # CODE GOES HERE
 
-PYTHONPATH="$GISBASE/etc/wxpython"
-
+if [ -z "$PYTHONPATH" ] ; then
+   PYTHONPATH="$GISBASE/etc/wxpython"
+else
+   PYTHONPATH="$GISBASE/etc/wxpython:$PYTHONPATH"
+fi
 export PYTHONPATH
 
 start="$GIS_OPT_START"
@@ -75,10 +78,10 @@ unlock="$GIS_OPT_UNLOCK"
 
 # create the command file
 command_file="`g.tempfile pid=$$`"
-g.gisenv set=GRASS_PYCMDFILE=${command_file}
+g.gisenv set="GRASS_PYCMDFILE=${command_file}"
 
 if [ -n "$start" ] ; then
-    python $PYTHONPATH/gui_modules/mapdisp.py "$start" ${command_file} &
+    "$GRASS_PYTHON" "$PYTHONPATH/gui_modules/mapdisp.py" "$start" "${command_file}" &
 fi
 
 if [[ -n "$stop" || -n "$select" || -n "$unlock" ]] ; then

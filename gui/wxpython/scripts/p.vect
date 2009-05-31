@@ -282,12 +282,12 @@ cmdfile="`g.gisenv get=GRASS_PYCMDFILE`"
 if [ -e ${cmdfile} ] && [ -n "${cmdfile}" ]; then
     echo -n
 else
-    echo "WARNING: GRASS_PYCMDFILE File not existing. Run p.mon" >&2
+    echo "WARNING: GRASS_PYCMDFILE - File not found. Run p.mon" >&2
     exit 1
 fi
 
 
-eval "`echo ${GIS_OPT_MAP}| sed -e 's/^/NAME=/' -e 's/@/; MAPSET=/'`;"
+eval "`echo ${GIS_OPT_MAP} | sed -e 's/^/NAME=/' -e 's/@/; MAPSET=/'`;"
 
 #echo $NAME 
 
@@ -332,4 +332,4 @@ fi
 #cmd="self.map.AddRasterLayer(self, $NAME $MAPSET $CATLIST $VALLIST $INVERCATS $INVERT $OPACITY)"
 
 cmd="addvector ${name} ${mapset}"
-echo ${cmd} >>${cmdfile}
+echo "${cmd}" >> "${cmdfile}"

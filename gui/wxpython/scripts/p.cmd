@@ -36,7 +36,7 @@ cmdfile="`g.gisenv get=GRASS_PYCMDFILE`"
 if [ -e ${cmdfile} ] && [ -n "${cmdfile}" ]; then
     :
 else
-    g.message -e "GRASS_PYCMDFILE File not found. Run p.mon"
+    g.message -e "GRASS_PYCMDFILE - File not found. Run p.mon"
     exit 1
 fi
 
@@ -44,6 +44,6 @@ cmd="${GIS_OPT_CMD}"
 
 g.message -d message="$0: ${cmd}"
 
-echo ${cmd} >> ${cmdfile}
+echo "${cmd}" >> "${cmdfile}"
 
 exit 0
