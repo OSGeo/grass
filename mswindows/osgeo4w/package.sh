@@ -31,7 +31,9 @@ if ! [ -f configure-stamp ]; then
 		--with-regex \
 		--with-nls \
 		--without-swig \
-		--with-freetype-includes=/c/OSGeo4W/include/freetype2
+		--with-freetype-includes=/c/OSGeo4W/include/freetype2 \
+		--without-cairo \
+		--without-geos
 
 	echo $(date): STARTING make clean
 	make clean
