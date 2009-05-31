@@ -58,12 +58,12 @@ cmdfile="`g.gisenv get=GRASS_PYCMDFILE`"
 if [ -e ${cmdfile} ] && [ -n "${cmdfile}" ]; then
     echo -n
 else
-    g.message -e "GRASS_PYCMDFILE File not found. Run p.mon"
+    g.message -e "GRASS_PYCMDFILE - File not found. Run p.mon"
     exit 1
 fi
 
 
-eval "`echo ${GIS_OPT_MAP}| sed -e 's/^/NAME=/' -e 's/@/; MAPSET=/'`;"
+eval "`echo ${GIS_OPT_MAP} | sed -e 's/^/NAME=/' -e 's/@/; MAPSET=/'`;"
 
 #echo $NAME 
 
@@ -109,5 +109,5 @@ fi
 
 cmd="addraster ${name} ${mapset} ${CATLIST} ${VALLIST} ${INVERT} ${OPACITY}"
 
-#echo ${cmd}
-echo ${cmd} >>${cmdfile}
+#echo "${cmd}"
+echo "${cmd}" >> "${cmdfile}"
