@@ -85,8 +85,8 @@ int main(int argc, char *argv[])
 
     if (((gui_type_env && update->answer) &&
 	 strcmp(gui_type_env, type->answer) != 0) || !gui_type_env) {
-	G_message(_("<%s> is now the default GUI"), type->answer);
 	G_setenv("GRASS_GUI", type->answer);
+	G_message(_("<%s> is now the default GUI"), type->answer);
     }
     else {
 	if(update->answer)
@@ -99,6 +99,8 @@ int main(int argc, char *argv[])
     if(nolaunch->answer)
 	exit(EXIT_SUCCESS);
 
+
+    G_debug(1, "Attempting to start '%s' GUI ...", type->answer);
 
     if (strcmp(type->answer, "wxpython") == 0) {
 	sprintf(progname, "%s/etc/wxpython/wxgui.py", G_gisbase());

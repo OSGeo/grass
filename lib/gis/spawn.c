@@ -81,6 +81,8 @@ int G_spawn(const char *command, ...)
 	return -1;
     }
 
+    G_debug(3, "spawning '%s' ...", command);
+
     return _spawnvp(_P_WAIT, command, args);
 }
 
@@ -126,6 +128,8 @@ int G_spawn(const char *command, ...)
     sigaddset(&block, SIGCHLD);
     if (sigprocmask(SIG_BLOCK, &block, &oldmask) < 0)
 	goto error_3;
+
+    G_debug(3, "forking '%s' ...", command);
 
     pid = fork();
 
