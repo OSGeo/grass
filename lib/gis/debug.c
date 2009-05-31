@@ -36,8 +36,9 @@ static int grass_debug_level;
  *  - 1 - message is printed once or twice per module<br>
  *  - 2 - less interesting once-per-module messages,<br>
  *  - 2 - library functions likely to be used once in a module<br>
- *  - 3-  library functions likely to be called a few times in a module (<=10),<br>
- *  - 3 - each row (raster) or line (vector) or database/column (DB)<br>
+ *  - 3 - library functions likely to be called a few times in a module (<=10),<br>
+ *  - 3 - database opening and closing logistics<br>
+ *  - 4 - each row (raster) or line (vector) or database/column (DB),<br>
  *  - 4 - each column/cat (DB)<br>
  *  - 5 - each cell (raster) or point (vector) or cat/attribute (DB)
  *
