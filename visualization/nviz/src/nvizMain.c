@@ -17,10 +17,10 @@
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
-									        *****************************************************************************//*
-									        * This is basically tkAppInit.c from the tk4.0 distribution except
-									        * that we define Tcl_AppInit in tkAppInit.c.
-									        */
+ *****************************************************************************//*
+ * This is basically tkAppInit.c from the tk4.0 distribution except
+ * that we define Tcl_AppInit in tkAppInit.c.
+ */
 
 #include <stdlib.h>
 #include <string.h>
@@ -49,10 +49,10 @@ extern int NVIZ_AppInit(Tcl_Interp *);
  */
 
 int main(int argc,		/* Number of command-line arguments. */
-	 char **argv		/* Values of command-line arguments. */
-    )
+	 char **argv)		/* Values of command-line arguments. */
 {
     Tcl_FindExecutable(argv[0]);
+
     if (argc > 1) {
 	if (strstr(argv[argc - 1], "-h") != NULL)
 	    sprintf(argv[argc - 1], "--h");
@@ -60,5 +60,5 @@ int main(int argc,		/* Number of command-line arguments. */
 
     Tk_Main(argc, argv, NVIZ_AppInit);
 
-    return 0;			/* Needed only to prevent compiler warning. */
+    exit(EXIT_SUCCESS);
 }
