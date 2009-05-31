@@ -33,9 +33,13 @@ static int grass_debug_level;
  * is set to level equal or greater  
  *
  * Levels: (recommended levels)<br>
- *  - 1 - message is printed once or few times per module<br>
- *  - 3 - each row (raster) or line (vector)<br>
- *  - 5 - each cell (raster) or point (vector) 
+ *  - 1 - message is printed once or twice per module<br>
+ *  - 2 - less interesting once-per-module messages,<br>
+ *  - 2 - library functions likely to be used once in a module<br>
+ *  - 3-  library functions likely to be called a few times in a module (<=10),<br>
+ *  - 3 - each row (raster) or line (vector) or database/column (DB)<br>
+ *  - 4 - each column/cat (DB)<br>
+ *  - 5 - each cell (raster) or point (vector) or cat/attribute (DB)
  *
  * \param[in] level level
  * \param[in] msg message
