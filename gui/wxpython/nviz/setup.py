@@ -24,17 +24,17 @@ libs = ['grass_gis',
         'grass_g3d']
 extras = []
 
-for flag in ('GDALCFLAGS',
+for flag in ['GDALCFLAGS',
              'GDALLIBS',
              'WXWIDGETSCXXFLAGS',
              'OPENGLINC',
              'OPENGLLIB',
-             'OPENGLULIB'):
+             'OPENGLULIB']:
     update_opts(flag, macros, inc_dirs, lib_dirs, libs, extras)
 if sys.platform != 'darwin':
     update_opts('WXWIDGETSLIB', macros, inc_dirs, lib_dirs, libs, extras)
 if variables['OPENGL_X11'] == '1':
-    for flag in ('XCFLAGS', 'XMINC'):
+    for flag in ['XCFLAGS']:
         update_opts(flag, macros, inc_dirs, lib_dirs, libs, extras)
 
 setup(
