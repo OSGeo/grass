@@ -41,6 +41,17 @@ print 'Vect map: ', input
 print 'Vect is 3D: ', grassvect.Vect_is_3d (map)
 print 'Vect DB links: ', grassvect.Vect_get_num_dblinks(map)
 print 'Map Scale:  1:', grassvect.Vect_get_scale(map)
+
+# vector box tests
+box = grassvect.bound_box()
+c_easting1  =  599505.0
+c_northing = 4921010.0
+c_easting2  =  4599505.0
+
+grassvect.Vect_get_map_box(map, box)
+print 'Position 1 in box? ', grassvect.Vect_point_in_box(c_easting1, c_northing, 0, box)
+print 'Position 2 in box? ', grassvect.Vect_point_in_box(c_easting2, c_northing, 0, box)
+print 'Vector line 2 in box? ', grassvect.Vect_get_line_box(map, 2, box)
 # misleading:
 # print 'Number of lines:', grassvect.Vect_get_num_lines(map)
 # how to access GV_POINT?
