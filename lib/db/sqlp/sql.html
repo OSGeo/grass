@@ -82,13 +82,13 @@ echo "SELECT * FROM archsites WHERE str1 &lt;&gt; 'No Name'" | db.select
 <p>
 
 
-<p>Example of subquery expressions from a list (does not work for DBF driver):
+<p><b>Example</b> of subquery expressions from a list (does not work for DBF driver):
 <div class="code"><pre>
 v.db.select mysites where="id IN ('P04', 'P05')"
 </pre></div>
 
 
-<p>Example of pattern matching:
+<p><b>Example</b> of pattern matching:
 <div class="code"><pre>
 
 # field contains string:
@@ -104,7 +104,7 @@ v.db.select mysites where="id LIKE 'P__'"
 v.db.select mysites where="id LIKE 'P%'"
 </pre></div>
 
-<p>Example of null handling:
+<p><b>Example</b> of null handling:
 <div class="code"><pre>
 v.db.addcol map=roads col="nulltest int"
 v.db.update map=roads col=nulltest value=1 where="cat &gt; 2"
@@ -113,7 +113,7 @@ v.db.update map=roads col=nulltest value=2 where="cat &lt;= 2"
 </pre></div>
 
 
-<p>Examples of complex expressions in updates (using v.db.* modules):
+<p><b>Examples</b> of complex expressions in updates (using v.db.* modules):
 <div class="code"><pre>
 v.db.addcol map=roads col="exprtest double precision"
 v.db.update map=roads col=exprtest value=cat/nulltest
@@ -121,7 +121,7 @@ v.db.update map=roads col=exprtest value=cat/nulltest+cat where=cat=1
 </pre></div>
 
 
-<p>Examples of complex expressions in updates (using db.* modules):
+<p><b>Examples</b> of complex expressions in updates (using db.* modules):
 <div class="code"><pre>
 echo "UPDATE roads SET exprtest=null"
 echo "UPDATE roads SET exprtest=cat/2" | db.execute
@@ -140,6 +140,18 @@ d.vect roads where="cat&gt;exprtest"
 </pre></div>
 
 
+<p><b>Example</b> of changing a SQL type (type casting, does not work for DBF driver):
+<div class="code"><pre>
+# North Carolina data set: convert string column to double precision
+#  copy map into current mapset
+g.copy vect=geodetic_pts,mygeodetic_pts
+v.db.addcol mygeodetic_pts col="zval double precision"
+
+# the 'z_value' col contains 'N/A' strings, not to be converted
+v.db.update mygeodetic_pts col=zval \
+            qcol="CAST(z_value AS double precision)" \
+            where="z_value <> 'N/A'"
+</pre></div>
 
 <h2>SEE ALSO</h2>
 
