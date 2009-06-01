@@ -1,7 +1,8 @@
 MODULE_TOPDIR = ../..
 
 PGM=v.in.dwg
-ADINIT = $(ARCH_DISTDIR)/etc/adinit.dat
+ADINIT = $(ETC)/adinit.dat
+ADINITSRC := $(shell echo $(OPENDWGINCPATH) | cut -b3- )/adinit/adinit.dat
 
 DEPENDENCIES = $(VECTDEP) $(DBMIDEP) $(GISDEP)
 LIBES     = $(VECTLIB) $(DBMILIB) $(GISLIB) $(OPENDWGLIBPATH) $(OPENDWGLIB)
@@ -11,12 +12,20 @@ EXTRA_CFLAGS = $(VECT_CFLAGS)
 include $(MODULE_TOPDIR)/include/Make/Module.make
 
 ifneq ($(USE_OPENDWG),)
-default: chck cmd $(ADINIT)
+default: check
+	$(MAKE) cmd $(ADINIT)
 endif
 
-chck:
-	./check
+check:
+ifneq ($(strip $(MINGW)),)
+	cat WARNING
+else
+	cat WARNING >/dev/tty
+endif
+	@read IN </dev/tty ; if [ "$$IN" != "yes" ]; then exit 1; fi
+
+.PHONY: check
 
 #a bit ugly:
-$(ADINIT):
-	$(INSTALL_DATA) `echo $(OPENDWGINCPATH) | cut -b3-`/adinit/adinit.dat $(ADINIT)
+$(ADINIT): $(ADINITSRC)
+	$(INSTALL_DATA) $< $@
