@@ -37,20 +37,22 @@
  */
 typedef int plus_t;
 
-#define BOUND_BOX struct bound_box
+typedef struct bound_box BOUND_BOX;
 
-#define P_NODE struct P_node
-#define P_AREA struct P_area
-#define P_LINE struct P_line
-#define P_ISLE struct P_isle
+typedef struct P_node P_NODE;
+typedef struct P_area P_AREA;
+typedef struct P_line P_LINE;
+typedef struct P_isle P_ISLE;
 
 /* Used by sites lib */
-typedef struct
+struct site_att
 {
     int cat;			/* category */
     double *dbl;		/* double attributes */
     char **str;			/* string attributes */
-} SITE_ATT;
+};
+
+typedef struct site_att SITE_ATT;
 
 struct bound_box		/* Bounding Box */
 {
@@ -62,7 +64,7 @@ struct bound_box		/* Bounding Box */
     double B;			/* bottom */
 };
 
-typedef struct
+struct gvfile
 {
     FILE *file;
     char *start;		/* pointer to beginnig of the file in the memory */
@@ -71,7 +73,9 @@ typedef struct
     off_t size;			/* size of the file loaded to memory */
     off_t alloc;		/* allocated space */
     int loaded;			/* 0 - not loaded, 1 - loaded */
-} GVFILE;
+};
+
+typedef struct gvfile GVFILE;
 
 /* category field information */
 struct field_info
@@ -532,17 +536,21 @@ struct ilist
 };
 
 /* Vector array. Space allocated is size + 1. */
-typedef struct
+struct varray
 {
     int size;			/* array size */
     int *c;			/* array where 'class' or new category or something like that is stored */
-} VARRAY;
+};
+
+typedef struct varray VARRAY;
 
 /* Spatial index for use in modules. */
-typedef struct
+struct spatial_index
 {
     struct Node *root;
-} SPATIAL_INDEX;
+};
+
+typedef struct spatial_index SPATIAL_INDEX;
 
 typedef dglGraph_s GRAPH;	/* graph structure */
 

@@ -163,12 +163,13 @@
 #define GV_ON_AND     "AND"	/* intersect */
 #define GV_ON_OVERLAP "OVERLAP"
 
-typedef enum
+enum overlay_operator
 {
     GV_O_AND,
     GV_O_OVERLAP
-} OVERLAY_OPERATOR;
+};
 
+typedef enum overlay_operator OVERLAY_OPERATOR;
 
 #define ESC	033
 
