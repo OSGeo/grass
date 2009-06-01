@@ -1,0 +1,7 @@
+-----------------------------------------------------------------------------
+------------------------------   WARNING  -----------------------------------  
+v.in.dwg is linked to proprietary library 'OpenDWG toolkit' (www.opendwg.org)
+and to GRASS libraries released under GPL. As a consequence, it is not allowed
+to distribute binary version of v.in.dwg.
+If you really want to build the binaries for v.in.dwg and lose the possibility
+of distributing GRASS binary package, type 'yes'<Enter>."
