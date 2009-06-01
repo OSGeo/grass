@@ -1,7 +1,5 @@
 TODO
 -----
-urgent:
-- move out *.i files into ../include/
 
 important:
 - enable calls from outside GRASS
