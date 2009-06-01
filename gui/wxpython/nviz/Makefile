@@ -15,6 +15,8 @@ SHLIB = $(OBJDIR)/_$(LIB_NAME).so
 
 ETCDIR = $(ETC)/wxpython
 
+EXTRA_CLEAN_FILES = $(LIB_NAME).i $(LIB_NAME).py $(LIB_NAME)_wrap.cpp
+
 ifneq ($(USE_WXWIDGETS),)
 ifneq ($(USE_PYTHON),)
 ifneq ($(strip $(CXX)),)
