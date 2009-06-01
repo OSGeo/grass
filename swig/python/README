@@ -14,9 +14,10 @@ How to INSTALL?
 
 3. Run make in the swig/python/ directory
 
-It will create two files, python_grass7.py and _python_grass7.so.
+   It will create a series of .py Python files and of .so library files
 
-4. From within GRASS (or a fake grass session) run "python test.py" to
+4. TODO: STILL VALID??:
+   From within GRASS (or a fake grass session) run "python test.py" to
    test and to automatically create a byte-compiled version of the module
    (python_grass7.pyc). The .pyc file is platform independent and may be
    safely shared among systems. Even so, it doesn't hurt to rebuild it
@@ -29,14 +30,14 @@ It will create two files, python_grass7.py and _python_grass7.so.
 How to use it?
 --------------
 
-import python_grass7
+import grass
 GRASS functions will be available in this module.
 Eg: 
-	import python_grass7
-	mapset=python_grass7.G_mapset()
+	import grass
+	mapset=grass.G_mapset()
 	print mapset
 
-See examples/m.distance for an example of a working SWIG-Python module.
+See examples/m.distance.py for an example of a working SWIG-Python module.
 
 More examples can be found on the GRASS Wiki site's Python page:
   http://grass.osgeo.org/wiki/GRASS_and_Python#Python-SWIG-GRASS_interface
@@ -69,3 +70,4 @@ Further work:
   Markus Landa
   Glynn Clements
   ...
+
