@@ -20,8 +20,6 @@ all:
 	@echo '   make mo         create the *.mo files'
 
 # Directory for installing tcl .msg files:
-MSG_DIR = $(ARCH_DISTDIR)/etc/msgs
-MO_DIR = $(ARCH_DISTDIR)/locale
 PO_DIR = po
 
 #distinguish between library messages and modules:

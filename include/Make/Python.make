@@ -13,7 +13,7 @@ PYMOD_CFLAGS = $(SHLIB_CFLAGS) $(PYTHONINC) $(PYTHON_CFLAGS)
 	$(PYTHON) -m py_compile $<
 
 %_wrap.c %.py: %.i $(EXTRA_SWIG)
-	$(SWIG) $(ARCH_INC) -python -module $* -shadow $<
+	$(SWIG) $(INC) -python -module $* -shadow $<
 
 _%.so: $(OBJDIR)/%_wrap.o $(_%_so_FILES)
 	$(PYMOD_LD) -o $@ $(LDFLAGS) $(EXTRA_LDFLAGS) $(PYMOD_LDFLAGS) $(filter %.o,$^) $($*_LIBS) $(LIBES) $(EXTRA_LIBS)

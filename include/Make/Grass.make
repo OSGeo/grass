@@ -26,27 +26,33 @@ SHELL           = /bin/sh
 # platform specific dirs
 ARCH_DISTDIR	= $(GRASS_HOME)/dist.$(ARCH)
 ARCH_BINDIR     = $(GRASS_HOME)/bin.$(ARCH)
+
+GISBASE		= $(ARCH_DISTDIR)
+
 ERRORLOG        = $(GRASS_HOME)/error.log
 # include dirs
 ARCH_INCDIR     = $(ARCH_DISTDIR)/include/grass
 
-ARCH_INC	= -I$(ARCH_DISTDIR)/include
-INC		= $(ARCH_INC)
+INC		= -I$(ARCH_DISTDIR)/include -I$(GISBASE)/include
 VECT_INC        = 
 
 # libraries
 ARCH_LIBDIR     = $(ARCH_DISTDIR)/lib
 
-ARCH_LIBPATH	= -L$(ARCH_LIBDIR)
-LIBPATH		= $(ARCH_LIBPATH)
+LIBPATH		= -L$(ARCH_LIBDIR) -L$(GISBASE)/lib
 
 # object dir
 OBJDIR		= OBJ.$(ARCH)
 
+LIB_RUNTIME_DIR = $(GISBASE)/lib
+
+RUN_GISRC       = $(GISBASE)/demolocation/.grassrc$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR)
+RUN_GISBASE     = $(GISBASE)
+
 #########################################################################
 # these define the various directories which contain GRASS programs
 # or files used by GRASS programs
-GISBASE		= $(ARCH_DISTDIR)
+
 BIN             = $(ARCH_DISTDIR)/bin
 ETC             = $(ARCH_DISTDIR)/etc
 DRIVERDIR       = $(ARCH_DISTDIR)/driver
@@ -54,6 +60,8 @@ DBDRIVERDIR     = $(ARCH_DISTDIR)/driver/db
 DOCSDIR         = $(ARCH_DISTDIR)/docs
 HTMLDIR         = $(ARCH_DISTDIR)/docs/html
 SCRIPTDIR       = $(ARCH_DISTDIR)/scripts
+MSG_DIR         = $(ARCH_DISTDIR)/etc/msgs
+MO_DIR          = $(ARCH_DISTDIR)/locale
 
 FONTDIR         = $(ARCH_DISTDIR)/fonts
 
@@ -64,6 +72,10 @@ GRASS_VERSION_FILE    = $(ETC)/VERSION
 GRASS_BUILD_FILE      = $(ETC)/BUILD
 
 ##################### other #############################################
+
+COMPILE_FLAGS      = $(CPPFLAGS) $(CFLAGS1) $(INCLUDE_DIRS)
+COMPILE_FLAGS_CXX  = $(CPPFLAGS) $(CXXFLAGS1) $(INCLUDE_DIRS)
+
 CFLAGS      =  $(INC) $(COMPILE_FLAGS)
 CXXFLAGS    =  $(INC) $(COMPILE_FLAGS_CXX)
 LDFLAGS     =  $(LIBPATH) $(LINK_FLAGS) $(LD_SEARCH_FLAGS) $(PQLIBPATH)
@@ -83,7 +95,7 @@ YFLAGS      = -d -v
 MANSECT = 1
 MANBASEDIR = $(ARCH_DISTDIR)/man
 MANDIR = $(MANBASEDIR)/man$(MANSECT)
-HTML2MAN = VERSION_NUMBER=${GRASS_VERSION_NUMBER} $(GRASS_HOME)/tools/g.html2man/g.html2man.py
+HTML2MAN = VERSION_NUMBER=$(GRASS_VERSION_NUMBER) $(GRASS_HOME)/tools/g.html2man/g.html2man.py
 
 ##################### library names #####################################
 
