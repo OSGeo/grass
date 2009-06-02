@@ -404,12 +404,7 @@ changelog:
 builddemolocation:
 	test -d ${ARCH_DISTDIR} || ${MAKE_DIR_CMD} ${ARCH_DISTDIR}
 	-tar cBf - demolocation | (cd ${ARCH_DISTDIR}/ ; tar xBfo - ) 2>/dev/null
-	@ echo "GISDBASE: ${RUN_GISBASE}" > ${RUN_GISRC}
-	@ echo "LOCATION_NAME: demolocation" >> ${RUN_GISRC}
-	@ echo "MAPSET: PERMANENT" >> ${RUN_GISRC}
-	@ echo "GRASS_DB_ENCODING: utf-8" >> ${RUN_GISRC}
-	@ echo "DEBUG: 0" >> ${RUN_GISRC}
-	@ echo "GRASS_GUI: text" >> ${RUN_GISRC}
+	sed 's!@GISDBASE@!$(ARCH_DISTDIR)!' < grassrc.tmpl > $(ARCH_DISTDIR)/demolocation/.grassrc$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR)
 
 .PHONY: default libs cleandistdirs cleanscriptstrings clean libsclean
 .PHONY: distclean strip install real-install install-strip install-macosx

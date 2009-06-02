@@ -35,11 +35,10 @@ check_for_desc_override()
 EXCLUDEHTML="`echo "$EXCLUDEMODS" | tr ' ' '|' | sed -e 's+\.+\\\\.+g' -e 's+|+\\\\|+g'`"
 
 #fetch the ARCH for store the files:
-ARCH="`cat ../include/Make/Platform.make | grep '^ARCH'  | sed 's+ ++g' | cut -d'=' -f2`"
 GEMDIR="../gem"
-HTMLDIR="../dist.$ARCH/docs/html"
-GRASSVERSION=`cat ../dist.$ARCH/etc/VERSIONNUMBER`
-GRASS_MMVER=`cut -d . -f 1-2 ../dist.$ARCH/etc/VERSIONNUMBER`
+HTMLDIR="$ARCH_DISTDIR/docs/html"
+GRASSVERSION=`cat "$GISBASE/etc/VERSIONNUMBER"`
+GRASS_MMVER=`cut -d . -f 1-2 "$GISBASE/etc/VERSIONNUMBER"`
 MACOSX=`echo $ARCH | grep -i darwin`
 
 
