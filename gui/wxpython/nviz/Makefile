@@ -35,6 +35,7 @@ $(LIB_NAME).i: nviz.i nviz_types.i nviz.h
 $(LIB_NAME).py: $(SHLIB)
 
 $(SHLIB): $(LIB_NAME).i
+	ARCH_DISTDIR=$(ARCH_DISTDIR) GISBASE=$(GISBASE) \
 	python setup.py build_ext --swig=$(SWIG) --swig-opts=-c++ --build-lib=$(OBJDIR) --build-temp=$(OBJDIR)
 
 .NOTPARALLEL: $(LIB_NAME).py $(LIB_NAME)_wrap.cpp

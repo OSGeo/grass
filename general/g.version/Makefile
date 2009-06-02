@@ -19,5 +19,5 @@ default: cmd $(GRASS_VERSION_FILE) $(GRASS_BUILD_FILE)
 $(GRASS_VERSION_FILE): $(MODULE_TOPDIR)/COPYING
 	cat $< | sed -f sed.script | tr -d '\012' > $@
 
-$(GRASS_BUILD_FILE): $(MODULE_TOPDIR)/config.status
+$(GRASS_BUILD_FILE): ../../config.status
 	head -n 7 $< | tail -n 1 | sed 's+#++1' | tr -d '\012' > $@

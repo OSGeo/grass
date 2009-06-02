@@ -34,6 +34,7 @@ GRASS_PDFDIR=		$(DOCSDIR)/pdf
 
 
 DIRS = \
+	tools \
 	lib \
 	db \
 	display \
@@ -50,7 +51,6 @@ DIRS = \
 	gui \
 	visualization \
 	locale \
-	tools \
 	man \
 	swig \
 	gem \
@@ -225,6 +225,7 @@ ifneq ($(strip $(MINGW)),)
 endif
 	-tar cBCf ${GISBASE} - . | tar xBCf ${INST_DIR} - 2>/dev/null
 	-sed 's#'${GISBASE}'#'${INST_DIR}'#g' ${GISBASE}/etc/fontcap > ${INST_DIR}/etc/fontcap
+	-${INSTALL} config.status ${INST_DIR}/config.status
 	-chmod -R a+rX ${INST_DIR} 2>/dev/null
 	@#GEM installation
 	-tar cBf - gem/skeleton | tar xBCf ${INST_DIR}/etc - 2>/dev/null
