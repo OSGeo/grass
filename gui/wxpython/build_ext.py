@@ -3,28 +3,8 @@
 import os
 import sys
 
-def __read_variables(file, dict={}):
-    """!Read variables from file (e.g. Platform.make)
-    
-    @param file file descriptor
-    @param dict dictionary to store (variable, value)
-    """
-    for line in file.readlines():
-        if len(line) < 1:
-            continue # skip empty lines
-        if line[0] == '#':
-            continue # skip comments
-        try:
-            var, val = line.split('=', 1)
-        except ValueError:
-            continue
-        
-        dict[var.strip()] = val.strip()
-        
-def update_opts(flag, macros, inc_dirs, lib_dirs, libs, extras):
+def update_opts(line, macros, inc_dirs, lib_dirs, libs, extras):
     """!Update Extension options"""
-    global variables
-    line = variables[flag]
     fw_next = False
     for val in line.split(' '):
         key = val[:2]
@@ -47,16 +27,3 @@ def update_opts(flag, macros, inc_dirs, lib_dirs, libs, extras):
         elif val == '-framework':
             extras.append(val)
             fw_next = True
-
-try:
-    Platform_make = open(os.path.join(os.path.normpath(os.getenv('MODULE_TOPDIR')),
-                                      'include', 'Make', 'Platform.make'))
-    Grass_make = open(os.path.join(os.path.normpath(os.getenv('MODULE_TOPDIR')),
-                                   'include', 'Make', 'Grass.make'))
-except IOError, e:
-    print 'Unable to compile wxGUI vdigit extension.\n\n', e
-    sys.exit(1)
-
-variables = {}
-__read_variables(Platform_make, variables)
-__read_variables(Grass_make, variables)

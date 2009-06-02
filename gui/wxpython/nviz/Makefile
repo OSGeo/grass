@@ -35,7 +35,17 @@ $(LIB_NAME).i: nviz.i nviz_types.i nviz.h
 $(LIB_NAME).py: $(SHLIB)
 
 $(SHLIB): $(LIB_NAME).i
-	ARCH_DISTDIR=$(ARCH_DISTDIR) GISBASE=$(GISBASE) \
+	GISBASE="$(GISBASE)" \
+	ARCH_DISTDIR="$(ARCH_DISTDIR)" \
+	GDALCFLAGS="$(GDALCFLAGS)" \
+	GDALLIBS="$(GDALLIBS)" \
+	WXWIDGETSCXXFLAGS="$(WXWIDGETSCXXFLAGS)" \
+	OPENGLINC="$(OPENGLINC)" \
+	OPENGLLIB="$(OPENGLLIB)" \
+	OPENGLULIB="$(OPENGLULIB)" \
+	WXWIDGETSLIB="$(WXWIDGETSLIB)" \
+	OPENGL_X11="$(OPENGL_X11)" \
+	XCFLAGS="$(XCFLAGS)" \
 	python setup.py build_ext --swig=$(SWIG) --swig-opts=-c++ --build-lib=$(OBJDIR) --build-temp=$(OBJDIR)
 
 .NOTPARALLEL: $(LIB_NAME).py $(LIB_NAME)_wrap.cpp

@@ -6,16 +6,15 @@ import os
 import sys
 
 sys.path.append('..')
-from build_ext import variables
 from build_ext import update_opts
 
 from distutils.core import setup, Extension
 
 macros = [('PACKAGE', '"grasslibs"')]
-inc_dirs = [os.path.join(os.path.normpath(os.environ['ARCH_DISTDIR']), 'include'),
-	    os.path.join(os.path.normpath(os.environ['GISBASE']), 'include')]
-lib_dirs = [os.path.join(os.path.normpath(os.environ['ARCH_DISTDIR']), 'lib'),
-	    os.path.join(os.path.normpath(os.environ['GISBASE']), 'lib')]
+inc_dirs = [os.path.join(os.path.normpath(os.getenv('ARCH_DISTDIR')), 'include'),
+	    os.path.join(os.path.normpath(os.getenv('GISBASE')), 'include')]
+lib_dirs = [os.path.join(os.path.normpath(os.getenv('ARCH_DISTDIR')), 'lib'),
+	    os.path.join(os.path.normpath(os.getenv('GISBASE')), 'lib')]
 libs = ['grass_gis',
         'grass_nviz',
         'grass_ogsf',
@@ -28,12 +27,11 @@ for flag in ['GDALCFLAGS',
              'OPENGLINC',
              'OPENGLLIB',
              'OPENGLULIB']:
-    update_opts(flag, macros, inc_dirs, lib_dirs, libs, extras)
+    update_opts(os.getenv(flag), macros, inc_dirs, lib_dirs, libs, extras)
 if sys.platform != 'darwin':
-    update_opts('WXWIDGETSLIB', macros, inc_dirs, lib_dirs, libs, extras)
-if variables['OPENGL_X11'] == '1':
-    for flag in ['XCFLAGS']:
-        update_opts(flag, macros, inc_dirs, lib_dirs, libs, extras)
+    update_opts(os.getenv('WXWIDGETSLIB'), macros, inc_dirs, lib_dirs, libs, extras)
+if os.getenv('OPENGL_X11') == '1':
+    update_opts(os.getenv('XCFLAGS'), macros, inc_dirs, lib_dirs, libs, extras)
 
 setup(
     ext_modules= [
