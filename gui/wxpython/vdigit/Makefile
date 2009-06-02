@@ -33,7 +33,13 @@ $(LIB_NAME).i: digit.i dig_types.i pseudodc.i driver.h digit.h
 $(LIB_NAME).py: $(SHLIB)
 
 $(SHLIB): $(LIB_NAME).i
-	ARCH_DISTDIR=$(ARCH_DISTDIR) GISBASE=$(GISBASE) \
+	GISBASE="$(GISBASE)" \
+	ARCH_DISTDIR="$(ARCH_DISTDIR)" \
+	GDALCFLAGS="$(GDALCFLAGS)" \
+	GDALLIBS="$(GDALLIBS)" \
+	GEOSCFLAGS="$(GEOSCFLAGS)" \
+	WXWIDGETSCXXFLAGS="$(WXWIDGETSCXXFLAGS)" \
+	WXWIDGETSLIB="$(WXWIDGETSLIB)" \
 	python setup.py build_ext --swig=$(SWIG) --swig-opts=-c++ --build-lib=$(OBJDIR) --build-temp=$(OBJDIR)
 
 .NOTPARALLEL: $(LIB_NAME).py $(LIB_NAME)_wrap.cpp
