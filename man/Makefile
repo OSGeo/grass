@@ -8,4 +8,6 @@ default: indices
 	$(MAKE) $(MANPAGES)
 
 indices:
-	cd ../tools && sh build_html_index.sh
+	cd ../tools && \
+	GISBASE="$(GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
+	sh build_html_index.sh
