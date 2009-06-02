@@ -5,7 +5,7 @@
  * AUTHOR(S):    Michael Shapiro, CERL (original contributor)
  *               Markus Neteler <neteler itc.it>, Brad Douglas <rez touchofmadness.com>,
  *               Huidae Cho <grass4u gmail.com>, Glynn Clements <glynn gclements.plus.com>,
- *               Hamish Bowman <hamish_nospam yahoo.com>,
+ *               Hamish Bowman <hamish_b yahoo.com>,
  *               Jachym Cepicky <jachym les-ejk.cz>, Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      calculates the area present in each of the categories of
  *               user-selected raster map layer(s)
@@ -20,9 +20,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-
 #include <grass/glocale.h>
-
 #include "global.h"
 
 char *no_data_str;
@@ -311,10 +309,17 @@ int main(int argc, char *argv[])
 				  name);
 		G_get_fp_range_min_max(&fp_range, &DMIN[nfiles],
 				       &DMAX[nfiles]);
-		G_quant_add_rule(&q, DMIN[nfiles], DMAX[nfiles], 1, nsteps);
+		G_debug(3, "file %2d: dmin=%f  dmax=%f", nfiles, DMIN[nfiles], 
+			DMAX[nfiles]);
+
+		G_quant_add_rule(&q, DMIN[nfiles], DMAX[nfiles], 1, nsteps+1);
+
 		/* set the quant rules for reading the map */
 		G_set_quant_rules(fd[nfiles], &q);
 		G_quant_get_limits(&q, &dmin, &dmax, &min, &max);
+		G_debug(2, "overall: dmin=%f  dmax=%f,  qmin=%d  qmax=%d",
+			dmin, dmax, min, max);
+
 		G_quant_free(&q);
 	    }
 	    else {		/* cats ranges */
@@ -336,6 +341,7 @@ int main(int argc, char *argv[])
 	}
 	else if (NULL_CELL < max + 1)
 	    NULL_CELL = max + 1;
+
 	nfiles++;
     }
 

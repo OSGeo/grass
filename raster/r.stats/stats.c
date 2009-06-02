@@ -87,15 +87,37 @@ struct Node *NewNode(double area)
     return node;
 }
 
-int reset_null_vals(CELL * cell, int ncols)
+
+/* Essentially, G_quant_add_rule() treats the ranges as half-open,
+ *  i.e. the values range from low (inclusive) to high (exclusive).
+ *  While half-open ranges are a common concept (e.g. floor() behaves
+ *  the same way), the range of a GRASS raster is closed, i.e. both the
+ *  low and high values are inclusive.
+ *  Therefore the quantized max FP cell gets put in the nsteps+1'th bin
+ *  and we need to manually place it back in the previous bin. */
+void fix_max_fp_val(CELL *cell, int ncols)
+{
+    while (ncols-- > 0) {
+	if (cell[ncols] > nsteps)
+	    cell[ncols] = nsteps;
+	    /* { G_debug(5, ". resetting %d to %d\n", cell[ncols], nsteps); } */
+    }
+    return;
+}
+
+
+/* we can't compute hash on null values, so we change all
+ *  nulls to max+1, set NULL_CELL to max+1, and later compare
+ *  with NULL_CELL to chack for nulls */
+void reset_null_vals(CELL *cell, int ncols)
 {
     while (ncols-- > 0) {
 	if (G_is_c_null_value(&cell[ncols]))
 	    cell[ncols] = NULL_CELL;
     }
-
-    return 0;
+    return;
 }
+
 
 int update_cell_stats(CELL ** cell, int ncols, double area)
 {
@@ -108,13 +130,16 @@ int update_cell_stats(CELL ** cell, int ncols, double area)
 	/* copy this cell to an array, compute hash */
 
 	hash = values[0] = cell[0][ncols];
+
 	for (i = 1; i < nfiles; i++)
 	    hash = hash * HASHMOD + (values[i] = cell[i][ncols]);
+
 	if (hash < 0)
 	    hash = -hash;
-	hash %= HASHSIZE;
-	/* look it up and update/insert */
 
+	hash %= HASHSIZE;
+
+	/* look it up and update/insert */
 	if ((q = hashtable[hash]) == NULL) {
 	    hashtable[hash] = NewNode(area);
 	}
@@ -132,6 +157,7 @@ int update_cell_stats(CELL ** cell, int ncols, double area)
 			break;
 		    }
 		}
+
 		if (i == nfiles) {	/* match */
 		    q->count++;
 		    q->area += area;
@@ -192,8 +218,7 @@ int print_node_count(void)
     return 0;
 }
 
-int
-print_cell_stats(char *fmt, int with_percents, int with_counts,
+int print_cell_stats(char *fmt, int with_percents, int with_counts,
 		 int with_areas, int with_labels, char *fs)
 {
     int i, n, nulls_found;

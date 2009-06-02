@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <grass/glocale.h>
 #include "global.h"
 
 int cell_stats(int fd[], int with_percents, int with_counts,
@@ -47,11 +48,17 @@ int cell_stats(int fd[], int with_percents, int with_counts,
 
 	for (i = 0; i < nfiles; i++) {
 	    if (G_get_c_raster_row(fd[i], cell[i], row) < 0)
-		exit(1);
-	    reset_null_vals(cell[i], ncols);
+		G_fatal_error(_("Unable to read raster map <map %d of %d> row %d"),
+				i+1, nfiles, row);
+
+	    /* include max FP value in nsteps'th bin */
+	    if(is_fp[i])
+		fix_max_fp_val(cell[i], ncols);
+
 	    /* we can't compute hash on null values, so we change all
-	       nulls to max+1, set NULL_CELL to max+1, and later compare with 
-	       NULL_CELL  to chack for nulls */
+	       nulls to max+1, set NULL_CELL to max+1, and later compare
+	       with NULL_CELL to chack for nulls */
+	    reset_null_vals(cell[i], ncols);
 	}
 
 	update_cell_stats(cell, ncols, unit_area);
