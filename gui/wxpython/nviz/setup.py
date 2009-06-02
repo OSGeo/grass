@@ -12,12 +12,10 @@ from build_ext import update_opts
 from distutils.core import setup, Extension
 
 macros = [('PACKAGE', '"grasslibs"')]
-inc_dirs = [os.path.join(variables['GRASS_HOME'],
-                         'dist.' + variables['ARCH'],
-                         'include')]
-lib_dirs = [os.path.join(variables['GRASS_HOME'],
-                         'dist.' + variables['ARCH'],
-                         'lib')]
+inc_dirs = [os.path.join(os.path.normpath(os.environ['ARCH_DISTDIR']), 'include'),
+	    os.path.join(os.path.normpath(os.environ['GISBASE']), 'include')]
+lib_dirs = [os.path.join(os.path.normpath(os.environ['ARCH_DISTDIR']), 'lib'),
+	    os.path.join(os.path.normpath(os.environ['GISBASE']), 'lib')]
 libs = ['grass_gis',
         'grass_nviz',
         'grass_ogsf',

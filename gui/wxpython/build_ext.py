@@ -49,9 +49,9 @@ def update_opts(flag, macros, inc_dirs, lib_dirs, libs, extras):
             fw_next = True
 
 try:
-    Platform_make = open(os.path.join('..', '..', '..',
+    Platform_make = open(os.path.join(os.path.normpath(os.getenv('MODULE_TOPDIR')),
                                       'include', 'Make', 'Platform.make'))
-    Grass_make = open(os.path.join('..', '..', '..',
+    Grass_make = open(os.path.join(os.path.normpath(os.getenv('MODULE_TOPDIR')),
                                    'include', 'Make', 'Grass.make'))
 except IOError, e:
     print 'Unable to compile wxGUI vdigit extension.\n\n', e

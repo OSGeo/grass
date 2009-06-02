@@ -14,5 +14,5 @@ default: cmd $(CAPFILE)
 
 $(CAPFILE): $(BIN)/$(PGM)$(EXE)
 	GISRC=junk GISBASE=$(RUN_GISBASE) \
-	$(LD_LIBRARY_PATH_VAR)="$(ARCH_LIBDIR):$($(LD_LIBRARY_PATH_VAR))" \
-	$< ; true
+	$(LD_LIBRARY_PATH_VAR)="$(ARCH_LIBDIR):$(BASE_LIBDIR):$($(LD_LIBRARY_PATH_VAR))" \
+	$< -s > $@

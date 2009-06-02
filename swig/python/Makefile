@@ -83,25 +83,25 @@ numptr:
 
 .SECONDARY: $(patsubst %,_%.so,$(MODULES))
 
-date_wrap.c: $(ARCH_INCDIR)/datetime.h
-date_wrap.c: $(ARCH_INCDIR)/P_datetime.h
-grass_wrap.c: $(ARCH_INCDIR)/gis.h
-grass_wrap.c: $(ARCH_INCDIR)/gisdefs.h
-math_wrap.c: $(ARCH_INCDIR)/gmath.h
-proj_wrap.c: $(ARCH_INCDIR)/gprojects.h
-imagery_wrap.c: $(ARCH_INCDIR)/imagedefs.h
-imagery_wrap.c: $(ARCH_INCDIR)/imagery.h
-vector_wrap.c: $(ARCH_INCDIR)/Vect.h
-vector_wrap.c: $(ARCH_INCDIR)/vect/dig_defines.h
-vector_wrap.c: $(ARCH_INCDIR)/vect/dig_structs.h
-raster_wrap.c: $(ARCH_INCDIR)/raster.h
-display_wrap.c: $(ARCH_INCDIR)/display.h
-stats_wrap.c: $(ARCH_INCDIR)/stats.h
-dbmi_wrap.c: $(ARCH_INCDIR)/dbmi.h
-dbmi_wrap.c: $(ARCH_INCDIR)/proto_dbmi.h
-g3d_wrap.c: $(ARCH_INCDIR)/G3d.h
-arraystats_wrap.c: $(ARCH_INCDIR)/arraystats.h
-cluster_wrap.c: $(ARCH_INCDIR)/cluster.h
-trans_wrap.c: $(ARCH_INCDIR)/transform.h
-vedit_wrap.c: $(ARCH_INCDIR)/vedit.h
+date_wrap.c: $(GISBASE)/include/grass/datetime.h
+date_wrap.c: $(GISBASE)/include/grass/P_datetime.h
+grass_wrap.c: $(GISBASE)/include/grass/gis.h
+grass_wrap.c: $(GISBASE)/include/grass/gisdefs.h
+math_wrap.c: $(GISBASE)/include/grass/gmath.h
+proj_wrap.c: $(GISBASE)/include/grass/gprojects.h
+imagery_wrap.c: $(GISBASE)/include/grass/imagedefs.h
+imagery_wrap.c: $(GISBASE)/include/grass/imagery.h
+vector_wrap.c: $(GISBASE)/include/grass/Vect.h
+vector_wrap.c: $(GISBASE)/include/grass/vect/dig_defines.h
+vector_wrap.c: $(GISBASE)/include/grass/vect/dig_structs.h
+raster_wrap.c: $(GISBASE)/include/grass/raster.h
+display_wrap.c: $(GISBASE)/include/grass/display.h
+stats_wrap.c: $(GISBASE)/include/grass/stats.h
+dbmi_wrap.c: $(GISBASE)/include/grass/dbmi.h
+dbmi_wrap.c: $(GISBASE)/include/grass/proto_dbmi.h
+g3d_wrap.c: $(GISBASE)/include/grass/G3d.h
+arraystats_wrap.c: $(GISBASE)/include/grass/arraystats.h
+cluster_wrap.c: $(GISBASE)/include/grass/cluster.h
+trans_wrap.c: $(GISBASE)/include/grass/transform.h
+vedit_wrap.c: $(GISBASE)/include/grass/vedit.h
 utils_wrap.c:

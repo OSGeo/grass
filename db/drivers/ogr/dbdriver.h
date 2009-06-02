@@ -2,7 +2,7 @@
 #ifndef DBDRIVER_H
 #define	DBDRIVER_H
 
-#include "dbstubs.h"
+#include <grass/dbstubs.h>
 
 int db__driver_close_cursor();
 int db__driver_open_database();

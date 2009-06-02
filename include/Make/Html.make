@@ -10,21 +10,21 @@ else
 htmldesc = \
 	GISRC=$(RUN_GISRC) \
 	GISBASE=$(RUN_GISBASE) \
-	PATH="$(BIN):$$PATH" \
+	PATH="$(GISBASE)/bin:$$PATH" \
 	PYTHONPATH="$(call mkpath,$(GISBASE)/etc/python,$$PYTHONPATH)" \
-	$(LD_LIBRARY_PATH_VAR)="$(BIN):$(ARCH_LIBDIR):$($(LD_LIBRARY_PATH_VAR))" \
+	$(LD_LIBRARY_PATH_VAR)="$(BIN):$(ARCH_LIBDIR):$(BASE_LIBDIR):$($(LD_LIBRARY_PATH_VAR))" \
 	LC_ALL=C \
 	$(1) --html-description < /dev/null | grep -v '</body>\|</html>' > $(2)
 
 ifneq ($(MINGW),)
-mkpath = $(shell PATH="$(BIN):$(ARCH_LIBDIR):$$PATH" GISRC=$(RUN_GISRC) $(BIN)/g.dirseps$(EXE) -h $(1));$(2)
+mkpath = $(shell PATH="$(GISBASE)/bin:$(ARCH_LIBDIR):$$PATH" GISRC=$(RUN_GISRC) $(BIN)/g.dirseps$(EXE) -h $(1));$(2)
 else
 mkpath = $(1):$(2)
 endif
 
 $(HTMLDIR)/%.html: %.html %.tmp.html $(HTMLSRC)
 	-test -d $(HTMLDIR) || $(MKDIR) $(HTMLDIR)
-	$(MODULE_TOPDIR)/tools/mkhtml.sh $* > $@
+	$(GISBASE)/tools/mkhtml.sh $* > $@
 	-for file in  *.png *.jpg ; do \
 		head -n 1 $$file | grep '^\#!' > /dev/null ; \
 		if [ $$? -ne 0 ] ; then \
