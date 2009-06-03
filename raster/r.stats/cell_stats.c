@@ -48,7 +48,7 @@ int cell_stats(int fd[], int with_percents, int with_counts,
 
 	for (i = 0; i < nfiles; i++) {
 	    if (G_get_c_raster_row(fd[i], cell[i], row) < 0)
-		G_fatal_error(_("Unable to read raster map <map %d of %d> row %d"),
+		G_fatal_error(_("Unable to read raster <map %d of %d> row %d"),
 				i+1, nfiles, row);
 
 	    /* include max FP value in nsteps'th bin */
