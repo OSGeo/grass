@@ -48,7 +48,6 @@ OBJDIR		= OBJ.$(ARCH)
 LIB_RUNTIME_DIR = $(GISBASE)/lib
 
 RUN_GISRC       = $(GISBASE)/demolocation/.grassrc$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR)
-RUN_GISBASE     = $(GISBASE)
 
 #########################################################################
 # these define the various directories which contain GRASS programs
