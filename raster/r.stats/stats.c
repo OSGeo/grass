@@ -99,8 +99,8 @@ void fix_max_fp_val(CELL *cell, int ncols)
 {
     while (ncols-- > 0) {
 	if (cell[ncols] > nsteps)
-	    cell[ncols] = nsteps;
-	    /* { G_debug(5, ". resetting %d to %d\n", cell[ncols], nsteps); } */
+	    cell[ncols] = (CELL)nsteps;
+	    /* { G_debug(5, ". resetting %d to %d", cell[ncols], nsteps); } */
     }
     return;
 }
