@@ -85,6 +85,13 @@ void G_format_resolution(double res, char *buf, int projection)
 
 static void format_double(double value, char *buf)
 {
-    sprintf(buf, "%.8f", value);
+    /* if the programmer has lied to G_format_resolution() about the
+        projection type in order to get FP values for lat/lon coords,
+        "%.8f" is not enough to preserve fidelity once converted
+        back into D:M:S, which leads to rounding errors. */
+    if (G_projection() == PROJECTION_LL)
+	sprintf(buf, "%.15g", value);
+    else
+	sprintf(buf, "%.8f", value);
     G_trim_decimal(buf);
 }
