@@ -3,7 +3,7 @@
  * 
  * \brief DBMI Library (client) - open/close driver/database connection
  *
- * (C) 1999-2008 by the GRASS Development Team
+ * (C) 1999-2009 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public
  * License (>=v2). Read the file COPYING that comes with GRASS
@@ -57,12 +57,13 @@ dbDriver *db_start_driver_open_database(const char *drvname,
 
   \param driver db driver
 
-  \return DB_OK
+  \return DB_OK or DB_FAILED
 */
 int db_close_database_shutdown_driver(dbDriver * driver)
 {
-    db_close_database(driver);
-    db_shutdown_driver(driver);
+    int status = db_close_database(driver);
+    if (db_shutdown_driver(driver) != 0)
+        status = DB_FAILED;
 
-    return DB_OK;
+    return status;
 }
