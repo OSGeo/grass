@@ -1,17 +1,14 @@
-
-/**
- * \file system.c
+/*!
+ * \file gis/system.c
  *
  * \brief GIS Library - Command execution functions.
  *
- * (C) 2001-2008 by the GRASS Development Team
+ * (C) 2001-2009 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author GRASS GIS Development Team
- *
- * \date 1999-2008
+ * \author Original author CERL
  */
 
 #include <grass/config.h>
@@ -27,7 +24,7 @@
 #include <grass/glocale.h>
 
 
-/**
+/*!
  * \brief Run a shell level command.
  *
  * This is essentially the UNIX <i>system()</i> call, except for the 
@@ -43,11 +40,11 @@
  * parent and the command being run, set them yourself and use
  * the UNIX <i>system()</i> call instead.
  *
- * \param[in] command
+ * \param command
+ *
  * \return -1 on error
  * \return status on success
  */
-
 int G_system(const char *command)
 {
     int status;
@@ -82,7 +79,7 @@ int G_system(const char *command)
     }
 
     if (pid < 0) {
-	G_warning(_("Can not create a new process!"));
+	G_warning(_("Unable to create a new process!"));
 	status = -1;
     }
     else {

@@ -1,34 +1,30 @@
-/*
- ****************************************************************
- * char *
- * G_home ()
+/*!
+ * \file gis/home.c
  *
- *   returns char pointer to home directory for user
- *   dies if can't determine
+ * \brief GIS Library - Get user's home directory.
  *
- * char *
- * G__home()
+ * (C) 2001-2009 by the GRASS Development Team
  *
- *   returns char pointer to home directory for user
- *   NULL if can't determine
+ * This program is free software under the GNU General Public License
+ * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- ***************************************************************/
+ * \author Original author CERL
+ */
+
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-
 /*!
- * \brief user's home directory
+ * \brief Get user's home directory
  *
- * Returns a pointer to a string
- * which is the full path name of the user's home directory.
+ * Returns a pointer to a string which is the full path name of the
+ * user's home directory.
  *
- *  \param ~
- *  \return char * 
+ * \return pointer to string
+ * \return NULL on error
  */
-
 const char *G_home(void)
 {
     const char *home = G__home();
@@ -36,10 +32,20 @@ const char *G_home(void)
     if (home)
 	return home;
 
-    G_fatal_error(_("unable to determine user's home directory"));
+    G_fatal_error(_("Unable to determine user's home directory"));
+    
     return NULL;
 }
 
+/*!
+ * \brief Get user's home directory
+ *
+ * Returns a pointer to a string which is the full path name of the
+ * user's home directory.
+ *
+ * \return pointer to string
+ * \return NULL on error
+ */
 const char *G__home(void)
 {
     static int initialized;

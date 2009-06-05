@@ -1,9 +1,9 @@
 /*!
-   \file find_file.c
+   \file gis/find_file.c
 
-   \brief GIS library - find GRASS data base files
+   \brief GIS library - Find GRASS data base files
 
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2009 by the GRASS Development Team
 
    This program is free software under the 
    GNU General Public License (>=v2). 
@@ -133,70 +133,94 @@ static const char *find_file1(
 }
 
 /*!
- * \brief searches for a file from the mapset search list
- *      or in a specified mapset.
- *      returns the mapset name where the file was found.
+ * \brief Searches for a file from the mapset search list or in a
+ * specified mapset.
  *
- *  notes:
+ * Returns the mapset name where the file was found.
  *
- *      If the user specifies a fully qualified element (<i>name@mapset</i>)
- *      which exists, then <i>G_find_file()</i> modifies <b>name</b>
- *      by removing the "@<i>mapset</i>" part.
+ * If the user specifies a fully qualified element (<i>name@mapset</i>)
+ * which exists, then G_find_file() modifies <i>name</i>
+ * by removing the "@<i>mapset</i>" part.
  *
- *      Rejects all names that begin with "."
+ * Rejects all names that begin with "."
  *
- *      If <b>name</b> is of the form nnn in ppp then only mapset ppp
- *      is searched.
+ * If <i>name</i> is of the form nnn in ppp then only mapset ppp
+ * is searched.
  *
- *  \param const char *element   database element (eg, "cell", "cellhd", "colr", etc)
- *  \param char *name            file name to look for
- *  \param const char *mapset    mapset to search. if mapset is ""
- *                               will search in mapset search list
+ * \param element database element (eg, "cell", "cellhd", "colr", etc)
+ * \param name    file name to look for
+ * \param mapset  mapset to search. if mapset is "" will search in mapset search list
  *
- *  \return char *  pointer to a string with name of mapset
- *              where file was found, or NULL if not found
+ * \return pointer to a string with name of mapset where file was
+ * found, or NULL if not found
  */
-
 const char *G_find_file(const char *element, char *name, const char *mapset)
 {
     return find_file1(0, NULL, element, name, mapset);
 }
 
+/*!
+ * \brief Searches for a file from the mapset search list or in a
+ * specified mapset.
+ *
+ * Returns the mapset name where the file was found.
+ *
+ * \param dir     file directory
+ * \param element database element (eg, "cell", "cellhd", "colr", etc)
+ * \param name    file name to look for
+ * \param mapset  mapset to search. if mapset is "" will search in mapset search list
+ *
+ * \return pointer to a string with name of mapset where file was
+ * found, or NULL if not found
+ */
 const char *G_find_file_misc(const char *dir,
-		       const char *element, char *name, const char *mapset)
+			     const char *element, char *name, const char *mapset)
 {
     return find_file1(1, dir, element, name, mapset);
 }
 
-
 /*!
- * \brief searches for a file from the mapset search list
- *      or in a specified mapset. (look but don't touch)
- *      returns the mapset name where the file was found.
+ * \brief Searches for a file from the mapset search list or in a
+ * specified mapset. (look but don't touch)
  *
- *      Exactly the same as G_find_file() except that if <b>name</b> is in
- *      the form "<i>name@mapset</i>", and is found, G_find_file2() will not
- *      alter <b>name</b> by removing the "@<i>mapset</i>" part.
+ * Returns the mapset name where the file was found.
  *
- *  note:
- *      rejects all names that begin with "."
+ * Exactly the same as G_find_file() except that if <i>name</i> is in
+ * the form "<i>name@mapset</i>", and is found, G_find_file2() will
+ * not alter <i>name</i> by removing the "@<i>mapset</i>" part.
  *
- *  \param char *element    database element (eg, "cell", "cellhd", "colr", etc)
- *  \param char *name       file name to look for
- *  \param char *mapset     mapset to search. if mapset is ""
- *                         will search in mapset search list
+ * Rejects all names that begin with "."
  *
- *  \return char *  pointer to a string with name of mapset
- *              where file was found, or NULL if not found
+ * \param element    database element (eg, "cell", "cellhd", "colr", etc)
+ * \param name       file name to look for
+ * \param mapset     mapset to search. if mapset is "" will search in mapset search list
+ *
+ * \return pointer to a string with name of mapset where file was
+ * found, or NULL if not found
  */
 const char *G_find_file2(const char *element, const char *name, const char *mapset)
 {
     return find_file(0, NULL, element, name, mapset);
 }
 
+/*!
+ * \brief Searches for a file from the mapset search list or in a
+ * specified mapset. (look but don't touch)
+ *
+ * Returns the mapset name where the file was found.
+ *
+ *
+ * \param dir        file directory
+ * \param element    database element (eg, "cell", "cellhd", "colr", etc)
+ * \param name       file name to look for
+ * \param mapset     mapset to search. if mapset is "" will search in mapset search list
+ *
+ * \return pointer to a string with name of mapset where file was
+ * found, or NULL if not found
+ */
 const char *G_find_file2_misc(const char *dir,
-			const char *element,
-			const char *name, const char *mapset)
+			      const char *element,
+			      const char *name, const char *mapset)
 {
     return find_file(1, dir, element, name, mapset);
 }

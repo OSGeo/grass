@@ -1,5 +1,5 @@
 /*
- * \file bres_line.c
+ * \file gis/bres_line.c
  *
  * \brief GIS Library - Bresenham line routines.
  *
@@ -8,33 +8,25 @@
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author GRASS GIS Development Team
- *
- * \date 1999-2008
+ * \author Original author CERL
  */
 
 #include <grass/gis.h>
 
-
-/**
+/*!
  * \brief Bresenham line algorithm.
  *
- * Draws a line from <b>x1,y1</b> to <b>x2,y2</b> using Bresenham's 
+ * Draws a line from <i>x1,y1</i> to <i>x2,y2</i> using Bresenham's 
  * algorithm. A routine to plot points must be provided, as is defined 
  * as: point(x, y) plot a point at x,y.
  *
- * This routine does not require a previous call to 
- * <i>G_setup_plot()</i> to function correctly, and is independent of 
- * all following routines.
+ * This routine does not require a previous call to G_setup_plot() to
+ * function correctly, and is independent of all following routines.
  *
- * \param[in] x0
- * \param[in] y0
- * \param[in] x1
- * \param[in] y1
- * \param[in] point pointer to point plotting function
- * \return
+ * \param x0,y0 first point
+ * \param x1,y1 end point
+ * \param point pointer to point plotting function
  */
-
 void G_bresenham_line(int x0, int y0, int x1, int y1, int (*point) (int, int))
 {
     int dx, dy;

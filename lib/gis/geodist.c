@@ -1,32 +1,28 @@
-
-/**
- * \file geodist.c
+/*!
+ * \file gis/geodist.c
  *
  * \brief GIS Library - Geodesic distance routines.
  *
  * Distance from point to point along a geodesic code from Paul
- * D. Thomas, 1970<br> "Spheroidal Geodesics, Reference Systems, and
- * Local Geometry"<br> U.S. Naval Oceanographic Office, p. 162<br>
- * Engineering Library 526.3 T36s
+ * D. Thomas, 1970 "Spheroidal Geodesics, Reference Systems, and Local
+ * Geometry" U.S. Naval Oceanographic Office, p. 162 Engineering
+ * Library 526.3 T36s
  * http://stinet.dtic.mil/oai/oai?&verb=getRecord&metadataPrefix=html&identifier=AD0703541
  *
  * <b>WARNING:</b> this code is preliminary and may be changed,
  * including calling sequences to any of the functions defined here.
  *
- * (C) 2001-2008 by the GRASS Development Team
+ * (C) 2001-2009 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author GRASS GIS Development Team
- *
- * \date 1999-2008
+ * \author Original author CERL
  */
 
 #include <math.h>
 #include <grass/gis.h>
 #include "pi.h"
-
 
 static struct state {
     double boa;
@@ -38,18 +34,17 @@ static struct state {
 
 static struct state *st = &state;
 
-/**
+/*!
  * \brief Begin geodesic distance.
  *
  * Initializes the distance calculations for the ellipsoid with
- * semi-major axis <b>a</b> (in meters) and ellipsoid eccentricity squared
- * <b>e2</b>. It is used only for the latitude-longitude projection.
- * <br>
+ * semi-major axis <i>a</i> (in meters) and ellipsoid eccentricity squared
+ * <i>e2</i>. It is used only for the latitude-longitude projection.
+ *
  * <b>Note:</b> Must be called once to establish the ellipsoid.
  *
- * \param[in] a semi-major axis in meters
- * \param[in] e2 ellipsoid eccentricity
- * \return
+ * \param a semi-major axis in meters
+ * \param e2 ellipsoid eccentricity
  */
 
 void G_begin_geodesic_distance(double a, double e2)
@@ -60,16 +55,14 @@ void G_begin_geodesic_distance(double a, double e2)
     st->ff64 = st->f * st->f / 64;
 }
 
-
-
-/**
+/*!
  * \brief Sets geodesic distance lat1.
  *
  * Set the first latitude.
  *
  * <b>Note:</b> Must be called first.
  *
- * \param[in] lat1 first latitude
+ * \param lat1 first latitude
  * \return
  */
 
@@ -78,18 +71,15 @@ void G_set_geodesic_distance_lat1(double lat1)
     st->t1r = atan(st->boa * tan(Radians(lat1)));
 }
 
-
-/**
+/*!
  * \brief Sets geodesic distance lat2.
  *
  * Set the second latitude.
  *
  * <b>Note:</b> Must be called second.
  *
- * \param[in] lat2 second latitidue
- * \return
+ * \param lat2 second latitidue
  */
-
 void G_set_geodesic_distance_lat2(double lat2)
 {
     double stm, ctm, sdtm, cdtm;
@@ -115,20 +105,19 @@ void G_set_geodesic_distance_lat2(double lat2)
     st->t4 = cdtm * cdtm - stm * stm;
 }
 
-
-/**
+/*!
  * \brief Calculates geodesic distance.
  *
- * Calculates the geodesic distance from <b>lon1,lat1</b> to 
- * <b>lon2,lat2</b> in meters where <b>lat1</b> was the latitude passed 
- * to <i>G_set_geodesic_distance_latl()</i> and <b>lat2</b> was the 
- * latitude passed to <i>G_set_geodesic_distance_lat2()</i>.
+ * Calculates the geodesic distance from <i>lon1,lat1</i> to
+ * <i>lon2,lat2</i> in meters where <i>lat1</i> was the latitude
+ * passed to G_set_geodesic_distance_latl() and <i>lat2</i> was the
+ * latitude passed to G_set_geodesic_distance_lat2().
  *
- * \param[in] lon1 first longitude
- * \param[in] lon2 second longitude
+ * \param lon1 first longitude
+ * \param lon2 second longitude
+ *
  * \return double distance in meters
  */
-
 double G_geodesic_distance_lon_to_lon(double lon1, double lon2)
 {
     double a, cd, d, e,		/*dl, */
@@ -190,20 +179,20 @@ double G_geodesic_distance_lon_to_lon(double lon1, double lon2)
 					+ y * (-2 * d + e * y) + d * x * y));
 }
 
-
-/**
+/*!
  * \brief Calculates geodesic distance.
  *
- * Calculates the geodesic distance from <b>lon1,lat1</b> to 
- * <b>lon2,lat2</b> in meters.
- * <br>
- * <b>Note:</b> The calculation of the geodesic distance is fairly costly.
+ * Calculates the geodesic distance from <i>lon1,lat1</i> to 
+ * <i>lon2,lat2</i> in meters.
+ * 
+ * <b>Note:</b> The calculation of the geodesic distance is fairly
+ * costly.
  *
- * \param[in] lon1,lat1 longitude,latitude of first point
- * \param[in] lon2,lat2 longitude,latitude of second point
+ * \param lon1,lat1 longitude,latitude of first point
+ * \param lon2,lat2 longitude,latitude of second point
+ *
  * \return distance in meters
  */
-
 double G_geodesic_distance(double lon1, double lat1, double lon2, double lat2)
 {
     G_set_geodesic_distance_lat1(lat1);

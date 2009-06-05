@@ -1,12 +1,12 @@
-
-/**
- * \file parser.c
+/*!
+ * \file gis/parser.c
  *
  * \brief GIS Library - Argument parsing functions.
  *
  * Parses the command line provided through argc and argv.  Example:
  * Assume the previous calls:
  *
+ * \code
  *  opt1 = G_define_option() ;
  *  opt1->key        = "map",
  *  opt1->type       = TYPE_STRING,
@@ -29,28 +29,37 @@
  *  opt3->answer     = "12345.67",
  *  opt3->options    = "0-99999",
  *  opt3->description= "Number to test parser" ;
+ * \endcode
  *
  * G_parser() will respond to the following command lines as described:
  *
+ * \verbatim
  * command      (No command line arguments)
+ * \endverbatim
  *    Parser enters interactive mode.
  *
+ * \verbatim
  * command map=map.name
+ * \endverbatim
  *    Parser will accept this line.  Map will be set to "map.name", the
  *    'a' and 'b' flags will remain off and the num option will be set
  *    to the default of 5.
  *
+ * \verbatim
  * command -ab map=map.name num=9
  * command -a -b map=map.name num=9
  * command -ab map.name num=9
  * command map.name num=9 -ab
  * command num=9 -a map=map.name -b
+ * \endverbatim
  *    These are all treated as acceptable and identical. Both flags are
  *    set to on, the map option is "map.name" and the num option is "9".
  *    Note that the "map=" may be omitted from the command line if it
  *    is part of the first option (flags do not count).
  *
+ * \verbatim
  * command num=12
+ * \endverbatim
  *    This command line is in error in two ways.  The user will be told 
  *    that the "map" option is required and also that the number 12 is
  *    out of range.  The acceptable range (or list) will be printed.
@@ -60,10 +69,7 @@
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author Radim Blazek
- *
- * \date 2003-2009
- *
+ * \author Original author CERL
  */
 
 #include <grass/config.h>
@@ -145,17 +151,15 @@ static void G_usage_xml(void);
 static void G_usage_html(void);
 static void G_script(void);
 
-
-/**
+/*!
  * \brief Disables the ability of the parser to operate interactively.
  *
- * When a user calls a command with no arguments on the command line, 
- * the parser will enter its own standardized interactive session in 
- * which all flags and options  are presented to the user for input. A 
- * call to <i>G_disable_interactive()</i> disables the parser's 
- * interactive prompting.
+ * When a user calls a command with no arguments on the command line,
+ * the parser will enter its own standardized interactive session in
+ * which all flags and options are presented to the user for input. A
+ * call to G_disable_interactive() disables the parser's interactive
+ * prompting.
  *
- * \return always returns 0
  */
 
 void G_disable_interactive(void)
@@ -163,20 +167,18 @@ void G_disable_interactive(void)
     st->no_interactive = 1;
 }
 
-
-/**
+/*!
  * \brief Initializes a Flag struct.
  *
- * Allocates memory for the Flag structure and returns a pointer to this 
- * memory (of <i>type struct Flag *</i>).<br>
+ * Allocates memory for the Flag structure and returns a pointer to
+ * this memory.
  *
- * Flags are always represented by single letters.  A user "turns them on"
- * at the command line using a minus sign followed by the character
- * representing the flag.
+ * Flags are always represented by single letters.  A user "turns them
+ * on" at the command line using a minus sign followed by the
+ * character representing the flag.
  *
- * \return Flag * Pointer to a Flag struct
+ * \return Pointer to a Flag struct
  */
-
 struct Flag *G_define_flag(void)
 {
     struct Flag *flag;
@@ -216,23 +218,21 @@ struct Flag *G_define_flag(void)
     return (flag);
 }
 
-
-/**
+/*!
  * \brief Initializes an Option struct.
  *
  * Allocates memory for the Option structure and returns a pointer to
- * this memory (of <i>type struct Option *</i>).<br>
+ * this memory.
  *
  * Options are provided by user on command line using the standard
- * format: <i>key=value</i>. Options identified as REQUIRED must be 
- * specified by user on command line. The option string can either 
- * specify a range of values (e.g. "10-100") or a list of acceptable 
- * values (e.g. "red,orange,yellow").  Unless the option string is NULL, 
- * user provided input will be evaluated agaist this string.
+ * format: <i>key=value</i>. Options identified as REQUIRED must be
+ * specified by user on command line. The option string can either
+ * specify a range of values (e.g. "10-100") or a list of acceptable
+ * values (e.g. "red,orange,yellow").  Unless the option string is
+ * NULL, user provided input will be evaluated agaist this string.
  *
- * \return Option * Pointer to an Option struct
+ * \return pointer to an Option struct
  */
-
 struct Option *G_define_option(void)
 {
     struct Option *opt;
@@ -286,14 +286,13 @@ struct Option *G_define_option(void)
     return (opt);
 }
 
-
-/**
+/*!
  * \brief Create standardised Option structure.
  *
- * This function will create a standardised Option structure
- * defined by parameter opt. A list of valid parameters can be found in gis.h.
- * It allocates memory for the Option structure and returns a pointer to
- * this memory (of <i>type struct Option *</i>).<br>
+ * This function will create a standardised Option structure defined
+ * by parameter opt. A list of valid parameters can be found in gis.h.
+ * It allocates memory for the Option structure and returns a pointer
+ * to this memory.
  *
  * If an invalid parameter was specified a empty Option structure will 
  * be returned (not NULL).
@@ -339,9 +338,9 @@ struct Option *G_define_option(void)
  *   - G_OPT_V_CAT
  *   - G_OPT_V_CATS
  *
- * \param[in] opt Type of Option struct to create
+ * \param opt type of Option struct to create
  *
- * \return Option * Pointer to an Option struct
+ * \return pointer to an Option struct
  */
 
 struct Option *G_define_standard_option(int opt)
@@ -690,12 +689,11 @@ struct Option *G_define_standard_option(int opt)
 }
 
 
-/**
+/*!
  * \brief Initializes a new module.
  *
- * \return GModule * Pointer to a GModule struct
+ * \return pointer to a GModule struct
  */
-
 struct GModule *G_define_module(void)
 {
     struct GModule *module;
@@ -711,43 +709,40 @@ struct GModule *G_define_module(void)
     return (module);
 }
 
-/* The main parsing routine */
-
-/**
+/*!
  * \brief Parse command line.
  *
- * The command line parameters <b>argv</b> and the number of parameters 
- * <b>argc</b> from the main() routine are passed directly to 
- * <i>G_parser()</i>. <i>G_parser()</i> accepts the command line input 
- * entered by the user, and parses this input according to the input 
- * options and/or flags that were defined by the programmer.<br>
+ * The command line parameters <i>argv</i> and the number of
+ * parameters <i>argc</i> from the main() routine are passed directly
+ * to G_parser(). G_parser() accepts the command line input entered by
+ * the user, and parses this input according to the input options
+ * and/or flags that were defined by the programmer.
  *
  * <b>Note:</b> The only functions which can legitimately be called 
- * before G_parser() are:<br>
- * <ul>
- *  <li>G_gisinit()</li>
- *  <li>G_no_gisinit()</li>
- *  <li>G_define_module()</li>
- *  <li>G_define_flag()</li>
- *  <li>G_define_option()</li>
- *  <li>G_define_standard_option()</li>
- *  <li>G_disable_interactive()</li>
- * </ul>
+ * before G_parser() are:
+ * 
+ *  - G_gisinit()
+ *  - G_no_gisinit()
+ *  - G_define_module()
+ *  - G_define_flag()
+ *  - G_define_option()
+ *  - G_define_standard_option()
+ *  - G_disable_interactive()
  *
- * The usual order a module calls functions is:<br>
- * <ul>
- *  <li>G_gisinit()</li>
- *  <li>G_define_module()</li>
- *  <li>G_define_{flag,option}()</li>
- *  <li>G_parser()</li>
- * </ul>
+ * The usual order a module calls functions is:
  *
- * \param[in] argc number of arguments
- * \param[in] argv argument list
+ *  # G_gisinit()
+ *  # G_define_module()
+ *  # G_define_flag()
+ *  # G_define_option()
+ *  # G_parser()
+ *
+ * \param argc number of arguments
+ * \param argv argument list
+ *
  * \return 0 on success
- * \return -1 on error and calls <b>G_usage()</b>
+ * \return -1 on error and calls G_usage()
  */
-
 int G_parser(int argc, char **argv)
 {
     int need_first_opt;
@@ -1025,29 +1020,26 @@ static int uses_new_gisprompt(void)
     return 0;
 }
 
-
-/**
+/*!
  * \brief Command line help/usage message.
  *
- * Calls to <i>G_usage()</i> allow the programmer to print the usage 
+ * Calls to G_usage() allow the programmer to print the usage 
  * message at any time. This will explain the allowed and required 
  * command line input to the user. This description is given according 
  * to the programmer's definitions for options and flags. This function 
  * becomes useful when the user enters options and/or flags on the 
  * command line that are syntactically valid to the parser, but 
- * functionally invalid for the command (e.g. an invalid file name.)<br>
- * For example, the parser logic doesn't directly support grouping 
- * options. If two options be specified together or not at all, the 
- * parser must be told that these options are not required and the 
- * programmer must check that if one is specified the other must be as 
- * well. If this additional check fails, then <i>G_parser()</i> will 
- * succeed, but the programmer can then call <i>G_usage()</i>  to print 
- * the standard usage message and print additional information about how 
- * the two options work together.
+ * functionally invalid for the command (e.g. an invalid file name.)
  *
- * \return
+ * For example, the parser logic doesn't directly support grouping
+ * options. If two options be specified together or not at all, the
+ * parser must be told that these options are not required and the
+ * programmer must check that if one is specified the other must be as
+ * well. If this additional check fails, then G_parser() will succeed,
+ * but the programmer can then call G_usage() to print the standard
+ * usage message and print additional information about how the two
+ * options work together.
  */
-
 void G_usage(void)
 {
     struct Option *opt;
@@ -1219,14 +1211,12 @@ void G_usage(void)
     }
 }
 
-
-/**
+/*!
  * \brief Formats text for XML.
  *
  * \param[in,out] fp file to write to
- * \param[in] str string to write
+ * \param str string to write
  */
-
 static void print_escaped_for_xml(FILE * fp, const char *str)
 {
     for (; *str; str++) {
@@ -1247,7 +1237,7 @@ static void print_escaped_for_xml(FILE * fp, const char *str)
 }
 
 
-/**
+/*!
  * \brief Format text for HTML output
  */
 #define do_escape(c,escaped) case c: fputs(escaped,f);break
@@ -1269,9 +1259,9 @@ static void print_escaped_for_html(FILE * f, const char *str)
 
 #undef do_escape
 
-/**
-   \brief Print module usage description in XML format.
-**/
+/*!
+  \brief Print module usage description in XML format.
+*/
 static void G_usage_xml(void)
 {
     struct Option *opt;
@@ -1507,9 +1497,9 @@ static void G_usage_xml(void)
     fprintf(stdout, "</task>\n");
 }
 
-/**
-   \brief Print module usage description in HTML format.
-**/
+/*!
+  \brief Print module usage description in HTML format.
+*/
 static void G_usage_html(void)
 {
     struct Option *opt;
@@ -1735,9 +1725,9 @@ static void G_usage_html(void)
     fprintf(stdout, "</body>\n</html>\n");
 }
 
-/**
-   \brief Print a module parameter template to assist with creating shell script wrappers.
-**/
+/*!
+  \brief Print a module parameter template to assist with creating shell script wrappers.
+*/
 static void G_script(void)
 {
     FILE *fp = stdout;
@@ -1852,9 +1842,9 @@ static void G_script(void)
 	    "fi\n" "\n" "# CODE GOES HERE\n" "\n");
 }
 
-/**
-   \brief Build wxPython GUI dialog
-**/
+/*!
+  \brief Build wxPython GUI dialog.
+*/
 static void G_gui_wx(void)
 {
     char script[GPATH_MAX];
@@ -1869,13 +1859,13 @@ static void G_gui_wx(void)
     G_spawn(getenv("GRASS_PYTHON"), "menuform.py", script, st->pgm_name, NULL);
 }
 
-/**
-   \brief Invoke GUI dialog 
+/*!
+  \brief Invoke GUI dialog 
 
-   Use G_gui_wx() to generate GUI dialog.
+  Use G_gui_wx() to generate GUI dialog.
 
-   G_gui_wx() is called by default (if GRASS_GUI is not defined)
-**/
+  G_gui_wx() is called by default (if GRASS_GUI is not defined)
+*/
 static void G_gui(void)
 {
     G_gui_wx();
@@ -2442,13 +2432,13 @@ static void split_gisprompt(const char *gisprompt, char *age, char *element,
     *ptr2 = '\0';
 }
 
-/**
+/*!
  * \brief Creates command to run non-interactive.
  *
  * Creates a command-line that runs the current command completely
  * non-interactive.
  *
- * \return char * Pointer to a char string
+ * \return pointer to a char string
  */
 char *G_recreate_command(void)
 {

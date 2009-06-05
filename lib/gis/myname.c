@@ -1,35 +1,31 @@
-
-/**
- * \file myname.c
+/*!
+ * \file gis/myname.c
  *
  * \brief GIS Library - Database name functions.
  *
- * (C) 2001-2008 by the GRASS Development Team
+ * (C) 2001-2009 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author GRASS GIS Development Team
- *
- * \date 1999-2008
+ * \author Original author CERL
  */
 
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-
-/**
+/*!
  * \brief Returns location title.
  *
- * Returns a one line title for the database location. This title is 
- * read from the file MYNAME in the PERMANENT mapset. See also 
- * Permanent_Mapset for a discussion of the PERMANENT mapset.<br>
+ * Returns a one line title for the database location. This title is
+ * read from the file MYNAME in the PERMANENT mapset. See also \ref
+ * Permanent_Mapset for a discussion of the PERMANENT mapset.
  *
  * <b>Note:</b> This name is the first line in the file 
  * $GISDBASE/$LOCATION_NAME/PERMANENT/MYNAME
  *
- * \return Pointer to a string
+ * \return pointer to a string
  */
 
 char *G_myname(void)

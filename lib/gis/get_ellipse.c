@@ -1,21 +1,22 @@
 /*!
-   \file get_ellipse.c
+  \file gis/get_ellipse.c
 
-   \brief Getting ellipsoid parameters from the database.
+  \brief GIS Library - Getting ellipsoid parameters from the database.
 
-   This routine returns the ellipsoid parameters from the database.
-   If the PROJECTION_FILE exists in the PERMANENT mapset, read info
-   from that file, otherwise return WGS 84 values.
+  This routine returns the ellipsoid parameters from the database.
+  If the PROJECTION_FILE exists in the PERMANENT mapset, read info
+  from that file, otherwise return WGS 84 values.
 
-   Returns: 1 ok, 0 default values used.
-   Dies with diagnostic if there is an error
+  New 05/2000 by al: for datum shift the f parameter is needed too.
+  This all is not a clean design, but it keeps backward-
+  compatibility. 
+  Looks up ellipsoid in ellipsoid table and returns the
+  a, e2 and f parameters for the ellipsoid
+  
+  (C) 2001-2009 by the GRASS Development Team
 
-   (C) 2001-2008 by the GRASS Development Team
-
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+  This program is free software under the GNU General Public License
+  (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author CERL
  */
@@ -94,13 +95,12 @@ int G_get_ellipsoid_parameters(double *a, double *e2)
 }
 
 /*!
- * \brief get ellipsoid parameters by name
+ * \brief Get ellipsoid parameters by name
  *
- * This routine returns the semi-major axis <b>a</b> (in meters) and
- * eccentricity squared <b>e2</b> for the named ellipsoid.  Returns 1
- * if <b>name</b> is a known ellipsoid, 0 otherwise.
+ * This routine returns the semi-major axis <i>a</i> (in meters) and
+ * eccentricity squared <i>e2</i> for the named ellipsoid.
  *
- * \param[in]  name ellipsoid name
+ * \param  name ellipsoid name
  * \param[out] a    semi-major axis
  * \param[out] e2   eccentricity squared
  *
@@ -124,16 +124,16 @@ int G_get_ellipsoid_by_name(const char *name, double *a, double *e2)
 }
 
 /*!
- * \brief get ellipsoid name
+ * \brief Get ellipsoid name
  *
  * This function returns a pointer to the short name for the
- * <b>n</b><i>th</i> ellipsoid.  If <b>n</b> is less than 0 or greater
+ * <i>n</i><i>th</i> ellipsoid.  If <i>n</i> is less than 0 or greater
  * than the number of known ellipsoids, it returns a NULL pointer.
  *
- * \param[in] n ellipsoid identificator
+ * \param n ellipsoid identificator
  *
- *  \return char * ellipsoid name
- *  \return NULL if no ellipsoid found
+ * \return ellipsoid name
+ * \return NULL if no ellipsoid found
  */
 const char *G_ellipsoid_name(int n)
 {
@@ -141,26 +141,14 @@ const char *G_ellipsoid_name(int n)
     return n >= 0 && n < table.count ? table.ellipses[n].name : NULL;
 }
 
-/*
- * new 05/2000 by al: for datum shift the f parameter is needed too.
- * this all is not a clean design, but it keeps backward-
- * compatibility. 
- * looks up ellipsoid in ellipsoid table and returns the
- * a, e2 and f parameters for the ellipsoid
- * 
- * returns 1 if ok,
- *         0 if not found in table 
- */
-
 /*!
- * \brief get spheroid parameters by name
+ * \brief Get spheroid parameters by name
  *
- * This function returns the semi-major axis <b>a</b> (in meters), the
- * eccentricity squared <b>e2</b> and the inverse flattening <b>f</b>
- * for the named ellipsoid. Returns 1 if <b>name</b> is a known
- * ellipsoid, 0 otherwise.
+ * This function returns the semi-major axis <i>a</i> (in meters), the
+ * eccentricity squared <i>e2</i> and the inverse flattening <i>f</i>
+ * for the named ellipsoid.
  *
- * \param[in] name spheroid name
+ * \param name spheroid name
  * \param[out] a   semi-major axis
  * \param[out] e2  eccentricity squared
  * \param[out] f   inverse flattening
@@ -187,18 +175,17 @@ int G_get_spheroid_by_name(const char *name, double *a, double *e2, double *f)
 
 
 /*!
- * \brief get description for <b>n</b><i>th</i> ellipsoid
+ * \brief Get description for nth ellipsoid
  *
  * This function returns a pointer to the description text for the
- * <b>n</b><i>th</i> ellipsoid. If <b>n</b> is less than 0 or greater
+ * <i>n</i>th ellipsoid. If <i>n</i> is less than 0 or greater
  * than the number of known ellipsoids, it returns a NULL pointer.
  *
- * \param[in] n ellipsoid identificator
+ * \param n ellipsoid identificator
  *
  * \return pointer to ellipsoid description
  * \return NULL if no ellipsoid found
  */
-
 const char *G_ellipsoid_description(int n)
 {
     G_read_ellipsoid_table(0);
@@ -253,6 +240,15 @@ static int compare_ellipse_names(const void *pa, const void *pb)
     return G_strcasecmp(a->name, b->name);
 }
 
+/*!
+  \brief Read ellipsoid table
+
+  \param fatal non-zero value for G_fatal_error(), otherwise
+  G_warning() is used
+
+  \return 1 on sucess
+  \return 0 on error
+*/
 int G_read_ellipsoid_table(int fatal)
 {
     FILE *fd;

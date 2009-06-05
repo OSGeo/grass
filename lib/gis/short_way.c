@@ -1,33 +1,28 @@
-
-/**
- * \file short_way.c
+/*!
+ * \file gis/short_way.c
  *
  * \brief GIS Library - Shortest path functions.
  *
- * (C) 2001-2008 by the GRASS Development Team
+ * (C) 2001-2009 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author GRASS GIS Development Team
- *
- * \date 1999-2008
+ * \author Original author CERL
  */
 
 #include <grass/gis.h>
 
-
-/**
+/*!
  * \brief Shortest way between two eastings.
  *
- * For lat-lon projection (<i>PROJECTION_LL</i>), <b>east1</b>, 
- * <b>east2</b> are changed so that they are no more than 180 degrees 
+ * For lat-lon projection (<tt>PROJECTION_LL</tt>), <i>east1</i>, 
+ * <i>east2</i> are changed so that they are no more than 180 degrees 
  * apart. Their true locations are not changed. For all other 
  * projections, this function does nothing.
  *
- * \param[in] east1 east (x) coordinate of first point
- * \param[in] east2 east (x) coordinate of second point
- * \return
+ * \param[in,out] east1 east (x) coordinate of first point
+ * \param[in,out] east2 east (x) coordinate of second point
  */
 
 void G_shortest_way(double *east1, double *east2)

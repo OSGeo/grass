@@ -1,15 +1,15 @@
 /*!
-  \file proj1.c
-
-  \brief GIS Library - Get projection info
-  
-  (C) 1999-2009 by the GRASS Development Team
-  
-  This program is free software under the GNU General Public License
-  (>=v2). Read the file COPYING that comes with GRASS for details.
-
-  \author Original author CERL
-*/
+  \file gis/proj1.c
+ *
+ * \brief GIS Library - Projection support
+ *
+ * (C) 2001-2009 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public License
+ * (>=v2). Read the file COPYING that comes with GRASS for details.
+ *
+ * \author Original author CERL
+ */
 
 #include <grass/gis.h>
 
@@ -18,7 +18,6 @@
   
   This routine returns a code indicating the projection for the active region.  The current
   values are:
-
    - PROJECTION_XY  0 - x,y (Raw imagery)
    - PROJECTION_UTM 1 - UTM   Universal Transverse Mercator
    - PROJECTION_SP  2 - State Plane (in feet)

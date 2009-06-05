@@ -1,9 +1,9 @@
 /*!
  * \file error.c
  * 
- * \brief GIS Library: Error messages functions
+ * \brief GIS Library - Error messages functions
  *
- * (C) 1999-2008 by the GRASS Development Team
+ * (C) 1999-2009 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public
  * License (>=v2). Read the file COPYING that comes with GRASS
@@ -198,9 +198,13 @@ int G_suppress_warnings(int flag)
 /*!
  * \brief Turn on/off no_sleep flag
  * 
- * \param flag if non-zero/zero value is given G_sleep() will be activated/deactivated
+ * If <em>flag</em> is 0, then no pause will occur after printing an
+ * error or warning message. Otherwise the pause will occur.
+ * 
+ * \param flag if non-zero/zero value is given G_sleep() will be
+ * activated/deactivated
  *
- * \return previous flag
+ * \return previous no_sleep value
  */
 int G_sleep_on_error(int flag)
 {

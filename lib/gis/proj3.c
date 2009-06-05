@@ -1,3 +1,16 @@
+/*!
+  \file gis/proj3.c
+
+  \brief GIS Library - Projection support
+  
+  (C) 2001-2009 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Original author CERL
+ */
+
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -22,16 +35,16 @@ static void init(void)
 }
 
 /*!
- * \brief database units
+ * \brief Get database units
  *
- * Returns a
- * string describing the database grid units. It returns a plural form (eg. feet)
- * if <b>plural</b> is true. Otherwise it returns a singular form (eg. foot).
+ * Returns a string describing the database grid units. It returns a
+ * plural form (eg. feet) if <i>plural</i> is true. Otherwise it
+ * returns a singular form (eg. foot).
  *
- *  \param plural
- *  \return char * 
+ * \param plural plural form if true
+ *
+ * \return units name
  */
-
 const char *G_database_unit_name(int plural)
 {
     int n;
@@ -54,16 +67,14 @@ const char *G_database_unit_name(int plural)
 
 
 /*!
- * \brief query cartographic projection
+ * \brief Query cartographic projection
  *
  * Returns a pointer to a string which is a printable name for
- * projection code <b>proj</b> (as returned by <i>G_projection</i>). Returns
- * NULL if <b>proj</b> is not a valid projection.
+ * projection code <i>proj</i> (as returned by G_projection). Returns
+ * NULL if <i>proj</i> is not a valid projection.
  *
- *  \param proj
- *  \return char * 
+ * \return projection name
  */
-
 const char *G_database_projection_name(void)
 {
     int n;
@@ -84,18 +95,15 @@ const char *G_database_projection_name(void)
     return name;
 }
 
-
 /*!
- * \brief conversion to meters
+ * \brief Conversion to meters
  *
  * Returns a factor which converts the grid unit to meters (by
- * multiplication).  If the database is not metric (eg. imagery) then 0.0 is
- * returned.
+ * multiplication). If the database is not metric (eg. imagery) then
+ * 0.0 is returned.
  *
- *  \param void
- *  \return double
+ * \return value
  */
-
 double G_database_units_to_meters_factor(void)
 {
     const char *unit;
@@ -130,26 +138,16 @@ double G_database_units_to_meters_factor(void)
     return factor;
 }
 
-/***********************************************************************
- * G_database_datum_name(void)
- *
- * return name of datum of current database
- *
- * returns pointer to valid name if ok
- * NULL otherwise
- ***********************************************************************/
-
-
 /*!
- * \brief get datum name for database
+ * \brief Get datum name for database
  *
- * Returns a pointer to the name of the map datum of the current database. If 
- * there is no map datum explicitely associated with the acutal database, the 
- * standard map datum WGS84 is returned, on error a NULL pointer is returned. 
+ * Returns a pointer to the name of the map datum of the current
+ * database. If there is no map datum explicitely associated with the
+ * acutal database, the standard map datum WGS84 is returned, on error
+ * a NULL pointer is returned.
  *
- *  \return char * 
+ * \return datum name
  */
-
 const char *G_database_datum_name(void)
 {
     const char *name;
@@ -170,15 +168,12 @@ const char *G_database_datum_name(void)
 	return NULL;
 }
 
-/***********************************************************************
- * G_database_ellipse_name(void)
- *
- * return name of ellipsoid of current database
- *
- * returns pointer to valid name if ok
- * NULL otherwise
- ***********************************************************************/
-
+/*!
+  \brief Get ellipsoid name of current database
+  
+  \return pointer to valid name if ok
+  \return NULL on error
+*/
 const char *G_database_ellipse_name(void)
 {
     const char *name;

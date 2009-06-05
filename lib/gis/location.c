@@ -1,17 +1,17 @@
 /*!
-   \file location.c
-
-   \brief GIS library - environment routines (location)
-
-   (C) 2001-2008 by the GRASS Development Team
-
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
-
-   \author Original author CERL
- */
+  \file gis/location.c
+  
+  \brief GIS library - environment routines (location)
+  
+  (C) 2001-2008 by the GRASS Development Team
+  
+  This program is free software under the 
+  GNU General Public License (>=v2). 
+  Read the file COPYING that comes with GRASS
+  for details.
+  
+  \author Original author CERL
+*/
 
 #include <stdio.h>
 #include <string.h>

@@ -1,39 +1,34 @@
-
-/**
- * \file wind_scan.c
+/*!
+ * \file gis/wind_scan.c
  *
  * \brief GIS Library - Window scanning functions.
  *
- * (C) 2001-2008 by the GRASS Development Team
+ * (C) 2001-2009 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author GRASS GIS Development Team
- *
- * \date 1999-2008
+ * \author Original author CERL
  */
 
 #include <stdio.h>
 #include <grass/gis.h>
 
-
 static int scan_double(const char *, double *);
 
-
-/**
+/*!
  * \brief ASCII northing to double.
  *
- * Converts the ASCII "northing" coordinate string in <b>buf</b> to its 
- * double representation (into <b>northing</b>).
+ * Converts the ASCII "northing" coordinate string in <i>buf</i> to its 
+ * double representation (into <i>northing</i>).
  *
- * \param[in] buf buffer hold string northing
- * \param[in,out] northing
- * \param[in] projection
+ * \param buf buffer hold string northing
+ * \param[out] northing northing
+ * \param projection projection code
+ *
  * \return 0 on error
  * \return 1 on success
  */
-
 int G_scan_northing(const char *buf, double *northing, int projection)
 {
     if (projection == PROJECTION_LL) {
@@ -48,20 +43,19 @@ int G_scan_northing(const char *buf, double *northing, int projection)
     return scan_double(buf, northing);
 }
 
-
-/**
+/*!
  * \brief ASCII easting to double.
  *
- * Converts the ASCII "easting" coordinate string in <b>buf</b> to its 
- * double representation (into <b>easting</b>).
+ * Converts the ASCII "easting" coordinate string in <i>buf</i> to its 
+ * double representation (into <i>easting</i>).
  *
- * \param[in] buf buffer containing string easting
- * \param[in,out] easting
- * \param[in] projection
+ * \param buf buffer containing string easting
+ * \param[out] easting easting
+ * \param projection projection code
+ *
  * \return 0 on error
  * \return 1 on success
  */
-
 int G_scan_easting(const char *buf, double *easting, int projection)
 {
     if (projection == PROJECTION_LL) {
@@ -80,20 +74,19 @@ int G_scan_easting(const char *buf, double *easting, int projection)
     return scan_double(buf, easting);
 }
 
-
-/**
+/*!
  * \brief ASCII resolution to double.
  *
- * Converts the ASCII "resolution" string in <b>buf</b> to its double 
+ * Converts the ASCII "resolution" string in <i>buf</i> to its double 
  * representation (into resolution).
  *
- * \param[in] buf buffer containing string resolution
- * \param[in,out] resolution
- * \param[in] projection
+ * \param buf buffer containing string resolution
+ * \param[out] resolution resolution value
+ * \param projection projection code
+ *
  * \return 0 on error
  * \return 1 on success
  */
-
 int G_scan_resolution(const char *buf, double *res, int projection)
 {
     if (projection == PROJECTION_LL) {
@@ -103,7 +96,6 @@ int G_scan_resolution(const char *buf, double *res, int projection)
 
     return (scan_double(buf, res) && *res > 0.0);
 }
-
 
 static int scan_double(const char *buf, double *value)
 {

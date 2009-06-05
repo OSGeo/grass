@@ -1,24 +1,15 @@
-/*
- *************************************************************************
- * G_get_window (window)
- *     struct Cell_head *window
- *
- *      read the current mapset window
- *      dies if error
- *
- *************************************************************************
- * G_get_default_window (window)
- *     struct Cell_head *window
- *
- *      read the default window for the location
- *      dies if error
- *
- *************************************************************************
- * char *
- * G__get_window (window, element, name, mapset)
- *      read the window 'name' in 'element' in 'mapset'
- *      returns NULL if ok, error message if not
- ************************************************************************/
+/*!
+  \file gis/get_window.c
+
+  \brief GIS Library - Get window (i.e. GRASS region)
+
+  (C) 2001-2009 by the GRASS Development Team
+
+  This program is free software under the GNU General Public License
+  (>=v2).  Read the file COPYING that comes with GRASS for details.
+
+  \author Original author CERL
+*/
 
 #include <stdlib.h>
 #include "G.h"
@@ -33,21 +24,22 @@ static struct state {
 static struct state *st = &state;
 
 /*!
- * \brief read the database region
+ * \brief Read the database region
  *
  * Reads the database region as stored in the WIND file in the user's
- * current mapset <b>into region.</b>
- * 3D values are set to defaults if not available in WIND file.
- * An error message is printed and exit( ) is called if there is a problem reading
- * the region.
- * <b>Note.</b> GRASS applications that read or write raster maps should not
- * use this routine since its use implies that the active module region will not
- * be used. Programs that read or write raster map data (or vector data) can
- * query the active module region <i>using G_window_rows and
- * G_window_cols..</i>
+ * current mapset into region.
  *
- *  \param region
- *  \return int
+ * 3D values are set to defaults if not available in WIND file.
+ * An error message is printed and exit() is called if there is a problem reading
+ * the region.
+ *
+ * <b>Note:</b> GRASS applications that read or write raster maps
+ * should not use this routine since its use implies that the active
+ * module region will not be used. Programs that read or write raster
+ * map data (or vector data) can query the active module region using
+ * G_window_rows() and G_window_cols().
+ *
+ * \param window pointer to Cell_head
  */
 
 void G_get_window(struct Cell_head *window)
@@ -76,7 +68,8 @@ void G_get_window(struct Cell_head *window)
     }
 
     if (err)
-	G_fatal_error(_("region for current mapset %s\nrun \"g.region\""), err);
+	G_fatal_error(_("Region for current mapset %s. "
+			"Run \"g.region\" to fix the current region."), err);
 
     *window = st->dbwindow;
 
@@ -88,17 +81,16 @@ void G_get_window(struct Cell_head *window)
     G_initialize_done(&st->initialized);
 }
 
-
 /*!
- * \brief read the default region
+ * \brief Read the default region
  *
- * Reads the default region for the location into <b>region.</b>
- * 3D values are set to defaults if not available in WIND file.
- * An error message is printed and exit( ) is called if there is a problem
- * reading the default region.
+ * Reads the default region for the location into <i>region.</i> 3D
+ * values are set to defaults if not available in WIND file.
  *
- *  \param region
- *  \return int
+ * An error message is printed and exit() is called if there is a
+ * problem reading the default region.
+ *
+ * \param[out] window pointer to Cell_head
  */
 
 void G_get_default_window(struct Cell_head *window)
@@ -106,9 +98,20 @@ void G_get_default_window(struct Cell_head *window)
     const char *err = G__get_window(window, "", "DEFAULT_WIND", "PERMANENT");
 
     if (err)
-	G_fatal_error(_("default region %s"), err);
+	G_fatal_error(_("Default region %s"), err);
 }
 
+/*!
+  \brief Get cwindow (region) of selected map layer
+  
+  \param window pointer to Cell_head
+  \param element element name
+  \param name map name
+  \param mapset mapset name
+
+  \return string on error
+  \return NULL on success
+*/
 char *G__get_window(struct Cell_head *window,
 		    const char *element, const char *name, const char *mapset)
 {
