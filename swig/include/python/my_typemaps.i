@@ -143,6 +143,9 @@ static void *pyobj_to_ptr(PyObject *input, int data_type)
 	void *buffer;
 	Py_ssize_t len;
 
+	if (input == Py_None)
+		return NULL;
+
 	if (PyCObject_Check(input))
 		return PyCObject_AsVoidPtr(input);
 
@@ -151,6 +154,9 @@ static void *pyobj_to_ptr(PyObject *input, int data_type)
 
 	if (PyObject_AsReadBuffer(input, &cbuffer, &len) == 0)
 		return (void *) cbuffer;
+
+	if (PyString_Check(input) && strchr("cbB", data_type))
+		return (void *) PyString_AsString(input);
 
 	return pyseq_to_ptr(input, data_type);
 }
@@ -167,6 +173,72 @@ static void *pyobj_to_ptr(PyObject *input, int data_type)
 
 %typemap(in) DCELL * {
 	$1 = (DCELL *) pyobj_to_ptr($input, 'd');
+}
+
+%{
+
+static void **pyseq_to_ptr_ptr(PyObject *input, int data_type) __attribute__ ((unused));
+static void **pyobj_to_ptr_ptr(PyObject *input, int data_type) __attribute__ ((unused));
+
+static void **pyseq_to_ptr_ptr(PyObject *input, int data_type)
+{
+	Py_ssize_t len;
+	void **array;
+	int i;
+
+	if (!PySequence_Check(input)) {
+		PyErr_SetString(PyExc_ValueError,"Expected a CObject, buffer or sequence");
+		return NULL;
+	}
+
+	len = PySequence_Length(input);
+	array = malloc((len + 1) * sizeof(void *));
+
+	for (i = 0; i < len; i++) {
+		PyObject *val = PySequence_GetItem(input, i);
+		void *p = pyobj_to_ptr(val, data_type);
+
+		Py_DECREF(val);
+		if (val != Py_None && p == NULL) {
+			PyErr_SetString(PyExc_ValueError,"Unable to convert element to pointer");
+			free(array);
+			return NULL;
+		}
+
+		array[i] = p;
+	}
+
+	array[i] = NULL;
+
+	return array;
+}
+
+static void **pyobj_to_ptr_ptr(PyObject *input, int data_type)
+{
+	const void *cbuffer;
+	void *buffer;
+	Py_ssize_t len;
+
+	if (PyCObject_Check(input))
+		return (void **) PyCObject_AsVoidPtr(input);
+
+	if (PyObject_AsWriteBuffer(input, &buffer, &len) == 0)
+		return (void **) buffer;
+
+	if (PyObject_AsReadBuffer(input, &cbuffer, &len) == 0)
+		return (void **) cbuffer;
+
+	return pyseq_to_ptr_ptr(input, data_type);
+}
+
+%}
+
+%typemap(in) void ** {
+	$1 = pyobj_to_ptr_ptr($input, 'c');
+}
+
+%typemap(in) char ** {
+	$1 = (char **) pyobj_to_ptr_ptr($input, 'c');
 }
 
 #endif
