@@ -1,25 +1,22 @@
-
-/**
- * \file zone.c
+/*!
+ * \file gis/zone.c
  *
- * \brief Cartographic zone functions.
+ * \brief GIS Library - Cartographic zone functions.
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author GRASS GIS Development Team
- *
- * \date 1999-2006
+ * \author Original author CERL
  */
 
 #include <grass/gis.h>
 
 
-/**
+/*!
  * \brief Query cartographic zone.
  *
- * This routine returns the zone for the active region. The meaning for 
- * the zone depends on the projection. For example, zone 18 for 
+ * This routine returns the zone for the active region. The meaning
+ * for the zone depends on the projection. For example, zone 18 for
  * projection type 1 would be UTM zone 18.
  *
  * \return int cartographic zone

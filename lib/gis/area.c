@@ -1,17 +1,14 @@
-
-/**
- * \file area.c
+/*!
+ * \file gis/area.c
  *
  * \brief GIS Library - Area calculation functions.
  *
- * (C) 2001-2008 by the GRASS Development Team
+ * (C) 2001-2009 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author GRASS GIS Development Team
- *
- * \date 1999-2008
+ * \author Original author CERL
  */
 
 #include <grass/gis.h>
@@ -32,17 +29,14 @@ static struct state {
 
 static struct state *st = &state;
 
-/**
+/*!
  * \brief Begin cell area calculations.
  *
  * This routine must be called once before any call to
- * <i>G_area_of_cell_at_row()</i>. It perform all inititalizations 
- * needed to do area calculations for grid cells, based on the current 
- * window "projection" field. It can be used in either planimetric
+ * G_area_of_cell_at_row(). It perform all inititalizations needed to
+ * do area calculations for grid cells, based on the current window
+ * "projection" field. It can be used in either planimetric
  * projections or the latitude-longitude projection.
- * <br>
- * If the return value is 1 or 0, all the grid cells in the map have 
- * the same area. Otherwise, the area of a grid cell varies with the row.
  *
  * \return 0 if the projection is not measurable (ie. imagery or xy)
  * \return 1 if the projection is planimetric (ie. UTM or SP)
@@ -79,18 +73,17 @@ int G_begin_cell_area_calculations(void)
     }
 }
 
-
-/**
- * \brief Cell area in specified <b>row</b>.
+/*!
+ * \brief Cell area in specified row.
  *
  * This routine returns the area in square meters of a cell in the
- * specified <b>row</b>. This value is constant for planimetric grids 
+ * specified <i>row</i>. This value is constant for planimetric grids 
  * and varies with the row if the projection is latitude-longitude.
  *
- * \param[in] row
- * \return double
+ * \param row row number
+ *
+ * \return cell area
  */
-
 double G_area_of_cell_at_row(int row)
 {
     double south_value;
@@ -114,18 +107,16 @@ double G_area_of_cell_at_row(int row)
     return cell_area;
 }
 
-
-/**
+/*!
  * \brief Begin polygon area calculations.
  *
- * This initializes the polygon area calculation routines. It is used 
+ * This initializes the polygon area calculation routines. It is used
  * both for planimetric and latitude-longitude projections.
  *
  * \return 0 if the projection is not measurable (ie. imagery or xy)
  * \return 1 if the projection is planimetric (ie. UTM or SP)
  * \return 2 if the projection is non-planimetric (ie. latitude-longitude)
  */
-
 int G_begin_polygon_area_calculations(void)
 {
     double a, e2;
@@ -145,29 +136,29 @@ int G_begin_polygon_area_calculations(void)
     return 0;
 }
 
-
-/**
+/*!
  * \brief Area in square meters of polygon.
  *
  * Returns the area in square meters of the polygon described by the 
- * <b>n</b> pairs of <b>x,y</b> coordinate vertices. It is used both for 
+ * <i>n</i> pairs of <i>x,y</i> coordinate vertices. It is used both for 
  * planimetric and latitude-longitude projections.
- * <br>
- * Returns the area in coordinate units of the polygon described by the
- * <b>n</b> pairs of <b>x,y</b> coordinate vertices for planimetric grids.
- * If the units for <b>x,y</b> are meters, then the area is in square meters.
- * If the units are feet, then the area is in square feet, and so on.
- * <br>
+ * 
+ * Returns the area in coordinate units of the polygon described by
+ * the <i>n</i> pairs of <i>x,y</i> coordinate vertices for
+ * planimetric grids.  If the units for <i>x,y</i> are meters, then
+ * the area is in square meters.  If the units are feet, then the area
+ * is in square feet, and so on.
+ * 
  * <b>Note:</b> If the database is planimetric with the non-meter grid, 
  * this routine performs the required unit conversion to produce square 
  * meters.
  *
- * \param[in] x array of x coordinates
- * \param[in] y array of y coordinates
- * \param[in] n number of x,y coordinate pairs
+ * \param x array of x coordinates
+ * \param y array of y coordinates
+ * \param n number of x,y coordinate pairs
+ *
  * \return area in coordinate units of the polygon
  */
-
 double G_area_of_polygon(const double *x, const double *y, int n)
 {
     double area;

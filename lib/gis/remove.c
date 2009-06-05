@@ -1,17 +1,14 @@
-
-/**
- * \file remove.c
+/*!
+ * \file gis/remove.c
  *
  * \brief GIS Library - File remove functions.
  *
- * (C) 2001-2008 by the GRASS Development Team
+ * (C) 2001-2009 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author GRASS GIS Development Team
- *
- * \date 1999-2008
+ * \author Original author CERL
  */
 
 #include <grass/config.h>
@@ -28,18 +25,19 @@ static int recursive_remove(const char *path);
 static int G__remove(int misc, const char *dir, const char *element,
 		     const char *name);
 
-/**
+/*!
  * \brief Remove a database file.
  *
- * The file or directory <b>name</b> under the database <b>element</b> directory
- * in the current mapset is removed.<br>
+ * The file or directory <i>name</i> under the database <i>element</i>
+ * directory in the current mapset is removed.
  * 
- * <b>Note:</b> If <b>name</b> is a directory, everything within the
- * directory is removed as well.
+ * If <i>name</i> is a directory, everything within the directory is
+ * removed as well.
  *
- * \param[in] element element name
- * \param[in] name file nane
- * \return 0 if <b>name</b> does not exist
+ * \param element element name
+ * \param name file name
+ *
+ * \return 0 if <i>name</i> does not exist
  * \return 1 if successful
  * \return -1 on error
  */
@@ -49,18 +47,19 @@ int G_remove(const char *element, const char *name)
     return G__remove(0, NULL, element, name);
 }
 
-/**
+/*!
  * \brief Remove a database misc file.
  *
- * The file or directory <b>name</b> under the database <b>element</b> directory
- * in the current mapset is removed.<br>
+ * The file or directory <i>name</i> under the database <i>element</i>
+ * directory in the current mapset is removed.
  * 
- * <b>Note:</b> If <b>name</b> is a directory, everything within the
- * directory is removed as well.
+ * If <i>name</i> is a directory, everything within the directory is
+ * removed as well.
  *
- * \param[in] element element name
- * \param[in] name file name
- * \return 0 if <b>name</b> does not exist
+ * \param element element name
+ * \param name file name
+ *
+ * \return 0 if <i>name</i> does not exist
  * \return 1 if successful
  * \return -1 on error
  */

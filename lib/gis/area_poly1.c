@@ -1,23 +1,19 @@
-
-/**
- * \file area_poly1.c
+/*!
+ * \file gis/area_poly1.c
  *
  * \brief GIS Library - Polygon area calculation routines.
  *
- * (C) 2001-2008 by the GRASS Development Team
+ * (C) 2001-2009 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author GRASS GIS Development Team
- *
- * \date 1999-2008
+ * \author Original author CERL
  */
 
 #include <math.h>
 #include <grass/gis.h>
 #include "pi.h"
-
 
 #define TWOPI M_PI + M_PI
 
@@ -51,17 +47,15 @@ static double Qbar(double x)
     return cosx * (st->QbarA + cosx2 * (st->QbarB + cosx2 * (st->QbarC + cosx2 * st->QbarD)));
 }
 
-
-/**
+/*!
  * \brief Begin area calculations.
  *
  * This initializes the polygon area calculations for the
- * ellipsoid with semi-major axis <b>a</b> (in meters) and ellipsoid
- * eccentricity squared <b>e2</b>.
+ * ellipsoid with semi-major axis <i>a</i> (in meters) and ellipsoid
+ * eccentricity squared <i>e2</i>.
  *
- * \param[in] a semi-major axis
- * \param[in] e2 ellipsoid eccentricity
- * \return
+ * \param a semi-major axis
+ * \param e2 ellipsoid eccentricity
  */
 
 void G_begin_ellipsoid_polygon_area(double a, double e2)
@@ -88,23 +82,22 @@ void G_begin_ellipsoid_polygon_area(double a, double e2)
 	st->E = -st->E;
 }
 
-
-/**
+/*!
  * \brief Area of lat-long polygon.
  *
  * Returns the area in square meters of the polygon described by the 
- * <b>n</b> pairs of <b>lat,long</b> vertices for latitude-longitude 
+ * <i>n</i> pairs of <i>lat,long</i> vertices for latitude-longitude 
  * grids.
- * <br>
+ *
  * <b>Note:</b> This routine assumes grid lines on the connecting the 
  * vertices (as opposed to geodesics).
  *
- * \param[in] lon array of longitudes
- * \param[in] lat array of latitudes
- * \param[in] n number of lat,lon pairs
- * \return double Area in square meters
+ * \param lon array of longitudes
+ * \param lat array of latitudes
+ * \param n number of lat,lon pairs
+ *
+ * \return area in square meters
  */
-
 double G_ellipsoid_polygon_area(const double *lon, const double *lat, int n)
 {
     double x1, y1, x2, y2, dx, dy;

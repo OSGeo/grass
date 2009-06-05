@@ -1,6 +1,26 @@
+/*!
+  \file gis/proj2.c
+
+  \brief GIS Library - Projection support
+  
+  (C) 2001-2009 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Original author CERL
+ */
+
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
+/*!
+  \brief Get units code
+
+  \param n project code
+
+  \retun units code
+*/
 int G__projection_units(int n)
 {
     switch (n) {
@@ -17,6 +37,14 @@ int G__projection_units(int n)
     }
 }
 
+/*!
+  \brief Get units name
+
+  \param unit units code
+  \param plural plural form
+
+  \return units name
+*/
 const char *G__unit_name(int unit, int plural)
 {
     switch (unit) {
@@ -33,6 +61,13 @@ const char *G__unit_name(int unit, int plural)
     }
 }
 
+/*!
+  \brief Get projection name
+  
+  \param n projection code
+
+  \return projection name
+*/
 const char *G__projection_name(int n)
 {
     switch (n) {

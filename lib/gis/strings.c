@@ -65,7 +65,7 @@ int G_strcasecmp(const char *x, const char *y)
     return 0;
 }
 
-/**
+/*!
  * \brief Copy string to allocated memory.
  *
  * This routine allocates enough memory to hold the string <b>s</b>,
@@ -323,7 +323,7 @@ int G_str_to_sql(char *str)
     return count;
 }
 
-/**
+/*!
  * \brief Remove superfluous white space.
  *
  * Leading and trailing white space is removed from the string 

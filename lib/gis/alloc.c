@@ -1,34 +1,32 @@
-
-/**
- * \file alloc.c
+/*!
+ * \file fis/alloc.c
  *
  * \brief GIS Library - Memory allocation routines.
  *
- * (C) 2001-2008 by the GRASS Development Team
+ * (C) 2001-2009 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author GRASS GIS Development Team
- *
- * \date 1999-2008
+ * \author Original author CERL
  */
 
 #include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-
-/**
+/*!
  * \brief Memory allocation.
  *
- * Allocates a block of
- * memory at least <b>n</b> bytes which is aligned properly for all data
- * types. A pointer to the aligned block is returned.<br>
+ * Allocates a block of memory at least <i>n</i> bytes which is
+ * aligned properly for all data types. A pointer to the aligned block
+ * is returned.
+ *
  * Dies with error message on memory allocation fail.
  *
- * \param[in] n
- * \return void * 
+ * \param file file name
+ * \param line line number
+ * \param t number of elements
  */
 
 void *G__malloc(const char *file, int line, size_t n)
@@ -46,20 +44,22 @@ void *G__malloc(const char *file, int line, size_t n)
     return buf;
 }
 
-/**
+/*!
  * \brief Memory allocation.
  *
- * Allocates a
- * properly aligned block of memory <b>n</b>*<b>m</b> bytes in length,
- * initializes the allocated memory to zero, and returns a pointer to the
- * allocated block of memory.<br>
- * Dies with error message on memory allocation fail.<br>
- * <b>Note:</b> Allocating memory for reading and writing raster maps is
- * discussed in Allocating_Raster_I_O_Buffers.
+ * Allocates a properly aligned block of memory <i>n</i>*<i>m</i>
+ * bytes in length, initializes the allocated memory to zero, and
+ * returns a pointer to the allocated block of memory.
  *
- * \param[in] n number of elements
- * \param[in] m element size
- * \return void * 
+ * Dies with error message on memory allocation fail.
+ *
+ * <b>Note:</b> Allocating memory for reading and writing raster maps
+ * is discussed in \ref Allocating_Raster_I_O_Buffers.
+ *
+ * \param file fine name
+ * \param line line number
+ * \param m element size
+ * \param n number of elements
  */
 
 void *G__calloc(const char *file, int line, size_t m, size_t n)
@@ -80,26 +80,27 @@ void *G__calloc(const char *file, int line, size_t m, size_t n)
 }
 
 
-/**
+/*!
  * \brief Memory reallocation.
  *
- * Changes the
- * <b>size</b> of a previously allocated block of memory at <b>ptr</b> and
- * returns a pointer to the new block of memory. The <b>size</b> may be larger
- * or smaller than the original size. If the original block cannot be extended
- * "in place", then a new block is allocated and the original block copied to the
- * new block.<br>
- * <b>Note:</b> If <b>buf</b> is NULL, then this routine simply allocates a
- * block of <b>n</b> bytes else <b>buf</b> must point to memory that has been dynamically
- * allocated by <i>G_malloc()</i>, <i>G_calloc()</i>, <i>G_realloc()</i>,
- * malloc(3), alloc(3), or realloc(3).. This routine works around broken realloc( )
- * routines, which do not handle a NULL <b>buf</b>.
+ * Changes the <i>size</i> of a previously allocated block of memory
+ * at <i>ptr</i> and returns a pointer to the new block of memory. The
+ * <i>size</i> may be larger or smaller than the original size. If the
+ * original block cannot be extended "in place", then a new block is
+ * allocated and the original block copied to the new block.
  *
+ * <b>Note:</b> If <i>buf</i> is NULL, then this routine simply
+ * allocates a block of <i>n</i> bytes else <i>buf</i> must point to
+ * memory that has been dynamically allocated by G_malloc(),
+ * G_calloc(), G_realloc(), malloc(3), alloc(3), or realloc(3).. This
+ * routine works around broken realloc() routines, which do not
+ * handle a NULL <i>buf</i>.
+ *
+ * \param file file name
+ * \param line line number
  * \param[in,out] buf buffer holding original data
  * \param[in] n array size
- * \return void * 
  */
-
 void *G__realloc(const char *file, int line, void *buf, size_t n)
 {
     if (n <= 0)
@@ -118,7 +119,7 @@ void *G__realloc(const char *file, int line, void *buf, size_t n)
 }
 
 
-/**
+/*!
  * \brief Free allocated memory.
  *
  * \param[in,out] buf buffer holding original data

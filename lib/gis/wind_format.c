@@ -1,38 +1,31 @@
-
-/**
- * \file wind_format.c
+/*!
+ * \file gis/wind_format.c
  *
  * \brief GIS Library - Window formatting functions.
  *
- * (C) 2001-2008 by the GRASS Development Team
+ * (C) 2001-2009 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author GRASS GIS Development Team
- *
- * \date 1999-2008
+ * \author Original author CERL
  */
 
 #include <stdio.h>
 #include <grass/gis.h>
 
-
 static void format_double(double, char *);
 
-
-/**
+/*!
  * \brief Northing to ASCII.
  *
- * Converts the double representation of the <b>north</b> coordinate to 
- * its ASCII representation (into <b>buf</b>).
+ * Converts the double representation of the <i>north</i> coordinate to 
+ * its ASCII representation (into <i>buf</i>).
  *
- * \param[in] north northing
- * \param[in,out] buf buffer to hold formatted string
- * \param[in] projection
- * \return
+ * \param north northing
+ * \param[out] buf buffer to hold formatted string
+ * \param projection projection code
  */
-
 void G_format_northing(double north, char *buf, int projection)
 {
     if (projection == PROJECTION_LL)
@@ -41,19 +34,16 @@ void G_format_northing(double north, char *buf, int projection)
 	format_double(north, buf);
 }
 
-
-/**
+/*!
  * \brief Easting to ASCII.
  *
- * Converts the double representation of the <b>east</b> coordinate to
- * its ASCII representation (into <b>buf</b>).
+ * Converts the double representation of the <i>east</i> coordinate to
+ * its ASCII representation (into <i>buf</i>).
  *
- * \param[in] east easting
- * \param[in,out] buf buffer to hold formatted string
- * \param[in] projection
- * \return
+ * \param east easting
+ * \param[out] buf buffer to hold formatted string
+ * \param projection projection code
  */
-
 void G_format_easting(double east, char *buf, int projection)
 {
     if (projection == PROJECTION_LL)
@@ -62,19 +52,16 @@ void G_format_easting(double east, char *buf, int projection)
 	format_double(east, buf);
 }
 
-
-/**
+/*!
  * \brief Resolution to ASCII.
  *
- * Converts the double representation of the <b>resolution</b> to its 
- * ASCII representation (into <b>buf</b>).
+ * Converts the double representation of the <i>resolution</i> to its 
+ * ASCII representation (into <i>buf</i>).
  *
- *  \param[in] resolution
- *  \param[in,out] buf buffer to hold formatted string
- *  \param[in] projection
- *  \return
+ * \param resolution resolution value
+ * \param[out] buf buffer to hold formatted string
+ * \param projection projection code
  */
-
 void G_format_resolution(double res, char *buf, int projection)
 {
     if (projection == PROJECTION_LL)

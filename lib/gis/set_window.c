@@ -1,31 +1,27 @@
-
-/**
- * \file set_window.c
+/*!
+ * \file gis/set_window.c
  *
- * \brief Set window
+ * \brief GIS Library - Set window (map region)
  *
- * (C) 2001-2008 by the GRASS Development Team
+ * (C) 2001-2009 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author GRASS GIS Development Team
- *
- * \date 1999-2007
+ * \author Original author CERL
  */
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include "G.h"
 
-/**
- * \brief Get the current working window.
+/*!
+ * \brief Get the current working window (region)
  *
  * The current working window values are returned in the structure
- * 'window'.
+ * <i>window</i>.
  *
- * \param[out] window window structure to be set
- * \return
+ * \param[in,out] window window structure to be set
  */
 void G_get_set_window(struct Cell_head *window)
 {
@@ -34,12 +30,12 @@ void G_get_set_window(struct Cell_head *window)
 }
 
 
-/**
+/*!
  * \brief Establishes 'window' as the current working window.
  * 
  * Any opened cell files has its file-to-window mapping reworked.
  *
- * \param[in] window window to become operative window
+ * \param window window to become operative window
  * 
  * \return -1 on error
  * \return  1 on success
@@ -129,9 +125,8 @@ int G_set_window(struct Cell_head *window)
 	fcb->min_null_row = (-1) * NULL_ROWS_INMEM;
 	if(fcb->null_cur_row > 0)
 	{
-	    G_warning(
-		"Calling G_set_window() in the middle of writing map %s", 
-		fcb->name);
+	  G_warning(_("Calling G_set_window() in the middle of writing map %s"), 
+		    fcb->name);
 	    fcb->null_cur_row = 0;
 	}
 #endif

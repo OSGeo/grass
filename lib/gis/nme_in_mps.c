@@ -1,34 +1,37 @@
 /*!
-   \file nme_in_mps.c
+  \file gis/nme_in_mps.c
 
-   \brief GIS Library - check map name
+  \brief GIS Library - check map name
 
-   (C) 2001-2008 by the GRASS Development Team
+  (C) 2001-2009 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+  This program is free software under the GNU General Public License
+  (>=v2).  Read the file COPYING that comes with GRASS for details.
 
-   \author Original author CERL
- */
+  \author Original author CERL
+*/
 
 #include <string.h>
 #include <grass/gis.h>
 
 /*!
-   \brief Check if map name is fully qualified (map @ mapset)
+  \brief Check if map name is fully qualified (map @ mapset)
+  
+  Returns a fully qualified name for the file <i>name</i> in
+  <i>mapset</i>. Currently this string is in the form
+  <i>name@mapset</i>, but the programmer should pretend not to know this
+  and always call this routine to get the fully qualified name.
 
-   Note:
-   - <b>name</b> is char array of size GNAME_MAX
-   - <b>mapset</b> is char array of size GMAPSET_MAX
+  Note:
+   - <i>name</i> is char array of size GNAME_MAX
+   - <i>mapset</i> is char array of size GMAPSET_MAX
 
-   \param fullname full map name
-   \param[out] name map name
-   \param[out] mapset mapset name
-
-   \return 1 if input map name is fully qualified
-   \return 0 if input map name is not fully qualified
+  \param fullname full map name
+  \param[out] name map name
+  \param[out] mapset mapset name
+  
+  \return 1 if input map name is fully qualified
+  \return 0 if input map name is not fully qualified
  */
 int G__name_is_fully_qualified(const char *fullname, char *name, char *mapset)
 {
