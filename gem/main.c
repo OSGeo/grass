@@ -75,7 +75,7 @@
    NEED HELP
    - GRASS' make install installs all files BENEATH top level dir with UID
    set to benni !!! Is this intentional?
-   - provide gem61 as link in /usr/local/bin as part of grass 6.1 base install
+   - provide gem7x as link in /usr/local/bin as part of grass 7.x base install
    - description.html should not contain </body> or </html> as Rules.Make seems
    to append those ?
    - source install copies files COPYING README REQUIREMENTS.html to somewhere (but where?)

@@ -397,7 +397,7 @@ with:
 
 <DL COMPACT>
 <DT>
-<DD>gem6
+<DD>gem70
 </DD>
 </DL>Instructions on how to user GEM to install an actual extension are
 given in section <A HREF="#sub:Basic-Usage">3.4</A>.
@@ -461,7 +461,7 @@ file that you can start from the current directory:
 
 <DL COMPACT>
 <DT>
-<DD>./gem6
+<DD>./gem70
 </DD>
 </DL>... or copy the executable to a system-wide directory, such
 as <I>/usr/local/bin</I>.
@@ -496,7 +496,7 @@ it from inside the GRASS session using:
 
 <DL COMPACT>
 <DT>
-<DD>gem6&nbsp;-install=<I>ExtensionName</I>.tar.gz
+<DD>gem70&nbsp;-install=<I>ExtensionName</I>.tar.gz
 </DD>
 </DL>You will now have to be patient as the extension is verified, configured
 and its source code compiled.
@@ -567,7 +567,7 @@ this with the name of the extension you wish to install as needed.
 
 <P>
 I will further assume that you (or your system's administrator) have
-copied the executable <I>gem6</I> into a directory from where it can
+copied the executable <I>gem70</I> into a directory from where it can
 be started system-wide (such as <I>/usr/local/bin</I>) without having
 to prefix the path to the executable (see instructions in <A HREF="#sub:Program-Installation">3.1</A>).
 
@@ -607,7 +607,7 @@ simply call GEM without any options or ``-help'':
 
 <DL COMPACT>
 <DT>
-<DD>gem6
+<DD>gem70
 </DD>
 </DL>The ``-version'' action shows information about the GEM version
 you are using.
@@ -629,7 +629,7 @@ installation for which you wish to install the extension (using the
 
 <DL COMPACT>
 <DT>
-<DD>gem6&nbsp;-grass=/usr/local/grass-6.0.0&nbsp;-install=RasterTools.tar.gz
+<DD>gem70&nbsp;-grass=/usr/local/grass-6.0.0&nbsp;-install=RasterTools.tar.gz
 </DD>
 </DL>If everything goes well, you will see a few messages on the screen
 and after a short while the program will inform you that it is done.
@@ -684,7 +684,7 @@ as ``RasterTools''. To get a list of newly installed GRASS modules:
 
 <DL COMPACT>
 <DT>
-<DD>gem6&nbsp;-query=RasterTools
+<DD>gem70&nbsp;-query=RasterTools
 </DD>
 </DL>This will display all sorts of information about your freshly installed
 extension, including the installed modules (under ``Commands provided'').
@@ -695,7 +695,7 @@ through <I>more</I> and press space to see one page after another:
 
 <DL COMPACT>
 <DT>
-<DD>gem6&nbsp;-query=RasterTools&nbsp;|&nbsp;more
+<DD>gem70&nbsp;-query=RasterTools&nbsp;|&nbsp;more
 </DD>
 </DL>Alternatively, you can browse the GRASS HTML offline help which should
 now contain a link to the extension and its modules from its main
@@ -715,7 +715,7 @@ it, you can also query the extension package itself:
 
 <DL COMPACT>
 <DT>
-<DD>gem6&nbsp;-query=RasterTools.tar.gz
+<DD>gem70&nbsp;-query=RasterTools.tar.gz
 </DD>
 </DL>Actions ``-details='' and ``-license='' will give additional
 information if needed. To list all installed extensions (shows name,
@@ -727,7 +727,7 @@ name:
 
 <DL COMPACT>
 <DT>
-<DD>gem6&nbsp;-q
+<DD>gem70&nbsp;-q
 </DD>
 </DL><!-- MATH
  $\framebox{\begin{minipage}[t][1\totalheight]{1\columnwidth}%
@@ -753,7 +753,7 @@ Again, you need write-access to the GRASS installation dir.
 
 <DL COMPACT>
 <DT>
-<DD>gem6&nbsp;-uninstall=AdvancedViewshedAnalysis&nbsp;
+<DD>gem70&nbsp;-uninstall=AdvancedViewshedAnalysis&nbsp;
 </DD>
 </DL>This should clean your system of all installed modules, HTML pages
 and GUI menu entires. Quit and restart the GIS-Manager (<I>d.m</I>)
@@ -766,7 +766,7 @@ now missing GUI menu entries and HTML pages for your extensions:
 
 <DL COMPACT>
 <DT>
-<DD>gem6&nbsp;-restore&nbsp;
+<DD>gem70&nbsp;-restore&nbsp;
 </DD>
 </DL>... will try to put everything back in order. The program will
 also create a backup copy <I>menu.tcl.gem.bak</I> before it alters
@@ -805,7 +805,7 @@ files for your OS by querying the extension package:
 
 <DL COMPACT>
 <DT>
-<DD>gem6&nbsp;-query=RasterTools.tar.gz
+<DD>gem70&nbsp;-query=RasterTools.tar.gz
 </DD>
 </DL>If any binaries are provided, they will be listed under &#34;Binary
 installation files&#34;. You should be able to see whether they
@@ -822,7 +822,7 @@ deem right:
 
 <DL COMPACT>
 <DT>
-<DD>gem6&nbsp;-binary=cygwin&nbsp;-install=RasterTools.tar.gz
+<DD>gem70&nbsp;-binary=cygwin&nbsp;-install=RasterTools.tar.gz
 </DD>
 </DL>This process should finish quicker than regular installation from
 source code as it will skip source code configuration and compilation.
@@ -854,7 +854,7 @@ is installed (http://www.gnu.org/software/wget/wget.html):
 
 <DL COMPACT>
 <DT>
-<DD>gem6&nbsp;-install=http://www.uni-kiel.de/ufg/dateienDucke/RasterTools.tar.gz
+<DD>gem70&nbsp;-install=http://www.uni-kiel.de/ufg/dateienDucke/RasterTools.tar.gz
 </DD>
 </DL>
 <P>
@@ -880,7 +880,7 @@ has before you attempt to install (under ``Dependencies''):
 
 <DL COMPACT>
 <DT>
-<DD>gem6&nbsp;-query=RasterTools.tar.gz
+<DD>gem70&nbsp;-query=RasterTools.tar.gz
 </DD>
 </DL>Compare this with the output of
 
@@ -888,7 +888,7 @@ has before you attempt to install (under ``Dependencies''):
 
 <DL COMPACT>
 <DT>
-<DD>gem6&nbsp;-q
+<DD>gem70&nbsp;-q
 </DD>
 </DL>... and you will know if you need to install something else first.
 
@@ -1406,7 +1406,7 @@ directory of your cross compilation setup):
 <DD>#!/bin/bash
 
 <P>
-$GEMBIN=/usr/local/bin/gem6
+$GEMBIN=/usr/local/bin/gem70
 
 <P>
 export&nbsp;WIN=/home/user/wingrass
@@ -1490,10 +1490,10 @@ commands:
 
 <DL COMPACT>
 <DT>
-<DD>./wingem6&nbsp;-install=&lt;extension&gt;&nbsp;-grass=&lt;grass-install-dir&gt;
+<DD>./wingem70&nbsp;-install=&lt;extension&gt;&nbsp;-grass=&lt;grass-install-dir&gt;
 </DD>
 </DL>Don't forget to configure your extension to re-generate Platform.make
-and Grass.make (i.e. don't use the <I>-s</I> flag on the first <I>wingem6</I>
+and Grass.make (i.e. don't use the <I>-s</I> flag on the first <I>wingem70</I>
 run).
 
 <P>
@@ -1545,7 +1545,7 @@ an error message about the extension being already installed):
 
 <DL COMPACT>
 <DT>
-<DD>./gem6&nbsp;-grass=pathToGRASS&nbsp;-t&nbsp;extensionName
+<DD>./gem70&nbsp;-grass=pathToGRASS&nbsp;-t&nbsp;extensionName
 </DD>
 </DL>If the compilation was successful, you will find two new folders in
 the <I>src</I> directory of the extension directory: <I>bin.architecture-osname</I>
@@ -2246,7 +2246,7 @@ B..3 GEM Synopsis</A>
 
 <DL COMPACT>
 <DT>
-<DD>Usage:&nbsp;gem6&nbsp;[OPTION]&nbsp;[ACTION]&nbsp;[FILE|DIR]
+<DD>Usage:&nbsp;gem70&nbsp;[OPTION]&nbsp;[ACTION]&nbsp;[FILE|DIR]
 
 <P>
 Possible&nbsp;ACTIONs&nbsp;are:
