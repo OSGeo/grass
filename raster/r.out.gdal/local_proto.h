@@ -51,15 +51,11 @@
 #define TYPE_FLOAT64_MAX	1.79E308f
 #endif
 
-#define GRASS_MAX_COLORS TYPE_UINT16_MAX
-
-/* main.c */
-int range_check(double, double, GDALDataType, char *);
-int nullvalue_check(double, GDALDataType);
+#define GRASS_MAX_COLORS TYPE_UINT16_MAX    /* ok? */
 
 /* export_band.c */
-int export_band(GDALDatasetH, int, const char *, const char *,
-		struct Cell_head *, RASTER_MAP_TYPE, double,
-		const char *, int, int);
+int export_band(GDALDatasetH, GDALDataType, int, const char *, 
+		const char *, struct Cell_head *, RASTER_MAP_TYPE, 
+		double, const char *, int, int);
 
 #endif /* __LOCAL_PROTO_H__ */
