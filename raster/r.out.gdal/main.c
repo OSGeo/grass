@@ -33,7 +33,7 @@
 #include "local_proto.h"
 
 int range_check(double, double, GDALDataType);
-int nodataval_check(double, GDALDataType);
+int nodataval_check(double *, GDALDataType);
 double set_default_nodata_value(GDALDataType, double, double);
 
 void supported_formats(const char **formats)
@@ -475,11 +475,8 @@ int main(int argc, char *argv[])
 	nodataval = atof(nodataopt->answer);
 	default_nodataval = 0;
 	/* Check if given nodata value can be represented by selected GDAL datatype */
-	if (nodataval_check(nodataval, datatype)) {
-	    if (flag_f->answer)
-		G_warning(_("Forcing raster export."));
-	    else
-		G_fatal_error(_("Raster export aborted."));
+	if (nodataval_check(&nodataval, datatype)) {
+	    G_warning(_("Nodata value converted to %f"), nodataval);
 	}
     }
     /* Set reasonable default nodata value */
@@ -702,31 +699,33 @@ int range_check(double min, double max, GDALDataType datatype)
     }
 }
 
-int nodataval_check(double nodataval, GDALDataType datatype)
+int nodataval_check(double *nodataval, GDALDataType datatype)
 {
 
     switch (datatype) {
     case GDT_Byte:
-	if (nodataval != (double)(GByte) nodataval) {
+	if (*nodataval != (double)(GByte) *nodataval) {
 	    G_warning(_("Mismatch between metadata nodata value and actual nodata value in exported raster: "
 		       "specified nodata value %f gets converted to %d by selected GDAL datatype."),
-		      nodataval, (GByte) nodataval);
+		      *nodataval, (GByte) *nodataval);
 	    G_warning(_("GDAL datatype: %s, range: %d - %d"),
 		      GDALGetDataTypeName(datatype), TYPE_BYTE_MIN,
 		      TYPE_BYTE_MAX);
+	    *nodataval = (double)(GByte) *nodataval;
 	    return 1;
 	}
 	else
 	    return 0;
 
     case GDT_UInt16:
-	if (nodataval != (double)(GUInt16) nodataval) {
+	if (*nodataval != (double)(GUInt16) *nodataval) {
 	    G_warning(_("Mismatch between metadata nodata value and actual nodata value in exported raster: "
 		       "specified nodata value %f gets converted to %d by selected GDAL datatype."),
-		      nodataval, (GUInt16) nodataval);
+		      *nodataval, (GUInt16) *nodataval);
 	    G_warning(_("GDAL datatype: %s, range: %d - %d"),
 		      GDALGetDataTypeName(datatype), TYPE_UINT16_MIN,
 		      TYPE_UINT16_MAX);
+	    *nodataval = (double)(GUInt16) *nodataval;
 	    return 1;
 	}
 	else
@@ -734,26 +733,28 @@ int nodataval_check(double nodataval, GDALDataType datatype)
 
     case GDT_Int16:
     case GDT_CInt16:
-	if (nodataval != (double)(GInt16) nodataval) {
+	if (*nodataval != (double)(GInt16) *nodataval) {
 	    G_warning(_("Mismatch between metadata nodata value and actual nodata value in exported raster: "
 		       "specified nodata value %f gets converted to %d by selected GDAL datatype."),
-		      nodataval, (GInt16) nodataval);
+		      *nodataval, (GInt16) *nodataval);
 	    G_warning(_("GDAL datatype: %s, range: %d - %d"),
 		      GDALGetDataTypeName(datatype), TYPE_INT16_MIN,
 		      TYPE_INT16_MAX);
+	    *nodataval = (double)(GInt16) *nodataval;
 	    return 1;
 	}
 	else
 	    return 0;
 
     case GDT_UInt32:
-	if (nodataval != (double)(GUInt32) nodataval) {
+	if (*nodataval != (double)(GUInt32) *nodataval) {
 	    G_warning(_("Mismatch between metadata nodata value and actual nodata value in exported raster: "
 		       "specified nodata value %f gets converted to %d by selected GDAL datatype."),
-		      nodataval, (GUInt32) nodataval);
+		      *nodataval, (GUInt32) *nodataval);
 	    G_warning(_("GDAL datatype: %s, range: %u - %u"),
 		      GDALGetDataTypeName(datatype), TYPE_UINT32_MIN,
 		      TYPE_UINT32_MAX);
+	    *nodataval = (double)(GUInt32) *nodataval;
 	    return 1;
 	}
 	else
@@ -761,13 +762,14 @@ int nodataval_check(double nodataval, GDALDataType datatype)
 
     case GDT_Int32:
     case GDT_CInt32:
-	if (nodataval != (double)(GInt32) nodataval) {
+	if (*nodataval != (double)(GInt32) *nodataval) {
 	    G_warning(_("Mismatch between metadata nodata value and actual nodata value in exported raster: "
 		       "specified nodata value %f gets converted to %d by selected GDAL datatype."),
-		      nodataval, (GInt32) nodataval);
+		      *nodataval, (GInt32) *nodataval);
 	    G_warning(_("GDAL datatype: %s, range: %d - %d"),
 		      GDALGetDataTypeName(datatype), TYPE_INT32_MIN,
 		      TYPE_INT32_MAX);
+	    *nodataval = (double)(GInt32) *nodataval;
 	    return 1;
 	}
 	else
@@ -775,13 +777,14 @@ int nodataval_check(double nodataval, GDALDataType datatype)
 
     case GDT_Float32:
     case GDT_CFloat32:
-	if (nodataval != (double)(float)nodataval) {
+	if (*nodataval != (double)(float) *nodataval) {
 	    G_warning(_("Mismatch between metadata nodata value and actual nodata value in exported raster: "
 		       "specified nodata value %f gets converted to %f by selected GDAL datatype."),
-		      nodataval, (float)nodataval);
+		      *nodataval, (float) *nodataval);
 	    G_warning(_("GDAL datatype: %s, range: %g - %g"),
 		      GDALGetDataTypeName(datatype), TYPE_FLOAT32_MIN,
 		      TYPE_FLOAT32_MAX);
+	    *nodataval = (double)(float) *nodataval;
 	    return 1;
 	}
 	else
