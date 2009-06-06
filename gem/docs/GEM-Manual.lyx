@@ -461,7 +461,7 @@ ally have GEM available system-wide (usually
 \end_layout
 
 \begin_layout LyX-Code
-gem6
+gem70
 \end_layout
 
 \begin_layout Standard
@@ -575,7 +575,7 @@ Afer a few seconds, the compilation is done and you have an executable file
 \end_layout
 
 \begin_layout LyX-Code
-./gem6
+./gem70
 \end_layout
 
 \begin_layout Standard
@@ -623,7 +623,7 @@ For the impatient.
 \end_layout
 
 \begin_layout LyX-Code
-gem6 --install=
+gem70 --install=
 \emph on
 ExtensionName
 \emph default
@@ -771,7 +771,7 @@ tar'd gzip
 I will further assume that you (or your system's administrator) have copied
  the executable 
 \emph on
-gem6
+gem70
 \emph default
  into a directory from where it can be started system-wide (such as 
 \emph on
@@ -878,7 +878,7 @@ GEM understands short and long options.
 \end_layout
 
 \begin_layout LyX-Code
-gem6
+gem70
 \end_layout
 
 \begin_layout Standard
@@ -941,7 +941,7 @@ To install a module into your GRASS installation (in this example
 \end_layout
 
 \begin_layout LyX-Code
-gem6 --grass=/usr/local/grass-6.0.0 --install=RasterTools.tar.gz
+gem70 --grass=/usr/local/grass-6.0.0 --install=RasterTools.tar.gz
 \end_layout
 
 \begin_layout Standard
@@ -1077,7 +1077,7 @@ RasterTools
 \end_layout
 
 \begin_layout LyX-Code
-gem6 --query=RasterTools
+gem70 --query=RasterTools
 \end_layout
 
 \begin_layout Standard
@@ -1100,7 +1100,7 @@ more
 \end_layout
 
 \begin_layout LyX-Code
-gem6 --query=RasterTools | more
+gem70 --query=RasterTools | more
 \end_layout
 
 \begin_layout Standard
@@ -1142,7 +1142,7 @@ If you want to know details about an extension before you install it, you
 \end_layout
 
 \begin_layout LyX-Code
-gem6 --query=RasterTools.tar.gz
+gem70 --query=RasterTools.tar.gz
 \end_layout
 
 \begin_layout Standard
@@ -1170,7 +1170,7 @@ Actions
 \end_layout
 
 \begin_layout LyX-Code
-gem6 -q
+gem70 -q
 \end_layout
 
 \begin_layout Standard
@@ -1218,7 +1218,7 @@ You can also un-install an extension to remove it from the system-wide GRASS
 \end_layout
 
 \begin_layout LyX-Code
-gem6 --uninstall=AdvancedViewshedAnalysis 
+gem70 --uninstall=AdvancedViewshedAnalysis 
 \end_layout
 
 \begin_layout Standard
@@ -1243,7 +1243,7 @@ menu.tcl
 \end_layout
 
 \begin_layout LyX-Code
-gem6 --restore 
+gem70 --restore 
 \end_layout
 
 \begin_layout Standard
@@ -1308,7 +1308,7 @@ You can check whether an extension provides such pre-compiled binary files
 \end_layout
 
 \begin_layout LyX-Code
-gem6 --query=RasterTools.tar.gz
+gem70 --query=RasterTools.tar.gz
 \end_layout
 
 \begin_layout Standard
@@ -1339,7 +1339,7 @@ Use the option "--binary=" in conjunction with the "--install=" action to
 \end_layout
 
 \begin_layout LyX-Code
-gem6 --binary=cygwin --install=RasterTools.tar.gz
+gem70 --binary=cygwin --install=RasterTools.tar.gz
 \end_layout
 
 \begin_layout Standard
@@ -1397,7 +1397,7 @@ wget
 \end_layout
 
 \begin_layout LyX-Code
-gem6 --install=http://www.uni-kiel.de/ufg/dateienDucke/RasterTools.tar.gz
+gem70 --install=http://www.uni-kiel.de/ufg/dateienDucke/RasterTools.tar.gz
 \end_layout
 
 \begin_layout Subsection
@@ -1435,7 +1435,7 @@ Dependencies
 \end_layout
 
 \begin_layout LyX-Code
-gem6 --query=RasterTools.tar.gz
+gem70 --query=RasterTools.tar.gz
 \end_layout
 
 \begin_layout Standard
@@ -1443,7 +1443,7 @@ Compare this with the output of
 \end_layout
 
 \begin_layout LyX-Code
-gem6 -q
+gem70 -q
 \end_layout
 
 \begin_layout Standard
@@ -2706,7 +2706,7 @@ WIN
 \end_layout
 
 \begin_layout LyX-Code
-$GEMBIN=/usr/local/bin/gem6
+$GEMBIN=/usr/local/bin/gem70
 \end_layout
 
 \begin_layout LyX-Code
@@ -2859,7 +2859,7 @@ This makes use of GEM's new ability to use custom configure and make commands:
 \end_layout
 
 \begin_layout LyX-Code
-./wingem6 --install=<extension> --grass=<grass-install-dir>
+./wingem70 --install=<extension> --grass=<grass-install-dir>
 \end_layout
 
 \begin_layout Standard
@@ -2871,7 +2871,7 @@ Don't forget to configure your extension to re-generate Platform.make and
 \emph default
  flag on the first 
 \emph on
-wingem6
+wingem70
 \emph default
  run).
 \end_layout
@@ -2939,7 +2939,7 @@ Compile the extension under the OS that you wish to prepare binaries for
 \end_layout
 
 \begin_layout LyX-Code
-./gem6 --grass=pathToGRASS -t extensionName
+./gem70 --grass=pathToGRASS -t extensionName
 \end_layout
 
 \begin_layout Standard
@@ -4186,7 +4186,7 @@ GEM Synopsis
 \end_layout
 
 \begin_layout LyX-Code
-Usage: gem6 [OPTION] [ACTION] [FILE|DIR]
+Usage: gem70 [OPTION] [ACTION] [FILE|DIR]
 \end_layout
 
 \begin_layout LyX-Code
