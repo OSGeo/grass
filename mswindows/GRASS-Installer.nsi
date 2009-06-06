@@ -656,7 +656,7 @@ Section "GRASS" SecGRASS
 	FileWrite $0 'exit" 2 3 9 15$\r$\n'
 	FileWrite $0 '$\r$\n'
 	FileWrite $0 '# Set the GISBASE variable$\r$\n'
-	FileWrite $0 'GISBASE=/$UNIX_LIKE_DRIVE$UNIX_LIKE_GRASS_PATH$\r$\n'
+	FileWrite $0 'GISBASE="/$UNIX_LIKE_DRIVE$UNIX_LIKE_GRASS_PATH"$\r$\n'
 	FileWrite $0 'export GISBASE$\r$\n'
 	FileWrite $0 '$\r$\n'
 	FileWrite $0 '# Set the PATH variable$\r$\n'
