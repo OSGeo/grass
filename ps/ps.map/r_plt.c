@@ -142,10 +142,9 @@ int read_eps(double e, double n)
 	    G_chop(data);
 	    eps = G_store(data);
 	    /* test if file is accessible */
-	    if ((fp = fopen(eps, "r")) == NULL) {
-		fprintf(stderr, "Can't open eps file <%s>\n", eps);
-		return (0);
-	    }
+	    if ((fp = fopen(eps, "r")) == NULL)
+		error(key, data, "Can't open eps file");
+
 	    have_eps = 1;
 	    fclose(fp);
 	    continue;
