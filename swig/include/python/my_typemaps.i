@@ -149,14 +149,16 @@ static void *pyobj_to_ptr(PyObject *input, int data_type)
 	if (PyCObject_Check(input))
 		return PyCObject_AsVoidPtr(input);
 
+	if (PyString_Check(input) && strchr("cbB", data_type))
+		return (void *) PyString_AsString(input);
+
 	if (PyObject_AsWriteBuffer(input, &buffer, &len) == 0)
 		return buffer;
 
 	if (PyObject_AsReadBuffer(input, &cbuffer, &len) == 0)
 		return (void *) cbuffer;
 
-	if (PyString_Check(input) && strchr("cbB", data_type))
-		return (void *) PyString_AsString(input);
+	PyErr_Clear();
 
 	return pyseq_to_ptr(input, data_type);
 }
@@ -173,6 +175,54 @@ static void *pyobj_to_ptr(PyObject *input, int data_type)
 
 %typemap(in) DCELL * {
 	$1 = (DCELL *) pyobj_to_ptr($input, 'd');
+}
+
+%typemap(in) signed char * {
+	$1 = (signed char *) pyobj_to_ptr($input, 'b');
+}
+
+%typemap(in) unsigned char * {
+	$1 = (unsigned char *) pyobj_to_ptr($input, 'B');
+}
+
+%typemap(in) signed short * {
+	$1 = (signed short *) pyobj_to_ptr($input, 'h');
+}
+
+%typemap(in) unsigned short * {
+	$1 = (unsigned short *) pyobj_to_ptr($input, 'H');
+}
+
+%typemap(in) int * {
+	$1 = (int *) pyobj_to_ptr($input, 'i');
+}
+
+%typemap(in) signed int * {
+	$1 = (int *) pyobj_to_ptr($input, 'i');
+}
+
+%typemap(in) unsigned int * {
+	$1 = (int *) pyobj_to_ptr($input, 'I');
+}
+
+%typemap(in) long * {
+	$1 = (long *) pyobj_to_ptr($input, 'l');
+}
+
+%typemap(in) signed long * {
+	$1 = (long *) pyobj_to_ptr($input, 'l');
+}
+
+%typemap(in) unsigned long * {
+	$1 = (long *) pyobj_to_ptr($input, 'L');
+}
+
+%typemap(in) float * {
+	$1 = (float *) pyobj_to_ptr($input, 'f');
+}
+
+%typemap(in) double * {
+	$1 = (double *) pyobj_to_ptr($input, 'd');
 }
 
 %{
