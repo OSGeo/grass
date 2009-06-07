@@ -13,8 +13,11 @@ include $(MODULE_TOPDIR)/include/Make/Module.make
 
 SRCPAT := $(wildcard patterns/*.eps)
 DSTPAT := $(patsubst patterns/%.eps,$(ETC)/paint/patterns/%.eps,$(SRCPAT))
+SRCDEC := $(wildcard decorations/*.eps)
+DSTDEC := $(patsubst decorations/%.eps,$(ETC)/paint/decorations/%.eps,$(SRCDEC))
 
-default: cmd $(PROLOG) patt
+
+default: cmd $(PROLOG) patt decor
 
 $(PROLOG): prolog.ps
 	if [ ! -d $(ETC)/paint ] ; then $(MKDIR) $(ETC)/paint ; fi
@@ -27,4 +30,12 @@ patt:
 $(ETC)/paint/patterns/%.eps: patterns/%.eps
 	$(INSTALL_DATA) $< $@
 
-.PHONY: patt
+decor:
+	if [ ! -d $(ETC)/paint/decorations ] ; then $(MKDIR) $(ETC)/paint/decorations ; fi
+	$(MAKE) $(DSTDEC)
+
+$(ETC)/paint/decorations/%.eps: decorations/%.eps
+	$(INSTALL_DATA) $< $@
+
+
+.PHONY: patt decor
