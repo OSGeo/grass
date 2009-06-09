@@ -127,10 +127,10 @@ class GMFrame(wx.Frame):
         # -> self.notebook, self.goutput, self.outpage
         self.notebook  = self.__createNoteBook()
         self.menubar, self.menudata = self.__createMenuBar()
+        self.statusbar = self.CreateStatusBar(number=1)
         self.cmdprompt, self.cmdinput = self.__createCommandPrompt()
         self.toolbar   = self.__createToolBar()
-        self.statusbar = self.CreateStatusBar(number=1)
-
+        
         # bindings
         self.Bind(wx.EVT_CLOSE,     self.OnCloseWindow)
         self.Bind(wx.EVT_LEFT_DOWN, self.AddRaster, self.notebook)

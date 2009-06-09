@@ -70,7 +70,8 @@ class GPrompt:
             cmdinput = TextCtrlAutoComplete(parent = cmdprompt, id = wx.ID_ANY,
                                             value = "",
                                             style = wx.TE_LINEWRAP | wx.TE_PROCESS_ENTER,
-                                            size = (-1, winHeight))
+                                            size = (-1, winHeight),
+                                            statusbar = self.parent.statusbar)
         except NotImplementedError:
             # wx.PopupWindow may be not available in wxMac
             # see http://trac.wxwidgets.org/ticket/9377
@@ -218,13 +219,16 @@ class PromptListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         listmix.ListCtrlAutoWidthMixin.__init__(self)
         
 class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
-    def __init__ (self, parent, id = wx.ID_ANY, choices = [], **kwargs):
+    def __init__ (self, parent, statusbar, 
+                  id = wx.ID_ANY, choices = [], **kwargs):
         """!Constructor works just like wx.TextCtrl except you can pass in a
         list of choices.  You can also change the choice list at any time
         by calling setChoices.
         
         Inspired by http://wiki.wxpython.org/TextCtrlAutoComplete
         """
+        self.statusbar = statusbar
+        
         if kwargs.has_key('style'):
             kwargs['style'] = wx.TE_PROCESS_ENTER | kwargs['style']
         else:
@@ -482,13 +486,22 @@ class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
             self.dropdownlistbox.Select(self.dropdownlistbox.GetFirstSelected(), False)
             if self._hideOnNoMatch:
                 self._showDropDown(False)
-            
-            if self._module and cmd[-1][-2] == '=':
-                optType = self._module.get_param(cmd[-1][:-2])['prompt']
-                if optType in ('raster', 'vector'):
-                    # -> raster/vector map
-                    self.SetChoices(self._choicesMap[optType], optType)
-                                            
+                if self._module and '=' not in cmd[-1]:
+                    message = ''
+                    if cmd[-1][0] == '-': # flag
+                        message = "Warning: flag <%s> not found in '%s'" % \
+                            (cmd[-1][1:], self._module.name)
+                    else: # option
+                        message = "Warning: option <%s> not found in '%s'" % \
+                            (cmd[-1], self._module.name)
+                    self.statusbar.SetStatusText(message)
+        
+        if self._module and len(cmd[-1]) == 2 and cmd[-1][-2] == '=':
+            optType = self._module.get_param(cmd[-1][:-2])['prompt']
+            if optType in ('raster', 'vector'):
+                # -> raster/vector map
+                self.SetChoices(self._choicesMap[optType], optType)
+        
         self._listItemVisible()
         
         event.Skip()
