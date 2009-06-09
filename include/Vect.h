@@ -317,6 +317,7 @@ int Vect_point_in_island(double, double, const struct Map_info *, int);
 void Vect_break_lines(struct Map_info *, int, struct Map_info *);
 int Vect_break_lines_list(struct Map_info *, struct ilist *, struct ilist *,
 			  int, struct Map_info *);
+int Vect_merge_lines(struct Map_info *, int, int *, struct Map_info *);
 void Vect_break_polygons(struct Map_info *, int, struct Map_info *);
 void Vect_remove_duplicates(struct Map_info *, int, struct Map_info *);
 int Vect_line_check_duplicate(const struct line_pnts *,
