@@ -57,6 +57,9 @@ int Vect_copy_map_lines(struct Map_info *In, struct Map_info *Out)
     if (Vect_level(In) >= 2) {
 	nlines = Vect_get_num_lines(In);
 	for (i = 1; i <= nlines; i++) {
+	    if (!Vect_line_alive(In, i))
+	    	continue;
+	    
 	    type = Vect_read_line(In, Points, Cats, i);
 	    if (type == -1) {
 		G_warning(_("Unable to read vector map <%s>"),
