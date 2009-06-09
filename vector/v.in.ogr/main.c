@@ -38,6 +38,7 @@
 #endif
 
 int n_polygons;
+double split_distance;
 
 int geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 	 double min_area, int type, int mk_centr);
@@ -57,7 +58,7 @@ int main(int argc, char *argv[])
     struct Flag *list_flag, *no_clean_flag, *z_flag, *notab_flag,
 	*region_flag;
     struct Flag *over_flag, *extend_flag, *formats_flag, *tolower_flag;
-    char buf[2000], namebuf[2000];
+    char buf[2000], namebuf[2000], tempvect[2000];
     char *separator;
     struct Key_Value *loc_proj_info = NULL, *loc_proj_units = NULL;
     struct Key_Value *proj_info, *proj_units;
@@ -65,7 +66,7 @@ int main(int argc, char *argv[])
     char error_msg[8192];
 
     /* Vector */
-    struct Map_info Map;
+    struct Map_info Map, Tmp;
     int cat;
 
     /* Attributes */
@@ -94,6 +95,7 @@ int main(int argc, char *argv[])
     int navailable_layers;
     int layer_id;
     int overwrite;
+    double area_size = 0.;
 
     G_gisinit(argv[0]);
 
@@ -452,6 +454,16 @@ int main(int argc, char *argv[])
 	cellhd.tb_res = 1.;
     }
 
+    /* suppress boundary splitting ? */
+    if (no_clean_flag->answer) {
+	split_distance = -1.;
+    }
+    else {
+	split_distance = 0.;
+	area_size =
+	    sqrt((cellhd.east - cellhd.west) * (cellhd.north - cellhd.south));
+    }
+
     /* Fetch input map projection in GRASS form. */
     proj_info = NULL;
     proj_units = NULL;
@@ -582,10 +594,24 @@ int main(int argc, char *argv[])
     db_init_string(&strval);
 
     /* open output vector */
-    if (z_flag->answer)
+    /* open temporary vector, do the work in the temporary vector
+     * at the end copy alive lines to output vector
+     * in case of polygons this reduces the coor file size by a factor of 2 to 5
+     * only needed for polygons, but the presence of polygons can be detected
+     * only during OGR feature import, not before */
+    sprintf(buf, "%s", out_opt->answer);
+    /* strip any @mapset from vector output name */
+    G_find_vector(buf, G_mapset());
+    sprintf(tempvect, "%s_tmp", buf);
+    G_verbose_message(_("Using temporary vector <%s>"), tempvect);
+    if (z_flag->answer) {
 	Vect_open_new(&Map, out_opt->answer, 1);
-    else
+	Vect_open_new(&Tmp, tempvect, 1);
+    }
+    else {
 	Vect_open_new(&Map, out_opt->answer, 0);
+	Vect_open_new(&Tmp, tempvect, 0);
+    }
 
     Vect_hist_command(&Map);
 
@@ -778,9 +804,21 @@ int main(int argc, char *argv[])
 	cat = 1;
 	nogeom = 0;
 	OGR_L_ResetReading(Ogr_layer);
-	G_important_message(_("Importing map %d features..."),
-			    OGR_L_GetFeatureCount(Ogr_layer, 1));
+	unsigned int n_features = 0, feature_count = 0;
+
+	n_features = OGR_L_GetFeatureCount(Ogr_layer, 1);
+	if (split_distance > -0.5 && n_features > 500) {
+	    split_distance =
+		area_size / log(OGR_L_GetFeatureCount(Ogr_layer, 1));
+	    /* divisor is the handle: increase divisor to decrease split_distance */
+	    split_distance = split_distance / 4.;
+	    G_debug(1, "root of area size: %f", area_size);
+	    G_verbose_message(_("Boundary splitting distance in map units: %G"),
+		      split_distance);
+	}
+	G_important_message(_("Importing map %d features..."), n_features);
 	while ((Ogr_feature = OGR_L_GetNextFeature(Ogr_layer)) != NULL) {
+	    G_percent(feature_count++, n_features, 1);	/* show something happens */
 	    /* Geometry */
 	    Ogr_geometry = OGR_F_GetGeometryRef(Ogr_feature);
 	    if (Ogr_geometry == NULL) {
@@ -791,7 +829,7 @@ int main(int argc, char *argv[])
 		if (dim > 2)
 		    with_z = 1;
 
-		geom(Ogr_geometry, &Map, layer + 1, cat, min_area, type,
+		geom(Ogr_geometry, &Tmp, layer + 1, cat, min_area, type,
 		     no_clean_flag->answer);
 	    }
 
@@ -813,8 +851,7 @@ int main(int argc, char *argv[])
 				 || Ogr_ftype == OFTDateTime) {
 			    char *newbuf;
 
-			    db_set_string(&strval,
-					  (char *)
+			    db_set_string(&strval, (char *)
 					  OGR_F_GetFieldAsString(Ogr_feature,
 								 i));
 			    db_double_quote_string(&strval);
@@ -825,8 +862,7 @@ int main(int argc, char *argv[])
 			}
 			else if (Ogr_ftype == OFTString ||
 				 Ogr_ftype == OFTIntegerList) {
-			    db_set_string(&strval,
-					  (char *)
+			    db_set_string(&strval, (char *)
 					  OGR_F_GetFieldAsString(Ogr_feature,
 								 i));
 			    db_double_quote_string(&strval);
@@ -867,6 +903,7 @@ int main(int argc, char *argv[])
 	    OGR_F_Destroy(Ogr_feature);
 	    cat++;
 	}
+	G_percent(n_features, n_features, 1);	/* finish it */
 
 	if (!notab_flag->answer) {
 	    db_commit_transaction(driver);
@@ -883,10 +920,11 @@ int main(int argc, char *argv[])
     G_message("%s", separator);
 
     /* TODO: is it necessary to build here? probably not, consumes time */
-    Vect_build(&Map);
+    /* GV_BUILD_BASE is sufficient to toggle boundary cleaning */
+    Vect_build_partial(&Tmp, GV_BUILD_BASE);
 
     if (!no_clean_flag->answer &&
-	Vect_get_num_primitives(&Map, GV_BOUNDARY) > 0) {
+	Vect_get_num_primitives(&Tmp, GV_BOUNDARY) > 0) {
 	int ret, centr, ncentr, otype, n_overlaps, n_nocat;
 	CENTR *Centr;
 	SPATIAL_INDEX si;
@@ -898,17 +936,13 @@ int main(int argc, char *argv[])
 	Points = Vect_new_line_struct();
 
 	G_message("%s", separator);
-	G_warning(_("Cleaning polygons, result is not guaranteed!"));
 
-	Vect_set_release_support(&Map);
-	Vect_close(&Map);
-	Vect_open_update(&Map, out_opt->answer, G_mapset());
-	Vect_build_partial(&Map, GV_BUILD_BASE);	/* Downgrade topo */
+	G_warning(_("Cleaning polygons, result is not guaranteed!"));
 
 	if (snap >= 0) {
 	    G_message("%s", separator);
 	    G_message(_("Snap boundaries (threshold = %.3e):"), snap);
-	    Vect_snap_lines(&Map, GV_BOUNDARY, snap, NULL);
+	    Vect_snap_lines(&Tmp, GV_BOUNDARY, snap, NULL);
 	}
 
 	/* It is not to clean to snap centroids, but I have seen data with 2 duplicate polygons
@@ -922,57 +956,64 @@ int main(int argc, char *argv[])
 
 	G_message("%s", separator);
 	G_message(_("Break polygons:"));
-	Vect_break_polygons(&Map, GV_BOUNDARY, NULL);
+	Vect_break_polygons(&Tmp, GV_BOUNDARY, NULL);
 
-	/* It is important to remove also duplicate centroids in case of duplicate imput polygons */
+	/* It is important to remove also duplicate centroids in case of duplicate input polygons */
 	G_message("%s", separator);
 	G_message(_("Remove duplicates:"));
-	Vect_remove_duplicates(&Map, GV_BOUNDARY | GV_CENTROID, NULL);
+	Vect_remove_duplicates(&Tmp, GV_BOUNDARY | GV_CENTROID, NULL);
+
+	/* split boundaries here ? */
 
 	/* Vect_clean_small_angles_at_nodes() can change the geometry so that new intersections
 	 * are created. We must call Vect_break_lines(), Vect_remove_duplicates()
-	 * and Vect_clean_small_angles_at_nodes() until no more small dangles are found */
+	 * and Vect_clean_small_angles_at_nodes() until no more small angles are found */
 	do {
 	    G_message("%s", separator);
 	    G_message(_("Break boundaries:"));
-	    Vect_break_lines(&Map, GV_BOUNDARY, NULL);
+	    Vect_break_lines(&Tmp, GV_BOUNDARY, NULL);
 
 	    G_message("%s", separator);
 	    G_message(_("Remove duplicates:"));
-	    Vect_remove_duplicates(&Map, GV_BOUNDARY, NULL);
+	    Vect_remove_duplicates(&Tmp, GV_BOUNDARY, NULL);
 
 	    G_message("%s", separator);
 	    G_message(_("Clean boundaries at nodes:"));
 	    nmodif =
-		Vect_clean_small_angles_at_nodes(&Map, GV_BOUNDARY, NULL);
+		Vect_clean_small_angles_at_nodes(&Tmp, GV_BOUNDARY, NULL);
 	} while (nmodif > 0);
 
 	G_message("%s", separator);
 	if (type & GV_BOUNDARY) {	/* that means lines were converted boundaries */
 	    G_message(_("Change boundary dangles to lines:"));
-	    Vect_chtype_dangles(&Map, -1.0, NULL);
+	    Vect_chtype_dangles(&Tmp, -1.0, NULL);
 	}
 	else {
 	    G_message(_("Change dangles to lines:"));
-	    Vect_remove_dangles(&Map, GV_BOUNDARY, -1.0, NULL);
+	    Vect_remove_dangles(&Tmp, GV_BOUNDARY, -1.0, NULL);
 	}
 
 	G_message("%s", separator);
 	if (type & GV_BOUNDARY) {
 	    G_message(_("Change boundary bridges to lines:"));
-	    Vect_chtype_bridges(&Map, NULL);
+	    Vect_chtype_bridges(&Tmp, NULL);
 	}
 	else {
 	    G_message(_("Remove bridges:"));
-	    Vect_remove_bridges(&Map, NULL);
+	    Vect_remove_bridges(&Tmp, NULL);
 	}
+
+	/* merge boundaries */
+	G_message("%s", separator);
+	G_message(_("Merge boundaries:"));
+	Vect_merge_lines(&Tmp, GV_BOUNDARY, NULL, NULL);
 
 	/* Boundaries are hopefully clean, build areas */
 	G_message("%s", separator);
-	Vect_build_partial(&Map, GV_BUILD_ATTACH_ISLES);
+	Vect_build_partial(&Tmp, GV_BUILD_ATTACH_ISLES);
 
 	/* Calculate new centroids for all areas, centroids have the same id as area */
-	ncentr = Vect_get_num_areas(&Map);
+	ncentr = Vect_get_num_areas(&Tmp);
 	G_debug(3, "%d centroids/areas", ncentr);
 
 	Centr = (CENTR *) G_calloc(ncentr + 1, sizeof(CENTR));
@@ -980,7 +1021,7 @@ int main(int argc, char *argv[])
 	for (centr = 1; centr <= ncentr; centr++) {
 	    Centr[centr].valid = 0;
 	    Centr[centr].cats = Vect_new_cats_struct();
-	    ret = Vect_get_point_in_area(&Map, centr, &x, &y);
+	    ret = Vect_get_point_in_area(&Tmp, centr, &x, &y);
 	    if (ret < 0) {
 		G_warning(_("Cannot calculate area centroid"));
 		continue;
@@ -997,7 +1038,8 @@ int main(int argc, char *argv[])
 
 	/* Go through all layers and find centroids for each polygon */
 	for (layer = 0; layer < nlayers; layer++) {
-	    G_message(_("Layer: %s"), layer_names[layer]);
+	    G_message("%s", separator);
+	    G_message(_("Find centroids for layer: %s"), layer_names[layer]);
 	    layer_id = layers[layer];
 	    Ogr_layer = OGR_DS_GetLayer(Ogr_ds, layer_id);
 	    OGR_L_ResetReading(Ogr_layer);
@@ -1017,12 +1059,15 @@ int main(int argc, char *argv[])
 	}
 
 	/* Write centroids */
+	G_message("%s", separator);
+	G_message(_("Write centroids:"));
+
 	n_overlaps = n_nocat = 0;
 	total_area = overlap_area = nocat_area = 0.0;
 	for (centr = 1; centr <= ncentr; centr++) {
 	    double area;
 
-	    area = Vect_get_area_area(&Map, centr);
+	    area = Vect_get_area_area(&Tmp, centr);
 	    total_area += area;
 
 	    if (!(Centr[centr].valid)) {
@@ -1048,17 +1093,17 @@ int main(int argc, char *argv[])
 		otype = GV_POINT;
 	    else
 		otype = GV_CENTROID;
-	    Vect_write_line(&Map, otype, Points, Centr[centr].cats);
+	    Vect_write_line(&Tmp, otype, Points, Centr[centr].cats);
 	}
 	if (Centr)
 	    G_free(Centr);
-	G_message("%s", separator);
-	Vect_build_partial(&Map, GV_BUILD_NONE);
 
-	G_message("%s", separator);
-	Vect_build(&Map);
+	/* G_message("%s", separator); */
+	/* Vect_build_partial(&Map, GV_BUILD_NONE); */
 
-	G_message("%s", separator);
+	/* not needed */
+	/* G_message("%s", separator);
+	   Vect_build(&Map); */
 
 	if (n_overlaps > 0) {
 	    G_warning(_("%d areas represent more (overlapping) features, because polygons overlap "
@@ -1067,22 +1112,26 @@ int main(int argc, char *argv[])
 		      n_overlaps, nlayers + 1);
 	}
 
-	sprintf(buf, _("%d input polygons"), n_polygons);
-	G_message(buf);
+	Vect_hist_write(&Map, separator);
+	Vect_hist_write(&Map, "\n");
+	sprintf(buf, _("%d input polygons\n"), n_polygons);
+	G_message(_("%d input polygons"), n_polygons);
 	Vect_hist_write(&Map, buf);
 
-	sprintf(buf, _("Total area: %e (%d areas)"), total_area, ncentr);
-	G_message(buf);
+	sprintf(buf, _("Total area: %G (%d areas)\n"), total_area, ncentr);
+	G_message(_("Total area: %G (%d areas)"), total_area, ncentr);
 	Vect_hist_write(&Map, buf);
 
-	sprintf(buf, _("Overlapping area: %e (%d areas)"), overlap_area,
+	sprintf(buf, _("Overlapping area: %G (%d areas)\n"), overlap_area,
 		n_overlaps);
-	G_message(buf);
+	G_message(_("Overlapping area: %G (%d areas)"), overlap_area,
+		  n_overlaps);
 	Vect_hist_write(&Map, buf);
 
-	sprintf(buf, _("Area without category: %e (%d areas)"), nocat_area,
+	sprintf(buf, _("Area without category: %G (%d areas)\n"), nocat_area,
 		n_nocat);
-	G_message(buf);
+	G_message(_("Area without category: %G (%d areas)"), nocat_area,
+		  n_nocat);
 	Vect_hist_write(&Map, buf);
     }
 
@@ -1090,8 +1139,13 @@ int main(int argc, char *argv[])
      * OGR_DS_Destroy( Ogr_ds );
      */
 
-    Vect_close(&Map);
+    /* Copy temporary vector to output vector */
+    Vect_copy_map_lines(&Tmp, &Map);
 
+    Vect_build(&Map);
+    Vect_close(&Map);
+    Vect_close(&Tmp);
+    Vect_delete(tempvect);
 
     /* -------------------------------------------------------------------- */
     /*      Extend current window based on dataset.                         */
