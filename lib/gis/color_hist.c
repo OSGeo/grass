@@ -1,44 +1,31 @@
-
-/**********************************************************************
- *
- *  G_make_histogram_eq_colors (colors, statf)
- *
- *   struct Colors *colors      struct to hold colors
- *   struct Cell_stats *statf   cell stats info
- *
- *  Generates histogram equalized grey scale from
- *  cell stats structure info.
- *  Color range is 0-255.
- *
- **********************************************************************
- *
- *  G_make_histogram_log_colors (colors, statf, min, max)
- *
- *   struct Colors *colors      struct to hold colors
- *   struct Cell_stats *statf   cell stats info
- *
- *  Generates histogram with normalized log transformed grey scale from
- *  cell stats structure info.
- *  Color range is 0-255.
- *
- **********************************************************************/
-#include <grass/gis.h>
-#include <math.h>
-
-
 /*!
- * \brief make histogram-stretched grey colors
+ * \file gis/color_hist.c
  *
- * Generates a histogram
- * contrast-stretched grey scale color table that goes from the ,histogram
- * information in the Cell_stats structure <b>s.</b>  (See
- * Raster_Histograms).
+ * \brief GIS Library - histogram grey scale colors
  *
- *  \param colors
- *  \param s
- *  \return
+ * (C) 2007-2009 Glynn Clements and the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public License 
+ * (>=v2). Read the file COPYING that comes with GRASS for details.
+ *
+ * \author Glynn Clements <glynn@gclements.plus.com>
  */
 
+#include <math.h>
+#include <grass/gis.h>
+
+/*!
+ * \brief Make histogram-stretched grey colors
+ *
+ * Generates a histogram contrast-stretched grey scale color table
+ * that goes from the, histogram information in the Cell_stats
+ * structure (see \ref Raster_Histograms).
+ *
+ * Color range is 0-255.
+ *
+ * \param colors pointer to Colors structure which holds color info
+ * \param stalf pointer to Cell_stats structure which holds cell stats info
+ */
 void G_make_histogram_eq_colors(struct Colors *colors,
 				struct Cell_stats *statf)
 {
@@ -96,6 +83,17 @@ void G_make_histogram_eq_colors(struct Colors *colors,
     }
 }
 
+/*!
+  \brief Generates histogram with normalized log transformed grey scale.
+
+  Generates histogram with normalized log transformed grey scale from
+  cell stats structure info. Color range is 0-255.
+
+  \param colors pointer to Colors structure which holds color info
+  \param stalf pointer to Cell_stats structure which holds cell stats info
+  \param min minimum value
+  \param max maximum value
+*/
 void G_make_histogram_log_colors(struct Colors *colors,
 				 struct Cell_stats *statf, int min, int max)
 {

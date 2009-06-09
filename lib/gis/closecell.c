@@ -1,25 +1,16 @@
-
-/***********************************************************************
+/*!
+ * \file gis/closecell.c
+ * 
+ * \brief GIS Library - Close raster file
  *
- *   G_close_cell(fd)
- *      Closes and does housekeeping on an opened cell file
+ * (C) 1999-2009 by the GRASS Development Team
  *
- *   G_unopen_cell(fd)
- *      Closes and does housekeeping on an opened cell file
- *      without creating the cell file
+ * This program is free software under the GNU General Public
+ * License (>=v2). Read the file COPYING that comes with GRASS
+ * for details.
  *
- *   parms:
- *      int fd     open cell file
- *
- *   returns:
- *      -1   on fail
- *       0   on success
- *
- *   note:
- *      On closing of a cell file that was open for writing, dummy cats
- *      and history files are created. Histogram and range info are written.
- *
- **********************************************************************/
+ * \author USACERL and many others
+ */
 
 #ifdef __MINGW32__
 #  include <windows.h>
@@ -45,37 +36,34 @@ static int close_new(int, int);
 static int write_fp_format(int fd);
 
 /*!
- * \brief close a raster map
+ * \brief Close a raster map
  *
- * The raster map
- * opened on file descriptor <b>fd</b> is closed. Memory allocated for raster
- * processing is freed. If open for writing, skeletal support files for the new
- * raster map are created as well.
- * <b>Note.</b> If a module wants to explicitly write support files (e.g., a
- * specific color table) for a raster map it creates, it must do so after the
- * raster map is closed. Otherwise the close will overwrite the support files.
- * See Raster_Map_Layer_Support_Routines for routines which write
- * raster support files.
+ * The raster map opened on file descriptor <i>fd</i> is
+ * closed. Memory allocated for raster processing is freed. If open
+ * for writing, skeletal support files for the new raster map are
+ * created as well.
  *
- *  \param fd
- *  \return int
+ * <b>Note:</b> If a module wants to explicitly write support files
+ * (e.g., a specific color table) for a raster map it creates, it must
+ * do so after the raster map is closed. Otherwise the close will
+ * overwrite the support files. See \ref
+ * Raster_Map_Layer_Support_Routines for routines which write raster
+ * support files.
+ *
+ * If the map is a new floating point, move the <tt>.tmp</tt> file
+ * into the <tt>fcell</tt> element, create an empty file in the
+ * <tt>cell</tt> directory; write the floating-point range file; write
+ * a default quantization file quantization file is set here to round
+ * fp numbers (this is a default for now). create an empty category
+ * file, with max cat = max value (for backwards compatibility). Move
+ * the <tt>.tmp</tt> NULL-value bitmap file to the <tt>cell_misc</tt>
+ * directory.
+ *
+ * \param fd file descriptor
+ *
+ * \return -1 on error
+ * \return 1 on success
  */
-
-
-/*!
- * \brief 
- *
- * If the map is a new floating point, move the
- * <tt>.tmp</tt> file into the <tt>fcell</tt> element, create an empty file in the
- * <tt>cell</tt> directory; write the floating-point range file; write a default
- * quantization file quantization file is set here to round fp numbers (this is
- * a default for now). create an empty category file, with max cat = max value
- * (for backwards compatibility). Move the <tt>.tmp</tt> NULL-value bitmap file to
- * the <tt>cell_misc</tt> directory.
- *
- *  \return int
- */
-
 int G_close_cell(int fd)
 {
     struct fileinfo *fcb = &G__.fileinfo[fd];
@@ -88,27 +76,27 @@ int G_close_cell(int fd)
     return close_new(fd, 1);
 }
 
-
 /*!
- * \brief unopen a raster map
+ * \brief Unopen a raster map
  *
- * The raster map
- * opened on file descriptor <b>fd</b> is closed. Memory allocated for raster
- * processing is freed. If open for writing, the raster map is not created and
- * the temporary file created when the raster map was opened is removed (see
- * Creating_and_Opening_New_Raster_Files).
- * This routine is useful when errors are detected and it is desired to not
- * create the new raster map. While it is true that the raster map will not be
- * created if the module exits without closing the file, the temporary file will
- * not be removed at module exit. GRASS database management will eventually
- * remove the temporary file, but the file can be quite large and will take up
- * disk space until GRASS does remove it. Use this routine as a courtesy to the
- * user.  
+ * The raster map opened on file descriptor <i>fd</i> is
+ * closed. Memory allocated for raster processing is freed. If open
+ * for writing, the raster map is not created and the temporary file
+ * created when the raster map was opened is removed (see \ref
+ * Creating_and_Opening_New_Raster_Files). This routine is useful when
+ * errors are detected and it is desired to not create the new raster
+ * map. While it is true that the raster map will not be created if
+ * the module exits without closing the file, the temporary file will
+ * not be removed at module exit. GRASS database management will
+ * eventually remove the temporary file, but the file can be quite
+ * large and will take up disk space until GRASS does remove it. Use
+ * this routine as a courtesy to the user.
  *
- *  \param fd
- *  \return int
+ * \param fd file descriptor
+ *
+ * \return -1 on error
+ * \return 1 on success
  */
-
 int G_unopen_cell(int fd)
 {
     struct fileinfo *fcb = &G__.fileinfo[fd];
@@ -383,7 +371,7 @@ static int close_new(int fd, int ok)
 	    close(null_fd);
 
 	    if (rename(fcb->null_temp_name, path)) {
-		G_warning(_("closecell: can't move %s\nto null file %s"),
+		G_warning(_("Unable to renae null file '%s'"),
 			  fcb->null_temp_name, path);
 		stat = -1;
 	    }
@@ -405,7 +393,7 @@ static int close_new(int fd, int ok)
 	    int cell_fd;
 
 	    if (write_fp_format(fd) != 0) {
-		G_warning(_("Error writing floating point format file for map %s"),
+		G_warning(_("Error writing floating point format file for map <%s>"),
 			  fcb->name);
 		stat = -1;
 	    }
@@ -453,7 +441,7 @@ static int close_new(int fd, int ok)
 	G__file_name(path, CELL_DIR, fcb->name, fcb->mapset);
 	remove(path);
 	if (rename(fcb->temp_name, path)) {
-	    G_warning(_("closecell: can't move %s\nto cell file %s"),
+	    G_warning(_("Unable to rename cell file '%s'"),
 		      fcb->temp_name, path);
 	    stat = -1;
 	}

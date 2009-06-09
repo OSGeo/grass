@@ -1,40 +1,47 @@
+/*!
+ * \file gis/color_lookup.c
+ * 
+ * \brief GIS Library - Lookup array of colors 
+ *
+ * (C) 1999-2009 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public
+ * License (>=v2). Read the file COPYING that comes with GRASS
+ * for details.
+ *
+ * \author USACERL and many others
+ */
+
 #include <math.h>
 #include <grass/gis.h>
 
-/* old 4.1 routine */
-
 /*!
- * \brief lookup an array of colors
+ * \brief Lookup an array of colors
  *
- * Extracts colors for an array of <b>raster</b> values. The
- * colors for the <b>n</b> values in the <b>raster</b> array are stored in
- * the <b>red, green</b>, and <b>blue</b> arrays. The values in the
- * <b>set</b> array will indicate if the corresponding <b>raster</b> value
- * has a color or not (1 means it does, 0 means it does not). The programmer
- * must allocate the <b>red, green, blue</b>, and <b>set</b> arrays to be at
- * least dimension <b>n.</b>
- * <b>Note.</b> The <b>red, green</b>, and <b>blue</b> intensities will be
- * in the range 0 -­ 255.
+ * \todo To be removed, replaced by G_lookup_c_raster_colors().
  *
- *  \param raster
- *  \param red
- *  \param green
- *  \param blue
- *  \param set
- *  \param n
- *  \param colors
- *  \return int
- */
-
-
-/*!
- * \brief 
+ * Extracts colors for an array of <i>cell</i> values. The colors
+ * for the <i>n</i> values in the <i>cell</i> array are stored in
+ * the <i>red, green</i>, and <i>blue</i> arrays. The values in the
+ * <i>set</i> array will indicate if the corresponding <i>cell</i>
+ * value has a color or not (1 means it does, 0 means it does not).
+ *
+ * The programmer must allocate the <i>red, green, blue</i>, and
+ * <b>set</b> arrays to be at least dimension <i>n</i>.
+ *
+ * <b>Note:</b> The <i>red, green</i>, and <i>blue</i> intensities
+ * will be in the range 0 -­ 255.
  *
  * Modified to return a color for NULL-values.
  *
- * \return
+ * \param cell raster cell value
+ * \param[out] red red value
+ * \param[out] grn green value
+ * \param[out] blu blue value
+ * \param set array which indicates if color is set or not
+ * \param n number of values
+ * \param colors pointer to Colors structure which holds color info
  */
-
 void G_lookup_colors(const CELL * cell,
 		     unsigned char *red, unsigned char *grn,
 		     unsigned char *blu, unsigned char *set, int n,
@@ -43,34 +50,31 @@ void G_lookup_colors(const CELL * cell,
     G_lookup_c_raster_colors(cell, red, grn, blu, set, n, colors);
 }
 
-/* I don't think it should exist, because it requires openning
-   of raster map every time Olga 
-   int G_lookup_rgb_colors(map, mapset, r, g, b)
-   char *name, *mapset;
-   unsigned char *r, *g, *b;
-   {
-   RASTER_MAP_TYPE map_type;
-   void *rast;
-   ....
-   }
- */
-
-
 /*!
- * \brief 
+ * \brief Lookup an array of colors
  *
- *  The same as G_lookup_colors(cell, r, g, b, set, n, colors).
+ * Extracts colors for an array of <i>cell</i> values. The colors
+ * for the <i>n</i> values in the <i>cell</i> array are stored in
+ * the <i>red, green</i>, and <i>blue</i> arrays. The values in the
+ * <i>set</i> array will indicate if the corresponding <i>cell</i>
+ * value has a color or not (1 means it does, 0 means it does not).
  *
- *  \param cell
- *  \param r
- *  \param g
- *  \param b
- *  \param set
- *  \param n
- *  \param colors
- *  \return
+ * The programmer must allocate the <i>red, green, blue</i>, and
+ * <b>set</b> arrays to be at least dimension <i>n</i>.
+ *
+ * <b>Note:</b> The <i>red, green</i>, and <i>blue</i> intensities
+ * will be in the range 0 -­ 255.
+ *
+ * Modified to return a color for NULL-values.
+ *
+ * \param cell raster cell value
+ * \param[out] red red value
+ * \param[out] grn green value
+ * \param[out] blu blue value
+ * \param set array which indicates if color is set or not
+ * \param n number of values
+ * \param colors pointer to Colors structure which holds color info
  */
-
 void G_lookup_c_raster_colors(const CELL * cell,
 			      unsigned char *red, unsigned char *grn,
 			      unsigned char *blu, unsigned char *set, int n,
@@ -89,28 +93,22 @@ void G_lookup_c_raster_colors(const CELL * cell,
 		     CELL_TYPE);
 }
 
-
 /*!
- * \brief 
+ * \brief Lookup an array of colors
  *
- * If the <em>cell_type</em> is CELL_TYPE, calls G_lookup_colors((CELL *)cell, r,
- * g, b, set, n, colors);
- * If the <em>cell_type</em> is FCELL_TYPE, calls
- * G_lookup_f_raster_colors(FCELL *)cell, r, g, b, set, n, colors);
- * If the <em>cell_type</em> is DCELL_TYPE, calls
- * G_lookup_d_raster_colors(DCELL *)cell, r, g, b, set, n, colors);
+ * - If the <em>map_type</em> is CELL_TYPE, calls G_lookup_colors()
+ * - If the <em>map_type</em> is FCELL_TYPE, calls G_lookup_f_raster_colors()
+ * - If the <em>map_type</em> is DCELL_TYPE, calls G_lookup_d_raster_colors()
  *
- *  \param rast
- *  \param r
- *  \param g
- *  \param b
- *  \param set
- *  \param n
- *  \param colors
- *  \param cell_type
- *  \return 
+ * \param raster raster cell value
+ * \param[out] red red value
+ * \param[out] grn green value
+ * \param[out] blu blue value
+ * \param set array which indicates if color is set or not
+ * \param n number of values
+ * \param colors pointer to Colors structure which holds color info
+ * \param map_type raster type (CELL, FCELL, DCELL)
  */
-
 void G_lookup_raster_colors(const void *raster,
 			    unsigned char *red, unsigned char *grn,
 			    unsigned char *blu, unsigned char *set, int n,
@@ -128,24 +126,21 @@ void G_lookup_raster_colors(const void *raster,
     G__lookup_colors(raster, red, grn, blu, set, n, colors, 1, 0, map_type);
 }
 
-
 /*!
- * \brief 
+ * \brief Lookup an array of colors (FCELL)
  *
- * Converts the <em>n</em>
- * floating-point values in the <em>fcell</em> array to their <em>r,g,b</em> color
- * components. Embedded NULL-values are handled properly as well.
+ * Converts the <em>n</em> floating-point values in the <em>fcell</em>
+ * array to their <em>r,g,b</em> color components. Embedded
+ * NULL-values are handled properly as well.
  *
- *  \param fcell
- *  \param r
- *  \param g
- *  \param b
- *  \param set
- *  \param n
- *  \param colors
- *  \return
+ * \param fcell raster cell value
+ * \param[out] red red value
+ * \param[out] grn green value
+ * \param[out] blu blue value
+ * \param set array which indicates if color is set or not
+ * \param n number of values
+ * \param colors pointer to Colors structure which holds color info
  */
-
 void G_lookup_f_raster_colors(const FCELL * fcell, unsigned char *red,
 			      unsigned char *grn, unsigned char *blu,
 			      unsigned char *set, int n, struct Colors *colors)
@@ -164,24 +159,21 @@ void G_lookup_f_raster_colors(const FCELL * fcell, unsigned char *red,
 		     FCELL_TYPE);
 }
 
-
 /*!
- * \brief 
+ * \brief Lookup an array of colors (DCELL)
  *
- * Converts the <em>n</em>
- * floating-point values in the <em>dcell</em> array to their <em>r,g,b</em> color
+ * Converts the <em>n</em> double-precision values in the
+ * <em>dcell</em> array to their <em>r,g,b</em> color
  * components. Embedded NULL-values are handled properly as well.
  *
- *  \param dcell
- *  \param r
- *  \param g
- *  \param b
- *  \param set
- *  \param n
- *  \param colors
- *  \return
+ * \param dcell raster cell value
+ * \param[out] red red value
+ * \param[out] grn green value
+ * \param[out] blu blue value
+ * \param set array which indicates if color is set or not
+ * \param n number of values
+ * \param colors pointer to Colors structure which holds color info
  */
-
 void G_lookup_d_raster_colors(const DCELL * dcell, unsigned char *red,
 			      unsigned char *grn, unsigned char *blu,
 			      unsigned char *set, int n, struct Colors *colors)
@@ -217,7 +209,20 @@ static int less(double x, double y)
 	return 0;
 }
 
-
+/*!
+ * \brief Lookup an array of colors
+ *
+ * \param raster raster cell value
+ * \param[out] red red value
+ * \param[out] grn green value
+ * \param[out] blu blue value
+ * \param set array which indicates if color is set or not
+ * \param n number of values
+ * \param colors pointer to Colors structure which holds color info
+ * \param mod
+ * \param rules_only
+ * \param data_type raster type (CELL, FCELL, DCELL)
+ */
 void G__lookup_colors(const void *raster, unsigned char *red,
 		      unsigned char *grn, unsigned char *blu,
 		      unsigned char *set, int n, struct Colors *colors,
@@ -431,6 +436,15 @@ void G__lookup_colors(const void *raster, unsigned char *red,
     }
 }
 
+/*!
+  \brief Interpolate color rules
+
+  \param val raster cell value
+  \param[out] red red value
+  \param[out] grn green value
+  \param[out] blu blue value
+  \param rule pointer to _Color_Rule which holds color rules info
+*/
 void G__interpolate_color_rule(DCELL val, unsigned char *red,
 			       unsigned char *grn, unsigned char *blu,
 			       const struct _Color_Rule_ *rule)

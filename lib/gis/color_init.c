@@ -1,25 +1,26 @@
-
-/**********************************************************************
+/*!
+ * \file gis/color_init.c
  *
- * G_init_colors (colors)
- *      struct Colors *colors         structure to hold color info
+ * \brief GIS Library - Initialize Colors structure
  *
- * Initializes the color structure for subsequent calls to G_add_color_rule()
- *********************************************************************/
+ * (C) 2001-2009 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public License
+ * (>=v2). Read the file COPYING that comes with GRASS for details.
+ *
+ * \author Original author CERL
+ */
 
 #include <grass/gis.h>
 
-
 /*!
- * \brief initialize color structure
+ * \brief Initialize color structure
  *
- * The <b>colors</b> structure is initialized for subsequent calls
- * to <i>G_add_color_rule</i> and<i>G_set_color.</i>
+ * The <i>colors</i> structure is initialized for subsequent calls
+ * to G_add_color_rule() and G_set_color().
  *
- *  \param colors
- *  \return
+ * \param colors pointer to Colors structure
  */
-
 void G_init_colors(struct Colors *colors)
 {
     colors->version = 0;

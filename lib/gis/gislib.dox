@@ -3,32 +3,88 @@
      by M. Neteler 2/2004, 2005, 2006
   -->
 
+by GRASS Development Team (http://grass.osgeo.org)
+
 This chapter is divided in the following pages:
+
 - \subpage gislibintro 
 - \subpage gisrasterlib
 - \subpage gisvectorlib
 
-\section gislibintro Introduction
-
 This sections is divided as follows:
+
 - \subpage gislibintro
-- \subpage Raster_File_Processing
-- \subpage Vector_File_Processing
+ - \subpage init
+ - \subpage diag
+ - \subpage envir
+
+- \subpage dbaseaccess
+ - \subpage Fully_Qualified_File_Names
+ - \subpage finding
+ - \subpage Legal_File_Names
+ - \subpage Opening_an_Existing_Database_File_for_Reading
+ - \subpage Opening_an_Existing_Database_File_for_Update
+ - \subpage Creating_and_Opening_a_New_Database_File
+ - \subpage Database_File_Management
+
+- \subpage The_Region
+ - \subpage The_Database_Region
+ - \subpage The_Active_Module_Region
+
+- \subpage Projection_Information
+ - \subpage Latitude_Longitude_Databases
+ - \subpage Coordinates
+ - \subpage Global_Wraparound
+ - \subpage Miscellaneous
+
+- \subpage Calculations
+ - \subpage Raster_Area_Calculations
+ - \subpage Polygonal_Area_Calculations
+ - \subpage Distance_Calculations
+
 - \subpage General_Plotting_Routines
+
 - \subpage Temporary_Files
+
 - \subpage Command_Line_Parsing
-- \subpage Full_Module_Example
-- \subpage Compiling_and_Installing_GRASS_Modules
-- \subpage Multiple_Architecture_Conventions
-- \subpage Full_Structure_Members_Description
-- \subpage Complete_Structure_Members_Table
-- \subpage Description_of_Complex_Structure_Members
+ - \subpage Description
+ - \subpage Structures 
+ - \subpage Option_structure
+ - \subpage Flag_structure
+ - \subpage Parser_Routines
+ - \subpage Parser_Programming_Examples
+ - \subpage Step_by_Step_Use_of_the_Parser
+ - \subpage Full_Module_Example
+ - \subpage Complete_Structure_Members_Table
+ - \subpage Description_of_Complex_Structure_Members
+ - \subpage Answer_member_of_the_Flag_and_Option_structures
+ - \subpage Multiple_and_Answers_Members
+ - \subpage key_desc_Member
+ - \subpage gisprompt_Member
+ - \subpage Common_Questions
+
 - \subpage String_Manipulation_Functions
+
 - \subpage Enhanced_UNIX_Routines
+ - \subpage Running_in_the_Background
+ - \subpage Partially_Interruptible_System_Call
+ - \subpage ENDIAN_test
+ - \subpage Miscellaneous
+
 - \subpage GIS_Library_Data_Structures
+ - \subpage struct_Cell_head
+ - \subpage struct_Categories
+ - \subpage struct_Colors
+ - \subpage struct_History
+ - \subpage struct_Range
+
 - \subpage Loading_the_GIS_Library
+
 - \subpage TimeStamp_functions
-- \subpage GRASS_GIS_Library_Overview
+
+- \subpage Memory_Allocation
+
+\section gislibintro Introduction
 
 The <em>GIS Library</em> is the primary programming library provided
 with the GRASS system. <b>Programs must use this libary to access the
@@ -243,7 +299,7 @@ Both routines set the value in module memory, but only G_setenv()
 writes the new value to the user's GRASS environment file.
 
 
-\subsection dbaseaccess Fundamental Database Access Routines
+\section dbaseaccess Fundamental Database Access Routines
 
 The routines described in this section provide the low-level interface
 to the GRASS database. They search the database for files, prompt the
@@ -451,44 +507,7 @@ but the other support files, such as "cellhd" or "cats", will not. To
 remove these other files as well, specific calls must be made for each
 related <i>element</i>.
 
-
-\subsection Memory_Allocation Memory Allocation
-
-The following routines provide memory allocation capability. They are
-simply calls to the UNIX suite of memory allocation routines malloc(),
-realloc() and calloc(), except that if there is not enough memory,
-they print a diagnostic message to that effect and then call exit().
-
- - G_malloc ()
-
-Allocates a block of memory at least <i>size</i> bytes which is
-aligned properly for all data types. A pointer to the aligned block is
-returned.
-
- - G_realloc()
-
-Changes the <i>size</i> of a previously allocated block of memory at
-<i>ptr</i> and returns a pointer to the new block of memory. The
-<i>size</i> may be larger or smaller than the original size. If the
-original block cannot be extended "in place", then a new block is
-allocated and the original block copied to the new block.
-
-<b>Note:</b> If <i>ptr</i> is NULL, then this routine simply allocates
-a block of <i>size</i> bytes. This routine works around broken
-realloc() routines, which do not handle a NULL <i>ptr</i>.
-
- - G_calloc()
-
-Allocates a properly aligned block of memory <i>n</i>*<i>size</i>
-bytes in length, initializes the allocated memory to zero, and returns
-a pointer to the allocated block of memory.
-
- - G_free()
-
-Use the G_free() routine to release memory allocated by
-these routines.
-
-\subsection The_Region The Region
+\section The_Region The Region
 
 The region concept is explained in \ref Region. It can be thought of as a
 two-dimensional matrix with known boundaries and rectangular cells.
@@ -667,7 +686,7 @@ Converts a northing relative to a region to a row.
 <b>Note:</b> the result is a double. Casting it to an integer will
 give the row number.
 
-\subsection Projection_Information Projection Information
+\section Projection_Information Projection Information
 
 The following routines return information about the cartographic
 projection and zone. See \ref Region for more information about these
@@ -790,6 +809,93 @@ G_format_northing(north, buf, -1);             /* double to ASCII */
 /* This last example forces floating-point ASCII format */
 \endcode
 
+\subsection Global_Wraparound Global Wraparound
+
+
+These next routines provide a mechanism for determining the relative
+position of a pair of longitudes. Since longitudes of ±360 are
+equivalent, but GRASS requires the east to be bigger than the west,
+some adjustment of coordinates is necessary.
+
+ - G_adjust_easting()
+ 
+Returns east larger than west. If the region projection is
+PROJECTION_LL, then this routine returns an equivalent <i>east</i>
+that is larger, but no more than 360 degrees larger, than the
+coordinate for the western edge of the region. Otherwise no adjustment
+is made and the original <i>east</i> is returned.
+
+ - G_adjust_east_longitude()
+
+This routine returns an equivalent <i>east</i> that is larger, but no
+more than 360 larger than the <i>west</i> coordinate.
+
+This routine should be used only with latitude-longitude coordinates.
+
+ - G_shortest_way()
+
+Returns shortest way between eastings. 
+
+\subsection Miscellaneous Miscellaneous
+
+
+ - G_ellipsoid_name()
+
+This routine returns a pointer to a string containing the name for the
+ellipsoid in the GRASS ellipsoid table. It can be used as follows:
+
+\code
+int n;
+char *name;
+
+for(n = 0; name = G_ellipsoid_name(n); n++)
+    fprintf(stdout, "%s\n", name);
+\endcode
+
+ - G_get_ellipsoid_by_name()
+
+This routine returns the semi-major axis (in meters) and
+eccentricity squared for the named ellipsoid.
+
+ - G_get_ellipsoid_parameters()
+
+This routine returns the semi-major axis (in meters) and the
+eccentricity squared for the ellipsoid associated with the
+database. If there is no ellipsoid explicitly associated with the
+database, it returns the values for the WGS 84 ellipsoid.
+
+- G_meridional_radius_of_curvature()
+
+Returns the meridional radius of curvature at a given longitude:
+
+\f$
+\rho = \frac{a (1-e^2)}{(1-e^2\sin^2 lon)^{3/2}}
+\f$
+
+ - G_transverse_radius_of_curvature()
+
+Returns the transverse radius of curvature at a given longitude:
+
+\f$
+\nu = \frac{a}{(1-e^2\sin^2 lon)^{1/2}}
+\f$
+
+ - G_radius_of_conformal_tangent_sphere()
+
+Returns the radius of the conformal sphere tangent to ellipsoid at a
+given longitude:
+
+\f$
+r = \frac{a (1-e^2)^{1/2}}{(1-e^2\sin^2 lon)}
+\f$
+
+ - G_pole_in_polygon() 
+
+For latitude-longitude coordinates, this routine determines if the
+polygon contains one of the poles.
+
+
+\section Calculations Calculations
 
 \subsection Raster_Area_Calculations Raster Area Calculations
 
@@ -878,7 +984,7 @@ grids.
 vertices (as opposed to geodesics).
 
 
-\subsection  Distance Calculations Distance Calculations
+\subsection  Distance_Calculations Distance Calculations
 
 Two routines perform distance calculations for any projection.
 
@@ -913,101 +1019,6 @@ fixed latitudes and varying longitude separation.
 Calculates the geodesic distance between two points set by
 G_set_geodesic_distance_latl() and G_set_geodesic_distance_lat2().
 
-\subsection Global_Wraparound Global Wraparound
-
-
-These next routines provide a mechanism for determining the relative
-position of a pair of longitudes. Since longitudes of ±360 are
-equivalent, but GRASS requires the east to be bigger than the west,
-some adjustment of coordinates is necessary.
-
- - G_adjust_easting()
- 
-Returns east larger than west. If the region projection is
-PROJECTION_LL, then this routine returns an equivalent <i>east</i>
-that is larger, but no more than 360 degrees larger, than the
-coordinate for the western edge of the region. Otherwise no adjustment
-is made and the original <i>east</i> is returned.
-
- - G_adjust_east_longitude()
-
-This routine returns an equivalent <i>east</i> that is larger, but no
-more than 360 larger than the <i>west</i> coordinate.
-
-This routine should be used only with latitude-longitude coordinates.
-
- - G_shortest_way()
-
-Returns shortest way between eastings. 
-
-\subsection Miscellaneous Miscellaneous
-
-
- - G_ellipsoid_name()
-
-This routine returns a pointer to a string containing the name for the
-ellipsoid in the GRASS ellipsoid table. It can be used as follows:
-
-\code
-int n;
-char *name;
-
-for(n = 0; name = G_ellipsoid_name(n); n++)
-    fprintf(stdout, "%s\n", name);
-\endcode
-
- - G_get_ellipsoid_by_name()
-
-This routine returns the semi-major axis (in meters) and
-eccentricity squared for the named ellipsoid.
-
- - G_get_ellipsoid_parameters()
-
-This routine returns the semi-major axis (in meters) and the
-eccentricity squared for the ellipsoid associated with the
-database. If there is no ellipsoid explicitly associated with the
-database, it returns the values for the WGS 84 ellipsoid.
-
-- G_meridional_radius_of_curvature()
-
-Returns the meridional radius of curvature at a given longitude:
-
-\f$
-\rho = \frac{a (1-e^2)}{(1-e^2\sin^2 lon)^{3/2}}
-\f$
-
- - G_transverse_radius_of_curvature()
-
-Returns the transverse radius of curvature at a given longitude:
-
-\f$
-\nu = \frac{a}{(1-e^2\sin^2 lon)^{1/2}}
-\f$
-
- - G_radius_of_conformal_tangent_sphere()
-
-Returns the radius of the conformal sphere tangent to ellipsoid at a
-given longitude:
-
-\f$
-r = \frac{a (1-e^2)^{1/2}}{(1-e^2\sin^2 lon)}
-\f$
-
- - G_pole_in_polygon() 
-
-For latitude-longitude coordinates, this routine determines if the
-polygon contains one of the poles.
-
-\section Raster_File_Processing GRASS Raster File Processing
-
-Please refer to GRASS Raster File Processing in Chapter \ref gisrastintro.
-
-
-\section Vector_File_Processing GRASS Vector File Processing
-
-Please refer to GRASS Vector File Processing in Chapter \ref
-gisvectintro.  Note, that the old "sites" are stored as vector points
-since GRASS 6.
 
 \section General_Plotting_Routines General Plotting Routines
 
@@ -1390,7 +1401,7 @@ For the option "Option test" you chose: Hello
 The flag "-t" is set.
 \endverbatim
 
-\section Full_Module_Example Full Module Example
+\subsection Full_Module_Example Full Module Example
 
 
 The following code demonstrates some of the basic capabilities of the
@@ -1468,156 +1479,7 @@ int main(int argc , char *argv[] )
 }
 \endcode
 
-\section Compiling_and_Installing_GRASS_Modules Compiling and Installing GRASS Modules
-
-
-GRASS modules are compiled and installed using the UNIX <tt>make</tt>
-command, which reads a file named <tt>Makefile</tt> (see \ref
-Multiple_Architecture_Conventions for more information) and then runs
-the compiler. The GRASS compilation process allows for
-multiple-architecture compilation from a single copy of the source
-code (for instance, if the source code is NFS mounted to various
-machines with differing architectures). This chapter assumes that the
-programmer is familiar with <tt>make</tt> and its accompanying
-Makefile.
-
-\todo Explain ''auto-conf''
-
-\todo Include contents of SUBMITTING and INSTALL files from source code
-
-To compile enter following:
-
-\verbatim
-./configure
-make
-make install
-\endverbatim
-
-Then the code will be compiled into "/usr/local/grass-7.x.y" directory. The start
-script "grass7x" will be placed into "/usr/local/bin/".
-
-Optionally other target directories can be specified while "configuring":
-
-\verbatim
-./configure --prefix=/opt/grass-7.x.y --with-bindir=/usr/bin
-make
-make install
-\endverbatim
-
-This will store the GRASS binaries into the directory
-"/opt/grass-7.x.y" and the script mentioned above into "/usr/bin".
-
-The script "make" is required to compile single modules. The
-compilation process and requirements are discussed in more detail now.
-
-\subsection Makefile_Variables Makefile Variables
-
-\todo Update the list.
-
-<b>GRASS Libraries</b>. The following variables name the various GRASS 
-libraries:
-
- - <i>GISLIB</i> - This names the <b>GIS Library</b>, which is the
-principal GRASS library. See \ref GIS_Library for details about this
-library, and \ref Loading_the_GIS_Library for a sample Makefile which
-loads this library.
-
- - <i>SEGMENTLIB</i> - This names the <b>Segment Library</b>, which
-manages large matrix data. See \ref Segment_Library for details about
-this library, and \ref Loading_the_Vask_Library for a sample
-<i>Makefile</i> which loads this library.
-
- - <i>RASTERLIB</i> - This names the <b>Raster Graphics Library</b>,
-which communicates with GRASS graphics drivers. See \ref
-Raster_Graphics_Library for details about this library, and \ref
-Loading_the_Raster_Graphics_Library for a sample <i>Makefile</i> which
-loads this library.
-
- - <i>DISPLAYLIB</i> - This names the <b>Display Graphics Library</b>,
-which provides a higher level graphics interface to
-<i>RASTERLIB</i>. See Display_Graphics_Library for details about this
-library, and Loading_the_Display_Graphics_Library for a sample
-<i>Makefile</i> which loads this library.
-
-<b>UNIX Libraries:</b> The following variables name some useful UNIX 
-system libraries:
-
- - <i>MATHLIB</i> This names the math library. It should be used
-instead of the -lm loader option.
-
- - <i>CURSES</i> This names both the curses and termcap libraries. It
-should be used instead of the -lcurses/-lncurses and
--ltermcap loader options. Do not use <tt>$CURSES</tt> if you use
-<tt>$VASK</tt>.
-
- - <i>TERMLIB</i> This names the termcap library. It should be used
--instead of the ltermcap or -ltermlib loader options. Do not use
--<tt>$TERMLIB</tt> if you use <tt>$VASK</tt> or <tt>$CURSES</tt>.
-
-<b>Compiler and loader variables.</b> The following variables are
-related to compiling and loading C programs:
-
- - <i>EXTRA\_CFLAGS</i> This variable can be used to add additional
-options to <tt>$CFLAGS</tt>. It has no predefined values. It is
-usually used to specify additional -I include directories, or -D
-preprocessor defines.
-
-\subsection Constructing_a_Makefile Constructing a Makefile
-
-
-The complete syntax for a <i>Makefile</i> is discussed in the UNIX
-documentation for <tt>make</tt> and will not be repeated here. The
-essential idea is that a target (e.g. a GRASS module) is to be built
-from a list of dependencies (e.g. object files, libraries, etc.). The
-relationship between the target, its dependencies, and the rules for
-constructing the target is expressed according to the following
-syntax:
-
-\code
-target: dependencies
-
-actions
-
-more actions
-\endcode
-
-If the target does not exist, or if any of the dependencies have a newer 
-date than the target (i.e., have changed), the actions will be executed to 
-build the target. The actions must be indented using a TAB. <tt>make</tt> is 
-picky about this. It does not like spaces in place of the TAB.
-
-\section Multiple_Architecture_Conventions Multiple-Architecture Conventions
-
-
-The following conventions allow for multiple architecture compilation on a 
-machine that uses a common or networked GRASS source code directory tree.
-
-Object files and library archives are compiled into subdirectories
-that represent the architecture that they were compiled on. These
-subdirectories are created in the $SRC directory as OBJ.<tt>arch</tt>
-and LIB.<tt>arch</tt>, where <tt>arch</tt> represents the architecture
-of the compiling machine. Thus, for example, $SRC/OBJ.sun4 would
-contain the object files for Sun/4 and SPARC architectures, and
-<tt>$SRC/LIB.686-pc-linux-gnu</tt> would contain library archives for
-Linux architectures. Likewise, <tt>$SRC/OBJ.686-pc-linux-gnu</tt>
-would contain the object files for Linux architectures, and
-<tt>$SRC/LIB.686-pc-linux-gnu</tt> would contain library archives for
-Linux architectures.
-
-Note that 'arch' is defined for a specific architecture during setup and 
-compilation of GRASS, it is not limited to sun4 or any specific string.
-
-\section Full_Structure_Members_Description Full Structure Members Description
-
-
-There are many members to the <b>Option</b> and <b>Flag</b>
-structures. The following tables and descriptions summarize all
-defined members of both the Option and Flag structures.
-
-An in-depth summary of the more complex structure members is presented
-in \ref Description_of_Complex_Structure_Members.
-
-\section Complete_Structure_Members_Table Complete Structure Members Table
+\subsection Complete_Structure_Members_Table Complete Structure Members Table
 
 <v>struct Flag</v>
 <table border=1>
@@ -1769,7 +1631,7 @@ in \ref Description_of_Complex_Structure_Members.
 </tr>
 </table>
 
-\section Description_of_Complex_Structure_Members Description of Complex Structure Members 
+\subsection Description_of_Complex_Structure_Members Description of Complex Structure Members 
 
 
 What follows are explanations of possibly confusing structure
@@ -1871,7 +1733,7 @@ opt->type = TYPE_INTEGER;
 opt->required = NO;
 opt->key_desc = "x,y"
 opt->multiple = NO;
-\endverbatim
+\endcode
 
 The answer to this option would <i>not</i> be stored in the answer
 member, but in the answers member. If the user entered
@@ -2122,7 +1984,7 @@ A number of useful UNIX library routines have side effects which are
 sometimes undesirable. The routines here provide the same functions as
 their corresponding UNIX routine, but with different side effects.
 
-\subsection Running in the Background Running in the Background
+\subsection Running_in_the_Background Running in the Background
 
 
 The standard UNIX fork() routine creates a child process which is a
@@ -2220,140 +2082,94 @@ G_message(_("Percent complete:"));
 
 for (row = 0; row < nrows; row++)
   G_percent(row, nrows, 10);
-\endverbatim
+\endcode
 
 This will print completion messages at 10% increments; i.e., 10%, 20%,
 30%, etc., up to 100%. Each message does not appear on a new line, but
 rather erases the previous message. After 100%, a new line is printed.
 
- - G_program_name() return module name
+ - G_program_name()
 
 Routine returns the name of the module as set by the call to
-<I>G_gisinit().</I>
+G_gisinit().
 
-<P>
-char * G_whoami() user's name
+ - G_whoami()
 
 Returns a pointer to a string which is the user's login name.
-
-<P>
-int G_yes() ask a yes/no question
-
-This routine prints a <B>question</B> to the user, and expects the
-user to respond either yes or no. (Invalid responses are rejected and
-the process is repeated until the user answers yes or no.)
-
-<P>
-The <B>default</B> indicates what the RETURN key alone should mean. A
-<B>default</B> of 1 indicates that RETURN means yes, 0 indicates that
-RETURN means no, and -1 indicates that RETURN alone is not a valid
-response.
-
-<P>
-The <B>question</B> will be appended with "(y/n) ", and, if
-<B>default</B> is not -1, with "[y] " or "[n] ", depending on the
-<B>default.</B>
-
-<P>
-<I>G_yes()</I> returns 1 if the user said yes, and 0 if the user said no.
-
-<P>
 
 \section GIS_Library_Data_Structures GIS Library Data Structures
 
 
-<P>
 Some of the data structures, defined in the "gis.h" header file and used 
 by routines in this library, are described in the sections below.
-
-<P>
 
 \subsection struct_Cell_head struct Cell_head
 
 
-<P>
 The raster header data structure is used for two purposes. It is used
 for raster header information for map layers. It also used to hold
 region values. The structure is:
 
-\verbatim
+\code
 struct Cell_head
 {
- int format; /* number of bytes per cell */
+ int format;     /* number of bytes per cell */
  int compressed; /* compressed(1) or not compressed(0) */
  int rows, cols; /* number of rows and columns */
- int proj; /* projection */
- int zone; /* zone */
- double ew_res; /* east-west resolution */
- double ns_res; /* north-south resolution */
- double north; /* northern edge */
- double south; /* southern edge */
- double east; /* eastern edge */
- double west; /* western edge */
+ int proj;       /* projection */
+ int zone;       /* zone */
+ double ew_res;  /* east-west resolution */
+ double ns_res;  /* north-south resolution */
+ double north;   /* northern edge */
+ double south;   /* southern edge */
+ double east;    /* eastern edge */
+ double west;    /* western edge */
 };
-\endverbatim
+\endcode
 
 
-<P>
-The <I>format</I> and <I>compressed</I> fields apply only to raster
-headers.  The <I>format</I> field describes the number of bytes per
-raster data value and the <I>compressed</I> field indicates if the
+The <i>format</i> and <i>compressed</i> fields apply only to raster
+headers. The <i>format</i> field describes the number of bytes per
+raster data value and the <i>compressed</i> field indicates if the
 raster file is compressed or not. The other fields apply both to
 raster headers and regions. The geographic boundaries are described by
-<I>north, south, east</I> and <I>west.</I> The grid resolution is
-described by <I>ew_res</I> and <I>ns_res.</I> The cartographic
-projection is described by <I>proj</I> and the related zone for the
-projection by <I>zone.</I> The <I>rows</I> and <I>cols</I> indicate
+<i>north, south, east</i> and <i>west</i>. The grid resolution is
+described by <i>ew_res</i> and <i>ns_res</i>. The cartographic
+projection is described by <i>proj</i> and the related zone for the
+projection by <i>zone</i>. The <i>rows</i> and <i>cols</i> indicate
 the number of rows and columns in the raster file, or in the
-region. See \ref Raster_Header_Format for more information about raster
-headers, and \ref Region for more information about regions.
+region. See \ref Raster_Header_Format for more information about
+raster headers, and \ref Region for more information about regions.
 
-<P>
 The routines described in \ref Raster_Header_File use this structure.
-
-<P>
 
 \subsection struct_Categories struct Categories
 
-<P>
-The <I>Categories</I> structure contains a title for the map layer,
+
+The <i>Categories</i> structure contains a title for the map layer,
 the largest category in the map layer, an automatic label generation
 rule for missing labels, and a list of category labels.
 
-<P>
-The structure is declared: <I>struct Categories</I> .
-
-<P>
 This structure should be accessed using the routines described in
-Raster_Category_File.
-
-<P>
+\ref Raster_Category_File.
 
 \subsection struct_Colors struct Colors
 
 
-<P>
 The color data structure holds red, green, and blue color intensities
 for raster categories. The structure has become so complicated that it
 will not be described in this manual.
 
-<P>
-The structure is declared: <I>struct Colors</I> .
-
-<P>
-The routines described in Raster_Color_Table must be used 
+The routines described in \ref Raster_Color_Table must be used 
 to store and retrieve color information using this structure.
-
-<P>
 
 \subsection struct_History struct History
 
-<P>
-The <I>History</I> structure is used to document raster files. The 
+The <i>History</i> structure is used to document raster files. The 
 information contained here is for the user. It is not used in any 
 operational way by GRASS. The structure is:
 
-\verbatim
+\code
 # define MAXEDLINES 50
 # define RECORD_LEN 80
 
@@ -2370,61 +2186,46 @@ struct History
  int edlinecnt;
  char edhist[MAXEDLINES][RECORD_LEN];
 };
-\endverbatim
+\endcode
 
-
-<P>
-The <I>mapid</I> and <I>mapset</I> are the raster file name and
-mapset, <I>title</I> is the raster file title, <I>creator</I> is the
-user who created the file, <I>maptype</I> is the map type (which
-should always be "raster"), <I>datasrc_1</I> and <I>datasrc_2</I>
-describe the original data source, <I>keywrd</I> is a one-line data
-description and <I>edhist</I> contains <I>edlinecnt</I> lines of user
+The <i>mapid</i> and <i>mapset</i> are the raster file name and
+mapset, <i>title</i> is the raster file title, <i>creator</i> is the
+user who created the file, <i>maptype</i> is the map type (which
+should always be "raster"), <i>datasrc_1</i> and <i>datasrc_2</i>
+describe the original data source, <i>keywrd</i> is a one-line data
+description and <i>edhist</i> contains <i>edlinecnt</i> lines of user
 comments.
 
-<P>
-The routines described in Raster_History_File use this structure.
-However, there is very little support for manipulating the contents of this
-structure. The programmer must manipulate the contents directly.
+The routines described in \ref Raster_History_File use this structure.
+However, there is very little support for manipulating the contents of
+this structure. The programmer must manipulate the contents directly.
 
-<P>
-<B>Note.</B> Some of the information in this structure is not meaningful.  For
-example, if the raster file is renamed, or copied into another mapset, the
-<I>mapid</I> and <I>mapset</I> will no longer be correct. Also the
-<I>title</I> does not reflect the true raster file title. The true title is
-maintained in the category file.
+<b>Note:</b> Some of the information in this structure is not
+meaningful. For example, if the raster file is renamed, or copied
+into another mapset, the <i>mapid</i> and <i>mapset</i> will no longer
+be correct. Also the <i>title</i> does not reflect the true raster
+file title. The true title is maintained in the category file.
 
-<P>
-<B>Warning.</B> This structure has remained unchanged since the inception of
+<b>Warning:</b> This structure has remained unchanged since the inception of
 GRASS. There is a good possibility that it will be changed or eliminated in
 future releases.
-
-<P>
 
 \subsection struct_Range struct Range
 
 
-<P>
-The <I>Range</I> structure contains the minimum and maximum values which occur
+The <i>Range</i> structure contains the minimum and maximum values which occur
 in a raster file.
 
-<P>
-The structure is declared: <I>struct Range</I> .
-
-<P>
-The routines described in Raster_Range_File should be used 
-to access this structure.
-
-<P>
+The routines described in \ref Raster_Range_File should be used to access
+this structure.
 
 \section Loading_the_GIS_Library Loading the GIS Library
 
 
-<P>
 The library is loaded by specifying $(GISLIB) in the Makefile. The following
 example is a complete Makefile which compiles code that uses this library:
-<br>
-<B>Makefile for $(GISLIB)}</B>
+
+<b>Makefile for $(GISLIB)</b>
 
 \verbatim
 MODULE_TOPDIR = ../..
@@ -2439,262 +2240,116 @@ include $(MODULE_TOPDIR)/include/Make/Module.make
 default: cmd
 \endverbatim
 
-<P>
-See \ref Compiling_and_Installing_GRASS_Modules for a complete discussion
-of Makefiles.
-
-<P>
+See \ref Compiling_and_Installing_GRASS_Modules for a complete
+discussion of Makefiles.
 
 \section TimeStamp_functions Timestamp functions
 
-\verbatim
- #include <grass/gis.h>
-\endverbatim
-
-
-<P>
-This structure is defined in gis.h, but there should be no reason to access its
+This structure is defined in "gis.h", but there should be no reason to access its
 elements directly:
 
-\verbatim
+\code
 struct TimeStamp {
  DateTime dt[2];   /* two datetimes */
  int count;
 };
-\endverbatim
+\endcode
 
-
-<P>
 Using the G_*_timestamp() routines reads/writes a timestamp file in 
-the cell_misc/rastername or dig_misc/vectorname mapset element.
+the cell_misc/rastername mapset element.
 
-<P>
 A TimeStamp can be one DateTime, or two DateTimes representing a 
-range.  When preparing to write a TimeStamp, the programmer should
+range. When preparing to write a TimeStamp, the programmer should
 use one of:
 
-<P>
-<B>G_set_timestamp()</B> to set a single DateTime
+ - G_set_timestamp() to set a single DateTime
 
-<P>
-<B>G_set_timestamp_range()</B> to set two DateTimes.
+ - G_set_timestamp_range() to set two DateTimes
 
-<P>
-int G_read_raster_timestamp(char *name, char *mapset, struct TimeStamp
-  *ts) Read raster timestamp<br>
-Returns 1 on success.  0 or negative on error.
+ - G_read_raster_timestamp to read raster timestamp
 
-<P>
-int G_read_vector_timestamp(char *name, char *mapset, struct TimeStamp
-  *ts) Read vector timestamp<br>
-Returns 1 on success.  0 or negative on error.
+ - G_read_vector_timestamp to read vector timestamp
 
-<P>
-int G_get_timestamps(struct TimeStamp *ts, DateTime *dt1, DateTime
-  *dt2, int *count) copy TimeStamp into Datetimes
+ - G_get_timestamps() to copy TimeStamp into Datetimes
 
 Use to copy the TimeStamp information into Datetimes, so the members
 of struct TimeStamp shouldn't be accessed directly.
 
-<br>
-count=0  means no datetimes were copied
+ - count=0  means no datetimes were copied
+ - count=1  means 1 datetime was copied into dt1
+ - count=2  means 2 datetimes were copied
 
-<br>
-count=1  means 1 datetime was copied into dt1
+ - G_init_timestamp()
 
-<br>
-count=2  means 2 datetimes were copied
-
-
-<P>
-int G_init_timestamp()
 Sets ts-&gt;count = 0, to indicate no valid DateTimes are in TimeStamp.
 
-<P>
-int G_set_timestamp() Copies a
-  single DateTime to a TimeStamp in preparation for writing.  (overwrites any
-  existing information in TimeStamp)
+ - G_set_timestamp()
 
-<P>
-int G_set_timestamp_range()
-Copies two DateTimes (a range) to a TimeStamp in preparation for writing.
-(overwrites any existing information in TimeStamp)
+Copies a single DateTime to a TimeStamp in preparation for writing
+(overwrites any existing information in TimeStamp).
 
-<P>
-int G_write_raster_timestamp()
-Returns:
+ - G_set_timestamp_range()
 
-<br>
-1 on success.  
+Copies two DateTimes (a range) to a TimeStamp in preparation for
+writing (overwrites any existing information in TimeStamp).
 
-<br>
--1 error - can't create timestamp file
+ - G_write_raster_timestamp()
 
-<br>
--2 error - invalid datetime in ts
+ - G_write_vector_timestamp()
 
+ - G_write_grid3_timestamp()
 
-<P>
-int G_write_vector_timestamp()
-Returns:
+ - G_format_timestamp()
 
-<br>
-1 on success.  
+ - G_scan_timestamp()
 
-<br>
--1 error - can't create timestamp file
+ - G_remove_raster_timestamp()
 
-<br>
--2 error - invalid datetime in ts
+ - G_remove_vector_timestamp()
 
+ - G_remove_grid3_timestamp()
 
-<P>
-int G_format_timestamp()
-Returns:
+Only timestamp files in current mapset can be removed.
 
-<br>
-1 on success
+ - G_read_grid3_timestamp()
 
-<br>
--1 error 
-
-
-<P>
-int G_scan_timestamp()
-Returns:
-
-<br>
-1 on success
-
-<br>
--1 error 
-
-
-<P>
-int G_remove_raster_timestamp()
-Only timestamp files in current mapset can be removed
-
-<P>
-Returns:
-
-<br>
-0  if no file
-
-<br>
-1  if successful
-
-<br>
--1  on fail
-
-
-<P>
-int G_remove_vector_timestamp()
-Only timestamp files in current mapset can be removed
-
-<P>
-Returns:
-
-<br>
-0  if no file
-
-<br>
-1  if successful
-
-<br>
--1  on fail
-
-
-<P>
-int G_read_grid3_timestamp() read grid3 timestamp
-
-Returns 1 on success. 0 or negative on error.
-
-<P>
-int G_remove_grid3_timestamp() remove grid3
-timestamp
-
-Only timestamp files in current mapset can be removed
-
-<P>
-Returns:
-
-<br>
-0  if no file
-
-<br>
-1  if successful
-
-<br>
--1  on fail
-
-
-<P>
-int G_write_grid3_timestamp() write grid3 timestamp
-
-Returns:
-
-<br>
-1 on success.
-
-<br>
--1 error - can't create timestamp file
-
-<br>
--2 error - invalid datetime in ts
-
-
-<P>
 See \ref DateTime_Library for a complete discussion of GRASS datetime
 routines.
 
-<P>
+\section Memory_Allocation Memory Allocation
 
-\section GRASS_GIS_Library_Overview GRASS GIS Library Overview
+The following routines provide memory allocation capability. They are
+simply calls to the UNIX suite of memory allocation routines malloc(),
+realloc() and calloc(), except that if there is not enough memory,
+they print a diagnostic message to that effect and then call exit().
 
+ - G_malloc ()
 
-<P>
-Contents of  directory lib/:
+Allocates a block of memory at least <i>size</i> bytes which is
+aligned properly for all data types. A pointer to the aligned block is
+returned.
 
-<P>
-<PRE>
-arraystats : statistical library
-bitmap     : bitmap library for X Window Bitmaps
-btree      : binary tree library
-cdhc       : library for testing normality and exponentiality
-cairodriver: CAIRO graphics driver
-datetime   : DateTime library
-db         : database management interface database drivers + SQL parser
-display    : library for CELL driver
-dspf       : G3D display files library
-external   : external libraries from other projects (shapelib)
-fonts      : Hershey fonts
-g3d        : G3D raster volume library
-gis        : main GRASS library
-gmath      : generic mathematical functions (matrix, fft etc.)
-             (later to be extended, BLAS/LAPACK library wrapper)
-gpde       : partial differential equations library
-htmldriver : HTML driver
-imagery    : imagery library
-init       : GRASS initialization code + scripts
-iostream   : fast I/O library
-linkm      : linked list memory manager
-manage     : general database maintenance routines
-nviz       : nviz visualization library
-ogsf       : openGL library (required for NVIZ)
-pngdriver  : PNG driver
-psdriver   : Postscript driver
-proj       : PROJ4 projection library wrapper
-python     : Python wrapper
-raster     : GRASS raster display library (raster map functions are in gis/)
-rowio      : row in/out library
-rst        : library for interpolation with regularized splines with tension 
-segment    : segment library
-sites      : old sites library (deprecated), now interfaced to vect library
-stats      : univariate statistics library
-symbol     : drawing symbols for point vector data
-vask       : Curses management library
-vect       : GRASS vector and Direct Graph library
-</PRE>
+ - G_realloc()
 
+Changes the <i>size</i> of a previously allocated block of memory at
+<i>ptr</i> and returns a pointer to the new block of memory. The
+<i>size</i> may be larger or smaller than the original size. If the
+original block cannot be extended "in place", then a new block is
+allocated and the original block copied to the new block.
+
+<b>Note:</b> If <i>ptr</i> is NULL, then this routine simply allocates
+a block of <i>size</i> bytes. This routine works around broken
+realloc() routines, which do not handle a NULL <i>ptr</i>.
+
+ - G_calloc()
+
+Allocates a properly aligned block of memory <i>n</i>*<i>size</i>
+bytes in length, initializes the allocated memory to zero, and returns
+a pointer to the allocated block of memory.
+
+ - G_free()
+
+Use the G_free() routine to release memory allocated by
+these routines.
 
 */

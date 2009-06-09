@@ -1,17 +1,14 @@
-
-/**
- * \file color_rule.c
+/*!
+ * \file gis/color_rule.c
  *
  * \brief GIS Library - Color rules.
  *
- * (C) 2001-2008 by the GRASS Development Team
+ * (C) 2001-2009 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License 
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author GRASS GIS Development Team
- *
- * \date 1999-2008
+ * \author Original author CERL
  */
 
 #include <grass/gis.h>
@@ -36,11 +33,9 @@ static void add_color_rule(const void *, int, int, int,
  *  \param[in,out] colors pointer to color table structure
  *  \return
  */
-
-void G_add_d_raster_color_rule(
-    const DCELL * val1, int r1, int g1, int b1,
-    const DCELL * val2, int r2, int g2, int b2,
-    struct Colors *colors)
+void G_add_d_raster_color_rule(const DCELL * val1, int r1, int g1, int b1,
+			       const DCELL * val2, int r2, int g2, int b2,
+			       struct Colors *colors)
 {
     add_color_rule(val1, r1, g1, b1, val2, r2, g2, b2, &colors->fixed,
 		   colors->version, &colors->cmin, &colors->cmax, DCELL_TYPE);
@@ -59,11 +54,9 @@ void G_add_d_raster_color_rule(
  *  \param[in,out] colors pointer to color table structure
  *  \return
  */
-
-void G_add_f_raster_color_rule(
-    const FCELL * cat1, int r1, int g1, int b1,
-    const FCELL * cat2, int r2, int g2, int b2,
-    struct Colors *colors)
+void G_add_f_raster_color_rule(const FCELL * cat1, int r1, int g1, int b1,
+			       const FCELL * cat2, int r2, int g2, int b2,
+			       struct Colors *colors)
 {
     add_color_rule(cat1, r1, g1, b1, cat2, r2, g2, b2, &colors->fixed,
 		   colors->version, &colors->cmin, &colors->cmax, FCELL_TYPE);
@@ -82,11 +75,9 @@ void G_add_f_raster_color_rule(
  *  \param[in,out] colors pointer to color table structure
  *  \return
  */
-
-void G_add_c_raster_color_rule(
-    const CELL * cat1, int r1, int g1, int b1,
-    const CELL * cat2, int r2, int g2, int b2,
-    struct Colors *colors)
+void G_add_c_raster_color_rule(const CELL * cat1, int r1, int g1, int b1,
+			       const CELL * cat2, int r2, int g2, int b2,
+			       struct Colors *colors)
 {
     add_color_rule(cat1, r1, g1, b1, cat2, r2, g2, b2, &colors->fixed,
 		   colors->version, &colors->cmin, &colors->cmax, CELL_TYPE);
@@ -115,10 +106,9 @@ void G_add_c_raster_color_rule(
  *  \return
  */
 
-void G_add_raster_color_rule(
-    const void *val1, int r1, int g1, int b1,
-    const void *val2, int r2, int g2, int b2,
-    struct Colors *colors, RASTER_MAP_TYPE data_type)
+void G_add_raster_color_rule(const void *val1, int r1, int g1, int b1,
+			     const void *val2, int r2, int g2, int b2,
+			     struct Colors *colors, RASTER_MAP_TYPE data_type)
 {
     add_color_rule(val1, r1, g1, b1, val2, r2, g2, b2, &colors->fixed,
 		   colors->version, &colors->cmin, &colors->cmax, data_type);
@@ -138,16 +128,20 @@ void G_add_raster_color_rule(
  * components <b>r1,g1,b1</b> and <b>r2,g2,b2</b> must be in the range
  * 0 -- 255.
  * For example, to create a linear grey scale for the range 200 -- 1000:
+ *
  \code
  struct Colors colr;
  G_init_colors (&colr);
- G_add_color_rule ((CELL)200, 0,0,0, (CELL)1000, 255,255,255);
+ G_add_color_rule ((CELL)200, 0,0,0, (CELL) 1000, 255,255,255);
  \endcode
- * The programmer is encouraged to review Raster_Color_Table_Format how
- * this routine fits into the 5.x raster color logic.
- * <b>Note.</b> The <b>colors</b> structure must have been initialized by
- * <i>G_init_colors.</i> See Predefined_Color_Tables for routines to
- * build some predefined color tables. 
+ *
+ * The programmer is encouraged to review \ref
+ * Raster_Color_Table_Format how this routine fits into the 5.x raster
+ * color logic.
+ *
+ * <b>Note:</b> The <i>colors</i> structure must have been initialized
+ * by G_init_colors(). See \ref Predefined_Color_Tables for routines
+ * to build some predefined color tables.
  *
  *  \param cat1 cell value
  *  \param r1,g1,b1 color value
@@ -156,18 +150,16 @@ void G_add_raster_color_rule(
  *  \param[in,out] colors pointer to color table structure
  *  \return
  */
-
-void G_add_color_rule(
-    CELL cat1, int r1, int g1, int b1,
-    CELL cat2, int r2, int g2,
-    int b2, struct Colors *colors)
+void G_add_color_rule(CELL cat1, int r1, int g1, int b1,
+		      CELL cat2, int r2, int g2,
+		      int b2, struct Colors *colors)
 {
     add_color_rule((void *)&cat1, r1, g1, b1, (void *)&cat2, r2, g2, b2,
 		   &colors->fixed, colors->version, &colors->cmin,
 		   &colors->cmax, CELL_TYPE);
 }
 
-/**
+/*!
  * \brief Add modular color rule (DCELL version)
  *
  * \param val1 cell value
@@ -179,10 +171,9 @@ void G_add_color_rule(
  * \return -1 on failure
  * \return 1 on success
  */
-int G_add_modular_d_raster_color_rule(
-    const DCELL * val1, int r1, int g1, int b1,
-    const DCELL * val2, int r2, int g2, int b2,
-    struct Colors *colors)
+int G_add_modular_d_raster_color_rule(const DCELL * val1, int r1, int g1, int b1,
+				      const DCELL * val2, int r2, int g2, int b2,
+				      struct Colors *colors)
 {
     DCELL min, max;
 
@@ -198,7 +189,7 @@ int G_add_modular_d_raster_color_rule(
     return 1;
 }
 
-/**
+/*!
  * \brief Add modular color rule (FCELL version)
  *
  * \param val1 cell value
@@ -210,10 +201,9 @@ int G_add_modular_d_raster_color_rule(
  * \return -1 on failure
  * \return 1 on success
  */
-int G_add_modular_f_raster_color_rule(
-    const FCELL * val1, int r1, int g1, int b1,
-    const FCELL * val2, int r2, int g2, int b2,
-    struct Colors *colors)
+int G_add_modular_f_raster_color_rule(const FCELL * val1, int r1, int g1, int b1,
+				      const FCELL * val2, int r2, int g2, int b2,
+				      struct Colors *colors)
 {
     DCELL min, max;
 
@@ -229,7 +219,7 @@ int G_add_modular_f_raster_color_rule(
     return 1;
 }
 
-/**
+/*!
  * \brief Add modular color rule (CCELL version)
  *
  * \param val1 cell value
@@ -241,20 +231,19 @@ int G_add_modular_f_raster_color_rule(
  * \return -1 on failure
  * \return 1 on success
  */
-int G_add_modular_c_raster_color_rule(
-    const CELL * val1, int r1, int g1, int b1,
-    const CELL * val2, int r2, int g2, int b2,
-    struct Colors *colors)
+int G_add_modular_c_raster_color_rule(const CELL * val1, int r1, int g1, int b1,
+				      const CELL * val2, int r2, int g2, int b2,
+				      struct Colors *colors)
 {
     return G_add_modular_color_rule(*val1, r1, g1, b1, *val2, r2, g2, b2,
 				    colors);
 }
 
-/**
+/*!
  * \brief Add modular color rule
  *
- * Question: shouldn't this function call
- * G_add_modular_<data_type>_raster_color_rule() instead???
+ * \todo Question: shouldn't this function call
+ * G_add_modular_<data_type>_raster_color_rule() instead?
  *
  * \param val1 cell value
  * \param r1,g1,b1 color value
@@ -285,10 +274,10 @@ int G_add_modular_raster_color_rule(
     return 1;
 }
 
-/**
+/*!
  * \brief Add modular color rule
  *
- * This function seems to be same as
+ * \todo This function seems to be same as
  * G_add_modular_raster_color_rule(). Can be removed?
  *
  * \param val1 cell value
@@ -301,10 +290,9 @@ int G_add_modular_raster_color_rule(
  * \return -1 on failure
  * \return 1 on success
  */
-int G_add_modular_color_rule(
-    CELL cat1, int r1, int g1,
-    int b1, CELL cat2, int r2,
-    int g2, int b2, struct Colors *colors)
+int G_add_modular_color_rule(CELL cat1, int r1, int g1,
+			     int b1, CELL cat2, int r2,
+			     int g2, int b2, struct Colors *colors)
 {
     CELL min, max;
 

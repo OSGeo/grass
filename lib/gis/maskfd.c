@@ -1,24 +1,20 @@
-
-/**
- * \file maskfd.c
+/*!
+ * \file gis/maskfd.c
  *
  * \brief GIS Library - Mask functions.
  *
- * (C) 2001-2008 by the GRASS Development Team
+ * (C) 2001-2009 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author GRASS GIS Development Team
- *
- * \date 1999-2008
+ * \author Original author CERL
  */
 
 #include <grass/gis.h>
 #include "G.h"
 
-
-/**
+/*!
  * \brief Test for MASK.
  *
  * \return -1 if no MASK

@@ -1,43 +1,34 @@
-/*
- **********************************************************************
- *  char *
- *  G_find_cell (name, mapset)
- *        char *name       file name to look for
- *        char *mapset     mapset to search. if mapset is ""
- *                         will search in mapset search list
+/*!
+ * \file strings.c
+ * 
+ * \brief GIS Library - Find raster map
  *
- *      searches for a cell file from the mapset search list
- *      or in a specified mapset.
- *      returns the mapset name where the cell file was found.
+ * (C) 1999-2009 by the GRASS Development Team
  *
- *  returns:
- *      char *  pointer to a string with name of mapset
- *              where cell file was found, or NULL if not found
- *  note:
- *      rejects all names that begin with .
+ * This program is free software under the GNU General Public
+ * License (>=v2). Read the file COPYING that comes with GRASS
+ * for details.
  *
- *      if name is of the form nnn in ppp then 
- *      name = nnn and mapset = ppp
- **********************************************************************/
+ * \author Original author CERL
+ */
 
 #include <grass/gis.h>
 
-
 /*!
- * \brief find a raster map
+ * \brief Find a raster map
  *
- * Looks for the raster map <b>name</b> in the database. The
- * <b>mapset</b> parameter can either be the empty string "", which means
- * search all the mapsets in the user's current mapset search path,
- * \remarks{See Mapset_Search_Path for more details about the search path.}
- * or it can be a specific mapset name, which means look for the raster map
- * only in this one mapset (for example, in the current mapset). If found,
- * the mapset where the raster map lives is returned. If not found, the NULL
- * pointer is returned.
+ * Looks for the raster map <i>name</i> in the database. The
+ * <i>mapset</i> parameter can either be the empty string "", which
+ * means search all the mapsets in the user's current mapset search
+ * path (see \ref Mapset_Search_Path for more details about the search
+ * path) or it can be a specific mapset name, which means look for the
+ * raster map only in this one mapset (for example, in the current
+ * mapset). If found, the mapset where the raster map lives is
+ * returned. If not found, the NULL pointer is returned.
  *
- * NOTE: If the user specifies a fully qualified raster map which exists,
- * then <i>G_find_cell(~)</i> modifies <b>name</b> by removing the
- * "@<i>mapset</i>".
+ * Note: If the user specifies a fully qualified raster map which
+ * exists, then G_find_cell() modifies <i>name</i> by removing
+ * the "@<i>mapset</i>".
  *
  * For example, to find a raster map anywhere in the database:
  \code
@@ -51,35 +42,36 @@
  *
  \code
  char name[GNAME_MAX];
- if (G_find_cell(name,G_mapset( )) == NULL)
+ if (G_find_cell(name, G_mapset()) == NULL)
  // not found
  \endcode
  *
- *  \param name
- *  \param mapset
- *  \return char * 
+ * \param[in,out] name map name
+ * \param mapset mapset name or ""
+ * 
+ * \return mapset where raster map was found
+ * \return NULL if not found
  */
-
 const char *G_find_cell(char *name, const char *mapset)
 {
     return G_find_file("cell", name, mapset);
 }
 
-
 /*!
- * \brief find a raster map (look but don't touch)
+ * \brief Find a raster map (look but don't touch)
  *
  * The same as G_find_cell() but doesn't remove the "@<i>mapset</i>"
- * qualification from <b>name</b>, if present.
+ * qualification from <i>name</i>, if present.
  *
  * Returns NULL if the map wasn't found, or the mapset the raster was
  * found in if it was.
  *
- *  \param name
- *  \param mapset
- *  \return char *
+ * \param name map name
+ * \param mapset mapset name or ""
+ * 
+ * \return mapset where raster map was found
+ * \return NULL if not found
  */
-
 const char *G_find_cell2(const char *name, const char *mapset)
 {
     return G_find_file2("cell", name, mapset);

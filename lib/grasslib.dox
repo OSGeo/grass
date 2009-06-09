@@ -33,13 +33,17 @@ who provides the GRASS main infrastructure.
 
 Main web site: <a href="http://grass.osgeo.org">http://grass.osgeo.org</a>
 
-<h2>Table of contents</h2>
+<b>Table of contents</b>
 
 - \subpage corelibs
 - \subpage libs
 - \subpage interfaces
 - \subpage gui
 - \subpage location
+- \subpage Compiling_and_Installing_GRASS_Modules
+ - \subpage Makefile_Variables
+ - \subpage Constructing_a_Makefile
+ - \subpage Multiple_Architecture_Conventions
 
 <p>
 <i>Missing entries below are either not yet uploaded to SVN (need to be migrated
@@ -163,5 +167,143 @@ as follows:
   http://trac.osgeo.org/grass/browser/grass-web/trunk/images/loc_struct.odg
 -->
 \image html "loc_struct.png" "Diagram of GRASS file structure"
+
+\section Compiling_and_Installing_GRASS_Modules Compiling and Installing GRASS Modules
+
+GRASS modules are compiled and installed using the UNIX <tt>make</tt>
+command, which reads a file named <tt>Makefile</tt> (see \ref
+Multiple_Architecture_Conventions for more information) and then runs
+the compiler. The GRASS compilation process allows for
+multiple-architecture compilation from a single copy of the source
+code (for instance, if the source code is NFS mounted to various
+machines with differing architectures). This chapter assumes that the
+programmer is familiar with <tt>make</tt> and its accompanying
+Makefile.
+
+\todo Explain ''auto-conf''
+
+\todo Include contents of SUBMITTING and INSTALL files from source code
+
+To compile enter following:
+
+\verbatim
+./configure
+make
+make install
+\endverbatim
+
+Then the code will be compiled into "/usr/local/grass-7.x.y" directory. The start
+script "grass7x" will be placed into "/usr/local/bin/".
+
+Optionally other target directories can be specified while "configuring":
+
+\verbatim
+./configure --prefix=/opt/grass-7.x.y --with-bindir=/usr/bin
+make
+make install
+\endverbatim
+
+This will store the GRASS binaries into the directory
+"/opt/grass-7.x.y" and the script mentioned above into "/usr/bin".
+
+The script "make" is required to compile single modules. The
+compilation process and requirements are discussed in more detail now.
+
+\subsection Makefile_Variables Makefile Variables
+
+\todo Update the list.
+
+<b>GRASS Libraries</b>. The following variables name the various GRASS 
+libraries:
+
+ - <i>GISLIB</i> - This names the <b>GIS Library</b>, which is the
+principal GRASS library. See \ref GIS_Library for details about this
+library, and \ref Loading_the_GIS_Library for a sample Makefile which
+loads this library.
+
+ - <i>SEGMENTLIB</i> - This names the <b>Segment Library</b>, which
+manages large matrix data. See \ref Segment_Library for details about
+this library, and \ref Loading_the_Vask_Library for a sample
+<i>Makefile</i> which loads this library.
+
+ - <i>RASTERLIB</i> - This names the <b>Raster Graphics Library</b>,
+which communicates with GRASS graphics drivers. See \ref
+Raster_Graphics_Library for details about this library, and \ref
+Loading_the_Raster_Graphics_Library for a sample <i>Makefile</i> which
+loads this library.
+
+ - <i>DISPLAYLIB</i> - This names the <b>Display Graphics Library</b>,
+which provides a higher level graphics interface to
+<i>RASTERLIB</i>. See Display_Graphics_Library for details about this
+library, and Loading_the_Display_Graphics_Library for a sample
+<i>Makefile</i> which loads this library.
+
+<b>UNIX Libraries:</b> The following variables name some useful UNIX 
+system libraries:
+
+ - <i>MATHLIB</i> This names the math library. It should be used
+instead of the -lm loader option.
+
+ - <i>CURSES</i> This names both the curses and termcap libraries. It
+should be used instead of the -lcurses/-lncurses and
+-ltermcap loader options. Do not use <tt>$CURSES</tt> if you use
+<tt>$VASK</tt>.
+
+ - <i>TERMLIB</i> This names the termcap library. It should be used
+-instead of the ltermcap or -ltermlib loader options. Do not use
+-<tt>$TERMLIB</tt> if you use <tt>$VASK</tt> or <tt>$CURSES</tt>.
+
+<b>Compiler and loader variables.</b> The following variables are
+related to compiling and loading C programs:
+
+ - <i>EXTRA\_CFLAGS</i> This variable can be used to add additional
+options to <tt>$CFLAGS</tt>. It has no predefined values. It is
+usually used to specify additional -I include directories, or -D
+preprocessor defines.
+
+\subsection Constructing_a_Makefile Constructing a Makefile
+
+
+The complete syntax for a <i>Makefile</i> is discussed in the UNIX
+documentation for <tt>make</tt> and will not be repeated here. The
+essential idea is that a target (e.g. a GRASS module) is to be built
+from a list of dependencies (e.g. object files, libraries, etc.). The
+relationship between the target, its dependencies, and the rules for
+constructing the target is expressed according to the following
+syntax:
+
+\code
+target: dependencies
+
+actions
+
+more actions
+\endcode
+
+If the target does not exist, or if any of the dependencies have a newer 
+date than the target (i.e., have changed), the actions will be executed to 
+build the target. The actions must be indented using a TAB. <tt>make</tt> is 
+picky about this. It does not like spaces in place of the TAB.
+
+\section Multiple_Architecture_Conventions Multiple-Architecture Conventions
+
+
+The following conventions allow for multiple architecture compilation on a 
+machine that uses a common or networked GRASS source code directory tree.
+
+Object files and library archives are compiled into subdirectories
+that represent the architecture that they were compiled on. These
+subdirectories are created in the $SRC directory as OBJ.<tt>arch</tt>
+and LIB.<tt>arch</tt>, where <tt>arch</tt> represents the architecture
+of the compiling machine. Thus, for example, $SRC/OBJ.sun4 would
+contain the object files for Sun/4 and SPARC architectures, and
+<tt>$SRC/LIB.686-pc-linux-gnu</tt> would contain library archives for
+Linux architectures. Likewise, <tt>$SRC/OBJ.686-pc-linux-gnu</tt>
+would contain the object files for Linux architectures, and
+<tt>$SRC/LIB.686-pc-linux-gnu</tt> would contain library archives for
+Linux architectures.
+
+Note that 'arch' is defined for a specific architecture during setup and 
+compilation of GRASS, it is not limited to sun4 or any specific string.
 
 */

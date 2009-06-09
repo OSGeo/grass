@@ -1,6 +1,27 @@
+/*!
+ * \file gis/color_range.c
+ *
+ * \brief GIS Library - Color range functions.
+ *
+ * (C) 2001-2009 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public License 
+ * (>=v2). Read the file COPYING that comes with GRASS for details.
+ *
+ * \author Original author CERL
+ */
+
 #include <math.h>
 #include <grass/gis.h>
 
+/*!
+  \brief Set color range (CELL version)
+
+  \todo Rename to G_set_c_color_range() ?
+
+  \param min,max minimum and maximum value
+  \param colors pointer to Colors structure which holds color info
+*/
 void G_set_color_range(CELL min, CELL max, struct Colors *colors)
 {
     if (min < max) {
@@ -13,6 +34,12 @@ void G_set_color_range(CELL min, CELL max, struct Colors *colors)
     }
 }
 
+/*!
+  \brief Set color range (DCELL version)
+
+  \param min,max minimum and maximum value
+  \param colors pointer to Colors structure which holds color info
+*/
 void G_set_d_color_range(DCELL min, DCELL max, struct Colors *colors)
 {
     if (min < max) {
@@ -25,18 +52,18 @@ void G_set_d_color_range(DCELL min, DCELL max, struct Colors *colors)
     }
 }
 
-/* returns min and max category in the range or huge numbers
-   if the co,lor table is defined on floating cell values and
-   not on categories */
-
-
 /*!
- * \brief
- *
- *  \param G_get_color_range
- *  \return int
- */
+  \brief Get color range values (CELL)
 
+  \todo Rename to G_get_c_color_range() ?
+  
+  Returns min and max category in the range or huge numbers if the
+  color table is defined on floating cell values and not on
+  categories.
+
+  \param[out] min,max minimum and maximum value
+  \param colors pointer to Colors structure which holds color info
+ */
 void G_get_color_range(CELL * min, CELL * max, const struct Colors *colors)
 {
     if (!colors->is_float) {
@@ -49,7 +76,16 @@ void G_get_color_range(CELL * min, CELL * max, const struct Colors *colors)
     }
 }
 
-/* returns min and max values in the range */
+/*!
+  \brief Get color range values (DELL)
+  
+  Returns min and max category in the range or huge numbers if the
+  color table is defined on floating cell values and not on
+  categories.
+
+  \param[out] min,max minimum and maximum value
+  \param colors pointer to Colors structure which holds color info
+ */
 void G_get_d_color_range(DCELL * min, DCELL * max, const struct Colors *colors)
 {
     *min = colors->cmin;
