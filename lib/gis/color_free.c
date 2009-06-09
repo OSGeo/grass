@@ -1,30 +1,43 @@
+/*!
+ * \file gis/color_free.c
+ *
+ * \brief GIS Library - Free Colors structure
+ *
+ * (C) 2001-2009 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public License 
+ * (>=v2). Read the file COPYING that comes with GRASS for details.
+ *
+ * \author Original author CERL
+ */
+
 #include <stdlib.h>
 #include <grass/gis.h>
 
-
 /*!
- * \brief free color structure memory
+ * \brief Free color structure memory
  *
- * The dynamically allocated memory associated with the <b>colors</b>
+ * The dynamically allocated memory associated with the <i>colors</i>
  * structure is freed.
- * <b>Note.</b> This routine may be used after <i>G_read_colors</i> as
- * well as after <i>G_init_colors.</i>
  *
- *  \param colors
- *  \return
+ * <b>Note:</b> This routine may be used after G_read_colors() as well
+ * as after G_init_colors().
+ *
+ * \param colors pointer to Colors structure
  */
-
 void G_free_colors(struct Colors *colors)
 {
     G__color_reset(colors);
     G_init_colors(colors);
 }
 
-/*******************************************
- * G__color* routines only to be used by other routines in this
- * library
- *******************************************/
+/*!
+  \brief Free color rules structure
 
+  Note: Only for internal use.
+
+  \param cp pointer to _Color_Info structure
+*/
 void G__color_free_rules(struct _Color_Info_ *cp)
 {
     struct _Color_Rule_ *rule, *next;
@@ -36,6 +49,13 @@ void G__color_free_rules(struct _Color_Info_ *cp)
     cp->rules = NULL;
 }
 
+/*!
+  \brief Free color rules structure
+
+  Note: Only for internal use.
+
+  \param cp pointer to _Color_Info structure
+*/
 void G__color_free_lookup(struct _Color_Info_ *cp)
 {
     if (cp->lookup.active) {
@@ -47,6 +67,13 @@ void G__color_free_lookup(struct _Color_Info_ *cp)
     }
 }
 
+/*!
+  \brief Free color rules structure
+
+  Note: Only for internal use.
+
+  \param cp pointer to _Color_Info structure
+*/
 void G__color_free_fp_lookup(struct _Color_Info_ *cp)
 {
     if (cp->fp_lookup.active) {
@@ -57,6 +84,15 @@ void G__color_free_fp_lookup(struct _Color_Info_ *cp)
     }
 }
 
+/*!
+  \brief Reset colors structure
+
+  Note: Only for internal use.
+
+  This routine should NOT init the colors.
+
+  \param colors pointer to Colors structure
+*/
 void G__color_reset(struct Colors *colors)
 {
     G__color_free_lookup(&colors->fixed);
@@ -64,5 +100,4 @@ void G__color_reset(struct Colors *colors)
     G__color_free_rules(&colors->fixed);
     G__color_free_rules(&colors->modular);
     colors->version = 0;
-    /* this routine should NOT init the colors */
 }

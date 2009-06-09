@@ -1,137 +1,70 @@
-
-/**********************************************************************
+/*!
+ * \file gis/range.c
  *
- *  G_read_range (name, mapset, range)
- *      const char *name             name of map
- *      const char *mapset           mapset that map belongs to
- *      struct Range *range          struct to hold range info
+ * \brief GIS Library - Raster range file management
  *
- *  Reads the data range information associated with map layer "map"
- *  in mapset "mapset" 
+ * (C) 2001-2009 GRASS Development Team
  *
- *   returns:    1  if successful
- *               2  range is empty
- *               3  map is fp: get range from quant rules
- *              -1  on fail
+ * This program is free software under the GNU General Public License 
+ * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- *  note:   a warning message is printed if the file is missing or incorrect
- *
- **********************************************************************
- *
- *  G_read_fp_range (name, mapset, range)
- *      const char *name               name of map
- *      const char *mapset             mapset that map belongs to
- *      struct FPRange *range          struct to hold range info
- *
- *  Reads the fp data range information associated with map layer "map"
- *  in mapset "mapset" . If map is integer, the integer range is read
- *  and the max and min values are casted to doubles and copied to FPRange
- *
- *   returns:    1  if successful
- *               2  range is empty
- *              -1  on fail
- *
- *  note:   a warning message is printed if the file is missing or incorrect
- *
- **********************************************************************
- *
- *  G_write_[fp_]range (name, range)
- *      const char *name                name of map
- *      struct [FP]Range *range         struct holding range info
- *
- *  Writes the range information associated with map layer "map"
- *
- *   returns:    0  if successful
- *              -1  on fail (or if the map is fp )
- *
- **********************************************************************
- *
- * G_init_[fp_]range (range)
- *      struct [FP]Range *range         struct for range info
- *
- * initializes range structure for call to G_update_[fp_]range()
- *
- **********************************************************************
- *
- * G_construct_default_range (range)
- *      struct Range *range         struct for range info
- *
- *  returns 1 and range is set to DEFAULT_CELL_MIN
- *  and DEFAULT_SET_MAX, otherwise returns -1
- *
- **********************************************************************
- *
- * G_update_[fp_]range (cat, range)
- *    DCELL cat                    cat to be factored into range
- *    struct [FP]Range *range      struct for range info
- **********************************************************************
- *
- * G_row_update_[fp_]range (rast, range, data_type)
- *    void *rast                   raster row to be factored into range
- *    struct [FP]Range *range      struct for range info
- *    RASTER_MAP_TYPE data_type;
- **********************************************************************
- *
- * G_get_[fp_]range_min_max (range, min, max)
- *    struct [FP]Range *range;
- *    [D]CELL *min, *max;
- **********************************************************************/
+ * \author Original author CERL
+ */
 
 #include <unistd.h>
 #include <rpc/types.h>		/* need this for sgi */
 #include <rpc/xdr.h>
 #include "G.h"
 #include <grass/glocale.h>
+
 #define DEFAULT_CELL_MIN 1
 #define DEFAULT_CELL_MAX 255
 
-/*-------------------------------------------------------------------------*/
+/*!
+  \brief Remove floating-point range
 
-/*-------------------------------------------------------------------------*/
+  Note: For internal use only.
 
-/* range functions for type "Range" */
-
-/*-------------------------------------------------------------------------*/
+  \param name map name
+*/
 void G__remove_fp_range(const char *name)
 {
     G_remove_misc("cell_misc", "f_range", name);
 }
 
-
 /*!
- * \brief 
+ * \brief Construct default range
  *
- * Sets the integer range <em>r</em> to [1,255]
+ * Sets the integer range to [1,255]
  *
- *  \param r
- *  \return
+ * \param[out] r pointer to Range structure which holds range info
  */
-
 void G_construct_default_range(struct Range *range)
 {
     G_update_range(DEFAULT_CELL_MIN, range);
     G_update_range(DEFAULT_CELL_MAX, range);
 }
 
-
 /*!
- * \brief 
+ * \brief Read floating-point range
  *
- * Read the floating point range file <tt>f_range</tt>. This file is
- * written in binary using XDR format. If there is no defined min/max in <em>r</em>, 
- * an empty <tt>f_range</tt>file is created.
- * An empty range file indicates that the min, max are undefined. This is a
- * valid case, and the result should be an initialized range struct with no
- * defined min/max.
- * If the range file is missing and the map is a floating-point map, this
- * function will create a default range by calling <tt>G_construct_default_range()</tt>.
+ * Read the floating point range file <i>drange</i>. This file is
+ * written in binary using XDR format.
  *
- *  \param r
- *  \param name
- *  \param mapset
- *  \return int
+ * An empty range file indicates that the min, max are undefined. This
+ * is a valid case, and the result should be an initialized range
+ * struct with no defined min/max.  If the range file is missing and
+ * the map is a floating-point map, this function will create a
+ * default range by calling G_construct_default_range().
+ *
+ * \param name map name
+ * \param mapset mapset name
+ * \param drange pointer to FPRange structure which holds fp range
+ *
+ * \return 1 on success
+ * \return 2 range is empty
+ * \return -1 on error
  */
-
 int G_read_fp_range(const char *name, const char *mapset,
 		    struct FPRange *drange)
 {
@@ -163,9 +96,12 @@ int G_read_fp_range(const char *name, const char *mapset,
 
     if (G_find_file2_misc("cell_misc", "f_range", name, mapset)) {
 	fd = G_open_old_misc("cell_misc", "f_range", name, mapset);
-	if (fd < 0)
-	    goto error;
-
+	if (fd < 0) {
+	  G_warning(_("Unable to read fp range file for <%s@%s>"),
+		    name, mapset);
+	  return -1;
+	}
+	
 	if (read(fd, xdr_buf, 2 * XDR_DOUBLE_NBYTES) != 2 * XDR_DOUBLE_NBYTES)
 	    return 2;
 
@@ -173,52 +109,49 @@ int G_read_fp_range(const char *name, const char *mapset,
 		      XDR_DECODE);
 
 	/* if the f_range file exists, but empty */
-	if (!xdr_double(&xdr_str, &dcell1) || !xdr_double(&xdr_str, &dcell2))
-	    goto error;
+	if (!xdr_double(&xdr_str, &dcell1) || !xdr_double(&xdr_str, &dcell2)) {
+	  if (fd) 
+	    close(fd);
+	  G_warning(_("Unable to read fp range file for <%s@%s>"),
+		    name, mapset);
+	  return -1;
+	}
 
 	G_update_fp_range(dcell1, drange);
 	G_update_fp_range(dcell2, drange);
 	close(fd);
-	return 1;
     }
-
-  error:
-    if (fd > 0)
-	close(fd);
-    G_warning(_("can't read f_range file for [%s in %s]"),
-	      name, mapset);
-    return -1;
+    
+    return 1;
 }
 
-/*-------------------------------------------------------------------------*/
-
-
 /*!
- * \brief read raster range
+ * \brief Read raster range (CELL)
  *
- * This routine reads the range information for the
- * raster map <b>name</b> in <b>mapset</b> into the <b>range</b>
- * structure.
+ * This routine reads the range information for the raster map
+ * <i>name</i> in <i>mapset</i> into the <i>range</i> structure.
+ *
  * A diagnostic message is printed and -1 is returned if there is an error
  * reading the range file. Otherwise, 0 is returned.
  *
- * Old range file (those with 4 numbers) should
- * treat zeros in this file as NULL-values. New range files (those with just 2
- * numbers) should treat these numbers as real data (zeros are real data in this
- * case).
- * An empty range file indicates that the min, max are undefined. This is a
- * valid case, and the result should be an initialized range struct with no
- * defined min/max.
- * If the range file is missing and the map is a floating-point map, this
- * function will create a default range by calling <tt>G_construct_default_range()</tt>.
+ * Old range file (those with 4 numbers) should treat zeros in this
+ * file as NULL-values. New range files (those with just 2 numbers)
+ * should treat these numbers as real data (zeros are real data in
+ * this case).  An empty range file indicates that the min, max are
+ * undefined. This is a valid case, and the result should be an
+ * initialized range struct with no defined min/max. If the range file
+ * is missing and the map is a floating-point map, this function will
+ * create a default range by calling G_construct_default_range().
  *
- *  \param name
- *  \param mapset
- *  \param range
+ * \param name map name
+ * \param mapset mapset name
+ * \param range pointer to Range structure which holds range info
  *
- *  \return int
+ * \return -1 on error
+ * \return 1 on success
+ * \return 2 if range is empty
+ * \return 3 if raster map is floating-point, get range from quant rules
  */
-
 int G_read_range(const char *name, const char *mapset, struct Range *range)
 {
     FILE *fd;
@@ -236,8 +169,7 @@ int G_read_range(const char *name, const char *mapset, struct Range *range)
 	DCELL dmin, dmax;
 
 	if (G_read_quant(name, mapset, &quant) < 0) {
-	    G_warning(_("G_read_range(): can't read quant rules"
-			" for fp map %s@%s"),
+	    G_warning(_("Unable to read quant rules for raster map <%s@%s>"),
 		       name, mapset);
 	    return -1;
 	}
@@ -273,9 +205,12 @@ int G_read_range(const char *name, const char *mapset, struct Range *range)
 
     if (G_find_file2_misc("cell_misc", "range", name, mapset)) {
 	fd = G_fopen_old_misc("cell_misc", "range", name, mapset);
-	if (!fd)
-	    goto error;
-
+	if (!fd) {
+	    G_warning(_("Unable to read range file for <%s@%s>"),
+		      name, mapset);
+	    return -1;
+	}
+	
 	/* if range file exists but empty */
 	if (!fgets(buf, sizeof buf, fd))
 	    return 2;
@@ -284,9 +219,15 @@ int G_read_range(const char *name, const char *mapset, struct Range *range)
 	count = sscanf(buf, "%d%d%d%d", &x[0], &x[1], &x[2], &x[3]);
 
 	/* if wrong format */
-	if (count <= 0)
-	    goto error;
-
+	if (count <= 0) {
+	    if (fd)
+		fclose(fd);
+	    
+	    G_warning(_("Unable to read range file for <%s@%s>"),
+		      name, mapset);
+	    return -1;
+	}
+	
 	for (n = 0; n < count; n++) {
 	    /* if count==4, the range file is old (4.1) and 0's in it
 	       have to be ignored */
@@ -294,81 +235,73 @@ int G_read_range(const char *name, const char *mapset, struct Range *range)
 		G_update_range((CELL) x[n], range);
 	}
 	fclose(fd);
-	return 1;
     }
 
-  error:
-    if (fd)
-	fclose(fd);
-    G_warning(_("can't read range file for [%s in %s]"),
-	      name, mapset);
-    return -1;
+    return 1;
 }
 
-/*-------------------------------------------------------------------------*/
-
-
 /*!
- * \brief write raster range file
+ * \brief Write raster range file
  *
  * This routine writes the range information for the raster map
- * <b>name</b> in the current mapset from the <b>range</b> structure.
- * A diagnostic message is printed and -1 is returned if there is an error
- * writing the range file. Otherwise, 0 is returned.
+ * <i>name</i> in the current mapset from the <i>range</i> structure.
+ * A diagnostic message is printed and -1 is returned if there is an
+ * error writing the range file. Otherwise, 0 is returned.
  *
  * This routine only writes 2 numbers (min,max) to the range
  * file, instead of the 4 (pmin,pmax,nmin,nmax) previously written.
  * If there is no defined min,max, an empty file is written.
  *
- *  \param name
- *  \param range
+ * \param name map name
+ * \param range pointer to Range structure which holds range info
  *
- *  \return int
+ * \return -1 on error (or raster map is floating-point)
+ * \return 0 on success
  */
-
 int G_write_range(const char *name, const struct Range *range)
 {
     FILE *fd;
 
-    if (G_raster_map_type(name, G_mapset()) != CELL_TYPE)
-	goto error;
+    if (G_raster_map_type(name, G_mapset()) != CELL_TYPE) {
+	G_remove_misc("cell_misc", "range", name);	/* remove the old file with this name */
+	G_warning(_("Unable to write range file for <%s>"),
+		  name);
+	return -1;
+    }
 
     fd = G_fopen_new_misc("cell_misc", "range", name);
-    if (!fd)
-	goto error;
+    if (!fd) {
+	G_remove_misc("cell_misc", "range", name);	/* remove the old file with this name */
+	G_warning(_("Unable to write range file for <%s>"),
+		  name);
+	return -1;
+    }
 
-    if (range->first_time)
-	/* if range hasn't been updated */
-    {
+    /* if range hasn't been updated */
+    if (range->first_time) {
 	fclose(fd);
 	return 0;
     }
+
     fprintf(fd, "%ld %ld\n", (long)range->min, (long)range->max);
     fclose(fd);
-    return 0;
 
-  error:
-    G_remove_misc("cell_misc", "range", name);	/* remove the old file with this name */
-    G_warning(_("can't write range file for [%s in %s]"),
-	      name, G_mapset());
-    return -1;
+    return 0;
 }
 
-/*-------------------------------------------------------------------------*/
-
-
 /*!
- * \brief 
+ * \brief Write raster range file (floating-point)
  *
- * Write the floating point range
- * file <tt>f_range</tt>. This file is written in binary using XDR format. If
- * there is no defined min/max in <em>r</em>, an empty <tt>f_range</tt>file is
- * created.
+ * Write the floating point range file <tt>f_range</tt>. This file is
+ * written in binary using XDR format. If there is no defined min/max
+ * in <em>range</em>, an empty <tt>f_range</tt> file is created.
  *
- *  \param r
- *  \return
+ * \param name map name
+ * \param range pointer to FPRange which holds fp range info
+ *
+ * \return 0 on success
+ * \return -1 on error
  */
-
 int G_write_fp_range(const char *name, const struct FPRange *range)
 {
     int fd;
@@ -376,12 +309,15 @@ int G_write_fp_range(const char *name, const struct FPRange *range)
     XDR xdr_str;
 
     fd = G_open_new_misc("cell_misc", "f_range", name);
-    if (fd < 0)
-	goto error;
-
-    if (range->first_time)
-	/* if range hasn't been updated, write empty file meaning Nulls */
-    {
+    if (fd < 0) {
+	G_remove_misc("cell_misc", "f_range", name);
+	G_warning(_("Unable to write range file for <%s>"),
+		  name);
+	return -1;
+    }
+    
+    /* if range hasn't been updated, write empty file meaning Nulls */
+    if (range->first_time) {
 	close(fd);
 	return 0;
     }
@@ -389,40 +325,38 @@ int G_write_fp_range(const char *name, const struct FPRange *range)
     xdrmem_create(&xdr_str, xdr_buf, (u_int) XDR_DOUBLE_NBYTES * 2,
 		  XDR_ENCODE);
 
-    if (!xdr_double(&xdr_str, (double *)&(range->min)))
-	goto error;
-    if (!xdr_double(&xdr_str, (double *)&(range->max)))
-	goto error;
-
+    if (!xdr_double(&xdr_str, (double *)&(range->min))) {
+	G_remove_misc("cell_misc", "f_range", name);
+	G_warning(_("Unable to write range file for <%s>"),
+		  name);
+	return -1;
+    }
+    
+    if (!xdr_double(&xdr_str, (double *)&(range->max))) {
+	G_remove_misc("cell_misc", "f_range", name);
+	G_warning(_("Unable to write range file for <%s>"),
+		  name);
+	return -1;
+    }
+    
     write(fd, xdr_buf, XDR_DOUBLE_NBYTES * 2);
     close(fd);
-    return 0;
 
-  error:
-    G_remove_misc("cell_misc", "f_range", name);	/* remove the old file with this name */
-    G_warning(_("can't write range file for [%s in %s]"),
-	      name, G_mapset());
-    return -1;
+    return 0;
 }
 
-/*-------------------------------------------------------------------------*/
-
-
 /*!
- * \brief update range structure
+ * \brief Update range structure (CELL)
  *
- * Compares the <b>cat</b> value with the minimum and maximum
- * values in the <b>range</b> structure, modifying the range if <b>cat</b>
+ * Compares the <i>cat</i> value with the minimum and maximum values
+ * in the <i>range</i> structure, modifying the range if <i>cat</i>
  * extends the range.
  *
  * NULL-values must be detected and ignored.
  *
- *  \param cat
- *  \param range
- *
- *  \return
+ * \param cat raster value
+ * \param range pointer to Range structure which holds range info
  */
-
 void G_update_range(CELL cat, struct Range *range)
 {
     if (!G_is_c_null_value(&cat)) {
@@ -439,8 +373,18 @@ void G_update_range(CELL cat, struct Range *range)
     }
 }
 
-/*-------------------------------------------------------------------------*/
-
+/*!
+ * \brief Update range structure (floating-point)
+ *
+ * Compares the <i>cat</i> value with the minimum and maximum values
+ * in the <i>range</i> structure, modifying the range if <i>cat</i>
+ * extends the range.
+ *
+ * NULL-values must be detected and ignored.
+ *
+ * \param val raster value
+ * \param range pointer to Range structure which holds range info
+ */
 void G_update_fp_range(DCELL val, struct FPRange *range)
 {
     if (!G_is_d_null_value(&val)) {
@@ -457,29 +401,32 @@ void G_update_fp_range(DCELL val, struct FPRange *range)
     }
 }
 
-/*-------------------------------------------------------------------------*/
-
-
 /*!
- * \brief update range structure
+ * \brief Update range structure based on raster row (CELL)
  *
- * This routine updates the <b>range</b> data
- * just like <i>G_update_range</i>, but for <b>n</b> values from the
- * <b>cell</b> array.
+ * This routine updates the <i>range</i> data just like
+ * G_update_range(), but for <i>n</i> values from the <i>cell</i>
+ * array.
  *
- *  \param cell
- *  \param n
- *  \param range
- *  \return
+ * \param cell raster values
+ * \param n number of values
+ * \param range pointer to Range structure which holds range info
  */
-
 void G_row_update_range(const CELL *cell, int n, struct Range *range)
 {
     G__row_update_range(cell, n, range, 0);
 }
 
-/*-------------------------------------------------------------------------*/
-
+/*!
+ * \brief Update range structure based on raster row
+ *
+ * Note: for internal use only.
+ *
+ * \param cell raster values
+ * \param n number of values
+ * \param range pointer to Range structure which holds range info
+ * \param ignore_zeros ignore zeros
+ */
 void G__row_update_range(const CELL *cell, int n,
 			 struct Range *range, int ignore_zeros)
 {
@@ -502,8 +449,18 @@ void G__row_update_range(const CELL *cell, int n,
     }
 }
 
-/*-------------------------------------------------------------------------*/
-
+/*!
+ * \brief Update range structure based on raster row (floating-point)
+ *
+ * This routine updates the <i>range</i> data just like
+ * G_update_range(), but for <i>n</i> values from the <i>cell</i>
+ * array.
+ *
+ * \param cell raster values
+ * \param n number of values
+ * \param range pointer to Range structure which holds range info
+ * \param data_type raster type (CELL, FCELL, DCELL)
+ */
 void G_row_update_fp_range(const void *rast, int n,
 			   struct FPRange *range, RASTER_MAP_TYPE data_type)
 {
@@ -542,21 +499,18 @@ void G_row_update_fp_range(const void *rast, int n,
     }
 }
 
-/*-------------------------------------------------------------------------*/
-
 /*!
- * \brief initialize range structure
+ * \brief Initialize range structure
  *
- * Initializes the <b>range</b> structure for updates by
- * <i>G_update_range</i> and <i>G_row_update_range.</i>
+ * Initializes the <i>range</i> structure for updates by
+ * G_update_range() and G_row_update_range().
  *
- * Must set a flag in the range structure that indicates that
- * no min/max have been defined - probably a <tt>"first"</tt> boolean flag.
+ * Must set a flag in the range structure that indicates that no
+ * min/max have been defined - probably a <tt>"first"</tt> boolean
+ * flag.
  *
- *  \param range
- *  \return
+ * \param range pointer to Range structure which holds range info
  */
-
 void G_init_range(struct Range *range)
 {
     G_set_c_null_value(&(range->min), 1);
@@ -564,26 +518,20 @@ void G_init_range(struct Range *range)
     range->first_time = 1;
 }
 
-/*-------------------------------------------------------------------------*/
-
-
 /*!
- * \brief get range min and max
+ * \brief Get range min and max
  *
- * The <b>min</b>inum and <b>max</b>imum CELL
- * values are extracted from the <b>range</b> structure.
+ * The mininum and maximum CELL values are extracted from the
+ * <i>range</i> structure.
  *
- * If the range structure has no defined min/max
- * (first!=0) there will not be a valid range. In this case the min and
- * max returned must be the NULL-value.
+ * If the range structure has no defined min/max (first!=0) there will
+ * not be a valid range. In this case the min and max returned must be
+ * the NULL-value.
  *
- *  \param range
- *  \param min
- *  \param max
- *  \return
+ * \param range pointer to Range structure which holds range info
+ * \param[out] min minimum value
+ * \param[out] max maximum value
  */
-
-
 void G_get_range_min_max(const struct Range *range, CELL * min, CELL * max)
 {
     if (range->first_time) {
@@ -603,19 +551,15 @@ void G_get_range_min_max(const struct Range *range, CELL * min, CELL * max)
     }
 }
 
-/*-------------------------------------------------------------------------*/
-
 /*!
- * \brief 
+ * \brief Initialize fp range
  *
- * Must set a flag in the range
- * structure that indicates that no min/max have been defined - probably a
- * <tt>"first"</tt> boolean flag.
+ * Must set a flag in the range structure that indicates that no
+ * min/max have been defined - probably a <tt>"first"</tt> boolean
+ * flag.
  *
- *  \param r
- *  \return
+ * \param range pointer to FPRange which holds fp range info
  */
-
 void G_init_fp_range(struct FPRange *range)
 {
     G_set_d_null_value(&(range->min), 1);
@@ -623,22 +567,18 @@ void G_init_fp_range(struct FPRange *range)
     range->first_time = 1;
 }
 
-/*-------------------------------------------------------------------------*/
-
-
 /*!
- * \brief 
+ * \brief Get minumum and maximum value from fp range
  *
- * Extract the min/max from the range structure <em>r</em>.
- * If the range structure has no defined min/max (first!=0) there will not be a
- * valid range. In this case the min and max returned must be the NULL-value.
+ * Extract the min/max from the range structure <i>range</i>.  If the
+ * range structure has no defined min/max (first!=0) there will not be
+ * a valid range. In this case the min and max returned must be the
+ * NULL-value.
  *
- *  \param r
- *  \param min
- *  \param max
- *  \return
+ * \param range pointer to FPRange which holds fp range info
+ * \param[out] min minimum value
+ * \param[out] max maximum value
  */
-
 void G_get_fp_range_min_max(const struct FPRange *range,
 			    DCELL *min, DCELL *max)
 {

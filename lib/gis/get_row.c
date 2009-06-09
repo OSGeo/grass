@@ -1,16 +1,14 @@
 /*!
-   \file get_row.c
+  \file gis/get_row.c
 
-   \brief GIS library - get raster row
+  \brief GIS library - Get raster row
 
-   (C) 2003-2008 by the GRASS Development Team
+  (C) 2003-2009 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+  This program is free software under the GNU General Public License
+  (>=v2).  Read the file COPYING that comes with GRASS for details.
 
-   \author Original author CERL
+  \author Original author CERL
  */
 
 #include <string.h>
@@ -25,15 +23,9 @@
 
 #include "G.h"
 
-/*--------------------------------------------------------------------------*/
-
 #define NULL_FILE   "null"
 
-/*--------------------------------------------------------------------------*/
-
 static int embed_nulls(int, void *, int, RASTER_MAP_TYPE, int, int);
-
-/*--------------------------------------------------------------------------*/
 
 static int compute_window_row(int fd, int row, int *cellRow)
 {
@@ -62,8 +54,6 @@ static int compute_window_row(int fd, int row, int *cellRow)
 
     return 1;
 }
-
-/*--------------------------------------------------------------------------*/
 
 static void do_reclass_int(int fd, void *cell, int null_is_zero)
 {
@@ -96,8 +86,6 @@ static void do_reclass_int(int fd, void *cell, int null_is_zero)
     }
 }
 
-/*--------------------------------------------------------------------------*/
-
 static int read_data_fp_compressed(int fd, int row, unsigned char *data_buf,
 				   int *nbytes)
 {
@@ -117,8 +105,6 @@ static int read_data_fp_compressed(int fd, int row, unsigned char *data_buf,
 
     return 0;
 }
-
-/*--------------------------------------------------------------------------*/
 
 static void rle_decompress(unsigned char *dst, const unsigned char *src,
 			   int nbytes, int size)
@@ -183,8 +169,6 @@ static int read_data_compressed(int fd, int row, unsigned char *data_buf,
     return 0;
 }
 
-/*--------------------------------------------------------------------------*/
-
 static int read_data_uncompressed(int fd, int row, unsigned char *data_buf,
 				  int *nbytes)
 {
@@ -201,8 +185,6 @@ static int read_data_uncompressed(int fd, int row, unsigned char *data_buf,
 
     return 0;
 }
-
-/*--------------------------------------------------------------------------*/
 
 #ifdef HAVE_GDAL
 static int read_data_gdal(int fd, int row, unsigned char *data_buf, int *nbytes)
@@ -238,10 +220,6 @@ static int read_data_gdal(int fd, int row, unsigned char *data_buf, int *nbytes)
 }
 #endif
 
-/*--------------------------------------------------------------------------*/
-
-/* Actually read a row of data in */
-
 static int read_data(int fd, int row, unsigned char *data_buf, int *nbytes)
 {
     struct fileinfo *fcb = &G__.fileinfo[fd];
@@ -262,10 +240,7 @@ static int read_data(int fd, int row, unsigned char *data_buf, int *nbytes)
 	return read_data_fp_compressed(fd, row, data_buf, nbytes);
 }
 
-/*--------------------------------------------------------------------------*/
-
 /* copy cell file data to user buffer translated by window column mapping */
-
 static void cell_values_int(int fd, const unsigned char *data,
 			    const COLUMN_MAPPING * cmap, int nbytes,
 			    void *cell, int n)
@@ -311,8 +286,6 @@ static void cell_values_int(int fd, const unsigned char *data,
     }
 }
 
-/*--------------------------------------------------------------------------*/
-
 static void cell_values_float(int fd, const unsigned char *data,
 			      const COLUMN_MAPPING * cmap, int nbytes,
 			      void *cell, int n)
@@ -351,8 +324,6 @@ static void cell_values_float(int fd, const unsigned char *data,
 	cmapold--;
     }
 }
-
-/*--------------------------------------------------------------------------*/
 
 static void cell_values_double(int fd, const unsigned char *data,
 			       const COLUMN_MAPPING * cmap, int nbytes,
@@ -393,14 +364,7 @@ static void cell_values_double(int fd, const unsigned char *data,
     }
 }
 
-/*--------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------*/
-
 #ifdef HAVE_GDAL
-
-/*--------------------------------------------------------------------------*/
-
 static void gdal_values_int(int fd, const unsigned char *data,
 			    const COLUMN_MAPPING *cmap, int nbytes,
 			    CELL *cell, int n)
@@ -439,8 +403,6 @@ static void gdal_values_int(int fd, const unsigned char *data,
     }
 }
 
-/*--------------------------------------------------------------------------*/
-
 static void gdal_values_float(int fd, const float *data,
 			      const COLUMN_MAPPING *cmap, int nbytes,
 			      FCELL *cell, int n)
@@ -465,8 +427,6 @@ static void gdal_values_float(int fd, const float *data,
     }
 }
 
-/*--------------------------------------------------------------------------*/
-
 static void gdal_values_double(int fd, const double *data,
 			       const COLUMN_MAPPING *cmap, int nbytes,
 			       DCELL *cell, int n)
@@ -490,12 +450,7 @@ static void gdal_values_double(int fd, const double *data,
 	cmapold = cmap[i];
     }
 }
-
-/*--------------------------------------------------------------------------*/
-
 #endif
-
-/*--------------------------------------------------------------------------*/
 
 /* transfer_to_cell_XY takes bytes from fcb->data, converts these bytes with
    the appropriate procedure (e.g. XDR or byte reordering) into type X 
@@ -506,9 +461,6 @@ static void gdal_values_double(int fd, const double *data,
    work_buf might be ommited. check the appropriate function for XY to
    determine the procedure of conversion. 
  */
-
-/*--------------------------------------------------------------------------*/
-
 static void transfer_to_cell_XX(int fd, void *cell)
 {
     static void (*cell_values_type[3]) () = {
@@ -530,8 +482,6 @@ static void transfer_to_cell_XX(int fd, void *cell)
 				       fcb->cur_nbytes, cell,
 				       G__.window.cols);
 }
-
-/*--------------------------------------------------------------------------*/
 
 static void transfer_to_cell_fi(int fd, void *cell)
 {
@@ -565,8 +515,6 @@ static void transfer_to_cell_di(int fd, void *cell)
     G__freea(work_buf);
 }
 
-/*--------------------------------------------------------------------------*/
-
 static void transfer_to_cell_if(int fd, void *cell)
 {
     CELL *work_buf = G__alloca(G__.window.cols * sizeof(CELL));
@@ -592,8 +540,6 @@ static void transfer_to_cell_df(int fd, void *cell)
 
     G__freea(work_buf);
 }
-
-/*--------------------------------------------------------------------------*/
 
 static void transfer_to_cell_id(int fd, void *cell)
 {
@@ -621,11 +567,6 @@ static void transfer_to_cell_fd(int fd, void *cell)
     G__freea(work_buf);
 }
 
-/*--------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------*/
 /*
  *   works for all map types and doesn't consider
  *   null row corresponding to the requested row 
@@ -676,8 +617,6 @@ static int get_map_row_nomask(int fd, void *rast, int row,
     return 1;
 }
 
-/*--------------------------------------------------------------------------*/
-
 static int get_map_row_no_reclass(int fd, void *rast, int row,
 				  RASTER_MAP_TYPE data_type, int null_is_zero,
 				  int with_mask)
@@ -694,8 +633,6 @@ static int get_map_row_no_reclass(int fd, void *rast, int row,
 
     return 1;
 }
-
-/*--------------------------------------------------------------------------*/
 
 static int get_map_row(int fd, void *rast, int row, RASTER_MAP_TYPE data_type,
 		       int null_is_zero, int with_mask)
@@ -746,12 +683,6 @@ static int get_map_row(int fd, void *rast, int row, RASTER_MAP_TYPE data_type,
     return 1;
 }
 
-/*--------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------*/
-
 /*!
  * \brief Read raster row without masking (this routine is deprecated)
  *
@@ -783,7 +714,6 @@ static int get_map_row(int fd, void *rast, int row, RASTER_MAP_TYPE data_type,
  * \return 0 row requested not within window
  * \return -1 on error
  */
-
 int G_get_map_row_nomask(int fd, CELL * buf, int row)
 {
     return get_map_row(fd, buf, row, CELL_TYPE, 1, 0);
@@ -803,7 +733,6 @@ int G_get_map_row_nomask(int fd, CELL * buf, int row)
  * \return 0 row requested not within window
  * \return -1 on error
  */
-
 int G_get_raster_row_nomask(int fd, void *buf, int row,
 			    RASTER_MAP_TYPE data_type)
 {
@@ -824,7 +753,6 @@ int G_get_raster_row_nomask(int fd, void *buf, int row,
  * \return 0 row requested not within window
  * \return -1 on error
  */
-
 int G_get_c_raster_row_nomask(int fd, CELL * buf, int row)
 {
     return G_get_raster_row_nomask(fd, buf, row, CELL_TYPE);
@@ -844,7 +772,6 @@ int G_get_c_raster_row_nomask(int fd, CELL * buf, int row)
  * \return 0 row requested not within window
  * \return -1 on error
  */
-
 int G_get_f_raster_row_nomask(int fd, FCELL * buf, int row)
 {
     return G_get_raster_row_nomask(fd, buf, row, FCELL_TYPE);
@@ -864,13 +791,10 @@ int G_get_f_raster_row_nomask(int fd, FCELL * buf, int row)
  * \return 0 row requested not within window
  * \return -1 on error
  */
-
 int G_get_d_raster_row_nomask(int fd, DCELL * buf, int row)
 {
     return G_get_raster_row_nomask(fd, buf, row, DCELL_TYPE);
 }
-
-/*--------------------------------------------------------------------------*/
 
 /*!
  * \brief Get raster row (this routine is deprecated!)
@@ -891,7 +815,6 @@ int G_get_d_raster_row_nomask(int fd, DCELL * buf, int row)
  * \return 0 row requested not within window
  * \return -1 on error
  */
-
 int G_get_map_row(int fd, CELL * buf, int row)
 {
     return get_map_row(fd, buf, row, CELL_TYPE, 1, 1);
@@ -939,7 +862,6 @@ int G_get_map_row(int fd, CELL * buf, int row)
  * \return 0 row requested not within window
  * \return -1 on error
  */
-
 int G_get_raster_row(int fd, void *buf, int row, RASTER_MAP_TYPE data_type)
 {
     return get_map_row(fd, buf, row, data_type, 0, 1);
@@ -966,7 +888,6 @@ int G_get_raster_row(int fd, void *buf, int row, RASTER_MAP_TYPE data_type)
  * \return 0 row requested not within window
  * \return -1 on error
  */
-
 int G_get_c_raster_row(int fd, CELL * buf, int row)
 {
     return G_get_raster_row(fd, buf, row, CELL_TYPE);
@@ -989,7 +910,6 @@ int G_get_c_raster_row(int fd, CELL * buf, int row)
  * \return 0 row requested not within window
  * \return -1 on error
  */
-
 int G_get_f_raster_row(int fd, FCELL * buf, int row)
 {
     return G_get_raster_row(fd, buf, row, FCELL_TYPE);
@@ -1009,17 +929,10 @@ int G_get_f_raster_row(int fd, FCELL * buf, int row)
  * \return 0 row requested not within window
  * \return -1 on error
  */
-
 int G_get_d_raster_row(int fd, DCELL * buf, int row)
 {
     return G_get_raster_row(fd, buf, row, DCELL_TYPE);
 }
-
-/*--------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------*/
 
 static int open_null_read(int fd)
 {

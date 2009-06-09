@@ -1,30 +1,42 @@
-#include <grass/gis.h>
-
-/* for convenience, but to be avoided if possible */
-
 /*!
- * \brief set a category color
+ * \file gis/color_set.c
  *
- * The <b>red, green</b>, and
- * <b>blue</b> intensities for the color associated with category <b>cat</b>
- * are set in the <b>colors</b> structure.  The intensities must be in the
- * range 0 -­ 255. Values below zero are set as zero, values above 255 are set as
- * 255.
- * <b>Use of this routine is discouraged because it defeats the new color
- * logic.</b> It is provided only for backward compatibility. Overuse can create
- * large color tables. <i>G_add_color_rule</i> should be used whenever
- * possible.
- * <b>Note.</b> The <b>colors</b> structure must have been initialized by
- * <i>G_init_color.</i>
+ * \brief GIS Library - Set colors for raster maps.
  *
- *  \param cat
- *  \param red
- *  \param green
- *  \param blue
- *  \param colors
- *  \return
+ * (C) 2001-2009 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public License 
+ * (>=v2). Read the file COPYING that comes with GRASS for details.
+ *
+ * \author Original author CERL
  */
 
+#include <grass/gis.h>
+
+/*!
+ * \brief Set a category color (CELL)
+ *
+ * The <i>red, green</i>, and <i>blue</i> intensities for the color
+ * associated with category <i>cat</i> are set in the <i>colors</i>
+ * structure.  The intensities must be in the range 0 -­ 255. Values
+ * below zero are set as zero, values above 255 are set as 255.
+ *
+ * <b>Warning: Use of this routine is discouraged because it defeats the new
+ * color logic.</b>
+ *
+ * It is provided only for backward compatibility. Overuse can create
+ * large color tables. G_add_color_rule() should be used whenever
+ * possible.
+ *
+ * <b>Note:</b> The <i>colors</i> structure must have been
+ * initialized by G_init_color().
+ *
+ * \param cat raster cell value
+ * \param r red value
+ * \param g green value
+ * \param b blue value
+ * \param colors pointer to Colors structure which holds color info
+ */
 void G_set_color(CELL cat, int r, int g, int b, struct Colors *colors)
 {
     if (G_is_c_null_value(&cat))
@@ -33,6 +45,17 @@ void G_set_color(CELL cat, int r, int g, int b, struct Colors *colors)
 	G_add_color_rule(cat, r, g, b, cat, r, g, b, colors);
 }
 
+/*!
+ * \brief Set a category color (DCELL)
+ * 
+ * See G_set_color() for detailed information.
+ *
+ * \param cat raster cell value
+ * \param r red value
+ * \param g green value
+ * \param b blue value
+ * \param colors pointer to Colors structure which holds color info
+ */
 void G_set_d_color(DCELL val, int r, int g, int b, struct Colors *colors)
 {
     if (G_is_d_null_value(&val))
@@ -41,19 +64,17 @@ void G_set_d_color(DCELL val, int r, int g, int b, struct Colors *colors)
 	G_add_d_raster_color_rule(&val, r, g, b, &val, r, g, b, colors);
 }
 
-
 /*!
- * \brief 
+ * \brief Set color for NULL-value
  *
- * Sets the color (in <em>colors</em>) for the NULL-value to <em>r,g,b</em>.
+ * Sets the color (in <i>colors</i>) for the NULL-value to
+ * <i>red, green, blue</i>.
  *
- *  \param r
- *  \param g
- *  \param b
- *  \param colors
- *  \return
+ * \param red red value
+ * \param grn green value
+ * \param blu blue value
+ * \param colors pointer to Colors structure which holds color info
  */
-
 void G_set_null_value_color(int red, int grn, int blu, struct Colors *colors)
 {
     colors->null_red = red;
@@ -62,20 +83,18 @@ void G_set_null_value_color(int red, int grn, int blu, struct Colors *colors)
     colors->null_set = 1;
 }
 
-
 /*!
- * \brief 
+ * \brief Set default color value 
  *
- * Sets the default color (in <em>colors</em>) to <em>r,g,b</em>. This is
- * the color for values which do not have an explicit rule.
+ * Sets the default color (in <i>colors</i>) to <i>red, green,
+ * blue</i>. This is the color for values which do not have an
+ * explicit rule.
  *
- *  \param r
- *  \param g
- *  \param b
- *  \param colors
- *  \return
+ * \param red red value
+ * \param grn green value
+ * \param blu blue value
+ * \param colors pointer to Colors structure which holds color info
  */
-
 void G_set_default_color(int red, int grn, int blu, struct Colors *colors)
 {
     colors->undef_red = red;

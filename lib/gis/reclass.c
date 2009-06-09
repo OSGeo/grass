@@ -1,3 +1,16 @@
+/*!
+ * \file gis/reclass.c
+ *
+ * \brief GIS Library - Check if raster map is reclassified
+ *
+ * (C) 2001-2009 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public License
+ * (>=v2). Read the file COPYING that comes with GRASS for details.
+ *
+ * \author Original author CERL
+ */
+
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -8,25 +21,23 @@ static FILE *fopen_cellhd_old(const char *, const char *);
 static FILE *fopen_cellhd_new(const char *);
 static int get_reclass_table(FILE *, struct Reclass *);
 
-
 /*!
- * \brief reclass file?
+ * \brief Check if raster map is reclassified
  *
- * This function determines if the raster map
- * <b>name</b> in <b>mapset</b> is a reclass file.
- * If it is, then the name and mapset of the referenced 
- * raster map are copied into the <b>r_name</b> and <b>r_mapset</b> 
- * buffers.
- * Returns 1 if <b>name</b> is a reclass file, 0 if it is not, and -1 if 
- * there was a problem reading the raster header for <b>name.</b>
+ * This function determines if the raster map <i>name</i> in
+ * <i>mapset</i> is a reclass file. If it is, then the name and mapset
+ * of the referenced raster map are copied into the <i>r_name</i> and
+ * <i>r_mapset</i> buffers.  
  *
- *  \param name
- *  \param mapset
- *  \param r_name
- *  \param r_mapset
- *  \return int
+ * \param name map name
+ * \param mapset mapset name
+ * \param[out] r_name name of reference map
+ * \param[out] r_mapset mapset where reference map lives
+ *
+ * \returns 1 if it is a reclass file
+ * \return 0 if it is not
+ * \return -1 if there was a problem reading the raster header
  */
-
 int G_is_reclass(const char *name, const char *mapset, char *rname,
 		 char *rmapset)
 {
@@ -45,24 +56,24 @@ int G_is_reclass(const char *name, const char *mapset, char *rname,
 	return type != 0;
 }
 
-
 /*!
- * \brief get child reclass maps list
+ * \brief Get child reclass maps list
  *
- * This function generates a
- * child reclass maps list from the cell_misc/reclassed_to file which stores 
- * this list. The cell_misc/reclassed_to file is written by 
- * G_put_reclass().
- * G_is_reclassed_to() is used by g.rename, g.remove and r.reclass to
- * prevent accidentally deleting the parent map of a reclassed raster map.
+ * This function generates a child reclass maps list from the
+ * cell_misc/reclassed_to file which stores this list. The
+ * cell_misc/reclassed_to file is written by G_put_reclass().
+ * G_is_reclassed_to() is used by <tt>g.rename</tt>, <tt>g.remove</tt>
+ * and <tt>r.reclass</tt> to prevent accidentally deleting the parent
+ * map of a reclassed raster map.
  *
- *  \param name
- *  \param mapset
- *  \param nrmaps
- *  \param rmaps
- *  \return int
+ * \param name map name
+ * \param mapset mapset name
+ * \param[out] nrmaps number of reference maps
+ * \param[out] rmaps array of names of reference maps
+ *
+ * \return number of reference maps
+ * \return -1 on error
  */
-
 int G_is_reclassed_to(const char *name, const char *mapset, int *nrmaps,
 		      char ***rmaps)
 {
@@ -112,6 +123,16 @@ int G_is_reclassed_to(const char *name, const char *mapset, int *nrmaps,
     return i;
 }
 
+/*!
+  \brief Get reclass
+
+  \param name map name
+  \param mapset mapset name
+  \param[out] reclass pointer to Reclass structure
+
+  \return -1 on error
+  \return type code
+*/
 int G_get_reclass(const char *name, const char *mapset,
 		  struct Reclass *reclass)
 {
@@ -140,16 +161,21 @@ int G_get_reclass(const char *name, const char *mapset,
     fclose(fd);
     if (stat < 0) {
 	if (stat == -2)
-	    G_warning(_("Too many reclass categories for [%s in %s]"),
+	    G_warning(_("Too many reclass categories for <%s@%s>"),
 		      name, mapset);
 	else
-	    G_warning(_("Illegal reclass format in header file for [%s in %s]"),
+	    G_warning(_("Illegal reclass format in header file for <%s@%s>"),
 		      name, mapset);
 	stat = -1;
     }
     return stat;
 }
 
+/*!
+  \brief Free Reclass structure
+
+  \param reclass pointer to Reclass structure
+*/
 void G_free_reclass(struct Reclass *reclass)
 {
     switch (reclass->type) {
@@ -220,6 +246,15 @@ static FILE *fopen_cellhd_old(const char *name, const char *mapset)
     return G_fopen_old("cellhd", name, mapset);
 }
 
+/*!
+  \brief Put reclass
+
+  \param name map name
+  \param reclass pointer to Reclass structure
+  
+  \return -1 on error
+  \return 1 on success
+*/
 int G_put_reclass(const char *name, const struct Reclass *reclass)
 {
     FILE *fd;
@@ -241,7 +276,7 @@ int G_put_reclass(const char *name, const struct Reclass *reclass)
 
     fd = fopen_cellhd_new(name);
     if (fd == NULL) {
-	G_warning(_("Unable to create header file for [%s in %s]"),
+	G_warning(_("Unable to create header file for <%s@%s>"),
 		  name, G_mapset());
 	return -1;
     }
@@ -289,7 +324,7 @@ int G_put_reclass(const char *name, const struct Reclass *reclass)
     fd = fopen(buf1, "a+");
     if (fd == NULL) {
 #if 0
-	G_warning(_("Unable to create dependency file in [%s in %s]"),
+	G_warning(_("Unable to create dependency file in <%s@%s>"),
 		  buf2, reclass->mapset);
 #endif
 	return 1;

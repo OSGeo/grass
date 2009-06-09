@@ -1,45 +1,43 @@
-
-/**
- * \file adj_cellhd.c
+/*!
+ * \file gis/adj_cellhd.c
  *
  * \brief GIS Library - CELL header adjustment.
  *
- * (C) 2001-2008 by the GRASS Development Team
+ * (C) 2001-2009 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author GRASS GIS Development Team
- *
- * \date 1999-2008
+ * \author Original author CERL
  */
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-
-/**
+/*!
  * \brief Adjust cell header.
  *
- * This function fills in missing parts of the input
- * cell header (or region).  It also makes projection-specific adjustments. The
- * <b>cellhd</b> structure must have its <i>north, south, east, west</i>,
- * and <i>proj</i> fields set. 
+ * This function fills in missing parts of the input cell header (or
+ * region). It also makes projection-specific adjustments. The
+ * <i>cellhd</i> structure must have its <i>north, south, east,
+ * west</i>, and <i>proj</i> fields set.
  * 
- * If <b>row_flag</b> is true, then the north-south resolution is computed 
- * from the number of <i>rows</i> in the <b>cellhd</b> structure. Otherwise the number of 
- * <i>rows</i> is computed from the north-south resolution in the structure, similarly for
- * <b>col_flag</b> and the number of columns and the east-west resolution. 
+ * If <i>row_flag</i> is true, then the north-south resolution is
+ * computed from the number of <i>rows</i> in the <i>cellhd</i>
+ * structure. Otherwise the number of <i>rows</i> is computed from the
+ * north-south resolution in the structure, similarly for
+ * <i>col_flag</i> and the number of columns and the east-west
+ * resolution.
  *
  * <b>Note:</b> 3D values are not adjusted.
  *
- * \param[in,out] cellhd
- * \param[in] row_flag
- * \param[in] col_flag
- * \return NULL on success
- * \return Localized text string on error
- */
+ * \param[in,out] cellhd pointer to Cell_head structure
+ * \param row_flag compute n-s resolution
+ * \param col_flag compute e-w resolution
 
+ * \return NULL on success
+ * \return localized text string on error
+ */
 const char *G_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_flag)
 {
     if (!row_flag) {
@@ -163,34 +161,33 @@ const char *G_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_f
     return NULL;
 }
 
-
-/**
+/*!
  * \brief Adjust cell header for 3D values.
  *
- * This function fills in missing parts of the input
- * cell header (or region).  It also makes projection-specific adjustments. The
- * <b>cellhd</b> structure must have its <i>north, south, east, west</i>,
- * and <i>proj</i> fields set. 
+ * This function fills in missing parts of the input cell header (or
+ * region).  It also makes projection-specific adjustments. The
+ * <i>cellhd</i> structure must have its <i>north, south, east,
+ * west</i>, and <i>proj</i> fields set.
  * 
- * If <b>row_flag</b> is true, then the north-south resolution is computed 
- * from the number of <i>rows</i> in the <b>cellhd</b> structure. 
+ * If <i>row_flag</i> is true, then the north-south resolution is computed 
+ * from the number of <i>rows</i> in the <i>cellhd</i> structure. 
  * Otherwise the number of <i>rows</i> is computed from the north-south 
- * resolution in the structure, similarly for <b>col_flag</b> and the 
+ * resolution in the structure, similarly for <i>col_flag</i> and the 
  * number of columns and the east-west resolution. 
  *
- * If <b>depth_flag</b> is true, top-bottom resolution is calculated 
+ * If <i>depth_flag</i> is true, top-bottom resolution is calculated 
  * from depths.
- * If <b>depth_flag</b> are false, number of depths is calculated from 
+ * If <i>depth_flag</i> are false, number of depths is calculated from 
  * top-bottom resolution.
  *
- * \param[in,out] cellhd
- * \param[in] row_flag
- * \param[in] col_flag
- * \param[in] depth_flag
+ * \param[in,out] cellhd pointer to Cell_head structure
+ * \param row_flag compute n-s resolution
+ * \param col_flag compute e-w resolution
+ * \param depth_flag compute t-b resolution
+ *
  * \return NULL on success
- * \return Localized text string on error
+ * \return localized text string on error
  */
-
 const char *G_adjust_Cell_head3(struct Cell_head *cellhd, int row_flag,
 				int col_flag, int depth_flag)
 {

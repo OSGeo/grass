@@ -1,17 +1,14 @@
-
-/**
- * \file whoami.c
+/*!
+ * \file gis/whoami.c
  *
  * \brief GIS Library - Login name functions.
  *
- * (C) 2001-2008 by the GRASS Development Team
+ * (C) 2001-2009 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author GRASS GIS Development Team
- *
- * \date 1999-2008
+ * \author Original author CERL
  */
 
 #include <unistd.h>
@@ -23,8 +20,7 @@
 
 #include <grass/gis.h>
 
-
-/**
+/*!
  * \brief Gets user's name.
  *
  * Returns a pointer to a string containing the user's login name.
@@ -34,9 +30,8 @@
  * because the ttyname(0) rotuine fails in ucb universe.
  * So we check for this, too.
  *
- *  \retval char * Pointer to string
+ * \return pointer to string ("anonymous" by default)
  */
-
 const char *G_whoami(void)
 {
     static int initialized;

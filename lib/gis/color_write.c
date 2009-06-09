@@ -1,28 +1,24 @@
+/*!
+ * \file gis/color_write.c
+ * 
+ * \brief GIS Library - Write color table of raster map
+ *
+ * (C) 1999-2009 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public
+ * License (>=v2). Read the file COPYING that comes with GRASS
+ * for details.
+ *
+ * \author USACERL and many others
+ */
 
-/**********************************************************************
- *  G_write_colors (name, mapset, colors)
- *      char *name                   name of map
- *      char *mapset                 mapset that map belongs to
- *      struct Colors *colors        structure holding color info
- *
- *  Writes the color information associated with map layer "map"
- *  in mapset "mapset" from the structure "colors".
- *
- *  returns:    1  if successful
- *             -1  on fail
- *
- * If the environment variable FORCE_GRASS3_COLORS is set (to anything at all)
- * then the output format is 3.0, even if the structure contains 4.0 rules.
- * This allows users to create 3.0 color files for export to sites which
- * don't yet have 4.0
- ***********************************************************************/
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <grass/gis.h>
+
 #define PRECISION 30
-#define THRESHOLD .0000000000000000000000000000005
-/* .5 * 10 ^(-30) */
+#define THRESHOLD .0000000000000000000000000000005 /* .5 * 10 ^(-30) */
 
 static void write_rules(FILE *, struct _Color_Rule_ *, DCELL, DCELL);
 static void write_new_colors(FILE *, struct Colors *);
@@ -31,49 +27,50 @@ static void forced_write_old_colors(FILE *, struct Colors *);
 static void format_min(char *, double);
 static void format_max(char *, double);
 
-
 /*!
- * \brief write map layer color table
+ * \brief Write map layer color table
  *
- * The color table is written for the
- * raster map <b>name</b> in the specified <b>mapset</b> from the
- * <b>colors</b> structure.
- * If there is an error, -1 is returned. No diagnostic is printed. Otherwise, 1
- * is returned.
- * The <b>colors</b> structure must be created properly, i.e.,
- * <i>G_init_colors</i> to initialize the structure and
- * <i>G_add_color_rule</i> to set the category colors.\remarks{These
- * routines are called by higher level routines which read or create entire
- * color tables, such as<i>G_read_colors</i> or
- * <i>G_make_ramp_colors.</i>}
- * <b>Note.</b> The calling sequence for this function deserves special
- * attention. The <b>mapset</b> parameter seems to imply that it is possible
- * to overwrite the color table for a raster map which is in another mapset.
- * However, this is not what actually happens. It is very useful for users to
- * create their own color tables for raster maps in other mapsets, but without
- * overwriting other users' color tables for the same raster map. If
- * <b>mapset</b> is the current mapset, then the color file for <b>name</b>
- * will be overwritten by the new color table. But if <b>mapset</b> is not the
- * current mapset, then the color table is actually written in the current
- * mapset under the <b>colr2</b> element as: colr2/mapset/name.
+ * The color table is written for the raster map <i>name</i> in the
+ * specified <i>mapset</i> from the <i>colors</i> structure.
  *
- *  \param name
- *  \param mapset
- *  \param colors
- *  \return int
+ * If there is an error, -1 is returned. No diagnostic is
+ * printed. Otherwise, 1 is returned.
+ *
+ * The <i>colors</i> structure must be created properly, i.e.,
+ * G_init_colors() to initialize the structure and G_add_color_rule()
+ * to set the category colors. These routines are called by
+ * higher level routines which read or create entire color tables,
+ * such as G_read_colors() or G_make_ramp_colors().
+ *
+ * <b>Note:</b> The calling sequence for this function deserves
+ * special attention. The <i>mapset</i> parameter seems to imply that
+ * it is possible to overwrite the color table for a raster map which
+ * is in another mapset. However, this is not what actually
+ * happens. It is very useful for users to create their own color
+ * tables for raster maps in other mapsets, but without overwriting
+ * other users' color tables for the same raster map. If <i>mapset</i>
+ * is the current mapset, then the color file for <i>name</i> will be
+ * overwritten by the new color table. But if <i>mapset</i> is not the
+ * current mapset, then the color table is actually written in the
+ * current mapset under the <tt>colr2</tt> element as:
+ * <tt>colr2/mapset/name</tt>.
+ *
+ * The rules are written out using floating-point format, removing
+ * trailing zeros (possibly producing integers).  The flag marking the
+ * colors as floating-point is <b>not</b> written.
+ *
+ * If the environment variable FORCE_GRASS3_COLORS is set (to anything at all)
+ * then the output format is 3.0, even if the structure contains 4.0 rules.
+ * This allows users to create 3.0 color files for export to sites which
+ * don't yet have 4.0
+ *
+ * \param name map name
+ * \param mapset mapset name
+ * \param colors pointer to structure Colors which holds color info
+ *
+ * \return 1 on success
+ * \return -1 on failure
  */
-
-
-/*!
- * \brief 
- *
- * The rules are written out using
- * floating-point format, removing trailing zeros (possibly producing integers).
- * The flag marking the colors as floating-point is <b>not</b> written.
- *
- *  \return int
- */
-
 int G_write_colors(const char *name, const char *mapset,
 		   struct Colors *colors)
 {
@@ -104,6 +101,12 @@ int G_write_colors(const char *name, const char *mapset,
     return 1;
 }
 
+/*!
+ * \brief Write map layer color table
+ *
+ * \param fd file descriptor
+ * \param colors pointer to Colors structure which holds color info
+ */
 void G__write_colors(FILE * fd, struct Colors *colors)
 {
     if (getenv("FORCE_GRASS3_COLORS"))

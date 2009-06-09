@@ -3,206 +3,77 @@
      by M. Neteler 2/2004, 8/2005, 2006
   -->
 
+by GRASS Development Team (http://grass.osgeo.org)
+
+<b>TODO: this sections needs to be cleaned up. The upper GRASS 4.x and
+the lower GRASS 5.x/6.x parts need to me merged.  </b>
+
 \section gisrastintro GRASS Raster File Processing
 
-<P>
-<B>TODO: this sections needs to be cleaned up. The upper GRASS 4.x
- and the lower GRASS 5.x/6.x parts need to me merged.
- </B>
-
-- \subpage gisrastintro
-- \subpage Opening_an_Existing_Raster_File
-- \subpage Creating_and_Opening_New_Raster_Files
-- \subpage Allocating_Raster_I_O_Buffers
-- \subpage Reading_Raster_Files
-- \subpage Raster_Map_Layer_Support_Routines
-- \subpage Raster_Header_File
-- \subpage Raster_Category_File
-- \subpage Reading_and_Writing_the_Raster_Category_File
-- \subpage Querying_and_Changing_the_Categories_Structure
-- \subpage Raster_Color_Table
-- \subpage Reading_and_Writing_the_Raster_Color_File
-- \subpage Lookup_Up_Raster_Colors
-- \subpage Creating_and_or_Modifying_the_Color_Table
-- \subpage Predefined_Color_Tables
-- \subpage Raster_History_File
-- \subpage Raster_Range_File
-- \subpage Raster_Histograms
-- \subpage GRASS_5_raster_API
-- \subpage Upgrades_to_Raster_Functions
-- \subpage Null_no_data
-- \subpage Color_Functions
-- \subpage New_functions_to_support_colors_for_floating_point
-- \subpage New_functions_to_support_a_colors_for_the_NULL_value
-- \subpage New_functions_to_support_a_default_color
-- \subpage New_functions_to_support_treating_a_raster_layer_as_a_color_image
-- \subpage Upgraded_color_functions
-- \subpage Changes_to_the_Colors_structure
-- \subpage Changes_to_the_colr_file
-- \subpage Range_functions
-- \subpage New_range_functions
-- \subpage New_and_Upgraded_Cell_stats_functions
-- \subpage New_Quantization_Functions
-- \subpage Categories_Labeling_Functions
-- \subpage Changes_to_the_cats_file
-- \subpage Range_functions
-- \subpage New_Functions_to_read_write_access_and_modify_Categories_structure
-- \subpage Library_Functions_that_are_Deprecated
-- \subpage Guidelines_for_upgrading_GRASS_4_x_Modules
-- \subpage Important_hints_for_upgrades_to_raster_modules
-
-<P>
-Raster files are the heart and soul of GRASS (update 2005: meanwhile also
-vector data processing entered GRASS' heart).  Because of this, a
-suite of routines which process raster file data has been
+Raster and vector files are the heart and soul of GRASS. Because of
+this, a suite of routines which process raster file data has been
 provided. The processing of raster files consists of determining which
-raster file or files are to be processed (either by prompting the user
-or as specified on the module command line), locating the raster file
-in the database, opening the raster file, dynamically allocating i/o
-buffers, reading or writing the raster file, closing the raster file,
-and creating support files for newly created raster files.
+raster file or files are to be processed (specified on the module
+command line), locating the raster file in the database, opening the
+raster file, dynamically allocating i/o buffers, reading or writing
+the raster file, closing the raster file, and creating support files
+for newly created raster files.
 
-<P>
 Raster file data can be of type CELL, FCELL or DCELL, they are defined
-in "gis.h". CELL is a 32-bit signed integer, FCELL is an IEEE single-precision
-floating-point, and  DCELL is an IEEE double-precision floating-point.
-G3D (GRID3D) is treated as DCELL.
-<P>
+in "gis.h". CELL is a 32-bit signed integer, FCELL is an IEEE
+single-precision floating-point, and DCELL is an IEEE double-precision
+floating-point. 3D rasters (grid3d) is treated as DCELL.
 
-Prompting for Raster Files</A>
+- Finding_Raster_Files_in_the_Database
+- Opening_an_Existing_Raster_File
 
+\section Finding_Raster_Files_in_the_Database Finding Raster Files in
+the Database
 
-<P>
-The following routines interactively prompt the user for a raster file
-name.  In each, the <B>prompt</B> string will be printed as the first
-line of the full prompt which asks the user to enter a raster file
-name. If <B>prompt</B> is the empty string "" then an appropriate
-prompt will be substituted. The name that the user enters is copied
-into the <B>name</B> buffer (The size of name should be large enough
-to hold any GRASS file name. Most systems allow file names to be quite
-long. It is recommended that name be declared char name.)  These
-routines have a built-in 'list' capability which allows the user to
-get a list of existing raster files.
+GRASS allows the user to specify raster file names (or any other
+database file) either as a simple <em>unqualified</em> name, such as
+"soils", or as a <em>fully qualified</em> name, such as
+"soils@mapset", where <i>mapset</i> is the mapset where the raster
+file is to be found. Often only the unqualified raster file name is
+provided on the command line.
 
-<P> The user is required to enter a valid raster file name, or else
-hit the RETURN key to cancel the request. If the user enters an
-invalid response, a message is printed, and the user is prompted
-again. If the user cancels the request, the NULL pointer is
-returned. Otherwise the mapset where the raster file lives or is to be
-created is returned. Both the name and the mapset are used in other
-routines to refer to the raster file.
-
-<P>
-char * G_ask_cell_old(char *prompt, char *name) prompt for existing
-raster file
-
-Asks the user to enter the name of an existing raster file in any
-mapset in the database.
-
-<P> char * G_ask_cell_in_mapset(char *prompt, char *name) prompt for
-existing raster file
-
-Asks the user to enter the name of an existing raster file in the
-current mapset.
-
-<P> char * G_ask_cell_new(char *prompt, char *name) prompt for new
-  raster file
-
-Asks the user to enter a name for a raster file which does not exist
-in the current mapset.
-
-<P> Here is an example of how to use these routines. Note that the
-programmer must handle the NULL return properly:
-
-
-\verbatim
-char *mapset;
-char name[GNAME_MAX];
-
-mapset = G_ask_cell_old("Enter raster file to be processed", name);
-
-if (mapset == NULL)
-  return(0);
-\endverbatim
-
-
-\subsection Finding_Raster_Files_in_the_Database Finding Raster Files
-in the Database
-
-<P>
-Noninteractive modules cannot make use of the interactive prompting
-routines described above. For example, a command line driven module
-may require a raster file name as one of the command arguments. GRASS
-allows the user to specify raster file names (or any other database
-file) either as a simple unqualified name, such as "soils", or as a
-fully qualified name, such as "soils@<I>mapset</I>", where
-<I>mapset</I> is the mapset where the raster file is to be
-found. Often only the unqualified raster file name is provided on the
-command line.
-
-<P>
 The following routines search the database for raster files:
 
-<P>
-char * G_find_cell(char *name, char *mapset) find a raster file
+ - G_find_cell()
 
-Looks for the raster file <B>name</B> in the database. The
-<B>mapset</B> parameter can either be the empty string "", which means
-search all the mapsets in the user's current mapset search path, or it
-can be a specific mapset name, which means look for the raster file
-only in this one mapset (for example, in the current mapset) . If
-found, the mapset where the raster file lives is returned. If not
-found, the NULL pointer is returned.
+Looks for the raster file in the database. If found, the mapset where
+the raster file lives is returned. If not found, the NULL pointer is
+returned. If the user specifies a fully qualified raster file which
+exists, then G_find_cell() modifies <i>name</i> by removing
+the "@<I>mapset</I>".
 
-<P>
-If the user specifies a fully qualified raster file which exists, then
-<I>G_find_cell() </I> modifies <B>name</B> by removing the
-"@<I>mapset</I>".
-
-<P>
 For example, to find a raster file anywhere in the database:
 
-\verbatim
+\code
 char name[GNAME_MAX];
 char *mapset;
 
 if ((mapset = G_find_cell(name,"")) == NULL)
   /* not found */
-\endverbatim
+\endcode
 
-
-<P>
 To check that the raster file exists in the current mapset:
 
-\verbatim
+\code
 char name[GNAME_MAX];
 
-if (G_find_cell(name,G_mapset()) == NULL)
+if (G_find_cell(name, G_mapset()) == NULL)
   /* not found */
-\endverbatim
-
-
-<P>
+\endcode
 
 \section Opening_an_Existing_Raster_File Opening an Existing Raster File
 
+The following routine opens the raster file for <em>reading</em>.
 
-<P>
-The following routine opens the raster file <B>name</B> in <B>mapset</B> for
-reading.
+ - G_open_cell_old()
 
-<P>
-The raster file <B>name</B> and <B>mapset</B> can be obtained
-interactively using <I>G_ask_cell_old()</I> or <I>
-G_ask_cell_in_mapset()</I>, and noninteractively using <I>
-G_find_cell()</I>.
-
-<P>
-int G_open_cell_old(char *name, char *mapset) open an existing
-  raster file
-
-This routine opens the raster file <B>name</B> in <B>mapset</B> for
-reading. A nonnegative file descriptor is returned if the open is
+This routine opens the raster file in given mapset for reading. A
+nonnegative file descriptor is returned if the open is
 successful. Otherwise a diagnostic message is printed and a negative
 value is returned. This routine does quite a bit of work. Since GRASS
 users expect that all raster files will be resampled into the current
@@ -211,1277 +82,976 @@ routine after the file is opened. The resampling is based on the
 active module region. Preparation required for reading the various
 raster file formats is also done.
 
-<P>
-
 \section Creating_and_Opening_New_Raster_Files Creating and Opening New Raster Files
 
-####################
-<P>
-The following routines create the new raster file <B>name</B> in the
-current mapset [footnote] and open
-it for writing. The raster file <B>name</B> should be obtained
-interactively using <I>G_ask_cell_new.</I> If obtained
-noninteractively (e.g., from the command line) ,
-<I>G_legal_filename</I> should be called first to make sure that
-<B>name</B> is a valid GRASS file name.
+The following routines create the new raster file in the current
+mapset and open it for <em>writing</em>. G_legal_filename should be
+called first to make sure that raster map name is a valid GRASS file
+name.
 
-<P>
-<B>Note.</B> It is not an error for <B>name</B> to already exist. New 
-raster files are actually created as temporary files and moved into the cell 
-directory when closed. This allows an existing raster file to be read at the 
-same time that it is being rewritten. The interactive routine 
-<I>G_ask_cell_new</I> guarantees that <B>name</B> will not exist, but 
-if <B>name</B> is obtained from the command line, <B>name</B> may exist. 
-In this case <I>G_find_cell</I> could be used to see if <B>name</B> exists.
+<b>Note:</b> It is not an error for raster map to already exist. New
+raster files are actually created as temporary files and moved into
+the cell directory when closed. This allows an existing raster file to
+be read at the same time that it is being rewritten. G_find_cell()
+could be used to see if raster map already exists.
 
-<P>
-<B>Warning.</B> However, there is a subtle trap. The temporary file, which 
-is created using <I>G_tempfile</I>, is named using the current process 
-id. If the new raster file is opened by a parent process which exits after 
-creating a child process using fork(), [footnote] 
-the raster file may never get created since the temporary file 
-would be associated with the parent process, not the child. GRASS management 
-automatically removes temporary files associated with processes that are no 
-longer running. If fork() must be used, the safest course of action is to 
-create the child first, then open the raster file. (See the discussion under 
-<I>G_tempfile()</I> for more details.) 
+<b>Warning:</b> However, there is a subtle trap. The temporary file,
+which is created using G_tempfile(), is named using the current
+process id. If the new raster file is opened by a parent process which
+exits after creating a child process using fork(), the raster file may
+never get created since the temporary file would be associated with
+the parent process, not the child. GRASS management automatically
+removes temporary files associated with processes that are no longer
+running. If fork() must be used, the safest course of action is to
+create the child first, then open the raster file (see the discussion
+under G_tempfile() for more details).
 
-<P>
-FILE * G_open_cell_new(char *name) open a new raster file
-  (sequential) Creates and opens the raster file <B>name</B> for writing by
-  <I>G_put_map_row</I> which writes the file row by row in sequential
-  order. The raster file data will be compressed as it is written.
+ - G_open_cell_new()
 
-<P>
-A nonnegative file descriptor is returned if the open is successful.
-  Otherwise a diagnostic message is printed and a negative value is returned.
+Creates and opens the raster file for writing by G_put_map_row() which
+writes the file row by row in <b>sequential</b> order. The raster file data
+will be compressed as it is written. A nonnegative file descriptor is
+returned if the open is successful. Otherwise a diagnostic message is
+printed and a negative value is returned.
 
-<P>
-FILE * G_open_cell_new_random(char *name) open a new raster file
-  (random) Creates and opens the raster file <B>name</B> for writing by
-  <I>G_put_map_row_random</I> which allows writing the raster file in a
-  random fashion. The file will be created uncompressed. [footnote]
-<P>
-A nonnegative file descriptor is returned if the open is successful.
-  Otherwise a diagnostic message is printed and a negative value is returned.
+ - G_open_cell_new_random()
 
-<P>
-FILE * G_open_cell_new_uncompressed(char *nameopen a new raster
-  file (uncompressed) Creates and opens the raster file <B>name</B> for
-  writing by <I>G_put_map_row</I> which writes the file row by row in
-  sequential order. The raster file will be in uncompressed format when closed.
+Creates and opens the raster file for writing by
+G_put_map_row_random() which allows writing the raster file in a
+<b>random</b> fashion. The file will be created uncompressed. A
+nonnegative file descriptor is returned if the open is
+successful. Otherwise a diagnostic message is printed and a negative
+value is returned.
 
-<P>
-A nonnegative file descriptor is returned if the open is successful.
-  Otherwise a warning message is printed on stderr and a negative value is
-  returned.
+ - G_open_cell_new_uncompressed()
 
-<P>
-General use of this routine is not recommended. [footnote]
- This routine is provided so the
-  <I>r.compress module</I> can create uncompressed raster files.  
+Creates and opens the raster file for writing by G_put_map_row() which
+writes the file row by row in sequential order. The raster file will
+be in uncompressed format when closed. A nonnegative file descriptor
+is returned if the open is successful. Otherwise a warning message is
+printed on stderr and a negative value is returned.
 
-<P>
+General use of this routine is not recommended. This routine is
+provided so the <tt>r.compress</tt> module can create uncompressed
+raster files.
 
 \section Allocating_Raster_I_O_Buffers Allocating Raster I/O Buffers
 
-
-<P>
 Since there is no predefined limit for the number of columns in the
-region,[footnote] 
- buffers which are used for reading and writing raster data must be
-dynamically allocated.
+region, buffers which are used for reading and writing raster data
+must be dynamically allocated.
 
-<P>
-CELL * G_allocate_cell_buf(void) allocate a raster buffer This
-  routine allocates a buffer of type CELL just large enough to hold one row of
-  raster data (based on the number of columns in the active region).
+ - G_allocate_cell_buf()
 
- 
-\verbatim
+This routine allocates a buffer of type CELL just large enough to hold
+one row of raster data (based on the number of columns in the active
+region).
+
+\code
 CELL *cell;
-cell = G_allocate_cell_buf(void) ;
-\endverbatim
+cell = G_allocate_cell_buf(void);
+\endcode
 
-<P>
-If larger buffers are required, the routine <I>G_malloc</I> can be used.
+If larger buffers are required, the routine G_malloc() can be
+used.
 
-<P>
-If sufficient memory is not available, an error message is printed and exit() 
-is called.
+If sufficient memory is not available, an error message is printed and
+exit() is called.
 
-<P>
-int G_zero_cell_buf(CELL *buf) zero a raster buffer This
-  routines assigns each member of the raster buffer array <B>buf</B> to zero.
-  It assumes that <B>buf</B> has been allocated using
-  <I>G_allocate_cell_buf.</I>
+ - G_zero_cell_buf()
 
-<P>
+This routines assigns each member of the raster buffer array to zero.
+It assumes that the buffer has been allocated using
+G_allocate_cell_buf().
 
 \section Reading_Raster_Files Reading Raster Files
 
-Needs updating for GRASS 5!! See later in this file.
-<BR>
-<P>
-Raster data can be thought of as a two-dimensional matrix. The routines
-described below read one full row of the matrix. It should be understood,
-however, that the number of rows and columns in the matrix is determined by the
-region, not the raster file itself. Raster data is always read resampled into
-the region. [footnote]
-This allows the user to specify the coverage of
-the database during analyses. It also allows databases to consist of raster
-files which do not cover exactly the same area, or do not have the same grid
-cell resolution. When raster files are resampled into the region, they all
-"look" the same.
 
-<P>
-<B>Note.</B> The rows and columns are specified "C style", i.e., 
+Raster data can be thought of as a two-dimensional matrix. The
+routines described below read one full row of the matrix. It should be
+understood, however, that the number of rows and columns in the matrix
+is determined by the region, not the raster file itself. Raster data
+is always read resampled into the region. This allows the user to
+specify the coverage of the database during analyses. It also allows
+databases to consist of raster files which do not cover exactly the
+same area, or do not have the same grid cell resolution. When raster
+files are resampled into the region, they all "look" the same.
+
+<b>Note:</b> The rows and columns are specified "C style", i.e.,
 starting with 0.
 
-<P>
+<b>THIS FUNCTION IS DEPRECATED IN GRASS 5! SEE NEXT CHAPTER!</b>
 
-<P><P>
-<BR>
-THIS FUNCTION IS DEPRECATED IN GRASS 5! SEE NEXT CHAPTER!
+ - G_get_map_row()
 
-<P>
-int G_get_map_row (int fd, CELL *cell, int row) read a raster file
-This routine reads the specified <B>row</B> from the raster file open on
-  file descriptor <B>fd</B> (as returned by <I>G_open_cell_old</I>) into
-  the <B>cell</B> buffer. The <B>cell</B> buffer must be dynamically
-  allocated large enough to hold one full row of raster data. It can be
-  <I>allocated using G_allocate_cell_buf.</I>
+This routine reads the specified <i>row</i> from the raster file open
+on file descriptor (as returned by G_open_cell_old()) into the
+buffer. The buffer must be dynamically allocated large enough to hold
+one full row of raster data. It can be allocated using
+G_allocate_cell_buf(). This routine prints a diagnostic message and
+returns -1 if there is an error reading the raster file. Otherwise a
+nonnegative value is returned.
 
-<P>
-This routine prints a diagnostic message and returns -1 if there is an error
-  reading the raster file. Otherwise a nonnegative value is returned.
+ - G_get_map_row_nomask()
 
-<P>
-int G_get_map_row_nomask (int fd, CELL *cell, int row) read a
-  raster file (without masking) This routine reads the specified <B>row</B>
-  from the raster file open on file descriptor <B>fd</B> into the
-  <B>cell</B> buffer like G_get_map_row() does. The difference is that
-  masking is suppressed. If the user has a mask set, G_get_map_row() will
-  apply the mask but G_get_map_row_nomask() will ignore it.
+This routine reads the specified row from the raster file open on file
+descriptor into the buffer like G_get_map_row() does. The difference
+is that masking is suppressed. If the user has a mask set,
+G_get_map_row() will apply the mask but G_get_map_row_nomask() will
+ignore it. This routine prints a diagnostic message and returns -1 if
+there is an error reading the raster file. Otherwise a nonnegative
+value is returned.
 
-<P>
-This routine prints a diagnostic message and returns -1 if there is an error 
-reading the raster file. Otherwise a nonnegative value is returned.
+<b>Note:</b> Ignoring the mask is not generally acceptable. Users
+expect the mask to be applied. However, in some cases ignoring the
+mask is justified. For example, the GRASS modules <tt>r.describe</tt>,
+which reads the raster file directly to report all data values in a
+raster file, and <tt>r.slope.aspect</tt>, which produces slope and
+aspect from elevation, ignore both the mask and the region. However,
+the number of GRASS modules which do this should be minimal. See \ref
+Mask for more information about the mask.
 
-<P>
-<B>Note.</B> Ignoring the mask is not generally acceptable. Users expect 
-the mask to be applied. However, in some cases ignoring the mask is 
-justified. For example, the GRASS modules <I>r.describe</I>, which reads 
-the raster file directly to report all data values in a raster file, and 
-<I>r.slope.aspect</I>, which produces slope and aspect from elevation, 
-ignore both the mask and the region. However, the number of GRASS modules 
-which do this should be minimal. See Mask for more information 
-about the mask.
-
-<P>
 
 \subsection Writing_Raster_Files Writing Raster Files
 
-Needs updating for GRASS 5!! See later in this file.
-<BR>
-<P>
-The routines described here write raster file data.
 
-<P>
-int G_put_map_row (int fd, CELL *buf) write a raster file
-  (sequential) This routine writes one row of raster data from <B>buf</B> to
-  the raster file open on file descriptor <B>fd.</B> The raster file must
-  have been opened with <I>G_open_cell_new.</I>
+\todo <b>Needs updating for GRASS 5!! See later in this file.</b>
 
-<P>
-The cell <B>buf</B> must have been allocated large enough for the region,
-  perhaps using <I>G_allocate_cell_buf.</I>
+ - G_put_map_row()
 
-<P>
-If there is an error writing the raster file, a warning message is printed
-  and -1 is returned. Otherwise 1 is returned.
+This routine writes one row of raster data from buffer to the raster
+file open on file descriptor. The raster file must have been opened
+with G_open_cell_new(). The buffer must have been allocated large
+enough for the region, perhaps using G_allocate_cell_buf(). If there
+is an error writing the raster file, a warning message is printed and
+-1 is returned. Otherwise 1 is returned.
 
-<P>
-<B>Note.</B> The rows are written in sequential order. The first call
-  writes row 0, the second writes row 1, etc. The following example assumes
-  that the raster file <B>name</B> is to be created:
+<b>Note:</b> The rows are written in <b>sequential</b> order. The
+first call writes row 0, the second writes row 1, etc. The following
+example assumes that the raster file is to be created:
 
-<P>
-\verbatim
+\code
 int fd, row, nrows, ncols;
 
 CELL *buf;
 
-fd = G_ope... /*...data for the row */
+fd = G_open_cell_old("map"); /*...data for the row */
 
-G_put_map_row(fd, buf) ;
-\endverbatim
+G_put_map_row(fd, buf);
+\endcode
 
-<P>
-int G_put_map_row_random (int fd, CELL *buf, int row, int col, int
-  ncells) write a raster file (random) This routine allows random writes to
-  the raster file open on file descriptor <B>fd.</B> The raster file must
-  have been opened using <I>G_open_cell_new_random.</I> The raster buffer
-  <B>buf</B> contains <B>ncells</B> columns of data and is to be written
-  into the raster file at the specified <B>row</B>, starting at column
-  <B>col.</B>
+ - G_put_map_row_random()
 
-<P>
+This routine allows random writes to the raster file open on file
+descriptor. The raster file must have been opened using
+G_open_cell_new_random(). The raster buffer contains columns of data
+and is to be written into the raster file at the specified row,
+starting at column.
 
 \subsection Closing_Raster_Files Closing Raster Files
 
+All raster files are closed by one of the following routines, whether
+opened for reading or for writing.
 
-<P>
-All raster files are closed by one of the following routines, whether opened 
-for reading or for writing.
+ - G_close_cell()
 
-<P>
-int G_close_cell (int fd) close a raster file The raster file
-  opened on file descriptor <B>fd</B> is closed. Memory allocated for raster
-  processing is freed. If open for writing, skeletal support files for the new
-  raster file are created as well.
+The raster file opened on file descriptor is closed. Memory allocated
+for raster processing is freed. If open for writing, skeletal support
+files for the new raster file are created as well.
 
-<P>
-<B>Note.</B> If a module wants to explicitly write support files (e.g., a
-  specific color table) for a raster file it creates, it must do so after the
-  raster file is closed. Otherwise the close will overwrite the support files.
-  See \ref Raster_Map_Layer_Support_Routines for routines which write
-  raster support files.
+<b>Note:</b> If a module wants to explicitly write support files
+(e.g., a specific color table) for a raster file it creates, it must
+do so after the raster file is closed. Otherwise the close will
+overwrite the support files. See \ref
+Raster_Map_Layer_Support_Routines for routines which write raster
+support files.
 
-<P>
-int G_unopen_cell (int fd) unopen a raster file The raster file
-  opened on file descriptor <B>fd</B> is closed. Memory allocated for raster
-  processing is freed. If open for writing, the raster file is not created and
-  the temporary file created when the raster file was opened is removed (see
-  Creating_and_Opening_New_Raster_Files) .
+ - G_unopen_cell()
 
-<P>
-This routine is useful when errors are detected and it is desired to not
-  create the new raster file. While it is true that the raster file will not be
-  created if the module exits without closing the file, the temporary file will
-  not be removed at module exit. GRASS database management will eventually
-  remove the temporary file, but the file can be quite large and will take up
-  disk space until GRASS does remove it. Use this routine as a courtesy to the
-  user.  
+The raster file opened on file descriptor is closed. Memory allocated
+for raster processing is freed. If open for writing, the raster file
+is not created and the temporary file created when the raster file was
+opened is removed (see \ref Creating_and_Opening_New_Raster_Files).
 
-<P>
+This routine is useful when errors are detected and it is desired to
+not create the new raster file. While it is true that the raster file
+will not be created if the module exits without closing the file, the
+temporary file will not be removed at module exit. GRASS database
+management will eventually remove the temporary file, but the file can
+be quite large and will take up disk space until GRASS does remove
+it. Use this routine as a courtesy to the user.
 
 \section Raster_Map_Layer_Support_Routines Raster Map Layer Support Routines
 
-
-<P>
-GRASS map layers have a number of support files associated with them. These 
-files are discussed in detail in Raster_Maps. The support files 
-are the <I>raster header</I>, the <I>category</I> file, the 
-<I>color</I> table, the <I>history</I> file, and the <I>range</I> file. 
-Each support file has its own data structure and associated routines.
-
-<P>
+GRASS map layers have a number of support files associated with
+them. These files are discussed in detail in \ref Raster_Maps. The
+support files are the <em>raster header</em>, the <em>category</em>
+file, the <em>color</em> table, the <em>history</em> file, and the
+<em>range</em> file. Each support file has its own data structure and
+associated routines.
 
 \section Raster_Header_File Raster Header File
 
 
-<P>
-The raster header file contains information describing the geographic extent 
-of the map layer, the grid cell resolution, and the format used to store the 
-data in the raster file. The format of this file is described in
-Raster_Header_Format. The routines described below use the 
-<I>Cell_head</I> structure which is shown in detail in
+The raster header file contains information describing the geographic
+extent of the map layer, the grid cell resolution, and the format used
+to store the data in the raster file. The format of this file is
+described in \ref Raster_Header_Format. The routines described below
+use the <i>Cell_head</i> structure which is shown in detail in \ref
 GIS_Library_Data_Structures.
 
-<P>
-int G_get_cellhd(char *name, char *mapset, struct Cell_Head
-  *cellhd) read the raster headerThe raster header for the raster file
-  <B>name</B> in the specified <B>mapset</B> is read into the
-  <B>cellhd</B> structure.
+ - G_get_cellhd()
 
-<P>
-If there is an error reading the raster header file, a diagnostic message is 
-printed and -1 is returned. Otherwise, 0 is returned.
+The raster header for the raster file in the specified mapset is read
+into the <em>cellhd</em> structure. If there is an error reading the
+raster header file, a diagnostic message is printed and -1 is
+returned. Otherwise, 0 is returned.
 
-<P>
-<B>Note.</B> If the raster file is a reclass file, the raster header for 
-the referenced raster file is read instead. See \ref Reclass_Format for 
-information about reclass files, and  <I>G_is_reclass</I> for 
-distinguishing reclass files from regular raster files.
+<b>Note:</b> If the raster file is a reclass file, the raster header
+for the referenced raster file is read instead. See \ref
+Reclass_Format for information about reclass files, and G_is_reclass()
+for distinguishing reclass files from regular raster files.
 
-<P>
-<B>Note.</B> It is not necessary to get the raster header for a map layer in
-order to read the raster file data. The routines which read raster file data
-automatically retrieve the raster header information and use it for resampling
-the raster file data into the active region. [footnote] 
-If it is necessary to read the raster file directly
-without resampling into the active region, [footnote]
-then the raster header can be used to set the active region using
-<I>G_set_window.</I>
+<b>Note:</b> It is not necessary to get the raster header for a map
+layer in order to read the raster file data. The routines which read
+raster file data automatically retrieve the raster header information
+and use it for resampling the raster file data into the active
+region. If it is necessary to read the raster file directly without
+resampling into the active region, then the raster header can be used
+to set the active region using G_set_window().
 
-<P>
-char * G_adjust_Cell_head(struct Cell_Head *cellhd, int rflag, int
-  cflag) adjust cell headerThis function fills in missing parts of the input
-  cell header (or region) .  It also makes projection-specific adjustments. The
-  <B>cellhd</B> structure must have its <I>north, south, east, west</I>,
-  and <I>proj</I> fields set. If <B>rflag</B> is true, then the north-south
-  resolution is computed from the number of <I>rows</I> in the
-  <B>cellhd</B> structure. Otherwise the number of <I>rows</I> is computed
-  from the north-south resolution in the structure, similarly for
-  <B>cflag</B> and the number of columns and the east-west resolution. This
-  routine returns NULL if execution occurs without error, otherwise it returns
-  an error message.
+ - G_adjust_Cell_head()
 
-<P>
-char * G_put_cellhd(char *name, struct Cell_Head *cellhd) write
-  the raster header This routine writes the information from the
-  <B>cellhd</B> structure to the raster header file for the map layer
-  <B>name</B> in the current mapset.
+This function fills in missing parts of the input cell header (or
+region). It also makes projection-specific adjustments.
 
-<P>
-If there was an error creating the raster header, -1 is returned. No 
+ - G_put_cellhd()
+
+This routine writes the information from the Cell_head structure to
+the raster header file for the map layer in the current mapset. If
+there was an error creating the raster header, -1 is returned. No
 diagnostic is printed. Otherwise, 1 is returned to indicate success.
 
-<P>
-<B>Note.</B> Programmers should have no reason to use this routine. It is 
-used by <I>G_close_cell</I> to giv e new raster files correct header 
-files, and by the <I>r.support module</I> to give users a means of 
-creating or modifying raster headers. 
+<b>Note:</b> Programmers should have no reason to use this routine. It
+is used by G_close_cell() to give new raster files correct header
+files, and by the <tt>r.support</tt> module to give users a means of
+creating or modifying raster headers.
 
-<P>
-int G_is_reclass(char *name, char *mapset, char r_name, char
-**r_mapset) reclass file?This function determines if the raster file
-*<B>name</B> in <B>mapset</B> is a reclass file.
-If it is, then the name and mapset of the referenced 
-raster file are copied into the <B>r_name</B> and <B>r_mapset</B> 
-buffers.
+ - G_is_reclass()
 
-<P>
-Returns 1 if <B>name</B> is a reclass file, 0 if it is not, and -1 if 
-there was a problem reading the raster header for <B>name.</B>
+This function determines if the raster file is a reclass file. Returns
+1 if raster file is a reclass file, 0 if it is not, and -1 if there
+was a problem reading the raster header.
 
-<P>
-int G_is_reclassed_to(char *name, char *mapset, int *nrmaps, 
-char ***rmaps) get child reclass maps listThis function generates a
-child reclass maps list from the cell_misc/reclassed_to file which stores 
-this list. The cell_misc/reclassed_to file is written by 
-G_put_reclass() .
+ - G_is_reclassed_to()
 
-<P>
-G_is_reclassed_to() is used by g.rename, g.remove and r.reclass to
-prevent accidentally deleting the parent map of a reclassed raster map.
-
-<P>
+This function generates a child reclass maps list from the
+cell_misc/reclassed_to file which stores this list. The
+cell_misc/reclassed_to file is written by
+G_put_reclass(). G_is_reclassed_to() is used by <tt>g.rename</tt>,
+<tt>g.remove</tt> and <tt>r.reclass</tt> to prevent accidentally
+deleting the parent map of a reclassed raster map.
 
 \section Raster_Category_File Raster Category File
 
 
-<P>
-GRASS map layers have category labels associated with them. The category file
-is structured so that each category in the raster file can have a one-line
-description. The format of this file is described in
-Raster_Category_File_Format.
+GRASS map layers have category labels associated with them. The
+category file is structured so that each category in the raster file
+can have a one-line description. The format of this file is described
+in \ref Raster_Category_File_Format.
 
-<P>
-The routines described below manage the category file. Some of them use the
-<I>Categories</I> structure which is described in
+The routines described below manage the category file. Some of them
+use the <i>Categories</i> structure which is described in \ref
 GIS_Library_Data_Structures.
-
-<P>
 
 \section Reading_and_Writing_the_Raster_Category_File Reading and Writing the Raster Category File
 
-
-<P>
 The following routines read or write the category file itself:
 
-<P>
-int G_read_cats(char *name, char *mapset, struct Categories
-  *cats) read raster category fileThe category file for raster file
-  <B>name</B> in <B>mapset</B> is read into the <B>cats</B> structure. If
-  there is an error reading the category file, a diagnostic message is printed
-  and -1 is returned. Otherwise, 0 is returned.
+ - G_read_cats()
 
-<P>
-int G_write_cats(char *name, struct Categories *cats) write raster
-  category fileWrites the category file for the raster file <B>name</B> in
-  the current mapset from the <B>cats</B> structure.
+The category file for raster file is read into the <i>cats</i>
+structure. If there is an error reading the category file, a
+diagnostic message is printed and -1 is returned. Otherwise, 0 is
+returned.
 
-<P>
-Returns 1 if successful. Otherwise, -1 is returned (no diagnostic is
-  printed) .
+ - G_write_cats()
 
-<P>
-char * G_get_cell_title(char *name, char *mapset) get raster map
-  titleIf only the map layer title is needed, it is not necessary to read the
-  entire category file into memory. This routine gets the title for raster file
-  <B>name</B> in <B>mapset</B> directly from the category file, and returns
-  a pointer to the title. A legal pointer is always returned. If the map layer
-  does not have a title, then a pointer to the empty string "" is returned.
+Writes the category file for the raster file in the current mapset
+from the <i>cats</i> structure. Returns 1 if successful. Otherwise, -1
+is returned (no diagnostic is printed).
 
-<P>
-char * G_put_cell_title(char *name, char *title) change raster map
-  titleIf it is only desired to change the title for a map layer, it is not
-  necessary to read the entire category file into memory, change the title, and
-  rewrite the category file. This routine changes the <B>title</B> for the
-  raster file <B>name</B> in the current mapset directly in the category
-  file. It returns a pointer to the title.
+ - G_get_cell_title()
 
-<P>
+If only the map layer title is needed, it is not necessary to read the
+entire category file into memory. This routine gets the title for
+raster file directly from the category file, and returns a pointer to
+the title. A legal pointer is always returned. If the map layer does
+not have a title, then a pointer to the empty string "" is returned.
+
+ - G_put_cell_title()
+
+If it is only desired to change the title for a map layer, it is not
+necessary to read the entire category file into memory, change the
+title, and rewrite the category file. This routine changes the title
+for the raster file in the current mapset directly in the category
+file. It returns a pointer to the title.
 
 \section Querying_and_Changing_the_Categories_Structure Querying and Changing the Categories Structure
 
+The following routines query or modify the information contained in
+the category structure:
 
-<P>
-The following routines query or modify the information contained in the
-category structure:
+ - G_get_cat()
 
-<P>
-char * G_get_cat(CELL n, struct Categories *cats) get a category
-  labelThis routine looks up category <B>n</B> in the <B>cats</B>
-  structure and returns a pointer to a string which is the label for the
-  category. A legal pointer is always returned. If the category does not exist
-  in <B>cats,</B> then a pointer to the empty string "" is returned.
+This routine looks up category in the cats structure and returns a
+pointer to a string which is the label for the category. A legal
+pointer is always returned. If the category does not exist in cats
+then a pointer to the empty string "" is returned.
 
-<P>
-<B>Warning.</B> The pointer that is returned points to a hidden static
-  buffer. Successive calls to G_get_cat() overwrite this buffer.
+<b>Warning:</b> The pointer that is returned points to a hidden static
+buffer. Successive calls to G_get_cat() overwrite this buffer.
 
-<P>
-char * G_get_cats_title (Categories *cats) get title from category
-  structure structMap layers store a one-line title in the category structure
-  as well. This routine returns a pointer to the title contained in the
-  <B>cats</B> structure.  A legal pointer is always returned. If the map
-  layer does not have a title, then a pointer to the empty string "" is
-  returned.
+ - G_get_cats_title()
 
-<P>
-int G_init_cats(CELL n, char *title, struct Categories
-  *cats) initialize category structureTo construct a new category file, the
-  structure must first be initialized.  This routine initializes the
-  <B>cats</B> structure, and copies the <B>title</B> into the structure.
-  The number of categories is set initially to <B>n.</B>
+Map layers store a one-line title in the category structure as
+well. This routine returns a pointer to the title contained in the
+cats structure. A legal pointer is always returned. If the map layer
+does not have a title, then a pointer to the empty string "" is
+returned.
 
-<P>
+ - G_init_cats()
+
+To construct a new category file, the structure must first be
+initialized.  This routine initializes the cats structure, and copies
+the title into the structure.
+
 For example:
 
-<P>
-\verbatim
+\code
 struct Categories cats;
 
-G_init_cats ((CELL) 0, '''', &cats) ;
-\endverbatim
+G_init_cats ((CELL) 0, "", &cats);
+\endcode
 
-<P>
-int G_set_cat(CELL n, char *label, struct Categories *cats) set a
-  category labelThe <B>label</B> is copied into the <B>cats</B> structure
-  for category <B>n.</B>
+ - G_set_cat()
 
-<P>
-int G_set_cats_title(char *title, struct Categories *cats) set
-  title in category structureThe <B>title</B> is copied into the
-  <B>cats</B> structure.
+Copies the label into the cats structure for category.
 
-<P>
-int G_free_cats(struct Categories *cats) free category structure
-  memoryFrees memory allocated by<I>G_read_cats, G_init_cats</I>
-  and<I> G_set_cat.</I>
+ - G_set_cats_title()
 
-<P>
+Copies the title is copied into the cats structure.
+
+ - G_free_cats()
+
+Frees memory allocated by G_read_cats(), G_init_cats() and
+G_set_cat().
 
 \section Raster_Color_Table Raster Color Table
 
-<P>
-GRASS map layers have colors associated with them. The color tables are
-structured so that each category in the raster file has its own color. The
-format of this file is described in Raster_Color_Table_Format.
 
-<P>
-The routines that manipulate the raster color file use the <I>Colors</I>
-structure which is described in detail in
+GRASS map layers have colors associated with them. The color tables
+are structured so that each category in the raster file has its own
+color. The format of this file is described in \ref
+Raster_Color_Table_Format.
+
+The routines that manipulate the raster color file use the
+<i>Colors</i> structure which is described in detail in \ref
 GIS_Library_Data_Structures.
-
-<P>
 
 \section Reading_and_Writing_the_Raster_Color_File Reading and Writing the Raster Color File
 
-<P>
+
 The following routines read, create, modify, and write color tables.
 
-<P>
-int G_read_colors(char *name, char *mapset, struct Colors
-  *colors) read map layer color tableThe color table for the raster file
-  <B>name</B> in the specified <B>mapset</B> is read into the
-  <B>colors</B> structure.
+ - G_read_colors()
 
-<P>
-If the data layer has no color table, a default color table is generated and
-  0 is returned. If there is an error reading the color table, a diagnostic
-  message is printed and -1 is returned. If the color table is read ok, 1 is
-  returned.
+The color table for the raster file in the specified mapset is read
+into the <em>colors</em> structure. If the data layer has no color
+table, a default color table is generated and 0 is returned. If there
+is an error reading the color table, a diagnostic message is printed
+and -1 is returned. If the color table is read ok, 1 is returned.
 
-<P>
-int G_write_colors(char *name, char *mapset, struct Colors
-  *colors) write map layer color tableThe color table is written for the
-  raster file <B>name</B> in the specified <B>mapset</B> from the
-  <B>colors</B> structure.
+ - G_write_colors()
 
-<P>
-If there is an error, -1 is returned. No diagnostic is printed. Otherwise, 1
-  is returned.
+Write map layer color table. The color table is written for the raster
+file in the specified mapset from the <em>colors</em> structure. If
+there is an error, -1 is returned. No diagnostic is
+printed. Otherwise, 1 is returned.
 
-<P>
-The <B>colors</B> structure must be created properly, i.e.,
-  <I>G_init_colors</I> to initialize the structure and
-  <I>G_add_color_rule</I> to set the category colors. [footnote]
-<P>
-<B>Note.</B> The calling sequence for this function deserves special
-  attention. The <B>mapset</B> parameter seems to imply that it is possible
-  to overwrite the color table for a raster file which is in another mapset.
-  However, this is not what actually happens. It is very useful for users to
-  create their own color tables for raster files in other mapsets, but without
-  overwriting other users' color tables for the same raster file. If
-  <B>mapset</B> is the current mapset, then the color file for <B>name</B>
-  will be overwritten by the new color table. But if <B>mapset</B> is not the
-  current mapset, then the color table is actually written in the current
-  mapset under the <B>colr2</B> element as: colr2/mapset/name.
+The <em>colors</em> structure must be created properly, i.e.,
+G_init_colors() to initialize the structure and G_add_color_rule() to
+set the category colors.
 
-<P>
+<b>Note:</b> The calling sequence for this function deserves special
+attention. The <em>mapset</em> parameter seems to imply that it is
+possible to overwrite the color table for a raster file which is in
+another mapset. However, this is not what actually happens. It is very
+useful for users to create their own color tables for raster files in
+other mapsets, but without overwriting other users' color tables for
+the same raster file. If <em>mapset</em> is the current mapset, then
+the color file for <em>name</em> will be overwritten by the new color
+table. But if <em>mapset</em> is not the current mapset, then the
+color table is actually written in the current mapset under the
+<tt>colr2</tt> element as: <tt>colr2/mapset/name</tt>.
 
 \section Lookup_Up_Raster_Colors Lookup Up Raster Colors
 
-
-<P>
 These routines translates raster values to their respective colors.
 
-<P>
-int G_lookup_colors(CELL *raster, unsigned char *red, unsigned char
-  *green, unsigned char *blue, set, int n, struct Colors *colors) lookup an
-  array of colorsExtracts colors for an array of <B>raster</B> values. The
-  colors for the <B>n</B> values in the <B>raster</B> array are stored in
-  the <B>red, green</B>, and <B>blue</B> arrays. The values in the
-  <B>set</B> array will indicate if the corresponding <B>raster</B> value
-  has a color or not (1 means it does, 0 means it does not) . The programmer
-  must allocate the <B>red, green, blue</B>, and <B>set</B> arrays to be at
-  least dimension <B>n.</B>
+ - G_lookup_colors()
 
-<P>
-<B>Note.</B> The <B>red, green</B>, and <B>blue</B> intensities will be
-  in the range 0 -­ 255.
+Extracts colors for an array of raster values. The colors from the
+raster array are stored in the red, green, and blue arrays.
 
-<P>
-int G_get_color(CELL cat, int *red, int *green, int *blue, struct
-  Colors *colors) get a category colorThe <B>red, green</B>, and
-  <B>blue</B> intensities for the color associated with category <B>cat</B>
-  are extracted from the <B>colors</B> structure. The intensities will be in
-  the range 0 ­- 255.
+<b>Note:</b> The red, green, and blue intensities will be in the range
+0 -­ 255.
 
-<P>
+ - G_get_color()
+
+Get a category color. The red, green, and blue intensities for the
+color associated with category are extracted from the colors
+structure. The intensities will be in the range 0 ­- 255.
 
 \section Creating_and_or_Modifying_the_Color_Table Creating and/or Modifying the Color Table
 
-
-<P>
 These routines allow the creation of customized color tables as well as the
 modification of existing tables.
 
-<P>
-int G_init_colors(struct Colors *colors) initialize color
-  structureThe <B>colors</B> structure is initialized for subsequent calls
-  to <I>G_add_color_rule</I> and<I>G_set_color.</I>
+ - G_init_colors()
 
-<P>
-int G_add_color_rule(CELL cat1, int r1, int g1, int b1, CELL cat2,
-  int r2, int g2, int b2, struct Colors *colors) set colorsThis is the heart
-  and soul of the new color logic. It adds a color rule to the <B>colors</B>
-  structure. The colors defined by the red, green, and blue values
-  <B>r1,g1,b1</B> and <B>r2,g2,b2</B> are assigned to <B>cat1</B> and
-  <B>cat2</B> respectively. Colors for data values between <B>cat1</B> and
-  <B>cat2</B> are not stored in the structure but are interpolated when
-  queried by <I>G_lookup_colors</I> and<I> G_get_color.</I> The color
-  components <B>r1,g1,b1</B> and <B>r2,g2,b2</B> must be in the range
-  0 - 255.
+Initialize <i>colors</i> structure for subsequent calls
+G_add_color_rule() and G_set_color().
 
-<P>
+int G_add_color_rule()
+
+This is the heart and soul of the new color logic. It adds a color
+rule to the <em>colors</em> structure. The colors defined by the red,
+green, and blue values are assigned to the categories
+respectively. Colors for data values between two categories are not
+stored in the structure but are interpolated when queried by
+G_lookup_colors() G_get_color(). The color components must be in the
+range 0 - 255.
+
 For example, to create a linear grey scale for the range 200 - 1000:
 
-<P>
-\verbatim
+\code
 struct Colors colr;
 
 G_init_colors (&colr) ;
 
 G_add_color_rule ((CELL) 200, 0,0,0,(CELL) 1000, 255,255,255) ;
-\endverbatim
+\endcode
 
+The programmer is encouraged to review \ref Raster_Color_Table_Format
+how this routine fits into the 5.x raster color logic.
 
-<P>
-The programmer is encouraged to review Raster_Color_Table_Format how
-this routine fits into the 5.x raster color logic.
-
-<P>
-<B>Note.</B> The <B>colors</B> structure must have been initialized by
-<I>G_init_colors.</I> See \ref Predefined_Color_Tables for routines to
+<b>Note:</b> The <em>colors</em> structure must have been initialized
+by G_init_colors(). See \ref Predefined_Color_Tables for routines to
 build some predefined color tables.
 
-<P>
-int G_set_color(CELL cat, int red, int green, int blue, struct
-  Colors *colors) set a category colorThe <B>red, green</B>, and
-  <B>blue</B> intensities for the color associated with category <B>cat</B>
-  are set in the <B>colors</B> structure.  The intensities must be in the
-  range 0 -­ 255. Values below zero are set as zero, values above 255 are set as
-  255.
+ - G_set_color()
 
-<P>
-<B>Use of this routine is discouraged because it defeats the new color
-    logic.</B> It is provided only for backward compatibility. Overuse can create
-  large color tables. <I>G_add_color_rule</I> should be used whenever
-  possible.
+Set a category color. The red, green, and blue intensities for the
+color associated with category The intensities must be in the range 0
+-­ 255. Values below zero are set as zero, values above 255 are set as
+255.
 
-<P>
-<B>Note.</B> The <B>colors</B> structure must have been initialized by
-  <I>G_init_color.</I>
+<b>Warning:</b> Use of this routine is discouraged because it defeats
+the new color logic. It is provided only for backward
+compatibility. Overuse can create large color
+tables. G_add_color_rule() should be used whenever possible.
 
-<P>
-int G_get_color_range(CELL *min, CELL *max, struct Colors
-*colors) get color rangeGets the minimum and maximum raster values that
-have colors associated with them.
+<b>Note:</b> The <em>colors</em> structure must have been initialized
+by G_init_color().
 
-<P>
-int G_free_colors(struct Colors *colors) free color structure
-  memoryThe dynamically allocated memory associated with the <B>colors</B>
-  structure is freed.
+ - G_get_color_range()
+ - G_get_d_color_range()
 
-<P>
-<B>Note.</B> This routine may be used after <I>G_read_colors</I> as
-  well as after <I>G_init_colors.</I>
+Get color range. Gets the minimum and maximum raster values that have
+colors associated with them.
 
-<P>
+ - G_free_colors()
+
+Free dynamically allocated memory associated with the <em>colors</em>
+structure.
+
+<b>Note:</b> This routine may be used after G_read_colors() as well as
+after G_init_colors().
 
 \section Predefined_Color_Tables Predefined Color Tables
 
 
-<P>
-The following routines generate entire color tables. The tables are loaded into
-a <B>colors</B> structure based on a range of category values from
-<B>min</B> to <B>max.</B> The range of values for a raster map can be
-obtained, for example, using <I>G_read_range.</I> <B>Note.</B> The color
-tables are generated without information about any particular raster file.
+The following routines generate entire color tables. The tables are
+loaded into a <i>colors</i> structure based on a range of category
+values from minimum to maximum value. The range of values for a raster
+map can be obtained, for example, using G_read_range().
 
-<P>
-These color tables may be created for a raster file, but they may also be 
-generated for loading graphics colors.
+<b>Note:</b> The color tables are generated without information about
+any particular raster file.
 
-<P>
-These routines return -1 if <B>min</B> is greater than <B>max</B>, 1
-otherwise.
+These color tables may be created for a raster map, but they may also
+be generated for loading graphics colors. These routines return -1 if
+minimum value is greater than maximum value, 1 otherwise.
 
-<P>
-int G_make_aspect_colors(struct Colors *colors, CELL min, CELL
-  max) make aspect colorsGenerates a color table for aspect data.
+ - G_make_aspect_colors()
 
-<P>
-int G_make_ramp_colors(struct Colors *colors, CELL min, CELL
-  max) make color rampGenerates a color table with 3 sections: red only,
-  green only, and blue only, each increasing from none to full intensity. This
-  table is good for continuous data, such as elevation.
+Generates a color table for aspect data.
 
-<P>
-int G_make_wave_colors(struct Colors *colors, CELL min, CELL
-  max) make color waveGenerates a color table with 3 sections: red only,
-  green only, and blue only, each increasing from none to full intensity and
-  back down to none.  This table is good for continuous data like elevation.
+ - G_make_ramp_colors()
 
-<P>
-int G_make_grey_scale_colors(struct Colors *colors, CELL min, CELL
-  max) make linear grey scaleGenerates a grey scale color table. Each color
-  is a level of grey, increasing from black to white.
+Generates a color table with 3 sections: red only, green only, and
+blue only, each increasing from none to full intensity. This table is
+good for continuous data, such as elevation.
 
-<P>
-int G_make_rainbow_colors(struct Colors *colors, CELL min, CELL
-  max) make rainbow colorsGenerates a "shifted" rainbow color table - yellow
-  to green to cyan to blue to magenta to red. The color table is based on
-  rainbow colors. (Normal rainbow colors are red, orange, yellow, green, blue,
-  indigo, and violet.)  This table is good for continuous data, such as
-  elevation.
+ - G_make_wave_colors()
 
-<P>
-int G_make_random_colors(struct Colors *colors, CELL min, CELL
-  max) make random colorsGenerates random colors. Good as a first pass at a
-  color table for nominal data.
+Generates a color table with 3 sections: red only, green only, and
+blue only, each increasing from none to full intensity and back down
+to none. This table is good for continuous data like elevation.
 
-<P>
-int G_make_ryg_colors(struct Colors *colors, CELL min, CELL
-  max) make red,yellow,green colorsGenerates a color table that goes from
-  red to yellow to green.
+ - G_make_grey_scale_colors()
 
-<P>
-int G_make_gyr_colors(struct Colors *colors, CELL min, CELL
-  max) make green,yellow,red colorsGenerates a color table that goes from
-  green to yellow to red.
+Generates a grey scale color table. Each color is a level of grey,
+increasing from black to white.
 
-<P>
-int G_make_histogram_eq_colors(struct Colors *colors, struct
-  Cell_stats *s) make histogram-stretched grey colorsGenerates a histogram
-  contrast-stretched grey scale color table that goes from the ,histogram
-  information in the Cell_stats structure <B>s.</B>  (See
-  Raster_Histograms) .
+ - G_make_rainbow_colors()
 
-<P>
+Generates a "shifted" rainbow color table - yellow to green to cyan to
+blue to magenta to red. The color table is based on rainbow
+colors. (Normal rainbow colors are red, orange, yellow, green, blue,
+indigo, and violet.)  This table is good for continuous data, such as
+elevation.
+
+ - G_make_random_colors()
+
+Generates random colors. Good as a first pass at a color table for
+nominal data.
+
+ - G_make_ryg_colors()
+
+Generates a color table that goes from red to yellow to green.
+
+ - G_make_gyr_colors()
+
+Generates a color table that goes from green to yellow to red.
+
+ - G_make_histogram_eq_colors()
+
+Generates a histogram contrast-stretched grey scale color table that goes from the, histogram information.
 
 \section Raster_History_File Raster History File
 
 
-<P>
-The history file contains documentary information about the raster file: who
-created it, when it was created, what was the original data source, what
-information is contained in the raster file, etc. This file is discussed in
-Raster_History_File_Format
+The history file contains documentary information about the raster
+file: who created it, when it was created, what was the original data
+source, what information is contained in the raster file, etc. This
+file is discussed in \ref Raster_History_File_Format.
 
-<P>
-The following routines manage this file. They use the <I>History</I>
-structure which is described in GIS_Library_Data_Structures.
+The following routines manage this file. They use the <em>History</em>
+structure which is described in \ref GIS_Library_Data_Structures.
 
-<P>
-<B>Note.</B> This structure has existed relatively unmodified since the
-inception of GRASS. It is in need of overhaul. Programmers should be aware that
-future versions of GRASS may no longer support either the routines or the data
-structure which support the history file.
+<b>Note:</b> This structure has existed relatively unmodified since
+the inception of GRASS. It is in need of overhaul. Programmers should
+be aware that future versions of GRASS may no longer support either
+the routines or the data structure which support the history file.
 
-<P>
-int G_read_history(char *name, char *mapset, struct History
-  *history) read raster history fileThis routine reads the history file for
-  the raster file <B>name</B> in <B>mapset</B> into the <B>history</B>
-  structure.
+ - G_read_history()
 
-<P>
-A diagnostic message is printed and -1 is returned if there is an error
-  reading the history file. Otherwise, 0 is returned.
+Read raster history file. This routine reads the history file for the
+raster map into the <em>history</em> structure. A diagnostic message
+is printed and -1 is returned if there is an error reading the history
+file. Otherwise, 0 is returned.
 
-<P>
-int G_write_history(char *name, struct History *history) write
-  raster history fileThis routine writes the history file for the raster file
-  <B>name</B> in the current mapset from the <B>history</B> structure.
+ - G_write_history()
 
-<P>
-A diagnostic message is printed and -1 is returned if there is an error
-  writing the history file. Otherwise, 0 is returned.
+Write raster history file. This routine writes the history file for
+the raster map in the current mapset from the <em>history</em>
+structure. A diagnostic message is printed and -1 is returned if there
+is an error writing the history file. Otherwise, 0 is returned.
 
-<P>
-<B>Note.</B> The <B>history</B> structure should first be initialized
-  using <I>G_short_history.</I>
+<b>Note:</b> The <em>history</em> structure should first be
+initialized using G_short_history().
 
-<P>
-int G_short_history(char *name, char *type, struct History
-  *history) initialize history structureThis routine initializes the
-  <B>history</B> structure, recording the date, user, module name and the
-  raster file <B>name</B> structure. The <B>type</B> is an anachronism from
-  earlier versions of GRASS and should be specified as "raster".
+ - G_short_history()
 
-<P>
-<B>Note.</B> This routine only initializes the data structure. It does not
-  write the history file.
+Initialize history structureThis routine initializes the
+<em>history</em> structure, recording the date, user, module name and
+the raster map.
 
-<P>
+<b>Note:</b> This routine only initializes the data structure. It does
+not write the history file.
 
 \section Raster_Range_File Raster Range File
 
-<P>
-The following routines manage the raster range file. This file contains the
-minimum and maximum values found in the raster file. The format of this file is
-described in Raster_Range_File_Format.
 
-<P>
-The routines below use the <I>Range</I> data structure which is described in
-GIS_Library_Data_Structures.
+The following routines manage the raster range file. This file
+contains the minimum and maximum values found in the raster file. The
+format of this file is described in \ref Raster_Range_File_Format.
 
-<P>
-int G_read_range(char *name, char *mapset, struct Range
-  *range) read raster rangeThis routine reads the range information for the
-  raster file <B>name</B> in <B>mapset</B> into the <B>range</B>
-  structure.
+The routines below use the <i>Range</i> data structure which is
+described in \ref GIS_Library_Data_Structures.
 
-<P>
-A diagnostic message is printed and -1 is returned if there is an error
-  reading the range file. Otherwise, 0 is returned.
+ - G_read_range()
 
-<P>
-int G_write_range(char *name, struct Range *range) write raster
-  range fileThis routine writes the range information for the raster file
-  <B>name</B> in the current mapset from the <B>range</B> structure.
+Reads raster range. This routine reads the range information for the
+raster map into the <i>range</i> structure. A diagnostic message is
+printed and -1 is returned if there is an error reading the range
+file. Otherwise, 0 is returned.
 
-<P>
-A diagnostic message is printed and -1 is returned if there is an error
-  writing the range file. Otherwise, 0 is returned.
+ - G_write_range()
 
-<P>
+Write raster range file. This routine writes the range information for
+the raster map in the current mapset from the <i>range</i>
+structure. A diagnostic message is printed and -1 is returned if there
+is an error writing the range file. Otherwise, 0 is returned.
+
 The range structure must be initialized and updated using the following
 routines:
 
-<P>
-int G_init_range(struct Range *range) initialize range
-  structureInitializes the <B>range</B> structure for updates by
-  <I>G_update_range</I> and <I>G_row_update_range.</I>
+ - G_init_range()
 
-<P>
-int G_update_range(CELL cat, struct Range *range) update range
-  structureCompares the <B>cat</B> value with the minimum and maximum
-  values in the <B>range</B> structure, modifying the range if <B>cat</B>
-  extends the range.
+Initializes the <i>range</i> structure for updates by G_update_range()
+and G_row_update_range().
 
-<P>
-int G_row_update_range(CELL *cell, int n, struct Range
-  *range) update range structureThis routine updates the <B>range</B> data
-  just like <I>G_update_range</I>, but for <B>n</B> values from the
-  <B>cell</B> array.
+ - G_update_range()
 
-<P>
+Compares the category value with the minimum and maximum values in the
+<i>range</i> structure, modifying the range if the value extends the
+range.
+
+ - G_row_update_range()
+
+This routine updates the range data just like G_update_range().
+
 The range structure is queried using the following routine:
 
-<P>
-int G_get_range_min_max(struct Range *range, CELL *min, CELL
-  *max) get range min and maxThe <B>min</B>inum and <B>max</B>imum CELL
-  values are extracted from the <B>range</B> structure.
+ - G_get_range_min_max()
 
-<P>
+Get range minimum and maximum value.
 
 \section Raster_Histograms Raster Histograms
 
+The following routines provide a relatively efficient mechanism for
+computing and querying a histogram of raster data. They use the
+<b>Cell_stats</b> structure to hold the histogram information. The
+histogram is a count associated with each unique raster value
+representing the number of times each value was inserted into the
+structure.
 
-<P>
-The following routines provide a relatively efficient mechanism for computing
-and querying a histogram of raster data. They use the <I>Cell_stats</I>
-structure to hold the histogram information. The histogram is a count
-associated with each unique raster value representing the number of times each
-value was inserted into the structure.
-
-<P>
 These next two routines are used to manage the Cell_stats structure:
 
-<P>
-int G_init_cell_stats(struct Cell_stats *s) initialize cell
-  statsThis routine, which must be called first, initializes the Cell_stats
-  structure <B>s.</B>
+ - G_init_cell_stats()
 
-<P>
-int G_free_cell_stats(struct Cell_stats *s) free cell statsThe
-  memory associated with structure <B>s</B> is freed. This routine may be
-  called any time after calling<I>G_init_cell_stats.</I>
+Initialize cell stats, This routine, which must be called first,
+initializes the Cell_stats structure.
 
-<P>
+ - G_free_cell_stats()
+
+Free cell stats. The memory associated with structure is freed. This
+routine may be called any time after calling G_init_cell_stats().
+
 This next routine stores values in the histogram:
 
-<P>
-int G_update_cell_stats(CELL *data, int n, struct Cell_stats
-  *s) add data to cell statsThe <B>n</B> CELL values in the <B>data</B>
-  array are inserted (and counted) in the Cell_stats structure <B>s.</B>
+ - G_update_cell_stats()
 
-<P>
-Once all values are stored, the structure may be queried either randomly (ie.
-search for a specific raster value) or sequentially (retrieve all raster
-values, in ascending order, and their related count) :
+Adds data to cell stats. Once all values are stored, the structure may
+be queried either randomly (ie. search for a specific raster value) or
+sequentially (retrieve all raster values, in ascending order, and
+their related count):
 
-<P>
-int G_find_cell_stat(CELL cat, long *count, struct Cell_stats
-  *s) random query of cell statsThis routine allows a random query of the
-  Cell_stats structure <B>s.</B>  The <B>count</B> associated with the
-  raster value <B>cat</B> is set. The routine returns 1 if <B>cat</B> was
-  found in the structure, 0 otherwise.
+ - G_find_cell_stat()
 
-<P>
+Random query of cell stats. This routine allows a random query of the
+Cell_stats structure. The routine returns 1 if <B>cat</B> was found in
+the structure, 0 otherwise.
+
 Sequential retrieval is accomplished using these next 2 routines:
 
-<P>
-int G_rewind_cell_stats(struct Cell_stats *s) reset/rewind cell
-  statsThe structure <B>s</B> is rewound (i.e., positioned at the first
-  raster category) so that sorted sequential retrieval can begin.
+ - G_rewind_cell_stats()
 
-<P>
-int G_next_cell_stat(CELL *cat, long *count, struct Cell_stats
-  *s) retrieve sorted cell stats Retrieves the next <B>cat,count</B>
-  combination from the structure <B>s.</B> Returns 0 if there are no more
-  items, non-zero if there are more.
+Reset/rewind cell stats. The structure is rewound (i.e., positioned at
+the first raster category) so that sorted sequential retrieval can
+begin.
 
-<P>
+ - G_next_cell_stat()
+
+Retrieve sorted cell stats. Retrieves the next <i>cat, count</i>
+combination from the structure. Returns 0 if there are no more items,
+non-zero if there are more.
+
 For example:
 
-<P>
-\verbatim
+\code
 struct Cell_stats s;
 CELL cat;
 long count;
 
-.
-. /* updating s occurs here */
-.
+/* updating s occurs here */
 
 G_rewind_cell_stats(&s);
 
-while (G_next_cell_stat(&cat,&count,&s)
+while(G_next_cell_stat(&cat, &count, &s))
   fprintf(stdout, "%ld %ld\n", (long) cat, count);
-\endverbatim
-
-<P>
+\endcode
 
 \section  GRASS_5_raster_API GRASS 5 raster API [needs to be merged
       into above sections]
-
 
 \subsection The_CELL_Data_Type The CELL Data Type
 
 GRASS integer raster map data is defined to be of type CELL. This data
 type is defined in the "gis.h" header file. Programmers must declare
 all variables and buffers which will hold raster data or category
-codes as type CELL.  Under GRASS the CELL data type is declared to be
-int, but the programmer should not assume this. What should be assumed
-is that CELL is a signed integer type. It may be changed sometime to
-short or long. This implies that use of CELL data with routines which
-do not know about this data type (e.g., fprintf(stdout, ...), sscanf(),
-etc.) must use an intermediate variable of type long.  To print a CELL
-value, it must be cast to long. For example:
+codes as type CELL. Under GRASS the CELL data type is declared to be
+"int", but the programmer should not assume this. What should be
+assumed is that CELL is a signed integer type. It may be changed
+sometime to short or long. This implies that use of CELL data with
+routines which do not know about this data type (e.g.,
+<tt>fprintf(stdout, ...), sscanf()</tt>, etc.) must use an
+intermediate variable of type long. To print a CELL value, it must be
+cast to long. For example:
 
-\verbatim
+\code
 CELL c; /* raster value to be printed */
 
 /* some code to get a value for c */
 fprintf(stdout, "%ld\n", (long) c); /* cast c to long to print */
-\endverbatim
+\endcode
 
 To read a CELL value, for example from user typed input, it is
 necessary to read into a long variable, and then assign it to the CELL
 variable. For example (this example does not check for valid inputs,
 EOF, etc., which good code must do):
 
-\verbatim
+\code
 char userbuf[128];
-CELL c; long x;
+CELL c;
+long x;
 
 fprintf (stdout, "Which category? "); /* prompt user */
-gets(userbuf); /* get user response * /
-sscanf (userbuf,"%ld", &x); /* scan category into long variable */
-c = (CELL) x; /* assign long value to CELL value */
-\endverbatim
+gets(userbuf);                        /* get user response * /
+sscanf (userbuf,"%ld", &x);           /* scan category into long variable */
+c = (CELL) x;                         /* assign long value to CELL value */
+\endcode
 
 Of course, with GRASS library routines that are designed to handle the
 CELL type, this problem does not arise. It is only when CELL data must
 be used in routines which do not know about the CELL type, that the
 values must be cast to or from long.
 
-
 \subsection 5.0 Changes to  <TT>"gis.h"</TT>
 
+The "gis.h" contains 5 new items:
 
-<P>
-The <TT>"gis.h"</TT>  contains 5 new items:
-
-<P>
-<PRE>         
-        typedef float FCELL
-        typedef double DCELL
+\code
+        typedef float FCELL;
+        typedef double DCELL;
         typedef int RASTER_MAP_TYPE;
-        #define CELL_TYPE 0
+        #define CELL_TYPE  0
         #define FCELL_TYPE 1
         #define DCELL_TYPE 2
-</PRE>
+\endcode
 
-<P>
-Also <TT>"gis.h"</TT> contains the definitions for new structures:
+Also "gis.h" contains the definitions for new structures:
 
-<P>
-<PRE>       
+\code
       struct FPReclass;
       struct FPRange;
       struct Quant;
-</PRE>
+\endcode
 
-<P>
 Some of the old structures such as
 
-<P>
-<PRE>
+\code
       struct Categories
       struct Cell_stats;
       struct Range;
       struct _Color_Rule_;
       struct _Color_Info_;
       struct Colors;
-</PRE>
+\endcode
 
-<P>
-were modified, so it is very important to use functional interface to access
-and set elements of these structures instead of accessing elements of the
-structures directly. Because some former elements such as for example
-<TT>(struct Range range.pmin) </TT> do not exist anymore. It was made sure non
-of the former elements have different meaning, so that the programs which do
-access the old elements directly either do not compile or work exactly the same
-way as prior to change.
-
-<P>
+were modified, so it is very important to use functional interface to
+access and set elements of these structures instead of accessing
+elements of the structures directly. Because some former elements such
+as for example <tt>(struct Range range.pmin)</tt> do not exist
+anymore. It was made sure non of the former elements have different
+meaning, so that the programs which do access the old elements
+directly either do not compile or work exactly the same way as prior
+to change.
 
 \subsection NULL_value_functions NULL-value functions
 
+ - G_set_null_value()
 
-<P>
-int G_set_null_value(void *rast, int count, RASTER_MAP_TYPE
-  data_type) Set NULL valueIf the <EM>data_type</EM> is CELL_TYPE, calls
-  G_set_c_null_value((CELL *) rast, count) ;
+Set NULL value. For raster type <tt>CELL_TYPE</tt> use
+G_set_c_null_value(), for <tt>FCELL_TYPE</tt> G_set_f_null_value(),
+and for <tt>DCELL_TYPE</tt> G_set_d_null_value().
 
-<P>
-If the <EM>data_type</EM> is FCELL_TYPE, calls G_set_f_null_value((FCELL
-  *) rast, count) ;
+ - G_insert_null_values()
 
-<P>
-If the <EM>data_type</EM> is DCELL_TYPE, calls G_set_d_null_value((DCELL
-  *) rast, count) ;
+Insert NULL value. If raster type is <tt>CELL_TYPE</tt> calls
+G_insert_c_null_values(), <tt>FCELL_TYPE</tt> calls
+G_insert_f_null_values(), and <tt>DCELL_TYPE</tt> calls
+G_insert_d_null_values().
 
-<P>
-int G_set_c_null_value(CELL *cell, int count) Set CELL NULL
-  valueSet the <EM>count</EM> elements in the <EM>cell</EM> array to the NULL value
-  (the largest positive integer) .
+ - G_is_null_value()
 
-<P>
-int G_set_f_null_value(FCELL *fcell, int count) Set FCELL NULL
-  valueSet the <EM>count</EM> elements in the <EM>fcell</EM> array to the NULL
-  value (a bit pattern for a <TT>float</TT> NaN - 32 bits of 1's) .
+Check NULL value. If raster type is <tt>CELL_TYPE<tt>, calls G_is_c_null_value(), <tt>FCELL_TYPE</tt> calls G_is_f_null_value(), and <tt>DCELL_TYPE</tt> calls G_is_d_null_value().
 
-<P>
-int G_set_d_null_value(DCELL *dcell, int count) Set CELL NULL
-  valueSet the <EM>count</EM> elements in the <EM>dcell</EM> array to the NULL
-  value - which (a bit pattern for a <TT>double</TT> NaN - 64 bits of 1's) .
+It isn't good enough to test for a particular NaN bit pattern since
+the machine code may change this bit pattern to a different NaN. The
+test will be
 
-<P>
-int G_insert_null_values(void *rast, char *flags, int count,
-  RASTER_MAP_TYPE data_type) Insert NULL valueIf the <EM>data_type</EM> is
-  CELL_TYPE, calls G_insert_c_null_values ((CELL *) rast, flags, count) ;
-
-<P>
-If the <EM>data_type</EM> is FCELL_TYPE, calls G_insert_f_null_values
-  ((FCELL *) rast, flags, count) ;
-
-<P>
-If the <EM>data_type</EM> is DCELL_TYPE, calls G_insert_d_null_values
-  ((DCELL *) rast, flags, count) ;
-
-<P>
-int G_insert_c_null_values(CELL *cell, char *flags, int
-  count) Insert CELL NULL value For each of the <EM>count</EM> <EM>flags</EM>
-  which is true(!=0) , set the corresponding <EM>cell</EM> to the NULL value.
-
-<P>
-int G_insert_f_null_values(FCELL *fcell, char *flags, int
-  count) Insert FCELL NULL value For each of the <EM>count</EM> <EM>flags</EM>
-  which is true(!=0) , set the corresponding <EM>fcell</EM> to the NULL value.
-
-<P>
-int G_insert_d_null_values(DCELL *dcell, char *flags, int
-  count) Insert DCELL NULL value For each for the <EM>count</EM> <EM>flag</EM>
-  which is true(!=0) , set the corresponding <EM>dcell</EM> to the NULL value.
-
-<P>
-int G_is_null_value(void *rast, RASTER_MAP_TYPE data_type) If
-  the <EM>data_type</EM> is CELL_TYPE, calls G_is_c_null_value ((CELL *) 
-  rast) ;
-
-<P>
-If the <EM>data_type</EM> is FCELL_TYPE, calls G_is_f_null_value ((FCELL
-  *) rast) ;
-
-<P>
-If the <EM>data_type</EM> is DCELL_TYPE, calls G_is_d_null_value ((DCELL
-  *) rast) ;
-
-<P>
-int G_is_c_null_value(CELL *cell) Returns 1 if <EM>cell</EM> is
-  NULL, 0 otherwise. This will test if the value <EM>cell</EM> is the largest <TT>int</TT>.
-
-<P>
-int G_is_f_null_value(FCELL *fcell) Returns 1 if <EM>fcell</EM>
-  is NULL, 0 otherwise. This will test if the value <EM>fcell</EM> is a NaN. It
-  isn't good enough to test for a particular NaN bit pattern since the machine
-  code may change this bit pattern to a different NaN. The test will be
-
-<P>
-\verbatim
+\code
 if(fcell == 0.0) return 0;
 if(fcell >  0.0) return 0;
 if(fcell <  0.0) return 0;
 return 1;
-\endverbatim
-<BR>
+\endcode
 
-<P>
 or (as suggested by Mark Line) 
 
-<P>
-\verbatim
+\code
 return(FCELL != fcell) ;
-\endverbatim
+\endcode
 
-<P>
-int G_is_d_null_value(DCELL *dcell) Returns 1 if <EM>dcell</EM> is
-  NULL, 0 otherwise. This will test if the value <EM>dcell</EM> is a NaN. Same
-  test as in <TT>G_is_f_null_value()</TT>.
+ - G_allocate_null_buf()
 
-<P>
-char * G_allocate_null_buf() Allocate an array of char based on
-  the number of columns in the current region.
+Allocates an array of char based on the number of columns in the
+current region.
 
-<P>
-int G_get_null_value_row (int fd, char *flags, int row) Reads a
-  row from NULL value bitmap file for the raster map open for read on <EM>fd</EM>.
-  If there is no bitmap file, then this routine simulates the read as follows:
-  non-zero values in the raster map correspond to non-NULL; zero values
-  correspond to NULL. When MASK exists, masked cells are set to null. <EM>
-  flags</EM> is a resulting array of 0's and 1's where 1 corresponds to
-  <TT>"no data"</TT> cell.
+ - G_get_null_value_row()
 
-<P>
+Reads a row from NULL value bitmap file for the raster map open for
+read. If there is no bitmap file, then this routine simulates the read
+as follows: non-zero values in the raster map correspond to non-NULL;
+zero values correspond to NULL. When MASK exists, masked cells are set
+to null.
 
 \subsection Floating_point_and_type_independent_functions Floating-point and type-independent functions
 
+ - G_maskfd()
 
-<P>
-int G_maskfd(void) test for current maskreturns file descriptor
-  number if MASK is in use and -1 if no MASK is in use.
+Test for current maskreturns file descriptor number if MASK is in use
+and -1 if no MASK is in use.
 
-<P>
-int G_raster_map_is_fp(char *name, char *mapset) Returns true(1) 
-  if raster map <EM>name</EM> in <EM>mapset</EM> is a floating-point dataset;
-  false(0) otherwise.
+ - G_raster_map_is_fp()
 
-<P>
-int G_raster_map_type(char *name, char *mapset) Returns the
-  storage type for raster map <EM>name</EM> in <EM>mapset</EM>: <TT>CELL_TYPE</TT>
-  (int) ; <TT>FCELL_TYPE</TT> (float) ; or <TT>DCELL_TYPE</TT> (double) .
+Returns true(1) if raster map is a floating-point dataset; false(0)
+otherwise.
 
-<P>
-int G_open_raster_new[_uncompressed](char *name,
-  RASTER_MAP_TYPE map_type) If map_type == CELL_TYPE, calls
-  G_open_map_new[_uncompressed](name) ;
+ - G_raster_map_type()
 
-<P>
-If map_type == FCELL_TYPE, calls G_set_fp_type(FCELL_TYPE) ;
-  G_open_fp_map_new[_uncompressed](name) ;
+Returns the storage type for raster map:
+ - <tt>CELL_TYPE</tt> for integer raster map
+ - <tt>FCELL_TYPE</tt> for floating-point raster map
+ - <tt>DCELL_TYPE</tt> for floating-point raster map (double precision)
 
-<P>
-If map_type == DCELL_TYPE, calls G_set_fp_type(DCELL_TYPE) ;
-  G_open_fp_map_new[_uncompressed](name) ;
+ - G_open_raster_new()
 
-<P>
-The use of this routine by applications is discouraged since its use would override user
-  preferences (what precision to use) .
+Creates new raster map in the current mapset. Calls G_open_map_new()
+for raster type <tt>CELL_TYPE</tt>, G_open_fp_map_new() for
+floating-point raster map. The use of this routine by applications is
+discouraged since its use would override user preferences (what
+precision to use).
 
-<P>
-int G_set_fp_type (RASTER_MAP_TYPE type) This controls the
-  storage type for floating-point maps. It affects subsequent calls to 
-  <TT>G_open_fp_map_new()</TT>. The <EM>type</EM> must be one of <TT>FCELL_TYPE</TT>
-  (float) or <TT>DCELL_TYPE</TT> (double) . The use of this routine by
-  applications is discouraged since its use would override user preferences.
+ - G_set_fp_type()
 
-<P>
-int G_open_fp_map_new(char *name) Opens a new floating-point
-  raster map (in <TT>.tmp</TT>) and returns a file descriptor. The storage type
-  (<TT>float</TT> or <TT>double</TT>) is determined by the last call to 
-  <TT>G_set_fp_type()</TT> or the default (<TT>float</TT> - unless the Unix env
-  variable GRASS_FP_DOUBLE is set) .
+This controls the storage type for floating-point raster maps. It
+affects subsequent calls to G_open_fp_map_new(). The <em>type</em>
+must be one of <tt>FCELL_TYPE</tt> (float) or <tt>DCELL_TYPE</tt>
+(double). The use of this routine by applications is discouraged since
+its use would override user preferences.
 
-<P>
-void * G_allocate_raster_buf(RASTER_MAP_TYPE
-  data_type) Allocate an array of CELL, FCELL, or DCELL (depending on <EM>
-  data_type</EM>) based on the number of columns in the current region.
+ - G_open_fp_map_new()
 
-<P>
-CELL * G_allocate_c_raster_buf() Allocate an array of CELL
-  based on the number of columns in the current region.
+Creates a new floating-point raster map (in <tt>.tmp</tt>) and returns
+a file descriptor. The storage type (float or double) is determined by
+the last call to G_set_fp_type() or the default (float - unless the
+GRASS environmental variable GRASS_FP_DOUBLE is set).
 
-<P>
-FCELL * G_allocate_f_raster_buf() Allocate an array of FCELL
-  based on the number of columns in the current region.
+ - G_allocate_raster_buf()
+ - G_allocate_c_raster_buf()
+ - G_allocate_f_raster_buf()
+ - G_allocate_d_raster_buf()
 
-<P>
-DCELL * G_allocate_d_raster_buf() Allocate an array of DCELL
-  based on the number of columns in the current region.
+Allocate an arrays of CELL, FCELL, or DCELL (depending on raster type)
+based on the number of columns in the current region.
 
-<P>
-void * G_incr_void_ptr(void *ptr, int size) Advances void
-  pointer by n bytes. returns new pointer value. Usefull in raster row
-  processing loops, substitutes 
+ - G_incr_void_ptr()
 
-<P>
-\verbatim
+Advances void pointer by n bytes. Returns new pointer value. Usefull
+in raster row processing loops, substitutes
+
+\code
 CELL *cell;
 cell += n;
-\endverbatim
+\endcode
 
-<P>
 Now 
 
-\verbatim
-rast = G_incr_void_ptr(rast, G_raster_size(data_type) ) 
-\endverbatim
+\code
+rast = G_incr_void_ptr(rast, G_raster_size(data_type));
+\endcode
 
-<P>
-(where rast is void* and data_type is RASTER_MAP_TYPE can be used instead
- of rast++.)  very usefull to generalize the row processing - loop (i.e. void *
- buf_ptr += G_raster_size(data_type) 
+Where <i>rast</i> is void* and data_type is RASTER_MAP_TYPE can be
+used instead of rast++.) Very usefull to generalize the row processing
+- loop (i.e. void * buf_ptr += G_raster_size(data_type))
 
-<P>
-int G_raster_size (RASTER_MAP_TYPE data_type) If <EM>data_type</EM> is CELL_TYPE, returns sizeof(CELL) 
+ - G_raster_size()
 
-<P>
-If <EM>data_type</EM> is FCELL_TYPE, returns sizeof(FCELL) 
+If <i>data_type</i> is CELL_TYPE, returns sizeof(CELL), for FCELL_TYPE
+returns sizeof(FCELL), and for <EM>data_type</EM> is DCELL_TYPE,
+returns sizeof(DCELL).
 
-<P>
-If <EM>data_type</EM> is DCELL_TYPE,q returns sizeof(DCELL) 
+ - G_raster_cmp()
 
-<P>
-int G_raster_cmp(void *p, *q, RASTER_MAP_TYPE
-  data_type) Compares raster vlues p and q. Returns 1 if p &gt; q or only q is
-  null value -1 if p &lt; q or only p is null value 0 if p == q or
-  p==q==null value
+Compares raster values.
 
-<P>
-int G_raster_cpy(void *p, void *q, int n, RASTER_MAP_TYPE
-  data_type) Copies raster values q into p. If q is null value, sets q to
-  null value.
+ - G_raster_cpy()
 
-<P>
-int G_set_raster_value_c(void *p, CELL val, RASTER_MAP_TYPE
-  data_type) If G_is_c_null_value(val) is true, sets p to null value.
-  Converts CELL val to data_type (type of p) and stores result in p. Used for
-  assigning CELL values to raster cells of any type.
+Copies raster values.
 
-<P>
-int G_set_raster_value_f(void *p, FCELL val, RASTER_MAP_TYPE
-  data_type) If G_is_f_null_value(val) is true, sets p to null value.
-  Converts FCELL val to data_type (type of p) and stores result in p. Used for
-  assigning FCELL values to raster cells of any type.
+ - G_set_raster_value_c()
 
-<P>
-int G_set_raster_value_d(void *p, DCELL val, RASTER_MAP_TYPE
-  data_type) If G_is_d_null_value(val) is true, sets p to null value.
-  Converts DCELL val to data_type (type of p) and stores result in p. Used for
-  assigning DCELL values to raster cells of any type.
+If G_is_c_null_value() is true, sets value to null value. Converts
+CELL value to raster data type value and stores the result. Used for
+assigning CELL values to raster cells of any type.
 
-<P>
-CELL G_get_raster_value_c(void *p, RASTER_MAP_TYPE
-  data_type) Retrieves the value of type data_type from pointer p,
-  converts it to CELL type and returns the result. If null value is stored in
-  p, returns CELL null value. Used for retreiving CELL values from raster cells
-  of any type.  NOTE: when data_type != CELL_TYPE, no quantization is used,
-  only type conversion.
+ - G_set_raster_value_f()
 
-<P>
-FCELL G_get_raster_value_f(void *p, RASTER_MAP_TYPE
-  data_type) Retrieves the value of type data_type from pointer p,
-  converts it to FCELL type and returns the result. If null value is stored in
-  p, returns FCELL null value. Used for retreiving FCELL values from raster
-  cells of any type.
+If G_is_f_null_value() is true, sets value to null value. Converts
+FCELL val to raster data type and stores the result. Used for
+assigning FCELL values to raster cells of any type.
 
-<P>
-DCELL G_get_raster_value_d(void *p, RASTER_MAP_TYPE
-  data_type) Retrieves the value of type data_type from pointer p,
-  converts it to DCELL type and returns the result. If null value is stored in
-  p, returns DCELL null value. Used for retreiving DCELL values from raster
-  cells of any type.
+ - G_set_raster_value_d()
 
-<P>
+If G_is_d_null_value() is true, sets value to null value. Converts
+DCELL val to raster data type and stores the result. Used for
+assigning DCELL values to raster cells of any type.
+ 
+ - G_get_raster_value_c()
+
+Retrieves the value of raster type, converts it to CELL type and
+returns the result. If null value is stored, returns CELL null
+value. Used for retreiving CELL values from raster cells of any type.
+
+Note: when data_type != CELL_TYPE, no quantization is used, only type conversion.
+
+ - G_get_raster_value_f()
+
+Retrieves the value of raster type, converts it to FCELL type and
+returns the result. If null value is stored, returns FCELL null
+value. Used for retreiving FCELL values from raster cells of any type.
+
+ - G_get_raster_value_d()
+
+Retrieves the value of raster type, converts it to DCELL type and
+returns the result. If null value is stored, returns DCELL null
+value. Used for retreiving DCELL values from raster cells of any type.
+
 int G_get_raster_row (int fd, void *rast, int row, RASTER_MAP_TYPE
   data_type) If <EM>data_type</EM> is CELL_TYPE, calls
   G_get_c_raster_row(fd,(CELL *) rast, row) ;

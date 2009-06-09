@@ -1,26 +1,16 @@
-
-/**********************************************************************
+/*!
+ * \file gis/color_read.c
+ * 
+ * \brief GIS Library - Read color table of raster map
  *
- *  G_read_colors (name, mapset, colors)
- *      char *name                   name of map
- *      char *mapset                 mapset that map belongs to
- *      struct Colors *colors        structure to hold color info
+ * (C) 1999-2009 by the GRASS Development Team
  *
- *  Reads the color information associated with map layer "map"
- *  in mapset "mapset" into the structure "colors".
+ * This program is free software under the GNU General Public
+ * License (>=v2). Read the file COPYING that comes with GRASS
+ * for details.
  *
- *  returns:    1  if successful
- *              0  if missing, but default colors generated
- *             -1  on fail
- *
- *  note:   If a secondary color file for map name "name" exists
- *          in the current project, that color file is read.  This
- *          allows the user to define their own color lookup tables
- *          for cell maps found in other mapsets.
- *
- *          Warning message is printed if the color file is
- *          missing or invalid.
- *********************************************************************/
+ * \author USACERL and many others
+ */
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -33,32 +23,35 @@ static int read_old_colors(FILE *, struct Colors *);
 
 
 /*!
- * \brief read map layer color table
+ * \brief Read raster map layer color table
  *
- * The color table for the raster map
- * <b>name</b> in the specified <b>mapset</b> is read into the
- * <b>colors</b> structure.
- * If the data layer has no color table, a default color table is generated and
- * 0 is returned. If there is an error reading the color table, a diagnostic
- * message is printed and -1 is returned. If the color table is read ok, 1 is
- * returned.
+ * The color table for the raster map <i>name</i> in the specified
+ * <i>mapset</i> is read into the <i>colors</i> structure. If the data
+ * layer has no color table, a default color table is generated and 0
+ * is returned. If there is an error reading the color table, a
+ * diagnostic message is printed and -1 is returned. If the color
+ * table is read ok, 1 is returned.
  *
- *  \param name
- *  \param mapset
- *  \param colors
- *  \return int
+ * This routine reads the rules from the color file. If the input
+ * raster map is is a floating-point map it calls
+ * G_mark_colors_as_fp().
+ *
+ *  Note: If a secondary color file for map name <i>name</i> exists in
+ *  the current project, that color file is read.  This allows the
+ *  user to define their own color lookup tables for cell maps found
+ *  in other mapsets.
+ *
+ *  Warning message is printed if the color file is
+ *  missing or invalid.
+ *
+ * \param name map name
+ * \param mapset mapset name
+ * \param[out] colors pointer to Colors structure
+ *
+ * \return -1 on error
+ * \return 0 if missing, but default colors generated
+ * \return 1 on success
  */
-
-
-/*!
- * \brief 
- *
- * This routine reads the rules from the color
- * file. If the input raster map is is a floating-point map it calls <tt>G_mark_colors_as_fp()</tt>.
- *
- *  \return int
- */
-
 int G_read_colors(const char *name, const char *mapset, struct Colors *colors)
 {
     int fp;
@@ -104,16 +97,16 @@ int G_read_colors(const char *name, const char *mapset, struct Colors *colors)
 		return 0;
 	    }
 	}
-	err = "missing";
+	err = _("missing");
 	break;
     case -1:
-	err = "invalid";
+	err = _("invalid");
 	break;
     default:
 	return 1;
     }
 
-    G_warning(_("color support for [%s] in mapset [%s] %s"), name, mapset,
+    G_warning(_("Color support for <%s@%s> %s"), name, mapset,
 	      err);
     return -1;
 }
@@ -303,9 +296,8 @@ static int read_new_colors(FILE * fd, struct Colors *colors)
 		G_add_color_rule((CELL) cat1, r1, g1, b1,
 				 (CELL) cat2, r2, g2, b2, colors);
 	}
-	/*
-	   fprintf (stderr, "adding rule %d=%.2lf %d %d %d  %d=%.2lf %d %d %d\n", cat1,val1,  r1, g1, b1, cat2, val2, r2, g2, b2);
-	 */
+	G_debug(3, "adding rule %d=%.2lf %d %d %d  %d=%.2lf %d %d %d",
+		cat1, val1,  r1, g1, b1, cat2, val2, r2, g2, b2);
     }
     return 1;
 }
@@ -380,19 +372,17 @@ static int read_old_colors(FILE * fd, struct Colors *colors)
     return 0;
 }
 
-
 /*!
- * \brief 
+ * \brief Mark colors as floating-point.
  *
- * Sets a flag in
- * the <em>colors</em> structure that indicates that these colors should only be
- * looked up using floating-point raster data (not integer data).
- * In particular if this flag is set, the routine <tt>G_get_colors_min_max()</tt> should return min=-255$^3$ and max=255$^3$.
+ * Sets a flag in the <i>colors</i> structure that indicates that
+ * these colors should only be looked up using floating-point raster
+ * data (not integer data). In particular if this flag is set, the
+ * routine G_get_colors_min_max() should return min=-255$^3$ and
+ * max=255$^3$.
  *
- *  \param colors
- *  \return int
+ * \param colors pointer to Colors structure
  */
-
 void G_mark_colors_as_fp(struct Colors *colors)
 {
     colors->is_float = 1;

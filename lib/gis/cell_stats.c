@@ -1,3 +1,16 @@
+/*!
+ * \file gis/cell_stats.c
+ *
+ * \brief GIS Library - Raster cell statistics
+ *
+ * (C) 2001-2009 GRASS Development Team
+ *
+ * This program is free software under the GNU General Public License 
+ * (>=v2). Read the file COPYING that comes with GRASS for details.
+ *
+ * \author Original author CERL
+ */
+
 #include <grass/gis.h>
 #include <stdlib.h>
 
@@ -11,26 +24,16 @@ static const int NCATS = 1 << SHIFT;
 static int next_node(struct Cell_stats *);
 static void init_node(NODE *, int, int);
 
-
 /*!
- * \brief initialize cell stats
+ * \brief Initialize cell stats
  *
- * This routine, which must be called first, initializes the Cell_stats
- * structure <b>s.</b>
- *
- *  \param s
- *  \return int
- */
-
-
-/*!
- * \brief 
+ * This routine, which must be called first, initializes the
+ * Cell_stats structure.
  *
  * Set the count for NULL-values to zero.
  *
- *  \return
+ * \param s pointer to Cell_stats structure
  */
-
 void G_init_cell_stats(struct Cell_stats *s)
 {
     s->N = 0;
@@ -39,29 +42,21 @@ void G_init_cell_stats(struct Cell_stats *s)
     s->null_data_count = 0;
 }
 
-
 /*!
- * \brief add data to cell stats
+ * \brief Sdd data to cell stats
  *
- * The <b>n</b> CELL values in the <b>data</b>
- * array are inserted (and counted) in the Cell_stats structure <b>s.</b>
+ * The <i>n</i> CELL values in the <i>data</i> array are inserted (and
+ * counted) in the Cell_stats structure.
  *
- *  \param data
- *  \param n
- *  \param s
- *  \return int
+ * Look for NULLs and update the NULL-value count.
+ *
+ * \param cell raster values
+ * \param n number of values
+ * \param s pointer to Cell_stats structure which holds cell stats info
+ *
+ * \return 1 on failure
+ * \return 0 on success
  */
-
-
-/*!
- * \brief 
- *
- * Look for NULLs and update the
- * NULL-value count.
- *
- *  \return int
- */
-
 int G_update_cell_stats(const CELL * cell, int n, struct Cell_stats *s)
 {
     CELL cat;
@@ -174,29 +169,22 @@ static void init_node(NODE * node, int idx, int offset)
 
 
 /*!
- * \brief random query of cell stats
+ * \brief Random query of cell stats
  *
- * This routine allows a random query of the
- * Cell_stats structure <b>s.</b>  The <b>count</b> associated with the
- * raster value <b>cat</b> is set. The routine returns 1 if <b>cat</b> was
- * found in the structure, 0 otherwise.
+ * This routine allows a random query of the Cell_stats structure. The
+ * <i>count</i> associated with the raster value <i>cat</i> is
+ * set. The routine returns 1 if <i>cat<i> was found in the
+ * structure, 0 otherwise.
  *
- *  \param cat
- *  \param count
- *  \param s
- *  \return int
+ * Allow finding the count for the NULL-value.
+ *
+ * \param cat raster value
+ * \param[out] count count
+ * \param s pointer to Cell_stats structure which holds cell stats info
+ *
+ * \return 1 if found
+ * \return 0 if not found
  */
-
-
-/*!
- * \brief 
- *
- * Allow finding the count for the
- * NULL-value
- *
- *  \return int
- */
-
 int G_find_cell_stat(CELL cat, long *count, const struct Cell_stats *s)
 {
     int q;
@@ -247,17 +235,16 @@ int G_find_cell_stat(CELL cat, long *count, const struct Cell_stats *s)
     return 0;
 }
 
-
 /*!
- * \brief reset/rewind cell stats
+ * \brief Reset/rewind cell stats
  *
- * The structure <b>s</b> is rewound (i.e., positioned at the first
+ * The structure <i>s</i> is rewound (i.e., positioned at the first
  * raster category) so that sorted sequential retrieval can begin.
  *
- *  \param s
- *  \return int
+ * \param s pointer to Cell_stats structure which holds cell stats info
+ *
+ * \return 0
  */
-
 int G_rewind_cell_stats(struct Cell_stats *s)
 {
     int q;
@@ -294,14 +281,12 @@ static int next_node(struct Cell_stats *s)
     return 1;
 }
 
-
 /*!
- * \brief retrieve sorted cell stats
+ * \brief Retrieve sorted cell stats
  *
- * Retrieves the next <b>cat,count</b>
- * combination from the structure <b>s.</b> Returns 0 if there are no more
- * items, non-zero if there are more.
- * For example:
+ * Retrieves the next <i>cat, count</i> combination from the
+ * structure. Returns 0 if there are no more items, non-zero if there
+ * are more. For example:
  * 
  \code
  struct Cell_stats s;
@@ -315,22 +300,15 @@ static int next_node(struct Cell_stats *s)
  fprintf(stdout, "%ld %ld\n", (long) cat, count);
  \endcode
  *
- *  \param cat
- *  \param count
- *  \param s
- *  \return int
- */
-
-
-/*!
- * \brief 
+ * Do not return a record for the NULL-value
  *
- * Do not return a record for the
- * NULL-value
+ * \param cat raster value
+ * \param[out] count
+ * \param s pointer to Cell_stats structure which holds cell stats info
  *
- *  \return int
+ * \return 0 if there are no more items
+ * \return non-zero if there are more
  */
-
 int G_next_cell_stat(CELL * cat, long *count, struct Cell_stats *s)
 {
     int idx;
@@ -377,34 +355,31 @@ int G_next_cell_stat(CELL * cat, long *count, struct Cell_stats *s)
 
 
 /*!
- * \brief 
+ * \brief Get number of null values.
  *
- * Get a number of null values from stats structure. Note: when reporting
- * values which appear in a map using G_next_cell_stats(), to get stats for
- * null, call G_get_stats_for_null_value() first, since
- * G_next_cell_stats() does not report stats for null.
+ * Get a number of null values from stats structure.
  *
- *  \param count
- *  \param s
- *  \return
+ * Note: when reporting values which appear in a map using
+ * G_next_cell_stats(), to get stats for null, call
+ * G_get_stats_for_null_value() first, since G_next_cell_stats() does
+ * not report stats for null.
+ *
+ * \param count count
+ * \param s pointer to Cell_stats structure which holds cell stats info
  */
-
 void G_get_stats_for_null_value(long *count, const struct Cell_stats *s)
 {
     *count = s->null_data_count;
 }
 
-
 /*!
- * \brief free cell stats
+ * \brief Free cell stats structure
  *
- * The memory associated with structure <b>s</b> is freed. This routine may be
- * called any time after calling<i>G_init_cell_stats.</i>
+ * The memory associated with structure <i>s</i> is freed. This
+ * routine may be called any time after calling G_init_cell_stats().
  *
- *  \param s
- *  \return
+ * \param s pointer to Cell_stats structure
  */
-
 void G_free_cell_stats(struct Cell_stats *s)
 {
     int i;
