@@ -34,6 +34,14 @@ Manager and opened for editing. "Select vector map" combobox in
 digitizer toolbar also allows switching easily between vector maps to be
 edited.
 
+The wxGUI vector digitizer draws all maps in the Layer Manager in the Map 
+Display window; in addition, the digitizer also recognizes a special 
+"background" vector map. This map is selected from the Layer Manager by 
+right-clicking on the map and selecting "Use as Background Map" from the
+contextual menu. The features of the background map may then be copied into
+the currently edited vector map using the "Copy features from (background) 
+vector map" button in the "Additional Tools" menu on the Digitzer Toolbar.
+
 <h3>DIGITIZER TOOLBAR</h3>
 
 <center>
@@ -146,10 +154,9 @@ edited.
   <dd>
     <ul>
       <li>Copy features from (background) map<br> Make identical copy of
-	selected vector features. If background vector map
-	('Settings->General->Background map') is given copy
-	features from background vector map, not from the currently
-	modified vector map.</li>
+	selected vector features. If a background vector map has been 
+	selected from the Layer Manager, copy features from background 
+	vector map, not from the currently modified vector map.</li>
       <li>Flip selected lines/boundaries<br> Flip direction of
 	selected linear features (lines or boundaries).</li>
       <li>Merge selected lines/boundaries<br> Merge (at least two)
