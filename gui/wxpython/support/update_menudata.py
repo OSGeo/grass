@@ -86,10 +86,14 @@ def updateData(data, modules):
         else:
             desc = modules[module]['desc']
         node.find('help').text = desc
-        if node.find('keywords') is not None:
-            node.find('keywords').text = ','.join(modules[module]['keywords'])
-        else:
+
+        if not modules[module].has_key('keywords'):
             grass.warning('%s: keywords missing' % module)
+        else:
+            if node.find('keywords') is None:
+                node.insert(2, etree.Element('keywords'))
+                grass.warning("Adding tag 'keywords' to '%s'" % module)
+            node.find('keywords').text = ','.join(modules[module]['keywords'])
         
 def writeData(data):
     """!Write updated menudata.xml"""
