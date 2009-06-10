@@ -35,6 +35,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     module->description = _("Update raster map statistics");
+    module->keywords = _("raster, statistics");
 
     parm.raster = G_define_standard_option(G_OPT_R_MAP);
 
