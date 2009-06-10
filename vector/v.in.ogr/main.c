@@ -1112,6 +1112,8 @@ int main(int argc, char *argv[])
 		      n_overlaps, nlayers + 1);
 	}
 
+	G_message("%s", separator);
+
 	Vect_hist_write(&Map, separator);
 	Vect_hist_write(&Map, "\n");
 	sprintf(buf, _("%d input polygons\n"), n_polygons);
@@ -1133,6 +1135,7 @@ int main(int argc, char *argv[])
 	G_message(_("Area without category: %G (%d areas)"), nocat_area,
 		  n_nocat);
 	Vect_hist_write(&Map, buf);
+	G_message("%s", separator);
     }
 
     /* needed?

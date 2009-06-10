@@ -384,22 +384,38 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 int split_line(struct Map_info *Map, int otype, struct line_pnts *Points, struct line_cats *Cats)
 {
     int i;
-    double dist = 0., dx, dy;
+    double dist = 0., seg_dist, dx, dy;
     struct line_pnts *OutPoints;
 
-    OutPoints = Vect_new_line_struct();
-    Vect_reset_line(OutPoints);
-    i = 0;
-    Vect_append_point(OutPoints, Points->x[i], Points->y[i], Points->z[i]);
+    /* don't write zero length boundaries */
+    Vect_line_prune(Points);
+    if (Points->n_points < 2)
+    	return 0;
 
-    for (i = 1; i < Points->n_points; i++) {
+    /* can't split boundaries with only 2 vertices */
+    if (Points->n_points == 2) {
+	Vect_write_line(Map, otype, Points, Cats);
+    	return 0;
+    }
+
+    OutPoints = Vect_new_line_struct();
+    Vect_append_point(OutPoints, Points->x[0], Points->y[0], Points->z[0]);
+    Vect_append_point(OutPoints, Points->x[1], Points->y[1], Points->z[1]);
+    dx = Points->x[1] - Points->x[0];
+    dy = Points->y[1] - Points->y[0];
+    dist = sqrt(dx * dx + dy * dy);
+
+    /* trying to keep line length smaller than split_distance
+     * alternative, less code: write line as soon as split_distance is exceeded */
+    for (i = 2; i < Points->n_points; i++) {
 	dx = Points->x[i] - Points->x[i - 1];
 	dy = Points->y[i] - Points->y[i - 1];
-	dist += sqrt(dx * dx + dy * dy);
+	seg_dist = sqrt(dx * dx + dy * dy);
+	dist += seg_dist;
 	if (dist > split_distance) {
 	    Vect_write_line(Map, otype, OutPoints, Cats);
 	    Vect_reset_line(OutPoints);
-	    dist = sqrt(dx * dx + dy * dy);
+	    dist = seg_dist;
 	    Vect_append_point(OutPoints, Points->x[i - 1], Points->y[i - 1], Points->z[i - 1]);
 	}
 	Vect_append_point(OutPoints, Points->x[i], Points->y[i], Points->z[i]);
@@ -407,7 +423,6 @@ int split_line(struct Map_info *Map, int otype, struct line_pnts *Points, struct
     Vect_write_line(Map, otype, OutPoints, Cats);
 
     Vect_destroy_line_struct(OutPoints);
-    /* G_free(OutPoints); */
 
     return 0;
 }
