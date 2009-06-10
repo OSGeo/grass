@@ -591,7 +591,7 @@
 	<separator />
 	<menuitem>
 	  <label>NVIZ (requires Tcl/Tk)</label>
-	  <help>nviz - Visualization and animation tool for GRASS data</help>
+	  <help>nviz - Visualization and animation tool for GRASS data.</help>
 	  <handler>self.OnMenuCmd</handler>
 	  <command>nviz</command>
 	</menuitem>
@@ -1133,19 +1133,6 @@
 	    </menuitem>
 	    <separator />
 	    <menuitem>
-	      <label>SIMWE Overland flow modeling</label>
-	      <help>Overland flow hydrologic simulation using path sampling method (SIMWE)</help>
-	      <handler>self.OnMenuCmd</handler>
-	      <command>r.sim.water</command>
-	    </menuitem>
-	    <menuitem>
-	      <label>SIMWE Sediment flux modeling</label>
-	      <help>Sediment transport and erosion/deposition simulation using path sampling method (SIMWE)</help>
-	      <handler>self.OnMenuCmd</handler>
-	      <command>r.sim.sediment</command>
-	    </menuitem>
-	    <separator />
-	    <menuitem>
 	      <label>Topographic index map</label>
 	      <help>Creates topographic index [ln(a/tan(beta))] map from elevation map.</help>
 	      <keywords>raster</keywords>
@@ -1194,30 +1181,6 @@
 	      <help>Watershed basin creation program.</help>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.water.outlet</command>
-	    </menuitem>
-	  </items>
-	</menu>
-	<menu>
-	  <label>Landscape structure modeling</label>
-	  <items>
-
-	    <menuitem>
-	      <label>Analyze landscape</label>
-	      <help>Contains a set of measures for attributes, diversity, texture, juxtaposition, and edge.</help>
-	      <handler>self.OnMenuCmd</handler>
-	      <command>r.le.pixel</command>
-	    </menuitem>
-	    <menuitem>
-	      <label>Analyze patches</label>
-	      <help>Calculates attribute, patch size, core (interior) size, shape, fractal dimension, and perimeter measures for sets of patches in a landscape.</help>
-	      <handler>self.OnMenuCmd</handler>
-	      <command>r.le.patch</command>
-	    </menuitem>
-	    <menuitem>
-	      <label>Output</label>
-	      <help>Displays the boundary of each r.le patch and shows how the boundary is traced, displays the attribute, size, perimeter and shape indices for each patch and saves the data in an output file.</help>
-	      <handler>self.OnMenuCmd</handler>
-	      <command>r.le.trace</command>
 	    </menuitem>
 	  </items>
 	</menu>
@@ -1395,12 +1358,6 @@
               <handler>self.RulesCmd</handler>
 	      <command>r.recode</command>
 	    </menuitem>
-	    <menuitem>
-	      <label>Recode using rules file</label>
-	      <help>r.recode.rules - Use ascii rules file to recode categories in raster map</help>
-	      <handler>self.OnMenuCmd</handler>
-	      <command>r.recode.file</command>
-	    </menuitem>
 	    <separator />
 	    <menuitem>
 	      <label>Rescale</label>
@@ -1506,12 +1463,6 @@
 	  <label>Interpolate surfaces</label>
 	  <items>
 	    <menuitem>
-	      <label>Bilinear from raster points</label>
-	      <help>Bilinear interpolation utility for raster map layers.</help>
-	      <handler>self.OnMenuCmd</handler>
-	      <command>r.bilinear</command>
-	    </menuitem>
-	    <menuitem>
 	      <label>Bilinear and bicubic from vector points</label>
 	      <help>Bicubic or bilinear spline interpolation with Tykhonov regularization.</help>
 	      <keywords>vector,interpolation</keywords>
@@ -1597,12 +1548,6 @@
 	      <keywords>raster</keywords>
               <handler>self.OnMenuCmd</handler>
 	      <command>r.describe</command>
-	    </menuitem>
-	    <menuitem>
-	      <label>Sum category values</label>
-	      <help>Sums up the raster cell values.</help>
-	      <handler>self.OnMenuCmd</handler>
-	      <command>r.sum</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Sum area by raster map and category</label>
@@ -2371,12 +2316,6 @@
 	      <keywords>imagery</keywords>
               <handler>self.OnMenuCmd</handler>
 	      <command>i.zc</command>
-	    </menuitem>
-	    <menuitem>
-	      <label>Matrix/convolving filter</label>
-	      <help>Raster map matrix filter.</help>
-	      <handler>self.OnMenuCmd</handler>
-	      <command>r.mfilter.fp</command>
 	    </menuitem>
 	  </items>
 	</menu>

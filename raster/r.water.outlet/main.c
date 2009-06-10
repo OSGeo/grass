@@ -61,7 +61,8 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     module->description = _("Watershed basin creation program.");
-
+    module->keywords = _("raster");
+    
     opt1 = G_define_option();
     opt1->key = "drainage";
     opt1->type = TYPE_STRING;
@@ -138,7 +139,7 @@ int main(int argc, char *argv[])
     for (row = 0; row < nrows; row++) {
 	G_get_map_row(drain_fd, cell_buf, row);
 	for (col = 0; col < ncols; col++) {
-	    if (cell_buf[col] == 0)
+	    if (cell_buf[col] == 0) 
 		total--;
 	    drain_ptrs[SEG_INDEX(pt_seg, row, col)] = cell_buf[col];
 	}

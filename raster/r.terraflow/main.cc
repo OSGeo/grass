@@ -450,6 +450,7 @@ main(int argc, char *argv[]) {
 #ifdef ELEV_FLOAT
   module->description = _("Flow computation for massive grids (Float version).");
 #endif
+  module->keywords = _("raster");
 
   /* read user options; fill in global <opt> */  
   opt = (userOptions*)malloc(sizeof(userOptions));
