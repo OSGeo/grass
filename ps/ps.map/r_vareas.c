@@ -34,7 +34,7 @@ static char *help[] = {
 int read_vareas(char *name, char *mapset)
 {
     char fullname[GNAME_MAX + GMAPSET_MAX + 5];
-    char buf[1024];
+    char buf[1024], eps_file[GPATH_MAX];
     char *key, *data;
     double width;
     int itmp, vec;
@@ -172,7 +172,17 @@ int read_vareas(char *name, char *mapset)
 
 	if (KEY("pat") || KEY("pattern")) {
 	    G_chop(data);
-	    vector.layer[vec].pat = G_store(data);
+
+	    /* expand "$GISBASE" if present */
+	    if (strncmp(data, "$GISBASE", 8) != 0)
+		strcpy(eps_file, data);
+	    else {
+		strcpy(eps_file, G_gisbase());
+		data += 8;
+		strcat(eps_file, data);
+	    }
+
+	    vector.layer[vec].pat = G_store(eps_file);
 	    continue;
 	}
 
