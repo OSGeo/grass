@@ -61,7 +61,7 @@ def updateData(data, modules):
     ignore =  [ 'v.type_wrapper.py',
                 'vcolors' ]
     
-
+    menu_modules = []
     for node in data.tree.getiterator():
         if node.tag != 'menuitem':
             continue
@@ -95,6 +95,12 @@ def updateData(data, modules):
                 grass.warning("Adding tag 'keywords' to '%s'" % module)
             node.find('keywords').text = ','.join(modules[module]['keywords'])
         
+        menu_modules.append(item['command'])
+
+    for module in modules.keys():
+        if module not in menu_modules:
+            grass.warning("'%s' not available from the menu" % module)
+    
 def writeData(data):
     """!Write updated menudata.xml"""
     file = os.path.join('..', 'xml', 'menudata.xml')
