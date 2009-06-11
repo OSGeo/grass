@@ -1528,183 +1528,109 @@ Initializes the Quant struct.
 Frees any memory allocated in Quant structure and re-initializes the
 structure by calling G_quant_init().
 
-<P>
-int G_quant_truncate(struct Quant *q) sets the quant for <EM>q</EM>
-  rules to perform simple truncation on floats.
+ - G_quant_truncate()
 
-<P>
-int G_quant_truncate(struct Quant *q) sets the quant for <EM>q</EM>
-  rules to perform simple rounding on floats.
+Sets the quant rules to perform simple truncation on floats.
 
-<P>
-int G_quant_organize_fp_lookup(struct Quant *quant) Organizes
-  fp_lookup table for faster (logarithmic) lookup time
-  G_quant_organize_fp_lookup() creates a list of min and max for each quant
-  rule, sorts this list, and stores the pointer to quant rule that should be
-  used inbetween any 2 numbers in this list Also it stores extreme points for 2
-  infinite rules, if exist After the call to G_quant_organize_fp_lookup() 
-  instead of linearly searching through list of rules to find a rule to apply,
-  quant lookup will perform a binary search to find an interval containing
-  floating point value, and then use the rule associated with this interval.
-  when the value doesn't fall within any interval, check for the infinite
-  rules.
+ - G_quant_truncate()
 
-<P>
-int G_quant_add_rule(struct Quant *q, DCELL dmin, DCELL dmax, CELL
-  cmin, CELL cmax) Add the rule that the floating-point range <EM>[dmin,dmin]</EM>
-   produces an integer in the range <EM>[cmin,cmax]</EM> by linear interpolation.
+Sets the quant rules to perform simple rounding on floats.
 
-<P>
-Rules that are added later have higher precedence when searching.
+ - G_quant_organize_fp_lookup()
 
-<P>
-If any of of <EM>dmin</EM>, <EM>dmax</EM> <EM>cmin</EM>, or <EM>cmax</EM> is the
-  NULL-value, this rule is not added and 0 is returned. Otherwise return 1. if
-  the fp_lookup is organized, destroy it.
+Organizes fp_lookup table for faster (logarithmic) lookup time
+G_quant_organize_fp_lookup() creates a list of min and max for each
+quant rule, sorts this list, and stores the pointer to quant rule that
+should be used inbetween any 2 numbers in this list Also it stores
+extreme points for 2 infinite rules, if exist After the call to
+G_quant_organize_fp_lookup() instead of linearly searching through
+list of rules to find a rule to apply, quant lookup will perform a
+binary search to find an interval containing floating point value, and
+then use the rule associated with this interval. When the value
+doesn't fall within any interval, check for the infinite rules.
 
-<P>
-int G_quant_set_positive_infinite_rule(struct Quant *q, DCELL
-  dmax, CELL c) Set the rule that values greater than or equal to <EM>dmax</EM> 
-  produce the integer <EM>c</EM>.  If <EM>dmax</EM> or <EM>c</EM> is the
-  NULL-value, return 0 and don't set the rule. Otherwise return 1.
+ - G_quant_add_rule()
 
-<P>
-This rule has lower precedence than rules added with <TT>G_quant_add_rule()</TT>.
+Add the rule that the floating-point range produces an integer in the
+range by linear interpolation. Rules that are added later have higher
+precedence when searching. If any of of the values is the NULL-value,
+this rule is not added and 0 is returned. Otherwise return 1. if the
+fp_lookup is organized, destroy it.
 
-<P>
-int G_quant_get_positive_infinite_rule(struct Quant *q, DCELL
-  *dmax, CELL *c) Sets <EM>dmax</EM> and <EM>c</EM> to the positive
-  <TT>"infinite"</TT> rule in <EM>q</EM> if there is one and returns 1. If there
-  is no such rule, it just returns 0. if the fp_lookup is organized, updates
-  infinite limits.
+ - G_quant_set_positive_infinite_rule()
+ - G_quant_get_positive_infinite_rule()
 
-<P>
-int G_quant_set_negative_infinite_rule(struct Quant *q, DCELL
-  dmin, CELL c) Set the rule that values less than or equal to <EM>dmin</EM>
-  produce the integer <EM>c</EM>. If <EM>dmin</EM> or <EM>c</EM> is the NULL-value,
-  return 0 and don't set the rule. Otherwise return 1. if the fp_lookup is
-  organized, updates infinite limits.
+This rule has lower precedence than rules added with G_quant_add_rule().
 
-<P>
-This rule has lower precedence than rules added with <TT>  G_quant_add_rule()</TT>.
+ - G_quant_set_negative_infinite_rule()
 
-<P>
-int G_quant_get_negative_infinite_rule(struct Quant *q, DCELL
-  *dmin, CELL *c) Sets <EM>dmin</EM> and <EM>c</EM> to the negative
-  <TT>"infinite"</TT> rule in <EM>q</EM> if there is one and returns 1. If there
-  is no such rule, it just returns 0.
+This rule has lower precedence than rules added with G_quant_add_rule().
 
-<P>
-int G_quant_get_limits(struct Quant *q, DCELL *dmin, DCELL *dmax,
-  CELL *cmin, CELL *cmax) Extracts the minimum and maximum floating-point
-  and integer values from all the rules (except the <TT>"infinite"</TT> rules) 
-  in <EM>q</EM> into <EM>dmin</EM>, <EM>dmax</EM>, <EM>cmin</EM>, and <EM>cmax</EM>. Returns 1
-  if there are any explicit rules. If there are no explicit rules, (this
-  includes cases when q is set to truncate or round map) , it returns 0 and sets
-  <EM>dmin</EM>, <EM>dmax</EM>, <EM>cmin</EM>, and <EM>cmax</EM> to NULL.
+ - G_quant_get_negative_infinite_rule()
 
-<P>
-int G_quant_nrules(struct Quant *q) Returns the number of rules
-  in <EM>q</EM>, excluding the negative and positive <TT>"infinite"</TT> rules.
+ - G_quant_get_limits()
 
-<P>
-int G_quant_get_rule(struct Quant *q, int n, DCELL *dmin, DCELL
-  *dmax, CELL *cmin, CELL *cmax) Get the <EM>n</EM>th rule from <EM>q</EM>. If 0
-  &lt;= <EM>n</EM> &lt; nrules(q) , extract the rule and return 1.
-  Otherwise return 0. This function can't be used to get the
-  <TT>"infinite"</TT> rules.
+Extracts the minimum and maximum floating-point and integer values
+from all the rules.
 
-<P>
-The order of the rules returned by increasing <EM>n</EM> is the order in which
-  the rules are applied when quantizing a value - the first rule applicable is
-  used.
+ - G_quant_nrules()
 
-<P>
-CELL G_quant_get_cell_value(struct Quant *q, DCELL value) 
-  Returns a CELL category for the floating-point <EM>value</EM> based on the
-  quantization rules in <EM>q</EM>. The first rule found that applies is used.
-  The rules are searched in the reverse order they are added to <EM>q</EM>.  If no
-  rule is found, the <EM>value</EM> is first tested against the negative infinite
-  rule, and finally against the positive infinite rule. if none of these rules
-  apply, the NULL-value is returned.
+Returns the number of rules, excluding the negative and positive
+"infinite" rules.
 
-<P>
-<B>NOTE.</B> See G_quant_organize_fp_lookup() for details on how the
-  values are looked up from fp_lookup table when it is active. (Right now
-  fp_lookup is automatically organized during the first call to
-  G_quant_get_cell_value() 
+ - G_quant_get_rule()
 
-<P>
-int G_quant_perform_d(struct Quant *q, DCELL *dcell, CELL *cell,
-  int n) Performs a quantization of the <EM>n</EM> <TT>DCELL</TT> values in the
-  <EM>dcell</EM> array and puts the results into the <EM>cell</EM> array.
+The order of the rules returned by increasing <i>n</i> is the order
+in which the rules are applied when quantizing a value - the first
+rule applicable is used.
 
-<P>
-int G_quant_perform_f(struct Quant *q, FCELL *fcell, CELL *cell,
-  int n) Performs a quantization of the <EM>n</EM> <TT>FCELL</TT> values in the
-  <EM>fcell</EM> array and puts the results into the <EM>cell</EM> array.
+ - G_quant_get_cell_value()
 
-<P>
+ - G_quant_perform_d()
+
+ - G_quant_perform_f()
+
 These next two functions are convenience functions to allow applications to
 easily create quantization rules other than the defaults:
 
-<P>
-int G_quantize_fp_map(char *name, CELL cmin, CELL cmax) Writes
-  the <TT>f_quant</TT> file for the raster map <EM>name</EM> with one rule. The rule
-  is generated using the floating-point range in <TT>f_range</TT> producing the
-  integer range [<EM>cmin,cmax</EM>].
+ - G_quantize_fp_map()
 
-<P>
-int G_quantize_fp_map_range(char *name, DCELL dmin, DCELL dmax,
-  CELL cmin, CELL cmax) Writes the <TT>f_quant</TT> file for the raster map
-  <EM>name</EM> with one rule. The rule is generated using the floating-point
-  range [<EM>dmin,dmax</EM>] and the integer range
-  [<EM>min,max</EM>].
+Writes the <tt>f_quant</tt> file for the raster map.
 
-<P>
-This routine differs from the one above in that the application controls the
-  floating-point range. For example, r.slope.aspect will use this routine to
-  quantize the slope map from [0.0, 90.0] to [0,
-  90] even if the range of slopes is not 0-90. The aspect map would be
-  quantized from [0.0, 360.0] to [0, 360].
+ - G_quantize_fp_map_range()
 
-<P>
+Writes the <tt>f_quant</TT> file for the raster map with one rule. 
 
 \section Categories_Labeling_Functions Categories Labeling Functions (new and upgraded)
 
 \subsection Upgraded_Categories_structure Upgraded Categories structure
 
+All the new programs which are using Categories structure directly
+have to be modified to use API functions to update and retrieve info
+from Categories structure. Both new and old API function can be used,
+since old functions still have exact same functionality (even though
+internally they are implemented very differently). New function names
+end with raster_cats(); old function names end with _cats().
 
-<P>
-All the new programs which are using Categories structure directly have to be
-modified to use API functions to update and retrieve info from Categories
-structure. Both new and old API function can be used, since old functions still
-have exact same functionality (even though internally they are implemented very
-differently) .  New function names end with raster_cats() ; old function names
-end with _cats() .
-<BR>
-<P>
-We made sure that all old fields in Categories structure are either missing in
-new Categories structure or have exactly the same meaning. We did it so that
-the modules using Categories structure directly either do not compile with new
-gis library or work exactly the same as bnefore.  A programmer might want to
-read the data in a floating point map in a way that each cell value stores
-index of it's category label and data range.  The way to do it is to call
-G_set_quant_rules(fd, &amp;pcats-&gt;q) after openning the map.
-<BR>
-<P>
-This is helpful when trying to collect statistics (how many cells of each
-category are in the map. (although there is another new mechanism to collect
-such stats - see G_mark_raster_cats() ) . Another reason to get a category
-index instead of fp values is that this index will be the FID into GRASS-DBMS
-link. Also he can use G_get_ith_raster_cat() to get the category
-information for each cell using this index.
-<BR>
-<P>
-Here is the new Categories structure defined in <TT>"gis.h"</TT>:
+We made sure that all old fields in Categories structure are either
+missing in new Categories structure or have exactly the same
+meaning. We did it so that the modules using Categories structure
+directly either do not compile with new gis library or work exactly
+the same as bnefore.  A programmer might want to read the data in a
+floating point map in a way that each cell value stores index of it's
+category label and data range. The way to do it is to call
+G_set_quant_rules() after openning the map.
 
-<P>
-\verbatim
+This is helpful when trying to collect statistics (how many cells of
+each category are in the map. (although there is another new mechanism
+to collect such stats - see G_mark_raster_cats()) . Another reason to
+get a category index instead of fp values is that this index will be
+the FID into GRASS-DBMS link. Also he can use G_get_ith_raster_cat()
+to get the category information for each cell using this index.
+
+Here is the new Categories structure defined in gis.h:
+
+\code
 struct Categories
 {
     CELL ncats            ;   /* total number of categories              */
@@ -1724,348 +1650,202 @@ struct Categories
     int nalloc;
     int last_marked_rule  ;
 } ;
-
-\endverbatim
-<P>
+\endcode
 
 \section Changes_to_the_cats_file Changes to the <TT>cats</TT> file
 
-
-<P>
 The format of explicit label entries is the same for integer maps.
-<PRE>
+
+\verbatim
     cat:description
-</PRE>
+\endverbatim
+
 In addition label entries of new format is supported for floating point maps.
-<PRE>
+\verbatim
     val:descr (where val is a floating point number) 
-</PRE>
+\endverbatim
 or
-<PRE>
+\verbatim
     val1:val2:descr (where val1, val2 is a floating point range) 
-</PRE>
+\endverbatim
 
-<P>
-Internally the labels are stored for fp ranges of data. However when the cats
-file is written, all the decimal zeros are stripped so that integer values
-appear as integers in the file. Also if values are the same, only 1 value is
-written (i.e. first format) .
-<BR>
-<P>
+Internally the labels are stored for fp ranges of data. However when
+the cats file is written, all the decimal zeros are stripped so that
+integer values appear as integers in the file. Also if values are the
+same, only 1 value is written (i.e. first format).
+
 This way even though the old cats files will be processed differently
-internally, the user or application programmer will not notice this difference
-as long as the proper api is used and the elements of Categories structure are
-not accessed directly without API calls.
-
-<P>
+internally, the user or application programmer will not notice this
+difference as long as the proper api is used and the elements of
+Categories structure are not accessed directly without API calls.
 
 \section Range_functions Range functions (new and upgraded)
 
-
-<P>
-
 \section New_Functions_to_read_write_access_and_modify_Categories_structure New Functions to read/write access and modify Categories structure
 
-<P>
-int G_read_raster_cats(char *name, *mapset, struct Categories
-  *pcats) Is the same as existing G_read_cats() 
+ - G_read_raster_cats()
 
-<P>
-int G_copy_raster_cats(struct Categories *pcats_to, struct
-  Categories*pcats_from) Allocates NEW space for quant rules and labels n
-  <EM>pcats_to</EM> and copies all info from <EM>pcats_from</EM> cats to <EM>pcats_to</EM> cats.
+Is the same as existing G_read_cats().
 
-<P>
-returns:
+ - G_copy_raster_cats()
 
-<P>
-0 if successful
+ - G_get_raster_cat()
+ - G_get_c_raster_cat()
+ - G_get_f_raster_cat()
+ - G_get_d_raster_cat()
 
-<P>
--1 on fail
+Returns pointer to a string describing category.
 
-<P>
-char * G_get_raster_cat(void *val, struct Categories *pcats,
-  RASTER_MAP_TYPE data_type) given a raster value <EM>val</EM> of type <EM>data_type</EM> 
-  Returns pointer to a string describing category.
+ - G_set_raster_cat()
+ - G_set_c_raster_cat()
+ - G_set_f_raster_cat()
+ - G_set_d_raster_cat()
 
-<P>
-char * G_get_c_raster_cat(CELL *val, struct Categories *pcats) 
-  given a CELL value <EM>val</EM> Returns pointer to a string describing
-  category.
+Adds the label for range in category structure.
 
-<P>
-char * G_get_d_raster_cat(DCELL *val, struct Categories
-  *pcats) given a DCELL value <EM>val</EM> Returns pointer to a string
-  describing category.
+ - G_number_of_raster_cats()
 
-<P>
-char * G_get_f_raster_cat(FCELL *val, struct Categories
-  *pcats) given a FCELL value <EM>val</EM> Returns pointer to a string
-  describing category.
+Returns the number of labels. DO NOT use G_number_of_cats() (it
+returns max cat number).
 
-<P>
-int G_set_raster_cat(void *rast1, void *rast2, struct Categories
-  *pcats, RASTER_MAP_TYPE data_type) Adds the label for range <EM>rast1</EM> through 
-  <EM>rast2</EM> in category structure <EM>pcats</EM>.
+ - G_get_ith_raster_cat()
+ - G_get_ith_c_raster_cat()
+ - G_get_ith_f_raster_cat()
+ - G_get_ith_d_raster_cat()
 
-<P>
-int G_set_c_raster_cat(CELL *rast1, CELL *rast2, struct Categories
-  *pcats) Adds the label for range <EM>rast1</EM> through <EM>rast2</EM> in
-  category structure <EM>pcats</EM>.
+Returns i-th description and i-th data range from the list of category
+descriptions with corresponding data ranges.
 
-<P>
-int G_set_f_raster_cat(FCELL *rast1, FCELL *rast2, struct
-  Categories *pcats) Adds the label for range <EM>rast1</EM> through <EM>rast2</EM>
-in category structure <EM>pcats</EM>.
+ - G_get_raster_cats_title()
 
-<P>
-int G_set_d_raster_cat(DCELL *rast1, DCELL *rast2, struct
-  Categories *pcats) Adds the label for range <EM>rast1</EM> through <EM>rast2</EM>
-in category structure <EM>pcats</EM>.
+Returns pointer to a string with title.
 
-<P>
-int * G_number_of_raster_cats (pcats) Returns the number of
-  labels. DO NOT use G_number_of_cats() (it returns max cat number) 
+ - G_unmark_raster_cats()
 
-<P>
-char * G_get_ith_raster_cat(struct Categories *pcats, int i, void
-  *rast1, void *rast2, RASTER_MAP_TYPE data_type) Returns i-th
-  description and i-th data range from the list of category descriptions with
-  corresponding data ranges. Stores end points of data interval in <EM>rast1</EM>
-  and <EM>rast2</EM> (after converting them to <EM>data_type</EM>.
+Sets marks for all categories to 0. This initializes Categories
+structure for subsequest calls to G_mark_raster_cats () for each row
+of data, where non-zero mark for i-th label means that some of the
+cells in rast_row are labeled with i-th label and fall into i-th data
+range.
 
-<P>
-char * G_get_ith_c_raster_cat(struct Categories *pcats, int i,
-  CELL *rast1, CELL *rast2) Returns i-th description and i-th data range
-  from the list of category descriptions with corresponding data ranges. end
-  points of data interval in <EM>rast1</EM> and <EM>rast2</EM>.
+These marks help determine from the Categories structure which labels
+were used and which weren't.
 
-<P>
-char * G_get_ith_f_raster_cat(struct Categories *pcats, int i,
-  FCELL *rast1, FCELL *rast2) Returns i-th description and i-th data range
-  from the list of category descriptions with corresponding data ranges. end
-  points of data interval in <EM>rast1</EM> and <EM>rast2</EM>.
+ - G_get_next_marked_raster_cat()
+ - G_get_next_marked_c_raster_cat()
+ - G_get_next_marked_f_raster_cat()
+ - G_get_next_marked_d_raster_cat()
 
-<P>
-char * G_get_ith_d_raster_cat(struct Categories *pcats, int i,
-  DCELL *rast1, DCELL *rast2) Returns i-th description and i-th data range
-  from the list of category descriptions with corresponding data ranges. end
-  points of data interval in <EM>rast1</EM> and <EM>rast2</EM>.
+Finds the next label and corresponding data range in the list of
+marked categories. The category (label + data range) is marked by
+G_mark_raster_cats(). End points of the data range are converted to
+raster type and returned. The number of times value from i-th
+cat. data range appeared so far is returned in stats. See
+G_unmark_raster_cats(), G_rewind_raster_cats() and G_mark_raster_cats
+().
 
-<P>
-char * G_get_raster_cats_title(struct Categories
-  *pcats) Returns pointer to a string with title.
+ - G_mark_raster_cats()
+ - G_mark_c_raster_cats()
+ - G_mark_f_raster_cats()
+ - G_mark_d_raster_cats()
 
-<P>
-int G_unmark_raster_cats(struct Categories *pcats) Sets marks
-  for all categories to 0. This initializes Categories structure for subsequest
-  calls to G_mark_raster_cats (rast_row,...) for each row of data, where
-  non-zero mark for i-th label means that some of the cells in rast_row are
-  labeled with i-th label and fall into i-th data range.
+Looks up the category label for each raster value in the raster row
+(row of raster cell value) and updates the marks for labels found.
 
-<P>
-These marks help determine from the Categories structure which labels were
-  used and which weren't.
+Note: non-zero mark for i-th label stores the number of of raster
+cells read so far which are labeled with i-th label and fall into i-th
+data range.
 
-<P>
-int G_get_next_marked_raster_cat(struct Categories *pcats, void
-  *rast1, void *rast2, long *stats, RASTER_MAP_TYPE data_type) Finds the
-  next label and corresponding data range in the list of marked categories. The
-  category (label + data range) is marked by G_mark_raster_cats () . End
-  points of the data range are converted to <EM>data_type</EM> and returned in
-  rast1, rast2. the number of times value from i-th cat. data range appeared so
-  far is returned in stats. See G_unmark_raster_cats() ,
-  G_rewind_raster_cats() and G_mark_raster_cats () .
+ - G_rewind_raster_cats()
 
-<P>
-int G_get_next_marked_c_raster_cat(struct Categories *pcats, CELL
-  *rast1, CELL *rast2, long *stats) Finds the next label and corresponding
-  data range in the list of marked categories. The category (label + data
-  range) is marked by G_mark_raster_cats () . End points of the data range
-  are converted to <EM>data_type</EM> and returned in rast1, rast2. the number of
-  times value from i-th cat. data range appeared so far is returned in stats.
-  See G_unmark_raster_cats() , G_rewind_raster_cats() and
-  G_mark_raster_cats () .
+After call to this function G_get_next_marked_raster_cat() returns the
+first marked cat label.
 
-<P>
-int G_get_next_marked_f_raster_cat(struct Categories *pcats,
-  FCELL *rast1, FCELL *rast2, long *stats) Finds the next label and
-  corresponding data range in the list of marked categories. The category
-  (label + data range) is marked by G_mark_raster_cats () . End points of the
-  data range are converted to <EM>data_type</EM> and returned in rast1, rast2.
-  the number of times value from i-th cat. data range appeared so far is
-  returned in stats. See G_unmark_raster_cats() , G_rewind_raster_cats() 
-  and G_mark_raster_cats () .
+ - G_init_raster_cats()
 
-<P>
-int G_get_next_marked_d_raster_cat(struct Categories *pcats,
-  DCELL *rast1, DCELL *rast2, long *stats) Finds the next label and
-  corresponding data range in the list of marked categories. The category
-  (label + data range) is marked by G_mark_raster_cats () . End points of the
-  data range are converted to <EM>data_type</EM> and returned in rast1, rast2.
-  the number of times value from i-th cat. data range appeared so far is
-  returned in stats. See G_unmark_raster_cats() , G_rewind_raster_cats() 
-  and G_mark_raster_cats () .
+Same as existing G_init_raster_cats() only ncats argument is
+missign. ncats has no meaning in new Categories structure and only
+stores (int) largets data value for backwards compatibility.
 
-<P>
-int G_mark_raster_cats(void *rast_row, int ncols, struct
-  Categories *pcats, RASTER_MAP_TYPE data_type) Looks up the category
-  label for each raster value in the <EM>rast_row</EM> (row of raster cell value) 
-  and updates the marks for labels found.
+ - G_set_raster_cats_fmt()
 
-<P>
-NOTE: non-zero mark for i-th label stores the number of of raster cells read
-  so far which are labeled with i-th label and fall into i-th data range.
+Same as existing G_set_cats_fmt().
 
-<P>
-int G_mark_c_raster_cats(CELL *rast_row, int ncols, struct
-  Categories *pcats) Looks up the category label for each raster value in
-  the <EM>rast_row</EM> and updates the marks for labels found.
+ - G_set_raster_cats_title()
 
-<P>
-NOTE: non-zero mark for i-th label stores the number of of raster cells read
-  so far which are labeled with i-th label and fall into i-th data range.
+Same as existing G_set_cats_title().
 
-<P>
-int G_mark_f_raster_cats(FCELL *rast_row, int ncols, struct
-  Categories *pcats) Looks up the category label for each raster value in
-  the <EM>rast_row</EM> and updates the marks for labels found.
+ - G_write_raster_cats()
 
-<P>
-NOTE: non-zero mark for i-th label stores the number of of raster cells read
-  so far which are labeled with i-th label and fall into i-th data range.
+Same as existing G_write_cats().
 
-<P>
-int G_mark_d_raster_cats(DCELL *rast_row, int ncols, struct
-  Categories *pcats) Looks up the category label for each raster value in
-  the <EM>rast_row</EM> and updates the marks for labels found.
+ - G_free_raster_cats()
 
-<P>
-NOTE: non-zero mark for i-th label stores the number of of raster cells read
-  so far which are labeled with i-th label and fall into i-th data range.
-
-<P>
-int G_rewind_raster_cats(struct Categories *pcats) after call to
-  this function G_get_next_marked_raster_cat() returns the first marked
-  cat label.
-
-<P>
-int G_init_raster_cats(char *title, struct Categories
-  *pcats) Same as existing G_init_raster_cats() only ncats argument is
-  missign. ncats has no meaning in new Categories structure and only stores
-  (int) largets data value for backwards compatibility.
-
-<P>
-int G_set_raster_cats_fmt(char *fmt, float m1, a1, m2, a2, struct
-  Categories*pcats) Same as existing G_set_cats_fmt() 
-
-<P>
-int G_set_raster_cats_title(char *title, struct Categories
-  *pcats) Same as existing G_set_cats_title() 
-
-<P>
-int G_write_raster_cats(char *name, struct Categories
-  *pcats) Same as existing G_write_cats() 
-
-<P>
-int G_free_raster_cats(struct Categories *pcats) Same as
-  existing G_free_cats() 
-
-<P>
+Same as existing G_free_cats().
 
 \section Library_Functions_that_are_Deprecated Library Functions that are Deprecated
 
+These functions are deprecated, since they imply that the application
+that uses them has not been upgraded to handle NULL-values and should
+be eliminated from GRASS code.
 
-<P>
-These functions are deprecated, since they imply that the application that uses
-them has not been upgraded to handle NULL-values and should be eliminated from
-GRASS code.
+ - G_get_map_row()
 
-<P>
+To be replaced by G_get_c_raster_row().
 
-<UL>
-<LI><TT>G_get_map_row()</TT>:
+ - G_get_map_row_nomask()
 
-<P>
-To be replaced by <TT>G_get_c_raster_row()</TT>.
-</LI>
-<LI><TT>G_get_map_row_nomask()</TT>:
+To be replaced by G_get_c_raster_row_nomask().
 
-<P>
-To be replaced by <TT>G_get_c_raster_row_nomask()</TT>.
-</LI>
-<LI><TT>G_put_map_row()</TT>:
+ - G_put_map_row()
 
-<P>
-To be replaced by <TT>G_put_c_raster_row()</TT>.
-</LI>
-</UL>
+To be replaced by G_put_c_raster_row().
 
+These functions are deprecated, since they can not be upgraded to
+support NULL-values, and should be eliminated from GRASS code.
 
-<P>
-These functions are deprecated, since they can not be upgraded to support
-NULL-values, and should be eliminated from GRASS code.
+ - G_open_map_new_random()
+ - G_put_map_row_random()
 
-<P>
-
-<UL>
-<LI><TT>G_open_map_new_random()</TT>
-</LI>
-<LI><TT>G_put_map_row_random()</TT>
-</LI>
-</UL>
-
-<P>
-<B>Also, no support for random writing of floating-point rasters will be provided.</B>
-
-<P>
+<b>Also, no support for random writing of floating-point rasters will be provided.</b>
 
 \section Guidelines_for_upgrading_GRASS_4_x_Modules Guidelines for upgrading GRASS 4.x Modules
 
+ - Modules that process raster maps as <em>continuous</em> data should
+read raster maps as floating-point. Modules that process raster maps
+as <em>nominal</em> data should read raster maps as integer.
 
-<P>
+<em>Exception:</em> Modules that process raster colors or the modules
+which report on raster categories labels should either always read the
+maps as floating-point, or read the maps as integer if the map is
+integer and floating-point if the map is floating-point.
 
-<UL>
-<LI>Modules that process raster maps as <EM>continuous</EM> data should read
-  raster maps as floating-point. Modules that process raster maps as <EM>nominal</EM> data
-  should read raster maps as integer.
-<BR>
+ - The quantization of floating-point to integer should NOT change the
+   color table. The color lookup should have its own separate
+   quantization.
 
-<P>
-<EM>Exception:</EM> Modules that process raster colors or the modules which
-  report on raster categories labels should either always read the maps as
-  floating-point, or read the maps as integer if the map is integer and
-  floating-point if the map is floating-point.
-</LI>
-<LI>The quantization of floating-point to integer should NOT change the color
-  table. The color lookup should have its own separate quantization.
-</LI>
-<LI>The quantization of floating-point to integer should NOT change the
-  Categories table. The Categories structure should have its own separate
-  quantization.
-</LI>
-<LI>Modules that read or write floating-point raster maps should use <TT>double</TT>
-(<TT>DCELL</TT>) arrays instead of <TT>float</TT> (<TT>FCELL</TT>) arrays.
-</LI>
-<LI>Modues should process NULL values in a well defined (consistent) manner.
-  Modules that processed zero as the pseudo NULL-value should be changed to use
-  the true NULL-value for this and process zero as normal value.
-</LI>
-<LI>Modules should process non-NULL values as normal numbers and not treat
-  any particular numbers (e.g. zero) as special.
-</LI>
-</UL>
+ - The quantization of floating-point to integer should NOT change the
+   Categories table. The Categories structure should have its own
+   separate quantization.
 
-<P>
+ - Modules that read or write floating-point raster maps should use
+<tt>double</tt> (<tt>DCELL</tt>) arrays instead of <tt>float</tt>
+(<tt>FCELL</tt>) arrays.
+
+ - Modues should process NULL values in a well defined (consistent)
+   manner. Modules that processed zero as the pseudo NULL-value should
+   be changed to use the true NULL-value for this and process zero as
+   normal value.
+
+ - Modules should process non-NULL values as normal numbers and not
+   treat any particular numbers (e.g. zero) as special.
 
 \section Important_hints_for_upgrades_to_raster_modules Important hints for upgrades to raster modules
 
+In general modules that use G_get_map_row(). Should use
+G_get_c_raster_row() instead.
 
-<P>
-In general modules that use <TT>G_get_map_row()</TT>. should use <TT>  G_get_c_raster_row()</TT> instead.
-
-<P>
-Modules that use <TT>G_put_map_row()</TT>. should use <TT>  G_put_c_raster_row()</TT> instead.
+Modules that use G_put_map_row(). Should use G_put_c_raster_row()
+instead.
 
 */
