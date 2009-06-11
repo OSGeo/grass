@@ -89,6 +89,7 @@ fi
 
 ### X11 stuff
 
+x11=""
 if [ "@X11@" ] ; then
 
 # start X11 if not running
@@ -100,6 +101,9 @@ if [ -d "/Applications/Utilities/X11.app" ] ; then
 		if [ ! "`ps -axc | grep 'X11$'`" ] ; then
 			open /Applications/Utilities/X11.app
 		fi
+		x11="tig"
+	else
+		x11="leo"
 	fi
 fi
 
@@ -125,30 +129,68 @@ fi # X11
 
 ### end X11 block
 
-# set PYTHONPATH for GUI when bundling wxpython
+# for bundling wxpython
+# change GRASS_WXBUNDLED and pyver_want here from bundle.make, or manually
 GRASS_WXBUNDLED=
 export GRASS_WXBUNDLED
+pyver_want="2.5"
 if [ -d "$GISBASE/etc/wxpython" ] && [ "$GRASS_WXBUNDLED" = "1" ] ; then
-if [ "$PYTHONPATH" ] ; then
-	PYTHONPATH="$GISBASE/etc/wxpython:$PYTHONPATH"
-else
-	PYTHONPATH="$GISBASE/etc/wxpython"
+# make sure python version used matches what wxpython wants
+py=""
+# did user set GRASS_PYTHON already? check it
+if [ "$GRASS_PYTHON" ] ; then
+	pyver=`$GRASS_PYTHON -V 2>&1 | grep " $pyver_want"`
+	if [ "$pyver" ] ; then
+		py="$GRASS_PYTHON"
+	fi
+fi # GRASS_PYTHON
+# try in shell path
+if [ ! "$py" ] ; then
+	py=`type -p python`
+	if [ "$py" ] ; then
+		pyver=`python -V 2>&1 | grep " $pyver_want"`
+		if [ ! "$pyver" ] ; then
+			py=""
+		fi
+	fi
 fi
-export PYTHONPATH
+# try standard framework
+if [ ! "$py" ] ; then
+	py="/Library/Frameworks/Python.framework/Versions/$pyver_want/bin/python"
+	if [ ! -x "$py" ] ; then
+		py=""
+	fi
+fi
+# try system (may be the same as in shell path)
+if [ ! "$py" ] ; then
+	py="/usr/bin/python"
+	pyver=`$py -V 2>&1 | grep " $pyver_want"`
+	if [ ! "$pyver" ] ; then
+		py=""
+	fi
 fi
 
-# if gisrc has text startup, switch back to Terminal (gotta duplicate some init.sh stuff)
-# eventually, when TclTk optional, can run appropriate apps per GUI here (ie X11)
-GISRCRC="$HOME/.grassrc7"
+if [ "$py" ] ; then
+	echo "$pyver found."
+	GRASS_PYTHON="$py"
+else
+	echo "Warning: No Python $pyver_want found, needed by wxPython."
+	echo "         The wxPython GUI may not work properly."
+fi
+fi # bundled wx
+
+# if grassrc has text startup, switch back to Terminal (gotta duplicate some init.sh stuff)
+# only applies to Tiger - Leopard X11 opens automatically as needed
+GRASSRC="$HOME/.grassrc7"
 if [ ! "$GRASS_GUI" ] ; then
-	if [ -f "$GISRCRC" ] ; then
-		GRASS_GUI=`awk '/GRASS_GUI/ {print $2}' "$GISRCRC"`
+	if [ -f "$GRASSRC" ] ; then
+		GRASS_GUI=`awk '/GRASS_GUI/ {print $2}' "$GRASSRC"`
 	fi
 	if [ ! "$GRASS_GUI" ] ; then
-		GRASS_GUI="tcltk"
+		GRASS_GUI="wxpython"
 	fi
 fi
-if [ "$GRASS_GUI" = "text" ] ; then
+if [ "$GRASS_GUI" = "text" ] && [ "$x11" = "tig" ] ; then
 	osascript -e "tell application \"$USERTERM\" to activate"
 fi
 
