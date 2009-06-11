@@ -142,11 +142,6 @@ def color_resolve(color):
             label = _('Select Color')
     return (rgb, label)
 
-
-def normalize_whitespace(text):
-    """!Remove redundant whitespace from a string"""
-    return string.join( string.split(text), ' ')
-
 def text_beautify( someString , width=70):
     """
     Make really long texts shorter, clean up whitespace and
@@ -154,10 +149,10 @@ def text_beautify( someString , width=70):
     """
     if width > 0:
         return escape_ampersand( string.strip(
-                os.linesep.join( textwrap.wrap( normalize_whitespace(someString), width ) ),
+                os.linesep.join( textwrap.wrap( utils.normalize_whitespace(someString), width ) ),
                 ".,;:" ) )
     else:
-        return escape_ampersand( string.strip(normalize_whitespace(someString ), ".,;:" ))
+        return escape_ampersand( string.strip(utils.normalize_whitespace(someString ), ".,;:" ))
     
 def escape_ampersand(text):
     """!Escapes ampersands with additional ampersand for GUI"""
@@ -498,7 +493,7 @@ class processTask():
         """!Get node text"""
         p = node.find(tag)
         if p is not None:
-            return normalize_whitespace(p.text)
+            return utils.normalize_whitespace(p.text)
         
         return default
     

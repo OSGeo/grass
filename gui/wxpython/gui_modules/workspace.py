@@ -1,4 +1,4 @@
-"""
+"""!
 @package workspace.py
 
 @brief Open/save workspace definition file
@@ -25,321 +25,332 @@ import wx
 # from xml.parsers.xmlproc import xmlproc
 # from xml.parsers.xmlproc import xmlval
 # from xml.parsers.xmlproc import xmldtd
-import xml.sax
-import xml.sax.handler
-HandlerBase=xml.sax.handler.ContentHandler
-from xml.sax import make_parser
+try:
+    import xml.etree.ElementTree as etree
+except ImportError:
+    import elementtree.ElementTree as etree # Python <= 2.4
 
+import utils
 from preferences import globalSettings as UserSettings
 
-class ProcessWorkspaceFile(HandlerBase):
-    """
-    A SAX handler for the GXW XML file, as
-    defined in grass-gxw.dtd.
-    """
-    def __init__(self):
-        self.inTag = {}
-        for tag in ('gxw', 'layer', 'task', 'parameter',
-                    'flag', 'value', 'group', 'display',
-                    'layer_manager',
-                    'nviz',
-                    # surface
-                    'surface', 'attribute', 'draw', 'resolution',
-                    'wire_color', 'position', 'x', 'y', 'z',
-                    # vector lines
-                    'vlines', 'color', 'width', 'mode',
-                    'map', 'height',
-                    # vector points
-                    'vpoints', 'size'):
-            self.inTag[tag] = False
-
+class ProcessWorkspaceFile():
+    def __init__(self, tree):
+        """!A ElementTree handler for the GXW XML file, as defined in
+        grass-gxw.dtd.
+        """
+        self.tree = tree
+        self.root = self.tree.getroot()
+        
         #
         # layer manager properties
         #
         self.layerManager = {}
-        self.layerManager['pos'] = None # window position
+        self.layerManager['pos']  = None # window position
         self.layerManager['size'] = None # window size
-
+        
+        #
         # list of mapdisplays
+        #
         self.displays = []
+        #
         # list of map layers
+        #
         self.layers = []
-
-        self.cmd    = []
+        
         self.displayIndex = -1 # first display has index '0'
-
+        
+        self.__processFile()
+        
     def __filterValue(self, value):
-        """!Translate value"""
+        """!Filter value
+        
+        @param value
+        """
         value = value.replace('&lt;', '<')
         value = value.replace('&gt;', '>')
         
         return value
-    
-    def startElement(self, name, attrs):
-        if name == 'display':
-            self.displayIndex += 1
 
-            # window position and size
-            posAttr = attrs.get('dim', '')
+    def __getNodeText(self, node, tag, default = ''):
+        """!Get node text"""
+        p = node.find(tag)
+        if p is not None:
+            return utils.normalize_whitespace(p.text)
+        
+        return default
+    
+    def __processFile(self):
+        """!Process workspace file"""
+        #
+        # layer manager
+        #
+        node_lm = self.root.find('layer_manager')
+        if node_lm is not None:
+            posAttr = node_lm.get('dim', '')
             if posAttr:
                 posVal = map(int, posAttr.split(','))
                 try:
-                    pos = (posVal[0], posVal[1])
+                    self.layerManager['pos']  = (posVal[0], posVal[1])
+                    self.layerManager['size'] = (posVal[2], posVal[3])
+                except:
+                    pass
+        
+        #
+        # displays
+        #
+        for display in self.root.findall('display'):
+            self.displayIndex += 1
+            
+            # window position and size
+            posAttr = display.get('dim', '')
+            if posAttr:
+                posVal = map(int, posAttr.split(','))
+                try:
+                    pos  = (posVal[0], posVal[1])
                     size = (posVal[2], posVal[3])
                 except:
-                    pos = None
+                    pos  = None
                     size = None
             else:
-                pos = None
+                pos  = None
                 size = None
-
-            extentAttr = attrs.get('extent', '')
+            
+            extentAttr = display.get('extent', '')
             if extentAttr:
                 # w, s, e, n
                 extent = map(float, extentAttr.split(','))
             else:
                 extent = None
-
-            self.displays.append({
-                "render"         : bool(int(attrs.get('render', "0"))),
-                "mode"           : int(attrs.get('mode', 0)),
-                "showCompExtent" : bool(int(attrs.get('showCompExtent', "0"))),
-                "pos"            : pos,
-                "size"           : size,
-                "extent"         : extent,
-                "constrainRes"   : bool(int(attrs.get('constrainRes', "0")))})
             
-        elif name == 'group':
-            self.groupName    = attrs.get('name', None)
-            self.groupChecked = attrs.get('checked', None)
-            self.layers.append({
-                "type"    : 'group',
-                "name"    : self.groupName,
-                "checked" : int(self.groupChecked),
-                "opacity" : None,
-                "cmd"     : None,
-                "group"   : self.inTag['group'],
-                "display" : self.displayIndex,
-                "nviz"    : None})
+            self.displays.append( {
+                    "render"         : bool(int(display.get('render', "0"))),
+                    "mode"           : int(display.get('mode', 0)),
+                    "showCompExtent" : bool(int(display.get('showCompExtent', "0"))),
+                    "pos"            : pos,
+                    "size"           : size,
+                    "extent"         : extent,
+                    "constrainRes"   : bool(int(display.get('constrainRes', "0"))) } )
+            
+            self.__processLayers(display)
 
-        elif name == 'layer':
-            self.layerType     = attrs.get('type', None)
-            self.layerName     = attrs.get('name', None)
-            self.layerChecked  = attrs.get('checked', None)
-            self.layerOpacity  = attrs.get('opacity', None)
-            self.layerSelected = False
-            self.layerNviz     = None
-            self.cmd = []
+    def __processLayers(self, node):
+        """!Process layers/groups of selected display
 
-        elif name == 'task':
-            name = attrs.get('name', None)
-            self.cmd.append(name)
+        @param node display tree node
+        """
+        for item in node.getchildren():
+            if item.tag == 'group':
+                # -> group
+                self.layers.append( {
+                        "type"    : 'group',
+                        "name"    : item.get('name', ''),
+                        "checked" : bool(int(item.get('checked', "0"))),
+                        "opacity" : None,
+                        "cmd"     : None,
+                        "group"   : False, #### self.inTag['group'], # ???
+                        "display" : self.displayIndex,
+                        "nviz"    : None})
+                
+            elif item.tag == 'layer':
+                cmd, selected, nviz = self.__processLayer(item)
+                
+                self.layers.append( {
+                        "type"     : item.get('type', None),
+                        "name"     : item.get('name', None),
+                        "checked"  : bool(int(item.get('checked', "0"))),
+                        "opacity"  : float(item.get('opacity', '1.0')),
+                        "cmd"      : cmd,
+                        "group"    : False, #### self.inTag['group'], # ???
+                        "display"  : self.displayIndex,
+                        "selected" : selected,
+                        "nviz"     : nviz } )
+        
+    def __processLayer(self, layer):
+        """!Process layer item
 
-        elif name == 'parameter':
-            self.parameterName = attrs.get('name', None)
-
-        elif name in ('value', 'x', 'y', 'z', 'map'):
-            self.value = ''
-
-        elif name == 'flag':
-            name = attrs.get('name', None)
-            self.cmd.append('-' + name)
-
-        elif name == 'selected':
-            if self.inTag['layer']:
-                self.layerSelected = True;
-
-        elif name == 'layer_manager':
-            posAttr = attrs.get('dim', '')
-            if posAttr:
-                posVal = map(int, posAttr.split(','))
-                try:
-                    self.layerManager['pos'] = (posVal[0], posVal[1])
-                    self.layerManager['size'] = (posVal[2], posVal[3])
-                except:
-                    pass
-            else:
-                pass
+        @param layer tree node
+        """
+        cmd = list()
+        
+        #
+        # layer attributes (task)
+        #
+        node_task = layer.find('task')
+        cmd.append(node_task.get('name', "unknown"))
+        
+        # flags
+        flags = ''
+        for p in node_task.findall('flag'):
+            flags += p.get('name', '')
+        cmd.append('-' + flags)
+        
+        # parameters
+        for p in node_task.findall('parameter'):
+            cmd.append('%s=%s' % (p.get('name', ''),
+                                  self.__filterValue(self.__getNodeText(p, 'value'))))
+        
+        if layer.find('selected') is not None:
+            selected = True
+        else:
+            selected = False
 
         #
-        # Nviz section
+        # Nviz (3D settings)
         #
-        elif name == 'nviz':
-            # init nviz layer properties
-            self.layerNviz = {}
-            if self.layerType == 'raster':
-                self.layerNviz['surface'] = {}
-                for sec in ('attribute', 'draw', 'mask', 'position'):
-                    self.layerNviz['surface'][sec] = {}
-            elif self.layerType == 'vector':
-                self.layerNviz['vector'] = {}
+        node_nviz = layer.find('nviz')
+        if node_nviz is not None:
+            nviz = self.__processLayerNviz(node_nviz)
+        else:
+            nviz = None
+        
+        return (cmd, selected, nviz)
+
+    def __processLayerNviz(self, node_nviz):
+        """!Process 3D layer settings
+
+        @param node_nviz nviz node
+        """
+        # init nviz layer properties
+        nviz = {}
+        node = node_nviz.find('surface')
+        if node: # -> raster
+            nviz['surface'] = {}
+            for sec in ('attribute', 'draw', 'mask', 'position'):
+                nviz['surface'][sec] = {}
+        else:
+            node = node_nviz.find('vector')
+            if node: # -> vector
+                nviz['vector'] = {}
                 for sec in ('lines', 'points'):
-                    self.layerNviz['vector'][sec] = {}
-
-        elif name == 'attribute':
-            if self.inTag['nviz'] and self.inTag['surface']:
-                tagName = str(name)
-                attrbName = str(attrs.get('name', ''))
-                self.layerNviz['surface'][tagName][attrbName] = {}
-                if attrs.get('map', '0') == '0':
-                    self.layerNviz['surface'][tagName][attrbName]['map'] = False
+                    nviz['vector'][sec] = {}
+        
+        if nviz.has_key('surface'):
+            # attributes
+            for attrb in node.find_all('attributes'):
+                tagName = str(attrb.tag)
+                attrbName = attrb.get('name', '')
+                self.nviz['surface'][tagName][attrbName] = {}
+                if attrb.get('map', '0') == '0':
+                    self.nviz['surface'][tagName][attrbName]['map'] = False
                 else:
-                    self.layerNviz['surface'][tagName][attrbName]['map'] = True
+                    self.nviz['surface'][tagName][attrbName]['map'] = True
+                    
+                self.refAttribute = self.nviz['surface'][tagName][attrbName]
 
-                self.refAttribute = self.layerNviz['surface'][tagName][attrbName]
-        
-        elif name == 'draw':
-            if self.inTag['nviz'] and self.inTag['surface']:
-                tagName = str(name)
-                self.layerNviz['surface'][tagName]['all'] = False
-                self.layerNviz['surface'][tagName]['mode'] = {}
-                self.layerNviz['surface'][tagName]['mode']['value'] = -1 # to be calculated
-                self.layerNviz['surface'][tagName]['mode']['desc'] = {}
-                self.layerNviz['surface'][tagName]['mode']['desc']['shading'] = \
+            # draw
+            node_draw = node.find('draw')
+            if node_draw is not None:
+                tagName = str(node_draw.tag)
+                nviz['surface'][tagName]['all'] = False
+                nviz['surface'][tagName]['mode'] = {}
+                nviz['surface'][tagName]['mode']['value'] = -1 # to be calculated
+                nviz['surface'][tagName]['mode']['desc'] = {}
+                nviz['surface'][tagName]['mode']['desc']['shading'] = \
                     str(attrs.get('shading', ''))
-                self.layerNviz['surface'][tagName]['mode']['desc']['style'] = \
+                nviz['surface'][tagName]['mode']['desc']['style'] = \
                     str(attrs.get('style', ''))
-                self.layerNviz['surface'][tagName]['mode']['desc']['mode'] = \
+                nviz['surface'][tagName]['mode']['desc']['mode'] = \
                     str(attrs.get('mode', ''))
-
-        elif name == 'resolution':
-            if self.inTag['nviz'] and self.inTag['surface']:
-                self.resolutionType = str(attrs.get('type', ''))
-                if not self.layerNviz['surface']['draw'].has_key(str(name)):
-                    self.layerNviz['surface']['draw'][str(name)] = {}
-
-        elif name == 'position':
-            if self.inTag['nviz'] and inTag['surface']:
-                self.layerNviz['surface']['position'] = {}
+                
+                for node_pos in node_draw.findall('resolution'):
+                    self.resolutionType = str(node_pos.get('type', ''))
+                    if not nviz['surface']['draw'].has_key('reaolution'):
+                        nviz['surface']['draw']['resolution'] = {}
+                    
+            # position
+            node_pos = node.find('position')
+            if node_pos is not None:
+                self.nviz['surface']['position'] = {}
         
-        elif name == 'mode':
-            if self.inTag['nviz']:
-                if self.inTag['vlines']:
-                    self.layerNviz['vector']['lines']['mode'] = {}
-                    self.layerNviz['vector']['lines']['mode']['type'] = str(attrs.get('type', ''))
-                    self.layerNviz['vector']['lines']['mode']['surface'] = ''
-                elif self.inTag['vpoints']:
-                    self.layerNviz['vector']['points']['mode'] = {}
-                    self.layerNviz['vector']['points']['mode']['type'] = str(attrs.get('type', ''))
-                    self.layerNviz['vector']['points']['mode']['surface'] = ''
-
-        elif name == 'vpoints':
-            if self.inTag['nviz']:
-                marker = str(attrs.get('marker', ''))
+        elif nviz.has_key('vector'):
+            # vpoints
+            node_vpoints = node.find('vpoints')
+            if node_vpoints is not None:
+                marker = str(node_vpoints.get('marker', ''))
                 markerId = list(UserSettings.Get(group='nviz', key='vector',
                                                  subkey=['points', 'marker'], internal=True)).index(marker)
-                self.layerNviz['vector']['points']['marker'] = markerId
-        
-        self.inTag[name] = True
-        
-    def endElement(self, name):
-        if name == 'group':
-            self.groupName = self.groupChecked = None
-
-        elif name == 'layer':
-            self.layers.append({
-                    "type"     : self.layerType,
-                    "name"     : self.layerName,
-                    "checked"  : int(self.layerChecked),
-                    "opacity"  : 1.0,
-                    "cmd"      : None,
-                    "group"    : self.inTag['group'],
-                    "display"  : self.displayIndex,
-                    "selected" : self.layerSelected,
-                    "nviz"     : self.layerNviz})
+                nviz['vector']['points']['marker'] = markerId
+                
+                node_mode = node.find('mode')
+                if node_mode is not None:
+                    nviz['vector']['points']['mode'] = {}
+                    nviz['vector']['points']['mode']['type'] = str(node_mode.get('type', ''))
+                    nviz['vector']['points']['mode']['surface'] = ''
             
-            if self.layerOpacity:
-                self.layers[-1]["opacity"] = float(self.layerOpacity)
-            if self.cmd:
-                self.layers[-1]["cmd"] = self.cmd
-            
-            self.layerType = self.layerName = self.Checked = \
-                self.Opacity = self.cmd = None
+            # vlines
+            node_vlines = node.find('vlines')
+            if node_vlines is not None:
+                node_mode = node.find('mode')
+                if node_mode is not None:
+                    nviz['vector']['lines']['mode'] = {}
+                    nviz['vector']['lines']['mode']['type'] = str(node_mode.get('type', ''))
+                    nviz['vector']['lines']['mode']['surface'] = ''
 
-        elif name == 'parameter':
-            self.cmd.append('%s=%s' % (self.parameterName,
-                                       self.__filterValue(self.value)))
-            self.parameterName = self.value = None
+#         elif name == 'attribute':
+#             if self.inTag['nviz'] and self.inTag['surface']:
+#                 try:
+#                     self.refAttribute['value'] = int(self.value)
+#                 except ValueError:
+#                     try:
+#                         self.refAttribute['value'] = float(self.value)
+#                     except ValueError:
+#                         self.refAttribute['value'] = str(self.value)
 
-        #
-        # Nviz section
-        #
-        elif name == 'attribute':
-            if self.inTag['nviz'] and self.inTag['surface']:
-                try:
-                    self.refAttribute['value'] = int(self.value)
-                except ValueError:
-                    try:
-                        self.refAttribute['value'] = float(self.value)
-                    except ValueError:
-                        self.refAttribute['value'] = str(self.value)
+#         elif name == 'resolution':
+#             if self.inTag['nviz'] and self.inTag['surface']:
+#                 self.layerNviz['surface']['draw']['resolution'][self.resolutionType] = int(self.value)
+#                 del self.resolutionType
 
-        elif name == 'resolution':
-            if self.inTag['nviz'] and self.inTag['surface']:
-                self.layerNviz['surface']['draw']['resolution'][self.resolutionType] = int(self.value)
-                del self.resolutionType
+#         elif name == 'wire_color':
+#             if self.inTag['nviz'] and self.inTag['surface']:
+#                 self.layerNviz['surface']['draw']['wire-color'] = {}
+#                 self.layerNviz['surface']['draw']['wire-color']['value'] = str(self.value)
 
-        elif name == 'wire_color':
-            if self.inTag['nviz'] and self.inTag['surface']:
-                self.layerNviz['surface']['draw']['wire-color'] = {}
-                self.layerNviz['surface']['draw']['wire-color']['value'] = str(self.value)
+#         elif name == 'x':
+#             if self.inTag['nviz'] and self.inTag['surface']:
+#                 self.layerNviz['surface']['position']['x'] = int(self.value)
 
-        elif name == 'x':
-            if self.inTag['nviz'] and self.inTag['surface']:
-                self.layerNviz['surface']['position']['x'] = int(self.value)
+#         elif name == 'y':
+#             if self.inTag['nviz'] and self.inTag['surface']:
+#                 self.layerNviz['surface']['position']['y'] = int(self.value)
 
-        elif name == 'y':
-            if self.inTag['nviz'] and self.inTag['surface']:
-                self.layerNviz['surface']['position']['y'] = int(self.value)
-
-        elif name == 'z':
-            if self.inTag['nviz'] and self.inTag['surface']:
-                self.layerNviz['surface']['position']['z'] = int(self.value)
+#         elif name == 'z':
+#             if self.inTag['nviz'] and self.inTag['surface']:
+#                 self.layerNviz['surface']['position']['z'] = int(self.value)
         
-        elif name == 'color':
-            if self.inTag['nviz']:
-                if self.inTag['vlines']:
-                    self.layerNviz['vector']['lines']['color'] = str(self.value)
-                elif self.inTag['vpoints']:
-                    self.layerNviz['vector']['points']['color'] = str(self.value)
+#         elif name == 'color':
+#             if self.inTag['nviz']:
+#                 if self.inTag['vlines']:
+#                     self.layerNviz['vector']['lines']['color'] = str(self.value)
+#                 elif self.inTag['vpoints']:
+#                     self.layerNviz['vector']['points']['color'] = str(self.value)
                     
-        elif name == 'width':
-            if self.inTag['nviz']:
-                if self.inTag['vlines']:
-                    self.layerNviz['vector']['lines']['width'] = int(self.value)
-                elif self.inTag['vpoints']:
-                    self.layerNviz['vector']['points']['width'] = int(self.value)
+#         elif name == 'width':
+#             if self.inTag['nviz']:
+#                 if self.inTag['vlines']:
+#                     self.layerNviz['vector']['lines']['width'] = int(self.value)
+#                 elif self.inTag['vpoints']:
+#                     self.layerNviz['vector']['points']['width'] = int(self.value)
 
-        elif name == 'height':
-            if self.inTag['nviz']:
-                if self.inTag['vlines']:
-                    self.layerNviz['vector']['lines']['height'] = int(self.value)
-                elif self.inTag['vpoints']:
-                    self.layerNviz['vector']['points']['height'] = int(self.value)
+#         elif name == 'height':
+#             if self.inTag['nviz']:
+#                 if self.inTag['vlines']:
+#                     self.layerNviz['vector']['lines']['height'] = int(self.value)
+#                 elif self.inTag['vpoints']:
+#                     self.layerNviz['vector']['points']['height'] = int(self.value)
         
-        elif name == 'size':
-            if self.inTag['nviz'] and self.inTag['vpoints']:
-                self.layerNviz['vector']['points']['size'] = int(self.value)
+#         elif name == 'size':
+#             if self.inTag['nviz'] and self.inTag['vpoints']:
+#                 self.layerNviz['vector']['points']['size'] = int(self.value)
 
-        elif name == 'map':
-            if self.inTag['nviz']:
-                if self.inTag['vlines']:
-                    self.layerNviz['vector']['lines']['mode']['surface'] = str(self.value)
-                elif self.inTag['vpoints']:
-                    self.layerNviz['vector']['points']['mode']['surface'] = str(self.value)
+#         elif name == 'map':
+#             if self.inTag['nviz']:
+#                 if self.inTag['vlines']:
+#                     self.layerNviz['vector']['lines']['mode']['surface'] = str(self.value)
+#                 elif self.inTag['vpoints']:
+#                     self.layerNviz['vector']['points']['mode']['surface'] = str(self.value)
 
-        self.inTag[name] = False
-
-    def characters(self, ch):
-        self.my_characters(ch)
-
-    def my_characters(self, ch):
-        if self.inTag['value'] or \
-                self.inTag['x'] or \
-                self.inTag['y'] or \
-                self.inTag['z'] or \
-                self.inTag['map']:
-            self.value += ch
+        return nviz
 
 class WriteWorkspaceFile(object):
     """!Generic class for writing workspace file"""

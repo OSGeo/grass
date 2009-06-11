@@ -17,6 +17,7 @@ for details.
 import os
 import sys
 import platform
+import string
 
 import globalvar
 grassPath = os.path.join(globalvar.ETCDIR, "python")
@@ -30,6 +31,10 @@ except:
     compatPath = os.path.join(globalvar.ETCWXDIR, "compat")
     sys.path.append(compatPath)
     import subprocess
+
+def normalize_whitespace(text):
+    """!Remove redundant whitespace from a string"""
+    return string.join( string.split(text), ' ')
 
 def GetTempfile(pref=None):
     """

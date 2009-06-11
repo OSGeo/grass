@@ -34,8 +34,10 @@
 <!ATTLIST display  render	   (0 | 1) #IMPLIED>
 <!ATTLIST display  mode            (0 | 1 | 2 | 3 | 4 | 5 | 6) #IMPLIED>
 <!ATTLIST display  showCompExtent  (0 | 1) #IMPLIED>
+<!ATTLIST display  constrainRes    (0 | 1) #IMPLIED>
 <!-- window dimenstion (x, y (ur), width, heigth -->
 <!ATTLIST display  dim             CDATA   #IMPLIED>
+<!ATTLIST display  extent          CDATA   #IMPLIED>
 
 <!--    group of map layers
 -->
