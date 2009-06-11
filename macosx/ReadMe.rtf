@@ -204,14 +204,6 @@ For OSX 10.5, you can also build for 64bit (all processors except the first Inte
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 
 \f0\fs24 \cf0 \
-Due to a small configure issue in FFMPEG, you may just have to build 32+64bit for one processor.  ie:\
-\
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li180\fi-180\ql\qnatural\pardirnatural
-
-\f1\fs20 \cf0 -arch i386 -arch x86_64
-\f0\fs24 \
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
-\cf0 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 \cf0 \ul Optimization\ulnone \
 \
@@ -282,12 +274,11 @@ If you want ffmpeg support (see build instructions below), add this:\
 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li180\fi-180\ql\qnatural\pardirnatural
 
-\f1\fs20 \cf0 --with-ffmpeg --with-ffmpeg-includes=/usr/local/include/ffmpeg --with-ffmpeg-libs=/usr/local/lib
+\f1\fs20 \cf0 --with-ffmpeg --with-ffmpeg-includes="/usr/local/include /usr/local/include/libavcodec /usr/local/include/libavdevice /usr/local/include/libavformat /usr/local/include/libavutil /usr/local/include/libswscale" --with-ffmpeg-libs=/usr/local/lib
 \f0\fs24 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 \cf0 \
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
-\cf0 For cairo support (see build instructions at {\field{\*\fldinst{HYPERLINK "http://www.kyngchaos.com/macosx:build:cairo"}}{\fldrslt kyngchaos.com}}), add this:\
+For cairo support (see build instructions at {\field{\*\fldinst{HYPERLINK "http://www.kyngchaos.com/macosx:build:cairo"}}{\fldrslt kyngchaos.com}}), add this:\
 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li180\fi-180\ql\qnatural\pardirnatural
 
@@ -296,7 +287,7 @@ If you want ffmpeg support (see build instructions below), add this:\
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 \cf0 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
-\cf0 \ul \ulc0 Leopard Notes\
+\cf0 \ul Leopard Notes\
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 \cf0 \ulnone \
 \'95 Linker Problem\
@@ -349,10 +340,8 @@ There is NO need to bundle
 \
 - GPSBabel (CLI)\
 - NetPBM programs (just what is used in GRASS)\
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
-\cf0 - other support CLI programs for script modules\
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
-\cf0 - ffmpeg libraries\
+- other support CLI programs for script modules\
+- ffmpeg libraries\
 - Postgres library (libpq)\
 \
 Things to leave out:\
@@ -398,7 +387,7 @@ modbuild deprecated (not installed now).  Makefile changes in progress to allow 
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 
 \b0\fs24 \cf0 \
-The simplest way to install Tcl/Tk Aqua is to download {\field{\*\fldinst{HYPERLINK "http://www.activestate.com/Products/activetcl/"}}{\fldrslt ActiveTcl}} from ActiveState.  This will give you a universal 32bit Tcl/Tk Aqua.  \ul Make sure to run the 
+The simplest way to install Tcl/Tk Aqua is to download {\field{\*\fldinst{HYPERLINK "http://www.activestate.com/Products/activetcl/"}}{\fldrslt ActiveTcl}} from ActiveState.  This will give you a universal 32bit Tcl/Tk Aqua (64bit is currently not possible).  \ul Make sure to run the 
 \i convenience
 \i0  commands below.\ulnone \
 \
@@ -422,34 +411,10 @@ sudo ln -sf /Library/Frameworks/Tk.framework/Versions/8.5/libtkstub8.5.a /usr/lo
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 
 \b0\fs24 \cf0 \
-A universal GPSBabel is also possible to build without too much fuss.  First, you need the GPSBabel source from {\field{\*\fldinst{HYPERLINK "http://www.gpsbabel.org/"}}{\fldrslt www.gpsbabel.org}}.  If you need support for USB GPS units, get the libusb 0.1 source from {\field{\*\fldinst{HYPERLINK "http://libusb.sourceforge.net/"}}{\fldrslt libusb.sourceforge.net}}.  It needs X11 for libexpat.  Do not get the new libusb 1.0 beta, that has a completely API and GPSBabel doesn't support it yet, as far as I can make out.\
-\
-For libusb, unzip the source and cd to the source folder in a Terminal.  Then:\
-\
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li180\fi-180\ql\qnatural\pardirnatural
-
-\f1\fs20 \cf0 export MACOSX_DEPLOYMENT_TARGET=10.4\
-./configure --disable-shared --disable-dependency-tracking CXXFLAGS="-Os -arch ppc -arch i386 -isysroot /Developer/SDKs/MacOSX10.4u.sdk" CFLAGS="-Os -arch ppc -arch i386 -isysroot /Developer/SDKs/MacOSX10.4u.sdk" LDFLAGS="-arch ppc -arch i386 -isysroot /Developer/SDKs/MacOSX10.4u.sdk"\
-make\
-sudo make install\
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
-
-\f0\fs24 \cf0 \
-Libusb will be installed in /usr/local.  GPSBabel uses the static library, so the shared libusb is not needed, and you might have problems building libusb as shared.\
-\
-For GPSBabel, unzip the source and cd to the source folder in a Terminal.  Then:\
-\
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li180\fi-180\ql\qnatural\pardirnatural
-
-\f1\fs20 \cf0 export MACOSX_DEPLOYMENT_TARGET=10.4\
-./configure --disable-dependency-tracking --with-zlib=system --with-expathdr=/usr/X11R6/include --with-libexpat=/usr/X11R6/lib CFLAGS="-Os -arch ppc -arch i386 -isysroot /Developer/SDKs/MacOSX10.4u.sdk" LDFLAGS="-arch ppc -arch i386 -isysroot /Developer/SDKs/MacOSX10.4u.sdk"\
-make\
-sudo make install\
+\cf0 A universal GPSBabel CLI executable is now included in the OSX binary from {\field{\*\fldinst{HYPERLINK "http://www.gpsbabel.org/"}}{\fldrslt www.gpsbabel.org}}.  This does not need to be 64bit.\
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
-
-\f0\fs24 \cf0 \
-If you installed libusb, it will be found and built into gpsbabel.  The gpsbabel program will be installed in /usr/local/bin.\
-\
+\cf0 \
 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 
@@ -572,7 +537,23 @@ library filename or 'none' [libz.so] ==>
 
 \f1\fs20 \cf0 echo "JASPERLIB = /Library/Frameworks/UnixImageIO.framework/unix/lib/libjasper.dylib" >> Makefile.config\
 echo "JASPERHDR_DIR = /Library/Frameworks/UnixImageIO.framework/Headers" >> Makefile.config\
-echo "CC = /usr/bin/gcc -arch ppc -arch i386 -isysroot /Developer/SDKs/MacOSX10.4u.sdk" >> Makefile.config\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
+
+\f0\fs24 \cf0 \
+For Tiger:\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li180\fi-180\ql\qnatural\pardirnatural
+
+\f1\fs20 \cf0 echo "CC = /usr/bin/gcc -arch ppc -arch i386 -isysroot /Developer/SDKs/MacOSX10.4u.sdk" >> Makefile.config\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
+
+\f0\fs24 \cf0 For Leopard:\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li180\fi-180\ql\qnatural\pardirnatural
+
+\f1\fs20 \cf0 echo "CC = /usr/bin/gcc -arch ppc -arch i386 -arch ppc64 -arch x86_64" >> Makefile.config\
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 \cf0 \
 make\
@@ -641,90 +622,175 @@ And that's it.\
 \b0\fs24 \
 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
-\cf0 \ul revision: 10837\ulnone \
+\cf0 \ul version: {\field{\*\fldinst{HYPERLINK "http://www.ffmpeg.org/download.html"}}{\fldrslt \ulnone 0.5}}\ulnone \
 \
-FFMPEG is constantly changing, there is no released version, it's all in SVN.  These instructions are work on the SVN revision listed above, so if a current SVN version doesn't work, try checking out that revision.  You need 
-\b SVN
-\b0  installed to download the FFMPEG source.\
+FFMPEG is constantly changing, and release versions are rare.  For simplicity use the 0.5 release version.  If you know anything about SVN you can try for a more up-to-date FFMPEG.  Some options used below are not in more recent SVN versions, so if configure complains about an invalid option, just remove it.\
 \
-This will build a basic FFMPEG as static libraries for use with GRASS.  No extra formats are included, such as mp3lame and xvid.  Note that by default debug symbols are included, so you will get a large binary out of this.  Stripping the libraries doesn't seem to work.\
+This will build a basic FFMPEG as dynamic libraries for use with GRASS.  The default static libraries don't work now because of reloc errors and the need for extra link flags.  No extra formats are included, such as mp3lame and xvid.  None of the ffmpeg programs are included either (GRASS doesn't need them).\
 \
-First, create a folder for your ffmpeg source and cd into it.  Now:\
+It's a multi-step build, 1 for each architecture.  Create a folder inside the source for each arch:\
 \
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li180\fi-180\ql\qnatural\pardirnatural
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 
-\f1\fs20 \cf0 svn checkout svn://svn.mplayerhq.hu/ffmpeg/trunk ffmpeg\
-cd ffmpeg\
+\f1\fs20 \cf0 mkdir build-i386\
 mkdir build-ppc\
-mkdir build-i386\
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 
 \f0\fs24 \cf0 \
-For a specific revision, use this instead for the checkout command:\
+and also for Leopard:\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
+
+\f1\fs20 \cf0 mkdir build-x86_64\
+mkdir build-ppc64\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
+
+\f0\fs24 \cf0 \
+For i386 and ppc arches, if building on Tiger, you must add the following to extra-cflags and extra-ldflags in the configure command:\
 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li180\fi-180\ql\qnatural\pardirnatural
 
-\f1\fs20 \cf0 svn checkout -r \ul revision#\ulnone  svn://svn.mplayerhq.hu/ffmpeg/trunk ffmpeg\
+\f1\fs20 \cf0  -isysroot /Developer/SDKs/MacOSX10.4u.sdk
+\f0\fs24 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
-
-\f0\fs24 \cf0 \
-It's a two-step build, 1 for each architecture, and I'm being explicit for each arch.  The -fno-common extra cflag is needed or there will be link errors in GRASS, and OSX Intel has MMX issues, so it is disabled.  For the Intel build:\
+\cf0 \
+For i386:\
 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li180\fi-180\ql\qnatural\pardirnatural
 
 \f1\fs20 \cf0 cd build-i386\
-../configure --disable-ffserver --enable-gpl --enable-pthreads --disable-ffplay --disable-mmx --disable-vhook --arch=i386 --extra-cflags="-fno-common -arch i386 -isysroot /Developer/SDKs/MacOSX10.4u.sdk" --extra-ldflags="-arch i386 -isysroot /Developer/SDKs/MacOSX10.4u.sdk"\
+../configure --enable-shared --disable-static --disable-debug --disable-ffserver --disable-network --enable-gpl --enable-pthreads --enable-swscale --disable-vhook --disable-ffplay --disable-ffmpeg --disable-amd3dnow --arch=i386 --extra-cflags="-arch i386" --extra-ldflags="-arch i386"
+\f0\fs24 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
-
-\f0\fs24 \cf0 \
-If you want to remove the debug symbols, edit config.mak at this point and remove "-g" from OPTFLAGS.\
+\cf0 \
+If you are building 
+\i on
+\i0  a PPC Mac, you need to add the flag "
+\f1\fs20 --enable-cross-compile
+\f0\fs24 " to the above configure command.\
 \
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li180\fi-180\ql\qnatural\pardirnatural
 
 \f1\fs20 \cf0 make\
 sudo make install\
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 
 \f0\fs24 \cf0 \
-Install at this point installs all the headers.  We don't care about the installed libraries at this point.\
+Install at this point installs everything.  We don't care about the installed libraries yet, we just need the headers there.\
 \
 Now, the PPC build:\
 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li180\fi-180\ql\qnatural\pardirnatural
 
 \f1\fs20 \cf0 cd ../build-ppc\
-../configure --disable-ffserver --enable-gpl --enable-pthreads --disable-ffplay --enable-altivec --disable-vhook --arch=ppc --extra-cflags="-fno-common -arch ppc -isysroot /Developer/SDKs/MacOSX10.4u.sdk" --extra-ldflags="-arch ppc -isysroot /Developer/SDKs/MacOSX10.4u.sdk"\
+../configure --enable-shared --disable-static --disable-debug --disable-ffserver --disable-network --enable-gpl --enable-pthreads --enable-swscale --disable-vhook --disable-ffplay --disable-ffmpeg --enable-altivec --arch=ppc --extra-cflags="-arch ppc" --extra-ldflags="-arch ppc"
+\f0\fs24 \
+
+\f1\fs20 make\
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 
 \f0\fs24 \cf0 \
-Again, if you want to remove the debug symbols, edit config.mak at this point and remove "-g" from OPTFLAGS.\
+Don't install this one, there is no need.\
 \
+If you are building for Leopard, also do the 64bit varieties, otherwise skip to the lipo step below.\
+\
+For x86_64:\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li180\fi-180\ql\qnatural\pardirnatural
+
+\f1\fs20 \cf0 cd build-x86_64\
+../configure --enable-shared --disable-static --disable-debug --disable-ffserver --disable-network --enable-gpl --enable-pthreads --enable-swscale --disable-vhook --disable-ffplay --disable-ffmpeg --disable-amd3dnow --arch=x86_64 --extra-cflags="-arch x86_64" --extra-ldflags="-arch x86_64"
+\f0\fs24 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
+\cf0 \
+Again, if you are building 
+\i on
+\i0  a PPC Mac, you need to add the flag "
+\f1\fs20 --enable-cross-compile
+\f0\fs24 " to the above configure command.\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li180\fi-180\ql\qnatural\pardirnatural
 
 \f1\fs20 \cf0 make\
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 
 \f0\fs24 \cf0 \
-Don't install this one, there is no need.  Now use lipo to merge them together:\
+And ppc64:\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li180\fi-180\ql\qnatural\pardirnatural
+
+\f1\fs20 \cf0 cd ../build-ppc64\
+../configure --enable-shared --disable-static --disable-debug --disable-ffserver --disable-network --enable-gpl --enable-pthreads --enable-swscale --disable-vhook --disable-ffplay --disable-ffmpeg --enable-altivec --arch=ppc64 --extra-cflags="-arch ppc64" --extra-ldflags="-arch ppc64"
+\f0\fs24 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
+\cf0 \
+Here, if you are building 
+\i on
+\i0  an Intel Mac, you need to add the flag "
+\f1\fs20 --enable-cross-compile
+\f0\fs24 " to the above configure command.  Also, it will fail to completely identify it as 64bit, so you need to fix 2 files.\
+\
+In 
+\b config.h
+\b0 , find the HAVE_PPC64 define and set it to 1:\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
+
+\f1\fs20 \cf0 #define HAVE_PPC64 1\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
+
+\f0\fs24 \cf0 \
+In 
+\b config.mak
+\b0 , add this line to the end of the file:\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
+
+\f1\fs20 \cf0 HAVE_PPC64=yes\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
+
+\f0\fs24 \cf0 \
+Then finish:\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li180\fi-180\ql\qnatural\pardirnatural
+
+\f1\fs20 \cf0 make\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
+
+\f0\fs24 \cf0 \
+\
+Now use lipo to merge them together, first drop down to the ffmpeg source folder:\
 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li180\fi-180\ql\qnatural\pardirnatural
 
 \f1\fs20 \cf0 cd ..\
-sudo lipo -create build-ppc/libavcodec/libavcodec.a build-i386/libavcodec/libavcodec.a -output /usr/local/lib/libavcodec.a\
-sudo lipo -create build-ppc/libavformat/libavformat.a build-i386/libavformat/libavformat.a -output /usr/local/lib/libavformat.a\
-sudo lipo -create build-ppc/libavutil/libavutil.a build-i386/libavutil/libavutil.a -output /usr/local/lib/libavutil.a\
-sudo ranlib /usr/local/lib/libavcodec.a\
-sudo ranlib /usr/local/lib/libavformat.a\
-sudo ranlib /usr/local/lib/libavutil.a\
-sudo lipo -create build-ppc/ffmpeg build-i386/ffmpeg -output /usr/local/bin/ffmpeg\
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 
 \f0\fs24 \cf0 \
-For a 64bit build, just repeat the i386 and ppc parts with x86_64 and ppc64.  One problem with this, is that, similar to Intel tests failing when built 
-\i on
-\i0  a PPC Mac, Rosetta doesn't do 64bit PPC, so some tests will fail for a PPC build on Intel.  The cleanest option is to build PPC64 on PPC, then merge with the Intel-built parts.  Or just build 32+64bit for one processor.\
+For each of the libraries:\
+\
+libavcodec\
+libavdevice\
+libavformat\
+libavutil\
+libswscale\
+\
+run the following lipo command (fill in the \ul libname\ulnone  in all places).  For Leopard:\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li180\fi-180\ql\qnatural\pardirnatural
+
+\f1\fs20 \cf0 sudo lipo -create build-ppc/\ul libname\ulnone /\ul libname\ulnone .dylib build-i386/\ul libname\ulnone /\ul libname\ulnone .dylib build-ppc64/\ul libname\ulnone /\ul libname\ulnone .dylib build-x86_64/\ul libname\ulnone /\ul libname\ulnone .dylib -output /usr/local/lib/\ul libname\ulnone .dylib\
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
-\cf0 \
+
+\f0\fs24 \cf0 \
+For Tiger:\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li180\fi-180\ql\qnatural\pardirnatural
+
+\f1\fs20 \cf0 sudo lipo -create build-ppc/\ul libname\ulnone /\ul libname\ulnone .dylib build-i386/\ul libname\ulnone /\ul libname\ulnone .dylib -output /usr/local/lib/\ul libname\ulnone .dylib\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
+
+\f0\fs24 \cf0 \
 Done.\
 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural
