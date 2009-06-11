@@ -1966,41 +1966,36 @@ static int is_option(const char *string)
     return n > 0 && string[n] == '=' && string[0] != '_' && string[n-1] != '_';
 }
 
+static int match_option_1(const char *string, const char *option)
+{
+    const char *next;
+
+    if (*string == '\0')
+	return 1;
+
+    if (*option == '\0')
+	return 0;
+
+    if (*string == *option && match_option_1(string + 1, option + 1))
+	return 1;
+
+    if (*option == '_' && match_option_1(string, option + 1))
+	return 1;
+
+    next = strchr(option, '_');
+    if (!next)
+	return 0;
+
+    if (*string == '_')
+	return match_option_1(string + 1, next + 1);
+
+    return match_option_1(string, next + 1);
+}
+
 static int match_option(const char *string, const char *option)
 {
-    int next[16];
-    int count = 0;
-    int i, j;
-
-    for (i = 0; option[i]; i++)
-	if (option[i] == '_' && option[i+1] != '\0')
-	    next[count++] = i+1;
-
-    /* try exact match */
-    for (i = 0; ; i++) {
-	if (string[i] == '\0')
-	    return 1;
-	if (option[i] == '\0')
-	    return 0;
-	if (string[i] == option[i])
-	    continue;
-	break;
-    }
-
-    /* try abbreviations */
-    for (i = 0; ; i++) {
-	if (string[i] == '\0')
-	    return 1;
-	if (option[i] == '\0')
-	    return 0;
-	if (string[i] == option[i])
-	    continue;
-	for (j = 0; j < count; j++)
-	    if (string[i] == option[next[j]] &&
-		match_option(&string[i], &option[next[j]]))
-		return 1;
-	return 0;
-    }
+    return (*string == *option)
+	&& match_option_1(string + 1, option + 1);
 }
 
 static int set_option(const char *string)
