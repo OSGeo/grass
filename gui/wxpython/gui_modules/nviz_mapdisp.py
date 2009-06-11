@@ -35,6 +35,7 @@ from debug import Debug as Debug
 from mapdisp_window import MapWindow
 from goutput import wxCmdOutput
 from preferences import globalSettings as UserSettings
+from workspace import Nviz as NvizDefault
 
 sys.path.append(os.path.join(globalvar.ETCWXDIR, "nviz"))
 import grass7_wxnviz as wxnviz
@@ -115,7 +116,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         #
         self.view = copy.deepcopy(UserSettings.Get(group='nviz', key='view')) # copy
         self.iview = UserSettings.Get(group='nviz', key='view', internal=True)
-
+        self.nvizDefault = NvizDefault()
+        
         self.size = None
         self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
         self.Bind(wx.EVT_SIZE, self.OnSize)
@@ -442,38 +444,26 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             data = self.tree.GetPyData(item)[0]['nviz']
 
             if type == 'raster':
-                data[nvizType] = {}
-                for sec in ('attribute', 'draw', 'mask', 'position'):
-                    data[nvizType][sec] = {}
-
                 # reset to default properties
-                self.SetSurfaceDefaultProp(data[nvizType])
+                data[nvizType] = self.nvizDefault.SetSurfaceDefaultProp()
                         
             elif type == 'vector':
-                data['vector'] = {}
-                for sec in ('lines', 'points'):
-                    data['vector'][sec] = {}
-                
                 # reset to default properties (lines/points)
-                self.SetVectorDefaultProp(data['vector'])
+                data['vector'] = self.nvizDefault.SetVectorDefaultProp()
 
             elif type == '3d-raster':
-                data[nvizType] = {}
-                for sec in ('attribute', 'draw', 'position'):
-                    data[nvizType][sec] = {}
-                for sec in ('isosurface', 'slice'):
-                    data[nvizType][sec] = []
-
                 # reset to default properties 
-                self.SetVolumeDefaultProp(data[nvizType])
+                data[nvizType] = self.nvizDefault.SetVolumeDefaultProp()
         
         else:
-            # check data
+            # complete data (use default values)
+            if type == 'raster':
+                data['surface'] = self.nvizDefault.SetSurfaceDefaultProp()
             if type == 'vector':
                 if not data['vector']['lines']:
-                    self.SetVectorLinesDefaultProp(data['vector']['lines'])
+                    self.nvizDefault.SetVectorLinesDefaultProp(data['vector']['lines'])
                 if not data['vector']['points']:
-                    self.SetVectorPointsDefaultProp(data['vector']['points'])
+                    self.nvizDefault.SetVectorPointsDefaultProp(data['vector']['points'])
                     
             # set updates
             for sec in data.keys():
@@ -725,230 +715,6 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 toolWin.page['surface']['id'] = -1
                 toolWin.page['settings']['id'] = 1
         
-    def GetDrawMode(self, mode=None, style=None, shade=None, string=False):
-        """!Get surface draw mode (value) from description/selection
-
-        @param mode,style,shade modes
-        @param string if True input parameters are strings otherwise
-        selections
-        """
-        value = 0
-        desc = {}
-
-        if string:
-            if mode is not None:
-                if mode == 'coarse':
-                    value |= wxnviz.DM_WIRE
-                elif mode == 'fine':
-                    value |= wxnviz.DM_POLY
-                else: # both
-                    value |= wxnviz.DM_WIRE_POLY
-
-            if style is not None:
-                if style == 'wire':
-                    value |= wxnviz.DM_GRID_WIRE
-                else: # surface
-                    value |= wxnviz.DM_GRID_SURF
-                    
-            if shade is not None:
-                if shade == 'flat':
-                    value |= wxnviz.DM_FLAT
-                else: # surface
-                    value |= wxnviz.DM_GOURAUD
-
-            return value
-
-        # -> string is False
-        if mode is not None:
-            if mode == 0: # coarse
-                value |= wxnviz.DM_WIRE
-                desc['mode'] = 'coarse'
-            elif mode == 1: # fine
-                value |= wxnviz.DM_POLY
-                desc['mode'] = 'fine'
-            else: # both
-                value |= wxnviz.DM_WIRE_POLY
-                desc['mode'] = 'both'
-
-        if style is not None:
-            if style == 0: # wire
-                value |= wxnviz.DM_GRID_WIRE
-                desc['style'] = 'wire'
-            else: # surface
-                value |= wxnviz.DM_GRID_SURF
-                desc['style'] = 'surface'
-
-        if shade is not None:
-            if shade == 0:
-                value |= wxnviz.DM_FLAT
-                desc['shading'] = 'flat'
-            else: # surface
-                value |= wxnviz.DM_GOURAUD
-                desc['shading'] = 'gouraud'
-        
-        return (value, desc)
-    
-    def SetSurfaceDefaultProp(self, data):
-        """!Set default surface data properties"""
-        #
-        # attributes
-        #
-        for attrb in ('shine', ):
-            data['attribute'][attrb] = {}
-            for key, value in UserSettings.Get(group='nviz', key='volume',
-                                               subkey=attrb).iteritems():
-                data['attribute'][attrb][key] = value
-            data['attribute'][attrb]['update'] = None
-        
-        #
-        # draw
-        #
-        data['draw']['all'] = False # apply only for current surface
-        for control, value in UserSettings.Get(group='nviz', key='surface', subkey='draw').iteritems():
-            if control[:3] == 'res':
-                if not data['draw'].has_key('resolution'):
-                    data['draw']['resolution'] = {}
-                if not data['draw']['resolution'].has_key('update'):
-                    data['draw']['resolution']['update'] = None
-                data['draw']['resolution'][control[4:]] = value
-                continue
-            
-            if control == 'wire-color':
-                value = str(value[0]) + ':' + str(value[1]) + ':' + str(value[2])
-            elif control in ('mode', 'style', 'shading'):
-                if not data['draw'].has_key('mode'):
-                    data['draw']['mode'] = {}
-                continue
-
-            data['draw'][control] = { 'value' : value }
-            data['draw'][control]['update'] = None
-            
-        value, desc = self.GetDrawMode(UserSettings.Get(group='nviz', key='surface', subkey=['draw', 'mode']),
-                                       UserSettings.Get(group='nviz', key='surface', subkey=['draw', 'style']),
-                                       UserSettings.Get(group='nviz', key='surface', subkey=['draw', 'shading']))
-
-        data['draw']['mode'] = { 'value' : value,
-                                 'desc' : desc, 
-                                 'update': None }
-
-    def SetVolumeDefaultProp(self, data):
-        """!Set default volume data properties"""
-        #
-        # draw
-        #
-        for control, value in UserSettings.Get(group='nviz', key='volume', subkey='draw').iteritems():
-            if control == 'mode':
-                continue
-            if control == 'shading':
-                sel = UserSettings.Get(group='nviz', key='surface', subkey=['draw', 'shading'])
-                value, desc = self.GetDrawMode(shade=sel, string=False)
-
-                data['draw']['shading'] = { 'value' : value,
-                                            'desc' : desc['shading'] }
-            elif control == 'mode':
-                sel = UserSettings.Get(group='nviz', key='volume', subkey=['draw', 'mode'])
-                if sel == 0:
-                    desc = 'isosurface'
-                else:
-                    desc = 'slice'
-                data['draw']['mode'] = { 'value' : sel,
-                                         'desc' : desc, }
-            else:
-                data['draw'][control] = { 'value' : value }
-
-            if not data['draw'][control].has_key('update'):
-                data['draw'][control]['update'] = None
-        
-        #
-        # isosurface attributes
-        #
-        for attrb in ('shine', ):
-            data['attribute'][attrb] = {}
-            for key, value in UserSettings.Get(group='nviz', key='volume',
-                                               subkey=attrb).iteritems():
-                data['attribute'][attrb][key] = value
-        
-    def SetVectorDefaultProp(self, data):
-        """!Set default vector data properties"""
-        self.SetVectorLinesDefaultProp(data['lines'])
-        self.SetVectorPointsDefaultProp(data['points'])
-
-    def SetVectorLinesDefaultProp(self, data):
-        """!Set default vector properties -- lines"""
-        # width
-        data['width'] = {'value' : UserSettings.Get(group='nviz', key='vector',
-                                                    subkey=['lines', 'width']) }
-        
-        # color
-        value = UserSettings.Get(group='nviz', key='vector',
-                                 subkey=['lines', 'color'])
-        color = str(value[0]) + ':' + str(value[1]) + ':' + str(value[2])
-        data['color'] = { 'value' : color }
-
-        # mode
-        if UserSettings.Get(group='nviz', key='vector',
-                            subkey=['lines', 'flat']):
-            type = 'flat'
-            map  = None
-        else:
-            rasters = self.GetLayerNames('raster')
-            if len(rasters) > 0:
-                type = 'surface'
-                map  = rasters[0]
-            else:
-                type = 'flat'
-                map = None
-
-        data['mode'] = {}
-        data['mode']['type'] = type
-        data['mode']['update'] = None
-        if map:
-            data['mode']['surface'] = map
-
-        # height
-        data['height'] = { 'value' : UserSettings.Get(group='nviz', key='vector',
-                                                      subkey=['lines', 'height']) }
-
-        if data.has_key('object'):
-            for attrb in ('color', 'width', 'mode', 'height'):
-                data[attrb]['update'] = None
-        
-    def SetVectorPointsDefaultProp(self, data):
-        """!Set default vector properties -- points"""
-        # size
-        data['size'] = { 'value' : UserSettings.Get(group='nviz', key='vector',
-                                                    subkey=['points', 'size']) }
-
-        # width
-        data['width'] = { 'value' : UserSettings.Get(group='nviz', key='vector',
-                                                     subkey=['points', 'width']) }
-
-        # marker
-        data['marker'] = { 'value' : UserSettings.Get(group='nviz', key='vector',
-                                                      subkey=['points', 'marker']) }
-
-        # color
-        value = UserSettings.Get(group='nviz', key='vector',
-                                 subkey=['points', 'color'])
-        color = str(value[0]) + ':' + str(value[1]) + ':' + str(value[2])
-        data['color'] = { 'value' : color }
-
-        # mode
-        data['mode'] = { 'type' : 'surface',
-                         'surface' : '', }
-        rasters = self.GetLayerNames('raster')
-        if len(rasters) > 0:
-            data['mode']['surface'] = rasters[0]
-        
-        # height
-        data['height'] = { 'value' : UserSettings.Get(group='nviz', key='vector',
-                                                      subkey=['points', 'height']) }
-
-        if data.has_key('object'):
-            for attrb in ('size', 'width', 'marker',
-                          'color', 'surface', 'height'):
-                data[attrb]['update'] = None
-        
     def Reset(self):
         """!Reset (unload data)"""
         for item in self.layers:
@@ -1080,10 +846,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         if data['draw']['mode'].has_key('update'):
             if data['draw']['mode']['value'] < 0: # need to calculate
                 data['draw']['mode']['value'] = \
-                    self.GetDrawMode(mode=data['draw']['mode']['desc']['mode'],
-                                        style=data['draw']['mode']['desc']['style'],
-                                        shade=data['draw']['mode']['desc']['shading'],
-                                        string=True)
+                    self.nvizDefault.GetDrawMode(mode=data['draw']['mode']['desc']['mode'],
+                                                 style=data['draw']['mode']['desc']['style'],
+                                                 shade=data['draw']['mode']['desc']['shading'],
+                                                 string=True)
             style = data['draw']['mode']['value']
             if data['draw']['all']:
                 self.nvizClass.SetSurfaceStyle(-1, style)
@@ -1120,8 +886,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         if data['draw']['shading'].has_key('update'):
             if data['draw']['shading']['value'] < 0: # need to calculate
                 data['draw']['shading']['value'] = \
-                    self.GetDrawMode(shade=data['draw']['shading'],
-                                     string=False)
+                    self.nvizDefault.GetDrawMode(shade=data['draw']['shading'],
+                                                 string=False)
             data['draw']['shading'].pop('update')
         
         #

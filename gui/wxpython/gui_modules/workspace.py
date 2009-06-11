@@ -5,6 +5,7 @@
 
 Classes:
  - ProcessWorkspaceFile
+ - Nviz
  - WriteWorkspaceFile
  - ProcessGrcFile
 
@@ -17,6 +18,7 @@ for details.
 """
 
 import os
+import sys
 
 import wx
 
@@ -31,7 +33,14 @@ except ImportError:
     import elementtree.ElementTree as etree # Python <= 2.4
 
 import utils
+import globalvar
 from preferences import globalSettings as UserSettings
+
+sys.path.append(os.path.join(globalvar.ETCWXDIR, "nviz"))
+try:
+    import grass7_wxnviz as wxnviz
+except ImportError:
+    wxnviz = None
 
 class ProcessWorkspaceFile():
     def __init__(self, tree):
@@ -60,6 +69,8 @@ class ProcessWorkspaceFile():
         self.displayIndex = -1 # first display has index '0'
         
         self.__processFile()
+        
+        self.nvizDefault = Nviz()
         
     def __filterValue(self, value):
         """!Filter value
@@ -131,11 +142,14 @@ class ProcessWorkspaceFile():
                     "extent"         : extent,
                     "constrainRes"   : bool(int(display.get('constrainRes', "0"))) } )
             
+            # process all layers/groups in the display
             self.__processLayers(display)
 
     def __processLayers(self, node):
         """!Process layers/groups of selected display
 
+        @todo Fix group flag
+        
         @param node display tree node
         """
         for item in node.getchildren():
@@ -173,7 +187,7 @@ class ProcessWorkspaceFile():
         cmd = list()
         
         #
-        # layer attributes (task)
+        # layer attributes (task) - 2D settings
         #
         node_task = layer.find('task')
         cmd.append(node_task.get('name', "unknown"))
@@ -193,7 +207,7 @@ class ProcessWorkspaceFile():
             selected = True
         else:
             selected = False
-
+        
         #
         # Nviz (3D settings)
         #
@@ -212,33 +226,38 @@ class ProcessWorkspaceFile():
         """
         # init nviz layer properties
         nviz = {}
-        node = node_nviz.find('surface')
-        if node: # -> raster
+        if node_nviz.find('surface') is not None: # -> raster
             nviz['surface'] = {}
             for sec in ('attribute', 'draw', 'mask', 'position'):
                 nviz['surface'][sec] = {}
-        else:
-            node = node_nviz.find('vector')
-            if node: # -> vector
-                nviz['vector'] = {}
-                for sec in ('lines', 'points'):
-                    nviz['vector'][sec] = {}
+        elif node_nviz.find('vlines') is not None or \
+                node_nviz.find('vpoints') is not None: # -> vector
+            nviz['vector'] = {}
+            for sec in ('lines', 'points'):
+                nviz['vector'][sec] = {}
         
         if nviz.has_key('surface'):
+            node_surface = node_nviz.find('surface')
             # attributes
-            for attrb in node.find_all('attributes'):
+            for attrb in node_surface.findall('attribute'):
                 tagName = str(attrb.tag)
                 attrbName = attrb.get('name', '')
-                self.nviz['surface'][tagName][attrbName] = {}
+                dc = nviz['surface'][tagName][attrbName] = {}
                 if attrb.get('map', '0') == '0':
-                    self.nviz['surface'][tagName][attrbName]['map'] = False
+                    dc['map'] = False
                 else:
-                    self.nviz['surface'][tagName][attrbName]['map'] = True
-                    
-                self.refAttribute = self.nviz['surface'][tagName][attrbName]
-
+                    dc['map'] = True
+                value = self.__getNodeText(attrb, 'value')
+                try:
+                    dc['value'] = int(value)
+                except ValueError:
+                    try:
+                        dc['value'] = float(value)
+                    except ValueError:
+                        dc['value'] = str(value)
+            
             # draw
-            node_draw = node.find('draw')
+            node_draw = node_surface.find('draw')
             if node_draw is not None:
                 tagName = str(node_draw.tag)
                 nviz['surface'][tagName]['all'] = False
@@ -246,112 +265,355 @@ class ProcessWorkspaceFile():
                 nviz['surface'][tagName]['mode']['value'] = -1 # to be calculated
                 nviz['surface'][tagName]['mode']['desc'] = {}
                 nviz['surface'][tagName]['mode']['desc']['shading'] = \
-                    str(attrs.get('shading', ''))
+                    str(node_draw.get('shading', ''))
                 nviz['surface'][tagName]['mode']['desc']['style'] = \
-                    str(attrs.get('style', ''))
+                    str(node_draw.get('style', ''))
                 nviz['surface'][tagName]['mode']['desc']['mode'] = \
-                    str(attrs.get('mode', ''))
+                    str(node_draw.get('mode', ''))
                 
-                for node_pos in node_draw.findall('resolution'):
-                    self.resolutionType = str(node_pos.get('type', ''))
-                    if not nviz['surface']['draw'].has_key('reaolution'):
+                # resolution
+                for node_res in node_draw.findall('resolution'):
+                    resType = str(node_res.get('type', ''))
+                    if not nviz['surface']['draw'].has_key('resolution'):
                         nviz['surface']['draw']['resolution'] = {}
-                    
+                    value = int(self.__getNodeText(node_res, 'value'))
+                    nviz['surface']['draw']['resolution'][resType] = value
+                
+                # wire-color
+                node_wire_color = node_draw.find('wire_color')
+                if node_wire_color is not None:
+                    nviz['surface']['draw']['wire-color'] = {}
+                    value = str(self.__getNodeText(node_wire_color, 'value'))
+                    nviz['surface']['draw']['wire-color']['value'] = value
+                
             # position
-            node_pos = node.find('position')
+            node_pos = node_surface.find('position')
             if node_pos is not None:
-                self.nviz['surface']['position'] = {}
-        
+                dc = self.nviz['surface']['position'] = {}
+                for coor in ['x', 'y', 'z']:
+                    node = node_pos.find(coor)
+                    if node is None:
+                        continue
+                    value = int(self.__getNodeText(node, 'value'))
+                    dc[coor] = value
+            
         elif nviz.has_key('vector'):
             # vpoints
-            node_vpoints = node.find('vpoints')
+            node_vpoints = node_nviz.find('vpoints')
             if node_vpoints is not None:
                 marker = str(node_vpoints.get('marker', ''))
                 markerId = list(UserSettings.Get(group='nviz', key='vector',
                                                  subkey=['points', 'marker'], internal=True)).index(marker)
                 nviz['vector']['points']['marker'] = markerId
                 
-                node_mode = node.find('mode')
+                node_mode = node_vpoints.find('mode')
                 if node_mode is not None:
                     nviz['vector']['points']['mode'] = {}
                     nviz['vector']['points']['mode']['type'] = str(node_mode.get('type', ''))
                     nviz['vector']['points']['mode']['surface'] = ''
+                    
+                    # map
+                    nviz['vector']['points']['mode']['surface'] = \
+                        self.__processLayerNvizNode(node_vpoints, 'map', str)
+                
+                # color
+                self.__processLayerNvizNode(node_vpoints, 'color', str,
+                                            nviz['vector']['points'])
+                
+                # width
+                self.__processLayerNvizNode(node_vpoints, 'width', int,
+                                            nviz['vector']['points'])
+                
+                # height
+                self.__processLayerNvizNode(node_vpoints, 'height', int,
+                                            nviz['vector']['points'])
+                
+                # height
+                self.__processLayerNvizNode(node_vpoints, 'size', int,
+                                            nviz['vector']['points'])
             
             # vlines
-            node_vlines = node.find('vlines')
+            node_vlines = node_nviz.find('vlines')
             if node_vlines is not None:
-                node_mode = node.find('mode')
+                node_mode = node_vlines.find('mode')
                 if node_mode is not None:
                     nviz['vector']['lines']['mode'] = {}
                     nviz['vector']['lines']['mode']['type'] = str(node_mode.get('type', ''))
                     nviz['vector']['lines']['mode']['surface'] = ''
-
-#         elif name == 'attribute':
-#             if self.inTag['nviz'] and self.inTag['surface']:
-#                 try:
-#                     self.refAttribute['value'] = int(self.value)
-#                 except ValueError:
-#                     try:
-#                         self.refAttribute['value'] = float(self.value)
-#                     except ValueError:
-#                         self.refAttribute['value'] = str(self.value)
-
-#         elif name == 'resolution':
-#             if self.inTag['nviz'] and self.inTag['surface']:
-#                 self.layerNviz['surface']['draw']['resolution'][self.resolutionType] = int(self.value)
-#                 del self.resolutionType
-
-#         elif name == 'wire_color':
-#             if self.inTag['nviz'] and self.inTag['surface']:
-#                 self.layerNviz['surface']['draw']['wire-color'] = {}
-#                 self.layerNviz['surface']['draw']['wire-color']['value'] = str(self.value)
-
-#         elif name == 'x':
-#             if self.inTag['nviz'] and self.inTag['surface']:
-#                 self.layerNviz['surface']['position']['x'] = int(self.value)
-
-#         elif name == 'y':
-#             if self.inTag['nviz'] and self.inTag['surface']:
-#                 self.layerNviz['surface']['position']['y'] = int(self.value)
-
-#         elif name == 'z':
-#             if self.inTag['nviz'] and self.inTag['surface']:
-#                 self.layerNviz['surface']['position']['z'] = int(self.value)
-        
-#         elif name == 'color':
-#             if self.inTag['nviz']:
-#                 if self.inTag['vlines']:
-#                     self.layerNviz['vector']['lines']['color'] = str(self.value)
-#                 elif self.inTag['vpoints']:
-#                     self.layerNviz['vector']['points']['color'] = str(self.value)
                     
-#         elif name == 'width':
-#             if self.inTag['nviz']:
-#                 if self.inTag['vlines']:
-#                     self.layerNviz['vector']['lines']['width'] = int(self.value)
-#                 elif self.inTag['vpoints']:
-#                     self.layerNviz['vector']['points']['width'] = int(self.value)
-
-#         elif name == 'height':
-#             if self.inTag['nviz']:
-#                 if self.inTag['vlines']:
-#                     self.layerNviz['vector']['lines']['height'] = int(self.value)
-#                 elif self.inTag['vpoints']:
-#                     self.layerNviz['vector']['points']['height'] = int(self.value)
-        
-#         elif name == 'size':
-#             if self.inTag['nviz'] and self.inTag['vpoints']:
-#                 self.layerNviz['vector']['points']['size'] = int(self.value)
-
-#         elif name == 'map':
-#             if self.inTag['nviz']:
-#                 if self.inTag['vlines']:
-#                     self.layerNviz['vector']['lines']['mode']['surface'] = str(self.value)
-#                 elif self.inTag['vpoints']:
-#                     self.layerNviz['vector']['points']['mode']['surface'] = str(self.value)
-
+                    # map
+                    nviz['vector']['lines']['mode']['surface'] = \
+                        self.__processLayerNvizNode(node_mode, 'map', str)
+                
+                # color
+                self.__processLayerNvizNode(node_vlines, 'color', str,
+                                            nviz['vector']['lines'])
+                
+                # width
+                self.__processLayerNvizNode(node_vlines, 'width', int,
+                                            nviz['vector']['lines'])
+                
+                # height
+                self.__processLayerNvizNode(node_vlines, 'height', int,
+                                            nviz['vector']['lines'])
+            
         return nviz
+    
+    def __processLayerNvizNode(self, node, tag, cast, dc = None):
+        """!Process given tag nviz/vector"""
+        node_tag = node.find(tag)
+        if node_tag is not None:
+            value = cast(self.__getNodeText(node_tag, 'value'))
+            if dc:
+                dc[tag] = dict()
+                dc[tag]['value'] = value
+            else:
+                return value
+    
+class Nviz:
+    def __init__(self):
+        """Default 3D settings"""
+        pass
+    
+    def SetSurfaceDefaultProp(self):
+        """Set default surface data properties"""
+        data = dict()
+        for sec in ('attribute', 'draw', 'mask', 'position'):
+            data[sec] = {}
+        
+        #
+        # attributes
+        #
+        for attrb in ('shine', ):
+            data['attribute'][attrb] = {}
+            for key, value in UserSettings.Get(group='nviz', key='volume',
+                                               subkey=attrb).iteritems():
+                data['attribute'][attrb][key] = value
+            data['attribute'][attrb]['update'] = None
+        
+        #
+        # draw
+        #
+        data['draw']['all'] = False # apply only for current surface
+        for control, value in UserSettings.Get(group='nviz', key='surface', subkey='draw').iteritems():
+            if control[:3] == 'res':
+                if not data['draw'].has_key('resolution'):
+                    data['draw']['resolution'] = {}
+                if not data['draw']['resolution'].has_key('update'):
+                    data['draw']['resolution']['update'] = None
+                data['draw']['resolution'][control[4:]] = value
+                continue
+            
+            if control == 'wire-color':
+                value = str(value[0]) + ':' + str(value[1]) + ':' + str(value[2])
+            elif control in ('mode', 'style', 'shading'):
+                if not data['draw'].has_key('mode'):
+                    data['draw']['mode'] = {}
+                continue
 
+            data['draw'][control] = { 'value' : value }
+            data['draw'][control]['update'] = None
+            
+        value, desc = self.GetDrawMode(UserSettings.Get(group='nviz', key='surface', subkey=['draw', 'mode']),
+                                       UserSettings.Get(group='nviz', key='surface', subkey=['draw', 'style']),
+                                       UserSettings.Get(group='nviz', key='surface', subkey=['draw', 'shading']))
+
+        data['draw']['mode'] = { 'value' : value,
+                                 'desc' : desc, 
+                                 'update': None }
+        
+        return data
+    
+    def SetVolumeDefaultProp(self):
+        """Set default volume data properties"""
+        data = dict()
+        for sec in ('attribute', 'draw', 'position'):
+            data[sec] = dict()
+            for sec in ('isosurface', 'slice'):
+                    data[sec] = list()
+        
+        #
+        # draw
+        #
+        for control, value in UserSettings.Get(group='nviz', key='volume', subkey='draw').iteritems():
+            if control == 'mode':
+                continue
+            if control == 'shading':
+                sel = UserSettings.Get(group='nviz', key='surface', subkey=['draw', 'shading'])
+                value, desc = self.GetDrawMode(shade=sel, string=False)
+
+                data['draw']['shading'] = { 'value' : value,
+                                            'desc' : desc['shading'] }
+            elif control == 'mode':
+                sel = UserSettings.Get(group='nviz', key='volume', subkey=['draw', 'mode'])
+                if sel == 0:
+                    desc = 'isosurface'
+                else:
+                    desc = 'slice'
+                data['draw']['mode'] = { 'value' : sel,
+                                         'desc' : desc, }
+            else:
+                data['draw'][control] = { 'value' : value }
+
+            if not data['draw'][control].has_key('update'):
+                data['draw'][control]['update'] = None
+        
+        #
+        # isosurface attributes
+        #
+        for attrb in ('shine', ):
+            data['attribute'][attrb] = {}
+            for key, value in UserSettings.Get(group='nviz', key='volume',
+                                               subkey=attrb).iteritems():
+                data['attribute'][attrb][key] = value
+        
+        return data
+    
+    def SetVectorDefaultProp(self):
+        """Set default vector data properties"""
+        data = dict()
+        for sec in ('lines', 'points'):
+            data[sec] = {}
+        
+        self.SetVectorLinesDefaultProp(data['lines'])
+        self.SetVectorPointsDefaultProp(data['points'])
+
+        return data
+    
+    def SetVectorLinesDefaultProp(self, data):
+        """Set default vector properties -- lines"""
+        # width
+        data['width'] = {'value' : UserSettings.Get(group='nviz', key='vector',
+                                                    subkey=['lines', 'width']) }
+        
+        # color
+        value = UserSettings.Get(group='nviz', key='vector',
+                                 subkey=['lines', 'color'])
+        color = str(value[0]) + ':' + str(value[1]) + ':' + str(value[2])
+        data['color'] = { 'value' : color }
+
+        # mode
+        if UserSettings.Get(group='nviz', key='vector',
+                            subkey=['lines', 'flat']):
+            type = 'flat'
+            map  = None
+        else:
+            type = 'flat'
+            map = None
+
+        data['mode'] = {}
+        data['mode']['type'] = type
+        data['mode']['update'] = None
+        if map:
+            data['mode']['surface'] = map
+
+        # height
+        data['height'] = { 'value' : UserSettings.Get(group='nviz', key='vector',
+                                                      subkey=['lines', 'height']) }
+
+        if data.has_key('object'):
+            for attrb in ('color', 'width', 'mode', 'height'):
+                data[attrb]['update'] = None
+        
+    def SetVectorPointsDefaultProp(self, data):
+        """Set default vector properties -- points"""
+        # size
+        data['size'] = { 'value' : UserSettings.Get(group='nviz', key='vector',
+                                                    subkey=['points', 'size']) }
+
+        # width
+        data['width'] = { 'value' : UserSettings.Get(group='nviz', key='vector',
+                                                     subkey=['points', 'width']) }
+
+        # marker
+        data['marker'] = { 'value' : UserSettings.Get(group='nviz', key='vector',
+                                                      subkey=['points', 'marker']) }
+
+        # color
+        value = UserSettings.Get(group='nviz', key='vector',
+                                 subkey=['points', 'color'])
+        color = str(value[0]) + ':' + str(value[1]) + ':' + str(value[2])
+        data['color'] = { 'value' : color }
+
+        # mode
+        data['mode'] = { 'type' : 'surface',
+                         'surface' : '', }
+        
+        # height
+        data['height'] = { 'value' : UserSettings.Get(group='nviz', key='vector',
+                                                      subkey=['points', 'height']) }
+
+        if data.has_key('object'):
+            for attrb in ('size', 'width', 'marker',
+                          'color', 'surface', 'height'):
+                data[attrb]['update'] = None
+        
+    def GetDrawMode(self, mode=None, style=None, shade=None, string=False):
+        """Get surface draw mode (value) from description/selection
+
+        @param mode,style,shade modes
+        @param string if True input parameters are strings otherwise
+        selections
+        """
+        if not wxnviz:
+            return None
+        
+        value = 0
+        desc = {}
+
+        if string:
+            if mode is not None:
+                if mode == 'coarse':
+                    value |= wxnviz.DM_WIRE
+                elif mode == 'fine':
+                    value |= wxnviz.DM_POLY
+                else: # both
+                    value |= wxnviz.DM_WIRE_POLY
+
+            if style is not None:
+                if style == 'wire':
+                    value |= wxnviz.DM_GRID_WIRE
+                else: # surface
+                    value |= wxnviz.DM_GRID_SURF
+                    
+            if shade is not None:
+                if shade == 'flat':
+                    value |= wxnviz.DM_FLAT
+                else: # surface
+                    value |= wxnviz.DM_GOURAUD
+
+            return value
+
+        # -> string is False
+        if mode is not None:
+            if mode == 0: # coarse
+                value |= wxnviz.DM_WIRE
+                desc['mode'] = 'coarse'
+            elif mode == 1: # fine
+                value |= wxnviz.DM_POLY
+                desc['mode'] = 'fine'
+            else: # both
+                value |= wxnviz.DM_WIRE_POLY
+                desc['mode'] = 'both'
+
+        if style is not None:
+            if style == 0: # wire
+                value |= wxnviz.DM_GRID_WIRE
+                desc['style'] = 'wire'
+            else: # surface
+                value |= wxnviz.DM_GRID_SURF
+                desc['style'] = 'surface'
+
+        if shade is not None:
+            if shade == 0:
+                value |= wxnviz.DM_FLAT
+                desc['shading'] = 'flat'
+            else: # surface
+                value |= wxnviz.DM_GOURAUD
+                desc['shading'] = 'gouraud'
+        
+        return (value, desc)
+    
 class WriteWorkspaceFile(object):
     """!Generic class for writing workspace file"""
     def __init__(self, lmgr, file):
@@ -602,7 +864,7 @@ class WriteWorkspaceFile(object):
                 else:
                     self.file.write('%s<%s>\n' % (' ' * self.indent, name))
                     self.indent += 4
-                    self.file.write('%s<value>%s</value>\n' % (' ' * self.indent, data[attrb][name]))
+                    self.file.write('%s<value>%s</value>\n' % (' ' * self.indent, data[attrb][name]['value']))
                     self.indent -= 4
                     self.file.write('%s</%s>\n' % (' ' * self.indent, name))
             self.indent -= 4
