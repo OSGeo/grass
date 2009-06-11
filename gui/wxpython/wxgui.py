@@ -30,10 +30,10 @@ import getopt
 import platform
 
 ### XML 
-import xml.sax
-import xml.sax.handler
-HandlerBase=xml.sax.handler.ContentHandler
-from xml.sax import make_parser
+try:
+    import xml.etree.ElementTree as etree
+except ImportError:
+    import elementtree.ElementTree as etree # Python <= 2.4
 
 ### i18N
 import gettext
@@ -591,150 +591,104 @@ class GMFrame(wx.Frame):
     def LoadWorkspaceFile(self, filename):
         """!Load layer tree definition stored in GRASS Workspace XML file (gxw)
 
-        Return True on success
-        Return False on error"""
-
+        @todo Validate against DTD
+        
+        @return True on success
+        @return False on error
+        """
         # dtd
         dtdFilename = os.path.join(globalvar.ETCWXDIR, "xml", "grass-gxw.dtd")
-
-        # validate xml agains dtd
-        #         dtd = xmldtd.load_dtd(dtdFilename)
-        #         parser = xmlproc.XMLProcessor()
-        #         parser.set_application(xmlval.ValidatingApp(dtd, parser))
-        #         parser.dtd = dtd
-        #         parser.ent = dtd
-        #         try:
-        #             # TODO: set_error_handler(self,err)
-        #             parser.parse_resource(filename)
-        #         except:
-        #             dlg = wx.MessageDialog(self, _("Unable to open workspace file <%s>. "
-        #                                            "It is not valid GRASS Workspace File.") % filename,
-        #                                    _("Error"), wx.OK | wx.ICON_ERROR)
-        #             dlg.ShowModal()
-        #             dlg.Destroy()
-        #             return False
-
-        # read file and fix patch to dtd
+        
+        # parse workspace file
         try:
-            file = open(filename, "r")
+            gxwXml = workspace.ProcessWorkspaceFile(etree.parse(filename))
+        except Exception, err:
+            raise gcmd.GStdError(_("Reading workspace file <%s> failed.\n"
+                                   "Invalid file, unable to parse XML document."
+                                   "\n\n%s") % (filename, err),
+                                 parent = self)
+        
+        busy = wx.BusyInfo(message=_("Please wait, loading workspace..."),
+                           parent=self)
+        wx.Yield()
 
-            fileStream = ''.join(file.readlines())
-            p = re.compile('(grass-gxw.dtd)')
-            p.search(fileStream)
-            if platform.system() == 'Windows':
-                # FIXME mixing '\' and '/' causes error in p.sub
-                dtdFilename = dtdFilename.replace("\\", "/") 
-            fileStream = p.sub(dtdFilename, fileStream)
-
-            # sax
-            gxwXml = workspace.ProcessWorkspaceFile()
+        #
+        # load layer manager window properties
+        #
+        if UserSettings.Get(group='workspace', key='posManager', subkey='enabled') is False:
+            if gxwXml.layerManager['pos']:
+                self.SetPosition(gxwXml.layerManager['pos'])
+            if gxwXml.layerManager['size']:
+                self.SetSize(gxwXml.layerManager['size'])
+        
+        #
+        # start map displays first (list of layers can be empty)
+        #
+        displayId = 0
+        mapdisplay = []
+        for display in gxwXml.displays:
+            mapdisplay.append(self.NewDisplay(show=False))
+            maptree = self.gm_cb.GetPage(displayId).maptree
             
-            try:
-                xml.sax.parseString(fileStream, gxwXml)
-            except xml.sax.SAXParseException, err:
-                raise gcmd.GStdError(_("Reading workspace file <%s> failed. "
-                                       "Invalid file, unable to parse XML document.") % filename + \
-                                         "\n\n%s" % err,
-                                     parent=self)
-            except ValueError, err:
-                raise gcmd.GStdError(_("Reading workspace file <%s> failed. "
-                                       "Invalid file, unable to parse XML document.") % filename + \
-                                         "\n\n%s" % err,
-                                     parent=self)
-
-            busy = wx.BusyInfo(message=_("Please wait, loading workspace..."),
-                               parent=self)
-            wx.Yield()
-
-            #
-            # load layer manager window properties
-            #
-            if UserSettings.Get(group='workspace', key='posManager', subkey='enabled') is False:
-                if gxwXml.layerManager['pos']:
-                    self.SetPosition(gxwXml.layerManager['pos'])
-                if gxwXml.layerManager['size']:
-                    self.SetSize(gxwXml.layerManager['size'])
-
-            #
-            # start map displays first (list of layers can be empty)
-            #
-            displayId = 0
-            mapdisplay = []
-            for display in gxwXml.displays:
-                mapdisplay.append(self.NewDisplay(show=False))
-                maptree = self.gm_cb.GetPage(displayId).maptree
-
-                # set windows properties
-                mapdisplay[-1].SetProperties(render=display['render'],
-                                             mode=display['mode'],
-                                             showCompExtent=display['showCompExtent'],
-                                             constrainRes=display['constrainRes'])
-
-                # set position and size of map display
-                if UserSettings.Get(group='workspace', key='posDisplay', subkey='enabled') is False:
-                    if display['pos']:
-                        mapdisplay[-1].SetPosition(display['pos'])
-                    if display['size']:
-                        mapdisplay[-1].SetSize(display['size'])
-
-                # set extent if defined
-                if display['extent']:
-                    w, s, e, n = display['extent']
-                    maptree.Map.region = maptree.Map.GetRegion(w=w, s=s, e=e, n=n)
+            # set windows properties
+            mapdisplay[-1].SetProperties(render=display['render'],
+                                         mode=display['mode'],
+                                         showCompExtent=display['showCompExtent'],
+                                         constrainRes=display['constrainRes'])
+            
+            # set position and size of map display
+            if UserSettings.Get(group='workspace', key='posDisplay', subkey='enabled') is False:
+                if display['pos']:
+                    mapdisplay[-1].SetPosition(display['pos'])
+                if display['size']:
+                    mapdisplay[-1].SetSize(display['size'])
                     
-                mapdisplay[-1].Show()
-
-                displayId += 1
-    
-            maptree = None 
-            selected = [] # list of selected layers
-            # 
-            # load list of map layers
-            #
-            for layer in gxwXml.layers:
-                display = layer['display']
-                maptree = self.gm_cb.GetPage(display).maptree
-
-                newItem = maptree.AddLayer(ltype=layer['type'],
-                                           lname=layer['name'],
-                                           lchecked=layer['checked'],
-                                           lopacity=layer['opacity'],
-                                           lcmd=layer['cmd'],
-                                           lgroup=layer['group'],
-                                           lnviz=layer['nviz'])
+            # set extent if defined
+            if display['extent']:
+                w, s, e, n = display['extent']
+                maptree.Map.region = maptree.Map.GetRegion(w=w, s=s, e=e, n=n)
                 
-                # tag 'selected' added 2008/04
-                if layer.has_key('selected'):
-                    if layer['selected']:
-                        selected.append((maptree, newItem))
-                    else:
-                        maptree.SelectItem(newItem, select=False)
-                    
-            for maptree, layer in selected:
-                if not maptree.IsSelected(layer):
-                    maptree.SelectItem(layer, select=True)
-                    maptree.layer_selected = layer
-
-            busy.Destroy()
+            mapdisplay[-1].Show()
             
-            if maptree:
-                # reverse list of map layers
-                maptree.Map.ReverseListOfLayers()
+            displayId += 1
+    
+        maptree = None 
+        selected = [] # list of selected layers
+        # 
+        # load list of map layers
+        #
+        for layer in gxwXml.layers:
+            display = layer['display']
+            maptree = self.gm_cb.GetPage(display).maptree
+            
+            newItem = maptree.AddLayer(ltype=layer['type'],
+                                       lname=layer['name'],
+                                       lchecked=layer['checked'],
+                                       lopacity=layer['opacity'],
+                                       lcmd=layer['cmd'],
+                                       lgroup=layer['group'],
+                                       lnviz=layer['nviz'])
+            
+            if layer.has_key('selected'):
+                if layer['selected']:
+                    selected.append((maptree, newItem))
+                else:
+                    maptree.SelectItem(newItem, select=False)
+            
+        for maptree, layer in selected:
+            if not maptree.IsSelected(layer):
+                maptree.SelectItem(layer, select=True)
+                maptree.layer_selected = layer
+                
+        busy.Destroy()
+        
+        if maptree:
+            # reverse list of map layers
+            maptree.Map.ReverseListOfLayers()
 
-            for mdisp in mapdisplay:
-                mdisp.MapWindow2D.UpdateMap()
+        for mdisp in mapdisplay:
+            mdisp.MapWindow2D.UpdateMap()
 
-            file.close()
-        except IOError, err:
-            wx.MessageBox(parent=self,
-                          message="%s <%s>. %s%s" % (_("Unable to read workspace file"),
-                                                     filename, os.linesep, err),
-                          caption=_("Error"), style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
-            return False
-        except gcmd.GStdError, e:
-            print e
-            return False
-                               
         return True
 
     def OnWorkspaceLoad(self, event=None):

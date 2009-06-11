@@ -64,14 +64,14 @@ from debug import Debug as Debug
 class GException(Exception):
     """!Generic exception"""
     def __init__(self, message, title=_("Error"), parent=None):
-        self.message = message
+        self.msg = message
         self.parent = parent
         self.title = title
         
     def Show(self):
         dlg = wx.MessageDialog(parent=self.parent,
                                caption=self.title,
-                               message=self.message,
+                               message=self.msg,
                                style=wx.ICON_ERROR | wx.CENTRE)
         dlg.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass_error.ico'), wx.BITMAP_TYPE_ICO))
         if self.parent:
