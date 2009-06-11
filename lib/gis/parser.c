@@ -2016,8 +2016,15 @@ static int set_option(const char *string)
     got_one = 0;
     key_len = strlen(the_key);
     for (at_opt = &st->first_option; at_opt != NULL; at_opt = at_opt->next_opt) {
-	if (at_opt->key == NULL || strncmp(the_key, at_opt->key, key_len))
+	if (!at_opt->key)
 	    continue;
+#if 1
+	if (!match_option(the_key, at_opt->key))
+	    continue;
+#else
+	if (strncmp(the_key, at_opt->key, key_len))
+	    continue;
+#endif
 
 	got_one++;
 	opt = at_opt;
