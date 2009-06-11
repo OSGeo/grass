@@ -1,29 +1,43 @@
+/*!
+ * \file gis/get_row_colr.c
+ * 
+ * \brief GIS Library - Get raster row (colors)
+ *
+ * (C) 1999-2009 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public
+ * License (>=v2). Read the file COPYING that comes with GRASS
+ * for details.
+ *
+ * \author USACERL and many others
+ */
+
 #include <grass/gis.h>
 #include "G.h"
 
-
 /*!
- * \brief 
+ * \brief Reads a row of raster data and converts it to RGB.
  *
- * Reads a row of raster data and converts it to red,
- * green and blue components according to the <em>colors</em> parameter.
- * This provides a convenient way to treat a raster layer as a color
- * image without having to explictly cater for each of <tt>CELL</tt>, <tt>FCELL</tt> and <tt>DCELL</tt> types
+ * Reads a row of raster data and converts it to red, green and blue
+ * components according to the <em>colors</em> parameter. This
+ * provides a convenient way to treat a raster layer as a color image
+ * without having to explictly cater for each of <tt>CELL</tt>,
+ * <tt>FCELL</tt> and <tt>DCELL</tt> types.
  *
- *  \param fd
- *  \param row
- *  \param colors
- *  \param red
- *  \param grn
- *  \param blu
- *  \param nul
- *  \return int
+ *  \param fd field descriptor
+ *  \param row row number
+ *  \param colors pointer to Colors structure which holds color info
+ *  \param[out] red red value
+ *  \param[out] grn green value
+ *  \param[out] blu blue value
+ *  \param[out] nul null value
+ *
+ *  \return -1 on error
+ *  \return 0 on success
  */
-
-int
-G_get_raster_row_colors(int fd, int row, struct Colors *colors,
-			unsigned char *red, unsigned char *grn,
-			unsigned char *blu, unsigned char *nul)
+int G_get_raster_row_colors(int fd, int row, struct Colors *colors,
+			    unsigned char *red, unsigned char *grn,
+			    unsigned char *blu, unsigned char *nul)
 {
     int cols = G_window_cols();
     int type = G_get_raster_map_type(fd);
