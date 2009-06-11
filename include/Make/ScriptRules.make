@@ -7,7 +7,7 @@ $(SCRIPTDIR)/%: %.py
 	if [ ! -d $(SCRIPTDIR) ]; then $(MKDIR) $(SCRIPTDIR); fi
 	$(INSTALL) $< $@
 
-$(SCRIPTDIR)/%: %
+$(SCRIPTDIR)/%.py: %.py
 	if [ ! -d $(SCRIPTDIR) ]; then $(MKDIR) $(SCRIPTDIR); fi
 	$(INSTALL) $< $@
 
