@@ -1052,171 +1052,130 @@ Retrieves the value of raster type, converts it to DCELL type and
 returns the result. If null value is stored, returns DCELL null
 value. Used for retreiving DCELL values from raster cells of any type.
 
-int G_get_raster_row (int fd, void *rast, int row, RASTER_MAP_TYPE
-  data_type) If <EM>data_type</EM> is CELL_TYPE, calls
-  G_get_c_raster_row(fd,(CELL *) rast, row) ;
+ - G_get_raster_row ()
 
-<P>
-If <EM>data_type</EM> is FCELL_TYPE, calls G_get_f_raster_row(fd,(FCELL
-  *) rast, row) ;
+For CELL_TYPE raster type calls G_get_c_raster_row(), FCELL_TYPE calls
+G_get_f_raster_row(), and DCELL_TYPE G_get_d_raster_row().
 
-<P>
-If <EM>data_type</EM> is DCELL_TYPE, calls G_get_d_raster_row(fd,(DCELL
-  *) rast, row) ;
+ - G_get_raster_row_nomask().
 
-<P>
-int G_get_raster_row_nomask (int fd, FCELL *fcell, int row,
-  RASTER_MAP_TYPE map_type) Same as <TT>G_get_f_raster_row()</TT>
-  except no masking occurs.
+Same as G_get_f_raster_row() except no masking occurs.
 
-<P>
-int G_get_f_raster_row (int fd, FCELL fcell, int row) Read a row
-  from the raster map open on <EM>fd</EM> into the <TT>float</TT> array <EM>fcell</EM>
-  performing type conversions as necessary based on the actual storage type of
-  the map. Masking, resampling into the current region.  NULL-values are always
-  embedded in <TT>fcell</TT> (<EM>never converted to a value</EM>) .
+ - G_get_f_raster_row()
 
-<P>
-int G_get_f_raster_row_nomask (int fd, FCELL *fcell, int row) 
-  Same as <TT>G_get_f_raster_row()</TT> except no masking occurs.
+Read a row from the raster map performing type conversions as
+necessary based on the actual storage type of the map. Masking,
+resampling into the current region. NULL-values are always embedded
+(never converted to a value).
 
-<P>
-int G_get_d_raster_row (int fd, DCELL *dcell, int row) Same as
-  <TT>G_get_f_raster_row()</TT> except that the array <EM>dcell</EM> is <TT>double</TT>.
+ - G_get_f_raster_row_nomask()
 
-<P>
-int G_get_d_raster_row_nomask (int fd, DECLL *dcell, int row) 
-  Same as <TT>G_get_d_raster_row()</TT> except no masking occurs.
+Same as G_get_f_raster_row() except no masking occurs.
 
-<P>
-int G_get_c_raster_row (int fd, CELL buf, int row) Reads a row
-  of raster data and leaves the NULL values intact. (As opposed to the
-  deprecated function <TT>G_get_map_row()</TT> which converts NULL values to
-  zero.) 
+ - G_get_d_raster_row()
 
-<P>
-<B>NOTE.</B> When the raster map is old and null file doesn't exist, it is
-  assumed that all 0-cells are no-data. When map is floating point, uses quant
-  rules set explicitly by G_set_quant_rules or stored in map's quant file to
-  convert floats to integers.
+Same as G_get_f_raster_row() except that the array double.
 
-<P>
-int G_get_c_raster_row_nomask (int fd, CELL buf, int row) Same
-  as <TT>G_get_c_raster_row()</TT> except no masking occurs.
+ - G_get_d_raster_row_nomask()
 
-<P>
-int G_put_raster_row (int fd, void *rast, RASTER_MAP_TYPE
-  data_type) If <EM>data_type</EM> is CELL_TYPE, calls
-  G_put_c_raster_row(fd,(CELL *) rast) ;
+Same as G_get_d_raster_row() except no masking occurs.
 
-<P>
-If <EM>data_type</EM> is FCELL_TYPE, calls G_put_f_raster_row(fd,(FCELL
-  *) rast) ;
+ - G_get_c_raster_row()
 
-<P>
-If <EM>data_type</EM> is DCELL_TYPE, calls G_put_d_raster_row(fd,(DCELL
-  *) rast) ;
+Reads a row of raster data and leaves the NULL values intact. (As
+opposed to the deprecated function G_get_map_row() which converts NULL
+values to zero.)
 
-<P>
-int G_put_f_raster_row (int fd, FCELL *fcell) Write the next row
-  of the raster map open on <EM>fd</EM> from the <TT>float</TT> array <EM>fcell</EM>,
-  performing type conversion to the actual storage type of the resultant map.
-  Keep track of the range of floating-point values.  Also writes the NULL-value
-  bitmap from the NULL-values embedded in the <EM>fcell</EM> array.
+<b>Note:</b> When the raster map is old and null file doesn't exist,
+it is assumed that all 0-cells are no-data. When map is floating
+point, uses quant rules set explicitly by G_set_quant_rules or stored
+in map's quant file to convert floats to integers.
 
-<P>
-int G_put_d_raster_row (int fd, DCELL *dcell) Same as <TT>G_put_f_raster_row()</TT> 
-except that the array <EM>dcell</EM> is <TT>double</TT>.
+ - G_get_c_raster_row_nomask()
 
-<P>
-int G_put_c_raster_row (int fd, CELL buf) Writes a row of raster
-  data and a row of the null-value bitmap, only treating NULL as NULL. (As
-  opposed to the deprecated function <TT>G_put_map_row()</TT> which treats zero
-  values also as NULL.) 
+Same as G_get_c_raster_row() except no masking occurs.
 
-<P>
-int G_zero_raster_row(void *rast, RASTER_MAP_TYPE
-  data_type) Depending on <EM>data_type</EM> zeroes out G_window_cols() 
-  CELLs, FCELLs, or DCELLs stored in cell buffer.
+ - G_put_raster_row()
 
-<P>
-double G_get_raster_sample(int, struct Cell_head *, struct Categories *,
-             double, double, int, INTERP_TYPE)
-extracts a cell value from raster map at given position with
-INTERP_TYPE 0:UNKNOWN; 1: nearest neighbor interpolation;
-2: bilinear interpolation; 3: cubic interpolation.
+If raster type is CELL_TYPE, calls G_put_c_raster_row(), if FCELL_TYPE, then calls G_put_f_raster_row(), and for DCELL_TYPE, calls G_put_d_raster_row().
 
-\section Upgrades_to_Raster_Functions Upgrades to Raster Functions  (comparing to GRASS 4.x)
+ - G_put_f_raster_row()
+
+Write the next row of the raster map performing type conversion to the
+actual storage type of the resultant map. Keep track of the range of
+floating-point values. Also writes the NULL-value bitmap from the
+NULL-values embedded in the data array.
+
+ - G_put_d_raster_row()
+
+Same as G_put_f_raster_row() except that the array is double.
+
+ - G_put_c_raster_row()
+
+Writes a row of raster data and a row of the null-value bitmap, only
+treating NULL as NULL. (As opposed to the deprecated function
+G_put_map_row() which treats zero values also as NULL.)
+
+ - G_zero_raster_row()
+
+Depending on raster type zeroes out G_window_cols() CELLs, FCELLs, or
+DCELLs stored in cell buffer.
+
+ - G_get_raster_sample()
+
+Extracts a cell value from raster map at given position with nearest neighbor interpolation, bilinear interpolation or cubic interpolation.
+
+\section Upgrades_to_Raster_Functions Upgrades to Raster Functions (comparing to GRASS 4.x)
 
 
-<P>
-These routines will be modified (internally) to work with floating-point and
-NULL-values.
+These routines will be modified (internally) to work with
+floating-point and NULL-values.
 
-<P>
-Changes to <TT>GISLIB</TT>:
+ - G_close_cell()
 
-<P>
-int G_close_cell() If the map is a new floating point, move the
-  <TT>.tmp</TT> file into the <TT>fcell</TT> element, create an empty file in the
-  <TT>cell</TT> directory; write the floating-point range file; write a default
-  quantization file quantization file is set here to round fp numbers (this is
-  a default for now) . create an empty category file, with max cat = max value
-  (for backwards compatibility) . Move the <TT>.tmp</TT> NULL-value bitmap file to
-  the <TT>cell_misc</TT> directory.
+If the map is a new floating point, move the <TT>.tmp</TT> file into
+the <TT>fcell</TT> element, create an empty file in the <TT>cell</TT>
+directory; write the floating-point range file; write a default
+quantization file quantization file is set here to round fp numbers
+(this is a default for now). Create an empty category file, with max
+cat = max value (for backwards compatibility). Move the <TT>.tmp</TT>
+NULL-value bitmap file to the <TT>cell_misc</TT> directory.
 
-<P>
-int G_open_cell_old() Arrange for the NULL-value bitmap to be
-  read as well as the raster map.  If no NULL-value bitmap exists, arrange for
-  the production of NULL-values based on zeros in the raster map.
+ - G_open_cell_old()
 
-<P>
-If the map is floating-point, arrange for quantization to integer for <TT>G_get_c_raster_row()</TT>,
- et. al., by reading the quantization rules for
-  the map using <TT>G_read_quant()</TT>.
+Arrange for the NULL-value bitmap to be read as well as the raster
+map. If no NULL-value bitmap exists, arrange for the production of
+NULL-values based on zeros in the raster map.
 
-<P>
-If the programmer wants to read the floating point map using uing quant rules
-  other than the ones stored in map's quant file, he/she should call
-  G_set_quant_rules() after the call to G_open_cell_old() .
+If the map is floating-point, arrange for quantization to integer for
+G_get_c_raster_row(), et. al., by reading the quantization rules for
+the map using G_read_quant().
 
-<P>
-int G_get_map_row() If the map is floating-point, quantize the
-  floating-point values to integer using the quantization rules established for
-  the map when the map was opened for reading (this quantization is read from
-  cell_misc/name/f_quant file, but can be reset after opening raster map by
-  G_set_quant_rules() ) .
+If the programmer wants to read the floating point map using uing
+quant rules other than the ones stored in map's quant file, he/she
+should call G_set_quant_rules() after the call to G_open_cell_old().
 
-<P>
-NULL values are converted to zeros.
+ - G_get_map_row()
 
-<P>
-<B>This routine is deprecated!!</B>
+If the map is floating-point, quantize the floating-point values to
+integer using the quantization rules established for the map when the
+map was opened for reading (this quantization is read from
+cell_misc/name/f_quant file, but can be reset after opening raster map
+by G_set_quant_rules()). NULL values are converted to zeros. <b>This
+routine is deprecated!!</b>
 
-<P>
-int G_put_map_row() Zero values are converted to NULLs. Write a
-  row of the NULL value bit map.
+ - G_put_map_row()
 
-<P>
-<B>This routine is deprecated!!</B>
-
-<P>
-Changes to <TT>D_LIB</TT>:
-
-<P>
-int Dcell() If the map is a floating-point map, read the map using
-  <TT>G_get_d_map_row()</TT> and plot using <TT>D_draw_d_cell()</TT>. If the
-  map is an integer map, read the map using <TT>G_get_c_raster_row()</TT> and
-  plot using <TT>D_draw_cell()</TT>.
-
-<P>
+Zero values are converted to NULLs. Write a row of the NULL value bit
+map. <b>This routine is deprecated!!</b>
 
 \section Null_no_data NULL (no data) handling
 
-The <TT>null</TT> file is stored in <TT>cell_misc/name/null file</TT>.
 
--2^31 (= 0x80000000 = -2147483648) is the null value
-for the CELL type, so you'll never see that value in a map.
+The <tt>null</tt> file is stored in <tt>cell_misc/name/null file</tt>.
+
+-2^31 (= 0x80000000 = -2147483648) is the null value for the CELL
+type, so you'll never see that value in a map.
 
 The FP nulls are the all-ones bit patterns. These corresponds to NaN
 according to the IEEE-754 formats, although it isn't the "default" NaN
@@ -1233,328 +1192,114 @@ values are treated as null. This will mean that code which can
 generate NaNs doesn't have to explicitly convert them to the GRASS
 null value.
 
-<b>Presence or absence of <TT>null</TT> file:</b>
+<b>Presence or absence of <tt>null</tt> file:</b>
+
 For an integer map, any cells which were null will become zero, but
 any zeroes (cells which were previously either null or zero) will be
 treated as nulls (this is for compatibility with GRASS 4.x, which
-didn't have a <TT>null</TT> file, but typically used zero to indicate a null
-value).
+didn't have a <tt>null</tt> file, but typically used zero to indicate
+a null value).
 
 For a floating-point map, any cells which were null will become zero
 (when writing FP data, a null has a zero written to the fcell/<map>
-file, and the corresponding bit is set in the <TT>null</TT>
-file).
+file, and the corresponding bit is set in the <tt>null</tt> file).
 
 \section Color_Functions Color Functions (new and upgraded)
 
+
 \subsection Upgraded_Colors_structures Upgraded Colors structures
 
-
-<P>
-\verbatim
+\code
 struct _Color_Rule_
-
 {
-
 struct
-
 {
-    int version;        /* set by read\_colors: -1=old,1=new */
+    int version;                                   /* set by read\_colors: -1=old,1=new */
     DCELL shift;
     int invert;
-    int is_float;             /* defined on floating point raster data? */
-    int null_set; /* the colors for null are set? */
+    int is_float;                                  /* defined on floating point raster data? */
+    int null_set;                                  /* the colors for null are set? */
     unsigned char null_red, null_grn, null_blu;
-    int undef_set; /* the colors for cells not in range are set? */
+    int undef_set;                                 /* the colors for cells not in range are set? */
     unsigned char undef_red, undef_grn, undef_blu;
     struct _Color_Info_ fixed, modular;
     DCELL cmin, cmax;
 };
-\endverbatim
-
-<P>
+\endcode
 
 \section New_functions_to_support_colors_for_floating_point New functions to support colors for floating-point
 
+ - G_lookup_raster_colors()
 
-<P>
-Changes to <TT>GISLIB</TT>:
+If raster type is CELL_TYPE, calls G_lookup_colors(), if FCELL_TYPE,
+calls G_lookup_f_raster_colors(), and for DCELL_TYPE
+G_lookup_d_raster_colors().
 
-<P>
-int G_lookup_raster_colors(void *rast, char *r, char *g, char *b,
-  char *set, int n, struct Colors *colors, RASTER_MAP_TYPE cell_type) If
-  the <EM>cell_type</EM> is CELL_TYPE, calls G_lookup_colors((CELL *) cell, r,
-  g, b, set, n, colors) ;
+ - G_lookup_c_raster_colors()
 
-<P>
-If the <EM>cell_type</EM> is FCELL_TYPE, calls
-  G_lookup_f_raster_colors(FCELL *) cell, r, g, b, set, n, colors) ;
+ - G_lookup_f_raster_colors()
 
-<P>
-If the <EM>cell_type</EM> is DCELL_TYPE, calls
-  G_lookup_d_raster_colors(DCELL *) cell, r, g, b, set, n, colors) ;
+Converts the floating-point values in the float data array to their
+<em>r,g,b</em> color components. Embedded NULL-values are handled
+properly as well.
 
-<P>
-int G_lookup_c_raster_colors(CELL *cell, char *r, char *g, char
-  *b, char *set, int n, struct Colors *colors) The same as
-  G_lookup_colors(cell, r, g, b, set, n, colors) .
+ - G_lookup_d_raster_colors()
 
-<P>
-int G_lookup_f_raster_colors(FCELL *fcell, char *r, char *g, char
-  *b, char *set, int n, struct Colors *colors) Converts the <EM>n</EM>
-  floating-point values in the <EM>fcell</EM> array to their <EM>r,g,b</EM> color
-  components. Embedded NULL-values are handled properly as well.
+Converts the floating-point values in the double data array to their
+<em>r,g,b</em> color components. Embedded NULL-values are handled
+properly as well.
 
-<P>
-int G_lookup_d_raster_colors(DCELL *dcell, char *r, char *g, char
-  *b, char *set, int n, struct Colors *colors) Converts the <EM>n</EM>
-  floating-point values in the <EM>dcell</EM> array to their <EM>r,g,b</EM> color
-  components. Embedded NULL-values are handled properly as well.
+ - G_add_raster_color_rule()
 
-<P>
-int G_add_raster_color_rule(void *v1, int r1, int g1, int b1, void *v2, int r2, int g2, int b2,
-  struct Colors *colors, RASTER_MAP_TYPE map_type) If <EM>map_type</EM> is CELL_TYPE, calls G_add_c_raster_color_rule ((CELL
-  *) v1, r1, g1, b1,(CELL *) v2, r2, g2, b2, colors) ;
+If raster type is CELL_TYPE, calls G_add_c_raster_color_rule(), if
+FCELL_TYPE, calls G_add_f_raster_color_rule(), and for DCELL_TYPE
+calls G_add_d_raster_color_rule().
 
-<P>
-If <EM>map_type</EM> is FCELL_TYPE, calls G_add_f_raster_color_rule
-  ((FCELL *) v1, r1, g1, b1,(FCELL *) v2, r2, g2, b2, colors) ;
+ - G_get_raster_color()
 
-<P>
-If <EM>map_type</EM> is DCELL_TYPE, calls G_add_d_raster_color_rule
-  ((DCELL *) v1, r1, g1, b1,(DCELL *) v2, r2, g2, b2, colors) ;
+Looks up the rgb colors for the value in the color table.
 
-<P>
-int G_add_c_raster_color_rule(CELL *v1, int r1, int g1, int b1,
-  CELL *v2, int r2, int g2, int b2, struct Colors *colors) Calls
-  G_add_color_rule(*v1, r1, g1, b1, *v2, r2, g2, b2, colors) .
+ - G_mark_colors_as_fp()
 
-<P>
-int G_add_f_raster_color_rule(FCELL *v1, int r1, int g1, int b1,
-  FCELL *v2, int r2, int g2, int b2, struct Colors *colors) Adds the
-  floating-point rule that the range [<EM>v1,v2</EM>] gets a
-  linear ramp of colors from [<EM>r1,g1,b1</EM>] to
-  [<EM>r2,g2,b2</EM>].
+Sets a flag in the <em>colors</em> structure that indicates that these
+colors should only be looked up using floating-point raster data (not
+integer data).
 
-<P>
-If either <EM>v1</EM> or <EM>v2</EM> is the NULL-value, this call is converted into
-  <TT>G_set_null_value_color (r1, g1, b1, colors) </TT>
-
-<P>
-int G_add_d_raster_color_rule(DCELL *v1, int r1, int g1, int b1,
-  DCELL *v2, int r2, int g2, int b2, struct Colors *colors) Adds the
-  floating-point rule that the range [<EM>v1,v2</EM>] gets a
-  linear ramp of colors from [<EM>r1,g1,b1</EM>] to
-  [<EM>r2,g2,b2</EM>].
-
-<P>
-If either <EM>v1</EM> or <EM>v2</EM> is the NULL-value, this call is converted into
-  <TT>G_set_null_value_color (r1, g1, b1, colors) </TT>
-
-<P>
-int G_get_raster_color(void *v, int *r, int *g, int *b, struct
-  Colors *colors, RASTER_MAP_TYPE data_type) Looks up the rgb colors for
-  <EM>v</EM> in the color table <EM>colors</EM>
-
-<P>
-int G_get_c_raster_color(CELL *v, int *r, int *g, int *b, struct
-  Colors *colors) Calls G_get_color(*v, r, g, b, colors) .
-
-<P>
-int G_get_f_raster_color(FCELL *v, int *r, int *g, int *b, struct
-  Colors *colors) Looks up the rgb colors for <EM>v</EM> in the color table
-  <EM>colors</EM>
-
-<P>
-int G_get_d_raster_color(DCELL *v, int *r, int *g, int *b, struct
-  Colors *colors) Looks up the rgb colors for <EM>v</EM> in the color table
-  <EM>colors</EM>
-
-<P>
-int G_set_raster_color(void *v, int r, int g, int b, struct Colors
-  *colors, RASTER_MAP_TYPE data_type) calls <TT>G_add_raster_color_rule (v, r, g, b, v, r, g, r, colors, data_type) ;</TT>
-
-<P>
-int G_set_c_raster_color(CELL *v, int r, int g, int b, struct
-  Colors *colors) Calls G_set_color(*v, r, g, b, colors) .
-
-<P>
-int G_set_f_raster_color(FCELL *v, int r, int g, int b, struct
-  Colors *colors) Inserts a rule that assigns the color <EM>r,g,b</EM> to <EM>v</EM>. It is implemented as:
-
-<P>
-<TT>G_add_f_raster_color_rule (v, r, g, b, v, r, g, r, colors) ;</TT>
-
-<P>
-int G_set_d_raster_color(DCELL *v, int r, int g, int b, struct
-  Colors *colors) Inserts a rule that assigns the color <EM>r,g,b</EM> to <EM>v</EM>. It is implemented as:
-
-<P>
-<TT>G_add_d_raster_color_rule (v, r, g, b, v, r, g, r, colors) ;</TT>
-
-<P>
-int G_mark_colors_as_fp(struct Colors *colors) Sets a flag in
-  the <EM>colors</EM> structure that indicates that these colors should only be
-  looked up using floating-point raster data (not integer data) .
-
-<P>
-In particular if this flag is set, the routine <TT>G_get_colors_min_max()</TT> should return 
-min=-255&#94;3 and max=255&#94;3.
-<P>
-
-<P><P>
-<BR>
-<B>These routines are in the <TT>DISPLAYLIB</TT>:</B>
-
-<P>
-int D_raster_of_type(void *rast, int ncols, int nrows, struct
-  Colors *colors, RASTER_MAP_TYPE data_type) If <EM>map_type</EM> is
-  CELL_TYPE, calls D_raster((CELL *) rast, ncols, nrows, colors) ;
-
-<P>
-If <EM>map_type</EM> is FCELL_TYPE, calls D_f_raster((FCELL *) rast, ncols,
-  nrows, colors) ;
-
-<P>
-If <EM>map_type</EM> is DCELL_TYPE, calls D_d_raster((DCELL *) rast, ncols,
-  nrows, colors) ;
-
-<P>
-int D_f_raster(FCELL *fcell, int ncols, int nrows, struct Colors
-  *colors) Same functionality as <TT>D_raster()</TT> except that the <EM>fcell</EM> 
-  array is type <TT>FCELL</TT>. This implies that the floating-point
-  interfaces to the <EM>colors</EM> are used by this routine.
-
-<P>
-int D_d_raster(DCELL *dcell, int ncols, int nrows, struct Colors
-  *colors) Same functionality as <TT>D_raster()</TT> except that the <EM>dcell</EM> 
-  array is type <TT>DCELL</TT>. This implies that the floating-point
-  interfaces to the <EM>colors</EM> are used by this routine.
-
-<P>
-int D_color_of_type(void *value, struct Colors *colors,
-  RASTER_MAP_TYPE data_type) If the <EM>data_type</EM> is CELL_TYPE,
-  calls D_color((CELL *value, colors) ;
-
-<P>
-If the <EM>data_type</EM> is FCELL_TYPE, calls D_f_color((FCELL *value,
-  colors) ;
-
-<P>
-If the <EM>data_type</EM> is DCELL_TYPE, calls D_d_color((DCELL *value,
-  colors) ;
-
-<P>
-int D_f_color(FCELL *value, struct Colors *colors) Same
-  functionality as <TT>D_color()</TT> except that the <EM>value</EM> is type <TT>FCELL</TT>. 
-  This implies that the floating-point interfaces to the <EM>colors</EM> are used by this routine.
-
-<P>
-int D_d_color(DCELL *value, struct Colors *colors) Same
-  functionality as <TT>D_color()</TT> except that the <EM>value</EM> is type <TT>DCELL</TT>.  
-  This implies that the floating-point interfaces to the <EM>colors</EM> are used by this routine.
-
-<P>
-int D_lookup_raster_colors(void *rast, int *colornum, int n, struct
-  Colors *colors, RASTER_MAP_TYPE data_type) If the <EM>data_type</EM> is
-  CELL_TYPE, calls D_lookup_c_raster_colors((CELL *) rast, colornum, n,
-  colors) ;
-
-<P>
-If the <EM>data_type</EM> is FCELL_TYPE, calls
-  D_lookup_f_raster_colors((FCELL *) rast, colornum, n, colors) ;
-
-<P>
-If the <EM>data_type</EM> is DCELL_TYPE, calls
-  D_lookup_d_raster_colors((DCELL *) rast, colornum, n, colors) ;
-
-<P>
-int D_lookup_c_raster_colors(CELL *cell, int *colornum, int n,
-  struct Colors *colors) Same functionality as <TT>D_lookup_colors()</TT>
-  except that the resultant color numbers are placed into a separate <EM>colornum</EM>
-  array (which the caller must allocate) .
-
-<P>
-int D_lookup_f_raster_colors(FCELL *fcell, int *colornum, int n,
-  struct Colors *colors) Same functionality as <TT>D_lookup_colors()</TT>
-  except that the <EM>fcell</EM> array is type <TT>FCELL</TT> and that the resultant
-  color numbers are placed into a separate <EM>colornum</EM> array (which the
-  caller must allocate) .
-
-<P>
-int D_lookup_d_raster_colors(DCELL *dcell, int *colornum, int n,
-  struct Colors *colors) Same functionality as <TT>D_lookup_colors()</TT>
-  except that the <EM>dcell</EM> array is type <TT>DCELL</TT> and that the resultant
-  color numbers are placed into a separate <EM>colornum</EM> array (which the
-  caller must allocate) .
-
-<P>
-int D_draw_cell_of_type(int A_row, DCELL *xarray, struct Colors
-  *colors, RASTER_MAP_TYPE map_type) If <EM>map_type</EM> is CELL_TYPE,
-  calls D_draw_cell (A_row,(CELL *) xarray, colors) ;
-
-<P>
-If <EM>map_type</EM> is FCELL_TYPE, calls D_draw_f_cell (A_row,(FCELL *) 
-  xarray, colors) ;
-
-<P>
-If <EM>map_type</EM> is DCELL_TYPE, calls D_draw_d_cell (A_row,(DCELL *) 
-  xarray, colors) ;
-
-<P>
-int D_draw_f_cell (int A_row, FCELL *xarray, struct Colors
-  *colors) Same functionality as <TT>D_draw_cell()</TT> except that the <EM>xarray</EM> 
-  array is type <TT>FCELL</TT> which implies a call to <TT>D_f_raster()</TT> instead of a call to <TT>D_raster()</TT>.
-
-<P>
-int D_draw_d_cell (int A_row, DCELL *xarray, struct Colors
-  *colors) Same functionality as <TT>D_draw_cell()</TT> except that the <EM>xarray</EM> 
-  array is type <TT>DCELL</TT> which implies a call to <TT>D_d_raster()</TT> instead of a call to <TT>D_raster()</TT>.
-
-<P>
 
 \section New_functions_to_support_a_colors_for_the_NULL_value New functions to support a color for the NULL-value
 
+ - G_set_null_value_color()
 
-<P>
-int G_set_null_value_color (int r, int g, int b, struct Colors
-  *colors) Sets the color (in <EM>colors</EM>) for the NULL-value to <EM>r,g,b</EM>.
+Sets the color (in <em>colors</em>) for the NULL-value to <em>r,g,b</em>.
 
-<P>
-int G_get_null_value_color (int *r, int *g, int *b, struct Colors
-  *colors) Puts the red, green, and blue components of the color for the
-  NULL-value into <EM>r,g,b</EM>.
+ - G_get_null_value_color()
 
-<P>
+Puts the red, green, and blue components of the color for the
+NULL-value into <em>r,g,b</em>.
 
 \section New_functions_to_support_a_default_color New functions to support a default color
 
 
-<P>
-int G_set_default_color (int r, int g, int b, struct Colors
-  *colors) Sets the default color (in <EM>colors</EM>) to <EM>r,g,b</EM>. This is
-  the color for values which do not have an explicit rule.
+ - G_set_default_color()
 
-<P>
-int G_get_default_color (int *r, int *g, int *b, struct Colors
-  *colors) Puts the red, green, and blue components of the
-  <TT>"default"</TT> color into <EM>r,g,b</EM>.
+Sets the default color (in <em>colors</em>) to <em>r,g,b</em>. This is
+the color for values which do not have an explicit rule.
 
-<P>
+ - G_get_default_color()
+
+Puts the red, green, and blue components of the <tt>"default"</tt>
+color into <em>r,g,b</em>.
 
 \section New_functions_to_support_treating_a_raster_layer_as_a_color_image New functions to support treating a raster layer as a color image
 
-<P>
-int G_get_raster_row_colors(int fd, int row, struct Colors *colors,
-  unsigned char *red, unsigned char *grn, unsigned char *blu,
-  unsigned char *nul) Reads a row of raster data and converts it to red,
-  green and blue components according to the <EM>colors</EM> parameter.
+ - G_get_raster_row_colors()
 
-<P>
+Reads a row of raster data and converts it to red, green and blue
+components according to the colors.
+
 This provides a convenient way to treat a raster layer as a color
-  image without having to explictly cater for each of <TT>CELL</TT>, <TT>  FCELL</TT> and <TT>DCELL</TT> types
-
-<P>
+image without having to explictly cater for each of CELL, FCELL and
+DCELL types.
 
 \section Upgraded_color_functions Upgraded color functions
 

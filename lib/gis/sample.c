@@ -1,22 +1,18 @@
 /*!
-   \file sample.c
+   \file gis/sample.c
 
-   \brief GIS library - sampling methods (extract a cell value from
+   \brief GIS library - Sampling methods (extract a cell value from
    raster map)
 
    1/2006: moved to libgis from v.sample/v.drape for clone removal
 
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2009 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author James Darrell McCauley <darrell mccauley-usa.com>, http://mccauley-usa.com/
-
-   \date 1994
- */
+*/
 
 #include <string.h>
 #include <unistd.h>
@@ -29,12 +25,15 @@ static double scancatlabel(const char *);
 static void raster_row_error(const struct Cell_head *window, double north,
 			     double east);
 
-
 /*!
  *  \brief Extract a cell value from raster map.
  *
  *  Extract a cell value from raster map at given northing and easting
  *  with a sampled 3x3 window using a specified interpolation method.
+ *
+ *  - NEAREST  neighbor interpolation
+ *  - BILINEAR bilinear interpolation
+ *  - CUBIC    cubic interpolation
  *
  *  \param fd file descriptor
  *  \param window region settings
@@ -46,13 +45,11 @@ static void raster_row_error(const struct Cell_head *window, double north,
  *
  *  \return cell value at given position
  */
-
-DCELL G_get_raster_sample(
-    int fd,
-    const struct Cell_head *window,
-    struct Categories *cats,
-    double north, double east,
-    int usedesc, INTERP_TYPE itype)
+DCELL G_get_raster_sample(int fd,
+			  const struct Cell_head *window,
+			  struct Categories *cats,
+			  double north, double east,
+			  int usedesc, INTERP_TYPE itype)
 {
     double retval;
 
@@ -74,12 +71,25 @@ DCELL G_get_raster_sample(
     return retval;
 }
 
-
-DCELL G_get_raster_sample_nearest(
-    int fd,
-    const struct Cell_head *window,
-    struct Categories *cats,
-    double north, double east, int usedesc)
+/*!
+ *  \brief Extract a cell value from raster map (neighbor interpolation)
+ *
+ *  Extract a cell value from raster map at given northing and easting
+ *  with a sampled 3x3 window using a neighbor interpolation.
+ *
+ *  \param fd file descriptor
+ *  \param window region settings
+ *  \param cats categories
+ *  \param north northing position
+ *  \param east easting position
+ *  \param usedesc flag to scan category label
+ *
+ *  \return cell value at given position
+ */
+DCELL G_get_raster_sample_nearest(int fd,
+				  const struct Cell_head *window,
+				  struct Categories *cats,
+				  double north, double east, int usedesc)
 {
     int row, col;
     DCELL result;
@@ -119,11 +129,25 @@ done:
 }
 
 
-DCELL G_get_raster_sample_bilinear(
-    int fd,
-    const struct Cell_head *window,
-    struct Categories *cats,
-    double north, double east, int usedesc)
+/*!
+ *  \brief Extract a cell value from raster map (bilinear interpolation).
+ *
+ *  Extract a cell value from raster map at given northing and easting
+ *  with a sampled 3x3 window using a bilinear interpolation.
+ *
+ *  \param fd file descriptor
+ *  \param window region settings
+ *  \param cats categories
+ *  \param north northing position
+ *  \param east easting position
+ *  \param usedesc flag to scan category label
+ *
+ *  \return cell value at given position
+ */
+DCELL G_get_raster_sample_bilinear(int fd,
+				   const struct Cell_head *window,
+				   struct Categories *cats,
+				   double north, double east, int usedesc)
 {
     int row, col;
     double grid[2][2];
@@ -194,11 +218,25 @@ done:
     return result;
 }
 
-DCELL G_get_raster_sample_cubic(
-    int fd,
-    const struct Cell_head *window,
-    struct Categories *cats,
-    double north, double east, int usedesc)
+/*!
+ *  \brief Extract a cell value from raster map (cubic interpolation).
+ *
+ *  Extract a cell value from raster map at given northing and easting
+ *  with a sampled 3x3 window using a cubic interpolation.
+ *
+ *  \param fd file descriptor
+ *  \param window region settings
+ *  \param cats categories
+ *  \param north northing position
+ *  \param east easting position
+ *  \param usedesc flag to scan category label
+ *
+ *  \return cell value at given position
+ */
+DCELL G_get_raster_sample_cubic(int fd,
+				const struct Cell_head *window,
+				struct Categories *cats,
+				double north, double east, int usedesc)
 {
     int i, j, row, col;
     double grid[4][4];

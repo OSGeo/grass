@@ -1044,15 +1044,10 @@ void G_rotate_around_point(double, double, double *, double *, double);
 void G_rotate_around_point_int(int, int, int *, int *, double);
 
 /* sample.c */
-DCELL G_get_raster_sample_nearest(
-    int, const struct Cell_head *, struct Categories *, double, double, int);
-DCELL G_get_raster_sample_bilinear(
-    int, const struct Cell_head *, struct Categories *, double, double, int);
-DCELL G_get_raster_sample_cubic(
-    int, const struct Cell_head *, struct Categories *, double, double, int);
-DCELL G_get_raster_sample(
-    int, const struct Cell_head *, struct Categories *, double, double, int,
-    INTERP_TYPE);
+DCELL G_get_raster_sample_nearest(int, const struct Cell_head *, struct Categories *, double, double, int);
+DCELL G_get_raster_sample_bilinear(int, const struct Cell_head *, struct Categories *, double, double, int);
+DCELL G_get_raster_sample_cubic(int, const struct Cell_head *, struct Categories *, double, double, int);
+DCELL G_get_raster_sample(int, const struct Cell_head *, struct Categories *, double, double, int, INTERP_TYPE);
 
 /* seek.c */
 off_t G_ftell(FILE *);

@@ -1,31 +1,26 @@
-
-/**
- * \file zero_cell.c
+/*!
+ * \file gis/zero_cell.c
  *
  * \brief GIS Library - Zero cell buffer functions.
  *
- * (C) 2001-2008 by the GRASS Development Team
+ * (C) 2001-2009 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author GRASS GIS Development Team
- *
- * \date 1999-2008
+ * \author Original author CERL
  */
 
 #include <grass/gis.h>
 
-
-/**
+/*!
  * \brief Zero a raster CELL buffer.
  *
- * This routines assigns each member of the raster buffer array 
- * <b>buf</b> to zero. It assumes that <b>buf</b> has been allocated 
- * using <i>G_allocate_cell_buf.</i>
+ * This routines assigns each member of the raster buffer array
+ * <i>buf</i> to zero. It assumes that <i>buf</i> has been allocated
+ * using G_allocate_cell_buf().
  *
- * \param[in] buf
- * \return
+ * \param buf data buffer
  */
 
 void G_zero_cell_buf(CELL * buf)
@@ -36,19 +31,16 @@ void G_zero_cell_buf(CELL * buf)
 	*buf++ = 0;
 }
 
-
-/**
+/*!
  * \brief Zero a raster buffer.
  *
- * This routines assigns each member of the raster buffer array 
- * <b>rast</b> to zero. It assumes that <b>rast</b> has been allocated 
- * using <i>G_allocate_cell_buf.</i>
+ * This routines assigns each member of the raster buffer array
+ * <i>rast</i> to zero. It assumes that <i>rast</i> has been allocated
+ * using G_allocate_cell_buf().
  *
- *  \param[in,out] rast
- *  \param[in] data_type RASTER_MAP_TYPE
- *  \return
+ * \param rast data buffer
+ * \param data_type raster type (CELL, FCELL, DCELL)
  */
-
 void G_zero_raster_buf(void *rast, RASTER_MAP_TYPE data_type)
 {
     int i;
