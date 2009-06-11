@@ -134,7 +134,7 @@ static int show(const char *, int);
 static int set_flag(int);
 static int contains(const char *, int);
 static int is_option(const char *);
-static int set_option(char *);
+static int set_option(const char *);
 static int check_opts();
 static int check_an_opt(const char *, int, const char *, const char **, char **);
 static int check_int(const char *, const char **);
@@ -1966,7 +1966,44 @@ static int is_option(const char *string)
     return n > 0 && string[n] == '=' && string[0] != '_' && string[n-1] != '_';
 }
 
-static int set_option(char *string)
+static int match_option(const char *string, const char *option)
+{
+    int next[16];
+    int count = 0;
+    int i, j;
+
+    for (i = 0; option[i]; i++)
+	if (option[i] == '_' && option[i+1] != '\0')
+	    next[count++] = i+1;
+
+    /* try exact match */
+    for (i = 0; ; i++) {
+	if (string[i] == '\0')
+	    return 1;
+	if (option[i] == '\0')
+	    return 0;
+	if (string[i] == option[i])
+	    continue;
+	break;
+    }
+
+    /* try abbreviations */
+    for (i = 0; ; i++) {
+	if (string[i] == '\0')
+	    return 1;
+	if (option[i] == '\0')
+	    return 0;
+	if (string[i] == option[i])
+	    continue;
+	for (j = 0; j < count; j++)
+	    if (string[i] == option[next[j]] &&
+		match_option(&string[i], &option[next[j]]))
+		return 1;
+	return 0;
+    }
+}
+
+static int set_option(const char *string)
 {
     struct Option *at_opt = NULL;
     struct Option *opt = NULL;
