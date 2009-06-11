@@ -252,8 +252,8 @@ def main():
     # calculate colors and write SQL command file
     grass.message("Looking up colors ...")
 
-    p = grass.start_command('r.what.color', flags = 'i', input = tmp_colr,
-			    stdin = grass.PIPE, stdout = grass.PIPE)
+    f = open(tmp, 'w')
+    p = grass.feed_command('r.what.color', flags = 'i', input = tmp_colr, stdout = f)
     lastval = None
     for v in sorted(cvals):
 	if v == lastval:
@@ -261,20 +261,23 @@ def main():
 	p.stdin.write('%f\n' % v)
     p.stdin.close()
     p.wait()
+    f.close()
 
     tmp_vcol = "%s_vcol.sql" % tmp
-    f = open(tmp_vcol, 'w')
+    fi = open(tmp, 'r')
+    fo = open(tmp_vcol, 'w')
     t = string.Template("UPDATE $table SET $rgb_column = '$colr' WHERE $column = $value;\n")
     found = 0
-    for line in p.stdout:
+    for line in fi:
 	[value, colr] = line.split(':')
 	colr = colr.strip()
 	if len(colr.split(':')) != 3:
 	    continue
 	#g.message message="LINE=[$LINE]"
-	f.write(t.substitute(table = table, rgb_column = rgb_column, colr = colr, value = value))
+	fo.write(t.substitute(table = table, rgb_column = rgb_column, colr = colr, value = value))
 	found += 1
-    f.close()
+    fi.close()
+    fo.close()
     
     if not found:
 	grass.fatal("No values found in color range")
