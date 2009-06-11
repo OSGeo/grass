@@ -1303,275 +1303,230 @@ DCELL types.
 
 \section Upgraded_color_functions Upgraded color functions
 
-<P>
-int G_read_colors() This routine reads the rules from the color
-  file. If the input raster map is is a floating-point map it calls <TT>G_mark_colors_as_fp()</TT>.
+ - G_read_colors()
 
-<P>
-int G_write_colors() The rules are written out using
-  floating-point format, removing trailing zeros (possibly producing integers) .
-  The flag marking the colors as floating-point is <B>not</B> written.
+This routine reads the rules from the color file. If the input raster
+map is is a floating-point map (FCELL or DCELL) it calls
+G_mark_colors_as_fp().
 
-<P>
-int G_get_colors_min_max() If the color table is marked as
-  <TT>"float"</TT>, then return the minimum as -(255&#94;3 * 128) and the maximum
-  as (255&#94;3 * 128).
- This is to simulate a very <B>large</B> range so that
-  GRASS doesn't attempt to use <EM>colormode float</EM> to allow interactive
-  toggling of colors.
+ - G_write_colors()
 
-<P>
-int G_lookup_colors() Modified to return a color for NULL-values.
+The rules are written out using floating-point format, removing
+trailing zeros (possibly producing integers). The flag marking the
+colors as floating-point is <b>not</b> written.
 
-<P>
-int G_get_color() Modified to return a color for the NULL-value.
+ - G_get_colors_min_max()
 
-<P>
+If the color table is marked as <tt>"float"</tt>, then return the
+minimum as -(255&#94;3 * 128) and the maximum as (255&#94;3 *
+128). This is to simulate a very <em>large</em> range so that GRASS
+doesn't attempt to use <em>colormode float</em> to allow interactive
+toggling of colors.
+
+ - G_lookup_colors()
+
+Modified to return a color for NULL-values.
+
+ - G_get_color()
+
+Modified to return a color for the NULL-value.
 
 \section Changes_to_the_Colors_structure Changes to the <TT>Colors</TT> structure
 
-<P>
-Modifications to the <TT>Colors</TT> structure to support colors for floating-point data and
-the NULL-value consist of
 
-<P>
+Modifications to the Colors structure to support colors for
+floating-point data and the NULL-value consist of
 
-<UL>
-<LI>the _Color_Rule_ struct was changed to have DCELL value (instead of
-  CELL cat) to have the range be floating-point values instead of integer cats.
-</LI>
-<LI>a color for NULL was added
-</LI>
-<LI>the special color for zero was eliminated
-</LI>
-<LI>a default color for values which have no assigned color was added
-</LI>
-<LI>a flag was added to the Colors structure to indicate if either the map
-  itself is floating-point (If the map is integer and the floating point
-  functions are used to lookup colors, the values are checked to see if they
-  are integer, and if they are, the integer mechanism is used) 
-</LI>
-<LI>fp_lookup - a lookup table for floating point numbers is added. It
-  orders the end points of fp intervals into array with a pointer to a color
-  rule for each inteval, and the binary search is then used when looking up
-  colors instead of linearly searching through all color rules.
-</LI>
-</UL>
-
-<P>
+ - the _Color_Rule_ struct was changed to have DCELL value (instead of
+CELL cat) to have the range be floating-point values instead of
+integer cats.
+ - a color for NULL was added
+ - the special color for zero was eliminated
+ - a default color for values which have no assigned color was added
+ - a flag was added to the Colors structure to indicate if either the
+map itself is floating-point (If the map is integer and the floating
+point functions are used to lookup colors, the values are checked to
+see if they are integer, and if they are, the integer mechanism is
+used)
+ - fp_lookup - a lookup table for floating point numbers is added. It
+orders the end points of fp intervals into array with a pointer to a
+color rule for each inteval, and the binary search is then used when
+looking up colors instead of linearly searching through all color
+rules.
 
 \section Changes_to_the_colr_file Changes to the <TT>colr</TT> file
 
-<UL>
-<LI>The rules are written out using floating-point format, removing trailing
-  zeros (possibly producing integers) . For example, to ramp from red to green
-  for the range [1.3,5.0]:
-<PRE>
-            1.3:255:0:0  5:0:255:0
-</PRE>
-</LI>
-<LI>The NULL-value color is written as:
-<PRE>
-            nv:red:grn:blu
-</PRE>
-</LI>
-<LI>The default color (for values that don't have an explicit rule) is written
-as:
-<PRE>
-            *:red:grn:blu
-</PRE>
-</LI>
-</UL>
 
-<P>
+ - The rules are written out using floating-point format, removing trailing zeros (possibly producing integers) . For example, to ramp from red to green for the range [1.3,5.0]:
+\verbatim
+            1.3:255:0:0  5:0:255:0
+\endverbatim
+
+ - The NULL-value color is written as:
+\verbatim
+            nv:red:grn:blu
+\endverbatim
+
+ - The default color (for values that don't have an explicit rule) is written
+as:
+\verbatim
+            *:red:grn:blu
+\endverbatim
+
 
 \section Range_functions Range functions (new and upgraded)
 
 \subsection Modified_range_functions Modified range functions
 
+ - G_read_range()
 
-<P>
-int G_read_range() Old range file (those with 4 numbers) should
-  treat zeros in this file as NULL-values. New range files (those with just 2
-  numbers) should treat these numbers as real data (zeros are real data in this
-  case) .
+Old range file (those with 4 numbers) should treat zeros in this file
+as NULL-values. New range files (those with just 2 numbers) should
+treat these numbers as real data (zeros are real data in this case).
 
-<P>
-An empty range file indicates that the min, max are undefined. This is a
-  valid case, and the result should be an initialized range struct with no
-  defined min/max.
+An empty range file indicates that the min, max are undefined. This is
+a valid case, and the result should be an initialized range struct
+with no defined min/max.
 
-<P>
 If the range file is missing and the map is a floating-point map, this
-  function will create a default range by calling <TT>G_construct_default_range()</TT>.
+function will create a default range by calling
+G_construct_default_range().
 
-<P>
-int G_init_range() Must set a flag in the range structure that indicates that
-  no min/max have been defined - probably a <TT>"first"</TT> boolean flag.
+ - G_init_range()
 
-<P>
-int G_update_range() NULL-values must be detected and ignored.
+Must set a flag in the range structure that indicates that no min/max
+have been defined - probably a "first" boolean flag.
 
-<P>
-int G_get_range_min_max() If the range structure has no defined min/max
-  (first!=0) there will not be a valid range. In this case the min and max returned must
-  be the NULL-value.
+ - G_update_range()
 
-<P>
-int G_write_range() This routine only writes 2 numbers (min,max) to the range
-  file, instead of the 4 (pmin,pmax,nmin,nmax) previously written. If there is no defined
-  min,max, an empty file is written.
+NULL-values must be detected and ignored.
 
-<P>
+ - G_get_range_min_max()
+
+If the range structure has no defined min/max (first!=0) there will
+not be a valid range. In this case the min and max returned must be
+the NULL-value.
+
+ - G_write_range()
+
+This routine only writes 2 numbers (min,max) to the range file,
+instead of the 4 (pmin,pmax,nmin,nmax) previously written. If there is
+no defined min,max, an empty file is written.
 
 \section New_range_functions New range functions
 
+ - G_construct_default_range()
 
-<P>
-int G_construct_default_range(struct Range *r) Sets the integer
-  range <EM>r</EM> to [1,255]
+Sets the integer range to [1,255].
 
-<P>
-int G_read_raster_range(void *r, char *name, char *mapset,
-  RASTER_MAP_TYPEmap_type) If <EM>map_type</EM> is CELL_TYPE, calls
-  G_read_range((struct Range *) r, name, mapset) ; otherwise calls
-  G_read_fp_range((struct FPRange *) r, name, mapset) ;
+ - G_read_raster_range()
 
-<P>
-int G_read_fp_range(struct FPRange *r, char *name, char
-  *mapset) Read the floating point range file <TT>f_range</TT>. This file is
-  written in binary using XDR format. If there is no defined min/max in <EM>r</EM>, 
-  an empty <TT>f_range</TT>file is created.
+If raster type is CELL_TYPE, calls G_read_range(), otherwise calls
+G_read_fp_range().
 
-<P>
-An empty range file indicates that the min, max are undefined. This is a
-  valid case, and the result should be an initialized range struct with no
-  defined min/max.
+ - G_read_fp_range()
 
-<P>
+Read the floating point range file <tt>f_range</tt>. This file is
+written in binary using XDR format. If there is no defined min/max in
+FPRange structure, an empty <tt>f_range</tt> file is created.
+
+An empty range file indicates that the min, max are undefined. This is
+a valid case, and the result should be an initialized range struct
+with no defined min/max.
+
 If the range file is missing and the map is a floating-point map, this
-  function will create a default range by calling <TT>G_construct_default_range()</TT>.
+function will create a default range by calling
+G_construct_default_range().
 
-<P>
-int G_init_raster_range (FPRange *r, RASTER_MAP_TYPE
-  map_type) If <EM>map_type</EM> is CELL_TYPE, calls G_init_range(struct
-  Range *) r) ; otherwise calls G_init_fp_range((struct FPRange *) r) ;
+ - G_init_raster_range()
 
-<P>
-int G_init_fp_range (FPRange *r) Must set a flag in the range
-  structure that indicates that no min/max have been defined - probably a
-  <TT>"first"</TT> boolean flag.
+If raster type is CELL_TYPE, calls G_init_range(), otherwise calls
+G_init_fp_range().
 
-<P>
-int G_update_f_range (FPRange *r, FCELL *fcell, int n) Updates the
-floating-point range <EM>r</EM> from the <EM>n</EM> <TT>FCELL</TT> values in <EM>fcell</EM>
-NULL-values must be detected and ignored.
+ - G_init_fp_range()
 
-<P>
-int G_update_d_range (FPRange *r, DCELL *dcell, int n) Updates
-  the floating-point range <EM>r</EM> from the <EM>n</EM> <TT>DCELL</TT> values in 
-  <EM>dcell</EM> NULL-values must be detected and ignored.
+Must set a flag in the range structure that indicates that no min/max
+have been defined - probably a "first" boolean flag.
 
-<P>
-int G_get_fp_range_min_max (FPRange *r, DCELL *min, DCELL
-  *max) Extract the min/max from the range structure <EM>r</EM>.
+ - G_update_f_range()
+ - G_update_d_range()
 
-<P>
-If the range structure has no defined min/max (first!=0) there will not be a
-  valid range. In this case the min and max returned must be the NULL-value.
+Updates the floating-point range from the values in NULL-values must
+be detected and ignored.
 
-<P>
-int G_write_fp_range (FPRange *r) Write the floating point range
-  file <TT>f_range</TT>. This file is written in binary using XDR format. If
-  there is no defined min/max in <EM>r</EM>, an empty <TT>f_range</TT>file is
-  created.
+ - G_get_fp_range_min_max()
 
-<P>
+Extract the min/max from the FPRange structure. If the range structure
+has no defined min/max (first!=0) there will not be a valid range. In
+this case the min and max returned must be the NULL-value.
+
+ - G_write_fp_range()
+
+Write the floating point range file <tt>f_range</tt>. This file is
+written in binary using XDR format. If there is no defined min/max in
+<EM>r</EM>, an empty <tt>f_range</tt> file is created.
 
 \section New_and_Upgraded_Cell_stats_functions New and Upgraded Cell_stats functions
 
+Modified Cell_stats functions to handle NULL-values:
 
-<P>
-Modified <TT>Cell_stats</TT> functions to handle NULL-values:
+ - G_init_cell_stats()
 
-<P>
-int G_init_cell_stats() Set the count for NULL-values to zero.
+Set the count for NULL-values to zero.
 
-<P>
-int G_update_cell_stats() Look for NULLs and update the
-  NULL-value count.
+ - G_update_cell_stats()
 
-<P>
-int G_next_cell_stat() Do not return a record for the
-  NULL-value
+Look for NULLs and update the NULL-value count.
 
-<P>
-int G_find_cell_stat() Allow finding the count for the
-  NULL-value
+ - G_next_cell_stat()
 
-<P>
-int G_get_stats_for_null_value(int *count, struct Cell_stats
-  *s) Get a number of null values from stats structure. Note: when reporting
-  values which appear in a map using G_next_cell_stats() , to get stats for
-  null, call G_get_stats_for_null_value() first, since
-  G_next_cell_stats() does not report stats for null.
+Do not return a record for the NULL-value.
 
-<P>
+ - G_find_cell_stat()
+
+Allow finding the count for the NULL-value.
+
+ - G_get_stats_for_null_value()
+
+Get a number of null values from stats structure. Note: when reporting
+values which appear in a map using G_next_cell_stats() , to get stats
+for null, call G_get_stats_for_null_value() first, since
+G_next_cell_stats() does not report stats for null.
 
 \section New_Quantization_Functions New Quantization Functions
 
-
-<P>
 New functions to support quantization of floating-point to integer:
 
-<P>
-int G_write_quant(char *name, char *mapset, struct Quant
-  *q) Writes the <TT>f_quant</TT> file for the raster map <EM>name</EM> from <EM>q</EM>.
+ - G_write_quant()
 
-<P>
-if mapset==G_mapset() i.e. the map is in current mapset, then the original
-  quant file in cell_misc/map/f_quant is written. Otherwise <EM>q</EM> is
-  written into quant2/mapset/name (much like colr2 element) . This results in
-  map&#64;mapset being read using quant rules stored in <EM>q</EM> from
-  G_mapset() .  See G_read_quant() for detailes.
+Writes the <tt>f_quant</tt> file for the raster map. If
+mapset==G_mapset() i.e. the map is in current mapset, then the
+original quant file in <tt>cell_misc/map/f_quant</tt> is
+written. Othewise is written into <tt>quant2/mapset/name</tt> (much
+like colr2 element). This results in map&#64;mapset being read using
+quant rules stored G_mapset(). See G_read_quant() for detailes.
 
-<P>
-int G_set_quant_rules (int fd, struct Quant *q) Sets quant
-  translation rules for raster map opened for reading. fd is a file descriptor
-  returned by G_open_cell_old() . After calling this function,
-  G_get_c_raster_row() and G_get_map_row() will use rules defined by q
-  (instead of using rules defined in map's quant file) to convert floats to
-  ints.
+ - G_set_quant_rules()
 
-<P>
-int G_read_quant(char *name, char *mapset, struct Quant *q) reads
-  quantization rules for <TT>"name"</TT> in <TT>"mapset"</TT> and stores them
-  in the quantization structure <TT>"quant"</TT>. If the map is in another
-  mapset, first checks for quant2 table for this map in current mapset.
+Sets quant translation rules for raster map opened for reading. After
+calling this function, G_get_c_raster_row() and G_get_map_row() will
+use defined rules (instead of using rules defined in map's quant file)
+to convert floats to ints.
 
-<P>
-Return codes:
+ - G_read_quant()
 
-<P>
--2 if raster map is of type integer
+Reads quantization rules for raster map and stores them in the
+quantization structure. If the map is in another mapset, first checks
+for quant2 table for this map in current mapset.
 
-<P>
--1 if (! G__name_is_fully_qualified () ) 
+ - G_quant_init()
 
-<P>
-0 if quantization file does not exist, or the file is empty or has wrong
-  format.
+Initializes the Quant struct.
 
-<P>
-1 if non-empty quantization file exists.
+ - G_quant_free()
 
-<P>
-int G_quant_init(struct Quant *q) Initializes the <EM>q</EM>
-  struct.
-
-<P>
-int G_quant_free(struct Quant *q) Frees any memory allocated in
-  <EM>q</EM> and re-initializes <EM>q</EM> by calling <TT>G_quant_init()</TT>.
+Frees any memory allocated in Quant structure and re-initializes the
+structure by calling G_quant_init().
 
 <P>
 int G_quant_truncate(struct Quant *q) sets the quant for <EM>q</EM>
