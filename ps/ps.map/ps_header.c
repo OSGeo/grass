@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <unistd.h>
+#include <grass/gis.h>
 #include "ps_info.h"
 
 static long bb_offset;
@@ -13,6 +14,12 @@ extern int rotate_plot;
 
 int write_PS_header(void)
 {
+    struct Categories cats;
+    int cats_ok;
+
+    if (PS.do_raster)
+	cats_ok = G_read_cats(PS.cell_name, PS.cell_mapset, &cats) >= 0;
+
     /* write PostScript header */
     /*fprintf(PS.fp, "%%!PS-Adobe-2.0 EPSF-1.2\n"); */
     if (eps_output)
@@ -24,9 +31,10 @@ int write_PS_header(void)
     fprintf(PS.fp, "                                       ");
     fprintf(PS.fp, "                                       \n");
     fprintf(PS.fp, "%%%%Title: ");
-    if (PS.do_raster)
-	fprintf(PS.fp, "Map layer = %s  ", PS.cell_name);
-    fprintf(PS.fp, "Mapset = %s\n", PS.cell_mapset);
+    if (PS.do_raster && cats_ok)
+	fprintf(PS.fp, "%s\n", cats.title);
+    else
+	fprintf(PS.fp, "Mapset = %s\n", PS.cell_mapset);
     fprintf(PS.fp, "%%%%EndComments\n");
 
     return 0;
