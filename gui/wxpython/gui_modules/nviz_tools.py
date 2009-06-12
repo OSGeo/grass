@@ -18,6 +18,7 @@ for details.
 
 import os
 import sys
+import copy
 
 import wx
 import wx.lib.colourselect as csel
