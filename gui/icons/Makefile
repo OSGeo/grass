@@ -2,7 +2,7 @@ MODULE_TOPDIR = ../..
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 
-SRCICO := $(wildcard *.ico)
+SRCICO := $(wildcard *.ico *.png)
 SRCICONS := $(wildcard grass/*.gif grass/vdigit/*.gif grass/vdigit/*.xbm silk/*.png grass2/*.png)
 ETCICONS := $(patsubst %,$(ETC)/gui/icons/%,$(SRCICONS) $(SRCICO))
 HTMLICONS := $(patsubst %,$(HTMLDIR)/icons/%,$(SRCICONS))
