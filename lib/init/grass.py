@@ -194,7 +194,9 @@ def read_gui():
 	if 'GRASS_GUI' not in kv:
 	    # Set the GRASS user interface to the default if needed
 	    grass_gui = default_gui
-
+        else:
+            grass_gui = kv['GRASS_GUI']
+    
     if grass_gui == 'gui':
 	grass_gui = default_gui
 
