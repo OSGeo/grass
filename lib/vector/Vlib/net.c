@@ -13,13 +13,14 @@
  * \author Radim Blazek
  */
 
-#include<stdlib.h>
-#include<string.h>
-#include<fcntl.h>
-#include<grass/gis.h>
-#include<grass/dbmi.h>
-#include<grass/Vect.h>
-#include<grass/glocale.h>
+#include <grass/config.h>
+#include <stdlib.h>
+#include <string.h>
+#include <fcntl.h>
+#include <grass/gis.h>
+#include <grass/dbmi.h>
+#include <grass/Vect.h>
+#include <grass/glocale.h>
 
 static int From_node;		/* from node set in SP and used by clipper for first arc */
 

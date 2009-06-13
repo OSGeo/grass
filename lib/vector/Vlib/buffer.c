@@ -17,6 +17,7 @@
    \author Radim Blazek
  */
 
+#include <grass/config.h>
 #include <stdlib.h>
 #include <math.h>
 #include <grass/Vect.h>

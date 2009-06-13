@@ -14,6 +14,7 @@
    \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
 */
 
+#include <grass/config.h>
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/Vect.h>

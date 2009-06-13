@@ -14,6 +14,7 @@
    \author Martin Landa <landa.martin gmail.com> (storing sidx to file)
  */
 
+#include <grass/config.h>
 #include <stdlib.h>
 #include <string.h>
 #include <grass/glocale.h>

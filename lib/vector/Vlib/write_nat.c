@@ -23,7 +23,6 @@
 
 #include <grass/config.h>
 #include <stdio.h>
-#include <sys/types.h>
 #include <stdlib.h>
 #include <math.h>
 

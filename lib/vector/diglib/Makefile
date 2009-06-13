@@ -14,7 +14,6 @@ LIBES = $(GISLIB) $(RTREELIB) $(MATHLIB)
 
 #compile if LFS (Large File Support) present:
 ifneq ($(USE_LARGEFILES),)
-	EXTRA_CFLAGS += -D_FILE_OFFSET_BITS=64
 	TESTFILE = test64.ok
 else
 	TESTFILE = test32.ok

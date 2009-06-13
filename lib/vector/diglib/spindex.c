@@ -14,6 +14,7 @@
   \author Update to GRASS 5.7 Radim Blazek
 */
 
+#include <grass/config.h>
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>

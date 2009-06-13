@@ -15,6 +15,7 @@
    \date 2007-2008
 */
 
+#include <grass/config.h>
 #include <grass/dbmi.h>
 #include <grass/vedit.h>
 

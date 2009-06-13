@@ -16,6 +16,7 @@
    \author Rewritten by Rosen Matev (Google Summer of Code 2008)
  */
 
+#include <grass/config.h>
 #include <stdlib.h>
 #include <grass/Vect.h>
 #include <grass/gis.h>

@@ -15,6 +15,7 @@
  *              for details.
  *
  *****************************************************************************/
+#include <grass/config.h>
 #include <grass/gis.h>
 #include <grass/Vect.h>
 

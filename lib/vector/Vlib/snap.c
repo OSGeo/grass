@@ -14,6 +14,7 @@
  * \author update to GRASS 7 Markus Metz
  */
 
+#include <grass/config.h>
 #include <stdlib.h>
 #include <math.h>
 #include <grass/gis.h>

@@ -14,6 +14,7 @@
    \author Update to GRASS 5.7 Radim Blazek and Piero Cavalieri.
 */
 
+#include <grass/config.h>
 #include <stdlib.h>
 #include <grass/Vect.h>
 #include <grass/glocale.h>

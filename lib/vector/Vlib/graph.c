@@ -15,6 +15,7 @@
    \author Radim Blazek
  */
 
+#include <grass/config.h>
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>

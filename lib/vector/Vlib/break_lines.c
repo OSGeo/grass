@@ -13,6 +13,7 @@
  * \author Radim Blazek
  */
 
+#include <grass/config.h>
 #include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/Vect.h>

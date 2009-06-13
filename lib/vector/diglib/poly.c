@@ -16,6 +16,7 @@
  *               for details.
  *
  *****************************************************************************/
+#include <grass/config.h>
 #include <math.h>
 #include <grass/Vect.h>
 

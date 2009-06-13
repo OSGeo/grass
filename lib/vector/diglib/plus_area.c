@@ -14,6 +14,7 @@
  * \date 2001-2006
  */
 
+#include <grass/config.h>
 #include <stdlib.h>
 #include <grass/Vect.h>
 #include <grass/glocale.h>
