@@ -30,6 +30,7 @@ EXTRA_CFLAGS = \
 LIBES = $(GISLIB) $(DATETIMELIB)
 
 FILES = \
+	$(ARCH_BINDIR)/$(START_UP).sh \
 	$(ARCH_BINDIR)/$(START_UP) \
 	$(ETC)/Init.sh \
 	$(ETC)/functions.sh \
@@ -60,41 +61,47 @@ endif
 
 default: $(FILES)
 
-$(ARCH_BINDIR)/$(START_UP): init.sh grass.src
-	@test -d $(ARCH_BINDIR) || (echo 'ARCH_BINDIR($(ARCH_BINDIR))' not found; exit 1)
-	@test -w $(ARCH_BINDIR) || (echo 'ARCH_BINDIR($(ARCH_BINDIR))' not writeable; exit 1)
-	rm -f $(ARCH_BINDIR)/$(START_UP) ; true
-	$(SHELL) -c "sed \
-	-e \"s#GISBASE_VALUE#$(GISBASE)#\" \
-	grass.src > $(ARCH_BINDIR)/$(START_UP) 2>/dev/null ; true"
-	chmod a+x $(ARCH_BINDIR)/$(START_UP)
-
-$(ARCH_BINDIR)/$(START_UP).bat: init.bat grass.bat
+$(ARCH_BINDIR)/$(START_UP).sh: grass.src
 	@test -d $(ARCH_BINDIR) || (echo 'ARCH_BINDIR($(ARCH_BINDIR))' not found; exit 1)
 	@test -w $(ARCH_BINDIR) || (echo 'ARCH_BINDIR($(ARCH_BINDIR))' not writeable; exit 1)
 	rm -f $@ ; true
-	$(SHELL) -c "sed \
-	-e \"s#GISBASE_VALUE#$(RUN_GISBASE)#\" \
-	grass.bat | \
-	tr '/' '\\\' > $@"
+	sed -e 's#GISBASE_VALUE#$(GISBASE)#' $< > $@
 	chmod a+x $@
+
+$(ARCH_BINDIR)/$(START_UP).bat: grass.bat
+	@test -d $(ARCH_BINDIR) || (echo 'ARCH_BINDIR($(ARCH_BINDIR))' not found; exit 1)
+	@test -w $(ARCH_BINDIR) || (echo 'ARCH_BINDIR($(ARCH_BINDIR))' not writeable; exit 1)
+	rm -f $@
+	sed -e 's#GISBASE_VALUE#$(RUN_GISBASE)#' $< | tr '/' '\\' > $@
+	chmod a+x $@
+
+$(ARCH_BINDIR)/$(START_UP): grass.py
+	rm -f $@
+	sed \
+	-e 's#@GISBASE@#$(GISBASE)#' \
+	-e 's#@GRASS_VERSION_NUMBER@#$(GRASS_VERSION_NUMBER)#' \
+	-e 's#@LD_LIBRARY_PATH_VAR@#$(LD_LIBRARY_PATH_VAR)#' \
+	-e 's#@START_UP@#$(START_UP)#' \
+	-e 's#@CONFIG_PROJSHARE@#$(PROJSHARE)#' \
+	$< > $@
+	chmod +x $@
 
 $(ETC)/Init.sh: init.sh
 	rm -f $@
-	$(SHELL) -c "sed \
-	-e \"s#@GRASS_VERSION_NUMBER@#$(GRASS_VERSION_NUMBER)#\" \
-	-e \"s#@LD_LIBRARY_PATH_VAR@#$(LD_LIBRARY_PATH_VAR)#g\" \
-	-e \"s#@START_UP@#$(START_UP)#\" \
-	-e \"s#@CONFIG_PROJSHARE@#$(PROJSHARE)#\" \
-	init.sh > $@"
+	sed \
+	-e 's#@GRASS_VERSION_NUMBER@#$(GRASS_VERSION_NUMBER)#' \
+	-e 's#@LD_LIBRARY_PATH_VAR@#$(LD_LIBRARY_PATH_VAR)#g' \
+	-e 's#@START_UP@#$(START_UP)#' \
+	-e 's#@CONFIG_PROJSHARE@#$(PROJSHARE)#' \
+	$< > $@
 	chmod +x $@
 
 $(ETC)/Init.bat: init.bat
 	rm -f $@
-	$(SHELL) -c "sed \
-	-e \"s#GRASS_VERSION_NUMBER#$(GRASS_VERSION_NUMBER)#\" \
-	-e \"s#CONFIG_PROJSHARE#$(PROJSHARE)#\" \
-	$< > $@"
+	sed \
+	-e 's#GRASS_VERSION_NUMBER#$(GRASS_VERSION_NUMBER)#' \
+	-e 's#CONFIG_PROJSHARE#$(PROJSHARE)#' \
+	$< > $@
 	chmod +x $@
 
 $(ETC)/functions.sh: functions.sh
