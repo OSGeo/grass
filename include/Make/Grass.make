@@ -82,6 +82,10 @@ CXXFLAGS    =  $(INC) $(COMPILE_FLAGS_CXX)
 LDFLAGS     =  $(LIBPATH) $(LINK_FLAGS) $(LD_SEARCH_FLAGS) $(PQLIBPATH)
 VECT_CFLAGS =  $(GDALCFLAGS) $(GEOSCFLAGS)
 
+ifdef USE_LARGEFILES
+VECT_CFLAGS += -D_FILE_OFFSET_BITS=64
+endif
+
 # Object with _fmode which must be linked to each executable on Windows
 ifdef MINGW
 FMODE_OBJ = $(BASE_LIBDIR)/fmode.o
