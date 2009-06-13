@@ -22,8 +22,9 @@
  *    returns -  (float)(-9)  if only 1 point or more points but identical
  */
 
+#include <grass/config.h>
 #include <stdio.h>
-#include    <math.h>
+#include <math.h>
 #include <grass/Vect.h>
 
 static double d_atan2(double, double);

@@ -13,6 +13,7 @@
    \author Radim Blazek, Piero Cavalieri
  */
 
+#include <grass/config.h>
 #include <grass/gis.h>
 #include <grass/Vect.h>
 #include <grass/glocale.h>

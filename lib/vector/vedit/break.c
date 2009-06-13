@@ -13,6 +13,7 @@
    \date 2007-2008
 */
 
+#include <grass/config.h>
 #include <math.h>
 #include <grass/vedit.h>
 

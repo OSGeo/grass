@@ -15,7 +15,7 @@
  *              for details.
  *
  *****************************************************************************/
-#include    <math.h>
+#include <math.h>
 
 #define ZERO(x) ((x) < tolerance && (x) > -tolerance)
 #define TOLERANCE 1.0e-10

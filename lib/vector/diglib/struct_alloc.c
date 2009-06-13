@@ -16,6 +16,7 @@
  *
  *****************************************************************************/
 
+#include <grass/config.h>
 #include <stdlib.h>
 #include <grass/Vect.h>
 

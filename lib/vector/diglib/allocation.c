@@ -15,6 +15,7 @@
  *              for details.
  *
  *****************************************************************************/
+#include <grass/config.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <grass/Vect.h>
