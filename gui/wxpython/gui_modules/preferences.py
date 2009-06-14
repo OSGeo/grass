@@ -1832,7 +1832,7 @@ class CheckListMapset(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.Check
         
         mapsets = []
         if ret:
-            mapsets = ret.rstrip('\n').split('|')
+            mapsets = ret.replace('\n', '').split('|')
         
         for mapset in mapsets:
             index = self.InsertStringItem(sys.maxint, mapset)
