@@ -196,7 +196,8 @@ class ProcessWorkspaceFile():
         flags = ''
         for p in node_task.findall('flag'):
             flags += p.get('name', '')
-        cmd.append('-' + flags)
+        if flags:
+            cmd.append('-' + flags)
         
         # parameters
         for p in node_task.findall('parameter'):
