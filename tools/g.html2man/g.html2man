@@ -137,8 +137,8 @@ sub DoLine {
   &DoPara($_);
   if (! $preformat) {
     if (m/^$/) {return 0};
-    s#^[ \t]*##;    
-    s#<[^>]*>##g;    
+    s#^[ \t]*##;
+    s#<[^>]*>##g;
   }
   return 1;
 }
@@ -279,6 +279,11 @@ print "Converting: $infile to $outfile\n";
 &PrintHeader($page,$sect,$TITLE[0]);
 
 while (<INP>) {
+  # for intro pages which lack a module NAME (for whois entry)
+  if ($_ =~ s/<!-- meta page description:(.*)-->/$1/) {
+	print OUT ".SH NAME\n$page -$_\n";
+  }
+
   s/\\/\\(rs/g;
   $result = &DoLine($_);
   if ($result == 2) {
@@ -286,6 +291,7 @@ while (<INP>) {
     close(OUT);
     return;
   }
+
   if (&DoLine($_) == 1) {
     s#&lt#<#g;
     s#&gt#>#g; 
@@ -312,7 +318,6 @@ while (<INP>) {
     #
     # end of comment part
     #
-
     
     $out .= $line;
 
