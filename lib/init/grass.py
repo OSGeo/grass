@@ -591,7 +591,8 @@ def start_gui():
     
     # Check for gui interface
     if grass_gui == "wxpython":
-	call([gfile("etc", "wxpython", "wxgui.py")])
+	call([os.getenv('GRASS_PYTHON'),
+              gfile("etc", "wxpython", "wxgui.py")])
 
 def clear_screen():
     if windows:
