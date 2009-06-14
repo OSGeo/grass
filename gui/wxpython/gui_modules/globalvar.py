@@ -123,7 +123,7 @@ def GetGRASSCmds(bin=True, scripts=True, gui_scripts=True):
     if scripts is True:
         list = list + os.listdir(os.path.join(gisbase, 'scripts')) 
     if gui_scripts is True:
-        os.environ["PATH"] = os.getenv("PATH") + ':%s' % os.path.join(gisbase, 'etc', 'gui', 'scripts')
+        os.environ["PATH"] = os.getenv("PATH") + os.pathsep + os.path.join(gisbase, 'etc', 'gui', 'scripts')
         list = list + os.listdir(os.path.join(gisbase, 'etc', 'gui', 'scripts'))
        
     if subprocess.mswindows:
