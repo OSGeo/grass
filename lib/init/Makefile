@@ -31,7 +31,6 @@ LIBES = $(GISLIB) $(DATETIMELIB)
 
 FILES = \
 	$(ARCH_BINDIR)/$(START_UP).sh \
-	$(ARCH_BINDIR)/$(START_UP) \
 	$(ETC)/Init.sh \
 	$(ETC)/functions.sh \
 	$(ETC)/prompt.sh \
@@ -55,8 +54,13 @@ endif
 
 ifneq ($(strip $(MINGW)),)
 	FILES += \
+		$(ARCH_BINDIR)/$(START_UP).py \
 		$(ARCH_BINDIR)/$(START_UP).bat \
 		$(ETC)/Init.bat
+else
+	FILES += \
+		$(ARCH_BINDIR)/$(START_UP)
+
 endif
 
 default: $(FILES)
@@ -75,10 +79,14 @@ $(ARCH_BINDIR)/$(START_UP).bat: grass.bat
 	sed -e 's#GISBASE_VALUE#$(RUN_GISBASE)#' $< | tr '/' '\\' > $@
 	chmod a+x $@
 
+ifneq ($(strip $(MINGW)),)
+$(ARCH_BINDIR)/$(START_UP).py: grass.py
+else
 $(ARCH_BINDIR)/$(START_UP): grass.py
+endif
 	rm -f $@
 	sed \
-	-e 's#@GISBASE@#$(GISBASE)#' \
+	-e 's#@GISBASE@#$(RUN_GISBASE)#' \
 	-e 's#@GRASS_VERSION_NUMBER@#$(GRASS_VERSION_NUMBER)#' \
 	-e 's#@LD_LIBRARY_PATH_VAR@#$(LD_LIBRARY_PATH_VAR)#' \
 	-e 's#@START_UP@#$(START_UP)#' \

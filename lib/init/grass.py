@@ -37,6 +37,8 @@ grass_version = "@GRASS_VERSION_NUMBER@"
 ld_library_path_var = '@LD_LIBRARY_PATH_VAR@'
 config_projshare = "@CONFIG_PROJSHARE@"
 
+gisbase = os.path.normpath(gisbase)
+
 tmpdir = None
 lockfile = None
 location = None
@@ -190,13 +192,17 @@ def read_gui():
     # not set. So we check if it is not set
     if not grass_gui:
 	# Check for a reference to the GRASS user interface in the grassrc file
-	kv = read_gisrc()
-	if 'GRASS_GUI' not in kv:
-	    # Set the GRASS user interface to the default if needed
-	    grass_gui = default_gui
+	if os.access(gisrc, os.R_OK):
+	    kv = read_gisrc()
+	    if 'GRASS_GUI' not in kv:
+		# Set the GRASS user interface to the default if needed
+		grass_gui = default_gui
         else:
             grass_gui = kv['GRASS_GUI']
     
+    if not grass_gui:
+	grass_gui = default_gui
+
     if grass_gui == 'gui':
 	grass_gui = default_gui
 
@@ -270,7 +276,7 @@ def set_defaults():
     # GRASS_PYTHON
     if not os.getenv('GRASS_PYTHON'):
 	if windows:
-	    os.environ['GRASS_PYTHON'] = "pythonw.exe"
+	    os.environ['GRASS_PYTHON'] = "python.exe"
 	else:
 	    os.environ['GRASS_PYTHON'] = "python"
 
@@ -319,8 +325,11 @@ def set_browser():
     os.environ['GRASS_HTML_BROWSER'] = browser
 
 def grass_intro():
-    path = gfile("locale", locale, "etc", "grass_intro")
-    if not os.access(path, os.R_OK):
+    if locale:
+	path = gfile("locale", locale, "etc", "grass_intro")
+	if not os.access(path, os.R_OK):
+	    path = gfile("etc", "grass_intro")
+    else:
 	path = gfile("etc", "grass_intro")
     f = open(path, 'r')
     for line in f:
@@ -582,7 +591,7 @@ def start_gui():
     
     # Check for gui interface
     if grass_gui == "wxpython":
-	call([gfile("etc", "wxpython", "scripts", "wxgui")])
+	call([gfile("etc", "wxpython", "wxgui.py")])
 
 def clear_screen():
     if windows:
@@ -800,6 +809,10 @@ macosx = "darwin" in sys.platform
 
 # Set GISBASE
 os.environ['GISBASE'] = gisbase
+
+# set HOME
+if windows and not os.getenv('HOME'):
+    os.environ['HOME'] = os.path.join(os.getenv('HOMEDRIVE'), os.getenv('HOMEPATH'))
 
 atexit.register(cleanup)
 
