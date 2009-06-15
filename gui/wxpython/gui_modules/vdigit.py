@@ -1,15 +1,13 @@
-"""
+"""!
 @package vdigit
 
 @brief Vector digitizer extension
 
-Progress:
- (1) v.edit called on the background (class VEdit) (removed in r?)
- (2) Reimplentation of v.digit (VDigit)
-
 Import:
 
+@code
   from vdigit import VDigit as VDigit
+@endcode
 
 Classes:
  - AbstractDigit 
