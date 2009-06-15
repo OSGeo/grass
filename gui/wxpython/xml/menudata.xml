@@ -728,8 +728,6 @@
 	<menu>
 	  <label>Develop raster map</label>
 	  <items>
-
-	    <separator />
 	    <menuitem>
 	      <label>Compress/decompress</label>
 	      <help>Compresses and decompresses raster maps.</help>
@@ -817,6 +815,11 @@
 	      <keywords>raster,import</keywords>
               <handler>self.OnMenuCmd</handler>
 	      <command>r.external</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>Multiple link to GDAL</label>
+	      <help>Link GDAL supported raster files to a binary raster map layers.</help>
+              <handler>self.OnLinkGdalLayers</handler>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
@@ -1729,6 +1732,11 @@
 	      <keywords>vector</keywords>
               <handler>self.OnMenuCmd</handler>
 	      <command>v.external</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>Multiple link to OGR</label>
+	      <help>Creates a new vectors as a read-only link to OGR layers.</help>
+              <handler>self.OnLinkOgrLayers</handler>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
