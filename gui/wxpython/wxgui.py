@@ -120,8 +120,11 @@ class GMFrame(wx.Frame):
         self.curr_pagenum  = ''           # currently selected page number for layer tree notebook
         self.encoding      = 'ISO-8859-1' # default encoding for display fonts
         self.workspaceFile = workspace    # workspace file
-        self.menucmd       = {}           # menuId / cmd
+        self.menucmd       = dict()       # menuId / cmd
         self.georectifying = None         # reference to GCP class or None
+        # list of open dialogs
+        self.dialogs        = dict()
+        self.dialogs['atm'] = list()
         
         # creating widgets
         # -> self.notebook, self.goutput, self.outpage
@@ -1021,19 +1024,19 @@ class GMFrame(wx.Frame):
         if not self.curr_page:
             self.MsgNoLayerSelected()
             return
-
+        
         layer = self.curr_page.maptree.layer_selected
         # no map layer selected
         if not layer:
             self.MsgNoLayerSelected()
             return
-
+        
         # available only for vector map layers
         try:
             maptype = self.curr_page.maptree.GetPyData(layer)[0]['maplayer'].type
         except:
             maptype = None
-
+        
         if not maptype or maptype != 'vector':
             wx.MessageBox(parent=self,
                           message=_("Attribute management is available only "
@@ -1041,7 +1044,7 @@ class GMFrame(wx.Frame):
                           caption=_("Message"),
                           style=wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
             return
-
+        
         if not self.curr_page.maptree.GetPyData(layer)[0]:
             return
         dcmd = self.curr_page.maptree.GetPyData(layer)[0]['cmd']
@@ -1052,14 +1055,18 @@ class GMFrame(wx.Frame):
                            parent=self)
         wx.Yield()
         
-        self.dbmanager = dbm.AttributeManager(parent=self, id=wx.ID_ANY,
-                                              size=wx.Size(500, 300),
-                                              item=layer, log=self.goutput)
-
+        dbmanager = dbm.AttributeManager(parent=self, id=wx.ID_ANY,
+                                         size=wx.Size(500, 300),
+                                         item=layer, log=self.goutput)
+        
         busy.Destroy()
-
-        self.dbmanager.Show()
-
+        
+        # register ATM dialog
+        self.dialogs['atm'].append(dbmanager)
+        
+        # show ATM window
+        dbmanager.Show()
+        
     def OnNewDisplay(self, event=None):
         """!Create new layer tree and map display instance"""
         self.NewDisplay()

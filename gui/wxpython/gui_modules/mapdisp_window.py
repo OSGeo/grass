@@ -160,6 +160,7 @@ class BufferedWindow(MapWindow, wx.Window):
 
         self.Map = Map
         self.tree = tree
+        self.lmgr = lmgr    # Layer Manager
         
         #
         # Flags
@@ -1128,7 +1129,7 @@ class BufferedWindow(MapWindow, wx.Window):
                 return
 
             self.UpdateMap(render=False) # redraw map
-
+            
             # add new record into atribute table
             if UserSettings.Get(group='vdigit', key="addRecord", subkey='enabled')  is True:
                 # select attributes based on layer and category
@@ -1144,22 +1145,43 @@ class BufferedWindow(MapWindow, wx.Window):
                                                                    cats=cats,
                                                                    pos=posWindow,
                                                                    action="add")
+                
                 if addRecordDlg.mapDBInfo and \
                         addRecordDlg.ShowModal() == wx.ID_OK:
                     sqlfile = tempfile.NamedTemporaryFile(mode="w")
                     for sql in addRecordDlg.GetSQLString():
                         sqlfile.file.write(sql + ";\n")
                     sqlfile.file.flush()
+                    
                     gcmd.RunCommand('db.execute',
                                     parent = self,
                                     quiet = True, 
                                     input = sqlfile.name)
-
+                
+                if addRecordDlg.mapDBInfo:
+                    self.__updateATM()
+        
         elif digitToolbar.GetAction('type') in ["line", "boundary"]:
             # add new point to the line
             self.polycoords.append(self.Pixel2Cell(event.GetPositionTuple()[:]))
             self.DrawLines(pdc=self.pdcTmp)
     
+    def __updateATM(self):
+        """!Update open Attribute Table Manager
+
+        @todo: use AddDataRow() instead
+        """
+        # update ATM
+        digitToolbar = self.parent.toolbars['vdigit']
+        digitVector = digitToolbar.GetLayer().GetName()
+                            
+        for atm in self.lmgr.dialogs['atm']:
+            atmVector = atm.GetVectorName()
+            if atmVector == digitVector:
+                layer = UserSettings.Get(group='vdigit', key="layer", subkey='value')
+                # TODO: use AddDataRow instead
+                atm.LoadData(layer)
+        
     def OnLeftDownVDigitEditLine(self, event):
         """
         Left mouse button down - vector digitizer edit linear feature
@@ -1942,10 +1964,14 @@ class BufferedWindow(MapWindow, wx.Window):
                                             quiet = True,
                                             input = sqlfile.name)
                         
+                        if addRecordDlg.mapDBInfo:
+                            self.__updateATM()
+            
             elif digitToolbar.GetAction() == "deleteLine":
                 # -> delete selected vector features
                 if digitClass.DeleteSelectedLines() < 0:
                     return
+                self.__updateATM()
             elif digitToolbar.GetAction() == "splitLine":
                 # split line
                 if digitClass.SplitLine(self.Pixel2Cell(self.mouse['begin'])) < 0:
@@ -1973,6 +1999,9 @@ class BufferedWindow(MapWindow, wx.Window):
                     del self.copyCatsIds
                 except AttributeError:
                     pass
+                
+                self.__updateATM()
+                
             elif digitToolbar.GetAction() == "editLine" and \
                     hasattr(self, "vdigitMove"):
                 line = digitClass.driver.GetSelected()

@@ -245,58 +245,14 @@ class VirtualAttributeList(wx.ListCtrl,
             record = outFile.readline().replace('\n', '')
             if not record:
                 break
-            
-            self.itemDataMap[i] = []
-            j = 0
-            
-            for value in record.split('|'):
-                if self.columns[columns[j]]['ctype'] != type(''):
-                    try:
-                        ### casting disabled (2009/03)
-                        ### self.itemDataMap[i].append(self.columns[columns[j]]['ctype'](value))
-                        self.itemDataMap[i].append(value)
-                    except ValueError:
-                        self.itemDataMap[i].append(_('Unknown value'))
-                else:
-                    # encode string values
-                    try:
-                        self.itemDataMap[i].append(unicodeValue(value))
-                    except UnicodeDecodeError:
-                        self.itemDataMap[i].append(_("Unable to decode value. "
-                                                     "Set encoding in GUI preferences ('Attributes')."))
-                
-                if keyId > -1 and keyId == j:
-                    try:
-                        cat = self.columns[columns[j]]['ctype'] (value)
-                    except ValueError, e:
-                        cat = -1
-                        wx.MessageBox(parent=self,
-                                      message=_("Error loading attribute data. "
-                                                "Record number: %(rec)d. Unable to convert value '%(val)s' in "
-                                                "key column (%(key)s) to integer.\n\n"
-                                                "Details: %(detail)s") % \
-                                          { 'rec' : i + 1, 'val' : value,
-                                            'key' : keyColumn, 'detail' : e},
-                                      caption=_("Error"),
-                                      style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
-                j += 1
-
-            # insert to table
-            # index = self.InsertStringItem(index=sys.maxint, label=str(self.itemDataMap[i][0]))
-            # for j in range(len(self.itemDataMap[i][1:])):
-            # self.SetStringItem(index=index, col=j+1, label=str(self.itemDataMap[i][j+1]))
-                
-            # self.SetItemData(item=index, data=i)
-            
-            self.itemIndexMap.append(i)
-            if keyId > -1: # load cats only when LoadData() is called first time
-                self.itemCatsMap[i] = cat
+           
+            self.AddDataRow(i, record, columns, keyId)
 
             i += 1
             if i >= 100000:
                 self.log.write(_("Limit 100000 records."))
                 break
-
+        
         self.SetItemCount(i)
         
         i = 0
@@ -308,14 +264,62 @@ class VirtualAttributeList(wx.ListCtrl,
                 width = 300
             self.SetColumnWidth(col=i, width=width)
             i += 1
-
+        
         self.SendSizeEvent()
-
+        
         self.log.write(_("Number of loaded records: %d") % \
                            self.GetItemCount())
         
         return keyId
     
+    def AddDataRow(self, i, record, columns, keyId):
+        """!Add row to the data list"""
+        self.itemDataMap[i] = []
+        j = 0
+        
+        for value in record.split('|'):
+            if self.columns[columns[j]]['ctype'] != type(str):
+                try:
+                    ### casting disabled (2009/03)
+                    ### self.itemDataMap[i].append(self.columns[columns[j]]['ctype'](value))
+                    self.itemDataMap[i].append(value)
+                except ValueError:
+                    self.itemDataMap[i].append(_('Unknown value'))
+            else:
+                # encode string values
+                try:
+                    self.itemDataMap[i].append(unicodeValue(value))
+                except UnicodeDecodeError:
+                    self.itemDataMap[i].append(_("Unable to decode value. "
+                                                 "Set encoding in GUI preferences ('Attributes')."))
+                
+            if keyId > -1 and keyId == j:
+                try:
+                    cat = self.columns[columns[j]]['ctype'] (value)
+                except ValueError, e:
+                    cat = -1
+                    wx.MessageBox(parent=self,
+                                  message=_("Error loading attribute data. "
+                                            "Record number: %(rec)d. Unable to convert value '%(val)s' in "
+                                            "key column (%(key)s) to integer.\n\n"
+                                            "Details: %(detail)s") % \
+                                      { 'rec' : i + 1, 'val' : value,
+                                        'key' : keyColumn, 'detail' : e},
+                                  caption=_("Error"),
+                                  style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
+            j += 1
+
+        # insert to table
+        # index = self.InsertStringItem(index=sys.maxint, label=str(self.itemDataMap[i][0]))
+        # for j in range(len(self.itemDataMap[i][1:])):
+        # self.SetStringItem(index=index, col=j+1, label=str(self.itemDataMap[i][j+1]))
+            
+        # self.SetItemData(item=index, data=i)
+            
+        self.itemIndexMap.append(i)
+        if keyId > -1: # load cats only when LoadData() is called first time
+            self.itemCatsMap[i] = cat
+        
     def OnItemSelected(self, event):
         """!Item selected. Add item to selected cats..."""
         #         cat = int(self.GetItemText(event.m_itemIndex))
@@ -1870,6 +1874,10 @@ class AttributeManager(wx.Frame):
     def OnCloseWindow(self, event):
         """!Cancel button pressed"""
         self.Close()
+        if self.parent.GetName() == 'LayerManager':
+            # deregister ATM
+            self.parent.dialogs['atm'].remove(self)
+        
         event.Skip()
 
     def OnBuilder(self,event):
@@ -2014,7 +2022,24 @@ class AttributeManager(wx.Frame):
         ### modify layer
         self.manageLayerBook.modifyLayerWidgets['layer'][1].SetItems(listOfLayers)
         self.manageLayerBook.OnChangeLayer(event=None)
+
+    def GetVectorName(self):
+        """!Get vector name"""
+        return self.vectorName
+    
+    def LoadData(self, layer, columns=None, where=None):
+        """!Load data into list
+
+        @param layer layer number
+        @param columns list of columns for output
+        @param where where statement
         
+        @return id of key column 
+        @return -1 if key column is not displayed
+        """
+        listWin = self.FindWindowById(self.layerPage[layer]['data'])
+        return listWin.LoadData(layer, columns, where)
+    
 class TableListCtrl(wx.ListCtrl,
                     listmix.ListCtrlAutoWidthMixin):
                     #                    listmix.TextEditMixin):
