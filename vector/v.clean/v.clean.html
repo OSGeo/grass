@@ -1,33 +1,67 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.clean</em> allows the user to automatically fix topology of vector maps.
+<em>v.clean</em> allows the user to automatically fix topology of vector 
+maps.
 
-<h2>NOTES</h2>
+<h3>Break lines/boundaries</h3>
 
-The user does <b>not</b> have to run <em><a HREF="v.build.html">v.build</a></em>
-on the <em>output</em> vector, unless the <em>-b</em> flag was used. The
-<em>-b</em> flag affects <b>only</b> the <em>output</em> vector - topology is
-always built for <em>error</em> vector.
+Threshold does not apply, use dummy value if <em>v.clean</em> is 
+run with several tools.
+<p>
+The <em>break</em> tool breaks lines/boundaries at intersections and also 
+breaks lines/boundaries forming a collapsed loop, for example 0.0;1.0;0.0 
+is broken at 1.0.
+<p>
+Breaking lines should be followed by removing duplicates, e.g. 
+<em>v.clean tool=break,rmdupl</em>.
 
-<h3>Removing small angles between lines at nodes</h3>
+<h3>Remove duplicate geometry features</h3>
 
-The <em>rmsa</em> tool only concerns angles which are so small that the calculated angle
-is 0. The user cannot change this threshold. The following figure should help 
-demonstrate what the tool does.
-<P>
-<table><tr><td>
-<img src="v_clean_rmsa.png" border=1>
-</td></tr>
-<tr><td align=center>
-<font size=-1><em>tool=rmsa</em></font>
-</td></tr>
-</table>
+Threshold does not apply, use dummy value if <em>v.clean</em> is 
+run with several tools.
+<p>
+The <em>rmdupl</em> tool removes geometry features with identical 
+coordinates. Categories are merged. If a point and a centroid have 
+identical coordinates, one of them will be removed if both points and 
+centroids are selected with <em>v.clean type=point,centroid</em>. The 
+same applies for lines and boundaries.
+<p>
+The <em>rmdupl</em> tool should be used after breaking lines and 
+breaking polygons.
 
-<h3>What is a bridge?</h3>
-A bridge is an area type connection of an island (polygon in a polygon) to the outer
-polygon. This is topologically incorrect (but OGC Simple Features allow it). <em>v.clean</em>
-can be used to optionally change the line type to fulfill the topology rules or to
-remove the bridge from the map:
+<h3>Remove dangles</h3>
+
+Threshold gives maximum line/boundary length in map units, degrees for 
+latlon. All dangles shorter than <em>thresh</em> will be removed. 
+Threshold is ignored if &lt; 0.
+<p>
+The <em>rmdangle</em> tool removes dangling lines/boundaries shorter than 
+<em>thresh</em>. A line/boundary is considered to be a dangle if no other 
+line of given <em>type</em> is on at least one end node. If a dangle is 
+formed by several lines, such a string of lines is taken as one dangle 
+and either everything or nothing is deleted. The <em>rmdangle</em> tool 
+is useful to remove incorrect boundaries after other cleaning operations. 
+Areas can then be successfully built. 
+
+<h3>Change boundary dangles to type line</h3>
+
+Threshold gives maximum line/boundary length in map units, degrees for 
+latlon. All boundary dangles shorter than <em>thresh</em> will be changed 
+to type line. Threshold is ignored if &lt; 0.
+<p>
+The <em>chdangle</em> tool is similar to the <em>rmdangle</em> tool, but 
+works only on boundaries and changes dangling boundaries to lines 
+instead of removing dangles.
+
+<h3>Remove or change bridges connecting an area and an island or two 
+islands</h3>
+Threshold does not apply, use dummy value if <em>v.clean</em> is 
+run with several tools.
+<p>
+A bridge is an area type connection of an island (polygon in a polygon) 
+to the outer polygon. This is topologically incorrect (but OGC Simple 
+Features allow it). The <em>rmbridge</em> tool removes bridges and the 
+<em>chbridge</em> tool changes bridges to type line:
 
 <div class="code"><pre>
     +-------------+             +-------------+   +-------------+
@@ -41,6 +75,93 @@ remove the bridge from the map:
     |      |      |             |             |   |      .      |
     +------+------+             +-------------+   +-------------+
 </pre></div>
+<p>
+Islands and areas must be already clean, i.e. without dangles or small 
+angles.
+
+<h3>Snap lines to vertex in threshold</h3>
+
+Threshold gives maximum distance to another vertex in map units, 
+degrees for latlon. If there is no other vertex within <em>thresh</em>, 
+no snapping will be done.
+
+The <em>snap</em> tool snaps vertices to another vertex not farther away 
+than <em>thresh</em>. The <em>type</em> option can have a strong 
+influence on the result. Snapped boundaries may need to be cleaned with 
+<em>rmdangle,break,rmdupl</em>.
+
+<h3>Remove duplicate area centroids</h3>
+
+Threshold does not apply, use dummy value if <em>v.clean</em> is 
+run with several tools.
+<p>
+The <em>rmdac</em> tool removes duplicate area centroids that can result 
+from deleting boundaries.
+
+<h3>Break (topologically clean) areas (imported from a non topological 
+format like ShapeFile)</h3>
+
+Threshold does not apply, use dummy value if <em>v.clean</em> is 
+run with several tools.
+<p>
+The <em>bpol</em> tool breaks boundaries on each point shared between 2 
+and more areas where angles of boundary segments are different and on 
+all boundary nodes (start and end points of each boundary). The 
+<em>bpol</em> tool behaves similar to <em>break</em> for boundaries, but 
+does not break collapsed loops. The <em>bpol</em> tool is faster than 
+the <em>break</em> tool but needs more memory.
+<p>
+The <em>bpol</em> tool should be followed by <em>rmdupl</em>.
+
+<h3>Remove vertices in threshold from lines and boundaries</h3>
+
+The <em>prune</em> tool is currently broken, please use 
+<em><a href=v.generalize.html>v.generalize</a></em> instead.
+
+<h3>Remove small areas</h3>
+
+Threshold gives area size in map units, square meters for latlon.
+<p>
+The <em>rmarea</em> tool removes all areas &lt;= <em>thresh</em>. The 
+longest boundary with an adjacent area is removed or all boundaries if 
+there is no adjacent area. Area categories are not combined when a small 
+area is merged with a larger area.
+
+<h3>Remove all lines or boundaries of zero length</h3>
+
+Threshold does not apply, use dummy value if <em>v.clean</em> is 
+run with several tools.
+<p>
+The <em>rmline</em> tool removes all lines or boundaries of zero length 
+that may have resulted from other cleaning operations. Zero length 
+boundaries are redundant and do not influence area topology.
+
+<h3>Remove small angles between lines at nodes</h3>
+
+Threshold does not apply, use dummy value if <em>v.clean</em> is 
+run with several tools.
+<p>
+The <em>rmsa</em> tool only concerns angles which are so small that the 
+calculated angle is 0. The following figure should help demonstrate what 
+the tool does.
+<p>
+<table><tr><td>
+<img src="v_clean_rmsa.png" border=1>
+</td></tr>
+<tr><td align=center>
+<font size=-1><em>tool=rmsa</em></font>
+</td></tr>
+</table>
+<p>
+The <em>rmsa</em> tool should be followed by <em>break,rmdupl</em>.
+
+<h2>NOTES</h2>
+
+The user does <b>not</b> have to run <em><a HREF="v.build.html">v.build</a></em>
+on the <em>output</em> vector, unless the <em>-b</em> flag was used. The
+<em>-b</em> flag affects <b>only</b> the <em>output</em> vector - 
+topology is always built for <em>error</em> vector.
+
 
 <h2>EXAMPLES</h2>
 
@@ -49,21 +170,20 @@ remove the bridge from the map:
 v.clean input=testmap output=cleanmap tool=snap thresh=1
 </pre></div>
 
-
 <h3>Cleaning OGR imported data (Simple Feature data)</h3>
 
-The import of areas with <em><a HREF="v.in.ogr.html">v.in.ogr</a></em>
-requires a subsequent run of <em>v.clean</em> to update the map to a
-topologically valid structure (removal of duplicate collinear lines etc). The
-tools used for that are 'rmdupl' and 'bpol':
+The import of areas with <em><a HREF="v.in.ogr.html">v.in.ogr</a> -c</em>
+(no cleaning) requires a subsequent run of <em>v.clean</em> to update 
+the map to a topologically valid structure (removal of duplicate 
+collinear lines etc). The tools used for that are <em>bpol</em> and 
+<em>rmdupl</em>:
 <div class="code"><pre>
-v.clean input=areamap output=areamap_clean tool=rmdupl,bpol 
+v.clean input=areamap output=areamap_clean tool=bpol,rmdupl type=boundary
 </pre></div>
-
 
 <h3>Extracting intersection points of vector lines</h3>
 <div class="code"><pre>
-v.clean input=lines1 output=lines2 err=points tool=break 
+v.clean input=lines1 output=lines2 err=points tool=break type=line
 </pre></div>
 
 Intersection points are written to 'points' map.
@@ -84,7 +204,7 @@ L 2
 EOF
 
 v.clean in=crossed_lines out=crossed_lines_brk \
-        error=intersection tool=break
+        error=intersection tool=break type=line
 </pre></div>
 
 <h3>Remove all lines of zero length</h3>
@@ -108,6 +228,7 @@ L  2 1
  -806227.28362601 -971104.80702988
  1     1         
 </pre></div>
+v.clean type=boundary would remove nothing.
 
 
 <h2>AUTHORS</h2>
