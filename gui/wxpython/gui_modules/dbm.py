@@ -540,10 +540,14 @@ class AttributeManager(wx.Frame):
         #
         # buttons
         #
-        self.btnQuit       = wx.Button(parent=self.panel, id=wx.ID_EXIT)
+        self.btnQuit   = wx.Button(parent=self.panel, id=wx.ID_EXIT)
+        self.btnQuit.SetToolTipString(_("Close Attribute Table Manager"))
+        self.btnReload = wx.Button(parent=self.panel, id=wx.ID_REFRESH)
+        self.btnReload.SetToolTipString(_("Reload attribute data (selected layer only)"))
 
         # events
-        self.btnQuit.Bind(wx.EVT_BUTTON,            self.OnCloseWindow)
+        self.btnQuit.Bind(wx.EVT_BUTTON,   self.OnCloseWindow)
+        self.btnReload.Bind(wx.EVT_BUTTON, self.OnDataReload)
         self.notebook.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
         self.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnLayerPageChanged, self.browsePage)
         self.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnLayerPageChanged, self.manageTablePage)
@@ -951,13 +955,13 @@ class AttributeManager(wx.Frame):
 
         # buttons
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
+        btnSizer.Add(item=self.btnReload, proportion=1,
+                     flag=wx.ALL | wx.ALIGN_RIGHT, border=5)
         btnSizer.Add(item=self.btnQuit, proportion=1,
-                     flag=wx.ALL | wx.ALIGN_RIGHT | wx.SHAPED, border=5)
-        # btnSizer.Add(item=self.btnApply,
-        #             flag=wx.ALL, border=5)
+                     flag=wx.ALL | wx.ALIGN_RIGHT, border=5)
 
         mainSizer.Add(item=self.notebook, proportion=1, flag=wx.EXPAND)
-        mainSizer.Add(item=btnSizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
+        mainSizer.Add(item=btnSizer, flag=wx.ALIGN_RIGHT | wx.ALL, border=5)
 
         self.panel.SetAutoLayout(True)
         self.panel.SetSizer(mainSizer)
@@ -1680,8 +1684,10 @@ class AttributeManager(wx.Frame):
                 self.log.write(_("Number of loaded records: %d") % win.GetItemCount())
             else:
                 self.log.write("")
+            self.btnReload.Enable()
         else:
             self.log.write("")
+            self.btnReload.Enable(False)
         
         event.Skip()
         
