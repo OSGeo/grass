@@ -690,7 +690,7 @@ def csh_startup():
 
 def bash_startup():
     global exit_val
-
+    
     # save command history in mapset dir and remember more
     os.environ['HISTFILE'] = os.path.join(location, ".bash_history")
     if not os.getenv('HISTSIZE') and not os.getenv('HISTFILESIZE'):
@@ -707,16 +707,16 @@ def bash_startup():
     try_remove(bashrc)
 
     f = open(bashrc, 'w')
-    f.write("test -r ~/.alias && . ~/.alias")
-    f.write("PS1='GRASS %s (%s):\w > '" % (grass_version, location_name))
-    f.write("PROMPT_COMMAND=%s" % gfile("etc", "prompt.sh"))
+    f.write("test -r ~/.alias && . ~/.alias\n")
+    f.write("PS1='GRASS %s (%s):\w > '\n" % (grass_version, location_name))
+    f.write("PROMPT_COMMAND=%s\n" % gfile("etc", "prompt.sh"))
 
     path = os.path.join(userhome, ".grass.bashrc")
     if os.access(path, os.R_OK):
-	f.write(readfile(path))
+	f.write(readfile(path) + '\n')
 
-    f.write("export PATH=\"%s\"" % os.getenv('PATH'))
-    f.write("export HOME=\"%s\"" % userhome) # restore user home path
+    f.write("export PATH=\"%s\"\n" % os.getenv('PATH'))
+    f.write("export HOME=\"%s\"\n" % userhome) # restore user home path
 
     f.close()
 
