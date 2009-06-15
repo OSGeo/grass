@@ -140,6 +140,11 @@ class GMConsole(wx.Panel):
                                             range=100, pos=(110, 50), size=(-1, 25),
                                             style=wx.GA_HORIZONTAL)
         self.console_progressbar.Bind(EVT_CMD_PROGRESS, self.OnCmdProgress)
+        # abort
+        self.btn_abort = wx.Button(parent=self, id=wx.ID_STOP)
+        self.btn_abort.SetToolTipString(_("Abort the running command"))
+        self.btn_abort.Bind(wx.EVT_BUTTON, self.OnCmdAbort)
+        self.btn_abort.Enable(False)
         
         #
         # text control for command output
@@ -190,9 +195,16 @@ class GMConsole(wx.Panel):
         boxsizer1.Add(item=gridsizer1, proportion=0,
                       flag=wx.EXPAND | wx.ALIGN_CENTRE_VERTICAL | wx.TOP | wx.BOTTOM,
                       border=5)
-        boxsizer1.Add(item=self.console_progressbar, proportion=0,
-                      flag=wx.EXPAND | wx.ADJUST_MINSIZE | wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)
-
+        boxsizer2 = wx.BoxSizer(wx.HORIZONTAL)
+        boxsizer2.Add(item=self.console_progressbar, proportion=1,
+                      flag=wx.EXPAND | wx.ALIGN_CENTRE_VERTICAL)
+        boxsizer2.Add(item=self.btn_abort, proportion=0,
+                      flag=wx.ALIGN_CENTRE_VERTICAL | wx.LEFT,
+                      border = 5)
+        boxsizer1.Add(item=boxsizer2, proportion=0,
+                      flag=wx.EXPAND | wx.ALIGN_CENTRE_VERTICAL | wx.ALL,
+                      border=5)
+        
         boxsizer1.Fit(self)
         boxsizer1.SetSizeHints(self)
 
@@ -357,7 +369,7 @@ class GMConsole(wx.Panel):
                                           onDone,
                                           cmdlist,
                                           self.cmd_stdout, self.cmd_stderr)                                          
-                    
+                    self.btn_abort.Enable()
                     self.cmd_output_timer.Start(50)
 
                     return None
@@ -489,7 +501,7 @@ class GMConsole(wx.Panel):
     def OnCmdRun(self, event):
         """!Run command"""
         self.WriteCmdLog('(%s)\n%s' % (str(time.ctime()), ' '.join(event.cmd)))
-
+        
     def OnCmdDone(self, event):
         """!Command done (or aborted)"""
         if event.aborted:
@@ -521,6 +533,7 @@ class GMConsole(wx.Panel):
         # set focus on prompt
         if self.parent.GetName() == "LayerManager":
             self.parent.cmdinput.SetFocus()
+            self.btn_abort.Enable(False)
         else:
             # updated command dialog
             dialog = self.parent.parent
