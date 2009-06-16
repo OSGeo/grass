@@ -407,6 +407,27 @@ class VectorDBInfo:
         """!Get vector name"""
         return self.map
     
+    def GetKeyColumn(self, layer):
+        """!Get key column of given layer
+        
+        @param layer vector layer number
+        """
+        return self.layers[layer]['key']
+    
+    def GetTable(self, layer):
+        """!Get table name of given layer
+        
+        @param layer vector layer number
+        """
+        return self.layers[layer]['table']
+    
+    def GetTableDesc(self, table):
+        """!Get table columns
+
+        @param table table name
+        """
+        return self.tables[table]
+
 class LayerSelect(wx.Choice):
     """
     Creates combo box for selecting data layers defined for vector.
@@ -540,16 +561,29 @@ class ColumnSelect(wx.ComboBox):
         if vector:
             self.InsertColumns(vector, layer)
                 
-    def InsertColumns(self, vector, layer):
-        """!Insert columns for a vector attribute table into the columns combobox"""
+    def InsertColumns(self, vector, layer, excludeKey = False, type = None):
+        """!Insert columns for a vector attribute table into the columns combobox
+
+        @param vector vector name
+        @param layer vector layer number
+        @param excludeKey exclude key column from the list?
+        @param type only columns of given type (given as list)
+        """
         dbInfo = VectorDBInfo(vector)
         
         try:
-            table = dbInfo.layers[int(layer)]['table']
-            columnchoices = dbInfo.tables[table]
+            table = dbInfo.GetTable(int(layer))
+            columnchoices = dbInfo.GetTableDesc(table)
+            keyColumn = dbInfo.GetKeyColumn(int(layer))
             columns = len(columnchoices.keys()) * ['']
             for key, val in columnchoices.iteritems():
                 columns[val['index']] = key
+            if excludeKey: # exclude key column
+                columns.remove(keyColumn)
+            if type: # only selected column types
+                for key, value in columnchoices.iteritems():
+                    if value['type'] not in type:
+                        columns.remove(key)
         except (KeyError, ValueError):
             columns = []
 

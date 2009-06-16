@@ -604,6 +604,16 @@ class VDigit(AbstractDigit):
         """
         return dict(self.digit.GetLineCats(line))
 
+    def GetLineLength(self, line):
+        """!Get line length
+
+        @param line feature id
+
+        @return line length
+        @return 0 for non-linear features
+        """
+        return self.digit.GetLineLength(line)
+        
     def SetLineCats(self, line, layer, cats, add=True):
         """!Set categories for given line and layer
 
@@ -1477,6 +1487,59 @@ class VDigitSettingsDialog(wx.Dialog):
         border.Add(item=sizer, proportion=0,
                    flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=5)
 
+        #
+        # geometry attributes (currently only length and area are supported)
+        #
+        box   = wx.StaticBox (parent = panel, id = wx.ID_ANY,
+                              label = " %s " % _("Geometry attributes"))
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        flexSizer = wx.FlexGridSizer(cols=2, hgap=3, vgap=3)
+        flexSizer.AddGrowableCol(0)
+        self.geomAttrb = { 'length' : { 'label' : _('length') },
+                           'area' : { 'label' : _('area') } }
+
+        digitToolbar = self.parent.toolbars['vdigit']
+        try:
+            vectorName = digitToolbar.GetLayer().GetName()
+        except AttributeError:
+            vectorName = None # no vector selected for editing
+        layer = UserSettings.Get(group='vdigit', key="layer", subkey='value')
+        for attrb in self.geomAttrb.keys():
+            # checkbox
+            check = wx.CheckBox(parent = panel, id = wx.ID_ANY,
+                                label = self.geomAttrb[attrb]['label'])
+            ### self.deleteRecord.SetValue(UserSettings.Get(group='vdigit', key="delRecord", subkey='enabled'))
+            check.Bind(wx.EVT_CHECKBOX, self.OnGeomAttrb)
+            # column (only numeric)
+            column = gselect.ColumnSelect(parent = panel)
+            column.InsertColumns(vector = vectorName,
+                                 layer = layer, excludeKey = True,
+                                 type = ['integer', 'double precision'])
+            
+            # default values
+            check.SetValue(UserSettings.Get(group='vdigit', key='geomAttrb',
+                                            subkey=[attrb, 'enabled'],
+                                            internal=True))
+            
+            if not vectorName:
+                check.Enable(False)
+                column.Enable(False)
+            
+            if not check.IsChecked():
+                column.Enable(False)
+            
+            self.geomAttrb[attrb]['check'] = check.GetId()
+            self.geomAttrb[attrb]['column'] = column.GetId()
+            
+            flexSizer.Add(item = check, proportion = 0,
+                          flag = wx.ALIGN_CENTER_VERTICAL)
+            flexSizer.Add(item = column, proportion = 0)
+
+        sizer.Add(item=flexSizer, proportion=1,
+                  flag=wx.ALL | wx.EXPAND, border=1)
+        border.Add(item=sizer, proportion=0,
+                   flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=5)
+
         # bindings
         self.Bind(wx.EVT_CHECKBOX, self.OnChangeAddRecord, self.addRecord)
         self.Bind(wx.EVT_CHOICE, self.OnChangeCategoryMode, self.categoryMode)
@@ -1511,6 +1574,22 @@ class VDigitSettingsDialog(wx.Dialog):
             (_("Area (closed boundary + centroid)"), "area"),
             (_("Direction"), "direction"),)
 
+    def OnGeomAttrb(self, event):
+        """!Register geometry attributes (enable/disable)"""
+        checked = event.IsChecked()
+        id = event.GetId()
+        key = None
+        for attrb, val in self.geomAttrb.iteritems():
+            if val['check'] == id:
+                key = attrb
+                break
+        
+        column = self.FindWindowById(self.geomAttrb[key]['column'])
+        if checked:
+            column.Enable()
+        else:
+            column.Enable(False)
+        
     def OnChangeCategoryMode(self, event):
         """!Change category mode"""
 
@@ -1677,6 +1756,17 @@ class VDigitSettingsDialog(wx.Dialog):
         UserSettings.Set(group='vdigit', key="delRecord", subkey='enabled',
                          value=self.deleteRecord.IsChecked())
 
+        # geometry attributes
+        for key, val in self.geomAttrb.iteritems():
+            checked = self.FindWindowById(val['check']).IsChecked()
+            column  = self.FindWindowById(val['column']).GetValue()
+            UserSettings.Set(group = 'vdigit', key = 'geomAttrb',
+                             subkey = [key, 'enabled'], value = checked,
+                             internal = True)
+            UserSettings.Set(group = 'vdigit', key = 'geomAttrb',
+                             subkey = [key, 'column'], value = column,
+                             internal = True)
+        
         # snapping threshold
         self.parent.digit.threshold = self.parent.digit.driver.GetThreshold()
 

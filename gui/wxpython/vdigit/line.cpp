@@ -1037,3 +1037,37 @@ int Digit::BreakLineAtIntersection(int line, struct line_pnts* points_line,
 
     return ret;
 }
+
+/*!
+  \brief Get line length
+  
+  \todo LL locations
+
+  \param line feature id
+
+  \return line length
+  \return 0 for non-linear features
+*/
+double Digit::GetLineLength(int line)
+{
+    int type;
+    double length;
+    
+    struct line_pnts *points;
+    
+    if (!Vect_line_alive(display->mapInfo, line))
+	return 0;
+    
+    points = Vect_new_line_struct();
+    
+    type = Vect_read_line(display->mapInfo, points, NULL, line);
+    
+    if (!(type & GV_LINES))
+	length = 0.0;
+    else
+	length = Vect_line_length(points);
+
+    Vect_destroy_line_struct(points);
+
+    return length;
+}

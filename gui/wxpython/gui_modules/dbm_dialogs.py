@@ -182,9 +182,9 @@ class DisplayAttributesDialog(wx.Dialog):
         sqlCommands = []
         # find updated values for each layer/category
         for layer in self.mapDBInfo.layers.keys(): # for each layer
-            table = self.mapDBInfo.layers[layer]["table"]
-            key = self.mapDBInfo.layers[layer]["key"]
-            columns = self.mapDBInfo.tables[table]
+            table = self.mapDBInfo.GetTable(layer)
+            key = self.mapDBInfo.GetKeyColumn(layer)
+            columns = self.mapDBInfo.GetTableDesc(table)
             for idx in range(len(columns[key]['values'])): # for each category
                 updatedColumns = []
                 updatedValues = []
@@ -247,7 +247,7 @@ class DisplayAttributesDialog(wx.Dialog):
 
         return sqlCommands
 
-    def OnReset(self, event):
+    def OnReset(self, event = None):
         """!Reset form"""
         for layer in self.mapDBInfo.layers.keys():
             table = self.mapDBInfo.layers[layer]["table"]
@@ -257,6 +257,8 @@ class DisplayAttributesDialog(wx.Dialog):
                 for name in columns.keys():
                     type  = columns[name]['type']
                     value = columns[name]['values'][idx]
+                    if value is None:
+                        value = ''
                     try:
                         id = columns[name]['ids'][idx]
                     except IndexError:
@@ -484,6 +486,20 @@ class DisplayAttributesDialog(wx.Dialog):
         
         return True
 
+    def SetColumnValue(self, layer, column, value):
+        """!Set attrbute value
+
+        @param column column name
+        @param value value
+        """
+        table = self.mapDBInfo.GetTable(layer)
+        columns = self.mapDBInfo.GetTableDesc(table)
+        
+        for key, col in columns.iteritems():
+            if key == column:
+                col['values'] = [col['ctype'](value),]
+                break
+        
 class ModifyTableRecord(wx.Dialog):
     """!Dialog for inserting/updating table record"""
     def __init__(self, parent, id, title, data, keyEditable=(-1, True),
