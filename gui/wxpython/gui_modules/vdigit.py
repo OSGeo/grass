@@ -610,10 +610,30 @@ class VDigit(AbstractDigit):
         @param line feature id
 
         @return line length
-        @return 0 for non-linear features
+        @return -1 on error
         """
         return self.digit.GetLineLength(line)
+
+    def GetAreaSize(self, centroid):
+        """!Get area size
+
+        @param centroid centroid id
+
+        @return area size
+        @return -1 on error
+        """
+        return self.digit.GetAreaSize(centroid)
         
+    def GetAreaPerimeter(self, centroid):
+        """!Get area perimeter
+
+        @param centroid centroid id
+
+        @return area size
+        @return -1 on error
+        """
+        return self.digit.GetAreaPerimeter(centroid)
+
     def SetLineCats(self, line, layer, cats, add=True):
         """!Set categories for given line and layer
 
@@ -1493,10 +1513,11 @@ class VDigitSettingsDialog(wx.Dialog):
         box   = wx.StaticBox (parent = panel, id = wx.ID_ANY,
                               label = " %s " % _("Geometry attributes"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
-        flexSizer = wx.FlexGridSizer(cols=2, hgap=3, vgap=3)
+        flexSizer = wx.FlexGridSizer(cols=3, hgap=3, vgap=3)
         flexSizer.AddGrowableCol(0)
         self.geomAttrb = { 'length' : { 'label' : _('length') },
-                           'area' : { 'label' : _('area') } }
+                           'area' : { 'label' : _('area') },
+                           'perimeter' : { 'label' : _('perimeter') } }
 
         digitToolbar = self.parent.toolbars['vdigit']
         try:
@@ -1504,22 +1525,29 @@ class VDigitSettingsDialog(wx.Dialog):
         except AttributeError:
             vectorName = None # no vector selected for editing
         layer = UserSettings.Get(group='vdigit', key="layer", subkey='value')
-        for attrb in self.geomAttrb.keys():
+        for attrb in ['length', 'area', 'perimeter']:
             # checkbox
             check = wx.CheckBox(parent = panel, id = wx.ID_ANY,
                                 label = self.geomAttrb[attrb]['label'])
             ### self.deleteRecord.SetValue(UserSettings.Get(group='vdigit', key="delRecord", subkey='enabled'))
             check.Bind(wx.EVT_CHECKBOX, self.OnGeomAttrb)
             # column (only numeric)
-            column = gselect.ColumnSelect(parent = panel)
+            column = gselect.ColumnSelect(parent = panel, size=(200, -1))
             column.InsertColumns(vector = vectorName,
                                  layer = layer, excludeKey = True,
                                  type = ['integer', 'double precision'])
+            # units 
+            ### TODO: more units
+            units = wx.Choice(parent = panel, id = wx.ID_ANY,
+                              choices = [_("map units")])
             
             # default values
             check.SetValue(UserSettings.Get(group='vdigit', key='geomAttrb',
                                             subkey=[attrb, 'enabled'],
                                             internal=True))
+            column.SetStringSelection(UserSettings.Get(group='vdigit', key='geomAttrb',
+                                                       subkey=[attrb, 'column'],
+                                                       internal=True))
             
             if not vectorName:
                 check.Enable(False)
@@ -1528,12 +1556,14 @@ class VDigitSettingsDialog(wx.Dialog):
             if not check.IsChecked():
                 column.Enable(False)
             
-            self.geomAttrb[attrb]['check'] = check.GetId()
+            self.geomAttrb[attrb]['check']  = check.GetId()
             self.geomAttrb[attrb]['column'] = column.GetId()
-            
+            self.geomAttrb[attrb]['units']  = units.GetId()
+
             flexSizer.Add(item = check, proportion = 0,
                           flag = wx.ALIGN_CENTER_VERTICAL)
             flexSizer.Add(item = column, proportion = 0)
+            flexSizer.Add(item = units, proportion = 0)
 
         sizer.Add(item=flexSizer, proportion=1,
                   flag=wx.ALL | wx.EXPAND, border=1)
