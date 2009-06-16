@@ -1166,6 +1166,17 @@ class BufferedWindow(MapWindow, wx.Window):
             self.polycoords.append(self.Pixel2Cell(event.GetPositionTuple()[:]))
             self.DrawLines(pdc=self.pdcTmp)
     
+    def __geomAttrb(self):
+        """!Trac geometry attributes?"""
+        ret = list()
+        for key, val in UserSettings.Get(group = 'vdigit', key = 'geomAttrb',
+                                         internal = True).iteritems():
+            if not val['enabled'] or not val['column']:
+                continue
+            ret.append((key, val['column']))
+
+        return ret
+    
     def __updateATM(self):
         """!Update open Attribute Table Manager
 
@@ -1953,6 +1964,13 @@ class BufferedWindow(MapWindow, wx.Window):
                                                                            cats=cats,
                                                                            pos=posWindow,
                                                                            action="add")
+                        layer = int(UserSettings.Get(group='vdigit', key="layer", subkey='value'))
+                        for attrb, column in self.__geomAttrb():
+                            if attrb is 'length':
+                                val = digitClass.GetLineLength(fid)
+                            addRecordDlg.SetColumnValue(layer, column, val)
+                        addRecordDlg.OnReset()
+                        
                         if addRecordDlg.mapDBInfo and \
                                addRecordDlg.ShowModal() == wx.ID_OK:
                             sqlfile = tempfile.NamedTemporaryFile(mode="w")

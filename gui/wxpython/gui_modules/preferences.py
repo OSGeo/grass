@@ -6,6 +6,7 @@
 Sets default display font, etc.
 
 Classes:
+ - Settings
  - PreferencesDialog
  - DefaultFontDialog
  - MapsetAccess
@@ -16,7 +17,7 @@ License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 @author Michael Barton (Arizona State University)
-Martin Landa <landa.martin gmail.com>
+@author Martin Landa <landa.martin gmail.com>
 """
 
 import os
@@ -553,6 +554,11 @@ class Settings:
                                                                        _("histogram"))
         self.internalSettings['vdigit']['bgmap'] = {}
         self.internalSettings['vdigit']['bgmap']['value'] = ''
+        self.internalSettings['vdigit']['geomAttrb'] = dict()
+        self.internalSettings['vdigit']['geomAttrb']['length'] = { 'enabled' : False,
+                                                                   'column' : '' }
+        self.internalSettings['vdigit']['geomAttrb']['area']   = { 'enabled' : False,
+                                                                   'column' : '' }
         
     def ReadSettingsFile(self, settings=None):
         """!Reads settings file (mapset, location, gisdbase)"""
@@ -743,8 +749,8 @@ class Settings:
                 else:
                     return settings[group][key]
             else:
-                if type(subkey) == type([]) or \
-                        type(subkey) == type(()):
+                if type(subkey) == type(tuple()) or \
+                        type(subkey) == type(list()):
                     return settings[group][key][subkey[0]][subkey[1]]
                 else:
                     return settings[group][key][subkey]  
@@ -778,7 +784,8 @@ class Settings:
                 else:
                     settings[group][key] = value
             else:
-                if type(subkey) == type([]):
+                if type(subkey) == type(tuple()) or \
+                        type(subkey) == type(list()):
                     settings[group][key][subkey[0]][subkey[1]] = value
                 else:
                     settings[group][key][subkey] = value
