@@ -19,7 +19,7 @@ set GRASS_7_DEV_INSTALL_FOLDER=%OSGEO4W_DIR%\apps\grass\grass-7.0.svn
 @echo -----------------------------------------------------------------------------------------------------------------------
 @echo Edited by: Marco Pasetti
 @echo Revised for OSGeo4W by: Colin Nielsen
-@echo Last Update: 30 March 2009
+@echo Last Update: 10 June 2009
 @echo -----------------------------------------------------------------------------------------------------------------------
 @echo Select the GRASS version to pack:
 @echo.
@@ -183,7 +183,7 @@ xcopy %OSGEO4W_DIR%\apps\msys\etc %PACKAGE_DIR%\msys\etc /S/V/F/I
 xcopy %OSGEO4W_DIR%\apps\msys\info %PACKAGE_DIR%\msys\info /S/V/F/I
 xcopy %OSGEO4W_DIR%\apps\msys\lib %PACKAGE_DIR%\msys\lib /S/V/F/I
 xcopy %OSGEO4W_DIR%\apps\msys\man %PACKAGE_DIR%\msys\man /S/V/F/I
-del %OSGEO4W_DIR%\apps\msys\etc\fstab
+del %PACKAGE_DIR%\msys\etc\fstab
 
 
 @echo.
@@ -205,7 +205,6 @@ xcopy %OSGEO4W_DIR%\apps\Python25\Scripts %PACKAGE_DIR%\Python25\Scripts /S/V/F/
 @echo.
 @echo -----------------------------------------------------------------------------------------------------------------------
 @echo Packaging Completed
-@echo Remove lines 11-16 from %PACKAGE_DIR%\msys\msys.bat
 @echo -----------------------------------------------------------------------------------------------------------------------
 @echo.
 pause

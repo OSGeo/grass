@@ -430,6 +430,8 @@ Section "GRASS" SecGRASS
 	SetOutPath "$INSTALL_DIR\icons"
 	File .\Installer-Files\GRASS.ico
 	File .\Installer-Files\GRASS_Web.ico
+	File .\Installer-Files\GRASS_tcltk.ico
+	File .\Installer-Files\GRASS_MSys.ico
 	File .\Installer-Files\GRASS_CMD.ico
 	File .\Installer-Files\MSYS_Custom_Icon.ico
 	File .\Installer-Files\WinGRASS.ico	
@@ -485,7 +487,7 @@ Section "GRASS" SecGRASS
 	"$INSTALL_DIR\icons\GRASS.ico" "" SW_SHOWMINIMIZED "" "Launch GRASS ${VERSION_NUMBER} with the new wxPython GUI"
 
 	CreateShortCut "$DESKTOP\GRASS ${VERSION_NUMBER} with MSYS.lnk" "$INSTALL_DIR\msys\msys.bat" "/grass/bin/${GRASS_COMMAND} -wxpython"\
-	"$INSTALL_DIR\icons\GRASS.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} with the new wxPython GUI and a MSYS UNIX terminal"
+	"$INSTALL_DIR\icons\GRASS_MSys.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} with the new wxPython GUI and a MSYS UNIX terminal"
  
 	;Create the Windows Start Menu Shortcuts
 	SetShellVarContext all
@@ -493,7 +495,7 @@ Section "GRASS" SecGRASS
 	CreateDirectory "$SMPROGRAMS\${GRASS_BASE}"
 	
 	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS Old TclTk GUI.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-tcltk"\
-	"$INSTALL_DIR\icons\GRASS.ico" "" SW_SHOWMINIMIZED "" "Launch GRASS ${VERSION_NUMBER} with the old TclTk GUI"
+	"$INSTALL_DIR\icons\GRASS_tcltk.ico" "" SW_SHOWMINIMIZED "" "Launch GRASS ${VERSION_NUMBER} with the old TclTk GUI"
 
 	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS ${VERSION_NUMBER}.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-wxpython"\
 	"$INSTALL_DIR\icons\GRASS.ico" "" SW_SHOWMINIMIZED "" "Launch GRASS ${VERSION_NUMBER} with the new wxPython GUI"
@@ -508,7 +510,7 @@ Section "GRASS" SecGRASS
 	"$INSTALL_DIR\icons\GRASS_Web.ico" "" SW_SHOWNORMAL "" "Visit the GRASS website"
 	
 	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS ${VERSION_NUMBER} with MSYS.lnk" "$INSTALL_DIR\msys\msys.bat" "/grass/bin/${GRASS_COMMAND} -wxpython"\
-	"$INSTALL_DIR\icons\GRASS.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} with the new wxPython GUI and a MSYS UNIX terminal"
+	"$INSTALL_DIR\icons\GRASS_MSys.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} with the new wxPython GUI and a MSYS UNIX terminal"
 	
 ; FIXME: ship the WinGrass release notes .html file instead of URL
 ; http://trac.osgeo.org/grass/browser/grass-web/trunk/grass64/binary/mswindows/native/README.html?format=raw
