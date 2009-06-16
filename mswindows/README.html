@@ -212,6 +212,9 @@ the option number 1.</p>
 <p>When finished, you should have a GRASS self-contained release package
 in <code>c:\temp\GRASS-Release-Package</code>.</p>
 
+<p>Download README.html from <a href="http://trac.osgeo.org/grass/browser/grass-web/trunk/grass64/binary/mswindows/native/README.html?format=raw">here</a>, 
+place in <code>c:\temp\GRASS-Release-Package</code> (update version numbers as necessary).</p>
+
 </div>
 
 
@@ -227,10 +230,9 @@ lines 11-16.</p>
 <p>At the end of line 88 (also in msys.bat) change:
 <pre><code>start %WD%rxvt -backspacekey  -sl 2500 -fg %FGCOLOR% -bg %BGCOLOR% -sr -fn Courier-12 -tn msys -geometry 80x25 -e /bin/sh --login -c "%*"</code></pre>
 To:
-<pre><code>if "x%*" == "x" start %WD%rxvt -backspacekey  -sl 2500 -fg %FGCOLOR% -bg %BGCOLOR% -sr -fn Courier-12 -tn msys -geometry 80x25 -e /bin/sh --login -i
-if NOT "x%*" == "x" start %WD%rxvt -backspacekey  -sl 2500 -fg %FGCOLOR% -bg %BGCOLOR% -sr -fn Courier-12 -tn msys -geometry 80x25 -e /bin/sh --login -c "%*"</code></pre>
-
-<p>Delete <code>c:\temp\GRASS-Release-Package\msys\etc\fstab</code></p>
+<pre><code>if "x%*" == "x" start "MSYS 1.0" "%WD%rxvt" -backspacekey  -sl 2500 -fg %FGCOLOR% -bg %BGCOLOR% -sr -fn Courier-12 -tn msys -geometry 80x25 -e /bin/sh --login -i
+if NOT "x%*" == "x" start "MSYS 1.0" "%WD%rxvt" -backspacekey  -sl 2500 -fg %FGCOLOR% -bg %BGCOLOR% -sr -fn Courier-12 -tn msys -geometry 80x25 -e /bin/sh --login -c "%*"
+</code></pre>
 
 </div>
 
@@ -303,7 +305,7 @@ osgeo4w tree by Colin Nielsen</p>
 <p>To contact them, e-mail to: GRASS Development Mailing List
 (<a target="_blank" href="http://lists.osgeo.org/mailman/listinfo/grass-dev">http://lists.osgeo.org/mailman/listinfo/grass-dev</a>).</p>
 
-<p>Last edited by Colin Nielsen on 29 April 2009.</p>
+<p>Last edited by Colin Nielsen on 10 June 2009.</p>
 
 </div>
 
