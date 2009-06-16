@@ -263,16 +263,17 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             
         # map layer items
         if ltype != "group" and \
-                ltype != "command": # properties
+                ltype != "command":
             self.popupMenu.AppendSeparator()
             self.popupMenu.Append(self.popupID8, text=_("Change opacity level"))
             self.Bind(wx.EVT_MENU, self.OnPopupOpacityLevel, id=self.popupID8)
             self.popupMenu.Append(self.popupID3, text=_("Properties"))
             self.Bind(wx.EVT_MENU, self.OnPopupProperties, id=self.popupID3)
-            self.popupMenu.Append(self.popupID9, text=_("Zoom to selected map(s)"))
-            self.Bind(wx.EVT_MENU, self.mapdisplay.MapWindow.OnZoomToMap, id=self.popupID9)
-            self.popupMenu.Append(self.popupID10, text=_("Set computational region from selected map(s)"))
-            self.Bind(wx.EVT_MENU, self.OnSetCompRegFromMap, id=self.popupID10)
+            if ltype in ('raster', 'vector'):
+                self.popupMenu.Append(self.popupID9, text=_("Zoom to selected map(s)"))
+                self.Bind(wx.EVT_MENU, self.mapdisplay.MapWindow.OnZoomToMap, id=self.popupID9)
+                self.popupMenu.Append(self.popupID10, text=_("Set computational region from selected map(s)"))
+                self.Bind(wx.EVT_MENU, self.OnSetCompRegFromMap, id=self.popupID10)
             if numSelected > 1:
                 self.popupMenu.Enable(self.popupID8, False)
                 self.popupMenu.Enable(self.popupID3, False)

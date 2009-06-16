@@ -1096,31 +1096,39 @@ class MapFrame(wx.Frame):
         self.MapWindow.SetCursor(self.cursors["cross"])
         
     def QueryMap(self, x, y):
-        """
-        Query map layer features
+        """!Query map layer features
 
-        Currently only raster and vector map layers are supported
+        Currently only raster and vector map layers are supported.
+        
+        @param x,y coordinates
         """
         #set query snap distance for v.what at mapunit equivalent of 10 pixels
         qdist = 10.0 * ((self.Map.region['e'] - self.Map.region['w']) / self.Map.width)
         east, north = self.MapWindow.Pixel2Cell((x, y))
 
-        if not self.tree.layer_selected:
+        num = 0
+        for layer in self.tree.GetSelections():
+            type = self.tree.GetPyData(layer)[0]['maplayer'].GetType()
+            if type in ('raster', 'rgb', 'his',
+                        'vector', 'thememap', 'themechart'):
+                num += 1
+        
+        if num < 1:
             dlg = wx.MessageDialog(parent=self,
-                                   message=_('No map layer selected for querying.'),
-                                   caption=_('Message'),
-                                   style=wx.OK | wx.ICON_INFORMATION)
+                                   message=_('No raster or vector map layer selected for querying.'),
+                                   caption=_('No map layer selected'),
+                                   style=wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
             dlg.ShowModal()
             dlg.Destroy()
             return
-
+        
         mapname = None
         raststr = ''
         vectstr = ''
         rcmd = ['r.what', '--q']
         vcmd = ['v.what', '--q']
         for layer in self.tree.GetSelections():
-            type = self.tree.GetPyData(layer)[0]['maplayer'].type
+            type = self.tree.GetPyData(layer)[0]['maplayer'].GetType()
             dcmd = self.tree.GetPyData(layer)[0]['cmd']
             name = utils.GetLayerNameFromCmd(dcmd)
             if name == '':
@@ -1272,6 +1280,15 @@ class MapFrame(wx.Frame):
                               kind=wx.ITEM_CHECK)
         toolsmenu.AppendItem(display)
         self.Bind(wx.EVT_MENU, self.OnQueryDisplay, display)
+        numLayers = 0
+        for layer in self.tree.GetSelections():
+            type = self.tree.GetPyData(layer)[0]['maplayer'].GetType()
+            if type in ('raster', 'rgb', 'his',
+                        'vector', 'thememap', 'themechart'):
+                numLayers += 1
+        if numLayers < 1:
+            display.Enable(False)
+        
         if action == "displayAttrb":
             display.Check(True)
         
