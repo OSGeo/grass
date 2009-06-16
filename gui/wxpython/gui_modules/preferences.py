@@ -559,6 +559,8 @@ class Settings:
                                                                    'column' : '' }
         self.internalSettings['vdigit']['geomAttrb']['area']   = { 'enabled' : False,
                                                                    'column' : '' }
+        self.internalSettings['vdigit']['geomAttrb']['perimeter']   = { 'enabled' : False,
+                                                                        'column' : '' }
         
     def ReadSettingsFile(self, settings=None):
         """!Reads settings file (mapset, location, gisdbase)"""

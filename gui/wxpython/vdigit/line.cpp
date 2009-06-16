@@ -1046,7 +1046,7 @@ int Digit::BreakLineAtIntersection(int line, struct line_pnts* points_line,
   \param line feature id
 
   \return line length
-  \return 0 for non-linear features
+  \return -1 for non-linear features
 */
 double Digit::GetLineLength(int line)
 {
@@ -1056,18 +1056,75 @@ double Digit::GetLineLength(int line)
     struct line_pnts *points;
     
     if (!Vect_line_alive(display->mapInfo, line))
-	return 0;
+	return -1;
     
     points = Vect_new_line_struct();
     
     type = Vect_read_line(display->mapInfo, points, NULL, line);
     
-    if (!(type & GV_LINES))
-	length = 0.0;
-    else
+    length = -1;
+    if (type & GV_LINES)
 	length = Vect_line_length(points);
 
     Vect_destroy_line_struct(points);
 
     return length;
+}
+
+/*!
+  \brief Get area size
+
+  \param centroid centroid id
+
+  \return area in map units
+  \return -1 on error
+*/
+double Digit::GetAreaSize(int centroid)
+{
+    int area;
+    double size;
+    
+    area = Vect_get_centroid_area(display->mapInfo, centroid);
+    size = -1;
+    if (area > 0) {
+	if (!Vect_area_alive(display->mapInfo, area))
+	    return -1;
+	
+	size = Vect_get_area_area(display->mapInfo, area);
+    }
+    
+    return size;
+}
+
+/*!
+  \brief Get area perimeter
+
+  \param centroid centroid id
+
+  \return perimeter in map units
+  \return -1 on error
+*/
+double Digit::GetAreaPerimeter(int centroid)
+{
+    int area;
+    double perimeter;
+    struct line_pnts *points = NULL;
+    
+    area = Vect_get_centroid_area(display->mapInfo, centroid);
+    perimeter = -1;
+    if (area > 0) {
+
+	if (!Vect_area_alive(display->mapInfo, area))
+	return -1;
+    
+	points = Vect_new_line_struct();
+    
+	Vect_get_area_points(display->mapInfo, area, points);
+	perimeter = Vect_area_perimeter(points);
+    }
+    
+    if (points)
+	Vect_destroy_line_struct(points);
+    
+    return perimeter;
 }

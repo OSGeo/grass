@@ -83,7 +83,9 @@ public:
 					int, int, double);
 
     double GetLineLength(int);
-    
+    double GetAreaSize(int);
+    double GetAreaPerimeter(int);
+
     int CopyCats(std::vector<int>, std::vector<int>, bool);
     int GetCategory(int);
     std::map<int, std::vector<int> > GetLineCats(int);
