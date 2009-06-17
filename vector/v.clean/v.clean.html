@@ -32,16 +32,18 @@ breaking polygons.
 <h3>Remove dangles</h3>
 
 Threshold gives maximum line/boundary length in map units, degrees for 
-latlon. All dangles shorter than <em>thresh</em> will be removed. 
-Threshold is ignored if &lt; 0.
+latlon. Dangles shorter than <em>thresh</em> will be removed. 
+All dangles will be removed if <em>thresh</em> &lt; 0.
 <p>
 The <em>rmdangle</em> tool removes dangling lines/boundaries shorter than 
 <em>thresh</em>. A line/boundary is considered to be a dangle if no other 
 line of given <em>type</em> is on at least one end node. If a dangle is 
 formed by several lines, such a string of lines is taken as one dangle 
-and either everything or nothing is deleted. The <em>rmdangle</em> tool 
-is useful to remove incorrect boundaries after other cleaning operations. 
-Areas can then be successfully built. 
+and everything is deleted if the combined length is shorter than 
+<em>thres</em> or <em>thres</em> is &lt; 0. If the combined length is 
+larger than <em>thresh</em>, nothing is deleted. The <em>rmdangle</em> 
+tool is useful to remove incorrect boundaries after other cleaning 
+operations. Areas can then be successfully built. 
 
 <h3>Change boundary dangles to type line</h3>
 
