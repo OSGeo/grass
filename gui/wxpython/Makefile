@@ -9,7 +9,7 @@ include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 
 ETCDIR = $(ETC)/wxpython
 
-SRCFILES := $(wildcard scripts/p.* compat/* gui_modules/* icons/*.* icons/silk/* images/* xml/*) gis_set.py wxgui.py README scripts/wxgui
+SRCFILES := $(wildcard scripts/p.* compat/* gui_modules/* icons/*.* icons/silk/* images/* xml/*) gis_set.py wxgui.py README
 DSTFILES := $(patsubst %,$(ETCDIR)/%,$(SRCFILES))
 
 default: install_scripts
@@ -21,12 +21,6 @@ install_scripts:
 	done
 	$(MAKE) $(DSTFILES)
 	$(MAKE) menustrings.py
-
-$(ETCDIR)/scripts/wxgui: wxgui
-	$(INSTALL) $< $@
-
-$(ETCDIR)/scripts/%: scripts/%
-	$(INSTALL) $< $@
 
 $(ETCDIR)/%: %
 	$(INSTALL_DATA) $< $@
