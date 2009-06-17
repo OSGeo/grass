@@ -392,14 +392,10 @@ int main(int argc, char *argv[])
 	 * immediately and that breaks scripts running GRASS scripts
 	 * because they dont wait until GRASS script finished */
 	/* execlp( "sh", "sh", filename, "@ARGS_PARSED@", NULL); */
-	/* _spawnlp ( _P_OVERLAY, "sh", "sh", filename, "@ARGS_PARSED@", NULL ); */
+	/* _spawnlp ( _P_OVERLAY, filename, filename, "@ARGS_PARSED@", NULL ); */
 	int ret;
-	char *shell = getenv("GRASS_SH");
 
-	if (shell == NULL)
-	    shell = "sh";
-	ret =
-	    _spawnlp(_P_WAIT, shell, shell, filename, "@ARGS_PARSED@", NULL);
+	ret = _spawnlp(_P_WAIT, filename, filename, "@ARGS_PARSED@", NULL);
 	G_debug(1, "ret = %d", ret);
 	if (ret == -1) {
 	    perror("_spawnlp() failed");
