@@ -166,8 +166,8 @@ class ProcessWorkspaceFile():
                         "nviz"    : None})
                 
             elif item.tag == 'layer':
-                cmd, selected, nviz = self.__processLayer(item)
-                
+                cmd, selected, vdigit, nviz = self.__processLayer(item)
+
                 self.layers.append( {
                         "type"     : item.get('type', None),
                         "name"     : item.get('name', None),
@@ -177,8 +177,9 @@ class ProcessWorkspaceFile():
                         "group"    : False, #### self.inTag['group'], # ???
                         "display"  : self.displayIndex,
                         "selected" : selected,
+                        "vdigit"   : vdigit,
                         "nviz"     : nviz } )
-        
+            
     def __processLayer(self, layer):
         """!Process layer item
 
@@ -210,6 +211,15 @@ class ProcessWorkspaceFile():
             selected = False
         
         #
+        # Vector digitizer settings
+        #
+        node_vdigit = layer.find('vdigit')
+        if node_vdigit is not None:
+            vdigit = self.__processLayerVdigit(node_vdigit)
+        else:
+            vdigit = None
+        
+        #
         # Nviz (3D settings)
         #
         node_nviz = layer.find('nviz')
@@ -218,8 +228,22 @@ class ProcessWorkspaceFile():
         else:
             nviz = None
         
-        return (cmd, selected, nviz)
+        return (cmd, selected, vdigit, nviz)
 
+    def __processLayerVdigit(self, node_vdigit):
+        """!Process vector digitizer layer settings
+
+        @param node_vdigit vdigit node
+        """
+        # init nviz layer properties
+        vdigit = dict()
+        for node in node_vdigit.findall('geometryAttribute'):
+            if not vdigit.has_key('geomAttr'):
+                vdigit['geomAttr'] = dict()
+            vdigit['geomAttr'][node.get('type')] = node.get('column')
+        
+        return vdigit
+    
     def __processLayerNviz(self, node_nviz):
         """!Process 3D layer settings
 
@@ -741,16 +765,28 @@ class WriteWorkspaceFile(object):
                         self.file.write('%s</parameter>\n' % (' ' * self.indent));
                 self.indent -= 4
                 self.file.write('%s</task>\n' % (' ' * self.indent));
+                # vector digitizer
+                vdigit = mapTree.GetPyData(item)[0]['vdigit']
+                if vdigit:
+                    self.file.write('%s<vdigit>\n' % (' ' * self.indent))
+                    if vdigit.has_key('geomAttr'):
+                        self.indent += 4
+                        for type, column in vdigit['geomAttr'].iteritems():
+                            self.file.write('%s<geometryAttribute type="%s" column="%s" />\n' % \
+                                                (' ' * self.indent, type, column))
+                        self.indent -= 4
+                    self.file.write('%s</vdigit>\n' % (' ' * self.indent))
+                # nviz
                 nviz = mapTree.GetPyData(item)[0]['nviz']
                 if nviz:
-                    self.file.write('%s<nviz>\n' % (' ' * self.indent));
+                    self.file.write('%s<nviz>\n' % (' ' * self.indent))
                     if maplayer.type == 'raster':
                         self.__writeNvizSurface(nviz['surface'])
                     elif maplayer.type == 'vector':
                         self.__writeNvizVector(nviz['vector'])
-                    self.file.write('%s</nviz>\n' % (' ' * self.indent));
+                    self.file.write('%s</nviz>\n' % (' ' * self.indent))
                 self.indent -= 4
-                self.file.write('%s</layer>\n' % (' ' * self.indent));
+                self.file.write('%s</layer>\n' % (' ' * self.indent))
             item = mapTree.GetNextSibling(item)
         self.indent -= 4
 

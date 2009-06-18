@@ -670,7 +670,8 @@ class GMFrame(wx.Frame):
                                        lopacity=layer['opacity'],
                                        lcmd=layer['cmd'],
                                        lgroup=layer['group'],
-                                       lnviz=layer['nviz'])
+                                       lnviz=layer['nviz'],
+                                       lvdigit=layer['vdigit'])
             
             if layer.has_key('selected'):
                 if layer['selected']:
