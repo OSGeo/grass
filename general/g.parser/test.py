@@ -4,6 +4,7 @@
 
 import os
 import sys
+import grass.script as grass
 
 #%Module
 #%  description: g.parser test script (python)
@@ -38,30 +39,20 @@ def main():
     #add your code here
 
     print ""
-    if ( os.getenv('GIS_FLAG_F') == "1" ):
+    if flags['f']:
         print "Flag -f set"
     else:
         print "Flag -f not set"
 
     #test if parameter present:
-    if ( os.getenv("GIS_OPT_OPTION1") != "" ):
-        print "Value of GIS_OPT_OPTION1: '%s'" % os.getenv('GIS_OPT_OPTION1')
+    if options['option1']:
+        print "Value of option1=: '%s'" % options['option1']
 
-    print "Value of GIS_OPT_RASTER: '%s'" % os.getenv('GIS_OPT_RASTER')
-    print "Value of GIS_OPT_VECTOR: '%s'" % os.getenv('GIS_OPT_VECTOR')
+    print "Value of raster=: '%s'" % options['raster']
+    print "Value of vector=: '%s'" % options['vector']
 
     #end of your code 
-    
+
 if __name__ == "__main__":
-    if not os.getenv("GISBASE"):
-        print >> sys.stderr, "You must be in GRASS GIS to run this program."
-        sys.exit(0)
-
-    try:
-        if len(sys.argv) < 2 or sys.argv[1] != "@ARGS_PARSED@":
-            os.execvp("g.parser", ["g.parser"] + sys.argv)
-    except IndexError:
-	os.execvp("g.parser", ["g.parser"] + sys.argv)
-
-    if sys.argv[1] == "@ARGS_PARSED@":
-        main();
+    options, flags = grass.parser()
+    main()
