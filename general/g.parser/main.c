@@ -255,12 +255,98 @@ static void parse_option(struct context *ctx, const char *cmd,
 	    cmd, ctx->line);
 }
 
+static int print_options(const struct context *ctx)
+{
+    struct Option *option;
+    struct Flag *flag;
+    const char *overwrite = getenv("GRASS_OVERWRITE");
+    const char *verbose = getenv("GRASS_VERBOSE");
+
+    printf("@ARGS_PARSED@\n");
+
+    if (overwrite)
+	printf("GRASS_OVERWRITE=%s\n", overwrite);
+
+    if (verbose)
+	printf("GRASS_VERBOSE=%s\n", verbose);
+
+    for (flag = ctx->first_flag; flag; flag = flag->next_flag)
+	printf("flag_%c=%d\n", flag->key, flag->answer ? 1 : 0);
+
+    for (option = ctx->first_option; option; option = option->next_opt)
+	printf("opt_%s=%s\n", option->key,
+	       option->answer ? option->answer : "");
+
+    return 0;
+}
+
+static int reinvoke_script(const struct context *ctx, const char *filename)
+{
+    struct Option *option;
+    struct Flag *flag;
+
+    /* Because shell from MINGW and CygWin converts all variables
+     * to uppercase it was necessary to use uppercase variables.
+     * Set both until all scripts are updated */
+    for (flag = ctx->first_flag; flag; flag = flag->next_flag) {
+	char buff[16];
+
+	sprintf(buff, "GIS_FLAG_%c=%d", flag->key, flag->answer ? 1 : 0);
+	putenv(G_store(buff));
+
+	sprintf(buff, "GIS_FLAG_%c=%d", toupper(flag->key),
+		flag->answer ? 1 : 0);
+
+	G_debug(2, "set %s", buff);
+	putenv(G_store(buff));
+    }
+
+    for (option = ctx->first_option; option; option = option->next_opt) {
+	char buff[4096], upper[4096];
+
+	sprintf(buff, "GIS_OPT_%s=%s", option->key,
+		option->answer ? option->answer : "");
+	putenv(G_store(buff));
+
+	strcpy(upper, option->key);
+	G_str_to_upper(upper);
+	sprintf(buff, "GIS_OPT_%s=%s", upper,
+		option->answer ? option->answer : "");
+
+	G_debug(2, "set %s", buff);
+	putenv(G_store(buff));
+    }
+
+#ifdef __MINGW32__
+    {
+	/* execlp() and _spawnlp ( _P_OVERLAY,..) do not work, they return 
+	 * immediately and that breaks scripts running GRASS scripts
+	 * because they dont wait until GRASS script finished */
+	/* execlp( "sh", "sh", filename, "@ARGS_PARSED@", NULL); */
+	/* _spawnlp ( _P_OVERLAY, filename, filename, "@ARGS_PARSED@", NULL ); */
+	int ret;
+
+	ret = _spawnlp(_P_WAIT, filename, filename, "@ARGS_PARSED@", NULL);
+	G_debug(1, "ret = %d", ret);
+	if (ret == -1) {
+	    perror("_spawnlp() failed");
+	    return 1;
+	}
+	return ret;
+    }
+#else
+    execl(filename, filename, "@ARGS_PARSED@", NULL);
+
+    perror("execl() failed");
+    return 1;
+#endif
+}
+
 int main(int argc, char *argv[])
 {
     struct context ctx;
-    struct Option *option;
-    struct Flag *flag;
     const char *filename;
+    int standard_output = 0;
 
     ctx.module = NULL;
     ctx.option = NULL;
@@ -274,18 +360,25 @@ int main(int argc, char *argv[])
     if (argc >= 2 && (strcmp(argv[1], "-t") == 0)) {
 	/* Turn on translation output */
 	translate_output = 1;
+	argv++, argc--;
     }
 
-    if ((argc < 2 + translate_output) || (argc >= 2 &&
-					  ((strcmp(argv[1], "help") == 0) ||
-					   (strcmp(argv[1], "-help") == 0) ||
-					   (strcmp(argv[1], "--help") == 0)))) {
+    if (argc >= 2 && (strcmp(argv[1], "-s") == 0)) {
+	/* write to stdout rather than re-invoking */
+	standard_output = 1;
+	argv++, argc--;
+    }
+
+    if ((argc < 2) || ((strcmp(argv[1], "help") == 0) ||
+		       (strcmp(argv[1], "-help") == 0) ||
+		       (strcmp(argv[1], "--help") == 0))) {
 	fprintf(stderr, "Usage: %s [-t] <filename> [<argument> ...]\n",
 		argv[0]);
 	return 1;
     }
 
-    filename = argv[1 + translate_output];
+    filename = argv[1];
+    argv++, argc--;
     G_debug(2, "filename = %s", filename);
 
     ctx.fp = fopen(filename, "r");
@@ -351,62 +444,12 @@ int main(int argc, char *argv[])
     if (translate_output)
 	return EXIT_SUCCESS;
 
-    if (G_parser(argc - 1, argv + 1))
+    if (G_parser(argc, argv))
 	return 1;
 
-    /* Because shell from MINGW and CygWin converts all variables
-     * to uppercase it was necessary to use uppercase variables.
-     * Set both until all scripts are updated */
-    for (flag = ctx.first_flag; flag; flag = flag->next_flag) {
-	char buff[16];
+    return standard_output
+	? print_options(&ctx)
+	: reinvoke_script(&ctx, filename);
 
-	sprintf(buff, "GIS_FLAG_%c=%d", flag->key, flag->answer ? 1 : 0);
-	putenv(G_store(buff));
-
-	sprintf(buff, "GIS_FLAG_%c=%d", toupper(flag->key),
-		flag->answer ? 1 : 0);
-
-	G_debug(2, "set %s", buff);
-	putenv(G_store(buff));
-    }
-
-    for (option = ctx.first_option; option; option = option->next_opt) {
-	char buff[4096], upper[4096];
-
-	sprintf(buff, "GIS_OPT_%s=%s", option->key,
-		option->answer ? option->answer : "");
-	putenv(G_store(buff));
-
-	strcpy(upper, option->key);
-	G_str_to_upper(upper);
-	sprintf(buff, "GIS_OPT_%s=%s", upper,
-		option->answer ? option->answer : "");
-
-	G_debug(2, "set %s", buff);
-	putenv(G_store(buff));
-    }
-
-#ifdef __MINGW32__
-    {
-	/* execlp() and _spawnlp ( _P_OVERLAY,..) do not work, they return 
-	 * immediately and that breaks scripts running GRASS scripts
-	 * because they dont wait until GRASS script finished */
-	/* execlp( "sh", "sh", filename, "@ARGS_PARSED@", NULL); */
-	/* _spawnlp ( _P_OVERLAY, filename, filename, "@ARGS_PARSED@", NULL ); */
-	int ret;
-
-	ret = _spawnlp(_P_WAIT, filename, filename, "@ARGS_PARSED@", NULL);
-	G_debug(1, "ret = %d", ret);
-	if (ret == -1) {
-	    perror("_spawnlp() failed");
-	    return 1;
-	}
-	return ret;
-    }
-#else
-    execl(filename, filename, "@ARGS_PARSED@", NULL);
-
-    perror("execl() failed");
-    return 1;
-#endif
+    return 0;
 }
