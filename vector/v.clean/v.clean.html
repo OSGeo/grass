@@ -4,7 +4,8 @@
 maps.
 
 <h3>Break lines/boundaries</h3>
-
+<em>tool=break</em>
+<p>
 Threshold does not apply, use dummy value if <em>v.clean</em> is 
 run with several tools.
 <p>
@@ -16,7 +17,8 @@ Breaking lines should be followed by removing duplicates, e.g.
 <em>v.clean tool=break,rmdupl</em>.
 
 <h3>Remove duplicate geometry features</h3>
-
+<em>tool=rmdupl</em>
+<p>
 Threshold does not apply, use dummy value if <em>v.clean</em> is 
 run with several tools.
 <p>
@@ -29,34 +31,37 @@ same applies for lines and boundaries.
 The <em>rmdupl</em> tool should be used after breaking lines and 
 breaking polygons.
 
-<h3>Remove dangles</h3>
-
+<h3>Remove dangles or change boundary dangles to type line</h3>
+<em>tool=rmdangle</em> and <em>tool=chdangle</em>
+<p>
 Threshold gives maximum line/boundary length in map units, degrees for 
-latlon. Dangles shorter than <em>thresh</em> will be removed. 
+latlon. Dangles shorter than <em>thresh</em> are removed sequentially. 
 All dangles will be removed if <em>thresh</em> &lt; 0.
 <p>
-The <em>rmdangle</em> tool removes dangling lines/boundaries shorter than 
-<em>thresh</em>. A line/boundary is considered to be a dangle if no other 
-line of given <em>type</em> is on at least one end node. If a dangle is 
-formed by several lines, such a string of lines is taken as one dangle 
-and everything is deleted if the combined length is shorter than 
-<em>thres</em> or <em>thres</em> is &lt; 0. If the combined length is 
-larger than <em>thresh</em>, nothing is deleted. The <em>rmdangle</em> 
-tool is useful to remove incorrect boundaries after other cleaning 
-operations. Areas can then be successfully built. 
-
-<h3>Change boundary dangles to type line</h3>
-
-Threshold gives maximum line/boundary length in map units, degrees for 
-latlon. All boundary dangles shorter than <em>thresh</em> will be changed 
-to type line. Threshold is ignored if &lt; 0.
+A line/boundary is considered to be a dangle if no other line of given 
+<em>type</em> is on at least one end node. If a dangle is formed by 
+several lines, such a string of lines is taken as one dangle and line 
+lengths are summarized. The <em>rmdangle</em> tool deletes a dangle if 
+the (combined) length is shorter than <em>thres</em> or <em>thres</em> 
+&lt; 0. If the combined length is larger than <em>thresh</em>, nothing 
+is deleted.
+<p>
+With <em>thresh</em> &lt; 0, only closed loops and lines connecting 
+loops will remain. This is useful to remove all incorrect boundaries 
+after other cleaning operations with <em>thres</em> is &lt; 0. Areas can 
+then be successfully built. 
+<p>
+To preferentially remove shortest dangles first, a first pass with a 
+small <em>thresh</em> value can be followed by subsequent passes with 
+increasing <em>thresh</em> values.
 <p>
 The <em>chdangle</em> tool is similar to the <em>rmdangle</em> tool, but 
 works only on boundaries and changes dangling boundaries to lines 
 instead of removing dangles.
 
-<h3>Remove or change bridges connecting an area and an island or two 
-islands</h3>
+<h3>Remove or change bridges connecting an area and an island or two islands</h3>
+<em>tool=rmbridge</em> and <em>tool=chbridge</em>
+<p>
 Threshold does not apply, use dummy value if <em>v.clean</em> is 
 run with several tools.
 <p>
@@ -79,21 +84,26 @@ Features allow it). The <em>rmbridge</em> tool removes bridges and the
 </pre></div>
 <p>
 Islands and areas must be already clean, i.e. without dangles or small 
-angles.
+angles, e.g. <em>v.clean type=boundary tool=rmdangle,rmsa,break,rmdupl,rmbridge 
+thresh=-1,0,0,0,0</em>.
 
 <h3>Snap lines to vertex in threshold</h3>
-
+<em>tool=snap</em>
+<p>
 Threshold gives maximum distance to another vertex in map units, 
-degrees for latlon. If there is no other vertex within <em>thresh</em>, 
-no snapping will be done.
-
+degrees for latlon. 
+<p>
 The <em>snap</em> tool snaps vertices to another vertex not farther away 
-than <em>thresh</em>. The <em>type</em> option can have a strong 
-influence on the result. Snapped boundaries may need to be cleaned with 
-<em>rmdangle,break,rmdupl</em>.
+than <em>thresh</em>. If there is no other vertex within <em>thresh</em>, 
+no snapping will be done. The <em>type</em> option can have a strong 
+influence on the result. A too large threshold and <em>type=boundary</em>
+can severely damage area topology.
+<p>
+Snapped boundaries may need to be cleaned with <em>rmdangle,break,rmdupl</em>.
 
 <h3>Remove duplicate area centroids</h3>
-
+<em>tool=rmdupl</em>
+<p>
 Threshold does not apply, use dummy value if <em>v.clean</em> is 
 run with several tools.
 <p>
@@ -102,7 +112,8 @@ from deleting boundaries.
 
 <h3>Break (topologically clean) areas (imported from a non topological 
 format like ShapeFile)</h3>
-
+<em>tool=bpol</em>
+<p>
 Threshold does not apply, use dummy value if <em>v.clean</em> is 
 run with several tools.
 <p>
@@ -121,7 +132,8 @@ The <em>prune</em> tool is currently broken, please use
 <em><a href=v.generalize.html>v.generalize</a></em> instead.
 
 <h3>Remove small areas</h3>
-
+<em>tool=rmarea</em>
+<p>
 Threshold gives area size in map units, square meters for latlon.
 <p>
 The <em>rmarea</em> tool removes all areas &lt;= <em>thresh</em>. The 
@@ -130,7 +142,8 @@ there is no adjacent area. Area categories are not combined when a small
 area is merged with a larger area.
 
 <h3>Remove all lines or boundaries of zero length</h3>
-
+<em>tool=rmline</em>
+<p>
 Threshold does not apply, use dummy value if <em>v.clean</em> is 
 run with several tools.
 <p>
@@ -139,7 +152,8 @@ that may have resulted from other cleaning operations. Zero length
 boundaries are redundant and do not influence area topology.
 
 <h3>Remove small angles between lines at nodes</h3>
-
+<em>tool=rmsa</em>
+<p>
 Threshold does not apply, use dummy value if <em>v.clean</em> is 
 run with several tools.
 <p>
@@ -232,6 +246,11 @@ L  2 1
 </pre></div>
 v.clean type=boundary would remove nothing.
 
+<h3>Repeatedly remove dangling lines up to 50m length</h3>
+
+<div class="code"><pre>
+v.clean input=testmap output=cleanmap type=line tool=rmdangle,rmdangle,rmdangle,rmdangle thresh=5,10,20,50
+</pre></div>
 
 <h2>AUTHORS</h2>
 
