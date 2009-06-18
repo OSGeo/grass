@@ -592,8 +592,7 @@ def start_gui():
     # Check for gui interface
     if grass_gui == "wxpython":
         subprocess.Popen([os.getenv('GRASS_PYTHON'),
-                          gfile("etc", "wxpython", "wxgui.py")],
-                         stdout=subprocess.PIPE)
+                          gfile("etc", "wxpython", "wxgui.py")])
     
 def clear_screen():
     if windows:
