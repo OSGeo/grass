@@ -77,6 +77,18 @@
 <!ELEMENT flag          EMPTY>
 <!ATTLIST flag          name            CDATA #REQUIRED>
 
+<!-- *********************** Vector digitizer *********************** -->
+
+<!--    vdigit layer properties
+-->
+<!ELEMENT vdigit	    (geometryAttribute?)>
+
+<!--    geometry attribute parameter
+-->
+<!ELEMENT geometryAttribute EMPTY>
+<!ATTLIST parameter	type	(length | area | perimeter) #REQUIRED>
+<!ATTLIST parameter	column	CDATA                       #REQUIRED>
+
 <!-- *********************** Nviz *********************** -->
 
 <!--    nviz layer properties

@@ -1,4 +1,4 @@
-"""
+"""!
 @package wxgui_utils.py
 
 @brief Utility classes for GRASS wxPython GUI. Main functions include
@@ -605,7 +605,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.EditLabel(self.layer_selected)
 
     def AddLayer(self, ltype, lname=None, lchecked=None,
-                 lopacity=1.0, lcmd=None, lgroup=None, lnviz=None):
+                 lopacity=1.0, lcmd=None, lgroup=None, lvdigit=None, lnviz=None):
         """!Add new item to the layer tree, create corresponding MapLayer instance.
         Launch property dialog if needed (raster, vector, etc.)
 
@@ -615,9 +615,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         @param lopacity layer opacity level
         @param lcmd command (given as a list)
         @param lgroup group name or None
+        @param lvdigit vector digitizer settings (eg. geometry attributes)
         @param lnviz layer Nviz properties
         """
-
         self.first = True
         params = {} # no initial options parameters
 
@@ -758,14 +758,15 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 ctrlId = None
                 
             # add a data object to hold the layer's command (does not apply to generic command layers)
-            self.SetPyData(layer, ({'cmd': cmd,
-                                    'type' : ltype,
-                                    'ctrl' : ctrlId,
+            self.SetPyData(layer, ({'cmd'      : cmd,
+                                    'type'     : ltype,
+                                    'ctrl'     : ctrlId,
                                     'maplayer' : None,
-                                    'nviz' : lnviz,
-                                    'propwin' : None}, 
+                                    'vdigit'   : lvdigit,
+                                    'nviz'     : lnviz,
+                                    'propwin'  : None}, 
                                    None))
-
+            
             # find previous map layer instance 
             prevItem = self.GetFirstChild(self.root)[0]
             prevMapLayer = None 

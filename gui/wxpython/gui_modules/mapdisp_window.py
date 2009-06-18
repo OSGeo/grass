@@ -1147,8 +1147,10 @@ class BufferedWindow(MapWindow, wx.Window):
                                                                    action="add")
 
                 if not point:
-                    self.__geomAttrb(fid, addRecordDlg, 'area', digitClass)
-                    self.__geomAttrb(fid, addRecordDlg, 'perimeter', digitClass)
+                    self.__geomAttrb(fid, addRecordDlg, 'area', digitClass,
+                                     digitToolbar.GetLayer())
+                    self.__geomAttrb(fid, addRecordDlg, 'perimeter', digitClass,
+                                     digitToolbar.GetLayer())
 
                 if addRecordDlg.mapDBInfo and \
                         addRecordDlg.ShowModal() == wx.ID_OK:
@@ -1170,10 +1172,11 @@ class BufferedWindow(MapWindow, wx.Window):
             self.polycoords.append(self.Pixel2Cell(event.GetPositionTuple()[:]))
             self.DrawLines(pdc=self.pdcTmp)
     
-    def __geomAttrb(self, fid, dialog, attrb, digit):
+    def __geomAttrb(self, fid, dialog, attrb, digit, mapLayer):
         """!Trac geometry attributes?"""
-        if UserSettings.Get(group = 'vdigit', key = 'geomAttrb',
-                            subkey = [attrb, 'enabled'], internal = True):
+        item = self.tree.FindItemByData('maplayer', mapLayer)
+        vdigit = self.tree.GetPyData(item)[0]['vdigit']
+        if vdigit.has_key('geomAttr') and vdigit['geomAttr'].has_key(attrb):
             val = -1
             if attrb == 'length':
                 val = digit.GetLineLength(fid)
@@ -1184,8 +1187,7 @@ class BufferedWindow(MapWindow, wx.Window):
             
             if val > 0:
                 layer = int(UserSettings.Get(group='vdigit', key="layer", subkey='value'))
-                column =  UserSettings.Get(group = 'vdigit', key = 'geomAttrb',
-                                           subkey = [attrb, 'column'], internal = True)
+                column =  vdigit['geomAttr'][attrb]
                 dialog.SetColumnValue(layer, column, val)
                 dialog.OnReset()
         
@@ -1960,7 +1962,6 @@ class BufferedWindow(MapWindow, wx.Window):
                     self.redrawAll = True
                     
                     # add new record into atribute table
-                    print UserSettings.Get(group='vdigit', key="addRecord", subkey='enabled'), line, fid
                     if UserSettings.Get(group='vdigit', key="addRecord", subkey='enabled') and \
                             (line is True or \
                                  (not line and fid > 0)):
@@ -1978,10 +1979,13 @@ class BufferedWindow(MapWindow, wx.Window):
                                                                            pos=posWindow,
                                                                            action="add")
 
-                        self.__geomAttrb(fid, addRecordDlg, 'length', digitClass)
+                        self.__geomAttrb(fid, addRecordDlg, 'length', digitClass,
+                                         digitToolbar.GetLayer())
                         # auto-placing centroid
-                        self.__geomAttrb(fid, addRecordDlg, 'area', digitClass)
-                        self.__geomAttrb(fid, addRecordDlg, 'perimeter', digitClass)
+                        self.__geomAttrb(fid, addRecordDlg, 'area', digitClass,
+                                         digitToolbar.GetLayer())
+                        self.__geomAttrb(fid, addRecordDlg, 'perimeter', digitClass,
+                                         digitToolbar.GetLayer())
 
                         if addRecordDlg.mapDBInfo and \
                                addRecordDlg.ShowModal() == wx.ID_OK:

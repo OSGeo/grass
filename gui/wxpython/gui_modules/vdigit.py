@@ -33,6 +33,7 @@ import os
 import sys
 import string
 import copy
+import textwrap
 
 from threading import Thread
 
@@ -1513,8 +1514,8 @@ class VDigitSettingsDialog(wx.Dialog):
         box   = wx.StaticBox (parent = panel, id = wx.ID_ANY,
                               label = " %s " % _("Geometry attributes"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
-        flexSizer = wx.FlexGridSizer(cols=3, hgap=3, vgap=3)
-        flexSizer.AddGrowableCol(0)
+        gridSizer = wx.GridBagSizer(hgap=3, vgap=3)
+        gridSizer.AddGrowableCol(0)
         self.geomAttrb = { 'length' : { 'label' : _('length') },
                            'area' : { 'label' : _('area') },
                            'perimeter' : { 'label' : _('perimeter') } }
@@ -1525,6 +1526,10 @@ class VDigitSettingsDialog(wx.Dialog):
         except AttributeError:
             vectorName = None # no vector selected for editing
         layer = UserSettings.Get(group='vdigit', key="layer", subkey='value')
+        mapLayer = self.parent.toolbars['vdigit'].GetLayer()
+        tree = self.parent.tree
+        item = tree.FindItemByData('maplayer', mapLayer)
+        row = 0
         for attrb in ['length', 'area', 'perimeter']:
             # checkbox
             check = wx.CheckBox(parent = panel, id = wx.ID_ANY,
@@ -1542,12 +1547,13 @@ class VDigitSettingsDialog(wx.Dialog):
                               choices = [_("map units")])
             
             # default values
-            check.SetValue(UserSettings.Get(group='vdigit', key='geomAttrb',
-                                            subkey=[attrb, 'enabled'],
-                                            internal=True))
-            column.SetStringSelection(UserSettings.Get(group='vdigit', key='geomAttrb',
-                                                       subkey=[attrb, 'column'],
-                                                       internal=True))
+            check.SetValue(False)
+            
+            if item and tree.GetPyData(item)[0]['vdigit'] and \
+                    tree.GetPyData(item)[0]['vdigit'].has_key('geomAttr') and \
+                    tree.GetPyData(item)[0]['vdigit']['geomAttr'].has_key(attrb):
+                check.SetValue(True)
+                column.SetStringSelection(tree.GetPyData(item)[0]['vdigit']['geomAttr'][attrb])
             
             if not vectorName:
                 check.Enable(False)
@@ -1560,12 +1566,23 @@ class VDigitSettingsDialog(wx.Dialog):
             self.geomAttrb[attrb]['column'] = column.GetId()
             self.geomAttrb[attrb]['units']  = units.GetId()
 
-            flexSizer.Add(item = check, proportion = 0,
-                          flag = wx.ALIGN_CENTER_VERTICAL)
-            flexSizer.Add(item = column, proportion = 0)
-            flexSizer.Add(item = units, proportion = 0)
-
-        sizer.Add(item=flexSizer, proportion=1,
+            gridSizer.Add(item = check,
+                          flag = wx.ALIGN_CENTER_VERTICAL,
+                          pos = (row, 0))
+            gridSizer.Add(item = column,
+                          pos = (row, 1))
+            gridSizer.Add(item = units,
+                          pos = (row, 2))
+            row += 1
+        
+        note = '\n'.join(textwrap.wrap(_("Note: These settings are stored "
+                                         " in the workspace not in the vector digitizer "
+                                         "preferences."), 55))
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                           label = note),
+                      pos = (3, 0), span=(1, 3))
+                      
+        sizer.Add(item=gridSizer, proportion=1,
                   flag=wx.ALL | wx.EXPAND, border=1)
         border.Add(item=sizer, proportion=0,
                    flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=5)
@@ -1786,16 +1803,21 @@ class VDigitSettingsDialog(wx.Dialog):
         UserSettings.Set(group='vdigit', key="delRecord", subkey='enabled',
                          value=self.deleteRecord.IsChecked())
 
-        # geometry attributes
+        # geometry attributes (workspace)
+        mapLayer = self.parent.toolbars['vdigit'].GetLayer()
+        tree = self.parent.tree
+        item = tree.FindItemByData('maplayer', mapLayer)
         for key, val in self.geomAttrb.iteritems():
             checked = self.FindWindowById(val['check']).IsChecked()
             column  = self.FindWindowById(val['column']).GetValue()
-            UserSettings.Set(group = 'vdigit', key = 'geomAttrb',
-                             subkey = [key, 'enabled'], value = checked,
-                             internal = True)
-            UserSettings.Set(group = 'vdigit', key = 'geomAttrb',
-                             subkey = [key, 'column'], value = column,
-                             internal = True)
+            if not tree.GetPyData(item)[0]['vdigit']: 
+                tree.GetPyData(item)[0]['vdigit'] = { 'geomAttr' : dict() }
+            
+            if checked: # enable
+                tree.GetPyData(item)[0]['vdigit']['geomAttr'][key] = column
+            else:
+                if tree.GetPyData(item)[0]['vdigit']['geomAttr'].has_key(key):
+                    del tree.GetPyData(item)[0]['vdigit']['geomAttr'][key]
         
         # snapping threshold
         self.parent.digit.threshold = self.parent.digit.driver.GetThreshold()

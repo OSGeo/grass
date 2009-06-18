@@ -34,7 +34,6 @@ import wx
 import wx.lib.filebrowsebutton as filebrowse
 import wx.lib.colourselect as csel
 import wx.lib.mixins.listctrl as listmix
-from wx.lib.wordwrap import wordwrap
 
 from grass.script import core as grass
 import gcmd
@@ -554,13 +553,6 @@ class Settings:
                                                                        _("histogram"))
         self.internalSettings['vdigit']['bgmap'] = {}
         self.internalSettings['vdigit']['bgmap']['value'] = ''
-        self.internalSettings['vdigit']['geomAttrb'] = dict()
-        self.internalSettings['vdigit']['geomAttrb']['length'] = { 'enabled' : False,
-                                                                   'column' : '' }
-        self.internalSettings['vdigit']['geomAttrb']['area']   = { 'enabled' : False,
-                                                                   'column' : '' }
-        self.internalSettings['vdigit']['geomAttrb']['perimeter']   = { 'enabled' : False,
-                                                                        'column' : '' }
         
     def ReadSettingsFile(self, settings=None):
         """!Reads settings file (mapset, location, gisdbase)"""
