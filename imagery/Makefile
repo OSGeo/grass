@@ -5,6 +5,7 @@ SUBDIRS = \
 	i.atcorr \
 	i.cca \
 	i.cluster \
+	i.eb.g0 \
 	i.emissivity \
 	i.find \
 	i.gensig \
