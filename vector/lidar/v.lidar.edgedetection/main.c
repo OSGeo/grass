@@ -244,7 +244,7 @@ int main(int argc, char *argv[])
 	if (nsply > NSPLY_MAX) {
 	    nsply = NSPLY_MAX;
 	}
-	G_debug(1, _("nsply = %d"), nsply);
+	G_debug(1, "nsply = %d", nsply);
 
 	elaboration_reg.east = original_reg.west;
 	last_column = FALSE;
@@ -271,11 +271,11 @@ int main(int argc, char *argv[])
 	    if (nsplx > NSPLX_MAX) {
 		nsplx = NSPLX_MAX;
 	    }
-	    G_debug(1, _("nsplx = %d"), nsplx);
+	    G_debug(1, "nsplx = %d", nsplx);
 
 	    /*Setting the active region */
 	    dim_vect = nsplx * nsply;
-	    G_debug(1, _("read vector region map"));
+	    G_debug(1, "read vector region map");
 	    observ =
 		P_Read_Vector_Region_Map(&In, &elaboration_reg, &npoints,
 					 dim_vect, 1);
@@ -310,7 +310,7 @@ int main(int argc, char *argv[])
 
 		/*G_free (observ); */
 
-		G_debug(1, _("Bilinear interpolation"));
+		G_verbose_message(_("Bilinear interpolation"));
 		normalDefBilin(N, TN, Q, obsVect, passoE, passoN, nsplx,
 			       nsply, elaboration_reg.west,
 			       elaboration_reg.south, npoints, nparameters,
@@ -327,7 +327,7 @@ int main(int argc, char *argv[])
 		N = G_alloc_matrix(nparameters, BW);	/* Normal matrix */
 		parVect_bicub = G_alloc_vector(nparameters);	/* Bicubic parameters vector */
 
-		G_debug(1, _("Bicubic interpolation"));
+		G_verbose_message(_("Bicubic interpolation"));
 		normalDefBicubic(N, TN, Q, obsVect, passoE, passoN, nsplx,
 				 nsply, elaboration_reg.west,
 				 elaboration_reg.south, npoints, nparameters,
@@ -347,7 +347,7 @@ int main(int argc, char *argv[])
 			G_fatal_error(_("It was impossible to create <%s>."),
 				      table_name);
 		}
-		G_debug(1, _("Point classification"));
+		G_verbose_message(_("Point classification"));
 		classification(&Out, elaboration_reg, general_box,
 			       overlap_box, obsVect, parVect_bilin,
 			       parVect_bicub, mean, alpha, grad_H, grad_L,
