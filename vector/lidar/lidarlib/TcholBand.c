@@ -12,7 +12,10 @@ void tcholDec(double **N, double **T, int n, int BW)
     int i, j, k;
     double somma;
 
+    G_debug(3, "tcholDec(): n=%d  BW=%d", n, BW);
+
     for (i = 0; i < n; i++) {
+	G_percent(i, n, 2);
 	for (j = 0; j < BW; j++) {
 	    somma = N[i][j];
 	    for (k = 1; k < BW; k++)
@@ -28,6 +31,7 @@ void tcholDec(double **N, double **T, int n, int BW)
 	}
     }
 
+    G_percent(i, n, 2);
     return;
 }
 
