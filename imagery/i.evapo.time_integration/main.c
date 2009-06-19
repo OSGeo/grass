@@ -7,7 +7,7 @@
  * PURPOSE:      Integrate in time the evapotranspiration from satellite,
  *		 following a daily pattern from meteorological ETo.
  *
- * COPYRIGHT:    (C) 2008-09 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2008-2009 by the GRASS Development Team
  *
  *               This program is free software under the GNU Lesser General Public
  *   	    	 License. Read the file COPYING that comes with GRASS for details.
@@ -62,8 +62,7 @@ int main(int argc, char *argv[])
     double startperiod, endperiod;  /*first and last days (DOYs) of the period studied */
     void *inrast[MAXFILES], *inrast1[MAXFILES], *inrast2[MAXFILES];
     DCELL *outrast;
-    int data_format;		/* 0=double  1=float  2=32bit signed int  5=8bit unsigned int (ie text) */
-
+    
     RASTER_MAP_TYPE in_data_type[MAXFILES];	/* ETa */
     RASTER_MAP_TYPE in_data_type1[MAXFILES];	/* DOY of ETa */
     RASTER_MAP_TYPE in_data_type2[MAXFILES];	/* ETo */
@@ -73,46 +72,46 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("evapotranspiration,temporal,integration");
-    module->description =_("Temporal integration of satellite ET actual (ETa) following the daily ET reference (ETo) from meteorological station(s)\n");
+    module->description =_("Computes temporal integration of satellite "
+			   "ET actual (ETa) following the daily ET reference "
+			   "(ETo) from meteorological station(s)");
+    module->keywords = _("imagery, evapotranspiration, temporal, integration");
 
     /* Define the different options */
     input = G_define_standard_option(G_OPT_R_INPUTS);
-    input->key = _("eta");
-    input->description = _("Names of satellite ETa layers [mm/d or cm/d]");
+    input->key = "eta";
+    input->description = _("Names of satellite ETa raster maps [mm/d or cm/d]");
 
     input1 = G_define_standard_option(G_OPT_R_INPUTS);
-    input1->key = _("eta_doy");
+    input1->key = "eta_doy";
     input1->description =
-	_("Names of satellite ETa Day of Year (DOY) layers [0-400] [-]");
+	_("Names of satellite ETa Day of Year (DOY) raster maps [0-400] [-]");
 
     input2 = G_define_standard_option(G_OPT_R_INPUTS);
-    input2->key = _("eto");
+    input2->key = "eto";
     input2->description =
-	_("Names of meteorological station ETo layers [0-400] [mm/d or cm/d]");
+	_("Names of meteorological station ETo raster maps [0-400] [mm/d or cm/d]");
 
     input3 = G_define_option();
-    input3->key = _("eto_doy_min");
+    input3->key = "eto_doy_min";
     input3->type = TYPE_DOUBLE;
     input3->required = YES;
     input3->description = _("Value of DOY for ETo first day");
     
     input4 = G_define_option();
-    input4->key = _("start_period");
+    input4->key = "start_period";
     input4->type = TYPE_DOUBLE;
     input4->required = YES;
-    input4->description = _("Value of DOY for the first day of the period studied ");
+    input4->description = _("Value of DOY for the first day of the period studied");
 
     input5 = G_define_option();
-    input5->key = _("end_period");
+    input5->key = "end_period";
     input5->type = TYPE_DOUBLE;
     input5->required = YES;
-    input5->description = _("Value of DOY for the last day of the period studied ");
+    input5->description = _("Value of DOY for the last day of the period studied");
 
     output = G_define_standard_option(G_OPT_R_OUTPUT);
-    output->description =
-	_("Name of the output temporally integrated ETa layer");
-
+    
     /* init nfiles */
     nfiles = 1;
     nfiles1 = 1;
@@ -121,7 +120,7 @@ int main(int argc, char *argv[])
     /********************/
 
     if (G_parser(argc, argv))
-	exit(-1);
+	exit(EXIT_FAILURE);
 
     ok = 1;
     names = input->answers;
@@ -150,13 +149,13 @@ int main(int argc, char *argv[])
     }
     for (; *ptr != NULL; ptr++) {
 	if (nfiles > MAXFILES)
-	    G_fatal_error(_("%s - too many ETa files. Only %d allowed"),
-			  G_program_name(), MAXFILES);
+	    G_fatal_error(_("Too many ETa files. Only %d allowed."),
+			  MAXFILES);
 	name = *ptr;
 	/* find map in mapset */
-	mapset = G_find_cell2(name, "");
+	mapset = (char *) G_find_cell2(name, "");
 	if (mapset == NULL) {
-	    G_fatal_error(_("raster map <%s> not found"), name);
+	    G_fatal_error(_("Raster map <%s> not found"), name);
 	    ok = 0;
 	}
 	if (!ok)
@@ -171,7 +170,7 @@ int main(int argc, char *argv[])
 	if ((infd[nfiles] = G_open_cell_old(name, mapset)) < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), name);
 	if ((G_get_cellhd(name, mapset, &cellhd)) < 0)
-	    G_fatal_error(_("Unable to read file header of <%s>"), name);
+	    G_fatal_error(_("Unable to read file header of raster map <%s>"), name);
 	inrast[nfiles] = G_allocate_raster_buf(in_data_type[nfiles]);
 	nfiles++;
     }
@@ -183,13 +182,13 @@ int main(int argc, char *argv[])
     ok = 1;
     for (; *ptr1 != NULL; ptr1++) {
 	if (nfiles1 > MAXFILES)
-	    G_fatal_error(_("%s - too many ETa files. Only %d allowed"),
-			  G_program_name(), MAXFILES);
+	    G_fatal_error(_("Too many ETa files. Only %d allowed."),
+			  MAXFILES);
 	name1 = *ptr1;
 	/* find map in mapset */
-	mapset = G_find_cell2(name1, "");
+	mapset = (char *) G_find_cell2(name1, "");
 	if (mapset == NULL) {
-	    G_fatal_error(_("raster map <%s> not found"), name1);
+	    G_fatal_error(_("Raster map <%s> not found"), name1);
 	    ok = 0;
 	}
 	if (!ok)
@@ -204,7 +203,7 @@ int main(int argc, char *argv[])
 	if ((infd1[nfiles1] = G_open_cell_old(name1, mapset)) < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), name1);
 	if ((G_get_cellhd(name1, mapset, &cellhd)) < 0)
-	    G_fatal_error(_("Unable to read file header of <%s>"), name1);
+	    G_fatal_error(_("Unable to read file header of raster map <%s>"), name1);
 	inrast1[nfiles1] = G_allocate_raster_buf(in_data_type1[nfiles1]);
 	nfiles1++;
     }
@@ -222,13 +221,13 @@ int main(int argc, char *argv[])
     ok = 1;
     for (; *ptr2 != NULL; ptr2++) {
 	if (nfiles > MAXFILES)
-	    G_fatal_error(_("%s - too many ETa files. Only %d allowed"),
-			  G_program_name(), MAXFILES);
+	    G_fatal_error(_("Too many ETa files. Only %d allowed."),
+			  MAXFILES);
 	name2 = *ptr2;
 	/* find map in mapset */
-	mapset = G_find_cell2(name2, "");
+	mapset = (char *) G_find_cell2(name2, "");
 	if (mapset == NULL) {
-	    G_fatal_error(_("raster map <%s> not found"), name2);
+	    G_fatal_error(_("Raster map <%s> not found"), name2);
 	    ok = 0;
 	}
 	if (!ok)
@@ -244,7 +243,7 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Unable to open raster map <%s>"), name2);
 	}
 	if ((G_get_cellhd(name2, mapset, &cellhd)) < 0) {
-	    G_fatal_error(_("Unable to read file header of <%s>"), name2);
+	    G_fatal_error(_("Unable to read file header of raster map <%s>"), name2);
 	}
 	inrast2[nfiles2] = G_allocate_d_raster_buf();
 	nfiles2++;
@@ -261,7 +260,7 @@ int main(int argc, char *argv[])
    
     /* Create New raster files */
     if ((outfd = G_open_raster_new(result, 1)) < 0)
-	G_fatal_error(_("Could not open <%s>"), result);
+	G_fatal_error(_("Unable to create raster map <%s>"), result);
 
     /*******************/
     /* Process pixels */
@@ -280,15 +279,15 @@ int main(int argc, char *argv[])
 	/* read input map */
 	for (i = 1; i <= nfiles; i++) 
 	    if ((G_get_d_raster_row(infd[i], inrast[i], row)) <	0) 
-		G_fatal_error(_("Could not read from <%s>"), name);
+		G_fatal_error(_("Unable to read raster map <%s> row %d"), name, row);
 	
 	for (i = 1; i <= nfiles1; i++) 
 	    if ((G_get_d_raster_row(infd1[i], inrast1[i], row)) < 0) 
-		G_fatal_error(_("Could not read from <%s>"), name1);
+		G_fatal_error(_("Unable to read raster map <%s> row %d"), name1, row);
 
 	for (i = 1; i <= nfiles2; i++) 
 	    if ((G_get_d_raster_row (infd2[i], inrast2[i], row)) < 0) 
-		G_fatal_error(_("Could not read from <%s>"), name2);
+		G_fatal_error(_("Unable to read raster map <%s> row %d"), name2, row);
 
 	/*process the data */
 	for (col = 0; col < ncols; col++) 
