@@ -5,6 +5,5 @@ import imagery
 import vector
 import proj
 import stats
-import raster
 import display
 import utils
