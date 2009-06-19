@@ -2293,9 +2293,16 @@
 	      <command>i.eb.evapfr</command>
 	    </menuitem>
 	    <menuitem>
+	      <label>Actual Evapotranspiration</label>
+	      <help>Computes the actual evapotranspiration (ETa)</help>
+	      <keywords>imagery,energy balance,land flux,actual evapotranspiration</keywords>
+              <handler>self.OnMenuCmd</handler>
+	      <command>i.eb.eta</command>
+	    </menuitem>
+	    <menuitem>
 	      <label>ET Temporal Integration</label>
 	      <help>Temporal integration of satellite ET actual (ETa) following the daily ET reference (ETo) from meteorological station(s)</help>
-	      <keywords>evapotranspiration,temporal,integration</keywords>
+	      <keywords>imagery,evapotranspiration,temporal,integration</keywords>
               <handler>self.OnMenuCmd</handler>
 	      <command>i.evapo.time_integration</command>
 	    </menuitem>
