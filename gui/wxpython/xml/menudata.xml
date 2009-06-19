@@ -2280,22 +2280,22 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Sensible Heat Flux (SEBAL01)</label>
-	      <help>Calculate Sensible Heat Flux after method SEBAL 2001</help>
-	      <keywords>energy balance,land flux,sensible heat flux</keywords>
+	      <help>Computes sensible Heat Flux iteration SEBAL 01</help>
+	      <keywords>imagery,evaporative fraction,soil moisture,energy balance,SEBAL</keywords>
               <handler>self.OnMenuCmd</handler>
 	      <command>i.eb.h_SEBAL01</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Evaporative Fraction</label>
-	      <help>Calculate the evaporative fraction (ETa/ETpot)</help>
-	      <keywords>energy balance,land flux fraction, evaporative fraction</keywords>
+	      <help>Computes evaporative fraction (Bastiaanssen, 1995) and root zone soil moisture (Makin, Molden and Bastiaanssen, 2001)</help>
+	      <keywords>imagery,evaporative fraction,soil moisture,energy balance,SEBAL</keywords>
               <handler>self.OnMenuCmd</handler>
 	      <command>i.eb.evapfr</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>ET Temporal Integration</label>
-	      <help>Integrate in time daily ET from satellite images and met station daily ETo</help>
-	      <keywords>energy balance, ET, temporal integration</keywords>
+	      <help>Temporal integration of satellite ET actual (ETa) following the daily ET reference (ETo) from meteorological station(s)</help>
+	      <keywords>evapotranspiration,temporal,integration</keywords>
               <handler>self.OnMenuCmd</handler>
 	      <command>i.evapo.time_integration</command>
 	    </menuitem>
