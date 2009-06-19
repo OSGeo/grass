@@ -6,6 +6,7 @@ SUBDIRS = \
 	i.cca \
 	i.cluster \
 	i.eb.evapfr \
+	i.eb.eta \
 	i.eb.g0 \
 	i.eb.h_SEBAL01 \
 	i.evapo.time_integration \
