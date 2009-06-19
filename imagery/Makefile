@@ -8,6 +8,7 @@ SUBDIRS = \
 	i.eb.evapfr \
 	i.eb.g0 \
 	i.eb.h_SEBAL01 \
+	i.evapo.time_integration \
 	i.emissivity \
 	i.find \
 	i.gensig \
