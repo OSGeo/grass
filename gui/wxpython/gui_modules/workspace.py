@@ -240,7 +240,11 @@ class ProcessWorkspaceFile():
         for node in node_vdigit.findall('geometryAttribute'):
             if not vdigit.has_key('geomAttr'):
                 vdigit['geomAttr'] = dict()
-            vdigit['geomAttr'][node.get('type')] = node.get('column')
+            type = node.get('type')
+            vdigit['geomAttr'][type] = dict()
+            vdigit['geomAttr'][type]['column'] = node.get('column') # required
+            # default map units
+            vdigit['geomAttr'][type]['units'] = node.get('units', 'mu')
         
         return vdigit
     
@@ -771,9 +775,12 @@ class WriteWorkspaceFile(object):
                     self.file.write('%s<vdigit>\n' % (' ' * self.indent))
                     if vdigit.has_key('geomAttr'):
                         self.indent += 4
-                        for type, column in vdigit['geomAttr'].iteritems():
-                            self.file.write('%s<geometryAttribute type="%s" column="%s" />\n' % \
-                                                (' ' * self.indent, type, column))
+                        for type, val in vdigit['geomAttr'].iteritems():
+                            units = ''
+                            if val['units'] != 'mu':
+                                units = ' units="%s"' % val['units']
+                            self.file.write('%s<geometryAttribute type="%s" column="%s"%s />\n' % \
+                                                (' ' * self.indent, type, val['column'], units))
                         self.indent -= 4
                     self.file.write('%s</vdigit>\n' % (' ' * self.indent))
                 # nviz

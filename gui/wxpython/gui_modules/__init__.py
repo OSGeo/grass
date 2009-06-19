@@ -28,6 +28,7 @@ all = [
     "rules.py",
     "sqlbuilder.py",
     "toolbars.py",
+    "units.py",
     "utils.py",
     "vdigit.py",
     "workspace.py",

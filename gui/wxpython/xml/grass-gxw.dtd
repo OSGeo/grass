@@ -88,6 +88,7 @@
 <!ELEMENT geometryAttribute EMPTY>
 <!ATTLIST parameter	type	(length | area | perimeter) #REQUIRED>
 <!ATTLIST parameter	column	CDATA                       #REQUIRED>
+<!ATTLIST parameter	units	CDATA                       #IMPLIED>
 
 <!-- *********************** Nviz *********************** -->
 
