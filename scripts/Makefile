@@ -50,14 +50,11 @@ SUBDIRS = \
 	v.db.update \
 	v.dissolve \
 	v.in.e00 \
-	v.in.garmin \
 	v.in.geonames \
 	v.in.gns \
-	v.in.gpsbabel \
 	v.in.mapgen \
 	v.in.sites.all \
 	v.in.wfs \
-	v.out.gps \
 	v.rast.stats \
 	v.report \
 	v.what.vect
@@ -66,6 +63,9 @@ SUBDIRS = \
 #	d.out.gpsdrive \
 #	r.mapcalculator \
 #	r3.mapcalculator \
+#	v.in.garmin \
+#	v.in.gpsbabel \
+#	v.out.gps
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 
