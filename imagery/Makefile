@@ -7,6 +7,7 @@ SUBDIRS = \
 	i.cluster \
 	i.eb.evapfr \
 	i.eb.g0 \
+	i.eb.h_SEBAL01 \
 	i.emissivity \
 	i.find \
 	i.gensig \
