@@ -1,11 +1,13 @@
 #include<stdio.h>
 #include<math.h>
 #include<stdlib.h>
- double g_0(double bbalb, double ndvi, double tempk, double rnet,
-	     double time, int roerink) 
+
+double g_0(double bbalb, double ndvi, double tempk, double rnet,
+	   double time, int roerink) 
 {
     double a, b, result;
     double r0_coef;
+    
     if (time <= 9.0 || time > 15.0) 
 	r0_coef = 1.1;
     else if (time > 9.0 && time <= 11.0)
@@ -22,6 +24,7 @@
     /* HAPEX-Sahel (Roerink, 1995) */ 
     if (roerink)
 	result = result * 1.430 - 0.0845;
+
     return result;
 }
 
