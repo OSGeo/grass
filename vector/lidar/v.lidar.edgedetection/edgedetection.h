@@ -28,7 +28,6 @@
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 #include <grass/PolimiFunct.h>
-#define PI 3.141592
 
 /*---------------------------------------------------------------------------------------*/
 int edge_detection(struct Cell_head, /**/

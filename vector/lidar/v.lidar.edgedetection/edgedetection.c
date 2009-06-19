@@ -50,7 +50,7 @@ int edge_detection(struct Cell_head elaboration_reg, BOUND_BOX Overlap_Box,
     g[0][1] = partial[1];
 
     gradPto = sqrt(g[0][0] * g[0][0] + g[0][1] * g[0][1]);
-    dirPto = atan(g[0][1] / g[0][0]) + PI / 2;	/* radiants */
+    dirPto = atan(g[0][1] / g[0][0]) + M_PI / 2;	/* radiants */
 
     Elaboration = elaboration_reg;
 
@@ -67,58 +67,58 @@ int edge_detection(struct Cell_head elaboration_reg, BOUND_BOX Overlap_Box,
 	    g[2][1] = gradient[1];
 
 	    gradient =
-		Get_Gradient(Elaboration, obsX + passoE * cos(dirPto + PI),
-			     obsY + passoN * sin(dirPto + PI), parBilin);
+		Get_Gradient(Elaboration, obsX + passoE * cos(dirPto + M_PI),
+			     obsY + passoN * sin(dirPto + M_PI), parBilin);
 	    g[7][0] = gradient[0];
 	    g[7][1] = gradient[1];
 
-	    if ((fabs(atan(g[2][1] / g[2][0]) + PI / 2 - dirPto) < alpha) &&
-		(fabs(atan(g[7][1] / g[7][0]) + PI / 2 - dirPto) < alpha)) {
+	    if ((fabs(atan(g[2][1] / g[2][0]) + M_PI / 2 - dirPto) < alpha) &&
+		(fabs(atan(g[7][1] / g[7][0]) + M_PI / 2 - dirPto) < alpha)) {
 
 		gradient =
 		    Get_Gradient(Elaboration,
-				 obsX + passoE * cos(dirPto + PI / 4),
-				 obsY + passoN * sin(dirPto + PI / 4),
+				 obsX + passoE * cos(dirPto + M_PI / 4),
+				 obsY + passoN * sin(dirPto + M_PI / 4),
 				 parBilin);
 		g[1][0] = gradient[0];
 		g[1][1] = gradient[1];
 
 		gradient =
 		    Get_Gradient(Elaboration,
-				 obsX + passoE * cos(dirPto - PI / 4),
-				 obsY + passoN * sin(dirPto - PI / 4),
+				 obsX + passoE * cos(dirPto - M_PI / 4),
+				 obsY + passoN * sin(dirPto - M_PI / 4),
 				 parBilin);
 		g[3][0] = gradient[0];
 		g[3][1] = gradient[1];
 
 		gradient =
 		    Get_Gradient(Elaboration,
-				 obsX + passoE * cos(dirPto + PI / 2),
-				 obsY + passoN * sin(dirPto + PI / 2),
+				 obsX + passoE * cos(dirPto + M_PI / 2),
+				 obsY + passoN * sin(dirPto + M_PI / 2),
 				 parBilin);
 		g[4][0] = gradient[0];
 		g[4][1] = gradient[1];
 
 		gradient =
 		    Get_Gradient(Elaboration,
-				 obsX + passoE * cos(dirPto - PI / 2),
-				 obsY + passoN * sin(dirPto - PI / 2),
+				 obsX + passoE * cos(dirPto - M_PI / 2),
+				 obsY + passoN * sin(dirPto - M_PI / 2),
 				 parBilin);
 		g[5][0] = gradient[0];
 		g[5][1] = gradient[1];
 
 		gradient =
 		    Get_Gradient(Elaboration,
-				 obsX + passoE * cos(dirPto + PI * 3 / 4),
-				 obsY + passoN * sin(dirPto + PI * 3 / 4),
+				 obsX + passoE * cos(dirPto + M_PI * 3 / 4),
+				 obsY + passoN * sin(dirPto + M_PI * 3 / 4),
 				 parBilin);
 		g[6][0] = gradient[0];
 		g[6][1] = gradient[1];
 
 		gradient =
 		    Get_Gradient(Elaboration,
-				 obsX + passoE * cos(dirPto - PI * 3 / 4),
-				 obsY + passoN * sin(dirPto - PI * 3 / 4),
+				 obsX + passoE * cos(dirPto - M_PI * 3 / 4),
+				 obsY + passoN * sin(dirPto - M_PI * 3 / 4),
 				 parBilin);
 		g[8][0] = gradient[0];
 		g[8][1] = gradient[1];
