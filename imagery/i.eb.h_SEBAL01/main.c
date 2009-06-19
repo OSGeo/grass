@@ -26,8 +26,6 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-#define PI 3.14159265358979
-
 double **G_alloc_matrix(int rows, int cols)
 {
     double **m;
@@ -82,28 +80,29 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->description = _("Sensible Heat Flux iteration SEBAL 01");
+    module->description = _("Computes sensible Heat Flux iteration SEBAL 01");
+    module->keywords = _("imagery, evaporative fraction, soil moisture, energy balance, SEBAL");
 
     /* Define different options */
     input_Rn = G_define_standard_option(G_OPT_R_INPUT);
-    input_Rn->key = "Rn";
+    input_Rn->key = "rnet";
     input_Rn->description =
-	_("Name of instantaneous Net Radiation map [W/m2]");
+	_("Name of instantaneous Net Radiation raster map [W/m2]");
 
     input_g0 = G_define_standard_option(G_OPT_R_INPUT);
     input_g0->key = "g0";
     input_g0->description =
-	_("Name of instantaneous soil heat flux map [W/m2]");
+	_("Name of instantaneous soil heat flux raster map [W/m2]");
 
     input_z0m = G_define_standard_option(G_OPT_R_INPUT);
     input_z0m->key = "z0m";
     input_z0m->description =
-	_("Name of aerodynamic resistance to heat momentum [s/m]");
+	_("Name of aerodynamic resistance to heat momentum raster map [s/m]");
 
     input_t0dem = G_define_standard_option(G_OPT_R_INPUT);
     input_t0dem->key = "t0dem";
     input_t0dem->description =
-	_("Name of altitude corrected surface temperature [K]");
+	_("Name of altitude corrected surface temperature raster map [K]");
 
     input_ustar = G_define_option();
     input_ustar->key = "ustar";
@@ -118,7 +117,6 @@ int main(int argc, char *argv[])
     input_ea->key = "ea";
     input_ea->type = TYPE_DOUBLE;
     input_ea->required = YES;
-    input_ea->gisprompt = "old,value";
     input_ea->answer = "1.511";
     input_ea->description = _("Value of the actual vapour pressure [KPa]");
     input_ea->guisection = _("Parameters");
@@ -127,7 +125,6 @@ int main(int argc, char *argv[])
     input_row_wet->key = "row_wet";
     input_row_wet->type = TYPE_DOUBLE;
     input_row_wet->required = NO;
-    input_row_wet->gisprompt = "old,value";
     input_row_wet->description = _("Row value of the wet pixel");
     input_row_wet->guisection = _("Parameters");
 
@@ -135,7 +132,6 @@ int main(int argc, char *argv[])
     input_col_wet->key = "col_wet";
     input_col_wet->type = TYPE_DOUBLE;
     input_col_wet->required = NO;
-    input_col_wet->gisprompt = "old,value";
     input_col_wet->description = _("Column value of the wet pixel");
     input_col_wet->guisection = _("Parameters");
 
@@ -143,7 +139,6 @@ int main(int argc, char *argv[])
     input_row_dry->key = "row_dry";
     input_row_dry->type = TYPE_DOUBLE;
     input_row_dry->required = NO;
-    input_row_dry->gisprompt = "old,value";
     input_row_dry->description = _("Row value of the dry pixel");
     input_row_dry->guisection = _("Parameters");
 
@@ -151,13 +146,12 @@ int main(int argc, char *argv[])
     input_col_dry->key = "col_dry";
     input_col_dry->type = TYPE_DOUBLE;
     input_col_dry->required = NO;
-    input_col_dry->gisprompt = "old,value";
     input_col_dry->description = _("Column value of the dry pixel");
     input_col_dry->guisection = _("Parameters");
 
     output = G_define_standard_option(G_OPT_R_OUTPUT);
-    output->description = _("Name of output sensible heat flux layer [W/m2]");
-
+    output->description = _("Name for output sensible heat flux raster map [W/m2]");
+    
     /* Define the different flags */
     flag2 = G_define_flag();
     flag2->key = 'a';
@@ -189,7 +183,7 @@ int main(int argc, char *argv[])
     if ((!input_row_wet->answer || !input_col_wet->answer ||
 	 !input_row_dry->answer || !input_col_dry->answer) &&
 	!flag2->answer) {
-	G_fatal_error(_("FATAL ERROR: either auto-mode either wet/dry pixels coordinates should be provided!"));
+	G_fatal_error(_("Either auto-mode either wet/dry pixels coordinates should be provided!"));
     }
     if (flag3->answer) {
 	G_message(_("Manual wet/dry pixels in image coordinates"));
@@ -200,27 +194,28 @@ int main(int argc, char *argv[])
 	G_message(_("Wet Pixel=> row:%.0f col:%.0f"), m_row_wet, m_col_wet);
 	G_message(_("Dry Pixel=> row:%.0f col:%.0f"), m_row_dry, m_col_dry);
     }
+
     /* check legal output name */
     if (G_legal_filename(h0) < 0)
-	G_fatal_error(_("[%s] is an illegal name"), h0);
+	G_fatal_error(_("<%s> is an illegal name"), h0);
 
     if ((infd_Rn = G_open_cell_old(Rn, "")) < 0)
-	G_fatal_error(_("Cannot open cell file [%s]"), Rn);
+	G_fatal_error(_("Unable to open raster map <%s>"), Rn);
     if ((infd_g0 = G_open_cell_old(g0, "")) < 0)
-	G_fatal_error(_("Cannot open cell file [%s]"), g0);
+	G_fatal_error(_("Unable to open raster map <%s>"), g0);
     if ((infd_z0m = G_open_cell_old(z0m, "")) < 0)
-	G_fatal_error(_("Cannot open cell file [%s]"), z0m);
+	G_fatal_error(_("Unable to open raster map <%s>"), z0m);
     if ((infd_t0dem = G_open_cell_old(t0dem, "")) < 0)
-	G_fatal_error(_("Cannot open cell file [%s]"), t0dem);
+	G_fatal_error(_("Unable to open raster map <%s>"), t0dem);
 
     if (G_get_cellhd(Rn, "", &cellhd) < 0)
-	G_fatal_error(_("Cannot read file header of [%s]"), Rn);
+	G_fatal_error(_("Unable to read header of raster map <%s>"), Rn);
     if (G_get_cellhd(g0, "", &cellhd) < 0)
-	G_fatal_error(_("Cannot read file header of [%s]"), g0);
+	G_fatal_error(_("Unable to read header of raster map <%s>"), g0);
     if (G_get_cellhd(z0m, "", &cellhd) < 0)
-	G_fatal_error(_("Cannot read file header of [%s]"), z0m);
+	G_fatal_error(_("Unable to read header of raster map <%s>"), z0m);
     if (G_get_cellhd(t0dem, "", &cellhd) < 0)
-	G_fatal_error(_("Cannot read file header of [%s]"), t0dem);
+	G_fatal_error(_("Unable to read header of raster map <%s>"), t0dem);
 
     /* Allocate input buffer */
     inrast_Rn = G_allocate_d_raster_buf();
@@ -248,16 +243,16 @@ int main(int argc, char *argv[])
     outrast = G_allocate_d_raster_buf();
 
     if ((outfd = G_open_raster_new(h0, DCELL_TYPE)) < 0)
-	G_fatal_error(_("Could not open <%s>"), h0);
+	G_fatal_error(_("Unable to create raster map <%s>"), h0);
 
     /***************************************************/
     /* Allocate memory for temporary images            */
     double **d_Roh, **d_Rah;
 
     if ((d_Roh = G_alloc_matrix(nrows, ncols)) == NULL)
-	G_message("cannot allocate memory for temporary d_Roh image");
+	G_message("Unable to allocate memory for temporary d_Roh image");
     if ((d_Rah = G_alloc_matrix(nrows, ncols)) == NULL)
-	G_message("cannot allocate memory for temporary d_Rah image");
+	G_message("Unable to allocate memory for temporary d_Rah image");
     /***************************************************/
 
     /* MANUAL T0DEM WET/DRY PIXELS */
@@ -281,11 +276,11 @@ int main(int argc, char *argv[])
 	    DCELL d_t0dem;
 	    G_percent(row, nrows, 2);
 	    if (G_get_d_raster_row(infd_t0dem,inrast_t0dem,row)<0)
-		G_fatal_error(_("Could not read from <%s>"),t0dem);
+	      G_fatal_error(_("Unable to read raster map <%s> row %d"), t0dem, row);
 	    if (G_get_d_raster_row(infd_Rn,inrast_Rn,row)<0)
-		G_fatal_error(_("Could not read from <%s>"),Rn);
+	      G_fatal_error(_("Unable to read raster map <%s> row %d"), Rn, row);
 	    if (G_get_d_raster_row(infd_g0,inrast_g0,row)<0)
-		G_fatal_error(_("Could not read from <%s>"),g0);
+	      G_fatal_error(_("Unable to read raster map <%s> row %d"), g0, row);
 	    /*process the data */
 	    for (col = 0; col < ncols; col++) {
 		d_t0dem = ((DCELL *) inrast_t0dem)[col];
@@ -326,15 +321,15 @@ int main(int argc, char *argv[])
 		}
 	    }
 	}
-	G_message("row_wet=%d\tcol_wet=%d\n", row_wet, col_wet);
-	G_message("row_dry=%d\tcol_dry=%d\n", row_dry, col_dry);
-	G_message("g0_wet=%f\n", d_g0_wet);
-	G_message("Rn_wet=%f\n", d_Rn_wet);
-	G_message("LE_wet=%f\n", d_Rn_wet - d_g0_wet);
-	G_message("t0dem_dry=%f\n", d_t0dem_dry);
-	G_message("rnet_dry=%f\n", d_Rn_dry);
-	G_message("g0_dry=%f\n", d_g0_dry);
-	G_message("h0_dry=%f\n", d_Rn_dry - d_g0_dry);
+	G_message("row_wet=%d\tcol_wet=%d", row_wet, col_wet);
+	G_message("row_dry=%d\tcol_dry=%d", row_dry, col_dry);
+	G_message("g0_wet=%f", d_g0_wet);
+	G_message("Rn_wet=%f", d_Rn_wet);
+	G_message("LE_wet=%f", d_Rn_wet - d_g0_wet);
+	G_message("t0dem_dry=%f", d_t0dem_dry);
+	G_message("rnet_dry=%f", d_Rn_dry);
+	G_message("g0_dry=%f", d_g0_dry);
+	G_message("h0_dry=%f", d_Rn_dry - d_g0_dry);
     }/* END OF FLAG2 */
 
 
@@ -354,11 +349,11 @@ int main(int argc, char *argv[])
     rowDry = row;
     colDry = col;
     if (G_get_d_raster_row(infd_Rn, inrast_Rn, row) < 0)
-	G_fatal_error(_("Could not read from <%s>"), Rn);
+	G_fatal_error(_("Unable to read raster map <%s> row %d"), Rn, row);
     if (G_get_d_raster_row(infd_g0, inrast_g0, row) < 0)
-	G_fatal_error(_("Could not read from <%s>"), g0);
+	G_fatal_error(_("Unable to read raster map <%s> row %d"), g0, row);
     if (G_get_d_raster_row(infd_t0dem, inrast_t0dem, row) < 0)
-	G_fatal_error(_("Could not read from <%s>"), t0dem);
+	G_fatal_error(_("Unable to read raster map <%s> row %d"), t0dem, row);
     d_Rn_dry = ((DCELL *) inrast_Rn)[col];
     d_g0_dry = ((DCELL *) inrast_g0)[col];
     d_t0dem_dry = ((DCELL *) inrast_t0dem)[col];
@@ -377,7 +372,7 @@ int main(int argc, char *argv[])
     rowWet = row;
     colWet = col;
     if (G_get_d_raster_row(infd_t0dem, inrast_t0dem, row) < 0)
-	G_fatal_error(_("Could not read from <%s>"), t0dem);
+	G_fatal_error(_("Unable to read raster map <%s> row %d"), t0dem, row);
     d_t0dem_wet = ((DCELL *) inrast_t0dem)[col];
     /* END OF MANUAL WET/DRY PIXELS */
     double h_dry;
@@ -399,9 +394,9 @@ int main(int argc, char *argv[])
 	G_percent(row, nrows, 2);
 	/* read a line input maps into buffers */
 	if (G_get_d_raster_row(infd_z0m, inrast_z0m, row) < 0)
-	    G_fatal_error(_("Could not read from <%s>"), z0m);
+	    G_fatal_error(_("Unable to read raster map <%s> row %d"), z0m, row);
 	if (G_get_d_raster_row(infd_t0dem, inrast_t0dem,row)<0)
-	    G_fatal_error(_("Could not read from <%s>"), t0dem);
+	    G_fatal_error(_("Unable to read raster map <%s> row %d"), t0dem, row);
 	/* read every cell in the line buffers */
 	for (col = 0; col < ncols; col++) {
             d_z0m = ((DCELL *) inrast_z0m)[col];
@@ -462,9 +457,9 @@ int main(int argc, char *argv[])
 	G_percent(row, nrows, 2);
 	/* read a line input maps into buffers */
 	if (G_get_d_raster_row(infd_z0m, inrast_z0m, row) < 0)
-	    G_fatal_error(_("Could not read from <%s>"), z0m);
+	    G_fatal_error(_("Unable to read raster map <%s> row %d"), z0m, row);
 	if (G_get_d_raster_row(infd_t0dem, inrast_t0dem,row)<0)
-	    G_fatal_error(_("Could not read from <%s>"), t0dem);
+	    G_fatal_error(_("Unable to read raster map <%s> row %d"), t0dem, row);
 	/* read every cell in the line buffers */
 	for (col = 0; col < ncols; col++) {
             d_z0m = ((DCELL *) inrast_z0m)[col];
@@ -483,7 +478,7 @@ int main(int argc, char *argv[])
 		}
 		d_L =-1004*d_roh1*pow(ustar,3)*d_t0dem/(d_h1*9.81*0.41);
 		d_x = pow((1-16*(5/d_L)),0.25);
-		d_psim =2*log((1+d_x)/2)+log((1+pow(d_x,2))/2)-2*atan(d_x)+0.5*PI;
+		d_psim =2*log((1+d_x)/2)+log((1+pow(d_x,2))/2)-2*atan(d_x)+0.5*M_PI;
 		d_psih =2*log((1+pow(d_x,2))/2);
 		d_u5 =(ustar/0.41)*log(5/d_z0m);
 		d_rah2 = (1/(d_u5*pow(0.41,2)))*log((5/d_z0m)-d_psim)
@@ -531,9 +526,9 @@ int main(int argc, char *argv[])
 	G_percent(row, nrows, 2);
 	/* read a line input maps into buffers */
 	if (G_get_d_raster_row(infd_z0m,inrast_z0m,row)<0)
-	    G_fatal_error(_("Could not read from <%s>"), z0m);
+	    G_fatal_error(_("Unable to read raster map <%s> row %d"), z0m, row);
 	if (G_get_d_raster_row(infd_t0dem,inrast_t0dem,row)<0)
-	    G_fatal_error(_("Could not read from <%s>"), t0dem);
+	    G_fatal_error(_("Unable to read raster map <%s> row %d"), t0dem, row);
 	/* read every cell in the line buffers */
 	for (col = 0; col < ncols; col++) {
             d_z0m = ((DCELL *) inrast_z0m)[col];
@@ -553,7 +548,7 @@ int main(int argc, char *argv[])
 		d_L =-1004*d_roh1*pow(ustar,3)*d_t0dem/(d_h2*9.81*0.41);
 		d_x = pow((1 - 16 * (5 / d_L)), 0.25);
 		d_psim =2*log((1+d_x)/2)+log((1+pow(d_x,2))/2)-
-		    2*atan(d_x)+0.5*PI;
+		    2*atan(d_x)+0.5*M_PI;
 		d_psih =2*log((1+pow(d_x,2))/2);
 		d_u5 =(ustar/0.41)*log(5/d_z0m);
 		d_rah3=(1/(d_u5*pow(0.41,2)))*log((5/d_z0m)-d_psim)*
@@ -601,9 +596,9 @@ int main(int argc, char *argv[])
 	G_percent(row, nrows, 2);
 	/* read a line input maps into buffers */
 	if (G_get_d_raster_row(infd_z0m, inrast_z0m, row) < 0)
-	    G_fatal_error(_("Could not read from <%s>"), z0m);
+	    G_fatal_error(_("Unable to read raster map <%s> row %d"), z0m, row);
 	if (G_get_d_raster_row(infd_t0dem,inrast_t0dem,row)<0)
-	    G_fatal_error(_("Could not read from <%s>"), t0dem);
+	    G_fatal_error(_("Unable to read raster map <%s> row %d"), t0dem, row);
 	/* read every cell in the line buffers */
 	for (col = 0; col < ncols; col++) {
             d_z0m = ((DCELL *) inrast_z0m)[col];
@@ -630,7 +625,7 @@ int main(int argc, char *argv[])
 	    }
 	}
 	if (G_put_d_raster_row(outfd, outrast) < 0)
-	    G_fatal_error("Cannot write to output file <%s>", h0);
+	    G_fatal_error("Failed writing raster map <%s>", h0);
     }
 
 

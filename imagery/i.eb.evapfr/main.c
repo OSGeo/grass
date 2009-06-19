@@ -6,7 +6,7 @@
  * PURPOSE:      Calculates the evaporative fraction
  *               as seen in Bastiaanssen (1995) 
  *
- * COPYRIGHT:    (C) 2002-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2009 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *   	    	 License (>=v2). Read the file COPYING that comes with GRASS
@@ -20,6 +20,7 @@
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
+
 double evap_fr(double r_net, double g0, double h0);
 double soilmoisture(double evapfr);
 
@@ -30,14 +31,13 @@ int main(int argc, char *argv[])
     int makin = 0;		/*Makin Flag for root zone soil moisture output */
     struct GModule *module;
     struct Option *input1, *input2, *input3, *output1, *output2;
-    struct Flag *flag1, *flag2;
+    struct Flag *flag1;
     struct History history;	/*metadata */
     char *result1, *result2;	/*output raster name */
     
     int infd_rnet, infd_g0, infd_h0;
     int outfd1, outfd2;
     char *rnet, *g0, *h0;
-    char *evapfr, *theta;
     void *inrast_rnet, *inrast_g0, *inrast_h0;
 
     DCELL * outrast1, *outrast2;
@@ -46,48 +46,43 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
     module = G_define_module();
     module->keywords =
-	_("evaporative fraction, soil moisture, energy balance, SEBAL");
+	_("imagery, evaporative fraction, soil moisture, energy balance, SEBAL");
     module->description =
-	_("evaporative fraction (Bastiaanssen, 1995) and root zone soil moisture (Makin, Molden and Bastiaanssen, 2001)");
+	_("Computes evaporative fraction (Bastiaanssen, 1995) and "
+	  "root zone soil moisture (Makin, Molden and Bastiaanssen, 2001)");
     
     /* Define the different options */ 
     input1 = G_define_standard_option(G_OPT_R_INPUT);
-    input1->key = _("rnet");
-    input1->description = _("Name of the Net Radiation map [W/m2]");
-    input1->answer = _("rnet");
+    input1->key = "rnet";
+    input1->description = _("Name of Net Radiation raster map [W/m2]");
 
     input2 = G_define_standard_option(G_OPT_R_INPUT);
-    input2->key = _("g0");
-    input2->description = _("Name of the soil heat flux map [W/m2]");
-    input2->answer = _("g0");
+    input2->key = "g0";
+    input2->description = _("Name of soil heat flux raster map [W/m2]");
 
     input3 = G_define_standard_option(G_OPT_R_INPUT);
-    input3->key = _("h0");
-    input3->description = _("Name of the sensible heat flux map [W/m2]");
-    input3->answer = _("h0");
+    input3->key = "h0";
+    input3->description = _("Name of sensible heat flux raster map [W/m2]");
 
     output1 = G_define_standard_option(G_OPT_R_OUTPUT);
-    output1->key = _("evapfr");
+    output1->key = "evapfr";
     output1->description =
-	_("Name of the output evaporative fraction layer");
-    output1->answer = _("evapfr");
+	_("Name for output evaporative fraction raster map");
 
     output2 = G_define_standard_option(G_OPT_R_OUTPUT);
-    output2->key = _("theta");
+    output2->key = "theta";
     output2->required = NO;
     output2->description =
-	_("Name of the output root zone soil moisture layer");
-    output2->answer = _("theta");
+	_("Name for output root zone soil moisture raster map");
 
     flag1 = G_define_flag();
     flag1->key = 'm';
     flag1->description =
-	_("root zone soil moisture output (Makin, Molden and Bastiaanssen, 2001)");
-
-    /********************/ 
+	_("Root zone soil moisture output (Makin, Molden and Bastiaanssen, 2001)");
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
-
+    
     rnet = input1->answer;
     g0 = input2->answer;
     h0 = input3->answer;
@@ -118,11 +113,11 @@ int main(int argc, char *argv[])
 	outrast2 = G_allocate_d_raster_buf();
     
     /* Create New raster files */ 
-    if ((outfd1 = G_open_raster_new(result1,DCELL_TYPE)) < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), result1);
+    if ((outfd1 = G_open_raster_new(result1, DCELL_TYPE)) < 0)
+	G_fatal_error(_("Unable to create raster map <%s>"), result1);
     if (makin) 
-	if ((outfd2 = G_open_raster_new(result2,DCELL_TYPE)) < 0)
-	    G_fatal_error(_("Unable to open raster map <%s>"), result2);
+	if ((outfd2 = G_open_raster_new(result2, DCELL_TYPE)) < 0)
+	    G_fatal_error(_("Unable to create raster map <%s>"), result2);
         
     /* Process pixels */ 
     for (row = 0; row < nrows; row++)
@@ -135,11 +130,12 @@ int main(int argc, char *argv[])
 	
         /* read input maps */ 
         if (G_get_d_raster_row(infd_rnet, inrast_rnet, row)<0)
-	    G_fatal_error(_("Unable to read from <%s>"), rnet);
+	  G_fatal_error(_("Unable to read raster map <%s> row %d"), rnet, row);
 	if (G_get_d_raster_row(infd_g0, inrast_g0, row) < 0)
-	    G_fatal_error(_("Unable to read from <%s>"), g0);
+	  G_fatal_error(_("Unable to read raster map <%s> row %d"), g0, row);
 	if (G_get_d_raster_row(infd_h0, inrast_h0, row) < 0)
-	    G_fatal_error(_("Unable to read from <%s>"), h0);
+	  G_fatal_error(_("Unable to read raster map <%s> row %d"), h0, row);
+	
         /*process the data */ 
         for (col = 0; col < ncols; col++)
         {
@@ -166,11 +162,11 @@ int main(int argc, char *argv[])
 	    }
         }
 	if (G_put_d_raster_row(outfd1, outrast1) < 0)
-	    G_fatal_error(_("Unable to write to output raster map"));
+	    G_fatal_error(_("Failed writing raster map <%s>"), result1);
 	if (makin) 
         {
             if (G_put_d_raster_row(outfd2, outrast2) < 0)
-                G_fatal_error(_("Unable to write to output raster map"));
+		G_fatal_error(_("Failed writing raster map <%s>"), result2);
         }
     }
     G_free(inrast_rnet);
@@ -193,6 +189,7 @@ int main(int argc, char *argv[])
 	G_command_history(&history);
 	G_write_history(result2, &history);
     }
+
     exit(EXIT_SUCCESS);
 }
 

@@ -7,7 +7,7 @@
  *               as seen in Bastiaanssen (1995) using time of
  *               satellite overpass.
  *
- * COPYRIGHT:    (C) 2006-2007 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2006-2009 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *   	    	 License (>=v2). Read the file COPYING that comes with GRASS
@@ -20,8 +20,10 @@
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
+
 double g_0(double bbalb, double ndvi, double tempk, double rnet,
 	     double time, int roerink);
+
 int main(int argc, char *argv[]) 
 {
     int nrows, ncols;
@@ -40,52 +42,42 @@ int main(int argc, char *argv[])
 	*inrast_time;
     DCELL * outrast;
 
-    /************************************/ 
     G_gisinit(argv[0]);
+
     module = G_define_module();
-    module->keywords = _("soil heat flux, energy balance, SEBAL");
-    module->description =
-	_("soil heat flux approximation (Bastiaanssen, 1995)");
+    module->keywords = _("imagery, soil heat flux, energy balance, SEBAL");
+    module->description = _("Soil heat flux approximation (Bastiaanssen, 1995)");
     
     /* Define the different options */ 
     input1 = G_define_standard_option(G_OPT_R_INPUT);
     input1->key = "albedo";
-    input1->description = _("Name of the Albedo map [0.0;1.0]");
-    input1->answer = "albedo";
+    input1->description = _("Name of Albedo raster map [0.0;1.0]");
 
     input2 = G_define_standard_option(G_OPT_R_INPUT);
     input2->key = "ndvi";
-    input2->description = _("Name of the ndvi map [-1.0;+1.0]");
-    input2->answer = "ndvi";
+    input2->description = _("Name of NDVI raster map [-1.0;+1.0]");
 
     input3 = G_define_standard_option(G_OPT_R_INPUT);
     input3->key = "tempk";
     input3->description =
-	_("Name of the Surface temperature map [degree Kelvin]");
-    input3->answer = "tempk";
+	_("Name of Surface temperature raster map [degree Kelvin]");
 
     input4 = G_define_standard_option(G_OPT_R_INPUT);
     input4->key = "rnet";
-    input4->description = _("Name of the Net Radiation map [W/m2]");
-    input4->answer = "rnet";
+    input4->description = _("Name of Net Radiation raster map [W/m2]");
 
     input5 = G_define_standard_option(G_OPT_R_INPUT);
     input5->key = "time";
     input5->description =
-	_("Name of the time of satellite overpass map [local UTC]");
-    input5->answer = "time";
+	_("Name of time of satellite overpass raster map [local UTC]");
 
     output1 = G_define_standard_option(G_OPT_R_OUTPUT);
-    output1->key = "g0";
-    output1->description = _("Name of the output g0 layer");
-    output1->answer = "g0";
 
     flag1 = G_define_flag();
     flag1->key = 'r';
     flag1->description =
 	_("HAPEX-Sahel empirical correction (Roerink, 1995)");
 
-    /********************/ 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -110,11 +102,11 @@ int main(int argc, char *argv[])
     inrast_tempk = G_allocate_d_raster_buf();
 
     if ((infd_rnet = G_open_cell_old(rnet, "")) < 0)
-	G_fatal_error(_("Unable to open raster map [%s]"), rnet);
+	G_fatal_error(_("Unable to open raster map <%s>"), rnet);
     inrast_rnet = G_allocate_d_raster_buf();
 
     if ((infd_time = G_open_cell_old(time, "")) < 0)
-	G_fatal_error(_("Unable to open raster map [%s]"), time);
+	G_fatal_error(_("Unable to open raster map <%s>"), time);
     inrast_time = G_allocate_d_raster_buf();
 
     nrows = G_window_rows();
@@ -123,7 +115,8 @@ int main(int argc, char *argv[])
     
     /* Create New raster files */ 
     if ((outfd = G_open_raster_new(result,DCELL_TYPE)) < 0)
-	G_fatal_error(_("Unable to open raster map<%s>"), result);
+	G_fatal_error(_("Unable to create raster map <%s>"), result);
+
     /* Process pixels */ 
     for (row = 0; row < nrows; row++)
     {
@@ -136,15 +129,20 @@ int main(int argc, char *argv[])
 	G_percent(row, nrows, 2);	
         /* read input maps */ 
         if (G_get_d_raster_row(infd_albedo, inrast_albedo, row) < 0)
-	    G_fatal_error(_("Unable to read from <%s>"), albedo);
+	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
+			  albedo, row);
 	if (G_get_d_raster_row(infd_ndvi, inrast_ndvi, row)<0)
-	    G_fatal_error(_("Unable to read from <%s>"), ndvi);
+	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
+			  ndvi, row);
 	if (G_get_d_raster_row(infd_tempk, inrast_tempk, row)< 0)
-	    G_fatal_error(_("Unable to read from <%s>"), tempk);
+	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
+			  tempk, row);
 	if (G_get_d_raster_row(infd_rnet, inrast_rnet, row)<0)
-	    G_fatal_error(_("Unable to read from <%s>"), rnet);
+	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
+			  rnet, row);
 	if (G_get_d_raster_row(infd_time, inrast_time, row)<0)
-	    G_fatal_error(_("Unable to read from <%s>"), time);
+	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
+			  time, row);
         /*process the data */ 
         for (col = 0; col < ncols; col++)
         {
@@ -167,7 +165,7 @@ int main(int argc, char *argv[])
 	    }
 	}
 	if (G_put_d_raster_row(outfd, outrast) < 0)
-	    G_fatal_error(_("Unable to write to output raster map"));
+	    G_fatal_error(_("Failed writing raster map <%s>"), result);
     }
     G_free(inrast_albedo);
     G_free(inrast_ndvi);
@@ -188,6 +186,7 @@ int main(int argc, char *argv[])
     G_short_history(result, "raster", &history);
     G_command_history(&history);
     G_write_history(result, &history);
+
     exit(EXIT_SUCCESS);
 }
 
