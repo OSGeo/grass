@@ -2,8 +2,8 @@ MODULE_TOPDIR = ../..
 
 PGM = d.fontlist
 
-LIBES     = $(RASTERLIB) $(GISLIB)
-DEPENDENCIES= $(RASTERDEP) $(GISDEP)
+LIBES     = $(DISPLAYLIB) $(GISLIB)
+DEPENDENCIES= $(GISDEP)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 

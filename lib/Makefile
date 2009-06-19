@@ -13,7 +13,6 @@ SUBDIRS = \
 	psdriver \
 	htmldriver \
 	cairodriver \
-	raster \
 	bitmap \
 	btree \
 	display \

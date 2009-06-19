@@ -2,9 +2,9 @@ MODULE_TOPDIR = ../..
 
 PGM = d.nviz
 
-LIBES        = $(DISPLAYLIB) $(RASTERLIB) $(GISLIB)
+LIBES        = $(DISPLAYLIB) $(GISLIB)
 
-DEPENDENCIES = $(DISPLAYDEP) $(RASTERDEP) $(GISDEP)
+DEPENDENCIES = $(DISPLAYDEP) $(GISDEP)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 
