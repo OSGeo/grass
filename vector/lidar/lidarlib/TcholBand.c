@@ -9,18 +9,20 @@
 
 void tcholDec(double **N, double **T, int n, int BW)
 {
-    int i, j, k;
+    int i, j, k, end;
     double somma;
 
-    G_debug(3, "tcholDec(): n=%d  BW=%d", n, BW);
+    G_debug(2, "tcholDec(): n=%d  BW=%d", n, BW);
 
     for (i = 0; i < n; i++) {
 	G_percent(i, n, 2);
 	for (j = 0; j < BW; j++) {
 	    somma = N[i][j];
-	    for (k = 1; k < BW; k++)
-		if (((i - k) >= 0) && ((j + k) < BW))
-		    somma -= T[i - k][k] * T[i - k][j + k];
+	    /* start = 1 */
+	    /* end = BW - j or i + 1 */
+	    end = ((BW - j) < (i + 1) ? (BW - j) : (i + 1));
+	    for (k = 1; k < end; k++)
+		somma -= T[i - k][k] * T[i - k][j + k];
 	    if (j == 0) {
 		if (somma <= 0.0)
 		    G_fatal_error(_("Decomposition failed"));
@@ -42,7 +44,7 @@ void tcholSolve(double **N, double *TN, double *parVect, int n, int BW)
 {
 
     double **T;
-    int i, j;
+    int i, j, start, end;
 
 	/*--------------------------------------*/
     T = G_alloc_matrix(n, BW);
@@ -54,18 +56,22 @@ void tcholSolve(double **N, double *TN, double *parVect, int n, int BW)
     parVect[0] = TN[0] / T[0][0];
     for (i = 1; i < n; i++) {
 	parVect[i] = TN[i];
-	for (j = 0; j < i; j++)
-	    if ((i - j) < BW)
-		parVect[i] -= T[j][i - j] * parVect[j];
+	/* start = 0 or i - BW + 1 */
+	start = ((i - BW + 1) < 0 ? 0 : (i - BW + 1));
+	/* end = i */
+	for (j = start; j < i; j++)
+	    parVect[i] -= T[j][i - j] * parVect[j];
 	parVect[i] = parVect[i] / T[i][0];
     }
 
     /* Backward substitution */
     parVect[n - 1] = parVect[n - 1] / T[n - 1][0];
     for (i = n - 2; i >= 0; i--) {
-	for (j = i + 1; j < n; j++)
-	    if ((j - i) < BW)
-		parVect[i] -= T[i][j - i] * parVect[j];
+	/* start = i + 1 */
+	/* end = n or BW + i */
+	end = (n < (BW + i) ? n : (BW + i));
+	for (j = i + 1; j < end; j++)
+	    parVect[i] -= T[i][j - i] * parVect[j];
 	parVect[i] = parVect[i] / T[i][0];
     }
 
@@ -84,24 +90,28 @@ void tcholSolve2(double **N, double *TN, double **T, double *parVect, int n,
 		 int BW)
 {
 
-    int i, j;
+    int i, j, start, end;
 
     /* Forward substitution */
     parVect[0] = TN[0] / T[0][0];
     for (i = 1; i < n; i++) {
 	parVect[i] = TN[i];
-	for (j = 0; j < i; j++)
-	    if ((i - j) < BW)
-		parVect[i] -= T[j][i - j] * parVect[j];
+	/* start = 0 or i - BW + 1 */
+	start = ((i - BW + 1) < 0 ? 0 : (i - BW + 1));
+	/* end = i */
+	for (j = start; j < i; j++)
+	    parVect[i] -= T[j][i - j] * parVect[j];
 	parVect[i] = parVect[i] / T[i][0];
     }
 
     /* Backward substitution */
     parVect[n - 1] = parVect[n - 1] / T[n - 1][0];
     for (i = n - 2; i >= 0; i--) {
-	for (j = i + 1; j < n; j++)
-	    if ((j - i) < BW)
-		parVect[i] -= T[i][j - i] * parVect[j];
+	/* start = i + 1 */
+	/* end = n or BW + i */
+	end = (n < (BW + i) ? n : (BW + i));
+	for (j = i + 1; j < end; j++)
+	    parVect[i] -= T[i][j - i] * parVect[j];
 	parVect[i] = parVect[i] / T[i][0];
     }
 
@@ -115,7 +125,7 @@ void tcholInv(double **N, double *invNdiag, int n, int BW)
 {
     double **T = NULL;
     double *vect = NULL;
-    int i, j, k;
+    int i, j, k, start;
     double somma;
 
 	/*--------------------------------------*/
@@ -136,9 +146,11 @@ void tcholInv(double **N, double *invNdiag, int n, int BW)
 	invNdiag[i] = vect[0] * vect[0];
 	for (j = i + 1; j < n; j++) {
 	    somma = 0.0;
-	    for (k = i; k < j; k++) {
-		if ((j - k) < BW)
-		    somma -= vect[k - i] * T[k][j - k];
+	    /* start = i or j - BW + 1 */
+	    start = ((j - BW + 1) < i ? i : (j - BW + 1));
+	    /* end = j */
+	    for (k = start; k < j; k++) {
+		somma -= vect[k - i] * T[k][j - k];
 	    }
 	    vect[j - i] = somma * T[j][0];
 	    invNdiag[i] += vect[j - i] * vect[j - i];
@@ -161,7 +173,7 @@ void tcholSolveInv(double **N, double *TN, double *invNdiag, double *parVect,
 
     double **T = NULL;
     double *vect = NULL;
-    int i, j, k;
+    int i, j, k, start, end;
     double somma;
 
 	/*--------------------------------------*/
@@ -175,18 +187,22 @@ void tcholSolveInv(double **N, double *TN, double *invNdiag, double *parVect,
     parVect[0] = TN[0] / T[0][0];
     for (i = 1; i < n; i++) {
 	parVect[i] = TN[i];
-	for (j = 0; j < i; j++)
-	    if ((i - j) < BW)
-		parVect[i] -= T[j][i - j] * parVect[j];
+	/* start = 0 or i - BW + 1 */
+	start = ((i - BW + 1) < 0 ? 0 : (i - BW + 1));
+	/* end = i */
+	for (j = start; j < i; j++)
+	    parVect[i] -= T[j][i - j] * parVect[j];
 	parVect[i] = parVect[i] / T[i][0];
     }
 
     /* Backward substitution */
     parVect[n - 1] = parVect[n - 1] / T[n - 1][0];
     for (i = n - 2; i >= 0; i--) {
-	for (j = i + 1; j < n; j++)
-	    if ((j - i) < BW)
-		parVect[i] -= T[i][j - i] * parVect[j];
+	/* start = i + 1 */
+	/* end = n or BW + i */
+	end = (n < (BW + i) ? n : (BW + i));
+	for (j = i + 1; j < end; j++)
+	    parVect[i] -= T[i][j - i] * parVect[j];
 	parVect[i] = parVect[i] / T[i][0];
     }
 
@@ -201,9 +217,11 @@ void tcholSolveInv(double **N, double *TN, double *invNdiag, double *parVect,
 	invNdiag[i] = vect[0] * vect[0];
 	for (j = i + 1; j < n; j++) {
 	    somma = 0.0;
-	    for (k = i; k < j; k++) {
-		if ((j - k) < BW)
-		    somma -= vect[k - i] * T[k][j - k];
+	    /* start = i or j - BW + 1 */
+	    start = ((j - BW + 1) < i ? i : (j - BW + 1));
+	    /* end = j */
+	    for (k = start; k < j; k++) {
+		somma -= vect[k - i] * T[k][j - k];
 	    }
 	    vect[j - i] = somma * T[j][0];
 	    invNdiag[i] += vect[j - i] * vect[j - i];
