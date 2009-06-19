@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ../..
 
-PGM = i.eb.g0
+PGM = i.eb.soilheatflux
 
 LIBES = $(GISLIB)
 DEPENDENCIES = $(GISDEP)
