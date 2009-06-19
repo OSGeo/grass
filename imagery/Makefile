@@ -7,8 +7,8 @@ SUBDIRS = \
 	i.cluster \
 	i.eb.evapfr \
 	i.eb.eta \
-	i.eb.g0 \
 	i.eb.h_SEBAL01 \
+	i.eb.soilheatflux \
 	i.evapo.time_integration \
 	i.emissivity \
 	i.find \
