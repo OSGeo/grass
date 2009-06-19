@@ -2268,6 +2268,39 @@
 	    </menuitem>
 	  </items>
 	</menu>
+	<menu>
+	  <label>Energy Balance RS processing</label>
+	  <items>
+	    <menuitem>
+	      <label>Soil Heat Flux</label>
+	      <help>Calculate Soil Heat Flux</help>
+	      <keywords>energy balance,land flux,soil heat flux</keywords>
+              <handler>self.OnMenuCmd</handler>
+	      <command>i.eb.soilheatflux</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>Sensible Heat Flux (SEBAL01)</label>
+	      <help>Calculate Sensible Heat Flux after method SEBAL 2001</help>
+	      <keywords>energy balance,land flux,sensible heat flux</keywords>
+              <handler>self.OnMenuCmd</handler>
+	      <command>i.eb.h_SEBAL01</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>Evaporative Fraction</label>
+	      <help>Calculate the evaporative fraction (ETa/ETpot)</help>
+	      <keywords>energy balance,land flux fraction, evaporative fraction</keywords>
+              <handler>self.OnMenuCmd</handler>
+	      <command>i.eb.evapfr</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>ET Temporal Integration</label>
+	      <help>Integrate in time daily ET from satellite images and met station daily ETo</help>
+	      <keywords>energy balance, ET, temporal integration</keywords>
+              <handler>self.OnMenuCmd</handler>
+	      <command>i.evapo.time_integration</command>
+	    </menuitem>
+	  </items>
+	</menu>
 	<separator />
 	<menuitem>
 	  <label>Brovey sharpening</label>
