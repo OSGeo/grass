@@ -46,6 +46,7 @@ import dbm
 from debug import Debug as Debug
 import gselect
 import globalvar
+from units import Units
 from preferences import globalSettings as UserSettings
 try:
     digitPath = os.path.join(globalvar.ETCWXDIR, "vdigit")
@@ -1542,19 +1543,28 @@ class VDigitSettingsDialog(wx.Dialog):
                                  layer = layer, excludeKey = True,
                                  type = ['integer', 'double precision'])
             # units 
-            ### TODO: more units
-            units = wx.Choice(parent = panel, id = wx.ID_ANY,
-                              choices = [_("map units")])
+            if attrb == 'area':
+                choices = Units.GetUnitsList('area')
+            else:
+                choices = Units.GetUnitsList('length')
+            win_units = wx.Choice(parent = panel, id = wx.ID_ANY,
+                                  choices = choices, size=(120, -1))
             
             # default values
             check.SetValue(False)
-            
             if item and tree.GetPyData(item)[0]['vdigit'] and \
                     tree.GetPyData(item)[0]['vdigit'].has_key('geomAttr') and \
                     tree.GetPyData(item)[0]['vdigit']['geomAttr'].has_key(attrb):
                 check.SetValue(True)
-                column.SetStringSelection(tree.GetPyData(item)[0]['vdigit']['geomAttr'][attrb])
-            
+                column.SetStringSelection(tree.GetPyData(item)[0]['vdigit']['geomAttr'][attrb]['column'])
+                if attrb == 'area':
+                    type = 'area'
+                else:
+                    type = 'length'
+                unitsIdx = Units.GetUnitsIndex(type, 
+                                                tree.GetPyData(item)[0]['vdigit']['geomAttr'][attrb]['units'])
+                win_units.SetSelection(unitsIdx)
+
             if not vectorName:
                 check.Enable(False)
                 column.Enable(False)
@@ -1564,14 +1574,14 @@ class VDigitSettingsDialog(wx.Dialog):
             
             self.geomAttrb[attrb]['check']  = check.GetId()
             self.geomAttrb[attrb]['column'] = column.GetId()
-            self.geomAttrb[attrb]['units']  = units.GetId()
+            self.geomAttrb[attrb]['units']  = win_units.GetId()
 
             gridSizer.Add(item = check,
                           flag = wx.ALIGN_CENTER_VERTICAL,
                           pos = (row, 0))
             gridSizer.Add(item = column,
                           pos = (row, 1))
-            gridSizer.Add(item = units,
+            gridSizer.Add(item = win_units,
                           pos = (row, 2))
             row += 1
         
@@ -1810,13 +1820,21 @@ class VDigitSettingsDialog(wx.Dialog):
         for key, val in self.geomAttrb.iteritems():
             checked = self.FindWindowById(val['check']).IsChecked()
             column  = self.FindWindowById(val['column']).GetValue()
-            if not tree.GetPyData(item)[0]['vdigit']: 
+            unitsIdx = self.FindWindowById(val['units']).GetSelection()
+            if item and not tree.GetPyData(item)[0]['vdigit']: 
                 tree.GetPyData(item)[0]['vdigit'] = { 'geomAttr' : dict() }
             
             if checked: # enable
-                tree.GetPyData(item)[0]['vdigit']['geomAttr'][key] = column
+                if key == 'area':
+                    type = key
+                else:
+                    type = 'length'
+                unitsKey = Units.GetUnitsKey(type, unitsIdx)
+                tree.GetPyData(item)[0]['vdigit']['geomAttr'][key] = { 'column' : column,
+                                                                       'units' : unitsKey }
             else:
-                if tree.GetPyData(item)[0]['vdigit']['geomAttr'].has_key(key):
+                if item and tree.GetPyData(item)[0]['vdigit'] and \
+                        tree.GetPyData(item)[0]['vdigit']['geomAttr'].has_key(key):
                     del tree.GetPyData(item)[0]['vdigit']['geomAttr'][key]
         
         # snapping threshold

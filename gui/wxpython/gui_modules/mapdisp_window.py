@@ -32,6 +32,7 @@ import utils
 import globalvar
 from debug import Debug
 from preferences import globalSettings as UserSettings
+from units import ConvertValue as UnitsConvertValue
 from vdigit import GV_LINES as VDigit_Lines_Type
 from vdigit import VDigitCategoryDialog
 from vdigit import VDigitZBulkDialog
@@ -1180,14 +1181,18 @@ class BufferedWindow(MapWindow, wx.Window):
             val = -1
             if attrb == 'length':
                 val = digit.GetLineLength(fid)
+                type = attrb
             elif attrb == 'area':
                 val = digit.GetAreaSize(fid)
+                type = attrb
             elif attrb == 'perimeter':
                 val = digit.GetAreaPerimeter(fid)
+                type = 'length'
             
             if val > 0:
                 layer = int(UserSettings.Get(group='vdigit', key="layer", subkey='value'))
-                column =  vdigit['geomAttr'][attrb]
+                column = vdigit['geomAttr'][attrb]['column']
+                val = UnitsConvertValue(val, type, vdigit['geomAttr'][attrb]['units'])
                 dialog.SetColumnValue(layer, column, val)
                 dialog.OnReset()
         
