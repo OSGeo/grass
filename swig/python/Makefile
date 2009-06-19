@@ -30,6 +30,7 @@ trans_LIBS      = $(TRANSLIB)
 vedit_LIBS      = $(VEDITLIB)
 
 vector_wrap_c_FLAGS = $(VECT_INC) $(VECT_CFLAGS)
+vedit_wrap_c_FLAGS = $(VECT_INC) $(VECT_CFLAGS)
 proj_wrap_c_FLAGS = $(PROJINC) $(GDALCFLAGS)
 
 EXTRA_SWIG = ../include/python/my_typemaps.i ../include/python/common.i
