@@ -189,6 +189,7 @@ void classification(struct Map_info *Out, struct Cell_head Elaboration,
     categories = Vect_new_cats_struct();
 
     for (i = 0; i < num_points; i++) {	/* Sparse points */
+	G_percent(i, num_points, 6);
 
 	Vect_reset_line(point);
 	Vect_reset_cats(categories);
@@ -395,6 +396,8 @@ void classification(struct Map_info *Out, struct Cell_head Elaboration,
 	    }
 	}			/*end if obs */
     }				/*end for */
+    G_percent(i, num_points, 6); /* finish it */
+
     Vect_destroy_line_struct(point);
     Vect_destroy_cats_struct(categories);
 }				/*end puntisparsi_select */

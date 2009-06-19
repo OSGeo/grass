@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
     const char *dvr, *db, *mapset;
     char table_interpolation[1024], table_name[1024];
 
-    int last_row, last_column, flag_auxiliar = FALSE;
+    int last_row, last_column, flag_auxiliar = FALSE, pass_num;
 
     int *lineVect;
     double *TN, *Q, *parVect_bilin, *parVect_bicub;	/* Interpolating and least-square vectors */
@@ -202,9 +202,9 @@ int main(int argc, char *argv[])
     Vect_region_box(&elaboration_reg, &overlap_box);
     Vect_region_box(&elaboration_reg, &general_box);
 
-    /* Fixxing parameters of the elaboration region */
+    /* Fixing parameters of the elaboration region */
     /*! Each original_region will be divided into several subregions. These
-     *  subregion will be overlapped by its neibourgh subregions. This overlapping
+     *  subregion will be overlapped by its neighboring subregions. This overlapping
      *  is calculated as OVERLAP_PASS times the east-west resolution. */
 
     ew_resol = original_reg.ew_res;
@@ -221,6 +221,7 @@ int main(int argc, char *argv[])
 
     last_row = FALSE;
     first_it = TRUE;
+    pass_num = 0;
 
     while (last_row == FALSE) {	/* For each row */
 
@@ -283,13 +284,16 @@ int main(int argc, char *argv[])
 	    if (npoints > 0) {	/* If there is any point falling into elaboration_reg... */
 		int i, tn;
 
+		pass_num++;
+		G_verbose_message(_("Pass %d:"), pass_num);
+
 		nparameters = nsplx * nsply;
 
 		/* Mean's calculation */
 		mean = P_Mean_Calc(&elaboration_reg, observ, npoints);
 
 		/* Least Squares system */
-		G_debug(1, _("Allocation memory for bilinear interpolation"));
+		G_debug(1, _("Allocating memory for bilinear interpolation"));
 		BW = P_get_BandWidth(P_BILINEAR, nsply);	/* Bilinear interpolation */
 		N = G_alloc_matrix(nparameters, BW);	/* Normal matrix */
 		TN = G_alloc_vector(nparameters);	/* vector */
@@ -322,7 +326,7 @@ int main(int argc, char *argv[])
 		for (tn = 0; tn < nparameters; tn++)
 		    TN[tn] = 0;
 
-		G_debug(1, _("Allocation memory for bicubic interpolation"));
+		G_debug(1, _("Allocating memory for bicubic interpolation"));
 		BW = P_get_BandWidth(P_BICUBIC, nsply);
 		N = G_alloc_matrix(nparameters, BW);	/* Normal matrix */
 		parVect_bicub = G_alloc_vector(nparameters);	/* Bicubic parameters vector */
