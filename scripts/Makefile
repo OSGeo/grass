@@ -57,6 +57,7 @@ SUBDIRS = \
 	v.in.wfs \
 	v.rast.stats \
 	v.report \
+	v.out.gps \
 	v.what.vect
 
 #	d.vect.thematic \
@@ -65,7 +66,6 @@ SUBDIRS = \
 #	r3.mapcalculator \
 #	v.in.garmin \
 #	v.in.gpsbabel \
-#	v.out.gps
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 
