@@ -16,6 +16,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/G3d.h>
 #include <grass/Vect.h>
 #include <grass/glocale.h>
@@ -441,7 +442,7 @@ int main(int argc, char *argv[])
 	    mapset = G_find_cell2(rast_name, "");
 	    if (!mapset)
 		G_fatal_error(_("Raster map <%s> not found"), rast_name);
-	    if (G_get_cellhd(rast_name, mapset, &temp_window) < 0)
+	    if (Rast_get_cellhd(rast_name, mapset, &temp_window) < 0)
 		G_fatal_error(_("Unable to read header of raster map <%s@%s>"),
 			      rast_name, mapset);
 	    if (!first) {
@@ -459,7 +460,7 @@ int main(int argc, char *argv[])
 		    window.west : temp_window.west;
 	    }
 	}
-	G_adjust_Cell_head3(&window, 0, 0, 0);
+	Rast_adjust_Cell_head3(&window, 0, 0, 0);
     }
 
 
@@ -775,7 +776,7 @@ int main(int argc, char *argv[])
 	mapset = G_find_cell2(name, "");
 	if (!mapset)
 	    G_fatal_error(_("Raster map <%s> not found"), name);
-	if (G_get_cellhd(name, mapset, &temp_window) < 0)
+	if (Rast_get_cellhd(name, mapset, &temp_window) < 0)
 	    G_fatal_error(_("Unable to read header of raster map <%s@%s>"),
 			  name, mapset);
 	if ((err = G_align_window(&window, &temp_window)))

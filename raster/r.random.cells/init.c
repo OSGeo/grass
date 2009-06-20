@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 #include "ransurf.h"
@@ -29,24 +30,24 @@ void Init()
 	MinRes = EW;
     else
 	MinRes = NS;
-    CellBuffer = G_allocate_cell_buf();
+    CellBuffer = Rast_allocate_cell_buf();
 
     /* Out = FlagCreate( Rs, Cs); */
     Out = (CELL **) G_malloc(sizeof(CELL *) * Rs);
     for (row = 0; row < Rs; row++) {
-	Out[row] = G_allocate_cell_buf();
-	G_zero_cell_buf(Out[row]);
+	Out[row] = Rast_allocate_cell_buf();
+	Rast_zero_cell_buf(Out[row]);
     }
 
     Cells = FlagCreate(Rs, Cs);
     CellCount = 0;
     if (NULL != G_find_file("cell", "MASK", G_mapset())) {
-	if ((FD = G_open_cell_old("MASK", G_mapset())) < 0) {
+	if ((FD = Rast_open_cell_old("MASK", G_mapset())) < 0) {
 	    G_fatal_error(_("Unable to open raster map <%s>"), "MASK");
 	}
 	else {
 	    for (row = 0; row < Rs; row++) {
-		G_get_map_row_nomask(FD, CellBuffer, row);
+		Rast_get_map_row_nomask(FD, CellBuffer, row);
 		for (col = 0; col < Cs; col++) {
 		    if (CellBuffer[col]) {
 			FLAG_SET(Cells, row, col);
@@ -54,7 +55,7 @@ void Init()
 		    }
 		}
 	    }
-	    G_close_cell(FD);
+	    Rast_close_cell(FD);
 	}
     }
     else {

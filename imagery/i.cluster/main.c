@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #define GLOBAL
 #include "global.h"
@@ -248,7 +249,7 @@ int main(int argc, char *argv[])
 	    window.ew_res);
     fprintf(report, _("  Rows:  %12d  Cols: %12d  Cells: %d\n"), nrows, ncols,
 	    nrows * ncols);
-    fprintf(report, _("Mask: %s\n"), G_mask_info());
+    fprintf(report, _("Mask: %s\n"), Rast_mask_info());
     fprintf(report, "\n");
     fprintf(report, _("Cluster parameters\n"));
     fprintf(report, _(" Number of initial classes:    %d"), maxclass);
@@ -274,7 +275,7 @@ int main(int argc, char *argv[])
     for (row = sample_rows - 1; row < nrows; row += sample_rows) {
 	G_percent(row, nrows, 2);
 	for (n = 0; n < ref.nfiles; n++)
-	    if (G_get_d_raster_row(cellfd[n], cell[n], row) < 0)
+	    if (Rast_get_d_raster_row(cellfd[n], cell[n], row) < 0)
 		G_fatal_error(_("Unable to read raster map row %d"),
 			      row);
 	for (col = sample_cols - 1; col < ncols; col += sample_cols) {
@@ -300,7 +301,7 @@ int main(int argc, char *argv[])
 
     for (n = 0; n < ref.nfiles; n++) {
 	G_free(cell[n]);
-	G_close_cell(cellfd[n]);
+	Rast_close_cell(cellfd[n]);
     }
     G_free(x);
 

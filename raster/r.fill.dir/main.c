@@ -48,6 +48,7 @@
 #include <unistd.h>
 
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 #define DEBUG
@@ -173,10 +174,10 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Raster map <%s> not found"), map_name);
 
     /* open the maps and get their file id  */
-    map_id = G_open_cell_old(map_name, map_mapset);
+    map_id = Rast_open_cell_old(map_name, map_mapset);
 
     /* allocate cell buf for the map layer */
-    in_type = G_get_raster_map_type(map_id);
+    in_type = Rast_get_raster_map_type(map_id);
 
     /* set the pointers for multi-typed functions */
     set_func_pointers(in_type);
@@ -215,7 +216,7 @@ int main(int argc, char **argv)
 	get_row(map_id, in_buf, i);
 	write(fe, in_buf, bnd.sz);
     }
-    G_close_cell(map_id);
+    Rast_close_cell(map_id);
 
     /* fill single-cell holes and take a first stab at flow directions */
     G_message(_("Filling sinks..."));
@@ -249,25 +250,25 @@ int main(int argc, char **argv)
     G_free(bnd.b[1]);
     G_free(bnd.b[2]);
 
-    out_buf = G_allocate_c_raster_buf();
+    out_buf = Rast_allocate_c_raster_buf();
     bufsz = ncols * sizeof(CELL);
 
     lseek(fe, 0, SEEK_SET);
-    new_id = G_open_raster_new(new_map_name, in_type);
+    new_id = Rast_open_raster_new(new_map_name, in_type);
 
     lseek(fd, 0, SEEK_SET);
-    dir_id = G_open_raster_new(dir_name, CELL_TYPE);
+    dir_id = Rast_open_raster_new(dir_name, CELL_TYPE);
 
     if (opt5->answer != NULL) {
 	lseek(fm, 0, SEEK_SET);
-	bas_id = G_open_raster_new(bas_name, CELL_TYPE);
+	bas_id = Rast_open_raster_new(bas_name, CELL_TYPE);
 
 	for (i = 0; i < nrows; i++) {
 	    read(fm, out_buf, bufsz);
-	    G_put_raster_row(bas_id, out_buf, CELL_TYPE);
+	    Rast_put_raster_row(bas_id, out_buf, CELL_TYPE);
 	}
 
-	G_close_cell(bas_id);
+	Rast_close_cell(bas_id);
 	close(fm);
     }
 
@@ -280,14 +281,14 @@ int main(int argc, char **argv)
 	for (j = 0; j < ncols; j += 1)
 	    out_buf[j] = dir_type(type, out_buf[j]);
 
-	G_put_raster_row(dir_id, out_buf, CELL_TYPE);
+	Rast_put_raster_row(dir_id, out_buf, CELL_TYPE);
 
     }
 
-    G_close_cell(new_id);
+    Rast_close_cell(new_id);
     close(fe);
 
-    G_close_cell(dir_id);
+    Rast_close_cell(dir_id);
     close(fd);
 
     G_free(in_buf);

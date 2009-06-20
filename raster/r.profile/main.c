@@ -9,6 +9,7 @@
 
 #include <stdlib.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 #include "local_proto.h"
@@ -128,12 +129,12 @@ int main(int argc, char *argv[])
 	coords = 1;
 
     /* Open Raster File */
-    if ((fd = G_open_cell_old(name, "")) < 0)
+    if ((fd = Rast_open_cell_old(name, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
 
     /* initialize color structure */
     if (clr)
-	G_read_colors(name, "", &colors);
+	Rast_read_colors(name, "", &colors);
 
     /* Open ASCII file for output or stdout */
     outfile = parm.output->answer;
@@ -145,7 +146,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Unable to open file <%s>"), outfile);
 
     /* Get Raster Type */
-    data_type = G_get_raster_map_type(fd);
+    data_type = Rast_get_raster_map_type(fd);
     /* Done with file */
 
     /* Show message giving output format */
@@ -212,11 +213,11 @@ int main(int argc, char *argv[])
 	}
     }
 
-    G_close_cell(fd);
+    Rast_close_cell(fd);
     fclose(fp);
 
     if (clr)
-	G_free_colors(&colors);
+	Rast_free_colors(&colors);
 
     exit(EXIT_SUCCESS);
 }				/* Done with main */

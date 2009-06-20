@@ -69,7 +69,7 @@ int main(int argc, char **argv)
 	G_fatal_error(msg);
     }
 
-    if (G_raster_map_is_fp(map->answer, mapset)) {
+    if (Rast_raster_map_is_fp(map->answer, mapset)) {
 	sprintf(buff,
 		"Raster file [%s] is floating point! \nd.colors only works with integer maps",
 		map->answer);

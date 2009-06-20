@@ -28,7 +28,9 @@
  *
  */
 #include <stdlib.h>
+
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/display.h>
 #include <grass/display_raster.h>
 
@@ -136,7 +138,7 @@ int D_color_of_type(const void *raster,
 {
     int r, g, b;
 
-    G_get_raster_color(raster, &r, &g, &b, colors, data_type);
+    Rast_get_raster_color(raster, &r, &g, &b, colors, data_type);
     R__RGB_color((unsigned char)r, (unsigned char)g, (unsigned char)b);
 
     return 0;

@@ -31,6 +31,7 @@
 #include <math.h>
 #include <unistd.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 
 #include "oct.h"
 #include "surf.h"

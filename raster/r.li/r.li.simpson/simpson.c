@@ -13,6 +13,7 @@
  */
 
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 #include <stdlib.h>
@@ -67,7 +68,7 @@ int simpson(int fd, char **par, area_des ad, double *result)
     double indice = 0;
     struct Cell_head hd;
 
-    if (G_get_cellhd(ad->raster, "", &hd) == -1)
+    if (Rast_get_cellhd(ad->raster, "", &hd) == -1)
 	return RLI_ERRORE;
 
     switch (ad->data_type) {
@@ -149,7 +150,7 @@ double calculate(area_des ad, int fd, double *result)
 	masked = TRUE;
     }
 
-    G_set_c_null_value(&precCell, 1);
+    Rast_set_c_null_value(&precCell, 1);
 
 
     for (j = 0; j < ad->rl; j++) {	/* for each row */
@@ -166,13 +167,13 @@ double calculate(area_des ad, int fd, double *result)
 	    corrCell = buf[i + ad->x];
 
 	    if ((masked) && (mask_buf[i + ad->x] == 0)) {
-		G_set_c_null_value(&corrCell, 1);
+		Rast_set_c_null_value(&corrCell, 1);
 		area--;
 	    }
 
-	    if (!(G_is_null_value(&corrCell, uc.t))) {
+	    if (!(Rast_is_null_value(&corrCell, uc.t))) {
 		a = 1;
-		if (G_is_null_value(&precCell, uc.t)) {
+		if (Rast_is_null_value(&precCell, uc.t)) {
 		    precCell = corrCell;
 		}
 		if (corrCell != precCell) {
@@ -338,7 +339,7 @@ double calculateD(area_des ad, int fd, double *result)
 	masked = TRUE;
     }
 
-    G_set_d_null_value(&precCell, 1);
+    Rast_set_d_null_value(&precCell, 1);
 
     for (j = 0; j < ad->rl; j++) {	/* for each row */
 	if (masked) {
@@ -355,14 +356,14 @@ double calculateD(area_des ad, int fd, double *result)
 	    corrCell = buf[i + ad->x];
 
 	    if (masked && mask_buf[i + ad->x] == 0) {
-		G_set_d_null_value(&corrCell, 1);
+		Rast_set_d_null_value(&corrCell, 1);
 		area--;
 	    }
 
-	    if (!(G_is_null_value(&corrCell, uc.t))) {
+	    if (!(Rast_is_null_value(&corrCell, uc.t))) {
 		a = 1;
 
-		if (G_is_null_value(&precCell, uc.t)) {
+		if (Rast_is_null_value(&precCell, uc.t)) {
 		    precCell = corrCell;
 		}
 		if (corrCell != precCell) {
@@ -527,7 +528,7 @@ double calculateF(area_des ad, int fd, double *result)
 	masked = TRUE;
     }
 
-    G_set_f_null_value(&precCell, 1);
+    Rast_set_f_null_value(&precCell, 1);
 
 
     for (j = 0; j < ad->rl; j++) {	/* for each row */
@@ -547,13 +548,13 @@ double calculateF(area_des ad, int fd, double *result)
 	    corrCell = buf[i + ad->x];
 
 	    if (masked && mask_buf[i + ad->x] == 0) {
-		G_set_f_null_value(&corrCell, 1);
+		Rast_set_f_null_value(&corrCell, 1);
 		area--;
 	    }
 
-	    if (!(G_is_null_value(&corrCell, uc.t))) {
+	    if (!(Rast_is_null_value(&corrCell, uc.t))) {
 		a = 1;
-		if (G_is_null_value(&precCell, uc.t)) {
+		if (Rast_is_null_value(&precCell, uc.t)) {
 		    precCell = corrCell;
 		}
 		if (corrCell != precCell) {

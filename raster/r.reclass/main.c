@@ -19,6 +19,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "rule.h"
 
@@ -91,10 +92,10 @@ int main(int argc, char *argv[])
     }
     tty = isatty(fileno(srcfp));
 
-    G_init_cats(0, "", &cats);
-    fp = G_raster_map_is_fp(parm.input->answer, old_mapset);
-    G_read_fp_range(parm.input->answer, old_mapset, &range);
-    G_get_fp_range_min_max(&range, &min, &max);
+    Rast_init_cats(0, "", &cats);
+    fp = Rast_raster_map_is_fp(parm.input->answer, old_mapset);
+    Rast_read_fp_range(parm.input->answer, old_mapset, &range);
+    Rast_get_fp_range_min_max(&range, &min, &max);
     rules = tail = NULL;
     any = 0;
 

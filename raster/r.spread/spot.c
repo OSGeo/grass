@@ -44,6 +44,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "cmd_line.h"
 #include "costHa.h"
 #include "cell_ptrHa.h"

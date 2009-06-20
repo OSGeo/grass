@@ -26,7 +26,9 @@
 #include <stdio.h>
 #include <math.h>
 #include <unistd.h>
+
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/bitmap.h>
 
 #include <grass/interpf.h>
@@ -236,16 +238,16 @@ int IL_grid_calc_2d(struct interp_params *params, struct quaddata *data,	/* give
 
 	    }
 	    else {
-		G_set_d_null_value(params->az + l, 1);
+		Rast_set_d_null_value(params->az + l, 1);
 		/*          fprintf (stderr, "zz=%f, az[l]=%f, c=%d\n", zz, params->az[l], l); */
 
 		if (cond1) {
-		    G_set_d_null_value(params->adx + l, 1);
-		    G_set_d_null_value(params->ady + l, 1);
+		    Rast_set_d_null_value(params->adx + l, 1);
+		    Rast_set_d_null_value(params->ady + l, 1);
 		    if (cond2) {
-			G_set_d_null_value(params->adxx + l, 1);
-			G_set_d_null_value(params->adyy + l, 1);
-			G_set_d_null_value(params->adxy + l, 1);
+			Rast_set_d_null_value(params->adxx + l, 1);
+			Rast_set_d_null_value(params->adyy + l, 1);
+			Rast_set_d_null_value(params->adxy + l, 1);
 		    }
 		}
 	    }

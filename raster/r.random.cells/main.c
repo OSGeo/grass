@@ -18,6 +18,7 @@
  *****************************************************************************/
 #include <stdlib.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 #include "ransurf.h"

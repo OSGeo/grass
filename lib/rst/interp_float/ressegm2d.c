@@ -21,7 +21,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/interpf.h>
 #include <grass/gmath.h>
 
@@ -168,7 +170,7 @@ int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitm
 						0, params->KMAX2);
 	m1 = 0;
 	for (k = 1; k <= p_size; k++) {
-	    if (!G_is_f_null_value(&(in_points[k - 1].z))) {
+	    if (!Rast_is_f_null_value(&(in_points[k - 1].z))) {
 		data->points[m1].x = in_points[k - 1].x / (*dnorm);
 		data->points[m1].y = in_points[k - 1].y / (*dnorm);
 		/*        data->points[m1].z = (double) (in_points[k - 1].z) / (*dnorm); */
@@ -316,7 +318,7 @@ int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitm
 	    for (k = 0; k <= last_row - first_row; k++) {
 		for (l = first_col - 1; l < last_col; l++) {
 		    index = k * inp_cols + l;
-		    if (!G_is_f_null_value(&(in_points[index].z))) {
+		    if (!Rast_is_f_null_value(&(in_points[index].z))) {
 			/* if the point is inside the segment (not overlapping) */
 			if ((in_points[index].x - x_or >= 0) &&
 			    (in_points[index].y - y_or >= 0) &&
@@ -491,19 +493,19 @@ static int input_data(struct interp_params *params,
 {
     double x, y, sm;		/* input data and smoothing */
     int m1, m2;			/* loop counters */
-    int ret_val, ret_val1;	/* return values of G_get_map_row */
+    int ret_val, ret_val1;	/* return values of Rast_get_map_row */
     static FCELL *cellinp = NULL;	/* cell buffer for input data */
     static FCELL *cellsmooth = NULL;	/* cell buffer for smoothing */
 
 
     if (!cellinp)
-	cellinp = G_allocate_f_raster_buf();
+	cellinp = Rast_allocate_f_raster_buf();
     if (!cellsmooth)
-	cellsmooth = G_allocate_f_raster_buf();
+	cellsmooth = Rast_allocate_f_raster_buf();
 
     for (m1 = 0; m1 <= last_row - first_row; m1++) {
 	ret_val =
-	    G_get_f_raster_row(fdinp, cellinp, inp_rows - m1 - first_row);
+	    Rast_get_f_raster_row(fdinp, cellinp, inp_rows - m1 - first_row);
 	if (ret_val < 0) {
 	    fprintf(stderr, "Cannot get row %d (return value = %d)\n", m1,
 		    ret_val);
@@ -511,7 +513,7 @@ static int input_data(struct interp_params *params,
 	}
 	if (fdsmooth >= 0) {
 	    ret_val1 =
-		G_get_f_raster_row(fdsmooth, cellsmooth,
+		Rast_get_f_raster_row(fdsmooth, cellsmooth,
 				   inp_rows - m1 - first_row);
 	    if (ret_val1 < 0) {
 		fprintf(stderr, "Cannot get smoothing row\n");
@@ -530,12 +532,12 @@ static int input_data(struct interp_params *params,
 
 	    points[m1 * inp_cols + m2].x = x - params->x_orig;
 	    points[m1 * inp_cols + m2].y = y - params->y_orig;
-	    if (!G_is_f_null_value(cellinp + m2)) {
+	    if (!Rast_is_f_null_value(cellinp + m2)) {
 		points[m1 * inp_cols + m2].z =
 		    cellinp[m2] * params->zmult - zmin;
 	    }
 	    else {
-		G_set_f_null_value(&(points[m1 * inp_cols + m2].z), 1);
+		Rast_set_f_null_value(&(points[m1 * inp_cols + m2].z), 1);
 	    }
 
 	    /*              fprintf (stdout,"sm: %f\n",sm); */
@@ -585,17 +587,17 @@ static int write_zeros(struct interp_params *params, struct quaddata *data,	/* g
 	    /*
 	     * params->az[l] = 0.;
 	     */
-	    G_set_d_null_value(params->az + l, 1);
+	    Rast_set_d_null_value(params->az + l, 1);
 	    if (cond1) {
 		/*
 		 * params->adx[l] = (FCELL)0.; params->ady[l] = (FCELL)0.;
 		 */
-		G_set_d_null_value(params->adx + l, 1);
-		G_set_d_null_value(params->ady + l, 1);
+		Rast_set_d_null_value(params->adx + l, 1);
+		Rast_set_d_null_value(params->ady + l, 1);
 		if (cond2) {
-		    G_set_d_null_value(params->adxx + l, 1);
-		    G_set_d_null_value(params->adyy + l, 1);
-		    G_set_d_null_value(params->adxy + l, 1);
+		    Rast_set_d_null_value(params->adxx + l, 1);
+		    Rast_set_d_null_value(params->adyy + l, 1);
+		    Rast_set_d_null_value(params->adxy + l, 1);
 		    /*
 		     * params->adxx[l] = (FCELL)0.; params->adyy[l] = (FCELL)0.;
 		     * params->adxy[l] = (FCELL)0.;

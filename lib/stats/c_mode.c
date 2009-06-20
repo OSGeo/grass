@@ -1,4 +1,5 @@
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/stats.h>
 
 void c_mode(DCELL * result, DCELL * values, int n, const void *closure)
@@ -29,7 +30,7 @@ void c_mode(DCELL * result, DCELL * values, int n, const void *closure)
     }
 
     if (max == 0)
-	G_set_d_null_value(result, 1);
+	Rast_set_d_null_value(result, 1);
     else
 	*result = mode;
 }
@@ -62,7 +63,7 @@ void w_mode(DCELL * result, DCELL(*values)[2], int n, const void *closure)
     }
 
     if (max == 0.0)
-	G_set_d_null_value(result, 1);
+	Rast_set_d_null_value(result, 1);
     else
 	*result = mode;
 }

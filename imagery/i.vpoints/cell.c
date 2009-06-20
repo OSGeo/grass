@@ -41,7 +41,7 @@ static int plot(int x, int y)
     if (x > VIEW_MAP1->left && x < VIEW_MAP1->right) {
 	if (!choose_groupfile(name, mapset))
 	    return 1;
-	if (G_get_cellhd(name, mapset, &cellhd) < 0)
+	if (Rast_get_cellhd(name, mapset, &cellhd) < 0)
 	    return 1;
 
 	Erase_view(VIEW_MAP1_ZOOM);
@@ -57,7 +57,7 @@ static int plot(int x, int y)
 	    return 1;
 	select_target_env();
 
-	if (G_get_cellhd(name, mapset, &cellhd) < 0) {
+	if (Rast_get_cellhd(name, mapset, &cellhd) < 0) {
 	    select_current_env();
 	    return 1;
 	}

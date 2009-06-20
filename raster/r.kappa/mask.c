@@ -19,7 +19,7 @@ char *maskinfo(void)
     results = NULL;
     if (G_find_cell("MASK", G_mapset()) == NULL)
 	return "none";
-    if (G_get_reclass("MASK", G_mapset(), &reclass) <= 0) {
+    if (Rast_get_reclass("MASK", G_mapset(), &reclass) <= 0) {
 	sprintf(text, "MASK in %s", G_mapset());
 	return append(results, text);
     }
@@ -39,7 +39,7 @@ char *maskinfo(void)
 	results = append(results, " ");
 	results = append(results, text);
     } while (next >= 0);
-    G_free_reclass(&reclass);
+    Rast_free_reclass(&reclass);
 
     return results;
 }

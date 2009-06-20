@@ -1,5 +1,6 @@
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "rule.h"
 
@@ -54,7 +55,7 @@ int parse(const char *line, RULE ** rules, RULE ** tail, struct Categories *cats
 	    }
 	    if (!scan_value(&v))
 		return -1;
-	    if (G_is_c_null_value(&v)) {
+	    if (Rast_is_c_null_value(&v)) {
 		G_warning(_("Can't have null on the left-hand side of the rule"));
 		return -1;
 	    }
@@ -71,7 +72,7 @@ int parse(const char *line, RULE ** rules, RULE ** tail, struct Categories *cats
 		return -1;
 	    if (!scan_value(&v))
 		return -1;
-	    if (G_is_c_null_value(&v))
+	    if (Rast_is_c_null_value(&v))
 		last_null = 1;
 	    else
 		last_null = 0;
@@ -95,7 +96,7 @@ int parse(const char *line, RULE ** rules, RULE ** tail, struct Categories *cats
 	case 3:
 	    if (!scan_value(&v))
 		return -1;
-	    if (G_is_c_null_value(&v)) {
+	    if (Rast_is_c_null_value(&v)) {
 		G_warning(_("Can't have null on the right-hand side of the rule"));
 		return -1;
 	    }
@@ -141,7 +142,7 @@ int parse(const char *line, RULE ** rules, RULE ** tail, struct Categories *cats
 	if (*rules == NULL)
 	    *rules = *tail;
 	if (*label)
-	    G_set_cat(new, label, cats);
+	    Rast_set_cat(new, label, cats);
     }
     return count;
 }
@@ -153,7 +154,7 @@ static int scan_value(CELL * v)
 
     if (strncmp(cur, "null", 4) == 0 || strncmp(cur, "NULL", 4) == 0) {
 	cur += 4;
-	G_set_c_null_value(v, 1);
+	Rast_set_c_null_value(v, 1);
     }
     else {
 	sign = 1;

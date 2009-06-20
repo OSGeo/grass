@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "global.h"
 #include "local_proto.h"
@@ -34,10 +35,10 @@ int open_files(void)
     cellfd = (int *)G_malloc(Ref.nfiles * sizeof(int));
     P = (double *)G_malloc(Ref.nfiles * sizeof(double));
     for (n = 0; n < Ref.nfiles; n++) {
-	cell[n] = G_allocate_d_raster_buf();
+	cell[n] = Rast_allocate_d_raster_buf();
 	name = Ref.file[n].name;
 	mapset = Ref.file[n].mapset;
-	if ((cellfd[n] = G_open_cell_old(name, mapset)) < 0)
+	if ((cellfd[n] = Rast_open_cell_old(name, mapset)) < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
 			  G_fully_qualified_name(name, mapset));
     }
@@ -61,20 +62,20 @@ int open_files(void)
     B = (double *)G_malloc(S.nsigs * sizeof(double));
     invert_signatures();
 
-    class_fd = G_open_cell_new(class_name);
+    class_fd = Rast_open_cell_new(class_name);
     if (class_fd < 0)
 	exit(EXIT_FAILURE);
 
-    class_cell = G_allocate_cell_buf();
+    class_cell = Rast_allocate_cell_buf();
 
     reject_cell = NULL;
     if (reject_name) {
-	reject_fd = G_open_cell_new(reject_name);
+	reject_fd = Rast_open_cell_new(reject_name);
 	if (reject_fd < 0)
 	    G_fatal_error(_("Unable to create raster map <%s>"),
 			  reject_name);
 	else
-	    reject_cell = G_allocate_cell_buf();
+	    reject_cell = Rast_allocate_cell_buf();
     }
 
     return 0;

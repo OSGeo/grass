@@ -13,6 +13,7 @@
  */
 
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 #include <stdlib.h>
@@ -68,7 +69,7 @@ int meanPixelAttribute(int fd, char **par, area_des ad, double *result)
     double indice = 0;
     struct Cell_head hd;
 
-    if (G_get_cellhd(ad->raster, "", &hd) == -1)
+    if (Rast_get_cellhd(ad->raster, "", &hd) == -1)
 	return RLI_ERRORE;
 
 
@@ -149,10 +150,10 @@ int calculate(int fd, area_des ad, double *result)
 	for (i = 0; i < ad->cl; i++) {	/*for each cell in the row */
 	    area++;
 	    if (masked && mask_buf[i + ad->x] == 0) {
-		G_set_c_null_value(&buf[i + ad->x], 1);
+		Rast_set_c_null_value(&buf[i + ad->x], 1);
 		area--;
 	    }
-	    if (!(G_is_null_value(&buf[i + ad->x], CELL_TYPE))) {	/*if it's a cell to consider */
+	    if (!(Rast_is_null_value(&buf[i + ad->x], CELL_TYPE))) {	/*if it's a cell to consider */
 		somma = somma + buf[i + ad->x];
 	    }
 	}
@@ -214,9 +215,9 @@ int calculateD(int fd, area_des ad, double *result)
 	    area++;
 	    if ((masked) && (mask_buf[i + ad->x] == 0)) {
 		area--;
-		G_set_d_null_value(&buf[i + ad->x], 1);
+		Rast_set_d_null_value(&buf[i + ad->x], 1);
 	    }
-	    if (!(G_is_null_value(&buf[i + ad->x], DCELL_TYPE))) {
+	    if (!(Rast_is_null_value(&buf[i + ad->x], DCELL_TYPE))) {
 		somma = somma + buf[i + ad->x];
 	    }
 	}
@@ -280,9 +281,9 @@ int calculateF(int fd, area_des ad, double *result)
 
 	    if ((masked) && (mask_buf[i + ad->x] == 0)) {
 		area--;
-		G_set_f_null_value(&buf[i + ad->x], 1);
+		Rast_set_f_null_value(&buf[i + ad->x], 1);
 	    }
-	    if (!(G_is_null_value(&buf[i + ad->x], FCELL_TYPE))) {
+	    if (!(Rast_is_null_value(&buf[i + ad->x], FCELL_TYPE))) {
 		somma = somma + buf[i + ad->x];
 	    }
 	}

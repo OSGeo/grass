@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 
 int main(int argc, char *argv[])
 {
@@ -16,7 +17,7 @@ int lister(char *name, char *mapset, char *title)
 {
     *title = 0;
     if (*name)
-	strcpy(title, G_get_cell_title(name, mapset));
+	strcpy(title, Rast_get_cell_title(name, mapset));
 
     return 0;
 }

@@ -20,6 +20,7 @@
 #include <string.h>
 
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include <grass/bitmap.h>
 
@@ -128,12 +129,12 @@ int Gs_loadmap_as_float(struct Cell_head *wind, const char *map_name,
     }
     *has_null = 0;
 
-    nullflags = G_allocate_null_buf();	/* G_fatal_error */
+    nullflags = Rast_allocate_null_buf();	/* G_fatal_error */
     if (!nullflags) {
 	G_fatal_error(_("Unable to allocate memory for a null buffer"));
     }
 
-    if ((cellfile = G_open_cell_old(map_name, map_set)) == -1) {
+    if ((cellfile = Rast_open_cell_old(map_name, map_set)) == -1) {
 	G_fatal_error(_("Unable to open raster map <%s>"), map_name);
     }
 
@@ -142,13 +143,13 @@ int Gs_loadmap_as_float(struct Cell_head *wind, const char *map_name,
 
     for (row = 0; row < wind->rows; row++) {
 	offset = row * wind->cols;
-	G_get_f_raster_row(cellfile, &(buff[offset]), row);
-	G_get_null_value_row(cellfile, nullflags, row);
+	Rast_get_f_raster_row(cellfile, &(buff[offset]), row);
+	Rast_get_null_value_row(cellfile, nullflags, row);
 
 	G_percent(row, wind->rows, 2);
 
 	for (col = 0; col < wind->cols; col++) {
-	    if (nullflags[col] || G_is_f_null_value(buff + offset + col)) {
+	    if (nullflags[col] || Rast_is_f_null_value(buff + offset + col)) {
 		*has_null = 1;
 		BM_set(nullmap, col, row, 1);
 	    }
@@ -159,7 +160,7 @@ int Gs_loadmap_as_float(struct Cell_head *wind, const char *map_name,
 
     G_debug(4, "  has_null=%d", *has_null);
 
-    G_close_cell(cellfile);
+    Rast_close_cell(cellfile);
 
     G_free(nullflags);
 
@@ -203,12 +204,12 @@ int Gs_loadmap_as_int(struct Cell_head *wind, const char *map_name, int *buff,
     }
     *has_null = 0;
 
-    nullflags = G_allocate_null_buf();	/* G_fatal_error */
+    nullflags = Rast_allocate_null_buf();	/* G_fatal_error */
     if (!nullflags) {
 	G_fatal_error(_("Unable to allocate memory for a null buffer"));
     }
 
-    if ((cellfile = G_open_cell_old(map_name, map_set)) == -1) {
+    if ((cellfile = Rast_open_cell_old(map_name, map_set)) == -1) {
 	G_fatal_error(_("Unable to open raster map <%s>"), map_name);
     }
 
@@ -217,8 +218,8 @@ int Gs_loadmap_as_int(struct Cell_head *wind, const char *map_name, int *buff,
 
     for (row = 0; row < wind->rows; row++) {
 	offset = row * wind->cols;
-	G_get_c_raster_row(cellfile, &(buff[offset]), row);
-	G_get_null_value_row(cellfile, nullflags, row);
+	Rast_get_c_raster_row(cellfile, &(buff[offset]), row);
+	Rast_get_null_value_row(cellfile, nullflags, row);
 
 	G_percent(row, wind->rows, 2);
 
@@ -233,7 +234,7 @@ int Gs_loadmap_as_int(struct Cell_head *wind, const char *map_name, int *buff,
     }
     G_percent(1, 1, 1);
     
-    G_close_cell(cellfile);
+    Rast_close_cell(cellfile);
 
     G_free(nullflags);
 
@@ -246,7 +247,7 @@ int Gs_loadmap_as_int(struct Cell_head *wind, const char *map_name, int *buff,
    \param filename raster map name
    \param negflag
 
-   \return -1 if map is integer and G_read_range() fails
+   \return -1 if map is integer and Rast_read_range() fails
    \return data type (ARRY_*)
  */
 int Gs_numtype(const char *filename, int *negflag)
@@ -287,17 +288,17 @@ int Gs_numtype(const char *filename, int *negflag)
 	return -1;
     }
 
-    if (G_raster_map_is_fp(filename, mapset)) {
+    if (Rast_raster_map_is_fp(filename, mapset)) {
 	G_debug(3, "Gs_numtype(): fp map detected");
 
 	return (ATTY_FLOAT);
     }
 
-    if (-1 == G_read_range(filename, mapset, &range)) {
+    if (-1 == Rast_read_range(filename, mapset, &range)) {
 	return (-1);
     }
 
-    G_get_range_min_max(&range, &min, &max);
+    Rast_get_range_min_max(&range, &min, &max);
     *negflag = (min < 0);
 
     if (max < max_char && min > 0) {
@@ -361,12 +362,12 @@ int Gs_loadmap_as_short(struct Cell_head *wind, const char *map_name,
     }
     *has_null = 0;
 
-    nullflags = G_allocate_null_buf();
+    nullflags = Rast_allocate_null_buf();
     if (!nullflags) {
 	G_fatal_error(_("Unable to allocate memory for a null buffer"));
     }
 
-    if ((cellfile = G_open_cell_old(map_name, map_set)) == -1) {
+    if ((cellfile = Rast_open_cell_old(map_name, map_set)) == -1) {
 	G_fatal_error(_("Unable to open raster map <%s>"), map_name);
     }
 
@@ -380,8 +381,8 @@ int Gs_loadmap_as_short(struct Cell_head *wind, const char *map_name,
 
     for (row = 0; row < wind->rows; row++) {
 	offset = row * wind->cols;
-	G_get_c_raster_row(cellfile, tmp_buf, row);
-	G_get_null_value_row(cellfile, nullflags, row);
+	Rast_get_c_raster_row(cellfile, tmp_buf, row);
+	Rast_get_null_value_row(cellfile, nullflags, row);
 
 	G_percent(row, wind->rows, 2);
 
@@ -412,7 +413,7 @@ int Gs_loadmap_as_short(struct Cell_head *wind, const char *map_name,
     }
     G_percent(1, 1, 1);
     
-    G_close_cell(cellfile);
+    Rast_close_cell(cellfile);
 
     G_free(tmp_buf);
     G_free(nullflags);
@@ -477,12 +478,12 @@ int Gs_loadmap_as_char(struct Cell_head *wind, const char *map_name,
     }
     *has_null = 0;
 
-    nullflags = G_allocate_null_buf();	/* G_fatal_error */
+    nullflags = Rast_allocate_null_buf();	/* G_fatal_error */
     if (!nullflags) {
 	G_fatal_error(_("Unable to allocate memory for a null buffer"));
     }
 
-    if ((cellfile = G_open_cell_old(map_name, map_set)) == -1) {
+    if ((cellfile = Rast_open_cell_old(map_name, map_set)) == -1) {
 	G_fatal_error(_("Unable to open raster map <%s>"), map_name);
     }
 
@@ -496,8 +497,8 @@ int Gs_loadmap_as_char(struct Cell_head *wind, const char *map_name,
 
     for (row = 0; row < wind->rows; row++) {
 	offset = row * wind->cols;
-	G_get_c_raster_row(cellfile, tmp_buf, row);
-	G_get_null_value_row(cellfile, nullflags, row);
+	Rast_get_c_raster_row(cellfile, tmp_buf, row);
+	Rast_get_null_value_row(cellfile, nullflags, row);
 	tc = (unsigned char *)&(buff[offset]);
 	ti = tmp_buf;
 
@@ -529,7 +530,7 @@ int Gs_loadmap_as_char(struct Cell_head *wind, const char *map_name,
     }
     G_percent(1, 1, 1);
     
-    G_close_cell(cellfile);
+    Rast_close_cell(cellfile);
 
     G_free(tmp_buf);
     G_free(nullflags);
@@ -573,7 +574,7 @@ int Gs_loadmap_as_bitmap(struct Cell_head *wind, const char *map_name,
 	return -1;
     }
 
-    if ((cellfile = G_open_cell_old(map_name, map_set)) == -1) {
+    if ((cellfile = Rast_open_cell_old(map_name, map_set)) == -1) {
 	G_fatal_error(_("Unable to open raster map <%s>"), map_name);
     }
 
@@ -582,7 +583,7 @@ int Gs_loadmap_as_bitmap(struct Cell_head *wind, const char *map_name,
 	return -1;
     }
 
-    nullflags = G_allocate_null_buf();
+    nullflags = Rast_allocate_null_buf();
     if (!nullflags) {
 	G_fatal_error(_("Unable to allocate memory for a null buffer"));
     }
@@ -591,7 +592,7 @@ int Gs_loadmap_as_bitmap(struct Cell_head *wind, const char *map_name,
 	      G_fully_qualified_name(map_name, map_set));
 
     for (row = 0; row < wind->rows; row++) {
-	G_get_null_value_row(cellfile, nullflags, row);
+	Rast_get_null_value_row(cellfile, nullflags, row);
 
 	for (col = 0; col < wind->cols; col++) {
 	    if (nullflags[col]) {
@@ -604,7 +605,7 @@ int Gs_loadmap_as_bitmap(struct Cell_head *wind, const char *map_name,
 	}
     }
 
-    G_close_cell(cellfile);
+    Rast_close_cell(cellfile);
 
     G_free(tmp_buf);
     G_free(nullflags);
@@ -640,8 +641,8 @@ int Gs_build_256lookup(const char *filename, int *buff)
 	return 0;
     }
 
-    G_read_colors(filename, mapset, &colrules);
-    G_get_color_range(&min, &max, &colrules);
+    Rast_read_colors(filename, mapset, &colrules);
+    Rast_get_color_range(&min, &max, &colrules);
 
     if (min < 0 || max > 255) {
 	G_warning(_("Color table range doesn't match data (mincol=%d, maxcol=%d"),
@@ -657,7 +658,7 @@ int Gs_build_256lookup(const char *filename, int *buff)
 	cats[i] = i;
     }
 
-    G_lookup_colors(cats, r, g, b, set, 256, &colrules);
+    Rast_lookup_colors(cats, r, g, b, set, 256, &colrules);
 
     for (i = 0; i < 256; i++) {
 
@@ -702,14 +703,14 @@ void Gs_pack_colors(const char *filename, int *buff, int rows, int cols)
     b = (unsigned char *)G_malloc(cols);
     set = (unsigned char *)G_malloc(cols);
 
-    G_read_colors(filename, mapset, &colrules);
+    Rast_read_colors(filename, mapset, &colrules);
 
     cur = buff;
 
     G_message(_("Translating colors from raster map <%s>..."), filename);
 
     for (i = 0; i < rows; i++) {
-	G_lookup_colors(cur, r, g, b, set, cols, &colrules);
+	Rast_lookup_colors(cur, r, g, b, set, cols, &colrules);
 	G_percent(i, rows, 2);
 
 	for (j = 0; j < cols; j++) {
@@ -727,7 +728,7 @@ void Gs_pack_colors(const char *filename, int *buff, int rows, int cols)
     }
     G_percent(1, 1, 1);
     
-    G_free_colors(&colrules);
+    Rast_free_colors(&colrules);
 
     G_free(r);
     G_free(g);
@@ -772,7 +773,7 @@ void Gs_pack_colors_float(const char *filename, float *fbuf, int *ibuf,
     b = (unsigned char *)G_malloc(cols);
     set = (unsigned char *)G_malloc(cols);
 
-    G_read_colors(filename, mapset, &colrules);
+    Rast_read_colors(filename, mapset, &colrules);
 
     fcur = fbuf;
     icur = ibuf;
@@ -780,7 +781,7 @@ void Gs_pack_colors_float(const char *filename, float *fbuf, int *ibuf,
     G_message(_("Translating colors from raster map <%s>..."), filename);
 
     for (i = 0; i < rows; i++) {
-	G_lookup_f_raster_colors(fcur, r, g, b, set, cols, &colrules);
+	Rast_lookup_f_raster_colors(fcur, r, g, b, set, cols, &colrules);
 	G_percent(i, rows, 2);
 
 	for (j = 0; j < cols; j++) {
@@ -799,7 +800,7 @@ void Gs_pack_colors_float(const char *filename, float *fbuf, int *ibuf,
     }
     G_percent(1, 1, 1);
     
-    G_free_colors(&colrules);
+    Rast_free_colors(&colrules);
 
     G_free(r);
     G_free(g);
@@ -836,23 +837,23 @@ int Gs_get_cat_label(const char *filename, int drow, int dcol, char *catstr)
 	return 0;
     }
 
-    if (-1 != G_read_cats(filename, mapset, &cats)) {
-	fd = G_open_cell_old(filename, mapset);
-	map_type = G_get_raster_map_type(fd);
+    if (-1 != Rast_read_cats(filename, mapset, &cats)) {
+	fd = Rast_open_cell_old(filename, mapset);
+	map_type = Rast_get_raster_map_type(fd);
 
 	if (map_type == CELL_TYPE) {
-	    buf = G_allocate_c_raster_buf();
+	    buf = Rast_allocate_c_raster_buf();
 
-	    if (G_get_c_raster_row(fd, buf, drow) < 0) {
+	    if (Rast_get_c_raster_row(fd, buf, drow) < 0) {
 		sprintf(catstr, "error");
 	    }
-	    else if (G_is_c_null_value(&buf[dcol])) {
+	    else if (Rast_is_c_null_value(&buf[dcol])) {
 		sprintf(catstr, "(NULL) %s",
-			G_get_c_raster_cat(&buf[dcol], &cats));
+			Rast_get_c_raster_cat(&buf[dcol], &cats));
 	    }
 	    else {
 		sprintf(catstr, "(%d) %s", buf[dcol],
-			G_get_c_raster_cat(&buf[dcol], &cats));
+			Rast_get_c_raster_cat(&buf[dcol], &cats));
 	    }
 
 	    G_free(buf);
@@ -860,18 +861,18 @@ int Gs_get_cat_label(const char *filename, int drow, int dcol, char *catstr)
 
 	else {
 	    /* fp map */
-	    dbuf = G_allocate_d_raster_buf();
+	    dbuf = Rast_allocate_d_raster_buf();
 
-	    if (G_get_d_raster_row(fd, dbuf, drow) < 0) {
+	    if (Rast_get_d_raster_row(fd, dbuf, drow) < 0) {
 		sprintf(catstr, "error");
 	    }
-	    else if (G_is_d_null_value(&dbuf[dcol])) {
+	    else if (Rast_is_d_null_value(&dbuf[dcol])) {
 		sprintf(catstr, "(NULL) %s",
-			G_get_d_raster_cat(&dbuf[dcol], &cats));
+			Rast_get_d_raster_cat(&dbuf[dcol], &cats));
 	    }
 	    else {
 		sprintf(catstr, "(%g) %s", dbuf[dcol],
-			G_get_d_raster_cat(&dbuf[dcol], &cats));
+			Rast_get_d_raster_cat(&dbuf[dcol], &cats));
 	    }
 
 	    G_free(dbuf);
@@ -882,9 +883,9 @@ int Gs_get_cat_label(const char *filename, int drow, int dcol, char *catstr)
     }
 
     /* TODO: may want to keep these around for multiple queries */
-    G_free_cats(&cats);
+    Rast_free_cats(&cats);
 
-    G_close_cell(fd);
+    Rast_close_cell(fd);
 
     return (1);
 }

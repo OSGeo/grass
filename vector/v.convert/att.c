@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/dbmi.h>
 #include <grass/Vect.h>
 #include <grass/glocale.h>
@@ -37,7 +38,7 @@ int attributes(char *in, struct Map_info *Out)
 	return 0;
     }
 
-    if (G_read_vector_cats(in, mapset, &Cats) == -1) {
+    if (Rast_read_vector_cats(in, mapset, &Cats) == -1) {
 	G_warning(_("Unable to open dig_cats file"));
 	return -1;
     }

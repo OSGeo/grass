@@ -24,7 +24,10 @@
 
 #include <stdlib.h>
 #include <string.h>
+
+#include <grass/Rast.h>
 #include <grass/glocale.h>
+
 #include "global.h"
 #include "crs.h"
 
@@ -188,13 +191,13 @@ int main(int argc, char *argv[])
     else {
 	/* Calculate smallest region */
 	if (a->answer) {
-	    if (G_get_cellhd(ref.file[0].name, ref.file[0].mapset, &cellhd) <
+	    if (Rast_get_cellhd(ref.file[0].name, ref.file[0].mapset, &cellhd) <
 		0)
 		G_fatal_error(_("Unable to read header of raster map <%s>"),
 			      ref.file[0].name);
 	}
 	else {
-	    if (G_get_cellhd(ifile->answers[0], ref.file[0].mapset, &cellhd) <
+	    if (Rast_get_cellhd(ifile->answers[0], ref.file[0].mapset, &cellhd) <
 		0)
 		G_fatal_error(_("Unable to read header of raster map <%s>"),
 			      ifile->answers[0]);

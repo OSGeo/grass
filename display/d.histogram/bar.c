@@ -27,8 +27,11 @@
  */
 
 #include <string.h>
+
+#include <grass/Rast.h>
 #include <grass/display.h>
 #include <grass/display_raster.h>
+
 #include "bar.h"
 
 int bar(struct stat_list *dist_stats,	/* list of distribution statistics */
@@ -102,9 +105,9 @@ int bar(struct stat_list *dist_stats,	/* list of distribution statistics */
 	    max_tics--;
 	i = 0;
 	if (is_fp) {
-	    G_get_fp_range_min_max(&fp_range, &range_dmin, &range_dmax);
-	    if (G_is_d_null_value(&range_dmin) ||
-		G_is_d_null_value(&range_dmax))
+	    Rast_get_fp_range_min_max(&fp_range, &range_dmin, &range_dmax);
+	    if (Rast_is_d_null_value(&range_dmin) ||
+		Rast_is_d_null_value(&range_dmax))
 		G_fatal_error("Floating point data range is empty");
 
 	    if ((range_dmax - range_dmin) < 1.0)
@@ -124,9 +127,9 @@ int bar(struct stat_list *dist_stats,	/* list of distribution statistics */
     }
     else {
 	if (is_fp && !cat_ranges) {
-	    G_get_fp_range_min_max(&fp_range, &range_dmin, &range_dmax);
-	    if (G_is_d_null_value(&range_dmin) ||
-		G_is_d_null_value(&range_dmax))
+	    Rast_get_fp_range_min_max(&fp_range, &range_dmin, &range_dmax);
+	    if (Rast_is_d_null_value(&range_dmin) ||
+		Rast_is_d_null_value(&range_dmax))
 		G_fatal_error("Floating point data range is empty");
 	}
 	tic_every = 1;
@@ -160,7 +163,7 @@ int bar(struct stat_list *dist_stats,	/* list of distribution statistics */
 		draw = NO;
 	    else {
 		draw = YES;
-		G_set_c_null_value(&bar_color, 1);
+		Rast_set_c_null_value(&bar_color, 1);
 		bar_height =
 		    (yoffset - yscale * (double)dist_stats->null_stat);
 	    }
@@ -212,9 +215,9 @@ int bar(struct stat_list *dist_stats,	/* list of distribution statistics */
 	if (draw == YES) {
 	    if (xscale != 1) {
 		/* draw the bar as a box */
-		if (!G_is_c_null_value(&bar_color) && is_fp) {
+		if (!Rast_is_c_null_value(&bar_color) && is_fp) {
 		    if (cat_ranges)
-			G_get_ith_d_raster_cat(&cats, bar_color,
+			Rast_get_ith_d_raster_cat(&cats, bar_color,
 					       &dmin, &dmax);
 		    else {
 			dmin = range_dmin + i * (range_dmax - range_dmin) / nsteps;
@@ -267,7 +270,7 @@ int bar(struct stat_list *dist_stats,	/* list of distribution statistics */
 		/* draw the bar as a line */
 		if (is_fp) {
 		    if (cat_ranges)
-			G_get_ith_d_raster_cat(&cats, bar_color,
+			Rast_get_ith_d_raster_cat(&cats, bar_color,
 					       &dmin, &dmax);
 		    else {
 			dmin = range_dmin + i * (range_dmax - range_dmin) / nsteps;

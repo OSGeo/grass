@@ -26,6 +26,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/Vect.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
@@ -339,11 +340,11 @@ static void getpoint(struct cell *curr, double level,
 
     p1 = curr->edge;
     p2 = (curr->edge + 1) % 4;
-    if (G_raster_cmp(&curr->z[p1], &curr->z[p2], DCELL_TYPE) == 0)
+    if (Rast_raster_cmp(&curr->z[p1], &curr->z[p2], DCELL_TYPE) == 0)
 	ratio = 1;
-    else if (G_is_d_null_value(&curr->z[p1]))
+    else if (Rast_is_d_null_value(&curr->z[p1]))
 	ratio = 1 / 2;
-    else if (G_is_d_null_value(&curr->z[p2]))
+    else if (Rast_is_d_null_value(&curr->z[p2]))
 	ratio = 1 / 2;
     else
 	ratio = (level - curr->z[p1]) / (curr->z[p2] - curr->z[p1]);

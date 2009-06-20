@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
 
 	    if (map_type != -1) {
 		/* NB: map_type must match when doing extended stats */
-		int this_type = G_get_raster_map_type(fd);
+		int this_type = Rast_get_raster_map_type(fd);
 
 		assert(this_type > -1);
 		if (map_type < -1) {
@@ -140,7 +140,7 @@ static int open_raster(const char *infile)
 {
     int fd;
 
-    fd = G_open_cell_old(infile, "");
+    fd = Rast_open_cell_old(infile, "");
     if (fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), infile);
 
@@ -172,13 +172,13 @@ process_raster(univar_stat * stats, int fd, const struct Cell_head *region)
     const int cols = region->cols;
     int first = (stats->n < 1);
 
-    const RASTER_MAP_TYPE map_type = G_get_raster_map_type(fd);
+    const RASTER_MAP_TYPE map_type = Rast_get_raster_map_type(fd);
     void *nextp
 	= ((!param.extended->answer) ? 0
 	   : (map_type == DCELL_TYPE) ? (void *)stats->dcell_array
 	   : (map_type == FCELL_TYPE) ? (void *)stats->fcell_array
 	   : (void *)stats->cell_array);
-    const size_t value_sz = G_raster_size(map_type);
+    const size_t value_sz = Rast_raster_size(map_type);
     unsigned int row;
     void *raster_row;
 
@@ -188,22 +188,22 @@ process_raster(univar_stat * stats, int fd, const struct Cell_head *region)
 	void *ptr;
 	unsigned int col;
 
-	if (G_get_raster_row(fd, raster_row, row, map_type) < 0)
+	if (Rast_get_raster_row(fd, raster_row, row, map_type) < 0)
 	    G_fatal_error(_("Reading row %d"), row);
 
 	ptr = raster_row;
 
 	for (col = 0; col < cols; col++) {
 
-	    if (G_is_null_value(ptr, map_type)) {
-		ptr = G_incr_void_ptr(ptr, value_sz);
+	    if (Rast_is_null_value(ptr, map_type)) {
+		ptr = Rast_incr_void_ptr(ptr, value_sz);
 		continue;
 	    }
 
 	    if (nextp) {
 		/* put the value into stats->XXXcell_array */
 		memcpy(nextp, ptr, value_sz);
-		nextp = G_incr_void_ptr(nextp, value_sz);
+		nextp = Rast_incr_void_ptr(nextp, value_sz);
 	    }
 
 	    {
@@ -228,7 +228,7 @@ process_raster(univar_stat * stats, int fd, const struct Cell_head *region)
 		}
 	    }
 
-	    ptr = G_incr_void_ptr(ptr, value_sz);
+	    ptr = Rast_incr_void_ptr(ptr, value_sz);
 	    stats->n++;
 	}
 	if (!(param.shell_style->answer))

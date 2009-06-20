@@ -87,7 +87,7 @@ int execute_filter(ROWIO * r, int out, FILTER * filter, DCELL * cell)
 	col = ccount;
 	while (col--) {
 	    if (null_only) {
-		if (G_is_d_null_value(&box[mid][mid]))
+		if (Rast_is_d_null_value(&box[mid][mid]))
 		    *cp++ = apply_filter(filter, box);
 		else
 		    *cp++ = box[mid][mid];

@@ -5,6 +5,9 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <unistd.h>
+
+#include <grass/Rast.h>
+
 #include "G3d_intern.h"
 
 /*---------------------------------------------------------------------------*/
@@ -18,13 +21,13 @@ static int G3d_closeNew(G3D_Map * map)
     G3d_removeColor(map->fileName);
 
     /* create empty cats file */
-    G_init_raster_cats(NULL, &cats);
+    Rast_init_raster_cats(NULL, &cats);
     G3d_writeCats(map->fileName, &cats);
-    G_free_cats(&cats);
+    Rast_free_cats(&cats);
 
     /*genrate the history file, use the normal G_ functions */
-    G_short_history(map->fileName, "raster3d", &hist);
-    G_command_history(&hist);
+    Rast_short_history(map->fileName, "raster3d", &hist);
+    Rast_command_history(&hist);
     /*Use the G3d function to write the history file,
      * otherwise the path is wrong */
     if (!G3d_writeHistory(map->fileName, &hist)) {

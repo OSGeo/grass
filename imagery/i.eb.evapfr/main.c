@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 double evap_fr(double r_net, double g0, double h0);
@@ -91,32 +92,32 @@ int main(int argc, char *argv[])
     makin = flag1->answer;
     
     /***************************************************/ 
-    if ((infd_rnet = G_open_cell_old(rnet, "")) < 0)
+    if ((infd_rnet = Rast_open_cell_old(rnet, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), rnet);
-    inrast_rnet = G_allocate_d_raster_buf();
+    inrast_rnet = Rast_allocate_d_raster_buf();
     
     /***************************************************/ 
-    if ((infd_g0 = G_open_cell_old(g0, "")) < 0)
+    if ((infd_g0 = Rast_open_cell_old(g0, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), g0);
-    inrast_g0 = G_allocate_d_raster_buf();
+    inrast_g0 = Rast_allocate_d_raster_buf();
     
     /***************************************************/ 
-    if ((infd_h0 = G_open_cell_old(h0, "")) < 0)
+    if ((infd_h0 = Rast_open_cell_old(h0, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), h0);
-    inrast_h0 = G_allocate_d_raster_buf();
+    inrast_h0 = Rast_allocate_d_raster_buf();
     
     /***************************************************/ 
     nrows = G_window_rows();
     ncols = G_window_cols();
-    outrast1 = G_allocate_d_raster_buf();
+    outrast1 = Rast_allocate_d_raster_buf();
     if (makin) 
-	outrast2 = G_allocate_d_raster_buf();
+	outrast2 = Rast_allocate_d_raster_buf();
     
     /* Create New raster files */ 
-    if ((outfd1 = G_open_raster_new(result1, DCELL_TYPE)) < 0)
+    if ((outfd1 = Rast_open_raster_new(result1, DCELL_TYPE)) < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), result1);
     if (makin) 
-	if ((outfd2 = G_open_raster_new(result2, DCELL_TYPE)) < 0)
+	if ((outfd2 = Rast_open_raster_new(result2, DCELL_TYPE)) < 0)
 	    G_fatal_error(_("Unable to create raster map <%s>"), result2);
         
     /* Process pixels */ 
@@ -129,11 +130,11 @@ int main(int argc, char *argv[])
 	G_percent(row, nrows, 2);
 	
         /* read input maps */ 
-        if (G_get_d_raster_row(infd_rnet, inrast_rnet, row)<0)
+        if (Rast_get_d_raster_row(infd_rnet, inrast_rnet, row)<0)
 	  G_fatal_error(_("Unable to read raster map <%s> row %d"), rnet, row);
-	if (G_get_d_raster_row(infd_g0, inrast_g0, row) < 0)
+	if (Rast_get_d_raster_row(infd_g0, inrast_g0, row) < 0)
 	  G_fatal_error(_("Unable to read raster map <%s> row %d"), g0, row);
-	if (G_get_d_raster_row(infd_h0, inrast_h0, row) < 0)
+	if (Rast_get_d_raster_row(infd_h0, inrast_h0, row) < 0)
 	  G_fatal_error(_("Unable to read raster map <%s> row %d"), h0, row);
 	
         /*process the data */ 
@@ -142,12 +143,12 @@ int main(int argc, char *argv[])
             d_rnet = ((DCELL *) inrast_rnet)[col];
             d_g0 = ((DCELL *) inrast_g0)[col];
             d_h0 = ((DCELL *) inrast_h0)[col];
-	    if (G_is_d_null_value(&d_rnet) || 
-                G_is_d_null_value(&d_g0) ||
-		G_is_d_null_value(&d_h0)) {
-		G_set_d_null_value(&outrast1[col], 1);
+	    if (Rast_is_d_null_value(&d_rnet) || 
+                Rast_is_d_null_value(&d_g0) ||
+		Rast_is_d_null_value(&d_h0)) {
+		Rast_set_d_null_value(&outrast1[col], 1);
 		if (makin) 
-		    G_set_d_null_value(&outrast2[col], 1);
+		    Rast_set_d_null_value(&outrast2[col], 1);
 	    }
 	    else {
                 /* calculate evaporative fraction       */ 
@@ -161,33 +162,33 @@ int main(int argc, char *argv[])
 		}
 	    }
         }
-	if (G_put_d_raster_row(outfd1, outrast1) < 0)
+	if (Rast_put_d_raster_row(outfd1, outrast1) < 0)
 	    G_fatal_error(_("Failed writing raster map <%s>"), result1);
 	if (makin) 
         {
-            if (G_put_d_raster_row(outfd2, outrast2) < 0)
+            if (Rast_put_d_raster_row(outfd2, outrast2) < 0)
 		G_fatal_error(_("Failed writing raster map <%s>"), result2);
         }
     }
     G_free(inrast_rnet);
     G_free(inrast_g0);
     G_free(inrast_h0);
-    G_close_cell(infd_rnet);
-    G_close_cell(infd_g0);
-    G_close_cell(infd_h0);
+    Rast_close_cell(infd_rnet);
+    Rast_close_cell(infd_g0);
+    Rast_close_cell(infd_h0);
     G_free(outrast1);
     G_free(outrast2);
     if (makin) {
-	G_close_cell(outfd1);
-	G_close_cell(outfd2);
+	Rast_close_cell(outfd1);
+	Rast_close_cell(outfd2);
     }
-    G_short_history(result1, "raster", &history);
-    G_command_history(&history);
-    G_write_history(result1, &history);
+    Rast_short_history(result1, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(result1, &history);
     if (makin) {
-	G_short_history(result2, "raster", &history);
-	G_command_history(&history);
-	G_write_history(result2, &history);
+	Rast_short_history(result2, "raster", &history);
+	Rast_command_history(&history);
+	Rast_write_history(result2, &history);
     }
 
     exit(EXIT_SUCCESS);

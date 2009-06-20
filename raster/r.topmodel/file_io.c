@@ -1,4 +1,5 @@
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "global.h"
 
 
@@ -284,7 +285,7 @@ void write_outputs(void)
 
     if (file.Qobs) {
 	fprintf(fp, "%-10s ", "Em:");
-	if (!G_is_d_null_value(&misc.Em))
+	if (!Rast_is_d_null_value(&misc.Em))
 	    fprintf(fp, "%10.5lf\n", misc.Em);
 	else
 	    fprintf(fp, "Not resolved due to constant observed Q\n");

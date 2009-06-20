@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 double elswaify_1985(double annual_pmm);
@@ -78,17 +79,17 @@ int main(int argc, char *argv[])
     result = output->answer;
     
     /***************************************************/ 
-    if ((infd_annual_pmm = G_open_cell_old(annual_pmm, "")) < 0)
+    if ((infd_annual_pmm = Rast_open_cell_old(annual_pmm, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), annual_pmm);
-    inrast_annual_pmm = G_allocate_d_raster_buf();
+    inrast_annual_pmm = Rast_allocate_d_raster_buf();
     
     /***************************************************/ 
     nrows = G_window_rows();
     ncols = G_window_cols();
-    outrast = G_allocate_d_raster_buf();
+    outrast = Rast_allocate_d_raster_buf();
     
     /* Create New raster files */ 
-    if ((outfd = G_open_raster_new(result, DCELL_TYPE)) < 0)
+    if ((outfd = Rast_open_raster_new(result, DCELL_TYPE)) < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), result);
     
     /* Process pixels */ 
@@ -99,7 +100,7 @@ int main(int argc, char *argv[])
 	G_percent(row, nrows, 2);
 	
 	/* read input map */ 
-	if (G_get_d_raster_row(infd_annual_pmm, inrast_annual_pmm, row) < 0)
+	if (Rast_get_d_raster_row(infd_annual_pmm, inrast_annual_pmm, row) < 0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			  annual_pmm, row);
 	
@@ -107,8 +108,8 @@ int main(int argc, char *argv[])
 	for (col = 0; col < ncols; col++)
 	{
 	    d_annual_pmm = ((DCELL *) inrast_annual_pmm)[col];
-	    if (G_is_d_null_value(&d_annual_pmm)) 
-		G_set_d_null_value(&outrast[col], 1);
+	    if (Rast_is_d_null_value(&d_annual_pmm)) 
+		Rast_set_d_null_value(&outrast[col], 1);
 	    else 
             {
                 /*calculate morgan       */ 
@@ -126,18 +127,18 @@ int main(int argc, char *argv[])
 		outrast[col] = d ;
 	    }
 	}
-	if (G_put_d_raster_row(outfd, outrast) < 0)
+	if (Rast_put_d_raster_row(outfd, outrast) < 0)
 	    G_fatal_error(_("Failed writing raster map <%s> row %d"),
 			  result, row);
     }
     G_free(inrast_annual_pmm);
-    G_close_cell(infd_annual_pmm);
+    Rast_close_cell(infd_annual_pmm);
     G_free(outrast);
-    G_close_cell(outfd);
+    Rast_close_cell(outfd);
 
-    G_short_history(result, "raster", &history);
-    G_command_history(&history);
-    G_write_history(result, &history);
+    Rast_short_history(result, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(result, &history);
 
     exit(EXIT_SUCCESS);
 }

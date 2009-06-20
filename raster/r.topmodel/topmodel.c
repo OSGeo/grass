@@ -1,4 +1,5 @@
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "global.h"
 
 
@@ -270,7 +271,7 @@ double get_Em(void)
 
     if (denominator == 0.0) {
 	G_warning("Em can not be resolved due to constant " "observed Q");
-	G_set_d_null_value(&Em, 1);
+	Rast_set_d_null_value(&Em, 1);
     }
     else {
 	Em = 1.0 - numerator / denominator;

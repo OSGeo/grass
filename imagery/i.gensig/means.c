@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <grass/Rast.h>
 #include <grass/imagery.h>
 #include <grass/glocale.h>
 #include "signature.h"
@@ -28,11 +29,10 @@ int compute_means(struct files *files, struct Signature *S)
 	G_percent(row, nrows, 2);
 	read_training_map(class, row, ncols, files);
 	for (b = 0; b < files->nbands; b++) {	/* NOTE: files->nbands == S->nbands */
-	    if (G_get_d_raster_row
-		(files->band_fd[b], cell = files->band_cell[b], row) < 0)
+	    if (Rast_get_d_raster_row(files->band_fd[b], cell = files->band_cell[b], row) < 0)
 		exit(1);
 	    for (col = 0; col < ncols; col++) {
-		if (G_is_d_null_value(&cell[col])) {
+		if (Rast_is_d_null_value(&cell[col])) {
 		    n_nulls++;
 		    continue;
 		}

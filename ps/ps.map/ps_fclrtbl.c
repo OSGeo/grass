@@ -47,12 +47,12 @@ int PS_fcolortable(void)
 	      ct.name, ct.mapset);
 
     /* Get color range */
-    if (G_read_fp_range(ct.name, ct.mapset, &range) == -1) {
+    if (Rast_read_fp_range(ct.name, ct.mapset, &range) == -1) {
 	G_warning(_("Range information not available (run r.support)"));
 	return 1;
     }
 
-    G_get_fp_range_min_max(&range, &dmin, &dmax);
+    Rast_get_fp_range_min_max(&range, &dmin, &dmax);
 
     /* override if range command is set */
     if (ct.range_override) {
@@ -65,7 +65,7 @@ int PS_fcolortable(void)
 	return 1;
     }
 
-    if (G_read_colors(ct.name, ct.mapset, &colors) == -1)
+    if (Rast_read_colors(ct.name, ct.mapset, &colors) == -1)
 	G_warning(_("Unable to read colors for colorbar"));
 
     do_color = (PS.grey == 0 && PS.level == 2);
@@ -132,7 +132,7 @@ int PS_fcolortable(void)
     for (i = 0; i < ncols; i++) {
 	/*      val = dmin + i * step;   flip */
 	val = dmax - i * step;
-	G_get_d_raster_color(&val, &R, &G, &B, &colors);
+	Rast_get_d_raster_color(&val, &R, &G, &B, &colors);
 
 	if (do_color)
 	    fprintf(PS.fp, "%.3f %.3f %.3f C\n", (double)R / 255.,
@@ -248,7 +248,7 @@ int PS_fcolortable(void)
 
 
     /* print units label, if present */
-    if (G_read_raster_units(ct.name, ct.mapset, units) != 0)
+    if (Rast_read_raster_units(ct.name, ct.mapset, units) != 0)
         units[0] = '\0';
 
     if(strlen(units)) {
@@ -322,7 +322,7 @@ int PS_fcolortable(void)
 	fprintf(PS.fp, "TIB\n");
     }
 
-    G_free_colors(&colors);
+    Rast_free_colors(&colors);
 
     return 0;
 }

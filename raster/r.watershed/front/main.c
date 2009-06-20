@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 int write_hist(char *, char *, char *, int, int);
@@ -442,9 +443,9 @@ int write_hist(char *map_name, char *title, char *source_name, int mode, int sfd
 {
     struct History history;
 
-    G_put_cell_title(map_name, title);
+    Rast_put_cell_title(map_name, title);
 
-    G_short_history(map_name, "raster", &history);
+    Rast_short_history(map_name, "raster", &history);
     strncpy(history.datsrc_1, source_name, RECORD_LEN);
     history.datsrc_1[RECORD_LEN - 1] = '\0';	/* strncpy() doesn't null terminate if maxfill */
     sprintf(history.edhist[0],
@@ -452,7 +453,7 @@ int write_hist(char *map_name, char *title, char *source_name, int mode, int sfd
     sprintf(history.edhist[1],
 	    "Memory mode: %s", mode ? "Segmented" : "All in RAM");
     history.edlinecnt = 2;
-    G_command_history(&history);
+    Rast_command_history(&history);
 
-    return G_write_history(map_name, &history);
+    return Rast_write_history(map_name, &history);
 }

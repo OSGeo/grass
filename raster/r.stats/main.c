@@ -269,11 +269,11 @@ int main(int argc, char *argv[])
 	DMAX = (DCELL *) G_realloc(DMAX, (nfiles + 1) * sizeof(DCELL));
 	DMIN = (DCELL *) G_realloc(DMIN, (nfiles + 1) * sizeof(DCELL));
 
-	fd[nfiles] = G_open_cell_old(name, "");
+	fd[nfiles] = Rast_open_cell_old(name, "");
 	if (fd[nfiles] < 0)
 	    exit(1);
 	if (!as_int)
-	    is_fp[nfiles] = G_raster_map_is_fp(name, "");
+	    is_fp[nfiles] = Rast_raster_map_is_fp(name, "");
 	else {
 	    is_fp[nfiles] = 0;
 	    if (cat_ranges || nsteps != 255)
@@ -284,15 +284,15 @@ int main(int argc, char *argv[])
 	if (with_labels || (cat_ranges && is_fp[nfiles])) {
 	    labels = (struct Categories *)
 		G_realloc(labels, (nfiles + 1) * sizeof(struct Categories));
-	    if (G_read_cats(name, "", &labels[nfiles]) < 0)
-		G_init_cats((CELL) 0, "", &labels[nfiles]);
+	    if (Rast_read_cats(name, "", &labels[nfiles]) < 0)
+		Rast_init_cats((CELL) 0, "", &labels[nfiles]);
 	}
 	if (is_fp[nfiles])
 	    /* floating point map */
 	{
-	    G_quant_init(&q);
+	    Rast_quant_init(&q);
 	    if (cat_ranges) {
-		if (!G_quant_nof_rules(&labels[nfiles].q)) {
+		if (!Rast_quant_nof_rules(&labels[nfiles].q)) {
 		    G_warning(_("Cats for raster map <%s> are either missing or have no explicit labels. "
 			       "Using %s=%d."),
 			      name, option.nsteps->key, nsteps);
@@ -304,36 +304,36 @@ int main(int argc, char *argv[])
 			      flag.C->key, name, option.nsteps->key);
 	    }
 	    if (!cat_ranges) {	/* DO NOT use else here, cat_ranges can change */
-		if (G_read_fp_range(name, "", &fp_range) < 0)
+		if (Rast_read_fp_range(name, "", &fp_range) < 0)
 		    G_fatal_error(_("Unable to read fp range of raster map <%s>"),
 				  name);
-		G_get_fp_range_min_max(&fp_range, &DMIN[nfiles],
+		Rast_get_fp_range_min_max(&fp_range, &DMIN[nfiles],
 				       &DMAX[nfiles]);
 		G_debug(3, "file %2d: dmin=%f  dmax=%f", nfiles, DMIN[nfiles], 
 			DMAX[nfiles]);
 
-		G_quant_add_rule(&q, DMIN[nfiles], DMAX[nfiles], 1, nsteps+1);
+		Rast_quant_add_rule(&q, DMIN[nfiles], DMAX[nfiles], 1, nsteps+1);
 
 		/* set the quant rules for reading the map */
-		G_set_quant_rules(fd[nfiles], &q);
-		G_quant_get_limits(&q, &dmin, &dmax, &min, &max);
+		Rast_set_quant_rules(fd[nfiles], &q);
+		Rast_quant_get_limits(&q, &dmin, &dmax, &min, &max);
 		G_debug(2, "overall: dmin=%f  dmax=%f,  qmin=%d  qmax=%d",
 			dmin, dmax, min, max);
 
-		G_quant_free(&q);
+		Rast_quant_free(&q);
 	    }
 	    else {		/* cats ranges */
 
 		/* set the quant rules for reading the map */
-		G_set_quant_rules(fd[nfiles], &labels[nfiles].q);
-		G_quant_get_limits(&labels[nfiles].q, &dmin, &dmax, &min,
+		Rast_set_quant_rules(fd[nfiles], &labels[nfiles].q);
+		Rast_quant_get_limits(&labels[nfiles].q, &dmin, &dmax, &min,
 				   &max);
 	    }
 	}
 	else {
-	    if (G_read_range(name, "", &range) < 0)
+	    if (Rast_read_range(name, "", &range) < 0)
 		G_fatal_error(_("Unable to read range for map <%s>"), name);
-	    G_get_range_min_max(&range, &min, &max);
+	    Rast_get_range_min_max(&range, &min, &max);
 	}
 	if (!null_set) {
 	    null_set = 1;

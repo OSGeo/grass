@@ -4,6 +4,7 @@
  */
 
 #include <grass/gis.h>
+#include <grass/Rast.h>
 
 int get_font(char *data)
 {

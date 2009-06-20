@@ -44,7 +44,7 @@ int read_point(double e, double n)
 	    continue;
 	}
 	if (KEY("color")) {
-	    ret = G_str_to_color(data, &r, &g, &b);
+	    ret = Rast_str_to_color(data, &r, &g, &b);
 	    if (ret == 1) {
 		color_R = r;
 		color_G = g;
@@ -58,7 +58,7 @@ int read_point(double e, double n)
 	    continue;
 	}
 	if (KEY("fcolor")) {
-	    ret = G_str_to_color(data, &r, &g, &b);
+	    ret = Rast_str_to_color(data, &r, &g, &b);
 	    if (ret == 1) {
 		fcolor_R = r;
 		fcolor_G = g;
@@ -220,7 +220,7 @@ int read_line(double e1, double n1, double e2, double n2)
 	}
 
 	if (KEY("color")) {
-	    ret = G_str_to_color(data, &r, &g, &b);
+	    ret = Rast_str_to_color(data, &r, &g, &b);
 	    if (ret == 1) {
 		color_R = r;
 		color_G = g;
@@ -292,7 +292,7 @@ int read_rectangle(double e1, double n1, double e2, double n2)
 	}
 
 	if (KEY("color")) {
-	    ret = G_str_to_color(data, &r, &g, &b);
+	    ret = Rast_str_to_color(data, &r, &g, &b);
 	    if (ret == 1) {
 		color_R = r;
 		color_G = g;
@@ -307,7 +307,7 @@ int read_rectangle(double e1, double n1, double e2, double n2)
 	}
 
 	if (KEY("fcolor")) {
-	    ret = G_str_to_color(data, &r, &g, &b);
+	    ret = Rast_str_to_color(data, &r, &g, &b);
 	    if (ret == 1) {
 		fcolor_R = r;
 		fcolor_G = g;

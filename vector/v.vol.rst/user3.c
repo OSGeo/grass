@@ -32,6 +32,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/Vect.h>
 #include <grass/dbmi.h>
 
@@ -275,7 +276,7 @@ COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
     }
 
     if (cell == NULL)
-	cell = G_allocate_f_raster_buf();
+	cell = Rast_allocate_f_raster_buf();
 
     for (i = 1; i <= n_points; i++) {
 	points[i - 1].x = (points[i - 1].x - x_or) / dnorm;
@@ -413,7 +414,7 @@ COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
 		    w2[m] = wm * wm;
 		}
 		if ((cellinp != NULL) && (cellout != NULL) && (i == ngstl)) {
-		    if (G_get_f_raster_row(fdcell, cell, n_rows_in - k) < 0)	/* fix by JH 04/24/02 */
+		    if (Rast_get_f_raster_row(fdcell, cell, n_rows_in - k) < 0)	/* fix by JH 04/24/02 */
 			G_fatal_error
 			    ("Could not get row (eventually WIND3 does not match WIND)");
 		}

@@ -18,13 +18,13 @@ int get_map_info(char *name, char *mapset)
 	exit(0);
 
     /* Reading color lookup table */
-    if (G_read_cats(name, mapset, &categories) == -1) {
+    if (Rast_read_cats(name, mapset, &categories) == -1) {
 	sprintf(buff, "category file for [%s] not available", name);
 	G_fatal_error(buff);
     }
 
     /* Reading color lookup table */
-    if (G_read_colors(name, mapset, &colors) == -1) {
+    if (Rast_read_colors(name, mapset, &colors) == -1) {
 	sprintf(buff, "color file for [%s] not available", name);
 	G_fatal_error(buff);
     }

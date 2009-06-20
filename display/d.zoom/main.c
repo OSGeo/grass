@@ -138,7 +138,7 @@ int main(int argc, char **argv)
 	nrasts = i;
 
 	for (i = 0; i < nrasts; i++) {
-	    if (G_get_cellhd(rast[i], "", &window) >= 0) {
+	    if (Rast_get_cellhd(rast[i], "", &window) >= 0) {
 		if (first) {
 		    first = 0;
 		    U_east = window.east;

@@ -168,7 +168,7 @@ int read_colortable(void)
 
     /* set default if legend type was not specified */
     if (ct.discrete == -1) {
-	if (G_raster_map_is_fp(ct.name, ct.mapset))
+	if (Rast_raster_map_is_fp(ct.name, ct.mapset))
 	    ct.discrete = FALSE;
 	else
 	    ct.discrete = TRUE;

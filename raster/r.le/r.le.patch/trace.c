@@ -105,7 +105,7 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
 
     name = choice->fn;
     mapset = G_mapset();
-    data_type = G_raster_map_type(name, mapset);
+    data_type = Rast_raster_map_type(name, mapset);
 
     /* dynamically allocate storage for the
        buffer that will hold the contents of
@@ -113,7 +113,7 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
 
     buf = (DCELL **) G_calloc(nrows + 3, sizeof(DCELL *));
     for (i = 0; i < nrows + 3; i++) {
-	buf[i] = (DCELL *) G_allocate_raster_buf(DCELL_TYPE);
+	buf[i] = (DCELL *) Rast_allocate_raster_buf(DCELL_TYPE);
     }
 
 
@@ -123,7 +123,7 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
 
     null_buf = (DCELL **) G_calloc(nrows + 3, sizeof(DCELL *));
     for (i = 0; i < nrows + 3; i++)
-	null_buf[i] = (DCELL *) G_allocate_raster_buf(DCELL_TYPE);
+	null_buf[i] = (DCELL *) Rast_allocate_raster_buf(DCELL_TYPE);
 
 
     /* if a map of patch cores was requested,
@@ -134,10 +134,10 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
     if (choice->coremap) {
 	cor = (DCELL **) G_calloc(nrows + 3, sizeof(DCELL *));
 	for (i = 0; i < nrows + 3; i++) {
-	    cor[i] = (DCELL *) G_allocate_raster_buf(DCELL_TYPE);
+	    cor[i] = (DCELL *) Rast_allocate_raster_buf(DCELL_TYPE);
 	}
 	for (i = 0; i < nrows + 3; i++) {
-	    G_set_null_value(cor[i], ncols + 3, DCELL_TYPE);
+	    Rast_set_null_value(cor[i], ncols + 3, DCELL_TYPE);
 	}
     }
 
@@ -148,7 +148,7 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
     if (choice->patchmap) {
 	pat = (CELL **) G_calloc(nrows + 3, sizeof(CELL *));
 	for (i = 0; i < nrows + 3; i++)
-	    pat[i] = (CELL *) G_allocate_raster_buf(CELL_TYPE);
+	    pat[i] = (CELL *) Rast_allocate_raster_buf(CELL_TYPE);
     }
 
     /* clip out the sampling area */
@@ -178,11 +178,11 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
 	   categories, history, quant) into the
 	   corresponding data structures */
 
-	infd = G_open_cell_old(name, mapset);
-	colr_ok = G_read_colors(name, mapset, &colr) > 0;
-	cats_ok = G_read_raster_cats(name, mapset, &cats) >= 0;
-	hist_ok = G_read_history(name, mapset, &hist) >= 0;
-	range_ok = G_read_range(name, mapset, &range) >= 0;
+	infd = Rast_open_cell_old(name, mapset);
+	colr_ok = Rast_read_colors(name, mapset, &colr) > 0;
+	cats_ok = Rast_read_raster_cats(name, mapset, &cats) >= 0;
+	hist_ok = Rast_read_history(name, mapset, &hist) >= 0;
+	range_ok = Rast_read_range(name, mapset, &range) >= 0;
 
 	/* 2. if map is floating point, then read
 	   the rules for quantization into the quant
@@ -190,17 +190,17 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
 	   them by rounding floating point values */
 
 	if (data_type != CELL_TYPE) {
-	    G_quant_init(&quant);
-	    if (G_read_quant(name, mapset, &quant) <= 0)
-		G_quant_round(&quant);
+	    Rast_quant_init(&quant);
+	    if (Rast_read_quant(name, mapset, &quant) <= 0)
+		Rast_quant_round(&quant);
 	}
 
 	/* 3. initialize appropriate data structures */
 
 	if (cats_ok)
-	    G_init_raster_cats(G_get_raster_cats_title(&cats), &newcats);
+	    Rast_init_raster_cats(Rast_get_raster_cats_title(&cats), &newcats);
 	if (data_type == CELL_TYPE)
-	    G_init_cell_stats(&stats);
+	    Rast_init_cell_stats(&stats);
 
 
 	/* 4. open an output map called "interior" and
@@ -209,41 +209,41 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
 
 	switch (data_type) {
 	case CELL_TYPE:
-	    cor_cell_buf = G_allocate_raster_buf(CELL_TYPE);
-	    fe = G_open_raster_new("interior", CELL_TYPE);
+	    cor_cell_buf = Rast_allocate_raster_buf(CELL_TYPE);
+	    fe = Rast_open_raster_new("interior", CELL_TYPE);
 	    for (i = 1; i < nrows + 1; i++) {
-		G_zero_raster_buf(cor_cell_buf, CELL_TYPE);
+		Rast_zero_raster_buf(cor_cell_buf, CELL_TYPE);
 		for (j = 1; j < ncols + 1; j++)
 		    *(cor_cell_buf + j - 1) = (int)(*(*(cor + i) + j));
 
-		if (G_put_raster_row(fe, cor_cell_buf, CELL_TYPE) < 0)
+		if (Rast_put_raster_row(fe, cor_cell_buf, CELL_TYPE) < 0)
 		    exit(EXIT_FAILURE);
 
-		G_update_cell_stats(cor_cell_buf, ncols + 1, &stats);
+		Rast_update_cell_stats(cor_cell_buf, ncols + 1, &stats);
 	    }
 	    break;
 	case FCELL_TYPE:
-	    cor_fcell_buf = G_allocate_raster_buf(FCELL_TYPE);
-	    fe = G_open_raster_new("interior", FCELL_TYPE);
+	    cor_fcell_buf = Rast_allocate_raster_buf(FCELL_TYPE);
+	    fe = Rast_open_raster_new("interior", FCELL_TYPE);
 	    for (i = 1; i < nrows + 1; i++) {
-		G_zero_raster_buf(cor_fcell_buf, FCELL_TYPE);
+		Rast_zero_raster_buf(cor_fcell_buf, FCELL_TYPE);
 		for (j = 1; j < ncols + 1; j++) {
 		    *(cor_fcell_buf + j - 1) = (float)(*(*(cor + i) + j));
 		}
 
-		if (G_put_raster_row(fe, cor_fcell_buf, FCELL_TYPE) < 0)
+		if (Rast_put_raster_row(fe, cor_fcell_buf, FCELL_TYPE) < 0)
 		    exit(EXIT_FAILURE);
 	    }
 	    break;
 	case DCELL_TYPE:
-	    cor_dcell_buf = G_allocate_raster_buf(DCELL_TYPE);
-	    fe = G_open_raster_new("interior", DCELL_TYPE);
+	    cor_dcell_buf = Rast_allocate_raster_buf(DCELL_TYPE);
+	    fe = Rast_open_raster_new("interior", DCELL_TYPE);
 	    for (i = 1; i < nrows + 1; i++) {
-		G_zero_raster_buf(cor_dcell_buf, DCELL_TYPE);
+		Rast_zero_raster_buf(cor_dcell_buf, DCELL_TYPE);
 		for (j = 1; j < ncols + 1; j++)
 		    *(cor_dcell_buf + j - 1) = (double)(*(*(cor + i) + j));
 
-		if (G_put_raster_row(fe, cor_dcell_buf, DCELL_TYPE) < 0)
+		if (Rast_put_raster_row(fe, cor_dcell_buf, DCELL_TYPE) < 0)
 		    exit(EXIT_FAILURE);
 	    }
 	    break;
@@ -255,14 +255,14 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
        complete the details of map creation */
 
     if (choice->patchmap) {
-	fd = G_open_raster_new("num", CELL_TYPE);
+	fd = Rast_open_raster_new("num", CELL_TYPE);
 	for (i = 1; i < nrows + 1; i++) {
-	    pat_buf = G_allocate_raster_buf(CELL_TYPE);
-	    G_zero_raster_buf(pat_buf, CELL_TYPE);
+	    pat_buf = Rast_allocate_raster_buf(CELL_TYPE);
+	    Rast_zero_raster_buf(pat_buf, CELL_TYPE);
 	    for (j = 1; j < ncols + 1; j++)
 		*(pat_buf + j - 1) = *(*(pat + i) + j);
 
-	    if (G_put_raster_row(fd, pat_buf, CELL_TYPE) < 0)
+	    if (Rast_put_raster_row(fd, pat_buf, CELL_TYPE) < 0)
 		exit(EXIT_FAILURE);
 	}
     }
@@ -356,7 +356,7 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
        memory allocated for it */
 
     if (choice->patchmap) {
-	G_close_cell(fd);
+	Rast_close_cell(fd);
 	G_free(pat_buf);
     }
 
@@ -367,67 +367,67 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
        memory allocated for the cor_buf */
 
     if (choice->coremap) {
-	G_close_cell(fe);
-	G_rewind_cell_stats(&stats);
-	G_rewind_raster_cats(&cats);
+	Rast_close_cell(fe);
+	Rast_rewind_cell_stats(&stats);
+	Rast_rewind_raster_cats(&cats);
 
 	if (cats_ok && data_type == CELL_TYPE) {
 	    long count;
 	    void *rast1, *rast2;
 
 	    rast1 = cor_cell_buf;
-	    rast2 = G_incr_void_ptr(rast1, G_raster_size(CELL_TYPE));
-	    while (G_next_cell_stat(rast1, &count, &stats))
-		G_set_raster_cat(rast1, rast2, G_get_raster_cat(rast1, &cats,
+	    rast2 = Rast_incr_void_ptr(rast1, Rast_raster_size(CELL_TYPE));
+	    while (Rast_next_cell_stat(rast1, &count, &stats))
+		Rast_set_raster_cat(rast1, rast2, Rast_get_raster_cat(rast1, &cats,
 								CELL_TYPE),
 				 &newcats, CELL_TYPE);
-	    G_write_raster_cats("interior", &newcats);
-	    G_free_raster_cats(&cats);
-	    G_free_raster_cats(&newcats);
-	    G_free_cell_stats(&stats);
+	    Rast_write_raster_cats("interior", &newcats);
+	    Rast_free_raster_cats(&cats);
+	    Rast_free_raster_cats(&newcats);
+	    Rast_free_cell_stats(&stats);
 	}
 
 	if (colr_ok) {
 	    if (data_type == CELL_TYPE) {
 		CELL min, max, cmin, cmax;
 
-		G_read_range("interior", mapset, &range);
-		G_get_range_min_max(&range, &min, &max);
-		G_get_color_range(&cmin, &cmax, &colr);
+		Rast_read_range("interior", mapset, &range);
+		Rast_get_range_min_max(&range, &min, &max);
+		Rast_get_color_range(&cmin, &cmax, &colr);
 		if (min > cmin)
 		    cmin = min;
 		if (max < cmax)
 		    cmax = max;
-		G_set_color_range(cmin, cmax, &colr);
+		Rast_set_color_range(cmin, cmax, &colr);
 	    }
 	    else {
 		DCELL dmin, dmax;
 		CELL cmin, cmax;
 
-		G_read_fp_range("interior", mapset, &fprange);
-		G_get_fp_range_min_max(&fprange, &dmin, &dmax);
-		G_get_color_range(&cmin, &cmax, &colr);
+		Rast_read_fp_range("interior", mapset, &fprange);
+		Rast_get_fp_range_min_max(&fprange, &dmin, &dmax);
+		Rast_get_color_range(&cmin, &cmax, &colr);
 		if (dmin > cmin)
 		    cmin = dmin;
 		if (dmax < cmax)
 		    cmax = dmax;
-		G_set_color_range(cmin, cmax, &colr);
+		Rast_set_color_range(cmin, cmax, &colr);
 	    }
-	    G_write_colors("interior", mapset, &colr);
+	    Rast_write_colors("interior", mapset, &colr);
 	}
 
 	if (range_ok) {
 	    if (data_type == CELL_TYPE)
-		G_write_range("interior", &range);
+		Rast_write_range("interior", &range);
 	    else
-		G_write_fp_range("interior", &fprange);
+		Rast_write_fp_range("interior", &fprange);
 	}
 
 	if (hist_ok)
-	    G_write_history("interior", &hist);
+	    Rast_write_history("interior", &hist);
 
-	G_free_cats(&cats);
-	G_free_colors(&colr);
+	Rast_free_cats(&cats);
+	Rast_free_colors(&colr);
 	switch (data_type) {
 	case CELL_TYPE:
 	    G_free(cor_cell_buf);
@@ -510,7 +510,7 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
        an integer (CELL_TYPE) map */
 
     if (choice->wrum == 'r') {
-	if (0 > (fr = G_open_cell_old(choice->reg, G_mapset()))) {
+	if (0 > (fr = Rast_open_cell_old(choice->reg, G_mapset()))) {
 	    fprintf(stderr, "\n");
 	    fprintf(stderr,
 		    "   *******************************************************\n");
@@ -524,7 +524,7 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
 		    "   *******************************************************\n");
 	    exit(EXIT_FAILURE);
 	}
-	if (G_raster_map_type(choice->reg, G_mapset()) > 0) {
+	if (Rast_raster_map_type(choice->reg, G_mapset()) > 0) {
 	    fprintf(stderr, "\n");
 	    fprintf(stderr,
 		    "   *******************************************************\n");
@@ -540,12 +540,12 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
 		    "   *******************************************************\n");
 	    exit(EXIT_FAILURE);
 	}
-	tmp1 = G_allocate_raster_buf(CELL_TYPE);
-	G_zero_raster_buf(tmp1, CELL_TYPE);
+	tmp1 = Rast_allocate_raster_buf(CELL_TYPE);
+	Rast_zero_raster_buf(tmp1, CELL_TYPE);
 	fprintf(stderr, "Analyzing region number %d...\n", index);
     }
 
-    data_type = G_raster_map_type(choice->fn, G_mapset());
+    data_type = Rast_raster_map_type(choice->fn, G_mapset());
 
 
     /* allocate memory to store a row of the
@@ -555,15 +555,15 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
 
     switch (data_type) {
     case CELL_TYPE:
-	tmp = G_allocate_raster_buf(CELL_TYPE);
+	tmp = Rast_allocate_raster_buf(CELL_TYPE);
 	tmpname = "tmp";
 	break;
     case FCELL_TYPE:
-	ftmp = G_allocate_raster_buf(FCELL_TYPE);
+	ftmp = Rast_allocate_raster_buf(FCELL_TYPE);
 	tmpname = "ftmp";
 	break;
     case DCELL_TYPE:
-	dtmp = G_allocate_raster_buf(DCELL_TYPE);
+	dtmp = Rast_allocate_raster_buf(DCELL_TYPE);
 	tmpname = "dtmp";
 	break;
     }
@@ -596,7 +596,7 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
 	   map row in the region file */
 
 	if (choice->wrum == 'r')
-	    G_get_raster_row_nomask(fr, tmp1, i, CELL_TYPE);
+	    Rast_get_raster_row_nomask(fr, tmp1, i, CELL_TYPE);
 
 	/* initialize each element of the
 	   row buffer to 0; this row buffer
@@ -606,16 +606,16 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
 
 	switch (data_type) {
 	case CELL_TYPE:
-	    G_zero_raster_buf(tmp, data_type);
-	    G_get_raster_row(finput, tmp, i, data_type);
+	    Rast_zero_raster_buf(tmp, data_type);
+	    Rast_get_raster_row(finput, tmp, i, data_type);
 	    break;
 	case FCELL_TYPE:
-	    G_zero_raster_buf(ftmp, data_type);
-	    G_get_raster_row(finput, ftmp, i, data_type);
+	    Rast_zero_raster_buf(ftmp, data_type);
+	    Rast_get_raster_row(finput, ftmp, i, data_type);
 	    break;
 	case DCELL_TYPE:
-	    G_zero_raster_buf(dtmp, data_type);
-	    G_get_raster_row(finput, dtmp, i, data_type);
+	    Rast_zero_raster_buf(dtmp, data_type);
+	    Rast_get_raster_row(finput, dtmp, i, data_type);
 	    break;
 	}
 
@@ -629,17 +629,17 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
 	case CELL_TYPE:
 	    rastptr = tmp;
 	    for (x = 0; x < col0; x++)
-		rastptr = G_incr_void_ptr(rastptr, G_raster_size(CELL_TYPE));
+		rastptr = Rast_incr_void_ptr(rastptr, Rast_raster_size(CELL_TYPE));
 	    break;
 	case FCELL_TYPE:
 	    rastptr = ftmp;
 	    for (x = 0; x < col0; x++)
-		rastptr = G_incr_void_ptr(rastptr, G_raster_size(FCELL_TYPE));
+		rastptr = Rast_incr_void_ptr(rastptr, Rast_raster_size(FCELL_TYPE));
 	    break;
 	case DCELL_TYPE:
 	    rastptr = dtmp;
 	    for (x = 0; x < col0; x++)
-		rastptr = G_incr_void_ptr(rastptr, G_raster_size(DCELL_TYPE));
+		rastptr = Rast_incr_void_ptr(rastptr, Rast_raster_size(DCELL_TYPE));
 	    break;
 	}
 
@@ -655,7 +655,7 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
 
 	    switch (data_type) {
 	    case CELL_TYPE:
-		if (G_is_null_value(rastptr, CELL_TYPE)) {
+		if (Rast_is_null_value(rastptr, CELL_TYPE)) {
 		    *(*(null_buf + i + 1 - row0) + j + 1 - col0) = 1.0;
 		    if (i == row0 + nrows / 2 && j == col0 + ncols / 2)
 			*centernull = 1;
@@ -667,11 +667,11 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
 		    else
 			*(*(null_buf + i + 1 - row0) + j + 1 - col0) = 1.0;
 		}
-		rastptr = G_incr_void_ptr(rastptr, G_raster_size(CELL_TYPE));
+		rastptr = Rast_incr_void_ptr(rastptr, Rast_raster_size(CELL_TYPE));
 		break;
 
 	    case FCELL_TYPE:
-		if (G_is_null_value(rastptr, FCELL_TYPE)) {
+		if (Rast_is_null_value(rastptr, FCELL_TYPE)) {
 		    *(*(null_buf + i + 1 - row0) + j + 1 - col0) = 1.0;
 		    if (i == row0 + nrows / 2 && j == col0 + ncols / 2)
 			*centernull = 1;
@@ -683,11 +683,11 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
 		    else
 			*(*(null_buf + i + 1 - row0) + j + 1 - col0) = 1.0;
 		}
-		rastptr = G_incr_void_ptr(rastptr, G_raster_size(FCELL_TYPE));
+		rastptr = Rast_incr_void_ptr(rastptr, Rast_raster_size(FCELL_TYPE));
 		break;
 
 	    case DCELL_TYPE:
-		if (G_is_null_value(rastptr, DCELL_TYPE)) {
+		if (Rast_is_null_value(rastptr, DCELL_TYPE)) {
 		    *(*(null_buf + i + 1 - row0) + j + 1 - col0) = 1.0;
 		    if (i == row0 + nrows / 2 && j == col0 + ncols / 2)
 			*centernull = 1;
@@ -699,7 +699,7 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
 		    else
 			*(*(null_buf + i + 1 - row0) + j + 1 - col0) = 1.0;
 		}
-		rastptr = G_incr_void_ptr(rastptr, G_raster_size(CELL_TYPE));
+		rastptr = Rast_incr_void_ptr(rastptr, Rast_raster_size(CELL_TYPE));
 		break;
 	    }
 
@@ -773,7 +773,7 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
     }
     if (choice->wrum == 'r') {
 	G_free(tmp1);
-	G_close_cell(fr);
+	Rast_close_cell(fr);
     }
     return;
 }
@@ -996,7 +996,7 @@ PATCH *get_bd(int row0, int col0, int nrows, int ncols, double class,
 
     patchmap = (CELL **) G_calloc(nrows + 3, sizeof(CELL *));
     for (m = 0; m < nrows + 3; m++)
-	patchmap[m] = (CELL *) G_allocate_raster_buf(CELL_TYPE);
+	patchmap[m] = (CELL *) Rast_allocate_raster_buf(CELL_TYPE);
 
     /* print on the screen a message indicating
        that tracing has reached a certain patch */

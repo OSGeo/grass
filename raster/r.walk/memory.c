@@ -17,6 +17,7 @@
 #include <string.h>
 #include <errno.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "memory.h"
 
 #define NUM_IN_BLOCK	1024*8

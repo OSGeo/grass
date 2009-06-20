@@ -100,6 +100,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/site.h>
 #include <grass/segment.h>
 #include "cost.h"
@@ -366,7 +367,7 @@ int main(int argc, char *argv[])
     H_DIAG_fac =
 	(double)sqrt((double)(NS_fac * NS_fac + 4 * EW_fac * EW_fac));
 
-    G_set_d_null_value(&null_cost, 1);
+    Rast_set_d_null_value(&null_cost, 1);
 
     if (flag2->answer)
 	total_reviewed = 16;
@@ -425,7 +426,7 @@ int main(int argc, char *argv[])
 	(sscanf(opt6->answer, "%lf", &null_cost) != 1)) {
 
 	G_message(_("Null cells excluded from cost evaluation."));
-	G_set_d_null_value(&null_cost, 1);
+	Rast_set_d_null_value(&null_cost, 1);
     }
     else if (keep_nulls)
 	G_message(_("Input null cell will be retained into output map"));
@@ -515,10 +516,10 @@ int main(int argc, char *argv[])
 	G_sites_close(fp);
     }
 
-    if (!G_is_d_null_value(&null_cost)) {
+    if (!Rast_is_d_null_value(&null_cost)) {
 	if (null_cost < 0.0) {
 	    G_warning(_("Warning: assigning negative cost to null cell. Null cells excluded."));
-	    G_set_d_null_value(&null_cost, 1);
+	    Rast_set_d_null_value(&null_cost, 1);
 	}
     }
     else {
@@ -540,8 +541,8 @@ int main(int argc, char *argv[])
 
     /*  Open cost cell layer for reading  */
 
-    dtm_fd = G_open_cell_old(dtm_layer, "");
-    cost_fd = G_open_cell_old(cost_layer, "");
+    dtm_fd = Rast_open_cell_old(dtm_layer, "");
+    cost_fd = Rast_open_cell_old(cost_layer, "");
 
     if (dtm_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), dtm_layer);
@@ -549,8 +550,8 @@ int main(int argc, char *argv[])
     if (cost_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), cost_layer);
 
-    dtm_head_ok = G_get_cellhd(dtm_layer, "", &dtm_cellhd) >= 0;
-    cost_head_ok = G_get_cellhd(cost_layer, "", &cost_cellhd) >= 0;
+    dtm_head_ok = Rast_get_cellhd(dtm_layer, "", &dtm_cellhd) >= 0;
+    cost_head_ok = Rast_get_cellhd(cost_layer, "", &cost_cellhd) >= 0;
 
     /*Reading headers from maps */
 
@@ -564,10 +565,10 @@ int main(int argc, char *argv[])
     if (dtm_cellhd.proj != cost_cellhd.proj)
 	G_fatal_error(_("Map with different projection"));
 
-    dtm_data_type = G_get_raster_map_type(dtm_fd);
-    cost_data_type = G_get_raster_map_type(cost_fd);
-    dtm_cell = G_allocate_raster_buf(dtm_data_type);
-    cost_cell = G_allocate_raster_buf(cost_data_type);
+    dtm_data_type = Rast_get_raster_map_type(dtm_fd);
+    cost_data_type = Rast_get_raster_map_type(cost_fd);
+    dtm_cell = Rast_allocate_raster_buf(dtm_data_type);
+    cost_cell = Rast_allocate_raster_buf(cost_data_type);
 
     /*   Parameters for map submatrices   */
 
@@ -700,13 +701,13 @@ int main(int argc, char *argv[])
 	int i;
 	double p;
 
-	dtm_dsize = G_raster_size(dtm_data_type);
+	dtm_dsize = Rast_raster_size(dtm_data_type);
 	p = 0.0;
 
 	for (row = 0; row < nrows; row++) {
 
 	    G_percent(row, nrows, 2);
-	    if (G_get_raster_row(dtm_fd, dtm_cell, row, dtm_data_type) < 0)
+	    if (Rast_get_raster_row(dtm_fd, dtm_cell, row, dtm_data_type) < 0)
 		G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			      dtm_layer, row);
 	    /* INPUT NULL VALUES: ??? */
@@ -714,39 +715,39 @@ int main(int argc, char *argv[])
 	    switch (dtm_data_type) {
 	    case CELL_TYPE:
 		for (i = 0; i < ncols; i++) {
-		    if (G_is_null_value(ptr2, dtm_data_type)) {
+		    if (Rast_is_null_value(ptr2, dtm_data_type)) {
 			p = null_cost;
 		    }
 		    else {
 			p = *(int *)ptr2;
 		    }
 		    segment_put(&dtm_in_seg, &p, row, i);
-		    ptr2 = G_incr_void_ptr(ptr2, dtm_dsize);
+		    ptr2 = Rast_incr_void_ptr(ptr2, dtm_dsize);
 		}
 		break;
 	    case FCELL_TYPE:
 		for (i = 0; i < ncols; i++) {
-		    if (G_is_null_value(ptr2, dtm_data_type)) {
+		    if (Rast_is_null_value(ptr2, dtm_data_type)) {
 			p = null_cost;
 		    }
 		    else {
 			p = *(float *)ptr2;
 		    }
 		    segment_put(&dtm_in_seg, &p, row, i);
-		    ptr2 = G_incr_void_ptr(ptr2, dtm_dsize);
+		    ptr2 = Rast_incr_void_ptr(ptr2, dtm_dsize);
 		}
 		break;
 
 	    case DCELL_TYPE:
 		for (i = 0; i < ncols; i++) {
-		    if (G_is_null_value(ptr2, dtm_data_type)) {
+		    if (Rast_is_null_value(ptr2, dtm_data_type)) {
 			p = null_cost;
 		    }
 		    else {
 			p = *(double *)ptr2;
 		    }
 		    segment_put(&dtm_in_seg, &p, row, i);
-		    ptr2 = G_incr_void_ptr(ptr2, dtm_dsize);
+		    ptr2 = Rast_incr_void_ptr(ptr2, dtm_dsize);
 		}
 		break;
 	    }
@@ -760,12 +761,12 @@ int main(int argc, char *argv[])
 	int i;
 	double p;
 
-	cost_dsize = G_raster_size(cost_data_type);
+	cost_dsize = Rast_raster_size(cost_data_type);
 	p = 0.0;
 	for (row = 0; row < nrows; row++) {
 
 	    G_percent(row, nrows, 2);
-	    if (G_get_raster_row(cost_fd, cost_cell, row, cost_data_type) < 0)
+	    if (Rast_get_raster_row(cost_fd, cost_cell, row, cost_data_type) < 0)
 		G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			      cost_layer, row);
 	    /* INPUT NULL VALUES: ??? */
@@ -773,39 +774,39 @@ int main(int argc, char *argv[])
 	    switch (cost_data_type) {
 	    case CELL_TYPE:
 		for (i = 0; i < ncols; i++) {
-		    if (G_is_null_value(ptr2, cost_data_type)) {
+		    if (Rast_is_null_value(ptr2, cost_data_type)) {
 			p = null_cost;
 		    }
 		    else {
 			p = *(int *)ptr2;
 		    }
 		    segment_put(&cost_in_seg, &p, row, i);
-		    ptr2 = G_incr_void_ptr(ptr2, cost_dsize);
+		    ptr2 = Rast_incr_void_ptr(ptr2, cost_dsize);
 		}
 		break;
 	    case FCELL_TYPE:
 		for (i = 0; i < ncols; i++) {
-		    if (G_is_null_value(ptr2, cost_data_type)) {
+		    if (Rast_is_null_value(ptr2, cost_data_type)) {
 			p = null_cost;
 		    }
 		    else {
 			p = *(float *)ptr2;
 		    }
 		    segment_put(&cost_in_seg, &p, row, i);
-		    ptr2 = G_incr_void_ptr(ptr2, cost_dsize);
+		    ptr2 = Rast_incr_void_ptr(ptr2, cost_dsize);
 		}
 		break;
 
 	    case DCELL_TYPE:
 		for (i = 0; i < ncols; i++) {
-		    if (G_is_null_value(ptr2, cost_data_type)) {
+		    if (Rast_is_null_value(ptr2, cost_data_type)) {
 			p = null_cost;
 		    }
 		    else {
 			p = *(double *)ptr2;
 		    }
 		    segment_put(&cost_in_seg, &p, row, i);
-		    ptr2 = G_incr_void_ptr(ptr2, cost_dsize);
+		    ptr2 = Rast_incr_void_ptr(ptr2, cost_dsize);
 		}
 		break;
 	    }
@@ -832,7 +833,7 @@ int main(int argc, char *argv[])
 	if (fbuff == NULL)
 	    G_fatal_error(_("Unable to allocate memory for segment fbuff == NULL"));
 
-	G_set_d_null_value(fbuff, ncols);
+	Rast_set_d_null_value(fbuff, ncols);
 
 	for (row = 0; row < nrows; row++) {
 	    {
@@ -860,7 +861,7 @@ int main(int argc, char *argv[])
 	    if (fbuff == NULL)
 		G_fatal_error(_("Unable to allocate memory for segment fbuff == NULL"));
 
-	    G_set_d_null_value(fbuff, ncols);
+	    Rast_set_d_null_value(fbuff, ncols);
 
 	    for (row = 0; row < nrows; row++) {
 		{
@@ -883,32 +884,32 @@ int main(int argc, char *argv[])
 
 	int dsize2;
 
-	cum_fd = G_open_cell_old(start_layer, "");
+	cum_fd = Rast_open_cell_old(start_layer, "");
 	if (cum_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
 			  start_layer);
 
-	data_type2 = G_get_raster_map_type(cum_fd);
+	data_type2 = Rast_get_raster_map_type(cum_fd);
 
-	dsize2 = G_raster_size(data_type2);
+	dsize2 = Rast_raster_size(data_type2);
 
-	cell2 = G_allocate_raster_buf(data_type2);
+	cell2 = Rast_allocate_raster_buf(data_type2);
 
 	G_message(_("Reading %s... "), cum_cost_layer);
 	for (row = 0; row < nrows; row++) {
 
 	    G_percent(row, nrows, 2);
-	    if (G_get_raster_row(cum_fd, cell2, row, data_type2) < 0)
+	    if (Rast_get_raster_row(cum_fd, cell2, row, data_type2) < 0)
 		G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			      cum_cost_layer, row);
 	    ptr2 = cell2;
 	    for (col = 0; col < ncols; col++) {
 		/* Did I understand that concept of cummulative cost map? - (pmx) 12 april 2000 */
-		if (!G_is_null_value(ptr2, data_type2)) {
+		if (!Rast_is_null_value(ptr2, data_type2)) {
 		    double cellval;
 
 		    if (start_with_raster_vals == 1) {
-			cellval = G_get_raster_value_d(ptr2, data_type2);
+			cellval = Rast_get_raster_value_d(ptr2, data_type2);
 			new_cell = insert(cellval, row, col);
 			segment_put(&out_seg, &cellval, row, col);
 		    }
@@ -918,13 +919,13 @@ int main(int argc, char *argv[])
 			segment_put(&out_seg, value_start_pt, row, col);
 		    }
 		}
-		ptr2 = G_incr_void_ptr(ptr2, dsize2);
+		ptr2 = Rast_incr_void_ptr(ptr2, dsize2);
 	    }
 	}
 
 	G_percent(row, nrows, 2);
 
-	G_close_cell(cum_fd);
+	Rast_close_cell(cum_fd);
 	G_free(cell2);
 
     }
@@ -981,7 +982,7 @@ int main(int argc, char *argv[])
 
 	/* If I've already been updated, delete me */
 	segment_get(&out_seg, &old_min_cost, pres_cell->row, pres_cell->col);
-	if (!G_is_d_null_value(&old_min_cost)) {
+	if (!Rast_is_d_null_value(&old_min_cost)) {
 	    if (pres_cell->min_cost > old_min_cost) {
 		delete(pres_cell);
 		pres_cell = get_lowest();
@@ -990,10 +991,10 @@ int main(int argc, char *argv[])
 	}
 
 	segment_get(&dtm_in_seg, &my_dtm, pres_cell->row, pres_cell->col);
-	if (G_is_d_null_value(&my_dtm))
+	if (Rast_is_d_null_value(&my_dtm))
 	    continue;
 	segment_get(&cost_in_seg, &my_cost, pres_cell->row, pres_cell->col);
-	if (G_is_d_null_value(&my_cost))
+	if (Rast_is_d_null_value(&my_cost))
 	    continue;
 
 
@@ -1100,7 +1101,7 @@ int main(int argc, char *argv[])
 		segment_get(&dtm_in_seg, dtm_value, row, col);
 		cost_value = &W_cost;
 		segment_get(&cost_in_seg, cost_value, row, col);
-		if (G_is_d_null_value(cost_value))
+		if (Rast_is_d_null_value(cost_value))
 		    continue;
 		if (((W_dtm - my_dtm) / EW_fac) >= 0)
 		    fcost_dtm = (double)((double)(W_dtm - my_dtm) * b);
@@ -1118,7 +1119,7 @@ int main(int argc, char *argv[])
 		segment_get(&dtm_in_seg, dtm_value, row, col);
 		cost_value = &E_cost;
 		segment_get(&cost_in_seg, cost_value, row, col);
-		if (G_is_d_null_value(cost_value))
+		if (Rast_is_d_null_value(cost_value))
 		    continue;
 		if (((E_dtm - my_dtm) / EW_fac) >= 0)
 		    fcost_dtm = (double)(E_dtm - my_dtm) * b;
@@ -1136,7 +1137,7 @@ int main(int argc, char *argv[])
 		segment_get(&dtm_in_seg, dtm_value, row, col);
 		cost_value = &N_cost;
 		segment_get(&cost_in_seg, cost_value, row, col);
-		if (G_is_d_null_value(cost_value))
+		if (Rast_is_d_null_value(cost_value))
 		    continue;
 		if (((N_dtm - my_dtm) / NS_fac) >= 0)
 		    fcost_dtm = (double)(N_dtm - my_dtm) * b;
@@ -1154,7 +1155,7 @@ int main(int argc, char *argv[])
 		segment_get(&dtm_in_seg, dtm_value, row, col);
 		cost_value = &S_cost;
 		segment_get(&cost_in_seg, cost_value, row, col);
-		if (G_is_d_null_value(cost_value))
+		if (Rast_is_d_null_value(cost_value))
 		    continue;
 		if (((S_dtm - my_dtm) / NS_fac) >= 0)
 		    fcost_dtm = (double)(S_dtm - my_dtm) * b;
@@ -1172,7 +1173,7 @@ int main(int argc, char *argv[])
 		segment_get(&dtm_in_seg, dtm_value, row, col);
 		cost_value = &NW_cost;
 		segment_get(&cost_in_seg, cost_value, row, col);
-		if (G_is_d_null_value(cost_value))
+		if (Rast_is_d_null_value(cost_value))
 		    continue;
 		if (((NW_dtm - my_dtm) / DIAG_fac) >= 0)
 		    fcost_dtm = (double)(NW_dtm - my_dtm) * b;
@@ -1190,7 +1191,7 @@ int main(int argc, char *argv[])
 		segment_get(&dtm_in_seg, dtm_value, row, col);
 		cost_value = &NE_cost;
 		segment_get(&cost_in_seg, cost_value, row, col);
-		if (G_is_d_null_value(cost_value))
+		if (Rast_is_d_null_value(cost_value))
 		    continue;
 		if (((NE_dtm - my_dtm) / DIAG_fac) >= 0)
 		    fcost_dtm = (double)(NE_dtm - my_dtm) * b;
@@ -1208,7 +1209,7 @@ int main(int argc, char *argv[])
 		segment_get(&dtm_in_seg, dtm_value, row, col);
 		cost_value = &SE_cost;
 		segment_get(&cost_in_seg, cost_value, row, col);
-		if (G_is_d_null_value(cost_value))
+		if (Rast_is_d_null_value(cost_value))
 		    continue;
 		if (((SE_dtm - my_dtm) / DIAG_fac) >= 0)
 		    fcost_dtm = (double)(SE_dtm - my_dtm) * b;
@@ -1226,7 +1227,7 @@ int main(int argc, char *argv[])
 		segment_get(&dtm_in_seg, dtm_value, row, col);
 		cost_value = &SW_cost;
 		segment_get(&cost_in_seg, cost_value, row, col);
-		if (G_is_d_null_value(cost_value))
+		if (Rast_is_d_null_value(cost_value))
 		    continue;
 		if (((SW_dtm - my_dtm) / DIAG_fac) >= 0)
 		    fcost_dtm = (double)(SW_dtm - my_dtm) * b;
@@ -1244,7 +1245,7 @@ int main(int argc, char *argv[])
 		segment_get(&dtm_in_seg, dtm_value, row, col);
 		cost_value = &NNW_cost;
 		segment_get(&cost_in_seg, cost_value, row, col);
-		if (G_is_d_null_value(cost_value))
+		if (Rast_is_d_null_value(cost_value))
 		    continue;
 		if (((NNW_dtm - my_dtm) / V_DIAG_fac) >= 0)
 		    fcost_dtm = (double)(NNW_dtm - my_dtm) * b;
@@ -1264,7 +1265,7 @@ int main(int argc, char *argv[])
 		segment_get(&dtm_in_seg, dtm_value, row, col);
 		cost_value = &NNE_cost;
 		segment_get(&cost_in_seg, cost_value, row, col);
-		if (G_is_d_null_value(cost_value))
+		if (Rast_is_d_null_value(cost_value))
 		    continue;
 		if (((NNE_dtm - my_dtm) / V_DIAG_fac) >= 0)
 		    fcost_dtm = (double)(NNE_dtm - my_dtm) * b;
@@ -1284,7 +1285,7 @@ int main(int argc, char *argv[])
 		segment_get(&dtm_in_seg, dtm_value, row, col);
 		cost_value = &SSE_cost;
 		segment_get(&cost_in_seg, cost_value, row, col);
-		if (G_is_d_null_value(cost_value))
+		if (Rast_is_d_null_value(cost_value))
 		    continue;
 		if (((SSE_dtm - my_dtm) / V_DIAG_fac) >= 0)
 		    fcost_dtm = (double)(SSE_dtm - my_dtm) * b;
@@ -1304,7 +1305,7 @@ int main(int argc, char *argv[])
 		segment_get(&dtm_in_seg, dtm_value, row, col);
 		cost_value = &SSW_cost;
 		segment_get(&cost_in_seg, cost_value, row, col);
-		if (G_is_d_null_value(cost_value))
+		if (Rast_is_d_null_value(cost_value))
 		    continue;
 		if (((SSW_dtm - my_dtm) / V_DIAG_fac) >= 0)
 		    fcost_dtm = (double)(SSW_dtm - my_dtm) * b;
@@ -1324,7 +1325,7 @@ int main(int argc, char *argv[])
 		segment_get(&dtm_in_seg, dtm_value, row, col);
 		cost_value = &WNW_cost;
 		segment_get(&cost_in_seg, cost_value, row, col);
-		if (G_is_d_null_value(cost_value))
+		if (Rast_is_d_null_value(cost_value))
 		    continue;
 		if (((WNW_dtm - my_dtm) / H_DIAG_fac) >= 0)
 		    fcost_dtm = (double)(WNW_dtm - my_dtm) * b;
@@ -1344,7 +1345,7 @@ int main(int argc, char *argv[])
 		segment_get(&dtm_in_seg, dtm_value, row, col);
 		cost_value = &ENE_cost;
 		segment_get(&cost_in_seg, cost_value, row, col);
-		if (G_is_d_null_value(cost_value))
+		if (Rast_is_d_null_value(cost_value))
 		    continue;
 		if (((ENE_dtm - my_dtm) / H_DIAG_fac) >= 0)
 		    fcost_dtm = (double)(ENE_dtm - my_dtm) * b;
@@ -1364,7 +1365,7 @@ int main(int argc, char *argv[])
 		segment_get(&dtm_in_seg, dtm_value, row, col);
 		cost_value = &ESE_cost;
 		segment_get(&cost_in_seg, cost_value, row, col);
-		if (G_is_d_null_value(cost_value))
+		if (Rast_is_d_null_value(cost_value))
 		    continue;
 		if (((ESE_dtm - my_dtm) / H_DIAG_fac) >= 0)
 		    fcost_dtm = (double)(ESE_dtm - my_dtm) * b;
@@ -1384,7 +1385,7 @@ int main(int argc, char *argv[])
 		segment_get(&dtm_in_seg, dtm_value, row, col);
 		cost_value = &WSW_cost;
 		segment_get(&cost_in_seg, cost_value, row, col);
-		if (G_is_d_null_value(cost_value))
+		if (Rast_is_d_null_value(cost_value))
 		    continue;
 		if (((WSW_dtm - my_dtm) / H_DIAG_fac) >= 0)
 		    fcost_dtm = (double)(WSW_dtm - my_dtm) * b;
@@ -1401,14 +1402,14 @@ int main(int argc, char *argv[])
 		break;
 	    }
 
-	    if (G_is_d_null_value(&min_cost))
+	    if (Rast_is_d_null_value(&min_cost))
 		continue;
 
 	    segment_get(&out_seg, &old_min_cost, row, col);
 	    if (dir == 1)
 		segment_get(&out_seg2, &old_cur_dir, row, col);
 
-	    if (G_is_d_null_value(&old_min_cost)) {
+	    if (Rast_is_d_null_value(&old_min_cost)) {
 		segment_put(&out_seg, &min_cost, row, col);
 		new_cell = insert(min_cost, row, col);
 		if (dir == 1)
@@ -1444,11 +1445,11 @@ int main(int argc, char *argv[])
   OUT:
     /*  Open cumulative cost layer for writing   */
 
-    cum_fd = G_open_raster_new(cum_cost_layer, cum_data_type);
-    cum_cell = G_allocate_raster_buf(cum_data_type);
+    cum_fd = Rast_open_raster_new(cum_cost_layer, cum_data_type);
+    cum_cell = Rast_allocate_raster_buf(cum_data_type);
     if (dir == 1) {
-	dir_fd = G_open_raster_new(move_dir_layer, dir_data_type);
-	dir_cell = G_allocate_raster_buf(dir_data_type);
+	dir_fd = Rast_open_raster_new(move_dir_layer, dir_data_type);
+	dir_cell = Rast_allocate_raster_buf(dir_data_type);
     }
 
     /*  Write pending updates by segment_put() to output map   */
@@ -1465,7 +1466,7 @@ int main(int argc, char *argv[])
     if (keep_nulls) {
 
 	G_message(_("Will copy input map null values into output map"));
-	cell2 = G_allocate_raster_buf(dtm_data_type);
+	cell2 = Rast_allocate_raster_buf(dtm_data_type);
     }
     if (cum_data_type == CELL_TYPE) {
 	int *p;
@@ -1476,7 +1477,7 @@ int main(int argc, char *argv[])
 
 	    G_percent(row, nrows, 2);
 	    if (keep_nulls) {
-		if (G_get_raster_row(dtm_fd, cell2, row, dtm_data_type) < 0)
+		if (Rast_get_raster_row(dtm_fd, cell2, row, dtm_data_type) < 0)
 		    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 				  dtm_layer, row);
 	    }
@@ -1484,14 +1485,14 @@ int main(int argc, char *argv[])
 	    p2 = cell2;
 	    for (col = 0; col < ncols; col++) {
 		if (keep_nulls) {
-		    if (G_is_null_value(p2++, dtm_data_type)) {
-			G_set_null_value((p + col), 1, dtm_data_type);
+		    if (Rast_is_null_value(p2++, dtm_data_type)) {
+			Rast_set_null_value((p + col), 1, dtm_data_type);
 			continue;
 		    }
 		}
 		segment_get(&out_seg, &min_cost, row, col);
-		if (G_is_d_null_value(&min_cost)) {
-		    G_set_null_value((p + col), 1, cum_data_type);
+		if (Rast_is_d_null_value(&min_cost)) {
+		    Rast_set_null_value((p + col), 1, cum_data_type);
 		}
 		else {
 		    if (min_cost > peak)
@@ -1499,7 +1500,7 @@ int main(int argc, char *argv[])
 		    *(p + col) = (int)(min_cost + .5);
 		}
 	    }
-	    G_put_raster_row(cum_fd, cum_cell, cum_data_type);
+	    Rast_put_raster_row(cum_fd, cum_cell, cum_data_type);
 	}
     }
     else if (cum_data_type == FCELL_TYPE) {
@@ -1511,7 +1512,7 @@ int main(int argc, char *argv[])
 
 	    G_percent(row, nrows, 2);
 	    if (keep_nulls) {
-		if (G_get_raster_row(dtm_fd, cell2, row, dtm_data_type) < 0)
+		if (Rast_get_raster_row(dtm_fd, cell2, row, dtm_data_type) < 0)
 		    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 				  dtm_layer, row);
 	    }
@@ -1519,14 +1520,14 @@ int main(int argc, char *argv[])
 	    p2 = cell2;
 	    for (col = 0; col < ncols; col++) {
 		if (keep_nulls) {
-		    if (G_is_null_value(p2++, dtm_data_type)) {
-			G_set_null_value((p + col), 1, dtm_data_type);
+		    if (Rast_is_null_value(p2++, dtm_data_type)) {
+			Rast_set_null_value((p + col), 1, dtm_data_type);
 			continue;
 		    }
 		}
 		segment_get(&out_seg, &min_cost, row, col);
-		if (G_is_d_null_value(&min_cost)) {
-		    G_set_null_value((p + col), 1, cum_data_type);
+		if (Rast_is_d_null_value(&min_cost)) {
+		    Rast_set_null_value((p + col), 1, cum_data_type);
 		}
 		else {
 		    if (min_cost > peak)
@@ -1534,7 +1535,7 @@ int main(int argc, char *argv[])
 		    *(p + col) = (float)(min_cost);
 		}
 	    }
-	    G_put_raster_row(cum_fd, cum_cell, cum_data_type);
+	    Rast_put_raster_row(cum_fd, cum_cell, cum_data_type);
 	}
     }
     else if (cum_data_type == DCELL_TYPE) {
@@ -1546,7 +1547,7 @@ int main(int argc, char *argv[])
 
 	    G_percent(row, nrows, 2);
 	    if (keep_nulls) {
-		if (G_get_raster_row(dtm_fd, cell2, row, dtm_data_type) < 0)
+		if (Rast_get_raster_row(dtm_fd, cell2, row, dtm_data_type) < 0)
 		    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 				  cell2, row);
 	    }
@@ -1554,14 +1555,14 @@ int main(int argc, char *argv[])
 	    p2 = cell2;
 	    for (col = 0; col < ncols; col++) {
 		if (keep_nulls) {
-		    if (G_is_null_value(p2++, dtm_data_type)) {
-			G_set_null_value((p + col), 1, dtm_data_type);
+		    if (Rast_is_null_value(p2++, dtm_data_type)) {
+			Rast_set_null_value((p + col), 1, dtm_data_type);
 			continue;
 		    }
 		}
 		segment_get(&out_seg, &min_cost, row, col);
-		if (G_is_d_null_value(&min_cost)) {
-		    G_set_null_value((p + col), 1, cum_data_type);
+		if (Rast_is_d_null_value(&min_cost)) {
+		    Rast_set_null_value((p + col), 1, cum_data_type);
 		}
 		else {
 		    if (min_cost > peak)
@@ -1569,7 +1570,7 @@ int main(int argc, char *argv[])
 		    *(p + col) = min_cost;
 		}
 	    }
-	    G_put_raster_row(cum_fd, cum_cell, cum_data_type);
+	    Rast_put_raster_row(cum_fd, cum_cell, cum_data_type);
 	}
     }
 
@@ -1583,7 +1584,7 @@ int main(int argc, char *argv[])
 		segment_get(&out_seg2, &cur_dir, row, col);
 		*(p + col) = cur_dir;
 	    }
-	    G_put_raster_row(dir_fd, dir_cell, dir_data_type);
+	    Rast_put_raster_row(dir_fd, dir_cell, dir_data_type);
 	}
 	G_percent(row, nrows, 2);
     }
@@ -1595,11 +1596,11 @@ int main(int argc, char *argv[])
     segment_release(&out_seg);
     if (dir == 1)
 	segment_release(&out_seg2);
-    G_close_cell(dtm_fd);
-    G_close_cell(cost_fd);
-    G_close_cell(cum_fd);
+    Rast_close_cell(dtm_fd);
+    Rast_close_cell(cost_fd);
+    Rast_close_cell(cum_fd);
     if (dir == 1)
-	G_close_cell(dir_fd);
+	Rast_close_cell(dir_fd);
     close(dtm_in_fd);		/* close all files */
     close(out_fd);
     close(cost_in_fd);
@@ -1614,21 +1615,21 @@ int main(int argc, char *argv[])
     /*  Create colours for output map    */
 
     /*
-     * G_read_range (cum_cost_layer, "", &range);
-     * G_get_range_min_max(&range, &min, &max);
+     * Rast_read_range (cum_cost_layer, "", &range);
+     * Rast_get_range_min_max(&range, &min, &max);
      * G_make_color_wave(&colors,min, max);
-     * G_write_colors (cum_cost_layer,"",&colors);
+     * Rast_write_colors (cum_cost_layer,"",&colors);
      */
 
     /* writing history file */
-    G_short_history(cum_cost_layer, "raster", &history);
-    G_command_history(&history);
-    G_write_history(cum_cost_layer, &history);
+    Rast_short_history(cum_cost_layer, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(cum_cost_layer, &history);
 
     if (dir == 1) {
-	G_short_history(move_dir_layer, "raster", &history);
-    G_command_history(&history);
-    G_write_history(move_dir_layer, &history);
+	Rast_short_history(move_dir_layer, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(move_dir_layer, &history);
 	}
 
     exit(EXIT_SUCCESS);

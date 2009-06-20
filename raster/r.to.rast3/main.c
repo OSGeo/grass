@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/G3d.h>
 #include <grass/glocale.h>
 #include <grass/config.h>
@@ -102,7 +103,7 @@ void raster_to_g3d(void *map, G3D_Region region, int *fd)
     cols = region.cols;
     depths = region.depths;
 
-    rast = G_allocate_raster_buf(globalRastMapType);
+    rast = Rast_allocate_raster_buf(globalRastMapType);
 
     G_debug(3, "raster_to_g3d: Writing %i raster maps with %i rows %i cols.",
 	    depths, rows, cols);
@@ -113,14 +114,14 @@ void raster_to_g3d(void *map, G3D_Region region, int *fd)
 	for (y = 0; y < rows; y++) {
 	    G_percent(y, rows - 1, 10);
 
-	    if (!G_get_raster_row(fd[z], rast, y, globalRastMapType))
+	    if (!Rast_get_raster_row(fd[z], rast, y, globalRastMapType))
 		fatal_error(map, fd, depths, _("Could not get raster row"));
 
 	    for (x = 0, ptr = rast; x < cols; x++,
 		 ptr =
-		 G_incr_void_ptr(ptr, G_raster_size(globalRastMapType))) {
+		 Rast_incr_void_ptr(ptr, Rast_raster_size(globalRastMapType))) {
 		if (globalRastMapType == CELL_TYPE) {
-		    if (G_is_null_value(ptr, globalRastMapType)) {
+		    if (Rast_is_null_value(ptr, globalRastMapType)) {
 			G3d_setNullValue(&dvalue, 1, DCELL_TYPE);
 		    }
 		    else {
@@ -132,7 +133,7 @@ void raster_to_g3d(void *map, G3D_Region region, int *fd)
 				    "Error writing double data");
 		}
 		else if (globalRastMapType == FCELL_TYPE) {
-		    if (G_is_null_value(ptr, globalRastMapType)) {
+		    if (Rast_is_null_value(ptr, globalRastMapType)) {
 			G3d_setNullValue(&fvalue, 1, FCELL_TYPE);
 		    }
 		    else {
@@ -145,7 +146,7 @@ void raster_to_g3d(void *map, G3D_Region region, int *fd)
 
 		}
 		else if (globalRastMapType == DCELL_TYPE) {
-		    if (G_is_null_value(ptr, globalRastMapType)) {
+		    if (Rast_is_null_value(ptr, globalRastMapType)) {
 			G3d_setNullValue(&dvalue, 1, DCELL_TYPE);
 		    }
 		    else {
@@ -255,7 +256,7 @@ int main(int argc, char *argv[])
 	fd[i] = open_input_raster_map(name);
 	opencells++;
 
-	maptype_tmp = G_get_raster_map_type(fd[i]);
+	maptype_tmp = Rast_get_raster_map_type(fd[i]);
 
 	/*maptype */
 	if (i == 0)
@@ -345,7 +346,7 @@ int open_input_raster_map(const char *name)
 
 
     /* open raster map */
-    fd = G_open_cell_old(name, "");
+    fd = Rast_open_cell_old(name, "");
 
     if (fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
@@ -359,6 +360,6 @@ int open_input_raster_map(const char *name)
 /* ************************************************************************* */
 void close_input_raster_map(int fd)
 {
-    if (G_close_cell(fd) < 0)
+    if (Rast_close_cell(fd) < 0)
 	G_fatal_error(_("Unable to close input map"));
 }

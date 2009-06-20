@@ -18,6 +18,7 @@
 #include <sys/types.h>
 #include <dirent.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/display_raster.h>
 #include <grass/display.h>
 #include <grass/Vect.h>
@@ -392,7 +393,7 @@ int main(int argc, char **argv)
     }
 
     color = G_standard_color_rgb(WHITE);
-    ret = G_str_to_color(color_opt->answer, &r, &g, &b);
+    ret = Rast_str_to_color(color_opt->answer, &r, &g, &b);
     if (ret == 1) {
 	has_color = 1;
 	color.r = r;
@@ -407,7 +408,7 @@ int main(int argc, char **argv)
     }
 
     fcolor = G_standard_color_rgb(WHITE);
-    ret = G_str_to_color(fcolor_opt->answer, &r, &g, &b);
+    ret = Rast_str_to_color(fcolor_opt->answer, &r, &g, &b);
     if (ret == 1) {
 	has_fcolor = 1;
 	fcolor.r = r;
@@ -532,20 +533,20 @@ int main(int argc, char **argv)
 	lattr.field = Clist->field;
 
     lattr.color.R = lattr.color.G = lattr.color.B = 255;
-    if (G_str_to_color(lcolor_opt->answer, &r, &g, &b)) {
+    if (Rast_str_to_color(lcolor_opt->answer, &r, &g, &b)) {
 	lattr.color.R = r;
 	lattr.color.G = g;
 	lattr.color.B = b;
     }
     lattr.has_bgcolor = 0;
-    if (G_str_to_color(bgcolor_opt->answer, &r, &g, &b) == 1) {
+    if (Rast_str_to_color(bgcolor_opt->answer, &r, &g, &b) == 1) {
 	lattr.has_bgcolor = 1;
 	lattr.bgcolor.R = r;
 	lattr.bgcolor.G = g;
 	lattr.bgcolor.B = b;
     }
     lattr.has_bcolor = 0;
-    if (G_str_to_color(bcolor_opt->answer, &r, &g, &b) == 1) {
+    if (Rast_str_to_color(bcolor_opt->answer, &r, &g, &b) == 1) {
 	lattr.has_bcolor = 1;
 	lattr.bcolor.R = r;
 	lattr.bcolor.G = g;

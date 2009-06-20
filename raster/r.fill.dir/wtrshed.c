@@ -2,6 +2,7 @@
 #include <sys/types.h>
 #include <stdlib.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 struct whereandwhat
@@ -26,37 +27,37 @@ int recurse_cell(CELL flag, int i, int j, int nl, int ns,
 
     if (i > 0) {
 	edge = dir[i - 1].p[j - 1];
-	if (bas[i - 1].p[j - 1] == -1 && !G_is_c_null_value(&edge) &&
+	if (bas[i - 1].p[j - 1] == -1 && !Rast_is_c_null_value(&edge) &&
 	    edge == 4)
 	    rc += recurse_cell(flag, i - 1, j - 1, nl, ns, bas, dir);
 	edge = dir[i - 1].p[j];
-	if (bas[i - 1].p[j] == -1 && !G_is_c_null_value(&edge) && edge == 8)
+	if (bas[i - 1].p[j] == -1 && !Rast_is_c_null_value(&edge) && edge == 8)
 	    rc += recurse_cell(flag, i - 1, j, nl, ns, bas, dir);
 	edge = dir[i - 1].p[j + 1];
-	if (bas[i - 1].p[j + 1] == -1 && !G_is_c_null_value(&edge) &&
+	if (bas[i - 1].p[j + 1] == -1 && !Rast_is_c_null_value(&edge) &&
 	    edge == 16)
 	    rc += recurse_cell(flag, i - 1, j + 1, nl, ns, bas, dir);
 
     }
 
     edge = dir[i].p[j - 1];
-    if (bas[i].p[j - 1] == -1 && !G_is_c_null_value(&edge) && edge == 2)
+    if (bas[i].p[j - 1] == -1 && !Rast_is_c_null_value(&edge) && edge == 2)
 	rc += recurse_cell(flag, i, j - 1, nl, ns, bas, dir);
 
     edge = dir[i].p[j + 1];
-    if (bas[i].p[j + 1] == -1 && !G_is_c_null_value(&edge) && edge == 32)
+    if (bas[i].p[j + 1] == -1 && !Rast_is_c_null_value(&edge) && edge == 32)
 	rc += recurse_cell(flag, i, j + 1, nl, ns, bas, dir);
 
     if (i < nl - 1) {
 	edge = dir[i + 1].p[j - 1];
-	if (bas[i + 1].p[j - 1] == -1 && !G_is_c_null_value(&edge) &&
+	if (bas[i + 1].p[j - 1] == -1 && !Rast_is_c_null_value(&edge) &&
 	    edge == 1)
 	    rc += recurse_cell(flag, i + 1, j - 1, nl, ns, bas, dir);
 	edge = dir[i + 1].p[j];
-	if (bas[i + 1].p[j] == -1 && !G_is_c_null_value(&edge) && edge == 128)
+	if (bas[i + 1].p[j] == -1 && !Rast_is_c_null_value(&edge) && edge == 128)
 	    rc += recurse_cell(flag, i + 1, j, nl, ns, bas, dir);
 	edge = dir[i + 1].p[j + 1];
-	if (bas[i + 1].p[j + 1] == -1 && !G_is_c_null_value(&edge) &&
+	if (bas[i + 1].p[j + 1] == -1 && !Rast_is_c_null_value(&edge) &&
 	    edge == 64)
 	    rc += recurse_cell(flag, i + 1, j + 1, nl, ns, bas, dir);
     }

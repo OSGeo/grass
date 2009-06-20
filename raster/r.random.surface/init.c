@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 #include "ransurf.h"
@@ -41,14 +42,14 @@ void Init(void)
 	FDM = -1;
     }
     else {
-	if ((FDM = G_open_cell_old("MASK", G_mapset())) < 0) {
+	if ((FDM = Rast_open_cell_old("MASK", G_mapset())) < 0) {
 	    G_fatal_error(_("Unable to open raster map <%s>"), "MASK");
 	}
 	else {
 	    MapCount = 0;
-	    CellBuffer = G_allocate_cell_buf();
+	    CellBuffer = Rast_allocate_cell_buf();
 	    for (row = 0; row < Rs; row++) {
-		G_get_map_row_nomask(FDM, CellBuffer, row);
+		Rast_get_map_row_nomask(FDM, CellBuffer, row);
 		for (col = 0; col < Cs; col++) {
 		    if (CellBuffer[col])
 			MapCount++;
@@ -125,7 +126,7 @@ void Init(void)
 	}			/* /for */
     }				/* /else */
 
-    CellBuffer = G_allocate_cell_buf();
+    CellBuffer = Rast_allocate_cell_buf();
     CatInfo.NumValue = (int *)G_malloc(CatInfo.NumCat * sizeof(int));
     CatInfo.Average = (double *)G_malloc(CatInfo.NumCat * sizeof(double));
     CatInfo.Min = (double *)G_malloc(CatInfo.NumCat * sizeof(double));

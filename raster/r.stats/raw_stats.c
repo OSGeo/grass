@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "global.h"
 
 int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels)
@@ -24,7 +25,7 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels)
 	    map_type[i] = DCELL_TYPE;
 	else
 	    map_type[i] = CELL_TYPE;
-	rast[i] = G_allocate_raster_buf(map_type[i]);
+	rast[i] = Rast_allocate_raster_buf(map_type[i]);
     }
 
     /* get window */
@@ -32,13 +33,13 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels)
 	G_get_set_window(&window);
 
     /* here we go */
-    G_set_c_null_value(&null_cell, 1);
+    Rast_set_c_null_value(&null_cell, 1);
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
 
 	/* read the rows and set the pointers */
 	for (i = 0; i < nfiles; i++) {
-	    if (G_get_raster_row(fd[i], rast[i], row, map_type[i]) < 0)
+	    if (Rast_get_raster_row(fd[i], rast[i], row, map_type[i]) < 0)
 		exit(1);
 	    rastp[i] = rast[i];
 	}
@@ -52,18 +53,18 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels)
 		nulls_found = 0;
 		for (i = 0; i < nfiles; i++) {
 		    /*
-		       G_set_raster_value_d(zero_val, 0.0, map_type[i]);
-		       if (G_raster_cmp(rastp[i], zero_val, map_type[i]) != 0)
+		       Rast_set_raster_value_d(zero_val, 0.0, map_type[i]);
+		       if (Rast_raster_cmp(rastp[i], zero_val, map_type[i]) != 0)
 		       break;
 		     */
-		    if (G_is_null_value(rastp[i], map_type[i]))
+		    if (Rast_is_null_value(rastp[i], map_type[i]))
 			nulls_found++;
 		}
 
 		if ((nulls_found == nfiles) || (nulls_found && no_nulls)) {
 		    for (i = 0; i < nfiles; i++)
-			rastp[i] = G_incr_void_ptr(rastp[i],
-						   G_raster_size(map_type
+			rastp[i] = Rast_incr_void_ptr(rastp[i],
+						   Rast_raster_size(map_type
 								 [i]));
 		    continue;
 		}
@@ -77,18 +78,18 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels)
 		fprintf(stdout, "%d%s%d%s", col + 1, fs, row + 1, fs);
 
 	    for (i = 0; i < nfiles; i++) {
-		if (G_is_null_value(rastp[i], map_type[i])) {
+		if (Rast_is_null_value(rastp[i], map_type[i])) {
 		    fprintf(stdout, "%s%s", i ? fs : "", no_data_str);
 		    if (with_labels)
 			fprintf(stdout, "%s%s", fs,
-				G_get_cat(null_cell, &labels[i]));
+				Rast_get_cat(null_cell, &labels[i]));
 		}
 		else if (map_type[i] == CELL_TYPE) {
 		    fprintf(stdout, "%s%ld", i ? fs : "",
 			    (long)*((CELL *) rastp[i]));
 		    if (with_labels && !is_fp[i])
 			fprintf(stdout, "%s%s", fs,
-				G_get_cat(*((CELL *) rastp[i]), &labels[i]));
+				Rast_get_cat(*((CELL *) rastp[i]), &labels[i]));
 		}
 		else {		/* floating point cell */
 
@@ -98,11 +99,11 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels)
 		    fprintf(stdout, "%s%s", i ? fs : "", str1);
 		    if (with_labels)
 			fprintf(stdout, "%s%s", fs,
-				G_get_d_raster_cat((DCELL *) rastp[i],
+				Rast_get_d_raster_cat((DCELL *) rastp[i],
 						   &labels[i]));
 		}
 		rastp[i] =
-		    G_incr_void_ptr(rastp[i], G_raster_size(map_type[i]));
+		    Rast_incr_void_ptr(rastp[i], Rast_raster_size(map_type[i]));
 	    }
 	    fprintf(stdout, "\n");
 	}

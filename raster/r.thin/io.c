@@ -34,6 +34,7 @@
 #include <fcntl.h>
 #include <grass/config.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include <grass/rowio.h>
 
@@ -90,7 +91,7 @@ int open_file(char *name)
 
     /* open raster map */
     strcpy(cell, name);
-    if ((cell_file = G_open_cell_old(cell, "")) < 0) {
+    if ((cell_file = Rast_open_cell_old(cell, "")) < 0) {
 	unlink(work_file_name);
 	G_fatal_error(_("Unable to open raster map <%s>"), cell);
     }
@@ -121,7 +122,7 @@ int open_file(char *name)
 	}
     }
     for (row = 0; row < n_rows; row++) {
-	if (G_get_map_row(cell_file, buf + PAD, row) < 0) {
+	if (Rast_get_map_row(cell_file, buf + PAD, row) < 0) {
 	    unlink(work_file_name);
 	    G_fatal_error(_("%s: Error reading from raster map <%s>"),
 			  error_prefix, cell);
@@ -145,7 +146,7 @@ int open_file(char *name)
     }
     n_rows += (PAD << 1);
     G_free(buf);
-    G_close_cell(cell_file);
+    Rast_close_cell(cell_file);
     rowio_setup(&row_io, work_file, MAX_ROW, n_cols * sizeof(CELL), read_row,
 		write_row);
 
@@ -158,7 +159,7 @@ int close_file(char *name)
     int row_count, col_count, col;
     CELL *buf;
 
-    if ((cell_file = G_open_cell_new(name)) < 0) {
+    if ((cell_file = Rast_open_cell_new(name)) < 0) {
 	unlink(work_file_name);
 	G_fatal_error(_("Unable to create raster map <%s>"), name);
     }
@@ -173,11 +174,11 @@ int close_file(char *name)
 	buf = get_a_row(k);
 	for (col = 0; col < n_cols; col++) {
 	    if (buf[col] == 0)
-		G_set_null_value(&buf[col], 1, CELL_TYPE);
+		Rast_set_null_value(&buf[col], 1, CELL_TYPE);
 	}
-	G_put_raster_row(cell_file, buf + PAD, CELL_TYPE);
+	Rast_put_raster_row(cell_file, buf + PAD, CELL_TYPE);
     }
-    G_close_cell(cell_file);
+    Rast_close_cell(cell_file);
     rowio_flush(&row_io);
     close(rowio_fileno(&row_io));
     rowio_release(&row_io);

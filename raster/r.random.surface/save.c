@@ -1,6 +1,7 @@
 /* save.c                                                               */
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "ransurf.h"
 
@@ -17,7 +18,7 @@ void SaveMap(int NumMap, int MapSeed)
 
     G_debug(2, "SaveMap()");
 
-    OutFD = G_open_cell_new(OutNames[NumMap]);
+    OutFD = Rast_open_cell_new(OutNames[NumMap]);
     if (OutFD < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"),
 		      OutNames[NumMap]);
@@ -56,7 +57,7 @@ void SaveMap(int NumMap, int MapSeed)
     }
     else {
 	for (Row = 0; Row < Rs; Row++) {
-	    G_get_map_row_nomask(FDM, CellBuffer, Row);
+	    Rast_get_map_row_nomask(FDM, CellBuffer, Row);
 	    for (Col = 0; Col < Cs; Col++) {
 		if (CellBuffer[Col] != 0) {
 		    Value = Surface[Row][Col];
@@ -75,7 +76,7 @@ void SaveMap(int NumMap, int MapSeed)
 	DownInterval = UpInterval = Value;
 
 	for (Row = 0; Row < Rs; Row++) {
-	    G_get_map_row_nomask(FDM, CellBuffer, Row);
+	    Rast_get_map_row_nomask(FDM, CellBuffer, Row);
 	    for (Col = 0; Col < Cs; Col++) {
 		if (CellBuffer[Col] != 0) {
 		    Value = Surface[Row][Col];
@@ -168,14 +169,14 @@ void SaveMap(int NumMap, int MapSeed)
 	for (Col = 0; Col < Cs; Col++) {
 	    CellBuffer[Col] = (CELL) Surface[Row][Col];
 	}
-	G_put_raster_row(OutFD, CellBuffer, CELL_TYPE);
+	Rast_put_raster_row(OutFD, CellBuffer, CELL_TYPE);
     }
     G_percent(1, 1, 1);
 
-    G_close_cell(OutFD);
-    G_short_history(OutNames[NumMap], "raster", &history);
-    G_command_history(&history);
-    G_write_history(OutNames[NumMap], &history);
+    Rast_close_cell(OutFD);
+    Rast_short_history(OutNames[NumMap], "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(OutNames[NumMap], &history);
 
     strcpy(Label, Buf);
     sprintf(String, " seed=%d", MapSeed);
@@ -186,19 +187,19 @@ void SaveMap(int NumMap, int MapSeed)
        TheoryCovariance( TheoryName, Label);
      */
 
-    G_init_cats(CatInfo.NumCat, Label, &Cats);
+    Rast_init_cats(CatInfo.NumCat, Label, &Cats);
     for (Index = 0; Index < CatInfo.NumCat; Index++) {
 	if (CatInfo.NumValue[Index] != 0) {
 	    CatInfo.Average[Index] /= CatInfo.NumValue[Index];
 	    sprintf(Label, "%+lf %+lf to %+lf",
 		    CatInfo.Average[Index],
 		    CatInfo.Min[Index], CatInfo.Max[Index]);
-	    G_set_cat(1 + Index, Label, &Cats);
+	    Rast_set_cat(1 + Index, Label, &Cats);
 	}
     }
 
-    G_write_cats(OutNames[NumMap], &Cats);
-    G_init_colors(&Colr);
+    Rast_write_cats(OutNames[NumMap], &Cats);
+    Rast_init_colors(&Colr);
     LowColor = (int)(127.5 * (CatInfo.Average[0] + 3.5) / 3.5);
     HighColor = (int)(255.0 - 127.5 *
 		      (3.5 - CatInfo.Average[CatInfo.NumCat - 1]) / 3.5);
@@ -210,10 +211,10 @@ void SaveMap(int NumMap, int MapSeed)
     G_debug(3, "(LowColor):%d", LowColor);
     G_debug(3, "(HighColor):%d", HighColor);
 
-    G_add_color_rule(1, LowColor, LowColor, LowColor,
+    Rast_add_color_rule(1, LowColor, LowColor, LowColor,
 		     High, HighColor, HighColor, HighColor, &Colr);
 
-    if (G_write_colors(OutNames[NumMap], G_mapset(), &Colr) == -1)
+    if (Rast_write_colors(OutNames[NumMap], G_mapset(), &Colr) == -1)
 	G_warning(_("Unable to write color table for raster map <%s>"),
 		  OutNames[NumMap]);
 }

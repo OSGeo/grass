@@ -58,7 +58,7 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
 
     name = choice->fn;
     mapset = G_mapset();
-    data_type = G_raster_map_type(name, mapset);
+    data_type = Rast_raster_map_type(name, mapset);
 
     /* dynamically allocate storage for the
        buffer that will hold the contents of
@@ -253,14 +253,14 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
        i, j       = indices to rows and cols of the arrays
      */
 
-    data_type = G_raster_map_type(choice->fn, G_mapset());
+    data_type = Rast_raster_map_type(choice->fn, G_mapset());
 
     /* if sampling by region was chosen, check
        for the region map and make sure it is
        an integer (CELL_TYPE) map */
 
     if (choice->wrum == 'r') {
-	if (0 > (fr = G_open_cell_old(choice->reg, G_mapset()))) {
+	if (0 > (fr = Rast_open_cell_old(choice->reg, G_mapset()))) {
 	    fprintf(stderr, "\n");
 	    fprintf(stderr,
 		    "   *******************************************************\n");
@@ -274,7 +274,7 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
 		    "   *******************************************************\n");
 	    exit(1);
 	}
-	if (G_raster_map_type(choice->reg, G_mapset()) > 0) {
+	if (Rast_raster_map_type(choice->reg, G_mapset()) > 0) {
 	    fprintf(stderr, "\n");
 	    fprintf(stderr,
 		    "   *******************************************************\n");
@@ -290,8 +290,8 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
 		    "   *******************************************************\n");
 	    exit(1);
 	}
-	tmp1 = G_allocate_raster_buf(CELL_TYPE);
-	G_zero_raster_buf(tmp1, CELL_TYPE);
+	tmp1 = Rast_allocate_raster_buf(CELL_TYPE);
+	Rast_zero_raster_buf(tmp1, CELL_TYPE);
 	fprintf(stderr, "Analyzing region number %d...\n", index);
     }
 
@@ -302,15 +302,15 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
 
     switch (data_type) {
     case CELL_TYPE:
-	tmp = G_allocate_raster_buf(CELL_TYPE);
+	tmp = Rast_allocate_raster_buf(CELL_TYPE);
 	tmpname = "tmp";
 	break;
     case FCELL_TYPE:
-	ftmp = G_allocate_raster_buf(FCELL_TYPE);
+	ftmp = Rast_allocate_raster_buf(FCELL_TYPE);
 	tmpname = "ftmp";
 	break;
     case DCELL_TYPE:
-	dtmp = G_allocate_raster_buf(DCELL_TYPE);
+	dtmp = Rast_allocate_raster_buf(DCELL_TYPE);
 	tmpname = "dtmp";
 	break;
     }
@@ -319,7 +319,7 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
        null values corresponding to the raster
        map */
 
-    nulltmp = G_allocate_null_buf();
+    nulltmp = Rast_allocate_null_buf();
 
     /* if circles are used for sampling, then
        calculate the center of the area to be
@@ -338,7 +338,7 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
 	   map row in the region file */
 
 	if (choice->wrum == 'r')
-	    G_get_raster_row_nomask(fr, tmp1, i, CELL_TYPE);
+	    Rast_get_raster_row_nomask(fr, tmp1, i, CELL_TYPE);
 
 	/* initialize each element of the
 	   row buffer to 0; this row buffer
@@ -349,20 +349,20 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
 
 	switch (data_type) {
 	case CELL_TYPE:
-	    G_zero_raster_buf(tmp, data_type);
-	    G_get_raster_row(finput, tmp, i, CELL_TYPE);
+	    Rast_zero_raster_buf(tmp, data_type);
+	    Rast_get_raster_row(finput, tmp, i, CELL_TYPE);
 	    break;
 	case FCELL_TYPE:
-	    G_zero_raster_buf(ftmp, data_type);
-	    G_get_raster_row(finput, ftmp, i, FCELL_TYPE);
+	    Rast_zero_raster_buf(ftmp, data_type);
+	    Rast_get_raster_row(finput, ftmp, i, FCELL_TYPE);
 	    break;
 	case DCELL_TYPE:
-	    G_zero_raster_buf(dtmp, data_type);
-	    G_get_raster_row(finput, dtmp, i, DCELL_TYPE);
+	    Rast_zero_raster_buf(dtmp, data_type);
+	    Rast_get_raster_row(finput, dtmp, i, DCELL_TYPE);
 	    break;
 	}
 
-	G_get_null_value_row(finput, nulltmp, i);
+	Rast_get_null_value_row(finput, nulltmp, i);
 
 	/* for all the columns one by one */
 
@@ -436,7 +436,7 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
     }
     if (choice->wrum == 'r') {
 	G_free(tmp1);
-	G_close_cell(fr);
+	Rast_close_cell(fr);
     }
     G_free(nulltmp);
     return;

@@ -12,6 +12,7 @@
  */
 
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 #include <fcntl.h>		/* for O_RDONLY usage */
@@ -159,7 +160,7 @@ int contrastWeightedEdgeDensity(int fd, char **par, area_des ad,
 	return RLI_ERRORE;
     }
 
-    if (G_get_cellhd(ad->raster, "", &hd) == -1) {
+    if (Rast_get_cellhd(ad->raster, "", &hd) == -1) {
 	G_fatal_error("can't read raster header");
 	return RLI_ERRORE;
     }
@@ -340,7 +341,7 @@ int calculate(int fd, area_des ad, Coppie * cc, long totCoppie,
     }
 
 
-    buf_sup = G_allocate_cell_buf();
+    buf_sup = Rast_allocate_cell_buf();
     if (buf_sup == NULL) {
 	G_fatal_error("malloc buf_sup failed");
 	return RLI_ERRORE;
@@ -349,13 +350,13 @@ int calculate(int fd, area_des ad, Coppie * cc, long totCoppie,
     c1.t = CELL_TYPE;
     c2.t = CELL_TYPE;
 
-    buf_corr = G_allocate_cell_buf();
+    buf_corr = Rast_allocate_cell_buf();
     if (buf_corr == NULL) {
 	G_fatal_error("error malloc buf_corr");
 	return RLI_ERRORE;
     }
 
-    G_set_c_null_value(buf_sup + ad->x, ad->cl);	/*the first time buf_sup is all null */
+    Rast_set_c_null_value(buf_sup + ad->x, ad->cl);	/*the first time buf_sup is all null */
     for (j = 0; j < ad->rl; j++) {	/* for each row */
 	buf_corr = RLI_get_cell_raster_row(fd, j + ad->y, ad);	/* read row of raster */
 	if (j > 0) {		/* not first row */
@@ -369,20 +370,20 @@ int calculate(int fd, area_des ad, Coppie * cc, long totCoppie,
 	    }
 	}
 
-	G_set_c_null_value(&prevCell, 1);
-	G_set_c_null_value(&corrCell, 1);
+	Rast_set_c_null_value(&prevCell, 1);
+	Rast_set_c_null_value(&corrCell, 1);
 	for (i = 0; i < ad->cl; i++) {	/* for each cell in the row */
 	    area++;
 	    corrCell = buf_corr[i + ad->x];
 	    if (masked && mask_corr[i + ad->x] == 0) {
 		area--;
-		G_set_c_null_value(&corrCell, 1);
+		Rast_set_c_null_value(&corrCell, 1);
 	    }
-	    if (!(G_is_null_value(&corrCell, CELL_TYPE))) {
+	    if (!(Rast_is_null_value(&corrCell, CELL_TYPE))) {
 		supCell = buf_sup[i + ad->x];
 		/* calculate how many edge the cell has */
 
-		if (((!G_is_null_value(&prevCell, CELL_TYPE))) &&
+		if (((!Rast_is_null_value(&prevCell, CELL_TYPE))) &&
 		    (corrCell != prevCell)) {
 		    int r = 0;
 
@@ -395,7 +396,7 @@ int calculate(int fd, area_des ad, Coppie * cc, long totCoppie,
 
 		}
 
-		if ((!(G_is_null_value(&supCell, CELL_TYPE))) &&
+		if ((!(Rast_is_null_value(&supCell, CELL_TYPE))) &&
 		    (corrCell != supCell)) {
 		    int r = 0;
 
@@ -481,7 +482,7 @@ int calculateD(int fd, area_des ad, Coppie * cc, long totCoppie,
     }
 
 
-    buf_sup = G_allocate_d_raster_buf();
+    buf_sup = Rast_allocate_d_raster_buf();
     if (buf_sup == NULL) {
 	G_fatal_error("malloc buf_sup failed");
 	return RLI_ERRORE;
@@ -490,9 +491,9 @@ int calculateD(int fd, area_des ad, Coppie * cc, long totCoppie,
     c1.t = DCELL_TYPE;
     c2.t = DCELL_TYPE;
 
-    buf_corr = G_allocate_d_raster_buf();
+    buf_corr = Rast_allocate_d_raster_buf();
 
-    G_set_d_null_value(buf_sup + ad->x, ad->cl);	/*the first time buf_sup is all null */
+    Rast_set_d_null_value(buf_sup + ad->x, ad->cl);	/*the first time buf_sup is all null */
 
     for (j = 0; j < ad->rl; j++) {	/* for each row */
 	buf_corr = RLI_get_dcell_raster_row(fd, j + ad->y, ad);	/* read row of raster */
@@ -506,19 +507,19 @@ int calculateD(int fd, area_des ad, Coppie * cc, long totCoppie,
 		return RLI_ERRORE;
 	    }
 	}
-	G_set_d_null_value(&prevCell, 1);
-	G_set_d_null_value(&corrCell, 1);
+	Rast_set_d_null_value(&prevCell, 1);
+	Rast_set_d_null_value(&corrCell, 1);
 	for (i = 0; i < ad->cl; i++) {	/* for each cell in the row */
 	    area++;
 	    corrCell = buf_corr[i + ad->x];
 	    if (masked && mask_corr[i + ad->x] == 0) {
-		G_set_d_null_value(&corrCell, 1);
+		Rast_set_d_null_value(&corrCell, 1);
 		area--;
 	    }
-	    if (!(G_is_null_value(&corrCell, DCELL_TYPE))) {
+	    if (!(Rast_is_null_value(&corrCell, DCELL_TYPE))) {
 		supCell = buf_sup[i + ad->x];
 		/* calculate how many edge the cell has */
-		if (((!G_is_null_value(&prevCell, DCELL_TYPE))) &&
+		if (((!Rast_is_null_value(&prevCell, DCELL_TYPE))) &&
 		    (corrCell != prevCell)) {
 		    int r = 0;
 
@@ -530,7 +531,7 @@ int calculateD(int fd, area_des ad, Coppie * cc, long totCoppie,
 		}
 
 
-		if ((!(G_is_null_value(&supCell, DCELL_TYPE))) &&
+		if ((!(Rast_is_null_value(&supCell, DCELL_TYPE))) &&
 		    (corrCell != supCell)) {
 		    int r = 0;
 
@@ -617,14 +618,14 @@ int calculateF(int fd, area_des ad, Coppie * cc, long totCoppie,
     }
 
     /* allocate and inizialize buffers */
-    buf_sup = G_allocate_f_raster_buf();
+    buf_sup = Rast_allocate_f_raster_buf();
     if (buf_sup == NULL) {
 	G_fatal_error("malloc buf_sup failed");
 	return RLI_ERRORE;
     }
-    G_set_f_null_value(buf_sup + ad->x, ad->cl);	/*the first time buf_sup is all null */
+    Rast_set_f_null_value(buf_sup + ad->x, ad->cl);	/*the first time buf_sup is all null */
 
-    buf_corr = G_allocate_f_raster_buf();
+    buf_corr = Rast_allocate_f_raster_buf();
     if (buf_corr == NULL) {
 	G_fatal_error("malloc buf_corr failed");
 	return RLI_ERRORE;
@@ -646,19 +647,19 @@ int calculateF(int fd, area_des ad, Coppie * cc, long totCoppie,
 		return RLI_ERRORE;
 	    }
 	}
-	G_set_f_null_value(&prevCell, 1);
-	G_set_f_null_value(&corrCell, 1);
+	Rast_set_f_null_value(&prevCell, 1);
+	Rast_set_f_null_value(&corrCell, 1);
 	for (i = 0; i < ad->cl; i++) {	/* for each cell in the row */
 	    area++;
 	    corrCell = buf_corr[i + ad->x];
 	    if (masked && mask_corr[i + ad->x] == 0) {
-		G_set_f_null_value(&corrCell, 1);
+		Rast_set_f_null_value(&corrCell, 1);
 		area--;
 	    }
-	    if (!(G_is_null_value(&corrCell, FCELL_TYPE))) {
+	    if (!(Rast_is_null_value(&corrCell, FCELL_TYPE))) {
 		supCell = buf_sup[i + ad->x];
 
-		if (((!G_is_null_value(&prevCell, FCELL_TYPE))) &&
+		if (((!Rast_is_null_value(&prevCell, FCELL_TYPE))) &&
 		    (corrCell != prevCell)) {
 		    int r = 0;
 
@@ -670,7 +671,7 @@ int calculateF(int fd, area_des ad, Coppie * cc, long totCoppie,
 		}
 
 
-		if ((!(G_is_null_value(&supCell, FCELL_TYPE))) &&
+		if ((!(Rast_is_null_value(&supCell, FCELL_TYPE))) &&
 		    (corrCell != supCell)) {
 		    int r = 0;
 
@@ -737,22 +738,22 @@ int addCoppia(Coppie * cc, generic_cell ce1, generic_cell ce2, double pe,
     switch (ce1.t) {
     case CELL_TYPE:
 	{
-	    if ((G_is_null_value(&ce1.val.c, CELL_TYPE)) ||
-		(G_is_null_value(&ce2.val.c, CELL_TYPE)))
+	    if ((Rast_is_null_value(&ce1.val.c, CELL_TYPE)) ||
+		(Rast_is_null_value(&ce2.val.c, CELL_TYPE)))
 		return _ERR;
 	    break;
 	}
     case DCELL_TYPE:
 	{
-	    if ((G_is_null_value(&ce1.val.dc, DCELL_TYPE)) ||
-		(G_is_null_value(&ce2.val.dc, DCELL_TYPE)))
+	    if ((Rast_is_null_value(&ce1.val.dc, DCELL_TYPE)) ||
+		(Rast_is_null_value(&ce2.val.dc, DCELL_TYPE)))
 		return _ERR;
 	    break;
 	}
     case FCELL_TYPE:
 	{
-	    if ((G_is_null_value(&ce1.val.fc, FCELL_TYPE)) ||
-		(G_is_null_value(&ce2.val.fc, FCELL_TYPE)))
+	    if ((Rast_is_null_value(&ce1.val.fc, FCELL_TYPE)) ||
+		(Rast_is_null_value(&ce2.val.fc, FCELL_TYPE)))
 		return _ERR;
 	    break;
 	}
@@ -824,22 +825,22 @@ int updateCoppia(Coppie * cc, generic_cell c1, generic_cell c2, long tc)
     switch (c1.t) {
     case CELL_TYPE:
 	{
-	    if ((G_is_null_value(&(c1.val.c), CELL_TYPE)) ||
-		(G_is_null_value(&(c2.val.c), CELL_TYPE)))
+	    if ((Rast_is_null_value(&(c1.val.c), CELL_TYPE)) ||
+		(Rast_is_null_value(&(c2.val.c), CELL_TYPE)))
 		return RLI_ERRORE;
 	    break;
 	}
     case DCELL_TYPE:
 	{
-	    if ((G_is_null_value(&(c1.val.dc), DCELL_TYPE)) ||
-		(G_is_null_value(&(c2.val.dc), DCELL_TYPE)))
+	    if ((Rast_is_null_value(&(c1.val.dc), DCELL_TYPE)) ||
+		(Rast_is_null_value(&(c2.val.dc), DCELL_TYPE)))
 		return RLI_ERRORE;
 	    break;
 	}
     case FCELL_TYPE:
 	{
-	    if ((G_is_null_value(&(c1.val.fc), FCELL_TYPE)) ||
-		(G_is_null_value(&(c2.val.fc), FCELL_TYPE)))
+	    if ((Rast_is_null_value(&(c1.val.fc), FCELL_TYPE)) ||
+		(Rast_is_null_value(&(c2.val.fc), FCELL_TYPE)))
 		return RLI_ERRORE;
 	    break;
 	}

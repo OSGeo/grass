@@ -62,10 +62,10 @@ static int open_existing_cell_file(char *fname, struct Cell_head *chd)
     if (mapset == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), fname);
 
-    if (chd && (G_get_cellhd(fname, mapset, chd) < 0))
+    if (chd && (Rast_get_cellhd(fname, mapset, chd) < 0))
 	G_fatal_error(_("Unable to get header for %s"), fname);
 
-    return G_open_cell_old(fname, mapset);
+    return Rast_open_cell_old(fname, mapset);
 }
 
 void read_input_files(void)
@@ -82,13 +82,13 @@ void read_input_files(void)
 	G_fatal_error(_("Elevation file's resolution differs from current region resolution"));
 
     for (row = 0; row < region.rows; row++) {
-	G_get_d_raster_row(fd, el.buf[row], row);
+	Rast_get_d_raster_row(fd, el.buf[row], row);
 	if (parm.seg)
 	    put_row_seg(el, row);
     }
     if (parm.seg)
 	segment_flush(el.seg);
-    G_close_cell(fd);
+    Rast_close_cell(fd);
 
     if (parm.aspin) {
 	G_message(_("Reading input files: aspect"));
@@ -99,29 +99,29 @@ void read_input_files(void)
 			    "current region resolution"));
 
 	for (row = 0; row < region.rows; row++) {
-	    G_get_d_raster_row(fd, as.buf[row], row);
+	    Rast_get_d_raster_row(fd, as.buf[row], row);
 	    if (parm.seg)
 		put_row_seg(as, row);
 	}
 	if (parm.seg)
 	    segment_flush(as.seg);
-	G_close_cell(fd);
+	Rast_close_cell(fd);
     }
 
     if (parm.barin) {
 	G_message(_("Reading input files: barrier"));
-	barc = G_allocate_d_raster_buf();
+	barc = Rast_allocate_d_raster_buf();
 	fd = open_existing_cell_file(parm.barin, &hd);
 
 	for (row = 0; row < region.rows; row++) {
-	    G_get_d_raster_row(fd, barc, row);
+	    Rast_get_d_raster_row(fd, barc, row);
 	    for (col = 0; col < region.cols; col++) {
 		BM_set(bitbar, col, row, (barc[col] != 0));
 		if (parm.dsout && barc[col] != 0)
 		    put(ds, row, col, -1);
 	    }
 	}
-	G_close_cell(fd);
+	Rast_close_cell(fd);
     }
 }
 
@@ -163,7 +163,7 @@ void open_output_files(void)
     }
 
     if (parm.lgout &&
-	((lgfd = G_open_raster_new(parm.lgout, FCELL_TYPE)) < 0))
+	((lgfd = Rast_open_raster_new(parm.lgout, FCELL_TYPE)) < 0))
 	G_fatal_error(_("Unable to create raster map <%s>"), parm.lgout);
 
     if (parm.flout && (Vect_open_new(&fl, parm.flout, 0) < 0))
@@ -179,7 +179,7 @@ void close_files(void)
 	    close(ds.sfd);
     }
     /*   if (parm.lgout)
-       G_close_cell(lgfd); */
+       Rast_close_cell(lgfd); */
     if (parm.flout) {
 	Vect_build(&fl);
 	Vect_close(&fl);
@@ -197,30 +197,30 @@ void write_density_file(void)
 	G_fatal_error(_("Cannot reset current region"));
 
     G_message(_("Writing density file"));
-    dsfd = G_open_raster_new(parm.dsout, DCELL_TYPE);
+    dsfd = Rast_open_raster_new(parm.dsout, DCELL_TYPE);
     if (dsfd < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), parm.dsout);
 
     for (row = 0; row < region.rows; row++) {
-	G_put_raster_row(dsfd, get_row(ds, row), DCELL_TYPE);
+	Rast_put_raster_row(dsfd, get_row(ds, row), DCELL_TYPE);
 	for (col = 0; col < region.cols; col++)
 	    if (ds.buf[row][col] > dsmax)
 		dsmax = ds.buf[row][col];
     }
-    G_close_cell(dsfd);
+    Rast_close_cell(dsfd);
 
-    G_init_colors(&colors);
+    Rast_init_colors(&colors);
 
-    G_add_color_rule(-1, 0, 0, 0, -1, 0, 0, 0, &colors);
-    G_add_color_rule(0, 255, 255, 255, 5, 255, 255, 0, &colors);
-    G_add_color_rule(5, 255, 255, 0, 30, 0, 255, 255, &colors);
-    G_add_color_rule(30, 0, 255, 255, 100, 0, 127, 255, &colors);
-    G_add_color_rule(100, 0, 127, 255, 1000, 0, 0, 255, &colors);
-    G_add_color_rule(1000, 0, 0, 255, (CELL) dsmax, 0, 0, 0, &colors);
+    Rast_add_color_rule(-1, 0, 0, 0, -1, 0, 0, 0, &colors);
+    Rast_add_color_rule(0, 255, 255, 255, 5, 255, 255, 0, &colors);
+    Rast_add_color_rule(5, 255, 255, 0, 30, 0, 255, 255, &colors);
+    Rast_add_color_rule(30, 0, 255, 255, 100, 0, 127, 255, &colors);
+    Rast_add_color_rule(100, 0, 127, 255, 1000, 0, 0, 255, &colors);
+    Rast_add_color_rule(1000, 0, 0, 255, (CELL) dsmax, 0, 0, 0, &colors);
 
     if ((mapset = G_find_file("cell", parm.dsout, "")) == NULL)
 	G_fatal_error(_("Unable to find file %s"), parm.dsout);
 
-    G_write_colors(parm.dsout, mapset, &colors);
-    G_free_colors(&colors);
+    Rast_write_colors(parm.dsout, mapset, &colors);
+    Rast_free_colors(&colors);
 }

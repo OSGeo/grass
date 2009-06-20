@@ -15,10 +15,12 @@
 *               for details.
 *
 *****************************************************************************/
-
-#include "grass/N_pde.h"
-#include "grass/glocale.h"
 #include <math.h>
+
+#include <grass/N_pde.h>
+#include <grass/Rast.h>
+#include <grass/glocale.h>
+
 
 /* ******************** 2D ARRAY FUNCTIONS *********************** */
 
@@ -62,11 +64,11 @@ N_array_2d *N_read_rast_to_array_2d(char *name, N_array_2d * array)
     cols = region.cols;
 
     /*open the raster map */
-    map = G_open_cell_old(name, G_find_cell2(name, ""));
+    map = Rast_open_cell_old(name, G_find_cell2(name, ""));
     if (map < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
 
-    type = G_get_raster_map_type(map);
+    type = Rast_get_raster_map_type(map);
 
     /*if the array is NULL create a new one with the data type of the raster map */
     /*the offset is 0 by default */
@@ -91,22 +93,22 @@ N_array_2d *N_read_rast_to_array_2d(char *name, N_array_2d * array)
 		("N_read_rast_to_array_2d: the data array size is different from the current region settings");
     }
 
-    rast = G_allocate_raster_buf(type);
+    rast = Rast_allocate_raster_buf(type);
 
     G_message(_("Reading raster map <%s> into memory"), name);
 
     for (y = 0; y < rows; y++) {
 	G_percent(y, rows - 1, 10);
 
-	if (!G_get_raster_row(map, rast, y, type)) {
-	    G_close_cell(map);
+	if (!Rast_get_raster_row(map, rast, y, type)) {
+	    Rast_close_cell(map);
 	    G_fatal_error(_("Could not get raster row"));
 	}
 
 	for (x = 0, ptr = rast; x < cols;
-	     x++, ptr = G_incr_void_ptr(ptr, G_raster_size(type))) {
+	     x++, ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(type))) {
 	    if (type == CELL_TYPE) {
-		if (G_is_c_null_value(ptr)) {
+		if (Rast_is_c_null_value(ptr)) {
 		    N_put_array_2d_value_null(data, x, y);
 		}
 		else {
@@ -122,7 +124,7 @@ N_array_2d *N_read_rast_to_array_2d(char *name, N_array_2d * array)
 		}
 	    }
 	    if (type == FCELL_TYPE) {
-		if (G_is_f_null_value(ptr)) {
+		if (Rast_is_f_null_value(ptr)) {
 		    N_put_array_2d_value_null(data, x, y);
 		}
 		else {
@@ -138,7 +140,7 @@ N_array_2d *N_read_rast_to_array_2d(char *name, N_array_2d * array)
 		}
 	    }
 	    if (type == DCELL_TYPE) {
-		if (G_is_d_null_value(ptr)) {
+		if (Rast_is_d_null_value(ptr)) {
 		    N_put_array_2d_value_null(data, x, y);
 		}
 		else {
@@ -157,7 +159,7 @@ N_array_2d *N_read_rast_to_array_2d(char *name, N_array_2d * array)
     }
 
     /* Close file */
-    if (G_close_cell(map) < 0)
+    if (Rast_close_cell(map) < 0)
 	G_fatal_error(_("Unable to close input map"));
 
     return data;
@@ -197,16 +199,16 @@ void N_write_array_2d_to_rast(N_array_2d * array, char *name)
     type = array->type;
 
     /*Open the new map */
-    map = G_open_raster_new(name, type);
+    map = Rast_open_raster_new(name, type);
     if (map < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), name);
 
     if (type == CELL_TYPE)
-	rast = G_allocate_raster_buf(type);
+	rast = Rast_allocate_raster_buf(type);
     if (type == FCELL_TYPE)
-	frast = G_allocate_raster_buf(type);
+	frast = Rast_allocate_raster_buf(type);
     if (type == DCELL_TYPE)
-	drast = G_allocate_raster_buf(type);
+	drast = Rast_allocate_raster_buf(type);
 
     G_message(_("Write 2d array to raster map <%s>"), name);
 
@@ -222,24 +224,24 @@ void N_write_array_2d_to_rast(N_array_2d * array, char *name)
 		drast[x] = N_get_array_2d_d_value(array, x, y);
 	}
 	if (type == CELL_TYPE)
-	    if (!G_put_c_raster_row(map, rast)) {
-		G_unopen_cell(map);	/*unopen the new raster map */
+	    if (!Rast_put_c_raster_row(map, rast)) {
+		Rast_unopen_cell(map);	/*unopen the new raster map */
 		G_fatal_error(_("Unable to write raster row %i"), y);
 	    }
 	if (type == FCELL_TYPE)
-	    if (!G_put_f_raster_row(map, frast)) {
-		G_unopen_cell(map);	/*unopen the new raster map */
+	    if (!Rast_put_f_raster_row(map, frast)) {
+		Rast_unopen_cell(map);	/*unopen the new raster map */
 		G_fatal_error(_("Unable to write raster row %i"), y);
 	    }
 	if (type == DCELL_TYPE)
-	    if (!G_put_d_raster_row(map, drast)) {
-		G_unopen_cell(map);	/*unopen the new raster map */
+	    if (!Rast_put_d_raster_row(map, drast)) {
+		Rast_unopen_cell(map);	/*unopen the new raster map */
 		G_fatal_error(_("Unable to write raster row %i"), y);
 	    }
     }
 
     /* Close file */
-    if (G_close_cell(map) < 0)
+    if (Rast_close_cell(map) < 0)
 	G_fatal_error(_("Unable to close input map"));
 
     return;
@@ -347,7 +349,7 @@ N_array_3d *N_read_rast3d_to_array_3d(char *name, N_array_3d * array,
 	    for (x = 0; x < cols; x++) {
 		if (type == FCELL_TYPE) {
 		    G3d_getValue(map, x, y, z, &f1, type);
-		    if (G_is_f_null_value((void *)&f1)) {
+		    if (Rast_is_f_null_value((void *)&f1)) {
 			N_put_array_3d_value_null(data, x, y, z);
 		    }
 		    else {
@@ -359,7 +361,7 @@ N_array_3d *N_read_rast3d_to_array_3d(char *name, N_array_3d * array,
 		}
 		else {
 		    G3d_getValue(map, x, y, z, &d1, type);
-		    if (G_is_d_null_value((void *)&d1)) {
+		    if (Rast_is_d_null_value((void *)&d1)) {
 			N_put_array_3d_value_null(data, x, y, z);
 		    }
 		    else {

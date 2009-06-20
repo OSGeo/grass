@@ -18,6 +18,7 @@
  */
 
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "list.h"
 
 

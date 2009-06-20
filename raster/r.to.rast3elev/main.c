@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/G3d.h>
 #include <grass/glocale.h>
 #include <grass/config.h>
@@ -63,7 +64,7 @@ void check_input_maps(Database * db);	/*Check input maps */
 /* ************************************************************************* */
 double get_raster_value_as_double(int MapType, void *ptr, double nullval)
 {
-    if (G_is_null_value(ptr, MapType))
+    if (Rast_is_null_value(ptr, MapType))
 	return nullval;
 
     switch (MapType) {
@@ -112,7 +113,7 @@ int open_input_raster_map(const char *name)
     G_debug(3, "Open Raster file %s", name);
 
     /* open raster map */
-    fd = G_open_cell_old(name, "");
+    fd = Rast_open_cell_old(name, "");
 
     if (fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
@@ -125,7 +126,7 @@ int open_input_raster_map(const char *name)
 /* ************************************************************************* */
 void close_input_raster_map(int fd)
 {
-    if (G_close_cell(fd) < 0)
+    if (Rast_close_cell(fd) < 0)
 	G_fatal_error(_("Unable to close input map"));
 }
 
@@ -216,8 +217,8 @@ void elev_raster_to_g3d(Database db, G3D_Region region)
     tbres = (top - bottom) / depths;
 
     /*memory */
-    input_rast = G_allocate_raster_buf(db.inputmaptype);
-    elev_rast = G_allocate_raster_buf(db.elevmaptype);
+    input_rast = Rast_allocate_raster_buf(db.inputmaptype);
+    elev_rast = Rast_allocate_raster_buf(db.elevmaptype);
 
     G3d_setNullValue(&null, 1, DCELL_TYPE);
 
@@ -230,16 +231,16 @@ void elev_raster_to_g3d(Database db, G3D_Region region)
     for (y = 0; y < rows; y++) {
 	G_percent(y, rows - 1, 10);
 
-	if (!G_get_raster_row(db.input, input_rast, y, db.inputmaptype))
+	if (!Rast_get_raster_row(db.input, input_rast, y, db.inputmaptype))
 	    fatal_error(db, _("Could not get raster row from input map"));
-	if (!G_get_raster_row(db.elev, elev_rast, y, db.elevmaptype))
+	if (!Rast_get_raster_row(db.elev, elev_rast, y, db.elevmaptype))
 	    fatal_error(db, _("Could not get raster row from elev map"));
 
 	for (x = 0, input_ptr = input_rast, elev_ptr = elev_rast; x < cols;
 	     x++, input_ptr =
-	     G_incr_void_ptr(input_ptr, G_raster_size(db.inputmaptype)),
+	     Rast_incr_void_ptr(input_ptr, Rast_raster_size(db.inputmaptype)),
 	     elev_ptr =
-	     G_incr_void_ptr(elev_ptr, G_raster_size(db.elevmaptype))) {
+	     Rast_incr_void_ptr(elev_ptr, Rast_raster_size(db.elevmaptype))) {
 
 	    /*Get the elevation and the input map value */
 	    inval =
@@ -460,14 +461,14 @@ int main(int argc, char *argv[])
 	/*Open input map */
 	name = param.input->answers[i];
 	db.input = open_input_raster_map(name);
-	db.inputmaptype = G_raster_map_type(name, "");
+	db.inputmaptype = Rast_raster_map_type(name, "");
 
 	G_debug(2, "Open elev raster map %s", param.elev->answers[i]);
 
 	/*Open elev map */
 	name = param.elev->answers[i];
 	db.elev = open_input_raster_map(name);
-	db.elevmaptype = G_raster_map_type(name, "");
+	db.elevmaptype = Rast_raster_map_type(name, "");
 
 	/****************************************/
 	/*Write the data into the G3D Rastermap */

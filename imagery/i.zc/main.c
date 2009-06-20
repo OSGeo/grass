@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/gmath.h>
 #include <grass/glocale.h>
 
@@ -99,7 +100,7 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     /* open input cell map */
-    inputfd = G_open_cell_old(input_map->answer, "");
+    inputfd = Rast_open_cell_old(input_map->answer, "");
     if (inputfd < 0)
 	exit(EXIT_FAILURE);
 
@@ -146,19 +147,19 @@ int main(int argc, char *argv[])
     }
 
     /* allocate the space for one row of cell map data */
-    cell_row = G_allocate_cell_buf();
+    cell_row = Rast_allocate_cell_buf();
 
     /* Read in cell map values */
     G_message(_("Reading raster map..."));
     for (i = 0; i < or; i++) {
-	if (G_get_map_row(inputfd, cell_row, i) < 0)
+	if (Rast_get_map_row(inputfd, cell_row, i) < 0)
 	    G_fatal_error(_("Error while reading input raster map."));
 
 	for (j = 0; j < oc; j++)
 	    *(data[0] + (i * size) + j) = (double)cell_row[j];
     }
     /* close input cell map and release the row buffer */
-    G_close_cell(inputfd);
+    Rast_close_cell(inputfd);
     G_free(cell_row);
 
     /* take the del**2g of image */
@@ -171,19 +172,19 @@ int main(int argc, char *argv[])
 
     /* open the output cell maps and allocate cell row buffers */
     G_message(_("Writing transformed data to file..."));
-    if ((zcfd = G_open_cell_new(output_map->answer)) < 0)
+    if ((zcfd = Rast_open_cell_new(output_map->answer)) < 0)
 	exit(EXIT_FAILURE);
 
-    cell_row = G_allocate_cell_buf();
+    cell_row = Rast_allocate_cell_buf();
 
     /* Write out result to a new cell map */
     for (i = 0; i < or; i++) {
 	for (j = 0; j < oc; j++) {
 	    *(cell_row + j) = (CELL) (*(data[1] + i * cols + j));
 	}
-	G_put_raster_row(zcfd, cell_row, CELL_TYPE);
+	Rast_put_raster_row(zcfd, cell_row, CELL_TYPE);
     }
-    G_close_cell(zcfd);
+    Rast_close_cell(zcfd);
 
     G_free(cell_row);
 

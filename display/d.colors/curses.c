@@ -63,11 +63,11 @@ int Write_cats(struct Categories *pcats, int current_cat)
     CELL tmp = current_cat;
     int start_cat, end_cat, at_cat, at_line;
 
-    if (G_is_c_null_value(&tmp))
+    if (Rast_is_c_null_value(&tmp))
 	current_cat = 0;
     else
 	current_cat++;
-    G_set_c_null_value(&tmp, 1);
+    Rast_set_c_null_value(&tmp, 1);
     start_cat = current_cat - 2;
     start_cat = start_cat > 0 ? start_cat : 0;
     end_cat = start_cat + 4;
@@ -85,18 +85,18 @@ int Write_cats(struct Categories *pcats, int current_cat)
 	if (at_cat == current_cat) {
 	    if (!at_cat)
 		sprintf(buffer, "-> %3s %s", "N",
-			G_get_c_raster_cat(&tmp, pcats));
+			Rast_get_c_raster_cat(&tmp, pcats));
 	    else
 		sprintf(buffer, "-> %3d %s", at_cat - 1,
-			G_get_cat(at_cat - 1, pcats));
+			Rast_get_cat(at_cat - 1, pcats));
 	}
 	else {
 	    if (!at_cat)
 		sprintf(buffer, "   %3s %s", "N",
-			G_get_c_raster_cat(&tmp, pcats));
+			Rast_get_c_raster_cat(&tmp, pcats));
 	    else
 		sprintf(buffer, "   %3d %s", at_cat - 1,
-			G_get_cat(at_cat - 1, pcats));
+			Rast_get_cat(at_cat - 1, pcats));
 	}
 	wmove(CAT_WIN, at_line++, 1);
 	waddstr(CAT_WIN, buffer);
@@ -155,7 +155,7 @@ Write_status(int red, int grn, int blu, int shift_incr, int at_cat,
     if (hi_mode)
 	sprintf(buffer, "HIGHLIGHT COLOR");
     else {
-	if (!G_is_c_null_value(&tmp))
+	if (!Rast_is_c_null_value(&tmp))
 	    sprintf(buffer, "CATEGORY NUMBER: %d", at_cat);
 	else
 	    sprintf(buffer, "CATEGORY NUMBER: N");

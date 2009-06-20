@@ -1,6 +1,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "local_proto.h"
 #include <grass/glocale.h>
 
@@ -97,7 +98,7 @@ int gethead(FILE * fd, struct Cell_head *cellhd, int *missingval)
 	return 0;
     }
 
-    if (err = G_adjust_Cell_head(cellhd, 1, 1)) {
+    if (err = Rast_adjust_Cell_head(cellhd, 1, 1)) {
 	G_warning(err);
 	return 0;
     }

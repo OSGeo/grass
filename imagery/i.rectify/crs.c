@@ -32,6 +32,7 @@
 #include <math.h>
 #include <limits.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 
 /*
    #define MSDOS 1

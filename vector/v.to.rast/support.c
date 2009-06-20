@@ -8,6 +8,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/dbmi.h>
 #include <grass/Vect.h>
 #include <grass/glocale.h>
@@ -21,7 +22,7 @@ int update_hist(const char *raster_name, const char *vector_name, long scale)
     if (raster_name == NULL)
 	return (-1);
 
-    if (G_read_history(raster_name, G_mapset(), &hist) < 0)
+    if (Rast_read_history(raster_name, G_mapset(), &hist) < 0)
 	return -1;
 
     strcpy(hist.title, raster_name);
@@ -31,9 +32,9 @@ int update_hist(const char *raster_name, const char *vector_name, long scale)
     sprintf(hist.datsrc_2, "Original scale from vector map: 1:%ld", scale);	/* 4.0 */
 
     /* store command line options */
-    G_command_history(&hist);
+    Rast_command_history(&hist);
 
-    return (G_write_history(raster_name, &hist));
+    return (Rast_write_history(raster_name, &hist));
 }
 
 
@@ -43,10 +44,10 @@ int update_colors(const char *raster_name)
     struct Colors colors;
     CELL min, max;
 
-    G_read_range(raster_name, G_mapset(), &range);
-    G_get_range_min_max(&range, &min, &max);
-    G_make_rainbow_colors(&colors, min, max);
-    G_write_colors(raster_name, G_mapset(), &colors);
+    Rast_read_range(raster_name, G_mapset(), &range);
+    Rast_get_range_min_max(&range, &min, &max);
+    Rast_make_rainbow_colors(&colors, min, max);
+    Rast_write_colors(raster_name, G_mapset(), &colors);
 
     return 0;
 }
@@ -58,10 +59,10 @@ int update_fcolors(const char *raster_name)
     struct Colors colors;
     DCELL min, max;
 
-    G_read_fp_range(raster_name, G_mapset(), &range);
-    G_get_fp_range_min_max(&range, &min, &max);
-    G_make_rainbow_colors(&colors, (CELL) min, (CELL) max);
-    G_write_colors(raster_name, G_mapset(), &colors);
+    Rast_read_fp_range(raster_name, G_mapset(), &range);
+    Rast_get_fp_range_min_max(&range, &min, &max);
+    Rast_make_rainbow_colors(&colors, (CELL) min, (CELL) max);
+    Rast_write_colors(raster_name, G_mapset(), &colors);
 
     return 0;
 }
@@ -70,12 +71,12 @@ int update_fcolors(const char *raster_name)
 int update_cats(const char *raster_name)
 {
     /* TODO: maybe attribute transfer from vector map? 
-       Use G_set_raster_cat() somewhere */
+       Use Rast_set_raster_cat() somewhere */
 
     struct Categories cats;
 
-    G_init_cats((CELL) 0, raster_name, &cats);
-    G_write_cats(raster_name, &cats);
+    Rast_init_cats((CELL) 0, raster_name, &cats);
+    Rast_write_cats(raster_name, &cats);
 
     return 0;
 }
@@ -113,7 +114,7 @@ int update_dbcolors(const char *rast_name, const char *vector_map, int field,
     int blu;
 
     /* init colors structure */
-    G_init_colors(&colors);
+    Rast_init_colors(&colors);
 
     /* open vector map and database driver */
     Vect_open_old(&Map, vector_map, "");
@@ -162,7 +163,7 @@ int update_dbcolors(const char *rast_name, const char *vector_map, int field,
 	if (*colorstring != '\0') {
 	    G_debug(3, "element colorstring: %s", colorstring);
 
-	    if (G_str_to_color(colorstring, &red, &grn, &blu) == 1) {
+	    if (Rast_str_to_color(colorstring, &red, &grn, &blu) == 1) {
 		G_debug(3, "cat %d r:%d g:%d b:%d", cat, red, grn, blu);
 	    }
 	    else {
@@ -200,7 +201,7 @@ int update_dbcolors(const char *rast_name, const char *vector_map, int field,
     /* set the color rules: for each rule */
     for (i = 0; i < colors_n_values - 1; i++) {
 	if (is_fp) {		/* add floating point color rule */
-	    G_add_d_raster_color_rule(&my_color_rules[i].d,
+	    Rast_add_d_raster_color_rule(&my_color_rules[i].d,
 				      my_color_rules[i].red,
 				      my_color_rules[i].green,
 				      my_color_rules[i].blue,
@@ -210,7 +211,7 @@ int update_dbcolors(const char *rast_name, const char *vector_map, int field,
 				      my_color_rules[i + 1].blue, &colors);
 	}
 	else {			/* add CELL color rule */
-	    G_add_color_rule((CELL) my_color_rules[i].i,
+	    Rast_add_color_rule((CELL) my_color_rules[i].i,
 			     my_color_rules[i].red, my_color_rules[i].green,
 			     my_color_rules[i].blue,
 			     (CELL) my_color_rules[i + 1].i,
@@ -221,7 +222,7 @@ int update_dbcolors(const char *rast_name, const char *vector_map, int field,
     }
 
     /* write the rules */
-    G_write_colors(rast_name, G_mapset(), &colors);
+    Rast_write_colors(rast_name, G_mapset(), &colors);
 
     return 1;
 }
@@ -256,16 +257,16 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
     } *my_labels_rules;
 
     /* init raster categories */
-    G_init_cats((CELL) 0, "Categories", &rast_cats);
+    Rast_init_cats((CELL) 0, "Categories", &rast_cats);
 
-    if (!(fd = G_open_cell_old(rast_name, G_mapset())))
+    if (!(fd = Rast_open_cell_old(rast_name, G_mapset())))
 	G_fatal_error(_("Unable to open raster map <%s>"), rast_name);
 
     switch (use) {
     case USE_ATTR:
 	{
-	    G_set_raster_cats_title("Labels", &rast_cats);
-	    int is_fp = G_raster_map_is_fp(rast_name, G_mapset());
+	    Rast_set_raster_cats_title("Labels", &rast_cats);
+	    int is_fp = Rast_raster_map_is_fp(rast_name, G_mapset());
 
 	    /* open vector map and database driver */
 	    Vect_open_old(&Map, vector_map, G_find_vector2(vector_map, ""));
@@ -361,14 +362,14 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 	    if (is_fp) {
 		/* add label */
 		for (i = 0; i < labels_n_values - 1; i++)
-		    G_set_raster_cat(&my_labels_rules[i].d,
+		    Rast_set_raster_cat(&my_labels_rules[i].d,
 				     &my_labels_rules[i + 1].d,
 				     db_get_string(&my_labels_rules[i].label),
 				     &rast_cats, DCELL_TYPE);
 	    }
 	    else {
 		for (i = 0; i < labels_n_values; i++)
-		    G_set_cat(my_labels_rules[i].i,
+		    Rast_set_cat(my_labels_rules[i].i,
 			      db_get_string(&my_labels_rules[i].label),
 			      &rast_cats);
 	    }
@@ -381,26 +382,26 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 	    struct FPRange fprange;
 	    struct Range range;
 
-	    map_type = G_raster_map_type(rast_name, G_mapset());
-	    G_set_raster_cats_title("Values", &rast_cats);
+	    map_type = Rast_raster_map_type(rast_name, G_mapset());
+	    Rast_set_raster_cats_title("Values", &rast_cats);
 
 	    if (map_type == CELL_TYPE) {
 		CELL min, max;
 
-		G_read_range(rast_name, G_mapset(), &range);
-		G_get_range_min_max(&range, &min, &max);
+		Rast_read_range(rast_name, G_mapset(), &range);
+		Rast_get_range_min_max(&range, &min, &max);
 
 		sprintf(msg, "Value %d", val);
-		G_set_raster_cat(&min, &max, msg, &rast_cats, map_type);
+		Rast_set_raster_cat(&min, &max, msg, &rast_cats, map_type);
 	    }
 	    else {
 		DCELL fmin, fmax;
 
-		G_read_fp_range(rast_name, G_mapset(), &fprange);
-		G_get_fp_range_min_max(&fprange, &fmin, &fmax);
+		Rast_read_fp_range(rast_name, G_mapset(), &fprange);
+		Rast_get_fp_range_min_max(&fprange, &fmin, &fmax);
 
 		sprintf(msg, "Value %.4f", (double)val);
-		G_set_raster_cat(&fmin, &fmax, msg, &rast_cats, map_type);
+		Rast_set_raster_cat(&fmin, &fmax, msg, &rast_cats, map_type);
 	    }
 
 	}
@@ -414,34 +415,34 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 	    RASTER_MAP_TYPE map_type;
 	    long count;
 
-	    if (!(fd = G_open_cell_old(rast_name, G_mapset())))
+	    if (!(fd = Rast_open_cell_old(rast_name, G_mapset())))
 		G_fatal_error(_("Unable to open raster map <%s>"), rast_name);
 
-	    map_type = G_raster_map_type(rast_name, G_mapset());
+	    map_type = Rast_raster_map_type(rast_name, G_mapset());
 
-	    if (!(rowbuf = G_allocate_raster_buf(map_type)))
+	    if (!(rowbuf = Rast_allocate_raster_buf(map_type)))
 		G_fatal_error(_("Cannot allocate memory for row buffer"));
 
-	    G_init_cell_stats(&stats);
-	    G_set_raster_cats_title("Categories", &rast_cats);
+	    Rast_init_cell_stats(&stats);
+	    Rast_set_raster_cats_title("Categories", &rast_cats);
 
 	    rows = G_window_rows();
 
 	    for (row = 0; row < rows; row++) {
-		if (G_get_raster_row(fd, rowbuf, row, map_type) < 0)
+		if (Rast_get_raster_row(fd, rowbuf, row, map_type) < 0)
 		    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 				  rast_name, row);
 
-		G_update_cell_stats(rowbuf, G_window_cols(), &stats);
+		Rast_update_cell_stats(rowbuf, G_window_cols(), &stats);
 	    }
 
-	    G_rewind_cell_stats(&stats);
+	    Rast_rewind_cell_stats(&stats);
 
-	    while (G_next_cell_stat(&n, &count, &stats)) {
+	    while (Rast_next_cell_stat(&n, &count, &stats)) {
 		char msg[80];
 
 		sprintf(msg, "Category %d", n);
-		G_set_raster_cat(&n, &n, msg, &rast_cats, map_type);
+		Rast_set_raster_cat(&n, &n, msg, &rast_cats, map_type);
 	    }
 
 	    G_free(rowbuf);
@@ -454,8 +455,8 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 	    int i;
 	    char msg[64];
 
-	    map_type = G_raster_map_type(rast_name, G_mapset());
-	    G_set_raster_cats_title("Degrees", &rast_cats);
+	    map_type = Rast_raster_map_type(rast_name, G_mapset());
+	    Rast_set_raster_cats_title("Degrees", &rast_cats);
 
 	    for (i = 1; i <= 360; i++) {
 		sprintf(msg, "%d degrees", i);
@@ -463,7 +464,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 		if (i == 360) {
 		    fmin = 359.5;
 		    fmax = 360.0;
-		    G_set_raster_cat(&fmin, &fmax, msg, &rast_cats, map_type);
+		    Rast_set_raster_cat(&fmin, &fmax, msg, &rast_cats, map_type);
 		    fmin = 0.0;
 		    fmax = 0.5;
 		}
@@ -472,7 +473,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 		    fmax = i + 0.5;
 		}
 
-		G_set_raster_cat(&fmin, &fmax, msg, &rast_cats, map_type);
+		Rast_set_raster_cat(&fmin, &fmax, msg, &rast_cats, map_type);
 	    }
 	}
 	break;
@@ -484,11 +485,11 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 	break;
     }
 
-    G_close_cell(fd);
-    if (G_write_cats(rast_name, &rast_cats) <= 0)
+    Rast_close_cell(fd);
+    if (Rast_write_cats(rast_name, &rast_cats) <= 0)
 	G_warning(_("Unable to write categories for raster map <%s>"),
 		  rast_name);
-    G_free_cats(&rast_cats);
+    Rast_free_cats(&rast_cats);
 
     return 1;
 }

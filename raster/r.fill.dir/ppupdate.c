@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "tinf.h"
 
 struct links
@@ -70,7 +71,7 @@ void ppupdate(int fe, int fb, int nl, int nbasins, struct band3 *elev,
 
 	    /* check to see if the cell is non-null and in a basin */
 	    here = (CELL *) basins->b[1] + j;
-	    if (G_is_c_null_value(here) || *here < 0)
+	    if (Rast_is_c_null_value(here) || *here < 0)
 		continue;
 
 	    ii = *here;

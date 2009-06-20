@@ -38,7 +38,7 @@ CELL cross(int fd[], int non_zero, int primary, int outfd)
     /* allocate i/o buffers for each raster map */
 
     for (i = 0; i < nfiles; i++)
-	cell[i] = G_allocate_cell_buf();
+	cell[i] = Rast_allocate_cell_buf();
     result_cell = cell[0];
 
     /* initialize the reclass table */
@@ -54,13 +54,13 @@ CELL cross(int fd[], int non_zero, int primary, int outfd)
 	G_percent(row, nrows, 5);
 
 	/* read the primary file first, even if not first in the list */
-	if (G_get_map_row(fd[primary], cell[0], row) < 0)
+	if (Rast_get_map_row(fd[primary], cell[0], row) < 0)
 	    exit(1);
 
 	/* read the others */
 	col = 1;
 	for (i = 0; i < nfiles; i++)
-	    if (i != primary && G_get_map_row(fd[i], cell[col++], row) < 0)
+	    if (i != primary && Rast_get_map_row(fd[i], cell[col++], row) < 0)
 		exit(1);
 	for (col = 0; col < ncols; col++) {
 	    zero = 1;
@@ -170,7 +170,7 @@ CELL cross(int fd[], int non_zero, int primary, int outfd)
 		pnode->right = N;	/* add right */
 	    }
 	}
-	G_put_raster_row(outfd, result_cell, CELL_TYPE);
+	Rast_put_raster_row(outfd, result_cell, CELL_TYPE);
     }
     G_percent(nrows, nrows, 5);
 

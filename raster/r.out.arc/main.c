@@ -3,6 +3,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 /*
@@ -115,17 +116,17 @@ int main(int argc, char *argv[])
 
     sprintf(null_str, "-9999");
 
-    fd = G_open_cell_old(parm.map->answer, "");
+    fd = Rast_open_cell_old(parm.map->answer, "");
     if (fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), parm.map->answer);
 
-    map_type = G_get_raster_map_type(fd);
+    map_type = Rast_get_raster_map_type(fd);
     out_type = map_type;
 
     /*
-       null_row = G_allocate_null_buf();
+       null_row = Rast_allocate_null_buf();
      */
-    raster = G_allocate_raster_buf(out_type);
+    raster = Rast_allocate_raster_buf(out_type);
 
     nrows = G_window_rows();
     ncols = G_window_cols();
@@ -170,15 +171,15 @@ int main(int argc, char *argv[])
 
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
-	if (G_get_raster_row(fd, raster, row, out_type) < 0)
+	if (Rast_get_raster_row(fd, raster, row, out_type) < 0)
 	    exit(EXIT_FAILURE);
 	/*
-	   if (G_get_null_value_row(fd, null_row, row) < 0)
+	   if (Rast_get_null_value_row(fd, null_row, row) < 0)
 	   exit(EXIT_FAILURE);
 	 */
 	for (col = 0, ptr = raster; col < ncols; col++,
-	     ptr = G_incr_void_ptr(ptr, G_raster_size(out_type))) {
-	    if (!G_is_null_value(ptr, out_type)) {
+	     ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(out_type))) {
+	    if (!Rast_is_null_value(ptr, out_type)) {
 		if (out_type == CELL_TYPE)
 		    fprintf(fp, "%d", *((CELL *) ptr));
 
@@ -215,7 +216,7 @@ int main(int argc, char *argv[])
     /* make sure it got to 100% */
     G_percent(1, 1, 2);
 
-    G_close_cell(fd);
+    Rast_close_cell(fd);
     fclose(fp);
 
     exit(EXIT_SUCCESS);

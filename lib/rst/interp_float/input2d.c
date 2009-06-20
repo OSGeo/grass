@@ -17,7 +17,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/site.h>
 #include <grass/bitmap.h>
 #include <grass/linkm.h>
@@ -33,8 +35,8 @@ struct BM *IL_create_bitmask(struct interp_params *params)
     CELL *cellmask, *MASK;
     struct BM *bitmask;
 
-    if ((MASKfd = G_maskfd()) >= 0)
-	MASK = G_allocate_cell_buf();
+    if ((MASKfd = Rast_maskfd()) >= 0)
+	MASK = Rast_allocate_cell_buf();
     else
 	MASK = NULL;
 
@@ -47,8 +49,8 @@ struct BM *IL_create_bitmask(struct interp_params *params)
 		G_fatal_error(_("Mask raster map <%s> not found"),
 			      params->maskmap);
 
-	    cellmask = G_allocate_cell_buf();
-	    cfmask = G_open_cell_old(params->maskmap, mapsetm);
+	    cellmask = Rast_allocate_cell_buf();
+	    cfmask = Rast_open_cell_old(params->maskmap, mapsetm);
 	}
 	else
 	    cellmask = NULL;
@@ -56,9 +58,9 @@ struct BM *IL_create_bitmask(struct interp_params *params)
 	for (i = 0; i < params->nsizr; i++) {
 	    irev = params->nsizr - i - 1;
 	    if (cellmask)
-		G_get_map_row(cfmask, cellmask, i);
+		Rast_get_map_row(cfmask, cellmask, i);
 	    if (MASK)
-		G_get_map_row(MASKfd, MASK, i);
+		Rast_get_map_row(MASKfd, MASK, i);
 	    for (j = 0; j < params->nsizc; j++) {
 		if ((cellmask && cellmask[j] == 0) || (MASK && MASK[j] == 0))
 		    BM_set(bitmask, j, irev, 0);

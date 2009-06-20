@@ -31,6 +31,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "cmd_line.h"
 #include "costHa.h"
@@ -374,40 +375,40 @@ int main(int argc, char *argv[])
 
     /*  Open input cell layers for reading  */
 
-    max_fd = G_open_cell_old(max_layer, G_find_cell2(max_layer, ""));
+    max_fd = Rast_open_cell_old(max_layer, G_find_cell2(max_layer, ""));
     if (max_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), max_layer);
 
-    dir_fd = G_open_cell_old(dir_layer, G_find_cell2(dir_layer, ""));
+    dir_fd = Rast_open_cell_old(dir_layer, G_find_cell2(dir_layer, ""));
     if (dir_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), dir_layer);
 
-    base_fd = G_open_cell_old(base_layer, G_find_cell2(base_layer, ""));
+    base_fd = Rast_open_cell_old(base_layer, G_find_cell2(base_layer, ""));
     if (base_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), base_layer);
 
     if (spotting) {
 	spotdist_fd =
-	    G_open_cell_old(spotdist_layer, G_find_cell2(spotdist_layer, ""));
+	    Rast_open_cell_old(spotdist_layer, G_find_cell2(spotdist_layer, ""));
 	if (spotdist_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), spotdist_layer);
 
 	velocity_fd =
-	    G_open_cell_old(velocity_layer, G_find_cell2(velocity_layer, ""));
+	    Rast_open_cell_old(velocity_layer, G_find_cell2(velocity_layer, ""));
 	if (velocity_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), velocity_layer);
 
-	mois_fd = G_open_cell_old(mois_layer, G_find_cell2(mois_layer, ""));
+	mois_fd = Rast_open_cell_old(mois_layer, G_find_cell2(mois_layer, ""));
 	if (mois_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), mois_layer);
     }
 
     /*  Allocate memories for a row  */
-    cell = G_allocate_cell_buf();
+    cell = Rast_allocate_cell_buf();
     if (x_out)
-	x_cell = G_allocate_cell_buf();
+	x_cell = Rast_allocate_cell_buf();
     if (y_out)
-	y_cell = G_allocate_cell_buf();
+	y_cell = Rast_allocate_cell_buf();
 
     /*  Allocate memories for a map  */
     map_max = (CELL *) G_calloc(nrows * ncols + 1, sizeof(CELL));
@@ -432,28 +433,28 @@ int main(int argc, char *argv[])
 
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
-	if (G_get_map_row(max_fd, cell, row) < 0)
+	if (Rast_get_map_row(max_fd, cell, row) < 0)
 	    exit(EXIT_FAILURE);
 	for (col = 0; col < ncols; col++)
 	    DATA(map_max, row, col) = cell[col];
-	if (G_get_map_row(dir_fd, cell, row) < 0)
+	if (Rast_get_map_row(dir_fd, cell, row) < 0)
 	    exit(EXIT_FAILURE);
 	for (col = 0; col < ncols; col++)
 	    DATA(map_dir, row, col) = cell[col];
-	if (G_get_map_row(base_fd, cell, row) < 0)
+	if (Rast_get_map_row(base_fd, cell, row) < 0)
 	    exit(EXIT_FAILURE);
 	for (col = 0; col < ncols; col++)
 	    DATA(map_base, row, col) = cell[col];
 	if (spotting) {
-	    if (G_get_map_row(spotdist_fd, cell, row) < 0)
+	    if (Rast_get_map_row(spotdist_fd, cell, row) < 0)
 		exit(EXIT_FAILURE);
 	    for (col = 0; col < ncols; col++)
 		DATA(map_spotdist, row, col) = cell[col];
-	    if (G_get_map_row(velocity_fd, cell, row) < 0)
+	    if (Rast_get_map_row(velocity_fd, cell, row) < 0)
 		exit(EXIT_FAILURE);
 	    for (col = 0; col < ncols; col++)
 		DATA(map_velocity, row, col) = cell[col];
-	    if (G_get_map_row(mois_fd, cell, row) < 0)
+	    if (Rast_get_map_row(mois_fd, cell, row) < 0)
 		exit(EXIT_FAILURE);
 	    for (col = 0; col < ncols; col++)
 		DATA(map_mois, row, col) = cell[col];
@@ -466,12 +467,12 @@ int main(int argc, char *argv[])
      *   Create an array of starting points (min_heap) ordered by costs.
      */
 
-    start_fd = G_open_cell_old(start_layer, G_find_cell2(start_layer, ""));
+    start_fd = Rast_open_cell_old(start_layer, G_find_cell2(start_layer, ""));
     if (start_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), start_layer);
 
-    G_read_range(start_layer, G_find_file("cell", start_layer, ""), &range);
-    G_get_range_min_max(&range, &range_min, &range_max);
+    Rast_read_range(start_layer, G_find_file("cell", start_layer, ""), &range);
+    Rast_get_range_min_max(&range, &range_min, &range_max);
 
     /*  Initialize the heap  */
     heap =
@@ -492,11 +493,11 @@ int main(int argc, char *argv[])
 
     /*  Open cumulative cost layer (and x, y direction layers) for writing */
 
-    cum_fd = G_open_cell_new(out_layer);
+    cum_fd = Rast_open_cell_new(out_layer);
     if (x_out)
-	x_fd = G_open_cell_new(x_out_layer);
+	x_fd = Rast_open_cell_new(x_out_layer);
     if (y_out)
-	y_fd = G_open_cell_new(y_out_layer);
+	y_fd = Rast_open_cell_new(y_out_layer);
 
     /* prepare output -- adjust from cm to m */
     window.ew_res = window.ew_res / 100;
@@ -520,19 +521,19 @@ int main(int argc, char *argv[])
 	G_free(map_velocity);
     }
 
-    G_close_cell(max_fd);
-    G_close_cell(dir_fd);
-    G_close_cell(base_fd);
-    G_close_cell(start_fd);
-    G_close_cell(cum_fd);
+    Rast_close_cell(max_fd);
+    Rast_close_cell(dir_fd);
+    Rast_close_cell(base_fd);
+    Rast_close_cell(start_fd);
+    Rast_close_cell(cum_fd);
     if (x_out)
-	G_close_cell(x_fd);
+	Rast_close_cell(x_fd);
     if (y_out)
-	G_close_cell(y_fd);
+	Rast_close_cell(y_fd);
     if (spotting) {
-	G_close_cell(spotdist_fd);
-	G_close_cell(velocity_fd);
-	G_close_cell(mois_fd);
+	Rast_close_cell(spotdist_fd);
+	Rast_close_cell(velocity_fd);
+	Rast_close_cell(mois_fd);
     }
 
     /* close graphics */

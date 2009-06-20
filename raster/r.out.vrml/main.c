@@ -19,6 +19,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "pv.h"
 
@@ -80,7 +81,7 @@ int main(int argc, char *argv[])
 
     G_get_set_window(&W);
 
-    if ((elevfd = G_open_cell_old(rast_el->answer, "")) == -1)
+    if ((elevfd = Rast_open_cell_old(rast_el->answer, "")) == -1)
 	G_fatal_error("Unable to open cellfile for <%s>", rast_el->answer);
 
     {
@@ -90,32 +91,32 @@ int main(int argc, char *argv[])
 	DCELL dmin, dmax;
 	struct FPRange fp_range;
 
-	is_fp = G_raster_map_is_fp(rast_el->answer, "");
+	is_fp = Rast_raster_map_is_fp(rast_el->answer, "");
 	if (is_fp) {
-	    if (G_read_fp_range(rast_el->answer, "", &fp_range) != 1) {
+	    if (Rast_read_fp_range(rast_el->answer, "", &fp_range) != 1) {
 		G_fatal_error(_("Range info for [%s] not available (run r.support)"),
 			      rast_el->answer);
 	    }
-	    G_get_fp_range_min_max(&fp_range, &dmin, &dmax);
+	    Rast_get_fp_range_min_max(&fp_range, &dmin, &dmax);
 	    min = dmin;
 	    max = dmax;
 	}
 	else {
-	    if (G_read_range(rast_el->answer, "", &range) == -1) {
+	    if (Rast_read_range(rast_el->answer, "", &range) == -1) {
 		G_fatal_error(_("Range info for <%s> not available (run r.support)"),
 			      rast_el->answer);
 	    }
-	    G_get_range_min_max(&range, &cmin, &cmax);
+	    Rast_get_range_min_max(&range, &cmin, &cmax);
 	    min = cmin;
 	    max = cmax;
 	}
     }
 
     if (rast_co->answer) {
-	if ((colorfd = G_open_cell_old(rast_co->answer, "")) == -1)
+	if ((colorfd = Rast_open_cell_old(rast_co->answer, "")) == -1)
 	    G_warning(_("Unable to open cellfile for <%s>"), rast_co->answer);
 	else {
-	    G_read_colors(rast_co->answer, "", &colr);
+	    Rast_read_colors(rast_co->answer, "", &colr);
 	    color_ok = 1;
 	}
     }
@@ -159,9 +160,9 @@ int main(int argc, char *argv[])
     vrml_end(vout);
 
 
-    G_close_cell(elevfd);
+    Rast_close_cell(elevfd);
     if (color_ok)
-	G_close_cell(colorfd);
+	Rast_close_cell(colorfd);
 
     return (EXIT_SUCCESS);
 

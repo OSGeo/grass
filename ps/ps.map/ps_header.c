@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "ps_info.h"
 
 static long bb_offset;
@@ -18,7 +19,7 @@ int write_PS_header(void)
     int cats_ok;
 
     if (PS.do_raster)
-	cats_ok = G_read_cats(PS.cell_name, PS.cell_mapset, &cats) >= 0;
+	cats_ok = Rast_read_cats(PS.cell_name, PS.cell_mapset, &cats) >= 0;
 
     /* write PostScript header */
     /*fprintf(PS.fp, "%%!PS-Adobe-2.0 EPSF-1.2\n"); */

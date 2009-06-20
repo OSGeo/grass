@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/Vect.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
@@ -273,18 +274,18 @@ void P_Aux_to_Raster(double **matrix, int fd)
     nrows = G_window_rows();
     ncols = G_window_cols();
 
-    raster = G_allocate_raster_buf(DCELL_TYPE);
+    raster = Rast_allocate_raster_buf(DCELL_TYPE);
 
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
 
-	G_set_d_null_value(raster, ncols);
+	Rast_set_d_null_value(raster, ncols);
 
 	for (col = 0, ptr = raster; col < ncols;
-	     col++, ptr = G_incr_void_ptr(ptr, G_raster_size(DCELL_TYPE))) {
-	    G_set_raster_value_d(ptr, (DCELL) (matrix[row][col]), DCELL_TYPE);
+	     col++, ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(DCELL_TYPE))) {
+	    Rast_set_raster_value_d(ptr, (DCELL) (matrix[row][col]), DCELL_TYPE);
 	}
-	G_put_d_raster_row(fd, raster);
+	Rast_put_d_raster_row(fd, raster);
     }
 }
 

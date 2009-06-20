@@ -1,6 +1,9 @@
 #include <stdlib.h>
+
+#include <grass/Rast.h>
 #include <grass/imagery.h>
 #include <grass/glocale.h>
+
 #include "files.h"
 /* #include "local_proto.h" */
 
@@ -22,7 +25,7 @@ int read_data(struct files *files, struct SigSet *S)
 	G_percent(row, nrows, 2);
 	read_training_map(class, row, ncols, files);
 	for (b = 0; b < files->nbands; b++)
-	    if (G_get_d_raster_row
+	    if (Rast_get_d_raster_row
 		(files->band_fd[b], files->band_cell[b], row) < 0)
 		G_fatal_error(_("Unable to read raster map row %d"),
 			      row);
@@ -33,8 +36,8 @@ int read_data(struct files *files, struct SigSet *S)
 		continue;
 	    Data = &S->ClassSig[n].ClassData;
 	    for (b = 0; b < files->nbands; b++) {
-		if (G_is_d_null_value(&files->band_cell[b][col]))
-		    G_set_d_null_value(&Data->x[Data->count][b], 1);
+		if (Rast_is_d_null_value(&files->band_cell[b][col]))
+		    Rast_set_d_null_value(&Data->x[Data->count][b], 1);
 		else
 		    Data->x[Data->count][b] = files->band_cell[b][col];
 	    }

@@ -43,6 +43,7 @@
 #endif
 
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/gstypes.h>
 #include <grass/glocale.h>
 
@@ -1630,7 +1631,7 @@ int GS_load_att_map(int id, const char *filename, int att)
     }
     
     /* Check to see if map is in Region */
-    G_get_cellhd(filename, mapset, &rast_head);
+    Rast_get_cellhd(filename, mapset, &rast_head);
     if (rast_head.north <= wind.south ||
 	rast_head.south >= wind.north ||
 	rast_head.east <= wind.west || rast_head.west >= wind.east) {

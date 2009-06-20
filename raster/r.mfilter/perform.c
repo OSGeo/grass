@@ -20,7 +20,7 @@ int perform_filter(const char *in_name, const char *out_name,
     DCELL *cell;
 
 
-    cell = G_allocate_d_raster_buf();
+    cell = Rast_allocate_d_raster_buf();
 
     count = 0;
     for (pass = 0; pass < repeat; pass++) {
@@ -29,7 +29,7 @@ int perform_filter(const char *in_name, const char *out_name,
 	    G_debug(1, "Filter %d", n + 1);
 
 	    if (count == 0) {
-		in = G_open_cell_old(in_name, "");
+		in = Rast_open_cell_old(in_name, "");
 
 		G_debug(1, "Open raster map %s = %d", in_name, in);
 
@@ -45,7 +45,7 @@ int perform_filter(const char *in_name, const char *out_name,
 
 		G_debug(1, "Closing raster map");
 
-		G_close_cell(in);
+		Rast_close_cell(in);
 		in = out;
 		close(creat(tmp2 = G_tempfile(), 0666));
 		out = open(tmp2, 2);
@@ -72,13 +72,13 @@ int perform_filter(const char *in_name, const char *out_name,
     }
 
     if (count == 1)
-	G_close_cell(in);
+	Rast_close_cell(in);
     else if (count > 1)
 	close(in);
 
     /* copy final result to output raster map */
     in = out;
-    out = G_open_fp_cell_new(out_name);
+    out = Rast_open_fp_cell_new(out_name);
     if (out < 0) {
 	G_fatal_error(_("Cannot create raster map <%s>"), out_name);
     }
@@ -86,17 +86,17 @@ int perform_filter(const char *in_name, const char *out_name,
     G_message(_("Writing raster map <%s>"), out_name);
     for (row = 0; row < nrows; row++) {
 	getrow(in, cell, row, buflen);
-	G_put_d_raster_row(out, cell);
+	Rast_put_d_raster_row(out, cell);
     }
 
-    /* remove the temporary files before closing so that the G_close_cell()
+    /* remove the temporary files before closing so that the Rast_close_cell()
        has more disk to work with
      */
     if (count > 0)
 	unlink(tmp1);
     if (count > 1)
 	unlink(tmp2);
-    G_close_cell(out);
+    Rast_close_cell(out);
 
     return 0;
 }

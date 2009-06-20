@@ -29,6 +29,7 @@
 #include <string.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/display_raster.h>
 #include <grass/display.h>
 #include <grass/glocale.h>
@@ -243,20 +244,20 @@ int main(int argc, char **argv)
     }
 
 
-    if (G_read_colors(map_name, "", &colors) == -1)
+    if (Rast_read_colors(map_name, "", &colors) == -1)
 	G_fatal_error(_("Color file for <%s> not available"), map_name);
 
-    fp = G_raster_map_is_fp(map_name, "");
+    fp = Rast_raster_map_is_fp(map_name, "");
     if (fp && !use_catlist) {
 	do_smooth = TRUE;
 	/* fprintf(stderr, "FP map found - switching gradient legend on\n"); */
 	flip = !flip;
     }
 
-    if (G_read_cats(map_name, "", &cats) == -1)
+    if (Rast_read_cats(map_name, "", &cats) == -1)
 	G_warning(_("Category file for <%s> not available"), map_name);
 
-    G_set_c_null_value(&null_cell, 1);
+    Rast_set_c_null_value(&null_cell, 1);
 
     if (R_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
@@ -318,15 +319,15 @@ int main(int argc, char **argv)
 
     /* How many categories to show */
     if (!fp) {
-	if (G_read_range(map_name, "", &range) == -1)
+	if (Rast_read_range(map_name, "", &range) == -1)
 	    G_fatal_error(_("Range information for <%s> not available (run r.support)"),
 			  map_name);
 
-	G_get_range_min_max(&range, &min_ind, &max_ind);
-	if (G_is_c_null_value(&min_ind))
+	Rast_get_range_min_max(&range, &min_ind, &max_ind);
+	if (Rast_is_c_null_value(&min_ind))
 	    G_fatal_error(_("Input map contains no data"));
 
-	G_get_color_range(&min_colr, &max_colr, &colors);
+	Rast_get_color_range(&min_colr, &max_colr, &colors);
 
 	if (UserRange) {
 	    if (min_ind < UserRangeMin)
@@ -371,9 +372,9 @@ int main(int argc, char **argv)
 	for (i = min_ind, j = 1, k = 0; j <= do_cats && i <= max_ind;
 	     j++, i += thin) {
 	    if (!flip)
-		cstr = G_get_cat(i, &cats);
+		cstr = Rast_get_cat(i, &cats);
 	    else
-		cstr = G_get_cat((max_ind - (i - min_ind)), &cats);
+		cstr = Rast_get_cat((max_ind - (i - min_ind)), &cats);
 
 	    if (!use_catlist)
 		catlist[j - 1] = (double)i;
@@ -404,7 +405,7 @@ int main(int argc, char **argv)
 				  opt8->answers[i], min_ind, max_ind);
 		}
 
-		cstr = G_get_cat(catlist[i], &cats);
+		cstr = Rast_get_cat(catlist[i], &cats);
 		if (!cstr[0]) {	/* no cat label found, skip str output */
 		    if (hide_nodata)
 			continue;
@@ -464,7 +465,7 @@ int main(int argc, char **argv)
 	}
 
 	/*      R_text_size((int)(dots_per_line*4/5), (int)(dots_per_line*4/5)) ;    redundant */
-	/* if(G_is_c_null_value(&min_ind) && G_is_c_null_value(&max_ind))
+	/* if(Rast_is_c_null_value(&min_ind) && Rast_is_c_null_value(&max_ind))
 	   {
 	   min_ind = 1;
 	   max_ind = 0;
@@ -480,13 +481,13 @@ int main(int argc, char **argv)
 	}
     }
     else {			/* is fp */
-	if (G_read_fp_range(map_name, "", &fprange) == -1)
+	if (Rast_read_fp_range(map_name, "", &fprange) == -1)
 	    G_fatal_error(_("Range information for <%s> not available"),
 			  map_name);
 
-	G_get_fp_range_min_max(&fprange, &dmin, &dmax);
+	Rast_get_fp_range_min_max(&fprange, &dmin, &dmax);
 
-	G_get_d_color_range(&min_dcolr, &max_dcolr, &colors);
+	Rast_get_d_color_range(&min_dcolr, &max_dcolr, &colors);
 
 	if (UserRange) {
 	    if (dmin < UserRangeMin)
@@ -603,7 +604,7 @@ int main(int argc, char **argv)
 			max_ind - k * (double)(max_ind - min_ind) / (steps -
 								     1);
 
-		cstr = G_get_cat(tcell, &cats);
+		cstr = Rast_get_cat(tcell, &cats);
 		if (!cstr[0])	/* no cats found, disable str output */
 		    hide_catstr = 1;
 		else
@@ -779,9 +780,9 @@ int main(int argc, char **argv)
 	    /*              for(i=min_ind, j=1, k=0; j<=do_cats && i<=max_ind; j++, i+=thin)        */
 	{
 	    if (!flip)
-		cstr = G_get_cat(catlist[i], &cats);
+		cstr = Rast_get_cat(catlist[i], &cats);
 	    else
-		cstr = G_get_cat(catlist[catlistCount - i - 1], &cats);
+		cstr = Rast_get_cat(catlist[catlistCount - i - 1], &cats);
 
 
 	    if (!cstr[0]) {	/* no cat label found, skip str output */

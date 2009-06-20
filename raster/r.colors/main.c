@@ -26,6 +26,7 @@
 #include <string.h>
 #include <sys/types.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 
@@ -265,7 +266,7 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Raster map <%s> not found"), name);
 
     if (remove) {
-	int stat = G_remove_colors(name, mapset);
+	int stat = Rast_remove_colors(name, mapset);
 
 	if (stat < 0)
 	    G_fatal_error(_("Unable to remove color table of raster map <%s>"), name);
@@ -275,18 +276,18 @@ int main(int argc, char **argv)
     }
 
     G_suppress_warnings(1);
-    have_colors = G_read_colors(name, mapset, &colors);
+    have_colors = Rast_read_colors(name, mapset, &colors);
     /*if (have_colors >= 0)
-       G_free_colors(&colors); */
+       Rast_free_colors(&colors); */
 
     if (have_colors > 0 && !overwrite)
 	exit(EXIT_SUCCESS);
 
     G_suppress_warnings(0);
 
-    fp = G_raster_map_is_fp(name, mapset);
-    G_read_fp_range(name, mapset, &range);
-    G_get_fp_range_min_max(&range, &min, &max);
+    fp = Rast_raster_map_is_fp(name, mapset);
+    Rast_read_fp_range(name, mapset, &range);
+    Rast_get_fp_range_min_max(&range, &min, &max);
 
     if (is_from_stdin) {
 	if (!read_color_rules(stdin, &colors, min, max, fp))
@@ -299,37 +300,37 @@ int main(int argc, char **argv)
 	if (strcmp(style, "random") == 0) {
 	    if (fp)
 		G_fatal_error(_("Color table 'random' is not supported for floating point raster map"));
-	    G_make_random_colors(&colors, (CELL) min, (CELL) max);
+	    Rast_make_random_colors(&colors, (CELL) min, (CELL) max);
 	}
 	else if (strcmp(style, "grey.eq") == 0) {
 	    if (fp)
 		G_fatal_error(_("Color table 'grey.eq' is not supported for floating point raster map"));
 	    if (!have_stats)
 		have_stats = get_stats(name, mapset, &statf);
-	    G_make_histogram_eq_colors(&colors, &statf);
+	    Rast_make_histogram_eq_colors(&colors, &statf);
 	}
 	else if (strcmp(style, "grey.log") == 0) {
 	    if (fp)
 		G_fatal_error(_("Color table 'grey.log' is not supported for floating point raster map"));
 	    if (!have_stats)
 		have_stats = get_stats(name, mapset, &statf);
-	    G_make_histogram_log_colors(&colors, &statf, (CELL) min,
+	    Rast_make_histogram_log_colors(&colors, &statf, (CELL) min,
 					(CELL) max);
 	}
 	else if (find_rule(style))
-	    G_make_fp_colors(&colors, style, min, max);
+	    Rast_make_fp_colors(&colors, style, min, max);
 	else
 	    G_fatal_error(_("Unknown color request '%s'"), style);
     }
     else if (rules) {
-	if (!G_load_fp_colors(&colors, rules, min, max)) {
+	if (!Rast_load_fp_colors(&colors, rules, min, max)) {
 	    /* for backwards compatibility try as std name; remove for GRASS 7 */
 	    char path[GPATH_MAX];
 
 	    /* don't bother with native dirsep as not needed for backwards compatibility */
 	    sprintf(path, "%s/etc/colors/%s", G_gisbase(), rules);
 
-	    if (!G_load_fp_colors(&colors, path, min, max))
+	    if (!Rast_load_fp_colors(&colors, path, min, max))
 		G_fatal_error(_("Unable to load rules file <%s>"), rules);
 	}
     }
@@ -339,44 +340,44 @@ int main(int argc, char **argv)
 	if (cmapset == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"), cmap);
 
-	if (G_read_colors(cmap, cmapset, &colors) < 0)
+	if (Rast_read_colors(cmap, cmapset, &colors) < 0)
 	    G_fatal_error(_("Unable to read color table for raster map <%s>"), cmap);
     }
 
     if (fp)
-	G_mark_colors_as_fp(&colors);
+	Rast_mark_colors_as_fp(&colors);
 
     if (flag.n->answer)
-	G_invert_colors(&colors);
+	Rast_invert_colors(&colors);
 
     if (flag.e->answer) {
 	if (fp) {
 	    struct FP_stats fpstats;
 	    get_fp_stats(name, mapset, &fpstats, min, max, flag.g->answer, flag.a->answer);
-	    G_histogram_eq_colors_fp(&colors_tmp, &colors, &fpstats);
+	    Rast_histogram_eq_colors_fp(&colors_tmp, &colors, &fpstats);
 	}
 	else {
 	    if (!have_stats) 
 		have_stats = get_stats(name, mapset, &statf);
-	    G_histogram_eq_colors(&colors_tmp, &colors, &statf);
+	    Rast_histogram_eq_colors(&colors_tmp, &colors, &statf);
 	}
 	colors = colors_tmp;
     }
 
     if (flag.g->answer) {
-	G_log_colors(&colors_tmp, &colors, 100);
+	Rast_log_colors(&colors_tmp, &colors, 100);
 	colors = colors_tmp;
     }
 
     if (flag.a->answer) {
-	G_abs_log_colors(&colors_tmp, &colors, 100);
+	Rast_abs_log_colors(&colors_tmp, &colors, 100);
 	colors = colors_tmp;
     }
 
     if (fp)
-	G_mark_colors_as_fp(&colors);
+	Rast_mark_colors_as_fp(&colors);
 
-    if (G_write_colors(name, mapset, &colors) >= 0)
+    if (Rast_write_colors(name, mapset, &colors) >= 0)
 	G_message(_("Color table for raster map <%s> set to '%s'"), name,
 		  is_from_stdin ? "rules" : style ? style : rules ? rules :
 		  cmap);

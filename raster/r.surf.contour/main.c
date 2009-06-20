@@ -25,6 +25,7 @@
 #include "contour.h"
 #include <unistd.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 int nrows;
@@ -94,22 +95,22 @@ int main(int argc, char *argv[])
     seen = flag_create(nrows, ncols);
     mask = flag_create(nrows, ncols);
     if (NULL != G_find_file("cell", "MASK", G_mapset())) {
-	if ((file_fd = G_open_cell_old("MASK", G_mapset())) < 0)
+	if ((file_fd = Rast_open_cell_old("MASK", G_mapset())) < 0)
 	    G_fatal_error("Unable to open MASK");
 	for (r = 0; r < nrows; r++) {
-	    G_get_map_row_nomask(file_fd, alt_row, r);
+	    Rast_get_map_row_nomask(file_fd, alt_row, r);
 	    for (c = 0; c < ncols; c++)
 		if (!alt_row[c])
 		    FLAG_SET(mask, r, c);
 	}
-	G_close_cell(file_fd);
+	Rast_close_cell(file_fd);
     }
     zero = (NODE *) G_malloc(INIT_AR * sizeof(NODE));
     minc = minr = 0;
     maxc = ncols - 1;
     maxr = nrows - 1;
     array_size = INIT_AR;
-    file_fd = G_open_cell_new(alt_name);
+    file_fd = Rast_open_cell_new(alt_name);
     if (!file_fd)
 	G_fatal_error("Unable to open output map");
     for (r = 0; r < nrows; r++) {
@@ -129,17 +130,17 @@ int main(int argc, char *argv[])
 	    else
 		alt_row[c] = con1;
 	}
-	G_put_raster_row(file_fd, alt_row, CELL_TYPE);
+	Rast_put_raster_row(file_fd, alt_row, CELL_TYPE);
     }
     G_percent(r, nrows, 1);
     free_cell(con);
     flag_destroy(seen);
     flag_destroy(mask);
-    G_close_cell(file_fd);
+    Rast_close_cell(file_fd);
 
-    G_short_history(alt_name, "raster", &history);
-    G_command_history(&history);
-    G_write_history(alt_name, &history);
+    Rast_short_history(alt_name, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(alt_name, &history);
 
     exit(EXIT_SUCCESS);
 }

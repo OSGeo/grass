@@ -17,24 +17,24 @@ int read_range(void)
 
     /* read the fpranges and ranges of all input maps */
     for (i = 0; i < noi; i++) {
-	if (G_read_fp_range(name[i], G_mapset(), &drange) <= 0) {
+	if (Rast_read_fp_range(name[i], G_mapset(), &drange) <= 0) {
 	    sprintf(buff, "Can't read f_range for map %s", name[i]);
 	    G_fatal_error(buff);
 	}
-	G_get_fp_range_min_max(&drange, &tmp_dmin, &tmp_dmax);
+	Rast_get_fp_range_min_max(&drange, &tmp_dmin, &tmp_dmax);
 
-	if (G_read_range(name[i], G_mapset(), &range) <= 0) {
+	if (Rast_read_range(name[i], G_mapset(), &range) <= 0) {
 	    sprintf(buff, "Can't read range for map %s", name[i]);
 	    G_fatal_error(buff);
 	}
-	G_get_range_min_max(&range, &tmp_min, &tmp_max);
-	if (!i || tmp_max > old_max || G_is_c_null_value(&old_max))
+	Rast_get_range_min_max(&range, &tmp_min, &tmp_max);
+	if (!i || tmp_max > old_max || Rast_is_c_null_value(&old_max))
 	    old_max = tmp_max;
-	if (!i || tmp_min < old_min || G_is_c_null_value(&old_min))
+	if (!i || tmp_min < old_min || Rast_is_c_null_value(&old_min))
 	    old_min = tmp_min;
-	if (!i || tmp_dmax > old_dmax || G_is_d_null_value(&old_dmax))
+	if (!i || tmp_dmax > old_dmax || Rast_is_d_null_value(&old_dmax))
 	    old_dmax = tmp_dmax;
-	if (!i || tmp_dmin < old_dmin || G_is_d_null_value(&old_dmin))
+	if (!i || tmp_dmin < old_dmin || Rast_is_d_null_value(&old_dmin))
 	    old_dmin = tmp_dmin;
     }				/* for loop */
 
@@ -45,7 +45,7 @@ int report_range(void)
 {
     char buff[300], buff2[300];
 
-    if (G_is_d_null_value(&old_dmin) || G_is_d_null_value(&old_dmax))
+    if (Rast_is_d_null_value(&old_dmin) || Rast_is_d_null_value(&old_dmax))
 	G_message(_("Old data range is empty"));
     else {
 	sprintf(buff, "%.10f", old_dmin);
@@ -54,7 +54,7 @@ int report_range(void)
 	G_trim_decimal(buff2);
 	G_message(_("Old data range is %s to %s"), buff, buff2);
     }
-    if (G_is_c_null_value(&old_min) || G_is_c_null_value(&old_max))
+    if (Rast_is_c_null_value(&old_min) || Rast_is_c_null_value(&old_max))
 	G_message(_("Old integer data range is empty"));
     else
 	G_message(_("Old integer data range is %d to %d"),
@@ -86,7 +86,7 @@ int read_rules(const char *filename)
     report_range();
     if (isatty(fileno(fp)))
 	fprintf(stderr, _("\nEnter the rule or 'help' for the format description or 'end' to exit:\n"));
-    G_quant_init(&quant_struct);
+    Rast_quant_init(&quant_struct);
     for (line = 1;; line++) {
 	if (isatty(fileno(fp)))
 	    fprintf(stderr, "> ");
@@ -106,7 +106,7 @@ int read_rules(const char *filename)
 		break;		/* if no new rules have been specified */
 
 	    /* give warning when quant rules do not cover the whole range of map */
-	    G_quant_get_limits(&quant_struct, &dmin, &dmax, &cmin, &cmax);
+	    Rast_quant_get_limits(&quant_struct, &dmin, &dmax, &cmin, &cmax);
 	    if ((dmin > old_dmin || dmax < old_dmax) && !first)
 		G_warning(_("quant rules do not cover the whole range map"));
 	    break;
@@ -126,26 +126,26 @@ int read_rules(const char *filename)
 	   lookup the values in the quant table */
 	switch (sscanf(buf, "%lf:%lf:%d:%d", &dLow, &dHigh, &iLow, &iHigh)) {
 	case 3:
-	    G_quant_add_rule(&quant_struct, dLow, dHigh, iLow, iLow);
+	    Rast_quant_add_rule(&quant_struct, dLow, dHigh, iLow, iLow);
 	    nrules++;
 	    first = 0;
 	    break;
 
 	case 4:
-	    G_quant_add_rule(&quant_struct, dLow, dHigh, iLow, iHigh);
+	    Rast_quant_add_rule(&quant_struct, dLow, dHigh, iLow, iHigh);
 	    nrules++;
 	    first = 0;
 	    break;
 
 	default:
 	    if (sscanf(buf, "%lf:*:%d", &dLow, &iLow) == 2) {
-		G_quant_set_pos_infinite_rule(&quant_struct, dLow, iLow);
+		Rast_quant_set_pos_infinite_rule(&quant_struct, dLow, iLow);
 		nrules++;
 		first = 0;
 	    }
 
 	    else if (sscanf(buf, "*:%lf:%d", &dHigh, &iLow) == 2) {
-		G_quant_set_neg_infinite_rule(&quant_struct, dHigh, iLow);
+		Rast_quant_set_neg_infinite_rule(&quant_struct, dHigh, iLow);
 		nrules++;
 		first = 0;
 	    }

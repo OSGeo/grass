@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 #include "kappa.h"
@@ -145,5 +146,5 @@ static void layer(const char *s)
     layers = (LAYER *) G_realloc(layers, 2 * sizeof(LAYER));
     layers[n].name = G_store(name);
     layers[n].mapset = mapset;
-    G_read_cats(name, mapset, &layers[n].labels);
+    Rast_read_cats(name, mapset, &layers[n].labels);
 }

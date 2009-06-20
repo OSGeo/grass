@@ -43,7 +43,7 @@ int read_border(void)
 	    continue;
 
 	if (KEY("color")) {
-	    ret = G_str_to_color(data, &r, &g, &b);
+	    ret = Rast_str_to_color(data, &r, &g, &b);
 	    if (ret == 1) {
 		color_R = r / 255.;
 		color_G = g / 255.;

@@ -92,7 +92,7 @@ int header(int unit1, int unit2)
 	for (i = 0; i < nlayers; i++) {
 	    char *title;
 
-	    title = G_get_cats_title(&(layers[i].labels));
+	    title = Rast_get_cats_title(&(layers[i].labels));
 	    if (title)
 		G_strip(title);
 	    if (title == NULL || *title == 0)

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 
 extern RASTER_MAP_TYPE in_type;
 extern RASTER_MAP_TYPE out_type;

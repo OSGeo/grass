@@ -30,18 +30,18 @@ int PS_colortable(void)
     G_message(_("Creating color table for <%s in %s>..."),
 	      ct.name, ct.mapset);
 
-    if (G_read_cats(ct.name, ct.mapset, &PS.cats) == -1) {
+    if (Rast_read_cats(ct.name, ct.mapset, &PS.cats) == -1) {
 	G_warning(_("Category file for <%s> not available"), ct.name);
 	return 1;
     }
 
-    if (G_read_colors(ct.name, ct.mapset, &colors) == -1)
+    if (Rast_read_colors(ct.name, ct.mapset, &colors) == -1)
 	G_warning(_("Unable to read colors for colorbar"));
 
     do_color = (PS.grey == 0 && PS.level == 2);
 
     /* How many categories to show */
-    num_cats = G_number_of_raster_cats(&PS.cats);
+    num_cats = Rast_number_of_raster_cats(&PS.cats);
     G_debug(3, "clrtbl: %d categories", num_cats);
     if (!num_cats) {
 	G_warning(_("Your cats/ file is invalid. A cats/ file with categories "
@@ -88,7 +88,7 @@ int PS_colortable(void)
 	    fprintf(PS.fp, "(%s)\n", "no data");
 	else
 	    fprintf(PS.fp, "(%s)\n",
-		    G_get_ith_d_raster_cat(&PS.cats, i - 1, &dmin, &dmax));
+		    Rast_get_ith_d_raster_cat(&PS.cats, i - 1, &dmin, &dmax));
     }
     fprintf(PS.fp, "] def\n");
 
@@ -135,7 +135,7 @@ int PS_colortable(void)
 
 	    /* fill box and outline in black */
 	    if (i)
-		label = G_get_ith_d_raster_cat(&PS.cats, i - 1, &dmin, &dmax);
+		label = Rast_get_ith_d_raster_cat(&PS.cats, i - 1, &dmin, &dmax);
 
 	    x1 = l + (double)j *72.0 * col_width;
 
@@ -146,9 +146,9 @@ int PS_colortable(void)
 	    {
 		/* set box fill color */
 		if (!i)
-		    G_get_null_value_color(&R, &G, &B, &colors);
+		    Rast_get_null_value_color(&R, &G, &B, &colors);
 		else
-		    G_get_d_raster_color(&dmin, &R, &G, &B, &colors);
+		    Rast_get_d_raster_color(&dmin, &R, &G, &B, &colors);
 
 		if (do_color)
 		    fprintf(PS.fp, "%.3f %.3f %.3f C\n",
@@ -179,7 +179,7 @@ int PS_colortable(void)
 		    /* set box fill color */
 		    val = dmin + (double)jj *(dmax - dmin) / NSTEPS;
 
-		    G_get_d_raster_color(&val, &R, &G, &B, &colors);
+		    Rast_get_d_raster_color(&val, &R, &G, &B, &colors);
 		    fprintf(PS.fp, "%.3f %.3f %.3f C\n",
 			    (double)R / 255., (double)G / 255.,
 			    (double)B / 255.);
@@ -222,7 +222,7 @@ int PS_colortable(void)
     if (PS.min_y > y)
 	PS.min_y = y;
 
-    G_free_colors(&colors);
+    Rast_free_colors(&colors);
 
     return 0;
 }

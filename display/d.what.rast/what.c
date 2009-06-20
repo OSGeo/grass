@@ -23,14 +23,14 @@ int what(int once, int terse, int colrow, char *fs, int width, int mwidth)
     G_get_set_window(&window);
     nrows = window.rows;
     ncols = window.cols;
-    buf = G_allocate_c_raster_buf();
-    dbuf = G_allocate_d_raster_buf();
+    buf = Rast_allocate_c_raster_buf();
+    dbuf = Rast_allocate_d_raster_buf();
 
     screen_x = ((int)D_get_d_west() + (int)D_get_d_east()) / 2;
     screen_y = ((int)D_get_d_north() + (int)D_get_d_south()) / 2;
 
     for (i = 0; i < nrasts; i++)
-	map_type[i] = G_get_raster_map_type(fd[i]);
+	map_type[i] = Rast_get_raster_map_type(fd[i]);
 
     do {
 	if (!terse)
@@ -50,19 +50,19 @@ int what(int once, int terse, int colrow, char *fs, int width, int mwidth)
 
 	show_utm(name[0], mapset[0], north, east, &window, terse, colrow,
 		 button, fs);
-	G_set_c_null_value(&null_cell, 1);
-	G_set_d_null_value(&null_dcell, 1);
+	Rast_set_c_null_value(&null_cell, 1);
+	Rast_set_d_null_value(&null_dcell, 1);
 	for (i = 0; i < nrasts; i++) {
 	    if (row < 0 || row >= nrows || col < 0 || col >= ncols) {
 		G_message(_("You are clicking outside the map"));
 		continue;
 	    }
-	    if (G_get_c_raster_row(fd[i], buf, row) < 0)
+	    if (Rast_get_c_raster_row(fd[i], buf, row) < 0)
 		show_cat(width, mwidth, name[i], mapset[i], null_cell,
 			 "ERROR reading raster map", terse, fs, map_type[i]);
 	    else if (map_type[i] == CELL_TYPE) {
 		show_cat(width, mwidth, name[i], mapset[i], buf[col],
-			 G_get_c_raster_cat(&buf[col], &cats[i]), terse, fs,
+			 Rast_get_c_raster_cat(&buf[col], &cats[i]), terse, fs,
 			 map_type[i]);
 		continue;
 	    }
@@ -75,12 +75,12 @@ int what(int once, int terse, int colrow, char *fs, int width, int mwidth)
 	    if (map_type[i] == CELL_TYPE)
 		continue;
 
-	    if (G_get_d_raster_row(fd[i], dbuf, row) < 0)
+	    if (Rast_get_d_raster_row(fd[i], dbuf, row) < 0)
 		show_dval(width, mwidth, name[i], mapset[i], null_dcell,
 			  "ERROR reading fcell file", terse, fs);
 	    else
 		show_dval(width, mwidth, name[i], mapset[i], dbuf[col],
-			  G_get_d_raster_cat(&dbuf[col], &cats[i]), terse,
+			  Rast_get_d_raster_cat(&dbuf[col], &cats[i]), terse,
 			  fs);
 	}
     }

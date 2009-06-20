@@ -10,7 +10,7 @@ int close_array_seg(void)
     CELL *theseg;
     RAMSEG thesegseg;
 
-    cellrow = G_allocate_cell_buf();
+    cellrow = Rast_allocate_cell_buf();
     if (seg_flag || bas_flag || haf_flag) {
 	if (seg_flag) {
 	    theseg = bas;
@@ -32,11 +32,11 @@ int close_array_seg(void)
 	    }
 	}
 	G_debug(1, "%d basins created", max);
-	G_init_colors(&colors);
-	G_make_random_colors(&colors, 1, max);
+	Rast_init_colors(&colors);
+	Rast_make_random_colors(&colors, 1, max);
 
 	if (max < 10000) {
-	    G_set_color((CELL) 0, 0, 0, 0, &colors);
+	    Rast_set_color((CELL) 0, 0, 0, 0, &colors);
 	    r = 1;
 	    incr = 0;
 	    while (incr >= 0) {
@@ -46,12 +46,12 @@ int close_array_seg(void)
 			for (bl = 90 + incr; bl <= 255; bl += 40) {
 			    flag = 1;
 			    while (flag) {
-				G_get_color(r, &red, &green, &blue, &colors);
+				Rast_get_color(r, &red, &green, &blue, &colors);
 				/* if existing rule is too dark then append a new
 				   rule to override it */
 				if ((blue * .11 + red * .30 + green * .59) <
 				    100) {
-				    G_set_color(r, rd, gr, bl, &colors);
+				    Rast_set_color(r, rd, gr, bl, &colors);
 				    flag = 0;
 				}
 				if (++r > max) {
@@ -83,52 +83,52 @@ int close_array_seg(void)
 
     /* stream segments map */
     if (seg_flag) {
-	map_fd = G_open_cell_new(seg_name);
+	map_fd = Rast_open_cell_new(seg_name);
 	for (r = 0; r < nrows; r++) {
-	    G_set_c_null_value(cellrow, ncols);	/* reset row to all NULL */
+	    Rast_set_c_null_value(cellrow, ncols);	/* reset row to all NULL */
 	    for (c = 0; c < ncols; c++) {
 		value = FLAG_GET(swale, r, c);
 		if (value)
 		    cellrow[c] = bas[SEG_INDEX(bas_seg, r, c)];
 	    }
-	    G_put_raster_row(map_fd, cellrow, CELL_TYPE);
+	    Rast_put_raster_row(map_fd, cellrow, CELL_TYPE);
 	}
-	G_close_cell(map_fd);
-	G_write_colors(seg_name, this_mapset, &colors);
+	Rast_close_cell(map_fd);
+	Rast_write_colors(seg_name, this_mapset, &colors);
     }
 
     /* basins map */
     if (bas_flag) {
-	map_fd = G_open_cell_new(bas_name);
+	map_fd = Rast_open_cell_new(bas_name);
 	for (r = 0; r < nrows; r++) {
 	    for (c = 0; c < ncols; c++) {
 		cellrow[c] = bas[SEG_INDEX(bas_seg, r, c)];
 		if (cellrow[c] == 0)
-		    G_set_c_null_value(cellrow + c, 1);
+		    Rast_set_c_null_value(cellrow + c, 1);
 	    }
-	    G_put_raster_row(map_fd, cellrow, CELL_TYPE);
+	    Rast_put_raster_row(map_fd, cellrow, CELL_TYPE);
 	}
-	G_close_cell(map_fd);
-	G_write_colors(bas_name, this_mapset, &colors);
+	Rast_close_cell(map_fd);
+	Rast_write_colors(bas_name, this_mapset, &colors);
     }
 
     /* half_basins map */
     if (haf_flag) {
-	map_fd = G_open_cell_new(haf_name);
+	map_fd = Rast_open_cell_new(haf_name);
 	for (r = 0; r < nrows; r++) {
 	    for (c = 0; c < ncols; c++) {
 		cellrow[c] = haf[SEG_INDEX(haf_seg, r, c)];
 		if (cellrow[c] == 0)
-		    G_set_c_null_value(cellrow + c, 1);
+		    Rast_set_c_null_value(cellrow + c, 1);
 	    }
-	    G_put_raster_row(map_fd, cellrow, CELL_TYPE);
+	    Rast_put_raster_row(map_fd, cellrow, CELL_TYPE);
 	}
-	G_close_cell(map_fd);
-	G_write_colors(haf_name, this_mapset, &colors);
+	Rast_close_cell(map_fd);
+	Rast_write_colors(haf_name, this_mapset, &colors);
     }
 
     if (seg_flag || bas_flag || haf_flag)
-	G_free_colors(&colors);
+	Rast_free_colors(&colors);
 
     G_free(haf);
     G_free(bas);

@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "method.h"
 
 int
@@ -30,7 +31,7 @@ o_divr(const char *basemap, const char *covermap, const char *outputmap, int use
 	    catc = 0;
 	}
 	if (basecat != catb) {
-	    write_reclass(reclass_fd, catb, catc, G_get_cat(catc, cats),
+	    write_reclass(reclass_fd, catb, catc, Rast_get_cat(catc, cats),
 			  usecats);
 	    catb = basecat;
 	    catc = 0;
@@ -38,7 +39,7 @@ o_divr(const char *basemap, const char *covermap, const char *outputmap, int use
 	catc++;
     }
     if (!first)
-	write_reclass(reclass_fd, catb, catc, G_get_cat(catc, cats), usecats);
+	write_reclass(reclass_fd, catb, catc, Rast_get_cat(catc, cats), usecats);
 
     pclose(stats_fd);
     pclose(reclass_fd);

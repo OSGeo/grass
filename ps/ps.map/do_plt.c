@@ -5,6 +5,7 @@
 
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include <grass/symbol.h>
 #include "clr.h"

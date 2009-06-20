@@ -1,5 +1,6 @@
 /* indep.c                                                              */
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 #include "ransurf.h"
@@ -128,7 +129,7 @@ void Indep(void)
     }
 
     G_debug(2, "outputting()");
-    OutFD = G_open_cell_new(Output->answer);
+    OutFD = Rast_open_cell_new(Output->answer);
     if (OutFD < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"),
 		      Output->answer);
@@ -140,12 +141,12 @@ void Indep(void)
 	for (C = 0; C < Cs; C++) {
 	    CellBuffer[C] = Out[R][C];
 	}
-	G_put_raster_row(OutFD, CellBuffer, CELL_TYPE);
+	Rast_put_raster_row(OutFD, CellBuffer, CELL_TYPE);
     }
     G_percent(1, 1, 1);
     
-    G_close_cell(OutFD);
-    G_short_history(Output->answer, "raster", &history);
-    G_command_history(&history);
-    G_write_history(Output->answer, &history);
+    Rast_close_cell(OutFD);
+    Rast_short_history(Output->answer, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(Output->answer, &history);
 }

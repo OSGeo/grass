@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include <grass/stats.h>
 #include "ncb.h"
@@ -203,7 +204,7 @@ int main(int argc, char *argv[])
     ncb.newcell = parm.output->answer;
 
     if (!flag.align->answer) {
-	if (G_get_cellhd(ncb.oldcell, "", &cellhd) < 0)
+	if (Rast_get_cellhd(ncb.oldcell, "", &cellhd) < 0)
 	    exit(EXIT_FAILURE);
 	G_get_window(&window);
 	G_align_window(&window, &cellhd);
@@ -214,11 +215,11 @@ int main(int argc, char *argv[])
     ncols = G_window_cols();
 
     /* open raster maps */
-    if ((in_fd = G_open_cell_old(ncb.oldcell, "")) < 0)
+    if ((in_fd = Rast_open_cell_old(ncb.oldcell, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"),
 		      ncb.oldcell);
 
-    map_type = G_get_raster_map_type(in_fd);
+    map_type = Rast_get_raster_map_type(in_fd);
 
     /* get the method */
     for (method = 0; (p = menu[method].name); method++)
@@ -247,7 +248,7 @@ int main(int argc, char *argv[])
     if (copycolr) {
 	G_suppress_warnings(1);
 	copycolr =
-	    (G_read_colors(ncb.oldcell, "", &colr) > 0);
+	    (Rast_read_colors(ncb.oldcell, "", &colr) > 0);
 	G_suppress_warnings(0);
     }
 
@@ -267,7 +268,7 @@ int main(int argc, char *argv[])
 
     /* allocate the cell buffers */
     allocate_bufs();
-    result = G_allocate_d_raster_buf();
+    result = Rast_allocate_d_raster_buf();
 
     /* get title, initialize the category and stat info */
     if (parm.title->answer)
@@ -284,12 +285,12 @@ int main(int argc, char *argv[])
 	readcell(in_fd, readrow++, nrows, ncols);
 
     /* open raster map */
-    in_fd = G_open_cell_old(ncb.oldcell, "");
+    in_fd = Rast_open_cell_old(ncb.oldcell, "");
     if (in_fd < 0)
 	exit(EXIT_FAILURE);
 
     /*open the new raster map */
-    out_fd = G_open_raster_new(ncb.newcell, map_type);
+    out_fd = Rast_open_raster_new(ncb.newcell, map_type);
     if (out_fd < 0)
 	exit(EXIT_FAILURE);
 
@@ -314,37 +315,37 @@ int main(int argc, char *argv[])
 		n = gather(values, col);
 
 	    if (n < 0)
-		G_set_d_null_value(rp, 1);
+		Rast_set_d_null_value(rp, 1);
 	    else {
 		if (newvalue_w)
 		    newvalue_w(rp, values_w, n, closure);
 		else
 		    newvalue(rp, values, n, closure);
 
-		if (half && !G_is_d_null_value(rp))
+		if (half && !Rast_is_d_null_value(rp))
 		    *rp += 0.5;
 	    }
 	}
-	G_put_d_raster_row(out_fd, result);
+	Rast_put_d_raster_row(out_fd, result);
     }
     G_percent(row, nrows, 2);
 
-    G_close_cell(out_fd);
-    G_close_cell(in_fd);
+    Rast_close_cell(out_fd);
+    Rast_close_cell(in_fd);
 
     /* put out category info */
     null_cats();
     if ((cat_names = menu[method].cat_names))
 	cat_names();
 
-    G_write_cats(ncb.newcell, &ncb.cats);
+    Rast_write_cats(ncb.newcell, &ncb.cats);
 
     if (copycolr)
-	G_write_colors(ncb.newcell, G_mapset(), &colr);
+	Rast_write_colors(ncb.newcell, G_mapset(), &colr);
 
-    G_short_history(ncb.newcell, "raster", &history);
-    G_command_history(&history);
-    G_write_history(ncb.newcell, &history);
+    Rast_short_history(ncb.newcell, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(ncb.newcell, &history);
 
 
     exit(EXIT_SUCCESS);

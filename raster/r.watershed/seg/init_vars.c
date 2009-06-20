@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include "Gwater.h"
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 int ele_round(double);
@@ -186,14 +187,14 @@ int init_vars(int argc, char *argv[])
     G_verbose_message("Checking for masked and NULL cells in input elevation <%s>", ele_name);
 
     /* open elevation input */
-    fd = G_open_cell_old(ele_name, "");
+    fd = Rast_open_cell_old(ele_name, "");
     if (fd < 0) {
 	G_fatal_error(_("unable to open elevation map layer"));
     }
 
-    ele_map_type = G_get_raster_map_type(fd);
-    ele_size = G_raster_size(ele_map_type);
-    elebuf = G_allocate_raster_buf(ele_map_type);
+    ele_map_type = Rast_get_raster_map_type(fd);
+    ele_size = Rast_raster_size(ele_map_type);
+    elebuf = Rast_allocate_raster_buf(ele_map_type);
 
     if (ele_map_type == FCELL_TYPE || ele_map_type == DCELL_TYPE)
 	ele_scale = 1000; 	/* should be enough to do the trick */
@@ -202,15 +203,15 @@ int init_vars(int argc, char *argv[])
     MASK_flag = 0;
     do_points = nrows * ncols;
     for (r = 0; r < nrows; r++) {
-	G_get_raster_row(fd, elebuf, r, ele_map_type);
+	Rast_get_raster_row(fd, elebuf, r, ele_map_type);
 	ptr = elebuf;
 	for (c = 0; c < ncols; c++) {
 
 	    /* check for masked and NULL cells */
-	    if (G_is_null_value(ptr, ele_map_type)) {
+	    if (Rast_is_null_value(ptr, ele_map_type)) {
 		bseg_put(&worked, &one, r, c);
 		bseg_put(&in_list, &one, r, c);
-		G_set_c_null_value(&alt_value, 1);
+		Rast_set_c_null_value(&alt_value, 1);
 		do_points--;
 	    }
 	    else {
@@ -232,10 +233,10 @@ int init_vars(int argc, char *argv[])
 	    if (er_flag) {
 		cseg_put(&r_h, &alt_value, r, c);
 	    }
-	    ptr = G_incr_void_ptr(ptr, ele_size);
+	    ptr = Rast_incr_void_ptr(ptr, ele_size);
 	}
     }
-    G_close_cell(fd);
+    Rast_close_cell(fd);
     G_free(elebuf);
     if (do_points < nrows * ncols)
 	MASK_flag = 1;
@@ -273,16 +274,16 @@ int init_vars(int argc, char *argv[])
     cseg_open(&asp, seg_rows, seg_cols, num_open_segs);
     /* depression: drainage direction will be set to zero later */
     if (pit_flag) {
-	fd = G_open_cell_old(pit_name, "");
+	fd = Rast_open_cell_old(pit_name, "");
 	if (fd < 0) {
 	    G_fatal_error(_("unable to open depression map layer"));
 	}
-	buf = G_allocate_cell_buf();
+	buf = Rast_allocate_cell_buf();
 	for (r = 0; r < nrows; r++) {
-	    G_get_c_raster_row(fd, buf, r);
+	    Rast_get_c_raster_row(fd, buf, r);
 	    for (c = 0; c < ncols; c++) {
 		asp_value = buf[c];
-		if (!G_is_c_null_value(&asp_value) && asp_value) {
+		if (!Rast_is_c_null_value(&asp_value) && asp_value) {
 		    cseg_put(&asp, &one, r, c);
 		}
 		else {
@@ -290,7 +291,7 @@ int init_vars(int argc, char *argv[])
 		}
 	    }
 	}
-	G_close_cell(fd);
+	Rast_close_cell(fd);
 	G_free(buf);
     }
     else {
@@ -302,16 +303,16 @@ int init_vars(int argc, char *argv[])
     }
     bseg_open(&swale, seg_rows, seg_cols, num_open_segs);
     if (ob_flag) {
-	fd = G_open_cell_old(ob_name, "");
+	fd = Rast_open_cell_old(ob_name, "");
 	if (fd < 0) {
 	    G_fatal_error(_("unable to open blocking map layer"));
 	}
-	buf = G_allocate_cell_buf();
+	buf = Rast_allocate_cell_buf();
 	for (r = 0; r < nrows; r++) {
-	    G_get_c_raster_row(fd, buf, r);
+	    Rast_get_c_raster_row(fd, buf, r);
 	    for (c = 0; c < ncols; c++) {
 		block_value = buf[c];
-		if (!G_is_c_null_value(&block_value) && block_value) {
+		if (!Rast_is_c_null_value(&block_value) && block_value) {
 		    bseg_put(&swale, &one, r, c);
 		}
 		else {
@@ -319,7 +320,7 @@ int init_vars(int argc, char *argv[])
 		}
 	    }
 	}
-	G_close_cell(fd);
+	Rast_close_cell(fd);
 	G_free(buf);
     }
     else {

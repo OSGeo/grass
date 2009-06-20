@@ -86,31 +86,31 @@ int input_data(void)
 */
 
     /* Allocate raster buffers */
-    cell1 = G_allocate_f_raster_buf();
-    cell2 = G_allocate_d_raster_buf();
-    cell3 = G_allocate_d_raster_buf();
+    cell1 = Rast_allocate_f_raster_buf();
+    cell2 = Rast_allocate_d_raster_buf();
+    cell3 = Rast_allocate_d_raster_buf();
 
     if (rain != NULL)
-	cell4 = G_allocate_d_raster_buf();
+	cell4 = Rast_allocate_d_raster_buf();
 
     if (infil != NULL)
-	cell4a = G_allocate_d_raster_buf();
+	cell4a = Rast_allocate_d_raster_buf();
 
     if (traps != NULL)
-	cell4b = G_allocate_f_raster_buf();
-    cell5 = G_allocate_f_raster_buf();
+	cell4b = Rast_allocate_f_raster_buf();
+    cell5 = Rast_allocate_f_raster_buf();
 
     if (detin != NULL)
-	cell9 = G_allocate_f_raster_buf();
+	cell9 = Rast_allocate_f_raster_buf();
 
     if (tranin != NULL)
-	cell10 = G_allocate_f_raster_buf();
+	cell10 = Rast_allocate_f_raster_buf();
 
     if (tauin != NULL)
-	cell11 = G_allocate_f_raster_buf();
+	cell11 = Rast_allocate_f_raster_buf();
 
     if (wdepth != NULL)
-	cell12 = G_allocate_d_raster_buf();
+	cell12 = Rast_allocate_d_raster_buf();
 
     /* Allocate some double dimension arrays for each input */
     /* with length of matrix Y */
@@ -177,18 +177,18 @@ int input_data(void)
     if ((mapset = G_find_cell(elevin, "")) == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), elevin);
 
-    fd1 = G_open_cell_old(elevin, mapset);
+    fd1 = Rast_open_cell_old(elevin, mapset);
 
     /* TO REPLACE BY INTERNAL PROCESSING of dx, dy from Elevin */
     if ((mapset = G_find_cell(dxin, "")) == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), dxin);
 
-    fd2 = G_open_cell_old(dxin, mapset);
+    fd2 = Rast_open_cell_old(dxin, mapset);
 
     if ((mapset = G_find_cell(dyin, "")) == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), dyin);
 
-    fd3 = G_open_cell_old(dyin, mapset);
+    fd3 = Rast_open_cell_old(dyin, mapset);
     /* END OF REPLACEMENT */
 
     /* Rendered Mannings n input map optional to run! */
@@ -196,7 +196,7 @@ int input_data(void)
     if (manin != NULL) {
 	if ((mapset = G_find_cell(manin, "")) == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"), manin);
-	fd5 = G_open_cell_old(manin, mapset);
+	fd5 = Rast_open_cell_old(manin, mapset);
     }
 
     /* Rendered Rainfall input map optional to run! */
@@ -204,93 +204,93 @@ int input_data(void)
     if (rain != NULL) {
 	if ((mapset = G_find_cell(rain, "")) == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"), rain);
-	fd4 = G_open_cell_old(rain, mapset);
+	fd4 = Rast_open_cell_old(rain, mapset);
     }
 
     if (infil != NULL) {
 	if ((mapset = G_find_cell(infil, "")) == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"), infil);
-	fd4a = G_open_cell_old(infil, mapset);
+	fd4a = Rast_open_cell_old(infil, mapset);
     }
 
     if (traps != NULL) {
 	if ((mapset = G_find_cell(traps, "")) == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"), traps);
 
-	fd4b = G_open_cell_old(traps, mapset);
+	fd4b = Rast_open_cell_old(traps, mapset);
     }
 
     if (detin != NULL) {
 	if ((mapset = G_find_cell(detin, "")) == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"), detin);
 
-	fd9 = G_open_cell_old(detin, mapset);
+	fd9 = Rast_open_cell_old(detin, mapset);
     }
 
     if (tranin != NULL) {
 	if ((mapset = G_find_cell(tranin, "")) == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"), tranin);
 
-	fd10 = G_open_cell_old(tranin, mapset);
+	fd10 = Rast_open_cell_old(tranin, mapset);
     }
 
     if (tauin != NULL) {
 	if ((mapset = G_find_cell(tauin, "")) == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"), tauin);
 
-	fd11 = G_open_cell_old(tauin, mapset);
+	fd11 = Rast_open_cell_old(tauin, mapset);
     }
 
     if (wdepth != NULL) {
 	if ((mapset = G_find_cell(wdepth, "")) == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"), wdepth);
 
-	fd12 = G_open_cell_old(wdepth, mapset);
+	fd12 = Rast_open_cell_old(wdepth, mapset);
     }
 
     for (row = 0; row < my; row++) {
-	G_get_f_raster_row(fd1, cell1, row);
-	G_get_d_raster_row(fd2, cell2, row);
-	G_get_d_raster_row(fd3, cell3, row);
+	Rast_get_f_raster_row(fd1, cell1, row);
+	Rast_get_d_raster_row(fd2, cell2, row);
+	Rast_get_d_raster_row(fd3, cell3, row);
 
 	if (manin != NULL)
-	    G_get_f_raster_row(fd5, cell5, row);
+	    Rast_get_f_raster_row(fd5, cell5, row);
 
 	if (rain != NULL)
-	    G_get_d_raster_row(fd4, cell4, row);
+	    Rast_get_d_raster_row(fd4, cell4, row);
 
 	if (infil != NULL)
-	    G_get_d_raster_row(fd4a, cell4a, row);
+	    Rast_get_d_raster_row(fd4a, cell4a, row);
 
 	if (traps != NULL)
-	    G_get_f_raster_row(fd4b, cell4b, row);
+	    Rast_get_f_raster_row(fd4b, cell4b, row);
 
 	if (detin != NULL)
-	    G_get_f_raster_row(fd9, cell9, row);
+	    Rast_get_f_raster_row(fd9, cell9, row);
 
 	if (tranin != NULL)
-	    G_get_f_raster_row(fd10, cell10, row);
+	    Rast_get_f_raster_row(fd10, cell10, row);
 
 	if (tauin != NULL)
-	    G_get_f_raster_row(fd11, cell11, row);
+	    Rast_get_f_raster_row(fd11, cell11, row);
 
 	if (wdepth != NULL)
-	    G_get_d_raster_row(fd12, cell12, row);
+	    Rast_get_d_raster_row(fd12, cell12, row);
 
 	for (j = 0; j < mx; j++) {
 	    row_rev = my - row - 1;
 	    /*if elevation data exists store in zz[][] */
-	    if (!G_is_f_null_value(cell1 + j))
+	    if (!Rast_is_f_null_value(cell1 + j))
 		zz[row_rev][j] = (float)(conv * cell1[j]);
 	    else
 		zz[row_rev][j] = UNDEF;
 
-	    if (!G_is_d_null_value(cell2 + j))
+	    if (!Rast_is_d_null_value(cell2 + j))
 		v1[row_rev][j] = (double)cell2[j];
 	    else
 		v1[row_rev][j] = UNDEF;
 
-	    if (!G_is_d_null_value(cell3 + j))
+	    if (!Rast_is_d_null_value(cell3 + j))
 		v2[row_rev][j] = (double)cell3[j];
 	    else
 		v2[row_rev][j] = UNDEF;
@@ -310,7 +310,7 @@ int input_data(void)
 
 	    /* If Rain Exists, then load data */
 	    if (rain != NULL) {
-		if (!G_is_d_null_value(cell4 + j))
+		if (!Rast_is_d_null_value(cell4 + j))
 		    si[row_rev][j] = ((double)cell4[j]) * unitconv;
 		/*conv mm/hr to m/s */
 		/*printf("\n INPUTrain, convert %f %f",si[row_rev][j],unitconv); */
@@ -322,7 +322,7 @@ int input_data(void)
 
 		/* Load infiltration map too if it exists */
 		if (infil != NULL) {
-		    if (!G_is_d_null_value(cell4a + j))
+		    if (!Rast_is_d_null_value(cell4a + j))
 			inf[row_rev][j] = (double)cell4a[j] * unitconv;
 		    /*conv mm/hr to m/s */
 		    /*printf("\nINPUT infilt,convert %f %f",inf[row_rev][j],unitconv); */
@@ -344,7 +344,7 @@ int input_data(void)
 		}
 
 		if (traps != NULL) {
-		    if (!G_is_f_null_value(cell4b + j))
+		    if (!Rast_is_f_null_value(cell4b + j))
 			trap[row_rev][j] = (float)cell4b[j];	/* no conv, unitless */
 		    else {
 			trap[row_rev][j] = UNDEF;
@@ -364,7 +364,7 @@ int input_data(void)
 		}
 
 		if (infil != NULL) {
-		    if (!G_is_d_null_value(cell4a + j))
+		    if (!Rast_is_d_null_value(cell4a + j))
 			inf[row_rev][j] = (double)cell4a[j] * unitconv;	/*conv mm/hr to m/s */
 		    /*printf("\nINPUT infilt,convert %f %f",inf[row_rev][j],unitconv); */
 		    else {
@@ -385,7 +385,7 @@ int input_data(void)
 		}
 
 		if (traps != NULL) {
-		    if (!G_is_f_null_value(cell4b + j))
+		    if (!Rast_is_f_null_value(cell4b + j))
 			trap[row_rev][j] = (float)cell4b[j];	/* no conv, unitless */
 		    else {
 			trap[row_rev][j] = UNDEF;
@@ -394,7 +394,7 @@ int input_data(void)
 		}
 	    }			/* End of added by Yann 20080213 */
 	    if (manin != NULL) {
-		if (!G_is_f_null_value(cell5 + j)) {
+		if (!Rast_is_f_null_value(cell5 + j)) {
 		    cchez[row_rev][j] = (float)cell5[j];	/* units in manual */
 		}
 		else {
@@ -410,7 +410,7 @@ int input_data(void)
 			      manin);
 	    }
 	    if (detin != NULL) {
-		if (!G_is_f_null_value(cell9 + j))
+		if (!Rast_is_f_null_value(cell9 + j))
 		    dc[row_rev][j] = (float)cell9[j];	/*units in manual */
 		else {
 		    dc[row_rev][j] = UNDEF;
@@ -419,7 +419,7 @@ int input_data(void)
 	    }
 
 	    if (tranin != NULL) {
-		if (!G_is_f_null_value(cell10 + j))
+		if (!Rast_is_f_null_value(cell10 + j))
 		    ct[row_rev][j] = (float)cell10[j];	/*units in manual */
 		else {
 		    ct[row_rev][j] = UNDEF;
@@ -428,7 +428,7 @@ int input_data(void)
 	    }
 
 	    if (tauin != NULL) {
-		if (!G_is_f_null_value(cell11 + j))
+		if (!Rast_is_f_null_value(cell11 + j))
 		    tau[row_rev][j] = (float)cell11[j];	/*units in manual */
 		else {
 		    tau[row_rev][j] = UNDEF;
@@ -437,7 +437,7 @@ int input_data(void)
 	    }
 
 	    if (wdepth != NULL) {
-		if (!G_is_d_null_value(cell12 + j))
+		if (!Rast_is_d_null_value(cell12 + j))
 		    gama[row_rev][j] = (double)cell12[j];	/*units in manual */
 		else {
 		    gama[row_rev][j] = UNDEF;
@@ -446,34 +446,34 @@ int input_data(void)
 	    }
 	}
     }
-    G_close_cell(fd1);
-    G_close_cell(fd2);
-    G_close_cell(fd3);
+    Rast_close_cell(fd1);
+    Rast_close_cell(fd2);
+    Rast_close_cell(fd3);
 
     if (rain != NULL)
-	G_close_cell(fd4);
+	Rast_close_cell(fd4);
 
     if (infil != NULL)
-	G_close_cell(fd4a);
+	Rast_close_cell(fd4a);
 
     if (traps != NULL)
-	G_close_cell(fd4b);
+	Rast_close_cell(fd4b);
     /* Maybe a conditional to manin!=NULL here ! */
-    G_close_cell(fd5);
+    Rast_close_cell(fd5);
 
 	/****************/
 
     if (detin != NULL)
-	G_close_cell(fd9);
+	Rast_close_cell(fd9);
 
     if (tranin != NULL)
-	G_close_cell(fd10);
+	Rast_close_cell(fd10);
 
     if (tauin != NULL)
-	G_close_cell(fd11);
+	Rast_close_cell(fd11);
 
     if (wdepth != NULL)
-	G_close_cell(fd12);
+	Rast_close_cell(fd12);
 
     return 1;
 }

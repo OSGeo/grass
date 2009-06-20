@@ -1,4 +1,5 @@
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include <grass/imagery.h>
 #include <grass/gmath.h>
@@ -105,7 +106,7 @@ void extract(DCELL *** img,	/* multispectral image, img[band][i][j] */
 	    /* Check for no data condition */
 	    no_data = 1;
 	    for (b1 = 0; (b1 < nbands) && no_data; b1++)
-		no_data = no_data && (G_is_d_null_value(&img[b1][i][j]));
+		no_data = no_data && (Rast_is_d_null_value(&img[b1][i][j]));
 
 	    if (no_data) {
 		for (m = 0; m < S->nclasses; m++)

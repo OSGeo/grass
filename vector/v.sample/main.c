@@ -43,6 +43,7 @@
 #include <string.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include <grass/dbmi.h>
 #include <grass/Vect.h>
@@ -145,7 +146,7 @@ int main(int argc, char **argv)
     Vect_set_open_level(2);
     Vect_open_old(&In, parm.input->answer, "");
 
-    if ((fdrast = G_open_cell_old(parm.rast->answer, "")) < 0)
+    if ((fdrast = Rast_open_cell_old(parm.rast->answer, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), parm.rast->answer);
 
     /* Read attributes */
@@ -255,9 +256,9 @@ int main(int argc, char **argv)
 	G_debug(4, "actual = %e", actual);
 
 	/* find predicted value */
-	predicted = G_get_raster_sample(fdrast, &window, NULL, Points->y[0],
+	predicted = Rast_get_raster_sample(fdrast, &window, NULL, Points->y[0],
 					Points->x[0], 0, method);
-	if (G_is_d_null_value(&predicted))
+	if (Rast_is_d_null_value(&predicted))
 	    continue;
 
 	predicted *= scale;
@@ -279,7 +280,7 @@ int main(int argc, char **argv)
 
     db_close_database_shutdown_driver(Driver);
 
-    G_close_cell(fdrast);
+    Rast_close_cell(fdrast);
 
     Vect_close(&In);
 

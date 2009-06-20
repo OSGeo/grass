@@ -27,6 +27,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "local_proto.h"
 #include <grass/glocale.h>
 
@@ -89,8 +90,8 @@ int main(int argc, char *argv[])
 
     drain_name = drain_opt->answer;
 
-    /* this isn't a nice thing to do. G_align_window() should be used first */
-    G_get_cellhd(drain_name, "", &window);
+    /* this isn't a nice thing to do. Rast_align_window() should be used first */
+    Rast_get_cellhd(drain_name, "", &window);
     G_set_window(&window);
 
     nrows = G_window_rows();
@@ -103,7 +104,7 @@ int main(int argc, char *argv[])
     drain = read_map(drain_name, NOMASK, nrows, ncols);
     ridge = read_map(ridge_name, NOMASK, nrows, ncols);
 
-    partfd = G_open_cell_new(part_name);
+    partfd = Rast_open_cell_new(part_name);
     if (partfd < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), part_name);
 
@@ -152,10 +153,10 @@ int main(int argc, char *argv[])
 
     /* write out partitioned watershed map */
     for (row = 0; row < nrows; row++)
-	G_put_raster_row(partfd, drain + (row * ncols), CELL_TYPE);
+	Rast_put_raster_row(partfd, drain + (row * ncols), CELL_TYPE);
 
     G_message(_("Creating support files for <%s>..."), part_name);
-    G_close_cell(partfd);
+    Rast_close_cell(partfd);
 
     exit(EXIT_SUCCESS);
 }

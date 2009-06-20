@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "h_measure.h"
 
@@ -210,18 +211,18 @@ int main(int argc, char *argv[])
 	&& moc2 && mcc)
 	G_fatal_error(_("Nothing to compute. Use at least one of the flags."));
 
-    if ((infd = G_open_cell_old(name, "")) < 0)
+    if ((infd = Rast_open_cell_old(name, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
 
     /* determine the inputmap type (CELL/FCELL/DCELL) */
-    data_type = G_get_raster_map_type(infd);
+    data_type = Rast_get_raster_map_type(infd);
 
-    if (G_get_cellhd(name, "", &cellhd) < 0)
+    if (Rast_get_cellhd(name, "", &cellhd) < 0)
 	G_fatal_error(_("Unable to read header of raster map <%s>"), name);
 
     out_data_type = FCELL_TYPE;
     /* Allocate output buffer, use FCELL data_type */
-    outrast = G_allocate_raster_buf(out_data_type);
+    outrast = Rast_allocate_raster_buf(out_data_type);
 
     nrows = G_window_rows();
     ncols = G_window_cols();
@@ -229,7 +230,7 @@ int main(int argc, char *argv[])
     /* Load raster map. */
 
     /* allocate the space for one row of cell map data *A* */
-    cell_row = G_allocate_cell_buf();
+    cell_row = Rast_allocate_cell_buf();
 
     /* Allocate appropriate memory for the structure containing the image */
     data = (int **)G_malloc(nrows * sizeof(int *));
@@ -240,13 +241,13 @@ int main(int argc, char *argv[])
     /* Read in cell map values */
     G_important_message(_("Reading raster map..."));
     for (j = 0; j < nrows; j++) {
-	G_get_raster_row(infd, cell_row, j, CELL_TYPE);
+	Rast_get_raster_row(infd, cell_row, j, CELL_TYPE);
 	for (i = 0; i < ncols; i++)
 	    data[j][i] = (int)cell_row[i];
     }
 
     /* close input cell map and release the row buffer */
-    G_close_cell(infd);
+    Rast_close_cell(infd);
     G_free(cell_row);
 
     /* Now raster map is into memory. */
@@ -284,7 +285,7 @@ int main(int argc, char *argv[])
 	    t_measure += 3;
 	else {
 	    if ((outfd =
-		 G_open_raster_new(strcat(filename, suffixes[t_measure]),
+		 Rast_open_raster_new(strcat(filename, suffixes[t_measure]),
 				   out_data_type)) < 0)
 		G_fatal_error(_("Unable to create raster map <%s>"), result);
 	    *result = '\0';
@@ -331,31 +332,31 @@ int main(int argc, char *argv[])
 		/* The early (size/2) samples take value from (size/2+1)'th sample */
 		if (row == 0)
 		    for (j = 0; j < (size / 2); j++)
-			if (G_put_raster_row(outfd, outrast, out_data_type) <
+			if (Rast_put_raster_row(outfd, outrast, out_data_type) <
 			    0)
 			    G_fatal_error(_("Failed writing raster map <%s> row %d"),
 					  result, row);
 
-		if (G_put_raster_row(outfd, outrast, out_data_type) < 0)
+		if (Rast_put_raster_row(outfd, outrast, out_data_type) < 0)
 		    G_fatal_error(_("Failed writing raster map <%s> row %d"),
 				  result, row);
 	    }
 	    /* The last few (size/2) samples take value from nrows-(size/2+1)'th sample */
 	    if ((row >= nrows - (size - 1)) && (row < nrows))
 		for (j = 0; j < (size / 2); j++)
-		    if (G_put_raster_row(outfd, outrast, out_data_type) < 0)
+		    if (Rast_put_raster_row(outfd, outrast, out_data_type) < 0)
 			G_fatal_error(_("Failed writing raster map <%s> row %d"),
 				      result, row);
 
-	    G_close_cell(outfd);
+	    Rast_close_cell(outfd);
 	    strcpy(mapname, filename);
 	    strcat(mapname, suffixes[t_measure]);
 	    G_important_message(_("Calculated measure #%d <%s> (56 measures available)"),
 				(t_measure + 1), mapname);
 
-	    G_short_history(mapname, "raster", &history);
-	    G_command_history(&history);
-	    G_write_history(mapname, &history);
+	    Rast_short_history(mapname, "raster", &history);
+	    Rast_command_history(&history);
+	    Rast_write_history(mapname, &history);
 
 	}
     G_free(outrast);

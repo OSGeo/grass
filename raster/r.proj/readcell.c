@@ -11,6 +11,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "r.proj.h"
 
@@ -77,7 +78,7 @@ struct cache *readcell(int fdi, const char *size)
 	    if (row + y >= nrows)
 		break;
 
-	    if (G_get_f_raster_row(fdi, &tmpbuf[y * nx * BDIM], row + y) < 0)
+	    if (Rast_get_f_raster_row(fdi, &tmpbuf[y * nx * BDIM], row + y) < 0)
 		G_fatal_error(_("Error reading input"));
 	}
 

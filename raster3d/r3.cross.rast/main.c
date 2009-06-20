@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/G3d.h>
 #include <grass/glocale.h>
 
@@ -57,7 +58,7 @@ void fatal_error(void *map, int elevfd, int outfd, char *errorMsg)
 
     /*unopen the output map */
     if (outfd != -1)
-	G_unopen_cell(outfd);
+	Rast_unopen_cell(outfd);
 
     if (elevfd != -1)
 	close_output_map(elevfd);
@@ -73,7 +74,7 @@ void fatal_error(void *map, int elevfd, int outfd, char *errorMsg)
 /* ************************************************************************* */
 void close_output_map(int fd)
 {
-    if (G_close_cell(fd) < 0)
+    if (Rast_close_cell(fd) < 0)
 	G_fatal_error(_("Unable to close output map"));
 }
 
@@ -146,28 +147,28 @@ void rast3d_cross_section(void *map, G3D_Region region, int elevfd, int outfd)
 
     /*Allocate mem for the output maps row */
     if (typeIntern == FCELL_TYPE)
-	fcell = G_allocate_f_raster_buf();
+	fcell = Rast_allocate_f_raster_buf();
     else if (typeIntern == DCELL_TYPE)
-	dcell = G_allocate_d_raster_buf();
+	dcell = Rast_allocate_d_raster_buf();
 
     /*Mem for the input map row */
-    elevrast = G_allocate_raster_buf(globalElevMapType);
+    elevrast = Rast_allocate_raster_buf(globalElevMapType);
 
     for (y = 0; y < rows; y++) {
 	G_percent(y, rows - 1, 10);
 
 	/*Read the input map row */
-	if (!G_get_raster_row(elevfd, elevrast, y, globalElevMapType))
+	if (!Rast_get_raster_row(elevfd, elevrast, y, globalElevMapType))
 	    fatal_error(map, elevfd, outfd,
 			_("Unable to get elevation raster row"));
 
 	for (x = 0, ptr = elevrast; x < cols; x++, ptr =
-	     G_incr_void_ptr(ptr, G_raster_size(globalElevMapType))) {
+	     Rast_incr_void_ptr(ptr, Rast_raster_size(globalElevMapType))) {
 
 	    /*we guess the elevation input map has no null values */
 	    isnull = 0;
 
-	    if (G_is_null_value(ptr, globalElevMapType)) {
+	    if (Rast_is_null_value(ptr, globalElevMapType)) {
 		isnull = 1;	/*input map has nulls */
 	    }
 
@@ -195,14 +196,14 @@ void rast3d_cross_section(void *map, G3D_Region region, int elevfd, int outfd)
 			if (typeIntern == FCELL_TYPE) {
 			    G3d_getValue(map, x, y, z, &f1, typeIntern);
 			    if (G3d_isNullValueNum(&f1, FCELL_TYPE))
-				G_set_null_value(&fcell[x], 1, FCELL_TYPE);
+				Rast_set_null_value(&fcell[x], 1, FCELL_TYPE);
 			    else
 				fcell[x] = (FCELL) f1;
 			}
 			else {
 			    G3d_getValue(map, x, y, z, &d1, typeIntern);
 			    if (G3d_isNullValueNum(&d1, DCELL_TYPE))
-				G_set_null_value(&dcell[x], 1, DCELL_TYPE);
+				Rast_set_null_value(&dcell[x], 1, DCELL_TYPE);
 			    else
 				dcell[x] = (DCELL) d1;
 
@@ -216,22 +217,22 @@ void rast3d_cross_section(void *map, G3D_Region region, int elevfd, int outfd)
 	    /*Set the NULL values */
 	    if (isnull == 1) {
 		if (typeIntern == FCELL_TYPE)
-		    G_set_null_value(&fcell[x], 1, FCELL_TYPE);
+		    Rast_set_null_value(&fcell[x], 1, FCELL_TYPE);
 		else if (typeIntern == DCELL_TYPE)
-		    G_set_null_value(&dcell[x], 1, DCELL_TYPE);
+		    Rast_set_null_value(&dcell[x], 1, DCELL_TYPE);
 	    }
 	}
 
 	/*Write the data to the output map */
 	if (typeIntern == FCELL_TYPE) {
-	    check = G_put_f_raster_row(outfd, fcell);
+	    check = Rast_put_f_raster_row(outfd, fcell);
 	    if (check != 1)
 		fatal_error(map, elevfd, outfd,
 			    _("Could not write raster row"));
 	}
 
 	if (typeIntern == DCELL_TYPE) {
-	    check = G_put_d_raster_row(outfd, dcell);
+	    check = Rast_put_d_raster_row(outfd, dcell);
 	    if (check != 1)
 		fatal_error(map, elevfd, outfd,
 			    _("Could not write raster row"));
@@ -327,11 +328,11 @@ int main(int argc, char *argv[])
 
 	/********************************/
 
-	elevfd = G_open_cell_old(param.elevation->answer, "");
+	elevfd = Rast_open_cell_old(param.elevation->answer, "");
 	if (elevfd <= 0)
 	    fatal_error(map, -1, -1, _("Unable to open elevation map"));
 
-	globalElevMapType = G_get_raster_map_type(elevfd);
+	globalElevMapType = Rast_get_raster_map_type(elevfd);
 
 	/**********************/
 	/*Open the Outputmap */
@@ -342,13 +343,13 @@ int main(int argc, char *argv[])
 	    G_message(_("Output map already exists. Will be overwritten!"));
 
 	if (output_type == FCELL_TYPE) {
-	    outfd = G_open_raster_new(param.output->answer, FCELL_TYPE);
+	    outfd = Rast_open_raster_new(param.output->answer, FCELL_TYPE);
 	    if (outfd < 0)
 		fatal_error(map, elevfd, -1,
 			    _("Unable to create raster map"));
 	}
 	else if (output_type == DCELL_TYPE) {
-	    outfd = G_open_raster_new(param.output->answer, DCELL_TYPE);
+	    outfd = Rast_open_raster_new(param.output->answer, DCELL_TYPE);
 	    if (outfd < 0)
 		fatal_error(map, elevfd, -1,
 			    _("Unable to create raster map"));
@@ -378,9 +379,9 @@ int main(int argc, char *argv[])
 		    G3d_maskOff(map);
 	}
 
-	if (G_close_cell(outfd) < 0)
+	if (Rast_close_cell(outfd) < 0)
 	    fatal_error(map, elevfd, -1, _("Unable to close output map"));
-	if (G_close_cell(elevfd) < 0)
+	if (Rast_close_cell(elevfd) < 0)
 	    fatal_error(map, -1, -1, _("Unable to close elevation map"));
 
     }

@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 #define POLYGON_DIMENSION 20
@@ -84,28 +85,28 @@ int main(int argc, char *argv[])
     result = output1->answer;
     
     /***************************************************/ 
-    if ((infd_psand = G_open_cell_old(psand, "")) < 0)
+    if ((infd_psand = Rast_open_cell_old(psand, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), psand);
-    inrast_psand = G_allocate_d_raster_buf();
+    inrast_psand = Rast_allocate_d_raster_buf();
     
-    if ((infd_psilt = G_open_cell_old(psilt, "")) < 0)
+    if ((infd_psilt = Rast_open_cell_old(psilt, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), psilt);
-    inrast_psilt = G_allocate_d_raster_buf();
+    inrast_psilt = Rast_allocate_d_raster_buf();
     
-    if ((infd_pclay = G_open_cell_old(pclay, "")) < 0)
+    if ((infd_pclay = Rast_open_cell_old(pclay, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), pclay);
-    inrast_pclay = G_allocate_d_raster_buf();
+    inrast_pclay = Rast_allocate_d_raster_buf();
     
-    if ((infd_pomat = G_open_cell_old(pomat, "")) < 0)
+    if ((infd_pomat = Rast_open_cell_old(pomat, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), pomat);
-    inrast_pomat = G_allocate_d_raster_buf();
+    inrast_pomat = Rast_allocate_d_raster_buf();
     /***************************************************/ 
     nrows = G_window_rows();
     ncols = G_window_cols();
-    outrast = G_allocate_d_raster_buf();
+    outrast = Rast_allocate_d_raster_buf();
     
     /* Create New raster files */ 
-    if ((outfd = G_open_raster_new(result, DCELL_TYPE)) < 0)
+    if ((outfd = Rast_open_raster_new(result, DCELL_TYPE)) < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), result);
     
     /* Process pixels */ 
@@ -119,16 +120,16 @@ int main(int argc, char *argv[])
 	G_percent(row, nrows, 2);
 	
 	/* read soil input maps */ 
-	if (G_get_d_raster_row(infd_psand, inrast_psand, row) < 0)
+	if (Rast_get_d_raster_row(infd_psand, inrast_psand, row) < 0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			  psand, row);
-	if (G_get_d_raster_row(infd_psilt, inrast_psilt, row) < 0)
+	if (Rast_get_d_raster_row(infd_psilt, inrast_psilt, row) < 0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			  psilt, row);
-	if (G_get_d_raster_row(infd_pclay, inrast_pclay, row) < 0)
+	if (Rast_get_d_raster_row(infd_pclay, inrast_pclay, row) < 0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			  pclay, row);
-	if (G_get_d_raster_row(infd_pomat, inrast_pomat, row) < 0)
+	if (Rast_get_d_raster_row(infd_pomat, inrast_pomat, row) < 0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			  pomat, row);
 	
@@ -139,17 +140,17 @@ int main(int argc, char *argv[])
 	    d_silt = ((DCELL *) inrast_psilt)[col];
 	    d_clay = ((DCELL *) inrast_pclay)[col];
             d_om = ((DCELL *) inrast_pomat)[col];
-	    if (G_is_d_null_value(&d_sand) || 
-                G_is_d_null_value(&d_clay) ||
-		G_is_d_null_value(&d_silt)) 
-		    G_set_d_null_value(&outrast[col], 1);
+	    if (Rast_is_d_null_value(&d_sand) || 
+                Rast_is_d_null_value(&d_clay) ||
+		Rast_is_d_null_value(&d_silt)) 
+		    Rast_set_d_null_value(&outrast[col], 1);
 	    else {
                 /***************************************/ 
 		/* In case some map input not standard */
 		if ((d_sand + d_clay + d_silt) != 1.0) 
-		    G_set_d_null_value(&outrast[col], 1);
+		    Rast_set_d_null_value(&outrast[col], 1);
 		/* if OM==NULL then make it 0.0 */
-		else if (G_is_d_null_value(&d_om))
+		else if (Rast_is_d_null_value(&d_om))
 		    d_om = 0.0;	
 		else {
                     /************************************/ 
@@ -160,7 +161,7 @@ int main(int argc, char *argv[])
                 }
 	    }
 	}
-	if (G_put_d_raster_row(outfd, outrast) < 0)
+	if (Rast_put_d_raster_row(outfd, outrast) < 0)
 	    G_fatal_error(_("Failed writing raster map <%s> row %d"),
 			  result, row);
     }
@@ -168,16 +169,16 @@ int main(int argc, char *argv[])
     G_free(inrast_psilt);
     G_free(inrast_pclay);
     G_free(inrast_pomat);
-    G_close_cell(infd_psand);
-    G_close_cell(infd_psilt);
-    G_close_cell(infd_pclay);
-    G_close_cell(infd_pomat);
+    Rast_close_cell(infd_psand);
+    Rast_close_cell(infd_psilt);
+    Rast_close_cell(infd_pclay);
+    Rast_close_cell(infd_pomat);
     G_free(outrast);
-    G_close_cell(outfd);
+    Rast_close_cell(outfd);
     
-    G_short_history(result, "raster", &history);
-    G_command_history(&history);
-    G_write_history(result, &history);
+    Rast_short_history(result, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(result, &history);
     
     exit(EXIT_SUCCESS);
 }

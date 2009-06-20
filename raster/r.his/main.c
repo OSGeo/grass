@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/display.h>
 #include <grass/display_raster.h>
 #include "his.h"
@@ -122,7 +123,7 @@ int main(int argc, char **argv)
     name_h = opt_h->answer;
 
     /* Make sure map is available */
-    if ((hue_file = G_open_cell_old(name_h, "")) == -1)
+    if ((hue_file = Rast_open_cell_old(name_h, "")) == -1)
 	G_fatal_error(_("Unable to open raster map <%s>"), name_h);
 
     hue_r = G_malloc(window.cols);
@@ -133,7 +134,7 @@ int main(int argc, char **argv)
     dummy = G_malloc(window.cols);
 
     /* Reading color lookup table */
-    if (G_read_colors(name_h, "", &hue_colors) == -1)
+    if (Rast_read_colors(name_h, "", &hue_colors) == -1)
 	G_fatal_error(_("Color file for <%s> not available"), name_h);
 
     int_used = 0;
@@ -143,14 +144,14 @@ int main(int argc, char **argv)
 	name_i = opt_i->answer;
 	int_used = 1;
 	/* Make sure map is available */
-	if ((int_file = G_open_cell_old(name_i, "")) == -1)
+	if ((int_file = Rast_open_cell_old(name_i, "")) == -1)
 	    G_fatal_error(_("Unable to open raster map <%s>"), name_i);
 
 	int_r = G_malloc(window.cols);
 	int_n = G_malloc(window.cols);
 
 	/* Reading color lookup table */
-	if (G_read_colors(name_i, "", &int_colors) == -1)
+	if (Rast_read_colors(name_i, "", &int_colors) == -1)
 	    G_fatal_error(_("Color file for <%s> not available"), name_i);
     }
 
@@ -162,14 +163,14 @@ int main(int argc, char **argv)
 	    sat_used = 1;
 
 	    /* Make sure map is available */
-	    if ((sat_file = G_open_cell_old(name_s, "")) == -1)
+	    if ((sat_file = Rast_open_cell_old(name_s, "")) == -1)
 		G_fatal_error(_("Unable to open raster map <%s>"), name_s);
 
 	    sat_r = G_malloc(window.cols);
 	    sat_n = G_malloc(window.cols);
 
 	    /* Reading color lookup table */
-	    if (G_read_colors(name_s, "", &sat_colors) == -1)
+	    if (Rast_read_colors(name_s, "", &sat_colors) == -1)
 		G_fatal_error(_("Color file for <%s> not available"), name_s);
     }
 
@@ -178,7 +179,7 @@ int main(int argc, char **argv)
     if (opt_r->answer != NULL) {
 	name_r = opt_r->answer;
 
-	if ((r_file = G_open_cell_new(name_r)) < 0)
+	if ((r_file = Rast_open_cell_new(name_r)) < 0)
 	    r_used = 0;
 	else
 	    r_used = 1;
@@ -189,7 +190,7 @@ int main(int argc, char **argv)
     if (opt_g->answer != NULL) {
 	name_g = opt_g->answer;
 
-	if ((g_file = G_open_cell_new(name_g)) < 0)
+	if ((g_file = Rast_open_cell_new(name_g)) < 0)
 	    g_used = 0;
 	else
 	    g_used = 1;
@@ -200,15 +201,15 @@ int main(int argc, char **argv)
     if (opt_b->answer != NULL) {
 	name_b = opt_b->answer;
 
-	if ((b_file = G_open_cell_new(name_b)) < 0)
+	if ((b_file = Rast_open_cell_new(name_b)) < 0)
 	    b_used = 0;
 	else
 	    b_used = 1;
     }
 
-    r_array = G_allocate_cell_buf();
-    g_array = G_allocate_cell_buf();
-    b_array = G_allocate_cell_buf();
+    r_array = Rast_allocate_cell_buf();
+    g_array = Rast_allocate_cell_buf();
+    b_array = Rast_allocate_cell_buf();
 
     /* Make color table */
     make_gray_scale(&gray_colors);
@@ -221,15 +222,15 @@ int main(int argc, char **argv)
     for (atrow = 0; atrow < window.rows; atrow++) {
 	G_percent(atrow, window.rows, 2);
 
-	if (G_get_raster_row_colors
+	if (Rast_get_raster_row_colors
 	    (hue_file, atrow, &hue_colors, hue_r, hue_g, hue_b, hue_n) < 0)
 	    G_fatal_error(_("Error reading 'hue' map"));
 	if (int_used &&
-	    (G_get_raster_row_colors
+	    (Rast_get_raster_row_colors
 	     (int_file, atrow, &int_colors, int_r, dummy, dummy, int_n) < 0))
 	    G_fatal_error(_("Error reading 'intensity' map"));
 	if (sat_used &&
-	    (G_get_raster_row_colors
+	    (Rast_get_raster_row_colors
 	     (sat_file, atrow, &sat_colors, sat_r, dummy, dummy, sat_n) < 0))
 	    G_fatal_error(_("Error reading 'saturation' map"));
 
@@ -238,9 +239,9 @@ int main(int argc, char **argv)
 		if (hue_n[atcol]
 		    || (int_used && int_n[atcol])
 		    || (sat_used && sat_n[atcol])) {
-		    G_set_c_null_value(&r_array[atcol], 1);
-		    G_set_c_null_value(&g_array[atcol], 1);
-		    G_set_c_null_value(&b_array[atcol], 1);
+		    Rast_set_c_null_value(&r_array[atcol], 1);
+		    Rast_set_c_null_value(&g_array[atcol], 1);
+		    Rast_set_c_null_value(&b_array[atcol], 1);
 		    continue;
 		}
 	    }
@@ -257,49 +258,49 @@ int main(int argc, char **argv)
 	}
 
 	if (r_used)
-	    if (G_put_raster_row(r_file, r_array, CELL_TYPE) < 0)
+	    if (Rast_put_raster_row(r_file, r_array, CELL_TYPE) < 0)
 		r_used = 0;
 
 	if (g_used)
-	    if (G_put_raster_row(g_file, g_array, CELL_TYPE) < 0)
+	    if (Rast_put_raster_row(g_file, g_array, CELL_TYPE) < 0)
 		g_used = 0;
 
 	if (b_used)
-	    if (G_put_raster_row(b_file, b_array, CELL_TYPE) < 0)
+	    if (Rast_put_raster_row(b_file, b_array, CELL_TYPE) < 0)
 		b_used = 0;
     }
     G_percent(window.rows, window.rows, 5);
 
     /* Close the cell files */
-    G_close_cell(hue_file);
+    Rast_close_cell(hue_file);
     if (int_used)
-	G_close_cell(int_file);
+	Rast_close_cell(int_file);
     if (sat_used)
-	G_close_cell(sat_file);
+	Rast_close_cell(sat_file);
 
     if (r_used) {
-	G_close_cell(r_file);
-	G_write_colors(name_r, G_mapset(), &gray_colors);
-	G_short_history(name_r, "raster", &history);
-	G_command_history(&history);
-	G_write_history(name_r, &history);
-	G_put_cell_title(name_r, "Red extracted from HIS");
+	Rast_close_cell(r_file);
+	Rast_write_colors(name_r, G_mapset(), &gray_colors);
+	Rast_short_history(name_r, "raster", &history);
+	Rast_command_history(&history);
+	Rast_write_history(name_r, &history);
+	Rast_put_cell_title(name_r, "Red extracted from HIS");
     }
     if (g_used) {
-	G_close_cell(g_file);
-	G_write_colors(name_g, G_mapset(), &gray_colors);
-	G_short_history(name_g, "raster", &history);
-	G_command_history(&history);
-	G_write_history(name_g, &history);
-	G_put_cell_title(name_g, "Green extracted from HIS");
+	Rast_close_cell(g_file);
+	Rast_write_colors(name_g, G_mapset(), &gray_colors);
+	Rast_short_history(name_g, "raster", &history);
+	Rast_command_history(&history);
+	Rast_write_history(name_g, &history);
+	Rast_put_cell_title(name_g, "Green extracted from HIS");
     }
     if (b_used) {
-	G_close_cell(b_file);
-	G_write_colors(name_b, G_mapset(), &gray_colors);
-	G_short_history(name_b, "raster", &history);
-	G_command_history(&history);
-	G_write_history(name_b, &history);
-	G_put_cell_title(name_b, "Blue extracted from HIS");
+	Rast_close_cell(b_file);
+	Rast_write_colors(name_b, G_mapset(), &gray_colors);
+	Rast_short_history(name_b, "raster", &history);
+	Rast_command_history(&history);
+	Rast_write_history(name_b, &history);
+	Rast_put_cell_title(name_b, "Blue extracted from HIS");
     }
 
     return EXIT_SUCCESS;

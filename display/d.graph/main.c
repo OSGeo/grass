@@ -31,6 +31,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/display.h>
 #include <grass/display_raster.h>
 #include <grass/glocale.h>
@@ -100,7 +101,7 @@ int main(int argc, char **argv)
 
     /* Parse and select color */
     if (opt2->answer != NULL) {
-	color = G_str_to_color(opt2->answer, &R, &G, &B);
+	color = Rast_str_to_color(opt2->answer, &R, &G, &B);
 
 	if (color == 0)
 	    G_fatal_error(_("[%s]: No such color"), opt2->answer);

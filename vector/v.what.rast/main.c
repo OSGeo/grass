@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/dbmi.h>
 #include <grass/Vect.h>
 #include <grass/glocale.h>
@@ -130,14 +131,14 @@ int main(int argc, char *argv[])
     }
 
     /* Open raster */
-    if ((fd = G_open_cell_old(rast_opt->answer, "")) < 0)
+    if ((fd = Rast_open_cell_old(rast_opt->answer, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), rast_opt->answer);
 
-    out_type = G_get_raster_map_type(fd);
+    out_type = Rast_get_raster_map_type(fd);
 
     /* TODO: Later possibly category labels */
     /* 
-       if ( G_read_cats (name, "", &RCats) < 0 )
+       if ( Rast_read_cats (name, "", &RCats) < 0 )
        G_fatal_error ( "Cannot read category file");
      */
 
@@ -245,9 +246,9 @@ int main(int argc, char *argv[])
 
     /* Allocate space for raster row */
     if (out_type == CELL_TYPE)
-	cell = G_allocate_c_raster_buf();
+	cell = Rast_allocate_c_raster_buf();
     else
-	dcell = G_allocate_d_raster_buf();
+	dcell = Rast_allocate_d_raster_buf();
 
     /* Extract raster values from file and store in cache */
     G_debug(1, "Extracting raster values");
@@ -260,12 +261,12 @@ int main(int argc, char *argv[])
 
 	if (cur_row != cache[point].row) {
 	    if (out_type == CELL_TYPE) {
-		if (G_get_c_raster_row(fd, cell, cache[point].row) < 0)
+		if (Rast_get_c_raster_row(fd, cell, cache[point].row) < 0)
 		    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 				  cell, cache[point].row);
 	    }
 	    else {
-		if (G_get_d_raster_row(fd, dcell, cache[point].row) < 0)
+		if (Rast_get_d_raster_row(fd, dcell, cache[point].row) < 0)
 		    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 				  dcell, cache[point].row);
 	    }
@@ -314,7 +315,7 @@ int main(int argc, char *argv[])
 
 	if (out_type == CELL_TYPE) {
 	    if (cache[point].count > 1 ||
-		G_is_c_null_value(&cache[point].value)) {
+		Rast_is_c_null_value(&cache[point].value)) {
 		sprintf(buf, "NULL");
 	    }
 	    else {
@@ -323,7 +324,7 @@ int main(int argc, char *argv[])
 	}
 	else {			/* FCELL or DCELL */
 	    if (cache[point].count > 1 ||
-		G_is_d_null_value(&cache[point].dvalue)) {
+		Rast_is_d_null_value(&cache[point].dvalue)) {
 		sprintf(buf, "NULL");
 	    }
 	    else {

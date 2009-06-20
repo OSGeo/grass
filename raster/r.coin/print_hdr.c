@@ -70,7 +70,7 @@ int print_coin_hdr(int Conformat)
     fprintf(dumpfile, "|%78.78s|\n", fill);
     fprintf(dumpfile, "| Layer 1: %-15.15s-- %-50.49s|\n", map1name, title1);
     fprintf(dumpfile, "| Layer 2: %-15.15s-- %-50.49s|\n", map2name, title2);
-    fprintf(dumpfile, "| Mask:    %-68.68s|\n", G_mask_info());
+    fprintf(dumpfile, "| Mask:    %-68.68s|\n", Rast_mask_info());
     fprintf(dumpfile, "|%78.78s|\n", fill);
     fprintf(dumpfile, "| Units:   %-68.68s|\n", unit_type);
     fprintf(dumpfile, "|%78.78s|\n", midline);

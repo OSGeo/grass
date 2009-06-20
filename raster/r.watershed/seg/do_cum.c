@@ -1,6 +1,7 @@
 #include "Gwater.h"
 #include <unistd.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 
@@ -211,7 +212,7 @@ int do_cum_mfd(void)
 		    worked_nbr[ct_dir] = cvalue;
 		    if (worked_nbr[ct_dir] == 0) {
 			cseg_get(&alt, &ele_nbr, r_nbr, c_nbr);
-			is_null = G_is_c_null_value(&ele_nbr);
+			is_null = Rast_is_c_null_value(&ele_nbr);
 			edge = is_null;
 			if (!is_null && ele_nbr <= ele) {
 			    if (ele_nbr < ele) {

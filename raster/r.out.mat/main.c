@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 int main(int argc, char *argv[])
@@ -81,11 +82,11 @@ int main(int argc, char *argv[])
     outfile = G_malloc(strlen(basename) + 5);
     sprintf(outfile, "%s.mat", basename);
 
-    fd = G_open_cell_old(infile, "");
+    fd = Rast_open_cell_old(infile, "");
     if (fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), infile);
 
-    map_type = G_get_raster_map_type(fd);
+    map_type = Rast_get_raster_map_type(fd);
 
     /* open bin file for writing */
     fp1 = fopen(outfile, "wb");
@@ -138,7 +139,7 @@ int main(int argc, char *argv[])
 
 
     /********** Write title (if there is one) **********/
-    maptitle = G_get_cell_title(infile, "");
+    maptitle = Rast_get_cell_title(infile, "");
     if (strlen(maptitle) >= 1) {
 
 	/** write text element (map title) **/
@@ -294,10 +295,10 @@ int main(int argc, char *argv[])
     /* data array, by increasing column */
     raster =
 	G_calloc((G_window_rows() + 1) * (G_window_cols() + 1),
-		 G_raster_size(map_type));
+		 Rast_raster_size(map_type));
 
     G_debug(1, "mem alloc is %d bytes\n",	/* I think _cols()+1 is unneeded? */
-	    G_raster_size(map_type) * (G_window_rows() +
+	    Rast_raster_size(map_type) * (G_window_rows() +
 				       1) * (G_window_cols() + 1));
 
     G_verbose_message(_("Reading in map ... "));
@@ -305,9 +306,9 @@ int main(int argc, char *argv[])
     /* load entire map into memory */
     for (row = 0, ptr = raster; row < mrows; row++,
 	 ptr =
-	 G_incr_void_ptr(ptr,
-			 (G_window_cols() + 1) * G_raster_size(map_type))) {
-	if (G_get_raster_row(fd, ptr, row, map_type) < 0)
+	 Rast_incr_void_ptr(ptr,
+			 (G_window_cols() + 1) * Rast_raster_size(map_type))) {
+	if (Rast_get_raster_row(fd, ptr, row, map_type) < 0)
 	    G_fatal_error("reading map");
 	G_percent(row, mrows, 2);
     }
@@ -317,18 +318,18 @@ int main(int argc, char *argv[])
     G_verbose_message(_("Writing out map..."));
 
     /* then write it to disk */
-    /* NoGood: fwrite(raster, G_raster_size(map_type), mrows*ncols, fp1); */
+    /* NoGood: fwrite(raster, Rast_raster_size(map_type), mrows*ncols, fp1); */
     for (col = 0; col < ncols; col++) {
 	for (row = 0; row < mrows; row++) {
 
 	    ptr = raster;
 	    ptr =
-		G_incr_void_ptr(ptr,
+		Rast_incr_void_ptr(ptr,
 				(col +
 				 row * (ncols +
-					1)) * G_raster_size(map_type));
+					1)) * Rast_raster_size(map_type));
 
-	    if (!G_is_null_value(ptr, map_type)) {
+	    if (!Rast_is_null_value(ptr, map_type)) {
 		if (map_type == CELL_TYPE) {
 		    val_i = *((CELL *) ptr);
 		    fwrite(&val_i, sizeof(int), 1, fp1);

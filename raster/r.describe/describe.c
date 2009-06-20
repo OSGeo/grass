@@ -17,6 +17,7 @@
  ***************************************************************************/
 
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 
@@ -39,25 +40,25 @@ int describe(const char *name, int compact, char *no_data_str,
     int (*get_row)(int, CELL *, int);
 
     if (windowed) {
-	get_row = G_get_c_raster_row;
+	get_row = Rast_get_c_raster_row;
     }
     else {
-	if (G_get_cellhd(name, "", &window) < 0)
+	if (Rast_get_cellhd(name, "", &window) < 0)
 	    G_fatal_error(_("Unable to get cell header for <%s>"), name);
 
 	G_set_window(&window);
-	get_row = G_get_c_raster_row_nomask;
+	get_row = Rast_get_c_raster_row_nomask;
     }
-    fd = G_open_cell_old(name, "");
+    fd = Rast_open_cell_old(name, "");
     if (fd < 0)
 	return 0;
 
-    map_type = G_get_raster_map_type(fd);
+    map_type = Rast_get_raster_map_type(fd);
     if (as_int)
 	map_type = CELL_TYPE;	/* read as int */
 
     /* allocate the cell buffer */
-    buf = G_allocate_cell_buf();
+    buf = Rast_allocate_cell_buf();
 
     if (map_type != CELL_TYPE && range)
 	/* this will make it report fp range */
@@ -68,7 +69,7 @@ int describe(const char *name, int compact, char *no_data_str,
 
     /* start the cell stats */
     if (!range) {
-	G_init_cell_stats(&statf);
+	Rast_init_cell_stats(&statf);
     }
     else {
 	zero = 0;
@@ -83,11 +84,11 @@ int describe(const char *name, int compact, char *no_data_str,
 
     /* set up quantization rules */
     if (map_type != CELL_TYPE) {
-	G_quant_init(&q);
-	G_read_fp_range(name, "", &r);
-	G_get_fp_range_min_max(&r, &dmin, &dmax);
-	G_quant_add_rule(&q, dmin, dmax, 1, nsteps);
-	G_set_quant_rules(fd, &q);
+	Rast_quant_init(&q);
+	Rast_read_fp_range(name, "", &r);
+	Rast_get_fp_range_min_max(&r, &dmin, &dmax);
+	Rast_quant_add_rule(&q, dmin, dmax, 1, nsteps);
+	Rast_set_quant_rules(fd, &q);
     }
 
     nrows = G_window_rows();
@@ -100,7 +101,7 @@ int describe(const char *name, int compact, char *no_data_str,
 	    break;
 	if (range) {
 	    for (col = ncols; col-- > 0; b++) {
-		if (G_is_c_null_value(b))
+		if (Rast_is_c_null_value(b))
 		    null = 1;
 		else if (*b == 0)
 		    zero = 1;
@@ -123,10 +124,10 @@ int describe(const char *name, int compact, char *no_data_str,
 	    }
 	}
 	else
-	    G_update_cell_stats(buf, ncols, &statf);
+	    Rast_update_cell_stats(buf, ncols, &statf);
     }
     G_percent(nrows, nrows, 2);
-    G_close_cell(fd);
+    Rast_close_cell(fd);
     G_free(buf);
 
     if (range) {
@@ -138,7 +139,7 @@ int describe(const char *name, int compact, char *no_data_str,
 		       no_data_str, skip_nulls);
     }
     else {
-	G_rewind_cell_stats(&statf);
+	Rast_rewind_cell_stats(&statf);
 
 	if (compact)
 	    compact_list(&statf, dmin, dmax, no_data_str, skip_nulls,
@@ -147,7 +148,7 @@ int describe(const char *name, int compact, char *no_data_str,
 	    long_list(&statf, dmin, dmax, no_data_str, skip_nulls, map_type,
 		      nsteps);
 
-	G_free_cell_stats(&statf);
+	Rast_free_cell_stats(&statf);
     }
     return 1;
 }

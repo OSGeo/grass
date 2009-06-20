@@ -1,5 +1,6 @@
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "pi.h"
 
 /* distance from point to point along a geodesic 

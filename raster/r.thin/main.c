@@ -36,6 +36,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "local_proto.h"
 #include <grass/glocale.h>
 
@@ -79,10 +80,10 @@ int main(int argc, char *argv[])
     thin_lines(iterations);
     close_file(output);
 
-    G_put_cell_title(output, "Thinned linear features");
-    G_short_history(output, "raster", &history);
-    G_command_history(&history);
-    G_write_history(output, &history);
+    Rast_put_cell_title(output, "Thinned linear features");
+    Rast_short_history(output, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(output, &history);
 
     exit(EXIT_SUCCESS);
 }

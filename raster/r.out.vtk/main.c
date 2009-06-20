@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include <grass/config.h>
 #include "writeascii.h"
@@ -122,12 +123,12 @@ int main(int argc, char *argv[])
 	G_debug(3, _("Open Raster file %s"), param.elevationmap->answer);
 
 	/* open raster map */
-	fd = G_open_cell_old(param.elevationmap->answer, "");
+	fd = Rast_open_cell_old(param.elevationmap->answer, "");
 	if (fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
 			  param.elevationmap->answer);
 
-	out_type = G_get_raster_map_type(fd);
+	out_type = Rast_get_raster_map_type(fd);
 
 	/*The write the Coordinates */
 	if (param.usestruct->answer) {
@@ -150,7 +151,7 @@ int main(int argc, char *argv[])
 					    region, out_type, null_value,
 					    scale, polytype, digits);
 	}
-	G_close_cell(fd);
+	Rast_close_cell(fd);
     }
     else {
 	/*Should pointdata or celldata be written */
@@ -185,15 +186,15 @@ int main(int argc, char *argv[])
 	    G_debug(3, _("Open Raster file %s"), param.input->answers[i]);
 
 	    /* open raster map */
-	    fd = G_open_cell_old(param.input->answers[i], "");
+	    fd = Rast_open_cell_old(param.input->answers[i], "");
 	    if (fd < 0)
 		G_fatal_error(_("Unable to open raster map <%s>"),
 			      param.input->answers[i]);
-	    out_type = G_get_raster_map_type(fd);
+	    out_type = Rast_get_raster_map_type(fd);
 	    /*Now write the data */
 	    write_vtk_data(fd, fp, param.input->answers[i], region, out_type,
 			   null_value, digits);
-	    G_close_cell(fd);
+	    Rast_close_cell(fd);
 	}
     }
 
@@ -210,11 +211,11 @@ int main(int argc, char *argv[])
 			param.rgbmaps->answers[i]);
 
 		/* open raster map */
-		rgbfd[i] = G_open_cell_old(param.rgbmaps->answers[i], "");
+		rgbfd[i] = Rast_open_cell_old(param.rgbmaps->answers[i], "");
 		if (rgbfd[i] < 0)
 		    G_fatal_error(_("Unable to open raster map <%s>"),
 				  param.rgbmaps->answers[i]);
-		celltype[i] = G_get_raster_map_type(rgbfd[i]);
+		celltype[i] = Rast_get_raster_map_type(rgbfd[i]);
 	    }
 
 	    /*Maps have to be from the same type */
@@ -235,7 +236,7 @@ int main(int argc, char *argv[])
 
 	    /*Close the maps */
 	    for (i = 0; i < 3; i++)
-		G_close_cell(rgbfd[i]);
+		Rast_close_cell(rgbfd[i]);
 	}
     }
 
@@ -253,11 +254,11 @@ int main(int argc, char *argv[])
 
 		/* open raster map */
 		vectfd[i] =
-		    G_open_cell_old(param.vectmaps->answers[i], "");
+		    Rast_open_cell_old(param.vectmaps->answers[i], "");
 		if (vectfd[i] < 0)
 		    G_fatal_error(_("Unable to open raster map <%s>"),
 				  param.vectmaps->answers[i]);
-		celltype[i] = G_get_raster_map_type(vectfd[i]);
+		celltype[i] = Rast_get_raster_map_type(vectfd[i]);
 	    }
 
 	    /*Maps have to be from the same type */
@@ -278,7 +279,7 @@ int main(int argc, char *argv[])
 
 	    /*Close the maps */
 	    for (i = 0; i < 3; i++)
-		G_close_cell(vectfd[i]);
+		Rast_close_cell(vectfd[i]);
 	}
     }
 

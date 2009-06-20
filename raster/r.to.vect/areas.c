@@ -68,6 +68,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include <grass/dbmi.h>
 #include "global.h"
@@ -99,7 +100,7 @@ static int update_width(struct area_table *, int);
 static int nabors(void);
 
 #define get_raster_value(ptr, col) \
-	G_get_raster_value_d(G_incr_void_ptr(ptr, (col)*data_size), data_type)
+	Rast_get_raster_value_d(Rast_incr_void_ptr(ptr, (col)*data_size), data_type)
 
 /* extract_areas - trace boundaries of polygons in file */
 
@@ -112,7 +113,7 @@ int extract_areas(void)
     area_num = 0;
     tl_area = 0;
 
-    G_set_d_null_value(&nullVal, 1);
+    Rast_set_d_null_value(&nullVal, 1);
     /* represents the "outside", the external null values */
     assign_area(nullVal, 0);
 
@@ -174,7 +175,7 @@ static int update_list(int i)
 	new_ptr1->fptr = new_ptr3;
 	new_ptr2->bptr = new_ptr3->bptr = new_ptr1;
 
-	/* if(G_is_c_null_value(&tl_area)) {
+	/* if(Rast_is_c_null_value(&tl_area)) {
 	   new_ptr1->left = new_ptr2->right = new_ptr3->left = 0;
 	   assign_area(tl,1);
 	   } else {
@@ -413,10 +414,10 @@ static struct COOR *get_ptr(void)
 
 static int nabors(void)
 {
-    int tl_null = G_is_d_null_value(&tl);
-    int tr_null = G_is_d_null_value(&tr);
-    int bl_null = G_is_d_null_value(&bl);
-    int br_null = G_is_d_null_value(&br);
+    int tl_null = Rast_is_d_null_value(&tl);
+    int tr_null = Rast_is_d_null_value(&tr);
+    int bl_null = Rast_is_d_null_value(&bl);
+    int br_null = Rast_is_d_null_value(&br);
 
     /* if both a and b are NULLs, thery are equal */
 #define cmp(a, b) (a##_null+b##_null==1 || (a##_null+b##_null==0 && a != b))

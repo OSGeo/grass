@@ -16,6 +16,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/Vect.h>
 #include <grass/glocale.h>
 
@@ -152,7 +153,7 @@ int main(int argc, char *argv[])
 
     name = parm.map->answer;
 
-    if (G_get_cellhd(name, G_mapset(), &cellhd) < 0)
+    if (Rast_get_cellhd(name, G_mapset(), &cellhd) < 0)
 	G_fatal_error(_("Unable to read header of raster map <%s>"), name);
 
     G_copy(&window, &cellhd, sizeof(window));
@@ -196,7 +197,7 @@ int main(int argc, char *argv[])
     }
 
     if ((name = parm.raster->answer)) {	/* raster= */
-	if (G_get_cellhd(name, "", &window) < 0)
+	if (Rast_get_cellhd(name, "", &window) < 0)
 	    G_fatal_error(_("Unable to read header of raster map <%s>"), name);
     }
 
@@ -310,7 +311,7 @@ int main(int argc, char *argv[])
     if ((name = parm.align->answer)) {	/* align= */
 	struct Cell_head temp_window;
 
-	if (G_get_cellhd(name, "", &temp_window) < 0)
+	if (Rast_get_cellhd(name, "", &temp_window) < 0)
 	    G_fatal_error(_("Unable to read header of raster map <%s>"), name);
 	if ((err = G_align_window(&window, &temp_window)))
 	    G_fatal_error("%s: %s", name, err);
@@ -319,7 +320,7 @@ int main(int argc, char *argv[])
     window.rows = cellhd.rows;
     window.cols = cellhd.cols;
 
-    if ((err = G_adjust_Cell_head(&window, 1, 1)))
+    if ((err = Rast_adjust_Cell_head(&window, 1, 1)))
 	G_fatal_error(_("Invalid region: %s"), err);
 
     cellhd.north = window.north;
@@ -327,7 +328,7 @@ int main(int argc, char *argv[])
     cellhd.east = window.east;
     cellhd.west = window.west;
 
-    if (G_put_cellhd(parm.map->answer, &cellhd) < 0)
+    if (Rast_put_cellhd(parm.map->answer, &cellhd) < 0)
 	G_fatal_error(_("Unable to update boundaries"));
 
     G_done_msg(" ");

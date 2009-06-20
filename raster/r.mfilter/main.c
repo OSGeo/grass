@@ -19,6 +19,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 #include "filter.h"
@@ -131,7 +132,7 @@ int main(int argc, char **argv)
 
     perform_filter(in_name, out_name, filter, nfilters, repeat);
 
-    G_put_cell_title(out_name, title);
+    Rast_put_cell_title(out_name, title);
 
     exit(EXIT_SUCCESS);
 }

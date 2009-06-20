@@ -25,6 +25,7 @@
 
 
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "r.flow.h"
 #include "io.h"
@@ -177,7 +178,7 @@ static void reflect_and_sentinel(void)
 	for (col = 0; col < region.cols; col++) {
 	    if (aspect(row, col) == 0)
 		/* put(as, row, col, (int) UNDEF); */
-		G_set_d_null_value(&(as.buf[row][col]), 1);
+		Rast_set_d_null_value(&(as.buf[row][col]), 1);
 	    else if (aspect(row, col) < 90)
 		put(as, row, col, 90 - aspect(row, col));
 	    else
@@ -201,7 +202,7 @@ static void precompute_aspects(void)
 	for (col = 0; col < region.cols; col++) {
 	    temp = aspect_fly(n++, c++, s++, d);
 	    if (temp == UNDEF)
-		G_set_d_null_value(&(as.buf[row][col]), 1);
+		Rast_set_d_null_value(&(as.buf[row][col]), 1);
 	    else
 		put(as, row, col, temp);
 	}

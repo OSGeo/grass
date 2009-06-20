@@ -1,5 +1,7 @@
 #include <math.h>
+
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/stats.h>
 
 void c_quant(DCELL * result, DCELL * values, int n, const void *closure)
@@ -11,7 +13,7 @@ void c_quant(DCELL * result, DCELL * values, int n, const void *closure)
     n = sort_cell(values, n);
 
     if (n < 1) {
-	G_set_d_null_value(result, 1);
+	Rast_set_d_null_value(result, 1);
 	return;
     }
 
@@ -52,7 +54,7 @@ void w_quant(DCELL * result, DCELL(*values)[2], int n, const void *closure)
     n = sort_cell_w(values, n);
 
     if (n < 1) {
-	G_set_d_null_value(result, 1);
+	Rast_set_d_null_value(result, 1);
 	return;
     }
 

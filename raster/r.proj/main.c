@@ -58,6 +58,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
 #include "r.proj.h"
@@ -264,7 +265,7 @@ int main(int argc, char **argv)
 		      inmap->answer, inlocation->answer, setname);
 
     /* Read input map colour table */
-    have_colors = G_read_colors(inmap->answer, setname, &colr);
+    have_colors = Rast_read_colors(inmap->answer, setname, &colr);
 
     /* Get projection info for input mapset */
     if ((in_proj_info = G_get_projinfo()) == NULL)
@@ -283,7 +284,7 @@ int main(int argc, char **argv)
     pj_print_proj_params(&iproj, &oproj);
 
     /* this call causes r.proj to read the entire map into memeory */
-    G_get_cellhd(inmap->answer, setname, &incellhd);
+    Rast_get_cellhd(inmap->answer, setname, &incellhd);
 
     G_set_window(&incellhd);
 
@@ -358,7 +359,7 @@ int main(int argc, char **argv)
     if (res->answer != NULL)	/* set user defined resolution */
 	outcellhd.ns_res = outcellhd.ew_res = atof(res->answer);
 
-    G_adjust_Cell_head(&outcellhd, 0, 0);
+    Rast_adjust_Cell_head(&outcellhd, 0, 0);
     G_set_window(&outcellhd);
 
     G_message("");
@@ -387,25 +388,25 @@ int main(int argc, char **argv)
     /* open and read the relevant parts of the input map and close it */
     G__switch_env();
     G_set_window(&incellhd);
-    fdi = G_open_cell_old(inmap->answer, setname);
-    cell_type = G_get_raster_map_type(fdi);
+    fdi = Rast_open_cell_old(inmap->answer, setname);
+    cell_type = Rast_get_raster_map_type(fdi);
     ibuffer = readcell(fdi, memory->answer);
-    G_close_cell(fdi);
+    Rast_close_cell(fdi);
 
     G__switch_env();
     G_set_window(&outcellhd);
 
     if (strcmp(interpol->answer, "nearest") == 0) {
-	fdo = G_open_raster_new(mapname, cell_type);
-	obuffer = (CELL *) G_allocate_raster_buf(cell_type);
+	fdo = Rast_open_raster_new(mapname, cell_type);
+	obuffer = (CELL *) Rast_allocate_raster_buf(cell_type);
     }
     else {
-	fdo = G_open_fp_cell_new(mapname);
+	fdo = Rast_open_fp_cell_new(mapname);
 	cell_type = FCELL_TYPE;
-	obuffer = (FCELL *) G_allocate_raster_buf(cell_type);
+	obuffer = (FCELL *) Rast_allocate_raster_buf(cell_type);
     }
 
-    cell_size = G_raster_size(cell_type);
+    cell_size = Rast_raster_size(cell_type);
 
     xcoord1 = xcoord2 = outcellhd.west + (outcellhd.ew_res / 2);
     /**/ ycoord1 = ycoord2 = outcellhd.north - (outcellhd.ns_res / 2);
@@ -419,7 +420,7 @@ int main(int argc, char **argv)
 	    /* project coordinates in output matrix to       */
 	    /* coordinates in input matrix                   */
 	    if (pj_do_proj(&xcoord1, &ycoord1, &oproj, &iproj) < 0)
-		G_set_null_value(obufptr, 1, cell_type);
+		Rast_set_null_value(obufptr, 1, cell_type);
 	    else {
 		/* convert to row/column indices of input matrix */
 		col_idx = (xcoord1 - incellhd.west) / incellhd.ew_res;
@@ -430,13 +431,13 @@ int main(int argc, char **argv)
 			    &col_idx, &row_idx, &incellhd);
 	    }
 
-	    obufptr = G_incr_void_ptr(obufptr, cell_size);
+	    obufptr = Rast_incr_void_ptr(obufptr, cell_size);
 	    xcoord2 += outcellhd.ew_res;
 	    xcoord1 = xcoord2;
 	    ycoord1 = ycoord2;
 	}
 
-	if (G_put_raster_row(fdo, obuffer, cell_type) < 0)
+	if (Rast_put_raster_row(fdo, obuffer, cell_type) < 0)
 	    G_fatal_error(_("Failed writing raster map <%s> row %d"), mapname,
 			  row);
 
@@ -446,16 +447,16 @@ int main(int argc, char **argv)
 	G_percent(row, outcellhd.rows - 1, 2);
     }
 
-    G_close_cell(fdo);
+    Rast_close_cell(fdo);
 
     if (have_colors > 0) {
-	G_write_colors(mapname, G_mapset(), &colr);
-	G_free_colors(&colr);
+	Rast_write_colors(mapname, G_mapset(), &colr);
+	Rast_free_colors(&colr);
     }
 
-    G_short_history(mapname, "raster", &history);
-    G_command_history(&history);
-    G_write_history(mapname, &history);
+    Rast_short_history(mapname, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(mapname, &history);
 
     G_done_msg("");
     exit(EXIT_SUCCESS);

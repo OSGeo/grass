@@ -13,13 +13,13 @@ int report_range(void)
     char buff[1024], buff2[300];
     RASTER_MAP_TYPE inp_type;
 
-    inp_type = G_raster_map_type(name, "");
+    inp_type = Rast_raster_map_type(name, "");
     if (inp_type != CELL_TYPE) {
-	if (G_read_fp_range(name, "", &drange) <= 0)
+	if (Rast_read_fp_range(name, "", &drange) <= 0)
 	    G_fatal_error(_("Unable to read f_range for map %s"), name);
 
-	G_get_fp_range_min_max(&drange, &old_dmin, &old_dmax);
-	if (G_is_d_null_value(&old_dmin) || G_is_d_null_value(&old_dmax))
+	Rast_get_fp_range_min_max(&drange, &old_dmin, &old_dmax);
+	if (Rast_is_d_null_value(&old_dmin) || Rast_is_d_null_value(&old_dmax))
 	    G_message(_("Data range is empty"));
 	else {
 	    sprintf(buff, "%.10f", old_dmin);
@@ -30,11 +30,11 @@ int report_range(void)
 		      buff, buff2);
 	}
     }
-    if (G_read_range(name, "", &range) <= 0)
+    if (Rast_read_range(name, "", &range) <= 0)
 	G_fatal_error(_("Unable to read range for map <%s>"), name);
 
-    G_get_range_min_max(&range, &old_min, &old_max);
-    if (G_is_c_null_value(&old_min) || G_is_c_null_value(&old_max))
+    Rast_get_range_min_max(&range, &old_min, &old_max);
+    if (Rast_is_c_null_value(&old_min) || Rast_is_c_null_value(&old_max))
 	G_message(_("Integer data range of %s is empty"), name);
     else
 	G_message(_("Integer data range of %s is %d to %d"),
@@ -58,7 +58,7 @@ int read_rules(FILE * fp)
 	report_range();
 	G_message(_("Enter the rule or 'help' for the format description"));
     }
-    G_fpreclass_init(&rcl_struct);
+    Rast_fpreclass_init(&rcl_struct);
     for (line = 1;; line++) {
 	if (isatty(fileno(fp)))
 	    fprintf(stderr, "> ");
@@ -101,7 +101,7 @@ int read_rules(FILE * fp)
 	    update_type(&in_type, oHigh);
 	    update_type(&out_type, nLow);
 	    update_rules(buf);
-	    G_fpreclass_add_rule(&rcl_struct, oLow, oHigh, nLow, nLow);
+	    Rast_fpreclass_add_rule(&rcl_struct, oLow, oHigh, nLow, nLow);
 	    break;
 
 	case 4:
@@ -110,7 +110,7 @@ int read_rules(FILE * fp)
 	    update_type(&out_type, nLow);
 	    update_type(&out_type, nHigh);
 	    update_rules(buf);
-	    G_fpreclass_add_rule(&rcl_struct, oLow, oHigh, nLow, nHigh);
+	    Rast_fpreclass_add_rule(&rcl_struct, oLow, oHigh, nLow, nHigh);
 	    break;
 
 	default:
@@ -118,13 +118,13 @@ int read_rules(FILE * fp)
 		update_type(&in_type, oLow);
 		update_type(&out_type, nLow);
 		update_rules(buf);
-		G_fpreclass_set_pos_infinite_rule(&rcl_struct, oLow, nLow);
+		Rast_fpreclass_set_pos_infinite_rule(&rcl_struct, oLow, nLow);
 	    }
 	    else if (sscanf(buf, "*:%lf:%lf", &oHigh, &nLow) == 2) {
 		update_type(&in_type, oHigh);
 		update_type(&out_type, nLow);
 		update_rules(buf);
-		G_fpreclass_set_neg_infinite_rule(&rcl_struct, oHigh, nLow);
+		Rast_fpreclass_set_neg_infinite_rule(&rcl_struct, oHigh, nLow);
 	    }
 	    else
 		G_message(_("%s is not a valid rule"), buf);

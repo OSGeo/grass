@@ -37,6 +37,7 @@
 #endif /* _MYINCLUDE_H */
 
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 #define DEF_RED 255
@@ -151,12 +152,12 @@ int main(int argc, char *argv[])
     G_message(_("rows = %d, cols = %d"), w.rows, w.cols);
 
     /* open raster map for reading */
-    if ((cellfile = G_open_cell_old(rast->answer, "")) == -1)
+    if ((cellfile = Rast_open_cell_old(rast->answer, "")) == -1)
 	G_fatal_error(_("Unable to open cellfile for <%s>"), rastermap);
 
-    cell_buf = G_allocate_c_raster_buf();
-    fcell_buf = G_allocate_f_raster_buf();
-    dcell_buf = G_allocate_d_raster_buf();
+    cell_buf = Rast_allocate_c_raster_buf();
+    fcell_buf = Rast_allocate_f_raster_buf();
+    dcell_buf = Rast_allocate_d_raster_buf();
 
     ored = G_malloc(w.cols);
     ogrn = G_malloc(w.cols);
@@ -221,9 +222,9 @@ int main(int argc, char *argv[])
     {
 	struct Colors colors;
 
-	G_read_colors(rast->answer, "", &colors);
+	Rast_read_colors(rast->answer, "", &colors);
 
-	rtype = G_get_raster_map_type(cellfile);
+	rtype = Rast_get_raster_map_type(cellfile);
 	if (rtype == CELL_TYPE)
 	    voidc = (CELL *) cell_buf;
 	else if (rtype == FCELL_TYPE)
@@ -251,9 +252,9 @@ int main(int argc, char *argv[])
 	    for (row = 0; row < w.rows; row++) {
 
 		G_percent(row, w.rows, 5);
-		if (G_get_raster_row(cellfile, (void *)voidc, row, rtype) < 0)
+		if (Rast_get_raster_row(cellfile, (void *)voidc, row, rtype) < 0)
 		    exit(EXIT_FAILURE);
-		G_lookup_raster_colors((void *)voidc, ored, ogrn, oblu, set,
+		Rast_lookup_raster_colors((void *)voidc, ored, ogrn, oblu, set,
 				       w.cols, &colors, rtype);
 
 		pp = line;
@@ -291,7 +292,7 @@ int main(int argc, char *argv[])
 	    G_warning("don't know how to write grey scale!\n");
 	}
 
-	G_free_colors(&colors);
+	Rast_free_colors(&colors);
 
     }
     G_free(cell_buf);
@@ -301,7 +302,7 @@ int main(int argc, char *argv[])
     G_free(ogrn);
     G_free(oblu);
     G_free(set);
-    G_close_cell(cellfile);
+    Rast_close_cell(cellfile);
 
 
 

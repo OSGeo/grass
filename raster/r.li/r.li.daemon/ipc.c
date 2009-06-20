@@ -19,6 +19,7 @@
 
 #include <unistd.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "ipc.h"
 

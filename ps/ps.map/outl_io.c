@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "ps_info.h"
 #include "local_proto.h"
@@ -40,13 +41,13 @@ int o_read_row(void *buf)
 	    blank_line(buf);
 	}
 	else {
-	    G_set_null_value(ptr, 1, map_type);
-	    ptr = G_incr_void_ptr(ptr, raster_size);
+	    Rast_set_null_value(ptr, 1, map_type);
+	    ptr = Rast_incr_void_ptr(ptr, raster_size);
 
-	    G_get_raster_row(in_file_d, ptr, row_count++, map_type);
+	    Rast_get_raster_row(in_file_d, ptr, row_count++, map_type);
 
-	    ptr = G_incr_void_ptr(ptr, raster_size * (row_length + 1));
-	    G_set_null_value(ptr, 1, map_type);
+	    ptr = Rast_incr_void_ptr(ptr, raster_size * (row_length + 1));
+	    Rast_set_null_value(ptr, 1, map_type);
 	}
     }
     return (row_length + 2);
@@ -54,7 +55,7 @@ int o_read_row(void *buf)
 
 static int blank_line(void *buf)
 {
-    G_set_null_value(buf, row_length + 2, map_type);
+    Rast_set_null_value(buf, row_length + 2, map_type);
 
     return 0;
 }
@@ -63,11 +64,11 @@ RASTER_MAP_TYPE o_open_file(char *cell)
 {
     /* open raster map */
     sscanf(cell, "%s", cell_name);
-    if ((in_file_d = G_open_cell_old(cell_name, "")) < 0)
+    if ((in_file_d = Rast_open_cell_old(cell_name, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), cell_name);
 
-    map_type = G_get_raster_map_type(in_file_d);
-    raster_size = G_raster_size(map_type);
+    map_type = Rast_get_raster_map_type(in_file_d);
+    raster_size = Rast_raster_size(map_type);
     first_read = 1;
     last_read = 0;
     row_count = 0;
@@ -77,7 +78,7 @@ RASTER_MAP_TYPE o_open_file(char *cell)
 
 int o_close_file(void)
 {
-    G_close_cell(in_file_d);
+    Rast_close_cell(in_file_d);
 
     return 0;
 }

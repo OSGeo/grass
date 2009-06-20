@@ -29,8 +29,11 @@
  */
 
 #include <string.h>
+
+#include <grass/Rast.h>
 #include <grass/display.h>
 #include <grass/display_raster.h>
+
 #include "pie.h"
 
 /*#define DEBUG */
@@ -108,9 +111,9 @@ int pie(struct stat_list *dist_stats,	/* list of distribution statistics */
 	max_tics = (x_line[2] - x_line[1]) / XTIC_DIST;
 	i = 0;
 	if (is_fp) {
-	    G_get_fp_range_min_max(&fp_range, &range_dmin, &range_dmax);
-	    if (G_is_d_null_value(&range_dmin) ||
-		G_is_d_null_value(&range_dmax))
+	    Rast_get_fp_range_min_max(&fp_range, &range_dmin, &range_dmax);
+	    if (Rast_is_d_null_value(&range_dmin) ||
+		Rast_is_d_null_value(&range_dmax))
 		G_fatal_error("Floating point data range is empty");
 
 	    while ((range_dmax - range_dmin) / tics[i].every > max_tics)
@@ -125,9 +128,9 @@ int pie(struct stat_list *dist_stats,	/* list of distribution statistics */
     }
     else {
 	if (is_fp && !cat_ranges) {
-	    G_get_fp_range_min_max(&fp_range, &range_dmin, &range_dmax);
-	    if (G_is_d_null_value(&range_dmin) ||
-		G_is_d_null_value(&range_dmax))
+	    Rast_get_fp_range_min_max(&fp_range, &range_dmin, &range_dmax);
+	    if (Rast_is_d_null_value(&range_dmin) ||
+		Rast_is_d_null_value(&range_dmax))
 		G_fatal_error("Floating point data range is empty");
 	}
 	tic_every = 1;
@@ -165,7 +168,7 @@ int pie(struct stat_list *dist_stats,	/* list of distribution statistics */
 		draw = NO;
 	    else {
 		draw = YES;
-		G_set_d_null_value(&dval, 1);
+		Rast_set_d_null_value(&dval, 1);
 		arc = 360.0 *((double)dist_stats->null_stat
 				    / (double)dist_stats->sumstat);
 		draw_slice_filled(colors, dval, color, ORIGIN_X,
@@ -185,7 +188,7 @@ int pie(struct stat_list *dist_stats,	/* list of distribution statistics */
 		draw = YES;
 		if (is_fp) {
 		    if (cat_ranges)
-			G_get_ith_d_raster_cat(&cats, (CELL) i, &dmin, &dmax);
+			Rast_get_ith_d_raster_cat(&cats, (CELL) i, &dmin, &dmax);
 		    else {
 			dmin = range_dmin + i * (range_dmax - range_dmin) / nsteps;
 			dmax = range_dmin + (i + 1) * (range_dmax - range_dmin) / nsteps;
@@ -225,7 +228,7 @@ int pie(struct stat_list *dist_stats,	/* list of distribution statistics */
 		    draw = YES;
 		    if (is_fp) {
 			if (cat_ranges)
-			    G_get_ith_d_raster_cat(&cats, (CELL) i, &dmin, &dmax);
+			    Rast_get_ith_d_raster_cat(&cats, (CELL) i, &dmin, &dmax);
 			else {
 			    dmin = range_dmin + i * (range_dmax - range_dmin) / nsteps;
 			    dmax = range_dmin + (i + 1) * (range_dmax - range_dmin) / nsteps;

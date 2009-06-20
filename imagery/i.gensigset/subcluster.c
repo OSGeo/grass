@@ -1,6 +1,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/imagery.h>
 #include <grass/glocale.h>
 #include <grass/gmath.h>
@@ -131,7 +132,7 @@ static void seed(struct ClassSig *Sig, int nbands)
 	n_nulls[b1] = 0;
 	mean[b1] = 0.0;
 	for (i = 0; i < Sig->ClassData.npixels; i++) {
-	    if (G_is_d_null_value(&Sig->ClassData.x[i][b1])) {
+	    if (Rast_is_d_null_value(&Sig->ClassData.x[i][b1])) {
 		n_nulls[b1]++;
 		total_nulls++;
 	    }
@@ -145,8 +146,8 @@ static void seed(struct ClassSig *Sig, int nbands)
 	for (b2 = 0; b2 < nbands; b2++) {
 	    R[b1][b2] = 0.0;
 	    for (i = 0; i < Sig->ClassData.npixels; i++) {
-		if (!G_is_d_null_value(&Sig->ClassData.x[i][b1]) &&
-		    !G_is_d_null_value(&Sig->ClassData.x[i][b2]))
+		if (!Rast_is_d_null_value(&Sig->ClassData.x[i][b1]) &&
+		    !Rast_is_d_null_value(&Sig->ClassData.x[i][b2]))
 		    R[b1][b2] +=
 			(Sig->ClassData.x[i][b1]) * (Sig->ClassData.x[i][b2]);
 	    }
@@ -166,8 +167,8 @@ static void seed(struct ClassSig *Sig, int nbands)
     /* Seed the means and set the diagonal covariance components */
     for (i = 0; i < Sig->nsubclasses; i++) {
 	for (b1 = 0; b1 < nbands; b1++) {
-	    if (G_is_d_null_value(&Sig->ClassData.x[(int)(i * period)][b1]))
-		G_set_d_null_value(&Sig->SubSig[i].means[b1], 1);
+	    if (Rast_is_d_null_value(&Sig->ClassData.x[(int)(i * period)][b1]))
+		Rast_set_d_null_value(&Sig->SubSig[i].means[b1], 1);
 	    else
 		Sig->SubSig[i].means[b1] =
 		    Sig->ClassData.x[(int)(i * period)][b1];
@@ -284,7 +285,7 @@ static int reestimate(struct ClassSig *Sig, int nbands)
 	    for (b1 = 0; b1 < nbands; b1++) {
 		Sig->SubSig[i].means[b1] = 0;
 		for (s = 0; s < Data->npixels; s++)
-		    if (!G_is_d_null_value(&Data->x[s][b1]))
+		    if (!Rast_is_d_null_value(&Data->x[s][b1]))
 			Sig->SubSig[i].means[b1] +=
 			    Data->p[s][i] * Data->x[s][b1];
 		Sig->SubSig[i].means[b1] /= (Sig->SubSig[i].N);
@@ -295,8 +296,8 @@ static int reestimate(struct ClassSig *Sig, int nbands)
 		for (b2 = b1; b2 < nbands; b2++) {
 		    Sig->SubSig[i].R[b1][b2] = 0;
 		    for (s = 0; s < Data->npixels; s++) {
-			if (!G_is_d_null_value(&Data->x[s][b1])
-			    && !G_is_d_null_value(&Data->x[s][b2])) {
+			if (!Rast_is_d_null_value(&Data->x[s][b1])
+			    && !Rast_is_d_null_value(&Data->x[s][b2])) {
 			    diff1 = Data->x[s][b1] - Sig->SubSig[i].means[b1];
 			    diff2 = Data->x[s][b2] - Sig->SubSig[i].means[b2];
 			    Sig->SubSig[i].R[b1][b2] +=
@@ -456,8 +457,8 @@ static double loglike(DCELL * x, struct SubSig *SubSig, int nbands)
     sum = 0;
     for (b1 = 0; b1 < nbands; b1++)
 	for (b2 = 0; b2 < nbands; b2++) {
-	    if (G_is_d_null_value(&x[b1])
-		|| G_is_d_null_value(&x[b2]))
+	    if (Rast_is_d_null_value(&x[b1])
+		|| Rast_is_d_null_value(&x[b2]))
 		continue;
 	    diff1 = x[b1] - SubSig->means[b1];
 	    diff2 = x[b2] - SubSig->means[b2];

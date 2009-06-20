@@ -15,6 +15,7 @@
 
 #include <stdlib.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include <grass/gmath.h>
 #include "param.h"
@@ -86,9 +87,9 @@ void process(void)
     /* Reserve `wsize' rows of memory.      */
 
     if (mparam != FEATURE)
-	row_out = G_allocate_raster_buf(DCELL_TYPE);	/* Initialise output row buffer.     */
+	row_out = Rast_allocate_raster_buf(DCELL_TYPE);	/* Initialise output row buffer.     */
     else
-	featrow_out = G_allocate_raster_buf(CELL_TYPE);	/* Initialise output row buffer.  */
+	featrow_out = Rast_allocate_raster_buf(CELL_TYPE);	/* Initialise output row buffer.  */
 
     window_ptr = (DCELL *) G_malloc(SQR(wsize) * sizeof(DCELL));
     /* Reserve enough memory for local wind. */
@@ -146,13 +147,13 @@ void process(void)
 
     if (mparam != FEATURE)
 	for (wind_row = 0; wind_row < EDGE; wind_row++)
-	    G_put_raster_row(fd_out, row_out, DCELL_TYPE);	/* Write out the edge cells as NULL.    */
+	    Rast_put_raster_row(fd_out, row_out, DCELL_TYPE);	/* Write out the edge cells as NULL.    */
     else
 	for (wind_row = 0; wind_row < EDGE; wind_row++)
-	    G_put_raster_row(fd_out, featrow_out, CELL_TYPE);	/* Write out the edge cells as NULL.    */
+	    Rast_put_raster_row(fd_out, featrow_out, CELL_TYPE);	/* Write out the edge cells as NULL.    */
 
     for (wind_row = 0; wind_row < wsize - 1; wind_row++)
-	G_get_raster_row(fd_in, row_in + (wind_row * ncols), wind_row,
+	Rast_get_raster_row(fd_in, row_in + (wind_row * ncols), wind_row,
 			 DCELL_TYPE);
     /* Read in enough of the first rows to  */
     /* allow window to be examined.         */
@@ -160,7 +161,7 @@ void process(void)
     for (row = EDGE; row < (nrows - EDGE); row++) {
 	G_percent(row + 1, nrows - EDGE, 2);
 
-	G_get_raster_row(fd_in, row_in + ((wsize - 1) * ncols), row + EDGE,
+	Rast_get_raster_row(fd_in, row_in + ((wsize - 1) * ncols), row + EDGE,
 			 DCELL_TYPE);
 
 	for (col = EDGE; col < (ncols - EDGE); col++) {
@@ -210,10 +211,10 @@ void process(void)
 	}
 
 	if (mparam != FEATURE)
-	    G_put_raster_row(fd_out, row_out, DCELL_TYPE);	/* Write the row buffer to the output   */
+	    Rast_put_raster_row(fd_out, row_out, DCELL_TYPE);	/* Write the row buffer to the output   */
 	/* raster.                              */
 	else			/* write FEATURE to CELL */
-	    G_put_raster_row(fd_out, featrow_out, CELL_TYPE);	/* Write the row buffer to the output       */
+	    Rast_put_raster_row(fd_out, featrow_out, CELL_TYPE);	/* Write the row buffer to the output       */
 	/* raster.                              */
 
 	/* 'Shuffle' rows down one, and read in */
@@ -226,9 +227,9 @@ void process(void)
 
     for (wind_row = 0; wind_row < EDGE; wind_row++) {
 	if (mparam != FEATURE)
-	    G_put_raster_row(fd_out, row_out, DCELL_TYPE);	/* Write out the edge cells as NULL. */
+	    Rast_put_raster_row(fd_out, row_out, DCELL_TYPE);	/* Write out the edge cells as NULL. */
 	else
-	    G_put_raster_row(fd_out, featrow_out, CELL_TYPE);	/* Write out the edge cells as NULL. */
+	    Rast_put_raster_row(fd_out, featrow_out, CELL_TYPE);	/* Write out the edge cells as NULL. */
     }
 
     /*--------------------------------------------------------------------------*/

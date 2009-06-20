@@ -24,6 +24,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 #include "ransurf.h"
@@ -120,7 +121,7 @@ int main(int argc, char **argv)
     CalcSD();
 
     for (DoMap = 0; DoMap < NumMaps; DoMap++) {
-	OutFD = G_open_cell_new(OutNames[DoMap]);
+	OutFD = Rast_open_cell_new(OutNames[DoMap]);
 	if (OutFD < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
 			  OutNames[DoMap]);

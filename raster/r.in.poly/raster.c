@@ -1,4 +1,5 @@
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "format.h"
 #include "local_proto.h"
 
@@ -81,7 +82,7 @@ int begin_rasterization(int nrows, int f)
 	break;
     }
     if (format != USE_CELL)
-	cell = G_allocate_cell_buf();
+	cell = Rast_allocate_cell_buf();
 
     at_row = 0;
     configure_plot();
@@ -157,7 +158,7 @@ int output_raster(int fd)
 	    for (j = 0; j < page.cols; j++) {
 		cell[j] = (CELL) raster.c[i][j];
 		if (cell[j] == 0)
-		    G_set_null_value(&cell[j], 1, CELL_TYPE);
+		    Rast_set_null_value(&cell[j], 1, CELL_TYPE);
 	    }
 	    break;
 
@@ -165,7 +166,7 @@ int output_raster(int fd)
 	    for (j = 0; j < page.cols; j++) {
 		cell[j] = (CELL) raster.u[i][j];
 		if (cell[j] == 0)
-		    G_set_null_value(&cell[j], 1, CELL_TYPE);
+		    Rast_set_null_value(&cell[j], 1, CELL_TYPE);
 	    }
 	    break;
 
@@ -173,19 +174,19 @@ int output_raster(int fd)
 	    for (j = 0; j < page.cols; j++) {
 		cell[j] = (CELL) raster.s[i][j];
 		if (cell[j] == 0)
-		    G_set_null_value(&cell[j], 1, CELL_TYPE);
+		    Rast_set_null_value(&cell[j], 1, CELL_TYPE);
 	    }
 	    break;
 
 	case USE_CELL:
 	    cell = raster.cell[i];
 	    if (cell == 0)
-		G_set_null_value(&cell, 1, CELL_TYPE);
+		Rast_set_null_value(&cell, 1, CELL_TYPE);
 	    break;
 	}
 
 	G_percent(i, page.rows, 2);
-	if (G_put_raster_row(fd, cell, CELL_TYPE) < 0)
+	if (Rast_put_raster_row(fd, cell, CELL_TYPE) < 0)
 	    return ERROR;
     }
     G_percent(i, page.rows, 2);

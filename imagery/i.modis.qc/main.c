@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
     /* MOD09Q1 Products (250m, 8-Days) */ 
@@ -192,21 +193,21 @@ int main(int argc, char *argv[])
 	(!strcmp(qcflag, "pixel_adjacent_to_cloud") && (strcmp(product, "mod09A1s"))))
 	G_fatal_error(_("This flag is only available for MOD09A1s @ 500m products"));
 
-    if ((infd = G_open_cell_old(qcchan, "")) < 0)
+    if ((infd = Rast_open_cell_old(qcchan, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), qcchan);
 
-    if (G_get_cellhd(qcchan, "", &cellhd) < 0)
+    if (Rast_get_cellhd(qcchan, "", &cellhd) < 0)
 	G_fatal_error(_("Unable to read header of raster map <%s> "), qcchan);
 
-    inrast = G_allocate_c_raster_buf();
+    inrast = Rast_allocate_c_raster_buf();
 
     G_debug(3, "number of rows %d", cellhd.rows);
     nrows = G_window_rows();
     ncols = G_window_cols();
-    outrast = G_allocate_c_raster_buf();
+    outrast = Rast_allocate_c_raster_buf();
 
     /* Create New raster files */ 
-    if ((outfd = G_open_raster_new(result, data_type_output)) < 0)
+    if ((outfd = Rast_open_raster_new(result, data_type_output)) < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), result);
 
     /* Process pixels */ 
@@ -214,7 +215,7 @@ int main(int argc, char *argv[])
     {
 	CELL c;
 	G_percent(row, nrows, 2);
-	if (G_get_c_raster_row(infd, inrast, row) < 0)
+	if (Rast_get_c_raster_row(infd, inrast, row) < 0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			  qcchan, row);
 
@@ -222,8 +223,8 @@ int main(int argc, char *argv[])
 	for (col = 0; col < ncols; col++)
 	{
 	    c = inrast[col];
-	    if (G_is_c_null_value(&c))
-		G_set_c_null_value(&outrast[col], 1);
+	    if (Rast_is_c_null_value(&c))
+		Rast_set_c_null_value(&outrast[col], 1);
             else if (!strcmp(product, "mod09A1"))
             {
 	        if (!strcmp(qcflag, "modland_qa_bits")) 
@@ -318,22 +319,22 @@ int main(int argc, char *argv[])
 	    outrast[col] = c;
 	}
 
-	if (G_put_c_raster_row(outfd, outrast) < 0)
+	if (Rast_put_c_raster_row(outfd, outrast) < 0)
 	    G_fatal_error(_("Failed writing raster map <%s> row %d"),
 			  output->answer, row);
     }
 
     G_free(inrast);
-    G_close_cell(infd);
+    Rast_close_cell(infd);
     G_free(outrast);
-    G_close_cell(outfd);
+    Rast_close_cell(outfd);
 
     /* Color from 0 to 10 in grey */ 
-    G_init_colors(&colors);
-    G_add_color_rule(0, 0, 0, 0, 10, 255, 255, 255, &colors);
-    G_short_history(result, "raster", &history);
-    G_command_history(&history);
-    G_write_history(result, &history);
+    Rast_init_colors(&colors);
+    Rast_add_color_rule(0, 0, 0, 0, 10, 255, 255, 255, &colors);
+    Rast_short_history(result, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(result, &history);
     exit(EXIT_SUCCESS);
 }
 

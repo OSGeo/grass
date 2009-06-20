@@ -15,10 +15,10 @@ int open_band_files(void)
     Bandbuf = (CELL **) G_malloc(nbands * sizeof(CELL *));
     Bandfd = (int *)G_malloc(nbands * sizeof(int));
     for (n = 0; n < nbands; n++) {
-	Bandbuf[n] = G_allocate_cell_buf();
+	Bandbuf[n] = Rast_allocate_cell_buf();
 	name = Refer.file[n].name;
 	mapset = Refer.file[n].mapset;
-	if ((Bandfd[n] = G_open_cell_old(name, mapset)) < 0)
+	if ((Bandfd[n] = Rast_open_cell_old(name, mapset)) < 0)
 	    G_fatal_error(_("Unable to open band files."));
     }
 
@@ -34,7 +34,7 @@ int close_band_files(void)
     nbands = Refer.nfiles;
     for (n = 0; n < nbands; n++) {
 	G_free(Bandbuf[n]);
-	G_close_cell(Bandfd[n]);
+	Rast_close_cell(Bandfd[n]);
     }
     G_free(Bandbuf);
     G_free(Bandfd);

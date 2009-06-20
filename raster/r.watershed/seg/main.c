@@ -21,6 +21,7 @@
 #include <unistd.h>
 #include "Gwater.h"
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 struct Cell_head window;

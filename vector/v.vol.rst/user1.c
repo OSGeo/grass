@@ -30,6 +30,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/G3d.h>
 #include <grass/dbmi.h>
 #include <grass/Vect.h>
@@ -363,13 +364,13 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
 	    clean_fatal_error(buf);
 	}
 	bitmask = BM_create(nsizc, nsizr);
-	cellmask = G_allocate_cell_buf();
-	cfmask = G_open_cell_old(maskmap, mapsetm);
+	cellmask = Rast_allocate_cell_buf();
+	cfmask = Rast_open_cell_old(maskmap, mapsetm);
 	for (i = 0; i < nsizr; i++) {
 	    irev = nsizr - i - 1;
-	    G_get_map_row(cfmask, cellmask, i);
+	    Rast_get_map_row(cfmask, cellmask, i);
 	    for (j = 0; j < nsizc; j++) {
-		if ((cellmask[j] == 0) || G_is_c_null_value(&cellmask[j]))
+		if ((cellmask[j] == 0) || Rast_is_c_null_value(&cellmask[j]))
 		    BM_set(bitmask, j, irev, 0);
 		else
 		    BM_set(bitmask, j, irev, 1);
@@ -398,7 +399,7 @@ int OUTGR()
     float value;
 
     if ((cellinp != NULL) && (cellout != NULL)) {
-	cell = G_allocate_f_raster_buf();
+	cell = Rast_allocate_f_raster_buf();
 
 	for (i = 0; i < nsizr; i++) {
 	    /* seek to the right row */
@@ -407,7 +408,7 @@ int OUTGR()
 		 0) == -1)
 		G_fatal_error("cannot fseek to the right spot");
 	    fread(cell, sizeof(FCELL), nsizc, Tmp_fd_cell);
-	    G_put_f_raster_row(fdcout, cell);
+	    Rast_put_f_raster_row(fdcout, cell);
 	}
     }
 

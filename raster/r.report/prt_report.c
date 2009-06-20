@@ -262,14 +262,14 @@ int construct_val_str(int nl, CELL * pval, char *str)
     char *descr;
     DCELL dLow, dHigh;
 
-    if (G_is_c_null_value(pval))
+    if (Rast_is_c_null_value(pval))
 	sprintf(str, "%s", no_data_str);
     else if (!is_fp[nl] || as_int)
 	sprintf(str, "%d", *pval);
     else {			/* find out which floating point range to print */
 
 	if (cat_ranges)
-	    descr = G_get_ith_d_raster_cat(&layers[nl].labels, *pval,
+	    descr = Rast_get_ith_d_raster_cat(&layers[nl].labels, *pval,
 					   &dLow, &dHigh);
 	else {
 	    dLow = (DMAX[nl] - DMIN[nl]) / nsteps *
@@ -295,13 +295,13 @@ char *construct_cat_label(int nl, CELL cat)
     static char str[500];
 
     if (!is_fp[nl] || as_int)
-	return G_get_cat(cat, &layers[nl].labels);
+	return Rast_get_cat(cat, &layers[nl].labels);
     else {			/* find or construct the label for
 				   floating point range to print */
-	if (G_is_c_null_value(&tmp))
+	if (Rast_is_c_null_value(&tmp))
 	    return G_store("no data");
 	if (cat_ranges)
-	    return G_get_ith_d_raster_cat(&layers[nl].labels, cat,
+	    return Rast_get_ith_d_raster_cat(&layers[nl].labels, cat,
 					  &dLow, &dHigh);
 	else {
 	    dLow = (DMAX[nl] - DMIN[nl]) / (double)nsteps *
@@ -309,8 +309,8 @@ char *construct_cat_label(int nl, CELL cat)
 	    dHigh = (DMAX[nl] - DMIN[nl]) / (double)nsteps *
 		(double)cat + DMIN[nl];
 	    sprintf(str, "from %s to %s",
-		    G_get_d_raster_cat(&dLow, &layers[nl].labels),
-		    G_get_d_raster_cat(&dHigh, &layers[nl].labels));
+		    Rast_get_d_raster_cat(&dLow, &layers[nl].labels),
+		    Rast_get_d_raster_cat(&dHigh, &layers[nl].labels));
 	    return str;
 	}
     }				/* fp label */

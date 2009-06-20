@@ -1,4 +1,5 @@
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "flag.h"
 
 int flag_destroy(FLAG * flags)

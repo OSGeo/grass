@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <strings.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include <grass/dbmi.h>
 #include <grass/Vect.h>
@@ -22,13 +23,13 @@ int extract_points(int z_flag)
 
     switch (data_type) {
     case CELL_TYPE:
-	cellbuf = G_allocate_c_raster_buf();
+	cellbuf = Rast_allocate_c_raster_buf();
 	break;
     case FCELL_TYPE:
-	fcellbuf = G_allocate_f_raster_buf();
+	fcellbuf = Rast_allocate_f_raster_buf();
 	break;
     case DCELL_TYPE:
-	dcellbuf = G_allocate_d_raster_buf();
+	dcellbuf = Rast_allocate_d_raster_buf();
 	break;
     }
 
@@ -42,13 +43,13 @@ int extract_points(int z_flag)
 
 	switch (data_type) {
 	case CELL_TYPE:
-	    G_get_c_raster_row(input_fd, cellbuf, row);
+	    Rast_get_c_raster_row(input_fd, cellbuf, row);
 	    break;
 	case FCELL_TYPE:
-	    G_get_f_raster_row(input_fd, fcellbuf, row);
+	    Rast_get_f_raster_row(input_fd, fcellbuf, row);
 	    break;
 	case DCELL_TYPE:
-	    G_get_d_raster_row(input_fd, dcellbuf, row);
+	    Rast_get_d_raster_row(input_fd, dcellbuf, row);
 	    break;
 	}
 
@@ -60,18 +61,18 @@ int extract_points(int z_flag)
 
 	    switch (data_type) {
 	    case CELL_TYPE:
-		if (G_is_c_null_value(cellbuf + col))
+		if (Rast_is_c_null_value(cellbuf + col))
 		    continue;
 		val = cellbuf[col];
 		dval = val;
 		break;
 	    case FCELL_TYPE:
-		if (G_is_f_null_value(fcellbuf + col))
+		if (Rast_is_f_null_value(fcellbuf + col))
 		    continue;
 		dval = fcellbuf[col];
 		break;
 	    case DCELL_TYPE:
-		if (G_is_d_null_value(dcellbuf + col))
+		if (Rast_is_d_null_value(dcellbuf + col))
 		    continue;
 		dval = dcellbuf[col];
 		break;

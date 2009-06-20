@@ -12,8 +12,9 @@
  */
 
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
-#include "G.h"
+#include "../raster/G.h"
 
 /*!
  * \brief Get the current working window (region)
@@ -52,7 +53,7 @@ int G_set_window(struct Cell_head *window)
        window = &twindow;
      */
 
-    if ((err = G_adjust_Cell_head(window, 0, 0))) {
+    if ((err = Rast_adjust_Cell_head(window, 0, 0))) {
 	G_warning("G_set_window(): %s", err);
 	return -1;
     }
@@ -77,7 +78,7 @@ int G_set_window(struct Cell_head *window)
 
     /* close the mask */
     if (G__.auto_mask > 0) {
-	G_close_cell(maskfd);
+	Rast_close_cell(maskfd);
 	/* G_free (G__.mask_buf); */
 	G__.mask_fd = -1;
 	G__.auto_mask = -1;	/* turn off masking */
@@ -110,14 +111,14 @@ int G_set_window(struct Cell_head *window)
 	    /* opened for writing */
 	    G_free (fcb->data);
 	    fcb->data = (unsigned char *) G_calloc (G__.window.cols,
-						    G_raster_size(fcb->map_type));
+						    Rast_raster_size(fcb->map_type));
 	}
 
 	/* allocate null bitstream buffers for reading/writing null rows */
 	for (j=0;j< NULL_ROWS_INMEM; j++)
 	{
 	    G_free (fcb->NULL_ROWS[j]);
-	    fcb->NULL_ROWS[j] = G__allocate_null_bits(G__.window.cols);
+	    fcb->NULL_ROWS[j] = (G__.window.cols);
 	}
 
 
@@ -133,7 +134,7 @@ int G_set_window(struct Cell_head *window)
     }
 
     /* turn masking (back) on if necessary */
-    G__check_for_auto_masking();
+    Rast__check_for_auto_masking();
 
     /* we want the number of bytes per cell to be maximum
        so that there is enough memory for reading and writing rows */

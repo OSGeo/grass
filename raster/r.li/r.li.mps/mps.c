@@ -12,6 +12,7 @@
 
 
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 #include <stdlib.h>
@@ -69,7 +70,7 @@ int meanPatchSize(int fd, char **par, area_des ad, double *result)
     double indice = 0;
     struct Cell_head hd;
 
-    if (G_get_cellhd(ad->raster, "", &hd) == -1)
+    if (Rast_get_cellhd(ad->raster, "", &hd) == -1)
 	return RLI_ERRORE;
 
     switch (ad->data_type) {
@@ -164,19 +165,19 @@ int calculate(int fd, area_des ad, struct Cell_head hd, double *result)
 	return RLI_ERRORE;
     }
 
-    buf_sup = G_allocate_cell_buf();
+    buf_sup = Rast_allocate_cell_buf();
     if (buf_sup == NULL) {
 	G_fatal_error("malloc buf_sup failed");
 	return RLI_ERRORE;
     }
 
-    buf = G_allocate_cell_buf();
+    buf = Rast_allocate_cell_buf();
     if (buf == NULL) {
 	G_fatal_error("malloc buf failed");
 	return RLI_ERRORE;
     }
 
-    G_set_c_null_value(buf_sup + ad->x, ad->cl);	/*the first time buf_sup is all null */
+    Rast_set_c_null_value(buf_sup + ad->x, ad->cl);	/*the first time buf_sup is all null */
 
     for (i = 0; i < ad->cl; i++) {
 	mask_patch_sup[i] = 0;
@@ -196,23 +197,23 @@ int calculate(int fd, area_des ad, struct Cell_head hd, double *result)
 		return RLI_ERRORE;
 	    }
 	}
-	G_set_c_null_value(&precCell, 1);
+	Rast_set_c_null_value(&precCell, 1);
 	for (i = 0; i < ad->cl; i++) {	/*for each cell in the row */
 
 	    corrCell = buf[i + ad->x];
 
 	    if ((masked) && (mask_buf[i + ad->x] == 0)) {
-		G_set_c_null_value(&corrCell, 1);
+		Rast_set_c_null_value(&corrCell, 1);
 	    }
 
 	    /*valid cell */
-	    if (!(G_is_null_value(&corrCell, CELL_TYPE))) {
+	    if (!(Rast_is_null_value(&corrCell, CELL_TYPE))) {
 		area++;
 		if (i > 0)
 		    precCell = buf[i - 1 + ad->x];
 
 		if (j == 0)
-		    G_set_c_null_value(&supCell, 1);
+		    Rast_set_c_null_value(&supCell, 1);
 		else
 		    supCell = buf_sup[i + ad->x];
 
@@ -534,19 +535,19 @@ int calculateD(int fd, area_des ad, struct Cell_head hd, double *result)
 	return RLI_ERRORE;
     }
 
-    buf_sup = G_allocate_d_raster_buf();
+    buf_sup = Rast_allocate_d_raster_buf();
     if (buf_sup == NULL) {
 	G_fatal_error("malloc buf_sup failed");
 	return RLI_ERRORE;
     }
 
-    buf = G_allocate_d_raster_buf();
+    buf = Rast_allocate_d_raster_buf();
     if (buf == NULL) {
 	G_fatal_error("malloc buf failed");
 	return RLI_ERRORE;
     }
 
-    G_set_d_null_value(buf_sup + ad->x, ad->cl);	/*the first time buf_sup is all null */
+    Rast_set_d_null_value(buf_sup + ad->x, ad->cl);	/*the first time buf_sup is all null */
 
     for (i = 0; i < ad->cl; i++) {
 	mask_patch_sup[i] = 0;
@@ -565,22 +566,22 @@ int calculateD(int fd, area_des ad, struct Cell_head hd, double *result)
 		return RLI_ERRORE;
 	    }
 	}
-	G_set_d_null_value(&precCell, 1);
+	Rast_set_d_null_value(&precCell, 1);
 	for (i = 0; i < ad->cl; i++) {	/*for each cell in the row */
 
 	    corrCell = buf[i + ad->x];
 
 	    if ((masked) && (mask_buf[i + ad->x] == 0)) {
-		G_set_d_null_value(&corrCell, 1);
+		Rast_set_d_null_value(&corrCell, 1);
 	    }
 
-	    if (!(G_is_null_value(&corrCell, DCELL_TYPE))) {
+	    if (!(Rast_is_null_value(&corrCell, DCELL_TYPE))) {
 		area++;
 		if (i > 0)
 		    precCell = buf[i - 1 + ad->x];
 
 		if (j == 0)
-		    G_set_d_null_value(&supCell, 1);
+		    Rast_set_d_null_value(&supCell, 1);
 		else
 		    supCell = buf_sup[i + ad->x];
 
@@ -904,20 +905,20 @@ int calculateF(int fd, area_des ad, struct Cell_head hd, double *result)
 	return RLI_ERRORE;
     }
 
-    buf_sup = G_allocate_f_raster_buf();
+    buf_sup = Rast_allocate_f_raster_buf();
     if (buf_sup == NULL) {
 	G_fatal_error("malloc buf_sup failed");
 	return RLI_ERRORE;
     }
 
 
-    buf = G_allocate_f_raster_buf();
+    buf = Rast_allocate_f_raster_buf();
     if (buf == NULL) {
 	G_fatal_error("malloc buf failed");
 	return RLI_ERRORE;
     }
 
-    G_set_f_null_value(buf_sup + ad->x, ad->cl);	/*the first time buf_sup is all null */
+    Rast_set_f_null_value(buf_sup + ad->x, ad->cl);	/*the first time buf_sup is all null */
 
     for (i = 0; i < ad->cl; i++) {
 	mask_patch_sup[i] = 0;
@@ -936,20 +937,20 @@ int calculateF(int fd, area_des ad, struct Cell_head hd, double *result)
 		return RLI_ERRORE;
 	    }
 	}
-	G_set_f_null_value(&precCell, 1);
+	Rast_set_f_null_value(&precCell, 1);
 	for (i = 0; i < ad->cl; i++) {	/*for each cell in the row */
 
 
 	    corrCell = buf[i + ad->x];
 	    if (((masked) && (mask_buf[i + ad->x] == 0))) {
-		G_set_f_null_value(&corrCell, 1);
+		Rast_set_f_null_value(&corrCell, 1);
 	    }
-	    if (!(G_is_null_value(&corrCell, FCELL_TYPE))) {
+	    if (!(Rast_is_null_value(&corrCell, FCELL_TYPE))) {
 		area++;
 		if (i > 0)
 		    precCell = buf[i - 1 + ad->x];
 		if (j == 0)
-		    G_set_f_null_value(&supCell, 1);
+		    Rast_set_f_null_value(&supCell, 1);
 		else
 		    supCell = buf_sup[i + ad->x];
 

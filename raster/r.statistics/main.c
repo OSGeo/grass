@@ -18,6 +18,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 #include "method.h"
@@ -92,13 +93,13 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (G_raster_map_is_fp(basemap->answer, "") != 0)
+    if (Rast_raster_map_is_fp(basemap->answer, "") != 0)
 	G_fatal_error(_("This module currently only works for integer (CELL) maps"));
 
-    if (G_raster_map_is_fp(covermap->answer, "") != 0)
+    if (Rast_raster_map_is_fp(covermap->answer, "") != 0)
 	G_fatal_error(_("This module currently only works for integer (CELL) maps"));
 
-    if (G_read_cats(covermap->answer, "", &cats) < 0) {
+    if (Rast_read_cats(covermap->answer, "", &cats) < 0) {
 	G_fatal_error(_("Unable to read category file of raster map <%s>"),
 		      covermap->answer);
     }

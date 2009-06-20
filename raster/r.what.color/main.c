@@ -20,6 +20,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 static const char *fmt;
@@ -37,7 +38,7 @@ static int do_value(const char *buf, RASTER_MAP_TYPE type,
 	    fprintf(stdout, "*: *\n");
 	    return 0;
 	}
-	if (!G_get_c_raster_color(&ival, &red, &grn, &blu, colors)) {
+	if (!Rast_get_c_raster_color(&ival, &red, &grn, &blu, colors)) {
 	    fprintf(stdout, "%d: *\n", ival);
 	    return 0;
 	}
@@ -52,7 +53,7 @@ static int do_value(const char *buf, RASTER_MAP_TYPE type,
 	    fprintf(stdout, "*: *\n");
 	    return 0;
 	}
-	if (!G_get_d_raster_color(&fval, &red, &grn, &blu, colors)) {
+	if (!Rast_get_d_raster_color(&fval, &red, &grn, &blu, colors)) {
 	    fprintf(stdout, "%f: *\n", fval);
 	    return 0;
 	}
@@ -121,11 +122,11 @@ int main(int argc, char **argv)
 
     name = opt.input->answer;
 
-    type = G_raster_map_type(name, "");
+    type = Rast_raster_map_type(name, "");
     if (type < 0)
 	G_fatal_error("Unable to determine type of input map %s", name);
 
-    if (G_read_colors(name, "", &colors) < 0)
+    if (Rast_read_colors(name, "", &colors) < 0)
 	G_fatal_error("Unable to read colors for input map %s", name);
 
     fmt = opt.format->answer;

@@ -22,6 +22,7 @@
 
 #include <stdio.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/bitmap.h>
 #include <grass/Vect.h>
 

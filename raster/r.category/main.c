@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 
@@ -124,7 +125,7 @@ int main(int argc, char *argv[])
     if (mapset == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), name);
 
-    map_type = G_raster_map_type(name, mapset);
+    map_type = Rast_raster_map_type(name, mapset);
 
 
     /* create category labels */
@@ -146,20 +147,20 @@ int main(int argc, char *argv[])
 		G_fatal_error(_("Raster map <%s> not found"),
 			      parm.raster->answer);
 
-	    if ((fd = G_open_cell_old(name, mapset)) < 0)
+	    if ((fd = Rast_open_cell_old(name, mapset)) < 0)
 		G_fatal_error(_("Unable to open raster map <%s>"), name);
 
-	    G_init_raster_cats("", &cats);
+	    Rast_init_raster_cats("", &cats);
 
-	    if (0 > G_read_cats(parm.raster->answer, cmapset, &cats))
+	    if (0 > Rast_read_cats(parm.raster->answer, cmapset, &cats))
 		G_fatal_error(_("Unable to read category file of raster map <%s@%s>"),
 			      parm.raster->answer, cmapset);
 
-	    if (G_write_cats(name, &cats) >= 0)
+	    if (Rast_write_cats(name, &cats) >= 0)
 		G_message(_("Category table for <%s> set from <%s>"), name,
 			  parm.raster->answer);
 
-	    G_close_cell(fd);
+	    Rast_close_cell(fd);
 	}
 
 	/* load cats from rules file */
@@ -178,7 +179,7 @@ int main(int argc, char *argv[])
 				  parm.file->answer);
 	    }
 
-	    G_init_raster_cats("", &cats);
+	    Rast_init_raster_cats("", &cats);
 
 	    for (;;) {
 		char buf[1024], label[1024];
@@ -188,12 +189,12 @@ int main(int argc, char *argv[])
 		    break;
 
 		if (sscanf(buf, "%lf:%lf:%[^\n]", &d1, &d2, label) == 3)
-		    G_set_d_raster_cat(&d1, &d2, label, &cats);
+		    Rast_set_d_raster_cat(&d1, &d2, label, &cats);
 		else if (sscanf(buf, "%lf:%[^\n]", &d1, label) == 2)
-		    G_set_d_raster_cat(&d1, &d1, label, &cats);
+		    Rast_set_d_raster_cat(&d1, &d1, label, &cats);
 	    }
 
-	    if (G_write_cats(name, &cats) < 0)
+	    if (Rast_write_cats(name, &cats) < 0)
 		G_fatal_error(_("Cannot create category file for <%s>"),
 			      name);
 
@@ -207,9 +208,9 @@ int main(int argc, char *argv[])
 	    double m1, a1, m2, a2;
 
 	    /* read existing values */
-	    G_init_raster_cats("", &cats);
+	    Rast_init_raster_cats("", &cats);
 
-	    if (0 > G_read_cats(name, G_mapset(), &cats))
+	    if (0 > Rast_read_cats(name, G_mapset(), &cats))
 		G_warning(_("Unable to read category file of raster map <%s@%s>"),
 			  name, G_mapset());
 
@@ -237,18 +238,18 @@ int main(int argc, char *argv[])
 		a2 = atof(parm.fmt_coeff->answers[3]);
 	    }
 
-	    G_set_cats_fmt(fmt_str, m1, a1, m2, a2, &cats);
+	    Rast_set_cats_fmt(fmt_str, m1, a1, m2, a2, &cats);
 
-	    if (G_write_cats(name, &cats) != 1)
+	    if (Rast_write_cats(name, &cats) != 1)
 		G_fatal_error(_("Cannot create category file for <%s>"),
 			      name);
 	}
 
-	G_free_cats(&cats);
+	Rast_free_cats(&cats);
 	exit(EXIT_SUCCESS);
     }
     else {
-	if (G_read_cats(name, mapset, &cats) < 0)
+	if (Rast_read_cats(name, mapset, &cats) < 0)
 	    G_fatal_error(_("Unable to read category file of raster map <%s> in <%s>"),
 			  name, mapset);
     }
@@ -301,7 +302,7 @@ int print_label(long x)
 {
     char *label;
 
-    G_squeeze(label = G_get_cat((CELL) x, &cats));
+    G_squeeze(label = Rast_get_cat((CELL) x, &cats));
     fprintf(stdout, "%ld%c%s\n", x, fs, label);
 
     return 0;
@@ -313,7 +314,7 @@ int print_d_label(double x)
     DCELL dtmp;
 
     dtmp = x;
-    G_squeeze(label = G_get_d_raster_cat(&dtmp, &cats));
+    G_squeeze(label = Rast_get_d_raster_cat(&dtmp, &cats));
     sprintf(tmp, "%.10f", x);
     G_trim_decimal(tmp);
     fprintf(stdout, "%s%c%s\n", tmp, fs, label);

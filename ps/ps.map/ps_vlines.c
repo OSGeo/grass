@@ -6,6 +6,7 @@
  */
 
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include <grass/Vect.h>
 #include <grass/dbmi.h>
@@ -120,7 +121,7 @@ int PS_vlines_plot(struct Map_info *P_map, int vec, int type)
 	    else {
 		rgbstring = db_get_string(cv_rgb->val.s);
 		if (rgbstring == NULL ||
-		    G_str_to_color(rgbstring, &red, &grn, &blu) != 1) {
+		    Rast_str_to_color(rgbstring, &red, &grn, &blu) != 1) {
 		    G_warning(_("Invalid RGB color definition in column <%s> for category [%d]"),
 			      vector.layer[vec].rgbcol, cat);
 		    rgbstring = NULL;

@@ -30,6 +30,7 @@
 
 #include <stdlib.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/Vect.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
@@ -52,10 +53,10 @@ int sample_raster(const int ltype, int fdrast, struct Cell_head window,
 	/* sample raster at this point, and update the z-coordinate
 	 * (note that input vector should not be 3D!)
 	 */
-	estimated_elevation = scale * G_get_raster_sample(
+	estimated_elevation = scale * Rast_get_raster_sample(
 	    fdrast, &window, NULL, Points->y[0], Points->x[0], 0, method);
 	/* Elevation value has to be meaningfull */
-	if (G_is_d_null_value(&estimated_elevation)) {
+	if (Rast_is_d_null_value(&estimated_elevation)) {
 	    if (null_opt->answer) {
 		estimated_elevation = null_val;
 	    }
@@ -75,10 +76,10 @@ int sample_raster(const int ltype, int fdrast, struct Cell_head window,
 	/* loop through each point in a line */
 	for (j = 0; j < Points->n_points; j++) {
 	    /* sample raster at this point, and update the z-coordinate (note that input vector should not be 3D!) */
-	    estimated_elevation = scale * G_get_raster_sample(
+	    estimated_elevation = scale * Rast_get_raster_sample(
 		fdrast, &window, NULL, Points->y[j], Points->x[j], 0, method);
 
-	    if (G_is_d_null_value(&estimated_elevation)) {
+	    if (Rast_is_d_null_value(&estimated_elevation)) {
 		if (null_opt->answer) {
 		    estimated_elevation = null_val;
 		}
@@ -99,10 +100,10 @@ int sample_raster(const int ltype, int fdrast, struct Cell_head window,
 	/* loop through each point in a line */
 	for (j = 0; j < Points->n_points; j++) {
 	    /* sample raster at this point, and update the z-coordinate (note that input vector should not be 3D!) */
-	    estimated_elevation = scale * G_get_raster_sample(
+	    estimated_elevation = scale * Rast_get_raster_sample(
 		fdrast, &window, NULL, Points->y[j], Points->x[j], 0, method);
 
-	    if (G_is_d_null_value(&estimated_elevation)) {
+	    if (Rast_is_d_null_value(&estimated_elevation)) {
 		if (null_opt->answer) {
 		    estimated_elevation = null_val;
 		}
@@ -223,7 +224,7 @@ int main(int argc, char *argv[])
     otype = Vect_option_to_types(type_opt);
 
     /* open the elev raster, and check for error condition */
-    if ((fdrast = G_open_cell_old(rast_opt->answer, "")) < 0) {
+    if ((fdrast = Rast_open_cell_old(rast_opt->answer, "")) < 0) {
 	G_fatal_error(_("Unable to open raster map <%s>"), rast_opt->answer);
     }
 
@@ -366,7 +367,7 @@ int main(int argc, char *argv[])
     }				/* end working on type=lines */
 
     /* close elevation raster: */
-    G_close_cell(fdrast);
+    Rast_close_cell(fdrast);
     
     /* build topology for output vector */
     if (out_num > 0) {

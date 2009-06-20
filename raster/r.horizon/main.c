@@ -35,6 +35,7 @@ Joint Research Centre of the European Commission, based on bits of the r.sun mod
 #include <string.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
 
@@ -536,7 +537,7 @@ int INPUT(void)
     int l, i, j, k;
     int lmax, kmax;
 
-    cell1 = G_allocate_f_raster_buf();
+    cell1 = Rast_allocate_f_raster_buf();
 
     z = (float **)G_malloc(sizeof(float *) * (m));
     z100 = (float **)G_malloc(sizeof(float *) * (m100));
@@ -552,22 +553,22 @@ int INPUT(void)
     if ((mapset = G_find_cell2(elevin, "")) == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), elevin);
 
-    fd1 = G_open_cell_old(elevin, mapset);
+    fd1 = Rast_open_cell_old(elevin, mapset);
 
     for (row = 0; row < m; row++) {
-	G_get_f_raster_row(fd1, cell1, row);
+	Rast_get_f_raster_row(fd1, cell1, row);
 
 	for (j = 0; j < n; j++) {
 	    row_rev = m - row - 1;
 
-	    if (!G_is_f_null_value(cell1 + j))
+	    if (!Rast_is_f_null_value(cell1 + j))
 		z[row_rev][j] = (float)cell1[j];
 	    else
 		z[row_rev][j] = UNDEFZ;
 
 	}
     }
-    G_close_cell(fd1);
+    Rast_close_cell(fd1);
 
     /*create low resolution array 100 */
     for (i = 0; i < m100; i++) {
@@ -616,8 +617,8 @@ int OUTGR(int numrows, int numcols)
 	exit(EXIT_FAILURE);
 
     if (horizon != NULL) {
-	cell1 = G_allocate_f_raster_buf();
-	fd1 = G_open_fp_cell_new(shad_filename);
+	cell1 = Rast_allocate_f_raster_buf();
+	fd1 = Rast_open_fp_cell_new(shad_filename);
 	if (fd1 < 0)
 	    G_fatal_error(_("Unable to create raster map %s"), shad_filename);
     }
@@ -637,16 +638,16 @@ int OUTGR(int numrows, int numcols)
 	if (horizon != NULL) {
 	    for (j = 0; j < numcols; j++) {
 		if (horizon_raster[i][j] == UNDEFZ)
-		    G_set_f_null_value(cell1 + j, 1);
+		    Rast_set_f_null_value(cell1 + j, 1);
 		else
 		    cell1[j] = (FCELL) horizon_raster[i][j];
 	    }
-	    G_put_f_raster_row(fd1, cell1);
+	    Rast_put_f_raster_row(fd1, cell1);
 	}
 
     }				/* End loop over rows. */
 
-    G_close_cell(fd1);
+    Rast_close_cell(fd1);
 
 
 
@@ -1264,9 +1265,9 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
 		    exit(0);
 	    }
 
-	    G_short_history(shad_filename, "raster", &history);
-	    G_command_history(&history);
-	    G_write_history(shad_filename, &history);
+	    Rast_short_history(shad_filename, "raster", &history);
+	    Rast_command_history(&history);
+	    Rast_write_history(shad_filename, &history);
 
 
 	}

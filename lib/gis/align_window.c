@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 
 /*!
  * \brief Align two regions.
@@ -70,5 +71,5 @@ const char *G_align_window(struct Cell_head *window, const struct Cell_head *ref
 		window->east -= window->ew_res;
     }
 
-    return G_adjust_Cell_head(window, 0, 0);
+    return Rast_adjust_Cell_head(window, 0, 0);
 }

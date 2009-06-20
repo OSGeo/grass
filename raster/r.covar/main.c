@@ -21,6 +21,7 @@
 #include <string.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 
@@ -73,9 +74,9 @@ int main(int argc, char *argv[])
     sum2 = (double **)G_malloc(nfiles * sizeof(double *));
     for (i = 0; i < nfiles; i++) {
 	sum2[i] = (double *)G_calloc(nfiles, sizeof(double));
-	dcell[i] = G_allocate_d_raster_buf();
+	dcell[i] = Rast_allocate_d_raster_buf();
 	name = maps->answers[i];
-	fd[i] = G_open_cell_old(name, "");
+	fd[i] = Rast_open_cell_old(name, "");
 	if (fd[i] < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), name);
     }
@@ -88,13 +89,13 @@ int main(int argc, char *argv[])
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
 	for (i = 0; i < nfiles; i++) {
-	    if (G_get_d_raster_row(fd[i], dcell[i], row) < 0)
+	    if (Rast_get_d_raster_row(fd[i], dcell[i], row) < 0)
 		exit(1);
 	}
 	for (col = 0; col < ncols; col++) {
 	    /* ignore cells where any of the maps has null value */
 	    for (i = 0; i < nfiles; i++)
-		if (G_is_d_null_value(&dcell[i][col]))
+		if (Rast_is_d_null_value(&dcell[i][col]))
 		    break;
 	    if (i != nfiles)
 		continue;

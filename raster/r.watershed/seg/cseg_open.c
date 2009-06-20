@@ -1,4 +1,5 @@
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include "cseg.h"

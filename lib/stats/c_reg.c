@@ -1,4 +1,5 @@
 #include <grass/gis.h>
+#include <grass/Rast.h>
 
 #define REGRESSION_SLOPE	0
 #define REGRESSION_OFFSET	1
@@ -16,7 +17,7 @@ static void regression(DCELL * result, DCELL * values, int n, int which)
     count = 0;
 
     for (i = 0; i < n; i++) {
-	if (G_is_d_null_value(&values[i]))
+	if (Rast_is_d_null_value(&values[i]))
 	    continue;
 
 	xsum += i;
@@ -25,7 +26,7 @@ static void regression(DCELL * result, DCELL * values, int n, int which)
     }
 
     if (count < 2) {
-	G_set_d_null_value(result, 1);
+	Rast_set_d_null_value(result, 1);
 	return;
     }
 
@@ -34,13 +35,13 @@ static void regression(DCELL * result, DCELL * values, int n, int which)
 
     numer = 0.0;
     for (i = 0; i < n; i++)
-	if (!G_is_d_null_value(&values[i]))
+	if (!Rast_is_d_null_value(&values[i]))
 	    numer += i * values[i];
     numer -= count * xbar * ybar;
 
     denom = 0.0;
     for (i = 0; i < n; i++)
-	if (!G_is_d_null_value(&values[i]))
+	if (!Rast_is_d_null_value(&values[i]))
 	    denom += (DCELL) i *i;
 
     denom -= count * xbar * xbar;
@@ -48,7 +49,7 @@ static void regression(DCELL * result, DCELL * values, int n, int which)
     if (which == REGRESSION_COEFF_DET) {
 	denom2 = 0.0;
 	for (i = 0; i < n; i++)
-	    if (!G_is_d_null_value(&values[i]))
+	    if (!Rast_is_d_null_value(&values[i]))
 		denom2 += values[i] * values[i];
 	denom2 -= count * ybar * ybar;
     }
@@ -64,13 +65,13 @@ static void regression(DCELL * result, DCELL * values, int n, int which)
 	*result = (numer * numer) / (denom * denom2);
 	break;
     default:
-	G_set_d_null_value(result, 1);
+	Rast_set_d_null_value(result, 1);
 	break;
     }
 
     /* Check for NaN */
     if (*result != *result)
-	G_set_d_null_value(result, 1);
+	Rast_set_d_null_value(result, 1);
 }
 
 void c_reg_m(DCELL * result, DCELL * values, int n, const void *closure)
@@ -100,7 +101,7 @@ static void regression_w(DCELL * result, DCELL(*values)[2], int n, int which)
     count = 0;
 
     for (i = 0; i < n; i++) {
-	if (G_is_d_null_value(&values[i][0]))
+	if (Rast_is_d_null_value(&values[i][0]))
 	    continue;
 
 	xsum += i * values[i][1];
@@ -109,7 +110,7 @@ static void regression_w(DCELL * result, DCELL(*values)[2], int n, int which)
     }
 
     if (count < 2) {
-	G_set_d_null_value(result, 1);
+	Rast_set_d_null_value(result, 1);
 	return;
     }
 
@@ -118,13 +119,13 @@ static void regression_w(DCELL * result, DCELL(*values)[2], int n, int which)
 
     numer = 0.0;
     for (i = 0; i < n; i++)
-	if (!G_is_d_null_value(&values[i][0]))
+	if (!Rast_is_d_null_value(&values[i][0]))
 	    numer += i * values[i][0] * values[i][1];
     numer -= count * xbar * ybar;
 
     denom = 0.0;
     for (i = 0; i < n; i++)
-	if (!G_is_d_null_value(&values[i][0]))
+	if (!Rast_is_d_null_value(&values[i][0]))
 	    denom += (DCELL) i *i * values[i][1];
 
     denom -= count * xbar * xbar;
@@ -132,7 +133,7 @@ static void regression_w(DCELL * result, DCELL(*values)[2], int n, int which)
     if (which == REGRESSION_COEFF_DET) {
 	denom2 = 0.0;
 	for (i = 0; i < n; i++)
-	    if (!G_is_d_null_value(&values[i][0]))
+	    if (!Rast_is_d_null_value(&values[i][0]))
 		denom2 += values[i][0] * values[i][0] * values[i][1];
 	denom2 -= count * ybar * ybar;
     }
@@ -148,13 +149,13 @@ static void regression_w(DCELL * result, DCELL(*values)[2], int n, int which)
 	*result = (numer * numer) / (denom * denom2);
 	break;
     default:
-	G_set_d_null_value(result, 1);
+	Rast_set_d_null_value(result, 1);
 	break;
     }
 
     /* Check for NaN */
     if (*result != *result)
-	G_set_d_null_value(result, 1);
+	Rast_set_d_null_value(result, 1);
 }
 
 void w_reg_m(DCELL * result, DCELL(*values)[2], int n, const void *closure)

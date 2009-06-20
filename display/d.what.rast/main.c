@@ -123,7 +123,7 @@ int main(int argc, char **argv)
 	    if (j > mwidth)
 		mwidth = j;
 
-	    if (G_read_cats(name[i], mapset[i], &cats[i]) < 0)
+	    if (Rast_read_cats(name[i], mapset[i], &cats[i]) < 0)
 		cats[i].ncats = -1;
 	}
     }

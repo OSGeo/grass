@@ -112,12 +112,12 @@ extern expression *binding(const char *var, expression * val);
 
 extern func_desc func_descs[];
 
-#define IS_NULL_C(x) (G_is_c_null_value((x)))
-#define IS_NULL_F(x) (G_is_f_null_value((x)))
-#define IS_NULL_D(x) (G_is_d_null_value((x)))
+#define IS_NULL_C(x) (Rast_is_c_null_value((x)))
+#define IS_NULL_F(x) (Rast_is_f_null_value((x)))
+#define IS_NULL_D(x) (Rast_is_d_null_value((x)))
 
-#define SET_NULL_C(x) (G_set_c_null_value((x),1))
-#define SET_NULL_F(x) (G_set_f_null_value((x),1))
-#define SET_NULL_D(x) (G_set_d_null_value((x),1))
+#define SET_NULL_C(x) (Rast_set_c_null_value((x),1))
+#define SET_NULL_F(x) (Rast_set_f_null_value((x),1))
+#define SET_NULL_D(x) (Rast_set_d_null_value((x),1))
 
 #endif /* __EXPRESSION_H_ */

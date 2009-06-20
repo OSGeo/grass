@@ -12,6 +12,7 @@
 
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/segment.h>
 #include <grass/glocale.h>
 #include "point.h"
@@ -113,7 +114,7 @@ struct point *hidden_point_elimination(struct point *head, int viewpt_elev,
 			    row_viewpt - CHECKED_PT_Y,
 			    col_viewpt + CHECKED_PT_X);
 
-		if (mask == 0 || G_is_null_value(&mask, CELL_TYPE)) {
+		if (mask == 0 || Rast_is_null_value(&mask, CELL_TYPE)) {
 		    head = delete(CHECKED_PT, head, seg_out_p,
 				  row_viewpt, col_viewpt);
 		    goto next_iter;
@@ -200,7 +201,7 @@ struct point *hidden_point_elimination(struct point *head, int viewpt_elev,
 	if (patt_flag == 1) {
 	    segment_get(seg_patt_p, &mask, row_viewpt - BLOCKING_PT_Y,
 			col_viewpt + BLOCKING_PT_X);
-	    if (mask == 0 || G_is_null_value(&mask, CELL_TYPE)) {
+	    if (mask == 0 || Rast_is_null_value(&mask, CELL_TYPE)) {
 	    
 	      /* Commenting out the following fixes a bug in r.los.
 		 In that program the 8 cells around the viewpoint

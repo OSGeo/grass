@@ -1,4 +1,5 @@
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "ncb.h"
 
 /*
@@ -58,8 +59,8 @@ int gather(DCELL * values, int offset)
 	    if (ncb.mask && !ncb.mask[row][col])
 		continue;
 
-	    if (G_is_d_null_value(c))
-		G_set_d_null_value(&values[n], 1);
+	    if (Rast_is_d_null_value(c))
+		Rast_set_d_null_value(&values[n], 1);
 	    else
 		values[n] = *c;
 
@@ -81,8 +82,8 @@ int gather_w(DCELL(*values)[2], int offset)
 	for (col = 0; col < ncb.nsize; col++) {
 	    DCELL *c = &ncb.buf[row][offset + col];
 
-	    if (G_is_d_null_value(c))
-		G_set_d_null_value(&values[n][0], 1);
+	    if (Rast_is_d_null_value(c))
+		Rast_set_d_null_value(&values[n][0], 1);
 	    else
 		values[n][0] = *c;
 

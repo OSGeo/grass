@@ -33,6 +33,7 @@
 #include <unistd.h>
 
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/site.h>
 #include <grass/Vect.h>
 #include "userglobs.h"
@@ -642,10 +643,10 @@ int main(int argc, char *argv[])
 	    mapset = G_find_cell2(cellinp, "");
 	    if (mapset == NULL)
 		G_fatal_error(_("Raster map <%s> not found"), cellinp);
-	    fdcell = G_open_cell_old(cellinp, mapset);
+	    fdcell = Rast_open_cell_old(cellinp, mapset);
 	    if (fdcell < 0)
 		G_fatal_error(_("Unable to open raster map <%s>"), cellinp);
-	    fdcout = G_open_fp_cell_new(cellout);
+	    fdcout = Rast_open_fp_cell_new(cellout);
 	    if (fdcout < 0)
 		G_fatal_error(_("Cannot open %s"), cellout);
 	    zero_array_cell = (FCELL *) G_malloc(sizeof(FCELL) * n_cols);
@@ -842,9 +843,9 @@ int main(int argc, char *argv[])
 
 	    OUTGR();
 	    if ((cellinp != NULL)) {
-		G_close_cell(fdcout);
+		Rast_close_cell(fdcout);
 		if ((cellout != NULL)) {
-		    G_short_history(cellout, "raster", &hist);
+		    Rast_short_history(cellout, "raster", &hist);
 		    /* TODO: next lines need to be verified! */
 		    sprintf(hist.edhist[0], "tension=%f, smoothing=%f", fi,
 			    rsm);
@@ -858,12 +859,12 @@ int main(int argc, char *argv[])
 		    /* ? sprintf (hist.edhist[4], "wmin_int=%f, wmax_int=%f", wminac, wmaxac); */
 		    hist.edlinecnt = 5;
 
-		    G_command_history(&hist);
-		    G_write_history(cellout, &hist);
+		    Rast_command_history(&hist);
+		    Rast_write_history(cellout, &hist);
 		    fclose(Tmp_fd_cell);
 		    unlink(Tmp_file_cell);
 		}
-		G_close_cell(fdcell);
+		Rast_close_cell(fdcell);
 	    }
 	    if (outz != NULL) {
 		fclose(Tmp_fd_z);

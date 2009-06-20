@@ -13,6 +13,7 @@
  */
 
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <math.h>
 #include "r.proj.h"
 
@@ -40,7 +41,7 @@ void p_cubic(struct cache *ibuffer,	/* input buffer                  */
     /* check for out of bounds of map - if out of bounds set NULL value     */
     if (row - 1 < 0 || row + 2 >= cellhd->rows ||
 	col - 1 < 0 || col + 2 >= cellhd->cols) {
-	G_set_null_value(obufptr, 1, cell_type);
+	Rast_set_null_value(obufptr, 1, cell_type);
 	return;
     }
 
@@ -51,8 +52,8 @@ void p_cubic(struct cache *ibuffer,	/* input buffer                  */
     /* check for NULL value                                         */
     for (i = 0; i < 4; i++)
 	for (j = 0; j < 4; j++) {
-	    if (G_is_f_null_value(cellp[i][j])) {
-		G_set_null_value(obufptr, 1, cell_type);
+	    if (Rast_is_f_null_value(cellp[i][j])) {
+		Rast_set_null_value(obufptr, 1, cell_type);
 		return;
 	    }
 	}
@@ -64,10 +65,10 @@ void p_cubic(struct cache *ibuffer,	/* input buffer                  */
     for (i = 0; i < 4; i++) {
 	FCELL **tmp = cellp[i];
 
-	val[i] = G_interp_cubic(t, *tmp[0], *tmp[1], *tmp[2], *tmp[3]);
+	val[i] = Rast_interp_cubic(t, *tmp[0], *tmp[1], *tmp[2], *tmp[3]);
     }
 
-    result = G_interp_cubic(u, val[0], val[1], val[2], val[3]);
+    result = Rast_interp_cubic(u, val[0], val[1], val[2], val[3]);
 
-    G_set_raster_value_f(obufptr, result, cell_type);
+    Rast_set_raster_value_f(obufptr, result, cell_type);
 }

@@ -38,6 +38,7 @@
 #include <string.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/display_raster.h>
 #include <grass/display.h>
 #include <grass/colors.h>
@@ -231,7 +232,7 @@ int main(int argc, char **argv)
     if (align->answer) {
 	struct Cell_head wind;
 
-	if (G_get_cellhd(layer_name, "", &wind) < 0)
+	if (Rast_get_cellhd(layer_name, "", &wind) < 0)
 	    G_fatal_error(_("Unable to read header of raster map <%s>"), layer_name);
 
 	/* expand window extent by one wind resolution */
@@ -267,10 +268,10 @@ int main(int argc, char **argv)
 
     /* figure out arrow scaling if using a magnitude map */
     if (opt7->answer) {
-	G_init_fp_range(&range);	/* really needed? */
-	if (G_read_fp_range(mag_map, "", &range) != 1)
+	Rast_init_fp_range(&range);	/* really needed? */
+	if (Rast_read_fp_range(mag_map, "", &range) != 1)
 	    G_fatal_error(_("Problem reading range file"));
-	G_get_fp_range_min_max(&range, &mag_min, &mag_max);
+	Rast_get_fp_range_min_max(&range, &mag_min, &mag_max);
 
 	scale *= 1.5 / fabs(mag_max);
 	G_debug(3, "scaling=%.2f  rast_max=%.2f", scale, mag_max);
@@ -290,26 +291,26 @@ int main(int argc, char **argv)
     }
 
     /* open the raster map */
-    layer_fd = G_open_cell_old(layer_name, "");
+    layer_fd = Rast_open_cell_old(layer_name, "");
     if (layer_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), layer_name);
 
-    raster_type = G_get_raster_map_type(layer_fd);
+    raster_type = Rast_get_raster_map_type(layer_fd);
 
     /* allocate the cell array */
-    raster_row = G_allocate_raster_buf(raster_type);
+    raster_row = Rast_allocate_raster_buf(raster_type);
 
 
     if (opt7->answer) {
 	/* open the magnitude raster map */
-	mag_fd = G_open_cell_old(mag_map, "");
+	mag_fd = Rast_open_cell_old(mag_map, "");
 	if (mag_fd < 0)
 	    G_fatal_error("Unable to open raster map <%s>", mag_map);
 
-	mag_raster_type = G_get_raster_map_type(mag_fd);
+	mag_raster_type = Rast_get_raster_map_type(mag_fd);
 
 	/* allocate the cell array */
-	mag_raster_row = G_allocate_raster_buf(mag_raster_type);
+	mag_raster_row = Rast_allocate_raster_buf(mag_raster_type);
     }
 
 
@@ -317,11 +318,11 @@ int main(int argc, char **argv)
        and call appropriate function to draw an arrow on the cell */
 
     for (row = 0; row < nrows; row++) {
-	G_get_raster_row(layer_fd, raster_row, row, raster_type);
+	Rast_get_raster_row(layer_fd, raster_row, row, raster_type);
 	ptr = raster_row;
 
 	if (opt7->answer) {
-	    G_get_raster_row(mag_fd, mag_raster_row, row, mag_raster_type);
+	    Rast_get_raster_row(mag_fd, mag_raster_row, row, mag_raster_type);
 	    mag_ptr = mag_raster_row;
 	}
 
@@ -355,7 +356,7 @@ int main(int argc, char **argv)
 
 		length *= scale;
 
-		if (G_is_null_value(mag_ptr, mag_raster_type)) {
+		if (Rast_is_null_value(mag_ptr, mag_raster_type)) {
 		    G_debug(5, "Invalid arrow length [NULL]. Skipping.");
 		    no_arrow = TRUE;
 		}
@@ -367,11 +368,11 @@ int main(int argc, char **argv)
 	    }
 
 	    if (no_arrow) {
-		ptr = G_incr_void_ptr(ptr, G_raster_size(raster_type));
+		ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(raster_type));
 		if (opt7->answer)
 		    mag_ptr =
-			G_incr_void_ptr(mag_ptr,
-					G_raster_size(mag_raster_type));
+			Rast_incr_void_ptr(mag_ptr,
+					Rast_raster_size(mag_raster_type));
 		no_arrow = FALSE;
 		continue;
 	    }
@@ -379,7 +380,7 @@ int main(int argc, char **argv)
 	    /* treat AGNPS and ANSWERS data like old zero-as-null CELL */
 	    /*   TODO: update models */
 	    if (map_type == 2 || map_type == 3) {
-		if (G_is_null_value(ptr, raster_type))
+		if (Rast_is_null_value(ptr, raster_type))
 		    aspect_c = 0;
 		else
 		    aspect_c = (int)(aspect_f + 0.5);
@@ -393,7 +394,7 @@ int main(int argc, char **argv)
 	    if (map_type == 1) {
 		D_use_color(arrow_color);
 
-		if (G_is_null_value(ptr, raster_type)) {
+		if (Rast_is_null_value(ptr, raster_type)) {
 		    D_use_color(x_color);
 		    draw_x();
 		    D_use_color(arrow_color);
@@ -476,7 +477,7 @@ int main(int argc, char **argv)
 	    else if (map_type == 4) {
 		D_use_color(arrow_color);
 
-		if (G_is_null_value(ptr, raster_type)) {
+		if (Rast_is_null_value(ptr, raster_type)) {
 		    D_use_color(x_color);
 		    draw_x();
 		    D_use_color(arrow_color);
@@ -494,16 +495,16 @@ int main(int argc, char **argv)
 		}
 	    }
 
-	    ptr = G_incr_void_ptr(ptr, G_raster_size(raster_type));
+	    ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(raster_type));
 	    if (opt7->answer)
 		mag_ptr =
-		    G_incr_void_ptr(mag_ptr, G_raster_size(mag_raster_type));
+		    Rast_incr_void_ptr(mag_ptr, Rast_raster_size(mag_raster_type));
 	}
     }
 
-    G_close_cell(layer_fd);
+    Rast_close_cell(layer_fd);
     if (opt7->answer)
-	G_close_cell(mag_fd);
+	Rast_close_cell(mag_fd);
 
     R_close_driver();
 

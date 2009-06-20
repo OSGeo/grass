@@ -1,6 +1,9 @@
 #include <stdlib.h>
+
+#include <grass/Rast.h>
 #include <grass/imagery.h>
 #include <grass/glocale.h>
+
 #include "files.h"
 #include "parms.h"
 
@@ -27,20 +30,20 @@ int openfiles(struct parms *parms, struct files *files)
 
     /* open training map for reading */
     mapset = G_find_cell2(parms->training_map, "");
-    files->train_fd = G_open_cell_old(parms->training_map, mapset);
+    files->train_fd = Rast_open_cell_old(parms->training_map, mapset);
     if (files->train_fd < 0)
 	G_fatal_error(_("Unable to open training map <%s>"),
 		      parms->training_map);
-    files->train_cell = G_allocate_c_raster_buf();
+    files->train_cell = Rast_allocate_c_raster_buf();
 
     /* open all maps for reading */
     for (n = 0; n < Ref.nfiles; n++) {
 	files->band_fd[n] =
-	    G_open_cell_old(Ref.file[n].name, Ref.file[n].mapset);
+	    Rast_open_cell_old(Ref.file[n].name, Ref.file[n].mapset);
 	if (files->band_fd[n] < 0)
 	    G_fatal_error(_("Unable to open training map <%s in %s>"),
 			  Ref.file[n].name, Ref.file[n].mapset);
-	files->band_cell[n] = G_allocate_d_raster_buf();
+	files->band_cell[n] = Rast_allocate_d_raster_buf();
     }
 
     return 0;

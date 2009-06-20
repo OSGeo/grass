@@ -40,6 +40,7 @@
 #include <unistd.h>
 
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/site.h>
 #include <grass/glocale.h>
 #include <grass/Vect.h>
@@ -180,7 +181,7 @@ int main(int argc, char **argv)
 			  ("Direction raster not specified, if direction flag is on, a direction raster must be given"));
 	}
 	strcpy(dir_name, opt3->answer);
-	dir_data_type = G_raster_map_type(dir_name, "");
+	dir_data_type = Rast_raster_map_type(dir_name, "");
     }
     if (costmode == 0) {
 	if (opt3->answer) {
@@ -202,7 +203,7 @@ int main(int argc, char **argv)
 	Vect_hist_command(&vout);
     }
     /*      allocate cell buf for the map layer */
-    in_type = G_raster_map_type(map_name, "");
+    in_type = Rast_raster_map_type(map_name, "");
 
     /* set the pointers for multi-typed functions */
     set_func_pointers(in_type);
@@ -342,7 +343,7 @@ int main(int argc, char **argv)
     in_buf = get_buf();
 
     /* open the original map and get its file id  */
-    map_id = G_open_cell_old(map_name, "");
+    map_id = Rast_open_cell_old(map_name, "");
 
     /* get some temp files */
     tempfile1 = G_tempfile();
@@ -356,19 +357,19 @@ int main(int argc, char **argv)
 	get_row(map_id, in_buf, i);
 	write(fe, in_buf, bnd.sz);
     }
-    G_close_cell(map_id);
+    Rast_close_cell(map_id);
 
     if (costmode == 1) {
-	dir_buf = G_allocate_d_raster_buf();
-	dir_id = G_open_cell_old(dir_name, "");
+	dir_buf = Rast_allocate_d_raster_buf();
+	dir_id = Rast_open_cell_old(dir_name, "");
 	tempfile3 = G_tempfile();
 	dir_fd = open(tempfile3, O_RDWR | O_CREAT, 0666);
 
 	for (i = 0; i < nrows; i++) {
-	    G_get_d_raster_row(dir_id, dir_buf, i);
+	    Rast_get_d_raster_row(dir_id, dir_buf, i);
 	    write(dir_fd, dir_buf, ncols * sizeof(DCELL));
 	}
-	G_close_cell(dir_id);
+	Rast_close_cell(dir_id);
     }
 
     /* only necessary for non-dir drain */
@@ -415,8 +416,8 @@ int main(int argc, char **argv)
 
 	/* Output will be a cell map */
 	/* open a new file and allocate an output buffer */
-	new_id = G_open_cell_new(new_map_name);
-	out_buf = G_allocate_c_raster_buf();
+	new_id = Rast_open_cell_new(new_map_name);
+	out_buf = Rast_allocate_c_raster_buf();
 
 	/* mark each cell */
 	thispoint = list;
@@ -446,21 +447,21 @@ int main(int argc, char **argv)
 		  new_map_name);
 	for (i = 0; i < nrows; i++) {
 	    G_percent(i, nrows, 2);
-	    G_set_c_null_value(out_buf, ncols);
+	    Rast_set_c_null_value(out_buf, ncols);
 	    thispoint = list;
 	    while (thispoint->next != NULL) {
 		if (thispoint->row == i)
 		    out_buf[thispoint->col] = (int)thispoint->value;
 		thispoint = thispoint->next;
 	    }
-	    G_put_c_raster_row(new_id, out_buf);
+	    Rast_put_c_raster_row(new_id, out_buf);
 	}
 	G_percent(1, 1, 1);
     }
     else {			/* mode = 1 or 2 */
 	/* Output will be of the same type as input */
 	/* open a new file and allocate an output buffer */
-	new_id = G_open_raster_new(new_map_name, in_type);
+	new_id = Rast_open_raster_new(new_map_name, in_type);
 	out_buf = get_buf();
 	bsz = ncols * bpe();
 
@@ -545,13 +546,13 @@ int main(int argc, char **argv)
     }
 
     /* close files and free buffers */
-    G_close_cell(new_id);
+    Rast_close_cell(new_id);
 
-    G_put_cell_title(new_map_name, "Surface flow trace");
+    Rast_put_cell_title(new_map_name, "Surface flow trace");
 
-    G_short_history(new_map_name, "raster", &history);
-    G_command_history(&history);
-    G_write_history(new_map_name, &history);
+    Rast_short_history(new_map_name, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(new_map_name, &history);
 
     close(fe);
     close(fd);
@@ -577,7 +578,7 @@ struct point *drain(int fd, struct point *list, int nrow, int ncol)
     CELL direction;
     CELL *dir;
 
-    dir = G_allocate_c_raster_buf();
+    dir = Rast_allocate_c_raster_buf();
     next_row = list->row;
     next_col = list->col;
 
@@ -643,7 +644,7 @@ struct point *drain_cost(int dir_fd, struct point *list, int nrow, int ncol)
     DCELL direction;
     DCELL *dir_buf;
 
-    dir_buf = G_allocate_d_raster_buf();
+    dir_buf = Rast_allocate_d_raster_buf();
 
     next_row = list->row;
     next_col = list->col;

@@ -1,4 +1,5 @@
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/Vect.h>
 #include "local.h"
 
@@ -143,16 +144,16 @@ int output_raster(int fd)
 	    cell = raster.cell[i];
 
 	    /* insert the NULL values */
-	    G_insert_c_null_values(cell, null_flags[i], page.cols);
-	    if (G_put_c_raster_row(fd, cell) < 0)
+	    Rast_insert_c_null_values(cell, null_flags[i], page.cols);
+	    if (Rast_put_c_raster_row(fd, cell) < 0)
 		return -1;
 	    break;
 	case USE_DCELL:
 	    dcell = raster.dcell[i];
 
 	    /* insert the NULL values */
-	    G_insert_d_null_values(dcell, null_flags[i], page.cols);
-	    if (G_put_d_raster_row(fd, dcell) < 0)
+	    Rast_insert_d_null_values(dcell, null_flags[i], page.cols);
+	    if (Rast_put_d_raster_row(fd, dcell) < 0)
 		return -1;
 	    break;
 	}

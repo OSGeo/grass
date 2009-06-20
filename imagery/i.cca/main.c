@@ -38,6 +38,7 @@
 #include <string.h>
 #include <math.h>
 
+#include <grass/Rast.h>
 #include <grass/imagery.h>
 #include <grass/gmath.h>
 #include <grass/glocale.h>
@@ -167,14 +168,14 @@ int main(int argc, char *argv[])
 	outbandmax[i] = (CELL) 0;
 	outbandmin[i] = (CELL) 0;
 
-	if ((datafds[i] = G_open_cell_old(refs.file[i - 1].name,
+	if ((datafds[i] = Rast_open_cell_old(refs.file[i - 1].name,
 					  refs.file[i - 1].mapset)) < 0) {
 	    G_fatal_error(_("Cannot open raster map <%s>"),
 			  refs.file[i - 1].name);
 	}
 
 	sprintf(tempname, "%s.%d", out_opt->answer, i);
-	if ((outfds[i] = G_open_cell_new(tempname)) < 0)
+	if ((outfds[i] = Rast_open_cell_new(tempname)) < 0)
 	    G_fatal_error(_("Cannot create raster map <%s>"), tempname);
     }
 
@@ -183,23 +184,23 @@ int main(int argc, char *argv[])
 	      outbandmin, outbandmax);
 
     /* make grey scale color table */
-    G_init_colors(&color_tbl);
+    Rast_init_colors(&color_tbl);
 
     /* close the cell maps */
     for (i = 1; i <= bands; i++) {
-	G_close_cell(datafds[i]);
-	G_close_cell(outfds[i]);
+	Rast_close_cell(datafds[i]);
+	Rast_close_cell(outfds[i]);
 
 	if (outbandmin[i] < (CELL) 0 || outbandmax[i] > (CELL) 255) {
 	    G_warning(_("The output cell map <%s.%d> has values "
 			"outside the 0-255 range."), out_opt->answer, i);
 	}
 
-	G_make_grey_scale_colors(&color_tbl, 0, outbandmax[i]);
+	Rast_make_grey_scale_colors(&color_tbl, 0, outbandmax[i]);
 	sprintf(tempname, "%s.%d", out_opt->answer, i);
 
 	/* write a color table */
-	G_write_colors(tempname, G_mapset(), &color_tbl);
+	Rast_write_colors(tempname, G_mapset(), &color_tbl);
     }
 
     I_free_signatures(&sigs);

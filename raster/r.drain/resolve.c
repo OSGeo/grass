@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "tinf.h"
 
 CELL select_dir(CELL i)
@@ -38,7 +39,7 @@ void flink(int i, int j, int nl, int ns, CELL * p1, CELL * p2, CELL * p3,
     int k;
 
     cwork = p2[j];
-    if (G_is_c_null_value(p2 + j) || cwork >= 0 || cwork == -256)
+    if (Rast_is_c_null_value(p2 + j) || cwork >= 0 || cwork == -256)
 	return;
     cwork = -cwork;
 
@@ -110,7 +111,7 @@ void resolve(int fd, int nl, struct band3 *bnd)
 	read(fd, bnd->b[0], bnd->sz);
 	for (j = 1; j < bnd->ns - 1; j += 1) {
 	    offset = j * isz;
-	    if (G_is_c_null_value((void *)(bnd->b[0] + offset)))
+	    if (Rast_is_c_null_value((void *)(bnd->b[0] + offset)))
 		continue;
 	    memcpy(&cvalue, bnd->b[0] + offset, isz);
 	    if (cvalue > 0)

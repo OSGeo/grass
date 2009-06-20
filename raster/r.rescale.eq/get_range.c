@@ -1,4 +1,5 @@
 #include <grass/gis.h>
+#include <grass/Rast.h>
 
 int get_range(struct Cell_stats *statf, CELL * min, CELL * max, int zero)
 {
@@ -8,8 +9,8 @@ int get_range(struct Cell_stats *statf, CELL * min, CELL * max, int zero)
 
     any = *min = *max = 0;
 
-    G_rewind_cell_stats(statf);
-    while (!any && G_next_cell_stat(&cat, &count, statf)) {
+    Rast_rewind_cell_stats(statf);
+    while (!any && Rast_next_cell_stat(&cat, &count, statf)) {
 	if (zero || cat)
 	    any = 1;
     }
@@ -17,7 +18,7 @@ int get_range(struct Cell_stats *statf, CELL * min, CELL * max, int zero)
 	return 0;
     *min = *max = cat;
 
-    while (G_next_cell_stat(&cat, &count, statf)) {
+    while (Rast_next_cell_stat(&cat, &count, statf)) {
 	if (zero || cat)
 	    *max = cat;
     }

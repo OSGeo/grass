@@ -4,8 +4,11 @@
 #include <unistd.h>
 #include <rpc/types.h>
 #include <rpc/xdr.h>
+
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
+
 #include "G3d_intern.h"
 
 /*---------------------------------------------------------------------------*/
@@ -22,19 +25,19 @@ G3d_range_updateFromTile(G3D_Map * map, const void *tile, int rows, int cols,
     cellType = G3d_g3dType2cellType(type);
 
     if (nofNum == map->tileSize) {
-	G_row_update_fp_range(tile, map->tileSize, range, cellType);
+	Rast_row_update_fp_range(tile, map->tileSize, range, cellType);
 	return;
     }
 
     if (xRedundant) {
 	for (z = 0; z < depths; z++) {
 	    for (y = 0; y < rows; y++) {
-		G_row_update_fp_range(tile, cols, range, cellType);
-		tile = G_incr_void_ptr(tile, map->tileX * G3d_length(type));
+		Rast_row_update_fp_range(tile, cols, range, cellType);
+		tile = Rast_incr_void_ptr(tile, map->tileX * G3d_length(type));
 	    }
 	    if (yRedundant)
 		tile =
-		    G_incr_void_ptr(tile,
+		    Rast_incr_void_ptr(tile,
 				    map->tileX * yRedundant *
 				    G3d_length(type));
 	}
@@ -43,27 +46,27 @@ G3d_range_updateFromTile(G3D_Map * map, const void *tile, int rows, int cols,
 
     if (yRedundant) {
 	for (z = 0; z < depths; z++) {
-	    G_row_update_fp_range(tile, map->tileX * rows, range, cellType);
-	    tile = G_incr_void_ptr(tile, map->tileXY * G3d_length(type));
+	    Rast_row_update_fp_range(tile, map->tileX * rows, range, cellType);
+	    tile = Rast_incr_void_ptr(tile, map->tileXY * G3d_length(type));
 	}
 	return;
     }
 
-    G_row_update_fp_range(tile, map->tileXY * depths, range, cellType);
+    Rast_row_update_fp_range(tile, map->tileXY * depths, range, cellType);
 }
 
 /*---------------------------------------------------------------------------*/
 
 int
 G3d_readRange(const char *name, const char *mapset, struct FPRange *drange)
- /* adapted from G_read_fp_range */
+ /* adapted from Rast_read_fp_range */
 {
     int fd;
     char xdr_buf[100];
     DCELL dcell1, dcell2;
     XDR xdr_str;
 
-    G_init_fp_range(drange);
+    Rast_init_fp_range(drange);
 
     fd = -1;
 
@@ -89,8 +92,8 @@ G3d_readRange(const char *name, const char *mapset, struct FPRange *drange)
 	return -1;
     }
 
-    G_update_fp_range(dcell1, drange);
-    G_update_fp_range(dcell2, drange);
+    Rast_update_fp_range(dcell1, drange);
+    Rast_update_fp_range(dcell2, drange);
     close(fd);
     return 1;
 }
@@ -136,13 +139,13 @@ int G3d_range_load(G3D_Map * map)
 
 void G3d_range_min_max(G3D_Map * map, double *min, double *max)
 {
-    G_get_fp_range_min_max(&(map->range), min, max);
+    Rast_get_fp_range_min_max(&(map->range), min, max);
 }
 
 /*-------------------------------------------------------------------------*/
 
 static int writeRange(const char *name, struct FPRange *range)
- /* adapted from G_write_fp_range */
+ /* adapted from Rast_write_fp_range */
 {
     char xdr_buf[100];
     int fd;
@@ -214,6 +217,6 @@ int G3d_range_write(G3D_Map * map)
 
 int G3d_range_init(G3D_Map * map)
 {
-    G_init_fp_range(&(map->range));
+    Rast_init_fp_range(&(map->range));
     return 0;
 }

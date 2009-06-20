@@ -16,6 +16,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
 
@@ -74,11 +75,11 @@ int main(int argc, char *argv[])
     result1 = output1->answer;
 
     /***************************************************/ 
-    if ((infd = G_open_cell_old(in, "")) < 0)
+    if ((infd = Rast_open_cell_old(in, "")) < 0)
 	G_fatal_error(_("Cannot open cell file [%s]"), in);
-    if (G_get_cellhd(in, "", &cellhd) < 0)
+    if (Rast_get_cellhd(in, "", &cellhd) < 0)
 	G_fatal_error(_("Cannot read file header of [%s])"), in);
-    inrast = G_allocate_d_raster_buf();
+    inrast = Rast_allocate_d_raster_buf();
     
     /***************************************************/ 
     stepx = cellhd.ew_res;
@@ -113,16 +114,16 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Unable to set up lat/long projection parameters"));
     }	/* End of stolen from r.sun */
 
-    outrast1 = G_allocate_d_raster_buf();
+    outrast1 = Rast_allocate_d_raster_buf();
 
-    if ((outfd1 = G_open_raster_new(result1,DCELL_TYPE)) < 0)
+    if ((outfd1 = Rast_open_raster_new(result1,DCELL_TYPE)) < 0)
 	G_fatal_error(_("Could not open <%s>"), result1);
 
     for (row = 0; row < nrows; row++)
     {
 	G_percent(row, nrows, 2);
 
-	if (G_get_d_raster_row(infd, inrast, row) < 0)
+	if (Rast_get_d_raster_row(infd, inrast, row) < 0)
 	    G_fatal_error(_("Could not read from <%s>"), in);
 
 	for (col = 0; col < ncols; col++)
@@ -138,17 +139,17 @@ int main(int argc, char *argv[])
 	        d = latitude;
 	    outrast1[col] = d;
 	}
-	if (G_put_d_raster_row(outfd1, outrast1) < 0)
+	if (Rast_put_d_raster_row(outfd1, outrast1) < 0)
 	    G_fatal_error(_("Cannot write to output raster file"));
     }
     G_free(inrast);
-    G_close_cell(infd);
+    Rast_close_cell(infd);
     G_free(outrast1);
-    G_close_cell(outfd1);
+    Rast_close_cell(outfd1);
 
-    G_short_history(result1, "raster", &history);
-    G_command_history(&history);
-    G_write_history(result1, &history);
+    Rast_short_history(result1, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(result1, &history);
 
     exit(EXIT_SUCCESS);
 }

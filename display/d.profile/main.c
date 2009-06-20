@@ -23,6 +23,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/display_raster.h>
 #include <grass/display.h>
 #include <grass/glocale.h>
@@ -38,7 +39,7 @@ struct point
 
 static void get_region_range(int fd)
 {
-    DCELL *buf = G_allocate_d_raster_buf();
+    DCELL *buf = Rast_allocate_d_raster_buf();
     int nrows = G_window_rows();
     int ncols = G_window_cols();
     int row, col;
@@ -47,7 +48,7 @@ static void get_region_range(int fd)
     max = -1e300;
 
     for (row = 0; row < nrows; row++) {
-	G_get_d_raster_row(fd, buf, row);
+	Rast_get_d_raster_row(fd, buf, row);
 	for (col = 0; col < ncols; col++) {
 	    if (min > buf[col])
 		min = buf[col];
@@ -59,14 +60,14 @@ static void get_region_range(int fd)
 
 static void get_map_range(void)
 {
-    if (G_raster_map_type(mapname, "") == CELL_TYPE) {
+    if (Rast_raster_map_type(mapname, "") == CELL_TYPE) {
 	struct Range range;
 	CELL xmin, xmax;
 
-	if (G_read_range(mapname, "", &range) <= 0)
+	if (Rast_read_range(mapname, "", &range) <= 0)
 	    G_fatal_error(_("Unable to read range for %s"), mapname);
 
-	G_get_range_min_max(&range, &xmin, &xmax);
+	Rast_get_range_min_max(&range, &xmin, &xmax);
 
 	max = xmax;
 	min = xmin;
@@ -74,10 +75,10 @@ static void get_map_range(void)
     else {
 	struct FPRange fprange;
 
-	if (G_read_fp_range(mapname, "", &fprange) <= 0)
+	if (Rast_read_fp_range(mapname, "", &fprange) <= 0)
 	    G_fatal_error(_("Unable to read FP range for %s"), mapname);
 
-	G_get_fp_range_min_max(&fprange, &min, &max);
+	Rast_get_fp_range_min_max(&fprange, &min, &max);
     }
 }
 
@@ -123,8 +124,8 @@ static int get_cell(DCELL *result, int fd, double x, double y)
     DCELL *tmp;
 
     if (!row1) {
-	row1 = G_allocate_d_raster_buf();
-	row2 = G_allocate_d_raster_buf();
+	row1 = Rast_allocate_d_raster_buf();
+	row2 = Rast_allocate_d_raster_buf();
     }
 
     col = (int)floor(x - 0.5);
@@ -134,33 +135,33 @@ static int get_cell(DCELL *result, int fd, double x, double y)
 
     if (row < 0 || row + 1 >= G_window_rows() ||
 	col < 0 || col + 1 >= G_window_cols()) {
-	G_set_d_null_value(result, 1);
+	Rast_set_d_null_value(result, 1);
 	return 0;
     }
 
     if (cur_row != row) {
 	if (cur_row == row + 1) {
 	    tmp = row1; row1 = row2; row2 = tmp;
-	    G_get_d_raster_row(fd, row1, row);
+	    Rast_get_d_raster_row(fd, row1, row);
 	}
 	else if (cur_row == row - 1) {
 	    tmp = row1; row1 = row2; row2 = tmp;
-	    G_get_d_raster_row(fd, row2, row + 1);
+	    Rast_get_d_raster_row(fd, row2, row + 1);
 	}
 	else {
-	    G_get_d_raster_row(fd, row1, row);
-	    G_get_d_raster_row(fd, row2, row + 1);
+	    Rast_get_d_raster_row(fd, row1, row);
+	    Rast_get_d_raster_row(fd, row2, row + 1);
 	}
 	cur_row = row;
     }
 
-    if (G_is_d_null_value(&row1[col]) || G_is_d_null_value(&row1[col+1]) ||
-	G_is_d_null_value(&row2[col]) || G_is_d_null_value(&row2[col+1])) {
-	G_set_d_null_value(result, 1);
+    if (Rast_is_d_null_value(&row1[col]) || Rast_is_d_null_value(&row1[col+1]) ||
+	Rast_is_d_null_value(&row2[col]) || Rast_is_d_null_value(&row2[col+1])) {
+	Rast_set_d_null_value(result, 1);
 	return 0;
     }
 
-    *result = G_interp_bilinear(x, y,
+    *result = Rast_interp_bilinear(x, y,
 				row1[col], row1[col+1],
 				row2[col], row2[col+1]);
 
@@ -211,7 +212,7 @@ int main(int argc, char **argv)
 
     mapname = map->answer;
 
-    fd = G_open_cell_old(mapname, "");
+    fd = Rast_open_cell_old(mapname, "");
     if (fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), mapname);
 

@@ -1,4 +1,5 @@
 #include <grass/gis.h>
+#include <grass/Rast.h>
 
 char *wc2regex(const char *wc)
 {

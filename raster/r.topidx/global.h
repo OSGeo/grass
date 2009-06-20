@@ -1,10 +1,11 @@
 #include <grass/gis.h>
+#include <grass/Rast.h>
 
 #define	cv(i,j)		cell[i][j]
 #define	av(i,j)		a[i][j]
 #define	atbv(i,j)	atb[i][j]
-#define	IScvNULL(i,j)	G_is_d_null_value(&cv(i,j))
-#define	ISatbvNULL(i,j)	G_is_d_null_value(&atbv(i,j))
+#define	IScvNULL(i,j)	Rast_is_d_null_value(&cv(i,j))
+#define	ISatbvNULL(i,j)	Rast_is_d_null_value(&atbv(i,j))
 
 #define	ZERO		0.0000001
 

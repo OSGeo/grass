@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/display_raster.h>
 #include <grass/display.h>
 #include <grass/Vect.h>
@@ -170,7 +171,7 @@ int main(int argc, char **argv)
     field = atoi(field_opt->answer);
 
     /* Outline color */
-    ret = G_str_to_color(ocolor_opt->answer, &r, &g, &b);
+    ret = Rast_str_to_color(ocolor_opt->answer, &r, &g, &b);
     if (ret == 1) {
 	ocolor.none = 0;
 	ocolor.r = r;
@@ -214,7 +215,7 @@ int main(int argc, char **argv)
 	    if (colors_opt->answers[i] == NULL)
 		break;
 
-	    ret = G_str_to_color(colors_opt->answers[i], &r, &g, &b);
+	    ret = Rast_str_to_color(colors_opt->answers[i], &r, &g, &b);
 	    if (ret == 1) {
 		colors[i].none = 0;
 		colors[i].r = r;

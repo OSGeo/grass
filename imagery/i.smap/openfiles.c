@@ -1,6 +1,9 @@
 #include <stdlib.h>
+
+#include <grass/Rast.h>
 #include <grass/imagery.h>
 #include <grass/glocale.h>
+
 #include "bouman.h"
 #include "local_proto.h"
 
@@ -20,8 +23,8 @@ int openfiles(struct parms *parms, struct files *files)
 		      parms->subgroup, parms->group);
 
     /* allocate file descriptors, and io buffer */
-    files->cellbuf = G_allocate_d_raster_buf();
-    files->outbuf = G_allocate_c_raster_buf();
+    files->cellbuf = Rast_allocate_d_raster_buf();
+    files->outbuf = Rast_allocate_c_raster_buf();
     files->isdata = G_malloc(G_window_cols());
 
     files->nbands = Ref.nfiles;

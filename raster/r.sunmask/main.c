@@ -45,6 +45,7 @@
 #include <string.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "solpos00.h"
 #include <grass/glocale.h>
 
@@ -450,26 +451,26 @@ int main(int argc, char *argv[])
 	exit(EXIT_SUCCESS);
     }
 
-    if ((elev_fd = G_open_cell_old(name, "")) < 0)
+    if ((elev_fd = Rast_open_cell_old(name, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
-    if ((output_fd = G_open_cell_new(outname)) < 0)
+    if ((output_fd = Rast_open_cell_new(outname)) < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), outname);
 
-    data_type = G_get_raster_map_type(elev_fd);
-    elevbuf.v = G_allocate_raster_buf(data_type);
-    tmpbuf.v = G_allocate_raster_buf(data_type);
-    outbuf.v = G_allocate_raster_buf(CELL_TYPE);	/* binary map */
+    data_type = Rast_get_raster_map_type(elev_fd);
+    elevbuf.v = Rast_allocate_raster_buf(data_type);
+    tmpbuf.v = Rast_allocate_raster_buf(data_type);
+    outbuf.v = Rast_allocate_raster_buf(CELL_TYPE);	/* binary map */
 
     if (data_type == CELL_TYPE) {
-	if ((G_read_range(name, "", &range)) < 0)
+	if ((Rast_read_range(name, "", &range)) < 0)
 	    G_fatal_error(_("Can't open range file for %s"), name);
-	G_get_range_min_max(&range, &min, &max);
+	Rast_get_range_min_max(&range, &min, &max);
 	dmin = (double)min;
 	dmax = (double)max;
     }
     else {
-	G_read_fp_range(name, "", &fprange);
-	G_get_fp_range_min_max(&fprange, &dmin, &dmax);
+	Rast_read_fp_range(name, "", &fprange);
+	Rast_get_fp_range_min_max(&fprange, &dmin, &dmax);
     }
 
     azi = 2 * M_PI * dazi / 360;
@@ -484,13 +485,13 @@ int main(int argc, char *argv[])
 	G_percent(row1, window.rows, 2);
 	col1 = 0;
 	drow = -1;
-	if (G_get_raster_row(elev_fd, elevbuf.v, row1, data_type) < 0)
+	if (Rast_get_raster_row(elev_fd, elevbuf.v, row1, data_type) < 0)
 	    G_fatal_error(_("Can't read row in input elevation map"));
 
 	while (col1 < window.cols) {
 	    dvalue = raster_value(elevbuf, data_type, col1);
 	    /*              outbuf.c[col1]=1; */
-	    G_set_null_value(&outbuf.c[col1], 1, CELL_TYPE);
+	    Rast_set_null_value(&outbuf.c[col1], 1, CELL_TYPE);
 	    OK = 1;
 	    east = G_col_to_easting(col1 + 0.5, &window);
 	    north = G_row_to_northing(row1 + 0.5, &window);
@@ -515,7 +516,7 @@ int main(int argc, char *argv[])
 			dcol = G_easting_to_col(east, &window);
 			if (drow != G_northing_to_row(north, &window)) {
 			    drow = G_northing_to_row(north, &window);
-			    G_get_raster_row(elev_fd, tmpbuf.v, (int)drow,
+			    Rast_get_raster_row(elev_fd, tmpbuf.v, (int)drow,
 					     data_type);
 			}
 			dvalue2 = raster_value(tmpbuf, data_type, (int)dcol);
@@ -530,21 +531,21 @@ int main(int argc, char *argv[])
 	    col1 += 1;
 	}
 	G_debug(3, "Writing result row %i of %i", row1, window.rows);
-	G_put_raster_row(output_fd, outbuf.c, CELL_TYPE);
+	Rast_put_raster_row(output_fd, outbuf.c, CELL_TYPE);
 	row1 += 1;
     }
 
-    G_close_cell(output_fd);
-    G_close_cell(elev_fd);
+    Rast_close_cell(output_fd);
+    Rast_close_cell(elev_fd);
 
     /* writing history file */
-    G_short_history(outname, "raster", &hist);
+    Rast_short_history(outname, "raster", &hist);
     sprintf(hist.edhist[0], "%s", *argv);
     sprintf(hist.datsrc_1, "raster elevation file %s", name);
     /* bug: long lines are truncated */
     sprintf(hist.datsrc_2, "%s", G_recreate_command());
     hist.edlinecnt = 3;
-    G_write_history(outname, &hist);
+    Rast_write_history(outname, &hist);
 
     G_done_msg(" ");
     exit(EXIT_SUCCESS);

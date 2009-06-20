@@ -27,19 +27,19 @@ int renumber(int in, int out)
     CELL *cell, *c;
     int row, col;
 
-    cell = G_allocate_cell_buf();
+    cell = Rast_allocate_cell_buf();
 
     G_message(_("%s: STEP 3 ... "), G_program_name());
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 5);
-	if (G_get_map_row(in, c = cell, row) < 0)
+	if (Rast_get_map_row(in, c = cell, row) < 0)
 	    exit(1);
 	col = ncols;
 	while (col-- > 0) {
 	    *c = table[*c];
 	    c++;
 	}
-	if (G_put_raster_row(out, cell, CELL_TYPE) < 0)
+	if (Rast_put_raster_row(out, cell, CELL_TYPE) < 0)
 	    exit(1);
     }
     G_percent(row, nrows, 10);

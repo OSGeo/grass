@@ -21,6 +21,7 @@
 
 #include "distance.h"
 #include <grass/gis.h>
+#include <grass/Rast.h>
 
 int init_grass(void)
 {

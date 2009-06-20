@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "method.h"
 
@@ -53,7 +54,7 @@ o_average(const char *basemap, const char *covermap, const char *outputmap, int 
 	    catb = basecat;
 	}
 	if (usecats)
-	    sscanf(G_get_cat((CELL) covercat, cats), "%lf", &x);
+	    sscanf(Rast_get_cat((CELL) covercat, cats), "%lf", &x);
 	else
 	    x = covercat;
 	sum1 += x * area;

@@ -8,6 +8,7 @@
  */
 
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 
@@ -23,8 +24,8 @@ int read_rast(double east, double north, double dist, int fd, int coords,
     int outofbounds = FALSE;
 
     if (!dcell) {
-	G_set_c_null_value(&nullcell, 1);
-	dcell = G_allocate_d_raster_buf();
+	Rast_set_c_null_value(&nullcell, 1);
+	dcell = Rast_allocate_d_raster_buf();
 	G_get_window(&window);
 	nrows = window.rows;
 	ncols = window.cols;
@@ -38,7 +39,7 @@ int read_rast(double east, double north, double dist, int fd, int coords,
 	outofbounds = TRUE;
 
     if (!outofbounds) {
-	if (row != cur_row && G_get_d_raster_row(fd, dcell, row) < 0)
+	if (row != cur_row && Rast_get_d_raster_row(fd, dcell, row) < 0)
 	    G_fatal_error(_("Unable to read raster map row %d"), row);
 	cur_row = row;
     }
@@ -48,7 +49,7 @@ int read_rast(double east, double north, double dist, int fd, int coords,
 
     fprintf(fp, " %f", dist);
 
-    if (outofbounds || G_is_d_null_value(&dcell[col]))
+    if (outofbounds || Rast_is_d_null_value(&dcell[col]))
 	fprintf(fp, " %s", null_string);
     else {
 	if (data_type == CELL_TYPE)
@@ -61,9 +62,9 @@ int read_rast(double east, double north, double dist, int fd, int coords,
 	int red, green, blue;
 
 	if (outofbounds)
-	    G_get_color(nullcell, &red, &green, &blue, &colors);
+	    Rast_get_color(nullcell, &red, &green, &blue, &colors);
 	else
-	    G_get_d_raster_color(&dcell[col], &red, &green, &blue,
+	    Rast_get_d_raster_color(&dcell[col], &red, &green, &blue,
 				 &colors);
 
 	fprintf(fp, " %03d:%03d:%03d", red, green, blue);
