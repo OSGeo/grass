@@ -144,14 +144,14 @@ int D_use_color(int color)
 	return 0;
 
     if (color < G_num_standard_colors()) {
-	R_standard_color(color);
+	R__standard_color(color);
 	return 1;
     }
 
     if (color < ncolors) {
 	const struct color_rgb *c = &colors[color];
 
-	R_RGB_color(c->r, c->g, c->b);
+	R__RGB_color(c->r, c->g, c->b);
 	return 1;
     }
 
@@ -211,6 +211,6 @@ int D_color_number_to_RGB(int color, int *r, int *g, int *b)
 
 void D_RGB_color(int red, int grn, int blu)
 {
-    R_RGB_color(red, grn, blu);
+    R__RGB_color(red, grn, blu);
 }
 

@@ -108,7 +108,7 @@ static int draw_cell(int A_row,
 	}
 
     A_row =
-	R_scaled_raster(ncols, A_row, red, grn, blu,
+	R__scaled_raster(ncols, A_row, red, grn, blu,
 			D__overlay_mode ? set : NULL);
 
     return (A_row < src[1][1])
@@ -135,7 +135,7 @@ void D_cell_draw_begin(void)
     /* Set up the screen for drawing map */
     D_get_a(src);
     D_get_d(dst);
-    R_begin_scaled_raster(D__overlay_mode, src, dst);
+    R__begin_scaled_raster(D__overlay_mode, src, dst);
 }
 
 int D_draw_raster_RGB(int A_row,
@@ -183,7 +183,7 @@ int D_draw_raster_RGB(int A_row,
 	}
 
     A_row =
-	R_scaled_raster(ncols, A_row, r_buf, g_buf, b_buf,
+	R__scaled_raster(ncols, A_row, r_buf, g_buf, b_buf,
 			D__overlay_mode ? n_buf : NULL);
 
     return (A_row < src[1][1])
@@ -192,5 +192,5 @@ int D_draw_raster_RGB(int A_row,
 
 void D_cell_draw_end(void)
 {
-    R_end_scaled_raster();
+    R__end_scaled_raster();
 }

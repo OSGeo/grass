@@ -137,7 +137,7 @@ int D_color_of_type(const void *raster,
     int r, g, b;
 
     G_get_raster_color(raster, &r, &g, &b, colors, data_type);
-    R_RGB_color((unsigned char)r, (unsigned char)g, (unsigned char)b);
+    R__RGB_color((unsigned char)r, (unsigned char)g, (unsigned char)b);
 
     return 0;
 }
