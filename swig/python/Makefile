@@ -65,8 +65,6 @@ $(GDIR): $(PYDIR)
 
 $(DSTDIR): $(GDIR)
 	test -d $@ || $(MKDIR) -p $@
-	test -f __init__.py || touch $(GDIR)/__init__.py
-	@echo "import lib" >> $(GDIR)/__init__.py
 
 $(DSTDIR)/_%.so: _%.so
 	$(INSTALL) $< $@
