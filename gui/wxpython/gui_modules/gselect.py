@@ -5,6 +5,7 @@
 
 Classes:
  - Select
+ - VectorSelect
  - TreeCrtlComboPopup
  - VectorDBInfo
  - LayerSelect
@@ -34,10 +35,9 @@ import utils
 from preferences import globalSettings as UserSettings
 
 class Select(wx.combo.ComboCtrl):
-    def __init__(self, parent, id, size,
+    def __init__(self, parent, id, size = globalvar.DIALOG_GSELECT_SIZE,
                  type=None, multiple=False, mapsets=None, exceptOf=[]):
-        """
-        Custom control to create a ComboBox with a tree control
+        """!Custom control to create a ComboBox with a tree control
         to display and select GIS elements within acessible mapsets.
         Elements can be selected with mouse. Can allow multiple selections, when
         argument multiple=True. Multiple selections are separated by commas.
@@ -51,22 +51,59 @@ class Select(wx.combo.ComboCtrl):
         self.SetPopupControl(self.tcp)
         self.SetPopupExtents(0,100)
         if type:
-            self.tcp.GetElementList(type, mapsets, exceptOf)
             self.tcp.SetData(type = type, mapsets = mapsets,
                              exceptOf = exceptOf, multiple = multiple)
 
     def SetElementList(self, type, mapsets = None, exceptOf = []):
-        self.tcp.seltree.DeleteAllItems()
-        self.tcp.GetElementList(type)
+        """!Set element list
+
+        @param type GIS element type
+        @param mapsets list of acceptable mapsets (None for all in search path)
+        @param exceptOf list of GIS elements to be excluded"""
         self.tcp.SetData(type = type, mapsets = mapsets,
                          exceptOf = exceptOf)
         
+class VectorSelect(Select):
+    def __init__(self, parent, ftype, **kwargs):
+        """!Custom to create a ComboBox with a tree control to display and
+        select vector maps. Control allows to filter vector maps. If you
+        don't need this feature use Select class instead
+
+        @ftype filter vector maps based on feature type
+        """
+        Select.__init__(self, parent = parent, id = wx.ID_ANY,
+                        type = 'vector', **kwargs)
+        
+        # remove vector maps which do not contain given feature type
+        self.tcp.SetFilter(self.__filterElements)
+        
+    def __filterElements(self, parentItem):
+        """!Filter vector maps in given mapset"""
+        root = self.tcp.seltree.GetRootItem()
+        item, cookie = self.tcp.seltree.GetFirstChild(parentItem)
+        while item:
+            if self.tcp.seltree.GetItemParent(item) != root:
+                # skip Mapset items
+                vectorName = self.tcp.seltree.GetItemText(item)
+                try:
+                    if int(grass.vector_info_topo(vectorName)['points']) < 1:
+                        self.tcp.seltree.Delete(item)
+                except KeyError:
+                    self.tcp.seltree.Delete(item)
+                
+                if not item:
+                    item, cookie = self.tcp.seltree.GetNextChild(parentItem, cookie)
+                    continue
+                
+            if self.tcp.seltree.ItemHasChildren(item):
+                item = self.__filterElements(item)
+            
+            item, cookie = self.tcp.seltree.GetNextChild(parentItem, cookie)
+        
 class TreeCtrlComboPopup(wx.combo.ComboPopup):
-    """
-    Create a tree ComboBox for selecting maps and other GIS elements
+    """!Create a tree ComboBox for selecting maps and other GIS elements
     in accessible mapsets within the current location
     """
-
     # overridden ComboPopup methods
     def Init(self):
         self.value = [] # for multiple is False -> len(self.value) in [0,1]
@@ -76,6 +113,8 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         self.mapsets = []
         self.exceptOf = []
 
+        self.SetFilter(None)
+        
     def Create(self, parent):
         self.seltree = wx.TreeCtrl(parent, style=wx.TR_HIDE_ROOT
                                    |wx.TR_HAS_BUTTONS
@@ -117,12 +156,18 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         
         return str
 
+    def SetFilter(self, filter):
+        """!Set filter for GIS elements, see e.g. VectorSelect"""
+        self.filterElements = filter
+        
     def OnPopup(self):
         """!Limited only for first selected"""
         # update list
         self.seltree.DeleteAllItems()
         self.GetElementList(self.type, self.mapsets, self.exceptOf)
-
+        if self.filterElements:
+            self.filterElements(self.seltree.GetRootItem())
+        
         if len(self.value) > 0:
             root = self.seltree.GetRootItem()
             if not root:
@@ -148,9 +193,12 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         return wx.Size(minWidth, min(200, maxHeight))
 
     def GetElementList(self, element, mapsets=None, exceptOf=[]):
-        """
-        Get list of GIS elements in accessible mapsets and display as tree
+        """!Get list of GIS elements in accessible mapsets and display as tree
         with all relevant elements displayed beneath each mapset branch
+
+        @param element GIS element
+        @param mapsets list of acceptable mapsets (None for all mapsets in search path)
+        @param exceptOf list of GIS elements to be excluded
         """
         # get current mapset
         curr_mapset = grass.gisenv()['MAPSET']
@@ -429,8 +477,7 @@ class VectorDBInfo:
         return self.tables[table]
 
 class LayerSelect(wx.Choice):
-    """
-    Creates combo box for selecting data layers defined for vector.
+    """!Creates combo box for selecting data layers defined for vector.
     The 'layer' terminology is likely to change for GRASS 7
     """
     def __init__(self, parent,
@@ -477,8 +524,7 @@ class LayerSelect(wx.Choice):
             self.SetStringSelection(str(self.default))
         
 class DriverSelect(wx.ComboBox):
-    """
-    Creates combo box for selecting database driver.
+    """!Creates combo box for selecting database driver.
     """
     def __init__(self, parent, choices, value,
                  id=wx.ID_ANY, pos=wx.DefaultPosition,
@@ -492,8 +538,7 @@ class DriverSelect(wx.ComboBox):
         self.SetStringSelection(value)
 
 class DatabaseSelect(wx.TextCtrl):
-    """
-    Creates combo box for selecting database driver.
+    """!Creates combo box for selecting database driver.
     """
     def __init__(self, parent, value='',
                  id=wx.ID_ANY, pos=wx.DefaultPosition,
@@ -504,8 +549,7 @@ class DatabaseSelect(wx.TextCtrl):
         self.SetName("DatabaseSelect")
 
 class TableSelect(wx.ComboBox):
-    """
-    Creates combo box for selecting attribute tables from the database
+    """!Creates combo box for selecting attribute tables from the database
     """
     def __init__(self, parent,
                  id=wx.ID_ANY, value='', pos=wx.DefaultPosition,
