@@ -18,7 +18,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
-#include <grass/raster.h>
+#include <grass/display_raster.h>
 #include <grass/display.h>
 #include <grass/Vect.h>
 #include <grass/colors.h>

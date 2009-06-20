@@ -1,6 +1,6 @@
 #include "globals.h"
 #include "local_proto.h"
-#include <grass/raster.h>
+#include <grass/display_raster.h>
 
 int display_points(int in_color)
 {

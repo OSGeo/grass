@@ -1,7 +1,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <grass/gis.h>
-#include <grass/raster.h>
+#include <grass/display_raster.h>
 #include "globals.h"
 #include "local_proto.h"
 #define NLINES 18

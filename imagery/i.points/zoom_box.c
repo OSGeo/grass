@@ -1,6 +1,6 @@
 #include "globals.h"
 #include "local_proto.h"
-#include <grass/raster.h>
+#include <grass/display_raster.h>
 
 static int zoom1(int, int);
 static int zoom2(int, int);

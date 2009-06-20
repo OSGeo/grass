@@ -1,7 +1,7 @@
 
 #include "globals.h"
 #include "local_proto.h"
-#include <grass/raster.h>
+#include <grass/display_raster.h>
 int debug(char *msg)
 {
     R_stabilize();

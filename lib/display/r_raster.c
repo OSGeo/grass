@@ -10,7 +10,7 @@
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
-#include <grass/raster.h>
+#include <grass/display_raster.h>
 
 #include "driver.h"
 

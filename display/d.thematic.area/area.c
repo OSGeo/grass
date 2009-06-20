@@ -6,7 +6,7 @@
 #include <grass/gis.h>
 #include <grass/Vect.h>
 #include <grass/display.h>
-#include <grass/raster.h>
+#include <grass/display_raster.h>
 #include <grass/colors.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>

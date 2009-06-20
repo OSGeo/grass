@@ -28,7 +28,7 @@
 
 #include <string.h>
 #include <grass/display.h>
-#include <grass/raster.h>
+#include <grass/display_raster.h>
 #include "bar.h"
 
 int bar(struct stat_list *dist_stats,	/* list of distribution statistics */

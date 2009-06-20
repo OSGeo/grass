@@ -24,7 +24,7 @@
 #include <grass/gis.h>
 #include <grass/Vect.h>
 #include <grass/config.h>
-#include <grass/raster.h>
+#include <grass/display_raster.h>
 #include <grass/display.h>
 #include <grass/glocale.h>
 #include "setup.h"

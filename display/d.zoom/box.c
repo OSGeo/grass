@@ -3,7 +3,7 @@
 #include <math.h>
 #include <grass/gis.h>
 #include <grass/display.h>
-#include <grass/raster.h>
+#include <grass/display_raster.h>
 #include "local_proto.h"
 
 int make_window_box(struct Cell_head *window, double magnify, int full,
