@@ -3,7 +3,7 @@ MODULE_TOPDIR = ../..
 LIB_NAME = $(GIS_LIBNAME)
 
 EXTRA_LIBS = $(XDRLIB) $(SOCKLIB) $(DATETIMELIB) $(PTHREADLIBPATH) $(PTHREADLIB) \
-	$(INTLLIB) $(MATHLIB) $(RASTRLIB)
+	$(INTLLIB) $(MATHLIB)
 EXTRA_INC = $(ZLIBINCPATH) $(PTHREADINCPATH)
 
 DATASRC = ellipse.table datum.table datumtransform.table FIPS.code state27 state83 projections
