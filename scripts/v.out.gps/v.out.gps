@@ -301,7 +301,8 @@ else
 fi
 
 # BUG: cat is being reported as evelation and attribute output is skipped.
-#   (v.out.ogr DB reading or ->OGR GPX driver bug ?)
+#   (v.out.ogr DB reading or ->OGR GPX driver bug<-
+#     resolved: see new Create opts at http://www.gdal.org/ogr/drv_gpx.html)
 #   v.out.ogr -> shapefile -> GPX works, but we try to avoid that as it's
 #     lossy. Also that would allow ogr2ogr -a_srs $IN_PROJ -t_srs EPSG:4326
 #     so skip m.proj pains.. if that is done ogr2ogr -s_srs MUST HAVE +wktext
