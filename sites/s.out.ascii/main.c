@@ -115,9 +115,12 @@ int main(int argc, char *argv[])
     while (G_site_get(fd, site) == 0) {
 	if (all || G_site_in_region(site, &window)) {
 	    if (!full) {
-		G_format_easting(site->east, ebuf, -1);
-		G_format_northing(site->north, nbuf, -1);
+		G_format_easting(site->east, ebuf,
+				 G_projection() == PROJECTION_LL ? -1 : 0);
+		G_format_northing(site->north, nbuf,
+				  G_projection() == PROJECTION_LL ? -1 : 0);
 		fprintf(stdout, "%s%s%s", ebuf, fs, nbuf);
+
 		for (n = 0; n < site->dim_alloc; ++n) {
 		    sprintf(nbuf, "%.8f", site->dim[n]);
 		    G_trim_decimal(nbuf);

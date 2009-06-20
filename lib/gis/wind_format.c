@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include <grass/gis.h>
 
-static void format_double(double, char *);
+static void format_double(double, char *, int);
 
 /*!
  * \brief Northing to ASCII.
@@ -24,14 +24,16 @@ static void format_double(double, char *);
  *
  * \param north northing
  * \param[out] buf buffer to hold formatted string
- * \param projection projection code
+ * \param projection projection code, or -1 to force full precision FP
  */
 void G_format_northing(double north, char *buf, int projection)
 {
     if (projection == PROJECTION_LL)
 	G_lat_format(north, buf);
+    else if (projection == -1)
+	format_double(north, buf, TRUE);
     else
-	format_double(north, buf);
+	format_double(north, buf, FALSE);
 }
 
 /*!
@@ -42,14 +44,16 @@ void G_format_northing(double north, char *buf, int projection)
  *
  * \param east easting
  * \param[out] buf buffer to hold formatted string
- * \param projection projection code
+ * \param projection projection code, or -1 to force full precision FP
  */
 void G_format_easting(double east, char *buf, int projection)
 {
     if (projection == PROJECTION_LL)
 	G_lon_format(east, buf);
+    else if (projection == -1)
+	format_double(east, buf, TRUE);
     else
-	format_double(east, buf);
+	format_double(east, buf, FALSE);
 }
 
 /*!
@@ -60,25 +64,30 @@ void G_format_easting(double east, char *buf, int projection)
  *
  * \param resolution resolution value
  * \param[out] buf buffer to hold formatted string
- * \param projection projection code
+ * \param projection projection code, or -1 to force full precision FP
  */
 void G_format_resolution(double res, char *buf, int projection)
 {
     if (projection == PROJECTION_LL)
 	G_llres_format(res, buf);
+    else if (projection == -1)
+	format_double(res, buf, TRUE);
     else
-	format_double(res, buf);
+	format_double(res, buf, FALSE);
 }
 
-static void format_double(double value, char *buf)
+/*
+ * 'full_prec' is boolean, FALSE uses %.8f,  TRUE uses %.15g
+ * The reason to have this is that for lat/lon "%.8f" is not
+ * enough to preserve fidelity once converted back into D:M:S,
+ * which leads to rounding errors, especially for resolution.
+ */
+static void format_double(double value, char *buf, int full_prec)
 {
-    /* if the programmer has lied to G_format_resolution() about the
-        projection type in order to get FP values for lat/lon coords,
-        "%.8f" is not enough to preserve fidelity once converted
-        back into D:M:S, which leads to rounding errors. */
-    if (G_projection() == PROJECTION_LL)
+    if (full_prec)
 	sprintf(buf, "%.15g", value);
     else
 	sprintf(buf, "%.8f", value);
+
     G_trim_decimal(buf);
 }

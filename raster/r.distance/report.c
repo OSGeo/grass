@@ -59,13 +59,17 @@ void report(struct Parms *parms)
 	    fprintf(stdout, "%s%s", fs, temp);
 
 	    /* print coordinates of the closest pair */
-	    G_format_easting(east1, temp, -1);
+	    G_format_easting(east1, temp,
+			     G_projection() == PROJECTION_LL ? -1 : 0);
 	    fprintf(stdout, "%s%s", fs, temp);
-	    G_format_northing(north1, temp, -1);
+	    G_format_northing(north1, temp,
+			      G_projection() == PROJECTION_LL ? -1 : 0);
 	    fprintf(stdout, "%s%s", fs, temp);
-	    G_format_easting(east2, temp, -1);
+	    G_format_easting(east2, temp,
+			     G_projection() == PROJECTION_LL ? -1 : 0);
 	    fprintf(stdout, "%s%s", fs, temp);
-	    G_format_northing(north2, temp, -1);
+	    G_format_northing(north2, temp,
+			      G_projection() == PROJECTION_LL ? -1 : 0);
 	    fprintf(stdout, "%s%s", fs, temp);
 
 	    /* print category labels */

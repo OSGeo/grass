@@ -44,7 +44,8 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels)
 	}
 
 	if (with_coordinates)
-	    G_format_northing(G_row_to_northing(row + .5, &window), nbuf, -1);
+	    G_format_northing(G_row_to_northing(row + .5, &window), nbuf, 
+			      G_projection() == PROJECTION_LL ? -1 : 0);
 
 	for (col = 0; col < ncols; col++) {
 	    if (no_nulls || no_nulls_all) {
@@ -69,7 +70,7 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels)
 	    }
 	    if (with_coordinates) {
 		G_format_easting(G_col_to_easting(col + .5, &window), ebuf,
-				 -1);
+				 G_projection() == PROJECTION_LL ? -1 : 0);
 		fprintf(stdout, "%s%s%s%s", ebuf, fs, nbuf, fs);
 	    }
 	    if (with_xy)
