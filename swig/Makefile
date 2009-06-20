@@ -4,7 +4,9 @@ include $(MODULE_TOPDIR)/include/Make/Vars.make
 
 #compile if PYTHON present:
 ifneq ($(USE_PYTHON),)
+ifneq ($(strip $(CXX)),)
     SUBDIRS += python
+endif
 endif
 
 # doxygen:
