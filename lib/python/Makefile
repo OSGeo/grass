@@ -22,8 +22,7 @@ $(GDIR): $(PYDIR)
 
 $(DSTDIR): $(GDIR)
 	test -d $@ || $(MKDIR) -p $@
-	test -f __init__.py || touch $(GDIR)/__init__.py
-	@echo "import script" >> $(GDIR)/__init__.py
+	@cat grass__init__.py > $(GDIR)/__init__.py
 
 $(DSTDIR)/%: %
 	$(INSTALL_DATA) $< $@
