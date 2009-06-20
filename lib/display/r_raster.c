@@ -1,3 +1,15 @@
+/*!
+  \file display/r_raster.c
+
+  \brief Display Library - Raster graphics subroutines
+
+  (C) 2001-2009 by the GRASS Development Team
+
+  This program is free software under the GNU General Public License
+  (>=v2).  Read the file COPYING that comes with GRASS for details.
+
+  \author Original author CERL
+*/
 
 #include <grass/config.h>
 
@@ -22,6 +34,8 @@ extern const struct driver *HTML_Driver(void);
 extern const struct driver *Cairo_Driver(void);
 #endif
 
+static void set_window(double, double, double, double);
+
 static void init(void)
 {
     const char *fenc = getenv("GRASS_ENCODING");
@@ -36,7 +50,7 @@ static void init(void)
 	R_encoding(fenc);
 
     if (line_width)
-	R_line_width(atof(line_width));
+	R__line_width(atof(line_width));
 
     if (text_size) {
 	double s = atof(text_size);
@@ -48,7 +62,7 @@ static void init(void)
     if (frame) {
 	double t, b, l, r;
 	sscanf(frame, "%lf,%lf,%lf,%lf", &t, &b, &l, &r);
-	R_set_window(t, b, l, r);
+	set_window(t, b, l, r);
     }
 }
 
@@ -95,7 +109,7 @@ void R_close_driver(void)
  *  \return void
  */
 
-void R_standard_color(int index)
+void R__standard_color(int index)
 {
     COM_Standard_color(index);
 }
@@ -114,7 +128,7 @@ void R_standard_color(int index)
  *  \return void
  */
 
-void R_RGB_color(int red, int grn, int blu)
+void R__RGB_color(int red, int grn, int blu)
 {
     COM_Color_RGB(red, grn, blu);
 }
@@ -128,7 +142,7 @@ void R_RGB_color(int red, int grn, int blu)
  *  \return void
  */
 
-void R_line_width(double width)
+void R__line_width(double width)
 {
     COM_Line_width(width);
 }
@@ -158,28 +172,9 @@ void R_erase(void)
  *  \return void
  */
 
-void R_pos_abs(double x, double y)
+void R__pos_abs(double x, double y)
 {
     COM_Pos_abs(x, y);
-}
-
-/*!
- * \brief fill a box
- *
- * A box is drawn in the current color using the coordinates <b>x1,y1</b> and
- * <b>x2,y2</b> as opposite corners of the box. The current location is undefined
- * afterwards
- *
- *  \param x1
- *  \param y1
- *  \param x2
- *  \param y2
- *  \return void
- */
-
-void R_box_abs(double x1, double y1, double x2, double y2)
-{
-    COM_Box_abs(x1, y1, x2, y2);
 }
 
 /*!
@@ -215,7 +210,7 @@ void R_text_rotation(double rotation)
  *  \return void
  */
 
-void R_set_window(double t, double b, double l, double r)
+void set_window(double t, double b, double l, double r)
 {
     COM_Set_window(t, b, l, r);
 }
@@ -269,7 +264,7 @@ void R_text(const char *text)
  *  \return void
  */
 
-void R_get_text_box(const char *text, double *t, double *b, double *l, double *r)
+void R__get_text_box(const char *text, double *t, double *b, double *l, double *r)
 {
     COM_Get_text_box(text, t, b, l, r);
 }
@@ -303,59 +298,54 @@ void R_font_info(char ***list, int *count)
     COM_Font_info(list, count);
 }
 
-void R_begin_scaled_raster(int mask, int src[2][2], double dst[2][2])
+void R__begin_scaled_raster(int mask, int src[2][2], double dst[2][2])
 {
     COM_begin_raster(mask, src, dst);
 }
 
-int R_scaled_raster(int n, int row,
-		      const unsigned char *red, const unsigned char *grn,
-		      const unsigned char *blu, const unsigned char *nul)
+int R__scaled_raster(int n, int row,
+		     const unsigned char *red, const unsigned char *grn,
+		     const unsigned char *blu, const unsigned char *nul)
 {
     return COM_raster(n, row, red, grn, blu, nul);
 }
 
-void R_end_scaled_raster(void)
+void R__end_scaled_raster(void)
 {
     COM_end_raster();
 }
 
-void R_bitmap(int ncols, int nrows, int threshold, const unsigned char *buf)
-{
-    COM_Bitmap(ncols, nrows, threshold, buf);
-}
-
-void R_begin(void)
+void R__begin(void)
 {
     COM_Begin();
 }
 
-void R_move(double x, double y)
+void R__move(double x, double y)
 {
     COM_Move(x, y);
 }
 
-void R_cont(double x, double y)
+void R__cont(double x, double y)
 {
     COM_Cont(x, y);
 }
 
-void R_close(void)
+void R__close(void)
 {
     COM_Close();
 }
 
-void R_stroke(void)
+void R__stroke(void)
 {
     COM_Stroke();
 }
 
-void R_fill(void)
+void R__fill(void)
 {
     COM_Fill();
 }
 
-void R_point(double x, double y)
+void R__point(double x, double y)
 {
     COM_Point(x, y);
 }

@@ -21,12 +21,12 @@ void D_erase(const char *color)
     D_use_color(colorindex);
 
     /* Do the plotting */
-    R_begin();
-    R_move(l, b);
-    R_cont(r, b);
-    R_cont(r, t);
-    R_cont(l, t);
-    R_close();
-    R_fill();
+    R__begin();
+    R__move(l, b);
+    R__cont(r, b);
+    R__cont(r, t);
+    R__cont(l, t);
+    R__close();
+    R__fill();
 }
 
