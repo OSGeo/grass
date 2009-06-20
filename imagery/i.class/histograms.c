@@ -1,6 +1,6 @@
 #include <math.h>
 #include "globals.h"
-#include <grass/raster.h>
+#include <grass/display_raster.h>
 #include "local_proto.h"
 
 #define MU	'l'		/* these are the characters that are printed as  */

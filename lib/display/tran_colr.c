@@ -5,7 +5,7 @@
 #include <string.h>
 #include <grass/display.h>
 #include <grass/colors.h>
-#include <grass/raster.h>
+#include <grass/display_raster.h>
 #include <grass/glocale.h>
 
 static struct color_rgb *colors;

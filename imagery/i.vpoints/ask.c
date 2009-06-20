@@ -1,5 +1,5 @@
 #include <string.h>
-#include <grass/raster.h>
+#include <grass/display_raster.h>
 #include "globals.h"
 
 #define NLINES 18

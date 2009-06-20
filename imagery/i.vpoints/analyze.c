@@ -3,7 +3,7 @@
 #include <math.h>
 #include <grass/gis.h>
 #include "globals.h"
-#include <grass/raster.h>
+#include <grass/display_raster.h>
 #include "crs.h"
 
 #define NLINES 18

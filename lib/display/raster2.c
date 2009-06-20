@@ -30,7 +30,7 @@
 #include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/display.h>
-#include <grass/raster.h>
+#include <grass/display_raster.h>
 
 int D__overlay_mode = 0;	/* external for now, but to be fixed later */
 

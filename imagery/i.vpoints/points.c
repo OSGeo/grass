@@ -1,5 +1,5 @@
 #include "globals.h"
-#include <grass/raster.h>
+#include <grass/display_raster.h>
 
 /* overlay ground control points on the display */
 

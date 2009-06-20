@@ -26,7 +26,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <grass/gis.h>
-#include <grass/raster.h>
+#include <grass/display_raster.h>
 #include <grass/display.h>
 
 extern int D__overlay_mode;

@@ -7,7 +7,7 @@
 #include <grass/colors.h>
 #include <grass/gis.h>
 #include <grass/display.h>
-#include <grass/raster.h>
+#include <grass/display_raster.h>
 
 void D_erase(const char *color)
 {
