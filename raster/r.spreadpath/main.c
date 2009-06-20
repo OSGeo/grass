@@ -33,6 +33,7 @@
 #include <fcntl.h>
 #include <grass/segment.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 
 #include "stash.h"
 #include <grass/glocale.h>
@@ -164,14 +165,14 @@ int main(int argc, char **argv)
     nrows = G_window_rows();
     ncols = G_window_cols();
 
-    cell = G_allocate_cell_buf();
+    cell = Rast_allocate_cell_buf();
 
     /*  Open back cell layers for reading  */
-    backrow_fd = G_open_cell_old(backrow_layer, backrow_mapset);
+    backrow_fd = Rast_open_cell_old(backrow_layer, backrow_mapset);
     if (backrow_fd < 0)
 	G_fatal_error("%s - can't open raster map", backrow_layer);
 
-    backcol_fd = G_open_cell_old(backcol_layer, backcol_mapset);
+    backcol_fd = Rast_open_cell_old(backcol_layer, backcol_mapset);
     if (backcol_fd < 0)
 	G_fatal_error("%s - can't open raster map", backcol_layer);
 
@@ -210,7 +211,7 @@ int main(int argc, char **argv)
     /*   Write the back cell layers in the segmented files, and  
      *   Change UTM coordinates to ROWs and COLUMNs */
     for (row = 0; row < nrows; row++) {
-	if (G_get_map_row(backrow_fd, cell, row) < 0)
+	if (Rast_get_map_row(backrow_fd, cell, row) < 0)
 	    G_fatal_error("unable to get map row %d", row);
 
 	for (col = 0; col < ncols; col++)
@@ -220,7 +221,7 @@ int main(int argc, char **argv)
 	    else
 		cell[col] = -1;
 	segment_put_row(&in_row_seg, cell, row);
-	if (G_get_map_row(backcol_fd, cell, row) < 0)
+	if (Rast_get_map_row(backcol_fd, cell, row) < 0)
 	    G_fatal_error("unable to get map row %d", row);
 
 	for (col = 0; col < ncols; col++)
@@ -276,13 +277,13 @@ int main(int argc, char **argv)
     /* If the output layer containing the starting positions */
     /* create a linked list of of them  */
     if (flag == 1) {
-	path_fd = G_open_cell_old(path_layer, path_mapset);
+	path_fd = Rast_open_cell_old(path_layer, path_mapset);
 	if (path_fd < 0)
 	    G_fatal_error("%s -can't open raster map", path_layer);
 
 	/*  Search for the marked starting pts and make list    */
 	for (row = 0; row < nrows; row++) {
-	    if (G_get_map_row(path_fd, cell, row) < 0)
+	    if (Rast_get_map_row(path_fd, cell, row) < 0)
 		G_fatal_error("unable to get map row %d", row);
 
 	    for (col = 0; col < ncols; col++) {
@@ -304,7 +305,7 @@ int main(int argc, char **argv)
 	    }			/* loop over cols */
 	}			/* loop over rows */
 
-	G_close_cell(path_fd);
+	Rast_close_cell(path_fd);
     }
 
     /* loop over the starting points to find the least cost paths */
@@ -327,10 +328,10 @@ int main(int argc, char **argv)
     if (verbose)
 	G_message("\nWriting the output map  -%s-...", path_layer);
 
-    path_fd = G_open_cell_new(path_layer);
+    path_fd = Rast_open_cell_new(path_layer);
     for (row = 0; row < nrows; row++) {
 	segment_get_row(&out_seg, cell, row);
-	if (G_put_raster_row(path_fd, cell, CELL_TYPE) < 0)
+	if (Rast_put_raster_row(path_fd, cell, CELL_TYPE) < 0)
 	    G_fatal_error("unable to write map row %d", row);
     }
 
@@ -345,9 +346,9 @@ int main(int argc, char **argv)
     close(in_col_fd);
     close(out_fd);
 
-    G_close_cell(path_fd);
-    G_close_cell(backrow_fd);
-    G_close_cell(backcol_fd);
+    Rast_close_cell(path_fd);
+    Rast_close_cell(backrow_fd);
+    Rast_close_cell(backcol_fd);
 
     unlink(in_row_file);	/* remove submatrix files  */
     unlink(in_col_file);

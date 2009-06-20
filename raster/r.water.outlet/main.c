@@ -25,6 +25,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 #include "basin.h"
@@ -126,7 +127,7 @@ int main(int argc, char *argv[])
     total = nrows * ncols;
     nrows_less_one = nrows - 1;
     ncols_less_one = ncols - 1;
-    drain_fd = G_open_cell_old(drain_name, "");
+    drain_fd = Rast_open_cell_old(drain_name, "");
 
     if (drain_fd < 0)
 	G_fatal_error(_("Unable to open drainage pointer map"));
@@ -134,10 +135,10 @@ int main(int argc, char *argv[])
     drain_ptrs =
 	(char *)G_malloc(sizeof(char) * size_array(&pt_seg, nrows, ncols));
     bas = (CELL *) G_calloc(size_array(&ba_seg, nrows, ncols), sizeof(CELL));
-    cell_buf = G_allocate_cell_buf();
+    cell_buf = Rast_allocate_cell_buf();
 
     for (row = 0; row < nrows; row++) {
-	G_get_map_row(drain_fd, cell_buf, row);
+	Rast_get_map_row(drain_fd, cell_buf, row);
 	for (col = 0; col < ncols; col++) {
 	    if (cell_buf[col] == 0) 
 		total--;
@@ -150,8 +151,8 @@ int main(int argc, char *argv[])
     if (row >= 0 && col >= 0 && row < nrows && col < ncols)
 	overland_cells(row, col);
     G_free(drain_ptrs);
-    cell_buf = G_allocate_cell_buf();
-    basin_fd = G_open_cell_new(basin_name);
+    cell_buf = Rast_allocate_cell_buf();
+    basin_fd = Rast_open_cell_new(basin_name);
 
     if (basin_fd < 0)
 	G_fatal_error(_("Unable to open new basin map"));
@@ -160,11 +161,11 @@ int main(int argc, char *argv[])
 	for (col = 0; col < ncols; col++) {
 	    cell_buf[col] = bas[SEG_INDEX(ba_seg, row, col)];
 	}
-	G_put_raster_row(basin_fd, cell_buf, CELL_TYPE);
+	Rast_put_raster_row(basin_fd, cell_buf, CELL_TYPE);
     }
     G_free(bas);
     G_free(cell_buf);
-    if (G_close_cell(basin_fd) < 0)
+    if (Rast_close_cell(basin_fd) < 0)
 	G_fatal_error(_("Unable to close new basin map layer"));
 
     return 0;

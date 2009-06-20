@@ -8,6 +8,7 @@
 #endif
 
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/dbmi.h>
 #include <grass/Vect.h>
 #include <grass/glocale.h>
@@ -101,15 +102,15 @@ int read_row(void *buf)
 	    /* bytes and cast the buf variable to char * before */
 	    /* incrementing */
 	    p = ((char *)buf) + data_size;
-	    G_get_raster_row(input_fd, p, row_count++, data_type);
+	    Rast_get_raster_row(input_fd, p, row_count++, data_type);
 	    p = buf;
-	    G_set_null_value(p, 1, data_type);
+	    Rast_set_null_value(p, 1, data_type);
 
 	    /* Again we need to cast p to char * under the */
 	    /* assumption that the increment is the proper */
 	    /* number of bytes. */
 	    p = ((char *)p) + (row_length + 1) * data_size;
-	    G_set_null_value(p, 1, data_type);
+	    Rast_set_null_value(p, 1, data_type);
 	}
     }
     return (row_length + 2);
@@ -117,7 +118,7 @@ int read_row(void *buf)
 
 static int blank_line(void *buf)
 {
-    G_set_null_value(buf, row_length + 2, data_type);
+    Rast_set_null_value(buf, row_length + 2, data_type);
 
     return 0;
 }
@@ -140,7 +141,7 @@ void insert_value(int cat, int val, double dval)
     if (has_cats) {
 	char *lab;
 
-	lab = G_get_cat(val, &RastCats);	/*cats are loaded only for CELL type */
+	lab = Rast_get_cat(val, &RastCats);	/*cats are loaded only for CELL type */
 
 	db_set_string(&label, lab);
 	db_double_quote_string(&label);

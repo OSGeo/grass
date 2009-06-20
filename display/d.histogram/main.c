@@ -34,6 +34,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/display.h>
 #include <grass/display_raster.h>
 #include <grass/glocale.h>
@@ -168,13 +169,13 @@ int main(int argc, char **argv)
     nodata = flag1->answer;
     quiet = flag2->answer ? YES : NO;
 
-    if (G_read_colors(map_name, "", &pcolors) == -1)
+    if (Rast_read_colors(map_name, "", &pcolors) == -1)
 	G_fatal_error(_("Color file for <%s> not available"), map_name);
 
-    if (G_read_cats(map_name, "", &cats) == -1)
+    if (Rast_read_cats(map_name, "", &cats) == -1)
 	G_fatal_error(_("Category file for <%s> not available"), map_name);
 
-    if (G_read_range(map_name, "", &range) == -1)
+    if (Rast_read_range(map_name, "", &range) == -1)
 	G_fatal_error(_("Range information for <%s> not available"),
 		      map_name);
 

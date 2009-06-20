@@ -29,6 +29,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 double s_r(double redchan, double nirchan);
@@ -206,46 +207,46 @@ int main(int argc, char *argv[])
                 || !(input6->answer) || !(input7->answer)) )
 	G_fatal_error(_("gvi index requires blue, green, red, nir, chan5 and chan7 maps"));
 
-    if ((infd_redchan = G_open_cell_old(redchan, "")) < 0)
+    if ((infd_redchan = Rast_open_cell_old(redchan, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), redchan);
-    inrast_redchan = G_allocate_d_raster_buf();
+    inrast_redchan = Rast_allocate_d_raster_buf();
 
     if (nirchan) {
-        if ((infd_nirchan = G_open_cell_old(nirchan, "")) < 0)
+        if ((infd_nirchan = Rast_open_cell_old(nirchan, "")) < 0)
             G_fatal_error(_("Unable to open raster map <%s>"), nirchan);
-        inrast_nirchan = G_allocate_d_raster_buf();
+        inrast_nirchan = Rast_allocate_d_raster_buf();
     }
 
     if (greenchan) {
-	if ((infd_greenchan = G_open_cell_old(greenchan, "")) < 0)
+	if ((infd_greenchan = Rast_open_cell_old(greenchan, "")) < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), greenchan);
-	inrast_greenchan = G_allocate_d_raster_buf();
+	inrast_greenchan = Rast_allocate_d_raster_buf();
     }
 
     if (bluechan) {
-	if ((infd_bluechan = G_open_cell_old(bluechan, "")) < 0)
+	if ((infd_bluechan = Rast_open_cell_old(bluechan, "")) < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), bluechan);
-	inrast_bluechan = G_allocate_d_raster_buf();
+	inrast_bluechan = Rast_allocate_d_raster_buf();
     }
 
     if (chan5chan) {
-	if ((infd_chan5chan = G_open_cell_old(chan5chan, "")) < 0)
+	if ((infd_chan5chan = Rast_open_cell_old(chan5chan, "")) < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), chan5chan);
-	inrast_chan5chan = G_allocate_d_raster_buf();
+	inrast_chan5chan = Rast_allocate_d_raster_buf();
     }
 
     if (chan7chan) {
-	if ((infd_chan7chan = G_open_cell_old(chan7chan, "")) < 0)
+	if ((infd_chan7chan = Rast_open_cell_old(chan7chan, "")) < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), chan7chan);
-	inrast_chan7chan = G_allocate_d_raster_buf();
+	inrast_chan7chan = Rast_allocate_d_raster_buf();
     }
 
     nrows = G_window_rows();
     ncols = G_window_cols();
-    outrast = G_allocate_d_raster_buf();
+    outrast = Rast_allocate_d_raster_buf();
 
     /* Create New raster files */ 
-    if ((outfd = G_open_raster_new(result, DCELL_TYPE)) < 0)
+    if ((outfd = Rast_open_raster_new(result, DCELL_TYPE)) < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), result);
 
     /* Process pixels */ 
@@ -260,31 +261,31 @@ int main(int argc, char *argv[])
 
 	G_percent(row, nrows, 2);
 
-	if (G_get_d_raster_row(infd_redchan, inrast_redchan, row) < 0)
+	if (Rast_get_d_raster_row(infd_redchan, inrast_redchan, row) < 0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			  redchan, row);
 	if (nirchan) {
-	    if (G_get_d_raster_row(infd_nirchan, inrast_nirchan, row) < 0)
+	    if (Rast_get_d_raster_row(infd_nirchan, inrast_nirchan, row) < 0)
 	        G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			      nirchan, row);
         }
 	if (greenchan) {
-	    if (G_get_d_raster_row(infd_greenchan, inrast_greenchan, row) < 0)
+	    if (Rast_get_d_raster_row(infd_greenchan, inrast_greenchan, row) < 0)
 		G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			      greenchan, row);
 	}
 	if (bluechan) {
-	    if (G_get_d_raster_row(infd_bluechan, inrast_bluechan, row) < 0)
+	    if (Rast_get_d_raster_row(infd_bluechan, inrast_bluechan, row) < 0)
 		G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			      bluechan, row);
 	}
 	if (chan5chan) {
-	    if (G_get_d_raster_row(infd_chan5chan, inrast_chan5chan, row) < 0)
+	    if (Rast_get_d_raster_row(infd_chan5chan, inrast_chan5chan, row) < 0)
 		G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			      chan5chan, row);
 	}
 	if (chan7chan) {
-	    if (G_get_d_raster_row(infd_chan7chan, inrast_chan7chan, row) < 0)
+	    if (Rast_get_d_raster_row(infd_chan7chan, inrast_chan7chan, row) < 0)
 		G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			      chan7chan, row);
 	}
@@ -304,13 +305,13 @@ int main(int argc, char *argv[])
             if(chan7chan)
 	    d_chan7chan = inrast_chan7chan[col];
 
-	    if (G_is_d_null_value(&d_redchan) ||
-		((nirchan) && G_is_d_null_value(&d_nirchan)) || 
-		((greenchan) && G_is_d_null_value(&d_greenchan)) ||
-		((bluechan) && G_is_d_null_value(&d_bluechan)) ||
-		((chan5chan) && G_is_d_null_value(&d_chan5chan)) ||
-		((chan7chan) && G_is_d_null_value(&d_chan7chan))) {
-		G_set_d_null_value(&outrast[col], 1);
+	    if (Rast_is_d_null_value(&d_redchan) ||
+		((nirchan) && Rast_is_d_null_value(&d_nirchan)) || 
+		((greenchan) && Rast_is_d_null_value(&d_greenchan)) ||
+		((bluechan) && Rast_is_d_null_value(&d_bluechan)) ||
+		((chan5chan) && Rast_is_d_null_value(&d_chan5chan)) ||
+		((chan7chan) && Rast_is_d_null_value(&d_chan7chan))) {
+		Rast_set_d_null_value(&outrast[col], 1);
 	    }
 	    else {
 		/* calculate simple_ratio        */ 
@@ -320,7 +321,7 @@ int main(int argc, char *argv[])
 		/* calculate ndvi                    */ 
 		if (!strcmp(viflag, "ndvi")) {
 		    if (d_redchan + d_nirchan < 0.001)
-			G_set_d_null_value(&outrast[col], 1);
+			Rast_set_d_null_value(&outrast[col], 1);
 		    else
 			outrast[col] = nd_vi(d_redchan, d_nirchan);
 		}
@@ -366,41 +367,41 @@ int main(int argc, char *argv[])
 		    outrast[col] = va_ri(d_redchan, d_greenchan, d_bluechan);
 	    }
 	}
-	if (G_put_d_raster_row(outfd, outrast) < 0)
+	if (Rast_put_d_raster_row(outfd, outrast) < 0)
 	    G_fatal_error(_("Failed writing raster map <%s> row %d"),
 			  result, row);
     }
 
     G_free(inrast_redchan);
-    G_close_cell(infd_redchan);
+    Rast_close_cell(infd_redchan);
     G_free(inrast_nirchan);
-    G_close_cell(infd_nirchan);
+    Rast_close_cell(infd_nirchan);
     if (greenchan) {
 	G_free(inrast_greenchan);
-	G_close_cell(infd_greenchan);
+	Rast_close_cell(infd_greenchan);
     }
     if (bluechan) {
 	G_free(inrast_bluechan);
-	G_close_cell(infd_bluechan);
+	Rast_close_cell(infd_bluechan);
     }
     if (chan5chan) {
 	G_free(inrast_chan5chan);
-	G_close_cell(infd_chan5chan);
+	Rast_close_cell(infd_chan5chan);
     }
     if (chan7chan) {
 	G_free(inrast_chan7chan);
-	G_close_cell(infd_chan7chan);
+	Rast_close_cell(infd_chan7chan);
     }
 
     G_free(outrast);
-    G_close_cell(outfd);
+    Rast_close_cell(outfd);
 
     /* Color from -1.0 to +1.0 in grey */ 
-    G_init_colors(&colors);
-    G_add_color_rule(-1.0, 0, 0, 0, 1.0, 255, 255, 255, &colors);
-    G_short_history(result, "raster", &history);
-    G_command_history(&history);
-    G_write_history(result, &history);
+    Rast_init_colors(&colors);
+    Rast_add_color_rule(-1.0, 0, 0, 0, 1.0, 255, 255, 255, &colors);
+    Rast_short_history(result, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(result, &history);
     
     exit(EXIT_SUCCESS);
 }

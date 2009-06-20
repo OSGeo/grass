@@ -45,6 +45,7 @@
 #include <ctype.h>
 #include <float.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/dbmi.h>
 #include <grass/Vect.h>
 #include <grass/glocale.h>
@@ -131,11 +132,11 @@ int main(int argc, char *argv[])
 
     name = map->answer;
 
-    fd = G_open_cell_old(name, "");
+    fd = Rast_open_cell_old(name, "");
     if (fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
 
-    if (G_read_fp_range(name, "", &range) < 0)
+    if (Rast_read_fp_range(name, "", &range) < 0)
 	G_fatal_error(_("Unable to read fp range of raster map <%s>"),
 		      name);
 
@@ -219,7 +220,7 @@ DCELL **get_z_array(int fd, int nrow, int ncol)
 
     for (i = 0; i < nrow; i++) {
 	z_array[i] = (DCELL *) G_malloc(ncol * sizeof(DCELL));
-	G_get_d_raster_row(fd, z_array[i], i);
+	Rast_get_d_raster_row(fd, z_array[i], i);
 	G_percent(i + 1, nrow, 2);
     }
     return z_array;
@@ -238,9 +239,9 @@ double *getlevels(struct Option *levels,
     double *lev;
     double tmp;
 
-    G_get_fp_range_min_max(range, &zmin, &zmax);
+    Rast_get_fp_range_min_max(range, &zmin, &zmax);
 
-    if (!G_is_d_null_value(&zmin) && !G_is_d_null_value(&zmax))
+    if (!Rast_is_d_null_value(&zmin) && !Rast_is_d_null_value(&zmax))
 	G_verbose_message(_("Range of data: min=%f, max=%f"), zmin, zmax);
     else
 	G_verbose_message(_("Range of data: empty"));

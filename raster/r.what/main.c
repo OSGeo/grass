@@ -21,6 +21,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 struct order
@@ -191,19 +192,19 @@ int main(int argc, char *argv[])
 			  NFILES);
 
 	strcpy(name, *ptr);
-	if ((fd[nfiles] = G_open_cell_old(name, "")) < 0)
+	if ((fd[nfiles] = Rast_open_cell_old(name, "")) < 0)
 	    G_fatal_error(_("Unable to open <%s>"), name);
 
-	out_type[nfiles] = G_get_raster_map_type(fd[nfiles]);
+	out_type[nfiles] = Rast_get_raster_map_type(fd[nfiles]);
 	if (flag3->answer)
 	    out_type[nfiles] = CELL_TYPE;
 
 	if (flag4->answer) {
-	    G_read_colors(name, "", &colors);
+	    Rast_read_colors(name, "", &colors);
 	    ncolor[nfiles] = colors;
 	}
 
-	if (withcats && G_read_cats(name, "", &cats[nfiles]) < 0)
+	if (withcats && Rast_read_cats(name, "", &cats[nfiles]) < 0)
 	    G_fatal_error(_("Unable to read category file for <%s>"), name);
 	nfiles++;
     }
@@ -212,9 +213,9 @@ int main(int argc, char *argv[])
 	if (flag3->answer)
 	    out_type[i] = CELL_TYPE;
 
-	cell[i] = G_allocate_c_raster_buf();
+	cell[i] = Rast_allocate_c_raster_buf();
 	if (out_type[i] != CELL_TYPE)
-	    dcell[i] = G_allocate_d_raster_buf();
+	    dcell[i] = Rast_allocate_d_raster_buf();
     }
 
     G_get_window(&window);
@@ -327,11 +328,11 @@ int main(int argc, char *argv[])
 		cache_miss++;
 		if (row_in_window)
 		    for (i = 0; i < nfiles; i++) {
-			if (G_get_c_raster_row(fd[i], cell[i], cache[point].row) < 0)
+			if (Rast_get_c_raster_row(fd[i], cell[i], cache[point].row) < 0)
 			    G_fatal_error(_("Error reading <%s>"), argv[i + 1]);
 
 			if (out_type[i] != CELL_TYPE) {
-			    if (G_get_d_raster_row(fd[i], dcell[i], cache[point].row) < 0)
+			    if (Rast_get_d_raster_row(fd[i], dcell[i], cache[point].row) < 0)
 				G_fatal_error(_("Error reading <%s>"), argv[i + 1]);
 			}
 		    }
@@ -345,20 +346,20 @@ int main(int argc, char *argv[])
 		if (in_window)
 		    cache[point].value[i] = cell[i][cache[point].col];
 		else
-		    G_set_c_null_value(&(cache[point].value[i]), 1);
+		    Rast_set_c_null_value(&(cache[point].value[i]), 1);
 
 		if (out_type[i] != CELL_TYPE) {
 		    if (in_window)
 			cache[point].dvalue[i] = dcell[i][cache[point].col];
 		    else
-			G_set_d_null_value(&(cache[point].dvalue[i]), 1);
+			Rast_set_d_null_value(&(cache[point].dvalue[i]), 1);
 		}
 		if (flag4->answer) {
 		    if (out_type[i] == CELL_TYPE)
-			G_get_c_raster_color(&cell[i][cache[point].col],
+			Rast_get_c_raster_color(&cell[i][cache[point].col],
 					     &red, &green, &blue, &ncolor[i]);
 		    else
-			G_get_d_raster_color(&dcell[i][cache[point].col],
+			Rast_get_d_raster_color(&dcell[i][cache[point].col],
 					     &red, &green, &blue, &ncolor[i]);
 
 		    sprintf(cache[point].clr_buf[i], "%03d:%03d:%03d", red,
@@ -385,7 +386,7 @@ int main(int argc, char *argv[])
 
 	    for (i = 0; i < nfiles; i++) {
 		if (out_type[i] == CELL_TYPE) {
-		    if (G_is_c_null_value(&cache[point].value[i])) {
+		    if (Rast_is_c_null_value(&cache[point].value[i])) {
 			fprintf(stdout, "%c%s", fs, null_str);
 			continue;
 		    }
@@ -393,7 +394,7 @@ int main(int argc, char *argv[])
 		}
 		else {		/* FCELL or DCELL */
 
-		    if (G_is_d_null_value(&cache[point].dvalue[i])) {
+		    if (Rast_is_d_null_value(&cache[point].dvalue[i])) {
 			fprintf(stdout, "%c%s", fs, null_str);
 			continue;
 		    }
@@ -403,7 +404,7 @@ int main(int argc, char *argv[])
 		}
 		if (withcats)
 		    fprintf(stdout, "%c%s", fs,
-			    G_get_cat(cache[point].value[i], &cats[i]));
+			    Rast_get_cat(cache[point].value[i], &cats[i]));
 		if (flag4->answer)
 		    fprintf(stdout, "%c%s", fs, cache[point].clr_buf[i]);
 	    }

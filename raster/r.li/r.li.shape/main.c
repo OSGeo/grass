@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "../r.li.daemon/daemon.h"
 
@@ -68,8 +69,8 @@ int shape_index(int fd, char **par, area_des ad, double *result)
     int i = 0, k = 0;
     int *mask_buf;
 
-    G_set_c_null_value(&complete_value, 1);
-    if (G_get_cellhd(ad->raster, "", &hd) == -1)
+    Rast_set_c_null_value(&complete_value, 1);
+    if (Rast_get_cellhd(ad->raster, "", &hd) == -1)
 	return 0;
 
 

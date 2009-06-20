@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "method.h"
 
@@ -55,7 +56,7 @@ o_var(const char *basemap, const char *covermap, const char *outputmap, int usec
 	}
 
 	if (usecats)
-	    sscanf(G_get_cat((CELL) covercat, cats), "%lf", &x);
+	    sscanf(Rast_get_cat((CELL) covercat, cats), "%lf", &x);
 	else
 	    x = covercat;
 

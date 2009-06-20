@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "local_proto.h"
 #include <grass/glocale.h>
 
@@ -96,14 +97,14 @@ int main(int argc, char *argv[])
     /* get the window, allocate buffers, etc. */
     G_get_set_window(&window);
 
-    cell = G_allocate_cell_buf();
+    cell = Rast_allocate_cell_buf();
 
-    if ((maskfd = G_maskfd()) >= 0)
-	mask = G_allocate_cell_buf();
+    if ((maskfd = Rast_maskfd()) >= 0)
+	mask = Rast_allocate_cell_buf();
     else
 	mask = NULL;
 
-    fd = G_open_cell_new(parm.output->answer);
+    fd = Rast_open_cell_new(parm.output->answer);
     if (fd < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"),
 		      parm.output->answer);
@@ -116,7 +117,7 @@ int main(int argc, char *argv[])
 	G_percent(row, window.rows, 2);
 
 	if (mask) {
-	    if (G_get_map_row(maskfd, mask, row) < 0)
+	    if (Rast_get_map_row(maskfd, mask, row) < 0)
 		G_fatal_error(_("Cannot get row"));
 	}
 	north += window.ns_res;
@@ -176,17 +177,17 @@ int main(int argc, char *argv[])
 	    cell[col] = (CELL) (sum1 / sum2 + 0.5);
 	}
 
-	G_put_raster_row(fd, cell, CELL_TYPE);
+	Rast_put_raster_row(fd, cell, CELL_TYPE);
     }
 
     G_free(points);
     G_free(cell);
-    G_close_cell(fd);
+    Rast_close_cell(fd);
 
     /* writing history file */
-    G_short_history(parm.output->answer, "raster", &history);
-    G_command_history(&history);
-    G_write_history(parm.output->answer, &history);
+    Rast_short_history(parm.output->answer, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(parm.output->answer, &history);
     G_done_msg(" ");
 
     exit(EXIT_SUCCESS);

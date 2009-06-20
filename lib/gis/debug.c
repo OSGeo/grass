@@ -20,8 +20,8 @@
 #include <stdarg.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
-#include "G.h"
 
+#include "../raster/G.h"
 
 static int initialized;
 static int grass_debug_level;

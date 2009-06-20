@@ -1,5 +1,8 @@
 #include <unistd.h>
+
+#include <grass/Rast.h>
 #include <grass/glocale.h>
+
 #include "global.h"
 
 /* Modified to support Grass 5.0 fp format 11 april 2000
@@ -18,7 +21,7 @@ int rectify(char *name, char *mapset, char *result, int order)
     char buf[2048] = "";
 
     select_current_env();
-    if (G_get_cellhd(name, mapset, &cellhd) < 0)
+    if (Rast_get_cellhd(name, mapset, &cellhd) < 0)
 	return 0;
 
     /* open the result file into target window
@@ -32,21 +35,21 @@ int rectify(char *name, char *mapset, char *result, int order)
 
     select_target_env();
     G_set_window(&target_window);
-    G_set_cell_format(cellhd.format);
+    Rast_set_cell_format(cellhd.format);
     select_current_env();
 
     /* open the file to be rectified
      * set window to cellhd first to be able to read file exactly
      */
     G_set_window(&cellhd);
-    infd = G_open_cell_old(name, mapset);
+    infd = Rast_open_cell_old(name, mapset);
     if (infd < 0) {
 	close(infd);
 	return 0;
     }
-    map_type = G_get_raster_map_type(infd);
-    rast = (void *)G_calloc(G_window_cols() + 1, G_raster_size(map_type));
-    G_set_null_value(rast, G_window_cols() + 1, map_type);
+    map_type = Rast_get_raster_map_type(infd);
+    rast = (void *)G_calloc(G_window_cols() + 1, Rast_raster_size(map_type));
+    Rast_set_null_value(rast, G_window_cols() + 1, map_type);
 
     G_copy(&win, &target_window, sizeof(win));
 
@@ -102,7 +105,7 @@ int rectify(char *name, char *mapset, char *result, int order)
     }
 
     target_window.compressed = cellhd.compressed;
-    G_close_cell(infd);		/* (pmx) 17 april 2000 */
+    Rast_close_cell(infd);		/* (pmx) 17 april 2000 */
     write_map(result);
     select_current_env();
 

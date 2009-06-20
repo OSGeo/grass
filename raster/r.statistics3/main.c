@@ -14,6 +14,7 @@
 #include <string.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include <grass/spawn.h>
 
@@ -68,24 +69,24 @@ static inline double get_quantile(struct basecat *bc, int n)
 
 static void get_slot_counts(int basefile, int coverfile)
 {
-    CELL *basebuf = G_allocate_c_raster_buf();
-    DCELL *coverbuf = G_allocate_d_raster_buf();
+    CELL *basebuf = Rast_allocate_c_raster_buf();
+    DCELL *coverbuf = Rast_allocate_d_raster_buf();
     int row, col;
 
     G_message(_("Computing histograms"));
 
     for (row = 0; row < rows; row++) {
-	G_get_c_raster_row(basefile, basebuf, row);
-	G_get_d_raster_row(coverfile, coverbuf, row);
+	Rast_get_c_raster_row(basefile, basebuf, row);
+	Rast_get_d_raster_row(coverfile, coverbuf, row);
 
 	for (col = 0; col < cols; col++) {
 	    struct basecat *bc;
 	    int i;
 
-	    if (G_is_c_null_value(&basebuf[col]))
+	    if (Rast_is_c_null_value(&basebuf[col]))
 		continue;
 
-	    if (G_is_d_null_value(&coverbuf[col]))
+	    if (Rast_is_d_null_value(&coverbuf[col]))
 		continue;
 
 	    i = get_slot(coverbuf[col]);
@@ -158,25 +159,25 @@ static void initialize_bins(void)
 
 static void fill_bins(int basefile, int coverfile)
 {
-    CELL *basebuf = G_allocate_c_raster_buf();
-    DCELL *coverbuf = G_allocate_d_raster_buf();
+    CELL *basebuf = Rast_allocate_c_raster_buf();
+    DCELL *coverbuf = Rast_allocate_d_raster_buf();
     int row, col;
 
     G_message(_("Binning data"));
 
     for (row = 0; row < rows; row++) {
-	G_get_c_raster_row(basefile, basebuf, row);
-	G_get_d_raster_row(coverfile, coverbuf, row);
+	Rast_get_c_raster_row(basefile, basebuf, row);
+	Rast_get_d_raster_row(coverfile, coverbuf, row);
 
 	for (col = 0; col < cols; col++) {
 	    struct basecat *bc;
 	    int i, bin;
 	    struct bin *b;
 
-	    if (G_is_c_null_value(&basebuf[col]))
+	    if (Rast_is_c_null_value(&basebuf[col]))
 		continue;
 
-	    if (G_is_d_null_value(&coverbuf[col]))
+	    if (Rast_is_d_null_value(&coverbuf[col]))
 		continue;
 
 	    i = get_slot(coverbuf[col]);
@@ -321,8 +322,8 @@ static void do_reclass(const char *basemap, char **outputs)
 static void do_output(int base_fd, char **outputs, const char *covermap)
 {
     int *out_fd = G_malloc(num_quants * sizeof(int));
-    CELL *base_buf = G_allocate_c_raster_buf();
-    DCELL *out_buf = G_allocate_d_raster_buf();
+    CELL *base_buf = Rast_allocate_c_raster_buf();
+    DCELL *out_buf = Rast_allocate_d_raster_buf();
     const char *mapset = G_mapset();
     struct Colors colors;
     int have_colors;
@@ -334,24 +335,24 @@ static void do_output(int base_fd, char **outputs, const char *covermap)
     for (quant = 0; quant < num_quants; quant++) {
 	const char *output = outputs[quant];
 
-	out_fd[quant] = G_open_fp_cell_new(output);
+	out_fd[quant] = Rast_open_fp_cell_new(output);
 	if (out_fd[quant] < 0)
 	    G_fatal_error(_("Unable to open output map <%s>"), output);
     }
 
-    have_colors = G_read_colors(covermap, "", &colors) > 0;
+    have_colors = Rast_read_colors(covermap, "", &colors) > 0;
 
     for (row = 0; row < rows; row++) {
-	G_get_c_raster_row(base_fd, base_buf, row);
+	Rast_get_c_raster_row(base_fd, base_buf, row);
 
 	for (quant = 0; quant < num_quants; quant++) {
 	    for (col = 0; col < cols; col++)
-		if (G_is_c_null_value(&base_buf[col]))
-		    G_set_d_null_value(&out_buf[col], 1);
+		if (Rast_is_c_null_value(&base_buf[col]))
+		    Rast_set_d_null_value(&out_buf[col], 1);
 		else
 		    out_buf[col] = basecats[base_buf[col] - min].quants[quant];
 
-	    G_put_d_raster_row(out_fd[quant], out_buf);
+	    Rast_put_d_raster_row(out_fd[quant], out_buf);
 	}
 
 	G_percent(row, rows, 2);
@@ -360,9 +361,9 @@ static void do_output(int base_fd, char **outputs, const char *covermap)
     G_percent(row, rows, 2);
 
     for (quant = 0; quant < num_quants; quant++) {
-	G_close_cell(out_fd[quant]);
+	Rast_close_cell(out_fd[quant]);
 	if (have_colors)
-	    G_write_colors(outputs[quant], mapset, &colors);
+	    Rast_write_colors(outputs[quant], mapset, &colors);
     }
 }
 
@@ -470,28 +471,28 @@ int main(int argc, char *argv[])
 			  num_quants, i);
     }
 
-    base_fd = G_open_cell_old(basemap, "");
+    base_fd = Rast_open_cell_old(basemap, "");
     if (base_fd < 0)
 	G_fatal_error(_("Unable to open base map <%s>"), basemap);
 
-    cover_fd = G_open_cell_old(covermap, "");
+    cover_fd = Rast_open_cell_old(covermap, "");
     if (cover_fd < 0)
 	G_fatal_error(_("Unable to open cover map <%s>"), covermap);
 
-    if (G_raster_map_is_fp(basemap, "") != 0)
+    if (Rast_raster_map_is_fp(basemap, "") != 0)
 	G_fatal_error(_("The base map must be an integer (CELL) map"));
 
-    if (G_read_range(basemap, "", &range) < 0)
+    if (Rast_read_range(basemap, "", &range) < 0)
 	G_fatal_error(_("Unable to read range of base map <%s>"), basemap);
 
-    G_get_range_min_max(&range, &min, &max);
+    Rast_get_range_min_max(&range, &min, &max);
     num_cats = max - min + 1;
     if (num_cats > MAX_CATS)
 	G_fatal_error(_("Base map <%s> has too many categories (max: %d)"),
 		      basemap, MAX_CATS);
 
-    G_read_fp_range(covermap, "", &fprange);
-    G_get_fp_range_min_max(&fprange, &f_min, &f_max);
+    Rast_read_fp_range(covermap, "", &fprange);
+    Rast_get_fp_range_min_max(&fprange, &f_min, &f_max);
     slot_size = (f_max - f_min) / num_slots;
 
     basecats = G_calloc(num_cats, sizeof(struct basecat));
@@ -518,8 +519,8 @@ int main(int argc, char *argv[])
     else
 	do_output(base_fd, outputs, covermap);
 
-    G_close_cell(cover_fd);
-    G_close_cell(base_fd);
+    Rast_close_cell(cover_fd);
+    Rast_close_cell(base_fd);
 
     return (EXIT_SUCCESS);
 }

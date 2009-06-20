@@ -11,6 +11,7 @@
  */
 
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 #include <stdlib.h>
@@ -81,7 +82,7 @@ int edgedensity(int fd, char **valore, area_des ad, double *result)
     int ris = -1;
     double indice = 0;
 
-    if (G_get_cellhd(ad->raster, "", &hd) == -1)
+    if (Rast_get_cellhd(ad->raster, "", &hd) == -1)
 	return RLI_ERRORE;
 
 
@@ -167,13 +168,13 @@ int calculate(int fd, area_des ad, char **valore, double *result)
 	masked = TRUE;
     }
 
-    buf_sup = G_allocate_cell_buf();
+    buf_sup = Rast_allocate_cell_buf();
     if (buf_sup == NULL) {
 	G_fatal_error("malloc buf_sup failed");
 	return RLI_ERRORE;
     }
 
-    G_set_c_null_value(buf_sup + ad->x, ad->cl);	/*the first time buf_sup is all null */
+    Rast_set_c_null_value(buf_sup + ad->x, ad->cl);	/*the first time buf_sup is all null */
 
 
     for (j = 0; j < ad->rl; j++) {	/* for each raster row */
@@ -188,12 +189,12 @@ int calculate(int fd, area_des ad, char **valore, double *result)
 	    buf_inf = RLI_get_cell_raster_row(fd, 1 + j + ad->y, ad);
 	}
 	else {
-	    buf_inf = G_allocate_cell_buf();
+	    buf_inf = Rast_allocate_cell_buf();
 	    if (buf_inf == NULL) {
 		G_fatal_error("malloc buf_inf failed");
 		return RLI_ERRORE;
 	    }
-	    G_set_c_null_value(buf_inf + ad->x, ad->cl);
+	    Rast_set_c_null_value(buf_inf + ad->x, ad->cl);
 	}
 
 	/*read mask if needed */
@@ -219,9 +220,9 @@ int calculate(int fd, area_des ad, char **valore, double *result)
 	}
 
 
-	G_set_c_null_value(&nextCell, 1);
-	G_set_c_null_value(&prevCell, 1);
-	G_set_c_null_value(&corrCell, 1);
+	Rast_set_c_null_value(&nextCell, 1);
+	Rast_set_c_null_value(&prevCell, 1);
+	Rast_set_c_null_value(&corrCell, 1);
 
 	for (i = 0; i < ad->cl; i++) {	/* for each cell in the row */
 	    area++;
@@ -229,15 +230,15 @@ int calculate(int fd, area_des ad, char **valore, double *result)
 
 
 	    if (masked && mask_corr[i + ad->x] == 0) {
-		G_set_c_null_value(&corrCell, 1);
+		Rast_set_c_null_value(&corrCell, 1);
 		area--;
 	    }
 
-	    if (!(G_is_null_value(&corrCell, CELL_TYPE))) {
+	    if (!(Rast_is_null_value(&corrCell, CELL_TYPE))) {
 		if ((i + 1) == ad->cl)	/*last cell of the row */
-		    G_set_c_null_value(&nextCell, 1);
+		    Rast_set_c_null_value(&nextCell, 1);
 		else if (masked && mask_corr[i + 1 + ad->x] == 0)
-		    G_set_c_null_value(&nextCell, 1);
+		    Rast_set_c_null_value(&nextCell, 1);
 		else
 		    nextCell = buf_corr[i + 1 + ad->x];
 
@@ -245,30 +246,30 @@ int calculate(int fd, area_des ad, char **valore, double *result)
 
 
 		if (masked && mask_inf[i + ad->x] == 0)
-		    G_set_c_null_value(&infCell, 1);
+		    Rast_set_c_null_value(&infCell, 1);
 		else
 		    infCell = buf_inf[i + ad->x];
 
 		/* calculate how many edge the cell has */
 
-		if ((G_is_null_value(&prevCell, CELL_TYPE)) ||
+		if ((Rast_is_null_value(&prevCell, CELL_TYPE)) ||
 		    (corrCell != prevCell)) {
 		    bordoCorr++;
 		}
 
 
-		if ((G_is_null_value(&supCell, CELL_TYPE)) ||
+		if ((Rast_is_null_value(&supCell, CELL_TYPE)) ||
 		    (corrCell != supCell)) {
 		    bordoCorr++;
 		}
 
-		if ((G_is_null_value(&infCell, CELL_TYPE)) ||
+		if ((Rast_is_null_value(&infCell, CELL_TYPE)) ||
 		    (corrCell != infCell)) {
 		    bordoCorr++;
 		}
 
 
-		if ((G_is_null_value(&nextCell, CELL_TYPE)) ||
+		if ((Rast_is_null_value(&nextCell, CELL_TYPE)) ||
 		    (corrCell != nextCell)) {
 		    bordoCorr++;
 		}
@@ -428,13 +429,13 @@ int calculateD(int fd, area_des ad, char **valore, double *result)
 	masked = TRUE;
     }
 
-    buf_sup = G_allocate_d_raster_buf();
+    buf_sup = Rast_allocate_d_raster_buf();
     if (buf_sup == NULL) {
 	G_fatal_error("malloc buf_sup failed");
 	return RLI_ERRORE;
     }
 
-    G_set_d_null_value(buf_sup + ad->x, ad->cl);	/*the first time buf_sup is all null */
+    Rast_set_d_null_value(buf_sup + ad->x, ad->cl);	/*the first time buf_sup is all null */
 
 
     for (j = 0; j < ad->rl; j++) {	/* for each raster row */
@@ -450,13 +451,13 @@ int calculateD(int fd, area_des ad, char **valore, double *result)
 	    buf_inf = RLI_get_dcell_raster_row(fd, 1 + j + ad->y, ad);
 	}
 	else {
-	    buf_inf = G_allocate_d_raster_buf();
+	    buf_inf = Rast_allocate_d_raster_buf();
 	    if (buf_inf == NULL) {
 		G_fatal_error("malloc buf_inf failed");
 		return RLI_ERRORE;
 	    }
 
-	    G_set_d_null_value(buf_inf + ad->x, ad->cl);
+	    Rast_set_d_null_value(buf_inf + ad->x, ad->cl);
 	}
 
 	/*read mask if needed */
@@ -483,9 +484,9 @@ int calculateD(int fd, area_des ad, char **valore, double *result)
 	}
 
 
-	G_set_d_null_value(&nextCell, 1);
-	G_set_d_null_value(&prevCell, 1);
-	G_set_d_null_value(&corrCell, 1);
+	Rast_set_d_null_value(&nextCell, 1);
+	Rast_set_d_null_value(&prevCell, 1);
+	Rast_set_d_null_value(&corrCell, 1);
 
 	for (i = 0; i < ad->cl; i++) {	/* for each cell in the row */
 
@@ -494,18 +495,18 @@ int calculateD(int fd, area_des ad, char **valore, double *result)
 
 
 	    if (masked && mask_corr[i + ad->x] == 0) {
-		G_set_d_null_value(&corrCell, 1);
+		Rast_set_d_null_value(&corrCell, 1);
 		area--;
 	    }
 
-	    if (!(G_is_null_value(&corrCell, DCELL_TYPE))) {
+	    if (!(Rast_is_null_value(&corrCell, DCELL_TYPE))) {
 
 
 
 		if ((i + 1) == ad->cl)	/*last cell of the row */
-		    G_set_d_null_value(&nextCell, 1);
+		    Rast_set_d_null_value(&nextCell, 1);
 		else if (masked && mask_corr[i + 1 + ad->x] == 0)
-		    G_set_d_null_value(&nextCell, 1);
+		    Rast_set_d_null_value(&nextCell, 1);
 		else
 		    nextCell = buf_corr[i + 1 + ad->x];
 
@@ -513,30 +514,30 @@ int calculateD(int fd, area_des ad, char **valore, double *result)
 
 
 		if (masked && mask_inf[i + ad->x] == 0)
-		    G_set_d_null_value(&infCell, 1);
+		    Rast_set_d_null_value(&infCell, 1);
 		else
 		    infCell = buf_inf[i + ad->x];
 
 		/* calculate how many edge the cell has */
 
-		if ((G_is_null_value(&prevCell, DCELL_TYPE)) ||
+		if ((Rast_is_null_value(&prevCell, DCELL_TYPE)) ||
 		    (corrCell != prevCell)) {
 		    bordoCorr++;
 		}
 
 
-		if ((G_is_null_value(&supCell, DCELL_TYPE)) ||
+		if ((Rast_is_null_value(&supCell, DCELL_TYPE)) ||
 		    (corrCell != supCell)) {
 		    bordoCorr++;
 		}
 
-		if ((G_is_null_value(&infCell, DCELL_TYPE)) ||
+		if ((Rast_is_null_value(&infCell, DCELL_TYPE)) ||
 		    (corrCell != infCell)) {
 		    bordoCorr++;
 		}
 
 
-		if ((G_is_null_value(&nextCell, DCELL_TYPE)) ||
+		if ((Rast_is_null_value(&nextCell, DCELL_TYPE)) ||
 		    (corrCell != nextCell)) {
 		    bordoCorr++;
 		}
@@ -693,13 +694,13 @@ int calculateF(int fd, area_des ad, char **valore, double *result)
 	masked = TRUE;
     }
 
-    buf_sup = G_allocate_f_raster_buf();
+    buf_sup = Rast_allocate_f_raster_buf();
     if (buf_sup == NULL) {
 	G_fatal_error("malloc buf_sup failed");
 	return RLI_ERRORE;
     }
 
-    G_set_f_null_value(buf_sup + ad->x, ad->cl);	/*the first time buf_sup is all null */
+    Rast_set_f_null_value(buf_sup + ad->x, ad->cl);	/*the first time buf_sup is all null */
 
 
     for (j = 0; j < ad->rl; j++) {	/* for each raster row */
@@ -715,13 +716,13 @@ int calculateF(int fd, area_des ad, char **valore, double *result)
 	    buf_inf = RLI_get_fcell_raster_row(fd, 1 + j + ad->y, ad);
 	}
 	else {
-	    buf_inf = G_allocate_f_raster_buf();
+	    buf_inf = Rast_allocate_f_raster_buf();
 	    if (mask_inf == NULL) {
 		G_fatal_error("malloc mask_inf failed");
 		return RLI_ERRORE;
 	    }
 
-	    G_set_f_null_value(buf_inf + ad->x, ad->cl);
+	    Rast_set_f_null_value(buf_inf + ad->x, ad->cl);
 	}
 
 	/*read mask if needed */
@@ -748,9 +749,9 @@ int calculateF(int fd, area_des ad, char **valore, double *result)
 	}
 
 
-	G_set_f_null_value(&nextCell, 1);
-	G_set_f_null_value(&prevCell, 1);
-	G_set_f_null_value(&corrCell, 1);
+	Rast_set_f_null_value(&nextCell, 1);
+	Rast_set_f_null_value(&prevCell, 1);
+	Rast_set_f_null_value(&corrCell, 1);
 
 	for (i = 0; i < ad->cl; i++) {	/* for each cell in the row */
 	    area++;
@@ -758,16 +759,16 @@ int calculateF(int fd, area_des ad, char **valore, double *result)
 
 
 	    if (masked && mask_corr[i + ad->x] == 0) {
-		G_set_f_null_value(&corrCell, 1);
+		Rast_set_f_null_value(&corrCell, 1);
 		area--;
 	    }
 
-	    if (!(G_is_null_value(&corrCell, FCELL_TYPE))) {
+	    if (!(Rast_is_null_value(&corrCell, FCELL_TYPE))) {
 
 		if ((i + 1) == ad->cl)	/*last cell of the row */
-		    G_set_f_null_value(&nextCell, 1);
+		    Rast_set_f_null_value(&nextCell, 1);
 		else if (masked && mask_corr[i + 1 + ad->x] == 0)
-		    G_set_f_null_value(&nextCell, 1);
+		    Rast_set_f_null_value(&nextCell, 1);
 		else
 		    nextCell = buf_corr[i + 1 + ad->x];
 
@@ -775,30 +776,30 @@ int calculateF(int fd, area_des ad, char **valore, double *result)
 
 
 		if (masked && mask_inf[i + ad->x] == 0)
-		    G_set_f_null_value(&infCell, 1);
+		    Rast_set_f_null_value(&infCell, 1);
 		else
 		    infCell = buf_inf[i + ad->x];
 
 		/* calculate how many edge the cell has */
 
-		if ((G_is_null_value(&prevCell, FCELL_TYPE)) ||
+		if ((Rast_is_null_value(&prevCell, FCELL_TYPE)) ||
 		    (corrCell != prevCell)) {
 		    bordoCorr++;
 		}
 
 
-		if ((G_is_null_value(&supCell, FCELL_TYPE)) ||
+		if ((Rast_is_null_value(&supCell, FCELL_TYPE)) ||
 		    (corrCell != supCell)) {
 		    bordoCorr++;
 		}
 
-		if ((G_is_null_value(&infCell, FCELL_TYPE)) ||
+		if ((Rast_is_null_value(&infCell, FCELL_TYPE)) ||
 		    (corrCell != infCell)) {
 		    bordoCorr++;
 		}
 
 
-		if ((G_is_null_value(&nextCell, FCELL_TYPE)) ||
+		if ((Rast_is_null_value(&nextCell, FCELL_TYPE)) ||
 		    (corrCell != nextCell)) {
 		    bordoCorr++;
 		}

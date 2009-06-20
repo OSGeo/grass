@@ -27,7 +27,7 @@ int digitize(FILE * fd)
     int any;
     struct Categories labels;
 
-    G_init_cats((CELL) 0, "", &labels);
+    Rast_init_cats((CELL) 0, "", &labels);
     any = 0;
     for (;;) {
 	switch (get_type()) {

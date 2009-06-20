@@ -182,22 +182,22 @@ int main(int argc, char **argv)
     else
 	G_fatal_error(_("Unknown metric: [%s]."), opt.met->answer);
 
-    in_fd = G_open_cell_old(in_name, "");
+    in_fd = Rast_open_cell_old(in_name, "");
     if (in_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), in_name);
 
-    type = G_get_raster_map_type(in_fd);
+    type = Rast_get_raster_map_type(in_fd);
 
-    out_fd = G_open_raster_new(out_name, type);
+    out_fd = Rast_open_raster_new(out_name, type);
     if (out_fd < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), out_name);
 
-    if (G_read_cats(in_name, "", &cats) == -1) {
+    if (Rast_read_cats(in_name, "", &cats) == -1) {
 	G_warning(_("Error reading category file for <%s>"), in_name);
-	G_init_cats(0, "", &cats);
+	Rast_init_cats(0, "", &cats);
     }
 
-    if (G_read_colors(in_name, "", &colr) == -1) {
+    if (Rast_read_colors(in_name, "", &colr) == -1) {
 	G_warning(_("Error in reading color file for <%s>"), in_name);
 	colrfile = 0;
     }
@@ -205,35 +205,35 @@ int main(int argc, char **argv)
 	colrfile = 1;
 
     if (opt.old->answer && oldval >= 0)
-	G_set_cat(oldval, "original cells", &cats);
+	Rast_set_cat(oldval, "original cells", &cats);
 
     if (opt.new->answer)
-	G_set_cat(newval, "grown cells", &cats);
+	Rast_set_cat(newval, "grown cells", &cats);
 
     in_rows = G_malloc((size * 2 + 1) * sizeof(DCELL *));
 
     for (row = 0; row <= size * 2; row++)
-	in_rows[row] = G_allocate_d_raster_buf();
+	in_rows[row] = Rast_allocate_d_raster_buf();
 
-    out_row = G_allocate_d_raster_buf();
+    out_row = Rast_allocate_d_raster_buf();
 
     for (row = 0; row < size; row++)
-	G_get_d_raster_row(in_fd, in_rows[size + row], row);
+	Rast_get_d_raster_row(in_fd, in_rows[size + row], row);
 
     for (row = 0; row < nrows; row++) {
 	DCELL *tmp;
 	int i;
 
 	if (row + size < nrows)
-	    G_get_d_raster_row(in_fd, in_rows[size * 2], row + size);
+	    Rast_get_d_raster_row(in_fd, in_rows[size * 2], row + size);
 
 	for (col = 0; col < ncols; col++) {
 	    DCELL *c = &in_rows[size][col];
 
-	    if (!G_is_d_null_value(c)) {
+	    if (!Rast_is_d_null_value(c)) {
 		if (opt.old->answer) {
 		    if (oldval < 0)
-			G_set_d_null_value(&out_row[col], 1);
+			Rast_set_d_null_value(&out_row[col], 1);
 		    else
 			out_row[col] = oldval;
 		}
@@ -254,17 +254,17 @@ int main(int argc, char **argv)
 
 		c = &in_rows[size + dy][x];
 
-		if (!G_is_d_null_value(c)) {
+		if (!Rast_is_d_null_value(c)) {
 		    out_row[col] = opt.new->answer ? newval : *c;
 		    break;
 		}
 	    }
 
 	    if (i == count)
-		G_set_d_null_value(&out_row[col], 1);
+		Rast_set_d_null_value(&out_row[col], 1);
 	}
 
-	G_put_d_raster_row(out_fd, out_row);
+	Rast_put_d_raster_row(out_fd, out_row);
 
 	G_percent(row, nrows, 2);
 
@@ -276,19 +276,19 @@ int main(int argc, char **argv)
 
     G_percent(row, nrows, 2);
 
-    G_close_cell(in_fd);
-    G_close_cell(out_fd);
+    Rast_close_cell(in_fd);
+    Rast_close_cell(out_fd);
 
-    if (G_write_cats(out_name, &cats) == -1)
+    if (Rast_write_cats(out_name, &cats) == -1)
 	G_warning(_("Error writing category file for <%s>"), out_name);
 
     if (colrfile)
-	if (G_write_colors(out_name, G_mapset(), &colr) == -1)
+	if (Rast_write_colors(out_name, G_mapset(), &colr) == -1)
 	    G_warning(_("Error writing color file for <%s>"), out_name);
 
-    G_short_history(out_name, "raster", &history);
-    G_command_history(&history);
-    G_write_history(out_name, &history);
+    Rast_short_history(out_name, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(out_name, &history);
 
     return EXIT_SUCCESS;
 }

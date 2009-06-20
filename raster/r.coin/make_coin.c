@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include "coin.h"
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 static int cmp(const void *, const void *);
@@ -132,8 +133,8 @@ int make_coin(void)
 	reversed = 1;
     }
 
-    title1 = G_get_cell_title(map1name, "");
-    title2 = G_get_cell_title(map2name, "");
+    title1 = Rast_get_cell_title(map1name, "");
+    title2 = Rast_get_cell_title(map2name, "");
 
     /* determine where no data (cat 0) is */
     for (no_data1 = ncat1 - 1; no_data1 >= 0; no_data1--)

@@ -18,6 +18,7 @@
 #include <stdlib.h>
 
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 #define DEF_RED 255
@@ -99,18 +100,18 @@ int main(int argc, char **argv)
 	char *name = B[i].opt->answer;
 
 	/* Open raster map */
-	if ((B[i].file = G_open_cell_old(name, "")) == -1)
+	if ((B[i].file = Rast_open_cell_old(name, "")) == -1)
 	    G_fatal_error(_("Unable to open raster map <%s>"), name);
 
 	/* Get map type (CELL/FCELL/DCELL) */
-	B[i].type = G_get_raster_map_type(B[i].file);
+	B[i].type = Rast_get_raster_map_type(B[i].file);
 
 	/* Get color table */
-	if (G_read_colors(name, "", &B[i].colors) == -1)
+	if (Rast_read_colors(name, "", &B[i].colors) == -1)
 	    G_fatal_error(_("Color file for <%s> not available"), name);
 
 	/* Allocate input buffer */
-	B[i].array = G_allocate_raster_buf(B[i].type);
+	B[i].array = Rast_allocate_raster_buf(B[i].type);
 
 	/* Allocate output buffers */
 	B[i].buf = (unsigned char *)G_malloc(w.cols);
@@ -158,10 +159,10 @@ int main(int argc, char **argv)
 	G_percent(row, w.rows, 5);
 
 	for (i = 0; i < 3; i++) {
-	    if (G_get_raster_row(B[i].file, B[i].array, row, B[i].type) < 0)
-		G_fatal_error("G_get_raster_row failed");
+	    if (Rast_get_raster_row(B[i].file, B[i].array, row, B[i].type) < 0)
+		G_fatal_error("Rast_get_raster_row failed");
 
-	    G_lookup_raster_colors(B[i].array,
+	    Rast_lookup_raster_colors(B[i].array,
 				   (i == 0) ? B[i].buf : dummy,
 				   (i == 1) ? B[i].buf : dummy,
 				   (i == 2) ? B[i].buf : dummy,
@@ -186,11 +187,11 @@ int main(int argc, char **argv)
     fclose(fp);
 
     for (i = 0; i < 3; i++) {
-	G_free_colors(&B[i].colors);
+	Rast_free_colors(&B[i].colors);
 	G_free(B[i].array);
 	G_free(B[i].buf);
 	G_free(B[i].mask);
-	G_close_cell(B[i].file);
+	Rast_close_cell(B[i].file);
     }
 
     exit(EXIT_SUCCESS);

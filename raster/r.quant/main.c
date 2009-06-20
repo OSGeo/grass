@@ -122,32 +122,32 @@ int main(int argc, char *argv[])
     for (noi = 0; input->answers[noi]; noi++) {
 	name[noi] = G_store(input->answers[noi]);
 
-	if (G_raster_map_type(name[noi], G_mapset()) == CELL_TYPE)
+	if (Rast_raster_map_type(name[noi], G_mapset()) == CELL_TYPE)
 	    G_fatal_error(_("%s is integer map, it can't be quantized"),
 			  name[noi]);
     }
 
-    G_quant_init(&quant_struct);
+    Rast_quant_init(&quant_struct);
 
     /* now figure out what new quant rules to write */
     if (truncate) {
 	G_message(_("Truncating..."));
-	G_quant_truncate(&quant_struct);
+	Rast_quant_truncate(&quant_struct);
     }
 
     else if (round) {
 	G_message(_("Rounding..."));
-	G_quant_round(&quant_struct);
+	Rast_quant_round(&quant_struct);
     }
 
     else if (basename)
 	/* set the quant to that of basemap */
     {
-	if (G_raster_map_type(basename, "") == CELL_TYPE)
+	if (Rast_raster_map_type(basename, "") == CELL_TYPE)
 	    G_fatal_error(_("%s is integer map, it can't be used as basemap"),
 			  basename);
 
-	if (G_read_quant(basename, "", &quant_struct) <= 0)
+	if (Rast_read_quant(basename, "", &quant_struct) <= 0)
 	    G_fatal_error(_("unable to read quant rules for basemap <%s>"),
 			  basename);
     }
@@ -160,7 +160,7 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("invalid value for range= <%s>"), range->answer);
 	G_message(_("Setting quant rules for input map(s) to (%f,%f) -> (%d,%d)"),
 		  new_dmin, new_dmax, new_min, new_max);
-	G_quant_add_rule(&quant_struct, new_dmin, new_dmax, new_min, new_max);
+	Rast_quant_add_rule(&quant_struct, new_dmin, new_dmax, new_min, new_max);
     }
 
     else if (rules->answer) {
@@ -178,7 +178,7 @@ int main(int argc, char *argv[])
     }				/* use rules */
 
     for (i = 0; i < noi; i++) {
-	if (G_write_quant(name[i], G_mapset(), &quant_struct) < 0)
+	if (Rast_write_quant(name[i], G_mapset(), &quant_struct) < 0)
 	    G_message(_("Quant table not changed for %s"), name[i]);
 	else
 	    G_message(_("New quant table created for %s"), name[i]);

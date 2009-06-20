@@ -1,5 +1,6 @@
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "global.h"
 
@@ -15,7 +16,7 @@ void initialize(void)
 	    av(i, j) = window.ns_res * window.ew_res;
 	    if (IScvNULL(i, j)) {
 		natb++;
-		G_set_d_null_value(&atbv(i, j), 1);
+		Rast_set_d_null_value(&atbv(i, j), 1);
 	    }
 	    else {
 		atbv(i, j) = -10.0;
@@ -236,7 +237,7 @@ void atanb(void)
 			atbv(i, j) = log((av(i, j) / (2 * dx * sumtb)));
 		    }
 		    else {
-			G_set_d_null_value(&atbv(i, j), 1);
+			Rast_set_d_null_value(&atbv(i, j), 1);
 		    }
 		    natb++;
 		    continue;

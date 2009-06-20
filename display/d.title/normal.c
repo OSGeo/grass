@@ -1,4 +1,5 @@
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "options.h"
 #include "local_proto.h"
 

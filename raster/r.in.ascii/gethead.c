@@ -2,6 +2,7 @@
 #include <string.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 
@@ -171,7 +172,7 @@ int gethead(FILE * fd,
 	}
 
 	if (strcmp(label, "multiplier") == 0) {
-	    if (G_is_d_null_value(mult)) {	/* if mult not set on commant line */
+	    if (Rast_is_d_null_value(mult)) {	/* if mult not set on commant line */
 		if (sscanf(value, "%lf", mult) != 1) {
 		    G_warning(_("illegal multiplier field: using 1.0"));
 		    *mult = 1.0;
@@ -205,7 +206,7 @@ int gethead(FILE * fd,
 
     if (!(*nval))
 	*nval = G_store("*");
-    if (G_is_d_null_value(mult))
+    if (Rast_is_d_null_value(mult))
 	*mult = 1.0;
     /* if data type is not set, then scan data to find out data type */
     if (*d_type < 0) {
@@ -220,7 +221,7 @@ int gethead(FILE * fd,
 	}
     }
 
-    if ((err = G_adjust_Cell_head(cellhd, 1, 1))) {
+    if ((err = Rast_adjust_Cell_head(cellhd, 1, 1))) {
 	G_warning(err);
 	return 0;
     }

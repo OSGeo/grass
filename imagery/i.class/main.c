@@ -128,7 +128,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("No graphics device selected"));
 
     /* check to see if a MASK is set */
-    if (G_maskfd() >= 0)
+    if (Rast_maskfd() >= 0)
 	G_fatal_error(_("You have a mask set. Unset mask and run again"));
 
 
@@ -161,7 +161,7 @@ int main(int argc, char *argv[])
     display_title(VIEW_MAP1);
 
     mapset = G_find_cell(bg_map->answer, "");
-    if (G_get_cellhd(bg_map->answer, mapset, &cellhd) != 0)
+    if (Rast_get_cellhd(bg_map->answer, mapset, &cellhd) != 0)
 	G_fatal_error(_("Raster map <%s> not found"), bg_map->answer);
 
     G_adjust_window_to_box(&cellhd, &VIEW_MAP1->cell.head, VIEW_MAP1->nrows,
@@ -265,7 +265,7 @@ static int check_files(char *img_group, char *img_subgroup,
 	G_fatal_error(_("The subgroup must have at least 2 files to run"));
     }
 
-    if (G_get_cellhd(Refer.file[0].name, Refer.file[0].mapset, &Band_cellhd)
+    if (Rast_get_cellhd(Refer.file[0].name, Refer.file[0].mapset, &Band_cellhd)
 	!= 0)
 	G_fatal_error(_("Unable to read cell header for first band file"));
 

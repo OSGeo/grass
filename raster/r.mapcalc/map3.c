@@ -5,6 +5,7 @@
 #include <unistd.h>
 
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/G3d.h>
 #include <grass/btree.h>
 #include <grass/glocale.h>
@@ -198,7 +199,7 @@ static void translate_from_colors(map * m, DCELL * rast, CELL * cell,
 {
     int i;
 
-    G_lookup_d_raster_colors(rast, red, grn, blu, set, ncols, &m->colors);
+    Rast_lookup_d_raster_colors(rast, red, grn, blu, set, ncols, &m->colors);
 
     switch (mod) {
     case 'r':
@@ -297,7 +298,7 @@ static void translate_from_cats(map * m, CELL * cell, DCELL * xcell,
 	if (!btree_find(btree, &key, &ptr)) {
 	    values = vbuf;
 	    for (i = 0; i < NCATS; i++) {
-		if ((label = G_get_cat((CELL) (i + key), pcats)) == NULL
+		if ((label = Rast_get_cat((CELL) (i + key), pcats)) == NULL
 		    || sscanf(label, "%lf", values) != 1)
 		    SET_NULL_D(values);
 		values++;
@@ -369,12 +370,12 @@ static void close_map(map * m)
 
     if (m->have_cats) {
 	btree_free(&m->btree);
-	G_free_cats(&m->cats);
+	Rast_free_cats(&m->cats);
 	m->have_cats = 0;
     }
 
     if (m->have_colors) {
-	G_free_colors(&m->colors);
+	Rast_free_colors(&m->colors);
 	m->have_colors = 0;
     }
 }
@@ -626,7 +627,7 @@ void copy_cats(const char *dst, int idx)
 	return;
 
     G3d_writeCats((char *)dst, &cats);
-    G_free_cats(&cats);
+    Rast_free_cats(&cats);
 }
 
 void copy_colors(const char *dst, int idx)
@@ -638,7 +639,7 @@ void copy_colors(const char *dst, int idx)
 	return;
 
     G3d_writeColors((char *)dst, G_mapset(), &colr);
-    G_free_colors(&colr);
+    Rast_free_colors(&colr);
 }
 
 void copy_history(const char *dst, int idx)

@@ -1,5 +1,4 @@
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,8 +6,11 @@
 #include <unistd.h>
 #include <rpc/types.h>
 #include <rpc/xdr.h>
+
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
+
 #include "G3d_intern.h"
 
 static int read_colors(const char *, const char *, struct Colors *);
@@ -27,22 +29,22 @@ int G3d_removeColor(const char *name)
 
 int
 G3d_readColors(const char *name, const char *mapset, struct Colors *colors)
- /* adapted from G_read_colors */
+ /* adapted from Rast_read_colors */
 {
     const char *err;
     struct FPRange drange;
     DCELL dmin, dmax;
 
-    G_init_colors(colors);
+    Rast_init_colors(colors);
 
-    G_mark_colors_as_fp(colors);
+    Rast_mark_colors_as_fp(colors);
 
     switch (read_colors(name, mapset, colors)) {
     case -2:
 	if (G3d_readRange(name, mapset, &drange) >= 0) {
-	    G_get_fp_range_min_max(&drange, &dmin, &dmax);
-	    if (!G_is_d_null_value(&dmin) && !G_is_d_null_value(&dmax))
-		G_make_rainbow_fp_colors(colors, dmin, dmax);
+	    Rast_get_fp_range_min_max(&drange, &dmin, &dmax);
+	    if (!Rast_is_d_null_value(&dmin) && !Rast_is_d_null_value(&dmax))
+		Rast_make_rainbow_fp_colors(colors, dmin, dmax);
 	    return 0;
 	}
 	err = "missing";
@@ -122,7 +124,7 @@ static int read_new_colors(FILE * fd, struct Colors *colors)
     G_strip(buf);
 
     if (sscanf(buf + 1, "%lf %lf", &val1, &val2) == 2)
-	G_set_d_color_range((DCELL) val1, (DCELL) val2, colors);
+	Rast_set_d_color_range((DCELL) val1, (DCELL) val2, colors);
 
     modular = 0;
     while (fgets(buf, sizeof buf, fd)) {
@@ -135,11 +137,11 @@ static int read_new_colors(FILE * fd, struct Colors *colors)
 	if (sscanf(word1, "shift:%lf", &shift) == 1
 	    || (strcmp(word1, "shift:") == 0 &&
 		sscanf(word2, "%lf", &shift) == 1)) {
-	    G_shift_d_colors(shift, colors);
+	    Rast_shift_d_colors(shift, colors);
 	    continue;
 	}
 	if (strcmp(word1, "invert") == 0) {
-	    G_invert_colors(colors);
+	    Rast_invert_colors(colors);
 	    continue;
 	}
 	if (strcmp(word1, "%%") == 0) {
@@ -220,26 +222,26 @@ static int read_new_colors(FILE * fd, struct Colors *colors)
 	    b2 = b1;
 	}
 	if (null)
-	    G_set_null_value_color(r1, g1, b1, colors);
+	    Rast_set_null_value_color(r1, g1, b1, colors);
 	else if (undef)
-	    G_set_default_color(r1, g1, b1, colors);
+	    Rast_set_default_color(r1, g1, b1, colors);
 
 	else if (modular) {
 	    if (fp_rule)
-		G_add_modular_d_raster_color_rule((DCELL *) & val1, r1, g1,
+		Rast_add_modular_d_raster_color_rule((DCELL *) & val1, r1, g1,
 						  b1, (DCELL *) & val2, r2,
 						  g2, b2, colors);
 	    else
-		G_add_modular_color_rule((CELL) cat1, r1, g1, b1,
+		Rast_add_modular_color_rule((CELL) cat1, r1, g1, b1,
 					 (CELL) cat2, r2, g2, b2, colors);
 	}
 	else {
 	    if (fp_rule)
-		G_add_d_raster_color_rule((DCELL *) & val1, r1, g1, b1,
+		Rast_add_d_raster_color_rule((DCELL *) & val1, r1, g1, b1,
 					  (DCELL *) & val2, r2, g2, b2,
 					  colors);
 	    else
-		G_add_color_rule((CELL) cat1, r1, g1, b1,
+		Rast_add_color_rule((CELL) cat1, r1, g1, b1,
 				 (CELL) cat2, r2, g2, b2, colors);
 	}
 	/*
@@ -259,7 +261,7 @@ static int read_old_colors(FILE * fd, struct Colors *colors)
     int old;
     int zero;
 
-    G_init_colors(colors);
+    Rast_init_colors(colors);
     /*
      * first line in pre 3.0 color files is number of colors - ignore
      * otherwise it is #min first color, and the next line is for color 0
@@ -306,12 +308,12 @@ static int read_old_colors(FILE * fd, struct Colors *colors)
 	    }
 	}
 	if (zero) {
-	    G__insert_color_into_lookup((CELL) 0, red, grn, blu,
+	    Rast__insert_color_into_lookup((CELL) 0, red, grn, blu,
 					&colors->fixed);
 	    zero = 0;
 	}
 	else
-	    G__insert_color_into_lookup((CELL) n++, red, grn, blu,
+	    Rast__insert_color_into_lookup((CELL) n++, red, grn, blu,
 					&colors->fixed);
     }
     colors->cmax = n - 1;
@@ -323,7 +325,7 @@ static int read_old_colors(FILE * fd, struct Colors *colors)
 
 int
 G3d_writeColors(const char *name, const char *mapset, struct Colors *colors)
- /* adapted from G_write_colors */
+ /* adapted from Rast_write_colors */
 {
     FILE *fd;
 
@@ -336,7 +338,7 @@ G3d_writeColors(const char *name, const char *mapset, struct Colors *colors)
     if (!fd)
 	return -1;
 
-    G__write_colors(fd, colors);
+    Rast__write_colors(fd, colors);
     fclose(fd);
 
     return 1;

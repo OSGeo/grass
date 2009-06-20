@@ -1,5 +1,6 @@
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/dbmi.h>
 #include <grass/Vect.h>
 #include <grass/glocale.h>
@@ -118,11 +119,11 @@ int vect_to_rast(const char *vector_map, const char *raster_map, int field,
 
     switch (format) {
     case USE_CELL:
-	if ((fd = G_open_cell_new(raster_map)) < 0)
+	if ((fd = Rast_open_cell_new(raster_map)) < 0)
 	    G_fatal_error(_("Unable to create raster map <%s>"), raster_map);
 	break;
     case USE_DCELL:
-	if ((fd = G_open_raster_new(raster_map, DCELL_TYPE)) < 0)
+	if ((fd = Rast_open_raster_new(raster_map, DCELL_TYPE)) < 0)
 	    G_fatal_error(_("Unable to create raster map <%s>"), raster_map);
 	break;
     default:
@@ -186,7 +187,7 @@ int vect_to_rast(const char *vector_map, const char *raster_map, int field,
     Vect_destroy_line_struct(Points);
 
     if (stat < 0) {
-	G_unopen_cell(fd);
+	Rast_unopen_cell(fd);
 
 	return 1;
     }
@@ -194,7 +195,7 @@ int vect_to_rast(const char *vector_map, const char *raster_map, int field,
     Vect_close(&Map);
 
     G_verbose_message(_("Creating support files for raster map..."));
-    G_close_cell(fd);
+    Rast_close_cell(fd);
     update_hist(raster_map, vector_map, Map.head.orig_scale);
 
     /* colors */

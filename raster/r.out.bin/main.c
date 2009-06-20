@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 #include "./gmt_grd.h"
@@ -122,11 +123,11 @@ int main(int argc, char *argv[])
 
     G_get_window(&region);
 
-    fd = G_open_cell_old(name, "");
+    fd = Rast_open_cell_old(name, "");
     if (fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
 
-    map_type = G_get_raster_map_type(fd);
+    map_type = Rast_get_raster_map_type(fd);
     if (!flag.int_out->answer)
 	out_type = map_type;
     else
@@ -153,8 +154,8 @@ int main(int argc, char *argv[])
 
     /* Set up Parameters for GMT header */
     if (flag.gmt_hd->answer) {
-	G_read_fp_range(name, "", &range);
-	G_get_fp_range_min_max(&range, &Z_MIN, &Z_MAX);
+	Rast_read_fp_range(name, "", &range);
+	Rast_get_fp_range_min_max(&range, &Z_MIN, &Z_MAX);
 
 	header.nx = region.cols;
 	header.ny = region.rows;
@@ -273,7 +274,7 @@ int main(int argc, char *argv[])
 	fclose(fp_2);
     }
 
-    raster = G_allocate_raster_buf(out_type);
+    raster = Rast_allocate_raster_buf(out_type);
 
     /* Write out GMT Header if required */
     if (flag.gmt_hd->answer) {
@@ -331,13 +332,13 @@ int main(int argc, char *argv[])
     G_message(_("c=%d"), region.cols);
 
     for (row = 0; row < nrows; row++) {
-	if (G_get_raster_row(fd, raster, row, out_type) < 0)
+	if (Rast_get_raster_row(fd, raster, row, out_type) < 0)
 	    G_fatal_error(_("Reading map"));
 	G_percent(row, nrows, 2);
 
 	for (col = 0, ptr = raster; col < ncols; col++,
-	     ptr = G_incr_void_ptr(ptr, G_raster_size(out_type))) {
-	    if (!G_is_null_value(ptr, out_type)) {
+	     ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(out_type))) {
+	    if (!Rast_is_null_value(ptr, out_type)) {
 		if (out_type == CELL_TYPE) {
 		    number_i = *((CELL *) ptr);
 		    if (flag.swap->answer)
@@ -382,7 +383,7 @@ int main(int argc, char *argv[])
     }
     G_percent(row, nrows, 2);	/* finish it off */
 
-    G_close_cell(fd);
+    Rast_close_cell(fd);
     fclose(fp);
 
     exit(EXIT_SUCCESS);

@@ -37,7 +37,7 @@ extern int g_scale, g_unit;
 
 struct Categories cats;
 
-char *G_get_cat();
+char *Rast_get_cat();
 
 					/* declare a counter for the number
 					   of pixels with non-null values
@@ -259,7 +259,7 @@ void df_texture(int nrows, int ncols, double **buf, double **null_buf,
     DCELL **edgemap_d, *edge_buf_d, *zscor_buf;
     RASTER_MAP_TYPE data_type;
 
-    data_type = G_raster_map_type(choice->fn, G_mapset());
+    data_type = Rast_raster_map_type(choice->fn, G_mapset());
 
     /* set the contents of the arrays
        used to stored the results of the
@@ -464,42 +464,42 @@ void df_texture(int nrows, int ncols, double **buf, double **null_buf,
     /* if the edge map was requested */
 
     if (choice->edgemap) {
-	fc = G_open_raster_new("edge", data_type);
+	fc = Rast_open_raster_new("edge", data_type);
 	switch (data_type) {
 	case (CELL_TYPE):
-	    edge_buf_c = G_allocate_raster_buf(CELL_TYPE);
+	    edge_buf_c = Rast_allocate_raster_buf(CELL_TYPE);
 	    for (i = 1; i < nrows + 1; i++) {
-		G_zero_raster_buf(edge_buf_c, CELL_TYPE);
-		G_set_null_value(edge_buf_c, ncols + 1, CELL_TYPE);
+		Rast_zero_raster_buf(edge_buf_c, CELL_TYPE);
+		Rast_set_null_value(edge_buf_c, ncols + 1, CELL_TYPE);
 		for (j = 1; j < ncols + 1; j++) {
 		    if (*(*(edgenull + i) + j) == 0)
 			*(edge_buf_c + j - 1) = edgemap_c[i][j];
 		}
-		G_put_raster_row(fc, edge_buf_c, CELL_TYPE);
+		Rast_put_raster_row(fc, edge_buf_c, CELL_TYPE);
 	    }
 	    break;
 	case (FCELL_TYPE):
-	    edge_buf_f = G_allocate_raster_buf(FCELL_TYPE);
+	    edge_buf_f = Rast_allocate_raster_buf(FCELL_TYPE);
 	    for (i = 1; i < nrows + 1; i++) {
-		G_zero_raster_buf(edge_buf_f, FCELL_TYPE);
-		G_set_null_value(edge_buf_f, ncols + 1, FCELL_TYPE);
+		Rast_zero_raster_buf(edge_buf_f, FCELL_TYPE);
+		Rast_set_null_value(edge_buf_f, ncols + 1, FCELL_TYPE);
 		for (j = 1; j < ncols + 1; j++) {
 		    if (*(*(edgenull + i) + j) == 0)
 			*(edge_buf_f + j - 1) = edgemap_f[i][j];
 		}
-		G_put_raster_row(fc, edge_buf_f, FCELL_TYPE);
+		Rast_put_raster_row(fc, edge_buf_f, FCELL_TYPE);
 	    }
 	    break;
 	case (DCELL_TYPE):
-	    edge_buf_d = G_allocate_raster_buf(DCELL_TYPE);
+	    edge_buf_d = Rast_allocate_raster_buf(DCELL_TYPE);
 	    for (i = 1; i < nrows + 1; i++) {
-		G_zero_raster_buf(edge_buf_d, DCELL_TYPE);
-		G_set_null_value(edge_buf_d, ncols + 1, DCELL_TYPE);
+		Rast_zero_raster_buf(edge_buf_d, DCELL_TYPE);
+		Rast_set_null_value(edge_buf_d, ncols + 1, DCELL_TYPE);
 		for (j = 1; j < ncols + 1; j++) {
 		    if (*(*(edgenull + i) + j) == 0)
 			*(edge_buf_d + j - 1) = edgemap_d[i][j];
 		}
-		G_put_raster_row(fc, edge_buf_d, DCELL_TYPE);
+		Rast_put_raster_row(fc, edge_buf_d, DCELL_TYPE);
 	    }
 	    break;
 	}
@@ -526,17 +526,17 @@ void df_texture(int nrows, int ncols, double **buf, double **null_buf,
 	for (i = 0; i < nrows + 3; i++)
 	    G_free(edgenull[i]);
 	G_free(edgenull);
-	G_close_cell(fc);
+	Rast_close_cell(fc);
     }
 
     /* if the zscore map was requested */
 
     if (choice->z) {
-	fd = G_open_raster_new("zscores", DCELL_TYPE);
-	zscor_buf = G_allocate_raster_buf(DCELL_TYPE);
+	fd = Rast_open_raster_new("zscores", DCELL_TYPE);
+	zscor_buf = Rast_allocate_raster_buf(DCELL_TYPE);
 	for (i = 1; i < nrows + 1; i++) {
-	    G_zero_raster_buf(zscor_buf, DCELL_TYPE);
-	    G_set_null_value(zscor_buf, ncols + 1, DCELL_TYPE);
+	    Rast_zero_raster_buf(zscor_buf, DCELL_TYPE);
+	    Rast_set_null_value(zscor_buf, ncols + 1, DCELL_TYPE);
 	    for (j = 1; j < ncols + 1; j++) {
 		if (attr[1] > 0.0)
 		    if ((buf[i][j] || buf[i][j] == 0) &&
@@ -544,10 +544,10 @@ void df_texture(int nrows, int ncols, double **buf, double **null_buf,
 			*(zscor_buf + j - 1) =
 			    (buf[i][j] - attr[0]) / attr[1];
 	    }
-	    G_put_raster_row(fd, zscor_buf, DCELL_TYPE);
+	    Rast_put_raster_row(fd, zscor_buf, DCELL_TYPE);
 	}
 	G_free(zscor_buf);
-	G_close_cell(fd);
+	Rast_close_cell(fd);
     }
 
     /* open the output files and 

@@ -36,6 +36,7 @@
 #include <stdlib.h>
 
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 /* Saves map file from 2d array. NULL must be 0. Also meanwhile calculates area and volume. */
@@ -60,7 +61,7 @@ void save_map(FCELL ** out, int out_fd, int rows, int cols, int flag,
 	    if (flag == 1)	/* Create negative map */
 		out[row][col] = 0 - out[row][col];
 	    if (out[row][col] == 0) {
-		G_set_f_null_value(&out[row][col], 1);
+		Rast_set_f_null_value(&out[row][col], 1);
 	    }
 	    if (out[row][col] > 0 || out[row][col] < 0) {
 		G_debug(5, "volume %f += cellsize %f  * value %f [%d,%d]",
@@ -75,7 +76,7 @@ void save_map(FCELL ** out, int out_fd, int rows, int cols, int flag,
 	    if (out[row][col] < *min_depth)
 		*min_depth = out[row][col];
 	}
-	if (G_put_f_raster_row(out_fd, out[row]) == -1)
+	if (Rast_put_f_raster_row(out_fd, out[row]) == -1)
 	    G_fatal_error(_("Failed writing output raster map row %d"), row);
 	G_percent(row + 1, rows, 5);
     }
@@ -212,7 +213,7 @@ int main(int argc, char *argv[])
 
     /* If lakemap is set, write to it, else is set overwrite flag and we should write to seedmap. */
     if (lakemap) {
-	lake_fd = G_open_raster_new(lakemap, 1);
+	lake_fd = Rast_open_raster_new(lakemap, 1);
 	if (lake_fd < 0)
 	    G_fatal_error(_("Unable to create raster map <%s>"), lakemap);
     }
@@ -237,13 +238,13 @@ int main(int argc, char *argv[])
     }
 
     /* Open terran map */
-    in_terran_fd = G_open_cell_old(terrainmap, "");
+    in_terran_fd = Rast_open_cell_old(terrainmap, "");
     if (in_terran_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), terrainmap);
 
     /* Open seed map */
     if (smap_opt->answer) {
-	out_fd = G_open_cell_old(seedmap, "");
+	out_fd = Rast_open_cell_old(seedmap, "");
 	if (out_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), seedmap);
     }
@@ -262,12 +263,12 @@ int main(int argc, char *argv[])
 	out_water[row] = (FCELL *) G_calloc(cols, sizeof(FCELL));
 
 	/* In newly created space load data from file. */
-	if (G_get_f_raster_row(in_terran_fd, in_terran[row], row) != 1)
+	if (Rast_get_f_raster_row(in_terran_fd, in_terran[row], row) != 1)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			  terrainmap, row);
 
 	if (smap_opt->answer)
-	    if (G_get_f_raster_row(out_fd, out_water[row], row) != 1)
+	    if (Rast_get_f_raster_row(out_fd, out_water[row], row) != 1)
 		G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			      seedmap, row);
 
@@ -284,14 +285,14 @@ int main(int argc, char *argv[])
 
     /* Close seed map for reading. */
     if (smap_opt->answer)
-	G_close_cell(out_fd);
+	Rast_close_cell(out_fd);
 
     /* Open output map for writing. */
     if (lakemap) {
 	out_fd = lake_fd;
     }
     else {
-	out_fd = G_open_raster_new(seedmap, 1);
+	out_fd = Rast_open_raster_new(seedmap, 1);
 	if (out_fd < 0)
 	    G_fatal_error(_("Unable to create raster map <%s>"), seedmap);
     }
@@ -367,27 +368,27 @@ int main(int argc, char *argv[])
     G_warning(_("Volume is correct only if lake depth (terrain raster map) is in meters"));
 
     /* Close all files. Lake map gets written only now. */
-    G_close_cell(in_terran_fd);
-    G_close_cell(out_fd);
+    Rast_close_cell(in_terran_fd);
+    Rast_close_cell(out_fd);
 
     /* Add blue color gradient from light bank to dark depth */
-    G_init_colors(&colr);
+    Rast_init_colors(&colr);
     if (negative_flag->answer == 1) {
-	G_add_f_raster_color_rule(&max_depth, 0, 240, 255,
+	Rast_add_f_raster_color_rule(&max_depth, 0, 240, 255,
 				  &min_depth, 0, 50, 170, &colr);
     }
     else {
-	G_add_f_raster_color_rule(&min_depth, 0, 240, 255,
+	Rast_add_f_raster_color_rule(&min_depth, 0, 240, 255,
 				  &max_depth, 0, 50, 170, &colr);
     }
 
-    if (G_write_colors(lakemap, G_mapset(), &colr) != 1)
+    if (Rast_write_colors(lakemap, G_mapset(), &colr) != 1)
 	G_fatal_error(_("Unable to read color file of raster map <%s>"),
 		      lakemap);
 
-    G_short_history(lakemap, "raster", &history);
-    G_command_history(&history);
-    G_write_history(lakemap, &history);
+    Rast_short_history(lakemap, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(lakemap, &history);
 
     return EXIT_SUCCESS;
 }

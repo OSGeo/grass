@@ -32,6 +32,7 @@
 #endif
 
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include <grass/gstypes.h>
 
@@ -239,15 +240,15 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
 	return (-1);
     }
 
-    is_fp = G_raster_map_is_fp(name, mapset);
+    is_fp = Rast_raster_map_is_fp(name, mapset);
 
-    if (G_read_colors(name, mapset, &colors) == -1) {
+    if (Rast_read_colors(name, mapset, &colors) == -1) {
 	G_warning(_("Unable to read color file of raster map <%s>"), name);
 	return (-1);
     }
 
     if (cat_labs)
-	if (G_read_cats(name, mapset, &cats) == -1) {
+	if (Rast_read_cats(name, mapset, &cats) == -1) {
 	    G_warning(_("Unable to read category file of raster map <%s>"),
 		      name);
 	    cat_labs = 0;
@@ -264,23 +265,23 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
     }
     else {
 	if (is_fp) {
-	    if (G_read_fp_range(name, mapset, &fp_range) != 1) {
+	    if (Rast_read_fp_range(name, mapset, &fp_range) != 1) {
 		G_warning(_("Unable to read fp range of raster map <%s>"),
 			  name);
 		return (-1);
 	    }
-	    G_get_fp_range_min_max(&fp_range, &fmin, &fmax);
+	    Rast_get_fp_range_min_max(&fp_range, &fmin, &fmax);
 	    if (flags[4] && rangef[0] != -9999.)
 		fmin = rangef[0];
 	    if (flags[4] && rangef[1] != -9999.)
 		fmax = rangef[1];
 	}
 	else {
-	    if (G_read_range(name, mapset, &range) == -1) {
+	    if (Rast_read_range(name, mapset, &range) == -1) {
 		G_warning(_("Unable to read range of raster map <%s>"), name);
 		return (-1);
 	    }
-	    G_get_range_min_max(&range, &min, &max);
+	    Rast_get_range_min_max(&range, &min, &max);
 	    if (flags[4] && rangef[0] != -9999.)
 		min = rangef[0];
 	    if (flags[4] && rangef[1] != -9999.)
@@ -402,7 +403,7 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
 		if (is_fp) {
 		    tdcell = discrete ? Listcats[k] : labvals[k];
 		    if (cat_labs) {
-			cstr = G_get_d_raster_cat(&tdcell, &cats);
+			cstr = Rast_get_d_raster_cat(&tdcell, &cats);
 		    }
 		    if (cat_labs && !cat_vals) {
 			sprintf(buff, "%s", cstr);
@@ -423,10 +424,10 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
 		    tcell = discrete ? Listnum ?
 			Listcats[k] : min + k : labvals[k];
 		    if (cat_labs && !cat_vals)
-			sprintf(buff, "%s", G_get_cat(tcell, &cats));
+			sprintf(buff, "%s", Rast_get_cat(tcell, &cats));
 		    else {
 			if (cat_labs && cat_vals) {
-			    cstr = G_get_cat(tcell, &cats);
+			    cstr = Rast_get_cat(tcell, &cats);
 			    if (cstr[0])
 				sprintf(buff, "%*d) %s", iprec, tcell, cstr);
 			    else
@@ -514,10 +515,10 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
 	    }
 	    if (k == 0 || tdcell != pdcell) {
 		if (is_fp)
-		    G_get_d_raster_color(&tdcell,
+		    Rast_get_d_raster_color(&tdcell,
 					 &red, &green, &blue, &colors);
 		else
-		    G_get_color((CELL) tdcell, &red, &green, &blue, &colors);
+		    Rast_get_color((CELL) tdcell, &red, &green, &blue, &colors);
 
 		RGB_TO_INT(red, green, blue, colr);
 		if (discrete) {	/* draw black-white-black separator */
@@ -634,9 +635,9 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
 		    labpos = 1. - labpos;
 		if (cat_labs) {
 		    if (!is_fp)
-			cstr = G_get_cat(tcell, &cats);
+			cstr = Rast_get_cat(tcell, &cats);
 		    else
-			cstr = G_get_d_raster_cat(&tdcell, &cats);
+			cstr = Rast_get_d_raster_cat(&tdcell, &cats);
 		}
 		if (cat_labs && !cat_vals)
 		    sprintf(buff, "%s", cstr);
@@ -688,9 +689,9 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
     }
 
     if (cat_labs)
-	G_free_cats(&cats);
+	Rast_free_cats(&cats);
 
-    G_free_colors(&colors);
+    Rast_free_colors(&colors);
 
     gsd_end_legend_viewport();
 

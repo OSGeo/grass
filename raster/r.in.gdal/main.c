@@ -22,6 +22,7 @@
 #include <math.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/imagery.h>
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
@@ -460,7 +461,7 @@ int main(int argc, char *argv[])
 	ImportBand(hBand, output, NULL);
 
 	if (title)
-	    G_put_cell_title(output, title);
+	    Rast_put_cell_title(output, title);
     }
 
     /* -------------------------------------------------------------------- */
@@ -505,7 +506,7 @@ int main(int argc, char *argv[])
 	    ImportBand(hBand, szBandName, &ref);
 
 	    if (title)
-		G_put_cell_title(szBandName, title);
+		Rast_put_cell_title(szBandName, title);
 	}
 
 	I_put_group_ref(output, &ref);
@@ -678,7 +679,7 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
     char outputReal[GNAME_MAX], outputImg[GNAME_MAX];
     char *nullFlags = NULL;
     int (*raster_open_new_func) (const char *, RASTER_MAP_TYPE) =
-	G_open_raster_new;
+	Rast_open_raster_new;
     struct History history;
 
     /* -------------------------------------------------------------------- */
@@ -698,8 +699,8 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 	data_type = CELL_TYPE;
 	eGDT = GDT_Int32;
 	complex = FALSE;
-	G_set_cell_format(0);
-	/* raster_open_new_func = G_open_raster_new_uncompressed; *//* ?? */
+	Rast_set_cell_format(0);
+	/* raster_open_new_func = Rast_open_raster_new_uncompressed; *//* ?? */
 	break;
 
     case GDT_Int16:
@@ -707,15 +708,15 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 	data_type = CELL_TYPE;
 	eGDT = GDT_Int32;
 	complex = FALSE;
-	G_set_cell_format(1);
-	/* raster_open_new_func = G_open_raster_new_uncompressed; *//* ?? */
+	Rast_set_cell_format(1);
+	/* raster_open_new_func = Rast_open_raster_new_uncompressed; *//* ?? */
 	break;
 
     default:
 	data_type = CELL_TYPE;
 	eGDT = GDT_Int32;
 	complex = FALSE;
-	G_set_cell_format(3);
+	Rast_set_cell_format(3);
 	break;
     }
 
@@ -736,8 +737,8 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 	if (cfI < 0)
 	    G_fatal_error(_("Unable to create raster map <%s>"), outputImg);
 
-	cellReal = G_allocate_raster_buf(data_type);
-	cellImg = G_allocate_raster_buf(data_type);
+	cellReal = Rast_allocate_raster_buf(data_type);
+	cellImg = Rast_allocate_raster_buf(data_type);
 	bufComplex = (float *)G_malloc(sizeof(float) * ncols * 2);
 
 	if (group_ref != NULL) {
@@ -753,7 +754,7 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 	if (group_ref != NULL)
 	    I_add_file_to_group_ref((char *)output, G_mapset(), group_ref);
 
-	cell = G_allocate_raster_buf(data_type);
+	cell = Rast_allocate_raster_buf(data_type);
     }
 
     /* -------------------------------------------------------------------- */
@@ -790,8 +791,8 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 			    bufComplex[indx * 2 + 1];
 		    }
 		}
-		G_put_raster_row(cfR, cellReal, data_type);
-		G_put_raster_row(cfI, cellImg, data_type);
+		Rast_put_raster_row(cfR, cellReal, data_type);
+		Rast_put_raster_row(cfI, cellImg, data_type);
 	    }			/* end of complex */
 	    else {		/* single band */
 		GDALRasterIO(hBand, GF_Read, 0, row - 1, ncols, 1,
@@ -815,10 +816,10 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 			}
 		    }
 
-		    G_insert_null_values(cell, nullFlags, ncols, data_type);
+		    Rast_insert_null_values(cell, nullFlags, ncols, data_type);
 		}
 
-		G_put_raster_row(cf, cell, data_type);
+		Rast_put_raster_row(cf, cell, data_type);
 	    }			/* end of not complex */
 
 	    G_percent(row, nrows, 2);
@@ -848,10 +849,10 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 		    }
 		}
 
-		G_insert_null_values(cell, nullFlags, ncols, data_type);
+		Rast_insert_null_values(cell, nullFlags, ncols, data_type);
 	    }
 
-	    G_put_raster_row(cf, cell, data_type);
+	    Rast_put_raster_row(cf, cell, data_type);
 	}
 
 	G_percent(row, nrows, 2);
@@ -861,25 +862,25 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
     /* -------------------------------------------------------------------- */
     if (complex) {
 	G_debug(1, "Creating support files for %s", outputReal);
-	G_close_cell(cfR);
-	G_short_history((char *)outputReal, "raster", &history);
-	G_command_history(&history);
-	G_write_history((char *)outputReal, &history);
+	Rast_close_cell(cfR);
+	Rast_short_history((char *)outputReal, "raster", &history);
+	Rast_command_history(&history);
+	Rast_write_history((char *)outputReal, &history);
 
 	G_debug(1, "Creating support files for %s", outputImg);
-	G_close_cell(cfI);
-	G_short_history((char *)outputImg, "raster", &history);
-	G_command_history(&history);
-	G_write_history((char *)outputImg, &history);
+	Rast_close_cell(cfI);
+	Rast_short_history((char *)outputImg, "raster", &history);
+	Rast_command_history(&history);
+	Rast_write_history((char *)outputImg, &history);
 
 	G_free(bufComplex);
     }
     else {
 	G_debug(1, "Creating support files for %s", output);
-	G_close_cell(cf);
-	G_short_history((char *)output, "raster", &history);
-	G_command_history(&history);
-	G_write_history((char *)output, &history);
+	Rast_close_cell(cf);
+	Rast_short_history((char *)output, "raster", &history);
+	Rast_command_history(&history);
+	Rast_write_history((char *)output, &history);
     }
 
     if (nullFlags != NULL)
@@ -897,7 +898,7 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 
 	hCT = GDALGetRasterColorTable(hBand);
 
-	G_init_colors(&colors);
+	Rast_init_colors(&colors);
 	for (iColor = 0; iColor < GDALGetColorEntryCount(hCT); iColor++) {
 	    GDALColorEntry sEntry;
 
@@ -905,10 +906,10 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 	    if (sEntry.c4 == 0)
 		continue;
 
-	    G_set_color(iColor, sEntry.c1, sEntry.c2, sEntry.c3, &colors);
+	    Rast_set_color(iColor, sEntry.c1, sEntry.c2, sEntry.c3, &colors);
 	}
 
-	G_write_colors((char *)output, G_mapset(), &colors);
+	Rast_write_colors((char *)output, G_mapset(), &colors);
     }
     else {			/* no color table present */
 
@@ -920,9 +921,9 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 	    G_verbose_message(_("Setting grey color table for <%s> (8bit, full range)"),
 			      output);
 
-	    G_init_colors(&colors);
-	    G_make_grey_scale_colors(&colors, 0, 255);	/* full range */
-	    G_write_colors((char *)output, G_mapset(), &colors);
+	    Rast_init_colors(&colors);
+	    Rast_make_grey_scale_colors(&colors, 0, 255);	/* full range */
+	    Rast_write_colors((char *)output, G_mapset(), &colors);
 	}
 	if ((GDALGetRasterDataType(hBand) == GDT_UInt16)) {
 	    /* found 0..65535 data: we set to grey scale: */
@@ -932,12 +933,12 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 
 	    G_verbose_message(_("Setting grey color table for <%s> (16bit, image range)"),
 			      output);
-	    G_read_range((char *)output, G_mapset(), &range);
-	    G_get_range_min_max(&range, &min, &max);
+	    Rast_read_range((char *)output, G_mapset(), &range);
+	    Rast_get_range_min_max(&range, &min, &max);
 
-	    G_init_colors(&colors);
-	    G_make_grey_scale_colors(&colors, min, max);	/* image range */
-	    G_write_colors((char *)output, G_mapset(), &colors);
+	    Rast_init_colors(&colors);
+	    Rast_make_grey_scale_colors(&colors, min, max);	/* image range */
+	    Rast_write_colors((char *)output, G_mapset(), &colors);
 	}
     }
 

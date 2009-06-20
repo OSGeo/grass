@@ -36,6 +36,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 extern CELL f_c(CELL);
@@ -96,24 +97,24 @@ int main(int argc, char *argv[])
     patv = atoi(patval->answer);
 
     /*if Gispf() error */
-    if ((infd = G_open_cell_old(name, "")) < 0)
+    if ((infd = Rast_open_cell_old(name, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
 
     /* determine the inputmap type (CELL/FCELL/DCELL) */
-    data_type = G_get_raster_map_type(infd);
+    data_type = Rast_get_raster_map_type(infd);
 
-    if (G_get_cellhd(name, "", &cellhd) < 0)
+    if (Rast_get_cellhd(name, "", &cellhd) < 0)
 	G_fatal_error(_("Unable to read header of raster map <%s>"), name);
 
     /* Allocate input buffer */
-    inrast = G_allocate_raster_buf(data_type);
+    inrast = Rast_allocate_raster_buf(data_type);
 
     /* Allocate output buffer, use input map data_type */
     nrows = G_window_rows();
     ncols = G_window_cols();
-    outrast = G_allocate_raster_buf(data_type);
+    outrast = Rast_allocate_raster_buf(data_type);
 
-    if ((outfd = G_open_raster_new(result, data_type)) < 0)
+    if ((outfd = Rast_open_raster_new(result, data_type)) < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), result);
 
     for (row = 0; row < nrows; row++) {
@@ -123,7 +124,7 @@ int main(int argc, char *argv[])
 	    G_percent(row, nrows, 2);
 
 	/* read input map */
-	if (G_get_raster_row(infd, inrast, row, data_type) < 0)
+	if (Rast_get_raster_row(infd, inrast, row, data_type) < 0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"), name,
 			  row);
 
@@ -139,14 +140,14 @@ int main(int argc, char *argv[])
 
 	}
 
-	if (G_put_raster_row(outfd, outrast, data_type) < 0)
+	if (Rast_put_raster_row(outfd, outrast, data_type) < 0)
 	    G_fatal_error(_("Unable to write to <%s>"), result);
     }
 
     G_free(inrast);
     G_free(outrast);
-    G_close_cell(infd);
-    G_close_cell(outfd);
+    Rast_close_cell(infd);
+    Rast_close_cell(outfd);
 
     return (EXIT_SUCCESS);
 }

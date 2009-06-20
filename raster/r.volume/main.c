@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/site.h>
 #include <grass/glocale.h>
 
@@ -116,13 +117,13 @@ int main(int argc, char *argv[])
 	clumpmap = "MASK";
 	use_MASK = 1;
     }
-    fd_data = G_open_cell_old(datamap, "");
+    fd_data = Rast_open_cell_old(datamap, "");
     if (use_MASK)
 	clump_mapset = G_mapset();
     else
 	clump_mapset = "";
 
-    fd_clump = G_open_cell_old(clumpmap, clump_mapset);
+    fd_clump = Rast_open_cell_old(clumpmap, clump_mapset);
 
     /* initialize sites file (for centroids) if needed */
     if (*site_list) {
@@ -132,7 +133,7 @@ int main(int argc, char *argv[])
     }
 
     /* initialize data accumulation arrays */
-    max = G_number_of_cats(clumpmap, clump_mapset);
+    max = Rast_number_of_cats(clumpmap, clump_mapset);
 
     sum = (double *)G_malloc((max + 1) * sizeof(double));
     count = (long int *)G_malloc((max + 1) * sizeof(long int));
@@ -142,8 +143,8 @@ int main(int argc, char *argv[])
 	count[i] = 0;
     }
 
-    data_buf = G_allocate_cell_buf();
-    clump_buf = G_allocate_cell_buf();
+    data_buf = Rast_allocate_cell_buf();
+    clump_buf = Rast_allocate_cell_buf();
 
     /* get window size */
     rows = window.rows;
@@ -156,14 +157,14 @@ int main(int argc, char *argv[])
     G_message("Complete ...");
     for (row = 0; row < rows; row++) {
 	G_percent(row, rows, 2);
-	G_get_map_row(fd_data, data_buf, row);
-	G_get_map_row(fd_clump, clump_buf, row);
+	Rast_get_map_row(fd_data, data_buf, row);
+	Rast_get_map_row(fd_clump, clump_buf, row);
 	for (col = 0; col < cols; col++) {
 	    i = clump_buf[col];
 	    if (i > max)
 		G_fatal_error(
 		    "Row=%d Col=%d Cat=%d in clump map [%s]; max=%d.\n"
-		    "Cat value > max returned by G_number_of_cats.",
+		    "Cat value > max returned by Rast_number_of_cats.",
 		    row, col, i, clumpmap, max);
 	    if (i < 1)
 		continue;	/* ignore zeros and negs */

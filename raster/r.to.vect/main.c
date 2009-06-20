@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/dbmi.h>
 #include <grass/Vect.h>
 #include <grass/glocale.h>
@@ -114,11 +115,11 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("z flag is supported only for points"));
 
     /* Open files */
-    if ((input_fd = G_open_cell_old(in_opt->answer, "")) < 0)
+    if ((input_fd = Rast_open_cell_old(in_opt->answer, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), in_opt->answer);
 
-    data_type = G_get_raster_map_type(input_fd);
-    data_size = G_raster_size(data_type);
+    data_type = Rast_get_raster_map_type(input_fd);
+    data_size = Rast_raster_size(data_type);
     G_get_window(&cell_head);
 
     if (value_flag && data_type != CELL_TYPE) {
@@ -137,7 +138,7 @@ int main(int argc, char *argv[])
 
     /* Open category labels */
     if (data_type == CELL_TYPE) {
-	if (0 == G_read_cats(in_opt->answer, "", &RastCats))
+	if (0 == Rast_read_cats(in_opt->answer, "", &RastCats))
 	    has_cats = 1;
     }
     else
@@ -233,7 +234,7 @@ int main(int argc, char *argv[])
 	extract_points(z_flg->answer);
     }
 
-    G_close_cell(input_fd);
+    Rast_close_cell(input_fd);
 
     if (!no_topol->answer)
 	Vect_build(&Map);
@@ -281,7 +282,7 @@ int main(int argc, char *argv[])
     }
 
     if (has_cats)
-	G_free_cats(&RastCats);
+	Rast_free_cats(&RastCats);
 
     if (driver != NULL) {
 	db_commit_transaction(driver);

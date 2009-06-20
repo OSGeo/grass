@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 

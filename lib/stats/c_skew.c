@@ -1,5 +1,7 @@
 #include <math.h>
+
 #include <grass/gis.h>
+#include <grass/Rast.h>
 
 void c_skew(DCELL * result, DCELL * values, int n, const void *closure)
 {
@@ -11,7 +13,7 @@ void c_skew(DCELL * result, DCELL * values, int n, const void *closure)
     count = 0;
 
     for (i = 0; i < n; i++) {
-	if (G_is_d_null_value(&values[i]))
+	if (Rast_is_d_null_value(&values[i]))
 	    continue;
 
 	sum += values[i];
@@ -19,7 +21,7 @@ void c_skew(DCELL * result, DCELL * values, int n, const void *closure)
     }
 
     if (count == 0) {
-	G_set_d_null_value(result, 1);
+	Rast_set_d_null_value(result, 1);
 	return;
     }
 
@@ -30,7 +32,7 @@ void c_skew(DCELL * result, DCELL * values, int n, const void *closure)
     for (i = 0; i < n; i++) {
 	DCELL d;
 
-	if (G_is_d_null_value(&values[i]))
+	if (Rast_is_d_null_value(&values[i]))
 	    continue;
 
 	d = values[i] - ave;
@@ -53,7 +55,7 @@ void w_skew(DCELL * result, DCELL(*values)[2], int n, const void *closure)
     count = 0;
 
     for (i = 0; i < n; i++) {
-	if (G_is_d_null_value(&values[i][0]))
+	if (Rast_is_d_null_value(&values[i][0]))
 	    continue;
 
 	sum += values[i][0] * values[i][1];
@@ -61,7 +63,7 @@ void w_skew(DCELL * result, DCELL(*values)[2], int n, const void *closure)
     }
 
     if (count == 0) {
-	G_set_d_null_value(result, 1);
+	Rast_set_d_null_value(result, 1);
 	return;
     }
 
@@ -72,7 +74,7 @@ void w_skew(DCELL * result, DCELL(*values)[2], int n, const void *closure)
     for (i = 0; i < n; i++) {
 	DCELL d;
 
-	if (G_is_d_null_value(&values[i][0]))
+	if (Rast_is_d_null_value(&values[i][0]))
 	    continue;
 
 	d = values[i][0] - ave;

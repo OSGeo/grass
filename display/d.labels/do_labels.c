@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/display.h>
 #include <grass/display_raster.h>
 #include <grass/glocale.h>

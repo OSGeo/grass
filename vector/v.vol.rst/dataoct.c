@@ -29,6 +29,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "dataoct.h"
 #include "externs.h"
 #include "user.h"

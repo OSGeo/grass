@@ -30,6 +30,7 @@
 
 extern "C" {
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 }
 
@@ -185,7 +186,7 @@ int MyApp::load_files(void)
     const char *name;
     struct Colors colors;
 
-    dcell = G_allocate_d_raster_buf();
+    dcell = Rast_allocate_d_raster_buf();
 
     tsiz = G_window_cols();
 
@@ -231,23 +232,23 @@ int MyApp::load_files(void)
 	    name = vfiles[vnum][cnt];
 	    G_message(_("Reading file [%s]..."), name);
 
-	    fd = G_open_cell_old(name, "");
+	    fd = Rast_open_cell_old(name, "");
 	    if (fd < 0)
 		G_fatal_error(_("Unable to open raster map <%s>"), name);
 	    /*
 	       strcpy(title[cnt],G_get_cell_title(name, mapset));
 	     */
 
-	    ret = G_read_colors(name, "", &colors);
+	    ret = Rast_read_colors(name, "", &colors);
 	    if (ret < 0)
 		G_fatal_error(_("Unable to read color file"));
 
 	    for (row = 0; row < vrows; row++) {
-		if (G_get_d_raster_row(fd, dcell, (int)(row / vscale)) < 0)
+		if (Rast_get_d_raster_row(fd, dcell, (int)(row / vscale)) < 0)
 		    G_fatal_error(_("Unable to read raster row"));
 
 		rowoff = (vyoff + row) * ncols;
-		G_lookup_d_raster_colors(dcell, tr, tg, tb, tset, tsiz, &colors);
+		Rast_lookup_d_raster_colors(dcell, tr, tg, tb, tset, tsiz, &colors);
 
 		for (col = 0; col < vcols; col++) {
 		    coff = (int)(col / vscale);
@@ -259,7 +260,7 @@ int MyApp::load_files(void)
 		}
 	    }
 
-	    G_close_cell(fd);
+	    Rast_close_cell(fd);
 	}
 
 	wxBitmap *bmp = new wxBitmap(img);

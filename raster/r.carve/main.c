@@ -22,6 +22,7 @@
 #include <errno.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "enforce.h"
 
@@ -160,15 +161,15 @@ int main(int argc, char **argv)
     if ((rmapset = G_find_file2("cell", parm.inrast->answer, "")) == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), parm.inrast->answer);
 
-    if ((infd = G_open_cell_old(parm.inrast->answer, rmapset)) == -1)
+    if ((infd = Rast_open_cell_old(parm.inrast->answer, rmapset)) == -1)
 	G_fatal_error(_("Unable to open raster map <%s>"),
 		      parm.inrast->answer);
 
-    parm.raster_type = G_get_raster_map_type(infd);
+    parm.raster_type = Rast_get_raster_map_type(infd);
 
     /* open new map for output */
     if ((outfd =
-	 G_open_raster_new(parm.outrast->answer, parm.raster_type)) < 0)
+	 Rast_open_raster_new(parm.outrast->answer, parm.raster_type)) < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"),
 		      parm.outrast->answer);
 
@@ -178,8 +179,8 @@ int main(int argc, char **argv)
 
     enforce_downstream(infd, outfd, &Map, &outMap, &parm);
 
-    G_close_cell(infd);
-    G_close_cell(outfd);
+    Rast_close_cell(infd);
+    Rast_close_cell(outfd);
     close_vect(&Map, 0);
 
     if (parm.outvect->answer)

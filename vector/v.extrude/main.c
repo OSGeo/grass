@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/Vect.h>
 #include <grass/glocale.h>
 #include <grass/dbmi.h>
@@ -172,7 +173,7 @@ int main(int argc, char *argv[])
 	G_get_window(&window);
 
 	/* open the elev raster, and check for error condition */
-	if ((fdrast = G_open_cell_old(elevation->answer, "")) < 0)
+	if ((fdrast = Rast_open_cell_old(elevation->answer, "")) < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
 			  elevation->answer);
     }
@@ -389,10 +390,10 @@ static int extrude(struct Map_info *In, struct Map_info *Out,
     /* do not trace -> calculate minumum dem offset */
     if (fdrast && !trace) {
 	for (k = 0; k < Points->n_points; k++) {
-	    voffset_curr = G_get_raster_sample(fdrast, &window, NULL,
+	    voffset_curr = Rast_get_raster_sample(fdrast, &window, NULL,
 					       Points->y[k], Points->x[k], 0,
 					       NEAREST);
-	    if (G_is_d_null_value(&voffset_curr))
+	    if (Rast_is_d_null_value(&voffset_curr))
 		continue;
 
 	    if (k == 0) {
@@ -412,20 +413,20 @@ static int extrude(struct Map_info *In, struct Map_info *Out,
 
 	/* trace */
 	if (fdrast && trace) {
-	    voffset_curr = G_get_raster_sample(fdrast, &window, NULL,
+	    voffset_curr = Rast_get_raster_sample(fdrast, &window, NULL,
 					       Points->y[k], Points->x[k], 0,
 					       NEAREST);
 
 	    if (type != GV_POINT) {
-		voffset_next = G_get_raster_sample(fdrast, &window, NULL,
+		voffset_next = Rast_get_raster_sample(fdrast, &window, NULL,
 						   Points->y[k + 1],
 						   Points->x[k + 1], 0,
 						   NEAREST);
 	    }
 	}
 
-	if (G_is_d_null_value(&voffset_curr) ||
-	    G_is_d_null_value(&voffset_next)) {
+	if (Rast_is_d_null_value(&voffset_curr) ||
+	    Rast_is_d_null_value(&voffset_next)) {
 	    if (type == GV_POINT)
 		break;
 	    else if (type == GV_LINE) {

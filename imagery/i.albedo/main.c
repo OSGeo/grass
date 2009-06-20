@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 #define MAXFILES 8
@@ -146,19 +147,19 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Too many input maps. Only %d allowed."), MAXFILES);
 	name = *ptr;
 	
-	infd[nfiles] = G_open_cell_old(name, "");
+	infd[nfiles] = Rast_open_cell_old(name, "");
 	if (infd[nfiles] < 0)
 	    continue;
 
 	/* Allocate input buffer */
-	in_data_type[nfiles] = G_raster_map_type(name, "");
-	if ((infd[nfiles] = G_open_cell_old(name, "")) < 0)
+	in_data_type[nfiles] = Rast_raster_map_type(name, "");
+	if ((infd[nfiles] = Rast_open_cell_old(name, "")) < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), name);
 
-	if ((G_get_cellhd(name, "", &cellhd)) < 0)
+	if ((Rast_get_cellhd(name, "", &cellhd)) < 0)
 	    G_fatal_error(_("Unable to read header of raster map <%s>"), name);
 
-	inrast[nfiles] = G_allocate_raster_buf(in_data_type[nfiles]);
+	inrast[nfiles] = Rast_allocate_raster_buf(in_data_type[nfiles]);
 	nfiles++;
     }
     nfiles--;
@@ -168,10 +169,10 @@ int main(int argc, char *argv[])
     /* Allocate output buffer, use input map data_type */
     nrows = G_window_rows();
     ncols = G_window_cols();
-    outrast = G_allocate_raster_buf(out_data_type);
+    outrast = Rast_allocate_raster_buf(out_data_type);
 
     /* Create New raster files */
-    if ((outfd = G_open_raster_new(result, 1)) < 0)
+    if ((outfd = Rast_open_raster_new(result, 1)) < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), result);
 
     /*START ALBEDO HISTOGRAM STRETCH */
@@ -189,7 +190,7 @@ int main(int argc, char *argv[])
 	    G_percent(row, nrows, 2);
 	    /* read input map */
 	    for (i = 1; i <= nfiles; i++) {
-		if ((G_get_raster_row(
+		if ((Rast_get_raster_row(
 			 infd[i], inrast[i], row, in_data_type[i])) < 0)
 		    G_fatal_error(_("Unable to read raster map <%s> row %d >"),
 				  name, row);
@@ -222,7 +223,7 @@ int main(int argc, char *argv[])
 		else if (aster) {
 		    de = bb_alb_aster(d[1], d[2], d[3], d[4], d[5], d[6]);
 		}
-		if (G_is_d_null_value(&de)) {
+		if (Rast_is_d_null_value(&de)) {
 		    /*Do nothing */
 		}
 		else {
@@ -347,7 +348,7 @@ int main(int argc, char *argv[])
 	G_percent(row, nrows, 2);
 	/* read input map */
 	for (i = 1; i <= nfiles; i++) {
-	    if ((G_get_raster_row(
+	    if ((Rast_get_raster_row(
 		     infd[i], inrast[i], row, in_data_type[i])) < 0)
 		G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			      name, row);
@@ -385,24 +386,24 @@ int main(int argc, char *argv[])
 	    }
 	    ((DCELL *) outrast)[col] = de;
 	}
-	if (G_put_raster_row(outfd, outrast, out_data_type) < 0)
+	if (Rast_put_raster_row(outfd, outrast, out_data_type) < 0)
 	    G_fatal_error(_("Failed writing raster map <%s> row %d"),
 			  result, row);
     }
     for (i = 1; i <= nfiles; i++) {
 	G_free(inrast[i]);
-	G_close_cell(infd[i]);
+	Rast_close_cell(infd[i]);
     }
     G_free(outrast);
-    G_close_cell(outfd);
+    Rast_close_cell(outfd);
 
     /* Color table from 0.0 to 1.0 */
-    G_init_colors(&colors);
-    G_add_color_rule(0.0, 0, 0, 0, 1.0, 255, 255, 255, &colors);
+    Rast_init_colors(&colors);
+    Rast_add_color_rule(0.0, 0, 0, 0, 1.0, 255, 255, 255, &colors);
     /* Metadata */
-    G_short_history(result, "raster", &history);
-    G_command_history(&history);
-    G_write_history(result, &history);
+    Rast_short_history(result, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(result, &history);
 
     exit(EXIT_SUCCESS);
 }

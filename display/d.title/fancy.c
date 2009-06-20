@@ -1,4 +1,5 @@
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "options.h"
 
 void fancy(struct Cell_head *window, struct Categories *cats, FILE * fp)

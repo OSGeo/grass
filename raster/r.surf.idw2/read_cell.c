@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 
@@ -16,13 +17,13 @@ int read_cell(char *name)
     G_get_window(&window);
 
     /* Set window to align with input raster map */
-    G_get_cellhd(name, "", &cellhd);
+    Rast_get_cellhd(name, "", &cellhd);
     G_align_window(&window, &cellhd);
     G_set_window(&window);
 
-    cell = G_allocate_cell_buf();
+    cell = Rast_allocate_cell_buf();
 
-    fd = G_open_cell_old(name, "");
+    fd = Rast_open_cell_old(name, "");
     if (fd < 0) {
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
 	exit(EXIT_FAILURE);
@@ -34,7 +35,7 @@ int read_cell(char *name)
     for (row = 0; row < window.rows; row++) {
 	G_percent(row, window.rows, 1);
 	north += window.ns_res;
-	if (G_get_map_row_nomask(fd, cell, row) < 0)
+	if (Rast_get_map_row_nomask(fd, cell, row) < 0)
 	    exit(1);
 	for (col = 0; col < window.cols; col++)
 	    if ((z = cell[col]))
@@ -42,7 +43,7 @@ int read_cell(char *name)
     }
     G_percent(row, window.rows, 1);
 
-    G_close_cell(fd);
+    Rast_close_cell(fd);
     G_free(cell);
 
     /* reset the window */

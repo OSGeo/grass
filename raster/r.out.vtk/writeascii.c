@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include <grass/config.h>
 #include "globaldefs.h"
@@ -37,7 +38,7 @@ double get_raster_value_as_double(int MapType, void *ptr, double nullval)
     double val = nullval;
 
     if (MapType == CELL_TYPE) {
-	if (G_is_null_value(ptr, MapType)) {
+	if (Rast_is_null_value(ptr, MapType)) {
 	    val = nullval;
 	}
 	else {
@@ -45,7 +46,7 @@ double get_raster_value_as_double(int MapType, void *ptr, double nullval)
 	}
     }
     if (MapType == FCELL_TYPE) {
-	if (G_is_null_value(ptr, MapType)) {
+	if (Rast_is_null_value(ptr, MapType)) {
 	    val = nullval;
 	}
 	else {
@@ -53,7 +54,7 @@ double get_raster_value_as_double(int MapType, void *ptr, double nullval)
 	}
     }
     if (MapType == DCELL_TYPE) {
-	if (G_is_null_value(ptr, MapType)) {
+	if (Rast_is_null_value(ptr, MapType)) {
 	    val = nullval;
 	}
 	else {
@@ -173,14 +174,14 @@ write_vtk_structured_coordinates(int fd, FILE * fp, char *varname,
 	nullvalue = 0;
     }
 
-    raster = G_allocate_raster_buf(out_type);
+    raster = Rast_allocate_raster_buf(out_type);
 
     rowcount = 0;
     for (row = nrows - 1; row >= 0; row--) {
 	colcount = 0;
 	G_percent((row - nrows) * (-1), nrows, 2);
 
-	if (G_get_raster_row(fd, raster, row, out_type) < 0) {
+	if (Rast_get_raster_row(fd, raster, row, out_type) < 0) {
 	    G_fatal_error(_("Unable to read row %i\n"), row);
 	    return;
 	}
@@ -189,7 +190,7 @@ write_vtk_structured_coordinates(int fd, FILE * fp, char *varname,
 	nspos -= y_extent;
 
 	for (col = 0, ptr = raster; col < ncols;
-	     col++, ptr = G_incr_void_ptr(ptr, G_raster_size(out_type))) {
+	     col++, ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(out_type))) {
 	    ewpos =
 		region.ew_res / 2 + region.west + colcount * region.ew_res;
 	    ewpos -= x_extent;
@@ -234,14 +235,14 @@ write_vtk_polygonal_coordinates(int fd, FILE * fp, char *varname,
 
 
     /*First we are writing the coordinate points, the elevation cell is only used for the z coordinate */
-    raster = G_allocate_raster_buf(out_type);
+    raster = Rast_allocate_raster_buf(out_type);
 
     rowcount = 0;
     for (row = nrows - 1; row >= 0; row--) {
 	colcount = 0;
 	G_percent((row - nrows) * (-1), nrows, 10);
 
-	if (G_get_raster_row(fd, raster, row, out_type) < 0) {
+	if (Rast_get_raster_row(fd, raster, row, out_type) < 0) {
 	    G_fatal_error(_("Unable to read row %i\n"), row);
 	    return;
 	}
@@ -250,7 +251,7 @@ write_vtk_polygonal_coordinates(int fd, FILE * fp, char *varname,
 	nspos -= y_extent;
 
 	for (col = 0, ptr = raster; col < ncols;
-	     col++, ptr = G_incr_void_ptr(ptr, G_raster_size(out_type))) {
+	     col++, ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(out_type))) {
 	    ewpos =
 		region.ew_res / 2 + region.west + colcount * region.ew_res;
 	    ewpos -= x_extent;
@@ -348,18 +349,18 @@ write_vtk_data(int fd, FILE * fp, char *varname, struct Cell_head region,
     fprintf(fp, "LOOKUP_TABLE default\n");
 
 
-    raster = G_allocate_raster_buf(out_type);
+    raster = Rast_allocate_raster_buf(out_type);
 
     for (row = nrows - 1; row >= 0; row--) {
 	G_percent((row - nrows) * (-1), nrows, 10);
 
-	if (G_get_raster_row(fd, raster, row, out_type) < 0) {
+	if (Rast_get_raster_row(fd, raster, row, out_type) < 0) {
 	    G_fatal_error(_("Unable to read row %i\n"), row);
 	    return;
 	}
 
 	for (col = 0, ptr = raster; col < ncols;
-	     col++, ptr = G_incr_void_ptr(ptr, G_raster_size(out_type))) {
+	     col++, ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(out_type))) {
 
 	    value = get_raster_value_as_double(out_type, ptr, nullvalue);
 	    fprintf(fp, "%.*f ", dp, value);
@@ -393,22 +394,22 @@ write_vtk_rgb_image_data(int redfd, int greenfd, int bluefd, FILE * fp,
 
     fprintf(fp, "COLOR_SCALARS %s 3\n", varname);
 
-    redraster = G_allocate_raster_buf(out_type);
-    greenraster = G_allocate_raster_buf(out_type);
-    blueraster = G_allocate_raster_buf(out_type);
+    redraster = Rast_allocate_raster_buf(out_type);
+    greenraster = Rast_allocate_raster_buf(out_type);
+    blueraster = Rast_allocate_raster_buf(out_type);
 
     for (row = nrows - 1; row >= 0; row--) {
 	G_percent((row - nrows) * (-1), nrows, 10);
 
-	if (G_get_raster_row(redfd, redraster, row, out_type) < 0) {
+	if (Rast_get_raster_row(redfd, redraster, row, out_type) < 0) {
 	    G_fatal_error(_("Unable to read row %i\n"), row);
 	    return;
 	}
-	if (G_get_raster_row(greenfd, greenraster, row, out_type) < 0) {
+	if (Rast_get_raster_row(greenfd, greenraster, row, out_type) < 0) {
 	    G_fatal_error(_("Unable to read row %i\n"), row);
 	    return;
 	}
-	if (G_get_raster_row(bluefd, blueraster, row, out_type) < 0) {
+	if (Rast_get_raster_row(bluefd, blueraster, row, out_type) < 0) {
 	    G_fatal_error(_("Unable to read row %i\n"), row);
 	    return;
 	}
@@ -416,9 +417,9 @@ write_vtk_rgb_image_data(int redfd, int greenfd, int bluefd, FILE * fp,
 	for (col = 0, redptr = redraster, greenptr = greenraster, blueptr =
 	     blueraster; col < ncols;
 	     col++, redptr =
-	     G_incr_void_ptr(redptr, G_raster_size(out_type)), greenptr =
-	     G_incr_void_ptr(greenptr, G_raster_size(out_type)), blueptr =
-	     G_incr_void_ptr(blueptr, G_raster_size(out_type))) {
+	     Rast_incr_void_ptr(redptr, Rast_raster_size(out_type)), greenptr =
+	     Rast_incr_void_ptr(greenptr, Rast_raster_size(out_type)), blueptr =
+	     Rast_incr_void_ptr(blueptr, Rast_raster_size(out_type))) {
 
 	    r = get_raster_value_as_double(out_type, redptr, 0.0);
 	    g = get_raster_value_as_double(out_type, greenptr, 0.0);
@@ -460,22 +461,22 @@ write_vtk_vector_data(int xfd, int yfd, int zfd, FILE * fp,
 
     fprintf(fp, "VECTORS %s float\n", varname);
 
-    xraster = G_allocate_raster_buf(out_type);
-    yraster = G_allocate_raster_buf(out_type);
-    zraster = G_allocate_raster_buf(out_type);
+    xraster = Rast_allocate_raster_buf(out_type);
+    yraster = Rast_allocate_raster_buf(out_type);
+    zraster = Rast_allocate_raster_buf(out_type);
 
     for (row = nrows - 1; row >= 0; row--) {
 	G_percent((row - nrows) * (-1), nrows, 10);
 
-	if (G_get_raster_row(xfd, xraster, row, out_type) < 0) {
+	if (Rast_get_raster_row(xfd, xraster, row, out_type) < 0) {
 	    G_fatal_error(_("Unable to read row %i\n"), row);
 	    return;
 	}
-	if (G_get_raster_row(yfd, yraster, row, out_type) < 0) {
+	if (Rast_get_raster_row(yfd, yraster, row, out_type) < 0) {
 	    G_fatal_error(_("Unable to read row %i\n"), row);
 	    return;
 	}
-	if (G_get_raster_row(zfd, zraster, row, out_type) < 0) {
+	if (Rast_get_raster_row(zfd, zraster, row, out_type) < 0) {
 	    G_fatal_error(_("Unable to read row %i\n"), row);
 	    return;
 	}
@@ -483,9 +484,9 @@ write_vtk_vector_data(int xfd, int yfd, int zfd, FILE * fp,
 	for (col = 0, xptr = xraster, yptr = yraster, zptr =
 	     zraster; col < ncols;
 	     col++, xptr =
-	     G_incr_void_ptr(xptr, G_raster_size(out_type)), yptr =
-	     G_incr_void_ptr(yptr, G_raster_size(out_type)), zptr =
-	     G_incr_void_ptr(zptr, G_raster_size(out_type))) {
+	     Rast_incr_void_ptr(xptr, Rast_raster_size(out_type)), yptr =
+	     Rast_incr_void_ptr(yptr, Rast_raster_size(out_type)), zptr =
+	     Rast_incr_void_ptr(zptr, Rast_raster_size(out_type))) {
 
 	    x = get_raster_value_as_double(out_type, xptr, 0.0);
 	    y = get_raster_value_as_double(out_type, yptr, 0.0);

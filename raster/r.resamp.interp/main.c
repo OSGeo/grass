@@ -17,6 +17,7 @@
 #include <string.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 static int neighbors;
@@ -47,7 +48,7 @@ static void read_rows(int infile, int row)
 	keep = 0;
 
     for (i = keep; i < neighbors; i++)
-	G_get_d_raster_row(infile, bufs[i], first_row + i);
+	Rast_get_d_raster_row(infile, bufs[i], first_row + i);
 
     cur_row = first_row;
 }
@@ -98,7 +99,7 @@ int main(int argc, char *argv[])
     G_get_set_window(&dst_w);
 
     /* set window to old map */
-    G_get_cellhd(rastin->answer, "", &src_w);
+    Rast_get_cellhd(rastin->answer, "", &src_w);
 
     /* enlarge source window */
     {
@@ -123,22 +124,22 @@ int main(int argc, char *argv[])
 
     /* allocate buffers for input rows */
     for (row = 0; row < neighbors; row++)
-	bufs[row] = G_allocate_d_raster_buf();
+	bufs[row] = Rast_allocate_d_raster_buf();
 
     cur_row = -100;
 
     /* open old map */
-    infile = G_open_cell_old(rastin->answer, "");
+    infile = Rast_open_cell_old(rastin->answer, "");
     if (infile < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), rastin->answer);
 
     /* reset window to current region */
     G_set_window(&dst_w);
 
-    outbuf = G_allocate_d_raster_buf();
+    outbuf = Rast_allocate_d_raster_buf();
 
     /* open new map */
-    outfile = G_open_raster_new(rastout->answer, DCELL_TYPE);
+    outfile = Rast_open_raster_new(rastout->answer, DCELL_TYPE);
     if (outfile < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), rastout->answer);
 
@@ -164,8 +165,8 @@ int main(int argc, char *argv[])
 
 		double c = bufs[0][mapcol0];
 
-		if (G_is_d_null_value(&c)) {
-		    G_set_d_null_value(&outbuf[col], 1);
+		if (Rast_is_d_null_value(&c)) {
+		    Rast_set_d_null_value(&outbuf[col], 1);
 		}
 		else {
 		    outbuf[col] = c;
@@ -173,7 +174,7 @@ int main(int argc, char *argv[])
 	    }
 
 	    G_set_window(&dst_w);
-	    G_put_d_raster_row(outfile, outbuf);
+	    Rast_put_d_raster_row(outfile, outbuf);
 	}
 	break;
 
@@ -201,18 +202,18 @@ int main(int argc, char *argv[])
 		double c10 = bufs[1][mapcol0];
 		double c11 = bufs[1][mapcol1];
 
-		if (G_is_d_null_value(&c00) ||
-		    G_is_d_null_value(&c01) ||
-		    G_is_d_null_value(&c10) || G_is_d_null_value(&c11)) {
-		    G_set_d_null_value(&outbuf[col], 1);
+		if (Rast_is_d_null_value(&c00) ||
+		    Rast_is_d_null_value(&c01) ||
+		    Rast_is_d_null_value(&c10) || Rast_is_d_null_value(&c11)) {
+		    Rast_set_d_null_value(&outbuf[col], 1);
 		}
 		else {
-		    outbuf[col] = G_interp_bilinear(u, v, c00, c01, c10, c11);
+		    outbuf[col] = Rast_interp_bilinear(u, v, c00, c01, c10, c11);
 		}
 	    }
 
 	    G_set_window(&dst_w);
-	    G_put_d_raster_row(outfile, outbuf);
+	    Rast_put_d_raster_row(outfile, outbuf);
 	}
 	break;
 
@@ -258,25 +259,25 @@ int main(int argc, char *argv[])
 		double c32 = bufs[3][mapcol2];
 		double c33 = bufs[3][mapcol3];
 
-		if (G_is_d_null_value(&c00) ||
-		    G_is_d_null_value(&c01) ||
-		    G_is_d_null_value(&c02) ||
-		    G_is_d_null_value(&c03) ||
-		    G_is_d_null_value(&c10) ||
-		    G_is_d_null_value(&c11) ||
-		    G_is_d_null_value(&c12) ||
-		    G_is_d_null_value(&c13) ||
-		    G_is_d_null_value(&c20) ||
-		    G_is_d_null_value(&c21) ||
-		    G_is_d_null_value(&c22) ||
-		    G_is_d_null_value(&c23) ||
-		    G_is_d_null_value(&c30) ||
-		    G_is_d_null_value(&c31) ||
-		    G_is_d_null_value(&c32) || G_is_d_null_value(&c33)) {
-		    G_set_d_null_value(&outbuf[col], 1);
+		if (Rast_is_d_null_value(&c00) ||
+		    Rast_is_d_null_value(&c01) ||
+		    Rast_is_d_null_value(&c02) ||
+		    Rast_is_d_null_value(&c03) ||
+		    Rast_is_d_null_value(&c10) ||
+		    Rast_is_d_null_value(&c11) ||
+		    Rast_is_d_null_value(&c12) ||
+		    Rast_is_d_null_value(&c13) ||
+		    Rast_is_d_null_value(&c20) ||
+		    Rast_is_d_null_value(&c21) ||
+		    Rast_is_d_null_value(&c22) ||
+		    Rast_is_d_null_value(&c23) ||
+		    Rast_is_d_null_value(&c30) ||
+		    Rast_is_d_null_value(&c31) ||
+		    Rast_is_d_null_value(&c32) || Rast_is_d_null_value(&c33)) {
+		    Rast_set_d_null_value(&outbuf[col], 1);
 		}
 		else {
-		    outbuf[col] = G_interp_bicubic(u, v,
+		    outbuf[col] = Rast_interp_bicubic(u, v,
 						   c00, c01, c02, c03,
 						   c10, c11, c12, c13,
 						   c20, c21, c22, c23,
@@ -285,36 +286,36 @@ int main(int argc, char *argv[])
 	    }
 
 	    G_set_window(&dst_w);
-	    G_put_d_raster_row(outfile, outbuf);
+	    Rast_put_d_raster_row(outfile, outbuf);
 	}
 	break;
     }
 
     G_percent(dst_w.rows, dst_w.rows, 2);
 
-    G_close_cell(infile);
-    G_close_cell(outfile);
+    Rast_close_cell(infile);
+    Rast_close_cell(outfile);
 
 
     /* record map metadata/history info */
     sprintf(title, "Resample by %s interpolation", method->answer);
-    G_put_cell_title(rastout->answer, title);
+    Rast_put_cell_title(rastout->answer, title);
 
-    G_short_history(rastout->answer, "raster", &history);
+    Rast_short_history(rastout->answer, "raster", &history);
     strncpy(history.datsrc_1, rastin->answer, RECORD_LEN);
     history.datsrc_1[RECORD_LEN - 1] = '\0';	/* strncpy() doesn't null terminate if maxfill */
     G_format_resolution(src_w.ns_res, buf_nsres, src_w.proj);
     G_format_resolution(src_w.ew_res, buf_ewres, src_w.proj);
     sprintf(history.datsrc_2, "Source map NS res: %s   EW res: %s", buf_nsres,
 	    buf_ewres);
-    G_command_history(&history);
-    G_write_history(rastout->answer, &history);
+    Rast_command_history(&history);
+    Rast_write_history(rastout->answer, &history);
 
     /* copy color table from source map */
-    if (G_read_colors(rastin->answer, "", &colors) < 0)
+    if (Rast_read_colors(rastin->answer, "", &colors) < 0)
 	G_fatal_error(_("Unable to read color table for %s"), rastin->answer);
-    G_mark_colors_as_fp(&colors);
-    if (G_write_colors(rastout->answer, G_mapset(), &colors) < 0)
+    Rast_mark_colors_as_fp(&colors);
+    if (Rast_write_colors(rastout->answer, G_mapset(), &colors) < 0)
 	G_fatal_error(_("Unable to write color table for %s"),
 		      rastout->answer);
 

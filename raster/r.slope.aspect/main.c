@@ -26,6 +26,7 @@
 #include <string.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 
@@ -364,7 +365,7 @@ int main(int argc, char *argv[])
     /* set the window from the header for the elevation file */
     if (!flag.a->answer) {
 	G_get_window(&window);
-	if (G_get_cellhd(elev_name, "", &cellhd) >= 0) {
+	if (Rast_get_cellhd(elev_name, "", &cellhd) >= 0) {
 	    G_align_window(&window, &cellhd);
 	    G_set_window(&window);
 	}
@@ -438,21 +439,21 @@ int main(int argc, char *argv[])
      */
 
     /* open the elevation file for reading */
-    elevation_fd = G_open_cell_old(elev_name, "");
+    elevation_fd = Rast_open_cell_old(elev_name, "");
     if (elevation_fd < 0)
 	exit(EXIT_FAILURE);
     elev_cell[0] = (DCELL *) G_calloc(ncols + 1, sizeof(DCELL));
-    G_set_d_null_value(elev_cell[0], ncols);
+    Rast_set_d_null_value(elev_cell[0], ncols);
     elev_cell[1] = (DCELL *) G_calloc(ncols + 1, sizeof(DCELL));
-    G_set_d_null_value(elev_cell[1], ncols);
+    Rast_set_d_null_value(elev_cell[1], ncols);
     elev_cell[2] = (DCELL *) G_calloc(ncols + 1, sizeof(DCELL));
-    G_set_d_null_value(elev_cell[2], ncols);
+    Rast_set_d_null_value(elev_cell[2], ncols);
 
     if (slope_name != NULL) {
 	slope_fd = opennew(slope_name, out_type);
-	slp_raster = G_allocate_raster_buf(data_type);
-	G_set_null_value(slp_raster, G_window_cols(), data_type);
-	G_put_raster_row(slope_fd, slp_raster, data_type);
+	slp_raster = Rast_allocate_raster_buf(data_type);
+	Rast_set_null_value(slp_raster, G_window_cols(), data_type);
+	Rast_put_raster_row(slope_fd, slp_raster, data_type);
     }
     else {
 	slp_raster = NULL;
@@ -461,9 +462,9 @@ int main(int argc, char *argv[])
 
     if (aspect_name != NULL) {
 	aspect_fd = opennew(aspect_name, out_type);
-	asp_raster = G_allocate_raster_buf(data_type);
-	G_set_null_value(asp_raster, G_window_cols(), data_type);
-	G_put_raster_row(aspect_fd, asp_raster, data_type);
+	asp_raster = Rast_allocate_raster_buf(data_type);
+	Rast_set_null_value(asp_raster, G_window_cols(), data_type);
+	Rast_put_raster_row(aspect_fd, asp_raster, data_type);
     }
     else {
 	asp_raster = NULL;
@@ -472,9 +473,9 @@ int main(int argc, char *argv[])
 
     if (pcurv_name != NULL) {
 	pcurv_fd = opennew(pcurv_name, out_type);
-	pcurv_raster = G_allocate_raster_buf(data_type);
-	G_set_null_value(pcurv_raster, G_window_cols(), data_type);
-	G_put_raster_row(pcurv_fd, pcurv_raster, data_type);
+	pcurv_raster = Rast_allocate_raster_buf(data_type);
+	Rast_set_null_value(pcurv_raster, G_window_cols(), data_type);
+	Rast_put_raster_row(pcurv_fd, pcurv_raster, data_type);
     }
     else {
 	pcurv_raster = NULL;
@@ -483,9 +484,9 @@ int main(int argc, char *argv[])
 
     if (tcurv_name != NULL) {
 	tcurv_fd = opennew(tcurv_name, out_type);
-	tcurv_raster = G_allocate_raster_buf(data_type);
-	G_set_null_value(tcurv_raster, G_window_cols(), data_type);
-	G_put_raster_row(tcurv_fd, tcurv_raster, data_type);
+	tcurv_raster = Rast_allocate_raster_buf(data_type);
+	Rast_set_null_value(tcurv_raster, G_window_cols(), data_type);
+	Rast_put_raster_row(tcurv_fd, tcurv_raster, data_type);
     }
     else {
 	tcurv_raster = NULL;
@@ -494,9 +495,9 @@ int main(int argc, char *argv[])
 
     if (dx_name != NULL) {
 	dx_fd = opennew(dx_name, out_type);
-	dx_raster = G_allocate_raster_buf(data_type);
-	G_set_null_value(dx_raster, G_window_cols(), data_type);
-	G_put_raster_row(dx_fd, dx_raster, data_type);
+	dx_raster = Rast_allocate_raster_buf(data_type);
+	Rast_set_null_value(dx_raster, G_window_cols(), data_type);
+	Rast_put_raster_row(dx_fd, dx_raster, data_type);
     }
     else {
 	dx_raster = NULL;
@@ -505,9 +506,9 @@ int main(int argc, char *argv[])
 
     if (dy_name != NULL) {
 	dy_fd = opennew(dy_name, out_type);
-	dy_raster = G_allocate_raster_buf(data_type);
-	G_set_null_value(dy_raster, G_window_cols(), data_type);
-	G_put_raster_row(dy_fd, dy_raster, data_type);
+	dy_raster = Rast_allocate_raster_buf(data_type);
+	Rast_set_null_value(dy_raster, G_window_cols(), data_type);
+	Rast_put_raster_row(dy_fd, dy_raster, data_type);
     }
     else {
 	dy_raster = NULL;
@@ -516,9 +517,9 @@ int main(int argc, char *argv[])
 
     if (dxx_name != NULL) {
 	dxx_fd = opennew(dxx_name, out_type);
-	dxx_raster = G_allocate_raster_buf(data_type);
-	G_set_null_value(dxx_raster, G_window_cols(), data_type);
-	G_put_raster_row(dxx_fd, dxx_raster, data_type);
+	dxx_raster = Rast_allocate_raster_buf(data_type);
+	Rast_set_null_value(dxx_raster, G_window_cols(), data_type);
+	Rast_put_raster_row(dxx_fd, dxx_raster, data_type);
     }
     else {
 	dxx_raster = NULL;
@@ -527,9 +528,9 @@ int main(int argc, char *argv[])
 
     if (dyy_name != NULL) {
 	dyy_fd = opennew(dyy_name, out_type);
-	dyy_raster = G_allocate_raster_buf(data_type);
-	G_set_null_value(dyy_raster, G_window_cols(), data_type);
-	G_put_raster_row(dyy_fd, dyy_raster, data_type);
+	dyy_raster = Rast_allocate_raster_buf(data_type);
+	Rast_set_null_value(dyy_raster, G_window_cols(), data_type);
+	Rast_put_raster_row(dyy_fd, dyy_raster, data_type);
     }
     else {
 	dyy_raster = NULL;
@@ -538,9 +539,9 @@ int main(int argc, char *argv[])
 
     if (dxy_name != NULL) {
 	dxy_fd = opennew(dxy_name, out_type);
-	dxy_raster = G_allocate_raster_buf(data_type);
-	G_set_null_value(dxy_raster, G_window_cols(), data_type);
-	G_put_raster_row(dxy_fd, dxy_raster, data_type);
+	dxy_raster = Rast_allocate_raster_buf(data_type);
+	Rast_set_null_value(dxy_raster, G_window_cols(), data_type);
+	Rast_put_raster_row(dxy_fd, dxy_raster, data_type);
     }
     else {
 	dxy_raster = NULL;
@@ -552,20 +553,20 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     if (Wrap) {
-	G_get_d_raster_row_nomask(elevation_fd, elev_cell[1] + 1, 0);
+	Rast_get_d_raster_row_nomask(elevation_fd, elev_cell[1] + 1, 0);
 	elev_cell[1][0] = elev_cell[1][G_window_cols() - 1];
 	elev_cell[1][G_window_cols() + 1] = elev_cell[1][2];
     }
     else
-	G_get_d_raster_row_nomask(elevation_fd, elev_cell[1], 0);
+	Rast_get_d_raster_row_nomask(elevation_fd, elev_cell[1], 0);
 
     if (Wrap) {
-	G_get_d_raster_row_nomask(elevation_fd, elev_cell[2] + 1, 1);
+	Rast_get_d_raster_row_nomask(elevation_fd, elev_cell[2] + 1, 1);
 	elev_cell[2][0] = elev_cell[2][G_window_cols() - 1];
 	elev_cell[2][G_window_cols() + 1] = elev_cell[2][2];
     }
     else
-	G_get_d_raster_row_nomask(elevation_fd, elev_cell[2], 1);
+	Rast_get_d_raster_row_nomask(elevation_fd, elev_cell[2], 1);
 
     G_verbose_message(_("Percent complete..."));
 
@@ -605,12 +606,12 @@ int main(int argc, char *argv[])
 	elev_cell[2] = temp;
 
 	if (Wrap) {
-	    G_get_d_raster_row_nomask(elevation_fd, elev_cell[2] + 1, row);
+	    Rast_get_d_raster_row_nomask(elevation_fd, elev_cell[2] + 1, row);
 	    elev_cell[2][0] = elev_cell[2][G_window_cols() - 1];
 	    elev_cell[2][G_window_cols() + 1] = elev_cell[2][2];
 	}
 	else
-	    G_get_d_raster_row_nomask(elevation_fd, elev_cell[2], row);
+	    Rast_get_d_raster_row_nomask(elevation_fd, elev_cell[2], row);
 
 	c1 = elev_cell[0];
 	c2 = c1 + 1;
@@ -627,14 +628,14 @@ int main(int argc, char *argv[])
 		asp_ptr = asp_raster;
 	    else
 		asp_ptr =
-		    G_incr_void_ptr(asp_raster, G_raster_size(data_type));
+		    Rast_incr_void_ptr(asp_raster, Rast_raster_size(data_type));
 	}
 	if (slope_fd >= 0) {
 	    if (Wrap)
 		slp_ptr = slp_raster;
 	    else
 		slp_ptr =
-		    G_incr_void_ptr(slp_raster, G_raster_size(data_type));
+		    Rast_incr_void_ptr(slp_raster, Rast_raster_size(data_type));
 	}
 
 	if (pcurv_fd >= 0) {
@@ -642,7 +643,7 @@ int main(int argc, char *argv[])
 		pcurv_ptr = pcurv_raster;
 	    else
 		pcurv_ptr =
-		    G_incr_void_ptr(pcurv_raster, G_raster_size(data_type));
+		    Rast_incr_void_ptr(pcurv_raster, Rast_raster_size(data_type));
 	}
 
 	if (tcurv_fd >= 0) {
@@ -650,21 +651,21 @@ int main(int argc, char *argv[])
 		tcurv_ptr = tcurv_raster;
 	    else
 		tcurv_ptr =
-		    G_incr_void_ptr(tcurv_raster, G_raster_size(data_type));
+		    Rast_incr_void_ptr(tcurv_raster, Rast_raster_size(data_type));
 	}
 
 	if (dx_fd >= 0) {
 	    if (Wrap)
 		dx_ptr = dx_raster;
 	    else
-		dx_ptr = G_incr_void_ptr(dx_raster, G_raster_size(data_type));
+		dx_ptr = Rast_incr_void_ptr(dx_raster, Rast_raster_size(data_type));
 	}
 
 	if (dy_fd >= 0) {
 	    if (Wrap)
 		dy_ptr = dy_raster;
 	    else
-		dy_ptr = G_incr_void_ptr(dy_raster, G_raster_size(data_type));
+		dy_ptr = Rast_incr_void_ptr(dy_raster, Rast_raster_size(data_type));
 	}
 
 	if (dxx_fd >= 0) {
@@ -672,7 +673,7 @@ int main(int argc, char *argv[])
 		dxx_ptr = dxx_raster;
 	    else
 		dxx_ptr =
-		    G_incr_void_ptr(dxx_raster, G_raster_size(data_type));
+		    Rast_incr_void_ptr(dxx_raster, Rast_raster_size(data_type));
 	}
 
 	if (dyy_fd >= 0) {
@@ -680,7 +681,7 @@ int main(int argc, char *argv[])
 		dyy_ptr = dyy_raster;
 	    else
 		dyy_ptr =
-		    G_incr_void_ptr(dyy_raster, G_raster_size(data_type));
+		    Rast_incr_void_ptr(dyy_raster, Rast_raster_size(data_type));
 	}
 
 	if (dxy_fd >= 0) {
@@ -688,7 +689,7 @@ int main(int argc, char *argv[])
 		dxy_ptr = dxy_raster;
 	    else
 		dxy_ptr =
-		    G_incr_void_ptr(dxy_raster, G_raster_size(data_type));
+		    Rast_incr_void_ptr(dxy_raster, Rast_raster_size(data_type));
 	}
 
 
@@ -701,55 +702,55 @@ int main(int argc, char *argv[])
 	       *c1, *c2, *c3, *c4, *c5, *c6, *c7, *c8, *c9);
 	     */
 
-	    if (G_is_d_null_value(c1) || G_is_d_null_value(c2) ||
-		G_is_d_null_value(c3) || G_is_d_null_value(c4) ||
-		G_is_d_null_value(c5) || G_is_d_null_value(c6) ||
-		G_is_d_null_value(c7) || G_is_d_null_value(c8) ||
-		G_is_d_null_value(c9)) {
+	    if (Rast_is_d_null_value(c1) || Rast_is_d_null_value(c2) ||
+		Rast_is_d_null_value(c3) || Rast_is_d_null_value(c4) ||
+		Rast_is_d_null_value(c5) || Rast_is_d_null_value(c6) ||
+		Rast_is_d_null_value(c7) || Rast_is_d_null_value(c8) ||
+		Rast_is_d_null_value(c9)) {
 		if (slope_fd > 0) {
-		    G_set_null_value(slp_ptr, 1, data_type);
+		    Rast_set_null_value(slp_ptr, 1, data_type);
 		    slp_ptr =
-			G_incr_void_ptr(slp_ptr, G_raster_size(data_type));
+			Rast_incr_void_ptr(slp_ptr, Rast_raster_size(data_type));
 		}
 		if (aspect_fd > 0) {
-		    G_set_null_value(asp_ptr, 1, data_type);
+		    Rast_set_null_value(asp_ptr, 1, data_type);
 		    asp_ptr =
-			G_incr_void_ptr(asp_ptr, G_raster_size(data_type));
+			Rast_incr_void_ptr(asp_ptr, Rast_raster_size(data_type));
 		}
 		if (pcurv_fd > 0) {
-		    G_set_null_value(pcurv_ptr, 1, data_type);
+		    Rast_set_null_value(pcurv_ptr, 1, data_type);
 		    pcurv_ptr =
-			G_incr_void_ptr(pcurv_ptr, G_raster_size(data_type));
+			Rast_incr_void_ptr(pcurv_ptr, Rast_raster_size(data_type));
 		}
 		if (tcurv_fd > 0) {
-		    G_set_null_value(tcurv_ptr, 1, data_type);
+		    Rast_set_null_value(tcurv_ptr, 1, data_type);
 		    tcurv_ptr =
-			G_incr_void_ptr(tcurv_ptr, G_raster_size(data_type));
+			Rast_incr_void_ptr(tcurv_ptr, Rast_raster_size(data_type));
 		}
 		if (dx_fd > 0) {
-		    G_set_null_value(dx_ptr, 1, data_type);
+		    Rast_set_null_value(dx_ptr, 1, data_type);
 		    dx_ptr =
-			G_incr_void_ptr(dx_ptr, G_raster_size(data_type));
+			Rast_incr_void_ptr(dx_ptr, Rast_raster_size(data_type));
 		}
 		if (dy_fd > 0) {
-		    G_set_null_value(dy_ptr, 1, data_type);
+		    Rast_set_null_value(dy_ptr, 1, data_type);
 		    dy_ptr =
-			G_incr_void_ptr(dy_ptr, G_raster_size(data_type));
+			Rast_incr_void_ptr(dy_ptr, Rast_raster_size(data_type));
 		}
 		if (dxx_fd > 0) {
-		    G_set_null_value(dxx_ptr, 1, data_type);
+		    Rast_set_null_value(dxx_ptr, 1, data_type);
 		    dxx_ptr =
-			G_incr_void_ptr(dxx_ptr, G_raster_size(data_type));
+			Rast_incr_void_ptr(dxx_ptr, Rast_raster_size(data_type));
 		}
 		if (dyy_fd > 0) {
-		    G_set_null_value(dyy_ptr, 1, data_type);
+		    Rast_set_null_value(dyy_ptr, 1, data_type);
 		    dyy_ptr =
-			G_incr_void_ptr(dyy_ptr, G_raster_size(data_type));
+			Rast_incr_void_ptr(dyy_ptr, Rast_raster_size(data_type));
 		}
 		if (dxy_fd > 0) {
-		    G_set_null_value(dxy_ptr, 1, data_type);
+		    Rast_set_null_value(dxy_ptr, 1, data_type);
 		    dxy_ptr =
-			G_incr_void_ptr(dxy_ptr, G_raster_size(data_type));
+			Rast_incr_void_ptr(dxy_ptr, Rast_raster_size(data_type));
 		}
 		continue;
 	    }			/* no data */
@@ -808,13 +809,13 @@ int main(int argc, char *argv[])
 		    *((CELL *) slp_ptr) = (CELL) test;
 		else {
 		    if (deg)
-			G_set_raster_value_d(slp_ptr,
+			Rast_set_raster_value_d(slp_ptr,
 					     (DCELL) slp_in_deg, data_type);
 		    else
-			G_set_raster_value_d(slp_ptr,
+			Rast_set_raster_value_d(slp_ptr,
 					     (DCELL) slp_in_perc, data_type);
 		}
-		slp_ptr = G_incr_void_ptr(slp_ptr, G_raster_size(data_type));
+		slp_ptr = Rast_incr_void_ptr(slp_ptr, Rast_raster_size(data_type));
 	    }			/* computing slope */
 
 	    if (aspect_fd > 0) {
@@ -841,12 +842,12 @@ int main(int argc, char *argv[])
 		    if (out_type == CELL_TYPE)
 			*((CELL *) asp_ptr) = (CELL) (aspect + .5);
 		    else
-			G_set_raster_value_d(asp_ptr,
+			Rast_set_raster_value_d(asp_ptr,
 					     (DCELL) aspect, data_type);
 		}
 		else
-		    G_set_null_value(asp_ptr, 1, data_type);
-		asp_ptr = G_incr_void_ptr(asp_ptr, G_raster_size(data_type));
+		    Rast_set_null_value(asp_ptr, 1, data_type);
+		asp_ptr = Rast_incr_void_ptr(asp_ptr, Rast_raster_size(data_type));
 
 		/* now update min and max */
 		if (min_asp > aspect)
@@ -859,16 +860,16 @@ int main(int argc, char *argv[])
 		if (out_type == CELL_TYPE)
 		    *((CELL *) dx_ptr) = (CELL) (scik1 * dx);
 		else
-		    G_set_raster_value_d(dx_ptr, (DCELL) dx, data_type);
-		dx_ptr = G_incr_void_ptr(dx_ptr, G_raster_size(data_type));
+		    Rast_set_raster_value_d(dx_ptr, (DCELL) dx, data_type);
+		dx_ptr = Rast_incr_void_ptr(dx_ptr, Rast_raster_size(data_type));
 	    }
 
 	    if (dy_fd > 0) {
 		if (out_type == CELL_TYPE)
 		    *((CELL *) dy_ptr) = (CELL) (scik1 * dy);
 		else
-		    G_set_raster_value_d(dy_ptr, (DCELL) dy, data_type);
-		dy_ptr = G_incr_void_ptr(dy_ptr, G_raster_size(data_type));
+		    Rast_set_raster_value_d(dy_ptr, (DCELL) dy, data_type);
+		dy_ptr = Rast_incr_void_ptr(dy_ptr, Rast_raster_size(data_type));
 	    }
 
 	    if (dxx_fd <= 0 && dxy_fd <= 0 && dyy_fd <= 0 &&
@@ -889,24 +890,24 @@ int main(int argc, char *argv[])
 		if (out_type == CELL_TYPE)
 		    *((CELL *) dxx_ptr) = (CELL) (scik1 * dxx);
 		else
-		    G_set_raster_value_d(dxx_ptr, (DCELL) dxx, data_type);
-		dxx_ptr = G_incr_void_ptr(dxx_ptr, G_raster_size(data_type));
+		    Rast_set_raster_value_d(dxx_ptr, (DCELL) dxx, data_type);
+		dxx_ptr = Rast_incr_void_ptr(dxx_ptr, Rast_raster_size(data_type));
 	    }
 
 	    if (dyy_fd > 0) {
 		if (out_type == CELL_TYPE)
 		    *((CELL *) dyy_ptr) = (CELL) (scik1 * dyy);
 		else
-		    G_set_raster_value_d(dyy_ptr, (DCELL) dyy, data_type);
-		dyy_ptr = G_incr_void_ptr(dyy_ptr, G_raster_size(data_type));
+		    Rast_set_raster_value_d(dyy_ptr, (DCELL) dyy, data_type);
+		dyy_ptr = Rast_incr_void_ptr(dyy_ptr, Rast_raster_size(data_type));
 	    }
 
 	    if (dxy_fd > 0) {
 		if (out_type == CELL_TYPE)
 		    *((CELL *) dxy_ptr) = (CELL) (scik1 * dxy);
 		else
-		    G_set_raster_value_d(dxy_ptr, (DCELL) dxy, data_type);
-		dxy_ptr = G_incr_void_ptr(dxy_ptr, G_raster_size(data_type));
+		    Rast_set_raster_value_d(dxy_ptr, (DCELL) dxy, data_type);
+		dxy_ptr = Rast_incr_void_ptr(dxy_ptr, Rast_raster_size(data_type));
 	    }
 
 	    /* compute curvature */
@@ -941,54 +942,54 @@ int main(int argc, char *argv[])
 		if (out_type == CELL_TYPE)
 		    *((CELL *) pcurv_ptr) = (CELL) (scik1 * pcurv);
 		else
-		    G_set_raster_value_d(pcurv_ptr, (DCELL) pcurv, data_type);
+		    Rast_set_raster_value_d(pcurv_ptr, (DCELL) pcurv, data_type);
 		pcurv_ptr =
-		    G_incr_void_ptr(pcurv_ptr, G_raster_size(data_type));
+		    Rast_incr_void_ptr(pcurv_ptr, Rast_raster_size(data_type));
 	    }
 
 	    if (tcurv_fd > 0) {
 		if (out_type == CELL_TYPE)
 		    *((CELL *) tcurv_ptr) = (CELL) (scik1 * tcurv);
 		else
-		    G_set_raster_value_d(tcurv_ptr, (DCELL) tcurv, data_type);
+		    Rast_set_raster_value_d(tcurv_ptr, (DCELL) tcurv, data_type);
 		tcurv_ptr =
-		    G_incr_void_ptr(tcurv_ptr, G_raster_size(data_type));
+		    Rast_incr_void_ptr(tcurv_ptr, Rast_raster_size(data_type));
 	    }
 
 	}			/* column for loop */
 
 	if (aspect_fd > 0)
-	    G_put_raster_row(aspect_fd, asp_raster, data_type);
+	    Rast_put_raster_row(aspect_fd, asp_raster, data_type);
 
 	if (slope_fd > 0)
-	    G_put_raster_row(slope_fd, slp_raster, data_type);
+	    Rast_put_raster_row(slope_fd, slp_raster, data_type);
 
 	if (pcurv_fd > 0)
-	    G_put_raster_row(pcurv_fd, pcurv_raster, data_type);
+	    Rast_put_raster_row(pcurv_fd, pcurv_raster, data_type);
 
 	if (tcurv_fd > 0)
-	    G_put_raster_row(tcurv_fd, tcurv_raster, data_type);
+	    Rast_put_raster_row(tcurv_fd, tcurv_raster, data_type);
 
 	if (dx_fd > 0)
-	    G_put_raster_row(dx_fd, dx_raster, data_type);
+	    Rast_put_raster_row(dx_fd, dx_raster, data_type);
 
 	if (dy_fd > 0)
-	    G_put_raster_row(dy_fd, dy_raster, data_type);
+	    Rast_put_raster_row(dy_fd, dy_raster, data_type);
 
 	if (dxx_fd > 0)
-	    G_put_raster_row(dxx_fd, dxx_raster, data_type);
+	    Rast_put_raster_row(dxx_fd, dxx_raster, data_type);
 
 	if (dyy_fd > 0)
-	    G_put_raster_row(dyy_fd, dyy_raster, data_type);
+	    Rast_put_raster_row(dyy_fd, dyy_raster, data_type);
 
 	if (dxy_fd > 0)
-	    G_put_raster_row(dxy_fd, dxy_raster, data_type);
+	    Rast_put_raster_row(dxy_fd, dxy_raster, data_type);
 
     }				/* row loop */
 
     G_percent(row, nrows, 2);
 
-    G_close_cell(elevation_fd);
+    Rast_close_cell(elevation_fd);
     G_debug(1, "Creating support files...");
 
     G_verbose_message(_("Elevation products for mapset <%s> in <%s>"),
@@ -998,16 +999,16 @@ int main(int argc, char *argv[])
 	DCELL min, max;
 	struct FPRange range;
 
-	G_set_null_value(asp_raster, G_window_cols(), data_type);
-	G_put_raster_row(aspect_fd, asp_raster, data_type);
-	G_close_cell(aspect_fd);
+	Rast_set_null_value(asp_raster, G_window_cols(), data_type);
+	Rast_put_raster_row(aspect_fd, asp_raster, data_type);
+	Rast_close_cell(aspect_fd);
 
 	if (out_type != CELL_TYPE)
-	    G_quantize_fp_map_range(aspect_name, G_mapset(), 0., 360., 0,
+	    Rast_quantize_fp_map_range(aspect_name, G_mapset(), 0., 360., 0,
 				    360);
 
-	G_read_raster_cats(aspect_name, G_mapset(), &cats);
-	G_set_raster_cats_title
+	Rast_read_raster_cats(aspect_name, G_mapset(), &cats);
+	Rast_set_raster_cats_title
 	    ("Aspect counterclockwise in degrees from east", &cats);
 
 	G_verbose_message(_("Min computed aspect %.4f, max computed aspect %.4f"),
@@ -1039,80 +1040,80 @@ int main(int argc, char *argv[])
 		sprintf(buf, "%d degree%s ccw from east", i,
 			i == 1 ? "" : "s");
 	    if (data_type == CELL_TYPE) {
-		G_set_cat(i, buf, &cats);
+		Rast_set_cat(i, buf, &cats);
 		continue;
 	    }
 	    tmp1 = (double)i - .5;
 	    tmp2 = (double)i + .5;
-	    G_set_d_raster_cat(&tmp1, &tmp2, buf, &cats);
+	    Rast_set_d_raster_cat(&tmp1, &tmp2, buf, &cats);
 	}
 	if (data_type == CELL_TYPE)
-	    G_set_cat(0, "no aspect", &cats);
+	    Rast_set_cat(0, "no aspect", &cats);
 	else {
 	    tmp1 = 0.;
 	    tmp2 = .5;
-	    G_set_d_raster_cat(&tmp1, &tmp2, "no aspect", &cats);
+	    Rast_set_d_raster_cat(&tmp1, &tmp2, "no aspect", &cats);
 	}
-	G_write_raster_cats(aspect_name, &cats);
-	G_free_raster_cats(&cats);
+	Rast_write_raster_cats(aspect_name, &cats);
+	Rast_free_raster_cats(&cats);
 
 	/* write colors for aspect file */
-	G_init_colors(&colors);
-	G_read_fp_range(aspect_name, G_mapset(), &range);
-	G_get_fp_range_min_max(&range, &min, &max);
-	G_make_aspect_fp_colors(&colors, min, max);
-	G_write_colors(aspect_name, G_mapset(), &colors);
+	Rast_init_colors(&colors);
+	Rast_read_fp_range(aspect_name, G_mapset(), &range);
+	Rast_get_fp_range_min_max(&range, &min, &max);
+	Rast_make_aspect_fp_colors(&colors, min, max);
+	Rast_write_colors(aspect_name, G_mapset(), &colors);
 
 	/* writing history file */
-	G_short_history(aspect_name, "raster", &hist);
+	Rast_short_history(aspect_name, "raster", &hist);
 	sprintf(hist.edhist[0], "aspect map elev = %s", elev_name);
 	sprintf(hist.edhist[1], "zfactor = %.2f", zfactor);
 	sprintf(hist.edhist[2], "min_slp_allowed = %f", min_slp_allowed);
 	sprintf(hist.datsrc_1, "raster elevation file %s", elev_name);
 	hist.edlinecnt = 3;
-	G_write_history(aspect_name, &hist);
+	Rast_write_history(aspect_name, &hist);
 
 	G_message(_("Aspect raster map <%s> complete"), aspect_name);
     }
 
     if (slope_fd >= 0) {
 	/* colortable for slopes */
-	G_init_colors(&colors);
-	G_add_color_rule(0, 255, 255, 255, 2, 255, 255, 0, &colors);
-	G_add_color_rule(2, 255, 255, 0, 5, 0, 255, 0, &colors);
-	G_add_color_rule(5, 0, 255, 0, 10, 0, 255, 255, &colors);
-	G_add_color_rule(10, 0, 255, 255, 15, 0, 0, 255, &colors);
-	G_add_color_rule(15, 0, 0, 255, 30, 255, 0, 255, &colors);
-	G_add_color_rule(30, 255, 0, 255, 50, 255, 0, 0, &colors);
-	G_add_color_rule(50, 255, 0, 0, 90, 0, 0, 0, &colors);
+	Rast_init_colors(&colors);
+	Rast_add_color_rule(0, 255, 255, 255, 2, 255, 255, 0, &colors);
+	Rast_add_color_rule(2, 255, 255, 0, 5, 0, 255, 0, &colors);
+	Rast_add_color_rule(5, 0, 255, 0, 10, 0, 255, 255, &colors);
+	Rast_add_color_rule(10, 0, 255, 255, 15, 0, 0, 255, &colors);
+	Rast_add_color_rule(15, 0, 0, 255, 30, 255, 0, 255, &colors);
+	Rast_add_color_rule(30, 255, 0, 255, 50, 255, 0, 0, &colors);
+	Rast_add_color_rule(50, 255, 0, 0, 90, 0, 0, 0, &colors);
 
-	G_set_null_value(slp_raster, G_window_cols(), data_type);
-	G_put_raster_row(slope_fd, slp_raster, data_type);
-	G_close_cell(slope_fd);
+	Rast_set_null_value(slp_raster, G_window_cols(), data_type);
+	Rast_put_raster_row(slope_fd, slp_raster, data_type);
+	Rast_close_cell(slope_fd);
 
 	if (out_type != CELL_TYPE) {
 	    /* INCR_BY_ONE
 	       if(deg)
-	       G_quantize_fp_map_range(slope_name, G_mapset(), 0., 90., 1, 91);
+	       Rast_quantize_fp_map_range(slope_name, G_mapset(), 0., 90., 1, 91);
 	       else
-	       G_quantize_fp_map_range(slope_name, G_mapset(), min_slp, max_slp, 
+	       Rast_quantize_fp_map_range(slope_name, G_mapset(), min_slp, max_slp, 
 	       (CELL) min_slp + 1, (CELL) ceil(max_slp) + 1);
 	     */
-	    G_write_colors(slope_name, G_mapset(), &colors);
+	    Rast_write_colors(slope_name, G_mapset(), &colors);
 	    if (deg)
-		G_quantize_fp_map_range(slope_name, G_mapset(), 0., 90., 0,
+		Rast_quantize_fp_map_range(slope_name, G_mapset(), 0., 90., 0,
 					90);
 	    else		/* percent */
-		G_quantize_fp_map_range(slope_name, G_mapset(), min_slp,
+		Rast_quantize_fp_map_range(slope_name, G_mapset(), min_slp,
 					max_slp, (CELL) min_slp,
 					(CELL) ceil(max_slp));
 	}
 
-	G_read_raster_cats(slope_name, G_mapset(), &cats);
+	Rast_read_raster_cats(slope_name, G_mapset(), &cats);
 	if (deg)
-	    G_set_raster_cats_title("slope in degrees", &cats);
+	    Rast_set_raster_cats_title("slope in degrees", &cats);
 	else if (perc)
-	    G_set_raster_cats_title("percent slope", &cats);
+	    Rast_set_raster_cats_title("percent slope", &cats);
 
 	G_verbose_message(_("Min computed slope %.4f, max computed slope %.4f"),
 			  min_slp, max_slp);
@@ -1127,9 +1128,9 @@ int main(int argc, char *argv[])
 		sprintf(buf, "%d percent", i);
 	    if (data_type == CELL_TYPE) {
 		/* INCR_BY_ONE
-		   G_set_cat(i+1, buf, &cats);
+		   Rast_set_cat(i+1, buf, &cats);
 		 */
-		G_set_cat(i, buf, &cats);
+		Rast_set_cat(i, buf, &cats);
 		continue;
 	    }
 	    /* INCR_BY_ONE
@@ -1138,70 +1139,70 @@ int main(int argc, char *argv[])
 	     */
 	    tmp1 = (DCELL) i - .5;
 	    tmp2 = (DCELL) i + .5;
-	    G_set_d_raster_cat(&tmp1, &tmp2, buf, &cats);
+	    Rast_set_d_raster_cat(&tmp1, &tmp2, buf, &cats);
 	}
 	if (data_type == CELL_TYPE)
-	    G_set_cat(0, "zero slope", &cats);
+	    Rast_set_cat(0, "zero slope", &cats);
 	/* INCR_BY_ONE
-	   G_set_cat(0, "no data", &cats);
+	   Rast_set_cat(0, "no data", &cats);
 	 */
 	else {
 	    tmp1 = 0;
 	    tmp2 = 0.5;
-	    G_set_d_raster_cat(&tmp1, &tmp2, "zero slope", &cats);
+	    Rast_set_d_raster_cat(&tmp1, &tmp2, "zero slope", &cats);
 	}
 	/* INCR_BY_ONE
-	   G_set_d_raster_cat (&tmp1, &tmp1, "no data", &cats);
+	   Rast_set_d_raster_cat (&tmp1, &tmp1, "no data", &cats);
 	 */
-	G_write_raster_cats(slope_name, &cats);
+	Rast_write_raster_cats(slope_name, &cats);
 
 	/* writing history file */
-	G_short_history(slope_name, "raster", &hist);
+	Rast_short_history(slope_name, "raster", &hist);
 	sprintf(hist.edhist[0], "slope map elev = %s", elev_name);
 	sprintf(hist.edhist[1], "zfactor = %.2f format = %s", zfactor,
 		parm.slope_fmt->answer);
 	sprintf(hist.edhist[2], "min_slp_allowed = %f", min_slp_allowed);
 	sprintf(hist.datsrc_1, "raster elevation file %s", elev_name);
 	hist.edlinecnt = 3;
-	G_write_history(slope_name, &hist);
+	Rast_write_history(slope_name, &hist);
 
 	G_message(_("Slope raster map <%s> complete"), slope_name);
     }
 
     /* colortable for curvatures */
     if (pcurv_fd >= 0 || tcurv_fd >= 0) {
-	G_init_colors(&colors);
+	Rast_init_colors(&colors);
 	if (c1min < c2min)
 	    dat1 = (FCELL) c1min;
 	else
 	    dat1 = (FCELL) c2min;
 
 	dat2 = (FCELL) - 0.01;
-	G_add_f_raster_color_rule(&dat1, 127, 0, 255,
+	Rast_add_f_raster_color_rule(&dat1, 127, 0, 255,
 				  &dat2, 0, 0, 255, &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) - 0.001;
-	G_add_f_raster_color_rule(&dat1, 0, 0, 255,
+	Rast_add_f_raster_color_rule(&dat1, 0, 0, 255,
 				  &dat2, 0, 127, 255, &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) - 0.00001;
-	G_add_f_raster_color_rule(&dat1, 0, 127, 255,
+	Rast_add_f_raster_color_rule(&dat1, 0, 127, 255,
 				  &dat2, 0, 255, 255, &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) 0.0;
-	G_add_f_raster_color_rule(&dat1, 0, 255, 255,
+	Rast_add_f_raster_color_rule(&dat1, 0, 255, 255,
 				  &dat2, 200, 255, 200, &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) 0.00001;
-	G_add_f_raster_color_rule(&dat1, 200, 255, 200,
+	Rast_add_f_raster_color_rule(&dat1, 200, 255, 200,
 				  &dat2, 255, 255, 0, &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) 0.001;
-	G_add_f_raster_color_rule(&dat1, 255, 255, 0,
+	Rast_add_f_raster_color_rule(&dat1, 255, 255, 0,
 				  &dat2, 255, 127, 0, &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) 0.01;
-	G_add_f_raster_color_rule(&dat1, 255, 127, 0,
+	Rast_add_f_raster_color_rule(&dat1, 255, 127, 0,
 				  &dat2, 255, 0, 0, &colors);
 	dat1 = dat2;
 	if (c1max > c2max)
@@ -1209,178 +1210,178 @@ int main(int argc, char *argv[])
 	else
 	    dat2 = (FCELL) c2max;
 
-	G_add_f_raster_color_rule(&dat1, 255, 0, 0,
+	Rast_add_f_raster_color_rule(&dat1, 255, 0, 0,
 				  &dat2, 255, 0, 200, &colors);
     }
 
     if (pcurv_fd >= 0) {
-	G_set_null_value(pcurv_raster, G_window_cols(), data_type);
-	G_put_raster_row(pcurv_fd, pcurv_raster, data_type);
-	G_close_cell(pcurv_fd);
+	Rast_set_null_value(pcurv_raster, G_window_cols(), data_type);
+	Rast_put_raster_row(pcurv_fd, pcurv_raster, data_type);
+	Rast_close_cell(pcurv_fd);
 
-	G_write_colors(pcurv_name, G_mapset(), &colors);
+	Rast_write_colors(pcurv_name, G_mapset(), &colors);
 
 	if (out_type != CELL_TYPE)
-	    G_round_fp_map(pcurv_name, G_mapset());
+	    Rast_round_fp_map(pcurv_name, G_mapset());
 
-	G_read_cats(pcurv_name, G_mapset(), &cats);
-	G_set_cats_title("profile curvature", &cats);
-	G_set_cat((CELL) 0, "no profile curve", &cats);
+	Rast_read_cats(pcurv_name, G_mapset(), &cats);
+	Rast_set_cats_title("profile curvature", &cats);
+	Rast_set_cat((CELL) 0, "no profile curve", &cats);
 
 	/* writing history file */
-	G_short_history(pcurv_name, "raster", &hist);
+	Rast_short_history(pcurv_name, "raster", &hist);
 	sprintf(hist.edhist[0], "profile curve map elev = %s", elev_name);
 	sprintf(hist.edhist[1], "zfactor = %.2f", zfactor);
 	sprintf(hist.edhist[2], "min_slp_allowed = %f", min_slp_allowed);
 	sprintf(hist.datsrc_1, "raster elevation file %s", elev_name);
 	hist.edlinecnt = 3;
-	G_write_history(pcurv_name, &hist);
+	Rast_write_history(pcurv_name, &hist);
 
 	G_message(_("Profile curve raster map <%s> complete"), pcurv_name);
     }
 
     if (tcurv_fd >= 0) {
-	G_set_null_value(tcurv_raster, G_window_cols(), data_type);
-	G_put_raster_row(tcurv_fd, tcurv_raster, data_type);
-	G_close_cell(tcurv_fd);
+	Rast_set_null_value(tcurv_raster, G_window_cols(), data_type);
+	Rast_put_raster_row(tcurv_fd, tcurv_raster, data_type);
+	Rast_close_cell(tcurv_fd);
 
-	G_write_colors(tcurv_name, G_mapset(), &colors);
+	Rast_write_colors(tcurv_name, G_mapset(), &colors);
 
 	if (out_type != CELL_TYPE)
-	    G_round_fp_map(tcurv_name, G_mapset());
+	    Rast_round_fp_map(tcurv_name, G_mapset());
 
-	G_read_cats(tcurv_name, G_mapset(), &cats);
-	G_set_cats_title("tangential curvature", &cats);
-	G_set_cat((CELL) 0, "no tangential curve", &cats);
+	Rast_read_cats(tcurv_name, G_mapset(), &cats);
+	Rast_set_cats_title("tangential curvature", &cats);
+	Rast_set_cat((CELL) 0, "no tangential curve", &cats);
 
 	/* writing history file */
-	G_short_history(tcurv_name, "raster", &hist);
+	Rast_short_history(tcurv_name, "raster", &hist);
 	sprintf(hist.edhist[0], "tangential curve map elev = %s", elev_name);
 	sprintf(hist.edhist[1], "zfactor = %.2f", zfactor);
 	sprintf(hist.edhist[2], "min_slp_allowed = %f", min_slp_allowed);
 	sprintf(hist.datsrc_1, "raster elevation file %s", elev_name);
 	hist.edlinecnt = 3;
-	G_write_history(tcurv_name, &hist);
+	Rast_write_history(tcurv_name, &hist);
 
 	G_message(_("Tangential curve raster map <%s> complete"), tcurv_name);
     }
 
     if (dx_fd >= 0) {
-	G_set_null_value(dx_raster, G_window_cols(), data_type);
-	G_put_raster_row(dx_fd, dx_raster, data_type);
-	G_close_cell(dx_fd);
+	Rast_set_null_value(dx_raster, G_window_cols(), data_type);
+	Rast_put_raster_row(dx_fd, dx_raster, data_type);
+	Rast_close_cell(dx_fd);
 
 	if (out_type != CELL_TYPE)
-	    G_round_fp_map(dx_name, G_mapset());
+	    Rast_round_fp_map(dx_name, G_mapset());
 
-	G_read_cats(dx_name, G_mapset(), &cats);
-	G_set_cats_title("E-W slope", &cats);
-	G_set_cat((CELL) 0, "no E-W slope", &cats);
+	Rast_read_cats(dx_name, G_mapset(), &cats);
+	Rast_set_cats_title("E-W slope", &cats);
+	Rast_set_cat((CELL) 0, "no E-W slope", &cats);
 
 	/* writing history file */
-	G_short_history(dx_name, "raster", &hist);
+	Rast_short_history(dx_name, "raster", &hist);
 	sprintf(hist.edhist[0], "E-W slope map elev = %s", elev_name);
 	sprintf(hist.edhist[1], "zfactor = %.2f", zfactor);
 	sprintf(hist.edhist[2], "min_slp_allowed = %f", min_slp_allowed);
 	sprintf(hist.datsrc_1, "raster elevation file %s", elev_name);
 	hist.edlinecnt = 3;
-	G_write_history(dx_name, &hist);
+	Rast_write_history(dx_name, &hist);
 
 	G_message(_("E-W slope raster map <%s> complete"), dx_name);
     }
 
     if (dy_fd >= 0) {
-	G_set_null_value(dy_raster, G_window_cols(), data_type);
-	G_put_raster_row(dy_fd, dy_raster, data_type);
-	G_close_cell(dy_fd);
+	Rast_set_null_value(dy_raster, G_window_cols(), data_type);
+	Rast_put_raster_row(dy_fd, dy_raster, data_type);
+	Rast_close_cell(dy_fd);
 
 	if (out_type != CELL_TYPE)
-	    G_round_fp_map(dy_name, G_mapset());
+	    Rast_round_fp_map(dy_name, G_mapset());
 
-	G_read_cats(dy_name, G_mapset(), &cats);
-	G_set_cats_title("N-S slope", &cats);
-	G_set_cat((CELL) 0, "no N-S slope", &cats);
+	Rast_read_cats(dy_name, G_mapset(), &cats);
+	Rast_set_cats_title("N-S slope", &cats);
+	Rast_set_cat((CELL) 0, "no N-S slope", &cats);
 
 	/* writing history file */
-	G_short_history(dy_name, "raster", &hist);
+	Rast_short_history(dy_name, "raster", &hist);
 	sprintf(hist.edhist[0], "N-S slope map elev = %s", elev_name);
 	sprintf(hist.edhist[1], "zfactor = %.2f", zfactor);
 	sprintf(hist.edhist[2], "min_slp_allowed = %f", min_slp_allowed);
 	sprintf(hist.datsrc_1, "raster elevation file %s", elev_name);
 	hist.edlinecnt = 3;
-	G_write_history(dy_name, &hist);
+	Rast_write_history(dy_name, &hist);
 
 	G_message(_("N-S slope raster map <%s> complete"), dy_name);
     }
 
     if (dxx_fd >= 0) {
-	G_set_null_value(dxx_raster, G_window_cols(), data_type);
-	G_put_raster_row(dxx_fd, dxx_raster, data_type);
-	G_close_cell(dxx_fd);
+	Rast_set_null_value(dxx_raster, G_window_cols(), data_type);
+	Rast_put_raster_row(dxx_fd, dxx_raster, data_type);
+	Rast_close_cell(dxx_fd);
 
 	if (out_type != CELL_TYPE)
-	    G_round_fp_map(dxx_name, G_mapset());
+	    Rast_round_fp_map(dxx_name, G_mapset());
 
-	G_read_cats(dxx_name, G_mapset(), &cats);
-	G_set_cats_title("DXX", &cats);
-	G_set_cat((CELL) 0, "DXX", &cats);
+	Rast_read_cats(dxx_name, G_mapset(), &cats);
+	Rast_set_cats_title("DXX", &cats);
+	Rast_set_cat((CELL) 0, "DXX", &cats);
 
 	/* writing history file */
-	G_short_history(dxx_name, "raster", &hist);
+	Rast_short_history(dxx_name, "raster", &hist);
 	sprintf(hist.edhist[0], "DXX map elev = %s", elev_name);
 	sprintf(hist.edhist[1], "zfactor = %.2f", zfactor);
 	sprintf(hist.edhist[2], "min_slp_allowed = %f", min_slp_allowed);
 	sprintf(hist.datsrc_1, "raster elevation file %s", elev_name);
 	hist.edlinecnt = 3;
-	G_write_history(dxx_name, &hist);
+	Rast_write_history(dxx_name, &hist);
 
 	G_message(_("Dxx raster map <%s> complete"), dxx_name);
     }
 
     if (dyy_fd >= 0) {
-	G_set_null_value(dyy_raster, G_window_cols(), data_type);
-	G_put_raster_row(dyy_fd, dyy_raster, data_type);
-	G_close_cell(dyy_fd);
+	Rast_set_null_value(dyy_raster, G_window_cols(), data_type);
+	Rast_put_raster_row(dyy_fd, dyy_raster, data_type);
+	Rast_close_cell(dyy_fd);
 
 	if (out_type != CELL_TYPE)
-	    G_round_fp_map(dyy_name, G_mapset());
+	    Rast_round_fp_map(dyy_name, G_mapset());
 
-	G_read_cats(dyy_name, G_mapset(), &cats);
-	G_set_cats_title("DYY", &cats);
-	G_set_cat((CELL) 0, "DYY", &cats);
+	Rast_read_cats(dyy_name, G_mapset(), &cats);
+	Rast_set_cats_title("DYY", &cats);
+	Rast_set_cat((CELL) 0, "DYY", &cats);
 
 	/* writing history file */
-	G_short_history(dyy_name, "raster", &hist);
+	Rast_short_history(dyy_name, "raster", &hist);
 	sprintf(hist.edhist[0], "DYY map elev = %s", elev_name);
 	sprintf(hist.edhist[1], "zfactor = %.2f", zfactor);
 	sprintf(hist.edhist[2], "min_slp_allowed = %f", min_slp_allowed);
 	sprintf(hist.datsrc_1, "raster elevation file %s", elev_name);
 	hist.edlinecnt = 3;
-	G_write_history(dyy_name, &hist);
+	Rast_write_history(dyy_name, &hist);
 
 	G_message(_("Dyy raster map <%s> complete"), dyy_name);
     }
 
     if (dxy_fd >= 0) {
-	G_set_null_value(dxy_raster, G_window_cols(), data_type);
-	G_put_raster_row(dxy_fd, dxy_raster, data_type);
-	G_close_cell(dxy_fd);
+	Rast_set_null_value(dxy_raster, G_window_cols(), data_type);
+	Rast_put_raster_row(dxy_fd, dxy_raster, data_type);
+	Rast_close_cell(dxy_fd);
 
 	if (out_type != CELL_TYPE)
-	    G_round_fp_map(dxy_name, G_mapset());
+	    Rast_round_fp_map(dxy_name, G_mapset());
 
-	G_read_cats(dxy_name, G_mapset(), &cats);
-	G_set_cats_title("DXY", &cats);
-	G_set_cat((CELL) 0, "DXY", &cats);
+	Rast_read_cats(dxy_name, G_mapset(), &cats);
+	Rast_set_cats_title("DXY", &cats);
+	Rast_set_cat((CELL) 0, "DXY", &cats);
 
 	/* writing history file */
-	G_short_history(dxy_name, "raster", &hist);
+	Rast_short_history(dxy_name, "raster", &hist);
 	sprintf(hist.edhist[0], "DXY map elev = %s", elev_name);
 	sprintf(hist.edhist[1], "zfactor = %.2f", zfactor);
 	sprintf(hist.edhist[2], "min_slp_allowed = %f", min_slp_allowed);
 	sprintf(hist.datsrc_1, "raster elevation file %s", elev_name);
 	hist.edlinecnt = 3;
-	G_write_history(dxy_name, &hist);
+	Rast_write_history(dxy_name, &hist);
 
 	G_message(_("Dxy raster map <%s> complete"), dxy_name);
     }

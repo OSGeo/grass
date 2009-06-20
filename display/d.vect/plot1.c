@@ -2,6 +2,7 @@
 
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/Vect.h>
 #include <grass/display.h>
 #include <grass/display_raster.h>
@@ -257,8 +258,8 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 	    G_debug(3, "display line %d, cat %d, x: %f, y: %f, z: %f", line,
 		    cat, Points->x[0], Points->y[0], Points->z[0]);
 	    custom_rgb = TRUE;
-	    G_make_fp_colors(&colors, style, box.B, box.T);
-	    G_get_raster_color(&zval, &red, &grn, &blu, &colors, DCELL_TYPE);
+	    Rast_make_fp_colors(&colors, style, box.B, box.T);
+	    Rast_get_raster_color(&zval, &red, &grn, &blu, &colors, DCELL_TYPE);
 	    G_debug(3, "b %d, g: %d, r %d", blu, grn, red);
 	}
 
@@ -284,7 +285,7 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 			G_debug(3, "element %d: colorstring: %s", line,
 				colorstring);
 
-			if (G_str_to_color(colorstring, &red, &grn, &blu) ==
+			if (Rast_str_to_color(colorstring, &red, &grn, &blu) ==
 			    1) {
 			    custom_rgb = TRUE;
 			    G_debug(3, "element:%d  cat %d r:%d g:%d b:%d",

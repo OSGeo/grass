@@ -20,6 +20,7 @@
 #include <string.h>
 
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 struct band
@@ -150,15 +151,15 @@ int main(int argc, char **argv)
 	b->name = b->opt_name->answer;
 
 	/* Make sure map is available */
-	if ((b->file = G_open_cell_old(b->name, "")) == -1)
+	if ((b->file = Rast_open_cell_old(b->name, "")) == -1)
 	    G_fatal_error(_("Unable to open raster map <%s>"), b->name);
 
-	b->type = G_get_raster_map_type(b->file);
+	b->type = Rast_get_raster_map_type(b->file);
 
-	b->size = G_raster_size(b->type);
+	b->size = Rast_raster_size(b->type);
 
 	/* Reading color lookup table */
-	if (G_read_colors(b->name, "", &b->colors) == -1)
+	if (Rast_read_colors(b->name, "", &b->colors) == -1)
 	    G_fatal_error(_("Unable to read color file of raster map <%s>"), b->name);
 
 	for (j = 0; j < 3; j++)
@@ -179,10 +180,10 @@ int main(int argc, char **argv)
     /* open output files */
     out_name = opt_out->answer;
 
-    if ((out_file = G_open_cell_new(out_name)) < 0)
+    if ((out_file = Rast_open_cell_new(out_name)) < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), out_name);
 
-    out_array = G_allocate_cell_buf();
+    out_array = Rast_allocate_cell_buf();
 
     /* Make color table */
     make_color_cube(&out_colors);
@@ -195,7 +196,7 @@ int main(int argc, char **argv)
 	for (i = 0; i < 3; i++) {
 	    struct band *b = &B[i];
 
-	    if (G_get_raster_row_colors(b->file, atrow, &b->colors,
+	    if (Rast_get_raster_row_colors(b->file, atrow, &b->colors,
 					b->array[0],
 					b->array[1], b->array[2], nulls) < 0)
 		G_fatal_error(_("Error reading raster map <%s>"),
@@ -215,7 +216,7 @@ int main(int argc, char **argv)
 	    int val[3];
 
 	    if (nulls[atcol]) {
-		G_set_c_null_value(&out_array[atcol], 1);
+		Rast_set_c_null_value(&out_array[atcol], 1);
 		continue;
 	    }
 
@@ -245,21 +246,21 @@ int main(int argc, char **argv)
 		(val[2] * B[1].levels + val[1]) * B[0].levels + val[0];
 	}
 
-	if (G_put_raster_row(out_file, out_array, CELL_TYPE) < 0)
+	if (Rast_put_raster_row(out_file, out_array, CELL_TYPE) < 0)
 	    G_fatal_error(_("Failed writing raster map <%s>"), out_name);
     }
     G_percent(window.rows, window.rows, 1);
 
     /* Close the input files */
     for (i = 0; i < 3; i++)
-	G_close_cell(B[i].file);
+	Rast_close_cell(B[i].file);
 
     /* Close the output file */
-    G_close_cell(out_file);
-    G_write_colors(out_name, G_mapset(), &out_colors);
-    G_short_history(out_name, "raster", &history);
-    G_command_history(&history);
-    G_write_history(out_name, &history);
+    Rast_close_cell(out_file);
+    Rast_write_colors(out_name, G_mapset(), &out_colors);
+    Rast_short_history(out_name, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(out_name, &history);
 
     G_done_msg(_("Raster map <%s> created."), out_name);
 
@@ -283,7 +284,7 @@ static void make_color_cube(struct Colors *colors)
     int g, b;
     int i = 0;
 
-    G_init_colors(colors);
+    Rast_init_colors(colors);
 
     G_message(_("Creating color table for output raster map..."));
 
@@ -296,7 +297,7 @@ static void make_color_cube(struct Colors *colors)
 	    CELL i0 = i;
 	    CELL i1 = i + mr;
 
-	    G_add_c_raster_color_rule(&i0, 0, grn, blu,
+	    Rast_add_c_raster_color_rule(&i0, 0, grn, blu,
 				      &i1, 255, grn, blu, colors);
 
 	    i += nr;

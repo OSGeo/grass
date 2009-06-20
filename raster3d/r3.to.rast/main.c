@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/G3d.h>
 #include <grass/glocale.h>
 
@@ -57,7 +58,7 @@ void fatal_error(void *map, int *fd, int depths, char *errorMsg)
 
     if (fd != NULL) {
 	for (i = 0; i < depths; i++)
-	    G_unopen_cell(fd[i]);
+	    Rast_unopen_cell(fd[i]);
     }
 
     G3d_fatalError(errorMsg);
@@ -118,9 +119,9 @@ void g3d_to_raster(void *map, G3D_Region region, int *fd)
     typeIntern = G3d_tileTypeMap(map);
 
     if (typeIntern == FCELL_TYPE)
-	fcell = G_allocate_f_raster_buf();
+	fcell = Rast_allocate_f_raster_buf();
     else if (typeIntern == DCELL_TYPE)
-	dcell = G_allocate_d_raster_buf();
+	dcell = Rast_allocate_d_raster_buf();
 
     pos = 0;
     /*Every Rastermap */
@@ -133,27 +134,27 @@ void g3d_to_raster(void *map, G3D_Region region, int *fd)
 		if (typeIntern == FCELL_TYPE) {
 		    G3d_getValue(map, x, y, z, &f1, typeIntern);
 		    if (G3d_isNullValueNum(&f1, FCELL_TYPE))
-			G_set_null_value(&fcell[x], 1, FCELL_TYPE);
+			Rast_set_null_value(&fcell[x], 1, FCELL_TYPE);
 		    else
 			fcell[x] = (FCELL) f1;
 		}
 		else {
 		    G3d_getValue(map, x, y, z, &d1, typeIntern);
 		    if (G3d_isNullValueNum(&d1, DCELL_TYPE))
-			G_set_null_value(&dcell[x], 1, DCELL_TYPE);
+			Rast_set_null_value(&dcell[x], 1, DCELL_TYPE);
 		    else
 			dcell[x] = (DCELL) d1;
 		}
 	    }
 	    if (typeIntern == FCELL_TYPE) {
-		check = G_put_f_raster_row(fd[pos], fcell);
+		check = Rast_put_f_raster_row(fd[pos], fcell);
 		if (check != 1)
 		    fatal_error(map, fd, depths,
 				_("Unable to write raster row"));
 	    }
 
 	    if (typeIntern == DCELL_TYPE) {
-		check = G_put_d_raster_row(fd[pos], dcell);
+		check = Rast_put_d_raster_row(fd[pos], dcell);
 		if (check != 1)
 		    fatal_error(map, fd, depths,
 				_("Unable to write raster row"));
@@ -178,7 +179,7 @@ int open_output_map(const char *name, int res_type)
 {
     int fd;
 
-    fd = G_open_raster_new((char *)name, res_type);
+    fd = Rast_open_raster_new((char *)name, res_type);
     if (fd < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), name);
 
@@ -190,7 +191,7 @@ int open_output_map(const char *name, int res_type)
 /* ************************************************************************* */
 void close_output_map(int fd)
 {
-    if (G_close_cell(fd) < 0)
+    if (Rast_close_cell(fd) < 0)
 	G_fatal_error(_("Unable to close output map"));
 }
 
@@ -339,7 +340,7 @@ int main(int argc, char *argv[])
 	/* write history */
 	G_asprintf(&RasterFileName, "%s_%i", param.output->answer, i + 1);
 	G_debug(4, "Raster map %d Filename: %s", i + 1, RasterFileName);
-	G_short_history(RasterFileName, "raster", &history);
+	Rast_short_history(RasterFileName, "raster", &history);
 
 	sprintf(history.datsrc_1, "3D Raster map:");
 	strncpy(history.datsrc_2, param.input->answer, RECORD_LEN);
@@ -363,8 +364,8 @@ int main(int argc, char *argv[])
 	    history.edlinecnt = 8;
 	}
 
-	G_command_history(&history);
-	G_write_history(RasterFileName, &history);
+	Rast_command_history(&history);
+	Rast_write_history(RasterFileName, &history);
     }
 
     /*We set the Mask off, if it was off before */

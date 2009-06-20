@@ -8,6 +8,7 @@
 #include <math.h>
 #include <grass/Vect.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "vector.h"
 
 #define LENGTH(DX, DY)  (  sqrt( (DX*DX)+(DY*DY) )  )

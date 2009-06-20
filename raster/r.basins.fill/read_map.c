@@ -17,6 +17,7 @@
 ****************************************************************************/
 
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 
@@ -32,16 +33,16 @@ CELL *read_map(const char *name, int nomask, int nrows, int ncols)
     map = (CELL *) G_malloc(nrows * ncols * sizeof(CELL));
 
     /* open the map */
-    if ((fd = G_open_cell_old(name, "")) < 0)
+    if ((fd = Rast_open_cell_old(name, "")) < 0)
 	G_fatal_error(_("Unable to open <%s>"), name);
 
     /* read the map */
     G_message(_("Reading <%s> ... "), name);
 
     if (nomask)
-	get_row = G_get_map_row_nomask;
+	get_row = Rast_get_map_row_nomask;
     else
-	get_row = G_get_map_row;
+	get_row = Rast_get_map_row;
 
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 10);
@@ -50,7 +51,7 @@ CELL *read_map(const char *name, int nomask, int nrows, int ncols)
     }
     G_percent(nrows, nrows, 10);
 
-    G_close_cell(fd);
+    Rast_close_cell(fd);
 
     return map;
 }

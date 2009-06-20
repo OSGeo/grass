@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "nfiles.h"
 #include "local_proto.h"
@@ -98,7 +99,7 @@ int main(int argc, char *argv[])
 	if (!ok)
 	    continue;
 
-	fd = G_open_cell_old(name, "");
+	fd = Rast_open_cell_old(name, "");
 	if (fd < 0) {
 	    ok = 0;
 	    continue;
@@ -106,25 +107,25 @@ int main(int argc, char *argv[])
 
 	infd[i] = fd;
 
-	map_type = G_get_raster_map_type(fd);
+	map_type = Rast_get_raster_map_type(fd);
 	if (map_type == FCELL_TYPE && out_type == CELL_TYPE)
 	    out_type = FCELL_TYPE;
 	else if (map_type == DCELL_TYPE)
 	    out_type = DCELL_TYPE;
 
-	G_init_cell_stats(&statf[i]);
+	Rast_init_cell_stats(&statf[i]);
     }
 
     if (!ok)
 	G_fatal_error(_("One or more input raster maps not found"));
 
     rname = opt2->answer;
-    outfd = G_open_raster_new(new_name = rname, out_type);
+    outfd = Rast_open_raster_new(new_name = rname, out_type);
     if (outfd < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), new_name);
 
-    presult = G_allocate_raster_buf(out_type);
-    patch = G_allocate_raster_buf(out_type);
+    presult = Rast_allocate_raster_buf(out_type);
+    patch = Rast_allocate_raster_buf(out_type);
 
     nrows = G_window_rows();
     ncols = G_window_cols();
@@ -132,28 +133,28 @@ int main(int argc, char *argv[])
     G_verbose_message(_("Percent complete..."));
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
-	if (G_get_raster_row(infd[0], presult, row, out_type) < 0)
+	if (Rast_get_raster_row(infd[0], presult, row, out_type) < 0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			  names[0], row);
 
 	if (out_type == CELL_TYPE)
-	    G_update_cell_stats((CELL *) presult, ncols, &statf[0]);
+	    Rast_update_cell_stats((CELL *) presult, ncols, &statf[0]);
 	for (i = 1; i < nfiles; i++) {
-	    if (G_get_raster_row(infd[i], patch, row, out_type) < 0)
+	    if (Rast_get_raster_row(infd[i], patch, row, out_type) < 0)
 		G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			      names[i], row);
 	    if (!do_patch
 		(presult, patch, &statf[i], ncols, out_type, ZEROFLAG))
 		break;
 	}
-	G_put_raster_row(outfd, presult, out_type);
+	Rast_put_raster_row(outfd, presult, out_type);
     }
     G_percent(row, nrows, 2);
 
     G_free(patch);
     G_free(presult);
     for (i = 0; i < nfiles; i++)
-	G_close_cell(infd[i]);
+	Rast_close_cell(infd[i]);
     /* 
      * build the new cats and colors. do this before closing the new
      * file, in case the new file is one of the patching files as well.
@@ -162,15 +163,15 @@ int main(int argc, char *argv[])
     support(names, statf, nfiles, &cats, &cats_ok, &colr, &colr_ok, out_type);
 
     /* now close (and create) the result */
-    G_close_cell(outfd);
+    Rast_close_cell(outfd);
     if (cats_ok)
-	G_write_cats(new_name, &cats);
+	Rast_write_cats(new_name, &cats);
     if (colr_ok)
-	G_write_colors(new_name, G_mapset(), &colr);
+	Rast_write_colors(new_name, G_mapset(), &colr);
 
-    G_short_history(new_name, "raster", &history);
-    G_command_history(&history);
-    G_write_history(new_name, &history);
+    Rast_short_history(new_name, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(new_name, &history);
 
     exit(EXIT_SUCCESS);
 }

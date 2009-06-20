@@ -15,6 +15,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "mask.h"
 #include "local_proto.h"
@@ -112,7 +113,7 @@ int main(int argc, char *argv[])
     if (mapset == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), name);
 
-    is_reclass = (G_is_reclass(name, mapset, rname, rmapset) > 0);
+    is_reclass = (Rast_is_reclass(name, mapset, rname, rmapset) > 0);
     if (is_reclass)
 	G_fatal_error(_("Raster map <%s> is a reclass of map <%s@%s>. "
 			"Consider to generate a copy with r.mapcalc. Exiting."),
@@ -131,7 +132,7 @@ int main(int argc, char *argv[])
 			  parms.null->answer);
     }
 
-    map_type = G_raster_map_type(name, mapset);
+    map_type = Rast_raster_map_type(name, mapset);
 
     if (only_null && G_find_file2_misc("cell_misc", "null", name, mapset))
 	G_fatal_error(_("Raster map <%s> already has a null bitmap file"), name);
@@ -153,15 +154,15 @@ int main(int argc, char *argv[])
 
     parse_vallist(parms.setnull->answers, &d_mask);
 
-    if (G_get_cellhd(name, mapset, &cellhd) < 0)
+    if (Rast_get_cellhd(name, mapset, &cellhd) < 0)
 	G_fatal_error(_("Unable to read header of raster map <%s>"),
 		      G_fully_qualified_name(name, mapset));
 
     if (create) {
 	/* write a file of no-nulls */
-	null_bits = (unsigned char *)G__allocate_null_bits(cellhd.cols);
+	null_bits = (unsigned char *)Rast__allocate_null_bits(cellhd.cols);
 	/* init all cells to 0's */
-	for (col = 0; col < G__null_bitstream_size(cellhd.cols); col++)
+	for (col = 0; col < Rast__null_bitstream_size(cellhd.cols); col++)
 	    null_bits[col] = 0;
 
 	null_fd = G_open_new_misc("cell_misc", "null", name);
@@ -171,7 +172,7 @@ int main(int argc, char *argv[])
 
 	for (row = 0; row < cellhd.rows; row++) {
 	    G_percent(row, cellhd.rows, 1);
-	    if (G__write_null_bits(null_fd, null_bits, row, cellhd.cols, 0) <
+	    if (Rast__write_null_bits(null_fd, null_bits, row, cellhd.cols, 0) <
 		0)
 		G_fatal_error(_("Error writing null row %d"), row);
 	}
@@ -275,13 +276,13 @@ int process(const char *name, const char *mapset, int change_null, RASTER_MAP_TY
     int quant_ok;
 
     G_suppress_warnings(1);
-    colr_ok = G_read_colors(name, mapset, &colr) > 0;
-    hist_ok = G_read_history(name, mapset, &hist) >= 0;
-    cats_ok = G_read_raster_cats(name, mapset, &cats) >= 0;
+    colr_ok = Rast_read_colors(name, mapset, &colr) > 0;
+    hist_ok = Rast_read_history(name, mapset, &hist) >= 0;
+    cats_ok = Rast_read_raster_cats(name, mapset, &cats) >= 0;
 
     if (map_type != CELL_TYPE) {
-	G_quant_init(&quant);
-	quant_ok = G_read_quant(name, mapset, &quant);
+	Rast_quant_init(&quant);
+	quant_ok = Rast_read_quant(name, mapset, &quant);
 	G_suppress_warnings(0);
     }
 
@@ -289,18 +290,18 @@ int process(const char *name, const char *mapset, int change_null, RASTER_MAP_TY
 	return 1;
 
     if (colr_ok) {
-	G_write_colors(name, mapset, &colr);
-	G_free_colors(&colr);
+	Rast_write_colors(name, mapset, &colr);
+	Rast_free_colors(&colr);
     }
     if (hist_ok)
-	G_write_history(name, &hist);
+	Rast_write_history(name, &hist);
     if (cats_ok) {
-	cats.num = G_number_of_cats(name, mapset);
-	G_write_raster_cats(name, &cats);
-	G_free_cats(&cats);
+	cats.num = Rast_number_of_cats(name, mapset);
+	Rast_write_raster_cats(name, &cats);
+	Rast_free_cats(&cats);
     }
     if (map_type != CELL_TYPE && quant_ok)
-	G_write_quant(name, mapset, &quant);
+	Rast_write_quant(name, mapset, &quant);
 
     return 0;
 }
@@ -312,16 +313,16 @@ int doit(const char *name, const char *mapset, int change_null, RASTER_MAP_TYPE 
 
     G_set_window(&cellhd);
 
-    old = G_open_cell_old(name, mapset);
+    old = Rast_open_cell_old(name, mapset);
     if (old < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
 
-    new = G_open_raster_new(name, map_type);
+    new = Rast_open_raster_new(name, map_type);
 
     if (new < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), name);
 
-    rast = G_allocate_raster_buf(map_type);
+    rast = Rast_allocate_raster_buf(map_type);
 
     G_verbose_message(_("Writing new data for raster map <%s>..."), name);
 
@@ -329,7 +330,7 @@ int doit(const char *name, const char *mapset, int change_null, RASTER_MAP_TYPE 
     for (row = 0; row < cellhd.rows; row++) {
 	G_percent(row, cellhd.rows, 1);
 
-	if (G_get_raster_row_nomask(old, rast, row, map_type) < 0) {
+	if (Rast_get_raster_row_nomask(old, rast, row, map_type) < 0) {
 	    G_warning(_("Unable to read raster map <%s> row %d"),
 		      name, row);
 	    break;
@@ -337,7 +338,7 @@ int doit(const char *name, const char *mapset, int change_null, RASTER_MAP_TYPE 
 
 	mask_raster_array(rast, cellhd.cols, change_null, map_type);
 
-	if (G_put_raster_row(new, rast, map_type) < 0) {
+	if (Rast_put_raster_row(new, rast, map_type) < 0) {
 	    G_warning(_("Failed writing raster map <%s> row %d"),
 		      name, row);
 	    break;
@@ -345,12 +346,12 @@ int doit(const char *name, const char *mapset, int change_null, RASTER_MAP_TYPE 
     }
     G_percent(row, cellhd.rows, 1);
     G_free(rast);
-    G_close_cell(old);
+    Rast_close_cell(old);
     if (row < cellhd.rows) {
-	G_unopen_cell(new);
+	Rast_unopen_cell(new);
 	return 1;
     }
-    G_close_cell(new);
+    Rast_close_cell(new);
 
     return 0;
 }

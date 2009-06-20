@@ -17,6 +17,7 @@
 
 #include <stdlib.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 
 
 /* 
@@ -33,35 +34,35 @@ int do_histogram(const char *name)
     int row;
     int fd;
 
-    if (G_get_cellhd(name, "", &cellhd) < 0)
+    if (Rast_get_cellhd(name, "", &cellhd) < 0)
 	return 1;
 
     G_set_window(&cellhd);
-    if ((fd = G_open_cell_old(name, "")) < 0)
+    if ((fd = Rast_open_cell_old(name, "")) < 0)
 	return 1;
 
     nrows = G_window_rows();
     ncols = G_window_cols();
-    cell = G_allocate_cell_buf();
+    cell = Rast_allocate_cell_buf();
 
-    G_init_cell_stats(&statf);
+    Rast_init_cell_stats(&statf);
 
     /* Update statistics for each row */
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
 
-	if (G_get_map_row_nomask(fd, cell, row) < 0)
+	if (Rast_get_map_row_nomask(fd, cell, row) < 0)
 	    break;
 
-	G_update_cell_stats(cell, ncols, &statf);
+	Rast_update_cell_stats(cell, ncols, &statf);
     }
 
     /* Write histogram if it made it through the loop */
     if (row == nrows)
-	G_write_histogram_cs(name, &statf);
+	Rast_write_histogram_cs(name, &statf);
 
-    G_free_cell_stats(&statf);
-    G_close_cell(fd);
+    Rast_free_cell_stats(&statf);
+    Rast_close_cell(fd);
     G_free(cell);
 
     if (row == nrows)

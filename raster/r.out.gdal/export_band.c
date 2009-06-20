@@ -15,6 +15,7 @@
 *****************************************************************************/
 
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 #include "cpl_string.h"
@@ -49,7 +50,7 @@ int export_band(GDALDatasetH hMEMDS, GDALDataType export_datatype, int band,
     int ret = 0;
 
     /* Open GRASS raster */
-    fd = G_open_cell_old(name, mapset);
+    fd = Rast_open_cell_old(name, mapset);
     if (fd < 0) {
 	G_warning(_("Unable to open raster map <%s>"), name);
 	return -1;
@@ -64,12 +65,12 @@ int export_band(GDALDatasetH hMEMDS, GDALDataType export_datatype, int band,
     }
 
     /* Get min/max values. */
-    if (G_read_fp_range(name, mapset, &sRange) == -1) {
+    if (Rast_read_fp_range(name, mapset, &sRange) == -1) {
 	bHaveMinMax = FALSE;
     }
     else {
 	bHaveMinMax = TRUE;
-	G_get_fp_range_min_max(&sRange, &dfCellMin, &dfCellMax);
+	Rast_get_fp_range_min_max(&sRange, &dfCellMin, &dfCellMax);
     }
 
     /* suppress useless warnings */
@@ -78,13 +79,13 @@ int export_band(GDALDatasetH hMEMDS, GDALDataType export_datatype, int band,
     CPLPopErrorHandler();
 
     /* use default color rules if no color rules are given */
-    if (G_read_colors(name, mapset, &sGrassColors) >= 0) {
+    if (Rast_read_colors(name, mapset, &sGrassColors) >= 0) {
 	int maxcolor, i;
 	CELL min, max;
 	char key[200], value[200];
 	int rcount;
 
-	G_get_color_range(&min, &max, &sGrassColors);
+	Rast_get_color_range(&min, &max, &sGrassColors);
 	if (bHaveMinMax) {
 	    if (max < dfCellMax) {
 		maxcolor = max;
@@ -109,7 +110,7 @@ int export_band(GDALDatasetH hMEMDS, GDALDataType export_datatype, int band,
 	    }
 	}
 
-	rcount = G_colors_count(&sGrassColors);
+	rcount = Rast_colors_count(&sGrassColors);
 
 	G_debug(3, "dfCellMin: %f, dfCellMax: %f, maxcolor: %d", dfCellMin,
 		dfCellMax, maxcolor);
@@ -121,7 +122,7 @@ int export_band(GDALDatasetH hMEMDS, GDALDataType export_datatype, int band,
 		int nRed, nGreen, nBlue;
 		GDALColorEntry sColor;
 
-		if (G_get_color
+		if (Rast_get_color
 		    (iColor, &nRed, &nGreen, &nBlue, &sGrassColors)) {
 		    sColor.c1 = nRed;
 		    sColor.c2 = nGreen;
@@ -129,7 +130,7 @@ int export_band(GDALDatasetH hMEMDS, GDALDataType export_datatype, int band,
 		    sColor.c4 = 255;
 
 		    G_debug(3,
-			    "G_get_color: Y, rcount %d, nRed %d, nGreen %d, nBlue %d",
+			    "Rast_get_color: Y, rcount %d, nRed %d, nGreen %d, nBlue %d",
 			    rcount, nRed, nGreen, nBlue);
 		    GDALSetColorEntry(hCT, iColor, &sColor);
 		}
@@ -140,7 +141,7 @@ int export_band(GDALDatasetH hMEMDS, GDALDataType export_datatype, int band,
 		    sColor.c4 = 0;
 
 		    G_debug(3,
-			    "G_get_color: N, rcount %d, nRed %d, nGreen %d, nBlue %d",
+			    "Rast_get_color: N, rcount %d, nRed %d, nGreen %d, nBlue %d",
 			    rcount, nRed, nGreen, nBlue);
 		    GDALSetColorEntry(hCT, iColor, &sColor);
 		}
@@ -163,7 +164,7 @@ int export_band(GDALDatasetH hMEMDS, GDALDataType export_datatype, int band,
 	    DCELL val1, val2;
 	    unsigned char r1, g1, b1, r2, g2, b2;
 
-	    G_get_f_color_rule(&val1, &r1, &g1, &b1, &val2, &r2, &g2, &b2,
+	    Rast_get_f_color_rule(&val1, &r1, &g1, &b1, &val2, &r2, &g2, &b2,
 			       &sGrassColors, i);
 
 
@@ -175,7 +176,7 @@ int export_band(GDALDatasetH hMEMDS, GDALDataType export_datatype, int band,
     }
 
     /* Create GRASS raster buffer */
-    void *bufer = G_allocate_raster_buf(maptype);
+    void *bufer = Rast_allocate_raster_buf(maptype);
 
     if (bufer == NULL) {
 	G_warning(_("Unable to allocate buffer for reading raster map"));
@@ -208,12 +209,12 @@ int export_band(GDALDatasetH hMEMDS, GDALDataType export_datatype, int band,
 
 	for (row = 0; row < rows; row++) {
 
-	    if (G_get_raster_row(fd, bufer, row, maptype) < 0) {
+	    if (Rast_get_raster_row(fd, bufer, row, maptype) < 0) {
 		G_warning(_("Unable to read raster map <%s> row %d"),
 			  name, row);
 		return -1;
 	    }
-	    G_get_null_value_row(fd, nulls, row);
+	    Rast_get_null_value_row(fd, nulls, row);
 	    for (col = 0; col < cols; col++)
 		if (nulls[col]) {
 		    ((FCELL *) bufer)[col] = fnullval;
@@ -250,12 +251,12 @@ int export_band(GDALDatasetH hMEMDS, GDALDataType export_datatype, int band,
 
 	for (row = 0; row < rows; row++) {
 
-	    if (G_get_raster_row(fd, bufer, row, maptype) < 0) {
+	    if (Rast_get_raster_row(fd, bufer, row, maptype) < 0) {
 		G_warning(_("Unable to read raster map <%s> row %d"),
 			  name, row);
 		return -1;
 	    }
-	    G_get_null_value_row(fd, nulls, row);
+	    Rast_get_null_value_row(fd, nulls, row);
 	    for (col = 0; col < cols; col++)
 		if (nulls[col]) {
 		    ((DCELL *) bufer)[col] = dnullval;
@@ -292,12 +293,12 @@ int export_band(GDALDatasetH hMEMDS, GDALDataType export_datatype, int band,
 
 	for (row = 0; row < rows; row++) {
 
-	    if (G_get_raster_row(fd, bufer, row, maptype) < 0) {
+	    if (Rast_get_raster_row(fd, bufer, row, maptype) < 0) {
 		G_warning(_("Unable to read raster map <%s> row %d"),
 			  name, row);
 		return -1;
 	    }
-	    G_get_null_value_row(fd, nulls, row);
+	    Rast_get_null_value_row(fd, nulls, row);
 	    for (col = 0; col < cols; col++)
 		if (nulls[col]) {
 		    ((CELL *) bufer)[col] = inullval;

@@ -12,6 +12,7 @@
  */
 
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 #include <stdlib.h>
@@ -68,7 +69,7 @@ int shannon(int fd, char **par, area_des ad, double *result)
     double indice = 0;
     struct Cell_head hd;
 
-    if (G_get_cellhd(ad->raster, "", &hd) == -1)
+    if (Rast_get_cellhd(ad->raster, "", &hd) == -1)
 	return RLI_ERRORE;
 
 
@@ -153,7 +154,7 @@ int calculate(int fd, area_des ad, double *result)
     }
 
 
-    G_set_c_null_value(&precCell, 1);
+    Rast_set_c_null_value(&precCell, 1);
 
 
     /*for each row */
@@ -174,13 +175,13 @@ int calculate(int fd, area_des ad, double *result)
 	    corrCell = buf[i + ad->x];
 
 	    if (masked && mask_buf[i + ad->x] == 0) {
-		G_set_c_null_value(&corrCell, 1);
+		Rast_set_c_null_value(&corrCell, 1);
 		area--;
 	    }
 
-	    if (!(G_is_null_value(&corrCell, CELL_TYPE))) {
+	    if (!(Rast_is_null_value(&corrCell, CELL_TYPE))) {
 		a = 1;
-		if (G_is_null_value(&precCell, cc.t)) {
+		if (Rast_is_null_value(&precCell, cc.t)) {
 		    precCell = corrCell;
 		}
 
@@ -360,7 +361,7 @@ int calculateD(int fd, area_des ad, double *result)
     }
 
 
-    G_set_d_null_value(&precCell, 1);
+    Rast_set_d_null_value(&precCell, 1);
 
     /*for each row */
     for (j = 0; j < ad->rl; j++) {
@@ -380,13 +381,13 @@ int calculateD(int fd, area_des ad, double *result)
 	    corrCell = buf[i + ad->x];
 
 	    if (masked && mask_buf[i + ad->x] == 0) {
-		G_set_d_null_value(&corrCell, 1);
+		Rast_set_d_null_value(&corrCell, 1);
 		area--;
 	    }
 
-	    if (!(G_is_null_value(&corrCell, DCELL_TYPE))) {
+	    if (!(Rast_is_null_value(&corrCell, DCELL_TYPE))) {
 		a = 1;
-		if (G_is_null_value(&precCell, DCELL_TYPE)) {
+		if (Rast_is_null_value(&precCell, DCELL_TYPE)) {
 		    precCell = corrCell;
 		}
 		if (corrCell != precCell) {
@@ -563,7 +564,7 @@ int calculateF(int fd, area_des ad, double *result)
     }
 
 
-    G_set_f_null_value(&precCell, 1);
+    Rast_set_f_null_value(&precCell, 1);
 
 
     /*for each row */
@@ -583,13 +584,13 @@ int calculateF(int fd, area_des ad, double *result)
 	    area++;
 	    corrCell = buf[i + ad->x];
 	    if (masked && mask_buf[i + ad->x] == 0) {
-		G_set_f_null_value(&corrCell, 1);
+		Rast_set_f_null_value(&corrCell, 1);
 		area--;
 	    }
 
-	    if (!(G_is_null_value(&corrCell, FCELL_TYPE))) {
+	    if (!(Rast_is_null_value(&corrCell, FCELL_TYPE))) {
 		a = 1;
-		if (G_is_null_value(&precCell, FCELL_TYPE)) {
+		if (Rast_is_null_value(&precCell, FCELL_TYPE)) {
 		    precCell = corrCell;
 		}
 		if (corrCell != precCell) {

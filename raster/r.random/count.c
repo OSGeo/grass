@@ -3,6 +3,7 @@
 #include <math.h>
 #include <unistd.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 
@@ -19,43 +20,43 @@ void get_stats(struct rr_state *theState)
 {
     int nrows, ncols, row, col;
 
-    theState->fd_old = G_open_cell_old(theState->inraster, "");
+    theState->fd_old = Rast_open_cell_old(theState->inraster, "");
     if (theState->fd_old < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"),
 		      theState->inraster);
     if (theState->docover == 1) {
-	theState->fd_cold = G_open_cell_old(theState->inrcover, "");
+	theState->fd_cold = Rast_open_cell_old(theState->inrcover, "");
 	if (theState->fd_cold < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
 			  theState->inrcover);
     }
-    theState->buf.type = G_get_raster_map_type(theState->fd_old);
-    theState->buf.data.v = G_allocate_raster_buf(theState->buf.type);
+    theState->buf.type = Rast_get_raster_map_type(theState->fd_old);
+    theState->buf.data.v = Rast_allocate_raster_buf(theState->buf.type);
     if (theState->docover == 1) {
-	theState->cover.type = G_get_raster_map_type(theState->fd_cold);
-	theState->cover.data.v = G_allocate_raster_buf(theState->cover.type);
+	theState->cover.type = Rast_get_raster_map_type(theState->fd_cold);
+	theState->cover.data.v = Rast_allocate_raster_buf(theState->cover.type);
     }
 
     theState->nulls.type = theState->buf.type;
     theState->min.type = theState->buf.type;
     theState->max.type = theState->buf.type;
     theState->nulls.data.v =
-	(void *)G_malloc(G_raster_size(theState->nulls.type));
+	(void *)G_malloc(Rast_raster_size(theState->nulls.type));
     theState->min.data.v =
-	(void *)G_malloc(G_raster_size(theState->min.type));
+	(void *)G_malloc(Rast_raster_size(theState->min.type));
     theState->max.data.v =
-	(void *)G_malloc(G_raster_size(theState->max.type));
+	(void *)G_malloc(Rast_raster_size(theState->max.type));
 
     if (theState->docover == 1) {
 	theState->cnulls.type = theState->cover.type;
 	theState->cmin.type = theState->cover.type;
 	theState->cmax.type = theState->cover.type;
 	theState->cnulls.data.v =
-	    (void *)G_malloc(G_raster_size(theState->cnulls.type));
+	    (void *)G_malloc(Rast_raster_size(theState->cnulls.type));
 	theState->cmin.data.v =
-	    (void *)G_malloc(G_raster_size(theState->cmin.type));
+	    (void *)G_malloc(Rast_raster_size(theState->cmin.type));
 	theState->cmax.data.v =
-	    (void *)G_malloc(G_raster_size(theState->cmax.type));
+	    (void *)G_malloc(Rast_raster_size(theState->cmax.type));
     }
     nrows = G_window_rows();
     ncols = G_window_cols();
@@ -72,11 +73,11 @@ void get_stats(struct rr_state *theState)
     }
     G_message(_("Collecting Stats..."));
     for (row = 0; row < nrows; row++) {
-	if (G_get_raster_row(theState->fd_old, theState->buf.data.v,
+	if (Rast_get_raster_row(theState->fd_old, theState->buf.data.v,
 			     row, theState->buf.type) < 0)
 	    G_fatal_error(_("Cannot read raster row [%d]"), row);
 	if (theState->docover == 1) {
-	    if (G_get_raster_row(theState->fd_cold, theState->cover.data.v,
+	    if (Rast_get_raster_row(theState->fd_cold, theState->cover.data.v,
 				 row, theState->cover.type) < 0)
 		G_fatal_error(_("Cannot read cover raster row [%d]"), row);
 	}

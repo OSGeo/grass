@@ -8,6 +8,7 @@
  *       \BUGS: please send bugs reports to pallecch@cli.di.unipi.it
  */
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 #include <string.h>

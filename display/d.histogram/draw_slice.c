@@ -2,6 +2,7 @@
 #include <grass/display_raster.h>
 #include <grass/display.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 
 char percent[] = "%";
 

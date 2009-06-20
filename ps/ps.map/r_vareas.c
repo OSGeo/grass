@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/Vect.h>
 
 #include "vector.h"
@@ -125,7 +126,7 @@ int read_vareas(char *name, char *mapset)
 	}
 
 	if (KEY("color")) {
-	    ret = G_str_to_color(data, &r, &g, &b);
+	    ret = Rast_str_to_color(data, &r, &g, &b);
 	    if (ret == 1)
 		set_color(&(vector.layer[vec].color), r, g, b);
 	    else if (ret == 2)
@@ -143,7 +144,7 @@ int read_vareas(char *name, char *mapset)
 	}
 
 	if (KEY("fcolor")) {	/* area color */
-	    ret = G_str_to_color(data, &r, &g, &b);
+	    ret = Rast_str_to_color(data, &r, &g, &b);
 	    if (ret == 1)
 		set_color(&(vector.layer[vec].fcolor), r, g, b);
 	    else if (ret == 2)

@@ -13,7 +13,8 @@
 
 #include <stdlib.h>
 #include <grass/gis.h>
-#include "G.h"
+
+#include "../raster/G.h"
 
 
 #define alloc_index(n) (COLUMN_MAPPING *) G_malloc((n)*sizeof(COLUMN_MAPPING))

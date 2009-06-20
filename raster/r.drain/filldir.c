@@ -3,6 +3,7 @@
 #include <limits.h>
 #include <float.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "tinf.h"
 #include "local.h"
 
@@ -45,7 +46,7 @@ void build_one_row(int i, int nl, int ns, struct band3 *bnd, CELL * dir,
 	offset = j * bpe();
 	center = bnd->b[1] + offset;
 	if (is_null(center)) {
-	    G_set_c_null_value(dir + j, 1);
+	    Rast_set_c_null_value(dir + j, 1);
 	    continue;
 	}
 

@@ -24,6 +24,7 @@
 #include <math.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/imagery.h>
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
@@ -346,14 +347,14 @@ int main(int argc, char *argv[])
     export_min = TYPE_FLOAT64_MIN;
     export_max = TYPE_FLOAT64_MAX;
     for (band = 0; band < ref.nfiles; band++) {
-	if (G_read_fp_range
+	if (Rast_read_fp_range
 	    (ref.file[band].name, ref.file[band].mapset, &sRange) == -1) {
 	    bHaveMinMax = FALSE;
 	    G_warning(_("Could not read data range of raster <%s>"),
 		      ref.file[band].name);
 	}
 	else {
-	    G_get_fp_range_min_max(&sRange, &dfCellMin, &dfCellMax);
+	    Rast_get_fp_range_min_max(&sRange, &dfCellMin, &dfCellMax);
 	    if (band == 0) {
 		export_min = dfCellMin;
 		export_max = dfCellMax;
@@ -379,7 +380,7 @@ int main(int argc, char *argv[])
     /* GDAL datatype not set by user, determine suitable datatype */
     if (datatype == GDT_Unknown) {
 	/* Use raster data type from first GRASS raster in a group */
-	maptype = G_raster_map_type(ref.file[0].name, ref.file[0].mapset);
+	maptype = Rast_raster_map_type(ref.file[0].name, ref.file[0].mapset);
 	if (maptype == FCELL_TYPE) {
 	    datatype = GDT_Float32;
 	}
@@ -428,7 +429,7 @@ int main(int argc, char *argv[])
 	/* Precision tests */
 	for (band = 0; band < ref.nfiles; band++) {
 	    testmaptype =
-		G_raster_map_type(ref.file[band].name, ref.file[band].mapset);
+		Rast_raster_map_type(ref.file[band].name, ref.file[band].mapset);
 	    /* Exporting floating point rasters to some integer type ? */
 	    if ((testmaptype == FCELL_TYPE || testmaptype == DCELL_TYPE) &&
 		(datatype == GDT_Byte || datatype == GDT_Int16 ||

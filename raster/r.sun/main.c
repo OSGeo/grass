@@ -500,9 +500,9 @@ int INPUT(void)
     int fr1, fr2;
     int l, i, j;
 
-    cell1 = G_allocate_f_raster_buf();
-    cell2 = G_allocate_f_raster_buf();
-    cell3 = G_allocate_f_raster_buf();
+    cell1 = Rast_allocate_f_raster_buf();
+    cell2 = Rast_allocate_f_raster_buf();
+    cell3 = Rast_allocate_f_raster_buf();
 
     z = (float **)G_malloc(sizeof(float *) * (m));
     o = (float **)G_malloc(sizeof(float *) * (m));
@@ -515,121 +515,121 @@ int INPUT(void)
 
     }
 
-    fd1 = G_open_cell_old(elevin, "");
-    fd2 = G_open_cell_old(aspin, "");
-    fd3 = G_open_cell_old(slopein, "");
+    fd1 = Rast_open_cell_old(elevin, "");
+    fd2 = Rast_open_cell_old(aspin, "");
+    fd3 = Rast_open_cell_old(slopein, "");
 
     if (linkein != NULL) {
-	cell4 = G_allocate_f_raster_buf();
+	cell4 = Rast_allocate_f_raster_buf();
 	li = (float **)G_malloc(sizeof(float *) * (m));
 	for (l = 0; l < m; l++)
 	    li[l] = (float *)G_malloc(sizeof(float) * (n));
 
-	fd4 = G_open_cell_old(linkein, "");
+	fd4 = Rast_open_cell_old(linkein, "");
     }
 
     if (albedo != NULL) {
-	cell5 = G_allocate_f_raster_buf();
+	cell5 = Rast_allocate_f_raster_buf();
 	a = (float **)G_malloc(sizeof(float *) * (m));
 	for (l = 0; l < m; l++)
 	    a[l] = (float *)G_malloc(sizeof(float) * (n));
 
-	fd5 = G_open_cell_old(albedo, "");
+	fd5 = Rast_open_cell_old(albedo, "");
     }
 
     if (latin != NULL) {
-	cell6 = G_allocate_f_raster_buf();
+	cell6 = Rast_allocate_f_raster_buf();
 	la = (float **)G_malloc(sizeof(float *) * (m));
 	for (l = 0; l < m; l++)
 	    la[l] = (float *)G_malloc(sizeof(float) * (n));
 
-	fd6 = G_open_cell_old(latin, "");
+	fd6 = Rast_open_cell_old(latin, "");
     }
 
     if (coefbh != NULL) {
-	rast1 = G_allocate_f_raster_buf();
+	rast1 = Rast_allocate_f_raster_buf();
 	cbhr = (float **)G_malloc(sizeof(float *) * (m));
 	for (l = 0; l < m; l++)
 	    cbhr[l] = (float *)G_malloc(sizeof(float) * (n));
 
-	fr1 = G_open_cell_old(coefbh, "");
+	fr1 = Rast_open_cell_old(coefbh, "");
     }
 
     if (coefdh != NULL) {
-	rast2 = G_allocate_f_raster_buf();
+	rast2 = Rast_allocate_f_raster_buf();
 	cdhr = (float **)G_malloc(sizeof(float *) * (m));
 	for (l = 0; l < m; l++)
 	    cdhr[l] = (float *)G_malloc(sizeof(float) * (n));
 
-	fr2 = G_open_cell_old(coefdh, "");
+	fr2 = Rast_open_cell_old(coefdh, "");
     }
 
 
     for (row = 0; row < m; row++) {
-	G_get_f_raster_row(fd1, cell1, row);
-	G_get_f_raster_row(fd2, cell2, row);
-	G_get_f_raster_row(fd3, cell3, row);
+	Rast_get_f_raster_row(fd1, cell1, row);
+	Rast_get_f_raster_row(fd2, cell2, row);
+	Rast_get_f_raster_row(fd3, cell3, row);
 	if (linkein != NULL)
-	    G_get_f_raster_row(fd4, cell4, row);
+	    Rast_get_f_raster_row(fd4, cell4, row);
 	if (albedo != NULL)
-	    G_get_f_raster_row(fd5, cell5, row);
+	    Rast_get_f_raster_row(fd5, cell5, row);
 	if (latin != NULL)
-	    G_get_f_raster_row(fd6, cell6, row);
+	    Rast_get_f_raster_row(fd6, cell6, row);
 	if (coefbh != NULL)
-	    G_get_f_raster_row(fr1, rast1, row);
+	    Rast_get_f_raster_row(fr1, rast1, row);
 	if (coefdh != NULL)
-	    G_get_f_raster_row(fr2, rast2, row);
+	    Rast_get_f_raster_row(fr2, rast2, row);
 
 
 	for (j = 0; j < n; j++) {
 	    row_rev = m - row - 1;
 
-	    if (!G_is_f_null_value(cell1 + j))
+	    if (!Rast_is_f_null_value(cell1 + j))
 		z[row_rev][j] = (float)cell1[j];
 	    else
 		z[row_rev][j] = UNDEFZ;
 
-	    if (!G_is_f_null_value(cell2 + j))
+	    if (!Rast_is_f_null_value(cell2 + j))
 		o[row_rev][j] = (float)cell2[j];
 	    else
 		o[row_rev][j] = UNDEFZ;
 
-	    if (!G_is_f_null_value(cell3 + j))
+	    if (!Rast_is_f_null_value(cell3 + j))
 		s[row_rev][j] = (float)cell3[j];
 	    else
 		s[row_rev][j] = UNDEFZ;
 
 
 	    if (linkein != NULL) {
-		if (!G_is_f_null_value(cell4 + j))
+		if (!Rast_is_f_null_value(cell4 + j))
 		    li[row_rev][j] = (float)cell4[j];
 		else
 		    li[row_rev][j] = UNDEFZ;
 	    }
 
 	    if (albedo != NULL) {
-		if (!G_is_f_null_value(cell5 + j))
+		if (!Rast_is_f_null_value(cell5 + j))
 		    a[row_rev][j] = (float)cell5[j];
 		else
 		    a[row_rev][j] = UNDEFZ;
 	    }
 
 	    if (latin != NULL) {
-		if (!G_is_f_null_value(cell6 + j))
+		if (!Rast_is_f_null_value(cell6 + j))
 		    la[row_rev][j] = (float)cell6[j];
 		else
 		    la[row_rev][j] = UNDEFZ;
 	    }
 
 	    if (coefbh != NULL) {
-		if (!G_is_f_null_value(rast1 + j))
+		if (!Rast_is_f_null_value(rast1 + j))
 		    cbhr[row_rev][j] = (float)rast1[j];
 		else
 		    cbhr[row_rev][j] = UNDEFZ;
 	    }
 
 	    if (coefdh != NULL) {
-		if (!G_is_f_null_value(rast2 + j))
+		if (!Rast_is_f_null_value(rast2 + j))
 		    cdhr[row_rev][j] = (float)rast2[j];
 		else
 		    cdhr[row_rev][j] = UNDEFZ;
@@ -638,19 +638,19 @@ int INPUT(void)
 
 	}
     }
-    G_close_cell(fd1);
-    G_close_cell(fd2);
-    G_close_cell(fd3);
+    Rast_close_cell(fd1);
+    Rast_close_cell(fd2);
+    Rast_close_cell(fd3);
     if (linkein != NULL)
-	G_close_cell(fd4);
+	Rast_close_cell(fd4);
     if (albedo != NULL)
-	G_close_cell(fd5);
+	Rast_close_cell(fd5);
     if (latin != NULL)
-	G_close_cell(fd6);
+	Rast_close_cell(fd6);
     if (coefbh != NULL)
-	G_close_cell(fr1);
+	Rast_close_cell(fr1);
     if (coefdh != NULL)
-	G_close_cell(fr2);
+	Rast_close_cell(fr2);
 
 /*******transformation of angles from 0 to east counterclock
 		to 0 to north clocwise, for ori=0 upslope flowlines
@@ -696,36 +696,36 @@ int OUTGR(void)
     int i, iarc, j;
 
     if (incidout != NULL) {
-	cell7 = G_allocate_f_raster_buf();
-	fd7 = G_open_fp_cell_new(incidout);
+	cell7 = Rast_allocate_f_raster_buf();
+	fd7 = Rast_open_fp_cell_new(incidout);
 	if (fd7 < 0)
 	    G_fatal_error(_("Unable to create raster map %s"), incidout);
     }
 
     if (beam_rad != NULL) {
-	cell8 = G_allocate_f_raster_buf();
-	fd8 = G_open_fp_cell_new(beam_rad);
+	cell8 = Rast_allocate_f_raster_buf();
+	fd8 = Rast_open_fp_cell_new(beam_rad);
 	if (fd8 < 0)
 	    G_fatal_error(_("Unable to create raster map %s"), beam_rad);
     }
 
     if (insol_time != NULL) {
-	cell11 = G_allocate_f_raster_buf();
-	fd11 = G_open_fp_cell_new(insol_time);
+	cell11 = Rast_allocate_f_raster_buf();
+	fd11 = Rast_open_fp_cell_new(insol_time);
 	if (fd11 < 0)
 	    G_fatal_error(_("Unable to create raster map %s"), insol_time);
     }
 
     if (diff_rad != NULL) {
-	cell9 = G_allocate_f_raster_buf();
-	fd9 = G_open_fp_cell_new(diff_rad);
+	cell9 = Rast_allocate_f_raster_buf();
+	fd9 = Rast_open_fp_cell_new(diff_rad);
 	if (fd9 < 0)
 	    G_fatal_error(_("Unable to create raster map %s"), diff_rad);
     }
 
     if (refl_rad != NULL) {
-	cell10 = G_allocate_f_raster_buf();
-	fd10 = G_open_fp_cell_new(refl_rad);
+	cell10 = Rast_allocate_f_raster_buf();
+	fd10 = Rast_open_fp_cell_new(refl_rad);
 	if (fd10 < 0)
 	    G_fatal_error(_("Unable to create raster map %s"), refl_rad);
     }
@@ -746,76 +746,76 @@ int OUTGR(void)
 	if (incidout != NULL) {
 	    for (j = 0; j < n; j++) {
 		if (lumcl[i][j] == UNDEFZ)
-		    G_set_f_null_value(cell7 + j, 1);
+		    Rast_set_f_null_value(cell7 + j, 1);
 		else
 		    cell7[j] = (FCELL) lumcl[i][j];
 	    }
-	    G_put_f_raster_row(fd7, cell7);
+	    Rast_put_f_raster_row(fd7, cell7);
 	}
 
 	if (beam_rad != NULL) {
 	    for (j = 0; j < n; j++) {
 		if (beam[i][j] == UNDEFZ)
-		    G_set_f_null_value(cell8 + j, 1);
+		    Rast_set_f_null_value(cell8 + j, 1);
 		else
 		    cell8[j] = (FCELL) beam[i][j];
 
 	    }
-	    G_put_f_raster_row(fd8, cell8);
+	    Rast_put_f_raster_row(fd8, cell8);
 	}
 
 	if (insol_time != NULL) {
 	    for (j = 0; j < n; j++) {
 		if (insol[i][j] == UNDEFZ)
-		    G_set_f_null_value(cell11 + j, 1);
+		    Rast_set_f_null_value(cell11 + j, 1);
 		else
 		    cell11[j] = (FCELL) insol[i][j];
 	    }
-	    G_put_f_raster_row(fd11, cell11);
+	    Rast_put_f_raster_row(fd11, cell11);
 	}
 
 
 	if (diff_rad != NULL) {
 	    for (j = 0; j < n; j++) {
 		if (diff[i][j] == UNDEFZ)
-		    G_set_f_null_value(cell9 + j, 1);
+		    Rast_set_f_null_value(cell9 + j, 1);
 		else
 		    cell9[j] = (FCELL) diff[i][j];
 	    }
-	    G_put_f_raster_row(fd9, cell9);
+	    Rast_put_f_raster_row(fd9, cell9);
 	}
 
 	if (refl_rad != NULL) {
 	    for (j = 0; j < n; j++) {
 		if (refl[i][j] == UNDEFZ)
-		    G_set_f_null_value(cell10 + j, 1);
+		    Rast_set_f_null_value(cell10 + j, 1);
 		else
 		    cell10[j] = (FCELL) refl[i][j];
 	    }
-	    G_put_f_raster_row(fd10, cell10);
+	    Rast_put_f_raster_row(fd10, cell10);
 	}
 
     }
 
     if (incidout != NULL) {
-	G_close_cell(fd7);
-	G_write_history(incidout, &hist);
+	Rast_close_cell(fd7);
+	Rast_write_history(incidout, &hist);
     }
     if (beam_rad != NULL) {
-	G_close_cell(fd8);
-	G_write_history(beam_rad, &hist);
+	Rast_close_cell(fd8);
+	Rast_write_history(beam_rad, &hist);
     }
     if (diff_rad != NULL) {
-	G_close_cell(fd9);
-	G_write_history(diff_rad, &hist);
+	Rast_close_cell(fd9);
+	Rast_write_history(diff_rad, &hist);
     }
     if (refl_rad != NULL) {
-	G_close_cell(fd10);
-	G_write_history(refl_rad, &hist);
+	Rast_close_cell(fd10);
+	Rast_write_history(refl_rad, &hist);
     }
     if (insol_time != NULL) {
-	G_close_cell(fd11);
-	G_write_history(insol_time, &hist);
+	Rast_close_cell(fd11);
+	Rast_write_history(insol_time, &hist);
     }
 
     return 1;
@@ -1378,7 +1378,7 @@ void calculate(void)
 
     }
 
-    G_short_history("r.sun solar model output", "raster", &hist);
+    Rast_short_history("r.sun solar model output", "raster", &hist);
 
     sprintf(hist.edhist[0],
 	    " ----------------------------------------------------------------");
@@ -1463,8 +1463,8 @@ void calculate(void)
 	    " -----------------------------------------------------------------");
     hist.edlinecnt++;
 
-    G_command_history(&hist);
-    /* don't call G_write_history() until after G_close_cell() or it just gets overwritten */
+    Rast_command_history(&hist);
+    /* don't call Rast_write_history() until after Rast_close_cell() or it just gets overwritten */
 }
 
 double com_sol_const(int no_of_day)

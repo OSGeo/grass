@@ -20,6 +20,7 @@
 #include <string.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include <grass/N_pde.h>
 #include <grass/N_gwflow.h>
@@ -501,7 +502,7 @@ copy_result(N_array_2d * status, N_array_2d * phead_start, double *result,
 		count++;
 	    }
 	    else {
-		G_set_null_value(&val, 1, DCELL_TYPE);
+		Rast_set_null_value(&val, 1, DCELL_TYPE);
 	    }
 	    N_put_array_2d_d_value(target, x, y, val);
 	}

@@ -48,7 +48,7 @@ int main(argc, argv)
     num_rows = col_b;
     num_cols = col_e;
 
-    if (G_get_cellhd(argv[1], mapset = G_mapset(), &wind)) {
+    if (Rast_get_cellhd(argv[1], mapset = G_mapset(), &wind)) {
 	fprintf(stderr, "ERROR bmif_to_cell: can't read cellhd file for %s\n",
 		argv[1]);
 	quit();
@@ -66,9 +66,9 @@ int main(argc, argv)
 
     G_set_window(&wind);
 
-    record = G_allocate_cell_buf();
+    record = Rast_allocate_cell_buf();
 
-    if ((newmap = G_open_cell_new(argv[1])) == -1) {
+    if ((newmap = Rast_open_cell_new(argv[1])) == -1) {
 	fprintf(stderr, "ERROR bmif_to_cell: can't open raster map %s\n",
 		argv[1]);
 	quit();
@@ -91,17 +91,17 @@ int main(argc, argv)
 
 	if (cur_row > num_rows) {
 	    while (atrow < num_rows) {
-		G_put_map_row(newmap, record);
+		Rast_put_map_row(newmap, record);
 		atrow++;
 	    }
-	    G_close_cell(newmap);
+	    Rast_close_cell(newmap);
 	    goto finish;
 	}
 
 	/* write out enough rows to get to current row */
 
 	while (atrow < cur_row + ROW_SHIFT) {
-	    G_put_map_row(newmap, record);
+	    Rast_put_map_row(newmap, record);
 	    atrow++;
 	}
 
@@ -114,17 +114,17 @@ int main(argc, argv)
 	}
 	while (cur_row == (atrow - ROW_SHIFT));
 
-	G_put_map_row(newmap, record);
+	Rast_put_map_row(newmap, record);
     }
-    fprintf(stderr, "Close: %d\n", G_close_cell(newmap));
+    fprintf(stderr, "Close: %d\n", Rast_close_cell(newmap));
 
   finish:
     G_suppress_warnings(1);
-    stat = G_read_vector_cats(argv[1], mapset, &cats);
+    stat = Rast_read_vector_cats(argv[1], mapset, &cats);
     G_suppress_warnings(0);
     if (stat >= 0) {		/* if cats file existed */
 	printf("Copying vector category file\n");
-	stat = G_write_cats(argv[1], &cats);
+	stat = Rast_write_cats(argv[1], &cats);
     }
     exit(0);
 }

@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "globals.h"
 
@@ -90,7 +91,7 @@ int main(int argc, char **argv)
 
 	/* read in a row from each cell map */
 	for (band = 0; band < 3; band++)
-	    if (G_get_map_row(fd_input[band], rowbuffer[band], i) < 0)
+	    if (Rast_get_map_row(fd_input[band], rowbuffer[band], i) < 0)
 		G_fatal_error(_("Unable to read raster map row %d"), i);
 
 	/* process this row of the map */
@@ -98,7 +99,7 @@ int main(int argc, char **argv)
 
 	/* write out the new row for each cell map */
 	for (band = 0; band < 3; band++)
-	    if (G_put_raster_row(fd_output[band], rowbuffer[band], CELL_TYPE)
+	    if (Rast_put_raster_row(fd_output[band], rowbuffer[band], CELL_TYPE)
 		< 0)
 		G_fatal_error(_("Failed writing raster map row %d"), i);
     }

@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 int search_points = 12;
@@ -238,15 +239,15 @@ int main(int argc, char *argv[])
 
     /* allocate buffers, etc. */
 
-    dcell = G_allocate_d_raster_buf();
+    dcell = Rast_allocate_d_raster_buf();
 
-    if ((maskfd = G_maskfd()) >= 0)
-	mask = G_allocate_cell_buf();
+    if ((maskfd = Rast_maskfd()) >= 0)
+	mask = Rast_allocate_cell_buf();
     else
 	mask = NULL;
 
 
-    fd = G_open_raster_new(parm.output->answer, DCELL_TYPE);
+    fd = Rast_open_raster_new(parm.output->answer, DCELL_TYPE);
     if (fd < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"),
 		      parm.output->answer);
@@ -259,7 +260,7 @@ int main(int argc, char *argv[])
 	G_percent(row, window.rows - 1, 1);
 
 	if (mask) {
-	    if (G_get_map_row(maskfd, mask, row) < 0)
+	    if (Rast_get_map_row(maskfd, mask, row) < 0)
 		exit(1);
 	}
 	north -= window.ns_res;
@@ -268,7 +269,7 @@ int main(int argc, char *argv[])
 	    east += window.ew_res;
 	    /* don't interpolate outside of the mask */
 	    if (mask && mask[col] == 0) {
-		G_set_d_null_value(&dcell[col], 1);
+		Rast_set_d_null_value(&dcell[col], 1);
 		continue;
 	    }
 
@@ -393,13 +394,13 @@ int main(int argc, char *argv[])
 	    }
 	    dcell[col] = (DCELL) interp_value;
 	}
-	G_put_d_raster_row(fd, dcell);
+	Rast_put_d_raster_row(fd, dcell);
     }
-    G_close_cell(fd);
+    Rast_close_cell(fd);
     /* writing history file */
-    G_short_history(parm.output->answer, "raster", &history);
-    G_command_history(&history);
-    G_write_history(parm.output->answer, &history);
+    Rast_short_history(parm.output->answer, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(parm.output->answer, &history);
 
     G_done_msg(" ");
 

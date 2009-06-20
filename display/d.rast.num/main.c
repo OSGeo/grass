@@ -38,6 +38,7 @@
 #include <string.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/display_raster.h>
 #include <grass/display.h>
 #include <grass/colors.h>
@@ -126,12 +127,12 @@ int main(int argc, char **argv)
     else
 	fixed_color = 1;
 
-    layer_fd = G_open_cell_old(map_name, "");
+    layer_fd = Rast_open_cell_old(map_name, "");
     if (layer_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), map_name);
 
     /* determine the inputmap type (CELL/FCELL/DCELL) */
-    inmap_type = G_get_raster_map_type(layer_fd);
+    inmap_type = Rast_get_raster_map_type(layer_fd);
     map_type = DCELL_TYPE;
 
     /* Read in the map window associated with window */
@@ -141,7 +142,7 @@ int main(int argc, char **argv)
     if (align->answer) {
 	struct Cell_head wind;
 
-	if (G_get_cellhd(map_name, "", &wind) < 0)
+	if (Rast_get_cellhd(map_name, "", &wind) < 0)
 	    G_fatal_error(_("Unable to read header of raster map <%s>"), map_name);
 
 	/* expand window extent by one wind resolution */
@@ -216,10 +217,10 @@ int main(int argc, char **argv)
     }
 
     /* allocate the cell array */
-    cell = G_allocate_raster_buf(map_type);
+    cell = Rast_allocate_raster_buf(map_type);
 
     /* read the color table in the color structures of the displayed map */
-    if (G_read_colors(map_name, "", &colors) == -1)
+    if (Rast_read_colors(map_name, "", &colors) == -1)
 	G_fatal_error(_("Color file for <%s> not available"), map_name);
 
     /* fixed text color */
@@ -228,12 +229,12 @@ int main(int argc, char **argv)
 
     /* loop through cells, find value, and draw text for value */
     for (row = 0; row < nrows; row++) {
-	G_get_raster_row(layer_fd, cell, row, map_type);
+	Rast_get_raster_row(layer_fd, cell, row, map_type);
 
 	for (col = 0; col < ncols; col++) {
 
 	    if (fixed_color == 0) {
-		G_get_raster_color(&cell[col], &R, &G, &B, &colors, map_type);
+		Rast_get_raster_color(&cell[col], &R, &G, &B, &colors, map_type);
 		D_RGB_color(R, G, B);
 	    }
 
@@ -241,7 +242,7 @@ int main(int argc, char **argv)
 	}
     }
 
-    G_close_cell(layer_fd);
+    Rast_close_cell(layer_fd);
 
     R_close_driver();
 
@@ -264,13 +265,13 @@ int draw_number(int row, int col, double number, int prec, RASTER_MAP_TYPE map_t
 
     /* maybe ugly, but works */
     if (map_type == CELL_TYPE) {
-	if (!G_is_c_null_value(&cell))
+	if (!Rast_is_c_null_value(&cell))
 	    sprintf(no, "%d", (int)number);
 	else
 	    sprintf(no, "Null");
     }
     else {
-	if (!G_is_d_null_value(&dcell))
+	if (!Rast_is_d_null_value(&dcell))
 	    sprintf(no, "%.*f", prec, number);
 	else
 	    sprintf(no, "Null");

@@ -1,5 +1,6 @@
 #include "Gwater.h"
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 
@@ -194,7 +195,7 @@ int do_cum_mfd(void)
 		    is_worked = FLAG_GET(worked, r_nbr, c_nbr);
 		    if (is_worked == 0) {
 			ele_nbr = alt[SEG_INDEX(alt_seg, r_nbr, c_nbr)];
-			is_null = G_is_c_null_value(&ele_nbr);
+			is_null = Rast_is_c_null_value(&ele_nbr);
 			edge = is_null;
 			if (!is_null && ele_nbr <= ele) {
 			    if (ele_nbr < ele) {

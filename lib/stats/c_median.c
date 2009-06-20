@@ -1,4 +1,5 @@
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/stats.h>
 
 void c_median(DCELL * result, DCELL * values, int n, const void *closure)
@@ -6,7 +7,7 @@ void c_median(DCELL * result, DCELL * values, int n, const void *closure)
     n = sort_cell(values, n);
 
     if (n < 1)
-	G_set_d_null_value(result, 1);
+	Rast_set_d_null_value(result, 1);
     else
 	*result = (values[(n - 1) / 2] + values[n / 2]) / 2;
 }
@@ -20,7 +21,7 @@ void w_median(DCELL * result, DCELL(*values)[2], int n, const void *closure)
     n = sort_cell_w(values, n);
 
     if (n < 1) {
-	G_set_d_null_value(result, 1);
+	Rast_set_d_null_value(result, 1);
 	return;
     }
 

@@ -37,6 +37,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/gmath.h>
 #include <grass/glocale.h>
 
@@ -46,12 +47,12 @@ static void fft_colors(const char *name)
     struct FPRange range;
     DCELL min, max;
 
-    G_read_fp_range(name, G_mapset(), &range);
-    G_get_fp_range_min_max(&range, &min, &max);
-    G_make_wave_colors(&wave, min, max);
-    G_abs_log_colors(&colors, &wave, 100);
-    G_write_colors(name, G_mapset(), &colors);
-    G_free_colors(&colors);
+    Rast_read_fp_range(name, G_mapset(), &range);
+    Rast_get_fp_range_min_max(&range, &min, &max);
+    Rast_make_wave_colors(&wave, min, max);
+    Rast_abs_log_colors(&colors, &wave, 100);
+    Rast_write_colors(name, G_mapset(), &colors);
+    Rast_free_colors(&colors);
 }
 
 int main(int argc, char *argv[])
@@ -98,11 +99,11 @@ int main(int argc, char *argv[])
     Cellmap_real = opt.real->answer;
     Cellmap_imag = opt.imag->answer;
 
-    inputfd = G_open_cell_old(Cellmap_orig, "");
+    inputfd = Rast_open_cell_old(Cellmap_orig, "");
     if (inputfd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), Cellmap_orig);
 
-    if (G_maskfd() >= 0)
+    if (Rast_maskfd() >= 0)
 	G_warning(_("Raster MASK found, consider to remove "
 		    "(see man-page). Will continue..."));
 
@@ -120,8 +121,8 @@ int main(int argc, char *argv[])
     data = G_malloc(rows * cols * 2 * sizeof(double));
 
     /* allocate the space for one row of cell map data */
-    cell_real = G_allocate_d_raster_buf();
-    cell_imag = G_allocate_d_raster_buf();
+    cell_real = Rast_allocate_d_raster_buf();
+    cell_imag = Rast_allocate_d_raster_buf();
 
 #define C(i, j) ((i) * cols + (j))
 
@@ -129,7 +130,7 @@ int main(int argc, char *argv[])
     G_message(_("Reading the raster map <%s>..."),
 	      Cellmap_orig);
     for (i = 0; i < rows; i++) {
-	if (G_get_d_raster_row(inputfd, cell_real, i) < 0)
+	if (Rast_get_d_raster_row(inputfd, cell_real, i) < 0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			  Cellmap_orig, i);
 	for (j = 0; j < cols; j++) {
@@ -141,16 +142,16 @@ int main(int argc, char *argv[])
     }
 
     /* close input cell map */
-    G_close_cell(inputfd);
+    Rast_close_cell(inputfd);
 
     /* perform FFT */
     G_message(_("Starting FFT..."));
     fft2(-1, data, totsize, cols, rows);
 
     /* open the output cell maps */
-    if ((realfd = G_open_fp_cell_new(Cellmap_real)) < 0)
+    if ((realfd = Rast_open_fp_cell_new(Cellmap_real)) < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), Cellmap_real);
-    if ((imagfd = G_open_fp_cell_new(Cellmap_imag)) < 0)
+    if ((imagfd = Rast_open_fp_cell_new(Cellmap_imag)) < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), Cellmap_imag);
 
 #define SWAP1(a, b)				\
@@ -182,14 +183,14 @@ int main(int argc, char *argv[])
 	    cell_real[j] = data[C(i, j)][0];
 	    cell_imag[j] = data[C(i, j)][1];
 	}
-	G_put_d_raster_row(realfd, cell_real);
-	G_put_d_raster_row(imagfd, cell_imag);
+	Rast_put_d_raster_row(realfd, cell_real);
+	Rast_put_d_raster_row(imagfd, cell_imag);
 
 	G_percent(i+1, rows, 2);
     }
 
-    G_close_cell(realfd);
-    G_close_cell(imagfd);
+    Rast_close_cell(realfd);
+    Rast_close_cell(imagfd);
 
     G_free(cell_real);
     G_free(cell_imag);

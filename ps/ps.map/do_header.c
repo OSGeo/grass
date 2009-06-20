@@ -129,7 +129,7 @@ static int output(char *line, const char *date)
 		    apply(G_whoami(), fmt, text);
 		    break;
 		case 'x':
-		    apply(G_mask_info(), fmt, text);
+		    apply(Rast_mask_info(), fmt, text);
 		    break;
 		case 0:
 		    continue;

@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 static FILE *fp;
@@ -83,11 +84,11 @@ int main(int argc, char **argv)
     file = opt.file->answer;
     perc = flag.p->answer ? 1 : 0;
 
-    if (G_read_colors(name, "", &colors) < 0)
+    if (Rast_read_colors(name, "", &colors) < 0)
 	G_fatal_error(_("Can't read color table for <%s>"));
 
-    G_read_fp_range(name, "", &range);
-    G_get_fp_range_min_max(&range, &min, &max);
+    Rast_read_fp_range(name, "", &range);
+    Rast_get_fp_range_min_max(&range, &min, &max);
 
     if (!file || strcmp(file, "-") == 0)
 	fp = stdout;
@@ -101,23 +102,23 @@ int main(int argc, char **argv)
 	/* 3.0 format */
 	CELL lo, hi;
 
-	G_get_color_range(&lo, &hi, &colors);
+	Rast_get_color_range(&lo, &hi, &colors);
 
 	for (i = lo; i <= hi; i++) {
 	    unsigned char r, g, b, set;
 	    DCELL val = (DCELL) i;
-	    G_lookup_colors(&i, &r, &g, &b, &set, 1, &colors);
+	    Rast_lookup_colors(&i, &r, &g, &b, &set, 1, &colors);
 	    write_rule(&val, r, g, b);
 	}
     }
     else {
-	count = G_colors_count(&colors);
+	count = Rast_colors_count(&colors);
 
 	for (i = 0; i < count; i++) {
 	    DCELL val1, val2;
 	    unsigned char r1, g1, b1, r2, g2, b2;
 
-	    G_get_f_color_rule(
+	    Rast_get_f_color_rule(
 		&val1, &r1, &g1, &b1,
 		&val2, &r2, &g2, &b2,
 		&colors, count - 1 - i);
@@ -129,9 +130,9 @@ int main(int argc, char **argv)
 
     {
 	int r, g, b;
-	G_get_null_value_color(&r, &g, &b, &colors);
+	Rast_get_null_value_color(&r, &g, &b, &colors);
 	fprintf(fp, "nv %d %d %d\n", r, g, b);
-	G_get_default_color(&r, &g, &b, &colors);
+	Rast_get_default_color(&r, &g, &b, &colors);
 	fprintf(fp, "default %d %d %d\n", r, g, b);
     }
 

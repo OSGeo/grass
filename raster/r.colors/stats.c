@@ -20,6 +20,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 
@@ -29,26 +30,26 @@ int get_stats(const char *name, const char *mapset, struct Cell_stats *statf)
     int row, nrows, ncols;
     int fd;
 
-    if ((fd = G_open_cell_old(name, mapset)) < 0)
+    if ((fd = Rast_open_cell_old(name, mapset)) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"),
 		      G_fully_qualified_name(name, mapset));
 
-    cell = G_allocate_cell_buf();
+    cell = Rast_allocate_cell_buf();
     nrows = G_window_rows();
     ncols = G_window_cols();
 
-    G_init_cell_stats(statf);
+    Rast_init_cell_stats(statf);
     G_verbose_message(_("Reading raster map <%s>..."),
 		      G_fully_qualified_name(name, mapset));
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
-	if (G_get_c_raster_row(fd, cell, row) < 0)
+	if (Rast_get_c_raster_row(fd, cell, row) < 0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			  G_fully_qualified_name(name, mapset), row);
-	G_update_cell_stats(cell, ncols, statf);
+	Rast_update_cell_stats(cell, ncols, statf);
     }
     G_percent(row, nrows, 2);
-    G_close_cell(fd);
+    Rast_close_cell(fd);
     G_free(cell);
 
     return 1;
@@ -62,11 +63,11 @@ void get_fp_stats(const char *name, const char *mapset,
     int row, col, nrows, ncols;
     int fd;
 
-    if ((fd = G_open_cell_old(name, mapset)) < 0)
+    if ((fd = Rast_open_cell_old(name, mapset)) < 0)
 	G_fatal_error("Unable to open raster map <%s>",
 		      G_fully_qualified_name(name, mapset));
 
-    dcell = G_allocate_d_raster_buf();
+    dcell = Rast_allocate_d_raster_buf();
     nrows = G_window_rows();
     ncols = G_window_cols();
 
@@ -109,7 +110,7 @@ void get_fp_stats(const char *name, const char *mapset,
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
 
-	if (G_get_d_raster_row(fd, dcell, row) < 0)
+	if (Rast_get_d_raster_row(fd, dcell, row) < 0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			  G_fully_qualified_name(name, mapset), row);
 	
@@ -117,7 +118,7 @@ void get_fp_stats(const char *name, const char *mapset,
 	    DCELL x;
 	    int i;
 
-	    if (G_is_d_null_value(&dcell[col]))
+	    if (Rast_is_d_null_value(&dcell[col]))
 		continue;
 
 	    x = dcell[col];
@@ -135,6 +136,6 @@ void get_fp_stats(const char *name, const char *mapset,
     }
 
     G_percent(row, nrows, 2);
-    G_close_cell(fd);
+    Rast_close_cell(fd);
     G_free(dcell);
 }

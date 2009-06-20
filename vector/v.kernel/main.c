@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <float.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include <grass/gmath.h>
 #include <grass/Vect.h>
@@ -237,19 +238,19 @@ int main(int argc, char **argv)
     else {
 	/* check and open the name of output map */
 	if (!flag_q->answer) {
-	    G_set_fp_type(DCELL_TYPE);
-	    if ((fdout = G_open_raster_new(out_opt->answer, DCELL_TYPE)) < 0)
+	    Rast_set_fp_type(DCELL_TYPE);
+	    if ((fdout = Rast_open_raster_new(out_opt->answer, DCELL_TYPE)) < 0)
 		G_fatal_error(_("Unable to create raster map <%s>"),
 			      out_opt->answer);
 
 	    /* open mask file */
-	    if ((maskfd = G_maskfd()) >= 0)
-		mask = G_allocate_cell_buf();
+	    if ((maskfd = Rast_maskfd()) >= 0)
+		mask = Rast_allocate_cell_buf();
 	    else
 		mask = NULL;
 
 	    /* allocate output raster */
-	    output_cell = G_allocate_raster_buf(DCELL_TYPE);
+	    output_cell = Rast_allocate_raster_buf(DCELL_TYPE);
 	}
     }
 
@@ -396,14 +397,14 @@ int main(int argc, char **argv)
 	for (row = 0; row < window.rows; row++) {
 	    G_percent(row, window.rows, 2);
 	    if (mask) {
-		if (G_get_map_row(maskfd, mask, row) < 0)
+		if (Rast_get_map_row(maskfd, mask, row) < 0)
 		    G_fatal_error(_("Unable to read MASK"));
 	    }
 
 	    for (col = 0; col < window.cols; col++) {
 		/* don't interpolate outside of the mask */
 		if (mask && mask[col] == 0) {
-		    G_set_d_null_value(&output_cell[col], 1);
+		    Rast_set_d_null_value(&output_cell[col], 1);
 		    continue;
 		}
 
@@ -415,10 +416,10 @@ int main(int argc, char **argv)
 		if (gaussian > gausmax)
 		    gausmax = gaussian;
 	    }
-	    G_put_raster_row(fdout, output_cell, DCELL_TYPE);
+	    Rast_put_raster_row(fdout, output_cell, DCELL_TYPE);
 	}
 
-	G_close_cell(fdout);
+	Rast_close_cell(fdout);
     }
 
     G_message(_("Maximum value in output: %e."), gausmax);

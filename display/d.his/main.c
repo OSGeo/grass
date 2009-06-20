@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/display.h>
 #include <grass/display_raster.h>
 #include <grass/glocale.h>
@@ -121,7 +122,7 @@ int main(int argc, char **argv)
     name_h = opt_h->answer;
 
     /* Make sure map is available */
-    if ((hue_file = G_open_cell_old(name_h, "")) == -1)
+    if ((hue_file = Rast_open_cell_old(name_h, "")) == -1)
 	G_fatal_error(_("Unable to open raster map <%s>"), name_h);
 
     hue_r = G_malloc(window.cols);
@@ -132,7 +133,7 @@ int main(int argc, char **argv)
     dummy = G_malloc(window.cols);
 
     /* Reading color lookup table */
-    if (G_read_colors(name_h, "", &hue_colors) == -1)
+    if (Rast_read_colors(name_h, "", &hue_colors) == -1)
 	G_fatal_error(_("Color file for <%s> not available"), name_h);
 
     int_used = 0;
@@ -143,14 +144,14 @@ int main(int argc, char **argv)
 	int_used = 1;
 
 	/* Make sure map is available */
-	if ((int_file = G_open_cell_old(name_i, "")) == -1)
+	if ((int_file = Rast_open_cell_old(name_i, "")) == -1)
 	    G_fatal_error(_("Unable to open raster map <%s>"), name_i);
 
 	int_r = G_malloc(window.cols);
 	int_n = G_malloc(window.cols);
 
 	/* Reading color lookup table */
-	if (G_read_colors(name_i, "", &int_colors) == -1)
+	if (Rast_read_colors(name_i, "", &int_colors) == -1)
 	    G_fatal_error(_("Color file for <%s> not available"), name_i);
     }
 
@@ -162,20 +163,20 @@ int main(int argc, char **argv)
 	sat_used = 1;
 
 	/* Make sure map is available */
-	if ((sat_file = G_open_cell_old(name_s, "")) == -1)
+	if ((sat_file = Rast_open_cell_old(name_s, "")) == -1)
 	    G_fatal_error("Unable to open raster map <%s>", name_s);
 
 	sat_r = G_malloc(window.cols);
 	sat_n = G_malloc(window.cols);
 
 	/* Reading color lookup table */
-	if (G_read_colors(name_s, "", &sat_colors) == -1)
+	if (Rast_read_colors(name_s, "", &sat_colors) == -1)
 	    G_fatal_error(_("Color file for <%s> not available"), name_s);
     }
 
-    r_array = G_allocate_cell_buf();
-    g_array = G_allocate_cell_buf();
-    b_array = G_allocate_cell_buf();
+    r_array = Rast_allocate_cell_buf();
+    g_array = Rast_allocate_cell_buf();
+    b_array = Rast_allocate_cell_buf();
 
     /* Make color table */
     make_gray_scale(&gray_colors);
@@ -190,17 +191,17 @@ int main(int argc, char **argv)
     for (atrow = 0; atrow < window.rows;) {
 	G_percent(atrow, window.rows, 2);
 
-	if (G_get_raster_row_colors
+	if (Rast_get_raster_row_colors
 	    (hue_file, atrow, &hue_colors, hue_r, hue_g, hue_b, hue_n) < 0)
 	    G_fatal_error(_("Error reading hue data"));
 
 	if (int_used &&
-	    (G_get_raster_row_colors
+	    (Rast_get_raster_row_colors
 	     (int_file, atrow, &int_colors, int_r, dummy, dummy, int_n) < 0))
 	    G_fatal_error(_("Error reading intensity data"));
 
 	if (sat_used &&
-	    (G_get_raster_row_colors
+	    (Rast_get_raster_row_colors
 	     (sat_file, atrow, &sat_colors, sat_r, dummy, dummy, sat_n) < 0))
 	    G_fatal_error(_("Error reading saturation data"));
 
@@ -209,9 +210,9 @@ int main(int argc, char **argv)
 		if (hue_n[atcol]
 		    || (int_used && int_n[atcol])
 		    || (sat_used && sat_n[atcol])) {
-		    G_set_c_null_value(&r_array[atcol], 1);
-		    G_set_c_null_value(&g_array[atcol], 1);
-		    G_set_c_null_value(&b_array[atcol], 1);
+		    Rast_set_c_null_value(&r_array[atcol], 1);
+		    Rast_set_c_null_value(&g_array[atcol], 1);
+		    Rast_set_c_null_value(&b_array[atcol], 1);
 		    continue;
 		}
 	    }
@@ -246,11 +247,11 @@ int main(int argc, char **argv)
     R_close_driver();
 
     /* Close the raster maps */
-    G_close_cell(hue_file);
+    Rast_close_cell(hue_file);
     if (int_used)
-	G_close_cell(int_file);
+	Rast_close_cell(int_file);
     if (sat_used)
-	G_close_cell(sat_file);
+	Rast_close_cell(sat_file);
 
     exit(EXIT_SUCCESS);
 }

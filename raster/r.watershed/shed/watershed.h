@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 
 #define RAM_NAME		"ram"
 #define SEG_NAME		"seg"

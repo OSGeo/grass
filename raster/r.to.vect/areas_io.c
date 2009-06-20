@@ -17,6 +17,7 @@
 #include <string.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include <grass/dbmi.h>
 #include <grass/Vect.h>
@@ -298,7 +299,7 @@ int write_area(struct area_table *a_list,	/* list of areas */
     catNum = 1;
 
     for (i = 0, p = a_list; i < n_areas; i++, p++) {
-	if (equivs[i] == i && p->width > 0 && !G_is_d_null_value(&(p->cat))) {
+	if (equivs[i] == i && p->width > 0 && !Rast_is_d_null_value(&(p->cat))) {
 	    char buf[1000];
 
 	    if (value_flag) {	/* raster value */
@@ -356,7 +357,7 @@ int write_area(struct area_table *a_list,	/* list of areas */
 		db_append_string(&sql, buf);
 
 		if (has_cats) {
-		    temp_buf = G_get_cat(p->cat, &RastCats);
+		    temp_buf = Rast_get_cat(p->cat, &RastCats);
 
 		    db_set_string(&label, temp_buf);
 		    db_double_quote_string(&label);

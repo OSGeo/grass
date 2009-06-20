@@ -248,19 +248,19 @@ int parse_layer(char *s)
     DMAX = (DCELL *) G_realloc(DMAX, (nlayers + 1) * sizeof(DCELL));
     DMIN = (DCELL *) G_realloc(DMIN, (nlayers + 1) * sizeof(DCELL));
     if (!as_int)
-	is_fp[n] = G_raster_map_is_fp(name, mapset);
+	is_fp[n] = Rast_raster_map_is_fp(name, mapset);
     else
 	is_fp[n] = 0;
     if (is_fp[n]) {
-	if (G_read_fp_range(name, mapset, &fp_range) < 0)
+	if (Rast_read_fp_range(name, mapset, &fp_range) < 0)
 	    G_fatal_error(_("Unable to read fp range for raster map <%s>"),
 			  name);
-	G_get_fp_range_min_max(&fp_range, &DMIN[n], &DMAX[n]);
+	Rast_get_fp_range_min_max(&fp_range, &DMIN[n], &DMAX[n]);
     }
 
     layers[n].name = G_store(name);
     layers[n].mapset = mapset;
-    if (G_read_cats(name, mapset, &layers[n].labels) < 0)
+    if (Rast_read_cats(name, mapset, &layers[n].labels) < 0)
 	G_fatal_error(_("Unable to read category file of raster map <%s@%s>"),
 		      name, mapset);
 

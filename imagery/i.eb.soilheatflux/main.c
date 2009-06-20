@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 double g_0(double bbalb, double ndvi, double tempk, double rnet,
@@ -89,32 +90,32 @@ int main(int argc, char *argv[])
     result = output1->answer;
     roerink = flag1->answer;
 
-    if ((infd_albedo = G_open_cell_old(albedo, "")) < 0)
+    if ((infd_albedo = Rast_open_cell_old(albedo, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), albedo);
-    inrast_albedo = G_allocate_d_raster_buf();
+    inrast_albedo = Rast_allocate_d_raster_buf();
 
-    if ((infd_ndvi = G_open_cell_old(ndvi, "")) < 0)
+    if ((infd_ndvi = Rast_open_cell_old(ndvi, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), ndvi);
-    inrast_ndvi = G_allocate_d_raster_buf();
+    inrast_ndvi = Rast_allocate_d_raster_buf();
 
-    if ((infd_tempk = G_open_cell_old(tempk, "")) < 0)
+    if ((infd_tempk = Rast_open_cell_old(tempk, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), tempk);
-    inrast_tempk = G_allocate_d_raster_buf();
+    inrast_tempk = Rast_allocate_d_raster_buf();
 
-    if ((infd_rnet = G_open_cell_old(rnet, "")) < 0)
+    if ((infd_rnet = Rast_open_cell_old(rnet, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), rnet);
-    inrast_rnet = G_allocate_d_raster_buf();
+    inrast_rnet = Rast_allocate_d_raster_buf();
 
-    if ((infd_time = G_open_cell_old(time, "")) < 0)
+    if ((infd_time = Rast_open_cell_old(time, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), time);
-    inrast_time = G_allocate_d_raster_buf();
+    inrast_time = Rast_allocate_d_raster_buf();
 
     nrows = G_window_rows();
     ncols = G_window_cols();
-    outrast = G_allocate_d_raster_buf();
+    outrast = Rast_allocate_d_raster_buf();
     
     /* Create New raster files */ 
-    if ((outfd = G_open_raster_new(result,DCELL_TYPE)) < 0)
+    if ((outfd = Rast_open_raster_new(result,DCELL_TYPE)) < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), result);
 
     /* Process pixels */ 
@@ -128,19 +129,19 @@ int main(int argc, char *argv[])
 	DCELL d_time;
 	G_percent(row, nrows, 2);	
         /* read input maps */ 
-        if (G_get_d_raster_row(infd_albedo, inrast_albedo, row) < 0)
+        if (Rast_get_d_raster_row(infd_albedo, inrast_albedo, row) < 0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			  albedo, row);
-	if (G_get_d_raster_row(infd_ndvi, inrast_ndvi, row)<0)
+	if (Rast_get_d_raster_row(infd_ndvi, inrast_ndvi, row)<0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			  ndvi, row);
-	if (G_get_d_raster_row(infd_tempk, inrast_tempk, row)< 0)
+	if (Rast_get_d_raster_row(infd_tempk, inrast_tempk, row)< 0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			  tempk, row);
-	if (G_get_d_raster_row(infd_rnet, inrast_rnet, row)<0)
+	if (Rast_get_d_raster_row(infd_rnet, inrast_rnet, row)<0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			  rnet, row);
-	if (G_get_d_raster_row(infd_time, inrast_time, row)<0)
+	if (Rast_get_d_raster_row(infd_time, inrast_time, row)<0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			  time, row);
         /*process the data */ 
@@ -151,12 +152,12 @@ int main(int argc, char *argv[])
             d_tempk  = ((DCELL *) inrast_tempk)[col];
             d_rnet   = ((DCELL *) inrast_rnet)[col];
             d_time   = ((DCELL *) inrast_time)[col];
-	    if (G_is_d_null_value(&d_albedo) || 
-                 G_is_d_null_value(&d_ndvi) ||
-                 G_is_d_null_value(&d_tempk) ||
-		 G_is_d_null_value(&d_rnet) || 
-                 G_is_d_null_value(&d_time)) {
-		G_set_d_null_value(&outrast[col], 1);
+	    if (Rast_is_d_null_value(&d_albedo) || 
+                 Rast_is_d_null_value(&d_ndvi) ||
+                 Rast_is_d_null_value(&d_tempk) ||
+		 Rast_is_d_null_value(&d_rnet) || 
+                 Rast_is_d_null_value(&d_time)) {
+		Rast_set_d_null_value(&outrast[col], 1);
 	    }
 	    else {
                 /* calculate soil heat flux         */ 
@@ -164,7 +165,7 @@ int main(int argc, char *argv[])
 		outrast[col] = d;
 	    }
 	}
-	if (G_put_d_raster_row(outfd, outrast) < 0)
+	if (Rast_put_d_raster_row(outfd, outrast) < 0)
 	    G_fatal_error(_("Failed writing raster map <%s>"), result);
     }
     G_free(inrast_albedo);
@@ -172,20 +173,20 @@ int main(int argc, char *argv[])
     G_free(inrast_tempk);
     G_free(inrast_rnet);
     G_free(inrast_time);
-    G_close_cell(infd_albedo);
-    G_close_cell(infd_ndvi);
-    G_close_cell(infd_tempk);
-    G_close_cell(infd_rnet);
-    G_close_cell(infd_time);
+    Rast_close_cell(infd_albedo);
+    Rast_close_cell(infd_ndvi);
+    Rast_close_cell(infd_tempk);
+    Rast_close_cell(infd_rnet);
+    Rast_close_cell(infd_time);
     G_free(outrast);
-    G_close_cell(outfd);
+    Rast_close_cell(outfd);
     
     /* Colors in grey shade */ 
-    G_init_colors(&colors);
-    G_add_color_rule(0.0, 0, 0, 0, 200.0, 255, 255, 255, &colors);
-    G_short_history(result, "raster", &history);
-    G_command_history(&history);
-    G_write_history(result, &history);
+    Rast_init_colors(&colors);
+    Rast_add_color_rule(0.0, 0, 0, 0, 200.0, 255, 255, 255, &colors);
+    Rast_short_history(result, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(result, &history);
 
     exit(EXIT_SUCCESS);
 }

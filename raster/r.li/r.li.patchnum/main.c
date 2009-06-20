@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "../r.li.daemon/daemon.h"
 
@@ -63,10 +64,10 @@ int patch_number(int fd, char **par, area_des ad, double *result)
     CELL complete_value;
     int mask_fd = -1, *mask_buf, *mask_sup, null_count = 0;
 
-    G_set_c_null_value(&complete_value, 1);
-    if (G_get_cellhd(ad->raster, "", &hd) == -1)
+    Rast_set_c_null_value(&complete_value, 1);
+    if (Rast_get_cellhd(ad->raster, "", &hd) == -1)
 	return 0;
-    sup = G_allocate_cell_buf();
+    sup = Rast_allocate_cell_buf();
 
     /* open mask if needed */
     if (ad->mask == 1) {
@@ -97,7 +98,7 @@ int patch_number(int fd, char **par, area_des ad, double *result)
 		return 0;
 	    for (k = 0; k < ad->cl; k++) {
 		if (mask_buf[k] == 0) {
-		    G_set_c_null_value(mask_buf + k, 1);
+		    Rast_set_c_null_value(mask_buf + k, 1);
 		    null_count++;
 		}
 	    }
@@ -106,7 +107,7 @@ int patch_number(int fd, char **par, area_des ad, double *result)
 
 
 	if (complete_line) {
-	    if (!G_is_null_value(&(buf[ad->x]), CELL_TYPE) &&
+	    if (!Rast_is_null_value(&(buf[ad->x]), CELL_TYPE) &&
 		buf[ad->x] != complete_value)
 		count++;
 
@@ -114,7 +115,7 @@ int patch_number(int fd, char **par, area_des ad, double *result)
 
 		if (buf[j + ad->x] != buf[j + 1 + ad->x]) {
 		    complete_line = 0;
-		    if (!G_is_null_value(&(buf[j + 1 + ad->x]), CELL_TYPE) &&
+		    if (!Rast_is_null_value(&(buf[j + 1 + ad->x]), CELL_TYPE) &&
 			buf[j + 1 + ad->x] != complete_value)
 			count++;
 		}
@@ -138,13 +139,13 @@ int patch_number(int fd, char **par, area_des ad, double *result)
 		}
 		else {
 		    if (connected &&
-			!G_is_null_value(&(buf[j + ad->x]), CELL_TYPE))
+			!Rast_is_null_value(&(buf[j + ad->x]), CELL_TYPE))
 			other_above = 1;
 		}
 		if (j < ad->cl - 1 && buf[j + ad->x] != buf[j + 1 + ad->x]) {
 		    complete_line = 0;
 		    if (!connected &&
-			!G_is_null_value(&(buf[j + ad->x]), CELL_TYPE)) {
+			!Rast_is_null_value(&(buf[j + ad->x]), CELL_TYPE)) {
 
 			count++;
 			connected = 0;
@@ -158,7 +159,7 @@ int patch_number(int fd, char **par, area_des ad, double *result)
 	    }
 	    if (!connected &&
 		sup[ad->cl - 1 + ad->x] != buf[ad->cl - 1 + ad->x]) {
-		if (!G_is_null_value(&(buf[ad->cl - 1 + ad->x]), CELL_TYPE)) {
+		if (!Rast_is_null_value(&(buf[ad->cl - 1 + ad->x]), CELL_TYPE)) {
 		    count++;
 		    complete_line = 0;
 		}

@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/display.h>
 #include <grass/display_raster.h>
 #include <grass/glocale.h>
@@ -89,16 +90,16 @@ int main(int argc, char **argv)
 	char *name = B[i].opt->answer;
 
 	/* Make sure map is available */
-	if ((B[i].file = G_open_cell_old(name, "")) == -1)
+	if ((B[i].file = Rast_open_cell_old(name, "")) == -1)
 	    G_fatal_error(_("Unable to open raster map <%s>"), name);
 
-	B[i].type = G_get_raster_map_type(B[i].file);
+	B[i].type = Rast_get_raster_map_type(B[i].file);
 
 	/* Reading color lookup table */
-	if (G_read_colors(name, "", &B[i].colors) == -1)
+	if (Rast_read_colors(name, "", &B[i].colors) == -1)
 	    G_fatal_error(_("Color file for <%s> not available"), name);
 
-	B[i].array = G_allocate_raster_buf(B[i].type);
+	B[i].array = Rast_allocate_raster_buf(B[i].type);
     }
 
     /* read in current window */
@@ -111,7 +112,7 @@ int main(int argc, char **argv)
 	G_percent(row, window.rows, 5);
 
 	for (i = 0; i < 3; i++)
-	    if (G_get_raster_row(B[i].file, B[i].array, row, B[i].type) < 0)
+	    if (Rast_get_raster_row(B[i].file, B[i].array, row, B[i].type) < 0)
 		G_fatal_error(_("Error reading row of data"));
 
 	if (row == next_row)
@@ -132,7 +133,7 @@ int main(int argc, char **argv)
 
     /* Close the raster maps */
     for (i = 0; i < 3; i++)
-	G_close_cell(B[i].file);
+	Rast_close_cell(B[i].file);
 
     exit(EXIT_SUCCESS);
 }

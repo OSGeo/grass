@@ -1,4 +1,5 @@
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "global.h"
 
 
@@ -24,13 +25,13 @@ int classify(CELL * class, CELL * reject, int ncols)
     for (col = 0; col < ncols; col++) {
 	valid_data = 0;
 	for (band = 0; band < nfiles; band++)
-	    if ((valid_data = !G_is_d_null_value(&cell[band][col])))
+	    if ((valid_data = !Rast_is_d_null_value(&cell[band][col])))
 		break;
 
 	if (!valid_data) {	/* all nulls are classified as nulls */
-	    G_set_c_null_value(class++, 1);
+	    Rast_set_c_null_value(class++, 1);
 	    if (reject)
-		G_set_c_null_value(reject++, 1);
+		Rast_set_c_null_value(reject++, 1);
 	    continue;
 	}
 

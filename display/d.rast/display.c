@@ -1,10 +1,14 @@
 #include <stdlib.h>
+
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/display_raster.h>
 #include <grass/display.h>
+#include <grass/glocale.h>
+
 #include "mask.h"
 #include "local_proto.h"
-#include <grass/glocale.h>
+
 
 static int cell_draw(const char *, struct Colors *, int, int, RASTER_MAP_TYPE);
 
@@ -15,15 +19,15 @@ int display(const char *name,
     struct Colors colors;
     int r, g, b;
 
-    if (G_read_colors(name, "", &colors) == -1)
+    if (Rast_read_colors(name, "", &colors) == -1)
 	G_fatal_error(_("Color file for <%s> not available"), name);
 
     if (bg) {
-	if (G_str_to_color(bg, &r, &g, &b) != 1) {
+	if (Rast_str_to_color(bg, &r, &g, &b) != 1) {
 	    G_warning(_("[%s]: No such color"), bg);
 	    r = g = b = 255;
 	}
-	G_set_null_value_color(r, g, b, &colors);
+	Rast_set_null_value_color(r, g, b, &colors);
     }
 
     D_setup(0);
@@ -32,7 +36,7 @@ int display(const char *name,
     cell_draw(name, &colors, overlay, invert, data_type);
 
     /* release the colors now */
-    G_free_colors(&colors);
+    Rast_free_colors(&colors);
 
     return 0;
 }
@@ -54,11 +58,11 @@ static int cell_draw(const char *name,
     D_set_overlay_mode(overlay);
 
     /* Make sure map is available */
-    if ((cellfile = G_open_cell_old(name, "")) == -1)
+    if ((cellfile = Rast_open_cell_old(name, "")) == -1)
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
 
     /* Allocate space for cell buffer */
-    xarray = G_allocate_raster_buf(data_type);
+    xarray = Rast_allocate_raster_buf(data_type);
 
     D_cell_draw_begin();
 
@@ -66,7 +70,7 @@ static int cell_draw(const char *name,
     for (cur_A_row = 0; cur_A_row != -1;) {
 	G_percent(cur_A_row, nrows, 2);
 	/* Get window (array) row currently required */
-	G_get_raster_row(cellfile, xarray, cur_A_row, data_type);
+	Rast_get_raster_row(cellfile, xarray, cur_A_row, data_type);
 	mask_raster_array(xarray, ncols, invert, data_type);
 
 	/* Draw the cell row, and get the next row number */
@@ -78,7 +82,7 @@ static int cell_draw(const char *name,
     G_percent(nrows, nrows, 2);
 
     /* Wrap up and return */
-    G_close_cell(cellfile);
+    Rast_close_cell(cellfile);
     G_free(xarray);
     return (0);
 }

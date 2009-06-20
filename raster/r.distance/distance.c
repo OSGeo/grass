@@ -86,14 +86,14 @@ int null_distance(const char *name1, const char *name2, int *zerro_row, int *zer
 
     /* NOTE: no need to controll, if the map exists. it should be checked in edge.c */
     mapset = G_find_cell2(name1, "");
-    maptype1 = G_raster_map_type(name1, mapset);
-    mapd1 = G_open_cell_old(name1, mapset);
-    inrast1 = G_allocate_raster_buf(maptype1);
+    maptype1 = Rast_raster_map_type(name1, mapset);
+    mapd1 = Rast_open_cell_old(name1, mapset);
+    inrast1 = Rast_allocate_raster_buf(maptype1);
 
     mapset = G_find_cell2(name2, "");
-    maptype2 = G_raster_map_type(name2, mapset);
-    mapd2 = G_open_cell_old(name2, mapset);
-    inrast2 = G_allocate_raster_buf(maptype2);
+    maptype2 = Rast_raster_map_type(name2, mapset);
+    mapd2 = Rast_open_cell_old(name2, mapset);
+    inrast2 = Rast_allocate_raster_buf(maptype2);
 
     G_message(_("Reading maps  <%s,%s> while finding 0 distance ..."), name1,
 	      name2);
@@ -105,9 +105,9 @@ int null_distance(const char *name1, const char *name2, int *zerro_row, int *zer
 
 	G_percent(row, nrows, 2);
 
-	if (G_get_raster_row(mapd1, inrast1, row, maptype1) < 0)
+	if (Rast_get_raster_row(mapd1, inrast1, row, maptype1) < 0)
 	    G_fatal_error("Could not read from <%s>", name1);
-	if (G_get_raster_row(mapd2, inrast2, row, maptype2) < 0)
+	if (Rast_get_raster_row(mapd2, inrast2, row, maptype2) < 0)
 	    G_fatal_error("Could not read from <%s>", name2);
 
 	for (col = 0; col < ncols; col++) {
@@ -137,8 +137,8 @@ int null_distance(const char *name1, const char *name2, int *zerro_row, int *zer
 		break;
 	    }
 
-	    if (!G_is_null_value(&cell1, maptype1) &&
-		!G_is_null_value(&cell2, maptype2)) {
+	    if (!Rast_is_null_value(&cell1, maptype1) &&
+		!Rast_is_null_value(&cell2, maptype2)) {
 
 		*zerro_row = row;
 		*zerro_col = col;
@@ -148,8 +148,8 @@ int null_distance(const char *name1, const char *name2, int *zerro_row, int *zer
 		G_free(inrast2);
 
 		/* closing raster maps */
-		G_close_cell(mapd1);
-		G_close_cell(mapd2);
+		Rast_close_cell(mapd1);
+		Rast_close_cell(mapd2);
 		return 1;
 	    }
 	}
@@ -159,8 +159,8 @@ int null_distance(const char *name1, const char *name2, int *zerro_row, int *zer
     G_free(inrast2);
 
     /* closing raster maps */
-    G_close_cell(mapd1);
-    G_close_cell(mapd2);
+    Rast_close_cell(mapd1);
+    Rast_close_cell(mapd2);
 
     return 0;
 }

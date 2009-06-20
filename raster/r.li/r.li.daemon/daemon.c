@@ -31,6 +31,7 @@
 #endif
 
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "daemon.h"
 
@@ -112,7 +113,7 @@ int calculateIndex(char *file, int f(int, char **, area_des, double *),
 	/* struct Cell_head cellhd_r, cellhd_new;
 	   char *mapset; */
 	/*creating new raster file */
-	mv_fd = G_open_raster_new(output, DCELL_TYPE);
+	mv_fd = Rast_open_raster_new(output, DCELL_TYPE);
 	if (mv_fd < 0)
 	    G_fatal_error(_("Unable to create raster map <%s>"), output);
 
@@ -267,10 +268,10 @@ int calculateIndex(char *file, int f(int, char **, area_des, double *),
 	write_raster(mv_fd, random_access, g);
 	close(random_access);
 	unlink(random_access_name);
-	G_close_cell(mv_fd);
-	G_short_history(output, "raster", &history);
-	G_command_history(&history);
-	G_write_history(output, &history);
+	Rast_close_cell(mv_fd);
+	Rast_short_history(output, "raster", &history);
+	Rast_command_history(&history);
+	Rast_write_history(output, &history);
     }
 
 
@@ -315,7 +316,7 @@ int parseSetup(char *path, list l, g_areas g, char *raster)
     rel_cl = atof(strtok(NULL, "\n"));
 
     /*finding raster map */
-    if (G_get_cellhd(raster, "", &cellhd) == -1)
+    if (Rast_get_cellhd(raster, "", &cellhd) == -1)
 	G_fatal_error(_("Cannot read raster header file"));
     /*calculating absolute sampling frame definition */
     sf_x = (int)rint(cellhd.cols * rel_x);
@@ -686,10 +687,10 @@ int write_raster(int mv_fd, int random_access, g_areas g)
 
     file_buf = malloc(cols * sizeof(double));
     lseek(random_access, 0, SEEK_SET);
-    cell_buf = G_allocate_d_raster_buf();
-    G_set_d_null_value(cell_buf, G_window_cols() + 1);
+    cell_buf = Rast_allocate_d_raster_buf();
+    Rast_set_d_null_value(cell_buf, G_window_cols() + 1);
     for (i = 0; i < g->sf_y + ((int)g->rl / 2); i++) {
-	G_put_raster_row(mv_fd, cell_buf, DCELL_TYPE);
+	Rast_put_raster_row(mv_fd, cell_buf, DCELL_TYPE);
     }
     for (i = 0; i < rows; i++) {
 	letti = read(random_access, file_buf, (cols * sizeof(double)));
@@ -698,10 +699,10 @@ int write_raster(int mv_fd, int random_access, g_areas g)
 	for (j = 0; j < cols; j++) {
 	    cell_buf[j + center] = file_buf[j];
 	}
-	G_put_raster_row(mv_fd, cell_buf, DCELL_TYPE);
+	Rast_put_raster_row(mv_fd, cell_buf, DCELL_TYPE);
     }
-    G_set_d_null_value(cell_buf, G_window_cols() + 1);
+    Rast_set_d_null_value(cell_buf, G_window_cols() + 1);
     for (i = 0; i < G_window_rows() - g->sf_y - g->rows; i++)
-	G_put_raster_row(mv_fd, cell_buf, DCELL_TYPE);
+	Rast_put_raster_row(mv_fd, cell_buf, DCELL_TYPE);
     return 1;
 }

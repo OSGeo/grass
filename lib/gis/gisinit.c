@@ -22,8 +22,10 @@
 #include <locale.h>
 
 #include <grass/gis.h>
-#include "G.h"
+#include <grass/Rast.h>
 #include <grass/glocale.h>
+
+#include "../raster/G.h"
 
 struct G__ G__;
 
@@ -139,12 +141,12 @@ void G_init_all(void)
     G_init_env();
     G_init_logging();
     G__init_window();
-    G__check_for_auto_masking();
+    Rast__check_for_auto_masking();
     G_init_locale();
     G_init_debug();
     G_verbose();
     G_init_tempfile();
-    G_init_gdal();
+    Rast_init_gdal();
     G_get_list_of_mapsets();
     G__home();
     G__machine_name();

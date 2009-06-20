@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/dbmi.h>
 #include <grass/Vect.h>
 #include <grass/glocale.h>
@@ -51,7 +52,7 @@ int execute_random(struct rr_state *theState)
 	    type = theState->cover.type;
 	else
 	    type = theState->buf.type;
-	if ((outfd = G_open_raster_new(theState->outraster, type)) < 0)
+	if ((outfd = Rast_open_raster_new(theState->outraster, type)) < 0)
 	    G_fatal_error(_("Unable to create raster map <%s>"),
 			  theState->outraster);
 	theState->fd_new = outfd;
@@ -123,12 +124,12 @@ int execute_random(struct rr_state *theState)
     cat = 1;
     /* Execute for loop for every row if nt>1 */
     for (row = 0; row < nrows && nt; row++) {
-	if (G_get_raster_row
+	if (Rast_get_raster_row
 	    (infd, theState->buf.data.v, row, theState->buf.type) < 0)
 	    G_fatal_error(_("Cannot read raster row [%d] from raster map <%s>"),
 			  row, theState->inraster);
 	if (theState->docover == 1) {
-	    if (G_get_raster_row
+	    if (Rast_get_raster_row
 		(cinfd, theState->cover.data.v, row,
 		 theState->cover.type) < 0)
 		G_fatal_error(_("Cannot read raster row [%d] from cover raster map <%s>"),
@@ -215,10 +216,10 @@ int execute_random(struct rr_state *theState)
 
 	if (theState->outraster) {
 	    if (theState->docover == 1)
-		G_put_raster_row(outfd, theState->cover.data.v,
+		Rast_put_raster_row(outfd, theState->cover.data.v,
 				 theState->cover.type);
 	    else
-		G_put_raster_row(outfd, theState->buf.data.v,
+		Rast_put_raster_row(outfd, theState->buf.data.v,
 				 theState->buf.type);
 	}
     }
@@ -233,10 +234,10 @@ int execute_random(struct rr_state *theState)
 	}
 	for (; row < nrows; row++) {
 	    if (theState->docover == 1)
-		G_put_raster_row(outfd, theState->cover.data.v,
+		Rast_put_raster_row(outfd, theState->cover.data.v,
 				 theState->cover.type);
 	    else
-		G_put_raster_row(outfd, theState->buf.data.v,
+		Rast_put_raster_row(outfd, theState->buf.data.v,
 				 theState->buf.type);
 	}
     }
@@ -246,9 +247,9 @@ int execute_random(struct rr_state *theState)
 		  theState->nRand - nt);
 
     /* close files */
-    G_close_cell(infd);
+    Rast_close_cell(infd);
     if (theState->docover == 1)
-	G_close_cell(cinfd);
+	Rast_close_cell(cinfd);
     if (theState->outvector) {
 	db_commit_transaction(driver);
 	db_close_database_shutdown_driver(driver);
@@ -257,7 +258,7 @@ int execute_random(struct rr_state *theState)
 	Vect_close(&Out);
     }
     if (theState->outraster)
-	G_close_cell(outfd);
+	Rast_close_cell(outfd);
 
     return 0;
 }				/* execute_random() */
@@ -299,13 +300,13 @@ static void set_to_null(struct RASTER_MAP_PTR *buf, int col)
 {
     switch (buf->type) {
     case CELL_TYPE:
-	G_set_c_null_value(&(buf->data.c[col]), 1);
+	Rast_set_c_null_value(&(buf->data.c[col]), 1);
 	break;
     case FCELL_TYPE:
-	G_set_f_null_value(&(buf->data.f[col]), 1);
+	Rast_set_f_null_value(&(buf->data.f[col]), 1);
 	break;
     case DCELL_TYPE:
-	G_set_d_null_value(&(buf->data.d[col]), 1);
+	Rast_set_d_null_value(&(buf->data.d[col]), 1);
 	break;
     }
 }
@@ -315,13 +316,13 @@ int is_null_value(struct RASTER_MAP_PTR buf, int col)
 {
     switch (buf.type) {
     case CELL_TYPE:
-	return G_is_c_null_value(&buf.data.c[col]);
+	return Rast_is_c_null_value(&buf.data.c[col]);
 	break;
     case FCELL_TYPE:
-	return G_is_f_null_value(&buf.data.f[col]);
+	return Rast_is_f_null_value(&buf.data.f[col]);
 	break;
     case DCELL_TYPE:
-	return G_is_d_null_value(&buf.data.d[col]);
+	return Rast_is_d_null_value(&buf.data.d[col]);
 	break;
     }
 

@@ -22,6 +22,7 @@
 #include <unistd.h>
 #endif
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 
@@ -140,16 +141,16 @@ int main(int argc, char *argv[])
 
     switch (rtype) {
     case CELL_TYPE:
-	cell = G_allocate_c_raster_buf();
+	cell = Rast_allocate_c_raster_buf();
 	break;
     case FCELL_TYPE:
-	fcell = G_allocate_f_raster_buf();
+	fcell = Rast_allocate_f_raster_buf();
 	break;
     case DCELL_TYPE:
-	dcell = G_allocate_d_raster_buf();
+	dcell = Rast_allocate_d_raster_buf();
 	break;
     }
-    cf = G_open_raster_new(output, rtype);
+    cf = Rast_open_raster_new(output, rtype);
     if (cf < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), output);
 
@@ -157,28 +158,28 @@ int main(int argc, char *argv[])
 	G_percent(row, nrows, 5);
 	for (col = 0; col < ncols; col++) {
 	    if (fscanf(fd, "%lf", &x) != 1) {
-		G_unopen_cell(cf);
+		Rast_unopen_cell(cf);
 		G_fatal_error(_("Data conversion failed at row %d, col %d"),
 			      row + 1, col + 1);
 	    }
 	    switch (rtype) {
 	    case CELL_TYPE:
 		if ((int)x == missingval)
-		    G_set_c_null_value(cell + col, 1);
+		    Rast_set_c_null_value(cell + col, 1);
 		else
 		    cell[col] = (CELL) x *mult_fact;
 
 		break;
 	    case FCELL_TYPE:
 		if ((int)x == missingval)
-		    G_set_f_null_value(fcell + col, 1);
+		    Rast_set_f_null_value(fcell + col, 1);
 		else
 		    fcell[col] = (FCELL) x *mult_fact;
 
 		break;
 	    case DCELL_TYPE:
 		if ((int)x == missingval)
-		    G_set_d_null_value(dcell + col, 1);
+		    Rast_set_d_null_value(dcell + col, 1);
 		else
 		    dcell[col] = (DCELL) x *mult_fact;
 
@@ -187,23 +188,23 @@ int main(int argc, char *argv[])
 	}
 	switch (rtype) {
 	case CELL_TYPE:
-	    G_put_c_raster_row(cf, cell);
+	    Rast_put_c_raster_row(cf, cell);
 	    break;
 	case FCELL_TYPE:
-	    G_put_f_raster_row(cf, fcell);
+	    Rast_put_f_raster_row(cf, fcell);
 	    break;
 	case DCELL_TYPE:
-	    G_put_d_raster_row(cf, dcell);
+	    Rast_put_d_raster_row(cf, dcell);
 	    break;
 	}
     }
     /* G_message(_("CREATING SUPPORT FILES FOR %s"), output); */
-    G_close_cell(cf);
+    Rast_close_cell(cf);
     if (title)
-	G_put_cell_title(output, title);
-    G_short_history(output, "raster", &history);
-    G_command_history(&history);
-    G_write_history(output, &history);
+	Rast_put_cell_title(output, title);
+    Rast_short_history(output, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(output, &history);
 
 
     exit(EXIT_SUCCESS);

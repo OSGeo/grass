@@ -34,6 +34,7 @@
 #include <math.h>
 #include <fcntl.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 
 #include <grass/segment.h>
 #include <grass/gprojects.h>
@@ -179,41 +180,41 @@ int main(int argc, char *argv[])
     }
 
     /*  read header info for elevation layer        */
-    if (G_get_cellhd(elev_layer, old_mapset, &cellhd_elev) < 0)
+    if (Rast_get_cellhd(elev_layer, old_mapset, &cellhd_elev) < 0)
 	G_fatal_error(_("[%s]: Cannot read map header"), elev_layer);
 
     /*  if pattern layer present, read in its header info   */
     if (patt_flag == TRUE) {
-	if (G_get_cellhd(patt_layer, patt_mapset, &cellhd_patt) < 0)
+	if (Rast_get_cellhd(patt_layer, patt_mapset, &cellhd_patt) < 0)
 	    G_fatal_error(_("[%s]: Cannot read map header"), patt_layer);
 
 	/*  allocate buffer space for row-io to layer           */
-	cell = G_allocate_raster_buf(CELL_TYPE);
+	cell = Rast_allocate_raster_buf(CELL_TYPE);
     }
 
     /*  allocate buffer space for row-io to layer           */
-    fcell = G_allocate_raster_buf(FCELL_TYPE);
+    fcell = Rast_allocate_raster_buf(FCELL_TYPE);
 
     /*  find number of rows and columns in elevation map    */
     nrows = G_window_rows();
     ncols = G_window_cols();
 
     /*      open elevation overlay file for reading         */
-    old = G_open_cell_old(elev_layer, old_mapset);
+    old = Rast_open_cell_old(elev_layer, old_mapset);
     if (old < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), elev_layer);
 
     /*      open cell layer for writing output              */
-    new = G_open_raster_new(out_layer, FCELL_TYPE);
+    new = Rast_open_raster_new(out_layer, FCELL_TYPE);
     if (new < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), out_layer);
 
     /* if pattern layer specified, open it for reading      */
     if (patt_flag == TRUE) {
-	patt = G_open_cell_old(patt_layer, patt_mapset);
+	patt = Rast_open_cell_old(patt_layer, patt_mapset);
 	if (patt < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), patt_layer);
-	if (G_get_raster_map_type(patt) != CELL_TYPE)
+	if (Rast_get_raster_map_type(patt) != CELL_TYPE)
 	    G_fatal_error(_("Pattern map should be a binary 0/1 CELL map"));
     }
 
@@ -266,7 +267,7 @@ int main(int argc, char *argv[])
 	patt_fd = open(patt_name, 2);
 	segment_init(&seg_patt, patt_fd, 4);
 	for (row = 0; row < nrows; row++) {
-	    if (G_get_raster_row(patt, cell, row, CELL_TYPE) < 0)
+	    if (Rast_get_raster_row(patt, cell, row, CELL_TYPE) < 0)
 		G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			      patt_layer, row);
 	    segment_put_row(&seg_patt, cell, row);
@@ -274,7 +275,7 @@ int main(int argc, char *argv[])
     }
 
     for (row = 0; row < nrows; row++) {
-	if (G_get_raster_row(old, fcell, row, FCELL_TYPE) < 0)
+	if (Rast_get_raster_row(old, fcell, row, FCELL_TYPE) < 0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			  elev_layer, row);
 	segment_put_row(&seg_in, fcell, row);
@@ -381,8 +382,8 @@ int main(int argc, char *argv[])
 	for (col = 0; col < ncols; col++)
 	    /* set to NULL if beyond max_dist (0) or blocked view (1) */
 	    if (fcell[col] == 0 || fcell[col] == 1)
-		G_set_null_value(&fcell[col], 1, FCELL_TYPE);
-	if (G_put_raster_row(new, fcell, FCELL_TYPE) < 0)
+		Rast_set_null_value(&fcell[col], 1, FCELL_TYPE);
+	if (Rast_put_raster_row(new, fcell, FCELL_TYPE) < 0)
 	    G_fatal_error(_("Failed writing raster map <%s> row %d"),
 			  out_layer, row);
     }
@@ -397,26 +398,26 @@ int main(int argc, char *argv[])
     close(out_fd);
     unlink(in_name);		/* remove temp files as well */
     unlink(out_name);
-    G_close_cell(old);
-    G_close_cell(new);
+    Rast_close_cell(old);
+    Rast_close_cell(new);
 
     if (patt_flag == TRUE) {
 	close(patt_fd);
-	G_close_cell(patt);
+	Rast_close_cell(patt);
     }
 
     /*      create category file for output map             */
-    G_read_cats(out_layer, current_mapset, &cats);
-    G_set_cats_fmt("$1 degree$?s", 1.0, 0.0, 0.0, 0.0, &cats);
-    G_write_cats(out_layer, &cats);
+    Rast_read_cats(out_layer, current_mapset, &cats);
+    Rast_set_cats_fmt("$1 degree$?s", 1.0, 0.0, 0.0, 0.0, &cats);
+    Rast_write_cats(out_layer, &cats);
 
     sprintf(title, "Line of sight %.2fm above %s", obs_elev, opt3->answer);
-    G_put_cell_title(out_layer, title);
-    G_write_raster_units(out_layer, "degrees");
+    Rast_put_cell_title(out_layer, title);
+    Rast_write_raster_units(out_layer, "degrees");
 
-    G_short_history(out_layer, "raster", &history);
-    G_command_history(&history);
-    G_write_history(out_layer, &history);
+    Rast_short_history(out_layer, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(out_layer, &history);
 
     /* release that last tiny bit of memory ... */
     if ( DELAYED_DELETE != NULL ) {

@@ -1,4 +1,5 @@
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/segment.h>
 #include "point.h"
 

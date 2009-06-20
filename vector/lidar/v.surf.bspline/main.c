@@ -22,6 +22,7 @@
 #include <string.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/Vect.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
@@ -282,7 +283,7 @@ int main(int argc, char *argv[])
 
     /* raster output */
     raster = -1;
-    G_set_fp_type(DCELL_TYPE);
+    Rast_set_fp_type(DCELL_TYPE);
     if (!vector && map) {
 	grid = TRUE;
 	/*
@@ -290,7 +291,7 @@ int main(int argc, char *argv[])
 	   G_fatal_error (_("Raster <%s> already exist."), out_map_opt->answer);
 	 */
 
-	if ((raster = G_open_fp_cell_new(out_map_opt->answer)) < 0)
+	if ((raster = Rast_open_fp_cell_new(out_map_opt->answer)) < 0)
 	    G_fatal_error(_("Unable to create raster map <%s>"),
 			  out_map_opt->answer);
     }
@@ -344,7 +345,7 @@ int main(int argc, char *argv[])
 		Vect_close(&Out);
 
 	    if (map)
-		G_close_cell(raster);
+		Rast_close_cell(raster);
 
 	    G_done_msg(_("Cross Validation was success!"));
 	    exit(EXIT_SUCCESS);
@@ -729,16 +730,16 @@ int main(int argc, char *argv[])
 	Vect_close(&Out);
 
     if (map) {
-	G_close_cell(raster);
+	Rast_close_cell(raster);
 
 	/* set map title */
 	sprintf(title, "%s interpolation with Tykhonov regularization",
 		type->answer);
-	G_put_cell_title(out_map_opt->answer, title);
+	Rast_put_cell_title(out_map_opt->answer, title);
 	/* write map history */
-	G_short_history(out_map_opt->answer, "raster", &history);
-	G_command_history(&history);
-	G_write_history(out_map_opt->answer, &history);
+	Rast_short_history(out_map_opt->answer, "raster", &history);
+	Rast_command_history(&history);
+	Rast_write_history(out_map_opt->answer, &history);
     }
 
     G_done_msg(" ");

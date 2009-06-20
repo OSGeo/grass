@@ -1,4 +1,5 @@
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "mask.h"
 #include "local_proto.h"
 
@@ -29,12 +30,12 @@ int mask_raster_array(void *rast, int ncols,
     DCELL x;
 
     while (ncols-- > 0) {
-	x = G_get_raster_value_d(rast, data_type);
-	if (change_null && G_is_null_value(rast, data_type))
-	    G_set_raster_value_d(rast, new_null, data_type);
+	x = Rast_get_raster_value_d(rast, data_type);
+	if (change_null && Rast_is_null_value(rast, data_type))
+	    Rast_set_raster_value_d(rast, new_null, data_type);
 	if (mask_d_select(&x, &d_mask))
-	    G_set_null_value(rast, 1, data_type);
-	rast = G_incr_void_ptr(rast, G_raster_size(data_type));
+	    Rast_set_null_value(rast, 1, data_type);
+	rast = Rast_incr_void_ptr(rast, Rast_raster_size(data_type));
     }
 
     return 0;
@@ -55,7 +56,7 @@ int mask_d_select(DCELL * x, d_Mask * mask)
 
 int mask_match_d_interval(DCELL x, d_Interval * I)
 {
-    if (G_is_d_null_value(&x))
+    if (Rast_is_d_null_value(&x))
 	return 0;
 
     if (I->inf < 0)

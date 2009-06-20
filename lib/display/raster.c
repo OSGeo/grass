@@ -25,7 +25,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/display_raster.h>
 #include <grass/display.h>
 
@@ -98,13 +100,13 @@ static int draw_cell(int A_row,
 	set = G_realloc(set, nalloc);
     }
 
-    G_lookup_raster_colors(array, red, grn, blu, set, ncols, colors,
+    Rast_lookup_raster_colors(array, red, grn, blu, set, ncols, colors,
 			   data_type);
 
     if (D__overlay_mode)
 	for (i = 0; i < ncols; i++) {
-	    set[i] = G_is_null_value(array, data_type);
-	    array = G_incr_void_ptr(array, G_raster_size(data_type));
+	    set[i] = Rast_is_null_value(array, data_type);
+	    array = Rast_incr_void_ptr(array, Rast_raster_size(data_type));
 	}
 
     A_row =
@@ -148,9 +150,9 @@ int D_draw_raster_RGB(int A_row,
     static unsigned char *r_buf, *g_buf, *b_buf, *n_buf;
     static int nalloc;
 
-    int r_size = G_raster_size(r_type);
-    int g_size = G_raster_size(g_type);
-    int b_size = G_raster_size(b_type);
+    int r_size = Rast_raster_size(r_type);
+    int g_size = Rast_raster_size(g_type);
+    int b_size = Rast_raster_size(b_type);
     int ncols = src[0][1] - src[0][0];
     int i;
 
@@ -164,22 +166,22 @@ int D_draw_raster_RGB(int A_row,
     }
 
     /* convert cell values to bytes */
-    G_lookup_raster_colors(r_raster, r_buf, n_buf, n_buf, n_buf, ncols,
+    Rast_lookup_raster_colors(r_raster, r_buf, n_buf, n_buf, n_buf, ncols,
 			   r_colors, r_type);
-    G_lookup_raster_colors(g_raster, n_buf, g_buf, n_buf, n_buf, ncols,
+    Rast_lookup_raster_colors(g_raster, n_buf, g_buf, n_buf, n_buf, ncols,
 			   g_colors, g_type);
-    G_lookup_raster_colors(b_raster, n_buf, n_buf, b_buf, n_buf, ncols,
+    Rast_lookup_raster_colors(b_raster, n_buf, n_buf, b_buf, n_buf, ncols,
 			   b_colors, b_type);
 
     if (D__overlay_mode)
 	for (i = 0; i < ncols; i++) {
-	    n_buf[i] = (G_is_null_value(r_raster, r_type) ||
-			G_is_null_value(g_raster, g_type) ||
-			G_is_null_value(b_raster, b_type));
+	    n_buf[i] = (Rast_is_null_value(r_raster, r_type) ||
+			Rast_is_null_value(g_raster, g_type) ||
+			Rast_is_null_value(b_raster, b_type));
 
-	    r_raster = G_incr_void_ptr(r_raster, r_size);
-	    g_raster = G_incr_void_ptr(g_raster, g_size);
-	    b_raster = G_incr_void_ptr(b_raster, b_size);
+	    r_raster = Rast_incr_void_ptr(r_raster, r_size);
+	    g_raster = Rast_incr_void_ptr(g_raster, g_size);
+	    b_raster = Rast_incr_void_ptr(b_raster, b_size);
 	}
 
     A_row =

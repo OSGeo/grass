@@ -5,6 +5,7 @@
 #include <math.h>
 #include <time.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 
 
 #define	FILL		0x1

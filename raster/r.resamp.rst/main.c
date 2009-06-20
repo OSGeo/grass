@@ -37,6 +37,7 @@
 
 #include <grass/dbmi.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/linkm.h>
 #include <grass/bitmap.h>
 #include "surf.h"
@@ -344,7 +345,7 @@ int main(int argc, char *argv[])
     outhd.south = winhd.south;
     outhd.proj = winhd.proj;
     outhd.zone = winhd.zone;
-    G_adjust_Cell_head(&outhd, 0, 0);
+    Rast_adjust_Cell_head(&outhd, 0, 0);
     ew_res = outhd.ew_res;
     ns_res = outhd.ns_res;
     nsizc = outhd.cols;
@@ -365,31 +366,31 @@ int main(int argc, char *argv[])
 
     if (smooth != NULL) {
 
-	if ((fdsmooth = G_open_cell_old(smooth, "")) < 0)
+	if ((fdsmooth = Rast_open_cell_old(smooth, "")) < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), smooth);
 
-	if (G_get_cellhd(smooth, "", &smhd) < 0)
+	if (Rast_get_cellhd(smooth, "", &smhd) < 0)
 	    G_fatal_error(_("Unable to read header for <%s>"), smooth);
 
 	if ((winhd.ew_res != smhd.ew_res) || (winhd.ns_res != smhd.ns_res))
 	    G_fatal_error(_("Map <%s> is the wrong resolution"), smooth);
 
-	if (G_read_fp_range(smooth, "", &range) >= 0)
-	    G_get_fp_range_min_max(&range, &cellmin, &cellmax);
+	if (Rast_read_fp_range(smooth, "", &range) >= 0)
+	    Rast_get_fp_range_min_max(&range, &cellmin, &cellmax);
 
 	fcellmin = (float)cellmin;
 
-	if (G_is_f_null_value(&fcellmin) || fcellmin < 0.0)
+	if (Rast_is_f_null_value(&fcellmin) || fcellmin < 0.0)
 	    G_fatal_error(_("Smoothing values can not be negative or NULL"));
     }
 
-    if (G_get_cellhd(input, "", &inphd) < 0)
+    if (Rast_get_cellhd(input, "", &inphd) < 0)
 	G_fatal_error(_("Unable to read header for <%s>"), input);
 
     if ((winhd.ew_res != inphd.ew_res) || (winhd.ns_res != inphd.ns_res))
 	G_fatal_error(_("Input map resolution differs from current region resolution!"));
 
-    if ((fdinp = G_open_cell_old(input, "")) < 0)
+    if ((fdinp = Rast_open_cell_old(input, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), input);
 
 
@@ -425,24 +426,24 @@ int main(int argc, char *argv[])
 	smc = 0.01;
 
 
-    if (G_read_fp_range(input, "", &range) >= 0) {
-	G_get_fp_range_min_max(&range, &cellmin, &cellmax);
+    if (Rast_read_fp_range(input, "", &range) >= 0) {
+	Rast_get_fp_range_min_max(&range, &cellmin, &cellmax);
     }
     else {
-	cellrow = G_allocate_f_raster_buf();
+	cellrow = Rast_allocate_f_raster_buf();
 	for (m1 = 0; m1 < inp_rows; m1++) {
-	    ret_val = G_get_f_raster_row(fdinp, cellrow, m1);
+	    ret_val = Rast_get_f_raster_row(fdinp, cellrow, m1);
 	    if (ret_val < 0)
 		G_fatal_error(_("Error reading row %d (error = %d)"),
 			      m1, ret_val);
 
-	    G_row_update_fp_range(cellrow, m1, &range, FCELL_TYPE);
+	    Rast_row_update_fp_range(cellrow, m1, &range, FCELL_TYPE);
 	}
-	G_get_fp_range_min_max(&range, &cellmin, &cellmax);
+	Rast_get_fp_range_min_max(&range, &cellmin, &cellmax);
     }
 
     fcellmin = (float)cellmin;
-    if (G_is_f_null_value(&fcellmin))
+    if (Rast_is_f_null_value(&fcellmin))
 	G_fatal_error(_("Maximum value of a raster map is NULL."));
 
     zmin = (double)cellmin *zmult;
@@ -527,9 +528,9 @@ int main(int argc, char *argv[])
     clean();
     if (fd4)
 	fclose(fd4);
-    G_close_cell(fdinp);
+    Rast_close_cell(fdinp);
     if (smooth != NULL)
-	G_close_cell(fdsmooth);
+	Rast_close_cell(fdsmooth);
 
     G_done_msg("");
     exit(EXIT_SUCCESS);

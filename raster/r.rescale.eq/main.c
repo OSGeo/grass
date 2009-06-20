@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "local_proto.h"
 #include <grass/glocale.h>
 
@@ -127,7 +128,7 @@ int main(int argc, char *argv[])
     strcat(buf, "\"");
 
     fd = popen(buf, "w");
-    G_cell_stats_histo_eq(&statf, (CELL) old_min, (CELL) old_max,
+    Rast_cell_stats_histo_eq(&statf, (CELL) old_min, (CELL) old_max,
 			  (CELL) new_min, (CELL) new_max, 0, reclass);
     if (fd != stdout)
 	pclose(fd);

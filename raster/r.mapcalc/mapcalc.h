@@ -8,6 +8,7 @@
 
 #include <grass/config.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 
 #include "expression.h"
 

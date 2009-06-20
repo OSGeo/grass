@@ -23,9 +23,9 @@ int read_rgb(char *key, char *data)
     PS.do_raster = 0;
     PS.do_colortable = 0;
     if (PS.cell_fd >= 0) {
-	G_close_cell(PS.cell_fd);
+	Rast_close_cell(PS.cell_fd);
 	G_free(PS.cell_name);
-	G_free_colors(&PS.colors);
+	Rast_free_colors(&PS.colors);
 	PS.cell_fd = -1;
     }
 
@@ -66,17 +66,17 @@ int read_rgb(char *key, char *data)
 	grp.mapset[i] = G_store(mapset);
 
 	/* read in colors */
-	if (G_read_colors(grp.name[i], grp.mapset[i], &(grp.colors[i])) == -1) {
+	if (Rast_read_colors(grp.name[i], grp.mapset[i], &(grp.colors[i])) == -1) {
 	    sprintf(fullname, "%s in %s", grp.name[i], grp.mapset[i]);
 	    error(fullname, "", "can't read color table");
 	    return 0;
 	}
 
 	/* open raster maps for reading */
-	if ((grp.fd[i] = G_open_cell_old(grp.name[i], grp.mapset[i])) < 0) {
+	if ((grp.fd[i] = Rast_open_cell_old(grp.name[i], grp.mapset[i])) < 0) {
 	    sprintf(fullname, "%s in %s", grp.name[i], grp.mapset[i]);
 	    error(fullname, "", "can't open raster map");
-	    G_free_colors(&(grp.colors[i]));
+	    Rast_free_colors(&(grp.colors[i]));
 	    return 0;
 	}
     }

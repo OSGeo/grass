@@ -37,6 +37,7 @@ TODO: use dynamic allocation for TiCache
 
 extern "C" {
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 }
 
@@ -95,7 +96,7 @@ static void adjust_region (char *name, const char *mapset)
 {
     struct Cell_head iimg_head;	/* the input image header file */
 
-    if(G_get_cellhd(name, mapset, &iimg_head) < 0) 
+    if(Rast_get_cellhd(name, mapset, &iimg_head) < 0) 
 	G_fatal_error (_("Unable to read header of raster map <%s>"),
 		       G_fully_qualified_name(name, mapset));
 
@@ -120,10 +121,10 @@ static void write_fp_to_cell (int ofd, FCELL* buf)
     CELL* cbuf;
     int col;
 
-    cbuf = (CELL*)G_allocate_raster_buf(CELL_TYPE);
+    cbuf = (CELL*)Rast_allocate_raster_buf(CELL_TYPE);
 
     for(col = 0; col < G_window_cols(); col++) cbuf[col] = round_c(buf[col]);
-    G_put_raster_row(ofd, cbuf, CELL_TYPE);
+    Rast_put_raster_row(ofd, cbuf, CELL_TYPE);
 }
 
 
@@ -292,9 +293,9 @@ static void process_raster (int ifd, InputMask imask, ScaleRange iscale,
     TICache ticache;    /* use this to increase computation speed when an elevation map with categories are given */
 	
     /* allocate memory for buffers */
-    buf = (FCELL*)G_allocate_raster_buf(FCELL_TYPE);
-    if(ialt_fd >= 0) alt = (FCELL*)G_allocate_raster_buf(FCELL_TYPE);
-    if(ivis_fd >= 0) vis = (FCELL*)G_allocate_raster_buf(FCELL_TYPE);
+    buf = (FCELL*)Rast_allocate_raster_buf(FCELL_TYPE);
+    if(ialt_fd >= 0) alt = (FCELL*)Rast_allocate_raster_buf(FCELL_TYPE);
+    if(ivis_fd >= 0) vis = (FCELL*)Rast_allocate_raster_buf(FCELL_TYPE);
 
     G_verbose_message(_("Percent complete..."));
     nrows = G_window_rows();
@@ -305,30 +306,30 @@ static void process_raster (int ifd, InputMask imask, ScaleRange iscale,
 	G_percent(row, nrows, 1);     /* keep the user informed of our progress */
 		
         /* read the next row */
-	if(G_get_raster_row(ifd, buf, row, FCELL_TYPE) < 0)
+	if(Rast_get_raster_row(ifd, buf, row, FCELL_TYPE) < 0)
 	    G_fatal_error (_("Unable to read input raster map row %d"),
 			     row);
 
         /* read the next row of elevation values */
         if(ialt_fd >= 0)
-	    if(G_get_raster_row(ialt_fd, alt, row, FCELL_TYPE) < 0)
+	    if(Rast_get_raster_row(ialt_fd, alt, row, FCELL_TYPE) < 0)
 		G_fatal_error (_("Unable to read elevation raster map row %d"),
 			       row);
 
         /* read the next row of elevation values */
         if(ivis_fd >= 0)
-	    if(G_get_raster_row(ivis_fd, vis, row, FCELL_TYPE) < 0)
+	    if(Rast_get_raster_row(ivis_fd, vis, row, FCELL_TYPE) < 0)
 		G_fatal_error (_("Unable to read visibility raster map row %d"),
 			       row);
 
         /* loop over all the values in the row */
 	for(col = 0; col < ncols; col++)
 	{
-	    if(vis && G_is_f_null_value(&vis[col]) || 
-	       alt && G_is_f_null_value(&alt[col]) || 
-	              G_is_f_null_value(&buf[col]))
+	    if(vis && Rast_is_f_null_value(&vis[col]) || 
+	       alt && Rast_is_f_null_value(&alt[col]) || 
+	              Rast_is_f_null_value(&buf[col]))
 	    {
-	        G_set_f_null_value(&buf[col], 1);
+	        Rast_set_f_null_value(&buf[col], 1);
 	        continue;
 	    }
 	    alt[col] /= 1000.0f; /* converting to km from input which should be in meter */
@@ -404,7 +405,7 @@ static void process_raster (int ifd, InputMask imask, ScaleRange iscale,
 	}
 
         /* write output */
-	if(oflt) G_put_raster_row(ofd, buf, FCELL_TYPE);
+	if(oflt) Rast_put_raster_row(ofd, buf, FCELL_TYPE);
 	else write_fp_to_cell(ofd, buf);
     }
 
@@ -421,8 +422,8 @@ static void copy_colors (char *iname, const char *imapset, char *oname)
 {
     struct Colors colors;
 
-    G_read_colors(iname, imapset, &colors);
-    G_write_colors(oname, G_mapset(), &colors);
+    Rast_read_colors(iname, imapset, &colors);
+    Rast_write_colors(oname, G_mapset(), &colors);
 }
 
 
@@ -588,7 +589,7 @@ int main(int argc, char* argv[])
     /* open input raster */
     if ( (iimg_mapset = G_find_cell2 ( opts.iimg->answer, "") ) == NULL )
 	G_fatal_error ( _("Raster map <%s> not found"), opts.iimg->answer);
-    if((iimg_fd = G_open_cell_old(opts.iimg->answer, iimg_mapset)) < 0)
+    if((iimg_fd = Rast_open_cell_old(opts.iimg->answer, iimg_mapset)) < 0)
 	G_fatal_error (_("Unable to open raster map <%s>"),
 		       G_fully_qualified_name(opts.iimg->answer, iimg_mapset));
 
@@ -597,7 +598,7 @@ int main(int argc, char* argv[])
     if(opts.ialt->answer) {
 	if ( (ialt_mapset = G_find_cell2 ( opts.ialt->answer, "") ) == NULL )
 	    G_fatal_error ( _("Raster map <%s> not found"), opts.ialt->answer);
-	if((ialt_fd = G_open_cell_old(opts.ialt->answer, ialt_mapset)) < 0)
+	if((ialt_fd = Rast_open_cell_old(opts.ialt->answer, ialt_mapset)) < 0)
             G_fatal_error (_("Unable to open raster map <%s>"),
 			   G_fully_qualified_name(opts.ialt->answer, ialt_mapset));
     }
@@ -605,7 +606,7 @@ int main(int argc, char* argv[])
     if(opts.ivis->answer) {
 	if ( (iviz_mapset = G_find_cell2 ( opts.ivis->answer, "") ) == NULL )
 	    G_fatal_error ( _("Raster map <%s> not found"), opts.ivis->answer);
-	if((ivis_fd = G_open_cell_old(opts.ivis->answer, iviz_mapset)) < 0)
+	if((ivis_fd = Rast_open_cell_old(opts.ivis->answer, iviz_mapset)) < 0)
             G_fatal_error (_("Unable to open raster map <%s>"),
 			   G_fully_qualified_name(opts.ivis->answer, iviz_mapset));
     }
@@ -613,13 +614,13 @@ int main(int argc, char* argv[])
     /* open a floating point raster or not? */
     if(opts.oflt->answer)
     {
-	if((oimg_fd = G_open_fp_cell_new(opts.oimg->answer)) < 0)
+	if((oimg_fd = Rast_open_fp_cell_new(opts.oimg->answer)) < 0)
 	    G_fatal_error (_("Unable to create raster map <%s>"),
 			   opts.oimg->answer);
     }
     else
     {
-	if((oimg_fd = G_open_raster_new(opts.oimg->answer, CELL_TYPE)) < 0)
+	if((oimg_fd = Rast_open_raster_new(opts.oimg->answer, CELL_TYPE)) < 0)
 	    G_fatal_error (_("Unable to create raster map <%s>"),
 			   opts.oimg->answer);
     }
@@ -644,14 +645,14 @@ int main(int argc, char* argv[])
 
 
     /* Close the input and output file descriptors */
-    G_short_history(opts.oimg->answer, "raster", &hist);
-    G_close_cell(iimg_fd);
-    if(opts.ialt->answer) G_close_cell(ialt_fd);
-    if(opts.ivis->answer) G_close_cell(ivis_fd);
-    G_close_cell(oimg_fd);
+    Rast_short_history(opts.oimg->answer, "raster", &hist);
+    Rast_close_cell(iimg_fd);
+    if(opts.ialt->answer) Rast_close_cell(ialt_fd);
+    if(opts.ivis->answer) Rast_close_cell(ivis_fd);
+    Rast_close_cell(oimg_fd);
 
-    G_command_history(&hist);
-    G_write_history(opts.oimg->answer, &hist);
+    Rast_command_history(&hist);
+    Rast_write_history(opts.oimg->answer, &hist);
 
     /* Copy the colors of the input raster to the output raster.
        Scaling is ignored and color ranges might not be correct. */

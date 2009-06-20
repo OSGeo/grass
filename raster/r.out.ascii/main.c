@@ -21,6 +21,7 @@
 #include <math.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "localproto.h"
 #include <grass/glocale.h>
 
@@ -141,11 +142,11 @@ int main(int argc, char *argv[])
     name = parm.map->answer;
 
     /* open raster map */
-    fd = G_open_cell_old(name, "");
+    fd = Rast_open_cell_old(name, "");
     if (fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
 
-    map_type = G_get_raster_map_type(fd);
+    map_type = Rast_get_raster_map_type(fd);
 
     if (!flag.int_out->answer)
 	out_type = map_type;
@@ -193,7 +194,7 @@ int main(int argc, char *argv[])
     }
 
     /* tidy up and go away */
-    G_close_cell(fd);
+    Rast_close_cell(fd);
     fclose(fp);
     exit(EXIT_SUCCESS);
 }

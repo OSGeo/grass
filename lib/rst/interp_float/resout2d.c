@@ -15,10 +15,11 @@
 
 #include <stdio.h>
 #include <math.h>
+
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/bitmap.h>
 #include <grass/linkm.h>
-
 #include <grass/interpf.h>
 
 
@@ -63,10 +64,10 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
     }
     mapset = G_mapset();
 
-    cell1 = G_allocate_f_raster_buf();
+    cell1 = Rast_allocate_f_raster_buf();
 
     if (params->elev != NULL) {
-	cf1 = G_open_fp_cell_new(params->elev);
+	cf1 = Rast_open_fp_cell_new(params->elev);
 	if (cf1 < 0) {
 	    fprintf(stderr, "unable to create raster map %s\n", params->elev);
 	    return -1;
@@ -74,7 +75,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
     }
 
     if (params->slope != NULL) {
-	cf2 = G_open_fp_cell_new(params->slope);
+	cf2 = Rast_open_fp_cell_new(params->slope);
 	if (cf2 < 0) {
 	    fprintf(stderr, "unable to create raster map %s\n",
 		    params->slope);
@@ -83,7 +84,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
     }
 
     if (params->aspect != NULL) {
-	cf3 = G_open_fp_cell_new(params->aspect);
+	cf3 = Rast_open_fp_cell_new(params->aspect);
 	if (cf3 < 0) {
 	    fprintf(stderr, "unable to create raster map %s\n",
 		    params->aspect);
@@ -92,7 +93,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
     }
 
     if (params->pcurv != NULL) {
-	cf4 = G_open_fp_cell_new(params->pcurv);
+	cf4 = Rast_open_fp_cell_new(params->pcurv);
 	if (cf4 < 0) {
 	    fprintf(stderr, "unable to create raster map %s\n",
 		    params->pcurv);
@@ -101,7 +102,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
     }
 
     if (params->tcurv != NULL) {
-	cf5 = G_open_fp_cell_new(params->tcurv);
+	cf5 = Rast_open_fp_cell_new(params->tcurv);
 	if (cf5 < 0) {
 	    fprintf(stderr, "unable to create raster map %s\n",
 		    params->tcurv);
@@ -110,7 +111,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
     }
 
     if (params->mcurv != NULL) {
-	cf6 = G_open_fp_cell_new(params->mcurv);
+	cf6 = Rast_open_fp_cell_new(params->mcurv);
 	if (cf6 < 0) {
 	    fprintf(stderr, "unable to create raster map %s\n",
 		    params->mcurv);
@@ -143,7 +144,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 		return -1;
 	    }
 	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_z);
-	    if (G_put_f_raster_row(cf1, cell1) < 0) {
+	    if (Rast_put_f_raster_row(cf1, cell1) < 0) {
 		fprintf(stderr, "cannot write file\n");
 		return -1;
 	    }
@@ -166,7 +167,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 	     * fprintf(stderr,"%f ",cell1[ii]); }
 	     * fprintf(stderr,"params->nsizc=%d \n",params->nsizc);
 	     */
-	    if (G_put_f_raster_row(cf2, cell1) < 0) {
+	    if (Rast_put_f_raster_row(cf2, cell1) < 0) {
 		fprintf(stderr, "cannot write file\n");
 		return -1;
 	    }
@@ -184,7 +185,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 		return -1;
 	    }
 	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_dy);
-	    if (G_put_f_raster_row(cf3, cell1) < 0) {
+	    if (Rast_put_f_raster_row(cf3, cell1) < 0) {
 		fprintf(stderr, "cannot write file\n");
 		return -1;
 	    }
@@ -202,7 +203,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 		return -1;
 	    }
 	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xx);
-	    if (G_put_f_raster_row(cf4, cell1) < 0) {
+	    if (Rast_put_f_raster_row(cf4, cell1) < 0) {
 		fprintf(stderr, "cannot write file\n");
 		return -1;
 	    }
@@ -220,7 +221,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 		return -1;
 	    }
 	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_yy);
-	    if (G_put_f_raster_row(cf5, cell1) < 0) {
+	    if (Rast_put_f_raster_row(cf5, cell1) < 0) {
 		fprintf(stderr, "cannot write file\n");
 		return -1;
 	    }
@@ -238,7 +239,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 		return -1;
 	    }
 	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xy);
-	    if (G_put_f_raster_row(cf6, cell1) < 0) {
+	    if (Rast_put_f_raster_row(cf6, cell1) < 0) {
 		fprintf(stderr, "cannot write file\n");
 		return -1;
 	    }
@@ -246,17 +247,17 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
     }
 
     if (cf1)
-	G_close_cell(cf1);
+	Rast_close_cell(cf1);
     if (cf2)
-	G_close_cell(cf2);
+	Rast_close_cell(cf2);
     if (cf3)
-	G_close_cell(cf3);
+	Rast_close_cell(cf3);
     if (cf4)
-	G_close_cell(cf4);
+	Rast_close_cell(cf4);
     if (cf5)
-	G_close_cell(cf5);
+	Rast_close_cell(cf5);
     if (cf6)
-	G_close_cell(cf6);
+	Rast_close_cell(cf6);
 
     /* write colormaps and history for output cell files */
     /* colortable for elevations */
@@ -267,12 +268,12 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 	    fprintf(stderr, "file [%s] not found\n", input);
 	    return -1;
 	}
-	G_init_colors(&colors2);
+	Rast_init_colors(&colors2);
 	/*
-	 * G_mark_colors_as_fp(&colors2);
+	 * Rast_mark_colors_as_fp(&colors2);
 	 */
 
-	if (G_read_colors(input, maps, &colors) >= 0) {
+	if (Rast_read_colors(input, maps, &colors) >= 0) {
 	    if (colors.modular.rules) {
 		rule = colors.modular.rules;
 
@@ -282,7 +283,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 		for (; rule; rule = rule->prev) {
 		    value1 = rule->low.value * params->zmult;
 		    value2 = rule->high.value * params->zmult;
-		    G_add_modular_d_raster_color_rule(&value1, rule->low.red,
+		    Rast_add_modular_d_raster_color_rule(&value1, rule->low.red,
 						      rule->low.grn,
 						      rule->low.blu, &value2,
 						      rule->high.red,
@@ -301,7 +302,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 		for (; rule; rule = rule->prev) {
 		    value1 = rule->low.value * params->zmult;
 		    value2 = rule->high.value * params->zmult;
-		    G_add_d_raster_color_rule(&value1, rule->low.red,
+		    Rast_add_d_raster_color_rule(&value1, rule->low.red,
 					      rule->low.grn, rule->low.blu,
 					      &value2, rule->high.red,
 					      rule->high.grn, rule->high.blu,
@@ -316,11 +317,11 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 		return -1;
 	    }
 
-	    if (G_write_colors(params->elev, maps, &colors2) < 0) {
+	    if (Rast_write_colors(params->elev, maps, &colors2) < 0) {
 		fprintf(stderr, "Cannot write color table\n");
 		return -1;
 	    }
-	    G_quantize_fp_map_range(params->elev, mapset,
+	    Rast_quantize_fp_map_range(params->elev, mapset,
 				    zminac - 0.5, zmaxac + 0.5,
 				    (CELL) (zminac - 0.5),
 				    (CELL) (zmaxac + 0.5));
@@ -332,14 +333,14 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 
     /* colortable for slopes */
     if (cond1 & (!params->deriv)) {
-	G_init_colors(&colors);
-	G_add_color_rule(0, 255, 255, 255, 2, 255, 255, 0, &colors);
-	G_add_color_rule(2, 255, 255, 0, 5, 0, 255, 0, &colors);
-	G_add_color_rule(5, 0, 255, 0, 10, 0, 255, 255, &colors);
-	G_add_color_rule(10, 0, 255, 255, 15, 0, 0, 255, &colors);
-	G_add_color_rule(15, 0, 0, 255, 30, 255, 0, 255, &colors);
-	G_add_color_rule(30, 255, 0, 255, 50, 255, 0, 0, &colors);
-	G_add_color_rule(50, 255, 0, 0, 90, 0, 0, 0, &colors);
+	Rast_init_colors(&colors);
+	Rast_add_color_rule(0, 255, 255, 255, 2, 255, 255, 0, &colors);
+	Rast_add_color_rule(2, 255, 255, 0, 5, 0, 255, 0, &colors);
+	Rast_add_color_rule(5, 0, 255, 0, 10, 0, 255, 255, &colors);
+	Rast_add_color_rule(10, 0, 255, 255, 15, 0, 0, 255, &colors);
+	Rast_add_color_rule(15, 0, 0, 255, 30, 255, 0, 255, &colors);
+	Rast_add_color_rule(30, 255, 0, 255, 50, 255, 0, 0, &colors);
+	Rast_add_color_rule(50, 255, 0, 0, 90, 0, 0, 0, &colors);
 
 	if (params->slope != NULL) {
 	    maps = NULL;
@@ -348,11 +349,11 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 		fprintf(stderr, "file [%s] not found\n", params->slope);
 		return -1;
 	    }
-	    G_write_colors(params->slope, maps, &colors);
-	    G_quantize_fp_map_range(params->slope, mapset, 0., 90., 0, 90);
+	    Rast_write_colors(params->slope, maps, &colors);
+	    Rast_quantize_fp_map_range(params->slope, mapset, 0., 90., 0, 90);
 
 	    type = "raster";
-	    G_short_history(params->slope, type, &hist1);
+	    Rast_short_history(params->slope, type, &hist1);
 	    if (params->elev != NULL)
 		sprintf(hist1.edhist[0], "The elevation map is %s",
 			params->elev);
@@ -360,16 +361,16 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 	    sprintf(hist1.datsrc_1, "raster map %s", input);
 	    hist1.edlinecnt = 1;
 
-	    G_write_history(params->slope, &hist1);
+	    Rast_write_history(params->slope, &hist1);
 	}
 
 	/* colortable for aspect */
-	G_init_colors(&colors);
-	G_add_color_rule(0, 255, 255, 255, 0, 255, 255, 255, &colors);
-	G_add_color_rule(1, 255, 255, 0, 90, 0, 255, 0, &colors);
-	G_add_color_rule(90, 0, 255, 0, 180, 0, 255, 255, &colors);
-	G_add_color_rule(180, 0, 255, 255, 270, 255, 0, 0, &colors);
-	G_add_color_rule(270, 255, 0, 0, 360, 255, 255, 0, &colors);
+	Rast_init_colors(&colors);
+	Rast_add_color_rule(0, 255, 255, 255, 0, 255, 255, 255, &colors);
+	Rast_add_color_rule(1, 255, 255, 0, 90, 0, 255, 0, &colors);
+	Rast_add_color_rule(90, 0, 255, 0, 180, 0, 255, 255, &colors);
+	Rast_add_color_rule(180, 0, 255, 255, 270, 255, 0, 0, &colors);
+	Rast_add_color_rule(270, 255, 0, 0, 360, 255, 255, 0, &colors);
 
 	if (params->aspect != NULL) {
 	    maps = NULL;
@@ -378,11 +379,11 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 		fprintf(stderr, "file [%s] not found\n", params->aspect);
 		return -1;
 	    }
-	    G_write_colors(params->aspect, maps, &colors);
-	    G_quantize_fp_map_range(params->aspect, mapset, 0., 360., 0, 360);
+	    Rast_write_colors(params->aspect, maps, &colors);
+	    Rast_quantize_fp_map_range(params->aspect, mapset, 0., 360., 0, 360);
 
 	    type = "raster";
-	    G_short_history(params->aspect, type, &hist2);
+	    Rast_short_history(params->aspect, type, &hist2);
 	    if (params->elev != NULL)
 		sprintf(hist2.edhist[0], "The elevation map is %s",
 			params->elev);
@@ -390,45 +391,45 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 	    sprintf(hist2.datsrc_1, "raster map %s", input);
 	    hist2.edlinecnt = 1;
 
-	    G_write_history(params->aspect, &hist2);
+	    Rast_write_history(params->aspect, &hist2);
 	}
 
 	/* colortable for curvatures */
 	if (cond2) {
-	    G_init_colors(&colors);
+	    Rast_init_colors(&colors);
 
 	    dat1 = (FCELL) amin1(c1min, c2min);
 	    dat2 = (FCELL) - 0.01;
 
-	    G_add_f_raster_color_rule(&dat1, 50, 0, 155,
+	    Rast_add_f_raster_color_rule(&dat1, 50, 0, 155,
 				      &dat2, 0, 0, 255, &colors);
 	    dat1 = dat2;
 	    dat2 = (FCELL) - 0.001;
-	    G_add_f_raster_color_rule(&dat1, 0, 0, 255,
+	    Rast_add_f_raster_color_rule(&dat1, 0, 0, 255,
 				      &dat2, 0, 127, 255, &colors);
 	    dat1 = dat2;
 	    dat2 = (FCELL) - 0.00001;
-	    G_add_f_raster_color_rule(&dat1, 0, 127, 255,
+	    Rast_add_f_raster_color_rule(&dat1, 0, 127, 255,
 				      &dat2, 0, 255, 255, &colors);
 	    dat1 = dat2;
 	    dat2 = (FCELL) 0.00;
-	    G_add_f_raster_color_rule(&dat1, 0, 255, 255,
+	    Rast_add_f_raster_color_rule(&dat1, 0, 255, 255,
 				      &dat2, 200, 255, 200, &colors);
 	    dat1 = dat2;
 	    dat2 = (FCELL) 0.00001;
-	    G_add_f_raster_color_rule(&dat1, 200, 255, 200,
+	    Rast_add_f_raster_color_rule(&dat1, 200, 255, 200,
 				      &dat2, 255, 255, 0, &colors);
 	    dat1 = dat2;
 	    dat2 = (FCELL) 0.001;
-	    G_add_f_raster_color_rule(&dat1, 255, 255, 0,
+	    Rast_add_f_raster_color_rule(&dat1, 255, 255, 0,
 				      &dat2, 255, 127, 0, &colors);
 	    dat1 = dat2;
 	    dat2 = (FCELL) 0.01;
-	    G_add_f_raster_color_rule(&dat1, 255, 127, 0,
+	    Rast_add_f_raster_color_rule(&dat1, 255, 127, 0,
 				      &dat2, 255, 0, 0, &colors);
 	    dat1 = dat2;
 	    dat2 = (FCELL) amax1(c1max, c2max);
-	    G_add_f_raster_color_rule(&dat1, 255, 0, 0,
+	    Rast_add_f_raster_color_rule(&dat1, 255, 0, 0,
 				      &dat2, 155, 0, 20, &colors);
 	    maps = NULL;
 	    if (params->pcurv != NULL) {
@@ -437,16 +438,16 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 		    fprintf(stderr, "file [%s] not found\n", params->pcurv);
 		    return -1;
 		}
-		G_write_colors(params->pcurv, maps, &colors);
+		Rast_write_colors(params->pcurv, maps, &colors);
 
 		fprintf(stderr, "color map written\n");
 
-		G_quantize_fp_map_range(params->pcurv, mapset,
+		Rast_quantize_fp_map_range(params->pcurv, mapset,
 					dat1, dat2,
 					(CELL) (dat1 * MULT),
 					(CELL) (dat2 * MULT));
 		type = "raster";
-		G_short_history(params->pcurv, type, &hist3);
+		Rast_short_history(params->pcurv, type, &hist3);
 		if (params->elev != NULL)
 		    sprintf(hist3.edhist[0], "The elevation map is %s",
 			    params->elev);
@@ -454,7 +455,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 		sprintf(hist3.datsrc_1, "raster map %s", input);
 		hist3.edlinecnt = 1;
 
-		G_write_history(params->pcurv, &hist3);
+		Rast_write_history(params->pcurv, &hist3);
 	    }
 
 	    if (params->tcurv != NULL) {
@@ -464,13 +465,13 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 		    fprintf(stderr, "file [%s] not found\n", params->tcurv);
 		    return -1;
 		}
-		G_write_colors(params->tcurv, maps, &colors);
-		G_quantize_fp_map_range(params->tcurv, mapset,
+		Rast_write_colors(params->tcurv, maps, &colors);
+		Rast_quantize_fp_map_range(params->tcurv, mapset,
 					dat1, dat2, (CELL) (dat1 * MULT),
 					(CELL) (dat2 * MULT));
 
 		type = "raster";
-		G_short_history(params->tcurv, type, &hist4);
+		Rast_short_history(params->tcurv, type, &hist4);
 		if (params->elev != NULL)
 		    sprintf(hist4.edhist[0], "The elevation map is %s",
 			    params->elev);
@@ -478,7 +479,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 		sprintf(hist4.datsrc_1, "raster map %s", input);
 		hist4.edlinecnt = 1;
 
-		G_write_history(params->tcurv, &hist4);
+		Rast_write_history(params->tcurv, &hist4);
 	    }
 
 	    if (params->mcurv != NULL) {
@@ -488,14 +489,14 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 		    fprintf(stderr, "file [%s] not found\n", params->mcurv);
 		    return -1;
 		}
-		G_write_colors(params->mcurv, maps, &colors);
-		G_quantize_fp_map_range(params->mcurv, mapset,
+		Rast_write_colors(params->mcurv, maps, &colors);
+		Rast_quantize_fp_map_range(params->mcurv, mapset,
 					dat1, dat2,
 					(CELL) (dat1 * MULT),
 					(CELL) (dat2 * MULT));
 
 		type = "raster";
-		G_short_history(params->mcurv, type, &hist5);
+		Rast_short_history(params->mcurv, type, &hist5);
 		if (params->elev != NULL)
 		    sprintf(hist5.edhist[0], "The elevation map is %s",
 			    params->elev);
@@ -503,7 +504,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 		sprintf(hist5.datsrc_1, "raster map %s", input);
 		hist5.edlinecnt = 1;
 
-		G_write_history(params->mcurv, &hist5);
+		Rast_write_history(params->mcurv, &hist5);
 	    }
 	}
     }
@@ -514,7 +515,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 	    fprintf(stderr, "file [%s] not found \n", params->elev);
 	    return -1;
 	}
-	G_short_history(params->elev, "raster", &hist);
+	Rast_short_history(params->elev, "raster", &hist);
 
 	if (smooth != NULL)
 	    sprintf(hist.edhist[0], "tension=%f, smoothing=%s",
@@ -532,7 +533,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 
 	hist.edlinecnt = 5;
 
-	G_write_history(params->elev, &hist);
+	Rast_write_history(params->elev, &hist);
     }
 
     /* change region to initial region */

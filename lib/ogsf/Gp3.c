@@ -19,6 +19,7 @@
 #include <stdlib.h>
 
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/site.h>
 #include <grass/Vect.h>
 #include <grass/glocale.h>
@@ -55,13 +56,13 @@ int Gp_set_color(const char *grassname, geopoint * gp)
 	    return 0;
 	}
 
-	G_read_colors(grassname, col_map, &sc);
+	Rast_read_colors(grassname, col_map, &sc);
 
 	for (tp = gp; tp; tp = tp->next) {
 	    cat = (int)tp->fattr;
 	    color = NULL_COLOR;
 
-	    if (G_get_color(cat, &r, &g, &b, &sc)) {
+	    if (Rast_get_color(cat, &r, &g, &b, &sc)) {
 		color = (r & 0xff) | ((g & 0xff) << 8) | ((b & 0xff) << 16);
 	    }
 

@@ -68,6 +68,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 
@@ -443,28 +444,28 @@ int main(int argc, char *argv[])
     nrows = G_window_rows();
     ncols = G_window_cols();
 
-    fuel = G_allocate_cell_buf();
-    mois_1h = G_allocate_cell_buf();
-    mois_10h = G_allocate_cell_buf();
-    mois_100h = G_allocate_cell_buf();
-    mois_live = G_allocate_cell_buf();
-    vel = G_allocate_cell_buf();
-    dir = G_allocate_cell_buf();
-    slope = G_allocate_cell_buf();
-    aspect = G_allocate_cell_buf();
-    base = G_allocate_cell_buf();
-    max = G_allocate_cell_buf();
-    maxdir = G_allocate_cell_buf();
+    fuel = Rast_allocate_cell_buf();
+    mois_1h = Rast_allocate_cell_buf();
+    mois_10h = Rast_allocate_cell_buf();
+    mois_100h = Rast_allocate_cell_buf();
+    mois_live = Rast_allocate_cell_buf();
+    vel = Rast_allocate_cell_buf();
+    dir = Rast_allocate_cell_buf();
+    slope = Rast_allocate_cell_buf();
+    aspect = Rast_allocate_cell_buf();
+    base = Rast_allocate_cell_buf();
+    max = Rast_allocate_cell_buf();
+    maxdir = Rast_allocate_cell_buf();
     if (spotting) {
-	spotdist = G_allocate_cell_buf();
-	elev = G_allocate_cell_buf();
+	spotdist = Rast_allocate_cell_buf();
+	elev = Rast_allocate_cell_buf();
 	map_elev = (CELL *) G_calloc(nrows * ncols, sizeof(CELL));
     }
 
     /*  Open input cell layers for reading  */
 
     fuel_fd =
-	G_open_cell_old(parm.model->answer,
+	Rast_open_cell_old(parm.model->answer,
 			G_find_cell2(parm.model->answer, ""));
     if (fuel_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"),
@@ -472,7 +473,7 @@ int main(int argc, char *argv[])
 
     if (parm.mois_1h->answer) {
 	mois_1h_fd =
-	    G_open_cell_old(parm.mois_1h->answer,
+	    Rast_open_cell_old(parm.mois_1h->answer,
 			    G_find_cell2(parm.mois_1h->answer, ""));
 	if (mois_1h_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
@@ -480,7 +481,7 @@ int main(int argc, char *argv[])
     }
     if (parm.mois_10h->answer) {
 	mois_10h_fd =
-	    G_open_cell_old(parm.mois_10h->answer,
+	    Rast_open_cell_old(parm.mois_10h->answer,
 			    G_find_cell2(parm.mois_10h->answer, ""));
 	if (mois_10h_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
@@ -488,7 +489,7 @@ int main(int argc, char *argv[])
     }
     if (parm.mois_100h->answer) {
 	mois_100h_fd =
-	    G_open_cell_old(parm.mois_100h->answer,
+	    Rast_open_cell_old(parm.mois_100h->answer,
 			    G_find_cell2(parm.mois_100h->answer, ""));
 	if (mois_100h_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
@@ -496,7 +497,7 @@ int main(int argc, char *argv[])
     }
 
     mois_live_fd =
-	G_open_cell_old(parm.mois_live->answer,
+	Rast_open_cell_old(parm.mois_live->answer,
 			G_find_cell2(parm.mois_live->answer, ""));
     if (mois_live_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"),
@@ -504,7 +505,7 @@ int main(int argc, char *argv[])
 
     if (parm.vel->answer) {
 	vel_fd =
-	    G_open_cell_old(parm.vel->answer,
+	    Rast_open_cell_old(parm.vel->answer,
 			    G_find_cell2(parm.vel->answer, ""));
 	if (vel_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
@@ -512,7 +513,7 @@ int main(int argc, char *argv[])
     }
     if (parm.dir->answer) {
 	dir_fd =
-	    G_open_cell_old(parm.dir->answer,
+	    Rast_open_cell_old(parm.dir->answer,
 			    G_find_cell2(parm.dir->answer, ""));
 	if (dir_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
@@ -521,7 +522,7 @@ int main(int argc, char *argv[])
 
     if (parm.slope->answer) {
 	slope_fd =
-	    G_open_cell_old(parm.slope->answer,
+	    Rast_open_cell_old(parm.slope->answer,
 			    G_find_cell2(parm.slope->answer, ""));
 	if (slope_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
@@ -529,7 +530,7 @@ int main(int argc, char *argv[])
     }
     if (parm.aspect->answer) {
 	aspect_fd =
-	    G_open_cell_old(parm.aspect->answer,
+	    Rast_open_cell_old(parm.aspect->answer,
 			    G_find_cell2(parm.aspect->answer, ""));
 	if (aspect_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
@@ -538,18 +539,18 @@ int main(int argc, char *argv[])
 
     if (spotting) {
 	elev_fd =
-	    G_open_cell_old(parm.elev->answer,
+	    Rast_open_cell_old(parm.elev->answer,
 			    G_find_cell2(parm.elev->answer, ""));
 	if (elev_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
 			  parm.elev->answer);
     }
 
-    base_fd = G_open_cell_new(name_base);
-    max_fd = G_open_cell_new(name_max);
-    maxdir_fd = G_open_cell_new(name_maxdir);
+    base_fd = Rast_open_cell_new(name_base);
+    max_fd = Rast_open_cell_new(name_max);
+    maxdir_fd = Rast_open_cell_new(name_maxdir);
     if (spotting)
-	spotdist_fd = G_open_cell_new(name_spotdist);
+	spotdist_fd = Rast_open_cell_new(name_spotdist);
 
     /*compute weights, combined wo, and combined sigma */
     /*wo[model] -- simple sum of WO[class][model] by all fuel subCLASS */
@@ -625,7 +626,7 @@ int main(int argc, char *argv[])
     /*if considering spotting, read elevation map into an array */
     if (spotting)
 	for (row = 0; row < nrows; row++) {
-	    if (G_get_map_row(elev_fd, elev, row) < 0)
+	    if (Rast_get_map_row(elev_fd, elev, row) < 0)
 		G_fatal_error("cannot get map row!");
 	    for (col = 0; col < ncols; col++)
 		DATA(map_elev, row, col) = elev[col];
@@ -636,30 +637,30 @@ int main(int argc, char *argv[])
 
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
-	if (G_get_map_row(fuel_fd, fuel, row) < 0)
+	if (Rast_get_map_row(fuel_fd, fuel, row) < 0)
 	    G_fatal_error("cannot get map row: %d!", row);
 	if (parm.mois_1h->answer)
-	    if (G_get_map_row(mois_1h_fd, mois_1h, row) < 0)
+	    if (Rast_get_map_row(mois_1h_fd, mois_1h, row) < 0)
 		G_fatal_error("cannot get map row: %d!", row);
 	if (parm.mois_10h->answer)
-	    if (G_get_map_row(mois_10h_fd, mois_10h, row) < 0)
+	    if (Rast_get_map_row(mois_10h_fd, mois_10h, row) < 0)
 		G_fatal_error("cannot get map row: %d!", row);
 	if (parm.mois_100h->answer)
-	    if (G_get_map_row(mois_100h_fd, mois_100h, row) < 0)
+	    if (Rast_get_map_row(mois_100h_fd, mois_100h, row) < 0)
 		G_fatal_error("cannot get map row: %d!", row);
-	if (G_get_map_row(mois_live_fd, mois_live, row) < 0)
+	if (Rast_get_map_row(mois_live_fd, mois_live, row) < 0)
 	    G_fatal_error("cannot get map row: %d!", row);
 	if (parm.vel->answer)
-	    if (G_get_map_row(vel_fd, vel, row) < 0)
+	    if (Rast_get_map_row(vel_fd, vel, row) < 0)
 		G_fatal_error("cannot get map row: %d!", row);
 	if (parm.dir->answer)
-	    if (G_get_map_row(dir_fd, dir, row) < 0)
+	    if (Rast_get_map_row(dir_fd, dir, row) < 0)
 		G_fatal_error("cannot get map row: %d!", row);
 	if (parm.slope->answer)
-	    if (G_get_map_row(slope_fd, slope, row) < 0)
+	    if (Rast_get_map_row(slope_fd, slope, row) < 0)
 		G_fatal_error("cannot get map row: %d!", row);
 	if (parm.aspect->answer)
-	    if (G_get_map_row(aspect_fd, aspect, row) < 0)
+	    if (Rast_get_map_row(aspect_fd, aspect, row) < 0)
 		G_fatal_error("cannot get map row: %d!", row);
 
 	/*initialize cell buffers for output map layers */
@@ -855,36 +856,36 @@ int main(int argc, char *argv[])
 	    maxdir[col] = (int)Rdir;
 	    /*printf("(%d, %d)\nR0=%.2f, vel=%d, dir=%d, phiw=%.2f, s=%d, as=%d, phis=%.2f, R=%.1f, Rdir=%.0f\n", row, col, R0, vel[col], dir[col], phiw, slope[col], aspect[col], phis, R, Rdir); */
 	}
-	G_put_raster_row(base_fd, base, CELL_TYPE);
-	G_put_raster_row(max_fd, max, CELL_TYPE);
-	G_put_raster_row(maxdir_fd, maxdir, CELL_TYPE);
+	Rast_put_raster_row(base_fd, base, CELL_TYPE);
+	Rast_put_raster_row(max_fd, max, CELL_TYPE);
+	Rast_put_raster_row(maxdir_fd, maxdir, CELL_TYPE);
 	if (spotting)
-	    G_put_raster_row(spotdist_fd, spotdist, CELL_TYPE);
+	    Rast_put_raster_row(spotdist_fd, spotdist, CELL_TYPE);
     }
     G_percent(row, nrows, 2);
 
-    G_close_cell(fuel_fd);
+    Rast_close_cell(fuel_fd);
     if (parm.mois_1h->answer)
-	G_close_cell(mois_1h_fd);
+	Rast_close_cell(mois_1h_fd);
     if (parm.mois_10h->answer)
-	G_close_cell(mois_10h_fd);
+	Rast_close_cell(mois_10h_fd);
     if (parm.mois_100h->answer)
-	G_close_cell(mois_100h_fd);
-    G_close_cell(mois_live_fd);
+	Rast_close_cell(mois_100h_fd);
+    Rast_close_cell(mois_live_fd);
     if (parm.vel->answer)
-	G_close_cell(vel_fd);
+	Rast_close_cell(vel_fd);
     if (parm.dir->answer)
-	G_close_cell(dir_fd);
+	Rast_close_cell(dir_fd);
     if (parm.slope->answer)
-	G_close_cell(slope_fd);
+	Rast_close_cell(slope_fd);
     if (parm.aspect->answer)
-	G_close_cell(aspect_fd);
-    G_close_cell(base_fd);
-    G_close_cell(max_fd);
-    G_close_cell(maxdir_fd);
+	Rast_close_cell(aspect_fd);
+    Rast_close_cell(base_fd);
+    Rast_close_cell(max_fd);
+    Rast_close_cell(maxdir_fd);
     if (spotting) {
-	G_close_cell(spotdist_fd);
-	G_close_cell(spotdist_fd);
+	Rast_close_cell(spotdist_fd);
+	Rast_close_cell(spotdist_fd);
 	G_free(map_elev);
     }
 

@@ -34,6 +34,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include <grass/gmath.h>
 
@@ -44,10 +45,10 @@ static void fft_colors(const char *name)
     DCELL min, max;
 
     /* make a real component color table */
-    G_read_fp_range(name, G_mapset(), &range);
-    G_get_fp_range_min_max(&range, &min, &max);
-    G_make_grey_scale_fp_colors(&colors, min, max);
-    G_write_colors(name, G_mapset(), &colors);
+    Rast_read_fp_range(name, G_mapset(), &range);
+    Rast_get_fp_range_min_max(&range, &min, &max);
+    Rast_make_grey_scale_fp_colors(&colors, min, max);
+    Rast_write_colors(name, G_mapset(), &colors);
 }
 
 int main(int argc, char *argv[])
@@ -99,19 +100,19 @@ int main(int argc, char *argv[])
     Cellmap_orig = opt.orig->answer;
 
     /* open input raster map */
-    realfd = G_open_cell_old(Cellmap_real, "");
+    realfd = Rast_open_cell_old(Cellmap_real, "");
     if (realfd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"),
 		      Cellmap_real);
 
-    imagfd = G_open_cell_old(Cellmap_imag, "");
+    imagfd = Rast_open_cell_old(Cellmap_imag, "");
     if (imagfd < 0)	
 	G_fatal_error(_("Unable to open raster map <%s>"),
 		      Cellmap_imag);
 
     /* get and compare the original window data */
-    G_get_cellhd(Cellmap_real, "", &realhead);
-    G_get_cellhd(Cellmap_imag, "", &imaghead);
+    Rast_get_cellhd(Cellmap_real, "", &realhead);
+    Rast_get_cellhd(Cellmap_imag, "", &imaghead);
 
     if (realhead.proj   != imaghead.proj   ||
 	realhead.zone   != imaghead.zone   ||
@@ -137,18 +138,18 @@ int main(int argc, char *argv[])
     data = G_malloc(rows * cols * 2 * sizeof(double));
 
     /* allocate the space for one row of cell map data */
-    cell_real = G_allocate_d_raster_buf();
-    cell_imag = G_allocate_d_raster_buf();
+    cell_real = Rast_allocate_d_raster_buf();
+    cell_imag = Rast_allocate_d_raster_buf();
 
 #define C(i, j) ((i) * cols + (j))
 
     /* Read in cell map values */
     G_message(_("Reading raster maps..."));
     for (i = 0; i < rows; i++) {
-	if (G_get_d_raster_row(realfd, cell_real, i) < 0)
+	if (Rast_get_d_raster_row(realfd, cell_real, i) < 0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			  Cellmap_real, i);
-	if (G_get_d_raster_row(imagfd, cell_imag, i) < 0)
+	if (Rast_get_d_raster_row(imagfd, cell_imag, i) < 0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			  Cellmap_imag, i);
 	for (j = 0; j < cols; j++) {
@@ -159,17 +160,17 @@ int main(int argc, char *argv[])
     }
 
     /* close input cell maps */
-    G_close_cell(realfd);
-    G_close_cell(imagfd);
+    Rast_close_cell(realfd);
+    Rast_close_cell(imagfd);
 
     /* Read in cell map values */
     G_message(_("Masking raster maps..."));
-    maskfd = G_maskfd();
+    maskfd = Rast_maskfd();
     if (maskfd >= 0) {
-	maskbuf = G_allocate_cell_buf();
+	maskbuf = Rast_allocate_cell_buf();
 
 	for (i = 0; i < rows; i++) {
-	    G_get_map_row(maskfd, maskbuf, i);
+	    Rast_get_map_row(maskfd, maskbuf, i);
 	    for (j = 0; j < cols; j++) {
 		if (maskbuf[j] == 0) {
 		    data[C(i, j)][0] = 0.0;
@@ -179,7 +180,7 @@ int main(int argc, char *argv[])
 	    G_percent(i+1, rows, 2);
 	}
 
-	G_close_cell(maskfd);
+	Rast_close_cell(maskfd);
 	G_free(maskbuf);
     }
 
@@ -210,7 +211,7 @@ int main(int argc, char *argv[])
     fft2(1, data, totsize, cols, rows);
 
     /* open the output cell map */
-    if ((outputfd = G_open_fp_cell_new(Cellmap_orig)) < 0)
+    if ((outputfd = Rast_open_fp_cell_new(Cellmap_orig)) < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"),
 		      Cellmap_orig);
 
@@ -221,12 +222,12 @@ int main(int argc, char *argv[])
     for (i = 0; i < rows; i++) {
 	for (j = 0; j < cols; j++)
 	    cell_real[j] = data[C(i, j)][0];
-	G_put_d_raster_row(outputfd, cell_real);
+	Rast_put_d_raster_row(outputfd, cell_real);
 
 	G_percent(i+1, rows, 2);
     }
 
-    G_close_cell(outputfd);
+    Rast_close_cell(outputfd);
 
     G_free(cell_real);
     G_free(cell_imag);

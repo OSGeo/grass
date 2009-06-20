@@ -29,6 +29,7 @@
 #include <stdlib.h>		/* for the random number generation */
 #include <time.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "r.flow.h"
 #include "mem.h"
@@ -117,8 +118,8 @@ height_angle_bounding_box(int sub, double cut, int horiz, point * p, bbox b)
     }
 
     if (!(a1 == UNDEF || a2 == UNDEF) &&
-	!(G_is_d_null_value(&a1) || G_is_d_null_value(&a2)))
-	/*    if (!(G_is_d_null_value(&a1) || G_is_d_null_value(&a2))) */
+	!(Rast_is_d_null_value(&a1) || Rast_is_d_null_value(&a2)))
+	/*    if (!(Rast_is_d_null_value(&a1) || Rast_is_d_null_value(&a2))) */
     {
 	if ((d = a1 - a2) >= D_PI || d <= -D_PI) {
 	    if (a2 > D_PI)
@@ -307,7 +308,7 @@ static void calculate(void)
 
     /*    double     x, y, length, xstep, ystep, roffset, coffset; */
     double x, y, length, xstep, ystep;
-    FCELL *lg = G_allocate_f_raster_buf();
+    FCELL *lg = Rast_allocate_f_raster_buf();
     struct line_pnts *points = Vect_new_line_struct();
     struct line_cats *cats = Vect_new_cats_struct();
     int loopstep = (!parm.dsout && !parm.lgout && parm.flout) ? parm.skip : 1;
@@ -367,7 +368,7 @@ static void calculate(void)
 		while (fls.index <= parm.bound &&
 		       (pts.z != UNDEFZ && pts.theta >= 0 && pts.theta <= 360)
 		       &&
-		       /*  (!G_is_d_null_value(&pts.z) && pts.theta != UNDEF) && */
+		       /*  (!Rast_is_d_null_value(&pts.z) && pts.theta != UNDEF) && */
 		       next_point(&pts, &ads, bbs, &length));
 	    }
 
@@ -384,7 +385,7 @@ static void calculate(void)
 	}
 
 	if (parm.lgout)
-	    G_put_f_raster_row(lgfd, lg);
+	    Rast_put_f_raster_row(lgfd, lg);
     }
 
     G_free(fls.px);
@@ -395,7 +396,7 @@ static void calculate(void)
     Vect_destroy_cats_struct(cats);
 
     if (parm.lgout)
-	G_close_cell(lgfd);
+	Rast_close_cell(lgfd);
 }
 
 int main(int argc, char *argv[])
@@ -578,14 +579,14 @@ int main(int argc, char *argv[])
     }
 
     if (parm.dsout) {
-	G_short_history(parm.dsout, "raster", &history);
-	G_command_history(&history);
-	G_write_history(parm.dsout, &history);
+	Rast_short_history(parm.dsout, "raster", &history);
+	Rast_command_history(&history);
+	Rast_write_history(parm.dsout, &history);
     }
     if (parm.lgout) {
-	G_short_history(parm.lgout, "raster", &history);
-	G_command_history(&history);
-	G_write_history(parm.lgout, &history);
+	Rast_short_history(parm.lgout, "raster", &history);
+	Rast_command_history(&history);
+	Rast_write_history(parm.lgout, &history);
     }
 
     exit(EXIT_SUCCESS);

@@ -61,7 +61,7 @@ void SimpleErrorMessage(FILE * fd, const char *name, const char *mapset)
  */
 
 int G3d_readHistory(const char *name, const char *mapset, struct History *hist)
-/* This function is adapted from G_read_history */
+/* This function is adapted from Rast_read_history */
 {
     FILE *fd;
 
@@ -140,7 +140,7 @@ int G3d_readHistory(const char *name, const char *mapset, struct History *hist)
  * A diagnostic message is printed and -1 is returned if there is an error
  * writing the History file. Otherwise, 0 is returned.
  * <b>Note.</b> The <b>history</b> structure should first be initialized
- * using <i>G_short_history.</i>
+ * using <i>Rast_short_history.</i>
  *
  *  \param name
  *  \param history
@@ -148,7 +148,7 @@ int G3d_readHistory(const char *name, const char *mapset, struct History *hist)
  */
 
 int G3d_writeHistory(const char *name, struct History *hist)
-/* This function is adapted from G_write_history */
+/* This function is adapted from Rast_write_history */
 {
     FILE *fd;
     int i;

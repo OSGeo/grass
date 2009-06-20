@@ -28,8 +28,8 @@ int drawcell(View * view)
 	read_colors = view == VIEW_MAP2;
     }
     if (read_colors) {
-	G_free_colors(colors);
-	if (G_read_colors(view->cell.name, view->cell.mapset, colors) < 0)
+	Rast_free_colors(colors);
+	if (Rast_read_colors(view->cell.name, view->cell.mapset, colors) < 0)
 	    return 0;
     }
 
@@ -50,22 +50,22 @@ int drawcell(View * view)
     if (getenv("NO_DRAW"))
 	return 1;
 
-    fd = G_open_cell_old(view->cell.name, view->cell.mapset);
+    fd = Rast_open_cell_old(view->cell.name, view->cell.mapset);
     if (fd < 0)
 	return 0;
-    dcell = G_allocate_d_raster_buf();
+    dcell = Rast_allocate_d_raster_buf();
 
     sprintf(msg, "Plotting %s ...", view->cell.name);
     Menu_msg(msg);
 
     D_cell_draw_setup(top, top + nrows, left, left + ncols);
     for (row = 0; row < nrows; row++) {
-	if (G_get_d_raster_row_nomask(fd, dcell, row) < 0)
+	if (Rast_get_d_raster_row_nomask(fd, dcell, row) < 0)
 	    break;
 	D_draw_d_raster(row, dcell, colors);
     }
     D_cell_draw_end();
-    G_close_cell(fd);
+    Rast_close_cell(fd);
     G_free(dcell);
     if (colors != &VIEW_MAP1->cell.colors)
 	set_colors(&VIEW_MAP1->cell.colors);

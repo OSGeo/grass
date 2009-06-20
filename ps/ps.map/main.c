@@ -24,6 +24,7 @@
 #include <signal.h>
 #include <errno.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 #include "map_info.h"
@@ -408,11 +409,11 @@ int main(int argc, char *argv[])
 		b = 255.0 * B;
 
 		if (strncmp(catsbuf, "null", 4) == 0) {
-		    G_set_null_value_color(r, g, b, &PS.colors);
+		    Rast_set_null_value_color(r, g, b, &PS.colors);
 		    continue;
 		}
 		if (strncmp(catsbuf, "default", 7) == 0) {
-		    G_set_default_color(r, g, b, &PS.colors);
+		    Rast_set_default_color(r, g, b, &PS.colors);
 		    continue;
 		}
 		if ((count = parse_val_list(catsbuf, &val_list)) < 0) {
@@ -422,7 +423,7 @@ int main(int argc, char *argv[])
 		for (i = 0; i < count; i += 2) {
 		    dmin = val_list[i];
 		    dmax = val_list[i + 1];
-		    G_add_d_raster_color_rule(&dmin, r, g, b, &dmax, r, g, b,
+		    Rast_add_d_raster_color_rule(&dmin, r, g, b, &dmax, r, g, b,
 					      &PS.colors);
 		}
 		G_free(val_list);
@@ -709,7 +710,7 @@ int main(int argc, char *argv[])
 	if (KEY("maskcolor")) {
 	    int ret, r, g, b;
 
-	    ret = G_str_to_color(data, &r, &g, &b);
+	    ret = Rast_str_to_color(data, &r, &g, &b);
 	    if (ret == 1) {
 		PS.mask_r = r / 255.0;
 		PS.mask_g = g / 255.0;

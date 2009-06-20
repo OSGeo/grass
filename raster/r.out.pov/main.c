@@ -39,6 +39,7 @@
 #include <string.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 void writeHeader(FILE * outf);
@@ -161,7 +162,7 @@ int main(int argc, char *argv[])
 
     name = parm.map->answer;
 
-    fd = G_open_cell_old(name, "");
+    fd = Rast_open_cell_old(name, "");
     if (fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
 
@@ -173,7 +174,7 @@ int main(int argc, char *argv[])
     if (NULL == (outf = fopen(outfilename, "wb")))
 	G_fatal_error(_("Unable to open output file <%s>"), outfilename);
 
-    cell = G_allocate_cell_buf();
+    cell = Rast_allocate_cell_buf();
 
     nrows = G_window_rows();
     ncols = G_window_cols();
@@ -195,9 +196,9 @@ int main(int argc, char *argv[])
     northMost = region.north;
     southMost = region.south;
 
-    G_init_range(&range);
-    G_read_range(name, "", &range);
-    G_get_range_min_max(&range, &range_min, &range_max);
+    Rast_init_range(&range);
+    Rast_read_range(name, "", &range);
+    Rast_get_range_min_max(&range, &range_min, &range_max);
     if (range.min < 0 || range.max < 0)
 	G_warning(_("Negative elevation values in input"));
 
@@ -219,7 +220,7 @@ int main(int argc, char *argv[])
     (void)processProfiles(fd, outf);
 
     fclose(outf);
-    G_close_cell(fd);
+    Rast_close_cell(fd);
 
     exit(EXIT_SUCCESS);
 }
@@ -259,9 +260,9 @@ void processProfiles(int inputFile, FILE * outputF)
     int c, r;
     double tempFloat;
 
-    cell = G_allocate_cell_buf();
+    cell = Rast_allocate_cell_buf();
     for (r = 0; r < rowCount; r++) {
-	if (G_get_map_row(inputFile, cell, r) < 0)
+	if (Rast_get_map_row(inputFile, cell, r) < 0)
 	    exit(1);
 	/* break; */
 

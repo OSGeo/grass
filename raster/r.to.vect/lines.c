@@ -31,6 +31,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include <grass/dbmi.h>
 #include "global.h"
@@ -85,15 +86,15 @@ int extract_lines(void)
 		    t = &((CELL *) top)[col];
 		    b = &((CELL *) bottom)[col];
 
-		    if ((mc = !G_is_c_null_value(m))) {
-			tl = !G_is_c_null_value(t - 1);
-			tc = !G_is_c_null_value(t);
-			tr = !G_is_c_null_value(t + 1);
-			ml = !G_is_c_null_value(m - 1);
-			mr = !G_is_c_null_value(m + 1);
-			bl = !G_is_c_null_value(b - 1);
-			bc = !G_is_c_null_value(b);
-			br = !G_is_c_null_value(b + 1);
+		    if ((mc = !Rast_is_c_null_value(m))) {
+			tl = !Rast_is_c_null_value(t - 1);
+			tc = !Rast_is_c_null_value(t);
+			tr = !Rast_is_c_null_value(t + 1);
+			ml = !Rast_is_c_null_value(m - 1);
+			mr = !Rast_is_c_null_value(m + 1);
+			bl = !Rast_is_c_null_value(b - 1);
+			bc = !Rast_is_c_null_value(b);
+			br = !Rast_is_c_null_value(b + 1);
 			update_list(nabors());
 		    }
 		}
@@ -120,15 +121,15 @@ int extract_lines(void)
 		    t = &((FCELL *) top)[col];
 		    b = &((FCELL *) bottom)[col];
 
-		    if ((mc = !G_is_f_null_value(m))) {
-			tl = !G_is_f_null_value(t - 1);
-			tc = !G_is_f_null_value(t);
-			tr = !G_is_f_null_value(t + 1);
-			ml = !G_is_f_null_value(m - 1);
-			mr = !G_is_f_null_value(m + 1);
-			bl = !G_is_f_null_value(b - 1);
-			bc = !G_is_f_null_value(b);
-			br = !G_is_f_null_value(b + 1);
+		    if ((mc = !Rast_is_f_null_value(m))) {
+			tl = !Rast_is_f_null_value(t - 1);
+			tc = !Rast_is_f_null_value(t);
+			tr = !Rast_is_f_null_value(t + 1);
+			ml = !Rast_is_f_null_value(m - 1);
+			mr = !Rast_is_f_null_value(m + 1);
+			bl = !Rast_is_f_null_value(b - 1);
+			bc = !Rast_is_f_null_value(b);
+			br = !Rast_is_f_null_value(b + 1);
 			update_list(nabors());
 		    }
 		}
@@ -154,15 +155,15 @@ int extract_lines(void)
 		    m = &((DCELL *) middle)[col];
 		    t = &((DCELL *) top)[col];
 		    b = &((DCELL *) bottom)[col];
-		    if ((mc = !G_is_d_null_value(m))) {
-			tl = !G_is_d_null_value(t - 1);
-			tc = !G_is_d_null_value(t);
-			tr = !G_is_d_null_value(t + 1);
-			ml = !G_is_d_null_value(m - 1);
-			mr = !G_is_d_null_value(m + 1);
-			bl = !G_is_d_null_value(b - 1);
-			bc = !G_is_d_null_value(b);
-			br = !G_is_d_null_value(b + 1);
+		    if ((mc = !Rast_is_d_null_value(m))) {
+			tl = !Rast_is_d_null_value(t - 1);
+			tc = !Rast_is_d_null_value(t);
+			tr = !Rast_is_d_null_value(t + 1);
+			ml = !Rast_is_d_null_value(m - 1);
+			mr = !Rast_is_d_null_value(m + 1);
+			bl = !Rast_is_d_null_value(b - 1);
+			bc = !Rast_is_d_null_value(b);
+			br = !Rast_is_d_null_value(b + 1);
 			update_list(nabors());
 		    }
 		}

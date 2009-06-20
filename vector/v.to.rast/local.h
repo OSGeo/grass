@@ -11,10 +11,10 @@
 /* 2 * PI */
 #define M_2PI 6.283185307179586232
 
-#define ISNULL(x)   G_is_c_null_value (x)
-#define ISDNULL(x)  G_is_d_null_value (x)
-#define SETNULL(x)  G_set_c_null_value (x, 1)
-#define SETDNULL(x) G_set_d_null_value (x, 1)
+#define ISNULL(x)   Rast_is_c_null_value (x)
+#define ISDNULL(x)  Rast_is_d_null_value (x)
+#define SETNULL(x)  Rast_set_c_null_value (x, 1)
+#define SETDNULL(x) Rast_set_d_null_value (x, 1)
 
 /* cell type */
 #define USE_CELL  1

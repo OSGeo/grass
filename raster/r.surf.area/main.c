@@ -56,6 +56,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 
@@ -114,12 +115,12 @@ int main(int argc, char *argv[])
 
     /* open raster map for reading */
     {
-	if ((cellfile = G_open_cell_old(surf->answer, "")) == -1)
+	if ((cellfile = Rast_open_cell_old(surf->answer, "")) == -1)
 	    G_fatal_error(_("Unable to open raster map <%s>"), surf->answer);
     }
 
-    cell_buf[0] = (DCELL *) G_malloc(w.cols * G_raster_size(DCELL_TYPE));
-    cell_buf[1] = (DCELL *) G_malloc(w.cols * G_raster_size(DCELL_TYPE));
+    cell_buf[0] = (DCELL *) G_malloc(w.cols * Rast_raster_size(DCELL_TYPE));
+    cell_buf[1] = (DCELL *) G_malloc(w.cols * Rast_raster_size(DCELL_TYPE));
 
     fprintf(stdout, "\n");
     {
@@ -128,10 +129,10 @@ int main(int argc, char *argv[])
 	minarea = maxarea = nullarea = 0.0;
 	for (row = 0; row < w.rows - 1; row++) {
 	    if (!row) {
-		G_get_raster_row(cellfile, cell_buf[1], 0, DCELL_TYPE);
+		Rast_get_raster_row(cellfile, cell_buf[1], 0, DCELL_TYPE);
 		top = cell_buf[1];
 	    }
-	    G_get_raster_row(cellfile, cell_buf[row % 2], row + 1,
+	    Rast_get_raster_row(cellfile, cell_buf[row % 2], row + 1,
 			     DCELL_TYPE);
 	    bottom = cell_buf[row % 2];
 	    add_row_area(top, bottom, sz, &w, &minarea, &maxarea);
@@ -146,7 +147,7 @@ int main(int argc, char *argv[])
 
     G_free(cell_buf[0]);
     G_free(cell_buf[1]);
-    G_close_cell(cellfile);
+    Rast_close_cell(cellfile);
 
     {				/* report */
 	double reg_area, flat_area, estavg;
@@ -195,10 +196,10 @@ add_row_area(DCELL * top, DCELL * bottom, double sz, struct Cell_head *w,
 	 */
 
 	/* If NAN go to next or we get NAN for everything */
-	if (G_is_d_null_value(&(bottom[col + 1])) ||
-	    G_is_d_null_value(&(top[col])) ||
-	    G_is_d_null_value(&(top[col + 1])) ||
-	    G_is_d_null_value(&(bottom[col]))
+	if (Rast_is_d_null_value(&(bottom[col + 1])) ||
+	    Rast_is_d_null_value(&(top[col])) ||
+	    Rast_is_d_null_value(&(top[col + 1])) ||
+	    Rast_is_d_null_value(&(bottom[col]))
 	    )
 	    continue;
 
@@ -265,7 +266,7 @@ void add_null_area(DCELL * rast, struct Cell_head *region, double *area)
     int col;
 
     for (col = 0; col < region->cols; col++) {
-	if (G_is_d_null_value(&(rast[col]))) {
+	if (Rast_is_d_null_value(&(rast[col]))) {
 	    *area += region->ew_res * region->ns_res;
 	}
     }

@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "ps_info.h"
 #include "local_proto.h"
@@ -113,7 +114,7 @@ int draw_outline(void)
     bottom = 1;			/*   line from raster map */
     scan_length = read_next();
     k = 0;
-    raster_size = G_raster_size(map_type);
+    raster_size = Rast_raster_size(map_type);
     while (read_next()) {	/* read rest of file, one row at *//*   a time */
 	n1 = G_row_to_northing((double)row - 1., &(PS.w));
 	n2 = G_row_to_northing((double)row, &(PS.w));
@@ -123,13 +124,13 @@ int draw_outline(void)
 	    e1 = G_col_to_easting((double)col - 1., &(PS.w));
 	    e2 = G_col_to_easting((double)col, &(PS.w));
 	    e3 = G_col_to_easting((double)col + 1., &(PS.w));
-	    tl = G_incr_void_ptr(buffer[top], col * raster_size);
+	    tl = Rast_incr_void_ptr(buffer[top], col * raster_size);
 	    /* top left in window */
-	    tr = G_incr_void_ptr(buffer[top], (col + 1) * raster_size);
+	    tr = Rast_incr_void_ptr(buffer[top], (col + 1) * raster_size);
 	    /* top right in window */
-	    bl = G_incr_void_ptr(buffer[bottom], col * raster_size);
+	    bl = Rast_incr_void_ptr(buffer[bottom], col * raster_size);
 	    /* bottom left in window */
-	    br = G_incr_void_ptr(buffer[bottom], (col + 1) * raster_size);
+	    br = Rast_incr_void_ptr(buffer[bottom], (col + 1) * raster_size);
 	    /* bottom right in window */
 	    draw_boundaries();
 	    if (k == 3)
@@ -144,9 +145,9 @@ int draw_outline(void)
 
 static int draw_boundaries(void)
 {
-    if (G_raster_cmp(bl, br, map_type) != 0)
+    if (Rast_raster_cmp(bl, br, map_type) != 0)
 	draw_bot();
-    if (G_raster_cmp(tr, br, map_type) != 0)
+    if (Rast_raster_cmp(tr, br, map_type) != 0)
 	draw_rite();
 
     return 0;

@@ -14,6 +14,7 @@
 #include <string.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 struct bin
@@ -56,7 +57,7 @@ static inline double get_quantile(int n)
 
 static void get_slot_counts(int infile)
 {
-    DCELL *inbuf = G_allocate_d_raster_buf();
+    DCELL *inbuf = Rast_allocate_d_raster_buf();
     int row, col;
 
     G_message(_("Computing histogram"));
@@ -64,12 +65,12 @@ static void get_slot_counts(int infile)
     total = 0;
 
     for (row = 0; row < rows; row++) {
-	G_get_d_raster_row(infile, inbuf, row);
+	Rast_get_d_raster_row(infile, inbuf, row);
 
 	for (col = 0; col < cols; col++) {
 	    int i;
 
-	    if (G_is_d_null_value(&inbuf[col]))
+	    if (Rast_is_d_null_value(&inbuf[col]))
 		continue;
 
 	    i = get_slot(inbuf[col]);
@@ -127,19 +128,19 @@ static void initialize_bins(void)
 
 static void fill_bins(int infile)
 {
-    DCELL *inbuf = G_allocate_d_raster_buf();
+    DCELL *inbuf = Rast_allocate_d_raster_buf();
     int row, col;
 
     G_message(_("Binning data"));
 
     for (row = 0; row < rows; row++) {
-	G_get_d_raster_row(infile, inbuf, row);
+	Rast_get_d_raster_row(infile, inbuf, row);
 
 	for (col = 0; col < cols; col++) {
 	    int i, bin;
 	    struct bin *b;
 
-	    if (G_is_d_null_value(&inbuf[col]))
+	    if (Rast_is_d_null_value(&inbuf[col]))
 		continue;
 
 	    i = get_slot(inbuf[col]);
@@ -306,12 +307,12 @@ int main(int argc, char *argv[])
 	    quants[i] = 1.0 * (i + 1) / (num_quants + 1);
     }
 
-    infile = G_open_cell_old(opt.input->answer, "");
+    infile = Rast_open_cell_old(opt.input->answer, "");
     if (infile < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), opt.input->answer);
 
-    G_read_fp_range(opt.input->answer, "", &range);
-    G_get_fp_range_min_max(&range, &min, &max);
+    Rast_read_fp_range(opt.input->answer, "", &range);
+    Rast_get_fp_range_min_max(&range, &min, &max);
 
     slots = G_calloc(num_slots, sizeof(unsigned int));
     slot_bins = G_calloc(num_slots, sizeof(unsigned char));
@@ -330,7 +331,7 @@ int main(int argc, char *argv[])
     values = G_calloc(num_values, sizeof(DCELL));
     fill_bins(infile);
 
-    G_close_cell(infile);
+    Rast_close_cell(infile);
     G_free(slot_bins);
 
     sort_bins();

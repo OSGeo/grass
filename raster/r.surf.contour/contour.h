@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "flag.h"
 
 #define NODE		struct _n_o_d_e_

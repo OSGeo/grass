@@ -24,6 +24,7 @@
 #include <math.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/display.h>
 #include <grass/display_raster.h>
 #include "local.h"
@@ -178,7 +179,7 @@ int main(int argc, char *argv[])
     /* Open Raster File */
     if (NULL == (mapset = G_find_cell2(name, "")))
 	G_fatal_error(_("Raster map <%s> not found"), name);
-    if (0 > (fd = G_open_cell_old(name, mapset)))
+    if (0 > (fd = Rast_open_cell_old(name, mapset)))
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
 
     /* Set Image name */
@@ -199,7 +200,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Unable to open file <%s>"), outfile);
 
     /* Get Raster Type */
-    data_type = G_get_raster_map_type(fd);
+    data_type = Rast_get_raster_map_type(fd);
     /* Done with file */
 
     /* Output initial startup stuff */
@@ -315,7 +316,7 @@ int main(int argc, char *argv[])
     fprintf(fp, "SendScriptLine \"set ScriptPlaying 0\"\n");
     fprintf(fp, "puts \"DONE!\"\n");
 
-    G_close_cell(fd);
+    Rast_close_cell(fd);
     fclose(fp);
 
     sprintf(buf1, _("Created NVIZ script <%s>."), outfile);
@@ -442,31 +443,31 @@ int read_rast
 
 
     if (data_type == CELL_TYPE) {
-	cell = G_allocate_c_raster_buf();
-	if (G_get_c_raster_row(fd, cell, row) < 0)
+	cell = Rast_allocate_c_raster_buf();
+	if (Rast_get_c_raster_row(fd, cell, row) < 0)
 	    exit(1);
 
-	if (G_is_c_null_value(&cell[col]))
+	if (Rast_is_c_null_value(&cell[col]))
 	    camera_height = (double)9999.;
 	else
 	    camera_height = (double)cell[col];
     }
 
     if (data_type == FCELL_TYPE) {
-	fcell = G_allocate_f_raster_buf();
-	if (G_get_f_raster_row(fd, fcell, row) < 0)
+	fcell = Rast_allocate_f_raster_buf();
+	if (Rast_get_f_raster_row(fd, fcell, row) < 0)
 	    exit(1);
-	if (G_is_f_null_value(&fcell[col]))
+	if (Rast_is_f_null_value(&fcell[col]))
 	    camera_height = (double)9999.;
 	else
 	    camera_height = (double)fcell[col];
     }
 
     if (data_type == DCELL_TYPE) {
-	dcell = G_allocate_d_raster_buf();
-	if (G_get_d_raster_row(fd, dcell, row) < 0)
+	dcell = Rast_allocate_d_raster_buf();
+	if (Rast_get_d_raster_row(fd, dcell, row) < 0)
 	    exit(1);
-	if (G_is_d_null_value(&dcell[col]))
+	if (Rast_is_d_null_value(&dcell[col]))
 	    camera_height = (double)9999.;
 	else
 	    camera_height = (double)dcell[col];

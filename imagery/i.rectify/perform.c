@@ -1,3 +1,6 @@
+
+#include <grass/Rast.h>
+
 #include "global.h"
 
 static ROWCOL *rmap, *cmap, left, right;
@@ -12,10 +15,10 @@ int perform_georef(int infd, void *rast)
     int idx;
     int i;
 
-    rast_size = G_raster_size(map_type);
+    rast_size = Rast_raster_size(map_type);
 
     for (row = 0; row < matrix_rows; row++)
-	G_set_null_value(cell_buf[row], matrix_cols, map_type);
+	Rast_set_null_value(cell_buf[row], matrix_cols, map_type);
 
     curidx = 0;
     while (1) {
@@ -36,8 +39,8 @@ int perform_georef(int infd, void *rast)
 	   fprintf (stderr, "read row %d\n", row);
 	 */
 
-	if (G_get_raster_row_nomask
-	    (infd, G_incr_void_ptr(rast, rast_size), row, map_type) < 0)
+	if (Rast_get_raster_row_nomask
+	    (infd, Rast_incr_void_ptr(rast, rast_size), row, map_type) < 0)
 	    return 0;
 
 	for (i = curidx; i < matrix_rows; i++) {
@@ -51,7 +54,7 @@ int perform_georef(int infd, void *rast)
 	    cmap = col_map[idx];
 	    left = row_left[idx];
 	    right = row_right[idx];
-	    do_cell(row, G_incr_void_ptr(rast, rast_size), cell_buf[idx]);
+	    do_cell(row, Rast_incr_void_ptr(rast, rast_size), cell_buf[idx]);
 
 	    row_min[idx]++;
 	    if (row_min[idx] > row_max[idx])
@@ -70,28 +73,28 @@ static int do_cell(int row, void *in, void *out)
     void *inptr, *outptr;
 
     for (; left <= right; left++) {
-	inptr = G_incr_void_ptr(in, cmap[left] * rast_size);
-	outptr = G_incr_void_ptr(out, left * rast_size);
+	inptr = Rast_incr_void_ptr(in, cmap[left] * rast_size);
+	outptr = Rast_incr_void_ptr(out, left * rast_size);
 	if (rmap[left] < 0)
 	    continue;
 	if (rmap[left] != row)
 	    break;
-	G_raster_cpy(outptr, inptr, 1, map_type);
+	Rast_raster_cpy(outptr, inptr, 1, map_type);
     }
     for (; left <= right; right--) {
-	inptr = G_incr_void_ptr(in, cmap[right] * rast_size);
-	outptr = G_incr_void_ptr(out, right * rast_size);
+	inptr = Rast_incr_void_ptr(in, cmap[right] * rast_size);
+	outptr = Rast_incr_void_ptr(out, right * rast_size);
 	if (rmap[right] < 0)
 	    continue;
 	if (rmap[right] != row)
 	    break;
-	G_raster_cpy(outptr, inptr, 1, map_type);
+	Rast_raster_cpy(outptr, inptr, 1, map_type);
     }
     for (col = left; col <= right; col++) {
-	inptr = G_incr_void_ptr(in, cmap[col] * rast_size);
-	outptr = G_incr_void_ptr(out, col * rast_size);
+	inptr = Rast_incr_void_ptr(in, cmap[col] * rast_size);
+	outptr = Rast_incr_void_ptr(out, col * rast_size);
 	if (rmap[col] == row)
-	    G_raster_cpy(outptr, inptr, 1, map_type);
+	    Rast_raster_cpy(outptr, inptr, 1, map_type);
     }
 
     return 0;

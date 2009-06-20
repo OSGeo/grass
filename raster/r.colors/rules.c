@@ -22,6 +22,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 
@@ -56,10 +57,10 @@ int read_color_rules(FILE * fp, struct Colors *colors, DCELL min, DCELL max,
 		    (long)max);
     }
 
-    if (!G_read_color_rules(colors, min, max, read_rule, fp))
+    if (!Rast_read_color_rules(colors, min, max, read_rule, fp))
 	return 0;
 
-    G_get_d_color_range(&rulemin, &rulemax, colors);
+    Rast_get_d_color_range(&rulemin, &rulemax, colors);
     G_debug(3, "rulemin=%.1f rulemax=%.1f", rulemin, rulemax);
 
     if (rulemin > min || rulemax < max)
@@ -116,7 +117,7 @@ static int read_rule(void *closure, DCELL min, DCELL max,
 	}
 
 	ret =
-	    G_parse_color_rule(min, max, buf, val, r, g, b, norm, nval, dflt);
+	    Rast_parse_color_rule(min, max, buf, val, r, g, b, norm, nval, dflt);
 	if (ret == 0)
 	    return 1;
 
@@ -128,7 +129,7 @@ static int read_rule(void *closure, DCELL min, DCELL max,
 
 static void badrule(int tty, const char *s, int code)
 {
-    const char *err = G_parse_color_rule_error(code);
+    const char *err = Rast_parse_color_rule_error(code);
 
     if (tty)
 	G_warning(_("bad rule (%s); rule not added"), err);

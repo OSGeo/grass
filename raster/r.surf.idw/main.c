@@ -35,6 +35,7 @@ Further modifications tracked by CVS
 #include <stdlib.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "main.h"
 
@@ -142,29 +143,29 @@ int main(int argc, char **argv)
     lookup_and_function_ptrs(nrows, ncols);
 
     /*  allocate buffers for row i/o                                */
-    cell = G_allocate_cell_buf();
-    if ((maskfd = G_maskfd()) >= 0 || error_flag) {	/* apply mask to output */
+    cell = Rast_allocate_cell_buf();
+    if ((maskfd = Rast_maskfd()) >= 0 || error_flag) {	/* apply mask to output */
 	if (error_flag)		/* use input as mask when -e option chosen */
-	    maskfd = G_open_cell_old(input, "");
-	mask = G_allocate_cell_buf();
+	    maskfd = Rast_open_cell_old(input, "");
+	mask = Rast_allocate_cell_buf();
     }
     else
 	mask = NULL;
 
     /*  Open input cell layer for reading                           */
-    fd = G_open_cell_old(input, "");
+    fd = Rast_open_cell_old(input, "");
     if (fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), input);
 
     /* Store input data in array-indexed doubly-linked lists and close input file */
     rowlist = row_lists(nrows, ncols, &datarows, &n, fd, cell);
-    G_close_cell(fd);
+    Rast_close_cell(fd);
     if (npoints > n)
 	npoints = n;
 
 
     /* open cell layer for writing output              */
-    fd = G_open_cell_new(output);
+    fd = Rast_open_cell_new(output);
     if (fd < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), output);
 
@@ -177,11 +178,11 @@ int main(int argc, char **argv)
     G_free(collook);
     if (ll)
 	free_dist_params();
-    G_close_cell(fd);
+    Rast_close_cell(fd);
     /* writing history file */
-    G_short_history(output, "raster", &history);
-    G_command_history(&history);
-    G_write_history(output, &history);
+    Rast_short_history(output, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(output, &history);
 
     G_done_msg(" ");
     
@@ -259,7 +260,7 @@ interpolate(MELEMENT rowlist[], SHORT nrows, SHORT ncols, SHORT datarows,
 	G_percent(row+1, nrows, 2);
 
 	/* if mask occurs, read current row of the mask */
-	if (mask && G_get_map_row(maskfd, mask, row) < 0)
+	if (mask && Rast_get_map_row(maskfd, mask, row) < 0)
 	    G_fatal_error(_("Cannot read row"));
 
 	/* prepare search array for next row of interpolations */
@@ -300,7 +301,7 @@ interpolate(MELEMENT rowlist[], SHORT nrows, SHORT ncols, SHORT datarows,
 	    }
 	}			/* end of loop over columns */
 
-	G_put_raster_row(out_fd, cell, CELL_TYPE);
+	Rast_put_raster_row(out_fd, cell, CELL_TYPE);
 
 	/* advance current row pointer if necessary */
 	if (current_row->start->y == row && current_row != lastrow)
@@ -708,7 +709,7 @@ MELEMENT *row_lists(
 
     for (row = 0, Rptr = rowlist; row < rows; row++) {
 	G_percent(row+1, rows, 2);
-	if (G_get_map_row_nomask(fd, cell, row) < 0)
+	if (Rast_get_map_row_nomask(fd, cell, row) < 0)
 	    G_fatal_error(_("Unable to read raster map row %d"),
 			  row);
 

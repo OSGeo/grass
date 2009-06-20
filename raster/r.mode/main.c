@@ -24,6 +24,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "local_proto.h"
 #include <grass/glocale.h>
 
@@ -81,7 +82,7 @@ int main(int argc, char *argv[])
     covermap = parm.cover->answer;
     outmap = parm.output->answer;
 
-    if (G_read_cats(covermap, "", &cover_cats) < 0) {
+    if (Rast_read_cats(covermap, "", &cover_cats) < 0) {
 	G_fatal_error(_("%s: Unable to read category labels"), covermap);
     }
 
@@ -104,7 +105,7 @@ int main(int argc, char *argv[])
 	    max = value;
 	}
 	if (basecat != catb) {
-	    write_reclass(reclass, catb, catc, G_get_cat(catc, &cover_cats));
+	    write_reclass(reclass, catb, catc, Rast_get_cat(catc, &cover_cats));
 	    catb = basecat;
 	    catc = covercat;
 	    max = value;
@@ -117,7 +118,7 @@ int main(int argc, char *argv[])
     if (first) {
 	catb = catc = 0;
     }
-    write_reclass(reclass, catb, catc, G_get_cat(catc, &cover_cats));
+    write_reclass(reclass, catb, catc, Rast_get_cat(catc, &cover_cats));
 
     pclose(stats);
     pclose(reclass);

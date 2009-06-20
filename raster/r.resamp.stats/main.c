@@ -16,6 +16,7 @@
 #include <string.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include <grass/stats.h>
 
@@ -119,7 +120,7 @@ static void resamp_unweighted(void)
 	G_set_window(&src_w);
 
 	for (i = 0; i < count; i++)
-	    G_get_d_raster_row(infile, bufs[i], maprow0 + i);
+	    Rast_get_d_raster_row(infile, bufs[i], maprow0 + i);
 
 	for (col = 0; col < dst_w.cols; col++) {
 	    int mapcol0 = col_map[col + 0];
@@ -133,8 +134,8 @@ static void resamp_unweighted(void)
 		    DCELL *src = &bufs[i - maprow0][j];
 		    DCELL *dst = &values[n++];
 
-		    if (G_is_d_null_value(src)) {
-			G_set_d_null_value(dst, 1);
+		    if (Rast_is_d_null_value(src)) {
+			Rast_set_d_null_value(dst, 1);
 			null = 1;
 		    }
 		    else
@@ -142,13 +143,13 @@ static void resamp_unweighted(void)
 		}
 
 	    if (null && nulls)
-		G_set_d_null_value(&outbuf[col], 1);
+		Rast_set_d_null_value(&outbuf[col], 1);
 	    else
 		(*method_fn) (&outbuf[col], values, n, closure);
 	}
 
 	G_set_window(&dst_w);
-	G_put_d_raster_row(outfile, outbuf);
+	Rast_put_d_raster_row(outfile, outbuf);
     }
 }
 
@@ -192,7 +193,7 @@ static void resamp_weighted(void)
 	G_set_window(&src_w);
 
 	for (i = 0; i < count; i++)
-	    G_get_d_raster_row(infile, bufs[i], maprow0 + i);
+	    Rast_get_d_raster_row(infile, bufs[i], maprow0 + i);
 
 	for (col = 0; col < dst_w.cols; col++) {
 	    double x0 = col_map[col + 0];
@@ -216,8 +217,8 @@ static void resamp_weighted(void)
 		    DCELL *src = &bufs[i - maprow0][j];
 		    DCELL *dst = &values[n++][0];
 
-		    if (G_is_d_null_value(src)) {
-			G_set_d_null_value(&dst[0], 1);
+		    if (Rast_is_d_null_value(src)) {
+			Rast_set_d_null_value(&dst[0], 1);
 			null = 1;
 		    }
 		    else {
@@ -228,13 +229,13 @@ static void resamp_weighted(void)
 	    }
 
 	    if (null && nulls)
-		G_set_d_null_value(&outbuf[col], 1);
+		Rast_set_d_null_value(&outbuf[col], 1);
 	    else
 		(*method_fn) (&outbuf[col], values, n, closure);
 	}
 
 	G_set_window(&dst_w);
-	G_put_d_raster_row(outfile, outbuf);
+	Rast_put_d_raster_row(outfile, outbuf);
     }
 }
 
@@ -307,7 +308,7 @@ int main(int argc, char *argv[])
     G_get_set_window(&dst_w);
 
     /* set window to old map */
-    G_get_cellhd(parm.rastin->answer, "", &src_w);
+    Rast_get_cellhd(parm.rastin->answer, "", &src_w);
 
     /* enlarge source window */
     {
@@ -332,10 +333,10 @@ int main(int argc, char *argv[])
     /* allocate buffers for input rows */
     bufs = G_malloc(row_scale * sizeof(DCELL *));
     for (row = 0; row < row_scale; row++)
-	bufs[row] = G_allocate_d_raster_buf();
+	bufs[row] = Rast_allocate_d_raster_buf();
 
     /* open old map */
-    infile = G_open_cell_old(parm.rastin->answer, "");
+    infile = Rast_open_cell_old(parm.rastin->answer, "");
     if (infile < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"),
 		      parm.rastin->answer);
@@ -344,10 +345,10 @@ int main(int argc, char *argv[])
     G_set_window(&dst_w);
 
     /* allocate output buffer */
-    outbuf = G_allocate_d_raster_buf();
+    outbuf = Rast_allocate_d_raster_buf();
 
     /* open new map */
-    outfile = G_open_raster_new(parm.rastout->answer, DCELL_TYPE);
+    outfile = Rast_open_raster_new(parm.rastout->answer, DCELL_TYPE);
     if (outfile < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"),
 		      parm.rastout->answer);
@@ -362,30 +363,30 @@ int main(int argc, char *argv[])
 
     G_percent(dst_w.rows, dst_w.rows, 2);
 
-    G_close_cell(infile);
-    G_close_cell(outfile);
+    Rast_close_cell(infile);
+    Rast_close_cell(outfile);
 
     /* record map metadata/history info */
     sprintf(title, "Aggregate resample by %s", parm.method->answer);
-    G_put_cell_title(parm.rastout->answer, title);
+    Rast_put_cell_title(parm.rastout->answer, title);
 
-    G_short_history(parm.rastout->answer, "raster", &history);
+    Rast_short_history(parm.rastout->answer, "raster", &history);
     strncpy(history.datsrc_1, parm.rastin->answer, RECORD_LEN);
     history.datsrc_1[RECORD_LEN - 1] = '\0';	/* strncpy() doesn't null terminate if maxfill */
     G_format_resolution(src_w.ns_res, buf_nsres, src_w.proj);
     G_format_resolution(src_w.ew_res, buf_ewres, src_w.proj);
     sprintf(history.datsrc_2, "Source map NS res: %s   EW res: %s", buf_nsres,
 	    buf_ewres);
-    G_command_history(&history);
-    G_write_history(parm.rastout->answer, &history);
+    Rast_command_history(&history);
+    Rast_write_history(parm.rastout->answer, &history);
 
     /* copy color table from source map */
     if (strcmp(parm.method->answer, "sum") != 0) {
-	if (G_read_colors(parm.rastin->answer, "", &colors) < 0)
+	if (Rast_read_colors(parm.rastin->answer, "", &colors) < 0)
 	    G_fatal_error(_("Unable to read color table for %s"),
 			  parm.rastin->answer);
-	G_mark_colors_as_fp(&colors);
-	if (G_write_colors(parm.rastout->answer, G_mapset(), &colors) < 0)
+	Rast_mark_colors_as_fp(&colors);
+	if (Rast_write_colors(parm.rastout->answer, G_mapset(), &colors) < 0)
 	    G_fatal_error(_("Unable to write color table for %s"),
 			  parm.rastout->answer);
     }

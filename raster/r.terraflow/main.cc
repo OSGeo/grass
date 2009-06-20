@@ -31,6 +31,7 @@
 
 extern "C" {
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 }
 
@@ -188,7 +189,7 @@ void check_header(char* cellname) {
   }
   /* read cell header */
   struct Cell_head cell_hd;
-  if (G_get_cellhd (cellname, mapset, &cell_hd) < 0)
+  if (Rast_get_cellhd (cellname, mapset, &cell_hd) < 0)
     G_fatal_error(_("Cannot read header of [%s]"), cellname);
   
   /* check compatibility with module region */
@@ -207,7 +208,7 @@ void check_header(char* cellname) {
 
   /* check type of input elevation raster and check if precision is lost */
     RASTER_MAP_TYPE data_type;
-	data_type = G_raster_map_type(opt->elev_grid, mapset);
+	data_type = Rast_raster_map_type(opt->elev_grid, mapset);
 #ifdef ELEV_SHORT
 	G_verbose_message(_("Elevation stored as SHORT (%dB)"),
 		sizeof(elevation_type));
@@ -335,7 +336,7 @@ setFlowAccuColorTable(char* cellname) {
   if (mapset == NULL) {
     G_fatal_error (_("Raster map <%s> not found"), cellname);
   }
-  if (G_read_range(cellname, mapset, &r) == -1) {
+  if (Rast_read_range(cellname, mapset, &r) == -1) {
     G_fatal_error(_("cannot read range"));
   }
   /*fprintf(stderr, "%s range is: min=%d, max=%d\n", cellname, r.min, r.max);*/
@@ -348,19 +349,19 @@ setFlowAccuColorTable(char* cellname) {
   v[5] = r.max;
   
 
-  G_init_colors(&colors);
+  Rast_init_colors(&colors);
  
-  G_add_color_rule(v[0], 255,255,255,  v[1],     255,255,0, &colors);
-  G_add_color_rule(v[1], 255,255,0,    v[2],       0,255,255, &colors);
-  G_add_color_rule(v[2],   0,255,255,  v[3],       0,127,255, &colors);
-  G_add_color_rule(v[3],   0,127,255,  v[4],       0,0,255,   &colors);
-  G_add_color_rule(v[4],   0,0,255,  (CELL)v[5],   0,0,0,     &colors);
+  Rast_add_color_rule(v[0], 255,255,255,  v[1],     255,255,0, &colors);
+  Rast_add_color_rule(v[1], 255,255,0,    v[2],       0,255,255, &colors);
+  Rast_add_color_rule(v[2],   0,255,255,  v[3],       0,127,255, &colors);
+  Rast_add_color_rule(v[3],   0,127,255,  v[4],       0,0,255,   &colors);
+  Rast_add_color_rule(v[4],   0,0,255,  (CELL)v[5],   0,0,0,     &colors);
 
  
-  if (G_write_colors(cellname, mapset, &colors) == -1) {
+  if (Rast_write_colors(cellname, mapset, &colors) == -1) {
     G_fatal_error(_("cannot write colors"));
   }
-  G_free_colors(&colors);
+  Rast_free_colors(&colors);
 }
 
 
@@ -375,17 +376,17 @@ setSinkWatershedColorTable(char* cellname) {
   if (mapset == NULL) {
     G_fatal_error (_("Raster map <%s> not found"), cellname);
   }
-  if (G_read_range(cellname, mapset, &r) == -1) {
+  if (Rast_read_range(cellname, mapset, &r) == -1) {
     G_fatal_error(_("cannot read range"));
   }
 
-  G_init_colors(&colors);
-  G_make_random_colors(&colors, 1, r.max);
+  Rast_init_colors(&colors);
+  Rast_make_random_colors(&colors, 1, r.max);
 
-  if (G_write_colors(cellname, mapset, &colors) == -1) {
+  if (Rast_write_colors(cellname, mapset, &colors) == -1) {
     G_fatal_error(_("cannot write colors"));
   }
-  G_free_colors(&colors);
+  Rast_free_colors(&colors);
 }
 
 

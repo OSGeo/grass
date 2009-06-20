@@ -21,7 +21,7 @@ DCELL apply_filter(FILTER * filter, DCELL ** input)
 
 	for (r = 0; r < size; r++)
 	    for (c = 0; c < size; c++) {
-		if (G_is_d_null_value(&input[r][c]))
+		if (Rast_is_d_null_value(&input[r][c]))
 		    continue;
 		v += input[r][c] * matrix[r][c];
 		divisor += filter->dmatrix[r][c];
@@ -31,13 +31,13 @@ DCELL apply_filter(FILTER * filter, DCELL ** input)
 	if (have_result)
 	    v /= divisor;
 	else
-	    G_set_d_null_value(&v, 1);
+	    Rast_set_d_null_value(&v, 1);
     }
     else {
 	for (r = 0; r < size; r++)
 	    for (c = 0; c < size; c++) {
-		if (G_is_d_null_value(&input[r][c])) {
-		    G_set_d_null_value(&v, 1);
+		if (Rast_is_d_null_value(&input[r][c])) {
+		    Rast_set_d_null_value(&v, 1);
 		    return v;
 		}
 		v += input[r][c] * matrix[r][c];

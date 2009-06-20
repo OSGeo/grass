@@ -1,4 +1,5 @@
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "ncb.h"
 
 /*
@@ -19,7 +20,7 @@ int allocate_bufs(void)
     ncb.buf = (DCELL **) G_malloc(ncb.nsize * sizeof(DCELL *));
     for (i = 0; i < ncb.nsize; i++) {
 	ncb.buf[i] = (DCELL *) G_malloc(bufsize);
-	G_set_d_null_value(ncb.buf[i], G_window_cols() + 2 * ncb.nsize);
+	Rast_set_d_null_value(ncb.buf[i], G_window_cols() + 2 * ncb.nsize);
     }
 
     return 0;

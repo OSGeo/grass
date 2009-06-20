@@ -9,7 +9,7 @@ CELL **read_cell(const char *name, const char *mapset)
     int fd;
     int row;
 
-    fd = G_open_cell_old(name, mapset);
+    fd = Rast_open_cell_old(name, mapset);
     if (fd < 0)
 	G_fatal_error(_("unable to open map <%s> in <%s>"),
 		      name, mapset);
@@ -20,12 +20,12 @@ CELL **read_cell(const char *name, const char *mapset)
     for (row = 0; row < nrows; row++) {
 	idx[row] = &buf[row * ncols];
 
-	if (G_get_map_row(fd, idx[row], row) < 0)
+	if (Rast_get_map_row(fd, idx[row], row) < 0)
 	    G_fatal_error(_("unable to read map <%s> in <%s>"),
 			  name, mapset);
     }
 
-    G_close_cell(fd);
+    Rast_close_cell(fd);
 
     return idx;
 }

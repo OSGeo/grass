@@ -108,7 +108,7 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
 
-    G_suppress_masking();	/* need to do this for target location */
+    Rast_suppress_masking();	/* need to do this for target location */
 
     interrupt_char = G_intr_char();
     tempfile1 = G_tempfile();
@@ -185,7 +185,7 @@ int main(int argc, char *argv[])
 	    quit(0);
 	/* display this file in "map1" */
     }
-    while (G_get_cellhd(name, mapset, &cellhd) < 0);
+    while (Rast_get_cellhd(name, mapset, &cellhd) < 0);
     G_adjust_window_to_box(&cellhd, &VIEW_MAP1->cell.head, VIEW_MAP1->nrows,
 			   VIEW_MAP1->ncols);
     Configure_view(VIEW_MAP1, name, mapset, cellhd.ns_res, cellhd.ew_res);

@@ -3,6 +3,7 @@
 #include <string.h>
 #include <time.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/display.h>
 #include <grass/display_raster.h>
 #include "cmd_line.h"
@@ -116,7 +117,7 @@ void display_init(void)
 
     /*figure scaling factors of a file cell to a screen unit */
     R_open_driver();
-    G_make_grey_scale_colors(&colors, 0, 59);
+    Rast_make_grey_scale_colors(&colors, 0, 59);
     width = r - l;
     height = 0.9 * (b - t) - 1;
     if (width * nrows > height * ncols) {

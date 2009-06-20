@@ -1,4 +1,5 @@
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/Vect.h>
 #include "local_proto.h"
 
@@ -23,20 +24,20 @@ int make_support(struct rr_state *theState, int percent, double percentage)
 	inraster = theState->inraster;
 	nulls = theState->nulls;
     }
-    if (G_read_raster_cats(inraster, "", &cats) >= 0) {
+    if (Rast_read_raster_cats(inraster, "", &cats) >= 0) {
 	sprintf(title, "Random points on <%s>", inraster);
-	G_set_cats_title(title, &cats);
+	Rast_set_cats_title(title, &cats);
 	if (theState->use_nulls)
-	    G_set_raster_cat(nulls.data.v,
+	    Rast_set_raster_cat(nulls.data.v,
 			     nulls.data.v,
 			     "Points with NULL values in original",
 			     &cats, nulls.type);
-	G_write_raster_cats(theState->outraster, &cats);
+	Rast_write_raster_cats(theState->outraster, &cats);
     }
 
     /* write history for output raster */
-    if (G_read_history(theState->outraster, G_mapset(), &hist) >= 0) {
-	G_short_history(theState->outraster, "raster", &hist);
+    if (Rast_read_history(theState->outraster, G_mapset(), &hist) >= 0) {
+	Rast_short_history(theState->outraster, "raster", &hist);
 	sprintf(hist.datsrc_1, "Based on map <%s>", inraster);
 	if (percent)
 	    sprintf(hist.datsrc_2,
@@ -46,7 +47,7 @@ int make_support(struct rr_state *theState, int percent, double percentage)
 	    sprintf(hist.datsrc_2,
 		    "%ld random points on the base map <%s>",
 		    theState->nRand, theState->inraster);
-	G_write_history(theState->outraster, &hist);
+	Rast_write_history(theState->outraster, &hist);
 
     }
 
@@ -60,13 +61,13 @@ int make_support(struct rr_state *theState, int percent, double percentage)
     }
 
     /* set colors for output raster */
-    if (G_read_colors(inraster, "", &clr) >= 0) {
+    if (Rast_read_colors(inraster, "", &clr) >= 0) {
 	if (theState->use_nulls) {
-	    G_add_raster_color_rule(nulls.data.v, 127, 127, 127,
+	    Rast_add_raster_color_rule(nulls.data.v, 127, 127, 127,
 				    nulls.data.v, 127, 127, 127, &clr,
 				    nulls.type);
 	}
-	G_write_colors(theState->outraster, G_mapset(), &clr);
+	Rast_write_colors(theState->outraster, G_mapset(), &clr);
     }
 
     return 0;

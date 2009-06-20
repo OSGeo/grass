@@ -29,9 +29,9 @@ int make_support_files(char *output, char *units)
     CELL cat;
     char label[128];
 
-    G_init_cats((CELL) 1, "Distance Zones", &pcats);
+    Rast_init_cats((CELL) 1, "Distance Zones", &pcats);
 
-    G_set_cat(cat = 1, "distances calculated from these locations", &pcats);
+    Rast_set_cat(cat = 1, "distances calculated from these locations", &pcats);
     for (cat = 0; cat < ndist; cat++) {
 	if (cat == 0)
 	    sprintf(label, "0-%s %s", distances[cat].label, units);
@@ -50,11 +50,11 @@ int make_support_files(char *output, char *units)
 		    distances[cat].label, units);
 	}
 
-	G_set_cat(cat + ZONE_INCR, label, &pcats);
+	Rast_set_cat(cat + ZONE_INCR, label, &pcats);
     }
 
-    G_write_cats(output, &pcats);
-    G_free_cats(&pcats);
+    Rast_write_cats(output, &pcats);
+    Rast_free_cats(&pcats);
 
     return 0;
 }

@@ -61,8 +61,8 @@ int Init_graphics(void)
     VIEW_MAP2_ZOOM = makeview(2.5, 47.5, 50.0, 100.0);
     VIEW_MENU = makeview(0.0, 2.5, 0.0, 100.0);
 
-    G_init_colors(&VIEW_MAP1->cell.colors);
-    G_init_colors(&VIEW_MAP2->cell.colors);
+    Rast_init_colors(&VIEW_MAP1->cell.colors);
+    Rast_init_colors(&VIEW_MAP2->cell.colors);
 
     return 0;
 }

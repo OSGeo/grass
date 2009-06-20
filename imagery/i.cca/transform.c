@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 
@@ -14,13 +15,13 @@ transform(int datafds[MX], int outfds[MX], int rows, int cols,
 
     /* allocate row buffers for each band */
     for (i = 1; i <= bands; i++)
-	if ((rowbufs[i] = G_allocate_cell_buf()) == NULL)
+	if ((rowbufs[i] = Rast_allocate_cell_buf()) == NULL)
 	    G_fatal_error(_("Unable to allocate cell buffers."));
 
     for (i = 0; i < rows; i++) {
 	/* get one row of data */
 	for (j = 1; j <= bands; j++)
-	    if (G_get_map_row(datafds[j], rowbufs[j], i) < 0)
+	    if (Rast_get_map_row(datafds[j], rowbufs[j], i) < 0)
 		G_fatal_error(_("Error reading cell map during transform."));
 
 	/* transform each cell in the row */
@@ -42,7 +43,7 @@ transform(int datafds[MX], int outfds[MX], int rows, int cols,
 
 	/* output the row of data */
 	for (j = 1; j <= bands; j++)
-	    if (G_put_raster_row(outfds[j], rowbufs[j], CELL_TYPE) < 0)
+	    if (Rast_put_raster_row(outfds[j], rowbufs[j], CELL_TYPE) < 0)
 		G_fatal_error(_("Error writing cell map during transform."));
     }
     for (i = 1; i <= bands; i++)

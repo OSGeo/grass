@@ -73,7 +73,7 @@ int get_stats(void)
 	for (nl = 0; nl < nlayers; nl++) {
 	    if (sscanf(tokens[i], "%d", &Gstats[ns].cats[nl]) != 1) {
 		if (tokens[i][0] == '*')
-		    G_set_c_null_value(&Gstats[ns].cats[nl], 1);
+		    Rast_set_c_null_value(&Gstats[ns].cats[nl], 1);
 		else
 		    die();
 	    }

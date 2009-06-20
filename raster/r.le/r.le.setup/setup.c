@@ -122,8 +122,8 @@ void set_map(char *name, char *name1, char *name2, struct Cell_head window,
      */
 
     colors_old = (struct Colors *)G_malloc(1 * sizeof(struct Colors));
-    G_init_colors(colors_old);
-    G_read_colors(name, G_mapset(), colors_old);
+    Rast_init_colors(colors_old);
+    Rast_read_colors(name, G_mapset(), colors_old);
 
     G_system("clear");
     paint_map(name, name1, name2);
@@ -238,8 +238,8 @@ void set_map(char *name, char *name1, char *name2, struct Cell_head window,
     /* reset the colortable and exit */
 
     else if (method == 7) {
-	G_write_colors(name, G_mapset(), colors_old);
-	G_free_colors(colors_old);
+	Rast_write_colors(name, G_mapset(), colors_old);
+	Rast_free_colors(colors_old);
 	/*     R_close_driver(); */
 	G_system("d.frame -e");
 	exit(0);
@@ -624,7 +624,7 @@ static void save_rgn(char *name, char *tempfile, FILE * tmp, int *x, int *y,
     fprintf(tmp, "E\n");
     fclose(tmp);
     G_get_set_window(&wind);
-    G_put_cellhd(name, &wind);
+    Rast_put_cellhd(name, &wind);
 
     /* make a GRASS raster map from the
        region boundary pts, using the
@@ -642,9 +642,9 @@ static void save_rgn(char *name, char *tempfile, FILE * tmp, int *x, int *y,
     /* set the color table for the regions
        file to color wave */
 
-    G_init_colors(&colors);
-    G_make_wave_colors(&colors, 1, class);
-    G_write_colors(name, G_mapset(), &colors);
+    Rast_init_colors(&colors);
+    Rast_make_wave_colors(&colors, 1, class);
+    Rast_write_colors(name, G_mapset(), &colors);
 
     /* overlay the region file on the
        screen */
@@ -711,8 +711,8 @@ static void change_color(char *name, char *name1, char *name2)
     double etmp;
 
 
-    G_read_range(name, G_mapset(), &range);
-    G_get_range_min_max(&range, &min, &max);
+    Rast_read_range(name, G_mapset(), &range);
+    Rast_get_range_min_max(&range, &min, &max);
     G_system("clear");
 
   again:
@@ -738,39 +738,39 @@ static void change_color(char *name, char *name1, char *name2)
     while (d > 10 || d < 1);
 
     if (d == 1) {
-	G_make_aspect_colors(&colors, min, max);
-	G_write_colors(name, G_mapset(), &colors);
+	Rast_make_aspect_colors(&colors, min, max);
+	Rast_write_colors(name, G_mapset(), &colors);
     }
     else if (d == 2) {
-	G_make_ramp_colors(&colors, min, max);
-	G_write_colors(name, G_mapset(), &colors);
+	Rast_make_ramp_colors(&colors, min, max);
+	Rast_write_colors(name, G_mapset(), &colors);
     }
     else if (d == 3) {
-	G_make_wave_colors(&colors, min, max);
-	G_write_colors(name, G_mapset(), &colors);
+	Rast_make_wave_colors(&colors, min, max);
+	Rast_write_colors(name, G_mapset(), &colors);
     }
     else if (d == 4) {
-	G_make_grey_scale_colors(&colors, min, max);
-	G_write_colors(name, G_mapset(), &colors);
+	Rast_make_grey_scale_colors(&colors, min, max);
+	Rast_write_colors(name, G_mapset(), &colors);
     }
     else if (d == 5) {
-	G_make_rainbow_colors(&colors, min, max);
-	G_write_colors(name, G_mapset(), &colors);
+	Rast_make_rainbow_colors(&colors, min, max);
+	Rast_write_colors(name, G_mapset(), &colors);
     }
     else if (d == 6) {
-	G_make_random_colors(&colors, min, max);
-	G_write_colors(name, G_mapset(), &colors);
+	Rast_make_random_colors(&colors, min, max);
+	Rast_write_colors(name, G_mapset(), &colors);
     }
     else if (d == 7) {
-	G_make_ryg_colors(&colors, min, max);
-	G_write_colors(name, G_mapset(), &colors);
+	Rast_make_ryg_colors(&colors, min, max);
+	Rast_write_colors(name, G_mapset(), &colors);
     }
     else if (d == 8) {
-	G_make_gyr_colors(&colors, min, max);
-	G_write_colors(name, G_mapset(), &colors);
+	Rast_make_gyr_colors(&colors, min, max);
+	Rast_write_colors(name, G_mapset(), &colors);
     }
     else if (d == 9) {
-	G_write_colors(name, G_mapset(), colors_old);
+	Rast_write_colors(name, G_mapset(), colors_old);
     }
     else if (d == 10) {
 	return;
@@ -802,8 +802,8 @@ static void change_color(char *name, char *name1, char *name2)
     else if (d == 2)
 	return;
     else if (d == 3) {
-	G_write_colors(name, G_mapset(), colors_old);
-	G_free_colors(colors_old);
+	Rast_write_colors(name, G_mapset(), colors_old);
+	Rast_free_colors(colors_old);
     }
     else if (d == 4)
 	*colors_old = colors;

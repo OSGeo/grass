@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 
@@ -20,44 +21,44 @@ int check_stats(const char *name)
     int cats_ok;
     int max;
 
-    data_type = G_raster_map_type(name, "");
+    data_type = Rast_raster_map_type(name, "");
 
     G_message(_("\n  Updating statistics for [%s]"), name);
     if (do_histogram(name) < 0)
 	return 0;
 
-    if (G_read_histogram(name, "", &histogram) <= 0)
+    if (Rast_read_histogram(name, "", &histogram) <= 0)
 	return 0;
 
     /* Init histogram range */
     if (data_type == CELL_TYPE)
-	G_init_range(&range);
+	Rast_init_range(&range);
     else
-	G_init_fp_range(&fprange);
+	Rast_init_fp_range(&fprange);
 
     /* Update histogram range */
-    i = G_get_histogram_num(&histogram);
+    i = Rast_get_histogram_num(&histogram);
     while (i >= 0) {
 	if (data_type == CELL_TYPE)
-	    G_update_range(G_get_histogram_cat(i--, &histogram), &range);
+	    Rast_update_range(Rast_get_histogram_cat(i--, &histogram), &range);
 	else
-	    G_update_fp_range((DCELL) G_get_histogram_cat(i--, &histogram),
+	    Rast_update_fp_range((DCELL) Rast_get_histogram_cat(i--, &histogram),
 			      &fprange);
     }
 
     /* Write histogram range */
     if (data_type == CELL_TYPE)
-	G_write_range(name, &range);
+	Rast_write_range(name, &range);
     else
-	G_write_fp_range(name, &fprange);
+	Rast_write_fp_range(name, &fprange);
 
     /* Get category status and max */
-    cats_ok = (G_read_cats(name, "", &cats) >= 0);
+    cats_ok = (Rast_read_cats(name, "", &cats) >= 0);
     max = (data_type == CELL_TYPE ? range.max : fprange.max);
 
     /* Further category checks */
     if (!cats_ok)
-	G_init_cats(max, "", &cats);
+	Rast_init_cats(max, "", &cats);
     else if (cats.num != max) {
 	cats.num = max;
 	cats_ok = 0;
@@ -67,11 +68,11 @@ int check_stats(const char *name)
     if (!cats_ok) {
 	G_message(_("   Updating the number of categories for "
 		    "[%s]\n\n"), name);
-	G_write_cats(name, &cats);
+	Rast_write_cats(name, &cats);
     }
 
-    G_free_histogram(&histogram);
-    G_free_cats(&cats);
+    Rast_free_histogram(&histogram);
+    Rast_free_cats(&cats);
 
     return 0;
 }

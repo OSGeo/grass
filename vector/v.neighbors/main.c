@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/Vect.h>
 #include <grass/glocale.h>
 
@@ -79,13 +80,13 @@ int main(int argc, char *argv[])
     nrows = G_window_rows();
     ncols = G_window_cols();
 
-    result = G_allocate_raster_buf(CELL_TYPE);
+    result = Rast_allocate_raster_buf(CELL_TYPE);
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
     List = Vect_new_list();
 
     /*open the new cellfile */
-    out_fd = G_open_raster_new(out_opt->answer, CELL_TYPE);
+    out_fd = Rast_open_raster_new(out_opt->answer, CELL_TYPE);
     if (out_fd < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), out_opt->answer);
 
@@ -101,7 +102,7 @@ int main(int argc, char *argv[])
 	box.N = y + radius;
 	box.S = y - radius;
 
-	G_set_null_value(result, ncols, CELL_TYPE);
+	Rast_set_null_value(result, ncols, CELL_TYPE);
 	rp = result;
 
 	for (col = 0; col < ncols; col++) {
@@ -133,17 +134,17 @@ int main(int argc, char *argv[])
 
 	    if (count > 0) {
 		value = count;
-		G_set_raster_value_d(rp, value, CELL_TYPE);
+		Rast_set_raster_value_d(rp, value, CELL_TYPE);
 	    }
-	    rp = G_incr_void_ptr(rp, G_raster_size(CELL_TYPE));
+	    rp = Rast_incr_void_ptr(rp, Rast_raster_size(CELL_TYPE));
 	}
 
-	G_put_raster_row(out_fd, result, CELL_TYPE);
+	Rast_put_raster_row(out_fd, result, CELL_TYPE);
     }
     G_percent(row, nrows, 1);
 
     Vect_close(&In);
-    G_close_cell(out_fd);
+    Rast_close_cell(out_fd);
 
     exit(EXIT_SUCCESS);
 }

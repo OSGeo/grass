@@ -35,16 +35,16 @@ int write_output_map(char *output, int offset)
     register MAPTYPE *ptr;
     int k;
 
-    fd_out = G_open_cell_new(output);
+    fd_out = Rast_open_cell_new(output);
     if (fd_out < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), output);
 
     if (offset) {
-	fd_in = G_open_cell_old(output, G_mapset());
+	fd_in = Rast_open_cell_old(output, G_mapset());
 	if (fd_in < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), output);
     }
-    cell = G_allocate_cell_buf();
+    cell = Rast_allocate_cell_buf();
     G_message(_("Writing output raster map <%s>..."), output);
 
     ptr = map;
@@ -57,7 +57,7 @@ int write_output_map(char *output, int offset)
 		*cell++ = (CELL) * ptr++;
 	}
 	else {
-	    if (G_get_map_row_nomask(fd_in, cell, row) < 0)
+	    if (Rast_get_map_row_nomask(fd_in, cell, row) < 0)
 		G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			      output, row);
 
@@ -72,9 +72,9 @@ int write_output_map(char *output, int offset)
 	/* set 0 to NULL */
 	for (k = 0; k < window.cols; k++)
 	    if (cell[k] == 0)
-		G_set_null_value(&cell[k], 1, CELL_TYPE);
+		Rast_set_null_value(&cell[k], 1, CELL_TYPE);
 
-	if (G_put_raster_row(fd_out, cell, CELL_TYPE) < 0)
+	if (Rast_put_raster_row(fd_out, cell, CELL_TYPE) < 0)
 	    G_fatal_error(_("Failed writing raster map <%s> row %d"), output,
 			  row);
     }
@@ -83,9 +83,9 @@ int write_output_map(char *output, int offset)
     G_free(cell);
 
     if (offset)
-	G_close_cell(fd_in);
+	Rast_close_cell(fd_in);
 
-    G_close_cell(fd_out);
+    Rast_close_cell(fd_out);
 
     return 0;
 }

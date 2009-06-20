@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 
@@ -66,11 +67,11 @@ int main(int argc, char *argv[])
 
     strcpy(name, INPUT);
 
-    in_fd = G_open_cell_old(name, "");
+    in_fd = Rast_open_cell_old(name, "");
     if (in_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), INPUT);
 
-    out_fd = G_open_cell_new(OUTPUT);
+    out_fd = Rast_open_cell_new(OUTPUT);
     if (out_fd < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), OUTPUT);
 
@@ -78,8 +79,8 @@ int main(int argc, char *argv[])
 
     G_debug(1, "Creating support files...");
 
-    G_close_cell(in_fd);
-    G_close_cell(out_fd);
+    Rast_close_cell(in_fd);
+    Rast_close_cell(out_fd);
 
 
     /* build title */
@@ -88,11 +89,11 @@ int main(int argc, char *argv[])
     else
 	sprintf(title, "clump of <%s@%s>", name, G_mapset());
     
-    G_put_cell_title(OUTPUT, title);
-    G_read_range(OUTPUT, G_mapset(), &range);
-    G_get_range_min_max(&range, &min, &max);
-    G_make_random_colors(&colr, min, max);
-    G_write_colors(OUTPUT, G_mapset(), &colr);
+    Rast_put_cell_title(OUTPUT, title);
+    Rast_read_range(OUTPUT, G_mapset(), &range);
+    Rast_get_range_min_max(&range, &min, &max);
+    Rast_make_random_colors(&colr, min, max);
+    Rast_write_colors(OUTPUT, G_mapset(), &colr);
 
     G_done_msg(_("%d clumps."), range.max);
 

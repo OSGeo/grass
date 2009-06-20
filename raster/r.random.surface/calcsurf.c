@@ -1,6 +1,7 @@
 /* calcsurf.c                                                           */
 #include <stdlib.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "ransurf.h"
 #include "local_proto.h"
 
@@ -108,7 +109,7 @@ void CalcSurface(void)
     }
     else {
 	for (Row = 0; Row < Rs; Row++) {
-	    G_get_map_row_nomask(FDM, CellBuffer, Row);
+	    Rast_get_map_row_nomask(FDM, CellBuffer, Row);
 	    if (ODD(Row)) {
 		for (Col = Cs - 1; Col >= 0; Col--) {
 		    if (CellBuffer[Col] == 0)

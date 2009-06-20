@@ -21,6 +21,7 @@
 #define __LOCAL_PROTO_H__
 
 #include <grass/gis.h>
+#include <grass/Rast.h>
 
 /* stats.c */
 int get_stats(const char *, const char *, struct Cell_stats *);

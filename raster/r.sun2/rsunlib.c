@@ -32,6 +32,7 @@ email: hofierka@geomodel.sk,marcel.suri@jrc.it,suri@geomodel.sk
 #include <stdio.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
 #include "sunradstruct.h"

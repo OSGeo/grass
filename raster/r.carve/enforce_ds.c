@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "enforce.h"
 
@@ -73,7 +74,7 @@ int enforce_downstream(int infd, int outfd,
     /* allocate and clear memory for entire raster */
     rbuf =
 	G_calloc(G_window_rows() * G_window_cols(),
-		 G_raster_size(parm->raster_type));
+		 Rast_raster_size(parm->raster_type));
 
     /* first read whole elevation file into buf */
     read_raster(rbuf, infd, parm->raster_type);
@@ -315,7 +316,7 @@ static double lowest_cell_near_point(void *data, const RASTER_MAP_TYPE rtype,
     rastrows = G_window_rows();
     rastcols = G_window_cols();
 
-    G_set_d_null_value(&min, 1);
+    Rast_set_d_null_value(&min, 1);
 
     /* kludge - fix for lat_lon */
     rowoff = rad / wind.ns_res;
@@ -335,7 +336,7 @@ static double lowest_cell_near_point(void *data, const RASTER_MAP_TYPE rtype,
 	{
 	    CELL *cbuf = data;
 
-	    if (!(G_is_c_null_value(&cbuf[row1 * rastcols + col1])))
+	    if (!(Rast_is_c_null_value(&cbuf[row1 * rastcols + col1])))
 		min = cbuf[row1 * rastcols + col1];
 	}
 	break;
@@ -343,7 +344,7 @@ static double lowest_cell_near_point(void *data, const RASTER_MAP_TYPE rtype,
 	{
 	    FCELL *fbuf = data;
 
-	    if (!(G_is_f_null_value(&fbuf[row1 * rastcols + col1])))
+	    if (!(Rast_is_f_null_value(&fbuf[row1 * rastcols + col1])))
 		min = fbuf[row1 * rastcols + col1];
 	}
 	break;
@@ -351,7 +352,7 @@ static double lowest_cell_near_point(void *data, const RASTER_MAP_TYPE rtype,
 	{
 	    DCELL *dbuf = data;
 
-	    if (!(G_is_d_null_value(&dbuf[row1 * rastcols + col1])))
+	    if (!(Rast_is_d_null_value(&dbuf[row1 * rastcols + col1])))
 		min = dbuf[row1 * rastcols + col1];
 	}
 	break;
@@ -370,12 +371,12 @@ static double lowest_cell_near_point(void *data, const RASTER_MAP_TYPE rtype,
 		    {
 			CELL *cbuf = data;
 
-			if (G_is_d_null_value(&min)) {
-			    if (!(G_is_c_null_value(&cbuf[r * rastcols + c])))
+			if (Rast_is_d_null_value(&min)) {
+			    if (!(Rast_is_c_null_value(&cbuf[r * rastcols + c])))
 				min = cbuf[r * rastcols + c];
 			}
 			else {
-			    if (!(G_is_c_null_value(&cbuf[r * rastcols + c])))
+			    if (!(Rast_is_c_null_value(&cbuf[r * rastcols + c])))
 				if (cbuf[r * rastcols + c] < min)
 				    min = cbuf[r * rastcols + c];
 			}
@@ -385,12 +386,12 @@ static double lowest_cell_near_point(void *data, const RASTER_MAP_TYPE rtype,
 		    {
 			FCELL *fbuf = data;
 
-			if (G_is_d_null_value(&min)) {
-			    if (!(G_is_f_null_value(&fbuf[r * rastcols + c])))
+			if (Rast_is_d_null_value(&min)) {
+			    if (!(Rast_is_f_null_value(&fbuf[r * rastcols + c])))
 				min = fbuf[r * rastcols + c];
 			}
 			else {
-			    if (!(G_is_f_null_value(&fbuf[r * rastcols + c])))
+			    if (!(Rast_is_f_null_value(&fbuf[r * rastcols + c])))
 				if (fbuf[r * rastcols + c] < min)
 				    min = fbuf[r * rastcols + c];
 			}
@@ -400,12 +401,12 @@ static double lowest_cell_near_point(void *data, const RASTER_MAP_TYPE rtype,
 		    {
 			DCELL *dbuf = data;
 
-			if (G_is_d_null_value(&min)) {
-			    if (!(G_is_d_null_value(&dbuf[r * rastcols + c])))
+			if (Rast_is_d_null_value(&min)) {
+			    if (!(Rast_is_d_null_value(&dbuf[r * rastcols + c])))
 				min = dbuf[r * rastcols + c];
 			}
 			else {
-			    if (!(G_is_d_null_value(&dbuf[r * rastcols + c])))
+			    if (!(Rast_is_d_null_value(&dbuf[r * rastcols + c])))
 				if (dbuf[r * rastcols + c] < min)
 				    min = dbuf[r * rastcols + c];
 			}

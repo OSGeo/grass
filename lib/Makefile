@@ -6,6 +6,7 @@ include $(MODULE_TOPDIR)/include/Make/Vars.make
 SUBDIRS = \
 	datetime \
 	gis \
+	raster \
 	gmath \
 	linkm \
 	driver \

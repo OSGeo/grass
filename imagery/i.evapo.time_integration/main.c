@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 #define MAXFILES 400
@@ -160,18 +161,18 @@ int main(int argc, char *argv[])
 	}
 	if (!ok)
 	    continue;
-	infd[nfiles] = G_open_cell_old(name, mapset);
+	infd[nfiles] = Rast_open_cell_old(name, mapset);
 	if (infd[nfiles] < 0) {
 	    ok = 0;
 	    continue;
 	}
 	/* Allocate input buffer */
-	in_data_type[nfiles] = G_raster_map_type(name, mapset);
-	if ((infd[nfiles] = G_open_cell_old(name, mapset)) < 0)
+	in_data_type[nfiles] = Rast_raster_map_type(name, mapset);
+	if ((infd[nfiles] = Rast_open_cell_old(name, mapset)) < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), name);
-	if ((G_get_cellhd(name, mapset, &cellhd)) < 0)
+	if ((Rast_get_cellhd(name, mapset, &cellhd)) < 0)
 	    G_fatal_error(_("Unable to read file header of raster map <%s>"), name);
-	inrast[nfiles] = G_allocate_raster_buf(in_data_type[nfiles]);
+	inrast[nfiles] = Rast_allocate_raster_buf(in_data_type[nfiles]);
 	nfiles++;
     }
     nfiles--;
@@ -193,18 +194,18 @@ int main(int argc, char *argv[])
 	}
 	if (!ok)
 	    continue;
-	infd1[nfiles1] = G_open_cell_old(name1, mapset);
+	infd1[nfiles1] = Rast_open_cell_old(name1, mapset);
 	if (infd1[nfiles1] < 0) {
 	    ok = 0;
 	    continue;
 	}
 	/* Allocate input buffer */
-	in_data_type1[nfiles1] = G_raster_map_type(name1, mapset);
-	if ((infd1[nfiles1] = G_open_cell_old(name1, mapset)) < 0)
+	in_data_type1[nfiles1] = Rast_raster_map_type(name1, mapset);
+	if ((infd1[nfiles1] = Rast_open_cell_old(name1, mapset)) < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), name1);
-	if ((G_get_cellhd(name1, mapset, &cellhd)) < 0)
+	if ((Rast_get_cellhd(name1, mapset, &cellhd)) < 0)
 	    G_fatal_error(_("Unable to read file header of raster map <%s>"), name1);
-	inrast1[nfiles1] = G_allocate_raster_buf(in_data_type1[nfiles1]);
+	inrast1[nfiles1] = Rast_allocate_raster_buf(in_data_type1[nfiles1]);
 	nfiles1++;
     }
     nfiles1--;
@@ -232,20 +233,20 @@ int main(int argc, char *argv[])
 	}
 	if (!ok)
 	    continue;
-	infd2[nfiles2] = G_open_cell_old(name2, mapset);
+	infd2[nfiles2] = Rast_open_cell_old(name2, mapset);
 	if (infd2[nfiles2] < 0) {
 	    ok = 0;
 	    continue;
 	}
 	/* Allocate input buffer */
-	in_data_type2[nfiles2] = G_raster_map_type(name2, mapset);
-	if ((infd2[nfiles2] = G_open_cell_old(name2, mapset)) < 0) {
+	in_data_type2[nfiles2] = Rast_raster_map_type(name2, mapset);
+	if ((infd2[nfiles2] = Rast_open_cell_old(name2, mapset)) < 0) {
 	    G_fatal_error(_("Unable to open raster map <%s>"), name2);
 	}
-	if ((G_get_cellhd(name2, mapset, &cellhd)) < 0) {
+	if ((Rast_get_cellhd(name2, mapset, &cellhd)) < 0) {
 	    G_fatal_error(_("Unable to read file header of raster map <%s>"), name2);
 	}
-	inrast2[nfiles2] = G_allocate_d_raster_buf();
+	inrast2[nfiles2] = Rast_allocate_d_raster_buf();
 	nfiles2++;
     }
     nfiles2--;
@@ -255,11 +256,11 @@ int main(int argc, char *argv[])
     /* Allocate output buffer, use input map data_type */
     nrows = G_window_rows();
     ncols = G_window_cols();
-    outrast = G_allocate_raster_buf(out_data_type);
+    outrast = Rast_allocate_raster_buf(out_data_type);
 
    
     /* Create New raster files */
-    if ((outfd = G_open_raster_new(result, 1)) < 0)
+    if ((outfd = Rast_open_raster_new(result, 1)) < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), result);
 
     /*******************/
@@ -278,15 +279,15 @@ int main(int argc, char *argv[])
 
 	/* read input map */
 	for (i = 1; i <= nfiles; i++) 
-	    if ((G_get_d_raster_row(infd[i], inrast[i], row)) <	0) 
+	    if ((Rast_get_d_raster_row(infd[i], inrast[i], row)) <	0) 
 		G_fatal_error(_("Unable to read raster map <%s> row %d"), name, row);
 	
 	for (i = 1; i <= nfiles1; i++) 
-	    if ((G_get_d_raster_row(infd1[i], inrast1[i], row)) < 0) 
+	    if ((Rast_get_d_raster_row(infd1[i], inrast1[i], row)) < 0) 
 		G_fatal_error(_("Unable to read raster map <%s> row %d"), name1, row);
 
 	for (i = 1; i <= nfiles2; i++) 
-	    if ((G_get_d_raster_row (infd2[i], inrast2[i], row)) < 0) 
+	    if ((Rast_get_d_raster_row (infd2[i], inrast2[i], row)) < 0) 
 		G_fatal_error(_("Unable to read raster map <%s> row %d"), name2, row);
 
 	/*process the data */
@@ -296,14 +297,14 @@ int main(int argc, char *argv[])
             int	d_null=0;
 	    for (i = 1; i <= nfiles; i++) 
             {
-		    if (G_is_d_null_value(&((DCELL *) inrast[i])[col]))
+		    if (Rast_is_d_null_value(&((DCELL *) inrast[i])[col]))
 		    	d_null=1;
 		    else
 	                d[i] = (double)((DCELL *) inrast[i])[col];
 	    }
 	    for (i = 1; i <= nfiles1; i++) 
             {
-		    if (G_is_d_null_value(&((DCELL *) inrast1[i])[col]))
+		    if (Rast_is_d_null_value(&((DCELL *) inrast1[i])[col]))
 			d1_null=1;
 		    else
 	                d1[i] = ((DCELL *) inrast1[i])[col];
@@ -316,12 +317,12 @@ int main(int argc, char *argv[])
 	    for (i = 1; i <= nfiles1; i++) 
             {
 		if ( d_null==1 || d1_null==1 )
-			G_set_d_null_value(&outrast[col],1);	
+			Rast_set_d_null_value(&outrast[col],1);	
 		else
 		{
 			doy[i] = d1[i] - etodoy+1;
-			if (G_is_d_null_value(&d2[(int)doy[i]]) || d2[(int)doy[i]]==0 )
-				G_set_d_null_value(&outrast[col],1);
+			if (Rast_is_d_null_value(&d2[(int)doy[i]]) || d2[(int)doy[i]]==0 )
+				Rast_set_d_null_value(&outrast[col],1);
 			else
 				d_ETrF[i] = d[i] / d2[(int)doy[i]];
 		} 
@@ -384,7 +385,7 @@ int main(int argc, char *argv[])
                 else
                 {
 			if (DOYbeforeETa[i]==0 || DOYbeforeETa[i]==0 ) 	
-                            G_set_d_null_value(&outrast[col],1);
+                            Rast_set_d_null_value(&outrast[col],1);
 			else 
                         {
 				bfr = (int)DOYbeforeETa[i];
@@ -400,7 +401,7 @@ int main(int argc, char *argv[])
 	    for (i = 1; i <= nfiles1; i++)
             {
 		if(d_null==1 || d_null==1)
-			G_set_d_null_value(&outrast[col],1);
+			Rast_set_d_null_value(&outrast[col],1);
 		else
                 {	
 			d_out += d_ETrF[i] * sum[i];
@@ -408,28 +409,28 @@ int main(int argc, char *argv[])
 		}	
 	    }
 	}
-	if (G_put_raster_row(outfd, outrast, out_data_type) < 0)
+	if (Rast_put_raster_row(outfd, outrast, out_data_type) < 0)
 	    G_fatal_error(_("Unable to write to raster map<%s>"), result);
     }
 
     for (i = 1; i <= nfiles; i++) {
 	G_free(inrast[i]);
-	G_close_cell(infd[i]);
+	Rast_close_cell(infd[i]);
 	G_free(inrast1[i]);
-	G_close_cell(infd1[i]);
+	Rast_close_cell(infd1[i]);
 	G_free(inrast2[i]);
-	G_close_cell(infd2[i]);
+	Rast_close_cell(infd2[i]);
     }
     G_free(outrast);
-    G_close_cell(outfd);
+    Rast_close_cell(outfd);
 
     /* Color table from 0.0 to 10.0 */
-    G_init_colors(&colors);
-    G_add_color_rule(0.0, 0, 0, 0, 10.0, 255, 255, 255, &colors);
+    Rast_init_colors(&colors);
+    Rast_add_color_rule(0.0, 0, 0, 0, 10.0, 255, 255, 255, &colors);
     /* Metadata */
-    G_short_history(result, "raster", &history);
-    G_command_history(&history);
-    G_write_history(result, &history);
+    Rast_short_history(result, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(result, &history);
 
     exit(EXIT_SUCCESS);
 }

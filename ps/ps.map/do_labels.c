@@ -238,7 +238,7 @@ int do_label(FILE * fd, int font_override)
 	}
 
 	if (FIELD("color")) {
-	    ret = G_str_to_color(value, &r, &g, &b);
+	    ret = Rast_str_to_color(value, &r, &g, &b);
 	    if (ret == 1)
 		set_color(&color, r, g, b);
 	    else
@@ -248,7 +248,7 @@ int do_label(FILE * fd, int font_override)
 	}
 
 	if (FIELD("hcolor")) {
-	    ret = G_str_to_color(value, &r, &g, &b);
+	    ret = Rast_str_to_color(value, &r, &g, &b);
 	    if (ret == 1)
 		set_color(&hcolor, r, g, b);
 	    else if (ret == 2)
@@ -279,7 +279,7 @@ int do_label(FILE * fd, int font_override)
 	    /*
 	       if(strncmp(value, "none", 4)==0) opaque = 0;
 	     */
-	    ret = G_str_to_color(value, &r, &g, &b);
+	    ret = Rast_str_to_color(value, &r, &g, &b);
 	    if (ret == 1)
 		set_color(&background, r, g, b);
 	    else if (ret == 2)
@@ -289,7 +289,7 @@ int do_label(FILE * fd, int font_override)
 	}
 
 	if (FIELD("border")) {
-	    ret = G_str_to_color(value, &r, &g, &b);
+	    ret = Rast_str_to_color(value, &r, &g, &b);
 	    if (ret == 1)
 		set_color(&border, r, g, b);
 	    else if (ret == 2)

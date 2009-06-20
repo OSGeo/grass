@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/G3d.h>
 #include <grass/glocale.h>
 #include "globalDefs.h"
@@ -41,7 +42,7 @@ double get_raster_value_as_double(int MapType, void *ptr, double nullval)
     double val = nullval;
 
     if (MapType == CELL_TYPE) {
-	if (G_is_null_value(ptr, MapType)) {
+	if (Rast_is_null_value(ptr, MapType)) {
 	    val = nullval;
 	}
 	else {
@@ -49,7 +50,7 @@ double get_raster_value_as_double(int MapType, void *ptr, double nullval)
 	}
     }
     if (MapType == FCELL_TYPE) {
-	if (G_is_null_value(ptr, MapType)) {
+	if (Rast_is_null_value(ptr, MapType)) {
 	    val = nullval;
 	}
 	else {
@@ -57,7 +58,7 @@ double get_raster_value_as_double(int MapType, void *ptr, double nullval)
 	}
     }
     if (MapType == DCELL_TYPE) {
-	if (G_is_null_value(ptr, MapType)) {
+	if (Rast_is_null_value(ptr, MapType)) {
 	    val = nullval;
 	}
 	else {
@@ -116,8 +117,8 @@ void write_vtk_points(input_maps * in, FILE * fp, G3D_Region region, int dp,
     cols = region.cols;
     depths = region.depths;
 
-    rast_top = G_allocate_raster_buf(in->topMapType);
-    rast_bottom = G_allocate_raster_buf(in->bottomMapType);
+    rast_top = Rast_allocate_raster_buf(in->topMapType);
+    rast_bottom = Rast_allocate_raster_buf(in->bottomMapType);
 
     G_debug(3, _("write_vtk_points: Writing point coordinates"));
 
@@ -127,20 +128,20 @@ void write_vtk_points(input_maps * in, FILE * fp, G3D_Region region, int dp,
 	    G_percent(status, (rows * depths - 1), 10);
 	    status++;
 
-	    if (!G_get_raster_row(in->top, rast_top, y, in->topMapType))
+	    if (!Rast_get_raster_row(in->top, rast_top, y, in->topMapType))
 		fatal_error(_("Could not get top raster row \n"), in);
 
-	    if (!G_get_raster_row
+	    if (!Rast_get_raster_row
 		(in->bottom, rast_bottom, y, in->bottomMapType))
 		fatal_error(_("Could not get bottom raster row \n"), in);
 
 	    for (x = 0, ptr_top = rast_top, ptr_bottom = rast_bottom;
 		 x < cols;
 		 x++, ptr_top =
-		 G_incr_void_ptr(ptr_top, G_raster_size(in->topMapType)),
+		 Rast_incr_void_ptr(ptr_top, Rast_raster_size(in->topMapType)),
 		 ptr_bottom =
-		 G_incr_void_ptr(ptr_bottom,
-				 G_raster_size(in->bottomMapType))) {
+		 Rast_incr_void_ptr(ptr_bottom,
+				 Rast_raster_size(in->bottomMapType))) {
 
 		/*Get the values */
 		topval =

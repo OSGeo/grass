@@ -1,4 +1,5 @@
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/stats.h>
 
 void c_intr(DCELL * result, DCELL * values, int n, const void *closure)
@@ -8,8 +9,8 @@ void c_intr(DCELL * result, DCELL * values, int n, const void *closure)
     int diff;
     int i;
 
-    if (G_is_d_null_value(&values[n / 2])) {
-	G_set_d_null_value(result, 1);
+    if (Rast_is_d_null_value(&values[n / 2])) {
+	Rast_set_d_null_value(result, 1);
 	return;
     }
 
@@ -18,7 +19,7 @@ void c_intr(DCELL * result, DCELL * values, int n, const void *closure)
     diff = 0;
 
     for (i = 0; i < n; i++) {
-	if (G_is_d_null_value(&values[i]))
+	if (Rast_is_d_null_value(&values[i]))
 	    continue;
 
 	count++;

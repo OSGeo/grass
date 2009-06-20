@@ -24,6 +24,7 @@
 #include <math.h>
 #include <grass/display.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/display_raster.h>
 #include <grass/glocale.h>
 
@@ -96,7 +97,7 @@ int main(int argc, char **argv)
 	exit(EXIT_FAILURE);
 
     map_name = opt1->answer;
-    fp = G_raster_map_is_fp(map_name, "");
+    fp = Rast_raster_map_is_fp(map_name, "");
 
     if (opt2->answer != NULL) {
 	new_colr = D_translate_color(opt2->answer);
@@ -128,9 +129,9 @@ int main(int argc, char **argv)
     }
 
     /* Make sure map is available */
-    if (G_read_colors(map_name, "", &colors) == -1)
+    if (Rast_read_colors(map_name, "", &colors) == -1)
 	G_fatal_error(_("Color file for <%s> not available"), map_name);
-    if (G_read_fp_range(map_name, "", &fp_range) == -1)
+    if (Rast_read_fp_range(map_name, "", &fp_range) == -1)
 	G_fatal_error(_("Range file for <%s> not available"), map_name);
     if (R_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
@@ -138,8 +139,8 @@ int main(int argc, char **argv)
     D_setup_unity(0);
     D_get_src(&t, &b, &l, &r);
 
-    G_get_fp_range_min_max(&fp_range, &dmin, &dmax);
-    if (G_is_d_null_value(&dmin) || G_is_d_null_value(&dmax))
+    Rast_get_fp_range_min_max(&fp_range, &dmin, &dmax);
+    if (Rast_is_d_null_value(&dmin) || Rast_is_d_null_value(&dmax))
 	G_fatal_error("Data range is empty");
     cats_num = (int)dmax - (int)dmin + 1;
     if (lines <= 0 && cols <= 0) {
@@ -173,7 +174,7 @@ int main(int argc, char **argv)
 
     white = D_translate_color("white");
     black = D_translate_color("black");
-    G_set_c_null_value(&atcat, 1);
+    Rast_set_c_null_value(&atcat, 1);
     if (!fp) {
 	for (atcol = 0; atcol < cols; atcol++) {
 	    cur_dot_row = t;
@@ -250,7 +251,7 @@ int main(int argc, char **argv)
 	fprintf(stdout, "dots_per_line: %d\n", dots_per_line);
 	for (r = 0; r < dots_per_line - 6; r++) {
 	    if (r <= 4)
-		G_set_d_null_value(&dval, 1);
+		Rast_set_d_null_value(&dval, 1);
 	    else
 		dval =
 		    dmin + (r - 1) * (dmax - dmin) / (dots_per_line - 6 - 5);

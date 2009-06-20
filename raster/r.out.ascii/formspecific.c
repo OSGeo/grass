@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 
 /* write the GRASS ASCII heading */
 int writeGRASSheader(FILE * fp)
@@ -32,17 +33,17 @@ int write_GRASS(int fd,
     void *ptr, *raster;
     char cell_buf[300];
 
-    raster = G_allocate_raster_buf(out_type);
+    raster = Rast_allocate_raster_buf(out_type);
 
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
 
-	if (G_get_raster_row(fd, raster, row, out_type) < 0)
+	if (Rast_get_raster_row(fd, raster, row, out_type) < 0)
 	    return (row);
 
 	for (col = 0, ptr = raster; col < ncols; col++,
-	     ptr = G_incr_void_ptr(ptr, G_raster_size(out_type))) {
-	    if (!G_is_null_value(ptr, out_type)) {
+	     ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(out_type))) {
+	    if (!Rast_is_null_value(ptr, out_type)) {
 		if (out_type == CELL_TYPE)
 		    fprintf(fp, "%d", *((CELL *) ptr));
 
@@ -85,29 +86,29 @@ int write_MODFLOW(int fd,
     int row, col, colcnt;
     void *ptr, *raster;
 
-    raster = G_allocate_raster_buf(out_type);
+    raster = Rast_allocate_raster_buf(out_type);
 
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
 
-	if (G_get_raster_row(fd, raster, row, out_type) < 0)
+	if (Rast_get_raster_row(fd, raster, row, out_type) < 0)
 	    return (row);
 
 	colcnt = 0;
 	for (col = 0, ptr = raster; col < ncols; col++,
-	     ptr = G_incr_void_ptr(ptr, G_raster_size(out_type))) {
+	     ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(out_type))) {
 	    if (out_type == CELL_TYPE) {
-		if (G_is_null_value(ptr, out_type))
+		if (Rast_is_null_value(ptr, out_type))
 		    *((CELL *) ptr) = 0;
 		fprintf(fp, " %d", *((CELL *) ptr));
 	    }
 	    else if (out_type == FCELL_TYPE) {
-		if (G_is_null_value(ptr, out_type))
+		if (Rast_is_null_value(ptr, out_type))
 		    *((FCELL *) ptr) = 0;
 		fprintf(fp, "%*.*e", dp + 6, dp - 1, *((FCELL *) ptr));
 	    }
 	    else if (out_type == DCELL_TYPE) {
-		if (G_is_null_value(ptr, out_type))
+		if (Rast_is_null_value(ptr, out_type))
 		    *((DCELL *) ptr) = 0;
 		fprintf(fp, "%*.*e", dp + 6, dp - 1, *((DCELL *) ptr));
 	    }
@@ -133,7 +134,7 @@ int writeGSheader(FILE * fp, const char *name)
     struct FPRange range;
     DCELL Z_MIN, Z_MAX;
 
-    if (G_read_fp_range(name, "", &range) < 0)
+    if (Rast_read_fp_range(name, "", &range) < 0)
 	return 1;
 
     fprintf(fp, "DSAA \n");
@@ -154,7 +155,7 @@ int writeGSheader(FILE * fp, const char *name)
 		      G_projection() == PROJECTION_LL ? -1 : 0);
     fprintf(fp, "%s %s\n", fromc, toc);
 
-    G_get_fp_range_min_max(&range, &Z_MIN, &Z_MAX);
+    Rast_get_fp_range_min_max(&range, &Z_MIN, &Z_MAX);
     fprintf(fp, "%f %f\n", (double)Z_MIN, (double)Z_MAX);
 
     return 0;
@@ -171,19 +172,19 @@ int write_GSGRID(int fd,
     void *ptr, *raster;
     char cell_buf[300];
 
-    raster = G_allocate_raster_buf(out_type);
+    raster = Rast_allocate_raster_buf(out_type);
 
     for (row = nrows - 1; row >= 0; row--) {
 	G_percent((row - nrows) * (-1), nrows, 2);
 
-	if (G_get_raster_row(fd, raster, row, out_type) < 0)
+	if (Rast_get_raster_row(fd, raster, row, out_type) < 0)
 	    return (row);
 
 	colcnt = 0;
 	for (col = 0, ptr = raster; col < ncols; col++,
-	     ptr = G_incr_void_ptr(ptr, G_raster_size(out_type))) {
+	     ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(out_type))) {
 	    colcnt += 1;
-	    if (!G_is_null_value(ptr, out_type)) {
+	    if (!Rast_is_null_value(ptr, out_type)) {
 		if (out_type == CELL_TYPE)
 		    fprintf(fp, "%d", *((CELL *) ptr));
 		else if (out_type == FCELL_TYPE) {

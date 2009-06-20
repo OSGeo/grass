@@ -1,4 +1,5 @@
 #include <grass/gis.h>
+#include <grass/Rast.h>
 int get_item(FILE * fd, int *type, long *cat, double **x, double **y,
 	     int *count, struct Categories *labels)
 {
@@ -65,7 +66,7 @@ int get_item(FILE * fd, int *type, long *cat, double **x, double **y,
 	    /* probably change this as G_getl2() doesn't store the new line (?) */
 	    if (sscanf(buf + 1, "%ld%[^\n]", cat, lbl) == 2) {
 		G_strip(lbl);
-		G_set_cat((CELL) * cat, lbl, labels);
+		Rast_set_cat((CELL) * cat, lbl, labels);
 	    }
 	    continue;
 	}

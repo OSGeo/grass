@@ -5,6 +5,9 @@
 #include <unistd.h>
 #include <rpc/types.h>
 #include <rpc/xdr.h>
+
+#include <grass/Rast.h>
+
 #include "G3d_intern.h"
 
 /*---------------------------------------------------------------------------*/
@@ -66,8 +69,8 @@ G3d_copyValues(const void *src, int offsSrc, int typeSrc, void *dst,
 
     eltLength = G3d_length(typeSrc);
 
-    src = G_incr_void_ptr(src, eltLength * offsSrc);
-    dst = G_incr_void_ptr(dst, eltLength * offsDst);
+    src = Rast_incr_void_ptr(src, eltLength * offsSrc);
+    dst = Rast_incr_void_ptr(dst, eltLength * offsDst);
 
     memcpy(dst, src, nElts * eltLength);
 }

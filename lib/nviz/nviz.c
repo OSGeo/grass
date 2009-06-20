@@ -16,6 +16,7 @@
    \date 2008
  */
 
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include <grass/nviz.h>
 
@@ -72,7 +73,7 @@ int Nviz_color_from_str(const char *color_str)
 {
     int red, grn, blu;
 
-    if (G_str_to_color(color_str, &red, &grn, &blu) != 1) {
+    if (Rast_str_to_color(color_str, &red, &grn, &blu) != 1) {
 	G_warning(_("Invalid color (%s), using \"white\" as default"),
 		  color_str);
 	red = grn = blu = 255;

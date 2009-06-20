@@ -12,6 +12,7 @@
 
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "r.proj.h"
 
 void p_bilinear(struct cache *ibuffer,	/* input buffer                  */
@@ -39,7 +40,7 @@ void p_bilinear(struct cache *ibuffer,	/* input buffer                  */
 
     /* check for out of bounds - if out of bounds set NULL value and return */
     if (row0 < 0 || row1 >= cellhd->rows || col0 < 0 || col1 >= cellhd->cols) {
-	G_set_null_value(obufptr, 1, cell_type);
+	Rast_set_null_value(obufptr, 1, cell_type);
 	return;
     }
 
@@ -49,10 +50,10 @@ void p_bilinear(struct cache *ibuffer,	/* input buffer                  */
     c11 = CPTR(ibuffer, row1, col1);
 
     /* check for NULL values */
-    if (G_is_f_null_value(c00) ||
-	G_is_f_null_value(c01) ||
-	G_is_f_null_value(c10) || G_is_f_null_value(c11)) {
-	G_set_null_value(obufptr, 1, cell_type);
+    if (Rast_is_f_null_value(c00) ||
+	Rast_is_f_null_value(c01) ||
+	Rast_is_f_null_value(c10) || Rast_is_f_null_value(c11)) {
+	Rast_set_null_value(obufptr, 1, cell_type);
 	return;
     }
 
@@ -61,7 +62,7 @@ void p_bilinear(struct cache *ibuffer,	/* input buffer                  */
     u = *row_idx - row0;
     tu = t * u;
 
-    result = G_interp_bilinear(t, u, *c00, *c01, *c10, *c11);
+    result = Rast_interp_bilinear(t, u, *c00, *c01, *c10, *c11);
 
-    G_set_raster_value_f(obufptr, result, cell_type);
+    Rast_set_raster_value_f(obufptr, result, cell_type);
 }

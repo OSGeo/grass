@@ -50,6 +50,7 @@
 #include <sys/types.h>
 #include <tiffio.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "rasterfile.h"
 
@@ -138,25 +139,25 @@ int main(int argc, char *argv[])
     palette = pflag->answer;
     tfw = tflag->answer;
 
-    if ((G_get_cellhd(inopt->answer, "", &cellhd) < 0))
+    if ((Rast_get_cellhd(inopt->answer, "", &cellhd) < 0))
 	G_fatal_error(_("Unable to read header of raster map <%s>"),
 		      inopt->answer);
 
     G_get_window(&cellhd);
 
-    G_read_colors(inopt->answer, "", &colors);
-    if ((isfp = G_raster_map_is_fp(inopt->answer, "")))
+    Rast_read_colors(inopt->answer, "", &colors);
+    if ((isfp = Rast_raster_map_is_fp(inopt->answer, "")))
 	G_warning(_("Raster map <%s>> is a floating point "
 		    "map. Fractional values will be rounded to integer"),
 		  inopt->answer);
 
-    G_set_null_value_color(255, 255, 255, &colors);
+    Rast_set_null_value_color(255, 255, 255, &colors);
     if (palette && (colors.cmax - colors.cmin > 255))
 	G_fatal_error(_("Color map for palette must have less "
 			"than 256 colors for the available range of data"));
 
-    cell = G_allocate_cell_buf();
-    if ((in = G_open_cell_old(inopt->answer, "")) < 0)
+    cell = Rast_allocate_cell_buf();
+    if ((in = Rast_open_cell_old(inopt->answer, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), inopt->answer);
 
     basename = G_store(outopt->answer);
@@ -199,7 +200,7 @@ int main(int argc, char *argv[])
 #define	SCALE(x)	(((x)*((1L<<16)-1))/255)
 
 	for (i = colors.cmin; i <= colors.cmax; i++, redp++, grnp++, blup++) {
-	    G_get_color(i, &red, &grn, &blu, &colors);
+	    Rast_get_color(i, &red, &grn, &blu, &colors);
 	    *redp = (unsigned short) (SCALE(red));
 	    *grnp = (unsigned short) (SCALE(grn));
 	    *blup = (unsigned short) (SCALE(blu));
@@ -241,7 +242,7 @@ int main(int argc, char *argv[])
 
 	/* allocate cell buffers */
 	for (i = 0; i < tilelength; i++)
-	    cells[i] = G_allocate_cell_buf();
+	    cells[i] = Rast_allocate_cell_buf();
 
 	/* build tiff tiles from grass buffer */
 	for (row = 0; row < imagelength; row += tilelength) {
@@ -251,7 +252,7 @@ int main(int argc, char *argv[])
 	    uint32 colb = 0;
 
 	    for (i = 0; i < nrow; i++) {
-		if (G_get_c_raster_row(in, cells[i], row + i) < 0)
+		if (Rast_get_c_raster_row(in, cells[i], row + i) < 0)
 		    G_fatal_error(_("Reading raster map..."));
 	    }
 
@@ -288,7 +289,7 @@ int main(int argc, char *argv[])
 		    }
 		    else {
 			for (j = 0; j < width; j++) {
-			    G_get_color(cellptr[col + j], &red, &grn, &blu,
+			    Rast_get_color(cellptr[col + j], &red, &grn, &blu,
 					&colors);
 			    *tptr++ = (unsigned char) red;
 			    *tptr++ = (unsigned char) grn;
@@ -338,7 +339,7 @@ int main(int argc, char *argv[])
 
 	    G_percent(row, h.ras_height, 2);
 
-	    if (G_get_c_raster_row(in, cell, row) < 0)
+	    if (Rast_get_c_raster_row(in, cell, row) < 0)
 		exit(EXIT_FAILURE);
 
 	    cellptr = cell;
@@ -348,7 +349,7 @@ int main(int argc, char *argv[])
 	    }
 	    else {
 		for (col = 0; col < h.ras_width; col++) {
-		    G_get_color(cell[col], &red, &grn, &blu, &colors);
+		    Rast_get_color(cell[col], &red, &grn, &blu, &colors);
 		    *tmpptr++ = (unsigned char) red;
 		    *tmpptr++ = (unsigned char) grn;
 		    *tmpptr++ = (unsigned char) blu;

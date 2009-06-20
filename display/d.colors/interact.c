@@ -43,8 +43,8 @@ interact(struct Categories *categories, struct Colors *colors, char *name,
     hi_save_mode = 0;
 
     colors_changed = 0;
-    G_set_c_null_value(&at_cat, 1);
-    G_get_color(at_cat, &cur_red, &cur_grn, &cur_blu, colors);
+    Rast_set_c_null_value(&at_cat, 1);
+    Rast_get_color(at_cat, &cur_red, &cur_grn, &cur_blu, colors);
     shift_incr = 10;
 
     Initialize_curses();
@@ -89,10 +89,10 @@ interact(struct Categories *categories, struct Colors *colors, char *name,
 	case 'd':
 	case 'u':
 	    if (hi_mode && !hi_save_mode) {
-		G_get_color(at_cat, &cur_red, &cur_grn, &cur_blu, colors);
+		Rast_get_color(at_cat, &cur_red, &cur_grn, &cur_blu, colors);
 	    }
 	    /*              tmark_category(at_cat, 0) ; */
-	    if (G_is_c_null_value(&at_cat))
+	    if (Rast_is_c_null_value(&at_cat))
 		tmp = 0;
 	    else
 		tmp = at_cat + 1;
@@ -115,7 +115,7 @@ interact(struct Categories *categories, struct Colors *colors, char *name,
 	    }
 	    tmp = tmp % (categories->num + 2);	/* changed 11/99 M.N. */
 	    if (!tmp)
-		G_set_c_null_value(&at_cat, 1);
+		Rast_set_c_null_value(&at_cat, 1);
 	    else
 		at_cat = tmp - 1;
 
@@ -124,12 +124,12 @@ interact(struct Categories *categories, struct Colors *colors, char *name,
 		cur_grn = grn_hi;
 		cur_blu = blu_hi;
 		if (hi_save_mode) {
-		    G_set_color(at_cat, cur_red, cur_grn, cur_blu, colors);
+		    Rast_set_color(at_cat, cur_red, cur_grn, cur_blu, colors);
 		    colors_changed = 1;
 		}
 	    }
 	    else {
-		G_get_color(at_cat, &cur_red, &cur_grn, &cur_blu, colors);
+		Rast_get_color(at_cat, &cur_red, &cur_grn, &cur_blu, colors);
 	    }
 
 	    WRITE_CATS;
@@ -167,12 +167,12 @@ interact(struct Categories *categories, struct Colors *colors, char *name,
 		cur_grn = grn_hi;
 		cur_blu = blu_hi;
 		if (hi_save_mode) {
-		    G_set_color(at_cat, cur_red, cur_grn, cur_blu, colors);
+		    Rast_set_color(at_cat, cur_red, cur_grn, cur_blu, colors);
 		    colors_changed = 1;
 		}
 	    }
 	    else {
-		G_get_color(at_cat, &cur_red, &cur_grn, &cur_blu, colors);
+		Rast_get_color(at_cat, &cur_red, &cur_grn, &cur_blu, colors);
 		switch (cur_char) {
 		case 'r':
 		    cur_red = shift_color(cur_red, -shift_incr);
@@ -193,7 +193,7 @@ interact(struct Categories *categories, struct Colors *colors, char *name,
 		    cur_blu = shift_color(cur_blu, shift_incr);
 		    break;
 		}
-		G_set_color(at_cat, cur_red, cur_grn, cur_blu, colors);
+		Rast_set_color(at_cat, cur_red, cur_grn, cur_blu, colors);
 		colors_changed = 1;
 	    }
 	    WRITE_STATUS;
@@ -207,25 +207,25 @@ interact(struct Categories *categories, struct Colors *colors, char *name,
 	    WRITE_STATUS;
 	    break;
 	case '+':
-	    G_shift_colors(1, colors);
+	    Rast_shift_colors(1, colors);
 	    if (hi_mode) {
 		cur_red = red_hi;
 		cur_grn = grn_hi;
 		cur_blu = blu_hi;
 		if (hi_save_mode)
-		    G_set_color(at_cat, cur_red, cur_grn, cur_blu, colors);
+		    Rast_set_color(at_cat, cur_red, cur_grn, cur_blu, colors);
 	    }
 	    colors_changed = 1;
 	    WRITE_STATUS;
 	    break;
 	case '-':
-	    G_shift_colors(-1, colors);
+	    Rast_shift_colors(-1, colors);
 	    if (hi_mode) {
 		cur_red = red_hi;
 		cur_grn = grn_hi;
 		cur_blu = blu_hi;
 		if (hi_save_mode)
-		    G_set_color(at_cat, cur_red, cur_grn, cur_blu, colors);
+		    Rast_set_color(at_cat, cur_red, cur_grn, cur_blu, colors);
 	    }
 	    colors_changed = 1;
 	    WRITE_STATUS;
@@ -245,14 +245,14 @@ interact(struct Categories *categories, struct Colors *colors, char *name,
 		cur_grn = grn_hi;
 		cur_blu = blu_hi;
 		if (hi_save_mode)
-		    G_set_color(at_cat, cur_red, cur_grn, cur_blu, colors);
+		    Rast_set_color(at_cat, cur_red, cur_grn, cur_blu, colors);
 	    }
 	    colors_changed = 1;
 	    break;
 	case 'h':
 	case 'H':
 	    if (hi_mode) {
-		G_get_color(at_cat, &cur_red, &cur_grn, &cur_blu, colors);
+		Rast_get_color(at_cat, &cur_red, &cur_grn, &cur_blu, colors);
 		hi_mode = 0;
 		hi_save_mode = 0;
 	    }
@@ -262,7 +262,7 @@ interact(struct Categories *categories, struct Colors *colors, char *name,
 		cur_blu = blu_hi;
 		hi_mode = 1;
 		if (cur_char == 'H') {
-		    G_set_color(at_cat, cur_red, cur_grn, cur_blu, colors);
+		    Rast_set_color(at_cat, cur_red, cur_grn, cur_blu, colors);
 		    hi_save_mode = 1;
 		    colors_changed = 1;
 		}
@@ -319,7 +319,7 @@ static int save_colors(char *name, char *mapset, struct Colors *colors)
     Clear_message();
     Write_message(2, "Writing color table      ");
 
-    if (G_write_colors(name, mapset, colors) == -1) {
+    if (Rast_write_colors(name, mapset, colors) == -1) {
 	G_sleep(1);
 	Write_message(2, "Can't write color table  ");
 	G_sleep(2);

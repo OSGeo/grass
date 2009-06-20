@@ -19,6 +19,7 @@
 #include <string.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
     
 #define PI 3.1415927
@@ -67,21 +68,21 @@ int main(int argc, char *argv[])
     result1 = output1->answer;
 
     /***************************************************/ 
-    if ((infd_doy = G_open_cell_old(doy, "")) < 0)
+    if ((infd_doy = Rast_open_cell_old(doy, "")) < 0)
 	G_fatal_error(_("Cannot open cell file [%s]"), doy);
-    inrast_doy = G_allocate_d_raster_buf();
+    inrast_doy = Rast_allocate_d_raster_buf();
 
     /***************************************************/ 
-    if ((infd_lat = G_open_cell_old(lat, "")) < 0)
+    if ((infd_lat = Rast_open_cell_old(lat, "")) < 0)
 	G_fatal_error(_("Cannot open cell file [%s]"), lat);
-    inrast_lat = G_allocate_d_raster_buf();
+    inrast_lat = Rast_allocate_d_raster_buf();
 
     /***************************************************/ 
     nrows = G_window_rows();
     ncols = G_window_cols();
 
-    outrast1 = G_allocate_d_raster_buf();
-    if ((outfd1 = G_open_raster_new(result1, DCELL_TYPE)) < 0)
+    outrast1 = Rast_allocate_d_raster_buf();
+    if ((outfd1 = Rast_open_raster_new(result1, DCELL_TYPE)) < 0)
 	G_fatal_error(_("Could not open <%s>"), result1);
 
     for (row = 0; row < nrows; row++)
@@ -95,9 +96,9 @@ int main(int argc, char *argv[])
 	DCELL d_doy;
 	G_percent(row, nrows, 2);
 
-	if (G_get_raster_row(infd_doy, inrast_doy, row, DCELL_TYPE) < 0)
+	if (Rast_get_raster_row(infd_doy, inrast_doy, row, DCELL_TYPE) < 0)
 	    G_fatal_error(_("Could not read from <%s>"), doy);
-	if (G_get_raster_row(infd_lat, inrast_lat, row, DCELL_TYPE) < 0)
+	if (Rast_get_raster_row(infd_lat, inrast_lat, row, DCELL_TYPE) < 0)
 	    G_fatal_error(_("Could not read from <%s>"), lat);
 
 	for (col = 0; col < ncols; col++)
@@ -114,19 +115,19 @@ int main(int argc, char *argv[])
 	    d_N = (360.0 / (15.0 * PI)) * d_Ws;
 	    ((DCELL *) outrast1)[col] = d_N;
         }
-	if (G_put_raster_row(outfd1, outrast1, DCELL_TYPE) < 0)
+	if (Rast_put_raster_row(outfd1, outrast1, DCELL_TYPE) < 0)
 	    G_fatal_error(_("Cannot write to output raster file"));
     }
     G_free(inrast_lat);
     G_free(inrast_doy);
-    G_close_cell(infd_lat);
-    G_close_cell(infd_doy);
+    Rast_close_cell(infd_lat);
+    Rast_close_cell(infd_doy);
     G_free(outrast1);
-    G_close_cell(outfd1);
+    Rast_close_cell(outfd1);
 
-    G_short_history(result1, "raster", &history);
-    G_command_history(&history);
-    G_write_history(result1, &history);
+    Rast_short_history(result1, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(result1, &history);
 
     exit(EXIT_SUCCESS);
 }

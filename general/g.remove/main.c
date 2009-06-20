@@ -20,6 +20,8 @@
  *****************************************************************************/
 #include <stdlib.h>
 #include <string.h>
+
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include <grass/list.h>
 
@@ -29,7 +31,7 @@ static int check_reclass(const char *name, const char *mapset, int force)
     char **rmaps;
     int nrmaps;
 
-    if (G_is_reclassed_to(name, mapset, &nrmaps, &rmaps) > 0) {
+    if (Rast_is_reclassed_to(name, mapset, &nrmaps, &rmaps) > 0) {
 	for (; *rmaps; rmaps++) {
 	    /* force remove */
 	    if (force)
@@ -44,8 +46,8 @@ static int check_reclass(const char *name, const char *mapset, int force)
 	    return 1;
     }
 
-    if (G_is_reclass(name, mapset, rname, rmapset) > 0 &&
-	G_is_reclassed_to(rname, rmapset, &nrmaps, &rmaps) > 0) {
+    if (Rast_is_reclass(name, mapset, rname, rmapset) > 0 &&
+	Rast_is_reclassed_to(rname, rmapset, &nrmaps, &rmaps) > 0) {
 	char path[GPATH_MAX];
 	char *p = strchr(rname, '@');
 	char *qname = G_fully_qualified_name(name, mapset);

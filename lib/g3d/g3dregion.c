@@ -1,6 +1,9 @@
 #include <stdio.h>
+
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/G3d.h>
+
 #include "G3d_intern.h"
 
 /*---------------------------------------------------------------------------*/
@@ -152,7 +155,7 @@ void G3d_adjustRegion(G3D_Region * region)
     const char *err;
 
     G3d_regionToCellHead(region, &region2d);
-    if ((err = G_adjust_Cell_head3(&region2d, 1, 1, 1)) != NULL) {
+    if ((err = Rast_adjust_Cell_head3(&region2d, 1, 1, 1)) != NULL) {
 	G_fatal_error("G3d_adjustRegion: %s", err);
     }
     G3d_regionFromToCellHead(&region2d, region);
@@ -181,7 +184,7 @@ void G3d_adjustRegionRes(G3D_Region * region)
     const char *err;
 
     G3d_regionToCellHead(region, &region2d);
-    if ((err = G_adjust_Cell_head3(&region2d, 1, 1, 1)) != NULL) {
+    if ((err = Rast_adjust_Cell_head3(&region2d, 1, 1, 1)) != NULL) {
 	G_fatal_error("G3d_adjustRegionRes: %s", err);
     }
     G3d_regionFromToCellHead(&region2d, region);

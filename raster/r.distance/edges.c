@@ -54,7 +54,7 @@ void find_edge_cells(struct Map *map)
 	buf2[col] = 0;
     }
 
-    fd = G_open_cell_old(map->name, map->mapset);
+    fd = Rast_open_cell_old(map->name, map->mapset);
     if (fd < 0)
 	exit(1);
 
@@ -69,7 +69,7 @@ void find_edge_cells(struct Map *map)
 	buf2 = tmp;
 
 	/* read a row */
-	if (G_get_map_row(fd, &buf1[1], row) < 0)
+	if (Rast_get_map_row(fd, &buf1[1], row) < 0)
 	    exit(1);
 
 	for (col = 1; col <= ncols; col++) {
@@ -83,7 +83,7 @@ void find_edge_cells(struct Map *map)
     }
     G_percent(row, nrows, 2);
 
-    G_close_cell(fd);
+    Rast_close_cell(fd);
 
     G_free(buf0);
     G_free(buf1);

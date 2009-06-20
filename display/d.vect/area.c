@@ -4,6 +4,7 @@
  */
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/Vect.h>
 #include <grass/display.h>
 #include <grass/display_raster.h>
@@ -242,8 +243,8 @@ int darea(struct Map_info *Map, struct cat_list *Clist,
 		    area, centroid, cat, Points->x[0], Points->y[0],
 		    Points->z[0]);
 	    rgb = 1;
-	    G_make_fp_colors(&colors, style, box.B, box.T);
-	    G_get_raster_color(&zval, &red, &grn, &blu, &colors, DCELL_TYPE);
+	    Rast_make_fp_colors(&colors, style, box.B, box.T);
+	    Rast_get_raster_color(&zval, &red, &grn, &blu, &colors, DCELL_TYPE);
 	    G_debug(3, "b %d, g: %d, r %d", blu, grn, red);
 	}
 
@@ -267,7 +268,7 @@ int darea(struct Map_info *Map, struct cat_list *Clist,
 			G_debug(3, "area %d: colorstring: %s", area,
 				colorstring);
 
-			if (G_str_to_color(colorstring, &red, &grn, &blu) ==
+			if (Rast_str_to_color(colorstring, &red, &grn, &blu) ==
 			    1) {
 			    rgb = 1;
 			    G_debug(3, "area:%d  cat %d r:%d g:%d b:%d", area,

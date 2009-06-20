@@ -18,6 +18,7 @@
 #include <unistd.h>
 
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include <grass/stats.h>
 
@@ -186,11 +187,11 @@ int main(int argc, char *argv[])
 
 	p->name = parm.input->answers[i];
 	G_message(_("Reading raster map <%s>..."), p->name);
-	p->fd = G_open_cell_old(p->name, "");
+	p->fd = Rast_open_cell_old(p->name, "");
 	if (p->fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
 			  p->name);
-	p->buf = G_allocate_d_raster_buf();
+	p->buf = Rast_allocate_d_raster_buf();
     }
 
     /* process the output maps */
@@ -216,8 +217,8 @@ int main(int argc, char *argv[])
 	out->quantile = (parm.quantile->answer && parm.quantile->answers[i])
 	    ? atof(parm.quantile->answers[i])
 	    : 0;
-	out->buf = G_allocate_d_raster_buf();
-	out->fd = G_open_raster_new(
+	out->buf = Rast_allocate_d_raster_buf();
+	out->fd = Rast_open_raster_new(
 	    output_name, menu[method].is_int ? CELL_TYPE : DCELL_TYPE);
 	if (out->fd < 0)
 	    G_fatal_error(_("Unable to create raster map <%s>"), out->name);
@@ -237,7 +238,7 @@ int main(int argc, char *argv[])
 	G_percent(row, nrows, 2);
 
 	for (i = 0; i < num_inputs; i++)
-	    G_get_d_raster_row(inputs[i].fd, inputs[i].buf, row);
+	    Rast_get_d_raster_row(inputs[i].fd, inputs[i].buf, row);
 
 	for (col = 0; col < ncols; col++) {
 	    int null = 0;
@@ -245,10 +246,10 @@ int main(int argc, char *argv[])
 	    for (i = 0; i < num_inputs; i++) {
 		DCELL v = inputs[i].buf[col];
 
-		if (G_is_d_null_value(&v))
+		if (Rast_is_d_null_value(&v))
 		    null = 1;
 		else if (parm.range->answer && (v < lo || v > hi)) {
-		    G_set_d_null_value(&v, 1);
+		    Rast_set_d_null_value(&v, 1);
 		    null = 1;
 		}
 
@@ -259,7 +260,7 @@ int main(int argc, char *argv[])
 		struct output *out = &outputs[i];
 
 		if (null && flag.nulls->answer)
-		    G_set_d_null_value(&out->buf[col], 1);
+		    Rast_set_d_null_value(&out->buf[col], 1);
 		else {
 		    memcpy(values_tmp, values, num_inputs * sizeof(DCELL));
 		    (*out->method_fn)(&out->buf[col], values_tmp, num_inputs, &out->quantile);
@@ -268,7 +269,7 @@ int main(int argc, char *argv[])
 	}
 
 	for (i = 0; i < num_outputs; i++)
-	    G_put_d_raster_row(outputs[i].fd, outputs[i].buf);
+	    Rast_put_d_raster_row(outputs[i].fd, outputs[i].buf);
     }
 
     G_percent(row, nrows, 2);
@@ -277,15 +278,15 @@ int main(int argc, char *argv[])
     for (i = 0; i < num_outputs; i++) {
 	struct output *out = &outputs[i];
 
-	G_close_cell(out->fd);
+	Rast_close_cell(out->fd);
 
-	G_short_history(out->name, "raster", &history);
-	G_command_history(&history);
-	G_write_history(out->name, &history);
+	Rast_short_history(out->name, "raster", &history);
+	Rast_command_history(&history);
+	Rast_write_history(out->name, &history);
     }
 
     for (i = 0; i < num_inputs; i++)
-	G_close_cell(inputs[i].fd);
+	Rast_close_cell(inputs[i].fd);
 
     exit(EXIT_SUCCESS);
 }

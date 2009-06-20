@@ -1,5 +1,6 @@
 #include "Gwater.h"
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 CELL *ril_buf;
@@ -13,12 +14,12 @@ int sg_factor(void)
     G_message(_("SECTION 4: RUSLE LS and/or S factor determination."));
 
     if (ril_flag)
-	ril_buf = G_allocate_cell_buf();
+	ril_buf = Rast_allocate_cell_buf();
 
     for (r = 0; r < nrows; r++) {
 	G_percent(r, nrows, 3);
 	if (ril_flag) {
-	    G_get_c_raster_row(ril_fd, ril_buf, r);
+	    Rast_get_c_raster_row(ril_fd, ril_buf, r);
 	}
 	for (c = 0; c < ncols; c++) {
 	    low_elev = alt[SEG_INDEX(alt_seg, r, c)];
@@ -46,7 +47,7 @@ int sg_factor(void)
 
     if (ril_flag) {
 	G_free(ril_buf);
-	G_close_cell(ril_fd);
+	Rast_close_cell(ril_fd);
     }
 
     return 0;

@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include <grass/list.h>
 
@@ -93,7 +94,7 @@ int main(int argc, char *argv[])
 		continue;
 	    }
 
-	    if (G_is_reclassed_to(old, mapset, &nrmaps, &rmaps) > 0) {
+	    if (Rast_is_reclassed_to(old, mapset, &nrmaps, &rmaps) > 0) {
 		int ptr, l;
 		char buf1[256], buf2[256], buf3[256], *str;
 		FILE *fp;

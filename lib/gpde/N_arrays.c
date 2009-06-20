@@ -16,9 +16,12 @@
 *
 *****************************************************************************/
 
-#include "grass/N_pde.h"
-#include "grass/glocale.h"
 #include <math.h>
+
+#include <grass/N_pde.h>
+#include <grass/Rast.h>
+#include <grass/glocale.h>
+
 
 /* ******************** 2D ARRAY FUNCTIONS *********************** */
 
@@ -233,7 +236,7 @@ int N_is_array_2d_value_null(N_array_2d * data, int col, int row)
 	    G_debug(6,
 		    "N_is_array_2d_value_null: null value is of type CELL at pos [%i][%i]",
 		    col, row);
-	    return G_is_null_value((void *)
+	    return Rast_is_null_value((void *)
 				   &(data->
 				     cell_array[row * data->cols_intern +
 						col]), CELL_TYPE);
@@ -242,7 +245,7 @@ int N_is_array_2d_value_null(N_array_2d * data, int col, int row)
 	    G_debug(6,
 		    "N_is_array_2d_value_null: null value is of type FCELL at pos [%i][%i]",
 		    col, row);
-	    return G_is_null_value((void *)
+	    return Rast_is_null_value((void *)
 				   &(data->
 				     fcell_array[row * data->cols_intern +
 						 col]), FCELL_TYPE);
@@ -251,7 +254,7 @@ int N_is_array_2d_value_null(N_array_2d * data, int col, int row)
 	    G_debug(6,
 		    "N_is_array_2d_value_null: null value is of type DCELL at pos [%i][%i]",
 		    col, row);
-	    return G_is_null_value((void *)
+	    return Rast_is_null_value((void *)
 				   &(data->
 				     dcell_array[row * data->cols_intern +
 						 col]), DCELL_TYPE);
@@ -262,7 +265,7 @@ int N_is_array_2d_value_null(N_array_2d * data, int col, int row)
 	    G_debug(6,
 		    "N_is_array_2d_value_null: null value is of type CELL at pos [%i][%i]",
 		    col, row);
-	    return G_is_null_value((void *)
+	    return Rast_is_null_value((void *)
 				   &(data->
 				     cell_array[(row +
 						 data->offset) *
@@ -273,7 +276,7 @@ int N_is_array_2d_value_null(N_array_2d * data, int col, int row)
 	    G_debug(6,
 		    "N_is_array_2d_value_null: null value is of type FCELL at pos [%i][%i]",
 		    col, row);
-	    return G_is_null_value((void *)
+	    return Rast_is_null_value((void *)
 				   &(data->
 				     fcell_array[(row +
 						  data->offset) *
@@ -284,7 +287,7 @@ int N_is_array_2d_value_null(N_array_2d * data, int col, int row)
 	    G_debug(6,
 		    "N_is_array_2d_value_null: null value is of type DCELL at pos [%i][%i]",
 		    col, row);
-	    return G_is_null_value((void *)
+	    return Rast_is_null_value((void *)
 				   &(data->
 				     dcell_array[(row +
 						  data->offset) *
@@ -461,19 +464,19 @@ void N_put_array_2d_value_null(N_array_2d * data, int col, int row)
 
     if (data->offset == 0) {
 	if (data->type == CELL_TYPE && data->cell_array != NULL) {
-	    G_set_c_null_value((void *)
+	    Rast_set_c_null_value((void *)
 			       &(data->
 				 cell_array[row * data->cols_intern + col]),
 			       1);
 	}
 	else if (data->type == FCELL_TYPE && data->fcell_array != NULL) {
-	    G_set_f_null_value((void *)
+	    Rast_set_f_null_value((void *)
 			       &(data->
 				 fcell_array[row * data->cols_intern + col]),
 			       1);
 	}
 	else if (data->type == DCELL_TYPE && data->dcell_array != NULL) {
-	    G_set_d_null_value((void *)
+	    Rast_set_d_null_value((void *)
 			       &(data->
 				 dcell_array[row * data->cols_intern + col]),
 			       1);
@@ -481,7 +484,7 @@ void N_put_array_2d_value_null(N_array_2d * data, int col, int row)
     }
     else {
 	if (data->type == CELL_TYPE && data->cell_array != NULL) {
-	    G_set_c_null_value((void *)
+	    Rast_set_c_null_value((void *)
 			       &(data->
 				 cell_array[(row +
 					     data->offset) *
@@ -489,7 +492,7 @@ void N_put_array_2d_value_null(N_array_2d * data, int col, int row)
 					    data->offset]), 1);
 	}
 	else if (data->type == FCELL_TYPE && data->fcell_array != NULL) {
-	    G_set_f_null_value((void *)
+	    Rast_set_f_null_value((void *)
 			       &(data->
 				 fcell_array[(row +
 					      data->offset) *
@@ -497,7 +500,7 @@ void N_put_array_2d_value_null(N_array_2d * data, int col, int row)
 					     data->offset]), 1);
 	}
 	else if (data->type == DCELL_TYPE && data->dcell_array != NULL) {
-	    G_set_d_null_value((void *)
+	    Rast_set_d_null_value((void *)
 			       &(data->
 				 dcell_array[(row +
 					      data->offset) *

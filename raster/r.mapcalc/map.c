@@ -10,6 +10,7 @@
 #endif
 
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/btree.h>
 #include <grass/glocale.h>
 
@@ -92,7 +93,7 @@ static void cache_sub_init(struct row_cache *cache, int data_type)
     sub->valid = G_calloc(cache->nrows, 1);
     sub->buf = G_malloc(cache->nrows * sizeof(void *));
     for (i = 0; i < cache->nrows; i++)
-	sub->buf[i] = G_allocate_raster_buf(data_type);
+	sub->buf[i] = Rast_allocate_raster_buf(data_type);
 
     cache->sub[data_type] = sub;
 }
@@ -143,7 +144,7 @@ static void *cache_get_raw(struct row_cache *cache, int row, int data_type)
 
     if (i >= 0 && i < cache->nrows) {
 	if (!sub->valid[i]) {
-	    G_get_raster_row(cache->fd, sub->buf[i], row + i, data_type);
+	    Rast_get_raster_row(cache->fd, sub->buf[i], row + i, data_type);
 	    sub->valid[i] = 1;
 	}
 	return sub->buf[i];
@@ -152,7 +153,7 @@ static void *cache_get_raw(struct row_cache *cache, int row, int data_type)
     if (i <= -cache->nrows || i >= cache->nrows * 2 - 1) {
 	memset(sub->valid, 0, cache->nrows);
 	sub->row = i;
-	G_get_raster_row(cache->fd, sub->buf[0], row, data_type);
+	Rast_get_raster_row(cache->fd, sub->buf[0], row, data_type);
 	sub->valid[0] = 1;
 	return sub->buf[0];
     }
@@ -180,7 +181,7 @@ static void *cache_get_raw(struct row_cache *cache, int row, int data_type)
     G__freea(tmp);
     G__freea(vtmp);
 
-    G_get_raster_row(cache->fd, sub->buf[i], row, data_type);
+    Rast_get_raster_row(cache->fd, sub->buf[i], row, data_type);
     sub->valid[i] = 1;
 
     return sub->buf[i];
@@ -189,7 +190,7 @@ static void *cache_get_raw(struct row_cache *cache, int row, int data_type)
 static void cache_get(struct row_cache *cache, void *buf, int row, int res_type)
 {
     void *p = cache_get_raw(cache, row, res_type);
-    memcpy(buf, p, columns * G_raster_size(res_type));
+    memcpy(buf, p, columns * Rast_raster_size(res_type));
 };
 
 /****************************************************************************/
@@ -201,7 +202,7 @@ static int compare_ints(const void *a, const void *b)
 
 static void init_colors(struct map *m)
 {
-    if (G_read_colors((char *)m->name, (char *)m->mapset, &m->colors) < 0)
+    if (Rast_read_colors((char *)m->name, (char *)m->mapset, &m->colors) < 0)
 	G_fatal_error(_("Unable to read color file for raster map <%s@%s>"),
 		      m->name, m->mapset);
 
@@ -210,7 +211,7 @@ static void init_colors(struct map *m)
 
 static void init_cats(struct map *m)
 {
-    if (G_read_cats((char *)m->name, (char *)m->mapset, &m->cats) < 0)
+    if (Rast_read_cats((char *)m->name, (char *)m->mapset, &m->cats) < 0)
 	G_fatal_error(_("Unable to read category file of raster map <%s@%s>"),
 		      m->name, m->mapset);
 
@@ -230,7 +231,7 @@ static void translate_from_colors(struct map *m, DCELL *rast, CELL *cell,
     unsigned char *set = G__alloca(columns);
     int i;
 
-    G_lookup_d_raster_colors(rast, red, grn, blu, set, ncols, &m->colors);
+    Rast_lookup_d_raster_colors(rast, red, grn, blu, set, ncols, &m->colors);
 
     switch (mod) {
     case 'r':
@@ -338,7 +339,7 @@ static void translate_from_cats(struct map *m, CELL * cell, DCELL * xcell,
 	if (!btree_find(btree, &key, &ptr)) {
 	    values = vbuf;
 	    for (i = 0; i < NCATS; i++) {
-		if ((label = G_get_cat((CELL) (i + key), pcats)) == NULL
+		if ((label = Rast_get_cat((CELL) (i + key), pcats)) == NULL
 		    || sscanf(label, "%lf", values) != 1)
 		    SET_NULL_D(values);
 		values++;
@@ -364,7 +365,7 @@ static void translate_from_cats(struct map *m, CELL * cell, DCELL * xcell,
 
 static void read_row(int fd, void *buf, int row, int res_type)
 {
-    if (G_get_raster_row(fd, buf, row, res_type) < 0)
+    if (Rast_get_raster_row(fd, buf, row, res_type) < 0)
 	G_fatal_error(_("Unable to read raster map row %d"), row);
 }
 
@@ -428,7 +429,7 @@ static void close_map(struct map *m)
     if (m->fd < 0)
 	return;
 
-    if (G_close_cell(m->fd) < 0)
+    if (Rast_close_cell(m->fd) < 0)
 	G_fatal_error(_("Unable to close raster map <%s@%s>"),
 		      m->name, m->mapset);
 
@@ -438,12 +439,12 @@ static void close_map(struct map *m)
 
     if (m->have_cats) {
 	btree_free(&m->btree);
-	G_free_cats(&m->cats);
+	Rast_free_cats(&m->cats);
 	m->have_cats = 0;
     }
 
     if (m->have_colors) {
-	G_free_colors(&m->colors);
+	Rast_free_colors(&m->colors);
 	m->have_colors = 0;
     }
 
@@ -465,7 +466,7 @@ int map_type(const char *name, int mod)
     case 'M':
 	tmpname = G_store((char *)name);
 	mapset = G_find_cell2(tmpname, "");
-	result = mapset ? G_raster_map_type(tmpname, mapset) : -1;
+	result = mapset ? Rast_raster_map_type(tmpname, mapset) : -1;
 	G_free(tmpname);
 	return result;
     case '@':
@@ -505,7 +506,7 @@ int open_map(const char *name, int mod, int row, int col)
     if (!mapset)
 	G_fatal_error(_("Raster map <%s> not found"), name);
 
-    fd = G_open_cell_old(name, mapset);
+    fd = Rast_open_cell_old(name, mapset);
     if (fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s@%s>"), name, mapset);
 
@@ -570,7 +571,7 @@ int open_map(const char *name, int mod, int row, int col)
     if (use_colors)
 	init_colors(m);
 
-    m->fd = G_open_cell_old(name, mapset);
+    m->fd = Rast_open_cell_old(name, mapset);
 
     if (m->fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s@%s>"), name, mapset);
@@ -657,7 +658,7 @@ int open_output_map(const char *name, int res_type)
 {
     int fd;
 
-    fd = G_open_raster_new((char *)name, res_type);
+    fd = Rast_open_raster_new((char *)name, res_type);
     if (fd < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), name);
 
@@ -666,19 +667,19 @@ int open_output_map(const char *name, int res_type)
 
 void put_map_row(int fd, void *buf, int res_type)
 {
-    if (G_put_raster_row(fd, buf, res_type) < 0)
+    if (Rast_put_raster_row(fd, buf, res_type) < 0)
 	G_fatal_error(_("Failed writing raster map row"));
 }
 
 void close_output_map(int fd)
 {
-    if (G_close_cell(fd) < 0)
+    if (Rast_close_cell(fd) < 0)
 	G_fatal_error(_("Unable to close raster map"));
 }
 
 void unopen_output_map(int fd)
 {
-    G_unopen_cell(fd);
+    Rast_unopen_cell(fd);
 }
 
 /****************************************************************************/
@@ -688,11 +689,11 @@ void copy_cats(const char *dst, int idx)
     const struct map *m = &maps[idx];
     struct Categories cats;
 
-    if (G_read_cats((char *)m->name, (char *)m->mapset, &cats) < 0)
+    if (Rast_read_cats((char *)m->name, (char *)m->mapset, &cats) < 0)
 	return;
 
-    G_write_cats((char *)dst, &cats);
-    G_free_cats(&cats);
+    Rast_write_cats((char *)dst, &cats);
+    Rast_free_cats(&cats);
 }
 
 void copy_colors(const char *dst, int idx)
@@ -700,11 +701,11 @@ void copy_colors(const char *dst, int idx)
     const struct map *m = &maps[idx];
     struct Colors colr;
 
-    if (G_read_colors((char *)m->name, (char *)m->mapset, &colr) <= 0)
+    if (Rast_read_colors((char *)m->name, (char *)m->mapset, &colr) <= 0)
 	return;
 
-    G_write_colors((char *)dst, G_mapset(), &colr);
-    G_free_colors(&colr);
+    Rast_write_colors((char *)dst, G_mapset(), &colr);
+    Rast_free_colors(&colr);
 }
 
 void copy_history(const char *dst, int idx)
@@ -712,10 +713,10 @@ void copy_history(const char *dst, int idx)
     const struct map *m = &maps[idx];
     struct History hist;
 
-    if (G_read_history((char *)m->name, (char *)m->mapset, &hist) < 0)
+    if (Rast_read_history((char *)m->name, (char *)m->mapset, &hist) < 0)
 	return;
 
-    G_write_history((char *)dst, &hist);
+    Rast_write_history((char *)dst, &hist);
 }
 
 void create_history(const char *dst, expression * e)
@@ -727,7 +728,7 @@ void create_history(const char *dst, expression * e)
     int len = strlen(expr);
     int i;
 
-    G_short_history((char *)dst, "raster", &hist);
+    Rast_short_history((char *)dst, "raster", &hist);
 
     for (i = 0; i < MAXEDLINES; i++) {
 	int n;
@@ -755,7 +756,7 @@ void create_history(const char *dst, expression * e)
 
     hist.edlinecnt = i;
 
-    G_write_history((char *)dst, &hist);
+    Rast_write_history((char *)dst, &hist);
 
     G_free(expr);
 }

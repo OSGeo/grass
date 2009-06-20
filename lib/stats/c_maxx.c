@@ -1,25 +1,26 @@
 #include <grass/gis.h>
+#include <grass/Rast.h>
 
 void c_maxx(DCELL * result, DCELL * values, int n, const void *closure)
 {
     DCELL max, maxx;
     int i;
 
-    G_set_d_null_value(&max, 1);
-    G_set_d_null_value(&maxx, 1);
+    Rast_set_d_null_value(&max, 1);
+    Rast_set_d_null_value(&maxx, 1);
 
     for (i = 0; i < n; i++) {
-	if (G_is_d_null_value(&values[i]))
+	if (Rast_is_d_null_value(&values[i]))
 	    continue;
 
-	if (G_is_d_null_value(&max) || max < values[i]) {
+	if (Rast_is_d_null_value(&max) || max < values[i]) {
 	    max = values[i];
 	    maxx = i;
 	}
     }
 
-    if (G_is_d_null_value(&maxx))
-	G_set_d_null_value(result, 1);
+    if (Rast_is_d_null_value(&maxx))
+	Rast_set_d_null_value(result, 1);
     else
 	*result = maxx;
 }

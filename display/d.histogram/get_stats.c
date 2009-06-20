@@ -4,6 +4,7 @@
 #include <stdarg.h>
 #include <unistd.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "options.h"
 #include "dhist.h"
 
@@ -50,17 +51,17 @@ int get_stats(const char *mapname, struct stat_list *dist_stats,	/* linked list 
 
     /* write stats to a temp file */
     tempfile = G_tempfile();
-    is_fp = G_raster_map_is_fp(mapname, "");
+    is_fp = Rast_raster_map_is_fp(mapname, "");
     if (is_fp) {
 	if (cat_ranges) {
-	    if (G_read_raster_cats(mapname, "", &cats) < 0)
+	    if (Rast_read_raster_cats(mapname, "", &cats) < 0)
 		G_fatal_error("Can't read category file");
-	    if (G_number_of_raster_cats(&cats) <= 0) {
+	    if (Rast_number_of_raster_cats(&cats) <= 0) {
 		G_warning("There are no labeled cats, using nsteps argument");
 		cat_ranges = 0;
 	    }
 	}
-	if (G_read_fp_range(map_name, "", &fp_range) <= 0)
+	if (Rast_read_fp_range(map_name, "", &fp_range) <= 0)
 	    G_fatal_error("Can't read frange file");
     }
     if (cat_ranges) {

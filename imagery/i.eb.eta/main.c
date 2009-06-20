@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 double et_a(double r_net_day, double evap_fr, double tempk);
 
@@ -72,23 +73,23 @@ int main(int argc, char *argv[])
     tempk = input3->answer;
     result1 = output1->answer;
     
-    if ((infd_rnetday = G_open_cell_old(rnetday, "")) < 0)
+    if ((infd_rnetday = Rast_open_cell_old(rnetday, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), rnetday);
-    inrast_rnetday = G_allocate_d_raster_buf();
+    inrast_rnetday = Rast_allocate_d_raster_buf();
     
-    if ((infd_evapfr = G_open_cell_old(evapfr, "")) < 0)
+    if ((infd_evapfr = Rast_open_cell_old(evapfr, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), evapfr);
-    inrast_evapfr = G_allocate_d_raster_buf();
+    inrast_evapfr = Rast_allocate_d_raster_buf();
     
-    if ((infd_tempk = G_open_cell_old(tempk, "")) < 0)
+    if ((infd_tempk = Rast_open_cell_old(tempk, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), tempk);
-    inrast_tempk = G_allocate_d_raster_buf();
+    inrast_tempk = Rast_allocate_d_raster_buf();
     
     nrows = G_window_rows();
     ncols = G_window_cols();
-    outrast1 = G_allocate_d_raster_buf();
+    outrast1 = Rast_allocate_d_raster_buf();
     
-    if ((outfd1 = G_open_raster_new(result1, DCELL_TYPE)) < 0)
+    if ((outfd1 = Rast_open_raster_new(result1, DCELL_TYPE)) < 0)
         G_fatal_error(_("Unable to create raster map <%s>"), result1);
     
     /* Process pixels */ 
@@ -101,11 +102,11 @@ int main(int argc, char *argv[])
 	G_percent(row, nrows, 2);
 	
 	/* read input maps */ 
-	if (G_get_d_raster_row(infd_rnetday,inrast_rnetday,row)<0)
+	if (Rast_get_d_raster_row(infd_rnetday,inrast_rnetday,row)<0)
 	    G_fatal_error(_("Unable to read from <%s> row %d"), rnetday, row);
-	if (G_get_d_raster_row(infd_evapfr,inrast_evapfr,row)<0)
+	if (Rast_get_d_raster_row(infd_evapfr,inrast_evapfr,row)<0)
 	    G_fatal_error(_("Unable to read from <%s> row %d"), evapfr, row);
-	if (G_get_d_raster_row(infd_tempk,inrast_tempk,row)<0)
+	if (Rast_get_d_raster_row(infd_tempk,inrast_tempk,row)<0)
 	    G_fatal_error(_("Unable to read from <%s> row %d"), tempk, row);
 	
     /*process the data */ 
@@ -114,29 +115,29 @@ int main(int argc, char *argv[])
             d_rnetday = ((DCELL *) inrast_rnetday)[col];
             d_evapfr = ((DCELL *) inrast_evapfr)[col];
             d_tempk = ((DCELL *) inrast_tempk)[col];
-	    if (G_is_d_null_value(&d_rnetday) ||
-		 G_is_d_null_value(&d_evapfr) ||
-		 G_is_d_null_value(&d_tempk)) 
-		G_set_d_null_value(&outrast1[col], 1);
+	    if (Rast_is_d_null_value(&d_rnetday) ||
+		 Rast_is_d_null_value(&d_evapfr) ||
+		 Rast_is_d_null_value(&d_tempk)) 
+		Rast_set_d_null_value(&outrast1[col], 1);
 	    else {
 		d = et_a(d_rnetday, d_evapfr, d_tempk);
 		outrast1[col] = d;
 	    }
 	}
-	if (G_put_d_raster_row(outfd1,outrast1) < 0)
+	if (Rast_put_d_raster_row(outfd1,outrast1) < 0)
 	    G_fatal_error(_("Failed writing raster map <%s>"), result1);
     }
     G_free(inrast_rnetday);
     G_free(inrast_evapfr);
     G_free(inrast_tempk);
-    G_close_cell(infd_rnetday);
-    G_close_cell(infd_evapfr);
-    G_close_cell(infd_tempk);
+    Rast_close_cell(infd_rnetday);
+    Rast_close_cell(infd_evapfr);
+    Rast_close_cell(infd_tempk);
     G_free(outrast1);
-    G_close_cell(outfd1);
-    G_short_history(result1, "raster", &history);
-    G_command_history(&history);
-    G_write_history(result1, &history);
+    Rast_close_cell(outfd1);
+    Rast_short_history(result1, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(result1, &history);
     exit(EXIT_SUCCESS);
 }
 

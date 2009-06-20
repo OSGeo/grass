@@ -6,6 +6,7 @@
 
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "r.proj.h"
 
 void p_nearest(struct cache *ibuffer,	/* input buffer                  */
@@ -25,16 +26,16 @@ void p_nearest(struct cache *ibuffer,	/* input buffer                  */
 
     /* check for out of bounds - if out of bounds set NULL value     */
     if (row < 0 || row >= cellhd->rows || col < 0 || col >= cellhd->cols) {
-	G_set_null_value(obufptr, 1, cell_type);
+	Rast_set_null_value(obufptr, 1, cell_type);
 	return;
     }
 
     cellp = CPTR(ibuffer, row, col);
 
-    if (G_is_f_null_value(cellp)) {
-	G_set_null_value(obufptr, 1, cell_type);
+    if (Rast_is_f_null_value(cellp)) {
+	Rast_set_null_value(obufptr, 1, cell_type);
 	return;
     }
 
-    G_set_raster_value_f(obufptr, *cellp, cell_type);
+    Rast_set_raster_value_f(obufptr, *cellp, cell_type);
 }

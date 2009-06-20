@@ -22,6 +22,7 @@
 #include <math.h>
 #include <sys/types.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 
@@ -427,18 +428,18 @@ int main(int argc, char *argv[])
     if (!scan_flag->answer) {
 	/* allocate memory (test for enough before we start) */
 	if (bin_n)
-	    n_array = G_calloc(rows * (cols + 1), G_raster_size(CELL_TYPE));
+	    n_array = G_calloc(rows * (cols + 1), Rast_raster_size(CELL_TYPE));
 	if (bin_min)
-	    min_array = G_calloc(rows * (cols + 1), G_raster_size(rtype));
+	    min_array = G_calloc(rows * (cols + 1), Rast_raster_size(rtype));
 	if (bin_max)
-	    max_array = G_calloc(rows * (cols + 1), G_raster_size(rtype));
+	    max_array = G_calloc(rows * (cols + 1), Rast_raster_size(rtype));
 	if (bin_sum)
-	    sum_array = G_calloc(rows * (cols + 1), G_raster_size(rtype));
+	    sum_array = G_calloc(rows * (cols + 1), Rast_raster_size(rtype));
 	if (bin_sumsq)
-	    sumsq_array = G_calloc(rows * (cols + 1), G_raster_size(rtype));
+	    sumsq_array = G_calloc(rows * (cols + 1), Rast_raster_size(rtype));
 	if (bin_index)
 	    index_array =
-		G_calloc(rows * (cols + 1), G_raster_size(CELL_TYPE));
+		G_calloc(rows * (cols + 1), Rast_raster_size(CELL_TYPE));
 
 	/* and then free it again */
 	if (bin_n)
@@ -492,7 +493,7 @@ int main(int argc, char *argv[])
 
 
     /* open output map */
-    out_fd = G_open_raster_new(outmap, rtype);
+    out_fd = Rast_open_raster_new(outmap, rtype);
     if (out_fd < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), outmap);
 
@@ -515,7 +516,7 @@ int main(int argc, char *argv[])
 	estimated_lines = -1;
 
     /* allocate memory for a single row of output data */
-    raster_row = G_allocate_raster_buf(rtype);
+    raster_row = Rast_allocate_raster_buf(rtype);
 
     G_message(_("Scanning data ..."));
 
@@ -541,33 +542,33 @@ int main(int argc, char *argv[])
 
 	if (bin_n) {
 	    G_debug(2, "allocating n_array");
-	    n_array = G_calloc(rows * (cols + 1), G_raster_size(CELL_TYPE));
+	    n_array = G_calloc(rows * (cols + 1), Rast_raster_size(CELL_TYPE));
 	    blank_array(n_array, rows, cols, CELL_TYPE, 0);
 	}
 	if (bin_min) {
 	    G_debug(2, "allocating min_array");
-	    min_array = G_calloc(rows * (cols + 1), G_raster_size(rtype));
+	    min_array = G_calloc(rows * (cols + 1), Rast_raster_size(rtype));
 	    blank_array(min_array, rows, cols, rtype, -1);	/* fill with NULLs */
 	}
 	if (bin_max) {
 	    G_debug(2, "allocating max_array");
-	    max_array = G_calloc(rows * (cols + 1), G_raster_size(rtype));
+	    max_array = G_calloc(rows * (cols + 1), Rast_raster_size(rtype));
 	    blank_array(max_array, rows, cols, rtype, -1);	/* fill with NULLs */
 	}
 	if (bin_sum) {
 	    G_debug(2, "allocating sum_array");
-	    sum_array = G_calloc(rows * (cols + 1), G_raster_size(rtype));
+	    sum_array = G_calloc(rows * (cols + 1), Rast_raster_size(rtype));
 	    blank_array(sum_array, rows, cols, rtype, 0);
 	}
 	if (bin_sumsq) {
 	    G_debug(2, "allocating sumsq_array");
-	    sumsq_array = G_calloc(rows * (cols + 1), G_raster_size(rtype));
+	    sumsq_array = G_calloc(rows * (cols + 1), Rast_raster_size(rtype));
 	    blank_array(sumsq_array, rows, cols, rtype, 0);
 	}
 	if (bin_index) {
 	    G_debug(2, "allocating index_array");
 	    index_array =
-		G_calloc(rows * (cols + 1), G_raster_size(CELL_TYPE));
+		G_calloc(rows * (cols + 1), Rast_raster_size(CELL_TYPE));
 	    blank_array(index_array, rows, cols, CELL_TYPE, -1);	/* fill with NULLs */
 	}
 
@@ -688,22 +689,22 @@ int main(int argc, char *argv[])
 	    if (bin_index) {
 		ptr = index_array;
 		ptr =
-		    G_incr_void_ptr(ptr,
+		    Rast_incr_void_ptr(ptr,
 				    ((arr_row * cols) +
-				     arr_col) * G_raster_size(CELL_TYPE));
+				     arr_col) * Rast_raster_size(CELL_TYPE));
 
-		if (G_is_null_value(ptr, CELL_TYPE)) {	/* first node */
+		if (Rast_is_null_value(ptr, CELL_TYPE)) {	/* first node */
 		    head_id = new_node();
 		    nodes[head_id].next = -1;
 		    nodes[head_id].z = z;
-		    G_set_raster_value_c(ptr, head_id, CELL_TYPE);	/* store index to head */
+		    Rast_set_raster_value_c(ptr, head_id, CELL_TYPE);	/* store index to head */
 		}
 		else {		/* head is already there */
 
-		    head_id = G_get_raster_value_c(ptr, CELL_TYPE);	/* get index to head */
+		    head_id = Rast_get_raster_value_c(ptr, CELL_TYPE);	/* get index to head */
 		    head_id = add_node(head_id, z);
 		    if (head_id != -1)
-			G_set_raster_value_c(ptr, head_id, CELL_TYPE);	/* store index to head */
+			Rast_set_raster_value_c(ptr, head_id, CELL_TYPE);	/* store index to head */
 		}
 	    }
 	}			/* while !EOF */
@@ -719,55 +720,55 @@ int main(int argc, char *argv[])
 
 	    switch (method) {
 	    case METHOD_N:	/* n is a straight copy */
-		G_raster_cpy(raster_row,
+		Rast_raster_cpy(raster_row,
 			     n_array +
-			     (row * cols * G_raster_size(CELL_TYPE)), cols,
+			     (row * cols * Rast_raster_size(CELL_TYPE)), cols,
 			     CELL_TYPE);
 		break;
 
 	    case METHOD_MIN:
-		G_raster_cpy(raster_row,
-			     min_array + (row * cols * G_raster_size(rtype)),
+		Rast_raster_cpy(raster_row,
+			     min_array + (row * cols * Rast_raster_size(rtype)),
 			     cols, rtype);
 		break;
 
 	    case METHOD_MAX:
-		G_raster_cpy(raster_row,
-			     max_array + (row * cols * G_raster_size(rtype)),
+		Rast_raster_cpy(raster_row,
+			     max_array + (row * cols * Rast_raster_size(rtype)),
 			     cols, rtype);
 		break;
 
 	    case METHOD_SUM:
-		G_raster_cpy(raster_row,
-			     sum_array + (row * cols * G_raster_size(rtype)),
+		Rast_raster_cpy(raster_row,
+			     sum_array + (row * cols * Rast_raster_size(rtype)),
 			     cols, rtype);
 		break;
 
 	    case METHOD_RANGE:	/* (max-min) */
 		ptr = raster_row;
 		for (col = 0; col < cols; col++) {
-		    offset = (row * cols + col) * G_raster_size(rtype);
-		    min = G_get_raster_value_d(min_array + offset, rtype);
-		    max = G_get_raster_value_d(max_array + offset, rtype);
-		    G_set_raster_value_d(ptr, max - min, rtype);
-		    ptr = G_incr_void_ptr(ptr, G_raster_size(rtype));
+		    offset = (row * cols + col) * Rast_raster_size(rtype);
+		    min = Rast_get_raster_value_d(min_array + offset, rtype);
+		    max = Rast_get_raster_value_d(max_array + offset, rtype);
+		    Rast_set_raster_value_d(ptr, max - min, rtype);
+		    ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(rtype));
 		}
 		break;
 
 	    case METHOD_MEAN:	/* (sum / n) */
 		ptr = raster_row;
 		for (col = 0; col < cols; col++) {
-		    offset = (row * cols + col) * G_raster_size(rtype);
-		    n_offset = (row * cols + col) * G_raster_size(CELL_TYPE);
-		    n = G_get_raster_value_c(n_array + n_offset, CELL_TYPE);
-		    sum = G_get_raster_value_d(sum_array + offset, rtype);
+		    offset = (row * cols + col) * Rast_raster_size(rtype);
+		    n_offset = (row * cols + col) * Rast_raster_size(CELL_TYPE);
+		    n = Rast_get_raster_value_c(n_array + n_offset, CELL_TYPE);
+		    sum = Rast_get_raster_value_d(sum_array + offset, rtype);
 
 		    if (n == 0)
-			G_set_null_value(ptr, 1, rtype);
+			Rast_set_null_value(ptr, 1, rtype);
 		    else
-			G_set_raster_value_d(ptr, (sum / n), rtype);
+			Rast_set_raster_value_d(ptr, (sum / n), rtype);
 
-		    ptr = G_incr_void_ptr(ptr, G_raster_size(rtype));
+		    ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(rtype));
 		}
 		break;
 
@@ -776,45 +777,45 @@ int main(int argc, char *argv[])
 	    case METHOD_COEFF_VAR:	/*  100 * stdev / mean    */
 		ptr = raster_row;
 		for (col = 0; col < cols; col++) {
-		    offset = (row * cols + col) * G_raster_size(rtype);
-		    n_offset = (row * cols + col) * G_raster_size(CELL_TYPE);
-		    n = G_get_raster_value_c(n_array + n_offset, CELL_TYPE);
-		    sum = G_get_raster_value_d(sum_array + offset, rtype);
-		    sumsq = G_get_raster_value_d(sumsq_array + offset, rtype);
+		    offset = (row * cols + col) * Rast_raster_size(rtype);
+		    n_offset = (row * cols + col) * Rast_raster_size(CELL_TYPE);
+		    n = Rast_get_raster_value_c(n_array + n_offset, CELL_TYPE);
+		    sum = Rast_get_raster_value_d(sum_array + offset, rtype);
+		    sumsq = Rast_get_raster_value_d(sumsq_array + offset, rtype);
 
 		    if (n == 0)
-			G_set_null_value(ptr, 1, rtype);
+			Rast_set_null_value(ptr, 1, rtype);
 		    else {
 			variance = (sumsq - sum * sum / n) / n;
 			if (variance < GRASS_EPSILON)
 			    variance = 0.0;
 
 			if (method == METHOD_STDDEV)
-			    G_set_raster_value_d(ptr, sqrt(variance), rtype);
+			    Rast_set_raster_value_d(ptr, sqrt(variance), rtype);
 
 			else if (method == METHOD_VARIANCE)
-			    G_set_raster_value_d(ptr, variance, rtype);
+			    Rast_set_raster_value_d(ptr, variance, rtype);
 
 			else if (method == METHOD_COEFF_VAR)
-			    G_set_raster_value_d(ptr,
+			    Rast_set_raster_value_d(ptr,
 						 100 * sqrt(variance) / (sum /
 									 n),
 						 rtype);
 
 		    }
-		    ptr = G_incr_void_ptr(ptr, G_raster_size(rtype));
+		    ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(rtype));
 		}
 		break;
 	    case METHOD_MEDIAN:	/* median, if only one point in cell we will use that */
 		ptr = raster_row;
 		for (col = 0; col < cols; col++) {
-		    n_offset = (row * cols + col) * G_raster_size(CELL_TYPE);
-		    if (G_is_null_value(index_array + n_offset, CELL_TYPE))	/* no points in cell */
-			G_set_null_value(ptr, 1, rtype);
+		    n_offset = (row * cols + col) * Rast_raster_size(CELL_TYPE);
+		    if (Rast_is_null_value(index_array + n_offset, CELL_TYPE))	/* no points in cell */
+			Rast_set_null_value(ptr, 1, rtype);
 		    else {	/* one or more points in cell */
 
 			head_id =
-			    G_get_raster_value_c(index_array + n_offset,
+			    Rast_get_raster_value_c(index_array + n_offset,
 						 CELL_TYPE);
 			node_id = head_id;
 
@@ -826,7 +827,7 @@ int main(int argc, char *argv[])
 			}
 
 			if (n == 1)	/* only one point, use that */
-			    G_set_raster_value_d(ptr, nodes[head_id].z,
+			    Rast_set_raster_value_d(ptr, nodes[head_id].z,
 						 rtype);
 			else if (n % 2 != 0) {	/* odd number of points: median_i = (n + 1) / 2 */
 			    n = (n + 1) / 2;
@@ -834,7 +835,7 @@ int main(int argc, char *argv[])
 			    for (j = 1; j < n; j++)	/* get "median element" */
 				node_id = nodes[node_id].next;
 
-			    G_set_raster_value_d(ptr, nodes[node_id].z,
+			    Rast_set_raster_value_d(ptr, nodes[node_id].z,
 						 rtype);
 			}
 			else {	/* even number of points: median = (val_below + val_above) / 2 */
@@ -847,21 +848,21 @@ int main(int argc, char *argv[])
 
 			    z = (nodes[node_id].z +
 				 nodes[nodes[node_id].next].z) / 2;
-			    G_set_raster_value_d(ptr, z, rtype);
+			    Rast_set_raster_value_d(ptr, z, rtype);
 			}
 		    }
-		    ptr = G_incr_void_ptr(ptr, G_raster_size(rtype));
+		    ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(rtype));
 		}
 		break;
 	    case METHOD_PERCENTILE:	/* rank = (pth*(n+1))/100; interpolate linearly */
 		ptr = raster_row;
 		for (col = 0; col < cols; col++) {
-		    n_offset = (row * cols + col) * G_raster_size(CELL_TYPE);
-		    if (G_is_null_value(index_array + n_offset, CELL_TYPE))	/* no points in cell */
-			G_set_null_value(ptr, 1, rtype);
+		    n_offset = (row * cols + col) * Rast_raster_size(CELL_TYPE);
+		    if (Rast_is_null_value(index_array + n_offset, CELL_TYPE))	/* no points in cell */
+			Rast_set_null_value(ptr, 1, rtype);
 		    else {
 			head_id =
-			    G_get_raster_value_c(index_array + n_offset,
+			    Rast_get_raster_value_c(index_array + n_offset,
 						 CELL_TYPE);
 			node_id = head_id;
 			n = 0;
@@ -892,20 +893,20 @@ int main(int argc, char *argv[])
 			    node_id = nodes[node_id].next;
 
 			z = (z + nodes[node_id].z) / 2;
-			G_set_raster_value_d(ptr, z, rtype);
+			Rast_set_raster_value_d(ptr, z, rtype);
 		    }
-		    ptr = G_incr_void_ptr(ptr, G_raster_size(rtype));
+		    ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(rtype));
 		}
 		break;
 	    case METHOD_SKEWNESS:	/* skewness = sum(xi-mean)^3/(N-1)*s^3 */
 		ptr = raster_row;
 		for (col = 0; col < cols; col++) {
-		    n_offset = (row * cols + col) * G_raster_size(CELL_TYPE);
-		    if (G_is_null_value(index_array + n_offset, CELL_TYPE))	/* no points in cell */
-			G_set_null_value(ptr, 1, rtype);
+		    n_offset = (row * cols + col) * Rast_raster_size(CELL_TYPE);
+		    if (Rast_is_null_value(index_array + n_offset, CELL_TYPE))	/* no points in cell */
+			Rast_set_null_value(ptr, 1, rtype);
 		    else {
 			head_id =
-			    G_get_raster_value_c(index_array + n_offset,
+			    Rast_get_raster_value_c(index_array + n_offset,
 						 CELL_TYPE);
 			node_id = head_id;
 
@@ -940,20 +941,20 @@ int main(int argc, char *argv[])
 				    sumdev / ((n - 1) *
 					      pow(sqrt(variance), 3));
 			}
-			G_set_raster_value_d(ptr, skew, rtype);
+			Rast_set_raster_value_d(ptr, skew, rtype);
 		    }
-		    ptr = G_incr_void_ptr(ptr, G_raster_size(rtype));
+		    ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(rtype));
 		}
 		break;
 	    case METHOD_TRIMMEAN:
 		ptr = raster_row;
 		for (col = 0; col < cols; col++) {
-		    n_offset = (row * cols + col) * G_raster_size(CELL_TYPE);
-		    if (G_is_null_value(index_array + n_offset, CELL_TYPE))	/* no points in cell */
-			G_set_null_value(ptr, 1, rtype);
+		    n_offset = (row * cols + col) * Rast_raster_size(CELL_TYPE);
+		    if (Rast_is_null_value(index_array + n_offset, CELL_TYPE))	/* no points in cell */
+			Rast_set_null_value(ptr, 1, rtype);
 		    else {
 			head_id =
-			    G_get_raster_value_c(index_array + n_offset,
+			    Rast_get_raster_value_c(index_array + n_offset,
 						 CELL_TYPE);
 
 			node_id = head_id;
@@ -997,9 +998,9 @@ int main(int argc, char *argv[])
 			    }
 			    mean = sum / n;
 			}
-			G_set_raster_value_d(ptr, mean, rtype);
+			Rast_set_raster_value_d(ptr, mean, rtype);
 		    }
-		    ptr = G_incr_void_ptr(ptr, G_raster_size(rtype));
+		    ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(rtype));
 		}
 		break;
 
@@ -1008,8 +1009,8 @@ int main(int argc, char *argv[])
 	    }
 
 	    /* write out line of raster data */
-	    if (1 != G_put_raster_row(out_fd, raster_row, rtype)) {
-		G_close_cell(out_fd);
+	    if (1 != Rast_put_raster_row(out_fd, raster_row, rtype)) {
+		Rast_close_cell(out_fd);
 		G_fatal_error(_("Writing map, row %d"),
 			      ((pass - 1) * rows) + row);
 	    }
@@ -1044,17 +1045,17 @@ int main(int argc, char *argv[])
 	fclose(in_fp);
 
     /* close raster file & write history */
-    G_close_cell(out_fd);
+    Rast_close_cell(out_fd);
 
     sprintf(title, "Raw x,y,z data binned into a raster grid by cell %s",
 	    method_opt->answer);
-    G_put_cell_title(outmap, title);
+    Rast_put_cell_title(outmap, title);
 
-    G_short_history(outmap, "raster", &history);
-    G_command_history(&history);
+    Rast_short_history(outmap, "raster", &history);
+    Rast_command_history(&history);
     strncpy(history.datsrc_1, infile, RECORD_LEN);
     history.datsrc_1[RECORD_LEN - 1] = '\0';	/* strncpy() doesn't null terminate if maxfill */
-    G_write_history(outmap, &history);
+    Rast_write_history(outmap, &history);
 
 
     sprintf(buff, _("%lu points found in region."), count_total);

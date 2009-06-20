@@ -107,10 +107,10 @@ int main(int argc, char *argv[])
 	if (!mapset)
 	    G_fatal_error(_("Raster map <%s> not found"), name);
 	names[nfiles] = name;
-	fd[nfiles] = G_open_cell_old(name, mapset);
+	fd[nfiles] = Rast_open_cell_old(name, mapset);
 	if (fd[nfiles] < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), name);
-	G_read_range(name, mapset, &range);
+	Rast_read_range(name, mapset, &range);
 	ncats = range.max - range.min;
 
 	if (nfiles == 0 || ncats > max_cats) {
@@ -122,7 +122,7 @@ int main(int argc, char *argv[])
     if (nfiles <= 1)
 	G_fatal_error(_("Must specify 2 or more input maps"));
     output = parm.output->answer;
-    outfd = G_open_cell_new(output);
+    outfd = Rast_open_cell_new(output);
 
     if (outfd < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"),
@@ -135,7 +135,7 @@ int main(int argc, char *argv[])
     }
     strcat(buf, " and ");
     strcat(buf, names[i]);
-    G_init_cats((CELL) 0, buf, &pcats);
+    Rast_init_cats((CELL) 0, buf, &pcats);
 
     /* first step is cross product, but un-ordered */
     result = cross(fd, non_zero, primary, outfd);
@@ -145,8 +145,8 @@ int main(int argc, char *argv[])
 
     /* now close all files */
     for (i = 0; i < nfiles; i++)
-	G_close_cell(fd[i]);
-    G_close_cell(outfd);
+	Rast_close_cell(fd[i]);
+    Rast_close_cell(outfd);
 
     if (result <= 0)
 	exit(0);
@@ -157,7 +157,7 @@ int main(int argc, char *argv[])
     table = (CELL *) G_calloc(result + 1, sizeof(CELL));
     for (i = 0; i < nfiles; i++) {
 	mapset = G_find_cell2(names[i], "");
-	G_read_cats(names[i], mapset, &labels[i]);
+	Rast_read_cats(names[i], mapset, &labels[i]);
     }
 
     for (ncats = 0; ncats <= result; ncats++) {
@@ -166,22 +166,22 @@ int main(int argc, char *argv[])
     }
 
     for (i = 0; i < nfiles; i++)
-	G_free_cats(&labels[i]);
+	Rast_free_cats(&labels[i]);
 
     /* reopen the output cell for reading and for writing */
-    fd[0] = G_open_cell_old(output, G_mapset());
-    outfd = G_open_cell_new(output);
+    fd[0] = Rast_open_cell_old(output, G_mapset());
+    outfd = Rast_open_cell_new(output);
 
     renumber(fd[0], outfd);
 
     G_message(_("Creating support files for <%s>..."), output);
-    G_close_cell(fd[0]);
-    G_close_cell(outfd);
-    G_write_cats(output, &pcats);
-    G_free_cats(&pcats);
+    Rast_close_cell(fd[0]);
+    Rast_close_cell(outfd);
+    Rast_write_cats(output, &pcats);
+    Rast_free_cats(&pcats);
     if (result > 0) {
-	G_make_random_colors(&pcolr, (CELL) 1, result);
-	G_write_colors(output, G_mapset(), &pcolr);
+	Rast_make_random_colors(&pcolr, (CELL) 1, result);
+	Rast_write_colors(output, G_mapset(), &pcolr);
     }
 
     G_message(_("%ld categories"), (long)result);

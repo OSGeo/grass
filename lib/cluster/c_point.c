@@ -17,7 +17,9 @@
  * note: if all values in x are zero, the point is rejected
  ***************************************************************/
 
+#include <grass/Rast.h>
 #include <grass/cluster.h>
+
 static int extend(struct Cluster *, int);
 static int all_zero(struct Cluster *, int);
 
@@ -27,7 +29,7 @@ int I_cluster_point(struct Cluster *C, DCELL * x)
 
     /* reject points which contain nulls in one of the bands */
     for (band = 0; band < C->nbands; band++)
-	if (G_is_d_null_value(&x[band]))
+	if (Rast_is_d_null_value(&x[band]))
 	    return 1;		/* fixed 11/99 Agus Carr */
     /*
        if (band >= C->nbands)
@@ -42,7 +44,7 @@ int I_cluster_point(struct Cluster *C, DCELL * x)
     for (band = 0; band < C->nbands; band++) {
 	register double z;
 
-	/*       if(G_is_d_null_value(&x[band])) continue; */
+	/*       if(Rast_is_d_null_value(&x[band])) continue; */
 	z = C->points[band][C->npoints] = x[band];
 	C->band_sum[band] += z;
 	C->band_sum2[band] += z * z;
@@ -60,7 +62,7 @@ int I_cluster_point_part(struct Cluster *C, DCELL x, int band, int n)
 {
     DCELL tmp = x;
 
-    if (G_is_d_null_value(&tmp))
+    if (Rast_is_d_null_value(&tmp))
 	return 1;
     C->points[band][C->npoints + n] = x;
     C->band_sum[band] += x;

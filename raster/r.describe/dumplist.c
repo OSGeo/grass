@@ -18,6 +18,7 @@
 
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 
 static int show(CELL, CELL, int *, DCELL, DCELL, RASTER_MAP_TYPE, int);
 
@@ -30,11 +31,11 @@ int long_list(struct Cell_stats *statf,
     CELL cat;
     long count;			/* not used, but required by cell stats call */
 
-    G_get_stats_for_null_value(&count, statf);
+    Rast_get_stats_for_null_value(&count, statf);
     if (count != 0 && !skip_nulls)
 	fprintf(stdout, "%s\n", no_data_str);
 
-    while (G_next_cell_stat(&cat, &count, statf)) {
+    while (Rast_next_cell_stat(&cat, &count, statf)) {
 	if (map_type != CELL_TYPE)
 	    fprintf(stdout, "%f-%f\n",
 		    dmin + (double)(cat - 1) * (dmax - dmin) / nsteps,
@@ -56,16 +57,16 @@ int compact_list(struct Cell_stats *statf,
     long count;			/* not used, but required by cell stats call */
 
     len = 0;
-    G_get_stats_for_null_value(&count, statf);
+    Rast_get_stats_for_null_value(&count, statf);
     if (count != 0 && !skip_nulls)
 	fprintf(stdout, "%s ", no_data_str);
 
-    if (!G_next_cell_stat(&cat1, &count, statf))
+    if (!Rast_next_cell_stat(&cat1, &count, statf))
 	/* map doesn't contain any non-null data */
 	return 1;
 
     cat2 = cat1;
-    while (G_next_cell_stat(&temp, &count, statf)) {
+    while (Rast_next_cell_stat(&temp, &count, statf)) {
 	if (temp != cat2 + (CELL) 1) {
 	    show(cat1, cat2, &len, dmin, dmax, map_type, nsteps);
 	    cat1 = temp;

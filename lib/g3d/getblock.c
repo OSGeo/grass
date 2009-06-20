@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <unistd.h>
+
+#include <grass/Rast.h>
 #include "G3d_intern.h"
 
 /*---------------------------------------------------------------------------*/
@@ -120,15 +122,15 @@ G3d_getBlock(G3D_Map * map, int x0, int y0, int z0, int nx, int ny, int nz,
 	for (y = y0; y < y1; y++) {
 	    for (x = x0; x < x1; x++) {
 		G3d_getValueRegion(map, x, y, z, block, type);
-		block = G_incr_void_ptr(block, length);
+		block = Rast_incr_void_ptr(block, length);
 	    }
 	    nNull = x0 + nx - x;
 	    G3d_setNullValue(block, nNull, type);
-	    block = G_incr_void_ptr(block, length * nNull);
+	    block = Rast_incr_void_ptr(block, length * nNull);
 	}
 	nNull = (y0 + ny - y) * nx;
 	G3d_setNullValue(block, nNull, type);
-	block = G_incr_void_ptr(block, length * nNull);
+	block = Rast_incr_void_ptr(block, length * nNull);
     }
     nNull = (z0 + nz - z) * ny * nx;
     G3d_setNullValue(block, nNull, type);

@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "global.h"
 
@@ -49,10 +50,10 @@ int open_files(void)
     cell = (DCELL **) G_malloc(ref.nfiles * sizeof(DCELL *));
     cellfd = (int *)G_malloc(ref.nfiles * sizeof(int));
     for (n = 0; n < ref.nfiles; n++) {
-	cell[n] = G_allocate_d_raster_buf();
+	cell[n] = Rast_allocate_d_raster_buf();
 	name = ref.file[n].name;
 	mapset = ref.file[n].mapset;
-	if ((cellfd[n] = G_open_cell_old(name, mapset)) < 0)
+	if ((cellfd[n] = Rast_open_cell_old(name, mapset)) < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
 			  G_fully_qualified_name(name, mapset));
     }

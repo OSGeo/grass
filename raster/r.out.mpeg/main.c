@@ -40,6 +40,7 @@
 #include <unistd.h>
 
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 #include "rom_proto.h"
@@ -281,23 +282,23 @@ static int load_files(void)
 	    if (!quiet)
 		G_message("\r%s <%s>", _("Reading file"), name);
 
-	    fd = G_open_cell_old(name, "");
+	    fd = Rast_open_cell_old(name, "");
 	    if (fd < 0)
 		G_fatal_error(_("Raster map <%s> not found"), name);
 
-	    if (G_read_colors(name, "", &colors) < 0)
+	    if (Rast_read_colors(name, "", &colors) < 0)
 		G_fatal_error(_("Unable to read color table for <%s>"), name);
 
-	    rtype = G_get_raster_map_type(fd);
-	    voidc = G_allocate_raster_buf(rtype);
+	    rtype = Rast_get_raster_map_type(fd);
+	    voidc = Rast_allocate_raster_buf(rtype);
 
 	    for (row = 0; row < vrows; row++) {
-		if (G_get_raster_row(fd, voidc,
+		if (Rast_get_raster_row(fd, voidc,
 				     (int)(row / vscale), rtype) < 0)
 		    G_fatal_error(_("Error reading row <%d>"), row);
 
 		rowoff = (vyoff + row) * ncols;
-		G_lookup_raster_colors(voidc, tr, tg, tb,
+		Rast_lookup_raster_colors(voidc, tr, tg, tb,
 				       tset, tsiz, &colors, rtype);
 
 		for (col = 0; col < vcols; col++) {
@@ -314,7 +315,7 @@ static int load_files(void)
 		}
 	    }
 
-	    G_close_cell(fd);
+	    Rast_close_cell(fd);
 	}
 
 	yfiles[cnt] = G_tempfile();

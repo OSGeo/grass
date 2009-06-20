@@ -26,6 +26,7 @@
 #include "stdlib.h"
 #include "string.h"
 #include <grass/gis.h>
+#include <grass/Rast.h>
 
 #define EQ(a, b)    (a-b < 0.01 && a-b > -0.01 )
 #define BIG   500000000.0

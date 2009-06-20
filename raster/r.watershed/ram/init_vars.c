@@ -2,6 +2,7 @@
 #include <string.h>
 #include "Gwater.h"
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 int ele_round(double);
@@ -139,14 +140,14 @@ int init_vars(int argc, char *argv[])
     worked = flag_create(nrows, ncols);
 
     /* open elevation input */
-    fd = G_open_cell_old(ele_name, "");
+    fd = Rast_open_cell_old(ele_name, "");
     if (fd < 0) {
 	G_fatal_error(_("unable to open elevation map layer"));
     }
 
-    ele_map_type = G_get_raster_map_type(fd);
-    ele_size = G_raster_size(ele_map_type);
-    elebuf = G_allocate_raster_buf(ele_map_type);
+    ele_map_type = Rast_get_raster_map_type(fd);
+    ele_size = Rast_raster_size(ele_map_type);
+    elebuf = Rast_allocate_raster_buf(ele_map_type);
 
     if (ele_map_type == FCELL_TYPE || ele_map_type == DCELL_TYPE)
 	ele_scale = 1000; 	/* should be enough to do the trick */
@@ -155,7 +156,7 @@ int init_vars(int argc, char *argv[])
     MASK_flag = 0;
     do_points = nrows * ncols;
     for (r = 0; r < nrows; r++) {
-	G_get_raster_row(fd, elebuf, r, ele_map_type);
+	Rast_get_raster_row(fd, elebuf, r, ele_map_type);
 	ptr = elebuf;
 	for (c = 0; c < ncols; c++) {
 	    index = SEG_INDEX(alt_seg, r, c);
@@ -166,10 +167,10 @@ int init_vars(int argc, char *argv[])
 	    flag_unset(worked, r, c);
 
 	    /* check for masked and NULL cells */
-	    if (G_is_null_value(ptr, ele_map_type)) {
+	    if (Rast_is_null_value(ptr, ele_map_type)) {
 		FLAG_SET(worked, r, c);
 		FLAG_SET(in_list, r, c);
-		G_set_c_null_value(&alt_value, 1);
+		Rast_set_c_null_value(&alt_value, 1);
 		do_points--;
 	    }
 	    else {
@@ -191,10 +192,10 @@ int init_vars(int argc, char *argv[])
 	    if (er_flag) {
 		r_h[index] = alt_value;
 	    }
-	    ptr = G_incr_void_ptr(ptr, ele_size);
+	    ptr = Rast_incr_void_ptr(ptr, ele_size);
 	}
     }
-    G_close_cell(fd);
+    Rast_close_cell(fd);
     G_free(elebuf);
     if (do_points < nrows * ncols)
 	MASK_flag = 1;
@@ -204,15 +205,15 @@ int init_vars(int argc, char *argv[])
 	(DCELL *) G_malloc(sizeof(DCELL) *
 			   size_array(&wat_seg, nrows, ncols));
 
-    buf = G_allocate_cell_buf();
+    buf = Rast_allocate_cell_buf();
     if (run_flag) {
 	/* ... with input map flow: amount of overland flow per cell */
-	fd = G_open_cell_old(run_name, "");
+	fd = Rast_open_cell_old(run_name, "");
 	if (fd < 0) {
 	    G_fatal_error(_("unable to open runoff map layer"));
 	}
 	for (r = 0; r < nrows; r++) {
-	    G_get_c_raster_row(fd, buf, r);
+	    Rast_get_c_raster_row(fd, buf, r);
 	    for (c = 0; c < ncols; c++) {
 		if (MASK_flag) {
 		    index = FLAG_GET(worked, r, c);
@@ -225,7 +226,7 @@ int init_vars(int argc, char *argv[])
 		    wat[SEG_INDEX(wat_seg, r, c)] = buf[c];
 	    }
 	}
-	G_close_cell(fd);
+	Rast_close_cell(fd);
     }
     else {
 	/* ... with 1.0 */
@@ -246,41 +247,41 @@ int init_vars(int argc, char *argv[])
 
     /* depression: drainage direction will be set to zero later */
     if (pit_flag) {
-	fd = G_open_cell_old(pit_name, "");
+	fd = Rast_open_cell_old(pit_name, "");
 	if (fd < 0) {
 	    G_fatal_error(_("unable to open depression map layer"));
 	}
 	for (r = 0; r < nrows; r++) {
-	    G_get_c_raster_row(fd, buf, r);
+	    Rast_get_c_raster_row(fd, buf, r);
 	    for (c = 0; c < ncols; c++) {
 		asp_value = buf[c];
-		if (!G_is_c_null_value(&asp_value) && asp_value)
+		if (!Rast_is_c_null_value(&asp_value) && asp_value)
 		    asp[SEG_INDEX(asp_seg, r, c)] = 1;
 	    }
 	}
-	G_close_cell(fd);
+	Rast_close_cell(fd);
     }
 
     /* this is also creating streams... */
     if (ob_flag) {
-	fd = G_open_cell_old(ob_name, "");
+	fd = Rast_open_cell_old(ob_name, "");
 	if (fd < 0) {
 	    G_fatal_error(_("unable to open blocking map layer"));
 	}
 	for (r = 0; r < nrows; r++) {
-	    G_get_c_raster_row(fd, buf, r);
+	    Rast_get_c_raster_row(fd, buf, r);
 	    for (c = 0; c < ncols; c++) {
 		block_value = buf[c];
-		if (!G_is_c_null_value(&block_value) && block_value)
+		if (!Rast_is_c_null_value(&block_value) && block_value)
 		    FLAG_SET(swale, r, c);
 	    }
 	}
-	G_close_cell(fd);
+	Rast_close_cell(fd);
     }
     G_free(buf);
 
     if (ril_flag) {
-	ril_fd = G_open_cell_old(ril_name, "");
+	ril_fd = Rast_open_cell_old(ril_name, "");
 	if (ril_fd < 0) {
 	    G_fatal_error(_("unable to open rill map layer"));
 	}

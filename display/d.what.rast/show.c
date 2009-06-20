@@ -19,7 +19,7 @@ int show_cat(int width, int mwidth,
 	sprintf(buf, " ");
     if (terse) {
 	fname = G_fully_qualified_name(name, mapset);
-	if (G_is_c_null_value(&cell_val)) {
+	if (Rast_is_c_null_value(&cell_val)) {
 	    if (!isatty(fileno(stdout)))
 		fprintf(stdout, "%s%s%sNull%s%s\n", fname, buf, fs, fs,
 			label);
@@ -33,7 +33,7 @@ int show_cat(int width, int mwidth,
 	}
     }
     else {
-	if (G_is_c_null_value(&cell_val)) {
+	if (Rast_is_c_null_value(&cell_val)) {
 	    if (!isatty(fileno(stdout)))
 		fprintf(stdout, "%*s in %-*s%s (Null)%s\n", width, name,
 			mwidth, mapset, buf, label);
@@ -63,7 +63,7 @@ int show_dval(int width, int mwidth,
     dcell_val = dval;
     if (terse) {
 	fname = G_fully_qualified_name(name, mapset);
-	if (G_is_d_null_value(&dcell_val)) {
+	if (Rast_is_d_null_value(&dcell_val)) {
 	    if (!isatty(fileno(stdout)))
 		fprintf(stdout, "%s, actual %sNull%s%s\n", fname, fs, fs,
 			label);
@@ -78,7 +78,7 @@ int show_dval(int width, int mwidth,
 	}
     }
     else {
-	if (G_is_d_null_value(&dcell_val)) {
+	if (Rast_is_d_null_value(&dcell_val)) {
 	    if (!isatty(fileno(stdout)))
 		fprintf(stdout, "%*s in %-*s, actual  (Null)%s\n", width,
 			name, mwidth, mapset, label);
@@ -120,7 +120,7 @@ int show_utm(char *name, char *mapset, double north, double east,
     if (once) {
 	/* speed up? */
 	once = 0;
-	G_get_cellhd(name, mapset, &cellhd);
+	Rast_get_cellhd(name, mapset, &cellhd);
     }
 
     n_row = (int)((cellhd.north - north) / window->ns_res);

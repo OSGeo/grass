@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/spawn.h>
 #include <grass/glocale.h>
 
@@ -167,21 +168,21 @@ int main(int argc, char **argv)
 
     method = menu[i].val;
 
-    base_fd = G_open_cell_old(basemap, "");
+    base_fd = Rast_open_cell_old(basemap, "");
     if (base_fd < 0)
 	G_fatal_error(_("Unable to open base map <%s>"), basemap);
 
-    cover_fd = G_open_cell_old(covermap, "");
+    cover_fd = Rast_open_cell_old(covermap, "");
     if (cover_fd < 0)
 	G_fatal_error(_("Unable to open cover map <%s>"), covermap);
 
-    if (usecats && G_read_cats(covermap, "", &cats) < 0)
+    if (usecats && Rast_read_cats(covermap, "", &cats) < 0)
 	G_fatal_error(_("Unable to read category file of cover map <%s>"), covermap);
 
-    if (G_raster_map_is_fp(basemap, "") != 0)
+    if (Rast_raster_map_is_fp(basemap, "") != 0)
 	G_fatal_error(_("The base map must be an integer (CELL) map"));
 
-    if (G_read_range(basemap, "", &range) < 0)
+    if (Rast_read_range(basemap, "", &range) < 0)
 	G_fatal_error(_("Unable to read range of base map <%s>"), basemap);
 
     mincat = range.min;
@@ -243,22 +244,22 @@ int main(int argc, char **argv)
 	for (i = 0; i < ncats; i++)
 	    max[i] = -1e300;
 
-    base_buf = G_allocate_c_raster_buf();
-    cover_buf = G_allocate_d_raster_buf();
+    base_buf = Rast_allocate_c_raster_buf();
+    cover_buf = Rast_allocate_d_raster_buf();
 
     G_message(_("First pass"));
 
     for (row = 0; row < rows; row++) {
-	G_get_c_raster_row(base_fd, base_buf, row);
-	G_get_d_raster_row(cover_fd, cover_buf, row);
+	Rast_get_c_raster_row(base_fd, base_buf, row);
+	Rast_get_d_raster_row(cover_fd, cover_buf, row);
 
 	for (col = 0; col < cols; col++) {
 	    int n;
 	    DCELL v;
 
-	    if (G_is_c_null_value(&base_buf[col]))
+	    if (Rast_is_c_null_value(&base_buf[col]))
 		continue;
-	    if (G_is_d_null_value(&cover_buf[col]))
+	    if (Rast_is_d_null_value(&cover_buf[col]))
 		continue;
 
 	    n = base_buf[col] - mincat;
@@ -268,7 +269,7 @@ int main(int argc, char **argv)
 
 	    v = cover_buf[col];
 	    if (usecats)
-		sscanf(G_get_cat((CELL) v, &cats), "%lf", &v);
+		sscanf(Rast_get_cat((CELL) v, &cats), "%lf", &v);
 
 	    if (count)
 		count[n]++;
@@ -328,16 +329,16 @@ int main(int argc, char **argv)
 	G_message(_("Second pass"));
 
 	for (row = 0; row < rows; row++) {
-	    G_get_c_raster_row(base_fd, base_buf, row);
-	    G_get_d_raster_row(cover_fd, cover_buf, row);
+	    Rast_get_c_raster_row(base_fd, base_buf, row);
+	    Rast_get_d_raster_row(cover_fd, cover_buf, row);
 
 	    for (col = 0; col < cols; col++) {
 		int n;
 		DCELL v, d;
 
-		if (G_is_c_null_value(&base_buf[col]))
+		if (Rast_is_c_null_value(&base_buf[col]))
 		    continue;
-		if (G_is_d_null_value(&cover_buf[col]))
+		if (Rast_is_d_null_value(&cover_buf[col]))
 		    continue;
 
 		n = base_buf[col] - mincat;
@@ -347,7 +348,7 @@ int main(int argc, char **argv)
 
 		v = cover_buf[col];
 		if (usecats)
-		    sscanf(G_get_cat((CELL) v, &cats), "%lf", &v);
+		    sscanf(Rast_get_cat((CELL) v, &cats), "%lf", &v);
 		d = v - mean[n];
 
 		if (sumu)
@@ -495,32 +496,32 @@ int main(int argc, char **argv)
 
 	G_message(_("Writing output map"));
 
-	out_fd = G_open_fp_cell_new(output);
+	out_fd = Rast_open_fp_cell_new(output);
 	if (out_fd < 0)
 	    G_fatal_error(_("Unable to open output map <%s>"), output);
 
-	out_buf = G_allocate_d_raster_buf();
+	out_buf = Rast_allocate_d_raster_buf();
 
 	for (row = 0; row < rows; row++) {
-	    G_get_c_raster_row(base_fd, base_buf, row);
+	    Rast_get_c_raster_row(base_fd, base_buf, row);
 
 	    for (col = 0; col < cols; col++)
-		if (G_is_c_null_value(&base_buf[col]))
-		    G_set_d_null_value(&out_buf[col], 1);
+		if (Rast_is_c_null_value(&base_buf[col]))
+		    Rast_set_d_null_value(&out_buf[col], 1);
 		else
 		    out_buf[col] = result[base_buf[col] - mincat];
 
-	    G_put_d_raster_row(out_fd, out_buf);
+	    Rast_put_d_raster_row(out_fd, out_buf);
 
 	    G_percent(row, rows, 2);
 	}
 
 	G_percent(row, rows, 2);
 
-	G_close_cell(out_fd);
+	Rast_close_cell(out_fd);
 
-	if (G_read_colors(covermap, "", &colors) > 0)
-	    G_write_colors(output, G_mapset(), &colors);
+	if (Rast_read_colors(covermap, "", &colors) > 0)
+	    Rast_write_colors(output, G_mapset(), &colors);
     }
 
     return 0;

@@ -111,29 +111,29 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Raster map <%s> not found"), name);
 
     /* determine the inputmap type (CELL/FCELL/DCELL) */
-    data_type = G_raster_map_type(name, mapset);
+    data_type = Rast_raster_map_type(name, mapset);
 
-    /* G_open_cell_old - returns file destriptor (>0) */
-    if ((infd = G_open_cell_old(name, mapset)) < 0)
+    /* Rast_open_cell_old - returns file destriptor (>0) */
+    if ((infd = Rast_open_cell_old(name, mapset)) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
 
 
     /* controlling, if we can open input raster */
-    if (G_get_cellhd(name, mapset, &cellhd) < 0)
+    if (Rast_get_cellhd(name, mapset, &cellhd) < 0)
 	G_fatal_error(_("Unable to read file header of <%s>"), name);
 
     G_debug(3, "number of rows %d", cellhd.rows);
 
     /* Allocate input buffer */
-    inrast = G_allocate_raster_buf(data_type);
+    inrast = Rast_allocate_raster_buf(data_type);
 
     /* Allocate output buffer, use input map data_type */
     nrows = G_window_rows();
     ncols = G_window_cols();
-    outrast = G_allocate_raster_buf(data_type);
+    outrast = Rast_allocate_raster_buf(data_type);
 
     /* controlling, if we can write the raster */
-    if ((outfd = G_open_raster_new(result, data_type)) < 0)
+    if ((outfd = Rast_open_raster_new(result, data_type)) < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), result);
 
     /* for each row */
@@ -146,7 +146,7 @@ int main(int argc, char *argv[])
 	    G_percent(row, nrows, 2);
 
 	/* read input map */
-	if (G_get_raster_row(infd, inrast, row, data_type) < 0)
+	if (Rast_get_raster_row(infd, inrast, row, data_type) < 0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"), name,
 			  row);
 
@@ -173,7 +173,7 @@ int main(int argc, char *argv[])
 	}
 
 	/* write raster row to output raster map */
-	if (G_put_raster_row(outfd, outrast, data_type) < 0)
+	if (Rast_put_raster_row(outfd, outrast, data_type) < 0)
 	    G_fatal_error(_("Failed writing raster map <%s>"), result);
     }
 
@@ -182,13 +182,13 @@ int main(int argc, char *argv[])
     G_free(outrast);
 
     /* closing raster maps */
-    G_close_cell(infd);
-    G_close_cell(outfd);
+    Rast_close_cell(infd);
+    Rast_close_cell(outfd);
 
     /* add command line incantation to history file */
-    G_short_history(result, "raster", &history);
-    G_command_history(&history);
-    G_write_history(result, &history);
+    Rast_short_history(result, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(result, &history);
 
 
     exit(EXIT_SUCCESS);

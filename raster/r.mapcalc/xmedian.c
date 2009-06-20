@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "globals.h"
 #include "expression.h"
 #include "func_proto.h"
@@ -47,7 +48,7 @@ int f_median(int argc, const int *argt, void **args)
 {
     static void *array;
     static int alloc;
-    int size = argc * G_raster_size(argt[0]);
+    int size = argc * Rast_raster_size(argt[0]);
     int i, j;
 
     if (argc < 1)

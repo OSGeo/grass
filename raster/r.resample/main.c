@@ -23,6 +23,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 int main(int argc, char *argv[])
@@ -78,37 +79,37 @@ int main(int argc, char *argv[])
     name = option.input->answer;
     result = option.output->answer;
 
-    hist_ok = G_read_history(name, "", &hist) >= 0;
-    colr_ok = G_read_colors(name, "", &colr) > 0;
-    cats_ok = G_read_cats(name, "", &cats) >= 0;
+    hist_ok = Rast_read_history(name, "", &hist) >= 0;
+    colr_ok = Rast_read_colors(name, "", &colr) > 0;
+    cats_ok = Rast_read_cats(name, "", &cats) >= 0;
     if (cats_ok) {
-	G_unmark_raster_cats(&cats);
-	G_init_cats((CELL) 0, G_get_cats_title(&cats), &newcats);
+	Rast_unmark_raster_cats(&cats);
+	Rast_init_cats((CELL) 0, Rast_get_cats_title(&cats), &newcats);
     }
 
-    infd = G_open_cell_old(name, "");
+    infd = Rast_open_cell_old(name, "");
     if (infd < 0)
 	G_fatal_error(_("Unable to open input map <%s>"), name);
 
     /* determine the map type;
        data_type is the type of data being processed,
        out_type is the type of map being created. */
-    data_type = G_get_raster_map_type(infd);
+    data_type = Rast_get_raster_map_type(infd);
     out_type = data_type;
 
-    if (G_get_cellhd(name, "", &cellhd) < 0)
+    if (Rast_get_cellhd(name, "", &cellhd) < 0)
 	G_fatal_error(_("Unable to read header for <%s>"), name);
 
     /* raster buffer is big enough to hold data */
-    rast = G_allocate_raster_buf(data_type);
+    rast = Rast_allocate_raster_buf(data_type);
     nrows = G_window_rows();
     ncols = G_window_cols();
     if (ncols <= 1)
-	rast = G_realloc(rast, 2 * G_raster_size(data_type));
+	rast = G_realloc(rast, 2 * Rast_raster_size(data_type));
     /* we need the buffer at least 2 cells large */
 
-    outfd = G_open_raster_new(result, out_type);
-    G_set_null_value(rast, ncols, out_type);
+    outfd = Rast_open_raster_new(result, out_type);
+    Rast_set_null_value(rast, ncols, out_type);
 
     if (outfd < 0)
 	G_fatal_error(_("Unable to open output map <%s>"), name);
@@ -117,59 +118,59 @@ int main(int argc, char *argv[])
 
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
-	if (G_get_raster_row(infd, rast, row, data_type) < 0)
+	if (Rast_get_raster_row(infd, rast, row, data_type) < 0)
 	    G_fatal_error(_("Error reading row %d"), row);
-	if (G_put_raster_row(outfd, rast, out_type) < 0)
+	if (Rast_put_raster_row(outfd, rast, out_type) < 0)
 	    G_fatal_error(_("Error writing row %d"), row);
-	G_mark_raster_cats(rast, ncols, &cats, data_type);
+	Rast_mark_raster_cats(rast, ncols, &cats, data_type);
     }
 
     G_percent(row, nrows, 2);
 
-    G_close_cell(infd);
+    Rast_close_cell(infd);
 
     G_message(_("Creating support files for <%s>..."), result);
 
-    G_close_cell(outfd);
+    Rast_close_cell(outfd);
 
-    G_rewind_raster_cats(&cats);
+    Rast_rewind_raster_cats(&cats);
 
     if (cats_ok) {
 	long count;
 	void *rast1, *rast2;
 
 	rast1 = rast;
-	rast2 = G_incr_void_ptr(rast, G_raster_size(data_type));
+	rast2 = Rast_incr_void_ptr(rast, Rast_raster_size(data_type));
 
 	G_message(_("Creating new cats file..."));
-	while (G_get_next_marked_raster_cat(&cats,
+	while (Rast_get_next_marked_raster_cat(&cats,
 					    rast1, rast2, &count, data_type))
-	    G_set_raster_cat(rast1, rast2,
-			     G_get_raster_cat(rast1, &cats, data_type),
+	    Rast_set_raster_cat(rast1, rast2,
+			     Rast_get_raster_cat(rast1, &cats, data_type),
 			     &newcats, data_type);
 
-	G_write_cats(result, &newcats);
-	G_free_cats(&cats);
-	G_free_cats(&newcats);
+	Rast_write_cats(result, &newcats);
+	Rast_free_cats(&cats);
+	Rast_free_cats(&newcats);
     }
 
     if (colr_ok) {
-	if (G_read_range(result, G_mapset(), &range) > 0) {
+	if (Rast_read_range(result, G_mapset(), &range) > 0) {
 	    CELL min, max, cmin, cmax;
 
-	    G_get_range_min_max(&range, &min, &max);
-	    G_get_color_range(&cmin, &cmax, &colr);
+	    Rast_get_range_min_max(&range, &min, &max);
+	    Rast_get_color_range(&cmin, &cmax, &colr);
 	    if (min > cmin)
 		cmin = min;
 	    if (max < cmax)
 		cmax = max;
-	    G_set_color_range(cmin, cmax, &colr);
+	    Rast_set_color_range(cmin, cmax, &colr);
 	}
-	G_write_colors(result, G_mapset(), &colr);
+	Rast_write_colors(result, G_mapset(), &colr);
     }
 
     if (hist_ok)
-	G_write_history(result, &hist);
+	Rast_write_history(result, &hist);
 
     exit(EXIT_SUCCESS);
 }

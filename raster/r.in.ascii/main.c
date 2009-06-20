@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 
@@ -130,7 +131,7 @@ int main(int argc, char *argv[])
     if ((title = parm.title->answer))
 	G_strip(title);
     if (strcmp(parm.mult->answer, "1.0 or read from header") == 0)
-	G_set_d_null_value(&mult, 1);
+	Rast_set_d_null_value(&mult, 1);
     else if ((sscanf(parm.mult->answer, "%lf", &mult)) != 1)
 	G_fatal_error(_("Wrong entry for multiplier: %s"), parm.mult->answer);
     if (strcmp(parm.nv->answer, "* or read from header") == 0)
@@ -197,35 +198,35 @@ int main(int argc, char *argv[])
 		      G_window_cols());
 
 
-    rast_ptr = G_allocate_raster_buf(data_type);
+    rast_ptr = Rast_allocate_raster_buf(data_type);
     rast = rast_ptr;
-    cf = G_open_raster_new(output, data_type);
+    cf = Rast_open_raster_new(output, data_type);
     if (cf < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), output);
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
 	for (col = 0; col < ncols; col++) {
 	    if (fscanf(fd, "%s", y) != 1) {
-		G_unopen_cell(cf);
+		Rast_unopen_cell(cf);
 		G_fatal_error(_("Data conversion failed at row %d, col %d"),
 			      row + 1, col + 1);
 	    }
 	    if (strcmp(y, null_val_str)) {
 		x = atof(y);
 		if ((float)x == GS_BLANK) {
-		    G_set_null_value(rast_ptr, 1, data_type);
+		    Rast_set_null_value(rast_ptr, 1, data_type);
 		}
 		else {
-		    G_set_raster_value_d(rast_ptr,
+		    Rast_set_raster_value_d(rast_ptr,
 					 (DCELL) (x * mult), data_type);
 		}
 	    }
 	    else {
-		G_set_null_value(rast_ptr, 1, data_type);
+		Rast_set_null_value(rast_ptr, 1, data_type);
 	    }
-	    rast_ptr = G_incr_void_ptr(rast_ptr, G_raster_size(data_type));
+	    rast_ptr = Rast_incr_void_ptr(rast_ptr, Rast_raster_size(data_type));
 	}
-	fwrite(rast, G_raster_size(data_type), ncols, ft);
+	fwrite(rast, Rast_raster_size(data_type), ncols, ft);
 	rast_ptr = rast;
     }
     G_percent(nrows, nrows, 2);
@@ -233,7 +234,7 @@ int main(int argc, char *argv[])
 
     sz = 0;
     if (direction < 0) {
-	sz = -ncols * G_raster_size(data_type);
+	sz = -ncols * Rast_raster_size(data_type);
 	fseek(ft, sz, SEEK_END);
 	sz *= 2;
     }
@@ -242,21 +243,21 @@ int main(int argc, char *argv[])
     }
 
     for (row = 0; row < nrows; row += 1) {
-	fread(rast, G_raster_size(data_type), ncols, ft);
-	G_put_raster_row(cf, rast, data_type);
+	fread(rast, Rast_raster_size(data_type), ncols, ft);
+	Rast_put_raster_row(cf, rast, data_type);
 	fseek(ft, sz, SEEK_CUR);
     }
     fclose(ft);
     unlink(temp);
 
-    G_close_cell(cf);
+    Rast_close_cell(cf);
 
     if (title)
-	G_put_cell_title(output, title);
+	Rast_put_cell_title(output, title);
 
-    G_short_history(output, "raster", &history);
-    G_command_history(&history);
-    G_write_history(output, &history);
+    Rast_short_history(output, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(output, &history);
 
     G_done_msg(" ");
 

@@ -21,6 +21,7 @@
 #include <strings.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 typedef int FILEDESC;
@@ -123,7 +124,7 @@ int main(int argc, char *argv[])
 
     G_get_set_window(&w);
 
-    if ((cellfile = G_open_cell_new(out_file->answer)) == -1)
+    if ((cellfile = Rast_open_cell_new(out_file->answer)) == -1)
 	G_fatal_error(_("Unable to create raster map <%s>"),
 		      out_file->answer);
 
@@ -140,17 +141,17 @@ int main(int argc, char *argv[])
 		int_buf[c] =
 		    (int)(distance(pt, cur, fmin, fmax, binary) * fmult);
 		if (int_buf[c] == 0)
-		    G_set_null_value(&int_buf[c], 1, CELL_TYPE);
+		    Rast_set_null_value(&int_buf[c], 1, CELL_TYPE);
 	    }
-	    G_put_raster_row(cellfile, int_buf, CELL_TYPE);
+	    Rast_put_raster_row(cellfile, int_buf, CELL_TYPE);
 
 	}
     }
     G_free(int_buf);
-    G_close_cell(cellfile);
-    G_short_history(out_file->answer, "raster", &history);
-    G_command_history(&history);
-    G_write_history(out_file->answer, &history);
+    Rast_close_cell(cellfile);
+    Rast_short_history(out_file->answer, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(out_file->answer, &history);
 
     G_done_msg(_("Raster map <%s> created."),
 	       out_file->answer);

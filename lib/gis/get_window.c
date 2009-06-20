@@ -12,9 +12,12 @@
 */
 
 #include <stdlib.h>
-#include "G.h"
+
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
+
+#include "../raster/G.h"
 
 static struct state {
     int initialized;
@@ -56,7 +59,7 @@ void G_get_window(struct Cell_head *window)
 
     if (regvar) {
 	char **tokens = G_tokenize(regvar, ";");
-	err = G__read_Cell_head_array(tokens, &st->dbwindow, 0);
+	err = Rast__read_Cell_head_array(tokens, &st->dbwindow, 0);
 	G_free_tokens(tokens);
     }
     else {
@@ -125,7 +128,7 @@ char *G__get_window(struct Cell_head *window,
     if (!fp)
 	return G_store(_("is not set"));
 
-    err = G__read_Cell_head(fp, window, 0);
+    err = Rast__read_Cell_head(fp, window, 0);
     fclose(fp);
 
     if (err) {

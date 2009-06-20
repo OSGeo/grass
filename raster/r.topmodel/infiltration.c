@@ -66,7 +66,7 @@ double get_f(double t, double R)
 		break;
 	}
 	if (i == MAXITER) {
-	    G_set_d_null_value(&f, 1);
+	    Rast_set_d_null_value(&f, 1);
 	    return f;
 	}
 	pt = t - input.dt + (f_ - cumf) / R;
@@ -108,7 +108,7 @@ double get_f(double t, double R)
 	    break;
     }
     if (i == MAXITER) {
-	G_set_d_null_value(&f, 1);
+	Rast_set_d_null_value(&f, 1);
 	return f;
     }
 

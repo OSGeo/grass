@@ -14,6 +14,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "gmt_grd.h"
 #include <grass/glocale.h>
 
@@ -405,7 +406,7 @@ int main(int argc, char *argv[])
 	}
 
 	/* Adjust Cell Header to match resolution */
-	if (err = G_adjust_Cell_head(&cellhd, 0, 0)) {
+	if (err = Rast_adjust_Cell_head(&cellhd, 0, 0)) {
 	    G_fatal_error("%s", err);
 	    exit(EXIT_FAILURE);
 	}
@@ -417,7 +418,7 @@ int main(int argc, char *argv[])
 
     if (!flag.gmt_hd->answer) {
 	/* Adjust Cell Header to New Values */
-	if (err = G_adjust_Cell_head(&cellhd, 1, 1)) {
+	if (err = Rast_adjust_Cell_head(&cellhd, 1, 1)) {
 	    G_fatal_error("%s", err);
 	    exit(EXIT_FAILURE);
 	}
@@ -480,18 +481,18 @@ int main(int argc, char *argv[])
 
     if (flag.f->answer) {
 	map_type = FCELL_TYPE;
-	fcell = G_allocate_f_raster_buf();
+	fcell = Rast_allocate_f_raster_buf();
     }
     else if (flag.d->answer) {
 	map_type = DCELL_TYPE;
-	dcell = G_allocate_d_raster_buf();
+	dcell = Rast_allocate_d_raster_buf();
     }
     else {
-	cell = G_allocate_c_raster_buf();
+	cell = Rast_allocate_c_raster_buf();
 	map_type = CELL_TYPE;
     }
 
-    cf = G_open_raster_new(output, map_type);
+    cf = Rast_open_raster_new(output, map_type);
     if (cf < 0) {
 	G_fatal_error(_("Unable to create raster map <%s>"), output);
 	exit(EXIT_FAILURE);
@@ -513,7 +514,7 @@ int main(int argc, char *argv[])
 
     for (row = 0; row < grass_nrows; row++) {
 	if (fread(x_v, bytes * ncols, 1, fd) != 1) {
-	    G_unopen_cell(cf);
+	    Rast_unopen_cell(cf);
 	    G_fatal_error(_("Conversion failed at row %d"), row);
 	    exit(EXIT_FAILURE);
 	}
@@ -559,34 +560,34 @@ int main(int argc, char *argv[])
 	    if (parm.anull->answer) {
 		if (flag.f->answer) {
 		    if (fcell[col] == (float)nul_val)
-			G_set_f_null_value(&fcell[col], 1);
+			Rast_set_f_null_value(&fcell[col], 1);
 		}
 		else {
 		    if (cell[col] == (int)nul_val)
-			G_set_c_null_value(&cell[col], 1);
+			Rast_set_c_null_value(&cell[col], 1);
 		}
 	    }
 	}
 
 	if (flag.f->answer)
-	    G_put_f_raster_row(cf, fcell);
+	    Rast_put_f_raster_row(cf, fcell);
 	else if (flag.d->answer)
-	    G_put_d_raster_row(cf, dcell);
+	    Rast_put_d_raster_row(cf, dcell);
 	else
-	    G_put_c_raster_row(cf, cell);
+	    Rast_put_c_raster_row(cf, cell);
 
 	G_percent(row + 1, nrows, 2);
     }
 
     G_debug(1, "Creating support files for %s", output);
-    G_close_cell(cf);
+    Rast_close_cell(cf);
 
     if (title)
-	G_put_cell_title(output, title);
+	Rast_put_cell_title(output, title);
 
-    G_short_history(output, "raster", &history);
-    G_command_history(&history);
-    G_write_history(output, &history);
+    Rast_short_history(output, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(output, &history);
 
 
     exit(EXIT_SUCCESS);

@@ -15,10 +15,12 @@
 *               for details.
 *
 *****************************************************************************/
-
-#include "grass/N_pde.h"
-#include "grass/glocale.h"
 #include <math.h>
+
+#include <grass/N_pde.h>
+#include <grass/Rast.h>
+#include <grass/glocale.h>
+
 
 /* ******************** 2D ARRAY FUNCTIONS *********************** */
 
@@ -64,7 +66,7 @@ void N_copy_array_2d(N_array_2d * source, N_array_2d * target)
     for (i = 0; i < source->cols_intern * source->rows_intern; i++) {
 	null = 0;
 	if (source->type == CELL_TYPE) {
-	    if (G_is_c_null_value((void *)&source->cell_array[i]))
+	    if (Rast_is_c_null_value((void *)&source->cell_array[i]))
 		null = 1;
 
 	    if (target->type == CELL_TYPE) {
@@ -72,25 +74,25 @@ void N_copy_array_2d(N_array_2d * source, N_array_2d * target)
 	    }
 	    if (target->type == FCELL_TYPE) {
 		if (null)
-		    G_set_f_null_value((void *)&(target->fcell_array[i]), 1);
+		    Rast_set_f_null_value((void *)&(target->fcell_array[i]), 1);
 		else
 		    target->fcell_array[i] = (FCELL) source->cell_array[i];
 	    }
 	    if (target->type == DCELL_TYPE) {
 		if (null)
-		    G_set_d_null_value((void *)&(target->dcell_array[i]), 1);
+		    Rast_set_d_null_value((void *)&(target->dcell_array[i]), 1);
 		else
 		    target->dcell_array[i] = (DCELL) source->cell_array[i];
 	    }
 
 	}
 	if (source->type == FCELL_TYPE) {
-	    if (G_is_f_null_value((void *)&source->fcell_array[i]))
+	    if (Rast_is_f_null_value((void *)&source->fcell_array[i]))
 		null = 1;
 
 	    if (target->type == CELL_TYPE) {
 		if (null)
-		    G_set_c_null_value((void *)&(target->cell_array[i]), 1);
+		    Rast_set_c_null_value((void *)&(target->cell_array[i]), 1);
 		else
 		    target->cell_array[i] = (CELL) source->fcell_array[i];
 	    }
@@ -99,24 +101,24 @@ void N_copy_array_2d(N_array_2d * source, N_array_2d * target)
 	    }
 	    if (target->type == DCELL_TYPE) {
 		if (null)
-		    G_set_d_null_value((void *)&(target->dcell_array[i]), 1);
+		    Rast_set_d_null_value((void *)&(target->dcell_array[i]), 1);
 		else
 		    target->dcell_array[i] = (DCELL) source->fcell_array[i];
 	    }
 	}
 	if (source->type == DCELL_TYPE) {
-	    if (G_is_d_null_value((void *)&source->dcell_array[i]))
+	    if (Rast_is_d_null_value((void *)&source->dcell_array[i]))
 		null = 1;
 
 	    if (target->type == CELL_TYPE) {
 		if (null)
-		    G_set_c_null_value((void *)&(target->cell_array[i]), 1);
+		    Rast_set_c_null_value((void *)&(target->cell_array[i]), 1);
 		else
 		    target->cell_array[i] = (CELL) source->dcell_array[i];
 	    }
 	    if (target->type == FCELL_TYPE) {
 		if (null)
-		    G_set_f_null_value((void *)&(target->fcell_array[i]), 1);
+		    Rast_set_f_null_value((void *)&(target->fcell_array[i]), 1);
 		else
 		    target->fcell_array[i] = (FCELL) source->dcell_array[i];
 	    }
@@ -163,27 +165,27 @@ double N_norm_array_2d(N_array_2d * a, N_array_2d * b, int type)
 	v2 = 0.0;
 
 	if (a->type == CELL_TYPE) {
-	    if (!G_is_f_null_value((void *)&(a->cell_array[i])))
+	    if (!Rast_is_f_null_value((void *)&(a->cell_array[i])))
 		v1 = (double)a->cell_array[i];
 	}
 	if (a->type == FCELL_TYPE) {
-	    if (!G_is_f_null_value((void *)&(a->fcell_array[i])))
+	    if (!Rast_is_f_null_value((void *)&(a->fcell_array[i])))
 		v1 = (double)a->fcell_array[i];
 	}
 	if (a->type == DCELL_TYPE) {
-	    if (!G_is_f_null_value((void *)&(a->dcell_array[i])))
+	    if (!Rast_is_f_null_value((void *)&(a->dcell_array[i])))
 		v1 = (double)a->dcell_array[i];
 	}
 	if (b->type == CELL_TYPE) {
-	    if (!G_is_f_null_value((void *)&(b->cell_array[i])))
+	    if (!Rast_is_f_null_value((void *)&(b->cell_array[i])))
 		v2 = (double)b->cell_array[i];
 	}
 	if (b->type == FCELL_TYPE) {
-	    if (!G_is_f_null_value((void *)&(b->fcell_array[i])))
+	    if (!Rast_is_f_null_value((void *)&(b->fcell_array[i])))
 		v2 = (double)b->fcell_array[i];
 	}
 	if (b->type == DCELL_TYPE) {
-	    if (!G_is_f_null_value((void *)&(b->dcell_array[i])))
+	    if (!Rast_is_f_null_value((void *)&(b->dcell_array[i])))
 		v2 = (double)b->dcell_array[i];
 	}
 
@@ -438,7 +440,7 @@ int N_convert_array_2d_null_to_zero(N_array_2d * a)
 
     if (a->type == CELL_TYPE)
 	for (i = 0; i < a->cols_intern * a->rows_intern; i++) {
-	    if (G_is_c_null_value((void *)&(a->cell_array[i]))) {
+	    if (Rast_is_c_null_value((void *)&(a->cell_array[i]))) {
 		a->cell_array[i] = 0;
 		count++;
 	    }
@@ -446,7 +448,7 @@ int N_convert_array_2d_null_to_zero(N_array_2d * a)
 
     if (a->type == FCELL_TYPE)
 	for (i = 0; i < a->cols_intern * a->rows_intern; i++) {
-	    if (G_is_f_null_value((void *)&(a->fcell_array[i]))) {
+	    if (Rast_is_f_null_value((void *)&(a->fcell_array[i]))) {
 		a->fcell_array[i] = 0.0;
 		count++;
 	    }
@@ -455,7 +457,7 @@ int N_convert_array_2d_null_to_zero(N_array_2d * a)
 
     if (a->type == DCELL_TYPE)
 	for (i = 0; i < a->cols_intern * a->rows_intern; i++) {
-	    if (G_is_d_null_value((void *)&(a->dcell_array[i]))) {
+	    if (Rast_is_d_null_value((void *)&(a->dcell_array[i]))) {
 		a->dcell_array[i] = 0.0;
 		count++;
 	    }

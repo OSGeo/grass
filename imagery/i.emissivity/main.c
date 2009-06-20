@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 double emissivity_generic(double ndvi);
@@ -59,17 +60,17 @@ int main(int argc, char *argv[])
     result1 = output->answer;
     
     /***************************************************/ 
-    if ((infd = G_open_cell_old(ndvi, "")) < 0)
+    if ((infd = Rast_open_cell_old(ndvi, "")) < 0)
 	G_fatal_error(_("Cannot open cell file [%s]"), ndvi);
-    inr = G_allocate_d_raster_buf();
+    inr = Rast_allocate_d_raster_buf();
     
     /***************************************************/ 
     nrows = G_window_rows();
     ncols = G_window_cols();
-    outr = G_allocate_d_raster_buf();
+    outr = Rast_allocate_d_raster_buf();
     
     /* Create New raster files */ 
-    if ((outfd = G_open_raster_new(result1, DCELL_TYPE)) < 0)
+    if ((outfd = Rast_open_raster_new(result1, DCELL_TYPE)) < 0)
 	G_fatal_error(_("Could not open <%s>"), result1);
     
     /* Process pixels */ 
@@ -80,15 +81,15 @@ int main(int argc, char *argv[])
 	G_percent(row, nrows, 2);
 	
         /* read input maps */ 
-        if (G_get_raster_row(infd,inr,row,DCELL_TYPE)< 0)
+        if (Rast_get_raster_row(infd,inr,row,DCELL_TYPE)< 0)
 	    G_fatal_error(_("Could not read from <%s>"), ndvi);
 	
         /*process the data */ 
         for (col = 0; col < ncols; col++)
         {
             d_ndvi = ((DCELL *) inr)[col];
-	    if (G_is_d_null_value(&d_ndvi)) 
-		G_set_d_null_value(&outr[col], 1);
+	    if (Rast_is_d_null_value(&d_ndvi)) 
+		Rast_set_d_null_value(&outr[col], 1);
 	    else {
                 /****************************/ 
                 /* calculate emissivity     */ 
@@ -96,17 +97,17 @@ int main(int argc, char *argv[])
 		outr[col] = d;
 	    }
         }
-	if (G_put_raster_row(outfd, outr, DCELL_TYPE) < 0)
+	if (Rast_put_raster_row(outfd, outr, DCELL_TYPE) < 0)
 	    G_fatal_error(_("Cannot write to output raster file"));
     }
     G_free(inr);
-    G_close_cell(infd);
+    Rast_close_cell(infd);
     G_free(outr);
-    G_close_cell(outfd);
+    Rast_close_cell(outfd);
 
-    G_short_history(result1, "raster", &history);
-    G_command_history(&history);
-    G_write_history(result1, &history);
+    Rast_short_history(result1, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(result1, &history);
 
     exit(EXIT_SUCCESS);
 }

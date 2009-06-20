@@ -20,6 +20,7 @@
 #include <math.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/imagery.h>
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
@@ -318,7 +319,7 @@ static void query_band(GDALRasterBandH hBand, const char *output, int exact_rang
     if(!(bGotMin && bGotMax))
 	GDALComputeRasterMinMax(hBand, !exact_range, info->range);
 
-    G_init_colors(&info->colors);
+    Rast_init_colors(&info->colors);
 
     if (GDALGetRasterColorTable(hBand) != NULL) {
 	GDALColorTableH hCT;
@@ -336,7 +337,7 @@ static void query_band(GDALRasterBandH hBand, const char *output, int exact_rang
 	    if (sEntry.c4 == 0)
 		continue;
 
-	    G_set_color(i, sEntry.c1, sEntry.c2, sEntry.c3, &info->colors);
+	    Rast_set_color(i, sEntry.c1, sEntry.c2, sEntry.c3, &info->colors);
 	}
     }
     else {
@@ -344,13 +345,13 @@ static void query_band(GDALRasterBandH hBand, const char *output, int exact_rang
 	    /* set full 0..255 range to grey scale: */
 	    G_verbose_message(_("Setting grey color table for <%s> (full 8bit range)"),
 			      output);
-	    G_make_grey_scale_colors(&info->colors, 0, 255);
+	    Rast_make_grey_scale_colors(&info->colors, 0, 255);
 	}
 	else  {
 	    /* set data range to grey scale: */
 	    G_verbose_message(_("Setting grey color table for <%s> (data range)"),
 			      output);
-	    G_make_grey_scale_colors(&info->colors,
+	    Rast_make_grey_scale_colors(&info->colors,
 				     (int) info->range[0], (int) info->range[1]);
 	}
     }
@@ -447,10 +448,10 @@ static void write_fp_quant(const char *output)
 {
     struct Quant quant;
 
-    G_quant_init(&quant);
-    G_quant_round(&quant);
+    Rast_quant_init(&quant);
+    Rast_quant_round(&quant);
 
-    if (G_write_quant(output, G_mapset(), &quant) < 0)
+    if (Rast_write_quant(output, G_mapset(), &quant) < 0)
 	G_warning(_("Unable to write quant file"));
 }
 
@@ -460,7 +461,7 @@ static void create_map(const char *input, int band, const char *output,
 {
     struct History history;
 
-    G_put_cellhd(output, cellhd);
+    Rast_put_cellhd(output, cellhd);
 
     make_cell(output, info);
 
@@ -471,27 +472,27 @@ static void create_map(const char *input, int band, const char *output,
 	range.min = (CELL)info->range[0];
 	range.max = (CELL)info->range[1];
 	range.first_time = 0;
-	G_write_range(output, &range);
+	Rast_write_range(output, &range);
     }
     else {
 	struct FPRange fprange;
 	fprange.min = info->range[0];
 	fprange.max = info->range[1];
 	fprange.first_time = 0;
-	G_write_fp_range(output, &fprange);
+	Rast_write_fp_range(output, &fprange);
 	write_fp_format(output, info);
 	write_fp_quant(output);
     }
 
     G_verbose_message(_("Creating support files for %s"), output);
-    G_short_history(output, "raster", &history);
-    G_command_history(&history);
-    G_write_history(output, &history);
+    Rast_short_history(output, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(output, &history);
 
-    G_write_colors(output, G_mapset(), &info->colors);
+    Rast_write_colors(output, G_mapset(), &info->colors);
 
     if (title)
-	G_put_cell_title(output, title);
+	Rast_put_cell_title(output, title);
 
     G_message(_("<%s> created"), output);
 

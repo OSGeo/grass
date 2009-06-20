@@ -23,10 +23,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-/* two less than lib/gis/put_title.c  G_put_cell_title()
+/* two less than lib/gis/put_title.c  Rast_put_cell_title()
    if only one less a newline gets appended in the cats file. bug? */
 #define MAX_TITLE_LEN 1022
 
@@ -146,15 +147,15 @@ int main(int argc, char *argv[])
     if (!mapset || strcmp(mapset, G_mapset()) != 0)
 	G_fatal_error(_("Raster map <%s> not found in current mapset"), infile);
 
-    cellhd_ok = (G_get_cellhd(raster->answer, "", &cellhd) >= 0);
-    is_reclass = (G_is_reclass(raster->answer, "", rname, rmapset) > 0);
+    cellhd_ok = (Rast_get_cellhd(raster->answer, "", &cellhd) >= 0);
+    is_reclass = (Rast_is_reclass(raster->answer, "", rname, rmapset) > 0);
 
     if (title_opt->answer) {
 	strncpy(title, title_opt->answer, MAX_TITLE_LEN);
 	title[MAX_TITLE_LEN] = '\0';	/* strncpy doesn't null terminate oversized input */
 	G_strip(title);
 	G_debug(3, "map title= [%s]  (%d chars)", title, strlen(title));
-	G_put_cell_title(raster->answer, title);
+	Rast_put_cell_title(raster->answer, title);
     }
 
     if (save_opt->answer) {
@@ -164,7 +165,7 @@ int main(int argc, char *argv[])
 	if (!fp)
 	    G_fatal_error(_("Unable to open output file <%s>"), save_opt->answer);
 
-	G_read_history(raster->answer, "", &hist);
+	Rast_read_history(raster->answer, "", &hist);
 
 	for (i = 0; i < hist.edlinecnt; i++)
 	    fprintf(fp, "%s\n", hist.edhist[i]);
@@ -179,7 +180,7 @@ int main(int argc, char *argv[])
 	if (!fp)
 	    G_fatal_error(_("Unable to open input file <%s>"), load_opt->answer);
 
-	G_read_history(raster->answer, "", &hist);
+	Rast_read_history(raster->answer, "", &hist);
 
 	for (i = 0; ; i++) {
 	    if (i >= MAXEDLINES) {
@@ -194,11 +195,11 @@ int main(int argc, char *argv[])
 
 	hist.edlinecnt = i;
 
-	G_write_history(raster->answer, &hist);
+	Rast_write_history(raster->answer, &hist);
     }
 
     if (history_opt->answer) {
-	G_read_history(raster->answer, "", &hist);
+	Rast_read_history(raster->answer, "", &hist);
 
 	if (hist.edlinecnt >= MAXEDLINES)
 	    G_fatal_error(_("Not enough room in history file"));
@@ -235,17 +236,17 @@ int main(int argc, char *argv[])
 		    strlen(hist.edhist[hist.edlinecnt]));
 	}
 
-	G_write_history(raster->answer, &hist);
+	Rast_write_history(raster->answer, &hist);
     }
 
     if (units_opt->answer)
-	G_write_raster_units(raster->answer, units_opt->answer);
+	Rast_write_raster_units(raster->answer, units_opt->answer);
 
     if (vdatum_opt->answer)
-	G_write_raster_vdatum(raster->answer, vdatum_opt->answer);
+	Rast_write_raster_vdatum(raster->answer, vdatum_opt->answer);
 
     if (datasrc1_opt->answer || datasrc2_opt->answer || datadesc_opt->answer) {
-	G_read_history(raster->answer, "", &hist);
+	Rast_read_history(raster->answer, "", &hist);
 
 	if (datasrc1_opt->answer) {
 	    strncpy(datasrc, datasrc1_opt->answer, RECORD_LEN);
@@ -273,25 +274,25 @@ int main(int argc, char *argv[])
 	    strncpy(hist.keywrd, datasrc, RECORD_LEN);
 	}
 
-	G_write_history(raster->answer, &hist);
+	Rast_write_history(raster->answer, &hist);
     }
 
     if (map_opt->answer) {	/* use cats from another map */
 	int fd;
 	struct Categories cats;
 
-	if ((fd = G_open_cell_old(infile, "")) < 0)
+	if ((fd = Rast_open_cell_old(infile, "")) < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), infile);
-	G_init_cats((CELL) 0, "", &cats);
-	if (G_read_cats(map_opt->answer, "", &cats) < 0)
+	Rast_init_cats((CELL) 0, "", &cats);
+	if (Rast_read_cats(map_opt->answer, "", &cats) < 0)
 	    G_fatal_error(_("Unable to read category file of raster map <%s>"),
 			  map_opt->answer);
 
-	if (G_write_cats(infile, &cats) >= 0)
+	if (Rast_write_cats(infile, &cats) >= 0)
 	    G_message(_("cats table for [%s] set to %s"), infile,
 		      map_opt->answer);
-	G_close_cell(fd);
-	G_free_cats(&cats);
+	Rast_close_cell(fd);
+	Rast_free_cats(&cats);
     }
 
 
@@ -316,8 +317,8 @@ int main(int argc, char *argv[])
 			  raster->answer);
 
 	/* Create a file of no-nulls */
-	null_bits = G__allocate_null_bits(cellhd.cols);
-	for (col = 0; col < G__null_bitstream_size(cellhd.cols); col++)
+	null_bits = Rast__allocate_null_bits(cellhd.cols);
+	for (col = 0; col < Rast__null_bitstream_size(cellhd.cols); col++)
 	    null_bits[col] = 0;
 
 	/* Open null file for writing */
@@ -326,7 +327,7 @@ int main(int argc, char *argv[])
 	G_message(_("Writing new null file for [%s]... "), raster->answer);
 	for (row = 0; row < cellhd.rows; row++) {
 	    G_percent(row, cellhd.rows, 1);
-	    if (G__write_null_bits(null_fd, null_bits, row, cellhd.cols, 0) <
+	    if (Rast__write_null_bits(null_fd, null_bits, row, cellhd.cols, 0) <
 		0)
 		G_fatal_error(_("Error writing null row [%d]."), row);
 	}

@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include "mask.h"
 #include "local_proto.h"
 
@@ -50,7 +51,7 @@ int mask_cell_array(CELL * cell, int ncols, Mask * mask, int invert)
 	if (mask_select(&x, mask, invert))
 	    *cell++ = x;
 	else
-	    G_set_c_null_value(cell++, 1);
+	    Rast_set_c_null_value(cell++, 1);
     }
     return 0;
 }
@@ -64,7 +65,7 @@ int mask_d_cell_array(DCELL * dcell, int ncols, d_Mask * mask, int invert)
 	if (mask_d_select(&x, mask, invert))
 	    *dcell++ = x;
 	else
-	    G_set_d_null_value(dcell++, 1);
+	    Rast_set_d_null_value(dcell++, 1);
     }
     return 0;
 }

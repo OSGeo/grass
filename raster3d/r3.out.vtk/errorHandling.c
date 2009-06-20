@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/G3d.h>
 #include <grass/glocale.h>
 #include "globalDefs.h"
@@ -48,7 +49,7 @@ void fatal_error(char *errorMsg, input_maps * in)
 int CloseInputRasterMap(int fd)
 {
     if (fd != -1)
-	if (G_close_cell(fd) < 0) {
+	if (Rast_close_cell(fd) < 0) {
 	    G_warning(_("unable to close input raster map"));
 	    return 1;
 	}
