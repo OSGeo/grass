@@ -19,6 +19,8 @@ VER_DATE = `date +"%g%m%d"`
 MAKE_DIR_CMD = mkdir -p -m 755
 LN = /bin/ln -sf
 LN_DIR = /bin/ln -sfh
+# get python version - use python in path, should be config'd python
+PYVER = `python -V 2>&1 | cut -d \  -f 2 | cut -d . -f 1,2`
 
 # packagemaker location, options and behaviour changed in xcode 3
 ifeq ($(findstring darwin9,$(ARCH)),darwin9)
@@ -95,7 +97,7 @@ bindist-macosx:
 	${MAKE} bundle-macosx
 	@# pkg resources
 	${MAKE_DIR_CMD} dist/resources
-	-sed -e "s#@INST_DIR@#${INST_DIR}#g" -e "s#@MACOSX_SUPPDIR@#${MACOSX_SUPPDIR}#g" -e "s#@GRASS_VER@#${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}#g" pkg/resources/postflight.in > dist/resources/postflight
+	-sed -e "s#@INST_DIR@#${INST_DIR}#g" -e "s#@MACOSX_SUPPDIR@#${MACOSX_SUPPDIR}#g" -e "s#@GRASS_VER@#${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}#g" -e "s#@PYVER@#${PYVER}#g" pkg/resources/postflight.in > dist/resources/postflight
 	-chmod a+rx dist/resources/postflight
 	-sed -e "s#@GRASS_VER@#${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}#g" pkg/resources/Description.plist.in > dist/Description.plist
 	-sed -e "s#@GRASS_VERSION_MAJOR@#${GRASS_VERSION_MAJOR}#g" -e "s#@GRASS_VERSION_MINOR@#${GRASS_VERSION_MINOR}#g" -e "s#@GRASS_VERSION_RELEASE@#${GRASS_VERSION_RELEASE}#g" -e "s#@VER_MINOR_REL@#${VER_MINOR_REL}#g" -e "s#@VER_DATE@#${VER_DATE}#g" -e "s#@PKG_INST_DIR@#${PKG_INST_DIR}#g" pkg/resources/Info.plist.in > dist/Info.plist

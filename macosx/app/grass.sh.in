@@ -133,7 +133,7 @@ fi # X11
 # change GRASS_WXBUNDLED and pyver_want here from bundle.make, or manually
 GRASS_WXBUNDLED=
 export GRASS_WXBUNDLED
-pyver_want="2.5"
+pyver_want="@PYVER@"
 if [ -d "$GISBASE/etc/wxpython" ] && [ "$GRASS_WXBUNDLED" = "1" ] ; then
 # make sure python version used matches what wxpython wants
 py=""
