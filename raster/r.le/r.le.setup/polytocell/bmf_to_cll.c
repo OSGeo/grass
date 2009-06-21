@@ -64,7 +64,7 @@ int main(argc, argv)
 	quit();
     }
 
-    G_set_window(&wind);
+    Rast_set_window(&wind);
 
     record = Rast_allocate_cell_buf();
 

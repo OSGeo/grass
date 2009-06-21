@@ -117,7 +117,7 @@ static void resamp_unweighted(void)
 
 	G_percent(row, dst_w.rows, 2);
 
-	G_set_window(&src_w);
+	Rast_set_window(&src_w);
 
 	for (i = 0; i < count; i++)
 	    Rast_get_d_raster_row(infile, bufs[i], maprow0 + i);
@@ -148,7 +148,7 @@ static void resamp_unweighted(void)
 		(*method_fn) (&outbuf[col], values, n, closure);
 	}
 
-	G_set_window(&dst_w);
+	Rast_set_window(&dst_w);
 	Rast_put_d_raster_row(outfile, outbuf);
     }
 }
@@ -190,7 +190,7 @@ static void resamp_weighted(void)
 
 	G_percent(row, dst_w.rows, 2);
 
-	G_set_window(&src_w);
+	Rast_set_window(&src_w);
 
 	for (i = 0; i < count; i++)
 	    Rast_get_d_raster_row(infile, bufs[i], maprow0 + i);
@@ -234,7 +234,7 @@ static void resamp_weighted(void)
 		(*method_fn) (&outbuf[col], values, n, closure);
 	}
 
-	G_set_window(&dst_w);
+	Rast_set_window(&dst_w);
 	Rast_put_d_raster_row(outfile, outbuf);
     }
 }
@@ -325,7 +325,7 @@ int main(int argc, char *argv[])
 	src_w.cols = c1 - c0;
     }
 
-    G_set_window(&src_w);
+    Rast_set_window(&src_w);
 
     row_scale = 2 + ceil(dst_w.ns_res / src_w.ns_res);
     col_scale = 2 + ceil(dst_w.ew_res / src_w.ew_res);
@@ -342,7 +342,7 @@ int main(int argc, char *argv[])
 		      parm.rastin->answer);
 
     /* reset window to current region */
-    G_set_window(&dst_w);
+    Rast_set_window(&dst_w);
 
     /* allocate output buffer */
     outbuf = Rast_allocate_d_raster_buf();

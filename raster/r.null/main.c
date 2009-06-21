@@ -311,7 +311,7 @@ int doit(const char *name, const char *mapset, int change_null, RASTER_MAP_TYPE 
     int new, old, row;
     void *rast;
 
-    G_set_window(&cellhd);
+    Rast_set_window(&cellhd);
 
     old = Rast_open_cell_old(name, mapset);
     if (old < 0)

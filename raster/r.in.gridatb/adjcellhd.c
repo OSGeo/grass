@@ -8,7 +8,7 @@ int adjcellhd(struct Cell_head *cellhd)
 
     retval = 0;
 
-    if (G_set_window(cellhd) < 0) {
+    if (Rast_set_window(cellhd) < 0) {
 	retval = 1;
     }
 

@@ -11,6 +11,7 @@
  */
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/Rast.h>
 #include <grass/display.h>
 #include <grass/display_raster.h>
 
@@ -43,7 +44,7 @@ void D_setup(int clear)
     R_get_window(&dt, &db, &dl, &dr);
 
     G_get_set_window(&region);
-    if (G_set_window(&region) < 0)
+    if (Rast_set_window(&region) < 0)
 	G_fatal_error("Invalid graphics coordinates");
 
     D_do_conversions(&region, dt, db, dl, dr);

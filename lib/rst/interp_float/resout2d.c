@@ -58,7 +58,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
     /* change region to output cell file region */
     fprintf(stderr,
 	    "Temporarily changing the region to desired resolution...\n");
-    if (G_set_window(outhd) < 0) {
+    if (Rast_set_window(outhd) < 0) {
 	fprintf(stderr, "Cannot set region to output region!\n");
 	return -1;
     }
@@ -538,7 +538,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 
     /* change region to initial region */
     fprintf(stderr, "Changing the region back to initial...\n");
-    if (G_set_window(winhd) < 0) {
+    if (Rast_set_window(winhd) < 0) {
 	fprintf(stderr, "Cannot set region to back to initial region!\n");
 	return -1;
     }

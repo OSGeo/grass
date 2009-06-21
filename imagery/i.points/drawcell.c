@@ -37,7 +37,7 @@ int drawcell(View * view)
 
     set_colors(colors);
 
-    G_set_window(&view->cell.head);
+    Rast_set_window(&view->cell.head);
     nrows = G_window_rows();
     ncols = G_window_cols();
 

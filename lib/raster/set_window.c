@@ -40,7 +40,7 @@ int Rast_set_window(struct Cell_head *window)
      */
 
     if ((err = G_adjust_Cell_head(window, 0, 0))) {
-	G_warning("G_set_window(): %s", err);
+	G_warning("Rast_set_window(): %s", err);
 	return -1;
     }
 
@@ -55,7 +55,7 @@ int Rast_set_window(struct Cell_head *window)
 		fcb->cellhd.proj == window->proj)
 		continue;
 	    if (i != maskfd) {
-		G_warning(_("G_set_window(): projection/zone differs from that of "
+		G_warning(_("Rast_set_window(): projection/zone differs from that of "
 			    "currently open raster maps"));
 		return -1;
 	    }
@@ -112,7 +112,7 @@ int Rast_set_window(struct Cell_head *window)
 	fcb->min_null_row = (-1) * NULL_ROWS_INMEM;
 	if(fcb->null_cur_row > 0)
 	{
-	  G_warning(_("Calling G_set_window() in the middle of writing map %s"), 
+	  G_warning(_("Calling Rast_set_window() in the middle of writing map %s"), 
 		    fcb->name);
 	    fcb->null_cur_row = 0;
 	}

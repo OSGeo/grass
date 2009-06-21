@@ -47,7 +47,7 @@ int drawcell(View * view, int initflag)
 	Erase_view(VIEW_MAP2_ZOOM);
     }
 
-    G_set_window(&view->cell.head);
+    Rast_set_window(&view->cell.head);
     nrows = G_window_rows();
     ncols = G_window_cols();
 

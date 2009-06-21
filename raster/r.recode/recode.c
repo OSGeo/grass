@@ -30,7 +30,7 @@ int do_recode(void)
 	G_get_window(&window);
 	if (Rast_get_cellhd(name, "", &cellhd) >= 0) {
 	    G_align_window(&window, &cellhd);
-	    G_set_window(&window);
+	    Rast_set_window(&window);
 	}
     }
 

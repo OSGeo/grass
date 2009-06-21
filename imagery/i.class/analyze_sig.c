@@ -16,7 +16,7 @@ int analyze_sig(void)
     Menu_msg("");
 
     /* allocate row buffers and open raster maps */
-    G_set_window(&Band_cellhd);
+    Rast_set_window(&Band_cellhd);
     nbands = Refer.nfiles;
     open_band_files();
 

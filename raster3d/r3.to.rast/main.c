@@ -252,7 +252,7 @@ int main(int argc, char *argv[])
 	/*Set the 2d region appropriate */
 	G3d_extract2dRegion(&region, &region2d);
 	/*Make the new 2d region the default */
-	G_set_window(&region2d);
+	Rast_set_window(&region2d);
 
     }
     else {

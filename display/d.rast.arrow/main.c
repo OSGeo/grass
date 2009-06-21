@@ -244,7 +244,7 @@ int main(int argc, char **argv)
 	wind.rows = (wind.north - wind.south) / wind.ns_res;
 	wind.cols = (wind.east - wind.west) / wind.ew_res;
 
-	G_set_window(&wind);
+	Rast_set_window(&wind);
 
 	nrows = wind.rows;
 	ncols = wind.cols;

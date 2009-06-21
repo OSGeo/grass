@@ -189,7 +189,7 @@ static int doit(char *name, int uncompress, RASTER_MAP_TYPE map_type)
 
     G_message(_("\n%sCOMPRESS [%s]"), uncompress ? "UN" : "", name);
 
-    G_set_window(&cellhd);
+    Rast_set_window(&cellhd);
 
     old = Rast_open_cell_old(name, G_mapset());
     if (old < 0)

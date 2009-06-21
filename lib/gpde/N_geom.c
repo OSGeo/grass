@@ -130,7 +130,7 @@ N_geom_data *N_init_geom_data_2d(struct Cell_head * region,
 	/*make a backup from this region */
 	G_get_set_window(&backup);	/*this function is not thread safe */
 	/*set the current region */
-	G_set_window(region);	/*this function is not thread safe */
+	Rast_set_window(region);	/*this function is not thread safe */
 
 	if (geom == NULL)
 	    geom = N_alloc_geom_data();
@@ -170,7 +170,7 @@ N_geom_data *N_init_geom_data_2d(struct Cell_head * region,
 	}
 
 	/*restore the old region */
-	G_set_window(&backup);	/*this function is not thread safe */
+	Rast_set_window(&backup);	/*this function is not thread safe */
     }
 
     return geom;

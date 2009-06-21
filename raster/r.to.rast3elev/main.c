@@ -423,7 +423,7 @@ int main(int argc, char *argv[])
 	window2d.ew_res = region.ew_res;
 	window2d.rows = region.rows;
 	window2d.cols = region.cols;
-	G_set_window(&window2d);
+	Rast_set_window(&window2d);
     }
 
     G_debug(2, "Open 3d raster map %s", param.output->answer);

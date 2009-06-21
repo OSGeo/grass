@@ -460,7 +460,7 @@ int main(int argc, char *argv[])
 		    window.west : temp_window.west;
 	    }
 	}
-	Rast_adjust_Cell_head3(&window, 0, 0, 0);
+	G_adjust_Cell_head3(&window, 0, 0, 0);
     }
 
 

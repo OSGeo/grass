@@ -15,7 +15,7 @@ int zoom(struct Cell_head *window, const char *name, const char *mapset)
     double north, south, east, west;
 
     adjust_window(window, 0, 0, 0);
-    G_set_window(window);
+    Rast_set_window(window);
     nrows = window->rows;
     ncols = window->cols;
 

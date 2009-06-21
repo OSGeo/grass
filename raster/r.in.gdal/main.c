@@ -434,7 +434,7 @@ int main(int argc, char *argv[])
     /* -------------------------------------------------------------------- */
     /*      Set the active window to match the available data.              */
     /* -------------------------------------------------------------------- */
-    if (G_set_window(&cellhd) < 0)
+    if (Rast_set_window(&cellhd) < 0)
 	exit(EXIT_FAILURE);
 
     /* -------------------------------------------------------------------- */

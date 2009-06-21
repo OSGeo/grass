@@ -26,7 +26,7 @@
  *
  * removed LZW support 5/5000
  *
- * Corrected G_set_window to G_get_window to make r.out.tiff sensitive
+ * Corrected Rast_set_window to G_get_window to make r.out.tiff sensitive
  * to region settings.   - Markus Neteler  (neteler geog.uni-hannover.de
  * 8/98        
  *

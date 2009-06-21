@@ -36,7 +36,7 @@ int get_cats(const char *name, const char *mapset)
 	G_fatal_error(_("Cannot read header of raster map <%s> in <%s>"),
 		      name, mapset);
 
-    G_set_window(&cellhd);
+    Rast_set_window(&cellhd);
 
     /* open the raster map */
     fd = Rast_open_cell_old(name, mapset);

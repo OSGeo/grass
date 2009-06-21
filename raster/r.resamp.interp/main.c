@@ -120,7 +120,7 @@ int main(int argc, char *argv[])
 	src_w.cols = c1 - c0;
     }
 
-    G_set_window(&src_w);
+    Rast_set_window(&src_w);
 
     /* allocate buffers for input rows */
     for (row = 0; row < neighbors; row++)
@@ -134,7 +134,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Unable to open raster map <%s>"), rastin->answer);
 
     /* reset window to current region */
-    G_set_window(&dst_w);
+    Rast_set_window(&dst_w);
 
     outbuf = Rast_allocate_d_raster_buf();
 
@@ -155,7 +155,7 @@ int main(int argc, char *argv[])
 
 	    G_percent(row, dst_w.rows, 2);
 
-	    G_set_window(&src_w);
+	    Rast_set_window(&src_w);
 	    read_rows(infile, maprow0);
 
 	    for (col = 0; col < dst_w.cols; col++) {
@@ -173,7 +173,7 @@ int main(int argc, char *argv[])
 		}
 	    }
 
-	    G_set_window(&dst_w);
+	    Rast_set_window(&dst_w);
 	    Rast_put_d_raster_row(outfile, outbuf);
 	}
 	break;
@@ -187,7 +187,7 @@ int main(int argc, char *argv[])
 
 	    G_percent(row, dst_w.rows, 2);
 
-	    G_set_window(&src_w);
+	    Rast_set_window(&src_w);
 	    read_rows(infile, maprow0);
 
 	    for (col = 0; col < dst_w.cols; col++) {
@@ -212,7 +212,7 @@ int main(int argc, char *argv[])
 		}
 	    }
 
-	    G_set_window(&dst_w);
+	    Rast_set_window(&dst_w);
 	    Rast_put_d_raster_row(outfile, outbuf);
 	}
 	break;
@@ -227,7 +227,7 @@ int main(int argc, char *argv[])
 
 	    G_percent(row, dst_w.rows, 2);
 
-	    G_set_window(&src_w);
+	    Rast_set_window(&src_w);
 	    read_rows(infile, maprow0);
 
 	    for (col = 0; col < dst_w.cols; col++) {
@@ -285,7 +285,7 @@ int main(int argc, char *argv[])
 		}
 	    }
 
-	    G_set_window(&dst_w);
+	    Rast_set_window(&dst_w);
 	    Rast_put_d_raster_row(outfile, outbuf);
 	}
 	break;

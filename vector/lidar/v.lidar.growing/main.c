@@ -219,7 +219,7 @@ int main(int argc, char *argv[])
 	    }
 
 	    /*Setting the active region */
-	    G_set_window(&elaboration_reg);
+	    Rast_set_window(&elaboration_reg);
 	    nrows = G_window_rows();
 	    ncols = G_window_cols();
 

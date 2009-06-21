@@ -19,7 +19,7 @@ int read_cell(char *name)
     /* Set window to align with input raster map */
     Rast_get_cellhd(name, "", &cellhd);
     G_align_window(&window, &cellhd);
-    G_set_window(&window);
+    Rast_set_window(&window);
 
     cell = Rast_allocate_cell_buf();
 
@@ -48,7 +48,7 @@ int read_cell(char *name)
 
     /* reset the window */
     G_get_window(&window);
-    G_set_window(&window);
+    Rast_set_window(&window);
 
     return 0;
 }

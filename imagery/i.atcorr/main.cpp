@@ -100,7 +100,7 @@ static void adjust_region (char *name, const char *mapset)
 	G_fatal_error (_("Unable to read header of raster map <%s>"),
 		       G_fully_qualified_name(name, mapset));
 
-    if(G_set_window(&iimg_head) < 0) 
+    if(Rast_set_window(&iimg_head) < 0) 
 	G_fatal_error (_("Invalid graphics region coordinates"));
 }
 

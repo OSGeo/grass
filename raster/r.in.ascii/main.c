@@ -187,7 +187,7 @@ int main(int argc, char *argv[])
 
     nrows = cellhd.rows;
     ncols = cellhd.cols;
-    if (G_set_window(&cellhd) < 0)
+    if (Rast_set_window(&cellhd) < 0)
 	G_fatal_error(_("Can't set window"));
 
     if (nrows != G_window_rows())

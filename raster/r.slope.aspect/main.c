@@ -367,7 +367,7 @@ int main(int argc, char *argv[])
 	G_get_window(&window);
 	if (Rast_get_cellhd(elev_name, "", &cellhd) >= 0) {
 	    G_align_window(&window, &cellhd);
-	    G_set_window(&window);
+	    Rast_set_window(&window);
 	}
     }
 

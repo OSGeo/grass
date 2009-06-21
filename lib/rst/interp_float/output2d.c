@@ -128,7 +128,7 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
 	return -1;
     }
 
-    if (G_set_window(cellhd) < 0)
+    if (Rast_set_window(cellhd) < 0)
 	return -1;
 
     if (nrows != G_window_rows()) {
