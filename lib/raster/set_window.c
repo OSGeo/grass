@@ -18,21 +18,6 @@
 #include "G.h"
 
 /*!
- * \brief Get the current working window (region)
- *
- * The current working window values are returned in the structure
- * <i>window</i>.
- *
- * \param[in,out] window window structure to be set
- */
-void Rast_get_set_window(struct Cell_head *window)
-{
-    G__init_window();
-    G_copy(window, &G__.window, sizeof(*window));
-}
-
-
-/*!
  * \brief Establishes 'window' as the current working window.
  * 
  * Any opened cell files has its file-to-window mapping reworked.
