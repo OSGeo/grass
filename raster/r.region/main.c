@@ -320,7 +320,7 @@ int main(int argc, char *argv[])
     window.rows = cellhd.rows;
     window.cols = cellhd.cols;
 
-    if ((err = Rast_adjust_Cell_head(&window, 1, 1)))
+    if ((err = G_adjust_Cell_head(&window, 1, 1)))
 	G_fatal_error(_("Invalid region: %s"), err);
 
     cellhd.north = window.north;

@@ -104,15 +104,15 @@ int main(int argc, char *argv[])
     /* now make a temorary region with the same boundaries only 1 x 1 */
     window.rows = 1;
     window.cols = 1;
-    Rast_adjust_Cell_head(&window, 1, 1);
-    G_set_window(&window);
+    G_adjust_Cell_head(&window, 1, 1);
+    Rast_set_window(&window);
 
     G_begin_cell_area_calculations();
     window_area = G_area_of_cell_at_row(0);
 
     /* restore region back to the original */
     G_get_window(&window);
-    G_set_window(&window);
+    Rast_set_window(&window);
 
     dumpname = G_tempfile();
     statname = G_tempfile();

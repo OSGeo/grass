@@ -193,7 +193,7 @@ void write_density_file(void)
     double dsmax = 0.0;
     struct Colors colors;
 
-    if (G_set_window(&region) < 0)
+    if (Rast_set_window(&region) < 0)
 	G_fatal_error(_("Cannot reset current region"));
 
     G_message(_("Writing density file"));

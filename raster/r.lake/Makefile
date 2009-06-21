@@ -4,8 +4,8 @@ MODULE_TOPDIR = ../..
 
 PGM = r.lake
 
-LIBES = $(GISLIB)
-DEPENDENCIES = $(GISDEP)
+LIBES = $(GISLIB) $(RASTRLIB)
+DEPENDENCIES = $(GISDEP) $(RASTRDEP)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 

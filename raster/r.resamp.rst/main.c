@@ -345,7 +345,7 @@ int main(int argc, char *argv[])
     outhd.south = winhd.south;
     outhd.proj = winhd.proj;
     outhd.zone = winhd.zone;
-    Rast_adjust_Cell_head(&outhd, 0, 0);
+    G_adjust_Cell_head(&outhd, 0, 0);
     ew_res = outhd.ew_res;
     ns_res = outhd.ns_res;
     nsizc = outhd.cols;
@@ -473,13 +473,13 @@ int main(int argc, char *argv[])
 		    IL_secpar_loop_2d, IL_crst, IL_crstg, IL_write_temp_2d);
 
     G_message(_("Temporarily changing the region to desired resolution ..."));
-    if (G_set_window(&outhd) < 0)
+    if (Rast_set_window(&outhd) < 0)
 	G_fatal_error(_("Cannot set region to output region"));
 
     bitmask = IL_create_bitmask(&params);
     /* change region to initial region */
     G_message(_("Changing back to the original region ..."));
-    if (G_set_window(&winhd) < 0)
+    if (Rast_set_window(&winhd) < 0)
 	G_fatal_error(_("Cannot set region to back to the initial region"));
 
     ertot = 0.;

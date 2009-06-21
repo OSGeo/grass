@@ -55,7 +55,7 @@ int dsp_setup(int blank, struct Cell_head *cellhead)
 
     D_check_map_window(cellhead);
 
-    if (G_set_window(cellhead) < 0)
+    if (Rast_set_window(cellhead) < 0)
 	G_fatal_error("Invalid graphics window coordinates");
 
     /* Determine conversion factors */

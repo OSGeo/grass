@@ -406,7 +406,7 @@ int main(int argc, char *argv[])
 	}
 
 	/* Adjust Cell Header to match resolution */
-	if (err = Rast_adjust_Cell_head(&cellhd, 0, 0)) {
+	if (err = G_adjust_Cell_head(&cellhd, 0, 0)) {
 	    G_fatal_error("%s", err);
 	    exit(EXIT_FAILURE);
 	}
@@ -418,7 +418,7 @@ int main(int argc, char *argv[])
 
     if (!flag.gmt_hd->answer) {
 	/* Adjust Cell Header to New Values */
-	if (err = Rast_adjust_Cell_head(&cellhd, 1, 1)) {
+	if (err = G_adjust_Cell_head(&cellhd, 1, 1)) {
 	    G_fatal_error("%s", err);
 	    exit(EXIT_FAILURE);
 	}
@@ -426,7 +426,7 @@ int main(int argc, char *argv[])
 	grass_ncols = ncols = cellhd.cols;
     }
 
-    if (G_set_window(&cellhd) < 0)
+    if (Rast_set_window(&cellhd) < 0)
 	exit(3);
 
     if (grass_nrows != G_window_rows())

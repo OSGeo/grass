@@ -124,7 +124,7 @@ int main(int argc, char *argv[])
 	realhead.ns_res != imaghead.ns_res)
 	G_fatal_error(_("The real and imaginary original windows did not match"));
 
-    G_set_window(&realhead);	/* set the window to the whole cell map */
+    Rast_set_window(&realhead);	/* set the window to the whole cell map */
 
     /* get the rows and columns in the current window */
     rows = G_window_rows();

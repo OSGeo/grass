@@ -34,14 +34,14 @@ int rectify(char *name, char *mapset, char *result, int order)
      */
 
     select_target_env();
-    G_set_window(&target_window);
+    Rast_set_window(&target_window);
     Rast_set_cell_format(cellhd.format);
     select_current_env();
 
     /* open the file to be rectified
      * set window to cellhd first to be able to read file exactly
      */
-    G_set_window(&cellhd);
+    Rast_set_window(&cellhd);
     infd = Rast_open_cell_old(name, mapset);
     if (infd < 0) {
 	close(infd);

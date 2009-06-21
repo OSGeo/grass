@@ -269,7 +269,7 @@ int display_signature(void)
 	nbands = Refer.nfiles;
 
 	/* build new mask based on current signature and Nstd */
-	G_set_window(&VIEW_MAP1->cell.head);
+	Rast_set_window(&VIEW_MAP1->cell.head);
 	open_band_files();
 
 	if ((fd = Rast_open_cell_new(MASK)) < 0)

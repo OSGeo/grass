@@ -124,7 +124,7 @@ static int configure_plot(void)
     /* change the region */
     page.north = region.north - at_row * region.ns_res;
     page.south = page.north - nrows * region.ns_res;
-    G_set_window(&page);
+    Rast_set_window(&page);
 
     /* configure the plot routines */
     G_setup_plot(-0.5, page.rows - 0.5, -0.5, page.cols - 0.5, move, cont);

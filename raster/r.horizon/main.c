@@ -471,7 +471,7 @@ int main(int argc, char *argv[])
 	n100 = ceil(n / 100.);
 	m100 = ceil(m / 100.);
 
-	if (G_set_window(&new_cellhd) == -1)
+	if (Rast_set_window(&new_cellhd) == -1)
 	    exit(EXIT_FAILURE);
     }
 
@@ -512,7 +512,7 @@ int main(int argc, char *argv[])
 
     if (bufferZone > 0.) {
 	/* Set the region window back to the original */
-	if (G_set_window(&cellhd) == -1)
+	if (Rast_set_window(&cellhd) == -1)
 	    exit(EXIT_FAILURE);
     }
 
@@ -522,7 +522,7 @@ int main(int argc, char *argv[])
        OUTGR(cellhd.rows,cellhd.cols);
        }
      */
-    if (G_set_window(&cellhd) == -1)
+    if (Rast_set_window(&cellhd) == -1)
 	exit(EXIT_FAILURE);
 
     exit(EXIT_SUCCESS);
@@ -613,7 +613,7 @@ int OUTGR(int numrows, int numcols)
     int fd1 = 0;
     int i, iarc, j;
 
-    if (G_set_window(&cellhd) < 0)
+    if (Rast_set_window(&cellhd) < 0)
 	exit(EXIT_FAILURE);
 
     if (horizon != NULL) {
@@ -1261,7 +1261,7 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
 
 	    /*return back the buffered region */
 	    if (bufferZone > 0.) {
-		if (G_set_window(&new_cellhd) == -1)
+		if (Rast_set_window(&new_cellhd) == -1)
 		    exit(0);
 	    }
 

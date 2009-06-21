@@ -1202,7 +1202,7 @@ int OUTGR(void)
     }
 
 
-    if (G_set_window(&cellhd) < 0)
+    if (Rast_set_window(&cellhd) < 0)
 	G_fatal_error("Cannot set region to output region!");
 
     if (m != G_window_rows())

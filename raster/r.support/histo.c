@@ -21,7 +21,7 @@ int do_histogram(const char *name)
     if (Rast_get_cellhd(name, "", &cellhd) < 0)
 	G_fatal_error(_("Unable to read header for <%s>"), name);
 
-    G_set_window(&cellhd);
+    Rast_set_window(&cellhd);
     if ((fd = Rast_open_cell_old(name, "")) < 0)
 	G_fatal_error(_("Unable to open <%s>"), name);
 

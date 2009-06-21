@@ -270,7 +270,7 @@ void P_Aux_to_Raster(double **matrix, int fd)
     struct Cell_head Original;
 
     G_get_window(&Original);
-    G_set_window(&Original);
+    Rast_set_window(&Original);
     nrows = G_window_rows();
     ncols = G_window_cols();
 
@@ -373,7 +373,7 @@ double **P_Null_Matrix(double **matrix)
 
 
     G_get_window(&Original);
-    G_set_window(&Original);
+    Rast_set_window(&Original);
     nrows = G_window_rows();
     ncols = G_window_cols();
 

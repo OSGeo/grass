@@ -389,10 +389,10 @@ int main(int argc, char *argv[])
 
     region.proj = G_projection();
     region.zone = G_zone();
-    err = Rast_adjust_Cell_head(&region, 1, 1);
+    err = G_adjust_Cell_head(&region, 1, 1);
     if (err)
 	G_fatal_error(err);
-    G_set_window(&region);
+    Rast_set_window(&region);
 
     G_verbose_message("");
     G_verbose_message(_("Map <%s> bounds set to:"), map_name);

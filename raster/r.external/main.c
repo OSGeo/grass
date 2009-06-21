@@ -647,7 +647,7 @@ int main(int argc, char *argv[])
     if (!hBand)
 	G_fatal_error(_("Selected band (%d) does not exist"), band);
 
-    if (G_set_window(&cellhd) < 0)
+    if (Rast_set_window(&cellhd) < 0)
 	G_fatal_error(_("Unable to set window"));
 
     query_band(hBand, output, flag_r->answer, &cellhd, &info);

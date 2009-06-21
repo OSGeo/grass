@@ -731,7 +731,7 @@ int OUTGR(void)
     }
 
 
-    if (G_set_window(&cellhd) < 0)
+    if (Rast_set_window(&cellhd) < 0)
 	G_fatal_error("region error");
 
     if (m != G_window_rows())

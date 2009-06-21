@@ -368,7 +368,7 @@ int Rast__open_cell_old(const char *name, const char *mapset)
 
   Diagnostics: warning message printed if open fails
  
-  Warning: calls to G_set_window() made after opening a new cell file
+  Warning: calls to Rast_set_window() made after opening a new cell file
   may create confusion and should be avoided the new cell file will be
   created to conform to the window at the time of the open.
 

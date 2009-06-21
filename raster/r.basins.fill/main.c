@@ -28,9 +28,9 @@
 #include <stdio.h>
 #include <grass/gis.h>
 #include <grass/Rast.h>
-#include "local_proto.h"
 #include <grass/glocale.h>
 
+#include "local_proto.h"
 
 #define NOMASK 1
 
@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
 
     /* this isn't a nice thing to do. Rast_align_window() should be used first */
     Rast_get_cellhd(drain_name, "", &window);
-    G_set_window(&window);
+    Rast_set_window(&window);
 
     nrows = G_window_rows();
     ncols = G_window_cols();

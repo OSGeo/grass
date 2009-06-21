@@ -396,7 +396,7 @@ int r_slope_aspect(int argc, char *argv[])
 	G_get_window(&window);
 	if (Rast_get_cellhd(elev_name, mapset, &cellhd) >= 0) {
 	    Rast_align_window(&window, &cellhd);
-	    G_set_window(&window);
+	    Rast_set_window(&window);
 	}
     }
 

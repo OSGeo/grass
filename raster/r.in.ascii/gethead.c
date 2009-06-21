@@ -221,7 +221,7 @@ int gethead(FILE * fd,
 	}
     }
 
-    if ((err = Rast_adjust_Cell_head(cellhd, 1, 1))) {
+    if ((err = G_adjust_Cell_head(cellhd, 1, 1))) {
 	G_warning(err);
 	return 0;
     }

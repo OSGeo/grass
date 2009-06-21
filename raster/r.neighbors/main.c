@@ -208,7 +208,7 @@ int main(int argc, char *argv[])
 	    exit(EXIT_FAILURE);
 	G_get_window(&window);
 	G_align_window(&window, &cellhd);
-	G_set_window(&window);
+	Rast_set_window(&window);
     }
 
     nrows = G_window_rows();

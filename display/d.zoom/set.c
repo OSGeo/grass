@@ -176,9 +176,9 @@ int set_win(struct Cell_head *window, double ux1, double uy1, double ux2,
 
 	limit = print_limit(window, &defwin);
 
-	Rast_adjust_Cell_head3(window, 0, 0, 0);
+	G_adjust_Cell_head3(window, 0, 0, 0);
 	G_put_window(window);
-	G_set_window(window);
+	Rast_set_window(window);
 	redraw();
     }
 

@@ -172,7 +172,7 @@ int output_data(int tt, double ft)
     }
 
 
-    if (G_set_window(&cellhd) < 0)
+    if (Rast_set_window(&cellhd) < 0)
 	exit(3);
 
     if (my != G_window_rows())
@@ -647,8 +647,8 @@ int output_et()
     }
 
 
-    if (G_set_window(&cellhd) < 0)
-	G_fatal_error("G_set_window");
+    if (Rast_set_window(&cellhd) < 0)
+	G_fatal_error("Rast_set_window");
 
     if (my != G_window_rows())
 	G_fatal_error("OOPS: rows changed from %d to %d\n", mx,
