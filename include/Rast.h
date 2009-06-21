@@ -523,7 +523,6 @@ DCELL Rast_get_raster_sample_cubic(int, const struct Cell_head *, struct Categor
 DCELL Rast_get_raster_sample(int, const struct Cell_head *, struct Categories *, double, double, int, INTERP_TYPE);
 
 /* set_window.c */
-void Rast_get_set_window(struct Cell_head *);
 int Rast_set_window(struct Cell_head *);
 
 /* zero_cell.c */
