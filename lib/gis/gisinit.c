@@ -22,7 +22,6 @@
 #include <locale.h>
 
 #include <grass/gis.h>
-#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 #include "../raster/G.h"
@@ -141,12 +140,10 @@ void G_init_all(void)
     G_init_env();
     G_init_logging();
     G__init_window();
-    Rast__check_for_auto_masking();
     G_init_locale();
     G_init_debug();
     G_verbose();
     G_init_tempfile();
-    Rast_init_gdal();
     G_get_list_of_mapsets();
     G__home();
     G__machine_name();
@@ -154,4 +151,3 @@ void G_init_all(void)
     G_read_datum_table();
     G_read_ellipsoid_table(0);
 }
-

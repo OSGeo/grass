@@ -13,8 +13,8 @@
 
 #include <stdio.h>
 #include <math.h>
+
 #include <grass/gis.h>
-#include <grass/Rast.h>
 
 /*!
  * \brief Align two regions.

@@ -522,6 +522,10 @@ DCELL Rast_get_raster_sample_bilinear(int, const struct Cell_head *, struct Cate
 DCELL Rast_get_raster_sample_cubic(int, const struct Cell_head *, struct Categories *, double, double, int);
 DCELL Rast_get_raster_sample(int, const struct Cell_head *, struct Categories *, double, double, int, INTERP_TYPE);
 
+/* set_window.c */
+void Rast_get_set_window(struct Cell_head *);
+int Rast_set_window(struct Cell_head *);
+
 /* zero_cell.c */
 void Rast_zero_cell_buf(CELL *);
 void Rast_zero_raster_buf(void *, RASTER_MAP_TYPE);
