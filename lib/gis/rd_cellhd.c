@@ -5,7 +5,6 @@
 #include <string.h>
 
 #include <grass/gis.h>
-#include <grass/Rast.h>
 #include <grass/glocale.h>
 
 #define ERROR(x,line) return error(x,line)
