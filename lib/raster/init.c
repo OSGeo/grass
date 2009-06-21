@@ -41,7 +41,7 @@ static int init(void);
  * \return exit() is called on error
  */
 
-void Rast__gisinit()
+void Rast__init(void)
 {
     if (initialized)
 	return;
@@ -56,7 +56,7 @@ void Rast__gisinit()
  * \return
  */
 
-void Rast__check_gisinit(void)
+void Rast__check_init(void)
 {
     if (initialized)
 	return;
