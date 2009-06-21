@@ -1177,7 +1177,9 @@ class BufferedWindow(MapWindow, wx.Window):
         """!Trac geometry attributes?"""
         item = self.tree.FindItemByData('maplayer', mapLayer)
         vdigit = self.tree.GetPyData(item)[0]['vdigit']
-        if vdigit.has_key('geomAttr') and vdigit['geomAttr'].has_key(attrb):
+        if vdigit and \
+                vdigit.has_key('geomAttr') and \
+                vdigit['geomAttr'].has_key(attrb):
             val = -1
             if attrb == 'length':
                 val = digit.GetLineLength(fid)
