@@ -39,16 +39,16 @@ static char *error(const char *, int);
 #define SET(x) flags|=(1<<x)
 #define TEST(x) (flags&(1<<x))
 
-char *Rast__read_Cell_head_array(char **array,
+char *G__read_Cell_head_array(char **array,
 			      struct Cell_head *cellhd, int is_cellhd);
 
-char *Rast__read_Cell_head(FILE * fd, struct Cell_head *cellhd, int is_cellhd)
+char *G__read_Cell_head(FILE * fd, struct Cell_head *cellhd, int is_cellhd)
 {
     int count;
     char *result, **array;
     char buf[1024];
 
-    G_debug(2, "Rast__read_Cell_head");
+    G_debug(2, "G__read_Cell_head");
 
     /* Count lines */
     count = 0;
@@ -65,7 +65,7 @@ char *Rast__read_Cell_head(FILE * fd, struct Cell_head *cellhd, int is_cellhd)
 	count++;
     }
 
-    result = Rast__read_Cell_head_array(array, cellhd, is_cellhd);
+    result = G__read_Cell_head_array(array, cellhd, is_cellhd);
 
     count = 0;
     while (array[count]) {
@@ -78,7 +78,7 @@ char *Rast__read_Cell_head(FILE * fd, struct Cell_head *cellhd, int is_cellhd)
 }
 
 /* Read window from NULL terminated array of strings */
-char *Rast__read_Cell_head_array(char **array,
+char *G__read_Cell_head_array(char **array,
 			      struct Cell_head *cellhd, int is_cellhd)
 {
     char *buf;
@@ -88,7 +88,7 @@ char *Rast__read_Cell_head_array(char **array,
     int flags;
     const char *err;
 
-    G_debug(2, "Rast__read_Cell_head_array");
+    G_debug(2, "G__read_Cell_head_array");
 
     flags = 0;
 
@@ -379,7 +379,7 @@ char *Rast__read_Cell_head_array(char **array,
     }
 
     /* Adjust and complete the cell header  */
-    if ((err = Rast_adjust_Cell_head(cellhd, TEST(F_ROWS), TEST(F_COLS))))
+    if ((err = G_adjust_Cell_head(cellhd, TEST(F_ROWS), TEST(F_COLS))))
 	ERROR(err, 0);
 
 
