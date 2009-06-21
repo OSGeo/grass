@@ -46,6 +46,10 @@
 
 #include <sys/types.h>
 
+/* adj_cellhd.c */
+const char *G_adjust_Cell_head(struct Cell_head *, int, int);
+const char *G_adjust_Cell_head3(struct Cell_head *, int, int, int);
+
 /* align_window.c */
 const char *G_align_window(struct Cell_head *, const struct Cell_head *);
 
@@ -505,6 +509,10 @@ void G_putenv(const char *, const char *);
 double G_meridional_radius_of_curvature(double, double, double);
 double G_transverse_radius_of_curvature(double, double, double);
 double G_radius_of_conformal_tangent_sphere(double, double, double);
+
+/* rd_cellhd.c */
+char *G__read_Cell_head(FILE *, struct Cell_head *, int);
+char *G__read_Cell_head_array(char **, struct Cell_head *, int);
 
 /* remove.c */
 int G_remove(const char *, const char *);

@@ -4,10 +4,6 @@
 
 /* --- ANSI prototypes for the lib/raster functions --- */
 
-/* adj_cellhd.c */
-const char *Rast_adjust_Cell_head(struct Cell_head *, int, int);
-const char *Rast_adjust_Cell_head3(struct Cell_head *, int, int, int);
-
 /* alloc_cell.c */
 size_t Rast_raster_size(RASTER_MAP_TYPE);
 CELL *Rast_allocate_cell_buf(void);
@@ -512,10 +508,6 @@ int Rast_write_raster_vdatum(const char *, const char *);
 int Rast__raster_misc_read_line(const char *, const char *, const char *,
 			     char *);
 int Rast__raster_misc_write_line(const char *, const char *, const char *);
-
-/* rd_cellhd.c */
-char *Rast__read_Cell_head(FILE *, struct Cell_head *, int);
-char *Rast__read_Cell_head_array(char **, struct Cell_head *, int);
 
 /* reclass.c */
 int Rast_is_reclass(const char *, const char *, char *, char *);

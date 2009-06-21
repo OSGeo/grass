@@ -38,7 +38,7 @@
  * \return NULL on success
  * \return localized text string on error
  */
-const char *Rast_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_flag)
+const char *G_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_flag)
 {
     if (!row_flag) {
 	if (cellhd->ns_res <= 0)
@@ -65,7 +65,7 @@ const char *Rast_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int co
 	epsilon_ns = 1. / cellhd->rows * 0.001;
 	epsilon_ew = .000001;	/* epsilon_ew calculation doesn't work due to cellhd->cols update/global wraparound below */
 
-	G_debug(3, "Rast_adjust_Cell_head: epsilon_ns: %g, epsilon_ew: %g",
+	G_debug(3, "G_adjust_Cell_head: epsilon_ns: %g, epsilon_ew: %g",
 		epsilon_ns, epsilon_ew);
 
 	/* TODO: once working, change below G_warning to G_debug */
@@ -97,7 +97,7 @@ const char *Rast_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int co
 	/* DISABLED: this breaks global wrap-around */
 
 	G_debug(3,
-		"Rast_adjust_Cell_head()  cellhd->west: %f, devi: %g, eps: %g",
+		"G_adjust_Cell_head()  cellhd->west: %f, devi: %g, eps: %g",
 		cellhd->west, cellhd->west + 180.0, epsilon_ew);
 
 	if ((cellhd->west < -180.0) && ((cellhd->west + 180.0) < epsilon_ew)
@@ -108,7 +108,7 @@ const char *Rast_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int co
 	}
 
 	G_debug(3,
-		"Rast_adjust_Cell_head()  cellhd->east: %f, devi: %g, eps: %g",
+		"G_adjust_Cell_head()  cellhd->east: %f, devi: %g, eps: %g",
 		cellhd->east, cellhd->east - 180.0, epsilon_ew);
 
 	if ((cellhd->east > 180.0) && ((cellhd->east - 180.0) > epsilon_ew)
@@ -188,7 +188,7 @@ const char *Rast_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int co
  * \return NULL on success
  * \return localized text string on error
  */
-const char *Rast_adjust_Cell_head3(struct Cell_head *cellhd, int row_flag,
+const char *G_adjust_Cell_head3(struct Cell_head *cellhd, int row_flag,
 				int col_flag, int depth_flag)
 {
     if (!row_flag) {
@@ -232,7 +232,7 @@ const char *Rast_adjust_Cell_head3(struct Cell_head *cellhd, int row_flag,
 	epsilon_ns = 1. / cellhd->rows * 0.001;
 	epsilon_ew = .000001;	/* epsilon_ew calculation doesn't work due to cellhd->cols update/global wraparound below */
 
-	G_debug(3, "Rast_adjust_Cell_head: epsilon_ns: %g, epsilon_ew: %g",
+	G_debug(3, "G_adjust_Cell_head: epsilon_ns: %g, epsilon_ew: %g",
 		epsilon_ns, epsilon_ew);
 
 	/* TODO: once working, change below G_warning to G_debug */
@@ -264,7 +264,7 @@ const char *Rast_adjust_Cell_head3(struct Cell_head *cellhd, int row_flag,
 	/* DISABLED: this breaks global wrap-around */
 
 	G_debug(3,
-		"Rast_adjust_Cell_head3() cellhd->west: %f, devi: %g, eps: %g",
+		"G_adjust_Cell_head3() cellhd->west: %f, devi: %g, eps: %g",
 		cellhd->west, cellhd->west + 180.0, epsilon_ew);
 
 	if ((cellhd->west < -180.0) && ((cellhd->west + 180.0) < epsilon_ew)
@@ -275,7 +275,7 @@ const char *Rast_adjust_Cell_head3(struct Cell_head *cellhd, int row_flag,
 	}
 
 	G_debug(3,
-		"Rast_adjust_Cell_head3() cellhd->east: %f, devi: %g, eps: %g",
+		"G_adjust_Cell_head3() cellhd->east: %f, devi: %g, eps: %g",
 		cellhd->east, cellhd->east - 180.0, epsilon_ew);
 
 	if ((cellhd->east > 180.0) && ((cellhd->east - 180.0) > epsilon_ew)
