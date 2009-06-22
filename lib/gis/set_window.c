@@ -29,3 +29,34 @@ void G_get_set_window(struct Cell_head *window)
     G__init_window();
     G_copy(window, &G__.window, sizeof(*window));
 }
+
+/*!
+ * \brief Establishes 'window' as the current working window.
+ * 
+ * \param window window to become operative window
+ * 
+ * \return -1 on error
+ * \return  1 on success
+ */
+int G_set_window(struct Cell_head *window)
+{
+    const char *err;
+
+    /* adjust window, check for valid window */
+    /* adjust the real one, not a copy
+       G_copy (&twindow, window, sizeof(struct Cell_head));
+       window = &twindow;
+     */
+
+    if ((err = G_adjust_Cell_head(window, 0, 0))) {
+	G_warning("G_set_window(): %s", err);
+	return -1;
+    }
+
+    /* copy the window to the current window */
+    G_copy((char *)&G__.window, (char *)window, sizeof(*window));
+
+    G__.window_set = 1;
+
+    return 1;
+}
