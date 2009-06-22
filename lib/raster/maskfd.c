@@ -14,7 +14,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 
-#include "G.h"
+#include "R.h"
 
 /*!
  * \brief Test for MASK.
@@ -27,5 +27,5 @@ int Rast_maskfd(void)
 {
     Rast__check_for_auto_masking();
 
-    return G__.auto_mask > 0 ? G__.mask_fd : -1;
+    return R__.auto_mask > 0 ? R__.mask_fd : -1;
 }

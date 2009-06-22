@@ -16,7 +16,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-#include "../raster/G.h"
+#include "G.h"
 
 static struct state {
     int initialized;

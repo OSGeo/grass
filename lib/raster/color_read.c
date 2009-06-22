@@ -298,7 +298,7 @@ static int read_new_colors(FILE * fd, struct Colors *colors)
 		Rast_add_color_rule((CELL) cat1, r1, g1, b1,
 				 (CELL) cat2, r2, g2, b2, colors);
 	}
-	G_debug(3, "adding rule %d=%.2lf %d %d %d  %d=%.2lf %d %d %d",
+	G_debug(3, "adding rule %ld=%.2lf %d %d %d  %ld=%.2lf %d %d %d",
 		cat1, val1,  r1, g1, b1, cat2, val2, r2, g2, b2);
     }
     return 1;

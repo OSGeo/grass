@@ -18,7 +18,7 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-#include "G.h"
+#include "R.h"
 
 #define DEFAULT_CELL_MIN 1
 #define DEFAULT_CELL_MAX 255

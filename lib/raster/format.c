@@ -6,7 +6,7 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-#include "G.h"
+#include "R.h"
 
 /*!
 
@@ -62,7 +62,7 @@
 
 int Rast__check_format(int fd)
 {
-    struct fileinfo *fcb = &G__.fileinfo[fd];
+    struct fileinfo *fcb = &R__.fileinfo[fd];
     unsigned char compress[4];
 
     /*
@@ -93,7 +93,7 @@ int Rast__check_format(int fd)
 
 int Rast__read_row_ptrs(int fd)
 {
-    struct fileinfo *fcb = &G__.fileinfo[fd];
+    struct fileinfo *fcb = &R__.fileinfo[fd];
     int nrows = fcb->cellhd.rows;
     unsigned char nbytes;
     unsigned char *buf, *b;
@@ -158,7 +158,7 @@ int Rast__read_row_ptrs(int fd)
 
 int Rast__write_row_ptrs(int fd)
 {
-    struct fileinfo *fcb = &G__.fileinfo[fd];
+    struct fileinfo *fcb = &R__.fileinfo[fd];
     int nrows = fcb->cellhd.rows;
     int nbytes = sizeof(off_t);
     unsigned char *buf, *b;

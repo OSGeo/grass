@@ -25,33 +25,33 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-#include "G.h"
+#include "R.h"
 #define FORMAT_FILE "f_format"
 
 static struct fileinfo *new_fileinfo(int fd)
 {
-    int oldsize = G__.fileinfo_count;
+    int oldsize = R__.fileinfo_count;
     int newsize = oldsize;
     int i;
 
     if (fd < oldsize)
-	return &G__.fileinfo[fd];
+	return &R__.fileinfo[fd];
 
     newsize *= 2;
     if (newsize <= fd)
 	newsize = fd + 20;
 
-    G__.fileinfo = G_realloc(G__.fileinfo, newsize * sizeof(struct fileinfo));
+    R__.fileinfo = G_realloc(R__.fileinfo, newsize * sizeof(struct fileinfo));
 
     /* Mark all cell files as closed */
     for (i = oldsize; i < newsize; i++) {
-	memset(&G__.fileinfo[i], 0, sizeof(struct fileinfo));
-	G__.fileinfo[i].open_mode = -1;
+	memset(&R__.fileinfo[i], 0, sizeof(struct fileinfo));
+	R__.fileinfo[i].open_mode = -1;
     }
 
-    G__.fileinfo_count = newsize;
+    R__.fileinfo_count = newsize;
 
-    return &G__.fileinfo[fd];
+    return &R__.fileinfo[fd];
 }
 
 
@@ -117,8 +117,8 @@ int Rast_open_cell_old(const char *name, const char *mapset)
     /* turn on auto masking, if not already on */
     Rast__check_for_auto_masking();
     /*
-       if(G__.auto_mask <= 0)
-       G__.mask_buf = Rast_allocate_cell_buf();
+       if(R__.auto_mask <= 0)
+       R__.mask_buf = Rast_allocate_cell_buf();
        now we don't ever free it!, so no need to allocate it  (Olga)
      */
     /* mask_buf is used for reading MASK file when mask is set and
@@ -169,7 +169,7 @@ int Rast__open_cell_old(const char *name, const char *mapset)
     struct GDAL_link *gdal;
 
     /* make sure window is set    */
-    G__init_window();
+    Rast__init_window();
 
     G__unqualified_name(name, mapset, xname, xmapset);
     name = xname;
@@ -222,16 +222,16 @@ int Rast__open_cell_old(const char *name, const char *mapset)
 	}
     }
 
-    if (cellhd.proj != G__.window.proj) {
+    if (cellhd.proj != R__.window.proj) {
 	G_warning(_("Raster map <%s@%s> is in different projection than current region. "
 		    "Found raster map <%s@%s>, should be <%s>."),
 		  name, mapset, name, G__projection_name(cellhd.proj),
-		  G__projection_name(G__.window.proj));
+		  G__projection_name(R__.window.proj));
 	return -1;
     }
-    if (cellhd.zone != G__.window.zone) {
+    if (cellhd.zone != R__.window.zone) {
 	G_warning(_("Raster map <%s@%s> is in different zone (%d) than current region (%d)"),
-		  name, mapset, cellhd.zone, G__.window.zone);
+		  name, mapset, cellhd.zone, R__.window.zone);
 	return -1;
     }
 
@@ -287,7 +287,7 @@ int Rast__open_cell_old(const char *name, const char *mapset)
 
     /* allocate null bitstream buffers for reading null rows */
     for (i = 0; i < NULL_ROWS_INMEM; i++)
-	fcb->NULL_ROWS[i] = Rast__allocate_null_bits(G__.window.cols);
+	fcb->NULL_ROWS[i] = Rast__allocate_null_bits(R__.window.cols);
     /* initialize : no NULL rows in memory */
     fcb->min_null_row = (-1) * NULL_ROWS_INMEM;
 
@@ -316,7 +316,7 @@ int Rast__open_cell_old(const char *name, const char *mapset)
 	}
 
     /* create the mapping from cell file to window */
-    G__create_window_mapping(fd);
+    Rast__create_window_mapping(fd);
 
     /*
      * allocate the data buffer
@@ -407,7 +407,7 @@ int Rast_open_cell_new_uncompressed(const char *name)
 */
 void Rast_want_histogram(int flag)
 {
-    G__.want_histogram = flag;
+    R__.want_histogram = flag;
 }
 
 /*!
@@ -425,11 +425,11 @@ void Rast_want_histogram(int flag)
 void Rast_set_cell_format(int n)
 /* sets the format for integer raster map */
 {
-    G__.nbytes = n + 1;
-    if (G__.nbytes <= 0)
-	G__.nbytes = 1;
-    if (G__.nbytes > sizeof(CELL))
-	G__.nbytes = sizeof(CELL);
+    R__.nbytes = n + 1;
+    if (R__.nbytes <= 0)
+	R__.nbytes = 1;
+    if (R__.nbytes > sizeof(CELL))
+	R__.nbytes = sizeof(CELL);
 }
 
 /*!
@@ -469,7 +469,7 @@ int Rast_cellvalue_format(CELL v)
 */
 int Rast_open_fp_cell_new(const char *name)
 {
-    return G__open_raster_new(name, OPEN_NEW_COMPRESSED, G__.fp_type);
+    return G__open_raster_new(name, OPEN_NEW_COMPRESSED, R__.fp_type);
 }
 
 /*!
@@ -484,7 +484,7 @@ int Rast_open_fp_cell_new(const char *name)
 */
 int Rast_open_fp_cell_new_uncompressed(const char *name)
 {
-    return G__open_raster_new(name, OPEN_NEW_UNCOMPRESSED, G__.fp_type);
+    return G__open_raster_new(name, OPEN_NEW_UNCOMPRESSED, R__.fp_type);
 }
 
 #ifdef HAVE_GDAL
@@ -509,12 +509,12 @@ static int G__open_raster_new_gdal(char *map, char *mapset, RASTER_MAP_TYPE map_
     if (!fcb->gdal)
 	return -1;
 
-    fcb->cellhd = G__.window;
+    fcb->cellhd = R__.window;
     fcb->cellhd.compressed = 0;
     fcb->nbytes = Rast_raster_size(fcb->map_type);
-    /* for writing fcb->data is allocated to be G__.window.cols * 
+    /* for writing fcb->data is allocated to be R__.window.cols * 
        sizeof(CELL or DCELL or FCELL)  */
-    fcb->data = G_calloc(G__.window.cols, fcb->nbytes);
+    fcb->data = G_calloc(R__.window.cols, fcb->nbytes);
 
     fcb->name = map;
     fcb->mapset = mapset;
@@ -534,7 +534,7 @@ static int G__open_raster_new_gdal(char *map, char *mapset, RASTER_MAP_TYPE map_
     /* init cell stats */
     /* now works only for int maps */
     if (fcb->map_type == CELL_TYPE)
-	if ((fcb->want_histogram = G__.want_histogram))
+	if ((fcb->want_histogram = R__.want_histogram))
 	    Rast_init_cell_stats(&fcb->statf);
 
     /* init range and if map is double/float init d/f_range */
@@ -566,7 +566,7 @@ static int G__open_raster_new(const char *name, int open_mode,
     switch (map_type) {
     case CELL_TYPE:
 	cell_dir = "cell";
-	nbytes = G__.nbytes;
+	nbytes = R__.nbytes;
 	break;
     case FCELL_TYPE:
 	nbytes = XDR_FLOAT_NBYTES;
@@ -594,7 +594,7 @@ static int G__open_raster_new(const char *name, int open_mode,
     }
 
     /* make sure window is set */
-    G__init_window();
+    Rast__init_window();
 
 #ifdef HAVE_GDAL
     if (G_find_file2("", "GDAL", G_mapset()))
@@ -624,9 +624,9 @@ static int G__open_raster_new(const char *name, int open_mode,
     fcb->open_mode = -1;
     fcb->gdal = NULL;
 
-    /* for writing fcb->data is allocated to be G__.window.cols * 
+    /* for writing fcb->data is allocated to be R__.window.cols * 
        sizeof(CELL or DCELL or FCELL)  */
-    fcb->data = (unsigned char *)G_calloc(G__.window.cols,
+    fcb->data = (unsigned char *)G_calloc(R__.window.cols,
 					  Rast_raster_size(fcb->map_type));
 
     /*
@@ -635,13 +635,13 @@ static int G__open_raster_new(const char *name, int open_mode,
      * for compressed writing
      *   allocate space to hold the row address array
      */
-    G_copy((char *)&fcb->cellhd, (char *)&G__.window, sizeof(fcb->cellhd));
+    G_copy((char *)&fcb->cellhd, (char *)&R__.window, sizeof(fcb->cellhd));
 
     if (open_mode == OPEN_NEW_COMPRESSED && fcb->map_type == CELL_TYPE) {
 	fcb->row_ptr = G_calloc(fcb->cellhd.rows + 1, sizeof(off_t));
 	G_zero(fcb->row_ptr, (fcb->cellhd.rows + 1) * sizeof(off_t));
 	Rast__write_row_ptrs(fd);
-	fcb->cellhd.compressed = G__.compression_type;
+	fcb->cellhd.compressed = R__.compression_type;
 
 	fcb->nbytes = 1;	/* to the minimum */
     }
@@ -651,7 +651,7 @@ static int G__open_raster_new(const char *name, int open_mode,
 	    fcb->row_ptr = G_calloc(fcb->cellhd.rows + 1, sizeof(off_t));
 	    G_zero(fcb->row_ptr, (fcb->cellhd.rows + 1) * sizeof(off_t));
 	    Rast__write_row_ptrs(fd);
-	    fcb->cellhd.compressed = G__.compression_type;
+	    fcb->cellhd.compressed = R__.compression_type;
 	}
 	else
 	    fcb->cellhd.compressed = 0;
@@ -696,7 +696,7 @@ static int G__open_raster_new(const char *name, int open_mode,
     /* init cell stats */
     /* now works only for int maps */
     if (fcb->map_type == CELL_TYPE)
-	if ((fcb->want_histogram = G__.want_histogram))
+	if ((fcb->want_histogram = R__.want_histogram))
 	    Rast_init_cell_stats(&fcb->statf);
 
     /* init range and if map is double/float init d/f_range */
@@ -731,7 +731,7 @@ int Rast_set_fp_type(RASTER_MAP_TYPE map_type)
     switch (map_type) {
     case FCELL_TYPE:
     case DCELL_TYPE:
-	G__.fp_type = map_type;
+	R__.fp_type = map_type;
 	return 1;
     default:
 	G_warning(_("Rast_set_fp_type(): can only be called with FCELL_TYPE or DCELL_TYPE"));
@@ -822,7 +822,7 @@ RASTER_MAP_TYPE Rast_raster_map_type(const char *name, const char *mapset)
  */
 RASTER_MAP_TYPE Rast_get_raster_map_type(int fd)
 {
-    struct fileinfo *fcb = &G__.fileinfo[fd];
+    struct fileinfo *fcb = &R__.fileinfo[fd];
 
     return fcb->map_type;
 }
@@ -945,7 +945,7 @@ int Rast_open_raster_new_uncompressed(const char *name, RASTER_MAP_TYPE wr_type)
 */
 int Rast_set_quant_rules(int fd, struct Quant *q)
 {
-    struct fileinfo *fcb = &G__.fileinfo[fd];
+    struct fileinfo *fcb = &R__.fileinfo[fd];
     CELL cell;
     DCELL dcell;
     struct Quant_table *p;
