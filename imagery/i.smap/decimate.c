@@ -1,5 +1,4 @@
 #include <grass/gis.h>
-#include <grass/raster.h>
 #include "bouman.h"
 #include "region.h"
 

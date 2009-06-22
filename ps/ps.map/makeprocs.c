@@ -6,7 +6,6 @@
  */
 
 #include <grass/gis.h>
-#include <grass/raster.h>
 #include <grass/glocale.h>
 #include "ps_info.h"
 

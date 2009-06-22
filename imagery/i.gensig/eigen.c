@@ -1,5 +1,4 @@
 #include <grass/gis.h>
-#include <grass/raster.h>
 #include "local_proto.h"
 #include <math.h>
 double **matrix(), *vector();

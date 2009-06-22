@@ -19,7 +19,6 @@
 
 
 #include <grass/gis.h>
-#include <grass/raster.h>
 
 
 #define BUFFSIZE 256

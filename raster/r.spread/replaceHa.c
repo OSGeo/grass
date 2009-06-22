@@ -12,7 +12,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <grass/gis.h>
-#include <grass/raster.h>
 #include "costHa.h"
 #include "local_proto.h"
 

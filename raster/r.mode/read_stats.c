@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <grass/gis.h>
-#include <grass/raster.h>
 #include <grass/glocale.h>
 
 int read_stats(FILE * fd, long *cat1, long *cat2, double *value)

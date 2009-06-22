@@ -1,6 +1,5 @@
 #include <math.h>
 #include <grass/gis.h>
-#include <grass/raster.h>
 
 #define PI	M_PI
 #define Radians(x) ((x) * PI/180.0)

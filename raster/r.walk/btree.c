@@ -15,7 +15,6 @@
 
 
 #include <grass/gis.h>
-#include <grass/raster.h>
 #include "local_proto.h"
 #include "memory.h"
 #include <stdlib.h>

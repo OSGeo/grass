@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <math.h>
 #include <grass/gis.h>
-#include <grass/raster.h>
 #include <grass/glocale.h>
 #include "global.h"
 #include "local_proto.h"

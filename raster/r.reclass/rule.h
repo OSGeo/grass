@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <grass/gis.h>
-#include <grass/raster.h>
 
 #define RULE struct _rule_
 RULE {

@@ -1,6 +1,5 @@
 #include <math.h>
 #include <grass/gis.h>
-#include <grass/raster.h>
 #include <grass/display.h>
 
 int plot_border(double grid_size, double east, double north)

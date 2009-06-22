@@ -10,7 +10,6 @@
 /****************************************************************/
 
 #include <grass/gis.h>
-#include <grass/raster.h>
 
 #define		PI		M_PI
 #define		PIBYFOUR 	M_PI_4

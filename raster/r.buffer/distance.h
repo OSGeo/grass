@@ -23,8 +23,6 @@
 #define __DISTANCE_H__
 
 #include <grass/gis.h>
-#include <grass/raster.h>
-#include <grass/raster.h>
 
 struct Distance
 {

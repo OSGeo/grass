@@ -1,5 +1,4 @@
 #include <grass/gis.h>
-#include <grass/raster.h>
 #include <grass/Vect.h>
 #include <grass/display.h>
 #include <grass/glocale.h>

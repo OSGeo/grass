@@ -20,7 +20,6 @@
 #include <stdio.h>
 #include "defs.h"
 #include <grass/gis.h>
-#include <grass/raster.h>
 #include <grass/glocale.h>
 
 int main(int argc, char *argv[])
