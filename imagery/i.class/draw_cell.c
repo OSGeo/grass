@@ -2,7 +2,6 @@
 #include <grass/gis.h>
 #include "globals.h"
 #include <grass/display.h>
-#include <grass/display_raster.h>
 #include "local_proto.h"
 
 int draw_cell(View * view, int overlay)

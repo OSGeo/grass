@@ -26,7 +26,6 @@
 
 #include <grass/gis.h>
 #include <grass/display.h>
-#include <grass/display_raster.h>
 #include "options.h"
 #include <grass/glocale.h>
 
@@ -115,7 +114,7 @@ int main(int argc, char **argv)
     sscanf(opt3->answers[1], "%lf", &north);
 
 
-    if (R_open_driver() != 0)
+    if (D_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
     D_setup(0);
@@ -131,7 +130,7 @@ int main(int argc, char **argv)
     /* Draw the scale */
     draw_scale(top->answer);
 
-    R_close_driver();
+    D_close_driver();
 
     exit(EXIT_SUCCESS);
 }

@@ -20,7 +20,6 @@
 #include <grass/config.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
-#include <grass/display_raster.h>
 #include <grass/display.h>
 #include <grass/Vect.h>
 #include <grass/colors.h>
@@ -362,7 +361,7 @@ int main(int argc, char **argv)
 
     if (!nodraw_flag->answer) {
 	/* Now's let's prepare the actual plotting */
-	if (R_open_driver() != 0)
+	if (D_open_driver() != 0)
 	    G_fatal_error(_("No graphics device selected"));
 
 	D_setup(0);
@@ -407,7 +406,7 @@ int main(int argc, char **argv)
 
 	}			/* end window check if */
 
-	R_close_driver();
+	D_close_driver();
 
     }				/* end of nodraw_flag condition */
 

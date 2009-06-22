@@ -1,6 +1,6 @@
 
 #include "globals.h"
-#include <grass/display_raster.h>
+#include <grass/display.h>
 
 
 

@@ -30,7 +30,6 @@
 #include <math.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
-#include <grass/display_raster.h>
 #include <grass/display.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
@@ -259,7 +258,7 @@ int main(int argc, char **argv)
 
     Rast_set_c_null_value(&null_cell, 1);
 
-    if (R_open_driver() != 0)
+    if (D_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
     white = D_translate_color(DEFAULT_FG_COLOR);
@@ -464,7 +463,7 @@ int main(int argc, char **argv)
 		    y0 = ((b - t) - (dots_per_line * lines)) / 2;
 	}
 
-	/*      R_text_size((int)(dots_per_line*4/5), (int)(dots_per_line*4/5)) ;    redundant */
+	/*      D_text_size((int)(dots_per_line*4/5), (int)(dots_per_line*4/5)) ;    redundant */
 	/* if(Rast_is_c_null_value(&min_ind) && Rast_is_c_null_value(&max_ind))
 	   {
 	   min_ind = 1;
@@ -656,7 +655,7 @@ int main(int argc, char **argv)
 	    if (txsiz < 0)
 		txsiz = 0;	/* keep it sane */
 
-	    R_text_size(txsiz, txsiz);
+	    D_text_size(txsiz, txsiz);
 	    D_use_color(color);
 
 	    ppl = (lleg) / (steps - 1);
@@ -671,7 +670,7 @@ int main(int argc, char **argv)
 	    }
 	    else {
 		/* text width is 0.81 of text height? so even though we set width 
-		   to txsiz with R_text_size(), we still have to reduce.. hmmm */
+		   to txsiz with D_text_size(), we still have to reduce.. hmmm */
 		if (!k)		/* first  */
 		    D_pos_abs(x0 - (strlen(buff) * txsiz * .81 / 2),
 			       y1 + 4 + txsiz);
@@ -684,7 +683,7 @@ int main(int argc, char **argv)
 			       y1 + 4 + txsiz);
 	    }
 
-	    R_text(buff);
+	    D_text(buff);
 
 	}			/*for */
 
@@ -751,7 +750,7 @@ int main(int argc, char **argv)
 	if (dots_per_line < txsiz)
 	    txsiz = dots_per_line;
 
-	R_text_size(txsiz, txsiz);
+	D_text_size(txsiz, txsiz);
 
 
 	/* Set up box arrays */
@@ -863,7 +862,7 @@ int main(int argc, char **argv)
 	    }
 
 	    D_pos_abs((l + 3 + dots_per_line), (cur_dot_row) - 3);
-	    R_text(buff);
+	    D_text(buff);
 	}
 
 	if (0 == k)
@@ -881,14 +880,14 @@ int main(int argc, char **argv)
 	    ScaleFactor = ((true_r - true_l) / (MaxLabelLen * txsiz * 0.81));	/* ?? txsiz*.81=actual text width. */
 	    if (ScaleFactor < 1.0) {
 		txsiz = (int)floor(txsiz * ScaleFactor);
-		R_text_size(txsiz, txsiz);
+		D_text_size(txsiz, txsiz);
 	    }
 	    D_use_color(white);
 	    D_pos_abs((l + 3 + dots_per_line), (cur_dot_row));
-	    R_text(buff);
+	    D_text(buff);
 	}
     }
 
-    R_close_driver();
+    D_close_driver();
     exit(EXIT_SUCCESS);
 }

@@ -7,8 +7,8 @@
 #include <grass/display.h>
 #include <grass/colors.h>
 #include <grass/raster.h>
-#include <grass/display_raster.h>
 #include <grass/glocale.h>
+#include "driver.h"
 
 static struct color_rgb *colors;
 static int ncolors;
@@ -146,14 +146,14 @@ int D_use_color(int color)
 	return 0;
 
     if (color < G_num_standard_colors()) {
-	R__standard_color(color);
+	COM_Standard_color(color);
 	return 1;
     }
 
     if (color < ncolors) {
 	const struct color_rgb *c = &colors[color];
 
-	R__RGB_color(c->r, c->g, c->b);
+	D_RGB_color(c->r, c->g, c->b);
 	return 1;
     }
 
@@ -213,6 +213,6 @@ int D_color_number_to_RGB(int color, int *r, int *g, int *b)
 
 void D_RGB_color(int red, int grn, int blu)
 {
-    R__RGB_color(red, grn, blu);
+    COM_Color_RGB(red, grn, blu);
 }
 

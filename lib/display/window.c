@@ -7,7 +7,7 @@
 #include <grass/colors.h>
 #include <grass/gis.h>
 #include <grass/display.h>
-#include <grass/display_raster.h>
+#include "driver.h"
 
 void D_erase(const char *color)
 {
@@ -21,12 +21,12 @@ void D_erase(const char *color)
     D_use_color(colorindex);
 
     /* Do the plotting */
-    R__begin();
-    R__move(l, b);
-    R__cont(r, b);
-    R__cont(r, t);
-    R__cont(l, t);
-    R__close();
-    R__fill();
+    COM_Begin();
+    COM_Move(l, b);
+    COM_Cont(r, b);
+    COM_Cont(r, t);
+    COM_Cont(l, t);
+    COM_Close();
+    COM_Fill();
 }
 

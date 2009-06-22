@@ -28,8 +28,8 @@
 
 #include <grass/gis.h>
 #include <grass/raster.h>
-#include <grass/display_raster.h>
 #include <grass/display.h>
+#include "driver.h"
 
 extern int D__overlay_mode;
 
@@ -110,8 +110,7 @@ static int draw_cell(int A_row,
 	}
 
     A_row =
-	R__scaled_raster(ncols, A_row, red, grn, blu,
-			D__overlay_mode ? set : NULL);
+	COM_raster(ncols, A_row, red, grn, blu, D__overlay_mode ? set : NULL);
 
     return (A_row < src[1][1])
 	? A_row : -1;
@@ -137,7 +136,7 @@ void D_cell_draw_begin(void)
     /* Set up the screen for drawing map */
     D_get_a(src);
     D_get_d(dst);
-    R__begin_scaled_raster(D__overlay_mode, src, dst);
+    COM_begin_raster(D__overlay_mode, src, dst);
 }
 
 int D_draw_raster_RGB(int A_row,
@@ -184,9 +183,8 @@ int D_draw_raster_RGB(int A_row,
 	    b_raster = Rast_incr_void_ptr(b_raster, b_size);
 	}
 
-    A_row =
-	R__scaled_raster(ncols, A_row, r_buf, g_buf, b_buf,
-			D__overlay_mode ? n_buf : NULL);
+    A_row = COM_raster(ncols, A_row, r_buf, g_buf, b_buf,
+		       D__overlay_mode ? n_buf : NULL);
 
     return (A_row < src[1][1])
 	? A_row : -1;
@@ -194,5 +192,5 @@ int D_draw_raster_RGB(int A_row,
 
 void D_cell_draw_end(void)
 {
-    R__end_scaled_raster();
+    COM_end_raster();
 }

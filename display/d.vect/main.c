@@ -19,7 +19,6 @@
 #include <dirent.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
-#include <grass/display_raster.h>
 #include <grass/display.h>
 #include <grass/Vect.h>
 #include <grass/colors.h>
@@ -355,7 +354,7 @@ int main(int argc, char **argv)
 
     G_get_set_window(&window);
 
-    if (R_open_driver() != 0)
+    if (D_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
     /* Read map options */
@@ -675,7 +674,7 @@ int main(int argc, char **argv)
 	}
     }
 
-    R_close_driver();
+    D_close_driver();
 
     if (verbose)
 	G_done_msg(" ");

@@ -3,7 +3,6 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/display.h>
-#include <grass/display_raster.h>
 #include <grass/symbol.h>
 #include <grass/glocale.h>
 
@@ -50,7 +49,7 @@ int set_graph_stuff(void)
 int set_text_size(void)
 {
     if (hsize >= 0. && vsize >= 0. && hsize <= 100. && vsize <= 100.) {
-	R_text_size(hsize * xincr, vsize * yincr);
+	D_text_size(hsize * xincr, vsize * yincr);
 	G_debug(3, "text size initialized to [%.1f,%.1f]",
 		hsize * xincr, vsize * yincr);
     }
@@ -203,7 +202,7 @@ int do_size(const char *str)
     if (xper < 0. || yper < 0. || xper > 100. || yper > 100.)
 	return (-1);
 
-    R_text_size(xper * xincr, yper * yincr);
+    D_text_size(xper * xincr, yper * yincr);
     G_debug(3, "text size set to [%.1f,%.1f]",
 	    xper * xincr, yper * yincr);
 
@@ -217,7 +216,7 @@ int do_rotate(const char *str)
 	return (-1);
     }
 
-    R_text_rotation(rotation);
+    D_text_rotation(rotation);
     G_debug(3, "rotation set to %.1f degrees", rotation);
 
     return (0);
@@ -232,7 +231,7 @@ int do_text(const char *str)
 	;
     for (; *ptr == ' '; ptr++)
 	;
-    R_text(ptr);
+    D_text(ptr);
 
     return 0;
 }

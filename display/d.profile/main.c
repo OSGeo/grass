@@ -24,7 +24,6 @@
 #include <math.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
-#include <grass/display_raster.h>
 #include <grass/display.h>
 #include <grass/glocale.h>
 
@@ -101,19 +100,19 @@ static void plot_axes(void)
 
     /* set text size for y-axis labels */
     scale = fabs(D_get_u_to_d_yconv());
-    R_text_size(scale * 0.04, scale * 0.05);
+    D_text_size(scale * 0.04, scale * 0.05);
 
     /* plot y-axis label (bottom) */
     sprintf(str, "%.1f", min);
     D_get_text_box(str, &t, &b, &l, &r);
     D_pos_abs(-0.02 - (r - l), 0 - (t - b) / 2);
-    R_text(str);
+    D_text(str);
 
     /* plot y-axis label (top) */
     sprintf(str, "%.1f", max);
     D_get_text_box(str, &t, &b, &l, &r);
     D_pos_abs(-0.02 - (r - l), 1 - (t - b) / 2);
-    R_text(str);
+    D_text(str);
 }
 
 static int get_cell(DCELL *result, int fd, double x, double y)
@@ -259,7 +258,7 @@ int main(int argc, char **argv)
 	G_fatal_error(_("At least two points are required"));
 
     /* establish connection with graphics driver */
-    if (R_open_driver() != 0)
+    if (D_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
     D_setup2(1, 0, 1.05, -0.05, -0.15, 1.05);
@@ -314,7 +313,7 @@ int main(int argc, char **argv)
     D_end();
     D_stroke();
 
-    R_close_driver();
+    D_close_driver();
 
     exit(EXIT_SUCCESS);
 }

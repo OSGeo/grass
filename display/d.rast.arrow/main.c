@@ -39,7 +39,6 @@
 #include <math.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
-#include <grass/display_raster.h>
 #include <grass/display.h>
 #include <grass/colors.h>
 #include <grass/glocale.h>
@@ -221,7 +220,7 @@ int main(int argc, char **argv)
 
 
     /* Setup driver and check important information */
-    if (R_open_driver() != 0)
+    if (D_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
     D_setup(0);
@@ -506,7 +505,7 @@ int main(int argc, char **argv)
     if (opt7->answer)
 	Rast_close_cell(mag_fd);
 
-    R_close_driver();
+    D_close_driver();
 
     exit(0);
 }

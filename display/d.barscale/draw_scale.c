@@ -6,7 +6,6 @@
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/display.h>
-#include <grass/display_raster.h>
 #include "options.h"
 
 #define NUMSCALES	16
@@ -74,7 +73,7 @@ int draw_scale(int toptext)
 
     /* Establish text size */
     size = 14;
-    R_text_size(size, size);
+    D_text_size(size, size);
 
     D_setup_unity(0);
     D_get_src(&t, &b, &l, &r);
@@ -117,7 +116,7 @@ int draw_scale(int toptext)
 
 	/* actual text width is 81% of size? from d.legend */
 	D_pos_abs(pl + w / 2 - 7 * .81, pt + 14);
-	R_text("N");
+	D_text("N");
 
 	return 0;
     }
@@ -248,11 +247,11 @@ int draw_scale(int toptext)
 	D_pos_abs(x_pos + 25 - draw * 10 + line_len / 2.
 		  - strlen(scales[incr].name) * size * 0.81 / 2,
 		  y_pos);
-	R_text(scales[incr].name);
+	D_text(scales[incr].name);
     }
     else {
 	D_pos_abs(x_pos + 35 - draw * 10 + line_len, y_pos + 20);
-	R_text(scales[incr].name);
+	D_text(scales[incr].name);
     }
 
     return (0);

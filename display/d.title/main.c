@@ -19,7 +19,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <grass/display.h>
-#include <grass/display_raster.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>

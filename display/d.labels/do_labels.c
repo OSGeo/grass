@@ -5,7 +5,6 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/display.h>
-#include <grass/display_raster.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 
@@ -185,7 +184,7 @@ int show_it(void)
     Y0 = north;
 
     /* Set font */
-    R_font(font);
+    D_font(font);
 
     /* Set text size */
     if (fontsize) {
@@ -199,7 +198,7 @@ int show_it(void)
 
     line_size = text_size * 1.2;
 
-    R_text_size(d_text_size, d_text_size);
+    D_text_size(d_text_size, d_text_size);
 
     /* Find extent of all text (assume ref point is upper left) */
     T = -1e300;
@@ -238,7 +237,7 @@ int show_it(void)
 
 	Y = north - (line_size * 1.2) - ((n_lines - 1) * line_size);
 	D_pos_abs(X, Y);
-	R_text_rotation(0.0);	/* reset */
+	D_text_rotation(0.0);	/* reset */
 	D_get_text_box(line, &t, &b, &l, &r);
 
 	if (T < t)
@@ -339,7 +338,7 @@ int show_it(void)
     }
 
     /* Set font rotation */
-    R_text_rotation(rotation);
+    D_text_rotation(rotation);
     G_debug(3, "  rotation = %.2f", rotation);
 
     /**** draw highlighted text background ****/
@@ -373,22 +372,22 @@ int show_it(void)
 	    for (j = 1; j <= highlight_width; j++) {
 		/* smear it around. probably a better way (knight's move? rand?) */
 		D_pos_abs(text_x + Xoffset, text_y + Yoffset + j);
-		R_text(line);
+		D_text(line);
 		D_pos_abs(text_x + Xoffset, text_y + Yoffset - j);
-		R_text(line);
+		D_text(line);
 		D_pos_abs(text_x + Xoffset + j, text_y + Yoffset);
-		R_text(line);
+		D_text(line);
 		D_pos_abs(text_x + Xoffset - j, text_y + Yoffset);
-		R_text(line);
+		D_text(line);
 
 		D_pos_abs(text_x + Xoffset + j, text_y + Yoffset + j);
-		R_text(line);
+		D_text(line);
 		D_pos_abs(text_x + Xoffset - j, text_y + Yoffset - j);
-		R_text(line);
+		D_text(line);
 		D_pos_abs(text_x + Xoffset + j, text_y + Yoffset - j);
-		R_text(line);
+		D_text(line);
 		D_pos_abs(text_x + Xoffset - j, text_y + Yoffset + j);
-		R_text(line);
+		D_text(line);
 	    }
 
 	    if ((*tptr == '\0') || (*tptr == NL))
@@ -427,7 +426,7 @@ int show_it(void)
 	G_rotate_around_point(X, Y0, &text_x, &text_y, -1 * rotation);
 
 	D_pos_abs(text_x + Xoffset, text_y + Yoffset);
-	R_text(line);
+	D_text(line);
 
 	if ((*tptr == '\0') || (*tptr == NL))
 	    break;

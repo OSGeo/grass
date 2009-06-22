@@ -2,7 +2,6 @@
 #include <grass/raster.h>
 #include <grass/Vect.h>
 #include <grass/display.h>
-#include <grass/display_raster.h>
 #include <grass/glocale.h>
 #include "plot.h"
 

@@ -33,7 +33,6 @@
 #include <stdlib.h>
 #include <math.h>
 #include <grass/gis.h>
-#include <grass/display_raster.h>
 #include <grass/display.h>
 #include <grass/colors.h>
 #include <grass/glocale.h>
@@ -254,7 +253,7 @@ int main(int argc, char **argv)
     }
 
     /* get coordinates of current screen window, in pixels */
-    if (R_open_driver() != 0)
+    if (D_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
     D_setup_unity(0);
     D_get_src(&t, &b, &l, &r);
@@ -268,7 +267,7 @@ int main(int argc, char **argv)
     y_line[1] = y_line[2] = b - (ORIGIN_Y * height);
     text_height = (b - t) * TEXT_HEIGHT;
     text_width = (r - l) * TEXT_WIDTH;
-    R_text_size(text_width, text_height);
+    D_text_size(text_width, text_height);
 
     /* read thru each data file in turn, find max and min values for
        each, count lines, find x min and max, find overall y min and
@@ -340,7 +339,7 @@ int main(int argc, char **argv)
 
     for (i = 0; i <= num_y_files; i++) {
 	if ((in[i].fp = fopen(in[i].full_name, "r")) == NULL) {
-	    R_close_driver();
+	    D_close_driver();
 	    G_fatal_error(_("Unable to open input file <%s>"), in[i].full_name);
 	}
     }
@@ -359,7 +358,7 @@ int main(int argc, char **argv)
 
 	/* didn't find a number or hit EOF before our time */
 	if ((err != 1) || (err == EOF)) {
-	    R_close_driver();
+	    D_close_driver();
 	    G_fatal_error(_("Problem reading X data file at line %d"), line);
 	}
 
@@ -369,7 +368,7 @@ int main(int argc, char **argv)
 	    if (line < in[i].num_pnts) {
 		err = fscanf(in[i].fp, "%f", &in[i].value);
 		if ((in[i].num_pnts >= line) && (err != 1)) {
-		    R_close_driver();
+		    D_close_driver();
 		    G_fatal_error(_("Problem reading <%s> data file at line %d"),
 				  in[i].name, line);
 		}
@@ -432,17 +431,17 @@ int main(int argc, char **argv)
 		sprintf(txt, "%.2f", (in[0].value));
 	    text_height = (b - t) * TEXT_HEIGHT;
 	    text_width = (r - l) * TEXT_WIDTH;
-	    R_text_size(text_width, text_height);
+	    D_text_size(text_width, text_height);
 	    D_get_text_box(txt, &tt, &tb, &tl, &tr);
 	    while ((tr - tl) > XTIC_DIST) {
 		text_width *= 0.75;
 		text_height *= 0.75;
-		R_text_size(text_width, text_height);
+		D_text_size(text_width, text_height);
 		D_get_text_box(txt, &tt, &tb, &tl, &tr);
 	    }
 	    D_pos_abs((xoffset + (line * xscale - (tr - tl) / 2)),
 		       (b - XNUMS_Y * (b - t)));
-	    R_text(txt);
+	    D_text(txt);
 	}
 	else if (rem(line, tic_unit) == 0.0) {
 
@@ -470,12 +469,12 @@ int main(int argc, char **argv)
 	sprintf(xlabel, "X: %s %s", title[0]->answer, tic_name);
     text_height = (b - t) * TEXT_HEIGHT;
     text_width = (r - l) * TEXT_WIDTH * 1.5;
-    R_text_size(text_width, text_height);
+    D_text_size(text_width, text_height);
     D_get_text_box(xlabel, &tt, &tb, &tl, &tr);
     D_pos_abs((l + (r - l) / 2 - (tr - tl) / 2),
 	      (b - LABEL_1 * (b - t)));
     D_use_color(title_color);
-    R_text(xlabel);
+    D_text(xlabel);
 
     /* DRAW Y-AXIS TIC-MARKS AND NUMBERS
        first, figure tic_every and tic_units for the x-axis of the bar-chart.
@@ -514,17 +513,17 @@ int main(int argc, char **argv)
 	    sprintf(txt, "%d", (i / tic_unit));
 	    text_height = (b - t) * TEXT_HEIGHT;
 	    text_width = (r - l) * TEXT_WIDTH;
-	    R_text_size(text_width, text_height);
+	    D_text_size(text_width, text_height);
 	    D_get_text_box(txt, &tt, &tb, &tl, &tr);
 	    while ((tt - tb) > YTIC_DIST) {
 		text_width *= 0.75;
 		text_height *= 0.75;
-		R_text_size(text_width, text_height);
+		D_text_size(text_width, text_height);
 		D_get_text_box(txt, &tt, &tb, &tl, &tr);
 	    }
 	    D_pos_abs(l + (r - l) * YNUMS_X - (tr - tl) / 2,
 		      yoffset - (yscale * (i - min_y) + 0.5 * (tt - tb)));
-	    R_text(txt);
+	    D_text(txt);
 	}
 	else if (rem(i, tic_unit) == 0.0) {
 	    /* draw a tic-mark */
@@ -543,31 +542,31 @@ int main(int argc, char **argv)
 	sprintf(xlabel, "Y: %s %s", title[1]->answer, tic_name);
     text_height = (b - t) * TEXT_HEIGHT;
     text_width = (r - l) * TEXT_WIDTH * 1.5;
-    R_text_size(text_width, text_height);
+    D_text_size(text_width, text_height);
     D_get_text_box(xlabel, &tt, &tb, &tl, &tr);
     D_pos_abs(l + (r - l) / 2 - (tr - tl) / 2, b - LABEL_2 * (b - t));
     D_use_color(title_color);
-    R_text(xlabel);
+    D_text(xlabel);
 
     /* top label */
     sprintf(xlabel, title[2]->answer);
     text_height = (b - t) * TEXT_HEIGHT;
     text_width = (r - l) * TEXT_WIDTH * 2.0;
-    R_text_size(text_width, text_height);
+    D_text_size(text_width, text_height);
     D_get_text_box(xlabel, &tt, &tb, &tl, &tr);
     /*
-       R_move_abs((int)(((r-l)/2)-(tr-tl)/2),
+       D_move_abs((int)(((r-l)/2)-(tr-tl)/2),
        (int) (t+ (b-t)*.07) );
      */
     D_pos_abs(l + (r - l) / 2 - (tr - tl) / 2, t + (b - t) * .07);
     D_use_color(title_color);
-    R_text(xlabel);
+    D_text(xlabel);
 
     /* draw x and y axis lines */
     D_use_color(title_color);
     D_polyline_abs(x_line, y_line, 3);
 
-    R_close_driver();
+    D_close_driver();
     exit(EXIT_SUCCESS);
 }
 

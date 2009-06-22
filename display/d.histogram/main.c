@@ -36,7 +36,6 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/display.h>
-#include <grass/display_raster.h>
 #include <grass/glocale.h>
 
 #include "options.h"
@@ -185,7 +184,7 @@ int main(int argc, char **argv)
 
     /* set up the graphics driver and initialize its color-table */
 
-    if (R_open_driver() != 0)
+    if (D_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
     D_setup_unity(0);			/* 0 = don't clear frame */
@@ -199,12 +198,12 @@ int main(int argc, char **argv)
     sprintf(title, "%s", map_name);
     text_height = (b - t) * 0.05;
     text_width = (r - l) * 0.05 * 0.50;
-    R_text_size(text_width, text_height);
+    D_text_size(text_width, text_height);
     D_get_text_box(title, &tt, &tb, &tl, &tr);
     D_pos_abs(l + (r - l) / 2 - (tr - tl) / 2,
 	      t + (b - t) * 0.07);
     D_use_color(color);
-    R_text(title);
+    D_text(title);
 
     /* plot the distributrion statistics */
     if (style == PIE)
@@ -212,7 +211,7 @@ int main(int argc, char **argv)
     else
 	bar(&dist_stats, &pcolors);
 
-    R_close_driver();
+    D_close_driver();
 
     exit(EXIT_SUCCESS);
 }

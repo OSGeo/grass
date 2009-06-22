@@ -33,7 +33,6 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/display.h>
-#include <grass/display_raster.h>
 #include <grass/glocale.h>
 
 #include "options.h"
@@ -96,7 +95,7 @@ int main(int argc, char **argv)
 	infile = stdin;
 
     /* open graphics window */
-    if (R_open_driver() != 0)
+    if (D_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
     /* Parse and select color */
@@ -128,7 +127,7 @@ int main(int argc, char **argv)
     set_text_size();
     graphics(infile);
 
-    R_close_driver();
+    D_close_driver();
 
     exit(EXIT_SUCCESS);
 }

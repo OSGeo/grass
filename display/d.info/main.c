@@ -15,7 +15,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <grass/gis.h>
-#include <grass/display_raster.h>
 #include <grass/display.h>
 #include <grass/glocale.h>
 
@@ -64,12 +63,12 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
     }
 
-    if (R_open_driver() != 0)
+    if (D_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
 
     if (rflag->answer || dflag->answer || fflag->answer)
-	R_get_window(&t, &b, &l, &r);
+	D_get_window(&t, &b, &l, &r);
 
 
     if (rflag->answer)
@@ -109,7 +108,7 @@ int main(int argc, char *argv[])
 	fprintf(stdout, "nsres=%.15g\n", (n-s)/(b-t) );
     }
 
-    R_close_driver();
+    D_close_driver();
 
     return EXIT_SUCCESS;
 }

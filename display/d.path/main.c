@@ -21,7 +21,6 @@
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
-#include <grass/display_raster.h>
 #include <grass/display.h>
 #include <grass/colors.h>
 #include <grass/Vect.h>
@@ -149,7 +148,7 @@ int main(int argc, char **argv)
 	G_fatal_error(_("%s - illegal y value"), coor_opt->answers[3]);
 
 
-    if (R_open_driver() != 0)
+    if (D_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
     color = G_standard_color_rgb(BLACK);
@@ -192,7 +191,7 @@ int main(int argc, char **argv)
     coor_path(&Map, &hcolor, bold_f->answer, x1, y1, x2, y2);
 
 
-    R_close_driver();
+    D_close_driver();
 
     Vect_close(&Map);
 

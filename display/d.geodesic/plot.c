@@ -1,6 +1,5 @@
 #include <string.h>
 #include <grass/display.h>
-#include <grass/display_raster.h>
 #include <grass/gis.h>
 #include <stdio.h>
 #include "local_proto.h"
@@ -56,7 +55,7 @@ void plot(double lon1, double lat1, double lon2, double lat2,
 	double t, b, l, r;
 	char buf[100];
 
-	R_text_size(10, 10);
+	D_text_size(10, 10);
 
 	distance = G_geodesic_distance(lon1, lat1, lon2, lat2);
 	sprintf(buf, "%.0f miles", METERS_TO_MILES(distance));
@@ -76,6 +75,6 @@ void plot(double lon1, double lat1, double lon2, double lat2,
 	D_use_color(text_color);
 
 	D_pos_abs(text_x, text_y);
-	R_text(buf);
+	D_text(buf);
     }
 }

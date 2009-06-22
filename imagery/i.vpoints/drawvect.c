@@ -1,5 +1,4 @@
 #include <string.h>
-#include <grass/display_raster.h>
 #include <grass/display.h>
 #include "vectpoints.h"
 #include <grass/Vect.h>

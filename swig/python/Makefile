@@ -95,7 +95,6 @@ vector_wrap.c: $(GISBASE)/include/grass/Vect.h
 vector_wrap.c: $(GISBASE)/include/grass/vect/dig_defines.h
 vector_wrap.c: $(GISBASE)/include/grass/vect/dig_structs.h
 display_wrap.c: $(GISBASE)/include/grass/display.h
-display_wrap.c: $(GISBASE)/include/grass/display_raster.h
 stats_wrap.c: $(GISBASE)/include/grass/stats.h
 dbmi_wrap.c: $(GISBASE)/include/grass/dbmi.h
 dbmi_wrap.c: $(GISBASE)/include/grass/proto_dbmi.h

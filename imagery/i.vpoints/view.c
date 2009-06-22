@@ -1,6 +1,6 @@
 #include "globals.h"
 #include <string.h>
-#include <grass/display_raster.h>
+#include <grass/display.h>
 
 int Configure_view(View * view, char *name, char *mapset, double ns_res, double ew_res	/* original map resolution */
     )

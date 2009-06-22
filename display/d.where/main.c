@@ -23,7 +23,6 @@
 #include <grass/gis.h>
 #include <grass/gprojects.h>
 #include <grass/display.h>
-#include <grass/display_raster.h>
 #include "local_proto.h"
 #include <grass/glocale.h>
 
@@ -164,11 +163,11 @@ int main(int argc, char **argv)
     else
 	fp = stdin;
 
-    if (R_open_driver() != 0)
+    if (D_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
     D_setup(0);
     where_am_i(coords->answers, fp, have_spheroid, decimal->answer, dcoord->answer);
-    R_close_driver();
+    D_close_driver();
 
     exit(EXIT_SUCCESS);
 }

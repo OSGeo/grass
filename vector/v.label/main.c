@@ -16,7 +16,6 @@
 #include <math.h>
 #include <grass/gis.h>
 #include <grass/display.h>
-#include <grass/display_raster.h>
 #include <grass/Vect.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
@@ -229,14 +228,14 @@ int main(int argc, char **argv)
 	/* figure out space param dynamically from current dispay */
 	/* don't bother if Space was explicitly given (bypasses xmon req) */
 	if (Along_flag->answer && !Space->answer) {
-	    if (R_open_driver() != 0)	/* connect to the driver */
+	    if (D_open_driver() != 0)	/* connect to the driver */
 		G_fatal_error(_("No graphics device selected"));
 
 	    /* Read in the map region associated with graphics window */
 	    D_setup(0);
 	    space = fontsize / D_get_u_to_d_xconv();	/* in earth units */
 
-	    R_close_driver();
+	    D_close_driver();
 	}
     }
     else

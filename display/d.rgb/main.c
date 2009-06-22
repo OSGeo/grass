@@ -23,7 +23,6 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/display.h>
-#include <grass/display_raster.h>
 #include <grass/glocale.h>
 
 struct band
@@ -79,7 +78,7 @@ int main(int argc, char **argv)
 	exit(EXIT_FAILURE);
 
     /* Do screen initializing stuff */
-    if (R_open_driver() != 0)
+    if (D_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
     D_setup(0);
@@ -129,7 +128,7 @@ int main(int argc, char **argv)
     G_percent(window.rows, window.rows, 5);
     D_cell_draw_end();
 
-    R_close_driver();
+    D_close_driver();
 
     /* Close the raster maps */
     for (i = 0; i < 3; i++)
