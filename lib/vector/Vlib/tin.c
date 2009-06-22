@@ -13,7 +13,7 @@
    \author Radim Blazek
  */
 
-#include <grass/Vect.h>
+#include <grass/vector.h>
 
 /*!
    \brief Calculates z coordinate for point from TIN

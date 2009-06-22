@@ -21,7 +21,7 @@
 #include <sys/types.h>
 #include <grass/glocale.h>
 #include <grass/gis.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 
 /*!
    \brief Build area on given side of line (GV_LEFT or GV_RIGHT)

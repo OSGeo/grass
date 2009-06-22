@@ -25,7 +25,7 @@
 #include <grass/glocale.h>
 #include <grass/gis.h>
 #include <grass/dbmi.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 
 #ifdef HAVE_GDAL
 #include <gdal_version.h>	/* needed for FID detection */

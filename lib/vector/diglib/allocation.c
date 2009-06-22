@@ -18,7 +18,7 @@
 #include <grass/config.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 
 /*  functions - alloc_space(), falloc(), frealloc() _falloc() _frealloc() */
 

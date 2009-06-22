@@ -3,7 +3,7 @@
 #ifndef _STDIO_H
 #include "stdio.h"
 #endif
-#include <grass/Vect.h>
+#include <grass/vector.h>
 
 
 #define MODE_READ  0

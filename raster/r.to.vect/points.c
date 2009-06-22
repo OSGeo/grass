@@ -7,7 +7,7 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 #include <grass/dbmi.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include "global.h"
 
 

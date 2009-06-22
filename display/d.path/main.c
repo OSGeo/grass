@@ -23,7 +23,7 @@
 #include <grass/raster.h>
 #include <grass/display.h>
 #include <grass/colors.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 #include "proto.h"

@@ -2,7 +2,7 @@
  * modified by Brown in June 1999 - added elatt & smatt
  * modified by Mitasova Nov. 9, 1999 - added parameter for dtens to output2d
  */
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include <grass/bitmap.h>
 #include <grass/dataquad.h>
 #include <grass/qtree.h>

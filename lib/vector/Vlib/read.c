@@ -16,7 +16,7 @@
 
 #include <grass/config.h>
 #include <sys/types.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include <grass/glocale.h>
 
 static int read_next_dummy()

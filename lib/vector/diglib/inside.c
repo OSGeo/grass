@@ -17,7 +17,7 @@
  *****************************************************************************/
 #include <grass/config.h>
 #include <grass/gis.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 
 double
 dig_x_intersect(double beg_x,

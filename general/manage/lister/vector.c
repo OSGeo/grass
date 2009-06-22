@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 
 int main(int argc, char *argv[])
 {

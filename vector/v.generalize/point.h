@@ -20,7 +20,7 @@
 #ifndef POINT_H
 #define POINT_H
 
-#include <grass/Vect.h>
+#include <grass/vector.h>
 
 typedef struct
 {

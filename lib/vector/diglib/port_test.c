@@ -18,7 +18,7 @@
 #include <grass/config.h>
 #include <stdio.h>
 #include <sys/types.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 
 /*
  **  Written by Dave Gerdes  9/1988

@@ -21,7 +21,7 @@
 #include <assert.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include "data_structures.h"
 #include "geometry.h"
 #include "rotation_tree.h"

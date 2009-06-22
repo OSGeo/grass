@@ -5,7 +5,7 @@
  ** modified to use G_plot_line() by Olga Waupotitsch on dec,93
  */
 
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include <grass/dbmi.h>
 #include <grass/symbol.h>
 #include <grass/glocale.h>

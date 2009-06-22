@@ -33,7 +33,7 @@
 #include <grass/raster.h>
 #include <grass/G3d.h>
 #include <grass/dbmi.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include <grass/bitmap.h>
 #include <grass/glocale.h>
 #include "oct.h"

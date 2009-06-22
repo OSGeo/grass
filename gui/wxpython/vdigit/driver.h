@@ -28,7 +28,7 @@
 
 extern "C" {
 #include <grass/gis.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 }
 
 class DisplayDriver

@@ -47,7 +47,7 @@
 #include <unistd.h>
 #include <grass/gis.h>
 #include <grass/dbmi.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include "ad2.h"
 #include "global.h"
 

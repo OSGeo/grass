@@ -16,7 +16,7 @@
  *****************************************************************************/
 
 #include <grass/gis.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 

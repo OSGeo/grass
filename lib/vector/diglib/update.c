@@ -17,7 +17,7 @@
 #include <grass/config.h>
 #include <stdlib.h>
 #include <grass/gis.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 
 /*!
    \brief Reset number of updated lines

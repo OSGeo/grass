@@ -19,7 +19,7 @@
 #include <sys/types.h>
 #include <string.h>
 #include <grass/gis.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 
 int dig_write_cidx_head(GVFILE * fp, struct Plus_head *plus)
 {

@@ -69,7 +69,7 @@
 
 #include <grass/config.h>
 #include <stdio.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include <math.h>
 
 int dig_prune(struct line_pnts *points, double thresh)

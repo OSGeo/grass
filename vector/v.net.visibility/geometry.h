@@ -21,7 +21,7 @@
 #include <assert.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include "rotation_tree.h"
 
 int point_inside(struct Point *p, double x, double y);

@@ -19,7 +19,7 @@
 #include <sys/types.h>
 #include <string.h>
 #include <grass/gis.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 
 /*
  * Routines for reading and writing Dig+ structures.

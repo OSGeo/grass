@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <float.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include "sw_defs.h"
 #include "write.h"
 

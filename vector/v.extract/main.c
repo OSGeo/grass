@@ -29,7 +29,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <grass/gis.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include <grass/dbmi.h>
 #include <grass/gmath.h>
 #include <grass/glocale.h>

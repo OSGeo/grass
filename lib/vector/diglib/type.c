@@ -16,7 +16,7 @@
 
 #include <grass/config.h>
 #include <grass/gis.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 
 /*!
    \brief Convert type to store type

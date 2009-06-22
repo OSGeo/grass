@@ -25,7 +25,7 @@
 #include <grass/config.h>
 #include <stdio.h>
 #include <math.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 
 static double d_atan2(double, double);
 

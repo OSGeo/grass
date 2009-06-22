@@ -116,7 +116,7 @@ WARNING: 	remember to add pick_vect_commands.o
 #include <grass/form.h>
 #include <grass/dbmi.h>
 #include <grass/display.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 
 #include <stdlib.h>
 #include "interface.h"

@@ -1,4 +1,4 @@
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #define QRY_LENGTH 1024
 
 struct Sql

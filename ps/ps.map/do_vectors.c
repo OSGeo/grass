@@ -9,7 +9,7 @@
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include <grass/symbol.h>
 #include "clr.h"
 #include "vector.h"

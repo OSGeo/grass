@@ -16,7 +16,7 @@
 
 #include <grass/config.h>
 #include <grass/gis.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 
 /*!
   Check if region overlaps with map extent.

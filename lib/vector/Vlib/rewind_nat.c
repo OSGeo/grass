@@ -14,7 +14,7 @@
    \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
 */
 
-#include <grass/Vect.h>
+#include <grass/vector.h>
 
 /*!
   \brief Rewind vector data file to cause reads to start at beginning (level 1)

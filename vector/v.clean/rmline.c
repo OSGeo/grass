@@ -17,7 +17,7 @@
  * **************************************************************/
 #include <stdlib.h>
 #include <grass/gis.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include <grass/glocale.h>
 
 int remove_zero_line(struct Map_info *Map, int otype, struct Map_info *Err)

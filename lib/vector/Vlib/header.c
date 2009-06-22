@@ -18,7 +18,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include <grass/glocale.h>
 
 static int lookup(const char *file, const char *key, char *value, size_t len);

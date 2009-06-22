@@ -25,7 +25,7 @@
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/dbmi.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
 #include <gdal_version.h>	/* needed for OFTDate */

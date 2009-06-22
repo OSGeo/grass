@@ -17,7 +17,7 @@
 #include <grass/config.h>
 #include <stdlib.h>
 #include <math.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include <grass/glocale.h>
 
 static double dist_squared(double, double, double, double);

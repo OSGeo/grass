@@ -17,7 +17,7 @@ lib_dirs = [os.path.join(os.path.normpath(os.getenv('ARCH_DISTDIR')), 'lib'),
 	    os.path.join(os.path.normpath(os.getenv('GISBASE')), 'lib')]
 libs = ['grass_dbmibase',
         'grass_dbmiclient',
-        'grass_vect',
+        'grass_vector',
         'grass_gis',
         'grass_vedit']
 extras = []

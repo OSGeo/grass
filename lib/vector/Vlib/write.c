@@ -18,7 +18,7 @@
 #include <sys/types.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 
 static off_t write_dummy()
 {

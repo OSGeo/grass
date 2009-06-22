@@ -3,7 +3,7 @@
  ** Author: Radim Blazek
  */
 
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include <grass/symbol.h>
 #include "clr.h"
 #include "ps_info.h"

@@ -3,7 +3,7 @@
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include <grass/display.h>
 #include "plot.h"
 #include "local_proto.h"

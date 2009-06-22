@@ -17,7 +17,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 
 /*!
    \brief Write command info to history file
