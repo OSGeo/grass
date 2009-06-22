@@ -6,7 +6,7 @@
  */
 #include <stdlib.h>
 #include <math.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include <grass/gis.h>
 #include "vector.h"
 

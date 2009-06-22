@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <grass/gis.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include "conv.h"
 #include "local_proto.h"
 

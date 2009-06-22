@@ -17,7 +17,7 @@
  ****************************************************************/
 #include <stdlib.h>
 #include <grass/gis.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include <grass/glocale.h>
 
 int path(struct Map_info *, struct Map_info *, char *, int, double, int);

@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <grass/gis.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include <grass/glocale.h>
 #include "grid_structs.h"
 #include "local_proto.h"

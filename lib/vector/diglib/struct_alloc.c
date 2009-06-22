@@ -18,7 +18,7 @@
 
 #include <grass/config.h>
 #include <stdlib.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 
 /*  These routines all eventually call calloc() to allocate and zero
  **  the new space.  BUT It is not neccessarily safe to assume that

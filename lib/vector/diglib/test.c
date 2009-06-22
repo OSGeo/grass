@@ -19,7 +19,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 
 /* Test portable r/w functions */
 

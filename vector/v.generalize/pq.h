@@ -20,7 +20,7 @@
 #ifndef PQ_H
 #define PQ_H
 
-#include <grass/Vect.h>
+#include <grass/vector.h>
 
 /* None of the functions below tests overflows,
  * only extract_max treats underflow */

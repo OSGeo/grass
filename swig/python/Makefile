@@ -91,7 +91,7 @@ math_wrap.c: $(GISBASE)/include/grass/gmath.h
 proj_wrap.c: $(GISBASE)/include/grass/gprojects.h
 imagery_wrap.c: $(GISBASE)/include/grass/imagedefs.h
 imagery_wrap.c: $(GISBASE)/include/grass/imagery.h
-vector_wrap.c: $(GISBASE)/include/grass/Vect.h
+vector_wrap.c: $(GISBASE)/include/grass/vector.h
 vector_wrap.c: $(GISBASE)/include/grass/vect/dig_defines.h
 vector_wrap.c: $(GISBASE)/include/grass/vect/dig_structs.h
 display_wrap.c: $(GISBASE)/include/grass/display.h

@@ -19,7 +19,7 @@
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/dbmi.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 
 int reclass(struct Map_info *In, struct Map_info *Out, int type, int field,
 	    dbCatValArray * cvarr, int dissolve)

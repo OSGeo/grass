@@ -1,6 +1,6 @@
 #include <unistd.h>
 #include <grass/gis.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include <grass/display.h>
 #include <grass/symbol.h>
 #include <grass/glocale.h>

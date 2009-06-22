@@ -18,7 +18,7 @@
 
 #include <grass/config.h>
 #include <string.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include <grass/glocale.h>
 
 int Vect_overlay_and(struct Map_info *, int, struct ilist *, struct ilist *,

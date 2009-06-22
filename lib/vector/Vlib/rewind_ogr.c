@@ -15,7 +15,7 @@
 
 #include <grass/config.h>
 #include <grass/gis.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 
 #ifdef HAVE_OGR
 #include <ogr_api.h>

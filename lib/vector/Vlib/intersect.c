@@ -69,7 +69,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <grass/gis.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include <grass/glocale.h>
 
 /* function prototypes */

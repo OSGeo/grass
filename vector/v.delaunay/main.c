@@ -19,7 +19,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <grass/gis.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include <grass/glocale.h>
 #include "data_types.h"
 #include "memory.h"

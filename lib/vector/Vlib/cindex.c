@@ -20,7 +20,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <grass/gis.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include <grass/glocale.h>
 
 static int cmp_cat(const void *pa, const void *pb);

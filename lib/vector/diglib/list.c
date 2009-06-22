@@ -18,7 +18,7 @@
 #include <grass/config.h>
 #include <stdlib.h>
 #include <grass/gis.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 
 /* Init int_list */
 int dig_init_list(struct ilist *list)

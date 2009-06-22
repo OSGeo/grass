@@ -33,7 +33,7 @@
    \date 2001-2008
  */
 
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include <grass/gis.h>
 
 /*!

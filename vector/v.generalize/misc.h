@@ -1,7 +1,7 @@
 #ifndef MISC_H_
 #define MISC_H_
 
-#include <grass/Vect.h>
+#include <grass/vector.h>
 
 /* returns bitmask for all the types specified in type_opt
  * e.g GV_LINE | GV_BOUNDARY

@@ -5,7 +5,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/dbmi.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include <grass/glocale.h>
 
 /* *  convert dig_cats to database table

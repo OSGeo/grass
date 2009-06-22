@@ -22,7 +22,7 @@
 #include <math.h>
 #include <grass/glocale.h>
 #include <grass/gis.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include <grass/dbmi.h>
 
 

@@ -1,4 +1,4 @@
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include <grass/glocale.h>
 #include "conv.h"
 

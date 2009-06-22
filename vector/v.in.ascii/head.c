@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
 

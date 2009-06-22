@@ -79,7 +79,7 @@
 #include <grass/config.h>
 #include <stdio.h>
 #include <sys/types.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include <grass/glocale.h>
 
 #define TEST_PATTERN 1.3333

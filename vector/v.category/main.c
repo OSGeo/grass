@@ -17,7 +17,7 @@
 #include <stdlib.h>
 #include <grass/glocale.h>
 #include <grass/gis.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 
 #define O_ADD  1
 #define O_DEL  2

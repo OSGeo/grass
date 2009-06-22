@@ -20,7 +20,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include <grass/G3d.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include <grass/dbmi.h>
 
 int main(int argc, char *argv[])

@@ -12,7 +12,7 @@
 
    \author Radim Blazek
  */
-#include <grass/Vect.h>
+#include <grass/vector.h>
 
 /*
    int 

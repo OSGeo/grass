@@ -7,7 +7,7 @@
  */
 
 #include <grass/gis.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include "quaddefs.h"
 
 void qindices(int *cnt, int n, double *fisher, double *david, double *douglas,

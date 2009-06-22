@@ -1,7 +1,7 @@
 #include <string.h>
 #include <grass/display.h>
 #include "vectpoints.h"
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include "globals.h"
 
 #define VFILES 12

@@ -29,7 +29,7 @@
 #include <grass/glocale.h>
 #include <grass/gis.h>
 #include <grass/display.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include "what.h"
 #include <grass/dbmi.h>
 #include <grass/glocale.h>

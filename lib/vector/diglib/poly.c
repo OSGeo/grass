@@ -18,7 +18,7 @@
  *****************************************************************************/
 #include <grass/config.h>
 #include <math.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 
 
 #ifndef HUGE_VAL

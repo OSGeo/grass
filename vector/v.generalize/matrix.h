@@ -20,7 +20,7 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
-#include <grass/Vect.h>
+#include <grass/vector.h>
 
 typedef struct
 {

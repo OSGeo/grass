@@ -70,7 +70,7 @@
 #include <unistd.h>
 #endif
 #include <grass/gis.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include <grass/linkm.h>
 #include <grass/bitmap.h>
 /*#include <grass/site.h> */

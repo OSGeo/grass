@@ -4,7 +4,7 @@
 #include <grass/form.h>
 #include <grass/dbmi.h>
 #include <grass/display.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 
 char *query_vect(char *name, double x, double y)
 {

@@ -17,7 +17,7 @@
 #include <grass/config.h>
 #include <sys/types.h>
 #include <stdlib.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 
 static int add_line(struct Plus_head *plus, int lineid, int type, const struct line_pnts *Points,
 		    off_t offset)

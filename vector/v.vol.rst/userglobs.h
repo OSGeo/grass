@@ -2,7 +2,7 @@
 #define __USERGLOBS_H__
 
 #include <grass/G3d.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include <grass/dbmi.h>
 
 extern double /* pargr */ xmin, xmax, ymin, ymax, zmin, zmax, wmin, wmax;

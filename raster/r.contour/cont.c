@@ -27,7 +27,7 @@
 #include <math.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
-#include <grass/Vect.h>
+#include <grass/vector.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 
