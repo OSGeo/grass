@@ -1,5 +1,4 @@
 #include <grass/gis.h>
-#include <grass/raster.h>
 #include <grass/segment.h>
 #include "cseg.h"
 

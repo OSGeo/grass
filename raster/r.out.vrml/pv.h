@@ -1,5 +1,4 @@
 #include <grass/gis.h>
-#include <grass/raster.h>
 
 /*  VRML VERSION - only 1.0 currently supported
    #define VRML2

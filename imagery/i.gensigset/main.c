@@ -19,7 +19,6 @@
  *****************************************************************************/
 #include <stdlib.h>
 #include <grass/gis.h>
-#include <grass/raster.h>
 #include <grass/imagery.h>
 #include <grass/glocale.h>
 #include "files.h"

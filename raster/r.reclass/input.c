@@ -2,7 +2,6 @@
 #include <unistd.h>
 #include <string.h>
 #include <grass/gis.h>
-#include <grass/raster.h>
 
 int input(FILE * fp, int tty, char *buf)
 {

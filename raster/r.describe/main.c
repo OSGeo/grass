@@ -20,7 +20,6 @@
 #include <string.h>
 #include <stdio.h>
 #include <grass/gis.h>
-#include <grass/raster.h>
 #include "local_proto.h"
 #include <grass/glocale.h>
 

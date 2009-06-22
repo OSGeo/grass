@@ -12,7 +12,6 @@
 
 
 #include <grass/gis.h>
-#include <grass/raster.h>
 #include <grass/glocale.h>
 
 #include <stdlib.h>

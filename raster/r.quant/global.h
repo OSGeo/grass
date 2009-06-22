@@ -1,5 +1,4 @@
 #include <grass/gis.h>
-#include <grass/raster.h>
 
 extern struct Quant quant_struct;
 extern CELL old_min, old_max;

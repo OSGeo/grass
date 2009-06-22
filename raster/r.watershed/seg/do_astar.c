@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <grass/gis.h>
-#include <grass/raster.h>
 #include <grass/glocale.h>
 #include "Gwater.h"
 #include "do_astar.h"

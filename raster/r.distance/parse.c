@@ -20,7 +20,6 @@
 #include <stdio.h>
 #include "defs.h"
 #include <grass/gis.h>
-#include <grass/raster.h>
 #include <grass/glocale.h>
 
 void parse(int argc, char *argv[], struct Parms *parms)

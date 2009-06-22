@@ -2,7 +2,6 @@
 
 #include <stdlib.h>
 #include <grass/gis.h>
-#include <grass/raster.h>
 #include "main.h"
 
 /************************************************************************/

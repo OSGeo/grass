@@ -19,7 +19,6 @@
 
 #include <stdio.h>
 #include <grass/gis.h>
-#include <grass/raster.h>
 #include "enforce.h"
 
 

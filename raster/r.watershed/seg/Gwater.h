@@ -8,7 +8,6 @@
 /* last modified 03/26/91                       */
 #include <math.h>
 #include <grass/gis.h>
-#include <grass/raster.h>
 #include "cseg.h"
 
 #define AR_SIZE			16

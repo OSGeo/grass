@@ -12,7 +12,6 @@
 /***************************************************************/
 
 #include <grass/gis.h>
-#include <grass/raster.h>
 #include "cell_ptrHa.h"
 #include "local_proto.h"
 

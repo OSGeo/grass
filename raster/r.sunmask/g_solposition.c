@@ -31,7 +31,6 @@
 #include <string.h>
 #include <stdio.h>
 #include <grass/gis.h>
-#include <grass/raster.h>
 #include <grass/gprojects.h>
 #include "solpos00.h"
 

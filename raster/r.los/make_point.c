@@ -13,7 +13,6 @@
 /****************************************************************/
 
 #include <grass/gis.h>
-#include <grass/raster.h>
 #include "point.h"
 
 /* #define NULL 0  should be (char *0), or just let the compiler fix it. */
