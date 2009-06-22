@@ -16,7 +16,7 @@
    \date 2008
  */
 
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include <grass/glocale.h>
 #include <grass/nviz.h>
 

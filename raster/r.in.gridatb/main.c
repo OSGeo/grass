@@ -19,7 +19,7 @@
 #include "local_proto.h"
 
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include <grass/glocale.h>
 
 struct Cell_head cellhd;

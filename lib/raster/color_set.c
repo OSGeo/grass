@@ -12,7 +12,7 @@
  */
 
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 
 /*!
  * \brief Set a category color (CELL)

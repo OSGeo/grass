@@ -1,5 +1,5 @@
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 
 void make_history(const char *name, const char *group, const char *subgroup, const char *sigfile)
 {

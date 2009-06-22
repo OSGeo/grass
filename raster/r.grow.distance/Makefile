@@ -2,8 +2,8 @@ MODULE_TOPDIR = ../..
 
 PGM = r.grow.distance
 
-LIBES = $(GISLIB) $(RASTRLIB) $(MATHLIB)
-DEPENDENCIES = $(GISDEP) $(RASTRDEP)
+LIBES = $(GISLIB) $(RASTERLIB) $(MATHLIB)
+DEPENDENCIES = $(GISDEP) $(RASTERDEP)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 

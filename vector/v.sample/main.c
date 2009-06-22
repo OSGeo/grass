@@ -43,7 +43,7 @@
 #include <string.h>
 #include <math.h>
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include <grass/glocale.h>
 #include <grass/dbmi.h>
 #include <grass/Vect.h>

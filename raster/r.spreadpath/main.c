@@ -33,7 +33,7 @@
 #include <fcntl.h>
 #include <grass/segment.h>
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 
 #include "stash.h"
 #include <grass/glocale.h>

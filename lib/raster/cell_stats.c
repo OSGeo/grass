@@ -14,7 +14,7 @@
 #include <stdlib.h>
 
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 
 #define INCR 10
 #define SHIFT 6

@@ -1,5 +1,5 @@
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 /*
  * creates new category and color structures from the patching
  * files category and color files

@@ -21,7 +21,7 @@
 
 #include <stdlib.h>
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include <grass/glocale.h>
 #include "global.h"
 #include "local_proto.h"

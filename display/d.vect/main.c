@@ -18,7 +18,7 @@
 #include <sys/types.h>
 #include <dirent.h>
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include <grass/display_raster.h>
 #include <grass/display.h>
 #include <grass/Vect.h>

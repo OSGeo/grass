@@ -15,7 +15,7 @@
 #include <string.h>
 
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include <grass/glocale.h>
 
 static int read_colors(const char *, const char *, const char *,

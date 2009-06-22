@@ -3,7 +3,7 @@
 #include <stdlib.h>		/*  For rand() and srand() */
 
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include <grass/glocale.h>
 
 #define MAX_COLORS 1024

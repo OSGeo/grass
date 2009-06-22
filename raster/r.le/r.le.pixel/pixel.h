@@ -26,7 +26,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 
 #define  BIG   1000000000.0
 #define  MAX   800

@@ -10,11 +10,12 @@ include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 DOXNAME=
 DOXINPUT=grasspython.dox
 
-MODULES = utils date grass math proj imagery vector display stats \
+MODULES = utils date grass raster math proj imagery vector display stats \
 	dbmi g3d arraystats cluster trans vedit
 
 date_LIBS       = $(DATETIMELIB)
 grass_LIBS      = $(GISLIB)
+raster_LIBS     = $(RASTERLIB)
 math_LIBS       = $(GMATHLIB)
 proj_LIBS       = $(GPROJLIB)
 imagery_LIBS    = $(IMAGERYLIB)
@@ -85,6 +86,7 @@ date_wrap.c: $(GISBASE)/include/grass/datetime.h
 date_wrap.c: $(GISBASE)/include/grass/P_datetime.h
 grass_wrap.c: $(GISBASE)/include/grass/gis.h
 grass_wrap.c: $(GISBASE)/include/grass/gisdefs.h
+raster_wrap.c: $(GISBASE)/include/grass/raster.h
 math_wrap.c: $(GISBASE)/include/grass/gmath.h
 proj_wrap.c: $(GISBASE)/include/grass/gprojects.h
 imagery_wrap.c: $(GISBASE)/include/grass/imagedefs.h
@@ -102,4 +104,3 @@ arraystats_wrap.c: $(GISBASE)/include/grass/arraystats.h
 cluster_wrap.c: $(GISBASE)/include/grass/cluster.h
 trans_wrap.c: $(GISBASE)/include/grass/transform.h
 vedit_wrap.c: $(GISBASE)/include/grass/vedit.h
-utils_wrap.c:

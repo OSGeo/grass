@@ -1,7 +1,7 @@
 #include <math.h>
 
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include <grass/stats.h>
 
 void c_stddev(DCELL * result, DCELL * values, int n, const void *closure)

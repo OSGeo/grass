@@ -31,7 +31,7 @@ using namespace std;
 #include "types.h" /* for dimension_type */
 extern "C" {
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 }
 
 

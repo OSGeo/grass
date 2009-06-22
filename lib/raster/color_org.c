@@ -1,7 +1,7 @@
 #include <stdlib.h>
 
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 
 #define LOOKUP_COLORS 2048
 

@@ -33,7 +33,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include "cmd_line.h"
 #include "costHa.h"
 #include "cell_ptrHa.h"

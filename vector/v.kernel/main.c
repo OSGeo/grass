@@ -20,7 +20,7 @@
 #include <stdlib.h>
 #include <float.h>
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include <grass/glocale.h>
 #include <grass/gmath.h>
 #include <grass/Vect.h>

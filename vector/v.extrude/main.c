@@ -23,7 +23,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include <grass/Vect.h>
 #include <grass/glocale.h>
 #include <grass/dbmi.h>

@@ -58,7 +58,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
 #include "r.proj.h"

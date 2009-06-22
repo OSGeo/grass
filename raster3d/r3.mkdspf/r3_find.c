@@ -5,7 +5,7 @@
  **************************************************************/
 #include <string.h>
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include <grass/G3d.h>
 
 

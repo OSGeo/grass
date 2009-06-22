@@ -12,7 +12,7 @@
 
 #include <math.h>
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include "r.proj.h"
 
 void p_bilinear(struct cache *ibuffer,	/* input buffer                  */

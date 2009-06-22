@@ -40,7 +40,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include <grass/glocale.h>
 
 static off_t newsize, oldsize;

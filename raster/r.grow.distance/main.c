@@ -24,7 +24,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include <grass/glocale.h>
 
 static struct Cell_head window;

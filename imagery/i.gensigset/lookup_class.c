@@ -1,5 +1,5 @@
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 /* build index of cell values from list */
 /* -1 means not found in list */
 

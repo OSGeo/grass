@@ -1,5 +1,5 @@
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 
 /*
  * aspect_fly: calculates aspect on the fly based on elevation map in z

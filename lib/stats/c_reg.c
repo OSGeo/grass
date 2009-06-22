@@ -1,5 +1,5 @@
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 
 #define REGRESSION_SLOPE	0
 #define REGRESSION_OFFSET	1

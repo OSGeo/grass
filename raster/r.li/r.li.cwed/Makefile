@@ -8,9 +8,9 @@ LIB_NAME      = grass_rli
 
 RLI_LIB = -l$(LIB_NAME)
 
-LIBES = $(GISLIB) $(RASTRLIB) $(RLI_LIB)
+LIBES = $(GISLIB) $(RASTERLIB) $(RLI_LIB)
 
-DEPENDENCIES = $(GISDEP) $(RASTRDEP) $(LIB_NAME )
+DEPENDENCIES = $(GISDEP) $(RASTERDEP) $(LIB_NAME )
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 

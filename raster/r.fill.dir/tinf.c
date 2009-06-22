@@ -2,7 +2,7 @@
 #include <float.h>
 #include <math.h>
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include "tinf.h"
 
 /* To add a new multitype function, use the function below to initialize

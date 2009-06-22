@@ -12,7 +12,7 @@
  */
 
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 
 #define LIMIT(x) if (x < 0) x = 0; else if (x > 255) x = 255;
 

@@ -2,7 +2,7 @@
 /************************** MEMORY MANAGEMENT ***************************/
 
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #define KB 1024
 #define MB (KB * KB)
 #define SEGSINMEM 9

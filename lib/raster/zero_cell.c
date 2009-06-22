@@ -12,7 +12,7 @@
  */
 
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 
 /*!
  * \brief Zero a raster CELL buffer.

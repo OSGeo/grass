@@ -1,6 +1,6 @@
 /* random.c                                                             */
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include "ransurf.h"
 
 #define M1 259200

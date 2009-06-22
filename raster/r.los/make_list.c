@@ -12,7 +12,7 @@
 #include <math.h>
 #include <grass/segment.h>
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include "point.h"
 #include "local_proto.h"
 

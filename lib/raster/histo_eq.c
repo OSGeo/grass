@@ -10,7 +10,7 @@
 * inputs are histo, output is map,min,max
 ****************************************************************/
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 
 void Rast_histogram_eq(const struct Histogram *histo,
 		    unsigned char **map, CELL *min, CELL *max)

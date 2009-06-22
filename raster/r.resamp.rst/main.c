@@ -37,7 +37,7 @@
 
 #include <grass/dbmi.h>
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include <grass/linkm.h>
 #include <grass/bitmap.h>
 #include "surf.h"

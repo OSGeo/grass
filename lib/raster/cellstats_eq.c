@@ -1,5 +1,5 @@
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 
 int Rast_cell_stats_histo_eq(struct Cell_stats *statf, CELL min1, CELL max1,	/* input range to be rescaled */
 			  CELL min2, CELL max2,	/* output range */

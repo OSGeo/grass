@@ -2,7 +2,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include "kappa.h"
 #include <grass/glocale.h>
 #include "local_proto.h"

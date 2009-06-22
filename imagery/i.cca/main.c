@@ -38,7 +38,7 @@
 #include <string.h>
 #include <math.h>
 
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include <grass/imagery.h>
 #include <grass/gmath.h>
 #include <grass/glocale.h>

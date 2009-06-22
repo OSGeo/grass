@@ -6,7 +6,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include <grass/Rast.h>
+#include <grass/raster.h>
 
 #include "G3d_intern.h"
 
