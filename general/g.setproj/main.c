@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("PERMANENT: permission denied"));
     }
     G_get_default_window(&cellhd);
-    if (-1 == Rast_set_window(&cellhd))
+    if (-1 == G_set_window(&cellhd))
 	G_fatal_error(_("Current region cannot be set"));
 
     if (G_get_set_window(&cellhd) == -1)
