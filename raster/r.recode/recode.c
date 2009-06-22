@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <grass/raster.h>
 #include "global.h"
 
 #define F2I(map_type) \

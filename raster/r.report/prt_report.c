@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <grass/raster.h>
 #include "global.h"
 
 int print_report(int unit1, int unit2)

@@ -1,4 +1,5 @@
 #include "contour.h"
+#include <grass/raster.h>
 #include <grass/glocale.h>
 
 CELL **read_cell(const char *name, const char *mapset)

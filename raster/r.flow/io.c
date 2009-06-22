@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <grass/raster.h>
 #include <grass/glocale.h>
 #include "r.flow.h"
 #include "mem.h"

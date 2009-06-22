@@ -8,6 +8,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <grass/raster.h>
 #include <grass/glocale.h>
 #include "clr.h"
 #include "ps_info.h"

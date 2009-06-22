@@ -17,6 +17,9 @@
  ***************************************************************************/
 
 #include <stdlib.h>
+
+#include <grass/raster.h>
+
 #include "defs.h"
 
 void read_labels(struct Map *map)
