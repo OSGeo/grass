@@ -27,7 +27,7 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-#include "G.h"
+#include "R.h"
 
 #define FORMAT_FILE "f_format"
 #define QUANT_FILE  "f_quant"
@@ -69,9 +69,9 @@ static int write_fp_format(int fd);
  */
 int Rast_close_cell(int fd)
 {
-    struct fileinfo *fcb = &G__.fileinfo[fd];
+    struct fileinfo *fcb = &R__.fileinfo[fd];
 
-    if (fd < 0 || fd >= G__.fileinfo_count || fcb->open_mode <= 0)
+    if (fd < 0 || fd >= R__.fileinfo_count || fcb->open_mode <= 0)
 	return -1;
     if (fcb->open_mode == OPEN_OLD)
 	return close_old(fd);
@@ -102,9 +102,9 @@ int Rast_close_cell(int fd)
  */
 int Rast_unopen_cell(int fd)
 {
-    struct fileinfo *fcb = &G__.fileinfo[fd];
+    struct fileinfo *fcb = &R__.fileinfo[fd];
 
-    if (fd < 0 || fd >= G__.fileinfo_count || fcb->open_mode <= 0)
+    if (fd < 0 || fd >= R__.fileinfo_count || fcb->open_mode <= 0)
 	return -1;
     if (fcb->open_mode == OPEN_OLD)
 	return close_old(fd);
@@ -114,13 +114,13 @@ int Rast_unopen_cell(int fd)
 
 static int close_old(int fd)
 {
-    struct fileinfo *fcb = &G__.fileinfo[fd];
+    struct fileinfo *fcb = &R__.fileinfo[fd];
     int i;
 
-    /* if G__.auto_mask was only allocated for reading map rows to create
-       non-existant null rows, and not for actuall mask, free G__.mask_row 
-       if(G__.auto_mask <=0)
-       G_free (G__.mask_buf);
+    /* if R__.auto_mask was only allocated for reading map rows to create
+       non-existant null rows, and not for actuall mask, free R__.mask_row 
+       if(R__.auto_mask <=0)
+       G_free (R__.mask_buf);
        This is obsolete since now the mask_bus is always allocated
      */
 
@@ -151,7 +151,7 @@ static int close_old(int fd)
 
 static void write_support_files(int fd)
 {
-    struct fileinfo *fcb = &G__.fileinfo[fd];
+    struct fileinfo *fcb = &R__.fileinfo[fd];
     struct Categories cats;
     struct History hist;
     CELL cell_min, cell_max;
@@ -229,7 +229,7 @@ static void write_support_files(int fd)
 
 static int close_new_gdal(int fd, int ok)
 {
-    struct fileinfo *fcb = &G__.fileinfo[fd];
+    struct fileinfo *fcb = &R__.fileinfo[fd];
     char path[GPATH_MAX];
     int stat = 1;
 
@@ -312,7 +312,7 @@ static int close_new_gdal(int fd, int ok)
 
 static int close_new(int fd, int ok)
 {
-    struct fileinfo *fcb = &G__.fileinfo[fd];
+    struct fileinfo *fcb = &R__.fileinfo[fd];
     int stat;
     char path[GPATH_MAX];
     int row, i;
@@ -475,7 +475,7 @@ static int close_new(int fd, int ok)
 /* returns 0 on success, 1 on failure */
 static int write_fp_format(int fd)
 {
-    struct fileinfo *fcb = &G__.fileinfo[fd];
+    struct fileinfo *fcb = &R__.fileinfo[fd];
     struct Key_Value *format_kv;
     char path[GPATH_MAX];
     int stat;

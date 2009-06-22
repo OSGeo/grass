@@ -15,7 +15,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 
-#include "G.h"
+#include "R.h"
 
 /*!
  * \brief Reads a row of raster data and converts it to RGB.

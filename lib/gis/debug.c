@@ -21,8 +21,6 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-#include "../raster/G.h"
-
 static int initialized;
 static int grass_debug_level;
 
@@ -102,58 +100,3 @@ int G_debug(int level, const char *msg, ...)
     return 1;
 }
 
-
-/**
- * \brief Dumps status of various GIS parameters.
- * 
- * Dumps status of various GIS parameters of a particular
- * file descriptor, <b>fd</b>.
- *
- * \param[in] fd file
- * \return always returns 0
-*/
-
-int G_dump(int fd)
-{
-    const struct fileinfo *fcb = &G__.fileinfo[fd];
-
-    G_message("G_dump: memory allocated to G__");
-    G_message("type for writing floating maps = %d", G__.fp_type);
-    G_message("current window = %p", &G__.window);
-    G_message("Flag: window set? %d", G__.window_set);
-    G_message("File descriptor for automatic mask %d", G__.mask_fd);
-    G_message("Flag denoting automatic masking %d", G__.auto_mask);
-    G_message("Histogram request %d", G__.want_histogram);
-
-    G_message("G_dump: file #%d", fd);
-    G_message("open mode = %d", fcb->open_mode);
-    G_message("Cell header %p", &fcb->cellhd);
-    G_message("Table reclass %p", &fcb->reclass);
-    G_message("Cell stats %p", &fcb->statf);
-    G_message("Range structure %p", &fcb->range);
-    G_message("float Range structure %p", &fcb->fp_range);
-    G_message("want histogram?  %d", fcb->want_histogram);
-    G_message("Automatic reclass flag %d", fcb->reclass_flag);
-    G_message("File row addresses %p", fcb->row_ptr);
-    G_message("Data to window col mapping %p", fcb->col_map);
-    G_message("Data to window row constants %f,%f", fcb->C1, fcb->C2);
-    G_message("Current data row in memory %d", fcb->cur_row);
-    G_message("Current null row in memory %d", fcb->null_cur_row);
-    G_message("nbytes per cell for current row %d", fcb->cur_nbytes);
-    G_message("Decompressed data buffer %s", fcb->data);
-    G_message("bytes per cell %d", fcb->nbytes);
-    G_message("type: int, float or double map %d", fcb->map_type);
-    G_message("Temporary name for NEW files %s", fcb->temp_name);
-    G_message("Temporary name for NEW NULL files %s", fcb->null_temp_name);
-    G_message("for existing raster maps %d", fcb->null_file_exists);
-    G_message("Name of open file %s", fcb->name);
-    G_message("Mapset of open file %s", fcb->mapset);
-    G_message("io error warning given %d", fcb->io_error);
-    G_message("xdr stream for reading fp %p", &fcb->xdrstream);
-    G_message("NULL_ROWS array[%d] = %p", NULL_ROWS_INMEM, fcb->NULL_ROWS);
-    G_message("Minimum row null number in memory %d", fcb->min_null_row);
-    G_message("Quant ptr = %p", &fcb->quant);
-    G_message("G_dump: end");
-
-    return 0;
-}

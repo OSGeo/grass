@@ -24,7 +24,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-#include "../raster/G.h"
+#include "G.h"
 
 struct G__ G__;
 
@@ -114,18 +114,6 @@ static int gisinit(void)
 {
     /* Mark window as not set */
     G__.window_set = 0;
-
-    /* no histograms */
-    G__.want_histogram = 0;
-
-    /* set the write type for floating maps */
-    G__.fp_type = getenv("GRASS_FP_DOUBLE") ? DCELL_TYPE : FCELL_TYPE;
-
-    /* Set masking flag unknown */
-    G__.auto_mask = -1;
-
-    G__.nbytes = sizeof(CELL);
-    G__.compression_type = getenv("GRASS_INT_ZLIB") ? 2 : 1;
 
     initialized = 1;
 

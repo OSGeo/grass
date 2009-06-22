@@ -33,7 +33,7 @@ struct GDAL_link
 };
 
 #ifdef HAVE_GDAL
-extern CPLErr G_gdal_raster_IO(
+extern CPLErr Rast_gdal_raster_IO(
     GDALRasterBandH, GDALRWFlag,
     int, int, int, int,
     void *, int, int, GDALDataType,
@@ -72,7 +72,7 @@ struct fileinfo			/* Information for opened cell files */
     struct GDAL_link *gdal;
 };
 
-struct G__			/*  Structure of library globals */
+struct R__			/*  Structure of library globals */
 {
     RASTER_MAP_TYPE fp_type;	/* type for writing floating maps */
     struct Cell_head window;	/* Contains the current window          */
@@ -87,7 +87,7 @@ struct G__			/*  Structure of library globals */
     struct fileinfo *fileinfo;
 };
 
-extern struct G__ G__;		/* allocated in gisinit */
+extern struct R__ R__;		/* allocated in init */
 
 #define OPEN_OLD              1
 #define OPEN_NEW_COMPRESSED   2

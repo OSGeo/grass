@@ -647,7 +647,6 @@ int G_scan_easting(const char *, double *, int);
 int G_scan_resolution(const char *, double *, int);
 
 /* window_map.c */
-void G__create_window_mapping(int);
 double G_northing_to_row(double, const struct Cell_head *);
 double G_adjust_east_longitude(double, double);
 double G_adjust_easting(double, const struct Cell_head *);
@@ -657,7 +656,6 @@ double G_col_to_easting(double, const struct Cell_head *);
 int G_window_rows(void);
 int G_window_cols(void);
 void G__init_window(void);
-int G_row_repeat_nomask(int, int);
 
 /* worker.c */
 void G_begin_execute(void (*func)(void *), void *, void **, int);

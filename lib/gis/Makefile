@@ -2,8 +2,8 @@ MODULE_TOPDIR = ../..
 
 LIB_NAME = $(GIS_LIBNAME)
 
-EXTRA_LIBS = $(XDRLIB) $(SOCKLIB) $(DATETIMELIB) $(PTHREADLIBPATH) $(PTHREADLIB) \
-	$(INTLLIB) $(MATHLIB)
+EXTRA_LIBS = $(DATETIMELIB) $(PTHREADLIBPATH) $(PTHREADLIB) \
+	$(INTLLIB) $(MATHLIB) $(ZLIBLIBPATH) $(ZLIB)
 EXTRA_INC = $(ZLIBINCPATH) $(PTHREADINCPATH)
 
 DATASRC = ellipse.table datum.table datumtransform.table FIPS.code state27 state83 projections
@@ -49,12 +49,10 @@ DOXNAME=gislib
 
 $(OBJDIR)/area_ellipse.o: pi.h
 $(OBJDIR)/area_sphere.o: pi.h
-$(OBJDIR)/debug.o: ../raster/G.h
 $(OBJDIR)/geodesic.o: pi.h
 $(OBJDIR)/geodist.o: pi.h
-$(OBJDIR)/get_window.o: ../raster/G.h
-$(OBJDIR)/gisinit.o: ../raster/G.h
+$(OBJDIR)/get_window.o: G.h
+$(OBJDIR)/gisinit.o: G.h
 $(OBJDIR)/radii.o: pi.h
 $(OBJDIR)/rhumbline.o: pi.h
-$(OBJDIR)/set_window.o: ../raster/G.h
-$(OBJDIR)/window_map.o: ../raster/G.h
+$(OBJDIR)/set_window.o: G.h

@@ -14,7 +14,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-#include "../raster/G.h"
+#include "G.h"
 
 /*!
  * \brief Get the current working window (region)

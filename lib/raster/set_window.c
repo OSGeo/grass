@@ -15,7 +15,7 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-#include "G.h"
+#include "R.h"
 
 /*!
  * \brief Establishes 'window' as the current working window.
@@ -47,9 +47,9 @@ int Rast_set_window(struct Cell_head *window)
     /* except for MASK, cell files open for read must have same projection
      * and zone as new window
      */
-    maskfd = G__.auto_mask > 0 ? G__.mask_fd : -1;
-    for (i = 0; i < G__.fileinfo_count; i++) {
-	struct fileinfo *fcb = &G__.fileinfo[i];
+    maskfd = R__.auto_mask > 0 ? R__.mask_fd : -1;
+    for (i = 0; i < R__.fileinfo_count; i++) {
+	struct fileinfo *fcb = &R__.fileinfo[i];
 	if (fcb->open_mode == OPEN_OLD) {
 	    if (fcb->cellhd.zone == window->zone &&
 		fcb->cellhd.proj == window->proj)
@@ -63,25 +63,25 @@ int Rast_set_window(struct Cell_head *window)
     }
 
     /* close the mask */
-    if (G__.auto_mask > 0) {
+    if (R__.auto_mask > 0) {
 	Rast_close_cell(maskfd);
-	/* G_free (G__.mask_buf); */
-	G__.mask_fd = -1;
-	G__.auto_mask = -1;	/* turn off masking */
+	/* G_free (R__.mask_buf); */
+	R__.mask_fd = -1;
+	R__.auto_mask = -1;	/* turn off masking */
     }
 
     /* copy the window to the current window */
-    G_copy((char *)&G__.window, (char *)window, sizeof(*window));
+    G_copy((char *)&R__.window, (char *)window, sizeof(*window));
 
-    G__.window_set = 1;
+    R__.window_set = 1;
 
     /* now for each possible open cell file, recreate the window mapping */
     /*
      * also the memory for reading and writing must be reallocated for all opened
      * cell files
      */
-    for (i = 0; i < G__.fileinfo_count; i++) {
-	struct fileinfo *fcb = &G__.fileinfo[i];
+    for (i = 0; i < R__.fileinfo_count; i++) {
+	struct fileinfo *fcb = &R__.fileinfo[i];
 
 	if (fcb->open_mode != OPEN_OLD &&
 	    fcb->open_mode != OPEN_NEW_UNCOMPRESSED &&
@@ -89,14 +89,14 @@ int Rast_set_window(struct Cell_head *window)
 	    continue;
 
 	if (fcb->open_mode == OPEN_OLD)
-	    G__create_window_mapping(i);
+	    Rast__create_window_mapping(i);
 	/* code commented 10/1999 due to problems */
 #if 0
 	else
 	{
 	    /* opened for writing */
 	    G_free (fcb->data);
-	    fcb->data = (unsigned char *) G_calloc (G__.window.cols,
+	    fcb->data = (unsigned char *) G_calloc (R__.window.cols,
 						    Rast_raster_size(fcb->map_type));
 	}
 
@@ -104,7 +104,7 @@ int Rast_set_window(struct Cell_head *window)
 	for (j=0;j< NULL_ROWS_INMEM; j++)
 	{
 	    G_free (fcb->NULL_ROWS[j]);
-	    fcb->NULL_ROWS[j] = (G__.window.cols);
+	    fcb->NULL_ROWS[j] = (R__.window.cols);
 	}
 
 

@@ -8,7 +8,7 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-#include "G.h"
+#include "R.h"
 
 #ifndef HAVE_GDAL
 #undef GDAL_LINK
@@ -368,7 +368,7 @@ struct GDAL_link *Rast_create_gdal_link(const char *name, RASTER_MAP_TYPE map_ty
 
     switch (map_type) {
     case CELL_TYPE:
-	switch (G__.nbytes) {
+	switch (R__.nbytes) {
 	case 1:
 	    gdal->type = GDT_Byte;
 	    gdal->null_val = (DCELL) 0xFF;
@@ -404,7 +404,7 @@ struct GDAL_link *Rast_create_gdal_link(const char *name, RASTER_MAP_TYPE map_ty
     /* Does driver support GDALCreate ? */
     if ((*pGDALGetMetadataItem)(driver, GDAL_DCAP_CREATE, NULL))
     {
-	gdal->data = (*pGDALCreate)(driver, gdal->filename, G__.window.cols, G__.window.rows,
+	gdal->data = (*pGDALCreate)(driver, gdal->filename, R__.window.cols, R__.window.rows,
 				1, gdal->type, st->opts.options);
 	if (!gdal->data)
 	    G_fatal_error(_("Unable to create <%s> dataset using <%s> driver"),
@@ -423,7 +423,7 @@ struct GDAL_link *Rast_create_gdal_link(const char *name, RASTER_MAP_TYPE map_ty
 	if (!mem_driver)
 	    G_fatal_error(_("Unable to get in-memory raster driver"));
 
-	gdal->data = (*pGDALCreate)(mem_driver, "", G__.window.cols, G__.window.rows,
+	gdal->data = (*pGDALCreate)(mem_driver, "", R__.window.cols, R__.window.rows,
 				    1, gdal->type, st->opts.options);
 	if (!gdal->data)
 	    G_fatal_error(_("Unable to create <%s> dataset using memory driver"),
@@ -438,12 +438,12 @@ struct GDAL_link *Rast_create_gdal_link(const char *name, RASTER_MAP_TYPE map_ty
     (*pGDALSetRasterNoDataValue)(gdal->band, gdal->null_val);
 
     /* Set Geo Transform  */
-    transform[0] = G__.window.west;
-    transform[1] = G__.window.ew_res;
+    transform[0] = R__.window.west;
+    transform[1] = R__.window.ew_res;
     transform[2] = 0.0;
-    transform[3] = G__.window.north;
+    transform[3] = R__.window.north;
     transform[4] = 0.0;
-    transform[5] = -G__.window.ns_res;
+    transform[5] = -R__.window.ns_res;
 
     if ((*pGDALSetGeoTransform)(gdal->data, transform) >= CE_Failure)
 	G_warning(_("Unable to set geo transform"));
@@ -519,7 +519,7 @@ int Rast_close_gdal_write_link(struct GDAL_link *gdal)
 }
 
 #ifdef GDAL_LINK
-CPLErr G_gdal_raster_IO(
+CPLErr Rast_gdal_raster_IO(
     GDALRasterBandH band, GDALRWFlag rw_flag,
     int x_off, int y_off, int x_size, int y_size,
     void *buffer, int buf_x_size, int buf_y_size, GDALDataType buf_type,

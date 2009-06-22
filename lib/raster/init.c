@@ -24,9 +24,9 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-#include "../raster/G.h"
+#include "R.h"
 
-struct G__ G__;
+struct R__ R__;
 
 static int initialized = 0; /** Is set when engine is initialized */
 static int init(void);
@@ -67,20 +67,17 @@ void Rast__check_init(void)
 
 static int init(void)
 {
-    /* Mark window as not set */
-    G__.window_set = 0;
-
     /* no histograms */
-    G__.want_histogram = 0;
+    R__.want_histogram = 0;
 
     /* set the write type for floating maps */
-    G__.fp_type = getenv("GRASS_FP_DOUBLE") ? DCELL_TYPE : FCELL_TYPE;
+    R__.fp_type = getenv("GRASS_FP_DOUBLE") ? DCELL_TYPE : FCELL_TYPE;
 
     /* Set masking flag unknown */
-    G__.auto_mask = -1;
+    R__.auto_mask = -1;
 
-    G__.nbytes = sizeof(CELL);
-    G__.compression_type = getenv("GRASS_INT_ZLIB") ? 2 : 1;
+    R__.nbytes = sizeof(CELL);
+    R__.compression_type = getenv("GRASS_INT_ZLIB") ? 2 : 1;
 
     initialized = 1;
 

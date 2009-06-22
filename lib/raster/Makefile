@@ -4,9 +4,8 @@ GDAL_LINK = $(USE_GDAL)
 GDAL_DYNAMIC = 1
 
 LIB_NAME = $(RASTER_LIBNAME)
-EXTRA_LIBS = $(XDRLIB) $(SOCKLIB) $(DATETIMELIB) $(PTHREADLIBPATH) \
-	$(PTHREADLIB) $(INTLLIB) $(MATHLIB) $(GISLIB)
-EXTRA_INC = $(ZLIBINCPATH) $(PTHREADINCPATH)
+EXTRA_LIBS = $(GISLIB) $(XDRLIB) $(SOCKLIB) $(MATHLIB)
+EXTRA_INC = 
 
 include $(MODULE_TOPDIR)/include/Make/Vars.make
 include $(MODULE_TOPDIR)/include/Make/Lib.make
@@ -38,11 +37,12 @@ default: lib
 
 DOXNAME = rasterlib
 
-$(OBJDIR)/auto_mask.o: G.h
-$(OBJDIR)/closecell.o: G.h
-$(OBJDIR)/format.o: G.h
-$(OBJDIR)/get_row.o: G.h
-$(OBJDIR)/get_window.o: G.h
-$(OBJDIR)/maskfd.o: G.h
-$(OBJDIR)/opencell.o: G.h
-$(OBJDIR)/put_row.o: G.h
+$(OBJDIR)/auto_mask.o: R.h
+$(OBJDIR)/closecell.o: R.h
+$(OBJDIR)/format.o: R.h
+$(OBJDIR)/get_row.o: R.h
+$(OBJDIR)/get_window.o: R.h
+$(OBJDIR)/maskfd.o: R.h
+$(OBJDIR)/opencell.o: R.h
+$(OBJDIR)/put_row.o: R.h
+$(OBJDIR)/window_map.o: R.h
