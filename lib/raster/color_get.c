@@ -12,7 +12,7 @@
  */
 
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 
 /*!
  * \brief Get a category color.

@@ -5,7 +5,7 @@
 #include <rpc/types.h>
 #include <rpc/xdr.h>
 
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include "G3d_intern.h"
 
 static int

@@ -1,6 +1,6 @@
 #include <string.h>
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 
 static char *append(char *, char *);
 static int do_text(char *, long, long);

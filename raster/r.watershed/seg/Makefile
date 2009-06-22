@@ -2,8 +2,8 @@ MODULE_TOPDIR = ../../..
 
 PGM = r.watershed.seg
 
-LIBES = $(GISLIB) $(RASTRLIB) $(SEGMENTLIB)
-DEPENDENCIES = $(GISDEP) $(RASTRDEP) $(SEGMENTDEP)
+LIBES = $(GISLIB) $(RASTERLIB) $(SEGMENTLIB)
+DEPENDENCIES = $(GISDEP) $(RASTERDEP) $(SEGMENTDEP)
 
 include $(MODULE_TOPDIR)/include/Make/Etc.make
 include $(MODULE_TOPDIR)/include/Make/NoHtml.make

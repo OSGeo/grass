@@ -17,7 +17,7 @@
  * note: if all values in x are zero, the point is rejected
  ***************************************************************/
 
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include <grass/cluster.h>
 
 static int extend(struct Cluster *, int);

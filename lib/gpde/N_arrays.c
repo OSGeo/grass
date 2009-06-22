@@ -19,7 +19,7 @@
 #include <math.h>
 
 #include <grass/N_pde.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include <grass/glocale.h>
 
 

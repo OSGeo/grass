@@ -61,7 +61,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include <grass/site.h>
 #include <grass/segment.h>
 #include "cost.h"

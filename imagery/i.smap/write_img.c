@@ -1,4 +1,4 @@
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include <grass/imagery.h>
 #include <grass/glocale.h>
 

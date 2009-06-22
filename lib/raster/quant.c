@@ -20,7 +20,7 @@
 
 #include <stdlib.h>
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 
 static int double_comp(const void *, const void *);
 

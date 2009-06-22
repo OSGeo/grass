@@ -1,5 +1,5 @@
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 int get_item(FILE * fd, int *type, long *cat, double **x, double **y,
 	     int *count, struct Categories *labels)
 {

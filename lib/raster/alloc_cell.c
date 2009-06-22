@@ -14,7 +14,7 @@
 #include <math.h>
 
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 
 /* convert type "RASTER_MAP_TYPE" into index */
 #define F2I(map_type) \

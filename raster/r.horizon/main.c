@@ -35,7 +35,7 @@ Joint Research Centre of the European Commission, based on bits of the r.sun mod
 #include <string.h>
 #include <math.h>
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
 

@@ -2,8 +2,8 @@ MODULE_TOPDIR = ../..
 
 PGM = i.eb.eta
 
-LIBES = $(GISLIB) $(RASTRLIB)
-DEPENDENCIES = $(GISDEP) $(RASTRDEP)
+LIBES = $(GISLIB) $(RASTERLIB)
+DEPENDENCIES = $(GISDEP) $(RASTERDEP)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 

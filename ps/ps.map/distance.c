@@ -1,5 +1,5 @@
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 
 double distance(double east, double west)
 {

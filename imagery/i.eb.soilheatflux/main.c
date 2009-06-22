@@ -19,7 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include <grass/glocale.h>
 
 double g_0(double bbalb, double ndvi, double tempk, double rnet,

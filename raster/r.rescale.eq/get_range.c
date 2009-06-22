@@ -1,5 +1,5 @@
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 
 int get_range(struct Cell_stats *statf, CELL * min, CELL * max, int zero)
 {

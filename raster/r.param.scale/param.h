@@ -9,7 +9,7 @@
 /************************************************************************/
 
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 				/* programs. It sets up the necessary   */
 				/* prototypes for GRASS library calls.  */
 #include <math.h>

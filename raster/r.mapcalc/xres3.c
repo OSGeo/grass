@@ -1,6 +1,6 @@
 
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include <grass/G3d.h>
 #include "globals.h"
 #include "globals3.h"

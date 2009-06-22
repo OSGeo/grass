@@ -1,7 +1,7 @@
 /* calcsurf.c                                                           */
 #include <stdlib.h>
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include "ransurf.h"
 #include "local_proto.h"
 

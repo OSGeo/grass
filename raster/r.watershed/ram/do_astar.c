@@ -1,7 +1,7 @@
 #include "Gwater.h"
 #include "do_astar.h"
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include <grass/glocale.h>
 
 int do_astar(void)

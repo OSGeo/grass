@@ -1,7 +1,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include <grass/glocale.h>
 
 void recurse_list(int flag, int *cells, int sz, int start)

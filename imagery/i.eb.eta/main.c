@@ -19,7 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include <grass/glocale.h>
 double et_a(double r_net_day, double evap_fr, double tempk);
 

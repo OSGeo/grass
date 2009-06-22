@@ -36,7 +36,7 @@
 #include <stdlib.h>
 
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include <grass/glocale.h>
 
 /* Saves map file from 2d array. NULL must be 0. Also meanwhile calculates area and volume. */

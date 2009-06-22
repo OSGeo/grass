@@ -18,7 +18,7 @@
 
 #include <string.h>
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 
 static int show(CELL, CELL, int *, DCELL, DCELL, RASTER_MAP_TYPE, int);
 

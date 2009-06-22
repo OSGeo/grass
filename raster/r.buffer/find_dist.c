@@ -20,7 +20,7 @@
 ****************************************************************************/
 
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include "distance.h"
 #include "local_proto.h"
 

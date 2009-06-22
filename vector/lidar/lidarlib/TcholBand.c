@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include <grass/PolimiFunct.h>
 
 /*--------------------------------------------------------------------------------------*/

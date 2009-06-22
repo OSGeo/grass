@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include "global.h"
 
 int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels)

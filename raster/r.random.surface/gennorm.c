@@ -1,7 +1,7 @@
 /* gennorm.c                                                    */
 #include <math.h>
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include "ransurf.h"
 
 void GenNorm(void)

@@ -1,7 +1,7 @@
 #include <math.h>
 
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 
 void c_skew(DCELL * result, DCELL * values, int n, const void *closure)
 {

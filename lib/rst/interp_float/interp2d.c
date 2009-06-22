@@ -28,7 +28,7 @@
 #include <unistd.h>
 
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include <grass/bitmap.h>
 
 #include <grass/interpf.h>

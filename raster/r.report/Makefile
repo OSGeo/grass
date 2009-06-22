@@ -2,8 +2,8 @@ MODULE_TOPDIR = ../..
 
 PGM = r.report
 
-LIBES = $(GISLIB) $(RASTRLIB)
-DEPENDENCIES = $(GISDEP) $(RASTRDEP)
+LIBES = $(GISLIB) $(RASTERLIB)
+DEPENDENCIES = $(GISDEP) $(RASTERDEP)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 

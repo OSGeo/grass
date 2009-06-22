@@ -20,7 +20,7 @@
 #include <stdlib.h>
 #include "coin.h"
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include <grass/glocale.h>
 
 static int cmp(const void *, const void *);

@@ -20,8 +20,8 @@
 #define __COIN_H__
 
 #include <grass/gis.h>
-#include <grass/Rast.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
+#include <grass/raster.h>
 
 struct stats_table
 {

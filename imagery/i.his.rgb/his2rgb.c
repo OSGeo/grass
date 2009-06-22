@@ -17,7 +17,7 @@ ASSUMPTION:
    each band is processed and written out.   CWU GIS Lab: DBS 8/90 */
 
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include "globals.h"
 
 void his2rgb(CELL * rowbuffer[3], int columns)

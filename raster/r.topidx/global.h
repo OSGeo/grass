@@ -1,5 +1,5 @@
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 
 #define	cv(i,j)		cell[i][j]
 #define	av(i,j)		a[i][j]

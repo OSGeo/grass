@@ -15,7 +15,7 @@
 #include <rpc/types.h>		/* need this for sgi */
 #include <rpc/xdr.h>
 
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include <grass/glocale.h>
 
 #include "G.h"

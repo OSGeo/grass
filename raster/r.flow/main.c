@@ -29,7 +29,7 @@
 #include <stdlib.h>		/* for the random number generation */
 #include <time.h>
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include <grass/glocale.h>
 #include "r.flow.h"
 #include "mem.h"

@@ -32,7 +32,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 
 #define  SML   0.5
 #define  MIN   2

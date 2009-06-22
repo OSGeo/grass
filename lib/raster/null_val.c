@@ -20,7 +20,7 @@
 
 /* Grass and local include files */
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include <grass/glocale.h>
 
 static void EmbedGivenNulls(void *, char *, RASTER_MAP_TYPE, int);

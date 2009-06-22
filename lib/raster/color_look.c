@@ -15,7 +15,7 @@
 #include <math.h>
 
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 
 /*!
  * \brief Lookup an array of colors

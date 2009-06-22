@@ -1,7 +1,7 @@
 /* Print z coordinate value for each node */
 
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include <grass/Vect.h>
 #include <grass/display.h>
 #include <grass/display_raster.h>

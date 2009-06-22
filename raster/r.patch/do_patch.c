@@ -1,5 +1,5 @@
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 /*
  * patch in non-zero data over zero data
  * keep track of the categories which are patched in

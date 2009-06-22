@@ -9,7 +9,7 @@
  */
 
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include "local_proto.h"
 
 static void *get_cell_ptr(void *array, int cols, int row, int col,

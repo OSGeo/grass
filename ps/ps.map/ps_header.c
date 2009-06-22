@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include "ps_info.h"
 
 static long bb_offset;

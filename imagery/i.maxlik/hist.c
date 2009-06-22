@@ -1,5 +1,5 @@
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 int make_history(char *name, char *group, char *subgroup, char *sigfile)
 {
     struct History hist;

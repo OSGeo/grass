@@ -6,7 +6,7 @@
 
 #include <grass/display.h>
 #include <grass/colors.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include <grass/display_raster.h>
 #include <grass/glocale.h>
 

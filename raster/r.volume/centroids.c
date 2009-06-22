@@ -17,7 +17,7 @@
  * col = sigma(col)/n.
  */
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 
 int centroids(int fd,		/* File descriptor of map layer to process */
 	      /* This file is assumed to be opened before calling */

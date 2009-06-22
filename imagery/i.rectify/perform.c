@@ -1,5 +1,5 @@
 
-#include <grass/Rast.h>
+#include <grass/raster.h>
 
 #include "global.h"
 

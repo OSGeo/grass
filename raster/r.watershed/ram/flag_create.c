@@ -1,5 +1,5 @@
 #include <grass/gis.h>
-#include <grass/Rast.h>
+#include <grass/raster.h>
 #include "flag.h"
 
 FLAG *flag_create(int nrows, int ncols)
