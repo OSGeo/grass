@@ -20,7 +20,6 @@
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/display.h>
-#include <grass/display_raster.h>
 #include <grass/colors.h>
 #include <grass/Vect.h>
 #include <grass/dbmi.h>

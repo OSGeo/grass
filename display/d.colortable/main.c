@@ -25,7 +25,6 @@
 #include <grass/display.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
-#include <grass/display_raster.h>
 #include <grass/glocale.h>
 
 int main(int argc, char **argv)
@@ -133,7 +132,7 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Color file for <%s> not available"), map_name);
     if (Rast_read_fp_range(map_name, "", &fp_range) == -1)
 	G_fatal_error(_("Range file for <%s> not available"), map_name);
-    if (R_open_driver() != 0)
+    if (D_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
     D_setup_unity(0);
@@ -261,7 +260,7 @@ int main(int argc, char **argv)
 	}
     }
 
-    R_close_driver();
+    D_close_driver();
 
     return 0;
 }

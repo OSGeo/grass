@@ -4,7 +4,6 @@
 #include <grass/raster.h>
 #include <grass/Vect.h>
 #include <grass/display.h>
-#include <grass/display_raster.h>
 #include "local_proto.h"
 #include "plot.h"
 
@@ -21,11 +20,11 @@ int zcoor(struct Map_info *Map, int type, LATTR *lattr)
     Cats = Vect_new_cats_struct();
 
     D_RGB_color(lattr->color.R, lattr->color.G, lattr->color.B);
-    R_text_size(lattr->size, lattr->size);
+    D_text_size(lattr->size, lattr->size);
     if (lattr->font)
-	R_font(lattr->font);
+	D_font(lattr->font);
     if (lattr->enc)
-	R_encoding(lattr->enc);
+	D_encoding(lattr->enc);
 
     Vect_rewind(Map);
 

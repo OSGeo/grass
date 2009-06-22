@@ -21,7 +21,7 @@
 #include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
-#include <grass/display_raster.h>
+#include <grass/display.h>
 
 #include "mask.h"
 #include "local_proto.h"
@@ -101,7 +101,7 @@ int main(int argc, char **argv)
     overlay = !flag_n->answer;
     invert = flag_i->answer;
 
-    if (R_open_driver() != 0)
+    if (D_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
     fp = Rast_raster_map_is_fp(name, "");
@@ -125,7 +125,7 @@ int main(int argc, char **argv)
     else
 	display(name, overlay, bg->answer, CELL_TYPE, invert);
 
-    R_close_driver();
+    D_close_driver();
 
     exit(EXIT_SUCCESS);
 }

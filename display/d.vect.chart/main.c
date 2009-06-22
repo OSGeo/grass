@@ -19,7 +19,6 @@
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
-#include <grass/display_raster.h>
 #include <grass/display.h>
 #include <grass/Vect.h>
 #include <grass/colors.h>
@@ -249,7 +248,7 @@ int main(int argc, char **argv)
     if (ctype_opt->answer[0] == 'b')
 	ctype = CTYPE_BAR;
 
-    if (R_open_driver() != 0)
+    if (D_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
     /* should we plot the maximum reference on bar plots? */
@@ -272,7 +271,7 @@ int main(int argc, char **argv)
 	       sizecol_opt->answer, size, scale,
 	       &ocolor, colors, y_center, max_reference);
 
-    R_close_driver();
+    D_close_driver();
 
     Vect_close(&Map);
 

@@ -3,7 +3,6 @@
 #include <grass/Vect.h>
 #include <grass/dbmi.h>
 #include <grass/display.h>
-#include <grass/display_raster.h>
 #include <grass/symbol.h>
 #include "global.h"
 

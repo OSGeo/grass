@@ -2,7 +2,6 @@
 #include <grass/raster.h>
 #include <grass/Vect.h>
 #include <grass/display.h>
-#include <grass/display_raster.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 #include "plot.h"
@@ -58,7 +57,7 @@ void show_label(double *px, double *py, LATTR *lattr, const char *text)
     }
 
     D_pos_abs(X + Xoffset, Y + Yoffset);
-    R_text(text);
+    D_text(text);
 }
 
 void show_label_line(const struct line_pnts *Points, int ltype, LATTR *lattr, const char *text)

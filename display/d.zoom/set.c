@@ -3,7 +3,6 @@
 #include <math.h>
 #include <grass/gis.h>
 #include <grass/display.h>
-#include <grass/display_raster.h>
 #include "local_proto.h"
 
 static double round_to(double in, int sd)

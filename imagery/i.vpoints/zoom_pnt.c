@@ -1,6 +1,6 @@
 #include <math.h>
 #include "globals.h"
-#include <grass/display_raster.h>
+#include <grass/display.h>
 
 static View *pick_view, *zoom_view, *main_view;
 static int target_flag;

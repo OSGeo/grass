@@ -25,7 +25,6 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/display.h>
-#include <grass/display_raster.h>
 #include <grass/glocale.h>
 #include "his.h"
 
@@ -111,7 +110,7 @@ int main(int argc, char **argv)
 
     /* Do screen initializing stuff */
 
-    if (R_open_driver() != 0)
+    if (D_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
     /* Prepare the raster cell drawing functions */
@@ -244,7 +243,7 @@ int main(int argc, char **argv)
     D_cell_draw_end();
 
     /* Close down connection to display driver */
-    R_close_driver();
+    D_close_driver();
 
     /* Close the raster maps */
     Rast_close_cell(hue_file);

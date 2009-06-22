@@ -8,7 +8,7 @@
 #include <sys/wait.h>
 #endif
 #include <grass/gis.h>
-#include <grass/display_raster.h>
+#include <grass/display.h>
 #include "globals.h"
 /*
  * call a subroutine, but as a child process

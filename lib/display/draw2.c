@@ -4,8 +4,8 @@
 
 #include <grass/gis.h>
 #include <grass/display.h>
-#include <grass/display_raster.h>
 #include <grass/glocale.h>
+#include "driver.h"
 #include "path.h"
 #include "clip.h"
 
@@ -186,14 +186,14 @@ void D_set_reduction(double e)
 
 void D_line_width(double d)
 {
-    R__line_width(d > 0 ? d : 0);
+    COM_Line_width(d > 0 ? d : 0);
 }
 
 void D_get_text_box(const char *text, double *t, double *b, double *l, double *r)
 {
     double T, B, L, R;
 
-    R__get_text_box(text, &T, &B, &L, &R);
+    COM_Get_text_box(text, &T, &B, &L, &R);
 
     *t = D_d_to_u_row(T);
     *b = D_d_to_u_row(B);
@@ -219,7 +219,7 @@ void D_pos_abs(double x, double y)
     x = D_u_to_d_col(x);
     y = D_u_to_d_row(y);
 
-    R__pos_abs(x, y);
+    COM_Pos_abs(x, y);
 }
 
 void D_pos_rel(double x, double y)
@@ -266,19 +266,19 @@ static void do_path(int no_pole)
 	p = &eps_path;
     }
 
-    R__begin();
+    COM_Begin();
     for (i = 0; i < p->count; i++) {
 	struct vertex *v = &p->vertices[i];
 	switch (v->mode)
 	{
 	case P_MOVE:
-	    R__move(v->x, v->y);
+	    COM_Move(v->x, v->y);
 	    break;
 	case P_CONT:
-	    R__cont(v->x, v->y);
+	    COM_Cont(v->x, v->y);
 	    break;
 	case P_CLOSE:
-	    R__close();
+	    COM_Close();
 	    break;
 	}
     }
@@ -317,13 +317,13 @@ void D_close(void)
 void D_stroke(void)
 {
     do_path(0);
-    R__stroke();
+    COM_Stroke();
 }
 
 void D_fill(void)
 {
     do_path(1);
-    R__fill();
+    COM_Fill();
 }
 
 void D_dots(void)
@@ -352,7 +352,7 @@ void D_dots(void)
 	x = D_u_to_d_col(x);
 	y = D_u_to_d_row(y);
 
-	R__point(x, y);
+	COM_Point(x, y);
     }
 }
 

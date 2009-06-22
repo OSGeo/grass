@@ -21,7 +21,6 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/display.h>
-#include <grass/display_raster.h>
 #include "local_proto.h"
 #include <grass/glocale.h>
 
@@ -96,7 +95,7 @@ int main(int argc, char **argv)
 	minreg = atof(minreg_opt->answer);
 	if (reg < minreg) {
 	    G_warning(_("Region size is lower than minreg, nothing displayed."));
-	    R_close_driver();
+	    D_close_driver();
 	    exit(0);
 	}
     }
@@ -104,7 +103,7 @@ int main(int argc, char **argv)
 	maxreg = atof(maxreg_opt->answer);
 	if (reg > maxreg) {
 	    G_warning(_("Region size is greater than maxreg, nothing displayed."));
-	    R_close_driver();
+	    D_close_driver();
 	    exit(0);
 	}
     }
@@ -114,7 +113,7 @@ int main(int argc, char **argv)
     if (infile == NULL)
 	G_fatal_error(_("Unable to open label file <%s>"), label_name);
 
-    if (R_open_driver() != 0)
+    if (D_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
     D_setup(0);
@@ -122,7 +121,7 @@ int main(int argc, char **argv)
     /* Go draw the raster map */
     do_labels(infile, !horiz_flag->answer);
 
-    R_close_driver();
+    D_close_driver();
 
     exit(0);
 }

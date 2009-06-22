@@ -4,7 +4,6 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/display.h>
-#include <grass/display_raster.h>
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
 
@@ -45,8 +44,8 @@ int plot_grid(double grid_size, double east, double north, int do_text,
 	if (do_text) {
 	    D_use_color(tcolor);
 	    G_format_easting(x, text, G_projection());
-	    R_text_rotation(270.0);
-	    R_text_size(fontsize, fontsize);
+	    D_text_rotation(270.0);
+	    D_text_size(fontsize, fontsize);
 
 	    /* Positioning -
 	       x: 4 pixels to the right of the grid line, + 0.5 rounding factor.
@@ -57,11 +56,11 @@ int plot_grid(double grid_size, double east, double north, int do_text,
 		       D_get_u_south()
 		       - D_get_d_to_u_yconv() * (strlen(text) * fontsize * 0.81) - 7.5);
 
-	    R_text(text);
+	    D_text(text);
 	}
 	x += grid_size;
     }
-    R_text_rotation(0.0);	/* reset */
+    D_text_rotation(0.0);	/* reset */
 
 
     /* Draw horizontal grids
@@ -89,7 +88,7 @@ int plot_grid(double grid_size, double east, double north, int do_text,
 	if (do_text) {
 	    D_use_color(tcolor);
 	    G_format_northing(y, text, G_projection());
-	    R_text_size(fontsize, fontsize);
+	    D_text_size(fontsize, fontsize);
 
 	    /* Positioning -
 	       x: End of text is 7 pixels left from right edge of screen, +.5 rounding.
@@ -101,7 +100,7 @@ int plot_grid(double grid_size, double east, double north, int do_text,
 		- D_get_d_to_u_xconv() * (strlen(text) * fontsize * 0.81 - 7.5),
 		y + D_get_d_to_u_yconv() * 4.5);
 
-	    R_text(text);
+	    D_text(text);
 	}
 	y += grid_size;
     }
@@ -209,11 +208,11 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
 	    D_use_color(tcolor);
 
 	    G_format_northing(g, text, PROJECTION_LL);
-	    R_text_rotation(font_angle);
-	    R_text_size(fontsize, fontsize);
+	    D_text_rotation(font_angle);
+	    D_text_size(fontsize, fontsize);
 	    D_pos_abs(D_get_u_west() + D_get_d_to_u_xconv() * border_off,
 		      start_coord - D_get_d_to_u_yconv() * grid_off);
-	    R_text(text);
+	    D_text(text);
 	}
     }
 
@@ -261,15 +260,15 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
 	    D_use_color(tcolor);
 
 	    G_format_easting(g, text, PROJECTION_LL);
-	    R_text_rotation(font_angle);
-	    R_text_size(fontsize, fontsize);
+	    D_text_rotation(font_angle);
+	    D_text_size(fontsize, fontsize);
 	    D_pos_abs(start_coord + D_get_d_to_u_xconv() * (grid_off + 1.5),
 		      D_get_u_north() + D_get_d_to_u_yconv() * border_off);
-	    R_text(text);
+	    D_text(text);
 	}
     }
 
-    R_text_rotation(0.0);	/* reset */
+    D_text_rotation(0.0);	/* reset */
 
     return 0;
 

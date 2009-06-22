@@ -21,7 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
-#include <grass/display_raster.h>
+#include <grass/display.h>
 #include <grass/glocale.h>
 
 int main(int argc, char **argv)
@@ -49,18 +49,18 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (R_open_driver() != 0)
+    if (D_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
     if (flagL->answer)
-	R_font_info(&list, &count);
+	D_font_info(&list, &count);
     else
-	R_font_list(&list, &count);
+	D_font_list(&list, &count);
 
     for (i = 0; i < count; i++)
 	fprintf(stdout, "%s\n", list[i]);
 
-    R_close_driver();
+    D_close_driver();
 
     exit(EXIT_SUCCESS);
 }

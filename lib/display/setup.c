@@ -13,7 +13,6 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/display.h>
-#include <grass/display_raster.h>
 
 
 /*!
@@ -41,7 +40,7 @@ void D_setup(int clear)
     struct Cell_head region;
     double dt, db, dl, dr;
 
-    R_get_window(&dt, &db, &dl, &dr);
+    D_get_window(&dt, &db, &dl, &dr);
 
     G_get_set_window(&region);
     if (Rast_set_window(&region) < 0)
@@ -71,7 +70,7 @@ void D_setup_unity(int clear)
 {
     double dt, db, dl, dr;
 
-    R_get_window(&dt, &db, &dl, &dr);
+    D_get_window(&dt, &db, &dl, &dr);
 
     D_set_src(dt, db, dl, dr);
     D_set_dst(dt, db, dl, dr);
@@ -105,7 +104,7 @@ void D_setup2(int clear, int fit, double st, double sb, double sl, double sr)
 {
     double dt, db, dl, dr;
 
-    R_get_window(&dt, &db, &dl, &dr);
+    D_get_window(&dt, &db, &dl, &dr);
 
     D_set_src(st, sb, sl, sr);
     D_set_dst(dt, db, dl, dr);

@@ -23,7 +23,6 @@
 #include <string.h>
 #include "what.h"
 #include <grass/display.h>
-#include <grass/display_raster.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 

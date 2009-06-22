@@ -24,7 +24,6 @@
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/display.h>
-#include <grass/display_raster.h>
 #include <grass/Vect.h>
 
 #include "local_proto.h"

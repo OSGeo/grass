@@ -22,7 +22,6 @@
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/display.h>
-#include <grass/display_raster.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 
@@ -92,7 +91,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("%s - illegal longitude"), parm.coor->answers[3]);
 
 
-    if (R_open_driver() != 0)
+    if (D_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
     line_color = D_translate_color(parm.lcolor->answer);
@@ -114,7 +113,7 @@ int main(int argc, char *argv[])
 
     plot(lon1, lat1, lon2, lat2, line_color, text_color);
 
-    R_close_driver();
+    D_close_driver();
 
     exit(EXIT_SUCCESS);
 }

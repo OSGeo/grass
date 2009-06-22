@@ -20,7 +20,6 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include <grass/display.h>
-#include <grass/display_raster.h>
 #include "colors.h"
 
 int main(int argc, char **argv)

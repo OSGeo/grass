@@ -58,7 +58,6 @@
 #include <unistd.h>
 #include <grass/gis.h>
 #include <grass/display.h>
-#include <grass/display_raster.h>
 #include <grass/colors.h>
 #include <grass/glocale.h>
 
@@ -276,17 +275,17 @@ int main(int argc, char **argv)
 
     bold = flag.b->answer;
 
-    if (R_open_driver() != 0)
+    if (D_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
 
     if (opt.font->answer)
-	R_font(opt.font->answer);
+	D_font(opt.font->answer);
     else if (opt.path->answer)
-	R_font(opt.path->answer);
+	D_font(opt.path->answer);
 
     if (opt.charset->answer)
-	R_encoding(opt.charset->answer);
+	D_encoding(opt.charset->answer);
 
     D_setup_unity(0);
 
@@ -322,8 +321,8 @@ int main(int argc, char **argv)
     prev_x = x;
     prev_y = y;
 
-    R_text_size(size, size);
-    R_text_rotation(rotation * 180.0 / M_PI);
+    D_text_size(size, size);
+    D_text_rotation(rotation * 180.0 / M_PI);
 
     if (text) {
 	double x2, y2;
@@ -335,10 +334,10 @@ int main(int argc, char **argv)
 	    draw_text(text, &x2, &y2, size, align, rotation, bold);
 
 	/* reset */
-	R_text_size(5, 5);
-	R_text_rotation(0.0);
+	D_text_size(5, 5);
+	D_text_rotation(0.0);
 
-	R_close_driver();
+	D_close_driver();
 
 	exit(EXIT_SUCCESS);
     }
@@ -380,9 +379,9 @@ int main(int argc, char **argv)
 		/* font */
 		if ((ptr = strchr(buf_ptr, ':')))
 		    *ptr = 0;
-		R_font(buf_ptr);
+		D_font(buf_ptr);
 		if (ptr)
-		    R_encoding(ptr + 1);
+		    D_encoding(ptr + 1);
 		break;
 	    case 'C':
 		/* color */
@@ -401,7 +400,7 @@ int main(int argc, char **argv)
 		    d *= (win.b - win.t) / 100.0;
 #endif
 		size = d + (i ? size : 0);
-		R_text_size(size, size);
+		D_text_size(size, size);
 		break;
 	    case 'B':
 		/* bold */
@@ -423,7 +422,7 @@ int main(int argc, char **argv)
 		rotation = fmod(d, 2.0 * M_PI);
 		if (rotation < 0.0)
 		    rotation += 2.0 * M_PI;
-		R_text_rotation(rotation * 180.0 / M_PI);
+		D_text_rotation(rotation * 180.0 / M_PI);
 		break;
 	    case 'I':
 		/* linespacing */
@@ -517,10 +516,10 @@ int main(int argc, char **argv)
 	fclose(cmd_fp);
 
     /* reset */
-    R_text_size(5, 5);
-    R_text_rotation(0.0);
+    D_text_size(5, 5);
+    D_text_rotation(0.0);
 
-    R_close_driver();
+    D_close_driver();
 
     exit(EXIT_SUCCESS);
 }
@@ -598,23 +597,23 @@ static void draw_text(char *text, double *x, double *y, double size, char *align
     /* R_get_text_box() does not work with rotation and returns a little bit
      * bigger dimension than actual text size */
     if (rotation != 0.0)
-	R_text_rotation(0.0);
+	D_text_rotation(0.0);
 
     D_get_text_box(text, &t, &b, &l, &r);
 
     if (rotation != 0.0)
-	R_text_rotation(rotation * 180.0 / M_PI);
+	D_text_rotation(rotation * 180.0 / M_PI);
     w = r - l;
     h = b - t;
     if (w > 0)
 	w += 0.2 * size;
     else
-	/* R_text() does not draw " ". */
+	/* D_text() does not draw " ". */
 	w = 0.8 * size;
     if (h > 0)
 	h += 0.2 * size;
     else
-	/* R_text() does not draw " ". */
+	/* D_text() does not draw " ". */
 	h = 0.8 * size;
 
     c = cos(rotation);
@@ -649,13 +648,13 @@ static void draw_text(char *text, double *x, double *y, double size, char *align
     }
 
     D_pos_abs(*x, *y);
-    R_text(text);
+    D_text(text);
 
     if (bold) {
 	D_pos_abs(*x, *y + 1);
-	R_text(text);
+	D_text(text);
 	D_pos_abs(*x + 1, *y);
-	R_text(text);
+	D_text(text);
     }
 
     *x += w * c;

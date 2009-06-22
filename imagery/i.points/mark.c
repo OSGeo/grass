@@ -1,6 +1,6 @@
 #include "globals.h"
 #include "local_proto.h"
-#include <grass/display_raster.h>
+#include <grass/display.h>
 
 static int get_point2(double *, double *);
 static int keyboard(void);

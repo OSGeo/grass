@@ -3,7 +3,6 @@
 #include <grass/raster.h>
 #include <grass/Vect.h>
 #include <grass/display.h>
-#include <grass/display_raster.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
@@ -60,11 +59,11 @@ int attr(struct Map_info *Map, int type, char *attrcol,
 	    continue;		/* used for both lines and labels */
 
 	D_RGB_color(lattr->color.R, lattr->color.G, lattr->color.B);
-	R_text_size(lattr->size, lattr->size);
+	D_text_size(lattr->size, lattr->size);
 	if (lattr->font)
-	    R_font(lattr->font);
+	    D_font(lattr->font);
 	if (lattr->enc)
-	    R_encoding(lattr->enc);
+	    D_encoding(lattr->enc);
 
 	if (chcat) {
 	    int found = 0;

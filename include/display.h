@@ -153,4 +153,22 @@ void D_RGB_color(int, int, int);
 /* window.c */
 void D_erase(const char *);
 
+/* r_raster.c */
+
+int D_open_driver(void);
+void D_close_driver(void);
+
+void D_get_window(double *, double *, double *, double *);
+
+void D__erase(void);
+
+void D_text_size(double, double);
+void D_text_rotation(double);
+void D_text(const char *);
+
+void D_font(const char *);
+void D_encoding(const char *);
+void D_font_list(char ***, int *);
+void D_font_info(char ***, int *);
+
 #endif /* GRASS_DISPLAY_H */

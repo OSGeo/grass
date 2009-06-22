@@ -20,7 +20,6 @@
  *                                                         *
  ************************************************************/
 
-#include <grass/display_raster.h>
 #include <grass/display.h>
 #include "setup.h"
 #include <grass/config.h>

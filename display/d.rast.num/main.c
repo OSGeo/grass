@@ -39,7 +39,6 @@
 #include <math.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
-#include <grass/display_raster.h>
 #include <grass/display.h>
 #include <grass/colors.h>
 #include <grass/glocale.h>
@@ -192,7 +191,7 @@ int main(int argc, char **argv)
 
     /* Setup driver and check important information */
 
-    if (R_open_driver() != 0)
+    if (D_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
     D_setup2(0, 0, t, b, l, r);
@@ -244,7 +243,7 @@ int main(int argc, char **argv)
 
     Rast_close_cell(layer_fd);
 
-    R_close_driver();
+    D_close_driver();
 
     exit(EXIT_SUCCESS);
 }
@@ -288,14 +287,14 @@ int draw_number(int row, int col, double number, int prec, RASTER_MAP_TYPE map_t
 	rite = text_size * len;
     }
 
-    R_text_size(text_size, text_size);
+    D_text_size(text_size, text_size);
 
     D_pos_abs(col, row + 0.7);
     D_get_text_box(no, &tt, &tb, &tl, &tr);
 
     dx = (tr + tl) / 2 - (col + 0.5);
     D_pos_abs(col - dx, row + 0.7);
-    R_text(no);
+    D_text(no);
 
     return 0;
 }

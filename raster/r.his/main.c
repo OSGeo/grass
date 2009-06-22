@@ -19,7 +19,6 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/display.h>
-#include <grass/display_raster.h>
 #include "his.h"
 #include <grass/glocale.h>
 

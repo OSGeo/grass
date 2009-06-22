@@ -1,5 +1,4 @@
 #include <math.h>
-#include <grass/display_raster.h>
 #include <grass/display.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
@@ -80,7 +79,7 @@ int draw_slice(struct Colors *colors, int fill_flag, DCELL fill_color1, DCELL fi
 	ly = y[0] - (r + 0.03) * (height) * sin(arc / 57.296) + (tb - tt) / 2;
 	D_pos_abs(lx, ly);
 	D_use_color(txt_color);
-	R_text(txt);
+	D_text(txt);
     }
 
     return 0;

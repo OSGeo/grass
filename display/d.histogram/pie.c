@@ -32,7 +32,6 @@
 
 #include <grass/raster.h>
 #include <grass/display.h>
-#include <grass/display_raster.h>
 
 #include "pie.h"
 
@@ -150,7 +149,7 @@ int pie(struct stat_list *dist_stats,	/* list of distribution statistics */
     for (i = dist_stats->mincat; i <= dist_stats->maxcat; i++) {
 	text_height = height * 0.7 * TEXT_HEIGHT;
 	text_width = width * 0.7 * TEXT_WIDTH;
-	R_text_size(text_width, text_height);
+	D_text_size(text_width, text_height);
 	draw = NO;
 	/* figure color and height of the slice of pie 
 	 *
@@ -346,12 +345,12 @@ int pie(struct stat_list *dist_stats,	/* list of distribution statistics */
 		sprintf(txt, "%d", (int)(i / tic_unit));
 	    text_height = height * TEXT_HEIGHT;
 	    text_width = width * TEXT_WIDTH;
-	    R_text_size(text_width, text_height);
+	    D_text_size(text_width, text_height);
 	    D_get_text_box(txt, &tt, &tb, &tl, &tr);
 	    while ((tr - tl) > XTIC_DIST) {
 		text_width *= 0.95;
 		text_height *= 0.95;
-		R_text_size(text_width, text_height);
+		D_text_size(text_width, text_height);
 		D_get_text_box(txt, &tt, &tb, &tl, &tr);
 	    }
 	    D_pos_abs(xoffset
@@ -359,7 +358,7 @@ int pie(struct stat_list *dist_stats,	/* list of distribution statistics */
 		      - 0.5 * xscale
 		      - (tr - tl) / 2,
 		      b - XNUMS_Y * height);
-	    R_text(txt);
+	    D_text(txt);
 	}
 	else if (rem(i, tic_unit) == 0.0) {
 	    /* draw a tic-mark */
@@ -390,12 +389,12 @@ int pie(struct stat_list *dist_stats,	/* list of distribution statistics */
 	sprintf(xlabel, "Cell Values");
     text_height = height * TEXT_HEIGHT;
     text_width = width * TEXT_WIDTH;
-    R_text_size(text_width, text_height);
+    D_text_size(text_width, text_height);
     D_get_text_box(xlabel, &tt, &tb, &tl, &tr);
     D_pos_abs(l + width / 2 - (tr - tl) / 2,
 	      b - LABEL * height);
     D_use_color(color);
-    R_text(xlabel);
+    D_text(xlabel);
 
     return 0;
 }
