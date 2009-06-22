@@ -1,4 +1,5 @@
 #include <grass/gis.h>
+#include <grass/raster.h>
 
 extern char *no_data_str;
 extern int nfiles;

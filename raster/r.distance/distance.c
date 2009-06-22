@@ -16,6 +16,8 @@
  *
  ***************************************************************************/
 
+#include <grass/raster.h>
+
 #include "defs.h"
 
 /* given two CatEdgeLists, find the cells which are closest

@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <grass/raster.h>
 #include "global.h"
 
 int parse_command_line(int argc, char *argv[])

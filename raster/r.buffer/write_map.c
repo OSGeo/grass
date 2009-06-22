@@ -21,6 +21,7 @@
 
 #include <stdlib.h>
 #include "distance.h"
+#include <grass/raster.h>
 #include <grass/glocale.h>
 
 

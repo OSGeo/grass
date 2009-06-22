@@ -16,8 +16,8 @@
  *
  ***************************************************************************/
 
+#include <grass/raster.h>
 #include "coin.h"
-
 
 int print_coin_hdr(int Conformat)
 {

@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include "glob.h"
 #include "local_proto.h"
+#include <grass/raster.h>
 #include <grass/glocale.h>
 
 

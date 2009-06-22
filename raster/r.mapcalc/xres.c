@@ -1,5 +1,6 @@
 
 #include <grass/gis.h>
+#include <grass/raster.h>
 #include "globals.h"
 #include "globals2.h"
 #include "expression.h"

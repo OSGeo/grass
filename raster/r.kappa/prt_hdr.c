@@ -1,4 +1,5 @@
 #include <string.h>
+#include <grass/raster.h>
 #include <grass/glocale.h>
 #include "kappa.h"
 #include "local_proto.h"

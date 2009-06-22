@@ -1,6 +1,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <grass/raster.h>
 #include "global.h"
 
 static int die(void);

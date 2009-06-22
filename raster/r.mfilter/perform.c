@@ -1,6 +1,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <grass/rowio.h>
+#include <grass/raster.h>
 #include <grass/glocale.h>
 #include "glob.h"
 #include "filter.h"

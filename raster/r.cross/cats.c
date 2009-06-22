@@ -17,6 +17,7 @@
  ***************************************************************************/
 
 #include <string.h>
+#include <grass/raster.h>
 #include "glob.h"
 
 static char *get_label(CELL, struct Categories *);

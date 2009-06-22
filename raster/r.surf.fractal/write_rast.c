@@ -14,6 +14,7 @@
 
 /***************************************************************************/
 
+#include <grass/raster.h>
 #include <grass/glocale.h>
 #include "frac.h"
 

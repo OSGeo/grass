@@ -20,6 +20,7 @@
 #include <unistd.h>
 #include <string.h>
 #include "global.h"
+#include <grass/raster.h>
 #include <grass/glocale.h>
 
 struct Quant quant_struct;

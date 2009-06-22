@@ -17,6 +17,9 @@
  ***************************************************************************/
 
 #include <stdlib.h>
+
+#include <grass/raster.h>
+
 #include "defs.h"
 
 void print_edge_info(struct Map *map)

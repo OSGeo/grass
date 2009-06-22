@@ -6,6 +6,7 @@
  */
 
 #include <string.h>
+#include <grass/raster.h>
 #include "clr.h"
 #include "labels.h"
 #include "ps_info.h"

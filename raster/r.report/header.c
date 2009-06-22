@@ -1,4 +1,5 @@
 #include <string.h>
+#include <grass/raster.h>
 #include "global.h"
 
 static int page = 0;

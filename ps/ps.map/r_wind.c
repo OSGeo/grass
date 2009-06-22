@@ -1,6 +1,7 @@
 /* parse the "region" instruction */
 #include "ps_info.h"
 #include <string.h>
+#include <grass/raster.h>
 #include "local_proto.h"
 
 #define KEY(x) (strcmp(key,x)==0)

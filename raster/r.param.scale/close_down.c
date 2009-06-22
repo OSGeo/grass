@@ -8,6 +8,7 @@
 /*****************************************************************************/
 
 #include <string.h>
+#include <grass/raster.h>
 #include "param.h"
 
 

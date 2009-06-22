@@ -1,3 +1,5 @@
+#include <grass/raster.h>
+
 #include "local_proto.h"
 
 
