@@ -29,6 +29,8 @@ import wx
 import wx.stc
 from wx.lib.newevent import NewEvent
 
+import grass.script as grass
+
 import globalvar
 import gcmd
 import utils
@@ -308,7 +310,24 @@ class GMConsole(wx.Panel):
             cmdlist = command.strip().split(' ')
         except:
             cmdlist = command
+        
+        # update history file
+        env = grass.gisenv()
+        fileHistory = open(os.path.join(env['GISDBASE'], env['LOCATION_NAME'], env['MAPSET'],
+                                        '.bash_history'), 'a')
+        cmdString = ' '.join(cmdlist)
+        try:
+            fileHistory.write(cmdString + '\n')
+        finally:
+            fileHistory.close()
 
+        # update history items
+        if self.parent.GetName() == 'LayerManager':
+            try:
+                self.parent.cmdinput.SetHistoryItems()
+            except AttributeError:
+                pass
+        
         if cmdlist[0] in globalvar.grassCmd['all']:
             # send GRASS command without arguments to GUI command interface
             # except display commands (they are handled differently)
@@ -388,7 +407,7 @@ class GMConsole(wx.Panel):
                              stderr=self.cmd_stderr)
             except gcmd.CmdError, e:
                 print >> sys.stderr, e
-
+        
         return None
 
     def ClearHistory(self, event):
