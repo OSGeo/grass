@@ -19,6 +19,7 @@ for details.
 @author Martin Landa <landa.martin gmail.com>
 """
 
+import os
 import sys
 import shlex
 
@@ -218,7 +219,7 @@ class PromptListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         wx.ListCtrl.__init__(self, parent, id, pos, size, style)
         listmix.ListCtrlAutoWidthMixin.__init__(self)
         
-class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
+class TextCtrlAutoComplete(wx.ComboBox, listmix.ColumnSorterMixin):
     def __init__ (self, parent, statusbar, 
                   id = wx.ID_ANY, choices = [], **kwargs):
         """!Constructor works just like wx.TextCtrl except you can pass in a
@@ -234,7 +235,7 @@ class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
         else:
             kwargs['style'] = wx.TE_PROCESS_ENTER
         
-        wx.TextCtrl.__init__(self, parent, id, **kwargs)
+        wx.ComboBox.__init__(self, parent, id, **kwargs)
 
         # some variables
         self._choices = choices
@@ -269,6 +270,9 @@ class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
         # first search for GRASS module
         self.SetChoices(self._choicesCmd)
 
+        # read history
+        self.SetHistoryItems()
+        
         # bindings...
         self.Bind(wx.EVT_KILL_FOCUS, self.OnControlChanged, self)
         self.Bind(wx.EVT_TEXT, self.OnEnteredText, self)
@@ -279,6 +283,8 @@ class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
         self.dropdownlistbox.Bind(wx.EVT_LEFT_DOWN, self.OnListClick)
         self.dropdownlistbox.Bind(wx.EVT_LEFT_DCLICK, self.OnListDClick)
         self.dropdownlistbox.Bind(wx.EVT_LIST_COL_CLICK, self.OnListColClick)
+
+        self.Bind(wx.EVT_COMBOBOX, self.OnCommandSelect)
         
     def _updateDataList(self, choices):
         """!Update data list"""
@@ -376,6 +382,23 @@ class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
         """!Method required by listmix.ColumnSorterMixin"""
         return self.dropdownlistbox
     
+    def SetHistoryItems(self):
+        """!Read history file and update combobox items"""
+        env = grass.gisenv()
+        fileHistory = open(os.path.join(env['GISDBASE'], env['LOCATION_NAME'], env['MAPSET'],
+                                        '.bash_history'), 'r')
+        try:
+            hist = []
+            for line in fileHistory.readlines():
+                hist.append(line.replace('\n', ''))
+            
+            self.SetItems(hist)
+        finally:
+            fileHistory.close()
+            return
+        
+        self.SetItems([])
+        
     def SetChoices(self, choices, type = 'module'):
         """!Sets the choices available in the popup wx.ListBox.
         The items will be sorted case insensitively.
@@ -403,6 +426,10 @@ class TextCtrlAutoComplete(wx.TextCtrl, listmix.ColumnSorterMixin):
         # there is only one choice for both search and fetch if setting a single column:
         self._colSearch = 0
         self._colFetch = -1
+
+    def OnCommandSelect(self, event):
+        """!Command selected from history"""
+        self.SetFocus()
         
     def OnListClick(self, evt):
         """!Left mouse button pressed"""
