@@ -3,6 +3,7 @@ MODULE_TOPDIR = ..
 SUBDIRS = \
 	i.albedo \
 	i.atcorr \
+	i.biomass \
 	i.cca \
 	i.cluster \
 	i.eb.evapfr \
