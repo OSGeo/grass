@@ -2258,6 +2258,13 @@
               <handler>self.OnMenuCmd</handler>
 	      <command>i.vi</command>
 	    </menuitem>
+	    <menuitem>
+	      <label>Biomass Growth</label>
+	      <help>Calculates the growth of biomass for a day.</help>
+	      <keywords>imagery,biomass growth,vegetation index,biophysical parameters</keywords>
+              <handler>self.OnMenuCmd</handler>
+	      <command>i.biomass</command>
+	    </menuitem>
 	    <separator />
 	    <menuitem>
 	      <label>Emissivity</label>
