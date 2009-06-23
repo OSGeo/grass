@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ../..
 
-PGM = db.dropcol
+PGM = db.dropcolumn
 
 include $(MODULE_TOPDIR)/include/Make/Script.make
 

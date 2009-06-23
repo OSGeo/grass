@@ -110,7 +110,7 @@ def main():
 	grass.try_remove(vectfile)
 
     # get rid of superfluous auto-added cat column (and cat_ if present)
-    grass.run_command('db.dropcol', quiet = True, flags = 'f', table = output,
+    grass.run_command('db.dropcolumn', quiet = True, flags = 'f', table = output,
 		      colum = 'cat', stdout = nuldev, stderr = nuldev)
 
     records = grass.db_describe(output)['nrows']
