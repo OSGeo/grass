@@ -767,8 +767,8 @@ class MapFrame(wx.Frame):
             e, n = map(float, self.goTo.GetValue().split(','))
         except ValueError:
             region = self.Map.GetCurrentRegion()
-            self.goTo.SetValue("%.2f, %.2f" % (region['center_northing'],
-                                               region['center_easting']))
+            self.goTo.SetValue("%.2f, %.2f" % (region['center_easting'],
+                                               region['center_northing']))
             return
 
         region = self.Map.GetCurrentRegion()
@@ -892,8 +892,8 @@ class MapFrame(wx.Frame):
         elif self.toggleStatus.GetSelection() == 7: # go to
             self.statusbar.SetStatusText("")
             region = self.Map.GetCurrentRegion()
-            self.goTo.SetValue("%.2f, %.2f" % (region['center_northing'],
-                                              region['center_easting']))
+            self.goTo.SetValue("%.2f, %.2f" % (region['center_easting'],
+                                               region['center_northing']))
             self.goTo.Show()
 
             # disable long help
