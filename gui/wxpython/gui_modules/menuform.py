@@ -399,7 +399,7 @@ class grassTask:
 
         return cmd
 
-class processTask():
+class processTask:
     """!A ElementTree handler for the --interface-description output,
     as defined in grass-interface.dtd. Extend or modify this and the
     DTD if the XML output of GRASS' parser is extended or modified.
