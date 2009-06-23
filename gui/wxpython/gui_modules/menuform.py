@@ -240,6 +240,7 @@ class UpdateThread(Thread):
                 if map:
                     self.data[win.InsertColumns] = { 'vector' : map, 'layer' : layer }
                 else: # table
+                    driver = db = None
                     pDriver = self.task.get_param('dbdriver', element='prompt', raiseError=False)
                     if pDriver:
                         driver = pDriver.get('value', None)
