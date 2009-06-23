@@ -42,7 +42,7 @@ try:
 except ImportError:
     wxnviz = None
 
-class ProcessWorkspaceFile():
+class ProcessWorkspaceFile:
     def __init__(self, tree):
         """!A ElementTree handler for the GXW XML file, as defined in
         grass-gxw.dtd.
