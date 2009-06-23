@@ -6,7 +6,7 @@ SUBDIRS = \
 	d.rast.edit \
 	d.rast.leg \
 	d.shadedmap \
-	db.dropcol \
+	db.dropcolumn \
 	db.droptable \
 	db.in.ogr \
 	db.out.ogr \

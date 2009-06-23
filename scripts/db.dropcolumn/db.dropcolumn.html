@@ -1,12 +1,12 @@
 <h2>DESCRIPTION</h2>
 
-<em>db.dropcol</em> drops a column from an attribute table.
+<em>db.dropcolumn</em> drops a column from an attribute table.
 If the <b>-f</b> force flag is not given then nothing is removed, instead
 a preview of the action to be taken is printed.
 
 <h2>NOTES</h2>
 
-<em>db.dropcol</em> is a front-end to <em>db.execute</em> to allow easier
+<em>db.dropcolumn</em> is a front-end to <em>db.execute</em> to allow easier
 usage with a special workaround for the SQLite driver to support column
 drop.
 
@@ -20,10 +20,10 @@ g.copy vect=roads,myroads
 db.describe -c myroads
 
 # only shows what would happen:
-db.dropcol myroads column=label
+db.dropcolumn myroads column=label
 
 # actually drops the column
-db.dropcol -f myroads column=label
+db.dropcolumn -f myroads column=label
 
 db.describe -c myroads
 </pre></div>
