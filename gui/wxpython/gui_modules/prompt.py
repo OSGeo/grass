@@ -220,7 +220,7 @@ class PromptListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         listmix.ListCtrlAutoWidthMixin.__init__(self)
         
 class TextCtrlAutoComplete(wx.ComboBox, listmix.ColumnSorterMixin):
-    def __init__ (self, parent, statusbar, 
+    def __init__ (self, parent, statusbar,
                   id = wx.ID_ANY, choices = [], **kwargs):
         """!Constructor works just like wx.TextCtrl except you can pass in a
         list of choices.  You can also change the choice list at any time
@@ -236,7 +236,7 @@ class TextCtrlAutoComplete(wx.ComboBox, listmix.ColumnSorterMixin):
             kwargs['style'] = wx.TE_PROCESS_ENTER
         
         wx.ComboBox.__init__(self, parent, id, **kwargs)
-
+        
         # some variables
         self._choices = choices
         self._hideOnNoMatch = True
@@ -269,14 +269,15 @@ class TextCtrlAutoComplete(wx.ComboBox, listmix.ColumnSorterMixin):
             self._choicesMap[type] = grass.list_strings(type = type[:4])
         # first search for GRASS module
         self.SetChoices(self._choicesCmd)
-
+        
+        self.SetMinSize(self.GetSize())
         # read history
         self.SetHistoryItems()
         
         # bindings...
-        self.Bind(wx.EVT_KILL_FOCUS, self.OnControlChanged, self)
-        self.Bind(wx.EVT_TEXT, self.OnEnteredText, self)
-        self.Bind(wx.EVT_KEY_DOWN , self.OnKeyDown, self)
+        self.Bind(wx.EVT_KILL_FOCUS, self.OnControlChanged)
+        self.Bind(wx.EVT_TEXT, self.OnEnteredText)
+        self.Bind(wx.EVT_KEY_DOWN , self.OnKeyDown)
 
         # if need drop down on left click
         self.dropdown.Bind(wx.EVT_LISTBOX , self.OnListItemSelected, self.dropdownlistbox)
