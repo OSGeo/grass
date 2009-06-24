@@ -84,31 +84,18 @@ class VectorSelect(Select):
         self.ftype = ftype
         
         # remove vector maps which do not contain given feature type
-        self.tcp.SetFilter(self.__filterElements)
+        self.tcp.SetFilter(self.__isElement)
         
-    def __filterElements(self, parentItem):
-        """!Filter vector maps in given mapset"""
-        root = self.tcp.seltree.GetRootItem()
-        item, cookie = self.tcp.seltree.GetFirstChild(parentItem)
-        while item:
-            if self.tcp.seltree.GetItemParent(item) != root:
-                # skip Mapset items
-                vectorName = self.tcp.seltree.GetItemText(item)
-                try:
-                    if int(grass.vector_info_topo(vectorName)[self.ftype]) < 1:
-                        self.tcp.seltree.Delete(item)
-                except KeyError:
-                    self.tcp.seltree.Delete(item)
-                
-                if not item:
-                    item, cookie = self.tcp.seltree.GetNextChild(parentItem, cookie)
-                    continue
-                
-            if self.tcp.seltree.ItemHasChildren(item):
-                item = self.__filterElements(item)
-            
-            item, cookie = self.tcp.seltree.GetNextChild(parentItem, cookie)
+    def __isElement(self, vectorName):
+        """!Check if element should be filtered out"""
+        try:
+            if int(grass.vector_info_topo(vectorName)[self.ftype]) < 1:
+                return False
+        except KeyError:
+            return False
         
+        return True
+
 class TreeCtrlComboPopup(wx.combo.ComboPopup):
     """!Create a tree ComboBox for selecting maps and other GIS elements
     in accessible mapsets within the current location
@@ -184,8 +171,6 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         # update list
         self.seltree.DeleteAllItems()
         self._getElementList(self.type, self.mapsets, self.exclude)
-        if self.filterElements:
-            self.filterElements(self.seltree.GetRootItem())
         
         if len(self.value) > 0:
             root = self.seltree.GetRootItem()
@@ -303,7 +288,12 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                         fullqElem = elem + '@' + dir
                         if len(exclude) > 0 and fullqElem in exclude:
                             continue
-                        self.AddItem(fullqElem, parent=dir_node)
+
+                        if self.filterElements:
+                            if self.filterElements(fullqElem):
+                                self.AddItem(fullqElem, parent=dir_node)
+                        else:
+                            self.AddItem(fullqElem, parent=dir_node)
             except:
                 continue
 
