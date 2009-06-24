@@ -45,45 +45,46 @@ int main(int argc, char *argv[])
     /************************************/ 
     G_gisinit(argv[0]);
     module = G_define_module();
-    module->keywords = _("biomass, fpar, yield");
+    module->keywords = _("imagery, biomass, fpar, yield");
     module->description =
-	_("biomass growth calculation, precursor of crop yield calculation");
+	_("Computes biomass growth, precursor of crop yield calculation");
     
     /* Define the different options */ 
     input1 = G_define_standard_option(G_OPT_R_INPUT);
     input1->key = "fpar";
-    input1->description = _("Name of the fPAR map");
+    input1->description = _("Name of fPAR raster map");
 
     input2 = G_define_standard_option(G_OPT_R_INPUT);
     input2->key = "luf";
     input2->description =
-	_("Name of the light use efficiency map (UZB:cotton=1.9)");
+	_("Name of light use efficiency raster map (UZB:cotton=1.9)");
 
     input3 = G_define_standard_option(G_OPT_R_INPUT);
     input3->key = "lat";
-    input3->description = _("Name of the degree latitude map [dd.ddd]");
+    input3->description = _("Name of degree latitude raster map [dd.ddd]");
 
     input4 = G_define_standard_option(G_OPT_R_INPUT);
     input4->key = "doy";
-    input4->description = _("Name of the Day of Year map [1-366]");
+    input4->description = _("Name of Day of Year raster map [1-366]");
 
     input5 = G_define_standard_option(G_OPT_R_INPUT);
     input5->key = "tsw";
     input5->description =
-	_("Name of the single-way transmissivity map [0.0-1.0]");
+	_("Name of single-way transmissivity raster map [0.0-1.0]");
 
     input6 = G_define_standard_option(G_OPT_R_INPUT);
     input6->key = "wa";
     input6->description =
-	_("Value of the water availability map [0.0-1.0]");
+	_("Value of water availability raster map [0.0-1.0]");
 
-    output1 = G_define_standard_option(G_OPT_R_INPUT);
+    output1 = G_define_standard_option(G_OPT_R_OUTPUT);
     output1->description =
-	_("Name of the output daily biomass growth layer [kg/ha/d]");
+	_("Name for output daily biomass growth raster map [kg/ha/d]");
     
     /********************/ 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
     fpar = input1->answer;
     luf = input2->answer;
     lat = input3->answer;
@@ -197,6 +198,7 @@ int main(int argc, char *argv[])
     Rast_short_history(result1, "raster", &history);
     Rast_command_history(&history);
     Rast_write_history(result1, &history);
+
     exit(EXIT_SUCCESS);
 }
 
