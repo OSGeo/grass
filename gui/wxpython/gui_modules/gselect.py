@@ -95,7 +95,6 @@ class VectorSelect(Select):
                 # skip Mapset items
                 vectorName = self.tcp.seltree.GetItemText(item)
                 try:
-                    print vectorName, int(grass.vector_info_topo(vectorName)[self.ftype])
                     if int(grass.vector_info_topo(vectorName)[self.ftype]) < 1:
                         self.tcp.seltree.Delete(item)
                 except KeyError:
