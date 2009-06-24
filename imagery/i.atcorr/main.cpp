@@ -325,8 +325,8 @@ static void process_raster (int ifd, InputMask imask, ScaleRange iscale,
         /* loop over all the values in the row */
 	for(col = 0; col < ncols; col++)
 	{
-	    if(vis && Rast_is_f_null_value(&vis[col]) || 
-	       alt && Rast_is_f_null_value(&alt[col]) || 
+	    if((vis && Rast_is_f_null_value(&vis[col])) || 
+	       (alt && Rast_is_f_null_value(&alt[col])) || 
 	              Rast_is_f_null_value(&buf[col]))
 	    {
 	        Rast_set_f_null_value(&buf[col], 1);
@@ -436,7 +436,8 @@ static void define_module (void)
     module->label = _("Performs atmospheric correction using the 6S algorithm.");
     module->description =
 	_("6S - Second Simulation of Satellite Signal in the Solar Spectrum.");
-    module->keywords = _("imagery, atmospheric correction");
+    G_add_keyword(_("imagery"));
+    G_add_keyword(_("atmospheric correction"));
 
     /* 
        " Incorporated into Grass by Christo A. Zietsman, January 2003.\n"
