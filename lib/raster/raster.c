@@ -1,7 +1,7 @@
 /*!
- * \file gis/raster.c
+ * \file raster/raster.c
  *
- * \brief GIS Library - Raster cell value routines.
+ * \brief Raster Library - Raster cell value routines.
  *
  * (C) 2001-2009 by the GRASS Development Team
  *

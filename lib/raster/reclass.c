@@ -1,7 +1,7 @@
 /*!
- * \file gis/reclass.c
+ * \file raster/reclass.c
  *
- * \brief GIS Library - Check if raster map is reclassified
+ * \brief Raster Library - Check if raster map is reclassified
  *
  * (C) 2001-2009 by the GRASS Development Team
  *

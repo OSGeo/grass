@@ -1,7 +1,7 @@
 /*!
- * \file gis/color_hist.c
+ * \file raster/color_hist.c
  *
- * \brief GIS Library - histogram grey scale colors
+ * \brief Raster Library - histogram grey scale colors
  *
  * (C) 2007-2009 Glynn Clements and the GRASS Development Team
  *

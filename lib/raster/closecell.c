@@ -1,7 +1,7 @@
 /*!
- * \file gis/closecell.c
+ * \file raster/closecell.c
  * 
- * \brief GIS Library - Close raster file
+ * \brief Raster Library - Close raster file
  *
  * (C) 1999-2009 by the GRASS Development Team
  *

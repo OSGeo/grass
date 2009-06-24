@@ -1,7 +1,7 @@
 /*!
- * \file gis/color_get.c
+ * \file raster/color_get.c
  *
- * \brief GIS Library - Get colors from a raster map.
+ * \brief Raster Library - Get colors from a raster map.
  *
  * (C) 2001-2009 by the GRASS Development Team
  *

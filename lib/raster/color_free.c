@@ -1,7 +1,7 @@
 /*!
- * \file gis/color_free.c
+ * \file raster/color_free.c
  *
- * \brief GIS Library - Free Colors structure
+ * \brief Raster Library - Free Colors structure
  *
  * (C) 2001-2009 by the GRASS Development Team
  *

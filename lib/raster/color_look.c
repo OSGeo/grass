@@ -1,7 +1,7 @@
 /*!
- * \file gis/color_lookup.c
+ * \file raster/color_lookup.c
  * 
- * \brief GIS Library - Lookup array of colors 
+ * \brief Raster Library - Lookup array of colors 
  *
  * (C) 1999-2009 by the GRASS Development Team
  *

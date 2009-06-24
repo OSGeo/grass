@@ -1,7 +1,7 @@
 /*!
- * \file gis/null_value.c
+ * \file raster/null_value.c
  *
- * \brief GIS Library - NULL value management
+ * \brief Raster Library - NULL value management
  *
  * To provide functionality to handle NULL values for data types CELL,
  * FCELL, and DCELL. May need more...

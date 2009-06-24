@@ -1,7 +1,7 @@
 /*!
-  \file gis/get_cellhd.c
+  \file raster/get_cellhd.c
   
-  \brief GIS library - Read raster map header
+  \brief Raster library - Read raster map header
   
   (C) 2001-2009 by the GRASS Development Team
   

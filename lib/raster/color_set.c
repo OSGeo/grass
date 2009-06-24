@@ -1,7 +1,7 @@
 /*!
- * \file gis/color_set.c
+ * \file raster/color_set.c
  *
- * \brief GIS Library - Set colors for raster maps.
+ * \brief Raster Library - Set colors for raster maps.
  *
  * (C) 2001-2009 by the GRASS Development Team
  *

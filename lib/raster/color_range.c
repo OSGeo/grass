@@ -1,7 +1,7 @@
 /*!
- * \file gis/color_range.c
+ * \file raster/color_range.c
  *
- * \brief GIS Library - Color range functions.
+ * \brief Raster Library - Color range functions.
  *
  * (C) 2001-2009 by the GRASS Development Team
  *

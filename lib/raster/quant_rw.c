@@ -1,7 +1,7 @@
 /*!
- * \file gis/quant_rw.c
+ * \file raster/quant_rw.c
  * 
- * \brief GIS Library - Quantization rules (read/write).
+ * \brief Raster Library - Quantization rules (read/write).
  *
  * (C) 1999-2009 by the GRASS Development Team
  *

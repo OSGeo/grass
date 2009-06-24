@@ -1,7 +1,7 @@
 /*!
- * \file gis/cats.c
+ * \file raster/cats.c
  *
- * \brief GIS Library - Raster categories management
+ * \brief Raster Library - Raster categories management
  *
  * Code in this file works with category files.  There are two formats:
  * Pre 3.0 direct category encoding form:

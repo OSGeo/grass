@@ -1,7 +1,7 @@
 /*!
- * \file gis/color_write.c
+ * \file raster/color_write.c
  * 
- * \brief GIS Library - Write color table of raster map
+ * \brief Raster Library - Write color table of raster map
  *
  * (C) 1999-2009 by the GRASS Development Team
  *
