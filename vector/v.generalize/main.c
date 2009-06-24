@@ -75,8 +75,12 @@ int main(int argc, char *argv[])
 
     /* initialize module */
     module = G_define_module();
-    G_add_keyword(_(""));
-	_("vector, generalization, simplification, smoothing, displacement, network generalization");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("generalization"));
+    G_add_keyword(_("simplification"));
+    G_add_keyword(_("smoothing"));
+    G_add_keyword(_("displacement"));
+    G_add_keyword(_("network generalization"));
     module->description = _("Vector based generalization.");
 
     /* Define the different options as defined in gis.h */
