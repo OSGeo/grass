@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
     /************************************/ 
     G_gisinit(argv[0]);
     module = G_define_module();
-    module->keywords =
+    G_add_keyword(_(""));
 	_("imagery, evaporative fraction, soil moisture, energy balance, SEBAL");
     module->description =
 	_("Computes evaporative fraction (Bastiaanssen, 1995) and "

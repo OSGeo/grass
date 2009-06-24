@@ -108,6 +108,8 @@ static struct state {
     int no_interactive;
     int n_opts;
     int n_flags;
+    int n_keys;
+    int n_keys_alloc;
     int overwrite;
     int quiet;
     int has_required;
@@ -145,6 +147,8 @@ static void split_opts(void);
 static int check_multiple_opts(void);
 static int check_overwrite(void);
 static void split_gisprompt(const char *, char *, char *, char *);
+static void define_keywords(void);
+static void print_keywords(FILE *, void (*)(FILE *, const char *));
 
 static void G_gui(void);
 static void G_usage_xml(void);
@@ -699,13 +703,14 @@ struct GModule *G_define_module(void)
     struct GModule *module;
 
     /* Allocate memory */
-
     module = &st->module_info;
 
     /* Zero structure */
-
     G_zero((char *)module, sizeof(struct GModule));
 
+    /* Allocate keywords array */
+    define_keywords();
+    
     return (module);
 }
 
@@ -1065,8 +1070,9 @@ void G_usage(void)
 	    fprintf(stderr, " %s\n", st->module_info.description);
     }
     if (st->module_info.keywords) {
-	fprintf(stderr, _("\nKeywords:\n"));
-	fprintf(stderr, " %s\n", st->module_info.keywords);
+	fprintf(stderr, _("\nKeywords:\n "));
+	print_keywords(stderr, NULL);
+	fprintf(stderr, "\n");
     }
 
     fprintf(stderr, _("\nUsage:\n "));
@@ -1309,7 +1315,7 @@ static void G_usage_xml(void)
 
     if (st->module_info.keywords) {
 	fprintf(stdout, "\t<keywords>\n\t\t");
-	print_escaped_for_xml(stdout, st->module_info.keywords);
+	print_keywords(stdout, print_escaped_for_xml);
 	fprintf(stdout, "\n\t</keywords>\n");
     }
 
@@ -1541,7 +1547,7 @@ static void G_usage_html(void)
 
     fprintf(stdout, "<h2>%s</h2>\n", _("KEYWORDS"));
     if (st->module_info.keywords) {
-	fprintf(stdout, "%s", st->module_info.keywords);
+	print_keywords(stdout, NULL);
 	fprintf(stdout, "\n");
     }
     fprintf(stdout, "<h2>%s</h2>\n", _("SYNOPSIS"));
@@ -1767,8 +1773,11 @@ static void G_script(void)
 	fprintf(fp, "#%% label: %s\n", st->module_info.label);
     if (st->module_info.description)
 	fprintf(fp, "#%% description: %s\n", st->module_info.description);
-    if (st->module_info.keywords)
-	fprintf(fp, "#%% keywords: %s\n", st->module_info.keywords);
+    if (st->module_info.keywords) {
+	fprintf(fp, "#%% keywords: ");
+	print_keywords(fp, NULL);
+	fprintf(fp, "\n");
+    }
     fprintf(fp, "#%%End\n");
 
     if (st->n_flags) {
@@ -2578,4 +2587,56 @@ char *G_recreate_command(void)
     }
 
     return (buff);
+}
+
+void define_keywords(void)
+{
+    st->n_keys = 0;
+    st->n_keys_alloc = 0;
+}
+
+/*!
+  \brief Add keyword to the list
+
+  \param module pointer to GModule structure
+  \param keyword keyword string
+*/
+void G_add_keyword(const char *keyword)
+{
+    if (st->n_keys >= st->n_keys_alloc) {
+	st->n_keys_alloc += 10;
+	st->module_info.keywords = (const char **) G_realloc(st->module_info.keywords,
+							     st->n_keys_alloc * sizeof(char *));
+    }
+    
+    st->module_info.keywords[st->n_keys++] = G_store(keyword);
+}
+
+void print_keywords(FILE *fd, void (*format)(FILE *, const char *))
+{
+    int i;
+    
+    for(i = 0; i < st->n_keys; i++) {
+	if (!format) {
+	    fprintf(fd, "%s", st->module_info.keywords[i]);
+	}
+	else {
+	    format(fd, st->module_info.keywords[i]);
+	}
+	if (i < st->n_keys - 1)
+	    fprintf(fd, ", ");
+    }
+    
+    fflush(fd);
+}
+
+/*!
+  \brief Set keywords from the string
+
+  \param keywords keywords separated by commas
+*/
+void G_set_keywords(const char *keywords)
+{
+    st->module_info.keywords = (const char**)G_tokenize(keywords, ",");
+    st->n_keys = st->n_keys_alloc = G_number_of_tokens((char **)st->module_info.keywords);
 }

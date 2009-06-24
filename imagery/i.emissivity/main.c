@@ -41,7 +41,9 @@ int main(int argc, char *argv[])
     /************************************/ 
     G_gisinit(argv[0]);
     module = G_define_module();
-    module->keywords = _("emissivity, land flux, energy balance");
+    G_add_keyword(_("emissivity"));
+    G_add_keyword(_("land flux"));
+    G_add_keyword(_("energy balance"));
     module->description =
 	_("Emissivity from NDVI, generic method for spares land.");
     

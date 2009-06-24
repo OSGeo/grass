@@ -150,7 +150,7 @@ int r_slope_aspect(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("raster");
+    G_add_keyword(_("raster"));
     module->description =
 	_("Generates raster map layers of slope, aspect, curvatures and "
 	  "partial derivatives from a raster map layer of true elevation "

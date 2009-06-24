@@ -81,7 +81,8 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("vector, statistics");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("statistics"));
     module->description = _("Randomly generate a 2D/3D vector points map.");
 
     parm.output = G_define_standard_option(G_OPT_V_OUTPUT);

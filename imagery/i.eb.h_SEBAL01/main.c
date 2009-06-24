@@ -82,7 +82,11 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     module->description = _("Computes sensible Heat Flux iteration SEBAL 01");
-    module->keywords = _("imagery, evaporative fraction, soil moisture, energy balance, SEBAL");
+    G_add_keyword(_("imagery"));
+    G_add_keyword(_("evaporative fraction"));
+    G_add_keyword(_("soil moisture"));
+    G_add_keyword(_("energy balance"));
+    G_add_keyword(_("SEBAL"));
 
     /* Define different options */
     input_Rn = G_define_standard_option(G_OPT_R_INPUT);

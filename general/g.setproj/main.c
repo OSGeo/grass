@@ -75,7 +75,8 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("general, projection");
+    G_add_keyword(_("general"));
+    G_add_keyword(_("projection"));
     module->description =
 	_("Interactively reset the location's projection settings.");
 

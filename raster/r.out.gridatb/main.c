@@ -45,7 +45,7 @@ int main(int argc, char **argv)
 
     /* Set description */
     module = G_define_module();
-    module->keywords = _("raster");
+    G_add_keyword(_("raster"));
     module->description =
 	_("Exports GRASS raster map to GRIDATB.FOR map file (TOPMODEL)");
 

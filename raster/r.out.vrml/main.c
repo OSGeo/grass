@@ -44,7 +44,9 @@ int main(int argc, char *argv[])
     shh = color_ok = 0;
 
     module = G_define_module();
-    module->keywords = _("raster, export, VRML");
+    G_add_keyword(_("raster"));
+    G_add_keyword(_("export"));
+    G_add_keyword(_("VRML"));
     module->description =
 	_("Export a raster map to the Virtual Reality Modeling Language (VRML)");
 

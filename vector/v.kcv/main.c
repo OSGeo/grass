@@ -72,7 +72,8 @@ int main(int argc, char *argv[])
     dbString sql;
 
     module = G_define_module();
-    module->keywords = _("vector, statistics");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("statistics"));
     module->description =
 	_("Randomly partition points into test/train sets.");
 

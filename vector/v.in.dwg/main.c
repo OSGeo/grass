@@ -79,7 +79,8 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("vector, import");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("import"));
     module->description = _("Converts DWG/DXF to GRASS vector map");
 
     in_opt = G_define_standard_option(G_OPT_F_INPUT);

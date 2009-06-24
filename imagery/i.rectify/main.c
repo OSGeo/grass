@@ -84,7 +84,8 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("imagery, rectify");
+    G_add_keyword(_("imagery"));
+    G_add_keyword(_("rectify"));
     module->description =
 	_("Rectifies an image by computing a coordinate "
 	  "transformation for each pixel in the image based on the "

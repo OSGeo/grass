@@ -61,7 +61,9 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("vector, metadata, history");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("metadata"));
+    G_add_keyword(_("history"));
     module->description =
 	_("Outputs basic information about a user-specified vector map.");
 

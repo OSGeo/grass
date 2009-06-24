@@ -127,7 +127,8 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("raster, series");
+    G_add_keyword(_("raster"));
+    G_add_keyword(_("series"));
     module->description =
 	_("Makes each output cell value a "
 	  "function of the values assigned to the corresponding cells "

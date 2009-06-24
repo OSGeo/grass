@@ -418,7 +418,7 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = "raster";
+    G_add_keyword(_("raster"));
     module->description =
 	_("Construction of slope curves (flowlines), flowpath lengths, "
 	  "and flowline densities (upslope areas) from a raster "

@@ -33,7 +33,9 @@ int main(int argc, char *argv[])
     struct GModule *module;
 
     module = G_define_module();
-    module->keywords = _("vector, import, conversion");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("import"));
+    G_add_keyword(_("conversion"));
     module->description = _("Imports older versions of GRASS vector maps.");
 
     /* input vector map */

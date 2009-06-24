@@ -59,7 +59,8 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("raster, export");
+    G_add_keyword(_("raster"));
+    G_add_keyword(_("export"));
     module->description = _("Exports a GRASS raster to a binary MAT-File.");
 
     /* Define the different options */

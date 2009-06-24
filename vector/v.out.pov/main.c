@@ -39,7 +39,8 @@ int main(int argc, char *argv[])
 
     /* Module options */
     module = G_define_module();
-    module->keywords = _("vector, export");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("export"));
     module->description =
 	"Converts to POV-Ray format, GRASS x,y,z -> POV-Ray x,z,y";
 

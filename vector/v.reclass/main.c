@@ -61,7 +61,9 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("vector, reclass, attributes");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("reclass"));
+    G_add_keyword(_("attributes"));
     module->description =
 	_("Changes vector category values for an existing vector map "
 	  "according to results of SQL queries or a value in attribute table column.");

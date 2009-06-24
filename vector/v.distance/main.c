@@ -111,7 +111,9 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("vector, database, attribute table");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("database"));
+    G_add_keyword(_("attribute table"));
     module->description =
 	_("Finds the nearest element in vector map 'to' for elements in vector map 'from'.");
 

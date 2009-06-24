@@ -50,7 +50,8 @@ int main(int argc, char **argv)
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("vector, querying");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("querying"));
     module->description = _("Queries a vector map layer at given locations.");
 
     opt1 = G_define_standard_option(G_OPT_V_MAP);

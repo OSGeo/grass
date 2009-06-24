@@ -42,7 +42,8 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("vector, export");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("export"));
     module->description =
 	_("Converts a GRASS binary vector map to a GRASS ASCII vector map.");
 

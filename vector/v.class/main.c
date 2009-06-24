@@ -41,7 +41,8 @@ int main(int argc, char *argv[])
     struct GASTATS stats;
 
     module = G_define_module();
-    module->keywords = _("vector, statistics");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("statistics"));
     module->description =
 	_("Classifies attribute data, e.g. for thematic mapping");
 

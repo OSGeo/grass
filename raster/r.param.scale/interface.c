@@ -51,7 +51,8 @@ void interface(int argc, char **argv)
     /*--------------------------------------------------------------------------*/
 
     module = G_define_module();
-    module->keywords = _("raster, geomorphology");
+    G_add_keyword(_("raster"));
+    G_add_keyword(_("geomorphology"));
     module->label = _("Extracts terrain parameters from a DEM.");
     module->description = _("Uses a multi-scale approach"
 			    " by taking fitting quadratic parameters to any size window (via least squares).");

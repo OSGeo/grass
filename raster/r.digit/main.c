@@ -41,7 +41,7 @@ int main(int argc, char **argv)
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("raster");
+    G_add_keyword(_("raster"));
     module->description =
 	_("Interactive tool used to draw and save vector features on a graphics"
 	 " monitor using a pointing device (mouse) and save to a raster map.");

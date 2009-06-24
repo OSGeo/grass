@@ -64,7 +64,8 @@ int main(int argc, char **argv)
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("vector, statistics");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("statistics"));
     module->description = _("Indices for quadrat counts of sites lists.");
 
     parm.input = G_define_option();

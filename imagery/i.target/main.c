@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("imagery");
+    G_add_keyword(_("imagery"));
     module->description =
 	_("Targets an imagery group to a GRASS location and mapset.");
 

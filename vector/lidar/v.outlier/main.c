@@ -65,7 +65,8 @@ int main(int argc, char *argv[])
     /*------------------------------------------------------------------------------------------*/
     /* Options' declaration */
     module = G_define_module();
-    module->keywords = _("vector, statistics");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("statistics"));
     module->description = _("Removes outliers from vector point data.");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);

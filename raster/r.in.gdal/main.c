@@ -77,7 +77,8 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("raster, import");
+    G_add_keyword(_("raster"));
+    G_add_keyword(_("import"));
     module->description =
 	_("Import GDAL supported raster file into a binary raster map layer.");
 

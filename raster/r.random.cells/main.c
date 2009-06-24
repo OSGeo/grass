@@ -42,7 +42,9 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
     /* Set description */
     module = G_define_module();
-    module->keywords = _("raster, random, cell");
+    G_add_keyword(_("raster"));
+    G_add_keyword(_("random"));
+    G_add_keyword(_("cell"));
     module->description =
 	_("Generates random cell values with spatial dependence.");
 

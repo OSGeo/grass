@@ -81,7 +81,10 @@ int main(int argc, char *argv[])
     /************************************/ 
     G_gisinit(argv[0]);
     module = G_define_module();
-    module->keywords = _("QC, Quality Control, surface reflectance, Modis");
+    G_add_keyword(_("QC"));
+    G_add_keyword(_("Quality Control"));
+    G_add_keyword(_("surface reflectance"));
+    G_add_keyword(_("Modis"));
     module->description =
 	_("Extract quality control parameters from Modis QC layers");
 

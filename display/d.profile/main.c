@@ -187,7 +187,7 @@ int main(int argc, char **argv)
 
     /* Set description */
     module = G_define_module();
-    module->keywords = _("display");
+    G_add_keyword(_("display"));
     module->description = _("Plots profile of a transect.");
 
     /* set up command line */

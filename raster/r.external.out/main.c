@@ -179,7 +179,8 @@ int main(int argc, char *argv[])
     GDALAllRegister();
 
     module = G_define_module();
-    module->keywords = _("raster, import");
+    G_add_keyword(_("raster"));
+    G_add_keyword(_("import"));
     module->description =
 	_("Link GDAL supported raster file to a binary raster map layer.");
 

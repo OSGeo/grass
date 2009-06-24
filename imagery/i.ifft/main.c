@@ -74,7 +74,8 @@ int main(int argc, char *argv[])
 
     /* Set description */
     module = G_define_module();
-    module->keywords = _("imagery, FFT");
+    G_add_keyword(_("imagery"));
+    G_add_keyword(_("FFT"));
     module->description =
 	_("Inverse Fast Fourier Transform (IFFT) for image processing.");
 

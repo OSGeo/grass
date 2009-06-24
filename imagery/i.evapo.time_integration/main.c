@@ -76,7 +76,10 @@ int main(int argc, char *argv[])
     module->description =_("Computes temporal integration of satellite "
 			   "ET actual (ETa) following the daily ET reference "
 			   "(ETo) from meteorological station(s)");
-    module->keywords = _("imagery, evapotranspiration, temporal, integration");
+    G_add_keyword(_("imagery"));
+    G_add_keyword(_("evapotranspiration"));
+    G_add_keyword(_("temporal"));
+    G_add_keyword(_("integration"));
 
     /* Define the different options */
     input = G_define_standard_option(G_OPT_R_INPUTS);

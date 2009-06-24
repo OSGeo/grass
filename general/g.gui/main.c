@@ -33,7 +33,8 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("general, gui");
+    G_add_keyword(_("general"));
+    G_add_keyword(_("gui"));
     module->description =
 	_("Launches a GRASS graphical user interface (GUI) session.");
 

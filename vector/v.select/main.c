@@ -49,7 +49,8 @@ int main(int argc, char *argv[])
     pre[1] = "b";
 
     module = G_define_module();
-    module->keywords = _("vector, spatial query");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("spatial query"));
     module->description =
 	_("Selects features from vector map (A) by features from other vector map (B).");
 

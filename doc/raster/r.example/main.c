@@ -82,7 +82,9 @@ int main(int argc, char *argv[])
 
     /* initialize module */
     module = G_define_module();
-    module->keywords = _("raster, keyword2, keyword3");
+    G_add_keyword(_("raster"));
+    G_add_keyword(_("keyword2"));
+    G_add_keyword(_("keyword3"));
     module->description = _("My first raster module");
 
     /* Define the different options as defined in gis.h */

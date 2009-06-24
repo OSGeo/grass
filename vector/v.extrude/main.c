@@ -65,7 +65,9 @@ int main(int argc, char *argv[])
     char *comment;
 
     module = G_define_module();
-    module->keywords = _("vector, geometry, 3D");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("geometry"));
+    G_add_keyword(_("3D"));
     module->description =
 	_("Extrudes flat vector object to 3D with defined height.");
 

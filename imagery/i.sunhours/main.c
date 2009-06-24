@@ -44,7 +44,9 @@ int main(int argc, char *argv[])
     /************************************/ 
     G_gisinit(argv[0]);
     module = G_define_module();
-    module->keywords = _("sunshine, hours, daytime");
+    G_add_keyword(_("sunshine"));
+    G_add_keyword(_("hours"));
+    G_add_keyword(_("daytime"));
     module->description = _("creates a sunshine hours map");
     
     /* Define the different options */ 

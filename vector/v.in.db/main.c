@@ -49,7 +49,10 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("vector, import, database, points");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("import"));
+    G_add_keyword(_("database"));
+    G_add_keyword(_("points"));
     module->description =
 	_("Creates new vector (points) map from database table containing coordinates.");
 

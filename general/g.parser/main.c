@@ -102,7 +102,7 @@ static void parse_module(struct context *ctx, const char *cmd,
     }
 
     if (strcasecmp(cmd, "keywords") == 0) {
-	ctx->module->keywords = translate(strdup(arg));
+	G_set_keywords(translate(strdup(arg)));
 	return;
     }
 

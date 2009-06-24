@@ -46,7 +46,10 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("imagery, soil heat flux, energy balance, SEBAL");
+    G_add_keyword(_("imagery"));
+    G_add_keyword(_("soil heat flux"));
+    G_add_keyword(_("energy balance"));
+    G_add_keyword(_("SEBAL"));
     module->description = _("Soil heat flux approximation (Bastiaanssen, 1995)");
     
     /* Define the different options */ 

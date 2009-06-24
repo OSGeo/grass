@@ -60,7 +60,8 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("vector, projection");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("projection"));
     module->description = _("Allows projection conversion of vector maps.");
 
     /* set up the options and flags for the command line parser */

@@ -67,7 +67,8 @@ int main(int argc, char **argv)
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("raster");
+    G_add_keyword(_("raster"));
+    G_add_keyword(_("metadata"));
     module->description =
 	_("Output basic information about a raster map layer.");
 

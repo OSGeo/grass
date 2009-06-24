@@ -84,7 +84,9 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("imagery, albedo, surface reflectance");
+    G_add_keyword(_("imagery"));
+    G_add_keyword(_("albedo"));
+    G_add_keyword(_("surface reflectance"));
     module->description = _("Broad Band Albedo from Surface Reflectance.");
 
     /* Define the different options */

@@ -88,7 +88,8 @@ int main(int argc, char **argv)
 
     /* set up the options and flags for the command line parser */
     module = G_define_module();
-    module->keywords = _("vector, extract");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("extract"));
     module->description =
 	_("Selects vector objects from an existing vector map and "
 	  "creates a new map containing only the selected objects.");

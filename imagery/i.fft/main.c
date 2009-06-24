@@ -75,7 +75,8 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("imagery, FFT");
+    G_add_keyword(_("imagery"));
+    G_add_keyword(_("FFT"));
     module->description =
 	_("Fast Fourier Transform (FFT) for image processing.");
 

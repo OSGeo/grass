@@ -84,7 +84,8 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("vector, interpolation");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("interpolation"));
     module->description =
 	_("Surface interpolation from vector point data by Inverse "
 	  "Distance Squared Weighting.");

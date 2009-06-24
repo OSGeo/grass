@@ -33,7 +33,9 @@ int main(int argc, char **argv)
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("vector, transformation, 3D");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("transformation"));
+    G_add_keyword(_("3D"));
     module->description =
 	_("Performs transformation of 2D vector features to 3D.");
 

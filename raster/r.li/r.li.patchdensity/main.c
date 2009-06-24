@@ -31,7 +31,9 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->description =
 	_("Calculates patch density index on a raster map, using a 4 neighbour algorithm");
-    module->keywords = _("raster, landscape structure analysis, patch index");
+    G_add_keyword(_("raster"));
+    G_add_keyword(_("landscape structure analysis"));
+    G_add_keyword(_("patch index"));
 
     /* define options */
 

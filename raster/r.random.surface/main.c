@@ -54,7 +54,9 @@ int main(int argc, char **argv)
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("raster, random, surface");
+    G_add_keyword(_("raster"));
+    G_add_keyword(_("random"));
+    G_add_keyword(_("surface"));
     module->description =
 	_("Generates random surface(s) with spatial dependence.");
 

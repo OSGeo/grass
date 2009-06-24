@@ -43,7 +43,8 @@ int main(int argc, char *argv[])
 #endif
 
     module = G_define_module();
-    module->keywords = _("vector, geometry");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("geometry"));
     module->description = _("Change the type of geometry elements.");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);

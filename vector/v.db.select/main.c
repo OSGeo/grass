@@ -48,7 +48,9 @@ int main(int argc, char **argv)
     int i, line, area, init_box, cat;
 
     module = G_define_module();
-    module->keywords = _("vector, database, attribute table");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("database"));
+    G_add_keyword(_("attribute table"));
     module->description = _("Prints vector map attributes.");
 
     map_opt = G_define_standard_option(G_OPT_V_MAP);

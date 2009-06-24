@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
 
     /* Set description */
     module = G_define_module();
-    module->keywords = _("raster");
+    G_add_keyword(_("raster"));
     module->label =
 	_("Simulates elliptically anisotropic spread on a graphics window and "
 	 "generates a raster map of the cumulative time of spread, "

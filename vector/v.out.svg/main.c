@@ -69,7 +69,8 @@ int main(int argc, char *argv[])
     /* parse command-line */
     module = G_define_module();
     module->description = _("Exports a GRASS vector map to SVG.");
-    module->keywords = _("vector, export");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("export"));
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
 

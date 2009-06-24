@@ -31,7 +31,9 @@ int main(int argc, char **argv)
 
     /* Set description */
     module = G_define_module();
-    module->keywords = _("database, attribute table, SQL");
+    G_add_keyword(_("database"));
+    G_add_keyword(_("attribute table"));
+    G_add_keyword(_("SQL"));
     module->label = _("Copy a table.");
     module->description =
 	_("Either 'from_table' (optionally with 'where') can be used "

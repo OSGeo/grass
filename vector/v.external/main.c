@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
 	    sprintf(buf, "%s,%s", buf, OGR_Dr_GetName(Ogr_driver));
     }
     module = G_define_module();
-    module->keywords = _("vector");
+    G_add_keyword(_("vector"));
     module->label =
 	_("Creates a new vector as a read-only link to OGR layer.");
     module->description = G_store(buf);

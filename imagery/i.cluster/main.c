@@ -72,7 +72,9 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("imagery, classification, signatures");
+    G_add_keyword(_("imagery"));
+    G_add_keyword(_("classification"));
+    G_add_keyword(_("signatures"));
     module->label =
 	_("Generates spectral signatures for land cover "
 	  "types in an image using a clustering algorithm.");

@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
     struct Flag *n_flag;
 
     module = G_define_module();
-    module->keywords = _("general");
+    G_add_keyword(_("general"));
     module->description =
 	_("Searches for GRASS data base files "
 	  "and sets variables for the shell.");

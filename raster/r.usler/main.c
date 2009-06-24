@@ -48,7 +48,10 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("raster, rainfall, erosion, USLE");
+    G_add_keyword(_("raster"));
+    G_add_keyword(_("rainfall"));
+    G_add_keyword(_("erosion"));
+    G_add_keyword(_("USLE"));
     module->description = _("Computes USLE R factor, Rainfall erosivity index.");
     
     input2 = G_define_standard_option(G_OPT_R_INPUT);

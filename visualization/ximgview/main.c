@@ -287,7 +287,7 @@ int main(int argc, char **argv)
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("display");
+    G_add_keyword(_("display"));
     module->description = _("View BMP images from the PNG driver.");
 
     opt.image = G_define_option();
