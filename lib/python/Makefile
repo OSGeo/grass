@@ -12,7 +12,7 @@ MODULES = core db raster vector
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
 
 default: $(DSTDIR)
-	$(MAKE) $(PYFILES) $(DSTDIR)/README.txt
+	$(MAKE) $(PYFILES)
 
 $(PYDIR):
 	test -d $@ || $(MKDIR) -p $@
