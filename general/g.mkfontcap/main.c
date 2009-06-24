@@ -24,6 +24,7 @@
 
 #include <grass/gis.h>
 #include <grass/fontcap.h>
+#include <grass/glocale.h>
 
 #include "local_proto.h"
 
@@ -66,29 +67,29 @@ int main(int argc, char *argv[])
     G_no_gisinit();
 
     module = G_define_module();
-    module->keywords = "general";
+    G_add_keyword(_("general"));
     module->description =
-	"Generates the font configuration file by scanning various directories "
-	"for fonts";
+	_("Generates the font configuration file by scanning various directories "
+	  "for fonts");
 
     overwrite = G_define_flag();
     overwrite->key = 'o';
     overwrite->description =
-	"Overwrite font configuration file if already existing";
+	_("Overwrite font configuration file if already existing");
 
     tostdout = G_define_flag();
     tostdout->key = 's';
     tostdout->description =
-	"Write font configuration file to standard output instead of "
-	"$GISBASE/etc";
+	_("Write font configuration file to standard output instead of "
+	  "$GISBASE/etc");
 
     extradirs = G_define_option();
     extradirs->key = "extradirs";
     extradirs->type = TYPE_STRING;
     extradirs->required = NO;
     extradirs->description =
-	"Comma-separated list of extra directories to scan for "
-	"Freetype-compatible fonts as well as the defaults (see documentation)";
+	_("Comma-separated list of extra directories to scan for "
+	  "Freetype-compatible fonts as well as the defaults (see documentation)");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -104,9 +105,9 @@ int main(int argc, char *argv[])
 
 	if (!stat(fontcapfile, &status)) {	/* File exists? */
 	    if (!overwrite->answer)
-		G_fatal_error
-		    ("Fontcap file %s already exists; use -%c flag if you "
-		     "wish to overwrite it", fontcapfile, overwrite->key);
+		G_fatal_error(_("Fontcap file %s already exists; use -%c flag if you "
+				"wish to overwrite it"),
+			      fontcapfile, overwrite->key);
 	}
     }
 
@@ -116,7 +117,8 @@ int main(int argc, char *argv[])
     /* Prepare list of directories to search */
     if (extradirs->answer) {
 #ifndef HAVE_FT2BUILD_H
-	G_warning("This GRASS installation was compiled without Freetype support, extradirs parameter ignored");
+	G_warning(_("This GRASS installation was compiled without "
+		    "Freetype support, extradirs parameter ignored"));
 #endif
 	char *str = G_store(extradirs->answer);
 
@@ -142,7 +144,7 @@ int main(int argc, char *argv[])
     else {
 	outstream = fopen(fontcapfile, "w");
 	if (outstream == NULL)
-	    G_fatal_error("Cannot open %s for writing: %s", fontcapfile,
+	    G_fatal_error(_("Cannot open %s for writing: %s"), fontcapfile,
 			  strerror(errno));
     }
 

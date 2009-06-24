@@ -46,7 +46,9 @@ int main(int argc, char **argv)
     /* set up the options and flags for the command line parser */
 
     module = G_define_module();
-    module->keywords = _("vector, database, attribute table");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("database"));
+    G_add_keyword(_("attribute table"));
     module->description =
 	_("Prints/sets DB connection for a vector map to attribute table.");
 

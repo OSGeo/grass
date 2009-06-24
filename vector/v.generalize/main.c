@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
 
     /* initialize module */
     module = G_define_module();
-    module->keywords =
+    G_add_keyword(_(""));
 	_("vector, generalization, simplification, smoothing, displacement, network generalization");
     module->description = _("Vector based generalization.");
 

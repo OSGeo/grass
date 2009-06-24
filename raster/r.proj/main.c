@@ -135,7 +135,8 @@ int main(int argc, char **argv)
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("raster, projection");
+    G_add_keyword(_("raster"));
+    G_add_keyword(_("projection"));
     module->description =
 	_("Re-projects a raster map from one location to the current location.");
 

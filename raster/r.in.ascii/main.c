@@ -66,7 +66,9 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("raster, import, conversion");
+    G_add_keyword(_("raster"));
+    G_add_keyword(_("import"));
+    G_add_keyword(_("conversion"));
     module->description =
 	_("Converts ASCII raster file to binary raster map layer.");
 

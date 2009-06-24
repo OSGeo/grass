@@ -43,7 +43,7 @@ int main(int argc, char **argv)
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("display");
+    G_add_keyword(_("display"));
     module->description =
 	_("Measures the lengths and areas of features drawn "
 	  "by the user in the active display frame on the "

@@ -64,7 +64,8 @@ int main(int argc, char *argv[])
     int nfreps, rtype, fld;
 
     module = G_define_module();
-    module->keywords = _("vector, category");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("category"));
     module->description =
 	_("Attach, delete or report vector categories to map geometry.");
 

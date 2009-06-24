@@ -50,7 +50,10 @@ int main(int argc, char *argv[])
     /************************************/ 
     G_gisinit(argv[0]);
     module = G_define_module();
-    module->keywords = _("raster, soil, erosion, USLE");
+    G_add_keyword(_("raster"));
+    G_add_keyword(_("soil"));
+    G_add_keyword(_("erosion"));
+    G_add_keyword(_("USLE"));
     module->description = _("USLE Soil Erodibility Factor (K)");
     
     /* Define the different options */ 

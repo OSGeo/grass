@@ -81,7 +81,8 @@ int main(int argc, char **argv)
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("display, cartography");
+    G_add_keyword(_("display"));
+    G_add_keyword(_("cartography"));
     module->description =
 	_("Displays a legend for a raster map in the active frame "
 	  "of the graphics monitor.");

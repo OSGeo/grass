@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("raster");
+    G_add_keyword(_("raster"));
     module->description =
 	_("GRASS module to produce a raster map layer of "
 	  "gaussian deviates whose mean and standard deviation "

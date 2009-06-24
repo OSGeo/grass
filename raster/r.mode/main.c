@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("raster");
+    G_add_keyword(_("raster"));
     module->description =
 	_("Finds the mode of values in a cover map within "
 	  "areas assigned the same category value in a "

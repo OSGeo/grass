@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     module->description = _("Watershed basin creation program.");
-    module->keywords = _("raster");
+    G_add_keyword(_("raster"));
     
     opt1 = G_define_option();
     opt1->key = "drainage";

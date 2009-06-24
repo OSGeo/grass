@@ -142,7 +142,8 @@ int main(int argc, char *argv[])
 
 
     module = G_define_module();
-    module->keywords = _("vector, buffer");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("buffer"));
     module->description =
 	_("Creates a buffer around features of given type (areas must contain centroid).");
 

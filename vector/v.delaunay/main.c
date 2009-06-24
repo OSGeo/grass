@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
     /* GRASS related manipulations */
     G_gisinit(argv[0]);
     module = G_define_module();
-    module->keywords = _("vector");
+    G_add_keyword(_("vector"));
     module->description = _("Creates a Delaunay triangulation from an input "
 			    "vector map containing points or centroids.");
 

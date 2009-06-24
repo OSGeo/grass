@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
     G_no_gisinit();
 
     module = G_define_module();
-    module->keywords = "general";
+    G_add_keyword(_("general"));
     module->label =
 	_("Internal GRASS utility for converting directory separator characters.");
     module->description =

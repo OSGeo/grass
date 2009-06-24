@@ -43,7 +43,10 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("visualization, raster, vector, raster3d");
+    G_add_keyword(_("visualization"));
+    G_add_keyword(_("raster"));
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("raster3d"));
     module->description = _("Experimental NVIZ CLI prototype.");
 
     params = (struct GParams *)G_malloc(sizeof(struct GParams));

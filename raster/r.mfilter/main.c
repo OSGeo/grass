@@ -53,7 +53,8 @@ int main(int argc, char **argv)
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("raster, map algebra");
+    G_add_keyword(_("raster"));
+    G_add_keyword(_("map algebra"));
     module->description = _("Raster map matrix filter.");
 
     /* Define the different options */

@@ -42,7 +42,9 @@ int main(int argc, char *argv[])
 
     /* initialize module */
     module = G_define_module();
-    module->keywords = _("vector, path, visibility");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("path"));
+    G_add_keyword(_("visibility"));
     module->description = _("Visibility graph construction.");
 
     /* define the arguments needed */

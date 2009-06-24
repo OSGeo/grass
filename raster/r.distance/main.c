@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
 
     /* Set description */
     module = G_define_module();
-    module->keywords = _("raster");
+    G_add_keyword(_("raster"));
     module->description =
 	_("Locates the closest points between objects in two raster maps.");
 

@@ -61,7 +61,8 @@ int main(int argc, char *argv[])
     int perc;
 
     module = G_define_module();
-    module->keywords = _("vector, statistics");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("statistics"));
     module->description =
 	_("Calculates univariate statistics for attribute. Variance and standard "
 	 "deviation is calculated only for points if specified.");

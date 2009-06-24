@@ -82,7 +82,8 @@ int main(int argc, char *argv[])
 
     /* Module options */
     module = G_define_module();
-    module->keywords = _("vector, export");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("export"));
     module->description =
 	_("Converts to one of the supported OGR vector formats.");
 

@@ -42,7 +42,9 @@ int main(int argc, char *argv[])
     dbCatValArray cvarr;
 
     module = G_define_module();
-    module->keywords = _("vector, volume, conversion");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("volume"));
+    G_add_keyword(_("conversion"));
     module->description = _("Converts a binary GRASS vector map "
 			    "(only points) layer into a 3D GRASS raster map layer.");
 

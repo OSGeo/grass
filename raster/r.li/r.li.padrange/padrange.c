@@ -38,7 +38,9 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->description =
 	_("Calculates range of patch area size on a raster map");
-    module->keywords = _("raster, landscape structure analysis, patch index");
+    G_add_keyword(_("raster"));
+    G_add_keyword(_("landscape structure analysis"));
+    G_add_keyword(_("patch index"));
 
     /* define options */
     raster = G_define_standard_option(G_OPT_R_MAP);

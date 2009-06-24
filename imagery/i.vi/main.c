@@ -73,7 +73,9 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("imagery, vegetation index, biophysical parameters");
+    G_add_keyword(_("imagery"));
+    G_add_keyword(_("vegetation index"));
+    G_add_keyword(_("biophysical parameters"));
     module->label =
 	_("Calculates different types of vegetation indices.");
     module->description = _("Uses red and nir bands mostly, "

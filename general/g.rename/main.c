@@ -40,7 +40,8 @@ int main(int argc, char *argv[])
     read_list(0);
 
     module = G_define_module();
-    module->keywords = _("general, map management");
+    G_add_keyword(_("general"));
+    G_add_keyword(_("map management"));
     module->description =
 	_("Renames data base element files in the user's current mapset.");
 

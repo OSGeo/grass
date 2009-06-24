@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
 
     /* Set description */
     module = G_define_module();
-    module->keywords = _("raster");
+    G_add_keyword(_("raster"));
     module->description =
 	_("Outputs the raster map layer values lying on user-defined line(s).");
 

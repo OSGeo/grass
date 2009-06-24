@@ -105,7 +105,8 @@ int main(int argc, char **argv)
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("vector, kernel density");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("kernel density"));
     module->description =
 	_("Generates a raster density map from vector points data using a moving 2D isotropic Gaussian kernel or "
 	 "optionally generates a vector density map on vector network with a 1D kernel.");

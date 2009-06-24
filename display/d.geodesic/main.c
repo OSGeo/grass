@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("display");
+    G_add_keyword(_("display"));
     module->description =
 	_("Displays a geodesic line, tracing the shortest distance "
 	"between two geographic points along a great circle, in "

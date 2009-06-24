@@ -36,7 +36,8 @@ int main(int argc, char *argv[])
 
     /* initialize module */
     module = G_define_module();
-    module->keywords = _("vector, metadata");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("metadata"));
     module->description = _("Updates vector map metadata.");
 
     /* Define the different options as defined in gis.h */

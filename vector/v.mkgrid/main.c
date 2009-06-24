@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
 
     /* Set description */
     module = G_define_module();
-    module->keywords = _("vector");
+    G_add_keyword(_("vector"));
     module->description =
 	_("Creates a GRASS vector map of a user-defined grid.");
 

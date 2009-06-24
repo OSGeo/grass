@@ -54,7 +54,8 @@ int main(int argc, char **argv)
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("display, cartography");
+    G_add_keyword(_("display"));
+    G_add_keyword(_("cartography"));
     module->description =
 	_("Program for generating and displaying simple graphics on the "
 	  "display monitor.");

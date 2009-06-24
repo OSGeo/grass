@@ -45,7 +45,8 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("vector, import");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("import"));
     module->description =
 	_("Creates a vector map from ASCII points file or ASCII vector file.");
 

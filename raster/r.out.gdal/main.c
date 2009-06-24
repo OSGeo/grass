@@ -126,7 +126,8 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->description =
 	_("Exports GRASS raster maps into GDAL supported formats.");
-    module->keywords = _("raster, export");
+    G_add_keyword(_("raster"));
+    G_add_keyword(_("export"));
 
     flag_l = G_define_flag();
     flag_l->key = 'l';

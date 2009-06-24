@@ -49,7 +49,8 @@ int main(int argc, char **argv)
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("vector, geometry");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("geometry"));
     module->description =
 	_("Creates points/segments from input vector lines and positions.");
 

@@ -45,7 +45,10 @@ int main(int argc, char *argv[])
     /************************************/ 
     G_gisinit(argv[0]);
     module = G_define_module();
-    module->keywords = _("imagery, biomass, fpar, yield");
+    G_add_keyword(_("imagery"));
+    G_add_keyword(_("biomass"));
+    G_add_keyword(_("fpar"));
+    G_add_keyword(_("yield"));
     module->description =
 	_("Computes biomass growth, precursor of crop yield calculation");
     

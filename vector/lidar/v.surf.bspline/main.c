@@ -79,7 +79,8 @@ int main(int argc, char *argv[])
     /*-------------------------------------------------------------------------------------------*/
     /* Options' declaration */
     module = G_define_module(); {
-	module->keywords = _("vector, interpolation");
+G_add_keyword(_("vector"));
+G_add_keyword(_("interpolation"));
 	module->description =
 	    _("Bicubic or bilinear spline interpolation with Tykhonov regularization.");
     }

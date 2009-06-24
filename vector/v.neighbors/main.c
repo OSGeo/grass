@@ -45,7 +45,9 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("vector, raster, aggregation");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("raster"));
+    G_add_keyword(_("aggregation"));
     module->description = "Makes each cell value a "
 	"function of the attribute values assigned to the vector points or centroids "
 	"around it, and stores new cell values in an output raster map layer.";

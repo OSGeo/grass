@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
     choice = (struct CHOICE *)G_calloc(1, sizeof(struct CHOICE));
 
     module = G_define_module();
-    module->keywords = _("raster");
+    G_add_keyword(_("raster"));
     module->description =
 	_("Displays the boundary of each r.le patch and shows how the boundary "
 	 "is traced, displays the attribute, size, perimeter and shape "

@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
 
     /* Set description */
     module = G_define_module();
-    module->keywords = _("raster");
+    G_add_keyword(_("raster"));
     module->description =
 	_("Rescales histogram equalized the range of category "
 	  "values in a raster map layer.");

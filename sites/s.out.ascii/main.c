@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("sites");
+    G_add_keyword(_("sites"));
     module->description =
 	"Converts a GRASS site list file into an ASCII listing of "
 	"site locations and their descriptions.";

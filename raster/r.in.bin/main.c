@@ -120,7 +120,8 @@ int main(int argc, char *argv[])
 
     /* Set description */
     module = G_define_module();
-    module->keywords = _("raster, import");
+    G_add_keyword(_("raster"));
+    G_add_keyword(_("import"));
     module->description =
 	_("Import a binary raster file into a GRASS raster map layer.");
 

@@ -83,7 +83,7 @@ int main(int argc, char **argv)
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("vector");
+    G_add_keyword(_("vector"));
     module->description =
 	_("Samples a raster map at vector point locations.");
 

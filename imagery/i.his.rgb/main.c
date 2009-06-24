@@ -43,7 +43,10 @@ int main(int argc, char **argv)
 
     /* Set description */
     module = G_define_module();
-    module->keywords = _("imagery, color transformation, RGB, HIS");
+    G_add_keyword(_("imagery"));
+    G_add_keyword(_("color transformation"));
+    G_add_keyword(_("RGB"));
+    G_add_keyword(_("HIS"));
     module->description =
 	_("Transforms raster maps from HIS (Hue-Intensity-Saturation) color space to "
 	  "RGB (Red-Green-Blue) color space.");

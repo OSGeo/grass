@@ -83,7 +83,10 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("raster, DEM, contours, vector");
+    G_add_keyword(_("raster"));
+    G_add_keyword(_("DEM"));
+    G_add_keyword(_("contours"));
+    G_add_keyword(_("vector"));
     module->description = _("Produces a vector map of specified "
 			    "contours from a raster map.");
 

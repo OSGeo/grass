@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
 				 * (to create a new location) when none exists */
 
     module = G_define_module();
-    module->keywords = _("general");
+    G_add_keyword(_("general"));
     module->description =
 #ifdef HAVE_OGR
 	_("Converts co-ordinate system descriptions (i.e. projection "

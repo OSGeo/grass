@@ -80,7 +80,8 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("vector, transformation");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("transformation"));
     module->description =
 	_("Performs an affine transformation (shift, scale and rotate, "
 	  "or GPCs) on vector map.");

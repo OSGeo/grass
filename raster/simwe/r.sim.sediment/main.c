@@ -108,7 +108,10 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("raster, sediment flow, erosion, deposition");
+    G_add_keyword(_("raster"));
+    G_add_keyword(_("sediment flow"));
+    G_add_keyword(_("erosion"));
+    G_add_keyword(_("deposition"));
     module->description =
 	_("Sediment transport and erosion/deposition simulation "
 	  "using path sampling method (SIMWE)");

@@ -56,7 +56,8 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("raster, null data");
+    G_add_keyword(_("raster"));
+    G_add_keyword(_("null data"));
     module->description = _("Manages NULL-values of given raster map.");
 
     parms.map = G_define_standard_option(G_OPT_R_MAP);

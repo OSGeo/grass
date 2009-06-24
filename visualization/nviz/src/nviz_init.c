@@ -50,7 +50,9 @@ static int parse_command(Nv_data * data, Tcl_Interp * interp,	/* Current interpr
      */
 
     module = G_define_module();
-    module->keywords = _("raster, vector, visualization");
+    G_add_keyword(_("raster"));
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("visualization"));
     module->description =
 	_("nviz - Visualization and animation tool for GRASS data.");
 

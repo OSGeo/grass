@@ -42,7 +42,8 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("general, settings");
+    G_add_keyword(_("general"));
+    G_add_keyword(_("settings"));
     module->description = _("Change current mapset.");
 
     mapset_opt = G_define_option();

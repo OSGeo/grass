@@ -222,7 +222,7 @@ int main(int argc, char **argv)
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("miscellaneous");
+    G_add_keyword(_("miscellaneous"));
     module->label = _("A simple utility for converting bearing and "
 		      "distance measurements to coordinates and vice versa.");
     module->description = _("It assumes a cartesian coordinate system");

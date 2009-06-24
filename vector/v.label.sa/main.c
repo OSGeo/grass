@@ -35,7 +35,8 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("vector, paint labels");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("paint labels"));
     module->description =
 	_("Create optimally placed labels for vector map(s)");
 

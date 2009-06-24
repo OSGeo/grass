@@ -284,7 +284,8 @@ int main(int argc, char **argv)
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("vector, geometry");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("geometry"));
     module->description =
 	_("Uses a GRASS vector points map to produce a convex hull vector map.");
 

@@ -35,7 +35,9 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);		/* Link with GRASS interface.      */
 
     module = G_define_module();
-    module->keywords = _("raster, DEM, fractal");
+    G_add_keyword(_("raster"));
+    G_add_keyword(_("DEM"));
+    G_add_keyword(_("fractal"));
     module->description =
 	_("Creates a fractal surface of a given fractal dimension.");
 

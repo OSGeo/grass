@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
 
     /* Set description */
     module = G_define_module();
-    module->keywords = _("raster");
+    G_add_keyword(_("raster"));
     module->description = _("Watershed basin analysis program.");
 
     opt1 = G_define_standard_option(G_OPT_R_ELEV);

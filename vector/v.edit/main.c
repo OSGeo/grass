@@ -51,7 +51,9 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("vector, editing, geometry");
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("editing"));
+    G_add_keyword(_("geometry"));
     module->description = _("Edits a vector map, allows adding, deleting "
 			    "and modifying selected vector features.");
 

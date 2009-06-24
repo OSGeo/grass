@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->description =
 	_("Calculates Simpson's diversity index on a raster map");
-    module->keywords =
+    G_add_keyword(_(""));
 	_("raster, landscape structure analysis, diversity index");
 
     /* define options */

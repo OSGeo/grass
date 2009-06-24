@@ -42,7 +42,7 @@ int main(int argc, char **argv)
 
     /* Set description */
     module = G_define_module();
-    module->keywords = _("raster");
+    G_add_keyword(_("raster"));
     module->description =
 	_("Imports GRIDATB.FOR map file (TOPMODEL) into GRASS raster map");
 

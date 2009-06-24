@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("general");
+    G_add_keyword(_("general"));
     module->description = _("Prints GRASS data base file names.");
 
     /* Define the different options */

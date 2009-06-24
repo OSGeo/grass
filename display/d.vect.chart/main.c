@@ -60,7 +60,8 @@ int main(int argc, char **argv)
     };
 
     module = G_define_module();
-    module->keywords = _("display, cartography");
+    G_add_keyword(_("display"));
+    G_add_keyword(_("cartography"));
     module->description =
 	_("Displays charts of vector data in the active frame "
 	  "on the graphics monitor.");

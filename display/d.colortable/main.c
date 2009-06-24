@@ -60,7 +60,8 @@ int main(int argc, char **argv)
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("display, setup");
+    G_add_keyword(_("display"));
+    G_add_keyword(_("setup"));
     module->description =
 	_("Displays the color table associated with a raster map layer.");
 
