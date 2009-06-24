@@ -1,7 +1,7 @@
 /*!
- * \file gis/quant.c
+ * \file raster/quant.c
  * 
- * \brief GIS Library - Quantization rules.
+ * \brief Raster Library - Quantization rules.
  *
  * The quantization table is stored as a linear array. rules are added
  * starting from index 0. redundant rules are not eliminated. rules

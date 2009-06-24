@@ -1,7 +1,7 @@
 /*!
- * \file gis/history.c
+ * \file raster/history.c
  *
- * \brief GIS Library - History management
+ * \brief Raster Library - History management
  *
  * (C) 2001-2009 GRASS Development Team
  *

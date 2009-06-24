@@ -1,7 +1,7 @@
 /**
- * \file gisinit.c
+ * \file rasterinit.c
  * 
- * \brief GIS Library - Handles program initialization.
+ * \brief Raster Library - Handles program initialization.
  *
  * (C) 2001-2008 by the GRASS Development Team
  *

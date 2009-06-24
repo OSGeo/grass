@@ -1,7 +1,7 @@
 /*!
- * \file gis/color_init.c
+ * \file raster/color_init.c
  *
- * \brief GIS Library - Initialize Colors structure
+ * \brief Raster Library - Initialize Colors structure
  *
  * (C) 2001-2009 by the GRASS Development Team
  *

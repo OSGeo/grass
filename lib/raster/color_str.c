@@ -1,7 +1,7 @@
 /*!
    \file color_str.c
 
-   \brief GIS library - color management, named color to RGB triplet
+   \brief Raster library - color management, named color to RGB triplet
 
    (C) 2001-2008 by the GRASS Development Team
 

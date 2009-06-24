@@ -2,7 +2,7 @@
 /**
  * \file auto_mask.c
  *
- * \brief GIS Library - Auto masking routines.
+ * \brief Raster Library - Auto masking routines.
  *
  * (C) 2001-2008 by the GRASS Development Team
  *

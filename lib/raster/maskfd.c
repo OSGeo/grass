@@ -1,7 +1,7 @@
 /*!
- * \file gis/maskfd.c
+ * \file raster/maskfd.c
  *
- * \brief GIS Library - Mask functions.
+ * \brief Raster Library - Mask functions.
  *
  * (C) 2001-2009 by the GRASS Development Team
  *

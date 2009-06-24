@@ -1,7 +1,7 @@
 /*!
- * \file gis/color_read.c
+ * \file raster/color_read.c
  * 
- * \brief GIS Library - Read color table of raster map
+ * \brief Raster Library - Read color table of raster map
  *
  * (C) 1999-2009 by the GRASS Development Team
  *

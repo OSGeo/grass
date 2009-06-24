@@ -1,7 +1,7 @@
 /*!
-  \file gis/get_row.c
+  \file raster/get_row.c
 
-  \brief GIS library - Get raster row
+  \brief Raster library - Get raster row
 
   (C) 2003-2009 by the GRASS Development Team
 

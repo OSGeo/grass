@@ -1,7 +1,7 @@
 /*!
- * \file gis/cell_stats.c
+ * \file raster/cell_stats.c
  *
- * \brief GIS Library - Raster cell statistics
+ * \brief Raster Library - Raster cell statistics
  *
  * (C) 2001-2009 GRASS Development Team
  *

@@ -1,7 +1,7 @@
 /*!
- * \file gis/opencell.c
+ * \file raster/opencell.c
  * 
- * \brief GIS Library - Open raster file
+ * \brief Raster Library - Open raster file
  *
  * (C) 1999-2009 by the GRASS Development Team
  *

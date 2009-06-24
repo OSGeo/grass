@@ -1,7 +1,7 @@
 /*!
- * \file gis/range.c
+ * \file raster/range.c
  *
- * \brief GIS Library - Raster range file management
+ * \brief Raster Library - Raster range file management
  *
  * (C) 2001-2009 GRASS Development Team
  *

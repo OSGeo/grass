@@ -1,7 +1,7 @@
 /*!
- * \file gis/set_window.c
+ * \file raster/set_window.c
  *
- * \brief GIS Library - Set window (map region)
+ * \brief Raster Library - Set window (map region)
  *
  * (C) 2001-2009 by the GRASS Development Team
  *

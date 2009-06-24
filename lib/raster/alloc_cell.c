@@ -1,7 +1,7 @@
 /*!
- * \file gis/alloc_cell.c
+ * \file raster/alloc_cell.c
  *
- * \brief GIS Library - Raster allocation routines.
+ * \brief Raster Library - Raster allocation routines.
  *
  * (C) 2001-2009 by the GRASS Development Team
  *

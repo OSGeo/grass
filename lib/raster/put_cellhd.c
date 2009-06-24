@@ -1,7 +1,7 @@
 /*!
- * \file gis/put_cellhd.c
+ * \file raster/put_cellhd.c
  *
- * \brief GIS Library - Write raster header.
+ * \brief Raster Library - Write raster header.
  *
  * (C) 2001-2009 by the GRASS Development Team
  *

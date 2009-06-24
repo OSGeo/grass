@@ -1,7 +1,7 @@
 /*!
- * \file gis/color_rule.c
+ * \file raster/color_rule.c
  *
- * \brief GIS Library - Color rules.
+ * \brief Raster Library - Color rules.
  *
  * (C) 2001-2009 by the GRASS Development Team
  *

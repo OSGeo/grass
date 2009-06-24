@@ -1,7 +1,7 @@
 /*!
  * \file window_map.c
  *
- * \brief GIS Library - Window mapping functions.
+ * \brief Raster Library - Window mapping functions.
  *
  * (C) 2001-2009 by the GRASS Development Team
  *

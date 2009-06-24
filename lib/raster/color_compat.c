@@ -1,7 +1,7 @@
 /*!
- * \file gis/color_compat.c
+ * \file raster/color_compat.c
  *
- * \brief GIS Library - Predefined color tables
+ * \brief Raster Library - Predefined color tables
  *
  * (C) 2007-2009 Glynn Clements and the GRASS Development Team
  *

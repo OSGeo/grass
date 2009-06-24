@@ -1,7 +1,7 @@
 /*!
-   \file gis/sample.c
+   \file raster/sample.c
 
-   \brief GIS library - Sampling methods (extract a cell value from
+   \brief Raster library - Sampling methods (extract a cell value from
    raster map)
 
    1/2006: moved to libgis from v.sample/v.drape for clone removal

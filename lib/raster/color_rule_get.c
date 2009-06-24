@@ -2,7 +2,7 @@
 /**
  * \file color_rule_get.c
  *
- * \brief GIS Library - Get color rules.
+ * \brief Raster Library - Get color rules.
  *
  * (C) 2001-2008 by the GRASS Development Team
  *

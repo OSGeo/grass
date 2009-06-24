@@ -1,7 +1,7 @@
 /*!
- * \file gis/get_row_colr.c
+ * \file raster/get_row_colr.c
  * 
- * \brief GIS Library - Get raster row (colors)
+ * \brief Raster Library - Get raster row (colors)
  *
  * (C) 1999-2009 by the GRASS Development Team
  *

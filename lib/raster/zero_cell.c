@@ -1,7 +1,7 @@
 /*!
- * \file gis/zero_cell.c
+ * \file raster/zero_cell.c
  *
- * \brief GIS Library - Zero cell buffer functions.
+ * \brief Raster Library - Zero cell buffer functions.
  *
  * (C) 2001-2009 by the GRASS Development Team
  *
