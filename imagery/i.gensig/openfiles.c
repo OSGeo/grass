@@ -43,7 +43,7 @@ int openfiles(struct parms *parms, struct files *files)
 	if (files->band_fd[n] < 0)
 	    G_fatal_error(_("Unable to open training map <%s in %s>"),
 			  Ref.file[n].name, Ref.file[n].mapset);
-	files->band_cell[n] = Rast_allocate_c_buf();
+	files->band_cell[n] = Rast_allocate_d_buf();
     }
 
     return 0;

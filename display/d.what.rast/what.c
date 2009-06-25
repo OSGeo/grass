@@ -23,7 +23,7 @@ int what(int once, int terse, int colrow, char *fs, int width, int mwidth)
     nrows = window.rows;
     ncols = window.cols;
     buf = Rast_allocate_c_buf();
-    dbuf = Rast_allocate_c_buf();
+    dbuf = Rast_allocate_d_buf();
 
     screen_x = ((int)D_get_d_west() + (int)D_get_d_east()) / 2;
     screen_y = ((int)D_get_d_north() + (int)D_get_d_south()) / 2;

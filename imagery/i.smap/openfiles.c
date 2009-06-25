@@ -23,8 +23,9 @@ int openfiles(struct parms *parms, struct files *files)
 		      parms->subgroup, parms->group);
 
     /* allocate file descriptors, and io buffer */
-    files->cellbuf = Rast_allocate_c_buf();
+    files->cellbuf = Rast_allocate_d_buf();
     files->outbuf = Rast_allocate_c_buf();
+
     files->isdata = G_malloc(G_window_cols());
 
     files->nbands = Ref.nfiles;
