@@ -21,7 +21,7 @@ int perform_filter(const char *in_name, const char *out_name,
     DCELL *cell;
 
 
-    cell = Rast_allocate_c_buf();
+    cell = Rast_allocate_d_buf();
 
     count = 0;
     for (pass = 0; pass < repeat; pass++) {

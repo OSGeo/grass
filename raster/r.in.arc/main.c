@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
 	fcell = Rast_allocate_f_buf();
 	break;
     case DCELL_TYPE:
-	dcell = Rast_allocate_c_buf();
+	dcell = Rast_allocate_d_buf();
 	break;
     }
     cf = Rast_open_raster_new(output, rtype);

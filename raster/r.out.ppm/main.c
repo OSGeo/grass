@@ -102,7 +102,7 @@ int main(int argc, char *argv[])
 
     cell_buf = Rast_allocate_c_buf();
     fcell_buf = Rast_allocate_f_buf();
-    dcell_buf = Rast_allocate_c_buf();
+    dcell_buf = Rast_allocate_d_buf();
 
     ored = G_malloc(w.cols);
     ogrn = G_malloc(w.cols);

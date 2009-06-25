@@ -27,7 +27,7 @@ void rdwr_gridatb(void)
 	fcell = Rast_allocate_f_buf();
 	break;
     case DCELL_TYPE:
-	dcell = Rast_allocate_c_buf();
+	dcell = Rast_allocate_d_buf();
 	break;
     }
 

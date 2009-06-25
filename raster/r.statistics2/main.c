@@ -246,7 +246,7 @@ int main(int argc, char **argv)
 	    max[i] = -1e300;
 
     base_buf = Rast_allocate_c_buf();
-    cover_buf = Rast_allocate_c_buf();
+    cover_buf = Rast_allocate_d_buf();
 
     G_message(_("First pass"));
 
@@ -501,7 +501,7 @@ int main(int argc, char **argv)
 	if (out_fd < 0)
 	    G_fatal_error(_("Unable to open output map <%s>"), output);
 
-	out_buf = Rast_allocate_c_buf();
+	out_buf = Rast_allocate_d_buf();
 
 	for (row = 0; row < rows; row++) {
 	    Rast_get_c_raster_row(base_fd, base_buf, row);

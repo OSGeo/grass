@@ -29,7 +29,7 @@ int extract_points(int z_flag)
 	fcellbuf = Rast_allocate_f_buf();
 	break;
     case DCELL_TYPE:
-	dcellbuf = Rast_allocate_c_buf();
+	dcellbuf = Rast_allocate_d_buf();
 	break;
     }
 

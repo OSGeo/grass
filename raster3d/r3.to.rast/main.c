@@ -121,7 +121,7 @@ void g3d_to_raster(void *map, G3D_Region region, int *fd)
     if (typeIntern == FCELL_TYPE)
 	fcell = Rast_allocate_f_buf();
     else if (typeIntern == DCELL_TYPE)
-	dcell = Rast_allocate_c_buf();
+	dcell = Rast_allocate_d_buf();
 
     pos = 0;
     /*Every Rastermap */

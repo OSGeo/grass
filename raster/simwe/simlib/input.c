@@ -87,14 +87,14 @@ int input_data(void)
 
     /* Allocate raster buffers */
     cell1 = Rast_allocate_f_buf();
-    cell2 = Rast_allocate_c_buf();
-    cell3 = Rast_allocate_c_buf();
+    cell2 = Rast_allocate_d_buf();
+    cell3 = Rast_allocate_d_buf();
 
     if (rain != NULL)
-	cell4 = Rast_allocate_c_buf();
+	cell4 = Rast_allocate_d_buf();
 
     if (infil != NULL)
-	cell4a = Rast_allocate_c_buf();
+	cell4a = Rast_allocate_d_buf();
 
     if (traps != NULL)
 	cell4b = Rast_allocate_f_buf();
@@ -110,7 +110,7 @@ int input_data(void)
 	cell11 = Rast_allocate_f_buf();
 
     if (wdepth != NULL)
-	cell12 = Rast_allocate_c_buf();
+	cell12 = Rast_allocate_d_buf();
 
     /* Allocate some double dimension arrays for each input */
     /* with length of matrix Y */

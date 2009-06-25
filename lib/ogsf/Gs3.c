@@ -861,7 +861,7 @@ int Gs_get_cat_label(const char *filename, int drow, int dcol, char *catstr)
 
 	else {
 	    /* fp map */
-	    dbuf = Rast_allocate_c_buf();
+	    dbuf = Rast_allocate_d_buf();
 
 	    if (Rast_get_d_raster_row(fd, dbuf, drow) < 0) {
 		sprintf(catstr, "error");

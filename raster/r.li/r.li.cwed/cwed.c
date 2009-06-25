@@ -484,7 +484,7 @@ int calculateD(int fd, area_des ad, Coppie * cc, long totCoppie,
     }
 
 
-    buf_sup = Rast_allocate_c_buf();
+    buf_sup = Rast_allocate_d_buf();
     if (buf_sup == NULL) {
 	G_fatal_error("malloc buf_sup failed");
 	return RLI_ERRORE;
@@ -493,7 +493,7 @@ int calculateD(int fd, area_des ad, Coppie * cc, long totCoppie,
     c1.t = DCELL_TYPE;
     c2.t = DCELL_TYPE;
 
-    buf_corr = Rast_allocate_c_buf();
+    buf_corr = Rast_allocate_d_buf();
 
     Rast_set_d_null_value(buf_sup + ad->x, ad->cl);	/*the first time buf_sup is all null */
 

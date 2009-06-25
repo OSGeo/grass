@@ -149,7 +149,7 @@ void rast3d_cross_section(void *map, G3D_Region region, int elevfd, int outfd)
     if (typeIntern == FCELL_TYPE)
 	fcell = Rast_allocate_f_buf();
     else if (typeIntern == DCELL_TYPE)
-	dcell = Rast_allocate_c_buf();
+	dcell = Rast_allocate_d_buf();
 
     /*Mem for the input map row */
     elevrast = Rast_allocate_buf(globalElevMapType);
