@@ -149,7 +149,7 @@ int read_vpoints(char *name, char *mapset)
 	}
 
 	if (KEY("color")) {
-	    ret = Rast_str_to_color(data, &r, &g, &b);
+	    ret = G_str_to_color(data, &r, &g, &b);
 	    if (ret == 1)
 		set_color(&(vector.layer[vec].color), r, g, b);
 	    else if (ret == 2)
@@ -161,7 +161,7 @@ int read_vpoints(char *name, char *mapset)
 	}
 
 	if (KEY("fcolor")) {	/* fill color */
-	    ret = Rast_str_to_color(data, &r, &g, &b);
+	    ret = G_str_to_color(data, &r, &g, &b);
 	    if (ret == 1)
 		set_color(&(vector.layer[vec].fcolor), r, g, b);
 	    else if (ret == 2)

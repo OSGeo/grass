@@ -73,7 +73,7 @@ int Nviz_color_from_str(const char *color_str)
 {
     int red, grn, blu;
 
-    if (Rast_str_to_color(color_str, &red, &grn, &blu) != 1) {
+    if (G_str_to_color(color_str, &red, &grn, &blu) != 1) {
 	G_warning(_("Invalid color (%s), using \"white\" as default"),
 		  color_str);
 	red = grn = blu = 255;

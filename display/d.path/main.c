@@ -153,21 +153,21 @@ int main(int argc, char **argv)
 	G_fatal_error(_("No graphics device selected"));
 
     color = G_standard_color_rgb(BLACK);
-    if (Rast_str_to_color(color_opt->answer, &r, &g, &b)) {
+    if (G_str_to_color(color_opt->answer, &r, &g, &b)) {
 	color.r = r;
 	color.g = g;
 	color.b = b;
     }
 
     hcolor = G_standard_color_rgb(RED);
-    if (Rast_str_to_color(hcolor_opt->answer, &r, &g, &b)) {
+    if (G_str_to_color(hcolor_opt->answer, &r, &g, &b)) {
 	hcolor.r = r;
 	hcolor.g = g;
 	hcolor.b = b;
     }
 
     bgcolor = G_standard_color_rgb(WHITE);
-    if (Rast_str_to_color(bgcolor_opt->answer, &r, &g, &b)) {
+    if (G_str_to_color(bgcolor_opt->answer, &r, &g, &b)) {
 	bgcolor.r = r;
 	bgcolor.g = g;
 	bgcolor.b = b;

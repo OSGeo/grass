@@ -22,7 +22,7 @@ int display(const char *name,
 	G_fatal_error(_("Color file for <%s> not available"), name);
 
     if (bg) {
-	if (Rast_str_to_color(bg, &r, &g, &b) != 1) {
+	if (G_str_to_color(bg, &r, &g, &b) != 1) {
 	    G_warning(_("[%s]: No such color"), bg);
 	    r = g = b = 255;
 	}

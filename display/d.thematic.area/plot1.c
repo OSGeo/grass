@@ -267,7 +267,7 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 			G_debug(3, "element %d: colorstring: %s", line,
 				colorstring);
 
-			if (Rast_str_to_color(colorstring, &red, &grn, &blu) ==
+			if (G_str_to_color(colorstring, &red, &grn, &blu) ==
 			    1) {
 			    custom_rgb = TRUE;
 			    G_debug(3, "element:%d  cat %d r:%d g:%d b:%d",

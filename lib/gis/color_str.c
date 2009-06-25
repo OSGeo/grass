@@ -1,7 +1,7 @@
 /*!
-   \file color_str.c
+   \file gis/color_str.c
 
-   \brief Raster library - color management, named color to RGB triplet
+   \brief GIS library - color management, named color to RGB triplet
 
    (C) 2001-2008 by the GRASS Development Team
 
@@ -109,7 +109,7 @@ const struct color_name *G_standard_color_name(int n)
    \return 2 NONE 
    \return 0 on error 
  */
-int Rast_str_to_color(const char *str, int *red, int *grn, int *blu)
+int G_str_to_color(const char *str, int *red, int *grn, int *blu)
 {
     char buf[100];
     int num_names = G_num_standard_color_names();
@@ -118,7 +118,7 @@ int Rast_str_to_color(const char *str, int *red, int *grn, int *blu)
     strcpy(buf, str);
     G_chop(buf);
 
-    G_debug(3, "Rast_str_to_color(): str = '%s'", buf);
+    G_debug(3, "G_str_to_color(): str = '%s'", buf);
 
     if (G_strcasecmp(buf, "NONE") == 0)
 	return 2;

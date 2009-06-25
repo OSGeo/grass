@@ -57,7 +57,7 @@ static int translate_or_add_color(const char *str)
 	    colors[i] = G_standard_color_rgb(i);
     }
 
-    ret = Rast_str_to_color(str, &red, &grn, &blu);
+    ret = G_str_to_color(str, &red, &grn, &blu);
 
     /* None color */
     if (ret == 2)

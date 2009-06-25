@@ -163,7 +163,7 @@ int update_dbcolors(const char *rast_name, const char *vector_map, int field,
 	if (*colorstring != '\0') {
 	    G_debug(3, "element colorstring: %s", colorstring);
 
-	    if (Rast_str_to_color(colorstring, &red, &grn, &blu) == 1) {
+	    if (G_str_to_color(colorstring, &red, &grn, &blu) == 1) {
 		G_debug(3, "cat %d r:%d g:%d b:%d", cat, red, grn, blu);
 	    }
 	    else {
