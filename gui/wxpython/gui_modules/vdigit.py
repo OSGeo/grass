@@ -355,7 +355,7 @@ class VDigit(AbstractDigit):
         @param coords click coordinates
         @param move   X,Y direction
 
-        @return 1 vertex moved
+        @return id of new feature
         @return 0 vertex not moved (not found, line is not selected)
         """
         snap, thresh = self.__getSnapThreshold()
@@ -378,7 +378,7 @@ class VDigit(AbstractDigit):
 
         @param coords coordinates to add vertex
 
-        @return 1 vertex added
+        @return id of new feature
         @return 0 nothing changed
         @return -1 on failure
         """
@@ -395,7 +395,7 @@ class VDigit(AbstractDigit):
 
         @param coords coordinates to remove vertex
 
-        @return 1 vertex removed
+        @return id of new feature
         @return 0 nothing changed
         @return -1 on failure
         """
