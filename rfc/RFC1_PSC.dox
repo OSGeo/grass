@@ -1,9 +1,11 @@
 /*!
 \page rfc1_psc RFC 1: Project Steering Committee Guidelines
 
-Author: GRASS PSC<br>
-Contact: <a href="http://lists.osgeo.org/mailman/listinfo/grass-psc">grass-psc AT lists.osgeo.org</a><br>
-Status: Adopted (6 April 2007)<br>
+Author: GRASS PSC
+
+Contact: <a href="http://lists.osgeo.org/mailman/listinfo/grass-psc">grass-psc AT lists.osgeo.org</a>
+
+Status: Adopted (6 April 2007)
 
 \section summary Summary
 
@@ -17,21 +19,18 @@ determines membership, and makes decisions on GRASS project issues.
 "The GRASS Project" is defined as the GPL-licenced GIS software known as the 
 Geographic Resources Analysis Support System, together with the surrounding 
 development, distribution and promotion infrastructure currently headquarted 
-at FBK-irst (formerly ITC-irst), Trento, Italy.
+at OSGeo.
 
 \section tor Terms of Reference
 
 The two primary functions of the PSC are:
-<ol>
-<li>To enforce control over the GRASS codebase. This can be summarised as:
-  <ul>
-  <li> Enforce mechanisms to ensure quality control.</li>
-  <li> Ensure compliance with all required legal measures.</li>
-  </ul>
-</li>  
-<li>Project Management and responsibility for the "public face" of
-GRASS.</li>
-</ol>     
+
+-# To enforce control over the GRASS codebase. This can be summarised as:
+ - Enforce mechanisms to ensure quality control.</li>
+ - Ensure compliance with all required legal measures.</li>
+-# Project Management and responsibility for the "public face" of
+GRASS.
+    
 The PSC is expected to be able to speak and act on behalf of the GRASS 
 project.
 
@@ -41,15 +40,14 @@ project.
 
 The quality control mechanisms, which are the responsibility of the PSC, 
 currently include:
-<ul>
-<li>Maintaining submitter guidelines and making all developers aware of 
-them.</li>
-<li>Granting write access to the source code repository for new
-developers.</li>
-<li>Enforcing the submitter guidelines, with the ultimate sanction against 
+
+- Maintaining submitter guidelines and making all developers aware of 
+them.
+- Granting write access to the source code repository for new
+developers.
+- Enforcing the submitter guidelines, with the ultimate sanction against 
 non-compliance being removal of write access to the source code
-repository.</li>
-</ul>
+repository.
 
 In general, once write access has been granted, developers are allowed to 
 make changes to the codebase as they see fit. For controversial or 
@@ -83,13 +81,12 @@ This document will be updated and revised by the PSC as required.
 The PSC will share responsibility and make decisions over issues related 
 to the management of the overall direction of the GRASS project and 
 external visibility, etc. These include, but are not limited to:
-<ul>
-<li>Release Cycles</li>
-<li>Project infrastructure</li>
-<li>Website Maintenance</li>
-<li>Promotion and Public Relations</li>
-<li>Other issues as they become relevant</li>
-</ul>
+
+- Release Cycles
+- Project infrastructure
+- Website Maintenance
+- Promotion and Public Relations
+- Other issues as they become relevant
 	  
 It is the responsibility of the PSC to ensure that issues critical to the 
 future of the GRASS project are adequately attended to. This may involve 
@@ -111,12 +108,11 @@ procedure is outlined in a separate document:
 The Chair is the ultimate adjudicator in case of deadlock or irretrievable 
 break down of decision-making, or in case of disputes over voting.
 
-The following issue(s) <strong>must</strong> have a vote called before a 
+The following issue(s) <b>must</b> have a vote called before a 
 decision is reached:
-<ul>
-<li>Granting source code repository write access for new developers</li>
-<li>Selection of a committee Chair</li>
-</ul>
+
+- Granting source code repository write access for new developers
+- Selection of a committee Chair
 
 \section composition Composition of the Committee
 
@@ -133,4 +129,3 @@ The Chair is responsible for keeping track of the membership of the PSC.
 
 
 */
-
