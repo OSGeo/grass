@@ -282,7 +282,7 @@ void P_Aux_to_Raster(double **matrix, int fd)
 	Rast_set_d_null_value(raster, ncols);
 
 	for (col = 0, ptr = raster; col < ncols;
-	     col++, ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(DCELL_TYPE))) {
+	     col++, ptr = G_incr_void_ptr(ptr, Rast_raster_size(DCELL_TYPE))) {
 	    Rast_set_raster_value_d(ptr, (DCELL) (matrix[row][col]), DCELL_TYPE);
 	}
 	Rast_put_d_raster_row(fd, raster);

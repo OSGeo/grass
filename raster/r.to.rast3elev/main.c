@@ -238,9 +238,9 @@ void elev_raster_to_g3d(Database db, G3D_Region region)
 
 	for (x = 0, input_ptr = input_rast, elev_ptr = elev_rast; x < cols;
 	     x++, input_ptr =
-	     Rast_incr_void_ptr(input_ptr, Rast_raster_size(db.inputmaptype)),
+	     G_incr_void_ptr(input_ptr, Rast_raster_size(db.inputmaptype)),
 	     elev_ptr =
-	     Rast_incr_void_ptr(elev_ptr, Rast_raster_size(db.elevmaptype))) {
+	     G_incr_void_ptr(elev_ptr, Rast_raster_size(db.elevmaptype))) {
 
 	    /*Get the elevation and the input map value */
 	    inval =

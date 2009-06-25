@@ -631,17 +631,17 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
 	case CELL_TYPE:
 	    rastptr = tmp;
 	    for (x = 0; x < col0; x++)
-		rastptr = Rast_incr_void_ptr(rastptr, Rast_raster_size(CELL_TYPE));
+		rastptr = G_incr_void_ptr(rastptr, Rast_raster_size(CELL_TYPE));
 	    break;
 	case FCELL_TYPE:
 	    rastptr = ftmp;
 	    for (x = 0; x < col0; x++)
-		rastptr = Rast_incr_void_ptr(rastptr, Rast_raster_size(FCELL_TYPE));
+		rastptr = G_incr_void_ptr(rastptr, Rast_raster_size(FCELL_TYPE));
 	    break;
 	case DCELL_TYPE:
 	    rastptr = dtmp;
 	    for (x = 0; x < col0; x++)
-		rastptr = Rast_incr_void_ptr(rastptr, Rast_raster_size(DCELL_TYPE));
+		rastptr = G_incr_void_ptr(rastptr, Rast_raster_size(DCELL_TYPE));
 	    break;
 	}
 
@@ -664,7 +664,7 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
 		else {
 		    *(*(null_buf + i + 1 - row0) + j + 1 - col0) = 0.0;
 		}
-		rastptr = Rast_incr_void_ptr(rastptr, Rast_raster_size(CELL_TYPE));
+		rastptr = G_incr_void_ptr(rastptr, Rast_raster_size(CELL_TYPE));
 		break;
 
 	    case FCELL_TYPE:
@@ -676,7 +676,7 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
 		else {
 		    *(*(null_buf + i + 1 - row0) + j + 1 - col0) = 0.0;
 		}
-		rastptr = Rast_incr_void_ptr(rastptr, Rast_raster_size(FCELL_TYPE));
+		rastptr = G_incr_void_ptr(rastptr, Rast_raster_size(FCELL_TYPE));
 		break;
 
 	    case DCELL_TYPE:
@@ -688,7 +688,7 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
 		else {
 		    *(*(null_buf + i + 1 - row0) + j + 1 - col0) = 0.0;
 		}
-		rastptr = Rast_incr_void_ptr(rastptr, Rast_raster_size(CELL_TYPE));
+		rastptr = G_incr_void_ptr(rastptr, Rast_raster_size(CELL_TYPE));
 		break;
 	    }
 

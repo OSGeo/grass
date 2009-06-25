@@ -337,7 +337,7 @@ int main(int argc, char *argv[])
 	G_percent(row, nrows, 2);
 
 	for (col = 0, ptr = raster; col < ncols; col++,
-	     ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(out_type))) {
+	     ptr = G_incr_void_ptr(ptr, Rast_raster_size(out_type))) {
 	    if (!Rast_is_null_value(ptr, out_type)) {
 		if (out_type == CELL_TYPE) {
 		    number_i = *((CELL *) ptr);

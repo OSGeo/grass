@@ -443,7 +443,7 @@ int main(int argc, char *argv[])
 			p = *(int *)ptr2;
 		    }
 		    segment_put(&in_seg, &p, row, i);
-		    ptr2 = Rast_incr_void_ptr(ptr2, dsize);
+		    ptr2 = G_incr_void_ptr(ptr2, dsize);
 		}
 		break;
 	    case FCELL_TYPE:
@@ -455,7 +455,7 @@ int main(int argc, char *argv[])
 			p = *(float *)ptr2;
 		    }
 		    segment_put(&in_seg, &p, row, i);
-		    ptr2 = Rast_incr_void_ptr(ptr2, dsize);
+		    ptr2 = G_incr_void_ptr(ptr2, dsize);
 		}
 		break;
 
@@ -468,7 +468,7 @@ int main(int argc, char *argv[])
 			p = *(double *)ptr2;
 		    }
 		    segment_put(&in_seg, &p, row, i);
-		    ptr2 = Rast_incr_void_ptr(ptr2, dsize);
+		    ptr2 = G_incr_void_ptr(ptr2, dsize);
 		}
 		break;
 	    }
@@ -670,7 +670,7 @@ int main(int argc, char *argv[])
 		    }
 		    got_one = 1;
 		}
-		ptr2 = Rast_incr_void_ptr(ptr2, dsize2);
+		ptr2 = G_incr_void_ptr(ptr2, dsize2);
 	    }
 	}
 	G_percent(1, 1, 2);

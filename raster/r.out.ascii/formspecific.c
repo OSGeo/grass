@@ -42,7 +42,7 @@ int write_GRASS(int fd,
 	    return (row);
 
 	for (col = 0, ptr = raster; col < ncols; col++,
-	     ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(out_type))) {
+	     ptr = G_incr_void_ptr(ptr, Rast_raster_size(out_type))) {
 	    if (!Rast_is_null_value(ptr, out_type)) {
 		if (out_type == CELL_TYPE)
 		    fprintf(fp, "%d", *((CELL *) ptr));
@@ -96,7 +96,7 @@ int write_MODFLOW(int fd,
 
 	colcnt = 0;
 	for (col = 0, ptr = raster; col < ncols; col++,
-	     ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(out_type))) {
+	     ptr = G_incr_void_ptr(ptr, Rast_raster_size(out_type))) {
 	    if (out_type == CELL_TYPE) {
 		if (Rast_is_null_value(ptr, out_type))
 		    *((CELL *) ptr) = 0;
@@ -182,7 +182,7 @@ int write_GSGRID(int fd,
 
 	colcnt = 0;
 	for (col = 0, ptr = raster; col < ncols; col++,
-	     ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(out_type))) {
+	     ptr = G_incr_void_ptr(ptr, Rast_raster_size(out_type))) {
 	    colcnt += 1;
 	    if (!Rast_is_null_value(ptr, out_type)) {
 		if (out_type == CELL_TYPE)

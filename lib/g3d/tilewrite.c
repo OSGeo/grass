@@ -39,11 +39,11 @@ G3d_tile2xdrTile(G3D_Map * map, const void *tile, int rows, int cols,
 		    G3d_error("G3d_tile2xdrTile: error in G3d_copyToXdr");
 		    return 0;
 		}
-		tile = Rast_incr_void_ptr(tile, map->tileX * G3d_length(type));
+		tile = G_incr_void_ptr(tile, map->tileX * G3d_length(type));
 	    }
 	    if (yRedundant)
 		tile =
-		    Rast_incr_void_ptr(tile,
+		    G_incr_void_ptr(tile,
 				    map->tileX * yRedundant *
 				    G3d_length(type));
 	}
@@ -56,7 +56,7 @@ G3d_tile2xdrTile(G3D_Map * map, const void *tile, int rows, int cols,
 		G3d_error("G3d_tile2xdrTile: error in G3d_copyToXdr");
 		return 0;
 	    }
-	    tile = Rast_incr_void_ptr(tile, map->tileXY * G3d_length(type));
+	    tile = G_incr_void_ptr(tile, map->tileXY * G3d_length(type));
 	}
 	return 1;
     }

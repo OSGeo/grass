@@ -691,7 +691,7 @@ int main(int argc, char *argv[])
 	    if (bin_index) {
 		ptr = index_array;
 		ptr =
-		    Rast_incr_void_ptr(ptr,
+		    G_incr_void_ptr(ptr,
 				    ((arr_row * cols) +
 				     arr_col) * Rast_raster_size(CELL_TYPE));
 
@@ -753,7 +753,7 @@ int main(int argc, char *argv[])
 		    min = Rast_get_raster_value_d(min_array + offset, rtype);
 		    max = Rast_get_raster_value_d(max_array + offset, rtype);
 		    Rast_set_raster_value_d(ptr, max - min, rtype);
-		    ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(rtype));
+		    ptr = G_incr_void_ptr(ptr, Rast_raster_size(rtype));
 		}
 		break;
 
@@ -770,7 +770,7 @@ int main(int argc, char *argv[])
 		    else
 			Rast_set_raster_value_d(ptr, (sum / n), rtype);
 
-		    ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(rtype));
+		    ptr = G_incr_void_ptr(ptr, Rast_raster_size(rtype));
 		}
 		break;
 
@@ -805,7 +805,7 @@ int main(int argc, char *argv[])
 						 rtype);
 
 		    }
-		    ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(rtype));
+		    ptr = G_incr_void_ptr(ptr, Rast_raster_size(rtype));
 		}
 		break;
 	    case METHOD_MEDIAN:	/* median, if only one point in cell we will use that */
@@ -853,7 +853,7 @@ int main(int argc, char *argv[])
 			    Rast_set_raster_value_d(ptr, z, rtype);
 			}
 		    }
-		    ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(rtype));
+		    ptr = G_incr_void_ptr(ptr, Rast_raster_size(rtype));
 		}
 		break;
 	    case METHOD_PERCENTILE:	/* rank = (pth*(n+1))/100; interpolate linearly */
@@ -897,7 +897,7 @@ int main(int argc, char *argv[])
 			z = (z + nodes[node_id].z) / 2;
 			Rast_set_raster_value_d(ptr, z, rtype);
 		    }
-		    ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(rtype));
+		    ptr = G_incr_void_ptr(ptr, Rast_raster_size(rtype));
 		}
 		break;
 	    case METHOD_SKEWNESS:	/* skewness = sum(xi-mean)^3/(N-1)*s^3 */
@@ -945,7 +945,7 @@ int main(int argc, char *argv[])
 			}
 			Rast_set_raster_value_d(ptr, skew, rtype);
 		    }
-		    ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(rtype));
+		    ptr = G_incr_void_ptr(ptr, Rast_raster_size(rtype));
 		}
 		break;
 	    case METHOD_TRIMMEAN:
@@ -1002,7 +1002,7 @@ int main(int argc, char *argv[])
 			}
 			Rast_set_raster_value_d(ptr, mean, rtype);
 		    }
-		    ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(rtype));
+		    ptr = G_incr_void_ptr(ptr, Rast_raster_size(rtype));
 		}
 		break;
 

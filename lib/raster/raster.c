@@ -16,43 +16,6 @@
 #include <grass/raster.h>
 
 /*!
- * \brief Advance void pointer
- *
- * Advances void pointer by <i>size</i> bytes. Returns new pointer
- * value.
- *
- * Useful in raster row processing loops, substitutes
- *
- \code
- CELL *cell; 
- cell += n;
- \endcode
- *
- * Now 
- \code
- rast = Rast_incr_void_ptr(rast, Rast_raster_size(data_type))
- \endcode
- *
- * (where rast is void* and <i>data_type</i> is RASTER_MAP_TYPE can be
- * used instead of rast++.)
- *
- * Very useful to generalize the row processing - loop i.e.
- * \code
- *   void * buf_ptr += Rast_raster_size(data_type)
- * \endcode
- *
- * \param ptr pointer
- * \param size buffer size
- *
- * \return pointer to the data
- */
-void *Rast_incr_void_ptr(const void *ptr, const size_t size)
-{
-    /* assuming that the size of unsigned char is 1 */
-    return (void *)((const unsigned char *)ptr + size);
-}
-
-/*!
  * \brief Compares raster values.
  *
  * \param v1,v2 values to be compared

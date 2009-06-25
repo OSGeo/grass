@@ -676,7 +676,7 @@ static int get_map_row(int fd, void *rast, int row, RASTER_MAP_TYPE data_type,
 
     for (i = 0; i < R__.window.cols; i++) {
 	Rast_set_raster_value_c(rast, temp_buf[i], data_type);
-	rast = Rast_incr_void_ptr(rast, size);
+	rast = G_incr_void_ptr(rast, size);
     }
 
     G__freea(temp_buf);
@@ -1183,7 +1183,7 @@ static int embed_nulls(int fd, void *buf, int row, RASTER_MAP_TYPE map_type,
 	       is not set and calls G_set_[f/d]_null_value() otherwise */
 	    Rast__set_null_value(buf, 1, null_is_zero, map_type);
 	}
-	buf = Rast_incr_void_ptr(buf, Rast_raster_size(map_type));
+	buf = G_incr_void_ptr(buf, Rast_raster_size(map_type));
     }
 
     G__freea(null_buf);

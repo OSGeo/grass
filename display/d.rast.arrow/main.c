@@ -367,10 +367,10 @@ int main(int argc, char **argv)
 	    }
 
 	    if (no_arrow) {
-		ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(raster_type));
+		ptr = G_incr_void_ptr(ptr, Rast_raster_size(raster_type));
 		if (opt7->answer)
 		    mag_ptr =
-			Rast_incr_void_ptr(mag_ptr,
+			G_incr_void_ptr(mag_ptr,
 					Rast_raster_size(mag_raster_type));
 		no_arrow = FALSE;
 		continue;
@@ -494,10 +494,10 @@ int main(int argc, char **argv)
 		}
 	    }
 
-	    ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(raster_type));
+	    ptr = G_incr_void_ptr(ptr, Rast_raster_size(raster_type));
 	    if (opt7->answer)
 		mag_ptr =
-		    Rast_incr_void_ptr(mag_ptr, Rast_raster_size(mag_raster_type));
+		    G_incr_void_ptr(mag_ptr, Rast_raster_size(mag_raster_type));
 	}
     }
 

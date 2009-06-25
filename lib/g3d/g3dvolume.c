@@ -250,7 +250,7 @@ G3d_makeAlignedVolumeFile(void *map, const char *fileName,
 	    for (x = 0; x < nx; x++) {
 		/* G3d_putValueRegion? */
 		if (!G3d_putValue(mapVolume, x, y, z,
-				  Rast_incr_void_ptr(volumeBuf,
+				  G_incr_void_ptr(volumeBuf,
 						  (z * ny * nx + y * nx +
 						   x) * eltLength),
 				  G3d_fileTypeMap(mapVolume)))

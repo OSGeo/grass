@@ -35,7 +35,7 @@ int mask_raster_array(void *rast, int ncols,
 	    Rast_set_raster_value_d(rast, new_null, data_type);
 	if (mask_d_select(&x, &d_mask))
 	    Rast_set_null_value(rast, 1, data_type);
-	rast = Rast_incr_void_ptr(rast, Rast_raster_size(data_type));
+	rast = G_incr_void_ptr(rast, Rast_raster_size(data_type));
     }
 
     return 0;

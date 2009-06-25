@@ -140,7 +140,7 @@ int main(int argc, char *argv[])
 	void *rast1, *rast2;
 
 	rast1 = rast;
-	rast2 = Rast_incr_void_ptr(rast, Rast_raster_size(data_type));
+	rast2 = G_incr_void_ptr(rast, Rast_raster_size(data_type));
 
 	G_message(_("Creating new cats file..."));
 	while (Rast_get_next_marked_raster_cat(&cats,

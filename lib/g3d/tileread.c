@@ -39,13 +39,13 @@ G3d_xdrTile2tile(G3D_Map * map, void *tile, int rows, int cols, int depths,
 		    G3d_error("G3d_xdrTile2tile: error in G3d_copyFromXdr");
 		    return 0;
 		}
-		tile = Rast_incr_void_ptr(tile, cols * length);
+		tile = G_incr_void_ptr(tile, cols * length);
 		G3d_setNullValue(tile, xRedundant, type);
-		tile = Rast_incr_void_ptr(tile, xLength);
+		tile = G_incr_void_ptr(tile, xLength);
 	    }
 	    if (yRedundant) {
 		G3d_setNullValue(tile, map->tileX * yRedundant, type);
-		tile = Rast_incr_void_ptr(tile, yLength);
+		tile = G_incr_void_ptr(tile, yLength);
 	    }
 	}
 	if (!zRedundant)
@@ -61,9 +61,9 @@ G3d_xdrTile2tile(G3D_Map * map, void *tile, int rows, int cols, int depths,
 		G3d_error("G3d_xdrTile2tile: error in G3d_copyFromXdr");
 		return 0;
 	    }
-	    tile = Rast_incr_void_ptr(tile, map->tileX * rows * length);
+	    tile = G_incr_void_ptr(tile, map->tileX * rows * length);
 	    G3d_setNullValue(tile, map->tileX * yRedundant, type);
-	    tile = Rast_incr_void_ptr(tile, yLength);
+	    tile = G_incr_void_ptr(tile, yLength);
 	}
 	if (!zRedundant)
 	    return 1;
@@ -80,7 +80,7 @@ G3d_xdrTile2tile(G3D_Map * map, void *tile, int rows, int cols, int depths,
     if (!zRedundant)
 	return 1;
 
-    tile = Rast_incr_void_ptr(tile, map->tileXY * depths * length);
+    tile = G_incr_void_ptr(tile, map->tileXY * depths * length);
     G3d_setNullValue(tile, map->tileXY * zRedundant, type);
 
     return 1;
