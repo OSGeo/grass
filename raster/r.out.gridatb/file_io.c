@@ -21,13 +21,13 @@ void rdwr_gridatb(void)
     data_type = Rast_get_raster_map_type(fd);
     switch (data_type) {
     case CELL_TYPE:
-	cell = Rast_allocate_c_raster_buf();
+	cell = Rast_allocate_c_buf();
 	break;
     case FCELL_TYPE:
-	fcell = Rast_allocate_f_raster_buf();
+	fcell = Rast_allocate_f_buf();
 	break;
     case DCELL_TYPE:
-	dcell = Rast_allocate_d_raster_buf();
+	dcell = Rast_allocate_c_buf();
 	break;
     }
 

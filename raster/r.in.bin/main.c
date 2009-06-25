@@ -482,14 +482,14 @@ int main(int argc, char *argv[])
 
     if (flag.f->answer) {
 	map_type = FCELL_TYPE;
-	fcell = Rast_allocate_f_raster_buf();
+	fcell = Rast_allocate_f_buf();
     }
     else if (flag.d->answer) {
 	map_type = DCELL_TYPE;
-	dcell = Rast_allocate_d_raster_buf();
+	dcell = Rast_allocate_c_buf();
     }
     else {
-	cell = Rast_allocate_c_raster_buf();
+	cell = Rast_allocate_c_buf();
 	map_type = CELL_TYPE;
     }
 

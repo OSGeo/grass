@@ -58,7 +58,7 @@ int describe(const char *name, int compact, char *no_data_str,
 	map_type = CELL_TYPE;	/* read as int */
 
     /* allocate the cell buffer */
-    buf = Rast_allocate_cell_buf();
+    buf = Rast_allocate_c_buf();
 
     if (map_type != CELL_TYPE && range)
 	/* this will make it report fp range */

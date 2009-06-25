@@ -483,7 +483,7 @@ void Rast_row_update_fp_range(const void *rast, int n,
 	}
 
 	if (Rast_is_null_value(rast, data_type)) {
-	    rast = G_incr_void_ptr(rast, Rast_raster_size(data_type));
+	    rast = G_incr_void_ptr(rast, Rast_cell_size(data_type));
 	    continue;
 	}
 	if (range->first_time) {
@@ -498,7 +498,7 @@ void Rast_row_update_fp_range(const void *rast, int n,
 		range->max = val;
 	}
 
-	rast = G_incr_void_ptr(rast, Rast_raster_size(data_type));
+	rast = G_incr_void_ptr(rast, Rast_cell_size(data_type));
     }
 }
 

@@ -74,7 +74,7 @@ int enforce_downstream(int infd, int outfd,
     /* allocate and clear memory for entire raster */
     rbuf =
 	G_calloc(G_window_rows() * G_window_cols(),
-		 Rast_raster_size(parm->raster_type));
+		 Rast_cell_size(parm->raster_type));
 
     /* first read whole elevation file into buf */
     read_raster(rbuf, infd, parm->raster_type);

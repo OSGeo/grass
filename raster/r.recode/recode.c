@@ -47,8 +47,8 @@ int do_recode(void)
 
     out_fd = Rast_open_raster_new(result, out_type);
 
-    out_rast = Rast_allocate_raster_buf(out_type);
-    in_rast = Rast_allocate_raster_buf(in_type);
+    out_rast = Rast_allocate_buf(out_type);
+    in_rast = Rast_allocate_buf(in_type);
 
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);

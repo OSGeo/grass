@@ -244,7 +244,7 @@ static int calc_mu(int *fds, double *mu, int bands)
 	/* don't assume each image is of the same type */
 	if (rowbuf)
 	    G_free(rowbuf);
-	if ((rowbuf = Rast_allocate_raster_buf(maptype)) == NULL)
+	if ((rowbuf = Rast_allocate_buf(maptype)) == NULL)
 	    G_fatal_error(_("Unable allocate memory for row buffer"));
 
 	G_verbose_message(_("Computing means for band %d..."), i + 1);
@@ -260,12 +260,12 @@ static int calc_mu(int *fds, double *mu, int bands)
 	    for (col = 0; col < cols; col++) {
 		/* skip null cells */
 		if (Rast_is_null_value(rowbuf, maptype)) {
-		    ptr = G_incr_void_ptr(ptr, Rast_raster_size(maptype));
+		    ptr = G_incr_void_ptr(ptr, Rast_cell_size(maptype));
 		    continue;
 		}
 
 		sum += Rast_get_raster_value_d(rowbuf, maptype);
-		ptr = G_incr_void_ptr(ptr, Rast_raster_size(maptype));
+		ptr = G_incr_void_ptr(ptr, Rast_cell_size(maptype));
 	    }
 	}
 
@@ -294,7 +294,7 @@ static int calc_covariance(int *fds, double **covar, double *mu, int bands)
 	/* don't assume each image is of the same type */
 	if (rowbuf1)
 	    G_free(rowbuf1);
-	if ((rowbuf1 = Rast_allocate_raster_buf(maptype)) == NULL)
+	if ((rowbuf1 = Rast_allocate_buf(maptype)) == NULL)
 	    G_fatal_error(_("Unable allocate memory for row buffer"));
 
 	G_verbose_message(_("Computing row %d of covariance matrix..."),
@@ -314,7 +314,7 @@ static int calc_covariance(int *fds, double **covar, double *mu, int bands)
 		/* don't assume each image is of the same type */
 		if (rowbuf2)
 		    G_free(rowbuf2);
-		if ((rowbuf2 = Rast_allocate_raster_buf(maptype2)) == NULL)
+		if ((rowbuf2 = Rast_allocate_buf(maptype2)) == NULL)
 		    G_fatal_error(_("Unable to allocate memory for row buffer"));
 
 		if (Rast_get_raster_row(fds[k], rowbuf2, row, maptype2) < 0)
@@ -327,8 +327,8 @@ static int calc_covariance(int *fds, double **covar, double *mu, int bands)
 		    /* skip null cells */
 		    if (Rast_is_null_value(ptr1, maptype) ||
 			Rast_is_null_value(ptr2, maptype2)) {
-			ptr1 = G_incr_void_ptr(ptr1, Rast_raster_size(maptype));
-			ptr2 = G_incr_void_ptr(ptr2, Rast_raster_size(maptype2));
+			ptr1 = G_incr_void_ptr(ptr1, Rast_cell_size(maptype));
+			ptr2 = G_incr_void_ptr(ptr2, Rast_cell_size(maptype2));
 			continue;
 		    }
 
@@ -337,8 +337,8 @@ static int calc_covariance(int *fds, double **covar, double *mu, int bands)
 			 mu[j]) * ((double)Rast_get_raster_value_d(ptr2,
 						   maptype2) - mu[k]);
 
-		    ptr1 = G_incr_void_ptr(ptr1, Rast_raster_size(maptype));
-		    ptr2 = G_incr_void_ptr(ptr2, Rast_raster_size(maptype2));
+		    ptr1 = G_incr_void_ptr(ptr1, Rast_cell_size(maptype));
+		    ptr2 = G_incr_void_ptr(ptr2, Rast_cell_size(maptype2));
 		}
 
 		covar[k][j] = covar[j][k];
@@ -362,8 +362,8 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
     double new_range = 0.;
     int rows = G_window_rows();
     int cols = G_window_cols();
-    int cell_mapsiz = Rast_raster_size(CELL_TYPE);
-    int dcell_mapsiz = Rast_raster_size(DCELL_TYPE);
+    int cell_mapsiz = Rast_cell_size(CELL_TYPE);
+    int dcell_mapsiz = Rast_cell_size(DCELL_TYPE);
     DCELL *d_buf;
 
     /* 2 passes for rescale.  1 pass for no rescale */
@@ -373,8 +373,8 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
     d_buf = (DCELL *) G_malloc(cols * sizeof(double));
 
     /* allocate memory for output row buffer */
-    outbuf = (scale) ? Rast_allocate_raster_buf(CELL_TYPE) :
-	Rast_allocate_raster_buf(DCELL_TYPE);
+    outbuf = (scale) ? Rast_allocate_buf(CELL_TYPE) :
+	Rast_allocate_buf(DCELL_TYPE);
 
     if (!outbuf)
 	G_fatal_error(_("Unable to allocate memory for raster row"));
@@ -429,7 +429,7 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
 		    /* don't assume each image is of the same type */
 		    if (rowbuf)
 			G_free(rowbuf);
-		    if (!(rowbuf = Rast_allocate_raster_buf(maptype)))
+		    if (!(rowbuf = Rast_allocate_buf(maptype)))
 			G_fatal_error(_("Unable allocate memory for row buffer"));
 
 		    if (Rast_get_raster_row(inp_fd[j], rowbuf, row, maptype) < 0)
@@ -455,7 +455,7 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
 
 			    rowptr =
 				G_incr_void_ptr(rowptr,
-						Rast_raster_size(maptype));
+						Rast_cell_size(maptype));
 			    continue;
 			}
 
@@ -506,7 +506,7 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
 			    G_incr_void_ptr(outptr, dcell_mapsiz);
 
 			rowptr =
-			    G_incr_void_ptr(rowptr, Rast_raster_size(maptype));
+			    G_incr_void_ptr(rowptr, Rast_cell_size(maptype));
 		    }
 		}		/* for j = 0 to bands */
 

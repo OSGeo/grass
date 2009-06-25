@@ -106,7 +106,7 @@ static int draw_cell(int A_row,
     if (D__overlay_mode)
 	for (i = 0; i < ncols; i++) {
 	    set[i] = Rast_is_null_value(array, data_type);
-	    array = G_incr_void_ptr(array, Rast_raster_size(data_type));
+	    array = G_incr_void_ptr(array, Rast_cell_size(data_type));
 	}
 
     A_row =
@@ -149,9 +149,9 @@ int D_draw_raster_RGB(int A_row,
     static unsigned char *r_buf, *g_buf, *b_buf, *n_buf;
     static int nalloc;
 
-    int r_size = Rast_raster_size(r_type);
-    int g_size = Rast_raster_size(g_type);
-    int b_size = Rast_raster_size(b_type);
+    int r_size = Rast_cell_size(r_type);
+    int g_size = Rast_cell_size(g_type);
+    int b_size = Rast_cell_size(b_type);
     int ncols = src[0][1] - src[0][0];
     int i;
 

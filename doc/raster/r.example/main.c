@@ -127,12 +127,12 @@ int main(int argc, char *argv[])
     G_debug(3, "number of rows %d", cellhd.rows);
 
     /* Allocate input buffer */
-    inrast = Rast_allocate_raster_buf(data_type);
+    inrast = Rast_allocate_buf(data_type);
 
     /* Allocate output buffer, use input map data_type */
     nrows = G_window_rows();
     ncols = G_window_cols();
-    outrast = Rast_allocate_raster_buf(data_type);
+    outrast = Rast_allocate_buf(data_type);
 
     /* controlling, if we can write the raster */
     if ((outfd = Rast_open_raster_new(result, data_type)) < 0)

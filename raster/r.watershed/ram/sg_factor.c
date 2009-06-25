@@ -14,7 +14,7 @@ int sg_factor(void)
     G_message(_("SECTION 4: RUSLE LS and/or S factor determination."));
 
     if (ril_flag)
-	ril_buf = Rast_allocate_cell_buf();
+	ril_buf = Rast_allocate_c_buf();
 
     for (r = 0; r < nrows; r++) {
 	G_percent(r, nrows, 3);

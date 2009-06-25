@@ -47,7 +47,7 @@ void Init(void)
 	}
 	else {
 	    MapCount = 0;
-	    CellBuffer = Rast_allocate_cell_buf();
+	    CellBuffer = Rast_allocate_c_buf();
 	    for (row = 0; row < Rs; row++) {
 		Rast_get_map_row_nomask(FDM, CellBuffer, row);
 		for (col = 0; col < Cs; col++) {
@@ -126,7 +126,7 @@ void Init(void)
 	}			/* /for */
     }				/* /else */
 
-    CellBuffer = Rast_allocate_cell_buf();
+    CellBuffer = Rast_allocate_c_buf();
     CatInfo.NumValue = (int *)G_malloc(CatInfo.NumCat * sizeof(int));
     CatInfo.Average = (double *)G_malloc(CatInfo.NumCat * sizeof(double));
     CatInfo.Min = (double *)G_malloc(CatInfo.NumCat * sizeof(double));

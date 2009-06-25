@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
     }
 
     /* allocate the space for one row of cell map data */
-    cell_row = Rast_allocate_cell_buf();
+    cell_row = Rast_allocate_c_buf();
 
     /* Read in cell map values */
     G_message(_("Reading raster map..."));
@@ -175,7 +175,7 @@ int main(int argc, char *argv[])
     if ((zcfd = Rast_open_cell_new(output_map->answer)) < 0)
 	exit(EXIT_FAILURE);
 
-    cell_row = Rast_allocate_cell_buf();
+    cell_row = Rast_allocate_c_buf();
 
     /* Write out result to a new cell map */
     for (i = 0; i < or; i++) {

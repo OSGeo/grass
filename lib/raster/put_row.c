@@ -571,7 +571,7 @@ static int put_data_gdal(int fd, const void *rast, int row, int n,
 {
 #ifdef HAVE_GDAL
     struct fileinfo *fcb = &R__.fileinfo[fd];
-    int size = Rast_raster_size(map_type);
+    int size = Rast_cell_size(map_type);
     DCELL null_val = fcb->gdal->null_val;
     const void *src;
     void *work_buf, *dst;

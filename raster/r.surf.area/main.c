@@ -119,8 +119,8 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Unable to open raster map <%s>"), surf->answer);
     }
 
-    cell_buf[0] = (DCELL *) G_malloc(w.cols * Rast_raster_size(DCELL_TYPE));
-    cell_buf[1] = (DCELL *) G_malloc(w.cols * Rast_raster_size(DCELL_TYPE));
+    cell_buf[0] = (DCELL *) G_malloc(w.cols * Rast_cell_size(DCELL_TYPE));
+    cell_buf[1] = (DCELL *) G_malloc(w.cols * Rast_cell_size(DCELL_TYPE));
 
     fprintf(stdout, "\n");
     {

@@ -442,7 +442,7 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
 
     buf = (DCELL **) G_calloc(nrows + 3, sizeof(DCELL *));
     for (i = 0; i < nrows + 3; i++) {
-	buf[i] = (DCELL *) Rast_allocate_raster_buf(DCELL_TYPE);
+	buf[i] = (DCELL *) Rast_allocate_buf(DCELL_TYPE);
     }
 
 
@@ -452,7 +452,7 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
 
     null_buf = (DCELL **) G_calloc(nrows + 3, sizeof(DCELL *));
     for (i = 0; i < nrows + 3; i++)
-	null_buf[i] = (DCELL *) Rast_allocate_raster_buf(DCELL_TYPE);
+	null_buf[i] = (DCELL *) Rast_allocate_buf(DCELL_TYPE);
 
 
     /* clip out the sampling area */
@@ -575,15 +575,15 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
 
     switch (data_type) {
     case CELL_TYPE:
-	tmp = Rast_allocate_raster_buf(CELL_TYPE);
+	tmp = Rast_allocate_buf(CELL_TYPE);
 	tmpname = "tmp";
 	break;
     case FCELL_TYPE:
-	ftmp = Rast_allocate_raster_buf(FCELL_TYPE);
+	ftmp = Rast_allocate_buf(FCELL_TYPE);
 	tmpname = "ftmp";
 	break;
     case DCELL_TYPE:
-	dtmp = Rast_allocate_raster_buf(DCELL_TYPE);
+	dtmp = Rast_allocate_buf(DCELL_TYPE);
 	tmpname = "dtmp";
 	break;
     }
@@ -631,17 +631,17 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
 	case CELL_TYPE:
 	    rastptr = tmp;
 	    for (x = 0; x < col0; x++)
-		rastptr = G_incr_void_ptr(rastptr, Rast_raster_size(CELL_TYPE));
+		rastptr = G_incr_void_ptr(rastptr, Rast_cell_size(CELL_TYPE));
 	    break;
 	case FCELL_TYPE:
 	    rastptr = ftmp;
 	    for (x = 0; x < col0; x++)
-		rastptr = G_incr_void_ptr(rastptr, Rast_raster_size(FCELL_TYPE));
+		rastptr = G_incr_void_ptr(rastptr, Rast_cell_size(FCELL_TYPE));
 	    break;
 	case DCELL_TYPE:
 	    rastptr = dtmp;
 	    for (x = 0; x < col0; x++)
-		rastptr = G_incr_void_ptr(rastptr, Rast_raster_size(DCELL_TYPE));
+		rastptr = G_incr_void_ptr(rastptr, Rast_cell_size(DCELL_TYPE));
 	    break;
 	}
 
@@ -664,7 +664,7 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
 		else {
 		    *(*(null_buf + i + 1 - row0) + j + 1 - col0) = 0.0;
 		}
-		rastptr = G_incr_void_ptr(rastptr, Rast_raster_size(CELL_TYPE));
+		rastptr = G_incr_void_ptr(rastptr, Rast_cell_size(CELL_TYPE));
 		break;
 
 	    case FCELL_TYPE:
@@ -676,7 +676,7 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
 		else {
 		    *(*(null_buf + i + 1 - row0) + j + 1 - col0) = 0.0;
 		}
-		rastptr = G_incr_void_ptr(rastptr, Rast_raster_size(FCELL_TYPE));
+		rastptr = G_incr_void_ptr(rastptr, Rast_cell_size(FCELL_TYPE));
 		break;
 
 	    case DCELL_TYPE:
@@ -688,7 +688,7 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
 		else {
 		    *(*(null_buf + i + 1 - row0) + j + 1 - col0) = 0.0;
 		}
-		rastptr = G_incr_void_ptr(rastptr, Rast_raster_size(CELL_TYPE));
+		rastptr = G_incr_void_ptr(rastptr, Rast_cell_size(CELL_TYPE));
 		break;
 	    }
 
@@ -931,7 +931,7 @@ PATCH *get_bd(int row0, int col0, int nrows, int ncols, double class,
 
     patchmap = (CELL **) G_calloc(nrows + 3, sizeof(CELL *));
     for (m = 0; m < nrows + 3; m++)
-	patchmap[m] = (CELL *) Rast_allocate_raster_buf(CELL_TYPE);
+	patchmap[m] = (CELL *) Rast_allocate_buf(CELL_TYPE);
 
     /* if this is the first patch to be traced,
        then set the next patch on the patch list

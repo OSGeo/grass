@@ -89,7 +89,7 @@ int output_data(int tt, double ft)
     }
 */
     if (depth != NULL) {
-	cell6 = Rast_allocate_f_raster_buf();
+	cell6 = Rast_allocate_f_buf();
 	if (ts == 1) {
 	    sprintf(buf, "%s.%.*d", depth, ndigit, tt);
 	    depth0 = G_store(buf);
@@ -102,7 +102,7 @@ int output_data(int tt, double ft)
     }
 
     if (disch != NULL) {
-	cell7 = Rast_allocate_f_raster_buf();
+	cell7 = Rast_allocate_f_buf();
 	if (ts == 1) {
 	    sprintf(buf, "%s.%.*d", disch, ndigit, tt);
 	    disch0 = G_store(buf);
@@ -115,7 +115,7 @@ int output_data(int tt, double ft)
     }
 
     if (err != NULL) {
-	cell8 = Rast_allocate_f_raster_buf();
+	cell8 = Rast_allocate_f_buf();
 	if (ts == 1) {
 	    sprintf(buf, "%s.%.*d", err, ndigit, tt);
 	    err0 = G_store(buf);
@@ -130,7 +130,7 @@ int output_data(int tt, double ft)
 
 
     if (conc != NULL) {
-	cell14 = Rast_allocate_f_raster_buf();
+	cell14 = Rast_allocate_f_buf();
 	if (ts == 1) {
 	    sprintf(buf, "%s.%.*d", conc, ndigit, tt);
 	    conc0 = G_store(buf);
@@ -144,7 +144,7 @@ int output_data(int tt, double ft)
     }
 
     if (flux != NULL) {
-	cell15 = Rast_allocate_f_raster_buf();
+	cell15 = Rast_allocate_f_buf();
 	if (ts == 1) {
 	    sprintf(buf, "%s.%.*d", flux, ndigit, tt);
 	    flux0 = G_store(buf);
@@ -158,7 +158,7 @@ int output_data(int tt, double ft)
     }
 
     if (erdep != NULL) {
-	cell16 = Rast_allocate_f_raster_buf();
+	cell16 = Rast_allocate_f_buf();
 	if (ts == 1) {
 	    sprintf(buf, "%s.%.*d", erdep, ndigit, tt);
 	    erdep0 = G_store(buf);
@@ -619,7 +619,7 @@ int output_et()
 
 
     if (et != NULL) {
-	cell17 = Rast_allocate_f_raster_buf();
+	cell17 = Rast_allocate_f_buf();
 	/*      if (ts == 1) {
 	   sprintf(buf,"%s.%.*d",et,ndigit,tt);
 	   et0 = G_store(buf);
@@ -633,7 +633,7 @@ int output_et()
     }
 
     if (tc != NULL) {
-	cell13 = Rast_allocate_f_raster_buf();
+	cell13 = Rast_allocate_f_buf();
 	/*   if (ts == 1) {
 	   sprintf(buf,"%s.%.*d",tc,ndigit,tt);
 	   tc0 = G_store(buf);

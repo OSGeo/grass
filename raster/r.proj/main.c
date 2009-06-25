@@ -399,15 +399,15 @@ int main(int argc, char **argv)
 
     if (strcmp(interpol->answer, "nearest") == 0) {
 	fdo = Rast_open_raster_new(mapname, cell_type);
-	obuffer = (CELL *) Rast_allocate_raster_buf(cell_type);
+	obuffer = (CELL *) Rast_allocate_buf(cell_type);
     }
     else {
 	fdo = Rast_open_fp_cell_new(mapname);
 	cell_type = FCELL_TYPE;
-	obuffer = (FCELL *) Rast_allocate_raster_buf(cell_type);
+	obuffer = (FCELL *) Rast_allocate_buf(cell_type);
     }
 
-    cell_size = Rast_raster_size(cell_type);
+    cell_size = Rast_cell_size(cell_type);
 
     xcoord1 = xcoord2 = outcellhd.west + (outcellhd.ew_res / 2);
     /**/ ycoord1 = ycoord2 = outcellhd.north - (outcellhd.ns_res / 2);

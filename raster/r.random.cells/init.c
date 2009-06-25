@@ -30,12 +30,12 @@ void Init()
 	MinRes = EW;
     else
 	MinRes = NS;
-    CellBuffer = Rast_allocate_cell_buf();
+    CellBuffer = Rast_allocate_c_buf();
 
     /* Out = FlagCreate( Rs, Cs); */
     Out = (CELL **) G_malloc(sizeof(CELL *) * Rs);
     for (row = 0; row < Rs; row++) {
-	Out[row] = Rast_allocate_cell_buf();
+	Out[row] = Rast_allocate_c_buf();
 	Rast_zero_cell_buf(Out[row]);
     }
 

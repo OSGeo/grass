@@ -290,7 +290,7 @@ static int load_files(void)
 		G_fatal_error(_("Unable to read color table for <%s>"), name);
 
 	    rtype = Rast_get_raster_map_type(fd);
-	    voidc = Rast_allocate_raster_buf(rtype);
+	    voidc = Rast_allocate_buf(rtype);
 
 	    for (row = 0; row < vrows; row++) {
 		if (Rast_get_raster_row(fd, voidc,

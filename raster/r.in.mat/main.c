@@ -295,21 +295,21 @@ int main(int argc, char *argv[])
 		G_debug(1, " double map");
 		map_type = DCELL_TYPE;
 		array_data =
-		    G_calloc(mrows * (ncols + 1), Rast_raster_size(map_type));
+		    G_calloc(mrows * (ncols + 1), Rast_cell_size(map_type));
 		fread(array_data, sizeof(double), mrows * ncols, fp1);
 		break;
 	    case 1:
 		G_debug(1, " float map");
 		map_type = FCELL_TYPE;
 		array_data =
-		    G_calloc(mrows * (ncols + 1), Rast_raster_size(map_type));
+		    G_calloc(mrows * (ncols + 1), Rast_cell_size(map_type));
 		fread(array_data, sizeof(float), mrows * ncols, fp1);
 		break;
 	    case 2:
 		G_debug(1, " int map");
 		map_type = CELL_TYPE;
 		array_data =
-		    G_calloc(mrows * (ncols + 1), Rast_raster_size(map_type));
+		    G_calloc(mrows * (ncols + 1), Rast_cell_size(map_type));
 		fread(array_data, sizeof(int), mrows * ncols, fp1);
 		break;
 	    default:
@@ -407,7 +407,7 @@ int main(int argc, char *argv[])
     G_verbose_message("");
 
     /* prep memory */
-    raster = Rast_allocate_raster_buf(map_type);
+    raster = Rast_allocate_buf(map_type);
 
     cf = Rast_open_raster_new(map_name, map_type);
     if (cf < 0)
@@ -426,7 +426,7 @@ int main(int argc, char *argv[])
 	    array_ptr =
 		G_incr_void_ptr(array_ptr,
 				(row +
-				 col * mrows) * Rast_raster_size(map_type));
+				 col * mrows) * Rast_cell_size(map_type));
 
 	    if (is_nan(array_ptr, map_type))
 		Rast_set_null_value(rastline_ptr, 1, map_type);
@@ -453,7 +453,7 @@ int main(int argc, char *argv[])
 		}
 	    }
 	    rastline_ptr =
-		G_incr_void_ptr(rastline_ptr, Rast_raster_size(map_type));
+		G_incr_void_ptr(rastline_ptr, Rast_cell_size(map_type));
 	}
 
 #ifdef DEBUG
@@ -465,7 +465,7 @@ int main(int argc, char *argv[])
 	    else
 		fprintf(stderr, "+");
 	    rastline_ptr =
-		G_incr_void_ptr(rastline_ptr, Rast_raster_size(map_type));
+		G_incr_void_ptr(rastline_ptr, Rast_cell_size(map_type));
 	}
 	fprintf(stderr, "]\n");
 #endif

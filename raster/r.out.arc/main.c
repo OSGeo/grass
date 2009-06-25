@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
     /*
        null_row = Rast_allocate_null_buf();
      */
-    raster = Rast_allocate_raster_buf(out_type);
+    raster = Rast_allocate_buf(out_type);
 
     nrows = G_window_rows();
     ncols = G_window_cols();
@@ -178,7 +178,7 @@ int main(int argc, char *argv[])
 	   exit(EXIT_FAILURE);
 	 */
 	for (col = 0, ptr = raster; col < ncols; col++,
-	     ptr = G_incr_void_ptr(ptr, Rast_raster_size(out_type))) {
+	     ptr = G_incr_void_ptr(ptr, Rast_cell_size(out_type))) {
 	    if (!Rast_is_null_value(ptr, out_type)) {
 		if (out_type == CELL_TYPE)
 		    fprintf(fp, "%d", *((CELL *) ptr));

@@ -24,7 +24,7 @@ int zoom(struct Cell_head *window, const char *name, const char *mapset)
 	G_fatal_error(_("Unable to open raster map <%s> in <%s>"),
 		      name, mapset);
     map_type = Rast_get_raster_map_type(fd);
-    raster = Rast_allocate_raster_buf(map_type);
+    raster = Rast_allocate_buf(map_type);
 
     /* find first non-null row */
     top = nrows;
@@ -37,7 +37,7 @@ int zoom(struct Cell_head *window, const char *name, const char *mapset)
 	for (col = 0; col < ncols; col++) {
 	    if (!Rast_is_null_value(rast_ptr, map_type))
 		break;
-	    rast_ptr = G_incr_void_ptr(rast_ptr, Rast_raster_size(map_type));
+	    rast_ptr = G_incr_void_ptr(rast_ptr, Rast_cell_size(map_type));
 	}
 	if (col == ncols)
 	    continue;
@@ -50,7 +50,7 @@ int zoom(struct Cell_head *window, const char *name, const char *mapset)
 	for (mark = col; col < ncols; col++) {
 	    if (!Rast_is_null_value(rast_ptr, map_type))
 		mark = col;
-	    rast_ptr = G_incr_void_ptr(rast_ptr, Rast_raster_size(map_type));
+	    rast_ptr = G_incr_void_ptr(rast_ptr, Rast_cell_size(map_type));
 	}
 	if (mark > right)
 	    right = mark;

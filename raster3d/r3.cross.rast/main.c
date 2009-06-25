@@ -147,12 +147,12 @@ void rast3d_cross_section(void *map, G3D_Region region, int elevfd, int outfd)
 
     /*Allocate mem for the output maps row */
     if (typeIntern == FCELL_TYPE)
-	fcell = Rast_allocate_f_raster_buf();
+	fcell = Rast_allocate_f_buf();
     else if (typeIntern == DCELL_TYPE)
-	dcell = Rast_allocate_d_raster_buf();
+	dcell = Rast_allocate_c_buf();
 
     /*Mem for the input map row */
-    elevrast = Rast_allocate_raster_buf(globalElevMapType);
+    elevrast = Rast_allocate_buf(globalElevMapType);
 
     for (y = 0; y < rows; y++) {
 	G_percent(y, rows - 1, 10);
@@ -163,7 +163,7 @@ void rast3d_cross_section(void *map, G3D_Region region, int elevfd, int outfd)
 			_("Unable to get elevation raster row"));
 
 	for (x = 0, ptr = elevrast; x < cols; x++, ptr =
-	     G_incr_void_ptr(ptr, Rast_raster_size(globalElevMapType))) {
+	     G_incr_void_ptr(ptr, Rast_cell_size(globalElevMapType))) {
 
 	    /*we guess the elevation input map has no null values */
 	    isnull = 0;

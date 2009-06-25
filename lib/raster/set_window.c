@@ -97,7 +97,7 @@ int Rast_set_window(struct Cell_head *window)
 	    /* opened for writing */
 	    G_free (fcb->data);
 	    fcb->data = (unsigned char *) G_calloc (R__.window.cols,
-						    Rast_raster_size(fcb->map_type));
+						    Rast_cell_size(fcb->map_type));
 	}
 
 	/* allocate null bitstream buffers for reading/writing null rows */

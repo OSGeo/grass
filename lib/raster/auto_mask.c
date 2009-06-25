@@ -68,7 +68,7 @@ int Rast__check_for_auto_masking(void)
 	return 0;
     }
 
-    /*    R__.mask_buf = Rast_allocate_cell_buf(); */
+    /*    R__.mask_buf = Rast_allocate_c_buf(); */
 
     R__.auto_mask = 1;
 

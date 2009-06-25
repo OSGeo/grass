@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Cannot open cell file [%s]"), in);
     if (Rast_get_cellhd(in, "", &cellhd) < 0)
 	G_fatal_error(_("Cannot read file header of [%s])"), in);
-    inrast = Rast_allocate_d_raster_buf();
+    inrast = Rast_allocate_c_buf();
     
     /***************************************************/ 
     stepx = cellhd.ew_res;
@@ -117,7 +117,7 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Unable to set up lat/long projection parameters"));
     }	/* End of stolen from r.sun */
 
-    outrast1 = Rast_allocate_d_raster_buf();
+    outrast1 = Rast_allocate_c_buf();
 
     if ((outfd1 = Rast_open_raster_new(result1,DCELL_TYPE)) < 0)
 	G_fatal_error(_("Could not open <%s>"), result1);

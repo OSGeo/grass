@@ -48,7 +48,7 @@ int rectify(char *name, char *mapset, char *result, int order)
 	return 0;
     }
     map_type = Rast_get_raster_map_type(infd);
-    rast = (void *)G_calloc(G_window_cols() + 1, Rast_raster_size(map_type));
+    rast = (void *)G_calloc(G_window_cols() + 1, Rast_cell_size(map_type));
     Rast_set_null_value(rast, G_window_cols() + 1, map_type);
 
     G_copy(&win, &target_window, sizeof(win));

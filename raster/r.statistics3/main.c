@@ -69,8 +69,8 @@ static inline double get_quantile(struct basecat *bc, int n)
 
 static void get_slot_counts(int basefile, int coverfile)
 {
-    CELL *basebuf = Rast_allocate_c_raster_buf();
-    DCELL *coverbuf = Rast_allocate_d_raster_buf();
+    CELL *basebuf = Rast_allocate_c_buf();
+    DCELL *coverbuf = Rast_allocate_c_buf();
     int row, col;
 
     G_message(_("Computing histograms"));
@@ -159,8 +159,8 @@ static void initialize_bins(void)
 
 static void fill_bins(int basefile, int coverfile)
 {
-    CELL *basebuf = Rast_allocate_c_raster_buf();
-    DCELL *coverbuf = Rast_allocate_d_raster_buf();
+    CELL *basebuf = Rast_allocate_c_buf();
+    DCELL *coverbuf = Rast_allocate_c_buf();
     int row, col;
 
     G_message(_("Binning data"));
@@ -322,8 +322,8 @@ static void do_reclass(const char *basemap, char **outputs)
 static void do_output(int base_fd, char **outputs, const char *covermap)
 {
     int *out_fd = G_malloc(num_quants * sizeof(int));
-    CELL *base_buf = Rast_allocate_c_raster_buf();
-    DCELL *out_buf = Rast_allocate_d_raster_buf();
+    CELL *base_buf = Rast_allocate_c_buf();
+    DCELL *out_buf = Rast_allocate_c_buf();
     const char *mapset = G_mapset();
     struct Colors colors;
     int have_colors;

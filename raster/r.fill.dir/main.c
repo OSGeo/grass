@@ -250,7 +250,7 @@ int main(int argc, char **argv)
     G_free(bnd.b[1]);
     G_free(bnd.b[2]);
 
-    out_buf = Rast_allocate_c_raster_buf();
+    out_buf = Rast_allocate_c_buf();
     bufsz = ncols * sizeof(CELL);
 
     lseek(fe, 0, SEEK_SET);

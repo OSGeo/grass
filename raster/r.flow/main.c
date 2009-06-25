@@ -308,7 +308,7 @@ static void calculate(void)
 
     /*    double     x, y, length, xstep, ystep, roffset, coffset; */
     double x, y, length, xstep, ystep;
-    FCELL *lg = Rast_allocate_f_raster_buf();
+    FCELL *lg = Rast_allocate_f_buf();
     struct line_pnts *points = Vect_new_line_struct();
     struct line_cats *cats = Vect_new_cats_struct();
     int loopstep = (!parm.dsout && !parm.lgout && parm.flout) ? parm.skip : 1;

@@ -139,8 +139,8 @@ int main(int argc, char *argv[])
     data = G_malloc(rows * cols * 2 * sizeof(double));
 
     /* allocate the space for one row of cell map data */
-    cell_real = Rast_allocate_d_raster_buf();
-    cell_imag = Rast_allocate_d_raster_buf();
+    cell_real = Rast_allocate_c_buf();
+    cell_imag = Rast_allocate_c_buf();
 
 #define C(i, j) ((i) * cols + (j))
 
@@ -168,7 +168,7 @@ int main(int argc, char *argv[])
     G_message(_("Masking raster maps..."));
     maskfd = Rast_maskfd();
     if (maskfd >= 0) {
-	maskbuf = Rast_allocate_cell_buf();
+	maskbuf = Rast_allocate_c_buf();
 
 	for (i = 0; i < rows; i++) {
 	    Rast_get_map_row(maskfd, maskbuf, i);

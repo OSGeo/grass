@@ -15,7 +15,7 @@ int get_stats(const char *name, struct Cell_stats *statf)
 	exit(1);
     nrows = G_window_rows();
     ncols = G_window_cols();
-    cell = Rast_allocate_cell_buf();
+    cell = Rast_allocate_c_buf();
 
     Rast_init_cell_stats(statf);
     G_message(_("Reading %s ..."), name);

@@ -82,7 +82,7 @@ int begin_rasterization(int nrows, int f)
 	break;
     }
     if (format != USE_CELL)
-	cell = Rast_allocate_cell_buf();
+	cell = Rast_allocate_c_buf();
 
     at_row = 0;
     configure_plot();

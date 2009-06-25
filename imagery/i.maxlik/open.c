@@ -35,7 +35,7 @@ int open_files(void)
     cellfd = (int *)G_malloc(Ref.nfiles * sizeof(int));
     P = (double *)G_malloc(Ref.nfiles * sizeof(double));
     for (n = 0; n < Ref.nfiles; n++) {
-	cell[n] = Rast_allocate_d_raster_buf();
+	cell[n] = Rast_allocate_c_buf();
 	name = Ref.file[n].name;
 	mapset = Ref.file[n].mapset;
 	if ((cellfd[n] = Rast_open_cell_old(name, mapset)) < 0)
@@ -66,7 +66,7 @@ int open_files(void)
     if (class_fd < 0)
 	exit(EXIT_FAILURE);
 
-    class_cell = Rast_allocate_cell_buf();
+    class_cell = Rast_allocate_c_buf();
 
     reject_cell = NULL;
     if (reject_name) {
@@ -75,7 +75,7 @@ int open_files(void)
 	    G_fatal_error(_("Unable to create raster map <%s>"),
 			  reject_name);
 	else
-	    reject_cell = Rast_allocate_cell_buf();
+	    reject_cell = Rast_allocate_c_buf();
     }
 
     return 0;

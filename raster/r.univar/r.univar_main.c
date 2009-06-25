@@ -179,7 +179,7 @@ process_raster(univar_stat * stats, int fd, const struct Cell_head *region)
 	   : (map_type == DCELL_TYPE) ? (void *)stats->dcell_array
 	   : (map_type == FCELL_TYPE) ? (void *)stats->fcell_array
 	   : (void *)stats->cell_array);
-    const size_t value_sz = Rast_raster_size(map_type);
+    const size_t value_sz = Rast_cell_size(map_type);
     unsigned int row;
     void *raster_row;
 

@@ -15,7 +15,7 @@ int perform_georef(int infd, void *rast)
     int idx;
     int i;
 
-    rast_size = Rast_raster_size(map_type);
+    rast_size = Rast_cell_size(map_type);
 
     for (row = 0; row < matrix_rows; row++)
 	Rast_set_null_value(cell_buf[row], matrix_cols, map_type);

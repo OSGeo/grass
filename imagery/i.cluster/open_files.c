@@ -50,7 +50,7 @@ int open_files(void)
     cell = (DCELL **) G_malloc(ref.nfiles * sizeof(DCELL *));
     cellfd = (int *)G_malloc(ref.nfiles * sizeof(int));
     for (n = 0; n < ref.nfiles; n++) {
-	cell[n] = Rast_allocate_d_raster_buf();
+	cell[n] = Rast_allocate_c_buf();
 	name = ref.file[n].name;
 	mapset = ref.file[n].mapset;
 	if ((cellfd[n] = Rast_open_cell_old(name, mapset)) < 0)

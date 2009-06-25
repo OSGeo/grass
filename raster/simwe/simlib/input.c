@@ -86,31 +86,31 @@ int input_data(void)
 */
 
     /* Allocate raster buffers */
-    cell1 = Rast_allocate_f_raster_buf();
-    cell2 = Rast_allocate_d_raster_buf();
-    cell3 = Rast_allocate_d_raster_buf();
+    cell1 = Rast_allocate_f_buf();
+    cell2 = Rast_allocate_c_buf();
+    cell3 = Rast_allocate_c_buf();
 
     if (rain != NULL)
-	cell4 = Rast_allocate_d_raster_buf();
+	cell4 = Rast_allocate_c_buf();
 
     if (infil != NULL)
-	cell4a = Rast_allocate_d_raster_buf();
+	cell4a = Rast_allocate_c_buf();
 
     if (traps != NULL)
-	cell4b = Rast_allocate_f_raster_buf();
-    cell5 = Rast_allocate_f_raster_buf();
+	cell4b = Rast_allocate_f_buf();
+    cell5 = Rast_allocate_f_buf();
 
     if (detin != NULL)
-	cell9 = Rast_allocate_f_raster_buf();
+	cell9 = Rast_allocate_f_buf();
 
     if (tranin != NULL)
-	cell10 = Rast_allocate_f_raster_buf();
+	cell10 = Rast_allocate_f_buf();
 
     if (tauin != NULL)
-	cell11 = Rast_allocate_f_raster_buf();
+	cell11 = Rast_allocate_f_buf();
 
     if (wdepth != NULL)
-	cell12 = Rast_allocate_d_raster_buf();
+	cell12 = Rast_allocate_c_buf();
 
     /* Allocate some double dimension arrays for each input */
     /* with length of matrix Y */

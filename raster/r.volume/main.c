@@ -143,8 +143,8 @@ int main(int argc, char *argv[])
 	count[i] = 0;
     }
 
-    data_buf = Rast_allocate_cell_buf();
-    clump_buf = Rast_allocate_cell_buf();
+    data_buf = Rast_allocate_c_buf();
+    clump_buf = Rast_allocate_c_buf();
 
     /* get window size */
     rows = window.rows;

@@ -234,20 +234,20 @@ int main(int argc, char **argv)
     xres = window.ew_res;
     yres = window.ns_res;
 
-    in_row = Rast_allocate_d_raster_buf();
+    in_row = Rast_allocate_c_buf();
 
-    old_val_row = Rast_allocate_d_raster_buf();
-    new_val_row = Rast_allocate_d_raster_buf();
+    old_val_row = Rast_allocate_c_buf();
+    new_val_row = Rast_allocate_c_buf();
 
-    old_x_row = Rast_allocate_c_raster_buf();
-    old_y_row = Rast_allocate_c_raster_buf();
-    new_x_row = Rast_allocate_c_raster_buf();
-    new_y_row = Rast_allocate_c_raster_buf();
+    old_x_row = Rast_allocate_c_buf();
+    old_y_row = Rast_allocate_c_buf();
+    new_x_row = Rast_allocate_c_buf();
+    new_y_row = Rast_allocate_c_buf();
 
-    dist_row = Rast_allocate_d_raster_buf();
+    dist_row = Rast_allocate_c_buf();
 
     if (dist_name && strcmp(opt.met->answer, "euclidean") == 0)
-	out_row = Rast_allocate_d_raster_buf();
+	out_row = Rast_allocate_c_buf();
     else
 	out_row = dist_row;
 

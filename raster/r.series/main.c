@@ -192,7 +192,7 @@ int main(int argc, char *argv[])
 	if (p->fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
 			  p->name);
-	p->buf = Rast_allocate_d_raster_buf();
+	p->buf = Rast_allocate_c_buf();
     }
 
     /* process the output maps */
@@ -218,7 +218,7 @@ int main(int argc, char *argv[])
 	out->quantile = (parm.quantile->answer && parm.quantile->answers[i])
 	    ? atof(parm.quantile->answers[i])
 	    : 0;
-	out->buf = Rast_allocate_d_raster_buf();
+	out->buf = Rast_allocate_c_buf();
 	out->fd = Rast_open_raster_new(
 	    output_name, menu[method].is_int ? CELL_TYPE : DCELL_TYPE);
 	if (out->fd < 0)

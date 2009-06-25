@@ -186,7 +186,7 @@ int MyApp::load_files(void)
     const char *name;
     struct Colors colors;
 
-    dcell = Rast_allocate_d_raster_buf();
+    dcell = Rast_allocate_d_buf();
 
     tsiz = G_window_cols();
 

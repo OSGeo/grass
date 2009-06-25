@@ -17,7 +17,7 @@ int get_range(const char *name, long *min, long *max)
 	Rast_init_range(&range);	/* read the file to get the range */
 	Rast_get_cellhd(name, "", &cellhd);
 	Rast_set_window(&cellhd);
-	cell = Rast_allocate_cell_buf();
+	cell = Rast_allocate_c_buf();
 	fd = Rast_open_cell_old(name, "");
 	if (fd < 0)
 	    exit(1);

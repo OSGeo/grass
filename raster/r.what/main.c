@@ -213,9 +213,9 @@ int main(int argc, char *argv[])
 	if (flag3->answer)
 	    out_type[i] = CELL_TYPE;
 
-	cell[i] = Rast_allocate_c_raster_buf();
+	cell[i] = Rast_allocate_c_buf();
 	if (out_type[i] != CELL_TYPE)
-	    dcell[i] = Rast_allocate_d_raster_buf();
+	    dcell[i] = Rast_allocate_c_buf();
     }
 
     G_get_window(&window);

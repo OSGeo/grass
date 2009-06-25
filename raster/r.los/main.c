@@ -189,11 +189,11 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("[%s]: Cannot read map header"), patt_layer);
 
 	/*  allocate buffer space for row-io to layer           */
-	cell = Rast_allocate_raster_buf(CELL_TYPE);
+	cell = Rast_allocate_buf(CELL_TYPE);
     }
 
     /*  allocate buffer space for row-io to layer           */
-    fcell = Rast_allocate_raster_buf(FCELL_TYPE);
+    fcell = Rast_allocate_buf(FCELL_TYPE);
 
     /*  find number of rows and columns in elevation map    */
     nrows = G_window_rows();

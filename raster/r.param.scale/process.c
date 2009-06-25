@@ -87,9 +87,9 @@ void process(void)
     /* Reserve `wsize' rows of memory.      */
 
     if (mparam != FEATURE)
-	row_out = Rast_allocate_raster_buf(DCELL_TYPE);	/* Initialise output row buffer.     */
+	row_out = Rast_allocate_buf(DCELL_TYPE);	/* Initialise output row buffer.     */
     else
-	featrow_out = Rast_allocate_raster_buf(CELL_TYPE);	/* Initialise output row buffer.  */
+	featrow_out = Rast_allocate_buf(CELL_TYPE);	/* Initialise output row buffer.  */
 
     window_ptr = (DCELL *) G_malloc(SQR(wsize) * sizeof(DCELL));
     /* Reserve enough memory for local wind. */

@@ -164,13 +164,13 @@ int calculate(int fd, area_des ad, double *result)
 	return RLI_ERRORE;
     }
 
-    buf_sup = Rast_allocate_cell_buf();
+    buf_sup = Rast_allocate_c_buf();
     if (buf_sup == NULL) {
 	G_fatal_error("malloc buf_sup failed");
 	return RLI_ERRORE;
     }
 
-    buf = Rast_allocate_cell_buf();
+    buf = Rast_allocate_c_buf();
     if (buf == NULL) {
 	G_fatal_error("malloc buf failed");
 	return RLI_ERRORE;
@@ -564,13 +564,13 @@ int calculateD(int fd, area_des ad, double *result)
 	G_fatal_error("malloc mask_patch_corr failed");
 	return RLI_ERRORE;
     }
-    buf_sup = Rast_allocate_d_raster_buf();
+    buf_sup = Rast_allocate_c_buf();
     if (buf_sup == NULL)
     {
 	G_fatal_error("malloc buf_sup failed");
 	return RLI_ERRORE;
     }
-    buf = Rast_allocate_d_raster_buf();
+    buf = Rast_allocate_c_buf();
     if (buf == NULL)
     {
 	G_fatal_error("malloc buf failed");
@@ -956,13 +956,13 @@ int calculateF(int fd, area_des ad, double *result)
 	G_fatal_error("malloc mask_patch_corr failed");
 	return RLI_ERRORE;
     }
-    buf_sup = Rast_allocate_f_raster_buf();
+    buf_sup = Rast_allocate_f_buf();
     if (buf_sup == NULL)
     {
 	G_fatal_error("malloc buf_sup failed");
 	return RLI_ERRORE;
     }
-    buf = Rast_allocate_f_raster_buf();
+    buf = Rast_allocate_f_buf();
     if (buf == NULL)
     {
 	G_fatal_error("malloc buf failed");

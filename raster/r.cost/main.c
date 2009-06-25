@@ -356,7 +356,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Unable to open raster map <%s>"), cost_layer);
 
     data_type = Rast_get_raster_map_type(cost_fd);
-    cell = Rast_allocate_raster_buf(data_type);
+    cell = Rast_allocate_buf(data_type);
 
     /*   Parameters for map submatrices   */
 
@@ -422,7 +422,7 @@ int main(int argc, char *argv[])
 	int i;
 	double p;
 
-	dsize = Rast_raster_size(data_type);
+	dsize = Rast_cell_size(data_type);
 	p = 0.0;
 
 	for (row = 0; row < nrows; row++) {
@@ -639,9 +639,9 @@ int main(int argc, char *argv[])
 
 	data_type2 = Rast_get_raster_map_type(fd);
 
-	dsize2 = Rast_raster_size(data_type2);
+	dsize2 = Rast_cell_size(data_type2);
 
-	cell2 = Rast_allocate_raster_buf(data_type2);
+	cell2 = Rast_allocate_buf(data_type2);
 
 	if (!cell2)
 	    G_fatal_error(_("Unable to allocate memory"));
@@ -981,7 +981,7 @@ int main(int argc, char *argv[])
 
     if (dir == 1) {
 	dir_fd = Rast_open_raster_new(move_dir_layer, dir_data_type);
-	dir_cell = Rast_allocate_raster_buf(dir_data_type);
+	dir_cell = Rast_allocate_buf(dir_data_type);
     }
 
     /*  Write pending updates by segment_put() to output map   */
@@ -995,7 +995,7 @@ int main(int argc, char *argv[])
     G_message(_("Writing raster map <%s>..."), cum_cost_layer);
 
     if (keep_nulls) {
-	cell2 = Rast_allocate_raster_buf(data_type);
+	cell2 = Rast_allocate_buf(data_type);
     }
 
     if (data_type == CELL_TYPE) {

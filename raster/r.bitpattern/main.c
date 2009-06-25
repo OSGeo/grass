@@ -107,12 +107,12 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Unable to read header of raster map <%s>"), name);
 
     /* Allocate input buffer */
-    inrast = Rast_allocate_raster_buf(data_type);
+    inrast = Rast_allocate_buf(data_type);
 
     /* Allocate output buffer, use input map data_type */
     nrows = G_window_rows();
     ncols = G_window_cols();
-    outrast = Rast_allocate_raster_buf(data_type);
+    outrast = Rast_allocate_buf(data_type);
 
     if ((outfd = Rast_open_raster_new(result, data_type)) < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), result);

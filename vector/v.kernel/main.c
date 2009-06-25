@@ -246,12 +246,12 @@ int main(int argc, char **argv)
 
 	    /* open mask file */
 	    if ((maskfd = Rast_maskfd()) >= 0)
-		mask = Rast_allocate_cell_buf();
+		mask = Rast_allocate_c_buf();
 	    else
 		mask = NULL;
 
 	    /* allocate output raster */
-	    output_cell = Rast_allocate_raster_buf(DCELL_TYPE);
+	    output_cell = Rast_allocate_buf(DCELL_TYPE);
 	}
     }
 

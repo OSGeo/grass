@@ -61,7 +61,7 @@ static int cell_draw(const char *name,
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
 
     /* Allocate space for cell buffer */
-    xarray = Rast_allocate_raster_buf(data_type);
+    xarray = Rast_allocate_buf(data_type);
 
     D_cell_draw_begin();
 

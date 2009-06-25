@@ -69,7 +69,7 @@ int patch_number(int fd, char **par, area_des ad, double *result)
     Rast_set_c_null_value(&complete_value, 1);
     if (Rast_get_cellhd(ad->raster, "", &hd) == -1)
 	return 0;
-    sup = Rast_allocate_cell_buf();
+    sup = Rast_allocate_c_buf();
 
     /* open mask if needed */
     if (ad->mask == 1) {

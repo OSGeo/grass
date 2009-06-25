@@ -97,24 +97,24 @@ int main(int argc, char *argv[])
     /***************************************************/ 
     if ((infd_rnet = Rast_open_cell_old(rnet, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), rnet);
-    inrast_rnet = Rast_allocate_d_raster_buf();
+    inrast_rnet = Rast_allocate_c_buf();
     
     /***************************************************/ 
     if ((infd_g0 = Rast_open_cell_old(g0, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), g0);
-    inrast_g0 = Rast_allocate_d_raster_buf();
+    inrast_g0 = Rast_allocate_c_buf();
     
     /***************************************************/ 
     if ((infd_h0 = Rast_open_cell_old(h0, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), h0);
-    inrast_h0 = Rast_allocate_d_raster_buf();
+    inrast_h0 = Rast_allocate_c_buf();
     
     /***************************************************/ 
     nrows = G_window_rows();
     ncols = G_window_cols();
-    outrast1 = Rast_allocate_d_raster_buf();
+    outrast1 = Rast_allocate_c_buf();
     if (makin) 
-	outrast2 = Rast_allocate_d_raster_buf();
+	outrast2 = Rast_allocate_c_buf();
     
     /* Create New raster files */ 
     if ((outfd1 = Rast_open_raster_new(result1, DCELL_TYPE)) < 0)

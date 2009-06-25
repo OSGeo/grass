@@ -537,7 +537,7 @@ int INPUT(void)
     int l, i, j, k;
     int lmax, kmax;
 
-    cell1 = Rast_allocate_f_raster_buf();
+    cell1 = Rast_allocate_f_buf();
 
     z = (float **)G_malloc(sizeof(float *) * (m));
     z100 = (float **)G_malloc(sizeof(float *) * (m100));
@@ -617,7 +617,7 @@ int OUTGR(int numrows, int numcols)
 	exit(EXIT_FAILURE);
 
     if (horizon != NULL) {
-	cell1 = Rast_allocate_f_raster_buf();
+	cell1 = Rast_allocate_f_buf();
 	fd1 = Rast_open_fp_cell_new(shad_filename);
 	if (fd1 < 0)
 	    G_fatal_error(_("Unable to create raster map %s"), shad_filename);

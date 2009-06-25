@@ -43,7 +43,7 @@ int Rast_get_raster_row_colors(int fd, int row, struct Colors *colors,
 {
     int cols = G_window_cols();
     int type = Rast_get_raster_map_type(fd);
-    int size = Rast_raster_size(type);
+    int size = Rast_cell_size(type);
     void *array;
     unsigned char *set;
     void *p;

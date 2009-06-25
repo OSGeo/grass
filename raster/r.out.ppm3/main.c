@@ -111,7 +111,7 @@ int main(int argc, char **argv)
 	    G_fatal_error(_("Color file for <%s> not available"), name);
 
 	/* Allocate input buffer */
-	B[i].array = Rast_allocate_raster_buf(B[i].type);
+	B[i].array = Rast_allocate_buf(B[i].type);
 
 	/* Allocate output buffers */
 	B[i].buf = (unsigned char *)G_malloc(w.cols);

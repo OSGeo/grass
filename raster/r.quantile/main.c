@@ -57,7 +57,7 @@ static inline double get_quantile(int n)
 
 static void get_slot_counts(int infile)
 {
-    DCELL *inbuf = Rast_allocate_d_raster_buf();
+    DCELL *inbuf = Rast_allocate_c_buf();
     int row, col;
 
     G_message(_("Computing histogram"));
@@ -128,7 +128,7 @@ static void initialize_bins(void)
 
 static void fill_bins(int infile)
 {
-    DCELL *inbuf = Rast_allocate_d_raster_buf();
+    DCELL *inbuf = Rast_allocate_c_buf();
     int row, col;
 
     G_message(_("Binning data"));

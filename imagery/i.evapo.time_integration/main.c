@@ -175,7 +175,7 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Unable to open raster map <%s>"), name);
 	if ((Rast_get_cellhd(name, mapset, &cellhd)) < 0)
 	    G_fatal_error(_("Unable to read file header of raster map <%s>"), name);
-	inrast[nfiles] = Rast_allocate_raster_buf(in_data_type[nfiles]);
+	inrast[nfiles] = Rast_allocate_buf(in_data_type[nfiles]);
 	nfiles++;
     }
     nfiles--;
@@ -208,7 +208,7 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Unable to open raster map <%s>"), name1);
 	if ((Rast_get_cellhd(name1, mapset, &cellhd)) < 0)
 	    G_fatal_error(_("Unable to read file header of raster map <%s>"), name1);
-	inrast1[nfiles1] = Rast_allocate_raster_buf(in_data_type1[nfiles1]);
+	inrast1[nfiles1] = Rast_allocate_buf(in_data_type1[nfiles1]);
 	nfiles1++;
     }
     nfiles1--;
@@ -249,7 +249,7 @@ int main(int argc, char *argv[])
 	if ((Rast_get_cellhd(name2, mapset, &cellhd)) < 0) {
 	    G_fatal_error(_("Unable to read file header of raster map <%s>"), name2);
 	}
-	inrast2[nfiles2] = Rast_allocate_d_raster_buf();
+	inrast2[nfiles2] = Rast_allocate_c_buf();
 	nfiles2++;
     }
     nfiles2--;
@@ -259,7 +259,7 @@ int main(int argc, char *argv[])
     /* Allocate output buffer, use input map data_type */
     nrows = G_window_rows();
     ncols = G_window_cols();
-    outrast = Rast_allocate_raster_buf(out_data_type);
+    outrast = Rast_allocate_buf(out_data_type);
 
    
     /* Create New raster files */

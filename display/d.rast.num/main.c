@@ -216,7 +216,7 @@ int main(int argc, char **argv)
     }
 
     /* allocate the cell array */
-    cell = Rast_allocate_raster_buf(map_type);
+    cell = Rast_allocate_buf(map_type);
 
     /* read the color table in the color structures of the displayed map */
     if (Rast_read_colors(map_name, "", &colors) == -1)

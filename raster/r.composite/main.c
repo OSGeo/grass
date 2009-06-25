@@ -157,7 +157,7 @@ int main(int argc, char **argv)
 
 	b->type = Rast_get_raster_map_type(b->file);
 
-	b->size = Rast_raster_size(b->type);
+	b->size = Rast_cell_size(b->type);
 
 	/* Reading color lookup table */
 	if (Rast_read_colors(b->name, "", &b->colors) == -1)
@@ -184,7 +184,7 @@ int main(int argc, char **argv)
     if ((out_file = Rast_open_cell_new(out_name)) < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), out_name);
 
-    out_array = Rast_allocate_cell_buf();
+    out_array = Rast_allocate_c_buf();
 
     /* Make color table */
     make_color_cube(&out_colors);

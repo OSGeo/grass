@@ -94,7 +94,7 @@ static void cache_sub_init(struct row_cache *cache, int data_type)
     sub->valid = G_calloc(cache->nrows, 1);
     sub->buf = G_malloc(cache->nrows * sizeof(void *));
     for (i = 0; i < cache->nrows; i++)
-	sub->buf[i] = Rast_allocate_raster_buf(data_type);
+	sub->buf[i] = Rast_allocate_buf(data_type);
 
     cache->sub[data_type] = sub;
 }
@@ -191,7 +191,7 @@ static void *cache_get_raw(struct row_cache *cache, int row, int data_type)
 static void cache_get(struct row_cache *cache, void *buf, int row, int res_type)
 {
     void *p = cache_get_raw(cache, row, res_type);
-    memcpy(buf, p, columns * Rast_raster_size(res_type));
+    memcpy(buf, p, columns * Rast_cell_size(res_type));
 };
 
 /****************************************************************************/

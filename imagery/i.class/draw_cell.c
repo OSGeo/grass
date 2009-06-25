@@ -43,7 +43,7 @@ int draw_cell(View * view, int overlay)
 	Rast_free_colors(&colr);
 	return 0;
     }
-    dcell = Rast_allocate_d_raster_buf();
+    dcell = Rast_allocate_c_buf();
 
 
     sprintf(msg, "Plotting %s ...", view->cell.name);

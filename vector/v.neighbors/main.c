@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
     nrows = G_window_rows();
     ncols = G_window_cols();
 
-    result = Rast_allocate_raster_buf(CELL_TYPE);
+    result = Rast_allocate_buf(CELL_TYPE);
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
     List = Vect_new_list();
@@ -138,7 +138,7 @@ int main(int argc, char *argv[])
 		value = count;
 		Rast_set_raster_value_d(rp, value, CELL_TYPE);
 	    }
-	    rp = G_incr_void_ptr(rp, Rast_raster_size(CELL_TYPE));
+	    rp = G_incr_void_ptr(rp, Rast_cell_size(CELL_TYPE));
 	}
 
 	Rast_put_raster_row(out_fd, result, CELL_TYPE);

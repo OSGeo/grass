@@ -93,7 +93,7 @@ N_array_2d *N_read_rast_to_array_2d(char *name, N_array_2d * array)
 		("N_read_rast_to_array_2d: the data array size is different from the current region settings");
     }
 
-    rast = Rast_allocate_raster_buf(type);
+    rast = Rast_allocate_buf(type);
 
     G_message(_("Reading raster map <%s> into memory"), name);
 
@@ -106,7 +106,7 @@ N_array_2d *N_read_rast_to_array_2d(char *name, N_array_2d * array)
 	}
 
 	for (x = 0, ptr = rast; x < cols;
-	     x++, ptr = G_incr_void_ptr(ptr, Rast_raster_size(type))) {
+	     x++, ptr = G_incr_void_ptr(ptr, Rast_cell_size(type))) {
 	    if (type == CELL_TYPE) {
 		if (Rast_is_c_null_value(ptr)) {
 		    N_put_array_2d_value_null(data, x, y);
@@ -204,11 +204,11 @@ void N_write_array_2d_to_rast(N_array_2d * array, char *name)
 	G_fatal_error(_("Unable to create raster map <%s>"), name);
 
     if (type == CELL_TYPE)
-	rast = Rast_allocate_raster_buf(type);
+	rast = Rast_allocate_buf(type);
     if (type == FCELL_TYPE)
-	frast = Rast_allocate_raster_buf(type);
+	frast = Rast_allocate_buf(type);
     if (type == DCELL_TYPE)
-	drast = Rast_allocate_raster_buf(type);
+	drast = Rast_allocate_buf(type);
 
     G_message(_("Write 2d array to raster map <%s>"), name);
 

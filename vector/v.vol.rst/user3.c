@@ -276,7 +276,7 @@ COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
     }
 
     if (cell == NULL)
-	cell = Rast_allocate_f_raster_buf();
+	cell = Rast_allocate_f_buf();
 
     for (i = 1; i <= n_points; i++) {
 	points[i - 1].x = (points[i - 1].x - x_or) / dnorm;

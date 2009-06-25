@@ -145,7 +145,7 @@ void G_free(void *buf)
  *
  * Now 
  \code
- rast = G_incr_void_ptr(rast, Rast_raster_size(data_type))
+ rast = G_incr_void_ptr(rast, Rast_cell_size(data_type))
  \endcode
  *
  * (where rast is void* and <i>data_type</i> is RASTER_MAP_TYPE can be
@@ -153,7 +153,7 @@ void G_free(void *buf)
  *
  * Very useful to generalize the row processing - loop i.e.
  * \code
- *   void * buf_ptr += Rast_raster_size(data_type)
+ *   void * buf_ptr += Rast_cell_size(data_type)
  * \endcode
  *
  * \param ptr pointer

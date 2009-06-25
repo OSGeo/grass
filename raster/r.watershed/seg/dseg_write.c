@@ -18,7 +18,7 @@ int dseg_write_cellfile(DSEG * dseg, char *map_name)
     }
     nrows = G_window_rows();
     ncols = G_window_cols();
-    dbuffer = Rast_allocate_d_raster_buf();
+    dbuffer = Rast_allocate_c_buf();
     segment_flush(&(dseg->seg));
     for (row = 0; row < nrows; row++) {
 	segment_get_row(&(dseg->seg), (DCELL *) dbuffer, row);

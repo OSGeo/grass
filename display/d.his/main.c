@@ -173,9 +173,9 @@ int main(int argc, char **argv)
 	    G_fatal_error(_("Color file for <%s> not available"), name_s);
     }
 
-    r_array = Rast_allocate_cell_buf();
-    g_array = Rast_allocate_cell_buf();
-    b_array = Rast_allocate_cell_buf();
+    r_array = Rast_allocate_c_buf();
+    g_array = Rast_allocate_c_buf();
+    b_array = Rast_allocate_c_buf();
 
     /* Make color table */
     make_gray_scale(&gray_colors);

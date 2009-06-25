@@ -290,7 +290,7 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
 		    "   *******************************************************\n");
 	    exit(1);
 	}
-	tmp1 = Rast_allocate_raster_buf(CELL_TYPE);
+	tmp1 = Rast_allocate_buf(CELL_TYPE);
 	Rast_zero_raster_buf(tmp1, CELL_TYPE);
 	fprintf(stderr, "Analyzing region number %d...\n", index);
     }
@@ -302,15 +302,15 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
 
     switch (data_type) {
     case CELL_TYPE:
-	tmp = Rast_allocate_raster_buf(CELL_TYPE);
+	tmp = Rast_allocate_buf(CELL_TYPE);
 	tmpname = "tmp";
 	break;
     case FCELL_TYPE:
-	ftmp = Rast_allocate_raster_buf(FCELL_TYPE);
+	ftmp = Rast_allocate_buf(FCELL_TYPE);
 	tmpname = "ftmp";
 	break;
     case DCELL_TYPE:
-	dtmp = Rast_allocate_raster_buf(DCELL_TYPE);
+	dtmp = Rast_allocate_buf(DCELL_TYPE);
 	tmpname = "dtmp";
 	break;
     }

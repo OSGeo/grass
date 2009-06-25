@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Unable to open raster map <%s>"), in_opt->answer);
 
     data_type = Rast_get_raster_map_type(input_fd);
-    data_size = Rast_raster_size(data_type);
+    data_size = Rast_cell_size(data_type);
     G_get_window(&cell_head);
 
     if (value_flag && data_type != CELL_TYPE) {

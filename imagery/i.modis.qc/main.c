@@ -202,12 +202,12 @@ int main(int argc, char *argv[])
     if (Rast_get_cellhd(qcchan, "", &cellhd) < 0)
 	G_fatal_error(_("Unable to read header of raster map <%s> "), qcchan);
 
-    inrast = Rast_allocate_c_raster_buf();
+    inrast = Rast_allocate_c_buf();
 
     G_debug(3, "number of rows %d", cellhd.rows);
     nrows = G_window_rows();
     ncols = G_window_cols();
-    outrast = Rast_allocate_c_raster_buf();
+    outrast = Rast_allocate_c_buf();
 
     /* Create New raster files */ 
     if ((outfd = Rast_open_raster_new(result, data_type_output)) < 0)

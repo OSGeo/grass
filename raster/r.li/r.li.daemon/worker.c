@@ -161,19 +161,19 @@ void worker(char *raster, int f(int, char **, area_des, double *),
 	    switch (data_type) {
 	    case CELL_TYPE:{
 		    for (i = 0; i < (ad->rl - used); i++) {
-			cm->cache[used + i] = Rast_allocate_cell_buf();
+			cm->cache[used + i] = Rast_allocate_c_buf();
 		    }
 		}
 		break;
 	    case DCELL_TYPE:{
 		    for (i = 0; i < ad->rl - used; i++) {
-			dm->cache[used + i] = Rast_allocate_d_raster_buf();
+			dm->cache[used + i] = Rast_allocate_c_buf();
 		    }
 		}
 		break;
 	    case FCELL_TYPE:{
 		    for (i = 0; i < ad->rl - used; i++) {
-			fm->cache[used + i] = Rast_allocate_f_raster_buf();
+			fm->cache[used + i] = Rast_allocate_f_buf();
 		    }
 		}
 		break;
@@ -241,7 +241,7 @@ char *mask_preprocessing(char *mask, char *raster, int rl, int cl)
     tmp_file = G_tempfile();
     mask_fd = open(tmp_file, O_RDWR | O_CREAT, 0755);
     old_fd = Rast_open_cell_old(mask, "");
-    old = Rast_allocate_cell_buf();
+    old = Rast_allocate_c_buf();
     for (i = 0; i < rl; i++) {
 	int riga;
 

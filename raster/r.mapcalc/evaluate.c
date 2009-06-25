@@ -24,7 +24,7 @@ static void evaluate(expression *e);
 
 static void allocate_buf(expression * e)
 {
-    e->buf = G_malloc(columns * Rast_raster_size(e->res_type));
+    e->buf = G_malloc(columns * Rast_cell_size(e->res_type));
 }
 
 static void set_buf(expression * e, void *buf)

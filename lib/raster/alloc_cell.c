@@ -23,7 +23,7 @@
 static const int type_size[3] = { sizeof(CELL), sizeof(FCELL), sizeof(DCELL) };
 
 /*!
- * \brief Returns size of a raster CELL in bytes.
+ * \brief Returns size of a raster cell in bytes.
  *
  *  - If <i>data_type</i> is CELL_TYPE, returns sizeof(CELL)
  *  - If <i>data_type</i> is FCELL_TYPE, returns sizeof(FCELL)
@@ -34,36 +34,9 @@ static const int type_size[3] = { sizeof(CELL), sizeof(FCELL), sizeof(DCELL) };
  * \return raster type size
  */
 
-size_t Rast_raster_size(RASTER_MAP_TYPE data_type)
+size_t Rast_cell_size(RASTER_MAP_TYPE data_type)
 {
     return (type_size[F2I(data_type)]);
-}
-
-/*!
- * \brief Allocate memory for a CELL type raster map.
- *
- * This routine allocates a buffer of type CELL just large enough to 
- * hold one row of raster data based on the number of columns in the 
- * active region.
- *
- \code
- CELL *cell;
- cell = Rast_allocate_cell_buf();
- \endcode
- *
- * If larger buffers are required, the routine G_malloc() can be used.
- * The routine is generally used with each open cell file.
- *
- * <b>Note:</b> Rast_allocate_raster_buf() or G_alloc_c_raster_buf() is
- * preferred over Rast_allocate_cell_buf().
- *
- * Prints error message and calls exit() on error.
- *
- * \return CELL * pointer to allocated buffer
- */
-CELL *Rast_allocate_cell_buf(void)
-{
-    return (CELL *) G_calloc(G_window_cols() + 1, sizeof(CELL));
 }
 
 /*!
@@ -77,20 +50,37 @@ CELL *Rast_allocate_cell_buf(void)
  *
  * \return pointer to allocated buffer
  */
-void *Rast_allocate_raster_buf(RASTER_MAP_TYPE data_type)
+void *Rast_allocate_buf(RASTER_MAP_TYPE data_type)
 {
-    return (void *)G_calloc(G_window_cols() + 1, Rast_raster_size(data_type));
+    return (void *)G_calloc(G_window_cols() + 1, Rast_cell_size(data_type));
 }
 
 /*!
  * \brief Allocates memory for a raster map of type CELL.
  *
+/*!
+ * \brief Allocate memory for a CELL type raster map.
+ *
  * Allocate an array of CELL based on the number of columns in the
  * current region.
  *
+ * This routine allocates a buffer of type CELL just large enough to 
+ * hold one row of raster data based on the number of columns in the 
+ * active region.
+ *
+ \code
+ CELL *cell;
+ cell = Rast_allocate_c_buf();
+ \endcode
+ *
+ * If larger buffers are required, the routine G_malloc() can be used.
+ * The routine is generally used with each open cell file.
+ *
+ * Prints error message and calls exit() on error.
+ *
  * \return pointer to allocated buffer
  */
-CELL *Rast_allocate_c_raster_buf(void)
+CELL *Rast_allocate_c_buf(void)
 {
     return (CELL *) G_calloc(G_window_cols() + 1, sizeof(CELL));
 }
@@ -103,7 +93,7 @@ CELL *Rast_allocate_c_raster_buf(void)
  *
  * \return pointer to allocated buffer
  */
-FCELL *Rast_allocate_f_raster_buf(void)
+FCELL *Rast_allocate_f_buf(void)
 {
     return (FCELL *) G_calloc(G_window_cols() + 1, sizeof(FCELL));
 }
@@ -116,7 +106,7 @@ FCELL *Rast_allocate_f_raster_buf(void)
  *
  * \return pointer to allocated buffer
  */
-DCELL *Rast_allocate_d_raster_buf(void)
+DCELL *Rast_allocate_d_buf(void)
 {
     return (DCELL *) G_calloc(G_window_cols() + 1, sizeof(DCELL));
 }

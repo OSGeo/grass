@@ -42,7 +42,7 @@ int read_input_map(char *input, char *mapset, int ZEROFLAG)
     if (fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), input);
 
-    cell = Rast_allocate_cell_buf();
+    cell = Rast_allocate_c_buf();
 
     ptr = map;
 

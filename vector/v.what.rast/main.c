@@ -248,9 +248,9 @@ int main(int argc, char *argv[])
 
     /* Allocate space for raster row */
     if (out_type == CELL_TYPE)
-	cell = Rast_allocate_c_raster_buf();
+	cell = Rast_allocate_c_buf();
     else
-	dcell = Rast_allocate_d_raster_buf();
+	dcell = Rast_allocate_c_buf();
 
     /* Extract raster values from file and store in cache */
     G_debug(1, "Extracting raster values");

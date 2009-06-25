@@ -170,7 +170,7 @@ int calculate(int fd, area_des ad, char **valore, double *result)
 	masked = TRUE;
     }
 
-    buf_sup = Rast_allocate_cell_buf();
+    buf_sup = Rast_allocate_c_buf();
     if (buf_sup == NULL) {
 	G_fatal_error("malloc buf_sup failed");
 	return RLI_ERRORE;
@@ -191,7 +191,7 @@ int calculate(int fd, area_des ad, char **valore, double *result)
 	    buf_inf = RLI_get_cell_raster_row(fd, 1 + j + ad->y, ad);
 	}
 	else {
-	    buf_inf = Rast_allocate_cell_buf();
+	    buf_inf = Rast_allocate_c_buf();
 	    if (buf_inf == NULL) {
 		G_fatal_error("malloc buf_inf failed");
 		return RLI_ERRORE;
@@ -431,7 +431,7 @@ int calculateD(int fd, area_des ad, char **valore, double *result)
 	masked = TRUE;
     }
 
-    buf_sup = Rast_allocate_d_raster_buf();
+    buf_sup = Rast_allocate_c_buf();
     if (buf_sup == NULL) {
 	G_fatal_error("malloc buf_sup failed");
 	return RLI_ERRORE;
@@ -453,7 +453,7 @@ int calculateD(int fd, area_des ad, char **valore, double *result)
 	    buf_inf = RLI_get_dcell_raster_row(fd, 1 + j + ad->y, ad);
 	}
 	else {
-	    buf_inf = Rast_allocate_d_raster_buf();
+	    buf_inf = Rast_allocate_c_buf();
 	    if (buf_inf == NULL) {
 		G_fatal_error("malloc buf_inf failed");
 		return RLI_ERRORE;
@@ -696,7 +696,7 @@ int calculateF(int fd, area_des ad, char **valore, double *result)
 	masked = TRUE;
     }
 
-    buf_sup = Rast_allocate_f_raster_buf();
+    buf_sup = Rast_allocate_f_buf();
     if (buf_sup == NULL) {
 	G_fatal_error("malloc buf_sup failed");
 	return RLI_ERRORE;
@@ -718,7 +718,7 @@ int calculateF(int fd, area_des ad, char **valore, double *result)
 	    buf_inf = RLI_get_fcell_raster_row(fd, 1 + j + ad->y, ad);
 	}
 	else {
-	    buf_inf = Rast_allocate_f_raster_buf();
+	    buf_inf = Rast_allocate_f_buf();
 	    if (mask_inf == NULL) {
 		G_fatal_error("malloc mask_inf failed");
 		return RLI_ERRORE;

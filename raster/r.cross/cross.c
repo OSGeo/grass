@@ -39,7 +39,7 @@ CELL cross(int fd[], int non_zero, int primary, int outfd)
     /* allocate i/o buffers for each raster map */
 
     for (i = 0; i < nfiles; i++)
-	cell[i] = Rast_allocate_cell_buf();
+	cell[i] = Rast_allocate_c_buf();
     result_cell = cell[0];
 
     /* initialize the reclass table */
