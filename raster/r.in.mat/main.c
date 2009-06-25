@@ -424,7 +424,7 @@ int main(int argc, char *argv[])
 	for (col = 0; col < ncols; col++) {
 	    array_ptr = array_data;
 	    array_ptr =
-		Rast_incr_void_ptr(array_ptr,
+		G_incr_void_ptr(array_ptr,
 				(row +
 				 col * mrows) * Rast_raster_size(map_type));
 
@@ -453,7 +453,7 @@ int main(int argc, char *argv[])
 		}
 	    }
 	    rastline_ptr =
-		Rast_incr_void_ptr(rastline_ptr, Rast_raster_size(map_type));
+		G_incr_void_ptr(rastline_ptr, Rast_raster_size(map_type));
 	}
 
 #ifdef DEBUG
@@ -465,7 +465,7 @@ int main(int argc, char *argv[])
 	    else
 		fprintf(stderr, "+");
 	    rastline_ptr =
-		Rast_incr_void_ptr(rastline_ptr, Rast_raster_size(map_type));
+		G_incr_void_ptr(rastline_ptr, Rast_raster_size(map_type));
 	}
 	fprintf(stderr, "]\n");
 #endif

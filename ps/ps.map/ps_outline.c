@@ -124,13 +124,13 @@ int draw_outline(void)
 	    e1 = G_col_to_easting((double)col - 1., &(PS.w));
 	    e2 = G_col_to_easting((double)col, &(PS.w));
 	    e3 = G_col_to_easting((double)col + 1., &(PS.w));
-	    tl = Rast_incr_void_ptr(buffer[top], col * raster_size);
+	    tl = G_incr_void_ptr(buffer[top], col * raster_size);
 	    /* top left in window */
-	    tr = Rast_incr_void_ptr(buffer[top], (col + 1) * raster_size);
+	    tr = G_incr_void_ptr(buffer[top], (col + 1) * raster_size);
 	    /* top right in window */
-	    bl = Rast_incr_void_ptr(buffer[bottom], col * raster_size);
+	    bl = G_incr_void_ptr(buffer[bottom], col * raster_size);
 	    /* bottom left in window */
-	    br = Rast_incr_void_ptr(buffer[bottom], (col + 1) * raster_size);
+	    br = G_incr_void_ptr(buffer[bottom], (col + 1) * raster_size);
 	    /* bottom right in window */
 	    draw_boundaries();
 	    if (k == 3)

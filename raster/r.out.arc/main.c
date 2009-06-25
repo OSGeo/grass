@@ -178,7 +178,7 @@ int main(int argc, char *argv[])
 	   exit(EXIT_FAILURE);
 	 */
 	for (col = 0, ptr = raster; col < ncols; col++,
-	     ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(out_type))) {
+	     ptr = G_incr_void_ptr(ptr, Rast_raster_size(out_type))) {
 	    if (!Rast_is_null_value(ptr, out_type)) {
 		if (out_type == CELL_TYPE)
 		    fprintf(fp, "%d", *((CELL *) ptr));

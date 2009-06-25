@@ -376,7 +376,7 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
 	    void *rast1, *rast2;
 
 	    rast1 = cor_cell_buf;
-	    rast2 = Rast_incr_void_ptr(rast1, Rast_raster_size(CELL_TYPE));
+	    rast2 = G_incr_void_ptr(rast1, Rast_raster_size(CELL_TYPE));
 	    while (Rast_next_cell_stat(rast1, &count, &stats))
 		Rast_set_raster_cat(rast1, rast2, Rast_get_raster_cat(rast1, &cats,
 								CELL_TYPE),
@@ -629,17 +629,17 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
 	case CELL_TYPE:
 	    rastptr = tmp;
 	    for (x = 0; x < col0; x++)
-		rastptr = Rast_incr_void_ptr(rastptr, Rast_raster_size(CELL_TYPE));
+		rastptr = G_incr_void_ptr(rastptr, Rast_raster_size(CELL_TYPE));
 	    break;
 	case FCELL_TYPE:
 	    rastptr = ftmp;
 	    for (x = 0; x < col0; x++)
-		rastptr = Rast_incr_void_ptr(rastptr, Rast_raster_size(FCELL_TYPE));
+		rastptr = G_incr_void_ptr(rastptr, Rast_raster_size(FCELL_TYPE));
 	    break;
 	case DCELL_TYPE:
 	    rastptr = dtmp;
 	    for (x = 0; x < col0; x++)
-		rastptr = Rast_incr_void_ptr(rastptr, Rast_raster_size(DCELL_TYPE));
+		rastptr = G_incr_void_ptr(rastptr, Rast_raster_size(DCELL_TYPE));
 	    break;
 	}
 
@@ -667,7 +667,7 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
 		    else
 			*(*(null_buf + i + 1 - row0) + j + 1 - col0) = 1.0;
 		}
-		rastptr = Rast_incr_void_ptr(rastptr, Rast_raster_size(CELL_TYPE));
+		rastptr = G_incr_void_ptr(rastptr, Rast_raster_size(CELL_TYPE));
 		break;
 
 	    case FCELL_TYPE:
@@ -683,7 +683,7 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
 		    else
 			*(*(null_buf + i + 1 - row0) + j + 1 - col0) = 1.0;
 		}
-		rastptr = Rast_incr_void_ptr(rastptr, Rast_raster_size(FCELL_TYPE));
+		rastptr = G_incr_void_ptr(rastptr, Rast_raster_size(FCELL_TYPE));
 		break;
 
 	    case DCELL_TYPE:
@@ -699,7 +699,7 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
 		    else
 			*(*(null_buf + i + 1 - row0) + j + 1 - col0) = 1.0;
 		}
-		rastptr = Rast_incr_void_ptr(rastptr, Rast_raster_size(CELL_TYPE));
+		rastptr = G_incr_void_ptr(rastptr, Rast_raster_size(CELL_TYPE));
 		break;
 	    }
 

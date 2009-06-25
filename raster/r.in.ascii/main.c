@@ -226,7 +226,7 @@ int main(int argc, char *argv[])
 	    else {
 		Rast_set_null_value(rast_ptr, 1, data_type);
 	    }
-	    rast_ptr = Rast_incr_void_ptr(rast_ptr, Rast_raster_size(data_type));
+	    rast_ptr = G_incr_void_ptr(rast_ptr, Rast_raster_size(data_type));
 	}
 	fwrite(rast, Rast_raster_size(data_type), ncols, ft);
 	rast_ptr = rast;

@@ -58,6 +58,7 @@ void *G__malloc(const char *, int, size_t);
 void *G__calloc(const char *, int, size_t, size_t);
 void *G__realloc(const char *, int, void *, size_t);
 void G_free(void *);
+void *G_incr_void_ptr(const void *, const size_t);
 
 #define G_malloc(n)     G__malloc(__FILE__, __LINE__, (n))
 #define G_calloc(m, n)  G__calloc(__FILE__, __LINE__, (m), (n))

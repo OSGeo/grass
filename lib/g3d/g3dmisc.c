@@ -69,8 +69,8 @@ G3d_copyValues(const void *src, int offsSrc, int typeSrc, void *dst,
 
     eltLength = G3d_length(typeSrc);
 
-    src = Rast_incr_void_ptr(src, eltLength * offsSrc);
-    dst = Rast_incr_void_ptr(dst, eltLength * offsDst);
+    src = G_incr_void_ptr(src, eltLength * offsSrc);
+    dst = G_incr_void_ptr(dst, eltLength * offsDst);
 
     memcpy(dst, src, nElts * eltLength);
 }

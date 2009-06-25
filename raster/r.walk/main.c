@@ -722,7 +722,7 @@ int main(int argc, char *argv[])
 			p = *(int *)ptr2;
 		    }
 		    segment_put(&dtm_in_seg, &p, row, i);
-		    ptr2 = Rast_incr_void_ptr(ptr2, dtm_dsize);
+		    ptr2 = G_incr_void_ptr(ptr2, dtm_dsize);
 		}
 		break;
 	    case FCELL_TYPE:
@@ -734,7 +734,7 @@ int main(int argc, char *argv[])
 			p = *(float *)ptr2;
 		    }
 		    segment_put(&dtm_in_seg, &p, row, i);
-		    ptr2 = Rast_incr_void_ptr(ptr2, dtm_dsize);
+		    ptr2 = G_incr_void_ptr(ptr2, dtm_dsize);
 		}
 		break;
 
@@ -747,7 +747,7 @@ int main(int argc, char *argv[])
 			p = *(double *)ptr2;
 		    }
 		    segment_put(&dtm_in_seg, &p, row, i);
-		    ptr2 = Rast_incr_void_ptr(ptr2, dtm_dsize);
+		    ptr2 = G_incr_void_ptr(ptr2, dtm_dsize);
 		}
 		break;
 	    }
@@ -781,7 +781,7 @@ int main(int argc, char *argv[])
 			p = *(int *)ptr2;
 		    }
 		    segment_put(&cost_in_seg, &p, row, i);
-		    ptr2 = Rast_incr_void_ptr(ptr2, cost_dsize);
+		    ptr2 = G_incr_void_ptr(ptr2, cost_dsize);
 		}
 		break;
 	    case FCELL_TYPE:
@@ -793,7 +793,7 @@ int main(int argc, char *argv[])
 			p = *(float *)ptr2;
 		    }
 		    segment_put(&cost_in_seg, &p, row, i);
-		    ptr2 = Rast_incr_void_ptr(ptr2, cost_dsize);
+		    ptr2 = G_incr_void_ptr(ptr2, cost_dsize);
 		}
 		break;
 
@@ -806,7 +806,7 @@ int main(int argc, char *argv[])
 			p = *(double *)ptr2;
 		    }
 		    segment_put(&cost_in_seg, &p, row, i);
-		    ptr2 = Rast_incr_void_ptr(ptr2, cost_dsize);
+		    ptr2 = G_incr_void_ptr(ptr2, cost_dsize);
 		}
 		break;
 	    }
@@ -919,7 +919,7 @@ int main(int argc, char *argv[])
 			segment_put(&out_seg, value_start_pt, row, col);
 		    }
 		}
-		ptr2 = Rast_incr_void_ptr(ptr2, dsize2);
+		ptr2 = G_incr_void_ptr(ptr2, dsize2);
 	    }
 	}
 

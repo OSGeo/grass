@@ -307,7 +307,7 @@ int main(int argc, char *argv[])
     /* load entire map into memory */
     for (row = 0, ptr = raster; row < mrows; row++,
 	 ptr =
-	 Rast_incr_void_ptr(ptr,
+	 G_incr_void_ptr(ptr,
 			 (G_window_cols() + 1) * Rast_raster_size(map_type))) {
 	if (Rast_get_raster_row(fd, ptr, row, map_type) < 0)
 	    G_fatal_error("reading map");
@@ -325,7 +325,7 @@ int main(int argc, char *argv[])
 
 	    ptr = raster;
 	    ptr =
-		Rast_incr_void_ptr(ptr,
+		G_incr_void_ptr(ptr,
 				(col +
 				 row * (ncols +
 					1)) * Rast_raster_size(map_type));

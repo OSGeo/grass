@@ -138,7 +138,7 @@ int main(int argc, char *argv[])
 		value = count;
 		Rast_set_raster_value_d(rp, value, CELL_TYPE);
 	    }
-	    rp = Rast_incr_void_ptr(rp, Rast_raster_size(CELL_TYPE));
+	    rp = G_incr_void_ptr(rp, Rast_raster_size(CELL_TYPE));
 	}
 
 	Rast_put_raster_row(out_fd, result, CELL_TYPE);

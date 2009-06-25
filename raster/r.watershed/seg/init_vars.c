@@ -233,7 +233,7 @@ int init_vars(int argc, char *argv[])
 	    if (er_flag) {
 		cseg_put(&r_h, &alt_value, r, c);
 	    }
-	    ptr = Rast_incr_void_ptr(ptr, ele_size);
+	    ptr = G_incr_void_ptr(ptr, ele_size);
 	}
     }
     Rast_close_cell(fd);

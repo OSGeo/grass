@@ -57,7 +57,7 @@ int Rast_get_raster_row_colors(int fd, int row, struct Colors *colors,
     }
 
     if (nul)
-	for (i = 0, p = array; i < cols; i++, p = Rast_incr_void_ptr(p, size))
+	for (i = 0, p = array; i < cols; i++, p = G_incr_void_ptr(p, size))
 	    nul[i] = Rast_is_null_value(p, type);
 
     set = G__alloca(cols);

@@ -280,7 +280,7 @@ void Rast__lookup_colors(const void *raster, unsigned char *red,
 
     for (; n-- > 0;
 	 ptr =
-	 Rast_incr_void_ptr(ptr, Rast_raster_size(data_type)), red++, grn++, blu++,
+	 G_incr_void_ptr(ptr, Rast_raster_size(data_type)), red++, grn++, blu++,
 	 *set++ = found) {
 	/* if the cell is the same as last one, use the prev color values */
 	if (ptr != raster && Rast_raster_cmp(ptr, last_ptr, data_type) == 0) {

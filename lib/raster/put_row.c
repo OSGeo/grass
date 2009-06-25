@@ -601,8 +601,8 @@ static int put_data_gdal(int fd, const void *rast, int row, int n,
 	    Rast_set_raster_value_d(dst, null_val, map_type);
 	else
 	    memcpy(dst, src, size);
-	src = Rast_incr_void_ptr(src, size);
-	dst = Rast_incr_void_ptr(dst, size);
+	src = G_incr_void_ptr(src, size);
+	dst = G_incr_void_ptr(dst, size);
     }
 
     err = Rast_gdal_raster_IO(fcb->gdal->band, GF_Write, 0, row, n, 1, work_buf,

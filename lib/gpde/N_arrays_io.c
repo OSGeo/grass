@@ -106,7 +106,7 @@ N_array_2d *N_read_rast_to_array_2d(char *name, N_array_2d * array)
 	}
 
 	for (x = 0, ptr = rast; x < cols;
-	     x++, ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(type))) {
+	     x++, ptr = G_incr_void_ptr(ptr, Rast_raster_size(type))) {
 	    if (type == CELL_TYPE) {
 		if (Rast_is_c_null_value(ptr)) {
 		    N_put_array_2d_value_null(data, x, y);

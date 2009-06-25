@@ -197,14 +197,14 @@ process_raster(univar_stat * stats, int fd, const struct Cell_head *region)
 	for (col = 0; col < cols; col++) {
 
 	    if (Rast_is_null_value(ptr, map_type)) {
-		ptr = Rast_incr_void_ptr(ptr, value_sz);
+		ptr = G_incr_void_ptr(ptr, value_sz);
 		continue;
 	    }
 
 	    if (nextp) {
 		/* put the value into stats->XXXcell_array */
 		memcpy(nextp, ptr, value_sz);
-		nextp = Rast_incr_void_ptr(nextp, value_sz);
+		nextp = G_incr_void_ptr(nextp, value_sz);
 	    }
 
 	    {
@@ -229,7 +229,7 @@ process_raster(univar_stat * stats, int fd, const struct Cell_head *region)
 		}
 	    }
 
-	    ptr = Rast_incr_void_ptr(ptr, value_sz);
+	    ptr = G_incr_void_ptr(ptr, value_sz);
 	    stats->n++;
 	}
 	if (!(param.shell_style->answer))

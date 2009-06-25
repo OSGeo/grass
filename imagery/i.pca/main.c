@@ -260,12 +260,12 @@ static int calc_mu(int *fds, double *mu, int bands)
 	    for (col = 0; col < cols; col++) {
 		/* skip null cells */
 		if (Rast_is_null_value(rowbuf, maptype)) {
-		    ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(maptype));
+		    ptr = G_incr_void_ptr(ptr, Rast_raster_size(maptype));
 		    continue;
 		}
 
 		sum += Rast_get_raster_value_d(rowbuf, maptype);
-		ptr = Rast_incr_void_ptr(ptr, Rast_raster_size(maptype));
+		ptr = G_incr_void_ptr(ptr, Rast_raster_size(maptype));
 	    }
 	}
 
@@ -327,8 +327,8 @@ static int calc_covariance(int *fds, double **covar, double *mu, int bands)
 		    /* skip null cells */
 		    if (Rast_is_null_value(ptr1, maptype) ||
 			Rast_is_null_value(ptr2, maptype2)) {
-			ptr1 = Rast_incr_void_ptr(ptr1, Rast_raster_size(maptype));
-			ptr2 = Rast_incr_void_ptr(ptr2, Rast_raster_size(maptype2));
+			ptr1 = G_incr_void_ptr(ptr1, Rast_raster_size(maptype));
+			ptr2 = G_incr_void_ptr(ptr2, Rast_raster_size(maptype2));
 			continue;
 		    }
 
@@ -337,8 +337,8 @@ static int calc_covariance(int *fds, double **covar, double *mu, int bands)
 			 mu[j]) * ((double)Rast_get_raster_value_d(ptr2,
 						   maptype2) - mu[k]);
 
-		    ptr1 = Rast_incr_void_ptr(ptr1, Rast_raster_size(maptype));
-		    ptr2 = Rast_incr_void_ptr(ptr2, Rast_raster_size(maptype2));
+		    ptr1 = G_incr_void_ptr(ptr1, Rast_raster_size(maptype));
+		    ptr2 = G_incr_void_ptr(ptr2, Rast_raster_size(maptype2));
 		}
 
 		covar[k][j] = covar[j][k];
@@ -445,16 +445,16 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
 			if (Rast_is_null_value(rowptr, maptype)) {
 			    if (scale) {
 				Rast_set_null_value(outptr, 1, CELL_TYPE);
-				outptr = Rast_incr_void_ptr(outptr, cell_mapsiz);
+				outptr = G_incr_void_ptr(outptr, cell_mapsiz);
 			    }
 			    else {
 				Rast_set_null_value(outptr, 1, DCELL_TYPE);
 				outptr =
-				    Rast_incr_void_ptr(outptr, dcell_mapsiz);
+				    G_incr_void_ptr(outptr, dcell_mapsiz);
 			    }
 
 			    rowptr =
-				Rast_incr_void_ptr(rowptr,
+				G_incr_void_ptr(rowptr,
 						Rast_raster_size(maptype));
 			    continue;
 			}
@@ -502,11 +502,11 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
 			}
 
 			outptr = (scale) ?
-			    Rast_incr_void_ptr(outptr, cell_mapsiz) :
-			    Rast_incr_void_ptr(outptr, dcell_mapsiz);
+			    G_incr_void_ptr(outptr, cell_mapsiz) :
+			    G_incr_void_ptr(outptr, dcell_mapsiz);
 
 			rowptr =
-			    Rast_incr_void_ptr(rowptr, Rast_raster_size(maptype));
+			    G_incr_void_ptr(rowptr, Rast_raster_size(maptype));
 		    }
 		}		/* for j = 0 to bands */
 

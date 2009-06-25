@@ -119,7 +119,7 @@ void raster_to_g3d(void *map, G3D_Region region, int *fd)
 
 	    for (x = 0, ptr = rast; x < cols; x++,
 		 ptr =
-		 Rast_incr_void_ptr(ptr, Rast_raster_size(globalRastMapType))) {
+		 G_incr_void_ptr(ptr, Rast_raster_size(globalRastMapType))) {
 		if (globalRastMapType == CELL_TYPE) {
 		    if (Rast_is_null_value(ptr, globalRastMapType)) {
 			G3d_setNullValue(&dvalue, 1, DCELL_TYPE);

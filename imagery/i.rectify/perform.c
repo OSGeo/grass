@@ -40,7 +40,7 @@ int perform_georef(int infd, void *rast)
 	 */
 
 	if (Rast_get_raster_row_nomask
-	    (infd, Rast_incr_void_ptr(rast, rast_size), row, map_type) < 0)
+	    (infd, G_incr_void_ptr(rast, rast_size), row, map_type) < 0)
 	    return 0;
 
 	for (i = curidx; i < matrix_rows; i++) {
@@ -54,7 +54,7 @@ int perform_georef(int infd, void *rast)
 	    cmap = col_map[idx];
 	    left = row_left[idx];
 	    right = row_right[idx];
-	    do_cell(row, Rast_incr_void_ptr(rast, rast_size), cell_buf[idx]);
+	    do_cell(row, G_incr_void_ptr(rast, rast_size), cell_buf[idx]);
 
 	    row_min[idx]++;
 	    if (row_min[idx] > row_max[idx])
@@ -73,8 +73,8 @@ static int do_cell(int row, void *in, void *out)
     void *inptr, *outptr;
 
     for (; left <= right; left++) {
-	inptr = Rast_incr_void_ptr(in, cmap[left] * rast_size);
-	outptr = Rast_incr_void_ptr(out, left * rast_size);
+	inptr = G_incr_void_ptr(in, cmap[left] * rast_size);
+	outptr = G_incr_void_ptr(out, left * rast_size);
 	if (rmap[left] < 0)
 	    continue;
 	if (rmap[left] != row)
@@ -82,8 +82,8 @@ static int do_cell(int row, void *in, void *out)
 	Rast_raster_cpy(outptr, inptr, 1, map_type);
     }
     for (; left <= right; right--) {
-	inptr = Rast_incr_void_ptr(in, cmap[right] * rast_size);
-	outptr = Rast_incr_void_ptr(out, right * rast_size);
+	inptr = G_incr_void_ptr(in, cmap[right] * rast_size);
+	outptr = G_incr_void_ptr(out, right * rast_size);
 	if (rmap[right] < 0)
 	    continue;
 	if (rmap[right] != row)
@@ -91,8 +91,8 @@ static int do_cell(int row, void *in, void *out)
 	Rast_raster_cpy(outptr, inptr, 1, map_type);
     }
     for (col = left; col <= right; col++) {
-	inptr = Rast_incr_void_ptr(in, cmap[col] * rast_size);
-	outptr = Rast_incr_void_ptr(out, col * rast_size);
+	inptr = G_incr_void_ptr(in, cmap[col] * rast_size);
+	outptr = G_incr_void_ptr(out, col * rast_size);
 	if (rmap[col] == row)
 	    Rast_raster_cpy(outptr, inptr, 1, map_type);
     }

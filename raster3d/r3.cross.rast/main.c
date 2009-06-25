@@ -163,7 +163,7 @@ void rast3d_cross_section(void *map, G3D_Region region, int elevfd, int outfd)
 			_("Unable to get elevation raster row"));
 
 	for (x = 0, ptr = elevrast; x < cols; x++, ptr =
-	     Rast_incr_void_ptr(ptr, Rast_raster_size(globalElevMapType))) {
+	     G_incr_void_ptr(ptr, Rast_raster_size(globalElevMapType))) {
 
 	    /*we guess the elevation input map has no null values */
 	    isnull = 0;

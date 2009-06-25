@@ -138,9 +138,9 @@ void write_vtk_points(input_maps * in, FILE * fp, G3D_Region region, int dp,
 	    for (x = 0, ptr_top = rast_top, ptr_bottom = rast_bottom;
 		 x < cols;
 		 x++, ptr_top =
-		 Rast_incr_void_ptr(ptr_top, Rast_raster_size(in->topMapType)),
+		 G_incr_void_ptr(ptr_top, Rast_raster_size(in->topMapType)),
 		 ptr_bottom =
-		 Rast_incr_void_ptr(ptr_bottom,
+		 G_incr_void_ptr(ptr_bottom,
 				 Rast_raster_size(in->bottomMapType))) {
 
 		/*Get the values */

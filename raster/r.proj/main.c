@@ -432,7 +432,7 @@ int main(int argc, char **argv)
 			    &col_idx, &row_idx, &incellhd);
 	    }
 
-	    obufptr = Rast_incr_void_ptr(obufptr, cell_size);
+	    obufptr = G_incr_void_ptr(obufptr, cell_size);
 	    xcoord2 += outcellhd.ew_res;
 	    xcoord1 = xcoord2;
 	    ycoord1 = ycoord2;

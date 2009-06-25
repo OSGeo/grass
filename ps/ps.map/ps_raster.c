@@ -138,7 +138,7 @@ int PS_raster_plot(void)
 			}
 		    }
 		    ptr =
-			Rast_incr_void_ptr(ptr,
+			G_incr_void_ptr(ptr,
 					Rast_raster_size(map_type) *
 					PS.col_delta);
 		}
@@ -170,7 +170,7 @@ int PS_raster_plot(void)
 			    g = gg;
 			if (i == 2)
 			    b = bb;
-			cptr[i] = Rast_incr_void_ptr(cptr[i],
+			cptr[i] = G_incr_void_ptr(cptr[i],
 						  Rast_raster_size(grp_map_type
 								[0]) *
 						  PS.col_delta);

@@ -153,11 +153,11 @@ int G3d_copyToXdr(const void *src, int nofNum)
 
     if (useXdr == G3D_NO_XDR) {
 	G3d_copyValues(src, 0, srcType, xdrTmp, 0, type, nofNum);
-	xdrTmp = Rast_incr_void_ptr(xdrTmp, nofNum * G3d_externLength(type));
+	xdrTmp = G_incr_void_ptr(xdrTmp, nofNum * G3d_externLength(type));
 	return 1;
     }
 
-    for (i = 0; i < nofNum; i++, src = Rast_incr_void_ptr(src, eltLength)) {
+    for (i = 0; i < nofNum; i++, src = G_incr_void_ptr(src, eltLength)) {
 
 	if (G3d_isNullValueNum(src, srcType)) {
 	    G3d_setXdrNullNum(xdrTmp, isFloat);
@@ -185,7 +185,7 @@ int G3d_copyToXdr(const void *src, int nofNum)
 	    }
 	}
 
-	xdrTmp = Rast_incr_void_ptr(xdrTmp, externLength);
+	xdrTmp = G_incr_void_ptr(xdrTmp, externLength);
     }
 
     return 1;
@@ -228,11 +228,11 @@ int G3d_copyFromXdr(int nofNum, void *dst)
 
     if (useXdr == G3D_NO_XDR) {
 	G3d_copyValues(xdrTmp, 0, type, dst, 0, dstType, nofNum);
-	xdrTmp = Rast_incr_void_ptr(xdrTmp, nofNum * G3d_externLength(type));
+	xdrTmp = G_incr_void_ptr(xdrTmp, nofNum * G3d_externLength(type));
 	return 1;
     }
 
-    for (i = 0; i < nofNum; i++, dst = Rast_incr_void_ptr(dst, eltLength)) {
+    for (i = 0; i < nofNum; i++, dst = G_incr_void_ptr(dst, eltLength)) {
 
 	if (G3d_isXdrNullNum(xdrTmp, isFloat)) {
 	    G3d_setNullValue(dst, 1, dstType);
@@ -260,7 +260,7 @@ int G3d_copyFromXdr(int nofNum, void *dst)
 	    }
 	}
 
-	xdrTmp = Rast_incr_void_ptr(xdrTmp, externLength);
+	xdrTmp = G_incr_void_ptr(xdrTmp, externLength);
     }
 
     return 1;
