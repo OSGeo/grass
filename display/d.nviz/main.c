@@ -463,7 +463,7 @@ int read_rast
     }
 
     if (data_type == DCELL_TYPE) {
-	dcell = Rast_allocate_c_buf();
+	dcell = Rast_allocate_d_buf();
 	if (Rast_get_d_raster_row(fd, dcell, row) < 0)
 	    exit(1);
 	if (Rast_is_d_null_value(&dcell[col]))

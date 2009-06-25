@@ -38,7 +38,8 @@ struct point
 
 static void get_region_range(int fd)
 {
-    DCELL *buf = Rast_allocate_c_buf();
+    DCELL *buf = Rast_allocate_d_buf();
+
     int nrows = G_window_rows();
     int ncols = G_window_cols();
     int row, col;
@@ -123,8 +124,8 @@ static int get_cell(DCELL *result, int fd, double x, double y)
     DCELL *tmp;
 
     if (!row1) {
-	row1 = Rast_allocate_c_buf();
-	row2 = Rast_allocate_c_buf();
+	row1 = Rast_allocate_d_buf();
+	row2 = Rast_allocate_d_buf();
     }
 
     col = (int)floor(x - 0.5);

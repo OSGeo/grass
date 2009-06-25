@@ -122,8 +122,8 @@ int main(int argc, char *argv[])
     data = G_malloc(rows * cols * 2 * sizeof(double));
 
     /* allocate the space for one row of cell map data */
-    cell_real = Rast_allocate_c_buf();
-    cell_imag = Rast_allocate_c_buf();
+    cell_real = Rast_allocate_d_buf();
+    cell_imag = Rast_allocate_d_buf();
 
 #define C(i, j) ((i) * cols + (j))
 

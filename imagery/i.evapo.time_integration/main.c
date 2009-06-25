@@ -249,7 +249,7 @@ int main(int argc, char *argv[])
 	if ((Rast_get_cellhd(name2, mapset, &cellhd)) < 0) {
 	    G_fatal_error(_("Unable to read file header of raster map <%s>"), name2);
 	}
-	inrast2[nfiles2] = Rast_allocate_c_buf();
+	inrast2[nfiles2] = Rast_allocate_d_buf();
 	nfiles2++;
     }
     nfiles2--;
