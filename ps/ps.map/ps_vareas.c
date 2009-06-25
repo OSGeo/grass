@@ -104,7 +104,7 @@ int get_ps_color_rgbcol_varea(struct Map_info *map, int vec, int area,
     else {
 	rgbstring = db_get_string(cv_rgb->val.s);
 	if (rgbstring == NULL ||
-	    Rast_str_to_color(rgbstring, &red, &grn, &blu) != 1) {
+	    G_str_to_color(rgbstring, &red, &grn, &blu) != 1) {
 	    G_warning(_("Invalid RGB color definition in column <%s> for category [%d]"),
 		      vector.layer[vec].rgbcol, cat);
 	    rgbstring = NULL;

@@ -54,7 +54,7 @@ int read_wind(char *name, char *mapset)
 
 
 	if (KEY("color")) {
-	    ret = Rast_str_to_color(data, &r, &g, &b);
+	    ret = G_str_to_color(data, &r, &g, &b);
 	    if (ret == 1) {
 		color_R = r;
 		color_G = g;

@@ -40,7 +40,7 @@ void Rast_make_histogram_eq_colors(struct Colors *colors,
 
     Rast_init_colors(colors);
 
-    Rast_str_to_color(DEFAULT_BG_COLOR, &R, &G, &B);
+    G_str_to_color(DEFAULT_BG_COLOR, &R, &G, &B);
     Rast_set_null_value_color(R, G, B, colors);
 
     total = 0;
@@ -108,7 +108,7 @@ void Rast_make_histogram_log_colors(struct Colors *colors,
 
     Rast_init_colors(colors);
 
-    Rast_str_to_color(DEFAULT_BG_COLOR, &R, &G, &B);
+    G_str_to_color(DEFAULT_BG_COLOR, &R, &G, &B);
     Rast_set_null_value_color(R, G, B, colors);
 
     total = 0;

@@ -272,7 +272,7 @@ int main(int argc, char **argv)
 
     /*get border line color */
     bcolor = G_standard_color_rgb(WHITE);
-    ret = Rast_str_to_color(bcolor_opt->answer, &r, &g, &b);
+    ret = G_str_to_color(bcolor_opt->answer, &r, &g, &b);
     if (ret == 1) {
 	has_color = 1;
 	bcolor.r = r;
@@ -347,7 +347,7 @@ int main(int argc, char **argv)
 		G_fatal_error(_("Not enough colors or error in color specifications.\nNeed %i colors."),
 			      nclass);
 
-	    ret = Rast_str_to_color(colors_opt->answers[i], &r, &g, &b);
+	    ret = G_str_to_color(colors_opt->answers[i], &r, &g, &b);
 	    if (!ret)
 		G_fatal_error(_("Error interpreting color %s"),
 			      colors_opt->answers[i]);

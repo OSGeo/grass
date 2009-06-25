@@ -99,7 +99,7 @@ int do_color(const char *str)
     }
 
     /* Parse and select color */
-    color = Rast_str_to_color(in_color, &R, &G, &B);
+    color = G_str_to_color(in_color, &R, &G, &B);
     if (color == 0) {
 	G_warning(_("[%s]: No such color"), in_color);
 	/* store for backup */
@@ -339,7 +339,7 @@ int do_symbol(const char *str)
     size *= yincr;
 
     /* parse line color */
-    ret = Rast_str_to_color(line_color_str, &R, &G, &B);
+    ret = G_str_to_color(line_color_str, &R, &G, &B);
     line_color->r = (unsigned char)R;
     line_color->g = (unsigned char)G;
     line_color->b = (unsigned char)B;
@@ -356,7 +356,7 @@ int do_symbol(const char *str)
     }
 
     /* parse fill color */
-    ret = Rast_str_to_color(fill_color_str, &R, &G, &B);
+    ret = G_str_to_color(fill_color_str, &R, &G, &B);
     fill_color->r = (unsigned char)R;
     fill_color->g = (unsigned char)G;
     fill_color->b = (unsigned char)B;

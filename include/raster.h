@@ -250,9 +250,6 @@ void Rast_set_default_color(int, int, int, struct Colors *);
 void Rast_shift_colors(int, struct Colors *);
 void Rast_shift_d_colors(DCELL, struct Colors *);
 
-/* color_str.c */
-int Rast_str_to_color(const char *, int *, int *, int *);
-
 /* color_write.c */
 int Rast_write_colors(const char *, const char *, struct Colors *);
 void Rast__write_colors(FILE *, struct Colors *);

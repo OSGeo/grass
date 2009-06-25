@@ -267,7 +267,7 @@ int darea(struct Map_info *Map, struct cat_list *Clist,
 			G_debug(3, "area %d: colorstring: %s", area,
 				colorstring);
 
-			if (Rast_str_to_color(colorstring, &red, &grn, &blu) ==
+			if (G_str_to_color(colorstring, &red, &grn, &blu) ==
 			    1) {
 			    rgb = 1;
 			    G_debug(3, "area:%d  cat %d r:%d g:%d b:%d", area,

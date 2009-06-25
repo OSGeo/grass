@@ -53,7 +53,7 @@ int set_RGBA_from_str(RGBA_Color * color, const char *clr_str)
     int r, g, b;
     int ret;
 
-    ret = Rast_str_to_color(clr_str, &r, &g, &b);
+    ret = G_str_to_color(clr_str, &r, &g, &b);
 
     if (ret == 1) {
 	color->a = RGBA_COLOR_OPAQUE;

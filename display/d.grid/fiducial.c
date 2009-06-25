@@ -34,7 +34,7 @@ void plot_symbol(double easting, double northing, int color, double rotation,
 
     if (D_color_number_to_RGB(color, &R, &G, &B) == 0)
 	/* fall back to black on failure */
-	Rast_str_to_color(DEFAULT_FG_COLOR, &R, &G, &B);
+	G_str_to_color(DEFAULT_FG_COLOR, &R, &G, &B);
 
     line_color->r = (unsigned char)R;
     line_color->g = (unsigned char)G;

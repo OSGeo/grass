@@ -98,7 +98,7 @@ int read_text(char *east, char *north, char *text)
 	}
 
 	if (KEY("color")) {
-	    ret = Rast_str_to_color(data, &r, &g, &b);
+	    ret = G_str_to_color(data, &r, &g, &b);
 	    if (ret == 1)
 		set_color(&color, r, g, b);
 	    else if (ret == 2)
@@ -110,7 +110,7 @@ int read_text(char *east, char *north, char *text)
 	}
 
 	if (KEY("hcolor")) {
-	    ret = Rast_str_to_color(data, &r, &g, &b);
+	    ret = G_str_to_color(data, &r, &g, &b);
 	    if (ret == 1)
 		set_color(&hcolor, r, g, b);
 	    else if (ret == 2)
@@ -124,7 +124,7 @@ int read_text(char *east, char *north, char *text)
 	}
 
 	if (KEY("background")) {
-	    ret = Rast_str_to_color(data, &r, &g, &b);
+	    ret = G_str_to_color(data, &r, &g, &b);
 	    if (ret == 1)
 		set_color(&background, r, g, b);
 	    else if (ret == 2) {
@@ -138,7 +138,7 @@ int read_text(char *east, char *north, char *text)
 	}
 
 	if (KEY("border")) {
-	    ret = Rast_str_to_color(data, &r, &g, &b);
+	    ret = G_str_to_color(data, &r, &g, &b);
 	    if (ret == 1)
 		set_color(&border, r, g, b);
 	    else if (ret == 2)
