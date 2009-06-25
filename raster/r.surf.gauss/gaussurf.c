@@ -41,7 +41,7 @@ int gaussurf(char *out,		/* Name of raster maps to be opened.    */
     nrows = G_window_rows();
     ncols = G_window_cols();
 
-    row_out = Rast_allocate_c_buf();
+    row_out = Rast_allocate_d_buf();
 
 
 	/****** PASS THROUGH EACH CELL ASSIGNING RANDOM VALUE ******/

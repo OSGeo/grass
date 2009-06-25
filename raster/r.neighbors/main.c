@@ -268,7 +268,7 @@ int main(int argc, char *argv[])
 
     /* allocate the cell buffers */
     allocate_bufs();
-    result = Rast_allocate_c_buf();
+    result = Rast_allocate_d_buf();
 
     /* get title, initialize the category and stat info */
     if (parm.title->answer)

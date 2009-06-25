@@ -486,7 +486,7 @@ int main(int argc, char *argv[])
     }
     else if (flag.d->answer) {
 	map_type = DCELL_TYPE;
-	dcell = Rast_allocate_c_buf();
+	dcell = Rast_allocate_d_buf();
     }
     else {
 	cell = Rast_allocate_c_buf();

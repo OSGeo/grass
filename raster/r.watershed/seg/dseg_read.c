@@ -24,7 +24,7 @@ int dseg_read_cell(DSEG * dseg, char *map_name, char *mapset)
     }
     nrows = G_window_rows();
     ncols = G_window_cols();
-    dbuffer = Rast_allocate_c_buf();
+    dbuffer = Rast_allocate_d_buf();
     for (row = 0; row < nrows; row++) {
 	if (Rast_get_d_raster_row(map_fd, dbuffer, row) < 0) {
 	    G_free(dbuffer);

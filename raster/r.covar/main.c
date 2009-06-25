@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
     sum2 = (double **)G_malloc(nfiles * sizeof(double *));
     for (i = 0; i < nfiles; i++) {
 	sum2[i] = (double *)G_calloc(nfiles, sizeof(double));
-	dcell[i] = Rast_allocate_c_buf();
+	dcell[i] = Rast_allocate_d_buf();
 	name = maps->answers[i];
 	fd[i] = Rast_open_cell_old(name, "");
 	if (fd[i] < 0)

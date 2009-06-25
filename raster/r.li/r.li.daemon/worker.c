@@ -167,7 +167,7 @@ void worker(char *raster, int f(int, char **, area_des, double *),
 		break;
 	    case DCELL_TYPE:{
 		    for (i = 0; i < ad->rl - used; i++) {
-			dm->cache[used + i] = Rast_allocate_c_buf();
+			dm->cache[used + i] = Rast_allocate_d_buf();
 		    }
 		}
 		break;

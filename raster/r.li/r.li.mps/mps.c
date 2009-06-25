@@ -537,13 +537,13 @@ int calculateD(int fd, area_des ad, struct Cell_head hd, double *result)
 	return RLI_ERRORE;
     }
 
-    buf_sup = Rast_allocate_c_buf();
+    buf_sup = Rast_allocate_d_buf();
     if (buf_sup == NULL) {
 	G_fatal_error("malloc buf_sup failed");
 	return RLI_ERRORE;
     }
 
-    buf = Rast_allocate_c_buf();
+    buf = Rast_allocate_d_buf();
     if (buf == NULL) {
 	G_fatal_error("malloc buf failed");
 	return RLI_ERRORE;

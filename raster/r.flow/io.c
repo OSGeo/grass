@@ -111,7 +111,7 @@ void read_input_files(void)
 
     if (parm.barin) {
 	G_message(_("Reading input files: barrier"));
-	barc = Rast_allocate_c_buf();
+	barc = Rast_allocate_d_buf();
 	fd = open_existing_cell_file(parm.barin, &hd);
 
 	for (row = 0; row < region.rows; row++) {

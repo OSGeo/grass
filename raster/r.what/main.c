@@ -215,7 +215,7 @@ int main(int argc, char *argv[])
 
 	cell[i] = Rast_allocate_c_buf();
 	if (out_type[i] != CELL_TYPE)
-	    dcell[i] = Rast_allocate_c_buf();
+	    dcell[i] = Rast_allocate_d_buf();
     }
 
     G_get_window(&window);

@@ -334,7 +334,7 @@ int main(int argc, char *argv[])
     /* allocate buffers for input rows */
     bufs = G_malloc(row_scale * sizeof(DCELL *));
     for (row = 0; row < row_scale; row++)
-	bufs[row] = Rast_allocate_c_buf();
+	bufs[row] = Rast_allocate_d_buf();
 
     /* open old map */
     infile = Rast_open_cell_old(parm.rastin->answer, "");
@@ -346,7 +346,7 @@ int main(int argc, char *argv[])
     Rast_set_window(&dst_w);
 
     /* allocate output buffer */
-    outbuf = Rast_allocate_c_buf();
+    outbuf = Rast_allocate_d_buf();
 
     /* open new map */
     outfile = Rast_open_raster_new(parm.rastout->answer, DCELL_TYPE);

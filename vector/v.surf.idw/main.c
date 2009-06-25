@@ -240,7 +240,7 @@ int main(int argc, char *argv[])
 
     /* allocate buffers, etc. */
 
-    dcell = Rast_allocate_c_buf();
+    dcell = Rast_allocate_d_buf();
 
     if ((maskfd = Rast_maskfd()) >= 0)
 	mask = Rast_allocate_c_buf();

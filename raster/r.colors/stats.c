@@ -67,7 +67,7 @@ void get_fp_stats(const char *name, const char *mapset,
 	G_fatal_error("Unable to open raster map <%s>",
 		      G_fully_qualified_name(name, mapset));
 
-    dcell = Rast_allocate_c_buf();
+    dcell = Rast_allocate_d_buf();
     nrows = G_window_rows();
     ncols = G_window_cols();
 

@@ -241,7 +241,7 @@ void *get_buf_f(void)
 
 void *get_buf_d(void)
 {
-    return (void *)Rast_allocate_c_buf();
+    return (void *)Rast_allocate_d_buf();
 }
 
 /* initialize memory to a minimum value */
