@@ -4,8 +4,8 @@
      * updated 8/2005, 2006, 2007, 2008
   -->
 
-<a href="http://grass.osgeo.org">GRASS GIS</a> (Geographic Resources
-Analysis Support System) is an open source, Free Software
+<a href="http://grass.osgeo.org">GRASS GIS</a> (<b>Geographic Resources
+Analysis Support System</b>) is an open source, Free Software
 <em>Geographical Information System</em> (GIS) with raster,
 topological %vector, image processing, and graphics production
 functionality that operates on various platforms through a graphical
@@ -61,10 +61,9 @@ from GRASS 5 Programmer's manual) or are simply undocumented.</i>
 
 (the name refers to the directory name in lib/ in the source code)
 
- - gis: \ref gislib, with following subsection
-  - \ref gisrasterlib
-  - \ref gisvectorlib
-  - Sites File Processing (legacy, merged into \ref gisvectorlib)
+ - gis: \ref gislib
+ - raster: \ref rasterlib
+ - vector: \ref Vector_Library
 
 \section libs Further libraries
 
@@ -95,7 +94,7 @@ from GRASS 5 Programmer's manual) or are simply undocumented.</i>
  - proj:	\ref projlib (wrapper to PROJ4 projection library)
  - psdriver:    PostScript display driver library - \ref psdriver
  - python:      \ref pythonlib
- - raster:	\ref rastergraphicslib (note: raster map functions are in \ref gislib)
+ - raster:	\ref rasterlib
  - rowio:	Raster row in/out library - \ref rowio
  - rst:	Library for interpolation with regularized splines with tension - \ref rst
  - segment:	\ref segmentlib (segment library for segmented raster reading)
