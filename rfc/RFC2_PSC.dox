@@ -1,9 +1,11 @@
 /*!
 \page rfc2_psc RFC 2: Legal aspects of code contributions
 
-Author: Markus Neteler (based on GDAL.org/RFC3)<br>
-Contact: neteler AT osgeo.org<br>
-Status: Adopted (8 Dec 2006)<br>
+Author: Markus Neteler (based on GDAL.org/RFC3)
+
+Contact: neteler AT osgeo.org
+
+Status: Adopted (8 Dec 2006)
 
 \section legal Legal aspects
 
@@ -41,32 +43,30 @@ Committers should adhere to the following guidelines, and may be
 personally legally liable for improperly contributing code to the
 source repository:
 
-<ul>
-<li> Make sure the contributor (and possibly employer) is aware of the
-  contribution terms.</li>
+- Make sure the contributor (and possibly employer) is aware of the
+  contribution terms.
 
-<li> Code coming from a source other than the contributor (such as
+- Code coming from a source other than the contributor (such as
   adapted from another project) should be clearly marked as to the
   original source, copyright holders, license terms and so forth. This
   information can be in the file headers, but should also be added to
   the project licensing file if not exactly matching normal project
-  licensing (grass/COPYRIGHT.txt).</li>
+  licensing (grass/COPYRIGHT.txt).
 
-<li> Existing copyright headers and license text should never be stripped
+- Existing copyright headers and license text should never be stripped
   from a file. If a copyright holder wishes to give up copyright they
   must do so in writing to the GRASS-PSC before copyright messages
   are removed. If license terms are changed, it has to be by agreement
-  (written in email is ok) of the copyright holders.</li>
+  (written in email is ok) of the copyright holders.
 
-<li> When substantial contributions are added to a file (such as
+- When substantial contributions are added to a file (such as
   substantial patches) the author/contributor should be added to the
-  list of copyright holders for the file in the file header.</li>
+  list of copyright holders for the file in the file header.
 
-<li> If there is uncertainty about whether a change is proper to
+- If there is uncertainty about whether a change is proper to
   contribute to the code base, please seek more information from the
   project steering committee, other GRASS developers or the OSGeo
-  foundation legal counsel.</li>
-</ul>
+  foundation legal counsel.
 
 Questions regarding GRASS GIS should be directed to the
 GRASS Development Team at the following address:
@@ -76,14 +76,13 @@ Internet:
   http://grass.osgeo.org
 
 Postal address:
-<pre>
- GRASS Development Team
- ITC-Irst
- c/o M. Neteler
- SSI/MPA
- Via Sommarive, 18
- 38050 Trento (Povo), Italy
- neteler * osgeo.org
-</pre>
-*/
 
+\verbatim
+ GRASS Development Team
+ c/o M. Neteler
+ Fondazione Mach - Centre for Alpine Ecology
+ 38100 Viote del Monte Bondone (Trento)
+ Italy
+ email: neteler AT cealp.it
+\endverbatim
+*/
