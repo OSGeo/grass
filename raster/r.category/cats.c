@@ -45,7 +45,7 @@ int get_cats(const char *name, const char *mapset)
 		      name, mapset);
     nrows = G_window_rows();
     ncols = G_window_cols();
-    cell = Rast_allocate_cell_buf();
+    cell = Rast_allocate_c_buf();
     Rast_init_cell_stats(&statf);
 
     /* read the raster map */

@@ -144,11 +144,11 @@ int main(int argc, char **argv)
     lookup_and_function_ptrs(nrows, ncols);
 
     /*  allocate buffers for row i/o                                */
-    cell = Rast_allocate_cell_buf();
+    cell = Rast_allocate_c_buf();
     if ((maskfd = Rast_maskfd()) >= 0 || error_flag) {	/* apply mask to output */
 	if (error_flag)		/* use input as mask when -e option chosen */
 	    maskfd = Rast_open_cell_old(input, "");
-	mask = Rast_allocate_cell_buf();
+	mask = Rast_allocate_c_buf();
     }
     else
 	mask = NULL;

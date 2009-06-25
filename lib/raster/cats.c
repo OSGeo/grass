@@ -634,7 +634,7 @@ int Rast_mark_raster_cats(const void *rast_row,
 	if (i > pcats->ncats)
 	    return -1;
 	pcats->marks[i]++;
-	rast_row = G_incr_void_ptr(rast_row, Rast_raster_size(data_type));
+	rast_row = G_incr_void_ptr(rast_row, Rast_cell_size(data_type));
     }
     return 1;
 }

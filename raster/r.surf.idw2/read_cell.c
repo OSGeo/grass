@@ -21,7 +21,7 @@ int read_cell(char *name)
     G_align_window(&window, &cellhd);
     Rast_set_window(&window);
 
-    cell = Rast_allocate_cell_buf();
+    cell = Rast_allocate_c_buf();
 
     fd = Rast_open_cell_old(name, "");
     if (fd < 0) {

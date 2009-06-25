@@ -217,8 +217,8 @@ void elev_raster_to_g3d(Database db, G3D_Region region)
     tbres = (top - bottom) / depths;
 
     /*memory */
-    input_rast = Rast_allocate_raster_buf(db.inputmaptype);
-    elev_rast = Rast_allocate_raster_buf(db.elevmaptype);
+    input_rast = Rast_allocate_buf(db.inputmaptype);
+    elev_rast = Rast_allocate_buf(db.elevmaptype);
 
     G3d_setNullValue(&null, 1, DCELL_TYPE);
 
@@ -238,9 +238,9 @@ void elev_raster_to_g3d(Database db, G3D_Region region)
 
 	for (x = 0, input_ptr = input_rast, elev_ptr = elev_rast; x < cols;
 	     x++, input_ptr =
-	     G_incr_void_ptr(input_ptr, Rast_raster_size(db.inputmaptype)),
+	     G_incr_void_ptr(input_ptr, Rast_cell_size(db.inputmaptype)),
 	     elev_ptr =
-	     G_incr_void_ptr(elev_ptr, Rast_raster_size(db.elevmaptype))) {
+	     G_incr_void_ptr(elev_ptr, Rast_cell_size(db.elevmaptype))) {
 
 	    /*Get the elevation and the input map value */
 	    inval =

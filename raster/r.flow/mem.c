@@ -76,10 +76,10 @@ void allocate_heap(void)
     if (!parm.mem) {
 	G_debug(1, "Allocating memory: aspect");
 	as.buf = (DCELL **) G_calloc(region.rows, sizeof(DCELL *));
-	as.buf[0] = (DCELL *) Rast_allocate_raster_buf(DCELL_TYPE);
+	as.buf[0] = (DCELL *) Rast_allocate_buf(DCELL_TYPE);
 	for (row = 0; row < region.rows; row++)
 	    as.buf[row] = parm.seg ?
-		as.buf[0] : (DCELL *) Rast_allocate_raster_buf(DCELL_TYPE);
+		as.buf[0] : (DCELL *) Rast_allocate_buf(DCELL_TYPE);
     }
 
     if (parm.barin) {
@@ -90,10 +90,10 @@ void allocate_heap(void)
     if (parm.dsout) {
 	G_debug(1, "Allocating memory: density");
 	ds.buf = (DCELL **) G_calloc(region.rows, sizeof(DCELL *));
-	ds.buf[0] = (DCELL *) Rast_allocate_raster_buf(DCELL_TYPE);
+	ds.buf[0] = (DCELL *) Rast_allocate_buf(DCELL_TYPE);
 	for (row = 0; row < region.rows; row++)
 	    ds.buf[row] = parm.seg ?
-		ds.buf[0] : (DCELL *) Rast_allocate_raster_buf(DCELL_TYPE);
+		ds.buf[0] : (DCELL *) Rast_allocate_buf(DCELL_TYPE);
     }
 
     if (parm.flout) {

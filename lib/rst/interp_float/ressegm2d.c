@@ -499,9 +499,9 @@ static int input_data(struct interp_params *params,
 
 
     if (!cellinp)
-	cellinp = Rast_allocate_f_raster_buf();
+	cellinp = Rast_allocate_f_buf();
     if (!cellsmooth)
-	cellsmooth = Rast_allocate_f_raster_buf();
+	cellsmooth = Rast_allocate_f_buf();
 
     for (m1 = 0; m1 <= last_row - first_row; m1++) {
 	ret_val =

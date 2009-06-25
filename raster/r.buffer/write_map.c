@@ -45,7 +45,7 @@ int write_output_map(char *output, int offset)
 	if (fd_in < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), output);
     }
-    cell = Rast_allocate_cell_buf();
+    cell = Rast_allocate_c_buf();
     G_message(_("Writing output raster map <%s>..."), output);
 
     ptr = map;

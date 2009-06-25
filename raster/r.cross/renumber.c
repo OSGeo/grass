@@ -28,7 +28,7 @@ int renumber(int in, int out)
     CELL *cell, *c;
     int row, col;
 
-    cell = Rast_allocate_cell_buf();
+    cell = Rast_allocate_c_buf();
 
     G_message(_("%s: STEP 3 ... "), G_program_name());
     for (row = 0; row < nrows; row++) {

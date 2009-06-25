@@ -15,7 +15,7 @@ transform(int datafds[MX], int outfds[MX], int rows, int cols,
 
     /* allocate row buffers for each band */
     for (i = 1; i <= bands; i++)
-	if ((rowbufs[i] = Rast_allocate_cell_buf()) == NULL)
+	if ((rowbufs[i] = Rast_allocate_c_buf()) == NULL)
 	    G_fatal_error(_("Unable to allocate cell buffers."));
 
     for (i = 0; i < rows; i++) {

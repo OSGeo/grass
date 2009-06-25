@@ -141,13 +141,13 @@ int main(int argc, char *argv[])
 
     switch (rtype) {
     case CELL_TYPE:
-	cell = Rast_allocate_c_raster_buf();
+	cell = Rast_allocate_c_buf();
 	break;
     case FCELL_TYPE:
-	fcell = Rast_allocate_f_raster_buf();
+	fcell = Rast_allocate_f_buf();
 	break;
     case DCELL_TYPE:
-	dcell = Rast_allocate_d_raster_buf();
+	dcell = Rast_allocate_c_buf();
 	break;
     }
     cf = Rast_open_raster_new(output, rtype);

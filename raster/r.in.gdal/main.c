@@ -738,8 +738,8 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 	if (cfI < 0)
 	    G_fatal_error(_("Unable to create raster map <%s>"), outputImg);
 
-	cellReal = Rast_allocate_raster_buf(data_type);
-	cellImg = Rast_allocate_raster_buf(data_type);
+	cellReal = Rast_allocate_buf(data_type);
+	cellImg = Rast_allocate_buf(data_type);
 	bufComplex = (float *)G_malloc(sizeof(float) * ncols * 2);
 
 	if (group_ref != NULL) {
@@ -755,7 +755,7 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 	if (group_ref != NULL)
 	    I_add_file_to_group_ref((char *)output, G_mapset(), group_ref);
 
-	cell = Rast_allocate_raster_buf(data_type);
+	cell = Rast_allocate_buf(data_type);
     }
 
     /* -------------------------------------------------------------------- */

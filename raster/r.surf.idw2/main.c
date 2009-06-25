@@ -97,10 +97,10 @@ int main(int argc, char *argv[])
     /* get the window, allocate buffers, etc. */
     G_get_set_window(&window);
 
-    cell = Rast_allocate_cell_buf();
+    cell = Rast_allocate_c_buf();
 
     if ((maskfd = Rast_maskfd()) >= 0)
-	mask = Rast_allocate_cell_buf();
+	mask = Rast_allocate_c_buf();
     else
 	mask = NULL;
 

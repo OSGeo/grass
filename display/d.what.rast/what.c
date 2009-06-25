@@ -22,8 +22,8 @@ int what(int once, int terse, int colrow, char *fs, int width, int mwidth)
     G_get_set_window(&window);
     nrows = window.rows;
     ncols = window.cols;
-    buf = Rast_allocate_c_raster_buf();
-    dbuf = Rast_allocate_d_raster_buf();
+    buf = Rast_allocate_c_buf();
+    dbuf = Rast_allocate_c_buf();
 
     screen_x = ((int)D_get_d_west() + (int)D_get_d_east()) / 2;
     screen_y = ((int)D_get_d_north() + (int)D_get_d_south()) / 2;

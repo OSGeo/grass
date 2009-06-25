@@ -174,7 +174,7 @@ int main(int argc, char *argv[])
     if (NULL == (outf = fopen(outfilename, "wb")))
 	G_fatal_error(_("Unable to open output file <%s>"), outfilename);
 
-    cell = Rast_allocate_cell_buf();
+    cell = Rast_allocate_c_buf();
 
     nrows = G_window_rows();
     ncols = G_window_cols();
@@ -260,7 +260,7 @@ void processProfiles(int inputFile, FILE * outputF)
     int c, r;
     double tempFloat;
 
-    cell = Rast_allocate_cell_buf();
+    cell = Rast_allocate_c_buf();
     for (r = 0; r < rowCount; r++) {
 	if (Rast_get_map_row(inputFile, cell, r) < 0)
 	    exit(1);

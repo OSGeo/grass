@@ -36,7 +36,7 @@ int exec_rectify(int order, char *extension)
 
     /* allocate the output cell matrix */
     cell_buf = (void **)G_calloc(NROWS, sizeof(void *));
-    n = NCOLS * Rast_raster_size(map_type);
+    n = NCOLS * Rast_cell_size(map_type);
     for (i = 0; i < NROWS; i++) {
 	cell_buf[i] = (void *)G_malloc(n);
 	Rast_set_null_value(cell_buf[i], NCOLS, map_type);

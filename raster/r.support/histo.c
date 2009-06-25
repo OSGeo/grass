@@ -27,7 +27,7 @@ int do_histogram(const char *name)
 
     nrows = G_window_rows();
     ncols = G_window_cols();
-    cell = Rast_allocate_cell_buf();
+    cell = Rast_allocate_c_buf();
 
     Rast_init_cell_stats(&statf);
     for (row = 0; row < nrows; row++) {

@@ -157,7 +157,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Color map for palette must have less "
 			"than 256 colors for the available range of data"));
 
-    cell = Rast_allocate_cell_buf();
+    cell = Rast_allocate_c_buf();
     if ((in = Rast_open_cell_old(inopt->answer, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), inopt->answer);
 
@@ -243,7 +243,7 @@ int main(int argc, char *argv[])
 
 	/* allocate cell buffers */
 	for (i = 0; i < tilelength; i++)
-	    cells[i] = Rast_allocate_cell_buf();
+	    cells[i] = Rast_allocate_c_buf();
 
 	/* build tiff tiles from grass buffer */
 	for (row = 0; row < imagelength; row += tilelength) {

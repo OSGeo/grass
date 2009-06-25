@@ -222,7 +222,7 @@ int main(int argc, char *argv[])
 
     out_data_type = FCELL_TYPE;
     /* Allocate output buffer, use FCELL data_type */
-    outrast = Rast_allocate_raster_buf(out_data_type);
+    outrast = Rast_allocate_buf(out_data_type);
 
     nrows = G_window_rows();
     ncols = G_window_cols();
@@ -230,7 +230,7 @@ int main(int argc, char *argv[])
     /* Load raster map. */
 
     /* allocate the space for one row of cell map data *A* */
-    cell_row = Rast_allocate_cell_buf();
+    cell_row = Rast_allocate_c_buf();
 
     /* Allocate appropriate memory for the structure containing the image */
     data = (int **)G_malloc(nrows * sizeof(int *));

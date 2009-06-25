@@ -17,7 +17,7 @@ static void *get_cell_ptr(void *array, int cols, int row, int col,
 {
     return G_incr_void_ptr(array,
 			   ((row * (size_t) cols) +
-			    col) * Rast_raster_size(map_type));
+			    col) * Rast_cell_size(map_type));
 }
 
 int blank_array(void *array, int nrows, int ncols, RASTER_MAP_TYPE map_type,
@@ -38,7 +38,7 @@ int blank_array(void *array, int nrows, int ncols, RASTER_MAP_TYPE map_type,
 	for (row = 0; row < nrows; row++) {
 	    for (col = 0; col < ncols; col++) {
 		Rast_set_raster_value_c(ptr, 0, map_type);
-		ptr = G_incr_void_ptr(ptr, Rast_raster_size(map_type));
+		ptr = G_incr_void_ptr(ptr, Rast_cell_size(map_type));
 	    }
 	}
 	break;

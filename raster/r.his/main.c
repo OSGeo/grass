@@ -206,9 +206,9 @@ int main(int argc, char **argv)
 	    b_used = 1;
     }
 
-    r_array = Rast_allocate_cell_buf();
-    g_array = Rast_allocate_cell_buf();
-    b_array = Rast_allocate_cell_buf();
+    r_array = Rast_allocate_c_buf();
+    g_array = Rast_allocate_c_buf();
+    b_array = Rast_allocate_c_buf();
 
     /* Make color table */
     make_gray_scale(&gray_colors);

@@ -212,17 +212,17 @@ int put_row_d(int fd, void *row)
 /* Allocate memory for one line of data */
 void *get_buf_c()
 {
-    return (void *)Rast_allocate_c_raster_buf();
+    return (void *)Rast_allocate_c_buf();
 }
 
 void *get_buf_f()
 {
-    return (void *)Rast_allocate_f_raster_buf();
+    return (void *)Rast_allocate_f_buf();
 }
 
 void *get_buf_d()
 {
-    return (void *)Rast_allocate_d_raster_buf();
+    return (void *)Rast_allocate_c_buf();
 }
 
 /* initialize memory to a minimum value */

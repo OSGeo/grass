@@ -842,7 +842,7 @@ int Gs_get_cat_label(const char *filename, int drow, int dcol, char *catstr)
 	map_type = Rast_get_raster_map_type(fd);
 
 	if (map_type == CELL_TYPE) {
-	    buf = Rast_allocate_c_raster_buf();
+	    buf = Rast_allocate_c_buf();
 
 	    if (Rast_get_c_raster_row(fd, buf, drow) < 0) {
 		sprintf(catstr, "error");
@@ -861,7 +861,7 @@ int Gs_get_cat_label(const char *filename, int drow, int dcol, char *catstr)
 
 	else {
 	    /* fp map */
-	    dbuf = Rast_allocate_d_raster_buf();
+	    dbuf = Rast_allocate_c_buf();
 
 	    if (Rast_get_d_raster_row(fd, dbuf, drow) < 0) {
 		sprintf(catstr, "error");

@@ -18,7 +18,7 @@ int close_maps(void)
     cseg_close(&alt);
     if (wat_flag) {
 	sum = sum_sqr = stddev = 0.0;
-	dbuf = Rast_allocate_d_raster_buf();
+	dbuf = Rast_allocate_c_buf();
 	if (abs_acc) {
 	    G_warning("Writing out only positive flow accumulation values.");
 	    G_warning("Cells with a likely underestimate for flow accumulation can no longer be identified.");

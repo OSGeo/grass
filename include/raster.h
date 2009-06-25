@@ -5,12 +5,11 @@
 /* --- ANSI prototypes for the lib/raster functions --- */
 
 /* alloc_cell.c */
-size_t Rast_raster_size(RASTER_MAP_TYPE);
-CELL *Rast_allocate_cell_buf(void);
-void *Rast_allocate_raster_buf(RASTER_MAP_TYPE);
-CELL *Rast_allocate_c_raster_buf(void);
-FCELL *Rast_allocate_f_raster_buf(void);
-DCELL *Rast_allocate_d_raster_buf(void);
+size_t Rast_cell_size(RASTER_MAP_TYPE);
+void *Rast_allocate_buf(RASTER_MAP_TYPE);
+CELL *Rast_allocate_c_buf(void);
+FCELL *Rast_allocate_f_buf(void);
+DCELL *Rast_allocate_d_buf(void);
 char *Rast_allocate_null_buf(void);
 unsigned char *Rast__allocate_null_bits(int);
 int Rast__null_bitstream_size(int);

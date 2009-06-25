@@ -442,7 +442,7 @@ int read_rast
 
 
     if (data_type == CELL_TYPE) {
-	cell = Rast_allocate_c_raster_buf();
+	cell = Rast_allocate_c_buf();
 	if (Rast_get_c_raster_row(fd, cell, row) < 0)
 	    exit(1);
 
@@ -453,7 +453,7 @@ int read_rast
     }
 
     if (data_type == FCELL_TYPE) {
-	fcell = Rast_allocate_f_raster_buf();
+	fcell = Rast_allocate_f_buf();
 	if (Rast_get_f_raster_row(fd, fcell, row) < 0)
 	    exit(1);
 	if (Rast_is_f_null_value(&fcell[col]))
@@ -463,7 +463,7 @@ int read_rast
     }
 
     if (data_type == DCELL_TYPE) {
-	dcell = Rast_allocate_d_raster_buf();
+	dcell = Rast_allocate_c_buf();
 	if (Rast_get_d_raster_row(fd, dcell, row) < 0)
 	    exit(1);
 	if (Rast_is_d_null_value(&dcell[col]))

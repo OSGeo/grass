@@ -33,7 +33,7 @@ int centroids(int fd,		/* File descriptor of map layer to process */
 
     adjusted = 0;
 
-    cell_buf = Rast_allocate_cell_buf();
+    cell_buf = Rast_allocate_c_buf();
     /* space to accumulate counts */
     count = (int *)G_malloc((max + 1) * sizeof(int));
 

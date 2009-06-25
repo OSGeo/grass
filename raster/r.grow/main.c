@@ -213,9 +213,9 @@ int main(int argc, char **argv)
     in_rows = G_malloc((size * 2 + 1) * sizeof(DCELL *));
 
     for (row = 0; row <= size * 2; row++)
-	in_rows[row] = Rast_allocate_d_raster_buf();
+	in_rows[row] = Rast_allocate_c_buf();
 
-    out_row = Rast_allocate_d_raster_buf();
+    out_row = Rast_allocate_c_buf();
 
     for (row = 0; row < size; row++)
 	Rast_get_d_raster_row(in_fd, in_rows[size + row], row);

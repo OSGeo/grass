@@ -56,7 +56,7 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
 	     || (params->mcurv != NULL));
     cond1 = ((params->slope != NULL) || (params->aspect != NULL) || cond2);
 
-    cell1 = Rast_allocate_f_raster_buf();
+    cell1 = Rast_allocate_f_buf();
 
     /*
      * G_set_embedded_null_value_mode(1);

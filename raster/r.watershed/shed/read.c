@@ -16,8 +16,8 @@ int read_basins(char *haf_name, OUTPUT * output)
 
     nrows = G_window_rows();
     ncols = G_window_cols();
-    buf = Rast_allocate_cell_buf();
-    bas_buf = Rast_allocate_cell_buf();
+    buf = Rast_allocate_c_buf();
+    bas_buf = Rast_allocate_c_buf();
     mapset = G_find_cell(haf_name, "");
     if (!mapset) {
 	G_fatal_error(_("unable to open basin/half basin map"));

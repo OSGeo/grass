@@ -36,7 +36,7 @@ struct BM *IL_create_bitmask(struct interp_params *params)
     struct BM *bitmask;
 
     if ((MASKfd = Rast_maskfd()) >= 0)
-	MASK = Rast_allocate_cell_buf();
+	MASK = Rast_allocate_c_buf();
     else
 	MASK = NULL;
 
@@ -49,7 +49,7 @@ struct BM *IL_create_bitmask(struct interp_params *params)
 		G_fatal_error(_("Mask raster map <%s> not found"),
 			      params->maskmap);
 
-	    cellmask = Rast_allocate_cell_buf();
+	    cellmask = Rast_allocate_c_buf();
 	    cfmask = Rast_open_cell_old(params->maskmap, mapsetm);
 	}
 	else

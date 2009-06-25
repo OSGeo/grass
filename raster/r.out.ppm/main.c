@@ -100,9 +100,9 @@ int main(int argc, char *argv[])
     if ((cellfile = Rast_open_cell_old(rast->answer, "")) == -1)
 	G_fatal_error(_("Unable to open raster map <%s>"), rast->answer);
 
-    cell_buf = Rast_allocate_c_raster_buf();
-    fcell_buf = Rast_allocate_f_raster_buf();
-    dcell_buf = Rast_allocate_d_raster_buf();
+    cell_buf = Rast_allocate_c_buf();
+    fcell_buf = Rast_allocate_f_buf();
+    dcell_buf = Rast_allocate_c_buf();
 
     ored = G_malloc(w.cols);
     ogrn = G_malloc(w.cols);

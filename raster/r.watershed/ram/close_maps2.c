@@ -10,7 +10,7 @@ int close_array_seg(void)
     CELL *theseg;
     RAMSEG thesegseg;
 
-    cellrow = Rast_allocate_cell_buf();
+    cellrow = Rast_allocate_c_buf();
     if (seg_flag || bas_flag || haf_flag) {
 	if (seg_flag) {
 	    theseg = bas;

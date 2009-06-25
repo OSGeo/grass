@@ -420,7 +420,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 
 	    map_type = Rast_raster_map_type(rast_name, G_mapset());
 
-	    if (!(rowbuf = Rast_allocate_raster_buf(map_type)))
+	    if (!(rowbuf = Rast_allocate_buf(map_type)))
 		G_fatal_error(_("Cannot allocate memory for row buffer"));
 
 	    Rast_init_cell_stats(&stats);

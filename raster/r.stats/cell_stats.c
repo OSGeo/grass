@@ -16,7 +16,7 @@ int cell_stats(int fd[], int with_percents, int with_counts,
     /* allocate i/o buffers for each raster map */
     cell = (CELL **) G_calloc(nfiles, sizeof(CELL *));
     for (i = 0; i < nfiles; i++)
-	cell[i] = Rast_allocate_cell_buf();
+	cell[i] = Rast_allocate_c_buf();
 
     /* if we want area totals, set this up.
      * distinguish projections which are planimetric (all cells same size)

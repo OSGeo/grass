@@ -400,7 +400,7 @@ void mv_driver()
        there is a mask */
 
     if (fmask > 0)
-	row_buf = Rast_allocate_raster_buf(CELL_TYPE);
+	row_buf = Rast_allocate_buf(CELL_TYPE);
 
 
     if (choice->edg[2] || choice->jux[0]) {
@@ -423,13 +423,13 @@ void mv_driver()
 
 	switch (data_type) {
 	case CELL_TYPE:
-	    tmp = Rast_allocate_raster_buf(CELL_TYPE);
+	    tmp = Rast_allocate_buf(CELL_TYPE);
 	    break;
 	case FCELL_TYPE:
-	    ftmp = Rast_allocate_raster_buf(FCELL_TYPE);
+	    ftmp = Rast_allocate_buf(FCELL_TYPE);
 	    break;
 	case DCELL_TYPE:
-	    dtmp = Rast_allocate_raster_buf(DCELL_TYPE);
+	    dtmp = Rast_allocate_buf(DCELL_TYPE);
 	    break;
 	}
 
@@ -578,7 +578,7 @@ void mv_driver()
 	   maps; the map location is adjusted to the center
 	   of the moving window */
 
-	tmp_buf = Rast_allocate_raster_buf(DCELL_TYPE);
+	tmp_buf = Rast_allocate_buf(DCELL_TYPE);
 	nulltmp = Rast_allocate_null_buf();
 
 	if (choice->att[1]) {
@@ -596,7 +596,7 @@ void mv_driver()
 		Rast_put_d_raster_row(b1, tmp_buf);
 	    }
 	    if (i == nr - 1) {
-		tmp_buf2 = Rast_allocate_raster_buf(DCELL_TYPE);
+		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
 		    Rast_put_d_raster_row(b1, tmp_buf2);
@@ -618,7 +618,7 @@ void mv_driver()
 		Rast_put_d_raster_row(b2, tmp_buf);
 	    }
 	    if (i == nr - 1) {
-		tmp_buf2 = Rast_allocate_raster_buf(DCELL_TYPE);
+		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
 		    Rast_put_d_raster_row(b2, tmp_buf2);
@@ -640,7 +640,7 @@ void mv_driver()
 		Rast_put_d_raster_row(b3, tmp_buf);
 	    }
 	    if (i == nr - 1) {
-		tmp_buf2 = Rast_allocate_raster_buf(DCELL_TYPE);
+		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
 		    Rast_put_d_raster_row(b3, tmp_buf2);
@@ -662,7 +662,7 @@ void mv_driver()
 		Rast_put_d_raster_row(b4, tmp_buf);
 	    }
 	    if (i == nr - 1) {
-		tmp_buf2 = Rast_allocate_raster_buf(DCELL_TYPE);
+		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
 		    Rast_put_d_raster_row(b4, tmp_buf2);
@@ -684,7 +684,7 @@ void mv_driver()
 		Rast_put_d_raster_row(d1, tmp_buf);
 	    }
 	    if (i == nr - 1) {
-		tmp_buf2 = Rast_allocate_raster_buf(DCELL_TYPE);
+		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
 		    Rast_put_d_raster_row(d1, tmp_buf2);
@@ -706,7 +706,7 @@ void mv_driver()
 		Rast_put_d_raster_row(d2, tmp_buf);
 	    }
 	    if (i == nr - 1) {
-		tmp_buf2 = Rast_allocate_raster_buf(DCELL_TYPE);
+		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
 		    Rast_put_d_raster_row(d2, tmp_buf2);
@@ -728,7 +728,7 @@ void mv_driver()
 		Rast_put_d_raster_row(d3, tmp_buf);
 	    }
 	    if (i == nr - 1) {
-		tmp_buf2 = Rast_allocate_raster_buf(DCELL_TYPE);
+		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
 		    Rast_put_d_raster_row(d3, tmp_buf2);
@@ -750,7 +750,7 @@ void mv_driver()
 		Rast_put_d_raster_row(d4, tmp_buf);
 	    }
 	    if (i == nr - 1) {
-		tmp_buf2 = Rast_allocate_raster_buf(DCELL_TYPE);
+		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
 		    Rast_put_d_raster_row(d4, tmp_buf2);
@@ -772,7 +772,7 @@ void mv_driver()
 		Rast_put_d_raster_row(t1, tmp_buf);
 	    }
 	    if (i == nr - 1) {
-		tmp_buf2 = Rast_allocate_raster_buf(DCELL_TYPE);
+		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
 		    Rast_put_d_raster_row(t1, tmp_buf2);
@@ -794,7 +794,7 @@ void mv_driver()
 		Rast_put_d_raster_row(t2, tmp_buf);
 	    }
 	    if (i == nr - 1) {
-		tmp_buf2 = Rast_allocate_raster_buf(DCELL_TYPE);
+		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
 		    Rast_put_d_raster_row(t2, tmp_buf2);
@@ -816,7 +816,7 @@ void mv_driver()
 		Rast_put_d_raster_row(t3, tmp_buf);
 	    }
 	    if (i == nr - 1) {
-		tmp_buf2 = Rast_allocate_raster_buf(DCELL_TYPE);
+		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
 		    Rast_put_d_raster_row(t3, tmp_buf2);
@@ -838,7 +838,7 @@ void mv_driver()
 		Rast_put_d_raster_row(t4, tmp_buf);
 	    }
 	    if (i == nr - 1) {
-		tmp_buf2 = Rast_allocate_raster_buf(DCELL_TYPE);
+		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
 		    Rast_put_d_raster_row(t4, tmp_buf2);
@@ -860,7 +860,7 @@ void mv_driver()
 		Rast_put_d_raster_row(t5, tmp_buf);
 	    }
 	    if (i == nr - 1) {
-		tmp_buf2 = Rast_allocate_raster_buf(DCELL_TYPE);
+		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
 		    Rast_put_d_raster_row(t5, tmp_buf2);
@@ -882,7 +882,7 @@ void mv_driver()
 		Rast_put_d_raster_row(j1, tmp_buf);
 	    }
 	    if (i == nr - 1) {
-		tmp_buf2 = Rast_allocate_raster_buf(DCELL_TYPE);
+		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
 		    Rast_put_d_raster_row(j1, tmp_buf2);
@@ -904,7 +904,7 @@ void mv_driver()
 		Rast_put_d_raster_row(j2, tmp_buf);
 	    }
 	    if (i == nr - 1) {
-		tmp_buf2 = Rast_allocate_raster_buf(DCELL_TYPE);
+		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
 		    Rast_put_d_raster_row(j2, tmp_buf2);
@@ -926,7 +926,7 @@ void mv_driver()
 		Rast_put_d_raster_row(e1, tmp_buf);
 	    }
 	    if (i == nr - 1) {
-		tmp_buf2 = Rast_allocate_raster_buf(DCELL_TYPE);
+		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
 		    Rast_put_d_raster_row(e1, tmp_buf2);
@@ -948,7 +948,7 @@ void mv_driver()
 		Rast_put_d_raster_row(e2, tmp_buf);
 	    }
 	    if (i == nr - 1) {
-		tmp_buf2 = Rast_allocate_raster_buf(DCELL_TYPE);
+		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
 		    Rast_put_d_raster_row(e2, tmp_buf2);
@@ -1346,13 +1346,13 @@ void unit_driver()
 
 	switch (data_type) {
 	case CELL_TYPE:
-	    tmp = Rast_allocate_raster_buf(CELL_TYPE);
+	    tmp = Rast_allocate_buf(CELL_TYPE);
 	    break;
 	case FCELL_TYPE:
-	    ftmp = Rast_allocate_raster_buf(FCELL_TYPE);
+	    ftmp = Rast_allocate_buf(FCELL_TYPE);
 	    break;
 	case DCELL_TYPE:
-	    dtmp = Rast_allocate_raster_buf(DCELL_TYPE);
+	    dtmp = Rast_allocate_buf(DCELL_TYPE);
 	    break;
 	}
 
@@ -1525,7 +1525,7 @@ void unit_driver()
 	    strcpy(unitname, "units_");
 	    strcat(unitname, istr);
 	    fd = Rast_open_raster_new(unitname, CELL_TYPE);
-	    unit_buf = Rast_allocate_raster_buf(CELL_TYPE);
+	    unit_buf = Rast_allocate_buf(CELL_TYPE);
 	    for (k = 1; k < wind.rows + 1; k++) {
 		Rast_zero_raster_buf(unit_buf, CELL_TYPE);
 		Rast_set_null_value(unit_buf, wind.cols + 1, CELL_TYPE);
@@ -1665,13 +1665,13 @@ void whole_reg_driver()
 
 	switch (data_type) {
 	case CELL_TYPE:
-	    tmp = Rast_allocate_raster_buf(CELL_TYPE);
+	    tmp = Rast_allocate_buf(CELL_TYPE);
 	    break;
 	case FCELL_TYPE:
-	    ftmp = Rast_allocate_raster_buf(FCELL_TYPE);
+	    ftmp = Rast_allocate_buf(FCELL_TYPE);
 	    break;
 	case DCELL_TYPE:
-	    dtmp = Rast_allocate_raster_buf(DCELL_TYPE);
+	    dtmp = Rast_allocate_buf(DCELL_TYPE);
 	    break;
 	}
 
@@ -1751,7 +1751,7 @@ void whole_reg_driver()
     else {
 	regcnt = 0;
 	fr = Rast_open_cell_old(choice->reg, G_mapset());
-	row_buf = Rast_allocate_raster_buf(CELL_TYPE);
+	row_buf = Rast_allocate_buf(CELL_TYPE);
 	for (i = 0; i < nrows; i++) {
 	    Rast_zero_raster_buf(row_buf, CELL_TYPE);
 	    Rast_get_raster_row(fr, row_buf, i, CELL_TYPE);

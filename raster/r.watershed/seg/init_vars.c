@@ -193,8 +193,8 @@ int init_vars(int argc, char *argv[])
     }
 
     ele_map_type = Rast_get_raster_map_type(fd);
-    ele_size = Rast_raster_size(ele_map_type);
-    elebuf = Rast_allocate_raster_buf(ele_map_type);
+    ele_size = Rast_cell_size(ele_map_type);
+    elebuf = Rast_allocate_buf(ele_map_type);
 
     if (ele_map_type == FCELL_TYPE || ele_map_type == DCELL_TYPE)
 	ele_scale = 1000; 	/* should be enough to do the trick */
@@ -278,7 +278,7 @@ int init_vars(int argc, char *argv[])
 	if (fd < 0) {
 	    G_fatal_error(_("unable to open depression map layer"));
 	}
-	buf = Rast_allocate_cell_buf();
+	buf = Rast_allocate_c_buf();
 	for (r = 0; r < nrows; r++) {
 	    Rast_get_c_raster_row(fd, buf, r);
 	    for (c = 0; c < ncols; c++) {
@@ -307,7 +307,7 @@ int init_vars(int argc, char *argv[])
 	if (fd < 0) {
 	    G_fatal_error(_("unable to open blocking map layer"));
 	}
-	buf = Rast_allocate_cell_buf();
+	buf = Rast_allocate_c_buf();
 	for (r = 0; r < nrows; r++) {
 	    Rast_get_c_raster_row(fd, buf, r);
 	    for (c = 0; c < ncols; c++) {

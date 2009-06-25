@@ -360,7 +360,7 @@ int main(int argc, char **argv)
     Rast_close_cell(map_id);
 
     if (costmode == 1) {
-	dir_buf = Rast_allocate_d_raster_buf();
+	dir_buf = Rast_allocate_c_buf();
 	dir_id = Rast_open_cell_old(dir_name, "");
 	tempfile3 = G_tempfile();
 	dir_fd = open(tempfile3, O_RDWR | O_CREAT, 0666);
@@ -417,7 +417,7 @@ int main(int argc, char **argv)
 	/* Output will be a cell map */
 	/* open a new file and allocate an output buffer */
 	new_id = Rast_open_cell_new(new_map_name);
-	out_buf = Rast_allocate_c_raster_buf();
+	out_buf = Rast_allocate_c_buf();
 
 	/* mark each cell */
 	thispoint = list;
@@ -578,7 +578,7 @@ struct point *drain(int fd, struct point *list, int nrow, int ncol)
     CELL direction;
     CELL *dir;
 
-    dir = Rast_allocate_c_raster_buf();
+    dir = Rast_allocate_c_buf();
     next_row = list->row;
     next_col = list->col;
 
@@ -644,7 +644,7 @@ struct point *drain_cost(int dir_fd, struct point *list, int nrow, int ncol)
     DCELL direction;
     DCELL *dir_buf;
 
-    dir_buf = Rast_allocate_d_raster_buf();
+    dir_buf = Rast_allocate_c_buf();
 
     next_row = list->row;
     next_col = list->col;

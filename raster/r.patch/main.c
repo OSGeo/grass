@@ -124,8 +124,8 @@ int main(int argc, char *argv[])
     if (outfd < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), new_name);
 
-    presult = Rast_allocate_raster_buf(out_type);
-    patch = Rast_allocate_raster_buf(out_type);
+    presult = Rast_allocate_buf(out_type);
+    patch = Rast_allocate_buf(out_type);
 
     nrows = G_window_rows();
     ncols = G_window_cols();

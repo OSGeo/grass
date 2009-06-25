@@ -28,7 +28,7 @@ int valid_basins(char *accum_name, OUTPUT * output)
 	G_fatal_error(_("unable to open accum file in valid_basins()"));
     }
 
-    buf = Rast_allocate_cell_buf();
+    buf = Rast_allocate_c_buf();
     basin_facts = output->basin_facts;
     for (i = output->num_basins - 1; i >= 0; i--) {
 	basin = &(basin_facts[i]);

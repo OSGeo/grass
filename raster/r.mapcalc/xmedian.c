@@ -49,7 +49,7 @@ int f_median(int argc, const int *argt, void **args)
 {
     static void *array;
     static int alloc;
-    int size = argc * Rast_raster_size(argt[0]);
+    int size = argc * Rast_cell_size(argt[0]);
     int i, j;
 
     if (argc < 1)

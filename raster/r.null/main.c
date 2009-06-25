@@ -323,7 +323,7 @@ int doit(const char *name, const char *mapset, int change_null, RASTER_MAP_TYPE 
     if (new < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), name);
 
-    rast = Rast_allocate_raster_buf(map_type);
+    rast = Rast_allocate_buf(map_type);
 
     G_verbose_message(_("Writing new data for raster map <%s>..."), name);
 

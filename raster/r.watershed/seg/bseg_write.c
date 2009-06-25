@@ -19,7 +19,7 @@ int bseg_write_cellfile(BSEG * bseg, char *map_name)
     }
     nrows = G_window_rows();
     ncols = G_window_cols();
-    buffer = Rast_allocate_cell_buf();
+    buffer = Rast_allocate_c_buf();
     for (row = 0; row < nrows; row++) {
 	for (col = 0; col < ncols; col++) {
 	    bseg_get(bseg, &value, row, col);

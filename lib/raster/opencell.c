@@ -118,7 +118,7 @@ int Rast_open_cell_old(const char *name, const char *mapset)
     Rast__check_for_auto_masking();
     /*
        if(R__.auto_mask <= 0)
-       R__.mask_buf = Rast_allocate_cell_buf();
+       R__.mask_buf = Rast_allocate_c_buf();
        now we don't ever free it!, so no need to allocate it  (Olga)
      */
     /* mask_buf is used for reading MASK file when mask is set and
@@ -511,7 +511,7 @@ static int G__open_raster_new_gdal(char *map, char *mapset, RASTER_MAP_TYPE map_
 
     fcb->cellhd = R__.window;
     fcb->cellhd.compressed = 0;
-    fcb->nbytes = Rast_raster_size(fcb->map_type);
+    fcb->nbytes = Rast_cell_size(fcb->map_type);
     /* for writing fcb->data is allocated to be R__.window.cols * 
        sizeof(CELL or DCELL or FCELL)  */
     fcb->data = G_calloc(R__.window.cols, fcb->nbytes);
@@ -627,7 +627,7 @@ static int G__open_raster_new(const char *name, int open_mode,
     /* for writing fcb->data is allocated to be R__.window.cols * 
        sizeof(CELL or DCELL or FCELL)  */
     fcb->data = (unsigned char *)G_calloc(R__.window.cols,
-					  Rast_raster_size(fcb->map_type));
+					  Rast_cell_size(fcb->map_type));
 
     /*
      * copy current window into cell header

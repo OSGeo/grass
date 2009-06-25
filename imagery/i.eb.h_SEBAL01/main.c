@@ -223,10 +223,10 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Unable to read header of raster map <%s>"), t0dem);
 
     /* Allocate input buffer */
-    inrast_Rn = Rast_allocate_d_raster_buf();
-    inrast_g0 = Rast_allocate_d_raster_buf();
-    inrast_z0m = Rast_allocate_d_raster_buf();
-    inrast_t0dem = Rast_allocate_d_raster_buf();
+    inrast_Rn = Rast_allocate_c_buf();
+    inrast_g0 = Rast_allocate_c_buf();
+    inrast_z0m = Rast_allocate_c_buf();
+    inrast_t0dem = Rast_allocate_c_buf();
 
     /***************************************************/
     /* Setup pixel location variables */
@@ -245,7 +245,7 @@ int main(int argc, char *argv[])
     /***************************************************/
     /* Allocate output buffer */
     /***************************************************/
-    outrast = Rast_allocate_d_raster_buf();
+    outrast = Rast_allocate_c_buf();
 
     if ((outfd = Rast_open_raster_new(h0, DCELL_TYPE)) < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), h0);

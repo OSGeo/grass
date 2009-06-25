@@ -37,9 +37,9 @@ int randsurf(char *out,		/* Name of raster maps to be opened.    */
     ncols = G_window_cols();
 
     if (int_map)
-	row_out_C = Rast_allocate_c_raster_buf();
+	row_out_C = Rast_allocate_c_buf();
     else
-	row_out_D = Rast_allocate_d_raster_buf();
+	row_out_D = Rast_allocate_c_buf();
 
 	/****** PASS THROUGH EACH CELL ASSIGNING RANDOM VALUE ******/
     for (row_count = 0; row_count < nrows; row_count++) {

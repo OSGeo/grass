@@ -56,8 +56,8 @@ int do_patch(void *result, void *patch,
 		}
 	    }			/* NULL support */
 	}
-	result = G_incr_void_ptr(result, Rast_raster_size(out_type));
-	patch = G_incr_void_ptr(patch, Rast_raster_size(out_type));
+	result = G_incr_void_ptr(result, Rast_cell_size(out_type));
+	patch = G_incr_void_ptr(patch, Rast_cell_size(out_type));
     }
     return more;
 }

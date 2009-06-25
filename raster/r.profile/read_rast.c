@@ -25,7 +25,7 @@ int read_rast(double east, double north, double dist, int fd, int coords,
 
     if (!dcell) {
 	Rast_set_c_null_value(&nullcell, 1);
-	dcell = Rast_allocate_d_raster_buf();
+	dcell = Rast_allocate_c_buf();
 	G_get_window(&window);
 	nrows = window.rows;
 	ncols = window.cols;

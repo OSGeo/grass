@@ -135,7 +135,7 @@ int main(int argc, char *argv[])
     drain_ptrs =
 	(char *)G_malloc(sizeof(char) * size_array(&pt_seg, nrows, ncols));
     bas = (CELL *) G_calloc(size_array(&ba_seg, nrows, ncols), sizeof(CELL));
-    cell_buf = Rast_allocate_cell_buf();
+    cell_buf = Rast_allocate_c_buf();
 
     for (row = 0; row < nrows; row++) {
 	Rast_get_map_row(drain_fd, cell_buf, row);
@@ -151,7 +151,7 @@ int main(int argc, char *argv[])
     if (row >= 0 && col >= 0 && row < nrows && col < ncols)
 	overland_cells(row, col);
     G_free(drain_ptrs);
-    cell_buf = Rast_allocate_cell_buf();
+    cell_buf = Rast_allocate_c_buf();
     basin_fd = Rast_open_cell_new(basin_name);
 
     if (basin_fd < 0)

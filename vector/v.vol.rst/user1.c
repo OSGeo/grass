@@ -364,7 +364,7 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
 	    clean_fatal_error(buf);
 	}
 	bitmask = BM_create(nsizc, nsizr);
-	cellmask = Rast_allocate_cell_buf();
+	cellmask = Rast_allocate_c_buf();
 	cfmask = Rast_open_cell_old(maskmap, mapsetm);
 	for (i = 0; i < nsizr; i++) {
 	    irev = nsizr - i - 1;
@@ -399,7 +399,7 @@ int OUTGR()
     float value;
 
     if ((cellinp != NULL) && (cellout != NULL)) {
-	cell = Rast_allocate_f_raster_buf();
+	cell = Rast_allocate_f_buf();
 
 	for (i = 0; i < nsizr; i++) {
 	    /* seek to the right row */

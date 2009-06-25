@@ -165,7 +165,7 @@ int main(int argc, char **argv)
     nrows = G_window_rows();
     ncols = G_window_cols();
 
-    cell = Rast_allocate_cell_buf();
+    cell = Rast_allocate_c_buf();
 
     /*  Open back cell layers for reading  */
     backrow_fd = Rast_open_cell_old(backrow_layer, backrow_mapset);

@@ -176,7 +176,7 @@ int export_band(GDALDatasetH hMEMDS, GDALDataType export_datatype, int band,
     }
 
     /* Create GRASS raster buffer */
-    void *bufer = Rast_allocate_raster_buf(maptype);
+    void *bufer = Rast_allocate_buf(maptype);
 
     if (bufer == NULL) {
 	G_warning(_("Unable to allocate buffer for reading raster map"));

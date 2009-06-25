@@ -36,7 +36,7 @@ int PS_make_mask(void)
 	return 0;
     }
     if (maskfd >= 0)
-	maskbuf = Rast_allocate_cell_buf();
+	maskbuf = Rast_allocate_c_buf();
 
     /* if masked, open a file to hold the PostScript mask data */
     if (maskfd >= 0 && PS.mask_needed) {
@@ -109,7 +109,7 @@ int PS_raster_plot(void)
     /* build the image RGB string */
     if (PS.do_raster) {
 	map_type = Rast_get_raster_map_type(PS.cell_fd);
-	cellbuf = Rast_allocate_raster_buf(map_type);
+	cellbuf = Rast_allocate_buf(map_type);
 	n = 0;
 	for (row = 0; row < PS.w.rows; row++) {
 	    Rast_get_raster_row(PS.cell_fd, cellbuf, row, map_type);
@@ -139,7 +139,7 @@ int PS_raster_plot(void)
 		    }
 		    ptr =
 			G_incr_void_ptr(ptr,
-					Rast_raster_size(map_type) *
+					Rast_cell_size(map_type) *
 					PS.col_delta);
 		}
 	    }
@@ -150,7 +150,7 @@ int PS_raster_plot(void)
 
 	for (i = 0; i < 3; i++) {
 	    grp_map_type[i] = Rast_get_raster_map_type(grp.fd[i]);
-	    cbuf[i] = Rast_allocate_raster_buf(grp_map_type[i]);
+	    cbuf[i] = Rast_allocate_buf(grp_map_type[i]);
 	}
 	n = 0;
 	for (row = 0; row < PS.w.rows; row++) {
@@ -171,7 +171,7 @@ int PS_raster_plot(void)
 			if (i == 2)
 			    b = bb;
 			cptr[i] = G_incr_void_ptr(cptr[i],
-						  Rast_raster_size(grp_map_type
+						  Rast_cell_size(grp_map_type
 								[0]) *
 						  PS.col_delta);
 		    }

@@ -114,7 +114,7 @@ int draw_outline(void)
     bottom = 1;			/*   line from raster map */
     scan_length = read_next();
     k = 0;
-    raster_size = Rast_raster_size(map_type);
+    raster_size = Rast_cell_size(map_type);
     while (read_next()) {	/* read rest of file, one row at *//*   a time */
 	n1 = G_row_to_northing((double)row - 1., &(PS.w));
 	n2 = G_row_to_northing((double)row, &(PS.w));

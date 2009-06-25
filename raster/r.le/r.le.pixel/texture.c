@@ -467,7 +467,7 @@ void df_texture(int nrows, int ncols, double **buf, double **null_buf,
 	fc = Rast_open_raster_new("edge", data_type);
 	switch (data_type) {
 	case (CELL_TYPE):
-	    edge_buf_c = Rast_allocate_raster_buf(CELL_TYPE);
+	    edge_buf_c = Rast_allocate_buf(CELL_TYPE);
 	    for (i = 1; i < nrows + 1; i++) {
 		Rast_zero_raster_buf(edge_buf_c, CELL_TYPE);
 		Rast_set_null_value(edge_buf_c, ncols + 1, CELL_TYPE);
@@ -479,7 +479,7 @@ void df_texture(int nrows, int ncols, double **buf, double **null_buf,
 	    }
 	    break;
 	case (FCELL_TYPE):
-	    edge_buf_f = Rast_allocate_raster_buf(FCELL_TYPE);
+	    edge_buf_f = Rast_allocate_buf(FCELL_TYPE);
 	    for (i = 1; i < nrows + 1; i++) {
 		Rast_zero_raster_buf(edge_buf_f, FCELL_TYPE);
 		Rast_set_null_value(edge_buf_f, ncols + 1, FCELL_TYPE);
@@ -491,7 +491,7 @@ void df_texture(int nrows, int ncols, double **buf, double **null_buf,
 	    }
 	    break;
 	case (DCELL_TYPE):
-	    edge_buf_d = Rast_allocate_raster_buf(DCELL_TYPE);
+	    edge_buf_d = Rast_allocate_buf(DCELL_TYPE);
 	    for (i = 1; i < nrows + 1; i++) {
 		Rast_zero_raster_buf(edge_buf_d, DCELL_TYPE);
 		Rast_set_null_value(edge_buf_d, ncols + 1, DCELL_TYPE);
@@ -533,7 +533,7 @@ void df_texture(int nrows, int ncols, double **buf, double **null_buf,
 
     if (choice->z) {
 	fd = Rast_open_raster_new("zscores", DCELL_TYPE);
-	zscor_buf = Rast_allocate_raster_buf(DCELL_TYPE);
+	zscor_buf = Rast_allocate_buf(DCELL_TYPE);
 	for (i = 1; i < nrows + 1; i++) {
 	    Rast_zero_raster_buf(zscor_buf, DCELL_TYPE);
 	    Rast_set_null_value(zscor_buf, ncols + 1, DCELL_TYPE);

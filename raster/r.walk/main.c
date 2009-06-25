@@ -567,8 +567,8 @@ int main(int argc, char *argv[])
 
     dtm_data_type = Rast_get_raster_map_type(dtm_fd);
     cost_data_type = Rast_get_raster_map_type(cost_fd);
-    dtm_cell = Rast_allocate_raster_buf(dtm_data_type);
-    cost_cell = Rast_allocate_raster_buf(cost_data_type);
+    dtm_cell = Rast_allocate_buf(dtm_data_type);
+    cost_cell = Rast_allocate_buf(cost_data_type);
 
     /*   Parameters for map submatrices   */
 
@@ -701,7 +701,7 @@ int main(int argc, char *argv[])
 	int i;
 	double p;
 
-	dtm_dsize = Rast_raster_size(dtm_data_type);
+	dtm_dsize = Rast_cell_size(dtm_data_type);
 	p = 0.0;
 
 	for (row = 0; row < nrows; row++) {
@@ -761,7 +761,7 @@ int main(int argc, char *argv[])
 	int i;
 	double p;
 
-	cost_dsize = Rast_raster_size(cost_data_type);
+	cost_dsize = Rast_cell_size(cost_data_type);
 	p = 0.0;
 	for (row = 0; row < nrows; row++) {
 
@@ -891,9 +891,9 @@ int main(int argc, char *argv[])
 
 	data_type2 = Rast_get_raster_map_type(cum_fd);
 
-	dsize2 = Rast_raster_size(data_type2);
+	dsize2 = Rast_cell_size(data_type2);
 
-	cell2 = Rast_allocate_raster_buf(data_type2);
+	cell2 = Rast_allocate_buf(data_type2);
 
 	G_message(_("Reading %s... "), cum_cost_layer);
 	for (row = 0; row < nrows; row++) {
@@ -1446,10 +1446,10 @@ int main(int argc, char *argv[])
     /*  Open cumulative cost layer for writing   */
 
     cum_fd = Rast_open_raster_new(cum_cost_layer, cum_data_type);
-    cum_cell = Rast_allocate_raster_buf(cum_data_type);
+    cum_cell = Rast_allocate_buf(cum_data_type);
     if (dir == 1) {
 	dir_fd = Rast_open_raster_new(move_dir_layer, dir_data_type);
-	dir_cell = Rast_allocate_raster_buf(dir_data_type);
+	dir_cell = Rast_allocate_buf(dir_data_type);
     }
 
     /*  Write pending updates by segment_put() to output map   */
@@ -1466,7 +1466,7 @@ int main(int argc, char *argv[])
     if (keep_nulls) {
 
 	G_message(_("Will copy input map null values into output map"));
-	cell2 = Rast_allocate_raster_buf(dtm_data_type);
+	cell2 = Rast_allocate_buf(dtm_data_type);
     }
     if (cum_data_type == CELL_TYPE) {
 	int *p;

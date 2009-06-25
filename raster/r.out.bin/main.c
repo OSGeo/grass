@@ -274,7 +274,7 @@ int main(int argc, char *argv[])
 	fclose(fp_2);
     }
 
-    raster = Rast_allocate_raster_buf(out_type);
+    raster = Rast_allocate_buf(out_type);
 
     /* Write out GMT Header if required */
     if (flag.gmt_hd->answer) {
@@ -337,7 +337,7 @@ int main(int argc, char *argv[])
 	G_percent(row, nrows, 2);
 
 	for (col = 0, ptr = raster; col < ncols; col++,
-	     ptr = G_incr_void_ptr(ptr, Rast_raster_size(out_type))) {
+	     ptr = G_incr_void_ptr(ptr, Rast_cell_size(out_type))) {
 	    if (!Rast_is_null_value(ptr, out_type)) {
 		if (out_type == CELL_TYPE) {
 		    number_i = *((CELL *) ptr);

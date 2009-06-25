@@ -98,7 +98,7 @@ int main(int argc, char **argv)
 	if (Rast_read_colors(name, "", &B[i].colors) == -1)
 	    G_fatal_error(_("Color file for <%s> not available"), name);
 
-	B[i].array = Rast_allocate_raster_buf(B[i].type);
+	B[i].array = Rast_allocate_buf(B[i].type);
     }
 
     /* read in current window */

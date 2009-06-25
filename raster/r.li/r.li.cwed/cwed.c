@@ -343,7 +343,7 @@ int calculate(int fd, area_des ad, Coppie * cc, long totCoppie,
     }
 
 
-    buf_sup = Rast_allocate_cell_buf();
+    buf_sup = Rast_allocate_c_buf();
     if (buf_sup == NULL) {
 	G_fatal_error("malloc buf_sup failed");
 	return RLI_ERRORE;
@@ -352,7 +352,7 @@ int calculate(int fd, area_des ad, Coppie * cc, long totCoppie,
     c1.t = CELL_TYPE;
     c2.t = CELL_TYPE;
 
-    buf_corr = Rast_allocate_cell_buf();
+    buf_corr = Rast_allocate_c_buf();
     if (buf_corr == NULL) {
 	G_fatal_error("error malloc buf_corr");
 	return RLI_ERRORE;
@@ -484,7 +484,7 @@ int calculateD(int fd, area_des ad, Coppie * cc, long totCoppie,
     }
 
 
-    buf_sup = Rast_allocate_d_raster_buf();
+    buf_sup = Rast_allocate_c_buf();
     if (buf_sup == NULL) {
 	G_fatal_error("malloc buf_sup failed");
 	return RLI_ERRORE;
@@ -493,7 +493,7 @@ int calculateD(int fd, area_des ad, Coppie * cc, long totCoppie,
     c1.t = DCELL_TYPE;
     c2.t = DCELL_TYPE;
 
-    buf_corr = Rast_allocate_d_raster_buf();
+    buf_corr = Rast_allocate_c_buf();
 
     Rast_set_d_null_value(buf_sup + ad->x, ad->cl);	/*the first time buf_sup is all null */
 
@@ -620,14 +620,14 @@ int calculateF(int fd, area_des ad, Coppie * cc, long totCoppie,
     }
 
     /* allocate and inizialize buffers */
-    buf_sup = Rast_allocate_f_raster_buf();
+    buf_sup = Rast_allocate_f_buf();
     if (buf_sup == NULL) {
 	G_fatal_error("malloc buf_sup failed");
 	return RLI_ERRORE;
     }
     Rast_set_f_null_value(buf_sup + ad->x, ad->cl);	/*the first time buf_sup is all null */
 
-    buf_corr = Rast_allocate_f_raster_buf();
+    buf_corr = Rast_allocate_f_buf();
     if (buf_corr == NULL) {
 	G_fatal_error("malloc buf_corr failed");
 	return RLI_ERRORE;

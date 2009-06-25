@@ -64,12 +64,12 @@ int main(int argc, char *argv[])
     /***************************************************/ 
     if ((infd = Rast_open_cell_old(ndvi, "")) < 0)
 	G_fatal_error(_("Cannot open cell file [%s]"), ndvi);
-    inr = Rast_allocate_d_raster_buf();
+    inr = Rast_allocate_c_buf();
     
     /***************************************************/ 
     nrows = G_window_rows();
     ncols = G_window_cols();
-    outr = Rast_allocate_d_raster_buf();
+    outr = Rast_allocate_c_buf();
     
     /* Create New raster files */ 
     if ((outfd = Rast_open_raster_new(result1, DCELL_TYPE)) < 0)

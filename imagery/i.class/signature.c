@@ -274,7 +274,7 @@ int display_signature(void)
 
 	if ((fd = Rast_open_cell_new(MASK)) < 0)
 	    G_fatal_error(_("Unable to open the cell map MASK."));
-	if ((buffer = Rast_allocate_cell_buf()) == NULL)
+	if ((buffer = Rast_allocate_c_buf()) == NULL)
 	    G_fatal_error(_("Unable to allocate the cell buffer in display_signature()."));
 	nrows = G_window_rows();
 	ncols = G_window_cols();

@@ -297,7 +297,7 @@ int main(int argc, char **argv)
     raster_type = Rast_get_raster_map_type(layer_fd);
 
     /* allocate the cell array */
-    raster_row = Rast_allocate_raster_buf(raster_type);
+    raster_row = Rast_allocate_buf(raster_type);
 
 
     if (opt7->answer) {
@@ -309,7 +309,7 @@ int main(int argc, char **argv)
 	mag_raster_type = Rast_get_raster_map_type(mag_fd);
 
 	/* allocate the cell array */
-	mag_raster_row = Rast_allocate_raster_buf(mag_raster_type);
+	mag_raster_row = Rast_allocate_buf(mag_raster_type);
     }
 
 
@@ -367,11 +367,11 @@ int main(int argc, char **argv)
 	    }
 
 	    if (no_arrow) {
-		ptr = G_incr_void_ptr(ptr, Rast_raster_size(raster_type));
+		ptr = G_incr_void_ptr(ptr, Rast_cell_size(raster_type));
 		if (opt7->answer)
 		    mag_ptr =
 			G_incr_void_ptr(mag_ptr,
-					Rast_raster_size(mag_raster_type));
+					Rast_cell_size(mag_raster_type));
 		no_arrow = FALSE;
 		continue;
 	    }
@@ -494,10 +494,10 @@ int main(int argc, char **argv)
 		}
 	    }
 
-	    ptr = G_incr_void_ptr(ptr, Rast_raster_size(raster_type));
+	    ptr = G_incr_void_ptr(ptr, Rast_cell_size(raster_type));
 	    if (opt7->answer)
 		mag_ptr =
-		    G_incr_void_ptr(mag_ptr, Rast_raster_size(mag_raster_type));
+		    G_incr_void_ptr(mag_ptr, Rast_cell_size(mag_raster_type));
 	}
     }
 

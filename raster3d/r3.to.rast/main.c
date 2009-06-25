@@ -119,9 +119,9 @@ void g3d_to_raster(void *map, G3D_Region region, int *fd)
     typeIntern = G3d_tileTypeMap(map);
 
     if (typeIntern == FCELL_TYPE)
-	fcell = Rast_allocate_f_raster_buf();
+	fcell = Rast_allocate_f_buf();
     else if (typeIntern == DCELL_TYPE)
-	dcell = Rast_allocate_d_raster_buf();
+	dcell = Rast_allocate_c_buf();
 
     pos = 0;
     /*Every Rastermap */

@@ -95,7 +95,7 @@ DCELL Rast_get_raster_sample_nearest(int fd,
 {
     int row, col;
     DCELL result;
-    DCELL *maprow = Rast_allocate_d_raster_buf();
+    DCELL *maprow = Rast_allocate_c_buf();
 
     /* convert northing and easting to row and col, resp */
     row = (int)floor(G_northing_to_row(north, window));
@@ -153,8 +153,8 @@ DCELL Rast_get_raster_sample_bilinear(int fd,
 {
     int row, col;
     double grid[2][2];
-    DCELL *arow = Rast_allocate_d_raster_buf();
-    DCELL *brow = Rast_allocate_d_raster_buf();
+    DCELL *arow = Rast_allocate_c_buf();
+    DCELL *brow = Rast_allocate_c_buf();
     double frow, fcol, trow, tcol;
     DCELL result;
 
@@ -247,7 +247,7 @@ DCELL Rast_get_raster_sample_cubic(int fd,
     DCELL result;
 
     for (i = 0; i < 4; i++)
-	rows[i] = Rast_allocate_d_raster_buf();
+	rows[i] = Rast_allocate_c_buf();
 
     frow = G_northing_to_row(north, window);
     fcol = G_easting_to_col(east, window);

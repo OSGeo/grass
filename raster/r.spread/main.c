@@ -404,11 +404,11 @@ int main(int argc, char *argv[])
     }
 
     /*  Allocate memories for a row  */
-    cell = Rast_allocate_cell_buf();
+    cell = Rast_allocate_c_buf();
     if (x_out)
-	x_cell = Rast_allocate_cell_buf();
+	x_cell = Rast_allocate_c_buf();
     if (y_out)
-	y_cell = Rast_allocate_cell_buf();
+	y_cell = Rast_allocate_c_buf();
 
     /*  Allocate memories for a map  */
     map_max = (CELL *) G_calloc(nrows * ncols + 1, sizeof(CELL));

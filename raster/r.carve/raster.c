@@ -17,7 +17,7 @@ void *read_raster(void *buf, const int fd, const RASTER_MAP_TYPE rtype)
 
 	Rast_get_raster_row(fd, tmpbuf, i, rtype);
 	tmpbuf =
-	    G_incr_void_ptr(tmpbuf, Rast_raster_size(rtype) * G_window_cols());
+	    G_incr_void_ptr(tmpbuf, Rast_cell_size(rtype) * G_window_cols());
     }
 
     return tmpbuf;
@@ -37,7 +37,7 @@ void *write_raster(void *buf, const int fd, const RASTER_MAP_TYPE rtype)
 
 	Rast_put_raster_row(fd, tmpbuf, rtype);
 	tmpbuf =
-	    G_incr_void_ptr(tmpbuf, Rast_raster_size(rtype) * G_window_cols());
+	    G_incr_void_ptr(tmpbuf, Rast_cell_size(rtype) * G_window_cols());
     }
 
     return tmpbuf;

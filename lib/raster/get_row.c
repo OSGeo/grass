@@ -639,7 +639,7 @@ static int get_map_row(int fd, void *rast, int row, RASTER_MAP_TYPE data_type,
 		       int null_is_zero, int with_mask)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
-    int size = Rast_raster_size(data_type);
+    int size = Rast_cell_size(data_type);
     CELL *temp_buf = NULL;
     void *buf;
     int type;
@@ -1099,7 +1099,7 @@ static void get_null_value_row_nomask(int fd, char *flags, int row)
 static void get_null_value_row_gdal(int fd, char *flags, int row)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
-    DCELL *tmp_buf = Rast_allocate_d_raster_buf();
+    DCELL *tmp_buf = Rast_allocate_c_buf();
     int i;
 
     if (get_map_row_nomask(fd, tmp_buf, row, DCELL_TYPE) <= 0) {
@@ -1183,7 +1183,7 @@ static int embed_nulls(int fd, void *buf, int row, RASTER_MAP_TYPE map_type,
 	       is not set and calls G_set_[f/d]_null_value() otherwise */
 	    Rast__set_null_value(buf, 1, null_is_zero, map_type);
 	}
-	buf = G_incr_void_ptr(buf, Rast_raster_size(map_type));
+	buf = G_incr_void_ptr(buf, Rast_cell_size(map_type));
     }
 
     G__freea(null_buf);

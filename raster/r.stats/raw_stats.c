@@ -25,7 +25,7 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels)
 	    map_type[i] = DCELL_TYPE;
 	else
 	    map_type[i] = CELL_TYPE;
-	rast[i] = Rast_allocate_raster_buf(map_type[i]);
+	rast[i] = Rast_allocate_buf(map_type[i]);
     }
 
     /* get window */
@@ -64,7 +64,7 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels)
 		if ((nulls_found == nfiles) || (nulls_found && no_nulls)) {
 		    for (i = 0; i < nfiles; i++)
 			rastp[i] = G_incr_void_ptr(rastp[i],
-						   Rast_raster_size(map_type
+						   Rast_cell_size(map_type
 								 [i]));
 		    continue;
 		}
@@ -103,7 +103,7 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels)
 						   &labels[i]));
 		}
 		rastp[i] =
-		    G_incr_void_ptr(rastp[i], Rast_raster_size(map_type[i]));
+		    G_incr_void_ptr(rastp[i], Rast_cell_size(map_type[i]));
 	    }
 	    fprintf(stdout, "\n");
 	}

@@ -70,7 +70,7 @@ cell2stream(char* cellname, elevation_type T_max_value, long* nodata_count) {
   
   /* Allocate input buffer */
   void *inrast;
-  inrast = Rast_allocate_raster_buf(data_type);
+  inrast = Rast_allocate_buf(data_type);
 
   CELL c;
   FCELL f;
@@ -180,7 +180,7 @@ stream2_CELL(AMI_STREAM<T>* str, dimension_type nrows, dimension_type ncols,
   
   /* Allocate output buffer */
   unsigned char *outrast;
-  outrast = (unsigned char *)Rast_allocate_raster_buf(mtype);
+  outrast = (unsigned char *)Rast_allocate_buf(mtype);
   assert(outrast);
  
   T* elt;
@@ -265,7 +265,7 @@ stream2_CELL(AMI_STREAM<T> *str, dimension_type nrows, dimension_type ncols,
   
   /* Allocate output buffer */
   unsigned char *outrast;
-  outrast = (unsigned char *)Rast_allocate_raster_buf(CELL_TYPE);
+  outrast = (unsigned char *)Rast_allocate_buf(CELL_TYPE);
   assert(outrast);
   
   T* elt;
@@ -339,7 +339,7 @@ stream2_FCELL(AMI_STREAM<T> *str, dimension_type nrows, dimension_type ncols,
   
   /* Allocate output buffer */
   unsigned char *outrast;
-  outrast = (unsigned char *)Rast_allocate_raster_buf(FCELL_TYPE);
+  outrast = (unsigned char *)Rast_allocate_buf(FCELL_TYPE);
   assert(outrast);
   
   T* elt;
@@ -436,10 +436,10 @@ stream2_FCELL(AMI_STREAM<T>* str,  dimension_type nrows, dimension_type ncols,
 
   /* Allocate output buffers */
   FCELL *rast1;
-  rast1 = (FCELL*)Rast_allocate_raster_buf(FCELL_TYPE);
+  rast1 = (FCELL*)Rast_allocate_buf(FCELL_TYPE);
   assert(rast1);
   FCELL *rast2;
-  rast2 = (FCELL*)Rast_allocate_raster_buf(FCELL_TYPE);
+  rast2 = (FCELL*)Rast_allocate_buf(FCELL_TYPE);
   assert(rast2);
 
   T* elt;

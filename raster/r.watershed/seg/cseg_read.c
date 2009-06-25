@@ -23,7 +23,7 @@ int cseg_read_cell(CSEG * cseg, char *map_name, char *mapset)
 	return -3;
     }
     nrows = G_window_rows();
-    buffer = Rast_allocate_cell_buf();
+    buffer = Rast_allocate_c_buf();
     for (row = 0; row < nrows; row++) {
 	if (Rast_get_c_raster_row(map_fd, buffer, row) < 0) {
 	    G_free(buffer);

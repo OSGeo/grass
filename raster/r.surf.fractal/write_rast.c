@@ -43,7 +43,7 @@ int write_rast(double *data[2],	/* Array holding complex data.          */
     nrows = G_window_rows();	/* Find out the number of rows and      */
     ncols = G_window_cols();	/* columns of the raster view.          */
 
-    row_out = Rast_allocate_d_raster_buf();
+    row_out = Rast_allocate_c_buf();
 
     /*------------------------------------------------------------------*/
     /*         Open new file and set the output file descriptor.        */

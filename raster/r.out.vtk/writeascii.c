@@ -174,7 +174,7 @@ write_vtk_structured_coordinates(int fd, FILE * fp, char *varname,
 	nullvalue = 0;
     }
 
-    raster = Rast_allocate_raster_buf(out_type);
+    raster = Rast_allocate_buf(out_type);
 
     rowcount = 0;
     for (row = nrows - 1; row >= 0; row--) {
@@ -190,7 +190,7 @@ write_vtk_structured_coordinates(int fd, FILE * fp, char *varname,
 	nspos -= y_extent;
 
 	for (col = 0, ptr = raster; col < ncols;
-	     col++, ptr = G_incr_void_ptr(ptr, Rast_raster_size(out_type))) {
+	     col++, ptr = G_incr_void_ptr(ptr, Rast_cell_size(out_type))) {
 	    ewpos =
 		region.ew_res / 2 + region.west + colcount * region.ew_res;
 	    ewpos -= x_extent;
@@ -235,7 +235,7 @@ write_vtk_polygonal_coordinates(int fd, FILE * fp, char *varname,
 
 
     /*First we are writing the coordinate points, the elevation cell is only used for the z coordinate */
-    raster = Rast_allocate_raster_buf(out_type);
+    raster = Rast_allocate_buf(out_type);
 
     rowcount = 0;
     for (row = nrows - 1; row >= 0; row--) {
@@ -251,7 +251,7 @@ write_vtk_polygonal_coordinates(int fd, FILE * fp, char *varname,
 	nspos -= y_extent;
 
 	for (col = 0, ptr = raster; col < ncols;
-	     col++, ptr = G_incr_void_ptr(ptr, Rast_raster_size(out_type))) {
+	     col++, ptr = G_incr_void_ptr(ptr, Rast_cell_size(out_type))) {
 	    ewpos =
 		region.ew_res / 2 + region.west + colcount * region.ew_res;
 	    ewpos -= x_extent;
@@ -349,7 +349,7 @@ write_vtk_data(int fd, FILE * fp, char *varname, struct Cell_head region,
     fprintf(fp, "LOOKUP_TABLE default\n");
 
 
-    raster = Rast_allocate_raster_buf(out_type);
+    raster = Rast_allocate_buf(out_type);
 
     for (row = nrows - 1; row >= 0; row--) {
 	G_percent((row - nrows) * (-1), nrows, 10);
@@ -360,7 +360,7 @@ write_vtk_data(int fd, FILE * fp, char *varname, struct Cell_head region,
 	}
 
 	for (col = 0, ptr = raster; col < ncols;
-	     col++, ptr = G_incr_void_ptr(ptr, Rast_raster_size(out_type))) {
+	     col++, ptr = G_incr_void_ptr(ptr, Rast_cell_size(out_type))) {
 
 	    value = get_raster_value_as_double(out_type, ptr, nullvalue);
 	    fprintf(fp, "%.*f ", dp, value);
@@ -394,9 +394,9 @@ write_vtk_rgb_image_data(int redfd, int greenfd, int bluefd, FILE * fp,
 
     fprintf(fp, "COLOR_SCALARS %s 3\n", varname);
 
-    redraster = Rast_allocate_raster_buf(out_type);
-    greenraster = Rast_allocate_raster_buf(out_type);
-    blueraster = Rast_allocate_raster_buf(out_type);
+    redraster = Rast_allocate_buf(out_type);
+    greenraster = Rast_allocate_buf(out_type);
+    blueraster = Rast_allocate_buf(out_type);
 
     for (row = nrows - 1; row >= 0; row--) {
 	G_percent((row - nrows) * (-1), nrows, 10);
@@ -417,9 +417,9 @@ write_vtk_rgb_image_data(int redfd, int greenfd, int bluefd, FILE * fp,
 	for (col = 0, redptr = redraster, greenptr = greenraster, blueptr =
 	     blueraster; col < ncols;
 	     col++, redptr =
-	     G_incr_void_ptr(redptr, Rast_raster_size(out_type)), greenptr =
-	     G_incr_void_ptr(greenptr, Rast_raster_size(out_type)), blueptr =
-	     G_incr_void_ptr(blueptr, Rast_raster_size(out_type))) {
+	     G_incr_void_ptr(redptr, Rast_cell_size(out_type)), greenptr =
+	     G_incr_void_ptr(greenptr, Rast_cell_size(out_type)), blueptr =
+	     G_incr_void_ptr(blueptr, Rast_cell_size(out_type))) {
 
 	    r = get_raster_value_as_double(out_type, redptr, 0.0);
 	    g = get_raster_value_as_double(out_type, greenptr, 0.0);
@@ -461,9 +461,9 @@ write_vtk_vector_data(int xfd, int yfd, int zfd, FILE * fp,
 
     fprintf(fp, "VECTORS %s float\n", varname);
 
-    xraster = Rast_allocate_raster_buf(out_type);
-    yraster = Rast_allocate_raster_buf(out_type);
-    zraster = Rast_allocate_raster_buf(out_type);
+    xraster = Rast_allocate_buf(out_type);
+    yraster = Rast_allocate_buf(out_type);
+    zraster = Rast_allocate_buf(out_type);
 
     for (row = nrows - 1; row >= 0; row--) {
 	G_percent((row - nrows) * (-1), nrows, 10);
@@ -484,9 +484,9 @@ write_vtk_vector_data(int xfd, int yfd, int zfd, FILE * fp,
 	for (col = 0, xptr = xraster, yptr = yraster, zptr =
 	     zraster; col < ncols;
 	     col++, xptr =
-	     G_incr_void_ptr(xptr, Rast_raster_size(out_type)), yptr =
-	     G_incr_void_ptr(yptr, Rast_raster_size(out_type)), zptr =
-	     G_incr_void_ptr(zptr, Rast_raster_size(out_type))) {
+	     G_incr_void_ptr(xptr, Rast_cell_size(out_type)), yptr =
+	     G_incr_void_ptr(yptr, Rast_cell_size(out_type)), zptr =
+	     G_incr_void_ptr(zptr, Rast_cell_size(out_type))) {
 
 	    x = get_raster_value_as_double(out_type, xptr, 0.0);
 	    y = get_raster_value_as_double(out_type, yptr, 0.0);

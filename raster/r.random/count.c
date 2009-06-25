@@ -31,32 +31,32 @@ void get_stats(struct rr_state *theState)
 			  theState->inrcover);
     }
     theState->buf.type = Rast_get_raster_map_type(theState->fd_old);
-    theState->buf.data.v = Rast_allocate_raster_buf(theState->buf.type);
+    theState->buf.data.v = Rast_allocate_buf(theState->buf.type);
     if (theState->docover == 1) {
 	theState->cover.type = Rast_get_raster_map_type(theState->fd_cold);
-	theState->cover.data.v = Rast_allocate_raster_buf(theState->cover.type);
+	theState->cover.data.v = Rast_allocate_buf(theState->cover.type);
     }
 
     theState->nulls.type = theState->buf.type;
     theState->min.type = theState->buf.type;
     theState->max.type = theState->buf.type;
     theState->nulls.data.v =
-	(void *)G_malloc(Rast_raster_size(theState->nulls.type));
+	(void *)G_malloc(Rast_cell_size(theState->nulls.type));
     theState->min.data.v =
-	(void *)G_malloc(Rast_raster_size(theState->min.type));
+	(void *)G_malloc(Rast_cell_size(theState->min.type));
     theState->max.data.v =
-	(void *)G_malloc(Rast_raster_size(theState->max.type));
+	(void *)G_malloc(Rast_cell_size(theState->max.type));
 
     if (theState->docover == 1) {
 	theState->cnulls.type = theState->cover.type;
 	theState->cmin.type = theState->cover.type;
 	theState->cmax.type = theState->cover.type;
 	theState->cnulls.data.v =
-	    (void *)G_malloc(Rast_raster_size(theState->cnulls.type));
+	    (void *)G_malloc(Rast_cell_size(theState->cnulls.type));
 	theState->cmin.data.v =
-	    (void *)G_malloc(Rast_raster_size(theState->cmin.type));
+	    (void *)G_malloc(Rast_cell_size(theState->cmin.type));
 	theState->cmax.data.v =
-	    (void *)G_malloc(Rast_raster_size(theState->cmax.type));
+	    (void *)G_malloc(Rast_cell_size(theState->cmax.type));
     }
     nrows = G_window_rows();
     ncols = G_window_cols();

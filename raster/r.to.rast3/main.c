@@ -103,7 +103,7 @@ void raster_to_g3d(void *map, G3D_Region region, int *fd)
     cols = region.cols;
     depths = region.depths;
 
-    rast = Rast_allocate_raster_buf(globalRastMapType);
+    rast = Rast_allocate_buf(globalRastMapType);
 
     G_debug(3, "raster_to_g3d: Writing %i raster maps with %i rows %i cols.",
 	    depths, rows, cols);
@@ -119,7 +119,7 @@ void raster_to_g3d(void *map, G3D_Region region, int *fd)
 
 	    for (x = 0, ptr = rast; x < cols; x++,
 		 ptr =
-		 G_incr_void_ptr(ptr, Rast_raster_size(globalRastMapType))) {
+		 G_incr_void_ptr(ptr, Rast_cell_size(globalRastMapType))) {
 		if (globalRastMapType == CELL_TYPE) {
 		    if (Rast_is_null_value(ptr, globalRastMapType)) {
 			G3d_setNullValue(&dvalue, 1, DCELL_TYPE);

@@ -81,7 +81,7 @@ void Rast__set_null_value(void *rast, int numVals, int null_is_zero,
 		       RASTER_MAP_TYPE data_type)
 {
     if (null_is_zero) {
-	G_zero((char *)rast, numVals * Rast_raster_size(data_type));
+	G_zero((char *)rast, numVals * Rast_cell_size(data_type));
 	return;
     }
 

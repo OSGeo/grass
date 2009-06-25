@@ -274,7 +274,7 @@ void P_Aux_to_Raster(double **matrix, int fd)
     nrows = G_window_rows();
     ncols = G_window_cols();
 
-    raster = Rast_allocate_raster_buf(DCELL_TYPE);
+    raster = Rast_allocate_buf(DCELL_TYPE);
 
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
@@ -282,7 +282,7 @@ void P_Aux_to_Raster(double **matrix, int fd)
 	Rast_set_d_null_value(raster, ncols);
 
 	for (col = 0, ptr = raster; col < ncols;
-	     col++, ptr = G_incr_void_ptr(ptr, Rast_raster_size(DCELL_TYPE))) {
+	     col++, ptr = G_incr_void_ptr(ptr, Rast_cell_size(DCELL_TYPE))) {
 	    Rast_set_raster_value_d(ptr, (DCELL) (matrix[row][col]), DCELL_TYPE);
 	}
 	Rast_put_d_raster_row(fd, raster);

@@ -101,11 +101,11 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Unable to read header for <%s>"), name);
 
     /* raster buffer is big enough to hold data */
-    rast = Rast_allocate_raster_buf(data_type);
+    rast = Rast_allocate_buf(data_type);
     nrows = G_window_rows();
     ncols = G_window_cols();
     if (ncols <= 1)
-	rast = G_realloc(rast, 2 * Rast_raster_size(data_type));
+	rast = G_realloc(rast, 2 * Rast_cell_size(data_type));
     /* we need the buffer at least 2 cells large */
 
     outfd = Rast_open_raster_new(result, out_type);
@@ -140,7 +140,7 @@ int main(int argc, char *argv[])
 	void *rast1, *rast2;
 
 	rast1 = rast;
-	rast2 = G_incr_void_ptr(rast, Rast_raster_size(data_type));
+	rast2 = G_incr_void_ptr(rast, Rast_cell_size(data_type));
 
 	G_message(_("Creating new cats file..."));
 	while (Rast_get_next_marked_raster_cat(&cats,

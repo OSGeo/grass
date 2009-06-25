@@ -146,8 +146,8 @@ int init_vars(int argc, char *argv[])
     }
 
     ele_map_type = Rast_get_raster_map_type(fd);
-    ele_size = Rast_raster_size(ele_map_type);
-    elebuf = Rast_allocate_raster_buf(ele_map_type);
+    ele_size = Rast_cell_size(ele_map_type);
+    elebuf = Rast_allocate_buf(ele_map_type);
 
     if (ele_map_type == FCELL_TYPE || ele_map_type == DCELL_TYPE)
 	ele_scale = 1000; 	/* should be enough to do the trick */
@@ -205,7 +205,7 @@ int init_vars(int argc, char *argv[])
 	(DCELL *) G_malloc(sizeof(DCELL) *
 			   size_array(&wat_seg, nrows, ncols));
 
-    buf = Rast_allocate_cell_buf();
+    buf = Rast_allocate_c_buf();
     if (run_flag) {
 	/* ... with input map flow: amount of overland flow per cell */
 	fd = Rast_open_cell_old(run_name, "");

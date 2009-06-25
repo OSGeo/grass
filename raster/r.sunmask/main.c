@@ -457,9 +457,9 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Unable to create raster map <%s>"), outname);
 
     data_type = Rast_get_raster_map_type(elev_fd);
-    elevbuf.v = Rast_allocate_raster_buf(data_type);
-    tmpbuf.v = Rast_allocate_raster_buf(data_type);
-    outbuf.v = Rast_allocate_raster_buf(CELL_TYPE);	/* binary map */
+    elevbuf.v = Rast_allocate_buf(data_type);
+    tmpbuf.v = Rast_allocate_buf(data_type);
+    outbuf.v = Rast_allocate_buf(CELL_TYPE);	/* binary map */
 
     if (data_type == CELL_TYPE) {
 	if ((Rast_read_range(name, "", &range)) < 0)

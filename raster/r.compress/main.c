@@ -211,7 +211,7 @@ static int doit(char *name, int uncompress, RASTER_MAP_TYPE map_type)
     if (new < 0)
 	return 1;
     nrows = G_window_rows();
-    rast = Rast_allocate_raster_buf(map_type);
+    rast = Rast_allocate_buf(map_type);
 
     oldsize = lseek(old, (off_t) 0, SEEK_END);
 

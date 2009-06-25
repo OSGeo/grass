@@ -18,11 +18,11 @@ void openfiles(char *h_name, char *i_name, char *s_name,
 	G_fatal_error(_("Unable to create raster map <%s>"), b_name);
 
     /* allocate the cell row buffer */
-    if ((rowbuf[0] = Rast_allocate_cell_buf()) == NULL)
+    if ((rowbuf[0] = Rast_allocate_c_buf()) == NULL)
 	G_fatal_error(_("Unable to allocate the input row buffer"));
-    if ((rowbuf[1] = Rast_allocate_cell_buf()) == NULL)
+    if ((rowbuf[1] = Rast_allocate_c_buf()) == NULL)
 	G_fatal_error(_("Unable to allocate the input row buffer"));
-    if ((rowbuf[2] = Rast_allocate_cell_buf()) == NULL)
+    if ((rowbuf[2] = Rast_allocate_c_buf()) == NULL)
 	G_fatal_error(_("Unable to allocate the input row buffer"));
 
     /* open input files (maps can be in different mapsets) */

@@ -200,7 +200,7 @@ int main(int argc, char *argv[])
 		      G_window_cols());
 
 
-    rast_ptr = Rast_allocate_raster_buf(data_type);
+    rast_ptr = Rast_allocate_buf(data_type);
     rast = rast_ptr;
     cf = Rast_open_raster_new(output, data_type);
     if (cf < 0)
@@ -226,9 +226,9 @@ int main(int argc, char *argv[])
 	    else {
 		Rast_set_null_value(rast_ptr, 1, data_type);
 	    }
-	    rast_ptr = G_incr_void_ptr(rast_ptr, Rast_raster_size(data_type));
+	    rast_ptr = G_incr_void_ptr(rast_ptr, Rast_cell_size(data_type));
 	}
-	fwrite(rast, Rast_raster_size(data_type), ncols, ft);
+	fwrite(rast, Rast_cell_size(data_type), ncols, ft);
 	rast_ptr = rast;
     }
     G_percent(nrows, nrows, 2);
@@ -236,7 +236,7 @@ int main(int argc, char *argv[])
 
     sz = 0;
     if (direction < 0) {
-	sz = -ncols * Rast_raster_size(data_type);
+	sz = -ncols * Rast_cell_size(data_type);
 	fseek(ft, sz, SEEK_END);
 	sz *= 2;
     }
@@ -245,7 +245,7 @@ int main(int argc, char *argv[])
     }
 
     for (row = 0; row < nrows; row += 1) {
-	fread(rast, Rast_raster_size(data_type), ncols, ft);
+	fread(rast, Rast_cell_size(data_type), ncols, ft);
 	Rast_put_raster_row(cf, rast, data_type);
 	fseek(ft, sz, SEEK_CUR);
     }

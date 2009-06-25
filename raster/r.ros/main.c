@@ -444,21 +444,21 @@ int main(int argc, char *argv[])
     nrows = G_window_rows();
     ncols = G_window_cols();
 
-    fuel = Rast_allocate_cell_buf();
-    mois_1h = Rast_allocate_cell_buf();
-    mois_10h = Rast_allocate_cell_buf();
-    mois_100h = Rast_allocate_cell_buf();
-    mois_live = Rast_allocate_cell_buf();
-    vel = Rast_allocate_cell_buf();
-    dir = Rast_allocate_cell_buf();
-    slope = Rast_allocate_cell_buf();
-    aspect = Rast_allocate_cell_buf();
-    base = Rast_allocate_cell_buf();
-    max = Rast_allocate_cell_buf();
-    maxdir = Rast_allocate_cell_buf();
+    fuel = Rast_allocate_c_buf();
+    mois_1h = Rast_allocate_c_buf();
+    mois_10h = Rast_allocate_c_buf();
+    mois_100h = Rast_allocate_c_buf();
+    mois_live = Rast_allocate_c_buf();
+    vel = Rast_allocate_c_buf();
+    dir = Rast_allocate_c_buf();
+    slope = Rast_allocate_c_buf();
+    aspect = Rast_allocate_c_buf();
+    base = Rast_allocate_c_buf();
+    max = Rast_allocate_c_buf();
+    maxdir = Rast_allocate_c_buf();
     if (spotting) {
-	spotdist = Rast_allocate_cell_buf();
-	elev = Rast_allocate_cell_buf();
+	spotdist = Rast_allocate_c_buf();
+	elev = Rast_allocate_c_buf();
 	map_elev = (CELL *) G_calloc(nrows * ncols, sizeof(CELL));
     }
 

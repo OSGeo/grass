@@ -74,7 +74,7 @@ int Rast_raster_cmp(const void *v1, const void *v2, RASTER_MAP_TYPE data_type)
  */
 void Rast_raster_cpy(void *v1, const void *v2, int n, RASTER_MAP_TYPE data_type)
 {
-    G_copy(v1, v2, n * Rast_raster_size(data_type));
+    G_copy(v1, v2, n * Rast_cell_size(data_type));
 }
 
 /*!

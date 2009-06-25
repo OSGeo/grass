@@ -19,7 +19,7 @@
  *
  * This routines assigns each member of the raster buffer array
  * <i>buf</i> to zero. It assumes that <i>buf</i> has been allocated
- * using Rast_allocate_cell_buf().
+ * using Rast_allocate_c_buf().
  *
  * \param buf data buffer
  */
@@ -37,7 +37,7 @@ void Rast_zero_cell_buf(CELL * buf)
  *
  * This routines assigns each member of the raster buffer array
  * <i>rast</i> to zero. It assumes that <i>rast</i> has been allocated
- * using Rast_allocate_cell_buf().
+ * using Rast_allocate_c_buf().
  *
  * \param rast data buffer
  * \param data_type raster type (CELL, FCELL, DCELL)
@@ -48,7 +48,7 @@ void Rast_zero_raster_buf(void *rast, RASTER_MAP_TYPE data_type)
     unsigned char *ptr;
 
     /* assuming that the size of unsigned char is 1 byte */
-    i = G_window_cols() * Rast_raster_size(data_type);
+    i = G_window_cols() * Rast_cell_size(data_type);
     ptr = (unsigned char *)rast;
 
     while (i--)

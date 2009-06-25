@@ -23,13 +23,13 @@ int extract_points(int z_flag)
 
     switch (data_type) {
     case CELL_TYPE:
-	cellbuf = Rast_allocate_c_raster_buf();
+	cellbuf = Rast_allocate_c_buf();
 	break;
     case FCELL_TYPE:
-	fcellbuf = Rast_allocate_f_raster_buf();
+	fcellbuf = Rast_allocate_f_buf();
 	break;
     case DCELL_TYPE:
-	dcellbuf = Rast_allocate_d_raster_buf();
+	dcellbuf = Rast_allocate_c_buf();
 	break;
     }
 

@@ -125,7 +125,7 @@ int main(int argc, char *argv[])
 
     /* allocate buffers for input rows */
     for (row = 0; row < neighbors; row++)
-	bufs[row] = Rast_allocate_d_raster_buf();
+	bufs[row] = Rast_allocate_c_buf();
 
     cur_row = -100;
 
@@ -137,7 +137,7 @@ int main(int argc, char *argv[])
     /* reset window to current region */
     Rast_set_window(&dst_w);
 
-    outbuf = Rast_allocate_d_raster_buf();
+    outbuf = Rast_allocate_c_buf();
 
     /* open new map */
     outfile = Rast_open_raster_new(rastout->answer, DCELL_TYPE);
