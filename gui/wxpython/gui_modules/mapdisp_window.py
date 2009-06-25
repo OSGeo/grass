@@ -21,6 +21,7 @@ import os
 import time
 import math
 import sys
+import tempfile
 
 import wx
 
@@ -30,6 +31,7 @@ import gdialogs
 import gcmd
 import utils
 import globalvar
+import gselect
 from debug import Debug
 from preferences import globalSettings as UserSettings
 from units import ConvertValue as UnitsConvertValue
@@ -1198,6 +1200,51 @@ class BufferedWindow(MapWindow, wx.Window):
                 dialog.SetColumnValue(layer, column, val)
                 dialog.OnReset()
         
+    def __geomAttrbUpdate(self, fids):
+        """!Update geometry atrributes of currently selected features
+
+        @param fid list feature id
+        """
+        mapLayer = self.parent.toolbars['vdigit'].GetLayer()
+        vectorName =  mapLayer.GetName()
+        digit = self.parent.digit
+        item = self.tree.FindItemByData('maplayer', mapLayer)
+        vdigit = self.tree.GetPyData(item)[0]['vdigit']
+        
+        if vdigit is None or not vdigit.has_key('geomAttr'):
+            return
+        
+        dbInfo = gselect.VectorDBInfo(vectorName)
+        sqlfile = tempfile.NamedTemporaryFile(mode="w")
+        for fid in fids:
+            for layer, cats in digit.GetLineCats(fid).iteritems():
+                table = dbInfo.GetTable(layer)
+                for attrb, item in vdigit['geomAttr'].iteritems():
+                    val = -1
+                    if attrb == 'length':
+                        val = digit.GetLineLength(fid)
+                        type = attrb
+                    elif attrb == 'area':
+                        val = digit.GetAreaSize(fid)
+                        type = attrb
+                    elif attrb == 'perimeter':
+                        val = digit.GetAreaPerimeter(fid)
+                        type = 'length'
+
+                    if val < 0:
+                        continue
+                    val = UnitsConvertValue(val, type, item['units'])
+                    
+                    for cat in cats:
+                        sqlfile.write('UPDATE %s SET %s = %f WHERE %s = %d;\n' % \
+                                          (table, item['column'], val,
+                                           dbInfo.GetKeyColumn(layer), cat))
+            sqlfile.file.flush()
+            gcmd.RunCommand('db.execute',
+                            parent = True,
+                            quiet = True,
+                            input = sqlfile.name)
+            
     def __updateATM(self):
         """!Update open Attribute Table Manager
 
@@ -1917,8 +1964,11 @@ class BufferedWindow(MapWindow, wx.Window):
                         return
                 elif digitToolbar.GetAction() == "moveVertex":
                     # move vertex
-                    if digitClass.MoveSelectedVertex(pFrom, move) < 0:
+                    fid = digitClass.MoveSelectedVertex(pFrom, move)
+                    if fid < 0:
                         return
+
+                    self.__geomAttrbUpdate([fid,])
                 
                 del self.vdigitMove
                 
@@ -2019,12 +2069,15 @@ class BufferedWindow(MapWindow, wx.Window):
                     return
             elif digitToolbar.GetAction() == "addVertex":
                 # add vertex
-                if digitClass.AddVertex(self.Pixel2Cell(self.mouse['begin'])) < 0:
+                fid = digitClass.AddVertex(self.Pixel2Cell(self.mouse['begin']))
+                if fid < 0:
                     return
             elif digitToolbar.GetAction() == "removeVertex":
                 # remove vertex
-                if digitClass.RemoveVertex(self.Pixel2Cell(self.mouse['begin'])) < 0:
+                fid = digitClass.RemoveVertex(self.Pixel2Cell(self.mouse['begin']))
+                if fid < 0:
                     return
+                self.__geomAttrbUpdate([fid,])
             elif digitToolbar.GetAction() in ("copyCats", "copyAttrs"):
                 try:
                     if digitToolbar.GetAction() == 'copyCats':

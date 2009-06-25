@@ -28,7 +28,7 @@ extern "C" {
    \param thresh_coords threshold value to identify vertex position
    \param thresh_snap threshold value to snap moved vertex
 
-   \param 1 vertex moved
+   \param id id of the new feature
    \param 0 nothing changed
    \param -1 error
 */
@@ -95,7 +95,7 @@ int Digit::MoveVertex(double x, double y, double z,
 
     Vect_destroy_line_struct(point);
 
-    return ret;
+    return nlines + 1; // feature is write at the end of the file
 }
 
 /**
@@ -107,7 +107,7 @@ int Digit::MoveVertex(double x, double y, double z,
    \param x,y,z coordinates (z is used only if map is 3d
    \param thresh threshold value to identify vertex position
 
-   \param 1 vertex added/removed
+   \param id id of the new feature
    \param 0 nothing changed
    \param -1 error
 */
@@ -155,5 +155,5 @@ int Digit::ModifyLineVertex(int add, double x, double y, double z,
 
     Vect_destroy_line_struct(point);
 
-    return ret;
+    return nlines + 1; // feature is write at the end of the file
 }
