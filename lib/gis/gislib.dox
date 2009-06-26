@@ -21,9 +21,9 @@ This chapter is divided as follows:
  - \subpage Creating_and_Opening_a_New_Database_File
  - \subpage Database_File_Management
 
-- \subpage The_Region
- - \subpage The_Database_Region
- - \subpage The_Active_Module_Region
+- \subpage Region
+ - \subpage Database_Region
+ - \subpage Active_Module_Region
 
 - \subpage Projection_Information
  - \subpage Latitude_Longitude_Databases
@@ -501,7 +501,7 @@ but the other support files, such as "cellhd" or "cats", will not. To
 remove these other files as well, specific calls must be made for each
 related <i>element</i>.
 
-\section The_Region The Region
+\section Region Region
 
 The region concept is explained in \ref Region. It can be thought of as a
 two-dimensional matrix with known boundaries and rectangular cells.
@@ -518,7 +518,7 @@ defined in the "gis.h" header file. It is discussed in detail under
 \ref GIS_Library_Data_Structures.
 
 
-\subsection The_Database_Region The Database Region
+\subsection Database_Region Database Region
 
 Reading and writing the user's database region are done by the
 following routines:
@@ -564,7 +564,7 @@ following routine reads this region:
 
  - G_get_default_window()
 
-\subsection The_Active_Module_Region The Active Module Region
+\subsection Active_Module_Region Active Module Region
 
 The <em>active module region</em> is the one that is used when reading
 and writing raster file data. This region determines the resampling
@@ -2107,17 +2107,26 @@ region values. The structure is:
 \code
 struct Cell_head
 {
- int format;     /* number of bytes per cell */
- int compressed; /* compressed(1) or not compressed(0) */
- int rows, cols; /* number of rows and columns */
- int proj;       /* projection */
- int zone;       /* zone */
- double ew_res;  /* east-west resolution */
- double ns_res;  /* north-south resolution */
- double north;   /* northern edge */
- double south;   /* southern edge */
- double east;    /* eastern edge */
- double west;    /* western edge */
+    int format;			/* max number of bytes per cell minus 1         */
+    int compressed;		/* 0 = uncompressed, 1 = compressed, -1 pre 3.0 */
+    int rows;			/* number of rows in the data 2D                */
+    int rows3;			/* number of rows in the data 3D                */
+    int cols;			/* number of columns in the data 2D             */
+    int cols3;			/* number of columns in the data 3D             */
+    int depths;			/* number of depths in data                     */
+    int proj;			/* projection (see #defines above)              */
+    int zone;			/* projection zone                              */
+    double ew_res;		/* east to west cell size 2D                    */
+    double ew_res3;		/* east to west cell size 3D                    */
+    double ns_res;		/* north to south cell size 2D                  */
+    double ns_res3;		/* north to south cell size 3D                  */
+    double tb_res;		/* top to bottom cell size                      */
+    double north;		/* coordinates of map layer                     */
+    double south;
+    double east;
+    double west;
+    double top;
+    double bottom;
 };
 \endcode
 
@@ -2132,27 +2141,70 @@ described by <i>ew_res</i> and <i>ns_res</i>. The cartographic
 projection is described by <i>proj</i> and the related zone for the
 projection by <i>zone</i>. The <i>rows</i> and <i>cols</i> indicate
 the number of rows and columns in the raster file, or in the
-region. See \ref Raster_Header_Format for more information about
+region. See \ref Raster_Header_File for more information about
 raster headers, and \ref Region for more information about regions.
 
 The routines described in \ref Raster_Header_File use this structure.
 
 \subsection struct_Categories struct Categories
 
-
 The <i>Categories</i> structure contains a title for the map layer,
 the largest category in the map layer, an automatic label generation
 rule for missing labels, and a list of category labels.
+
+\code
+struct Categories
+{
+    CELL ncats;			/* total number of categories              */
+    CELL num;			/* the highest cell values. Only exists    
+				   for backwards compatibility = (CELL)
+				   max_fp_values in quant rules            */
+    char *title;		/* name of data layer                      */
+    char *fmt;			/* printf-like format to generate labels   */
+    float m1;			/* multiplication coefficient 1            */
+    float a1;			/* addition coefficient 1                  */
+    float m2;			/* multiplication coefficient 2            */
+    float a2;			/* addition coefficient 2                  */
+    struct Quant q;		/* rules mapping cell values to index in
+				   list of labels                          */
+    char **labels;		/* array of labels of size num             */
+    int *marks;			/* was the value with this label was used? */
+    int nalloc;
+    int last_marked_rule;
+};
+\endcode
 
 This structure should be accessed using the routines described in
 \ref Raster_Category_File.
 
 \subsection struct_Colors struct Colors
 
-
 The color data structure holds red, green, and blue color intensities
 for raster categories. The structure has become so complicated that it
 will not be described in this manual.
+
+\code
+struct Colors
+{
+    int version;		/* set by read_colors: -1=old, 1=new */
+    DCELL shift;
+    int invert;
+    int is_float;		/* defined on floating point raster data? */
+    int null_set;		/* the colors for null are set? */
+    unsigned char null_red;
+    unsigned char null_grn;
+    unsigned char null_blu;
+    int undef_set;		/* the colors for cells not in range are set? */
+    unsigned char undef_red;
+    unsigned char undef_grn;
+    unsigned char undef_blu;
+    struct _Color_Info_ fixed;
+    struct _Color_Info_ modular;
+    DCELL cmin;
+    DCELL cmax;
+    int organizing;
+};
+\endcode
 
 The routines described in \ref Raster_Color_Table must be used 
 to store and retrieve color information using this structure.
@@ -2206,9 +2258,25 @@ future releases.
 
 \subsection struct_Range struct Range
 
+The <i>Range</i> (<i>FPRange</i> for floating point raster maps)
+structure contains the minimum and maximum values which occur in a
+raster file.
 
-The <i>Range</i> structure contains the minimum and maximum values which occur
-in a raster file.
+\code
+struct Range
+{
+    CELL min;
+    CELL max;
+    int first_time;		/* whether or not range was updated */
+};
+
+struct FPRange
+{
+    DCELL min;
+    DCELL max;
+    int first_time;		/* whether or not range was updated */
+};
+\endcode
 
 The routines described in \ref Raster_Range_File should be used to access
 this structure.
