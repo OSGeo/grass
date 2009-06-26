@@ -121,7 +121,7 @@ static void write_fp_to_cell (int ofd, FCELL* buf)
     CELL* cbuf;
     int col;
 
-    cbuf = (CELL*)Rast_allocate_raster_buf(CELL_TYPE);
+    cbuf = (CELL*)Rast_allocate_buf(CELL_TYPE);
 
     for(col = 0; col < G_window_cols(); col++) cbuf[col] = round_c(buf[col]);
     Rast_put_raster_row(ofd, cbuf, CELL_TYPE);
@@ -293,9 +293,9 @@ static void process_raster (int ifd, InputMask imask, ScaleRange iscale,
     TICache ticache;    /* use this to increase computation speed when an elevation map with categories are given */
 	
     /* allocate memory for buffers */
-    buf = (FCELL*)Rast_allocate_raster_buf(FCELL_TYPE);
-    if(ialt_fd >= 0) alt = (FCELL*)Rast_allocate_raster_buf(FCELL_TYPE);
-    if(ivis_fd >= 0) vis = (FCELL*)Rast_allocate_raster_buf(FCELL_TYPE);
+    buf = (FCELL*)Rast_allocate_buf(FCELL_TYPE);
+    if(ialt_fd >= 0) alt = (FCELL*)Rast_allocate_buf(FCELL_TYPE);
+    if(ivis_fd >= 0) vis = (FCELL*)Rast_allocate_buf(FCELL_TYPE);
 
     G_verbose_message(_("Percent complete..."));
     nrows = G_window_rows();
