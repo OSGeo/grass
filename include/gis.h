@@ -258,21 +258,21 @@ typedef int INTERP_TYPE;
 
 struct Cell_head
 {
-    int format;			/* max numer of bytes per cell minus 1          */
+    int format;			/* max number of bytes per cell minus 1         */
     int compressed;		/* 0 = uncompressed, 1 = compressed, -1 pre 3.0 */
     int rows;			/* number of rows in the data 2D                */
     int rows3;			/* number of rows in the data 3D                */
     int cols;			/* number of columns in the data 2D             */
     int cols3;			/* number of columns in the data 3D             */
     int depths;			/* number of depths in data                     */
-    int proj;			/* Projection (see #defines above)              */
-    int zone;			/* Projection zone                              */
-    double ew_res;		/* East to West cell size 2D                    */
-    double ew_res3;		/* East to West cell size 3D                    */
-    double ns_res;		/* North to South cell size 2D                  */
-    double ns_res3;		/* North to South cell size 3D                  */
-    double tb_res;		/* Top to Bottom cell size                      */
-    double north;		/* coordinates of layer                         */
+    int proj;			/* projection (see #defines above)              */
+    int zone;			/* projection zone                              */
+    double ew_res;		/* east to west cell size 2D                    */
+    double ew_res3;		/* east to west cell size 3D                    */
+    double ns_res;		/* north to south cell size 2D                  */
+    double ns_res3;		/* north to south cell size 3D                  */
+    double tb_res;		/* top to bottom cell size                      */
+    double north;		/* coordinates of map layer                     */
     double south;
     double east;
     double west;
