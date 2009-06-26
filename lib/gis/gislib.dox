@@ -5,13 +5,7 @@
 
 by GRASS Development Team (http://grass.osgeo.org)
 
-This chapter is divided in the following pages:
-
-- \subpage gislibintro 
-- \subpage gisrasterlib
-- \subpage gisvectorlib
-
-This sections is divided as follows:
+This chapter is divided as follows:
 
 - \subpage gislibintro
  - \subpage init
