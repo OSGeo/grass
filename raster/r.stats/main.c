@@ -286,7 +286,7 @@ int main(int argc, char *argv[])
 	    labels = (struct Categories *)
 		G_realloc(labels, (nfiles + 1) * sizeof(struct Categories));
 	    if (Rast_read_cats(name, "", &labels[nfiles]) < 0)
-		Rast_init_cats((CELL) 0, "", &labels[nfiles]);
+		Rast_init_cats("", &labels[nfiles]);
 	}
 	if (is_fp[nfiles])
 	    /* floating point map */

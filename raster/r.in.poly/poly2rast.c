@@ -40,7 +40,7 @@ int poly_to_rast(char *input_file, char *raster_map, char *title, int nrows)
 	title = "";
     G_strip(title);
 
-    Rast_init_cats((CELL) 0, title, &labels);
+    Rast_init_cats(title, &labels);
 
     format = getformat(ifd);
     npasses = begin_rasterization(nrows, format);
