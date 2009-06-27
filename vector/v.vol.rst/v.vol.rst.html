@@ -86,9 +86,9 @@ v.info -c elevrand_3d
 v.info -t elevrand_3d
 
 # remove the now superfluous 'x', 'y' and 'value' (z) columns
-v.db.dropcol elevrand_3d col=x
-v.db.dropcol elevrand_3d col=y
-v.db.dropcol elevrand_3d col=value
+v.db.dropcolumn elevrand_3d col=x
+v.db.dropcolumn elevrand_3d col=y
+v.db.dropcolumn elevrand_3d col=value
 
 # add attribute to interpolate
 # (Soil range types taken from the USDA Soil Survey)
