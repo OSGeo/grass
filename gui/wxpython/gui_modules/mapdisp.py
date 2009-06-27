@@ -109,7 +109,8 @@ class MapFrame(wx.Frame):
         self.page       = page      # Notebook page holding the layer tree
         self.layerbook  = notebook  # Layer Manager layer tree notebook
         self.parent     = parent
-
+        self.title      = title
+        
         #
         # available cursors
         #

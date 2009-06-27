@@ -1,4 +1,4 @@
-"""
+"""!
 @package mapdisp_window.py
 
 @brief GIS map display canvas, buffered window.
@@ -25,6 +25,8 @@ import tempfile
 
 import wx
 
+import grass.script as grass
+
 import dbm
 import dbm_dialogs
 import gdialogs
@@ -42,7 +44,7 @@ from vdigit import VDigitDuplicatesDialog
 from vdigit import PseudoDC
 
 class MapWindow(object):
-    """
+    """!
     Abstract map window class
 
     Parent for BufferedWindow class (2D display mode) and
@@ -67,13 +69,13 @@ class MapWindow(object):
             }
         
     def EraseMap(self):
-        """
+        """!
         Erase the canvas (virtual method)
         """
         pass
 
     def UpdateMap(self):
-        """
+        """!
         Updates the canvas anytime there is a change to the
         underlaying images or to the geometry of the canvas.
         """
@@ -95,7 +97,7 @@ class MapWindow(object):
         pass
     
     def GetSelectedLayer(self, type = 'layer', multi = False):
-        """
+        """!
         Get selected layer from layer tree
 
         @param type 'item' / 'layer' / 'nviz'
@@ -142,7 +144,7 @@ class MapWindow(object):
         return ret
     
 class BufferedWindow(MapWindow, wx.Window):
-    """
+    """!
     A Buffered window class.
 
     When the drawing needs to change, you app needs to call the
@@ -244,7 +246,7 @@ class BufferedWindow(MapWindow, wx.Window):
         self.lastpos  = (0, 0)
 
     def Draw(self, pdc, img=None, drawid=None, pdctype='image', coords=[0, 0, 0, 0]):
-        """
+        """!
         Draws map and overlay decorations
         """
         if drawid == None:
@@ -379,7 +381,7 @@ class BufferedWindow(MapWindow, wx.Window):
         return drawid
 
     def TextBounds(self, textinfo):
-        """
+        """!
         Return text boundary data
 
         @param textinfo text metadata (text, font, color, rotation)
@@ -414,7 +416,7 @@ class BufferedWindow(MapWindow, wx.Window):
         return coords, boxw, boxh
 
     def OnPaint(self, event):
-        """
+        """!
         Draw PseudoDC's to buffered paint DC
 
         self.pdc for background and decorations
@@ -496,7 +498,7 @@ class BufferedWindow(MapWindow, wx.Window):
             self.redrawAll = False
                 
     def OnSize(self, event):
-        """
+        """!
         Scale map image so that it is
         the same size as the Window
         """
@@ -532,7 +534,7 @@ class BufferedWindow(MapWindow, wx.Window):
         self.parent.StatusbarUpdate()
 
     def OnIdle(self, event):
-        """
+        """!
         Only re-render a composite map image from GRASS during
         idle time instead of multiple times during resizing.
         """
@@ -542,7 +544,7 @@ class BufferedWindow(MapWindow, wx.Window):
         event.Skip()
 
     def SaveToFile(self, FileName, FileType):
-        """
+        """!
         This draws the psuedo DC to a buffer that
         can be saved to a file.
         """
@@ -553,7 +555,7 @@ class BufferedWindow(MapWindow, wx.Window):
         self.buffer.SaveFile(FileName, FileType)
 
     def GetOverlay(self):
-        """
+        """!
         Converts rendered overlay files to wx.Image
 
         Updates self.imagedict
@@ -571,7 +573,7 @@ class BufferedWindow(MapWindow, wx.Window):
         return imgs
 
     def GetImage(self):
-        """
+        """!
         Converts redered map files to wx.Image
 
         Updates self.imagedict (id=99)
@@ -590,7 +592,7 @@ class BufferedWindow(MapWindow, wx.Window):
         return img
 
     def UpdateMap(self, render=True, renderVector=True):
-        """
+        """!
         Updates the canvas anytime there is a change to the
         underlaying images or to the geometry of the canvas.
 
@@ -622,7 +624,7 @@ class BufferedWindow(MapWindow, wx.Window):
         # update layer dictionary if there has been a change in layers
         if self.tree and self.tree.reorder == True:
             self.tree.ReorderLayers()
-            
+        
         # reset flag for auto-rendering
         if self.tree:
             self.tree.rerender = False
@@ -663,7 +665,7 @@ class BufferedWindow(MapWindow, wx.Window):
                 return False
 
             self.Draw(self.pdc, self.img, drawid=id)
-
+        
         #
         # render vector map layer
         #
@@ -709,10 +711,10 @@ class BufferedWindow(MapWindow, wx.Window):
         for id in self.textdict.keys():
             self.Draw(self.pdc, img=self.textdict[id], drawid=id,
                       pdctype='text', coords=[10, 10, 10, 10])
-
+        
         # optionally draw computational extent box
         self.DrawCompRegionExtent()
-
+        
         #
         # redraw pdcTmp if needed
         #
@@ -731,7 +733,6 @@ class BufferedWindow(MapWindow, wx.Window):
         # 
         # clear measurement
         #
-        
         if self.mouse["use"] == "measure":
             self.ClearLines(pdc=self.pdcTmp)
             self.polycoords = []
@@ -741,25 +742,30 @@ class BufferedWindow(MapWindow, wx.Window):
             self.SetCursor(self.parent.cursors["default"])
             
         stop = time.clock()
-
+        
         #
         # hide process bar
         #
         self.parent.onRenderGauge.Hide()
 
         #
-        # update statusbar
+        # update statusbar 
         #
         ### self.Map.SetRegion()
         self.parent.StatusbarUpdate()
-
+        if grass.find_file(name = 'MASK', element = 'cell')['name']:
+            # mask found
+            self.parent.SetTitle(self.parent.title + _(' (masked)'))
+        else:
+            self.parent.SetTitle(self.parent.title)
+        
         Debug.msg (2, "BufferedWindow.UpdateMap(): render=%s, renderVector=%s -> time=%g" % \
                    (render, renderVector, (stop-start)))
         
         return True
 
     def DrawCompRegionExtent(self):
-        """
+        """!
         Draw computational region extent in the display
         
         Display region is drawn as a blue box inside the computational region,
@@ -787,7 +793,7 @@ class BufferedWindow(MapWindow, wx.Window):
             self.DrawLines(pdc=self.pdcDec, polycoords=self.regionCoords)
 
     def IsInRegion(self, region, refRegion):
-        """
+        """!
         Test if 'region' is inside of 'refRegion'
 
         @param region input region
@@ -805,7 +811,7 @@ class BufferedWindow(MapWindow, wx.Window):
         return False
 
     def EraseMap(self):
-        """
+        """!
         Erase the canvas
         """
         self.Draw(self.pdc, pdctype='clear')
@@ -817,7 +823,7 @@ class BufferedWindow(MapWindow, wx.Window):
         self.Draw(self.pdcTmp, pdctype='clear')
         
     def DragMap(self, moveto):
-        """
+        """!
         Drag the entire map image for panning.
         """
 
@@ -836,7 +842,7 @@ class BufferedWindow(MapWindow, wx.Window):
         return True
 
     def DragItem(self, id, event):
-        """
+        """!
         Drag an overlay decoration item
         """
         if id == 99 or id == '' or id == None: return
@@ -867,7 +873,7 @@ class BufferedWindow(MapWindow, wx.Window):
         self.lastpos = (event.GetX(), event.GetY())
                 
     def MouseDraw(self, pdc=None, begin=None, end=None):
-        """
+        """!
         Mouse box or line from 'begin' to 'end'
 
         If not given from self.mouse['begin'] to self.mouse['end'].
@@ -918,7 +924,7 @@ class BufferedWindow(MapWindow, wx.Window):
             self.Draw(pdc, drawid=self.lineid, pdctype='line', coords=mousecoords)
 
     def DrawLines(self, pdc=None, polycoords=None):
-        """
+        """!
         Draw polyline in PseudoDC
 
         Set self.pline to wx.NEW_ID + 1
@@ -989,7 +995,7 @@ class BufferedWindow(MapWindow, wx.Window):
         return self.lineid
 
     def MouseActions(self, event):
-        """
+        """!
         Mouse motion and button click notifier
         """
         if not self.processMouse:
@@ -1036,7 +1042,7 @@ class BufferedWindow(MapWindow, wx.Window):
 #        event.Skip()
         
     def OnMouseWheel(self, event):
-        """
+        """!
         Mouse wheel moved
         """
         self.processMouse = False
@@ -1070,7 +1076,7 @@ class BufferedWindow(MapWindow, wx.Window):
 #        event.Skip()
 
     def OnDragging(self, event):
-        """
+        """!
         Mouse dragging with left button down
         """
         Debug.msg (5, "BufferedWindow.MouseAction(): Dragging")
@@ -1107,7 +1113,7 @@ class BufferedWindow(MapWindow, wx.Window):
 #        event.Skip()
 
     def OnLeftDownVDigitAddLine(self, event):
-        """
+        """!
         Left mouse button down - vector digitizer add new line
         action
         """
@@ -1262,7 +1268,7 @@ class BufferedWindow(MapWindow, wx.Window):
                 atm.LoadData(layer)
         
     def OnLeftDownVDigitEditLine(self, event):
-        """
+        """!
         Left mouse button down - vector digitizer edit linear feature
         - add new vertex.
         """
@@ -1274,7 +1280,7 @@ class BufferedWindow(MapWindow, wx.Window):
         self.DrawLines(pdc=self.pdcTmp)
 
     def OnLeftDownVDigitMoveLine(self, event):
-        """
+        """!
         Left mouse button down - vector digitizer move feature/vertex,
         edit linear feature
         """
@@ -1298,7 +1304,7 @@ class BufferedWindow(MapWindow, wx.Window):
             self.pdcTmp.SetPen(self.polypen)
 
     def OnLeftDownVDigitDisplayCA(self, event):
-        """
+        """!
         Left mouse button down - vector digitizer display categories
         or attributes action
         """
@@ -1379,7 +1385,7 @@ class BufferedWindow(MapWindow, wx.Window):
         self.UpdateMap(render=False)
  
     def OnLeftDownVDigitCopyCA(self, event):
-        """
+        """!
         Left mouse button down - vector digitizer copy categories
         or attributes action
         """
@@ -1393,7 +1399,7 @@ class BufferedWindow(MapWindow, wx.Window):
             self.mouse['box'] = 'box'
         
     def OnLeftDownVDigitCopyLine(self, event):
-        """
+        """!
         Left mouse button down - vector digitizer copy lines action
         """
         digitToolbar = self.parent.toolbars['vdigit']
@@ -1404,7 +1410,7 @@ class BufferedWindow(MapWindow, wx.Window):
             self.layerTmp = None
         
     def OnLeftDownVDigitBulkLine(self, event):
-        """
+        """!
         Left mouse button down - vector digitizer label 3d vector
         lines
         """
@@ -1425,7 +1431,7 @@ class BufferedWindow(MapWindow, wx.Window):
             self.DrawLines(self.pdcTmp, begin, end)
         
     def OnLeftDown(self, event):
-        """
+        """!
         Left mouse button pressed
         """
         Debug.msg (5, "BufferedWindow.OnLeftDown(): use=%s" % \
@@ -1520,7 +1526,7 @@ class BufferedWindow(MapWindow, wx.Window):
         event.Skip()
 
     def OnLeftUpVDigitVarious(self, event):
-        """
+        """!
         Left mouse button up - vector digitizer various actions
         """
         digitToolbar = self.parent.toolbars['vdigit']
@@ -1654,7 +1660,7 @@ class BufferedWindow(MapWindow, wx.Window):
                 self.UpdateMap(render=False, renderVector=False)
         
     def OnLeftUpVDigitModifyLine(self, event):
-        """
+        """!
         Left mouse button up - vector digitizer split line, add/remove
         vertex action
         """
@@ -1692,7 +1698,7 @@ class BufferedWindow(MapWindow, wx.Window):
                 self.UpdateMap(render=False)
 
     def OnLeftUpVDigitCopyLine(self, event):
-        """
+        """!
         Left mouse button up - vector digitizer copy feature action
         """
         digitToolbar = self.parent.toolbars['vdigit']
@@ -1745,7 +1751,7 @@ class BufferedWindow(MapWindow, wx.Window):
             self.redrawAll = None
             
     def OnLeftUpVDigitBulkLine(self, event):
-        """
+        """!
         Left mouse button up - vector digitizer z-bulk line action
         """
         digitToolbar = self.parent.toolbars['vdigit']
@@ -1765,7 +1771,7 @@ class BufferedWindow(MapWindow, wx.Window):
             self.UpdateMap(render=False, renderVector=False)
 
     def OnLeftUpVDigitConnectLine(self, event):
-        """
+        """!
         Left mouse button up - vector digitizer connect line action
         """
         digitToolbar = self.parent.toolbars['vdigit']
@@ -1775,7 +1781,7 @@ class BufferedWindow(MapWindow, wx.Window):
             self.UpdateMap(render=False)
         
     def OnLeftUp(self, event):
-        """
+        """!
         Left mouse button released
         """
         Debug.msg (5, "BufferedWindow.OnLeftUp(): use=%s" % \
@@ -1896,7 +1902,7 @@ class BufferedWindow(MapWindow, wx.Window):
             self.currtxtid = None
         
     def OnButtonDClick(self, event):
-        """
+        """!
         Mouse button double click
         """
         Debug.msg (5, "BufferedWindow.OnButtonDClick(): use=%s" % \
@@ -1938,7 +1944,7 @@ class BufferedWindow(MapWindow, wx.Window):
                 self.parent.OnAddLegend(None)
         
     def OnRightDown(self, event):
-        """
+        """!
         Right mouse button pressed
         """
         Debug.msg (5, "BufferedWindow.OnRightDown(): use=%s" % \
@@ -1975,7 +1981,7 @@ class BufferedWindow(MapWindow, wx.Window):
         event.Skip()
 
     def OnRightUp(self, event):
-        """
+        """!
         Right mouse button released
         """
         Debug.msg (5, "BufferedWindow.OnRightUp(): use=%s" % \
@@ -2159,7 +2165,7 @@ class BufferedWindow(MapWindow, wx.Window):
         event.Skip()
 
     def OnMiddleDown(self, event):
-        """
+        """!
         Middle mouse button pressed
         """
         digitToolbar = self.parent.toolbars['vdigit']
@@ -2224,7 +2230,7 @@ class BufferedWindow(MapWindow, wx.Window):
             self.redrawAll = True
             
     def OnMouseMoving(self, event):
-        """
+        """!
         Motion event and no mouse buttons were pressed
         """
         digitToolbar = self.parent.toolbars['vdigit']
@@ -2291,7 +2297,7 @@ class BufferedWindow(MapWindow, wx.Window):
         event.Skip()
 
     def ClearLines(self, pdc=None):
-        """
+        """!
         Clears temporary drawn lines from PseudoDC
         """
         if not pdc:
@@ -2316,7 +2322,7 @@ class BufferedWindow(MapWindow, wx.Window):
         return True
 
     def Pixel2Cell(self, (x, y)):
-        """
+        """!
         Convert image coordinates to real word coordinates
 
         Input : int x, int y
@@ -2347,7 +2353,7 @@ class BufferedWindow(MapWindow, wx.Window):
         return (east, north)
 
     def Cell2Pixel(self, (east, north)):
-        """
+        """!
         Convert real word coordinates to image coordinates
         """
 
@@ -2374,7 +2380,7 @@ class BufferedWindow(MapWindow, wx.Window):
         return (x, y)
 
     def Zoom(self, begin, end, zoomtype):
-        """
+        """!
         Calculates new region while (un)zoom/pan-ing
         """
         x1, y1 = begin
@@ -2450,7 +2456,7 @@ class BufferedWindow(MapWindow, wx.Window):
             self.redrawAll = True
 
     def ZoomBack(self):
-        """
+        """!
         Zoom to previous extents in zoomhistory list
         """
 
@@ -2476,7 +2482,7 @@ class BufferedWindow(MapWindow, wx.Window):
             self.parent.StatusbarUpdate()
 
     def ZoomHistory(self, n, s, e, w):
-        """
+        """!
         Manages a list of last 10 zoom extents
 
         Return removed history item if exists
@@ -2497,20 +2503,20 @@ class BufferedWindow(MapWindow, wx.Window):
         return removed
 
     def OnZoomToMap(self, event):
-        """
+        """!
         Set display extents to match selected raster (including NULLs)
         or vector map.
         """
         self.ZoomToMap()
 
     def OnZoomToRaster(self, event):
-        """
+        """!
         Set display extents to match selected raster map (ignore NULLs)
         """
         self.ZoomToMap(ignoreNulls = True)
         
     def ZoomToMap(self, layers = None, ignoreNulls = False, render = True):
-        """
+        """!
         Set display extents to match selected raster
         or vector map(s).
 
@@ -2557,7 +2563,7 @@ class BufferedWindow(MapWindow, wx.Window):
         self.parent.StatusbarUpdate()
         
     def ZoomToWind(self, event):
-        """
+        """!
         Set display geometry to match computational
         region settings (set with g.region)
         """
@@ -2572,7 +2578,7 @@ class BufferedWindow(MapWindow, wx.Window):
         self.parent.StatusbarUpdate()
 
     def ZoomToDefault(self, event):
-        """
+        """!
         Set display geometry to match default region settings
         """
         self.Map.region = self.Map.GetRegion(default=True)
@@ -2586,7 +2592,7 @@ class BufferedWindow(MapWindow, wx.Window):
         self.parent.StatusbarUpdate()
         
     def DisplayToWind(self, event):
-        """
+        """!
         Set computational region (WIND file) to
         match display extents
         """
@@ -2611,7 +2617,7 @@ class BufferedWindow(MapWindow, wx.Window):
             os.environ["GRASS_REGION"] = tmpreg
 
     def ZoomToSaved(self, event):
-        """
+        """!
         Set display geometry to match extents in
         saved region file
         """
@@ -2658,7 +2664,7 @@ class BufferedWindow(MapWindow, wx.Window):
         dlg.Destroy()
         
     def SaveDisplayRegion(self, event):
-        """
+        """!
         Save display extents to named region file.
         """
 
@@ -2690,7 +2696,7 @@ class BufferedWindow(MapWindow, wx.Window):
         dlg.Destroy()
 
     def SaveRegion(self, wind):
-        """
+        """!
         Save region settings
         """
         new = self.Map.AlignResolution()
