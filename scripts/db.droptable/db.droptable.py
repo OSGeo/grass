@@ -31,7 +31,7 @@
 #% key_desc : name
 #% description: Table to drop
 #% required : yes
-#% gisprompt: old,dbtable,dbtable
+#% gisprompt: old_dbtable,dbtable,dbtable
 #%end
 
 import sys

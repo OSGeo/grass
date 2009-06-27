@@ -33,7 +33,7 @@
 #% key_desc : name
 #% description: Table from which to drop attribute column
 #% required : yes
-#% gisprompt: old,dbtable,dbtable
+#% gisprompt: old_dbtable,dbtable,dbtable
 #%end
 
 #%option
