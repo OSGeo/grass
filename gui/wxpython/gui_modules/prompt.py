@@ -386,8 +386,15 @@ class TextCtrlAutoComplete(wx.ComboBox, listmix.ColumnSorterMixin):
     def SetHistoryItems(self):
         """!Read history file and update combobox items"""
         env = grass.gisenv()
-        fileHistory = open(os.path.join(env['GISDBASE'], env['LOCATION_NAME'], env['MAPSET'],
-                                        '.bash_history'), 'r')
+        try:
+            fileHistory = open(os.path.join(env['GISDBASE'],
+                                            env['LOCATION_NAME'],
+                                            env['MAPSET'],
+                                            '.bash_history'), 'r')
+        except IOError:
+            self.SetItems([])
+            return
+        
         try:
             hist = []
             for line in fileHistory.readlines():
