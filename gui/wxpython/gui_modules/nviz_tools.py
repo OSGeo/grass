@@ -1519,7 +1519,7 @@ class NvizToolWindow(wx.Frame):
 
         self.mapWindow.nvizClass.SetBgColor(str(color))
 
-        if self.parent.autoRender.IsChecked():
+        if self.parent.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
         
     def OnClose(self, event):
@@ -1580,7 +1580,7 @@ class NvizToolWindow(wx.Frame):
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self.mapWindow, event)
         
-        if self.parent.autoRender.IsChecked():
+        if self.parent.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
 
     def SetMapObjUseMap(self, nvizType, attrb, map=None):
@@ -1660,14 +1660,14 @@ class NvizToolWindow(wx.Frame):
             event = wxUpdateProperties(data=data)
             wx.PostEvent(self.mapWindow, event)
             
-            if self.parent.autoRender.IsChecked():
+            if self.parent.statusbarWin['render'].IsChecked():
                 self.mapWindow.Refresh(False)
 
     def OnSurfaceResolution(self, event):
         """!Draw resolution changed"""
         self.SetSurfaceResolution()
 
-        if apply and self.parent.autoRender.IsChecked():
+        if apply and self.parent.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
 
     def SetSurfaceResolution(self):
@@ -1721,7 +1721,7 @@ class NvizToolWindow(wx.Frame):
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self.mapWindow, event)
         
-        if apply and self.parent.autoRender.IsChecked():
+        if apply and self.parent.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
 
     def OnSurfaceModeAll(self, event):
@@ -1750,7 +1750,7 @@ class NvizToolWindow(wx.Frame):
             event = wxUpdateProperties(data=data)
             wx.PostEvent(self.mapWindow, event)
             
-        if apply and self.parent.autoRender.IsChecked():
+        if apply and self.parent.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
 
     def _getColorString(self, color):
@@ -1768,7 +1768,7 @@ class NvizToolWindow(wx.Frame):
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self.mapWindow, event)
         
-        if self.parent.autoRender.IsChecked():
+        if self.parent.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
 
     def OnSurfaceAxis(self, event):
@@ -1818,7 +1818,7 @@ class NvizToolWindow(wx.Frame):
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self.mapWindow, event)
         
-        if self.parent.autoRender.IsChecked():
+        if self.parent.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
 
     def UpdateVectorShow(self, vecType, enabled):
@@ -1878,7 +1878,7 @@ class NvizToolWindow(wx.Frame):
                 event = wxUpdateProperties(data=data)
                 wx.PostEvent(self.mapWindow, event)
                 
-        if self.parent.autoRender.IsChecked():
+        if self.parent.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
         
         event.Skip()
@@ -1929,7 +1929,7 @@ class NvizToolWindow(wx.Frame):
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self.mapWindow, event)
                         
-        if self.parent.autoRender.IsChecked():
+        if self.parent.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
         
     def OnVectorHeight(self, event):
@@ -1996,7 +1996,7 @@ class NvizToolWindow(wx.Frame):
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self.mapWindow, event)
         
-        if self.parent.autoRender.IsChecked():
+        if self.parent.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
         
     def OnVectorPoints(self, event):
@@ -2021,7 +2021,7 @@ class NvizToolWindow(wx.Frame):
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self.mapWindow, event)
         
-        if self.parent.autoRender.IsChecked():
+        if self.parent.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
 
     def UpdateIsosurfButtons(self, list):
@@ -2074,7 +2074,7 @@ class NvizToolWindow(wx.Frame):
         
         self.mapWindow.nvizClass.SetIsosurfaceMode(id, mode)
         
-        if self.parent.autoRender.IsChecked():
+        if self.parent.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
         
     def OnVolumeIsosurfResolution(self, event):
@@ -2088,7 +2088,7 @@ class NvizToolWindow(wx.Frame):
         id = data['object']['id']
         self.mapWindow.nvizClass.SetIsosurfaceRes(id, res)
         
-        if self.parent.autoRender.IsChecked():
+        if self.parent.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
 
     def OnVolumeIsosurfMap(self, event):
@@ -2110,7 +2110,7 @@ class NvizToolWindow(wx.Frame):
             # disable -> make transparent
             self.mapWindow.nvizClass.SetIsosurfaceTransp(id, isosurfId, False, "255")
         
-        if self.parent.autoRender.IsChecked():
+        if self.parent.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
         
     def OnVolumeIsosurfSelect(self, event):
@@ -2198,7 +2198,7 @@ class NvizToolWindow(wx.Frame):
         # update buttons
         self.UpdateIsosurfButtons(list)
 
-        if self.parent.autoRender.IsChecked():
+        if self.parent.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
 
         event.Skip()
@@ -2226,7 +2226,7 @@ class NvizToolWindow(wx.Frame):
         # update buttons
         self.UpdateIsosurfButtons(list)
         
-        if self.parent.autoRender.IsChecked():
+        if self.parent.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
         
         event.Skip()
@@ -2256,7 +2256,7 @@ class NvizToolWindow(wx.Frame):
         # update buttons
         self.UpdateIsosurfButtons(list)
         
-        if self.parent.autoRender.IsChecked():
+        if self.parent.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
         
         event.Skip()
@@ -2286,7 +2286,7 @@ class NvizToolWindow(wx.Frame):
         # update buttons
         self.UpdateIsosurfButtons(list)
         
-        if self.parent.autoRender.IsChecked():
+        if self.parent.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
         
         event.Skip()
