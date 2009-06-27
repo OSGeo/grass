@@ -54,9 +54,9 @@ int get_stats(const char *mapname, struct stat_list *dist_stats,	/* linked list 
     is_fp = Rast_raster_map_is_fp(mapname, "");
     if (is_fp) {
 	if (cat_ranges) {
-	    if (Rast_read_raster_cats(mapname, "", &cats) < 0)
+	    if (Rast_read_cats(mapname, "", &cats) < 0)
 		G_fatal_error("Can't read category file");
-	    if (Rast_number_of_raster_cats(&cats) <= 0) {
+	    if (Rast_number_of_cats(&cats) <= 0) {
 		G_warning("There are no labeled cats, using nsteps argument");
 		cat_ranges = 0;
 	    }

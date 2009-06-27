@@ -372,9 +372,9 @@ int main(int argc, char **argv)
 	for (i = min_ind, j = 1, k = 0; j <= do_cats && i <= max_ind;
 	     j++, i += thin) {
 	    if (!flip)
-		cstr = Rast_get_cat(i, &cats);
+		cstr = Rast_get_c_cat(&i, &cats);
 	    else
-		cstr = Rast_get_cat((max_ind - (i - min_ind)), &cats);
+		cstr = Rast_get_c_cat((max_ind - (i - min_ind)), &cats);
 
 	    if (!use_catlist)
 		catlist[j - 1] = (double)i;
@@ -405,7 +405,7 @@ int main(int argc, char **argv)
 				  opt8->answers[i], min_ind, max_ind);
 		}
 
-		cstr = Rast_get_cat(catlist[i], &cats);
+		cstr = Rast_get_c_cat(&(catlist[i]), &cats);
 		if (!cstr[0]) {	/* no cat label found, skip str output */
 		    if (hide_nodata)
 			continue;
@@ -604,7 +604,7 @@ int main(int argc, char **argv)
 			max_ind - k * (double)(max_ind - min_ind) / (steps -
 								     1);
 
-		cstr = Rast_get_cat(tcell, &cats);
+		cstr = Rast_get_c_cat(tcell, &cats);
 		if (!cstr[0])	/* no cats found, disable str output */
 		    hide_catstr = 1;
 		else
@@ -780,9 +780,9 @@ int main(int argc, char **argv)
 	    /*              for(i=min_ind, j=1, k=0; j<=do_cats && i<=max_ind; j++, i+=thin)        */
 	{
 	    if (!flip)
-		cstr = Rast_get_cat(catlist[i], &cats);
+		cstr = Rast_get_c_cat(&(catlist[i]), &cats);
 	    else
-		cstr = Rast_get_cat(catlist[catlistCount - i - 1], &cats);
+		cstr = Rast_get_c_cat(&(catlist[catlistCount - i - 1]), &cats);
 
 
 	    if (!cstr[0]) {	/* no cat label found, skip str output */

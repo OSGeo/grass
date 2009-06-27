@@ -19,6 +19,7 @@
 
 #include <grass/gis.h>
 #include <grass/config.h>
+#include <grass/raster.h>
 #include "pixel.h"
 
 
@@ -37,7 +38,6 @@ extern int g_scale, g_unit;
 
 struct Categories cats;
 
-char *Rast_get_cat();
 
 					/* declare a counter for the number
 					   of pixels with non-null values

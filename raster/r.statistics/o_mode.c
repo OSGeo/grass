@@ -32,7 +32,7 @@ o_mode(const char *basemap, const char *covermap, const char *outputmap, int use
 	}
 
 	if (basecat != catb) {
-	    write_reclass(reclass, catb, catc, Rast_get_cat(catc, cats),
+	  write_reclass(reclass, catb, catc, Rast_get_c_cat((CELL *) &catc, cats),
 			  usecats);
 	    catb = basecat;
 	    catc = covercat;
@@ -49,7 +49,7 @@ o_mode(const char *basemap, const char *covermap, const char *outputmap, int use
 	catb = catc = 0;
     }
 
-    write_reclass(reclass, catb, catc, Rast_get_cat(catc, cats), usecats);
+    write_reclass(reclass, catb, catc, Rast_get_c_cat((CELL *) &catc, cats), usecats);
 
     pclose(stats);
     pclose(reclass);

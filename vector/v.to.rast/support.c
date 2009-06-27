@@ -71,11 +71,11 @@ int update_fcolors(const char *raster_name)
 int update_cats(const char *raster_name)
 {
     /* TODO: maybe attribute transfer from vector map? 
-       Use Rast_set_raster_cat() somewhere */
+       Use Rast_set_cat() somewhere */
 
     struct Categories cats;
 
-    Rast_init_cats((CELL) 0, raster_name, &cats);
+    Rast_init_cats(raster_name, &cats);
     Rast_write_cats(raster_name, &cats);
 
     return 0;
@@ -257,7 +257,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
     } *my_labels_rules;
 
     /* init raster categories */
-    Rast_init_cats((CELL) 0, "Categories", &rast_cats);
+    Rast_init_cats("Categories", &rast_cats);
 
     if (!(fd = Rast_open_cell_old(rast_name, G_mapset())))
 	G_fatal_error(_("Unable to open raster map <%s>"), rast_name);
@@ -265,7 +265,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
     switch (use) {
     case USE_ATTR:
 	{
-	    Rast_set_raster_cats_title("Labels", &rast_cats);
+	    Rast_set_cats_title("Labels", &rast_cats);
 	    int is_fp = Rast_raster_map_is_fp(rast_name, G_mapset());
 
 	    /* open vector map and database driver */
@@ -362,16 +362,17 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 	    if (is_fp) {
 		/* add label */
 		for (i = 0; i < labels_n_values - 1; i++)
-		    Rast_set_raster_cat(&my_labels_rules[i].d,
+		    Rast_set_cat(&my_labels_rules[i].d,
 				     &my_labels_rules[i + 1].d,
 				     db_get_string(&my_labels_rules[i].label),
 				     &rast_cats, DCELL_TYPE);
 	    }
 	    else {
 		for (i = 0; i < labels_n_values; i++)
-		    Rast_set_cat(my_labels_rules[i].i,
-			      db_get_string(&my_labels_rules[i].label),
-			      &rast_cats);
+		  Rast_set_c_cat(&(my_labels_rules[i].i),
+				 &(my_labels_rules[i].i),
+				 db_get_string(&my_labels_rules[i].label),
+				 &rast_cats);
 	    }
 	}
 	break;
@@ -383,7 +384,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 	    struct Range range;
 
 	    map_type = Rast_raster_map_type(rast_name, G_mapset());
-	    Rast_set_raster_cats_title("Values", &rast_cats);
+	    Rast_set_cats_title("Values", &rast_cats);
 
 	    if (map_type == CELL_TYPE) {
 		CELL min, max;
@@ -392,7 +393,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 		Rast_get_range_min_max(&range, &min, &max);
 
 		sprintf(msg, "Value %d", val);
-		Rast_set_raster_cat(&min, &max, msg, &rast_cats, map_type);
+		Rast_set_cat(&min, &max, msg, &rast_cats, map_type);
 	    }
 	    else {
 		DCELL fmin, fmax;
@@ -401,7 +402,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 		Rast_get_fp_range_min_max(&fprange, &fmin, &fmax);
 
 		sprintf(msg, "Value %.4f", (double)val);
-		Rast_set_raster_cat(&fmin, &fmax, msg, &rast_cats, map_type);
+		Rast_set_cat(&fmin, &fmax, msg, &rast_cats, map_type);
 	    }
 
 	}
@@ -424,7 +425,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 		G_fatal_error(_("Cannot allocate memory for row buffer"));
 
 	    Rast_init_cell_stats(&stats);
-	    Rast_set_raster_cats_title("Categories", &rast_cats);
+	    Rast_set_cats_title("Categories", &rast_cats);
 
 	    rows = G_window_rows();
 
@@ -442,7 +443,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 		char msg[80];
 
 		sprintf(msg, "Category %d", n);
-		Rast_set_raster_cat(&n, &n, msg, &rast_cats, map_type);
+		Rast_set_cat(&n, &n, msg, &rast_cats, map_type);
 	    }
 
 	    G_free(rowbuf);
@@ -456,7 +457,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 	    char msg[64];
 
 	    map_type = Rast_raster_map_type(rast_name, G_mapset());
-	    Rast_set_raster_cats_title("Degrees", &rast_cats);
+	    Rast_set_cats_title("Degrees", &rast_cats);
 
 	    for (i = 1; i <= 360; i++) {
 		sprintf(msg, "%d degrees", i);
@@ -464,7 +465,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 		if (i == 360) {
 		    fmin = 359.5;
 		    fmax = 360.0;
-		    Rast_set_raster_cat(&fmin, &fmax, msg, &rast_cats, map_type);
+		    Rast_set_cat(&fmin, &fmax, msg, &rast_cats, map_type);
 		    fmin = 0.0;
 		    fmax = 0.5;
 		}
@@ -473,7 +474,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 		    fmax = i + 0.5;
 		}
 
-		Rast_set_raster_cat(&fmin, &fmax, msg, &rast_cats, map_type);
+		Rast_set_cat(&fmin, &fmax, msg, &rast_cats, map_type);
 	    }
 	}
 	break;

@@ -15,7 +15,8 @@ void SaveMap(int NumMap, int MapSeed)
     struct Colors Colr;
     char String[80], Label[240];
     struct History history;
-
+    CELL cat;
+    
     G_debug(2, "SaveMap()");
 
     OutFD = Rast_open_cell_new(OutNames[NumMap]);
@@ -187,14 +188,15 @@ void SaveMap(int NumMap, int MapSeed)
        TheoryCovariance( TheoryName, Label);
      */
 
-    Rast_init_cats(CatInfo.NumCat, Label, &Cats);
+    Rast_init_cats(Label, &Cats);
     for (Index = 0; Index < CatInfo.NumCat; Index++) {
 	if (CatInfo.NumValue[Index] != 0) {
 	    CatInfo.Average[Index] /= CatInfo.NumValue[Index];
 	    sprintf(Label, "%+lf %+lf to %+lf",
 		    CatInfo.Average[Index],
 		    CatInfo.Min[Index], CatInfo.Max[Index]);
-	    Rast_set_cat(1 + Index, Label, &Cats);
+	    cat = Index + 1;
+	    Rast_set_c_cat(&cat, &cat, Label, &Cats);
 	}
     }
 

@@ -180,7 +180,7 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
 
 	infd = Rast_open_cell_old(name, mapset);
 	colr_ok = Rast_read_colors(name, mapset, &colr) > 0;
-	cats_ok = Rast_read_raster_cats(name, mapset, &cats) >= 0;
+	cats_ok = Rast_read_cats(name, mapset, &cats) >= 0;
 	hist_ok = Rast_read_history(name, mapset, &hist) >= 0;
 	range_ok = Rast_read_range(name, mapset, &range) >= 0;
 
@@ -198,7 +198,7 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
 	/* 3. initialize appropriate data structures */
 
 	if (cats_ok)
-	    Rast_init_raster_cats(Rast_get_raster_cats_title(&cats), &newcats);
+	    Rast_init_cats(Rast_get_cats_title(&cats), &newcats);
 	if (data_type == CELL_TYPE)
 	    Rast_init_cell_stats(&stats);
 
@@ -369,7 +369,7 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
     if (choice->coremap) {
 	Rast_close_cell(fe);
 	Rast_rewind_cell_stats(&stats);
-	Rast_rewind_raster_cats(&cats);
+	Rast_rewind_cats(&cats);
 
 	if (cats_ok && data_type == CELL_TYPE) {
 	    long count;
@@ -378,12 +378,12 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
 	    rast1 = cor_cell_buf;
 	    rast2 = G_incr_void_ptr(rast1, Rast_cell_size(CELL_TYPE));
 	    while (Rast_next_cell_stat(rast1, &count, &stats))
-		Rast_set_raster_cat(rast1, rast2, Rast_get_raster_cat(rast1, &cats,
+		Rast_set_cat(rast1, rast2, Rast_get_cat(rast1, &cats,
 								CELL_TYPE),
 				 &newcats, CELL_TYPE);
-	    Rast_write_raster_cats("interior", &newcats);
-	    Rast_free_raster_cats(&cats);
-	    Rast_free_raster_cats(&newcats);
+	    Rast_write_cats("interior", &newcats);
+	    Rast_free_cats(&cats);
+	    Rast_free_cats(&newcats);
 	    Rast_free_cell_stats(&stats);
 	}
 

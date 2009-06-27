@@ -42,7 +42,7 @@ int PS_colortable(void)
     do_color = (PS.grey == 0 && PS.level == 2);
 
     /* How many categories to show */
-    num_cats = Rast_number_of_raster_cats(&PS.cats);
+    num_cats = Rast_number_of_cats(&PS.cats);
     G_debug(3, "clrtbl: %d categories", num_cats);
     if (!num_cats) {
 	G_warning(_("Your cats/ file is invalid. A cats/ file with categories "
@@ -89,7 +89,7 @@ int PS_colortable(void)
 	    fprintf(PS.fp, "(%s)\n", "no data");
 	else
 	    fprintf(PS.fp, "(%s)\n",
-		    Rast_get_ith_d_raster_cat(&PS.cats, i - 1, &dmin, &dmax));
+		    Rast_get_ith_d_cat(&PS.cats, i - 1, &dmin, &dmax));
     }
     fprintf(PS.fp, "] def\n");
 
@@ -136,7 +136,7 @@ int PS_colortable(void)
 
 	    /* fill box and outline in black */
 	    if (i)
-		label = Rast_get_ith_d_raster_cat(&PS.cats, i - 1, &dmin, &dmax);
+		label = Rast_get_ith_d_cat(&PS.cats, i - 1, &dmin, &dmax);
 
 	    x1 = l + (double)j *72.0 * col_width;
 

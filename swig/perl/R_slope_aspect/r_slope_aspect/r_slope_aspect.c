@@ -1035,8 +1035,8 @@ int r_slope_aspect(int argc, char *argv[])
 	    Rast_quantize_fp_map_range(aspect_name, G_mapset(), 0., 360., 0,
 				    360);
 
-	Rast_read_raster_cats(aspect_name, G_mapset(), &cats);
-	Rast_set_raster_cats_title
+	Rast_read_cats(aspect_name, G_mapset(), &cats);
+	Rast_set_cats_title
 	    ("Aspect counterclockwise in degrees from east", &cats);
 
 	G_message(_("Min computed aspect %.4f, max computed aspect %.4f"),
@@ -1068,22 +1068,22 @@ int r_slope_aspect(int argc, char *argv[])
 		sprintf(buf, "%d degree%s ccw from east", i,
 			i == 1 ? "" : "s");
 	    if (data_type == CELL_TYPE) {
-		Rast_set_cat(i, buf, &cats);
+		Rast_set_c_cat(i, buf, &cats);
 		continue;
 	    }
 	    tmp1 = (double)i - .5;
 	    tmp2 = (double)i + .5;
-	    Rast_set_d_raster_cat(&tmp1, &tmp2, buf, &cats);
+	    Rast_set_d_cat(&tmp1, &tmp2, buf, &cats);
 	}
 	if (data_type == CELL_TYPE)
-	    Rast_set_cat(0, "no aspect", &cats);
+	    Rast_set_c_cat(0, "no aspect", &cats);
 	else {
 	    tmp1 = 0.;
 	    tmp2 = .5;
-	    Rast_set_d_raster_cat(&tmp1, &tmp2, "no aspect", &cats);
+	    Rast_set_d_cat(&tmp1, &tmp2, "no aspect", &cats);
 	}
-	Rast_write_raster_cats(aspect_name, &cats);
-	Rast_free_raster_cats(&cats);
+	Rast_write_cats(aspect_name, &cats);
+	Rast_free_cats(&cats);
 
 	/* write colors for aspect file */
 	Rast_init_colors(&colors);
@@ -1137,11 +1137,11 @@ int r_slope_aspect(int argc, char *argv[])
 					(CELL) ceil(max_slp));
 	}
 
-	Rast_read_raster_cats(slope_name, G_mapset(), &cats);
+	Rast_read_cats(slope_name, G_mapset(), &cats);
 	if (deg)
-	    Rast_set_raster_cats_title("slope in degrees", &cats);
+	    Rast_set_cats_title("slope in degrees", &cats);
 	else if (perc)
-	    Rast_set_raster_cats_title("percent slope", &cats);
+	    Rast_set_cats_title("percent slope", &cats);
 
 	G_message(_("Min computed slope %.4f, max computed slope %.4f"),
 		  min_slp, max_slp);
@@ -1156,9 +1156,9 @@ int r_slope_aspect(int argc, char *argv[])
 		sprintf(buf, "%d percent", i);
 	    if (data_type == CELL_TYPE) {
 		/* INCR_BY_ONE
-		   Rast_set_cat(i+1, buf, &cats);
+		   Rast_set_c_cat(i+1, buf, &cats);
 		 */
-		Rast_set_cat(i, buf, &cats);
+		Rast_set_c_cat(i, buf, &cats);
 		continue;
 	    }
 	    /* INCR_BY_ONE
@@ -1167,22 +1167,22 @@ int r_slope_aspect(int argc, char *argv[])
 	     */
 	    tmp1 = (DCELL) i - .5;
 	    tmp2 = (DCELL) i + .5;
-	    Rast_set_d_raster_cat(&tmp1, &tmp2, buf, &cats);
+	    Rast_set_d_cat(&tmp1, &tmp2, buf, &cats);
 	}
 	if (data_type == CELL_TYPE)
-	    Rast_set_cat(0, "zero slope", &cats);
+	    Rast_set_c_cat(0, "zero slope", &cats);
 	/* INCR_BY_ONE
-	   Rast_set_cat(0, "no data", &cats);
+	   Rast_set_c_cat(0, "no data", &cats);
 	 */
 	else {
 	    tmp1 = 0;
 	    tmp2 = 0.5;
-	    Rast_set_d_raster_cat(&tmp1, &tmp2, "zero slope", &cats);
+	    Rast_set_d_cat(&tmp1, &tmp2, "zero slope", &cats);
 	}
 	/* INCR_BY_ONE
-	   Rast_set_d_raster_cat (&tmp1, &tmp1, "no data", &cats);
+	   Rast_set_d_cat (&tmp1, &tmp1, "no data", &cats);
 	 */
-	Rast_write_raster_cats(slope_name, &cats);
+	Rast_write_cats(slope_name, &cats);
 
 	/* writing history file */
 	Rast_short_history(slope_name, "raster", &hist);
@@ -1253,8 +1253,8 @@ int r_slope_aspect(int argc, char *argv[])
 	    Rast_round_fp_map(pcurv_name, G_mapset());
 
 	Rast_read_cats(pcurv_name, G_mapset(), &cats);
-	Rast_set_cats_title("profile curvature", &cats);
-	Rast_set_cat((CELL) 0, "no profile curve", &cats);
+	Rast_set_c_cats_title("profile curvature", &cats);
+	Rast_set_c_cat((CELL) 0, "no profile curve", &cats);
 
 	/* writing history file */
 	Rast_short_history(pcurv_name, "raster", &hist);
@@ -1279,8 +1279,8 @@ int r_slope_aspect(int argc, char *argv[])
 	    Rast_round_fp_map(tcurv_name, G_mapset());
 
 	Rast_read_cats(tcurv_name, G_mapset(), &cats);
-	Rast_set_cats_title("tangential curvature", &cats);
-	Rast_set_cat((CELL) 0, "no tangential curve", &cats);
+	Rast_set_c_cats_title("tangential curvature", &cats);
+	Rast_set_c_cat((CELL) 0, "no tangential curve", &cats);
 
 	/* writing history file */
 	Rast_short_history(tcurv_name, "raster", &hist);
@@ -1303,8 +1303,8 @@ int r_slope_aspect(int argc, char *argv[])
 	    Rast_round_fp_map(dx_name, G_mapset());
 
 	Rast_read_cats(dx_name, G_mapset(), &cats);
-	Rast_set_cats_title("E-W slope", &cats);
-	Rast_set_cat((CELL) 0, "no E-W slope", &cats);
+	Rast_set_c_cats_title("E-W slope", &cats);
+	Rast_set_c_cat((CELL) 0, "no E-W slope", &cats);
 
 	/* writing history file */
 	Rast_short_history(dx_name, "raster", &hist);
@@ -1327,8 +1327,8 @@ int r_slope_aspect(int argc, char *argv[])
 	    Rast_round_fp_map(dy_name, G_mapset());
 
 	Rast_read_cats(dy_name, G_mapset(), &cats);
-	Rast_set_cats_title("N-S slope", &cats);
-	Rast_set_cat((CELL) 0, "no N-S slope", &cats);
+	Rast_set_c_cats_title("N-S slope", &cats);
+	Rast_set_c_cat((CELL) 0, "no N-S slope", &cats);
 
 	/* writing history file */
 	Rast_short_history(dy_name, "raster", &hist);
@@ -1351,8 +1351,8 @@ int r_slope_aspect(int argc, char *argv[])
 	    Rast_round_fp_map(dxx_name, G_mapset());
 
 	Rast_read_cats(dxx_name, G_mapset(), &cats);
-	Rast_set_cats_title("DXX", &cats);
-	Rast_set_cat((CELL) 0, "DXX", &cats);
+	Rast_set_c_cats_title("DXX", &cats);
+	Rast_set_c_cat((CELL) 0, "DXX", &cats);
 
 	/* writing history file */
 	Rast_short_history(dxx_name, "raster", &hist);
@@ -1375,8 +1375,8 @@ int r_slope_aspect(int argc, char *argv[])
 	    Rast_round_fp_map(dyy_name, G_mapset());
 
 	Rast_read_cats(dyy_name, G_mapset(), &cats);
-	Rast_set_cats_title("DYY", &cats);
-	Rast_set_cat((CELL) 0, "DYY", &cats);
+	Rast_set_c_cats_title("DYY", &cats);
+	Rast_set_c_cat((CELL) 0, "DYY", &cats);
 
 	/* writing history file */
 	Rast_short_history(dyy_name, "raster", &hist);
@@ -1399,8 +1399,8 @@ int r_slope_aspect(int argc, char *argv[])
 	    Rast_round_fp_map(dxy_name, G_mapset());
 
 	Rast_read_cats(dxy_name, G_mapset(), &cats);
-	Rast_set_cats_title("DXY", &cats);
-	Rast_set_cat((CELL) 0, "DXY", &cats);
+	Rast_set_c_cats_title("DXY", &cats);
+	Rast_set_c_cat((CELL) 0, "DXY", &cats);
 
 	/* writing history file */
 	Rast_short_history(dxy_name, "raster", &hist);

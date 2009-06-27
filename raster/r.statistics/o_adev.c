@@ -54,7 +54,7 @@ o_adev(const char *basemap, const char *covermap, const char *outputmap, int use
 	}
 
 	if (usecats)
-	    sscanf(Rast_get_cat((CELL) covercat, cats), "%lf", &x);
+	    sscanf(Rast_get_c_cat((CELL *) &covercat, cats), "%lf", &x);
 	else
 	    x = covercat;
 

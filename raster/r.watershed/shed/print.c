@@ -67,7 +67,7 @@ int print_output(OUTPUT * output)
 	    do_cat = &(output->maps[b].basins[c].first_cat);
 	    while ((output->maps[b].do_cats != 0) && do_cat) {
 		cat_name =
-		    Rast_get_cat(do_cat->cat_val, &(output->maps[b].cats));
+		    Rast_get_c_cat(&(do_cat->cat_val), &(output->maps[b].cats));
 		switch (output->type_area) {
 		case 1:
 		    sprintf(area, "%.3f acres",

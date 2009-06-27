@@ -83,8 +83,8 @@ int main(int argc, char *argv[])
     colr_ok = Rast_read_colors(name, "", &colr) > 0;
     cats_ok = Rast_read_cats(name, "", &cats) >= 0;
     if (cats_ok) {
-	Rast_unmark_raster_cats(&cats);
-	Rast_init_cats((CELL) 0, Rast_get_cats_title(&cats), &newcats);
+	Rast_unmark_cats(&cats);
+	Rast_init_cats(Rast_get_cats_title(&cats), &newcats);
     }
 
     infd = Rast_open_cell_old(name, "");
@@ -122,7 +122,7 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Error reading row %d"), row);
 	if (Rast_put_raster_row(outfd, rast, out_type) < 0)
 	    G_fatal_error(_("Error writing row %d"), row);
-	Rast_mark_raster_cats(rast, ncols, &cats, data_type);
+	Rast_mark_cats(rast, ncols, &cats, data_type);
     }
 
     G_percent(row, nrows, 2);
@@ -133,7 +133,7 @@ int main(int argc, char *argv[])
 
     Rast_close_cell(outfd);
 
-    Rast_rewind_raster_cats(&cats);
+    Rast_rewind_cats(&cats);
 
     if (cats_ok) {
 	long count;
@@ -143,10 +143,10 @@ int main(int argc, char *argv[])
 	rast2 = G_incr_void_ptr(rast, Rast_cell_size(data_type));
 
 	G_message(_("Creating new cats file..."));
-	while (Rast_get_next_marked_raster_cat(&cats,
+	while (Rast_get_next_marked_cat(&cats,
 					    rast1, rast2, &count, data_type))
-	    Rast_set_raster_cat(rast1, rast2,
-			     Rast_get_raster_cat(rast1, &cats, data_type),
+	    Rast_set_cat(rast1, rast2,
+			     Rast_get_cat(rast1, &cats, data_type),
 			     &newcats, data_type);
 
 	Rast_write_cats(result, &newcats);

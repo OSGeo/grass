@@ -21,8 +21,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/raster.h>
 #include <grass/glocale.h>
-
 
 #define MAX(a, b)	((a) > (b) ? (a) : (b))
 
@@ -194,7 +194,7 @@ int main(int argc, char **argv)
 
     if (Rast_read_cats(in_name, "", &cats) == -1) {
 	G_warning(_("Error reading category file for <%s>"), in_name);
-	Rast_init_cats(0, "", &cats);
+	Rast_init_cats("", &cats);
     }
 
     if (Rast_read_colors(in_name, "", &colr) == -1) {
@@ -205,10 +205,10 @@ int main(int argc, char **argv)
 	colrfile = 1;
 
     if (opt.old->answer && oldval >= 0)
-	Rast_set_cat(oldval, "original cells", &cats);
+	Rast_set_c_cat(&oldval, &oldval, "original cells", &cats);
 
     if (opt.new->answer)
-	Rast_set_cat(newval, "grown cells", &cats);
+	Rast_set_c_cat(&newval, &newval,"grown cells", &cats);
 
     in_rows = G_malloc((size * 2 + 1) * sizeof(DCELL *));
 

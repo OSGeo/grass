@@ -187,7 +187,7 @@ int pie(struct stat_list *dist_stats,	/* list of distribution statistics */
 		draw = YES;
 		if (is_fp) {
 		    if (cat_ranges)
-			Rast_get_ith_d_raster_cat(&cats, (CELL) i, &dmin, &dmax);
+			Rast_get_ith_d_cat(&cats, (CELL) i, &dmin, &dmax);
 		    else {
 			dmin = range_dmin + i * (range_dmax - range_dmin) / nsteps;
 			dmax = range_dmin + (i + 1) * (range_dmax - range_dmin) / nsteps;
@@ -227,7 +227,7 @@ int pie(struct stat_list *dist_stats,	/* list of distribution statistics */
 		    draw = YES;
 		    if (is_fp) {
 			if (cat_ranges)
-			    Rast_get_ith_d_raster_cat(&cats, (CELL) i, &dmin, &dmax);
+			    Rast_get_ith_d_cat(&cats, (CELL) i, &dmin, &dmax);
 			else {
 			    dmin = range_dmin + i * (range_dmax - range_dmin) / nsteps;
 			    dmax = range_dmin + (i + 1) * (range_dmax - range_dmin) / nsteps;

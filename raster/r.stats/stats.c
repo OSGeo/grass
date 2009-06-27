@@ -242,7 +242,7 @@ int print_cell_stats(char *fmt, int with_percents, int with_counts,
 	if (with_percents)
 	    fprintf(stdout, "%s0.00%%", fs);
 	if (with_labels)
-	    fprintf(stdout, "%s%s", fs, Rast_get_cat(null_cell, &labels[i]));
+	    fprintf(stdout, "%s%s", fs, Rast_get_c_cat(&null_cell, &labels[i]));
 	fprintf(stdout, "\n");
     }
     else {
@@ -271,14 +271,14 @@ int print_cell_stats(char *fmt, int with_percents, int with_counts,
 		    fprintf(stdout, "%s%s", i ? fs : "", no_data_str);
 		    if (with_labels && !(raw_output && is_fp[i]))
 			fprintf(stdout, "%s%s", fs,
-				Rast_get_cat(null_cell, &labels[i]));
+				Rast_get_c_cat(&null_cell, &labels[i]));
 		}
 		else if (raw_output || !is_fp[i] || as_int) {
 		    fprintf(stdout, "%s%ld", i ? fs : "",
 			    (long)node->values[i]);
 		    if (with_labels && !is_fp[i])
 			fprintf(stdout, "%s%s", fs,
-				Rast_get_cat((CELL) node->values[i],
+				Rast_get_c_cat((CELL*) &(node->values[i]),
 					  &labels[i]));
 		}
 		else {		/* find out which floating point range to print */
@@ -316,8 +316,8 @@ int print_cell_stats(char *fmt, int with_percents, int with_counts,
 				    labels[i].labels[node->values[i]]);
 			else
 			    fprintf(stdout, "%sfrom %s to %s", fs,
-				    Rast_get_d_raster_cat(&dLow, &labels[i]),
-				    Rast_get_d_raster_cat(&dHigh, &labels[i]));
+				    Rast_get_d_cat(&dLow, &labels[i]),
+				    Rast_get_d_cat(&dHigh, &labels[i]));
 		    }
 		}
 

@@ -216,7 +216,7 @@ int bar(struct stat_list *dist_stats,	/* list of distribution statistics */
 		/* draw the bar as a box */
 		if (!Rast_is_c_null_value(&bar_color) && is_fp) {
 		    if (cat_ranges)
-			Rast_get_ith_d_raster_cat(&cats, bar_color,
+			Rast_get_ith_d_cat(&cats, bar_color,
 					       &dmin, &dmax);
 		    else {
 			dmin = range_dmin + i * (range_dmax - range_dmin) / nsteps;
@@ -269,7 +269,7 @@ int bar(struct stat_list *dist_stats,	/* list of distribution statistics */
 		/* draw the bar as a line */
 		if (is_fp) {
 		    if (cat_ranges)
-			Rast_get_ith_d_raster_cat(&cats, bar_color,
+			Rast_get_ith_d_cat(&cats, bar_color,
 					       &dmin, &dmax);
 		    else {
 			dmin = range_dmin + i * (range_dmax - range_dmin) / nsteps;

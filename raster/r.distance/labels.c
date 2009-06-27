@@ -30,7 +30,5 @@ void read_labels(struct Map *map)
 
 char *get_label(struct Map *map, CELL cat)
 {
-    char *Rast_get_cat();
-
-    return Rast_get_cat(cat, &map->labels);
+    return Rast_get_c_cat(&cat, &map->labels);
 }

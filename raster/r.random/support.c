@@ -24,15 +24,15 @@ int make_support(struct rr_state *theState, int percent, double percentage)
 	inraster = theState->inraster;
 	nulls = theState->nulls;
     }
-    if (Rast_read_raster_cats(inraster, "", &cats) >= 0) {
+    if (Rast_read_cats(inraster, "", &cats) >= 0) {
 	sprintf(title, "Random points on <%s>", inraster);
 	Rast_set_cats_title(title, &cats);
 	if (theState->use_nulls)
-	    Rast_set_raster_cat(nulls.data.v,
+	    Rast_set_cat(nulls.data.v,
 			     nulls.data.v,
 			     "Points with NULL values in original",
 			     &cats, nulls.type);
-	Rast_write_raster_cats(theState->outraster, &cats);
+	Rast_write_cats(theState->outraster, &cats);
     }
 
     /* write history for output raster */

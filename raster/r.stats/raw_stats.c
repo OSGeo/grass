@@ -82,14 +82,14 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels)
 		    fprintf(stdout, "%s%s", i ? fs : "", no_data_str);
 		    if (with_labels)
 			fprintf(stdout, "%s%s", fs,
-				Rast_get_cat(null_cell, &labels[i]));
+				Rast_get_c_cat(&null_cell, &labels[i]));
 		}
 		else if (map_type[i] == CELL_TYPE) {
 		    fprintf(stdout, "%s%ld", i ? fs : "",
 			    (long)*((CELL *) rastp[i]));
 		    if (with_labels && !is_fp[i])
 			fprintf(stdout, "%s%s", fs,
-				Rast_get_cat(*((CELL *) rastp[i]), &labels[i]));
+				Rast_get_c_cat((CELL *) rastp[i], &labels[i]));
 		}
 		else {		/* floating point cell */
 
@@ -99,7 +99,7 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels)
 		    fprintf(stdout, "%s%s", i ? fs : "", str1);
 		    if (with_labels)
 			fprintf(stdout, "%s%s", fs,
-				Rast_get_d_raster_cat((DCELL *) rastp[i],
+				Rast_get_d_cat((DCELL *) rastp[i],
 						   &labels[i]));
 		}
 		rastp[i] =

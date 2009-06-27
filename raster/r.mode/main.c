@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
 	    max = value;
 	}
 	if (basecat != catb) {
-	    write_reclass(reclass, catb, catc, Rast_get_cat(catc, &cover_cats));
+	  write_reclass(reclass, catb, catc, Rast_get_c_cat((CELL *) &catc, &cover_cats));
 	    catb = basecat;
 	    catc = covercat;
 	    max = value;
@@ -118,7 +118,7 @@ int main(int argc, char *argv[])
     if (first) {
 	catb = catc = 0;
     }
-    write_reclass(reclass, catb, catc, Rast_get_cat(catc, &cover_cats));
+    write_reclass(reclass, catb, catc, Rast_get_c_cat((CELL *) &catc, &cover_cats));
 
     pclose(stats);
     pclose(reclass);

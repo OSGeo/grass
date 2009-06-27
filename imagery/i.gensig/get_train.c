@@ -48,7 +48,7 @@ int get_training_classes(struct files *files, struct Signature *S)
 	    S->sig[n].status = 1;
 	    S->sig[n].npoints = count;
 	    strncpy(S->sig[n].desc,
-		      Rast_get_cat(cat, &files->training_labels),
+		      Rast_get_c_cat(&cat, &files->training_labels),
 		      sizeof(S->sig[n].desc)
 		);
 	    n++;

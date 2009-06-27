@@ -21,6 +21,7 @@
 #include <grass/gis.h>
 #include "pixel.h"
 #include <grass/config.h>
+#include <grass/raster.h>
 #include "local_proto.h"
 
 
