@@ -1,6 +1,6 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.db.renamecol</em> renames a column in the attribute table connected
+<em>v.db.renamecolumn</em> renames a column in the attribute table connected
 to a given vector map. It automatically checks the connection for the specified
 layer.
 
@@ -27,7 +27,7 @@ column to an intermediary name, then rename the intermediary to the final name.
 Renaming a column:<br>
 <div class="code"><pre>
 v.info -c myroads
-v.db.renamecol myroads column=label,roadtype
+v.db.renamecolumn myroads column=label,roadtype
 v.info -c myroads
 </pre></div>
 

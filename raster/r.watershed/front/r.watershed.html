@@ -413,7 +413,7 @@ Create watershed basins map and convert to a vector polygon map
   r.watershed elev=elevation.dem basin=rwater.basin thresh=15000
   r.to.vect -s in=rwater.basin out=rwater_basins feature=area
   v.db.dropcolumn map=rwater_basins column=label
-  v.db.renamecol map=rwater_basins column=value,catchment
+  v.db.renamecolumn map=rwater_basins column=value,catchment
 </pre></div>
 <br>
 

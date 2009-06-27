@@ -2626,7 +2626,7 @@
 	      <help>Renames a column in the attribute table connected to a given vector map.</help>
 	      <keywords>vector,database,attribute table</keywords>
               <handler>self.OnMenuCmd</handler>
-	      <command>v.db.renamecol</command>
+	      <command>v.db.renamecolumn</command>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
