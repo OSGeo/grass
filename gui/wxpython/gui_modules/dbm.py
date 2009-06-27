@@ -1494,7 +1494,7 @@ class AttributeManager(wx.Frame):
                 else:
                     list.SetItemText(item, nameTo)
 
-                    self.listOfCommands.append(('v.db.renamecol',
+                    self.listOfCommands.append(('v.db.renamecolumn',
                                                 { 'map'    : self.vectorName,
                                                   'layer'  : self.layer,
                                                   'column' : '%s,%s' % (name, nameTo) }

@@ -2,7 +2,7 @@
 
 ############################################################################
 #
-# MODULE:       v.db.renamecol
+# MODULE:       v.db.renamecolumn
 # AUTHOR(S):    Markus Neteler
 #               Converted to Python by Glynn Clements
 # PURPOSE:      interface to db.execute to drop a column from the 

@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ../..
 
-PGM = v.db.renamecol
+PGM = v.db.renamecolumn
 
 include $(MODULE_TOPDIR)/include/Make/Script.make
 
