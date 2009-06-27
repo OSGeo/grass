@@ -21,7 +21,7 @@ static int G3d_closeNew(G3D_Map * map)
     G3d_removeColor(map->fileName);
 
     /* create empty cats file */
-    Rast_init_raster_cats(NULL, &cats);
+    Rast_init_cats(NULL, &cats);
     G3d_writeCats(map->fileName, &cats);
     Rast_free_cats(&cats);
 

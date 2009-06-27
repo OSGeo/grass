@@ -42,7 +42,7 @@ o_median(const char *basemap, const char *covermap, const char *outputmap, int u
 	}
 	if (basecat != catb) {
 	    catc = median(&stats);
-	    write_reclass(reclass_fd, catb, catc, Rast_get_cat(catc, cats),
+	    write_reclass(reclass_fd, catb, catc, Rast_get_c_cat((CELL *) &catc, cats),
 			  usecats);
 	    catb = basecat;
 	    stats.n = 0;
@@ -60,7 +60,7 @@ o_median(const char *basemap, const char *covermap, const char *outputmap, int u
     }
     if (!first) {
 	catc = median(&stats);
-	write_reclass(reclass_fd, catb, catc, Rast_get_cat(catc, cats), usecats);
+	write_reclass(reclass_fd, catb, catc, Rast_get_c_cat((CELL *) &catc, cats), usecats);
     }
 
     pclose(stats_fd);

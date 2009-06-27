@@ -21,57 +21,47 @@ void Rast_unsuppress_masking(void);
 
 /* cats.c */
 int Rast_read_cats(const char *, const char *, struct Categories *);
-int Rast_read_raster_cats(const char *, const char *, struct Categories *);
 int Rast_read_vector_cats(const char *, const char *, struct Categories *);
-CELL Rast_number_of_cats(const char *, const char *);
+CELL Rast_get_max_c_cat(const char *, const char *);
 char *Rast_get_cats_title(const struct Categories *);
-char *Rast_get_raster_cats_title(const struct Categories *);
-char *Rast_get_cat(CELL, struct Categories *);
-char *Rast_get_c_raster_cat(CELL *, struct Categories *);
-char *Rast_get_f_raster_cat(FCELL *, struct Categories *);
-char *Rast_get_d_raster_cat(DCELL *, struct Categories *);
-char *Rast_get_raster_cat(void *, struct Categories *, RASTER_MAP_TYPE);
-void Rast_unmark_raster_cats(struct Categories *);
-void Rast_mark_c_raster_cats(const CELL *, int, struct Categories *);
-void Rast_mark_f_raster_cats(const FCELL *, int, struct Categories *);
-void Rast_mark_d_raster_cats(const DCELL *, int, struct Categories *);
-int Rast_mark_raster_cats(const void *, int, struct Categories *, RASTER_MAP_TYPE);
-void Rast_rewind_raster_cats(struct Categories *);
-char *Rast_get_next_marked_d_raster_cat(struct Categories *, DCELL *, DCELL *,
+char *Rast_get_c_cat(CELL *, struct Categories *);
+char *Rast_get_f_cat(FCELL *, struct Categories *);
+char *Rast_get_d_cat(DCELL *, struct Categories *);
+char *Rast_get_cat(void *, struct Categories *, RASTER_MAP_TYPE);
+void Rast_unmark_cats(struct Categories *);
+void Rast_mark_c_cats(const CELL *, int, struct Categories *);
+void Rast_mark_f_cats(const FCELL *, int, struct Categories *);
+void Rast_mark_d_cats(const DCELL *, int, struct Categories *);
+int Rast_mark_cats(const void *, int, struct Categories *, RASTER_MAP_TYPE);
+void Rast_rewind_cats(struct Categories *);
+char *Rast_get_next_marked_d_cat(struct Categories *, DCELL *, DCELL *,
+				 long *);
+char *Rast_get_next_marked_c_cat(struct Categories *, CELL *, CELL *,
+				 long *);
+char *Rast_get_next_marked_f_cat(struct Categories *, FCELL *, FCELL *,
 				     long *);
-char *Rast_get_next_marked_c_raster_cat(struct Categories *, CELL *, CELL *,
-				     long *);
-char *Rast_get_next_marked_f_raster_cat(struct Categories *, FCELL *, FCELL *,
-				     long *);
-char *Rast_get_next_marked_raster_cat(struct Categories *, void *, void *,
-				   long *, RASTER_MAP_TYPE);
-int Rast_set_cat(CELL, const char *, struct Categories *);
-int Rast_set_c_raster_cat(const CELL *, const CELL *, const char *, struct Categories *);
-int Rast_set_f_raster_cat(const FCELL *, const FCELL *, const char *, struct Categories *);
-int Rast_set_d_raster_cat(const DCELL *, const DCELL *, const char *, struct Categories *);
-int Rast_set_raster_cat(const void *, const void *, const char *, struct Categories *,
-		     RASTER_MAP_TYPE);
+char *Rast_get_next_marked_cat(struct Categories *, void *, void *,
+			       long *, RASTER_MAP_TYPE);
+int Rast_set_c_cat(const CELL *, const CELL *, const char *, struct Categories *);
+int Rast_set_f_cat(const FCELL *, const FCELL *, const char *, struct Categories *);
+int Rast_set_d_cat(const DCELL *, const DCELL *, const char *, struct Categories *);
+int Rast_set_cat(const void *, const void *, const char *, struct Categories *,
+		 RASTER_MAP_TYPE);
 int Rast_write_cats(const char *, struct Categories *);
-int Rast_write_raster_cats(const char *, struct Categories *);
 int Rast_write_vector_cats(const char *, struct Categories *);
-char *Rast_get_ith_d_raster_cat(const struct Categories *, int, DCELL *,
-			     DCELL *);
-char *Rast_get_ith_f_raster_cat(const struct Categories *, int, void *, void *);
-char *Rast_get_ith_c_raster_cat(const struct Categories *, int, void *, void *);
-char *Rast_get_ith_raster_cat(const struct Categories *, int, void *, void *,
-			   RASTER_MAP_TYPE);
-void Rast_init_cats(CELL, const char *, struct Categories *);
-void Rast_init_raster_cats(const char *, struct Categories *);
+char *Rast_get_ith_d_cat(const struct Categories *, int, DCELL *,
+			 DCELL *);
+char *Rast_get_ith_f_cat(const struct Categories *, int, void *, void *);
+char *Rast_get_ith_c_cat(const struct Categories *, int, void *, void *);
+char *Rast_get_ith_cat(const struct Categories *, int, void *, void *,
+		       RASTER_MAP_TYPE);
+void Rast_init_cats(const char *, struct Categories *);
 void Rast_set_cats_title(const char *, struct Categories *);
-void Rast_set_raster_cats_title(const char *, struct Categories *);
 void Rast_set_cats_fmt(const char *, double, double, double, double,
-		   struct Categories *);
-void Rast_set_raster_cats_fmt(const char *, double, double, double, double,
 			   struct Categories *);
 void Rast_free_cats(struct Categories *);
-void Rast_free_raster_cats(struct Categories *);
-void Rast_copy_raster_cats(struct Categories *, const struct Categories *);
-int Rast_number_of_raster_cats(struct Categories *);
+void Rast_copy_cats(struct Categories *, const struct Categories *);
+int Rast_number_of_cats(struct Categories *);
 int Rast_sort_cats(struct Categories *);
 
 /* cell_stats.c */

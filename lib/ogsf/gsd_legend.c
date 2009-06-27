@@ -403,7 +403,7 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
 		if (is_fp) {
 		    tdcell = discrete ? Listcats[k] : labvals[k];
 		    if (cat_labs) {
-			cstr = Rast_get_d_raster_cat(&tdcell, &cats);
+			cstr = Rast_get_d_cat(&tdcell, &cats);
 		    }
 		    if (cat_labs && !cat_vals) {
 			sprintf(buff, "%s", cstr);
@@ -424,10 +424,10 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
 		    tcell = discrete ? Listnum ?
 			Listcats[k] : min + k : labvals[k];
 		    if (cat_labs && !cat_vals)
-			sprintf(buff, "%s", Rast_get_cat(tcell, &cats));
+			sprintf(buff, "%s", Rast_get_c_cat(&tcell, &cats));
 		    else {
 			if (cat_labs && cat_vals) {
-			    cstr = Rast_get_cat(tcell, &cats);
+			    cstr = Rast_get_c_cat(&tcell, &cats);
 			    if (cstr[0])
 				sprintf(buff, "%*d) %s", iprec, tcell, cstr);
 			    else
@@ -635,9 +635,9 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
 		    labpos = 1. - labpos;
 		if (cat_labs) {
 		    if (!is_fp)
-			cstr = Rast_get_cat(tcell, &cats);
+			cstr = Rast_get_c_cat(&tcell, &cats);
 		    else
-			cstr = Rast_get_d_raster_cat(&tdcell, &cats);
+			cstr = Rast_get_d_cat(&tdcell, &cats);
 		}
 		if (cat_labs && !cat_vals)
 		    sprintf(buff, "%s", cstr);

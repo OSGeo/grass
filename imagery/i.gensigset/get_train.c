@@ -48,7 +48,7 @@ int get_training_classes(struct parms *parms,
     while (Rast_next_cell_stat(&cat, &count, &cell_stats)) {
 	if (count > 1) {
 	    Sig = I_NewClassSig(S);
-	    I_SetClassTitle(Sig, Rast_get_cat(cat, &files->training_labels));
+	    I_SetClassTitle(Sig, Rast_get_c_cat(&cat, &files->training_labels));
 	    Sig->classnum = cat;
 	    /* initialize this class with maxsubclasses (by allocating them) */
 	    for (i = 0; i < parms->maxsubclasses; i++)

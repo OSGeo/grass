@@ -38,6 +38,7 @@ int class_fd, reject_fd;
 char *class_name, *reject_name;
 double *B;
 double *P;
+CELL cat;
 
 int main(int argc, char *argv[])
 {
@@ -123,39 +124,30 @@ int main(int argc, char *argv[])
     if (reject_fd > 0)
 	Rast_close_cell(reject_fd);
 
-    Rast_init_cats((CELL) S.nsigs, "Maximum Likelihood Classification", &cats);
+    Rast_init_cats("Maximum Likelihood Classification", &cats);
     for (i = 0; i < S.nsigs; i++) {
-	if (*S.sig[i].desc)
-	    Rast_set_cat((CELL) (i + 1), S.sig[i].desc, &cats);
+	if (*S.sig[i].desc) {
+	    cat = i + 1;
+	    Rast_set_c_cat(&cat, &cat, S.sig[i].desc, &cats);
+	}
     }
     Rast_write_cats(class_name, &cats);
     Rast_free_cats(&cats);
 
     if (reject_fd > 0) {
 	char title[100];
-
+	char *label[] = { "no data", "0.1%", "0.5%",
+			  "1%", "2%", "5%", "10%",
+			  "20%", "30%", "50%", "70%",
+			  "80%", "90%", "95%", "98%",
+			  "99%", "100%", "bad" };
 	sprintf(title, "Rejection Probability for %s", class_name);
 
-	Rast_init_cats((CELL) 17, title, &cats);
+	Rast_init_cats(title, &cats);
 	Rast_set_cats_title(title, &cats);
-	Rast_set_cat((CELL) 0, "no data", &cats);
-	Rast_set_cat((CELL) 1, "0.1%", &cats);
-	Rast_set_cat((CELL) 2, "0.5%", &cats);
-	Rast_set_cat((CELL) 3, "1%", &cats);
-	Rast_set_cat((CELL) 4, "2%", &cats);
-	Rast_set_cat((CELL) 5, "5%", &cats);
-	Rast_set_cat((CELL) 6, "10%", &cats);
-	Rast_set_cat((CELL) 7, "20%", &cats);
-	Rast_set_cat((CELL) 8, "30%", &cats);
-	Rast_set_cat((CELL) 9, "50%", &cats);
-	Rast_set_cat((CELL) 10, "70%", &cats);
-	Rast_set_cat((CELL) 11, "80%", &cats);
-	Rast_set_cat((CELL) 12, "90%", &cats);
-	Rast_set_cat((CELL) 13, "95%", &cats);
-	Rast_set_cat((CELL) 14, "98%", &cats);
-	Rast_set_cat((CELL) 15, "99%", &cats);
-	Rast_set_cat((CELL) 16, "100%", &cats);
-	Rast_set_cat((CELL) 17, "bad", &cats);
+	for(i = 0; i < (int) (sizeof(label) / sizeof (char *)); i++) {
+	    Rast_set_c_cat(&i, &i, label[i], &cats);
+	}
 	Rast_write_cats(reject_name, &cats);
 	Rast_free_cats(&cats);
 

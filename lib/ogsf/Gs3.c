@@ -849,11 +849,11 @@ int Gs_get_cat_label(const char *filename, int drow, int dcol, char *catstr)
 	    }
 	    else if (Rast_is_c_null_value(&buf[dcol])) {
 		sprintf(catstr, "(NULL) %s",
-			Rast_get_c_raster_cat(&buf[dcol], &cats));
+			Rast_get_c_cat(&buf[dcol], &cats));
 	    }
 	    else {
 		sprintf(catstr, "(%d) %s", buf[dcol],
-			Rast_get_c_raster_cat(&buf[dcol], &cats));
+			Rast_get_c_cat(&buf[dcol], &cats));
 	    }
 
 	    G_free(buf);
@@ -868,11 +868,11 @@ int Gs_get_cat_label(const char *filename, int drow, int dcol, char *catstr)
 	    }
 	    else if (Rast_is_d_null_value(&dbuf[dcol])) {
 		sprintf(catstr, "(NULL) %s",
-			Rast_get_d_raster_cat(&dbuf[dcol], &cats));
+			Rast_get_d_cat(&dbuf[dcol], &cats));
 	    }
 	    else {
 		sprintf(catstr, "(%g) %s", dbuf[dcol],
-			Rast_get_d_raster_cat(&dbuf[dcol], &cats));
+			Rast_get_d_cat(&dbuf[dcol], &cats));
 	    }
 
 	    G_free(dbuf);

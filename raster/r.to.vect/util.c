@@ -141,7 +141,7 @@ void insert_value(int cat, int val, double dval)
     if (has_cats) {
 	char *lab;
 
-	lab = Rast_get_cat(val, &RastCats);	/*cats are loaded only for CELL type */
+	lab = Rast_get_c_cat(&val, &RastCats);	/*cats are loaded only for CELL type */
 
 	db_set_string(&label, lab);
 	db_double_quote_string(&label);

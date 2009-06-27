@@ -23,27 +23,27 @@
 #define RAD2DEG 57.29578
 #define DEG2RAD 0.017453293
 
-#define TINY 1.0e-20;
+#define TINY 1.0e-20
 
 /* Bug? start with 1 as G_set_cats() doesn't accept 0 category */
-#define FLAT ((CELL)1)
-#define PIT ((CELL)2)
-#define CHANNEL ((CELL)3)
-#define PASS ((CELL)4)
-#define RIDGE ((CELL)5)
-#define PEAK ((CELL)6)
+#define FLAT    1
+#define PIT     2
+#define CHANNEL 3
+#define PASS    4
+#define RIDGE   5
+#define PEAK    6
 
-#define NUM_CATS ((CELL)7)
+#define NUM_CATS 7
 
-#define ELEV   1
-#define SLOPE  2
-#define ASPECT 3
-#define PROFC  4
-#define PLANC  5
-#define LONGC  6
-#define CROSC  7
-#define MINIC  8
-#define MAXIC  9
+#define ELEV    1
+#define SLOPE   2
+#define ASPECT  3
+#define PROFC   4
+#define PLANC   5
+#define LONGC   6
+#define CROSC   7
+#define MINIC   8
+#define MAXIC   9
 #define FEATURE 10
 
 /* The six quadratic coefficients are stored in the array coeff */

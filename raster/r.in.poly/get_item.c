@@ -66,7 +66,7 @@ int get_item(FILE * fd, int *type, long *cat, double **x, double **y,
 	    /* probably change this as G_getl2() doesn't store the new line (?) */
 	    if (sscanf(buf + 1, "%ld%[^\n]", cat, lbl) == 2) {
 		G_strip(lbl);
-		Rast_set_cat((CELL) * cat, lbl, labels);
+		Rast_set_c_cat((CELL*) cat, (CELL *) cat, lbl, labels);
 	    }
 	    continue;
 	}

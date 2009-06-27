@@ -61,7 +61,7 @@ int what(int once, int terse, int colrow, char *fs, int width, int mwidth)
 			 "ERROR reading raster map", terse, fs, map_type[i]);
 	    else if (map_type[i] == CELL_TYPE) {
 		show_cat(width, mwidth, name[i], mapset[i], buf[col],
-			 Rast_get_c_raster_cat(&buf[col], &cats[i]), terse, fs,
+			 Rast_get_c_cat(&buf[col], &cats[i]), terse, fs,
 			 map_type[i]);
 		continue;
 	    }
@@ -79,7 +79,7 @@ int what(int once, int terse, int colrow, char *fs, int width, int mwidth)
 			  "ERROR reading fcell file", terse, fs);
 	    else
 		show_dval(width, mwidth, name[i], mapset[i], dbuf[col],
-			  Rast_get_d_raster_cat(&dbuf[col], &cats[i]), terse,
+			  Rast_get_d_cat(&dbuf[col], &cats[i]), terse,
 			  fs);
 	}
     }

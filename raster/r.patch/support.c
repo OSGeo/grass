@@ -50,7 +50,7 @@ int support(char **names,
 		if (n && !Rast_find_cell_stat(n, &count, statf)) {
 		    if (do_cats) {
 			Rast_update_cell_stats(&n, 1, statf);
-			Rast_set_cat(n, Rast_get_cat(n, &pcats), cats);
+			Rast_set_c_cat(&n, &n, Rast_get_c_cat((CELL *) &n, &pcats), cats);
 		    }
 		    if (do_colr) {
 			Rast_get_color(n, &red, &grn, &blu, &pcolr);

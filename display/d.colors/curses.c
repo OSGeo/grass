@@ -85,18 +85,18 @@ int Write_cats(struct Categories *pcats, int current_cat)
 	if (at_cat == current_cat) {
 	    if (!at_cat)
 		sprintf(buffer, "-> %3s %s", "N",
-			Rast_get_c_raster_cat(&tmp, pcats));
+			Rast_get_c_cat(&tmp, pcats));
 	    else
 		sprintf(buffer, "-> %3d %s", at_cat - 1,
-			Rast_get_cat(at_cat - 1, pcats));
+			Rast_get_c_cat(at_cat - 1, pcats));
 	}
 	else {
 	    if (!at_cat)
 		sprintf(buffer, "   %3s %s", "N",
-			Rast_get_c_raster_cat(&tmp, pcats));
+			Rast_get_c_cat(&tmp, pcats));
 	    else
 		sprintf(buffer, "   %3d %s", at_cat - 1,
-			Rast_get_cat(at_cat - 1, pcats));
+			Rast_get_c_cat(at_cat - 1, pcats));
 	}
 	wmove(CAT_WIN, at_line++, 1);
 	waddstr(CAT_WIN, buffer);

@@ -44,7 +44,7 @@ char *get_label(long cat, struct Categories *labels)
 
     for (;;) {
 	fprintf(stdout, _("Enter a label for category %ld [%s] "),
-		cat, Rast_get_cat((CELL) cat, labels));
+		cat, Rast_get_c_cat((CELL *) &cat, labels));
 	if (!G_gets(buffer))
 	    continue;;
 	G_strip(buffer);
@@ -64,10 +64,10 @@ int get_category(FILE * fd, char *type, struct Categories *labels)
 	cat = get_cat(type);
 	lbl = get_label(cat, labels);
 	fprintf(stdout, "%ld [%s]\n", cat,
-		*lbl ? lbl : Rast_get_cat((CELL) cat, labels));
+		*lbl ? lbl : Rast_get_c_cat((CELL) cat, labels));
     } while (!G_yes(_("Look ok? "), 1));
     if (*lbl)
-	Rast_set_cat((CELL) cat, lbl, labels);
+      Rast_set_c_cat((CELL *) &cat, (CELL *) &cat, lbl, labels);
 
     fprintf(fd, "= %ld %s\n", cat, lbl);
     return (0);

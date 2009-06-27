@@ -142,7 +142,7 @@ int parse(const char *line, RULE ** rules, RULE ** tail, struct Categories *cats
 	if (*rules == NULL)
 	    *rules = *tail;
 	if (*label)
-	    Rast_set_cat(new, label, cats);
+	    Rast_set_c_cat(&new, &new, label, cats);
     }
     return count;
 }

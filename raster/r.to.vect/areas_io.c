@@ -357,7 +357,7 @@ int write_area(struct area_table *a_list,	/* list of areas */
 		db_append_string(&sql, buf);
 
 		if (has_cats) {
-		    temp_buf = Rast_get_cat(p->cat, &RastCats);
+		    temp_buf = Rast_get_c_cat(&(p->cat), &RastCats);
 
 		    db_set_string(&label, temp_buf);
 		    db_double_quote_string(&label);

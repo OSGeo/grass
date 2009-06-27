@@ -136,7 +136,7 @@ static int process(char *name, int uncompress)
     if (hist_ok)
 	Rast_write_history(name, &hist);
     if (cats_ok) {
-	cats.num = Rast_number_of_cats(name, G_mapset());
+	cats.num = Rast_get_max_c_cat(name, G_mapset());
 	Rast_write_cats(name, &cats);
 	Rast_free_cats(&cats);
     }

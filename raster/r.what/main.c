@@ -404,7 +404,7 @@ int main(int argc, char *argv[])
 		}
 		if (withcats)
 		    fprintf(stdout, "%c%s", fs,
-			    Rast_get_cat(cache[point].value[i], &cats[i]));
+			    Rast_get_c_cat(&(cache[point].value[i]), &cats[i]));
 		if (flag4->answer)
 		    fprintf(stdout, "%c%s", fs, cache[point].clr_buf[i]);
 	    }

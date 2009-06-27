@@ -116,7 +116,7 @@ DCELL Rast_get_raster_sample_nearest(int fd,
     }
 
     if (usedesc) {
-	char *buf = Rast_get_cat(maprow[col], cats);
+	char *buf = Rast_get_c_cat((CELL *) &(maprow[col]), cats);
 
 	G_squeeze(buf);
 	result = scancatlabel(buf);
@@ -194,13 +194,13 @@ DCELL Rast_get_raster_sample_bilinear(int fd,
     if (usedesc) {
 	char *buf;
 
-	G_squeeze(buf = Rast_get_cat((int)arow[col], cats));
+	G_squeeze(buf = Rast_get_c_cat((int*) &(arow[col]), cats));
 	grid[0][0] = scancatlabel(buf);
-	G_squeeze(buf = Rast_get_cat((int)arow[col + 1], cats));
+	G_squeeze(buf = Rast_get_c_cat((CELL *) &(arow[col + 1]), cats));
 	grid[0][1] = scancatlabel(buf);
-	G_squeeze(buf = Rast_get_cat((int)brow[col], cats));
+	G_squeeze(buf = Rast_get_c_cat((CELL *) &(brow[col]), cats));
 	grid[1][0] = scancatlabel(buf);
-	G_squeeze(buf = Rast_get_cat((int)brow[col + 1], cats));
+	G_squeeze(buf = Rast_get_c_cat((CELL *) &(brow[col + 1]), cats));
 	grid[1][1] = scancatlabel(buf);
     }
     else {
@@ -289,7 +289,7 @@ DCELL Rast_get_raster_sample_cubic(int fd,
 
 	for (i = 0; i < 4; i++) {
 	    for (j = 0; j < 4; j++) {
-		G_squeeze(buf = Rast_get_cat(rows[i][col + j], cats));
+		G_squeeze(buf = Rast_get_c_cat((CELL *) &(rows[i][col + j]), cats));
 		grid[i][j] = scancatlabel(buf);
 	    }
 	}

@@ -298,8 +298,9 @@ static void translate_from_cats(map * m, CELL * cell, DCELL * xcell,
 	 */
 	if (!btree_find(btree, &key, &ptr)) {
 	    values = vbuf;
+	    int cat = i + key;
 	    for (i = 0; i < NCATS; i++) {
-		if ((label = Rast_get_cat((CELL) (i + key), pcats)) == NULL
+		if ((label = Rast_get_c_cat((CELL *) &cat, pcats)) == NULL
 		    || sscanf(label, "%lf", values) != 1)
 		    SET_NULL_D(values);
 		values++;

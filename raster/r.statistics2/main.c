@@ -270,7 +270,7 @@ int main(int argc, char **argv)
 
 	    v = cover_buf[col];
 	    if (usecats)
-		sscanf(Rast_get_cat((CELL) v, &cats), "%lf", &v);
+		sscanf(Rast_get_c_cat((CELL *) &v, &cats), "%lf", &v);
 
 	    if (count)
 		count[n]++;
@@ -349,7 +349,7 @@ int main(int argc, char **argv)
 
 		v = cover_buf[col];
 		if (usecats)
-		    sscanf(Rast_get_cat((CELL) v, &cats), "%lf", &v);
+		    sscanf(Rast_get_c_cat((CELL *) &v, &cats), "%lf", &v);
 		d = v - mean[n];
 
 		if (sumu)

@@ -52,7 +52,7 @@ int G3d_writeCats(const char *name, struct Categories *cats)
 
     /* write the cat numbers:label */
     for (i = 0; i < Rast_quant_nof_rules(&cats->q); i++) {
-	descr = Rast_get_ith_d_raster_cat(cats, i, &val1, &val2);
+	descr = Rast_get_ith_d_cat(cats, i, &val1, &val2);
 	if ((cats->fmt && cats->fmt[0]) || (descr && descr[0])) {
 	    if (val1 == val2) {
 		sprintf(str1, "%.10f", val1);
@@ -104,7 +104,7 @@ read_cats(const char *name, const char *mapset, struct Categories *pcats)
 	goto error;
     G_strip(buff);
 
-    Rast_init_raster_cats(buff, pcats);
+    Rast_init_cats(buff, pcats);
     if (num >= 0)
 	pcats->num = num;
 
@@ -119,7 +119,7 @@ read_cats(const char *name, const char *mapset, struct Categories *pcats)
 	    goto error;
 	if (sscanf(buff, "%f %f %f %f", &m1, &a1, &m2, &a2) != 4)
 	    goto error;
-	Rast_set_raster_cats_fmt(fmt, m1, a1, m2, a2, pcats);
+	Rast_set_cats_fmt(fmt, m1, a1, m2, a2, pcats);
     }
 
     /* Read all category names */
@@ -130,7 +130,7 @@ read_cats(const char *name, const char *mapset, struct Categories *pcats)
 	    break;
 
 	if (old)
-	    Rast_set_cat(cat, buff, pcats);
+	    Rast_set_c_cat(&cat, &cat, buff, pcats);
 	else {
 	    *label = 0;
 	    if (sscanf(buff, "%1s", label) != 1)
@@ -141,11 +141,11 @@ read_cats(const char *name, const char *mapset, struct Categories *pcats)
 
 	    /* try to read a range of data */
 	    if (sscanf(buff, "%lf:%lf:%[^\n]", &val1, &val2, label) == 3)
-		Rast_set_raster_cat(&val1, &val2, label, pcats, DCELL_TYPE);
+		Rast_set_cat(&val1, &val2, label, pcats, DCELL_TYPE);
 	    else if (sscanf(buff, "%d:%[^\n]", &cat, label) >= 1)
-		Rast_set_raster_cat(&cat, &cat, label, pcats, CELL_TYPE);
+		Rast_set_cat(&cat, &cat, label, pcats, CELL_TYPE);
 	    else if (sscanf(buff, "%lf:%[^\n]", &val1, label) >= 1)
-		Rast_set_raster_cat(&val1, &val1, label, pcats, DCELL_TYPE);
+		Rast_set_cat(&val1, &val1, label, pcats, DCELL_TYPE);
 	    else
 		goto error;
 	}

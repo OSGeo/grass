@@ -161,13 +161,13 @@ static void set_cats(struct Categories *cats, /* const */ int *is_default,
 	for (i = 0; i < rec->num; i++)
 	    if (is_default[i]) {
 		int x = i + rec->min;
-		char *label = Rast_get_cat(x, &old_cats);
+		char *label = Rast_get_c_cat(&x, &old_cats);
 
-		Rast_set_cat(x, label, cats);
+		Rast_set_c_cat(&x, &x, label, cats);
 	    }
     }
     else if (default_rule)
-	Rast_set_cat(DEFAULT, default_label, cats);
+	Rast_set_c_cat(&DEFAULT, &DEFAULT, default_label, cats);
 }
 
 static int _reclass( /* const */ RULE * rules, struct Categories *cats,

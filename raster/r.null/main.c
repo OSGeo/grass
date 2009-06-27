@@ -279,7 +279,7 @@ int process(const char *name, const char *mapset, int change_null, RASTER_MAP_TY
     G_suppress_warnings(1);
     colr_ok = Rast_read_colors(name, mapset, &colr) > 0;
     hist_ok = Rast_read_history(name, mapset, &hist) >= 0;
-    cats_ok = Rast_read_raster_cats(name, mapset, &cats) >= 0;
+    cats_ok = Rast_read_cats(name, mapset, &cats) >= 0;
 
     if (map_type != CELL_TYPE) {
 	Rast_quant_init(&quant);
@@ -297,8 +297,8 @@ int process(const char *name, const char *mapset, int change_null, RASTER_MAP_TY
     if (hist_ok)
 	Rast_write_history(name, &hist);
     if (cats_ok) {
-	cats.num = Rast_number_of_cats(name, mapset);
-	Rast_write_raster_cats(name, &cats);
+	cats.num = Rast_get_max_c_cat(name, mapset);
+	Rast_write_cats(name, &cats);
 	Rast_free_cats(&cats);
     }
     if (map_type != CELL_TYPE && quant_ok)

@@ -21,24 +21,31 @@
 void write_cats(void)
 {
     struct Categories cats;
+    CELL cat;
 
     /*------------------------------------------------------------------------*/
     /*                            INITIALISE                                  */
 
     /*------------------------------------------------------------------------*/
-    Rast_init_cats((CELL) 0, "", &cats);
-    Rast_set_raster_cats_title("Surface Features", &cats);
+    Rast_init_cats("", &cats);
+    Rast_set_cats_title("Surface Features", &cats);
 
     /*------------------------------------------------------------------------*/
     /*                      FILL OUT CATEGORIES STRUCTURE                     */
 
     /*------------------------------------------------------------------------*/
-    Rast_set_cat(FLAT, " Planar", &cats);
-    Rast_set_cat(PIT, " Pit", &cats);
-    Rast_set_cat(PEAK, " Peak", &cats);
-    Rast_set_cat(RIDGE, " Ridge", &cats);
-    Rast_set_cat(CHANNEL, " Channel", &cats);
-    Rast_set_cat(PASS, " Pass (saddle)", &cats);
+    cat = FLAT;
+    Rast_set_c_cat(&cat, &cat, " Planar", &cats);
+    cat = PIT;
+    Rast_set_c_cat(&cat, &cat, " Pit", &cats);
+    cat = PEAK;
+    Rast_set_c_cat(&cat, &cat, " Peak", &cats);
+    cat = RIDGE;
+    Rast_set_c_cat(&cat, &cat, " Ridge", &cats);
+    cat = CHANNEL;
+    Rast_set_c_cat(&cat, &cat, " Channel", &cats);
+    cat = PASS;
+    Rast_set_c_cat(&cat, &cat, " Pass (saddle)", &cats);
 
     /*------------------------------------------------------------------------*/
     /*                     WRITE OUT CATEGORIES STRUCTURE                     */
