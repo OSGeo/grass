@@ -398,7 +398,7 @@ as the cut-off value. This only works with SFD, not with MFD.
   r.thin in=rwater.course out=rwater.course.Thin
   r.colors -gn rwater.course.Thin color=grey
   r.to.vect in=rwater.course.Thin out=rwater_course feature=line
-  v.db.dropcol map=rwater_course column=label
+  v.db.dropcolumn map=rwater_course column=label
 </pre></div>
 <!-- can't set line attribute to catchment it is in as v.what.rast and 
   v.distance only work for point features. Could create endpoint node
@@ -412,7 +412,7 @@ Create watershed basins map and convert to a vector polygon map
 <div class="code"><pre>
   r.watershed elev=elevation.dem basin=rwater.basin thresh=15000
   r.to.vect -s in=rwater.basin out=rwater_basins feature=area
-  v.db.dropcol map=rwater_basins column=label
+  v.db.dropcolumn map=rwater_basins column=label
   v.db.renamecol map=rwater_basins column=value,catchment
 </pre></div>
 <br>

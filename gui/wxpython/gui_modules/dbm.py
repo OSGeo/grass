@@ -1545,7 +1545,7 @@ class AttributeManager(wx.Frame):
 
         item = list.GetFirstSelected()
         while item != -1:
-            self.listOfCommands.append(('v.db.dropcol',
+            self.listOfCommands.append(('v.db.dropcolumn',
                                         { 'map' : self.vectorName,
                                           'layer' : self.layer,
                                           'column' : list.GetItemText(item) }
@@ -1568,7 +1568,7 @@ class AttributeManager(wx.Frame):
         table = self.mapDBInfo.layers[self.layer]['table']
         cols = self.mapDBInfo.GetColumns(table)
         for col in cols:
-            self.listOfCommands.append(('v.db.dropcol',
+            self.listOfCommands.append(('v.db.dropcolumn',
                                         { 'map' : self.vectorName,
                                           'layer' : self.layer,
                                           'column' : col }

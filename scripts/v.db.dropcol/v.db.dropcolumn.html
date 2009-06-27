@@ -1,13 +1,13 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.db.dropcol</em> drops a column from the attribute table connected
+<em>v.db.dropcolumn</em> drops a column from the attribute table connected
 to a given vector map. It automatically checks the connection for the specified
-layer. <em>v.db.dropcol</em> omits to delete the 'cat' column which is
+layer. <em>v.db.dropcolumn</em> omits to delete the 'cat' column which is
 relevant to keep the connection between vector map and table.
 
 <h2>NOTES</h2>
 
-v.db.dropcol is a front-end to <em>db.execute</em> to allow easier usage.
+v.db.dropcolumn is a front-end to <em>db.execute</em> to allow easier usage.
 
 The existing database connection(s) can be verified with <em>v.db.connect</em>.
 
@@ -15,7 +15,7 @@ The existing database connection(s) can be verified with <em>v.db.connect</em>.
 
 Dropping a column:<br>
 <div class="code"><pre>
-v.db.dropcol sentiero_brenta_points column=slope
+v.db.dropcolumn sentiero_brenta_points column=slope
 v.info -c sentiero_brenta_points
 </pre></div>
 

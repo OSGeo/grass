@@ -7,7 +7,7 @@
 #               Converted to Python by Glynn Clements
 # PURPOSE:      interface to db.execute to drop a column from the 
 #               attribute table connected to a given vector map
-#               - Based on v.db.dropcol
+#               - Based on v.db.dropcolumn
 #               - with special trick for SQLite and DBF (here the new col is 
 #                 added/values copied/old col deleted)
 # COPYRIGHT:    (C) 2007 by the GRASS Development Team
@@ -105,7 +105,7 @@ def main():
 	grass.run_command('v.db.addcol', map = map, layer = layer, column = colspec)
 	sql = "UPDATE %s SET %s=%s" % (table, newcol, oldcol)
 	grass.write_command('db.execute', database = database, driver = driver, stdin = sql)
-	grass.run_command('v.db.dropcol', map = map, layer = layer, column = oldcol)
+	grass.run_command('v.db.dropcolumn', map = map, layer = layer, column = oldcol)
     else:
 	sql = "ALTER TABLE %s RENAME %s TO %s" % (table, oldcol, newcol)
 	grass.write_command('db.execute', database = database, driver = driver, stdin = sql)

@@ -99,7 +99,7 @@ v.db.select myarchsites
 # perform transformation to 3D
 v.transform -t myarchsites output=myarchsites3d column="zshift:zs" table=myarchsites
 # drop table containing transformation parameters
-v.db.dropcol myarchsites3d col=zs
+v.db.dropcolumn myarchsites3d col=zs
 </pre></div>
 The resulting map is a 3D vector map.
 

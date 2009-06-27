@@ -304,7 +304,7 @@ def main():
     else:
 	grass.run_command('g.remove', rast = tmp_colr)
 
-    #v.db.dropcol map=vcol_test col=GRASSRGB
+    #v.db.dropcolumn map=vcol_test col=GRASSRGB
     #d.vect -a vcol_test icon=basic/circle color=none size=8
 
 if __name__ == "__main__":
