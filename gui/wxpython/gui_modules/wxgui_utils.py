@@ -108,9 +108,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                            Map=self.Map, auimgr=self.auimgr)
 
         # title
-        self.mapdisplay.title = _("GRASS GIS Map Display: %d  - Location: %s") % \
-            (self.disp_idx + 1, grass.gisenv()["LOCATION_NAME"])
-        self.mapdisplay.SetTitle(self.mapdisplay.title)
+        self.mapdisplay.SetTitle(_("GRASS GIS Map Display: %d  - Location: %s") % \
+                                     (self.disp_idx + 1, grass.gisenv()["LOCATION_NAME"]))
         
         # show new display
         if kargs['showMapDisplay'] is True:
@@ -202,7 +201,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         idle time instead of multiple times during layer changing.
         """
         if self.rerender:
-            if self.mapdisplay.autoRender.GetValue():
+            if self.mapdisplay.statusbarWin['render'].GetValue():
                 self.mapdisplay.MapWindow.UpdateMap(render=True)
 
         event.Skip()
@@ -586,7 +585,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             # redraw map if auto-rendering is enabled
             self.rerender = True
             self.reorder = True
-            #if self.mapdisplay.autoRender.GetValue():
+            #if self.mapdisplay.statusbarWin['render'].GetValue():
             #    print "*** Opacity OnRender *****"
             #    self.mapdisplay.OnRender(None)
 
@@ -817,7 +816,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 
         # updated progress bar range (mapwindow statusbar)
         if checked is True:
-            self.mapdisplay.onRenderGauge.SetRange(len(self.Map.GetListOfLayers(l_active=True)))
+            self.mapdisplay.statusbarWin['progress'].SetRange(len(self.Map.GetListOfLayers(l_active=True)))
 
         # layer.SetHeight(TREE_ITEM_HEIGHT)
 
@@ -957,7 +956,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # redraw map if auto-rendering is enabled
         self.rerender = True
         self.reorder = True
-        #if self.mapdisplay.autoRender.GetValue():
+        #if self.mapdisplay.statusbarWin['render'].GetValue():
         #    print "*** Delete OnRender *****"
         #    self.mapdisplay.OnRender(None)
 
@@ -965,7 +964,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.mapdisplay.toolbars['vdigit'].UpdateListOfLayers (updateTool=True)
 
         # update progress bar range (mapwindow statusbar)
-        self.mapdisplay.onRenderGauge.SetRange(len(self.Map.GetListOfLayers(l_active=True)))
+        self.mapdisplay.statusbarWin['progress'].SetRange(len(self.Map.GetListOfLayers(l_active=True)))
 
         event.Skip()
 
@@ -997,7 +996,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         #
         # update progress bar range (mapwindow statusbar)
         #
-        self.mapdisplay.onRenderGauge.SetRange(len(self.Map.GetListOfLayers(l_active=True)))
+        self.mapdisplay.statusbarWin['progress'].SetRange(len(self.Map.GetListOfLayers(l_active=True)))
 
         #
         # nviz
@@ -1040,7 +1039,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # redraw map if auto-rendering is enabled
         self.rerender = True
         self.reorder = True
-        #if self.mapdisplay.autoRender.GetValue():
+        #if self.mapdisplay.statusbarWin['render'].GetValue():
         #    print "*** Checked OnRender *****"
         #    self.mapdisplay.OnRender(None)
 
@@ -1091,7 +1090,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                UserSettings.Get(group = 'display', key = 'autoZooming', subkey = 'enabled'):
             mapLayer = self.GetPyData(layer)[0]['maplayer']
             if mapLayer.GetType() in ('raster', 'vector'):
-                render = self.mapdisplay.autoRender.IsChecked()
+                render = self.mapdisplay.statusbarWin['render'].IsChecked()
                 self.mapdisplay.MapWindow.ZoomToMap(layers = [mapLayer,],
                                                     render = render)
         
@@ -1185,7 +1184,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # redraw map if auto-rendering is enabled
         self.rerender = True
         self.reorder = True
-        #if self.mapdisplay.autoRender.GetValue():
+        #if self.mapdisplay.statusbarWin['render'].GetValue():
         #    print "*** Drop OnRender *****"
         #    self.mapdisplay.OnRender(None)
 
@@ -1414,7 +1413,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # redraw map if auto-rendering is enabled
         self.rerender = True
         self.reorder = True
-        #if self.mapdisplay.autoRender.GetValue():
+        #if self.mapdisplay.statusbarWin['render'].GetValue():
         #    print "*** Change OnRender *****"
         #    self.mapdisplay.OnRender(None)
         

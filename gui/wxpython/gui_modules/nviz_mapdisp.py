@@ -102,7 +102,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         else:
             logerr = logmsg = None
         self.nvizThread = NvizThread(logerr,
-                                     self.parent.onRenderGauge,
+                                     self.parent.statusbarWin['progress'],
                                      logmsg)
         self.nvizThread.start()
         time.sleep(.1)
@@ -257,12 +257,12 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.resize = False
         
         if self.render['quick'] is False:
-            self.parent.onRenderGauge.Show()
-            self.parent.onRenderGauge.SetRange(2)
-            self.parent.onRenderGauge.SetValue(0)
+            self.parent.statusbarWin['progress'].Show()
+            self.parent.statusbarWin['progress'].SetRange(2)
+            self.parent.statusbarWin['progress'].SetValue(0)
             
         if self.render['quick'] is False:
-            self.parent.onRenderGauge.SetValue(1)
+            self.parent.statusbarWin['progress'].SetValue(1)
             self.nvizClass.Draw(False, -1)
         elif self.render['quick'] is True:
             # quick
@@ -280,9 +280,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         stop = time.clock()
 
         if self.render['quick'] is False:
-            self.parent.onRenderGauge.SetValue(2)
+            self.parent.statusbarWin['progress'].SetValue(2)
             # hide process bar
-            self.parent.onRenderGauge.Hide()
+            self.parent.statusbarWin['progress'].Hide()
 
         #
         # update statusbar

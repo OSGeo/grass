@@ -613,9 +613,9 @@ class BufferedWindow(MapWindow, wx.Window):
         # initialize process bar (only on 'render')
         #
         if render is True or renderVector is True:
-            self.parent.onRenderGauge.Show()
-            if self.parent.onRenderGauge.GetRange() > 0:
-                self.parent.onRenderGauge.SetValue(1)
+            self.parent.statusbarWin['progress'].Show()
+            if self.parent.statusbarWin['progress'].GetRange() > 0:
+                self.parent.statusbarWin['progress'].SetValue(1)
         
         #
         # render background image if needed
@@ -632,7 +632,7 @@ class BufferedWindow(MapWindow, wx.Window):
         if render:
             # update display size
             self.Map.ChangeMapSize(self.GetClientSize())
-            if self.parent.compResolution.IsChecked():
+            if self.parent.statusbarWin['resolution'].IsChecked():
                 # use computation region resolution for rendering
                 windres = True
             else:
@@ -746,7 +746,7 @@ class BufferedWindow(MapWindow, wx.Window):
         #
         # hide process bar
         #
-        self.parent.onRenderGauge.Hide()
+        self.parent.statusbarWin['progress'].Hide()
 
         #
         # update statusbar 
@@ -755,9 +755,9 @@ class BufferedWindow(MapWindow, wx.Window):
         self.parent.StatusbarUpdate()
         if grass.find_file(name = 'MASK', element = 'cell')['name']:
             # mask found
-            self.parent.SetTitle(self.parent.title + _(' (masked)'))
+            self.parent.statusbarWin['mask'].SetLabel(_('MASK'))
         else:
-            self.parent.SetTitle(self.parent.title)
+            self.parent.statusbarWin['mask'].SetLabel('')
         
         Debug.msg (2, "BufferedWindow.UpdateMap(): render=%s, renderVector=%s -> time=%g" % \
                    (render, renderVector, (stop-start)))

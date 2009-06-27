@@ -682,10 +682,10 @@ class WriteWorkspaceFile(object):
                        'constrainRes="%d" '
                        'dim="%d,%d,%d,%d" '
                        'extent="%f,%f,%f,%f">\n' % (' ' * self.indent,
-                                                    int(mapTree.mapdisplay.autoRender.IsChecked()),
-                                                    mapTree.mapdisplay.toggleStatus.GetSelection(),
-                                                    int(mapTree.mapdisplay.showRegion.IsChecked()),
-                                                    int(mapTree.mapdisplay.compResolution.IsChecked()),
+                                                    int(mapTree.mapdisplay.statusbarWin['render'].IsChecked()),
+                                                    mapTree.mapdisplay.statusbarWin['toggle'].GetSelection(),
+                                                    int(mapTree.mapdisplay.statusbarWin['region'].IsChecked()),
+                                                    int(mapTree.mapdisplay.statusbarWin['resolution'].IsChecked()),
                                                     displayPos[0],
                                                     displayPos[1],
                                                     displaySize[0],

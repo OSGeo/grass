@@ -8,11 +8,11 @@ view).
 Can be used either from Layer Manager or as p.mon backend.
 
 Classes:
- - MapFrame
- - MapApp
+- MapFrame
+- MapApp
 
 Usage:
- python mapdisp.py monitor-identifier /path/to/command/file
+python mapdisp.py monitor-identifier /path/to/command/file
 
 (C) 2006-2009 by the GRASS Development Team
 This program is free software under the GNU General Public
@@ -109,7 +109,6 @@ class MapFrame(wx.Frame):
         self.page       = page      # Notebook page holding the layer tree
         self.layerbook  = notebook  # Layer Manager layer tree notebook
         self.parent     = parent
-        self.title      = title
         
         #
         # available cursors
@@ -154,60 +153,69 @@ class MapFrame(wx.Frame):
         #
         # Add statusbar
         #
-        self.statusbar = self.CreateStatusBar(number=3, style=0)
-        self.statusbar.SetStatusWidths([-5, -2, -1])
-        self.toggleStatus = wx.Choice(self.statusbar, wx.ID_ANY,
-                                      choices = globalvar.MAP_DISPLAY_STATUSBAR_MODE)
-        self.toggleStatus.SetSelection(UserSettings.Get(group='display', key='statusbarMode', subkey='selection'))
-        self.statusbar.Bind(wx.EVT_CHOICE, self.OnToggleStatus, self.toggleStatus)
+        self.statusbar = self.CreateStatusBar(number=4, style=0)
+        self.statusbar.SetStatusWidths([-5, -2, -1, -1])
+        self.statusbarWin = dict()
+        self.statusbarWin['toggle'] = wx.Choice(self.statusbar, wx.ID_ANY,
+                                                choices = globalvar.MAP_DISPLAY_STATUSBAR_MODE)
+        self.statusbarWin['toggle'].SetSelection(UserSettings.Get(group='display',
+                                                                  key='statusbarMode',
+                                                                  subkey='selection'))
+        self.statusbar.Bind(wx.EVT_CHOICE, self.OnToggleStatus, self.statusbarWin['toggle'])
         # auto-rendering checkbox
-        self.autoRender = wx.CheckBox(parent=self.statusbar, id=wx.ID_ANY,
-                                      label=_("Render"))
-        self.statusbar.Bind(wx.EVT_CHECKBOX, self.OnToggleRender, self.autoRender)
-        self.autoRender.SetValue(UserSettings.Get(group='display', key='autoRendering', subkey='enabled'))
-        self.autoRender.SetToolTip(wx.ToolTip (_("Enable/disable auto-rendering")))
+        self.statusbarWin['render'] = wx.CheckBox(parent=self.statusbar, id=wx.ID_ANY,
+                                                  label=_("Render"))
+        self.statusbar.Bind(wx.EVT_CHECKBOX, self.OnToggleRender, self.statusbarWin['render'])
+        self.statusbarWin['render'].SetValue(UserSettings.Get(group='display',
+                                                              key='autoRendering',
+                                                              subkey='enabled'))
+        self.statusbarWin['render'].SetToolTip(wx.ToolTip (_("Enable/disable auto-rendering")))
         # show region
-        self.showRegion = wx.CheckBox(parent=self.statusbar, id=wx.ID_ANY,
-                                      label=_("Show computational extent"))
-        self.statusbar.Bind(wx.EVT_CHECKBOX, self.OnToggleShowRegion, self.showRegion)
+        self.statusbarWin['region'] = wx.CheckBox(parent=self.statusbar, id=wx.ID_ANY,
+                                                  label=_("Show computational extent"))
+        self.statusbar.Bind(wx.EVT_CHECKBOX, self.OnToggleShowRegion, self.statusbarWin['region'])
         
-        self.showRegion.SetValue(False)
-        self.showRegion.Hide()
-        self.showRegion.SetToolTip(wx.ToolTip (_("Show/hide computational "
-                                                 "region extent (set with g.region). "
-                                                 "Display region drawn as a blue box inside the "
-                                                 "computational region, "
-                                                 "computational region inside a display region "
-                                                 "as a red box).")))
+        self.statusbarWin['region'].SetValue(False)
+        self.statusbarWin['region'].Hide()
+        self.statusbarWin['region'].SetToolTip(wx.ToolTip (_("Show/hide computational "
+                                                             "region extent (set with g.region). "
+                                                             "Display region drawn as a blue box inside the "
+                                                             "computational region, "
+                                                             "computational region inside a display region "
+                                                             "as a red box).")))
         # set resolution
-        self.compResolution = wx.CheckBox(parent=self.statusbar, id=wx.ID_ANY,
-                                         label=_("Constrain display resolution to computational settings"))
-        self.statusbar.Bind(wx.EVT_CHECKBOX, self.OnToggleResolution, self.compResolution)
-        self.compResolution.SetValue(UserSettings.Get(group='display', key='compResolution', subkey='enabled'))
-        self.compResolution.Hide()
-        self.compResolution.SetToolTip(wx.ToolTip (_("Constrain display resolution "
-                                                     "to computational region settings. "
-                                                     "Default value for new map displays can "
-                                                     "be set up in 'User GUI settings' dialog.")))
+        self.statusbarWin['resolution'] = wx.CheckBox(parent=self.statusbar, id=wx.ID_ANY,
+                                                      label=_("Constrain display resolution to computational settings"))
+        self.statusbar.Bind(wx.EVT_CHECKBOX, self.OnToggleResolution, self.statusbarWin['resolution'])
+        self.statusbarWin['resolution'].SetValue(UserSettings.Get(group='display', key='compResolution', subkey='enabled'))
+        self.statusbarWin['resolution'].Hide()
+        self.statusbarWin['resolution'].SetToolTip(wx.ToolTip (_("Constrain display resolution "
+                                                                 "to computational region settings. "
+                                                                 "Default value for new map displays can "
+                                                                 "be set up in 'User GUI settings' dialog.")))
         # map scale
-        self.mapScale = wx.TextCtrl(parent=self.statusbar, id=wx.ID_ANY,
-                                    value="", style=wx.TE_PROCESS_ENTER,
-                                    size=(150, -1))
-        self.mapScale.Hide()
-        self.statusbar.Bind(wx.EVT_TEXT_ENTER, self.OnChangeMapScale, self.mapScale)
+        self.statusbarWin['mapscale'] = wx.TextCtrl(parent=self.statusbar, id=wx.ID_ANY,
+                                                    value="", style=wx.TE_PROCESS_ENTER,
+                                                    size=(150, -1))
+        self.statusbarWin['mapscale'].Hide()
+        self.statusbar.Bind(wx.EVT_TEXT_ENTER, self.OnChangeMapScale, self.statusbarWin['mapscale'])
 
         # go to
-        self.goTo = wx.TextCtrl(parent=self.statusbar, id=wx.ID_ANY,
-                                value="", style=wx.TE_PROCESS_ENTER,
-                                size=(200, -1))
-        self.goTo.Hide()
-        self.statusbar.Bind(wx.EVT_TEXT_ENTER, self.OnGoTo, self.goTo)
+        self.statusbarWin['goto'] = wx.TextCtrl(parent=self.statusbar, id=wx.ID_ANY,
+                                                value="", style=wx.TE_PROCESS_ENTER,
+                                                size=(200, -1))
+        self.statusbarWin['goto'].Hide()
+        self.statusbar.Bind(wx.EVT_TEXT_ENTER, self.OnGoTo, self.statusbarWin['goto'])
 
-
+        # mask
+        self.statusbarWin['mask'] = wx.StaticText(parent = self.statusbar, id = wx.ID_ANY,
+                                                  label = '')
+        self.statusbarWin['mask'].SetForegroundColour(wx.Colour(255, 0, 0))
+        
         # on-render gauge
-        self.onRenderGauge = wx.Gauge(parent=self.statusbar, id=wx.ID_ANY,
+        self.statusbarWin['progress'] = wx.Gauge(parent=self.statusbar, id=wx.ID_ANY,
                                       range=0, style=wx.GA_HORIZONTAL)
-        self.onRenderGauge.Hide()
+        self.statusbarWin['progress'].Hide()
         
         self.StatusbarReposition() # reposition statusbar
 
@@ -239,9 +247,9 @@ class MapFrame(wx.Frame):
         # Update fancy gui style
         #
         self._mgr.AddPane(self.MapWindow, wx.aui.AuiPaneInfo().CentrePane().
-                   Dockable(False).BestSize((-1,-1)).
-                   CloseButton(False).DestroyOnClose(True).
-                   Layer(0))
+                          Dockable(False).BestSize((-1,-1)).
+                          CloseButton(False).DestroyOnClose(True).
+                          Layer(0))
         self._mgr.Update()
 
         #
@@ -278,9 +286,9 @@ class MapFrame(wx.Frame):
         Add defined toolbar to the window
 
         Currently known toolbars are:
-         - map basic map toolbar
-         - digit vector digitizer
-         - georect georectifier
+        - map basic map toolbar
+        - digit vector digitizer
+        - georect georectifier
         """
         # default toolbar
         if name == "map":
@@ -384,7 +392,7 @@ class MapFrame(wx.Frame):
             #
             # update status bar
             #
-            self.toggleStatus.Enable(False)
+            self.statusbarWin['toggle'].Enable(False)
 
             #
             # erase map window
@@ -456,7 +464,7 @@ class MapFrame(wx.Frame):
             # hide nviz tools
             self.nvizToolWin.Hide()
             # unload data
-#            self.MapWindow3D.Reset()
+            #            self.MapWindow3D.Reset()
             # switch from MapWindowGL to MapWindow
             self._mgr.DetachPane(self.MapWindow3D)
             self.MapWindow3D.Hide()
@@ -466,7 +474,7 @@ class MapFrame(wx.Frame):
                               CloseButton(False).DestroyOnClose(True).
                               Layer(0))
             self.MapWindow = self.MapWindow2D
-  
+            
             #
             # update layer tree (-> disable 3d-rasters)
             #
@@ -476,7 +484,7 @@ class MapFrame(wx.Frame):
             
         self.toolbars['map'].combo.SetValue (_("2D view"))
         self.toolbars['map'].Enable2D(True)
-        self.toggleStatus.Enable(True)
+        self.statusbarWin['toggle'].Enable(True)
 
         self._mgr.Update()
 
@@ -495,7 +503,7 @@ class MapFrame(wx.Frame):
         """
         Update progress bar info
         """
-        self.onRenderGauge.SetValue(event.value)
+        self.statusbarWin['progress'].SetValue(event.value)
         
         event.Skip()
         
@@ -524,7 +532,7 @@ class MapFrame(wx.Frame):
         Track mouse motion and update status bar
         """
         # update statusbar if required
-        if self.toggleStatus.GetSelection() == 0: # Coordinates
+        if self.statusbarWin['toggle'].GetSelection() == 0: # Coordinates
             e, n = self.MapWindow.Pixel2Cell(event.GetPositionTuple())
             if self.toolbars['vdigit'] and \
                     self.toolbars['vdigit'].GetAction() == 'addLine' and \
@@ -666,7 +674,7 @@ class MapFrame(wx.Frame):
         self.MapWindow.mouse['use'] = "pan"
         self.MapWindow.mouse['box'] = "pan"
         self.MapWindow.zoomtype = 0
-                
+        
         # change the cursor
         self.MapWindow.SetCursor(self.cursors["hand"])
 
@@ -699,21 +707,21 @@ class MapFrame(wx.Frame):
         """
         Enable/disable auto-rendering
         """
-        if self.autoRender.GetValue():
+        if self.statusbarWin['render'].GetValue():
             self.OnRender(None)
 
     def OnToggleShowRegion(self, event):
         """
         Show/Hide extent in map canvas
         """
-        if self.showRegion.GetValue():
+        if self.statusbarWin['region'].GetValue():
             # show extent
             self.MapWindow.regionCoords = []
         else:
             del self.MapWindow.regionCoords
 
         # redraw map if auto-rendering is enabled
-        if self.autoRender.GetValue():
+        if self.statusbarWin['render'].GetValue():
             self.OnRender(None)
 
     def OnToggleResolution(self, event):
@@ -722,7 +730,7 @@ class MapFrame(wx.Frame):
         for redering image instead of display resolution
         """
         # redraw map if auto-rendering is enabled
-        if self.autoRender.GetValue():
+        if self.statusbarWin['render'].GetValue():
             self.OnRender(None)
         
     def OnToggleStatus(self, event):
@@ -742,7 +750,7 @@ class MapFrame(wx.Frame):
                 raise ValueError
             value = int(scale[2:])
         except ValueError:
-            self.mapScale.SetValue('1:%ld' % int(self.mapScaleValue))
+            self.statusbarWin['mapscale'].SetValue('1:%ld' % int(self.mapScaleValue))
             return
 
         dEW = value * (self.Map.region['cols'] / self.ppm[0])
@@ -758,18 +766,18 @@ class MapFrame(wx.Frame):
         
         # redraw a map
         self.MapWindow.UpdateMap()
-        self.mapScale.SetFocus()
+        self.statusbarWin['mapscale'].SetFocus()
         
     def OnGoTo(self, event):
         """
         Go to position
         """
         try:
-            e, n = map(float, self.goTo.GetValue().split(','))
+            e, n = map(float, self.statusbarWin['goto'].GetValue().split(','))
         except ValueError:
             region = self.Map.GetCurrentRegion()
-            self.goTo.SetValue("%.2f, %.2f" % (region['center_easting'],
-                                               region['center_northing']))
+            self.statusbarWin['goto'].SetValue("%.2f, %.2f" % (region['center_easting'],
+                                                               region['center_northing']))
             return
 
         region = self.Map.GetCurrentRegion()
@@ -790,30 +798,30 @@ class MapFrame(wx.Frame):
         
         # redraw a map
         self.MapWindow.UpdateMap()
-        self.goTo.SetFocus()
+        self.statusbarWin['goto'].SetFocus()
         
     def StatusbarUpdate(self):
         """!Update statusbar content"""
 
-        self.showRegion.Hide()
-        self.compResolution.Hide()
-        self.mapScale.Hide()
-        self.goTo.Hide()
+        self.statusbarWin['region'].Hide()
+        self.statusbarWin['resolution'].Hide()
+        self.statusbarWin['mapscale'].Hide()
+        self.statusbarWin['goto'].Hide()
         self.mapScaleValue = self.ppm = None
 
-        if self.toggleStatus.GetSelection() == 0: # Coordinates
+        if self.statusbarWin['toggle'].GetSelection() == 0: # Coordinates
             self.statusbar.SetStatusText("", 0)
             # enable long help
             self.StatusbarEnableLongHelp()
 
-        elif self.toggleStatus.GetSelection() == 1: # Extent
+        elif self.statusbarWin['toggle'].GetSelection() == 1: # Extent
             self.statusbar.SetStatusText("%.2f - %.2f, %.2f - %.2f" %
                                          (self.Map.region["w"], self.Map.region["e"],
                                           self.Map.region["s"], self.Map.region["n"]), 0)
             # enable long help
             self.StatusbarEnableLongHelp()
 
-        elif self.toggleStatus.GetSelection() == 2: # Comp. region
+        elif self.statusbarWin['toggle'].GetSelection() == 2: # Comp. region
             compregion = self.Map.GetRegion()
             self.statusbar.SetStatusText("%.2f - %.2f, %.2f - %.2f (%.2f, %.2f)" %
                                          (compregion["w"], compregion["e"],
@@ -822,26 +830,26 @@ class MapFrame(wx.Frame):
             # enable long help
             self.StatusbarEnableLongHelp()
 
-        elif self.toggleStatus.GetSelection() == 3: # Show comp. extent
+        elif self.statusbarWin['toggle'].GetSelection() == 3: # Show comp. extent
             self.statusbar.SetStatusText("", 0)
-            self.showRegion.Show()
+            self.statusbarWin['region'].Show()
             # disable long help
             self.StatusbarEnableLongHelp(False)
 
-        elif self.toggleStatus.GetSelection() == 4: # Display mode
+        elif self.statusbarWin['toggle'].GetSelection() == 4: # Display mode
             self.statusbar.SetStatusText("", 0)
-            self.compResolution.Show()
+            self.statusbarWin['resolution'].Show()
             # disable long help
             self.StatusbarEnableLongHelp(False)
 
-        elif self.toggleStatus.GetSelection() == 5: # Display geometry
+        elif self.statusbarWin['toggle'].GetSelection() == 5: # Display geometry
             self.statusbar.SetStatusText("rows=%d; cols=%d; nsres=%.2f; ewres=%.2f" %
                                          (self.Map.region["rows"], self.Map.region["cols"],
                                           self.Map.region["nsres"], self.Map.region["ewres"]), 0)
             # enable long help
             self.StatusbarEnableLongHelp()
 
-        elif self.toggleStatus.GetSelection() == 6: # Map scale
+        elif self.statusbarWin['toggle'].GetSelection() == 6: # Map scale
             # TODO: need to be fixed...
             ### screen X region problem
             ### user should specify ppm
@@ -881,21 +889,21 @@ class MapFrame(wx.Frame):
 
             self.statusbar.SetStatusText("")
             try:
-                self.mapScale.SetValue("1:%ld" % (scale + 0.5))
+                self.statusbarWin['mapscale'].SetValue("1:%ld" % (scale + 0.5))
             except TypeError:
                 pass
             self.mapScaleValue = scale
-            self.mapScale.Show()
+            self.statusbarWin['mapscale'].Show()
 
             # disable long help
             self.StatusbarEnableLongHelp(False)
 
-        elif self.toggleStatus.GetSelection() == 7: # go to
+        elif self.statusbarWin['toggle'].GetSelection() == 7: # go to
             self.statusbar.SetStatusText("")
             region = self.Map.GetCurrentRegion()
-            self.goTo.SetValue("%.2f, %.2f" % (region['center_easting'],
-                                               region['center_northing']))
-            self.goTo.Show()
+            self.statusbarWin['goto'].SetValue("%.2f, %.2f" % (region['center_easting'],
+                                                               region['center_northing']))
+            self.statusbarWin['goto'].Show()
 
             # disable long help
             self.StatusbarEnableLongHelp(False)
@@ -912,32 +920,35 @@ class MapFrame(wx.Frame):
     def StatusbarReposition(self):
         """!Reposition checkbox in statusbar"""
         # reposition checkbox
-        widgets = [(0, self.showRegion),
-                   (0, self.compResolution),
-                   (0, self.mapScale),
-                   (0, self.onRenderGauge),
-                   (1, self.toggleStatus),
-                   (2, self.autoRender)]
+        widgets = [(0, self.statusbarWin['region']),
+                   (0, self.statusbarWin['resolution']),
+                   (0, self.statusbarWin['mapscale']),
+                   (0, self.statusbarWin['progress']),
+                   (1, self.statusbarWin['toggle']),
+                   (2, self.statusbarWin['mask']),
+                   (3, self.statusbarWin['render'])]
         for idx, win in widgets:
             rect = self.statusbar.GetFieldRect(idx)
             if idx == 0: # show region / mapscale / process bar
                 # -> size
                 wWin, hWin = win.GetBestSize()
-                if win == self.onRenderGauge:
+                if win == self.statusbarWin['progress']:
                     wWin = rect.width - 6
                 # -> position
-                # if win == self.showRegion:
-                    # x, y = rect.x + rect.width - wWin, rect.y - 1
-                    # align left
+                # if win == self.statusbarWin['region']:
+                # x, y = rect.x + rect.width - wWin, rect.y - 1
+                # align left
                 # else:
                 x, y = rect.x + 3, rect.y - 1
                 w, h = wWin, rect.height + 2
             else: # choice || auto-rendering
                 x, y = rect.x, rect.y - 1
                 w, h = rect.width, rect.height + 2
-                if idx == 2:
+                if idx == 2: # mask
                     x += 5
-
+                    y += 4
+                elif idx == 3: # render
+                    x += 5
             win.SetPosition((x, y))
             win.SetSize((w, h))
 
@@ -966,10 +977,10 @@ class MapFrame(wx.Frame):
             filetype += "XPM file (*.xpm)|*.xpm"
 
         dlg = wx.FileDialog(self, _("Choose a file name to save the image (no need to add extension)"),
-            defaultDir = "",
-            defaultFile = "",
-            wildcard = filetype,
-            style=wx.SAVE|wx.FD_OVERWRITE_PROMPT)
+                            defaultDir = "",
+                            defaultFile = "",
+                            wildcard = filetype,
+                            style=wx.SAVE|wx.FD_OVERWRITE_PROMPT)
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
             if path == None: return
@@ -1158,7 +1169,7 @@ class MapFrame(wx.Frame):
                 for vector in vectstr.split(','):
                     if map == vector:
                         self._layerManager.goutput.WriteWarning("Vector map <%s> "
-                                                             "opened for editing - skipped." % map)
+                                                                "opened for editing - skipped." % map)
                         continue
                     vect.append(vector)
                 vectstr = ','.join(vect)
@@ -1176,7 +1187,7 @@ class MapFrame(wx.Frame):
         if self._layerManager:
             if raststr:
                 self._layerManager.goutput.RunCmd(rcmd,
-                                               compReg=False)
+                                                  compReg=False)
             if vectstr:
                 self._layerManager.goutput.RunCmd(vcmd)
         else:
@@ -1322,8 +1333,8 @@ class MapFrame(wx.Frame):
         # color settings from ATM
         color = UserSettings.Get(group='atm', key='highlight', subkey='color')
         colorStr = str(color[0]) + ":" + \
-        str(color[1]) + ":" + \
-        str(color[2])
+            str(color[1]) + ":" + \
+            str(color[2])
 
         pattern = ["d.vect",
                    "map=%s" % name,
@@ -1410,18 +1421,18 @@ class MapFrame(wx.Frame):
         # initiating output
         style = self._layerManager.goutput.cmd_output.StyleWarning
         self._layerManager.goutput.WriteLog(_('Click and drag with left mouse button '
-                                           'to measure.%s'
-                                           'Double click with left button to clear.') % \
-                                             (os.linesep), style)
+                                              'to measure.%s'
+                                              'Double click with left button to clear.') % \
+                                                (os.linesep), style)
         if self.Map.projinfo['proj'] != 'xy':
             units = self.Map.projinfo['units']
             style = self._layerManager.goutput.cmd_output.StyleCommand
             self._layerManager.goutput.WriteLog(_('Measuring distance') + ' ('
-                                             + units + '):',
-                                             style)
+                                                + units + '):',
+                                                style)
         else:
             self._layerManager.goutput.WriteLog(_('Measuring distance:'),
-                                             style)
+                                                style)
 
     def MeasureDist(self, beginpt, endpt):
         """
@@ -1465,7 +1476,7 @@ class MapFrame(wx.Frame):
         """
         raster = []
         if self.tree.layer_selected and \
-               self.tree.GetPyData(self.tree.layer_selected)[0]['type'] == 'raster':
+                self.tree.GetPyData(self.tree.layer_selected)[0]['type'] == 'raster':
             raster.append(self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer'].name)
 
         self.profile = profile.ProfileFrame(self,
@@ -1608,7 +1619,7 @@ class MapFrame(wx.Frame):
 
         cmd = ['d.legend']
         if self.tree.layer_selected and \
-               self.tree.GetPyData(self.tree.layer_selected)[0]['type'] == 'raster':
+                self.tree.GetPyData(self.tree.layer_selected)[0]['type'] == 'raster':
             cmd.append('map=%s' % self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer'].name)
 
         # Decoration overlay control dialog
@@ -1642,8 +1653,8 @@ class MapFrame(wx.Frame):
                 id = 101
 
         self.dialogs['text'] = gdialogs.TextLayerDialog(parent=self, ovlId=id, 
-                                                    title=_('Add text layer'),
-                                                    size=(400, 200))
+                                                        title=_('Add text layer'),
+                                                        size=(400, 200))
         self.dialogs['text'].CenterOnParent()
 
         # If OK button pressed in decoration control dialog
@@ -1724,11 +1735,11 @@ class MapFrame(wx.Frame):
     def SetProperties(self, render=False, mode=0, showCompExtent=False,
                       constrainRes=False):
         """!Set properies of map display window"""
-        self.autoRender.SetValue(render)
-        self.toggleStatus.SetSelection(mode)
+        self.statusbarWin['render'].SetValue(render)
+        self.statusbarWin['toggle'].SetSelection(mode)
         self.StatusbarUpdate()
-        self.showRegion.SetValue(showCompExtent)
-        self.compResolution.SetValue(constrainRes)
+        self.statusbarWin['region'].SetValue(showCompExtent)
+        self.statusbarWin['resolution'].SetValue(constrainRes)
         if showCompExtent:
             self.MapWindow.regionCoords = []
 
