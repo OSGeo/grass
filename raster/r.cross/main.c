@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
     }
     strcat(buf, " and ");
     strcat(buf, names[i]);
-    Rast_init_cats((CELL) 0, buf, &pcats);
+    Rast_init_cats(buf, &pcats);
 
     /* first step is cross product, but un-ordered */
     result = cross(fd, non_zero, primary, outfd);

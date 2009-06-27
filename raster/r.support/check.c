@@ -58,7 +58,7 @@ int check_stats(const char *name)
 
     /* Further category checks */
     if (!cats_ok)
-	Rast_init_cats(max, "", &cats);
+	Rast_init_cats("", &cats);
     else if (cats.num != max) {
 	cats.num = max;
 	cats_ok = 0;

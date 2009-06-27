@@ -211,7 +211,7 @@ static void write_support_files(int fd)
     Rast_get_range_min_max(&fcb->range, &cell_min, &cell_max);
     if (Rast_is_c_null_value(&cell_max))
 	cell_max = 0;
-    Rast_init_cats(cell_max, (char *)NULL, &cats);
+    Rast_init_cats((char *)NULL, &cats);
     Rast_write_cats(fcb->name, &cats);
     Rast_free_cats(&cats);
 
