@@ -278,6 +278,7 @@ class TextCtrlAutoComplete(wx.ComboBox, listmix.ColumnSorterMixin):
         self.Bind(wx.EVT_KILL_FOCUS, self.OnControlChanged)
         self.Bind(wx.EVT_TEXT, self.OnEnteredText)
         self.Bind(wx.EVT_KEY_DOWN , self.OnKeyDown)
+        self.Bind(wx.EVT_LEFT_DOWN, self.OnClick)
 
         # if need drop down on left click
         self.dropdown.Bind(wx.EVT_LISTBOX , self.OnListItemSelected, self.dropdownlistbox)
@@ -435,6 +436,19 @@ class TextCtrlAutoComplete(wx.ComboBox, listmix.ColumnSorterMixin):
         self._colSearch = 0
         self._colFetch = -1
 
+    def OnClick(self, event):
+        """Left mouse button pressed"""
+        sel = self.dropdownlistbox.GetFirstSelected()
+        if not self.dropdown.IsShown():
+            if sel > -1:
+                self.dropdownlistbox.Select(sel)
+            else:
+                self.dropdownlistbox.Select(0)
+            self._listItemVisible()
+            self._showDropDown()
+        else:
+            self.dropdown.Hide()
+        
     def OnCommandSelect(self, event):
         """!Command selected from history"""
         self.SetFocus()
@@ -560,7 +574,7 @@ class TextCtrlAutoComplete(wx.ComboBox, listmix.ColumnSorterMixin):
             if sel > 0:
                 self.dropdownlistbox.Select(sel - 1)
                 self._listItemVisible()
-            self._showDropDown ()
+            self._showDropDown()
             skip = False
         
         if visible:
