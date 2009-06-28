@@ -298,7 +298,7 @@ static int load_files(void)
 		    G_fatal_error(_("Error reading row <%d>"), row);
 
 		rowoff = (vyoff + row) * ncols;
-		Rast_lookup_raster_colors(voidc, tr, tg, tb,
+		Rast_lookup_colors(voidc, tr, tg, tb,
 				       tset, tsiz, &colors, rtype);
 
 		for (col = 0; col < vcols; col++) {

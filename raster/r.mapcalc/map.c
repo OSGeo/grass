@@ -232,7 +232,7 @@ static void translate_from_colors(struct map *m, DCELL *rast, CELL *cell,
     unsigned char *set = G__alloca(columns);
     int i;
 
-    Rast_lookup_d_raster_colors(rast, red, grn, blu, set, ncols, &m->colors);
+    Rast_lookup_d_colors(rast, red, grn, blu, set, ncols, &m->colors);
 
     switch (mod) {
     case 'r':

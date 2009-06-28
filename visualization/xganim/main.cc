@@ -248,7 +248,7 @@ int MyApp::load_files(void)
 		    G_fatal_error(_("Unable to read raster row"));
 
 		rowoff = (vyoff + row) * ncols;
-		Rast_lookup_d_raster_colors(dcell, tr, tg, tb, tset, tsiz, &colors);
+		Rast_lookup_d_colors(dcell, tr, tg, tb, tset, tsiz, &colors);
 
 		for (col = 0; col < vcols; col++) {
 		    coff = (int)(col / vscale);

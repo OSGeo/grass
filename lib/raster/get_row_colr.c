@@ -62,7 +62,7 @@ int Rast_get_raster_row_colors(int fd, int row, struct Colors *colors,
 
     set = G__alloca(cols);
 
-    Rast_lookup_raster_colors(array, red, grn, blu, set, cols, colors, type);
+    Rast_lookup_colors(array, red, grn, blu, set, cols, colors, type);
 
     G__freea(array);
     G__freea(set);

@@ -136,25 +136,23 @@ int Rast__insert_color_into_lookup(CELL, int, int, int, struct _Color_Info_ *);
 int Rast_invert_colors(struct Colors *);
 
 /* color_look.c */
-void Rast_lookup_colors(const CELL *, unsigned char *, unsigned char *,
-		     unsigned char *, unsigned char *, int, struct Colors *);
-void Rast_lookup_c_raster_colors(const CELL *, unsigned char *, unsigned char *,
-			      unsigned char *, unsigned char *, int,
-			      struct Colors *);
-void Rast_lookup_raster_colors(const void *, unsigned char *, unsigned char *,
-			    unsigned char *, unsigned char *, int,
-			    struct Colors *, RASTER_MAP_TYPE);
-void Rast_lookup_f_raster_colors(const FCELL *, unsigned char *, unsigned char *,
-			     unsigned char *, unsigned char *, int,
-			     struct Colors *);
-void Rast_lookup_d_raster_colors(const DCELL *, unsigned char *, unsigned char *,
-			     unsigned char *, unsigned char *, int,
-			     struct Colors *);
+void Rast_lookup_c_colors(const CELL *, unsigned char *, unsigned char *,
+			  unsigned char *, unsigned char *, int,
+			  struct Colors *);
+void Rast_lookup_colors(const void *, unsigned char *, unsigned char *,
+			unsigned char *, unsigned char *, int,
+			struct Colors *, RASTER_MAP_TYPE);
+void Rast_lookup_f_colors(const FCELL *, unsigned char *, unsigned char *,
+			  unsigned char *, unsigned char *, int,
+			  struct Colors *);
+void Rast_lookup_d_colors(const DCELL *, unsigned char *, unsigned char *,
+			  unsigned char *, unsigned char *, int,
+			  struct Colors *);
 void Rast__lookup_colors(const void *, unsigned char *, unsigned char *,
-		      unsigned char *, unsigned char *, int, struct Colors *,
-		      int, int, RASTER_MAP_TYPE);
+			 unsigned char *, unsigned char *, int, struct Colors *,
+			 int, int, RASTER_MAP_TYPE);
 void Rast__interpolate_color_rule(DCELL, unsigned char *, unsigned char *,
-			       unsigned char *, const struct _Color_Rule_ *);
+				  unsigned char *, const struct _Color_Rule_ *);
 
 /* color_org.c */
 void Rast__organize_colors(struct Colors *);

@@ -100,7 +100,7 @@ void vrml_put_grid(FILE * vout,
 		G_percent(row, rows - 1, 5);
 
 	    Rast_get_f_raster_row(colorfd, tf, row);
-	    Rast_lookup_f_raster_colors(tf, red, green, blue, set, cols, colr);
+	    Rast_lookup_f_colors(tf, red, green, blue, set, cols, colr);
 
 	    for (col = 0; col < cols; col++) {
 		sprintf(str, "%.3f %.3f %.3f,",
