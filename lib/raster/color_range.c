@@ -64,7 +64,7 @@ void Rast_set_d_color_range(DCELL min, DCELL max, struct Colors *colors)
   \param[out] min,max minimum and maximum value
   \param colors pointer to Colors structure which holds color info
  */
-void Rast_get_color_range(CELL * min, CELL * max, const struct Colors *colors)
+void Rast_get_c_color_range(CELL * min, CELL * max, const struct Colors *colors)
 {
     if (!colors->is_float) {
 	*min = (CELL) floor(colors->cmin);

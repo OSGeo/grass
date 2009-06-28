@@ -9,7 +9,7 @@ int table_toggle(char *name, char *mapset, struct Colors *colors)
     char *msg = '\0';
     char info[100];
 
-    Rast_get_color_range(&min, &max, colors);
+    Rast_get_c_color_range(&min, &max, colors);
     Rast_free_colors(colors);
     sprintf(info, "Color range: %d to %d\n", min, max);
 

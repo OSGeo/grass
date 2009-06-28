@@ -125,7 +125,7 @@ void Rast_add_raster_color_rule(const void *val1, int r1, int g1, int b1,
  * <b>r1,g1,b1</b> and <b>r2,g2,b2</b> are assigned to <b>cat1</b> and
  * <b>cat2</b> respectively. Colors for data values between <b>cat1</b> and
  * <b>cat2</b> are not stored in the structure but are interpolated when
- * queried by <i>Rast_lookup_colors</i> and<i>Rast_get_color.</i> The color
+ * queried by <i>Rast_lookup_colors</i> and<i>Rast_get_c_color.</i> The color
  * components <b>r1,g1,b1</b> and <b>r2,g2,b2</b> must be in the range
  * 0 -- 255.
  * For example, to create a linear grey scale for the range 200 -- 1000:

@@ -258,7 +258,7 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 		    cat, Points->x[0], Points->y[0], Points->z[0]);
 	    custom_rgb = TRUE;
 	    Rast_make_fp_colors(&colors, style, box.B, box.T);
-	    Rast_get_raster_color(&zval, &red, &grn, &blu, &colors, DCELL_TYPE);
+	    Rast_get_color(&zval, &red, &grn, &blu, &colors, DCELL_TYPE);
 	    G_debug(3, "b %d, g: %d, r %d", blu, grn, red);
 	}
 

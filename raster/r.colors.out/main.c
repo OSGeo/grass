@@ -103,7 +103,7 @@ int main(int argc, char **argv)
 	/* 3.0 format */
 	CELL lo, hi;
 
-	Rast_get_color_range(&lo, &hi, &colors);
+	Rast_get_c_color_range(&lo, &hi, &colors);
 
 	for (i = lo; i <= hi; i++) {
 	    unsigned char r, g, b, set;

@@ -101,7 +101,7 @@ void Rast_histogram_eq_colors(struct Colors *dst,
 	    continue;
 
 	x = min + (max - min) * (sum + count / 2.0) / total;
-	Rast_get_d_raster_color(&x, &red2, &grn2, &blu2, src);
+	Rast_get_d_color(&x, &red2, &grn2, &blu2, src);
 
 	if (!first)
 	    Rast_add_color_rule(prev, red, grn, blu, cat, red2, grn2, blu2, dst);
@@ -168,7 +168,7 @@ void Rast_histogram_eq_colors_fp(struct Colors *dst,
 	if (statf->flip)
 	    val2 = -val2;
 	x = min + (max - min) * sum / statf->total;
-	Rast_get_d_raster_color(&x, &red2, &grn2, &blu2, src);
+	Rast_get_d_color(&x, &red2, &grn2, &blu2, src);
 
 	if (!first)
 	    Rast_add_d_raster_color_rule(&val, red, grn, blu, &val2, red2, grn2, blu2, dst);
@@ -222,7 +222,7 @@ void Rast_log_colors(struct Colors *dst, struct Colors *src, int samples)
 	DCELL x, y;
 
 	y = min + (max - min) * i / samples;
-	Rast_get_d_raster_color(&y, &red2, &grn2, &blu2, src);
+	Rast_get_d_color(&y, &red2, &grn2, &blu2, src);
 
 	if (i == 0)
 	    x = min;
@@ -286,7 +286,7 @@ void Rast_abs_log_colors(struct Colors *dst, struct Colors *src, int samples)
 	DCELL x, y;
 
 	y = min + (max - min) * i / samples;
-	Rast_get_d_raster_color(&y, &red2, &grn2, &blu2, src);
+	Rast_get_d_color(&y, &red2, &grn2, &blu2, src);
 
 	if (i == 0)
 	    x = 1;

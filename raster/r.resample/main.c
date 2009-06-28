@@ -159,7 +159,7 @@ int main(int argc, char *argv[])
 	    CELL min, max, cmin, cmax;
 
 	    Rast_get_range_min_max(&range, &min, &max);
-	    Rast_get_color_range(&cmin, &cmax, &colr);
+	    Rast_get_c_color_range(&cmin, &cmax, &colr);
 	    if (min > cmin)
 		cmin = min;
 	    if (max < cmax)

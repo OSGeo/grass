@@ -393,7 +393,7 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
 
 		Rast_read_range("interior", mapset, &range);
 		Rast_get_range_min_max(&range, &min, &max);
-		Rast_get_color_range(&cmin, &cmax, &colr);
+		Rast_get_c_color_range(&cmin, &cmax, &colr);
 		if (min > cmin)
 		    cmin = min;
 		if (max < cmax)
@@ -406,7 +406,7 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
 
 		Rast_read_fp_range("interior", mapset, &fprange);
 		Rast_get_fp_range_min_max(&fprange, &dmin, &dmax);
-		Rast_get_color_range(&cmin, &cmax, &colr);
+		Rast_get_c_color_range(&cmin, &cmax, &colr);
 		if (dmin > cmin)
 		    cmin = dmin;
 		if (dmax < cmax)

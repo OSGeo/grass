@@ -85,7 +85,7 @@ int export_band(GDALDatasetH hMEMDS, GDALDataType export_datatype, int band,
 	char key[200], value[200];
 	int rcount;
 
-	Rast_get_color_range(&min, &max, &sGrassColors);
+	Rast_get_c_color_range(&min, &max, &sGrassColors);
 	if (bHaveMinMax) {
 	    if (max < dfCellMax) {
 		maxcolor = max;
@@ -122,15 +122,15 @@ int export_band(GDALDatasetH hMEMDS, GDALDataType export_datatype, int band,
 		int nRed, nGreen, nBlue;
 		GDALColorEntry sColor;
 
-		if (Rast_get_color
-		    (iColor, &nRed, &nGreen, &nBlue, &sGrassColors)) {
+		if (Rast_get_c_color(&iColor, &nRed, &nGreen, &nBlue,
+				     &sGrassColors)) {
 		    sColor.c1 = nRed;
 		    sColor.c2 = nGreen;
 		    sColor.c3 = nBlue;
 		    sColor.c4 = 255;
 
 		    G_debug(3,
-			    "Rast_get_color: Y, rcount %d, nRed %d, nGreen %d, nBlue %d",
+			    "Rast_get_c_color: Y, rcount %d, nRed %d, nGreen %d, nBlue %d",
 			    rcount, nRed, nGreen, nBlue);
 		    GDALSetColorEntry(hCT, iColor, &sColor);
 		}
@@ -141,7 +141,7 @@ int export_band(GDALDatasetH hMEMDS, GDALDataType export_datatype, int band,
 		    sColor.c4 = 0;
 
 		    G_debug(3,
-			    "Rast_get_color: N, rcount %d, nRed %d, nGreen %d, nBlue %d",
+			    "Rast_get_c_color: N, rcount %d, nRed %d, nGreen %d, nBlue %d",
 			    rcount, nRed, nGreen, nBlue);
 		    GDALSetColorEntry(hCT, iColor, &sColor);
 		}

@@ -116,7 +116,7 @@ int PS_raster_plot(void)
 	    if ((row % PS.row_delta) == 0) {
 		ptr = cellbuf;
 		for (col = 0; col < PS.w.cols; col += PS.col_delta) {
-		    Rast_get_raster_color(ptr, &r, &g, &b, &PS.colors, map_type);
+		    Rast_get_color(ptr, &r, &g, &b, &PS.colors, map_type);
 
 		    /* if color raster */
 		    if (doing_color) {
@@ -162,7 +162,7 @@ int PS_raster_plot(void)
 	    if ((row % PS.row_delta) == 0) {
 		for (col = 0; col < PS.w.cols; col += PS.col_delta) {
 		    for (i = 0; i < 3; i++) {
-			Rast_get_raster_color(cptr[i], &rr, &gg, &bb,
+			Rast_get_color(cptr[i], &rr, &gg, &bb,
 					   &(grp.colors[i]), grp_map_type[i]);
 			if (i == 0)
 			    r = rr;

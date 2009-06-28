@@ -38,7 +38,7 @@ static int do_value(const char *buf, RASTER_MAP_TYPE type,
 	    fprintf(stdout, "*: *\n");
 	    return 0;
 	}
-	if (!Rast_get_c_raster_color(&ival, &red, &grn, &blu, colors)) {
+	if (!Rast_get_c_color(&ival, &red, &grn, &blu, colors)) {
 	    fprintf(stdout, "%d: *\n", ival);
 	    return 0;
 	}
@@ -53,7 +53,7 @@ static int do_value(const char *buf, RASTER_MAP_TYPE type,
 	    fprintf(stdout, "*: *\n");
 	    return 0;
 	}
-	if (!Rast_get_d_raster_color(&fval, &red, &grn, &blu, colors)) {
+	if (!Rast_get_d_color(&fval, &red, &grn, &blu, colors)) {
 	    fprintf(stdout, "%f: *\n", fval);
 	    return 0;
 	}

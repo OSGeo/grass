@@ -133,7 +133,7 @@ int PS_fcolortable(void)
     for (i = 0; i < ncols; i++) {
 	/*      val = dmin + i * step;   flip */
 	val = dmax - i * step;
-	Rast_get_d_raster_color(&val, &R, &G, &B, &colors);
+	Rast_get_d_color(&val, &R, &G, &B, &colors);
 
 	if (do_color)
 	    fprintf(PS.fp, "%.3f %.3f %.3f C\n", (double)R / 255.,

@@ -83,6 +83,6 @@ int Gvl_get_color_for_value(void *color_data, float *value)
 {
     int r, g, b;
 
-    Rast_get_f_raster_color((FCELL *) value, &r, &g, &b, color_data);
+    Rast_get_f_color((FCELL *) value, &r, &g, &b, color_data);
     return ((r & 0xff) | ((g & 0xff) << 8) | ((b & 0xff) << 16));
 }

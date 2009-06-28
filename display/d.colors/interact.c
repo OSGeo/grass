@@ -43,7 +43,7 @@ interact(struct Categories *categories, struct Colors *colors, char *name,
 
     colors_changed = 0;
     Rast_set_c_null_value(&at_cat, 1);
-    Rast_get_color(at_cat, &cur_red, &cur_grn, &cur_blu, colors);
+    Rast_get_c_color(&at_cat, &cur_red, &cur_grn, &cur_blu, colors);
     shift_incr = 10;
 
     Initialize_curses();
@@ -88,7 +88,7 @@ interact(struct Categories *categories, struct Colors *colors, char *name,
 	case 'd':
 	case 'u':
 	    if (hi_mode && !hi_save_mode) {
-		Rast_get_color(at_cat, &cur_red, &cur_grn, &cur_blu, colors);
+		Rast_get_c_color(&at_cat, &cur_red, &cur_grn, &cur_blu, colors);
 	    }
 	    /*              tmark_category(at_cat, 0) ; */
 	    if (Rast_is_c_null_value(&at_cat))
@@ -128,7 +128,7 @@ interact(struct Categories *categories, struct Colors *colors, char *name,
 		}
 	    }
 	    else {
-		Rast_get_color(at_cat, &cur_red, &cur_grn, &cur_blu, colors);
+		Rast_get_c_color(&at_cat, &cur_red, &cur_grn, &cur_blu, colors);
 	    }
 
 	    WRITE_CATS;
@@ -171,7 +171,7 @@ interact(struct Categories *categories, struct Colors *colors, char *name,
 		}
 	    }
 	    else {
-		Rast_get_color(at_cat, &cur_red, &cur_grn, &cur_blu, colors);
+		Rast_get_c_color(&at_cat, &cur_red, &cur_grn, &cur_blu, colors);
 		switch (cur_char) {
 		case 'r':
 		    cur_red = shift_color(cur_red, -shift_incr);
@@ -251,7 +251,7 @@ interact(struct Categories *categories, struct Colors *colors, char *name,
 	case 'h':
 	case 'H':
 	    if (hi_mode) {
-		Rast_get_color(at_cat, &cur_red, &cur_grn, &cur_blu, colors);
+		Rast_get_c_color(&at_cat, &cur_red, &cur_grn, &cur_blu, colors);
 		hi_mode = 0;
 		hi_save_mode = 0;
 	    }

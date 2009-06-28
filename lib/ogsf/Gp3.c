@@ -62,7 +62,7 @@ int Gp_set_color(const char *grassname, geopoint * gp)
 	    cat = (int)tp->fattr;
 	    color = NULL_COLOR;
 
-	    if (Rast_get_color(cat, &r, &g, &b, &sc)) {
+	    if (Rast_get_c_color(&cat, &r, &g, &b, &sc)) {
 		color = (r & 0xff) | ((g & 0xff) << 8) | ((b & 0xff) << 16);
 	    }
 

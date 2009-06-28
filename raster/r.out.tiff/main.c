@@ -201,7 +201,7 @@ int main(int argc, char *argv[])
 #define	SCALE(x)	(((x)*((1L<<16)-1))/255)
 
 	for (i = colors.cmin; i <= colors.cmax; i++, redp++, grnp++, blup++) {
-	    Rast_get_color(i, &red, &grn, &blu, &colors);
+	    Rast_get_c_color(&i, &red, &grn, &blu, &colors);
 	    *redp = (unsigned short) (SCALE(red));
 	    *grnp = (unsigned short) (SCALE(grn));
 	    *blup = (unsigned short) (SCALE(blu));
@@ -290,8 +290,8 @@ int main(int argc, char *argv[])
 		    }
 		    else {
 			for (j = 0; j < width; j++) {
-			    Rast_get_color(cellptr[col + j], &red, &grn, &blu,
-					&colors);
+			    Rast_get_c_color(&(cellptr[col + j]), &red, &grn, &blu,
+					     &colors);
 			    *tptr++ = (unsigned char) red;
 			    *tptr++ = (unsigned char) grn;
 			    *tptr++ = (unsigned char) blu;
@@ -350,7 +350,7 @@ int main(int argc, char *argv[])
 	    }
 	    else {
 		for (col = 0; col < h.ras_width; col++) {
-		    Rast_get_color(cell[col], &red, &grn, &blu, &colors);
+		    Rast_get_c_color(&(cell[col]), &red, &grn, &blu, &colors);
 		    *tmpptr++ = (unsigned char) red;
 		    *tmpptr++ = (unsigned char) grn;
 		    *tmpptr++ = (unsigned char) blu;

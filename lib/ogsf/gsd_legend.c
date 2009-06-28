@@ -515,10 +515,10 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
 	    }
 	    if (k == 0 || tdcell != pdcell) {
 		if (is_fp)
-		    Rast_get_d_raster_color(&tdcell,
+		    Rast_get_d_color(&tdcell,
 					 &red, &green, &blue, &colors);
 		else
-		    Rast_get_color((CELL) tdcell, &red, &green, &blue, &colors);
+		    Rast_get_c_color((CELL *)&tdcell, &red, &green, &blue, &colors);
 
 		RGB_TO_INT(red, green, blue, colr);
 		if (discrete) {	/* draw black-white-black separator */

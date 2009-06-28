@@ -27,7 +27,7 @@ int read_cell(char *name, char *mapset)
 	error(fullname, "", "can't read color table");
 	return 0;
     }
-    Rast_get_color_range(&PS.min_color, &PS.max_color, &PS.colors);
+    Rast_get_c_color_range(&PS.min_color, &PS.max_color, &PS.colors);
 
     /* open raster map for reading */
     if ((PS.cell_fd = Rast_open_cell_old(name, mapset)) < 0) {

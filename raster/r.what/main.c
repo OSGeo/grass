@@ -356,10 +356,10 @@ int main(int argc, char *argv[])
 		}
 		if (flag4->answer) {
 		    if (out_type[i] == CELL_TYPE)
-			Rast_get_c_raster_color(&cell[i][cache[point].col],
+			Rast_get_c_color(&cell[i][cache[point].col],
 					     &red, &green, &blue, &ncolor[i]);
 		    else
-			Rast_get_d_raster_color(&dcell[i][cache[point].col],
+			Rast_get_d_color(&dcell[i][cache[point].col],
 					     &red, &green, &blue, &ncolor[i]);
 
 		    sprintf(cache[point].clr_buf[i], "%03d:%03d:%03d", red,

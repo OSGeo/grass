@@ -327,7 +327,7 @@ int main(int argc, char **argv)
 	if (Rast_is_c_null_value(&min_ind))
 	    G_fatal_error(_("Input map contains no data"));
 
-	Rast_get_color_range(&min_colr, &max_colr, &colors);
+	Rast_get_c_color_range(&min_colr, &max_colr, &colors);
 
 	if (UserRange) {
 	    if (min_ind < UserRangeMin)
