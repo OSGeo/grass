@@ -187,7 +187,7 @@ int vect_to_rast(const char *vector_map, const char *raster_map, int field,
     Vect_destroy_line_struct(Points);
 
     if (stat < 0) {
-	Rast_unopen_cell(fd);
+	Rast_unopen(fd);
 
 	return 1;
     }
@@ -195,7 +195,7 @@ int vect_to_rast(const char *vector_map, const char *raster_map, int field,
     Vect_close(&Map);
 
     G_verbose_message(_("Creating support files for raster map..."));
-    Rast_close_cell(fd);
+    Rast_close(fd);
     update_hist(raster_map, vector_map, Map.head.orig_scale);
 
     /* colors */

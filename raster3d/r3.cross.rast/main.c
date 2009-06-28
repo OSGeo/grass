@@ -58,7 +58,7 @@ void fatal_error(void *map, int elevfd, int outfd, char *errorMsg)
 
     /*unopen the output map */
     if (outfd != -1)
-	Rast_unopen_cell(outfd);
+	Rast_unopen(outfd);
 
     if (elevfd != -1)
 	close_output_map(elevfd);
@@ -74,7 +74,7 @@ void fatal_error(void *map, int elevfd, int outfd, char *errorMsg)
 /* ************************************************************************* */
 void close_output_map(int fd)
 {
-    if (Rast_close_cell(fd) < 0)
+    if (Rast_close(fd) < 0)
 	G_fatal_error(_("Unable to close output map"));
 }
 
@@ -380,9 +380,9 @@ int main(int argc, char *argv[])
 		    G3d_maskOff(map);
 	}
 
-	if (Rast_close_cell(outfd) < 0)
+	if (Rast_close(outfd) < 0)
 	    fatal_error(map, elevfd, -1, _("Unable to close output map"));
-	if (Rast_close_cell(elevfd) < 0)
+	if (Rast_close(elevfd) < 0)
 	    fatal_error(map, -1, -1, _("Unable to close elevation map"));
 
     }

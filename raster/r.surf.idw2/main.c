@@ -182,7 +182,7 @@ int main(int argc, char *argv[])
 
     G_free(points);
     G_free(cell);
-    Rast_close_cell(fd);
+    Rast_close(fd);
 
     /* writing history file */
     Rast_short_history(parm.output->answer, "raster", &history);

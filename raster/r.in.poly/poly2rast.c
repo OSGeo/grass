@@ -81,11 +81,11 @@ int poly_to_rast(char *input_file, char *raster_map, char *title, int nrows)
      */
 
     if (stat < 0) {
-	Rast_unopen_cell(rfd);
+	Rast_unopen(rfd);
 	return 1;
     }
 
-    Rast_close_cell(rfd);
+    Rast_close(rfd);
     Rast_write_cats(raster_map, &labels);
     Rast_short_history(raster_map, "raster", &history);
     Rast_command_history(&history);

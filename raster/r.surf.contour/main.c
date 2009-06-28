@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
 		if (!alt_row[c])
 		    FLAG_SET(mask, r, c);
 	}
-	Rast_close_cell(file_fd);
+	Rast_close(file_fd);
     }
     zero = (NODE *) G_malloc(INIT_AR * sizeof(NODE));
     minc = minr = 0;
@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
     free_cell(con);
     flag_destroy(seen);
     flag_destroy(mask);
-    Rast_close_cell(file_fd);
+    Rast_close(file_fd);
 
     Rast_short_history(alt_name, "raster", &history);
     Rast_command_history(&history);

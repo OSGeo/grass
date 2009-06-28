@@ -216,7 +216,7 @@ int main(int argc, char *argv[])
     /* make sure it got to 100% */
     G_percent(1, 1, 2);
 
-    Rast_close_cell(fd);
+    Rast_close(fd);
     fclose(fp);
 
     exit(EXIT_SUCCESS);

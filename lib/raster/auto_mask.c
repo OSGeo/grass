@@ -60,7 +60,7 @@ int Rast__check_for_auto_masking(void)
 	}
     }
 
-    Rast_unopen_cell(R__.mask_fd);
+    Rast_unopen(R__.mask_fd);
     R__.mask_fd = Rast__open_cell_old("MASK", G_mapset());
     if (R__.mask_fd < 0) {
 	R__.auto_mask = 0;
@@ -85,7 +85,7 @@ int Rast__check_for_auto_masking(void)
 void Rast_suppress_masking(void)
 {
     if (R__.auto_mask > 0) {
-	Rast_close_cell(R__.mask_fd);
+	Rast_close(R__.mask_fd);
 	/* G_free (R__.mask_buf); */
 	R__.mask_fd = -1;
     }

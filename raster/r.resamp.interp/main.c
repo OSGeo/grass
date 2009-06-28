@@ -294,8 +294,8 @@ int main(int argc, char *argv[])
 
     G_percent(dst_w.rows, dst_w.rows, 2);
 
-    Rast_close_cell(infile);
-    Rast_close_cell(outfile);
+    Rast_close(infile);
+    Rast_close(outfile);
 
 
     /* record map metadata/history info */

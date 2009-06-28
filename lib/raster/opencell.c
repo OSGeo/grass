@@ -362,7 +362,7 @@ int Rast__open_cell_old(const char *name, const char *mapset)
   The file must be written sequentially. Use Rast_open_cell_new_random()
   for non sequential writes.
   
-  Note: the open actually creates a temporary file Rast_close_cell() will
+  Note: the open actually creates a temporary file Rast_close() will
   move the temporary file to the cell file and write out the necessary
   support files (cellhd, cats, hist, etc.).
 

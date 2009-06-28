@@ -210,7 +210,7 @@ void worker(char *raster, int f(int, char **, area_des, double *),
 	receive(rec_ch, &toReceive);
     }
     /* close raster map */
-    Rast_close_cell(fd);
+    Rast_close(fd);
 
     /* close channels */
     close(rec_ch);

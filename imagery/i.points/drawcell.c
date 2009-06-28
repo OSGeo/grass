@@ -64,7 +64,7 @@ int drawcell(View * view)
 	D_draw_d_raster(row, dcell, colors);
     }
     D_cell_draw_end();
-    Rast_close_cell(fd);
+    Rast_close(fd);
     G_free(dcell);
     if (colors != &VIEW_MAP1->cell.colors)
 	set_colors(&VIEW_MAP1->cell.colors);

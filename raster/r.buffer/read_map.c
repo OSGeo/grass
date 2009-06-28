@@ -100,7 +100,7 @@ int read_input_map(char *input, char *mapset, int ZEROFLAG)
 	cell -= window.cols;
     }
     G_percent(row, window.rows, 2);
-    Rast_close_cell(fd);
+    Rast_close(fd);
     G_free(cell);
 
     return 0;

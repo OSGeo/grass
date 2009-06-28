@@ -224,15 +224,15 @@ static int doit(char *name, int uncompress, RASTER_MAP_TYPE map_type)
 	    break;
     }
     G_free(rast);
-    Rast_close_cell(old);
+    Rast_close(old);
     if (row < nrows) {
-	Rast_unopen_cell(new);
+	Rast_unopen(new);
 	return 1;
     }
-    Rast_close_cell(new);
+    Rast_close(new);
     newsize = 0;
     old = Rast_open_cell_old(name, G_mapset());
     newsize = lseek(old, (off_t) 0, SEEK_END);
-    Rast_close_cell(old);
+    Rast_close(old);
     return 0;
 }

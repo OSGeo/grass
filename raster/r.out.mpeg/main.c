@@ -315,7 +315,7 @@ static int load_files(void)
 		}
 	    }
 
-	    Rast_close_cell(fd);
+	    Rast_close(fd);
 	}
 
 	yfiles[cnt] = G_tempfile();

@@ -64,7 +64,7 @@ int Rast_set_window(struct Cell_head *window)
 
     /* close the mask */
     if (R__.auto_mask > 0) {
-	Rast_close_cell(maskfd);
+	Rast_close(maskfd);
 	/* G_free (R__.mask_buf); */
 	R__.mask_fd = -1;
 	R__.auto_mask = -1;	/* turn off masking */

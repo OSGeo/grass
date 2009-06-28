@@ -337,7 +337,7 @@ void mov_wind(int t, int b, int l, int r, char *n1, char *n2, char *n3,
 	    t = t0;
 	}
 
-	Rast_close_cell(fmask);
+	Rast_close(fmask);
     }
 
     /* if neither, then exit */

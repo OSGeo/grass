@@ -27,7 +27,7 @@ int get_stats(const char *name, struct Cell_stats *statf)
     }
     if (row < nrows)
 	exit(1);
-    Rast_close_cell(fd);
+    Rast_close(fd);
     G_free(cell);
     G_percent(row, nrows, 2);
 

@@ -515,7 +515,7 @@ int main(int argc, char *argv[])
 
     for (row = 0; row < grass_nrows; row++) {
 	if (fread(x_v, bytes * ncols, 1, fd) != 1) {
-	    Rast_unopen_cell(cf);
+	    Rast_unopen(cf);
 	    G_fatal_error(_("Conversion failed at row %d"), row);
 	    exit(EXIT_FAILURE);
 	}
@@ -581,7 +581,7 @@ int main(int argc, char *argv[])
     }
 
     G_debug(1, "Creating support files for %s", output);
-    Rast_close_cell(cf);
+    Rast_close(cf);
 
     if (title)
 	Rast_put_cell_title(output, title);

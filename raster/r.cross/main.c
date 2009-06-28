@@ -146,8 +146,8 @@ int main(int argc, char *argv[])
 
     /* now close all files */
     for (i = 0; i < nfiles; i++)
-	Rast_close_cell(fd[i]);
-    Rast_close_cell(outfd);
+	Rast_close(fd[i]);
+    Rast_close(outfd);
 
     if (result <= 0)
 	exit(0);
@@ -176,8 +176,8 @@ int main(int argc, char *argv[])
     renumber(fd[0], outfd);
 
     G_message(_("Creating support files for <%s>..."), output);
-    Rast_close_cell(fd[0]);
-    Rast_close_cell(outfd);
+    Rast_close(fd[0]);
+    Rast_close(outfd);
     Rast_write_cats(output, &pcats);
     Rast_free_cats(&pcats);
     if (result > 0) {

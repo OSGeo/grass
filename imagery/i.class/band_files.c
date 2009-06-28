@@ -34,7 +34,7 @@ int close_band_files(void)
     nbands = Refer.nfiles;
     for (n = 0; n < nbands; n++) {
 	G_free(Bandbuf[n]);
-	Rast_close_cell(Bandfd[n]);
+	Rast_close(Bandfd[n]);
     }
     G_free(Bandbuf);
     G_free(Bandfd);

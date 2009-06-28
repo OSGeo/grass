@@ -159,7 +159,7 @@ int main(int argc, char *argv[])
 	    *(data[0] + (i * size) + j) = (double)cell_row[j];
     }
     /* close input cell map and release the row buffer */
-    Rast_close_cell(inputfd);
+    Rast_close(inputfd);
     G_free(cell_row);
 
     /* take the del**2g of image */
@@ -184,7 +184,7 @@ int main(int argc, char *argv[])
 	}
 	Rast_put_raster_row(zcfd, cell_row, CELL_TYPE);
     }
-    Rast_close_cell(zcfd);
+    Rast_close(zcfd);
 
     G_free(cell_row);
 

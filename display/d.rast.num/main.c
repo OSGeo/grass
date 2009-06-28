@@ -241,7 +241,7 @@ int main(int argc, char **argv)
 	}
     }
 
-    Rast_close_cell(layer_fd);
+    Rast_close(layer_fd);
 
     D_close_driver();
 

@@ -18,10 +18,10 @@ void close_down(void)
     char map_title[RECORD_LEN], map_type[32];
 
     /* Close connection with existing input raster. */
-    Rast_unopen_cell(fd_in);
+    Rast_unopen(fd_in);
 
     /* Write output raster map and close connection. */
-    Rast_close_cell(fd_out);
+    Rast_close(fd_out);
 
     /* write out map metadata */
     Rast_short_history(rast_out_name, "raster", &history);

@@ -392,7 +392,7 @@ int main(int argc, char **argv)
     fdi = Rast_open_cell_old(inmap->answer, setname);
     cell_type = Rast_get_raster_map_type(fdi);
     ibuffer = readcell(fdi, memory->answer);
-    Rast_close_cell(fdi);
+    Rast_close(fdi);
 
     G__switch_env();
     Rast_set_window(&outcellhd);
@@ -448,7 +448,7 @@ int main(int argc, char **argv)
 	G_percent(row, outcellhd.rows - 1, 2);
     }
 
-    Rast_close_cell(fdo);
+    Rast_close(fdo);
 
     if (have_colors > 0) {
 	Rast_write_colors(mapname, G_mapset(), &colr);

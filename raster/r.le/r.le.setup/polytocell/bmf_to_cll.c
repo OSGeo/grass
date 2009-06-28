@@ -94,7 +94,7 @@ int main(argc, argv)
 		Rast_put_map_row(newmap, record);
 		atrow++;
 	    }
-	    Rast_close_cell(newmap);
+	    Rast_close(newmap);
 	    goto finish;
 	}
 
@@ -116,7 +116,7 @@ int main(argc, argv)
 
 	Rast_put_map_row(newmap, record);
     }
-    fprintf(stderr, "Close: %d\n", Rast_close_cell(newmap));
+    fprintf(stderr, "Close: %d\n", Rast_close(newmap));
 
   finish:
     G_suppress_warnings(1);

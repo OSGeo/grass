@@ -369,7 +369,7 @@ int main(int argc, char *argv[])
     }				/* end working on type=lines */
 
     /* close elevation raster: */
-    Rast_close_cell(fdrast);
+    Rast_close(fdrast);
     
     /* build topology for output vector */
     if (out_num > 0) {

@@ -160,7 +160,7 @@ int main(int argc, char *argv[])
 		G_message(_("Category table for <%s> set from <%s>"), name,
 			  parm.raster->answer);
 
-	    Rast_close_cell(fd);
+	    Rast_close(fd);
 	}
 
 	/* load cats from rules file */

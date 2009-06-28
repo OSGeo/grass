@@ -64,7 +64,7 @@ void rdwr_gridatb(void)
     }
     G_percent(i, cellhd.rows, 2);
     fclose(fp);
-    Rast_close_cell(fd);
+    Rast_close(fd);
 
     Rast_put_cell_title(oname, buf);
     Rast_put_cellhd(oname, &cellhd);

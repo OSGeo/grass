@@ -236,7 +236,7 @@ int init_vars(int argc, char *argv[])
 	    ptr = G_incr_void_ptr(ptr, ele_size);
 	}
     }
-    Rast_close_cell(fd);
+    Rast_close(fd);
     G_free(elebuf);
     if (do_points < nrows * ncols)
 	MASK_flag = 1;
@@ -291,7 +291,7 @@ int init_vars(int argc, char *argv[])
 		}
 	    }
 	}
-	Rast_close_cell(fd);
+	Rast_close(fd);
 	G_free(buf);
     }
     else {
@@ -320,7 +320,7 @@ int init_vars(int argc, char *argv[])
 		}
 	    }
 	}
-	Rast_close_cell(fd);
+	Rast_close(fd);
 	G_free(buf);
     }
     else {

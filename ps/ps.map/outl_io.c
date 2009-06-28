@@ -78,7 +78,7 @@ RASTER_MAP_TYPE o_open_file(char *cell)
 
 int o_close_file(void)
 {
-    Rast_close_cell(in_file_d);
+    Rast_close(in_file_d);
 
     return 0;
 }

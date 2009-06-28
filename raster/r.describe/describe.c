@@ -127,7 +127,7 @@ int describe(const char *name, int compact, char *no_data_str,
 	    Rast_update_cell_stats(buf, ncols, &statf);
     }
     G_percent(nrows, nrows, 2);
-    Rast_close_cell(fd);
+    Rast_close(fd);
     G_free(buf);
 
     if (range) {

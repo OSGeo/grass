@@ -271,14 +271,14 @@ int main(int argc, char **argv)
     G_percent(window.rows, window.rows, 5);
 
     /* Close the cell files */
-    Rast_close_cell(hue_file);
+    Rast_close(hue_file);
     if (int_used)
-	Rast_close_cell(int_file);
+	Rast_close(int_file);
     if (sat_used)
-	Rast_close_cell(sat_file);
+	Rast_close(sat_file);
 
     if (r_used) {
-	Rast_close_cell(r_file);
+	Rast_close(r_file);
 	Rast_write_colors(name_r, G_mapset(), &gray_colors);
 	Rast_short_history(name_r, "raster", &history);
 	Rast_command_history(&history);
@@ -286,7 +286,7 @@ int main(int argc, char **argv)
 	Rast_put_cell_title(name_r, "Red extracted from HIS");
     }
     if (g_used) {
-	Rast_close_cell(g_file);
+	Rast_close(g_file);
 	Rast_write_colors(name_g, G_mapset(), &gray_colors);
 	Rast_short_history(name_g, "raster", &history);
 	Rast_command_history(&history);
@@ -294,7 +294,7 @@ int main(int argc, char **argv)
 	Rast_put_cell_title(name_g, "Green extracted from HIS");
     }
     if (b_used) {
-	Rast_close_cell(b_file);
+	Rast_close(b_file);
 	Rast_write_colors(name_b, G_mapset(), &gray_colors);
 	Rast_short_history(name_b, "raster", &history);
 	Rast_command_history(&history);

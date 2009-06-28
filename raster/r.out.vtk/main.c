@@ -151,7 +151,7 @@ int main(int argc, char *argv[])
 					    region, out_type, null_value,
 					    scale, polytype, digits);
 	}
-	Rast_close_cell(fd);
+	Rast_close(fd);
     }
     else {
 	/*Should pointdata or celldata be written */
@@ -194,7 +194,7 @@ int main(int argc, char *argv[])
 	    /*Now write the data */
 	    write_vtk_data(fd, fp, param.input->answers[i], region, out_type,
 			   null_value, digits);
-	    Rast_close_cell(fd);
+	    Rast_close(fd);
 	}
     }
 
@@ -236,7 +236,7 @@ int main(int argc, char *argv[])
 
 	    /*Close the maps */
 	    for (i = 0; i < 3; i++)
-		Rast_close_cell(rgbfd[i]);
+		Rast_close(rgbfd[i]);
 	}
     }
 
@@ -279,7 +279,7 @@ int main(int argc, char *argv[])
 
 	    /*Close the maps */
 	    for (i = 0; i < 3; i++)
-		Rast_close_cell(vectfd[i]);
+		Rast_close(vectfd[i]);
 	}
     }
 

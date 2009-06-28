@@ -328,9 +328,9 @@ int main(int argc, char *argv[])
     }
 
     G_free(inrast);
-    Rast_close_cell(infd);
+    Rast_close(infd);
     G_free(outrast);
-    Rast_close_cell(outfd);
+    Rast_close(outfd);
 
     /* Color from 0 to 10 in grey */ 
     Rast_init_colors(&colors);

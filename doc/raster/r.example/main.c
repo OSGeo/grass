@@ -184,8 +184,8 @@ int main(int argc, char *argv[])
     G_free(outrast);
 
     /* closing raster maps */
-    Rast_close_cell(infd);
-    Rast_close_cell(outfd);
+    Rast_close(infd);
+    Rast_close(outfd);
 
     /* add command line incantation to history file */
     Rast_short_history(result, "raster", &history);

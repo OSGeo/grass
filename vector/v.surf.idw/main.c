@@ -397,7 +397,7 @@ int main(int argc, char *argv[])
 	}
 	Rast_put_d_raster_row(fd, dcell);
     }
-    Rast_close_cell(fd);
+    Rast_close(fd);
     /* writing history file */
     Rast_short_history(parm.output->answer, "raster", &history);
     Rast_command_history(&history);

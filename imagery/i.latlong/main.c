@@ -146,9 +146,9 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Cannot write to output raster file"));
     }
     G_free(inrast);
-    Rast_close_cell(infd);
+    Rast_close(infd);
     G_free(outrast1);
-    Rast_close_cell(outfd1);
+    Rast_close(outfd1);
 
     Rast_short_history(result1, "raster", &history);
     Rast_command_history(&history);

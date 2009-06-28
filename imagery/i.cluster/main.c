@@ -303,7 +303,7 @@ int main(int argc, char *argv[])
 
     for (n = 0; n < ref.nfiles; n++) {
 	G_free(cell[n]);
-	Rast_close_cell(cellfd[n]);
+	Rast_close(cellfd[n]);
     }
     G_free(x);
 

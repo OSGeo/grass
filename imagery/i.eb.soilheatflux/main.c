@@ -176,13 +176,13 @@ int main(int argc, char *argv[])
     G_free(inrast_tempk);
     G_free(inrast_rnet);
     G_free(inrast_time);
-    Rast_close_cell(infd_albedo);
-    Rast_close_cell(infd_ndvi);
-    Rast_close_cell(infd_tempk);
-    Rast_close_cell(infd_rnet);
-    Rast_close_cell(infd_time);
+    Rast_close(infd_albedo);
+    Rast_close(infd_ndvi);
+    Rast_close(infd_tempk);
+    Rast_close(infd_rnet);
+    Rast_close(infd_time);
     G_free(outrast);
-    Rast_close_cell(outfd);
+    Rast_close(outfd);
     
     /* Colors in grey shade */ 
     Rast_init_colors(&colors);

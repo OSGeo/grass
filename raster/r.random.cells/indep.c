@@ -145,7 +145,7 @@ void Indep(void)
     }
     G_percent(1, 1, 1);
     
-    Rast_close_cell(OutFD);
+    Rast_close(OutFD);
     Rast_short_history(Output->answer, "raster", &history);
     Rast_command_history(&history);
     Rast_write_history(Output->answer, &history);

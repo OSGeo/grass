@@ -188,8 +188,8 @@ int main(int argc, char *argv[])
 
     /* close the cell maps */
     for (i = 1; i <= bands; i++) {
-	Rast_close_cell(datafds[i]);
-	Rast_close_cell(outfds[i]);
+	Rast_close(datafds[i]);
+	Rast_close(outfds[i]);
 
 	if (outbandmin[i] < (CELL) 0 || outbandmax[i] > (CELL) 255) {
 	    G_warning(_("The output cell map <%s.%d> has values "

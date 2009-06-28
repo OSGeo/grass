@@ -346,7 +346,7 @@ G_add_keyword(_("interpolation"));
 		Vect_close(&Out);
 
 	    if (map)
-		Rast_close_cell(raster);
+		Rast_close(raster);
 
 	    G_done_msg(_("Cross Validation was success!"));
 	    exit(EXIT_SUCCESS);
@@ -731,7 +731,7 @@ G_add_keyword(_("interpolation"));
 	Vect_close(&Out);
 
     if (map) {
-	Rast_close_cell(raster);
+	Rast_close(raster);
 
 	/* set map title */
 	sprintf(title, "%s interpolation with Tykhonov regularization",

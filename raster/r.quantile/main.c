@@ -332,7 +332,7 @@ int main(int argc, char *argv[])
     values = G_calloc(num_values, sizeof(DCELL));
     fill_bins(infile);
 
-    Rast_close_cell(infile);
+    Rast_close(infile);
     G_free(slot_bins);
 
     sort_bins();

@@ -126,7 +126,7 @@ int open_input_raster_map(const char *name)
 /* ************************************************************************* */
 void close_input_raster_map(int fd)
 {
-    if (Rast_close_cell(fd) < 0)
+    if (Rast_close(fd) < 0)
 	G_fatal_error(_("Unable to close input map"));
 }
 

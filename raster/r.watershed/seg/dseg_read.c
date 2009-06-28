@@ -28,7 +28,7 @@ int dseg_read_cell(DSEG * dseg, char *map_name, char *mapset)
     for (row = 0; row < nrows; row++) {
 	if (Rast_get_d_raster_row(map_fd, dbuffer, row) < 0) {
 	    G_free(dbuffer);
-	    Rast_close_cell(map_fd);
+	    Rast_close(map_fd);
 	    sprintf(msg, "%s(): unable to read file [%s] in [%s], %d %d",
 		    me, map_name, mapset, row, nrows);
 	    G_warning(msg);
@@ -36,7 +36,7 @@ int dseg_read_cell(DSEG * dseg, char *map_name, char *mapset)
 	}
 	if (segment_put_row(&(dseg->seg), (DCELL *) dbuffer, row) < 0) {
 	    G_free(dbuffer);
-	    Rast_close_cell(map_fd);
+	    Rast_close(map_fd);
 	    sprintf(msg, "%s(): unable to segment put row for [%s] in [%s]",
 		    me, map_name, mapset);
 	    G_warning(msg);
@@ -44,7 +44,7 @@ int dseg_read_cell(DSEG * dseg, char *map_name, char *mapset)
 	}
     }
 
-    Rast_close_cell(map_fd);
+    Rast_close(map_fd);
     G_free(dbuffer);
 
     dseg->name = G_store(map_name);

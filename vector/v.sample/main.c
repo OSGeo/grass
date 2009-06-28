@@ -280,7 +280,7 @@ int main(int argc, char **argv)
 
     db_close_database_shutdown_driver(Driver);
 
-    Rast_close_cell(fdrast);
+    Rast_close(fdrast);
 
     Vect_close(&In);
 

@@ -14,9 +14,9 @@ int closefiles(struct parms *parms, struct files *files)
     G_debug(1, "Creating support files for <%s>...", parms->output_map);
 
     for (n = 0; n < files->nbands; n++)
-	Rast_close_cell(files->band_fd[n]);
+	Rast_close(files->band_fd[n]);
 
-    Rast_close_cell(files->output_fd);
+    Rast_close(files->output_fd);
     Rast_write_cats(parms->output_map, &files->output_labels);
     make_history(parms->output_map,
 		 parms->group, parms->subgroup, parms->sigfile);

@@ -347,12 +347,12 @@ int doit(const char *name, const char *mapset, int change_null, RASTER_MAP_TYPE 
     }
     G_percent(row, cellhd.rows, 1);
     G_free(rast);
-    Rast_close_cell(old);
+    Rast_close(old);
     if (row < cellhd.rows) {
-	Rast_unopen_cell(new);
+	Rast_unopen(new);
 	return 1;
     }
-    Rast_close_cell(new);
+    Rast_close(new);
 
     return 0;
 }

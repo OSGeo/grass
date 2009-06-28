@@ -521,19 +521,19 @@ int main(int argc, char *argv[])
 	G_free(map_velocity);
     }
 
-    Rast_close_cell(max_fd);
-    Rast_close_cell(dir_fd);
-    Rast_close_cell(base_fd);
-    Rast_close_cell(start_fd);
-    Rast_close_cell(cum_fd);
+    Rast_close(max_fd);
+    Rast_close(dir_fd);
+    Rast_close(base_fd);
+    Rast_close(start_fd);
+    Rast_close(cum_fd);
     if (x_out)
-	Rast_close_cell(x_fd);
+	Rast_close(x_fd);
     if (y_out)
-	Rast_close_cell(y_fd);
+	Rast_close(y_fd);
     if (spotting) {
-	Rast_close_cell(spotdist_fd);
-	Rast_close_cell(velocity_fd);
-	Rast_close_cell(mois_fd);
+	Rast_close(spotdist_fd);
+	Rast_close(velocity_fd);
+	Rast_close(mois_fd);
     }
 
     /* close graphics */

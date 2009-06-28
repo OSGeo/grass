@@ -528,9 +528,9 @@ int main(int argc, char *argv[])
     clean();
     if (fd4)
 	fclose(fd4);
-    Rast_close_cell(fdinp);
+    Rast_close(fdinp);
     if (smooth != NULL)
-	Rast_close_cell(fdsmooth);
+	Rast_close(fdsmooth);
 
     G_done_msg("");
     exit(EXIT_SUCCESS);

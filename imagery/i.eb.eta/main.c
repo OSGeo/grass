@@ -133,11 +133,11 @@ int main(int argc, char *argv[])
     G_free(inrast_rnetday);
     G_free(inrast_evapfr);
     G_free(inrast_tempk);
-    Rast_close_cell(infd_rnetday);
-    Rast_close_cell(infd_evapfr);
-    Rast_close_cell(infd_tempk);
+    Rast_close(infd_rnetday);
+    Rast_close(infd_evapfr);
+    Rast_close(infd_tempk);
     G_free(outrast1);
-    Rast_close_cell(outfd1);
+    Rast_close(outfd1);
     Rast_short_history(result1, "raster", &history);
     Rast_command_history(&history);
     Rast_write_history(result1, &history);

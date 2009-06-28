@@ -72,7 +72,7 @@ int write_rast(double *data[2],	/* Array holding complex data.          */
 	Rast_put_raster_row(fd_out, (DCELL *) row_out, DCELL_TYPE);
     }
 
-    Rast_close_cell(fd_out);
+    Rast_close(fd_out);
     Rast_short_history(file_name, "raster", &history);
     Rast_command_history(&history);
     Rast_write_history(file_name, &history);

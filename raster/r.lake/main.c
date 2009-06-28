@@ -285,7 +285,7 @@ int main(int argc, char *argv[])
 
     /* Close seed map for reading. */
     if (smap_opt->answer)
-	Rast_close_cell(out_fd);
+	Rast_close(out_fd);
 
     /* Open output map for writing. */
     if (lakemap) {
@@ -368,8 +368,8 @@ int main(int argc, char *argv[])
     G_warning(_("Volume is correct only if lake depth (terrain raster map) is in meters"));
 
     /* Close all files. Lake map gets written only now. */
-    Rast_close_cell(in_terran_fd);
-    Rast_close_cell(out_fd);
+    Rast_close(in_terran_fd);
+    Rast_close(out_fd);
 
     /* Add blue color gradient from light bank to dark depth */
     Rast_init_colors(&colr);

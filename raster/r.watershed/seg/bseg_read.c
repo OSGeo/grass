@@ -29,7 +29,7 @@ int bseg_read_cell(BSEG * bseg, char *map_name, char *mapset)
     for (row = 0; row < nrows; row++) {
 	if (Rast_get_c_raster_row(map_fd, buffer, row) < 0) {
 	    G_free(buffer);
-	    Rast_close_cell(map_fd);
+	    Rast_close(map_fd);
 	    sprintf(msg, "%s(): unable to read file [%s] in [%s], %d %d",
 		    me, map_name, mapset, row, nrows);
 	    G_warning(msg);
@@ -40,7 +40,7 @@ int bseg_read_cell(BSEG * bseg, char *map_name, char *mapset)
 	}
     }
 
-    Rast_close_cell(map_fd);
+    Rast_close(map_fd);
     G_free(buffer);
 
     bseg->name = G_store(map_name);

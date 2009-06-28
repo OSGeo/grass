@@ -675,7 +675,7 @@ int main(int argc, char *argv[])
 	}
 	G_percent(1, 1, 2);
 
-	Rast_close_cell(fd);
+	Rast_close(fd);
 	G_free(cell2);
 
 	if (!got_one)
@@ -1120,10 +1120,10 @@ int main(int argc, char *argv[])
     if (dir == 1) {
 	segment_release(&out_seg2);
     }
-    Rast_close_cell(cost_fd);
-    Rast_close_cell(cum_fd);
+    Rast_close(cost_fd);
+    Rast_close(cum_fd);
     if (dir == 1) {
-	Rast_close_cell(dir_fd);
+	Rast_close(dir_fd);
     }
     close(in_fd);		/* close all files */
     close(out_fd);

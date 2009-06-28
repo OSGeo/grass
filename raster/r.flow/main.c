@@ -396,7 +396,7 @@ static void calculate(void)
     Vect_destroy_cats_struct(cats);
 
     if (parm.lgout)
-	Rast_close_cell(lgfd);
+	Rast_close(lgfd);
 }
 
 int main(int argc, char *argv[])

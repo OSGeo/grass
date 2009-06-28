@@ -148,7 +148,7 @@ int main(int argc, char *argv[])
 	}
     }
     G_free(int_buf);
-    Rast_close_cell(cellfile);
+    Rast_close(cellfile);
     Rast_short_history(out_file->answer, "raster", &history);
     Rast_command_history(&history);
     Rast_write_history(out_file->answer, &history);

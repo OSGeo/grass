@@ -24,13 +24,13 @@ int dseg_write_cellfile(DSEG * dseg, char *map_name)
 	segment_get_row(&(dseg->seg), (DCELL *) dbuffer, row);
 	if (Rast_put_raster_row(map_fd, dbuffer, DCELL_TYPE) < 0) {
 	    G_free(dbuffer);
-	    Rast_unopen_cell(map_fd);
+	    Rast_unopen(map_fd);
 	    G_warning("%s(): unable to write new map layer [%s], row %d",
 		      me, map_name, row);
 	    return -2;
 	}
     }
     G_free(dbuffer);
-    Rast_close_cell(map_fd);
+    Rast_close(map_fd);
     return 0;
 }

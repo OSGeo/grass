@@ -84,9 +84,9 @@ int write_output_map(char *output, int offset)
     G_free(cell);
 
     if (offset)
-	Rast_close_cell(fd_in);
+	Rast_close(fd_in);
 
-    Rast_close_cell(fd_out);
+    Rast_close(fd_out);
 
     return 0;
 }

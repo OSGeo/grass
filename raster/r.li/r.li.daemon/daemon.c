@@ -268,7 +268,7 @@ int calculateIndex(char *file, int f(int, char **, area_des, double *),
 	write_raster(mv_fd, random_access, g);
 	close(random_access);
 	unlink(random_access_name);
-	Rast_close_cell(mv_fd);
+	Rast_close(mv_fd);
 	Rast_short_history(output, "raster", &history);
 	Rast_command_history(&history);
 	Rast_write_history(output, &history);

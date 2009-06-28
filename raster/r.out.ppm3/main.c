@@ -191,7 +191,7 @@ int main(int argc, char **argv)
 	G_free(B[i].array);
 	G_free(B[i].buf);
 	G_free(B[i].mask);
-	Rast_close_cell(B[i].file);
+	Rast_close(B[i].file);
     }
 
     exit(EXIT_SUCCESS);

@@ -55,7 +55,7 @@ int zoom(struct Cell_head *window, const char *name, const char *mapset)
 	if (mark > right)
 	    right = mark;
     }
-    Rast_close_cell(fd);
+    Rast_close(fd);
     G_free(raster);
 
     /* no data everywhere? */

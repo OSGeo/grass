@@ -56,7 +56,7 @@ int draw_cell(View * view, int overlay)
 	D_draw_d_raster(row, dcell, &colr);
     }
     D_cell_draw_end();
-    Rast_close_cell(fd);
+    Rast_close(fd);
     G_free(dcell);
     Rast_free_colors(&colr);
 

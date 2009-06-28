@@ -46,7 +46,7 @@ int perform_filter(const char *in_name, const char *out_name,
 
 		G_debug(1, "Closing raster map");
 
-		Rast_close_cell(in);
+		Rast_close(in);
 		in = out;
 		close(creat(tmp2 = G_tempfile(), 0666));
 		out = open(tmp2, 2);
@@ -73,7 +73,7 @@ int perform_filter(const char *in_name, const char *out_name,
     }
 
     if (count == 1)
-	Rast_close_cell(in);
+	Rast_close(in);
     else if (count > 1)
 	close(in);
 
@@ -90,14 +90,14 @@ int perform_filter(const char *in_name, const char *out_name,
 	Rast_put_d_raster_row(out, cell);
     }
 
-    /* remove the temporary files before closing so that the Rast_close_cell()
+    /* remove the temporary files before closing so that the Rast_close()
        has more disk to work with
      */
     if (count > 0)
 	unlink(tmp1);
     if (count > 1)
 	unlink(tmp2);
-    Rast_close_cell(out);
+    Rast_close(out);
 
     return 0;
 }

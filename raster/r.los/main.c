@@ -398,12 +398,12 @@ int main(int argc, char *argv[])
     close(out_fd);
     unlink(in_name);		/* remove temp files as well */
     unlink(out_name);
-    Rast_close_cell(old);
-    Rast_close_cell(new);
+    Rast_close(old);
+    Rast_close(new);
 
     if (patt_flag == TRUE) {
 	close(patt_fd);
-	Rast_close_cell(patt);
+	Rast_close(patt);
     }
 
     /*      create category file for output map             */

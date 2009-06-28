@@ -32,7 +32,7 @@ int get_range(const char *name, long *min, long *max)
 		Rast_update_range(cell[col], &range);
 	}
 	G_percent(row, nrows, 2);
-	Rast_close_cell(fd);
+	Rast_close(fd);
 	G_free(cell);
     }
 

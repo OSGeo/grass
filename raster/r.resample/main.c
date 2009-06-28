@@ -127,11 +127,11 @@ int main(int argc, char *argv[])
 
     G_percent(row, nrows, 2);
 
-    Rast_close_cell(infd);
+    Rast_close(infd);
 
     G_message(_("Creating support files for <%s>..."), result);
 
-    Rast_close_cell(outfd);
+    Rast_close(outfd);
 
     Rast_rewind_cats(&cats);
 

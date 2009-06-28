@@ -174,7 +174,7 @@ int main(int argc, char *argv[])
 	write_support(bands, outname, eigmat, eigval);
 
 	/* close output file */
-	Rast_unopen_cell(inp_fd[i]);
+	Rast_unopen(inp_fd[i]);
     }
 
     exit(EXIT_SUCCESS);
@@ -523,7 +523,7 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
 
 	    /* close output file */
 	    if (pass == PASSES)
-		Rast_close_cell(out_fd);
+		Rast_close(out_fd);
 	}
     }
 

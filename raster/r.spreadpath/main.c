@@ -305,7 +305,7 @@ int main(int argc, char **argv)
 	    }			/* loop over cols */
 	}			/* loop over rows */
 
-	Rast_close_cell(path_fd);
+	Rast_close(path_fd);
     }
 
     /* loop over the starting points to find the least cost paths */
@@ -346,9 +346,9 @@ int main(int argc, char **argv)
     close(in_col_fd);
     close(out_fd);
 
-    Rast_close_cell(path_fd);
-    Rast_close_cell(backrow_fd);
-    Rast_close_cell(backcol_fd);
+    Rast_close(path_fd);
+    Rast_close(backrow_fd);
+    Rast_close(backcol_fd);
 
     unlink(in_row_file);	/* remove submatrix files  */
     unlink(in_col_file);

@@ -158,7 +158,7 @@ int main(int argc, char *argv[])
 	G_percent(row, nrows, 5);
 	for (col = 0; col < ncols; col++) {
 	    if (fscanf(fd, "%lf", &x) != 1) {
-		Rast_unopen_cell(cf);
+		Rast_unopen(cf);
 		G_fatal_error(_("Data conversion failed at row %d, col %d"),
 			      row + 1, col + 1);
 	    }
@@ -199,7 +199,7 @@ int main(int argc, char *argv[])
 	}
     }
     /* G_message(_("CREATING SUPPORT FILES FOR %s"), output); */
-    Rast_close_cell(cf);
+    Rast_close(cf);
     if (title)
 	Rast_put_cell_title(output, title);
     Rast_short_history(output, "raster", &history);

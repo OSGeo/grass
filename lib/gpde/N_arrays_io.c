@@ -101,7 +101,7 @@ N_array_2d *N_read_rast_to_array_2d(char *name, N_array_2d * array)
 	G_percent(y, rows - 1, 10);
 
 	if (!Rast_get_raster_row(map, rast, y, type)) {
-	    Rast_close_cell(map);
+	    Rast_close(map);
 	    G_fatal_error(_("Could not get raster row"));
 	}
 
@@ -159,7 +159,7 @@ N_array_2d *N_read_rast_to_array_2d(char *name, N_array_2d * array)
     }
 
     /* Close file */
-    if (Rast_close_cell(map) < 0)
+    if (Rast_close(map) < 0)
 	G_fatal_error(_("Unable to close input map"));
 
     return data;
@@ -225,23 +225,23 @@ void N_write_array_2d_to_rast(N_array_2d * array, char *name)
 	}
 	if (type == CELL_TYPE)
 	    if (!Rast_put_c_raster_row(map, rast)) {
-		Rast_unopen_cell(map);	/*unopen the new raster map */
+		Rast_unopen(map);	/*unopen the new raster map */
 		G_fatal_error(_("Unable to write raster row %i"), y);
 	    }
 	if (type == FCELL_TYPE)
 	    if (!Rast_put_f_raster_row(map, frast)) {
-		Rast_unopen_cell(map);	/*unopen the new raster map */
+		Rast_unopen(map);	/*unopen the new raster map */
 		G_fatal_error(_("Unable to write raster row %i"), y);
 	    }
 	if (type == DCELL_TYPE)
 	    if (!Rast_put_d_raster_row(map, drast)) {
-		Rast_unopen_cell(map);	/*unopen the new raster map */
+		Rast_unopen(map);	/*unopen the new raster map */
 		G_fatal_error(_("Unable to write raster row %i"), y);
 	    }
     }
 
     /* Close file */
-    if (Rast_close_cell(map) < 0)
+    if (Rast_close(map) < 0)
 	G_fatal_error(_("Unable to close input map"));
 
     return;

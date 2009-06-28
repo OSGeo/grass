@@ -195,7 +195,7 @@ int init_vars(int argc, char *argv[])
 	    ptr = G_incr_void_ptr(ptr, ele_size);
 	}
     }
-    Rast_close_cell(fd);
+    Rast_close(fd);
     G_free(elebuf);
     if (do_points < nrows * ncols)
 	MASK_flag = 1;
@@ -226,7 +226,7 @@ int init_vars(int argc, char *argv[])
 		    wat[SEG_INDEX(wat_seg, r, c)] = buf[c];
 	    }
 	}
-	Rast_close_cell(fd);
+	Rast_close(fd);
     }
     else {
 	/* ... with 1.0 */
@@ -259,7 +259,7 @@ int init_vars(int argc, char *argv[])
 		    asp[SEG_INDEX(asp_seg, r, c)] = 1;
 	    }
 	}
-	Rast_close_cell(fd);
+	Rast_close(fd);
     }
 
     /* this is also creating streams... */
@@ -276,7 +276,7 @@ int init_vars(int argc, char *argv[])
 		    FLAG_SET(swale, r, c);
 	    }
 	}
-	Rast_close_cell(fd);
+	Rast_close(fd);
     }
     G_free(buf);
 

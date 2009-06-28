@@ -246,11 +246,11 @@ int main(int argc, char **argv)
     D_close_driver();
 
     /* Close the raster maps */
-    Rast_close_cell(hue_file);
+    Rast_close(hue_file);
     if (int_used)
-	Rast_close_cell(int_file);
+	Rast_close(int_file);
     if (sat_used)
-	Rast_close_cell(sat_file);
+	Rast_close(sat_file);
 
     exit(EXIT_SUCCESS);
 }

@@ -56,7 +56,7 @@ void rdwr_gridatb(void)
 	switch (data_type) {
 	case CELL_TYPE:
 	    if (Rast_get_c_raster_row(fd, cell, row) < 0) {
-		Rast_close_cell(fd);
+		Rast_close(fd);
 		exit(1);
 	    }
 
@@ -71,7 +71,7 @@ void rdwr_gridatb(void)
 	    break;
 	case FCELL_TYPE:
 	    if (Rast_get_f_raster_row(fd, fcell, row) < 0) {
-		Rast_close_cell(fd);
+		Rast_close(fd);
 		exit(1);
 	    }
 
@@ -86,7 +86,7 @@ void rdwr_gridatb(void)
 	    break;
 	case DCELL_TYPE:
 	    if (Rast_get_d_raster_row(fd, dcell, row) < 0) {
-		Rast_close_cell(fd);
+		Rast_close(fd);
 		exit(1);
 	    }
 
@@ -101,7 +101,7 @@ void rdwr_gridatb(void)
 	    break;
 	}
     }
-    Rast_close_cell(fd);
+    Rast_close(fd);
 
     return;
 }

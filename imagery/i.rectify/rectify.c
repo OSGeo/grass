@@ -105,7 +105,7 @@ int rectify(char *name, char *mapset, char *result, int order)
     }
 
     target_window.compressed = cellhd.compressed;
-    Rast_close_cell(infd);		/* (pmx) 17 april 2000 */
+    Rast_close(infd);		/* (pmx) 17 april 2000 */
     write_map(result);
     select_current_env();
 

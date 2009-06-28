@@ -217,7 +217,7 @@ int main(int argc, char *argv[])
     G_free(ogrn);
     G_free(oblu);
     G_free(set);
-    Rast_close_cell(cellfile);
+    Rast_close(cellfile);
     /*
        if(!do_stdout)
      */

@@ -213,7 +213,7 @@ int main(int argc, char *argv[])
 	}
     }
 
-    Rast_close_cell(fd);
+    Rast_close(fd);
     fclose(fp);
 
     if (clr)

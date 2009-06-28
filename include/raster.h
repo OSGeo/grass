@@ -81,8 +81,8 @@ int Rast_cell_stats_histo_eq(struct Cell_stats *, CELL, CELL, CELL, CELL, int,
 			  void (*)(CELL, CELL, CELL));
 
 /* closecell.c */
-int Rast_close_cell(int);
-int Rast_unopen_cell(int);
+int Rast_close(int);
+int Rast_unopen(int);
 
 /* color_compat.c */
 void Rast_make_ryg_colors(struct Colors *, CELL, CELL);

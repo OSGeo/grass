@@ -177,14 +177,14 @@ int main(int argc, char *argv[])
     G_free(inrast_rnet);
     G_free(inrast_g0);
     G_free(inrast_h0);
-    Rast_close_cell(infd_rnet);
-    Rast_close_cell(infd_g0);
-    Rast_close_cell(infd_h0);
+    Rast_close(infd_rnet);
+    Rast_close(infd_g0);
+    Rast_close(infd_h0);
     G_free(outrast1);
     G_free(outrast2);
     if (makin) {
-	Rast_close_cell(outfd1);
-	Rast_close_cell(outfd2);
+	Rast_close(outfd1);
+	Rast_close(outfd2);
     }
     Rast_short_history(result1, "raster", &history);
     Rast_command_history(&history);

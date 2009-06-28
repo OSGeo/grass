@@ -535,8 +535,8 @@ int main(int argc, char *argv[])
 	row1 += 1;
     }
 
-    Rast_close_cell(output_fd);
-    Rast_close_cell(elev_fd);
+    Rast_close(output_fd);
+    Rast_close(elev_fd);
 
     /* writing history file */
     Rast_short_history(outname, "raster", &hist);

@@ -220,7 +220,7 @@ int main(int argc, char *argv[])
     (void)processProfiles(fd, outf);
 
     fclose(outf);
-    Rast_close_cell(fd);
+    Rast_close(fd);
 
     exit(EXIT_SUCCESS);
 }

@@ -17,7 +17,7 @@ int closefiles(char *h_name, char *i_name, char *s_name,
     const char *mapset;
 
     for (i = 0; i < 3; i++) {
-	Rast_close_cell(fd_output[i]);
+	Rast_close(fd_output[i]);
 	G_free(rowbuf[i]);
     }
 

@@ -216,7 +216,7 @@ int main(int argc, char **argv)
 	get_row(map_id, in_buf, i);
 	write(fe, in_buf, bnd.sz);
     }
-    Rast_close_cell(map_id);
+    Rast_close(map_id);
 
     /* fill single-cell holes and take a first stab at flow directions */
     G_message(_("Filling sinks..."));
@@ -268,7 +268,7 @@ int main(int argc, char **argv)
 	    Rast_put_raster_row(bas_id, out_buf, CELL_TYPE);
 	}
 
-	Rast_close_cell(bas_id);
+	Rast_close(bas_id);
 	close(fm);
     }
 
@@ -285,10 +285,10 @@ int main(int argc, char **argv)
 
     }
 
-    Rast_close_cell(new_id);
+    Rast_close(new_id);
     close(fe);
 
-    Rast_close_cell(dir_id);
+    Rast_close(dir_id);
     close(fd);
 
     G_free(in_buf);

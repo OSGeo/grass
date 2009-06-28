@@ -79,7 +79,7 @@ int drawcell(View * view, int initflag)
     if (view == VIEW_MAP2 || view == VIEW_MAP2_ZOOM)
 	cellmap_present = 1;	/* for drawcell */
 
-    Rast_close_cell(fd);
+    Rast_close(fd);
     G_free(dcell);
 
 

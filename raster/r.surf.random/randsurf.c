@@ -61,7 +61,7 @@ int randsurf(char *out,		/* Name of raster maps to be opened.    */
 	    Rast_put_d_raster_row(fd_out, (DCELL *) row_out_D);
     }
 
-    Rast_close_cell(fd_out);
+    Rast_close(fd_out);
 
     return 0;
 }

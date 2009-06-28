@@ -356,7 +356,7 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
        memory allocated for it */
 
     if (choice->patchmap) {
-	Rast_close_cell(fd);
+	Rast_close(fd);
 	G_free(pat_buf);
     }
 
@@ -367,7 +367,7 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
        memory allocated for the cor_buf */
 
     if (choice->coremap) {
-	Rast_close_cell(fe);
+	Rast_close(fe);
 	Rast_rewind_cell_stats(&stats);
 	Rast_rewind_cats(&cats);
 
@@ -773,7 +773,7 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
     }
     if (choice->wrum == 'r') {
 	G_free(tmp1);
-	Rast_close_cell(fr);
+	Rast_close(fr);
     }
     return;
 }

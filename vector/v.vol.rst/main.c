@@ -843,7 +843,7 @@ int main(int argc, char *argv[])
 
 	    OUTGR();
 	    if ((cellinp != NULL)) {
-		Rast_close_cell(fdcout);
+		Rast_close(fdcout);
 		if ((cellout != NULL)) {
 		    Rast_short_history(cellout, "raster", &hist);
 		    /* TODO: next lines need to be verified! */
@@ -864,7 +864,7 @@ int main(int argc, char *argv[])
 		    fclose(Tmp_fd_cell);
 		    unlink(Tmp_file_cell);
 		}
-		Rast_close_cell(fdcell);
+		Rast_close(fdcell);
 	    }
 	    if (outz != NULL) {
 		fclose(Tmp_fd_z);

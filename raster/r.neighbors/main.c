@@ -330,8 +330,8 @@ int main(int argc, char *argv[])
     }
     G_percent(row, nrows, 2);
 
-    Rast_close_cell(out_fd);
-    Rast_close_cell(in_fd);
+    Rast_close(out_fd);
+    Rast_close(in_fd);
 
     /* put out category info */
     null_cats();

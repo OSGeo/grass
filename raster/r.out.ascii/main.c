@@ -195,7 +195,7 @@ int main(int argc, char *argv[])
     }
 
     /* tidy up and go away */
-    Rast_close_cell(fd);
+    Rast_close(fd);
     fclose(fp);
     exit(EXIT_SUCCESS);
 }

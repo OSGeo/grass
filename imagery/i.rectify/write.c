@@ -63,7 +63,7 @@ int write_map(char *name)
     }
     close(temp_fd);
     unlink(temp_name);
-    Rast_close_cell(fd);
+    Rast_close(fd);
 
     return 0;
 }

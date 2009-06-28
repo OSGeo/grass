@@ -279,7 +279,7 @@ int main(int argc, char *argv[])
     for (i = 0; i < num_outputs; i++) {
 	struct output *out = &outputs[i];
 
-	Rast_close_cell(out->fd);
+	Rast_close(out->fd);
 
 	Rast_short_history(out->name, "raster", &history);
 	Rast_command_history(&history);
@@ -287,7 +287,7 @@ int main(int argc, char *argv[])
     }
 
     for (i = 0; i < num_inputs; i++)
-	Rast_close_cell(inputs[i].fd);
+	Rast_close(inputs[i].fd);
 
     exit(EXIT_SUCCESS);
 }

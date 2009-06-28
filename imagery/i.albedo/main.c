@@ -394,10 +394,10 @@ int main(int argc, char *argv[])
     }
     for (i = 1; i <= nfiles; i++) {
 	G_free(inrast[i]);
-	Rast_close_cell(infd[i]);
+	Rast_close(infd[i]);
     }
     G_free(outrast);
-    Rast_close_cell(outfd);
+    Rast_close(outfd);
 
     /* Color table from 0.0 to 1.0 */
     Rast_init_colors(&colors);

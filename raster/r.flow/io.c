@@ -89,7 +89,7 @@ void read_input_files(void)
     }
     if (parm.seg)
 	segment_flush(el.seg);
-    Rast_close_cell(fd);
+    Rast_close(fd);
 
     if (parm.aspin) {
 	G_message(_("Reading input files: aspect"));
@@ -106,7 +106,7 @@ void read_input_files(void)
 	}
 	if (parm.seg)
 	    segment_flush(as.seg);
-	Rast_close_cell(fd);
+	Rast_close(fd);
     }
 
     if (parm.barin) {
@@ -122,7 +122,7 @@ void read_input_files(void)
 		    put(ds, row, col, -1);
 	    }
 	}
-	Rast_close_cell(fd);
+	Rast_close(fd);
     }
 }
 
@@ -180,7 +180,7 @@ void close_files(void)
 	    close(ds.sfd);
     }
     /*   if (parm.lgout)
-       Rast_close_cell(lgfd); */
+       Rast_close(lgfd); */
     if (parm.flout) {
 	Vect_build(&fl);
 	Vect_close(&fl);
@@ -208,7 +208,7 @@ void write_density_file(void)
 	    if (ds.buf[row][col] > dsmax)
 		dsmax = ds.buf[row][col];
     }
-    Rast_close_cell(dsfd);
+    Rast_close(dsfd);
 
     Rast_init_colors(&colors);
 

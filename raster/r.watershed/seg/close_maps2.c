@@ -84,7 +84,7 @@ int close_array_seg(void)
 	    Rast_put_raster_row(map_fd, cellrow, CELL_TYPE);
 	}
 	G_free(cellrow);
-	Rast_close_cell(map_fd);
+	Rast_close(map_fd);
 	Rast_write_colors(seg_name, this_mapset, &colors);
     }
 

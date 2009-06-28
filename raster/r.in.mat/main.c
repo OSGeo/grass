@@ -448,7 +448,7 @@ int main(int argc, char *argv[])
 					 map_type);
 		    break;
 		default:
-		    Rast_close_cell(cf);
+		    Rast_close(cf);
 		    G_fatal_error(_("Please contact the GRASS development team"));
 		}
 	    }
@@ -471,7 +471,7 @@ int main(int argc, char *argv[])
 #endif
 
 	if (1 != Rast_put_raster_row(cf, raster, map_type)) {
-	    Rast_close_cell(cf);
+	    Rast_close(cf);
 	    G_fatal_error(_("Writing raster map, row %d"), row);
 	}
 
@@ -480,7 +480,7 @@ int main(int argc, char *argv[])
 
     G_percent(row, mrows, 5);	/* finish it off */
 
-    Rast_close_cell(cf);
+    Rast_close(cf);
 
     G_free(array_data);
     G_free(raster);

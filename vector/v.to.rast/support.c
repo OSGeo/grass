@@ -486,7 +486,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 	break;
     }
 
-    Rast_close_cell(fd);
+    Rast_close(fd);
     if (Rast_write_cats(rast_name, &rast_cats) <= 0)
 	G_warning(_("Unable to write categories for raster map <%s>"),
 		  rast_name);

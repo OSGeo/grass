@@ -120,9 +120,9 @@ int main(int argc, char *argv[])
     }
     G_percent(nrows, nrows, 2);
 
-    Rast_close_cell(class_fd);
+    Rast_close(class_fd);
     if (reject_fd > 0)
-	Rast_close_cell(reject_fd);
+	Rast_close(reject_fd);
 
     Rast_init_cats("Maximum Likelihood Classification", &cats);
     for (i = 0; i < S.nsigs; i++) {

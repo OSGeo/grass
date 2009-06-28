@@ -55,7 +55,7 @@ void Init()
 		    }
 		}
 	    }
-	    Rast_close_cell(FD);
+	    Rast_close(FD);
 	}
     }
     else {

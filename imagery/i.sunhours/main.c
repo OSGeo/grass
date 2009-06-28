@@ -123,10 +123,10 @@ int main(int argc, char *argv[])
     }
     G_free(inrast_lat);
     G_free(inrast_doy);
-    Rast_close_cell(infd_lat);
-    Rast_close_cell(infd_doy);
+    Rast_close(infd_lat);
+    Rast_close(infd_doy);
     G_free(outrast1);
-    Rast_close_cell(outfd1);
+    Rast_close(outfd1);
 
     Rast_short_history(result1, "raster", &history);
     Rast_command_history(&history);
