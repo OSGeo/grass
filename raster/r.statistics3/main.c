@@ -361,7 +361,7 @@ static void do_output(int base_fd, char **outputs, const char *covermap)
     G_percent(row, rows, 2);
 
     for (quant = 0; quant < num_quants; quant++) {
-	Rast_close_cell(out_fd[quant]);
+	Rast_close(out_fd[quant]);
 	if (have_colors)
 	    Rast_write_colors(outputs[quant], mapset, &colors);
     }
@@ -520,8 +520,8 @@ int main(int argc, char *argv[])
     else
 	do_output(base_fd, outputs, covermap);
 
-    Rast_close_cell(cover_fd);
-    Rast_close_cell(base_fd);
+    Rast_close(cover_fd);
+    Rast_close(base_fd);
 
     return (EXIT_SUCCESS);
 }

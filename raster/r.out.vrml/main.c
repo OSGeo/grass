@@ -162,9 +162,9 @@ int main(int argc, char *argv[])
     vrml_end(vout);
 
 
-    Rast_close_cell(elevfd);
+    Rast_close(elevfd);
     if (color_ok)
-	Rast_close_cell(colorfd);
+	Rast_close(colorfd);
 
     return (EXIT_SUCCESS);
 

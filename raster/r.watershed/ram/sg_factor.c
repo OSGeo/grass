@@ -47,7 +47,7 @@ int sg_factor(void)
 
     if (ril_flag) {
 	G_free(ril_buf);
-	Rast_close_cell(ril_fd);
+	Rast_close(ril_fd);
     }
 
     return 0;

@@ -209,7 +209,7 @@ int main(int argc, char *argv[])
 	G_percent(row, nrows, 2);
 	for (col = 0; col < ncols; col++) {
 	    if (fscanf(fd, "%s", y) != 1) {
-		Rast_unopen_cell(cf);
+		Rast_unopen(cf);
 		G_fatal_error(_("Data conversion failed at row %d, col %d"),
 			      row + 1, col + 1);
 	    }
@@ -252,7 +252,7 @@ int main(int argc, char *argv[])
     fclose(ft);
     unlink(temp);
 
-    Rast_close_cell(cf);
+    Rast_close(cf);
 
     if (title)
 	Rast_put_cell_title(output, title);

@@ -635,12 +635,12 @@ int main(int argc, char *argv[])
 
 
     G_free(inrast_z0m);
-    Rast_close_cell(infd_z0m);
+    Rast_close(infd_z0m);
     G_free(inrast_t0dem);
-    Rast_close_cell(infd_t0dem);
+    Rast_close(infd_t0dem);
 
     G_free(outrast);
-    Rast_close_cell(outfd);
+    Rast_close(outfd);
 
     /* add command line incantation to history file */
     Rast_short_history(h0, "raster", &history);

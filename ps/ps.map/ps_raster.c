@@ -194,13 +194,13 @@ int PS_raster_plot(void)
     if (PS.do_raster) {
 	if (!PS.do_colortable)
 	    Rast_free_colors(&PS.colors);
-	Rast_close_cell(PS.cell_fd);
+	Rast_close(PS.cell_fd);
 	G_free(cellbuf);
     }
     else {
 	for (i = 0; i < 3; i++) {
 	    Rast_free_colors(&(grp.colors[i]));
-	    Rast_close_cell(grp.fd[i]);
+	    Rast_close(grp.fd[i]);
 	    G_free(cbuf[i]);
 	}
 	I_free_group_ref(&grp.ref);

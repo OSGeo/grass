@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
 
     G_free(cell_buf[0]);
     G_free(cell_buf[1]);
-    Rast_close_cell(cellfile);
+    Rast_close(cellfile);
 
     {				/* report */
 	double reg_area, flat_area, estavg;

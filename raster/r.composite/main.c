@@ -254,10 +254,10 @@ int main(int argc, char **argv)
 
     /* Close the input files */
     for (i = 0; i < 3; i++)
-	Rast_close_cell(B[i].file);
+	Rast_close(B[i].file);
 
     /* Close the output file */
-    Rast_close_cell(out_file);
+    Rast_close(out_file);
     Rast_write_colors(out_name, G_mapset(), &out_colors);
     Rast_short_history(out_name, "raster", &history);
     Rast_command_history(&history);

@@ -247,17 +247,17 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
     }
 
     if (cf1)
-	Rast_close_cell(cf1);
+	Rast_close(cf1);
     if (cf2)
-	Rast_close_cell(cf2);
+	Rast_close(cf2);
     if (cf3)
-	Rast_close_cell(cf3);
+	Rast_close(cf3);
     if (cf4)
-	Rast_close_cell(cf4);
+	Rast_close(cf4);
     if (cf5)
-	Rast_close_cell(cf5);
+	Rast_close(cf5);
     if (cf6)
-	Rast_close_cell(cf6);
+	Rast_close(cf6);
 
     /* write colormaps and history for output cell files */
     /* colortable for elevations */

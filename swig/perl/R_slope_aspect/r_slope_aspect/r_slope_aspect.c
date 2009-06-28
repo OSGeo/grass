@@ -1017,7 +1017,7 @@ int r_slope_aspect(int argc, char *argv[])
 
     G_percent(row, nrows, 2);
 
-    Rast_close_cell(elevation_fd);
+    Rast_close(elevation_fd);
     G_message(_("Creating support files..."));
 
     G_message(_("Elevation products for mapset [%s] in [%s]"),
@@ -1029,7 +1029,7 @@ int r_slope_aspect(int argc, char *argv[])
 
 	Rast_set_null_value(asp_raster, G_window_cols(), data_type);
 	Rast_put_raster_row(aspect_fd, asp_raster, data_type);
-	Rast_close_cell(aspect_fd);
+	Rast_close(aspect_fd);
 
 	if (out_type != CELL_TYPE)
 	    Rast_quantize_fp_map_range(aspect_name, G_mapset(), 0., 360., 0,
@@ -1117,7 +1117,7 @@ int r_slope_aspect(int argc, char *argv[])
 
 	Rast_set_null_value(slp_raster, G_window_cols(), data_type);
 	Rast_put_raster_row(slope_fd, slp_raster, data_type);
-	Rast_close_cell(slope_fd);
+	Rast_close(slope_fd);
 
 	if (out_type != CELL_TYPE) {
 	    /* INCR_BY_ONE
@@ -1245,7 +1245,7 @@ int r_slope_aspect(int argc, char *argv[])
     if (pcurv_fd >= 0) {
 	Rast_set_null_value(pcurv_raster, G_window_cols(), data_type);
 	Rast_put_raster_row(pcurv_fd, pcurv_raster, data_type);
-	Rast_close_cell(pcurv_fd);
+	Rast_close(pcurv_fd);
 
 	Rast_write_colors(pcurv_name, G_mapset(), &colors);
 
@@ -1271,7 +1271,7 @@ int r_slope_aspect(int argc, char *argv[])
     if (tcurv_fd >= 0) {
 	Rast_set_null_value(tcurv_raster, G_window_cols(), data_type);
 	Rast_put_raster_row(tcurv_fd, tcurv_raster, data_type);
-	Rast_close_cell(tcurv_fd);
+	Rast_close(tcurv_fd);
 
 	Rast_write_colors(tcurv_name, G_mapset(), &colors);
 
@@ -1297,7 +1297,7 @@ int r_slope_aspect(int argc, char *argv[])
     if (dx_fd >= 0) {
 	Rast_set_null_value(dx_raster, G_window_cols(), data_type);
 	Rast_put_raster_row(dx_fd, dx_raster, data_type);
-	Rast_close_cell(dx_fd);
+	Rast_close(dx_fd);
 
 	if (out_type != CELL_TYPE)
 	    Rast_round_fp_map(dx_name, G_mapset());
@@ -1321,7 +1321,7 @@ int r_slope_aspect(int argc, char *argv[])
     if (dy_fd >= 0) {
 	Rast_set_null_value(dy_raster, G_window_cols(), data_type);
 	Rast_put_raster_row(dy_fd, dy_raster, data_type);
-	Rast_close_cell(dy_fd);
+	Rast_close(dy_fd);
 
 	if (out_type != CELL_TYPE)
 	    Rast_round_fp_map(dy_name, G_mapset());
@@ -1345,7 +1345,7 @@ int r_slope_aspect(int argc, char *argv[])
     if (dxx_fd >= 0) {
 	Rast_set_null_value(dxx_raster, G_window_cols(), data_type);
 	Rast_put_raster_row(dxx_fd, dxx_raster, data_type);
-	Rast_close_cell(dxx_fd);
+	Rast_close(dxx_fd);
 
 	if (out_type != CELL_TYPE)
 	    Rast_round_fp_map(dxx_name, G_mapset());
@@ -1369,7 +1369,7 @@ int r_slope_aspect(int argc, char *argv[])
     if (dyy_fd >= 0) {
 	Rast_set_null_value(dyy_raster, G_window_cols(), data_type);
 	Rast_put_raster_row(dyy_fd, dyy_raster, data_type);
-	Rast_close_cell(dyy_fd);
+	Rast_close(dyy_fd);
 
 	if (out_type != CELL_TYPE)
 	    Rast_round_fp_map(dyy_name, G_mapset());
@@ -1393,7 +1393,7 @@ int r_slope_aspect(int argc, char *argv[])
     if (dxy_fd >= 0) {
 	Rast_set_null_value(dxy_raster, G_window_cols(), data_type);
 	Rast_put_raster_row(dxy_fd, dxy_raster, data_type);
-	Rast_close_cell(dxy_fd);
+	Rast_close(dxy_fd);
 
 	if (out_type != CELL_TYPE)
 	    Rast_round_fp_map(dxy_name, G_mapset());

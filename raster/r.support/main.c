@@ -292,7 +292,7 @@ int main(int argc, char *argv[])
 	if (Rast_write_cats(infile, &cats) >= 0)
 	    G_message(_("cats table for [%s] set to %s"), infile,
 		      map_opt->answer);
-	Rast_close_cell(fd);
+	Rast_close(fd);
 	Rast_free_cats(&cats);
     }
 

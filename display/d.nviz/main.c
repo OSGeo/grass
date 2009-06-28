@@ -315,7 +315,7 @@ int main(int argc, char *argv[])
     fprintf(fp, "SendScriptLine \"set ScriptPlaying 0\"\n");
     fprintf(fp, "puts \"DONE!\"\n");
 
-    Rast_close_cell(fd);
+    Rast_close(fd);
     fclose(fp);
 
     sprintf(buf1, _("Created NVIZ script <%s>."), outfile);

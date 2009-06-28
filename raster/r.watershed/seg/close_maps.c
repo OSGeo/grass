@@ -40,7 +40,7 @@ int close_maps(void)
 		}
 		Rast_put_raster_row(fd, dbuf, DCELL_TYPE);
 	    }
-	    if (Rast_close_cell(fd) < 0)
+	    if (Rast_close(fd) < 0)
 		G_warning(_("Close failed."));
 	}
 	else {

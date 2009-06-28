@@ -174,7 +174,7 @@ void SaveMap(int NumMap, int MapSeed)
     }
     G_percent(1, 1, 1);
 
-    Rast_close_cell(OutFD);
+    Rast_close(OutFD);
     Rast_short_history(OutNames[NumMap], "raster", &history);
     Rast_command_history(&history);
     Rast_write_history(OutNames[NumMap], &history);

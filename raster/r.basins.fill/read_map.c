@@ -51,7 +51,7 @@ CELL *read_map(const char *name, int nomask, int nrows, int ncols)
     }
     G_percent(nrows, nrows, 10);
 
-    Rast_close_cell(fd);
+    Rast_close(fd);
 
     return map;
 }

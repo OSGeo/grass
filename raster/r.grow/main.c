@@ -276,8 +276,8 @@ int main(int argc, char **argv)
 
     G_percent(row, nrows, 2);
 
-    Rast_close_cell(in_fd);
-    Rast_close_cell(out_fd);
+    Rast_close(in_fd);
+    Rast_close(out_fd);
 
     if (Rast_write_cats(out_name, &cats) == -1)
 	G_warning(_("Error writing category file for <%s>"), out_name);

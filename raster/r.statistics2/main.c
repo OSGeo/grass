@@ -519,7 +519,7 @@ int main(int argc, char **argv)
 
 	G_percent(row, rows, 2);
 
-	Rast_close_cell(out_fd);
+	Rast_close(out_fd);
 
 	if (Rast_read_colors(covermap, "", &colors) > 0)
 	    Rast_write_colors(output, G_mapset(), &colors);

@@ -864,28 +864,28 @@ int main(int argc, char *argv[])
     }
     G_percent(row, nrows, 2);
 
-    Rast_close_cell(fuel_fd);
+    Rast_close(fuel_fd);
     if (parm.mois_1h->answer)
-	Rast_close_cell(mois_1h_fd);
+	Rast_close(mois_1h_fd);
     if (parm.mois_10h->answer)
-	Rast_close_cell(mois_10h_fd);
+	Rast_close(mois_10h_fd);
     if (parm.mois_100h->answer)
-	Rast_close_cell(mois_100h_fd);
-    Rast_close_cell(mois_live_fd);
+	Rast_close(mois_100h_fd);
+    Rast_close(mois_live_fd);
     if (parm.vel->answer)
-	Rast_close_cell(vel_fd);
+	Rast_close(vel_fd);
     if (parm.dir->answer)
-	Rast_close_cell(dir_fd);
+	Rast_close(dir_fd);
     if (parm.slope->answer)
-	Rast_close_cell(slope_fd);
+	Rast_close(slope_fd);
     if (parm.aspect->answer)
-	Rast_close_cell(aspect_fd);
-    Rast_close_cell(base_fd);
-    Rast_close_cell(max_fd);
-    Rast_close_cell(maxdir_fd);
+	Rast_close(aspect_fd);
+    Rast_close(base_fd);
+    Rast_close(max_fd);
+    Rast_close(maxdir_fd);
     if (spotting) {
-	Rast_close_cell(spotdist_fd);
-	Rast_close_cell(spotdist_fd);
+	Rast_close(spotdist_fd);
+	Rast_close(spotdist_fd);
 	G_free(map_elev);
     }
 

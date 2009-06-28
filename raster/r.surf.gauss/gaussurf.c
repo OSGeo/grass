@@ -58,7 +58,7 @@ int gaussurf(char *out,		/* Name of raster maps to be opened.    */
 
 	/****** CLOSE THE CELL FILE ******/
 
-    Rast_close_cell(fd_out);
+    Rast_close(fd_out);
     Rast_short_history(out, "raster", &history);
     Rast_command_history(&history);
     Rast_write_history(out, &history);

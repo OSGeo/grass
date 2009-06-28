@@ -160,7 +160,7 @@ int Gs_loadmap_as_float(struct Cell_head *wind, const char *map_name,
 
     G_debug(4, "  has_null=%d", *has_null);
 
-    Rast_close_cell(cellfile);
+    Rast_close(cellfile);
 
     G_free(nullflags);
 
@@ -234,7 +234,7 @@ int Gs_loadmap_as_int(struct Cell_head *wind, const char *map_name, int *buff,
     }
     G_percent(1, 1, 1);
     
-    Rast_close_cell(cellfile);
+    Rast_close(cellfile);
 
     G_free(nullflags);
 
@@ -413,7 +413,7 @@ int Gs_loadmap_as_short(struct Cell_head *wind, const char *map_name,
     }
     G_percent(1, 1, 1);
     
-    Rast_close_cell(cellfile);
+    Rast_close(cellfile);
 
     G_free(tmp_buf);
     G_free(nullflags);
@@ -530,7 +530,7 @@ int Gs_loadmap_as_char(struct Cell_head *wind, const char *map_name,
     }
     G_percent(1, 1, 1);
     
-    Rast_close_cell(cellfile);
+    Rast_close(cellfile);
 
     G_free(tmp_buf);
     G_free(nullflags);
@@ -605,7 +605,7 @@ int Gs_loadmap_as_bitmap(struct Cell_head *wind, const char *map_name,
 	}
     }
 
-    Rast_close_cell(cellfile);
+    Rast_close(cellfile);
 
     G_free(tmp_buf);
     G_free(nullflags);
@@ -885,7 +885,7 @@ int Gs_get_cat_label(const char *filename, int drow, int dcol, char *catstr)
     /* TODO: may want to keep these around for multiple queries */
     Rast_free_cats(&cats);
 
-    Rast_close_cell(fd);
+    Rast_close(fd);
 
     return (1);
 }

@@ -139,7 +139,7 @@ cell2stream(char* cellname, elevation_type T_max_value, long* nodata_count) {
   /* delete buffers */
   G_free(inrast);
   /* close map files */
-  Rast_close_cell (infd);
+  Rast_close (infd);
   
   assert(nrows * ncols == str->stream_len());
   rt_stop(rt);
@@ -219,7 +219,7 @@ stream2_CELL(AMI_STREAM<T>* str, dimension_type nrows, dimension_type ncols,
   G_percent(1, 1, 2); /* finish it */
 
   G_free(outrast);
-  Rast_close_cell (outfd);
+  Rast_close (outfd);
 
   rt_stop(rt);
   stats->recordTime("writing raster map", rt);
@@ -298,7 +298,7 @@ stream2_CELL(AMI_STREAM<T> *str, dimension_type nrows, dimension_type ncols,
   G_percent(1, 1, 2); /* finish it */
 
   G_free(outrast);
-  Rast_close_cell (outfd);
+  Rast_close (outfd);
 
   rt_stop(rt);
   stats->recordTime("writing raster map", rt);
@@ -372,7 +372,7 @@ stream2_FCELL(AMI_STREAM<T> *str, dimension_type nrows, dimension_type ncols,
   G_percent(1, 1, 2); /* finish it */
 
   G_free(outrast);
-  Rast_close_cell (outfd);
+  Rast_close (outfd);
 
   rt_stop(rt);
   stats->recordTime("writing raster map", rt);
@@ -484,9 +484,9 @@ stream2_FCELL(AMI_STREAM<T>* str,  dimension_type nrows, dimension_type ncols,
   G_percent(1, 1, 2); /* finish it */
 
   G_free(rast1);
-  Rast_close_cell (fd1);
+  Rast_close (fd1);
   G_free(rast2);
-  Rast_close_cell (fd2);
+  Rast_close (fd2);
 
   
   rt_stop(rt);

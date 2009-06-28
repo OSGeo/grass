@@ -117,7 +117,7 @@ void sample(int t0, int b0, int l0, int r0, char *name, char *name1,
 	else if (d == 2)
 	    graph_unit(t0, b0, l0, r0, name, name1, name2, msc, fmask);
 
-	Rast_close_cell(fmask);
+	Rast_close(fmask);
     }
     /* if neither, then exit */
     else
@@ -363,7 +363,7 @@ static void man_unit(int t, int b, int l, int r, char *n1, char *n2, char *n3,
 			}
 		    }
 		    G_free(row_buf);
-		    Rast_close_cell(fr);
+		    Rast_close(fr);
 		    cnt = (double)(count);
 		    if (cnt)
 			cnt = sqrt(cnt);
@@ -420,7 +420,7 @@ static void man_unit(int t, int b, int l, int r, char *n1, char *n2, char *n3,
 			    }
 			}
 			G_free(row_buf);
-			Rast_close_cell(fr);
+			Rast_close(fr);
 			cnt = (double)(count);
 			if (cnt)
 			    cnt = sqrt(cnt);

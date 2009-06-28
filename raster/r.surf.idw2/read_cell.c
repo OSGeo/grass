@@ -43,7 +43,7 @@ int read_cell(char *name)
     }
     G_percent(row, window.rows, 1);
 
-    Rast_close_cell(fd);
+    Rast_close(fd);
     G_free(cell);
 
     /* reset the window */

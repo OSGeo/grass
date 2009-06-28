@@ -146,7 +146,7 @@ int open_file(char *name)
     }
     n_rows += (PAD << 1);
     G_free(buf);
-    Rast_close_cell(cell_file);
+    Rast_close(cell_file);
     rowio_setup(&row_io, work_file, MAX_ROW, n_cols * sizeof(CELL), read_row,
 		write_row);
 
@@ -178,7 +178,7 @@ int close_file(char *name)
 	}
 	Rast_put_raster_row(cell_file, buf + PAD, CELL_TYPE);
     }
-    Rast_close_cell(cell_file);
+    Rast_close(cell_file);
     rowio_flush(&row_io);
     close(rowio_fileno(&row_io));
     rowio_release(&row_io);

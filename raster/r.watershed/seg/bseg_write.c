@@ -27,13 +27,13 @@ int bseg_write_cellfile(BSEG * bseg, char *map_name)
 	}
 	if (Rast_put_raster_row(map_fd, buffer, CELL_TYPE) < 0) {
 	    G_free(buffer);
-	    Rast_unopen_cell(map_fd);
+	    Rast_unopen(map_fd);
 	    G_warning("%s(): unable to write new map layer [%s], row %d",
 		      me, map_name, row);
 	    return -2;
 	}
     }
     G_free(buffer);
-    Rast_close_cell(map_fd);
+    Rast_close(map_fd);
     return 0;
 }

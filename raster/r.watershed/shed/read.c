@@ -67,7 +67,7 @@ int read_basins(char *haf_name, OUTPUT * output)
 		    }
 		}
 	    }
-	    Rast_close_cell(fd);
+	    Rast_close(fd);
 	}
     }
 

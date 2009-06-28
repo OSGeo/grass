@@ -172,12 +172,12 @@ int main(int argc, char *argv[])
     G_free(inrast_psilt);
     G_free(inrast_pclay);
     G_free(inrast_pomat);
-    Rast_close_cell(infd_psand);
-    Rast_close_cell(infd_psilt);
-    Rast_close_cell(infd_pclay);
-    Rast_close_cell(infd_pomat);
+    Rast_close(infd_psand);
+    Rast_close(infd_psilt);
+    Rast_close(infd_pclay);
+    Rast_close(infd_pomat);
     G_free(outrast);
-    Rast_close_cell(outfd);
+    Rast_close(outfd);
     
     Rast_short_history(result, "raster", &history);
     Rast_command_history(&history);

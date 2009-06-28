@@ -431,7 +431,7 @@ static void close_map(struct map *m)
     if (m->fd < 0)
 	return;
 
-    if (Rast_close_cell(m->fd) < 0)
+    if (Rast_close(m->fd) < 0)
 	G_fatal_error(_("Unable to close raster map <%s@%s>"),
 		      m->name, m->mapset);
 
@@ -675,13 +675,13 @@ void put_map_row(int fd, void *buf, int res_type)
 
 void close_output_map(int fd)
 {
-    if (Rast_close_cell(fd) < 0)
+    if (Rast_close(fd) < 0)
 	G_fatal_error(_("Unable to close raster map"));
 }
 
 void unopen_output_map(int fd)
 {
-    Rast_unopen_cell(fd);
+    Rast_unopen(fd);
 }
 
 /****************************************************************************/

@@ -86,7 +86,7 @@ void find_edge_cells(struct Map *map)
     }
     G_percent(row, nrows, 2);
 
-    Rast_close_cell(fd);
+    Rast_close(fd);
 
     G_free(buf0);
     G_free(buf1);

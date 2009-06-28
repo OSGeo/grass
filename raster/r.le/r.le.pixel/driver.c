@@ -138,7 +138,7 @@ void texture_fore()
 	    unit_driver();
     }
 
-    Rast_close_cell(finput);
+    Rast_close(finput);
 
     fputs("R.LE.PIXEL IS DONE;  ", stderr);
 
@@ -980,109 +980,109 @@ void mv_driver()
 
 
     if (choice->att[1]) {
-	Rast_close_cell(b1);
+	Rast_close(b1);
 	set_colors("b1");
 	sprintf(cmdbuf, "%s %s", "r.compress", "b1");
 	system(cmdbuf);
     }
     if (choice->att[2]) {
-	Rast_close_cell(b2);
+	Rast_close(b2);
 	set_colors("b2");
 	sprintf(cmdbuf, "%s %s", "r.compress", "b2");
 	system(cmdbuf);
     }
     if (choice->att[3]) {
-	Rast_close_cell(b3);
+	Rast_close(b3);
 	set_colors("b3");
 	sprintf(cmdbuf, "%s %s", "r.compress", "b3");
 	system(cmdbuf);
     }
     if (choice->att[4]) {
-	Rast_close_cell(b4);
+	Rast_close(b4);
 	set_colors("b4");
 	sprintf(cmdbuf, "%s %s", "r.compress", "b4");
 	system(cmdbuf);
     }
     if (choice->div[1]) {
-	Rast_close_cell(d1);
+	Rast_close(d1);
 	set_colors("d1");
 	sprintf(cmdbuf, "%s %s", "r.compress", "d1");
 	system(cmdbuf);
     }
     if (choice->div[2]) {
-	Rast_close_cell(d2);
+	Rast_close(d2);
 	set_colors("d2");
 	sprintf(cmdbuf, "%s %s", "r.compress", "d2");
 	system(cmdbuf);
     }
     if (choice->div[3]) {
-	Rast_close_cell(d3);
+	Rast_close(d3);
 	set_colors("d3");
 	sprintf(cmdbuf, "%s %s", "r.compress", "d3");
 	system(cmdbuf);
     }
     if (choice->div[4]) {
-	Rast_close_cell(d4);
+	Rast_close(d4);
 	set_colors("d4");
 	sprintf(cmdbuf, "%s %s", "r.compress", "d4");
 	system(cmdbuf);
     }
     if (choice->te2[1]) {
-	Rast_close_cell(t1);
+	Rast_close(t1);
 	set_colors("t1");
 	sprintf(cmdbuf, "%s %s", "r.compress", "t1");
 	system(cmdbuf);
     }
     if (choice->te2[2]) {
-	Rast_close_cell(t2);
+	Rast_close(t2);
 	set_colors("t2");
 	sprintf(cmdbuf, "%s %s", "r.compress", "t2");
 	system(cmdbuf);
     }
     if (choice->te2[3]) {
-	Rast_close_cell(t3);
+	Rast_close(t3);
 	set_colors("t3");
 	sprintf(cmdbuf, "%s %s", "r.compress", "t3");
 	system(cmdbuf);
     }
     if (choice->te2[4]) {
-	Rast_close_cell(t4);
+	Rast_close(t4);
 	set_colors("t4");
 	sprintf(cmdbuf, "%s %s", "r.compress", "t4");
 	system(cmdbuf);
     }
     if (choice->te2[5]) {
-	Rast_close_cell(t5);
+	Rast_close(t5);
 	set_colors("t5");
 	sprintf(cmdbuf, "%s %s", "r.compress", "t5");
 	system(cmdbuf);
     }
     if (choice->jux[1]) {
-	Rast_close_cell(j1);
+	Rast_close(j1);
 	set_colors("j1");
 	sprintf(cmdbuf, "%s %s", "r.compress", "j1");
 	system(cmdbuf);
     }
     if (choice->jux[2]) {
-	Rast_close_cell(j2);
+	Rast_close(j2);
 	set_colors("j2");
 	sprintf(cmdbuf, "%s %s", "r.compress", "j2");
 	system(cmdbuf);
     }
     if (choice->edg[1]) {
-	Rast_close_cell(e1);
+	Rast_close(e1);
 	set_colors("e1");
 	sprintf(cmdbuf, "%s %s", "r.compress", "e1");
 	system(cmdbuf);
     }
     if (choice->edg[2]) {
-	Rast_close_cell(e2);
+	Rast_close(e2);
 	set_colors("e2");
 	sprintf(cmdbuf, "%s %s", "r.compress", "e2");
 	system(cmdbuf);
     }
 
-    Rast_close_cell(fmask);
+    Rast_close(fmask);
 
     return;
 }
@@ -1535,7 +1535,7 @@ void unit_driver()
 		}
 		Rast_put_raster_row(fd, unit_buf, CELL_TYPE);
 	    }
-	    Rast_close_cell(fd);
+	    Rast_close(fd);
 	    G_free(unit_buf);
 	}
     }
@@ -1805,7 +1805,7 @@ void whole_reg_driver()
 			  cntwhole, 0.0);
 	    ptrthis = ptrthis->next;
 	}
-	Rast_close_cell(fr);
+	Rast_close(fr);
 	G_free(row_buf);
 	G_free(ptrnew);
     }

@@ -234,7 +234,7 @@ int main(int argc, char *argv[])
 	extract_points(z_flg->answer);
     }
 
-    Rast_close_cell(input_fd);
+    Rast_close(input_fd);
 
     if (!no_topol->answer)
 	Vect_build(&Map);

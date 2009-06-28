@@ -26,7 +26,7 @@ CELL **read_cell(const char *name, const char *mapset)
 			  name, mapset);
     }
 
-    Rast_close_cell(fd);
+    Rast_close(fd);
 
     return idx;
 }

@@ -375,28 +375,28 @@ int main(int argc, char *argv[])
     }
 
     G_free(inrast_redchan);
-    Rast_close_cell(infd_redchan);
+    Rast_close(infd_redchan);
     G_free(inrast_nirchan);
-    Rast_close_cell(infd_nirchan);
+    Rast_close(infd_nirchan);
     if (greenchan) {
 	G_free(inrast_greenchan);
-	Rast_close_cell(infd_greenchan);
+	Rast_close(infd_greenchan);
     }
     if (bluechan) {
 	G_free(inrast_bluechan);
-	Rast_close_cell(infd_bluechan);
+	Rast_close(infd_bluechan);
     }
     if (chan5chan) {
 	G_free(inrast_chan5chan);
-	Rast_close_cell(infd_chan5chan);
+	Rast_close(infd_chan5chan);
     }
     if (chan7chan) {
 	G_free(inrast_chan7chan);
-	Rast_close_cell(infd_chan7chan);
+	Rast_close(infd_chan7chan);
     }
 
     G_free(outrast);
-    Rast_close_cell(outfd);
+    Rast_close(outfd);
 
     /* Color from -1.0 to +1.0 in grey */ 
     Rast_init_colors(&colors);

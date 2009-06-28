@@ -647,10 +647,10 @@ int main(int argc, char* argv[])
 
     /* Close the input and output file descriptors */
     Rast_short_history(opts.oimg->answer, "raster", &hist);
-    Rast_close_cell(iimg_fd);
-    if(opts.ialt->answer) Rast_close_cell(ialt_fd);
-    if(opts.ivis->answer) Rast_close_cell(ivis_fd);
-    Rast_close_cell(oimg_fd);
+    Rast_close(iimg_fd);
+    if(opts.ialt->answer) Rast_close(ialt_fd);
+    if(opts.ivis->answer) Rast_close(ivis_fd);
+    Rast_close(oimg_fd);
 
     Rast_command_history(&hist);
     Rast_write_history(opts.oimg->answer, &hist);

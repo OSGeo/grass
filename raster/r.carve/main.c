@@ -179,8 +179,8 @@ int main(int argc, char **argv)
 
     enforce_downstream(infd, outfd, &Map, &outMap, &parm);
 
-    Rast_close_cell(infd);
-    Rast_close_cell(outfd);
+    Rast_close(infd);
+    Rast_close(outfd);
     close_vect(&Map, 0);
 
     if (parm.outvect->answer)

@@ -55,8 +55,8 @@ int do_recode(void)
 	PROCESS_ROW(row);
     }
     G_percent(row, nrows, 2);
-    Rast_close_cell(in_fd);
-    Rast_close_cell(out_fd);
+    Rast_close(in_fd);
+    Rast_close(out_fd);
 
     /* writing history file */
     Rast_short_history(result, "raster", &hist);

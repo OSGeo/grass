@@ -418,14 +418,14 @@ int main(int argc, char *argv[])
 
     for (i = 1; i <= nfiles; i++) {
 	G_free(inrast[i]);
-	Rast_close_cell(infd[i]);
+	Rast_close(infd[i]);
 	G_free(inrast1[i]);
-	Rast_close_cell(infd1[i]);
+	Rast_close(infd1[i]);
 	G_free(inrast2[i]);
-	Rast_close_cell(infd2[i]);
+	Rast_close(infd2[i]);
     }
     G_free(outrast);
-    Rast_close_cell(outfd);
+    Rast_close(outfd);
 
     /* Color table from 0.0 to 10.0 */
     Rast_init_colors(&colors);

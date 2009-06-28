@@ -58,7 +58,7 @@ void fatal_error(void *map, int *fd, int depths, char *errorMsg)
 
     if (fd != NULL) {
 	for (i = 0; i < depths; i++)
-	    Rast_unopen_cell(fd[i]);
+	    Rast_unopen(fd[i]);
     }
 
     G3d_fatalError(errorMsg);
@@ -191,7 +191,7 @@ int open_output_map(const char *name, int res_type)
 /* ************************************************************************* */
 void close_output_map(int fd)
 {
-    if (Rast_close_cell(fd) < 0)
+    if (Rast_close(fd) < 0)
 	G_fatal_error(_("Unable to close output map"));
 }
 

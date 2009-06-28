@@ -132,7 +132,7 @@ int main(int argc, char **argv)
 
     /* Close the raster maps */
     for (i = 0; i < 3; i++)
-	Rast_close_cell(B[i].file);
+	Rast_close(B[i].file);
 
     exit(EXIT_SUCCESS);
 }

@@ -638,19 +638,19 @@ int INPUT(void)
 
 	}
     }
-    Rast_close_cell(fd1);
-    Rast_close_cell(fd2);
-    Rast_close_cell(fd3);
+    Rast_close(fd1);
+    Rast_close(fd2);
+    Rast_close(fd3);
     if (linkein != NULL)
-	Rast_close_cell(fd4);
+	Rast_close(fd4);
     if (albedo != NULL)
-	Rast_close_cell(fd5);
+	Rast_close(fd5);
     if (latin != NULL)
-	Rast_close_cell(fd6);
+	Rast_close(fd6);
     if (coefbh != NULL)
-	Rast_close_cell(fr1);
+	Rast_close(fr1);
     if (coefdh != NULL)
-	Rast_close_cell(fr2);
+	Rast_close(fr2);
 
 /*******transformation of angles from 0 to east counterclock
 		to 0 to north clocwise, for ori=0 upslope flowlines
@@ -798,23 +798,23 @@ int OUTGR(void)
     }
 
     if (incidout != NULL) {
-	Rast_close_cell(fd7);
+	Rast_close(fd7);
 	Rast_write_history(incidout, &hist);
     }
     if (beam_rad != NULL) {
-	Rast_close_cell(fd8);
+	Rast_close(fd8);
 	Rast_write_history(beam_rad, &hist);
     }
     if (diff_rad != NULL) {
-	Rast_close_cell(fd9);
+	Rast_close(fd9);
 	Rast_write_history(diff_rad, &hist);
     }
     if (refl_rad != NULL) {
-	Rast_close_cell(fd10);
+	Rast_close(fd10);
 	Rast_write_history(refl_rad, &hist);
     }
     if (insol_time != NULL) {
-	Rast_close_cell(fd11);
+	Rast_close(fd11);
 	Rast_write_history(insol_time, &hist);
     }
 
@@ -1464,7 +1464,7 @@ void calculate(void)
     hist.edlinecnt++;
 
     Rast_command_history(&hist);
-    /* don't call Rast_write_history() until after Rast_close_cell() or it just gets overwritten */
+    /* don't call Rast_write_history() until after Rast_close() or it just gets overwritten */
 }
 
 double com_sol_const(int no_of_day)

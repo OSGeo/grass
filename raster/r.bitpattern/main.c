@@ -146,8 +146,8 @@ int main(int argc, char *argv[])
 
     G_free(inrast);
     G_free(outrast);
-    Rast_close_cell(infd);
-    Rast_close_cell(outfd);
+    Rast_close(infd);
+    Rast_close(outfd);
 
     return (EXIT_SUCCESS);
 }

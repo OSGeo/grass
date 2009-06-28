@@ -60,7 +60,7 @@ int get_cats(const char *name, const char *mapset)
     /* done */
     if (G_verbose() > G_verbose_std())
 	G_percent(row, nrows, 2);
-    Rast_close_cell(fd);
+    Rast_close(fd);
     G_free(cell);
     Rast_rewind_cell_stats(&statf);
 

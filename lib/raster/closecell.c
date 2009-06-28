@@ -67,7 +67,7 @@ static int write_fp_format(int fd);
  * \return -1 on error
  * \return 1 on success
  */
-int Rast_close_cell(int fd)
+int Rast_close(int fd)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
 
@@ -100,7 +100,7 @@ int Rast_close_cell(int fd)
  * \return -1 on error
  * \return 1 on success
  */
-int Rast_unopen_cell(int fd)
+int Rast_unopen(int fd)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
 

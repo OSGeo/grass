@@ -160,7 +160,7 @@ int main(int argc, char **argv)
 
     /* Store input data in array-indexed doubly-linked lists and close input file */
     rowlist = row_lists(nrows, ncols, &datarows, &n, fd, cell);
-    Rast_close_cell(fd);
+    Rast_close(fd);
     if (npoints > n)
 	npoints = n;
 
@@ -179,7 +179,7 @@ int main(int argc, char **argv)
     G_free(collook);
     if (ll)
 	free_dist_params();
-    Rast_close_cell(fd);
+    Rast_close(fd);
     /* writing history file */
     Rast_short_history(output, "raster", &history);
     Rast_command_history(&history);

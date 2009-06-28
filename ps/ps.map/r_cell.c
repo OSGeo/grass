@@ -15,7 +15,7 @@ int read_cell(char *name, char *mapset)
 
     PS.do_colortable = 0;
     if (PS.cell_fd >= 0) {
-	Rast_close_cell(PS.cell_fd);
+	Rast_close(PS.cell_fd);
 	G_free(PS.cell_name);
 	Rast_free_colors(&PS.colors);
 	PS.cell_fd = -1;

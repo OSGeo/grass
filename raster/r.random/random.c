@@ -247,9 +247,9 @@ int execute_random(struct rr_state *theState)
 		  theState->nRand - nt);
 
     /* close files */
-    Rast_close_cell(infd);
+    Rast_close(infd);
     if (theState->docover == 1)
-	Rast_close_cell(cinfd);
+	Rast_close(cinfd);
     if (theState->outvector) {
 	db_commit_transaction(driver);
 	db_close_database_shutdown_driver(driver);
@@ -258,7 +258,7 @@ int execute_random(struct rr_state *theState)
 	Vect_close(&Out);
     }
     if (theState->outraster)
-	Rast_close_cell(outfd);
+	Rast_close(outfd);
 
     return 0;
 }				/* execute_random() */

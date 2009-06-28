@@ -526,7 +526,7 @@ void df_texture(int nrows, int ncols, double **buf, double **null_buf,
 	for (i = 0; i < nrows + 3; i++)
 	    G_free(edgenull[i]);
 	G_free(edgenull);
-	Rast_close_cell(fc);
+	Rast_close(fc);
     }
 
     /* if the zscore map was requested */
@@ -547,7 +547,7 @@ void df_texture(int nrows, int ncols, double **buf, double **null_buf,
 	    Rast_put_raster_row(fd, zscor_buf, DCELL_TYPE);
 	}
 	G_free(zscor_buf);
-	Rast_close_cell(fd);
+	Rast_close(fd);
     }
 
     /* open the output files and 

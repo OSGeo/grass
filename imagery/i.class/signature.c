@@ -294,7 +294,7 @@ int display_signature(void)
 	    Rast_put_raster_row(fd, buffer, CELL_TYPE);
 	}
 
-	Rast_close_cell(fd);
+	Rast_close(fd);
 	close_band_files();
     }				/* end of if first_display */
 

@@ -146,7 +146,7 @@ int main(int argc, char *argv[])
     G_percent(row, nrows, 1);
 
     Vect_close(&In);
-    Rast_close_cell(out_fd);
+    Rast_close(out_fd);
 
     exit(EXIT_SUCCESS);
 }

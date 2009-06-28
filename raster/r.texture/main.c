@@ -247,7 +247,7 @@ int main(int argc, char *argv[])
     }
 
     /* close input cell map and release the row buffer */
-    Rast_close_cell(infd);
+    Rast_close(infd);
     G_free(cell_row);
 
     /* Now raster map is into memory. */
@@ -348,7 +348,7 @@ int main(int argc, char *argv[])
 			G_fatal_error(_("Failed writing raster map <%s> row %d"),
 				      result, row);
 
-	    Rast_close_cell(outfd);
+	    Rast_close(outfd);
 	    strcpy(mapname, filename);
 	    strcat(mapname, suffixes[t_measure]);
 	    G_important_message(_("Calculated measure #%d <%s> (56 measures available)"),

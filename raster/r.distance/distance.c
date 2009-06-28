@@ -150,8 +150,8 @@ int null_distance(const char *name1, const char *name2, int *zerro_row, int *zer
 		G_free(inrast2);
 
 		/* closing raster maps */
-		Rast_close_cell(mapd1);
-		Rast_close_cell(mapd2);
+		Rast_close(mapd1);
+		Rast_close(mapd2);
 		return 1;
 	    }
 	}
@@ -161,8 +161,8 @@ int null_distance(const char *name1, const char *name2, int *zerro_row, int *zer
     G_free(inrast2);
 
     /* closing raster maps */
-    Rast_close_cell(mapd1);
-    Rast_close_cell(mapd2);
+    Rast_close(mapd1);
+    Rast_close(mapd2);
 
     return 0;
 }

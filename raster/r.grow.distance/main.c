@@ -296,7 +296,7 @@ int main(int argc, char **argv)
 
     G_percent(row, nrows, 2);
 
-    Rast_close_cell(in_fd);
+    Rast_close(in_fd);
 
     Rast_set_c_null_value(old_x_row, ncols);
     Rast_set_c_null_value(old_y_row, ncols);
@@ -351,9 +351,9 @@ int main(int argc, char **argv)
     remove(temp_name);
 
     if (dist_name)
-	Rast_close_cell(dist_fd);
+	Rast_close(dist_fd);
     if (val_name)
-	Rast_close_cell(val_fd);
+	Rast_close(val_fd);
 
     if (val_name) {
 	if (Rast_read_colors(in_name, "", &colors) < 0)

@@ -154,7 +154,7 @@ int main(int argc, char *argv[])
     G_free(patch);
     G_free(presult);
     for (i = 0; i < nfiles; i++)
-	Rast_close_cell(infd[i]);
+	Rast_close(infd[i]);
     /* 
      * build the new cats and colors. do this before closing the new
      * file, in case the new file is one of the patching files as well.
@@ -163,7 +163,7 @@ int main(int argc, char *argv[])
     support(names, statf, nfiles, &cats, &cats_ok, &colr, &colr_ok, out_type);
 
     /* now close (and create) the result */
-    Rast_close_cell(outfd);
+    Rast_close(outfd);
     if (cats_ok)
 	Rast_write_cats(new_name, &cats);
     if (colr_ok)

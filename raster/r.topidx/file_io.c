@@ -42,7 +42,7 @@ void getcells(void)
 
 	if (data_type == CELL_TYPE) {
 	    if (Rast_get_c_raster_row(fd, ccell, i) < 0) {
-		Rast_close_cell(fd);
+		Rast_close(fd);
 	    }
 	    for (j = 0; j < window.cols; j++) {
 		if (Rast_is_c_null_value(&ccell[j]))
@@ -53,7 +53,7 @@ void getcells(void)
 	}
 	else if (data_type == FCELL_TYPE) {
 	    if (Rast_get_f_raster_row(fd, fcell, i) < 0) {
-		Rast_close_cell(fd);
+		Rast_close(fd);
 	    }
 	    for (j = 0; j < window.cols; j++) {
 		if (Rast_is_f_null_value(&fcell[j]))
@@ -63,7 +63,7 @@ void getcells(void)
 	    }
 	}
 	else if (Rast_get_d_raster_row(fd, cell[i], i) < 0) {
-	    Rast_close_cell(fd);
+	    Rast_close(fd);
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"), iname,
 			  i);
 	}
@@ -73,7 +73,7 @@ void getcells(void)
     else if (data_type == FCELL_TYPE)
 	G_free(fcell);
     G_percent(i, window.rows, 2);
-    Rast_close_cell(fd);
+    Rast_close(fd);
 }
 
 
@@ -92,7 +92,7 @@ void putcells(void)
 	Rast_put_d_raster_row(fd, atb[i]);
     }
     G_percent(i, window.rows, 2);
-    Rast_close_cell(fd);
+    Rast_close(fd);
 
     Rast_short_history(oname, "raster", &history);
     strncpy(history.datsrc_1, iname, RECORD_LEN);

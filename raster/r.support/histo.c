@@ -43,7 +43,7 @@ int do_histogram(const char *name)
 	Rast_write_histogram_cs(name, &statf);
 
     Rast_free_cell_stats(&statf);
-    Rast_close_cell(fd);
+    Rast_close(fd);
     G_free(cell);
 
     if (row < nrows)

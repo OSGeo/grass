@@ -1066,46 +1066,46 @@ int INPUT_part(int offset, double *zmax)
 	}
     }
 
-    Rast_close_cell(fd1);
+    Rast_close(fd1);
     G_free(cell1);
 
     if (aspin != NULL) {
 	G_free(cell2);
-	Rast_close_cell(fd2);
+	Rast_close(fd2);
     }
     if (slopein != NULL) {
 	G_free(cell3);
-	Rast_close_cell(fd3);
+	Rast_close(fd3);
     }
     if (linkein != NULL) {
 	G_free(cell4);
-	Rast_close_cell(fd4);
+	Rast_close(fd4);
     }
     if (albedo != NULL) {
 	G_free(cell5);
-	Rast_close_cell(fd5);
+	Rast_close(fd5);
     }
     if (latin != NULL) {
 	G_free(cell6);
-	Rast_close_cell(fd6);
+	Rast_close(fd6);
     }
     if (longin != NULL) {
 	G_free(cell7);
-	Rast_close_cell(fd7);
+	Rast_close(fd7);
     }
     if (coefbh != NULL) {
 	G_free(rast1);
-	Rast_close_cell(fr1);
+	Rast_close(fr1);
     }
     if (coefdh != NULL) {
 	G_free(rast2);
-	Rast_close_cell(fr2);
+	Rast_close(fr2);
     }
 
 
     if (useHorizonData()) {
 	for (i = 0; i < arrayNumInt; i++) {
-	    Rast_close_cell(fd_shad[i]);
+	    Rast_close(fd_shad[i]);
 	    G_free(horizonbuf[i]);
 	}
     }
@@ -1277,27 +1277,27 @@ int OUTGR(void)
     }
 
     if (incidout != NULL) {
-	Rast_close_cell(fd7);
+	Rast_close(fd7);
 	Rast_write_history(incidout, &hist);
     }
     if (beam_rad != NULL) {
-	Rast_close_cell(fd8);
+	Rast_close(fd8);
 	Rast_write_history(beam_rad, &hist);
     }
     if (diff_rad != NULL) {
-	Rast_close_cell(fd9);
+	Rast_close(fd9);
 	Rast_write_history(diff_rad, &hist);
     }
     if (refl_rad != NULL) {
-	Rast_close_cell(fd10);
+	Rast_close(fd10);
 	Rast_write_history(refl_rad, &hist);
     }
     if (insol_time != NULL) {
-	Rast_close_cell(fd11);
+	Rast_close(fd11);
 	Rast_write_history(insol_time, &hist);
     }
     if (glob_rad != NULL) {
-	Rast_close_cell(fd12);
+	Rast_close(fd12);
 	Rast_write_history(glob_rad, &hist);
     }
 
@@ -2062,7 +2062,7 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
     hist.edlinecnt++;
 
     Rast_command_history(&hist);
-    /* don't call Rast_write_history() until after Rast_close_cell() or it just gets overwritten */
+    /* don't call Rast_write_history() until after Rast_close() or it just gets overwritten */
 
 }				/* End of ) function */
 

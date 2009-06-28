@@ -135,9 +135,9 @@ int main(int argc, char *argv[])
 			  result, row);
     }
     G_free(inrast_annual_pmm);
-    Rast_close_cell(infd_annual_pmm);
+    Rast_close(infd_annual_pmm);
     G_free(outrast);
-    Rast_close_cell(outfd);
+    Rast_close(outfd);
 
     Rast_short_history(result, "raster", &history);
     Rast_command_history(&history);

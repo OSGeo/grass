@@ -357,7 +357,7 @@ int main(int argc, char **argv)
 	get_row(map_id, in_buf, i);
 	write(fe, in_buf, bnd.sz);
     }
-    Rast_close_cell(map_id);
+    Rast_close(map_id);
 
     if (costmode == 1) {
 	dir_buf = Rast_allocate_d_buf();
@@ -369,7 +369,7 @@ int main(int argc, char **argv)
 	    Rast_get_d_raster_row(dir_id, dir_buf, i);
 	    write(dir_fd, dir_buf, ncols * sizeof(DCELL));
 	}
-	Rast_close_cell(dir_id);
+	Rast_close(dir_id);
     }
 
     /* only necessary for non-dir drain */
@@ -546,7 +546,7 @@ int main(int argc, char **argv)
     }
 
     /* close files and free buffers */
-    Rast_close_cell(new_id);
+    Rast_close(new_id);
 
     Rast_put_cell_title(new_map_name, "Surface flow trace");
 

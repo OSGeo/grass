@@ -501,9 +501,9 @@ int main(int argc, char **argv)
 	}
     }
 
-    Rast_close_cell(layer_fd);
+    Rast_close(layer_fd);
     if (opt7->answer)
-	Rast_close_cell(mag_fd);
+	Rast_close(mag_fd);
 
     D_close_driver();
 

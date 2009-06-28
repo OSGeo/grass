@@ -268,17 +268,17 @@ int output_data(int tt, double ft)
     }
 
     if (depth != NULL)
-	Rast_close_cell(fd6);
+	Rast_close(fd6);
     if (disch != NULL)
-	Rast_close_cell(fd7);
+	Rast_close(fd7);
     if (err != NULL)
-	Rast_close_cell(fd8);
+	Rast_close(fd8);
     if (conc != NULL)
-	Rast_close_cell(fd14);
+	Rast_close(fd14);
     if (flux != NULL)
-	Rast_close_cell(fd15);
+	Rast_close(fd15);
     if (erdep != NULL)
-	Rast_close_cell(fd16);
+	Rast_close(fd16);
 
     if (depth != NULL) {
 
@@ -692,10 +692,10 @@ int output_et()
 
 
     if (tc != NULL)
-	Rast_close_cell(fd13);
+	Rast_close(fd13);
 
     if (et != NULL)
-	Rast_close_cell(fd17);
+	Rast_close(fd17);
 
     if (et != NULL) {
 

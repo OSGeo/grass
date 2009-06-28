@@ -437,7 +437,7 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
     }
     if (choice->wrum == 'r') {
 	G_free(tmp1);
-	Rast_close_cell(fr);
+	Rast_close(fr);
     }
     G_free(nulltmp);
     return;

@@ -143,7 +143,7 @@ int main(int argc, char *argv[])
     }
 
     /* close input cell map */
-    Rast_close_cell(inputfd);
+    Rast_close(inputfd);
 
     /* perform FFT */
     G_message(_("Starting FFT..."));
@@ -190,8 +190,8 @@ int main(int argc, char *argv[])
 	G_percent(i+1, rows, 2);
     }
 
-    Rast_close_cell(realfd);
-    Rast_close_cell(imagfd);
+    Rast_close(realfd);
+    Rast_close(imagfd);
 
     G_free(cell_real);
     G_free(cell_imag);

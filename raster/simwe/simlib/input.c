@@ -446,34 +446,34 @@ int input_data(void)
 	    }
 	}
     }
-    Rast_close_cell(fd1);
-    Rast_close_cell(fd2);
-    Rast_close_cell(fd3);
+    Rast_close(fd1);
+    Rast_close(fd2);
+    Rast_close(fd3);
 
     if (rain != NULL)
-	Rast_close_cell(fd4);
+	Rast_close(fd4);
 
     if (infil != NULL)
-	Rast_close_cell(fd4a);
+	Rast_close(fd4a);
 
     if (traps != NULL)
-	Rast_close_cell(fd4b);
+	Rast_close(fd4b);
     /* Maybe a conditional to manin!=NULL here ! */
-    Rast_close_cell(fd5);
+    Rast_close(fd5);
 
 	/****************/
 
     if (detin != NULL)
-	Rast_close_cell(fd9);
+	Rast_close(fd9);
 
     if (tranin != NULL)
-	Rast_close_cell(fd10);
+	Rast_close(fd10);
 
     if (tauin != NULL)
-	Rast_close_cell(fd11);
+	Rast_close(fd11);
 
     if (wdepth != NULL)
-	Rast_close_cell(fd12);
+	Rast_close(fd12);
 
     return 1;
 }

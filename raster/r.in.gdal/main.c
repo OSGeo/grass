@@ -863,13 +863,13 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
     /* -------------------------------------------------------------------- */
     if (complex) {
 	G_debug(1, "Creating support files for %s", outputReal);
-	Rast_close_cell(cfR);
+	Rast_close(cfR);
 	Rast_short_history((char *)outputReal, "raster", &history);
 	Rast_command_history(&history);
 	Rast_write_history((char *)outputReal, &history);
 
 	G_debug(1, "Creating support files for %s", outputImg);
-	Rast_close_cell(cfI);
+	Rast_close(cfI);
 	Rast_short_history((char *)outputImg, "raster", &history);
 	Rast_command_history(&history);
 	Rast_write_history((char *)outputImg, &history);
@@ -878,7 +878,7 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
     }
     else {
 	G_debug(1, "Creating support files for %s", output);
-	Rast_close_cell(cf);
+	Rast_close(cf);
 	Rast_short_history((char *)output, "raster", &history);
 	Rast_command_history(&history);
 	Rast_write_history((char *)output, &history);

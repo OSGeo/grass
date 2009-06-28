@@ -260,7 +260,7 @@ int MyApp::load_files(void)
 		}
 	    }
 
-	    Rast_close_cell(fd);
+	    Rast_close(fd);
 	}
 
 	wxBitmap *bmp = new wxBitmap(img);

@@ -420,7 +420,7 @@ int main(int argc, char **argv)
 	    Rast_put_raster_row(fdout, output_cell, DCELL_TYPE);
 	}
 
-	Rast_close_cell(fdout);
+	Rast_close(fdout);
     }
 
     G_message(_("Maximum value in output: %e."), gausmax);

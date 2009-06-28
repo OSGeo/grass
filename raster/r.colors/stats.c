@@ -49,7 +49,7 @@ int get_stats(const char *name, const char *mapset, struct Cell_stats *statf)
 	Rast_update_cell_stats(cell, ncols, statf);
     }
     G_percent(row, nrows, 2);
-    Rast_close_cell(fd);
+    Rast_close(fd);
     G_free(cell);
 
     return 1;
@@ -136,6 +136,6 @@ void get_fp_stats(const char *name, const char *mapset,
     }
 
     G_percent(row, nrows, 2);
-    Rast_close_cell(fd);
+    Rast_close(fd);
     G_free(dcell);
 }

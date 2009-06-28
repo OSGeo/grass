@@ -568,7 +568,7 @@ int INPUT(void)
 
 	}
     }
-    Rast_close_cell(fd1);
+    Rast_close(fd1);
 
     /*create low resolution array 100 */
     for (i = 0; i < m100; i++) {
@@ -647,7 +647,7 @@ int OUTGR(int numrows, int numcols)
 
     }				/* End loop over rows. */
 
-    Rast_close_cell(fd1);
+    Rast_close(fd1);
 
 
 

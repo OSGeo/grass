@@ -81,7 +81,7 @@ static int cell_draw(const char *name,
     G_percent(nrows, nrows, 2);
 
     /* Wrap up and return */
-    Rast_close_cell(cellfile);
+    Rast_close(cellfile);
     G_free(xarray);
     return (0);
 }

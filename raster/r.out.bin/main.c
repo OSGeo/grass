@@ -383,7 +383,7 @@ int main(int argc, char *argv[])
     }
     G_percent(row, nrows, 2);	/* finish it off */
 
-    Rast_close_cell(fd);
+    Rast_close(fd);
     fclose(fp);
 
     exit(EXIT_SUCCESS);
