@@ -108,7 +108,7 @@ int main(int argc, char **argv)
 	for (i = lo; i <= hi; i++) {
 	    unsigned char r, g, b, set;
 	    DCELL val = (DCELL) i;
-	    Rast_lookup_colors(&i, &r, &g, &b, &set, 1, &colors);
+	    Rast_lookup_c_colors(&i, &r, &g, &b, &set, 1, &colors);
 	    write_rule(&val, r, g, b);
 	}
     }
