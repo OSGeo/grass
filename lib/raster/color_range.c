@@ -16,13 +16,11 @@
 
 /*!
   \brief Set color range (CELL version)
-
-  \todo Rename to G_set_c_color_range() ?
-
+  
   \param min,max minimum and maximum value
   \param colors pointer to Colors structure which holds color info
 */
-void Rast_set_color_range(CELL min, CELL max, struct Colors *colors)
+void Rast_set_c_color_range(CELL min, CELL max, struct Colors *colors)
 {
     if (min < max) {
 	colors->cmin = (DCELL) min;
@@ -55,8 +53,6 @@ void Rast_set_d_color_range(DCELL min, DCELL max, struct Colors *colors)
 /*!
   \brief Get color range values (CELL)
 
-  \todo Rename to G_get_c_color_range() ?
-  
   Returns min and max category in the range or huge numbers if the
   color table is defined on floating cell values and not on
   categories.

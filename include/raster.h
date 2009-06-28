@@ -161,7 +161,7 @@ void Rast__organize_colors(struct Colors *);
 void Rast_make_random_colors(struct Colors *, CELL, CELL);
 
 /* color_range.c */
-void Rast_set_color_range(CELL, CELL, struct Colors *);
+void Rast_set_c_color_range(CELL, CELL, struct Colors *);
 void Rast_set_d_color_range(DCELL, DCELL, struct Colors *);
 void Rast_get_c_color_range(CELL *, CELL *, const struct Colors *);
 void Rast_get_d_color_range(DCELL *, DCELL *, const struct Colors *);

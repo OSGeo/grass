@@ -398,7 +398,7 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
 		    cmin = min;
 		if (max < cmax)
 		    cmax = max;
-		Rast_set_color_range(cmin, cmax, &colr);
+		Rast_set_c_color_range(cmin, cmax, &colr);
 	    }
 	    else {
 		DCELL dmin, dmax;
@@ -411,7 +411,7 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
 		    cmin = dmin;
 		if (dmax < cmax)
 		    cmax = dmax;
-		Rast_set_color_range(cmin, cmax, &colr);
+		Rast_set_c_color_range(cmin, cmax, &colr);
 	    }
 	    Rast_write_colors("interior", mapset, &colr);
 	}

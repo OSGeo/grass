@@ -164,7 +164,7 @@ int main(int argc, char *argv[])
 		cmin = min;
 	    if (max < cmax)
 		cmax = max;
-	    Rast_set_color_range(cmin, cmax, &colr);
+	    Rast_set_c_color_range(cmin, cmax, &colr);
 	}
 	Rast_write_colors(result, G_mapset(), &colr);
     }
