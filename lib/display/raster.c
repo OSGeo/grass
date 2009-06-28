@@ -100,7 +100,7 @@ static int draw_cell(int A_row,
 	set = G_realloc(set, nalloc);
     }
 
-    Rast_lookup_raster_colors(array, red, grn, blu, set, ncols, colors,
+    Rast_lookup_colors(array, red, grn, blu, set, ncols, colors,
 			   data_type);
 
     if (D__overlay_mode)
@@ -165,11 +165,11 @@ int D_draw_raster_RGB(int A_row,
     }
 
     /* convert cell values to bytes */
-    Rast_lookup_raster_colors(r_raster, r_buf, n_buf, n_buf, n_buf, ncols,
+    Rast_lookup_colors(r_raster, r_buf, n_buf, n_buf, n_buf, ncols,
 			   r_colors, r_type);
-    Rast_lookup_raster_colors(g_raster, n_buf, g_buf, n_buf, n_buf, ncols,
+    Rast_lookup_colors(g_raster, n_buf, g_buf, n_buf, n_buf, ncols,
 			   g_colors, g_type);
-    Rast_lookup_raster_colors(b_raster, n_buf, n_buf, b_buf, n_buf, ncols,
+    Rast_lookup_colors(b_raster, n_buf, n_buf, b_buf, n_buf, ncols,
 			   b_colors, b_type);
 
     if (D__overlay_mode)

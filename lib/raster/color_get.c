@@ -41,7 +41,7 @@ int Rast_get_color(const void *rast,
 {
     unsigned char r, g, b, set;
 
-    Rast_lookup_raster_colors(rast, &r, &g, &b, &set, 1, colors, map_type);
+    Rast_lookup_colors(rast, &r, &g, &b, &set, 1, colors, map_type);
 
     *red = (int)r;
     *grn = (int)g;

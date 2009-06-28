@@ -20,8 +20,6 @@
 /*!
  * \brief Lookup an array of colors
  *
- * \todo To be removed, replaced by Rast_lookup_c_raster_colors().
- *
  * Extracts colors for an array of <i>cell</i> values. The colors
  * for the <i>n</i> values in the <i>cell</i> array are stored in
  * the <i>red, green</i>, and <i>blue</i> arrays. The values in the
@@ -44,43 +42,10 @@
  * \param n number of values
  * \param colors pointer to Colors structure which holds color info
  */
-void Rast_lookup_colors(const CELL * cell,
-		     unsigned char *red, unsigned char *grn,
-		     unsigned char *blu, unsigned char *set, int n,
-		     struct Colors *colors)
-{
-    Rast_lookup_c_raster_colors(cell, red, grn, blu, set, n, colors);
-}
-
-/*!
- * \brief Lookup an array of colors
- *
- * Extracts colors for an array of <i>cell</i> values. The colors
- * for the <i>n</i> values in the <i>cell</i> array are stored in
- * the <i>red, green</i>, and <i>blue</i> arrays. The values in the
- * <i>set</i> array will indicate if the corresponding <i>cell</i>
- * value has a color or not (1 means it does, 0 means it does not).
- *
- * The programmer must allocate the <i>red, green, blue</i>, and
- * <b>set</b> arrays to be at least dimension <i>n</i>.
- *
- * <b>Note:</b> The <i>red, green</i>, and <i>blue</i> intensities
- * will be in the range 0 -­ 255.
- *
- * Modified to return a color for NULL-values.
- *
- * \param cell raster cell value
- * \param[out] red red value
- * \param[out] grn green value
- * \param[out] blu blue value
- * \param set array which indicates if color is set or not
- * \param n number of values
- * \param colors pointer to Colors structure which holds color info
- */
-void Rast_lookup_c_raster_colors(const CELL * cell,
-			      unsigned char *red, unsigned char *grn,
-			      unsigned char *blu, unsigned char *set, int n,
-			      struct Colors *colors)
+void Rast_lookup_c_colors(const CELL * cell,
+			  unsigned char *red, unsigned char *grn,
+			  unsigned char *blu, unsigned char *set, int n,
+			  struct Colors *colors)
 {
     Rast__organize_colors(colors);	/* make sure the lookup tables are in place */
 
@@ -99,8 +64,8 @@ void Rast_lookup_c_raster_colors(const CELL * cell,
  * \brief Lookup an array of colors
  *
  * - If the <em>map_type</em> is CELL_TYPE, calls Rast_lookup_colors()
- * - If the <em>map_type</em> is FCELL_TYPE, calls Rast_lookup_f_raster_colors()
- * - If the <em>map_type</em> is DCELL_TYPE, calls Rast_lookup_d_raster_colors()
+ * - If the <em>map_type</em> is FCELL_TYPE, calls Rast_lookup_f_colors()
+ * - If the <em>map_type</em> is DCELL_TYPE, calls Rast_lookup_d_colors()
  *
  * \param raster raster cell value
  * \param[out] red red value
@@ -111,10 +76,10 @@ void Rast_lookup_c_raster_colors(const CELL * cell,
  * \param colors pointer to Colors structure which holds color info
  * \param map_type raster type (CELL, FCELL, DCELL)
  */
-void Rast_lookup_raster_colors(const void *raster,
-			    unsigned char *red, unsigned char *grn,
-			    unsigned char *blu, unsigned char *set, int n,
-			    struct Colors *colors, RASTER_MAP_TYPE map_type)
+void Rast_lookup_colors(const void *raster,
+			unsigned char *red, unsigned char *grn,
+			unsigned char *blu, unsigned char *set, int n,
+			struct Colors *colors, RASTER_MAP_TYPE map_type)
 {
     Rast__organize_colors(colors);	/* make sure the lookup tables are in place */
     /* in case of float color rules, fp_lookup table is created */
@@ -143,9 +108,9 @@ void Rast_lookup_raster_colors(const void *raster,
  * \param n number of values
  * \param colors pointer to Colors structure which holds color info
  */
-void Rast_lookup_f_raster_colors(const FCELL * fcell, unsigned char *red,
-			      unsigned char *grn, unsigned char *blu,
-			      unsigned char *set, int n, struct Colors *colors)
+void Rast_lookup_f_colors(const FCELL * fcell, unsigned char *red,
+			  unsigned char *grn, unsigned char *blu,
+			  unsigned char *set, int n, struct Colors *colors)
 {
     Rast__organize_colors(colors);	/* make sure the lookup tables are in place */
     /* in case of float color rules, fp_lookup table is created */
@@ -176,9 +141,9 @@ void Rast_lookup_f_raster_colors(const FCELL * fcell, unsigned char *red,
  * \param n number of values
  * \param colors pointer to Colors structure which holds color info
  */
-void Rast_lookup_d_raster_colors(const DCELL * dcell, unsigned char *red,
-			      unsigned char *grn, unsigned char *blu,
-			      unsigned char *set, int n, struct Colors *colors)
+void Rast_lookup_d_colors(const DCELL * dcell, unsigned char *red,
+			  unsigned char *grn, unsigned char *blu,
+			  unsigned char *set, int n, struct Colors *colors)
 {
     Rast__organize_colors(colors);	/* make sure the lookup tables are in place */
     /* in case of float color rules, fp_lookup table is created */
@@ -226,9 +191,9 @@ static int less(double x, double y)
  * \param data_type raster type (CELL, FCELL, DCELL)
  */
 void Rast__lookup_colors(const void *raster, unsigned char *red,
-		      unsigned char *grn, unsigned char *blu,
-		      unsigned char *set, int n, struct Colors *colors,
-		      int mod, int rules_only, RASTER_MAP_TYPE data_type)
+			 unsigned char *grn, unsigned char *blu,
+			 unsigned char *set, int n, struct Colors *colors,
+			 int mod, int rules_only, RASTER_MAP_TYPE data_type)
 {
     struct _Color_Info_ *cp;
     struct _Color_Rule_ *rule;
@@ -448,8 +413,8 @@ void Rast__lookup_colors(const void *raster, unsigned char *red,
   \param rule pointer to _Color_Rule which holds color rules info
 */
 void Rast__interpolate_color_rule(DCELL val, unsigned char *red,
-			       unsigned char *grn, unsigned char *blu,
-			       const struct _Color_Rule_ *rule)
+				  unsigned char *grn, unsigned char *blu,
+				  const struct _Color_Rule_ *rule)
 {
     DCELL delta;
 
