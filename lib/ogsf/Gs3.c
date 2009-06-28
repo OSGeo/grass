@@ -658,7 +658,7 @@ int Gs_build_256lookup(const char *filename, int *buff)
 	cats[i] = i;
     }
 
-    Rast_lookup_colors(cats, r, g, b, set, 256, &colrules);
+    Rast_lookup_c_colors(cats, r, g, b, set, 256, &colrules);
 
     for (i = 0; i < 256; i++) {
 
@@ -710,7 +710,7 @@ void Gs_pack_colors(const char *filename, int *buff, int rows, int cols)
     G_message(_("Translating colors from raster map <%s>..."), filename);
 
     for (i = 0; i < rows; i++) {
-	Rast_lookup_colors(cur, r, g, b, set, cols, &colrules);
+	Rast_lookup_c_colors(cur, r, g, b, set, cols, &colrules);
 	G_percent(i, rows, 2);
 
 	for (j = 0; j < cols; j++) {
