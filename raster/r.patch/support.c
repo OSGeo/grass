@@ -53,7 +53,7 @@ int support(char **names,
 			Rast_set_c_cat(&n, &n, Rast_get_c_cat((CELL *) &n, &pcats), cats);
 		    }
 		    if (do_colr) {
-			Rast_get_color(n, &red, &grn, &blu, &pcolr);
+			Rast_get_c_color(&n, &red, &grn, &blu, &pcolr);
 			Rast_set_color(n, red, grn, blu, colr);
 		    }
 		}

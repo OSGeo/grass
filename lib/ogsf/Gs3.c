@@ -642,7 +642,7 @@ int Gs_build_256lookup(const char *filename, int *buff)
     }
 
     Rast_read_colors(filename, mapset, &colrules);
-    Rast_get_color_range(&min, &max, &colrules);
+    Rast_get_c_color_range(&min, &max, &colrules);
 
     if (min < 0 || max > 255) {
 	G_warning(_("Color table range doesn't match data (mincol=%d, maxcol=%d"),

@@ -62,9 +62,9 @@ int read_rast(double east, double north, double dist, int fd, int coords,
 	int red, green, blue;
 
 	if (outofbounds)
-	    Rast_get_color(nullcell, &red, &green, &blue, &colors);
+	    Rast_get_c_color(&nullcell, &red, &green, &blue, &colors);
 	else
-	    Rast_get_d_raster_color(&dcell[col], &red, &green, &blue,
+	    Rast_get_d_color(&dcell[col], &red, &green, &blue,
 				 &colors);
 
 	fprintf(fp, " %03d:%03d:%03d", red, green, blue);

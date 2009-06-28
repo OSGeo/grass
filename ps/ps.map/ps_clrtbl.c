@@ -149,7 +149,7 @@ int PS_colortable(void)
 		if (!i)
 		    Rast_get_null_value_color(&R, &G, &B, &colors);
 		else
-		    Rast_get_d_raster_color(&dmin, &R, &G, &B, &colors);
+		    Rast_get_d_color(&dmin, &R, &G, &B, &colors);
 
 		if (do_color)
 		    fprintf(PS.fp, "%.3f %.3f %.3f C\n",
@@ -180,7 +180,7 @@ int PS_colortable(void)
 		    /* set box fill color */
 		    val = dmin + (double)jj *(dmax - dmin) / NSTEPS;
 
-		    Rast_get_d_raster_color(&val, &R, &G, &B, &colors);
+		    Rast_get_d_color(&val, &R, &G, &B, &colors);
 		    fprintf(PS.fp, "%.3f %.3f %.3f C\n",
 			    (double)R / 255., (double)G / 255.,
 			    (double)B / 255.);

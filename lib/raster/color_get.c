@@ -15,44 +15,15 @@
 #include <grass/raster.h>
 
 /*!
- * \brief Get a category color.
+ * \brief Gets color from raster map
  *
- * \todo To be removed, replaced by Rast_get_raster_color().
+ * Looks up the rgb colors for <i>rast</i> in the color table
+ * <i>colors</i>.
  *
  * The <i>red, green</i>, and <i>blue</i> intensities for the color
  * associated with category <i>n</i> are extracted from the
  * <i>colors</i> structure. The intensities will be in the range 0 ­-
  * 255. Also works for null cells.
- *
- * \param n cell to get color from
- * \param[out] red red value
- * \param[out] grn green value
- * \param[out] blu blue value
- * \param colors pointer to Colors structure which holds color info
- *
- * \return 1 if color is set
- * \return 0 if color is not set
- */
-int Rast_get_color(CELL n, int *red, int *grn, int *blu, struct Colors *colors)
-{
-    CELL cat;
-    unsigned char r, g, b, set;
-
-    cat = n;
-    Rast_lookup_colors(&cat, &r, &g, &b, &set, 1, colors);
-
-    *red = (int)r;
-    *grn = (int)g;
-    *blu = (int)b;
-
-    return (int)set;
-}
-
-/*!
- * \brief Gets color from raster map
- *
- * Looks up the rgb colors for <i>rast</i> in the color table
- * <i>colors</i>.
  *
  * \param rast raster cell value
  * \param[out] red red value
@@ -64,9 +35,9 @@ int Rast_get_color(CELL n, int *red, int *grn, int *blu, struct Colors *colors)
  * \return 1 if color is set
  * \return 0 if color is not set
  */
-int Rast_get_raster_color(const void *rast,
-		       int *red, int *grn, int *blu,
-		       struct Colors *colors, RASTER_MAP_TYPE map_type)
+int Rast_get_color(const void *rast,
+		   int *red, int *grn, int *blu,
+		   struct Colors *colors, RASTER_MAP_TYPE map_type)
 {
     unsigned char r, g, b, set;
 
@@ -94,10 +65,10 @@ int Rast_get_raster_color(const void *rast,
  * \return 1 if color is set
  * \return 0 if color is not set
  */
-int Rast_get_c_raster_color(const CELL * rast,
-			 int *red, int *grn, int *blu, struct Colors *colors)
+int Rast_get_c_color(const CELL *rast,
+		     int *red, int *grn, int *blu, struct Colors *colors)
 {
-    return Rast_get_raster_color(rast, red, grn, blu, colors, CELL_TYPE);
+    return Rast_get_color(rast, red, grn, blu, colors, CELL_TYPE);
 }
 
 /*!
@@ -115,10 +86,10 @@ int Rast_get_c_raster_color(const CELL * rast,
  * \return 1 if color is set
  * \return 0 if color is not set
  */
-int Rast_get_f_raster_color(const FCELL * rast,
-			 int *red, int *grn, int *blu, struct Colors *colors)
+int Rast_get_f_color(const FCELL *rast,
+		     int *red, int *grn, int *blu, struct Colors *colors)
 {
-    return Rast_get_raster_color(rast, red, grn, blu, colors, FCELL_TYPE);
+    return Rast_get_color(rast, red, grn, blu, colors, FCELL_TYPE);
 }
 
 /*!
@@ -136,10 +107,10 @@ int Rast_get_f_raster_color(const FCELL * rast,
  * \return 1 if color is set
  * \return 0 if color is not set
  */
-int Rast_get_d_raster_color(const DCELL * rast,
-			 int *red, int *grn, int *blu, struct Colors *colors)
+int Rast_get_d_color(const DCELL *rast,
+		     int *red, int *grn, int *blu, struct Colors *colors)
 {
-    return Rast_get_raster_color(rast, red, grn, blu, colors, DCELL_TYPE);
+    return Rast_get_color(rast, red, grn, blu, colors, DCELL_TYPE);
 }
 
 /*!
@@ -154,7 +125,7 @@ int Rast_get_d_raster_color(const DCELL * rast,
  * \param colors pointer to Colors structure which holds color info
  */
 void Rast_get_null_value_color(int *red, int *grn, int *blu,
-			   const struct Colors *colors)
+			       const struct Colors *colors)
 {
     if (colors->null_set) {
 	*red = (int)colors->null_red;
@@ -182,7 +153,7 @@ void Rast_get_null_value_color(int *red, int *grn, int *blu,
  * \param colors pointer to Colors structure which holds color info
  */
 void Rast_get_default_color(int *red, int *grn, int *blu,
-			 const struct Colors *colors)
+			    const struct Colors *colors)
 {
     if (colors->undef_set) {
 	*red = (int)colors->undef_red;

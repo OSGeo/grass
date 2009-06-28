@@ -114,12 +114,11 @@ void Rast__color_free_fp_lookup(struct _Color_Info_ *);
 void Rast__color_reset(struct Colors *);
 
 /* color_get.c */
-int Rast_get_color(CELL, int *, int *, int *, struct Colors *);
-int Rast_get_raster_color(const void *, int *, int *, int *, struct Colors *,
-		       RASTER_MAP_TYPE);
-int Rast_get_c_raster_color(const CELL *, int *, int *, int *, struct Colors *);
-int Rast_get_f_raster_color(const FCELL *, int *, int *, int *, struct Colors *);
-int Rast_get_d_raster_color(const DCELL *, int *, int *, int *, struct Colors *);
+int Rast_get_color(const void *, int *, int *, int *, struct Colors *,
+		   RASTER_MAP_TYPE);
+int Rast_get_c_color(const CELL *, int *, int *, int *, struct Colors *);
+int Rast_get_f_color(const FCELL *, int *, int *, int *, struct Colors *);
+int Rast_get_d_color(const DCELL *, int *, int *, int *, struct Colors *);
 void Rast_get_null_value_color(int *, int *, int *, const struct Colors *);
 void Rast_get_default_color(int *, int *, int *, const struct Colors *);
 
@@ -166,7 +165,7 @@ void Rast_make_random_colors(struct Colors *, CELL, CELL);
 /* color_range.c */
 void Rast_set_color_range(CELL, CELL, struct Colors *);
 void Rast_set_d_color_range(DCELL, DCELL, struct Colors *);
-void Rast_get_color_range(CELL *, CELL *, const struct Colors *);
+void Rast_get_c_color_range(CELL *, CELL *, const struct Colors *);
 void Rast_get_d_color_range(DCELL *, DCELL *, const struct Colors *);
 
 /* color_read.c */

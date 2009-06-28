@@ -233,7 +233,7 @@ int main(int argc, char **argv)
 	for (col = 0; col < ncols; col++) {
 
 	    if (fixed_color == 0) {
-		Rast_get_raster_color(&cell[col], &R, &G, &B, &colors, map_type);
+		Rast_get_color(&cell[col], &R, &G, &B, &colors, map_type);
 		D_RGB_color(R, G, B);
 	    }
 

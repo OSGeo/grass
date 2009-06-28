@@ -243,7 +243,7 @@ int darea(struct Map_info *Map, struct cat_list *Clist,
 		    Points->z[0]);
 	    rgb = 1;
 	    Rast_make_fp_colors(&colors, style, box.B, box.T);
-	    Rast_get_raster_color(&zval, &red, &grn, &blu, &colors, DCELL_TYPE);
+	    Rast_get_color(&zval, &red, &grn, &blu, &colors, DCELL_TYPE);
 	    G_debug(3, "b %d, g: %d, r %d", blu, grn, red);
 	}
 

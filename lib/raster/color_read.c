@@ -380,7 +380,7 @@ static int read_old_colors(FILE * fd, struct Colors *colors)
  * Sets a flag in the <i>colors</i> structure that indicates that
  * these colors should only be looked up using floating-point raster
  * data (not integer data). In particular if this flag is set, the
- * routine Rast_get_colors_min_max() should return min=-255$^3$ and
+ * routine Rast_get_c_colors_min_max() should return min=-255$^3$ and
  * max=255$^3$.
  *
  * \param colors pointer to Colors structure

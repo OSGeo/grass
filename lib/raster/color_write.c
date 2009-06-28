@@ -229,11 +229,12 @@ static void forced_write_old_colors(FILE * fd, struct Colors *colors)
     CELL cat;
 
     fprintf(fd, "#%ld first color\n", (long)colors->cmin);
-    Rast_get_color((CELL) 0, &red, &grn, &blu, colors);
+    cat = 0;
+    Rast_get_c_color(&cat, &red, &grn, &blu, colors);
     fprintf(fd, "%d %d %d\n", red, grn, blu);
 
     for (cat = colors->cmin; cat <= colors->cmax; cat++) {
-	Rast_get_color(cat, &red, &grn, &blu, colors);
+	Rast_get_c_color(&cat, &red, &grn, &blu, colors);
 	fprintf(fd, "%d", red);
 	if (red != grn || red != blu)
 	    fprintf(fd, " %d %d", grn, blu);
