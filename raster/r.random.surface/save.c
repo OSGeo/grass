@@ -213,8 +213,8 @@ void SaveMap(int NumMap, int MapSeed)
     G_debug(3, "(LowColor):%d", LowColor);
     G_debug(3, "(HighColor):%d", HighColor);
 
-    Rast_add_color_rule(1, LowColor, LowColor, LowColor,
-		     High, HighColor, HighColor, HighColor, &Colr);
+    Rast_add_c_color_rule(&Low, LowColor, LowColor, LowColor,
+			  &High, HighColor, HighColor, HighColor, &Colr);
 
     if (Rast_write_colors(OutNames[NumMap], G_mapset(), &Colr) == -1)
 	G_warning(_("Unable to write color table for raster map <%s>"),

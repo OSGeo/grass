@@ -174,36 +174,30 @@ void Rast_mark_colors_as_fp(struct Colors *);
 int Rast_remove_colors(const char *, const char *);
 
 /* color_rule.c */
-void Rast_add_d_raster_color_rule(const DCELL *, int, int, int,
-			       const DCELL *, int, int, int,
-			       struct Colors *);
-void Rast_add_f_raster_color_rule(const FCELL *, int, int, int,
-			       const FCELL *, int, int, int,
-			       struct Colors *);
-void Rast_add_c_raster_color_rule(const CELL *, int, int, int,
-			       const CELL *, int, int, int,
-			       struct Colors *);
-void Rast_add_raster_color_rule(const void *, int, int, int,
-			     const void *, int, int, int,
-			     struct Colors *, RASTER_MAP_TYPE);
-void Rast_add_color_rule(const CELL, int, int, int,
-		      const CELL, int, int, int,
-		      struct Colors *);
-int Rast_add_modular_d_raster_color_rule(const DCELL *, int, int, int,
-				      const DCELL *, int, int, int,
-				      struct Colors *);
-int Rast_add_modular_f_raster_color_rule(const FCELL *, int, int, int,
-				      const FCELL *, int, int, int,
-				      struct Colors *);
-int Rast_add_modular_c_raster_color_rule(const CELL *, int, int, int,
-				      const CELL *, int, int, int,
-				      struct Colors *);
-int Rast_add_modular_raster_color_rule(const void *, int, int, int,
-				    const void *, int, int, int,
-				    struct Colors *, RASTER_MAP_TYPE);
-int Rast_add_modular_color_rule(CELL, int, int, int,
-			     CELL, int, int, int,
-			     struct Colors *);
+void Rast_add_d_color_rule(const DCELL *, int, int, int,
+			   const DCELL *, int, int, int,
+			   struct Colors *);
+void Rast_add_f_color_rule(const FCELL *, int, int, int,
+			   const FCELL *, int, int, int,
+			   struct Colors *);
+void Rast_add_c_color_rule(const CELL *, int, int, int,
+			   const CELL *, int, int, int,
+			   struct Colors *);
+void Rast_add_color_rule(const void *, int, int, int,
+			 const void *, int, int, int,
+			 struct Colors *, RASTER_MAP_TYPE);
+int Rast_add_modular_d_color_rule(const DCELL *, int, int, int,
+				  const DCELL *, int, int, int,
+				  struct Colors *);
+int Rast_add_modular_f_color_rule(const FCELL *, int, int, int,
+				  const FCELL *, int, int, int,
+				  struct Colors *);
+int Rast_add_modular_c_color_rule(const CELL *, int, int, int,
+				  const CELL *, int, int, int,
+				  struct Colors *);
+int Rast_add_modular_color_rule(const void *, int, int, int,
+				const void *, int, int, int,
+				struct Colors *, RASTER_MAP_TYPE);
 
 /* color_rule_get.c */
 int Rast_colors_count(const struct Colors *);

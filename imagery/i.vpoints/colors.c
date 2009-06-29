@@ -29,48 +29,48 @@ int set_menu_colors(struct Colors *colors)
 {
 
     /* SCREEN OUTLINE and CURSOR */
-    Rast_add_color_rule((CELL) 241, 180, 180, 180, (CELL) 241, 180, 180, 180,
+    Rast_add_c_color_rule((CELL) 241, 180, 180, 180, (CELL) 241, 180, 180, 180,
 		     colors);
     /* RED */
-    Rast_add_color_rule((CELL) 242, 200, 90, 90, (CELL) 242, 200, 90, 90,
+    Rast_add_c_color_rule((CELL) 242, 200, 90, 90, (CELL) 242, 200, 90, 90,
 		     colors);
     /* ORANGE */
-    Rast_add_color_rule((CELL) 243, 150, 100, 50, (CELL) 243, 150, 100, 50,
+    Rast_add_c_color_rule((CELL) 243, 150, 100, 50, (CELL) 243, 150, 100, 50,
 		     colors);
     /* YELLOW */
-    Rast_add_color_rule((CELL) 244, 200, 200, 10, (CELL) 244, 200, 200, 10,
+    Rast_add_c_color_rule((CELL) 244, 200, 200, 10, (CELL) 244, 200, 200, 10,
 		     colors);
     /* GREEN */
-    Rast_add_color_rule((CELL) 245, 90, 200, 90, (CELL) 245, 90, 200, 90,
+    Rast_add_c_color_rule((CELL) 245, 90, 200, 90, (CELL) 245, 90, 200, 90,
 		     colors);
     /* BLUE */
-    Rast_add_color_rule((CELL) 246, 90, 90, 200, (CELL) 246, 90, 90, 200,
+    Rast_add_c_color_rule((CELL) 246, 90, 90, 200, (CELL) 246, 90, 90, 200,
 		     colors);
     /* INDIGO */
-    Rast_add_color_rule((CELL) 247, 100, 100, 10, (CELL) 247, 100, 100, 10,
+    Rast_add_c_color_rule((CELL) 247, 100, 100, 10, (CELL) 247, 100, 100, 10,
 		     colors);
     /* VIOLET */
-    Rast_add_color_rule((CELL) 248, 150, 150, 10, (CELL) 248, 150, 150, 10,
+    Rast_add_c_color_rule((CELL) 248, 150, 150, 10, (CELL) 248, 150, 150, 10,
 		     colors);
     /* WHITE */
-    Rast_add_color_rule((CELL) 249, 250, 250, 250, (CELL) 249, 250, 250, 250,
+    Rast_add_c_color_rule((CELL) 249, 250, 250, 250, (CELL) 249, 250, 250, 250,
 		     colors);
     /* BLACK */
-    Rast_add_color_rule((CELL) 250, 0, 0, 0, (CELL) 250, 0, 0, 0, colors);
+    Rast_add_c_color_rule((CELL) 250, 0, 0, 0, (CELL) 250, 0, 0, 0, colors);
     /* GRAY */
-    Rast_add_color_rule((CELL) 251, 180, 180, 180, (CELL) 251, 180, 180, 180,
+    Rast_add_c_color_rule((CELL) 251, 180, 180, 180, (CELL) 251, 180, 180, 180,
 		     colors);
     /* BROWN */
-    Rast_add_color_rule((CELL) 252, 100, 100, 30, (CELL) 252, 100, 100, 30,
+    Rast_add_c_color_rule((CELL) 252, 100, 100, 30, (CELL) 252, 100, 100, 30,
 		     colors);
     /* MAGENTA */
-    Rast_add_color_rule((CELL) 253, 150, 90, 150, (CELL) 253, 150, 90, 150,
+    Rast_add_c_color_rule((CELL) 253, 150, 90, 150, (CELL) 253, 150, 90, 150,
 		     colors);
     /* AQUA */
-    Rast_add_color_rule((CELL) 254, 50, 120, 120, (CELL) 254, 50, 120, 120,
+    Rast_add_c_color_rule((CELL) 254, 50, 120, 120, (CELL) 254, 50, 120, 120,
 		     colors);
     /*      */
-    Rast_add_color_rule((CELL) 255, 250, 0, 0, (CELL) 255, 250, 0, 0, colors);
+    Rast_add_c_color_rule((CELL) 255, 250, 0, 0, (CELL) 255, 250, 0, 0, colors);
 
     set_colors(colors);
 
@@ -144,32 +144,32 @@ static int set_cur_clr(int curs_color)
 
     switch (curs_color) {
     case BLUE:
-	Rast_add_color_rule((CELL) 241, 90, 90, 200, (CELL) 241, 90, 90, 200,
+	Rast_add_c_color_rule((CELL) 241, 90, 90, 200, (CELL) 241, 90, 90, 200,
 			 colors);
 	break;
 
     case GRAY:
-	Rast_add_color_rule((CELL) 241, 180, 180, 180, (CELL) 241, 180, 180, 180,
+	Rast_add_c_color_rule((CELL) 241, 180, 180, 180, (CELL) 241, 180, 180, 180,
 			 colors);
 	break;
 
     case GREEN:
-	Rast_add_color_rule((CELL) 241, 90, 200, 90, (CELL) 241, 90, 200, 90,
+	Rast_add_c_color_rule((CELL) 241, 90, 200, 90, (CELL) 241, 90, 200, 90,
 			 colors);
 	break;
 
     case RED:
-	Rast_add_color_rule((CELL) 241, 200, 90, 90, (CELL) 241, 200, 90, 90,
+	Rast_add_c_color_rule((CELL) 241, 200, 90, 90, (CELL) 241, 200, 90, 90,
 			 colors);
 	break;
 
     case WHITE:
-	Rast_add_color_rule((CELL) 241, 250, 250, 250, (CELL) 241, 250, 250, 250,
+	Rast_add_c_color_rule((CELL) 241, 250, 250, 250, (CELL) 241, 250, 250, 250,
 			 colors);
 	break;
 
     case YELLOW:
-	Rast_add_color_rule((CELL) 241, 200, 200, 10, (CELL) 241, 200, 200, 10,
+	Rast_add_c_color_rule((CELL) 241, 200, 200, 10, (CELL) 241, 200, 200, 10,
 			 colors);
 	break;
     }

@@ -63,6 +63,7 @@ int main(int argc, char *argv[])
     double startperiod, endperiod;  /*first and last days (DOYs) of the period studied */
     void *inrast[MAXFILES], *inrast1[MAXFILES], *inrast2[MAXFILES];
     DCELL *outrast;
+    CELL val1, val2;
     
     RASTER_MAP_TYPE in_data_type[MAXFILES];	/* ETa */
     RASTER_MAP_TYPE in_data_type1[MAXFILES];	/* DOY of ETa */
@@ -429,7 +430,9 @@ int main(int argc, char *argv[])
 
     /* Color table from 0.0 to 10.0 */
     Rast_init_colors(&colors);
-    Rast_add_color_rule(0.0, 0, 0, 0, 10.0, 255, 255, 255, &colors);
+    val1 = 0;
+    val2 = 10;
+    Rast_add_c_color_rule(&val1, 0, 0, 0, &val2, 255, 255, 255, &colors);
     /* Metadata */
     Rast_short_history(result, "raster", &history);
     Rast_command_history(&history);

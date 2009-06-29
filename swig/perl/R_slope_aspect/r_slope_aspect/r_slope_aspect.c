@@ -1106,14 +1106,29 @@ int r_slope_aspect(int argc, char *argv[])
 
     if (slope_fd >= 0) {
 	/* colortable for slopes */
+	CELL val1, val2;
 	Rast_init_colors(&colors);
-	Rast_add_color_rule(0, 255, 255, 255, 2, 255, 255, 0, &colors);
-	Rast_add_color_rule(2, 255, 255, 0, 5, 0, 255, 0, &colors);
-	Rast_add_color_rule(5, 0, 255, 0, 10, 0, 255, 255, &colors);
-	Rast_add_color_rule(10, 0, 255, 255, 15, 0, 0, 255, &colors);
-	Rast_add_color_rule(15, 0, 0, 255, 30, 255, 0, 255, &colors);
-	Rast_add_color_rule(30, 255, 0, 255, 50, 255, 0, 0, &colors);
-	Rast_add_color_rule(50, 255, 0, 0, 90, 0, 0, 0, &colors);
+	val1 = 0;
+	val2 = 2;
+	Rast_add_c_color_rule(&val1, 255, 255, 255, &val2, 255, 255, 0, &colors);
+	val1 = 2;
+	val2 = 5;
+	Rast_add_c_color_rule(&val1, 255, 255, 0, &val2, 0, 255, 0, &colors);
+	val1 = 5;
+	val2 = 10;
+	Rast_add_c_color_rule(&val1, 0, 255, 0, &val2, 0, 255, 255, &colors);
+	val1 = 10;
+	val2 = 15;
+	Rast_add_c_color_rule(&val1, 0, 255, 255, &val2, 0, 0, 255, &colors);
+	val1 = 15;
+	val2 = 30;
+	Rast_add_c_color_rule(&val1, 0, 0, 255, &val2, 255, 0, 255, &colors);
+	val1 = 30;
+	val2 = 50;
+	Rast_add_c_color_rule(&val1, 255, 0, 255, &val2, 255, 0, 0, &colors);
+	val1 = 50;
+	val2 = 90;
+	Rast_add_c_color_rule(&val1, 255, 0, 0, &val2, 0, 0, 0, &colors);
 
 	Rast_set_null_value(slp_raster, G_window_cols(), data_type);
 	Rast_put_raster_row(slope_fd, slp_raster, data_type);
@@ -1206,31 +1221,31 @@ int r_slope_aspect(int argc, char *argv[])
 	    dat1 = (FCELL) c2min;
 
 	dat2 = (FCELL) - 0.01;
-	Rast_add_f_raster_color_rule(&dat1, 127, 0, 255,
+	Rast_add_f_color_rule(&dat1, 127, 0, 255,
 				  &dat2, 0, 0, 255, &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) - 0.001;
-	Rast_add_f_raster_color_rule(&dat1, 0, 0, 255,
+	Rast_add_f_color_rule(&dat1, 0, 0, 255,
 				  &dat2, 0, 127, 255, &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) - 0.00001;
-	Rast_add_f_raster_color_rule(&dat1, 0, 127, 255,
+	Rast_add_f_color_rule(&dat1, 0, 127, 255,
 				  &dat2, 0, 255, 255, &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) 0.0;
-	Rast_add_f_raster_color_rule(&dat1, 0, 255, 255,
+	Rast_add_f_color_rule(&dat1, 0, 255, 255,
 				  &dat2, 200, 255, 200, &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) 0.00001;
-	Rast_add_f_raster_color_rule(&dat1, 200, 255, 200,
+	Rast_add_f_color_rule(&dat1, 200, 255, 200,
 				  &dat2, 255, 255, 0, &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) 0.001;
-	Rast_add_f_raster_color_rule(&dat1, 255, 255, 0,
+	Rast_add_f_color_rule(&dat1, 255, 255, 0,
 				  &dat2, 255, 127, 0, &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) 0.01;
-	Rast_add_f_raster_color_rule(&dat1, 255, 127, 0,
+	Rast_add_f_color_rule(&dat1, 255, 127, 0,
 				  &dat2, 255, 0, 0, &colors);
 	dat1 = dat2;
 	if (c1max > c2max)
@@ -1238,7 +1253,7 @@ int r_slope_aspect(int argc, char *argv[])
 	else
 	    dat2 = (FCELL) c2max;
 
-	Rast_add_f_raster_color_rule(&dat1, 255, 0, 0,
+	Rast_add_f_color_rule(&dat1, 255, 0, 0,
 				  &dat2, 255, 0, 200, &colors);
     }
 

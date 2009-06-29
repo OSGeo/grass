@@ -83,51 +83,51 @@ int close_maps(void)
 	    if (min < (-stddev - 1)) {
 		clr_min = min;
 		clr_max = -stddev - 1;
-		Rast_add_d_raster_color_rule(&clr_min, 0, 0, 0, &clr_max, 0,
+		Rast_add_d_color_rule(&clr_min, 0, 0, 0, &clr_max, 0,
 					  0, 0, &colors);
 	    }
 	    clr_min = -stddev - 1.;
 	    clr_max = -1. * exp(lstddev * 0.75);
-	    Rast_add_d_raster_color_rule(&clr_min, 0, 0, 0, &clr_max, 0,
+	    Rast_add_d_color_rule(&clr_min, 0, 0, 0, &clr_max, 0,
 				      0, 255, &colors);
 	    clr_min = clr_max;
 	    clr_max = -1. * exp(lstddev * 0.5);
-	    Rast_add_d_raster_color_rule(&clr_min, 0, 0, 255, &clr_max, 0,
+	    Rast_add_d_color_rule(&clr_min, 0, 0, 255, &clr_max, 0,
 				      255, 255, &colors);
 	    clr_min = clr_max;
 	    clr_max = -1. * exp(lstddev * 0.35);
-	    Rast_add_d_raster_color_rule(&clr_min, 0, 255, 255, &clr_max, 0,
+	    Rast_add_d_color_rule(&clr_min, 0, 255, 255, &clr_max, 0,
 				      255, 0, &colors);
 	    clr_min = clr_max;
 	    clr_max = -1.;
-	    Rast_add_d_raster_color_rule(&clr_min, 0, 255, 0, &clr_max, 255,
+	    Rast_add_d_color_rule(&clr_min, 0, 255, 0, &clr_max, 255,
 				      255, 0, &colors);
 	}
 	clr_min = -1.;
 	clr_max = 1.;
-	Rast_add_d_raster_color_rule(&clr_min, 255, 255, 0, &clr_max, 255,
+	Rast_add_d_color_rule(&clr_min, 255, 255, 0, &clr_max, 255,
 				  255, 0, &colors);
 	clr_min = 1;
 	clr_max = exp(lstddev * 0.35);
-	Rast_add_d_raster_color_rule(&clr_min, 255, 255, 0, &clr_max, 0,
+	Rast_add_d_color_rule(&clr_min, 255, 255, 0, &clr_max, 0,
 				  255, 0, &colors);
 	clr_min = clr_max;
 	clr_max = exp(lstddev * 0.5);
-	Rast_add_d_raster_color_rule(&clr_min, 0, 255, 0, &clr_max, 0,
+	Rast_add_d_color_rule(&clr_min, 0, 255, 0, &clr_max, 0,
 				  255, 255, &colors);
 	clr_min = clr_max;
 	clr_max = exp(lstddev * 0.75);
-	Rast_add_d_raster_color_rule(&clr_min, 0, 255, 255, &clr_max, 0,
+	Rast_add_d_color_rule(&clr_min, 0, 255, 255, &clr_max, 0,
 				  0, 255, &colors);
 	clr_min = clr_max;
 	clr_max = stddev + 1.;
-	Rast_add_d_raster_color_rule(&clr_min, 0, 0, 255, &clr_max, 0, 0,
+	Rast_add_d_color_rule(&clr_min, 0, 0, 255, &clr_max, 0, 0,
 				  0, &colors);
 
 	if (max > 0 && max > stddev + 1) {
 	    clr_min = stddev + 1;
 	    clr_max = max;
-	    Rast_add_d_raster_color_rule(&clr_min, 0, 0, 0, &clr_max, 0, 0, 0,
+	    Rast_add_d_color_rule(&clr_min, 0, 0, 0, &clr_max, 0, 0, 0,
 				      &colors);
 	}
 	Rast_write_colors(wat_name, this_mapset, &colors);

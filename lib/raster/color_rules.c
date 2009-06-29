@@ -210,7 +210,7 @@ int Rast_read_color_rules(struct Colors *colors, DCELL min, DCELL max,
 	struct rule *lo = &rule[n - 1];
 	struct rule *hi = &rule[n];
 
-	Rast_add_d_raster_color_rule(&lo->val, lo->r, lo->g, lo->b,
+	Rast_add_d_color_rule(&lo->val, lo->r, lo->g, lo->b,
 				  &hi->val, hi->r, hi->g, hi->b, colors);
     }
 

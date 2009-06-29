@@ -39,7 +39,7 @@ static void format_max(char *, double);
  * printed. Otherwise, 1 is returned.
  *
  * The <i>colors</i> structure must be created properly, i.e.,
- * Rast_init_colors() to initialize the structure and Rast_add_color_rule()
+ * Rast_init_colors() to initialize the structure and Rast_add_c_color_rule()
  * to set the category colors. These routines are called by
  * higher level routines which read or create entire color tables,
  * such as Rast_read_colors() or Rast_make_ramp_colors().

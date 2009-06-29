@@ -193,6 +193,7 @@ void write_density_file(void)
     int dsfd, row, col;
     double dsmax = 0.0;
     struct Colors colors;
+    CELL val1, val2;
 
     if (Rast_set_window(&region) < 0)
 	G_fatal_error(_("Cannot reset current region"));
@@ -212,12 +213,24 @@ void write_density_file(void)
 
     Rast_init_colors(&colors);
 
-    Rast_add_color_rule(-1, 0, 0, 0, -1, 0, 0, 0, &colors);
-    Rast_add_color_rule(0, 255, 255, 255, 5, 255, 255, 0, &colors);
-    Rast_add_color_rule(5, 255, 255, 0, 30, 0, 255, 255, &colors);
-    Rast_add_color_rule(30, 0, 255, 255, 100, 0, 127, 255, &colors);
-    Rast_add_color_rule(100, 0, 127, 255, 1000, 0, 0, 255, &colors);
-    Rast_add_color_rule(1000, 0, 0, 255, (CELL) dsmax, 0, 0, 0, &colors);
+    val1 = -1;
+    val2 = -1;
+    Rast_add_c_color_rule(&val1, 0, 0, 0, &val2, 0, 0, 0, &colors);
+    val1 = 0;
+    val2 = 5;
+    Rast_add_c_color_rule(&val1, 255, 255, 255, &val2, 255, 255, 0, &colors);
+    val1 = 5;
+    val2 = 30;
+    Rast_add_c_color_rule(&val1, 255, 255, 0, &val2, 0, 255, 255, &colors);
+    val1 = 30;
+    val2 = 100;
+    Rast_add_c_color_rule(&val1, 0, 255, 255, &val2, 0, 127, 255, &colors);
+    val1 = 100;
+    val2 = 1000;
+    Rast_add_c_color_rule(&val1, 0, 127, 255, &val2, 0, 0, 255, &colors);
+    val1 = 1000;
+    val2 = (CELL) dsmax;
+    Rast_add_c_color_rule(&val1, 0, 0, 255, &val2, 0, 0, 0, &colors);
 
     if ((mapset = G_find_file("cell", parm.dsout, "")) == NULL)
 	G_fatal_error(_("Unable to find file %s"), parm.dsout);

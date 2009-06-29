@@ -201,7 +201,7 @@ int update_dbcolors(const char *rast_name, const char *vector_map, int field,
     /* set the color rules: for each rule */
     for (i = 0; i < colors_n_values - 1; i++) {
 	if (is_fp) {		/* add floating point color rule */
-	    Rast_add_d_raster_color_rule(&my_color_rules[i].d,
+	    Rast_add_d_color_rule(&my_color_rules[i].d,
 				      my_color_rules[i].red,
 				      my_color_rules[i].green,
 				      my_color_rules[i].blue,
@@ -211,13 +211,13 @@ int update_dbcolors(const char *rast_name, const char *vector_map, int field,
 				      my_color_rules[i + 1].blue, &colors);
 	}
 	else {			/* add CELL color rule */
-	    Rast_add_color_rule((CELL) my_color_rules[i].i,
-			     my_color_rules[i].red, my_color_rules[i].green,
-			     my_color_rules[i].blue,
-			     (CELL) my_color_rules[i + 1].i,
-			     my_color_rules[i + 1].red,
-			     my_color_rules[i + 1].green,
-			     my_color_rules[i + 1].blue, &colors);
+	    Rast_add_c_color_rule(&my_color_rules[i].i,
+				  my_color_rules[i].red, my_color_rules[i].green,
+				  my_color_rules[i].blue,
+				  &my_color_rules[i + 1].i,
+				  my_color_rules[i + 1].red,
+				  my_color_rules[i + 1].green,
+				  my_color_rules[i + 1].blue, &colors);
 	}
     }
 

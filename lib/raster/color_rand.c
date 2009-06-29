@@ -43,7 +43,8 @@ void Rast_make_random_colors(struct Colors *colors, CELL min, CELL max)
 	red = rand() & 0377;
 	grn = rand() & 0377;
 	blu = rand() & 0377;
-	Rast_add_modular_color_rule(n, red, grn, blu, n, red, grn, blu, colors);
+	Rast_add_modular_c_color_rule(&n, red, grn, blu,
+				      &n, red, grn, blu, colors);
     }
     Rast_set_c_color_range(min, max, colors);
 }

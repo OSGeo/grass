@@ -425,7 +425,7 @@ int main(int argc, char *argv[])
 		for (i = 0; i < count; i += 2) {
 		    dmin = val_list[i];
 		    dmax = val_list[i + 1];
-		    Rast_add_d_raster_color_rule(&dmin, r, g, b, &dmax, r, g, b,
+		    Rast_add_d_color_rule(&dmin, r, g, b, &dmax, r, g, b,
 					      &PS.colors);
 		}
 		G_free(val_list);

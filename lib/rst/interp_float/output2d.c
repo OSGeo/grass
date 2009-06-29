@@ -20,9 +20,8 @@
 #include <grass/raster.h>
 #include <grass/bitmap.h>
 #include <grass/linkm.h>
-
 #include <grass/interpf.h>
-
+#include <grass/glocale.h>
 
 #define MULT 100000
 
@@ -51,7 +50,8 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
     const char *mapset = NULL;
     int cond1, cond2;
     FCELL dat1, dat2;
-
+    CELL val1, val2;
+    
     cond2 = ((params->pcurv != NULL) || (params->tcurv != NULL)
 	     || (params->mcurv != NULL));
     cond1 = ((params->slope != NULL) || (params->aspect != NULL) || cond2);
@@ -64,7 +64,7 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
     if (params->elev != NULL) {
 	cf1 = Rast_open_fp_cell_new(params->elev);
 	if (cf1 < 0) {
-	    fprintf(stderr, "unable to create raster map %s\n", params->elev);
+	    G_warning(_("Unable to create raster map <%s>"), params->elev);
 	    return -1;
 	}
     }
@@ -72,8 +72,8 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
     if (params->slope != NULL) {
 	cf2 = Rast_open_fp_cell_new(params->slope);
 	if (cf2 < 0) {
-	    fprintf(stderr, "unable to create raster map %s\n",
-		    params->slope);
+	    G_warning(_("Unable to create raster map <%s>"),
+		      params->slope);
 	    return -1;
 	}
     }
@@ -81,7 +81,7 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
     if (params->aspect != NULL) {
 	cf3 = Rast_open_fp_cell_new(params->aspect);
 	if (cf3 < 0) {
-	    fprintf(stderr, "unable to create raster map %s\n",
+	    G_warning(_("Unable to create raster map <%s>"),
 		    params->aspect);
 	    return -1;
 	}
@@ -90,8 +90,8 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
     if (params->pcurv != NULL) {
 	cf4 = Rast_open_fp_cell_new(params->pcurv);
 	if (cf4 < 0) {
-	    fprintf(stderr, "unable to create raster map %s\n",
-		    params->pcurv);
+	    G_warning(_("Unable to create raster map <%s>"),
+		      params->pcurv);
 	    return -1;
 	}
     }
@@ -99,8 +99,8 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
     if (params->tcurv != NULL) {
 	cf5 = Rast_open_fp_cell_new(params->tcurv);
 	if (cf5 < 0) {
-	    fprintf(stderr, "unable to create raster map %s\n",
-		    params->tcurv);
+	    G_warning(_("Unable to create raster map <%s>"),
+		      params->tcurv);
 	    return -1;
 	}
     }
@@ -108,23 +108,23 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
     if (params->mcurv != NULL) {
 	cf6 = Rast_open_fp_cell_new(params->mcurv);
 	if (cf6 < 0) {
-	    fprintf(stderr, "unable to create raster map %s\n",
-		    params->mcurv);
+	    G_warning(_("Unable to create raster map <%s>"),
+		      params->mcurv);
 	    return -1;
 	}
     }
 
     nrows = cellhd->rows;
     if (nrows != params->nsizr) {
-	fprintf(stderr, "first change your rows number to nsizr! %d %d\n",
-		nrows, params->nsizr);
+	G_warning(_("First change your rows number to nsizr! %d %d"),
+		  nrows, params->nsizr);
 	return -1;
     }
 
     ncols = cellhd->cols;
     if (ncols != params->nsizc) {
-	fprintf(stderr, "first change your cols number to nsizc! %d %d\n",
-		ncols, params->nsizc);
+	G_warning(_("First change your cols number to nsizc! %d %d"),
+		  ncols, params->nsizc);
 	return -1;
     }
 
@@ -132,14 +132,14 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
 	return -1;
 
     if (nrows != G_window_rows()) {
-	fprintf(stderr, "OOPS: rows changed from %d to %d\n", nrows,
-		G_window_rows());
+	G_warning(_("Rows changed from %d to %d"), nrows,
+		  G_window_rows());
 	return -1;
     }
 
     if (ncols != G_window_cols()) {
-	fprintf(stderr, "OOPS: cols changed from %d to %d\n", ncols,
-		G_window_cols());
+	G_warning(_("Cols changed from %d to %d"), ncols,
+		  G_window_cols());
 	return -1;
     }
 
@@ -151,7 +151,7 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
 		      ((params->nsizr - 1 -
 			i) * params->nsizc * sizeof(FCELL)), 0)
 		== -1) {
-		fprintf(stderr, "cannot fseek to the right spot\n");
+		G_warning(_("Unable to fseek to the right spot"));
 		return -1;
 	    }
 	    ii = fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_z);
@@ -172,7 +172,7 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
 		      ((params->nsizr - 1 -
 			i) * params->nsizc * sizeof(FCELL)), 0)
 		== -1) {
-		fprintf(stderr, "cannot fseek to the right spot\n");
+		G_warning(_("Unable to fseek to the right spot"));
 		return -1;
 	    }
 	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_dx);
@@ -188,7 +188,7 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
 		      ((params->nsizr - 1 -
 			i) * params->nsizc * sizeof(FCELL)), 0)
 		== -1) {
-		fprintf(stderr, "cannot fseek to the right spot\n");
+		G_warning(_("Unable to fseek to the right spot"));
 		return -1;
 	    }
 	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_dy);
@@ -204,7 +204,7 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
 		      ((params->nsizr - 1 -
 			i) * params->nsizc * sizeof(FCELL)), 0)
 		== -1) {
-		fprintf(stderr, "cannot fseek to the right spot\n");
+		G_warning(_("Unable to fseek to the right spot"));
 		return -1;
 	    }
 	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xx);
@@ -220,7 +220,7 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
 		      ((params->nsizr - 1 -
 			i) * params->nsizc * sizeof(FCELL)), 0)
 		== -1) {
-		fprintf(stderr, "cannot fseek to the right spot\n");
+		G_warning(_("Unable to fseek to the right spot"));
 		return -1;
 	    }
 	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_yy);
@@ -236,7 +236,7 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
 		      ((params->nsizr - 1 -
 			i) * params->nsizc * sizeof(FCELL)), 0)
 		== -1) {
-		fprintf(stderr, "cannot fseek to the right spot\n");
+		G_warning(_("Unable to fseek to the right spot"));
 		return -1;
 	    }
 	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xy);
@@ -266,23 +266,23 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
 	data2 = (FCELL) (zminac + i * zstep);
 	switch (i) {
 	case 1:
-	    Rast_add_f_raster_color_rule(&data1, 0, 191, 191,
+	    Rast_add_f_color_rule(&data1, 0, 191, 191,
 				      &data2, 0, 255, 0, &colors);
 	    break;
 	case 2:
-	    Rast_add_f_raster_color_rule(&data1, 0, 255, 0,
+	    Rast_add_f_color_rule(&data1, 0, 255, 0,
 				      &data2, 255, 255, 0, &colors);
 	    break;
 	case 3:
-	    Rast_add_f_raster_color_rule(&data1, 255, 255, 0,
+	    Rast_add_f_color_rule(&data1, 255, 255, 0,
 				      &data2, 255, 127, 0, &colors);
 	    break;
 	case 4:
-	    Rast_add_f_raster_color_rule(&data1, 255, 127, 0,
+	    Rast_add_f_color_rule(&data1, 255, 127, 0,
 				      &data2, 191, 127, 63, &colors);
 	    break;
 	case 5:
-	    Rast_add_f_raster_color_rule(&data1, 191, 127, 63,
+	    Rast_add_f_color_rule(&data1, 191, 127, 63,
 				      &data2, 20, 20, 20, &colors);
 	    break;
 	}
@@ -291,7 +291,7 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
     if (params->elev != NULL) {
 	mapset = G_find_file("cell", params->elev, "");
 	if (mapset == NULL) {
-	    fprintf(stderr, "file [%s] not found\n", params->elev);
+	    G_warning(_("Raster map <%s> not found"), params->elev);
 	    return -1;
 	}
 	Rast_write_colors(params->elev, mapset, &colors);
@@ -309,56 +309,70 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
 	     * (&colors,smin,smax);
 	     */
 	    Rast_init_colors(&colors);
-	    Rast_add_color_rule(0, 255, 255, 255, 2, 255, 255, 0, &colors);
-	    Rast_add_color_rule(2, 255, 255, 0, 5, 0, 255, 0, &colors);
-	    Rast_add_color_rule(5, 0, 255, 0, 10, 0, 255, 255, &colors);
-	    Rast_add_color_rule(10, 0, 255, 255, 15, 0, 0, 255, &colors);
-	    Rast_add_color_rule(15, 0, 0, 255, 30, 255, 0, 255, &colors);
-	    Rast_add_color_rule(30, 255, 0, 255, 50, 255, 0, 0, &colors);
-	    Rast_add_color_rule(50, 255, 0, 0, 90, 0, 0, 0, &colors);
+	    val1 = 0;
+	    val2 = 2;
+	    Rast_add_c_color_rule(&val1, 255, 255, 255, &val2, 255, 255, 0, &colors);
+	    val1 = 2;
+	    val2 = 5;
+	    Rast_add_c_color_rule(&val1, 255, 255, 0, &val2, 0, 255, 0, &colors);
+	    val1 = 5;
+	    val2 = 10;
+	    Rast_add_c_color_rule(&val1, 0, 255, 0, &val2, 0, 255, 255, &colors);
+	    val1 = 10;
+	    val2 = 15;
+	    Rast_add_c_color_rule(&val1, 0, 255, 255, &val2, 0, 0, 255, &colors);
+	    val1 = 15;
+	    val2 = 30;
+	    Rast_add_c_color_rule(&val1, 0, 0, 255, &val2, 255, 0, 255, &colors);
+	    val1 = 30;
+	    val2 = 50;
+	    Rast_add_c_color_rule(&val1, 255, 0, 255, &val2, 255, 0, 0, &colors);
+	    val1 = 50;
+	    val2 = 90;
+	    Rast_add_c_color_rule(&val1, 255, 0, 0, &val2, 0, 0, 0, &colors);
 	}
 	else {
 	    Rast_init_colors(&colors);
 	    dat1 = (FCELL) - 5.0;	/* replace by min dx, amin1 (c1min,
 					 * c2min); */
 	    dat2 = (FCELL) - 0.1;
-	    Rast_add_f_raster_color_rule(&dat1, 127, 0, 255,
+	    Rast_add_f_color_rule(&dat1, 127, 0, 255,
 				      &dat2, 0, 0, 255, &colors);
 	    dat1 = dat2;
 	    dat2 = (FCELL) - 0.01;
-	    Rast_add_f_raster_color_rule(&dat1, 0, 0, 255,
+	    Rast_add_f_color_rule(&dat1, 0, 0, 255,
 				      &dat2, 0, 127, 255, &colors);
 	    dat1 = dat2;
 	    dat2 = (FCELL) - 0.001;
-	    Rast_add_f_raster_color_rule(&dat1, 0, 127, 255,
+	    Rast_add_f_color_rule(&dat1, 0, 127, 255,
 				      &dat2, 0, 255, 255, &colors);
 	    dat1 = dat2;
 	    dat2 = (FCELL) 0.0;
-	    Rast_add_f_raster_color_rule(&dat1, 0, 255, 255,
+	    Rast_add_f_color_rule(&dat1, 0, 255, 255,
 				      &dat2, 200, 255, 200, &colors);
 	    dat1 = dat2;
 	    dat2 = (FCELL) 0.001;
-	    Rast_add_f_raster_color_rule(&dat1, 200, 255, 200,
+	    Rast_add_f_color_rule(&dat1, 200, 255, 200,
 				      &dat2, 255, 255, 0, &colors);
 	    dat1 = dat2;
 	    dat2 = (FCELL) 0.01;
-	    Rast_add_f_raster_color_rule(&dat1, 255, 255, 0,
+	    Rast_add_f_color_rule(&dat1, 255, 255, 0,
 				      &dat2, 255, 127, 0, &colors);
 	    dat1 = dat2;
 	    dat2 = (FCELL) 0.1;
-	    Rast_add_f_raster_color_rule(&dat1, 255, 127, 0,
+	    Rast_add_f_color_rule(&dat1, 255, 127, 0,
 				      &dat2, 255, 0, 0, &colors);
 	    dat1 = dat2;
 	    dat2 = (FCELL) 5.0;	/* replace by max dx, amax1 (c1max,
 				 * c2max); */
-	    Rast_add_f_raster_color_rule(&dat1, 255, 0, 0,
+	    Rast_add_f_color_rule(&dat1, 255, 0, 0,
 				      &dat2, 255, 0, 200, &colors);
 	}
 
 	if (params->slope != NULL) {
 	    mapset = G_find_file("cell", params->slope, "");
 	    if (mapset == NULL) {
-		fprintf(stderr, "file [%s] not found\n", params->slope);
+		G_warning(_("Raster map <%s> not found"), params->slope);
 		return -1;
 	    }
 	    Rast_write_colors(params->slope, mapset, &colors);
@@ -385,54 +399,64 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
 	/* colortable for aspect */
 	if (!params->deriv) {
 	    Rast_init_colors(&colors);
-	    Rast_add_color_rule(0, 255, 255, 255, 0, 255, 255, 255, &colors);
-	    Rast_add_color_rule(1, 255, 255, 0, 90, 0, 255, 0, &colors);
-	    Rast_add_color_rule(90, 0, 255, 0, 180, 0, 255, 255, &colors);
-	    Rast_add_color_rule(180, 0, 255, 255, 270, 255, 0, 0, &colors);
-	    Rast_add_color_rule(270, 255, 0, 0, 360, 255, 255, 0, &colors);
+	    val1 = 0;
+	    val2 = 0;
+	    Rast_add_c_color_rule(&val1, 255, 255, 255, &val2, 255, 255, 255, &colors);
+	    val1 = 1;
+	    val2 = 90;
+	    Rast_add_c_color_rule(&val1, 255, 255, 0, &val2, 0, 255, 0, &colors);
+	    val1 = 90;
+	    val2 = 180;
+	    Rast_add_c_color_rule(&val1, 0, 255, 0, &val2, 0, 255, 255, &colors);
+	    val1 = 180;
+	    val2 = 270;
+	    Rast_add_c_color_rule(&val1, 0, 255, 255, &val2, 255, 0, 0, &colors);
+	    val1 = 270;
+	    val2 = 360;
+	    Rast_add_c_color_rule(&val1, 255, 0, 0, &val2, 255, 255, 0, &colors);
 	}
 	else {
 	    Rast_init_colors(&colors);
 	    dat1 = (FCELL) - 5.0;	/* replace by min dy, amin1 (c1min,
 					 * c2min); */
 	    dat2 = (FCELL) - 0.1;
-	    Rast_add_f_raster_color_rule(&dat1, 127, 0, 255,
+	    Rast_add_f_color_rule(&dat1, 127, 0, 255,
 				      &dat2, 0, 0, 255, &colors);
 	    dat1 = dat2;
 	    dat2 = (FCELL) - 0.01;
-	    Rast_add_f_raster_color_rule(&dat1, 0, 0, 255,
+	    Rast_add_f_color_rule(&dat1, 0, 0, 255,
 				      &dat2, 0, 127, 255, &colors);
 	    dat1 = dat2;
 	    dat2 = (FCELL) - 0.001;
-	    Rast_add_f_raster_color_rule(&dat1, 0, 127, 255,
+	    Rast_add_f_color_rule(&dat1, 0, 127, 255,
 				      &dat2, 0, 255, 255, &colors);
 	    dat1 = dat2;
 	    dat2 = (FCELL) 0.0;
-	    Rast_add_f_raster_color_rule(&dat1, 0, 255, 255,
+	    Rast_add_f_color_rule(&dat1, 0, 255, 255,
 				      &dat2, 200, 255, 200, &colors);
 	    dat1 = dat2;
 	    dat2 = (FCELL) 0.001;
-	    Rast_add_f_raster_color_rule(&dat1, 200, 255, 200,
+	    Rast_add_f_color_rule(&dat1, 200, 255, 200,
 				      &dat2, 255, 255, 0, &colors);
 	    dat1 = dat2;
 	    dat2 = (FCELL) 0.01;
-	    Rast_add_f_raster_color_rule(&dat1, 255, 255, 0,
+	    Rast_add_f_color_rule(&dat1, 255, 255, 0,
 				      &dat2, 255, 127, 0, &colors);
 	    dat1 = dat2;
 	    dat2 = (FCELL) 0.1;
-	    Rast_add_f_raster_color_rule(&dat1, 255, 127, 0,
+	    Rast_add_f_color_rule(&dat1, 255, 127, 0,
 				      &dat2, 255, 0, 0, &colors);
 	    dat1 = dat2;
 	    dat2 = (FCELL) 5.0;	/* replace by max dy, amax1 (c1max,
 				 * c2max); */
-	    Rast_add_f_raster_color_rule(&dat1, 255, 0, 0,
+	    Rast_add_f_color_rule(&dat1, 255, 0, 0,
 				      &dat2, 255, 0, 200, &colors);
 	}
 
 	if (params->aspect != NULL) {
 	    mapset = G_find_file("cell", params->aspect, "");
 	    if (mapset == NULL) {
-		fprintf(stderr, "file [%s] not found\n", params->aspect);
+		G_warning(_("Raster map <%s> not found"), params->aspect);
 		return -1;
 	    }
 	    Rast_write_colors(params->aspect, mapset, &colors);
@@ -461,42 +485,42 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
 	    dat1 = (FCELL) amin1(c1min, c2min);	/* for derivatives use min
 						 * dxx,dyy,dxy */
 	    dat2 = (FCELL) - 0.01;
-	    Rast_add_f_raster_color_rule(&dat1, 127, 0, 255,
+	    Rast_add_f_color_rule(&dat1, 127, 0, 255,
 				      &dat2, 0, 0, 255, &colors);
 	    dat1 = dat2;
 	    dat2 = (FCELL) - 0.001;
-	    Rast_add_f_raster_color_rule(&dat1, 0, 0, 255,
+	    Rast_add_f_color_rule(&dat1, 0, 0, 255,
 				      &dat2, 0, 127, 255, &colors);
 	    dat1 = dat2;
 	    dat2 = (FCELL) - 0.00001;
-	    Rast_add_f_raster_color_rule(&dat1, 0, 127, 255,
+	    Rast_add_f_color_rule(&dat1, 0, 127, 255,
 				      &dat2, 0, 255, 255, &colors);
 	    dat1 = dat2;
 	    dat2 = (FCELL) 0.0;
-	    Rast_add_f_raster_color_rule(&dat1, 0, 255, 255,
+	    Rast_add_f_color_rule(&dat1, 0, 255, 255,
 				      &dat2, 200, 255, 200, &colors);
 	    dat1 = dat2;
 	    dat2 = (FCELL) 0.00001;
-	    Rast_add_f_raster_color_rule(&dat1, 200, 255, 200,
+	    Rast_add_f_color_rule(&dat1, 200, 255, 200,
 				      &dat2, 255, 255, 0, &colors);
 	    dat1 = dat2;
 	    dat2 = (FCELL) 0.001;
-	    Rast_add_f_raster_color_rule(&dat1, 255, 255, 0,
+	    Rast_add_f_color_rule(&dat1, 255, 255, 0,
 				      &dat2, 255, 127, 0, &colors);
 	    dat1 = dat2;
 	    dat2 = (FCELL) 0.01;
-	    Rast_add_f_raster_color_rule(&dat1, 255, 127, 0,
+	    Rast_add_f_color_rule(&dat1, 255, 127, 0,
 				      &dat2, 255, 0, 0, &colors);
 	    dat1 = dat2;
 	    dat2 = (FCELL) amax1(c1max, c2max);	/* for derivatives use max
 						 * dxx,dyy,dxy */
-	    Rast_add_f_raster_color_rule(&dat1, 255, 0, 0,
+	    Rast_add_f_color_rule(&dat1, 255, 0, 0,
 				      &dat2, 255, 0, 200, &colors);
 
 	    if (params->pcurv != NULL) {
 		mapset = G_find_file("cell", params->pcurv, "");
 		if (mapset == NULL) {
-		    fprintf(stderr, "file [%s] not found\n", params->pcurv);
+		    G_warning(_("Raster map <%s> not found"), params->pcurv);
 		    return -1;
 		}
 		Rast_write_colors(params->pcurv, mapset, &colors);
@@ -524,7 +548,7 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
 	    if (params->tcurv != NULL) {
 		mapset = G_find_file("cell", params->tcurv, "");
 		if (mapset == NULL) {
-		    fprintf(stderr, "file [%s] not found\n", params->tcurv);
+		    G_warning(_("Raster map <%s> not found"), params->tcurv);
 		    return -1;
 		}
 		Rast_write_colors(params->tcurv, mapset, &colors);
@@ -552,7 +576,7 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
 	    if (params->mcurv != NULL) {
 		mapset = G_find_file("cell", params->mcurv, "");
 		if (mapset == NULL) {
-		    fprintf(stderr, "file [%s] not found\n", params->mcurv);
+		    G_warning(_("Raster map <%s> not found"), params->mcurv);
 		    return -1;
 		}
 		Rast_write_colors(params->mcurv, mapset, &colors);
@@ -582,7 +606,7 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
     if (params->elev != NULL) {
 	mapset = G_find_file("cell", params->elev, "");
 	if (mapset == NULL) {
-	    fprintf(stderr, "file [%s] not found\n", params->elev);
+	    G_warning(_("Raster map <%s> not found"), params->elev);
 	    return -1;
 	}
 	type = "raster";

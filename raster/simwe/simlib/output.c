@@ -286,23 +286,23 @@ int output_data(int tt, double ft)
 
 	dat1 = (FCELL) 0.;
 	dat2 = (FCELL) 0.001;
-	Rast_add_f_raster_color_rule(&dat1, 255, 255, 255, &dat2, 255, 255, 0,
+	Rast_add_f_color_rule(&dat1, 255, 255, 255, &dat2, 255, 255, 0,
 				  &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) 0.05;
-	Rast_add_f_raster_color_rule(&dat1, 255, 255, 0, &dat2, 0, 255, 255,
+	Rast_add_f_color_rule(&dat1, 255, 255, 0, &dat2, 0, 255, 255,
 				  &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) 0.1;
-	Rast_add_f_raster_color_rule(&dat1, 0, 255, 255, &dat2, 0, 127, 255,
+	Rast_add_f_color_rule(&dat1, 0, 255, 255, &dat2, 0, 127, 255,
 				  &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) 0.5;
-	Rast_add_f_raster_color_rule(&dat1, 0, 127, 255, &dat2, 0, 0, 255,
+	Rast_add_f_color_rule(&dat1, 0, 127, 255, &dat2, 0, 0, 255,
 				  &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) gmax;
-	Rast_add_f_raster_color_rule(&dat1, 0, 0, 255, &dat2, 0, 0, 0, &colors);
+	Rast_add_f_color_rule(&dat1, 0, 0, 255, &dat2, 0, 0, 0, &colors);
 
 
 	if (ts == 1) {
@@ -330,23 +330,23 @@ int output_data(int tt, double ft)
 
 	dat1 = (FCELL) 0.;
 	dat2 = (FCELL) 0.0005;
-	Rast_add_f_raster_color_rule(&dat1, 255, 255, 255, &dat2, 255, 255, 0,
+	Rast_add_f_color_rule(&dat1, 255, 255, 255, &dat2, 255, 255, 0,
 				  &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) 0.005;
-	Rast_add_f_raster_color_rule(&dat1, 255, 255, 0, &dat2, 0, 255, 255,
+	Rast_add_f_color_rule(&dat1, 255, 255, 0, &dat2, 0, 255, 255,
 				  &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) 0.05;
-	Rast_add_f_raster_color_rule(&dat1, 0, 255, 255, &dat2, 0, 127, 255,
+	Rast_add_f_color_rule(&dat1, 0, 255, 255, &dat2, 0, 127, 255,
 				  &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) 0.1;
-	Rast_add_f_raster_color_rule(&dat1, 0, 127, 255, &dat2, 0, 0, 255,
+	Rast_add_f_color_rule(&dat1, 0, 127, 255, &dat2, 0, 0, 255,
 				  &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) dismax;
-	Rast_add_f_raster_color_rule(&dat1, 0, 0, 255, &dat2, 0, 0, 0, &colors);
+	Rast_add_f_color_rule(&dat1, 0, 0, 255, &dat2, 0, 0, 0, &colors);
 
 	if (ts == 1) {
 	    if ((mapst = G_find_file("cell", disch0, "")) == NULL)
@@ -373,19 +373,19 @@ int output_data(int tt, double ft)
 
 	dat1 = (FCELL) 0.;
 	dat2 = (FCELL) 0.001;
-	Rast_add_f_raster_color_rule(&dat1, 255, 255, 255, &dat2, 255, 255, 0,
+	Rast_add_f_color_rule(&dat1, 255, 255, 255, &dat2, 255, 255, 0,
 				  &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) 0.1;
-	Rast_add_f_raster_color_rule(&dat1, 255, 255, 0, &dat2, 255, 127, 0,
+	Rast_add_f_color_rule(&dat1, 255, 255, 0, &dat2, 255, 127, 0,
 				  &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) 1.;
-	Rast_add_f_raster_color_rule(&dat1, 255, 127, 0, &dat2, 191, 127, 63,
+	Rast_add_f_color_rule(&dat1, 255, 127, 0, &dat2, 191, 127, 63,
 				  &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) dismax;
-	Rast_add_f_raster_color_rule(&dat1, 191, 127, 63, &dat2, 0, 0, 0,
+	Rast_add_f_color_rule(&dat1, 191, 127, 63, &dat2, 0, 0, 0,
 				  &colors);
 
 	if (ts == 1) {
@@ -414,34 +414,34 @@ int output_data(int tt, double ft)
 
 	dat1 = (FCELL) ermax;
 	dat2 = (FCELL) 0.1;
-	Rast_add_f_raster_color_rule(&dat1, 0, 0, 0, &dat2, 0, 0, 255, &colors);
+	Rast_add_f_color_rule(&dat1, 0, 0, 0, &dat2, 0, 0, 255, &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) 0.01;
-	Rast_add_f_raster_color_rule(&dat1, 0, 0, 255, &dat2, 0, 191, 191,
+	Rast_add_f_color_rule(&dat1, 0, 0, 255, &dat2, 0, 191, 191,
 				  &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) 0.0001;
-	Rast_add_f_raster_color_rule(&dat1, 0, 191, 191, &dat2, 170, 255, 255,
+	Rast_add_f_color_rule(&dat1, 0, 191, 191, &dat2, 170, 255, 255,
 				  &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) 0.;
-	Rast_add_f_raster_color_rule(&dat1, 170, 255, 255, &dat2, 255, 255, 255,
+	Rast_add_f_color_rule(&dat1, 170, 255, 255, &dat2, 255, 255, 255,
 				  &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) - 0.0001;
-	Rast_add_f_raster_color_rule(&dat1, 255, 255, 255, &dat2, 255, 255, 0,
+	Rast_add_f_color_rule(&dat1, 255, 255, 255, &dat2, 255, 255, 0,
 				  &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) - 0.01;
-	Rast_add_f_raster_color_rule(&dat1, 255, 255, 0, &dat2, 255, 127, 0,
+	Rast_add_f_color_rule(&dat1, 255, 255, 0, &dat2, 255, 127, 0,
 				  &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) - 0.1;
-	Rast_add_f_raster_color_rule(&dat1, 255, 127, 0, &dat2, 255, 0, 0,
+	Rast_add_f_color_rule(&dat1, 255, 127, 0, &dat2, 255, 0, 0,
 				  &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) ermin;
-	Rast_add_f_raster_color_rule(&dat1, 255, 0, 0, &dat2, 255, 0, 255,
+	Rast_add_f_color_rule(&dat1, 255, 0, 0, &dat2, 255, 0, 255,
 				  &colors);
 
 	if (ts == 1) {
@@ -703,34 +703,34 @@ int output_et()
 
 	dat1 = (FCELL) etmax;
 	dat2 = (FCELL) 0.1;
-	Rast_add_f_raster_color_rule(&dat1, 0, 0, 0, &dat2, 0, 0, 255, &colors);
+	Rast_add_f_color_rule(&dat1, 0, 0, 0, &dat2, 0, 0, 255, &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) 0.01;
-	Rast_add_f_raster_color_rule(&dat1, 0, 0, 255, &dat2, 0, 191, 191,
+	Rast_add_f_color_rule(&dat1, 0, 0, 255, &dat2, 0, 191, 191,
 				  &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) 0.0001;
-	Rast_add_f_raster_color_rule(&dat1, 0, 191, 191, &dat2, 170, 255, 255,
+	Rast_add_f_color_rule(&dat1, 0, 191, 191, &dat2, 170, 255, 255,
 				  &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) 0.;
-	Rast_add_f_raster_color_rule(&dat1, 170, 255, 255, &dat2, 255, 255, 255,
+	Rast_add_f_color_rule(&dat1, 170, 255, 255, &dat2, 255, 255, 255,
 				  &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) - 0.0001;
-	Rast_add_f_raster_color_rule(&dat1, 255, 255, 255, &dat2, 255, 255, 0,
+	Rast_add_f_color_rule(&dat1, 255, 255, 255, &dat2, 255, 255, 0,
 				  &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) - 0.01;
-	Rast_add_f_raster_color_rule(&dat1, 255, 255, 0, &dat2, 255, 127, 0,
+	Rast_add_f_color_rule(&dat1, 255, 255, 0, &dat2, 255, 127, 0,
 				  &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) - 0.1;
-	Rast_add_f_raster_color_rule(&dat1, 255, 127, 0, &dat2, 255, 0, 0,
+	Rast_add_f_color_rule(&dat1, 255, 127, 0, &dat2, 255, 0, 0,
 				  &colors);
 	dat1 = dat2;
 	dat2 = (FCELL) etmin;
-	Rast_add_f_raster_color_rule(&dat1, 255, 0, 0, &dat2, 255, 0, 255,
+	Rast_add_f_color_rule(&dat1, 255, 0, 0, &dat2, 255, 0, 255,
 				  &colors);
 
 	/*    if (ts == 1) {
