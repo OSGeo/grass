@@ -381,8 +381,8 @@ void Rast__init_null_bits(unsigned char *, int);
 /* opencell.c */
 int Rast_open_old(const char *, const char *);
 int Rast__open_old(const char *, const char *);
-int Rast_open_new(const char *);
-int Rast_open_new_uncompressed(const char *);
+int Rast_open_c_new(const char *);
+int Rast_open_c_new_uncompressed(const char *);
 void Rast_want_histogram(int);
 void Rast_set_cell_format(int);
 int Rast_get_cell_format(CELL);
