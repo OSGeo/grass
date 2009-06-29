@@ -201,7 +201,7 @@ int Rast_add_modular_color_rule(const void *, int, int, int,
 
 /* color_rule_get.c */
 int Rast_colors_count(const struct Colors *);
-int Rast_get_f_color_rule(DCELL *, unsigned char *, unsigned char *,
+int Rast_get_fp_color_rule(DCELL *, unsigned char *, unsigned char *,
 		       unsigned char *, DCELL *, unsigned char *,
 		       unsigned char *, unsigned char *,
 		       const struct Colors *, int);
