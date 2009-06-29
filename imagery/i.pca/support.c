@@ -21,7 +21,7 @@ int write_support(int bands, char *outname, double **eigmat, double *eigval)
 
     Rast_make_grey_scale_fp_colors(&colors, min, max);
 
-    if (Rast_raster_map_is_fp(outname, mapset))
+    if (Rast_map_is_fp(outname, mapset))
 	Rast_mark_colors_as_fp(&colors);
 
     if (Rast_write_colors(outname, mapset, &colors) < 0)

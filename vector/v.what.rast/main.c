@@ -133,10 +133,10 @@ int main(int argc, char *argv[])
     }
 
     /* Open raster */
-    if ((fd = Rast_open_cell_old(rast_opt->answer, "")) < 0)
+    if ((fd = Rast_open_old(rast_opt->answer, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), rast_opt->answer);
 
-    out_type = Rast_get_raster_map_type(fd);
+    out_type = Rast_get_map_type(fd);
 
     /* TODO: Later possibly category labels */
     /* 

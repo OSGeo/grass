@@ -113,7 +113,7 @@ int calculateIndex(char *file, int f(int, char **, area_des, double *),
 	/* struct Cell_head cellhd_r, cellhd_new;
 	   char *mapset; */
 	/*creating new raster file */
-	mv_fd = Rast_open_raster_new(output, DCELL_TYPE);
+	mv_fd = Rast_open_new(output, DCELL_TYPE);
 	if (mv_fd < 0)
 	    G_fatal_error(_("Unable to create raster map <%s>"), output);
 

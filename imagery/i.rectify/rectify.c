@@ -42,12 +42,12 @@ int rectify(char *name, char *mapset, char *result, int order)
      * set window to cellhd first to be able to read file exactly
      */
     Rast_set_window(&cellhd);
-    infd = Rast_open_cell_old(name, mapset);
+    infd = Rast_open_old(name, mapset);
     if (infd < 0) {
 	close(infd);
 	return 0;
     }
-    map_type = Rast_get_raster_map_type(infd);
+    map_type = Rast_get_map_type(infd);
     rast = (void *)G_calloc(G_window_cols() + 1, Rast_cell_size(map_type));
     Rast_set_null_value(rast, G_window_cols() + 1, map_type);
 

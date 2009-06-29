@@ -117,13 +117,13 @@ int main(int argc, char *argv[])
 	clumpmap = "MASK";
 	use_MASK = 1;
     }
-    fd_data = Rast_open_cell_old(datamap, "");
+    fd_data = Rast_open_old(datamap, "");
     if (use_MASK)
 	clump_mapset = G_mapset();
     else
 	clump_mapset = "";
 
-    fd_clump = Rast_open_cell_old(clumpmap, clump_mapset);
+    fd_clump = Rast_open_old(clumpmap, clump_mapset);
 
     /* initialize sites file (for centroids) if needed */
     if (*site_list) {

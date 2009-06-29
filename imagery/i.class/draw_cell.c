@@ -38,7 +38,7 @@ int draw_cell(View * view, int overlay)
 	return 1;
     }
 
-    fd = Rast_open_cell_old(view->cell.name, view->cell.mapset);
+    fd = Rast_open_old(view->cell.name, view->cell.mapset);
     if (fd < 0) {
 	Rast_free_colors(&colr);
 	return 0;

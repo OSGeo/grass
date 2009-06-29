@@ -15,7 +15,7 @@ int cseg_read_cell(CSEG * cseg, char *map_name, char *mapset)
     cseg->name = NULL;
     cseg->mapset = NULL;
 
-    map_fd = Rast_open_cell_old(map_name, mapset);
+    map_fd = Rast_open_old(map_name, mapset);
     if (map_fd < 0) {
 	sprintf(msg, "%s(): unable to open file [%s] in [%s], %d",
 		me, map_name, mapset, map_fd);

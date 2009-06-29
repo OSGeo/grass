@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
     result1 = output->answer;
     
     /***************************************************/ 
-    if ((infd = Rast_open_cell_old(ndvi, "")) < 0)
+    if ((infd = Rast_open_old(ndvi, "")) < 0)
 	G_fatal_error(_("Cannot open cell file [%s]"), ndvi);
     inr = Rast_allocate_d_buf();
     
@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
     outr = Rast_allocate_d_buf();
     
     /* Create New raster files */ 
-    if ((outfd = Rast_open_raster_new(result1, DCELL_TYPE)) < 0)
+    if ((outfd = Rast_open_new(result1, DCELL_TYPE)) < 0)
 	G_fatal_error(_("Could not open <%s>"), result1);
     
     /* Process pixels */ 

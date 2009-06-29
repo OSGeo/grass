@@ -36,12 +36,12 @@ int write_output_map(char *output, int offset)
     register MAPTYPE *ptr;
     int k;
 
-    fd_out = Rast_open_cell_new(output);
+    fd_out = Rast_open_c_new(output);
     if (fd_out < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), output);
 
     if (offset) {
-	fd_in = Rast_open_cell_old(output, G_mapset());
+	fd_in = Rast_open_old(output, G_mapset());
 	if (fd_in < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), output);
     }

@@ -258,7 +258,7 @@ int main(int argc, char *argv[])
 	fd[i] = open_input_raster_map(name);
 	opencells++;
 
-	maptype_tmp = Rast_get_raster_map_type(fd[i]);
+	maptype_tmp = Rast_get_map_type(fd[i]);
 
 	/*maptype */
 	if (i == 0)
@@ -348,7 +348,7 @@ int open_input_raster_map(const char *name)
 
 
     /* open raster map */
-    fd = Rast_open_cell_old(name, "");
+    fd = Rast_open_old(name, "");
 
     if (fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), name);

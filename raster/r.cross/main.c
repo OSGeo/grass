@@ -108,7 +108,7 @@ int main(int argc, char *argv[])
 	if (!mapset)
 	    G_fatal_error(_("Raster map <%s> not found"), name);
 	names[nfiles] = name;
-	fd[nfiles] = Rast_open_cell_old(name, mapset);
+	fd[nfiles] = Rast_open_old(name, mapset);
 	if (fd[nfiles] < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), name);
 	Rast_read_range(name, mapset, &range);
@@ -123,7 +123,7 @@ int main(int argc, char *argv[])
     if (nfiles <= 1)
 	G_fatal_error(_("Must specify 2 or more input maps"));
     output = parm.output->answer;
-    outfd = Rast_open_cell_new(output);
+    outfd = Rast_open_c_new(output);
 
     if (outfd < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"),
@@ -170,8 +170,8 @@ int main(int argc, char *argv[])
 	Rast_free_cats(&labels[i]);
 
     /* reopen the output cell for reading and for writing */
-    fd[0] = Rast_open_cell_old(output, G_mapset());
-    outfd = Rast_open_cell_new(output);
+    fd[0] = Rast_open_old(output, G_mapset());
+    outfd = Rast_open_c_new(output);
 
     renumber(fd[0], outfd);
 

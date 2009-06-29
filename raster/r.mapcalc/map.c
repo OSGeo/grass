@@ -468,7 +468,7 @@ int map_type(const char *name, int mod)
     case 'M':
 	tmpname = G_store((char *)name);
 	mapset = G_find_cell2(tmpname, "");
-	result = mapset ? Rast_raster_map_type(tmpname, mapset) : -1;
+	result = mapset ? Rast_map_type(tmpname, mapset) : -1;
 	G_free(tmpname);
 	return result;
     case '@':
@@ -508,7 +508,7 @@ int open_map(const char *name, int mod, int row, int col)
     if (!mapset)
 	G_fatal_error(_("Raster map <%s> not found"), name);
 
-    fd = Rast_open_cell_old(name, mapset);
+    fd = Rast_open_old(name, mapset);
     if (fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s@%s>"), name, mapset);
 
@@ -573,7 +573,7 @@ int open_map(const char *name, int mod, int row, int col)
     if (use_colors)
 	init_colors(m);
 
-    m->fd = Rast_open_cell_old(name, mapset);
+    m->fd = Rast_open_old(name, mapset);
 
     if (m->fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s@%s>"), name, mapset);
@@ -660,7 +660,7 @@ int open_output_map(const char *name, int res_type)
 {
     int fd;
 
-    fd = Rast_open_raster_new((char *)name, res_type);
+    fd = Rast_open_new((char *)name, res_type);
     if (fd < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), name);
 

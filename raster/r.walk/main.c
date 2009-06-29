@@ -541,8 +541,8 @@ int main(int argc, char *argv[])
 
     /*  Open cost cell layer for reading  */
 
-    dtm_fd = Rast_open_cell_old(dtm_layer, "");
-    cost_fd = Rast_open_cell_old(cost_layer, "");
+    dtm_fd = Rast_open_old(dtm_layer, "");
+    cost_fd = Rast_open_old(cost_layer, "");
 
     if (dtm_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), dtm_layer);
@@ -565,8 +565,8 @@ int main(int argc, char *argv[])
     if (dtm_cellhd.proj != cost_cellhd.proj)
 	G_fatal_error(_("Map with different projection"));
 
-    dtm_data_type = Rast_get_raster_map_type(dtm_fd);
-    cost_data_type = Rast_get_raster_map_type(cost_fd);
+    dtm_data_type = Rast_get_map_type(dtm_fd);
+    cost_data_type = Rast_get_map_type(cost_fd);
     dtm_cell = Rast_allocate_buf(dtm_data_type);
     cost_cell = Rast_allocate_buf(cost_data_type);
 
@@ -884,12 +884,12 @@ int main(int argc, char *argv[])
 
 	int dsize2;
 
-	cum_fd = Rast_open_cell_old(start_layer, "");
+	cum_fd = Rast_open_old(start_layer, "");
 	if (cum_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
 			  start_layer);
 
-	data_type2 = Rast_get_raster_map_type(cum_fd);
+	data_type2 = Rast_get_map_type(cum_fd);
 
 	dsize2 = Rast_cell_size(data_type2);
 
@@ -1445,10 +1445,10 @@ int main(int argc, char *argv[])
   OUT:
     /*  Open cumulative cost layer for writing   */
 
-    cum_fd = Rast_open_raster_new(cum_cost_layer, cum_data_type);
+    cum_fd = Rast_open_new(cum_cost_layer, cum_data_type);
     cum_cell = Rast_allocate_buf(cum_data_type);
     if (dir == 1) {
-	dir_fd = Rast_open_raster_new(move_dir_layer, dir_data_type);
+	dir_fd = Rast_open_new(move_dir_layer, dir_data_type);
 	dir_cell = Rast_allocate_buf(dir_data_type);
     }
 

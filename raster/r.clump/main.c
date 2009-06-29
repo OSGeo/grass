@@ -69,11 +69,11 @@ int main(int argc, char *argv[])
 
     strcpy(name, INPUT);
 
-    in_fd = Rast_open_cell_old(name, "");
+    in_fd = Rast_open_old(name, "");
     if (in_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), INPUT);
 
-    out_fd = Rast_open_cell_new(OUTPUT);
+    out_fd = Rast_open_c_new(OUTPUT);
     if (out_fd < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), OUTPUT);
 

@@ -113,7 +113,7 @@ int open_input_raster_map(const char *name)
     G_debug(3, "Open Raster file %s", name);
 
     /* open raster map */
-    fd = Rast_open_cell_old(name, "");
+    fd = Rast_open_old(name, "");
 
     if (fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
@@ -464,14 +464,14 @@ int main(int argc, char *argv[])
 	/*Open input map */
 	name = param.input->answers[i];
 	db.input = open_input_raster_map(name);
-	db.inputmaptype = Rast_raster_map_type(name, "");
+	db.inputmaptype = Rast_map_type(name, "");
 
 	G_debug(2, "Open elev raster map %s", param.elev->answers[i]);
 
 	/*Open elev map */
 	name = param.elev->answers[i];
 	db.elev = open_input_raster_map(name);
-	db.elevmaptype = Rast_raster_map_type(name, "");
+	db.elevmaptype = Rast_map_type(name, "");
 
 	/****************************************/
 	/*Write the data into the G3D Rastermap */

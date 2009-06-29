@@ -379,22 +379,22 @@ void Rast__convert_flags_01(char *, const unsigned char *, int);
 void Rast__init_null_bits(unsigned char *, int);
 
 /* opencell.c */
-int Rast_open_cell_old(const char *, const char *);
-int Rast__open_cell_old(const char *, const char *);
-int Rast_open_cell_new(const char *);
-int Rast_open_cell_new_uncompressed(const char *);
+int Rast_open_old(const char *, const char *);
+int Rast__open_old(const char *, const char *);
+int Rast_open_new(const char *);
+int Rast_open_new_uncompressed(const char *);
 void Rast_want_histogram(int);
 void Rast_set_cell_format(int);
-int Rast_cellvalue_format(CELL);
-int Rast_open_fp_cell_new(const char *);
-int Rast_open_fp_cell_new_uncompressed(const char *);
+int Rast_get_cell_format(CELL);
+int Rast_open_fp_new(const char *);
+int Rast_open_fp_new_uncompressed(const char *);
 int Rast_set_fp_type(RASTER_MAP_TYPE);
-int Rast_raster_map_is_fp(const char *, const char *);
-RASTER_MAP_TYPE Rast_raster_map_type(const char *, const char *);
+int Rast_map_is_fp(const char *, const char *);
+RASTER_MAP_TYPE Rast_map_type(const char *, const char *);
 RASTER_MAP_TYPE Rast__check_fp_type(const char *, const char *);
-RASTER_MAP_TYPE Rast_get_raster_map_type(int);
-int Rast_open_raster_new(const char *, RASTER_MAP_TYPE);
-int Rast_open_raster_new_uncompressed(const char *, RASTER_MAP_TYPE);
+RASTER_MAP_TYPE Rast_get_map_type(int);
+int Rast_open_new(const char *, RASTER_MAP_TYPE);
+int Rast_open_new_uncompressed(const char *, RASTER_MAP_TYPE);
 int Rast_set_quant_rules(int, struct Quant *);
 
 /* put_cellhd.c */

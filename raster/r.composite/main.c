@@ -152,10 +152,10 @@ int main(int argc, char **argv)
 	b->name = b->opt_name->answer;
 
 	/* Make sure map is available */
-	if ((b->file = Rast_open_cell_old(b->name, "")) == -1)
+	if ((b->file = Rast_open_old(b->name, "")) == -1)
 	    G_fatal_error(_("Unable to open raster map <%s>"), b->name);
 
-	b->type = Rast_get_raster_map_type(b->file);
+	b->type = Rast_get_map_type(b->file);
 
 	b->size = Rast_cell_size(b->type);
 
@@ -181,7 +181,7 @@ int main(int argc, char **argv)
     /* open output files */
     out_name = opt_out->answer;
 
-    if ((out_file = Rast_open_cell_new(out_name)) < 0)
+    if ((out_file = Rast_open_c_new(out_name)) < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), out_name);
 
     out_array = Rast_allocate_c_buf();

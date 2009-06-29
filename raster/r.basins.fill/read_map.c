@@ -33,7 +33,7 @@ CELL *read_map(const char *name, int nomask, int nrows, int ncols)
     map = (CELL *) G_malloc(nrows * ncols * sizeof(CELL));
 
     /* open the map */
-    if ((fd = Rast_open_cell_old(name, "")) < 0)
+    if ((fd = Rast_open_old(name, "")) < 0)
 	G_fatal_error(_("Unable to open <%s>"), name);
 
     /* read the map */

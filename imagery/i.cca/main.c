@@ -168,14 +168,14 @@ int main(int argc, char *argv[])
 	outbandmax[i] = (CELL) 0;
 	outbandmin[i] = (CELL) 0;
 
-	if ((datafds[i] = Rast_open_cell_old(refs.file[i - 1].name,
+	if ((datafds[i] = Rast_open_old(refs.file[i - 1].name,
 					  refs.file[i - 1].mapset)) < 0) {
 	    G_fatal_error(_("Cannot open raster map <%s>"),
 			  refs.file[i - 1].name);
 	}
 
 	sprintf(tempname, "%s.%d", out_opt->answer, i);
-	if ((outfds[i] = Rast_open_cell_new(tempname)) < 0)
+	if ((outfds[i] = Rast_open_c_new(tempname)) < 0)
 	    G_fatal_error(_("Cannot create raster map <%s>"), tempname);
     }
 

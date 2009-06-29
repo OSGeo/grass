@@ -161,15 +161,15 @@ int main(int argc, char **argv)
     if ((rmapset = G_find_file2("cell", parm.inrast->answer, "")) == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), parm.inrast->answer);
 
-    if ((infd = Rast_open_cell_old(parm.inrast->answer, rmapset)) == -1)
+    if ((infd = Rast_open_old(parm.inrast->answer, rmapset)) == -1)
 	G_fatal_error(_("Unable to open raster map <%s>"),
 		      parm.inrast->answer);
 
-    parm.raster_type = Rast_get_raster_map_type(infd);
+    parm.raster_type = Rast_get_map_type(infd);
 
     /* open new map for output */
     if ((outfd =
-	 Rast_open_raster_new(parm.outrast->answer, parm.raster_type)) < 0)
+	 Rast_open_new(parm.outrast->answer, parm.raster_type)) < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"),
 		      parm.outrast->answer);
 

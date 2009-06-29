@@ -64,11 +64,11 @@ N_array_2d *N_read_rast_to_array_2d(char *name, N_array_2d * array)
     cols = region.cols;
 
     /*open the raster map */
-    map = Rast_open_cell_old(name, G_find_cell2(name, ""));
+    map = Rast_open_old(name, G_find_cell2(name, ""));
     if (map < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
 
-    type = Rast_get_raster_map_type(map);
+    type = Rast_get_map_type(map);
 
     /*if the array is NULL create a new one with the data type of the raster map */
     /*the offset is 0 by default */
@@ -199,7 +199,7 @@ void N_write_array_2d_to_rast(N_array_2d * array, char *name)
     type = array->type;
 
     /*Open the new map */
-    map = Rast_open_raster_new(name, type);
+    map = Rast_open_new(name, type);
     if (map < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), name);
 

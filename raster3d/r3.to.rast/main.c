@@ -179,7 +179,7 @@ int open_output_map(const char *name, int res_type)
 {
     int fd;
 
-    fd = Rast_open_raster_new((char *)name, res_type);
+    fd = Rast_open_new((char *)name, res_type);
     if (fd < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), name);
 

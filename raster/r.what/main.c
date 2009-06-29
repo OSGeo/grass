@@ -192,10 +192,10 @@ int main(int argc, char *argv[])
 			  NFILES);
 
 	strcpy(name, *ptr);
-	if ((fd[nfiles] = Rast_open_cell_old(name, "")) < 0)
+	if ((fd[nfiles] = Rast_open_old(name, "")) < 0)
 	    G_fatal_error(_("Unable to open <%s>"), name);
 
-	out_type[nfiles] = Rast_get_raster_map_type(fd[nfiles]);
+	out_type[nfiles] = Rast_get_map_type(fd[nfiles]);
 	if (flag3->answer)
 	    out_type[nfiles] = CELL_TYPE;
 

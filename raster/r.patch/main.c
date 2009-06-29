@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
 	if (!ok)
 	    continue;
 
-	fd = Rast_open_cell_old(name, "");
+	fd = Rast_open_old(name, "");
 	if (fd < 0) {
 	    ok = 0;
 	    continue;
@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
 
 	infd[i] = fd;
 
-	map_type = Rast_get_raster_map_type(fd);
+	map_type = Rast_get_map_type(fd);
 	if (map_type == FCELL_TYPE && out_type == CELL_TYPE)
 	    out_type = FCELL_TYPE;
 	else if (map_type == DCELL_TYPE)
@@ -120,7 +120,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("One or more input raster maps not found"));
 
     rname = opt2->answer;
-    outfd = Rast_open_raster_new(new_name = rname, out_type);
+    outfd = Rast_open_new(new_name = rname, out_type);
     if (outfd < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), new_name);
 

@@ -97,11 +97,11 @@ int main(int argc, char *argv[])
     patv = atoi(patval->answer);
 
     /*if Gispf() error */
-    if ((infd = Rast_open_cell_old(name, "")) < 0)
+    if ((infd = Rast_open_old(name, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
 
     /* determine the inputmap type (CELL/FCELL/DCELL) */
-    data_type = Rast_get_raster_map_type(infd);
+    data_type = Rast_get_map_type(infd);
 
     if (Rast_get_cellhd(name, "", &cellhd) < 0)
 	G_fatal_error(_("Unable to read header of raster map <%s>"), name);
@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
     ncols = G_window_cols();
     outrast = Rast_allocate_buf(data_type);
 
-    if ((outfd = Rast_open_raster_new(result, data_type)) < 0)
+    if ((outfd = Rast_open_new(result, data_type)) < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), result);
 
     for (row = 0; row < nrows; row++) {

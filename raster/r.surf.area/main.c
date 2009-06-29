@@ -115,7 +115,7 @@ int main(int argc, char *argv[])
 
     /* open raster map for reading */
     {
-	if ((cellfile = Rast_open_cell_old(surf->answer, "")) == -1)
+	if ((cellfile = Rast_open_old(surf->answer, "")) == -1)
 	    G_fatal_error(_("Unable to open raster map <%s>"), surf->answer);
     }
 

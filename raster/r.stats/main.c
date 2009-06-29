@@ -270,11 +270,11 @@ int main(int argc, char *argv[])
 	DMAX = (DCELL *) G_realloc(DMAX, (nfiles + 1) * sizeof(DCELL));
 	DMIN = (DCELL *) G_realloc(DMIN, (nfiles + 1) * sizeof(DCELL));
 
-	fd[nfiles] = Rast_open_cell_old(name, "");
+	fd[nfiles] = Rast_open_old(name, "");
 	if (fd[nfiles] < 0)
 	    exit(1);
 	if (!as_int)
-	    is_fp[nfiles] = Rast_raster_map_is_fp(name, "");
+	    is_fp[nfiles] = Rast_map_is_fp(name, "");
 	else {
 	    is_fp[nfiles] = 0;
 	    if (cat_ranges || nsteps != 255)

@@ -116,11 +116,11 @@ int main(int argc, char *argv[])
 
     sprintf(null_str, "-9999");
 
-    fd = Rast_open_cell_old(parm.map->answer, "");
+    fd = Rast_open_old(parm.map->answer, "");
     if (fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), parm.map->answer);
 
-    map_type = Rast_get_raster_map_type(fd);
+    map_type = Rast_get_map_type(fd);
     out_type = map_type;
 
     /*

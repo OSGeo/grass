@@ -493,7 +493,7 @@ int main(int argc, char *argv[])
 	map_type = CELL_TYPE;
     }
 
-    cf = Rast_open_raster_new(output, map_type);
+    cf = Rast_open_new(output, map_type);
     if (cf < 0) {
 	G_fatal_error(_("Unable to create raster map <%s>"), output);
 	exit(EXIT_FAILURE);

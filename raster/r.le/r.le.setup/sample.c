@@ -101,7 +101,7 @@ void sample(int t0, int b0, int l0, int r0, char *name, char *name1,
 		"    and a WARNING may be printed that can be ignored.\n");
 	fprintf(stderr,
 		"    If a MASK is present there will be no warning.\n");
-	fmask = Rast_open_cell_old("MASK", G_mapset());
+	fmask = Rast_open_old("MASK", G_mapset());
 	fprintf(stderr, "\n");
 
 
@@ -353,7 +353,7 @@ static void man_unit(int t, int b, int l, int r, char *n1, char *n2, char *n3,
 		if (fmask > 0) {
 		    count = 0;
 		    row_buf = Rast_allocate_buf(CELL_TYPE);
-		    fr = Rast_open_cell_old(n1, G_mapset());
+		    fr = Rast_open_old(n1, G_mapset());
 		    for (j = t; j < b; j++) {
 			Rast_zero_raster_buf(row_buf, CELL_TYPE);
 			Rast_get_row(fr, row_buf, j, CELL_TYPE);
@@ -410,7 +410,7 @@ static void man_unit(int t, int b, int l, int r, char *n1, char *n2, char *n3,
 		    if (fmask > 0) {
 			count = 0;
 			row_buf = Rast_allocate_buf(CELL_TYPE);
-			fr = Rast_open_cell_old(n1, G_mapset());
+			fr = Rast_open_old(n1, G_mapset());
 			for (j = t; j < b; j++) {
 			    Rast_zero_raster_buf(row_buf, CELL_TYPE);
 			    Rast_get_row(fr, row_buf, j, CELL_TYPE);

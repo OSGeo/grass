@@ -93,10 +93,10 @@ int output_data(int tt, double ft)
 	if (ts == 1) {
 	    sprintf(buf, "%s.%.*d", depth, ndigit, tt);
 	    depth0 = G_store(buf);
-	    fd6 = Rast_open_fp_cell_new(depth0);
+	    fd6 = Rast_open_fp_new(depth0);
 	}
 	else
-	    fd6 = Rast_open_fp_cell_new(depth);
+	    fd6 = Rast_open_fp_new(depth);
 	if (fd6 < 0)
 	    G_fatal_error("unable to create raster map %s", depth);
     }
@@ -106,10 +106,10 @@ int output_data(int tt, double ft)
 	if (ts == 1) {
 	    sprintf(buf, "%s.%.*d", disch, ndigit, tt);
 	    disch0 = G_store(buf);
-	    fd7 = Rast_open_fp_cell_new(disch0);
+	    fd7 = Rast_open_fp_new(disch0);
 	}
 	else
-	    fd7 = Rast_open_fp_cell_new(disch);
+	    fd7 = Rast_open_fp_new(disch);
 	if (fd7 < 0)
 	    G_fatal_error("unable to create raster map %s", disch);
     }
@@ -119,10 +119,10 @@ int output_data(int tt, double ft)
 	if (ts == 1) {
 	    sprintf(buf, "%s.%.*d", err, ndigit, tt);
 	    err0 = G_store(buf);
-	    fd8 = Rast_open_fp_cell_new(err0);
+	    fd8 = Rast_open_fp_new(err0);
 	}
 	else
-	    fd8 = Rast_open_fp_cell_new(err);
+	    fd8 = Rast_open_fp_new(err);
 
 	if (fd8 < 0)
 	    G_fatal_error("unable to create raster map %s", err);
@@ -134,10 +134,10 @@ int output_data(int tt, double ft)
 	if (ts == 1) {
 	    sprintf(buf, "%s.%.*d", conc, ndigit, tt);
 	    conc0 = G_store(buf);
-	    fd14 = Rast_open_fp_cell_new(conc0);
+	    fd14 = Rast_open_fp_new(conc0);
 	}
 	else
-	    fd14 = Rast_open_fp_cell_new(conc);
+	    fd14 = Rast_open_fp_new(conc);
 
 	if (fd14 < 0)
 	    G_fatal_error("unable to create raster map %s", conc);
@@ -148,10 +148,10 @@ int output_data(int tt, double ft)
 	if (ts == 1) {
 	    sprintf(buf, "%s.%.*d", flux, ndigit, tt);
 	    flux0 = G_store(buf);
-	    fd15 = Rast_open_fp_cell_new(flux0);
+	    fd15 = Rast_open_fp_new(flux0);
 	}
 	else
-	    fd15 = Rast_open_fp_cell_new(flux);
+	    fd15 = Rast_open_fp_new(flux);
 
 	if (fd15 < 0)
 	    G_fatal_error("unable to create raster map %s", flux);
@@ -162,10 +162,10 @@ int output_data(int tt, double ft)
 	if (ts == 1) {
 	    sprintf(buf, "%s.%.*d", erdep, ndigit, tt);
 	    erdep0 = G_store(buf);
-	    fd16 = Rast_open_fp_cell_new(erdep0);
+	    fd16 = Rast_open_fp_new(erdep0);
 	}
 	else
-	    fd16 = Rast_open_fp_cell_new(erdep);
+	    fd16 = Rast_open_fp_new(erdep);
 
 	if (fd16 < 0)
 	    G_fatal_error("unable to create raster map %s", erdep);
@@ -623,10 +623,10 @@ int output_et()
 	/*      if (ts == 1) {
 	   sprintf(buf,"%s.%.*d",et,ndigit,tt);
 	   et0 = G_store(buf);
-	   fd17 = Rast_open_fp_cell_new (et0);
+	   fd17 = Rast_open_fp_new (et0);
 	   }
 	   else */
-	fd17 = Rast_open_fp_cell_new(et);
+	fd17 = Rast_open_fp_new(et);
 
 	if (fd17 < 0)
 	    G_fatal_error("unable to create raster map %s", et);
@@ -637,10 +637,10 @@ int output_et()
 	/*   if (ts == 1) {
 	   sprintf(buf,"%s.%.*d",tc,ndigit,tt);
 	   tc0 = G_store(buf);
-	   fd13 = Rast_open_fp_cell_new (tc0);
+	   fd13 = Rast_open_fp_new (tc0);
 	   }
 	   else */
-	fd13 = Rast_open_fp_cell_new(tc);
+	fd13 = Rast_open_fp_new(tc);
 
 	if (fd13 < 0)
 	    G_fatal_error("unable to create raster map %s", tc);

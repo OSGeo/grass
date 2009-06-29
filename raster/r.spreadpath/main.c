@@ -168,11 +168,11 @@ int main(int argc, char **argv)
     cell = Rast_allocate_c_buf();
 
     /*  Open back cell layers for reading  */
-    backrow_fd = Rast_open_cell_old(backrow_layer, backrow_mapset);
+    backrow_fd = Rast_open_old(backrow_layer, backrow_mapset);
     if (backrow_fd < 0)
 	G_fatal_error("%s - can't open raster map", backrow_layer);
 
-    backcol_fd = Rast_open_cell_old(backcol_layer, backcol_mapset);
+    backcol_fd = Rast_open_old(backcol_layer, backcol_mapset);
     if (backcol_fd < 0)
 	G_fatal_error("%s - can't open raster map", backcol_layer);
 
@@ -277,7 +277,7 @@ int main(int argc, char **argv)
     /* If the output layer containing the starting positions */
     /* create a linked list of of them  */
     if (flag == 1) {
-	path_fd = Rast_open_cell_old(path_layer, path_mapset);
+	path_fd = Rast_open_old(path_layer, path_mapset);
 	if (path_fd < 0)
 	    G_fatal_error("%s -can't open raster map", path_layer);
 
@@ -328,7 +328,7 @@ int main(int argc, char **argv)
     if (verbose)
 	G_message("\nWriting the output map  -%s-...", path_layer);
 
-    path_fd = Rast_open_cell_new(path_layer);
+    path_fd = Rast_open_c_new(path_layer);
     for (row = 0; row < nrows; row++) {
 	segment_get_row(&out_seg, cell, row);
 	if (Rast_put_raster_row(path_fd, cell, CELL_TYPE) < 0)

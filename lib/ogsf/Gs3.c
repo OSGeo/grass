@@ -134,7 +134,7 @@ int Gs_loadmap_as_float(struct Cell_head *wind, const char *map_name,
 	G_fatal_error(_("Unable to allocate memory for a null buffer"));
     }
 
-    if ((cellfile = Rast_open_cell_old(map_name, map_set)) == -1) {
+    if ((cellfile = Rast_open_old(map_name, map_set)) == -1) {
 	G_fatal_error(_("Unable to open raster map <%s>"), map_name);
     }
 
@@ -209,7 +209,7 @@ int Gs_loadmap_as_int(struct Cell_head *wind, const char *map_name, int *buff,
 	G_fatal_error(_("Unable to allocate memory for a null buffer"));
     }
 
-    if ((cellfile = Rast_open_cell_old(map_name, map_set)) == -1) {
+    if ((cellfile = Rast_open_old(map_name, map_set)) == -1) {
 	G_fatal_error(_("Unable to open raster map <%s>"), map_name);
     }
 
@@ -288,7 +288,7 @@ int Gs_numtype(const char *filename, int *negflag)
 	return -1;
     }
 
-    if (Rast_raster_map_is_fp(filename, mapset)) {
+    if (Rast_map_is_fp(filename, mapset)) {
 	G_debug(3, "Gs_numtype(): fp map detected");
 
 	return (ATTY_FLOAT);
@@ -367,7 +367,7 @@ int Gs_loadmap_as_short(struct Cell_head *wind, const char *map_name,
 	G_fatal_error(_("Unable to allocate memory for a null buffer"));
     }
 
-    if ((cellfile = Rast_open_cell_old(map_name, map_set)) == -1) {
+    if ((cellfile = Rast_open_old(map_name, map_set)) == -1) {
 	G_fatal_error(_("Unable to open raster map <%s>"), map_name);
     }
 
@@ -483,7 +483,7 @@ int Gs_loadmap_as_char(struct Cell_head *wind, const char *map_name,
 	G_fatal_error(_("Unable to allocate memory for a null buffer"));
     }
 
-    if ((cellfile = Rast_open_cell_old(map_name, map_set)) == -1) {
+    if ((cellfile = Rast_open_old(map_name, map_set)) == -1) {
 	G_fatal_error(_("Unable to open raster map <%s>"), map_name);
     }
 
@@ -574,7 +574,7 @@ int Gs_loadmap_as_bitmap(struct Cell_head *wind, const char *map_name,
 	return -1;
     }
 
-    if ((cellfile = Rast_open_cell_old(map_name, map_set)) == -1) {
+    if ((cellfile = Rast_open_old(map_name, map_set)) == -1) {
 	G_fatal_error(_("Unable to open raster map <%s>"), map_name);
     }
 
@@ -838,8 +838,8 @@ int Gs_get_cat_label(const char *filename, int drow, int dcol, char *catstr)
     }
 
     if (-1 != Rast_read_cats(filename, mapset, &cats)) {
-	fd = Rast_open_cell_old(filename, mapset);
-	map_type = Rast_get_raster_map_type(fd);
+	fd = Rast_open_old(filename, mapset);
+	map_type = Rast_get_map_type(fd);
 
 	if (map_type == CELL_TYPE) {
 	    buf = Rast_allocate_c_buf();

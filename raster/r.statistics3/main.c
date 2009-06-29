@@ -335,7 +335,7 @@ static void do_output(int base_fd, char **outputs, const char *covermap)
     for (quant = 0; quant < num_quants; quant++) {
 	const char *output = outputs[quant];
 
-	out_fd[quant] = Rast_open_fp_cell_new(output);
+	out_fd[quant] = Rast_open_fp_new(output);
 	if (out_fd[quant] < 0)
 	    G_fatal_error(_("Unable to open output map <%s>"), output);
     }
@@ -472,15 +472,15 @@ int main(int argc, char *argv[])
 			  num_quants, i);
     }
 
-    base_fd = Rast_open_cell_old(basemap, "");
+    base_fd = Rast_open_old(basemap, "");
     if (base_fd < 0)
 	G_fatal_error(_("Unable to open base map <%s>"), basemap);
 
-    cover_fd = Rast_open_cell_old(covermap, "");
+    cover_fd = Rast_open_old(covermap, "");
     if (cover_fd < 0)
 	G_fatal_error(_("Unable to open cover map <%s>"), covermap);
 
-    if (Rast_raster_map_is_fp(basemap, "") != 0)
+    if (Rast_map_is_fp(basemap, "") != 0)
 	G_fatal_error(_("The base map must be an integer (CELL) map"));
 
     if (Rast_read_range(basemap, "", &range) < 0)

@@ -240,7 +240,7 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
 	return (-1);
     }
 
-    is_fp = Rast_raster_map_is_fp(name, mapset);
+    is_fp = Rast_map_is_fp(name, mapset);
 
     if (Rast_read_colors(name, mapset, &colors) == -1) {
 	G_warning(_("Unable to read color file of raster map <%s>"), name);

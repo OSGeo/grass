@@ -23,7 +23,7 @@ int close_maps(void)
 	    G_warning("Writing out only positive flow accumulation values.");
 	    G_warning("Cells with a likely underestimate for flow accumulation can no longer be identified.");
 
-	    fd = Rast_open_raster_new(wat_name, DCELL_TYPE);
+	    fd = Rast_open_new(wat_name, DCELL_TYPE);
 	    if (fd < 0) {
 		G_warning(_("unable to open new accum map layer."));
 	    }
@@ -47,7 +47,7 @@ int close_maps(void)
 	    dseg_write_cellfile(&wat, wat_name);
 
 	    /* get standard deviation */
-	    fd = Rast_open_cell_old(wat_name, "");
+	    fd = Rast_open_old(wat_name, "");
 	    if (fd < 0) {
 		G_fatal_error(_("unable to open flow accumulation map layer"));
 	    }

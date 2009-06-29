@@ -72,7 +72,7 @@ void patch_fore()
        map remains open on finput while all the programs
        run, so it is globally available */
 
-    if (0 > (finput = Rast_open_cell_old(choice->fn, G_mapset()))) {
+    if (0 > (finput = Rast_open_old(choice->fn, G_mapset()))) {
 	fprintf(stderr, "\n");
 	fprintf(stderr,
 		"   ******* *************************************************\n");
@@ -90,7 +90,7 @@ void patch_fore()
        double (DCELL_TYPE) and make globally available */
 
     else
-	data_type = Rast_raster_map_type(choice->fn, G_mapset());
+	data_type = Rast_map_type(choice->fn, G_mapset());
 
 
     /* if using a moving window, get the parameters,
@@ -551,49 +551,49 @@ void mv_driver()
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=a1,a1bak");
 	    system(cmdbuf);
 	}
-	a1 = Rast_open_raster_new("a1", DCELL_TYPE);
+	a1 = Rast_open_new("a1", DCELL_TYPE);
     }
     if (choice->att[2]) {
 	if (G_find_cell("a2", G_mapset()) != NULL) {
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=a2,a2bak");
 	    system(cmdbuf);
 	}
-	a2 = Rast_open_raster_new("a2", DCELL_TYPE);
+	a2 = Rast_open_new("a2", DCELL_TYPE);
     }
     if (choice->att[3]) {
 	if (G_find_cell("a3", G_mapset()) != NULL) {
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=a3,a3bak");
 	    system(cmdbuf);
 	}
-	a3 = Rast_open_raster_new("a3", DCELL_TYPE);
+	a3 = Rast_open_new("a3", DCELL_TYPE);
     }
     if (choice->att[4]) {
 	if (G_find_cell("a4", G_mapset()) != NULL) {
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=a4,a4bak");
 	    system(cmdbuf);
 	}
-	a4 = Rast_open_raster_new("a4", DCELL_TYPE);
+	a4 = Rast_open_new("a4", DCELL_TYPE);
     }
     if (choice->att[5]) {
 	if (G_find_cell("a5", G_mapset()) != NULL) {
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=a5,a5bak");
 	    system(cmdbuf);
 	}
-	a5 = Rast_open_raster_new("a5", DCELL_TYPE);
+	a5 = Rast_open_new("a5", DCELL_TYPE);
     }
     if (choice->att[6]) {
 	if (G_find_cell("a6", G_mapset()) != NULL) {
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=a6,a6bak");
 	    system(cmdbuf);
 	}
-	a6 = Rast_open_raster_new("a6", DCELL_TYPE);
+	a6 = Rast_open_new("a6", DCELL_TYPE);
     }
     if (choice->att[7]) {
 	if (G_find_cell("a7", G_mapset()) != NULL) {
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=a7,a7bak");
 	    system(cmdbuf);
 	}
-	a7 = Rast_open_raster_new("a7", DCELL_TYPE);
+	a7 = Rast_open_new("a7", DCELL_TYPE);
     }
 
     if (choice->att[8]) {
@@ -601,7 +601,7 @@ void mv_driver()
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=a8,a8bak");
 	    system(cmdbuf);
 	}
-	a8 = Rast_open_raster_new("a8", DCELL_TYPE);
+	a8 = Rast_open_new("a8", DCELL_TYPE);
     }
 
     if (choice->size[1]) {
@@ -609,42 +609,42 @@ void mv_driver()
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=s1,s1bak");
 	    system(cmdbuf);
 	}
-	s1 = Rast_open_raster_new("s1", DCELL_TYPE);
+	s1 = Rast_open_new("s1", DCELL_TYPE);
     }
     if (choice->size[2]) {
 	if (G_find_cell("s2", G_mapset()) != NULL) {
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=s2,s2bak");
 	    system(cmdbuf);
 	}
-	s2 = Rast_open_raster_new("s2", DCELL_TYPE);
+	s2 = Rast_open_new("s2", DCELL_TYPE);
     }
     if (choice->size[3]) {
 	if (G_find_cell("s3", G_mapset()) != NULL) {
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=s3,s3bak");
 	    system(cmdbuf);
 	}
-	s3 = Rast_open_raster_new("s3", DCELL_TYPE);
+	s3 = Rast_open_new("s3", DCELL_TYPE);
     }
     if (choice->size[4]) {
 	if (G_find_cell("s4", G_mapset()) != NULL) {
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=s4,s4bak");
 	    system(cmdbuf);
 	}
-	s4 = Rast_open_raster_new("s4", DCELL_TYPE);
+	s4 = Rast_open_new("s4", DCELL_TYPE);
     }
     if (choice->size[5]) {
 	if (G_find_cell("s5", G_mapset()) != NULL) {
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=s5,s5bak");
 	    system(cmdbuf);
 	}
-	s5 = Rast_open_raster_new("s5", DCELL_TYPE);
+	s5 = Rast_open_new("s5", DCELL_TYPE);
     }
     if (choice->size[6]) {
 	if (G_find_cell("s6", G_mapset()) != NULL) {
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=s6,s6bak");
 	    system(cmdbuf);
 	}
-	s6 = Rast_open_raster_new("s6", DCELL_TYPE);
+	s6 = Rast_open_new("s6", DCELL_TYPE);
     }
 
     if (choice->size[7]) {
@@ -652,7 +652,7 @@ void mv_driver()
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=s7,s7bak");
 	    system(cmdbuf);
 	}
-	s7 = Rast_open_raster_new("s7", DCELL_TYPE);
+	s7 = Rast_open_new("s7", DCELL_TYPE);
     }
 
     if (choice->size[8]) {
@@ -660,7 +660,7 @@ void mv_driver()
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=s8,s8bak");
 	    system(cmdbuf);
 	}
-	s8 = Rast_open_raster_new("s8", DCELL_TYPE);
+	s8 = Rast_open_new("s8", DCELL_TYPE);
     }
 
     if (choice->core[1]) {
@@ -668,70 +668,70 @@ void mv_driver()
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=c1,c1bak");
 	    system(cmdbuf);
 	}
-	c1 = Rast_open_raster_new("c1", DCELL_TYPE);
+	c1 = Rast_open_new("c1", DCELL_TYPE);
     }
     if (choice->core[2]) {
 	if (G_find_cell("c2", G_mapset()) != NULL) {
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=c2,c2bak");
 	    system(cmdbuf);
 	}
-	c2 = Rast_open_raster_new("c2", DCELL_TYPE);
+	c2 = Rast_open_new("c2", DCELL_TYPE);
     }
     if (choice->core[3]) {
 	if (G_find_cell("c3", G_mapset()) != NULL) {
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=c3,c3bak");
 	    system(cmdbuf);
 	}
-	c3 = Rast_open_raster_new("c3", DCELL_TYPE);
+	c3 = Rast_open_new("c3", DCELL_TYPE);
     }
     if (choice->core[4]) {
 	if (G_find_cell("c4", G_mapset()) != NULL) {
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=c4,c4bak");
 	    system(cmdbuf);
 	}
-	c4 = Rast_open_raster_new("c4", DCELL_TYPE);
+	c4 = Rast_open_new("c4", DCELL_TYPE);
     }
     if (choice->core[5]) {
 	if (G_find_cell("c5", G_mapset()) != NULL) {
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=c5,c5bak");
 	    system(cmdbuf);
 	}
-	c5 = Rast_open_raster_new("c5", DCELL_TYPE);
+	c5 = Rast_open_new("c5", DCELL_TYPE);
     }
     if (choice->core[6]) {
 	if (G_find_cell("c6", G_mapset()) != NULL) {
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=c6,c6bak");
 	    system(cmdbuf);
 	}
-	c6 = Rast_open_raster_new("c6", DCELL_TYPE);
+	c6 = Rast_open_new("c6", DCELL_TYPE);
     }
     if (choice->core[7]) {
 	if (G_find_cell("c7", G_mapset()) != NULL) {
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=c7,c7bak");
 	    system(cmdbuf);
 	}
-	c7 = Rast_open_raster_new("c7", DCELL_TYPE);
+	c7 = Rast_open_new("c7", DCELL_TYPE);
     }
     if (choice->core[8]) {
 	if (G_find_cell("c8", G_mapset()) != NULL) {
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=c8,c8bak");
 	    system(cmdbuf);
 	}
-	c8 = Rast_open_raster_new("c8", DCELL_TYPE);
+	c8 = Rast_open_new("c8", DCELL_TYPE);
     }
     if (choice->core[9]) {
 	if (G_find_cell("c9", G_mapset()) != NULL) {
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=c9,c9bak");
 	    system(cmdbuf);
 	}
-	c9 = Rast_open_raster_new("c9", DCELL_TYPE);
+	c9 = Rast_open_new("c9", DCELL_TYPE);
     }
     if (choice->core[10]) {
 	if (G_find_cell("c10", G_mapset()) != NULL) {
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=c10,c10bak");
 	    system(cmdbuf);
 	}
-	c10 = Rast_open_raster_new("c10", DCELL_TYPE);
+	c10 = Rast_open_new("c10", DCELL_TYPE);
     }
 
     if (choice->shape[1]) {
@@ -739,42 +739,42 @@ void mv_driver()
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=h1,h1bak");
 	    system(cmdbuf);
 	}
-	h1 = Rast_open_raster_new("h1", DCELL_TYPE);
+	h1 = Rast_open_new("h1", DCELL_TYPE);
     }
     if (choice->shape[2]) {
 	if (G_find_cell("h2", G_mapset()) != NULL) {
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=h2,h2bak");
 	    system(cmdbuf);
 	}
-	h2 = Rast_open_raster_new("h2", DCELL_TYPE);
+	h2 = Rast_open_new("h2", DCELL_TYPE);
     }
     if (choice->shape[3]) {
 	if (G_find_cell("h3", G_mapset()) != NULL) {
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=h3,h3bak");
 	    system(cmdbuf);
 	}
-	h3 = Rast_open_raster_new("h3", DCELL_TYPE);
+	h3 = Rast_open_new("h3", DCELL_TYPE);
     }
     if (choice->shape[4]) {
 	if (G_find_cell("h4", G_mapset()) != NULL) {
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=h4,h4bak");
 	    system(cmdbuf);
 	}
-	h4 = Rast_open_raster_new("h4", DCELL_TYPE);
+	h4 = Rast_open_new("h4", DCELL_TYPE);
     }
     if (choice->shape[5]) {
 	if (G_find_cell("h5", G_mapset()) != NULL) {
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=h5,h5bak");
 	    system(cmdbuf);
 	}
-	h5 = Rast_open_raster_new("h5", DCELL_TYPE);
+	h5 = Rast_open_new("h5", DCELL_TYPE);
     }
     if (choice->shape[6]) {
 	if (G_find_cell("h6", G_mapset()) != NULL) {
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=h6,h6bak");
 	    system(cmdbuf);
 	}
-	h6 = Rast_open_raster_new("h6", DCELL_TYPE);
+	h6 = Rast_open_new("h6", DCELL_TYPE);
     }
 
     if (choice->boundary[1]) {
@@ -782,7 +782,7 @@ void mv_driver()
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=n1,n1bak");
 	    system(cmdbuf);
 	}
-	n1 = Rast_open_raster_new("n1", DCELL_TYPE);
+	n1 = Rast_open_new("n1", DCELL_TYPE);
     }
 
     if (choice->boundary[2]) {
@@ -790,7 +790,7 @@ void mv_driver()
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=n2,n2bak");
 	    system(cmdbuf);
 	}
-	n2 = Rast_open_raster_new("n2", DCELL_TYPE);
+	n2 = Rast_open_new("n2", DCELL_TYPE);
     }
 
     if (choice->boundary[3]) {
@@ -798,7 +798,7 @@ void mv_driver()
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=n3,n3bak");
 	    system(cmdbuf);
 	}
-	n3 = Rast_open_raster_new("n3", DCELL_TYPE);
+	n3 = Rast_open_new("n3", DCELL_TYPE);
     }
 
     if (choice->boundary[4]) {
@@ -806,7 +806,7 @@ void mv_driver()
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=n4,n4bak");
 	    system(cmdbuf);
 	}
-	n4 = Rast_open_raster_new("n4", DCELL_TYPE);
+	n4 = Rast_open_new("n4", DCELL_TYPE);
     }
 
     if (choice->perim[1]) {
@@ -814,42 +814,42 @@ void mv_driver()
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=p1,p1bak");
 	    system(cmdbuf);
 	}
-	p1 = Rast_open_raster_new("p1", DCELL_TYPE);
+	p1 = Rast_open_new("p1", DCELL_TYPE);
     }
     if (choice->perim[2]) {
 	if (G_find_cell("p2", G_mapset()) != NULL) {
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=p2,p2bak");
 	    system(cmdbuf);
 	}
-	p2 = Rast_open_raster_new("p2", DCELL_TYPE);
+	p2 = Rast_open_new("p2", DCELL_TYPE);
     }
     if (choice->perim[3]) {
 	if (G_find_cell("p3", G_mapset()) != NULL) {
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=p3,p3bak");
 	    system(cmdbuf);
 	}
-	p3 = Rast_open_raster_new("p3", DCELL_TYPE);
+	p3 = Rast_open_new("p3", DCELL_TYPE);
     }
     if (choice->perim[4]) {
 	if (G_find_cell("p4", G_mapset()) != NULL) {
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=p4,p4bak");
 	    system(cmdbuf);
 	}
-	p4 = Rast_open_raster_new("p4", DCELL_TYPE);
+	p4 = Rast_open_new("p4", DCELL_TYPE);
     }
     if (choice->perim[5]) {
 	if (G_find_cell("p5", G_mapset()) != NULL) {
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=p5,p5bak");
 	    system(cmdbuf);
 	}
-	p5 = Rast_open_raster_new("p5", DCELL_TYPE);
+	p5 = Rast_open_new("p5", DCELL_TYPE);
     }
     if (choice->perim[6]) {
 	if (G_find_cell("p6", G_mapset()) != NULL) {
 	    sprintf(cmdbuf, "%s %s", "g.rename -o", "rast=p6,p6bak");
 	    system(cmdbuf);
 	}
-	p6 = Rast_open_raster_new("p6", DCELL_TYPE);
+	p6 = Rast_open_new("p6", DCELL_TYPE);
     }
 
     /* get the moving window parameters */
@@ -915,7 +915,7 @@ void mv_driver()
     fprintf(stderr,
 	    "   warning may be printed or appear in a window; ignore this warning.\n");
     fprintf(stderr, "If a MASK is present there will be no warning.\n");
-    fmask = Rast_open_cell_old("MASK", G_mapset());
+    fmask = Rast_open_old("MASK", G_mapset());
     fprintf(stderr, "\n");
 
     /* allocate memory for the buffer that
@@ -2702,7 +2702,7 @@ void unit_driver()
 	if (choice->units) {
 	    strcpy(unitname, "units_");
 	    strcat(unitname, istr);
-	    fd = Rast_open_raster_new(unitname, CELL_TYPE);
+	    fd = Rast_open_new(unitname, CELL_TYPE);
 	    unit_buf = Rast_allocate_buf(CELL_TYPE);
 	    for (k = 1; k < wind.rows + 1; k++) {
 		Rast_zero_raster_buf(unit_buf, CELL_TYPE);
@@ -2817,7 +2817,7 @@ void whole_reg_driver()
     }
     else {
 	regcnt = 0;
-	fr = Rast_open_cell_old(choice->reg, G_mapset());
+	fr = Rast_open_old(choice->reg, G_mapset());
 	row_buf = Rast_allocate_buf(CELL_TYPE);
 	for (i = 0; i < nrows; i++) {
 	    Rast_zero_raster_buf(row_buf, CELL_TYPE);

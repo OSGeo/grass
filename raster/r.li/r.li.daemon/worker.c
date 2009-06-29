@@ -59,13 +59,13 @@ void worker(char *raster, int f(int, char **, area_des, double *),
     pid = getpid();
     ad = malloc(sizeof(struct area_entry));
     /* open raster map */
-    fd = Rast_open_cell_old(raster, "");
+    fd = Rast_open_old(raster, "");
     if (Rast_get_cellhd(raster, "", &hd) == -1) {
 	G_message(_("CHILD[pid = %i] cannot open raster map"), pid);
 	exit(EXIT_FAILURE);
     }
     /* read data type to allocate cache */
-    data_type = Rast_raster_map_type(raster, "");
+    data_type = Rast_map_type(raster, "");
     /* calculate rows in cache */
     switch (data_type) {
     case CELL_TYPE:{
@@ -240,7 +240,7 @@ char *mask_preprocessing(char *mask, char *raster, int rl, int cl)
     add_col = 1.0 * oldcell.cols / cl;
     tmp_file = G_tempfile();
     mask_fd = open(tmp_file, O_RDWR | O_CREAT, 0755);
-    old_fd = Rast_open_cell_old(mask, "");
+    old_fd = Rast_open_old(mask, "");
     old = Rast_allocate_c_buf();
     for (i = 0; i < rl; i++) {
 	int riga;

@@ -36,7 +36,7 @@ int gaussurf(char *out,		/* Name of raster maps to be opened.    */
 
 	/****** OPEN CELL FILES AND GET CELL DETAILS ******/
 
-    fd_out = Rast_open_raster_new(out, DCELL_TYPE);
+    fd_out = Rast_open_new(out, DCELL_TYPE);
 
     nrows = G_window_rows();
     ncols = G_window_cols();

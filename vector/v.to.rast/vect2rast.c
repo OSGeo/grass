@@ -119,11 +119,11 @@ int vect_to_rast(const char *vector_map, const char *raster_map, int field,
 
     switch (format) {
     case USE_CELL:
-	if ((fd = Rast_open_cell_new(raster_map)) < 0)
+	if ((fd = Rast_open_c_new(raster_map)) < 0)
 	    G_fatal_error(_("Unable to create raster map <%s>"), raster_map);
 	break;
     case USE_DCELL:
-	if ((fd = Rast_open_raster_new(raster_map, DCELL_TYPE)) < 0)
+	if ((fd = Rast_open_new(raster_map, DCELL_TYPE)) < 0)
 	    G_fatal_error(_("Unable to create raster map <%s>"), raster_map);
 	break;
     default:

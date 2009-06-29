@@ -247,7 +247,7 @@ int main(int argc, char **argv)
     if (Rast_read_colors(map_name, "", &colors) == -1)
 	G_fatal_error(_("Color file for <%s> not available"), map_name);
 
-    fp = Rast_raster_map_is_fp(map_name, "");
+    fp = Rast_map_is_fp(map_name, "");
     if (fp && !use_catlist) {
 	do_smooth = TRUE;
 	/* fprintf(stderr, "FP map found - switching gradient legend on\n"); */

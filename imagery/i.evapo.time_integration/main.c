@@ -165,14 +165,14 @@ int main(int argc, char *argv[])
 	}
 	if (!ok)
 	    continue;
-	infd[nfiles] = Rast_open_cell_old(name, mapset);
+	infd[nfiles] = Rast_open_old(name, mapset);
 	if (infd[nfiles] < 0) {
 	    ok = 0;
 	    continue;
 	}
 	/* Allocate input buffer */
-	in_data_type[nfiles] = Rast_raster_map_type(name, mapset);
-	if ((infd[nfiles] = Rast_open_cell_old(name, mapset)) < 0)
+	in_data_type[nfiles] = Rast_map_type(name, mapset);
+	if ((infd[nfiles] = Rast_open_old(name, mapset)) < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), name);
 	if ((Rast_get_cellhd(name, mapset, &cellhd)) < 0)
 	    G_fatal_error(_("Unable to read file header of raster map <%s>"), name);
@@ -198,14 +198,14 @@ int main(int argc, char *argv[])
 	}
 	if (!ok)
 	    continue;
-	infd1[nfiles1] = Rast_open_cell_old(name1, mapset);
+	infd1[nfiles1] = Rast_open_old(name1, mapset);
 	if (infd1[nfiles1] < 0) {
 	    ok = 0;
 	    continue;
 	}
 	/* Allocate input buffer */
-	in_data_type1[nfiles1] = Rast_raster_map_type(name1, mapset);
-	if ((infd1[nfiles1] = Rast_open_cell_old(name1, mapset)) < 0)
+	in_data_type1[nfiles1] = Rast_map_type(name1, mapset);
+	if ((infd1[nfiles1] = Rast_open_old(name1, mapset)) < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), name1);
 	if ((Rast_get_cellhd(name1, mapset, &cellhd)) < 0)
 	    G_fatal_error(_("Unable to read file header of raster map <%s>"), name1);
@@ -237,14 +237,14 @@ int main(int argc, char *argv[])
 	}
 	if (!ok)
 	    continue;
-	infd2[nfiles2] = Rast_open_cell_old(name2, mapset);
+	infd2[nfiles2] = Rast_open_old(name2, mapset);
 	if (infd2[nfiles2] < 0) {
 	    ok = 0;
 	    continue;
 	}
 	/* Allocate input buffer */
-	in_data_type2[nfiles2] = Rast_raster_map_type(name2, mapset);
-	if ((infd2[nfiles2] = Rast_open_cell_old(name2, mapset)) < 0) {
+	in_data_type2[nfiles2] = Rast_map_type(name2, mapset);
+	if ((infd2[nfiles2] = Rast_open_old(name2, mapset)) < 0) {
 	    G_fatal_error(_("Unable to open raster map <%s>"), name2);
 	}
 	if ((Rast_get_cellhd(name2, mapset, &cellhd)) < 0) {
@@ -264,7 +264,7 @@ int main(int argc, char *argv[])
 
    
     /* Create New raster files */
-    if ((outfd = Rast_open_raster_new(result, 1)) < 0)
+    if ((outfd = Rast_open_new(result, 1)) < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), result);
 
     /*******************/

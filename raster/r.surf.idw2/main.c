@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
     else
 	mask = NULL;
 
-    fd = Rast_open_cell_new(parm.output->answer);
+    fd = Rast_open_c_new(parm.output->answer);
     if (fd < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"),
 		      parm.output->answer);

@@ -83,7 +83,7 @@ int close_array_seg(void)
 
     /* stream segments map */
     if (seg_flag) {
-	map_fd = Rast_open_cell_new(seg_name);
+	map_fd = Rast_open_c_new(seg_name);
 	for (r = 0; r < nrows; r++) {
 	    Rast_set_c_null_value(cellrow, ncols);	/* reset row to all NULL */
 	    for (c = 0; c < ncols; c++) {
@@ -99,7 +99,7 @@ int close_array_seg(void)
 
     /* basins map */
     if (bas_flag) {
-	map_fd = Rast_open_cell_new(bas_name);
+	map_fd = Rast_open_c_new(bas_name);
 	for (r = 0; r < nrows; r++) {
 	    for (c = 0; c < ncols; c++) {
 		cellrow[c] = bas[SEG_INDEX(bas_seg, r, c)];
@@ -114,7 +114,7 @@ int close_array_seg(void)
 
     /* half_basins map */
     if (haf_flag) {
-	map_fd = Rast_open_cell_new(haf_name);
+	map_fd = Rast_open_c_new(haf_name);
 	for (r = 0; r < nrows; r++) {
 	    for (c = 0; c < ncols; c++) {
 		cellrow[c] = haf[SEG_INDEX(haf_seg, r, c)];

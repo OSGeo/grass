@@ -259,7 +259,7 @@ void df_texture(int nrows, int ncols, double **buf, double **null_buf,
     DCELL **edgemap_d, *edge_buf_d, *zscor_buf;
     RASTER_MAP_TYPE data_type;
 
-    data_type = Rast_raster_map_type(choice->fn, G_mapset());
+    data_type = Rast_map_type(choice->fn, G_mapset());
 
     /* set the contents of the arrays
        used to stored the results of the
@@ -464,7 +464,7 @@ void df_texture(int nrows, int ncols, double **buf, double **null_buf,
     /* if the edge map was requested */
 
     if (choice->edgemap) {
-	fc = Rast_open_raster_new("edge", data_type);
+	fc = Rast_open_new("edge", data_type);
 	switch (data_type) {
 	case (CELL_TYPE):
 	    edge_buf_c = Rast_allocate_buf(CELL_TYPE);
@@ -532,7 +532,7 @@ void df_texture(int nrows, int ncols, double **buf, double **null_buf,
     /* if the zscore map was requested */
 
     if (choice->z) {
-	fd = Rast_open_raster_new("zscores", DCELL_TYPE);
+	fd = Rast_open_new("zscores", DCELL_TYPE);
 	zscor_buf = Rast_allocate_buf(DCELL_TYPE);
 	for (i = 1; i < nrows + 1; i++) {
 	    Rast_zero_raster_buf(zscor_buf, DCELL_TYPE);

@@ -389,8 +389,8 @@ int main(int argc, char **argv)
     /* open and read the relevant parts of the input map and close it */
     G__switch_env();
     Rast_set_window(&incellhd);
-    fdi = Rast_open_cell_old(inmap->answer, setname);
-    cell_type = Rast_get_raster_map_type(fdi);
+    fdi = Rast_open_old(inmap->answer, setname);
+    cell_type = Rast_get_map_type(fdi);
     ibuffer = readcell(fdi, memory->answer);
     Rast_close(fdi);
 
@@ -398,11 +398,11 @@ int main(int argc, char **argv)
     Rast_set_window(&outcellhd);
 
     if (strcmp(interpol->answer, "nearest") == 0) {
-	fdo = Rast_open_raster_new(mapname, cell_type);
+	fdo = Rast_open_new(mapname, cell_type);
 	obuffer = (CELL *) Rast_allocate_buf(cell_type);
     }
     else {
-	fdo = Rast_open_fp_cell_new(mapname);
+	fdo = Rast_open_fp_new(mapname);
 	cell_type = FCELL_TYPE;
 	obuffer = (FCELL *) Rast_allocate_buf(cell_type);
     }

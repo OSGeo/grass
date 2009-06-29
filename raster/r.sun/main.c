@@ -515,9 +515,9 @@ int INPUT(void)
 
     }
 
-    fd1 = Rast_open_cell_old(elevin, "");
-    fd2 = Rast_open_cell_old(aspin, "");
-    fd3 = Rast_open_cell_old(slopein, "");
+    fd1 = Rast_open_old(elevin, "");
+    fd2 = Rast_open_old(aspin, "");
+    fd3 = Rast_open_old(slopein, "");
 
     if (linkein != NULL) {
 	cell4 = Rast_allocate_f_buf();
@@ -525,7 +525,7 @@ int INPUT(void)
 	for (l = 0; l < m; l++)
 	    li[l] = (float *)G_malloc(sizeof(float) * (n));
 
-	fd4 = Rast_open_cell_old(linkein, "");
+	fd4 = Rast_open_old(linkein, "");
     }
 
     if (albedo != NULL) {
@@ -534,7 +534,7 @@ int INPUT(void)
 	for (l = 0; l < m; l++)
 	    a[l] = (float *)G_malloc(sizeof(float) * (n));
 
-	fd5 = Rast_open_cell_old(albedo, "");
+	fd5 = Rast_open_old(albedo, "");
     }
 
     if (latin != NULL) {
@@ -543,7 +543,7 @@ int INPUT(void)
 	for (l = 0; l < m; l++)
 	    la[l] = (float *)G_malloc(sizeof(float) * (n));
 
-	fd6 = Rast_open_cell_old(latin, "");
+	fd6 = Rast_open_old(latin, "");
     }
 
     if (coefbh != NULL) {
@@ -552,7 +552,7 @@ int INPUT(void)
 	for (l = 0; l < m; l++)
 	    cbhr[l] = (float *)G_malloc(sizeof(float) * (n));
 
-	fr1 = Rast_open_cell_old(coefbh, "");
+	fr1 = Rast_open_old(coefbh, "");
     }
 
     if (coefdh != NULL) {
@@ -561,7 +561,7 @@ int INPUT(void)
 	for (l = 0; l < m; l++)
 	    cdhr[l] = (float *)G_malloc(sizeof(float) * (n));
 
-	fr2 = Rast_open_cell_old(coefdh, "");
+	fr2 = Rast_open_old(coefdh, "");
     }
 
 
@@ -697,35 +697,35 @@ int OUTGR(void)
 
     if (incidout != NULL) {
 	cell7 = Rast_allocate_f_buf();
-	fd7 = Rast_open_fp_cell_new(incidout);
+	fd7 = Rast_open_fp_new(incidout);
 	if (fd7 < 0)
 	    G_fatal_error(_("Unable to create raster map %s"), incidout);
     }
 
     if (beam_rad != NULL) {
 	cell8 = Rast_allocate_f_buf();
-	fd8 = Rast_open_fp_cell_new(beam_rad);
+	fd8 = Rast_open_fp_new(beam_rad);
 	if (fd8 < 0)
 	    G_fatal_error(_("Unable to create raster map %s"), beam_rad);
     }
 
     if (insol_time != NULL) {
 	cell11 = Rast_allocate_f_buf();
-	fd11 = Rast_open_fp_cell_new(insol_time);
+	fd11 = Rast_open_fp_new(insol_time);
 	if (fd11 < 0)
 	    G_fatal_error(_("Unable to create raster map %s"), insol_time);
     }
 
     if (diff_rad != NULL) {
 	cell9 = Rast_allocate_f_buf();
-	fd9 = Rast_open_fp_cell_new(diff_rad);
+	fd9 = Rast_open_fp_new(diff_rad);
 	if (fd9 < 0)
 	    G_fatal_error(_("Unable to create raster map %s"), diff_rad);
     }
 
     if (refl_rad != NULL) {
 	cell10 = Rast_allocate_f_buf();
-	fd10 = Rast_open_fp_cell_new(refl_rad);
+	fd10 = Rast_open_fp_new(refl_rad);
 	if (fd10 < 0)
 	    G_fatal_error(_("Unable to create raster map %s"), refl_rad);
     }

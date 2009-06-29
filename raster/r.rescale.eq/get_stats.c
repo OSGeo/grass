@@ -10,7 +10,7 @@ int get_stats(const char *name, struct Cell_stats *statf)
     CELL *cell;
     int row, nrows, ncols;
 
-    fd = Rast_open_cell_old(name, "");
+    fd = Rast_open_old(name, "");
     if (fd < 0)
 	exit(1);
     nrows = G_window_rows();

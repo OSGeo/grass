@@ -12,7 +12,7 @@ int bseg_write_cellfile(BSEG * bseg, char *map_name)
     CELL *buffer;
     CELL value;
 
-    map_fd = Rast_open_cell_new(map_name);
+    map_fd = Rast_open_c_new(map_name);
     if (map_fd < 0) {
 	G_warning("%s(): unable to open new map layer [%s]", me, map_name);
 	return -1;

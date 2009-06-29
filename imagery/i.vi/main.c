@@ -210,36 +210,36 @@ int main(int argc, char *argv[])
                 || !(input6->answer) || !(input7->answer)) )
 	G_fatal_error(_("gvi index requires blue, green, red, nir, chan5 and chan7 maps"));
 
-    if ((infd_redchan = Rast_open_cell_old(redchan, "")) < 0)
+    if ((infd_redchan = Rast_open_old(redchan, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), redchan);
     inrast_redchan = Rast_allocate_d_buf();
 
     if (nirchan) {
-        if ((infd_nirchan = Rast_open_cell_old(nirchan, "")) < 0)
+        if ((infd_nirchan = Rast_open_old(nirchan, "")) < 0)
             G_fatal_error(_("Unable to open raster map <%s>"), nirchan);
         inrast_nirchan = Rast_allocate_d_buf();
     }
 
     if (greenchan) {
-	if ((infd_greenchan = Rast_open_cell_old(greenchan, "")) < 0)
+	if ((infd_greenchan = Rast_open_old(greenchan, "")) < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), greenchan);
 	inrast_greenchan = Rast_allocate_d_buf();
     }
 
     if (bluechan) {
-	if ((infd_bluechan = Rast_open_cell_old(bluechan, "")) < 0)
+	if ((infd_bluechan = Rast_open_old(bluechan, "")) < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), bluechan);
 	inrast_bluechan = Rast_allocate_d_buf();
     }
 
     if (chan5chan) {
-	if ((infd_chan5chan = Rast_open_cell_old(chan5chan, "")) < 0)
+	if ((infd_chan5chan = Rast_open_old(chan5chan, "")) < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), chan5chan);
 	inrast_chan5chan = Rast_allocate_d_buf();
     }
 
     if (chan7chan) {
-	if ((infd_chan7chan = Rast_open_cell_old(chan7chan, "")) < 0)
+	if ((infd_chan7chan = Rast_open_old(chan7chan, "")) < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), chan7chan);
 	inrast_chan7chan = Rast_allocate_d_buf();
     }
@@ -249,7 +249,7 @@ int main(int argc, char *argv[])
     outrast = Rast_allocate_d_buf();
 
     /* Create New raster files */ 
-    if ((outfd = Rast_open_raster_new(result, DCELL_TYPE)) < 0)
+    if ((outfd = Rast_open_new(result, DCELL_TYPE)) < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), result);
 
     /* Process pixels */ 

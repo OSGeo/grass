@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
     List = Vect_new_list();
 
     /*open the new cellfile */
-    out_fd = Rast_open_raster_new(out_opt->answer, CELL_TYPE);
+    out_fd = Rast_open_new(out_opt->answer, CELL_TYPE);
     if (out_fd < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), out_opt->answer);
 

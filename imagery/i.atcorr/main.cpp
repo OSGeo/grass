@@ -590,7 +590,7 @@ int main(int argc, char* argv[])
     /* open input raster */
     if ( (iimg_mapset = G_find_cell2 ( opts.iimg->answer, "") ) == NULL )
 	G_fatal_error ( _("Raster map <%s> not found"), opts.iimg->answer);
-    if((iimg_fd = Rast_open_cell_old(opts.iimg->answer, iimg_mapset)) < 0)
+    if((iimg_fd = Rast_open_old(opts.iimg->answer, iimg_mapset)) < 0)
 	G_fatal_error (_("Unable to open raster map <%s>"),
 		       G_fully_qualified_name(opts.iimg->answer, iimg_mapset));
 
@@ -599,7 +599,7 @@ int main(int argc, char* argv[])
     if(opts.ialt->answer) {
 	if ( (ialt_mapset = G_find_cell2 ( opts.ialt->answer, "") ) == NULL )
 	    G_fatal_error ( _("Raster map <%s> not found"), opts.ialt->answer);
-	if((ialt_fd = Rast_open_cell_old(opts.ialt->answer, ialt_mapset)) < 0)
+	if((ialt_fd = Rast_open_old(opts.ialt->answer, ialt_mapset)) < 0)
             G_fatal_error (_("Unable to open raster map <%s>"),
 			   G_fully_qualified_name(opts.ialt->answer, ialt_mapset));
     }
@@ -607,7 +607,7 @@ int main(int argc, char* argv[])
     if(opts.ivis->answer) {
 	if ( (iviz_mapset = G_find_cell2 ( opts.ivis->answer, "") ) == NULL )
 	    G_fatal_error ( _("Raster map <%s> not found"), opts.ivis->answer);
-	if((ivis_fd = Rast_open_cell_old(opts.ivis->answer, iviz_mapset)) < 0)
+	if((ivis_fd = Rast_open_old(opts.ivis->answer, iviz_mapset)) < 0)
             G_fatal_error (_("Unable to open raster map <%s>"),
 			   G_fully_qualified_name(opts.ivis->answer, iviz_mapset));
     }
@@ -615,13 +615,13 @@ int main(int argc, char* argv[])
     /* open a floating point raster or not? */
     if(opts.oflt->answer)
     {
-	if((oimg_fd = Rast_open_fp_cell_new(opts.oimg->answer)) < 0)
+	if((oimg_fd = Rast_open_fp_new(opts.oimg->answer)) < 0)
 	    G_fatal_error (_("Unable to create raster map <%s>"),
 			   opts.oimg->answer);
     }
     else
     {
-	if((oimg_fd = Rast_open_raster_new(opts.oimg->answer, CELL_TYPE)) < 0)
+	if((oimg_fd = Rast_open_new(opts.oimg->answer, CELL_TYPE)) < 0)
 	    G_fatal_error (_("Unable to create raster map <%s>"),
 			   opts.oimg->answer);
     }

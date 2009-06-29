@@ -18,7 +18,7 @@ int get_range(const char *name, long *min, long *max)
 	Rast_get_cellhd(name, "", &cellhd);
 	Rast_set_window(&cellhd);
 	cell = Rast_allocate_c_buf();
-	fd = Rast_open_cell_old(name, "");
+	fd = Rast_open_old(name, "");
 	if (fd < 0)
 	    exit(1);
 	nrows = G_window_rows();

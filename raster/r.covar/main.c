@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
 	sum2[i] = (double *)G_calloc(nfiles, sizeof(double));
 	dcell[i] = Rast_allocate_d_buf();
 	name = maps->answers[i];
-	fd[i] = Rast_open_cell_old(name, "");
+	fd[i] = Rast_open_old(name, "");
 	if (fd[i] < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), name);
     }

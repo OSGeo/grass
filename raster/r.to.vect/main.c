@@ -115,10 +115,10 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("z flag is supported only for points"));
 
     /* Open files */
-    if ((input_fd = Rast_open_cell_old(in_opt->answer, "")) < 0)
+    if ((input_fd = Rast_open_old(in_opt->answer, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), in_opt->answer);
 
-    data_type = Rast_get_raster_map_type(input_fd);
+    data_type = Rast_get_map_type(input_fd);
     data_size = Rast_cell_size(data_type);
     G_get_window(&cell_head);
 

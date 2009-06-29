@@ -125,7 +125,7 @@ int main(int argc, char *argv[])
     if (mapset == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), name);
 
-    map_type = Rast_raster_map_type(name, mapset);
+    map_type = Rast_map_type(name, mapset);
 
 
     /* create category labels */
@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
 		G_fatal_error(_("Raster map <%s> not found"),
 			      parm.raster->answer);
 
-	    if ((fd = Rast_open_cell_old(name, mapset)) < 0)
+	    if ((fd = Rast_open_old(name, mapset)) < 0)
 		G_fatal_error(_("Unable to open raster map <%s>"), name);
 
 	    Rast_init_cats("", &cats);

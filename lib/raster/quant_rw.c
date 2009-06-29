@@ -187,7 +187,7 @@ int Rast_write_quant(const char *name, const char *mapset,
     CELL cell_min, cell_max;
     DCELL d_min, d_max;
 
-    if (Rast_raster_map_type(name, mapset) == CELL_TYPE) {
+    if (Rast_map_type(name, mapset) == CELL_TYPE) {
 	G_warning(_("Unable to write quant rules: raster map <%s> is integer"),
 		  name);
 	return -1;

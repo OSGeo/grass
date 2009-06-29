@@ -465,7 +465,7 @@ int main(int argc, char *argv[])
     /*  Open input cell layers for reading  */
 
     fuel_fd =
-	Rast_open_cell_old(parm.model->answer,
+	Rast_open_old(parm.model->answer,
 			G_find_cell2(parm.model->answer, ""));
     if (fuel_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"),
@@ -473,7 +473,7 @@ int main(int argc, char *argv[])
 
     if (parm.mois_1h->answer) {
 	mois_1h_fd =
-	    Rast_open_cell_old(parm.mois_1h->answer,
+	    Rast_open_old(parm.mois_1h->answer,
 			    G_find_cell2(parm.mois_1h->answer, ""));
 	if (mois_1h_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
@@ -481,7 +481,7 @@ int main(int argc, char *argv[])
     }
     if (parm.mois_10h->answer) {
 	mois_10h_fd =
-	    Rast_open_cell_old(parm.mois_10h->answer,
+	    Rast_open_old(parm.mois_10h->answer,
 			    G_find_cell2(parm.mois_10h->answer, ""));
 	if (mois_10h_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
@@ -489,7 +489,7 @@ int main(int argc, char *argv[])
     }
     if (parm.mois_100h->answer) {
 	mois_100h_fd =
-	    Rast_open_cell_old(parm.mois_100h->answer,
+	    Rast_open_old(parm.mois_100h->answer,
 			    G_find_cell2(parm.mois_100h->answer, ""));
 	if (mois_100h_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
@@ -497,7 +497,7 @@ int main(int argc, char *argv[])
     }
 
     mois_live_fd =
-	Rast_open_cell_old(parm.mois_live->answer,
+	Rast_open_old(parm.mois_live->answer,
 			G_find_cell2(parm.mois_live->answer, ""));
     if (mois_live_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"),
@@ -505,7 +505,7 @@ int main(int argc, char *argv[])
 
     if (parm.vel->answer) {
 	vel_fd =
-	    Rast_open_cell_old(parm.vel->answer,
+	    Rast_open_old(parm.vel->answer,
 			    G_find_cell2(parm.vel->answer, ""));
 	if (vel_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
@@ -513,7 +513,7 @@ int main(int argc, char *argv[])
     }
     if (parm.dir->answer) {
 	dir_fd =
-	    Rast_open_cell_old(parm.dir->answer,
+	    Rast_open_old(parm.dir->answer,
 			    G_find_cell2(parm.dir->answer, ""));
 	if (dir_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
@@ -522,7 +522,7 @@ int main(int argc, char *argv[])
 
     if (parm.slope->answer) {
 	slope_fd =
-	    Rast_open_cell_old(parm.slope->answer,
+	    Rast_open_old(parm.slope->answer,
 			    G_find_cell2(parm.slope->answer, ""));
 	if (slope_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
@@ -530,7 +530,7 @@ int main(int argc, char *argv[])
     }
     if (parm.aspect->answer) {
 	aspect_fd =
-	    Rast_open_cell_old(parm.aspect->answer,
+	    Rast_open_old(parm.aspect->answer,
 			    G_find_cell2(parm.aspect->answer, ""));
 	if (aspect_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
@@ -539,18 +539,18 @@ int main(int argc, char *argv[])
 
     if (spotting) {
 	elev_fd =
-	    Rast_open_cell_old(parm.elev->answer,
+	    Rast_open_old(parm.elev->answer,
 			    G_find_cell2(parm.elev->answer, ""));
 	if (elev_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
 			  parm.elev->answer);
     }
 
-    base_fd = Rast_open_cell_new(name_base);
-    max_fd = Rast_open_cell_new(name_max);
-    maxdir_fd = Rast_open_cell_new(name_maxdir);
+    base_fd = Rast_open_c_new(name_base);
+    max_fd = Rast_open_c_new(name_max);
+    maxdir_fd = Rast_open_c_new(name_maxdir);
     if (spotting)
-	spotdist_fd = Rast_open_cell_new(name_spotdist);
+	spotdist_fd = Rast_open_c_new(name_spotdist);
 
     /*compute weights, combined wo, and combined sigma */
     /*wo[model] -- simple sum of WO[class][model] by all fuel subCLASS */

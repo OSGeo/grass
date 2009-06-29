@@ -21,7 +21,7 @@ int check_stats(const char *name)
     int cats_ok;
     int max;
 
-    data_type = Rast_raster_map_type(name, "");
+    data_type = Rast_map_type(name, "");
 
     G_message(_("\n  Updating statistics for [%s]"), name);
     if (do_histogram(name) < 0)

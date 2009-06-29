@@ -259,14 +259,14 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
     /* init raster categories */
     Rast_init_cats("Categories", &rast_cats);
 
-    if (!(fd = Rast_open_cell_old(rast_name, G_mapset())))
+    if (!(fd = Rast_open_old(rast_name, G_mapset())))
 	G_fatal_error(_("Unable to open raster map <%s>"), rast_name);
 
     switch (use) {
     case USE_ATTR:
 	{
 	    Rast_set_cats_title("Labels", &rast_cats);
-	    int is_fp = Rast_raster_map_is_fp(rast_name, G_mapset());
+	    int is_fp = Rast_map_is_fp(rast_name, G_mapset());
 
 	    /* open vector map and database driver */
 	    Vect_open_old(&Map, vector_map, G_find_vector2(vector_map, ""));
@@ -383,7 +383,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 	    struct FPRange fprange;
 	    struct Range range;
 
-	    map_type = Rast_raster_map_type(rast_name, G_mapset());
+	    map_type = Rast_map_type(rast_name, G_mapset());
 	    Rast_set_cats_title("Values", &rast_cats);
 
 	    if (map_type == CELL_TYPE) {
@@ -416,10 +416,10 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 	    RASTER_MAP_TYPE map_type;
 	    long count;
 
-	    if (!(fd = Rast_open_cell_old(rast_name, G_mapset())))
+	    if (!(fd = Rast_open_old(rast_name, G_mapset())))
 		G_fatal_error(_("Unable to open raster map <%s>"), rast_name);
 
-	    map_type = Rast_raster_map_type(rast_name, G_mapset());
+	    map_type = Rast_map_type(rast_name, G_mapset());
 
 	    if (!(rowbuf = Rast_allocate_buf(map_type)))
 		G_fatal_error(_("Cannot allocate memory for row buffer"));
@@ -456,7 +456,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 	    int i;
 	    char msg[64];
 
-	    map_type = Rast_raster_map_type(rast_name, G_mapset());
+	    map_type = Rast_map_type(rast_name, G_mapset());
 	    Rast_set_cats_title("Degrees", &rast_cats);
 
 	    for (i = 1; i <= 360; i++) {

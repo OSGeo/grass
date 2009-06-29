@@ -101,12 +101,12 @@ int main(int argc, char *argv[])
     Cellmap_orig = opt.orig->answer;
 
     /* open input raster map */
-    realfd = Rast_open_cell_old(Cellmap_real, "");
+    realfd = Rast_open_old(Cellmap_real, "");
     if (realfd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"),
 		      Cellmap_real);
 
-    imagfd = Rast_open_cell_old(Cellmap_imag, "");
+    imagfd = Rast_open_old(Cellmap_imag, "");
     if (imagfd < 0)	
 	G_fatal_error(_("Unable to open raster map <%s>"),
 		      Cellmap_imag);
@@ -212,7 +212,7 @@ int main(int argc, char *argv[])
     fft2(1, data, totsize, cols, rows);
 
     /* open the output cell map */
-    if ((outputfd = Rast_open_fp_cell_new(Cellmap_orig)) < 0)
+    if ((outputfd = Rast_open_fp_new(Cellmap_orig)) < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"),
 		      Cellmap_orig);
 

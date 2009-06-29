@@ -57,7 +57,7 @@ static int cell_draw(const char *name,
     D_set_overlay_mode(overlay);
 
     /* Make sure map is available */
-    if ((cellfile = Rast_open_cell_old(name, "")) == -1)
+    if ((cellfile = Rast_open_old(name, "")) == -1)
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
 
     /* Allocate space for cell buffer */

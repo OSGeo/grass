@@ -240,7 +240,7 @@ int main(int argc, char **argv)
 	/* check and open the name of output map */
 	if (!flag_q->answer) {
 	    Rast_set_fp_type(DCELL_TYPE);
-	    if ((fdout = Rast_open_raster_new(out_opt->answer, DCELL_TYPE)) < 0)
+	    if ((fdout = Rast_open_new(out_opt->answer, DCELL_TYPE)) < 0)
 		G_fatal_error(_("Unable to create raster map <%s>"),
 			      out_opt->answer);
 

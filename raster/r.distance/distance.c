@@ -88,13 +88,13 @@ int null_distance(const char *name1, const char *name2, int *zerro_row, int *zer
 
     /* NOTE: no need to controll, if the map exists. it should be checked in edge.c */
     mapset = G_find_cell2(name1, "");
-    maptype1 = Rast_raster_map_type(name1, mapset);
-    mapd1 = Rast_open_cell_old(name1, mapset);
+    maptype1 = Rast_map_type(name1, mapset);
+    mapd1 = Rast_open_old(name1, mapset);
     inrast1 = Rast_allocate_buf(maptype1);
 
     mapset = G_find_cell2(name2, "");
-    maptype2 = Rast_raster_map_type(name2, mapset);
-    mapd2 = Rast_open_cell_old(name2, mapset);
+    maptype2 = Rast_map_type(name2, mapset);
+    mapd2 = Rast_open_old(name2, mapset);
     inrast2 = Rast_allocate_buf(maptype2);
 
     G_message(_("Reading maps  <%s,%s> while finding 0 distance ..."), name1,

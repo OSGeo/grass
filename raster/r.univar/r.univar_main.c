@@ -108,7 +108,7 @@ int main(int argc, char *argv[])
 
 	    if (map_type != -1) {
 		/* NB: map_type must match when doing extended stats */
-		int this_type = Rast_get_raster_map_type(fd);
+		int this_type = Rast_get_map_type(fd);
 
 		assert(this_type > -1);
 		if (map_type < -1) {
@@ -141,7 +141,7 @@ static int open_raster(const char *infile)
 {
     int fd;
 
-    fd = Rast_open_cell_old(infile, "");
+    fd = Rast_open_old(infile, "");
     if (fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), infile);
 
@@ -173,7 +173,7 @@ process_raster(univar_stat * stats, int fd, const struct Cell_head *region)
     const int cols = region->cols;
     int first = (stats->n < 1);
 
-    const RASTER_MAP_TYPE map_type = Rast_get_raster_map_type(fd);
+    const RASTER_MAP_TYPE map_type = Rast_get_map_type(fd);
     void *nextp
 	= ((!param.extended->answer) ? 0
 	   : (map_type == DCELL_TYPE) ? (void *)stats->dcell_array

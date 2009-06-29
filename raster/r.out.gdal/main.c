@@ -381,7 +381,7 @@ int main(int argc, char *argv[])
     /* GDAL datatype not set by user, determine suitable datatype */
     if (datatype == GDT_Unknown) {
 	/* Use raster data type from first GRASS raster in a group */
-	maptype = Rast_raster_map_type(ref.file[0].name, ref.file[0].mapset);
+	maptype = Rast_map_type(ref.file[0].name, ref.file[0].mapset);
 	if (maptype == FCELL_TYPE) {
 	    datatype = GDT_Float32;
 	}
@@ -430,7 +430,7 @@ int main(int argc, char *argv[])
 	/* Precision tests */
 	for (band = 0; band < ref.nfiles; band++) {
 	    testmaptype =
-		Rast_raster_map_type(ref.file[band].name, ref.file[band].mapset);
+		Rast_map_type(ref.file[band].name, ref.file[band].mapset);
 	    /* Exporting floating point rasters to some integer type ? */
 	    if ((testmaptype == FCELL_TYPE || testmaptype == DCELL_TYPE) &&
 		(datatype == GDT_Byte || datatype == GDT_Int16 ||

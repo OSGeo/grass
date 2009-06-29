@@ -62,7 +62,7 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
      * G_set_embedded_null_value_mode(1);
      */
     if (params->elev != NULL) {
-	cf1 = Rast_open_fp_cell_new(params->elev);
+	cf1 = Rast_open_fp_new(params->elev);
 	if (cf1 < 0) {
 	    G_warning(_("Unable to create raster map <%s>"), params->elev);
 	    return -1;
@@ -70,7 +70,7 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
     }
 
     if (params->slope != NULL) {
-	cf2 = Rast_open_fp_cell_new(params->slope);
+	cf2 = Rast_open_fp_new(params->slope);
 	if (cf2 < 0) {
 	    G_warning(_("Unable to create raster map <%s>"),
 		      params->slope);
@@ -79,7 +79,7 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
     }
 
     if (params->aspect != NULL) {
-	cf3 = Rast_open_fp_cell_new(params->aspect);
+	cf3 = Rast_open_fp_new(params->aspect);
 	if (cf3 < 0) {
 	    G_warning(_("Unable to create raster map <%s>"),
 		    params->aspect);
@@ -88,7 +88,7 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
     }
 
     if (params->pcurv != NULL) {
-	cf4 = Rast_open_fp_cell_new(params->pcurv);
+	cf4 = Rast_open_fp_new(params->pcurv);
 	if (cf4 < 0) {
 	    G_warning(_("Unable to create raster map <%s>"),
 		      params->pcurv);
@@ -97,7 +97,7 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
     }
 
     if (params->tcurv != NULL) {
-	cf5 = Rast_open_fp_cell_new(params->tcurv);
+	cf5 = Rast_open_fp_new(params->tcurv);
 	if (cf5 < 0) {
 	    G_warning(_("Unable to create raster map <%s>"),
 		      params->tcurv);
@@ -106,7 +106,7 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
     }
 
     if (params->mcurv != NULL) {
-	cf6 = Rast_open_fp_cell_new(params->mcurv);
+	cf6 = Rast_open_fp_new(params->mcurv);
 	if (cf6 < 0) {
 	    G_warning(_("Unable to create raster map <%s>"),
 		      params->mcurv);

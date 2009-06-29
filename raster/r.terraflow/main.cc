@@ -208,7 +208,7 @@ void check_header(char* cellname) {
 
   /* check type of input elevation raster and check if precision is lost */
     RASTER_MAP_TYPE data_type;
-	data_type = Rast_raster_map_type(opt->elev_grid, mapset);
+	data_type = Rast_map_type(opt->elev_grid, mapset);
 #ifdef ELEV_SHORT
 	G_verbose_message(_("Elevation stored as SHORT (%dB)"),
 		sizeof(elevation_type));

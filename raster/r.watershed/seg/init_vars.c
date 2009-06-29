@@ -187,12 +187,12 @@ int init_vars(int argc, char *argv[])
     G_verbose_message("Checking for masked and NULL cells in input elevation <%s>", ele_name);
 
     /* open elevation input */
-    fd = Rast_open_cell_old(ele_name, "");
+    fd = Rast_open_old(ele_name, "");
     if (fd < 0) {
 	G_fatal_error(_("unable to open elevation map layer"));
     }
 
-    ele_map_type = Rast_get_raster_map_type(fd);
+    ele_map_type = Rast_get_map_type(fd);
     ele_size = Rast_cell_size(ele_map_type);
     elebuf = Rast_allocate_buf(ele_map_type);
 
@@ -274,7 +274,7 @@ int init_vars(int argc, char *argv[])
     cseg_open(&asp, seg_rows, seg_cols, num_open_segs);
     /* depression: drainage direction will be set to zero later */
     if (pit_flag) {
-	fd = Rast_open_cell_old(pit_name, "");
+	fd = Rast_open_old(pit_name, "");
 	if (fd < 0) {
 	    G_fatal_error(_("unable to open depression map layer"));
 	}
@@ -303,7 +303,7 @@ int init_vars(int argc, char *argv[])
     }
     bseg_open(&swale, seg_rows, seg_cols, num_open_segs);
     if (ob_flag) {
-	fd = Rast_open_cell_old(ob_name, "");
+	fd = Rast_open_old(ob_name, "");
 	if (fd < 0) {
 	    G_fatal_error(_("unable to open blocking map layer"));
 	}

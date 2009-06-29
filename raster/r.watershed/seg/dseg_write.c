@@ -11,7 +11,7 @@ int dseg_write_cellfile(DSEG * dseg, char *map_name)
     int row, nrows, ncols;
     double *dbuffer;
 
-    map_fd = Rast_open_raster_new(map_name, DCELL_TYPE);
+    map_fd = Rast_open_new(map_name, DCELL_TYPE);
     if (map_fd < 0) {
 	G_warning("%s(): unable to open new map layer [%s]", me, map_name);
 	return -1;

@@ -87,14 +87,14 @@ int main(int argc, char *argv[])
 	Rast_init_cats(Rast_get_cats_title(&cats), &newcats);
     }
 
-    infd = Rast_open_cell_old(name, "");
+    infd = Rast_open_old(name, "");
     if (infd < 0)
 	G_fatal_error(_("Unable to open input map <%s>"), name);
 
     /* determine the map type;
        data_type is the type of data being processed,
        out_type is the type of map being created. */
-    data_type = Rast_get_raster_map_type(infd);
+    data_type = Rast_get_map_type(infd);
     out_type = data_type;
 
     if (Rast_get_cellhd(name, "", &cellhd) < 0)
@@ -108,7 +108,7 @@ int main(int argc, char *argv[])
 	rast = G_realloc(rast, 2 * Rast_cell_size(data_type));
     /* we need the buffer at least 2 cells large */
 
-    outfd = Rast_open_raster_new(result, out_type);
+    outfd = Rast_open_new(result, out_type);
     Rast_set_null_value(rast, ncols, out_type);
 
     if (outfd < 0)

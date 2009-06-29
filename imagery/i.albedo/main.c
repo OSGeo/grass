@@ -150,13 +150,13 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Too many input maps. Only %d allowed."), MAXFILES);
 	name = *ptr;
 	
-	infd[nfiles] = Rast_open_cell_old(name, "");
+	infd[nfiles] = Rast_open_old(name, "");
 	if (infd[nfiles] < 0)
 	    continue;
 
 	/* Allocate input buffer */
-	in_data_type[nfiles] = Rast_raster_map_type(name, "");
-	if ((infd[nfiles] = Rast_open_cell_old(name, "")) < 0)
+	in_data_type[nfiles] = Rast_map_type(name, "");
+	if ((infd[nfiles] = Rast_open_old(name, "")) < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), name);
 
 	if ((Rast_get_cellhd(name, "", &cellhd)) < 0)
@@ -175,7 +175,7 @@ int main(int argc, char *argv[])
     outrast = Rast_allocate_buf(out_data_type);
 
     /* Create New raster files */
-    if ((outfd = Rast_open_raster_new(result, 1)) < 0)
+    if ((outfd = Rast_open_new(result, 1)) < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), result);
 
     /*START ALBEDO HISTOGRAM STRETCH */

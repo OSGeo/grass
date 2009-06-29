@@ -102,7 +102,7 @@ void mov_wind(int t, int b, int l, int r, char *n1, char *n2, char *n3,
 	fprintf(stderr,
 		"    If a MASK is present there will be no warning.\n");
 
-	fmask = Rast_open_cell_old("MASK", G_mapset());
+	fmask = Rast_open_old("MASK", G_mapset());
 	fprintf(stderr, "\n");
 
 

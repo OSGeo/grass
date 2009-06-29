@@ -97,7 +97,7 @@ int main(int argc, char **argv)
 	exit(EXIT_FAILURE);
 
     map_name = opt1->answer;
-    fp = Rast_raster_map_is_fp(map_name, "");
+    fp = Rast_map_is_fp(map_name, "");
 
     if (opt2->answer != NULL) {
 	new_colr = D_translate_color(opt2->answer);
