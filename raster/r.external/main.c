@@ -337,7 +337,7 @@ static void query_band(GDALRasterBandH hBand, const char *output, int exact_rang
 	    if (sEntry.c4 == 0)
 		continue;
 
-	    Rast_set_color(i, sEntry.c1, sEntry.c2, sEntry.c3, &info->colors);
+	    Rast_set_c_color(i, sEntry.c1, sEntry.c2, sEntry.c3, &info->colors);
 	}
     }
     else {

@@ -54,7 +54,7 @@ int support(char **names,
 		    }
 		    if (do_colr) {
 			Rast_get_c_color(&n, &red, &grn, &blu, &pcolr);
-			Rast_set_color(n, red, grn, blu, colr);
+			Rast_set_c_color(n, red, grn, blu, colr);
 		    }
 		}
 	}

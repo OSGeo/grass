@@ -123,7 +123,7 @@ interact(struct Categories *categories, struct Colors *colors, char *name,
 		cur_grn = grn_hi;
 		cur_blu = blu_hi;
 		if (hi_save_mode) {
-		    Rast_set_color(at_cat, cur_red, cur_grn, cur_blu, colors);
+		    Rast_set_c_color(at_cat, cur_red, cur_grn, cur_blu, colors);
 		    colors_changed = 1;
 		}
 	    }
@@ -166,7 +166,7 @@ interact(struct Categories *categories, struct Colors *colors, char *name,
 		cur_grn = grn_hi;
 		cur_blu = blu_hi;
 		if (hi_save_mode) {
-		    Rast_set_color(at_cat, cur_red, cur_grn, cur_blu, colors);
+		    Rast_set_c_color(at_cat, cur_red, cur_grn, cur_blu, colors);
 		    colors_changed = 1;
 		}
 	    }
@@ -192,7 +192,7 @@ interact(struct Categories *categories, struct Colors *colors, char *name,
 		    cur_blu = shift_color(cur_blu, shift_incr);
 		    break;
 		}
-		Rast_set_color(at_cat, cur_red, cur_grn, cur_blu, colors);
+		Rast_set_c_color(at_cat, cur_red, cur_grn, cur_blu, colors);
 		colors_changed = 1;
 	    }
 	    WRITE_STATUS;
@@ -212,7 +212,7 @@ interact(struct Categories *categories, struct Colors *colors, char *name,
 		cur_grn = grn_hi;
 		cur_blu = blu_hi;
 		if (hi_save_mode)
-		    Rast_set_color(at_cat, cur_red, cur_grn, cur_blu, colors);
+		    Rast_set_c_color(at_cat, cur_red, cur_grn, cur_blu, colors);
 	    }
 	    colors_changed = 1;
 	    WRITE_STATUS;
@@ -224,7 +224,7 @@ interact(struct Categories *categories, struct Colors *colors, char *name,
 		cur_grn = grn_hi;
 		cur_blu = blu_hi;
 		if (hi_save_mode)
-		    Rast_set_color(at_cat, cur_red, cur_grn, cur_blu, colors);
+		    Rast_set_c_color(at_cat, cur_red, cur_grn, cur_blu, colors);
 	    }
 	    colors_changed = 1;
 	    WRITE_STATUS;
@@ -244,7 +244,7 @@ interact(struct Categories *categories, struct Colors *colors, char *name,
 		cur_grn = grn_hi;
 		cur_blu = blu_hi;
 		if (hi_save_mode)
-		    Rast_set_color(at_cat, cur_red, cur_grn, cur_blu, colors);
+		    Rast_set_c_color(at_cat, cur_red, cur_grn, cur_blu, colors);
 	    }
 	    colors_changed = 1;
 	    break;
@@ -261,7 +261,7 @@ interact(struct Categories *categories, struct Colors *colors, char *name,
 		cur_blu = blu_hi;
 		hi_mode = 1;
 		if (cur_char == 'H') {
-		    Rast_set_color(at_cat, cur_red, cur_grn, cur_blu, colors);
+		    Rast_set_c_color(at_cat, cur_red, cur_grn, cur_blu, colors);
 		    hi_save_mode = 1;
 		    colors_changed = 1;
 		}

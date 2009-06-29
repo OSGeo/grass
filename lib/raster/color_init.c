@@ -17,7 +17,7 @@
  * \brief Initialize color structure
  *
  * The <i>colors</i> structure is initialized for subsequent calls
- * to Rast_add_c_color_rule() and Rast_set_color().
+ * to Rast_add_c_color_rule() and Rast_set_c_color().
  *
  * \param colors pointer to Colors structure
  */

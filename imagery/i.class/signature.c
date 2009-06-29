@@ -300,7 +300,7 @@ int display_signature(void)
 
     /* generate and write the color table for the mask */
     Rast_init_colors(&mask_colors);
-    Rast_set_color((CELL) 1, Color_table[Display_color].red,
+    Rast_set_c_color((CELL) 1, Color_table[Display_color].red,
 		Color_table[Display_color].grn,
 		Color_table[Display_color].blue, &mask_colors);
     Rast_write_colors(MASK, G_mapset(), &mask_colors);

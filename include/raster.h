@@ -221,7 +221,7 @@ void Rast_make_colors(struct Colors *, const char *, CELL, CELL);
 void Rast_make_fp_colors(struct Colors *, const char *, DCELL, DCELL);
 
 /* color_set.c */
-void Rast_set_color(CELL, int, int, int, struct Colors *);
+void Rast_set_c_color(CELL, int, int, int, struct Colors *);
 void Rast_set_d_color(DCELL, int, int, int, struct Colors *);
 void Rast_set_null_value_color(int, int, int, struct Colors *);
 void Rast_set_default_color(int, int, int, struct Colors *);
