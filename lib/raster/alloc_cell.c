@@ -56,9 +56,6 @@ void *Rast_allocate_buf(RASTER_MAP_TYPE data_type)
 }
 
 /*!
- * \brief Allocates memory for a raster map of type CELL.
- *
-/*!
  * \brief Allocate memory for a CELL type raster map.
  *
  * Allocate an array of CELL based on the number of columns in the
