@@ -907,7 +907,7 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 	    if (sEntry.c4 == 0)
 		continue;
 
-	    Rast_set_color(iColor, sEntry.c1, sEntry.c2, sEntry.c3, &colors);
+	    Rast_set_c_color(iColor, sEntry.c1, sEntry.c2, sEntry.c3, &colors);
 	}
 
 	Rast_write_colors((char *)output, G_mapset(), &colors);

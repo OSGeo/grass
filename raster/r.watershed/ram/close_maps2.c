@@ -36,7 +36,7 @@ int close_array_seg(void)
 	Rast_make_random_colors(&colors, 1, max);
 
 	if (max < 10000) {
-	    Rast_set_color((CELL) 0, 0, 0, 0, &colors);
+	    Rast_set_c_color((CELL) 0, 0, 0, 0, &colors);
 	    r = 1;
 	    incr = 0;
 	    while (incr >= 0) {
@@ -51,7 +51,7 @@ int close_array_seg(void)
 				   rule to override it */
 				if ((blue * .11 + red * .30 + green * .59) <
 				    100) {
-				    Rast_set_color(r, rd, gr, bl, &colors);
+				    Rast_set_c_color(r, rd, gr, bl, &colors);
 				    flag = 0;
 				}
 				if (++r > max) {

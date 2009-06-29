@@ -69,7 +69,7 @@ int make_gray_scale(struct Colors *gray)
     Rast_init_colors(gray);
 
     for (i = 0; i < 256; i++)
-	Rast_set_color((CELL) i, i, i, i, gray);
+	Rast_set_c_color((CELL) i, i, i, i, gray);
 
     return 0;
 }

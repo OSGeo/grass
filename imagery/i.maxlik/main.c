@@ -153,8 +153,8 @@ int main(int argc, char *argv[])
 
 	Rast_make_grey_scale_colors(&colr, (CELL) 1, (CELL) 16);
 
-	Rast_set_color((CELL) 0, 0, 255, 0, &colr);
-	Rast_set_color((CELL) 17, 255, 0, 0, &colr);
+	Rast_set_c_color((CELL) 0, 0, 255, 0, &colr);
+	Rast_set_c_color((CELL) 17, 255, 0, 0, &colr);
 	Rast_write_colors(reject_name, G_mapset(), &colr);
 	Rast_free_colors(&colr);
     }

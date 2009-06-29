@@ -38,7 +38,7 @@
  * \param b blue value
  * \param colors pointer to Colors structure which holds color info
  */
-void Rast_set_color(CELL cat, int r, int g, int b, struct Colors *colors)
+void Rast_set_c_color(CELL cat, int r, int g, int b, struct Colors *colors)
 {
     if (Rast_is_c_null_value(&cat))
 	Rast_set_null_value_color(r, g, b, colors);
@@ -49,7 +49,7 @@ void Rast_set_color(CELL cat, int r, int g, int b, struct Colors *colors)
 /*!
  * \brief Set a category color (DCELL)
  * 
- * See Rast_set_color() for detailed information.
+ * See Rast_set_c_color() for detailed information.
  *
  * \param cat raster cell value
  * \param r red value
