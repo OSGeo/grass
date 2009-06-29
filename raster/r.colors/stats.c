@@ -30,7 +30,7 @@ int get_stats(const char *name, const char *mapset, struct Cell_stats *statf)
     int row, nrows, ncols;
     int fd;
 
-    if ((fd = Rast_open_cell_old(name, mapset)) < 0)
+    if ((fd = Rast_open_old(name, mapset)) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"),
 		      G_fully_qualified_name(name, mapset));
 
@@ -63,7 +63,7 @@ void get_fp_stats(const char *name, const char *mapset,
     int row, col, nrows, ncols;
     int fd;
 
-    if ((fd = Rast_open_cell_old(name, mapset)) < 0)
+    if ((fd = Rast_open_old(name, mapset)) < 0)
 	G_fatal_error("Unable to open raster map <%s>",
 		      G_fully_qualified_name(name, mapset));
 

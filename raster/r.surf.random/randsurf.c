@@ -25,11 +25,11 @@ int randsurf(char *out,		/* Name of raster maps to be opened.    */
 
 	/****** OPEN CELL FILES AND GET CELL DETAILS ******/
     if (int_map) {
-	if ((fd_out = Rast_open_raster_new(out, CELL_TYPE)) < 0)
+	if ((fd_out = Rast_open_new(out, CELL_TYPE)) < 0)
 	    G_fatal_error(_("Unable to create raster map <%s>"), out);
     }
     else {
-	if ((fd_out = Rast_open_raster_new(out, DCELL_TYPE)) < 0)
+	if ((fd_out = Rast_open_new(out, DCELL_TYPE)) < 0)
 	    G_fatal_error(_("Unable to create raster map <%s>"), out);
     }
 

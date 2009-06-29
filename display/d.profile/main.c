@@ -60,7 +60,7 @@ static void get_region_range(int fd)
 
 static void get_map_range(void)
 {
-    if (Rast_raster_map_type(mapname, "") == CELL_TYPE) {
+    if (Rast_map_type(mapname, "") == CELL_TYPE) {
 	struct Range range;
 	CELL xmin, xmax;
 
@@ -212,7 +212,7 @@ int main(int argc, char **argv)
 
     mapname = map->answer;
 
-    fd = Rast_open_cell_old(mapname, "");
+    fd = Rast_open_old(mapname, "");
     if (fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), mapname);
 

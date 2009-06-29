@@ -232,7 +232,7 @@ int MyApp::load_files(void)
 	    name = vfiles[vnum][cnt];
 	    G_message(_("Reading file [%s]..."), name);
 
-	    fd = Rast_open_cell_old(name, "");
+	    fd = Rast_open_old(name, "");
 	    if (fd < 0)
 		G_fatal_error(_("Unable to open raster map <%s>"), name);
 	    /*

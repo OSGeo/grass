@@ -10,7 +10,7 @@ int open_cell_old(const char *name, const char *mapset)
 
     if (mapset == NULL)
 	mapset = G_find_cell2(name, "");
-    fd = Rast_open_cell_old(name, mapset);
+    fd = Rast_open_old(name, mapset);
     if (fd >= 0)
 	return fd;
 
@@ -24,7 +24,7 @@ int open_cell_new(const char *name)
 {
     int fd;
 
-    fd = Rast_open_cell_new(name);
+    fd = Rast_open_c_new(name);
     if (fd >= 0)
 	return fd;
 

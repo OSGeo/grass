@@ -169,18 +169,18 @@ int main(int argc, char **argv)
 
     method = menu[i].val;
 
-    base_fd = Rast_open_cell_old(basemap, "");
+    base_fd = Rast_open_old(basemap, "");
     if (base_fd < 0)
 	G_fatal_error(_("Unable to open base map <%s>"), basemap);
 
-    cover_fd = Rast_open_cell_old(covermap, "");
+    cover_fd = Rast_open_old(covermap, "");
     if (cover_fd < 0)
 	G_fatal_error(_("Unable to open cover map <%s>"), covermap);
 
     if (usecats && Rast_read_cats(covermap, "", &cats) < 0)
 	G_fatal_error(_("Unable to read category file of cover map <%s>"), covermap);
 
-    if (Rast_raster_map_is_fp(basemap, "") != 0)
+    if (Rast_map_is_fp(basemap, "") != 0)
 	G_fatal_error(_("The base map must be an integer (CELL) map"));
 
     if (Rast_read_range(basemap, "", &range) < 0)
@@ -497,7 +497,7 @@ int main(int argc, char **argv)
 
 	G_message(_("Writing output map"));
 
-	out_fd = Rast_open_fp_cell_new(output);
+	out_fd = Rast_open_fp_new(output);
 	if (out_fd < 0)
 	    G_fatal_error(_("Unable to open output map <%s>"), output);
 

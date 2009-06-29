@@ -22,7 +22,7 @@ int read_cell(char *name)
 
     cell = Rast_allocate_c_buf();
 
-    fd = Rast_open_cell_old(name, "");
+    fd = Rast_open_old(name, "");
     if (fd < 0) {
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
 	exit(EXIT_FAILURE);

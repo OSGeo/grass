@@ -19,7 +19,7 @@ void SaveMap(int NumMap, int MapSeed)
     
     G_debug(2, "SaveMap()");
 
-    OutFD = Rast_open_cell_new(OutNames[NumMap]);
+    OutFD = Rast_open_c_new(OutNames[NumMap]);
     if (OutFD < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"),
 		      OutNames[NumMap]);

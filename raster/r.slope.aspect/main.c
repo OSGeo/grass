@@ -441,7 +441,7 @@ int main(int argc, char *argv[])
      */
 
     /* open the elevation file for reading */
-    elevation_fd = Rast_open_cell_old(elev_name, "");
+    elevation_fd = Rast_open_old(elev_name, "");
     if (elevation_fd < 0)
 	exit(EXIT_FAILURE);
     elev_cell[0] = (DCELL *) G_calloc(ncols + 1, sizeof(DCELL));

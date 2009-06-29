@@ -282,7 +282,7 @@ int main(int argc, char *argv[])
 	int fd;
 	struct Categories cats;
 
-	if ((fd = Rast_open_cell_old(infile, "")) < 0)
+	if ((fd = Rast_open_old(infile, "")) < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), infile);
 	Rast_init_cats("", &cats);
 	if (Rast_read_cats(map_opt->answer, "", &cats) < 0)

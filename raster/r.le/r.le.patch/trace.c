@@ -105,7 +105,7 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
 
     name = choice->fn;
     mapset = G_mapset();
-    data_type = Rast_raster_map_type(name, mapset);
+    data_type = Rast_map_type(name, mapset);
 
     /* dynamically allocate storage for the
        buffer that will hold the contents of
@@ -178,7 +178,7 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
 	   categories, history, quant) into the
 	   corresponding data structures */
 
-	infd = Rast_open_cell_old(name, mapset);
+	infd = Rast_open_old(name, mapset);
 	colr_ok = Rast_read_colors(name, mapset, &colr) > 0;
 	cats_ok = Rast_read_cats(name, mapset, &cats) >= 0;
 	hist_ok = Rast_read_history(name, mapset, &hist) >= 0;
@@ -210,7 +210,7 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
 	switch (data_type) {
 	case CELL_TYPE:
 	    cor_cell_buf = Rast_allocate_buf(CELL_TYPE);
-	    fe = Rast_open_raster_new("interior", CELL_TYPE);
+	    fe = Rast_open_new("interior", CELL_TYPE);
 	    for (i = 1; i < nrows + 1; i++) {
 		Rast_zero_raster_buf(cor_cell_buf, CELL_TYPE);
 		for (j = 1; j < ncols + 1; j++)
@@ -224,7 +224,7 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
 	    break;
 	case FCELL_TYPE:
 	    cor_fcell_buf = Rast_allocate_buf(FCELL_TYPE);
-	    fe = Rast_open_raster_new("interior", FCELL_TYPE);
+	    fe = Rast_open_new("interior", FCELL_TYPE);
 	    for (i = 1; i < nrows + 1; i++) {
 		Rast_zero_raster_buf(cor_fcell_buf, FCELL_TYPE);
 		for (j = 1; j < ncols + 1; j++) {
@@ -237,7 +237,7 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
 	    break;
 	case DCELL_TYPE:
 	    cor_dcell_buf = Rast_allocate_buf(DCELL_TYPE);
-	    fe = Rast_open_raster_new("interior", DCELL_TYPE);
+	    fe = Rast_open_new("interior", DCELL_TYPE);
 	    for (i = 1; i < nrows + 1; i++) {
 		Rast_zero_raster_buf(cor_dcell_buf, DCELL_TYPE);
 		for (j = 1; j < ncols + 1; j++)
@@ -255,7 +255,7 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
        complete the details of map creation */
 
     if (choice->patchmap) {
-	fd = Rast_open_raster_new("num", CELL_TYPE);
+	fd = Rast_open_new("num", CELL_TYPE);
 	for (i = 1; i < nrows + 1; i++) {
 	    pat_buf = Rast_allocate_buf(CELL_TYPE);
 	    Rast_zero_raster_buf(pat_buf, CELL_TYPE);
@@ -510,7 +510,7 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
        an integer (CELL_TYPE) map */
 
     if (choice->wrum == 'r') {
-	if (0 > (fr = Rast_open_cell_old(choice->reg, G_mapset()))) {
+	if (0 > (fr = Rast_open_old(choice->reg, G_mapset()))) {
 	    fprintf(stderr, "\n");
 	    fprintf(stderr,
 		    "   *******************************************************\n");
@@ -524,7 +524,7 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
 		    "   *******************************************************\n");
 	    exit(EXIT_FAILURE);
 	}
-	if (Rast_raster_map_type(choice->reg, G_mapset()) > 0) {
+	if (Rast_map_type(choice->reg, G_mapset()) > 0) {
 	    fprintf(stderr, "\n");
 	    fprintf(stderr,
 		    "   *******************************************************\n");
@@ -545,7 +545,7 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
 	fprintf(stderr, "Analyzing region number %d...\n", index);
     }
 
-    data_type = Rast_raster_map_type(choice->fn, G_mapset());
+    data_type = Rast_map_type(choice->fn, G_mapset());
 
 
     /* allocate memory to store a row of the

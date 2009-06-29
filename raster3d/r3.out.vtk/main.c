@@ -98,7 +98,7 @@ int open_input_map(const char *name, const char *mapset)
 
 
     /* open raster map */
-    fd = Rast_open_cell_old(name, mapset);
+    fd = Rast_open_old(name, mapset);
 
     if (fd < 0)
 	G_fatal_error(_("Could not open map %s"), name);
@@ -469,7 +469,7 @@ int main(int argc, char *argv[])
 	name = param.top->answer;
 	mapset = G_find_cell2(name, "");
 	in->top = open_input_map(name, mapset);
-	in->topMapType = Rast_get_raster_map_type(in->top);
+	in->topMapType = Rast_get_map_type(in->top);
 
 	/*open bottom */
 	mapset = NULL;
@@ -477,7 +477,7 @@ int main(int argc, char *argv[])
 	name = param.bottom->answer;
 	mapset = G_find_cell2(name, "");
 	in->bottom = open_input_map(name, mapset);
-	in->bottomMapType = Rast_get_raster_map_type(in->bottom);
+	in->bottomMapType = Rast_get_map_type(in->bottom);
 
 	/* Write the vtk-header and the points */
 	if (param.point->answer) {

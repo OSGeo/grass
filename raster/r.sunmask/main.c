@@ -451,12 +451,12 @@ int main(int argc, char *argv[])
 	exit(EXIT_SUCCESS);
     }
 
-    if ((elev_fd = Rast_open_cell_old(name, "")) < 0)
+    if ((elev_fd = Rast_open_old(name, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
-    if ((output_fd = Rast_open_cell_new(outname)) < 0)
+    if ((output_fd = Rast_open_c_new(outname)) < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), outname);
 
-    data_type = Rast_get_raster_map_type(elev_fd);
+    data_type = Rast_get_map_type(elev_fd);
     elevbuf.v = Rast_allocate_buf(data_type);
     tmpbuf.v = Rast_allocate_buf(data_type);
     outbuf.v = Rast_allocate_buf(CELL_TYPE);	/* binary map */

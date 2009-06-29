@@ -50,7 +50,7 @@ int export_band(GDALDatasetH hMEMDS, GDALDataType export_datatype, int band,
     int ret = 0;
 
     /* Open GRASS raster */
-    fd = Rast_open_cell_old(name, mapset);
+    fd = Rast_open_old(name, mapset);
     if (fd < 0) {
 	G_warning(_("Unable to open raster map <%s>"), name);
 	return -1;

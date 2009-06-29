@@ -409,7 +409,7 @@ int main(int argc, char *argv[])
     /* prep memory */
     raster = Rast_allocate_buf(map_type);
 
-    cf = Rast_open_raster_new(map_name, map_type);
+    cf = Rast_open_new(map_name, map_type);
     if (cf < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), outfile);
 

@@ -59,7 +59,7 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
 
     name = choice->fn;
     mapset = G_mapset();
-    data_type = Rast_raster_map_type(name, mapset);
+    data_type = Rast_map_type(name, mapset);
 
     /* dynamically allocate storage for the
        buffer that will hold the contents of
@@ -254,14 +254,14 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
        i, j       = indices to rows and cols of the arrays
      */
 
-    data_type = Rast_raster_map_type(choice->fn, G_mapset());
+    data_type = Rast_map_type(choice->fn, G_mapset());
 
     /* if sampling by region was chosen, check
        for the region map and make sure it is
        an integer (CELL_TYPE) map */
 
     if (choice->wrum == 'r') {
-	if (0 > (fr = Rast_open_cell_old(choice->reg, G_mapset()))) {
+	if (0 > (fr = Rast_open_old(choice->reg, G_mapset()))) {
 	    fprintf(stderr, "\n");
 	    fprintf(stderr,
 		    "   *******************************************************\n");
@@ -275,7 +275,7 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
 		    "   *******************************************************\n");
 	    exit(1);
 	}
-	if (Rast_raster_map_type(choice->reg, G_mapset()) > 0) {
+	if (Rast_map_type(choice->reg, G_mapset()) > 0) {
 	    fprintf(stderr, "\n");
 	    fprintf(stderr,
 		    "   *******************************************************\n");

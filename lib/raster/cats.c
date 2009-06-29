@@ -196,7 +196,7 @@ static CELL read_cats(const char *element,
     if (strncmp(element, "dig", 3) == 0)
 	fp_map = 0;
     else
-	fp_map = Rast_raster_map_is_fp(name, mapset);
+	fp_map = Rast_map_is_fp(name, mapset);
 
     if (!(fd = G_fopen_old(element, name, mapset)))
 	return -2;
@@ -981,7 +981,7 @@ static int write_cats(const char *element, const char *name, struct Categories *
     if (strncmp(element, "dig", 3) == 0)
 	fp_map = 0;
     else
-	fp_map = Rast_raster_map_is_fp(name, G_mapset());
+	fp_map = Rast_map_is_fp(name, G_mapset());
     if (!fp_map)
 	Rast_sort_cats(cats);
 

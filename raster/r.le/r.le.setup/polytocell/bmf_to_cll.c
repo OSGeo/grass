@@ -68,7 +68,7 @@ int main(argc, argv)
 
     record = Rast_allocate_c_buf();
 
-    if ((newmap = Rast_open_cell_new(argv[1])) == -1) {
+    if ((newmap = Rast_open_c_new(argv[1])) == -1) {
 	fprintf(stderr, "ERROR bmif_to_cell: can't open raster map %s\n",
 		argv[1]);
 	quit();

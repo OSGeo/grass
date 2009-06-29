@@ -113,7 +113,7 @@ static int process(char *name, int uncompress)
 	return 1;
     }
 
-    map_type = Rast_raster_map_type(name, G_mapset());
+    map_type = Rast_map_type(name, G_mapset());
 
     G_suppress_warnings(1);
     colr_ok = Rast_read_colors(name, G_mapset(), &colr) > 0;
@@ -191,22 +191,22 @@ static int doit(char *name, int uncompress, RASTER_MAP_TYPE map_type)
 
     Rast_set_window(&cellhd);
 
-    old = Rast_open_cell_old(name, G_mapset());
+    old = Rast_open_old(name, G_mapset());
     if (old < 0)
 	return 1;
 
     if (uncompress) {
 	if (map_type == CELL_TYPE) {
 	    Rast_set_cell_format(cellhd.format);
-	    new = Rast_open_cell_new_uncompressed(name);
+	    new = Rast_open_c_new_uncompressed(name);
 	}
 	else {
 	    Rast_set_fp_type(map_type);
-	    new = Rast_open_fp_cell_new_uncompressed(name);
+	    new = Rast_open_fp_new_uncompressed(name);
 	}
     }
     else
-	new = Rast_open_raster_new(name, map_type);
+	new = Rast_open_new(name, map_type);
 
     if (new < 0)
 	return 1;
@@ -231,7 +231,7 @@ static int doit(char *name, int uncompress, RASTER_MAP_TYPE map_type)
     }
     Rast_close(new);
     newsize = 0;
-    old = Rast_open_cell_old(name, G_mapset());
+    old = Rast_open_old(name, G_mapset());
     newsize = lseek(old, (off_t) 0, SEEK_END);
     Rast_close(old);
     return 0;

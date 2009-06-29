@@ -308,7 +308,7 @@ int main(int argc, char *argv[])
 	    quants[i] = 1.0 * (i + 1) / (num_quants + 1);
     }
 
-    infile = Rast_open_cell_old(opt.input->answer, "");
+    infile = Rast_open_old(opt.input->answer, "");
     if (infile < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), opt.input->answer);
 

@@ -174,10 +174,10 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Raster map <%s> not found"), map_name);
 
     /* open the maps and get their file id  */
-    map_id = Rast_open_cell_old(map_name, map_mapset);
+    map_id = Rast_open_old(map_name, map_mapset);
 
     /* allocate cell buf for the map layer */
-    in_type = Rast_get_raster_map_type(map_id);
+    in_type = Rast_get_map_type(map_id);
 
     /* set the pointers for multi-typed functions */
     set_func_pointers(in_type);
@@ -254,14 +254,14 @@ int main(int argc, char **argv)
     bufsz = ncols * sizeof(CELL);
 
     lseek(fe, 0, SEEK_SET);
-    new_id = Rast_open_raster_new(new_map_name, in_type);
+    new_id = Rast_open_new(new_map_name, in_type);
 
     lseek(fd, 0, SEEK_SET);
-    dir_id = Rast_open_raster_new(dir_name, CELL_TYPE);
+    dir_id = Rast_open_new(dir_name, CELL_TYPE);
 
     if (opt5->answer != NULL) {
 	lseek(fm, 0, SEEK_SET);
-	bas_id = Rast_open_raster_new(bas_name, CELL_TYPE);
+	bas_id = Rast_open_new(bas_name, CELL_TYPE);
 
 	for (i = 0; i < nrows; i++) {
 	    read(fm, out_buf, bufsz);

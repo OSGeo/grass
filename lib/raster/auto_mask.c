@@ -61,7 +61,7 @@ int Rast__check_for_auto_masking(void)
     }
 
     Rast_unopen(R__.mask_fd);
-    R__.mask_fd = Rast__open_cell_old("MASK", G_mapset());
+    R__.mask_fd = Rast__open_old("MASK", G_mapset());
     if (R__.mask_fd < 0) {
 	R__.auto_mask = 0;
 	G_warning(_("Unable to open automatic MASK file"));

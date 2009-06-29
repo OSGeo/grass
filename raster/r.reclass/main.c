@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
     tty = isatty(fileno(srcfp));
 
     Rast_init_cats("", &cats);
-    fp = Rast_raster_map_is_fp(parm.input->answer, old_mapset);
+    fp = Rast_map_is_fp(parm.input->answer, old_mapset);
     Rast_read_fp_range(parm.input->answer, old_mapset, &range);
     Rast_get_fp_range_min_max(&range, &min, &max);
     rules = tail = NULL;

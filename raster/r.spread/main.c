@@ -375,30 +375,30 @@ int main(int argc, char *argv[])
 
     /*  Open input cell layers for reading  */
 
-    max_fd = Rast_open_cell_old(max_layer, G_find_cell2(max_layer, ""));
+    max_fd = Rast_open_old(max_layer, G_find_cell2(max_layer, ""));
     if (max_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), max_layer);
 
-    dir_fd = Rast_open_cell_old(dir_layer, G_find_cell2(dir_layer, ""));
+    dir_fd = Rast_open_old(dir_layer, G_find_cell2(dir_layer, ""));
     if (dir_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), dir_layer);
 
-    base_fd = Rast_open_cell_old(base_layer, G_find_cell2(base_layer, ""));
+    base_fd = Rast_open_old(base_layer, G_find_cell2(base_layer, ""));
     if (base_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), base_layer);
 
     if (spotting) {
 	spotdist_fd =
-	    Rast_open_cell_old(spotdist_layer, G_find_cell2(spotdist_layer, ""));
+	    Rast_open_old(spotdist_layer, G_find_cell2(spotdist_layer, ""));
 	if (spotdist_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), spotdist_layer);
 
 	velocity_fd =
-	    Rast_open_cell_old(velocity_layer, G_find_cell2(velocity_layer, ""));
+	    Rast_open_old(velocity_layer, G_find_cell2(velocity_layer, ""));
 	if (velocity_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), velocity_layer);
 
-	mois_fd = Rast_open_cell_old(mois_layer, G_find_cell2(mois_layer, ""));
+	mois_fd = Rast_open_old(mois_layer, G_find_cell2(mois_layer, ""));
 	if (mois_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), mois_layer);
     }
@@ -467,7 +467,7 @@ int main(int argc, char *argv[])
      *   Create an array of starting points (min_heap) ordered by costs.
      */
 
-    start_fd = Rast_open_cell_old(start_layer, G_find_cell2(start_layer, ""));
+    start_fd = Rast_open_old(start_layer, G_find_cell2(start_layer, ""));
     if (start_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), start_layer);
 
@@ -493,11 +493,11 @@ int main(int argc, char *argv[])
 
     /*  Open cumulative cost layer (and x, y direction layers) for writing */
 
-    cum_fd = Rast_open_cell_new(out_layer);
+    cum_fd = Rast_open_c_new(out_layer);
     if (x_out)
-	x_fd = Rast_open_cell_new(x_out_layer);
+	x_fd = Rast_open_c_new(x_out_layer);
     if (y_out)
-	y_fd = Rast_open_cell_new(y_out_layer);
+	y_fd = Rast_open_c_new(y_out_layer);
 
     /* prepare output -- adjust from cm to m */
     window.ew_res = window.ew_res / 100;

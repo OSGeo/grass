@@ -39,7 +39,7 @@ int get_cats(const char *name, const char *mapset)
     Rast_set_window(&cellhd);
 
     /* open the raster map */
-    fd = Rast_open_cell_old(name, mapset);
+    fd = Rast_open_old(name, mapset);
     if (fd < 0)
 	G_fatal_error(_("Cannot open cell file of raster map <%s> in <%s>"),
 		      name, mapset);

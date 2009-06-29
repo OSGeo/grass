@@ -197,7 +197,7 @@ int main(int argc, char *argv[])
 	(!strcmp(qcflag, "pixel_adjacent_to_cloud") && (strcmp(product, "mod09A1s"))))
 	G_fatal_error(_("This flag is only available for MOD09A1s @ 500m products"));
 
-    if ((infd = Rast_open_cell_old(qcchan, "")) < 0)
+    if ((infd = Rast_open_old(qcchan, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), qcchan);
 
     if (Rast_get_cellhd(qcchan, "", &cellhd) < 0)
@@ -211,7 +211,7 @@ int main(int argc, char *argv[])
     outrast = Rast_allocate_c_buf();
 
     /* Create New raster files */ 
-    if ((outfd = Rast_open_raster_new(result, data_type_output)) < 0)
+    if ((outfd = Rast_open_new(result, data_type_output)) < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), result);
 
     /* Process pixels */ 

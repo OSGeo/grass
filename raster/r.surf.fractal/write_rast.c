@@ -55,7 +55,7 @@ int write_rast(double *data[2],	/* Array holding complex data.          */
     else
 	strcpy(file_name, rast_out_name);
 
-    if ((fd_out = Rast_open_raster_new(file_name, DCELL_TYPE)) < 0) {
+    if ((fd_out = Rast_open_new(file_name, DCELL_TYPE)) < 0) {
 	G_fatal_error(_("Unable to create raster map <%s>"),
 		      file_name);
     }

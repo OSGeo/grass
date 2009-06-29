@@ -337,7 +337,7 @@ int main(int argc, char *argv[])
 	bufs[row] = Rast_allocate_d_buf();
 
     /* open old map */
-    infile = Rast_open_cell_old(parm.rastin->answer, "");
+    infile = Rast_open_old(parm.rastin->answer, "");
     if (infile < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"),
 		      parm.rastin->answer);
@@ -349,7 +349,7 @@ int main(int argc, char *argv[])
     outbuf = Rast_allocate_d_buf();
 
     /* open new map */
-    outfile = Rast_open_raster_new(parm.rastout->answer, DCELL_TYPE);
+    outfile = Rast_open_new(parm.rastout->answer, DCELL_TYPE);
     if (outfile < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"),
 		      parm.rastout->answer);

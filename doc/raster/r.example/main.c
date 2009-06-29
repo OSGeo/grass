@@ -113,10 +113,10 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Raster map <%s> not found"), name);
 
     /* determine the inputmap type (CELL/FCELL/DCELL) */
-    data_type = Rast_raster_map_type(name, mapset);
+    data_type = Rast_map_type(name, mapset);
 
-    /* Rast_open_cell_old - returns file destriptor (>0) */
-    if ((infd = Rast_open_cell_old(name, mapset)) < 0)
+    /* Rast_open_old - returns file destriptor (>0) */
+    if ((infd = Rast_open_old(name, mapset)) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
 
 
@@ -135,7 +135,7 @@ int main(int argc, char *argv[])
     outrast = Rast_allocate_buf(data_type);
 
     /* controlling, if we can write the raster */
-    if ((outfd = Rast_open_raster_new(result, data_type)) < 0)
+    if ((outfd = Rast_open_new(result, data_type)) < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), result);
 
     /* for each row */

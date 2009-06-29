@@ -366,7 +366,7 @@ int main(int argc, char *argv[])
 
     if (smooth != NULL) {
 
-	if ((fdsmooth = Rast_open_cell_old(smooth, "")) < 0)
+	if ((fdsmooth = Rast_open_old(smooth, "")) < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), smooth);
 
 	if (Rast_get_cellhd(smooth, "", &smhd) < 0)
@@ -390,7 +390,7 @@ int main(int argc, char *argv[])
     if ((winhd.ew_res != inphd.ew_res) || (winhd.ns_res != inphd.ns_res))
 	G_fatal_error(_("Input map resolution differs from current region resolution!"));
 
-    if ((fdinp = Rast_open_cell_old(input, "")) < 0)
+    if ((fdinp = Rast_open_old(input, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), input);
 
 

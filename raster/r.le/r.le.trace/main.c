@@ -434,7 +434,7 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
 
     name = choice->fn;
     mapset = G_mapset();
-    data_type = Rast_raster_map_type(name, mapset);
+    data_type = Rast_map_type(name, mapset);
 
     /* dynamically allocate storage for the
        buffer that will hold the contents of
@@ -552,7 +552,7 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
        map remains open on finput while all the programs
        run, so it is globally available */
 
-    if (0 > (finput = Rast_open_cell_old(choice->fn, G_mapset()))) {
+    if (0 > (finput = Rast_open_old(choice->fn, G_mapset()))) {
 	fprintf(stderr, "\n");
 	fprintf(stderr,
 		"   ********************************************************\n");
@@ -566,7 +566,7 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
     }
 
     else
-	data_type = Rast_raster_map_type(choice->fn, G_mapset());
+	data_type = Rast_map_type(choice->fn, G_mapset());
 
     /* allocate memory to store a row of the
        raster map, depending on the type of

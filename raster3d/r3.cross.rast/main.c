@@ -329,11 +329,11 @@ int main(int argc, char *argv[])
 
 	/********************************/
 
-	elevfd = Rast_open_cell_old(param.elevation->answer, "");
+	elevfd = Rast_open_old(param.elevation->answer, "");
 	if (elevfd <= 0)
 	    fatal_error(map, -1, -1, _("Unable to open elevation map"));
 
-	globalElevMapType = Rast_get_raster_map_type(elevfd);
+	globalElevMapType = Rast_get_map_type(elevfd);
 
 	/**********************/
 	/*Open the Outputmap */
@@ -344,13 +344,13 @@ int main(int argc, char *argv[])
 	    G_message(_("Output map already exists. Will be overwritten!"));
 
 	if (output_type == FCELL_TYPE) {
-	    outfd = Rast_open_raster_new(param.output->answer, FCELL_TYPE);
+	    outfd = Rast_open_new(param.output->answer, FCELL_TYPE);
 	    if (outfd < 0)
 		fatal_error(map, elevfd, -1,
 			    _("Unable to create raster map"));
 	}
 	else if (output_type == DCELL_TYPE) {
-	    outfd = Rast_open_raster_new(param.output->answer, DCELL_TYPE);
+	    outfd = Rast_open_new(param.output->answer, DCELL_TYPE);
 	    if (outfd < 0)
 		fatal_error(map, elevfd, -1,
 			    _("Unable to create raster map"));

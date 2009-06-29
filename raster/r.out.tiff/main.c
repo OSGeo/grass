@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
     G_get_window(&cellhd);
 
     Rast_read_colors(inopt->answer, "", &colors);
-    if ((isfp = Rast_raster_map_is_fp(inopt->answer, "")))
+    if ((isfp = Rast_map_is_fp(inopt->answer, "")))
 	G_warning(_("Raster map <%s>> is a floating point "
 		    "map. Fractional values will be rounded to integer"),
 		  inopt->answer);
@@ -158,7 +158,7 @@ int main(int argc, char *argv[])
 			"than 256 colors for the available range of data"));
 
     cell = Rast_allocate_c_buf();
-    if ((in = Rast_open_cell_old(inopt->answer, "")) < 0)
+    if ((in = Rast_open_old(inopt->answer, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), inopt->answer);
 
     basename = G_store(outopt->answer);

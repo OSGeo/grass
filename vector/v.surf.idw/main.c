@@ -248,7 +248,7 @@ int main(int argc, char *argv[])
 	mask = NULL;
 
 
-    fd = Rast_open_raster_new(parm.output->answer, DCELL_TYPE);
+    fd = Rast_open_new(parm.output->answer, DCELL_TYPE);
     if (fd < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"),
 		      parm.output->answer);

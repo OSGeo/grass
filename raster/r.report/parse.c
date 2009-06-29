@@ -249,7 +249,7 @@ int parse_layer(char *s)
     DMAX = (DCELL *) G_realloc(DMAX, (nlayers + 1) * sizeof(DCELL));
     DMIN = (DCELL *) G_realloc(DMIN, (nlayers + 1) * sizeof(DCELL));
     if (!as_int)
-	is_fp[n] = Rast_raster_map_is_fp(name, mapset);
+	is_fp[n] = Rast_map_is_fp(name, mapset);
     else
 	is_fp[n] = 0;
     if (is_fp[n]) {

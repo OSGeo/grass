@@ -49,7 +49,7 @@ int drawcell(View * view)
     if (getenv("NO_DRAW"))
 	return 1;
 
-    fd = Rast_open_cell_old(view->cell.name, view->cell.mapset);
+    fd = Rast_open_old(view->cell.name, view->cell.mapset);
     if (fd < 0)
 	return 0;
     dcell = Rast_allocate_d_buf();

@@ -67,7 +67,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
     cell1 = Rast_allocate_f_buf();
 
     if (params->elev != NULL) {
-	cf1 = Rast_open_fp_cell_new(params->elev);
+	cf1 = Rast_open_fp_new(params->elev);
 	if (cf1 < 0) {
 	    G_warning(_("Unable to create raster map <%s>"),
 		      params->elev);
@@ -76,7 +76,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
     }
 
     if (params->slope != NULL) {
-	cf2 = Rast_open_fp_cell_new(params->slope);
+	cf2 = Rast_open_fp_new(params->slope);
 	if (cf2 < 0) {
 	    G_warning(_("Unable to create raster map <%s>"),
 		      params->elev);
@@ -85,7 +85,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
     }
 
     if (params->aspect != NULL) {
-	cf3 = Rast_open_fp_cell_new(params->aspect);
+	cf3 = Rast_open_fp_new(params->aspect);
 	if (cf3 < 0) {
 	    G_warning(_("Unable to create raster map <%s>"),
 		      params->elev);
@@ -94,7 +94,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
     }
 
     if (params->pcurv != NULL) {
-	cf4 = Rast_open_fp_cell_new(params->pcurv);
+	cf4 = Rast_open_fp_new(params->pcurv);
 	if (cf4 < 0) {
 	    G_warning(_("Unable to create raster map <%s>"),
 		      params->elev);
@@ -103,7 +103,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
     }
 
     if (params->tcurv != NULL) {
-	cf5 = Rast_open_fp_cell_new(params->tcurv);
+	cf5 = Rast_open_fp_new(params->tcurv);
 	if (cf5 < 0) {
 	    G_warning(_("Unable to create raster map <%s>"),
 		      params->elev);
@@ -112,7 +112,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
     }
 
     if (params->mcurv != NULL) {
-	cf6 = Rast_open_fp_cell_new(params->mcurv);
+	cf6 = Rast_open_fp_new(params->mcurv);
 	if (cf6 < 0) {
 	    G_warning(_("Unable to create raster map <%s>"),
 		      params->elev);

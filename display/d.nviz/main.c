@@ -178,7 +178,7 @@ int main(int argc, char *argv[])
     /* Open Raster File */
     if (NULL == (mapset = G_find_cell2(name, "")))
 	G_fatal_error(_("Raster map <%s> not found"), name);
-    if (0 > (fd = Rast_open_cell_old(name, mapset)))
+    if (0 > (fd = Rast_open_old(name, mapset)))
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
 
     /* Set Image name */
@@ -199,7 +199,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Unable to open file <%s>"), outfile);
 
     /* Get Raster Type */
-    data_type = Rast_get_raster_map_type(fd);
+    data_type = Rast_get_map_type(fd);
     /* Done with file */
 
     /* Output initial startup stuff */

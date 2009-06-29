@@ -94,10 +94,10 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (Rast_raster_map_is_fp(basemap->answer, "") != 0)
+    if (Rast_map_is_fp(basemap->answer, "") != 0)
 	G_fatal_error(_("This module currently only works for integer (CELL) maps"));
 
-    if (Rast_raster_map_is_fp(covermap->answer, "") != 0)
+    if (Rast_map_is_fp(covermap->answer, "") != 0)
 	G_fatal_error(_("This module currently only works for integer (CELL) maps"));
 
     if (Rast_read_cats(covermap->answer, "", &cats) < 0) {

@@ -26,7 +26,7 @@ int close_maps(void)
 
     sum = sum_sqr = stddev = 0.0;
     if (wat_flag) {
-	fd = Rast_open_raster_new(wat_name, DCELL_TYPE);
+	fd = Rast_open_new(wat_name, DCELL_TYPE);
 	if (fd < 0) {
 	    G_warning(_("unable to open new accum map layer."));
 	}
@@ -138,7 +138,7 @@ int close_maps(void)
     /* TODO: elevation == NULL -> drainage direction == NULL (wat == 0 where ele == NULL) */
     /* keep drainage direction == 0 for real depressions */
     if (asp_flag) {
-	fd = Rast_open_cell_new(asp_name);
+	fd = Rast_open_c_new(asp_name);
 	if (fd < 0) {
 	    G_warning(_("unable to open new aspect map layer."));
 	}
@@ -161,7 +161,7 @@ int close_maps(void)
 
     /* visual output no longer needed */
     if (dis_flag) {
-	fd = Rast_open_cell_new(dis_name);
+	fd = Rast_open_c_new(dis_name);
 	if (fd < 0) {
 	    G_warning(_("unable to open new accum map layer."));
 	}
@@ -197,7 +197,7 @@ int close_maps(void)
     G_free(wat);
 
     if (ls_flag) {
-	fd = Rast_open_raster_new(ls_name, DCELL_TYPE);
+	fd = Rast_open_new(ls_name, DCELL_TYPE);
 	if (fd < 0) {
 	    G_warning(_("unable to open new LS factor map layer."));
 	}
@@ -215,7 +215,7 @@ int close_maps(void)
     }
 
     if (sl_flag) {
-	fd = Rast_open_raster_new(sl_name, DCELL_TYPE);
+	fd = Rast_open_new(sl_name, DCELL_TYPE);
 	if (fd < 0) {
 	    G_warning(_("unable to open new slope length map layer."));
 	}
@@ -237,7 +237,7 @@ int close_maps(void)
 	G_free(s_l);
 
     if (sg_flag) {
-	fd = Rast_open_raster_new(sg_name, DCELL_TYPE);
+	fd = Rast_open_new(sg_name, DCELL_TYPE);
 	if (fd < 0) {
 	    G_warning(_("unable to open new S factor map layer."));
 	}

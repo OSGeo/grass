@@ -18,7 +18,7 @@ int open_band_files(void)
 	Bandbuf[n] = Rast_allocate_c_buf();
 	name = Refer.file[n].name;
 	mapset = Refer.file[n].mapset;
-	if ((Bandfd[n] = Rast_open_cell_old(name, mapset)) < 0)
+	if ((Bandfd[n] = Rast_open_old(name, mapset)) < 0)
 	    G_fatal_error(_("Unable to open band files."));
     }
 

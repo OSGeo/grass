@@ -350,12 +350,12 @@ int main(int argc, char *argv[])
 
     /*  Open cost cell layer for reading  */
 
-    cost_fd = Rast_open_cell_old(cost_layer, cost_mapset);
+    cost_fd = Rast_open_old(cost_layer, cost_mapset);
 
     if (cost_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), cost_layer);
 
-    data_type = Rast_get_raster_map_type(cost_fd);
+    data_type = Rast_get_map_type(cost_fd);
     cell = Rast_allocate_buf(data_type);
 
     /*   Parameters for map submatrices   */
@@ -632,12 +632,12 @@ int main(int argc, char *argv[])
 
 	search_mapset = G_find_file("cell", opt9->answer, "");
 
-	fd = Rast_open_cell_old(opt9->answer, search_mapset);
+	fd = Rast_open_old(opt9->answer, search_mapset);
 	if (fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
 			  opt9->answer);
 
-	data_type2 = Rast_get_raster_map_type(fd);
+	data_type2 = Rast_get_map_type(fd);
 
 	dsize2 = Rast_cell_size(data_type2);
 
@@ -977,10 +977,10 @@ int main(int argc, char *argv[])
   OUT:
     /*  Open cumulative cost layer for writing   */
 
-    cum_fd = Rast_open_raster_new(cum_cost_layer, data_type);
+    cum_fd = Rast_open_new(cum_cost_layer, data_type);
 
     if (dir == 1) {
-	dir_fd = Rast_open_raster_new(move_dir_layer, dir_data_type);
+	dir_fd = Rast_open_new(move_dir_layer, dir_data_type);
 	dir_cell = Rast_allocate_buf(dir_data_type);
     }
 

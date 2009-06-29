@@ -42,7 +42,7 @@ void Init(void)
 	FDM = -1;
     }
     else {
-	if ((FDM = Rast_open_cell_old("MASK", G_mapset())) < 0) {
+	if ((FDM = Rast_open_old("MASK", G_mapset())) < 0) {
 	    G_fatal_error(_("Unable to open raster map <%s>"), "MASK");
 	}
 	else {

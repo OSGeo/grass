@@ -30,7 +30,7 @@ int perform_filter(const char *in_name, const char *out_name,
 	    G_debug(1, "Filter %d", n + 1);
 
 	    if (count == 0) {
-		in = Rast_open_cell_old(in_name, "");
+		in = Rast_open_old(in_name, "");
 
 		G_debug(1, "Open raster map %s = %d", in_name, in);
 
@@ -79,7 +79,7 @@ int perform_filter(const char *in_name, const char *out_name,
 
     /* copy final result to output raster map */
     in = out;
-    out = Rast_open_fp_cell_new(out_name);
+    out = Rast_open_fp_new(out_name);
     if (out < 0) {
 	G_fatal_error(_("Cannot create raster map <%s>"), out_name);
     }

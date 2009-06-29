@@ -181,7 +181,7 @@ int main(int argc, char **argv)
 			  ("Direction raster not specified, if direction flag is on, a direction raster must be given"));
 	}
 	strcpy(dir_name, opt3->answer);
-	dir_data_type = Rast_raster_map_type(dir_name, "");
+	dir_data_type = Rast_map_type(dir_name, "");
     }
     if (costmode == 0) {
 	if (opt3->answer) {
@@ -203,7 +203,7 @@ int main(int argc, char **argv)
 	Vect_hist_command(&vout);
     }
     /*      allocate cell buf for the map layer */
-    in_type = Rast_raster_map_type(map_name, "");
+    in_type = Rast_map_type(map_name, "");
 
     /* set the pointers for multi-typed functions */
     set_func_pointers(in_type);
@@ -343,7 +343,7 @@ int main(int argc, char **argv)
     in_buf = get_buf();
 
     /* open the original map and get its file id  */
-    map_id = Rast_open_cell_old(map_name, "");
+    map_id = Rast_open_old(map_name, "");
 
     /* get some temp files */
     tempfile1 = G_tempfile();
@@ -361,7 +361,7 @@ int main(int argc, char **argv)
 
     if (costmode == 1) {
 	dir_buf = Rast_allocate_d_buf();
-	dir_id = Rast_open_cell_old(dir_name, "");
+	dir_id = Rast_open_old(dir_name, "");
 	tempfile3 = G_tempfile();
 	dir_fd = open(tempfile3, O_RDWR | O_CREAT, 0666);
 
@@ -416,7 +416,7 @@ int main(int argc, char **argv)
 
 	/* Output will be a cell map */
 	/* open a new file and allocate an output buffer */
-	new_id = Rast_open_cell_new(new_map_name);
+	new_id = Rast_open_c_new(new_map_name);
 	out_buf = Rast_allocate_c_buf();
 
 	/* mark each cell */
@@ -461,7 +461,7 @@ int main(int argc, char **argv)
     else {			/* mode = 1 or 2 */
 	/* Output will be of the same type as input */
 	/* open a new file and allocate an output buffer */
-	new_id = Rast_open_raster_new(new_map_name, in_type);
+	new_id = Rast_open_new(new_map_name, in_type);
 	out_buf = get_buf();
 	bsz = ncols * bpe();
 

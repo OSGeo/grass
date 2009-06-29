@@ -79,7 +79,7 @@ int Rast_read_fp_range(const char *name, const char *mapset,
 
     Rast_init_fp_range(drange);
 
-    if (Rast_raster_map_type(name, mapset) == CELL_TYPE) {
+    if (Rast_map_type(name, mapset) == CELL_TYPE) {
 	/* if map is integer
 	   read integer range and convert it to double */
 
@@ -168,7 +168,7 @@ int Rast_read_range(const char *name, const char *mapset, struct Range *range)
     fd = NULL;
 
     /* if map is not integer, read quant rules, and get limits */
-    if (Rast_raster_map_type(name, mapset) != CELL_TYPE) {
+    if (Rast_map_type(name, mapset) != CELL_TYPE) {
 	DCELL dmin, dmax;
 
 	if (Rast_read_quant(name, mapset, &quant) < 0) {
@@ -265,7 +265,7 @@ int Rast_write_range(const char *name, const struct Range *range)
 {
     FILE *fd;
 
-    if (Rast_raster_map_type(name, G_mapset()) != CELL_TYPE) {
+    if (Rast_map_type(name, G_mapset()) != CELL_TYPE) {
 	G_remove_misc("cell_misc", "range", name);	/* remove the old file with this name */
 	G_warning(_("Unable to write range file for <%s>"),
 		  name);

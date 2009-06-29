@@ -105,7 +105,7 @@ int main(int argc, char **argv)
     if (D_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
-    fp = Rast_raster_map_is_fp(name, "");
+    fp = Rast_map_is_fp(name, "");
     if (catlist->answer) {
 	if (fp)
 	    G_warning(_("Ignoring catlist: map is floating point (please use 'val=')"));

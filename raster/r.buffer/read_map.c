@@ -38,7 +38,7 @@ int read_input_map(char *input, char *mapset, int ZEROFLAG)
 
     map = (MAPTYPE *) G_malloc(window.rows * window.cols * sizeof(MAPTYPE));
 
-    fd = Rast_open_cell_old(input, mapset);
+    fd = Rast_open_old(input, mapset);
     if (fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), input);
 

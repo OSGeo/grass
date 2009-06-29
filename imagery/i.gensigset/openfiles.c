@@ -30,7 +30,7 @@ int openfiles(struct parms *parms, struct files *files)
 
     /* open training map for reading */
     mapset = G_find_cell2(parms->training_map, "");
-    files->train_fd = Rast_open_cell_old(parms->training_map, mapset);
+    files->train_fd = Rast_open_old(parms->training_map, mapset);
     if (files->train_fd < 0)
 	G_fatal_error(_("Unable to open training map <%s>"),
 		      parms->training_map);
@@ -39,7 +39,7 @@ int openfiles(struct parms *parms, struct files *files)
     /* open all maps for reading */
     for (n = 0; n < Ref.nfiles; n++) {
 	files->band_fd[n] =
-	    Rast_open_cell_old(Ref.file[n].name, Ref.file[n].mapset);
+	    Rast_open_old(Ref.file[n].name, Ref.file[n].mapset);
 	if (files->band_fd[n] < 0)
 	    G_fatal_error(_("Unable to open training map <%s in %s>"),
 			  Ref.file[n].name, Ref.file[n].mapset);

@@ -120,7 +120,7 @@ int Rast__quant_import(const char *name, const char *mapset, struct Quant *quant
 
     Rast_quant_free(quant);
 
-    if (Rast_raster_map_type(name, mapset) == CELL_TYPE) {
+    if (Rast_map_type(name, mapset) == CELL_TYPE) {
 	G_warning (_("Rast__quant_import: attempt to open quantization"
 		     " table for CELL_TYPE file [%s] in mapset {%s]"),
 		   name, mapset);

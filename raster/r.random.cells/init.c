@@ -42,7 +42,7 @@ void Init()
     Cells = FlagCreate(Rs, Cs);
     CellCount = 0;
     if (NULL != G_find_file("cell", "MASK", G_mapset())) {
-	if ((FD = Rast_open_cell_old("MASK", G_mapset())) < 0) {
+	if ((FD = Rast_open_old("MASK", G_mapset())) < 0) {
 	    G_fatal_error(_("Unable to open raster map <%s>"), "MASK");
 	}
 	else {

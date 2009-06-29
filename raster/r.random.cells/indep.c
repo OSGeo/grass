@@ -129,7 +129,7 @@ void Indep(void)
     }
 
     G_debug(2, "outputting()");
-    OutFD = Rast_open_cell_new(Output->answer);
+    OutFD = Rast_open_c_new(Output->answer);
     if (OutFD < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"),
 		      Output->answer);

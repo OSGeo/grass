@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
     result = output->answer;
     
     /***************************************************/ 
-    if ((infd_annual_pmm = Rast_open_cell_old(annual_pmm, "")) < 0)
+    if ((infd_annual_pmm = Rast_open_old(annual_pmm, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), annual_pmm);
     inrast_annual_pmm = Rast_allocate_d_buf();
     
@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
     outrast = Rast_allocate_d_buf();
     
     /* Create New raster files */ 
-    if ((outfd = Rast_open_raster_new(result, DCELL_TYPE)) < 0)
+    if ((outfd = Rast_open_new(result, DCELL_TYPE)) < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), result);
     
     /* Process pixels */ 

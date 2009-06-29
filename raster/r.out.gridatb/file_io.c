@@ -14,11 +14,11 @@ void rdwr_gridatb(void)
     FCELL *fcell;
     RASTER_MAP_TYPE data_type;
 
-    fd = Rast_open_cell_old(iname, "");
+    fd = Rast_open_old(iname, "");
     if (fd < 0)
 	G_fatal_error("%s - could not read", iname);
 
-    data_type = Rast_get_raster_map_type(fd);
+    data_type = Rast_get_map_type(fd);
     switch (data_type) {
     case CELL_TYPE:
 	cell = Rast_allocate_c_buf();

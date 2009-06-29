@@ -66,7 +66,7 @@ static int open_existing_cell_file(char *fname, struct Cell_head *chd)
     if (chd && (Rast_get_cellhd(fname, mapset, chd) < 0))
 	G_fatal_error(_("Unable to get header for %s"), fname);
 
-    return Rast_open_cell_old(fname, mapset);
+    return Rast_open_old(fname, mapset);
 }
 
 void read_input_files(void)
@@ -164,7 +164,7 @@ void open_output_files(void)
     }
 
     if (parm.lgout &&
-	((lgfd = Rast_open_raster_new(parm.lgout, FCELL_TYPE)) < 0))
+	((lgfd = Rast_open_new(parm.lgout, FCELL_TYPE)) < 0))
 	G_fatal_error(_("Unable to create raster map <%s>"), parm.lgout);
 
     if (parm.flout && (Vect_open_new(&fl, parm.flout, 0) < 0))
@@ -199,7 +199,7 @@ void write_density_file(void)
 	G_fatal_error(_("Cannot reset current region"));
 
     G_message(_("Writing density file"));
-    dsfd = Rast_open_raster_new(parm.dsout, DCELL_TYPE);
+    dsfd = Rast_open_new(parm.dsout, DCELL_TYPE);
     if (dsfd < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), parm.dsout);
 

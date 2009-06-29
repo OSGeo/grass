@@ -123,7 +123,7 @@ int main(int argc, char *argv[])
     for (noi = 0; input->answers[noi]; noi++) {
 	name[noi] = G_store(input->answers[noi]);
 
-	if (Rast_raster_map_type(name[noi], G_mapset()) == CELL_TYPE)
+	if (Rast_map_type(name[noi], G_mapset()) == CELL_TYPE)
 	    G_fatal_error(_("%s is integer map, it can't be quantized"),
 			  name[noi]);
     }
@@ -144,7 +144,7 @@ int main(int argc, char *argv[])
     else if (basename)
 	/* set the quant to that of basemap */
     {
-	if (Rast_raster_map_type(basename, "") == CELL_TYPE)
+	if (Rast_map_type(basename, "") == CELL_TYPE)
 	    G_fatal_error(_("%s is integer map, it can't be used as basemap"),
 			  basename);
 

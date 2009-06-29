@@ -73,7 +73,7 @@ int close_array_seg(void)
     /* stream segments map */
     if (seg_flag) {
 	cellrow = (CELL *) G_malloc(ncols * sizeof(CELL));
-	map_fd = Rast_open_cell_new(seg_name);
+	map_fd = Rast_open_c_new(seg_name);
 	for (r = 0; r < nrows; r++) {
 	    Rast_set_c_null_value(cellrow, ncols);	/* reset row to all NULL */
 	    for (c = 0; c < ncols; c++) {

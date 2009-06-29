@@ -150,7 +150,7 @@ int main(int argc, char *argv[])
 	dcell = Rast_allocate_d_buf();
 	break;
     }
-    cf = Rast_open_raster_new(output, rtype);
+    cf = Rast_open_new(output, rtype);
     if (cf < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), output);
 

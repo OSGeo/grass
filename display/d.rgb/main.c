@@ -89,10 +89,10 @@ int main(int argc, char **argv)
 	char *name = B[i].opt->answer;
 
 	/* Make sure map is available */
-	if ((B[i].file = Rast_open_cell_old(name, "")) == -1)
+	if ((B[i].file = Rast_open_old(name, "")) == -1)
 	    G_fatal_error(_("Unable to open raster map <%s>"), name);
 
-	B[i].type = Rast_get_raster_map_type(B[i].file);
+	B[i].type = Rast_get_map_type(B[i].file);
 
 	/* Reading color lookup table */
 	if (Rast_read_colors(name, "", &B[i].colors) == -1)

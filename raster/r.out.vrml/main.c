@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
 
     G_get_set_window(&W);
 
-    if ((elevfd = Rast_open_cell_old(rast_el->answer, "")) == -1)
+    if ((elevfd = Rast_open_old(rast_el->answer, "")) == -1)
 	G_fatal_error("Unable to open cellfile for <%s>", rast_el->answer);
 
     {
@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
 	DCELL dmin, dmax;
 	struct FPRange fp_range;
 
-	is_fp = Rast_raster_map_is_fp(rast_el->answer, "");
+	is_fp = Rast_map_is_fp(rast_el->answer, "");
 	if (is_fp) {
 	    if (Rast_read_fp_range(rast_el->answer, "", &fp_range) != 1) {
 		G_fatal_error(_("Range info for [%s] not available (run r.support)"),
@@ -115,7 +115,7 @@ int main(int argc, char *argv[])
     }
 
     if (rast_co->answer) {
-	if ((colorfd = Rast_open_cell_old(rast_co->answer, "")) == -1)
+	if ((colorfd = Rast_open_old(rast_co->answer, "")) == -1)
 	    G_warning(_("Unable to open cellfile for <%s>"), rast_co->answer);
 	else {
 	    Rast_read_colors(rast_co->answer, "", &colr);

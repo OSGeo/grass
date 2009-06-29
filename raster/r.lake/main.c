@@ -213,7 +213,7 @@ int main(int argc, char *argv[])
 
     /* If lakemap is set, write to it, else is set overwrite flag and we should write to seedmap. */
     if (lakemap) {
-	lake_fd = Rast_open_raster_new(lakemap, 1);
+	lake_fd = Rast_open_new(lakemap, 1);
 	if (lake_fd < 0)
 	    G_fatal_error(_("Unable to create raster map <%s>"), lakemap);
     }
@@ -238,13 +238,13 @@ int main(int argc, char *argv[])
     }
 
     /* Open terran map */
-    in_terran_fd = Rast_open_cell_old(terrainmap, "");
+    in_terran_fd = Rast_open_old(terrainmap, "");
     if (in_terran_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), terrainmap);
 
     /* Open seed map */
     if (smap_opt->answer) {
-	out_fd = Rast_open_cell_old(seedmap, "");
+	out_fd = Rast_open_old(seedmap, "");
 	if (out_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), seedmap);
     }
@@ -292,7 +292,7 @@ int main(int argc, char *argv[])
 	out_fd = lake_fd;
     }
     else {
-	out_fd = Rast_open_raster_new(seedmap, 1);
+	out_fd = Rast_open_new(seedmap, 1);
 	if (out_fd < 0)
 	    G_fatal_error(_("Unable to create raster map <%s>"), seedmap);
     }

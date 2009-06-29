@@ -182,13 +182,13 @@ int main(int argc, char **argv)
     else
 	G_fatal_error(_("Unknown metric: [%s]."), opt.met->answer);
 
-    in_fd = Rast_open_cell_old(in_name, "");
+    in_fd = Rast_open_old(in_name, "");
     if (in_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), in_name);
 
-    type = Rast_get_raster_map_type(in_fd);
+    type = Rast_get_map_type(in_fd);
 
-    out_fd = Rast_open_raster_new(out_name, type);
+    out_fd = Rast_open_new(out_name, type);
     if (out_fd < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), out_name);
 

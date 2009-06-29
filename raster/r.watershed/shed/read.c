@@ -23,7 +23,7 @@ int read_basins(char *haf_name, OUTPUT * output)
 	G_fatal_error(_("unable to open basin/half basin map"));
     }
 
-    bas_fd = Rast_open_cell_old(haf_name, mapset);
+    bas_fd = Rast_open_old(haf_name, mapset);
     facts = output->basin_facts;
     for (r = nrows - 1; r >= 0; r--) {
 	Rast_get_c_row(bas_fd, bas_buf, r);
@@ -45,7 +45,7 @@ int read_basins(char *haf_name, OUTPUT * output)
 	    map->basins[r].first_cat.nxt = NULL;
 	    map->basins[r].sum_values = 0.0;
 	}
-	fd = Rast_open_cell_old(map->name, map->mapset);
+	fd = Rast_open_old(map->name, map->mapset);
 	if (fd >= 0) {
 	    for (r = 0; r < nrows; r++) {
 		Rast_get_c_row(fd, buf, r);

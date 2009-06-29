@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
     drain = read_map(drain_name, NOMASK, nrows, ncols);
     ridge = read_map(ridge_name, NOMASK, nrows, ncols);
 
-    partfd = Rast_open_cell_new(part_name);
+    partfd = Rast_open_c_new(part_name);
     if (partfd < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), part_name);
 

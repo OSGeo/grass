@@ -365,7 +365,7 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
 	}
 	bitmask = BM_create(nsizc, nsizr);
 	cellmask = Rast_allocate_c_buf();
-	cfmask = Rast_open_cell_old(maskmap, mapsetm);
+	cfmask = Rast_open_old(maskmap, mapsetm);
 	for (i = 0; i < nsizr; i++) {
 	    irev = nsizr - i - 1;
 	    Rast_get_c_row(cfmask, cellmask, i);

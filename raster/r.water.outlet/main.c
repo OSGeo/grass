@@ -127,7 +127,7 @@ int main(int argc, char *argv[])
     total = nrows * ncols;
     nrows_less_one = nrows - 1;
     ncols_less_one = ncols - 1;
-    drain_fd = Rast_open_cell_old(drain_name, "");
+    drain_fd = Rast_open_old(drain_name, "");
 
     if (drain_fd < 0)
 	G_fatal_error(_("Unable to open drainage pointer map"));
@@ -152,7 +152,7 @@ int main(int argc, char *argv[])
 	overland_cells(row, col);
     G_free(drain_ptrs);
     cell_buf = Rast_allocate_c_buf();
-    basin_fd = Rast_open_cell_new(basin_name);
+    basin_fd = Rast_open_c_new(basin_name);
 
     if (basin_fd < 0)
 	G_fatal_error(_("Unable to open new basin map"));

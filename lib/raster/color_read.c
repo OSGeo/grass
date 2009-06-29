@@ -65,7 +65,7 @@ int Rast_read_colors(const char *name, const char *mapset, struct Colors *colors
     CELL min, max;
     DCELL dmin, dmax;
 
-    fp = Rast_raster_map_is_fp(name, mapset);
+    fp = Rast_map_is_fp(name, mapset);
     Rast_init_colors(colors);
 
     strcpy(xname, name);

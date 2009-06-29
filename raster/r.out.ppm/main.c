@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
     G_message(_("rows = %d, cols = %d"), w.rows, w.cols);
 
     /* open raster map for reading */
-    if ((cellfile = Rast_open_cell_old(rast->answer, "")) == -1)
+    if ((cellfile = Rast_open_old(rast->answer, "")) == -1)
 	G_fatal_error(_("Unable to open raster map <%s>"), rast->answer);
 
     cell_buf = Rast_allocate_c_buf();
@@ -150,7 +150,7 @@ int main(int argc, char *argv[])
 
 	Rast_read_colors(rast->answer, "", &colors);
 
-	rtype = Rast_get_raster_map_type(cellfile);
+	rtype = Rast_get_map_type(cellfile);
 	if (rtype == CELL_TYPE)
 	    voidc = (CELL *) cell_buf;
 	else if (rtype == FCELL_TYPE)

@@ -43,7 +43,7 @@ void rdwr_gridatb(void)
 	}
     }
 
-    fd = Rast_open_raster_new(oname, FCELL_TYPE);
+    fd = Rast_open_new(oname, FCELL_TYPE);
 
     cell = (FCELL *) G_malloc(sizeof(FCELL) * cellhd.cols);
 

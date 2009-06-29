@@ -94,23 +94,23 @@ int main(int argc, char *argv[])
     result = output1->answer;
     roerink = flag1->answer;
 
-    if ((infd_albedo = Rast_open_cell_old(albedo, "")) < 0)
+    if ((infd_albedo = Rast_open_old(albedo, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), albedo);
     inrast_albedo = Rast_allocate_d_buf();
 
-    if ((infd_ndvi = Rast_open_cell_old(ndvi, "")) < 0)
+    if ((infd_ndvi = Rast_open_old(ndvi, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), ndvi);
     inrast_ndvi = Rast_allocate_d_buf();
 
-    if ((infd_tempk = Rast_open_cell_old(tempk, "")) < 0)
+    if ((infd_tempk = Rast_open_old(tempk, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), tempk);
     inrast_tempk = Rast_allocate_d_buf();
 
-    if ((infd_rnet = Rast_open_cell_old(rnet, "")) < 0)
+    if ((infd_rnet = Rast_open_old(rnet, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), rnet);
     inrast_rnet = Rast_allocate_d_buf();
 
-    if ((infd_time = Rast_open_cell_old(time, "")) < 0)
+    if ((infd_time = Rast_open_old(time, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), time);
     inrast_time = Rast_allocate_d_buf();
 
@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
     outrast = Rast_allocate_d_buf();
     
     /* Create New raster files */ 
-    if ((outfd = Rast_open_raster_new(result,DCELL_TYPE)) < 0)
+    if ((outfd = Rast_open_new(result,DCELL_TYPE)) < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), result);
 
     /* Process pixels */ 

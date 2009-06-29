@@ -61,12 +61,12 @@ cell2stream(char* cellname, elevation_type T_max_value, long* nodata_count) {
   
   /* open map */
   int infd;
-  if ( (infd = Rast_open_cell_old (cellname, mapset)) < 0)
+  if ( (infd = Rast_open_old (cellname, mapset)) < 0)
     G_fatal_error (_("Unable to open raster map <%s>"), cellname);
   
   /* determine map type (CELL/FCELL/DCELL) */
   RASTER_MAP_TYPE data_type;
-  data_type = Rast_raster_map_type(cellname, mapset);
+  data_type = Rast_map_type(cellname, mapset);
   
   /* Allocate input buffer */
   void *inrast;
@@ -174,7 +174,7 @@ stream2_CELL(AMI_STREAM<T>* str, dimension_type nrows, dimension_type ncols,
 
   /* open output raster map */
   int outfd;
-  if ( (outfd = Rast_open_raster_new (cellname, mtype)) < 0) {
+  if ( (outfd = Rast_open_new (cellname, mtype)) < 0) {
     G_fatal_error (_("Unable to create raster map <%s>"), cellname);
   }
   
@@ -259,7 +259,7 @@ stream2_CELL(AMI_STREAM<T> *str, dimension_type nrows, dimension_type ncols,
   
   /* open output raster map */
   int outfd;
-  if ( (outfd = Rast_open_raster_new (cellname, CELL_TYPE)) < 0) {
+  if ( (outfd = Rast_open_new (cellname, CELL_TYPE)) < 0) {
     G_fatal_error ("Could not open <%s>", cellname);
   }
   
@@ -333,7 +333,7 @@ stream2_FCELL(AMI_STREAM<T> *str, dimension_type nrows, dimension_type ncols,
   
   /* open output raster map */
   int outfd;
-  if ( (outfd = Rast_open_raster_new (cellname, FCELL_TYPE)) < 0) {
+  if ( (outfd = Rast_open_new (cellname, FCELL_TYPE)) < 0) {
     G_fatal_error ("Could not open <%s>", cellname);
   }
   
@@ -425,11 +425,11 @@ stream2_FCELL(AMI_STREAM<T>* str,  dimension_type nrows, dimension_type ncols,
 
   /* open  raster maps */
   int fd1;
-  if ( (fd1 = Rast_open_raster_new (cellname1, FCELL_TYPE)) < 0) {
+  if ( (fd1 = Rast_open_new (cellname1, FCELL_TYPE)) < 0) {
     G_fatal_error ("Could not open <%s>", cellname1);
   }
   int fd2;
-  if ( (fd2 = Rast_open_raster_new (cellname2, FCELL_TYPE)) < 0) {
+  if ( (fd2 = Rast_open_new (cellname2, FCELL_TYPE)) < 0) {
     G_fatal_error ("Could not open <%s>", cellname2);
   }
   

@@ -186,7 +186,7 @@ struct GDAL_link *Rast_get_gdal_link(const char *name, const char *mapset)
     if (!G_find_cell2(name, mapset))
 	return NULL;
 
-    map_type = Rast_raster_map_type(name, mapset);
+    map_type = Rast_map_type(name, mapset);
     if (map_type < 0)
 	return NULL;
 

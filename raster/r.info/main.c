@@ -123,7 +123,7 @@ int main(int argc, char **argv)
     cats_ok = Rast_read_cats(name, "", &cats) >= 0;
     hist_ok = Rast_read_history(name, "", &hist) >= 0;
     is_reclass = Rast_get_reclass(name, "", &reclass);
-    data_type = Rast_raster_map_type(name, "");
+    data_type = Rast_map_type(name, "");
 
     if (Rast_read_raster_units(name, "", units) != 0)
 	units[0] = '\0';

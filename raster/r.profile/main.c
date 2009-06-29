@@ -129,7 +129,7 @@ int main(int argc, char *argv[])
 	coords = 1;
 
     /* Open Raster File */
-    if ((fd = Rast_open_cell_old(name, "")) < 0)
+    if ((fd = Rast_open_old(name, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
 
     /* initialize color structure */
@@ -146,7 +146,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Unable to open file <%s>"), outfile);
 
     /* Get Raster Type */
-    data_type = Rast_get_raster_map_type(fd);
+    data_type = Rast_get_map_type(fd);
     /* Done with file */
 
     /* Show message giving output format */

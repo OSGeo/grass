@@ -208,18 +208,18 @@ int main(int argc, char **argv)
     if (flag.m->answer)
 	scale = G_database_units_to_meters_factor();
 
-    in_fd = Rast_open_cell_old(in_name, "");
+    in_fd = Rast_open_old(in_name, "");
     if (in_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), in_name);
 
     if (dist_name) {
-	dist_fd = Rast_open_raster_new(dist_name, DCELL_TYPE);
+	dist_fd = Rast_open_new(dist_name, DCELL_TYPE);
 	if (dist_fd < 0)
 	    G_fatal_error(_("Unable to create distance map <%s>"), dist_name);
     }
 
     if (val_name) {
-	val_fd = Rast_open_raster_new(val_name, DCELL_TYPE);
+	val_fd = Rast_open_new(val_name, DCELL_TYPE);
 	if (val_fd < 0)
 	    G_fatal_error(_("Unable to create value map <%s>"), val_name);
     }

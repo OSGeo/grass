@@ -133,7 +133,7 @@ int main(int argc, char *argv[])
 			  parms.null->answer);
     }
 
-    map_type = Rast_raster_map_type(name, mapset);
+    map_type = Rast_map_type(name, mapset);
 
     if (only_null && G_find_file2_misc("cell_misc", "null", name, mapset))
 	G_fatal_error(_("Raster map <%s> already has a null bitmap file"), name);
@@ -314,11 +314,11 @@ int doit(const char *name, const char *mapset, int change_null, RASTER_MAP_TYPE 
 
     Rast_set_window(&cellhd);
 
-    old = Rast_open_cell_old(name, mapset);
+    old = Rast_open_old(name, mapset);
     if (old < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
 
-    new = Rast_open_raster_new(name, map_type);
+    new = Rast_open_new(name, map_type);
 
     if (new < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), name);

@@ -7,7 +7,7 @@
  *
  *   Writes the next row for the cell file opened on 'fd' from 'buf'
  *   All writes go into NEW files that exactly match the current window.
- *   The file must have been opened with Rast_open_cell_new()
+ *   The file must have been opened with Rast_open_new()
  *   and be written sequentially, ie no skipping rows
  *
  *   when the null values are embeded into the data, corresponding cells are 
@@ -38,7 +38,7 @@
  *
  *   Writes the next row for the cell file opened on 'fd' from 'buf'
  *   All writes go into NEW files that exactly match the current window.
- *   The file must have been opened with Rast_open_cell_new()
+ *   The file must have been opened with Rast_open_new()
  *   and be written sequentially, ie no skipping rows
  *
  *   NULLS are written into null bitmap file for all cells which are zero,

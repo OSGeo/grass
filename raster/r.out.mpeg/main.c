@@ -282,14 +282,14 @@ static int load_files(void)
 	    if (!quiet)
 		G_message("\r%s <%s>", _("Reading file"), name);
 
-	    fd = Rast_open_cell_old(name, "");
+	    fd = Rast_open_old(name, "");
 	    if (fd < 0)
 		G_fatal_error(_("Raster map <%s> not found"), name);
 
 	    if (Rast_read_colors(name, "", &colors) < 0)
 		G_fatal_error(_("Unable to read color table for <%s>"), name);
 
-	    rtype = Rast_get_raster_map_type(fd);
+	    rtype = Rast_get_map_type(fd);
 	    voidc = Rast_allocate_buf(rtype);
 
 	    for (row = 0; row < vrows; row++) {

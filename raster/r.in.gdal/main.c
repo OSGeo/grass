@@ -680,7 +680,7 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
     char outputReal[GNAME_MAX], outputImg[GNAME_MAX];
     char *nullFlags = NULL;
     int (*raster_open_new_func) (const char *, RASTER_MAP_TYPE) =
-	Rast_open_raster_new;
+	Rast_open_new;
     struct History history;
 
     /* -------------------------------------------------------------------- */
@@ -701,7 +701,7 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 	eGDT = GDT_Int32;
 	complex = FALSE;
 	Rast_set_cell_format(0);
-	/* raster_open_new_func = Rast_open_raster_new_uncompressed; *//* ?? */
+	/* raster_open_new_func = Rast_open_new_uncompressed; *//* ?? */
 	break;
 
     case GDT_Int16:
@@ -710,7 +710,7 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 	eGDT = GDT_Int32;
 	complex = FALSE;
 	Rast_set_cell_format(1);
-	/* raster_open_new_func = Rast_open_raster_new_uncompressed; *//* ?? */
+	/* raster_open_new_func = Rast_open_new_uncompressed; *//* ?? */
 	break;
 
     default:

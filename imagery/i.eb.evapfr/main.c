@@ -95,17 +95,17 @@ int main(int argc, char *argv[])
     makin = flag1->answer;
     
     /***************************************************/ 
-    if ((infd_rnet = Rast_open_cell_old(rnet, "")) < 0)
+    if ((infd_rnet = Rast_open_old(rnet, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), rnet);
     inrast_rnet = Rast_allocate_d_buf();
     
     /***************************************************/ 
-    if ((infd_g0 = Rast_open_cell_old(g0, "")) < 0)
+    if ((infd_g0 = Rast_open_old(g0, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), g0);
     inrast_g0 = Rast_allocate_d_buf();
     
     /***************************************************/ 
-    if ((infd_h0 = Rast_open_cell_old(h0, "")) < 0)
+    if ((infd_h0 = Rast_open_old(h0, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), h0);
     inrast_h0 = Rast_allocate_d_buf();
     
@@ -118,10 +118,10 @@ int main(int argc, char *argv[])
 	outrast2 = Rast_allocate_d_buf();
     
     /* Create New raster files */ 
-    if ((outfd1 = Rast_open_raster_new(result1, DCELL_TYPE)) < 0)
+    if ((outfd1 = Rast_open_new(result1, DCELL_TYPE)) < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), result1);
     if (makin) 
-	if ((outfd2 = Rast_open_raster_new(result2, DCELL_TYPE)) < 0)
+	if ((outfd2 = Rast_open_new(result2, DCELL_TYPE)) < 0)
 	    G_fatal_error(_("Unable to create raster map <%s>"), result2);
         
     /* Process pixels */ 

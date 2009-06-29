@@ -14,7 +14,7 @@ int report_range(void)
     char buff[1024], buff2[300];
     RASTER_MAP_TYPE inp_type;
 
-    inp_type = Rast_raster_map_type(name, "");
+    inp_type = Rast_map_type(name, "");
     if (inp_type != CELL_TYPE) {
 	if (Rast_read_fp_range(name, "", &drange) <= 0)
 	    G_fatal_error(_("Unable to read f_range for map %s"), name);

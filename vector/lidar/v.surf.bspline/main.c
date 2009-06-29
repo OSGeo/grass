@@ -292,7 +292,7 @@ G_add_keyword(_("interpolation"));
 	   G_fatal_error (_("Raster <%s> already exist."), out_map_opt->answer);
 	 */
 
-	if ((raster = Rast_open_fp_cell_new(out_map_opt->answer)) < 0)
+	if ((raster = Rast_open_fp_new(out_map_opt->answer)) < 0)
 	    G_fatal_error(_("Unable to create raster map <%s>"),
 			  out_map_opt->answer);
     }

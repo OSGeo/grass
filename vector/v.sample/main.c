@@ -146,7 +146,7 @@ int main(int argc, char **argv)
     Vect_set_open_level(2);
     Vect_open_old(&In, parm.input->answer, "");
 
-    if ((fdrast = Rast_open_cell_old(parm.rast->answer, "")) < 0)
+    if ((fdrast = Rast_open_old(parm.rast->answer, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), parm.rast->answer);
 
     /* Read attributes */

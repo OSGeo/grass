@@ -50,7 +50,7 @@ struct BM *IL_create_bitmask(struct interp_params *params)
 			      params->maskmap);
 
 	    cellmask = Rast_allocate_c_buf();
-	    cfmask = Rast_open_cell_old(params->maskmap, mapsetm);
+	    cfmask = Rast_open_old(params->maskmap, mapsetm);
 	}
 	else
 	    cellmask = NULL;

@@ -286,7 +286,7 @@ int main(int argc, char **argv)
 
     G_suppress_warnings(0);
 
-    fp = Rast_raster_map_is_fp(name, mapset);
+    fp = Rast_map_is_fp(name, mapset);
     Rast_read_fp_range(name, mapset, &range);
     Rast_get_fp_range_min_max(&range, &min, &max);
 

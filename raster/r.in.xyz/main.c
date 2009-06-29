@@ -495,7 +495,7 @@ int main(int argc, char *argv[])
 
 
     /* open output map */
-    out_fd = Rast_open_raster_new(outmap, rtype);
+    out_fd = Rast_open_new(outmap, rtype);
     if (out_fd < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), outmap);
 

@@ -46,7 +46,7 @@ int write_map(char *name)
     rast = Rast_allocate_buf(map_type);
     close(temp_fd);
     temp_fd = open(temp_name, 0);
-    fd = Rast_open_raster_new(name, map_type);
+    fd = Rast_open_new(name, map_type);
 
     if (fd <= 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), name);

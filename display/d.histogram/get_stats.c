@@ -51,7 +51,7 @@ int get_stats(const char *mapname, struct stat_list *dist_stats,	/* linked list 
 
     /* write stats to a temp file */
     tempfile = G_tempfile();
-    is_fp = Rast_raster_map_is_fp(mapname, "");
+    is_fp = Rast_map_is_fp(mapname, "");
     if (is_fp) {
 	if (cat_ranges) {
 	    if (Rast_read_cats(mapname, "", &cats) < 0)

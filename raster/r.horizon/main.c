@@ -553,7 +553,7 @@ int INPUT(void)
     if ((mapset = G_find_cell2(elevin, "")) == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), elevin);
 
-    fd1 = Rast_open_cell_old(elevin, mapset);
+    fd1 = Rast_open_old(elevin, mapset);
 
     for (row = 0; row < m; row++) {
 	Rast_get_f_row(fd1, cell1, row);
@@ -618,7 +618,7 @@ int OUTGR(int numrows, int numcols)
 
     if (horizon != NULL) {
 	cell1 = Rast_allocate_f_buf();
-	fd1 = Rast_open_fp_cell_new(shad_filename);
+	fd1 = Rast_open_fp_new(shad_filename);
 	if (fd1 < 0)
 	    G_fatal_error(_("Unable to create raster map %s"), shad_filename);
     }

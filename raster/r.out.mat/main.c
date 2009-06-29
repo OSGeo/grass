@@ -83,11 +83,11 @@ int main(int argc, char *argv[])
     outfile = G_malloc(strlen(basename) + 5);
     sprintf(outfile, "%s.mat", basename);
 
-    fd = Rast_open_cell_old(infile, "");
+    fd = Rast_open_old(infile, "");
     if (fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), infile);
 
-    map_type = Rast_get_raster_map_type(fd);
+    map_type = Rast_get_map_type(fd);
 
     /* open bin file for writing */
     fp1 = fopen(outfile, "wb");

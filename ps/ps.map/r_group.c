@@ -51,7 +51,7 @@ int read_group(void)
 
     /* open raster maps for reading */
     for (i = 0; i < 3; i++) {
-	if ((grp.fd[i] = Rast_open_cell_old(grp.name[i], grp.mapset[i])) < 0) {
+	if ((grp.fd[i] = Rast_open_old(grp.name[i], grp.mapset[i])) < 0) {
 	    sprintf(fullname, "%s in %s", grp.name[i], grp.mapset[i]);
 	    error(fullname, "", "can't open raster map");
 	    Rast_free_colors(&(grp.colors[i]));

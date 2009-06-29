@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     /* open input cell map */
-    inputfd = Rast_open_cell_old(input_map->answer, "");
+    inputfd = Rast_open_old(input_map->answer, "");
     if (inputfd < 0)
 	exit(EXIT_FAILURE);
 
@@ -172,7 +172,7 @@ int main(int argc, char *argv[])
 
     /* open the output cell maps and allocate cell row buffers */
     G_message(_("Writing transformed data to file..."));
-    if ((zcfd = Rast_open_cell_new(output_map->answer)) < 0)
+    if ((zcfd = Rast_open_c_new(output_map->answer)) < 0)
 	exit(EXIT_FAILURE);
 
     cell_row = Rast_allocate_c_buf();

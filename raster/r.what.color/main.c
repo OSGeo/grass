@@ -122,7 +122,7 @@ int main(int argc, char **argv)
 
     name = opt.input->answer;
 
-    type = Rast_raster_map_type(name, "");
+    type = Rast_map_type(name, "");
     if (type < 0)
 	G_fatal_error("Unable to determine type of input map %s", name);
 

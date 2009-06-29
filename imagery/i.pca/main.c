@@ -127,7 +127,7 @@ int main(int argc, char *argv[])
 	sprintf(tmpbuf, "%s.%d", opt_out->answer, i + 1);
 	G_check_input_output_name(opt_in->answers[i], tmpbuf, GR_FATAL_EXIT);
 
-	if ((inp_fd[i] = Rast_open_cell_old(opt_in->answers[i], "")) < 0)
+	if ((inp_fd[i] = Rast_open_old(opt_in->answers[i], "")) < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
 			  opt_in->answers[i]);
     }
@@ -239,7 +239,7 @@ static int calc_mu(int *fds, double *mu, int bands)
 	int row, col;
 	double sum = 0.;
 
-	maptype = Rast_get_raster_map_type(fds[i]);
+	maptype = Rast_get_map_type(fds[i]);
 
 	/* don't assume each image is of the same type */
 	if (rowbuf)
@@ -287,7 +287,7 @@ static int calc_covariance(int *fds, double **covar, double *mu, int bands)
     int row, col;
 
     for (j = 0; j < bands; j++) {
-	RASTER_MAP_TYPE maptype = Rast_get_raster_map_type(fds[j]);
+	RASTER_MAP_TYPE maptype = Rast_get_map_type(fds[j]);
 	void *rowbuf1 = NULL;
 	void *rowbuf2 = NULL;
 
@@ -309,7 +309,7 @@ static int calc_covariance(int *fds, double **covar, double *mu, int bands)
 		G_fatal_error(_("Unable to read raster map row %d"), row);
 
 	    for (k = j; k < bands; k++) {
-		RASTER_MAP_TYPE maptype2 = Rast_get_raster_map_type(fds[k]);
+		RASTER_MAP_TYPE maptype2 = Rast_get_map_type(fds[k]);
 
 		/* don't assume each image is of the same type */
 		if (rowbuf2)
@@ -390,9 +390,9 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
 
 	/* open a new file for output */
 	if (scale)
-	    out_fd = Rast_open_cell_new(name);
+	    out_fd = Rast_open_c_new(name);
 	else {
-	    out_fd = Rast_open_fp_cell_new(name);
+	    out_fd = Rast_open_fp_new(name);
 	    Rast_set_fp_type(DCELL_TYPE);
 	}
 
@@ -424,7 +424,7 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
 
 		for (j = 0; j < bands; j++) {
 		    RASTER_MAP_TYPE maptype =
-			Rast_get_raster_map_type(inp_fd[j]);
+			Rast_get_map_type(inp_fd[j]);
 
 		    /* don't assume each image is of the same type */
 		    if (rowbuf)

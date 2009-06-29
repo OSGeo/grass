@@ -22,7 +22,7 @@ int do_histogram(const char *name)
 	G_fatal_error(_("Unable to read header for <%s>"), name);
 
     Rast_set_window(&cellhd);
-    if ((fd = Rast_open_cell_old(name, "")) < 0)
+    if ((fd = Rast_open_old(name, "")) < 0)
 	G_fatal_error(_("Unable to open <%s>"), name);
 
     nrows = G_window_rows();
