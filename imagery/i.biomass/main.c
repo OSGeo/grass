@@ -42,6 +42,8 @@ int main(int argc, char *argv[])
     void *inrast_fpar, *inrast_luf, *inrast_lat;
     void *inrast_doy, *inrast_tsw, *inrast_wa;
     DCELL * outrast1;
+    CELL val1, val2;
+    
     /************************************/ 
     G_gisinit(argv[0]);
     module = G_define_module();
@@ -183,7 +185,9 @@ int main(int argc, char *argv[])
     
     /* Color table for biomass */ 
     Rast_init_colors(&colors);
-    Rast_add_color_rule(0, 0, 0, 0, 1, 255, 255, 255, &colors);
+    val1 = 0;
+    val2 = 1;
+    Rast_add_c_color_rule(&val1, 0, 0, 0, &val2, 255, 255, 255, &colors);
     G_free(inrast_fpar);
     G_free(inrast_luf);
     G_free(inrast_lat);

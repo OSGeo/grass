@@ -351,11 +351,11 @@ setFlowAccuColorTable(char* cellname) {
 
   Rast_init_colors(&colors);
  
-  Rast_add_color_rule(v[0], 255,255,255,  v[1],     255,255,0, &colors);
-  Rast_add_color_rule(v[1], 255,255,0,    v[2],       0,255,255, &colors);
-  Rast_add_color_rule(v[2],   0,255,255,  v[3],       0,127,255, &colors);
-  Rast_add_color_rule(v[3],   0,127,255,  v[4],       0,0,255,   &colors);
-  Rast_add_color_rule(v[4],   0,0,255,  (CELL)v[5],   0,0,0,     &colors);
+  Rast_add_c_color_rule(&v[0], 255,255,255,  &v[1],     255,255,0, &colors);
+  Rast_add_c_color_rule(&v[1], 255,255,0,    &v[2],       0,255,255, &colors);
+  Rast_add_c_color_rule(&v[2],   0,255,255,  &v[3],       0,127,255, &colors);
+  Rast_add_c_color_rule(&v[3],   0,127,255,  &v[4],       0,0,255,   &colors);
+  Rast_add_c_color_rule(&v[4],   0,0,255,    &v[5],   0,0,0,     &colors);
 
  
   if (Rast_write_colors(cellname, mapset, &colors) == -1) {

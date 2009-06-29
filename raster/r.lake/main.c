@@ -374,11 +374,11 @@ int main(int argc, char *argv[])
     /* Add blue color gradient from light bank to dark depth */
     Rast_init_colors(&colr);
     if (negative_flag->answer == 1) {
-	Rast_add_f_raster_color_rule(&max_depth, 0, 240, 255,
+	Rast_add_f_color_rule(&max_depth, 0, 240, 255,
 				  &min_depth, 0, 50, 170, &colr);
     }
     else {
-	Rast_add_f_raster_color_rule(&min_depth, 0, 240, 255,
+	Rast_add_f_color_rule(&min_depth, 0, 240, 255,
 				  &max_depth, 0, 50, 170, &colr);
     }
 

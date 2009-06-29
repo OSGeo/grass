@@ -282,21 +282,21 @@ static int read_new_colors(FILE * fd, struct Colors *colors)
 
 	else if (modular) {
 	    if (fp_rule)
-		Rast_add_modular_d_raster_color_rule((DCELL *) & val1, r1, g1,
+		Rast_add_modular_d_color_rule((DCELL *) & val1, r1, g1,
 						  b1, (DCELL *) & val2, r2,
 						  g2, b2, colors);
 	    else
-		Rast_add_modular_color_rule((CELL) cat1, r1, g1, b1,
-					 (CELL) cat2, r2, g2, b2, colors);
+		Rast_add_modular_c_color_rule((CELL *) &cat1, r1, g1, b1,
+					      (CELL *) &cat2, r2, g2, b2, colors);
 	}
 	else {
 	    if (fp_rule)
-		Rast_add_d_raster_color_rule((DCELL *) & val1, r1, g1, b1,
+		Rast_add_d_color_rule((DCELL *) & val1, r1, g1, b1,
 					  (DCELL *) & val2, r2, g2, b2,
 					  colors);
 	    else
-		Rast_add_color_rule((CELL) cat1, r1, g1, b1,
-				 (CELL) cat2, r2, g2, b2, colors);
+		Rast_add_c_color_rule((CELL *) &cat1, r1, g1, b1,
+				      (CELL *) &cat2, r2, g2, b2, colors);
 	}
 	G_debug(3, "adding rule %ld=%.2lf %d %d %d  %ld=%.2lf %d %d %d",
 		cat1, val1,  r1, g1, b1, cat2, val2, r2, g2, b2);

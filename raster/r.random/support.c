@@ -63,9 +63,9 @@ int make_support(struct rr_state *theState, int percent, double percentage)
     /* set colors for output raster */
     if (Rast_read_colors(inraster, "", &clr) >= 0) {
 	if (theState->use_nulls) {
-	    Rast_add_raster_color_rule(nulls.data.v, 127, 127, 127,
-				    nulls.data.v, 127, 127, 127, &clr,
-				    nulls.type);
+	    Rast_add_color_rule(nulls.data.v, 127, 127, 127,
+				nulls.data.v, 127, 127, 127, &clr,
+				nulls.type);
 	}
 	Rast_write_colors(theState->outraster, G_mapset(), &clr);
     }

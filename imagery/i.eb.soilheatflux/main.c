@@ -42,6 +42,7 @@ int main(int argc, char *argv[])
     void *inrast_albedo, *inrast_ndvi, *inrast_tempk, *inrast_rnet,
 	*inrast_time;
     DCELL * outrast;
+    CELL val1, val2;
 
     G_gisinit(argv[0]);
 
@@ -186,7 +187,9 @@ int main(int argc, char *argv[])
     
     /* Colors in grey shade */ 
     Rast_init_colors(&colors);
-    Rast_add_color_rule(0.0, 0, 0, 0, 200.0, 255, 255, 255, &colors);
+    val1 = 0;
+    val2 = 200;
+    Rast_add_c_color_rule(&val1, 0, 0, 0, &val2, 255, 255, 255, &colors);
     Rast_short_history(result, "raster", &history);
     Rast_command_history(&history);
     Rast_write_history(result, &history);

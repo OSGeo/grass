@@ -77,7 +77,8 @@ int main(int argc, char *argv[])
     CELL *inrast;
     CELL *outrast;
     RASTER_MAP_TYPE data_type_output = CELL_TYPE;
-
+    CELL val1, val2;
+    
     /************************************/ 
     G_gisinit(argv[0]);
     module = G_define_module();
@@ -334,7 +335,9 @@ int main(int argc, char *argv[])
 
     /* Color from 0 to 10 in grey */ 
     Rast_init_colors(&colors);
-    Rast_add_color_rule(0, 0, 0, 0, 10, 255, 255, 255, &colors);
+    val1 = 0;
+    val2 = 10;
+    Rast_add_c_color_rule(&val1, 0, 0, 0, &val2, 255, 255, 255, &colors);
     Rast_short_history(result, "raster", &history);
     Rast_command_history(&history);
     Rast_write_history(result, &history);

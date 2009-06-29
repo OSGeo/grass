@@ -32,7 +32,7 @@ void Rast_make_histogram_eq_colors(struct Colors *colors,
 				struct Cell_stats *statf)
 {
     long count, total;
-    CELL prev = 0, cat;
+    CELL prev = 0, cat, val2;
     double span, sum;
     int first;
     int x, grey;
@@ -73,15 +73,16 @@ void Rast_make_histogram_eq_colors(struct Colors *colors,
 	    first = 0;
 	}
 	else if (grey != x) {
-	    Rast_add_color_rule(prev, grey, grey, grey, cat - 1, grey, grey,
-			     grey, colors);
+	    val2 = cat - 1;
+	    Rast_add_c_color_rule(&prev, grey, grey, grey, &val2, grey, grey,
+				  grey, colors);
 	    grey = x;
 	    prev = cat;
 	}
     }
     if (!first) {
-	Rast_add_color_rule(prev, grey, grey, grey, cat, grey, grey, grey,
-			 colors);
+	Rast_add_c_color_rule(&prev, grey, grey, grey, &cat, grey, grey, grey,
+			      colors);
     }
 }
 
@@ -101,7 +102,7 @@ void Rast_make_histogram_log_colors(struct Colors *colors,
 {
     long count, total;
     double lmin, lmax;
-    CELL prev = 0, cat;
+    CELL prev = 0, cat, val2;
     int first;
     int x, grey;
     int R, G, B;
@@ -144,14 +145,15 @@ void Rast_make_histogram_log_colors(struct Colors *colors,
 	    first = 0;
 	}
 	else if (grey != x) {
-	    Rast_add_color_rule(prev, grey, grey, grey, cat - 1, grey, grey,
-			     grey, colors);
+	    val2 = cat - 1;
+	    Rast_add_c_color_rule(&prev, grey, grey, grey, &val2, grey, grey,
+				  grey, colors);
 	    grey = x;
 	    prev = cat;
 	}
     }
     if (!first) {
-	Rast_add_color_rule(prev, grey, grey, grey, cat, grey, grey, grey,
-			 colors);
+	Rast_add_c_color_rule(&prev, grey, grey, grey, &cat, grey, grey, grey,
+			      colors);
     }
 }

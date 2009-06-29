@@ -69,6 +69,7 @@ int main(int argc, char *argv[])
     DCELL *inrast_redchan, *inrast_nirchan, *inrast_greenchan;
     DCELL *inrast_bluechan, *inrast_chan5chan, *inrast_chan7chan;
     DCELL *outrast;
+    CELL val1, val2;
 
     G_gisinit(argv[0]);
 
@@ -400,7 +401,9 @@ int main(int argc, char *argv[])
 
     /* Color from -1.0 to +1.0 in grey */ 
     Rast_init_colors(&colors);
-    Rast_add_color_rule(-1.0, 0, 0, 0, 1.0, 255, 255, 255, &colors);
+    val1 = -1;
+    val2 = 1;
+    Rast_add_c_color_rule(&val1, 0, 0, 0, &val2, 255, 255, 255, &colors);
     Rast_short_history(result, "raster", &history);
     Rast_command_history(&history);
     Rast_write_history(result, &history);

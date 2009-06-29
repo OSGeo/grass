@@ -61,7 +61,8 @@ int main(int argc, char *argv[])
 
     RASTER_MAP_TYPE in_data_type[MAXFILES];	/* 0=numbers  1=text */
     RASTER_MAP_TYPE out_data_type = DCELL_TYPE;
-
+    CELL val1, val2;
+    
     /************************************/
     int peak1, peak2, peak3;
     int i_peak1, i_peak2, i_peak3;
@@ -401,7 +402,9 @@ int main(int argc, char *argv[])
 
     /* Color table from 0.0 to 1.0 */
     Rast_init_colors(&colors);
-    Rast_add_color_rule(0.0, 0, 0, 0, 1.0, 255, 255, 255, &colors);
+    val1 = 0;
+    val2 = 1;
+    Rast_add_c_color_rule(&val1, 0, 0, 0, &val2, 255, 255, 255, &colors);
     /* Metadata */
     Rast_short_history(result, "raster", &history);
     Rast_command_history(&history);

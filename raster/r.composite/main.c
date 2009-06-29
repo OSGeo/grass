@@ -298,8 +298,8 @@ static void make_color_cube(struct Colors *colors)
 	    CELL i0 = i;
 	    CELL i1 = i + mr;
 
-	    Rast_add_c_raster_color_rule(&i0, 0, grn, blu,
-				      &i1, 255, grn, blu, colors);
+	    Rast_add_c_color_rule(&i0, 0, grn, blu,
+				  &i1, 255, grn, blu, colors);
 
 	    i += nr;
 	}

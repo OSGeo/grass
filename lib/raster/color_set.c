@@ -26,7 +26,7 @@
  * color logic.</b>
  *
  * It is provided only for backward compatibility. Overuse can create
- * large color tables. Rast_add_color_rule() should be used whenever
+ * large color tables. Rast_add_c_color_rule() should be used whenever
  * possible.
  *
  * <b>Note:</b> The <i>colors</i> structure must have been
@@ -43,7 +43,7 @@ void Rast_set_color(CELL cat, int r, int g, int b, struct Colors *colors)
     if (Rast_is_c_null_value(&cat))
 	Rast_set_null_value_color(r, g, b, colors);
     else
-	Rast_add_color_rule(cat, r, g, b, cat, r, g, b, colors);
+	Rast_add_c_color_rule(&cat, r, g, b, &cat, r, g, b, colors);
 }
 
 /*!
@@ -62,7 +62,7 @@ void Rast_set_d_color(DCELL val, int r, int g, int b, struct Colors *colors)
     if (Rast_is_d_null_value(&val))
 	Rast_set_null_value_color(r, g, b, colors);
     else
-	Rast_add_d_raster_color_rule(&val, r, g, b, &val, r, g, b, colors);
+	Rast_add_d_color_rule(&val, r, g, b, &val, r, g, b, colors);
 }
 
 /*!
