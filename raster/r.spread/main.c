@@ -433,28 +433,28 @@ int main(int argc, char *argv[])
 
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
-	if (Rast_get_map_row(max_fd, cell, row) < 0)
+	if (Rast_get_c_row(max_fd, cell, row) < 0)
 	    exit(EXIT_FAILURE);
 	for (col = 0; col < ncols; col++)
 	    DATA(map_max, row, col) = cell[col];
-	if (Rast_get_map_row(dir_fd, cell, row) < 0)
+	if (Rast_get_c_row(dir_fd, cell, row) < 0)
 	    exit(EXIT_FAILURE);
 	for (col = 0; col < ncols; col++)
 	    DATA(map_dir, row, col) = cell[col];
-	if (Rast_get_map_row(base_fd, cell, row) < 0)
+	if (Rast_get_c_row(base_fd, cell, row) < 0)
 	    exit(EXIT_FAILURE);
 	for (col = 0; col < ncols; col++)
 	    DATA(map_base, row, col) = cell[col];
 	if (spotting) {
-	    if (Rast_get_map_row(spotdist_fd, cell, row) < 0)
+	    if (Rast_get_c_row(spotdist_fd, cell, row) < 0)
 		exit(EXIT_FAILURE);
 	    for (col = 0; col < ncols; col++)
 		DATA(map_spotdist, row, col) = cell[col];
-	    if (Rast_get_map_row(velocity_fd, cell, row) < 0)
+	    if (Rast_get_c_row(velocity_fd, cell, row) < 0)
 		exit(EXIT_FAILURE);
 	    for (col = 0; col < ncols; col++)
 		DATA(map_velocity, row, col) = cell[col];
-	    if (Rast_get_map_row(mois_fd, cell, row) < 0)
+	    if (Rast_get_c_row(mois_fd, cell, row) < 0)
 		exit(EXIT_FAILURE);
 	    for (col = 0; col < ncols; col++)
 		DATA(map_mois, row, col) = cell[col];

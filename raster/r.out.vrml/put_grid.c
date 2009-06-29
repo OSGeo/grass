@@ -48,7 +48,7 @@ void vrml_put_grid(FILE * vout,
 	    if (!shh)
 		G_percent(row, rows - 1, 10);
 
-	    Rast_get_f_raster_row(elevfd, tf, row);
+	    Rast_get_f_row(elevfd, tf, row);
 	    coordz = G_row_to_northing((double)row, w);
 	    do_coordcnv(&coordz, 'z');
 
@@ -99,7 +99,7 @@ void vrml_put_grid(FILE * vout,
 	    if (!shh)
 		G_percent(row, rows - 1, 5);
 
-	    Rast_get_f_raster_row(colorfd, tf, row);
+	    Rast_get_f_row(colorfd, tf, row);
 	    Rast_lookup_f_colors(tf, red, green, blue, set, cols, colr);
 
 	    for (col = 0; col < cols; col++) {

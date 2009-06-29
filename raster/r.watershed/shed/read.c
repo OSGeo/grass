@@ -26,7 +26,7 @@ int read_basins(char *haf_name, OUTPUT * output)
     bas_fd = Rast_open_cell_old(haf_name, mapset);
     facts = output->basin_facts;
     for (r = nrows - 1; r >= 0; r--) {
-	Rast_get_c_raster_row(bas_fd, bas_buf, r);
+	Rast_get_c_row(bas_fd, bas_buf, r);
 	for (c = ncols - 1; c >= 0; c--) {
 	    b = bas_buf[c] / 2 - 1;
 	    if (b >= 0)
@@ -48,8 +48,8 @@ int read_basins(char *haf_name, OUTPUT * output)
 	fd = Rast_open_cell_old(map->name, map->mapset);
 	if (fd >= 0) {
 	    for (r = 0; r < nrows; r++) {
-		Rast_get_c_raster_row(fd, buf, r);
-		Rast_get_c_raster_row(bas_fd, bas_buf, r);
+		Rast_get_c_row(fd, buf, r);
+		Rast_get_c_row(bas_fd, bas_buf, r);
 		for (c = 0; c < ncols; c++) {
 		    v = buf[c];
 		    b = bas_buf[c] / 2 - 1;

@@ -25,7 +25,7 @@ int read_data(struct files *files, struct SigSet *S)
 	G_percent(row, nrows, 2);
 	read_training_map(class, row, ncols, files);
 	for (b = 0; b < files->nbands; b++)
-	    if (Rast_get_d_raster_row
+	    if (Rast_get_d_row
 		(files->band_fd[b], files->band_cell[b], row) < 0)
 		G_fatal_error(_("Unable to read raster map row %d"),
 			      row);

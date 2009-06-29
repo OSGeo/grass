@@ -40,14 +40,14 @@ int describe(const char *name, int compact, char *no_data_str,
     int (*get_row)(int, CELL *, int);
 
     if (windowed) {
-	get_row = Rast_get_c_raster_row;
+	get_row = Rast_get_c_row;
     }
     else {
 	if (Rast_get_cellhd(name, "", &window) < 0)
 	    G_fatal_error(_("Unable to get cell header for <%s>"), name);
 
 	Rast_set_window(&window);
-	get_row = Rast_get_c_raster_row_nomask;
+	get_row = Rast_get_c_row_nomask;
     }
     fd = Rast_open_cell_old(name, "");
     if (fd < 0)

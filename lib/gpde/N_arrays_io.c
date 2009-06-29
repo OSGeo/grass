@@ -100,7 +100,7 @@ N_array_2d *N_read_rast_to_array_2d(char *name, N_array_2d * array)
     for (y = 0; y < rows; y++) {
 	G_percent(y, rows - 1, 10);
 
-	if (!Rast_get_raster_row(map, rast, y, type)) {
+	if (!Rast_get_row(map, rast, y, type)) {
 	    Rast_close(map);
 	    G_fatal_error(_("Could not get raster row"));
 	}

@@ -31,7 +31,7 @@ int do_histogram(const char *name)
 
     Rast_init_cell_stats(&statf);
     for (row = 0; row < nrows; row++) {
-	if (Rast_get_map_row_nomask(fd, cell, row) < 0) {
+	if (Rast_get_c_row_nomask(fd, cell, row) < 0) {
 	    G_warning(_("Unable to read row %d"), row);
 	    break;
 	}

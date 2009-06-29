@@ -65,7 +65,7 @@ static void get_slot_counts(int infile)
     total = 0;
 
     for (row = 0; row < rows; row++) {
-	Rast_get_d_raster_row(infile, inbuf, row);
+	Rast_get_d_row(infile, inbuf, row);
 
 	for (col = 0; col < cols; col++) {
 	    int i;
@@ -134,7 +134,7 @@ static void fill_bins(int infile)
     G_message(_("Binning data"));
 
     for (row = 0; row < rows; row++) {
-	Rast_get_d_raster_row(infile, inbuf, row);
+	Rast_get_d_row(infile, inbuf, row);
 
 	for (col = 0; col < cols; col++) {
 	    int i, bin;

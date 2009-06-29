@@ -19,7 +19,7 @@ int sg_factor(void)
     for (r = 0; r < nrows; r++) {
 	G_percent(r, nrows, 3);
 	if (ril_flag) {
-	    Rast_get_c_raster_row(ril_fd, ril_buf, r);
+	    Rast_get_c_row(ril_fd, ril_buf, r);
 	}
 	for (c = 0; c < ncols; c++) {
 	    low_elev = alt[SEG_INDEX(alt_seg, r, c)];

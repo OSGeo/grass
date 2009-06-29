@@ -72,7 +72,7 @@ void find_edge_cells(struct Map *map)
 	buf2 = tmp;
 
 	/* read a row */
-	if (Rast_get_map_row(fd, &buf1[1], row) < 0)
+	if (Rast_get_c_row(fd, &buf1[1], row) < 0)
 	    exit(1);
 
 	for (col = 1; col <= ncols; col++) {

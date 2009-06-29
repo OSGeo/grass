@@ -152,7 +152,7 @@ int main(int argc, char *argv[])
     /* Read in cell map values */
     G_message(_("Reading raster map..."));
     for (i = 0; i < or; i++) {
-	if (Rast_get_map_row(inputfd, cell_row, i) < 0)
+	if (Rast_get_c_row(inputfd, cell_row, i) < 0)
 	    G_fatal_error(_("Error while reading input raster map."));
 
 	for (j = 0; j < oc; j++)

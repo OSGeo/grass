@@ -15,7 +15,7 @@
  *   file.
  *
  *   *** NOTE *** 
- *   A map cannot be copied using Rast_get_raster_row() and Rast_put_raster_row().
+ *   A map cannot be copied using Rast_get_row() and Rast_put_raster_row().
  *   The former resamples the data of the original map into a row buffer
  *   that matches the current window.  The later writes out rows associated
  *   with the window.
@@ -46,7 +46,7 @@
  *   writing) 
  *
  *   *** NOTE *** 
- *   A map cannot be copied using Rast_get_map_row() and Rast_put_map_row().
+ *   A map cannot be copied using Rast_get_c_row() and Rast_put_map_row().
  *   The former resamples the data of the original map into a row buffer
  *   that matches the current window.  The later writes out rows associated
  *   with the window.

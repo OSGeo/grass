@@ -241,7 +241,7 @@ int main(int argc, char *argv[])
     /* Read in cell map values */
     G_important_message(_("Reading raster map..."));
     for (j = 0; j < nrows; j++) {
-	Rast_get_raster_row(infd, cell_row, j, CELL_TYPE);
+	Rast_get_row(infd, cell_row, j, CELL_TYPE);
 	for (i = 0; i < ncols; i++)
 	    data[j][i] = (int)cell_row[i];
     }

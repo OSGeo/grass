@@ -47,7 +47,7 @@ int cell_stats(int fd[], int with_percents, int with_counts,
 	G_percent(row, nrows, 2);
 
 	for (i = 0; i < nfiles; i++) {
-	    if (Rast_get_c_raster_row(fd[i], cell[i], row) < 0)
+	    if (Rast_get_c_row(fd[i], cell[i], row) < 0)
 		G_fatal_error(_("Unable to read raster <map %d of %d> row %d"),
 				i+1, nfiles, row);
 

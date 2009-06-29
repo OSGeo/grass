@@ -133,19 +133,19 @@ int main(int argc, char *argv[])
 	DCELL d_time;
 	G_percent(row, nrows, 2);	
         /* read input maps */ 
-        if (Rast_get_d_raster_row(infd_albedo, inrast_albedo, row) < 0)
+        if (Rast_get_d_row(infd_albedo, inrast_albedo, row) < 0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			  albedo, row);
-	if (Rast_get_d_raster_row(infd_ndvi, inrast_ndvi, row)<0)
+	if (Rast_get_d_row(infd_ndvi, inrast_ndvi, row)<0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			  ndvi, row);
-	if (Rast_get_d_raster_row(infd_tempk, inrast_tempk, row)< 0)
+	if (Rast_get_d_row(infd_tempk, inrast_tempk, row)< 0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			  tempk, row);
-	if (Rast_get_d_raster_row(infd_rnet, inrast_rnet, row)<0)
+	if (Rast_get_d_row(infd_rnet, inrast_rnet, row)<0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			  rnet, row);
-	if (Rast_get_d_raster_row(infd_time, inrast_time, row)<0)
+	if (Rast_get_d_row(infd_time, inrast_time, row)<0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			  time, row);
         /*process the data */ 

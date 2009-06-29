@@ -263,12 +263,12 @@ int main(int argc, char *argv[])
 	out_water[row] = (FCELL *) G_calloc(cols, sizeof(FCELL));
 
 	/* In newly created space load data from file. */
-	if (Rast_get_f_raster_row(in_terran_fd, in_terran[row], row) != 1)
+	if (Rast_get_f_row(in_terran_fd, in_terran[row], row) != 1)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			  terrainmap, row);
 
 	if (smap_opt->answer)
-	    if (Rast_get_f_raster_row(out_fd, out_water[row], row) != 1)
+	    if (Rast_get_f_row(out_fd, out_water[row], row) != 1)
 		G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			      seedmap, row);
 

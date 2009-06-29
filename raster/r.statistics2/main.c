@@ -251,8 +251,8 @@ int main(int argc, char **argv)
     G_message(_("First pass"));
 
     for (row = 0; row < rows; row++) {
-	Rast_get_c_raster_row(base_fd, base_buf, row);
-	Rast_get_d_raster_row(cover_fd, cover_buf, row);
+	Rast_get_c_row(base_fd, base_buf, row);
+	Rast_get_d_row(cover_fd, cover_buf, row);
 
 	for (col = 0; col < cols; col++) {
 	    int n;
@@ -330,8 +330,8 @@ int main(int argc, char **argv)
 	G_message(_("Second pass"));
 
 	for (row = 0; row < rows; row++) {
-	    Rast_get_c_raster_row(base_fd, base_buf, row);
-	    Rast_get_d_raster_row(cover_fd, cover_buf, row);
+	    Rast_get_c_row(base_fd, base_buf, row);
+	    Rast_get_d_row(cover_fd, cover_buf, row);
 
 	    for (col = 0; col < cols; col++) {
 		int n;
@@ -504,7 +504,7 @@ int main(int argc, char **argv)
 	out_buf = Rast_allocate_d_buf();
 
 	for (row = 0; row < rows; row++) {
-	    Rast_get_c_raster_row(base_fd, base_buf, row);
+	    Rast_get_c_row(base_fd, base_buf, row);
 
 	    for (col = 0; col < cols; col++)
 		if (Rast_is_c_null_value(&base_buf[col]))

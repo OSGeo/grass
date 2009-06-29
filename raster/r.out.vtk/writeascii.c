@@ -181,7 +181,7 @@ write_vtk_structured_coordinates(int fd, FILE * fp, char *varname,
 	colcount = 0;
 	G_percent((row - nrows) * (-1), nrows, 2);
 
-	if (Rast_get_raster_row(fd, raster, row, out_type) < 0) {
+	if (Rast_get_row(fd, raster, row, out_type) < 0) {
 	    G_fatal_error(_("Unable to read row %i\n"), row);
 	    return;
 	}
@@ -242,7 +242,7 @@ write_vtk_polygonal_coordinates(int fd, FILE * fp, char *varname,
 	colcount = 0;
 	G_percent((row - nrows) * (-1), nrows, 10);
 
-	if (Rast_get_raster_row(fd, raster, row, out_type) < 0) {
+	if (Rast_get_row(fd, raster, row, out_type) < 0) {
 	    G_fatal_error(_("Unable to read row %i\n"), row);
 	    return;
 	}
@@ -354,7 +354,7 @@ write_vtk_data(int fd, FILE * fp, char *varname, struct Cell_head region,
     for (row = nrows - 1; row >= 0; row--) {
 	G_percent((row - nrows) * (-1), nrows, 10);
 
-	if (Rast_get_raster_row(fd, raster, row, out_type) < 0) {
+	if (Rast_get_row(fd, raster, row, out_type) < 0) {
 	    G_fatal_error(_("Unable to read row %i\n"), row);
 	    return;
 	}
@@ -401,15 +401,15 @@ write_vtk_rgb_image_data(int redfd, int greenfd, int bluefd, FILE * fp,
     for (row = nrows - 1; row >= 0; row--) {
 	G_percent((row - nrows) * (-1), nrows, 10);
 
-	if (Rast_get_raster_row(redfd, redraster, row, out_type) < 0) {
+	if (Rast_get_row(redfd, redraster, row, out_type) < 0) {
 	    G_fatal_error(_("Unable to read row %i\n"), row);
 	    return;
 	}
-	if (Rast_get_raster_row(greenfd, greenraster, row, out_type) < 0) {
+	if (Rast_get_row(greenfd, greenraster, row, out_type) < 0) {
 	    G_fatal_error(_("Unable to read row %i\n"), row);
 	    return;
 	}
-	if (Rast_get_raster_row(bluefd, blueraster, row, out_type) < 0) {
+	if (Rast_get_row(bluefd, blueraster, row, out_type) < 0) {
 	    G_fatal_error(_("Unable to read row %i\n"), row);
 	    return;
 	}
@@ -468,15 +468,15 @@ write_vtk_vector_data(int xfd, int yfd, int zfd, FILE * fp,
     for (row = nrows - 1; row >= 0; row--) {
 	G_percent((row - nrows) * (-1), nrows, 10);
 
-	if (Rast_get_raster_row(xfd, xraster, row, out_type) < 0) {
+	if (Rast_get_row(xfd, xraster, row, out_type) < 0) {
 	    G_fatal_error(_("Unable to read row %i\n"), row);
 	    return;
 	}
-	if (Rast_get_raster_row(yfd, yraster, row, out_type) < 0) {
+	if (Rast_get_row(yfd, yraster, row, out_type) < 0) {
 	    G_fatal_error(_("Unable to read row %i\n"), row);
 	    return;
 	}
-	if (Rast_get_raster_row(zfd, zraster, row, out_type) < 0) {
+	if (Rast_get_row(zfd, zraster, row, out_type) < 0) {
 	    G_fatal_error(_("Unable to read row %i\n"), row);
 	    return;
 	}

@@ -114,7 +114,7 @@ void raster_to_g3d(void *map, G3D_Region region, int *fd)
 	for (y = 0; y < rows; y++) {
 	    G_percent(y, rows - 1, 10);
 
-	    if (!Rast_get_raster_row(fd[z], rast, y, globalRastMapType))
+	    if (!Rast_get_row(fd[z], rast, y, globalRastMapType))
 		fatal_error(map, fd, depths, _("Could not get raster row"));
 
 	    for (x = 0, ptr = rast; x < cols; x++,

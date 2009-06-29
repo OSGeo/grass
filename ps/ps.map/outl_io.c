@@ -44,7 +44,7 @@ int o_read_row(void *buf)
 	    Rast_set_null_value(ptr, 1, map_type);
 	    ptr = G_incr_void_ptr(ptr, raster_size);
 
-	    Rast_get_raster_row(in_file_d, ptr, row_count++, map_type);
+	    Rast_get_row(in_file_d, ptr, row_count++, map_type);
 
 	    ptr = G_incr_void_ptr(ptr, raster_size * (row_length + 1));
 	    Rast_set_null_value(ptr, 1, map_type);

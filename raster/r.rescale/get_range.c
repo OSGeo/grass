@@ -26,7 +26,7 @@ int get_range(const char *name, long *min, long *max)
 	G_message(_("Reading %s ..."), name);
 	for (row = 0; row < nrows; row++) {
 	    G_percent(row, nrows, 2);
-	    if (Rast_get_map_row_nomask(fd, cell, row) < 0)
+	    if (Rast_get_c_row_nomask(fd, cell, row) < 0)
 		exit(1);
 	    for (col = 0; col < ncols; col++)
 		Rast_update_range(cell[col], &range);

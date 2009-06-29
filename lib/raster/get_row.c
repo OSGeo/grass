@@ -685,13 +685,13 @@ static int get_map_row(int fd, void *rast, int row, RASTER_MAP_TYPE data_type,
 }
 
 /*!
- * \brief Read raster row without masking (this routine is deprecated)
+ * \brief Read raster row without masking
  *
  * This routine reads the specified <em>row</em> from the raster map
  * open on file descriptor <em>fd</em> into the <em>buf</em> buffer
- * like Rast_get_map_row() does. The difference is that masking is
- * suppressed. If the user has a mask set, Rast_get_map_row() will apply
- * the mask but Rast_get_map_row_nomask() will ignore it. This routine
+ * like Rast_get_c_row() does. The difference is that masking is
+ * suppressed. If the user has a mask set, Rast_get_c_row() will apply
+ * the mask but Rast_get_c_row_nomask() will ignore it. This routine
  * prints a diagnostic message and returns -1 if there is an error
  * reading the raster map. Otherwise a nonnegative value is returned.
  *
@@ -704,27 +704,6 @@ static int get_map_row(int fd, void *rast, int row, RASTER_MAP_TYPE data_type,
  * the region. However, the number of GRASS modules which do this
  * should be minimal. See Mask for more information about the mask.
  *
- * <b>This routine is deprecated! Use Rast_get_raster_row_nomask()
- * instead.</b>
- *
- * \param fd file descriptor for the opened raster map
- * \param buf buffer for the row to be placed into
- * \param row data row desired
- *
- * \return 1 on success
- * \return 0 row requested not within window
- * \return -1 on error
- */
-int Rast_get_map_row_nomask(int fd, CELL * buf, int row)
-{
-    return get_map_row(fd, buf, row, CELL_TYPE, 1, 0);
-}
-
-/*!
- * \brief Read raster row without masking
- *
- *  Same as Rast_get_raster_row() except no masking occurs.
- *
  * \param fd file descriptor for the opened raster map
  * \param buf buffer for the row to be placed into
  * \param row data row desired
@@ -734,8 +713,8 @@ int Rast_get_map_row_nomask(int fd, CELL * buf, int row)
  * \return 0 row requested not within window
  * \return -1 on error
  */
-int Rast_get_raster_row_nomask(int fd, void *buf, int row,
-			    RASTER_MAP_TYPE data_type)
+int Rast_get_row_nomask(int fd, void *buf, int row,
+			  RASTER_MAP_TYPE data_type)
 {
     return get_map_row(fd, buf, row, data_type, 0, 0);
 }
@@ -743,7 +722,7 @@ int Rast_get_raster_row_nomask(int fd, void *buf, int row,
 /*!
  * \brief Read raster row without masking (CELL type)
  *
- *  Same as Rast_get_c_raster_row() except no masking occurs.
+ *  Same as Rast_get_c_row() except no masking occurs.
  *
  * \param fd file descriptor for the opened raster map
  * \param buf buffer for the row to be placed into
@@ -754,15 +733,15 @@ int Rast_get_raster_row_nomask(int fd, void *buf, int row,
  * \return 0 row requested not within window
  * \return -1 on error
  */
-int Rast_get_c_raster_row_nomask(int fd, CELL * buf, int row)
+int Rast_get_c_row_nomask(int fd, CELL *buf, int row)
 {
-    return Rast_get_raster_row_nomask(fd, buf, row, CELL_TYPE);
+    return Rast_get_row_nomask(fd, buf, row, CELL_TYPE);
 }
 
 /*!
  * \brief Read raster row without masking (FCELL type)
  *
- *  Same as Rast_get_f_raster_row() except no masking occurs.
+ *  Same as Rast_get_f_row() except no masking occurs.
  *
  * \param fd file descriptor for the opened raster map
  * \param buf buffer for the row to be placed into
@@ -773,15 +752,15 @@ int Rast_get_c_raster_row_nomask(int fd, CELL * buf, int row)
  * \return 0 row requested not within window
  * \return -1 on error
  */
-int Rast_get_f_raster_row_nomask(int fd, FCELL * buf, int row)
+int Rast_get_f_row_nomask(int fd, FCELL * buf, int row)
 {
-    return Rast_get_raster_row_nomask(fd, buf, row, FCELL_TYPE);
+    return Rast_get_row_nomask(fd, buf, row, FCELL_TYPE);
 }
 
 /*!
  * \brief Read raster row without masking (DCELL type)
  *
- *  Same as Rast_get_d_raster_row() except no masking occurs.
+ *  Same as Rast_get_d_row() except no masking occurs.
  *
  * \param fd file descriptor for the opened raster map
  * \param buf buffer for the row to be placed into
@@ -792,42 +771,18 @@ int Rast_get_f_raster_row_nomask(int fd, FCELL * buf, int row)
  * \return 0 row requested not within window
  * \return -1 on error
  */
-int Rast_get_d_raster_row_nomask(int fd, DCELL * buf, int row)
+int Rast_get_d_row_nomask(int fd, DCELL * buf, int row)
 {
-    return Rast_get_raster_row_nomask(fd, buf, row, DCELL_TYPE);
-}
-
-/*!
- * \brief Get raster row (this routine is deprecated!)
- *
- * If the map is floating-point, quantize the floating-point values to
- * integer using the quantization rules established for the map when
- * the map was opened for reading (this quantization is read from
- * cell_misc/name/f_quant file, but can be reset after opening raster
- * map by Rast_set_quant_rules()). NULL values are converted to zeros.
- *
- * <b>This routine is deprecated! Use Rast_get_raster_row() instead.</b>
- *
- * \param fd file descriptor for the opened raster map
- * \param buf buffer for the row to be placed into
- * \param row data row desired
- *
- * \return 1 on success
- * \return 0 row requested not within window
- * \return -1 on error
- */
-int Rast_get_map_row(int fd, CELL * buf, int row)
-{
-    return get_map_row(fd, buf, row, CELL_TYPE, 1, 1);
+    return Rast_get_row_nomask(fd, buf, row, DCELL_TYPE);
 }
 
 /*!
  * \brief Get raster row
  *
  * If <em>data_type</em> is
- *  - CELL_TYPE, calls Rast_get_c_raster_row()
- *  - FCELL_TYPE, calls Rast_get_f_raster_row()
- *  - DCELL_TYPE, calls Rast_get_d_raster_row()
+ *  - CELL_TYPE, calls Rast_get_c_row()
+ *  - FCELL_TYPE, calls Rast_get_f_row()
+ *  - DCELL_TYPE, calls Rast_get_d_row()
  *
  *   Reads appropriate information into the buffer <em>buf</em> associated 
  *   with the requested row <em>row</em>. <em>buf</em> is associated with the
@@ -849,9 +804,9 @@ int Rast_get_map_row(int fd, CELL * buf, int row)
  *            mask exists. (the MASK is taken care of by null values
  *            (if the null file doesn't exist for this map, then the null row
  *            is simulated by assuming that all zero are nulls *** in case
- *            of Rast_get_raster_row() and assuming that all data is valid 
+ *            of Rast_get_row() and assuming that all data is valid 
  *            in case of G_get_f/d_raster_row(). In case of deprecated function
- *            Rast_get_map_row() all nulls are converted to zeros (so there are
+ *            Rast_get_c_row() all nulls are converted to zeros (so there are
  *            no embedded nulls at all). Also all masked out cells become zeros.
  *
  * \param fd file descriptor for the opened raster map
@@ -863,7 +818,7 @@ int Rast_get_map_row(int fd, CELL * buf, int row)
  * \return 0 row requested not within window
  * \return -1 on error
  */
-int Rast_get_raster_row(int fd, void *buf, int row, RASTER_MAP_TYPE data_type)
+int Rast_get_row(int fd, void *buf, int row, RASTER_MAP_TYPE data_type)
 {
     return get_map_row(fd, buf, row, data_type, 0, 1);
 }
@@ -872,7 +827,7 @@ int Rast_get_raster_row(int fd, void *buf, int row, RASTER_MAP_TYPE data_type)
  * \brief Get raster row (CELL type)
  *
  * Reads a row of raster data and leaves the NULL values intact. (As
- * opposed to the deprecated function Rast_get_map_row() which
+ * opposed to the deprecated function Rast_get_c_row() which
  * converts NULL values to zero.) 
  *
  * <b>NOTE.</b> When the raster map is old and null file doesn't
@@ -889,9 +844,9 @@ int Rast_get_raster_row(int fd, void *buf, int row, RASTER_MAP_TYPE data_type)
  * \return 0 row requested not within window
  * \return -1 on error
  */
-int Rast_get_c_raster_row(int fd, CELL * buf, int row)
+int Rast_get_c_row(int fd, CELL * buf, int row)
 {
-    return Rast_get_raster_row(fd, buf, row, CELL_TYPE);
+    return Rast_get_row(fd, buf, row, CELL_TYPE);
 }
 
 /*!
@@ -911,15 +866,15 @@ int Rast_get_c_raster_row(int fd, CELL * buf, int row)
  * \return 0 row requested not within window
  * \return -1 on error
  */
-int Rast_get_f_raster_row(int fd, FCELL * buf, int row)
+int Rast_get_f_row(int fd, FCELL * buf, int row)
 {
-    return Rast_get_raster_row(fd, buf, row, FCELL_TYPE);
+    return Rast_get_row(fd, buf, row, FCELL_TYPE);
 }
 
 /*!
  * \brief Get raster row (DCELL type)
  *
- * Same as Rast_get_f_raster_row() except that the array <em>dcell</em>
+ * Same as Rast_get_f_row() except that the array <em>dcell</em>
  * is <tt>double</tt>.
  *
  * \param fd file descriptor for the opened raster map
@@ -930,9 +885,9 @@ int Rast_get_f_raster_row(int fd, FCELL * buf, int row)
  * \return 0 row requested not within window
  * \return -1 on error
  */
-int Rast_get_d_raster_row(int fd, DCELL * buf, int row)
+int Rast_get_d_row(int fd, DCELL * buf, int row)
 {
-    return Rast_get_raster_row(fd, buf, row, DCELL_TYPE);
+    return Rast_get_row(fd, buf, row, DCELL_TYPE);
 }
 
 static int open_null_read(int fd)
@@ -1190,12 +1145,6 @@ static int embed_nulls(int fd, void *buf, int row, RASTER_MAP_TYPE map_type,
 
     return 1;
 }
-
-/*--------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------*/
 
 /*!
    \brief Read or simmulate null value row

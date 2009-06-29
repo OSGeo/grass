@@ -120,7 +120,7 @@ static void resamp_unweighted(void)
 	Rast_set_window(&src_w);
 
 	for (i = 0; i < count; i++)
-	    Rast_get_d_raster_row(infile, bufs[i], maprow0 + i);
+	    Rast_get_d_row(infile, bufs[i], maprow0 + i);
 
 	for (col = 0; col < dst_w.cols; col++) {
 	    int mapcol0 = col_map[col + 0];
@@ -193,7 +193,7 @@ static void resamp_weighted(void)
 	Rast_set_window(&src_w);
 
 	for (i = 0; i < count; i++)
-	    Rast_get_d_raster_row(infile, bufs[i], maprow0 + i);
+	    Rast_get_d_row(infile, bufs[i], maprow0 + i);
 
 	for (col = 0; col < dst_w.cols; col++) {
 	    double x0 = col_map[col + 0];

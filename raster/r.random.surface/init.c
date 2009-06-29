@@ -49,7 +49,7 @@ void Init(void)
 	    MapCount = 0;
 	    CellBuffer = Rast_allocate_c_buf();
 	    for (row = 0; row < Rs; row++) {
-		Rast_get_map_row_nomask(FDM, CellBuffer, row);
+		Rast_get_c_row_nomask(FDM, CellBuffer, row);
 		for (col = 0; col < Cs; col++) {
 		    if (CellBuffer[col])
 			MapCount++;

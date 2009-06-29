@@ -53,7 +53,7 @@ int close_maps(void)
 	    }
 
 	    for (r = 0; r < nrows; r++) {
-		Rast_get_d_raster_row(fd, dbuf, r);
+		Rast_get_d_row(fd, dbuf, r);
 		for (c = 0; c < ncols; c++) {
 		    dvalue = dbuf[c];
 		    if (Rast_is_d_null_value(&dvalue) == 0 && dvalue) {

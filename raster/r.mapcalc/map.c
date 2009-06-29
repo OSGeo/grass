@@ -145,7 +145,7 @@ static void *cache_get_raw(struct row_cache *cache, int row, int data_type)
 
     if (i >= 0 && i < cache->nrows) {
 	if (!sub->valid[i]) {
-	    Rast_get_raster_row(cache->fd, sub->buf[i], row + i, data_type);
+	    Rast_get_row(cache->fd, sub->buf[i], row + i, data_type);
 	    sub->valid[i] = 1;
 	}
 	return sub->buf[i];
@@ -154,7 +154,7 @@ static void *cache_get_raw(struct row_cache *cache, int row, int data_type)
     if (i <= -cache->nrows || i >= cache->nrows * 2 - 1) {
 	memset(sub->valid, 0, cache->nrows);
 	sub->row = i;
-	Rast_get_raster_row(cache->fd, sub->buf[0], row, data_type);
+	Rast_get_row(cache->fd, sub->buf[0], row, data_type);
 	sub->valid[0] = 1;
 	return sub->buf[0];
     }
@@ -182,7 +182,7 @@ static void *cache_get_raw(struct row_cache *cache, int row, int data_type)
     G__freea(tmp);
     G__freea(vtmp);
 
-    Rast_get_raster_row(cache->fd, sub->buf[i], row, data_type);
+    Rast_get_row(cache->fd, sub->buf[i], row, data_type);
     sub->valid[i] = 1;
 
     return sub->buf[i];
@@ -367,7 +367,7 @@ static void translate_from_cats(struct map *m, CELL * cell, DCELL * xcell,
 
 static void read_row(int fd, void *buf, int row, int res_type)
 {
-    if (Rast_get_raster_row(fd, buf, row, res_type) < 0)
+    if (Rast_get_row(fd, buf, row, res_type) < 0)
 	G_fatal_error(_("Unable to read raster map row %d"), row);
 }
 

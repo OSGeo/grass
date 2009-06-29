@@ -493,7 +493,7 @@ static int input_data(struct interp_params *params,
 {
     double x, y, sm;		/* input data and smoothing */
     int m1, m2;			/* loop counters */
-    int ret_val, ret_val1;	/* return values of Rast_get_map_row */
+    int ret_val, ret_val1;	/* return values of Rast_get_c_row */
     static FCELL *cellinp = NULL;	/* cell buffer for input data */
     static FCELL *cellsmooth = NULL;	/* cell buffer for smoothing */
 
@@ -505,7 +505,7 @@ static int input_data(struct interp_params *params,
 
     for (m1 = 0; m1 <= last_row - first_row; m1++) {
 	ret_val =
-	    Rast_get_f_raster_row(fdinp, cellinp, inp_rows - m1 - first_row);
+	    Rast_get_f_row(fdinp, cellinp, inp_rows - m1 - first_row);
 	if (ret_val < 0) {
 	    fprintf(stderr, "Cannot get row %d (return value = %d)\n", m1,
 		    ret_val);
@@ -513,7 +513,7 @@ static int input_data(struct interp_params *params,
 	}
 	if (fdsmooth >= 0) {
 	    ret_val1 =
-		Rast_get_f_raster_row(fdsmooth, cellsmooth,
+		Rast_get_f_row(fdsmooth, cellsmooth,
 				   inp_rows - m1 - first_row);
 	    if (ret_val1 < 0) {
 		fprintf(stderr, "Cannot get smoothing row\n");

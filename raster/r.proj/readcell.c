@@ -78,7 +78,7 @@ struct cache *readcell(int fdi, const char *size)
 	    if (row + y >= nrows)
 		break;
 
-	    if (Rast_get_f_raster_row(fdi, &tmpbuf[y * nx * BDIM], row + y) < 0)
+	    if (Rast_get_f_row(fdi, &tmpbuf[y * nx * BDIM], row + y) < 0)
 		G_fatal_error(_("Error reading input"));
 	}
 

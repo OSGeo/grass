@@ -117,7 +117,7 @@ int main(int argc, char *argv[])
 	G_percent(row, window.rows, 2);
 
 	if (mask) {
-	    if (Rast_get_map_row(maskfd, mask, row) < 0)
+	    if (Rast_get_c_row(maskfd, mask, row) < 0)
 		G_fatal_error(_("Cannot get row"));
 	}
 	north += window.ns_res;

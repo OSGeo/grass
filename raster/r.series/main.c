@@ -239,7 +239,7 @@ int main(int argc, char *argv[])
 	G_percent(row, nrows, 2);
 
 	for (i = 0; i < num_inputs; i++)
-	    Rast_get_d_raster_row(inputs[i].fd, inputs[i].buf, row);
+	    Rast_get_d_row(inputs[i].fd, inputs[i].buf, row);
 
 	for (col = 0; col < ncols; col++) {
 	    int null = 0;

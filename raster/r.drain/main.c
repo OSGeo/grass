@@ -366,7 +366,7 @@ int main(int argc, char **argv)
 	dir_fd = open(tempfile3, O_RDWR | O_CREAT, 0666);
 
 	for (i = 0; i < nrows; i++) {
-	    Rast_get_d_raster_row(dir_id, dir_buf, i);
+	    Rast_get_d_row(dir_id, dir_buf, i);
 	    write(dir_fd, dir_buf, ncols * sizeof(DCELL));
 	}
 	Rast_close(dir_id);

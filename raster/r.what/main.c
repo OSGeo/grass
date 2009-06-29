@@ -328,11 +328,11 @@ int main(int argc, char *argv[])
 		cache_miss++;
 		if (row_in_window)
 		    for (i = 0; i < nfiles; i++) {
-			if (Rast_get_c_raster_row(fd[i], cell[i], cache[point].row) < 0)
+			if (Rast_get_c_row(fd[i], cell[i], cache[point].row) < 0)
 			    G_fatal_error(_("Error reading <%s>"), argv[i + 1]);
 
 			if (out_type[i] != CELL_TYPE) {
-			    if (Rast_get_d_raster_row(fd[i], dcell[i], cache[point].row) < 0)
+			    if (Rast_get_d_row(fd[i], dcell[i], cache[point].row) < 0)
 				G_fatal_error(_("Error reading <%s>"), argv[i + 1]);
 			}
 		    }

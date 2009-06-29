@@ -9,7 +9,7 @@
 
 int read_training_map(CELL * class, int row, int ncols, struct files *files)
 {
-    if (Rast_get_c_raster_row(files->train_fd, files->train_cell, row) < 0)
+    if (Rast_get_c_row(files->train_fd, files->train_cell, row) < 0)
 	G_fatal_error(_("Unable to read raster map row %d"),
 		      row);
     lookup_class(files->train_cell, ncols, files->training_cats, files->ncats,

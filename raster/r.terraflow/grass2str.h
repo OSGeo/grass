@@ -81,7 +81,7 @@ cell2stream(char* cellname, elevation_type T_max_value, long* nodata_count) {
   for (int i = 0; i< nrows; i++) {
 	
 	/* read input map */
-    if (Rast_get_raster_row (infd, inrast, i, data_type) < 0)
+    if (Rast_get_row (infd, inrast, i, data_type) < 0)
       G_fatal_error (_("Unable to read raster map <%s>, row %d"),cellname, i);
   
 	for (int j=0; j<ncols; j++) {

@@ -432,7 +432,7 @@ int main(int argc, char *argv[])
     else {
 	cellrow = Rast_allocate_f_buf();
 	for (m1 = 0; m1 < inp_rows; m1++) {
-	    ret_val = Rast_get_f_raster_row(fdinp, cellrow, m1);
+	    ret_val = Rast_get_f_row(fdinp, cellrow, m1);
 	    if (ret_val < 0)
 		G_fatal_error(_("Error reading row %d (error = %d)"),
 			      m1, ret_val);

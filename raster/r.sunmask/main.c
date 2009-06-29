@@ -485,7 +485,7 @@ int main(int argc, char *argv[])
 	G_percent(row1, window.rows, 2);
 	col1 = 0;
 	drow = -1;
-	if (Rast_get_raster_row(elev_fd, elevbuf.v, row1, data_type) < 0)
+	if (Rast_get_row(elev_fd, elevbuf.v, row1, data_type) < 0)
 	    G_fatal_error(_("Can't read row in input elevation map"));
 
 	while (col1 < window.cols) {
@@ -516,7 +516,7 @@ int main(int argc, char *argv[])
 			dcol = G_easting_to_col(east, &window);
 			if (drow != G_northing_to_row(north, &window)) {
 			    drow = G_northing_to_row(north, &window);
-			    Rast_get_raster_row(elev_fd, tmpbuf.v, (int)drow,
+			    Rast_get_row(elev_fd, tmpbuf.v, (int)drow,
 					     data_type);
 			}
 			dvalue2 = raster_value(tmpbuf, data_type, (int)dcol);

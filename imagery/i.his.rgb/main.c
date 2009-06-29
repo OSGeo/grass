@@ -94,7 +94,7 @@ int main(int argc, char **argv)
 
 	/* read in a row from each cell map */
 	for (band = 0; band < 3; band++)
-	    if (Rast_get_map_row(fd_input[band], rowbuffer[band], i) < 0)
+	    if (Rast_get_c_row(fd_input[band], rowbuffer[band], i) < 0)
 		G_fatal_error(_("Unable to read raster map row %d"), i);
 
 	/* process this row of the map */

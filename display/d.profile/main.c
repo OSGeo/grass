@@ -48,7 +48,7 @@ static void get_region_range(int fd)
     max = -1e300;
 
     for (row = 0; row < nrows; row++) {
-	Rast_get_d_raster_row(fd, buf, row);
+	Rast_get_d_row(fd, buf, row);
 	for (col = 0; col < ncols; col++) {
 	    if (min > buf[col])
 		min = buf[col];
@@ -142,15 +142,15 @@ static int get_cell(DCELL *result, int fd, double x, double y)
     if (cur_row != row) {
 	if (cur_row == row + 1) {
 	    tmp = row1; row1 = row2; row2 = tmp;
-	    Rast_get_d_raster_row(fd, row1, row);
+	    Rast_get_d_row(fd, row1, row);
 	}
 	else if (cur_row == row - 1) {
 	    tmp = row1; row1 = row2; row2 = tmp;
-	    Rast_get_d_raster_row(fd, row2, row + 1);
+	    Rast_get_d_row(fd, row2, row + 1);
 	}
 	else {
-	    Rast_get_d_raster_row(fd, row1, row);
-	    Rast_get_d_raster_row(fd, row2, row + 1);
+	    Rast_get_d_row(fd, row1, row);
+	    Rast_get_d_row(fd, row2, row + 1);
 	}
 	cur_row = row;
     }

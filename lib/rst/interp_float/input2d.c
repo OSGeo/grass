@@ -58,9 +58,9 @@ struct BM *IL_create_bitmask(struct interp_params *params)
 	for (i = 0; i < params->nsizr; i++) {
 	    irev = params->nsizr - i - 1;
 	    if (cellmask)
-		Rast_get_map_row(cfmask, cellmask, i);
+		Rast_get_c_row(cfmask, cellmask, i);
 	    if (MASK)
-		Rast_get_map_row(MASKfd, MASK, i);
+		Rast_get_c_row(MASKfd, MASK, i);
 	    for (j = 0; j < params->nsizc; j++) {
 		if ((cellmask && cellmask[j] == 0) || (MASK && MASK[j] == 0))
 		    BM_set(bitmask, j, irev, 0);

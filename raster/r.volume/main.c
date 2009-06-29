@@ -157,8 +157,8 @@ int main(int argc, char *argv[])
     G_message("Complete ...");
     for (row = 0; row < rows; row++) {
 	G_percent(row, rows, 2);
-	Rast_get_map_row(fd_data, data_buf, row);
-	Rast_get_map_row(fd_clump, clump_buf, row);
+	Rast_get_c_row(fd_data, data_buf, row);
+	Rast_get_c_row(fd_clump, clump_buf, row);
 	for (col = 0; col < cols; col++) {
 	    i = clump_buf[col];
 	    if (i > max)

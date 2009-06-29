@@ -143,7 +143,7 @@ int Gs_loadmap_as_float(struct Cell_head *wind, const char *map_name,
 
     for (row = 0; row < wind->rows; row++) {
 	offset = row * wind->cols;
-	Rast_get_f_raster_row(cellfile, &(buff[offset]), row);
+	Rast_get_f_row(cellfile, &(buff[offset]), row);
 	Rast_get_null_value_row(cellfile, nullflags, row);
 
 	G_percent(row, wind->rows, 2);
@@ -218,7 +218,7 @@ int Gs_loadmap_as_int(struct Cell_head *wind, const char *map_name, int *buff,
 
     for (row = 0; row < wind->rows; row++) {
 	offset = row * wind->cols;
-	Rast_get_c_raster_row(cellfile, &(buff[offset]), row);
+	Rast_get_c_row(cellfile, &(buff[offset]), row);
 	Rast_get_null_value_row(cellfile, nullflags, row);
 
 	G_percent(row, wind->rows, 2);
@@ -381,7 +381,7 @@ int Gs_loadmap_as_short(struct Cell_head *wind, const char *map_name,
 
     for (row = 0; row < wind->rows; row++) {
 	offset = row * wind->cols;
-	Rast_get_c_raster_row(cellfile, tmp_buf, row);
+	Rast_get_c_row(cellfile, tmp_buf, row);
 	Rast_get_null_value_row(cellfile, nullflags, row);
 
 	G_percent(row, wind->rows, 2);
@@ -497,7 +497,7 @@ int Gs_loadmap_as_char(struct Cell_head *wind, const char *map_name,
 
     for (row = 0; row < wind->rows; row++) {
 	offset = row * wind->cols;
-	Rast_get_c_raster_row(cellfile, tmp_buf, row);
+	Rast_get_c_row(cellfile, tmp_buf, row);
 	Rast_get_null_value_row(cellfile, nullflags, row);
 	tc = (unsigned char *)&(buff[offset]);
 	ti = tmp_buf;
@@ -844,7 +844,7 @@ int Gs_get_cat_label(const char *filename, int drow, int dcol, char *catstr)
 	if (map_type == CELL_TYPE) {
 	    buf = Rast_allocate_c_buf();
 
-	    if (Rast_get_c_raster_row(fd, buf, drow) < 0) {
+	    if (Rast_get_c_row(fd, buf, drow) < 0) {
 		sprintf(catstr, "error");
 	    }
 	    else if (Rast_is_c_null_value(&buf[dcol])) {
@@ -863,7 +863,7 @@ int Gs_get_cat_label(const char *filename, int drow, int dcol, char *catstr)
 	    /* fp map */
 	    dbuf = Rast_allocate_d_buf();
 
-	    if (Rast_get_d_raster_row(fd, dbuf, drow) < 0) {
+	    if (Rast_get_d_row(fd, dbuf, drow) < 0) {
 		sprintf(catstr, "error");
 	    }
 	    else if (Rast_is_d_null_value(&dbuf[dcol])) {

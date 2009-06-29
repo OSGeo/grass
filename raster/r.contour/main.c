@@ -223,7 +223,7 @@ DCELL **get_z_array(int fd, int nrow, int ncol)
 
     for (i = 0; i < nrow; i++) {
 	z_array[i] = (DCELL *) G_malloc(ncol * sizeof(DCELL));
-	Rast_get_d_raster_row(fd, z_array[i], i);
+	Rast_get_d_row(fd, z_array[i], i);
 	G_percent(i + 1, nrow, 2);
     }
     return z_array;

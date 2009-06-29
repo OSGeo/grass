@@ -414,7 +414,7 @@ COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
 		    w2[m] = wm * wm;
 		}
 		if ((cellinp != NULL) && (cellout != NULL) && (i == ngstl)) {
-		    if (Rast_get_f_raster_row(fdcell, cell, n_rows_in - k) < 0)	/* fix by JH 04/24/02 */
+		    if (Rast_get_f_row(fdcell, cell, n_rows_in - k) < 0)	/* fix by JH 04/24/02 */
 			G_fatal_error
 			    ("Could not get row (eventually WIND3 does not match WIND)");
 		}

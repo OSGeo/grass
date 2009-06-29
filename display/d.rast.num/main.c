@@ -228,7 +228,7 @@ int main(int argc, char **argv)
 
     /* loop through cells, find value, and draw text for value */
     for (row = 0; row < nrows; row++) {
-	Rast_get_raster_row(layer_fd, cell, row, map_type);
+	Rast_get_row(layer_fd, cell, row, map_type);
 
 	for (col = 0; col < ncols; col++) {
 

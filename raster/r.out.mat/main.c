@@ -309,7 +309,7 @@ int main(int argc, char *argv[])
 	 ptr =
 	 G_incr_void_ptr(ptr,
 			 (G_window_cols() + 1) * Rast_cell_size(map_type))) {
-	if (Rast_get_raster_row(fd, ptr, row, map_type) < 0)
+	if (Rast_get_row(fd, ptr, row, map_type) < 0)
 	    G_fatal_error("reading map");
 	G_percent(row, mrows, 2);
     }

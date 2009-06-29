@@ -102,7 +102,7 @@ int read_row(void *buf)
 	    /* bytes and cast the buf variable to char * before */
 	    /* incrementing */
 	    p = ((char *)buf) + data_size;
-	    Rast_get_raster_row(input_fd, p, row_count++, data_type);
+	    Rast_get_row(input_fd, p, row_count++, data_type);
 	    p = buf;
 	    Rast_set_null_value(p, 1, data_type);
 

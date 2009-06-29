@@ -356,7 +356,7 @@ static void man_unit(int t, int b, int l, int r, char *n1, char *n2, char *n3,
 		    fr = Rast_open_cell_old(n1, G_mapset());
 		    for (j = t; j < b; j++) {
 			Rast_zero_raster_buf(row_buf, CELL_TYPE);
-			Rast_get_raster_row(fr, row_buf, j, CELL_TYPE);
+			Rast_get_row(fr, row_buf, j, CELL_TYPE);
 			for (k = l; k < r; k++) {
 			    if (*(row_buf + k))
 				count++;
@@ -413,7 +413,7 @@ static void man_unit(int t, int b, int l, int r, char *n1, char *n2, char *n3,
 			fr = Rast_open_cell_old(n1, G_mapset());
 			for (j = t; j < b; j++) {
 			    Rast_zero_raster_buf(row_buf, CELL_TYPE);
-			    Rast_get_raster_row(fr, row_buf, j, CELL_TYPE);
+			    Rast_get_row(fr, row_buf, j, CELL_TYPE);
 			    for (k = l; k < r; k++) {
 				if (*(row_buf + k))
 				    count++;
@@ -956,13 +956,13 @@ static int calc_unit_loc(double radius, int top, int bot, int left, int right,
 
 		if (fmask > 0) {
 		    row_buf = Rast_allocate_c_buf();
-		    Rast_get_map_row_nomask(fmask, row_buf, t + top1);
+		    Rast_get_c_row_nomask(fmask, row_buf, t + top1);
 		    if (!
 			(*(row_buf + l + left1) &&
 			 *(row_buf + l + left1 + u_w - 1)))
 			goto back;
 		    Rast_zero_cell_buf(row_buf);
-		    Rast_get_map_row_nomask(fmask, row_buf, t + top1 + u_l - 1);
+		    Rast_get_c_row_nomask(fmask, row_buf, t + top1 + u_l - 1);
 		    if (!
 			(*(row_buf + l + left1) &&
 			 *(row_buf + l + left1 + u_w - 1)))
@@ -1407,7 +1407,7 @@ static void graph_unit(int t, int b, int l, int r, char *n1, char *n2,
 
 		if (fmask > 0) {
 		    row_buf = Rast_allocate_c_buf();
-		    Rast_get_map_row_nomask(fmask, row_buf, at);
+		    Rast_get_c_row_nomask(fmask, row_buf, at);
 		    if (!(*(row_buf + al) && *(row_buf + ar - 1))) {
 			fprintf(stderr,
 				"\n    The unit would be outside the mask; ");
@@ -1417,7 +1417,7 @@ static void graph_unit(int t, int b, int l, int r, char *n1, char *n2,
 			goto back1;
 		    }
 		    Rast_zero_cell_buf(row_buf);
-		    Rast_get_map_row_nomask(fmask, row_buf, ab - 1);
+		    Rast_get_c_row_nomask(fmask, row_buf, ab - 1);
 		    if (!(*(row_buf + al) && *(row_buf + ar - 1))) {
 			fprintf(stderr,
 				"\n    The unit would be outside the mask; ");
@@ -1529,7 +1529,7 @@ static void graph_unit(int t, int b, int l, int r, char *n1, char *n2,
 
 		if (fmask > 0) {
 		    row_buf = Rast_allocate_c_buf();
-		    Rast_get_map_row_nomask(fmask, row_buf, at);
+		    Rast_get_c_row_nomask(fmask, row_buf, at);
 		    if (!(*(row_buf + al) && *(row_buf + ar - 1))) {
 			fprintf(stderr,
 				"\n    The unit would be outside the mask; ");
@@ -1539,7 +1539,7 @@ static void graph_unit(int t, int b, int l, int r, char *n1, char *n2,
 			goto back2;
 		    }
 		    Rast_zero_cell_buf(row_buf);
-		    Rast_get_map_row_nomask(fmask, row_buf, ab - 1);
+		    Rast_get_c_row_nomask(fmask, row_buf, ab - 1);
 		    if (!(*(row_buf + al) && *(row_buf + ar - 1))) {
 			fprintf(stderr,
 				"\n    The unit would be outside the mask; ");

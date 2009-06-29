@@ -56,7 +56,7 @@ int what(int once, int terse, int colrow, char *fs, int width, int mwidth)
 		G_message(_("You are clicking outside the map"));
 		continue;
 	    }
-	    if (Rast_get_c_raster_row(fd[i], buf, row) < 0)
+	    if (Rast_get_c_row(fd[i], buf, row) < 0)
 		show_cat(width, mwidth, name[i], mapset[i], null_cell,
 			 "ERROR reading raster map", terse, fs, map_type[i]);
 	    else if (map_type[i] == CELL_TYPE) {
@@ -74,7 +74,7 @@ int what(int once, int terse, int colrow, char *fs, int width, int mwidth)
 	    if (map_type[i] == CELL_TYPE)
 		continue;
 
-	    if (Rast_get_d_raster_row(fd[i], dbuf, row) < 0)
+	    if (Rast_get_d_row(fd[i], dbuf, row) < 0)
 		show_dval(width, mwidth, name[i], mapset[i], null_dcell,
 			  "ERROR reading fcell file", terse, fs);
 	    else

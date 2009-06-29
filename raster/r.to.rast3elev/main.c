@@ -231,9 +231,9 @@ void elev_raster_to_g3d(Database db, G3D_Region region)
     for (y = 0; y < rows; y++) {
 	G_percent(y, rows - 1, 10);
 
-	if (!Rast_get_raster_row(db.input, input_rast, y, db.inputmaptype))
+	if (!Rast_get_row(db.input, input_rast, y, db.inputmaptype))
 	    fatal_error(db, _("Could not get raster row from input map"));
-	if (!Rast_get_raster_row(db.elev, elev_rast, y, db.elevmaptype))
+	if (!Rast_get_row(db.elev, elev_rast, y, db.elevmaptype))
 	    fatal_error(db, _("Could not get raster row from elev map"));
 
 	for (x = 0, input_ptr = input_rast, elev_ptr = elev_rast; x < cols;

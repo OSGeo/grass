@@ -253,7 +253,7 @@ int main(int argc, char *argv[])
 	    uint32 colb = 0;
 
 	    for (i = 0; i < nrow; i++) {
-		if (Rast_get_c_raster_row(in, cells[i], row + i) < 0)
+		if (Rast_get_c_row(in, cells[i], row + i) < 0)
 		    G_fatal_error(_("Reading raster map..."));
 	    }
 
@@ -340,7 +340,7 @@ int main(int argc, char *argv[])
 
 	    G_percent(row, h.ras_height, 2);
 
-	    if (Rast_get_c_raster_row(in, cell, row) < 0)
+	    if (Rast_get_c_row(in, cell, row) < 0)
 		exit(EXIT_FAILURE);
 
 	    cellptr = cell;

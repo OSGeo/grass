@@ -209,7 +209,7 @@ int export_band(GDALDatasetH hMEMDS, GDALDataType export_datatype, int band,
 
 	for (row = 0; row < rows; row++) {
 
-	    if (Rast_get_raster_row(fd, bufer, row, maptype) < 0) {
+	    if (Rast_get_row(fd, bufer, row, maptype) < 0) {
 		G_warning(_("Unable to read raster map <%s> row %d"),
 			  name, row);
 		return -1;
@@ -251,7 +251,7 @@ int export_band(GDALDatasetH hMEMDS, GDALDataType export_datatype, int band,
 
 	for (row = 0; row < rows; row++) {
 
-	    if (Rast_get_raster_row(fd, bufer, row, maptype) < 0) {
+	    if (Rast_get_row(fd, bufer, row, maptype) < 0) {
 		G_warning(_("Unable to read raster map <%s> row %d"),
 			  name, row);
 		return -1;
@@ -293,7 +293,7 @@ int export_band(GDALDatasetH hMEMDS, GDALDataType export_datatype, int band,
 
 	for (row = 0; row < rows; row++) {
 
-	    if (Rast_get_raster_row(fd, bufer, row, maptype) < 0) {
+	    if (Rast_get_row(fd, bufer, row, maptype) < 0) {
 		G_warning(_("Unable to read raster map <%s> row %d"),
 			  name, row);
 		return -1;

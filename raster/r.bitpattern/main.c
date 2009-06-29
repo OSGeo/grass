@@ -124,7 +124,7 @@ int main(int argc, char *argv[])
 	    G_percent(row, nrows, 2);
 
 	/* read input map */
-	if (Rast_get_raster_row(infd, inrast, row, data_type) < 0)
+	if (Rast_get_row(infd, inrast, row, data_type) < 0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"), name,
 			  row);
 
