@@ -237,7 +237,7 @@ void Rast__write_colors(FILE *, struct Colors *);
 /* color_xform.c */
 void Rast_histogram_eq_colors(struct Colors *, struct Colors *,
 			   struct Cell_stats *);
-void Rast_histogram_eq_colors_fp(struct Colors *,
+void Rast_histogram_eq_fp_colors(struct Colors *,
 			      struct Colors *, struct FP_stats *);
 void Rast_log_colors(struct Colors *, struct Colors *, int);
 void Rast_abs_log_colors(struct Colors *, struct Colors *, int);
