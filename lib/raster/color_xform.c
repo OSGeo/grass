@@ -1,44 +1,15 @@
-
-/****************************************************************************
+/*!
+ * \file raster/color_xform.c
  *
- * MODULE:       gis library
- * AUTHOR(S):    Glynn Clements <glynn@gclements.plus.com>
- * COPYRIGHT:    (C) 2007 Glynn Clements
+ * \brief Raster Library - Colors management
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ * (C) 2001-2009 by the GRASS Development Team
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * This program is free software under the GNU General Public License 
+ * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- *****************************************************************************/
-
-/**********************************************************************
- *
- *  Rast_histogram_eq_colors (dst, src, statf)
- *
- *   struct Colors *dst         struct to hold new colors
- *   struct Colors *src         struct containing original colors
- *   struct Cell_stats *statf   cell stats info
- *
- *  Generates histogram equalized version of an existing color table from
- *  cell stats structure info.
- *
- **********************************************************************
- *
- *  Rast_log_colors (dst, src, samples)
- *
- *   struct Colors *dst         struct to hold new colors
- *   struct Colors *src         struct containing original colors
- *   int samples                number of samples
- *
- *  Generates logarithmically-scaled version of an existing color table.
- *
- **********************************************************************/
+ * \author Original author CERL
+ */
 
 #include <math.h>
 
@@ -46,21 +17,18 @@
 #include <grass/raster.h>
 
 /*!
- * \brief make histogram-stretched version of existing color table
+ * \brief Make histogram-stretched version of existing color table
  *
- * Generates a histogram
- * contrast-stretched color table that goes from the histogram
- * information in the Cell_stats structure <b>statf.</b>  (See
- * Raster_Histograms).
+ * Generates a histogram contrast-stretched color table that goes from
+ * the histogram information in the Cell_stats structure <i>statf</i>.
+ * (See \ref Raster_Histograms).
  *
- *  \param dst
- *  \param src
- *  \param statf
- *  \return
+ * \param[out] dst struct to hold new colors
+ * \param src struct containing original colors
+ * \param statf cell stats info
  */
-
 void Rast_histogram_eq_colors(struct Colors *dst,
-			   struct Colors *src, struct Cell_stats *statf)
+			      struct Colors *src, struct Cell_stats *statf)
 {
     DCELL min, max;
     int red, grn, blu;
@@ -117,21 +85,18 @@ void Rast_histogram_eq_colors(struct Colors *dst,
 }
 
 /*!
- * \brief make histogram-stretched version of existing color table (FP version)
+ * \brief Make histogram-stretched version of existing color table (FP version)
  *
- * Generates a histogram
- * contrast-stretched color table that goes from the histogram
- * information in the FP_stats structure <b>statf.</b>  (See
- * Raster_Histograms).
+ * Generates a histogram contrast-stretched color table that goes from
+ * the histogram information in the FP_stats structure <b>statf.</b>
+ * (See \ref Raster_Histograms).
  *
- *  \param dst
- *  \param src
- *  \param statf
- *  \return void
+ * \param[out] dst struct to hold new colors
+ * \param src struct containing original colors
+ * \param statf cell stats info
  */
-
-void Rast_histogram_eq_colors_fp(struct Colors *dst,
-			      struct Colors *src, struct FP_stats *statf)
+void Rast_histogram_eq_fp_colors(struct Colors *dst,
+				 struct Colors *src, struct FP_stats *statf)
 {
     DCELL min, max;
     int red, grn, blu;
@@ -187,12 +152,11 @@ void Rast_histogram_eq_colors_fp(struct Colors *dst,
 }
 
 /*!
- * \brief make logarithmically-scaled version of an existing color table
+ * \brief Make logarithmically-scaled version of an existing color table
  *
- *  \param dst
- *  \param src
- *  \param samples
- *  \return
+ * \param[out] dst struct to hold new colors
+ * \param src struct containing original colors
+ * \param samples number of samples
  */
 
 void Rast_log_colors(struct Colors *dst, struct Colors *src, int samples)
@@ -247,14 +211,13 @@ void Rast_log_colors(struct Colors *dst, struct Colors *src, int samples)
 }
 
 /*!
- * \brief make logarithmically-scaled version of an existing color table, allowing for signed values
+ * \brief Make logarithmically-scaled version of an existing color
+ * table, allowing for signed values
  *
- *  \param dst
- *  \param src
- *  \param samples
- *  \return
+ * \param[out] dst struct to hold new colors
+ * \param src struct containing original colors
+ * \param samples number of samples
  */
-
 void Rast_abs_log_colors(struct Colors *dst, struct Colors *src, int samples)
 {
     DCELL min, max;
@@ -316,4 +279,3 @@ void Rast_abs_log_colors(struct Colors *dst, struct Colors *src, int samples)
 	blu = blu2;
     }
 }
-

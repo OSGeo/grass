@@ -355,7 +355,7 @@ int main(int argc, char **argv)
 	if (fp) {
 	    struct FP_stats fpstats;
 	    get_fp_stats(name, mapset, &fpstats, min, max, flag.g->answer, flag.a->answer);
-	    Rast_histogram_eq_colors_fp(&colors_tmp, &colors, &fpstats);
+	    Rast_histogram_eq_fp_colors(&colors_tmp, &colors, &fpstats);
 	}
 	else {
 	    if (!have_stats) 
