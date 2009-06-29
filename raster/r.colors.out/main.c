@@ -119,7 +119,7 @@ int main(int argc, char **argv)
 	    DCELL val1, val2;
 	    unsigned char r1, g1, b1, r2, g2, b2;
 
-	    Rast_get_f_color_rule(
+	    Rast_get_fp_color_rule(
 		&val1, &r1, &g1, &b1,
 		&val2, &r2, &g2, &b2,
 		&colors, count - 1 - i);
