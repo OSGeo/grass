@@ -48,7 +48,7 @@ int valid_basins(char *accum_name, OUTPUT * output)
 	       G_fatal_error("r:%d c:%d big error", r,c);
 	       }
 	     */
-	    Rast_get_c_raster_row(fd, buf, r);
+	    Rast_get_c_row(fd, buf, r);
 	    if (buf[c] < 0) {
 		basin->valid = 0;
 		if (down_basin != NULL)

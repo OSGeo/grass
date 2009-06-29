@@ -129,10 +129,10 @@ int main(int argc, char *argv[])
 	minarea = maxarea = nullarea = 0.0;
 	for (row = 0; row < w.rows - 1; row++) {
 	    if (!row) {
-		Rast_get_raster_row(cellfile, cell_buf[1], 0, DCELL_TYPE);
+		Rast_get_row(cellfile, cell_buf[1], 0, DCELL_TYPE);
 		top = cell_buf[1];
 	    }
-	    Rast_get_raster_row(cellfile, cell_buf[row % 2], row + 1,
+	    Rast_get_row(cellfile, cell_buf[row % 2], row + 1,
 			     DCELL_TYPE);
 	    bottom = cell_buf[row % 2];
 	    add_row_area(top, bottom, sz, &w, &minarea, &maxarea);

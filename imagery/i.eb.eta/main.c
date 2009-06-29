@@ -105,11 +105,11 @@ int main(int argc, char *argv[])
 	G_percent(row, nrows, 2);
 	
 	/* read input maps */ 
-	if (Rast_get_d_raster_row(infd_rnetday,inrast_rnetday,row)<0)
+	if (Rast_get_d_row(infd_rnetday,inrast_rnetday,row)<0)
 	    G_fatal_error(_("Unable to read from <%s> row %d"), rnetday, row);
-	if (Rast_get_d_raster_row(infd_evapfr,inrast_evapfr,row)<0)
+	if (Rast_get_d_row(infd_evapfr,inrast_evapfr,row)<0)
 	    G_fatal_error(_("Unable to read from <%s> row %d"), evapfr, row);
-	if (Rast_get_d_raster_row(infd_tempk,inrast_tempk,row)<0)
+	if (Rast_get_d_row(infd_tempk,inrast_tempk,row)<0)
 	    G_fatal_error(_("Unable to read from <%s> row %d"), tempk, row);
 	
     /*process the data */ 

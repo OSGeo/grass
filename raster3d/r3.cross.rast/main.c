@@ -158,7 +158,7 @@ void rast3d_cross_section(void *map, G3D_Region region, int elevfd, int outfd)
 	G_percent(y, rows - 1, 10);
 
 	/*Read the input map row */
-	if (!Rast_get_raster_row(elevfd, elevrast, y, globalElevMapType))
+	if (!Rast_get_row(elevfd, elevrast, y, globalElevMapType))
 	    fatal_error(map, elevfd, outfd,
 			_("Unable to get elevation raster row"));
 

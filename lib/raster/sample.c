@@ -107,7 +107,7 @@ DCELL Rast_get_raster_sample_nearest(int fd,
 	goto done;
     }
 
-    if (Rast_get_d_raster_row(fd, maprow, row) < 0)
+    if (Rast_get_d_row(fd, maprow, row) < 0)
 	raster_row_error(window, north, east);
 
     if (Rast_is_d_null_value(&maprow[col])) {
@@ -174,9 +174,9 @@ DCELL Rast_get_raster_sample_bilinear(int fd,
 	goto done;
     }
 
-    if (Rast_get_d_raster_row(fd, arow, row) < 0)
+    if (Rast_get_d_row(fd, arow, row) < 0)
 	raster_row_error(window, north, east);
-    if (Rast_get_d_raster_row(fd, brow, row + 1) < 0)
+    if (Rast_get_d_row(fd, brow, row + 1) < 0)
 	raster_row_error(window, north, east);
 
     if (Rast_is_d_null_value(&arow[col]) || Rast_is_d_null_value(&arow[col + 1]) ||
@@ -266,7 +266,7 @@ DCELL Rast_get_raster_sample_cubic(int fd,
     }
 
     for (i = 0; i < 4; i++)
-	if (Rast_get_d_raster_row(fd, rows[i], row + i) < 0)
+	if (Rast_get_d_row(fd, rows[i], row + i) < 0)
 	    raster_row_error(window, north, east);
 
     for (i = 0; i < 4; i++)

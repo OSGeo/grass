@@ -249,33 +249,33 @@ int input_data(void)
     }
 
     for (row = 0; row < my; row++) {
-	Rast_get_f_raster_row(fd1, cell1, row);
-	Rast_get_d_raster_row(fd2, cell2, row);
-	Rast_get_d_raster_row(fd3, cell3, row);
+	Rast_get_f_row(fd1, cell1, row);
+	Rast_get_d_row(fd2, cell2, row);
+	Rast_get_d_row(fd3, cell3, row);
 
 	if (manin != NULL)
-	    Rast_get_f_raster_row(fd5, cell5, row);
+	    Rast_get_f_row(fd5, cell5, row);
 
 	if (rain != NULL)
-	    Rast_get_d_raster_row(fd4, cell4, row);
+	    Rast_get_d_row(fd4, cell4, row);
 
 	if (infil != NULL)
-	    Rast_get_d_raster_row(fd4a, cell4a, row);
+	    Rast_get_d_row(fd4a, cell4a, row);
 
 	if (traps != NULL)
-	    Rast_get_f_raster_row(fd4b, cell4b, row);
+	    Rast_get_f_row(fd4b, cell4b, row);
 
 	if (detin != NULL)
-	    Rast_get_f_raster_row(fd9, cell9, row);
+	    Rast_get_f_row(fd9, cell9, row);
 
 	if (tranin != NULL)
-	    Rast_get_f_raster_row(fd10, cell10, row);
+	    Rast_get_f_row(fd10, cell10, row);
 
 	if (tauin != NULL)
-	    Rast_get_f_raster_row(fd11, cell11, row);
+	    Rast_get_f_row(fd11, cell11, row);
 
 	if (wdepth != NULL)
-	    Rast_get_d_raster_row(fd12, cell12, row);
+	    Rast_get_d_row(fd12, cell12, row);
 
 	for (j = 0; j < mx; j++) {
 	    row_rev = my - row - 1;

@@ -280,11 +280,11 @@ int main(int argc, char *argv[])
 	for (row = 0; row < nrows; row++) {
 	    DCELL d_t0dem;
 	    G_percent(row, nrows, 2);
-	    if (Rast_get_d_raster_row(infd_t0dem,inrast_t0dem,row)<0)
+	    if (Rast_get_d_row(infd_t0dem,inrast_t0dem,row)<0)
 	      G_fatal_error(_("Unable to read raster map <%s> row %d"), t0dem, row);
-	    if (Rast_get_d_raster_row(infd_Rn,inrast_Rn,row)<0)
+	    if (Rast_get_d_row(infd_Rn,inrast_Rn,row)<0)
 	      G_fatal_error(_("Unable to read raster map <%s> row %d"), Rn, row);
-	    if (Rast_get_d_raster_row(infd_g0,inrast_g0,row)<0)
+	    if (Rast_get_d_row(infd_g0,inrast_g0,row)<0)
 	      G_fatal_error(_("Unable to read raster map <%s> row %d"), g0, row);
 	    /*process the data */
 	    for (col = 0; col < ncols; col++) {
@@ -353,11 +353,11 @@ int main(int argc, char *argv[])
     }
     rowDry = row;
     colDry = col;
-    if (Rast_get_d_raster_row(infd_Rn, inrast_Rn, row) < 0)
+    if (Rast_get_d_row(infd_Rn, inrast_Rn, row) < 0)
 	G_fatal_error(_("Unable to read raster map <%s> row %d"), Rn, row);
-    if (Rast_get_d_raster_row(infd_g0, inrast_g0, row) < 0)
+    if (Rast_get_d_row(infd_g0, inrast_g0, row) < 0)
 	G_fatal_error(_("Unable to read raster map <%s> row %d"), g0, row);
-    if (Rast_get_d_raster_row(infd_t0dem, inrast_t0dem, row) < 0)
+    if (Rast_get_d_row(infd_t0dem, inrast_t0dem, row) < 0)
 	G_fatal_error(_("Unable to read raster map <%s> row %d"), t0dem, row);
     d_Rn_dry = ((DCELL *) inrast_Rn)[col];
     d_g0_dry = ((DCELL *) inrast_g0)[col];
@@ -376,7 +376,7 @@ int main(int argc, char *argv[])
     }
     rowWet = row;
     colWet = col;
-    if (Rast_get_d_raster_row(infd_t0dem, inrast_t0dem, row) < 0)
+    if (Rast_get_d_row(infd_t0dem, inrast_t0dem, row) < 0)
 	G_fatal_error(_("Unable to read raster map <%s> row %d"), t0dem, row);
     d_t0dem_wet = ((DCELL *) inrast_t0dem)[col];
     /* END OF MANUAL WET/DRY PIXELS */
@@ -398,9 +398,9 @@ int main(int argc, char *argv[])
 	DCELL d_u5;
 	G_percent(row, nrows, 2);
 	/* read a line input maps into buffers */
-	if (Rast_get_d_raster_row(infd_z0m, inrast_z0m, row) < 0)
+	if (Rast_get_d_row(infd_z0m, inrast_z0m, row) < 0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"), z0m, row);
-	if (Rast_get_d_raster_row(infd_t0dem, inrast_t0dem,row)<0)
+	if (Rast_get_d_row(infd_t0dem, inrast_t0dem,row)<0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"), t0dem, row);
 	/* read every cell in the line buffers */
 	for (col = 0; col < ncols; col++) {
@@ -461,9 +461,9 @@ int main(int argc, char *argv[])
 	DCELL d_u5;
 	G_percent(row, nrows, 2);
 	/* read a line input maps into buffers */
-	if (Rast_get_d_raster_row(infd_z0m, inrast_z0m, row) < 0)
+	if (Rast_get_d_row(infd_z0m, inrast_z0m, row) < 0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"), z0m, row);
-	if (Rast_get_d_raster_row(infd_t0dem, inrast_t0dem,row)<0)
+	if (Rast_get_d_row(infd_t0dem, inrast_t0dem,row)<0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"), t0dem, row);
 	/* read every cell in the line buffers */
 	for (col = 0; col < ncols; col++) {
@@ -530,9 +530,9 @@ int main(int argc, char *argv[])
 	DCELL d_u5;
 	G_percent(row, nrows, 2);
 	/* read a line input maps into buffers */
-	if (Rast_get_d_raster_row(infd_z0m,inrast_z0m,row)<0)
+	if (Rast_get_d_row(infd_z0m,inrast_z0m,row)<0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"), z0m, row);
-	if (Rast_get_d_raster_row(infd_t0dem,inrast_t0dem,row)<0)
+	if (Rast_get_d_row(infd_t0dem,inrast_t0dem,row)<0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"), t0dem, row);
 	/* read every cell in the line buffers */
 	for (col = 0; col < ncols; col++) {
@@ -600,9 +600,9 @@ int main(int argc, char *argv[])
 	DCELL d;		/* Output pixel */
 	G_percent(row, nrows, 2);
 	/* read a line input maps into buffers */
-	if (Rast_get_d_raster_row(infd_z0m, inrast_z0m, row) < 0)
+	if (Rast_get_d_row(infd_z0m, inrast_z0m, row) < 0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"), z0m, row);
-	if (Rast_get_d_raster_row(infd_t0dem,inrast_t0dem,row)<0)
+	if (Rast_get_d_row(infd_t0dem,inrast_t0dem,row)<0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"), t0dem, row);
 	/* read every cell in the line buffers */
 	for (col = 0; col < ncols; col++) {

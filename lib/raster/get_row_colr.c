@@ -37,7 +37,7 @@
  *  \return -1 on error
  *  \return 0 on success
  */
-int Rast_get_raster_row_colors(int fd, int row, struct Colors *colors,
+int Rast_get_row_colors(int fd, int row, struct Colors *colors,
 			    unsigned char *red, unsigned char *grn,
 			    unsigned char *blu, unsigned char *nul)
 {
@@ -51,7 +51,7 @@ int Rast_get_raster_row_colors(int fd, int row, struct Colors *colors,
 
     array = G__alloca(cols * size);
 
-    if (Rast_get_raster_row(fd, array, row, type) < 0) {
+    if (Rast_get_row(fd, array, row, type) < 0) {
 	G__freea(array);
 	return -1;
     }

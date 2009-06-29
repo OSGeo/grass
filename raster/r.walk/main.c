@@ -707,7 +707,7 @@ int main(int argc, char *argv[])
 	for (row = 0; row < nrows; row++) {
 
 	    G_percent(row, nrows, 2);
-	    if (Rast_get_raster_row(dtm_fd, dtm_cell, row, dtm_data_type) < 0)
+	    if (Rast_get_row(dtm_fd, dtm_cell, row, dtm_data_type) < 0)
 		G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			      dtm_layer, row);
 	    /* INPUT NULL VALUES: ??? */
@@ -766,7 +766,7 @@ int main(int argc, char *argv[])
 	for (row = 0; row < nrows; row++) {
 
 	    G_percent(row, nrows, 2);
-	    if (Rast_get_raster_row(cost_fd, cost_cell, row, cost_data_type) < 0)
+	    if (Rast_get_row(cost_fd, cost_cell, row, cost_data_type) < 0)
 		G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			      cost_layer, row);
 	    /* INPUT NULL VALUES: ??? */
@@ -899,7 +899,7 @@ int main(int argc, char *argv[])
 	for (row = 0; row < nrows; row++) {
 
 	    G_percent(row, nrows, 2);
-	    if (Rast_get_raster_row(cum_fd, cell2, row, data_type2) < 0)
+	    if (Rast_get_row(cum_fd, cell2, row, data_type2) < 0)
 		G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			      cum_cost_layer, row);
 	    ptr2 = cell2;
@@ -1477,7 +1477,7 @@ int main(int argc, char *argv[])
 
 	    G_percent(row, nrows, 2);
 	    if (keep_nulls) {
-		if (Rast_get_raster_row(dtm_fd, cell2, row, dtm_data_type) < 0)
+		if (Rast_get_row(dtm_fd, cell2, row, dtm_data_type) < 0)
 		    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 				  dtm_layer, row);
 	    }
@@ -1512,7 +1512,7 @@ int main(int argc, char *argv[])
 
 	    G_percent(row, nrows, 2);
 	    if (keep_nulls) {
-		if (Rast_get_raster_row(dtm_fd, cell2, row, dtm_data_type) < 0)
+		if (Rast_get_row(dtm_fd, cell2, row, dtm_data_type) < 0)
 		    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 				  dtm_layer, row);
 	    }
@@ -1547,7 +1547,7 @@ int main(int argc, char *argv[])
 
 	    G_percent(row, nrows, 2);
 	    if (keep_nulls) {
-		if (Rast_get_raster_row(dtm_fd, cell2, row, dtm_data_type) < 0)
+		if (Rast_get_row(dtm_fd, cell2, row, dtm_data_type) < 0)
 		    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 				  cell2, row);
 	    }

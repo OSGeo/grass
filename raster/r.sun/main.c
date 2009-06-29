@@ -566,19 +566,19 @@ int INPUT(void)
 
 
     for (row = 0; row < m; row++) {
-	Rast_get_f_raster_row(fd1, cell1, row);
-	Rast_get_f_raster_row(fd2, cell2, row);
-	Rast_get_f_raster_row(fd3, cell3, row);
+	Rast_get_f_row(fd1, cell1, row);
+	Rast_get_f_row(fd2, cell2, row);
+	Rast_get_f_row(fd3, cell3, row);
 	if (linkein != NULL)
-	    Rast_get_f_raster_row(fd4, cell4, row);
+	    Rast_get_f_row(fd4, cell4, row);
 	if (albedo != NULL)
-	    Rast_get_f_raster_row(fd5, cell5, row);
+	    Rast_get_f_row(fd5, cell5, row);
 	if (latin != NULL)
-	    Rast_get_f_raster_row(fd6, cell6, row);
+	    Rast_get_f_row(fd6, cell6, row);
 	if (coefbh != NULL)
-	    Rast_get_f_raster_row(fr1, rast1, row);
+	    Rast_get_f_row(fr1, rast1, row);
 	if (coefdh != NULL)
-	    Rast_get_f_raster_row(fr2, rast2, row);
+	    Rast_get_f_row(fr2, rast2, row);
 
 
 	for (j = 0; j < n; j++) {

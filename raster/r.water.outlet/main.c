@@ -138,7 +138,7 @@ int main(int argc, char *argv[])
     cell_buf = Rast_allocate_c_buf();
 
     for (row = 0; row < nrows; row++) {
-	Rast_get_map_row(drain_fd, cell_buf, row);
+	Rast_get_c_row(drain_fd, cell_buf, row);
 	for (col = 0; col < ncols; col++) {
 	    if (cell_buf[col] == 0) 
 		total--;

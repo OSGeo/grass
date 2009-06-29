@@ -98,7 +98,7 @@ CELL clump(int in_fd, int out_fd)
 
 	G_message(_("Pass %d..."), pass);
 	for (row = 0; row < nrows; row++) {
-	    if (Rast_get_map_row(in_fd, cur_in + 1, row) < 0)
+	    if (Rast_get_c_row(in_fd, cur_in + 1, row) < 0)
 		G_fatal_error(_("Unable to read raster map row %d "),
 			      row);
 	    

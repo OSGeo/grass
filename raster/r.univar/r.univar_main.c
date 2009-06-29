@@ -189,7 +189,7 @@ process_raster(univar_stat * stats, int fd, const struct Cell_head *region)
 	void *ptr;
 	unsigned int col;
 
-	if (Rast_get_raster_row(fd, raster_row, row, map_type) < 0)
+	if (Rast_get_row(fd, raster_row, row, map_type) < 0)
 	    G_fatal_error(_("Reading row %d"), row);
 
 	ptr = raster_row;

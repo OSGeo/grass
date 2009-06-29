@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
 	if ((file_fd = Rast_open_cell_old("MASK", G_mapset())) < 0)
 	    G_fatal_error("Unable to open MASK");
 	for (r = 0; r < nrows; r++) {
-	    Rast_get_map_row_nomask(file_fd, alt_row, r);
+	    Rast_get_c_row_nomask(file_fd, alt_row, r);
 	    for (c = 0; c < ncols; c++)
 		if (!alt_row[c])
 		    FLAG_SET(mask, r, c);

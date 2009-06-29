@@ -5,7 +5,6 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-
 int read_cell(char *name)
 {
     int fd;
@@ -35,7 +34,7 @@ int read_cell(char *name)
     for (row = 0; row < window.rows; row++) {
 	G_percent(row, window.rows, 1);
 	north += window.ns_res;
-	if (Rast_get_map_row_nomask(fd, cell, row) < 0)
+	if (Rast_get_c_row_nomask(fd, cell, row) < 0)
 	    exit(1);
 	for (col = 0; col < window.cols; col++)
 	    if ((z = cell[col]))

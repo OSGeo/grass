@@ -58,7 +58,7 @@ void SaveMap(int NumMap, int MapSeed)
     }
     else {
 	for (Row = 0; Row < Rs; Row++) {
-	    Rast_get_map_row_nomask(FDM, CellBuffer, Row);
+	    Rast_get_c_row_nomask(FDM, CellBuffer, Row);
 	    for (Col = 0; Col < Cs; Col++) {
 		if (CellBuffer[Col] != 0) {
 		    Value = Surface[Row][Col];
@@ -77,7 +77,7 @@ void SaveMap(int NumMap, int MapSeed)
 	DownInterval = UpInterval = Value;
 
 	for (Row = 0; Row < Rs; Row++) {
-	    Rast_get_map_row_nomask(FDM, CellBuffer, Row);
+	    Rast_get_c_row_nomask(FDM, CellBuffer, Row);
 	    for (Col = 0; Col < Cs; Col++) {
 		if (CellBuffer[Col] != 0) {
 		    Value = Surface[Row][Col];

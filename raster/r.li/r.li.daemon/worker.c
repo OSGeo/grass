@@ -246,7 +246,7 @@ char *mask_preprocessing(char *mask, char *raster, int rl, int cl)
 	int riga;
 
 	riga = (int)rint(i * add_row);
-	Rast_get_map_row_nomask(old_fd, old, riga);
+	Rast_get_c_row_nomask(old_fd, old, riga);
 	for (j = 0; j < cl; j++) {
 	    int colonna;
 
@@ -268,7 +268,7 @@ CELL *RLI_get_cell_raster_row(int fd, int row, area_des ad)
     if (ad->cm->contents[hash] == row)
 	return ad->cm->cache[hash];
     else {
-	Rast_get_raster_row(fd, ad->cm->cache[hash], row, CELL_TYPE);
+	Rast_get_row(fd, ad->cm->cache[hash], row, CELL_TYPE);
 	ad->cm->contents[hash] = row;
 	return ad->cm->cache[hash];
     }
@@ -283,7 +283,7 @@ DCELL *RLI_get_dcell_raster_row(int fd, int row, area_des ad)
     if (ad->dm->contents[hash] == row)
 	return ad->dm->cache[hash];
     else {
-	Rast_get_raster_row(fd, ad->dm->cache[hash], row, DCELL_TYPE);
+	Rast_get_row(fd, ad->dm->cache[hash], row, DCELL_TYPE);
 	ad->dm->contents[hash] = row;
 	return ad->dm->cache[hash];
     }
@@ -298,7 +298,7 @@ FCELL *RLI_get_fcell_raster_row(int fd, int row, area_des ad)
     if (ad->fm->contents[hash] == row)
 	return ad->fm->cache[hash];
     else {
-	Rast_get_raster_row(fd, ad->fm->cache[hash], row, FCELL_TYPE);
+	Rast_get_row(fd, ad->fm->cache[hash], row, FCELL_TYPE);
 	ad->fm->contents[hash] = row;
 	return ad->fm->cache[hash];
     }

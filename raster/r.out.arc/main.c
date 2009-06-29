@@ -171,7 +171,7 @@ int main(int argc, char *argv[])
 
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
-	if (Rast_get_raster_row(fd, raster, row, out_type) < 0)
+	if (Rast_get_row(fd, raster, row, out_type) < 0)
 	    exit(EXIT_FAILURE);
 	/*
 	   if (Rast_get_null_value_row(fd, null_row, row) < 0)

@@ -15,7 +15,7 @@ void *read_raster(void *buf, const int fd, const RASTER_MAP_TYPE rtype)
     for (i = 0; i < rows; i++) {
 	G_percent(i + 1, rows, 10);
 
-	Rast_get_raster_row(fd, tmpbuf, i, rtype);
+	Rast_get_row(fd, tmpbuf, i, rtype);
 	tmpbuf =
 	    G_incr_void_ptr(tmpbuf, Rast_cell_size(rtype) * G_window_cols());
     }

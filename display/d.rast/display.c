@@ -69,7 +69,7 @@ static int cell_draw(const char *name,
     for (cur_A_row = 0; cur_A_row != -1;) {
 	G_percent(cur_A_row, nrows, 2);
 	/* Get window (array) row currently required */
-	Rast_get_raster_row(cellfile, xarray, cur_A_row, data_type);
+	Rast_get_row(cellfile, xarray, cur_A_row, data_type);
 	mask_raster_array(xarray, ncols, invert, data_type);
 
 	/* Draw the cell row, and get the next row number */

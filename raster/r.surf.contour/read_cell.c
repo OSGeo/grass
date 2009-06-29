@@ -21,7 +21,7 @@ CELL **read_cell(const char *name, const char *mapset)
     for (row = 0; row < nrows; row++) {
 	idx[row] = &buf[row * ncols];
 
-	if (Rast_get_map_row(fd, idx[row], row) < 0)
+	if (Rast_get_c_row(fd, idx[row], row) < 0)
 	    G_fatal_error(_("unable to read map <%s> in <%s>"),
 			  name, mapset);
     }

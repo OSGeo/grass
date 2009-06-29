@@ -32,7 +32,7 @@ int zoom(struct Cell_head *window, const char *name, const char *mapset)
     left = ncols;
     right = -1;
     for (row = 0; row < nrows; row++) {
-	if (Rast_get_raster_row(fd, rast_ptr = raster, row, map_type) < 0)
+	if (Rast_get_row(fd, rast_ptr = raster, row, map_type) < 0)
 	    G_fatal_error(_("Could not read from <%s>"), name);
 	for (col = 0; col < ncols; col++) {
 	    if (!Rast_is_null_value(rast_ptr, map_type))

@@ -218,14 +218,14 @@ int main(int argc, char **argv)
     out_row = Rast_allocate_d_buf();
 
     for (row = 0; row < size; row++)
-	Rast_get_d_raster_row(in_fd, in_rows[size + row], row);
+	Rast_get_d_row(in_fd, in_rows[size + row], row);
 
     for (row = 0; row < nrows; row++) {
 	DCELL *tmp;
 	int i;
 
 	if (row + size < nrows)
-	    Rast_get_d_raster_row(in_fd, in_rows[size * 2], row + size);
+	    Rast_get_d_row(in_fd, in_rows[size * 2], row + size);
 
 	for (col = 0; col < ncols; col++) {
 	    DCELL *c = &in_rows[size][col];

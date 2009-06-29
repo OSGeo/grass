@@ -51,7 +51,7 @@ int do_histogram(const char *name)
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
 
-	if (Rast_get_map_row_nomask(fd, cell, row) < 0)
+	if (Rast_get_c_row_nomask(fd, cell, row) < 0)
 	    break;
 
 	Rast_update_cell_stats(cell, ncols, &statf);

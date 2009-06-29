@@ -62,7 +62,7 @@ static struct fileinfo *new_fileinfo(int fd)
  * map. If no NULL-value bitmap exists, arrange for the production of
  * NULL-values based on zeros in the raster map. If the map is
  * floating-point, arrange for quantization to integer for
- * Rast_get_c_raster_row(), et. al., by reading the quantization rules
+ * Rast_get_c_row(), et. al., by reading the quantization rules
  * for the map using Rast_read_quant(). If the programmer wants to read
  * the floating point map using uing quant rules other than the ones
  * stored in map's quant file, he/she should call Rast_set_quant_rules()
@@ -83,7 +83,7 @@ static int G__open_raster_new(const char *name, int open_mode,
   \brief Open an existing integer raster map (cell)
   
   Opens the existing cell file <i>name</i> in the <i>mapset</i> for
-  reading by Rast_get_raster_row() with mapping into the current window.
+  reading by Rast_get_row() with mapping into the current window.
 
   This routine opens the raster map <i>name</i> in <i>mapset</i> for
   reading. A nonnegative file descriptor is returned if the open is
@@ -933,7 +933,7 @@ int Rast_open_raster_new_uncompressed(const char *name, RASTER_MAP_TYPE wr_type)
   reading.
 
   Returned by Rast_open_cell_old(). After calling this function,
-  Rast_get_c_raster_row() and Rast_get_map_row() will use rules defined by q
+  Rast_get_c_row() and Rast_get_c_row() will use rules defined by q
   (instead of using rules defined in map's quant file) to convert floats to
   ints.
   

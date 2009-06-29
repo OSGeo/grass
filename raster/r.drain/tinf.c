@@ -199,17 +199,17 @@ void *get_max_d(void *v1, void *v2)
 /* Read one line from a raster map */
 int get_row_c(int fd, void *row, int n)
 {
-    return Rast_get_c_raster_row(fd, (CELL *) row, n);
+    return Rast_get_c_row(fd, (CELL *) row, n);
 }
 
 int get_row_f(int fd, void *row, int n)
 {
-    return Rast_get_f_raster_row(fd, (FCELL *) row, n);
+    return Rast_get_f_row(fd, (FCELL *) row, n);
 }
 
 int get_row_d(int fd, void *row, int n)
 {
-    return Rast_get_d_raster_row(fd, (DCELL *) row, n);
+    return Rast_get_d_row(fd, (DCELL *) row, n);
 }
 
 /* Write one row to a raster map */

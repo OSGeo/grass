@@ -43,13 +43,13 @@ int extract_points(int z_flag)
 
 	switch (data_type) {
 	case CELL_TYPE:
-	    Rast_get_c_raster_row(input_fd, cellbuf, row);
+	    Rast_get_c_row(input_fd, cellbuf, row);
 	    break;
 	case FCELL_TYPE:
-	    Rast_get_f_raster_row(input_fd, fcellbuf, row);
+	    Rast_get_f_row(input_fd, fcellbuf, row);
 	    break;
 	case DCELL_TYPE:
-	    Rast_get_d_raster_row(input_fd, dcellbuf, row);
+	    Rast_get_d_row(input_fd, dcellbuf, row);
 	    break;
 	}
 

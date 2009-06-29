@@ -153,7 +153,7 @@ void process(void)
 	    Rast_put_raster_row(fd_out, featrow_out, CELL_TYPE);	/* Write out the edge cells as NULL.    */
 
     for (wind_row = 0; wind_row < wsize - 1; wind_row++)
-	Rast_get_raster_row(fd_in, row_in + (wind_row * ncols), wind_row,
+	Rast_get_row(fd_in, row_in + (wind_row * ncols), wind_row,
 			 DCELL_TYPE);
     /* Read in enough of the first rows to  */
     /* allow window to be examined.         */
@@ -161,7 +161,7 @@ void process(void)
     for (row = EDGE; row < (nrows - EDGE); row++) {
 	G_percent(row + 1, nrows - EDGE, 2);
 
-	Rast_get_raster_row(fd_in, row_in + ((wsize - 1) * ncols), row + EDGE,
+	Rast_get_row(fd_in, row_in + ((wsize - 1) * ncols), row + EDGE,
 			 DCELL_TYPE);
 
 	for (col = EDGE; col < (ncols - EDGE); col++) {

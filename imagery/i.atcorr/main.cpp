@@ -306,19 +306,19 @@ static void process_raster (int ifd, InputMask imask, ScaleRange iscale,
 	G_percent(row, nrows, 1);     /* keep the user informed of our progress */
 		
         /* read the next row */
-	if(Rast_get_raster_row(ifd, buf, row, FCELL_TYPE) < 0)
+	if(Rast_get_row(ifd, buf, row, FCELL_TYPE) < 0)
 	    G_fatal_error (_("Unable to read input raster map row %d"),
 			     row);
 
         /* read the next row of elevation values */
         if(ialt_fd >= 0)
-	    if(Rast_get_raster_row(ialt_fd, alt, row, FCELL_TYPE) < 0)
+	    if(Rast_get_row(ialt_fd, alt, row, FCELL_TYPE) < 0)
 		G_fatal_error (_("Unable to read elevation raster map row %d"),
 			       row);
 
         /* read the next row of elevation values */
         if(ivis_fd >= 0)
-	    if(Rast_get_raster_row(ivis_fd, vis, row, FCELL_TYPE) < 0)
+	    if(Rast_get_row(ivis_fd, vis, row, FCELL_TYPE) < 0)
 		G_fatal_error (_("Unable to read visibility raster map row %d"),
 			       row);
 

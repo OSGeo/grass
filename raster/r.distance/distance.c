@@ -107,9 +107,9 @@ int null_distance(const char *name1, const char *name2, int *zerro_row, int *zer
 
 	G_percent(row, nrows, 2);
 
-	if (Rast_get_raster_row(mapd1, inrast1, row, maptype1) < 0)
+	if (Rast_get_row(mapd1, inrast1, row, maptype1) < 0)
 	    G_fatal_error("Could not read from <%s>", name1);
-	if (Rast_get_raster_row(mapd2, inrast2, row, maptype2) < 0)
+	if (Rast_get_row(mapd2, inrast2, row, maptype2) < 0)
 	    G_fatal_error("Could not read from <%s>", name2);
 
 	for (col = 0; col < ncols; col++) {

@@ -145,17 +145,17 @@ int main(int argc, char *argv[])
 	G_percent(row, nrows, 2);
 	
         /* read input maps */ 
-        if (Rast_get_d_raster_row(infd_fpar, inrast_fpar, row)< 0)
+        if (Rast_get_d_row(infd_fpar, inrast_fpar, row)< 0)
 	    G_fatal_error(_("Unable to read from <%s> row %d"),fpar,row);
-	if (Rast_get_d_raster_row(infd_luf,inrast_luf,row)<0)
+	if (Rast_get_d_row(infd_luf,inrast_luf,row)<0)
 	    G_fatal_error(_("Unable to read from <%s> row %d"),luf,row);
-	if (Rast_get_d_raster_row(infd_lat, inrast_lat, row) < 0)
+	if (Rast_get_d_row(infd_lat, inrast_lat, row) < 0)
 	    G_fatal_error(_("Unable to read from <%s> row %d"),lat,row);
-	if (Rast_get_d_raster_row(infd_doy, inrast_doy, row) < 0)
+	if (Rast_get_d_row(infd_doy, inrast_doy, row) < 0)
 	    G_fatal_error(_("Unable to read from <%s> row %d"),doy,row);
-	if (Rast_get_d_raster_row(infd_tsw, inrast_tsw, row) < 0)
+	if (Rast_get_d_row(infd_tsw, inrast_tsw, row) < 0)
 	    G_fatal_error(_("Unable to read from <%s> row %d"),tsw,row);
-	if (Rast_get_d_raster_row(infd_wa,inrast_wa,row)<0)
+	if (Rast_get_d_row(infd_wa,inrast_wa,row)<0)
 	    G_fatal_error(_("Unable to read from <%s> row %d"),wa,row); 
         /*process the data */ 
         for (col = 0; col < ncols; col++)

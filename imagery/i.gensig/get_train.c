@@ -32,7 +32,7 @@ int get_training_classes(struct files *files, struct Signature *S)
     G_message(_("Finding training classes..."));
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
-	if (Rast_get_c_raster_row(fd, cell, row) < 0)
+	if (Rast_get_c_row(fd, cell, row) < 0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"), cell,
 			  row);
 	Rast_update_cell_stats(cell, ncols, &cell_stats);

@@ -99,9 +99,9 @@ int main(int argc, char *argv[])
 	DCELL d_doy;
 	G_percent(row, nrows, 2);
 
-	if (Rast_get_raster_row(infd_doy, inrast_doy, row, DCELL_TYPE) < 0)
+	if (Rast_get_row(infd_doy, inrast_doy, row, DCELL_TYPE) < 0)
 	    G_fatal_error(_("Could not read from <%s>"), doy);
-	if (Rast_get_raster_row(infd_lat, inrast_lat, row, DCELL_TYPE) < 0)
+	if (Rast_get_row(infd_lat, inrast_lat, row, DCELL_TYPE) < 0)
 	    G_fatal_error(_("Could not read from <%s>"), lat);
 
 	for (col = 0; col < ncols; col++)

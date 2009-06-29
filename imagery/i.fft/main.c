@@ -131,7 +131,7 @@ int main(int argc, char *argv[])
     G_message(_("Reading the raster map <%s>..."),
 	      Cellmap_orig);
     for (i = 0; i < rows; i++) {
-	if (Rast_get_d_raster_row(inputfd, cell_real, i) < 0)
+	if (Rast_get_d_row(inputfd, cell_real, i) < 0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			  Cellmap_orig, i);
 	for (j = 0; j < cols; j++) {

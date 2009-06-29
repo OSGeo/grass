@@ -48,7 +48,7 @@ static void read_rows(int infile, int row)
 	keep = 0;
 
     for (i = keep; i < neighbors; i++)
-	Rast_get_d_raster_row(infile, bufs[i], first_row + i);
+	Rast_get_d_row(infile, bufs[i], first_row + i);
 
     cur_row = first_row;
 }

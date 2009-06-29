@@ -556,7 +556,7 @@ int INPUT(void)
     fd1 = Rast_open_cell_old(elevin, mapset);
 
     for (row = 0; row < m; row++) {
-	Rast_get_f_raster_row(fd1, cell1, row);
+	Rast_get_f_row(fd1, cell1, row);
 
 	for (j = 0; j < n; j++) {
 	    row_rev = m - row - 1;

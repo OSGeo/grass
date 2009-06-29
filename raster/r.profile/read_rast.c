@@ -39,7 +39,7 @@ int read_rast(double east, double north, double dist, int fd, int coords,
 	outofbounds = TRUE;
 
     if (!outofbounds) {
-	if (row != cur_row && Rast_get_d_raster_row(fd, dcell, row) < 0)
+	if (row != cur_row && Rast_get_d_row(fd, dcell, row) < 0)
 	    G_fatal_error(_("Unable to read raster map row %d"), row);
 	cur_row = row;
     }

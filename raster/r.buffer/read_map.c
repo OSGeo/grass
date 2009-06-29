@@ -60,7 +60,7 @@ int read_input_map(char *input, char *mapset, int ZEROFLAG)
 	hit = 0;
 	G_percent(row, window.rows, 2);
 
-	if (Rast_get_c_raster_row(fd, cell, row) < 0)
+	if (Rast_get_c_row(fd, cell, row) < 0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			  G_fully_qualified_name(input, mapset), row);
 

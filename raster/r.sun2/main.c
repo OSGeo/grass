@@ -964,7 +964,7 @@ int INPUT_part(int offset, double *zmax)
 
 		row_rev = m - row - 1;
 		rowrevoffset = row_rev - offset;
-		Rast_get_f_raster_row(fd_shad[i], horizonbuf[i], row);
+		Rast_get_f_row(fd_shad[i], horizonbuf[i], row);
 		horizonpointer =
 		    horizonarray + (ssize_t) arrayNumInt *n * rowrevoffset;
 		for (j = 0; j < n; j++) {
@@ -982,23 +982,23 @@ int INPUT_part(int offset, double *zmax)
 
 
     for (row = m - offset - 1; row >= finalRow; row--) {
-	Rast_get_f_raster_row(fd1, cell1, row);
+	Rast_get_f_row(fd1, cell1, row);
 	if (aspin != NULL)
-	    Rast_get_f_raster_row(fd2, cell2, row);
+	    Rast_get_f_row(fd2, cell2, row);
 	if (slopein != NULL)
-	    Rast_get_f_raster_row(fd3, cell3, row);
+	    Rast_get_f_row(fd3, cell3, row);
 	if (linkein != NULL)
-	    Rast_get_f_raster_row(fd4, cell4, row);
+	    Rast_get_f_row(fd4, cell4, row);
 	if (albedo != NULL)
-	    Rast_get_f_raster_row(fd5, cell5, row);
+	    Rast_get_f_row(fd5, cell5, row);
 	if (latin != NULL)
-	    Rast_get_f_raster_row(fd6, cell6, row);
+	    Rast_get_f_row(fd6, cell6, row);
 	if (longin != NULL)
-	    Rast_get_f_raster_row(fd7, cell7, row);
+	    Rast_get_f_row(fd7, cell7, row);
 	if (coefbh != NULL)
-	    Rast_get_f_raster_row(fr1, rast1, row);
+	    Rast_get_f_row(fr1, rast1, row);
 	if (coefdh != NULL)
-	    Rast_get_f_raster_row(fr2, rast2, row);
+	    Rast_get_f_row(fr2, rast2, row);
 
 	row_rev = m - row - 1;
 	rowrevoffset = row_rev - offset;

@@ -193,7 +193,7 @@ int main(int argc, char *argv[])
 	    G_percent(row, nrows, 2);
 	    /* read input map */
 	    for (i = 1; i <= nfiles; i++) {
-		if ((Rast_get_raster_row(
+		if ((Rast_get_row(
 			 infd[i], inrast[i], row, in_data_type[i])) < 0)
 		    G_fatal_error(_("Unable to read raster map <%s> row %d >"),
 				  name, row);
@@ -351,7 +351,7 @@ int main(int argc, char *argv[])
 	G_percent(row, nrows, 2);
 	/* read input map */
 	for (i = 1; i <= nfiles; i++) {
-	    if ((Rast_get_raster_row(
+	    if ((Rast_get_row(
 		     infd[i], inrast[i], row, in_data_type[i])) < 0)
 		G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			      name, row);

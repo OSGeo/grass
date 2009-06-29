@@ -38,7 +38,7 @@ int write_GRASS(int fd,
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
 
-	if (Rast_get_raster_row(fd, raster, row, out_type) < 0)
+	if (Rast_get_row(fd, raster, row, out_type) < 0)
 	    return (row);
 
 	for (col = 0, ptr = raster; col < ncols; col++,
@@ -91,7 +91,7 @@ int write_MODFLOW(int fd,
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
 
-	if (Rast_get_raster_row(fd, raster, row, out_type) < 0)
+	if (Rast_get_row(fd, raster, row, out_type) < 0)
 	    return (row);
 
 	colcnt = 0;
@@ -177,7 +177,7 @@ int write_GSGRID(int fd,
     for (row = nrows - 1; row >= 0; row--) {
 	G_percent((row - nrows) * (-1), nrows, 2);
 
-	if (Rast_get_raster_row(fd, raster, row, out_type) < 0)
+	if (Rast_get_row(fd, raster, row, out_type) < 0)
 	    return (row);
 
 	colcnt = 0;

@@ -277,7 +277,7 @@ int main(int argc, char *argv[])
     for (row = sample_rows - 1; row < nrows; row += sample_rows) {
 	G_percent(row, nrows, 2);
 	for (n = 0; n < ref.nfiles; n++)
-	    if (Rast_get_d_raster_row(cellfd[n], cell[n], row) < 0)
+	    if (Rast_get_d_row(cellfd[n], cell[n], row) < 0)
 		G_fatal_error(_("Unable to read raster map row %d"),
 			      row);
 	for (col = sample_cols - 1; col < ncols; col += sample_cols) {

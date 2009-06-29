@@ -317,11 +317,11 @@ int main(int argc, char **argv)
        and call appropriate function to draw an arrow on the cell */
 
     for (row = 0; row < nrows; row++) {
-	Rast_get_raster_row(layer_fd, raster_row, row, raster_type);
+	Rast_get_row(layer_fd, raster_row, row, raster_type);
 	ptr = raster_row;
 
 	if (opt7->answer) {
-	    Rast_get_raster_row(mag_fd, mag_raster_row, row, mag_raster_type);
+	    Rast_get_row(mag_fd, mag_raster_row, row, mag_raster_type);
 	    mag_ptr = mag_raster_row;
 	}
 

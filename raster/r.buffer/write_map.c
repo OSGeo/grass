@@ -58,7 +58,7 @@ int write_output_map(char *output, int offset)
 		*cell++ = (CELL) * ptr++;
 	}
 	else {
-	    if (Rast_get_map_row_nomask(fd_in, cell, row) < 0)
+	    if (Rast_get_c_row_nomask(fd_in, cell, row) < 0)
 		G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			      output, row);
 

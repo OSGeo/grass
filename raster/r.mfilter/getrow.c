@@ -9,7 +9,7 @@
 
 int getmaprow(int fd, void *buf, int row, int len)
 {
-    if (Rast_get_d_raster_row(fd, (DCELL *) buf, row) < 0)
+    if (Rast_get_d_row(fd, (DCELL *) buf, row) < 0)
 	G_fatal_error(_("Cannot read raster row %d"), row);
     return 1;
 }

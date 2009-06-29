@@ -197,7 +197,7 @@ int main(int argc, char **argv)
 	for (i = 0; i < 3; i++) {
 	    struct band *b = &B[i];
 
-	    if (Rast_get_raster_row_colors(b->file, atrow, &b->colors,
+	    if (Rast_get_row_colors(b->file, atrow, &b->colors,
 					b->array[0],
 					b->array[1], b->array[2], nulls) < 0)
 		G_fatal_error(_("Error reading raster map <%s>"),

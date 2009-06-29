@@ -427,7 +427,7 @@ int main(int argc, char *argv[])
 
 	for (row = 0; row < nrows; row++) {
 	    G_percent(row, nrows, 2);
-	    if (Rast_get_raster_row(cost_fd, cell, row, data_type) < 0)
+	    if (Rast_get_row(cost_fd, cell, row, data_type) < 0)
 		G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			      cost_layer, row);
 
@@ -649,7 +649,7 @@ int main(int argc, char *argv[])
 	G_message(_("Reading raster map <%s>..."), opt9->answer);
 	for (row = 0; row < nrows; row++) {
 	    G_percent(row, nrows, 2);
-	    if (Rast_get_raster_row(fd, cell2, row, data_type2) < 0)
+	    if (Rast_get_row(fd, cell2, row, data_type2) < 0)
 		G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			      opt9->answer, row);
 	    ptr2 = cell2;
@@ -1005,7 +1005,7 @@ int main(int argc, char *argv[])
 	for (row = 0; row < nrows; row++) {
 	    G_percent(row, nrows, 2);
 	    if (keep_nulls) {
-		if (Rast_get_raster_row(cost_fd, cell2, row, data_type) < 0)
+		if (Rast_get_row(cost_fd, cell2, row, data_type) < 0)
 		    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 				  cost_layer, row);
 	    }
@@ -1038,7 +1038,7 @@ int main(int argc, char *argv[])
 	for (row = 0; row < nrows; row++) {
 	    G_percent(row, nrows, 2);
 	    if (keep_nulls) {
-		if (Rast_get_raster_row(cost_fd, cell2, row, data_type) < 0)
+		if (Rast_get_row(cost_fd, cell2, row, data_type) < 0)
 		    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 				  cost_layer, row);
 	    }
@@ -1071,7 +1071,7 @@ int main(int argc, char *argv[])
 	for (row = 0; row < nrows; row++) {
 	    G_percent(row, nrows, 2);
 	    if (keep_nulls) {
-		if (Rast_get_raster_row(cost_fd, cell2, row, data_type) < 0)
+		if (Rast_get_row(cost_fd, cell2, row, data_type) < 0)
 		    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 				  cost_layer, row);
 	    }

@@ -124,12 +124,12 @@ int execute_random(struct rr_state *theState)
     cat = 1;
     /* Execute for loop for every row if nt>1 */
     for (row = 0; row < nrows && nt; row++) {
-	if (Rast_get_raster_row
+	if (Rast_get_row
 	    (infd, theState->buf.data.v, row, theState->buf.type) < 0)
 	    G_fatal_error(_("Cannot read raster row [%d] from raster map <%s>"),
 			  row, theState->inraster);
 	if (theState->docover == 1) {
-	    if (Rast_get_raster_row
+	    if (Rast_get_row
 		(cinfd, theState->cover.data.v, row,
 		 theState->cover.type) < 0)
 		G_fatal_error(_("Cannot read raster row [%d] from cover raster map <%s>"),

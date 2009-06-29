@@ -122,7 +122,7 @@ int open_file(char *name)
 	}
     }
     for (row = 0; row < n_rows; row++) {
-	if (Rast_get_map_row(cell_file, buf + PAD, row) < 0) {
+	if (Rast_get_c_row(cell_file, buf + PAD, row) < 0) {
 	    unlink(work_file_name);
 	    G_fatal_error(_("%s: Error reading from raster map <%s>"),
 			  error_prefix, cell);

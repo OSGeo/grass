@@ -267,7 +267,7 @@ int main(int argc, char *argv[])
 	patt_fd = open(patt_name, 2);
 	segment_init(&seg_patt, patt_fd, 4);
 	for (row = 0; row < nrows; row++) {
-	    if (Rast_get_raster_row(patt, cell, row, CELL_TYPE) < 0)
+	    if (Rast_get_row(patt, cell, row, CELL_TYPE) < 0)
 		G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			      patt_layer, row);
 	    segment_put_row(&seg_patt, cell, row);
@@ -275,7 +275,7 @@ int main(int argc, char *argv[])
     }
 
     for (row = 0; row < nrows; row++) {
-	if (Rast_get_raster_row(old, fcell, row, FCELL_TYPE) < 0)
+	if (Rast_get_row(old, fcell, row, FCELL_TYPE) < 0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			  elev_layer, row);
 	segment_put_row(&seg_in, fcell, row);

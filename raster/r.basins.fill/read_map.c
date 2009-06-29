@@ -40,9 +40,9 @@ CELL *read_map(const char *name, int nomask, int nrows, int ncols)
     G_message(_("Reading <%s> ... "), name);
 
     if (nomask)
-	get_row = Rast_get_map_row_nomask;
+	get_row = Rast_get_c_row_nomask;
     else
-	get_row = Rast_get_map_row;
+	get_row = Rast_get_c_row;
 
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 10);

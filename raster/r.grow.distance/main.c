@@ -264,7 +264,7 @@ int main(int argc, char **argv)
 
 	Rast_set_d_null_value(dist_row, ncols);
 
-	Rast_get_d_raster_row(in_fd, in_row, irow);
+	Rast_get_d_row(in_fd, in_row, irow);
 
 	for (col = 0; col < ncols; col++)
 	    if (!Rast_is_d_null_value(&in_row[col])) {

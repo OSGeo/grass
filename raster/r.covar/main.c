@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
 	for (i = 0; i < nfiles; i++) {
-	    if (Rast_get_d_raster_row(fd[i], dcell[i], row) < 0)
+	    if (Rast_get_d_row(fd[i], dcell[i], row) < 0)
 		exit(1);
 	}
 	for (col = 0; col < ncols; col++) {

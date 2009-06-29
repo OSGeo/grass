@@ -156,7 +156,7 @@ int init_vars(int argc, char *argv[])
     MASK_flag = 0;
     do_points = nrows * ncols;
     for (r = 0; r < nrows; r++) {
-	Rast_get_raster_row(fd, elebuf, r, ele_map_type);
+	Rast_get_row(fd, elebuf, r, ele_map_type);
 	ptr = elebuf;
 	for (c = 0; c < ncols; c++) {
 	    index = SEG_INDEX(alt_seg, r, c);
@@ -213,7 +213,7 @@ int init_vars(int argc, char *argv[])
 	    G_fatal_error(_("unable to open runoff map layer"));
 	}
 	for (r = 0; r < nrows; r++) {
-	    Rast_get_c_raster_row(fd, buf, r);
+	    Rast_get_c_row(fd, buf, r);
 	    for (c = 0; c < ncols; c++) {
 		if (MASK_flag) {
 		    index = FLAG_GET(worked, r, c);
@@ -252,7 +252,7 @@ int init_vars(int argc, char *argv[])
 	    G_fatal_error(_("unable to open depression map layer"));
 	}
 	for (r = 0; r < nrows; r++) {
-	    Rast_get_c_raster_row(fd, buf, r);
+	    Rast_get_c_row(fd, buf, r);
 	    for (c = 0; c < ncols; c++) {
 		asp_value = buf[c];
 		if (!Rast_is_c_null_value(&asp_value) && asp_value)
@@ -269,7 +269,7 @@ int init_vars(int argc, char *argv[])
 	    G_fatal_error(_("unable to open blocking map layer"));
 	}
 	for (r = 0; r < nrows; r++) {
-	    Rast_get_c_raster_row(fd, buf, r);
+	    Rast_get_c_row(fd, buf, r);
 	    for (c = 0; c < ncols; c++) {
 		block_value = buf[c];
 		if (!Rast_is_c_null_value(&block_value) && block_value)

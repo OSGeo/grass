@@ -55,13 +55,13 @@ CELL cross(int fd[], int non_zero, int primary, int outfd)
 	G_percent(row, nrows, 5);
 
 	/* read the primary file first, even if not first in the list */
-	if (Rast_get_map_row(fd[primary], cell[0], row) < 0)
+	if (Rast_get_c_row(fd[primary], cell[0], row) < 0)
 	    exit(1);
 
 	/* read the others */
 	col = 1;
 	for (i = 0; i < nfiles; i++)
-	    if (i != primary && Rast_get_map_row(fd[i], cell[col++], row) < 0)
+	    if (i != primary && Rast_get_c_row(fd[i], cell[col++], row) < 0)
 		exit(1);
 	for (col = 0; col < ncols; col++) {
 	    zero = 1;

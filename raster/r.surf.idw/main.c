@@ -261,7 +261,7 @@ interpolate(MELEMENT rowlist[], SHORT nrows, SHORT ncols, SHORT datarows,
 	G_percent(row+1, nrows, 2);
 
 	/* if mask occurs, read current row of the mask */
-	if (mask && Rast_get_map_row(maskfd, mask, row) < 0)
+	if (mask && Rast_get_c_row(maskfd, mask, row) < 0)
 	    G_fatal_error(_("Cannot read row"));
 
 	/* prepare search array for next row of interpolations */
@@ -710,7 +710,7 @@ MELEMENT *row_lists(
 
     for (row = 0, Rptr = rowlist; row < rows; row++) {
 	G_percent(row+1, rows, 2);
-	if (Rast_get_map_row_nomask(fd, cell, row) < 0)
+	if (Rast_get_c_row_nomask(fd, cell, row) < 0)
 	    G_fatal_error(_("Unable to read raster map row %d"),
 			  row);
 

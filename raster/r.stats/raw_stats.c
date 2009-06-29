@@ -39,7 +39,7 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels)
 
 	/* read the rows and set the pointers */
 	for (i = 0; i < nfiles; i++) {
-	    if (Rast_get_raster_row(fd[i], rast[i], row, map_type[i]) < 0)
+	    if (Rast_get_row(fd[i], rast[i], row, map_type[i]) < 0)
 		exit(1);
 	    rastp[i] = rast[i];
 	}

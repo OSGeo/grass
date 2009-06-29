@@ -76,8 +76,8 @@ static void get_slot_counts(int basefile, int coverfile)
     G_message(_("Computing histograms"));
 
     for (row = 0; row < rows; row++) {
-	Rast_get_c_raster_row(basefile, basebuf, row);
-	Rast_get_d_raster_row(coverfile, coverbuf, row);
+	Rast_get_c_row(basefile, basebuf, row);
+	Rast_get_d_row(coverfile, coverbuf, row);
 
 	for (col = 0; col < cols; col++) {
 	    struct basecat *bc;
@@ -166,8 +166,8 @@ static void fill_bins(int basefile, int coverfile)
     G_message(_("Binning data"));
 
     for (row = 0; row < rows; row++) {
-	Rast_get_c_raster_row(basefile, basebuf, row);
-	Rast_get_d_raster_row(coverfile, coverbuf, row);
+	Rast_get_c_row(basefile, basebuf, row);
+	Rast_get_d_row(coverfile, coverbuf, row);
 
 	for (col = 0; col < cols; col++) {
 	    struct basecat *bc;
@@ -343,7 +343,7 @@ static void do_output(int base_fd, char **outputs, const char *covermap)
     have_colors = Rast_read_colors(covermap, "", &colors) > 0;
 
     for (row = 0; row < rows; row++) {
-	Rast_get_c_raster_row(base_fd, base_buf, row);
+	Rast_get_c_row(base_fd, base_buf, row);
 
 	for (quant = 0; quant < num_quants; quant++) {
 	    for (col = 0; col < cols; col++)

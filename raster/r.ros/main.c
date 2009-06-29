@@ -626,7 +626,7 @@ int main(int argc, char *argv[])
     /*if considering spotting, read elevation map into an array */
     if (spotting)
 	for (row = 0; row < nrows; row++) {
-	    if (Rast_get_map_row(elev_fd, elev, row) < 0)
+	    if (Rast_get_c_row(elev_fd, elev, row) < 0)
 		G_fatal_error("cannot get map row!");
 	    for (col = 0; col < ncols; col++)
 		DATA(map_elev, row, col) = elev[col];
@@ -637,30 +637,30 @@ int main(int argc, char *argv[])
 
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
-	if (Rast_get_map_row(fuel_fd, fuel, row) < 0)
+	if (Rast_get_c_row(fuel_fd, fuel, row) < 0)
 	    G_fatal_error("cannot get map row: %d!", row);
 	if (parm.mois_1h->answer)
-	    if (Rast_get_map_row(mois_1h_fd, mois_1h, row) < 0)
+	    if (Rast_get_c_row(mois_1h_fd, mois_1h, row) < 0)
 		G_fatal_error("cannot get map row: %d!", row);
 	if (parm.mois_10h->answer)
-	    if (Rast_get_map_row(mois_10h_fd, mois_10h, row) < 0)
+	    if (Rast_get_c_row(mois_10h_fd, mois_10h, row) < 0)
 		G_fatal_error("cannot get map row: %d!", row);
 	if (parm.mois_100h->answer)
-	    if (Rast_get_map_row(mois_100h_fd, mois_100h, row) < 0)
+	    if (Rast_get_c_row(mois_100h_fd, mois_100h, row) < 0)
 		G_fatal_error("cannot get map row: %d!", row);
-	if (Rast_get_map_row(mois_live_fd, mois_live, row) < 0)
+	if (Rast_get_c_row(mois_live_fd, mois_live, row) < 0)
 	    G_fatal_error("cannot get map row: %d!", row);
 	if (parm.vel->answer)
-	    if (Rast_get_map_row(vel_fd, vel, row) < 0)
+	    if (Rast_get_c_row(vel_fd, vel, row) < 0)
 		G_fatal_error("cannot get map row: %d!", row);
 	if (parm.dir->answer)
-	    if (Rast_get_map_row(dir_fd, dir, row) < 0)
+	    if (Rast_get_c_row(dir_fd, dir, row) < 0)
 		G_fatal_error("cannot get map row: %d!", row);
 	if (parm.slope->answer)
-	    if (Rast_get_map_row(slope_fd, slope, row) < 0)
+	    if (Rast_get_c_row(slope_fd, slope, row) < 0)
 		G_fatal_error("cannot get map row: %d!", row);
 	if (parm.aspect->answer)
-	    if (Rast_get_map_row(aspect_fd, aspect, row) < 0)
+	    if (Rast_get_c_row(aspect_fd, aspect, row) < 0)
 		G_fatal_error("cannot get map row: %d!", row);
 
 	/*initialize cell buffers for output map layers */

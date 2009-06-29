@@ -332,7 +332,7 @@ int main(int argc, char *argv[])
     G_message(_("c=%d"), region.cols);
 
     for (row = 0; row < nrows; row++) {
-	if (Rast_get_raster_row(fd, raster, row, out_type) < 0)
+	if (Rast_get_row(fd, raster, row, out_type) < 0)
 	    G_fatal_error(_("Reading map"));
 	G_percent(row, nrows, 2);
 

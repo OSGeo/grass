@@ -147,10 +147,10 @@ int main(int argc, char *argv[])
     /* Read in cell map values */
     G_message(_("Reading raster maps..."));
     for (i = 0; i < rows; i++) {
-	if (Rast_get_d_raster_row(realfd, cell_real, i) < 0)
+	if (Rast_get_d_row(realfd, cell_real, i) < 0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			  Cellmap_real, i);
-	if (Rast_get_d_raster_row(imagfd, cell_imag, i) < 0)
+	if (Rast_get_d_row(imagfd, cell_imag, i) < 0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			  Cellmap_imag, i);
 	for (j = 0; j < cols; j++) {
@@ -171,7 +171,7 @@ int main(int argc, char *argv[])
 	maskbuf = Rast_allocate_c_buf();
 
 	for (i = 0; i < rows; i++) {
-	    Rast_get_map_row(maskfd, maskbuf, i);
+	    Rast_get_c_row(maskfd, maskbuf, i);
 	    for (j = 0; j < cols; j++) {
 		if (maskbuf[j] == 0) {
 		    data[C(i, j)][0] = 0.0;

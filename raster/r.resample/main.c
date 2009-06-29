@@ -118,7 +118,7 @@ int main(int argc, char *argv[])
 
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
-	if (Rast_get_raster_row(infd, rast, row, data_type) < 0)
+	if (Rast_get_row(infd, rast, row, data_type) < 0)
 	    G_fatal_error(_("Error reading row %d"), row);
 	if (Rast_put_raster_row(outfd, rast, out_type) < 0)
 	    G_fatal_error(_("Error writing row %d"), row);

@@ -555,20 +555,20 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     if (Wrap) {
-	Rast_get_d_raster_row_nomask(elevation_fd, elev_cell[1] + 1, 0);
+	Rast_get_d_row_nomask(elevation_fd, elev_cell[1] + 1, 0);
 	elev_cell[1][0] = elev_cell[1][G_window_cols() - 1];
 	elev_cell[1][G_window_cols() + 1] = elev_cell[1][2];
     }
     else
-	Rast_get_d_raster_row_nomask(elevation_fd, elev_cell[1], 0);
+	Rast_get_d_row_nomask(elevation_fd, elev_cell[1], 0);
 
     if (Wrap) {
-	Rast_get_d_raster_row_nomask(elevation_fd, elev_cell[2] + 1, 1);
+	Rast_get_d_row_nomask(elevation_fd, elev_cell[2] + 1, 1);
 	elev_cell[2][0] = elev_cell[2][G_window_cols() - 1];
 	elev_cell[2][G_window_cols() + 1] = elev_cell[2][2];
     }
     else
-	Rast_get_d_raster_row_nomask(elevation_fd, elev_cell[2], 1);
+	Rast_get_d_row_nomask(elevation_fd, elev_cell[2], 1);
 
     G_verbose_message(_("Percent complete..."));
 
@@ -608,12 +608,12 @@ int main(int argc, char *argv[])
 	elev_cell[2] = temp;
 
 	if (Wrap) {
-	    Rast_get_d_raster_row_nomask(elevation_fd, elev_cell[2] + 1, row);
+	    Rast_get_d_row_nomask(elevation_fd, elev_cell[2] + 1, row);
 	    elev_cell[2][0] = elev_cell[2][G_window_cols() - 1];
 	    elev_cell[2][G_window_cols() + 1] = elev_cell[2][2];
 	}
 	else
-	    Rast_get_d_raster_row_nomask(elevation_fd, elev_cell[2], row);
+	    Rast_get_d_row_nomask(elevation_fd, elev_cell[2], row);
 
 	c1 = elev_cell[0];
 	c2 = c1 + 1;

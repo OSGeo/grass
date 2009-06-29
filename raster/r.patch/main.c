@@ -133,14 +133,14 @@ int main(int argc, char *argv[])
     G_verbose_message(_("Percent complete..."));
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
-	if (Rast_get_raster_row(infd[0], presult, row, out_type) < 0)
+	if (Rast_get_row(infd[0], presult, row, out_type) < 0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			  names[0], row);
 
 	if (out_type == CELL_TYPE)
 	    Rast_update_cell_stats((CELL *) presult, ncols, &statf[0]);
 	for (i = 1; i < nfiles; i++) {
-	    if (Rast_get_raster_row(infd[i], patch, row, out_type) < 0)
+	    if (Rast_get_row(infd[i], patch, row, out_type) < 0)
 		G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			      names[i], row);
 	    if (!do_patch

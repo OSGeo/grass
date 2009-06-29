@@ -2,7 +2,7 @@
  **
  ** Author: Paul W. Carlson     3/92
  ** 
- ** ps_get_map_row is substituted by Rast_get_map_row_nomask
+ ** ps_get_map_row is substituted by Rast_get_c_row_nomask
  ** writing mask file is done separately by function ps_write_mask_row
  ** which used code previously in ps_get_map_row. This is done because
  ** sometimes the raster map is not drawn, but we still need a mask
@@ -50,7 +50,7 @@ int PS_make_mask(void)
 	PS.b0 = (double)b / 255.0;
 
 	for (row = 0; row < PS.w.rows; row++) {
-	    Rast_get_map_row_nomask(maskfd, maskbuf, row);
+	    Rast_get_c_row_nomask(maskfd, maskbuf, row);
 	    ps_write_mask_row(maskbuf);
 	}
 	fclose(ps_mask_fp);
@@ -112,7 +112,7 @@ int PS_raster_plot(void)
 	cellbuf = Rast_allocate_buf(map_type);
 	n = 0;
 	for (row = 0; row < PS.w.rows; row++) {
-	    Rast_get_raster_row(PS.cell_fd, cellbuf, row, map_type);
+	    Rast_get_row(PS.cell_fd, cellbuf, row, map_type);
 	    if ((row % PS.row_delta) == 0) {
 		ptr = cellbuf;
 		for (col = 0; col < PS.w.cols; col += PS.col_delta) {
@@ -155,7 +155,7 @@ int PS_raster_plot(void)
 	n = 0;
 	for (row = 0; row < PS.w.rows; row++) {
 	    for (i = 0; i < 3; i++) {
-		Rast_get_raster_row(grp.fd[i], cbuf[i], row, grp_map_type[i]);
+		Rast_get_row(grp.fd[i], cbuf[i], row, grp_map_type[i]);
 		cptr[i] = cbuf[i];
 	    }
 

@@ -163,7 +163,7 @@ int main(int argc, char *argv[])
 	if (!gscale->answer) {	/* 24BIT COLOR IMAGE */
 	    for (row = 0; row < w.rows; row++) {
 		G_percent(row, w.rows, 5);
-		if (Rast_get_raster_row(cellfile, (void *)voidc, row, rtype) < 0)
+		if (Rast_get_row(cellfile, (void *)voidc, row, rtype) < 0)
 		    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 				  rast->answer, row);
 		Rast_lookup_colors((void *)voidc, ored, ogrn, oblu, set,
@@ -187,7 +187,7 @@ int main(int argc, char *argv[])
 	    for (row = 0; row < w.rows; row++) {
 
 		G_percent(row, w.rows, 5);
-		if (Rast_get_raster_row(cellfile, (void *)voidc, row, rtype) < 0)
+		if (Rast_get_row(cellfile, (void *)voidc, row, rtype) < 0)
 		    exit(1);
 		Rast_lookup_colors((void *)voidc, ored, ogrn, oblu, set,
 				   w.cols, &colors, rtype);

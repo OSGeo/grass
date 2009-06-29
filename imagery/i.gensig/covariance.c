@@ -33,7 +33,7 @@ int compute_covariances(struct files *files, struct Signature *S)
 	G_percent(row, nrows, 2);
 	read_training_map(class, row, ncols, files);
 	for (b = 0; b < files->nbands; b++)	/* NOTE: files->nbands == S->nbands */
-	    if (Rast_get_d_raster_row(files->band_fd[b], files->band_cell[b], row) < 0)
+	    if (Rast_get_d_row(files->band_fd[b], files->band_cell[b], row) < 0)
 		G_fatal_error(_("Unable to read raster map row %d"),
 			      row);
 	for (b1 = 0; b1 < files->nbands; b1++) {

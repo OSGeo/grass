@@ -296,20 +296,18 @@ int Rast_close_gdal_write_link(struct GDAL_link *);
 int Rast_get_cellhd(const char *, const char *, struct Cell_head *);
 
 /* get_row.c */
-int Rast_get_map_row_nomask(int, CELL *, int);
-int Rast_get_raster_row_nomask(int, void *, int, RASTER_MAP_TYPE);
-int Rast_get_c_raster_row_nomask(int, CELL *, int);
-int Rast_get_f_raster_row_nomask(int, FCELL *, int);
-int Rast_get_d_raster_row_nomask(int, DCELL *, int);
-int Rast_get_map_row(int, CELL *, int);
-int Rast_get_raster_row(int, void *, int, RASTER_MAP_TYPE);
-int Rast_get_c_raster_row(int, CELL *, int);
-int Rast_get_f_raster_row(int, FCELL *, int);
-int Rast_get_d_raster_row(int, DCELL *, int);
+int Rast_get_row_nomask(int, void *, int, RASTER_MAP_TYPE);
+int Rast_get_c_row_nomask(int, CELL *, int);
+int Rast_get_f_row_nomask(int, FCELL *, int);
+int Rast_get_d_row_nomask(int, DCELL *, int);
+int Rast_get_row(int, void *, int, RASTER_MAP_TYPE);
+int Rast_get_c_row(int, CELL *, int);
+int Rast_get_f_row(int, FCELL *, int);
+int Rast_get_d_row(int, DCELL *, int);
 int Rast_get_null_value_row(int, char *, int);
 
 /* get_row_colr.c */
-int Rast_get_raster_row_colors(int, int, struct Colors *,
+int Rast_get_row_colors(int, int, struct Colors *,
 			    unsigned char *, unsigned char *, unsigned char *,
 			    unsigned char *);
 /* histo_eq.c */

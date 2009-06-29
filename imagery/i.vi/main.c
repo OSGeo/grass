@@ -264,31 +264,31 @@ int main(int argc, char *argv[])
 
 	G_percent(row, nrows, 2);
 
-	if (Rast_get_d_raster_row(infd_redchan, inrast_redchan, row) < 0)
+	if (Rast_get_d_row(infd_redchan, inrast_redchan, row) < 0)
 	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			  redchan, row);
 	if (nirchan) {
-	    if (Rast_get_d_raster_row(infd_nirchan, inrast_nirchan, row) < 0)
+	    if (Rast_get_d_row(infd_nirchan, inrast_nirchan, row) < 0)
 	        G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			      nirchan, row);
         }
 	if (greenchan) {
-	    if (Rast_get_d_raster_row(infd_greenchan, inrast_greenchan, row) < 0)
+	    if (Rast_get_d_row(infd_greenchan, inrast_greenchan, row) < 0)
 		G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			      greenchan, row);
 	}
 	if (bluechan) {
-	    if (Rast_get_d_raster_row(infd_bluechan, inrast_bluechan, row) < 0)
+	    if (Rast_get_d_row(infd_bluechan, inrast_bluechan, row) < 0)
 		G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			      bluechan, row);
 	}
 	if (chan5chan) {
-	    if (Rast_get_d_raster_row(infd_chan5chan, inrast_chan5chan, row) < 0)
+	    if (Rast_get_d_row(infd_chan5chan, inrast_chan5chan, row) < 0)
 		G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			      chan5chan, row);
 	}
 	if (chan7chan) {
-	    if (Rast_get_d_raster_row(infd_chan7chan, inrast_chan7chan, row) < 0)
+	    if (Rast_get_d_row(infd_chan7chan, inrast_chan7chan, row) < 0)
 		G_fatal_error(_("Unable to read raster map <%s> row %d"),
 			      chan7chan, row);
 	}

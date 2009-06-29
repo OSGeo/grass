@@ -443,15 +443,15 @@ void mv_driver()
 	    switch (data_type) {
 	    case (CELL_TYPE):
 		Rast_zero_raster_buf(tmp, CELL_TYPE);
-		Rast_get_raster_row(finput, tmp, i, CELL_TYPE);
+		Rast_get_row(finput, tmp, i, CELL_TYPE);
 		break;
 	    case (FCELL_TYPE):
 		Rast_zero_raster_buf(ftmp, FCELL_TYPE);
-		Rast_get_raster_row(finput, ftmp, i, FCELL_TYPE);
+		Rast_get_row(finput, ftmp, i, FCELL_TYPE);
 		break;
 	    case (DCELL_TYPE):
 		Rast_zero_raster_buf(dtmp, DCELL_TYPE);
-		Rast_get_raster_row(finput, dtmp, i, DCELL_TYPE);
+		Rast_get_row(finput, dtmp, i, DCELL_TYPE);
 		break;
 	    }
 
@@ -525,7 +525,7 @@ void mv_driver()
 
 	if (fmask > 0) {
 	    Rast_zero_raster_buf(row_buf, CELL_TYPE);
-	    Rast_get_raster_row_nomask(fmask, row_buf, y0 + i + u_l / 2,
+	    Rast_get_row_nomask(fmask, row_buf, y0 + i + u_l / 2,
 				    CELL_TYPE);
 
 	    /* for each cell whose value is "1"
@@ -1366,15 +1366,15 @@ void unit_driver()
 	    switch (data_type) {
 	    case (CELL_TYPE):
 		Rast_zero_raster_buf(tmp, CELL_TYPE);
-		Rast_get_raster_row(finput, tmp, i, CELL_TYPE);
+		Rast_get_row(finput, tmp, i, CELL_TYPE);
 		break;
 	    case (FCELL_TYPE):
 		Rast_zero_raster_buf(ftmp, FCELL_TYPE);
-		Rast_get_raster_row(finput, ftmp, i, FCELL_TYPE);
+		Rast_get_row(finput, ftmp, i, FCELL_TYPE);
 		break;
 	    case (DCELL_TYPE):
 		Rast_zero_raster_buf(dtmp, DCELL_TYPE);
-		Rast_get_raster_row(finput, dtmp, i, DCELL_TYPE);
+		Rast_get_row(finput, dtmp, i, DCELL_TYPE);
 		break;
 	    }
 
@@ -1685,15 +1685,15 @@ void whole_reg_driver()
 	    switch (data_type) {
 	    case (CELL_TYPE):
 		Rast_zero_raster_buf(tmp, CELL_TYPE);
-		Rast_get_raster_row(finput, tmp, i, CELL_TYPE);
+		Rast_get_row(finput, tmp, i, CELL_TYPE);
 		break;
 	    case (FCELL_TYPE):
 		Rast_zero_raster_buf(ftmp, FCELL_TYPE);
-		Rast_get_raster_row(finput, ftmp, i, FCELL_TYPE);
+		Rast_get_row(finput, ftmp, i, FCELL_TYPE);
 		break;
 	    case (DCELL_TYPE):
 		Rast_zero_raster_buf(dtmp, DCELL_TYPE);
-		Rast_get_raster_row(finput, dtmp, i, DCELL_TYPE);
+		Rast_get_row(finput, dtmp, i, DCELL_TYPE);
 		break;
 	    }
 
@@ -1754,7 +1754,7 @@ void whole_reg_driver()
 	row_buf = Rast_allocate_buf(CELL_TYPE);
 	for (i = 0; i < nrows; i++) {
 	    Rast_zero_raster_buf(row_buf, CELL_TYPE);
-	    Rast_get_raster_row(fr, row_buf, i, CELL_TYPE);
+	    Rast_get_row(fr, row_buf, i, CELL_TYPE);
 	    for (j = 0; j < ncols; j++) {
 		if (*(row_buf + j)) {
 		    if (regcnt == 0)

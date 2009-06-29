@@ -83,7 +83,7 @@ void read_input_files(void)
 	G_fatal_error(_("Elevation file's resolution differs from current region resolution"));
 
     for (row = 0; row < region.rows; row++) {
-	Rast_get_d_raster_row(fd, el.buf[row], row);
+	Rast_get_d_row(fd, el.buf[row], row);
 	if (parm.seg)
 	    put_row_seg(el, row);
     }
@@ -100,7 +100,7 @@ void read_input_files(void)
 			    "current region resolution"));
 
 	for (row = 0; row < region.rows; row++) {
-	    Rast_get_d_raster_row(fd, as.buf[row], row);
+	    Rast_get_d_row(fd, as.buf[row], row);
 	    if (parm.seg)
 		put_row_seg(as, row);
 	}
@@ -115,7 +115,7 @@ void read_input_files(void)
 	fd = open_existing_cell_file(parm.barin, &hd);
 
 	for (row = 0; row < region.rows; row++) {
-	    Rast_get_d_raster_row(fd, barc, row);
+	    Rast_get_d_row(fd, barc, row);
 	    for (col = 0; col < region.cols; col++) {
 		BM_set(bitbar, col, row, (barc[col] != 0));
 		if (parm.dsout && barc[col] != 0)
