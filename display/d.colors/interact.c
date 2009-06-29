@@ -206,7 +206,7 @@ interact(struct Categories *categories, struct Colors *colors, char *name,
 	    WRITE_STATUS;
 	    break;
 	case '+':
-	    Rast_shift_colors(1, colors);
+	    Rast_shift_c_colors(1, colors);
 	    if (hi_mode) {
 		cur_red = red_hi;
 		cur_grn = grn_hi;
@@ -218,7 +218,7 @@ interact(struct Categories *categories, struct Colors *colors, char *name,
 	    WRITE_STATUS;
 	    break;
 	case '-':
-	    Rast_shift_colors(-1, colors);
+	    Rast_shift_c_colors(-1, colors);
 	    if (hi_mode) {
 		cur_red = red_hi;
 		cur_grn = grn_hi;
