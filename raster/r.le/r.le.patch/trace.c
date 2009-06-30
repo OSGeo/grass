@@ -212,7 +212,7 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
 	    cor_cell_buf = Rast_allocate_buf(CELL_TYPE);
 	    fe = Rast_open_new("interior", CELL_TYPE);
 	    for (i = 1; i < nrows + 1; i++) {
-		Rast_zero_raster_buf(cor_cell_buf, CELL_TYPE);
+		Rast_zero_buf(cor_cell_buf, CELL_TYPE);
 		for (j = 1; j < ncols + 1; j++)
 		    *(cor_cell_buf + j - 1) = (int)(*(*(cor + i) + j));
 
@@ -226,7 +226,7 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
 	    cor_fcell_buf = Rast_allocate_buf(FCELL_TYPE);
 	    fe = Rast_open_new("interior", FCELL_TYPE);
 	    for (i = 1; i < nrows + 1; i++) {
-		Rast_zero_raster_buf(cor_fcell_buf, FCELL_TYPE);
+		Rast_zero_buf(cor_fcell_buf, FCELL_TYPE);
 		for (j = 1; j < ncols + 1; j++) {
 		    *(cor_fcell_buf + j - 1) = (float)(*(*(cor + i) + j));
 		}
@@ -239,7 +239,7 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
 	    cor_dcell_buf = Rast_allocate_buf(DCELL_TYPE);
 	    fe = Rast_open_new("interior", DCELL_TYPE);
 	    for (i = 1; i < nrows + 1; i++) {
-		Rast_zero_raster_buf(cor_dcell_buf, DCELL_TYPE);
+		Rast_zero_buf(cor_dcell_buf, DCELL_TYPE);
 		for (j = 1; j < ncols + 1; j++)
 		    *(cor_dcell_buf + j - 1) = (double)(*(*(cor + i) + j));
 
@@ -258,7 +258,7 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
 	fd = Rast_open_new("num", CELL_TYPE);
 	for (i = 1; i < nrows + 1; i++) {
 	    pat_buf = Rast_allocate_buf(CELL_TYPE);
-	    Rast_zero_raster_buf(pat_buf, CELL_TYPE);
+	    Rast_zero_buf(pat_buf, CELL_TYPE);
 	    for (j = 1; j < ncols + 1; j++)
 		*(pat_buf + j - 1) = *(*(pat + i) + j);
 
@@ -541,7 +541,7 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
 	    exit(EXIT_FAILURE);
 	}
 	tmp1 = Rast_allocate_buf(CELL_TYPE);
-	Rast_zero_raster_buf(tmp1, CELL_TYPE);
+	Rast_zero_buf(tmp1, CELL_TYPE);
 	fprintf(stderr, "Analyzing region number %d...\n", index);
     }
 
@@ -606,15 +606,15 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
 
 	switch (data_type) {
 	case CELL_TYPE:
-	    Rast_zero_raster_buf(tmp, data_type);
+	    Rast_zero_buf(tmp, data_type);
 	    Rast_get_row(finput, tmp, i, data_type);
 	    break;
 	case FCELL_TYPE:
-	    Rast_zero_raster_buf(ftmp, data_type);
+	    Rast_zero_buf(ftmp, data_type);
 	    Rast_get_row(finput, ftmp, i, data_type);
 	    break;
 	case DCELL_TYPE:
-	    Rast_zero_raster_buf(dtmp, data_type);
+	    Rast_zero_buf(dtmp, data_type);
 	    Rast_get_row(finput, dtmp, i, data_type);
 	    break;
 	}

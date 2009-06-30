@@ -506,7 +506,7 @@ void Rast__create_window_mapping(int);
 int Rast_row_repeat_nomask(int, int);
 
 /* zero_cell.c */
-void Rast_zero_cell_buf(CELL *);
-void Rast_zero_raster_buf(void *, RASTER_MAP_TYPE);
+void Rast_zero_c_buf(CELL *);
+void Rast_zero_buf(void *, RASTER_MAP_TYPE);
 
 #endif

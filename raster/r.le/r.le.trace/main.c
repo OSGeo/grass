@@ -608,15 +608,15 @@ void cell_clip(DCELL ** buf, DCELL ** null_buf, int row0, int col0, int nrows,
 
 	switch (data_type) {
 	case CELL_TYPE:
-	    Rast_zero_raster_buf(tmp, data_type);
+	    Rast_zero_buf(tmp, data_type);
 	    Rast_get_row(finput, tmp, i, data_type);
 	    break;
 	case FCELL_TYPE:
-	    Rast_zero_raster_buf(ftmp, data_type);
+	    Rast_zero_buf(ftmp, data_type);
 	    Rast_get_row(finput, ftmp, i, data_type);
 	    break;
 	case DCELL_TYPE:
-	    Rast_zero_raster_buf(dtmp, data_type);
+	    Rast_zero_buf(dtmp, data_type);
 	    Rast_get_row(finput, dtmp, i, data_type);
 	    break;
 	}

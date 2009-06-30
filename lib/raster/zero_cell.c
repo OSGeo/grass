@@ -24,7 +24,7 @@
  * \param buf data buffer
  */
 
-void Rast_zero_cell_buf(CELL * buf)
+void Rast_zero_c_buf(CELL * buf)
 {
     int i = G_window_cols();
 
@@ -42,7 +42,7 @@ void Rast_zero_cell_buf(CELL * buf)
  * \param rast data buffer
  * \param data_type raster type (CELL, FCELL, DCELL)
  */
-void Rast_zero_raster_buf(void *rast, RASTER_MAP_TYPE data_type)
+void Rast_zero_buf(void *rast, RASTER_MAP_TYPE data_type)
 {
     int i;
     unsigned char *ptr;
