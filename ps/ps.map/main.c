@@ -24,6 +24,7 @@
 #include <signal.h>
 #include <errno.h>
 #include <grass/gis.h>
+#include <grass/colors.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
 

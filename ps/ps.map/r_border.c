@@ -10,6 +10,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <grass/colors.h>
 #include <grass/raster.h>
 #include "border.h"
 #include "ps_info.h"

@@ -42,8 +42,9 @@ struct color_name
 };
 
 extern int G_num_standard_colors(void);
-extern struct color_rgb G_standard_color_rgb(int n);
+extern struct color_rgb G_standard_color_rgb(int);
 extern int G_num_standard_color_names(void);
-extern const struct color_name *G_standard_color_name(int n);
+extern const struct color_name *G_standard_color_name(int);
+extern int G_str_to_color(const char *, int *, int *, int *);
 
 #endif

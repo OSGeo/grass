@@ -8,6 +8,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <grass/gis.h>
+#include <grass/colors.h>
 #include <grass/raster.h>
 #include <grass/dbmi.h>
 #include <grass/vector.h>

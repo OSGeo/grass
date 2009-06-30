@@ -15,6 +15,7 @@
 
 #include <grass/gis.h>
 #include <grass/raster.h>
+#include <grass/colors.h>
 
 /*!
  * \brief Make histogram-stretched grey colors
