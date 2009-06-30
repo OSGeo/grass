@@ -699,14 +699,14 @@ int main(int argc, char *argv[])
 		    head_id = new_node();
 		    nodes[head_id].next = -1;
 		    nodes[head_id].z = z;
-		    Rast_set_raster_value_c(ptr, head_id, CELL_TYPE);	/* store index to head */
+		    Rast_set_c_value(ptr, head_id, CELL_TYPE);	/* store index to head */
 		}
 		else {		/* head is already there */
 
-		    head_id = Rast_get_raster_value_c(ptr, CELL_TYPE);	/* get index to head */
+		    head_id = Rast_get_c_value(ptr, CELL_TYPE);	/* get index to head */
 		    head_id = add_node(head_id, z);
 		    if (head_id != -1)
-			Rast_set_raster_value_c(ptr, head_id, CELL_TYPE);	/* store index to head */
+			Rast_set_c_value(ptr, head_id, CELL_TYPE);	/* store index to head */
 		}
 	    }
 	}			/* while !EOF */
@@ -750,9 +750,9 @@ int main(int argc, char *argv[])
 		ptr = raster_row;
 		for (col = 0; col < cols; col++) {
 		    offset = (row * cols + col) * Rast_cell_size(rtype);
-		    min = Rast_get_raster_value_d(min_array + offset, rtype);
-		    max = Rast_get_raster_value_d(max_array + offset, rtype);
-		    Rast_set_raster_value_d(ptr, max - min, rtype);
+		    min = Rast_get_d_value(min_array + offset, rtype);
+		    max = Rast_get_d_value(max_array + offset, rtype);
+		    Rast_set_d_value(ptr, max - min, rtype);
 		    ptr = G_incr_void_ptr(ptr, Rast_cell_size(rtype));
 		}
 		break;
@@ -762,13 +762,13 @@ int main(int argc, char *argv[])
 		for (col = 0; col < cols; col++) {
 		    offset = (row * cols + col) * Rast_cell_size(rtype);
 		    n_offset = (row * cols + col) * Rast_cell_size(CELL_TYPE);
-		    n = Rast_get_raster_value_c(n_array + n_offset, CELL_TYPE);
-		    sum = Rast_get_raster_value_d(sum_array + offset, rtype);
+		    n = Rast_get_c_value(n_array + n_offset, CELL_TYPE);
+		    sum = Rast_get_d_value(sum_array + offset, rtype);
 
 		    if (n == 0)
 			Rast_set_null_value(ptr, 1, rtype);
 		    else
-			Rast_set_raster_value_d(ptr, (sum / n), rtype);
+			Rast_set_d_value(ptr, (sum / n), rtype);
 
 		    ptr = G_incr_void_ptr(ptr, Rast_cell_size(rtype));
 		}
@@ -781,9 +781,9 @@ int main(int argc, char *argv[])
 		for (col = 0; col < cols; col++) {
 		    offset = (row * cols + col) * Rast_cell_size(rtype);
 		    n_offset = (row * cols + col) * Rast_cell_size(CELL_TYPE);
-		    n = Rast_get_raster_value_c(n_array + n_offset, CELL_TYPE);
-		    sum = Rast_get_raster_value_d(sum_array + offset, rtype);
-		    sumsq = Rast_get_raster_value_d(sumsq_array + offset, rtype);
+		    n = Rast_get_c_value(n_array + n_offset, CELL_TYPE);
+		    sum = Rast_get_d_value(sum_array + offset, rtype);
+		    sumsq = Rast_get_d_value(sumsq_array + offset, rtype);
 
 		    if (n == 0)
 			Rast_set_null_value(ptr, 1, rtype);
@@ -793,13 +793,13 @@ int main(int argc, char *argv[])
 			    variance = 0.0;
 
 			if (method == METHOD_STDDEV)
-			    Rast_set_raster_value_d(ptr, sqrt(variance), rtype);
+			    Rast_set_d_value(ptr, sqrt(variance), rtype);
 
 			else if (method == METHOD_VARIANCE)
-			    Rast_set_raster_value_d(ptr, variance, rtype);
+			    Rast_set_d_value(ptr, variance, rtype);
 
 			else if (method == METHOD_COEFF_VAR)
-			    Rast_set_raster_value_d(ptr,
+			    Rast_set_d_value(ptr,
 						 100 * sqrt(variance) / (sum /
 									 n),
 						 rtype);
@@ -817,7 +817,7 @@ int main(int argc, char *argv[])
 		    else {	/* one or more points in cell */
 
 			head_id =
-			    Rast_get_raster_value_c(index_array + n_offset,
+			    Rast_get_c_value(index_array + n_offset,
 						 CELL_TYPE);
 			node_id = head_id;
 
@@ -829,7 +829,7 @@ int main(int argc, char *argv[])
 			}
 
 			if (n == 1)	/* only one point, use that */
-			    Rast_set_raster_value_d(ptr, nodes[head_id].z,
+			    Rast_set_d_value(ptr, nodes[head_id].z,
 						 rtype);
 			else if (n % 2 != 0) {	/* odd number of points: median_i = (n + 1) / 2 */
 			    n = (n + 1) / 2;
@@ -837,7 +837,7 @@ int main(int argc, char *argv[])
 			    for (j = 1; j < n; j++)	/* get "median element" */
 				node_id = nodes[node_id].next;
 
-			    Rast_set_raster_value_d(ptr, nodes[node_id].z,
+			    Rast_set_d_value(ptr, nodes[node_id].z,
 						 rtype);
 			}
 			else {	/* even number of points: median = (val_below + val_above) / 2 */
@@ -850,7 +850,7 @@ int main(int argc, char *argv[])
 
 			    z = (nodes[node_id].z +
 				 nodes[nodes[node_id].next].z) / 2;
-			    Rast_set_raster_value_d(ptr, z, rtype);
+			    Rast_set_d_value(ptr, z, rtype);
 			}
 		    }
 		    ptr = G_incr_void_ptr(ptr, Rast_cell_size(rtype));
@@ -864,7 +864,7 @@ int main(int argc, char *argv[])
 			Rast_set_null_value(ptr, 1, rtype);
 		    else {
 			head_id =
-			    Rast_get_raster_value_c(index_array + n_offset,
+			    Rast_get_c_value(index_array + n_offset,
 						 CELL_TYPE);
 			node_id = head_id;
 			n = 0;
@@ -895,7 +895,7 @@ int main(int argc, char *argv[])
 			    node_id = nodes[node_id].next;
 
 			z = (z + nodes[node_id].z) / 2;
-			Rast_set_raster_value_d(ptr, z, rtype);
+			Rast_set_d_value(ptr, z, rtype);
 		    }
 		    ptr = G_incr_void_ptr(ptr, Rast_cell_size(rtype));
 		}
@@ -908,7 +908,7 @@ int main(int argc, char *argv[])
 			Rast_set_null_value(ptr, 1, rtype);
 		    else {
 			head_id =
-			    Rast_get_raster_value_c(index_array + n_offset,
+			    Rast_get_c_value(index_array + n_offset,
 						 CELL_TYPE);
 			node_id = head_id;
 
@@ -943,7 +943,7 @@ int main(int argc, char *argv[])
 				    sumdev / ((n - 1) *
 					      pow(sqrt(variance), 3));
 			}
-			Rast_set_raster_value_d(ptr, skew, rtype);
+			Rast_set_d_value(ptr, skew, rtype);
 		    }
 		    ptr = G_incr_void_ptr(ptr, Rast_cell_size(rtype));
 		}
@@ -956,7 +956,7 @@ int main(int argc, char *argv[])
 			Rast_set_null_value(ptr, 1, rtype);
 		    else {
 			head_id =
-			    Rast_get_raster_value_c(index_array + n_offset,
+			    Rast_get_c_value(index_array + n_offset,
 						 CELL_TYPE);
 
 			node_id = head_id;
@@ -1000,7 +1000,7 @@ int main(int argc, char *argv[])
 			    }
 			    mean = sum / n;
 			}
-			Rast_set_raster_value_d(ptr, mean, rtype);
+			Rast_set_d_value(ptr, mean, rtype);
 		    }
 		    ptr = G_incr_void_ptr(ptr, Rast_cell_size(rtype));
 		}

@@ -88,7 +88,7 @@ void Rast_raster_cpy(void *v1, const void *v2, int n, RASTER_MAP_TYPE data_type)
  * \param cval value to set
  * \param data_type raster type (CELL, FCELL, DCELL)
  */
-void Rast_set_raster_value_c(void *rast, CELL cval, RASTER_MAP_TYPE data_type)
+void Rast_set_c_value(void *rast, CELL cval, RASTER_MAP_TYPE data_type)
 {
     CELL c;
 
@@ -121,7 +121,7 @@ void Rast_set_raster_value_c(void *rast, CELL cval, RASTER_MAP_TYPE data_type)
  * \param fval value to set
  * \param data_type raster type (CELL, FCELL, DCELL)
  */
-void Rast_set_raster_value_f(void *rast, FCELL fval, RASTER_MAP_TYPE data_type)
+void Rast_set_f_value(void *rast, FCELL fval, RASTER_MAP_TYPE data_type)
 {
     FCELL f;
 
@@ -155,7 +155,7 @@ void Rast_set_raster_value_f(void *rast, FCELL fval, RASTER_MAP_TYPE data_type)
  * \param fval value to set
  * \param data_type raster type (CELL, FCELL, DCELL)
  */
-void Rast_set_raster_value_d(void *rast, DCELL dval, RASTER_MAP_TYPE data_type)
+void Rast_set_d_value(void *rast, DCELL dval, RASTER_MAP_TYPE data_type)
 {
     DCELL d;
 
@@ -194,7 +194,7 @@ void Rast_set_raster_value_d(void *rast, DCELL dval, RASTER_MAP_TYPE data_type)
  *
  * \return raster value
  */
-CELL Rast_get_raster_value_c(const void *rast, RASTER_MAP_TYPE data_type)
+CELL Rast_get_c_value(const void *rast, RASTER_MAP_TYPE data_type)
 {
     CELL c;
 
@@ -228,7 +228,7 @@ CELL Rast_get_raster_value_c(const void *rast, RASTER_MAP_TYPE data_type)
  *
  * \return raster value
  */
-FCELL Rast_get_raster_value_f(const void *rast, RASTER_MAP_TYPE data_type)
+FCELL Rast_get_f_value(const void *rast, RASTER_MAP_TYPE data_type)
 {
     FCELL f;
 
@@ -263,7 +263,7 @@ FCELL Rast_get_raster_value_f(const void *rast, RASTER_MAP_TYPE data_type)
  *
  * \return raster value
  */
-DCELL Rast_get_raster_value_d(const void *rast, RASTER_MAP_TYPE data_type)
+DCELL Rast_get_d_value(const void *rast, RASTER_MAP_TYPE data_type)
 {
     DCELL d;
 

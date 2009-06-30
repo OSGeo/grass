@@ -53,7 +53,7 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels)
 		nulls_found = 0;
 		for (i = 0; i < nfiles; i++) {
 		    /*
-		       Rast_set_raster_value_d(zero_val, 0.0, map_type[i]);
+		       Rast_set_d_value(zero_val, 0.0, map_type[i]);
 		       if (Rast_raster_cmp(rastp[i], zero_val, map_type[i]) != 0)
 		       break;
 		     */

@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
 
 	    if (count > 0) {
 		value = count;
-		Rast_set_raster_value_d(rp, value, CELL_TYPE);
+		Rast_set_d_value(rp, value, CELL_TYPE);
 	    }
 	    rp = G_incr_void_ptr(rp, Rast_cell_size(CELL_TYPE));
 	}

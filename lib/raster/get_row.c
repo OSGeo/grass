@@ -675,7 +675,7 @@ static int get_map_row(int fd, void *rast, int row, RASTER_MAP_TYPE data_type,
 	return 1;
 
     for (i = 0; i < R__.window.cols; i++) {
-	Rast_set_raster_value_c(rast, temp_buf[i], data_type);
+	Rast_set_c_value(rast, temp_buf[i], data_type);
 	rast = G_incr_void_ptr(rast, size);
     }
 

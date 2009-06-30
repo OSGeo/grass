@@ -70,5 +70,5 @@ void p_cubic(struct cache *ibuffer,	/* input buffer                  */
 
     result = Rast_interp_cubic(u, val[0], val[1], val[2], val[3]);
 
-    Rast_set_raster_value_f(obufptr, result, cell_type);
+    Rast_set_f_value(obufptr, result, cell_type);
 }

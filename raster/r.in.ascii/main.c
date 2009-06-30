@@ -219,7 +219,7 @@ int main(int argc, char *argv[])
 		    Rast_set_null_value(rast_ptr, 1, data_type);
 		}
 		else {
-		    Rast_set_raster_value_d(rast_ptr,
+		    Rast_set_d_value(rast_ptr,
 					 (DCELL) (x * mult), data_type);
 		}
 	    }

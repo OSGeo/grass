@@ -256,7 +256,7 @@ void Rast__lookup_colors(const void *raster, unsigned char *red,
 	    last_ptr = ptr;
 	    continue;
 	}
-	val = Rast_get_raster_value_d(ptr, data_type);
+	val = Rast_get_d_value(ptr, data_type);
 	/* DEBUG fprintf (stderr, "val: %.4lf\n", val); */
 	last_ptr = ptr;
 

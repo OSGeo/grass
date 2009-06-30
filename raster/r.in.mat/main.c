@@ -434,17 +434,17 @@ int main(int argc, char *argv[])
 		switch (map_type) {
 		case CELL_TYPE:
 		    pval_i = (int *)array_ptr;
-		    Rast_set_raster_value_c(rastline_ptr, (CELL) pval_i[0],
+		    Rast_set_c_value(rastline_ptr, (CELL) pval_i[0],
 					 map_type);
 		    break;
 		case FCELL_TYPE:
 		    pval_f = (float *)array_ptr;
-		    Rast_set_raster_value_f(rastline_ptr, (FCELL) pval_f[0],
+		    Rast_set_f_value(rastline_ptr, (FCELL) pval_f[0],
 					 map_type);
 		    break;
 		case DCELL_TYPE:
 		    pval_d = (double *)array_ptr;
-		    Rast_set_raster_value_d(rastline_ptr, (DCELL) pval_d[0],
+		    Rast_set_d_value(rastline_ptr, (DCELL) pval_d[0],
 					 map_type);
 		    break;
 		default:

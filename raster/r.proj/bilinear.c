@@ -64,5 +64,5 @@ void p_bilinear(struct cache *ibuffer,	/* input buffer                  */
 
     result = Rast_interp_bilinear(t, u, *c00, *c01, *c10, *c11);
 
-    Rast_set_raster_value_f(obufptr, result, cell_type);
+    Rast_set_f_value(obufptr, result, cell_type);
 }

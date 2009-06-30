@@ -264,7 +264,7 @@ static int calc_mu(int *fds, double *mu, int bands)
 		    continue;
 		}
 
-		sum += Rast_get_raster_value_d(rowbuf, maptype);
+		sum += Rast_get_d_value(rowbuf, maptype);
 		ptr = G_incr_void_ptr(ptr, Rast_cell_size(maptype));
 	    }
 	}
@@ -333,8 +333,8 @@ static int calc_covariance(int *fds, double **covar, double *mu, int bands)
 		    }
 
 		    covar[j][k] +=
-			((double)Rast_get_raster_value_d(ptr1, maptype) -
-			 mu[j]) * ((double)Rast_get_raster_value_d(ptr2,
+			((double)Rast_get_d_value(ptr1, maptype) -
+			 mu[j]) * ((double)Rast_get_d_value(ptr2,
 						   maptype2) - mu[k]);
 
 		    ptr1 = G_incr_void_ptr(ptr1, Rast_cell_size(maptype));
@@ -461,7 +461,7 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
 
 			/* corresp. cell of j-th band */
 			d_buf[col] +=
-			    eigmat[i][j] * Rast_get_raster_value_d(rowptr,
+			    eigmat[i][j] * Rast_get_d_value(rowptr,
 								maptype);
 
 			/* the cell entry is complete */
@@ -479,7 +479,7 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
 			    else if (scale) {
 
 				if (min == max) {
-				    Rast_set_raster_value_c(outptr, 1,
+				    Rast_set_c_value(outptr, 1,
 							 CELL_TYPE);
 				}
 				else {
@@ -490,13 +490,13 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
 						  min) / old_range) +
 						scale_min);
 
-				    Rast_set_raster_value_c(outptr, tmpcell,
+				    Rast_set_c_value(outptr, tmpcell,
 							 CELL_TYPE);
 				}
 			    }
 			    else {	/* (!scale) */
 
-				Rast_set_raster_value_d(outptr, d_buf[col],
+				Rast_set_d_value(outptr, d_buf[col],
 						     DCELL_TYPE);
 			    }
 			}

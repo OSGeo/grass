@@ -837,10 +837,10 @@ int r_slope_aspect(int argc, char *argv[])
 		    *((CELL *) slp_ptr) = (CELL) test;
 		else {
 		    if (deg)
-			Rast_set_raster_value_d(slp_ptr,
+			Rast_set_d_value(slp_ptr,
 					     (DCELL) slp_in_deg, data_type);
 		    else
-			Rast_set_raster_value_d(slp_ptr,
+			Rast_set_d_value(slp_ptr,
 					     (DCELL) slp_in_perc, data_type);
 		}
 		slp_ptr = G_incr_void_ptr(slp_ptr, Rast_cell_size(data_type));
@@ -870,7 +870,7 @@ int r_slope_aspect(int argc, char *argv[])
 		    if (out_type == CELL_TYPE)
 			*((CELL *) asp_ptr) = (CELL) (aspect + .5);
 		    else
-			Rast_set_raster_value_d(asp_ptr,
+			Rast_set_d_value(asp_ptr,
 					     (DCELL) aspect, data_type);
 		}
 		else
@@ -888,7 +888,7 @@ int r_slope_aspect(int argc, char *argv[])
 		if (out_type == CELL_TYPE)
 		    *((CELL *) dx_ptr) = (CELL) (scik1 * dx);
 		else
-		    Rast_set_raster_value_d(dx_ptr, (DCELL) dx, data_type);
+		    Rast_set_d_value(dx_ptr, (DCELL) dx, data_type);
 		dx_ptr = G_incr_void_ptr(dx_ptr, Rast_cell_size(data_type));
 	    }
 
@@ -896,7 +896,7 @@ int r_slope_aspect(int argc, char *argv[])
 		if (out_type == CELL_TYPE)
 		    *((CELL *) dy_ptr) = (CELL) (scik1 * dy);
 		else
-		    Rast_set_raster_value_d(dy_ptr, (DCELL) dy, data_type);
+		    Rast_set_d_value(dy_ptr, (DCELL) dy, data_type);
 		dy_ptr = G_incr_void_ptr(dy_ptr, Rast_cell_size(data_type));
 	    }
 
@@ -918,7 +918,7 @@ int r_slope_aspect(int argc, char *argv[])
 		if (out_type == CELL_TYPE)
 		    *((CELL *) dxx_ptr) = (CELL) (scik1 * dxx);
 		else
-		    Rast_set_raster_value_d(dxx_ptr, (DCELL) dxx, data_type);
+		    Rast_set_d_value(dxx_ptr, (DCELL) dxx, data_type);
 		dxx_ptr = G_incr_void_ptr(dxx_ptr, Rast_cell_size(data_type));
 	    }
 
@@ -926,7 +926,7 @@ int r_slope_aspect(int argc, char *argv[])
 		if (out_type == CELL_TYPE)
 		    *((CELL *) dyy_ptr) = (CELL) (scik1 * dyy);
 		else
-		    Rast_set_raster_value_d(dyy_ptr, (DCELL) dyy, data_type);
+		    Rast_set_d_value(dyy_ptr, (DCELL) dyy, data_type);
 		dyy_ptr = G_incr_void_ptr(dyy_ptr, Rast_cell_size(data_type));
 	    }
 
@@ -934,7 +934,7 @@ int r_slope_aspect(int argc, char *argv[])
 		if (out_type == CELL_TYPE)
 		    *((CELL *) dxy_ptr) = (CELL) (scik1 * dxy);
 		else
-		    Rast_set_raster_value_d(dxy_ptr, (DCELL) dxy, data_type);
+		    Rast_set_d_value(dxy_ptr, (DCELL) dxy, data_type);
 		dxy_ptr = G_incr_void_ptr(dxy_ptr, Rast_cell_size(data_type));
 	    }
 
@@ -970,7 +970,7 @@ int r_slope_aspect(int argc, char *argv[])
 		if (out_type == CELL_TYPE)
 		    *((CELL *) pcurv_ptr) = (CELL) (scik1 * pcurv);
 		else
-		    Rast_set_raster_value_d(pcurv_ptr, (DCELL) pcurv, data_type);
+		    Rast_set_d_value(pcurv_ptr, (DCELL) pcurv, data_type);
 		pcurv_ptr =
 		    G_incr_void_ptr(pcurv_ptr, Rast_cell_size(data_type));
 	    }
@@ -979,7 +979,7 @@ int r_slope_aspect(int argc, char *argv[])
 		if (out_type == CELL_TYPE)
 		    *((CELL *) tcurv_ptr) = (CELL) (scik1 * tcurv);
 		else
-		    Rast_set_raster_value_d(tcurv_ptr, (DCELL) tcurv, data_type);
+		    Rast_set_d_value(tcurv_ptr, (DCELL) tcurv, data_type);
 		tcurv_ptr =
 		    G_incr_void_ptr(tcurv_ptr, Rast_cell_size(data_type));
 	    }

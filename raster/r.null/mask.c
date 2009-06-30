@@ -30,9 +30,9 @@ int mask_raster_array(void *rast, int ncols,
     DCELL x;
 
     while (ncols-- > 0) {
-	x = Rast_get_raster_value_d(rast, data_type);
+	x = Rast_get_d_value(rast, data_type);
 	if (change_null && Rast_is_null_value(rast, data_type))
-	    Rast_set_raster_value_d(rast, new_null, data_type);
+	    Rast_set_d_value(rast, new_null, data_type);
 	if (mask_d_select(&x, &d_mask))
 	    Rast_set_null_value(rast, 1, data_type);
 	rast = G_incr_void_ptr(rast, Rast_cell_size(data_type));
