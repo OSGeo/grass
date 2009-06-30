@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/colors.h>
 #include <grass/raster.h>
 #include <grass/display.h>
 #include <grass/symbol.h>

@@ -5,6 +5,7 @@
  ** modified to use G_plot_line() by Olga Waupotitsch on dec,93
  */
 
+#include <grass/colors.h>
 #include <grass/raster.h>
 #include <grass/vector.h>
 #include <grass/dbmi.h>

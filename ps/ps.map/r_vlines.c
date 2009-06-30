@@ -8,6 +8,7 @@
  */
 #include <stdlib.h>
 #include <string.h>
+#include <grass/colors.h>
 #include <grass/raster.h>
 #include <grass/vector.h>
 #include "vector.h"
