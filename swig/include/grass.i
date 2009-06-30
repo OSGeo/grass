@@ -3,6 +3,11 @@
 
 %include "grass/gis.h"
 %include "grass/gisdefs.h"
+%include "grass/colors.h"
+
+%{
+#include <grass/colors.h>
+%}
 
 %pythoncode %{
 import sys
