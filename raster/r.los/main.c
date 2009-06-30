@@ -413,7 +413,7 @@ int main(int argc, char *argv[])
 
     sprintf(title, "Line of sight %.2fm above %s", obs_elev, opt3->answer);
     Rast_put_cell_title(out_layer, title);
-    Rast_write_raster_units(out_layer, "degrees");
+    Rast_write_units(out_layer, "degrees");
 
     Rast_short_history(out_layer, "raster", &history);
     Rast_command_history(&history);

@@ -1,15 +1,17 @@
-/* raster_metadata.c
- *
- * PURPOSE: functions to read and write raster "units" and "vertical datum"
- *              meta-data info
- *
- *   Copyright (C) 2007 by Hamish Bowman, and the GRASS Development Team
- *   Author(s): Hamish Bowman, Dunedin, New Zealand
- *
- *   This program is free software under the GNU General Public
- *   License (>=v2). Read the file COPYING that comes with GRASS
- *   for details.
- */
+/*!
+  \file raster/raster_metadata.c
+
+  \brief Raster library - Functions to read and write raster "units"
+  and "vertical datum" meta-data info
+
+  (C) 2007-2009 by Hamish Bowman, and the GRASS Development Team
+
+  This program is free software under the GNU General Public License
+  (>=v2).  Read the file COPYING that comes with GRASS for details.
+
+  \author Hamish Bowman
+*/
+
 #include <stdio.h>
 #include <string.h>
 
@@ -17,72 +19,77 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
+static int misc_read_line(const char *, const char *,
+			  const char *, char *);
+static int misc_write_line(const char *, const char *,
+			   const char *);
 
 /*!
  * \brief Get a raster map's units metadata string
  *
  * Read the raster's units metadata file and put string in str
  *
- * \param name
- * \param mapset
- * \param *str  string to be populated with data
+ * \param name raster map name
+ * \param mapset mapset name
+ * \param str  string to be populated with data
+ *
  * \return 0 on success
  * \return -1, EOF (fclose() result) on error
  */
-int Rast_read_raster_units(const char *name, const char *mapset, char *str)
+int Rast_read_units(const char *name, const char *mapset, char *str)
 {
-    return Rast__raster_misc_read_line("units", name, mapset, str);
+    return misc_read_line("units", name, mapset, str);
 }
-
 
 /*!
  * \brief Write a string to a raster map's units metadata file
  *
- * Map must exist in the current mapset.
+ * Raster map must exist in the current mapset.
  *
- * \param name
- * \param *str  string containing data to be written
+ * \param name raster map name
+ * \param str  string containing data to be written
+ *
  * \return  0 on success
  * \return -1, EOF (fclose() result) on error
  */
-int Rast_write_raster_units(const char *name, const char *str)
+int Rast_write_units(const char *name, const char *str)
 {
-    return Rast__raster_misc_write_line("units", name, str);
+    return misc_write_line("units", name, str);
 }
-
 
 /*!
  * \brief Get a raster map's vertical datum metadata string
  *
  * Read the raster's vertical datum metadata file and put string in str
  *
- * \param name
- * \param mapset
- * \param *str  string to be populated with data
+ * \param name raster map name
+ * \param mapset mapset name
+ * \param str  string to be populated with data
+ *
  * \return  0 on success
  * \return -1, EOF (fclose() result) on error
  */
-int Rast_read_raster_vdatum(const char *name, const char *mapset, char *str)
+int Rast_read_vdatum(const char *name, const char *mapset, char *str)
 {
-    return Rast__raster_misc_read_line("vertical_datum", name, mapset, str);
+    return misc_read_line("vertical_datum", name, mapset, str);
 }
 
 
 /*!
  * \brief Write a string into a raster's vertical datum metadata file
  *
- * Map must exist in the current mapset.
+ * Raster map must exist in the current mapset.
  *
- * \param name
- * \param *str  string containing data to be written
+ * \param name raster map name
+ * \param str  string containing data to be written
+ *
  * \return  0 on success
  * \return -1, EOF (fclose() result) on error
  */
-int Rast_write_raster_vdatum(const char *name, const char *str)
+int Rast_write_vdatum(const char *name, const char *str)
 {
-    return Rast__raster_misc_write_line("vertical_datum", name, str);
+    return misc_write_line("vertical_datum", name, str);
 }
-
 
 
 /*!
@@ -97,8 +104,8 @@ int Rast_write_raster_vdatum(const char *name, const char *str)
  * \return 0 on success
  * \return -1, EOF (fclose() result) on error
  */
-int Rast__raster_misc_read_line(const char *elem, const char *name,
-			     const char *mapset, char *str)
+int misc_read_line(const char *elem, const char *name,
+		   const char *mapset, char *str)
 {
     FILE *fd;
     char buff[GNAME_MAX];
@@ -110,7 +117,8 @@ int Rast__raster_misc_read_line(const char *elem, const char *name,
 
     fd = G_fopen_old_misc("cell_misc", elem, name, mapset);
     if (!fd) {
-	G_warning(_("Can't read %s for [%s in %s]"), elem, name, mapset);
+	G_warning(_("Unable to read %s for raster map <%s@%s>"),
+		  elem, name, mapset);
 	return -1;
     }
     if (G_getl2(buff, sizeof(buff) - 1, fd) == 0) {
@@ -136,14 +144,14 @@ int Rast__raster_misc_read_line(const char *elem, const char *name,
  * \return  0 on success
  * \return -1, EOF (fclose() result) on error
  */
-int Rast__raster_misc_write_line(const char *elem, const char *name,
-			      const char *str)
+int misc_write_line(const char *elem, const char *name,
+		    const char *str)
 {
     FILE *fd;
 
     fd = G_fopen_new_misc("cell_misc", elem, name);
     if (fd == NULL) {
-	G_warning(_("Can't create %s metadata file for [%s in %s]"),
+	G_warning(_("Unable to create %s metadata file for raster map <%s@%s>"),
 		  elem, name, G_mapset());
 	return -1;
     }

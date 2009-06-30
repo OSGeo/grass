@@ -241,10 +241,10 @@ int main(int argc, char *argv[])
     }
 
     if (units_opt->answer)
-	Rast_write_raster_units(raster->answer, units_opt->answer);
+	Rast_write_units(raster->answer, units_opt->answer);
 
     if (vdatum_opt->answer)
-	Rast_write_raster_vdatum(raster->answer, vdatum_opt->answer);
+	Rast_write_vdatum(raster->answer, vdatum_opt->answer);
 
     if (datasrc1_opt->answer || datasrc2_opt->answer || datadesc_opt->answer) {
 	Rast_read_history(raster->answer, "", &hist);
