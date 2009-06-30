@@ -492,10 +492,10 @@ void Rast_free_reclass(struct Reclass *);
 int Rast_put_reclass(const char *, const struct Reclass *);
 
 /* sample.c */
-DCELL Rast_get_raster_sample_nearest(int, const struct Cell_head *, struct Categories *, double, double, int);
-DCELL Rast_get_raster_sample_bilinear(int, const struct Cell_head *, struct Categories *, double, double, int);
-DCELL Rast_get_raster_sample_cubic(int, const struct Cell_head *, struct Categories *, double, double, int);
-DCELL Rast_get_raster_sample(int, const struct Cell_head *, struct Categories *, double, double, int, INTERP_TYPE);
+DCELL Rast_get_sample_nearest(int, const struct Cell_head *, struct Categories *, double, double, int);
+DCELL Rast_get_sample_bilinear(int, const struct Cell_head *, struct Categories *, double, double, int);
+DCELL Rast_get_sample_cubic(int, const struct Cell_head *, struct Categories *, double, double, int);
+DCELL Rast_get_sample(int, const struct Cell_head *, struct Categories *, double, double, int, INTERP_TYPE);
 
 /* set_window.c */
 int Rast_set_window(struct Cell_head *);

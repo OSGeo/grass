@@ -256,7 +256,7 @@ int main(int argc, char **argv)
 	G_debug(4, "actual = %e", actual);
 
 	/* find predicted value */
-	predicted = Rast_get_raster_sample(fdrast, &window, NULL, Points->y[0],
+	predicted = Rast_get_sample(fdrast, &window, NULL, Points->y[0],
 					Points->x[0], 0, method);
 	if (Rast_is_d_null_value(&predicted))
 	    continue;

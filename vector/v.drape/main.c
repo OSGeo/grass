@@ -53,7 +53,7 @@ int sample_raster(const int ltype, int fdrast, struct Cell_head window,
 	/* sample raster at this point, and update the z-coordinate
 	 * (note that input vector should not be 3D!)
 	 */
-	estimated_elevation = scale * Rast_get_raster_sample(
+	estimated_elevation = scale * Rast_get_sample(
 	    fdrast, &window, NULL, Points->y[0], Points->x[0], 0, method);
 	/* Elevation value has to be meaningfull */
 	if (Rast_is_d_null_value(&estimated_elevation)) {
@@ -76,7 +76,7 @@ int sample_raster(const int ltype, int fdrast, struct Cell_head window,
 	/* loop through each point in a line */
 	for (j = 0; j < Points->n_points; j++) {
 	    /* sample raster at this point, and update the z-coordinate (note that input vector should not be 3D!) */
-	    estimated_elevation = scale * Rast_get_raster_sample(
+	    estimated_elevation = scale * Rast_get_sample(
 		fdrast, &window, NULL, Points->y[j], Points->x[j], 0, method);
 
 	    if (Rast_is_d_null_value(&estimated_elevation)) {
@@ -100,7 +100,7 @@ int sample_raster(const int ltype, int fdrast, struct Cell_head window,
 	/* loop through each point in a line */
 	for (j = 0; j < Points->n_points; j++) {
 	    /* sample raster at this point, and update the z-coordinate (note that input vector should not be 3D!) */
-	    estimated_elevation = scale * Rast_get_raster_sample(
+	    estimated_elevation = scale * Rast_get_sample(
 		fdrast, &window, NULL, Points->y[j], Points->x[j], 0, method);
 
 	    if (Rast_is_d_null_value(&estimated_elevation)) {

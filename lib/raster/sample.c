@@ -47,7 +47,7 @@ static void raster_row_error(const struct Cell_head *window, double north,
  *
  *  \return cell value at given position
  */
-DCELL Rast_get_raster_sample(int fd,
+DCELL Rast_get_sample(int fd,
 			  const struct Cell_head *window,
 			  struct Categories *cats,
 			  double north, double east,
@@ -57,16 +57,16 @@ DCELL Rast_get_raster_sample(int fd,
 
     switch (itype) {
     case NEAREST:
-	retval = Rast_get_raster_sample_nearest(fd, window, cats, north, east, usedesc);
+	retval = Rast_get_sample_nearest(fd, window, cats, north, east, usedesc);
 	break;
     case BILINEAR:
-	retval = Rast_get_raster_sample_bilinear(fd, window, cats, north, east, usedesc);
+	retval = Rast_get_sample_bilinear(fd, window, cats, north, east, usedesc);
 	break;
     case CUBIC:
-	retval = Rast_get_raster_sample_cubic(fd, window, cats, north, east, usedesc);
+	retval = Rast_get_sample_cubic(fd, window, cats, north, east, usedesc);
 	break;
     default:
-	G_fatal_error("Rast_get_raster_sample: %s",
+	G_fatal_error("Rast_get_sample: %s",
 		      _("Unknown interpolation type"));
     }
 
@@ -88,7 +88,7 @@ DCELL Rast_get_raster_sample(int fd,
  *
  *  \return cell value at given position
  */
-DCELL Rast_get_raster_sample_nearest(int fd,
+DCELL Rast_get_sample_nearest(int fd,
 				  const struct Cell_head *window,
 				  struct Categories *cats,
 				  double north, double east, int usedesc)
@@ -146,7 +146,7 @@ done:
  *
  *  \return cell value at given position
  */
-DCELL Rast_get_raster_sample_bilinear(int fd,
+DCELL Rast_get_sample_bilinear(int fd,
 				   const struct Cell_head *window,
 				   struct Categories *cats,
 				   double north, double east, int usedesc)
@@ -235,7 +235,7 @@ done:
  *
  *  \return cell value at given position
  */
-DCELL Rast_get_raster_sample_cubic(int fd,
+DCELL Rast_get_sample_cubic(int fd,
 				const struct Cell_head *window,
 				struct Categories *cats,
 				double north, double east, int usedesc)
