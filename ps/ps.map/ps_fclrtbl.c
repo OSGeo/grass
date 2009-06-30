@@ -249,7 +249,7 @@ int PS_fcolortable(void)
 
 
     /* print units label, if present */
-    if (Rast_read_raster_units(ct.name, ct.mapset, units) != 0)
+    if (Rast_read_units(ct.name, ct.mapset, units) != 0)
         units[0] = '\0';
 
     if(strlen(units)) {

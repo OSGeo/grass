@@ -125,9 +125,9 @@ int main(int argc, char **argv)
     is_reclass = Rast_get_reclass(name, "", &reclass);
     data_type = Rast_map_type(name, "");
 
-    if (Rast_read_raster_units(name, "", units) != 0)
+    if (Rast_read_units(name, "", units) != 0)
 	units[0] = '\0';
-    if (Rast_read_raster_vdatum(name, "", vdatum) != 0)
+    if (Rast_read_vdatum(name, "", vdatum) != 0)
 	vdatum[0] = '\0';
 
     /*Check the Timestamp */

@@ -37,7 +37,7 @@ void close_down(void)
 
     case SLOPE:
 	strcpy(map_type, "Magnitude of maximum gradient");
-	Rast_write_raster_units(rast_out_name, "degrees");
+	Rast_write_units(rast_out_name, "degrees");
 
 	strcpy(history.edhist[0],
 	    "Slope is given for steepest slope angle and measured in degrees.");
@@ -46,7 +46,7 @@ void close_down(void)
 
     case ASPECT:
 	strcpy(map_type, "Direction of maximum gradient");
-	Rast_write_raster_units(rast_out_name, "degrees");
+	Rast_write_units(rast_out_name, "degrees");
 
 	strcpy(history.edhist[0],
 	    "Flow direction (aspect): W=0, E=180, N=+90, S=-90 degrees");
