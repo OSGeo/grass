@@ -1011,7 +1011,7 @@ int main(int argc, char *argv[])
 	    }
 
 	    /* write out line of raster data */
-	    if (1 != Rast_put_raster_row(out_fd, raster_row, rtype)) {
+	    if (1 != Rast_put_row(out_fd, raster_row, rtype)) {
 		Rast_close(out_fd);
 		G_fatal_error(_("Writing map, row %d"),
 			      ((pass - 1) * rows) + row);

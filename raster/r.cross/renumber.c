@@ -40,7 +40,7 @@ int renumber(int in, int out)
 	    *c = table[*c];
 	    c++;
 	}
-	if (Rast_put_raster_row(out, cell, CELL_TYPE) < 0)
+	if (Rast_put_row(out, cell, CELL_TYPE) < 0)
 	    exit(1);
     }
     G_percent(row, nrows, 10);

@@ -221,7 +221,7 @@ CELL clump(int in_fd, int out_fd)
 		   for (col = 1; col <= ncols; col++)
 		   out_cell[col] = index[cur_clump[col]];
 
-		   if (Rast_put_raster_row (out_fd, out_cell+1, CELL_TYPE) < 0)
+		   if (Rast_put_row (out_fd, out_cell+1, CELL_TYPE) < 0)
 		   G_fatal_error (_("Unable to properly write output raster map"));
 		 */
 		col = ncols;
@@ -235,7 +235,7 @@ CELL clump(int in_fd, int out_fd)
 		    if (out_cell[column] == 0)
 			Rast_set_null_value(&out_cell[column], 1, CELL_TYPE);
 		}
-		if (Rast_put_raster_row(out_fd, out_cell, CELL_TYPE) < 0)
+		if (Rast_put_row(out_fd, out_cell, CELL_TYPE) < 0)
 		    G_fatal_error(_("Failed writing raster map row %d"),
 				  row);
 	    }

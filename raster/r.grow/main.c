@@ -264,7 +264,7 @@ int main(int argc, char **argv)
 		Rast_set_d_null_value(&out_row[col], 1);
 	}
 
-	Rast_put_d_raster_row(out_fd, out_row);
+	Rast_put_d_row(out_fd, out_row);
 
 	G_percent(row, nrows, 2);
 

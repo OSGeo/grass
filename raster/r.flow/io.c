@@ -204,7 +204,7 @@ void write_density_file(void)
 	G_fatal_error(_("Unable to create raster map <%s>"), parm.dsout);
 
     for (row = 0; row < region.rows; row++) {
-	Rast_put_raster_row(dsfd, get_row(ds, row), DCELL_TYPE);
+	Rast_put_row(dsfd, get_row(ds, row), DCELL_TYPE);
 	for (col = 0; col < region.cols; col++)
 	    if (ds.buf[row][col] > dsmax)
 		dsmax = ds.buf[row][col];

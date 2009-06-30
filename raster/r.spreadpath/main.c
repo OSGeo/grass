@@ -331,7 +331,7 @@ int main(int argc, char **argv)
     path_fd = Rast_open_c_new(path_layer);
     for (row = 0; row < nrows; row++) {
 	segment_get_row(&out_seg, cell, row);
-	if (Rast_put_raster_row(path_fd, cell, CELL_TYPE) < 0)
+	if (Rast_put_row(path_fd, cell, CELL_TYPE) < 0)
 	    G_fatal_error("unable to write map row %d", row);
     }
 

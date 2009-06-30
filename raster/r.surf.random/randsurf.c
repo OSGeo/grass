@@ -56,9 +56,9 @@ int randsurf(char *out,		/* Name of raster maps to be opened.    */
 
 	/* Write contents row by row */
 	if (int_map)
-	    Rast_put_c_raster_row(fd_out, (CELL *) row_out_C);
+	    Rast_put_c_row(fd_out, (CELL *) row_out_C);
 	else
-	    Rast_put_d_raster_row(fd_out, (DCELL *) row_out_D);
+	    Rast_put_d_row(fd_out, (DCELL *) row_out_D);
     }
 
     Rast_close(fd_out);

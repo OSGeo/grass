@@ -141,7 +141,7 @@ int main(int argc, char *argv[])
 	    rp = G_incr_void_ptr(rp, Rast_cell_size(CELL_TYPE));
 	}
 
-	Rast_put_raster_row(out_fd, result, CELL_TYPE);
+	Rast_put_row(out_fd, result, CELL_TYPE);
     }
     G_percent(row, nrows, 1);
 

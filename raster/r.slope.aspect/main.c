@@ -455,7 +455,7 @@ int main(int argc, char *argv[])
 	slope_fd = opennew(slope_name, out_type);
 	slp_raster = Rast_allocate_buf(data_type);
 	Rast_set_null_value(slp_raster, G_window_cols(), data_type);
-	Rast_put_raster_row(slope_fd, slp_raster, data_type);
+	Rast_put_row(slope_fd, slp_raster, data_type);
     }
     else {
 	slp_raster = NULL;
@@ -466,7 +466,7 @@ int main(int argc, char *argv[])
 	aspect_fd = opennew(aspect_name, out_type);
 	asp_raster = Rast_allocate_buf(data_type);
 	Rast_set_null_value(asp_raster, G_window_cols(), data_type);
-	Rast_put_raster_row(aspect_fd, asp_raster, data_type);
+	Rast_put_row(aspect_fd, asp_raster, data_type);
     }
     else {
 	asp_raster = NULL;
@@ -477,7 +477,7 @@ int main(int argc, char *argv[])
 	pcurv_fd = opennew(pcurv_name, out_type);
 	pcurv_raster = Rast_allocate_buf(data_type);
 	Rast_set_null_value(pcurv_raster, G_window_cols(), data_type);
-	Rast_put_raster_row(pcurv_fd, pcurv_raster, data_type);
+	Rast_put_row(pcurv_fd, pcurv_raster, data_type);
     }
     else {
 	pcurv_raster = NULL;
@@ -488,7 +488,7 @@ int main(int argc, char *argv[])
 	tcurv_fd = opennew(tcurv_name, out_type);
 	tcurv_raster = Rast_allocate_buf(data_type);
 	Rast_set_null_value(tcurv_raster, G_window_cols(), data_type);
-	Rast_put_raster_row(tcurv_fd, tcurv_raster, data_type);
+	Rast_put_row(tcurv_fd, tcurv_raster, data_type);
     }
     else {
 	tcurv_raster = NULL;
@@ -499,7 +499,7 @@ int main(int argc, char *argv[])
 	dx_fd = opennew(dx_name, out_type);
 	dx_raster = Rast_allocate_buf(data_type);
 	Rast_set_null_value(dx_raster, G_window_cols(), data_type);
-	Rast_put_raster_row(dx_fd, dx_raster, data_type);
+	Rast_put_row(dx_fd, dx_raster, data_type);
     }
     else {
 	dx_raster = NULL;
@@ -510,7 +510,7 @@ int main(int argc, char *argv[])
 	dy_fd = opennew(dy_name, out_type);
 	dy_raster = Rast_allocate_buf(data_type);
 	Rast_set_null_value(dy_raster, G_window_cols(), data_type);
-	Rast_put_raster_row(dy_fd, dy_raster, data_type);
+	Rast_put_row(dy_fd, dy_raster, data_type);
     }
     else {
 	dy_raster = NULL;
@@ -521,7 +521,7 @@ int main(int argc, char *argv[])
 	dxx_fd = opennew(dxx_name, out_type);
 	dxx_raster = Rast_allocate_buf(data_type);
 	Rast_set_null_value(dxx_raster, G_window_cols(), data_type);
-	Rast_put_raster_row(dxx_fd, dxx_raster, data_type);
+	Rast_put_row(dxx_fd, dxx_raster, data_type);
     }
     else {
 	dxx_raster = NULL;
@@ -532,7 +532,7 @@ int main(int argc, char *argv[])
 	dyy_fd = opennew(dyy_name, out_type);
 	dyy_raster = Rast_allocate_buf(data_type);
 	Rast_set_null_value(dyy_raster, G_window_cols(), data_type);
-	Rast_put_raster_row(dyy_fd, dyy_raster, data_type);
+	Rast_put_row(dyy_fd, dyy_raster, data_type);
     }
     else {
 	dyy_raster = NULL;
@@ -543,7 +543,7 @@ int main(int argc, char *argv[])
 	dxy_fd = opennew(dxy_name, out_type);
 	dxy_raster = Rast_allocate_buf(data_type);
 	Rast_set_null_value(dxy_raster, G_window_cols(), data_type);
-	Rast_put_raster_row(dxy_fd, dxy_raster, data_type);
+	Rast_put_row(dxy_fd, dxy_raster, data_type);
     }
     else {
 	dxy_raster = NULL;
@@ -961,31 +961,31 @@ int main(int argc, char *argv[])
 	}			/* column for loop */
 
 	if (aspect_fd > 0)
-	    Rast_put_raster_row(aspect_fd, asp_raster, data_type);
+	    Rast_put_row(aspect_fd, asp_raster, data_type);
 
 	if (slope_fd > 0)
-	    Rast_put_raster_row(slope_fd, slp_raster, data_type);
+	    Rast_put_row(slope_fd, slp_raster, data_type);
 
 	if (pcurv_fd > 0)
-	    Rast_put_raster_row(pcurv_fd, pcurv_raster, data_type);
+	    Rast_put_row(pcurv_fd, pcurv_raster, data_type);
 
 	if (tcurv_fd > 0)
-	    Rast_put_raster_row(tcurv_fd, tcurv_raster, data_type);
+	    Rast_put_row(tcurv_fd, tcurv_raster, data_type);
 
 	if (dx_fd > 0)
-	    Rast_put_raster_row(dx_fd, dx_raster, data_type);
+	    Rast_put_row(dx_fd, dx_raster, data_type);
 
 	if (dy_fd > 0)
-	    Rast_put_raster_row(dy_fd, dy_raster, data_type);
+	    Rast_put_row(dy_fd, dy_raster, data_type);
 
 	if (dxx_fd > 0)
-	    Rast_put_raster_row(dxx_fd, dxx_raster, data_type);
+	    Rast_put_row(dxx_fd, dxx_raster, data_type);
 
 	if (dyy_fd > 0)
-	    Rast_put_raster_row(dyy_fd, dyy_raster, data_type);
+	    Rast_put_row(dyy_fd, dyy_raster, data_type);
 
 	if (dxy_fd > 0)
-	    Rast_put_raster_row(dxy_fd, dxy_raster, data_type);
+	    Rast_put_row(dxy_fd, dxy_raster, data_type);
 
     }				/* row loop */
 
@@ -1002,7 +1002,7 @@ int main(int argc, char *argv[])
 	struct FPRange range;
 
 	Rast_set_null_value(asp_raster, G_window_cols(), data_type);
-	Rast_put_raster_row(aspect_fd, asp_raster, data_type);
+	Rast_put_row(aspect_fd, asp_raster, data_type);
 	Rast_close(aspect_fd);
 
 	if (out_type != CELL_TYPE)
@@ -1107,7 +1107,7 @@ int main(int argc, char *argv[])
 	Rast_add_c_color_rule(&val1, 255, 0, 0, &val2, 0, 0, 0, &colors);
 	
 	Rast_set_null_value(slp_raster, G_window_cols(), data_type);
-	Rast_put_raster_row(slope_fd, slp_raster, data_type);
+	Rast_put_row(slope_fd, slp_raster, data_type);
 	Rast_close(slope_fd);
 
 	if (out_type != CELL_TYPE) {
@@ -1237,7 +1237,7 @@ int main(int argc, char *argv[])
 
     if (pcurv_fd >= 0) {
 	Rast_set_null_value(pcurv_raster, G_window_cols(), data_type);
-	Rast_put_raster_row(pcurv_fd, pcurv_raster, data_type);
+	Rast_put_row(pcurv_fd, pcurv_raster, data_type);
 	Rast_close(pcurv_fd);
 
 	Rast_write_colors(pcurv_name, G_mapset(), &colors);
@@ -1264,7 +1264,7 @@ int main(int argc, char *argv[])
 
     if (tcurv_fd >= 0) {
 	Rast_set_null_value(tcurv_raster, G_window_cols(), data_type);
-	Rast_put_raster_row(tcurv_fd, tcurv_raster, data_type);
+	Rast_put_row(tcurv_fd, tcurv_raster, data_type);
 	Rast_close(tcurv_fd);
 
 	Rast_write_colors(tcurv_name, G_mapset(), &colors);
@@ -1291,7 +1291,7 @@ int main(int argc, char *argv[])
 
     if (dx_fd >= 0) {
 	Rast_set_null_value(dx_raster, G_window_cols(), data_type);
-	Rast_put_raster_row(dx_fd, dx_raster, data_type);
+	Rast_put_row(dx_fd, dx_raster, data_type);
 	Rast_close(dx_fd);
 
 	if (out_type != CELL_TYPE)
@@ -1316,7 +1316,7 @@ int main(int argc, char *argv[])
 
     if (dy_fd >= 0) {
 	Rast_set_null_value(dy_raster, G_window_cols(), data_type);
-	Rast_put_raster_row(dy_fd, dy_raster, data_type);
+	Rast_put_row(dy_fd, dy_raster, data_type);
 	Rast_close(dy_fd);
 
 	if (out_type != CELL_TYPE)
@@ -1341,7 +1341,7 @@ int main(int argc, char *argv[])
 
     if (dxx_fd >= 0) {
 	Rast_set_null_value(dxx_raster, G_window_cols(), data_type);
-	Rast_put_raster_row(dxx_fd, dxx_raster, data_type);
+	Rast_put_row(dxx_fd, dxx_raster, data_type);
 	Rast_close(dxx_fd);
 
 	if (out_type != CELL_TYPE)
@@ -1366,7 +1366,7 @@ int main(int argc, char *argv[])
 
     if (dyy_fd >= 0) {
 	Rast_set_null_value(dyy_raster, G_window_cols(), data_type);
-	Rast_put_raster_row(dyy_fd, dyy_raster, data_type);
+	Rast_put_row(dyy_fd, dyy_raster, data_type);
 	Rast_close(dyy_fd);
 
 	if (out_type != CELL_TYPE)
@@ -1391,7 +1391,7 @@ int main(int argc, char *argv[])
 
     if (dxy_fd >= 0) {
 	Rast_set_null_value(dxy_raster, G_window_cols(), data_type);
-	Rast_put_raster_row(dxy_fd, dxy_raster, data_type);
+	Rast_put_row(dxy_fd, dxy_raster, data_type);
 	Rast_close(dxy_fd);
 
 	if (out_type != CELL_TYPE)

@@ -145,7 +145,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 		return -1;
 	    }
 	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_z);
-	    if (Rast_put_f_raster_row(cf1, cell1) < 0) {
+	    if (Rast_put_f_row(cf1, cell1) < 0) {
 		G_warning(_("Failed writing raster map"));
 		return -1;
 	    }
@@ -168,7 +168,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 	     * fprintf(stderr,"%f ",cell1[ii]); }
 	     * fprintf(stderr,"params->nsizc=%d \n",params->nsizc);
 	     */
-	    if (Rast_put_f_raster_row(cf2, cell1) < 0) {
+	    if (Rast_put_f_row(cf2, cell1) < 0) {
 		G_warning(_("Failed writing raster map"));
 		return -1;
 	    }
@@ -186,7 +186,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 		return -1;
 	    }
 	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_dy);
-	    if (Rast_put_f_raster_row(cf3, cell1) < 0) {
+	    if (Rast_put_f_row(cf3, cell1) < 0) {
 		G_warning(_("Failed writing raster map"));
 		return -1;
 	    }
@@ -204,7 +204,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 		return -1;
 	    }
 	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xx);
-	    if (Rast_put_f_raster_row(cf4, cell1) < 0) {
+	    if (Rast_put_f_row(cf4, cell1) < 0) {
 		G_warning(_("Failed writing raster map"));
 		return -1;
 	    }
@@ -222,7 +222,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 		return -1;
 	    }
 	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_yy);
-	    if (Rast_put_f_raster_row(cf5, cell1) < 0) {
+	    if (Rast_put_f_row(cf5, cell1) < 0) {
 		G_warning(_("Failed writing raster map"));
 		return -1;
 	    }
@@ -240,7 +240,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 		return -1;
 	    }
 	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xy);
-	    if (Rast_put_f_raster_row(cf6, cell1) < 0) {
+	    if (Rast_put_f_row(cf6, cell1) < 0) {
 		G_warning(_("Failed writing raster map"));
 		return -1;
 	    }

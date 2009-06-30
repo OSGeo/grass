@@ -52,7 +52,7 @@ int gaussurf(char *out,		/* Name of raster maps to be opened.    */
 		(DCELL) (G_math_rand_gauss(2742, sigma) + mean);
 
 	/* Write contents row by row */
-	Rast_put_d_raster_row(fd_out, (DCELL *) row_out);
+	Rast_put_d_row(fd_out, (DCELL *) row_out);
     }
 
 

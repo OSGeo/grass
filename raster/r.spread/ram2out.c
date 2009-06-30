@@ -45,11 +45,11 @@ void ram2out(void)
 			      window.ns_res * DATA(map_y_out, row, col));
 	    }
 	}
-	Rast_put_raster_row(cum_fd, cell, CELL_TYPE);
+	Rast_put_row(cum_fd, cell, CELL_TYPE);
 	if (x_out)
-	    Rast_put_raster_row(x_fd, x_cell, CELL_TYPE);
+	    Rast_put_row(x_fd, x_cell, CELL_TYPE);
 	if (y_out)
-	    Rast_put_raster_row(y_fd, y_cell, CELL_TYPE);
+	    Rast_put_row(y_fd, y_cell, CELL_TYPE);
     }
     G_percent(row, nrows, 2);
 }

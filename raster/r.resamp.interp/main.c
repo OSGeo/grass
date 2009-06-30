@@ -175,7 +175,7 @@ int main(int argc, char *argv[])
 	    }
 
 	    Rast_set_window(&dst_w);
-	    Rast_put_d_raster_row(outfile, outbuf);
+	    Rast_put_d_row(outfile, outbuf);
 	}
 	break;
 
@@ -214,7 +214,7 @@ int main(int argc, char *argv[])
 	    }
 
 	    Rast_set_window(&dst_w);
-	    Rast_put_d_raster_row(outfile, outbuf);
+	    Rast_put_d_row(outfile, outbuf);
 	}
 	break;
 
@@ -287,7 +287,7 @@ int main(int argc, char *argv[])
 	    }
 
 	    Rast_set_window(&dst_w);
-	    Rast_put_d_raster_row(outfile, outbuf);
+	    Rast_put_d_row(outfile, outbuf);
 	}
 	break;
     }

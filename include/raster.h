@@ -401,11 +401,10 @@ int Rast_set_quant_rules(int, struct Quant *);
 int Rast_put_cellhd(const char *, struct Cell_head *);
 
 /* put_row.c */
-int Rast_put_map_row(int, const CELL *);
-int Rast_put_raster_row(int, const void *, RASTER_MAP_TYPE);
-int Rast_put_c_raster_row(int, const CELL *);
-int Rast_put_f_raster_row(int, const FCELL *);
-int Rast_put_d_raster_row(int, const DCELL *);
+int Rast_put_row(int, const void *, RASTER_MAP_TYPE);
+int Rast_put_c_row(int, const CELL *);
+int Rast_put_f_row(int, const FCELL *);
+int Rast_put_d_row(int, const DCELL *);
 int Rast__open_null_write(int);
 int Rast__write_null_bits(int, const unsigned char *, int, int, int);
 

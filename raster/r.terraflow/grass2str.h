@@ -211,7 +211,7 @@ stream2_CELL(AMI_STREAM<T>* str, dimension_type nrows, dimension_type ncols,
     }
 
   } /* for j*/
-  if (Rast_put_raster_row (outfd, outrast, mtype) < 0)
+  if (Rast_put_row (outfd, outrast, mtype) < 0)
     G_fatal_error ("Cannot write to <%s>",cellname);
 
   G_percent(i, nrows, 2);
@@ -290,7 +290,7 @@ stream2_CELL(AMI_STREAM<T> *str, dimension_type nrows, dimension_type ncols,
       }
       
     } /* for j*/
-    if (Rast_put_raster_row (outfd, outrast, CELL_TYPE) < 0)
+    if (Rast_put_row (outfd, outrast, CELL_TYPE) < 0)
       G_fatal_error ("Cannot write to <%s>",cellname);
 
     G_percent(i, nrows, 2);
@@ -364,7 +364,7 @@ stream2_FCELL(AMI_STREAM<T> *str, dimension_type nrows, dimension_type ncols,
       }
       
     } /* for j*/
-    if (Rast_put_raster_row (outfd, outrast, FCELL_TYPE) < 0)
+    if (Rast_put_row (outfd, outrast, FCELL_TYPE) < 0)
       G_fatal_error ("Cannot write to <%s>",cellname);
 
     G_percent(i, nrows, 2);
@@ -473,9 +473,9 @@ stream2_FCELL(AMI_STREAM<T>* str,  dimension_type nrows, dimension_type ncols,
 
     } /* for j*/
 
-    if (Rast_put_raster_row (fd1, rast1, FCELL_TYPE) < 0)
+    if (Rast_put_row (fd1, rast1, FCELL_TYPE) < 0)
       G_fatal_error ("Cannot write to <%s>", cellname1);
-    if (Rast_put_raster_row (fd2, rast2, FCELL_TYPE) < 0)
+    if (Rast_put_row (fd2, rast2, FCELL_TYPE) < 0)
       G_fatal_error ("Cannot write to <%s>", cellname2);
     
     G_percent(i, nrows, 2);

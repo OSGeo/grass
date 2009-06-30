@@ -27,7 +27,7 @@
  *        Next byte(s): category number. The number of bytes is determined
  *                      by the number of bytes in a cell 
  *
- * The normal G_open_cell(), and Rast_put_raster_row() do the compression
+ * The normal G_open_cell(), and Rast_put_row() do the compression
  * This program must only check that the file is not a reclass file and
  * is not already compressed.
  *
@@ -220,7 +220,7 @@ static int doit(char *name, int uncompress, RASTER_MAP_TYPE map_type)
 	G_percent(row, nrows, 2);
 	if (Rast_get_row_nomask(old, rast, row, map_type) < 0)
 	    break;
-	if (Rast_put_raster_row(new, rast, map_type) < 0)
+	if (Rast_put_row(new, rast, map_type) < 0)
 	    break;
     }
     G_free(rast);

@@ -85,7 +85,7 @@ static void process_row_ii(int row)
 	Rast_get_c_row(in_fd, (CELL *) in_rast, row);
     Rast_fpreclass_perform_ii(&rcl_struct, (CELL *) in_rast, (CELL *) out_rast,
 			   ncols);
-    Rast_put_raster_row(out_fd, (CELL *) out_rast, CELL_TYPE);
+    Rast_put_row(out_fd, (CELL *) out_rast, CELL_TYPE);
 }
 
 static void process_row_if(int row)
@@ -96,7 +96,7 @@ static void process_row_if(int row)
 	Rast_get_c_row(in_fd, (CELL *) in_rast, row);
     Rast_fpreclass_perform_if(&rcl_struct, (CELL *) in_rast, (FCELL *) out_rast,
 			   ncols);
-    Rast_put_f_raster_row(out_fd, (FCELL *) out_rast);
+    Rast_put_f_row(out_fd, (FCELL *) out_rast);
 }
 
 static void process_row_id(int row)
@@ -107,7 +107,7 @@ static void process_row_id(int row)
 	Rast_get_c_row(in_fd, (CELL *) in_rast, row);
     Rast_fpreclass_perform_id(&rcl_struct, (CELL *) in_rast, (DCELL *) out_rast,
 			   ncols);
-    Rast_put_raster_row(out_fd, (DCELL *) out_rast, DCELL_TYPE);
+    Rast_put_row(out_fd, (DCELL *) out_rast, DCELL_TYPE);
 }
 
 static void process_row_fi(int row)
@@ -118,7 +118,7 @@ static void process_row_fi(int row)
 	Rast_get_f_row(in_fd, (FCELL *) in_rast, row);
     Rast_fpreclass_perform_fi(&rcl_struct, (FCELL *) in_rast, (CELL *) out_rast,
 			   ncols);
-    Rast_put_raster_row(out_fd, (CELL *) out_rast, CELL_TYPE);
+    Rast_put_row(out_fd, (CELL *) out_rast, CELL_TYPE);
 }
 
 static void process_row_ff(int row)
@@ -129,7 +129,7 @@ static void process_row_ff(int row)
 	Rast_get_f_row(in_fd, (FCELL *) in_rast, row);
     Rast_fpreclass_perform_ff(&rcl_struct, (FCELL *) in_rast, (FCELL *) out_rast,
 			   ncols);
-    Rast_put_f_raster_row(out_fd, (FCELL *) out_rast);
+    Rast_put_f_row(out_fd, (FCELL *) out_rast);
 }
 
 static void process_row_fd(int row)
@@ -140,7 +140,7 @@ static void process_row_fd(int row)
 	Rast_get_f_row(in_fd, (FCELL *) in_rast, row);
     Rast_fpreclass_perform_fd(&rcl_struct, (FCELL *) in_rast, (DCELL *) out_rast,
 			   ncols);
-    Rast_put_raster_row(out_fd, (DCELL *) out_rast, DCELL_TYPE);
+    Rast_put_row(out_fd, (DCELL *) out_rast, DCELL_TYPE);
 }
 
 static void process_row_di(int row)
@@ -151,7 +151,7 @@ static void process_row_di(int row)
 	Rast_get_d_row(in_fd, (DCELL *) in_rast, row);
     Rast_fpreclass_perform_di(&rcl_struct, (DCELL *) in_rast, (CELL *) out_rast,
 			   ncols);
-    Rast_put_raster_row(out_fd, (CELL *) out_rast, CELL_TYPE);
+    Rast_put_row(out_fd, (CELL *) out_rast, CELL_TYPE);
 }
 
 static void process_row_df(int row)
@@ -162,7 +162,7 @@ static void process_row_df(int row)
 	Rast_get_d_row(in_fd, (DCELL *) in_rast, row);
     Rast_fpreclass_perform_df(&rcl_struct, (DCELL *) in_rast, (FCELL *) out_rast,
 			   ncols);
-    Rast_put_f_raster_row(out_fd, (FCELL *) out_rast);
+    Rast_put_f_row(out_fd, (FCELL *) out_rast);
 }
 
 static void process_row_dd(int row)
@@ -173,5 +173,5 @@ static void process_row_dd(int row)
 	Rast_get_d_row(in_fd, (DCELL *) in_rast, row);
     Rast_fpreclass_perform_dd(&rcl_struct, (DCELL *) in_rast, (DCELL *) out_rast,
 			   ncols);
-    Rast_put_raster_row(out_fd, (DCELL *) out_rast, DCELL_TYPE);
+    Rast_put_row(out_fd, (DCELL *) out_rast, DCELL_TYPE);
 }

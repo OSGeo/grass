@@ -352,7 +352,7 @@ static void do_output(int base_fd, char **outputs, const char *covermap)
 		else
 		    out_buf[col] = basecats[base_buf[col] - min].quants[quant];
 
-	    Rast_put_d_raster_row(out_fd[quant], out_buf);
+	    Rast_put_d_row(out_fd[quant], out_buf);
 	}
 
 	G_percent(row, rows, 2);

@@ -21,7 +21,7 @@ int cseg_write_cellfile(CSEG * cseg, char *map_name)
     segment_flush(&(cseg->seg));
     for (row = 0; row < nrows; row++) {
 	segment_get_row(&(cseg->seg), buffer, row);
-	if (Rast_put_raster_row(map_fd, buffer, CELL_TYPE) < 0) {
+	if (Rast_put_row(map_fd, buffer, CELL_TYPE) < 0) {
 	    G_free(buffer);
 	    Rast_unopen(map_fd);
 	    G_warning("%s(): unable to write new map layer [%s], row %d",

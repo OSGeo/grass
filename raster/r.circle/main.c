@@ -143,7 +143,7 @@ int main(int argc, char *argv[])
 		if (int_buf[c] == 0)
 		    Rast_set_null_value(&int_buf[c], 1, CELL_TYPE);
 	    }
-	    Rast_put_raster_row(cellfile, int_buf, CELL_TYPE);
+	    Rast_put_row(cellfile, int_buf, CELL_TYPE);
 
 	}
     }

@@ -336,11 +336,11 @@ int main(int argc, char **argv)
 		for (col = 0; col < ncols; col++)
 		    out_row[col] *= scale;
 
-	    Rast_put_d_raster_row(dist_fd, out_row);
+	    Rast_put_d_row(dist_fd, out_row);
 	}
 
 	if (val_name)
-	    Rast_put_d_raster_row(val_fd, new_val_row);
+	    Rast_put_d_row(val_fd, new_val_row);
 
 	swap_rows();
     }

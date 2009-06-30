@@ -118,7 +118,7 @@ int main(int argc, char *argv[])
 	    d_N = (360.0 / (15.0 * PI)) * d_Ws;
 	    ((DCELL *) outrast1)[col] = d_N;
         }
-	if (Rast_put_raster_row(outfd1, outrast1, DCELL_TYPE) < 0)
+	if (Rast_put_row(outfd1, outrast1, DCELL_TYPE) < 0)
 	    G_fatal_error(_("Cannot write to output raster file"));
     }
     G_free(inrast_lat);

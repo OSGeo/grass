@@ -188,13 +188,13 @@ int main(int argc, char *argv[])
 	}
 	switch (rtype) {
 	case CELL_TYPE:
-	    Rast_put_c_raster_row(cf, cell);
+	    Rast_put_c_row(cf, cell);
 	    break;
 	case FCELL_TYPE:
-	    Rast_put_f_raster_row(cf, fcell);
+	    Rast_put_f_row(cf, fcell);
 	    break;
 	case DCELL_TYPE:
-	    Rast_put_d_raster_row(cf, dcell);
+	    Rast_put_d_row(cf, dcell);
 	    break;
 	}
     }

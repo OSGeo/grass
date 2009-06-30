@@ -25,7 +25,7 @@ int bseg_write_cellfile(BSEG * bseg, char *map_name)
 	    bseg_get(bseg, &value, row, col);
 	    buffer[col] = value;
 	}
-	if (Rast_put_raster_row(map_fd, buffer, CELL_TYPE) < 0) {
+	if (Rast_put_row(map_fd, buffer, CELL_TYPE) < 0) {
 	    G_free(buffer);
 	    Rast_unopen(map_fd);
 	    G_warning("%s(): unable to write new map layer [%s], row %d",

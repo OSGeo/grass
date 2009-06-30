@@ -475,7 +475,7 @@ void df_texture(int nrows, int ncols, double **buf, double **null_buf,
 		    if (*(*(edgenull + i) + j) == 0)
 			*(edge_buf_c + j - 1) = edgemap_c[i][j];
 		}
-		Rast_put_raster_row(fc, edge_buf_c, CELL_TYPE);
+		Rast_put_row(fc, edge_buf_c, CELL_TYPE);
 	    }
 	    break;
 	case (FCELL_TYPE):
@@ -487,7 +487,7 @@ void df_texture(int nrows, int ncols, double **buf, double **null_buf,
 		    if (*(*(edgenull + i) + j) == 0)
 			*(edge_buf_f + j - 1) = edgemap_f[i][j];
 		}
-		Rast_put_raster_row(fc, edge_buf_f, FCELL_TYPE);
+		Rast_put_row(fc, edge_buf_f, FCELL_TYPE);
 	    }
 	    break;
 	case (DCELL_TYPE):
@@ -499,7 +499,7 @@ void df_texture(int nrows, int ncols, double **buf, double **null_buf,
 		    if (*(*(edgenull + i) + j) == 0)
 			*(edge_buf_d + j - 1) = edgemap_d[i][j];
 		}
-		Rast_put_raster_row(fc, edge_buf_d, DCELL_TYPE);
+		Rast_put_row(fc, edge_buf_d, DCELL_TYPE);
 	    }
 	    break;
 	}
@@ -544,7 +544,7 @@ void df_texture(int nrows, int ncols, double **buf, double **null_buf,
 			*(zscor_buf + j - 1) =
 			    (buf[i][j] - attr[0]) / attr[1];
 	    }
-	    Rast_put_raster_row(fd, zscor_buf, DCELL_TYPE);
+	    Rast_put_row(fd, zscor_buf, DCELL_TYPE);
 	}
 	G_free(zscor_buf);
 	Rast_close(fd);

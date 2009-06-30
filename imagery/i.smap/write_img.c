@@ -20,7 +20,7 @@ int write_img(unsigned char **img, int ncols, int nrows, struct SigSet *S,	/* cl
 	    G_debug(3, "class: [%d] row/col: [%d][%d]", class, row, col);
 	    files->outbuf[col] = (CELL) S->ClassSig[class].classnum;
 	}
-	Rast_put_raster_row(files->output_fd, files->outbuf, CELL_TYPE);
+	Rast_put_row(files->output_fd, files->outbuf, CELL_TYPE);
     }
     G_percent(nrows, nrows, 2);
 

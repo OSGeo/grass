@@ -454,7 +454,7 @@ int main(int argc, char **argv)
 		    out_buf[thispoint->col] = (int)thispoint->value;
 		thispoint = thispoint->next;
 	    }
-	    Rast_put_c_raster_row(new_id, out_buf);
+	    Rast_put_c_row(new_id, out_buf);
 	}
 	G_percent(1, 1, 1);
     }

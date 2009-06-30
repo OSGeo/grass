@@ -171,7 +171,7 @@ CELL cross(int fd[], int non_zero, int primary, int outfd)
 		pnode->right = N;	/* add right */
 	    }
 	}
-	Rast_put_raster_row(outfd, result_cell, CELL_TYPE);
+	Rast_put_row(outfd, result_cell, CELL_TYPE);
     }
     G_percent(nrows, nrows, 5);
 

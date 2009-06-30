@@ -186,7 +186,7 @@ int output_raster(int fd)
 	}
 
 	G_percent(i, page.rows, 2);
-	if (Rast_put_raster_row(fd, cell, CELL_TYPE) < 0)
+	if (Rast_put_row(fd, cell, CELL_TYPE) < 0)
 	    return ERROR;
     }
     G_percent(i, page.rows, 2);

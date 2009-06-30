@@ -159,7 +159,7 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
 	     * for(j=0;j<params->nsizc;j++) fprintf(stderr,"%f ",cell1[j]);
 	     * fprintf(stderr,"\n");
 	     */
-	    Rast_put_f_raster_row(cf1, cell1);
+	    Rast_put_f_row(cf1, cell1);
 
 	}
     }
@@ -176,7 +176,7 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
 		return -1;
 	    }
 	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_dx);
-	    Rast_put_f_raster_row(cf2, cell1);
+	    Rast_put_f_row(cf2, cell1);
 	}
     }
 
@@ -192,7 +192,7 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
 		return -1;
 	    }
 	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_dy);
-	    Rast_put_f_raster_row(cf3, cell1);
+	    Rast_put_f_row(cf3, cell1);
 	}
     }
 
@@ -208,7 +208,7 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
 		return -1;
 	    }
 	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xx);
-	    Rast_put_f_raster_row(cf4, cell1);
+	    Rast_put_f_row(cf4, cell1);
 	}
     }
 
@@ -224,7 +224,7 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
 		return -1;
 	    }
 	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_yy);
-	    Rast_put_f_raster_row(cf5, cell1);
+	    Rast_put_f_row(cf5, cell1);
 	}
     }
 
@@ -240,7 +240,7 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
 		return -1;
 	    }
 	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xy);
-	    Rast_put_f_raster_row(cf6, cell1);
+	    Rast_put_f_row(cf6, cell1);
 	}
     }
 

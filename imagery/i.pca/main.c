@@ -512,9 +512,9 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
 
 		if (pass == PASSES) {
 		    if (scale)
-			Rast_put_raster_row(out_fd, outbuf, CELL_TYPE);
+			Rast_put_row(out_fd, outbuf, CELL_TYPE);
 		    else
-			Rast_put_raster_row(out_fd, outbuf, DCELL_TYPE);
+			Rast_put_row(out_fd, outbuf, DCELL_TYPE);
 		}
 	    }
 

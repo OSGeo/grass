@@ -176,7 +176,7 @@ int close_file(char *name)
 	    if (buf[col] == 0)
 		Rast_set_null_value(&buf[col], 1, CELL_TYPE);
 	}
-	Rast_put_raster_row(cell_file, buf + PAD, CELL_TYPE);
+	Rast_put_row(cell_file, buf + PAD, CELL_TYPE);
     }
     Rast_close(cell_file);
     rowio_flush(&row_io);

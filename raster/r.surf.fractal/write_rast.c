@@ -69,7 +69,7 @@ int write_rast(double *data[2],	/* Array holding complex data.          */
 	for (col = 0; col < ncols; col++)
 	    *(row_out + col) = (DCELL) (*(data[0] + row * nn + col) * 100000);
 
-	Rast_put_raster_row(fd_out, (DCELL *) row_out, DCELL_TYPE);
+	Rast_put_row(fd_out, (DCELL *) row_out, DCELL_TYPE);
     }
 
     Rast_close(fd_out);

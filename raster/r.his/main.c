@@ -257,15 +257,15 @@ int main(int argc, char **argv)
 	}
 
 	if (r_used)
-	    if (Rast_put_raster_row(r_file, r_array, CELL_TYPE) < 0)
+	    if (Rast_put_row(r_file, r_array, CELL_TYPE) < 0)
 		r_used = 0;
 
 	if (g_used)
-	    if (Rast_put_raster_row(g_file, g_array, CELL_TYPE) < 0)
+	    if (Rast_put_row(g_file, g_array, CELL_TYPE) < 0)
 		g_used = 0;
 
 	if (b_used)
-	    if (Rast_put_raster_row(b_file, b_array, CELL_TYPE) < 0)
+	    if (Rast_put_row(b_file, b_array, CELL_TYPE) < 0)
 		b_used = 0;
     }
     G_percent(window.rows, window.rows, 5);

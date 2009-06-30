@@ -91,7 +91,7 @@ int close_array_seg(void)
 		if (value)
 		    cellrow[c] = bas[SEG_INDEX(bas_seg, r, c)];
 	    }
-	    Rast_put_raster_row(map_fd, cellrow, CELL_TYPE);
+	    Rast_put_row(map_fd, cellrow, CELL_TYPE);
 	}
 	Rast_close(map_fd);
 	Rast_write_colors(seg_name, this_mapset, &colors);
@@ -106,7 +106,7 @@ int close_array_seg(void)
 		if (cellrow[c] == 0)
 		    Rast_set_c_null_value(cellrow + c, 1);
 	    }
-	    Rast_put_raster_row(map_fd, cellrow, CELL_TYPE);
+	    Rast_put_row(map_fd, cellrow, CELL_TYPE);
 	}
 	Rast_close(map_fd);
 	Rast_write_colors(bas_name, this_mapset, &colors);
@@ -121,7 +121,7 @@ int close_array_seg(void)
 		if (cellrow[c] == 0)
 		    Rast_set_c_null_value(cellrow + c, 1);
 	    }
-	    Rast_put_raster_row(map_fd, cellrow, CELL_TYPE);
+	    Rast_put_row(map_fd, cellrow, CELL_TYPE);
 	}
 	Rast_close(map_fd);
 	Rast_write_colors(haf_name, this_mapset, &colors);

@@ -383,7 +383,7 @@ int main(int argc, char *argv[])
 	    /* set to NULL if beyond max_dist (0) or blocked view (1) */
 	    if (fcell[col] == 0 || fcell[col] == 1)
 		Rast_set_null_value(&fcell[col], 1, FCELL_TYPE);
-	if (Rast_put_raster_row(new, fcell, FCELL_TYPE) < 0)
+	if (Rast_put_row(new, fcell, FCELL_TYPE) < 0)
 	    G_fatal_error(_("Failed writing raster map <%s> row %d"),
 			  out_layer, row);
     }

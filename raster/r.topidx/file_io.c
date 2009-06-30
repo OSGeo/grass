@@ -89,7 +89,7 @@ void putcells(void)
 
     for (i = 0; i < window.rows; i++) {
 	G_percent(i, window.rows, 2);
-	Rast_put_d_raster_row(fd, atb[i]);
+	Rast_put_d_row(fd, atb[i]);
     }
     G_percent(i, window.rows, 2);
     Rast_close(fd);

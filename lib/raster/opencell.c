@@ -354,7 +354,7 @@ int Rast__open_old(const char *name, const char *mapset)
   \brief Opens a new cell file in a database (compressed)
 
   Opens a new cell file <i>name</i> in the current mapset for writing
-  by Rast_put_raster_row().
+  by Rast_put_row().
  
   The file is created and filled with no data it is assumed that the
   new cell file is to conform to the current window.

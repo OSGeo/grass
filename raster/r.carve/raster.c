@@ -35,7 +35,7 @@ void *write_raster(void *buf, const int fd, const RASTER_MAP_TYPE rtype)
     for (i = 0; i < rows; i++) {
 	G_percent(i, rows, 10);
 
-	Rast_put_raster_row(fd, tmpbuf, rtype);
+	Rast_put_row(fd, tmpbuf, rtype);
 	tmpbuf =
 	    G_incr_void_ptr(tmpbuf, Rast_cell_size(rtype) * G_window_cols());
     }

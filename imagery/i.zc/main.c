@@ -182,7 +182,7 @@ int main(int argc, char *argv[])
 	for (j = 0; j < oc; j++) {
 	    *(cell_row + j) = (CELL) (*(data[1] + i * cols + j));
 	}
-	Rast_put_raster_row(zcfd, cell_row, CELL_TYPE);
+	Rast_put_row(zcfd, cell_row, CELL_TYPE);
     }
     Rast_close(zcfd);
 

@@ -45,7 +45,7 @@ int close_maps(void)
 			    sum_sqr += dvalue * dvalue;
 			}
 		    }
-		    Rast_put_raster_row(fd, dbuf, DCELL_TYPE);
+		    Rast_put_row(fd, dbuf, DCELL_TYPE);
 		}
 	    }
 	    else {
@@ -60,7 +60,7 @@ int close_maps(void)
 			    sum_sqr += dvalue * dvalue;
 			}
 		    }
-		    Rast_put_raster_row(fd, dbuf, DCELL_TYPE);
+		    Rast_put_row(fd, dbuf, DCELL_TYPE);
 		}
 	    }
 	    if (Rast_close(fd) < 0)
@@ -148,7 +148,7 @@ int close_maps(void)
 		for (c = 0; c < ncols; c++) {
 		    buf[c] = asp[SEG_INDEX(asp_seg, r, c)];
 		}
-		Rast_put_raster_row(fd, buf, CELL_TYPE);
+		Rast_put_row(fd, buf, CELL_TYPE);
 	    }
 	    if (Rast_close(fd) < 0)
 		G_warning(_("Close failed."));
@@ -181,7 +181,7 @@ int close_maps(void)
 			}
 		    }
 		}
-		Rast_put_raster_row(fd, buf, CELL_TYPE);
+		Rast_put_row(fd, buf, CELL_TYPE);
 	    }
 	    if (Rast_close(fd) < 0)
 		G_warning(_("Close failed."));
@@ -206,7 +206,7 @@ int close_maps(void)
 		for (c = 0; c < ncols; c++) {
 		    dbuf[c] = l_s[SEG_INDEX(l_s_seg, r, c)];
 		}
-		Rast_put_raster_row(fd, dbuf, DCELL_TYPE);
+		Rast_put_row(fd, dbuf, DCELL_TYPE);
 	    }
 	    if (Rast_close(fd) < 0)
 		G_warning(_("Close failed."));
@@ -226,7 +226,7 @@ int close_maps(void)
 		    if (dbuf[c] > max_length)
 			dbuf[c] = max_length;
 		}
-		Rast_put_raster_row(fd, dbuf, DCELL_TYPE);
+		Rast_put_row(fd, dbuf, DCELL_TYPE);
 	    }
 	    if (Rast_close(fd) < 0)
 		G_warning(_("Close failed."));
@@ -246,7 +246,7 @@ int close_maps(void)
 		for (c = 0; c < ncols; c++) {
 		    dbuf[c] = s_g[SEG_INDEX(s_g_seg, r, c)];
 		}
-		Rast_put_raster_row(fd, dbuf, DCELL_TYPE);
+		Rast_put_row(fd, dbuf, DCELL_TYPE);
 	    }
 	    if (Rast_close(fd) < 0)
 		G_warning(_("Close failed."));

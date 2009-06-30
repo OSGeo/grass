@@ -216,10 +216,10 @@ int execute_random(struct rr_state *theState)
 
 	if (theState->outraster) {
 	    if (theState->docover == 1)
-		Rast_put_raster_row(outfd, theState->cover.data.v,
+		Rast_put_row(outfd, theState->cover.data.v,
 				 theState->cover.type);
 	    else
-		Rast_put_raster_row(outfd, theState->buf.data.v,
+		Rast_put_row(outfd, theState->buf.data.v,
 				 theState->buf.type);
 	}
     }
@@ -234,10 +234,10 @@ int execute_random(struct rr_state *theState)
 	}
 	for (; row < nrows; row++) {
 	    if (theState->docover == 1)
-		Rast_put_raster_row(outfd, theState->cover.data.v,
+		Rast_put_row(outfd, theState->cover.data.v,
 				 theState->cover.type);
 	    else
-		Rast_put_raster_row(outfd, theState->buf.data.v,
+		Rast_put_row(outfd, theState->buf.data.v,
 				 theState->buf.type);
 	}
     }

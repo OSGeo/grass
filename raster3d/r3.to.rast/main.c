@@ -147,14 +147,14 @@ void g3d_to_raster(void *map, G3D_Region region, int *fd)
 		}
 	    }
 	    if (typeIntern == FCELL_TYPE) {
-		check = Rast_put_f_raster_row(fd[pos], fcell);
+		check = Rast_put_f_row(fd[pos], fcell);
 		if (check != 1)
 		    fatal_error(map, fd, depths,
 				_("Unable to write raster row"));
 	    }
 
 	    if (typeIntern == DCELL_TYPE) {
-		check = Rast_put_d_raster_row(fd[pos], dcell);
+		check = Rast_put_d_row(fd[pos], dcell);
 		if (check != 1)
 		    fatal_error(map, fd, depths,
 				_("Unable to write raster row"));

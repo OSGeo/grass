@@ -177,7 +177,7 @@ int main(int argc, char *argv[])
 	    cell[col] = (CELL) (sum1 / sum2 + 0.5);
 	}
 
-	Rast_put_raster_row(fd, cell, CELL_TYPE);
+	Rast_put_row(fd, cell, CELL_TYPE);
     }
 
     G_free(points);

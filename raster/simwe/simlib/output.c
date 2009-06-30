@@ -194,7 +194,7 @@ int output_data(int tt, double ft)
 		    gmax = amax1(gmax, a1);
 		}
 	    }
-	    Rast_put_f_raster_row(fd6, cell6);
+	    Rast_put_f_row(fd6, cell6);
 	}
 
 	if (disch != NULL) {
@@ -208,7 +208,7 @@ int output_data(int tt, double ft)
 		    dismax = amax1(dismax, a2);
 		}
 	    }
-	    Rast_put_f_raster_row(fd7, cell7);
+	    Rast_put_f_row(fd7, cell7);
 	}
 
 	if (err != NULL) {
@@ -220,7 +220,7 @@ int output_data(int tt, double ft)
 		    gsmax = amax1(gsmax, gammas[i][j]);	/* add conv? */
 		}
 	    }
-	    Rast_put_f_raster_row(fd8, cell8);
+	    Rast_put_f_row(fd8, cell8);
 	}
 
 
@@ -233,7 +233,7 @@ int output_data(int tt, double ft)
 		    /*      gsmax = amax1(gsmax, gama[i][j]); */
 		}
 	    }
-	    Rast_put_f_raster_row(fd14, cell14);
+	    Rast_put_f_row(fd14, cell14);
 	}
 
 
@@ -248,7 +248,7 @@ int output_data(int tt, double ft)
 		    dismax = amax1(dismax, a2);
 		}
 	    }
-	    Rast_put_f_raster_row(fd15, cell15);
+	    Rast_put_f_row(fd15, cell15);
 	}
 
 
@@ -262,7 +262,7 @@ int output_data(int tt, double ft)
 		    ermin = amin1(ermin, er[i][j]);
 		}
 	    }
-	    Rast_put_f_raster_row(fd16, cell16);
+	    Rast_put_f_row(fd16, cell16);
 	}
 
     }
@@ -669,7 +669,7 @@ int output_et()
 		    etmin = amin1(etmin, er[i][j]);
 		}
 	    }
-	    Rast_put_f_raster_row(fd17, cell17);
+	    Rast_put_f_row(fd17, cell17);
 	}
 
 	if (tc != NULL) {
@@ -686,7 +686,7 @@ int output_et()
 		    /*  gsmax = amax1(gsmax, trc); */
 		}
 	    }
-	    Rast_put_f_raster_row(fd13, cell13);
+	    Rast_put_f_row(fd13, cell13);
 	}
     }
 

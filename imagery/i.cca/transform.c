@@ -43,7 +43,7 @@ transform(int datafds[MX], int outfds[MX], int rows, int cols,
 
 	/* output the row of data */
 	for (j = 1; j <= bands; j++)
-	    if (Rast_put_raster_row(outfds[j], rowbufs[j], CELL_TYPE) < 0)
+	    if (Rast_put_row(outfds[j], rowbufs[j], CELL_TYPE) < 0)
 		G_fatal_error(_("Error writing cell map during transform."));
     }
     for (i = 1; i <= bands; i++)

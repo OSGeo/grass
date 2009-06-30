@@ -792,8 +792,8 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 			    bufComplex[indx * 2 + 1];
 		    }
 		}
-		Rast_put_raster_row(cfR, cellReal, data_type);
-		Rast_put_raster_row(cfI, cellImg, data_type);
+		Rast_put_row(cfR, cellReal, data_type);
+		Rast_put_row(cfI, cellImg, data_type);
 	    }			/* end of complex */
 	    else {		/* single band */
 		GDALRasterIO(hBand, GF_Read, 0, row - 1, ncols, 1,
@@ -820,7 +820,7 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 		    Rast_insert_null_values(cell, nullFlags, ncols, data_type);
 		}
 
-		Rast_put_raster_row(cf, cell, data_type);
+		Rast_put_row(cf, cell, data_type);
 	    }			/* end of not complex */
 
 	    G_percent(row, nrows, 2);
@@ -853,7 +853,7 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 		Rast_insert_null_values(cell, nullFlags, ncols, data_type);
 	    }
 
-	    Rast_put_raster_row(cf, cell, data_type);
+	    Rast_put_row(cf, cell, data_type);
 	}
 
 	G_percent(row, nrows, 2);

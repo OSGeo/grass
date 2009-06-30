@@ -1,76 +1,18 @@
+/*!
+  \file raster/put_row.c
+
+  \brief Raster library - Put raster row
+
+  (C) 2003-2009 by the GRASS Development Team
+
+  This program is free software under the GNU General Public License
+  (>=v2).  Read the file COPYING that comes with GRASS for details.
+
+  \author Original author CERL
+ */
 
 /**********************************************************************
- *
- *   G_put_[c/f/d]_raster_row(fd, buf)
- *      int fd           file descriptor of the opened map
- *      [F/D]CELL *buf   buffer holding row info to be written
- *
- *   Writes the next row for the cell file opened on 'fd' from 'buf'
- *   All writes go into NEW files that exactly match the current window.
- *   The file must have been opened with Rast_open_new()
- *   and be written sequentially, ie no skipping rows
- *
- *   when the null values are embeded into the data, corresponding cells are 
- *   changed to 0's and the corresponding null value row is written into null 
- *   file.
- *
- *   *** NOTE *** 
- *   A map cannot be copied using Rast_get_row() and Rast_put_raster_row().
- *   The former resamples the data of the original map into a row buffer
- *   that matches the current window.  The later writes out rows associated
- *   with the window.
- *
- *   returns:    1  if successful
- *              -1  on fail
- *
- *  Keeps track of the minimum and maximum cell value  for use in updating
- *  the range file upon close of the cell file.
- *  HOWEVER when nulls are not embeded, the cells are considered 0's as far
- *  as updating range is concerned, even if the corresponding cell is null
- *  in the resulting null file, so programmer should be carefult to set all 
- *  the null values using Rast_set_null_value() or G_insert_[d/f_]null_values()
- *
- ********************************************************************** 
- *
- *   Rast_put_map_row(fd, buf)
- *      int fd           file descriptor of the opened map
- *      CELL *buf        buffer holding row info to be written
- *
- *   Writes the next row for the cell file opened on 'fd' from 'buf'
- *   All writes go into NEW files that exactly match the current window.
- *   The file must have been opened with Rast_open_new()
- *   and be written sequentially, ie no skipping rows
- *
- *   NULLS are written into null bitmap file for all cells which are zero,
- *   and cells which have null value (these cells are converted to 0's before
- *   writing) 
- *
- *   *** NOTE *** 
- *   A map cannot be copied using Rast_get_c_row() and Rast_put_map_row().
- *   The former resamples the data of the original map into a row buffer
- *   that matches the current window.  The later writes out rows associated
- *   with the window.
- *
- *   returns:    1  if successful
- *              -1  on fail
- *
- *  Keeps track of the minimum and maximum cell value  for use in updating
- *  the range file upon close of the cell file.
- *
- ***********************************************************************
- *
- *  put_null_value_row(fd, buf)
- *      int fd                  File descriptor where data is to be written
- *      char *buf               Buffer holding null data
- *
- *   converts a buffer of zero's and ones to bitstream and stores this 
- *   bitstream in memory. (the null rows from memory are written into null
- *   file after the limit is reached, and the place for new null rows
- *   to be kept in memory is freed. Should not be used by application
- *   programs.
- *
- *   returns:    0  if successful
- *              -1  on fail
+
  **********************************************************************/
 
 #include <string.h>
@@ -99,14 +41,8 @@ static int convert_and_write_if(int, const CELL *);
 static int convert_and_write_id(int, const CELL *);
 static int convert_and_write_df(int, const DCELL *);
 static int convert_and_write_fd(int, const FCELL *);
-static int put_raster_row(int fd, const void *buf, RASTER_MAP_TYPE data_type,
-			  int zeros_r_nulls);
-
-/*--------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------*/
+static int put_raster_row(int, const void *, RASTER_MAP_TYPE,
+			  int);
 
 static int put_null_value_row(int fd, const char *buf)
 {
@@ -127,40 +63,90 @@ static int put_null_value_row(int fd, const char *buf)
     return 1;
 }
 
-int Rast_put_map_row(int fd, const CELL * buf)
+/*!
+  \brief Writes the next row for cell/fcell/dcell file
+
+  Writes the next row for the cell file opened on 'fd' from 'buf' All
+  writes go into NEW files that exactly match the current window.  The
+  file must have been opened with Rast_open_new() and be written
+  sequentially, ie no skipping rows.
+ 
+  When the null values are embeded into the data, corresponding cells
+  are changed to 0's and the corresponding null value row is written
+  into null file.
+ 
+  A map cannot be copied using Rast_get_row() and
+  Rast_put_row(). The former resamples the data of the original
+  map into a row buffer that matches the current window. The later
+  writes out rows associated with the window.
+  
+  Keeps track of the minimum and maximum cell value for use in
+  updating the range file upon close of the cell file.  HOWEVER when
+  nulls are not embeded, the cells are considered 0's as far as
+  updating range is concerned, even if the corresponding cell is null
+  in the resulting null file, so programmer should be carefult to set
+  all the null values using Rast_set_null_value() or
+  G_insert_d_null_values() or G_insert_f_null_values().
+
+  \param fd file descriptor where data is to be written
+  \param buf     buffer holding data
+  \param data_type raster map type (CELL_TYPE, FCELL_TYPE, DCELL_TYPE)
+
+  \return 1 on success
+  \return -1 on failure
+*/
+int Rast_put_row(int fd, const void *buf, RASTER_MAP_TYPE data_type)
 {
-    struct fileinfo *fcb = &R__.fileinfo[fd];
-
-    if (fcb->map_type != CELL_TYPE) {
-	G_fatal_error(_("Rast_put_map_row: %s is not integer! Use G_put_[f/d]_raster_row()!"),
-		      fcb->name);
-	return -1;
-    }
-
-    return put_raster_row(fd, buf, CELL_TYPE, 1);
+    return put_raster_row(fd, buf, data_type, data_type);
 }
 
-int Rast_put_raster_row(int fd, const void *buf, RASTER_MAP_TYPE data_type)
+/*!
+  \brief Writes the next row for cell file (CELL version)
+
+  See Rast_put_row() for details.
+
+  \param fd file descriptor where data is to be written
+  \param buf     buffer holding data
+
+  \return 1 on success
+  \return -1 on failure
+*/
+int Rast_put_c_row(int fd, const CELL * buf)
 {
-    return put_raster_row(fd, buf, data_type, 0);
+    return Rast_put_row(fd, buf, CELL_TYPE);
 }
 
-int Rast_put_c_raster_row(int fd, const CELL * buf)
+/*!
+  \brief Writes the next row for fcell file (FCELL version)
+
+  See Rast_put_row() for details.
+
+  \param fd file descriptor where data is to be written
+  \param buf     buffer holding data
+
+  \return 1 on success
+  \return -1 on failure
+*/
+int Rast_put_f_row(int fd, const FCELL * buf)
 {
-    return Rast_put_raster_row(fd, buf, CELL_TYPE);
+    return Rast_put_row(fd, buf, FCELL_TYPE);
 }
 
-int Rast_put_f_raster_row(int fd, const FCELL * buf)
-{
-    return Rast_put_raster_row(fd, buf, FCELL_TYPE);
-}
+/*!
+  \brief Writes the next row for dcell file (DCELL version)
 
-int Rast_put_d_raster_row(int fd, const DCELL * buf)
-{
-    return Rast_put_raster_row(fd, buf, DCELL_TYPE);
-}
+  See Rast_put_row() for details.
 
-/*--------------------------------------------------------------------------*/
+  \param fd file descriptor where data is to be written
+  \param buf     buffer holding data
+
+  \return 1 on success
+  \return -1 on failure
+*/
+int Rast_put_d_row(int fd, const DCELL * buf)
+{
+    return Rast_put_row(fd, buf, DCELL_TYPE);
+}
 
 static int check_open(const char *me, int fd)
 {
@@ -168,7 +154,7 @@ static int check_open(const char *me, int fd)
 
     switch (fcb->open_mode) {
     case OPEN_OLD:
-	G_warning(_("%s: map [%s] not open for write - request ignored"), me,
+	G_warning(_("%s: raster map <%s> not open for write - request ignored"), me,
 		  fcb->name);
 	break;
     case OPEN_NEW_COMPRESSED:
@@ -190,12 +176,10 @@ static void write_error(int fd, int row)
     if (fcb->io_error)
 	return;
 
-    G_warning(_("map [%s] - unable to write row %d"), fcb->name, row);
+    G_warning(_("Raster map <%s> - unable to write row %d"), fcb->name, row);
 
     fcb->io_error = 1;
 }
-
-/*--------------------------------------------------------------------------*/
 
 static int write_data(int fd, int row, unsigned char *buf, int n)
 {
@@ -223,20 +207,12 @@ static int write_data_compressed(int fd, int row, unsigned char *buf, int n)
     return 0;
 }
 
-/*--------------------------------------------------------------------------*/
-
 static void set_file_pointer(int fd, int row)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
 
     fcb->row_ptr[row] = lseek(fd, 0L, SEEK_CUR);
 }
-
-/*--------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------*/
 
 static int convert_float(XDR * xdrs, char *null_buf, const FCELL * rast,
 			 int row, int n)
@@ -288,10 +264,7 @@ static int convert_double(XDR * xdrs, char *null_buf, const DCELL * rast,
     return 0;
 }
 
-/*--------------------------------------------------------------------------*/
-
 /* writes data to fcell file for either full or partial rows */
-
 static int put_fp_data(int fd, char *null_buf, const void *rast,
 		       int row, int n, RASTER_MAP_TYPE data_type)
 {
@@ -345,12 +318,6 @@ static int put_fp_data(int fd, char *null_buf, const void *rast,
 
     return 1;
 }
-
-/*--------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------*/
 
 static void convert_int(unsigned char *wk, char *null_buf, const CELL * rast,
 			int n, int len, int zeros_r_nulls)
@@ -474,8 +441,6 @@ static int zlib_compress(unsigned char *dst, unsigned char *src, int n,
     return (nwrite >= total) ? 0 : nwrite;
 }
 
-/*--------------------------------------------------------------------------*/
-
 static int put_data(int fd, char *null_buf, const CELL *cell,
 		    int row, int n, int zeros_r_nulls)
 {
@@ -564,8 +529,6 @@ static int put_data(int fd, char *null_buf, const CELL *cell,
     return 1;
 }
 
-/*--------------------------------------------------------------------------*/
-
 static int put_data_gdal(int fd, const void *rast, int row, int n,
 			 int zeros_r_nulls, RASTER_MAP_TYPE map_type)
 {
@@ -616,12 +579,6 @@ static int put_data_gdal(int fd, const void *rast, int row, int n,
 #endif
 }
 
-/*--------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------*/
-
 static int put_raster_data(int fd, char *null_buf, const void *rast,
 			   int row, int n,
 			   int zeros_r_nulls, RASTER_MAP_TYPE map_type)
@@ -635,12 +592,6 @@ static int put_raster_data(int fd, char *null_buf, const void *rast,
 	? put_data(fd, null_buf, rast, row, n, zeros_r_nulls)
 	: put_fp_data(fd, null_buf, rast, row, n, map_type);
 }
-
-/*--------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------*/
 
 static int put_null_data(int fd, const char *flags, int row)
 {
@@ -684,13 +635,21 @@ static int put_null_data(int fd, const char *flags, int row)
     return 1;
 }
 
+/*!
+  \brief Open null file for write
+
+  \param fd file descriptor of raster cell data file
+
+  \return field descriptor of null data file
+  \return -1 on failure
+*/
 int Rast__open_null_write(int fd)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
     int null_fd;
 
     if (access(fcb->null_temp_name, 0) != 0) {
-	G_warning(_("unable to find a temporary null file %s"),
+	G_warning(_("Unable to find a temporary null file <%s>"),
 		  fcb->null_temp_name);
 	return -1;
     }
@@ -702,8 +661,20 @@ int Rast__open_null_write(int fd)
     return null_fd;
 }
 
+/*!
+  \brief Write null data
+
+  \param null_fd file descriptor of null file where data is to be written
+  \param flags ?
+  \param row row number
+  \param col col number
+  \param fd file descriptor of cell data file
+
+  \return 1 on success
+  \return -1 on failure
+*/
 int Rast__write_null_bits(int null_fd, const unsigned char *flags, int row,
-		       int cols, int fd)
+			  int cols, int fd)
 {
     off_t offset;
     size_t size;
@@ -712,23 +683,17 @@ int Rast__write_null_bits(int null_fd, const unsigned char *flags, int row,
     offset = (off_t) size *row;
 
     if (lseek(null_fd, offset, SEEK_SET) < 0) {
-	G_warning(_("error writing null row %d"), row);
+	G_warning(_("Error writing null row %d"), row);
 	return -1;
     }
 
     if (write(null_fd, flags, size) != size) {
-	G_warning(_("error writing null row %d"), row);
+	G_warning(_("Error writing null row %d"), row);
 	return -1;
     }
 
     return 1;
 }
-
-/*--------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------*/
 
 static int convert_and_write_if(int fd, const CELL * buf)
 {
@@ -742,7 +707,7 @@ static int convert_and_write_if(int fd, const CELL * buf)
 	else
 	    p[i] = (FCELL) buf[i];
 
-    return Rast_put_f_raster_row(fd, p);
+    return Rast_put_f_row(fd, p);
 }
 
 static int convert_and_write_df(int fd, const DCELL * buf)
@@ -757,7 +722,7 @@ static int convert_and_write_df(int fd, const DCELL * buf)
 	else
 	    p[i] = (FCELL) buf[i];
 
-    return Rast_put_f_raster_row(fd, p);
+    return Rast_put_f_row(fd, p);
 }
 
 static int convert_and_write_id(int fd, const CELL * buf)
@@ -772,7 +737,7 @@ static int convert_and_write_id(int fd, const CELL * buf)
 	else
 	    p[i] = (DCELL) buf[i];
 
-    return Rast_put_d_raster_row(fd, p);
+    return Rast_put_d_row(fd, p);
 }
 
 static int convert_and_write_fd(int fd, const FCELL * buf)
@@ -787,7 +752,7 @@ static int convert_and_write_fd(int fd, const FCELL * buf)
 	else
 	    p[i] = (DCELL) buf[i];
 
-    return Rast_put_d_raster_row(fd, p);
+    return Rast_put_d_row(fd, p);
 }
 
 static int convert_and_write_fi(int fd, const FCELL * buf)
@@ -802,7 +767,7 @@ static int convert_and_write_fi(int fd, const FCELL * buf)
 	else
 	    p[i] = (CELL) buf[i];
 
-    return Rast_put_c_raster_row(fd, p);
+    return Rast_put_c_row(fd, p);
 }
 
 static int convert_and_write_di(int fd, const DCELL * buf)
@@ -817,11 +782,23 @@ static int convert_and_write_di(int fd, const DCELL * buf)
 	else
 	    p[i] = (CELL) buf[i];
 
-    return Rast_put_c_raster_row(fd, p);
+    return Rast_put_c_row(fd, p);
 }
 
-/*--------------------------------------------------------------------------*/
+/*!
+  \brief converts a buffer of zero's and ones to bitstream.
 
+  Stores this bitstream in memory. (the null rows from memory are
+  written into null file after the limit is reached, and the place for
+  new null rows to be kept in memory is freed. Should not be used by
+  application programs.
+
+  \param fd file descriptor where data is to be written
+  \param buf buffer holding null data
+ 
+  \return 0  if successful
+  \return -1  on fail
+*/
 static int put_raster_row(int fd, const void *buf, RASTER_MAP_TYPE data_type,
 			  int zeros_r_nulls)
 {

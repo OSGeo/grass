@@ -270,7 +270,7 @@ int main(int argc, char *argv[])
 	}
 
 	for (i = 0; i < num_outputs; i++)
-	    Rast_put_d_raster_row(outputs[i].fd, outputs[i].buf);
+	    Rast_put_d_row(outputs[i].fd, outputs[i].buf);
     }
 
     G_percent(row, nrows, 2);

@@ -196,17 +196,17 @@ int get_row_d(int fd, void *row, int n)
 /* Write one row to a raster map */
 int put_row_c(int fd, void *row)
 {
-    return Rast_put_c_raster_row(fd, (CELL *) row);
+    return Rast_put_c_row(fd, (CELL *) row);
 }
 
 int put_row_f(int fd, void *row)
 {
-    return Rast_put_f_raster_row(fd, (FCELL *) row);
+    return Rast_put_f_row(fd, (FCELL *) row);
 }
 
 int put_row_d(int fd, void *row)
 {
-    return Rast_put_d_raster_row(fd, (DCELL *) row);
+    return Rast_put_d_row(fd, (DCELL *) row);
 }
 
 /* Allocate memory for one line of data */

@@ -130,7 +130,7 @@ int main(int argc, char *argv[])
 	    else
 		alt_row[c] = con1;
 	}
-	Rast_put_raster_row(file_fd, alt_row, CELL_TYPE);
+	Rast_put_row(file_fd, alt_row, CELL_TYPE);
     }
     G_percent(r, nrows, 1);
     free_cell(con);
