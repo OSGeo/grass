@@ -117,6 +117,7 @@ static struct state {
     struct GModule module_info;	/* general information on the corresponding module */
 
     const char *pgm_name;
+    const char *pgm_path;
 
     struct Flag first_flag;	/* First flag in a linked list      */
     struct Flag *current_flag;	/* Pointer for traversing list      */
@@ -760,7 +761,9 @@ int G_parser(int argc, char **argv)
 
     error = 0;
     need_first_opt = 1;
-    i = strlen(tmp_name = G_store(argv[0]));
+    tmp_name = G_store(argv[0]);
+    st->pgm_path = tmp_name;
+    i = strlen(tmp_name);
     while (--i >= 0) {
 	if (G_is_dirsep(tmp_name[i])) {
 	    tmp_name += i + 1;
@@ -1858,14 +1861,14 @@ static void G_gui_wx(void)
 {
     char script[GPATH_MAX];
 
-    if (!st->pgm_name)
-	st->pgm_name = G_program_name();
-    if (!st->pgm_name)
+    if (!st->pgm_path)
+	st->pgm_path = G_program_name();
+    if (!st->pgm_path)
 	G_fatal_error(_("Unable to determine program name"));
 
     sprintf(script, "%s/etc/wxpython/gui_modules/menuform.py",
 	    getenv("GISBASE"));
-    G_spawn(getenv("GRASS_PYTHON"), "menuform.py", script, st->pgm_name, NULL);
+    G_spawn(getenv("GRASS_PYTHON"), "menuform.py", script, st->pgm_path, NULL);
 }
 
 /*!
