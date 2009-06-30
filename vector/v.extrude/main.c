@@ -392,7 +392,7 @@ static int extrude(struct Map_info *In, struct Map_info *Out,
     /* do not trace -> calculate minumum dem offset */
     if (fdrast && !trace) {
 	for (k = 0; k < Points->n_points; k++) {
-	    voffset_curr = Rast_get_raster_sample(fdrast, &window, NULL,
+	    voffset_curr = Rast_get_sample(fdrast, &window, NULL,
 					       Points->y[k], Points->x[k], 0,
 					       NEAREST);
 	    if (Rast_is_d_null_value(&voffset_curr))
@@ -415,12 +415,12 @@ static int extrude(struct Map_info *In, struct Map_info *Out,
 
 	/* trace */
 	if (fdrast && trace) {
-	    voffset_curr = Rast_get_raster_sample(fdrast, &window, NULL,
+	    voffset_curr = Rast_get_sample(fdrast, &window, NULL,
 					       Points->y[k], Points->x[k], 0,
 					       NEAREST);
 
 	    if (type != GV_POINT) {
-		voffset_next = Rast_get_raster_sample(fdrast, &window, NULL,
+		voffset_next = Rast_get_sample(fdrast, &window, NULL,
 						   Points->y[k + 1],
 						   Points->x[k + 1], 0,
 						   NEAREST);
