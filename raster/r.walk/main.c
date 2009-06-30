@@ -909,7 +909,7 @@ int main(int argc, char *argv[])
 		    double cellval;
 
 		    if (start_with_raster_vals == 1) {
-			cellval = Rast_get_raster_value_d(ptr2, data_type2);
+			cellval = Rast_get_d_value(ptr2, data_type2);
 			new_cell = insert(cellval, row, col);
 			segment_put(&out_seg, &cellval, row, col);
 		    }

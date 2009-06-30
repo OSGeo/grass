@@ -15,7 +15,7 @@ int G_is_zero_value(void *rast, RASTER_MAP_TYPE data_type)
     /* insert 0 check here */
 
     return Rast_is_null_value(rast, data_type) ||
-	Rast_get_raster_value_d(rast, data_type) != 0.0 ? 0 : 1;
+	Rast_get_d_value(rast, data_type) != 0.0 ? 0 : 1;
 }
 
 

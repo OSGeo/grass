@@ -406,7 +406,7 @@ char *Rast_get_cat(void *rast,
 
     /* first search the list of labels */
     *label = 0;
-    val = Rast_get_raster_value_d(rast, data_type);
+    val = Rast_get_d_value(rast, data_type);
     i = Rast_quant_get_cell_value(&pcats->q, val);
 
     G_debug(5, "Rast_get_cat(): val %lf found i %d", val, i);
@@ -560,7 +560,7 @@ int Rast_mark_cats(const void *rast_row,
 
     while (ncols-- > 0) {
 	i = Rast_quant_get_cell_value(&pcats->q,
-				   Rast_get_raster_value_d(rast_row, data_type));
+				   Rast_get_d_value(rast_row, data_type));
 	if (Rast_is_c_null_value(&i))
 	    continue;
 	if (i > pcats->ncats)
@@ -678,8 +678,8 @@ char *Rast_get_next_marked_cat(struct Categories *pcats,
     char *lab;
 
     lab = Rast_get_next_marked_d_cat(pcats, &val1, &val2, count);
-    Rast_set_raster_value_d(rast1, val1, data_type);
-    Rast_set_raster_value_d(rast2, val2, data_type);
+    Rast_set_d_value(rast1, val1, data_type);
+    Rast_set_d_value(rast2, val2, data_type);
     return lab;
 }
 
@@ -913,8 +913,8 @@ int Rast_set_cat(const void *rast1, const void *rast2,
 {
     DCELL val1, val2;
 
-    val1 = Rast_get_raster_value_d(rast1, data_type);
-    val2 = Rast_get_raster_value_d(rast2, data_type);
+    val1 = Rast_get_d_value(rast1, data_type);
+    val2 = Rast_get_d_value(rast2, data_type);
     return Rast_set_d_cat(&val1, &val2, label, pcats);
 }
 
@@ -1059,8 +1059,8 @@ char *Rast_get_ith_f_cat(const struct Categories *pcats,
     DCELL val1, val2;
 
     tmp = Rast_get_ith_d_cat(pcats, i, &val1, &val2);
-    Rast_set_raster_value_d(rast1, val1, data_type);
-    Rast_set_raster_value_d(rast2, val2, data_type);
+    Rast_set_d_value(rast1, val1, data_type);
+    Rast_set_d_value(rast2, val2, data_type);
     return tmp;
 }
 
@@ -1086,8 +1086,8 @@ char *Rast_get_ith_c_cat(const struct Categories *pcats,
     DCELL val1, val2;
 
     tmp = Rast_get_ith_d_cat(pcats, i, &val1, &val2);
-    Rast_set_raster_value_d(rast1, val1, data_type);
-    Rast_set_raster_value_d(rast2, val2, data_type);
+    Rast_set_d_value(rast1, val1, data_type);
+    Rast_set_d_value(rast2, val2, data_type);
     return tmp;
 }
 
@@ -1113,8 +1113,8 @@ char *Rast_get_ith_cat(const struct Categories *pcats, int i, void *rast1,
     DCELL val1, val2;
 
     tmp = Rast_get_ith_d_cat(pcats, i, &val1, &val2);
-    Rast_set_raster_value_d(rast1, val1, data_type);
-    Rast_set_raster_value_d(rast2, val2, data_type);
+    Rast_set_d_value(rast1, val1, data_type);
+    Rast_set_d_value(rast2, val2, data_type);
     return tmp;
 }
 

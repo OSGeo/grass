@@ -471,12 +471,12 @@ void Rast_get_fp_range_min_max(const struct FPRange *, DCELL *, DCELL *);
 /* raster.c */
 int Rast_raster_cmp(const void *, const void *, RASTER_MAP_TYPE);
 void Rast_raster_cpy(void *, const void *, int, RASTER_MAP_TYPE);
-void Rast_set_raster_value_c(void *, CELL, RASTER_MAP_TYPE);
-void Rast_set_raster_value_f(void *, FCELL, RASTER_MAP_TYPE);
-void Rast_set_raster_value_d(void *, DCELL, RASTER_MAP_TYPE);
-CELL Rast_get_raster_value_c(const void *, RASTER_MAP_TYPE);
-FCELL Rast_get_raster_value_f(const void *, RASTER_MAP_TYPE);
-DCELL Rast_get_raster_value_d(const void *, RASTER_MAP_TYPE);
+void Rast_set_c_value(void *, CELL, RASTER_MAP_TYPE);
+void Rast_set_f_value(void *, FCELL, RASTER_MAP_TYPE);
+void Rast_set_d_value(void *, DCELL, RASTER_MAP_TYPE);
+CELL Rast_get_c_value(const void *, RASTER_MAP_TYPE);
+FCELL Rast_get_f_value(const void *, RASTER_MAP_TYPE);
+DCELL Rast_get_d_value(const void *, RASTER_MAP_TYPE);
 
 /* raster_metadata.c */
 int Rast_read_raster_units(const char *, const char *, char *);

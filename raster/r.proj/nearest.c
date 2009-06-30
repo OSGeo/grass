@@ -37,5 +37,5 @@ void p_nearest(struct cache *ibuffer,	/* input buffer                  */
 	return;
     }
 
-    Rast_set_raster_value_f(obufptr, *cellp, cell_type);
+    Rast_set_f_value(obufptr, *cellp, cell_type);
 }

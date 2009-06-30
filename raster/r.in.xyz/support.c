@@ -37,7 +37,7 @@ int blank_array(void *array, int nrows, int ncols, RASTER_MAP_TYPE map_type,
 
 	for (row = 0; row < nrows; row++) {
 	    for (col = 0; col < ncols; col++) {
-		Rast_set_raster_value_c(ptr, 0, map_type);
+		Rast_set_c_value(ptr, 0, map_type);
 		ptr = G_incr_void_ptr(ptr, Rast_cell_size(map_type));
 	    }
 	}
@@ -62,8 +62,8 @@ int update_n(void *array, int cols, int row, int col)
     void *ptr = get_cell_ptr(array, cols, row, col, CELL_TYPE);
     CELL old_n;
 
-    old_n = Rast_get_raster_value_c(ptr, CELL_TYPE);
-    Rast_set_raster_value_c(ptr, (1 + old_n), CELL_TYPE);
+    old_n = Rast_get_c_value(ptr, CELL_TYPE);
+    Rast_set_c_value(ptr, (1 + old_n), CELL_TYPE);
 
     return 0;
 }
@@ -76,11 +76,11 @@ int update_min(void *array, int cols, int row, int col,
     DCELL old_val;
 
     if (Rast_is_null_value(ptr, map_type))
-	Rast_set_raster_value_d(ptr, (DCELL) value, map_type);
+	Rast_set_d_value(ptr, (DCELL) value, map_type);
     else {
-	old_val = Rast_get_raster_value_d(ptr, map_type);
+	old_val = Rast_get_d_value(ptr, map_type);
 	if (value < old_val)
-	    Rast_set_raster_value_d(ptr, (DCELL) value, map_type);
+	    Rast_set_d_value(ptr, (DCELL) value, map_type);
     }
     return 0;
 }
@@ -93,11 +93,11 @@ int update_max(void *array, int cols, int row, int col,
     DCELL old_val;
 
     if (Rast_is_null_value(ptr, map_type))
-	Rast_set_raster_value_d(ptr, (DCELL) value, map_type);
+	Rast_set_d_value(ptr, (DCELL) value, map_type);
     else {
-	old_val = Rast_get_raster_value_d(ptr, map_type);
+	old_val = Rast_get_d_value(ptr, map_type);
 	if (value > old_val)
-	    Rast_set_raster_value_d(ptr, (DCELL) value, map_type);
+	    Rast_set_d_value(ptr, (DCELL) value, map_type);
     }
 
     return 0;
@@ -110,8 +110,8 @@ int update_sum(void *array, int cols, int row, int col,
     void *ptr = get_cell_ptr(array, cols, row, col, map_type);
     DCELL old_val;
 
-    old_val = Rast_get_raster_value_d(ptr, map_type);
-    Rast_set_raster_value_d(ptr, value + old_val, map_type);
+    old_val = Rast_get_d_value(ptr, map_type);
+    Rast_set_d_value(ptr, value + old_val, map_type);
 
     return 0;
 }
@@ -123,8 +123,8 @@ int update_sumsq(void *array, int cols, int row, int col,
     void *ptr = get_cell_ptr(array, cols, row, col, map_type);
     DCELL old_val;
 
-    old_val = Rast_get_raster_value_d(ptr, map_type);
-    Rast_set_raster_value_d(ptr, (value * value) + old_val, map_type);
+    old_val = Rast_get_d_value(ptr, map_type);
+    Rast_set_d_value(ptr, (value * value) + old_val, map_type);
 
     return 0;
 }

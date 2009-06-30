@@ -250,8 +250,8 @@ static void add_color_rule(const void *pt1, int r1, int g1, int b1,
     DCELL min, max, val1, val2;
     CELL cat;
 
-    val1 = Rast_get_raster_value_d(pt1, data_type);
-    val2 = Rast_get_raster_value_d(pt2, data_type);
+    val1 = Rast_get_d_value(pt1, data_type);
+    val2 = Rast_get_d_value(pt2, data_type);
     /* allocate a low:high rule */
     rule = (struct _Color_Rule_ *)G_malloc(sizeof(*rule));
     rule->next = rule->prev = NULL;

@@ -561,7 +561,7 @@ static int put_data_gdal(int fd, const void *rast, int row, int n,
 
     for (i = 0; i < n; i++) {
 	if (Rast_is_null_value(src, map_type) || zeros_r_nulls && !*(CELL *)src)
-	    Rast_set_raster_value_d(dst, null_val, map_type);
+	    Rast_set_d_value(dst, null_val, map_type);
 	else
 	    memcpy(dst, src, size);
 	src = G_incr_void_ptr(src, size);
