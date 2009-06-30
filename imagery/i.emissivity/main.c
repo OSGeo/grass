@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
 		outr[col] = d;
 	    }
         }
-	if (Rast_put_raster_row(outfd, outr, DCELL_TYPE) < 0)
+	if (Rast_put_row(outfd, outr, DCELL_TYPE) < 0)
 	    G_fatal_error(_("Cannot write to output raster file"));
     }
     G_free(inr);

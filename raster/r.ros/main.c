@@ -856,11 +856,11 @@ int main(int argc, char *argv[])
 	    maxdir[col] = (int)Rdir;
 	    /*printf("(%d, %d)\nR0=%.2f, vel=%d, dir=%d, phiw=%.2f, s=%d, as=%d, phis=%.2f, R=%.1f, Rdir=%.0f\n", row, col, R0, vel[col], dir[col], phiw, slope[col], aspect[col], phis, R, Rdir); */
 	}
-	Rast_put_raster_row(base_fd, base, CELL_TYPE);
-	Rast_put_raster_row(max_fd, max, CELL_TYPE);
-	Rast_put_raster_row(maxdir_fd, maxdir, CELL_TYPE);
+	Rast_put_row(base_fd, base, CELL_TYPE);
+	Rast_put_row(max_fd, max, CELL_TYPE);
+	Rast_put_row(maxdir_fd, maxdir, CELL_TYPE);
 	if (spotting)
-	    Rast_put_raster_row(spotdist_fd, spotdist, CELL_TYPE);
+	    Rast_put_row(spotdist_fd, spotdist, CELL_TYPE);
     }
     G_percent(row, nrows, 2);
 

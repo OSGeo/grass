@@ -38,7 +38,7 @@ int close_maps(void)
 			sum_sqr += dvalue * dvalue;
 		    }
 		}
-		Rast_put_raster_row(fd, dbuf, DCELL_TYPE);
+		Rast_put_row(fd, dbuf, DCELL_TYPE);
 	    }
 	    if (Rast_close(fd) < 0)
 		G_warning(_("Close failed."));

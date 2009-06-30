@@ -22,7 +22,7 @@ int dseg_write_cellfile(DSEG * dseg, char *map_name)
     segment_flush(&(dseg->seg));
     for (row = 0; row < nrows; row++) {
 	segment_get_row(&(dseg->seg), (DCELL *) dbuffer, row);
-	if (Rast_put_raster_row(map_fd, dbuffer, DCELL_TYPE) < 0) {
+	if (Rast_put_row(map_fd, dbuffer, DCELL_TYPE) < 0) {
 	    G_free(dbuffer);
 	    Rast_unopen(map_fd);
 	    G_warning("%s(): unable to write new map layer [%s], row %d",

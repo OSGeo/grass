@@ -291,7 +291,7 @@ int display_signature(void)
 		buffer[col] = (CELL) 1;
 	      past:;
 	    }
-	    Rast_put_raster_row(fd, buffer, CELL_TYPE);
+	    Rast_put_row(fd, buffer, CELL_TYPE);
 	}
 
 	Rast_close(fd);

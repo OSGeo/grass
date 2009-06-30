@@ -102,7 +102,7 @@ int main(int argc, char **argv)
 
 	/* write out the new row for each cell map */
 	for (band = 0; band < 3; band++)
-	    if (Rast_put_raster_row(fd_output[band], rowbuffer[band], CELL_TYPE)
+	    if (Rast_put_row(fd_output[band], rowbuffer[band], CELL_TYPE)
 		< 0)
 		G_fatal_error(_("Failed writing raster map row %d"), i);
     }

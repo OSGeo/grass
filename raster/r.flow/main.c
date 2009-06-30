@@ -385,7 +385,7 @@ static void calculate(void)
 	}
 
 	if (parm.lgout)
-	    Rast_put_f_raster_row(lgfd, lg);
+	    Rast_put_f_row(lgfd, lg);
     }
 
     G_free(fls.px);

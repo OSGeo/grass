@@ -265,7 +265,7 @@ int main(int argc, char **argv)
 
 	for (i = 0; i < nrows; i++) {
 	    read(fm, out_buf, bufsz);
-	    Rast_put_raster_row(bas_id, out_buf, CELL_TYPE);
+	    Rast_put_row(bas_id, out_buf, CELL_TYPE);
 	}
 
 	Rast_close(bas_id);
@@ -281,7 +281,7 @@ int main(int argc, char **argv)
 	for (j = 0; j < ncols; j += 1)
 	    out_buf[j] = dir_type(type, out_buf[j]);
 
-	Rast_put_raster_row(dir_id, out_buf, CELL_TYPE);
+	Rast_put_row(dir_id, out_buf, CELL_TYPE);
 
     }
 

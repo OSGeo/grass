@@ -417,7 +417,7 @@ int main(int argc, char **argv)
 		if (gaussian > gausmax)
 		    gausmax = gaussian;
 	    }
-	    Rast_put_raster_row(fdout, output_cell, DCELL_TYPE);
+	    Rast_put_row(fdout, output_cell, DCELL_TYPE);
 	}
 
 	Rast_close(fdout);

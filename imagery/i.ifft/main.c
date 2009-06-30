@@ -223,7 +223,7 @@ int main(int argc, char *argv[])
     for (i = 0; i < rows; i++) {
 	for (j = 0; j < cols; j++)
 	    cell_real[j] = data[C(i, j)][0];
-	Rast_put_d_raster_row(outputfd, cell_real);
+	Rast_put_d_row(outputfd, cell_real);
 
 	G_percent(i+1, rows, 2);
     }

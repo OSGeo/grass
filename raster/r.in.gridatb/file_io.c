@@ -60,7 +60,7 @@ void rdwr_gridatb(void)
 		cell[j] = idx;
 	    }
 	}
-	Rast_put_f_raster_row(fd, cell);
+	Rast_put_f_row(fd, cell);
     }
     G_percent(i, cellhd.rows, 2);
     fclose(fp);

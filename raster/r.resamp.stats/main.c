@@ -149,7 +149,7 @@ static void resamp_unweighted(void)
 	}
 
 	Rast_set_window(&dst_w);
-	Rast_put_d_raster_row(outfile, outbuf);
+	Rast_put_d_row(outfile, outbuf);
     }
 }
 
@@ -235,7 +235,7 @@ static void resamp_weighted(void)
 	}
 
 	Rast_set_window(&dst_w);
-	Rast_put_d_raster_row(outfile, outbuf);
+	Rast_put_d_row(outfile, outbuf);
     }
 }
 

@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
 		(presult, patch, &statf[i], ncols, out_type, ZEROFLAG))
 		break;
 	}
-	Rast_put_raster_row(outfd, presult, out_type);
+	Rast_put_row(outfd, presult, out_type);
     }
     G_percent(row, nrows, 2);
 

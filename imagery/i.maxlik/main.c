@@ -114,9 +114,9 @@ int main(int argc, char *argv[])
 			      row);
 	
 	classify(class_cell, reject_cell, ncols);
-	Rast_put_raster_row(class_fd, class_cell, CELL_TYPE);
+	Rast_put_row(class_fd, class_cell, CELL_TYPE);
 	if (reject_fd > 0)
-	    Rast_put_raster_row(reject_fd, reject_cell, CELL_TYPE);
+	    Rast_put_row(reject_fd, reject_cell, CELL_TYPE);
     }
     G_percent(nrows, nrows, 2);
 

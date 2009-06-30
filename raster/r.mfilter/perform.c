@@ -87,7 +87,7 @@ int perform_filter(const char *in_name, const char *out_name,
     G_message(_("Writing raster map <%s>"), out_name);
     for (row = 0; row < nrows; row++) {
 	getrow(in, cell, row, buflen);
-	Rast_put_d_raster_row(out, cell);
+	Rast_put_d_row(out, cell);
     }
 
     /* remove the temporary files before closing so that the Rast_close()

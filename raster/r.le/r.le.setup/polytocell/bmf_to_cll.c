@@ -91,7 +91,7 @@ int main(argc, argv)
 
 	if (cur_row > num_rows) {
 	    while (atrow < num_rows) {
-		Rast_put_map_row(newmap, record);
+		Rast_put_c_row(newmap, record);
 		atrow++;
 	    }
 	    Rast_close(newmap);
@@ -101,7 +101,7 @@ int main(argc, argv)
 	/* write out enough rows to get to current row */
 
 	while (atrow < cur_row + ROW_SHIFT) {
-	    Rast_put_map_row(newmap, record);
+	    Rast_put_c_row(newmap, record);
 	    atrow++;
 	}
 
@@ -114,7 +114,7 @@ int main(argc, argv)
 	}
 	while (cur_row == (atrow - ROW_SHIFT));
 
-	Rast_put_map_row(newmap, record);
+	Rast_put_c_row(newmap, record);
     }
     fprintf(stderr, "Close: %d\n", Rast_close(newmap));
 

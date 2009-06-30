@@ -1500,7 +1500,7 @@ int main(int argc, char *argv[])
 		    *(p + col) = (int)(min_cost + .5);
 		}
 	    }
-	    Rast_put_raster_row(cum_fd, cum_cell, cum_data_type);
+	    Rast_put_row(cum_fd, cum_cell, cum_data_type);
 	}
     }
     else if (cum_data_type == FCELL_TYPE) {
@@ -1535,7 +1535,7 @@ int main(int argc, char *argv[])
 		    *(p + col) = (float)(min_cost);
 		}
 	    }
-	    Rast_put_raster_row(cum_fd, cum_cell, cum_data_type);
+	    Rast_put_row(cum_fd, cum_cell, cum_data_type);
 	}
     }
     else if (cum_data_type == DCELL_TYPE) {
@@ -1570,7 +1570,7 @@ int main(int argc, char *argv[])
 		    *(p + col) = min_cost;
 		}
 	    }
-	    Rast_put_raster_row(cum_fd, cum_cell, cum_data_type);
+	    Rast_put_row(cum_fd, cum_cell, cum_data_type);
 	}
     }
 
@@ -1584,7 +1584,7 @@ int main(int argc, char *argv[])
 		segment_get(&out_seg2, &cur_dir, row, col);
 		*(p + col) = cur_dir;
 	    }
-	    Rast_put_raster_row(dir_fd, dir_cell, dir_data_type);
+	    Rast_put_row(dir_fd, dir_cell, dir_data_type);
 	}
 	G_percent(row, nrows, 2);
     }

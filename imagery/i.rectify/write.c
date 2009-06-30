@@ -29,7 +29,7 @@ int write_matrix(int row, int col)
 	    unlink(temp_name);
 	    G_fatal_error(_("Error while writing to temp file"));
 	}
-	/*Rast_put_map_row_random (outfd, cell_buf[n], row++, col, matrix_cols); */
+	/*Rast_put_c_row_random (outfd, cell_buf[n], row++, col, matrix_cols); */
     }
     select_current_env();
 
@@ -55,7 +55,7 @@ int write_map(char *name)
 	if (read(temp_fd, rast, target_window.cols * Rast_cell_size(map_type))
 	    != target_window.cols * Rast_cell_size(map_type))
 	    G_fatal_error(_("Error writing row %d"), row);
-	if (Rast_put_raster_row(fd, rast, map_type) < 0) {
+	if (Rast_put_row(fd, rast, map_type) < 0) {
 	    G_fatal_error(_("Failed writing raster map <%s> row %d"),
 			  name, row);
 	    unlink(temp_name);

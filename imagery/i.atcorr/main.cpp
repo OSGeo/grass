@@ -124,7 +124,7 @@ static void write_fp_to_cell (int ofd, FCELL* buf)
     cbuf = (CELL*)Rast_allocate_buf(CELL_TYPE);
 
     for(col = 0; col < G_window_cols(); col++) cbuf[col] = round_c(buf[col]);
-    Rast_put_raster_row(ofd, cbuf, CELL_TYPE);
+    Rast_put_row(ofd, cbuf, CELL_TYPE);
 }
 
 
@@ -405,7 +405,7 @@ static void process_raster (int ifd, InputMask imask, ScaleRange iscale,
 	}
 
         /* write output */
-	if(oflt) Rast_put_raster_row(ofd, buf, FCELL_TYPE);
+	if(oflt) Rast_put_row(ofd, buf, FCELL_TYPE);
 	else write_fp_to_cell(ofd, buf);
     }
 

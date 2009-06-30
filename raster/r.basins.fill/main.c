@@ -153,7 +153,7 @@ int main(int argc, char *argv[])
 
     /* write out partitioned watershed map */
     for (row = 0; row < nrows; row++)
-	Rast_put_raster_row(partfd, drain + (row * ncols), CELL_TYPE);
+	Rast_put_row(partfd, drain + (row * ncols), CELL_TYPE);
 
     G_message(_("Creating support files for <%s>..."), part_name);
     Rast_close(partfd);

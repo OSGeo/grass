@@ -225,14 +225,14 @@ void rast3d_cross_section(void *map, G3D_Region region, int elevfd, int outfd)
 
 	/*Write the data to the output map */
 	if (typeIntern == FCELL_TYPE) {
-	    check = Rast_put_f_raster_row(outfd, fcell);
+	    check = Rast_put_f_row(outfd, fcell);
 	    if (check != 1)
 		fatal_error(map, elevfd, outfd,
 			    _("Could not write raster row"));
 	}
 
 	if (typeIntern == DCELL_TYPE) {
-	    check = Rast_put_d_raster_row(outfd, dcell);
+	    check = Rast_put_d_row(outfd, dcell);
 	    if (check != 1)
 		fatal_error(map, elevfd, outfd,
 			    _("Could not write raster row"));

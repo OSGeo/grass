@@ -1014,20 +1014,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(a1, tmp_buf);
+		    Rast_put_d_row(a1, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 0) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 0);
 		}
-		Rast_put_d_raster_row(a1, tmp_buf);
+		Rast_put_d_row(a1, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(a1, tmp_buf2);
+		    Rast_put_d_row(a1, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1037,20 +1037,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(a2, tmp_buf);
+		    Rast_put_d_row(a2, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 1) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 1);
 		}
-		Rast_put_d_raster_row(a2, tmp_buf);
+		Rast_put_d_row(a2, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(a2, tmp_buf2);
+		    Rast_put_d_row(a2, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1059,20 +1059,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(a3, tmp_buf);
+		    Rast_put_d_row(a3, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 2) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 2);
 		}
-		Rast_put_d_raster_row(a3, tmp_buf);
+		Rast_put_d_row(a3, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(a3, tmp_buf2);
+		    Rast_put_d_row(a3, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1081,20 +1081,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(a4, tmp_buf);
+		    Rast_put_d_row(a4, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 3) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 3);
 		}
-		Rast_put_d_raster_row(a4, tmp_buf);
+		Rast_put_d_row(a4, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(a4, tmp_buf2);
+		    Rast_put_d_row(a4, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1103,20 +1103,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(a5, tmp_buf);
+		    Rast_put_d_row(a5, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 4) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 4);
 		}
-		Rast_put_d_raster_row(a5, tmp_buf);
+		Rast_put_d_row(a5, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(a5, tmp_buf2);
+		    Rast_put_d_row(a5, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1125,20 +1125,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(a6, tmp_buf);
+		    Rast_put_d_row(a6, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 5) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 5);
 		}
-		Rast_put_d_raster_row(a6, tmp_buf);
+		Rast_put_d_row(a6, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(a6, tmp_buf2);
+		    Rast_put_d_row(a6, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1147,20 +1147,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(a7, tmp_buf);
+		    Rast_put_d_row(a7, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 6) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 6);
 		}
-		Rast_put_d_raster_row(a7, tmp_buf);
+		Rast_put_d_row(a7, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(a7, tmp_buf2);
+		    Rast_put_d_row(a7, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1169,20 +1169,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(s1, tmp_buf);
+		    Rast_put_d_row(s1, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 7) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 7);
 		}
-		Rast_put_d_raster_row(s1, tmp_buf);
+		Rast_put_d_row(s1, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(s1, tmp_buf2);
+		    Rast_put_d_row(s1, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1191,20 +1191,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(s2, tmp_buf);
+		    Rast_put_d_row(s2, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 8) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 8);
 		}
-		Rast_put_d_raster_row(s2, tmp_buf);
+		Rast_put_d_row(s2, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(s2, tmp_buf2);
+		    Rast_put_d_row(s2, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1213,20 +1213,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(s3, tmp_buf);
+		    Rast_put_d_row(s3, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 9) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 9);
 		}
-		Rast_put_d_raster_row(s3, tmp_buf);
+		Rast_put_d_row(s3, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(s3, tmp_buf2);
+		    Rast_put_d_row(s3, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1235,20 +1235,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(s4, tmp_buf);
+		    Rast_put_d_row(s4, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 10) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 10);
 		}
-		Rast_put_d_raster_row(s4, tmp_buf);
+		Rast_put_d_row(s4, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(s4, tmp_buf2);
+		    Rast_put_d_row(s4, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1257,20 +1257,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(s5, tmp_buf);
+		    Rast_put_d_row(s5, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 11) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 11);
 		}
-		Rast_put_d_raster_row(s5, tmp_buf);
+		Rast_put_d_row(s5, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(s5, tmp_buf2);
+		    Rast_put_d_row(s5, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1279,20 +1279,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(s6, tmp_buf);
+		    Rast_put_d_row(s6, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 12) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 12);
 		}
-		Rast_put_d_raster_row(s6, tmp_buf);
+		Rast_put_d_row(s6, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(s6, tmp_buf2);
+		    Rast_put_d_row(s6, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1301,20 +1301,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(c1, tmp_buf);
+		    Rast_put_d_row(c1, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 13) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 13);
 		}
-		Rast_put_d_raster_row(c1, tmp_buf);
+		Rast_put_d_row(c1, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(c1, tmp_buf2);
+		    Rast_put_d_row(c1, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1323,20 +1323,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(c2, tmp_buf);
+		    Rast_put_d_row(c2, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 14) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 14);
 		}
-		Rast_put_d_raster_row(c2, tmp_buf);
+		Rast_put_d_row(c2, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(c2, tmp_buf2);
+		    Rast_put_d_row(c2, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1345,20 +1345,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(c3, tmp_buf);
+		    Rast_put_d_row(c3, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 15) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 15);
 		}
-		Rast_put_d_raster_row(c3, tmp_buf);
+		Rast_put_d_row(c3, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(c3, tmp_buf2);
+		    Rast_put_d_row(c3, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1367,20 +1367,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(c4, tmp_buf);
+		    Rast_put_d_row(c4, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 16) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 16);
 		}
-		Rast_put_d_raster_row(c4, tmp_buf);
+		Rast_put_d_row(c4, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(c4, tmp_buf2);
+		    Rast_put_d_row(c4, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1389,20 +1389,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(c5, tmp_buf);
+		    Rast_put_d_row(c5, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 17) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 17);
 		}
-		Rast_put_d_raster_row(c5, tmp_buf);
+		Rast_put_d_row(c5, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(c5, tmp_buf2);
+		    Rast_put_d_row(c5, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1411,20 +1411,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(c6, tmp_buf);
+		    Rast_put_d_row(c6, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 18) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 18);
 		}
-		Rast_put_d_raster_row(c6, tmp_buf);
+		Rast_put_d_row(c6, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(c6, tmp_buf2);
+		    Rast_put_d_row(c6, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1433,20 +1433,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(c7, tmp_buf);
+		    Rast_put_d_row(c7, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 19) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 19);
 		}
-		Rast_put_d_raster_row(c7, tmp_buf);
+		Rast_put_d_row(c7, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(c7, tmp_buf2);
+		    Rast_put_d_row(c7, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1455,20 +1455,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(c8, tmp_buf);
+		    Rast_put_d_row(c8, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 20) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 20);
 		}
-		Rast_put_d_raster_row(c8, tmp_buf);
+		Rast_put_d_row(c8, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(c8, tmp_buf2);
+		    Rast_put_d_row(c8, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1477,20 +1477,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(c9, tmp_buf);
+		    Rast_put_d_row(c9, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 21) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 21);
 		}
-		Rast_put_d_raster_row(c9, tmp_buf);
+		Rast_put_d_row(c9, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(c9, tmp_buf2);
+		    Rast_put_d_row(c9, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1499,20 +1499,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(c10, tmp_buf);
+		    Rast_put_d_row(c10, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 22) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 22);
 		}
-		Rast_put_d_raster_row(c10, tmp_buf);
+		Rast_put_d_row(c10, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(c10, tmp_buf2);
+		    Rast_put_d_row(c10, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1521,20 +1521,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(h1, tmp_buf);
+		    Rast_put_d_row(h1, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 23) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 23);
 		}
-		Rast_put_d_raster_row(h1, tmp_buf);
+		Rast_put_d_row(h1, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(h1, tmp_buf2);
+		    Rast_put_d_row(h1, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1543,20 +1543,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(h2, tmp_buf);
+		    Rast_put_d_row(h2, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 24) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 24);
 		}
-		Rast_put_d_raster_row(h2, tmp_buf);
+		Rast_put_d_row(h2, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(h2, tmp_buf2);
+		    Rast_put_d_row(h2, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1565,20 +1565,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(h3, tmp_buf);
+		    Rast_put_d_row(h3, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 25) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 25);
 		}
-		Rast_put_d_raster_row(h3, tmp_buf);
+		Rast_put_d_row(h3, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(h3, tmp_buf2);
+		    Rast_put_d_row(h3, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1587,20 +1587,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(h4, tmp_buf);
+		    Rast_put_d_row(h4, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 26) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 26);
 		}
-		Rast_put_d_raster_row(h4, tmp_buf);
+		Rast_put_d_row(h4, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(h4, tmp_buf2);
+		    Rast_put_d_row(h4, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1609,20 +1609,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(h5, tmp_buf);
+		    Rast_put_d_row(h5, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 27) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 27);
 		}
-		Rast_put_d_raster_row(h5, tmp_buf);
+		Rast_put_d_row(h5, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(h5, tmp_buf2);
+		    Rast_put_d_row(h5, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1631,20 +1631,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(h6, tmp_buf);
+		    Rast_put_d_row(h6, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 28) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 28);
 		}
-		Rast_put_d_raster_row(h6, tmp_buf);
+		Rast_put_d_row(h6, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(h6, tmp_buf2);
+		    Rast_put_d_row(h6, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1653,20 +1653,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(n1, tmp_buf);
+		    Rast_put_d_row(n1, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 29) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 29);
 		}
-		Rast_put_d_raster_row(n1, tmp_buf);
+		Rast_put_d_row(n1, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(n1, tmp_buf2);
+		    Rast_put_d_row(n1, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1675,20 +1675,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(p1, tmp_buf);
+		    Rast_put_d_row(p1, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 30) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 30);
 		}
-		Rast_put_d_raster_row(p1, tmp_buf);
+		Rast_put_d_row(p1, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(p1, tmp_buf2);
+		    Rast_put_d_row(p1, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1697,20 +1697,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(p2, tmp_buf);
+		    Rast_put_d_row(p2, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 31) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 31);
 		}
-		Rast_put_d_raster_row(p2, tmp_buf);
+		Rast_put_d_row(p2, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(p2, tmp_buf2);
+		    Rast_put_d_row(p2, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1719,20 +1719,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(p3, tmp_buf);
+		    Rast_put_d_row(p3, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 32) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 32);
 		}
-		Rast_put_d_raster_row(p3, tmp_buf);
+		Rast_put_d_row(p3, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(p3, tmp_buf2);
+		    Rast_put_d_row(p3, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1741,20 +1741,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(p4, tmp_buf);
+		    Rast_put_d_row(p4, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 33) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 33);
 		}
-		Rast_put_d_raster_row(p4, tmp_buf);
+		Rast_put_d_row(p4, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(p4, tmp_buf2);
+		    Rast_put_d_row(p4, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1763,20 +1763,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(p5, tmp_buf);
+		    Rast_put_d_row(p5, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 34) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 34);
 		}
-		Rast_put_d_raster_row(p5, tmp_buf);
+		Rast_put_d_row(p5, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(p5, tmp_buf2);
+		    Rast_put_d_row(p5, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1785,20 +1785,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(p6, tmp_buf);
+		    Rast_put_d_row(p6, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 35) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 35);
 		}
-		Rast_put_d_raster_row(p6, tmp_buf);
+		Rast_put_d_row(p6, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(p6, tmp_buf2);
+		    Rast_put_d_row(p6, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1808,20 +1808,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(a8, tmp_buf);
+		    Rast_put_d_row(a8, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 36) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 36);
 		}
-		Rast_put_d_raster_row(a8, tmp_buf);
+		Rast_put_d_row(a8, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(a8, tmp_buf2);
+		    Rast_put_d_row(a8, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1831,20 +1831,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(s7, tmp_buf);
+		    Rast_put_d_row(s7, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 37) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 37);
 		}
-		Rast_put_d_raster_row(s7, tmp_buf);
+		Rast_put_d_row(s7, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(s7, tmp_buf2);
+		    Rast_put_d_row(s7, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1854,20 +1854,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(s8, tmp_buf);
+		    Rast_put_d_row(s8, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 38) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 38);
 		}
-		Rast_put_d_raster_row(s8, tmp_buf);
+		Rast_put_d_row(s8, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(s8, tmp_buf2);
+		    Rast_put_d_row(s8, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1877,20 +1877,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(n2, tmp_buf);
+		    Rast_put_d_row(n2, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 39) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 39);
 		}
-		Rast_put_d_raster_row(n2, tmp_buf);
+		Rast_put_d_row(n2, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(n2, tmp_buf2);
+		    Rast_put_d_row(n2, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1900,20 +1900,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(n3, tmp_buf);
+		    Rast_put_d_row(n3, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 40) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 40);
 		}
-		Rast_put_d_raster_row(n3, tmp_buf);
+		Rast_put_d_row(n3, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(n3, tmp_buf2);
+		    Rast_put_d_row(n3, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -1923,20 +1923,20 @@ void mv_driver()
 	    Rast_set_null_value(tmp_buf, x0 + nc + u_w, DCELL_TYPE);
 	    if (i == 0) {
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(n4, tmp_buf);
+		    Rast_put_d_row(n4, tmp_buf);
 	    }
 	    if (i < nr) {
 		for (m = 0; m < nc; m++) {
 		    if (*(*(buff + m) + 41) > -BIG)
 			*(tmp_buf + (x0 + m + u_w / 2)) = *(*(buff + m) + 41);
 		}
-		Rast_put_d_raster_row(n4, tmp_buf);
+		Rast_put_d_row(n4, tmp_buf);
 	    }
 	    if (i == nr - 1) {
 		tmp_buf2 = Rast_allocate_buf(DCELL_TYPE);
 		Rast_set_null_value(tmp_buf2, x0 + nc + u_w, DCELL_TYPE);
 		for (b = 0; b < u_l / 2; b++)
-		    Rast_put_d_raster_row(n4, tmp_buf2);
+		    Rast_put_d_row(n4, tmp_buf2);
 		G_free(tmp_buf2);
 	    }
 	}
@@ -2711,7 +2711,7 @@ void unit_driver()
 		    if (*(*(units + k) + m))
 			*(unit_buf + m - 1) = *(*(units + k) + m);
 		}
-		Rast_put_raster_row(fd, unit_buf, CELL_TYPE);
+		Rast_put_row(fd, unit_buf, CELL_TYPE);
 	    }
 	    Rast_close(fd);
 	    G_free(unit_buf);

@@ -642,7 +642,7 @@ int OUTGR(int numrows, int numcols)
 		else
 		    cell1[j] = (FCELL) horizon_raster[i][j];
 	    }
-	    Rast_put_f_raster_row(fd1, cell1);
+	    Rast_put_f_row(fd1, cell1);
 	}
 
     }				/* End loop over rows. */

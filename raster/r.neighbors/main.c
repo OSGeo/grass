@@ -326,7 +326,7 @@ int main(int argc, char *argv[])
 		    *rp += 0.5;
 	    }
 	}
-	Rast_put_d_raster_row(out_fd, result);
+	Rast_put_d_row(out_fd, result);
     }
     G_percent(row, nrows, 2);
 

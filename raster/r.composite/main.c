@@ -247,7 +247,7 @@ int main(int argc, char **argv)
 		(val[2] * B[1].levels + val[1]) * B[0].levels + val[0];
 	}
 
-	if (Rast_put_raster_row(out_file, out_array, CELL_TYPE) < 0)
+	if (Rast_put_row(out_file, out_array, CELL_TYPE) < 0)
 	    G_fatal_error(_("Failed writing raster map <%s>"), out_name);
     }
     G_percent(window.rows, window.rows, 1);

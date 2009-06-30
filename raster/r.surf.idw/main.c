@@ -302,7 +302,7 @@ interpolate(MELEMENT rowlist[], SHORT nrows, SHORT ncols, SHORT datarows,
 	    }
 	}			/* end of loop over columns */
 
-	Rast_put_raster_row(out_fd, cell, CELL_TYPE);
+	Rast_put_row(out_fd, cell, CELL_TYPE);
 
 	/* advance current row pointer if necessary */
 	if (current_row->start->y == row && current_row != lastrow)

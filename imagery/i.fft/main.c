@@ -184,8 +184,8 @@ int main(int argc, char *argv[])
 	    cell_real[j] = data[C(i, j)][0];
 	    cell_imag[j] = data[C(i, j)][1];
 	}
-	Rast_put_d_raster_row(realfd, cell_real);
-	Rast_put_d_raster_row(imagfd, cell_imag);
+	Rast_put_d_row(realfd, cell_real);
+	Rast_put_d_row(imagfd, cell_imag);
 
 	G_percent(i+1, rows, 2);
     }

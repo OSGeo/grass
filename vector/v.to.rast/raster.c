@@ -145,7 +145,7 @@ int output_raster(int fd)
 
 	    /* insert the NULL values */
 	    Rast_insert_c_null_values(cell, null_flags[i], page.cols);
-	    if (Rast_put_c_raster_row(fd, cell) < 0)
+	    if (Rast_put_c_row(fd, cell) < 0)
 		return -1;
 	    break;
 	case USE_DCELL:
@@ -153,7 +153,7 @@ int output_raster(int fd)
 
 	    /* insert the NULL values */
 	    Rast_insert_d_null_values(dcell, null_flags[i], page.cols);
-	    if (Rast_put_d_raster_row(fd, dcell) < 0)
+	    if (Rast_put_d_row(fd, dcell) < 0)
 		return -1;
 	    break;
 	}

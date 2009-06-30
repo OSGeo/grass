@@ -408,7 +408,7 @@ int OUTGR()
 		 0) == -1)
 		G_fatal_error("cannot fseek to the right spot");
 	    fread(cell, sizeof(FCELL), nsizc, Tmp_fd_cell);
-	    Rast_put_f_raster_row(fdcout, cell);
+	    Rast_put_f_row(fdcout, cell);
 	}
     }
 

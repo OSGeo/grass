@@ -170,7 +170,7 @@ void SaveMap(int NumMap, int MapSeed)
 	for (Col = 0; Col < Cs; Col++) {
 	    CellBuffer[Col] = (CELL) Surface[Row][Col];
 	}
-	Rast_put_raster_row(OutFD, CellBuffer, CELL_TYPE);
+	Rast_put_row(OutFD, CellBuffer, CELL_TYPE);
     }
     G_percent(1, 1, 1);
 

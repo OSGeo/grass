@@ -246,7 +246,7 @@ int main(int argc, char *argv[])
 
     for (row = 0; row < nrows; row += 1) {
 	fread(rast, Rast_cell_size(data_type), ncols, ft);
-	Rast_put_raster_row(cf, rast, data_type);
+	Rast_put_row(cf, rast, data_type);
 	fseek(ft, sz, SEEK_CUR);
     }
     fclose(ft);

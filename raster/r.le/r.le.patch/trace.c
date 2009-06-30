@@ -216,7 +216,7 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
 		for (j = 1; j < ncols + 1; j++)
 		    *(cor_cell_buf + j - 1) = (int)(*(*(cor + i) + j));
 
-		if (Rast_put_raster_row(fe, cor_cell_buf, CELL_TYPE) < 0)
+		if (Rast_put_row(fe, cor_cell_buf, CELL_TYPE) < 0)
 		    exit(EXIT_FAILURE);
 
 		Rast_update_cell_stats(cor_cell_buf, ncols + 1, &stats);
@@ -231,7 +231,7 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
 		    *(cor_fcell_buf + j - 1) = (float)(*(*(cor + i) + j));
 		}
 
-		if (Rast_put_raster_row(fe, cor_fcell_buf, FCELL_TYPE) < 0)
+		if (Rast_put_row(fe, cor_fcell_buf, FCELL_TYPE) < 0)
 		    exit(EXIT_FAILURE);
 	    }
 	    break;
@@ -243,7 +243,7 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
 		for (j = 1; j < ncols + 1; j++)
 		    *(cor_dcell_buf + j - 1) = (double)(*(*(cor + i) + j));
 
-		if (Rast_put_raster_row(fe, cor_dcell_buf, DCELL_TYPE) < 0)
+		if (Rast_put_row(fe, cor_dcell_buf, DCELL_TYPE) < 0)
 		    exit(EXIT_FAILURE);
 	    }
 	    break;
@@ -262,7 +262,7 @@ void cell_clip_drv(int col0, int row0, int ncols, int nrows, double **value,
 	    for (j = 1; j < ncols + 1; j++)
 		*(pat_buf + j - 1) = *(*(pat + i) + j);
 
-	    if (Rast_put_raster_row(fd, pat_buf, CELL_TYPE) < 0)
+	    if (Rast_put_row(fd, pat_buf, CELL_TYPE) < 0)
 		exit(EXIT_FAILURE);
 	}
     }

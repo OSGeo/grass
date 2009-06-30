@@ -512,7 +512,7 @@ int main(int argc, char **argv)
 		else
 		    out_buf[col] = result[base_buf[col] - mincat];
 
-	    Rast_put_d_raster_row(out_fd, out_buf);
+	    Rast_put_d_row(out_fd, out_buf);
 
 	    G_percent(row, rows, 2);
 	}

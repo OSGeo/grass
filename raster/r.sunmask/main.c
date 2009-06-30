@@ -531,7 +531,7 @@ int main(int argc, char *argv[])
 	    col1 += 1;
 	}
 	G_debug(3, "Writing result row %i of %i", row1, window.rows);
-	Rast_put_raster_row(output_fd, outbuf.c, CELL_TYPE);
+	Rast_put_row(output_fd, outbuf.c, CELL_TYPE);
 	row1 += 1;
     }
 

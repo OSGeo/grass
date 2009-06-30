@@ -161,7 +161,7 @@ int main(int argc, char *argv[])
 	for (col = 0; col < ncols; col++) {
 	    cell_buf[col] = bas[SEG_INDEX(ba_seg, row, col)];
 	}
-	Rast_put_raster_row(basin_fd, cell_buf, CELL_TYPE);
+	Rast_put_row(basin_fd, cell_buf, CELL_TYPE);
     }
     G_free(bas);
     G_free(cell_buf);

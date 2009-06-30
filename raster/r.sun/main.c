@@ -750,7 +750,7 @@ int OUTGR(void)
 		else
 		    cell7[j] = (FCELL) lumcl[i][j];
 	    }
-	    Rast_put_f_raster_row(fd7, cell7);
+	    Rast_put_f_row(fd7, cell7);
 	}
 
 	if (beam_rad != NULL) {
@@ -761,7 +761,7 @@ int OUTGR(void)
 		    cell8[j] = (FCELL) beam[i][j];
 
 	    }
-	    Rast_put_f_raster_row(fd8, cell8);
+	    Rast_put_f_row(fd8, cell8);
 	}
 
 	if (insol_time != NULL) {
@@ -771,7 +771,7 @@ int OUTGR(void)
 		else
 		    cell11[j] = (FCELL) insol[i][j];
 	    }
-	    Rast_put_f_raster_row(fd11, cell11);
+	    Rast_put_f_row(fd11, cell11);
 	}
 
 
@@ -782,7 +782,7 @@ int OUTGR(void)
 		else
 		    cell9[j] = (FCELL) diff[i][j];
 	    }
-	    Rast_put_f_raster_row(fd9, cell9);
+	    Rast_put_f_row(fd9, cell9);
 	}
 
 	if (refl_rad != NULL) {
@@ -792,7 +792,7 @@ int OUTGR(void)
 		else
 		    cell10[j] = (FCELL) refl[i][j];
 	    }
-	    Rast_put_f_raster_row(fd10, cell10);
+	    Rast_put_f_row(fd10, cell10);
 	}
 
     }

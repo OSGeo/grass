@@ -147,10 +147,10 @@ void process(void)
 
     if (mparam != FEATURE)
 	for (wind_row = 0; wind_row < EDGE; wind_row++)
-	    Rast_put_raster_row(fd_out, row_out, DCELL_TYPE);	/* Write out the edge cells as NULL.    */
+	    Rast_put_row(fd_out, row_out, DCELL_TYPE);	/* Write out the edge cells as NULL.    */
     else
 	for (wind_row = 0; wind_row < EDGE; wind_row++)
-	    Rast_put_raster_row(fd_out, featrow_out, CELL_TYPE);	/* Write out the edge cells as NULL.    */
+	    Rast_put_row(fd_out, featrow_out, CELL_TYPE);	/* Write out the edge cells as NULL.    */
 
     for (wind_row = 0; wind_row < wsize - 1; wind_row++)
 	Rast_get_row(fd_in, row_in + (wind_row * ncols), wind_row,
@@ -211,10 +211,10 @@ void process(void)
 	}
 
 	if (mparam != FEATURE)
-	    Rast_put_raster_row(fd_out, row_out, DCELL_TYPE);	/* Write the row buffer to the output   */
+	    Rast_put_row(fd_out, row_out, DCELL_TYPE);	/* Write the row buffer to the output   */
 	/* raster.                              */
 	else			/* write FEATURE to CELL */
-	    Rast_put_raster_row(fd_out, featrow_out, CELL_TYPE);	/* Write the row buffer to the output       */
+	    Rast_put_row(fd_out, featrow_out, CELL_TYPE);	/* Write the row buffer to the output       */
 	/* raster.                              */
 
 	/* 'Shuffle' rows down one, and read in */
@@ -227,9 +227,9 @@ void process(void)
 
     for (wind_row = 0; wind_row < EDGE; wind_row++) {
 	if (mparam != FEATURE)
-	    Rast_put_raster_row(fd_out, row_out, DCELL_TYPE);	/* Write out the edge cells as NULL. */
+	    Rast_put_row(fd_out, row_out, DCELL_TYPE);	/* Write out the edge cells as NULL. */
 	else
-	    Rast_put_raster_row(fd_out, featrow_out, CELL_TYPE);	/* Write out the edge cells as NULL. */
+	    Rast_put_row(fd_out, featrow_out, CELL_TYPE);	/* Write out the edge cells as NULL. */
     }
 
     /*--------------------------------------------------------------------------*/

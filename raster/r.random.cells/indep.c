@@ -141,7 +141,7 @@ void Indep(void)
 	for (C = 0; C < Cs; C++) {
 	    CellBuffer[C] = Out[R][C];
 	}
-	Rast_put_raster_row(OutFD, CellBuffer, CELL_TYPE);
+	Rast_put_row(OutFD, CellBuffer, CELL_TYPE);
     }
     G_percent(1, 1, 1);
     

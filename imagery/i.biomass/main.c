@@ -179,7 +179,7 @@ int main(int argc, char *argv[])
 		outrast1[col] = d;
 	    }
         }
-	if (Rast_put_d_raster_row(outfd1, outrast1) < 0)
+	if (Rast_put_d_row(outfd1, outrast1) < 0)
 	    G_fatal_error(_("Failed writing raster map <%s>"), result1);
     }
     

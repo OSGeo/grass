@@ -395,7 +395,7 @@ int main(int argc, char *argv[])
 	    }
 	    dcell[col] = (DCELL) interp_value;
 	}
-	Rast_put_d_raster_row(fd, dcell);
+	Rast_put_d_row(fd, dcell);
     }
     Rast_close(fd);
     /* writing history file */
