@@ -588,7 +588,7 @@ static int get_map_row_nomask(int fd, void *rast, int row,
 
     if (rowStatus <= 0) {
 	fcb->cur_row = -1;
-	Rast_zero_raster_buf(rast, data_type);
+	Rast_zero_buf(rast, data_type);
 	return rowStatus;
     }
 
@@ -597,7 +597,7 @@ static int get_map_row_nomask(int fd, void *rast, int row,
 	fcb->cur_row = r;
 
 	if (read_data(fd, fcb->cur_row, fcb->data, &fcb->cur_nbytes) < 0) {
-	    Rast_zero_raster_buf(rast, data_type);
+	    Rast_zero_buf(rast, data_type);
 
 	    if (!fcb->io_error) {
 		if (fcb->cellhd.compressed)

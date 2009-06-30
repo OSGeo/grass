@@ -355,7 +355,7 @@ static void man_unit(int t, int b, int l, int r, char *n1, char *n2, char *n3,
 		    row_buf = Rast_allocate_buf(CELL_TYPE);
 		    fr = Rast_open_old(n1, G_mapset());
 		    for (j = t; j < b; j++) {
-			Rast_zero_raster_buf(row_buf, CELL_TYPE);
+			Rast_zero_buf(row_buf, CELL_TYPE);
 			Rast_get_row(fr, row_buf, j, CELL_TYPE);
 			for (k = l; k < r; k++) {
 			    if (*(row_buf + k))
@@ -412,7 +412,7 @@ static void man_unit(int t, int b, int l, int r, char *n1, char *n2, char *n3,
 			row_buf = Rast_allocate_buf(CELL_TYPE);
 			fr = Rast_open_old(n1, G_mapset());
 			for (j = t; j < b; j++) {
-			    Rast_zero_raster_buf(row_buf, CELL_TYPE);
+			    Rast_zero_buf(row_buf, CELL_TYPE);
 			    Rast_get_row(fr, row_buf, j, CELL_TYPE);
 			    for (k = l; k < r; k++) {
 				if (*(row_buf + k))
@@ -961,7 +961,7 @@ static int calc_unit_loc(double radius, int top, int bot, int left, int right,
 			(*(row_buf + l + left1) &&
 			 *(row_buf + l + left1 + u_w - 1)))
 			goto back;
-		    Rast_zero_cell_buf(row_buf);
+		    Rast_zero_c_buf(row_buf);
 		    Rast_get_c_row_nomask(fmask, row_buf, t + top1 + u_l - 1);
 		    if (!
 			(*(row_buf + l + left1) &&
@@ -1416,7 +1416,7 @@ static void graph_unit(int t, int b, int l, int r, char *n1, char *n2,
 			G_free(row_buf);
 			goto back1;
 		    }
-		    Rast_zero_cell_buf(row_buf);
+		    Rast_zero_c_buf(row_buf);
 		    Rast_get_c_row_nomask(fmask, row_buf, ab - 1);
 		    if (!(*(row_buf + al) && *(row_buf + ar - 1))) {
 			fprintf(stderr,
@@ -1538,7 +1538,7 @@ static void graph_unit(int t, int b, int l, int r, char *n1, char *n2,
 			G_free(row_buf);
 			goto back2;
 		    }
-		    Rast_zero_cell_buf(row_buf);
+		    Rast_zero_c_buf(row_buf);
 		    Rast_get_c_row_nomask(fmask, row_buf, ab - 1);
 		    if (!(*(row_buf + al) && *(row_buf + ar - 1))) {
 			fprintf(stderr,

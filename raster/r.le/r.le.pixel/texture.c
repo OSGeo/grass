@@ -469,7 +469,7 @@ void df_texture(int nrows, int ncols, double **buf, double **null_buf,
 	case (CELL_TYPE):
 	    edge_buf_c = Rast_allocate_buf(CELL_TYPE);
 	    for (i = 1; i < nrows + 1; i++) {
-		Rast_zero_raster_buf(edge_buf_c, CELL_TYPE);
+		Rast_zero_buf(edge_buf_c, CELL_TYPE);
 		Rast_set_null_value(edge_buf_c, ncols + 1, CELL_TYPE);
 		for (j = 1; j < ncols + 1; j++) {
 		    if (*(*(edgenull + i) + j) == 0)
@@ -481,7 +481,7 @@ void df_texture(int nrows, int ncols, double **buf, double **null_buf,
 	case (FCELL_TYPE):
 	    edge_buf_f = Rast_allocate_buf(FCELL_TYPE);
 	    for (i = 1; i < nrows + 1; i++) {
-		Rast_zero_raster_buf(edge_buf_f, FCELL_TYPE);
+		Rast_zero_buf(edge_buf_f, FCELL_TYPE);
 		Rast_set_null_value(edge_buf_f, ncols + 1, FCELL_TYPE);
 		for (j = 1; j < ncols + 1; j++) {
 		    if (*(*(edgenull + i) + j) == 0)
@@ -493,7 +493,7 @@ void df_texture(int nrows, int ncols, double **buf, double **null_buf,
 	case (DCELL_TYPE):
 	    edge_buf_d = Rast_allocate_buf(DCELL_TYPE);
 	    for (i = 1; i < nrows + 1; i++) {
-		Rast_zero_raster_buf(edge_buf_d, DCELL_TYPE);
+		Rast_zero_buf(edge_buf_d, DCELL_TYPE);
 		Rast_set_null_value(edge_buf_d, ncols + 1, DCELL_TYPE);
 		for (j = 1; j < ncols + 1; j++) {
 		    if (*(*(edgenull + i) + j) == 0)
@@ -535,7 +535,7 @@ void df_texture(int nrows, int ncols, double **buf, double **null_buf,
 	fd = Rast_open_new("zscores", DCELL_TYPE);
 	zscor_buf = Rast_allocate_buf(DCELL_TYPE);
 	for (i = 1; i < nrows + 1; i++) {
-	    Rast_zero_raster_buf(zscor_buf, DCELL_TYPE);
+	    Rast_zero_buf(zscor_buf, DCELL_TYPE);
 	    Rast_set_null_value(zscor_buf, ncols + 1, DCELL_TYPE);
 	    for (j = 1; j < ncols + 1; j++) {
 		if (attr[1] > 0.0)
