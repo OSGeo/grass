@@ -468,6 +468,12 @@ void print_window(struct Cell_head *window, int print_flag)
 	}
     }
 
+
+    /* flag.gmt_style */
+    if (print_flag & PRINT_GMT)
+	fprintf(stdout, "%s/%s/%s/%s\n", west, east, south, north);
+
+
     /* flag.nangle */
     if (print_flag & PRINT_NANGLE) {
 	double convergence;
