@@ -45,14 +45,16 @@ int main(int argc, char *argv[])
     {
 	struct Flag
 	    *update, *print, *gprint, *lprint, *eprint, *nangle,
-	    *center, *res_set, *dist_res, *dflt, *z, *savedefault, *bbox;
+	    *center, *res_set, *dist_res, *dflt, *z, *savedefault,
+	    *bbox, *gmt_style;
     } flag;
     struct
     {
 	struct Option
 	    *north, *south, *east, *west, *top, *bottom,
 	    *res, *nsres, *ewres, *res3, *tbres, *rows, *cols,
-	    *save, *region, *view, *raster, *raster3d, *align, *zoom, *vect;
+	    *save, *region, *view, *raster, *raster3d, *align,
+	    *zoom, *vect;
     } parm;
 
     G_gisinit(argv[0]);
@@ -95,6 +97,12 @@ int main(int argc, char *argv[])
     flag.center->description =
 	_("Print the current region map center coordinates");
     flag.center->guisection = _("Print");
+
+    flag.gmt_style = G_define_flag();
+    flag.gmt_style->key = 't';
+    flag.gmt_style->description =
+	_("Print the current region in GMT style");
+    flag.gmt_style->guisection = _("Print");
 
     flag.dist_res = G_define_flag();
     flag.dist_res->key = 'm';
@@ -356,6 +364,9 @@ int main(int argc, char *argv[])
 
     if (flag.center->answer)
 	print_flag |= PRINT_CENTER;
+
+    if (flag.gmt_style->answer)
+	print_flag |= PRINT_GMT;
 
     if (flag.nangle->answer)
 	print_flag |= PRINT_NANGLE;
