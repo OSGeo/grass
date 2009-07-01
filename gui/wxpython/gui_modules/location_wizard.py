@@ -1412,38 +1412,21 @@ class EPSGPage(TitledPage):
         
     def OnBrowseCodes(self, event, search=None):
         """!Browse EPSG codes"""
-#        try:
-        if True:
-            data = []
-            self.epsgCodeDict = {}
-            f = open(self.tfile.GetValue(), "r")
-            i = 0
-            code = None
-            for line in f.readlines():
-                line = line.strip()
-                if len(line) < 1:
-                    continue
+        self.epsgCodeDict = utils.ReadEpsgCodes(self.tfile.GetValue())
+        if type(self.epsgCodeDict) == type(''):
+            wx.MessageBox(parent=self,
+                          message=_("Unable to read EPGS codes: %s") % self.epsgCodeDict,
+                          caption=_("Error"),  style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
+            self.epsglist.Populate([], update=True)
+            return
+
+        data = []
+        for code, val in self.epsgCodeDict.iteritems():
+            if code is not None:
+                data.append((code, val[0], val[1]))
                 
-                if line[0] == '#':
-                    descr = line[1:].strip()
-                elif line[0] == '<':
-                    code, params = line.split(" ", 1)
-                    code = int(code.replace('<', '').replace('>', ''))
-
-                if code is not None:
-                    data.append((code, descr, params))
-                    self.epsgCodeDict[code] = (descr, params)
-                    code = None
-                i += 1
-            f.close()
-
-            self.epsglist.Populate(data, update=True)
-#         except StandardError, e:
-#             wx.MessageBox(parent=self,
-#                           message=_("Unable to read EPGS codes: %s") % e,
-#                           caption=_("Error"),  style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
-#             self.epsglist.Populate([], update=True)
-
+        self.epsglist.Populate(data, update=True)
+        
 class CustomPage(TitledPage):
     """
     Wizard page for entering custom PROJ.4 string
