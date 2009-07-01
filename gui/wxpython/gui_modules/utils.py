@@ -377,3 +377,71 @@ def reexec_with_pythonw():
             not sys.executable.endswith('MacOS/Python'):
         print >> sys.stderr, 're-executing using pythonw'
         os.execvp('pythonw', ['pythonw', __file__] + sys.argv[1:])
+
+def ReadEpsgCodes(path):
+    """!Read EPSG code from the file
+
+    @param path full path to the file with EPSG codes
+
+    @return dictionary of EPSG code
+    @return string on error
+    """
+    epsgCodeDict = dict()
+    try:
+        f = open(path, "r")
+        i = 0
+        code = None
+        for line in f.readlines():
+            line = line.strip()
+            if len(line) < 1:
+                continue
+                
+            if line[0] == '#':
+                descr = line[1:].strip()
+            elif line[0] == '<':
+                code, params = line.split(" ", 1)
+                code = int(code.replace('<', '').replace('>', ''))
+
+            if code is not None:
+                epsgCodeDict[code] = (descr, params)
+                code = None
+            i += 1
+        f.close()
+    except StandardError, e:
+        return str(e)
+    
+    return epsgCodeDict
+
+def ReprojectCoordinates(coord, projOut, projIn = None, flags = ''):
+    """!Reproject coordinates
+
+    @param coord coordinates given as tuple
+    @param projOut output projection
+    @param projIn input projection (use location projection settings)
+
+    @return reprojected coordinates (returned as tuple)
+    """
+    if not projIn:
+        projIn = gcmd.RunCommand('g.proj',
+                                 flags = 'jf',
+                                 read = True)
+    coors = gcmd.RunCommand('m.proj',
+                            flags = flags,
+                            proj_in = projIn,
+                            proj_out = projOut,
+                            stdin = '%f|%f' % (coord[0], coord[1]),
+                            read = True)
+    if coors:
+        coors = coors.split('\t')
+        e = coors[0]
+        n = coors[1].split(' ')[0].strip()
+        try:
+            proj = projOut.split(' ')[0].split('=')[1]
+        except IndexError:
+            proj = ''
+        if proj in ('ll', 'latlong', 'longlat'):
+            return (proj, (e, n))
+        else:
+            return (proj, (float(e), float(n)))
+    
+    return (None, None)
