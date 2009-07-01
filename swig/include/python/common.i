@@ -1,6 +1,7 @@
 %{
 #include <stdio.h>
 #include <grass/gis.h>
+#include <grass/raster.h>
 %}
 
 %rename(my_def) def;

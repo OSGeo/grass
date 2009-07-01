@@ -1,3 +1,5 @@
+#include <grass/raster.h>
+
 /* box.c */
 int box_path(double, double, double, double);
 int box_clip(double, double, double, double);
@@ -108,7 +110,7 @@ int multi_lines(char *);
 int o_io_init(void);
 int o_read_row(void *);
 
-#ifdef GRASS_GIS_H
+#ifdef GRASS_RASTER_H
 RASTER_MAP_TYPE o_open_file(char *);
 #endif
 int o_close_file(void);

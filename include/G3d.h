@@ -1,7 +1,8 @@
-#include <grass/gis.h>
-
 #ifndef GRASS_G3D_H
 #define GRASS_G3D_H
+
+#include <grass/gis.h>
+#include <grass/raster.h>
 
 #define G3D_TILE_SAME_AS_FILE 2
 

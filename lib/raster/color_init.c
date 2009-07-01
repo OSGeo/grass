@@ -12,6 +12,7 @@
  */
 
 #include <grass/gis.h>
+#include <grass/raster.h>
 
 /*!
  * \brief Initialize color structure

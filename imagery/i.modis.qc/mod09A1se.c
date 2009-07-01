@@ -5,7 +5,7 @@
  * 11 -> class 3: High
  */  
 
-#include "grass/gis.h"
+#include <grass/raster.h>
 
 CELL mod09A1se(CELL pixel) 
 {

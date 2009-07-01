@@ -16,6 +16,9 @@
 
 #ifndef __MASK_FUNCTIONS_H__
 #define __MASK_FUNCTIONS_H__
+
+#include <grass/raster.h>
+
 /*Structures */
 typedef struct _d_interval
 {

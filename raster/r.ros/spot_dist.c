@@ -32,9 +32,8 @@
  *	INT-438, 46 p.
  ******************************************************************************/
 
-#include <grass/gis.h>
 #include <math.h>
-
+#include <grass/raster.h>
 
 #define DATA(map, r, c) (map)[(r) * ncols + (c)]
 #define	DEG2RAD		0.017453292

@@ -20,6 +20,7 @@
 #define __R_CROSS_GLOB_H__
 
 #include <grass/gis.h>
+#include <grass/raster.h>
 
 #define NFILES 30		/* maximum number of layers */
 #define SHIFT 6			/* 2^SHIFT cats per node */

@@ -3,6 +3,7 @@
 #define GRASS_STATS_H
 
 #include <grass/gis.h>
+#include <grass/raster.h>
 
 typedef void stat_func(DCELL *, DCELL *, int, const void *);
 typedef void stat_func_w(DCELL *, DCELL(*)[2], int, const void *);

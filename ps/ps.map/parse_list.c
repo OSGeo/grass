@@ -19,7 +19,7 @@
  *
  * count will be negative if list is not valid
  ********************************************************/
-#include <grass/gis.h>
+#include <grass/raster.h>
 
 int parse_val_list(char *buf, DCELL ** list)
 {

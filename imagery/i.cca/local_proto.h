@@ -1,6 +1,8 @@
 #ifndef __LOCAL_PROTO_H__
 #define __LOCAL_PROTO_H__
 
+#include <grass/raster.h>
+
 #define MX 9
 #define MC 50
 

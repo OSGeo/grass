@@ -1,3 +1,4 @@
+#include <grass/raster.h>
 
 struct ncb			/* neighborhood control block */
 {

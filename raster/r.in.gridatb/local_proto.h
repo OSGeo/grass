@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <grass/gis.h>
+#include <grass/raster.h>
 
 int check_ready(void);
 int adjcellhd(struct Cell_head *cellhd);

@@ -3,7 +3,7 @@
  * 1 -> class 1: No
  */  
 
-#include "grass/gis.h"
+#include <grass/raster.h>
 
 CELL mod09A1si(CELL pixel) 
 {

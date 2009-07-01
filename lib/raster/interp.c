@@ -1,5 +1,18 @@
+/*!
+ * \file raster/interp.c
+ *
+ * \brief Raster Library - Interpolation
+ *
+ * (C) 2001-2009 GRASS Development Team
+ *
+ * This program is free software under the GNU General Public License 
+ * (>=v2). Read the file COPYING that comes with GRASS for details.
+ *
+ * \author Original author CERL
+ */
 
 #include <grass/gis.h>
+#include <grass/raster.h>
 
 DCELL Rast_interp_linear(double u, DCELL c0, DCELL c1)
 {

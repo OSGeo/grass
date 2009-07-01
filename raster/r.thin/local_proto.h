@@ -1,3 +1,5 @@
+#include <grass/raster.h>
+
 /* io.c */
 CELL *get_a_row(int);
 int put_a_row(int, CELL *);

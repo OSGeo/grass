@@ -5,7 +5,7 @@
  * 11 -> class 3: Not Set ; Assumed Clear
  */  
 
-#include "grass/gis.h"
+#include <grass/raster.h>
 
 CELL mod09Q1b(CELL pixel) 
 {

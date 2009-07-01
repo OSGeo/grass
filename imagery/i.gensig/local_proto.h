@@ -1,3 +1,5 @@
+#include <grass/raster.h>
+
 /* alloc.c */
 double *vector(int, int);
 double **matrix(int, int, int, int);

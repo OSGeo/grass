@@ -3,7 +3,7 @@
  * 1 -> class 1: No fire
  */  
 
-#include "grass/gis.h"
+#include <grass/raster.h>
 
 CELL mod09A1sg(CELL pixel) 
 {

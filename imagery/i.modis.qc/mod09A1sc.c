@@ -9,7 +9,7 @@
  * 111 -> class 7: Deep ocean
  */  
 
-#include "grass/gis.h"
+#include <grass/raster.h>
 
 CELL mod09A1sc(CELL pixel) 
 {

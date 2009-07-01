@@ -13,6 +13,7 @@
 
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/raster.h>
 #include <grass/glocale.h>
 
 static void print_history_error(const char *, const char *, FILE *);

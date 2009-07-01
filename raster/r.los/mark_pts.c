@@ -9,9 +9,10 @@
 
 /****************************************************************/
 
+#include <grass/gis.h>
+#include <grass/raster.h>
 #include <grass/segment.h>
 #include "point.h"
-#include <grass/gis.h>
 
 #define		PT_TO_MARK_X		PT_TO_MARK->x
 #define		PT_TO_MARK_Y		PT_TO_MARK->y

@@ -28,6 +28,7 @@
 #include <string.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/raster.h>
 #include <grass/vector.h>
 #include <grass/dbmi.h>
     /* #include <grass/PolimiFunct.h> */

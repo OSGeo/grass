@@ -19,6 +19,8 @@
 #ifndef __R_DESC_LOCAL_PROTO_H__
 #define __R_DESC_LOCAL_PROTO_H__
 
+#include <grass/raster.h>
+
 /* describe.c */
 int describe(const char *, int, char *, int, int, int, int, int);
 

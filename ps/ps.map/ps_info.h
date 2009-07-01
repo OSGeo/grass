@@ -1,4 +1,4 @@
-#include <grass/gis.h>
+#include <grass/raster.h>
 
 /* Font sizes */
 #define PS_FONT_MAX_SIZE      50
