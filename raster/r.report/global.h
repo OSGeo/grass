@@ -5,8 +5,7 @@
 # define INIT(x) = x
 #endif
 
-#include <grass/gis.h>
-#include <grass/glocale.h>
+#include <grass/raster.h>
 
 extern struct Cell_head window;
 

@@ -5,7 +5,7 @@
  * 11 -> class 3: Average emissivity error > 0.04
  */  
 
-#include "grass/gis.h"
+#include <grass/raster.h>
 
 CELL mod11A2c(CELL pixel) 
 {

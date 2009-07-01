@@ -5,7 +5,7 @@
  * 11 -> class 3: TBD
  */  
 
-#include "grass/gis.h"
+#include <grass/raster.h>
 
 CELL mod11A2b(CELL pixel) 
 {

@@ -13,7 +13,7 @@
  * Class 10-15: Combination of bits unused
  */  
 
-#include "grass/gis.h"
+#include <grass/raster.h>
 
 CELL mod09A1c(CELL pixel, int bandno) 
 {

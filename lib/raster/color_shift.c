@@ -12,6 +12,7 @@
  */
 
 #include <grass/gis.h>
+#include <grass/raster.h>
 
 void Rast_shift_c_colors(CELL shift, struct Colors *colors)
 {

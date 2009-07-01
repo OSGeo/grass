@@ -19,6 +19,7 @@
 #include <stdlib.h>
 
 #include <grass/raster.h>
+#include <grass/glocale.h>
 
 #include "defs.h"
 

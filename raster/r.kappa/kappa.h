@@ -1,6 +1,6 @@
-
-#include <grass/gis.h>
 #include <math.h>
+#include <grass/gis.h>
+#include <grass/raster.h>
 
 struct _gstats_
 {

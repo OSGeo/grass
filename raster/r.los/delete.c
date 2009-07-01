@@ -11,6 +11,7 @@
 
 #include <stdlib.h>
 #include <grass/gis.h>
+#include <grass/raster.h>
 #include <grass/segment.h>
 #include "point.h"
 

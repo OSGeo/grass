@@ -3,7 +3,7 @@
  * 1 -> class 1: different orbit from 500m
  */  
 
-#include "grass/gis.h"
+#include <grass/raster.h>
 
 CELL mod09Q1f(CELL pixel) 
 {

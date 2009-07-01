@@ -5,7 +5,7 @@
  * 11 -> class 3: Corrected product NOT produced due to other reasons -- some or all bands mayb be fill value (Note that a value of [11] overrides a value of [01])
  */  
 
-#include "grass/gis.h"
+#include <grass/raster.h>
 
 CELL mod09A1a(CELL pixel) 
 {

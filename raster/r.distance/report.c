@@ -16,6 +16,8 @@
  *
  ***************************************************************************/
 
+#include <grass/glocale.h>
+
 #include "defs.h"
 
 void report(struct Parms *parms)

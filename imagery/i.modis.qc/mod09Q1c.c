@@ -11,7 +11,7 @@
  * 1111 -> class 9: not processed due to deep ocean or cloud
  * Class 11-15: Combination of bits unused
  */
-#include "grass/gis.h"
+#include <grass/raster.h>
   
 CELL mod09Q1c(CELL pixel, int bandno) 
 {

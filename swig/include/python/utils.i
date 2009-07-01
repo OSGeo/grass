@@ -1,3 +1,6 @@
+%{
+#include <grass/raster.h>
+%}
 
 %include "common.i"
 

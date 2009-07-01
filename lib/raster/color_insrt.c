@@ -4,6 +4,8 @@
  * These routines know when it is approriate to call this routine.
  */
 #include <grass/gis.h>
+#include <grass/raster.h>
+
 #define umalloc(n) (unsigned char *) G_malloc((size_t)n)
 #define urealloc(s,n) (unsigned char *) G_realloc(s,(size_t)n)
 

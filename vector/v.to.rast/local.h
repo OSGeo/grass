@@ -1,7 +1,7 @@
 #ifndef __LOCAL_H__
 #define __LOCAL_H__
 
-#include <grass/gis.h>
+#include <grass/raster.h>
 #include <grass/dbmi.h>
 #include <grass/vector.h>
 

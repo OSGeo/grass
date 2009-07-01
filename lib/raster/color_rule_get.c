@@ -12,6 +12,7 @@
  */
 
 #include <grass/gis.h>
+#include <grass/raster.h>
 
 /*! 
    \brief Get both modular and fixed rules count 

@@ -13,6 +13,7 @@
 
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/raster.h>
 
 /*!
   \brief Set color range (CELL version)

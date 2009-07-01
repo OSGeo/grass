@@ -17,7 +17,7 @@
  ***************************************************************************/
 
 #include <grass/gis.h>
-
+#include <grass/raster.h>
 
 #define INCR 10
 #define NCATS 100

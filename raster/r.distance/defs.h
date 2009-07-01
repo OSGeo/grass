@@ -20,7 +20,7 @@
 #define __R_DIST_DEFS_H__
 
 #include <grass/gis.h>
-#include <grass/glocale.h>
+#include <grass/raster.h>
 
 struct EdgeList			/* keep track of edge cells */
 {
