@@ -554,19 +554,21 @@ class MapFrame(wx.Frame):
                     proj, coord  = utils.ReprojectCoordinates(coord = (e, n),
                                                               projOut = UserSettings.Get(group='display',
                                                                                          key='projection',
-                                                                                         subkey='proj4'))
+                                                                                         subkey='proj4'),
+                                                              flags = 'd')
                     if coord:
+                        e, n = coord
                         if proj in ('ll', 'latlong', 'longlat'):
-                            self.statusbar.SetStatusText("%s, %s" % (coord[0], coord[1]), 0)
+                            self.statusbar.SetStatusText("%s" % utils.Deg2DMS(e, n), 0)
                         else:
-                            self.statusbar.SetStatusText("%.2f, %.2f" % (coord[0], coord[1]), 0)
+                            self.statusbar.SetStatusText("%.2f; %.2f" % (e, n), 0)
                     else:
                         self.statusbar.SetStatusText(_("Error in projection"), 0)
                 else:
                     if self.Map.projinfo['proj'] == 'll':
                         self.statusbar.SetStatusText("%s" % utils.Deg2DMS(e, n), 0)
                     else:
-                        self.statusbar.SetStatusText("%.2f, %.2f" % (e, n), 0)
+                        self.statusbar.SetStatusText("%.2f; %.2f" % (e, n), 0)
                 
         event.Skip()
 
@@ -787,16 +789,55 @@ class MapFrame(wx.Frame):
         Go to position
         """
         try:
-            e, n = map(float, self.statusbarWin['goto'].GetValue().split(','))
+            if UserSettings.Get(group='display', key='projection', subkey='enabled') and \
+                    UserSettings.Get(group='display', key='projection', subkey='proj4'):
+                # reproject values
+                projIn = UserSettings.Get(group='display',
+                                          key='projection',
+                                          subkey='proj4')
+                projOut = gcmd.RunCommand('g.proj',
+                                          flags = 'jf',
+                                          read = True)
+                proj = projIn.split(' ')[0].split('=')[1]
+                if proj in ('ll', 'latlong', 'longlat'):
+                    e, n = self.statusbarWin['goto'].GetValue().split(';')
+                    e, n = utils.DMS2Deg(e, n)
+                    proj, coord1 = utils.ReprojectCoordinates(coord = (e, n),
+                                                              projIn = projIn,
+                                                              projOut = projOut, flags = 'd')
+                    e, n = coord1
+                else:
+                    e, n = map(float, self.statusbarWin['goto'].GetValue().split(';'))
+                    proj, coord1 = utils.ReprojectCoordinates(coord = (e, n),
+                                                              projIn = projIn,
+                                                              projOut = projOut, flags = 'd')
+                    e, n = coord1
+            else:
+                if self.Map.projinfo['proj'] == 'll':
+                    e, n = self.statusbarWin['goto'].GetValue().split(';')
+                else:
+                    e, n = map(float, self.statusbarWin['goto'].GetValue().split(';'))
+                    
+            region = self.Map.GetCurrentRegion()
+            if UserSettings.Get(group='display', key='projection', subkey='enabled') and \
+                    UserSettings.Get(group='display', key='projection', subkey='proj4'):
+                region['center_easting'], region['center_northing'] = e, n
+            else:
+                if self.Map.projinfo['proj'] == 'll':
+                    region['center_easting'], region['center_northing'] = utils.DMS2Deg(e, n)
+                else:
+                    region['center_easting'], region['center_northing'] = e, n
         except ValueError:
             region = self.Map.GetCurrentRegion()
-            self.statusbarWin['goto'].SetValue("%.2f, %.2f" % (region['center_easting'],
-                                                               region['center_northing']))
+            if self.Map.projinfo['proj'] == 'll':
+                    self.statusbarWin['goto'].SetValue("%s" % utils.Deg2DMS(region['center_easting'], 
+                                                                            region['center_northing']))
+            else:
+                self.statusbarWin['goto'].SetValue("%.2f; %.2f" % (region['center_easting'],
+                                                                   region['center_northing']))
             return
-
-        region = self.Map.GetCurrentRegion()
-        region['center_northing'] = n
-        region['center_easting'] = e
+        
+        
         dn = (region['nsres'] * region['rows']) / 2.
         region['n'] = region['center_northing'] + dn
         region['s'] = region['center_northing'] - dn
@@ -828,67 +869,73 @@ class MapFrame(wx.Frame):
             # enable long help
             self.StatusbarEnableLongHelp()
 
-        elif self.statusbarWin['toggle'].GetSelection() == 1: # Extent
+        elif self.statusbarWin['toggle'].GetSelection() in (1, 2): # Extent
+            sel = self.statusbarWin['toggle'].GetSelection()
+            if sel == 1:
+                region = self.Map.region
+            else:
+                region = self.Map.GetRegion() # computation region
+
             if UserSettings.Get(group='display', key='projection', subkey='enabled') and \
                     UserSettings.Get(group='display', key='projection', subkey='proj4'):
                 projOut = UserSettings.Get(group='display',
                                            key='projection',
                                            subkey='proj4')
-                proj, coord1 = utils.ReprojectCoordinates(coord = (self.Map.region["w"], self.Map.region["s"]),
-                                                  projOut = projOut)
-                proj, coord2 = utils.ReprojectCoordinates(coord = (self.Map.region["e"], self.Map.region["n"]),
-                                                  projOut = projOut)
+                proj, coord1 = utils.ReprojectCoordinates(coord = (region["w"], region["s"]),
+                                                          projOut = projOut)
+                proj, coord2 = utils.ReprojectCoordinates(coord = (region["e"], region["n"]),
+                                                          projOut = projOut)
+                if sel == 2:
+                    proj, coord3 = utils.ReprojectCoordinates(coord = (region["ewres"], region["nsres"]),
+                                                              projOut = projOut)
                 
                 if coord1 and coord2:
                     if proj in ('ll', 'latlong', 'longlat'):
+                        w, s = utils.Deg2DMS(coord1[0], coord1[1], string = False)
+                        e, n = utils.Deg2DMS(coord2[0], coord2[1], string = False)
+                        if sel == 1:
+                            self.statusbar.SetStatusText("%s - %s, %s - %s" %
+                                                         (w, e, s, n), 0)
+                        else:
+                            ewres, nsres = utils.Deg2DMS(coord3[0], coord3[1], string = False)
+                            self.statusbar.SetStatusText("%s - %s, %s - %s (%s, %s)" %
+                                                         (w, e, s, n, ewres, nsres), 0)
+                    else:
+                        w, s = coord1
+                        e, n = coord2
+                        if sel == 1:
+                            self.statusbar.SetStatusText("%.2f - %.2f, %.2f - %.2f" %
+                                                         (w, e, s, n), 0)
+                        else:
+                            ewres, nsres = coord3
+                            self.statusbar.SetStatusText("%.2f - %.2f, %.2f - %.2f (%.2f, %.2f)" %
+                                                         (w, e, s, n, ewres, nsres), 0)
+                else:
+                    self.statusbar.SetStatusText(_("Error in projection"), 0)
+            else:
+                if self.Map.projinfo['proj'] == 'll':
+                    w, s = utils.Deg2DMS(region["w"], region["s"],
+                                         string = False)
+                    e, n = utils.Deg2DMS(region["e"], region["n"],
+                                         string = False)
+                    if sel == 1:
                         self.statusbar.SetStatusText("%s - %s, %s - %s" %
-                                                     (coord1[0], coord2[0],
-                                                      coord1[1], coord2[1]))
+                                                     (w, e, s, n), 0)
                     else:
-                        self.statusbar.SetStatusText("%.2f - %.2f, %.2f - %.2f" %
-                                                     (float(coord1[0]), float(coord2[0]),
-                                                      float(coord1[1]), float(coord2[1])))
-                else:
-                    self.statusbar.SetStatusText(_("Error in projection"), 0)
-            else:
-                self.statusbar.SetStatusText("%.2f - %.2f, %.2f - %.2f" %
-                                             (self.Map.region["w"], self.Map.region["e"],
-                                              self.Map.region["s"], self.Map.region["n"]), 0)
-            # enable long help
-            self.StatusbarEnableLongHelp()
-
-        elif self.statusbarWin['toggle'].GetSelection() == 2: # Comp. region
-            compregion = self.Map.GetRegion()
-            if UserSettings.Get(group='display', key='projection', subkey='enabled') and \
-                    UserSettings.Get(group='display', key='projection', subkey='proj4'):
-                projOut = UserSettings.Get(group='display',
-                                           key='projection',
-                                           subkey='proj4')
-                proj, coord1 = utils.ReprojectCoordinates(coord = (compregion["w"], compregion["s"]),
-                                                          projOut = projOut)
-                proj, coord2 = utils.ReprojectCoordinates(coord = (compregion["e"], compregion["n"]),
-                                                          projOut = projOut)
-                proj, coord3 = utils.ReprojectCoordinates(coord = (compregion["ewres"], compregion["nsres"]),
-                                                          projOut = projOut)
-                
-                if coord1 and coord2 and coord3:
-                    if proj in ('ll', 'latlong', 'longlat'):
+                        ewres, nsres = utils.Deg2DMS(region['ewres'], region['nsres'],
+                                                     string = False)
                         self.statusbar.SetStatusText("%s - %s, %s - %s (%s, %s)" %
-                                                     (coord1[0], coord2[0],
-                                                      coord1[1], coord2[1],
-                                                      coord3[0], coord3[1]))
-                    else:
-                        self.statusbar.SetStatusText("%.2f - %.2f, %.2f - %.2f (%.2f, %.2f)" %
-                                                     (float(coord1[0]), float(coord2[0]),
-                                                      float(coord1[1]), float(coord2[1]),
-                                                      float(coord3[0]), float(coord3[1])))
+                                                     (w, e, s, n, ewres, nsres), 0)
                 else:
-                    self.statusbar.SetStatusText(_("Error in projection"), 0)
-            else:
-                self.statusbar.SetStatusText("%.2f - %.2f, %.2f - %.2f (%.2f, %.2f)" %
-                                             (compregion["w"], compregion["e"],
-                                              compregion["s"], compregion["n"],
-                                              compregion["ewres"], compregion["nsres"]), 0)
+                    w, s = region["w"], region["s"]
+                    e, n = region["e"], region["n"]
+                    if sel == 1:
+                        self.statusbar.SetStatusText("%.2f - %.2f, %.2f - %.2f" %
+                                                     (w, e, s, n), 0)
+                    else:
+                        ewres, nsres = region['ewres'], region['nsres']
+                        self.statusbar.SetStatusText("%s - %s, %s - %s (%s, %s)" %
+                                                     (w, e, s, n, ewres, nsres), 0)
             # enable long help
             self.StatusbarEnableLongHelp()
 
@@ -972,14 +1019,20 @@ class MapFrame(wx.Frame):
                                                                                      subkey='proj4'))
                 if coord:
                     if proj in ('ll', 'latlong', 'longlat'):
-                        self.statusbarWin['goto'].SetValue("%s, %s" % (coord[0],
+                        self.statusbarWin['goto'].SetValue("%s; %s" % (coord[0],
                                                                            coord[1]))
                     else:
-                        self.statusbarWin['goto'].SetValue("%.2f, %.2f" % (coord[0],
+                        self.statusbarWin['goto'].SetValue("%.2f; %.2f" % (coord[0],
                                                                            coord[1]))
+                else:
+                    self.statusbar.SetStatusText(_("Error in projection"), 0)
             else:
-                self.statusbarWin['goto'].SetValue("%.2f, %.2f" % (region['center_easting'],
-                                                                   region['center_northing']))
+                if self.Map.projinfo['proj'] == 'll':
+                    self.statusbarWin['goto'].SetValue("%s" % utils.Deg2DMS(region['center_easting'], 
+                                                                            region['center_northing']))
+                else:
+                    self.statusbarWin['goto'].SetValue("%.2f; %.2f" % (region['center_easting'],
+                                                                       region['center_northing']))
             self.statusbarWin['goto'].Show()
 
             # disable long help
