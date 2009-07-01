@@ -424,17 +424,20 @@ def ReprojectCoordinates(coord, projOut, projIn = None, flags = ''):
     if not projIn:
         projIn = gcmd.RunCommand('g.proj',
                                  flags = 'jf',
-                                 read = True)
+                                 read = True).rstrip('\n')
+    
     coors = gcmd.RunCommand('m.proj',
                             flags = flags,
+                            input = '-',
                             proj_in = projIn,
                             proj_out = projOut,
-                            stdin = '%f|%f' % (coord[0], coord[1]),
+                            fs = ';',
+                            stdin = '%f;%f' % (coord[0], coord[1]),
                             read = True)
     if coors:
-        coors = coors.split('\t')
+        coors = coors.split(';')
         e = coors[0]
-        n = coors[1].split(' ')[0].strip()
+        n = coors[1]
         try:
             proj = projOut.split(' ')[0].split('=')[1]
         except IndexError:
