@@ -10,7 +10,9 @@
 #define FCELL_TYPE 1
 #define DCELL_TYPE 2
 
+/* History */
 #define RECORD_LEN  80
+#define MAXEDLINES  50
 
 /* for G_get_raster_sample(), INTERP_TYPE */
 #define UNKNOWN	  0

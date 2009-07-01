@@ -2,6 +2,7 @@
 #define GRASS_DISPLAY_H
 
 #include <grass/gis.h>
+#include <grass/raster.h>
 #include <grass/symbol.h>
 
 enum clip_mode
