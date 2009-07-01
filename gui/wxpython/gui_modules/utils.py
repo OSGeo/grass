@@ -266,20 +266,24 @@ def GetVectorNumberOfLayers(vector):
     
     return layers
 
-def Deg2DMS(lon, lat):
+def Deg2DMS(lon, lat, string = True):
     """!Convert deg value to dms string
 
-    @param lat latitude
-    @param lon longitude
-
-    @return DMS string
+    @param lon longitude (x)
+    @param lat latitude (y)
+    @param string True to return string otherwise tuple
+    
+    @return DMS string or tuple of values
     @return empty string on error
     """
     try:
         flat = float(lat)
         flon = float(lon)
     except ValueError:
-        return ''
+        if string:
+            return ''
+        else:
+            return None
 
     # fix longitude
     while flon > 180.0:
@@ -303,31 +307,88 @@ def Deg2DMS(lon, lat):
     slat = __ll_parts(flat)
     slon = __ll_parts(flon)
 
-    return slon + hlon + '; ' + slat + hlat
-
-def __ll_parts(value):
-    """!Converts deg to d:m:s string"""
-    if value == 0.0:
-        return '00:00:00.0000'
+    if string:
+        return slon + hlon + '; ' + slat + hlat
     
-    d = int(int(value))
-    m = int((value - d) * 60)
-    s = ((value - d) * 60 - m) * 60
-    if m < 0:
-        m = '00'
-    elif m < 10:
-        m = '0' + str(m)
-    else:
-        m = str(m)
-    if s < 0:
-        s = '00.0000'
-    elif s < 10.0:
-        s = '0%.4f' % s
-    else:
-        s = '%.4f' % s
-    
-    return str(d) + ':' + m + ':' + s
+    return (slon + hlon, slat + hlat)
 
+def DMS2Deg(lon, lat):
+    """!Convert dms value to deg
+
+    @param lon longitude (x)
+    @param lat latitude (y)
+    
+    @return tuple of converted values
+    @return ValueError on error
+    """
+    x = __ll_parts(lon, reverse = True)
+    y = __ll_parts(lat, reverse = True)
+    
+    return (x, y)
+
+def __ll_parts(value, reverse = False):
+    """!Converts deg to d:m:s string
+
+    @param value value to be converted
+    @param reverse True to convert from d:m:s to deg
+
+    @return converted value (string/float)
+    @return ValueError on error (reverse == True)
+    """
+    if not reverse:
+        if value == 0.0:
+            return '00:00:00.0000'
+    
+        d = int(int(value))
+        m = int((value - d) * 60)
+        s = ((value - d) * 60 - m) * 60
+        if m < 0:
+            m = '00'
+        elif m < 10:
+            m = '0' + str(m)
+        else:
+            m = str(m)
+        if s < 0:
+            s = '00.0000'
+        elif s < 10.0:
+            s = '0%.4f' % s
+        else:
+            s = '%.4f' % s
+        
+        return str(d) + ':' + m + ':' + s
+    else: # -> reverse
+        try:
+            d, m, s = value.split(':')
+            hs = s[-1]
+            s = s[:-1]
+        except ValueError:
+            try:
+                d, m = value.split(':')
+                hs = m[-1]
+                m = m[:-1]
+                s = '0.0'
+            except ValueError:
+                try:
+                    d = value
+                    hs = d[-1]
+                    d = d[:-1]
+                    m = '0'
+                    s = '0.0'
+                except ValueError:
+                    raise ValueError
+        
+        if hs not in ('N', 'S', 'E', 'W'):
+            raise ValueError
+        
+        coef = 1.0
+        if hs in ('S', 'W'):
+            coef = -1.0
+        
+        fm = int(m) / 60.0
+        fs = float(s) / (60 * 60)
+        
+        return coef * (float(d) + fm + fs)
+    
 def GetCmdString(cmd):
     """
     Get GRASS command as string.
@@ -442,7 +503,7 @@ def ReprojectCoordinates(coord, projOut, projIn = None, flags = ''):
             proj = projOut.split(' ')[0].split('=')[1]
         except IndexError:
             proj = ''
-        if proj in ('ll', 'latlong', 'longlat'):
+        if proj in ('ll', 'latlong', 'longlat') and 'd' not in flags:
             return (proj, (e, n))
         else:
             return (proj, (float(e), float(n)))

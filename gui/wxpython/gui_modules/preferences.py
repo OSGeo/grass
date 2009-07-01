@@ -1591,11 +1591,15 @@ class PreferencesDialog(wx.Dialog):
         choices = map(str, self.epsgCodeDict.keys())
 
         list.SetItems(choices)
-        list.SetSelection(0)
-        code = int(list.GetStringSelection())
+        code = int(list.GetValue())
         win = self.FindWindowById(self.winId['display:projection:proj4'])
-        win.SetValue(self.epsgCodeDict[code][1])
-
+        if self.epsgCodeDict.has_key(code):
+            win.SetValue(self.epsgCodeDict[code][1])
+        else:
+            list.SetSelection(0)
+            code = int(list.GetStringSelection())
+            win.SetValue(self.epsgCodeDict[code][1])
+        
     def OnSetProj(self, event):
         """!Enable mapdisplay window statusbar projection"""
         checked = event.IsChecked()
