@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: grassmods_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-01-09 23:29+0100\n"
-"PO-Revision-Date: 2009-03-25 10:47+0100\n"
+"PO-Revision-Date: 2009-06-11 16:08+0200\n"
 "Last-Translator: Robert Nuske <rnuske@gwdg.de>\n"
 "Language-Team: Deutsch <grass-translations@lists.osgeo.org>\n"
 "MIME-Version: 1.0\n"
@@ -11403,14 +11403,12 @@ msgid "Removes outliers from vector point data."
 msgstr "Entfernt Ausreißer aus einem Punkt-Vektordatensatz."
 
 #: ../vector/lidar/v.outlier/main.c:81
-#, fuzzy
 msgid "Name of output outlier vector map"
-msgstr "von"
+msgstr "Name der Ausgabe Ausreißer Vektorkarte"
 
 #: ../vector/lidar/v.outlier/main.c:89
-#, fuzzy
 msgid "Name of vector map for visualization in QGIS"
-msgstr "Name einer vorhandenen Rasterkarte, die angezeigt werden soll."
+msgstr "Name der Vektorkarte, die in QGIS angezeigt werden soll."
 
 #: ../vector/lidar/v.outlier/main.c:97
 #: ../vector/lidar/v.surf.bspline/main.c:112
@@ -11433,7 +11431,7 @@ msgstr ""
 
 #: ../vector/lidar/v.outlier/main.c:118
 msgid "Threshold for the outliers"
-msgstr ""
+msgstr "Grenzwert für Ausreißer"
 
 #: ../vector/lidar/v.outlier/main.c:128
 #: ../vector/lidar/v.surf.bspline/main.c:185
@@ -11474,9 +11472,8 @@ msgstr "Kann <Auxiliar_outlier_table> nicht erzeugen"
 #: ../vector/lidar/v.surf.bspline/main.c:689
 #: ../vector/lidar/v.lidar.correction/main.c:337
 #: ../vector/lidar/v.lidar.edgedetection/main.c:372
-#, fuzzy
 msgid "Auxiliar table could not be dropped"
-msgstr "Hilfstabelle konnte nicht gelöscht werden"
+msgstr "Hilfstabelle konnte nicht gelöscht werden."
 
 #: ../vector/lidar/v.outlier/outlier.c:74
 #: ../vector/lidar/v.outlier/outlier.c:115
@@ -11527,26 +11524,24 @@ msgid ""
 "Building contour determination and Region Growing algorithm for determining "
 "the building inside"
 msgstr ""
+"Bestimmung des Gebäude Umriss und Anwendung des 'Region Growing' Verfahrens "
+"zu Ermittelung des Gebäude Inneren."
 
 #: ../vector/lidar/v.lidar.growing/main.c:91
-#, fuzzy
 msgid "Name of the first pulse vector map"
-msgstr "Name einer existierenden Vektorkarte."
+msgstr "Name der Vektorkarte mit 'first pulse' Daten"
 
 #: ../vector/lidar/v.lidar.growing/main.c:98
-#, fuzzy
 msgid "Threshold for cell object frequency in region growing"
-msgstr "in"
+msgstr "Grenzwert für die Zellenelementfrequenz im regionalen Wachstum"
 
 #: ../vector/lidar/v.lidar.growing/main.c:106
-#, fuzzy
 msgid "Threshold for double pulse in region growing"
-msgstr "in"
+msgstr "Grenzwert für Doppelimpuls im regionalen Wachstum"
 
 #: ../vector/lidar/v.lidar.growing/main.c:157
-#, fuzzy
 msgid "Setting regions and boxes"
-msgstr "Setze das Kartenfenster."
+msgstr "Einstellungen von Region und Fenster."
 
 #: ../vector/lidar/v.lidar.growing/main.c:178
 msgid "It was impossible to open table"
@@ -11568,7 +11563,7 @@ msgstr "...beende nun das Modul..."
 
 #: ../vector/lidar/lidarlib/TcholBand.c:23
 msgid "Decomposition failed"
-msgstr ""
+msgstr "Entmischung fehlgeschlagen."
 
 #: ../vector/lidar/lidarlib/zones.c:243
 #: ../vector/lidar/v.lidar.edgedetection/edgedetection.c:580
@@ -11577,101 +11572,105 @@ msgid "<%s> created in database."
 msgstr "<%s> in Datenbank erzeugt."
 
 #: ../vector/lidar/lidarlib/zones.c:248
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> has not been created in database."
-msgstr "Tabelle in"
+msgstr "<%s> wurde in Datenbank nicht erstellt."
 
 #: ../vector/lidar/v.surf.bspline/crosscorr.c:76
 #, c-format
 msgid "%d are too many points. The cross validation would take too much time."
-msgstr ""
+msgstr "%d sind zu viele Punkte. Die Kreuzvalidierung würde zu lange dauern."
 
 #: ../vector/lidar/v.surf.bspline/crosscorr.c:85
-#, fuzzy, c-format
+#, c-format
 msgid "%d points read in region"
-msgstr "%lu Punkte in der Region gefunden."
+msgstr "%d Punkte in der Region gelesen"
 
 #: ../vector/lidar/v.surf.bspline/crosscorr.c:89
 msgid ""
 "Maybe, it takes too long. It will depend on how many points you are "
 "considering."
 msgstr ""
+"Vielleicht dauert es zu lange. Es hängt davon ab wieviel Punkte Sie erwägen "
+"zu verwenden."
 
 #: ../vector/lidar/v.surf.bspline/crosscorr.c:118
 #, c-format
 msgid "CrossCorrelation: driver=%s db=%s"
-msgstr ""
+msgstr "Kreuzvalidierung: Treiber=%s db=%s"
 
 #: ../vector/lidar/v.surf.bspline/crosscorr.c:135
-#, fuzzy, c-format
+#, c-format
 msgid "No records selected from table <%s> "
-msgstr "%d Datensätze aus der Tabelle selektiert."
+msgstr "Keine Datensätze in der Tabelle <%s> selektiert."
 
 #: ../vector/lidar/v.surf.bspline/crosscorr.c:150
 #, c-format
 msgid ""
 "Too many splines (%d x %d). Consider changing spline steps \"sie=\" \"sin=\"."
 msgstr ""
+"Zu viele Splines (%d x %d). Erwägen Sie die Splineschrittweite (\"sie=\" "
+"\"sin=\") zu ändern."
 
 #: ../vector/lidar/v.surf.bspline/crosscorr.c:168
 #, c-format
 msgid "Begining cross validation with lambda_i=%.4f..."
-msgstr ""
+msgstr "Beginne die Kreuzvalidierung mit lambda_i=%.4f..."
 
 #: ../vector/lidar/v.surf.bspline/crosscorr.c:288
 #, c-format
 msgid "Mean = %.5lf"
-msgstr ""
+msgstr "Mittelwert = %.5lf"
 
 #: ../vector/lidar/v.surf.bspline/crosscorr.c:289
 #, c-format
 msgid "Root Means Square (RMS) = %.5lf"
-msgstr ""
+msgstr "Root Means Square (RMS) = %.5lf"
 
 #: ../vector/lidar/v.surf.bspline/crosscorr.c:305
 msgid ""
 "Different number of splines and lambda_i values have been taken for the "
 "cross correlation"
 msgstr ""
+"Eine unterschiedliche Anzahl von Splines und lambda_i-Werten wurde für die "
+"Kreuzvalidierung angegeben."
 
 #: ../vector/lidar/v.surf.bspline/crosscorr.c:307
 #, c-format
 msgid ""
 "The minimum value for the test (rms=%lf) was obtained with: lambda_i = %.3f"
 msgstr ""
+"Der Minimalwert für den Test (rms=%lf) wurde erreicht mit: lambda_i = %.3f"
 
 #: ../vector/lidar/v.surf.bspline/crosscorr.c:315
-#, fuzzy
 msgid "Results into a table:"
-msgstr "Nun, -husch husch- die Ergebnisse in eine Tabelle:\n"
+msgstr "Nun, -husch husch- die Ergebnisse in eine Tabelle:"
 
 #: ../vector/lidar/v.surf.bspline/crosscorr.c:316
-#, fuzzy
 msgid " lambda    | mean        | rms         |"
-msgstr " lambda    | mean (m)    | rms (m)     |\n"
+msgstr " lambda    | Mittelwert  | rms         |"
 
 #: ../vector/lidar/v.surf.bspline/crosscorr.c:318
-#, fuzzy, c-format
+#, c-format
 msgid " %-10.5f| %-12.4f| %-12.4f|"
-msgstr " %-10.5f| %-12.3f| %-12.3f|\n"
+msgstr " %-10.5f| %-12.4f| %-12.4f|"
 
 #: ../vector/lidar/v.surf.bspline/crosscorr.c:326
-#, fuzzy
 msgid "No point lies into the current region"
-msgstr "%d Punkte in der Region."
+msgstr "Keine Punkte in der aktuellen Region."
 
 #: ../vector/lidar/v.surf.bspline/main.c:81
 msgid "Bicubic or bilinear spline interpolation with Tykhonov regularization."
 msgstr ""
+"Bikubische oder bilineare Spline-Interpolation mit Tykhonov-Regularisierung."
 
 #: ../vector/lidar/v.surf.bspline/main.c:87
 msgid "Find best parameters using a cross validation method"
 msgstr ""
 
 #: ../vector/lidar/v.surf.bspline/main.c:96
-#, fuzzy
 msgid "Name of input vector map of sparse points"
-msgstr "Vektor-Ausgabe mit den angepassten Punkten im Fluss."
+msgstr "Eingabe Vektorkarte mit wenigen Punkten."
 
 #: ../vector/lidar/v.surf.bspline/main.c:130
 #, fuzzy
@@ -11690,10 +11689,14 @@ msgid ""
 "It was not possible to drop <%s> table. Nothing will be done. Try to drop it "
 "manually."
 msgstr ""
+"Es war nicht möglich die Tabelle <%s> zu löschen. Nichts wird unternommen. "
+"Versuchen Sie die Tabelle manuell zu löschen."
 
 #: ../vector/lidar/v.surf.bspline/main.c:219
 msgid "Choose either vector or raster output, not both"
 msgstr ""
+"Wählen Sie entweder die Ausgabe im Raster- oder Vektor-Format, aber nicht "
+"beides."
 
 #: ../vector/lidar/v.surf.bspline/main.c:222
 msgid "No raster nor vector output"
@@ -11716,6 +11719,8 @@ msgid ""
 "Sorry, <%s> driver is not allowed for vector output in this module. Try with "
 "a raster output or other driver."
 msgstr ""
+"Der Treiber <%s> ist leider nicht für die Vektorausgabe in diesem Modul "
+"erlaubt. Versuchen Sie die Rasterausgabe oder einen anderen Treiber."
 
 #: ../vector/lidar/v.surf.bspline/main.c:300
 msgid "Cannot read field info"
@@ -11728,11 +11733,11 @@ msgstr "[%d] Datensätze aus der Tabelle selektiert."
 
 #: ../vector/lidar/v.surf.bspline/main.c:334
 msgid "Cross validation didn't finish correctly"
-msgstr ""
+msgstr "Die Kreuzvalidierung wurde nicht korrekt abgeschlossen."
 
 #: ../vector/lidar/v.surf.bspline/main.c:347
 msgid "Cross Validation was success!"
-msgstr ""
+msgstr "Die Kreuzvalidierung war erfolgreich."
 
 #: ../vector/lidar/v.surf.bspline/main.c:380
 #, c-format
@@ -11740,6 +11745,8 @@ msgid ""
 "Interpolation: The region resolution is too high: %d cells. Consider to "
 "change it."
 msgstr ""
+"Interpolation: Die Auflösung der Region ist zu hoch: %d Zellen. Überlegen "
+"Sie die Auflösung zu ändern."
 
 #: ../vector/lidar/v.surf.bspline/main.c:542
 #, c-format
@@ -11747,43 +11754,44 @@ msgid "Interpolation: (%d,%d): No record for point (cat = %d)"
 msgstr "Interpolation: (%d,%d): Kein Eintrag für den Punkt (cat = %d)."
 
 #: ../vector/lidar/v.surf.bspline/main.c:603
-#, fuzzy, c-format
+#, c-format
 msgid "Interpolation: Creating table: It was impossible to create table <%s>."
-msgstr "Kann %s nicht erstellen."
+msgstr ""
+"Interpolation: Tabellenerzeugung: Es war nicht möglich die Tabelle <%s> zu "
+"erstellen."
 
 #: ../vector/lidar/v.lidar.correction/main.c:68
 msgid ""
 "Correction of the v.lidar.growing output. It is the last of the three "
 "algorithms for LIDAR filtering."
 msgstr ""
+"Korrektur der v.lidar.growing Ausgabe. Das ist der letzte von 3 Algorithmen "
+"um LIDAR zu filtern."
 
 #: ../vector/lidar/v.lidar.correction/main.c:72
 msgid "Input observation vector map name (v.lidar.growing output)"
 msgstr ""
+"Eingabeüberwachung des Vektorkarten-Namens (Ausgabe von v.lidar.growing)"
 
 #: ../vector/lidar/v.lidar.correction/main.c:75
-#, fuzzy
 msgid "Output classified vector map name"
-msgstr "Ausgabekarte mit Hangexposition."
+msgstr "Vektorkarte mit klassifizierter Ausgabe"
 
 #: ../vector/lidar/v.lidar.correction/main.c:84
-#, fuzzy
 msgid "Only 'terrain' points output vector map"
-msgstr "Vektorkarte mit Startpunkten"
+msgstr "Vektorausgabekarte nur mit Geländepunkten"
 
 #: ../vector/lidar/v.lidar.correction/main.c:107
-#, fuzzy
 msgid "Regularization weight in reclassification evaluation"
-msgstr "in"
+msgstr "Regularisierungsgewicht für die Evaluation der Reklassifizierung"
 
 #: ../vector/lidar/v.lidar.correction/main.c:115
-#, fuzzy
 msgid "High threshold for object to terrain reclassification"
-msgstr "Signaturen, die für die Klassifikation genutzt werden sollen."
+msgstr "Oberer Grenzwert für die Objekt zu Gelände-Reklassifizierung"
 
 #: ../vector/lidar/v.lidar.correction/main.c:123
 msgid "Low threshold for terrain to object reclassification"
-msgstr ""
+msgstr "Unterer Grenzwert für die Objekt zu Gelände-Reklassifizierung"
 
 #: ../vector/lidar/v.lidar.correction/main.c:229
 #: ../vector/lidar/v.lidar.edgedetection/main.c:247
@@ -11813,22 +11821,21 @@ msgstr "Berechnung des Mittelwerts."
 
 #: ../vector/lidar/v.lidar.correction/main.c:283
 msgid "Only TERRAIN points"
-msgstr ""
+msgstr "Nur Geländepunkte"
 
 #: ../vector/lidar/v.lidar.correction/main.c:295
-#, fuzzy
 msgid "M.Q. solution"
-msgstr "Auflösung"
+msgstr "M.Q. Lösung"
 
 #: ../vector/lidar/v.lidar.correction/main.c:317
 msgid "Correction and creation of terrain vector"
-msgstr ""
+msgstr "Korrektur und Erstellung des Gelände-Vektorkarte"
 
 #: ../vector/lidar/v.lidar.correction/main.c:335
 #: ../vector/lidar/v.lidar.edgedetection/main.c:370
 #, c-format
 msgid "Dropping <%s>"
-msgstr ""
+msgstr "Lösche <%s>"
 
 #: ../vector/lidar/v.lidar.edgedetection/main.c:74
 msgid "vector, LIDAR, edges"
@@ -11843,29 +11850,27 @@ msgid "Regularization weight in gradient evaluation"
 msgstr "Regularisierungsgewicht für die Auswertung der Gradienten."
 
 #: ../vector/lidar/v.lidar.edgedetection/main.c:114
-#, fuzzy
 msgid "High gradient threshold for edge classification"
-msgstr "Signaturen, die für die Klassifikation genutzt werden sollen."
+msgstr "Schwellwert hoher Gradienten für die Kantenerkennung "
 
 #: ../vector/lidar/v.lidar.edgedetection/main.c:123
-#, fuzzy
 msgid "Low gradient threshold for edge classification"
-msgstr "Signaturen, die für die Klassifikation genutzt werden sollen."
+msgstr "Schwellwert niedriger Gradienten für die Kantenerkennung"
 
 #: ../vector/lidar/v.lidar.edgedetection/main.c:131
-#, fuzzy
 msgid "Angle range for same direction detection"
-msgstr "Winkel"
+msgstr "Winkelbereich für Erkennung der gleichen Richtung"
 
 #: ../vector/lidar/v.lidar.edgedetection/main.c:140
-#, fuzzy
 msgid "Regularization weight in residual evaluation"
-msgstr "in"
+msgstr "Regularisierungsgewicht für die Evaluation der Residuen"
 
 #: ../vector/lidar/v.lidar.edgedetection/main.c:196
-#, fuzzy, c-format
+#, c-format
 msgid "It was impossible to create <%s> interpolation table in database."
-msgstr "in."
+msgstr ""
+"Es war nicht möglich die <%s> Interpolations-Tabelle in der Datenbank zu "
+"erstellen."
 
 #: ../vector/lidar/v.lidar.edgedetection/main.c:292
 msgid "Allocation memory for bilinear interpolation"
@@ -11885,7 +11890,7 @@ msgstr "Bikubische Interpolation."
 
 #: ../vector/lidar/v.lidar.edgedetection/main.c:344
 msgid "Creating auxiliar table for archiving overlapping zones"
-msgstr ""
+msgstr "Erstelle Hilfstabelle um überlappende Zonen zu archivieren"
 
 #: ../vector/lidar/v.lidar.edgedetection/main.c:347
 #, c-format
@@ -24177,20 +24182,18 @@ msgid "SECTION %d: Watershed determination."
 msgstr "ABSCHNITT %d: Bestimme Wassereinzugsgebiet."
 
 #: ../raster/r.watershed/seg/do_cum.c:15 ../raster/r.watershed/ram/do_cum.c:12
-#, fuzzy
 msgid "SECTION 3: Accumulating Surface Flow with SFD."
-msgstr "ABSCHNITT 3: Akkumuliere Oberflächenabfluß."
+msgstr "ABSCHNITT 3: Akkumuliere Oberflächenabfluß mit SFD."
 
 #: ../raster/r.watershed/seg/do_cum.c:104
-#, fuzzy
 msgid "SECTION 3: Accumulating Surface Flow with MFD."
-msgstr "ABSCHNITT 3: Akkumuliere Oberflächenabfluß."
+msgstr "ABSCHNITT 3: Akkumuliere Oberflächenabfluß mit MFD."
 
 #: ../raster/r.watershed/seg/do_cum.c:278
 #: ../raster/r.watershed/ram/do_cum.c:265
 #, c-format
 msgid "MFD: cumulative proportion of flow distribution not 1.0 but %f"
-msgstr ""
+msgstr "MFD: kumulierter Anteil der Fließrichtung ist nicht 1.0 aber %f "
 
 #: ../raster/r.watershed/seg/do_cum.c:335
 #: ../raster/r.watershed/ram/do_cum.c:321
@@ -24244,6 +24247,8 @@ msgstr "ABSCHNITT 1 Beginne: Initialisiere Variablen. %d Abschnitte insgesamt."
 msgid ""
 "Maximum memory to be used was smaller than 3 MB, set to default = 300 MB."
 msgstr ""
+"Maximal verwendbarer Speicher war kleiner als 3 MB; Setze es auf den "
+"Standardwert 300 MB."
 
 #: ../raster/r.watershed/seg/init_vars.c:216
 msgid "Unable to open MASK"
@@ -24348,7 +24353,7 @@ msgstr ""
 
 #: ../raster/r.watershed/front/main.c:100
 msgid "Input value: minimum size of exterior watershed basin"
-msgstr "Eingabewert: kleinste Größe eines äußeren Wassereinzugsgebiets."
+msgstr "Eingabewert: kleinste Größe des äußeren Wassereinzugsgebiets."
 
 #: ../raster/r.watershed/front/main.c:109
 msgid "Input value: maximum length of surface flow, for USLE"
@@ -24388,17 +24393,19 @@ msgid "Output map: slope steepness (S) factor for USLE"
 msgstr "Ausgabekarte der Hangneigungsfaktoren (S) für USLE."
 
 #: ../raster/r.watershed/front/main.c:189
-#, fuzzy
 msgid "Convergence factor for MFD (1-10)"
-msgstr "Umrechnungsfaktor für z-Werte."
+msgstr "Umrechnungsfaktor für MFD (1-10)."
 
 #: ../raster/r.watershed/front/main.c:191
 msgid "1 = most diverging flow, 10 = most converging flow. Recommended: 5"
 msgstr ""
+"1 = der am meisten divergierende Fluss, 10 = der am meisten konvergierende "
+"Fluss. Empfohlen: 5."
 
 #: ../raster/r.watershed/front/main.c:198
 msgid "Maximum memory to be used with -m flag (in MB)"
 msgstr ""
+"Maximal zu verwendender Speicher in Verbindung mit dem Schalter -m (in MB)."
 
 #: ../raster/r.watershed/front/main.c:202
 msgid "SFD (D8) flow (default is MFD)"
@@ -24406,7 +24413,7 @@ msgstr ""
 
 #: ../raster/r.watershed/front/main.c:204
 msgid "SFD: single flow direction, MFD: multiple flow direction"
-msgstr ""
+msgstr "SFD: einzelne Fließrichtung, MFD: mehrere Fließrichtungen."
 
 #: ../raster/r.watershed/front/main.c:209
 msgid "Allow only horizontal and vertical flow of water"
@@ -24430,41 +24437,44 @@ msgstr ""
 #: ../raster/r.watershed/front/main.c:385
 #, c-format
 msgid "Subprocess failed with exit code %d"
-msgstr ""
+msgstr "Unterprozess fehlgeschlagen mit dem Fehlercode %d"
 
 #: ../raster/r.watershed/shed/intro.c:8
 #, c-format
 msgid "%s provides a text-based user-interface to the %s program."
 msgstr ""
+"%s erstellt eine textbasierte Benutzerschnittstelle für das %s Programm. "
 
 #: ../raster/r.watershed/shed/intro.c:10
 #, c-format
 msgid "%s also allows the user to prepare a report of map layers for each"
-msgstr ""
+msgstr "%s ermöglicht dem Benutzer auch einen Bericht zu jeder Karte "
 
 #: ../raster/r.watershed/shed/intro.c:12
-#, fuzzy, c-format
+#, c-format
 msgid "watershed basin determined in %s.\n"
-msgstr "Modul zur Berechnung von Wassereinzugsgebieten."
+msgstr "der Einzugsgebiete zu erstellen, die in %s ermittelt wurden.\n"
 
 #: ../raster/r.watershed/shed/intro.c:14
 #, c-format
 msgid "%s will help the user determine which options to use for the"
-msgstr ""
+msgstr "%s hilft dem Benutzer herauszufinden welche Optionen für das"
 
 #: ../raster/r.watershed/shed/intro.c:16
 #, c-format
 msgid "%s program.  %s will then ask for map layers that will be"
-msgstr ""
+msgstr "%s Programm zu benutzen sind. %s wird nach Karte fragen, die "
 
 #: ../raster/r.watershed/shed/intro.c:18
 #, c-format
 msgid "divided by basin. %s will then run %s and create the report."
 msgstr ""
+"von Behältern getrennt werden. %s wird dann %s starten und einen Bericht "
+"erstellen. "
 
 #: ../raster/r.watershed/shed/read.c:23
 msgid "unable to open basin/half basin map"
-msgstr "Kann die basin/half basin-Karte nicht öffnen."
+msgstr "Kann die 'basin'/'half basin'-Karte nicht öffnen."
 
 #: ../raster/r.watershed/shed/com_line.c:21
 msgid ""
@@ -24554,36 +24564,41 @@ msgid ""
 "One of the options for %s is a `depression map'.  A"
 msgstr ""
 "\n"
-"One of the options for %s is a `depression map'.  A"
+"Eine der Optionen für %s ist eine `Senkungskarte'. Eine "
 
 #: ../raster/r.watershed/shed/com_line.c:81
-#, fuzzy
 msgid ""
 "depression map indicates all the locations in the current map window where"
-msgstr "in"
+msgstr "Senkungskarte zeigt alle Orte im aktuellen Fenster an wo "
 
 #: ../raster/r.watershed/shed/com_line.c:82
 msgid ""
 "water accumulates and does not leave by the edge of the map. Lakes without"
-msgstr ""
+msgstr "sich Wasser sammelt und nicht am Kartenrand austritt. Seen ohne "
 
 #: ../raster/r.watershed/shed/com_line.c:83
 msgid ""
 "outlet streams and sinkholes are examples of `depressions'.  If you wish to"
 msgstr ""
+"Auslassströmungen und Senklöcher sind Beispiele von 'Bodensenken'. Wenn Sie "
+"eine "
 
 #: ../raster/r.watershed/shed/com_line.c:84
 msgid "have a depression map, prepare a map where non-zero values indicate the"
 msgstr ""
+"Karte der Bodensenken wünschen, müssen Sie eine Karte vorbereiten, in der "
+"die Nicht-Null Zellen "
 
 #: ../raster/r.watershed/shed/com_line.c:85
 msgid "locations where depressions occur.\n"
-msgstr "Orte an denen Senken vorkommen.\n"
+msgstr "Orte anzeigen an denen Senken vorkommen.\n"
 
 #: ../raster/r.watershed/shed/com_line.c:86
 msgid ""
 "Hit <return> by itself for the next question if there is no depression map."
 msgstr ""
+"Drücke <return> für die nächste Frage, wenn es keine Karte der Bodensenken "
+"gibt."
 
 #: ../raster/r.watershed/shed/com_line.c:97
 #, c-format
@@ -24591,70 +24606,92 @@ msgid ""
 "\n"
 "The %s program will divide the elevation map into a number of"
 msgstr ""
+"\n"
+"Das %s Programm wird die Höhenkarte in ein Anzahl von "
 
 #: ../raster/r.watershed/shed/com_line.c:99
 msgid ""
 "watershed basins.  The number of watershed basins is indirectly determined"
 msgstr ""
+"Einzugsgebiete unterteilen. Die Anzahl von Einzugsgebieten wird indirekt "
 
 #: ../raster/r.watershed/shed/com_line.c:100
 msgid ""
 "by the `basin threshold' value.  The basin threshold is the area necessary "
 "for"
 msgstr ""
+"vom 'basin threshold' Wert festgelegt. Der 'basin threshold' ist die "
+"notwendige Fläche für "
 
 #: ../raster/r.watershed/shed/com_line.c:101
 #, c-format
 msgid "%s to define a unique watershed basin.  This area only applies to"
 msgstr ""
+"%s um einzelne Einzugsgebiete zu definieren. Diese Fläche gilt nur für "
 
 #: ../raster/r.watershed/shed/com_line.c:103
 msgid ""
 "`exterior drainage basins'.  An exterior drainage basin does not have any"
 msgstr ""
+"außenliegende Einzugsgebiete. Ein außenliegendes Einzugsgebiet hat keine "
+"anderen "
 
 #: ../raster/r.watershed/shed/com_line.c:104
 msgid ""
 "drainage basins flowing into it.  Interior drainage basin size is determined"
 msgstr ""
+"Einzugsgebiete die mit einfließen. Die Größe von Binneneinzugsgebieten ist "
+"festgelegt "
 
 #: ../raster/r.watershed/shed/com_line.c:105
 msgid ""
 "by the surface flow going into stream segments between stream interceptions."
 msgstr ""
+"durch den Oberflächenabfluss, der in Flussabschnitten zwischen "
+"Stromunterbrechungen fließt. "
 
 #: ../raster/r.watershed/shed/com_line.c:106
 #, c-format
 msgid "Thus interior drainage basins can be of any size.  The %s program"
 msgstr ""
+"Daher können Binneneinzugsgebiete eine beliebige Größe haben. Das Programm %"
+"s "
 
 #: ../raster/r.watershed/shed/com_line.c:108
 msgid "also allows the user to relate basin size to potential overland flow"
 msgstr ""
+"ermöglicht es dem Benutzer sogar die Behältergröße in Beziehung zum "
+"Oberflächenabfluss zu setzen "
 
 #: ../raster/r.watershed/shed/com_line.c:109
 msgid ""
 "(i.e., areas with low infiltration capacities will need smaller areas to"
 msgstr ""
+"(z.B. Flächen mit niedriger Infiltrationskapazität brauchen kleinere Flächen "
+"um "
 
 #: ../raster/r.watershed/shed/com_line.c:110
 msgid ""
 "develop stream channels than neighboring areas with high infiltration rates)."
 msgstr ""
+"Strömungskanäle zu entwickeln als benachbarte Flächen mit hohen "
+"Infiltrationsraten). "
 
 #: ../raster/r.watershed/shed/com_line.c:111
 msgid ""
 "The user can create a map layer with potential overland flow values, and"
 msgstr ""
+"Der Benutzer kann eine Karte mit potentiellen Oerflächenabflusswerten "
+"generieren, und "
 
 #: ../raster/r.watershed/shed/com_line.c:112
 #, c-format
 msgid "%s will accumulate those values instead of area.\n"
-msgstr ""
+msgstr "%s wird diese Werte anstatt der Fläche akkumulieren.\n"
 
 #: ../raster/r.watershed/shed/com_line.c:114
 msgid "What unit of measure will you use for the basin threshold:"
-msgstr ""
+msgstr "Welche Maßeinheit wollen Sie für den 'basin threshold' verwenden:"
 
 #: ../raster/r.watershed/shed/com_line.c:117
 msgid " 1) acres,          2) meters sq., 3) miles sq., 4) hectares,"
@@ -24674,18 +24711,23 @@ msgid ""
 "\n"
 "How large an area (or how many overland flow units) must a drainage basin"
 msgstr ""
+"\n"
+"Welche Fläche (oder wie viele Oberflächenabfluss-Einheiten) muss ein "
+"Einzugsgebiet "
 
 #: ../raster/r.watershed/shed/com_line.c:129
 #, c-format
 msgid "be for it to be an exterior drainage basin: "
-msgstr ""
+msgstr "haben, um ein außenliegendes Einziehungsgebiet zu sein:"
 
 #: ../raster/r.watershed/shed/com_line.c:198
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "%s must create a map layer of watershed basins"
-msgstr "Generiert eine Rasterkarte mit Wassereinzugsgebieten"
+msgstr ""
+"\n"
+"%s muss eine Karte der Wassereinzugsgebiete erstellen"
 
 #: ../raster/r.watershed/shed/com_line.c:200
 #: ../raster/r.watershed/shed/com_line.c:221
@@ -24699,6 +24741,8 @@ msgid ""
 "\n"
 "%s must create a file of watershed basin relationships"
 msgstr ""
+"\n"
+"%s muss eine Datei für die Einzugsgebiet - Behälter - Verhältnisse erstellen"
 
 #: ../raster/r.watershed/shed/com_line.c:225
 #: ../raster/r.watershed/shed/com_line.c:260
@@ -24716,11 +24760,13 @@ msgid ""
 "\n"
 "%s will generate a lot of output.  Indicate a file"
 msgstr ""
+"\n"
+"%s wird viel Output erzeugen. Geben Sie einen Dateinamen "
 
 #: ../raster/r.watershed/shed/com_line.c:256
 #, c-format
 msgid "name for %s to send the output to."
-msgstr ""
+msgstr "für %s an, um den Output dorthin zu schicken."
 
 #: ../raster/r.watershed/shed/com_line.c:274
 #, c-format
@@ -24728,11 +24774,13 @@ msgid ""
 "\n"
 "The accumulation map from %s must be present for"
 msgstr ""
+"\n"
+"Die Akkumulationskarte von %s muss für"
 
 #: ../raster/r.watershed/shed/com_line.c:276
 #, c-format
 msgid "%s to work properly."
-msgstr ""
+msgstr "%s da sein um korrekt zu arbeiten."
 
 #: ../raster/r.watershed/shed/com_line.c:287
 #, c-format
@@ -24740,62 +24788,71 @@ msgid ""
 "\n"
 "%s can produce several maps not necessary for"
 msgstr ""
+"\n"
+"%s kann verschiedene Karten produzieren, die für "
 
 #: ../raster/r.watershed/shed/com_line.c:289
 #, c-format
 msgid "%s to function (stream channels, overland flow aspect, and"
 msgstr ""
+"%s nicht unbedingt funktionieren müssen (Strömungskanäle, Oberflächenabfluss-"
+"Aspekt und "
 
 #: ../raster/r.watershed/shed/com_line.c:291
 #, c-format
 msgid "a display version of the accumulation map).  %s also has the"
-msgstr ""
+msgstr "Bildschirmversion der Akkumulationskarte). %s hat auch die "
 
 #: ../raster/r.watershed/shed/com_line.c:293
-#, fuzzy
 msgid ""
 "ability to generate several variables in the Revised Universal Soil Loss"
-msgstr "in"
+msgstr ""
+"Möglichkeit in der verbesserten allgemeinen Bodenverlust Formel (Revised "
+"Universal Soil Loss Equation; Rusle) "
 
 #: ../raster/r.watershed/shed/com_line.c:294
-#, fuzzy
 msgid "Equation (Rusle): Slope Length (LS), and Slope Steepness (S).\n"
-msgstr "Länge S"
+msgstr ": Hanglänge (LS) und Hangsteilheit (S).\n"
 
 #: ../raster/r.watershed/shed/com_line.c:345
-#, fuzzy
 msgid ""
 "\n"
 "The Slope Length factor (LS) and Slope Steepness (S) are influenced by"
-msgstr "Länge S"
+msgstr ""
+"\n"
+"Der Faktor der Hanglänge (LS) und der Hangsteilheit (S) sind beeinflusst von "
 
 #: ../raster/r.watershed/shed/com_line.c:346
 #, c-format
 msgid "disturbed land.  %s reflects this with an optional map layer or value"
 msgstr ""
+"gestörtem Boden. %s reflektiert das mit einer optionalen Karte oder einem "
+"Wert "
 
 #: ../raster/r.watershed/shed/com_line.c:348
-#, fuzzy
 msgid ""
 "where the value indicates the percent of disturbed (barren) land in that "
 "cell."
-msgstr "in."
+msgstr ""
+"wobei der Wert den Prozentanteil von gestörtem (unfruchtbarem) Boden in der "
+"Zelle angibt. "
 
 #: ../raster/r.watershed/shed/com_line.c:349
-#, fuzzy
 msgid "Type <return> if you do not have a disturbed land map layer."
-msgstr "Typ<return>."
+msgstr "Drücke <return> wenn keine Karte mit gestörtem Boden vorhanden ist. "
 
 #: ../raster/r.watershed/shed/com_line.c:361
 msgid ""
 "\n"
 "Type the value indicating the percent of disturbed land.  This value will"
 msgstr ""
+"\n"
+"Geben Sie den Wert der den Prozentansatz von gestörtem Boden indiziert ein. "
+"Dieser Wert "
 
 #: ../raster/r.watershed/shed/com_line.c:362
-#, fuzzy
 msgid "be used for every cell in the current region."
-msgstr "Gib die aktuelle Region aus."
+msgstr "wird für jede Zelle in der aktuellen Region benutzt. "
 
 #: ../raster/r.watershed/shed/com_line.c:365
 #, c-format
@@ -24811,69 +24868,77 @@ msgid ""
 "\n"
 "Overland surface flow only occurs for a set distance before swales form."
 msgstr ""
+"\n"
+"Oberflächenabfluss tritt nur für eine bestimmte Distanz auf bevor eine Senke "
+"entsteht. "
 
 #: ../raster/r.watershed/shed/com_line.c:377
 #, c-format
 msgid "Because of digital terrain model limitations, %s cannot pick up"
-msgstr ""
+msgstr "Wegen der Grenzen des Digitalen Geländemodells kann %s diese "
 
 #: ../raster/r.watershed/shed/com_line.c:379
 #, c-format
 msgid "these swales.  %s allows for an input (warning: kludge factor)"
 msgstr ""
+"Senken nicht aufnehmen. %s erlaubt eine Eingabe (Warnung: Kludge Faktor) "
 
 #: ../raster/r.watershed/shed/com_line.c:381
 msgid ""
 "that prevents the surface flow distance from getting too long.  Normally,"
-msgstr ""
+msgstr "das verhindert dass die Distanz des Oberflächenabfluss zu lang wird. "
 
 #: ../raster/r.watershed/shed/com_line.c:382
-#, fuzzy
 msgid "maximum slope length is around 600 feet (about 183 meters)."
-msgstr "Fuß Meter."
+msgstr "Maximale Hanglänge ca. 600 Fuß (ca. 183 Meter). "
 
 #: ../raster/r.watershed/shed/com_line.c:397
-#, fuzzy
 msgid ""
 "\n"
 "Roads, ditches, changes in ground cover, and other factors will stop"
-msgstr "in"
+msgstr ""
+"\n"
+"Straßen, Gräben, Änderung in der Oberflächenabdeckung und andere Faktoren "
 
 #: ../raster/r.watershed/shed/com_line.c:398
 msgid ""
 "slope length.  You may input a raster map indicating the locations of these"
-msgstr ""
+msgstr "begrenzen die Hanglänge. Eine Rasterkarte mit den Standorten dieser "
 
 #: ../raster/r.watershed/shed/com_line.c:399
 msgid "blocking factors.\n"
-msgstr ""
+msgstr "blockierenden Faktoren sollte angegeben werden.\n"
 
 #: ../raster/r.watershed/shed/com_line.c:400
 msgid ""
 "Hit <return> by itself for the next question if there is no blocking map."
 msgstr ""
+"Drücke <return> für die nächste Frage wenn es keine Karte der Blockierungen "
+"gibt. "
 
 #: ../raster/r.watershed/shed/basin_maps.c:12
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Please indicate which map layers you wish to use in the lumped"
-msgstr "in"
+msgstr ""
+"\n"
+"\n"
+"Bitte geben Sie an welche Karten verwendet werden sollen in dem "
+"konzentrierten "
 
 #: ../raster/r.watershed/shed/basin_maps.c:13
 msgid "parameter hydrologic/soil erosion model.  Continue inputing cell map"
-msgstr ""
+msgstr "hydrologischen Parameter/Bodenerosions Modell. Die Eingabe der Karten "
 
 #: ../raster/r.watershed/shed/basin_maps.c:14
-#, fuzzy
 msgid "layers, one at a time, until all desired map layers are in."
-msgstr "in."
+msgstr "sollten einzeln erfolgen bis alle gewünschten Karten geladen sind."
 
 #: ../raster/r.watershed/shed/basin_maps.c:15
-#, fuzzy, c-format
+#, c-format
 msgid "You can have %s include a list of categories in each."
-msgstr "in."
+msgstr "%s kann eine Liste der Kategorien in jede einfügen. "
 
 #: ../raster/r.watershed/shed/basin_maps.c:17
 #, c-format
@@ -24881,6 +24946,8 @@ msgid ""
 "\n"
 "Hit <return> at the map prompt to continue with %s"
 msgstr ""
+"\n"
+"Drücke <return> in der Kartenanzeige um mit %s fortzufahren. "
 
 #: ../raster/r.watershed/shed/basin_maps.c:36
 #, c-format
@@ -24888,24 +24955,32 @@ msgid ""
 "\n"
 "The output from %s will be divided into watershed"
 msgstr ""
+"\n"
+"Die Ergebnisse von %s werden in Einzugsgebiete unterteilt. "
 
 #: ../raster/r.watershed/shed/basin_maps.c:38
 msgid "basins.  There are two possible methods of tabulating the information:"
-msgstr ""
+msgstr "Es gibt zwei mögliche Methoden die Information zu tabellieren: "
 
 #: ../raster/r.watershed/shed/basin_maps.c:39
 msgid "1) by only including data pertaining to the basin itself, or 2) using"
 msgstr ""
+"1) es werden nur die Daten beigefügt die nur das Gebiet selbst betreffen, "
+"oder 2) "
 
 #: ../raster/r.watershed/shed/basin_maps.c:40
 msgid "data from the basin, and all basins upstream of it."
 msgstr ""
+"es werden die Daten zum jeweiligen Gebiet und allen stromaufwärts gelegenen "
+"verwendet. "
 
 #: ../raster/r.watershed/shed/basin_maps.c:43
 msgid ""
 "\n"
 "Would you like the data organized:"
 msgstr ""
+"\n"
+"Sollen die Daten gegliedert werden:"
 
 #: ../raster/r.watershed/shed/basin_maps.c:44
 msgid ""
@@ -24914,6 +24989,10 @@ msgid ""
 "3) Both\n"
 "OR 0) to cancel program"
 msgstr ""
+"1) Nur das Gebiet\n"
+"2) Nur den Oberlauf\n"
+"3) Beides oder \n"
+"0) Programm beenden."
 
 #: ../raster/r.watershed/shed/basin_maps.c:45
 #, c-format
@@ -24932,6 +25011,9 @@ msgid ""
 "OK, %s should start running now using the following form:\n"
 "%s"
 msgstr ""
+"\n"
+"OK, %s sollte nun in der folgenden Form starten:\n"
+"%s"
 
 #: ../raster/r.watershed/shed/file_in.c:15
 msgid "unable to open ARMSED file"
@@ -34094,21 +34176,17 @@ msgstr "Nein"
 #~ msgid "Calculating flow directions..."
 #~ msgstr "Berechne Flußrichtungen..."
 
-#, fuzzy
 #~ msgid "unable to open flow accumulation map layer"
-#~ msgstr "Kann neue accum-Karte nicht öffnen."
+#~ msgstr "Kann neue Fluss-Akkumulations-Karte nicht öffnen."
 
-#, fuzzy
 #~ msgid "SECTION 4: RUSLE LS and/or S factor determination."
-#~ msgstr "ABSCHNITT 4: Bestimme die Hanglänge."
+#~ msgstr "ABSCHNITT 4: Bestimme RUSLE LS und/oder den S Faktor."
 
-#, fuzzy
 #~ msgid "unable to open new LS factor map layer."
-#~ msgstr "Kann neue L-Karte nicht öffnen."
+#~ msgstr "Kann neue LS-Faktor Karte nicht öffnen."
 
-#, fuzzy
 #~ msgid "unable to open new S factor map layer."
-#~ msgstr "Kann neue S-Karte nicht öffnen."
+#~ msgstr "Kann neue S-Faktor Karte nicht öffnen."
 
 #~ msgid "Base raster map <%s> not found"
 #~ msgstr "Basis-Rasterkarte <%s> nicht gefunden."
@@ -34232,9 +34310,8 @@ msgstr "Nein"
 #~ msgid "** no %s files found **\n"
 #~ msgstr "** keine %s Dateien gefunden **\n"
 
-#, fuzzy
 #~ msgid "Vector map <%s> of sparse points will be interpolated"
-#~ msgstr "<%s> Vektorkarte wird interpoliert."
+#~ msgstr "Die Vektorkarte <%s> mit wenigen Punkten wird interpoliert."
 
 #~ msgid "point;simple x,y[,z] list;standard;GRASS vector ASCII format"
 #~ msgstr "Punkt; einfache x,y[,z] Liste;Standard;GRASSs Vektor-ASCII-Format"
@@ -34452,16 +34529,15 @@ msgstr "Nein"
 #~ msgid "direction read: %lf, neighbour found: %i"
 #~ msgstr "Richtung gelesen: %lf, Nachbar gefunden: %i"
 
-#, fuzzy
 #~ msgid "Input value: maximum length of surface flow in map units, for USLE"
 #~ msgstr ""
-#~ "Eingabewert: Maximale Länge des Oberflächenabflusses (für ABAG/USLE)."
+#~ "Eingabewert: Maximale Länge des Oberflächenabflusses in Karteneinheiten "
+#~ "für USLE."
 
-#, fuzzy
 #~ msgid "Output map: useful for visual display of results. DEPRECATED."
 #~ msgstr ""
 #~ "Ausgabekarte die hilfreich für die visuelle Darstellung der Ergebnisse "
-#~ "ist."
+#~ "ist. VERALTET."
 
 #~ msgid "Use cell center reference in header instead of cell corner"
 #~ msgstr ""
@@ -34484,23 +34560,92 @@ msgstr "Nein"
 #~ msgid "Eigen values, (vectors), and [percent importance]:"
 #~ msgstr "Eigenwerte, (Vektoren), und [Prozent Wichtigkeit]:"
 
-#, fuzzy
 #~ msgid "Length of each spline step in the east-west direction"
-#~ msgstr "Spline-Interpolations-Schrittweite in Ost-Richtung."
+#~ msgstr "Spline-Interpolations-Schrittweite in Ost-West-Richtung."
 
-#, fuzzy
 #~ msgid "Length of each spline step in the north-south direction"
-#~ msgstr "Spline-Interpolations-Schrittweite in Nord-Richtung"
+#~ msgstr "Spline-Interpolations-Schrittweite in Nord-Süd-Richtung"
 
-#, fuzzy
 #~ msgid "Spline interpolation algorithm"
-#~ msgstr "Generalisierungs Algorithmus"
+#~ msgstr "Splineinterpolations Algorithmus"
 
-#, fuzzy
 #~ msgid ""
 #~ "No vector map of sparse points to interpolate was specified. "
 #~ "Interpolation will be done with <%s> vector map"
-#~ msgstr "Nein"
+#~ msgstr ""
+#~ "Keine Vektorkarte mit wenigen zu interpolierenden Punkten angegeben. Die "
+#~ "Interpolation erfolgt mit der <%s> Vektorkarte"
 
 #~ msgid "Outputs"
 #~ msgstr "Ausgaben"
+
+#~ msgid "All non-NULL and non-zero cells are considered as real depressions"
+#~ msgstr ""
+#~ "Alle Zellen, die nicht NULL sind oder den Wert Null haben werden als "
+#~ "echte Bodensenke aufgefasst."
+
+#~ msgid "All non-NULL and non-zero cells are considered as blocking terrain"
+#~ msgstr ""
+#~ "Alle Zellen, die nicht NULL sind oder den Wert Null haben werden als "
+#~ "echte Hindernis aufgefasst."
+
+#~ msgid "enable MFD flow (default is SFD (D8))"
+#~ msgstr "Aktiviere MFD-Fluss (Standard ist SFD (D8))."
+
+#~ msgid ""
+#~ "Only needed if memory requirements exceed available RAM; see manual on "
+#~ "how to calculate memory requirements"
+#~ msgstr ""
+#~ "Nur benötigt wenn die Speicheranforderungen den vorhandenen "
+#~ "Arbeitsspeicher überschreiten. Schlagen Sie im Handbuch nach wie die "
+#~ "Speicheranforderungen berechnet werden."
+
+#~ msgid "Use positive flow accumulation even for likely underestimates"
+#~ msgstr ""
+#~ "Verwende positive Flussakkumulation, auch für vorraussichtliche "
+#~ "Unterschätzungen."
+
+#~ msgid "See manual for a detailed description of flow accumulation output"
+#~ msgstr ""
+#~ "Siehe Handbuch für detaillierte Beschreibung der Ausgabe der "
+#~ "Flussakkumulation."
+
+#~ msgid ""
+#~ "Sorry, if any of the following options are set:\n"
+#~ "    basin, stream, half.basin, length.slope, or slope.steepness\n"
+#~ "    you MUST provide a value for the basin threshold parameter."
+#~ msgstr ""
+#~ "Wenn eine der nachfolgenden Optionen gesetzt wurde\n"
+#~ "    basin, stream, half.basin, length.slope, or slope.steepness\n"
+#~ "    MÜSSEN Sie ein Wert für den Parameter 'basin threshold' angegeben."
+
+#~ msgid ""
+#~ "MFD: A * path already processed when distributing flow: %d of %d cells"
+#~ msgstr ""
+#~ "MFD: A * Pfad schon verarbeitet bei der Verteilung der Flüsse: %d von %d "
+#~ "Zellen"
+
+#~ msgid "Tykhonov regularization weight"
+#~ msgstr "Tykhonov Regulierungs Gewicht"
+
+#~ msgid ""
+#~ "Find the best Tykhonov regularizing parameter using a \"leave-one-out\" "
+#~ "cross validation method"
+#~ msgstr ""
+#~ "Finde die beste Tykhonov Regularisierung mittels der \"leave-one-out\" "
+#~ "Kreuzvalidierung."
+
+#~ msgid "Tykhonov regularization parameter (affects smoothing)"
+#~ msgstr "Parameter für die Tykhonov Regularisierung (beinflußt Glättung)."
+
+#~ msgid ""
+#~ "Cannot allocate memory for auxiliar matrix.Consider changing region "
+#~ "resolution"
+#~ msgstr ""
+#~ "Speicher für Hilfmatrix kann nicht bereitgestellt werden. Erwägen Sie die "
+#~ "Auflösung der Region zu ändern."
+
+#~ msgid "No data within this subzone. Consider changing the spline step."
+#~ msgstr ""
+#~ "Keine Daten in dieser Unterzone, Erwägen Sie die Splineschrittweite zu "
+#~ "ändern."

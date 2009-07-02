@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: grasswxpy_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-01-09 23:29+0100\n"
-"PO-Revision-Date: 2009-03-24 18:26+0100\n"
+"PO-Revision-Date: 2009-06-11 16:45+0200\n"
 "Last-Translator: Robert Nuske <rnuske@gwdg.de>\n"
 "Language-Team: Deutsch <grass-translations@lists.osgeo.org>\n"
 "MIME-Version: 1.0\n"
@@ -1199,12 +1199,17 @@ msgid "Database connection is not defined in DB file."
 msgstr "Datenbankverbindung ist nicht definiert in der DB-Datei."
 
 #: ../gui/wxpython/gui_modules/dbm.py:2908
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "No attribute table linked to vector map <%(vector)s> found. %(msg)s\n"
 "You can disable this message from digitization settings. Or you can create "
 "and link attribute table to the vector map using Attribute Table Manager."
-msgstr "Vektor Vektor Vektor."
+msgstr ""
+"Es ist keine Attributtabelle mit der Vektorkarte <%(vector)s> verlinkt. %"
+"(msg)s\n"
+" Sie können diese Meldung in den Digitalisierungseinstellungen ausschalten. "
+"Oder Sie können mit dem Attributtabellenmanager eine Attributtabelle "
+"erzeugen und mit der Vektorkarte verknüpfen "
 
 #: ../gui/wxpython/gui_modules/dbm.py:2927
 msgid "Close dialog on submit"
@@ -1448,7 +1453,7 @@ msgstr "Karte"
 #: ../gui/wxpython/gui_modules/nviz_tools.py:262
 #: ../gui/wxpython/gui_modules/nviz_tools.py:866
 msgid "unset"
-msgstr ""
+msgstr "zurücksetzen"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:267
 #: ../gui/wxpython/gui_modules/nviz_tools.py:871
@@ -1537,12 +1542,11 @@ msgstr "Nullen maskieren:"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:441
 msgid "by elevation"
-msgstr ""
+msgstr "nach Höhenlage"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:446
-#, fuzzy
 msgid "by color"
-msgstr "Farbe"
+msgstr "nach Farbe"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:461
 msgid "Position"
@@ -2108,9 +2112,8 @@ msgid "Query features"
 msgstr "Feature abfragen"
 
 #: ../gui/wxpython/gui_modules/toolbars.py:863
-#, fuzzy
 msgid "Z bulk-labeling of 3D lines"
-msgstr "Zeilen"
+msgstr "Z Massenbeschriftung von 3D Linien"
 
 #: ../gui/wxpython/gui_modules/toolbars.py:871
 msgid "Feature type conversion"
@@ -3029,17 +3032,20 @@ msgid "Vector point layer not found (id=%d)"
 msgstr "Vektor-Punktebene nicht gefunden (id=%d)"
 
 #: ../gui/wxpython/gui_modules/nviz_mapdisp.py:1187
-#, fuzzy, python-format
+#, python-format
 msgid "Unable to set data layer properties (id=%d)"
-msgstr "Daten"
+msgstr "Kann die Eigenschaften der Datenebene (id=%d) nicht setzen."
 
 #: ../gui/wxpython/gui_modules/nviz_mapdisp.py:1191
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Setting data layer properties failed.\n"
 "\n"
 "%s"
-msgstr "fehlgeschlagen"
+msgstr ""
+"Setzen der Eigenschaften des Datenebene fehlgeschlagen.\n"
+"\n"
+"%s"
 
 #: ../gui/wxpython/gui_modules/colorrules.py:94
 msgid "Create new color table for raster map"
@@ -3092,9 +3098,8 @@ msgid "Enter raster cat values or percents (range = %(min)d-%(max)d)"
 msgstr "Geben Sie Raster cat Werte oder Prozente ein (range = %(min)d-%(max)d)"
 
 #: ../gui/wxpython/gui_modules/colorrules.py:468
-#, fuzzy
 msgid "Please select attribute column and RGB color column first"
-msgstr "Farbe"
+msgstr "Bitte wählen Sie zuerst die Attributspalte und die RGB-Farbspalte."
 
 #: ../gui/wxpython/gui_modules/mapdisp_window.py:1094
 #: ../gui/wxpython/gui_modules/mapdisp_window.py:1725
@@ -3202,12 +3207,15 @@ msgid "Unable render overlay <%s>"
 msgstr "Kann die Überlagerung <%s> nicht rendern"
 
 #: ../gui/wxpython/gui_modules/vdigit.py:121
-#, fuzzy
 msgid ""
 "Unable to initialize display driver, see README file for more information.\n"
 "\n"
 "Details:"
-msgstr "Darstellung:"
+msgstr ""
+"Kann den Displaytreiber nicht initializieren. Bitte, schauen Sie in die "
+"README-Datei für mehr Informationen.\n"
+"\n"
+"Details:"
 
 #: ../gui/wxpython/gui_modules/vdigit.py:127
 #: ../gui/wxpython/gui_modules/vdigit.py:134
@@ -3484,6 +3492,9 @@ msgid ""
 "Layer and category number must be integer.\n"
 "Layer number must be greater then zero."
 msgstr ""
+"Kann den neuen Layer/Kategorie <%(layer)s/%(category)s> nicht hinzufügen.\n"
+"Layer und Kategorie Nummern müssen integer sein.\n"
+"Layer Nummern müssen größer als Null sein."
 
 #: ../gui/wxpython/gui_modules/vdigit.py:1926
 msgid "Delete selected"
@@ -3498,13 +3509,13 @@ msgid "Unable to update vector map."
 msgstr "Kann die Vektorkarte nicht aktualisieren."
 
 #: ../gui/wxpython/gui_modules/vdigit.py:2237
-#, fuzzy, python-format
+#, python-format
 msgid "%d lines selected for z bulk-labeling"
-msgstr "Zeilen"
+msgstr "%d Linien ausgewählt für die Z Massenbeschriftung."
 
 #: ../gui/wxpython/gui_modules/vdigit.py:2240
 msgid "Set value"
-msgstr ""
+msgstr "Wert setzen"
 
 #: ../gui/wxpython/gui_modules/vdigit.py:2247
 msgid "Starting value"
@@ -5979,10 +5990,11 @@ msgid "Recode using rules file"
 msgstr "Neukodieren der Kategorien mit einer Regel-Datei"
 
 #: ../gui/wxpython/menustrings.py:377
-#, fuzzy
 msgid ""
 "r.recode.rules - Use ascii rules file to recode categories in raster map"
-msgstr "Raster"
+msgstr ""
+"r.recode.rules - Verwenden Sie ASCII-Regeldateien, um eine Rasterkarte "
+"umzukodieren."
 
 #: ../gui/wxpython/menustrings.py:378
 msgid "Rescale"
@@ -6140,6 +6152,7 @@ msgstr "Bilinear und Bikubisch aus Vektorpunkten"
 #: ../gui/wxpython/menustrings.py:408
 msgid "Bicubic or bilinear spline interpolation with Tykhonov regularization."
 msgstr ""
+"Bikubische oder bilineare Splineinterpolation mit Tykhonov Regularisierung."
 
 #: ../gui/wxpython/menustrings.py:409
 msgid "IDW from raster points"
@@ -6244,9 +6257,8 @@ msgid "Sums up the raster cell values."
 msgstr "Summiert die Rasterzellenwerte."
 
 #: ../gui/wxpython/menustrings.py:430
-#, fuzzy
 msgid "Sum area by raster map and category"
-msgstr "Fläche Raster"
+msgstr "Addiere Flächen nach Rasterkarte und Kategorie"
 
 #: ../gui/wxpython/menustrings.py:431
 msgid "Reports statistics for raster map layers."
@@ -6265,9 +6277,8 @@ msgstr ""
 "Vektorkarte (Punkte) mit den Zentroiden der Datenklumpen erzeugt werden."
 
 #: ../gui/wxpython/menustrings.py:434
-#, fuzzy
 msgid "Total corrected area"
-msgstr "Fläche"
+msgstr "Gesamte korrigierte Fläche"
 
 #: ../gui/wxpython/menustrings.py:435
 msgid "Surface area estimation for rasters."
@@ -6558,21 +6569,24 @@ msgid "Detect interiors"
 msgstr "Innenräume erkennen"
 
 #: ../gui/wxpython/menustrings.py:501
-#, fuzzy
 msgid ""
 "Building contour determination and Region Growing algorithm for determining "
 "the building inside"
-msgstr "Region"
+msgstr ""
+"Bestimmung der Gebäudeumrisse und Ermittelung des Gebäudeinneren mittels des "
+"'Region Growing' Verfahrens"
 
 #: ../gui/wxpython/menustrings.py:502
 msgid "Correct and reclassify objects"
-msgstr ""
+msgstr "Korrigiere und Reklassifiziere Objekte"
 
 #: ../gui/wxpython/menustrings.py:503
 msgid ""
 "Correction of the v.lidar.growing output. It is the last of the three "
 "algorithms for LIDAR filtering."
 msgstr ""
+"Korrektur der v.lidar.growing Ausgabe. Dies ist der letzte von drei LiDAR "
+"Filter-Algorithmen."
 
 #: ../gui/wxpython/menustrings.py:504
 msgid "Linear referencing"
@@ -6744,13 +6758,13 @@ msgid "Reclassify objects interactively"
 msgstr "Reklassifiziere Objekte interaktiv"
 
 #: ../gui/wxpython/menustrings.py:539
-#, fuzzy
 msgid "Reclassify vector objects interactively by entering SQL rules"
-msgstr "Vektor"
+msgstr ""
+"Reklassifiziere Vektorobjekte interaktive durch Eingabe von SQL Regeln."
 
 #: ../gui/wxpython/menustrings.py:540
 msgid "Reclassify objects using rules file"
-msgstr ""
+msgstr "Reklassifiziere Objekte mittels Regeldatei"
 
 #: ../gui/wxpython/menustrings.py:541
 msgid ""
@@ -6928,23 +6942,20 @@ msgstr ""
 "Gibt grundlegende Informationen über eine benutzerdefinierte Vektorkarte aus."
 
 #: ../gui/wxpython/menustrings.py:578
-#, fuzzy
 msgid "Report topology by category"
-msgstr "Topologie"
+msgstr "Berichte Topologie nach Kategorien getrennt"
 
 #: ../gui/wxpython/menustrings.py:579
 msgid "Reports geometry statistics for vectors."
 msgstr "Gibt statistische Werte für Geometrie der Vektorobjekte aus."
 
 #: ../gui/wxpython/menustrings.py:580
-#, fuzzy
 msgid "Upload or report topology"
-msgstr "Topologie"
+msgstr "Lade oder berichte Topologie"
 
 #: ../gui/wxpython/menustrings.py:581
-#, fuzzy
 msgid "Populate database values from vector features."
-msgstr "Vektor."
+msgstr "Fülle Datenbank basierend auf Vektorfetures."
 
 #: ../gui/wxpython/menustrings.py:582
 msgid "Univariate attribute statistics"
@@ -7025,29 +7036,32 @@ msgid "HIS to RGB"
 msgstr "HIS zu RGB"
 
 #: ../gui/wxpython/menustrings.py:600
-#, fuzzy
 msgid ""
 "Hue-intensity-saturation (his) to red-green-blue (rgb) raster map color "
 "transformation function."
-msgstr "Raster."
+msgstr ""
+"Farbwert-Intensität-Sättigung (HIS) zu Rot-Grün-Blau (RGB) Rasterkarten "
+"Farbtransformationsfunktion."
 
 #: ../gui/wxpython/menustrings.py:602
-#, fuzzy
 msgid ""
 "Red-green-blue (rgb) to hue-intensity-saturation (his) raster map color "
 "transformation function"
-msgstr "Raster"
+msgstr ""
+"Rot-Grün-Blau (RGB) zu Farbwert-Intensität-Sättigung (HIS) Rasterkarten "
+"Farbtransformationsfunktion."
 
 #: ../gui/wxpython/menustrings.py:603
 msgid "Rectify image or raster"
 msgstr "Rektifiziere Bild oder Raster"
 
 #: ../gui/wxpython/menustrings.py:604
-#, fuzzy
 msgid ""
 "Rectifies an image by computing a coordinate transformation for each pixel "
 "in the image based on the control points"
-msgstr "Punkte"
+msgstr ""
+"Rektifiziert ein Bild durch Berechnung einer Koordinatentransformation für "
+"jedes Pixel des Bildes basierend auf den Kontrollpunkten."
 
 #: ../gui/wxpython/menustrings.py:605
 msgid "Basic RS processing"
@@ -7120,9 +7134,8 @@ msgid "Classify image"
 msgstr "Bild klassifizieren"
 
 #: ../gui/wxpython/menustrings.py:621
-#, fuzzy
 msgid "Clustering input for unsupervised classification"
-msgstr "für"
+msgstr "Clustert die Eingabe für eine unüberwachte Klassifikation."
 
 #: ../gui/wxpython/menustrings.py:622
 msgid ""
@@ -7146,7 +7159,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:625
 msgid "Sequential maximum a posteriori classification (SMAP)"
-msgstr ""
+msgstr "Sequential maximum a posteriori classification (SMAP)"
 
 #: ../gui/wxpython/menustrings.py:626
 msgid ""
@@ -7157,24 +7170,20 @@ msgstr ""
 "'sequential maximum a posteriori (SMAP)' Ansatzes durch."
 
 #: ../gui/wxpython/menustrings.py:627
-#, fuzzy
 msgid "Input for supervised MLC"
-msgstr "Eingabe"
+msgstr "Eingabe für überwachte MLC"
 
 #: ../gui/wxpython/menustrings.py:628
-#, fuzzy
 msgid "Generates statistics for i.maxlik from raster map layer."
-msgstr "Raster."
+msgstr "Erzeugt Statistiken für i.maxlink aus einer Rasterkarte."
 
 #: ../gui/wxpython/menustrings.py:629
-#, fuzzy
 msgid "Input for supervised SMAP"
-msgstr "Eingabe"
+msgstr "Eingabe für überwachte SMAP"
 
 #: ../gui/wxpython/menustrings.py:630
-#, fuzzy
 msgid "Generate statistics for i.smap from raster map layer."
-msgstr "Raster."
+msgstr "Erzeugt Statistiken für i.smap aus einer Rasterkarte."
 
 #: ../gui/wxpython/menustrings.py:631
 msgid "Filter image"
@@ -7208,6 +7217,7 @@ msgstr "Spektralwert"
 msgid ""
 "displays spectral response at user specified locations in group or images"
 msgstr ""
+"Zeigt die Spektralantwort von Gruppen oder Bildern an einem gegebenen Ort."
 
 #: ../gui/wxpython/menustrings.py:640
 msgid "Tasseled cap vegetation index"
@@ -7431,11 +7441,13 @@ msgid "Copy table"
 msgstr "Tabelle kopieren"
 
 #: ../gui/wxpython/menustrings.py:693
-#, fuzzy
 msgid ""
 "Copy a table. Either 'from_table' (optionally with 'where') can be used or "
 "'select' option, but not 'from_table' and 'select' at the same time."
-msgstr "Kopiere Karten."
+msgstr ""
+"Kopiere eine Tabelle. Entweder kann 'from_table' (gegebenenfalls mit "
+"'where') oder die 'select'Option verwendet werden. 'from_table' und 'select' "
+"können aber nicht zur gleichen Zeit verwendet werden."
 
 #: ../gui/wxpython/menustrings.py:694
 msgid "New table"
@@ -7536,9 +7548,8 @@ msgid "Reconnects vectors to a new database."
 msgstr "Verbindet Vektor mit einer neuen Datenbank."
 
 #: ../gui/wxpython/menustrings.py:716
-#, fuzzy
 msgid "Set vector map - database connection"
-msgstr "Vektor"
+msgstr "Gebe die Vektorkarte - Datenbankverbindung"
 
 #: ../gui/wxpython/menustrings.py:717
 msgid "Prints/sets DB connection for a vector map to attribute table."
@@ -7754,13 +7765,12 @@ msgstr ""
 #~ msgid "Ortho Photo rectification"
 #~ msgstr "Orthophoto Rektifizierung"
 
-#, fuzzy
 #~ msgid "Interactive input for supervised classification (requires Xterm)"
-#~ msgstr "für"
+#~ msgstr ""
+#~ "Interaktive Eingabe für eine überwachte Klassifikation (benötigt Xterm)."
 
-#, fuzzy
 #~ msgid "Interactive input for supervised classification"
-#~ msgstr "für"
+#~ msgstr "Interaktive Eingabe für eine überwachte Klassifikation"
 
 #~ msgid "GRASS GIS Layer Manager"
 #~ msgstr "GRASS GIS Ebenen-Manager"
@@ -7875,9 +7885,8 @@ msgstr ""
 #~ msgid "Select vector map(s) to add to group:"
 #~ msgstr "Wählen Sie Vektorkarte(n) für die Gruppe:"
 
-#, fuzzy
 #~ msgid "Set to all"
-#~ msgstr "Alle"
+#~ msgstr "Alle setzen"
 
 #~ msgid "Use draw settings for all loaded surfaces"
 #~ msgstr "Verwende Zeichenvorschriften für alle geladenen Oberflächen"
@@ -7920,9 +7929,8 @@ msgstr ""
 #~ msgid "Do not attach category to boundaries"
 #~ msgstr "Hänge keine Kategorien an die Grenzen an"
 
-#, fuzzy
 #~ msgid "Select toggle"
-#~ msgstr "Farbe auswählen"
+#~ msgstr "Umschalter auswählen"
 
 #~ msgid "Change default GUI"
 #~ msgstr "Wechsle das Standard GUI"
@@ -7940,3 +7948,58 @@ msgstr ""
 
 #~ msgid "Smooth or simplify lines/boundaries (remove vertices)."
 #~ msgstr "Glättet oder Vereinfacht Linien/Grenzen (entfernt Vertices)."
+
+#~ msgid "Cmd >"
+#~ msgstr "Cmd >"
+
+#~ msgid "Click for erasing command prompt"
+#~ msgstr "Klicke um die Eingabeaufforderung (prompt) zu löschen."
+
+#~ msgid "Collapse all except current"
+#~ msgstr "Alle einklappen außer Aktuelles"
+
+#~ msgid "Unknown value"
+#~ msgstr "Unbekannter Wert"
+
+#~ msgid ""
+#~ "Error loading attribute data. Record number: %(rec)d. Unable to convert "
+#~ "value '%(val)s' in key column (%(key)s) to integer.\n"
+#~ "\n"
+#~ "Details: %(detail)s"
+#~ msgstr ""
+#~ "Fehler beim Laden der Attributdaten. Datensatz Nummer: %(rec)d. Kann den "
+#~ "Wert '%(val)s' in der Schlüsselspalte (%(key)s) nicht nach integer "
+#~ "umwandeln.\n"
+#~ "\n"
+#~ "Einzelheiten: %(detail)s"
+
+#~ msgid "Value '%(value)s' needs to be entered as %(type)s."
+#~ msgstr "Der Wert '%(value)s' muss als %(type)s eingegeben werden."
+
+#~ msgid ""
+#~ "Unable to get current geographic extent. Force quiting wxGUI. Please run "
+#~ "manually g.region to fix the problem."
+#~ msgstr ""
+#~ "Kann die aktuelle geographische Ausdehnung nicht ermitteln. Erzwinge das "
+#~ "Schlicßen von wxGUI. Bitte, führen Sie g.region manuell aus um das "
+#~ "Problem zu beheben."
+
+#~ msgid "Invert selection"
+#~ msgstr "Auswahl umkehren"
+
+#~ msgid "Reload EPSG Codes"
+#~ msgstr "EPSG Codes erneut laden"
+
+#~ msgid ""
+#~ "Location <%(loc)s> will be created in GIS data directory <%(dir)s>.You "
+#~ "will need to change the default GIS data directory in the GRASS startup "
+#~ "screen."
+#~ msgstr ""
+#~ "Die Location <%(loc)s> wird im GIS-Verzeichnis <%(dir)s> angelegt. Sie "
+#~ "müssen das Standard GIS-Verzeichnis auf dem GRASS Startbildschrim ändern."
+
+#~ msgid "New GIS data directory"
+#~ msgstr "Neues GIS-Verzeichnis:"
+
+#~ msgid "Datums (select to see description):"
+#~ msgstr "Datum (auswählen um die Beschreibung zu sehen):"
