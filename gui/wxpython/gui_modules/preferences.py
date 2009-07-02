@@ -865,6 +865,8 @@ class PreferencesDialog(wx.Dialog):
         btnCancel.Bind(wx.EVT_BUTTON, self.OnCancel)
         btnCancel.SetToolTipString(_("Close dialog and ignore changes"))
 
+        self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
+
         # sizers
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
         btnSizer.Add(item=btnDefault, proportion=1,
@@ -1675,6 +1677,9 @@ class PreferencesDialog(wx.Dialog):
         if self.__UpdateSettings():
             self.Close()
 
+    def OnCloseWindow(self, event):
+        self.Hide()
+        
     def OnCancel(self, event):
         """!Button 'Cancel' pressed"""
         self.Close()

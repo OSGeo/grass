@@ -124,6 +124,7 @@ class GMFrame(wx.Frame):
         self.georectifying = None         # reference to GCP class or None
         # list of open dialogs
         self.dialogs        = dict()
+        self.dialogs['preferences'] = None
         self.dialogs['atm'] = list()
         
         # creating widgets
@@ -892,9 +893,12 @@ class GMFrame(wx.Frame):
 
     def OnPreferences(self, event):
         """!General GUI preferences/settings"""
-        dlg = preferences.PreferencesDialog(parent=self)
-        dlg.CenterOnScreen()
-        dlg.ShowModal()
+        if not self.dialogs['preferences']:
+            dlg = preferences.PreferencesDialog(parent=self)
+            self.dialogs['preferences'] = dlg
+            self.dialogs['preferences'].CenterOnScreen()
+
+        self.dialogs['preferences'].ShowModal()
         
     def DispHistogram(self, event):
         """
