@@ -1161,7 +1161,7 @@ class PreferencesDialog(wx.Dialog):
         # proj
         row += 1
         label = wx.StaticText(parent=panel, id=wx.ID_ANY,
-                              label=_("Proj.4 string:"))
+                              label=_("Proj.4 string (required):"))
         projString = wx.TextCtrl(parent=panel, id=wx.ID_ANY,
                                  value=self.settings.Get(group='display', key='projection', subkey='proj4'),
                                  name="GetValue", size=(400, -1))
