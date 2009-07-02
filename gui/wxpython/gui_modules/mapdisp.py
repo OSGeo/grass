@@ -882,12 +882,12 @@ class MapFrame(wx.Frame):
                                            key='projection',
                                            subkey='proj4')
                 proj, coord1 = utils.ReprojectCoordinates(coord = (region["w"], region["s"]),
-                                                          projOut = projOut)
+                                                          projOut = projOut, flags = 'd')
                 proj, coord2 = utils.ReprojectCoordinates(coord = (region["e"], region["n"]),
-                                                          projOut = projOut)
+                                                          projOut = projOut, flags = 'd')
                 if sel == 2:
                     proj, coord3 = utils.ReprojectCoordinates(coord = (region["ewres"], region["nsres"]),
-                                                              projOut = projOut)
+                                                              projOut = projOut, flags = 'd')
                 
                 if coord1 and coord2:
                     if proj in ('ll', 'latlong', 'longlat'):
@@ -1016,11 +1016,12 @@ class MapFrame(wx.Frame):
                                                                    region['center_northing']),
                                                           projOut = UserSettings.Get(group='display',
                                                                                      key='projection',
-                                                                                     subkey='proj4'))
+                                                                                     subkey='proj4'),
+                                                          flags = 'd')
                 if coord:
                     if proj in ('ll', 'latlong', 'longlat'):
-                        self.statusbarWin['goto'].SetValue("%s; %s" % (coord[0],
-                                                                           coord[1]))
+                        self.statusbarWin['goto'].SetValue("%s" % utils.Deg2DMS(coord[0],
+                                                                                coord[1]))
                     else:
                         self.statusbarWin['goto'].SetValue("%.2f; %.2f" % (coord[0],
                                                                            coord[1]))
