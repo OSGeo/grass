@@ -886,9 +886,10 @@ class MapFrame(wx.Frame):
                 proj, coord2 = utils.ReprojectCoordinates(coord = (region["e"], region["n"]),
                                                           projOut = projOut, flags = 'd')
                 if sel == 2:
-                    proj, coord3 = utils.ReprojectCoordinates(coord = (region["ewres"], region["nsres"]),
+                    proj, coord3 = utils.ReprojectCoordinates(coord = (0.0, 0.0),
                                                               projOut = projOut, flags = 'd')
-                
+                    proj, coord4 = utils.ReprojectCoordinates(coord = (region["ewres"], region["nsres"]),
+                                                              projOut = projOut, flags = 'd')
                 if coord1 and coord2:
                     if proj in ('ll', 'latlong', 'longlat'):
                         w, s = utils.Deg2DMS(coord1[0], coord1[1], string = False)
@@ -897,7 +898,9 @@ class MapFrame(wx.Frame):
                             self.statusbar.SetStatusText("%s - %s, %s - %s" %
                                                          (w, e, s, n), 0)
                         else:
-                            ewres, nsres = utils.Deg2DMS(coord3[0], coord3[1], string = False)
+                            ewres, nsres = utils.Deg2DMS(abs(coord3[0]) - abs(coord4[0]),
+                                                         abs(coord3[1]) - abs(coord4[1]),
+                                                         string = False, hemisphere = False)
                             self.statusbar.SetStatusText("%s - %s, %s - %s (%s, %s)" %
                                                          (w, e, s, n, ewres, nsres), 0)
                     else:
