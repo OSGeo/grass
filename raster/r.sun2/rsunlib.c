@@ -203,7 +203,7 @@ void com_par(struct SunGeometryConstDay *sungeom,
 	    }
 	}
 	else {
-	    /*                      G_debug(3,"\tThe Sun is ON HORIZON during the whole day"); */
+	    /* G_debug(3,"\tThe Sun is ON HORIZON during the whole day"); */
 	    sungeom->sunrise_time = 0;
 	    sungeom->sunset_time = 24;
 	}
@@ -344,16 +344,14 @@ double lumcline2(struct SunGeometryConstDay *sungeom,
 
 	if (useHorizonData()) {
 	    /* Start is due east, sungeom->timeangle = -pi/2 */
-	    /*
-	       timeoffset = sungeom->timeAngle+pihalf;
-	     */
+	    /* timeoffset = sungeom->timeAngle+pihalf; */
 	    timeoffset = sunVarGeom->sunAzimuthAngle;
 
 	    /*
 	       if(timeoffset<0.)
-	       timeoffset+=pi2;
+		  timeoffset+=pi2;
 	       else if(timeoffset>pi2)
-	       timeoffset-=pi2;
+		  timeoffset-=pi2;
 	       horizPos = arrayNumInt - timeoffset/horizonInterval;
 	     */
 
@@ -374,20 +372,18 @@ double lumcline2(struct SunGeometryConstDay *sungeom,
 		(horizonHeight > sunVarGeom->solarAltitude);
 
 	    if (!sunVarGeom->isShadow) {
-		/*
-		   if (z_orig != UNDEFZ) 
-		   {
-		   s = sunSlopeGeom->lum_C31_l * cos(-sungeom->timeAngle - sunSlopeGeom->longit_l) + sunSlopeGeom->lum_C33_l; 
-
-		   }
-		   else
-		   {
-		   s = sunVarGeom->sinSolarAltitude;
+		/* if (z_orig != UNDEFZ) {
+		      s = sunSlopeGeom->lum_C31_l
+			* cos(-sungeom->timeAngle - sunSlopeGeom->longit_l)
+			+ sunSlopeGeom->lum_C33_l;
+		   } else {
+		     s = sunVarGeom->sinSolarAltitude;
 		   }
 		 */
-		s = sunSlopeGeom->lum_C31_l * cos(-sungeom->timeAngle - sunSlopeGeom->longit_l) + sunSlopeGeom->lum_C33_l;	/* Jenco */
+		s = sunSlopeGeom->lum_C31_l
+			* cos(-sungeom->timeAngle - sunSlopeGeom->longit_l)
+			+ sunSlopeGeom->lum_C33_l;	/* Jenco */
 	    }
-
 
 	}			/*  End if useHorizonData() */
 	else {
@@ -397,46 +393,43 @@ double lumcline2(struct SunGeometryConstDay *sungeom,
 	    }
 
 
-
-
 	    if (r == 2) {
 		sunVarGeom->isShadow = 1;	/* shadow */
 	    }
 	    else {
 
-		/*
-		   if (z_orig != UNDEFZ) 
-		   {
-
-		   s = sunSlopeGeom->lum_C31_l * cos(-sungeom->timeAngle - sunSlopeGeom->longit_l) + sunSlopeGeom->lum_C33_l; 
-		   }
-		   else
-		   {
-		   s = sunVarGeom->sinSolarAltitude;
+		/* if (z_orig != UNDEFZ) {
+		      s = sunSlopeGeom->lum_C31_l
+			* cos(-sungeom->timeAngle - sunSlopeGeom->longit_l)
+			+ sunSlopeGeom->lum_C33_l;
+		   } else {
+		     s = sunVarGeom->sinSolarAltitude;
 		   }
 		 */
-		s = sunSlopeGeom->lum_C31_l * cos(-sungeom->timeAngle - sunSlopeGeom->longit_l) + sunSlopeGeom->lum_C33_l;	/* Jenco */
+		s = sunSlopeGeom->lum_C31_l
+			* cos(-sungeom->timeAngle - sunSlopeGeom->longit_l)
+			+ sunSlopeGeom->lum_C33_l;	/* Jenco */
 	    }
 	}
     }
     else {
-	/*
-	   if (z_orig != UNDEFZ) 
-	   {
-	   s = sunSlopeGeom->lum_C31_l * cos(-sungeom->timeAngle - sunSlopeGeom->longit_l) + sunSlopeGeom->lum_C33_l; 
-	   }
-	   else
-	   {
-	   s = sunVarGeom->sinSolarAltitude;
+	/* if (z_orig != UNDEFZ) {
+	     s = sunSlopeGeom->lum_C31_l
+		* cos(-sungeom->timeAngle - sunSlopeGeom->longit_l)
+		+ sunSlopeGeom->lum_C33_l;
+	   } else {
+	     s = sunVarGeom->sinSolarAltitude;
 	   }
 	 */
-	s = sunSlopeGeom->lum_C31_l * cos(-sungeom->timeAngle - sunSlopeGeom->longit_l) + sunSlopeGeom->lum_C33_l;	/* Jenco */
-
-
+	s = sunSlopeGeom->lum_C31_l
+		* cos(-sungeom->timeAngle - sunSlopeGeom->longit_l)
+		+ sunSlopeGeom->lum_C33_l;	/* Jenco */
     }
 
+    /* if (s <= 0) return UNDEFZ; ?? */
     if (s < 0)
 	return 0.;
+
     return (s);
 }
 
@@ -513,12 +506,10 @@ double brad_angle_loss(double sh, double *bh,
     if (opticalAirMass <= 20.)
 	rayl =
 	    1. / (6.6296 +
-		  opticalAirMass * (1.7513 +
-				    opticalAirMass * (-0.1202 +
-						      opticalAirMass *
-						      (0.0065 -
-						       opticalAirMass *
-						       0.00013))));
+		  opticalAirMass *
+		   (1.7513 + opticalAirMass *
+		    (-0.1202 + opticalAirMass *
+		     (0.0065 - opticalAirMass * 0.00013))));
     else
 	rayl = 1. / (10.4 + 0.718 * opticalAirMass);
     *bh =
@@ -584,21 +575,19 @@ double drad(double sh, double bh, double *rr,
 	if ((sunVarGeom->isShadow == 1) || sh <= 0.)
 	    fx = r_sky + fg * 0.252271;
 	else if (sunVarGeom->solarAltitude >= 0.1) {
-	    fx = ((0.00263 - kb * (0.712 + 0.6883 * kb)) * fg + r_sky) * (1. -
-									  kb)
-		+ kb * sh / locSinSolarAltitude;
+	    fx = ((0.00263 - kb * (0.712 + 0.6883 * kb)) * fg + r_sky) *
+		  (1. - kb) + kb * sh / locSinSolarAltitude;
 	}
 	else if (sunVarGeom->solarAltitude < 0.1)
 	    fx = ((0.00263 - 0.712 * kb - 0.6883 * kb * kb) * fg +
-		  r_sky) * (1. - kb) + kb * sinslope * cos(a_ln) / (0.1 -
-								    0.008 *
-								    sunVarGeom->
-								    solarAltitude);
+		  r_sky) * (1. - kb) + kb *
+		  sinslope * cos(a_ln) /
+		  (0.1 - 0.008 * sunVarGeom->solarAltitude);
 	dr = dh * fx;
 	/* refl. rad */
 	*rr = sunRadVar->alb * gh * (1 - cosslope) / 2.;
     }
-    else {			/* plane */
+    else {	/* plane */
 	dr = dh;
 	*rr = 0.;
     }
@@ -632,6 +621,7 @@ double drad_angle_loss(double sh, double bh, double *rr,
 
     tn = -0.015843 + locLinke * (0.030543 + 0.0003797 * locLinke);
     A1b = 0.26463 + locLinke * (-0.061581 + 0.0031408 * locLinke);
+
     if (A1b * tn < 0.0022)
 	A1 = 0.0022 / tn;
     else
@@ -643,11 +633,14 @@ double drad_angle_loss(double sh, double bh, double *rr,
 	A3 * locSinSolarAltitude * locSinSolarAltitude;
     dh = sunRadVar->cdh * sunRadVar->G_norm_extra * fd * tn;
     gh = bh + dh;
+
     if (sunSlopeGeom->aspect != UNDEF && sunSlopeGeom->slope != 0.) {
+
 	kb = bh / (sunRadVar->G_norm_extra * locSinSolarAltitude);
 	r_sky = (1. + cosslope) / 2.;
 	a_ln = sunVarGeom->solarAzimuth - sunSlopeGeom->aspect;
 	ln = a_ln;
+
 	if (a_ln > M_PI)
 	    ln = a_ln - pi2;
 	else if (a_ln < -M_PI)
@@ -665,10 +658,9 @@ double drad_angle_loss(double sh, double bh, double *rr,
 	}
 	else if (sunVarGeom->solarAltitude < 0.1)
 	    fx = ((0.00263 - 0.712 * kb - 0.6883 * kb * kb) * fg +
-		  r_sky) * (1. - kb) + kb * sinslope * cos(a_ln) / (0.1 -
-								    0.008 *
-								    sunVarGeom->
-								    solarAltitude);
+		  r_sky) * (1. - kb) + kb * sinslope * cos(a_ln) /
+		  (0.1 - 0.008 * sunVarGeom->solarAltitude);
+
 	dr = dh * fx;
 	/* refl. rad */
 	*rr = sunRadVar->alb * gh * (1 - cosslope) / 2.;
