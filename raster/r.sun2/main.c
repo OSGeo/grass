@@ -1922,9 +1922,13 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
 		    lum =
 			lumcline2(&sunGeom, &sunVarGeom, &sunSlopeGeom,
 				  &gridGeom, horizonarray + shadowoffset);
-		    lum = rad2deg * asin(lum);
-		    lumcl[j][i] = (float)lum;
+		    if (lum > 0.) {
+			lum = rad2deg * asin(lum);
+			lumcl[j][i] = (float)lum;
+		    }
+		    else lumcl[j][i] = UNDEFZ;
 		}
+
 		if (someRadiation) {
 		    joules2(&sunGeom, &sunVarGeom, &sunSlopeGeom, &sunRadVar,
 			    &gridGeom, horizonarray + shadowoffset, latitude,
@@ -1946,7 +1950,6 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
 	    shadowoffset += arrayNumInt;
 	}
 	arrayOffset++;
-
     }
 
     /* re-use &hist, but try all to initiate it for any case */
