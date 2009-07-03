@@ -88,7 +88,7 @@ SUBDIRS = \
 	r.statistics2 \
 	r.statistics3 \
 	r.stats \
-	r.sun2 \
+	r.sun \
 	r.sunmask \
 	r.support \
 	r.support.stats \
