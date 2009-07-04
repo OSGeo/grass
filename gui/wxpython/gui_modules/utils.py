@@ -513,6 +513,9 @@ def ReprojectCoordinates(coord, projOut, projIn = None, flags = ''):
         if proj in ('ll', 'latlong', 'longlat') and 'd' not in flags:
             return (proj, (e, n))
         else:
-            return (proj, (float(e), float(n)))
+            try:
+                return (proj, (float(e), float(n)))
+            except ValueError:
+                return (None, None)
     
     return (None, None)
