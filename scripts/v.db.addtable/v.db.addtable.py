@@ -132,7 +132,7 @@ def main():
 
     sql = "CREATE TABLE %s (%s)" % (table, column_def)
 
-    if grass.write_command('db.execute', database = database, driver = driver, stdin = sql) != 0:
+    if grass.write_command('db.execute', input = '-', database = database, driver = driver, stdin = sql) != 0:
 	grass.fatal("Cannot continue.")
 
     # connect the map to the DB:

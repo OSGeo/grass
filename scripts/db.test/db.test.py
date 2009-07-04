@@ -50,7 +50,7 @@ def main():
 	# Copy expected result to temp file
 
 	if type == 'X':
-	    r = grass.write_command('db.execute', stdin = sql + '\n')
+	    r = grass.write_command('db.execute', input = '-', stdin = sql + '\n')
 	else:
 	    resf = file(result, 'w')
 	    r = grass.write_command('db.select', flags = 'c', stdin = sql + '\n', stdout = resf)

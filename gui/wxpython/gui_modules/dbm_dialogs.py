@@ -290,6 +290,7 @@ class DisplayAttributesDialog(wx.Dialog):
             
             gcmd.RunCommand('db.execute',
                             quiet = True,
+                            input = '-',
                             stdin = sql)
         
         if self.closeDialog.IsChecked():

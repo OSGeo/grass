@@ -189,6 +189,7 @@ def CreateNewVector(parent, cmd, title=_('Create new vector map'),
             gcmd.RunCommand('db.execute',
                             quiet = True,
                             parent = parent,
+                            input = '-',
                             stdin = sql)
 
             gcmd.RunCommand('v.db.connect',

@@ -76,7 +76,7 @@ def main():
 	if not col:
 	    grass.fatal("There is an empty column. Did you leave a trailing comma?")
 
-	p = grass.feed_command('db.execute', database = database, driver = driver)
+	p = grass.feed_command('db.execute', input = '-', database = database, driver = driver)
 	p.stdin.write("ALTER TABLE %s ADD COLUMN %s" % (table, col))
 	p.stdin.close()
 	if p.wait() != 0:

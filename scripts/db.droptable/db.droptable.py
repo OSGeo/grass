@@ -79,7 +79,7 @@ def main():
 	grass.message("You must use the force flag to actually remove it. Exiting.")
 	sys.exit(0)
 
-    p = grass.feed_command('db.execute', database = database, driver = driver)
+    p = grass.feed_command('db.execute', input = '-', database = database, driver = driver)
     p.stdin.write("DROP TABLE " + table)
     p.stdin.close()
     p.wait()

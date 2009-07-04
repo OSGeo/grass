@@ -2717,6 +2717,7 @@ class LayerBook(wx.Notebook):
                         quiet = True,
                         parent = self,
                         stdin = sql,
+                        input = '-',
                         driver = driver,
                         database = database)
         
