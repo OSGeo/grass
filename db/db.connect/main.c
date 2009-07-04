@@ -8,7 +8,7 @@
  *               Markus Neteler <neteler itc.it>,
  *               Hamish Bowman <hamish_b yahoo com>
  * PURPOSE:      set parameters for connection to database
- * COPYRIGHT:    (C) 2002-2008 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2009 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -44,6 +44,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("database"));
     G_add_keyword(_("attribute table"));
+    G_add_keyword(_("connection settings"));
     module->description =
 	_("Prints/sets general DB connection for current mapset and exits.");
 
@@ -51,18 +52,22 @@ int main(int argc, char *argv[])
     print = G_define_flag();
     print->key = 'p';
     print->description = _("Print current connection parameters and exit");
+    print->guisection = _("Print");
 
     check_set_default = G_define_flag();
     check_set_default->key = 'c';
     check_set_default->description =
 	_("Check connection parameters, set if uninitialized, and exit");
+    check_set_default->guisection = _("Print");
 
     driver = G_define_standard_option(G_OPT_DB_DRIVER);
     driver->options = db_list_drivers();
     driver->answer = (char *) db_get_default_driver_name();
+    driver->guisection = _("Set");
 
     database = G_define_standard_option(G_OPT_DB_DATABASE);
     database->answer = (char *) db_get_default_database_name();
+    database->guisection = _("Set");
 
     schema = G_define_option();
     schema->key = "schema";
@@ -73,6 +78,7 @@ int main(int argc, char *argv[])
     schema->label = _("Database schema");
     schema->description = _("Do not use this option if schemas "
 			    "are not supported by driver/database server");
+    schema->guisection = _("Set");
 
     group = G_define_option();
     group->key = "group";
@@ -82,6 +88,7 @@ int main(int argc, char *argv[])
     group->answer = (char*) db_get_default_group_name();
     group->description = _("Default group of database users to which "
 			   "select privilege is granted");
+    group->guisection = _("Set");
 
     /* commented due to new mechanism:
        user = G_define_option() ;
@@ -135,9 +142,9 @@ int main(int argc, char *argv[])
 	    db_set_default_connection();
 	    db_get_connection(&conn);
 
-	    G_message(_("Default driver / database set to:\n"
-			"driver: %s\ndatabase: %s"), conn.driverName,
-		      conn.databaseName);
+	    G_important_message(_("Default driver / database set to:\n"
+				  "driver: %s\ndatabase: %s"), conn.driverName,
+				conn.databaseName);
 	}
 	/* they must be a matched pair, so if one is set but not the other
 	   then give up and let the user figure it out */
