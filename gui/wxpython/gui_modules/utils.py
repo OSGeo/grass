@@ -489,16 +489,11 @@ def ReprojectCoordinates(coord, projOut, projIn = None, flags = ''):
 
     @return reprojected coordinates (returned as tuple)
     """
-    if not projIn:
-        projIn = gcmd.RunCommand('g.proj',
-                                 flags = 'jf',
-                                 read = True).rstrip('\n')
-    
     coors = gcmd.RunCommand('m.proj',
                             flags = flags,
                             input = '-',
-                            proj_in = projIn,
-                            proj_out = projOut,
+                            proj_input = projIn,
+                            proj_output = projOut,
                             fs = ';',
                             stdin = '%f;%f' % (coord[0], coord[1]),
                             read = True)
