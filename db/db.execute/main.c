@@ -127,7 +127,6 @@ static void parse_command_line(int argc, char **argv)
     schema = G_define_standard_option(G_OPT_DB_SCHEMA);
     if ((schema_name = db_get_default_schema_name()))
 	schema->answer = (char *) schema_name;
-    schema->guisection = _("Set");
 
     i = G_define_flag();
     i->key = 'i';
