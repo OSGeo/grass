@@ -309,6 +309,7 @@ struct Option *G_define_option(void)
  *   - G_OPT_DB_TABLE
  *   - G_OPT_DB_DRIVER
  *   - G_OPT_DB_DATABASE
+ *   - G_OPT_DB_SCHEMA
  *
  *  - imagery:
  *   - G_OPT_I_GROUP
@@ -390,6 +391,16 @@ struct Option *G_define_standard_option(int opt)
 	Opt->description = _("Database name");
 	Opt->gisprompt = "old_dbname,dbname,dbname";
 	break;
+    case G_OPT_DB_SCHEMA:
+	Opt->key = "schema";
+	Opt->type = TYPE_STRING;
+	Opt->key_desc = "name";
+	Opt->required = NO;
+	Opt->multiple = NO;
+	Opt->label = _("Database schema");
+	Opt->description = _("Do not use this option if schemas "
+			     "are not supported by driver/database server");
+	break;
     case G_OPT_DB_COLUMN:
 	Opt->key = "column";
 	Opt->type = TYPE_STRING;
@@ -406,7 +417,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->required = NO;
 	Opt->multiple = YES;
 	Opt->description = _("Name of attribute column(s)");
-	Opt->gisprompt = "old_table,table,dbcolumn";
+	Opt->gisprompt = "old_dbcolumn,dbcolumn,dbcolumn";
 	break;
 
 	/* imagery group */

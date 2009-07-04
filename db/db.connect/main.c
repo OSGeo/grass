@@ -69,15 +69,8 @@ int main(int argc, char *argv[])
     database->answer = (char *) db_get_default_database_name();
     database->guisection = _("Set");
 
-    schema = G_define_option();
-    schema->key = "schema";
-    schema->type = TYPE_STRING;
-    schema->required = NO;
-    schema->multiple = NO;
+    schema = G_define_standard_option(G_OPT_DB_SCHEMA);
     schema->answer = (char *) db_get_default_schema_name();
-    schema->label = _("Database schema");
-    schema->description = _("Do not use this option if schemas "
-			    "are not supported by driver/database server");
     schema->guisection = _("Set");
 
     group = G_define_option();
