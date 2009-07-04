@@ -355,7 +355,17 @@ class GMConsole(wx.Panel):
                     return None
 
                 # add layer into layer tree
+                if cmdlist[0] == 'd.rast':
+                    lname = utils.GetLayerNameFromCmd(cmdlist, fullyQualified = True,
+                                                      layerType = 'raster')
+                elif cmdlist[0] == 'd.vect':
+                    lname = utils.GetLayerNameFromCmd(cmdlist, fullyQualified = True,
+                                                      layerType = 'vector')
+                else:
+                    lname = None
+                
                 self.parent.curr_page.maptree.AddLayer(ltype=layertype,
+                                                       lname=lname,
                                                        lcmd=cmdlist)
 
             else:
