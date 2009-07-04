@@ -152,6 +152,7 @@ static const char *GRASS_copyright __attribute__ ((unused))
     G_OPT_DB_TABLE,		/* table name */
     G_OPT_DB_DRIVER,		/* driver name */
     G_OPT_DB_DATABASE,		/* database name */
+    G_OPT_DB_SCHEMA,            /* database schema */
     G_OPT_DB_COLUMN,		/* one attr column */
     G_OPT_DB_COLUMNS,		/* one or more attr columns */
 

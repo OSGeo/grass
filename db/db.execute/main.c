@@ -23,7 +23,7 @@
 
 struct
 {
-    char *driver, *database, *input;
+    const char *driver, *database, *schema, *input;
     int i;
 } parms;
 
@@ -39,7 +39,6 @@ int main(int argc, char **argv)
     dbString stmt;
     dbDriver *driver;
     dbHandle handle;
-    const char *schema;
     int ret;
     FILE *fd;
     int error;
@@ -64,9 +63,8 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Unable to start driver <%s>"), parms.driver);
     }
 
-    schema = db_get_default_schema_name();
     db_init_handle(&handle);
-    db_set_handle(&handle, parms.database, schema);
+    db_set_handle(&handle, parms.database, parms.schema);
     if (db_open_database(driver, &handle) != DB_OK)
 	G_fatal_error(_("Unable to open database <%s>"), parms.database);
 
@@ -98,10 +96,10 @@ int main(int argc, char **argv)
 
 static void parse_command_line(int argc, char **argv)
 {
-    struct Option *driver, *database, *input;
+    struct Option *driver, *database, *schema, *input;
     struct Flag *i;
     struct GModule *module;
-    const char *drv, *db;
+    const char *drv, *db, *schema_name;
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
@@ -126,6 +124,11 @@ static void parse_command_line(int argc, char **argv)
     if ((db = db_get_default_database_name()))
 	database->answer = (char *) db;
 
+    schema = G_define_standard_option(G_OPT_DB_SCHEMA);
+    if ((schema_name = db_get_default_schema_name()))
+	schema->answer = (char *) schema_name;
+    schema->guisection = _("Set");
+
     i = G_define_flag();
     i->key = 'i';
     i->description = _("Ignore SQL errors and continue");
@@ -135,6 +138,7 @@ static void parse_command_line(int argc, char **argv)
 
     parms.driver = driver->answer;
     parms.database = database->answer;
+    parms.schema = schema->answer;
     parms.input = input->answer;
     parms.i = i->answer;
 }
