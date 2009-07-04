@@ -178,7 +178,9 @@ def main():
 	in_proj = proj_in
 
     if not in_proj:
-	grass.fatal("Missing input projection parameters ")
+	grass.verbose("Assuming current location as input")
+        in_proj = grass.read_command('g.proj', flags = 'jf')
+    
     in_proj = in_proj.strip()
     grass.verbose("Input parameters: '%s'" % in_proj)
 
