@@ -556,6 +556,7 @@ class MapFrame(wx.Frame):
                                                                                          key='projection',
                                                                                          subkey='proj4'),
                                                               flags = 'd')
+                    
                     if coord:
                         e, n = coord
                         if proj in ('ll', 'latlong', 'longlat'):
@@ -563,7 +564,7 @@ class MapFrame(wx.Frame):
                         else:
                             self.statusbar.SetStatusText("%.2f; %.2f" % (e, n), 0)
                     else:
-                        self.statusbar.SetStatusText(_("Error in projection"), 0)
+                        self.statusbar.SetStatusText(_("Error in projection (check the settings)"), 0)
                 else:
                     if self.Map.projinfo['proj'] == 'll':
                         self.statusbar.SetStatusText("%s" % utils.Deg2DMS(e, n), 0)
@@ -914,7 +915,7 @@ class MapFrame(wx.Frame):
                             self.statusbar.SetStatusText("%.2f - %.2f, %.2f - %.2f (%.2f, %.2f)" %
                                                          (w, e, s, n, ewres, nsres), 0)
                 else:
-                    self.statusbar.SetStatusText(_("Error in projection"), 0)
+                    self.statusbar.SetStatusText(_("Error in projection (check the settings)"), 0)
             else:
                 if self.Map.projinfo['proj'] == 'll':
                     w, s = utils.Deg2DMS(region["w"], region["s"],
@@ -1029,7 +1030,7 @@ class MapFrame(wx.Frame):
                         self.statusbarWin['goto'].SetValue("%.2f; %.2f" % (coord[0],
                                                                            coord[1]))
                 else:
-                    self.statusbar.SetStatusText(_("Error in projection"), 0)
+                    self.statusbar.SetStatusText(_("Error in projection (check the settings)"), 0)
             else:
                 if self.Map.projinfo['proj'] == 'll':
                     self.statusbarWin['goto'].SetValue("%s" % utils.Deg2DMS(region['center_easting'], 
