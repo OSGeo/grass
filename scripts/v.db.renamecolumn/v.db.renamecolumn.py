@@ -104,11 +104,11 @@ def main():
 
 	grass.run_command('v.db.addcol', map = map, layer = layer, column = colspec)
 	sql = "UPDATE %s SET %s=%s" % (table, newcol, oldcol)
-	grass.write_command('db.execute', database = database, driver = driver, stdin = sql)
+	grass.write_command('db.execute', input = '-', database = database, driver = driver, stdin = sql)
 	grass.run_command('v.db.dropcolumn', map = map, layer = layer, column = oldcol)
     else:
 	sql = "ALTER TABLE %s RENAME %s TO %s" % (table, oldcol, newcol)
-	grass.write_command('db.execute', database = database, driver = driver, stdin = sql)
+	grass.write_command('db.execute', input = '-', database = database, driver = driver, stdin = sql)
 
     # write cmd history:
     grass.vector_history(map)

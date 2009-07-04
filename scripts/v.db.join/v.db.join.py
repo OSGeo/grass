@@ -108,7 +108,7 @@ def main():
 				   otable = otable, ocolumn = ocolumn,
 				   colname = colname)
 
-	if grass.write_command('db.execute', stdin = stmt, database = database, driver = driver) != 0:
+	if grass.write_command('db.execute', stdin = stmt, input = '-', database = database, driver = driver) != 0:
 	    grass.fatal("Error filling column <%s>." % colname)
 
     # write cmd history:

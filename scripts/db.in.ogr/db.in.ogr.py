@@ -77,7 +77,7 @@ def main():
 	    if l == output:
 		grass.fatal("Table <%s> already exists" % output)
     else:
-	grass.write_command('db.execute', stdin = "DROP TABLE %s" % output)
+	grass.write_command('db.execute', input = '-', stdin = "DROP TABLE %s" % output)
 
     # treat DB as real vector map...
     if db_table:
@@ -97,8 +97,10 @@ def main():
     # rename ID col if requested from cat to new name
     if key:
 	grass.run_command('db.execute', quiet = True, flags = 'f',
+                          input = '-', 
 			  stdin = "ALTER TABLE %s ADD COLUMN %s integer" % (output, key) )
 	grass.run_command('db.execute', quiet = True, flags = 'f',
+                          input = '-', 
 			  stdin = "UPDATE %s SET %s=cat" % (output, key) )
 
     # ... and immediately drop the empty geometry

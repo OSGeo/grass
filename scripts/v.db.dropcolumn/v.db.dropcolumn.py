@@ -108,7 +108,7 @@ def main():
     else:
 	sql = "ALTER TABLE %s DROP COLUMN %s" % (table, column)
 
-    if grass.write_command('db.execute', database = database, driver = driver,
+    if grass.write_command('db.execute', input = '-', database = database, driver = driver,
 			   stdin = sql) != 0:
 	grass.fatal("Cannot continue (problem deleting column).")
 

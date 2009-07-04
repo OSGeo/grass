@@ -83,7 +83,7 @@ def main():
 
     grass.message("Dropping table <%s>..." % table)
 
-    if grass.write_command('db.execute', stdin = "DROP TABLE %s" % table) != 0:
+    if grass.write_command('db.execute', stdin = "DROP TABLE %s" % table, input = '-') != 0:
 	grass.fatal("An error occured while running db.execute")
 
     grass.run_command('v.db.connect', flags = 'd', map = map, layer = layer)
