@@ -5,7 +5,7 @@
  * AUTHOR(S):    Radim Blazek <radim.blazek gmail.com> (original contributor)
  *               Huidae Cho <grass4u gmail.com>, Glynn Clements <glynn gclements.plus.com>, Hamish Bowman <hamish_nospam yahoo.com>, Markus Neteler <neteler itc.it>, Stephan Holl
  * PURPOSE:      process one non-select sql statement
- * COPYRIGHT:    (C) 2002-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2009 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -39,29 +39,34 @@ int main(int argc, char **argv)
     dbString stmt;
     dbDriver *driver;
     dbHandle handle;
+    const char *schema;
     int ret;
     FILE *fd;
-    int error = 0;
+    int error;
+
+    error = 0;
 
     parse_command_line(argc, argv);
 
-    if (parms.input) {
+    if (strcmp(parms.input, "-")) {
 	fd = fopen(parms.input, "r");
 	if (fd == NULL) {
 	    perror(parms.input);
 	    exit(EXIT_FAILURE);
 	}
     }
-    else
+    else {
 	fd = stdin;
-
+    }
+    
     driver = db_start_driver(parms.driver);
     if (driver == NULL) {
 	G_fatal_error(_("Unable to start driver <%s>"), parms.driver);
     }
 
+    schema = db_get_default_schema_name();
     db_init_handle(&handle);
-    db_set_handle(&handle, parms.database, NULL);
+    db_set_handle(&handle, parms.database, schema);
     if (db_open_database(driver, &handle) != DB_OK)
 	G_fatal_error(_("Unable to open database <%s>"), parms.database);
 
@@ -109,8 +114,8 @@ static void parse_command_line(int argc, char **argv)
     module->description = _("Executes any SQL statement.");
 
     input = G_define_standard_option(G_OPT_F_INPUT);
-    input->required = NO;
-    input->description = _("Name of file containing SQL statements");
+    input->label = _("Name of file containing SQL statements");
+    input->description = _("'-' to read from standard input");
 
     driver = G_define_standard_option(G_OPT_DB_DRIVER);
     driver->options = db_list_drivers();
