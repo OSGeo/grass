@@ -54,13 +54,13 @@
 #% answer : |
 #%end
 #%option
-#% key: proj_in
+#% key: proj_input
 #% type: string
 #% description: Input projection parameters (PROJ.4 style)
 #% required : no
 #%end
 #%option
-#% key: proj_out
+#% key: proj_output
 #% type: string
 #% description: Output projection parameters (PROJ.4 style)
 #% required : no
@@ -95,8 +95,8 @@ def main():
     input = options['input']
     output = options['output']
     fs = options['fs']
-    proj_in = options['proj_in']
-    proj_out = options['proj_out']
+    proj_in = options['proj_input']
+    proj_out = options['proj_output']
     ll_in = flags['i']
     ll_out = flags['o']
     decimal = flags['d']
