@@ -64,8 +64,9 @@
 #%end
 
 #%flag
-#%  key: l
-#%  description: List available modules in the GRASS Addons SVN repository
+#% key: l
+#% description: List available modules in the GRASS Addons SVN repository
+#% guisection: Print
 #%end
 
 import os
