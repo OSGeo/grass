@@ -144,7 +144,7 @@ def install_extension(svnurl, gisbase, module):
     grass.message("Compiling '%s'..." % module)
     if grass.call(['make',
                    'MODULE_TOPDIR=%s' % gisbase]) != 0:
-        grass.fatal('Compilation failed, sorry. Please check above error messages')
+        grass.fatal('Compilation failed, sorry. Please check above error messages.')
     
     grass.message("Installing '%s'..." % module)
     # can we write ?
@@ -154,8 +154,8 @@ def install_extension(svnurl, gisbase, module):
         f = open(file, "w")
         f.close()
         os.remove(file)
-
-        ret = grass.call(['make'
+        
+        ret = grass.call(['make',
                           'MODULE_TOPDIR=%s' % gisbase,
                           'install'])
     except IOError:
