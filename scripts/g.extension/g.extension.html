@@ -1,22 +1,24 @@
 <h2>DESCRIPTION</h2>
 
-<em>g.extension.add</em> downloads and installs extensions from 
-GRASS Addons SVN repository into the local GRASS installation.
+<em>g.extension</em> downloads and installs, removes or updates
+extensions from GRASS Addons SVN repository into the local GRASS
+installation.
 
 <p>
-Re-running the script on an installed GRASS Addon re-installs
+Re-running the script on an installed GRASS Addons re-installs
 the requested extension which may include updates.
 
 <h2>EXAMPLES</h2>
 
 Download and install i.landsat.toar into current GRASS installation:
+
 <div class="code"><pre>
-  g.extension.add extension=i.landsat.toar
+  g.extension extension=i.landsat.toar operation=add
 </pre></div>
 
 <h2>AUTHOR</h2>
 
 Markus Neteler<br>
-Upgraded for GRASS 7 by Martin Landa
+Upgraded for GRASS 7 by Martin Landa, CTU in Prague, Czech Republic
 
 <p><i>Last changed: $Date$</i>
