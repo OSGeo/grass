@@ -564,7 +564,10 @@ main(int argc, char *argv[]) {
   
 #else 
   AMI_STREAM<waterWindowBaseType> *flowStream;
-  flowStream = new AMI_STREAM<waterWindowBaseType>(streamdir->answer);
+  char path[GPATH_MAX];
+
+  sprintf(path, "%s/flowStream", streamdir->answer);
+  flowStream = new AMI_STREAM<waterWindowBaseType>(path);
   fprintf(stderr, "flowStream opened: len=%d\n", flowStream->stream_len());
   fprintf(stderr, "jumping to flow accumulation computation\n");
 #endif
