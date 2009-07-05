@@ -159,7 +159,7 @@ def install_extension(svnurl, gisbase, module):
                           'MODULE_TOPDIR=%s' % gisbase,
                           'install'])
     except IOError:
-        ret = grass.call(['sudo', 'make'
+        ret = grass.call(['sudo', 'make',
                           'MODULE_TOPDIR=%s' % gisbase,
                           'install'])
     
