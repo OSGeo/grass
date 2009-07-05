@@ -99,7 +99,8 @@ MAP_DISPLAY_STATUSBAR_MODE = [_("Coordinates"),
                               _("Display mode"),
                               _("Display geometry"),
                               _("Map scale"),
-                              _("Go to")]
+                              _("Go to"),
+                              _("Projection"),]
 
 """!File name extension binaries/scripts"""
 if subprocess.mswindows:

@@ -638,7 +638,16 @@ class GMFrame(wx.Frame):
             mapdisplay[-1].SetProperties(render=display['render'],
                                          mode=display['mode'],
                                          showCompExtent=display['showCompExtent'],
-                                         constrainRes=display['constrainRes'])
+                                         constrainRes=display['constrainRes'],
+                                         projection=display['projection']['enabled'])
+
+            if display['projection']['enabled']:
+                if display['projection']['epsg']:
+                    UserSettings.Set(group = 'display', key = 'projection', subkey = 'epsg',
+                                     value = display['projection']['epsg'])
+                    if display['projection']['proj']:
+                        UserSettings.Set(group = 'display', key = 'projection', subkey = 'proj4',
+                                         value = display['projection']['proj'])
             
             # set position and size of map display
             if UserSettings.Get(group='workspace', key='posDisplay', subkey='enabled') is False:
