@@ -131,7 +131,11 @@ parse_args(int argc, char *argv[]) {
   streamdir->key        = "stream_dir";
   streamdir->type       = TYPE_STRING;
   streamdir->required   = NO;
+#ifdef __MINGW32__
+  streamdir->answer     = G_convert_dirseps_from_host(G_store(getenv("TEMP")));
+#else
   streamdir->answer     = G_store("/var/tmp/");
+#endif
   streamdir->description=
      _("Directory to hold temporary files (they can be large)");
 
