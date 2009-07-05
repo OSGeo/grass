@@ -61,8 +61,11 @@ int main(int argc, char *argv[])
     
     if (parm.operator->answer[0] == 'e')
 	operator = OP_EQUALS;
-    else if (parm.operator->answer[0] == 'd')
-	operator = OP_DISJOINT;
+    else if (parm.operator->answer[0] == 'd') {
+	/* operator = OP_DISJOINT; */
+	operator = OP_INTERSECTS;
+	flag.reverse->answer = YES;
+    }
     else if (parm.operator->answer[0] == 'i')
 	operator = OP_INTERSECTS;
     else if (parm.operator->answer[0] == 't')
