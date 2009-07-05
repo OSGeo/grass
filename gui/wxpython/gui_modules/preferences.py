@@ -114,7 +114,6 @@ class Settings:
                     'color' : (255, 255, 255, 255),
                     },
                 'projection' : {
-                    'enabled' : False,
                     'proj4'   : '',
                     'epsg'    : '',
                     },
@@ -1134,17 +1133,17 @@ class PreferencesDialog(wx.Dialog):
         gridSizer.AddGrowableCol(1)
 
         row = 0
-        useProj = wx.CheckBox(parent=panel, id=wx.ID_ANY,
-                              label=_("Use defined projection"),
-                              name="IsChecked")
-        useProj.SetValue(self.settings.Get(group='display', key='projection', subkey='enabled'))
-        self.winId['display:projection:enabled'] = useProj.GetId()
-
-        gridSizer.Add(item=useProj,
-                      pos=(row, 0), span=(1, 3))
+        # useProj = wx.CheckBox(parent=panel, id=wx.ID_ANY,
+        # label=_("Use defined projection"),
+        #                       name="IsChecked")
+        # useProj.SetValue(self.settings.Get(group='display', key='projection', subkey='enabled'))
+        # self.winId['display:projection:enabled'] = useProj.GetId()
+        #
+        # gridSizer.Add(item=useProj,
+        #              pos=(row, 0), span=(1, 3))
 
         # epsg
-        row += 1
+        #row += 1
         label = wx.StaticText(parent=panel, id=wx.ID_ANY,
                               label=_("EPSG code:"))
         epsgCode = wx.ComboBox(parent=panel, id=wx.ID_ANY,
@@ -1187,10 +1186,6 @@ class PreferencesDialog(wx.Dialog):
                              label=_("&Load EPSG codes"))
         self.winId['display:projection:projFile'] = projFile.GetId()
         
-        if not useProj.IsChecked():
-            projString.Enable(False)
-            epsgCode.Enable(False)
-
         gridSizer.Add(item=label,
                       pos=(row, 0),
                       flag = wx.ALIGN_CENTER_VERTICAL)
@@ -1210,7 +1205,6 @@ class PreferencesDialog(wx.Dialog):
         epsgLoad.Bind(wx.EVT_BUTTON, self.OnLoadEpsgCodes)
         epsgCode.Bind(wx.EVT_COMBOBOX, self.OnSetEpsgCode)
         epsgCode.Bind(wx.EVT_TEXT_ENTER, self.OnSetEpsgCode)
-        useProj.Bind(wx.EVT_CHECKBOX, self.OnSetProj)
         
         return panel
 
@@ -1601,17 +1595,7 @@ class PreferencesDialog(wx.Dialog):
             list.SetSelection(0)
             code = int(list.GetStringSelection())
             win.SetValue(self.epsgCodeDict[code][1])
-        
-    def OnSetProj(self, event):
-        """!Enable mapdisplay window statusbar projection"""
-        checked = event.IsChecked()
-
-        winCode = self.FindWindowById(self.winId['display:projection:epsg'])
-        winString = self.FindWindowById(self.winId['display:projection:proj4'])
-        
-        winCode.Enable(checked)
-        winString.Enable(checked)
-        
+    
     def OnSetEpsgCode(self, event):
         """!EPSG code selected"""
         winCode = self.FindWindowById(event.GetId())

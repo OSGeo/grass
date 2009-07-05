@@ -133,6 +133,15 @@ class ProcessWorkspaceFile:
             else:
                 extent = None
             
+            # projection
+            node_projection = display.find('projection')
+            if node_projection is not None:
+                projection = { 'enabled' : True,
+                               'epsg' : node_projection.get('epsg', ''),
+                               'proj' : self.__getNodeText(node_projection, 'value') }
+            else:
+                projection = { 'enabled' : False }
+            
             self.displays.append( {
                     "render"         : bool(int(display.get('render', "0"))),
                     "mode"           : int(display.get('mode', 0)),
@@ -140,7 +149,8 @@ class ProcessWorkspaceFile:
                     "pos"            : pos,
                     "size"           : size,
                     "extent"         : extent,
-                    "constrainRes"   : bool(int(display.get('constrainRes', "0"))) } )
+                    "constrainRes"   : bool(int(display.get('constrainRes', "0"))),
+                    "projection"     : projection, } )
             
             # process all layers/groups in the display
             self.__processLayers(display)
@@ -695,6 +705,21 @@ class WriteWorkspaceFile(object):
                                                     region['e'],
                                                     region['n']
                                                     ))
+            # projection statusbar info
+            if mapTree.mapdisplay.statusbarWin['projection'].IsChecked() and \
+                    UserSettings.Get(group='display', key='projection', subkey='proj4'):
+                self.indent += 4
+                file.write('%s<projection' % (' ' * self.indent))
+                epsg = UserSettings.Get(group='display', key='projection', subkey='epsg')
+                if epsg:
+                    file.write(' epsg="%s"' % epsg)
+                file.write('>\n')
+                proj = UserSettings.Get(group='display', key='projection', subkey='proj4')
+                self.indent += 4 
+                file.write('%s<value>%s</value>\n' % (' ' * self.indent, proj))
+                self.indent -= 4
+                file.write('%s</projection>\n' % (' ' * self.indent))
+                self.indent -= 4
             
             # list of layers
             item = mapTree.GetFirstChild(mapTree.root)[0]
