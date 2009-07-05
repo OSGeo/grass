@@ -716,6 +716,13 @@
 	  </items>
 	</menu>
 	<menuitem>
+	  <label>Manage extensions</label>
+	  <help>Tool to maintain GRASS extensions in local GRASS installation.</help>
+	  <keywords>installation, extensions</keywords>
+          <handler>self.OnMenuCmd</handler>
+	  <command>g.extension</command>
+	</menuitem>
+	<menuitem>
 	  <label>Preferences</label>
 	  <help>User GUI preferences (display font, commands, digitizer, etc.)</help>
 	  <handler>self.OnPreferences</handler>
