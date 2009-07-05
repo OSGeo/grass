@@ -84,12 +84,16 @@ ami_single_temp_name(const std::string& base, char* tmp_path) {
 #ifdef __MINGW32__
   fd = mktemp(tmp_path) ? open(tmp_path, O_CREAT|O_EXCL|O_RDWR, 0600) : -1;
 #else
-  fd  = mkstemp(tmp_path);
+  fd = mkstemp(tmp_path);
 #endif
 
   if (fd == -1) {
     cerr <<  "ami_single_temp_name: ";
+#ifdef __MINGW32__
+    perror("mktemp failed: ");
+#else
     perror("mkstemp failed: ");
+#endif
     assert(0);
     exit(1);
   }
