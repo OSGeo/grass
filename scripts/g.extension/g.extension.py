@@ -40,10 +40,26 @@
 #% answer: add
 #%end
 #%option
+#% key: svnurl
+#% type: string
+#% key_desc: url
+#% description: SVN Addons repository URL
+#% required: yes
+#% answer: https://svn.osgeo.org/grass/grass-addons/grass7
+#%end
+#%option
 #% key: prefix
 #% type: string
 #% key_desc: path
 #% description: Prefix where to install extension (default: GISBASE)
+#% required: no
+#%end
+#%option
+#% key: menuitem
+#% type: string
+#% key_desc: name
+#% label: Menu item in wxGUI
+#% description: Given as string, e.g. 'Imagery;Filter image'
 #% required: no
 #%end
 
@@ -60,9 +76,6 @@ import atexit
 import urllib
 
 from grass.script import core as grass
-
-# definitions
-svnurl_addons = "https://svn.osgeo.org/grass/grass-addons/"
 
 # temp dir
 tmpdir = grass.tempfile()
@@ -92,15 +105,13 @@ def expand_module_class_name(c):
     
     return c
 
-def list_available_modules():
-    global svnurl_addons
-    
+def list_available_modules(svnurl):
     grass.message('Fetching list of modules from GRASS-Addons SVN (be patient)...')
     pattern = re.compile(r'(<li><a href=".+">)(.+)(</a></li>)', re.IGNORECASE)
     for d in ['d', 'db', 'g', 'i', 'ps',
               'p', 'r', 'r3', 'v']:
         modclass = expand_module_class_name(d)
-        url = svnurl_addons + modclass
+        url = svnurl + '/' + modclass
         f = urllib.urlopen(url)
         if not f:
             grass.warning("Unable to fetch '%s'" % url)
@@ -114,14 +125,13 @@ def cleanup():
     global tmpdir
     grass.try_rmdir(tmpdir)
 
-def install_extension(gisbase, module):
+def install_extension(svnurl, gisbase, module):
     if grass.find_program(module):
         grass.warning("Extension '%s' already installed. Will be updated..." % module)
     
     classchar = module.split('.', 1)[0]
     moduleclass = expand_module_class_name(classchar)
-    global svnurl_addons
-    url = svnurl_addons + moduleclass + '/' + module
+    url = svnurl + '/' + moduleclass + '/' + module
         
     grass.message("Fetching '%s' from GRASS-Addons SVN (be patient)..." % module)
     global tmpdir
@@ -177,7 +187,7 @@ def main():
 
     # list available modules
     if flags['l']:
-        list_available_modules()
+        list_available_modules(options['svnurl'])
         return 0
     else:
         if not options['extension']:
@@ -190,7 +200,7 @@ def main():
         gisbase = os.getenv('GISBASE')
 
     if options['operation'] == 'add':
-        install_extension(gisbase, module)
+        install_extension(options['svnurl'], gisbase, module)
     else: # remove
         remove_extension(gisbase, module)
         
