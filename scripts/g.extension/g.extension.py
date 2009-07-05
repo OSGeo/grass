@@ -115,6 +115,9 @@ def cleanup():
     grass.try_rmdir(tmpdir)
 
 def install_extension(gisbase, module):
+    if grass.find_program(module):
+        grass.warning("Extension '%s' already installed. Will be updated..." % module)
+    
     classchar = module.split('.', 1)[0]
     moduleclass = expand_module_class_name(classchar)
     global svnurl_addons
@@ -166,7 +169,7 @@ def remove_extension(gisbase, module):
         if os.path.isfile(file):
             os.remove(file)
                     
-    grass.message("'%s' successfully removed." % module)
+    grass.message("'%s' successfully uninstalled." % module)
     
 def main():
     # check dependecies
