@@ -6,6 +6,10 @@
 
 void parse_options(struct GParm *parm, struct GFlag *flag)
 {
+    parm->input[0] = G_define_standard_option(G_OPT_V_INPUT);
+    parm->input[0]->description = _("Name of input vector map (A)");
+    parm->input[0]->key = "ainput";
+
     parm->type[0] = G_define_standard_option(G_OPT_V_TYPE);
     parm->type[0]->label = _("Feature type (vector map A)");
     parm->type[0]->key = "atype";
