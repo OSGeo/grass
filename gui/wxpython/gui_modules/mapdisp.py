@@ -211,6 +211,8 @@ class MapFrame(wx.Frame):
         self.statusbarWin['projection'] = wx.CheckBox(parent=self.statusbar, id=wx.ID_ANY,
                                                       label=_("Use defined projection"))
         self.statusbarWin['projection'].SetValue(False)
+        size = self.statusbarWin['projection'].GetSize()
+        self.statusbarWin['projection'].SetMinSize((size[0] + 150, size[1]))
         self.statusbarWin['projection'].SetToolTip(wx.ToolTip (_("Reproject coordinates displayed "
                                                                  "in the statusbar. Projection can be "
                                                                  "defined in GUI preferences dialog "
@@ -1066,6 +1068,12 @@ class MapFrame(wx.Frame):
         
         elif self.statusbarWin['toggle'].GetSelection() == 8: # projection
             self.statusbar.SetStatusText("")
+            epsg = UserSettings.Get(group='display', key='projection', subkey='epsg')
+            if epsg:
+                label = '%s (EPSG: %s)' % (_("Use defined projection"), epsg)
+                self.statusbarWin['projection'].SetLabel(label)
+            else:
+                self.statusbarWin['projection'].SetLabel(_("Use defined projection"))
             self.statusbarWin['projection'].Show()
             
             # disable long help
