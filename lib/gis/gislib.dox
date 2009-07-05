@@ -1195,10 +1195,9 @@ Structure Member Description of Member:
 
  - <i>flag->key</i> - Single letter used for flag name
  - <i>flag->description</i> - Flag description that is shown to the user
-\endcode
+
 
 \subsection Parser_Routines Parser Routines
-
 
 Associated with the parser are five routines that are automatically
 included in the GRASS Makefile process. The Makefile process is
