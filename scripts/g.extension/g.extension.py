@@ -17,18 +17,36 @@
 #       $GISBASE directory)
 #############################################################################
 
-#%Module
-#%  description: Tool to download and install extensions from GRASS Addons SVN repository into local GRASS installation.
-#%  keywords: installation, extensions
-#%End
+#%module
+#% label: Tool to maintain GRASS extensions in local GRASS installation.
+#% description: Downloads, installs extensions from GRASS Addons SVN repository into local GRASS installation or removes installed extensions.
+#% keywords: installation, extensions
+#%end
 
 #%option
 #% key: extension
 #% type: string
-#% key_desc : name
-#% description: Name of extension to install from GRASS Addons SVN repository
-#% required : no
+#% key_desc: name
+#% description: Name of extension to install/remove
+#% required: no
 #%end
+#%option
+#% key: operation
+#% type: string
+#% key_desc: name
+#% description: Operation to be performed
+#% required: no
+#% options: add,remove
+#% answer: add
+#%end
+#%option
+#% key: prefix
+#% type: string
+#% key_desc: path
+#% description: Prefix where to install extension (default: GISBASE)
+#% required: no
+#%end
+
 #%flag
 #%  key: l
 #%  description: List available modules in the GRASS Addons SVN repository
@@ -96,26 +114,14 @@ def cleanup():
     global tmpdir
     grass.try_rmdir(tmpdir)
 
-def main():
-    # check dependecies
-    check()
-
-    # list available modules
-    if flags['l']:
-        list_available_modules()
-        return 0
-    else:
-        if not options['extension']:
-            grass.fatal('You need to define an extension name or use -l')
-    
-    module = options['extension']
+def install_extension(gisbase, module):
     classchar = module.split('.', 1)[0]
     moduleclass = expand_module_class_name(classchar)
     global svnurl_addons
     url = svnurl_addons + moduleclass + '/' + module
-    global tmpdir
-    print tmpdir
+        
     grass.message("Fetching '%s' from GRASS-Addons SVN (be patient)..." % module)
+    global tmpdir
     os.chdir(tmpdir)
     if grass.call(['svn', 'checkout',
                    url]) != 0:
@@ -123,10 +129,8 @@ def main():
 
     os.chdir(os.path.join(tmpdir, module))
     grass.message("Compiling '%s'..." % module)
-    gisbase = os.getenv('GISBASE')
     if grass.call(['make',
                    'MODULE_TOPDIR=%s' % gisbase]) != 0:
-        cleanup()
         grass.fatal('Compilation failed, sorry. Please check above error messages')
     
     grass.message("Installing '%s'..." % module)
@@ -147,12 +151,46 @@ def main():
                           'install'])
     
     if ret != 0:
-        cleanup()
         grass.fatal('Installation failed, sorry. Please check above error messages.')
     
     grass.message("Installation of '%s' successfully finished." % module)
-    cleanup()
+
+def remove_extension(gisbase, module):
+    # is module available?
+    if not grass.find_program(module):
+        grass.fatal("'%s' not found" % module)
     
+    for file in [os.path.join(gisbase, 'bin', module),
+                 os.path.join(gisbase, 'scripts', module),
+                 os.path.join(gisbase, 'docs', 'html', module + '.html')]:
+        if os.path.isfile(file):
+            os.remove(file)
+                    
+    grass.message("'%s' successfully removed." % module)
+    
+def main():
+    # check dependecies
+    check()
+
+    # list available modules
+    if flags['l']:
+        list_available_modules()
+        return 0
+    else:
+        if not options['extension']:
+            grass.fatal('You need to define an extension name or use -l')
+    
+    module = options['extension']
+    if options['prefix']:
+        gisbase = options['prefix']
+    else:
+        gisbase = os.getenv('GISBASE')
+
+    if options['operation'] == 'add':
+        install_extension(gisbase, module)
+    else: # remove
+        remove_extension(gisbase, module)
+        
     return 0
 
 if __name__ == "__main__":
