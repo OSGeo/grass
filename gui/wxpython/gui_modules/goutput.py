@@ -65,7 +65,7 @@ class CmdThread(threading.Thread):
 
     def RunCmd(self, callable, onDone, *args, **kwds):
         CmdThread.requestId += 1
-
+        
         self.requestCmd = None
         self.requestQ.put((CmdThread.requestId, callable, onDone, args, kwds))
         
@@ -78,6 +78,7 @@ class CmdThread(threading.Thread):
             requestTime = time.time()
             event = wxCmdRun(cmd=args[0],
                              pid=requestId)
+            
             wx.PostEvent(self.parent, event)
 
             time.sleep(.1)
@@ -411,12 +412,15 @@ class GMConsole(wx.Panel):
             # console output window
 
             # if command is not a GRASS command, treat it like a shell command
-            try:
-                gcmd.Command(cmdlist,
-                             stdout=self.cmd_stdout,
-                             stderr=self.cmd_stderr)
-            except gcmd.CmdError, e:
-                print >> sys.stderr, e
+            # process GRASS command with argument
+            self.cmdThread.RunCmd(GrassCmd,
+                                  onDone,
+                                  cmdlist,
+                                  self.cmd_stdout, self.cmd_stderr)                                          
+            self.btn_abort.Enable()
+            self.cmd_output_timer.Start(50)
+            
+            return None
         
         return None
 

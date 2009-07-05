@@ -304,6 +304,7 @@ class grassTask:
     for parsed filling.
     """
     def __init__(self, grassModule = None):
+        self.path = grassModule
         self.name = _('unknown')
         self.params = []
         self.description = ''
@@ -825,8 +826,9 @@ class mainFrame(wx.Frame):
                 self.notebookpanel.notebook.SetSelection(self.notebookpanel.goutputId)
             
             try:
+                cmd[0] = self.task.path # full path
                 self.goutput.RunCmd(cmd)
-            except AttributeError,e:
+            except AttributeError, e:
                 print >> sys.stderr, "%s: Propably not running in wxgui.py session?" % (e)
                 print >> sys.stderr, "parent window is: %s" % (str(self.parent))
             # Send any other command to the shell.
@@ -1815,7 +1817,7 @@ if __name__ == "__main__":
         sys.exit()
     if sys.argv[1] != 'test':
         q=wx.LogNull()
-        GrassGUIApp( grassTask( sys.argv[1] ) ).MainLoop()
+        GrassGUIApp(grassTask(sys.argv[1])).MainLoop()
     else: #Test
         # Test grassTask from within a GRASS session
         if os.getenv("GISBASE") is not None:
