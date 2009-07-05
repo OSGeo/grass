@@ -165,9 +165,9 @@ def install_extension(svnurl, gisbase, module):
                           'install'])
     
     if ret != 0:
-        grass.fatal('Installation failed, sorry. Please check above error messages.')
-    
-    grass.message("Installation of '%s' successfully finished." % module)
+        grass.warning('Installation failed, sorry. Please check above error messages.')
+    else:
+        grass.message("Installation of '%s' successfully finished." % module)
 
 def remove_extension(gisbase, module):
     # is module available?
@@ -182,6 +182,13 @@ def remove_extension(gisbase, module):
                     
     grass.message("'%s' successfully uninstalled." % module)
     
+def update_menu(menuitem, module, operation):
+    grass.warning('Not implemented')
+    if operation == 'add':
+        pass
+    else: # remove
+        pass
+
 def main():
     # check dependecies
     check()
@@ -204,7 +211,10 @@ def main():
         install_extension(options['svnurl'], gisbase, module)
     else: # remove
         remove_extension(gisbase, module)
-        
+
+    if options['menuitem']:
+        update_menu(options['menuitem'], module, options['operation'])
+    
     return 0
 
 if __name__ == "__main__":
