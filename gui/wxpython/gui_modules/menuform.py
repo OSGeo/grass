@@ -826,7 +826,8 @@ class mainFrame(wx.Frame):
                 self.notebookpanel.notebook.SetSelection(self.notebookpanel.goutputId)
             
             try:
-                cmd[0] = self.task.path # full path
+                if self.task.path:
+                    cmd[0] = self.task.path # full path
                 self.goutput.RunCmd(cmd)
             except AttributeError, e:
                 print >> sys.stderr, "%s: Propably not running in wxgui.py session?" % (e)
