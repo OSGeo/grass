@@ -1654,7 +1654,10 @@ class PreferencesDialog(wx.Dialog):
         choices = map(str, self.epsgCodeDict.keys())
 
         list.SetItems(choices)
-        code = int(list.GetValue())
+        try:
+            code = int(list.GetValue())
+        except ValueError:
+            code = -1
         win = self.FindWindowById(self.winId['projection:statusbar:proj4'])
         if self.epsgCodeDict.has_key(code):
             win.SetValue(self.epsgCodeDict[code][1])
