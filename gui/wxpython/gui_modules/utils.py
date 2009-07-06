@@ -266,13 +266,14 @@ def GetVectorNumberOfLayers(vector):
     
     return layers
 
-def Deg2DMS(lon, lat, string = True, hemisphere = True):
+def Deg2DMS(lon, lat, string = True, hemisphere = True, precision = 3):
     """!Convert deg value to dms string
 
     @param lon longitude (x)
     @param lat latitude (y)
     @param string True to return string otherwise tuple
     @param hemisphere print hemisphere
+    @param precision seconds precision
     
     @return DMS string or tuple of values
     @return empty string on error
@@ -311,8 +312,8 @@ def Deg2DMS(lon, lat, string = True, hemisphere = True):
         hlon = ''
         hlat = ''
     
-    slat = __ll_parts(flat)
-    slon = __ll_parts(flon)
+    slat = __ll_parts(flat, precision = precision)
+    slon = __ll_parts(flon, precision = precision)
 
     if string:
         return slon + hlon + '; ' + slat + hlat
@@ -333,18 +334,19 @@ def DMS2Deg(lon, lat):
     
     return (x, y)
 
-def __ll_parts(value, reverse = False):
+def __ll_parts(value, reverse = False, precision = 3):
     """!Converts deg to d:m:s string
 
     @param value value to be converted
     @param reverse True to convert from d:m:s to deg
-
+    @param precision seconds precision (ignored if reverse is True)
+    
     @return converted value (string/float)
     @return ValueError on error (reverse == True)
     """
     if not reverse:
         if value == 0.0:
-            return '00:00:00.0000'
+            return '%s%.*f' % ('00:00:0', precision, 0.0)
     
         d = int(int(value))
         m = int((value - d) * 60)
@@ -358,9 +360,9 @@ def __ll_parts(value, reverse = False):
         if s < 0:
             s = '00.0000'
         elif s < 10.0:
-            s = '0%.4f' % s
+            s = '0%.*f' % (precision, s)
         else:
-            s = '%.4f' % s
+            s = '%.*f' % (precision, s)
         
         return str(d) + ':' + m + ':' + s
     else: # -> reverse

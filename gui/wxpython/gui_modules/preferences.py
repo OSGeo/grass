@@ -113,9 +113,18 @@ class Settings:
                 'bgcolor': {
                     'color' : (255, 255, 255, 255),
                     },
-                'projection' : {
+                },
+            #
+            # projection
+            #
+            'projection' : {
+                'statusbar' : {
                     'proj4'   : '',
                     'epsg'    : '',
+                    },
+                'format' : {
+                    'll'  : 'DMS',
+                    'precision' : 6,
                     },
                 },
             #
@@ -843,6 +852,7 @@ class PreferencesDialog(wx.Dialog):
         self.__CreateDisplayPage(notebook)
         self.__CreateCmdPage(notebook)
         self.__CreateAttributeManagerPage(notebook)
+        self.__CreateProjectionPage(notebook)
         self.__CreateWorkspacePage(notebook)
         self.__CreateAdvancedPage(notebook)
 
@@ -1122,89 +1132,11 @@ class PreferencesDialog(wx.Dialog):
 
         sizer.Add(item=gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
         border.Add(item=sizer, proportion=0, flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=3)
-
-        #
-        # projections statusbar settings
-        #
-        box   = wx.StaticBox (parent=panel, id=wx.ID_ANY, label=" %s " % _("Projection statusbar settings"))
-        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
-
-        gridSizer = wx.GridBagSizer (hgap=3, vgap=3)
-        gridSizer.AddGrowableCol(1)
-
-        row = 0
-        # useProj = wx.CheckBox(parent=panel, id=wx.ID_ANY,
-        # label=_("Use defined projection"),
-        #                       name="IsChecked")
-        # useProj.SetValue(self.settings.Get(group='display', key='projection', subkey='enabled'))
-        # self.winId['display:projection:enabled'] = useProj.GetId()
-        #
-        # gridSizer.Add(item=useProj,
-        #              pos=(row, 0), span=(1, 3))
-
-        # epsg
-        #row += 1
-        label = wx.StaticText(parent=panel, id=wx.ID_ANY,
-                              label=_("EPSG code:"))
-        epsgCode = wx.ComboBox(parent=panel, id=wx.ID_ANY,
-                               name="GetValue",
-                               size = (150, -1))
-        self.epsgCodeDict = dict()
-        epsgCode.SetValue(str(self.settings.Get(group='display', key='projection', subkey='epsg')))
-        self.winId['display:projection:epsg'] = epsgCode.GetId()
         
-        gridSizer.Add(item=label,
-                      pos=(row, 0),
-                      flag = wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(item=epsgCode,
-                      pos=(row, 1), span=(1, 2))
-        
-        # proj
-        row += 1
-        label = wx.StaticText(parent=panel, id=wx.ID_ANY,
-                              label=_("Proj.4 string (required):"))
-        projString = wx.TextCtrl(parent=panel, id=wx.ID_ANY,
-                                 value=self.settings.Get(group='display', key='projection', subkey='proj4'),
-                                 name="GetValue", size=(400, -1))
-        self.winId['display:projection:proj4'] = projString.GetId()
-
-        gridSizer.Add(item=label,
-                      pos=(row, 0),
-                      flag = wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(item=projString,
-                      pos=(row, 1), span=(1, 2),
-                      flag = wx.ALIGN_CENTER_VERTICAL)
-        
-        # epsg file
-        row += 1
-        label = wx.StaticText(parent=panel, id=wx.ID_ANY,
-                              label=_("EPSG file:"))
-        projFile = wx.TextCtrl(parent=panel, id=wx.ID_ANY,
-                               value=utils.PathJoin(os.environ["GRASS_PROJSHARE"], 'epsg'),
-                               name="GetValue", size=(400, -1))
-        epsgLoad = wx.Button(parent=panel, id=wx.ID_ANY,
-                             label=_("&Load EPSG codes"))
-        self.winId['display:projection:projFile'] = projFile.GetId()
-        
-        gridSizer.Add(item=label,
-                      pos=(row, 0),
-                      flag = wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(item=projFile,
-                      pos=(row, 1),
-                      flag = wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(item=epsgLoad,
-                      pos=(row, 2))
-        
-        sizer.Add(item=gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
-        border.Add(item=sizer, proportion=0, flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=3)
-
         panel.SetSizer(border)
         
         # bindings
         fontButton.Bind(wx.EVT_BUTTON, self.OnSetFont)
-        epsgLoad.Bind(wx.EVT_BUTTON, self.OnLoadEpsgCodes)
-        epsgCode.Bind(wx.EVT_COMBOBOX, self.OnSetEpsgCode)
-        epsgCode.Bind(wx.EVT_TEXT_ENTER, self.OnSetEpsgCode)
         
         return panel
 
@@ -1454,6 +1386,141 @@ class PreferencesDialog(wx.Dialog):
 
         return panel
 
+    def __CreateProjectionPage(self, notebook):
+        """!Create notebook page for workspace settings"""
+        panel = wx.Panel(parent=notebook, id=wx.ID_ANY)
+        notebook.AddPage(page=panel, text=_("Projection"))
+        
+        border = wx.BoxSizer(wx.VERTICAL)
+        
+        #
+        # projections statusbar settings
+        #
+        box   = wx.StaticBox (parent=panel, id=wx.ID_ANY, label=" %s " % _("Projection statusbar settings"))
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+
+        gridSizer = wx.GridBagSizer (hgap=3, vgap=3)
+        gridSizer.AddGrowableCol(1)
+
+        # epsg
+        row = 0
+        label = wx.StaticText(parent=panel, id=wx.ID_ANY,
+                              label=_("EPSG code:"))
+        epsgCode = wx.ComboBox(parent=panel, id=wx.ID_ANY,
+                               name="GetValue",
+                               size = (150, -1))
+        self.epsgCodeDict = dict()
+        epsgCode.SetValue(str(self.settings.Get(group='projection', key='statusbar', subkey='epsg')))
+        self.winId['projection:statusbar:epsg'] = epsgCode.GetId()
+        
+        gridSizer.Add(item=label,
+                      pos=(row, 0),
+                      flag = wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(item=epsgCode,
+                      pos=(row, 1), span=(1, 2))
+        
+        # proj
+        row += 1
+        label = wx.StaticText(parent=panel, id=wx.ID_ANY,
+                              label=_("Proj.4 string (required):"))
+        projString = wx.TextCtrl(parent=panel, id=wx.ID_ANY,
+                                 value=self.settings.Get(group='projection', key='statusbar', subkey='proj4'),
+                                 name="GetValue", size=(400, -1))
+        self.winId['projection:statusbar:proj4'] = projString.GetId()
+
+        gridSizer.Add(item=label,
+                      pos=(row, 0),
+                      flag = wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(item=projString,
+                      pos=(row, 1), span=(1, 2),
+                      flag = wx.ALIGN_CENTER_VERTICAL)
+        
+        # epsg file
+        row += 1
+        label = wx.StaticText(parent=panel, id=wx.ID_ANY,
+                              label=_("EPSG file:"))
+        projFile = wx.TextCtrl(parent=panel, id=wx.ID_ANY,
+                               value=utils.PathJoin(os.environ["GRASS_PROJSHARE"], 'epsg'),
+                               name="GetValue", size=(400, -1))
+        self.winId['projection:statusbar:projFile'] = projFile.GetId()
+        gridSizer.Add(item=label,
+                      pos=(row, 0),
+                      flag = wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(item=projFile,
+                      pos=(row, 1),
+                      flag = wx.ALIGN_CENTER_VERTICAL)
+        
+        # note + button
+        row += 1
+        note = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                             label = _("Load EPSG codes (be patient), enter EPSG code or "
+                                       "insert Proj.4 string directly."))
+        gridSizer.Add(item=note,
+                      span = (1, 2),
+                      pos=(row, 0))
+
+        row += 1
+        epsgLoad = wx.Button(parent=panel, id=wx.ID_ANY,
+                             label=_("&Load EPSG codes"))
+        gridSizer.Add(item=epsgLoad,
+                      flag = wx.ALIGN_RIGHT,
+                      pos=(row, 1))
+        
+        sizer.Add(item=gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
+
+        #
+        # format
+        #
+        box   = wx.StaticBox (parent=panel, id=wx.ID_ANY, label=" %s " % _("Coordinates format"))
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        
+        gridSizer = wx.GridBagSizer (hgap=3, vgap=3)
+        gridSizer.AddGrowableCol(2)
+
+        row = 0
+        # ll format
+        ll = wx.RadioBox(parent = panel, id = wx.ID_ANY,
+                         label = " %s " % _("LL projections"),
+                         choices = ["DMS", "DEG"],
+                         name = "GetStringSelection")
+        self.winId['projection:format:ll'] = ll.GetId()
+        if self.settings.Get(group = 'projection', key = 'format', subkey = 'll') == 'DMS':
+            ll.SetSelection(0)
+        else:
+            ll.SetSelection(1)
+        
+        # precision
+        precision =  wx.SpinCtrl(parent = panel, id = wx.ID_ANY,
+                                 min = 0, max = 12,
+                                 name = "GetValue")
+        precision.SetValue(int(self.settings.Get(group = 'projection', key = 'format', subkey = 'precision')))
+        self.winId['projection:format:precision'] = precision.GetId()
+                
+        gridSizer.Add(item=ll,
+                      pos=(row, 0))
+        gridSizer.Add(item=wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Precision:")),
+                      flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT | wx.LEFT,
+                      border = 20,
+                      pos=(row, 1))
+        gridSizer.Add(item=precision,
+                      flag = wx.ALIGN_CENTER_VERTICAL,
+                      pos=(row, 2))
+        
+        
+        sizer.Add(item=gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(item=sizer, proportion=0, flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=3)
+        
+        panel.SetSizer(border)
+
+        # bindings
+        epsgLoad.Bind(wx.EVT_BUTTON, self.OnLoadEpsgCodes)
+        epsgCode.Bind(wx.EVT_COMBOBOX, self.OnSetEpsgCode)
+        epsgCode.Bind(wx.EVT_TEXT_ENTER, self.OnSetEpsgCode)
+        
+        return panel
+
     def __CreateWorkspacePage(self, notebook):
         """!Create notebook page for workspace settings"""
         panel = wx.Panel(parent=notebook, id=wx.ID_ANY)
@@ -1569,11 +1636,11 @@ class PreferencesDialog(wx.Dialog):
 
     def OnLoadEpsgCodes(self, event):
         """!Load EPSG codes from the file"""
-        win = self.FindWindowById(self.winId['display:projection:projFile'])
+        win = self.FindWindowById(self.winId['projection:statusbar:projFile'])
         path = win.GetValue()
 
         self.epsgCodeDict = utils.ReadEpsgCodes(path)
-        list = self.FindWindowById(self.winId['display:projection:epsg'])
+        list = self.FindWindowById(self.winId['projection:statusbar:epsg'])
         if type(self.epsgCodeDict) == type(''):
             wx.MessageBox(parent=self,
                           message=_("Unable to read EPSG codes: %s") % self.epsgCodeDict,
@@ -1581,14 +1648,14 @@ class PreferencesDialog(wx.Dialog):
             self.epsgCodeDict = dict()
             list.SetItems([])
             list.SetValue('')
-            self.FindWindowById(self.winId['display:projection:proj4']).SetValue('')
+            self.FindWindowById(self.winId['projection:statusbar:proj4']).SetValue('')
             return
         
         choices = map(str, self.epsgCodeDict.keys())
 
         list.SetItems(choices)
         code = int(list.GetValue())
-        win = self.FindWindowById(self.winId['display:projection:proj4'])
+        win = self.FindWindowById(self.winId['projection:statusbar:proj4'])
         if self.epsgCodeDict.has_key(code):
             win.SetValue(self.epsgCodeDict[code][1])
         else:
@@ -1599,7 +1666,7 @@ class PreferencesDialog(wx.Dialog):
     def OnSetEpsgCode(self, event):
         """!EPSG code selected"""
         winCode = self.FindWindowById(event.GetId())
-        win = self.FindWindowById(self.winId['display:projection:proj4'])
+        win = self.FindWindowById(self.winId['projection:statusbar:proj4'])
         if not self.epsgCodeDict:
             wx.MessageBox(parent=self,
                           message=_("EPSG code %s not found") % event.GetString(),
