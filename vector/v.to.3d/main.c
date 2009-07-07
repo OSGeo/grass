@@ -29,7 +29,8 @@ int main(int argc, char **argv)
     struct Map_info In, Out;
     BOUND_BOX box;
     int field, type;
-
+    int ret;
+    
     G_gisinit(argv[0]);
 
     module = G_define_module();
@@ -102,9 +103,10 @@ int main(int argc, char **argv)
     }
 
     G_message(_("Transforming features..."));
+    ret = 0;
     if (opt.reverse->answer) {
 	/* 3d -> 2d */
-	trans3d(&In, &Out, type, field, opt.column->answer);
+	ret = trans3d(&In, &Out, type, field, opt.column->answer);
     }
     else {
 	/* 2d -> 3d */
@@ -113,7 +115,14 @@ int main(int argc, char **argv)
 	if (opt.height->answer) {
 	    height = atof(opt.height->answer);
 	}
-	trans2d(&In, &Out, type, height, field, opt.column->answer);
+	ret = trans2d(&In, &Out, type, height, field, opt.column->answer);
+    }
+
+    if (ret < 0) {
+	Vect_close(&In);
+	Vect_close(&Out);
+	Vect_delete(opt.output->answer);
+	G_fatal_error(_("%s failed"), G_program_name());
     }
 
     if (!opt.reverse->answer && !opt.table->answer) {

@@ -16,6 +16,7 @@
    \param column attribute column used for height
 
    \return number of writen features
+   \return -1 on error
  */
 int trans2d(struct Map_info *In, struct Map_info *Out, int type,
 	    double height, int field, const char *column)
@@ -40,23 +41,29 @@ int trans2d(struct Map_info *In, struct Map_info *Out, int type,
 	dbDriver *driver;
 
 	Fi = Vect_get_field(In, field);
-	if (!Fi)
-	    G_fatal_error(_("Database connection not defined for layer %d"),
-			  field);
+	if (!Fi) {
+	    G_warning(_("Database connection not defined for layer %d"),
+		      field);
+	    return -1;
+	}
 
 	driver = db_start_driver_open_database(Fi->driver, Fi->database);
 	if (!driver) {
-	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
-			  Fi->database, Fi->driver);
+	    G_warning(_("Unable to open database <%s> by driver <%s>"),
+		      Fi->database, Fi->driver);
+	    return -1;
 	}
 
 	/* column type must numeric */
 	ctype = db_column_Ctype(driver, Fi->table, column);
-	if (ctype == -1)
-	    G_fatal_error(_("Column <%s> not found in table <%s>"),
-			  column, Fi->table);
+	if (ctype == -1) {
+	    G_warning(_("Column <%s> not found in table <%s>"),
+		      column, Fi->table);
+	    return -1;
+	}
 	if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE) {
-	    G_fatal_error(_("Column must be numeric"));
+	    G_warning(_("Column must be numeric"));
+	    return -1;
 	}
 
 	db_select_CatValArray(driver, Fi->table, Fi->key,
@@ -71,7 +78,8 @@ int trans2d(struct Map_info *In, struct Map_info *Out, int type,
     while (1) {
 	ltype = Vect_read_next_line(In, Points, Cats);
 	if (ltype == -1) {
-	    G_fatal_error(_("Unable to read vector map"));
+	    G_warning(_("Unable to read vector map"));
+	    return -1;
 	}
 	if (ltype == -2) {	/* EOF */
 	    break;
