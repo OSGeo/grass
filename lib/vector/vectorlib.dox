@@ -209,34 +209,34 @@ This directory contains these files:
 
 <b>Head</b>
 
-<TABLE border=2>
-<TR><TD>Name</TD><TD>Type</TD><TD>Number</TD><TD>Description</TD></TR>
+<table border="1" style="border-collapse: collapse">
+<tr><td>Name</td><td>Type</td><td>Number</td><td>Description</td></tr>
 
-<TR><TD>Version_Major </TD><TD>C</TD><TD>1</TD><TD>file version (major)</TD></TR>
-<TR><TD>Version_Minor </TD><TD>C</TD><TD>1</TD><TD>file version (minor)</TD></TR>
-<TR><TD>Back_Major</TD><TD>C</TD><TD>1</TD><TD>supported from GRASS version (major)</TD></TR>
-<TR><TD>Back_Minor</TD><TD>C</TD><TD>1</TD><TD>supported from GRASS version (minor)</TD></TR>
+<tr><td>Version_Major </td><td>C</td><td>1</td><td>file version (major)</td></tr>
+<tr><td>Version_Minor </td><td>C</td><td>1</td><td>file version (minor)</td></tr>
+<tr><td>Back_Major</td><td>C</td><td>1</td><td>supported from GRASS version (major)</td></tr>
+<tr><td>Back_Minor</td><td>C</td><td>1</td><td>supported from GRASS version (minor)</td></tr>
 
-<TR><TD>byte_order</TD><TD>C</TD><TD>1</TD><TD>little or big endian
+<tr><td>byte_order</td><td>C</td><td>1</td><td>little or big endian
                   flag; files are written in machine native order but
                   files in both little and big endian order may be
-                  read; zero for little endian</TD></TR>
+                  read; zero for little endian</td></tr>
 
-<TR><TD>size</TD><TD>L</TD><TD>1</TD><TD>coor file size</TD></TR>
+<tr><td>size</td><td>L</td><td>1</td><td>coor file size</td></tr>
 
-<TR><TD>with_z</TD><TD>C</TD><TD>1</TD><TD>2D or 3D flag; zero for 2D</TD></TR>
+<tr><td>with_z</td><td>C</td><td>1</td><td>2D or 3D flag; zero for 2D</td></tr>
 
-<TR><TD>reserved</TD><TD>C</TD><TD>10</TD><TD>not used</TD></TR>
+<tr><td>reserved</td><td>C</td><td>10</td><td>not used</td></tr>
 
-</TABLE>
+</table>
 
 <b>Body</b>
 
 The body consists of line records:
 
-<TABLE border=2>
-<TR><TD>Name</TD><TD>Type</TD><TD>Number</TD><TD>Description</TD></TR>
-<TR><TD>record header</TD><TD>C</TD><TD>1</TD><TD>
+<table border="1" style="border-collapse: collapse">
+<tr><td>Name</td><td>Type</td><td>Number</td><td>Description</td></tr>
+<tr><td>record header</td><td>C</td><td>1</td><td>
 <UL>
   <LI><B>0. bit</B> : 1 - alive, 0 - dead line
   <LI><B>1. bit</B> : 1 - categories, 0 - no categories
@@ -244,38 +244,38 @@ The body consists of line records:
                               GV_BOUNDARY, GV_CENTROID
   <LI><B>4.-7. bit</B> : reserved, not used 
 </UL>
-</TD></TR>
+</td></tr>
 
-<TR><TD>ncats</TD><TD>I</TD><TD>1</TD><TD>number of categories 
-    (written only if categories exist) </TD></TR>
+<tr><td>ncats</td><td>I</td><td>1</td><td>number of categories 
+    (written only if categories exist) </td></tr>
 
-<TR><TD>field</TD><TD>I</TD><TD>ncats</TD><TD>field identifier,
+<tr><td>field</td><td>I</td><td>ncats</td><td>field identifier,
     distinguishes between more categories append to one feature (written
     only if categories exist; field is called "layer" at user
-    level)</TD></TR>
+    level)</td></tr>
 
-<TR><TD>cat</TD><TD>I</TD><TD>ncats</TD><TD>category value (written
-    only if categories exist)</TD></TR>
+<tr><td>cat</td><td>I</td><td>ncats</td><td>category value (written
+    only if categories exist)</td></tr>
 
-<TR><TD>ncoor</TD><TD>I</TD><TD>1</TD><TD>written for GV_LINES and GV_BOUNDARIES 
-    only</TD></TR>
+<tr><td>ncoor</td><td>I</td><td>1</td><td>written for GV_LINES and GV_BOUNDARIES 
+    only</td></tr>
 
-<TR><TD>x</TD><TD>D</TD><TD>ncoor</TD><TD>x coordinate</TD></TR>
+<tr><td>x</td><td>D</td><td>ncoor</td><td>x coordinate</td></tr>
 
-<TR><TD>y</TD><TD>D</TD><TD>ncoor</TD><TD>y coordinate</TD></TR>
+<tr><td>y</td><td>D</td><td>ncoor</td><td>y coordinate</td></tr>
 
-<TR><TD>z</TD><TD>D</TD><TD>ncoor</TD><TD>z coordinate; present if
-    with_z in head is set to 1</TD></TR> </TABLE>
+<tr><td>z</td><td>D</td><td>ncoor</td><td>z coordinate; present if
+    with_z in head is set to 1</td></tr> </table>
 
 <B>Types used in coor file</B>
-<TABLE border=2>
-<TR><TD>Type</TD><TD>Name</TD><TD>Size in Bytes</TD></TR>
-<TR><TD>D</TD><TD>Double</TD><TD>8</TD></TR>
-<TR><TD>L</TD><TD>Long  </TD><TD>4</TD></TR>
-<TR><TD>I</TD><TD>Int   </TD><TD>4</TD></TR>
-<TR><TD>S</TD><TD>Short </TD><TD>4</TD></TR>
-<TR><TD>C</TD><TD>Char  </TD><TD>1</TD></TR>
-</TABLE>
+<table border="1" style="border-collapse: collapse">
+<tr><td>Type</td><td>Name</td><td>Size in Bytes</td></tr>
+<tr><td>D</td><td>Double</td><td>8</td></tr>
+<tr><td>L</td><td>Long  </td><td>4</td></tr>
+<tr><td>I</td><td>Int   </td><td>4</td></tr>
+<tr><td>S</td><td>Short </td><td>4</td></tr>
+<tr><td>C</td><td>Char  </td><td>1</td></tr>
+</table>
 
 
 \subsubsection head_file_format Head file format
@@ -312,90 +312,90 @@ for OGR sources, SHAPE-link.
 
 <b>Head</b>
 
-<TABLE border=2>
-<TR><TD>Name</TD><TD>Type</TD><TD>Number</TD><TD>Description</TD></TR>
+<table border="1" style="border-collapse: collapse">
+<tr><td>Name</td><td>Type</td><td>Number</td><td>Description</td></tr>
 
-<TR><TD>Version_Major </TD><TD>C</TD><TD>1</TD><TD>file version (major)</TD></TR>
-<TR><TD>Version_Minor </TD><TD>C</TD><TD>1</TD><TD>file version (minor)</TD></TR>
-<TR><TD>Back_Major</TD><TD>C</TD><TD>1</TD><TD>supported from GRASS version (major)</TD></TR>
-<TR><TD>Back_Minor</TD><TD>C</TD><TD>1</TD><TD>supported from GRASS version (minor)</TD></TR>
+<tr><td>Version_Major </td><td>C</td><td>1</td><td>file version (major)</td></tr>
+<tr><td>Version_Minor </td><td>C</td><td>1</td><td>file version (minor)</td></tr>
+<tr><td>Back_Major</td><td>C</td><td>1</td><td>supported from GRASS version (major)</td></tr>
+<tr><td>Back_Minor</td><td>C</td><td>1</td><td>supported from GRASS version (minor)</td></tr>
 
-<TR><TD>byte_order</TD><TD>C</TD><TD>1</TD><TD>little or big endian
+<tr><td>byte_order</td><td>C</td><td>1</td><td>little or big endian
                   flag; files are written in machine native order but
                   files in both little and big endian order may be
-                  readl; zero for little endian</TD></TR>
+                  readl; zero for little endian</td></tr>
 
-<TR><TD>head_size</TD><TD>L</TD><TD>1</TD><TD>header size</TD></TR>
+<tr><td>head_size</td><td>L</td><td>1</td><td>header size</td></tr>
 
-<TR><TD>with_z</TD><TD>C</TD><TD>1</TD><TD>2D or 3D flag; zero for 2D</TD></TR>
+<tr><td>with_z</td><td>C</td><td>1</td><td>2D or 3D flag; zero for 2D</td></tr>
 
-<TR><TD>box</TD><TD>D</TD><TD>6</TD><TD>Bounding box coordinates (N,S,E,W,T,B)</TD></TR>
+<tr><td>box</td><td>D</td><td>6</td><td>Bounding box coordinates (N,S,E,W,T,B)</td></tr>
 
-<TR><TD>n_nodes, n_lines, etc.</TD><TD>I</TD><TD>7</TD><TD>Number of
-nodes, edges, lines, areas, isles, volumes and holes</TD></TR>
+<tr><td>n_nodes, n_lines, etc.</td><td>I</td><td>7</td><td>Number of
+nodes, edges, lines, areas, isles, volumes and holes</td></tr>
 
-<TR><TD>n_plines, n_llines, etc.</TD><TD>I</TD><TD>7</TD><TD>Number of
-points, lines, boundaries, centroids, faces and kernels</TD></TR>
+<tr><td>n_plines, n_llines, etc.</td><td>I</td><td>7</td><td>Number of
+points, lines, boundaries, centroids, faces and kernels</td></tr>
 
-<TR><TD>Node_offset, Edge_offset,
-etc.</TD><TD>L</TD><TD>7</TD><TD>Offset value for nodes, edges, lines,
-areas, isles, volumes and holes</TD></TR>
+<tr><td>Node_offset, Edge_offset,
+etc.</td><td>L</td><td>7</td><td>Offset value for nodes, edges, lines,
+areas, isles, volumes and holes</td></tr>
 
-<TR><TD>coor_size</TD><TD>L</TD><TD>1</TD><TD>File size</TD></TR>
-</TABLE>
+<tr><td>coor_size</td><td>L</td><td>1</td><td>File size</td></tr>
+</table>
 
 <b>Body</b>
 
 For each node (n_nodes):
 
-<TABLE border=2>
-<TR><TD>Name</TD><TD>Type</TD><TD>Number</TD><TD>Description</TD></TR>
-<TR><TD>n_lines</TD><TD>I</TD><TD>1</TD><TD>Number of lines (0 for dead node)</TD></TR>
-<TR><TD>lines</TD><TD>I</TD><TD>n_lines</TD><TD>Line ids</TD></TR>
-<TR><TD>angles</TD><TD>D</TD><TD>n_lines</TD><TD>Angle value</TD></TR>
-<TR><TD>n_edges</TD><TD>I</TD><TD>1</TD><TD>Reserved for edges (only for with_z)</TD></TR>
-<TR><TD>x,y</TD><TD>D</TD><TD>2</TD><TD>Coordinate pair</TD></TR>
-<TR><TD>z</TD><TD>D</TD><TD>1</TD><TD>Only for with_z</TD></TR>
-</TABLE>
+<table border="1" style="border-collapse: collapse">
+<tr><td>Name</td><td>Type</td><td>Number</td><td>Description</td></tr>
+<tr><td>n_lines</td><td>I</td><td>1</td><td>Number of lines (0 for dead node)</td></tr>
+<tr><td>lines</td><td>I</td><td>n_lines</td><td>Line ids</td></tr>
+<tr><td>angles</td><td>D</td><td>n_lines</td><td>Angle value</td></tr>
+<tr><td>n_edges</td><td>I</td><td>1</td><td>Reserved for edges (only for with_z)</td></tr>
+<tr><td>x,y</td><td>D</td><td>2</td><td>Coordinate pair</td></tr>
+<tr><td>z</td><td>D</td><td>1</td><td>Only for with_z</td></tr>
+</table>
 
 For each line (n_lines):
 
-<TABLE border=2>
-<TR><TD>Name</TD><TD>Type</TD><TD>Number</TD><TD>Description</TD></TR>
-<TR><TD>feature type</TD><TD>C</TD><TD>1</TD><TD>0 for dead</TD></TR>
-<TR><TD>offset</TD><TD>L</TD><TD>1</TD><TD>Line offset</TD></TR>
-<TR><TD>N1</TD><TD>I</TD><TD>1</TD><TD>First node id (only if feature type is GV_POINTS, GV_LINES or GV_KERNEL)</TD></TR>
-<TR><TD>N2</TD><TD>I</TD><TD>1</TD><TD>Second node id (only if feature type is GV_LINE or GV_BOUNDARY)</TD></TR>
-<TR><TD>left</TD><TD>I</TD><TD>1</TD><TD>Left area id for feature type GV_BOUNDARY / Area id for feature type GV_CENTROID</TD></TR>
-<TR><TD>right</TD><TD>I</TD><TD>1</TD><TD>Right area id (for feature type GV_BOUNDARY)</TD></TR>
-<TR><TD>vol</TD><TD>I</TD><TD>1</TD><TD>Reserved for kernel (volume number, for feature type GV_KERNEL)</TD></TR>
-<TR><TD>N,S,E,W</TD><TD>D</TD><TD>4</TD><TD>Line bounding box (for feature type GV_LINE, GV_BOUNDARY or GV_FACE)</TD></TR>
-<TR><TD>T,B</TD><TD>D</TD><TD>2</TD><TD>Line bounding box for 3D (only if with_z=1)</TD></TR>
-</TABLE>
+<table border="1" style="border-collapse: collapse">
+<tr><td>Name</td><td>Type</td><td>Number</td><td>Description</td></tr>
+<tr><td>feature type</td><td>C</td><td>1</td><td>0 for dead</td></tr>
+<tr><td>offset</td><td>L</td><td>1</td><td>Line offset</td></tr>
+<tr><td>N1</td><td>I</td><td>1</td><td>First node id (only if feature type is GV_POINTS, GV_LINES or GV_KERNEL)</td></tr>
+<tr><td>N2</td><td>I</td><td>1</td><td>Second node id (only if feature type is GV_LINE or GV_BOUNDARY)</td></tr>
+<tr><td>left</td><td>I</td><td>1</td><td>Left area id for feature type GV_BOUNDARY / Area id for feature type GV_CENTROID</td></tr>
+<tr><td>right</td><td>I</td><td>1</td><td>Right area id (for feature type GV_BOUNDARY)</td></tr>
+<tr><td>vol</td><td>I</td><td>1</td><td>Reserved for kernel (volume number, for feature type GV_KERNEL)</td></tr>
+<tr><td>N,S,E,W</td><td>D</td><td>4</td><td>Line bounding box (for feature type GV_LINE, GV_BOUNDARY or GV_FACE)</td></tr>
+<tr><td>T,B</td><td>D</td><td>2</td><td>Line bounding box for 3D (only if with_z=1)</td></tr>
+</table>
 
 For each area (n_areas):
 
-<TABLE border=2>
-<TR><TD>Name</TD><TD>Type</TD><TD>Number</TD><TD>Description</TD></TR>
-<TR><TD>n_lines</TD><TD>I</TD><TD>1</TD><TD>number of boundaries</TD></TR>
-<TR><TD>lines</TD><TD>I</TD><TD>n_lines</TD><TD>Line ids</TD></TR>
-<TR><TD>n_isles</TD><TD>I</TD><TD>1</TD><TD>Number of isles</TD></TR>
-<TR><TD>isles</TD><TD>I</TD><TD>n_isles</TD><TD>Isle ids</TD></TR>
-<TR><TD>centroid</TD><TD>I</TD><TD>1</TD><TD>Centroid id</TD></TR>
-<TR><TD>N,S,E,W</TD><TD>D</TD><TD>4</TD><TD>Area bounding box</TD></TR>
-<TR><TD>T,B</TD><TD>D</TD><TD>2</TD><TD>Area bounding box for 3D (only if with_z=1)</TD></TR>
-</TABLE>
+<table border="1" style="border-collapse: collapse">
+<tr><td>Name</td><td>Type</td><td>Number</td><td>Description</td></tr>
+<tr><td>n_lines</td><td>I</td><td>1</td><td>number of boundaries</td></tr>
+<tr><td>lines</td><td>I</td><td>n_lines</td><td>Line ids</td></tr>
+<tr><td>n_isles</td><td>I</td><td>1</td><td>Number of isles</td></tr>
+<tr><td>isles</td><td>I</td><td>n_isles</td><td>Isle ids</td></tr>
+<tr><td>centroid</td><td>I</td><td>1</td><td>Centroid id</td></tr>
+<tr><td>N,S,E,W</td><td>D</td><td>4</td><td>Area bounding box</td></tr>
+<tr><td>T,B</td><td>D</td><td>2</td><td>Area bounding box for 3D (only if with_z=1)</td></tr>
+</table>
 
 For each isle (n_isle):
 
-<TABLE border=2>
-<TR><TD>Name</TD><TD>Type</TD><TD>Number</TD><TD>Description</TD></TR>
-<TR><TD>n_lines</TD><TD>I</TD><TD>1</TD><TD>number of boundaries</TD></TR>
-<TR><TD>lines</TD><TD>I</TD><TD>n_lines</TD><TD>Line ids</TD></TR>
-<TR><TD>area</TD><TD>I</TD><TD>1</TD><TD>Outer area id</TD></TR>
-<TR><TD>N,S,E,W</TD><TD>D</TD><TD>4</TD><TD>Isle bounding box</TD></TR>
-<TR><TD>T,B</TD><TD>D</TD><TD>2</TD><TD>Isle bounding box for 3D (only if with_z=1)</TD></TR>
-</TABLE>
+<table border="1" style="border-collapse: collapse">
+<tr><td>Name</td><td>Type</td><td>Number</td><td>Description</td></tr>
+<tr><td>n_lines</td><td>I</td><td>1</td><td>number of boundaries</td></tr>
+<tr><td>lines</td><td>I</td><td>n_lines</td><td>Line ids</td></tr>
+<tr><td>area</td><td>I</td><td>1</td><td>Outer area id</td></tr>
+<tr><td>N,S,E,W</td><td>D</td><td>4</td><td>Isle bounding box</td></tr>
+<tr><td>T,B</td><td>D</td><td>2</td><td>Isle bounding box for 3D (only if with_z=1)</td></tr>
+</table>
 
 <b>Feature types:</b>
 
