@@ -17,6 +17,7 @@ static int srch(const void *, const void *);
    \param zcolumn attribute column where to store height
 
    \return number of writen features
+   \return -1 on error
  */
 int trans3d(struct Map_info *In, struct Map_info *Out, int type,
 	    int field, const char *zcolumn)
@@ -41,23 +42,29 @@ int trans3d(struct Map_info *In, struct Map_info *Out, int type,
 
     if (zcolumn) {
 	Fi = Vect_get_field(Out, field);
-	if (!Fi)
-	    G_fatal_error(_("Database connection not defined for layer %d"),
-			  field);
+	if (!Fi) {
+	    G_warning(_("Database connection not defined for layer %d"),
+		      field);
+	    return -1;
+	}
 
 	driver = db_start_driver_open_database(Fi->driver, Fi->database);
 	if (!driver) {
-	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
-			  Fi->database, Fi->driver);
+	    G_warning(_("Unable to open database <%s> by driver <%s>"),
+		      Fi->database, Fi->driver);
+	    return -1;
 	}
 
 	/* column type must numeric */
 	ctype = db_column_Ctype(driver, Fi->table, zcolumn);
-	if (ctype == -1)
-	    G_fatal_error(_("Column <%s> not found in table <%s>"),
-			  zcolumn, Fi->table);
+	if (ctype == -1) {
+	    G_warning(_("Column <%s> not found in table <%s>"),
+		      zcolumn, Fi->table);
+	    return -1;
+	}
 	if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE) {
-	    G_fatal_error(_("Column must be numeric"));
+	    G_warning(_("Column must be numeric"));
+	    return -1;
 	}
 
 	db_begin_transaction(driver);
@@ -71,7 +78,8 @@ int trans3d(struct Map_info *In, struct Map_info *Out, int type,
     while (1) {
 	ltype = Vect_read_next_line(In, Points, Cats);
 	if (ltype == -1) {
-	    G_fatal_error(_("Unable to read vector map"));
+	    G_warning(_("Unable to read vector map"));
+	    return -1;
 	}
 	if (ltype == -2) {	/* EOF */
 	    break;
