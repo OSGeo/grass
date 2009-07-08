@@ -572,17 +572,17 @@ class Map(object):
             self.height = 480
             return False
 
-    def GetRegion(self, rast = [], zoom = False, vect = [],
+    def GetRegion(self, rast = [], zoom = False, vect = [], regionName = None,
                   n = None, s = None, e = None, w = None, default = False,
                   update = False):
-        """
-        Get region settings (g.region -upgc)
+        """!Get region settings (g.region -upgc)
 
         Optionally extent, raster or vector map layer can be given.
-
-        @param rast raster name or None
-        @param vect vector name or None
-        @param zoom zoom to raster (ignore NULLs)
+        
+        @param rast list of raster maps
+        @param zoom zoom to raster map (ignore NULLs)
+        @param vect list of vector maps
+        @param regionName  named region or None
         @param n,s,e,w force extent
         @param default force default region settings
         @param update if True update current display region settings
@@ -590,7 +590,6 @@ class Map(object):
         @return region settings as directory, e.g. {
         'n':'4928010', 's':'4913700', 'w':'589980',...}
         """
-
         region = {}
 
         tmpreg = os.getenv("GRASS_REGION")
@@ -608,7 +607,10 @@ class Map(object):
 
         if default:
             cmd['flags'] += 'd'
-            
+        
+        if regionName:
+            cmd['region'] = regionName
+        
         if n:
             cmd['n'] = n
         if s:

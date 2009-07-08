@@ -600,7 +600,7 @@ class BufferedWindow(MapWindow, wx.Window):
         @param renderVector re-render vector map layer enabled for editing (used for digitizer)
         """
         start = time.clock()
-
+        
         self.resize = False
 
         # if len(self.Map.GetListOfLayers()) == 0:
@@ -2617,52 +2617,33 @@ class BufferedWindow(MapWindow, wx.Window):
             os.environ["GRASS_REGION"] = tmpreg
 
     def ZoomToSaved(self, event):
-        """!
-        Set display geometry to match extents in
+        """!Set display geometry to match extents in
         saved region file
         """
-
-        zoomreg = {}
-
-        dlg = gdialogs.SavedRegion(self, wx.ID_ANY, _("Zoom to saved region extents"),
+        dlg = gdialogs.SavedRegion(parent = self, id = wx.ID_ANY,
+                                   title = _("Zoom to saved region extents"),
                                    pos=wx.DefaultPosition, size=wx.DefaultSize,
                                    style=wx.DEFAULT_DIALOG_STYLE,
                                    loadsave='load')
-
+        
         if dlg.ShowModal() == wx.ID_CANCEL:
             dlg.Destroy()
             return
-
+        
         wind = dlg.wind
-
-        region = gcmd.RunCommand('g.region',
-                                 parent = self,
-                                 read = True,
-                                 flags = 'ugp',
-                                 region = wind)
         
-        if not region:
-            dlg.Destroy()
-            return
+        self.Map.GetRegion(regionName = wind,
+                           update = True)
         
-        for line in region.splitlines():
-            key, val = line.split('=')
-            zoomreg[key.strip()] = float(val.strip())
+        dlg.Destroy()
         
-        self.Map.region['n'] = zoomreg['n']
-        self.Map.region['s'] = zoomreg['s']
-        self.Map.region['e'] = zoomreg['e']
-        self.Map.region['w'] = zoomreg['w']
-
         self.ZoomHistory(self.Map.region['n'],
                          self.Map.region['s'],
                          self.Map.region['e'],
                          self.Map.region['w'])
         
         self.UpdateMap()
-        
-        dlg.Destroy()
-        
+                
     def SaveDisplayRegion(self, event):
         """!
         Save display extents to named region file.
