@@ -124,7 +124,7 @@ class Settings:
                     },
                 'format' : {
                     'll'  : 'DMS',
-                    'precision' : 6,
+                    'precision' : 2,
                     },
                 },
             #

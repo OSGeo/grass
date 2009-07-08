@@ -989,8 +989,10 @@ class MapFrame(wx.Frame):
                                                       precision, s, precision, n), 0)
                     else:
                         ewres, nsres = region['ewres'], region['nsres']
-                        self.statusbar.SetStatusText("%s - %s, %s - %s (%s, %s)" %
-                                                     (w, e, s, n, ewres, nsres), 0)
+                        self.statusbar.SetStatusText("%.*f - %.*f, %.*f - %.*f (%.*f, %.*f)" %
+                                                     (precision, w, precision, e,
+                                                      precision, s, precision, n,
+                                                      precision, ewres, precision, nsres), 0)
             # enable long help
             self.StatusbarEnableLongHelp()
 
