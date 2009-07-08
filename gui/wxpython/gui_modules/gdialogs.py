@@ -231,6 +231,7 @@ class SavedRegion(wx.Dialog):
             box.Add(item=label, proportion=0, flag=wx.ALIGN_CENTRE | wx.ALL, border=5)
             self.selection = gselect.Select(parent=self, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE,
                                             type='windows')
+            self.selection.SetFocus()
             box.Add(item=self.selection, proportion=0, flag=wx.ALIGN_CENTRE | wx.ALL, border=5)
             self.selection.Bind(wx.EVT_TEXT, self.OnSelection)
 
@@ -239,6 +240,7 @@ class SavedRegion(wx.Dialog):
             box.Add(item=label, proportion=0, flag=wx.ALIGN_CENTRE | wx.ALL, border=5)
             self.textentry = wx.TextCtrl(parent=self, id=wx.ID_ANY, value="",
                                          size=globalvar.DIALOG_TEXTCTRL_SIZE)
+            self.textentry.SetFocus()
             box.Add(item=self.textentry, proportion=0, flag=wx.ALIGN_CENTRE | wx.ALL, border=5)
             self.textentry.Bind(wx.EVT_TEXT, self.OnText)
 
