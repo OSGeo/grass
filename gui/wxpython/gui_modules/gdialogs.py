@@ -212,66 +212,61 @@ def CreateNewVector(parent, cmd, title=_('Create new vector map'),
     return (None, dlg.addbox.IsChecked())
 
 class SavedRegion(wx.Dialog):
-    def __init__(self, parent, id, title="", pos=wx.DefaultPosition, size=wx.DefaultSize,
-                 style=wx.DEFAULT_DIALOG_STYLE,
-                 loadsave='load'):
+    def __init__(self, parent, id = wx.ID_ANY, title="", loadsave='load',
+                 **kwargs):
+        """!Loading and saving of display extents to saved region file
+
+        @param loadsave load or save region?
         """
-        Loading and saving of display extents to saved region file
-        """
-        wx.Dialog.__init__(self, parent, id, title, pos, size, style)
+        wx.Dialog.__init__(self, parent, id, title, **kwargs)
 
         self.loadsave = loadsave
         self.wind = ''
-
+        
         sizer = wx.BoxSizer(wx.VERTICAL)
-
+        
         box = wx.BoxSizer(wx.HORIZONTAL)
+        label = wx.StaticText(parent=self, id=wx.ID_ANY)
+        box.Add(item=label, proportion=0, flag=wx.ALIGN_CENTRE | wx.ALL, border=5)
         if loadsave == 'load':
-            label = wx.StaticText(parent=self, id=wx.ID_ANY, label=_("Load region:"))
-            box.Add(item=label, proportion=0, flag=wx.ALIGN_CENTRE | wx.ALL, border=5)
-            self.selection = gselect.Select(parent=self, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE,
-                                            type='windows')
-            self.selection.SetFocus()
-            box.Add(item=self.selection, proportion=0, flag=wx.ALIGN_CENTRE | wx.ALL, border=5)
-            self.selection.Bind(wx.EVT_TEXT, self.OnSelection)
-
+            label.SetLabel(_("Load region:"))
+            selection = gselect.Select(parent=self, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE,
+                                       type='windows')
         elif loadsave == 'save':
-            label = wx.StaticText(parent=self, id=wx.ID_ANY, label=_("Save region:"))
-            box.Add(item=label, proportion=0, flag=wx.ALIGN_CENTRE | wx.ALL, border=5)
-            self.textentry = wx.TextCtrl(parent=self, id=wx.ID_ANY, value="",
-                                         size=globalvar.DIALOG_TEXTCTRL_SIZE)
-            self.textentry.SetFocus()
-            box.Add(item=self.textentry, proportion=0, flag=wx.ALIGN_CENTRE | wx.ALL, border=5)
-            self.textentry.Bind(wx.EVT_TEXT, self.OnText)
-
+            label.SetLabel(_("Save region:"))
+            selection = gselect.Select(parent=self, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE,
+                                       type='windows', mapsets = [grass.gisenv()['MAPSET']])
+        
+        box.Add(item=selection, proportion=0, flag=wx.ALIGN_CENTRE | wx.ALL, border=5)
+        selection.SetFocus()
+        selection.Bind(wx.EVT_TEXT, self.OnRegion)
+        
         sizer.Add(item=box, proportion=0, flag=wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL,
                   border=5)
-
+        
         line = wx.StaticLine(parent=self, id=wx.ID_ANY, size=(20, -1), style=wx.LI_HORIZONTAL)
         sizer.Add(item=line, proportion=0,
                   flag=wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.LEFT|wx.RIGHT, border=5)
-
+        
         btnsizer = wx.StdDialogButtonSizer()
-
-        btn = wx.Button(self, wx.ID_OK)
+        
+        btn = wx.Button(parent = self, id = wx.ID_OK)
         btn.SetDefault()
         btnsizer.AddButton(btn)
-
-        btn = wx.Button(self, wx.ID_CANCEL)
+        
+        btn = wx.Button(parent = self, id = wx.ID_CANCEL)
         btnsizer.AddButton(btn)
         btnsizer.Realize()
-
+        
         sizer.Add(item=btnsizer, proportion=0, flag=wx.ALIGN_RIGHT | wx.ALL, border=5)
-
+        
         self.SetSizer(sizer)
         sizer.Fit(self)
-
-    def OnSelection(self, event):
+        self.Layout()
+        
+    def OnRegion(self, event):
         self.wind = event.GetString()
-
-    def OnText(self, event):
-        self.wind = event.GetString()
-
+    
 class DecorationDialog(wx.Dialog):
     """
     Controls setting options and displaying/hiding map overlay decorations

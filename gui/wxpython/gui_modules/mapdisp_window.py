@@ -2620,19 +2620,22 @@ class BufferedWindow(MapWindow, wx.Window):
         """!Set display geometry to match extents in
         saved region file
         """
-        dlg = gdialogs.SavedRegion(parent = self, id = wx.ID_ANY,
+        dlg = gdialogs.SavedRegion(parent = self,
                                    title = _("Zoom to saved region extents"),
-                                   pos=wx.DefaultPosition, size=wx.DefaultSize,
-                                   style=wx.DEFAULT_DIALOG_STYLE,
                                    loadsave='load')
         
-        if dlg.ShowModal() == wx.ID_CANCEL:
+        if dlg.ShowModal() == wx.ID_CANCEL or not dlg.wind:
             dlg.Destroy()
             return
         
-        wind = dlg.wind
+        if not grass.find_file(name = dlg.wind, element = 'windows')['name']:
+            wx.MessageBox(parent = self,
+                          message = _("Region <%s> not found. Operation canceled.") % dlg.wind,
+                          caption = _("Error"), style = wx.ICON_ERROR | wx.OK | wx.CENTRE)
+            dlg.Destroy()
+            return
         
-        self.Map.GetRegion(regionName = wind,
+        self.Map.GetRegion(regionName = dlg.wind,
                            update = True)
         
         dlg.Destroy()
@@ -2649,49 +2652,33 @@ class BufferedWindow(MapWindow, wx.Window):
         Save display extents to named region file.
         """
 
-        dlg = gdialogs.SavedRegion(self, wx.ID_ANY, "Save display extents to region file",
-                                   pos=wx.DefaultPosition, size=wx.DefaultSize,
-                                   style=wx.DEFAULT_DIALOG_STYLE,
+        dlg = gdialogs.SavedRegion(parent = self,
+                                   title = _("Save display extents to region file"),
                                    loadsave='save')
-        if dlg.ShowModal() == wx.ID_CANCEL:
+        
+        if dlg.ShowModal() == wx.ID_CANCEL or not dlg.wind:
             dlg.Destroy()
             return
 
-        wind = dlg.wind
-
         # test to see if it already exists and ask permission to overwrite
-        windpath = os.path.join(self.Map.env["GISDBASE"], self.Map.env["LOCATION_NAME"],
-                                self.Map.env["MAPSET"],"windows",wind)
-
-        if windpath and not os.path.exists(windpath):
-            self.SaveRegion(wind)
-        elif windpath and os.path.exists(windpath):
-            overwrite = wx.MessageBox(_("Region file <%s> already exists. "
-                                        "Do you want to overwrite it?") % (wind),
-                                      _("Warning"), wx.YES_NO)
+        if grass.find_file(name = dlg.wind, element = 'windows')['name']:
+            overwrite = wx.MessageBox(parent = self,
+                                      message = _("Region file <%s> already exists. "
+                                                  "Do you want to overwrite it?") % (dlg.wind),
+                                      caption = _("Warning"), style = wx.YES_NO | wx.CENTRE)
             if (overwrite == wx.YES):
-                self.SaveRegion(wind)
+                self.SaveRegion(dlg.wind)
         else:
-            pass
-
+            self.SaveRegion(dlg.wind)
+        
         dlg.Destroy()
 
     def SaveRegion(self, wind):
-        """!
-        Save region settings
-        """
-        new = self.Map.AlignResolution()
+        """!Save region settings
 
-        cmdRegion = ["g.region",
-                     "-u",
-                     "n=%f" % new['n'],
-                     "s=%f" % new['s'],
-                     "e=%f" % new['e'],
-                     "w=%f" % new['w'],
-                     "rows=%d" % new['rows'],
-                     "cols=%d" % new['cols'],
-                     "save=%s" % wind,
-                     "--o"]
+        @param wind region name
+        """
+        new = self.Map.GetCurrentRegion()
 
         tmpreg = os.getenv("GRASS_REGION")
         if tmpreg:
