@@ -991,16 +991,21 @@ class cmdPanel(wx.Panel):
             else:
                 title = text_beautify( f['description'] )
                 tooltip = None
+            title_sizer = wx.BoxSizer(wx.HORIZONTAL)
+            rtitle_txt = wx.StaticText(parent=which_panel,
+                                       label = '(' + f['name'] + ')')
             chk = wx.CheckBox(parent=which_panel, label = title, style = wx.NO_BORDER)
             self.label_id.append(chk.GetId())
             if tooltip:
                 chk.SetToolTipString(tooltip)
             if 'value' in f:
                 chk.SetValue( f['value'] )
-            # chk.SetFont(wx.Font(pointSize=fontsize, family=wx.FONTFAMILY_DEFAULT,
-            #                    style=wx.NORMAL, weight=text_style))
-            which_sizer.Add( item=chk, proportion=0,
-                             flag=wx.EXPAND | wx.TOP | wx.LEFT | wx.RIGHT, border=5)
+            title_sizer.Add(item=chk, proportion=1,
+                            flag=wx.EXPAND)
+            title_sizer.Add(item=rtitle_txt, proportion=0,
+                            flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL)
+            which_sizer.Add(item=title_sizer, proportion=0,
+                            flag=wx.EXPAND | wx.TOP | wx.LEFT | wx.RIGHT, border=5)
             f['wxId'] = chk.GetId()
             chk.Bind(wx.EVT_CHECKBOX, self.OnSetValue)
             if f['name'] in ('verbose', 'quiet'):
@@ -1074,7 +1079,7 @@ class cmdPanel(wx.Panel):
                 if p.get('multiple', 'no') == 'yes' and \
                         p.get('gisprompt',False) == False and \
                         p.get('type', '') == 'string':
-                    title_txt.SetLabel(" " + title + ": ")
+                    title_txt.SetLabel(" %s: (%s, %s) " % (title, p['name'], p['type']))
                     if len(valuelist) > 6:
                         hSizer=wx.StaticBoxSizer ( box=title_txt, orient=wx.VERTICAL )
                     else:
@@ -1096,7 +1101,8 @@ class cmdPanel(wx.Panel):
                         except IndexError:
                             label = val
                         
-                        chkbox = wx.CheckBox( parent=which_panel, label = text_beautify(label) )
+                        chkbox = wx.CheckBox( parent=which_panel,
+                                              label = text_beautify(label))
                         p[ 'wxId' ].append( chkbox.GetId() )
                         if isEnabled.has_key(val):
                             chkbox.SetValue( True )
