@@ -645,10 +645,7 @@ class Map(object):
                               "Force quiting wxGUI. Please run manually g.region to "
                               "fix the problem.")
             e.Show()
-            if not rast and not vect:
-                sys.exit(1)
-            else:
-                return self.region
+            return self.region
 
         for reg in ret.splitlines():
             key, val = reg.split("=", 1)
