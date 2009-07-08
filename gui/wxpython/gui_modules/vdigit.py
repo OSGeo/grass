@@ -1439,16 +1439,9 @@ class VDigitSettingsDialog(wx.Dialog):
         settings = ((_("Layer"), 1), (_("Category"), 1), (_("Mode"), _("Next to use")))
         # layer
         text = wx.StaticText(parent=panel, id=wx.ID_ANY, label=_("Layer"))
-        if self.parent.digit.map:
-            layers = map(str, self.parent.digit.GetLayers())
-            if len(layers) == 0:
-                layers = [str(UserSettings.Get(group='vdigit', key="layer", subkey='value')), ]
-        else:
-            layers = [str(UserSettings.Get(group='vdigit', key="layer", subkey='value')), ]
-        
-        self.layer = wx.Choice(parent=panel, id=wx.ID_ANY, size=(125, -1),
-                               choices=layers)
-        self.layer.SetStringSelection(str(UserSettings.Get(group='vdigit', key="layer", subkey='value')))
+        self.layer = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(125, -1),
+                                 min = 1, max = 1e3)
+        self.layer.SetValue(int(UserSettings.Get(group='vdigit', key="layer", subkey='value')))
         flexSizer.Add(item=text, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL)
         flexSizer.Add(item=self.layer, proportion=0,
                       flag=wx.FIXED_MINSIZE | wx.ALIGN_CENTER_VERTICAL)
@@ -1600,7 +1593,7 @@ class VDigitSettingsDialog(wx.Dialog):
         # bindings
         self.Bind(wx.EVT_CHECKBOX, self.OnChangeAddRecord, self.addRecord)
         self.Bind(wx.EVT_CHOICE, self.OnChangeCategoryMode, self.categoryMode)
-        self.Bind(wx.EVT_CHOICE, self.OnChangeLayer, self.layer)
+        self.Bind(wx.EVT_SPINCTRL, self.OnChangeLayer, self.layer)
 
         panel.SetSizer(border)
         
@@ -1665,7 +1658,7 @@ class VDigitSettingsDialog(wx.Dialog):
 
     def OnChangeLayer(self, event):
         """!Layer changed"""
-        layer = int(event.GetString())
+        layer = event.GetInt()
         if layer > 0:
             UserSettings.Set(group='vdigit', key='layer', subkey='value', value=layer)
             self.parent.digit.SetCategory()
@@ -1797,7 +1790,7 @@ class VDigitSettingsDialog(wx.Dialog):
         UserSettings.Set(group='vdigit', key="addRecord", subkey='enabled',
                          value=self.addRecord.IsChecked())
         UserSettings.Set(group='vdigit', key="layer", subkey='value',
-                         value=int(self.layer.GetStringSelection()))
+                         value=int(self.layer.GetValue()))
         UserSettings.Set(group='vdigit', key="category", subkey='value',
                          value=int(self.category.GetValue()))
         UserSettings.Set(group='vdigit', key="categoryMode", subkey='selection',
