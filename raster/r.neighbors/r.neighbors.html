@@ -31,9 +31,8 @@ performed), and the <b>size</b> of the neighborhood.
 Optionally, the user can also specify the <b>TITLE</b> to
 be assigned to the raster map layer <b>output</b>, elect
 to not align the resolution of the output with that of the
-input (the <b>-a</b> option), run <em><b>r.neighbors</b></em> with
-a custom matrix weights with the <em>weight</em> option, and
-elect to run <em><b>r.neighbors</b></em> quietly (the <b>-q</b> option).
+input (the <b>-a</b> option), and run <em><b>r.neighbors</b></em>
+with a custom matrix weights with the <em>weight</em> option.
 These options are described further below.
 
 
@@ -215,16 +214,6 @@ The exact masks for the first few neighborhood sizes are as follows:
 				        	. . . . . X . . . . .	
 </pre></div>
 
-
-        
-<p>
-
-<dt><b>-q</b> 
-
-<dd>If specified, <em><b>r.neighbors</b></em> will run relatively quietly
-(i.e., without printing to standard output notes on the program's progress).
-If unspecified, the program will print messages to standard output by default.
-</dd>
 </dl>
 
 <h2>NOTES</h2>
@@ -236,8 +225,12 @@ of the raster map layer.  By default, <em><b>r.neighbors</b></em> will align
 these geographic region settings.  However, the user can elect to keep
 original input and output resolutions which are not aligned by specifying
 this (e.g., using the <b>-a</b> option).
-
 <p>
+
+<em><b>r.neighbors</b></em> doesn't propagate NULLs, but computes the
+aggregate over the non-NULL cells in the neighborhood.
+<p>
+
 The <b>-c</b> flag and the <b>weights</b> parameter are mutually exclusive. 
 Any use of the two together will produce an error. Differently-shaped neighborhood 
 analysis windows may be achieved by using the <b>weight=</b> parameter to specify 
@@ -264,6 +257,7 @@ for <em>average</em> neighborhood function output,
 whether or not the color file makes sense for the output
 will be dependent on the input data values.)
 
+
 <h2>SEE ALSO</h2>
 
 <em><a href="g.region.html">g.region</a></em><br>
@@ -273,18 +267,11 @@ will be dependent on the input data values.)
 <em><a href="r.statistics.html">r.statistics</a></em><br>
 <em><a href="r.support.html">r.support</a></em>
 
+
 <h2>AUTHOR</h2>
 
 Michael Shapiro,
 U.S.Army Construction Engineering Research Laboratory 
 
-<p><i>Last changed: $Date$</i>  
-				        
-				        
-				        
-				        
-
-
-
-
-
+<p>
+<i>Last changed: $Date$</i>  
