@@ -1,4 +1,4 @@
-/*! \page Vector_Library GRASS Vector Library
+/*! \page vectorlib GRASS Vector Library
 
 by GRASS Development Team (http://grass.osgeo.org)
 
@@ -1577,7 +1577,7 @@ Text based on: R. Blazek, M. Neteler, and R. Micarelli. The new GRASS 5.1
  
  - \ref dbmilib
  
- - \ref Vedit_Library
+ - \ref veditlib
 
 Last change: $Date$
 */

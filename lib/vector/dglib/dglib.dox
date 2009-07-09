@@ -113,7 +113,7 @@ of graph, transversing, accessing and modifying it.
 Map Structure Map_info contains a instance of dglGraph_s as one of its
 elements named 'graph'. This element is populated call to api
 Vect_net_build_graph(). This API takes several arguments as defined in
-lib/vector/Vlib/net.c (see \ref Vector_Library).
+lib/vector/Vlib/net.c (see \ref vectorlib).
 
 Following structure declares dglGraph_s, main datastructure for storing graph.
 
@@ -276,7 +276,7 @@ Nitin K Dhiman, AINN group, CAIR  <nitinkdhiman@gmail.com> (code walkthrough doc
 
 \section seealso See Also
 
-GRASS 6 Vector Architecture \ref Vector_Library 
+GRASS 6 Vector Architecture \ref vectorlib 
 
 Last change: $Date$
 */
