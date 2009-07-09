@@ -2459,27 +2459,24 @@ class BufferedWindow(MapWindow, wx.Window):
         """!
         Zoom to previous extents in zoomhistory list
         """
-
-        zoom = []
+        zoom = list()
+        
         if len(self.zoomhistory) > 1:
             self.zoomhistory.pop()
-            zoom = self.zoomhistory[len(self.zoomhistory)-1]
-            # (n, s, e, w)
-        if zoom:
-            # zoom to selected region
-            self.Map.region['center_easting'] = zoom[3] + \
-                (zoom[2] - zoom[3]) / 2
-            self.Map.region['center_northing'] = zoom[1] + \
-                (zoom[0] - zoom[1]) / 2
-            self.Map.region["ewres"] = (zoom[2] - zoom[3]) / self.Map.width
-            self.Map.region["nsres"] = (zoom[0] - zoom[1]) / self.Map.height
-            self.Map.AlignExtentFromDisplay()
-
-            # update map
-            self.UpdateMap()
-
-            # update statusbar
-            self.parent.StatusbarUpdate()
+            zoom = self.zoomhistory[-1]
+        
+        if len(self.zoomhistory) < 2: # disable tool
+            self.parent.toolbars['map'].Enable('zoomback', enable = False)
+        
+        # zoom to selected region
+        self.Map.GetRegion(n = zoom[0], s = zoom[1],
+                           e = zoom[2], w = zoom[3],
+                           update = True)
+        # update map
+        self.UpdateMap()
+        
+        # update statusbar
+        self.parent.StatusbarUpdate()
 
     def ZoomHistory(self, n, s, e, w):
         """!
@@ -2499,7 +2496,10 @@ class BufferedWindow(MapWindow, wx.Window):
         else:
             Debug.msg(4, "BufferedWindow.ZoomHistory(): hist=%s" %
                       (self.zoomhistory))
-
+        
+        if len(self.zoomhistory) > 1:
+            self.parent.toolbars['map'].Enable('zoomback')
+        
         return removed
 
     def OnZoomToMap(self, event):
