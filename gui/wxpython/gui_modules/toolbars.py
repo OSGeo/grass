@@ -180,6 +180,8 @@ class MapToolbar(AbstractToolbar):
                                'bind' : self.mapdisplay.OnPointer }
         self.OnTool(None)
         
+        self.toolbar.EnableTool(self.zoomback, False)
+        
         self.FixSize(width = 90)
         
     def ToolbarData(self):
@@ -289,6 +291,19 @@ class MapToolbar(AbstractToolbar):
                      self.savefile,
                      self.printmap):
             self.toolbar.EnableTool(tool, enabled)
+
+    def Enable(self, tool, enable = True):
+        """!Enable defined tool
+
+        @param tool name
+        @param enable True to enable otherwise disable tool
+        """
+        try:
+            id = getattr(self, tool)
+        except AttributeError:
+            return
+        
+        self.toolbar.EnableTool(self.zoomback, enable)
 
 class GRToolbar(AbstractToolbar):
     """
