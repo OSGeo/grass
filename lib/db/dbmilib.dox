@@ -797,7 +797,7 @@ Text based on: R. Blazek, M. Neteler, and R. Micarelli. The new GRASS 5.1
 
 \section seealso See Also
  
-GRASS 6 Vector Architecture: \ref Vector_Library
+GRASS 6 Vector Architecture: \ref vectorlib
 
 Last change: $Date$
 */

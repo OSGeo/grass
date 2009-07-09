@@ -63,7 +63,7 @@ from GRASS 5 Programmer's manual) or are simply undocumented.</i>
 
  - gis: \ref gislib
  - raster: \ref rasterlib
- - vector: \ref Vector_Library
+ - vector: \ref vectorlib
 
 \section libs Further libraries
 
@@ -98,12 +98,12 @@ from GRASS 5 Programmer's manual) or are simply undocumented.</i>
  - rowio:	Raster row in/out library - \ref rowio
  - rst:	Library for interpolation with regularized splines with tension - \ref rst
  - segment:	\ref segmentlib (segment library for segmented raster reading)
- - sites:	Old Sites library, now interfaced to \ref Vector_Library - \ref sites
+ - sites:	Old Sites library, now interfaced to \ref vectorlib - \ref sites
  - stats:       Raster stats library - \ref stats
  - symbol:	Drawing symbols for %point %vector data library - \ref symbol
  - vask:	Cursor management library - \ref vask
- - %vector:	\ref Vector_Library (GRASS Vector and Direct Graph Library)
-  - vedit:      \ref Vedit_Library - %vector editing
+ - %vector:	\ref vectorlib (GRASS Vector and Direct Graph Library)
+  - vedit:      \ref veditlib - %vector editing
  - nviz:        \ref nvizlib (used by wxGUI Nviz extension and CLI-based Nviz module)
 <!--<li>image3:	extra imagery library (mainly still unused) - \ref image3lib-->
 <!--<li>D:		display library - \ref d_displaylib-->
