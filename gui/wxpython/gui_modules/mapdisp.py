@@ -1362,7 +1362,7 @@ class MapFrame(wx.Frame):
                 vectstr += "%s," % name
 
         # use display region settings instead of computation region settings
-        tmpreg = os.getenv("GRASS_REGION")
+        self.tmpreg = os.getenv("GRASS_REGION")
         os.environ["GRASS_REGION"] = self.Map.SetRegion(windres=False)
         
         # build query commands for any selected rasters and vectors
@@ -1398,18 +1398,32 @@ class MapFrame(wx.Frame):
         if self._layerManager:
             if raststr:
                 self._layerManager.goutput.RunCmd(rcmd,
-                                                  compReg=False)
+                                                  compReg=False,
+                                                  onDone = self._QueryMapDone)
             if vectstr:
-                self._layerManager.goutput.RunCmd(vcmd)
+                self._layerManager.goutput.RunCmd(vcmd,
+                                                  onDone = self._QueryMapDone)
         else:
             if raststr:
                 gcmd.RunCommand(rcmd)
             if vectstr:
                 gcmd.RunCommand(vcmd)
+        
+    def _QueryMapDone(self, returncode):
+        """!Restore settings after querying (restore GRASS_REGION)
 
-        # restore GRASS_REGION
-        if tmpreg:
-            os.environ["GRASS_REGION"] = tmpreg
+        @param returncode command return code
+        """
+        if hasattr(self, "tmpreg"):
+            if self.tmpreg:
+                os.environ["GRASS_REGION"] = self.tmpreg
+            elif os.environ.has_key('GRASS_REGION'):
+                del os.environ["GRASS_REGION"]
+        elif os.environ.has_key('GRASS_REGION'):
+            del os.environ["GRASS_REGION"]
+        
+        if hasattr(self, "tmpreg"):
+            del self.tmpreg
         
     def QueryVector(self, x, y):
         """
