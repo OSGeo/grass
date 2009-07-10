@@ -1,3 +1,16 @@
+/*!
+  \file rowio/get.c
+  
+  \brief RowIO library - Get a row
+  
+  (C) 2001-2009 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2).  Read the file COPYING that comes with GRASS for details.
+  
+  \author Original author CERL
+*/
+
 #include <stdio.h>
 #include <grass/rowio.h>
 
@@ -6,29 +19,26 @@ static void pageout(ROWIO *, int);
 
 
 /*!
- * \brief read a row
+ * \brief Read a row
  *
- * Rowio_get() returns a
- * buffer which holds the data for row <b>n</b> from the file associated with
- * ROWIO structure <b>r.</b> If the row requested is not in memory, the
- * <b>getrow()</b> routine specified in <i>rowio_setup</i> is called to
- * read row <b>n</b> into memory and a pointer to the memory buffer containing
- * the row is returned. If the data currently in the buffer had been changed by
- * <i>rowio_put</i>, the <b>putrow()</b> routine specified in
- * <i>rowio_setup</i> is called first to write the changed row to disk. If row
- * <b>n</b> is already in memory, no disk read is done. The pointer to the data
- * is simply returned.
- * Return codes:
- * NULL <b>n</b> is negative, or
- * <b>getrow()</b> returned 0 (indicating an error condition).
- * !NULL pointer to buffer containing row <b>n.</b>
+ * Rowio_get() returns a buffer which holds the data for row from the
+ * file associated with ROWIO structure <i>R</i>. If the row requested
+ * is not in memory, the getrow() routine specified in
+ * Rowio_setup() is called to read row into memory and a
+ * pointer to the memory buffer containing the row is returned. If the
+ * data currently in the buffer had been changed by Rowio_put(),
+ * the putrow() routine specified in Rowio_setup() is
+ * called first to write the changed row to disk. If row is
+ * already in memory, no disk read is done. The pointer to the data is
+ * simply returned.  
  *
- *  \param r
- *  \param n
- *  \return char * 
+ * \param R pointer to ROWIO structure
+ * \param row row number
+ *
+ * \return NULL on error
+ * \return pointer to the buffer containing row
  */
-
-void *rowio_get(ROWIO * R, int row)
+void *Rowio_get(ROWIO * R, int row)
 {
     int i;
     int age;
@@ -71,7 +81,12 @@ void *rowio_get(ROWIO * R, int row)
     return my_select(R, cur);
 }
 
-void rowio_flush(ROWIO * R)
+/*!
+  \brief Flush data
+
+  \param R pointer to ROWIO strcuture
+*/
+void Rowio_flush(ROWIO * R)
 {
     int i;
 

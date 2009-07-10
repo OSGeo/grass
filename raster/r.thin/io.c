@@ -58,13 +58,13 @@ CELL *get_a_row(int row)
 {
     if (row < 0 || row >= n_rows)
 	return (NULL);
-    return ((CELL *) rowio_get(&row_io, row));
+    return ((CELL *) Rowio_get(&row_io, row));
 }
 
 int put_a_row(int row, CELL * buf)
 {
     /* rowio.h defines this withe 2nd argument as char * */
-    rowio_put(&row_io, (char *)buf, row);
+    Rowio_put(&row_io, (char *)buf, row);
 
     return 0;
 }
@@ -147,7 +147,7 @@ int open_file(char *name)
     n_rows += (PAD << 1);
     G_free(buf);
     Rast_close(cell_file);
-    rowio_setup(&row_io, work_file, MAX_ROW, n_cols * sizeof(CELL), read_row,
+    Rowio_setup(&row_io, work_file, MAX_ROW, n_cols * sizeof(CELL), read_row,
 		write_row);
 
     return 0;
@@ -179,9 +179,9 @@ int close_file(char *name)
 	Rast_put_row(cell_file, buf + PAD, CELL_TYPE);
     }
     Rast_close(cell_file);
-    rowio_flush(&row_io);
-    close(rowio_fileno(&row_io));
-    rowio_release(&row_io);
+    Rowio_flush(&row_io);
+    close(Rowio_fileno(&row_io));
+    Rowio_release(&row_io);
     unlink(work_file_name);
 
     return 0;

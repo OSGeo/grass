@@ -61,7 +61,7 @@ int execute_filter(ROWIO * r, int out, FILTER * filter, DCELL * cell)
     /* copy border rows to output */
     row = starty;
     for (i = 0; i < mid; i++) {
-	cp = (DCELL *) rowio_get(r, row);
+	cp = (DCELL *) Rowio_get(r, row);
 	write(out, cp, buflen);
 	row += dy;
     }
@@ -73,7 +73,7 @@ int execute_filter(ROWIO * r, int out, FILTER * filter, DCELL * cell)
 	starty += dy;
 	/* get "size" rows */
 	for (i = 0; i < size; i++) {
-	    bufs[i] = (DCELL *) rowio_get(r, row);
+	    bufs[i] = (DCELL *) Rowio_get(r, row);
 	    box[i] = bufs[i] + startx;
 	    row += dy;
 	}
@@ -112,7 +112,7 @@ int execute_filter(ROWIO * r, int out, FILTER * filter, DCELL * cell)
     /* copy border rows to output */
     row = starty + mid * dy;
     for (i = 0; i < mid; i++) {
-	cp = (DCELL *) rowio_get(r, row);
+	cp = (DCELL *) Rowio_get(r, row);
 	write(out, cp, buflen);
 	row += dy;
     }

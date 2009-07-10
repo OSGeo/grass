@@ -63,12 +63,12 @@ int perform_filter(const char *in_name, const char *out_name,
 		out = fd;
 	    }
 
-	    rowio_setup(&r, in, filter[n].size, buflen,
+	    Rowio_setup(&r, in, filter[n].size, buflen,
 			count ? getrow : getmaprow, NULL);
 
 	    execute_filter(&r, out, &filter[n], cell);
 
-	    rowio_release(&r);
+	    Rowio_release(&r);
 	}
     }
 
