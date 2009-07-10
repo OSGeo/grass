@@ -246,6 +246,11 @@ static void parse_option(struct context *ctx, const char *cmd,
 	return;
     }
 
+    if (strcasecmp(cmd, "guidependency") == 0) {
+	ctx->option->guidependency = translate(strdup(arg));
+	return;
+    }
+
     if (strcasecmp(cmd, "end") == 0) {
 	ctx->state = S_TOPLEVEL;
 	return;

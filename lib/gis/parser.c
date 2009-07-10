@@ -1856,6 +1856,8 @@ static void G_script(void)
 		fprintf(fp, "#%% gisprompt: %s\n", opt->gisprompt);
 	    if (opt->guisection)
 		fprintf(fp, "#%% guisection: %s\n", opt->guisection);
+	    if (opt->guidependency)
+		fprintf(fp, "#%% guidependency: %s\n", opt->guidependency);
 	    fprintf(fp, "#%%End\n");
 	}
     }
