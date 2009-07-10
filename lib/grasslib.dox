@@ -95,7 +95,7 @@ from GRASS 5 Programmer's manual) or are simply undocumented.</i>
  - psdriver:    PostScript display driver library - \ref psdriver
  - python:      \ref pythonlib
  - raster:	\ref rasterlib
- - rowio:	Raster row in/out library - \ref rowio
+ - rowio:	\ref rowiolib
  - rst:	Library for interpolation with regularized splines with tension - \ref rst
  - segment:	\ref segmentlib (segment library for segmented raster reading)
  - sites:	Old Sites library, now interfaced to \ref vectorlib - \ref sites
