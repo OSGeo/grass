@@ -157,17 +157,14 @@ def main():
 
     #check if DBF driver used, in this case cut to 10 chars col names:
     try:
-        f = grass.vector_db(map = vector)[int(layer)]
+        fi = grass.vector_db(map = vector)[int(layer)]
     except KeyError:
 	grass.fatal('There is no table connected to this map. Run v.db.connect or v.db.addtable first.')
     # we need this for non-DBF driver:
-    table = f[1]
-    db_database = f[3]
-    db_sqldriver = f[4]
-    dbfdriver = db_sqldriver == 'dbf'
+    dbfdriver = fi['driver'] == 'dbf'
 
     #Find out which table is linked to the vector map on the given layer
-    if not table:
+    if not fi['table']:
 	grass.fatal('There is no table connected to this map. Run v.db.connect or v.db.addtable first.')
 
     basecols = ['n', 'min', 'max', 'range', 'mean', 'stddev', 'variance', 'cf_var', 'sum']
@@ -197,7 +194,7 @@ def main():
 
 	if currcolumn in grass.vector_columns(vector, layer).keys():
 	    if not flags['c']:
-		grass.fatal(("Cannot create column <%s> (already present)." % currcolumn) +
+		grass.fatal(("Cannot create column <%s> (already present). " % currcolumn) +
 			    "Use -c flag to update values in this column.")
 	else:
 	    if i == "n":
@@ -227,7 +224,7 @@ def main():
     currnum = 1
 
     for i in cats:
-	grass.verbose("Processing category %s (%d/%d)" % (i, currnum, number))
+	grass.message("Processing category %s (%d/%d)..." % (i, currnum, number))
 	grass.run_command('g.remove', rast = 'MASK', quiet = True, stderr = nuldev)
 	grass.mapcalc("MASK = if($name == $i, 1, null())",
 		      name = "%s_%s" % (vector, tmpname), i = i)
@@ -250,23 +247,22 @@ def main():
 	    colname = '%s_%s' % (colprefix, var)
 	    if dbfdriver:
 		colname = colname[:10]
-	    f.write("UPDATE %s SET %s=%s WHERE cat=%s;\n" % (table, colname, value, i))
+	    f.write("UPDATE %s SET %s=%s WHERE cat=%s;\n" % (fi['table'], colname, value, i))
 
 	currnum += 1
 
     f.close()
 
-    grass.verbose("Updating the database ...")
+    grass.message("Updating the database ...")
     exitcode = grass.run_command('db.execute', input = sqltmp,
-				 database = db_database, driver = db_sqldriver)
-
+				 database = fi['database'], driver = fi['driver'])
+    
     grass.run_command('g.remove', rast = 'MASK', quiet = True, stderr = nuldev)
 
     if exitcode == 0:
-	grass.message(("Statistics calculated from raster map %s" % raster) +
-		      (" and uploaded to attribute table of vector map %s." % vector))
-	grass.message("Done.")
-
+	grass.message(("Statistics calculated from raster map <%s>" % raster) +
+		      (" and uploaded to attribute table of vector map <%s>." % vector))
+    
     sys.exit(exitcode)
 
 if __name__ == "__main__":
