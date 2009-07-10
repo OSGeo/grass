@@ -233,7 +233,7 @@ struct Flag *G_define_flag(void)
  * format: <i>key=value</i>. Options identified as REQUIRED must be
  * specified by user on command line. The option string can either
  * specify a range of values (e.g. "10-100") or a list of acceptable
- * values (e.g. "red,orange,yellow").  Unless the option string is
+ * values (e.g. "red,orange,yellow"). Unless the option string is
  * NULL, user provided input will be evaluated agaist this string.
  *
  * \return pointer to an Option struct
@@ -269,7 +269,8 @@ struct Option *G_define_option(void)
     opt->description = NULL;
     opt->descriptions = NULL;
     opt->guisection = NULL;
-
+    opt->guidependency = NULL;
+    
     st->current_option = opt;
     st->n_opts++;
 
@@ -1443,6 +1444,11 @@ static void G_usage_xml(void)
 		fprintf(stdout, "\t\t<guisection>\n\t\t\t");
 		print_escaped_for_xml(stdout, opt->guisection);
 		fprintf(stdout, "\n\t\t</guisection>\n");
+	    }
+	    if (opt->guidependency) {
+		fprintf(stdout, "\t\t<guidependency>\n\t\t\t");
+		print_escaped_for_xml(stdout, opt->guidependency);
+		fprintf(stdout, "\n\t\t</guidependency>\n");
 	    }
 	    /* TODO:
 	     * - key_desc?

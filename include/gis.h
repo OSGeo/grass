@@ -319,6 +319,9 @@ struct Option			/* Structure that stores option info */
     struct Option *next_opt;	/* Pointer to next option struct    */
     const char *gisprompt;	/* Interactive prompt guidance      */
     const char *guisection;	/* GUI Layout guidance: ';' delimited heirarchical tree position */
+    const char *guidependency;  /* GUI dependency, list of options
+				   (separated by commas) to be updated
+				   if the value is chanched */
     int (*checker) ();		/* Routine to check answer or NULL  */
     int count;
 };

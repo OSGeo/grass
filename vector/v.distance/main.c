@@ -145,12 +145,12 @@ int main(int argc, char *argv[])
     from_field_opt->key = "from_layer";
     from_field_opt->label = _("Layer number (from)");
     from_field_opt->guisection = _("From");
-
+    
     to_field_opt = G_define_standard_option(G_OPT_V_FIELD);
     to_field_opt->key = "to_layer";
     to_field_opt->label = _("Layer number (to)");
     to_field_opt->guisection = _("To");
-
+    
     out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
     out_opt->key = "output";
     out_opt->required = NO;
@@ -206,7 +206,7 @@ int main(int argc, char *argv[])
     to_column_opt->description =
 	_("Column name of nearest feature (used with upload=to_attr)");
     to_column_opt->guisection = _("To");
-
+    
     table_opt = G_define_standard_option(G_OPT_DB_TABLE);
     table_opt->gisprompt = "new_dbtable,dbtable,dbtable";
     table_opt->description =
@@ -224,6 +224,12 @@ int main(int argc, char *argv[])
     all_flag->label =
 	_("Calculate distances to all features within the threshold");
     all_flag->description = _("The output is written to stdout but may be uploaded " "to a new table created by this module. " "From categories are may be multiple.");	/* huh? */
+
+    /* GUI dependency */
+    from_opt->guidependency = G_store(from_field_opt->key);
+    sprintf(buf1, "%s,%s", to_field_opt->key, to_column_opt->key);
+    to_opt->guidependency = G_store(buf1);
+    to_field_opt->guidependency = G_store(to_column_opt->key);
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
