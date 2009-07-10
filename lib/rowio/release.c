@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <grass/rowio.h>
 
-void rowio_release(ROWIO * R)
+void Rowio_release(ROWIO * R)
 {
     int i;
 

@@ -1,30 +1,45 @@
+/*!
+  \file rowio/put.c
+  
+  \brief RowIO library - Write a row
+  
+  (C) 2001-2009 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2).  Read the file COPYING that comes with GRASS for details.
+  
+  \author Original author CERL
+*/
+
 #include <stdio.h>
 #include <string.h>
 #include <grass/rowio.h>
 
 
 /*!
- * \brief write a row
+ * \brief Write a row
  *
- * Rowio_put()
- * writes the buffer <b>buf</b>, which holds the data for row <b>n</b>, into
- * the ROWIO structure <b>r.</b> If the row requested is currently in memory,
- * the buffer is simply copied into the structure and marked as having been
- * changed. It will be written out later. Otherwise it is written immediately.
- * Note that when the row is finally written to disk, the <b>putrow()</b>
- * routine specified in <i>rowio_setup</i> is called to write row <b>n</b>
- * to the file. <b>rowio_flush</b> ( r) force pending updates to disk ROWIO *r;
- * Rowio_flush() forces all rows modified by <i>rowio_put</i> to be written
- * to the file. This routine must be called before closing the file or releasing
- * the rowio structure if rowio_put() has been called.
+ * Writes the buffer <i>buf</i>, which holds the data for row
+ * <i>n</i>, into the ROWIO structure <i>r</i>. If the row requested
+ * is currently in memory, the buffer is simply copied into the
+ * structure and marked as having been changed. It will be written out
+ * later. Otherwise it is written immediately.  Note that when the row
+ * is finally written to disk, the putrow() routine specified in
+ * Rowio_setup() is called to write row <i>n</i> to the
+ * file. Rowio_flush() force pending updates to disk ROWIO *r;
+ * Rowio_flush() forces all rows modified by Rowio_put() to be
+ * written to the file. This routine must be called before closing the
+ * file or releasing the rowio structure if Rowio_put() has been
+ * called.
  *
- *  \param r
- *  \param buf
- *  \param n
- *  \return int
+ * \param R pointer to ROWIO structure
+ * \param buf pointer to data buffer
+ * \param row row number
+ *
+ * \return
  */
 
-int rowio_put(ROWIO * R, const void *buf, int row)
+int Rowio_put(ROWIO * R, const void *buf, int row)
 {
     int i;
 
