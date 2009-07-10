@@ -50,6 +50,7 @@ import string
 import textwrap
 import os
 import time
+import types
 import copy
 import locale
 from threading import Thread
@@ -228,7 +229,27 @@ class UpdateThread(Thread):
                                                 'database' : db }
                 
             elif name == 'ColumnSelect':
-                pLayer = self.task.get_param('layer', element='element', raiseError=False)
+                if not map:
+                    # standard way failed, try to track wxIds manually
+                    if p.get('element', '') == 'vector':
+                        map = p.get('value', '')
+                        # get layer
+                        for bid in p['wxId-bind']:
+                            p = self.task.get_param(bid, element = 'wxId', raiseError = False)
+                            if not p:
+                                continue
+                            if p.get('element', '') == 'layer':
+                                pLayer = p
+                                break
+                    elif p.get('element', '') == 'layer':
+                        pLayer = p
+                        # get vector name
+                        pMap = self.task.get_param(p['wxId'], element = 'wxId-bind', raiseError = False)
+                        if pMap:
+                            map = pMap.get('value', '')
+                else:
+                    pLayer = self.task.get_param('layer', element='element', raiseError=False)
+                
                 if pLayer:
                     if pLayer.get('value', '') != '':
                         layer = int(pLayer.get('value', 1))
@@ -333,12 +354,21 @@ class grassTask:
     
     def get_param(self, value, element='name', raiseError=True):
         """!Find and return a param by name."""
-        for p in self.params:
-            if p[element] == value:
-                return p
+        try:
+            for p in self.params:
+                val = p[element]
+                if type(val) in (types.ListType, types.TupleType):
+                    if value in val:
+                        return p
+                else:
+                    if p[element] == value:
+                        return p
+        except KeyError:
+            pass
+        
         if raiseError:
-            raise ValueError, _("Parameter not found: %s") % \
-                value
+            raise ValueError, _("Parameter element '%s' not found: '%s'") % \
+                (element, value)
         else:
             return None
 
@@ -465,22 +495,23 @@ class processTask:
                     key_desc.append(ki.text)
             
             self.task.params.append( {
-                "name"        : p.get('name'),
-                "type"        : p.get('type'),
-                "required"    : p.get('required'),
-                "multiple"    : p.get('multiple'),
-                "label"       : self.__getNodeText(p, 'label'),
-                "description" : self.__getNodeText(p, 'description'),
-                'gisprompt'   : gisprompt,
-                'age'         : age,
-                'element'     : element,
-                'prompt'      : prompt,
-                "guisection"  : self.__getNodeText(p, 'guisection'),
-                "default"     : self.__getNodeText(p, 'default'),
-                "values"      : values,
-                "values_desc" : values_desc,
-                "value"       : '',
-                "key_desc"    : key_desc } )
+                "name"           : p.get('name'),
+                "type"           : p.get('type'),
+                "required"       : p.get('required'),
+                "multiple"       : p.get('multiple'),
+                "label"          : self.__getNodeText(p, 'label'),
+                "description"    : self.__getNodeText(p, 'description'),
+                'gisprompt'      : gisprompt,
+                'age'            : age,
+                'element'        : element,
+                'prompt'         : prompt,
+                "guisection"     : self.__getNodeText(p, 'guisection'),
+                "guidependency"  : self.__getNodeText(p, 'guidependency'),
+                "default"        : self.__getNodeText(p, 'default'),
+                "values"         : values,
+                "values_desc"    : values_desc,
+                "value"          : '',
+                "key_desc"       : key_desc } )
             
     def __processFlags(self):
         """!Process flags description"""
@@ -1383,8 +1414,18 @@ class cmdPanel(wx.Panel):
             if p.get('gisprompt', False) == False:
                 continue
             
-            prompt = p.get('element', '')
+            guidep = p.get('guidependency', '')
+            if guidep:
+                # fixed options dependency defined
+                options = guidep.split(',')
+                for opt in options:
+                    pOpt = self.task.get_param(opt, element = 'name', raiseError = False)
+                    if id:
+                        if not p.has_key('wxId-bind'):
+                            p['wxId-bind'] = list()
+                        p['wxId-bind'].append(pOpt['wxId'])
             
+            prompt = p.get('element', '')
             if prompt == 'vector':
                 name = p.get('name', '')
                 if name in ('map', 'input'):
@@ -1400,6 +1441,7 @@ class cmdPanel(wx.Panel):
             elif prompt == 'dbtable':
                 pTable = p
         
+        # collect ids
         pColumnIds = []
         for p in pColumn:
             pColumnIds.append(p['wxId'])
@@ -1407,13 +1449,15 @@ class cmdPanel(wx.Panel):
         for p in pLayer:
             pLayerIds.append(p['wxId']) 
         
+        # set wxId-bindings
         if pMap:
             pMap['wxId-bind'] = copy.copy(pColumnIds)
             if pLayer:
                 pMap['wxId-bind'] += pLayerIds
         
-        for p in pLayer:
-            p['wxId-bind'] = copy.copy(pColumnIds)
+        if len(pLayer) == 1:
+            # TODO: fix modules with more 'layer' options
+            pLayer[0]['wxId-bind'] = copy.copy(pColumnIds)
 
         if pDriver and pTable:
             pDriver['wxId-bind'] = [pTable['wxId'], ]
