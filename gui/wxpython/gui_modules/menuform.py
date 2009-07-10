@@ -214,8 +214,12 @@ class UpdateThread(Thread):
             name = win.GetName()
             
             if name == 'LayerSelect':
-                self.data[win.InsertLayers] = { 'vector' : map }
-                
+                if not map and p.get('element', '') == 'vector':
+                    # standard way failed, try to track wxIds manually
+                    map = p.get('value', '')
+                if map:
+                    self.data[win.InsertLayers] = { 'vector' : map }
+            
             elif name == 'TableSelect':
                 pDriver = self.task.get_param('dbdriver', element='prompt', raiseError=False)
                 driver = db = None
