@@ -151,10 +151,10 @@ static void split_gisprompt(const char *, char *, char *, char *);
 static void define_keywords(void);
 static void print_keywords(FILE *, void (*)(FILE *, const char *));
 
-static void G_gui(void);
-static void G_usage_xml(void);
-static void G_usage_html(void);
-static void G_script(void);
+static void gui(void);
+static void usage_xml(void);
+static void usage_html(void);
+static void script(void);
 
 /*!
  * \brief Disables the ability of the parser to operate interactively.
@@ -873,7 +873,7 @@ int G_parser(int argc, char **argv)
     /* If there are NO arguments, go interactive */
 
     if (argc < 2 && st->has_required && !st->no_interactive && isatty(0)) {
-	G_gui();
+	gui();
 	return -1;
     }
     else if (argc < 2 && st->has_required && isatty(0)) {
@@ -892,21 +892,21 @@ int G_parser(int argc, char **argv)
 	/* If first arg is "--interface-description" then print out
 	 * a xml description of the task */
 	if (strcmp(argv[1], "--interface-description") == 0) {
-	    G_usage_xml();
+	    usage_xml();
 	    exit(EXIT_SUCCESS);
 	}
 
 	/* If first arg is "--html-description" then print out
 	 * a html description of the task */
 	if (strcmp(argv[1], "--html-description") == 0) {
-	    G_usage_html();
+	    usage_html();
 	    exit(EXIT_SUCCESS);
 	}
 
 	/* If first arg is "--script" then then generate
 	 * g.parser boilerplate */
 	if (strcmp(argv[1], "--script") == 0) {
-	    G_script();
+	    script();
 	    exit(EXIT_SUCCESS);
 	}
 
@@ -982,7 +982,7 @@ int G_parser(int argc, char **argv)
 
     /* Run the gui if it was specifically requested */
     if (force_gui) {
-	G_gui();
+	gui();
 	return -1;
     }
 
@@ -1283,7 +1283,7 @@ static void print_escaped_for_html(FILE * f, const char *str)
 /*!
   \brief Print module usage description in XML format.
 */
-static void G_usage_xml(void)
+static void usage_xml(void)
 {
     struct Option *opt;
     struct Flag *flag;
@@ -1526,7 +1526,7 @@ static void G_usage_xml(void)
 /*!
   \brief Print module usage description in HTML format.
 */
-static void G_usage_html(void)
+static void usage_html(void)
 {
     struct Option *opt;
     struct Flag *flag;
@@ -1752,21 +1752,21 @@ static void G_usage_html(void)
 }
 
 /*!
-  \brief Print a module parameter template to assist with creating shell script wrappers.
+  \brief Print a module parameter template to assist with creating 
+  script wrappers.
 */
-static void G_script(void)
+static void script(void)
 {
     FILE *fp = stdout;
     char *type;
 
-    fprintf(fp, "#!/bin/sh\n\n");
     fprintf(fp,
 	    "############################################################################\n");
     fprintf(fp, "#\n");
     fprintf(fp, "# MODULE:       %s_wrapper\n", G_program_name());
     fprintf(fp, "# AUTHOR(S):    %s\n", G_whoami());
     fprintf(fp, "# PURPOSE:      \n");
-    fprintf(fp, "# COPYRIGHT:    (C) 2009 GRASS Development Team/%s\n",
+    fprintf(fp, "# COPYRIGHT:    (C) 2009 by %s, and The GRASS Development Team\n",
 	    G_whoami());
     fprintf(fp, "#\n");
     fprintf(fp,
@@ -1786,9 +1786,9 @@ static void G_script(void)
     fprintf(fp, "#  GNU General Public License for more details.\n");
     fprintf(fp, "#\n");
     fprintf(fp,
-	    "############################################################################\n");
+	    "############################################################################\n\n");
 
-    fprintf(fp, "#%%Module\n");
+    fprintf(fp, "#%%module\n");
     if (st->module_info.label)
 	fprintf(fp, "#%% label: %s\n", st->module_info.label);
     if (st->module_info.description)
@@ -1798,13 +1798,13 @@ static void G_script(void)
 	print_keywords(fp, NULL);
 	fprintf(fp, "\n");
     }
-    fprintf(fp, "#%%End\n");
+    fprintf(fp, "#%%end\n");
 
     if (st->n_flags) {
 	struct Flag *flag;
 
 	for (flag = &st->first_flag; flag; flag = flag->next_flag) {
-	    fprintf(fp, "#%%Flag\n");
+	    fprintf(fp, "#%%flag\n");
 	    fprintf(fp, "#%% key: %c\n", flag->key);
 	    if (flag->label)
 		fprintf(fp, "#%% label: %s\n", flag->label);
@@ -1812,7 +1812,7 @@ static void G_script(void)
 		fprintf(fp, "#%% description: %s\n", flag->description);
 	    if (flag->guisection)
 		fprintf(fp, "#%% guisection: %s\n", flag->guisection);
-	    fprintf(fp, "#%%End\n");
+	    fprintf(fp, "#%%end\n");
 	}
     }
 
@@ -1835,7 +1835,7 @@ static void G_script(void)
 		break;
 	    }
 
-	    fprintf(fp, "#%%Option\n");
+	    fprintf(fp, "#%%option\n");
 	    fprintf(fp, "#%% key: %s\n", opt->key);
 	    fprintf(fp, "#%% type: %s\n", type);
 	    fprintf(fp, "#%% required: %s\n", opt->required ? "yes" : "no");
@@ -1858,25 +1858,15 @@ static void G_script(void)
 		fprintf(fp, "#%% guisection: %s\n", opt->guisection);
 	    if (opt->guidependency)
 		fprintf(fp, "#%% guidependency: %s\n", opt->guidependency);
-	    fprintf(fp, "#%%End\n");
+	    fprintf(fp, "#%%end\n");
 	}
     }
-
-    fprintf(fp,
-	    "\nif [ -z \"$GISBASE\" ] ; then\n"
-	    "    echo \"You must be in GRASS GIS to run this program.\" 1>&2\n"
-	    "    exit 1\n"
-	    "fi\n"
-	    "\n"
-	    "if [ \"$1\" != \"@ARGS_PARSED@\" ] ; then\n"
-	    "    exec g.parser \"$0\" \"$@\"\n"
-	    "fi\n" "\n" "# CODE GOES HERE\n" "\n");
 }
 
 /*!
-  \brief Build wxPython GUI dialog.
+  \brief Invoke GUI dialog 
 */
-static void G_gui_wx(void)
+static void gui(void)
 {
     char script[GPATH_MAX];
 
@@ -1888,18 +1878,6 @@ static void G_gui_wx(void)
     sprintf(script, "%s/etc/wxpython/gui_modules/menuform.py",
 	    getenv("GISBASE"));
     G_spawn(getenv("GRASS_PYTHON"), "menuform.py", script, st->pgm_path, NULL);
-}
-
-/*!
-  \brief Invoke GUI dialog 
-
-  Use G_gui_wx() to generate GUI dialog.
-
-  G_gui_wx() is called by default (if GRASS_GUI is not defined)
-*/
-static void G_gui(void)
-{
-    G_gui_wx();
 }
 
 /**************************************************************************
