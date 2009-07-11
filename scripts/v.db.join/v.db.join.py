@@ -6,7 +6,7 @@
 # AUTHOR(S):    Markus Neteler
 #               Converted to Python by Glynn Clements
 # PURPOSE:      Join a table to a map table
-# COPYRIGHT:    (C) 2007 by Markus Neteler and the GRASS Development Team
+# COPYRIGHT:    (C) 2007-2009 by Markus Neteler and the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
@@ -26,6 +26,7 @@
 #% gisprompt: old,vector,vector
 #% description: Vector map to which to join other table
 #% required : yes
+#% guidependency: layer,column
 #%end
 
 #%option
@@ -35,6 +36,7 @@
 #% answer: 1
 #% required : no
 #% gisprompt: old_layer,layer,layer
+#% guidependency: column
 #%end
 
 #%option
@@ -51,6 +53,7 @@
 #% description: Other table name
 #% required : yes
 #% gisprompt: old_dbtable,dbtable,dbtable
+#% guidependency: ocolumn
 #%end
 
 #%option
