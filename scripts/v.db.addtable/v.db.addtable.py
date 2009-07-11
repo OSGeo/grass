@@ -16,7 +16,9 @@
 
 #%Module
 #%  description: Creates and adds a new attribute table to a given layer of an existing vector map.
-#%  keywords: vector, database, attribute table
+#%  keywords: vector
+#%  keywords: database
+#%  keywords: attribute table
 #%End
 #%option
 #% key: map

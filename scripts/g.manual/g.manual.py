@@ -16,7 +16,9 @@
 
 #%Module
 #%  description: Display the HTML man pages of GRASS
-#%  keywords: general, manual, help
+#%  keywords: general
+#%  keywords: manual
+#%  keywords: help
 #%End
 #%flag
 #%  key: i

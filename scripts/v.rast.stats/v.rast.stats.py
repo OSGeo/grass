@@ -17,7 +17,9 @@
 
 #%Module
 #%  description: Calculates univariate statistics from a GRASS raster map based on vector polygons and uploads statistics to new attribute columns.
-#%  keywords: vector, raster, statistics
+#%  keywords: vector
+#%  keywords: raster
+#%  keywords: statistics
 #%End
 #%flag
 #%  key: c

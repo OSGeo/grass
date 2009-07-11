@@ -20,7 +20,8 @@
 
 #%Module
 #%  description: Draws polar diagram of angle map such as aspect or flow directions
-#%  keywords: display, diagram
+#%  keywords: display
+#%  keywords: diagram
 #%End
 #%option
 #% key: map

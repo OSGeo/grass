@@ -18,7 +18,8 @@
 
 #%Module
 #% description: Export a raster map to a text file as x,y,z values based on cell centers.
-#% keywords: raster, export
+#% keywords: raster
+#% keywords: export
 #%End
 #%option
 #% key: input

@@ -15,7 +15,9 @@
 
 #%Module
 #%  description: Uploads vector values at positions of vector points to the table.
-#%  keywords: vector, database, attribute table
+#%  keywords: vector
+#%  keywords: database
+#%  keywords: attribute table
 #%End
 
 #%option

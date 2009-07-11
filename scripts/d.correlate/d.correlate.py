@@ -18,7 +18,8 @@
 
 #%Module
 #%  description: Prints a graph of the correlation between data layers (in pairs).
-#%  keywords: display, diagram
+#%  keywords: display
+#%  keywords: diagram
 #%End
 #%option
 #% key: layers

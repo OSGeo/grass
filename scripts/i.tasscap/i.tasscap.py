@@ -34,7 +34,8 @@
 #
 #%Module
 #%  description: Tasseled Cap (Kauth Thomas) transformation for LANDSAT-TM data
-#%  keywords: raster, imagery
+#%  keywords: raster
+#%  keywords: imagery
 #%End
 #%flag
 #%  key: 4

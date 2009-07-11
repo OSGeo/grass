@@ -24,7 +24,9 @@
 
 #% Module
 #%  description: Mosaics several images and extends colormap
-#%  keywords: raster, imagery, mosaicking
+#%  keywords: raster
+#%  keywords: imagery
+#%  keywords: mosaicking
 #% End
 #% option
 #% key: images

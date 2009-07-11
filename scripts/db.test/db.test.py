@@ -15,7 +15,8 @@
 
 #% Module
 #%  description: Test database driver, database must exist and set by db.connect.
-#%  keywords: database, attribute table
+#%  keywords: database
+#%  keywords: attribute table
 #% End
 #% option
 #%  key: test

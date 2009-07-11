@@ -34,7 +34,9 @@
 
 #%Module
 #%  description: Exports a vector map to a GPS receiver or file format supported by GpsBabel.
-#%  keywords: vector, export, GPS
+#%  keywords: vector
+#%  keywords: export
+#%  keywords: GPS
 #%End
 #%flag
 #%  key: w

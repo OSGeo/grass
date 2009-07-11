@@ -15,7 +15,9 @@
 
 #%Module
 #%  description: Reports geometry statistics for vectors.
-#%  keywords: vector, report, statistics
+#%  keywords: vector
+#%  keywords: report
+#%  keywords: statistics
 #%End
 #%Flag
 #% key: r

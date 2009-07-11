@@ -18,7 +18,8 @@
 
 #%Module
 #%  description: Creates raster plane map given dip (inclination), aspect (azimuth) and one point.
-#%  keywords: raster, elevation
+#%  keywords: raster
+#%  keywords: elevation
 #%End
 #%option
 #% key: name

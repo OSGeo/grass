@@ -16,7 +16,8 @@
 
 #%Module
 #% description: Set color rules based on stddev from a map's mean value.
-#% keywords: raster, color table
+#% keywords: raster
+#% keywords: color table
 #%End
 #% option
 #% key: input

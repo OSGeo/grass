@@ -23,7 +23,8 @@
 
 #%Module
 #%  description: Import E00 file into a vector map.
-#%  keywords: vector, import
+#%  keywords: vector
+#%  keywords: import
 #%End
 #%flag
 #%  key: v

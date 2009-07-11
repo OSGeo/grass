@@ -16,7 +16,8 @@
 
 #%Module
 #%  description: Exports attribute tables into various formats.
-#%  keywords: database, attribute table
+#%  keywords: database
+#%  keywords: attribute table
 #%End
 
 #%option
