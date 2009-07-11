@@ -23,7 +23,9 @@
 
 #%Module
 #%  description: Displays spectral response at user specified locations in group or images.
-#%  keywords: imagery, raster, multispectral
+#%  keywords: imagery
+#%  keywords: raster
+#%  keywords: multispectral
 #%End
 #%option
 #% key: group

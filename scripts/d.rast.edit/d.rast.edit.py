@@ -20,7 +20,8 @@
 
 #%Module
 #% description: Interactively edit cell values in a raster map.
-#% keywords: display, raster
+#% keywords: display
+#% keywords: raster
 #%End
 #%Option
 #% key: input

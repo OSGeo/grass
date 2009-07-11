@@ -26,7 +26,8 @@
 
 #%Module
 #%  description: Converts coordinates from one projection to another (cs2cs frontend).
-#%  keywords: miscellaneous, projection
+#%  keywords: miscellaneous
+#%  keywords: projection
 #%End
 #%option
 #% key: input

@@ -20,7 +20,9 @@
 
 #%module
 #%  description: Downloads and imports data from WMS servers.
-#%  keywords: raster, import, wms
+#%  keywords: raster
+#%  keywords: import
+#%  keywords: wms
 #%end
 #%flag
 #% key: l

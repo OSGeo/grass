@@ -18,7 +18,9 @@
 
 #%Module
 #%  description: Adds one or more columns to the attribute table connected to a given vector map.
-#%  keywords: vector, database, attribute table
+#%  keywords: vector
+#%  keywords: database
+#%  keywords: attribute table
 #%End
 
 #%option

@@ -19,7 +19,8 @@
 
 #%Module
 #%  description: Drops a column from selected attribute table
-#%  keywords: database, attribute table
+#%  keywords: database
+#%  keywords: attribute table
 #%End
 
 #%flag

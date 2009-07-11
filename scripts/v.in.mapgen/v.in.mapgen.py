@@ -27,7 +27,8 @@
 
 #%Module
 #%  description: Import Mapgen or Matlab vector maps into GRASS.
-#%  keywords: vector, import
+#%  keywords: vector
+#%  keywords: import
 #%End
 #%flag
 #%  key: f

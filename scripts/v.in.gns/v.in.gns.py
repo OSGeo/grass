@@ -26,7 +26,9 @@
 
 #%Module
 #%  description: Imports US-NGA GEOnet Names Server (GNS) country files into a GRASS vector points map.
-#%  keywords: vector, import, gazetteer
+#%  keywords: vector
+#%  keywords: import
+#%  keywords: gazetteer
 #%End
 #%option
 #% key: file

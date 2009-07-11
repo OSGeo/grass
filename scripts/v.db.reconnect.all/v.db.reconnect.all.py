@@ -15,7 +15,9 @@
 
 #%Module
 #% description: Reconnects vectors to a new database.
-#% keywords: vector, database, attribute table
+#% keywords: vector
+#% keywords: database
+#% keywords: attribute table
 #%End
 #%option
 #% key: old_database

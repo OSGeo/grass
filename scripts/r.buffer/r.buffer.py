@@ -16,7 +16,8 @@
 
 #%Module
 #% description: Creates a raster map layer showing buffer zones surrounding cells that contain non-NULL category values.
-#% keywords: raster, buffer
+#% keywords: raster
+#% keywords: buffer
 #%End
 #%Flag
 #% key: z

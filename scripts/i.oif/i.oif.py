@@ -25,7 +25,9 @@
 
 #% Module
 #%  description: Calculates Optimum-Index-Factor table for LANDSAT TM bands 1-5, & 7
-#%  keywords: raster, imagery, statistics
+#%  keywords: raster
+#%  keywords: imagery
+#%  keywords: statistics
 #% End
 #% option
 #% key: image1

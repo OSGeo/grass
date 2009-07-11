@@ -16,7 +16,8 @@
 
 #%Module
 #%  description: Imports attribute tables in various formats.
-#%  keywords: database, attribute table
+#%  keywords: database
+#%  keywords: attribute table
 #%End
 
 #%option

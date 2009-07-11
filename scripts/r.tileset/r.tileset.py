@@ -37,7 +37,8 @@
 
 #%Module
 #% description: Produces tilings of the source projection for use in the destination region and projection.
-#% keywords: raster, tiling
+#% keywords: raster
+#% keywords: tiling
 #%End
 #%flag
 #% key: g

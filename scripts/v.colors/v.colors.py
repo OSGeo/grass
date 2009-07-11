@@ -17,7 +17,8 @@
 
 #%Module
 #% description: Set color rules for features in a vector using a numeric attribute column.
-#% keywords: vector, color table
+#% keywords: vector
+#% keywords: color table
 #%End
 #% option
 #% key: map

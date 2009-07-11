@@ -18,7 +18,8 @@
 
 #%Module
 #%  description: Calculates linear regression from two raster maps: y = a + b*x
-#%  keywords: raster, statistics
+#%  keywords: raster
+#%  keywords: statistics
 #%End
 #%flag
 #%  key: g
