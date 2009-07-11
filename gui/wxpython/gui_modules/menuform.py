@@ -365,8 +365,8 @@ class grassTask:
             pass
         
         if raiseError:
-            raise ValueError, _("Parameter element '%s' not found: '%s'") % \
-                (element, value)
+            raise ValueError, _("Parameter element '%(element)s' not found: '%(value)s'") % \
+                { 'element' : element, 'value' : value }
         else:
             return None
 
