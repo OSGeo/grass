@@ -9,8 +9,8 @@ if ! [ -f configure-stamp ]; then
 	echo $(date): STARTING configure
 
 	./configure \
-		--with-libs="/c/OSGeo4W/lib /c/MinGW/lib" \
-		--with-includes="/c/OSGeo4W/include /c/MinGW/include" \
+		--with-libs=/c/OSGeo4W/lib \
+		--with-includes=/c/OSGeo4W/include \
 		--exec-prefix=/c/OSGeo4W/bin \
 		--libexecdir=/c/OSGeo4W/bin \
 		--prefix=/c/OSGeo4W/apps/grass \
@@ -23,7 +23,7 @@ if ! [ -f configure-stamp ]; then
 		--with-fftw \
 		--with-freetype \
 		--with-proj-share=/c/OSGeo4W/share/proj \
-		--with-gdal=/C/OSGeo4W/bin/gdal-config \
+		--with-gdal=/c/OSGeo4W/bin/gdal-config \
 		--with-tcltk \
 		--with-sqlite \
 		--with-postgres \
