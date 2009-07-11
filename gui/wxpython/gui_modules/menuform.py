@@ -213,74 +213,68 @@ class UpdateThread(Thread):
             win = self.parent.FindWindowById(uid)
             name = win.GetName()
             
-            if name == 'LayerSelect':
-                if not map and p.get('element', '') == 'vector':
-                    # standard way failed, try to track wxIds manually
+            map = layer = None
+            driver = db = table = None
+            if name in ('LayerSelect', 'ColumnSelect'):
+                if p.get('element', '') == 'vector': # -> vector 
+                    # get map name
                     map = p.get('value', '')
-                if map:
-                    self.data[win.InsertLayers] = { 'vector' : map }
+                    # get layer
+                    for bid in p['wxId-bind']:
+                        p = self.task.get_param(bid, element = 'wxId', raiseError = False)
+                        if not p:
+                            continue
+                        if p.get('element', '') == 'layer':
+                            layer = p.get('value', '')
+                            if layer != '':
+                                layer = int(p.get('value', 1))
+                            else:
+                                layer = int(p.get('default', 1))
+                            break
+                
+                elif p.get('element', '') == 'layer': # -> layer
+                    # get layer
+                    layer = p.get('value', '')
+                    if layer != '':
+                        layer = int(p.get('value', 1))
+                    else:
+                        layer = int(p.get('default', 1))
+                    
+                    # get map name
+                    pMap = self.task.get_param(p['wxId'], element = 'wxId-bind', raiseError = False)
+                    if pMap:
+                        map = pMap.get('value', '')
             
-            elif name == 'TableSelect':
+            if name == 'TableSelect' or \
+                    (name == 'ColumnSelect' and not map):
                 pDriver = self.task.get_param('dbdriver', element='prompt', raiseError=False)
-                driver = db = None
                 if pDriver:
-                    driver = pDriver['value']
+                    driver = pDriver.get('value', '')
                 pDb = self.task.get_param('dbname', element='prompt', raiseError=False)
                 if pDb:
-                    db = pDb['value']
+                    db = pDb.get('value', '')
+                if name == 'ColumnSelect':
+                    pTable = self.task.get_param('dbtable', element='element', raiseError=False)
+                    if pTable:
+                        table = pTable.get('value', '')
                 
+            if name == 'LayerSelect':
+                self.data[win.InsertLayers] = { 'vector' : map }
+            
+            elif name == 'TableSelect':
                 self.data[win.InsertTables] = { 'driver' : driver,
                                                 'database' : db }
                 
             elif name == 'ColumnSelect':
-                if not map:
-                    # standard way failed, try to track wxIds manually
-                    if p.get('element', '') == 'vector':
-                        map = p.get('value', '')
-                        # get layer
-                        for bid in p['wxId-bind']:
-                            p = self.task.get_param(bid, element = 'wxId', raiseError = False)
-                            if not p:
-                                continue
-                            if p.get('element', '') == 'layer':
-                                pLayer = p
-                                break
-                    elif p.get('element', '') == 'layer':
-                        pLayer = p
-                        # get vector name
-                        pMap = self.task.get_param(p['wxId'], element = 'wxId-bind', raiseError = False)
-                        if pMap:
-                            map = pMap.get('value', '')
-                else:
-                    pLayer = self.task.get_param('layer', element='element', raiseError=False)
-                
-                if pLayer:
-                    if pLayer.get('value', '') != '':
-                        layer = int(pLayer.get('value', 1))
-                    else:
-                        layer = int(pLayer.get('default', 1))
-                else:
-                    layer = 1
-                
                 if map:
                     self.data[win.InsertColumns] = { 'vector' : map, 'layer' : layer }
                 else: # table
-                    driver = db = None
-                    pDriver = self.task.get_param('dbdriver', element='prompt', raiseError=False)
-                    if pDriver:
-                        driver = pDriver.get('value', None)
-                    pDb = self.task.get_param('dbname', element='prompt', raiseError=False)
-                    if pDb:
-                        db = pDb.get('value', None)
-                    pTable = self.task.get_param('dbtable', element='element', raiseError=False)
-                    if pTable and \
-                            pTable.get('value', '') != '':
-                        if driver and db:
-                            self.data[win.InsertTableColumns] = { 'table' : pTable.get('value'),
-                                                                  'driver' : driver,
-                                                                  'database' : db }
-                        else:
-                            self.data[win.InsertTableColumns] = { 'table'  : pTable.get('value') }
+                    if driver and db:
+                        self.data[win.InsertTableColumns] = { 'table' : pTable.get('value'),
+                                                              'driver' : driver,
+                                                              'database' : db }
+                    else:
+                        self.data[win.InsertTableColumns] = { 'table'  : pTable.get('value') }
         
 def UpdateDialog(parent, event, eventId, task):
     return UpdateThread(parent, event, eventId, task)
@@ -1419,6 +1413,7 @@ class cmdPanel(wx.Panel):
                 continue
             
             guidep = p.get('guidependency', '')
+            
             if guidep:
                 # fixed options dependency defined
                 options = guidep.split(',')
@@ -1428,6 +1423,7 @@ class cmdPanel(wx.Panel):
                         if not p.has_key('wxId-bind'):
                             p['wxId-bind'] = list()
                         p['wxId-bind'].append(pOpt['wxId'])
+                continue
             
             prompt = p.get('element', '')
             if prompt == 'vector':
