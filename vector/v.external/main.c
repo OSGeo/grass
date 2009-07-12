@@ -63,29 +63,32 @@ int main(int argc, char *argv[])
     options.dsn->description = _("Examples:\n"
 				 "\t\tESRI Shapefile: directory containing shapefiles\n"
 				 "\t\tMapInfo File: directory containing mapinfo files");
-
-    options.output = G_define_standard_option(G_OPT_V_OUTPUT);
-    options.output->required = NO;
-    options.output->description =
-	_("Output vector. If not given, available layers are printed only.");
+    options.dsn->guisection = _("Data source");
 
     options.layer = G_define_option();
     options.layer->key = "layer";
     options.layer->type = TYPE_STRING;
     options.layer->required = NO;
     options.layer->multiple = NO;
-    options.layer->description =
-	_("OGR layer name. If not given, available layers are printed only. Examples:\n"
-	 "\t\tESRI Shapefile: shapefile name\n"
-	 "\t\tMapInfo File: mapinfo file name");
+    options.layer->label = _("OGR layer name");
+    options.layer->description = _("Examples:\n"
+				   "\t\tESRI Shapefile: shapefile name\n"
+				   "\t\tMapInfo File: mapinfo file name");
+    options.layer->guisection = _("Data source");
+
+    options.output = G_define_standard_option(G_OPT_V_OUTPUT);
+    options.output->required = NO;
+    options.output->description = _("Name for output vector map");
 
     flags.format = G_define_flag();
     flags.format->key = 'f';
     flags.format->description = _("List supported formats and exit");
-    
+    flags.format->guisection = _("Print");
+
     flags.layer = G_define_flag();
     flags.layer->key = 'l';
     flags.layer->description = _("List available layers and exit");
+    flags.layer->guisection = _("Print");
 
     flags.topo = G_define_flag();
     flags.topo->key = 'b';
