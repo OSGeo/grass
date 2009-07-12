@@ -4,6 +4,7 @@
  * MODULE:       v.external
  * 
  * AUTHOR(S):    Radim Blazek
+ *               Updated by Martin Landa <landa.martin gmail.com> (2009)
  *               
  * PURPOSE:      Create a new vector as a link to OGR layer (read-only)
  *               
@@ -42,7 +43,7 @@ int main(int argc, char *argv[])
     } options;
 
     struct {
-	struct Flag *format, *layer;
+      struct Flag *format, *layer, *topo;
     } flags;
     
     G_gisinit(argv[0]);
@@ -86,6 +87,10 @@ int main(int argc, char *argv[])
     flags.layer->key = 'l';
     flags.layer->description = _("List available layers and exit");
 
+    flags.topo = G_define_flag();
+    flags.topo->key = 'b';
+    flags.topo->description = _("Do not build topology");
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -145,9 +150,13 @@ int main(int argc, char *argv[])
     
     fclose(fd);
     
-    Vect_open_old(&Map, options.output->answer, G_mapset());
-    Vect_build(&Map);
-    Vect_close(&Map);
+    if (!flags.topo->answer) {
+      Vect_open_old(&Map, options.output->answer, G_mapset());
+      Vect_build(&Map);
+      Vect_close(&Map);
+    }
+
+    G_done_msg(_("<%s> created."), options.output->answer);
 
     exit(EXIT_SUCCESS);
 }
