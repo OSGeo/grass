@@ -66,8 +66,7 @@ carthage "Carthage"	  	  clark80	dx=-263.0	dy=6.0	dz=431.0
 hermannskogel "Militar_Geographische_Institut"	  bessel	dx=653	    dy=-212     dz=449
 # From NIMA document
 ire65    "TM65"                   modif_airy    dx=506      dy=-122     dz=611
-# http://www.asprs.org/asprs/resources/grids/07-2001-swiss.pdf
-ch1903   "CH1903"     bessel        dx=674.253  dy=15.053   dz=405.324
+ch1903   "CH1903"     bessel        dx=674.374  dy=15.056   dz=405.346
 # http://www.asprs.org/asprs/resources/grids/01-2001-france.pdf and http://crs.ifag.de/
 ntf      "Nouvelle_Triangulation_Francaise"                    clark80IGN       dx=-168     dy=-60      dz=320
 etrs89   "European_Terrestrial_Reference_System_1989"   grs80       dx=0        dy=0       dz=0

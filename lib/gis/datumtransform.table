@@ -34,9 +34,6 @@ nad83	"nadgrids=MD"           "Maryland" "Transforms 'Old NAD83' to 'HPGN NAD83'
 nad83	"nadgrids=TN"           "Tennessee" "Transforms 'Old NAD83' to 'HPGN NAD83'"
 nad83	"nadgrids=WI"           "Wisconsin" "Transforms 'Old NAD83' to 'HPGN NAD83'"
 nad83	"nadgrids=WO"           "Washington - Oregon" "Transforms 'Old NAD83' to 'HPGN NAD83'"
-# http://www.asprs.org/asprs/resources/grids/07-2001-swiss.pdf
-# Not sure about this (esp. difference between ch1903 and ch1903+
-# ch1903  "towgs84=660.077,13.551,369.344,2.484,1.783,2.939,0.566" "Switzerland" "Accuracy approx. 1m"
 # http://www.gps.gov.uk/guide6.asp
 osgb36  "towgs84=446.448,-125.157,542.060,0.1502,0.2470,0.8421,-20.4894" "Great Britain" "Accuracy 5m"
 # http://crs.ifag.de/
