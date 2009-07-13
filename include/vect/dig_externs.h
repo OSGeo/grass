@@ -176,9 +176,15 @@ void dig_spidx_free_lines(struct Plus_head *);
 void dig_spidx_free_areas(struct Plus_head *);
 void dig_spidx_free_isles(struct Plus_head *);
 void dig_spidx_free(struct Plus_head *);
-int dig_write_spidx(struct gvfile *, struct Plus_head *);
+int dig_Rd_spidx_head(struct gvfile  *, struct Plus_head *);
+int dig_Wr_spidx_head(struct gvfile  *, struct Plus_head *);
+int dig_Wr_spidx(struct gvfile *, struct Plus_head *);
+int dig_Rd_spidx(struct gvfile *, struct Plus_head *);
+
 int dig_dump_spidx(FILE *, const struct Plus_head *);
-int dig_read_spidx(struct gvfile *, struct Plus_head *);
+
+int rtree_search(struct RTree *, struct Rect *, SearchHitCallback ,
+		void *, struct Plus_head *);
 
 /* category index */
 int dig_cidx_init(struct Plus_head *);

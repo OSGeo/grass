@@ -126,13 +126,6 @@ int Vect_box_extend(BOUND_BOX *, const BOUND_BOX *);
 int Vect_box_clip(double *, double *, double *, double *, const BOUND_BOX *);
 int Vect_region_box(const struct Cell_head *, BOUND_BOX *);
 
-/* Spatial index */
-void Vect_spatial_index_init(SPATIAL_INDEX *);
-void Vect_spatial_index_destroy(SPATIAL_INDEX *);
-void Vect_spatial_index_add_item(SPATIAL_INDEX *, int, const BOUND_BOX *);
-void Vect_spatial_index_del_item(SPATIAL_INDEX *, int);
-int Vect_spatial_index_select(const SPATIAL_INDEX *, const BOUND_BOX *, struct ilist *);
-
 /* Category index */
 int Vect_cidx_get_num_fields(const struct Map_info *);
 int Vect_cidx_get_field_number(const struct Map_info *, int);
@@ -393,6 +386,13 @@ int Vect_line_get_intersections(struct line_pnts *, struct line_pnts *,
 				struct line_pnts *, int);
 char *Vect_subst_var(const char *, const struct Map_info *);
 
+/* Custom spatial index */
+void Vect_spatial_index_init(SPATIAL_INDEX *, int);
+void Vect_spatial_index_destroy(SPATIAL_INDEX *);
+void Vect_spatial_index_add_item(SPATIAL_INDEX *, int, const BOUND_BOX *);
+void Vect_spatial_index_del_item(SPATIAL_INDEX *, int, const BOUND_BOX *);
+int Vect_spatial_index_select(const SPATIAL_INDEX *, const BOUND_BOX *, struct ilist *);
+
 /*
  * Internal functions, MUST NOT be used in modules
  */
@@ -404,11 +404,11 @@ int Vect_coor_info(const struct Map_info *, struct Coor_info *);
 const char *Vect_maptype_info(const struct Map_info *);
 int Vect_open_topo(struct Map_info *, int);
 int Vect_save_topo(struct Map_info *);
-int Vect_open_spatial_index(struct Map_info *);
-int Vect_save_spatial_index(struct Map_info *);
-int Vect_spatial_index_dump(struct Map_info *, FILE *);
+int Vect_open_sidx(struct Map_info *, int);
+int Vect_save_sidx(struct Map_info *);
+int Vect_sidx_dump(struct Map_info *, FILE *);
 int Vect_build_sidx_from_topo(struct Map_info *);
-int Vect_build_spatial_index(struct Map_info *);
+int Vect_build_sidx(struct Map_info *);
 
 int Vect__write_head(const struct Map_info *);
 int Vect__read_head(struct Map_info *);
@@ -460,7 +460,7 @@ long V1_rewrite_line_ogr(struct Map_info *, long offset, int type,
 			 struct line_pnts *, struct line_cats *);
 #endif
 
-    /* Miscellaneous */
+    /* Build topology */
 int Vect_build_nat(struct Map_info *, int);
 int Vect_build_ogr(struct Map_info *, int);
 int Vect_build_line_area(struct Map_info *, int, int);

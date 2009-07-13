@@ -100,6 +100,7 @@ struct Port_info
     /* portability stuff, set in V1_open_new/old() */
     /* file byte order */
     int byte_order;
+    int off_t_size;
 
     /* conversion matrices between file and native byte order */
     unsigned char dbl_cnvrt[PORT_DOUBLE];
@@ -281,14 +282,16 @@ struct Plus_head
     P_LINE **Line;		/* P_LINE array of pointers *//* all these (not 0) */
     P_AREA **Area;
     P_ISLE **Isle;
+    /* add here P_FACE, P_VOLUME, P_HOLE */
 
-    plus_t n_nodes;		/* Current Number of nodes */
-    plus_t n_edges;		/* Current Number of edges */
-    plus_t n_lines;		/* Current Number of lines */
-    plus_t n_areas;		/* Current Number of areas */
-    plus_t n_isles;
-    plus_t n_volumes;		/* Current Number of volumes */
-    plus_t n_holes;		/* Current Number of holes */
+    plus_t n_nodes;		/* current Number of nodes */
+    plus_t n_edges;		/* current Number of edges */
+    plus_t n_lines;		/* current Number of lines */
+    plus_t n_areas;		/* current Number of areas */
+    plus_t n_isles;		/* current Number of isles */
+    plus_t n_faces;		/* current Number of faces */
+    plus_t n_volumes;	/* current Number of volumes */
+    plus_t n_holes;		/* current Number of holes */
 
     plus_t n_plines;		/* Current Number of point    lines */
     plus_t n_llines;		/* Current Number of line     lines */
@@ -296,6 +299,8 @@ struct Plus_head
     plus_t n_clines;		/* Current Number of centroid lines */
     plus_t n_flines;		/* Current Number of face lines */
     plus_t n_klines;		/* Current Number of kernel lines */
+    plus_t n_vfaces;		/* Current Number of volume faces */
+    plus_t n_hfaces;		/* Current Number of hole faces */
 
     plus_t alloc_nodes;		/* # of nodes we have alloc'ed space for 
 				   i.e. array size - 1 */
@@ -303,8 +308,9 @@ struct Plus_head
     plus_t alloc_lines;		/* # of lines we have alloc'ed space for */
     plus_t alloc_areas;		/* # of areas we have alloc'ed space for */
     plus_t alloc_isles;		/* # of isles we have alloc'ed space for */
-    plus_t alloc_volumes;
-    plus_t alloc_holes;
+    plus_t alloc_faces;		/* # of faces we have alloc'ed space for */
+    plus_t alloc_volumes;	/* # of volumes we have alloc'ed space for */
+    plus_t alloc_holes;		/* # of holes we have alloc'ed space for */
 
     off_t Node_offset;		/* offset of array of nodes in topo file */
     off_t Edge_offset;
@@ -314,25 +320,30 @@ struct Plus_head
     off_t Volume_offset;
     off_t Hole_offset;
 
-    /* Spatial index */
-    /* Spatial index is never saved, it is built automaticaly for new and updated vectors.
-     * It is not built for old vectors until it is needed, i.e. until Vect_select is called. 
-     * or until Vect_build is called */
+    /* Spatial index is always saved */
 
-    int Spidx_built;		/* set to 1 if spatial index is available and to 0 if it is not */
+    int Spidx_built;		/* set to 1 if spatial index is available */
+    int Spidx_new;          /* set to 1 if new spatial index will be generated */
 
-    off_t Node_spidx_offset;	/* offset of spindex */
-    off_t Edge_spidx_offset;
+    GVFILE spidx_fp;		    /* spatial index file pointer */
+    
+    char *spidx_node_fname;     /* node spatial index file name */
+
+    off_t Node_spidx_offset;	/* offset of spatial index in sidx file */
     off_t Line_spidx_offset;
     off_t Area_spidx_offset;
     off_t Isle_spidx_offset;
+    off_t Face_spidx_offset;
     off_t Volume_spidx_offset;
     off_t Hole_spidx_offset;
 
-    struct Node *Node_spidx;
-    struct Node *Line_spidx;
-    struct Node *Area_spidx;
-    struct Node *Isle_spidx;
+    struct RTree *Node_spidx;     /* node spatial index */
+    struct RTree *Line_spidx;     /* line spatial index */
+    struct RTree *Area_spidx;     /* area spatial index */
+    struct RTree *Isle_spidx;     /* isle spatial index */
+    struct RTree *Face_spidx;     /* face spatial index */
+    struct RTree *Volume_spidx;   /* volume spatial index */
+    struct RTree *Hole_spidx;     /* hole spatial index */
 
     /* Category index */
     /* By default, category index is not updated */
@@ -547,7 +558,8 @@ typedef struct varray VARRAY;
 /* Spatial index for use in modules. */
 struct spatial_index
 {
-    struct Node *root;
+    struct RTree *si_tree;
+    char *name;
 };
 
 typedef struct spatial_index SPATIAL_INDEX;
