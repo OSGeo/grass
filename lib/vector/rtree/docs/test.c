@@ -40,7 +40,7 @@ int MySearchCallback(int id, void *arg)
 
 int main()
 {
-    struct Node *root = RTreeNewIndex();
+    struct RTree *rtree = RTreeNewIndex(2);
     int i, nhits;
 
     fprintf(stdout, "nrects = %d\n", nrects);
@@ -55,8 +55,8 @@ int main()
      * parameter 4 is always zero which means to add from the root.
      */
     for (i = 0; i < nrects; i++)
-	RTreeInsertRect(&rects[i], i + 1, &root, 0);	/* i+1 is rect ID. Note: root can change */
-    nhits = RTreeSearch(root, &search_rect, MySearchCallback, 0);
+	RTreeInsertRect(&rects[i], i + 1, rtree);	/* i+1 is rect ID. */
+    nhits = RTreeSearch(rtree, &search_rect, MySearchCallback, 0);
     fprintf(stdout, "Search resulted in %d hits\n", nhits);
 
     return 0;

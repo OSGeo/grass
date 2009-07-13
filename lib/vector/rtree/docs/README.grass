@@ -1,9 +1,10 @@
-This library was taken from:
+This library was originally taken from:
 http://www.superliminal.com/sources/RTree.zip
 described on:
 http://www.superliminal.com/sources/sources.htm
 Copy of this file is in sources.htm
-
+The current R*-tree implementation is based on
+http://dbs.mathematik.uni-marburg.de/publications/myPapers/1990/BKSS90.pdf
 
 Changes done in GRASS:
 - files converted to unix line ends
@@ -20,4 +21,4 @@ Changes done in GRASS:
 - type RectReal: float -> double 
 - log_pi set to constant
 - added GRASS headers to all *.[hc] files
-
+- changed to R*-tree, near complete rewrite

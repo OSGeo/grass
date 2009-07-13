@@ -5,10 +5,11 @@
 * AUTHOR(S):    Antonin Guttman - original code
 *               Daniel Green (green@superliminal.com) - major clean-up
 *                               and implementation of bounding spheres
+*               Markus Metz - R*-tree
 *               
 * PURPOSE:      Multidimensional index
 *
-* COPYRIGHT:    (C) 2001 by the GRASS Development Team
+* COPYRIGHT:    (C) 2009 by the GRASS Development Team
 *
 *               This program is free software under the GNU General Public
 *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -16,7 +17,6 @@
 *****************************************************************************/
 #include <stdio.h>
 #include <math.h>
-#include <grass/gis.h>
 
 #ifndef ABS
 #	define ABS(a) ((a) > 0 ? (a) : -(a))

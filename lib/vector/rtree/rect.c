@@ -5,10 +5,11 @@
 * AUTHOR(S):    Antonin Guttman - original code
 *               Daniel Green (green@superliminal.com) - major clean-up
 *                               and implementation of bounding spheres
+*               Markus Metz - R*-tree
 *               
 * PURPOSE:      Multidimensional index
 *
-* COPYRIGHT:    (C) 2001 by the GRASS Development Team
+* COPYRIGHT:    (C) 2009 by the GRASS Development Team
 *
 *               This program is free software under the GNU General Public
 *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -17,12 +18,11 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "assert.h"
+#include <assert.h>
 #include "index.h"
 
 #include <float.h>
 #include <math.h>
-#include <grass/gis.h>
 
 #define BIG_NUM (FLT_MAX/4.0)
 
@@ -145,7 +145,7 @@ void RTreePrintRect(struct Rect *R, int depth)
 /*-----------------------------------------------------------------------------
 | Calculate the n-dimensional volume of a rectangle
 -----------------------------------------------------------------------------*/
-RectReal RTreeRectVolume(struct Rect *R)
+RectReal RTreeRectVolume(struct Rect *R, struct RTree *t)
 {
     register struct Rect *r = R;
     register int i;
@@ -155,7 +155,7 @@ RectReal RTreeRectVolume(struct Rect *R)
     if (Undefined(r))
 	return (RectReal) 0;
 
-    for (i = 0; i < NUMDIMS; i++)
+    for (i = 0; i < t->ndims; i++)
 	volume *= r->boundary[i + NUMDIMS] - r->boundary[i];
     assert(volume >= 0.0);
     return volume;
@@ -229,7 +229,7 @@ const double UnitSphereVolumes[] = {
  * A fast approximation to the volume of the bounding sphere for the
  * given Rect. By Paul B.
  */
-RectReal RTreeRectSphericalVolume(struct Rect *R)
+RectReal RTreeRectSphericalVolume(struct Rect *R, struct RTree *t)
 {
     register struct Rect *r = R;
     register int i;
@@ -238,57 +238,56 @@ RectReal RTreeRectSphericalVolume(struct Rect *R)
     assert(r);
     if (Undefined(r))
 	return (RectReal) 0;
-    for (i = 0; i < NUMDIMS; i++) {
+    for (i = 0; i < t->ndims; i++) {
 	c_size = r->boundary[i + NUMDIMS] - r->boundary[i];
 	if (c_size > maxsize)
 	    maxsize = c_size;
     }
-    return (RectReal) (pow(maxsize / 2, NUMDIMS) * UnitSphereVolume);
+    return (RectReal) (pow(maxsize / 2, NUMDIMS) *
+		       UnitSphereVolumes[t->ndims]);
 }
 #endif
 
 /*
  * The exact volume of the bounding sphere for the given Rect.
  */
-RectReal RTreeRectSphericalVolume(struct Rect * R)
+RectReal RTreeRectSphericalVolume(struct Rect * r, struct RTree * t)
 {
-    register struct Rect *r = R;
-    register int i;
-    register double sum_of_squares = 0, radius;
+    int i;
+    double sum_of_squares = 0, radius, half_extent;
 
     assert(r);
     if (Undefined(r))
 	return (RectReal) 0;
-    for (i = 0; i < NUMDIMS; i++) {
-	double half_extent = (r->boundary[i + NUMDIMS] - r->boundary[i]) / 2;
+    for (i = 0; i < t->ndims; i++) {
+	half_extent = (r->boundary[i + NUMDIMS] - r->boundary[i]) / 2;
 
 	sum_of_squares += half_extent * half_extent;
     }
     radius = sqrt(sum_of_squares);
-    return (RectReal) (pow(radius, NUMDIMS) * UnitSphereVolume);
+    return (RectReal) (pow(radius, t->ndims) * UnitSphereVolumes[t->ndims]);
 }
 
 
 /*-----------------------------------------------------------------------------
 | Calculate the n-dimensional surface area of a rectangle
 -----------------------------------------------------------------------------*/
-RectReal RTreeRectSurfaceArea(struct Rect * R)
+RectReal RTreeRectSurfaceArea(struct Rect * r, struct RTree * t)
 {
-    register struct Rect *r = R;
-    register int i, j;
-    register RectReal sum = (RectReal) 0;
+    int i, j;
+    RectReal j_extent, sum = (RectReal) 0;
 
     assert(r);
     if (Undefined(r))
 	return (RectReal) 0;
 
-    for (i = 0; i < NUMDIMS; i++) {
+    for (i = 0; i < t->ndims; i++) {
 	RectReal face_area = (RectReal) 1;
 
-	for (j = 0; j < NUMDIMS; j++)
+	for (j = 0; j < t->ndims; j++)
 	    /* exclude i extent from product in this dimension */
 	    if (i != j) {
-		RectReal j_extent = r->boundary[j + NUMDIMS] - r->boundary[j];
+		j_extent = r->boundary[j + NUMDIMS] - r->boundary[j];
 
 		face_area *= j_extent;
 	    }
@@ -298,14 +297,31 @@ RectReal RTreeRectSurfaceArea(struct Rect * R)
 }
 
 
+/*-----------------------------------------------------------------------------
+| Calculate the n-dimensional margin of a rectangle
+| the margin is the sum of the lengths of the edges
+-----------------------------------------------------------------------------*/
+RectReal RTreeRectMargin(struct Rect * r, struct RTree * t)
+{
+    int i;
+    RectReal margin = 0.0;
+
+    assert(r);
+
+    for (i = 0; i < t->ndims; i++) {
+	margin += r->boundary[i + NUMDIMS] - r->boundary[i];
+    }
+
+    return margin;
+}
+
 
 /*-----------------------------------------------------------------------------
 | Combine two rectangles, make one that includes both.
 -----------------------------------------------------------------------------*/
-struct Rect RTreeCombineRect(struct Rect *R, struct Rect *Rr)
+struct Rect RTreeCombineRect(struct Rect *r, struct Rect *rr, struct RTree *t)
 {
-    register struct Rect *r = R, *rr = Rr;
-    register int i, j;
+    int i, j;
     struct Rect new_rect;
 
     assert(r && rr);
@@ -316,7 +332,7 @@ struct Rect RTreeCombineRect(struct Rect *R, struct Rect *Rr)
     if (Undefined(rr))
 	return *r;
 
-    for (i = 0; i < NUMDIMS; i++) {
+    for (i = 0; i < t->ndims; i++) {
 	new_rect.boundary[i] = MIN(r->boundary[i], rr->boundary[i]);
 	j = i + NUMDIMS;
 	new_rect.boundary[j] = MAX(r->boundary[j], rr->boundary[j]);
@@ -328,14 +344,13 @@ struct Rect RTreeCombineRect(struct Rect *R, struct Rect *Rr)
 /*-----------------------------------------------------------------------------
 | Decide whether two rectangles overlap.
 -----------------------------------------------------------------------------*/
-int RTreeOverlap(struct Rect *R, struct Rect *S)
+int RTreeOverlap(struct Rect *r, struct Rect *s, struct RTree *t)
 {
-    register struct Rect *r = R, *s = S;
     register int i, j;
 
     assert(r && s);
 
-    for (i = 0; i < NUMDIMS; i++) {
+    for (i = 0; i < t->ndims; i++) {
 	j = i + NUMDIMS;	/* index for high sides */
 	if (r->boundary[i] > s->boundary[j] ||
 	    s->boundary[i] > r->boundary[j]) {
@@ -349,12 +364,11 @@ int RTreeOverlap(struct Rect *R, struct Rect *S)
 /*-----------------------------------------------------------------------------
 | Decide whether rectangle r is contained in rectangle s.
 -----------------------------------------------------------------------------*/
-int RTreeContained(struct Rect *R, struct Rect *S)
+int RTreeContained(struct Rect *r, struct Rect *s, struct RTree *t)
 {
-    register struct Rect *r = R, *s = S;
     register int i, j, result;
 
-    assert(r && s); /* same as in RTreeOverlap() */
+    assert(r && s);		/* same as in RTreeOverlap() */
 
     /* undefined rect is contained in any other */
     if (Undefined(r))
@@ -365,7 +379,7 @@ int RTreeContained(struct Rect *R, struct Rect *S)
 	return FALSE;
 
     result = TRUE;
-    for (i = 0; i < NUMDIMS; i++) {
+    for (i = 0; i < t->ndims; i++) {
 	j = i + NUMDIMS;	/* index for high sides */
 	result = result && r->boundary[i] >= s->boundary[i]
 	    && r->boundary[j] <= s->boundary[j];
