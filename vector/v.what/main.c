@@ -141,7 +141,7 @@ int main(int argc, char **argv)
 			      vect[i]);
 
 	    G_verbose_message(_("Building spatial index..."));
-	    Vect_build_spatial_index(&Map[i]);
+	    Vect_build_sidx(&Map[i]);
 	}
     }
 
