@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <unistd.h>
 #include <grass/glocale.h>
 #include <grass/gis.h>
 #include <grass/vector.h>
@@ -118,7 +119,8 @@ int Vect_build_partial(struct Map_info *Map, int build)
     Map->level = 1;		/* may be not needed, because  V1_read is used directly by Vect_build_ */
     Map->support_updated = 1;
 
-    Map->plus.Spidx_built = 1;
+    if (Map->plus.Spidx_built == 0)
+	Vect_open_sidx(Map, 2);
 
     plus = &(Map->plus);
     if (build > GV_BUILD_NONE) {
@@ -161,11 +163,11 @@ int Vect_build_partial(struct Map_info *Map, int build)
 
 	if (plus->n_flines > 0)
 	    G_message(_("Number of faces: %d"), plus->n_flines);
-	
+
 	if (plus->n_klines > 0)
 	    G_message(_("Number of kernels: %d"), plus->n_klines);
     }
-    
+
     if (plus->built >= GV_BUILD_AREAS) {
 	int line, nlines, area, nareas, err_boundaries, err_centr_out,
 	    err_centr_dupl, err_nocentr;
@@ -209,19 +211,17 @@ int Vect_build_partial(struct Map_info *Map, int build)
 
 	if (err_boundaries)
 	    G_message(_("Number of incorrect boundaries: %d"),
-			      err_boundaries);
+		      err_boundaries);
 
 	if (err_centr_out)
 	    G_message(_("Number of centroids outside area: %d"),
-			      err_centr_out);
+		      err_centr_out);
 
 	if (err_centr_dupl)
-	    G_message(_("Number of duplicate centroids: %d"),
-			      err_centr_dupl);
+	    G_message(_("Number of duplicate centroids: %d"), err_centr_dupl);
 
 	if (err_nocentr)
-	    G_message(_("Number of areas without centroid: %d"),
-			      err_nocentr);
+	    G_message(_("Number of areas without centroid: %d"), err_nocentr);
 
     }
     else if (build > GV_BUILD_NONE) {
@@ -327,8 +327,8 @@ int Vect_topo_dump(const struct Map_info *Map, FILE * out)
 	Line = plus->Line[i];
 	fprintf(out, "line = %d, type = %d, offset = %lu n1 = %d, n2 = %d, "
 		"left/area = %d, right = %d\n",
-		i, Line->type, (unsigned long) Line->offset, Line->N1, Line->N2,
-		Line->left, Line->right);
+		i, Line->type, (unsigned long)Line->offset, Line->N1,
+		Line->N2, Line->left, Line->right);
 	fprintf(out, "N,S,E,W,T,B: %f, %f, %f, %f, %f, %f\n", Line->N,
 		Line->S, Line->E, Line->W, Line->T, Line->B);
     }
@@ -383,43 +383,179 @@ int Vect_topo_dump(const struct Map_info *Map, FILE * out)
 }
 
 /*!
-   \brief Save spatial index file
+   \brief Create spatial index if necessary.
+
+   To be used in modules.
+   Map must be opened on level 2.
+
+   \param[in,out] Map pointer to vector map
+
+   \return 0 OK
+   \return 1 error
+ */
+int Vect_build_sidx(struct Map_info *Map)
+{
+    if (Map->level < 2) {
+	G_fatal_error(_("Unable to build spatial index from topology, "
+			"vector map is not opened at topology level 2"));
+    }
+    if (!(Map->plus.Spidx_built)) {
+	return (Vect_build_sidx_from_topo(Map));
+    }
+    return 0;
+}
+
+/*!
+   \brief Create spatial index from topology if necessary
+
+   \param Map pointer to vector map
+
+   \return 0 OK
+   \return 1 error
+ */
+int Vect_build_sidx_from_topo(struct Map_info *Map)
+{
+    int i, total, done;
+    struct Plus_head *plus;
+    BOUND_BOX box;
+    P_LINE *Line;
+    P_NODE *Node;
+    P_AREA *Area;
+    P_ISLE *Isle;
+
+    G_debug(3, "Vect_build_sidx_from_topo()");
+
+    plus = &(Map->plus);
+
+    Vect_open_sidx(Map, 2);
+
+    total = plus->n_nodes + plus->n_lines + plus->n_areas + plus->n_isles;
+
+    /* Nodes */
+    for (i = 1; i <= plus->n_nodes; i++) {
+	G_percent(i, total, 3);
+
+	Node = plus->Node[i];
+	if (!Node)
+	    G_fatal_error(_("BUG (Vect_build_sidx_from_topo): node does not exist"));
+
+	dig_spidx_add_node(plus, i, Node->x, Node->y, Node->z);
+    }
+
+    /* Lines */
+    done = plus->n_nodes;
+    for (i = 1; i <= plus->n_lines; i++) {
+	G_percent(done + i, total, 3);
+
+	Line = plus->Line[i];
+	if (!Line)
+	    G_fatal_error(_("BUG (Vect_build_sidx_from_topo): line does not exist"));
+
+	box.N = Line->N;
+	box.S = Line->S;
+	box.E = Line->E;
+	box.W = Line->W;
+	box.T = Line->T;
+	box.B = Line->B;
+
+	dig_spidx_add_line(plus, i, &box);
+    }
+
+    /* Areas */
+    done += plus->n_lines;
+    for (i = 1; i <= plus->n_areas; i++) {
+	G_percent(done + i, total, 3);
+
+	Area = plus->Area[i];
+	if (!Area)
+	    G_fatal_error(_("BUG (Vect_build_sidx_from_topo): area does not exist"));
+
+	box.N = Area->N;
+	box.S = Area->S;
+	box.E = Area->E;
+	box.W = Area->W;
+	box.T = Area->T;
+	box.B = Area->B;
+
+	dig_spidx_add_area(plus, i, &box);
+    }
+
+    /* Isles */
+    done += plus->n_areas;
+    for (i = 1; i <= plus->n_isles; i++) {
+	G_percent(done + i, total, 3);
+
+	Isle = plus->Isle[i];
+	if (!Isle)
+	    G_fatal_error(_("BUG (Vect_build_sidx_from_topo): isle does not exist"));
+
+	box.N = Isle->N;
+	box.S = Isle->S;
+	box.E = Isle->E;
+	box.W = Isle->W;
+	box.T = Isle->T;
+	box.B = Isle->B;
+
+	dig_spidx_add_isle(plus, i, &box);
+    }
+
+    Map->plus.Spidx_built = 1;
+
+    G_debug(3, "Spatial index was built");
+
+    return 0;
+}
+
+/*!
+   \brief Save spatial index file for vector map
 
    \param Map vector map
 
    \return 1 on success
    \return 0 on error
  */
-int Vect_save_spatial_index(struct Map_info *Map)
+int Vect_save_sidx(struct Map_info *Map)
 {
     struct Plus_head *plus;
     char fname[GPATH_MAX], buf[GPATH_MAX];
-    GVFILE fp;
 
     G_debug(1, "Vect_save_spatial_index()");
 
     plus = &(Map->plus);
 
-    /*  write out rtrees to the sidx file  */
-    sprintf(buf, "%s/%s", GRASS_VECT_DIRECTORY, Map->name);
-    G__file_name(fname, buf, GV_SIDX_ELEMENT, Map->mapset);
-    G_debug(1, "Open sidx: %s", fname);
-    dig_file_init(&fp);
-    fp.file = fopen(fname, "w");
-    if (fp.file == NULL) {
-	G_warning(_("Unable open spatial index file for write <%s>"), fname);
+    if (Map->plus.Spidx_built == 0) {
+	G_warning("Spatial index not available, can not be saved");
 	return 0;
     }
 
-    /* set portable info */
-    dig_init_portable(&(plus->spidx_port), dig__byte_order_out());
+    /* new or update mode ? */
+    if (Map->plus.Spidx_new == 1) {
 
-    if (0 > dig_write_spidx(&fp, plus)) {
-	G_warning(_("Error writing out spatial index file"));
-	return 0;
+	/*  write out rtrees to sidx file  */
+	sprintf(buf, "%s/%s", GRASS_VECT_DIRECTORY, Map->name);
+	G__file_name(fname, buf, GV_SIDX_ELEMENT, Map->mapset);
+	G_debug(1, "Open sidx: %s", fname);
+	dig_file_init(&(Map->plus.spidx_fp));
+	Map->plus.spidx_fp.file = fopen(fname, "w+");
+	if (Map->plus.spidx_fp.file == NULL) {
+	    G_warning(_("Unable open spatial index file for write <%s>"),
+		      fname);
+	    return 0;
+	}
+
+	/* set portable info */
+	dig_init_portable(&(plus->spidx_port), dig__byte_order_out());
+
+	if (0 > dig_Wr_spidx(&(Map->plus.spidx_fp), plus)) {
+	    G_warning(_("Error writing out spatial index file"));
+	    return 0;
+	}
+	Map->plus.Spidx_new = 0;
     }
 
-    fclose(fp.file);
+    fclose(Map->plus.spidx_fp.file);
+
+    Map->plus.Spidx_built = 0;
 
     return 1;
 }
@@ -433,7 +569,7 @@ int Vect_save_spatial_index(struct Map_info *Map)
    \return 1 on success
    \return 0 on error
  */
-int Vect_spatial_index_dump(struct Map_info *Map, FILE * out)
+int Vect_sidx_dump(struct Map_info *Map, FILE * out)
 {
     if (!(Map->plus.Spidx_built)) {
 	Vect_build_sidx_from_topo(Map);

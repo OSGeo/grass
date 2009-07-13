@@ -73,16 +73,17 @@ int Vect_build_line_area(struct Map_info *Map, int iline, int side)
 	line = abs(lines[j]);
 	BLine = plus->Line[line];
 	offset = BLine->offset;
-	G_debug(3, "  line[%d] = %d, offset = %lu", j, line, (unsigned long) offset);
+	G_debug(3, "  line[%d] = %d, offset = %lu", j, line,
+		(unsigned long)offset);
 	type = Vect_read_line(Map, Points, NULL, line);
 	if (lines[j] > 0)
 	    direction = GV_FORWARD;
 	else
 	    direction = GV_BACKWARD;
 	Vect_append_points(APoints, Points, direction);
-	APoints->n_points--; /* skip last point, avoids duplicates */
+	APoints->n_points--;	/* skip last point, avoids duplicates */
     }
-    APoints->n_points++; /* close polygon */
+    APoints->n_points++;	/* close polygon */
 
     dig_find_area_poly(APoints, &area_size);
 
@@ -220,9 +221,9 @@ int Vect_isle_find_area(struct Map_info *Map, int isle)
 		    /* This is slow, but should not be called often */
 		    Vect_get_area_points(Map, sel_area, APoints);
 		    /* G_begin_polygon_area_calculations();
-		    cur_size =
-			G_area_of_polygon(APoints->x, APoints->y,
-					  APoints->n_points); */
+		       cur_size =
+		       G_area_of_polygon(APoints->x, APoints->y,
+		       APoints->n_points); */
 		    /* this is faster, but there may be latlon problems: the poles */
 		    dig_find_area_poly(APoints, &cur_size);
 		    G_debug(3, "  first area size = %f (n points = %d)",
@@ -232,8 +233,8 @@ int Vect_isle_find_area(struct Map_info *Map, int isle)
 
 		Vect_get_area_points(Map, area, APoints);
 		/* size =
-		    G_area_of_polygon(APoints->x, APoints->y,
-				      APoints->n_points); */
+		   G_area_of_polygon(APoints->x, APoints->y,
+		   APoints->n_points); */
 		/* this is faster, but there may be latlon problems: the poles */
 		dig_find_area_poly(APoints, &size);
 		G_debug(3, "  area size = %f (n points = %d)", size,
@@ -394,7 +395,7 @@ int Vect_attach_centroids(struct Map_info *Map, const BOUND_BOX * box)
 	 * 3) it's faster
 	 */
 	if (Line->left > 0)
-	    continue; 
+	    continue;
 
 	orig_area = Line->left;
 
@@ -539,7 +540,7 @@ int Vect_build_nat(struct Map_info *Map, int build)
 
 	    offset = Map->head.last_offset;
 
-	    G_debug(3, "Register line: offset = %lu", (unsigned long) offset);
+	    G_debug(3, "Register line: offset = %lu", (unsigned long)offset);
 	    lineid = dig_add_line(plus, type, Points, offset);
 	    dig_line_box(Points, &box);
 	    if (lineid == 1)
@@ -565,11 +566,11 @@ int Vect_build_nat(struct Map_info *Map, int build)
 		else
 		    fprintf(stderr, "%11d\b\b\b\b\b\b\b\b\b\b\b", i);
 	    }
-	    
+
 	    i++;
 	}
-	
-	if ( (G_verbose() > G_verbose_min() ) && format != G_INFO_FORMAT_PLAIN )
+
+	if ((G_verbose() > G_verbose_min()) && format != G_INFO_FORMAT_PLAIN)
 	    fprintf(stderr, "\r");
 
 	G_message(_("%d primitives registered"), plus->n_lines);

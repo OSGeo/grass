@@ -1,9 +1,9 @@
 /*!
-   \file select.c
+   \file Vlib/select.c
 
-   \brief Vector library - select vector features
+   \brief Vector library - spatial index
 
-   Higher level functions for reading/writing/manipulating vectors.
+   Higher level functions for a custom spatial index.
 
    (C) 2001-2009 by the GRASS Development Team
 
@@ -15,345 +15,134 @@
 
 #include <grass/config.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <string.h>
+#include <grass/glocale.h>
 #include <grass/gis.h>
 #include <grass/vector.h>
+#include <grass/glocale.h>
 
 /*!
-   \brief Select lines by box.
+   \brief Initialize spatial index structure
 
-   Select lines whose boxes overlap specified box!!!  It means that
-   selected line may or may not overlap the box.
+   \param si pointer to spatial index structure
 
-   \param Map vector map
-   \param Box bounding box
-   \param type line type
-   \param[out] list output list, must be initialized
-
-   \return number of lines
+   \return void
  */
-int
-Vect_select_lines_by_box(struct Map_info *Map, const BOUND_BOX * Box,
-			 int type, struct ilist *list)
+void Vect_spatial_index_init(SPATIAL_INDEX * si, int with_z)
 {
-    int i, line, nlines;
-    struct Plus_head *plus;
-    P_LINE *Line;
-    static struct ilist *LocList = NULL;
+    G_debug(1, "Vect_spatial_index_init()");
 
-    G_debug(3, "Vect_select_lines_by_box()");
-    G_debug(3, "  Box(N,S,E,W,T,B): %e, %e, %e, %e, %e, %e", Box->N, Box->S,
-	    Box->E, Box->W, Box->T, Box->B);
-    plus = &(Map->plus);
-
-    if (!(plus->Spidx_built)) {
-	G_debug(3, "Building spatial index.");
-	Vect_build_sidx_from_topo(Map);
-    }
-
-    list->n_values = 0;
-    if (!LocList)
-	LocList = Vect_new_list();
-
-    nlines = dig_select_lines(plus, Box, LocList);
-    G_debug(3, "  %d lines selected (all types)", nlines);
-
-    /* Remove lines of not requested types */
-    for (i = 0; i < nlines; i++) {
-	line = LocList->value[i];
-	if (plus->Line[line] == NULL)
-	    continue;		/* Should not happen */
-	Line = plus->Line[line];
-	if (!(Line->type & type))
-	    continue;
-	dig_list_add(list, line);
-    }
-
-    G_debug(3, "  %d lines of requested type", list->n_values);
-
-    return list->n_values;
+    si->si_tree = RTreeNewIndex(2 + with_z);
 }
 
 /*!
-   \brief Select areas by box.
+   \brief Destroy existing spatial index
 
-   Select areas whose boxes overlap specified box!!!
-   It means that selected area may or may not overlap the box.
+   Vect_spatial_index_init() must be call before new use.
 
-   \param Map vector map
-   \param Box bounding box
-   \param[out] output list, must be initialized
+   \param si pointer to spatial index structure
 
-   \return number of areas
+   \return void
  */
-int
-Vect_select_areas_by_box(struct Map_info *Map, const BOUND_BOX * Box,
-			 struct ilist *list)
+void Vect_spatial_index_destroy(SPATIAL_INDEX * si)
 {
-    int i;
-    const char *dstr;
-    int debug_level;
+    G_debug(1, "Vect_spatial_index_destroy()");
 
-    dstr = G__getenv("DEBUG");
-
-    if (dstr != NULL)
-	debug_level = atoi(dstr);
-    else
-	debug_level = 0;
-
-    G_debug(3, "Vect_select_areas_by_box()");
-    G_debug(3, "Box(N,S,E,W,T,B): %e, %e, %e, %e, %e, %e", Box->N, Box->S,
-	    Box->E, Box->W, Box->T, Box->B);
-
-    if (!(Map->plus.Spidx_built)) {
-	G_debug(3, "Building spatial index.");
-	Vect_build_sidx_from_topo(Map);
-    }
-
-    dig_select_areas(&(Map->plus), Box, list);
-    G_debug(3, "  %d areas selected", list->n_values);
-    /* avoid loop when not debugging */
-    if (debug_level > 2) {
-	for (i = 0; i < list->n_values; i++) {
-	    G_debug(3, "  area = %d pointer to area structure = %lx",
-		    list->value[i],
-		    (unsigned long)Map->plus.Area[list->value[i]]);
-	}
-    }
-    
-    return list->n_values;
-}
-
-
-/*!
-   \brief Select isles by box.
-
-   Select isles whose boxes overlap specified box!!!
-   It means that selected isle may or may not overlap the box.
-
-   \param Map vector map
-   \param Box bounding box
-   \param[out] list output list, must be initialized
-
-   \return number of isles
- */
-int
-Vect_select_isles_by_box(struct Map_info *Map, const BOUND_BOX * Box,
-			 struct ilist *list)
-{
-    G_debug(3, "Vect_select_isles_by_box()");
-    G_debug(3, "Box(N,S,E,W,T,B): %e, %e, %e, %e, %e, %e", Box->N, Box->S,
-	    Box->E, Box->W, Box->T, Box->B);
-
-    if (!(Map->plus.Spidx_built)) {
-	G_debug(3, "Building spatial index.");
-	Vect_build_sidx_from_topo(Map);
-    }
-
-    dig_select_isles(&(Map->plus), Box, list);
-    G_debug(3, "  %d isles selected", list->n_values);
-
-    return list->n_values;
+    RTreeFreeIndex(si->si_tree);
 }
 
 /*!
-   \brief Select nodes by box.
+   \brief Add a new item to spatial index structure
 
-   \param Map vector map
-   \param Box bounding box
-   \param[out] list output list, must be initialized
+   \param[in,out] si pointer to spatial index structure
+   \param id item identifier
+   \param box pointer to item bounding box
 
-   \return number of nodes
+   \return void
  */
-int
-Vect_select_nodes_by_box(struct Map_info *Map, const BOUND_BOX * Box,
-			 struct ilist *list)
+void Vect_spatial_index_add_item(SPATIAL_INDEX * si, int id,
+				 const BOUND_BOX * box)
 {
-    struct Plus_head *plus;
+    struct Rect rect;
 
-    G_debug(3, "Vect_select_nodes_by_box()");
-    G_debug(3, "Box(N,S,E,W,T,B): %e, %e, %e, %e, %e, %e", Box->N, Box->S,
-	    Box->E, Box->W, Box->T, Box->B);
+    G_debug(3, "Vect_spatial_index_add_item(): id = %d", id);
 
-    plus = &(Map->plus);
-
-    if (!(plus->Spidx_built)) {
-	G_debug(3, "Building spatial index.");
-	Vect_build_sidx_from_topo(Map);
-    }
-
-    list->n_values = 0;
-
-    dig_select_nodes(plus, Box, list);
-    G_debug(3, "  %d nodes selected", list->n_values);
-
-    return list->n_values;
+    rect.boundary[0] = box->W;
+    rect.boundary[1] = box->S;
+    rect.boundary[2] = box->B;
+    rect.boundary[3] = box->E;
+    rect.boundary[4] = box->N;
+    rect.boundary[5] = box->T;
+    RTreeInsertRect(&rect, id, si->si_tree);
 }
 
 /*!
-   \brief Select lines by Polygon with optional isles. 
+   \brief Delete item from spatial index structure
 
-   Polygons should be closed, i.e. first and last points must be identical.
+   \param[in,out] si pointer to spatial index structure
+   \param id item identifier
 
-   \param Map vector map
-   \param Polygon outer ring
-   \param nisles number of islands or 0
-   \param Isles array of islands or NULL
-   \param type line type
-   \param[out] list output list, must be initialised
-
-   \return number of lines
+   \return void
  */
-int
-Vect_select_lines_by_polygon(struct Map_info *Map, struct line_pnts *Polygon,
-			     int nisles, struct line_pnts **Isles, int type,
-			     struct ilist *List)
+void Vect_spatial_index_del_item(SPATIAL_INDEX * si, int id,
+				 const BOUND_BOX * box)
 {
-    int i;
-    BOUND_BOX box;
-    static struct line_pnts *LPoints = NULL;
-    static struct ilist *LocList = NULL;
+    int ret;
+    struct Rect rect;
 
-    /* TODO: this function was not tested with isles */
-    G_debug(3, "Vect_select_lines_by_polygon() nisles = %d", nisles);
+    G_debug(3, "Vect_spatial_index_del_item(): id = %d", id);
 
-    List->n_values = 0;
-    if (!LPoints)
-	LPoints = Vect_new_line_struct();
-    if (!LocList)
-	LocList = Vect_new_list();
+    rect.boundary[0] = box->W;
+    rect.boundary[1] = box->S;
+    rect.boundary[2] = box->B;
+    rect.boundary[3] = box->E;
+    rect.boundary[4] = box->N;
+    rect.boundary[5] = box->T;
 
-    /* Select first all lines by box */
-    dig_line_box(Polygon, &box);
-    Vect_select_lines_by_box(Map, &box, type, LocList);
-    G_debug(3, "  %d lines selected by box", LocList->n_values);
+    ret = RTreeDeleteRect(&rect, id, si->si_tree);
 
-    /* Check all lines if intersect the polygon */
-    for (i = 0; i < LocList->n_values; i++) {
-	int j, line, intersect = 0;
-
-	line = LocList->value[i];
-	/* Read line points */
-	Vect_read_line(Map, LPoints, NULL, line);
-
-	/* Check if any of line vertices is within polygon */
-	for (j = 0; j < LPoints->n_points; j++) {
-	    if (Vect_point_in_poly(LPoints->x[j], LPoints->y[j], Polygon) >= 1) {	/* inside polygon */
-		int k, inisle = 0;
-
-		for (k = 0; k < nisles; k++) {
-		    if (Vect_point_in_poly(LPoints->x[j], LPoints->y[j], Isles[k]) >= 1) {	/* in isle */
-			inisle = 1;
-			break;
-		    }
-		}
-
-		if (!inisle) {	/* inside polygon, outside isles -> select */
-		    intersect = 1;
-		    break;
-		}
-	    }
-	}
-	if (intersect) {
-	    dig_list_add(List, line);
-	    continue;
-	}
-
-	/* Check intersections of the line with area/isles boundary */
-	/* Outer boundary */
-	if (Vect_line_check_intersection(LPoints, Polygon, 0)) {
-	    dig_list_add(List, line);
-	    continue;
-	}
-
-	/* Islands */
-	for (j = 0; j < nisles; j++) {
-	    if (Vect_line_check_intersection(LPoints, Isles[j], 0)) {
-		intersect = 1;
-		break;
-	    }
-	}
-	if (intersect) {
-	    dig_list_add(List, line);
-	}
-    }
-
-    G_debug(4, "  %d lines selected by polygon", List->n_values);
-
-    return List->n_values;
+    if (ret)
+	G_fatal_error(_("Unable to delete item %d from spatial index"), id);
 }
 
+/************************* SELECT BY BOX *********************************/
+/* This function is called by  RTreeSearch() to add selected item to the list */
+static int _add_item(int id, struct ilist *list)
+{
+    dig_list_add(list, id);
+    return 1;
+}
 
 /*!
-   \brief Select areas by Polygon with optional isles. 
+   \brief Select items by bounding box to list
 
-   Polygons should be closed, i.e. first and last points must be identical.
+   \param si pointer to spatial index structure
+   \param box bounding box
+   \param[out] list pointer to list where selected items are stored
 
-   Warning : values in list may be duplicate!
-   
-   \param Map vector map
-   \param Polygon outer ring
-   \param nisles number of islands or 0
-   \param Isles array of islands or NULL
-   \param[out] list output list, must be initialised
-
-   \return number of areas
+   \return number of selected items
  */
 int
-Vect_select_areas_by_polygon(struct Map_info *Map, struct line_pnts *Polygon,
-			     int nisles, struct line_pnts **Isles,
-			     struct ilist *List)
+Vect_spatial_index_select(const SPATIAL_INDEX * si, const BOUND_BOX * box,
+			  struct ilist *list)
 {
-    int i, area;
-    static struct ilist *BoundList = NULL;
+    struct Rect rect;
 
-    /* TODO: this function was not tested with isles */
-    G_debug(3, "Vect_select_areas_by_polygon() nisles = %d", nisles);
+    G_debug(3, "Vect_spatial_index_select()");
 
-    List->n_values = 0;
-    if (!BoundList)
-	BoundList = Vect_new_list();
+    Vect_reset_list(list);
 
-    /* Select boundaries by polygon */
-    Vect_select_lines_by_polygon(Map, Polygon, nisles, Isles, GV_BOUNDARY,
-				 BoundList);
+    rect.boundary[0] = box->W;
+    rect.boundary[1] = box->S;
+    rect.boundary[2] = box->B;
+    rect.boundary[3] = box->E;
+    rect.boundary[4] = box->N;
+    rect.boundary[5] = box->T;
+    RTreeSearch(si->si_tree, &rect, (void *)_add_item, list);
 
-    /* Add areas on left/right side of selected boundaries */
-    for (i = 0; i < BoundList->n_values; i++) {
-	int line, left, right;
+    G_debug(3, "  %d items selected", list->n_values);
 
-	line = BoundList->value[i];
-
-	Vect_get_line_areas(Map, line, &left, &right);
-	G_debug(4, "boundary = %d left = %d right = %d", line, left, right);
-
-	if (left > 0) {
-	    dig_list_add(List, left);
-	}
-	else if (left < 0) {	/* island */
-	    area = Vect_get_isle_area(Map, abs(left));
-	    G_debug(4, "  left island -> area = %d", area);
-	    if (area > 0)
-		dig_list_add(List, area);
-	}
-
-	if (right > 0) {
-	    dig_list_add(List, right);
-	}
-	else if (right < 0) {	/* island */
-	    area = Vect_get_isle_area(Map, abs(right));
-	    G_debug(4, "  right island -> area = %d", area);
-	    if (area > 0)
-		dig_list_add(List, area);
-	}
-    }
-
-    /* But the Polygon may be completely inside the area (only one), in that case 
-     * we find the area by one polygon point and add it to the list */
-    area = Vect_find_area(Map, Polygon->x[0], Polygon->y[0]);
-    if (area > 0)
-	dig_list_add(List, area);
-
-    G_debug(3, "  %d areas selected by polygon", List->n_values);
-
-    return List->n_values;
+    return (list->n_values);
 }

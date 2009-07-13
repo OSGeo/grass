@@ -6,49 +6,49 @@
    Higher level functions for reading/writing/manipulating vectors.
 
    Some parts of code taken from grass50 v.spag/linecros.c
-   
+
    Based on the following:
-   
+
    <code>
    (ax2-ax1)r1 - (bx2-bx1)r2 = ax2 - ax1
    (ay2-ay1)r1 - (by2-by1)r2 = ay2 - ay1
    </code>
- 
+
    Solving for r1 and r2, if r1 and r2 are between 0 and 1, then line
    segments (ax1,ay1)(ax2,ay2) and (bx1,by1)(bx2,by2) intersect.
 
    Intersect 2 line segments.
- 
+
    Returns: 0 - do not intersect
-            1 - intersect at one point
+   1 - intersect at one point
    <pre>
-                 \  /    \  /  \  /
-                  \/      \/    \/
-                  /\             \
-                 /  \             \
-           2 - partial overlap         ( \/                      )
-                ------      a          (    distance < threshold )
-                   ------   b          (                         )
-           3 - a contains b            ( /\                      )
-                ----------  a    ----------- a
-                   ----     b          ----- b
-	     4 - b contains a
-                   ----     a          ----- a
-                ----------  b    ----------- b
-            5 - identical
-                ----------  a
-                ----------  b
-  </pre>
-  Intersection points: 
-  <pre>
-  return  point1 breakes: point2 breaks:    distance1 on:   distance2 on:
-      0        -              -                  -              -  
-      1        a,b            -                  a              b
-      2        a              b                  a              b
-      3        a              a                  a              a
-      4        b              b                  b              b
-      5        -              -                  -              -
-  </pre>
+   \  /    \  /  \  /
+   \/      \/    \/
+   /\             \
+   /  \             \
+   2 - partial overlap         ( \/                      )
+   ------      a          (    distance < threshold )
+   ------   b          (                         )
+   3 - a contains b            ( /\                      )
+   ----------  a    ----------- a
+   ----     b          ----- b
+   4 - b contains a
+   ----     a          ----- a
+   ----------  b    ----------- b
+   5 - identical
+   ----------  a
+   ----------  b
+   </pre>
+   Intersection points: 
+   <pre>
+   return  point1 breakes: point2 breaks:    distance1 on:   distance2 on:
+   0        -              -                  -              -  
+   1        a,b            -                  a              b
+   2        a              b                  a              b
+   3        a              a                  a              a
+   4        b              b                  b              b
+   5        -              -                  -              -
+   </pre>
    Sometimes (often) is important to get the same coordinates for a x
    b and b x a.  To reach this, the segments a,b are 'sorted' at the
    beginning, so that for the same switched segments, results are
@@ -67,6 +67,8 @@
 
 #include <grass/config.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
 #include <math.h>
 #include <grass/gis.h>
 #include <grass/vector.h>
@@ -608,7 +610,7 @@ Vect_line_intersection(struct line_pnts *APoints,
     double x, y, rethresh;
     struct Rect rect;
     struct line_pnts **XLines, *Points;
-    struct Node *RTree;
+    struct RTree *MyRTree;
     struct line_pnts *Points1, *Points2;	/* first, second points */
     int seg1, seg2, vert1, vert2;
 
@@ -675,7 +677,7 @@ Vect_line_intersection(struct line_pnts *APoints,
      *  in bound box */
 
     /* Create rtree for B line */
-    RTree = RTreeNewIndex();
+    MyRTree = RTreeNewIndex(2);
     for (i = 0; i < BPoints->n_points - 1; i++) {
 	if (BPoints->x[i] <= BPoints->x[i + 1]) {
 	    rect.boundary[0] = BPoints->x[i];
@@ -704,7 +706,7 @@ Vect_line_intersection(struct line_pnts *APoints,
 	    rect.boundary[5] = BPoints->z[i];
 	}
 
-	RTreeInsertRect(&rect, i + 1, &RTree, 0);	/* B line segment numbers in rtree start from 1 */
+	RTreeInsertRect(&rect, i + 1, MyRTree);	/* B line segment numbers in rtree start from 1 */
     }
 
     /* Break segments in A by segments in B */
@@ -735,11 +737,11 @@ Vect_line_intersection(struct line_pnts *APoints,
 	    rect.boundary[5] = APoints->z[i];
 	}
 
-	j = RTreeSearch(RTree, &rect, (void *)cross_seg, &i);	/* A segment number from 0 */
+	j = RTreeSearch(MyRTree, &rect, (void *)cross_seg, &i);	/* A segment number from 0 */
     }
 
     /* Free RTree */
-    RTreeDestroyNode(RTree);
+    RTreeFreeIndex(MyRTree);
 
     G_debug(2, "n_cross = %d", n_cross);
     /* Lines do not cross each other */
@@ -1087,7 +1089,7 @@ static int find_cross(int id, int *arg)
 
     if (!IPnts)
 	IPnts = Vect_new_line_struct();
-    
+
     switch (ret) {
     case 0:
     case 5:
@@ -1132,7 +1134,7 @@ Vect_line_check_intersection(struct line_pnts *APoints,
     int i;
     double dist, rethresh;
     struct Rect rect;
-    struct Node *RTree;
+    struct RTree *MyRTree;
 
     rethresh = 0.000001;	/* TODO */
     APnts = APoints;
@@ -1212,7 +1214,7 @@ Vect_line_check_intersection(struct line_pnts *APoints,
      *  in bound box */
 
     /* Create rtree for B line */
-    RTree = RTreeNewIndex();
+    MyRTree = RTreeNewIndex(2);
     for (i = 0; i < BPoints->n_points - 1; i++) {
 	if (BPoints->x[i] <= BPoints->x[i + 1]) {
 	    rect.boundary[0] = BPoints->x[i];
@@ -1241,7 +1243,7 @@ Vect_line_check_intersection(struct line_pnts *APoints,
 	    rect.boundary[5] = BPoints->z[i];
 	}
 
-	RTreeInsertRect(&rect, i + 1, &RTree, 0);	/* B line segment numbers in rtree start from 1 */
+	RTreeInsertRect(&rect, i + 1, MyRTree);	/* B line segment numbers in rtree start from 1 */
     }
 
     /* Find intersection */
@@ -1274,7 +1276,7 @@ Vect_line_check_intersection(struct line_pnts *APoints,
 	    rect.boundary[5] = APoints->z[i];
 	}
 
-	RTreeSearch(RTree, &rect, (void *)find_cross, &i);	/* A segment number from 0 */
+	RTreeSearch(MyRTree, &rect, (void *)find_cross, &i);	/* A segment number from 0 */
 
 	if (cross_found) {
 	    break;
@@ -1282,7 +1284,7 @@ Vect_line_check_intersection(struct line_pnts *APoints,
     }
 
     /* Free RTree */
-    RTreeDestroyNode(RTree);
+    RTreeFreeIndex(MyRTree);
 
     return cross_found;
 }

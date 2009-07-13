@@ -12,7 +12,7 @@
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
    \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
-*/
+ */
 
 #include <grass/config.h>
 #include <stdlib.h>
@@ -94,8 +94,7 @@ int Vect_close(struct Map_info *Map)
 
 	Vect_save_topo(Map);
 
-	/* Spatial index is not saved */
-	/* Vect_save_spatial_index ( Map ); */
+	Vect_save_sidx(Map);
 
 	Vect_cidx_save(Map);
 
@@ -104,15 +103,18 @@ int Vect_close(struct Map_info *Map)
 	    V2_close_ogr(Map);
 #endif
     }
+    else {
+	/* spatial index must also be closed when opened with topo but not modified */
+	if (Map->plus.Spidx_built == 1 && Map->plus.built == GV_BUILD_ALL)
+	    Vect_save_sidx(Map);
+    }
 
     if (Map->level == 2 && Map->plus.release_support) {
 	G_debug(1, "free topology");
 	dig_free_plus(&(Map->plus));
 
-	if (!Map->head_only) {
-	    G_debug(1, "free spatial index");
-	    dig_spidx_free(&(Map->plus));
-	}
+	G_debug(1, "free spatial index");
+	dig_spidx_free(&(Map->plus));
 
 	G_debug(1, "free category index");
 	dig_cidx_free(&(Map->plus));
