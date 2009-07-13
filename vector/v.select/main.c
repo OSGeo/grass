@@ -136,10 +136,6 @@ int main(int argc, char *argv[])
     /* Alloc space for input lines array */
     ALines = (int *)G_calloc(nalines + 1, sizeof(int));
 
-    G_message(_("Building spatial index..."));
-    Vect_build_spatial_index(&In[0]);
-    Vect_build_spatial_index(&In[1]);
-
     /* Lines in A. Go through all lines and mark those that meets condition */
     if (itype[0] & (GV_POINTS | GV_LINES)) {
 	G_message(_("Processing features..."));
