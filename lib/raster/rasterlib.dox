@@ -1,53 +1,53 @@
 /*! \page rasterlib GRASS Raster Library
-<!-- doxygenized from "GRASS 5 Programmer's Manual" 
-     by M. Neteler 2/2004, 8/2005, 2006
+<!-- * doxygenized from "GRASS 5 Programmer's Manual" 
+       by M. Neteler 2/2004, 8/2005, 2006
+     * updated to GRASS 7 by Martin Landa
   -->
 
 by GRASS Development Team (http://grass.osgeo.org)
 
 <b>TODO: Needs to be cleaned up. The upper GRASS 4.x and the lower
-GRASS 5.x/6.x parts need to me merged.</b>
+GRASS 5.x/6.x parts need to me merged and updated to GRASS 7</b>
 
-\section gisrastintro GRASS Raster File Processing
+\section gisrastintro GRASS Raster Map Processing
 
-Raster and vector files are the heart and soul of GRASS. Because of
-this, a suite of routines which process raster file data has been
-provided. The processing of raster files consists of determining which
-raster file or files are to be processed (specified on the module
-command line), locating the raster file in the database, opening the
-raster file, dynamically allocating i/o buffers, reading or writing
-the raster file, closing the raster file, and creating support files
-for newly created raster files.
+This library provides a suite of routines which process raster map file.
+The processing of raster map files consists of determining which
+raster map file or files are to be processed (specified on the module
+command line), locating the raster map file in the database, opening the
+raster files, dynamically allocating i/o buffers, reading or writing
+the raster files, closing the raster files, and creating support files
+for newly created raster maps.
 
-Raster file data can be of type CELL, FCELL or DCELL, they are defined
+Raster map data can be of type CELL, FCELL or DCELL, they are defined
 in "gis.h". CELL is a 32-bit signed integer, FCELL is an IEEE
 single-precision floating-point, and DCELL is an IEEE double-precision
-floating-point. 3D rasters (grid3d) is treated as DCELL.
+floating-point. 3D rasters (grid3d) is treated as DCELL (see related
+library).
 
-- Finding_Raster_Files_in_the_Database
-- Opening_an_Existing_Raster_File
+\section Finding_Raster_Files_in_the_Database Finding Raster Files in the Database
 
-\section Finding_Raster_Files_in_the_Database Finding Raster Files in
-the Database
+GRASS allows the user to specify raster map names (or any other
+GIS database file) either as a simple <em>unqualified</em> name, such as
+"soils", or in case of input raster maps also as a <em>fully qualified</em> 
+name, such as "soils@mapset", where <i>mapset</i> is the mapset where the raster
+map is to be found. Often only the unqualified raster map name is
+provided on the command line and searched in all mapsets indicated in
+the mapset search path (SEARCH_PATH file in the actual mapset; managed
+with "g.mapsets" command).
 
-GRASS allows the user to specify raster file names (or any other
-database file) either as a simple <em>unqualified</em> name, such as
-"soils", or as a <em>fully qualified</em> name, such as
-"soils@mapset", where <i>mapset</i> is the mapset where the raster
-file is to be found. Often only the unqualified raster file name is
-provided on the command line.
-
-The following routines search the database for raster files:
+The following routines search the database for raster map files:
 
  - G_find_cell()
 
 Looks for the raster file in the database. If found, the mapset where
 the raster file lives is returned. If not found, the NULL pointer is
-returned. If the user specifies a fully qualified raster file which
+returned. If the user specifies a fully qualified raster map name which
 exists, then G_find_cell() modifies <i>name</i> by removing
 the "@<I>mapset</I>".
 
-For example, to find a raster file anywhere in the database:
+For example, to find a raster map in all mapsets listed the mapset search
+path:
 
 \code
 char name[GNAME_MAX];
@@ -57,7 +57,7 @@ if ((mapset = G_find_cell(name,"")) == NULL)
   /* not found */
 \endcode
 
-To check that the raster file exists in the current mapset:
+To check that the raster map exists in the current mapset:
 
 \code
 char name[GNAME_MAX];
@@ -68,31 +68,30 @@ if (G_find_cell(name, G_mapset()) == NULL)
 
 \section Opening_an_Existing_Raster_File Opening an Existing Raster File
 
-The following routine opens the raster file for <em>reading</em>.
+The following routine opens the raster map file for <em>reading</em>.
 
  - Rast_open_old()
 
-This routine opens the raster file in given mapset for reading. A
+This routine opens the raster map in given mapset for reading. A
 nonnegative file descriptor is returned if the open is
 successful. Otherwise a diagnostic message is printed and a negative
 value is returned. This routine does quite a bit of work. Since GRASS
-users expect that all raster files will be resampled into the current
-region, the resampling index for the raster file is prepared by this
-routine after the file is opened. The resampling is based on the
-active module region. Preparation required for reading the various
-raster file formats is also done.
+users expect that all raster maps will be resampled into the current
+region (nearest neighbor method), the resampling index for the raster 
+map is prepared by this routine after the map is opened. The resampling
+is based on the active module region. Preparation required for reading
+the various raster map formats (CELL, FCELL, DCELL) is also done.
 
 \section Creating_and_Opening_New_Raster_Files Creating and Opening New Raster Files
 
-The following routines create the new raster file in the current
+The following routines create a new raster map in the current
 mapset and open it for <em>writing</em>. G_legal_filename() should be
-called first to make sure that raster map name is a valid GRASS file
-name.
+called first to make sure that raster map name is a valid name.
 
 <b>Note:</b> It is not an error for raster map to already exist. New
-raster files are actually created as temporary files and moved into
-the cell directory when closed. This allows an existing raster file to
-be read at the same time that it is being rewritten. G_find_cell()
+raster maps are actually created as temporary files and moved into
+the cell or fcell directory when closed. This allows an existing raster map
+to be read at the same time that it is being rewritten. G_find_cell()
 could be used to see if raster map already exists.
 
 <b>Warning:</b> However, there is a subtle trap. The temporary file,
@@ -107,23 +106,18 @@ create the child first, then open the raster file (see the discussion
 under G_tempfile() for more details).
 
  - Rast_open_new()
+ - Rast_open_c_new()
+ - Rast_open_fp_new()
 
-Creates and opens the raster file for writing by Rast_put_row() which
+Creates and opens the raster map for writing by Rast_put_row() which
 writes the file row by row in <b>sequential</b> order. The raster file data
 will be compressed as it is written. A nonnegative file descriptor is
 returned if the open is successful. Otherwise a diagnostic message is
 printed and a negative value is returned.
 
- - Rast_open_new_random()
-
-Creates and opens the raster file for writing by
-Rast_put_row_random() which allows writing the raster file in a
-<b>random</b> fashion. The file will be created uncompressed. A
-nonnegative file descriptor is returned if the open is
-successful. Otherwise a diagnostic message is printed and a negative
-value is returned.
-
  - Rast_open_new_uncompressed()
+ - Rast_open_c_new_uncompressed()
+ - Rast_open_fp_new_uncompressed()
 
 Creates and opens the raster file for writing by Rast_put_row() which
 writes the file row by row in sequential order. The raster file will
@@ -142,15 +136,25 @@ region, buffers which are used for reading and writing raster data
 must be dynamically allocated.
 
  - Rast_allocate_buf()
+ - Rast_allocate_c_buf()
+ - Rast_allocate_d_buf()
+ - Rast_allocate_f_buf()
 
-This routine allocates a buffer of type CELL just large enough to hold
-one row of raster data (based on the number of columns in the active
+This routine allocates a buffer of type CELL/FCELL/DCELL just large enough
+to hold one row of raster data (based on the number of columns in the active
 region).
 
 \code
-CELL *cell;
-cell = Rast_allocate_c_buf(void);
+int input_fd;
+char inmap;
+RASTER_MAP_TYPE data_type;
+
+input_fd = Rast_open_old(inmap, "");
+data_type = Rast_get_map_type(input_fd);
+cell = Rast_allocate_buf(data_type);
 \endcode
+
+<i>FIXME 7/2009: next still true?</i>
 
 If larger buffers are required, the routine G_malloc() can be
 used.
@@ -505,13 +509,13 @@ Extracts colors for an array of raster values. The colors from the
 raster array are stored in the red, green, and blue arrays.
 
 <b>Note:</b> The red, green, and blue intensities will be in the range
-0 -­ 255.
+0 -ï¿½ 255.
 
  - Rast_get_color()
 
 Get a category color. The red, green, and blue intensities for the
 color associated with category are extracted from the colors
-structure. The intensities will be in the range 0 ­- 255.
+structure. The intensities will be in the range 0 ï¿½- 255.
 
 \section Creating_and_or_Modifying_the_Color_Table Creating and/or Modifying the Color Table
 
@@ -554,7 +558,7 @@ build some predefined color tables.
 
 Set a category color. The red, green, and blue intensities for the
 color associated with category The intensities must be in the range 0
--­ 255. Values below zero are set as zero, values above 255 are set as
+-ï¿½ 255. Values below zero are set as zero, values above 255 are set as
 255.
 
 <b>Warning:</b> Use of this routine is discouraged because it defeats
@@ -1860,9 +1864,11 @@ instead.
  - Rast_allocate_f_buf()
  - Rast_allocate_d_buf()
  - Rast_allocate_null_buf()
+
+TODO: used in r.null and r.support, why Rast__ and not Rast_?
  - Rast__allocate_null_bits()
  - Rast__null_bitstream_size()
- - Rast__check_for_auto_masking()
+
  - Rast_suppress_masking()
  - Rast_unsuppress_masking()
  - Rast_read_cats()
@@ -1930,10 +1936,6 @@ instead.
  - Rast_make_wave_colors()
  - Rast_make_wave_fp_colors()
  - Rast_free_colors()
- - Rast__color_free_rules()
- - Rast__color_free_lookup()
- - Rast__color_free_fp_lookup()
- - Rast__color_reset()
  - Rast_get_color()
  - Rast_get_c_color()
  - Rast_get_f_color()
@@ -1943,15 +1945,11 @@ instead.
  - Rast_make_histogram_eq_colors()
  - Rast_make_histogram_log_colors()
  - Rast_init_colors()
- - Rast__insert_color_into_lookup()
  - Rast_invert_colors()
  - Rast_lookup_c_colors()
  - Rast_lookup_f_colors()
  - Rast_lookup_d_colors()
  - Rast_lookup_colors()
- - Rast__lookup_colors()
- - Rast__interpolate_color_rule()
- - Rast__organize_colors()
  - Rast_make_random_colors()
  - Rast_set_c_color_range()
  - Rast_set_d_color_range()
@@ -1985,10 +1983,6 @@ instead.
  - Rast_shift_c_colors()
  - Rast_shift_d_colors()
  - Rast_write_colors()
- - Rast__write_colors()
- - Rast__check_format()
- - Rast__read_row_ptrs()
- - Rast__write_row_ptrs()
  - Rast_fpreclass_clear()
  - Rast_fpreclass_reset()
  - Rast_fpreclass_init()
@@ -2051,8 +2045,6 @@ instead.
  - Rast_interp_bicubic()
  - Rast_maskfd()
  - Rast_mask_info()
- - Rast__mask_info()
- - Rast__set_null_value()
  - Rast_set_null_value()
  - Rast_set_c_null_value()
  - Rast_set_f_null_value()
@@ -2065,12 +2057,7 @@ instead.
  - Rast_insert_c_null_values()
  - Rast_insert_f_null_values()
  - Rast_insert_d_null_values()
- - Rast__check_null_bit()
- - Rast__convert_01_flags()
- - Rast__convert_flags_01()
- - Rast__init_null_bits()
  - Rast_open_old()
- - Rast__open_old()
  - Rast_open_c_new()
  - Rast_open_c_new_uncompressed()
  - Rast_want_histogram()
@@ -2081,7 +2068,6 @@ instead.
  - Rast_set_fp_type()
  - Rast_map_is_fp()
  - Rast_map_type()
- - Rast__check_fp_type()
  - Rast_get_map_type()
  - Rast_open_new()
  - Rast_open_new_uncompressed()
@@ -2091,12 +2077,9 @@ instead.
  - Rast_put_c_row()
  - Rast_put_f_row()
  - Rast_put_d_row()
- - Rast__open_null_write()
- - Rast__write_null_bits()
  - Rast_put_cell_title()
  - Rast_quant_clear()
  - Rast_quant_free()
- - Rast__quant_organize_fp_lookup()
  - Rast_quant_init()
  - Rast_quant_is_truncate()
  - Rast_quant_is_round()
@@ -2114,16 +2097,12 @@ instead.
  - Rast_quant_get_cell_value()
  - Rast_quant_perform_d()
  - Rast_quant_perform_f()
- - Rast__quant_get_rule_for_d_raster_val()
- - Rast__quant_import()
- - Rast__quant_export()
  - Rast_truncate_fp_map()
  - Rast_round_fp_map()
  - Rast_quantize_fp_map()
  - Rast_quantize_fp_map_range()
  - Rast_write_quant()
  - Rast_read_quant()
- - Rast__remove_fp_range()
  - Rast_construct_default_range()
  - Rast_read_fp_range()
  - Rast_read_range()
@@ -2132,7 +2111,6 @@ instead.
  - Rast_update_range()
  - Rast_update_fp_range()
  - Rast_row_update_range()
- - Rast__row_update_range()
  - Rast_row_update_fp_range()
  - Rast_init_range()
  - Rast_get_range_min_max()
