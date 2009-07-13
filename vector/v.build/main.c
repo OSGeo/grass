@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
 	    Vect_topo_dump(&Map, stdout);
 
 	if (sdump)
-	    Vect_spatial_index_dump(&Map, stdout);
+	    Vect_sidx_dump(&Map, stdout);
 
 	if (cdump)
 	    Vect_cidx_dump(&Map, stdout);
