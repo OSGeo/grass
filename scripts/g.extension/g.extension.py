@@ -129,7 +129,7 @@ def cleanup():
     grass.try_rmdir(tmpdir)
 
 def install_extension(svnurl, prefix, module):
-    gisbase = os.environ['GISBASE']
+    gisbase = os.getenv('GISBASE')
     if not gisbase:
         grass.fatal('$GISBASE not defined')
     
