@@ -1,21 +1,23 @@
 /*!
-  \file diglib/spindex.c
- 
-  \brief Vector library - spatial index (lower level functions)
-  
-  Lower level functions for reading/writing/manipulating vectors.
-  
-  (C) 2001-2009 by the GRASS Development Team
-  
-  This program is free software under the GNU General Public License
-  (>=v2). Read the file COPYING that comes with GRASS for details.
-  
-  \author Original author CERL, probably Dave Gerdes
-  \author Update to GRASS 5.7 Radim Blazek
-*/
+   \file diglib/spindex.c
+
+   \brief Vector library - spatial index (lower level functions)
+
+   Lower level functions for reading/writing/manipulating vectors.
+
+   (C) 2001-2009 by the GRASS Development Team
+
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
+
+   \author Original author CERL, probably Dave Gerdes
+   \author Update to GRASS 5.7 Radim Blazek
+   \author Update to GRASS 7 Markus Metz
+ */
 
 #include <grass/config.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/vector.h>
@@ -31,67 +33,94 @@
  */
 int dig_spidx_init(struct Plus_head *Plus)
 {
+    int ndims;
+
+    ndims = Plus->with_z ? 3 : 2;
 
     G_debug(1, "dig_spidx_init()");
+    G_debug(1, "Plus->spidx_separate = %d", Plus->Spidx_new);
 
-    Plus->Node_spidx = RTreeNewIndex();
-    Plus->Line_spidx = RTreeNewIndex();
-    Plus->Area_spidx = RTreeNewIndex();
-    Plus->Isle_spidx = RTreeNewIndex();
+    Plus->Node_spidx = RTreeNewIndex(ndims);
+    Plus->Line_spidx = RTreeNewIndex(ndims);
+    Plus->Area_spidx = RTreeNewIndex(ndims);
+    Plus->Isle_spidx = RTreeNewIndex(ndims);
+    Plus->Face_spidx = NULL;
+    Plus->Volume_spidx = NULL;
+    Plus->Hole_spidx = NULL;
 
     Plus->Node_spidx_offset = 0L;
-    Plus->Edge_spidx_offset = 0L;
     Plus->Line_spidx_offset = 0L;
     Plus->Area_spidx_offset = 0L;
     Plus->Isle_spidx_offset = 0L;
+    Plus->Face_spidx_offset = 0L;
     Plus->Volume_spidx_offset = 0L;
     Plus->Hole_spidx_offset = 0L;
 
     return 1;
 }
 
-/*!
+/*! 
    \brief Free spatial index for nodes
 
    \param Plus pointer to Plus_head structure
  */
 void dig_spidx_free_nodes(struct Plus_head *Plus)
 {
-    RTreeDestroyNode(Plus->Node_spidx);
-    Plus->Node_spidx = RTreeNewIndex();
+    int ndims;
+
+    ndims = Plus->with_z ? 3 : 2;
+
+    /* Node spidx */
+    RTreeFreeIndex(Plus->Node_spidx);
+    Plus->Node_spidx = RTreeNewIndex(ndims);
 }
 
-/*!
+/*! 
    \brief Free spatial index for lines
 
    \param Plus pointer to Plus_head structure
  */
 void dig_spidx_free_lines(struct Plus_head *Plus)
 {
-    RTreeDestroyNode(Plus->Line_spidx);
-    Plus->Line_spidx = RTreeNewIndex();
+    int ndims;
+
+    ndims = Plus->with_z ? 3 : 2;
+
+    /* Line spidx */
+    RTreeFreeIndex(Plus->Line_spidx);
+    Plus->Line_spidx = RTreeNewIndex(ndims);
 }
 
-/*!
-   \brief Free spatial index for areas
+/*! 
+   \brief Reset spatial index for areas
 
    \param Plus pointer to Plus_head structure
  */
 void dig_spidx_free_areas(struct Plus_head *Plus)
 {
-    RTreeDestroyNode(Plus->Area_spidx);
-    Plus->Area_spidx = RTreeNewIndex();
+    int ndims;
+
+    ndims = Plus->with_z ? 3 : 2;
+
+    /* Area spidx */
+    RTreeFreeIndex(Plus->Area_spidx);
+    Plus->Area_spidx = RTreeNewIndex(ndims);
 }
 
-/*!
-   \brief Free spatial index for isles
+/*! 
+   \brief Reset spatial index for isles
 
    \param Plus pointer to Plus_head structure
  */
 void dig_spidx_free_isles(struct Plus_head *Plus)
 {
-    RTreeDestroyNode(Plus->Isle_spidx);
-    Plus->Isle_spidx = RTreeNewIndex();
+    int ndims;
+
+    ndims = Plus->with_z ? 3 : 2;
+
+    /* Isle spidx */
+    RTreeFreeIndex(Plus->Isle_spidx);
+    Plus->Isle_spidx = RTreeNewIndex(ndims);
 }
 
 /*! 
@@ -101,10 +130,17 @@ void dig_spidx_free_isles(struct Plus_head *Plus)
  */
 void dig_spidx_free(struct Plus_head *Plus)
 {
-    dig_spidx_free_nodes(Plus);
-    dig_spidx_free_lines(Plus);
-    dig_spidx_free_areas(Plus);
-    dig_spidx_free_isles(Plus);
+    /* Node spidx */
+    RTreeFreeIndex(Plus->Node_spidx);
+
+    /* Line spidx */
+    RTreeFreeIndex(Plus->Line_spidx);
+
+    /* Area spidx */
+    RTreeFreeIndex(Plus->Area_spidx);
+
+    /* Isle spidx */
+    RTreeFreeIndex(Plus->Isle_spidx);
 }
 
 /*!
@@ -132,7 +168,7 @@ dig_spidx_add_node(struct Plus_head *Plus, int node,
     rect.boundary[3] = x;
     rect.boundary[4] = y;
     rect.boundary[5] = z;
-    RTreeInsertRect(&rect, node, &(Plus->Node_spidx), 0);
+    RTreeInsertRect(&rect, node, Plus->Node_spidx);
 
     return 1;
 }
@@ -158,7 +194,7 @@ int dig_spidx_add_line(struct Plus_head *Plus, int line, BOUND_BOX * box)
     rect.boundary[3] = box->E;
     rect.boundary[4] = box->N;
     rect.boundary[5] = box->T;
-    RTreeInsertRect(&rect, line, &(Plus->Line_spidx), 0);
+    RTreeInsertRect(&rect, line, Plus->Line_spidx);
 
     return 0;
 }
@@ -184,7 +220,7 @@ int dig_spidx_add_area(struct Plus_head *Plus, int area, BOUND_BOX * box)
     rect.boundary[3] = box->E;
     rect.boundary[4] = box->N;
     rect.boundary[5] = box->T;
-    RTreeInsertRect(&rect, area, &(Plus->Area_spidx), 0);
+    RTreeInsertRect(&rect, area, Plus->Area_spidx);
 
     return 0;
 }
@@ -211,7 +247,7 @@ int dig_spidx_add_isle(struct Plus_head *Plus, int isle, BOUND_BOX * box)
     rect.boundary[3] = box->E;
     rect.boundary[4] = box->N;
     rect.boundary[5] = box->T;
-    RTreeInsertRect(&rect, isle, &(Plus->Isle_spidx), 0);
+    RTreeInsertRect(&rect, isle, Plus->Isle_spidx);
 
     return 0;
 }
@@ -243,7 +279,7 @@ int dig_spidx_del_node(struct Plus_head *Plus, int node)
     rect.boundary[4] = Node->y;
     rect.boundary[5] = Node->z;
 
-    ret = RTreeDeleteRect(&rect, node, &(Plus->Node_spidx));
+    ret = RTreeDeleteRect(&rect, node, Plus->Node_spidx);
 
     if (ret)
 	G_fatal_error(_("Unable to delete node %d from spatial index"), node);
@@ -281,7 +317,7 @@ int dig_spidx_del_line(struct Plus_head *Plus, int line)
     rect.boundary[4] = Line->N;
     rect.boundary[5] = Line->T;
 
-    ret = RTreeDeleteRect(&rect, line, &(Plus->Line_spidx));
+    ret = RTreeDeleteRect(&rect, line, Plus->Line_spidx);
 
     G_debug(3, "  ret = %d", ret);
 
@@ -322,7 +358,7 @@ int dig_spidx_del_area(struct Plus_head *Plus, int area)
     rect.boundary[4] = Area->N;
     rect.boundary[5] = Area->T;
 
-    ret = RTreeDeleteRect(&rect, area, &(Plus->Area_spidx));
+    ret = RTreeDeleteRect(&rect, area, Plus->Area_spidx);
 
     if (ret)
 	G_fatal_error(_("Unable to delete area %d from spatial index"), area);
@@ -357,7 +393,7 @@ int dig_spidx_del_isle(struct Plus_head *Plus, int isle)
     rect.boundary[4] = Isle->N;
     rect.boundary[5] = Isle->T;
 
-    ret = RTreeDeleteRect(&rect, isle, &(Plus->Isle_spidx));
+    ret = RTreeDeleteRect(&rect, isle, Plus->Isle_spidx);
 
     if (ret)
 	G_fatal_error(_("Unable to delete isle %d from spatial index"), isle);
@@ -383,7 +419,8 @@ static int _add_item(int id, struct ilist *list)
    \return -1 on error
  */
 int
-dig_select_nodes(struct Plus_head *Plus, const BOUND_BOX * box, struct ilist *list)
+dig_select_nodes(struct Plus_head *Plus, const BOUND_BOX * box,
+		 struct ilist *list)
 {
     struct Rect rect;
 
@@ -397,7 +434,11 @@ dig_select_nodes(struct Plus_head *Plus, const BOUND_BOX * box, struct ilist *li
     rect.boundary[3] = box->E;
     rect.boundary[4] = box->N;
     rect.boundary[5] = box->T;
-    RTreeSearch(Plus->Node_spidx, &rect, (void *)_add_item, list);
+
+    if (Plus->Spidx_new)
+	RTreeSearch(Plus->Node_spidx, &rect, (void *)_add_item, list);
+    else
+	rtree_search(Plus->Node_spidx, &rect, (void *)_add_item, list, Plus);
 
     return (list->n_values);
 }
@@ -436,7 +477,10 @@ int dig_find_node(struct Plus_head *Plus, double x, double y, double z)
     rect.boundary[5] = z;
 
     node = 0;
-    RTreeSearch(Plus->Node_spidx, &rect, (void *)_add_node, &node);
+    if (Plus->Spidx_new)
+	RTreeSearch(Plus->Node_spidx, &rect, (void *)_add_node, &node);
+    else
+	rtree_search(Plus->Node_spidx, &rect, (void *)_add_node, &node, Plus);
 
     return node;
 }
@@ -451,7 +495,8 @@ int dig_find_node(struct Plus_head *Plus, double x, double y, double z)
    \return number of selected lines
  */
 int
-dig_select_lines(struct Plus_head *Plus, const BOUND_BOX * box, struct ilist *list)
+dig_select_lines(struct Plus_head *Plus, const BOUND_BOX * box,
+		 struct ilist *list)
 {
     struct Rect rect;
 
@@ -465,7 +510,11 @@ dig_select_lines(struct Plus_head *Plus, const BOUND_BOX * box, struct ilist *li
     rect.boundary[3] = box->E;
     rect.boundary[4] = box->N;
     rect.boundary[5] = box->T;
-    RTreeSearch(Plus->Line_spidx, &rect, (void *)_add_item, list);
+
+    if (Plus->Spidx_new)
+	RTreeSearch(Plus->Line_spidx, &rect, (void *)_add_item, list);
+    else
+	rtree_search(Plus->Line_spidx, &rect, (void *)_add_item, list, Plus);
 
     return (list->n_values);
 }
@@ -480,7 +529,8 @@ dig_select_lines(struct Plus_head *Plus, const BOUND_BOX * box, struct ilist *li
    \return number of selected areas
  */
 int
-dig_select_areas(struct Plus_head *Plus, const BOUND_BOX * box, struct ilist *list)
+dig_select_areas(struct Plus_head *Plus, const BOUND_BOX * box,
+		 struct ilist *list)
 {
     struct Rect rect;
 
@@ -494,7 +544,11 @@ dig_select_areas(struct Plus_head *Plus, const BOUND_BOX * box, struct ilist *li
     rect.boundary[3] = box->E;
     rect.boundary[4] = box->N;
     rect.boundary[5] = box->T;
-    RTreeSearch(Plus->Area_spidx, &rect, (void *)_add_item, list);
+
+    if (Plus->Spidx_new)
+	RTreeSearch(Plus->Area_spidx, &rect, (void *)_add_item, list);
+    else
+	rtree_search(Plus->Area_spidx, &rect, (void *)_add_item, list, Plus);
 
     return (list->n_values);
 }
@@ -509,7 +563,8 @@ dig_select_areas(struct Plus_head *Plus, const BOUND_BOX * box, struct ilist *li
    \return number of selected isles
  */
 int
-dig_select_isles(struct Plus_head *Plus, const BOUND_BOX * box, struct ilist *list)
+dig_select_isles(struct Plus_head *Plus, const BOUND_BOX * box,
+		 struct ilist *list)
 {
     struct Rect rect;
 
@@ -523,7 +578,11 @@ dig_select_isles(struct Plus_head *Plus, const BOUND_BOX * box, struct ilist *li
     rect.boundary[3] = box->E;
     rect.boundary[4] = box->N;
     rect.boundary[5] = box->T;
-    RTreeSearch(Plus->Isle_spidx, &rect, (void *)_add_item, list);
+
+    if (Plus->Spidx_new)
+	RTreeSearch(Plus->Isle_spidx, &rect, (void *)_add_item, list);
+    else
+	rtree_search(Plus->Isle_spidx, &rect, (void *)_add_item, list, Plus);
 
     return (list->n_values);
 }
