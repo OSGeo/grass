@@ -120,6 +120,11 @@ int dig_find_area_poly(struct line_pnts *Points, double *totalarea)
         tot_area += y[i] * (x[i + 1] - x[i - 1]);
     }
 
+    /* tot_area = 0.0;
+    for (i = 1; i < Points->n_points; i++) {
+	tot_area += (x[i] - x[i - 1]) * (y[i] + y[i - 1]);
+    } */
+
     *totalarea = 0.5 * tot_area;
 
     return (0);
@@ -127,7 +132,9 @@ int dig_find_area_poly(struct line_pnts *Points, double *totalarea)
 
 /*
  * find orientation of polygon (clockwise or counterclockwise)
- * faster than signed area for > 4 vertices
+ * in theory faster than signed area for > 4 vertices, but is not robust
+ * against special cases
+ * use dog_find_area_poly instead
  *
  * points must be closed polygon with first point = last point
  *
@@ -135,8 +142,8 @@ int dig_find_area_poly(struct line_pnts *Points, double *totalarea)
  * (C) 2000 softSurfer (www.softsurfer.com)
  * (C) 2006 Refractions Research Inc.
  *
- * and now copes with partially collapsed boundaries
- * the code is long but fast
+ * copes with partially collapsed boundaries and 8-shaped isles
+ * the code is long and not much faster than dig_find_area_poly
  * it can be written much shorter, but that comes with speed penalty
  *
  * returns orientation, positive for CW, negative for CCW, 0 for degenerate
@@ -157,6 +164,11 @@ double dig_find_poly_orientation(struct line_pnts *Points)
 	else if (y[pnext] == y[pcur]) {    /* just as high */
 	    if (x[pnext] > x[pcur])   	   /* but to the right */
 		continue;
+	    if (x[pnext] == x[pcur]) {   /* duplicate point, self-intersecting polygon ? */
+		pprev = (pcur == 0 ? lastpoint - 1 : pcur - 1);
+		if (y[pnext - 1] < y[pprev])
+		    continue;
+	    }
 	}
 	pcur = pnext;          /* a new leftmost highest vertex */
     }
@@ -198,6 +210,11 @@ double dig_find_poly_orientation(struct line_pnts *Points)
 	else if (y[pnext] == y[pcur]) {    /* just as high */
 	    if (x[pnext] < x[pcur])   	/* but to the left */
 		continue;
+	    if (x[pnext] == x[pcur]) {   /* duplicate point, self-intersecting polygon ? */
+		pprev = (pcur == 0 ? lastpoint - 1 : pcur - 1);
+		if (y[pnext - 1] < y[pprev])
+		    continue;
+	    }
 	}
 	pcur = pnext;          /* a new rightmost highest vertex */
     }
@@ -239,6 +256,11 @@ double dig_find_poly_orientation(struct line_pnts *Points)
 	else if (y[pnext] == y[pcur]) {    /* just as low */
 	    if (x[pnext] > x[pcur])   	/* but to the right */
 		continue;
+	    if (x[pnext] == x[pcur]) {   /* duplicate point, self-intersecting polygon ? */
+		pprev = (pcur == 0 ? lastpoint - 1 : pcur - 1);
+		if (y[pnext - 1] > y[pprev])
+		    continue;
+	    }
 	}
 	pcur = pnext;          /* a new leftmost lowest vertex */
     }
@@ -280,6 +302,11 @@ double dig_find_poly_orientation(struct line_pnts *Points)
 	else if (y[pnext] == y[pcur]) {    /* just as low */
 	    if (x[pnext] < x[pcur])   	/* but to the left */
 		continue;
+	    if (x[pnext] == x[pcur]) {   /* duplicate point, self-intersecting polygon ? */
+		pprev = (pcur == 0 ? lastpoint - 1 : pcur - 1);
+		if (y[pnext - 1] > y[pprev])
+		    continue;
+	    }
 	}
 	pcur = pnext;          /* a new rightmost lowest vertex */
     }
