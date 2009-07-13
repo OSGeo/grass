@@ -1018,7 +1018,7 @@ int main(int argc, char *argv[])
 	G_debug(3, "%d centroids/areas", ncentr);
 
 	Centr = (CENTR *) G_calloc(ncentr + 1, sizeof(CENTR));
-	Vect_spatial_index_init(&si);
+	Vect_spatial_index_init(&si, 0);
 	for (centr = 1; centr <= ncentr; centr++) {
 	    Centr[centr].valid = 0;
 	    Centr[centr].cats = Vect_new_cats_struct();
@@ -1067,6 +1067,8 @@ int main(int argc, char *argv[])
 	total_area = overlap_area = nocat_area = 0.0;
 	for (centr = 1; centr <= ncentr; centr++) {
 	    double area;
+	    
+	    G_percent(centr, ncentr, 2);
 
 	    area = Vect_get_area_area(&Tmp, centr);
 	    total_area += area;
@@ -1098,6 +1100,8 @@ int main(int argc, char *argv[])
 	}
 	if (Centr)
 	    G_free(Centr);
+	    
+	Vect_spatial_index_destroy(&si);
 
 	/* G_message("%s", separator); */
 	/* Vect_build_partial(&Map, GV_BUILD_NONE); */
@@ -1145,11 +1149,11 @@ int main(int argc, char *argv[])
 
     /* Copy temporary vector to output vector */
     Vect_copy_map_lines(&Tmp, &Map);
+    Vect_close(&Tmp);
+    Vect_delete(tempvect);
 
     Vect_build(&Map);
     Vect_close(&Map);
-    Vect_close(&Tmp);
-    Vect_delete(tempvect);
 
     /* -------------------------------------------------------------------- */
     /*      Extend current window based on dataset.                         */
