@@ -52,8 +52,9 @@
 #% key: prefix
 #% type: string
 #% key_desc: path
-#% description: Prefix where to install extension (default: GISBASE)
-#% required: no
+#% description: Prefix where to install extension
+#% answer: $(HOME)/.grass/addons
+#% required: yes
 #%end
 #%option
 #% key: menuitem
@@ -127,7 +128,11 @@ def cleanup():
     global tmpdir
     grass.try_rmdir(tmpdir)
 
-def install_extension(svnurl, gisbase, module):
+def install_extension(svnurl, prefix, module):
+    gisbase = os.environ['GISBASE']
+    if not gisbase:
+        grass.fatal('$GISBASE not defined')
+    
     if grass.find_program(module):
         grass.warning("Extension '%s' already installed. Will be updated..." % module)
     
@@ -152,17 +157,19 @@ def install_extension(svnurl, gisbase, module):
     # can we write ?
     try:
         # replace with something better
-        file = os.path.join(gisbase, 'test')
+        file = os.path.join(prefix, 'test')
         f = open(file, "w")
         f.close()
         os.remove(file)
         
         ret = grass.call(['make',
                           'MODULE_TOPDIR=%s' % gisbase,
+                          'INST_DIR=%s' % prefix,
                           'install'])
     except IOError:
         ret = grass.call(['sudo', 'make',
                           'MODULE_TOPDIR=%s' % gisbase,
+                          'INST_DIR=%s' % prefix,
                           'install'])
     
     if ret != 0:
@@ -170,14 +177,14 @@ def install_extension(svnurl, gisbase, module):
     else:
         grass.message("Installation of '%s' successfully finished." % module)
 
-def remove_extension(gisbase, module):
+def remove_extension(prefix, module):
     # is module available?
     if not grass.find_program(module):
         grass.fatal("'%s' not found" % module)
     
-    for file in [os.path.join(gisbase, 'bin', module),
-                 os.path.join(gisbase, 'scripts', module),
-                 os.path.join(gisbase, 'docs', 'html', module + '.html')]:
+    for file in [os.path.join(prefix, 'bin', module),
+                 os.path.join(prefix, 'scripts', module),
+                 os.path.join(prefix, 'docs', 'html', module + '.html')]:
         if os.path.isfile(file):
             os.remove(file)
                     
@@ -202,19 +209,25 @@ def main():
         if not options['extension']:
             grass.fatal('You need to define an extension name or use -l')
     
-    module = options['extension']
-    if options['prefix']:
-        gisbase = options['prefix']
-    else:
-        gisbase = os.getenv('GISBASE')
+    # TODO: check more variable
+    if '$(HOME)' in options['prefix']:
+        options['prefix'] = options['prefix'].replace('$(HOME)', os.environ['HOME'])  
 
+    if not os.path.isdir(options['prefix']):
+        try:
+            os.makedirs(options['prefix'])
+        except OSError, e:
+            grass.fatal("Unable to create '%s'\n%s" % (options['prefix'], e))
+            
+        grass.warning("'%s' created" % options['prefix'])
+    
     if options['operation'] == 'add':
-        install_extension(options['svnurl'], gisbase, module)
+        install_extension(options['svnurl'], options['prefix'], options['extension'])
     else: # remove
-        remove_extension(gisbase, module)
+        remove_extension(options['prefix'], options['extension'])
 
     if options['menuitem']:
-        update_menu(options['menuitem'], module, options['operation'])
+        update_menu(options['menuitem'], options['extension'], options['operation'])
     
     return 0
 
