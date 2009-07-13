@@ -212,7 +212,8 @@ Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
 		_("Unable to open vector map <%s> on level %d. "
 		  "Try to rebuild vector topology by v.build."),
 		Vect_get_full_name(Map), level_request);
-	G_warning(_("Unable to read head file of vector <%s>"), Vect_get_full_name(Map));
+	G_warning(_("Unable to read head file of vector <%s>"),
+		  Vect_get_full_name(Map));
     }
 
     G_debug(1, "Level request = %d", level_request);
@@ -229,7 +230,7 @@ Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
 	/* open topo */
 	ret = Vect_open_topo(Map, head_only);
 	if (ret == 1) {		/* topo file is not available */
-	    G_debug(1, "Topo file for vector '%s' not available.",
+	    G_debug(1, "topo file for vector '%s' not available.",
 		    Vect_get_full_name(Map));
 	    level = 1;
 	}
@@ -237,23 +238,25 @@ Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
 	    G_fatal_error(_("Unable to open topology file for vector map <%s>"),
 			  Vect_get_full_name(Map));
 	}
-	/* open spatial index, not needed for head_only */
-	/* spatial index is not loaded anymore */
-	/*
-	   if ( level == 2 && !head_only ) {
-	   if ( Vect_open_spatial_index(Map) == -1 ) {
-	   G_debug( 1, "Cannot open spatial index file for vector '%s'.", Vect_get_full_name (Map) );
-	   dig_free_plus ( &(Map->plus) );
-	   level = 1;
-	   }
-	   }
-	 */
+	/* open spatial index */
+	if (level == 2) {
+	    ret = Vect_open_sidx(Map, (update != 0));
+	    if (ret == 1) {	/* sidx file is not available */
+		G_debug(1, "sidx file for vector '%s' not available.",
+			Vect_get_full_name(Map));
+		level = 1;
+	    }
+	    else if (ret == -1) {
+		G_fatal_error(_("Unable to open spatial index file for vector map <%s>"),
+			      Vect_get_full_name(Map));
+	    }
+	}
 	/* open category index */
 	if (level == 2) {
 	    ret = Vect_cidx_open(Map, head_only);
 	    if (ret == 1) {	/* category index is not available */
 		G_debug(1,
-			"Category index file for vector '%s' not available.",
+			"cidx file for vector '%s' not available.",
 			Vect_get_full_name(Map));
 		dig_free_plus(&(Map->plus));	/* free topology */
 		dig_spidx_free(&(Map->plus));	/* free spatial index */
@@ -356,7 +359,7 @@ Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
 	    fatal_error(ferror, errmsg);
 	    return (-1);
 	}
-	fseek(Map->hist_fp, (off_t)0, SEEK_END);
+	fseek(Map->hist_fp, (off_t) 0, SEEK_END);
 	Vect_hist_write(Map,
 			"---------------------------------------------------------------------------------\n");
 
@@ -445,8 +448,10 @@ Vect_open_update(struct Map_info *Map, const char *name, const char *mapset)
 	Map->plus.n_upnodes = 0;
 	Map->plus.alloc_upnodes = 0;
 
+	/* read spatial index */
+
 	/* Build spatial index from topo */
-	Vect_build_sidx_from_topo(Map);
+	/* Vect_build_sidx_from_topo(Map); */
     }
 
     return ret;
@@ -518,7 +523,7 @@ Vect_open_update_head(struct Map_info *Map, const char *name,
 int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
 {
     int ret, ferror;
-    char errmsg[2000], buf[200];
+    char errmsg[2000], buf[500];
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
     G_debug(2, "Vect_open_new(): name = %s", name);
@@ -582,7 +587,11 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
 
     Open_level = 0;
 
+    /* initialize topo */
     dig_init_plus(&(Map->plus));
+
+    /* initialize spatial index */
+    Vect_open_sidx(Map, 2);
 
     Map->open = VECT_OPEN_CODE;
     Map->level = 1;
@@ -625,7 +634,7 @@ int Vect_coor_info(const struct Map_info *Map, struct Coor_info *Info)
 	    Info->mtime = -1L;
 	}
 	else {
-	    Info->size = (off_t)stat_buf.st_size;	/* file size */
+	    Info->size = (off_t) stat_buf.st_size;	/* file size */
 	    Info->mtime = (long)stat_buf.st_mtime;	/* last modified time */
 	}
 	/* stat does not give correct size on MINGW 
@@ -643,8 +652,8 @@ int Vect_coor_info(const struct Map_info *Map, struct Coor_info *Info)
 	Info->mtime = 0L;
 	break;
     }
-    G_debug(1, "Info->size = %lu, Info->mtime = %ld", (unsigned long) Info->size,
-	    Info->mtime);
+    G_debug(1, "Info->size = %lu, Info->mtime = %ld",
+	    (unsigned long)Info->size, Info->mtime);
 
     return 1;
 }
@@ -727,7 +736,7 @@ int Vect_open_topo(struct Map_info *Map, int head_only)
 	return -1;
 
     G_debug(1, "Topo head: coor size = %lu, coor mtime = %ld",
-	    (unsigned long) Plus->coor_size, Plus->coor_mtime);
+	    (unsigned long)Plus->coor_size, Plus->coor_mtime);
 
     /* do checks */
     err = 0;
@@ -767,73 +776,101 @@ int Vect_open_topo(struct Map_info *Map, int head_only)
  * \brief Open spatial index file
  *
  * \param[in,out] Map vector map
+ * \param mode 0 old, 1 update, 2 new
  *
  * \return 0 on success
  * \return -1 on error
  */
-int Vect_open_spatial_index(struct Map_info *Map)
+int Vect_open_sidx(struct Map_info *Map, int mode)
 {
-    char buf[500];
-    GVFILE fp;
-
-    /* struct Coor_info CInfo; */
+    char buf[500], spidxbuf[500], file_path[2000];
+    int err;
+    struct Coor_info CInfo;
     struct Plus_head *Plus;
+    struct stat info;
 
-    G_debug(1, "Vect_open_spatial_index(): name = %s mapset= %s", Map->name,
-	    Map->mapset);
+    G_debug(1, "Vect_open_sidx(): name = %s mapset= %s mode = %s", Map->name,
+	    Map->mapset, mode == 0 ? "old" : (mode == 1 ? "update" : "new"));
+
+    if (Map->plus.Spidx_built == 1) {
+	G_warning("spatial index already opened");
+	return 0;
+    }
 
     Plus = &(Map->plus);
 
-    sprintf(buf, "%s/%s", GRASS_VECT_DIRECTORY, Map->name);
-    dig_file_init(&fp);
-    fp.file = G_fopen_old(buf, GV_SIDX_ELEMENT, Map->mapset);
+    dig_file_init(&(Map->plus.spidx_fp));
 
-    if (fp.file == NULL) {	/* spatial index file is not available */
-	G_debug(1, "Cannot open spatial index file for vector '%s@%s'.",
-		Map->name, Map->mapset);
-	return -1;
+    if (mode < 2) {
+	sprintf(buf, "%s/%s", GRASS_VECT_DIRECTORY, Map->name);
+	G__file_name(file_path, buf, GV_SIDX_ELEMENT, Map->mapset);
+
+	if (stat(file_path, &info) != 0)	/* does not exist */
+	    return 1;
+
+	Map->plus.spidx_fp.file =
+	    G_fopen_old(buf, GV_SIDX_ELEMENT, Map->mapset);
+
+	if (Map->plus.spidx_fp.file == NULL) {	/* sidx file is not available */
+	    G_debug(1, "Cannot open spatial index file for vector '%s@%s'.",
+		    Map->name, Map->mapset);
+	    return -1;
+	}
+
+	/* get coor info */
+	Vect_coor_info(Map, &CInfo);
+
+	/* initialize spatial index */
+	Map->plus.Spidx_new = 0;
+
+	dig_spidx_init(Plus);
+
+	/* load head */
+	if (dig_Rd_spidx_head(&(Map->plus.spidx_fp), Plus) == -1) {
+	    fclose(Map->plus.spidx_fp.file);
+	    return -1;
+	}
+
+	G_debug(1, "Sidx head: coor size = %lu, coor mtime = %ld",
+		(unsigned long)Plus->coor_size, Plus->coor_mtime);
+
+	/* do checks */
+	err = 0;
+	if (CInfo.size != Plus->coor_size) {
+	    G_warning(_("Size of 'coor' file differs from value saved in sidx file"));
+	    err = 1;
+	}
+	/* Do not check mtime because mtime is changed by copy */
+	/*
+	   if ( CInfo.mtime != Plus->coor_mtime ) {
+	   G_warning ( "Time of last modification for 'coor' file differs from value saved in topo file.\n");
+	   err = 1;
+	   }
+	 */
+	if (err) {
+	    G_warning(_("Please rebuild topology for vector map <%s@%s>"),
+		      Map->name, Map->mapset);
+	    fclose(Map->plus.spidx_fp.file);
+	    return -1;
+	}
     }
 
-    /* TODO: checks */
-    /* load head */
-    /*
-       dig_Rd_spindx_head (fp, Plus);
-       G_debug ( 1, "Spindx head: coor size = %ld, coor mtime = %ld", 
-       Plus->coor_size, Plus->coor_mtime);
+    if (mode) {
+	/* open new spatial index */
+	Map->plus.Spidx_new = 1;
 
-     */
-    /* do checks */
-    /*
-       err = 0;
-       if ( CInfo.size != Plus->coor_size ) {
-       G_warning ( "Size of 'coor' file differs from value saved in topo file.\n");
-       err = 1;
-       }
-     */
-    /* Do not check mtime because mtime is changed by copy */
-    /*
-       if ( CInfo.mtime != Plus->coor_mtime ) {
-       G_warning ( "Time of last modification for 'coor' file differs from value saved in topo file.\n");
-       err = 1;
-       }
-     */
-    /*
-       if ( err ) {
-       G_warning ( "Please rebuild topology for vector '%s@%s'\n", Map->name,
-       Map->mapset );
-       return -1;
-       }
-     */
+	dig_spidx_init(Plus);
 
-    /* load file to the memory */
-    /* dig_file_load ( &fp); */
+	if (mode == 1) {
+	    /* load spatial index for update */
+	    if (dig_Rd_spidx(&(Map->plus.spidx_fp), Plus) == -1) {
+		fclose(Map->plus.spidx_fp.file);
+		return -1;
+	    }
+	}
+    }
 
-    /* load topo to memory */
-    dig_spidx_init(Plus);
-    dig_read_spidx(&fp, Plus);
-
-    fclose(fp.file);
-    /* dig_file_free ( &fp); */
+    Map->plus.Spidx_built = 1;
 
     return 0;
 }
