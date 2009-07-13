@@ -32,6 +32,7 @@
  */
 int dig_init_plus(struct Plus_head *Plus)
 {
+    
     G_debug(3, "dig_init_plus()");
 
     Plus->Version_Major = 0;
@@ -80,7 +81,6 @@ int dig_init_plus(struct Plus_head *Plus)
     Plus->n_klines = 0;
 
     Plus->Node_offset = 0L;
-    Plus->Edge_offset = 0L;
     Plus->Line_offset = 0L;
     Plus->Area_offset = 0L;
     Plus->Isle_offset = 0L;
@@ -88,14 +88,14 @@ int dig_init_plus(struct Plus_head *Plus)
     Plus->Hole_offset = 0L;
 
     Plus->Node_spidx_offset = 0L;
-    Plus->Edge_spidx_offset = 0L;
     Plus->Line_spidx_offset = 0L;
     Plus->Area_spidx_offset = 0L;
     Plus->Isle_spidx_offset = 0L;
+    Plus->Face_spidx_offset = 0L;
     Plus->Volume_spidx_offset = 0L;
     Plus->Hole_spidx_offset = 0L;
 
-    dig_spidx_init(Plus);
+    /* dig_spidx_init(Plus); */
     dig_cidx_init(Plus);
 
     return 1;
@@ -253,7 +253,6 @@ void dig_free_plus(struct Plus_head *Plus)
 int dig_load_plus(struct Plus_head *Plus, GVFILE * plus, int head_only)
 {
     int i;
-
 
     G_debug(1, "dig_load_plus()");
     /* TODO
