@@ -151,7 +151,7 @@ static void split_gisprompt(const char *, char *, char *, char *);
 static void define_keywords(void);
 static void print_keywords(FILE *, void (*)(FILE *, const char *));
 
-static void gui(void);
+static void module_gui_wx(void);
 static void usage_xml(void);
 static void usage_html(void);
 static void script(void);
@@ -873,7 +873,7 @@ int G_parser(int argc, char **argv)
     /* If there are NO arguments, go interactive */
 
     if (argc < 2 && st->has_required && !st->no_interactive && isatty(0)) {
-	gui();
+	module_gui_wx();
 	return -1;
     }
     else if (argc < 2 && st->has_required && isatty(0)) {
@@ -982,7 +982,7 @@ int G_parser(int argc, char **argv)
 
     /* Run the gui if it was specifically requested */
     if (force_gui) {
-	gui();
+	module_gui_wx();
 	return -1;
     }
 
@@ -1866,7 +1866,7 @@ static void script(void)
 /*!
   \brief Invoke GUI dialog 
 */
-static void gui(void)
+static void module_gui_wx(void)
 {
     char script[GPATH_MAX];
 
