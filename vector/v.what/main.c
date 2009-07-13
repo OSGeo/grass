@@ -139,9 +139,6 @@ int main(int argc, char **argv)
 	    if (level < 2)
 		G_fatal_error(_("You must build topology on vector map <%s>"),
 			      vect[i]);
-
-	    G_verbose_message(_("Building spatial index..."));
-	    Vect_build_sidx(&Map[i]);
 	}
     }
 
