@@ -598,7 +598,10 @@ static off_t rtree_write_to_sidx(GVFILE * fp, off_t startpos,
     } s[50];
     int top = 0;
 
-    sidx_nodesize = t->nodesize - MAXCARD * (sizeof(off_t) - off_t_size);
+    /* should be foolproof */
+    sidx_nodesize =
+	(int)(2 * sizeof(int) +
+	      MAXCARD * (off_t_size + NUMSIDES * sizeof(double)));
 
     /* stack size of t->n_levels + 1 would be enough because of depth first search */
     /* only one node per level on stack at any given time */
@@ -634,7 +637,7 @@ static off_t rtree_write_to_sidx(GVFILE * fp, off_t startpos,
 	if (writeout) {
 	    /* write node to sidx file */
 	    if (G_ftell(fp->file) != nextfreepos)
-		G_fatal_error("position mismatch");
+		G_fatal_error("write sidx: wrong node position in file");
 
 	    /* write with dig__fwrite_port_* fns */
 	    dig__fwrite_port_I(&(s[top].sn->count), 1, fp);
