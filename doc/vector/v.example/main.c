@@ -8,7 +8,7 @@
  * PURPOSE:    copies vector data from source map to destination map
  *             prints out all point coordinates and atributes
  *
- * COPYRIGHT:  (C) 2002-2008 by the GRASS Development Team
+ * COPYRIGHT:  (C) 2002-2009 by the GRASS Development Team
  *
  *             This program is free software under the
  *             GNU General Public License (>=v2).
@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
      */
     Vect_check_input_output_name(old->answer, new->answer, GV_FATAL_EXIT);
 
-    if ((mapset = G_find_vector2(old->answer, "")) == NULL)
+    if ((mapset = (char *)G_find_vector2(old->answer, "")) == NULL)
 	G_fatal_error(_("Vector map <%s> not found"), old->answer);
 
     /* Predetermine level at which a map will be opened for reading 

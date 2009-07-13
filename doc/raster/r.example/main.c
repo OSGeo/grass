@@ -7,7 +7,7 @@
  * PURPOSE:      Just copies a raster map, preserving the raster map type
  *               Intended to explain GRASS raster programming
  *
- * COPYRIGHT:    (C) 2002,2005 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002, 2005-2009 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *   	    	 License (>=v2). Read the file COPYING that comes with GRASS
@@ -15,11 +15,11 @@
  *
  *****************************************************************************/
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/raster.h>
 #include <grass/glocale.h>
 
 /* 
@@ -68,14 +68,12 @@ int main(int argc, char *argv[])
     int nrows, ncols;
     int row, col;
     int infd, outfd;		/* file descriptor */
-    int verbose;
     RASTER_MAP_TYPE data_type;	/* type of the map (CELL/DCELL/...) */
     struct History history;	/* holds meta-data (title, comments,..) */
 
     struct GModule *module;	/* GRASS module for parsing arguments */
 
     struct Option *input, *output;	/* options */
-    struct Flag *flag1;		/* flags */
 
     /* initialize GIS environment */
     G_gisinit(argv[0]);		/* reads grass env, stores program name to G_program_name() */
@@ -92,11 +90,6 @@ int main(int argc, char *argv[])
 
     output = G_define_standard_option(G_OPT_R_OUTPUT);
 
-    /* Define the different flags */
-    flag1 = G_define_flag();
-    flag1->key = 'q';
-    flag1->description = _("Quiet");
-
     /* options and flags parser */
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -104,11 +97,10 @@ int main(int argc, char *argv[])
     /* stores options and flags to variables */
     name = input->answer;
     result = output->answer;
-    verbose = (!flag1->answer);
 
     /* returns NULL if the map was not found in any mapset, 
      * mapset name otherwise */
-    mapset = G_find_cell2(name, "");
+    mapset = (char *) G_find_cell2(name, "");
     if (mapset == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), name);
 
@@ -144,8 +136,7 @@ int main(int argc, char *argv[])
 	FCELL f;
 	DCELL d;
 
-	if (verbose)
-	    G_percent(row, nrows, 2);
+	G_percent(row, nrows, 2);
 
 	/* read input map */
 	if (Rast_get_row(infd, inrast, row, data_type) < 0)
