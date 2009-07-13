@@ -84,9 +84,9 @@ int Vect_build_line_area(struct Map_info *Map, int iline, int side)
     }
     APoints->n_points++; /* close polygon */
 
-    /* dig_find_area_poly(APoints, &area_size); */
+    dig_find_area_poly(APoints, &area_size);
 
-    area_size = dig_find_poly_orientation(APoints);
+    /* area_size = dig_find_poly_orientation(APoints); */
     /* area_size is not real area size, we are only interested in the sign */
 
     G_debug(3, "  area/isle size = %f", area_size);
