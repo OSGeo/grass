@@ -12,7 +12,7 @@ ifneq ($(USE_LARGEFILES),)
 endif
 
 RTLINC = $(ARCH_INCDIR)/rtree
-HEADERS := $(RTLINC)/card.h $(RTLINC)/index.h $(RTLINC)/split_q.h \
+HEADERS := $(RTLINC)/card.h $(RTLINC)/index.h $(RTLINC)/split.h \
 	$(ARCH_INCDIR)/rtree.h
 
 default: headers

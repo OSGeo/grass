@@ -8,7 +8,7 @@ OBJECTS = card.o \
 	node.o \
 	rect.o \
 	sphvol.o \
-	split_q.o 
+	split.o 
 
 all: librtree.a test
 
