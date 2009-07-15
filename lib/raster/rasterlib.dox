@@ -34,7 +34,7 @@ name, such as "soils@mapset", where <i>mapset</i> is the mapset where the raster
 map is to be found. Often only the unqualified raster map name is
 provided on the command line and searched in all mapsets indicated in
 the mapset search path (SEARCH_PATH file in the actual mapset; managed
-with "g.mapsets" command).
+with <tt>g.mapsets</tt> command).
 
 The following routines search the database for raster map files:
 
@@ -137,8 +137,8 @@ must be dynamically allocated.
 
  - Rast_allocate_buf()
  - Rast_allocate_c_buf()
- - Rast_allocate_d_buf()
  - Rast_allocate_f_buf()
+ - Rast_allocate_d_buf()
 
 This routine allocates a buffer of type CELL/FCELL/DCELL just large enough
 to hold one row of raster data (based on the number of columns in the active
@@ -170,21 +170,18 @@ Rast_allocate_c_buf().
 
 \section Reading_Raster_Files Reading Raster Files
 
-
 Raster data can be thought of as a two-dimensional matrix. The
 routines described below read one full row of the matrix. It should be
 understood, however, that the number of rows and columns in the matrix
 is determined by the region, not the raster file itself. Raster data
-is always read resampled into the region. This allows the user to
-specify the coverage of the database during analyses. It also allows
-databases to consist of raster files which do not cover exactly the
+is always read resampled (nearest neighbor) into the region. This allows 
+the user to specify the coverage of the database during analyses. It also 
+allows databases to consist of raster files which do not cover exactly the
 same area, or do not have the same grid cell resolution. When raster
 files are resampled into the region, they all "look" the same.
 
 <b>Note:</b> The rows and columns are specified "C style", i.e.,
 starting with 0.
-
-<b>THIS FUNCTION IS DEPRECATED IN GRASS 5! SEE NEXT CHAPTER!</b>
 
  - Rast_get_row()
 
@@ -218,9 +215,6 @@ Mask for more information about the mask.
 
 \subsection Writing_Raster_Files Writing Raster Files
 
-
-\todo <b>Needs updating for GRASS 5!! See later in this file.</b>
-
  - Rast_put_row()
 
 This routine writes one row of raster data from buffer to the raster
@@ -236,21 +230,15 @@ example assumes that the raster file is to be created:
 
 \code
 int fd, row, nrows, ncols;
-
 CELL *buf;
+RASTER_MAP_TYPE data_type;
 
-fd = Rast_open_old("map"); /*...data for the row */
+fd = Rast_open_old(inmap, ""); /*...data for the row */
+data_type = Rast_get_map_type(fd);
 
-Rast_put_row(fd, buf);
+Rast_put_row(fd, buf, data_type);
 \endcode
 
- - Rast_put_row_random()
-
-This routine allows random writes to the raster file open on file
-descriptor. The raster file must have been opened using
-Rast_open_new_random(). The raster buffer contains columns of data
-and is to be written into the raster file at the specified row,
-starting at column.
 
 \subsection Closing_Raster_Files Closing Raster Files
 
@@ -266,9 +254,8 @@ files for the new raster file are created as well.
 <b>Note:</b> If a module wants to explicitly write support files
 (e.g., a specific color table) for a raster file it creates, it must
 do so after the raster file is closed. Otherwise the close will
-overwrite the support files. See \ref
-Raster_Map_Layer_Support_Routines for routines which write raster
-support files.
+overwrite the support files. See \ref Raster_Map_Layer_Support_Routines 
+for routines which write raster support files.
 
  - Rast_unopen()
 
@@ -294,8 +281,8 @@ file, the <em>color</em> table, the <em>history</em> file, and the
 <em>range</em> file. Each support file has its own data structure and
 associated routines.
 
-\section Raster_Header_File Raster Header File
 
+\section Raster_Header_File Raster Header File
 
 The raster header file contains information describing the geographic
 extent of the map layer, the grid cell resolution, and the format used
@@ -304,7 +291,7 @@ described in \ref Raster_Header_Format. The routines described below
 use the <i>Cell_head</i> structure which is shown in detail in \ref
 GIS_Library_Data_Structures.
 
- - G_get_cellhd()
+ - Rast_get_cellhd()
 
 The raster header for the raster file in the specified mapset is read
 into the <em>cellhd</em> structure. If there is an error reading the
@@ -312,8 +299,8 @@ raster header file, a diagnostic message is printed and -1 is
 returned. Otherwise, 0 is returned.
 
 <b>Note:</b> If the raster file is a reclass file, the raster header
-for the referenced raster file is read instead. See \ref
-Reclass_Format for information about reclass files, and Rast_is_reclass()
+for the referenced raster file is read instead. See \ref Reclass_Format
+for information about reclass files, and Rast_is_reclass()
 for distinguishing reclass files from regular raster files.
 
 <b>Note:</b> It is not necessary to get the raster header for a map
@@ -329,7 +316,7 @@ to set the active region using G_set_window().
 This function fills in missing parts of the input cell header (or
 region). It also makes projection-specific adjustments.
 
- - G_put_cellhd()
+ - Rast_put_cellhd()
 
 This routine writes the information from the Cell_head structure to
 the raster header file for the map layer in the current mapset. If
@@ -356,8 +343,8 @@ Rast_put_reclass(). Rast_is_reclassed_to() is used by <tt>g.rename</tt>,
 <tt>g.remove</tt> and <tt>r.reclass</tt> to prevent accidentally
 deleting the parent map of a reclassed raster map.
 
-\section Raster_Category_File Raster Category File
 
+\section Raster_Category_File Raster Category File
 
 GRASS map layers have category labels associated with them. The
 category file is structured so that each category in the raster file
@@ -367,6 +354,7 @@ in \ref Raster_Category_File_Format.
 The routines described below manage the category file. Some of them
 use the <i>Categories</i> structure which is described in \ref
 GIS_Library_Data_Structures.
+
 
 \section Reading_and_Writing_the_Raster_Category_File Reading and Writing the Raster Category File
 
@@ -400,6 +388,7 @@ necessary to read the entire category file into memory, change the
 title, and rewrite the category file. This routine changes the title
 for the raster file in the current mapset directly in the category
 file. It returns a pointer to the title.
+
 
 \section Querying_and_Changing_the_Categories_Structure Querying and Changing the Categories Structure
 
@@ -451,20 +440,20 @@ Copies the title is copied into the cats structure.
 Frees memory allocated by Rast_read_cats(), Rast_init_cats() and
 Rast_set_cat().
 
-\section Raster_Color_Table Raster Color Table
 
+\section Raster_Color_Table Raster Color Table
 
 GRASS map layers have colors associated with them. The color tables
 are structured so that each category in the raster file has its own
-color. The format of this file is described in \ref
-Raster_Color_Table_Format.
+color. The format of this file is described in
+\ref Raster_Color_Table_Format.
 
 The routines that manipulate the raster color file use the
-<i>Colors</i> structure which is described in detail in \ref
-GIS_Library_Data_Structures.
+<i>Colors</i> structure which is described in detail in 
+\ref GIS_Library_Data_Structures.
+
 
 \section Reading_and_Writing_the_Raster_Color_File Reading and Writing the Raster Color File
-
 
 The following routines read, create, modify, and write color tables.
 
@@ -499,6 +488,7 @@ table. But if <em>mapset</em> is not the current mapset, then the
 color table is actually written in the current mapset under the
 <tt>colr2</tt> element as: <tt>colr2/mapset/name</tt>.
 
+
 \section Lookup_Up_Raster_Colors Lookup Up Raster Colors
 
 These routines translates raster values to their respective colors.
@@ -509,13 +499,14 @@ Extracts colors for an array of raster values. The colors from the
 raster array are stored in the red, green, and blue arrays.
 
 <b>Note:</b> The red, green, and blue intensities will be in the range
-0 -� 255.
+0-255.
 
  - Rast_get_color()
 
 Get a category color. The red, green, and blue intensities for the
 color associated with category are extracted from the colors
-structure. The intensities will be in the range 0 �- 255.
+structure. The intensities will be in the range 0-255.
+
 
 \section Creating_and_or_Modifying_the_Color_Table Creating and/or Modifying the Color Table
 
@@ -527,17 +518,17 @@ modification of existing tables.
 Initialize <i>colors</i> structure for subsequent calls
 Rast_add_color_rule() and Rast_set_color().
 
-int Rast_add_color_rule()
+ - Rast_add_color_rule()
 
-This is the heart and soul of the new color logic. It adds a color
+This is the heart and soul of the color logic. It adds a color
 rule to the <em>colors</em> structure. The colors defined by the red,
 green, and blue values are assigned to the categories
 respectively. Colors for data values between two categories are not
 stored in the structure but are interpolated when queried by
-Rast_lookup_colors() Rast_get_color(). The color components must be in the
-range 0 - 255.
+Rast_lookup_colors() and Rast_get_color(). The color components must be in the
+range 0-255.
 
-For example, to create a linear grey scale for the range 200 - 1000:
+For example, to create a linear grey scale for the range 200-1000:
 
 \code
 struct Colors colr;
@@ -547,8 +538,7 @@ Rast_init_colors (&colr) ;
 Rast_add_color_rule ((CELL) 200, 0,0,0,(CELL) 1000, 255,255,255) ;
 \endcode
 
-The programmer is encouraged to review \ref Raster_Color_Table_Format
-how this routine fits into the 5.x raster color logic.
+The programmer is encouraged to review \ref Raster_Color_Table_Format.
 
 <b>Note:</b> The <em>colors</em> structure must have been initialized
 by Rast_init_colors(). See \ref Predefined_Color_Tables for routines to
@@ -557,8 +547,8 @@ build some predefined color tables.
  - Rast_set_color()
 
 Set a category color. The red, green, and blue intensities for the
-color associated with category The intensities must be in the range 0
--� 255. Values below zero are set as zero, values above 255 are set as
+color associated with category The intensities must be in the range 
+0-255. Values below zero are set as zero, values above 255 are set as
 255.
 
 <b>Warning:</b> Use of this routine is discouraged because it defeats
@@ -583,8 +573,8 @@ structure.
 <b>Note:</b> This routine may be used after Rast_read_colors() as well as
 after Rast_init_colors().
 
-\section Predefined_Color_Tables Predefined Color Tables
 
+\section Predefined_Color_Tables Predefined Color Tables
 
 The following routines generate entire color tables. The tables are
 loaded into a <i>colors</i> structure based on a range of category
@@ -642,10 +632,11 @@ Generates a color table that goes from green to yellow to red.
 
  - Rast_make_histogram_eq_colors()
 
-Generates a histogram contrast-stretched grey scale color table that goes from the, histogram information.
+Generates a histogram contrast-stretched grey scale color table that goes
+from the, histogram information.
+
 
 \section Raster_History_File Raster History File
-
 
 The history file contains documentary information about the raster
 file: who created it, when it was created, what was the original data
@@ -686,8 +677,8 @@ the raster map.
 <b>Note:</b> This routine only initializes the data structure. It does
 not write the history file.
 
-\section Raster_Range_File Raster Range File
 
+\section Raster_Range_File Raster Range File
 
 The following routines manage the raster range file. This file
 contains the minimum and maximum values found in the raster file. The
@@ -734,6 +725,7 @@ The range structure is queried using the following routine:
 
 Get range minimum and maximum value.
 
+
 \section Raster_Histograms Raster Histograms
 
 The following routines provide a relatively efficient mechanism for
@@ -760,7 +752,7 @@ This next routine stores values in the histogram:
  - Rast_update_cell_stats()
 
 Adds data to cell stats. Once all values are stored, the structure may
-be queried either randomly (ie. search for a specific raster value) or
+be queried either randomly (i.e., search for a specific raster value) or
 sequentially (retrieve all raster values, in ascending order, and
 their related count):
 
@@ -1608,6 +1600,7 @@ Writes the <tt>f_quant</tt> file for the raster map.
 
 Writes the <tt>f_quant</TT> file for the raster map with one rule. 
 
+
 \section Categories_Labeling_Functions Categories Labeling Functions (new and upgraded)
 
 \subsection Upgraded_Categories_structure Upgraded Categories structure
@@ -1859,7 +1852,7 @@ instead.
 
 <b>TODO: Reorder functions</b>
 
- - Rast_cell_size()
+\subsection MemoryAllocation Memory allocation
  - Rast_allocate_c_buf()
  - Rast_allocate_f_buf()
  - Rast_allocate_d_buf()
@@ -1869,8 +1862,24 @@ TODO: used in r.null and r.support, why Rast__ and not Rast_?
  - Rast__allocate_null_bits()
  - Rast__null_bitstream_size()
 
+\subsection RasterMask Raster Mask
  - Rast_suppress_masking()
  - Rast_unsuppress_masking()
+
+\subsection RasterStatistics Raster statistics
+ - Rast_cell_size()
+ - Rast_init_cell_stats()
+ - Rast_update_cell_stats()
+ - Rast_find_cell_stat()
+ - Rast_rewind_cell_stats()
+ - Rast_next_cell_stat()
+ - Rast_get_stats_for_null_value()
+ - Rast_free_cell_stats()
+ - Rast_cell_stats_histo_eq()
+ - Rast_get_cell_title()
+ - Rast_cell_stats_histo_eq()
+
+\subsection RasterCategories Raster category management
  - Rast_read_cats()
  - Rast_get_max_cat()
  - Rast_get_cats_title()
@@ -1903,18 +1912,12 @@ TODO: used in r.null and r.support, why Rast__ and not Rast_?
  - Rast_copy_cats()
  - Rast_number_of_cats()
  - Rast_sort_cats()
- - Rast_init_cell_stats()
- - Rast_update_cell_stats()
- - Rast_find_cell_stat()
- - Rast_rewind_cell_stats()
- - Rast_next_cell_stat()
- - Rast_get_stats_for_null_value()
- - Rast_free_cell_stats()
- - Rast_cell_stats_histo_eq()
- - Rast_get_cell_title()
- - Rast_cell_stats_histo_eq()
+
+\subsection RasterFileManagement Raster file management
  - Rast_close()
  - Rast_unopen()
+
+\subsection ColorFunctions Color functions
  - Rast_make_ryg_colors()
  - Rast_make_ryg_fp_colors()
  - Rast_make_aspect_colors()
@@ -1983,6 +1986,8 @@ TODO: used in r.null and r.support, why Rast__ and not Rast_?
  - Rast_shift_c_colors()
  - Rast_shift_d_colors()
  - Rast_write_colors()
+
+\subsection RasterFloatingPointManagement Raster floating point management
  - Rast_fpreclass_clear()
  - Rast_fpreclass_reset()
  - Rast_fpreclass_init()
@@ -2007,6 +2012,8 @@ TODO: used in r.null and r.support, why Rast__ and not Rast_?
  - Rast_fpreclass_perform_ii()
  - Rast_fpreclass_perform_if()
  - Rast_fpreclass_perform_id()
+
+\subsection RasterMapReading Raster map reading
  - Rast_get_cellhd()
  - Rast_get_row_nomask()
  - Rast_get_c_row_nomask()
@@ -2018,6 +2025,8 @@ TODO: used in r.null and r.support, why Rast__ and not Rast_?
  - Rast_get_d_row()
  - Rast_get_null_value_row()
  - Rast_get_row_colors()
+
+\subsection RasterMapHistogram Raster map histogram
  - Rast_histogram_eq()
  - Rast_init_histogram()
  - Rast_read_histogram()
@@ -2035,49 +2044,21 @@ TODO: used in r.null and r.support, why Rast__ and not Rast_?
  - Rast_set_histogram()
  - Rast_extend_histogram()
  - Rast_zero_histogram()
+ - Rast_want_histogram()
+
+\subsection RasterMapHistory Raster map history
  - Rast_read_history()
  - Rast_write_history()
  - Rast_short_history()
  - Rast_command_history()
+
+\subsection RasterMapInterpolation Raster map interpolation
  - Rast_interp_linear()
  - Rast_interp_bilinear()
  - Rast_interp_cubic()
  - Rast_interp_bicubic()
- - Rast_maskfd()
- - Rast_mask_info()
- - Rast_set_null_value()
- - Rast_set_c_null_value()
- - Rast_set_f_null_value()
- - Rast_set_d_null_value()
- - Rast_is_null_value()
- - Rast_is_c_null_value()
- - Rast_is_f_null_value()
- - Rast_is_d_null_value()
- - Rast_insert_null_values()
- - Rast_insert_c_null_values()
- - Rast_insert_f_null_values()
- - Rast_insert_d_null_values()
- - Rast_open_old()
- - Rast_open_c_new()
- - Rast_open_c_new_uncompressed()
- - Rast_want_histogram()
- - Rast_set_cell_format()
- - Rast_get_cell_format()
- - Rast_open_fp_new()
- - Rast_open_fp_new_uncompressed()
- - Rast_set_fp_type()
- - Rast_map_is_fp()
- - Rast_map_type()
- - Rast_get_map_type()
- - Rast_open_new()
- - Rast_open_new_uncompressed()
- - Rast_set_quant_rules()
- - Rast_put_cellhd()
- - Rast_put_row()
- - Rast_put_c_row()
- - Rast_put_f_row()
- - Rast_put_d_row()
- - Rast_put_cell_title()
+
+\subsection RasterMapQuantization Raster map quantization
  - Rast_quant_clear()
  - Rast_quant_free()
  - Rast_quant_init()
@@ -2097,12 +2078,48 @@ TODO: used in r.null and r.support, why Rast__ and not Rast_?
  - Rast_quant_get_cell_value()
  - Rast_quant_perform_d()
  - Rast_quant_perform_f()
- - Rast_truncate_fp_map()
- - Rast_round_fp_map()
  - Rast_quantize_fp_map()
  - Rast_quantize_fp_map_range()
  - Rast_write_quant()
  - Rast_read_quant()
+
+\subsection ToDo yet unsorted functions
+ - Rast_maskfd()
+ - Rast_mask_info()
+ - Rast_set_null_value()
+ - Rast_set_c_null_value()
+ - Rast_set_f_null_value()
+ - Rast_set_d_null_value()
+ - Rast_is_null_value()
+ - Rast_is_c_null_value()
+ - Rast_is_f_null_value()
+ - Rast_is_d_null_value()
+ - Rast_insert_null_values()
+ - Rast_insert_c_null_values()
+ - Rast_insert_f_null_values()
+ - Rast_insert_d_null_values()
+ - Rast_open_old()
+ - Rast_open_c_new()
+ - Rast_open_c_new_uncompressed()
+ - Rast_set_cell_format()
+ - Rast_get_cell_format()
+ - Rast_open_fp_new()
+ - Rast_open_fp_new_uncompressed()
+ - Rast_set_fp_type()
+ - Rast_map_is_fp()
+ - Rast_map_type()
+ - Rast_get_map_type()
+ - Rast_open_new()
+ - Rast_open_new_uncompressed()
+ - Rast_set_quant_rules()
+ - Rast_put_cellhd()
+ - Rast_put_row()
+ - Rast_put_c_row()
+ - Rast_put_f_row()
+ - Rast_put_d_row()
+ - Rast_put_cell_title()
+ - Rast_truncate_fp_map()
+ - Rast_round_fp_map()
  - Rast_construct_default_range()
  - Rast_read_fp_range()
  - Rast_read_range()
