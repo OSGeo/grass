@@ -355,6 +355,7 @@ struct GDAL_link *Rast_create_gdal_link(const char *name,
     struct Key_Value *key_val;
     char buf[32];
 
+    Rast__init();
 
     Rast_init_gdal();
 

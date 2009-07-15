@@ -115,6 +115,8 @@ void Rast__create_window_mapping(int fd)
  */
 void Rast__init_window(void)
 {
+    Rast__init();
+
     if (G_is_initialized(&R__.window_set))
 	return;
 

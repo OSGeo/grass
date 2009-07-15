@@ -168,6 +168,8 @@ int Rast__open_old(const char *name, const char *mapset)
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
     struct GDAL_link *gdal;
 
+    Rast__init();
+
     /* make sure window is set    */
     Rast__init_window();
 
@@ -564,6 +566,8 @@ static int G__open_raster_new(const char *name, int open_mode,
     const char *cell_dir;
     int nbytes;
 
+    Rast__init();
+
     switch (map_type) {
     case CELL_TYPE:
 	cell_dir = "cell";
@@ -729,6 +733,8 @@ static int G__open_raster_new(const char *name, int open_mode,
  */
 int Rast_set_fp_type(RASTER_MAP_TYPE map_type)
 {
+    Rast__init();
+
     switch (map_type) {
     case FCELL_TYPE:
     case DCELL_TYPE:

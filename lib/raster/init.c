@@ -44,10 +44,7 @@ static int init(void);
 
 void Rast_init(void)
 {
-    if (initialized)
-	return;
-
-    init();
+    Rast__init();
 }
 
 
@@ -65,6 +62,14 @@ void Rast__check_init(void)
     G_fatal_error(_("Raster library not initialized. Programmer forgot to call Rast_init()."));
 }
 
+
+void Rast__init(void)
+{
+    if (G_is_initialized(&initialized))
+	return;
+    init();
+    G_initialize_done(&initialized);
+}
 
 static int init(void)
 {
@@ -87,6 +92,7 @@ static int init(void)
 
 void Rast_init_all(void)
 {
+    Rast__init();
     Rast__check_for_auto_masking();
     Rast_init_gdal();
 }
