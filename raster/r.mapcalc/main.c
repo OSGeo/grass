@@ -106,6 +106,7 @@ int main(int argc, char **argv)
     int all_ok;
 
     G_gisinit(argv[0]);
+    Rast_init();
 
     module = G_define_module();
     G_add_keyword(_("raster"));
