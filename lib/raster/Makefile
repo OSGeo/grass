@@ -35,7 +35,7 @@ endif
 
 default: lib
 
-DOXNAME = rasterlib
+DOXNAME = raster
 
 $(OBJDIR)/auto_mask.o: R.h
 $(OBJDIR)/closecell.o: R.h
