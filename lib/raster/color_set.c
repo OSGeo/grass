@@ -76,7 +76,8 @@ void Rast_set_d_color(DCELL val, int r, int g, int b, struct Colors *colors)
  * \param blu blue value
  * \param colors pointer to Colors structure which holds color info
  */
-void Rast_set_null_value_color(int red, int grn, int blu, struct Colors *colors)
+void Rast_set_null_value_color(int red, int grn, int blu,
+			       struct Colors *colors)
 {
     colors->null_red = red;
     colors->null_grn = grn;

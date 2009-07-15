@@ -30,7 +30,7 @@
  * \param stalf pointer to Cell_stats structure which holds cell stats info
  */
 void Rast_make_histogram_eq_colors(struct Colors *colors,
-				struct Cell_stats *statf)
+				   struct Cell_stats *statf)
 {
     long count, total;
     CELL prev = 0, cat, val2;
@@ -88,18 +88,19 @@ void Rast_make_histogram_eq_colors(struct Colors *colors,
 }
 
 /*!
-  \brief Generates histogram with normalized log transformed grey scale.
+   \brief Generates histogram with normalized log transformed grey scale.
 
-  Generates histogram with normalized log transformed grey scale from
-  cell stats structure info. Color range is 0-255.
+   Generates histogram with normalized log transformed grey scale from
+   cell stats structure info. Color range is 0-255.
 
-  \param colors pointer to Colors structure which holds color info
-  \param stalf pointer to Cell_stats structure which holds cell stats info
-  \param min minimum value
-  \param max maximum value
-*/
+   \param colors pointer to Colors structure which holds color info
+   \param stalf pointer to Cell_stats structure which holds cell stats info
+   \param min minimum value
+   \param max maximum value
+ */
 void Rast_make_histogram_log_colors(struct Colors *colors,
-				 struct Cell_stats *statf, int min, int max)
+				    struct Cell_stats *statf, int min,
+				    int max)
 {
     long count, total;
     double lmin, lmax;

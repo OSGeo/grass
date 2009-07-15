@@ -34,8 +34,8 @@ static void add_color_rule(const void *, int, int, int,
  *  \param[in,out] colors pointer to color table structure
  *  \return
  */
-void Rast_add_d_color_rule(const DCELL *val1, int r1, int g1, int b1,
-			   const DCELL *val2, int r2, int g2, int b2,
+void Rast_add_d_color_rule(const DCELL * val1, int r1, int g1, int b1,
+			   const DCELL * val2, int r2, int g2, int b2,
 			   struct Colors *colors)
 {
     add_color_rule(val1, r1, g1, b1, val2, r2, g2, b2, &colors->fixed,
@@ -55,8 +55,8 @@ void Rast_add_d_color_rule(const DCELL *val1, int r1, int g1, int b1,
  *  \param[in,out] colors pointer to color table structure
  *  \return
  */
-void Rast_add_f_color_rule(const FCELL *cat1, int r1, int g1, int b1,
-			   const FCELL *cat2, int r2, int g2, int b2,
+void Rast_add_f_color_rule(const FCELL * cat1, int r1, int g1, int b1,
+			   const FCELL * cat2, int r2, int g2, int b2,
 			   struct Colors *colors)
 {
     add_color_rule(cat1, r1, g1, b1, cat2, r2, g2, b2, &colors->fixed,
@@ -76,8 +76,8 @@ void Rast_add_f_color_rule(const FCELL *cat1, int r1, int g1, int b1,
  *  \param[in,out] colors pointer to color table structure
  *  \return
  */
-void Rast_add_c_color_rule(const CELL *cat1, int r1, int g1, int b1,
-			   const CELL *cat2, int r2, int g2, int b2,
+void Rast_add_c_color_rule(const CELL * cat1, int r1, int g1, int b1,
+			   const CELL * cat2, int r2, int g2, int b2,
 			   struct Colors *colors)
 {
     add_color_rule(cat1, r1, g1, b1, cat2, r2, g2, b2, &colors->fixed,
@@ -127,8 +127,8 @@ void Rast_add_color_rule(const void *val1, int r1, int g1, int b1,
  * \return -1 on failure
  * \return 1 on success
  */
-int Rast_add_modular_d_color_rule(const DCELL *val1, int r1, int g1, int b1,
-				  const DCELL *val2, int r2, int g2, int b2,
+int Rast_add_modular_d_color_rule(const DCELL * val1, int r1, int g1, int b1,
+				  const DCELL * val2, int r2, int g2, int b2,
 				  struct Colors *colors)
 {
     DCELL min, max;
@@ -157,8 +157,8 @@ int Rast_add_modular_d_color_rule(const DCELL *val1, int r1, int g1, int b1,
  * \return -1 on failure
  * \return 1 on success
  */
-int Rast_add_modular_f_color_rule(const FCELL *val1, int r1, int g1, int b1,
-				  const FCELL *val2, int r2, int g2, int b2,
+int Rast_add_modular_f_color_rule(const FCELL * val1, int r1, int g1, int b1,
+				  const FCELL * val2, int r2, int g2, int b2,
 				  struct Colors *colors)
 {
     DCELL min, max;
@@ -187,8 +187,8 @@ int Rast_add_modular_f_color_rule(const FCELL *val1, int r1, int g1, int b1,
  * \return -1 on failure
  * \return 1 on success
  */
-int Rast_add_modular_c_color_rule(const CELL *val1, int r1, int g1, int b1,
-				  const CELL *val2, int r2, int g2, int b2,
+int Rast_add_modular_c_color_rule(const CELL * val1, int r1, int g1, int b1,
+				  const CELL * val2, int r2, int g2, int b2,
 				  struct Colors *colors)
 {
     CELL min, max;
@@ -224,7 +224,8 @@ int Rast_add_modular_c_color_rule(const CELL *val1, int r1, int g1, int b1,
  */
 int Rast_add_modular_color_rule(const void *val1, int r1, int g1, int b1,
 				const void *val2, int r2, int g2, int b2,
-				struct Colors *colors, RASTER_MAP_TYPE data_type)
+				struct Colors *colors,
+				RASTER_MAP_TYPE data_type)
 {
     CELL min, max;
 
@@ -338,7 +339,7 @@ static void add_color_rule(const void *pt1, int r1, int g1, int b1,
 	for (cat = (CELL) min; cat <= (CELL) max; cat++) {
 	    Rast__interpolate_color_rule((DCELL) cat, &red, &grn, &blu, rule);
 	    Rast__insert_color_into_lookup(cat, (int)red, (int)grn, (int)blu,
-					cp);
+					   cp);
 	}
 	G_free(rule);
     }

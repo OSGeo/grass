@@ -341,8 +341,8 @@ static void fpreclass_update_limits(struct FPReclass *r,
 /*--------------------------------------------------------------------------*/
 
 int Rast_fpreclass_get_limits(const struct FPReclass *r,
-			   DCELL * dMin, DCELL * dMax,
-			   DCELL * rMin, DCELL * rMax)
+			      DCELL * dMin, DCELL * dMax,
+			      DCELL * rMin, DCELL * rMax)
 {
     if (NO_EXPLICIT_RULE) {
 	if (NO_DEFAULT_RULE)
@@ -381,8 +381,8 @@ int Rast_fpreclass_nof_rules(const struct FPReclass *r)
 /*--------------------------------------------------------------------------*/
 
 void Rast_fpreclass_get_ith_rule(const struct FPReclass *r, int i,
-			      DCELL *dLow, DCELL *dHigh,
-			      DCELL *rLow, DCELL *rHigh)
+				 DCELL * dLow, DCELL * dHigh,
+				 DCELL * rLow, DCELL * rHigh)
 {
     *dLow = r->table[i].dLow;
     *dHigh = r->table[i].dHigh;
@@ -413,7 +413,8 @@ static void fpreclass_table_increase(struct FPReclass *r)
 /*--------------------------------------------------------------------------*/
 
 void
-Rast_fpreclass_set_neg_infinite_rule(struct FPReclass *r, DCELL dLeft, DCELL c)
+Rast_fpreclass_set_neg_infinite_rule(struct FPReclass *r, DCELL dLeft,
+				     DCELL c)
 {
     r->infiniteDLeft = dLeft;
     r->infiniteRLeft = c;
@@ -424,7 +425,7 @@ Rast_fpreclass_set_neg_infinite_rule(struct FPReclass *r, DCELL dLeft, DCELL c)
 /*--------------------------------------------------------------------------*/
 
 int Rast_fpreclass_get_neg_infinite_rule(const struct FPReclass *r,
-				      DCELL *dLeft, DCELL *c)
+					 DCELL * dLeft, DCELL * c)
 {
     if (r->infiniteLeftSet == 0)
 	return 0;
@@ -437,7 +438,8 @@ int Rast_fpreclass_get_neg_infinite_rule(const struct FPReclass *r,
 
 /*--------------------------------------------------------------------------*/
 
-void Rast_fpreclass_set_pos_infinite_rule(struct FPReclass *r, DCELL dRight, DCELL c)
+void Rast_fpreclass_set_pos_infinite_rule(struct FPReclass *r, DCELL dRight,
+					  DCELL c)
 {
     r->infiniteDRight = dRight;
     r->infiniteRRight = c;
@@ -448,7 +450,7 @@ void Rast_fpreclass_set_pos_infinite_rule(struct FPReclass *r, DCELL dRight, DCE
 /*--------------------------------------------------------------------------*/
 
 int Rast_fpreclass_get_pos_infinite_rule(const struct FPReclass *r,
-				      DCELL *dRight, DCELL *c)
+					 DCELL * dRight, DCELL * c)
 {
     if (r->infiniteRightSet == 0)
 	return 0;
@@ -462,8 +464,7 @@ int Rast_fpreclass_get_pos_infinite_rule(const struct FPReclass *r,
 /*--------------------------------------------------------------------------*/
 
 void Rast_fpreclass_add_rule(struct FPReclass *r,
-			  DCELL dLow, DCELL dHigh,
-			  DCELL rLow, DCELL rHigh)
+			     DCELL dLow, DCELL dHigh, DCELL rLow, DCELL rHigh)
 {
     int i;
     struct FPReclass_table *p;
@@ -524,10 +525,8 @@ void Rast_fpreclass_reverse_rule_order(struct FPReclass *r)
 
 /*--------------------------------------------------------------------------*/
 
-static DCELL fpreclass_interpolate(
-    DCELL dLow, DCELL dHigh,
-    DCELL rLow, DCELL rHigh,
-    DCELL dValue)
+static DCELL fpreclass_interpolate(DCELL dLow, DCELL dHigh,
+				   DCELL rLow, DCELL rHigh, DCELL dValue)
 {
     if (rLow == rHigh)
 	return rLow;
@@ -539,7 +538,8 @@ static DCELL fpreclass_interpolate(
 
 /*--------------------------------------------------------------------------*/
 
-static DCELL fpreclass_get_default_cell_value(const struct FPReclass *r, DCELL cellVal)
+static DCELL fpreclass_get_default_cell_value(const struct FPReclass *r,
+					      DCELL cellVal)
 {
     DCELL tmp;
 
@@ -590,7 +590,7 @@ DCELL Rast_fpreclass_get_cell_value(const struct FPReclass * r, DCELL cellVal)
 /*--------------------------------------------------------------------------*/
 
 void Rast_fpreclass_perform_di(const struct FPReclass *r,
-			    const DCELL *dcell, CELL *cell, int n)
+			       const DCELL * dcell, CELL * cell, int n)
 {
     int i;
 
@@ -604,7 +604,7 @@ void Rast_fpreclass_perform_di(const struct FPReclass *r,
 /*--------------------------------------------------------------------------*/
 
 void Rast_fpreclass_perform_df(const struct FPReclass *r,
-			    const DCELL *dcell, FCELL *cell, int n)
+			       const DCELL * dcell, FCELL * cell, int n)
 {
     int i;
 
@@ -618,7 +618,7 @@ void Rast_fpreclass_perform_df(const struct FPReclass *r,
 /*--------------------------------------------------------------------------*/
 
 void Rast_fpreclass_perform_dd(const struct FPReclass *r,
-			    const DCELL *dcell, DCELL *cell, int n)
+			       const DCELL * dcell, DCELL * cell, int n)
 {
     int i;
 
@@ -632,7 +632,7 @@ void Rast_fpreclass_perform_dd(const struct FPReclass *r,
 /*--------------------------------------------------------------------------*/
 
 void Rast_fpreclass_perform_fi(const struct FPReclass *r,
-			    const FCELL *fcell, CELL *cell, int n)
+			       const FCELL * fcell, CELL * cell, int n)
 {
     int i;
 
@@ -646,7 +646,7 @@ void Rast_fpreclass_perform_fi(const struct FPReclass *r,
 /*--------------------------------------------------------------------------*/
 
 void Rast_fpreclass_perform_ff(const struct FPReclass *r,
-			    const FCELL *fcell, FCELL *cell, int n)
+			       const FCELL * fcell, FCELL * cell, int n)
 {
     int i;
 
@@ -660,7 +660,7 @@ void Rast_fpreclass_perform_ff(const struct FPReclass *r,
 /*--------------------------------------------------------------------------*/
 
 void Rast_fpreclass_perform_fd(const struct FPReclass *r,
-			    const FCELL *fcell, DCELL *cell, int n)
+			       const FCELL * fcell, DCELL * cell, int n)
 {
     int i;
 
@@ -674,7 +674,7 @@ void Rast_fpreclass_perform_fd(const struct FPReclass *r,
 /*--------------------------------------------------------------------------*/
 
 void Rast_fpreclass_perform_ii(const struct FPReclass *r,
-			    const CELL *icell, CELL *cell, int n)
+			       const CELL * icell, CELL * cell, int n)
 {
     int i;
 
@@ -688,7 +688,7 @@ void Rast_fpreclass_perform_ii(const struct FPReclass *r,
 /*--------------------------------------------------------------------------*/
 
 void Rast_fpreclass_perform_if(const struct FPReclass *r,
-			    const CELL *icell, FCELL *cell, int n)
+			       const CELL * icell, FCELL * cell, int n)
 {
     int i;
 
@@ -702,7 +702,7 @@ void Rast_fpreclass_perform_if(const struct FPReclass *r,
 /*--------------------------------------------------------------------------*/
 
 void Rast_fpreclass_perform_id(const struct FPReclass *r,
-			    const CELL *icell, DCELL *cell, int n)
+			       const CELL * icell, DCELL * cell, int n)
 {
     int i;
 

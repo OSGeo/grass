@@ -72,7 +72,8 @@ int Rast_raster_cmp(const void *v1, const void *v2, RASTER_MAP_TYPE data_type)
  * \param n ?
  * \param data_type raster type (CELL, FCELL, DCELL)
  */
-void Rast_raster_cpy(void *v1, const void *v2, int n, RASTER_MAP_TYPE data_type)
+void Rast_raster_cpy(void *v1, const void *v2, int n,
+		     RASTER_MAP_TYPE data_type)
 {
     G_copy(v1, v2, n * Rast_cell_size(data_type));
 }
@@ -206,9 +207,9 @@ CELL Rast_get_c_value(const void *rast, RASTER_MAP_TYPE data_type)
     case CELL_TYPE:
 	return *((const CELL *)rast);
     case FCELL_TYPE:
-	return (CELL) *((const FCELL *)rast);
+	return (CELL) * ((const FCELL *)rast);
     case DCELL_TYPE:
-	return (CELL) *((const DCELL *)rast);
+	return (CELL) * ((const DCELL *)rast);
     }
 
     return 0;

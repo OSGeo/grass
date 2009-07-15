@@ -128,8 +128,8 @@ static void organize_lookup(struct Colors *colors, int mod)
 
     G_zero(cp->lookup.set, n * sizeof(unsigned char));
     Rast__lookup_colors((void *)cat,
-		     cp->lookup.red, cp->lookup.grn, cp->lookup.blu,
-		     cp->lookup.set, n, colors, mod, 1, CELL_TYPE);
+			cp->lookup.red, cp->lookup.grn, cp->lookup.blu,
+			cp->lookup.set, n, colors, mod, 1, CELL_TYPE);
 
     cp->lookup.active = 1;
 }

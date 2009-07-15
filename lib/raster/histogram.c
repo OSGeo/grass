@@ -43,7 +43,7 @@ void Rast_init_histogram(struct Histogram *histogram)
  */
 
 int Rast_read_histogram(const char *name, const char *mapset,
-		     struct Histogram *histogram)
+			struct Histogram *histogram)
 {
     FILE *fd = NULL;
     long cat;
@@ -159,7 +159,8 @@ int Rast_write_histogram_cs(const char *name, struct Cell_stats *statf)
  * \param histogram: raster histogram
  * \return 
  */
-void Rast_make_histogram_cs(struct Cell_stats *statf, struct Histogram *histogram)
+void Rast_make_histogram_cs(struct Cell_stats *statf,
+			    struct Histogram *histogram)
 {
     CELL cat;
     long count;
@@ -433,8 +434,7 @@ void Rast_extend_histogram(CELL cat, long count, struct Histogram *histogram)
 {
     histogram->num++;
     histogram->list =
-	(LIST *) G_realloc(histogram->list,
-			   histogram->num * sizeof(LIST));
+	(LIST *) G_realloc(histogram->list, histogram->num * sizeof(LIST));
     histogram->list[histogram->num - 1].cat = cat;
     histogram->list[histogram->num - 1].count = count;
 }

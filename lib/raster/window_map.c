@@ -96,10 +96,10 @@ void Rast__create_window_mapping(int fd)
     }
 
     G_debug(3, "create window mapping (%d columns)", R__.window.cols);
-/*  for (i = 0; i < R__.window.cols; i++)
-	fprintf(stderr, "%s%ld", i % 15 ? " " : "\n", (long)fcb->col_map[i]);
-    fprintf(stderr, "\n");
-*/
+    /*  for (i = 0; i < R__.window.cols; i++)
+       fprintf(stderr, "%s%ld", i % 15 ? " " : "\n", (long)fcb->col_map[i]);
+       fprintf(stderr, "\n");
+     */
 
     /* compute C1,C2 for row window mapping */
     fcb->C1 = R__.window.ns_res / fcb->cellhd.ns_res;

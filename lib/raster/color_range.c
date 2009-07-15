@@ -16,11 +16,11 @@
 #include <grass/raster.h>
 
 /*!
-  \brief Set color range (CELL version)
-  
-  \param min,max minimum and maximum value
-  \param colors pointer to Colors structure which holds color info
-*/
+   \brief Set color range (CELL version)
+
+   \param min,max minimum and maximum value
+   \param colors pointer to Colors structure which holds color info
+ */
 void Rast_set_c_color_range(CELL min, CELL max, struct Colors *colors)
 {
     if (min < max) {
@@ -34,11 +34,11 @@ void Rast_set_c_color_range(CELL min, CELL max, struct Colors *colors)
 }
 
 /*!
-  \brief Set color range (DCELL version)
+   \brief Set color range (DCELL version)
 
-  \param min,max minimum and maximum value
-  \param colors pointer to Colors structure which holds color info
-*/
+   \param min,max minimum and maximum value
+   \param colors pointer to Colors structure which holds color info
+ */
 void Rast_set_d_color_range(DCELL min, DCELL max, struct Colors *colors)
 {
     if (min < max) {
@@ -52,16 +52,17 @@ void Rast_set_d_color_range(DCELL min, DCELL max, struct Colors *colors)
 }
 
 /*!
-  \brief Get color range values (CELL)
+   \brief Get color range values (CELL)
 
-  Returns min and max category in the range or huge numbers if the
-  color table is defined on floating cell values and not on
-  categories.
+   Returns min and max category in the range or huge numbers if the
+   color table is defined on floating cell values and not on
+   categories.
 
-  \param[out] min,max minimum and maximum value
-  \param colors pointer to Colors structure which holds color info
+   \param[out] min,max minimum and maximum value
+   \param colors pointer to Colors structure which holds color info
  */
-void Rast_get_c_color_range(CELL * min, CELL * max, const struct Colors *colors)
+void Rast_get_c_color_range(CELL * min, CELL * max,
+			    const struct Colors *colors)
 {
     if (!colors->is_float) {
 	*min = (CELL) floor(colors->cmin);
@@ -74,16 +75,17 @@ void Rast_get_c_color_range(CELL * min, CELL * max, const struct Colors *colors)
 }
 
 /*!
-  \brief Get color range values (DELL)
-  
-  Returns min and max category in the range or huge numbers if the
-  color table is defined on floating cell values and not on
-  categories.
+   \brief Get color range values (DELL)
 
-  \param[out] min,max minimum and maximum value
-  \param colors pointer to Colors structure which holds color info
+   Returns min and max category in the range or huge numbers if the
+   color table is defined on floating cell values and not on
+   categories.
+
+   \param[out] min,max minimum and maximum value
+   \param colors pointer to Colors structure which holds color info
  */
-void Rast_get_d_color_range(DCELL * min, DCELL * max, const struct Colors *colors)
+void Rast_get_d_color_range(DCELL * min, DCELL * max,
+			    const struct Colors *colors)
 {
     *min = colors->cmin;
     *max = colors->cmax;

@@ -54,7 +54,8 @@ static int read_old_colors(FILE *, struct Colors *);
  * \return 0 if missing, but default colors generated
  * \return 1 on success
  */
-int Rast_read_colors(const char *name, const char *mapset, struct Colors *colors)
+int Rast_read_colors(const char *name, const char *mapset,
+		     struct Colors *colors)
 {
     int fp;
     char buf[GNAME_MAX];
@@ -86,7 +87,8 @@ int Rast_read_colors(const char *name, const char *mapset, struct Colors *colors
 	if (!fp) {
 	    if (Rast_read_range(name, mapset, &range) >= 0) {
 		Rast_get_range_min_max(&range, &min, &max);
-		if (!Rast_is_c_null_value(&min) && !Rast_is_c_null_value(&max))
+		if (!Rast_is_c_null_value(&min) &&
+		    !Rast_is_c_null_value(&max))
 		    Rast_make_rainbow_colors(colors, min, max);
 		return 0;
 	    }
@@ -94,7 +96,8 @@ int Rast_read_colors(const char *name, const char *mapset, struct Colors *colors
 	else {
 	    if (Rast_read_fp_range(name, mapset, &drange) >= 0) {
 		Rast_get_fp_range_min_max(&drange, &dmin, &dmax);
-		if (!Rast_is_d_null_value(&dmin) && !Rast_is_d_null_value(&dmax))
+		if (!Rast_is_d_null_value(&dmin) &&
+		    !Rast_is_d_null_value(&dmax))
 		    Rast_make_rainbow_fp_colors(colors, dmin, dmax);
 		return 0;
 	    }
@@ -108,8 +111,7 @@ int Rast_read_colors(const char *name, const char *mapset, struct Colors *colors
 	return 1;
     }
 
-    G_warning(_("Color support for <%s@%s> %s"), name, mapset,
-	      err);
+    G_warning(_("Color support for <%s@%s> %s"), name, mapset, err);
     return -1;
 }
 
@@ -283,23 +285,23 @@ static int read_new_colors(FILE * fd, struct Colors *colors)
 	else if (modular) {
 	    if (fp_rule)
 		Rast_add_modular_d_color_rule((DCELL *) & val1, r1, g1,
-						  b1, (DCELL *) & val2, r2,
-						  g2, b2, colors);
+					      b1, (DCELL *) & val2, r2,
+					      g2, b2, colors);
 	    else
-		Rast_add_modular_c_color_rule((CELL *) &cat1, r1, g1, b1,
-					      (CELL *) &cat2, r2, g2, b2, colors);
+		Rast_add_modular_c_color_rule((CELL *) & cat1, r1, g1, b1,
+					      (CELL *) & cat2, r2, g2, b2,
+					      colors);
 	}
 	else {
 	    if (fp_rule)
 		Rast_add_d_color_rule((DCELL *) & val1, r1, g1, b1,
-					  (DCELL *) & val2, r2, g2, b2,
-					  colors);
+				      (DCELL *) & val2, r2, g2, b2, colors);
 	    else
-		Rast_add_c_color_rule((CELL *) &cat1, r1, g1, b1,
-				      (CELL *) &cat2, r2, g2, b2, colors);
+		Rast_add_c_color_rule((CELL *) & cat1, r1, g1, b1,
+				      (CELL *) & cat2, r2, g2, b2, colors);
 	}
 	G_debug(3, "adding rule %ld=%.2lf %d %d %d  %ld=%.2lf %d %d %d",
-		cat1, val1,  r1, g1, b1, cat2, val2, r2, g2, b2);
+		cat1, val1, r1, g1, b1, cat2, val2, r2, g2, b2);
     }
     return 1;
 }
@@ -362,12 +364,12 @@ static int read_old_colors(FILE * fd, struct Colors *colors)
 	}
 	if (zero) {
 	    Rast__insert_color_into_lookup((CELL) 0, red, grn, blu,
-					&colors->fixed);
+					   &colors->fixed);
 	    zero = 0;
 	}
 	else
 	    Rast__insert_color_into_lookup((CELL) n++, red, grn, blu,
-					&colors->fixed);
+					   &colors->fixed);
     }
     colors->cmax = n - 1;
 

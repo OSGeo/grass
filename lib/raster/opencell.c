@@ -80,30 +80,30 @@ static int G__open_raster_new(const char *name, int open_mode,
 			      RASTER_MAP_TYPE map_type);
 
 /*!
-  \brief Open an existing integer raster map (cell)
-  
-  Opens the existing cell file <i>name</i> in the <i>mapset</i> for
-  reading by Rast_get_row() with mapping into the current window.
+   \brief Open an existing integer raster map (cell)
 
-  This routine opens the raster map <i>name</i> in <i>mapset</i> for
-  reading. A nonnegative file descriptor is returned if the open is
-  successful. Otherwise a diagnostic message is printed and a negative
-  value is returned. This routine does quite a bit of work. Since
-  GRASS users expect that all raster maps will be resampled into the
-  current region, the resampling index for the raster map is prepared
-  by this routine after the file is opened. The resampling is based on
-  the active module region (see also \ref The_Region}. Preparation
-  required for reading the various raster file formats (see \ref
-  Raster_File_Format for an explanation of the various raster file
-  formats) is also done.
- 
-  Diagnostics: warning message printed if open fails.
+   Opens the existing cell file <i>name</i> in the <i>mapset</i> for
+   reading by Rast_get_row() with mapping into the current window.
 
-  \param name map name
-  \param mapset mapset name where raster map <i>name</i> lives
-  
-  \return nonnegative file descriptor (int)
-  \return -1 on failure
+   This routine opens the raster map <i>name</i> in <i>mapset</i> for
+   reading. A nonnegative file descriptor is returned if the open is
+   successful. Otherwise a diagnostic message is printed and a negative
+   value is returned. This routine does quite a bit of work. Since
+   GRASS users expect that all raster maps will be resampled into the
+   current region, the resampling index for the raster map is prepared
+   by this routine after the file is opened. The resampling is based on
+   the active module region (see also \ref The_Region}. Preparation
+   required for reading the various raster file formats (see \ref
+   Raster_File_Format for an explanation of the various raster file
+   formats) is also done.
+
+   Diagnostics: warning message printed if open fails.
+
+   \param name map name
+   \param mapset mapset name where raster map <i>name</i> lives
+
+   \return nonnegative file descriptor (int)
+   \return -1 on failure
  */
 int Rast_open_old(const char *name, const char *mapset)
 {
@@ -128,29 +128,29 @@ int Rast_open_old(const char *name, const char *mapset)
 }
 
 /*!  \brief Lower level function, open cell files, supercell files,
-  and the MASK file.
+   and the MASK file.
 
-  Actions:
+   Actions:
    - opens the named cell file, following reclass reference if
    named layer is a reclass layer.
    - creates the required mapping between the data and the window
    for use by the get_map_row family of routines.
-  
-  Diagnostics: Errors other than actual open failure will cause a
-  diagnostic to be delivered thru G_warning() open failure messages
-  are left to the calling routine since the masking logic will want to
-  issue a different warning.
-  
-  Note: This routine does NOT open the MASK layer. If it did we would
-  get infinite recursion.  This routine is called to open the mask by
-  Rast__check_for_auto_masking() which is called by Rast_open_old().
- 
-  \param name map name
-  \param mapset mapset of cell file to be opened
- 
-  \return open file descriptor
-  \return -1 if error
-*/
+
+   Diagnostics: Errors other than actual open failure will cause a
+   diagnostic to be delivered thru G_warning() open failure messages
+   are left to the calling routine since the masking logic will want to
+   issue a different warning.
+
+   Note: This routine does NOT open the MASK layer. If it did we would
+   get infinite recursion.  This routine is called to open the mask by
+   Rast__check_for_auto_masking() which is called by Rast_open_old().
+
+   \param name map name
+   \param mapset mapset of cell file to be opened
+
+   \return open file descriptor
+   \return -1 if error
+ */
 int Rast__open_old(const char *name, const char *mapset)
 {
     struct fileinfo *fcb;
@@ -193,8 +193,8 @@ int Rast__open_old(const char *name, const char *mapset)
 	r_mapset = reclass.mapset;
 	if (G_find_cell2(r_name, r_mapset) == NULL) {
 	    G_warning(_("Unable to open raster map <%s@%s> since it is a reclass "
-			"of raster map <%s@%s> which does not exist"),
-		      name, mapset, r_name, r_mapset);
+		       "of raster map <%s@%s> which does not exist"), name,
+		      mapset, r_name, r_mapset);
 	    return -1;
 	}
 	break;
@@ -224,8 +224,8 @@ int Rast__open_old(const char *name, const char *mapset)
 
     if (cellhd.proj != R__.window.proj) {
 	G_warning(_("Raster map <%s@%s> is in different projection than current region. "
-		    "Found raster map <%s@%s>, should be <%s>."),
-		  name, mapset, name, G__projection_name(cellhd.proj),
+		   "Found raster map <%s@%s>, should be <%s>."), name, mapset,
+		  name, G__projection_name(cellhd.proj),
 		  G__projection_name(R__.window.proj));
 	return -1;
     }
@@ -236,7 +236,7 @@ int Rast__open_old(const char *name, const char *mapset)
     }
 
     /* when map is int warn if too large cell size */
-    if (MAP_TYPE == CELL_TYPE && (unsigned int) CELL_nbytes > sizeof(CELL)) {
+    if (MAP_TYPE == CELL_TYPE && (unsigned int)CELL_nbytes > sizeof(CELL)) {
 	G_warning(_("Raster map <%s@%s>: bytes per cell (%d) too large"),
 		  name, mapset, CELL_nbytes);
 	return -1;
@@ -331,7 +331,7 @@ int Rast__open_old(const char *name, const char *mapset)
     if (fcb->map_type != CELL_TYPE) {
 	if (fcb->reclass_flag)
 	    Rast_read_quant(fcb->reclass.name, fcb->reclass.mapset,
-			 &(fcb->quant));
+			    &(fcb->quant));
 	else
 	    Rast_read_quant(fcb->name, fcb->mapset, &(fcb->quant));
     }
@@ -351,77 +351,77 @@ int Rast__open_old(const char *name, const char *mapset)
 }
 
 /*!
-  \brief Opens a new cell file in a database (compressed)
+   \brief Opens a new cell file in a database (compressed)
 
-  Opens a new cell file <i>name</i> in the current mapset for writing
-  by Rast_put_row().
- 
-  The file is created and filled with no data it is assumed that the
-  new cell file is to conform to the current window.
- 
-  The file must be written sequentially. Use Rast_open_new_random()
-  for non sequential writes.
-  
-  Note: the open actually creates a temporary file Rast_close() will
-  move the temporary file to the cell file and write out the necessary
-  support files (cellhd, cats, hist, etc.).
+   Opens a new cell file <i>name</i> in the current mapset for writing
+   by Rast_put_row().
 
-  Diagnostics: warning message printed if open fails
- 
-  Warning: calls to Rast_set_window() made after opening a new cell file
-  may create confusion and should be avoided the new cell file will be
-  created to conform to the window at the time of the open.
+   The file is created and filled with no data it is assumed that the
+   new cell file is to conform to the current window.
 
-  \param name map name
+   The file must be written sequentially. Use Rast_open_new_random()
+   for non sequential writes.
 
-  \return open file descriptor ( >= 0) if successful
-  \return negative integer if error
-*/
+   Note: the open actually creates a temporary file Rast_close() will
+   move the temporary file to the cell file and write out the necessary
+   support files (cellhd, cats, hist, etc.).
+
+   Diagnostics: warning message printed if open fails
+
+   Warning: calls to Rast_set_window() made after opening a new cell file
+   may create confusion and should be avoided the new cell file will be
+   created to conform to the window at the time of the open.
+
+   \param name map name
+
+   \return open file descriptor ( >= 0) if successful
+   \return negative integer if error
+ */
 int Rast_open_c_new(const char *name)
 {
     return G__open_raster_new(name, OPEN_NEW_COMPRESSED, CELL_TYPE);
 }
 
 /*!
-  \brief Opens a new cell file in a database (uncompressed)
+   \brief Opens a new cell file in a database (uncompressed)
 
-  See also Rast_open_new().
- 
-  \param name map name
+   See also Rast_open_new().
 
-  \return open file descriptor ( >= 0) if successful
-  \return negative integer if error
-*/
+   \param name map name
+
+   \return open file descriptor ( >= 0) if successful
+   \return negative integer if error
+ */
 int Rast_open_c_new_uncompressed(const char *name)
 {
     return G__open_raster_new(name, OPEN_NEW_UNCOMPRESSED, CELL_TYPE);
 }
 
 /*!
-  \brief Save histogram for newly create raster map (cell)
+   \brief Save histogram for newly create raster map (cell)
 
-  If newly created cell files should have histograms, set flag=1
-  otherwise set flag=0. Applies to subsequent opens.
+   If newly created cell files should have histograms, set flag=1
+   otherwise set flag=0. Applies to subsequent opens.
 
-  \param flag flag indicator
-*/
+   \param flag flag indicator
+ */
 void Rast_want_histogram(int flag)
 {
     R__.want_histogram = flag;
 }
 
 /*!
-  \brief Sets the format for subsequent opens on new integer cell files
-  (uncompressed and random only).
+   \brief Sets the format for subsequent opens on new integer cell files
+   (uncompressed and random only).
 
-  Warning: subsequent put_row calls will only write n+1 bytes per
-  cell. If the data requires more, the cell file will be written
-  incorrectly (but with n+1 bytes per cell)
+   Warning: subsequent put_row calls will only write n+1 bytes per
+   cell. If the data requires more, the cell file will be written
+   incorrectly (but with n+1 bytes per cell)
 
-  When writing float map: format is -1
+   When writing float map: format is -1
 
-  \param n format
-*/
+   \param n format
+ */
 void Rast_set_cell_format(int n)
 /* sets the format for integer raster map */
 {
@@ -433,12 +433,12 @@ void Rast_set_cell_format(int n)
 }
 
 /*!
-  \brief Get cell value format
+   \brief Get cell value format
 
-  \param v cell
+   \param v cell
 
-  \return cell format
-*/
+   \return cell format
+ */
 int Rast_get_cell_format(CELL v)
 {
     unsigned int i;
@@ -451,44 +451,45 @@ int Rast_get_cell_format(CELL v)
 }
 
 /*!
-  \brief Opens new fcell file in a database
+   \brief Opens new fcell file in a database
 
-  Opens a new floating-point map <i>name</i> in the current mapset for
-  writing. The type of the file (i.e. either double or float) is
-  determined and fixed at this point. The default is FCELL_TYPE. In
-  order to change this default
+   Opens a new floating-point map <i>name</i> in the current mapset for
+   writing. The type of the file (i.e. either double or float) is
+   determined and fixed at this point. The default is FCELL_TYPE. In
+   order to change this default
 
-  Use Rast_set_fp_type() where type is one of DCELL_TYPE or FCELL_TYPE.
+   Use Rast_set_fp_type() where type is one of DCELL_TYPE or FCELL_TYPE.
 
-  See warnings and notes for Rast_open_new().
+   See warnings and notes for Rast_open_new().
 
-  \param name map name
+   \param name map name
 
-  \return nonnegative file descriptor (int)
-  \return -1 on error
-*/
+   \return nonnegative file descriptor (int)
+   \return -1 on error
+ */
 int Rast_open_fp_new(const char *name)
 {
     return G__open_raster_new(name, OPEN_NEW_COMPRESSED, R__.fp_type);
 }
 
 /*!
-  \brief Opens new fcell file in a database (uncompressed)
+   \brief Opens new fcell file in a database (uncompressed)
 
-  See Rast_open_fp_new() for details.
+   See Rast_open_fp_new() for details.
 
-  \param name map name
+   \param name map name
 
-  \return nonnegative file descriptor (int)
-  \return -1 on error
-*/
+   \return nonnegative file descriptor (int)
+   \return -1 on error
+ */
 int Rast_open_fp_new_uncompressed(const char *name)
 {
     return G__open_raster_new(name, OPEN_NEW_UNCOMPRESSED, R__.fp_type);
 }
 
 #ifdef HAVE_GDAL
-static int G__open_raster_new_gdal(char *map, char *mapset, RASTER_MAP_TYPE map_type)
+static int G__open_raster_new_gdal(char *map, char *mapset,
+				   RASTER_MAP_TYPE map_type)
 {
     int fd;
     struct fileinfo *fcb;
@@ -573,7 +574,7 @@ static int G__open_raster_new(const char *name, int open_mode,
 	cell_dir = "fcell";
 	break;
     case DCELL_TYPE:
-	nbytes =  XDR_DOUBLE_NBYTES;
+	nbytes = XDR_DOUBLE_NBYTES;
 	cell_dir = "fcell";
 	break;
     default:
@@ -713,19 +714,19 @@ static int G__open_raster_new(const char *name, int open_mode,
 }
 
 /*!
-  \brief Set raster map floating-point data format.
-  
-  This controls the storage type for floating-point maps. It affects
-  subsequent calls to G_open_fp_map_new(). The <i>type</i> must be
-  one of FCELL_TYPE (float) or DCELL_TYPE (double). The use of this
-  routine by applications is discouraged since its use would override
-  user preferences.
-  
-  \param type raster data type
+   \brief Set raster map floating-point data format.
 
-  \return 1 on success
-  \return -1 on error
-*/
+   This controls the storage type for floating-point maps. It affects
+   subsequent calls to G_open_fp_map_new(). The <i>type</i> must be
+   one of FCELL_TYPE (float) or DCELL_TYPE (double). The use of this
+   routine by applications is discouraged since its use would override
+   user preferences.
+
+   \param type raster data type
+
+   \return 1 on success
+   \return -1 on error
+ */
 int Rast_set_fp_type(RASTER_MAP_TYPE map_type)
 {
     switch (map_type) {
@@ -740,17 +741,17 @@ int Rast_set_fp_type(RASTER_MAP_TYPE map_type)
 }
 
 /*!
-  \brief Check if raster map is floating-point
- 
-  Returns true (1) if raster map <i>name</i> in <i>mapset</i>
-  is a floating-point dataset; false(0) otherwise.
- 
-  \param name map name
-  \param mapset mapset name
+   \brief Check if raster map is floating-point
 
-  \return 1 floating-point
-  \return 0 int
-*/
+   Returns true (1) if raster map <i>name</i> in <i>mapset</i>
+   is a floating-point dataset; false(0) otherwise.
+
+   \param name map name
+   \param mapset mapset name
+
+   \return 1 floating-point
+   \return 0 int
+ */
 int Rast_map_is_fp(const char *name, const char *mapset)
 {
     char path[GPATH_MAX];
@@ -767,22 +768,22 @@ int Rast_map_is_fp(const char *name, const char *mapset)
     G__file_name(path, "g3dcell", name, xmapset);
     if (access(path, 0) == 0)
 	return 1;
-    
+
     return 0;
 }
 
 /*!
-  \brief Determine raster data type
-  
-  Determines if the raster map is floating point or integer. Returns
-  DCELL_TYPE for double maps, FCELL_TYPE for float maps, CELL_TYPE for
-  integer maps, -1 if error has occured
+   \brief Determine raster data type
 
-  \param name map name 
-  \param mapset mapset where map <i>name</i> lives
+   Determines if the raster map is floating point or integer. Returns
+   DCELL_TYPE for double maps, FCELL_TYPE for float maps, CELL_TYPE for
+   integer maps, -1 if error has occured
 
-  \return raster data type
-*/
+   \param name map name 
+   \param mapset mapset where map <i>name</i> lives
+
+   \return raster data type
+ */
 RASTER_MAP_TYPE Rast_map_type(const char *name, const char *mapset)
 {
     char path[GPATH_MAX];
@@ -791,7 +792,8 @@ RASTER_MAP_TYPE Rast_map_type(const char *name, const char *mapset)
     xmapset = G_find_cell2(name, mapset);
     if (!xmapset) {
 	if (mapset && *mapset)
-	    G_warning(_("Raster map <%s> not found in mapset <%s>"), name, mapset);
+	    G_warning(_("Raster map <%s> not found in mapset <%s>"), name,
+		      mapset);
 	else
 	    G_warning(_("Raster map <%s> not found"), name);
 	return -1;
@@ -810,15 +812,15 @@ RASTER_MAP_TYPE Rast_map_type(const char *name, const char *mapset)
 }
 
 /*!
-  \brief Determine raster type from descriptor
-  
-  Determines if the raster map is floating point or integer. Returns
-  DCELL_TYPE for double maps, FCELL_TYPE for float maps, CELL_TYPE for
-  integer maps, -1 if error has occured
-  
-  \param fd file descriptor
+   \brief Determine raster type from descriptor
 
-  \return raster data type
+   Determines if the raster map is floating point or integer. Returns
+   DCELL_TYPE for double maps, FCELL_TYPE for float maps, CELL_TYPE for
+   integer maps, -1 if error has occured
+
+   \param fd file descriptor
+
+   \return raster data type
  */
 RASTER_MAP_TYPE Rast_get_map_type(int fd)
 {
@@ -828,13 +830,13 @@ RASTER_MAP_TYPE Rast_get_map_type(int fd)
 }
 
 /*!
-  \brief Determines whether the floating points cell file has double or float type
+   \brief Determines whether the floating points cell file has double or float type
 
-  \param name map name
-  \param mapset mapset where map <i>name</i> lives
-  
-  \return raster type (fcell, dcell)
-*/
+   \param name map name
+   \param mapset mapset where map <i>name</i> lives
+
+   \return raster type (fcell, dcell)
+ */
 RASTER_MAP_TYPE Rast__check_fp_type(const char *name, const char *mapset)
 {
     char path[GPATH_MAX];
@@ -866,8 +868,7 @@ RASTER_MAP_TYPE Rast__check_fp_type(const char *name, const char *mapset)
 	else if (strcmp(str, "float") == 0)
 	    map_type = FCELL_TYPE;
 	else {
-	    G_warning(_("Invalid type: field '%s' in file '%s'"),
-		      str, path);
+	    G_warning(_("Invalid type: field '%s' in file '%s'"), str, path);
 	    G_free_key_value(format_keys);
 	    return -1;
 	}
@@ -880,7 +881,7 @@ RASTER_MAP_TYPE Rast__check_fp_type(const char *name, const char *mapset)
     if ((str1 = G_find_key_value("byte_order", format_keys)) != NULL) {
 	if (strcmp(str1, "xdr") != 0)
 	    G_warning(_("Raster map <%s> is not xdr: byte_order: %s"),
-			name, str);
+		      name, str);
 	/* here read and translate  byte order if not using xdr */
     }
     G_free_key_value(format_keys);
@@ -888,61 +889,61 @@ RASTER_MAP_TYPE Rast__check_fp_type(const char *name, const char *mapset)
 }
 
 /*!
-  \brief Opens a new raster map
+   \brief Opens a new raster map
 
-  Opens a new raster map of type <i>wr_type</i>
+   Opens a new raster map of type <i>wr_type</i>
 
-  See warnings and notes for Rast_open_new().
+   See warnings and notes for Rast_open_new().
 
-  Supported data types:
+   Supported data types:
    - CELL_TYPE
    - FCELL_TYPE
    - DCELL_TYPE
-  
-  On CELL_TYPE calls Rast_open_new() otherwise Rast_open_fp_new().
- 
-  \param name map name
-  \param wr_type raster data type
 
-  \return nonnegative file descriptor (int)
-  \return -1 on error
-*/
+   On CELL_TYPE calls Rast_open_new() otherwise Rast_open_fp_new().
+
+   \param name map name
+   \param wr_type raster data type
+
+   \return nonnegative file descriptor (int)
+   \return -1 on error
+ */
 int Rast_open_new(const char *name, RASTER_MAP_TYPE wr_type)
 {
     return G__open_raster_new(name, OPEN_NEW_COMPRESSED, wr_type);
 }
 
 /*!
-  \brief Opens a new raster map (uncompressed)
+   \brief Opens a new raster map (uncompressed)
 
-  See Rast_open_new().
+   See Rast_open_new().
 
-  \param name map name
-  \param wr_type raster data type
+   \param name map name
+   \param wr_type raster data type
 
-  \return nonnegative file descriptor (int)
-  \return -1 on error
-*/
+   \return nonnegative file descriptor (int)
+   \return -1 on error
+ */
 int Rast_open_new_uncompressed(const char *name, RASTER_MAP_TYPE wr_type)
 {
     return G__open_raster_new(name, OPEN_NEW_UNCOMPRESSED, wr_type);
 }
 
 /*!
-  \brief Sets quant translation rules for raster map opened for
-  reading.
+   \brief Sets quant translation rules for raster map opened for
+   reading.
 
-  Returned by Rast_open_old(). After calling this function,
-  Rast_get_c_row() and Rast_get_c_row() will use rules defined by q
-  (instead of using rules defined in map's quant file) to convert floats to
-  ints.
-  
-  \param fd file descriptor (cell file)
-  \param q pointer to Quant structure
+   Returned by Rast_open_old(). After calling this function,
+   Rast_get_c_row() and Rast_get_c_row() will use rules defined by q
+   (instead of using rules defined in map's quant file) to convert floats to
+   ints.
 
-  \return 0 success
-  \return -1 failure
-*/
+   \param fd file descriptor (cell file)
+   \param q pointer to Quant structure
+
+   \return 0 success
+   \return -1 failure
+ */
 int Rast_set_quant_rules(int fd, struct Quant *q)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
@@ -962,7 +963,8 @@ int Rast_set_quant_rules(int fd, struct Quant *q)
 	return 0;
     }
     for (p = &(q->table[q->nofRules - 1]); p >= q->table; p--)
-	Rast_quant_add_rule(&fcb->quant, p->dLow, p->dHigh, p->cLow, p->cHigh);
+	Rast_quant_add_rule(&fcb->quant, p->dLow, p->dHigh, p->cLow,
+			    p->cHigh);
     if (Rast_quant_get_neg_infinite_rule(q, &dcell, &cell) > 0)
 	Rast_quant_set_neg_infinite_rule(&fcb->quant, dcell, cell);
     if (Rast_quant_get_pos_infinite_rule(q, &dcell, &cell) > 0)

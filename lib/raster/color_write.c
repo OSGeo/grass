@@ -20,7 +20,7 @@
 #include <grass/raster.h>
 
 #define PRECISION 30
-#define THRESHOLD .0000000000000000000000000000005 /* .5 * 10 ^(-30) */
+#define THRESHOLD .0000000000000000000000000000005	/* .5 * 10 ^(-30) */
 
 static void write_rules(FILE *, struct _Color_Rule_ *, DCELL, DCELL);
 static void write_new_colors(FILE *, struct Colors *);
@@ -74,7 +74,7 @@ static void format_max(char *, double);
  * \return -1 on failure
  */
 int Rast_write_colors(const char *name, const char *mapset,
-		   struct Colors *colors)
+		      struct Colors *colors)
 {
     char element[512];
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
@@ -159,7 +159,8 @@ static void write_new_colors(FILE * fd, struct Colors *colors)
 }
 
 /* overall min and max data values in color table */
-static void write_rules(FILE * fd, struct _Color_Rule_ *crules, DCELL dmin, DCELL dmax)
+static void write_rules(FILE * fd, struct _Color_Rule_ *crules, DCELL dmin,
+			DCELL dmax)
 {
     struct _Color_Rule_ *rule;
     char str[100];

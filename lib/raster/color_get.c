@@ -65,7 +65,7 @@ int Rast_get_color(const void *rast,
  * \return 1 if color is set
  * \return 0 if color is not set
  */
-int Rast_get_c_color(const CELL *rast,
+int Rast_get_c_color(const CELL * rast,
 		     int *red, int *grn, int *blu, struct Colors *colors)
 {
     return Rast_get_color(rast, red, grn, blu, colors, CELL_TYPE);
@@ -86,7 +86,7 @@ int Rast_get_c_color(const CELL *rast,
  * \return 1 if color is set
  * \return 0 if color is not set
  */
-int Rast_get_f_color(const FCELL *rast,
+int Rast_get_f_color(const FCELL * rast,
 		     int *red, int *grn, int *blu, struct Colors *colors)
 {
     return Rast_get_color(rast, red, grn, blu, colors, FCELL_TYPE);
@@ -107,7 +107,7 @@ int Rast_get_f_color(const FCELL *rast,
  * \return 1 if color is set
  * \return 0 if color is not set
  */
-int Rast_get_d_color(const DCELL *rast,
+int Rast_get_d_color(const DCELL * rast,
 		     int *red, int *grn, int *blu, struct Colors *colors)
 {
     return Rast_get_color(rast, red, grn, blu, colors, DCELL_TYPE);

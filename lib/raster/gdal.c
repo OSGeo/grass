@@ -25,25 +25,34 @@
 # endif
 #endif
 
-static void CPL_STDCALL (*pGDALAllRegister)(void);
-static void CPL_STDCALL (*pGDALClose)(GDALDatasetH);
-static GDALRasterBandH CPL_STDCALL (*pGDALGetRasterBand)(GDALDatasetH, int);
-static GDALDatasetH CPL_STDCALL (*pGDALOpen)(
-    const char *pszFilename, GDALAccess eAccess);
-static CPLErr CPL_STDCALL (*pGDALRasterIO)(
-    GDALRasterBandH hRBand, GDALRWFlag eRWFlag,
-    int nDSXOff, int nDSYOff, int nDSXSize, int nDSYSize,
-    void * pBuffer, int nBXSize, int nBYSize,GDALDataType eBDataType,
-    int nPixelSpace, int nLineSpace);
-static GDALDriverH CPL_STDCALL (*pGDALGetDriverByName)(const char *);
-static const char * CPL_STDCALL (*pGDALGetMetadataItem)(GDALMajorObjectH, const char *, const char *);
-static GDALDatasetH CPL_STDCALL (*pGDALCreate)(GDALDriverH hDriver, const char *, int, int, int, GDALDataType, char **);
-static GDALDatasetH CPL_STDCALL (*pGDALCreateCopy)(GDALDriverH, const char *, GDALDatasetH, int, char **, GDALProgressFunc, void *);
-static CPLErr CPL_STDCALL (*pGDALSetRasterNoDataValue)(GDALRasterBandH, double);
-static CPLErr CPL_STDCALL (*pGDALSetGeoTransform)(GDALDatasetH, double *);
-static CPLErr CPL_STDCALL (*pGDALSetProjection)(GDALDatasetH, const char *);
-static const char * CPL_STDCALL (*pGDALGetDriverShortName)(GDALDriverH);
-static GDALDriverH CPL_STDCALL (*pGDALGetDatasetDriver)(GDALDatasetH);
+static void CPL_STDCALL(*pGDALAllRegister) (void);
+static void CPL_STDCALL(*pGDALClose) (GDALDatasetH);
+static GDALRasterBandH CPL_STDCALL(*pGDALGetRasterBand) (GDALDatasetH, int);
+static GDALDatasetH CPL_STDCALL(*pGDALOpen) (const char *pszFilename,
+					     GDALAccess eAccess);
+static CPLErr CPL_STDCALL(*pGDALRasterIO) (GDALRasterBandH hRBand,
+					   GDALRWFlag eRWFlag, int nDSXOff,
+					   int nDSYOff, int nDSXSize,
+					   int nDSYSize, void *pBuffer,
+					   int nBXSize, int nBYSize,
+					   GDALDataType eBDataType,
+					   int nPixelSpace, int nLineSpace);
+static GDALDriverH CPL_STDCALL(*pGDALGetDriverByName) (const char *);
+static const char *CPL_STDCALL(*pGDALGetMetadataItem) (GDALMajorObjectH,
+						       const char *,
+						       const char *);
+static GDALDatasetH CPL_STDCALL(*pGDALCreate) (GDALDriverH hDriver,
+					       const char *, int, int, int,
+					       GDALDataType, char **);
+static GDALDatasetH CPL_STDCALL(*pGDALCreateCopy) (GDALDriverH, const char *,
+						   GDALDatasetH, int, char **,
+						   GDALProgressFunc, void *);
+static CPLErr CPL_STDCALL(*pGDALSetRasterNoDataValue) (GDALRasterBandH,
+						       double);
+static CPLErr CPL_STDCALL(*pGDALSetGeoTransform) (GDALDatasetH, double *);
+static CPLErr CPL_STDCALL(*pGDALSetProjection) (GDALDatasetH, const char *);
+static const char *CPL_STDCALL(*pGDALGetDriverShortName) (GDALDriverH);
+static GDALDriverH CPL_STDCALL(*pGDALGetDatasetDriver) (GDALDatasetH);
 
 #if GDAL_DYNAMIC
 # if defined(__unix) && !defined(__unix__)
@@ -81,7 +90,7 @@ static void try_load_library(const char *name)
 
 static void load_library(void)
 {
-    static const char * const candidates[] = {
+    static const char *const candidates[] = {
 # ifdef __unix__
 	"libgdal.1.1.so",
 	"gdal.1.0.so",
@@ -111,40 +120,40 @@ static void init_gdal(void)
 {
     load_library();
 
-    pGDALAllRegister          = get_symbol("GDALAllRegister");
-    pGDALOpen                 = get_symbol("GDALOpen");
-    pGDALClose                = get_symbol("GDALClose");
-    pGDALGetRasterBand        = get_symbol("GDALGetRasterBand");
-    pGDALRasterIO             = get_symbol("GDALRasterIO");
-    pGDALGetDriverByName      = get_symbol("GDALGetDriverByName");
-    pGDALGetMetadataItem      = get_symbol("GDALGetMetadataItem");
-    pGDALCreate               = get_symbol("GDALCreate");
-    pGDALCreateCopy           = get_symbol("GDALCreateCopy");
+    pGDALAllRegister = get_symbol("GDALAllRegister");
+    pGDALOpen = get_symbol("GDALOpen");
+    pGDALClose = get_symbol("GDALClose");
+    pGDALGetRasterBand = get_symbol("GDALGetRasterBand");
+    pGDALRasterIO = get_symbol("GDALRasterIO");
+    pGDALGetDriverByName = get_symbol("GDALGetDriverByName");
+    pGDALGetMetadataItem = get_symbol("GDALGetMetadataItem");
+    pGDALCreate = get_symbol("GDALCreate");
+    pGDALCreateCopy = get_symbol("GDALCreateCopy");
     pGDALSetRasterNoDataValue = get_symbol("GDALSetRasterNoDataValue");
-    pGDALSetGeoTransform      = get_symbol("GDALSetGeoTransform");
-    pGDALSetProjection        = get_symbol("GDALSetProjection");
-    pGDALGetDriverShortName   = get_symbol("GDALGetDriverShortName");
-    pGDALGetDatasetDriver     = get_symbol("GDALGetDatasetDriver");
+    pGDALSetGeoTransform = get_symbol("GDALSetGeoTransform");
+    pGDALSetProjection = get_symbol("GDALSetProjection");
+    pGDALGetDriverShortName = get_symbol("GDALGetDriverShortName");
+    pGDALGetDatasetDriver = get_symbol("GDALGetDatasetDriver");
 }
 
 #else /* GDAL_DYNAMIC */
 
 static void init_gdal(void)
 {
-    pGDALAllRegister          = &GDALAllRegister;
-    pGDALOpen                 = &GDALOpen;
-    pGDALClose                = &GDALClose;
-    pGDALGetRasterBand        = &GDALGetRasterBand;
-    pGDALRasterIO             = &GDALRasterIO;
-    pGDALGetDriverByName      = &GDALGetDriverByName;
-    pGDALGetMetadataItem      = &GDALGetMetadataItem;
-    pGDALCreate               = &GDALCreate;
-    pGDALCreateCopy           = &GDALCreateCopy;
+    pGDALAllRegister = &GDALAllRegister;
+    pGDALOpen = &GDALOpen;
+    pGDALClose = &GDALClose;
+    pGDALGetRasterBand = &GDALGetRasterBand;
+    pGDALRasterIO = &GDALRasterIO;
+    pGDALGetDriverByName = &GDALGetDriverByName;
+    pGDALGetMetadataItem = &GDALGetMetadataItem;
+    pGDALCreate = &GDALCreate;
+    pGDALCreateCopy = &GDALCreateCopy;
     pGDALSetRasterNoDataValue = &GDALSetRasterNoDataValue;
-    pGDALSetGeoTransform      = &GDALSetGeoTransform;
-    pGDALSetProjection        = &GDALSetProjection;
-    pGDALGetDriverShortName   = &GDALGetDriverShortName;
-    pGDALGetDatasetDriver     = &GDALGetDatasetDriver;
+    pGDALSetGeoTransform = &GDALSetGeoTransform;
+    pGDALSetProjection = &GDALSetProjection;
+    pGDALGetDriverShortName = &GDALGetDriverShortName;
+    pGDALGetDatasetDriver = &GDALGetDatasetDriver;
 }
 
 #endif /* GDAL_DYNAMIC */
@@ -160,7 +169,7 @@ void Rast_init_gdal(void)
 	return;
 
     init_gdal();
-    (*pGDALAllRegister)();
+    (*pGDALAllRegister) ();
     G_initialize_done(&initialized);
 #endif
 }
@@ -250,13 +259,13 @@ struct GDAL_link *Rast_get_gdal_link(const char *name, const char *mapset)
 
     Rast_init_gdal();
 
-    data = (*pGDALOpen)(filename, GA_ReadOnly);
+    data = (*pGDALOpen) (filename, GA_ReadOnly);
     if (!data)
 	return NULL;
 
-    band = (*pGDALGetRasterBand)(data, band_num);
+    band = (*pGDALGetRasterBand) (data, band_num);
     if (!band) {
-	(*pGDALClose)(data);
+	(*pGDALClose) (data);
 	return NULL;
     }
 #endif
@@ -277,14 +286,16 @@ struct GDAL_link *Rast_get_gdal_link(const char *name, const char *mapset)
     return gdal;
 }
 
-struct GDAL_Options {
+struct GDAL_Options
+{
     const char *dir;
     const char *ext;
     const char *format;
     char **options;
 };
 
-static struct state {
+static struct state
+{
     int initialized;
     struct GDAL_Options opts;
     struct Key_Value *projinfo, *projunits;
@@ -313,6 +324,7 @@ static void read_gdal_options(void)
     }
     else {
 	char path[GPATH_MAX];
+
 	G__file_name(path, p, "", G_mapset());
 	st->opts.dir = G_store(path);
 	if (access(path, 0) != 0)
@@ -331,7 +343,8 @@ static void read_gdal_options(void)
     G_free_key_value(key_val);
 }
 
-struct GDAL_link *Rast_create_gdal_link(const char *name, RASTER_MAP_TYPE map_type)
+struct GDAL_link *Rast_create_gdal_link(const char *name,
+					RASTER_MAP_TYPE map_type)
 {
 #ifdef GDAL_LINK
     char path[GPATH_MAX];
@@ -397,34 +410,35 @@ struct GDAL_link *Rast_create_gdal_link(const char *name, RASTER_MAP_TYPE map_ty
 	break;
     }
 
-    driver = (*pGDALGetDriverByName)(st->opts.format);
+    driver = (*pGDALGetDriverByName) (st->opts.format);
     if (!driver)
 	G_fatal_error(_("Unable to get <%s> driver"), st->opts.format);
 
     /* Does driver support GDALCreate ? */
-    if ((*pGDALGetMetadataItem)(driver, GDAL_DCAP_CREATE, NULL))
-    {
-	gdal->data = (*pGDALCreate)(driver, gdal->filename, R__.window.cols, R__.window.rows,
-				1, gdal->type, st->opts.options);
+    if ((*pGDALGetMetadataItem) (driver, GDAL_DCAP_CREATE, NULL)) {
+	gdal->data =
+	    (*pGDALCreate) (driver, gdal->filename, R__.window.cols,
+			    R__.window.rows, 1, gdal->type, st->opts.options);
 	if (!gdal->data)
 	    G_fatal_error(_("Unable to create <%s> dataset using <%s> driver"),
 			  name, st->opts.format);
     }
     /* If not - create MEM driver for intermediate dataset. 
      * Check if raster can be created at all (with GDALCreateCopy) */
-    else if ((*pGDALGetMetadataItem)(driver, GDAL_DCAP_CREATECOPY, NULL)) {
+    else if ((*pGDALGetMetadataItem) (driver, GDAL_DCAP_CREATECOPY, NULL)) {
 	GDALDriverH mem_driver;
 
 	G_message(_("Driver <%s> does not support direct writing. "
 		    "Using MEM driver for intermediate dataset."),
 		  st->opts.format);
 
-	mem_driver = (*pGDALGetDriverByName)("MEM");
+	mem_driver = (*pGDALGetDriverByName) ("MEM");
 	if (!mem_driver)
 	    G_fatal_error(_("Unable to get in-memory raster driver"));
 
-	gdal->data = (*pGDALCreate)(mem_driver, "", R__.window.cols, R__.window.rows,
-				    1, gdal->type, st->opts.options);
+	gdal->data =
+	    (*pGDALCreate) (mem_driver, "", R__.window.cols, R__.window.rows,
+			    1, gdal->type, st->opts.options);
 	if (!gdal->data)
 	    G_fatal_error(_("Unable to create <%s> dataset using memory driver"),
 			  name);
@@ -433,9 +447,9 @@ struct GDAL_link *Rast_create_gdal_link(const char *name, RASTER_MAP_TYPE map_ty
 	G_fatal_error(_("Driver <%s> does not support creating rasters"),
 		      st->opts.format);
 
-    gdal->band = (*pGDALGetRasterBand)(gdal->data, gdal->band_num);
+    gdal->band = (*pGDALGetRasterBand) (gdal->data, gdal->band_num);
 
-    (*pGDALSetRasterNoDataValue)(gdal->band, gdal->null_val);
+    (*pGDALSetRasterNoDataValue) (gdal->band, gdal->null_val);
 
     /* Set Geo Transform  */
     transform[0] = R__.window.west;
@@ -445,11 +459,11 @@ struct GDAL_link *Rast_create_gdal_link(const char *name, RASTER_MAP_TYPE map_ty
     transform[4] = 0.0;
     transform[5] = -R__.window.ns_res;
 
-    if ((*pGDALSetGeoTransform)(gdal->data, transform) >= CE_Failure)
+    if ((*pGDALSetGeoTransform) (gdal->data, transform) >= CE_Failure)
 	G_warning(_("Unable to set geo transform"));
 
     if (st->srswkt)
-	if ((*pGDALSetProjection)(gdal->data, st->srswkt) == CE_Failure)
+	if ((*pGDALSetProjection) (gdal->data, st->srswkt) == CE_Failure)
 	    G_warning(_("Unable to set projection"));
 
     fp = G_fopen_new_misc("cell_misc", "gdal", name);
@@ -485,7 +499,7 @@ struct GDAL_link *Rast_create_gdal_link(const char *name, RASTER_MAP_TYPE map_ty
 void Rast_close_gdal_link(struct GDAL_link *gdal)
 {
 #ifdef GDAL_LINK
-    (*pGDALClose)(gdal->data);
+    (*pGDALClose) (gdal->data);
 #endif
     G_free(gdal->filename);
     G_free(gdal);
@@ -494,22 +508,25 @@ void Rast_close_gdal_link(struct GDAL_link *gdal)
 int Rast_close_gdal_write_link(struct GDAL_link *gdal)
 {
     int stat = 1;
-#ifdef GDAL_LINK
-    GDALDriverH src_drv = (*pGDALGetDatasetDriver)(gdal->data);
 
-    if (G_strcasecmp((*pGDALGetDriverShortName)(src_drv), "MEM") == 0) {
-	GDALDriverH dst_drv = (*pGDALGetDriverByName)(st->opts.format);
-	GDALDatasetH dst = (*pGDALCreateCopy)(dst_drv, gdal->filename, gdal->data, FALSE,
-					      st->opts.options, NULL, NULL);
+#ifdef GDAL_LINK
+    GDALDriverH src_drv = (*pGDALGetDatasetDriver) (gdal->data);
+
+    if (G_strcasecmp((*pGDALGetDriverShortName) (src_drv), "MEM") == 0) {
+	GDALDriverH dst_drv = (*pGDALGetDriverByName) (st->opts.format);
+	GDALDatasetH dst =
+	    (*pGDALCreateCopy) (dst_drv, gdal->filename, gdal->data, FALSE,
+				st->opts.options, NULL, NULL);
+
 	if (!dst) {
 	    G_warning(_("Unable to create output file <%s> using driver <%s>"),
 		      gdal->filename, st->opts.format);
 	    stat = -1;
 	}
-	(*pGDALClose)(dst);
+	(*pGDALClose) (dst);
     }
 
-    (*pGDALClose)(gdal->data);
+    (*pGDALClose) (gdal->data);
 
 #endif
     G_free(gdal->filename);
@@ -519,15 +536,14 @@ int Rast_close_gdal_write_link(struct GDAL_link *gdal)
 }
 
 #ifdef GDAL_LINK
-CPLErr Rast_gdal_raster_IO(
-    GDALRasterBandH band, GDALRWFlag rw_flag,
-    int x_off, int y_off, int x_size, int y_size,
-    void *buffer, int buf_x_size, int buf_y_size, GDALDataType buf_type,
-    int pixel_size, int line_size)
+CPLErr Rast_gdal_raster_IO(GDALRasterBandH band, GDALRWFlag rw_flag,
+			   int x_off, int y_off, int x_size, int y_size,
+			   void *buffer, int buf_x_size, int buf_y_size,
+			   GDALDataType buf_type, int pixel_size,
+			   int line_size)
 {
-    return (*pGDALRasterIO)(
-	band, rw_flag, x_off, y_off, x_size, y_size,
-	buffer, buf_x_size, buf_y_size, buf_type,
-	pixel_size, line_size);
+    return (*pGDALRasterIO) (band, rw_flag, x_off, y_off, x_size, y_size,
+			     buffer, buf_x_size, buf_y_size, buf_type,
+			     pixel_size, line_size);
 }
 #endif

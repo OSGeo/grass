@@ -72,7 +72,8 @@ void Rast_histogram_eq_colors(struct Colors *dst,
 	Rast_get_d_color(&x, &red2, &grn2, &blu2, src);
 
 	if (!first)
-	    Rast_add_c_color_rule(&prev, red, grn, blu, &cat, red2, grn2, blu2, dst);
+	    Rast_add_c_color_rule(&prev, red, grn, blu, &cat, red2, grn2,
+				  blu2, dst);
 
 	sum += count;
 	first = 0;
@@ -136,7 +137,8 @@ void Rast_histogram_eq_fp_colors(struct Colors *dst,
 	Rast_get_d_color(&x, &red2, &grn2, &blu2, src);
 
 	if (!first)
-	    Rast_add_d_color_rule(&val, red, grn, blu, &val2, red2, grn2, blu2, dst);
+	    Rast_add_d_color_rule(&val, red, grn, blu, &val2, red2, grn2,
+				  blu2, dst);
 	first = 0;
 
 	if (i == statf->count)
@@ -199,8 +201,7 @@ void Rast_log_colors(struct Colors *dst, struct Colors *src, int samples)
 
 	if (i > 0)
 	    Rast_add_d_color_rule(&prev, red, grn, blu,
-				      &x, red2, grn2, blu2,
-				      dst);
+				  &x, red2, grn2, blu2, dst);
 
 	prev = x;
 
@@ -262,14 +263,13 @@ void Rast_abs_log_colors(struct Colors *dst, struct Colors *src, int samples)
 
 	if (i > 0) {
 	    DCELL x0 = prev, x1 = x;
+
 	    Rast_add_d_color_rule(&x0, red, grn, blu,
-				      &x1, red2, grn2, blu2,
-				      dst);
+				  &x1, red2, grn2, blu2, dst);
 	    x0 = -x0;
 	    x1 = -x1;
 	    Rast_add_d_color_rule(&x0, red, grn, blu,
-				      &x1, red2, grn2, blu2,
-				      dst);
+				  &x1, red2, grn2, blu2, dst);
 	}
 
 	prev = x;
