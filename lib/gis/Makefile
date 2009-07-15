@@ -45,7 +45,7 @@ endif
 $(ETC)/%: %
 	$(INSTALL_DATA) $< $@
 
-DOXNAME=gislib
+DOXNAME = gis
 
 $(OBJDIR)/area_ellipse.o: pi.h
 $(OBJDIR)/area_sphere.o: pi.h
