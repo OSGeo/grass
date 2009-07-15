@@ -38,6 +38,8 @@ int Rast__check_for_auto_masking(void)
 {
     struct Cell_head cellhd;
 
+    Rast__init();
+
     /* if mask is switched off (-2) return -2
        if R__.auto_mask is not set (-1) or set (>=0) recheck the MASK */
 
@@ -84,6 +86,8 @@ int Rast__check_for_auto_masking(void)
 
 void Rast_suppress_masking(void)
 {
+    Rast__init();
+
     if (R__.auto_mask > 0) {
 	Rast_close(R__.mask_fd);
 	/* G_free (R__.mask_buf); */
@@ -101,6 +105,8 @@ void Rast_suppress_masking(void)
 
 void Rast_unsuppress_masking(void)
 {
+    Rast__init();
+
     if (R__.auto_mask < -1) {
 	R__.mask_fd = -1;
 	Rast__check_for_auto_masking();

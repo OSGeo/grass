@@ -33,6 +33,8 @@ int Rast_set_window(struct Cell_head *window)
     int maskfd;
     const char *err;
 
+    Rast__init();
+
     /* adjust window, check for valid window */
     /* adjust the real one, not a copy
        G_copy (&twindow, window, sizeof(struct Cell_head));

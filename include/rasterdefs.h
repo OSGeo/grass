@@ -343,6 +343,7 @@ int Rast_command_history(struct History *);
 void Rast_init(void);
 void Rast__check_init(void);
 void Rast_init_all(void);
+void Rast__init(void);
 
 /* interp.c */
 DCELL Rast_interp_linear(double, DCELL, DCELL);
