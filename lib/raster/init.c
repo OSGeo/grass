@@ -42,7 +42,7 @@ static int init(void);
  * \return exit() is called on error
  */
 
-void Rast__init(void)
+void Rast_init(void)
 {
     if (initialized)
 	return;

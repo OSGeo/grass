@@ -340,7 +340,7 @@ void Rast_short_history(const char *, const char *, struct History *);
 int Rast_command_history(struct History *);
 
 /* init.c */
-void Rast__init(void);
+void Rast_init(void);
 void Rast__check_init(void);
 void Rast_init_all(void);
 
