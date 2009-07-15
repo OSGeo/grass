@@ -56,7 +56,7 @@
  * my_ros.max, and my_ros.maxdir, or even my_ros.spotdist
  * respectively. 
  *   
- * COPYRIGHT:    (C) 2000-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2000-2009 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -74,8 +74,6 @@
 
 
 #define DATA(map, r, c)         (map)[(r) * ncols + (c)]
-#define DEBUG
-
 
 /*measurements of the 13 fuel models, input of Rothermel equation (1972) */
 float WO[4][14] =
@@ -202,7 +200,7 @@ int main(int argc, char *argv[])
     } parm;
 
     /* please, remove before GRASS 7 released */
-    struct Flag *flag1, *flag2;
+    struct Flag *flag_s;
     struct GModule *module;
 
     /* initialize access to database and create temporary files */
@@ -211,112 +209,82 @@ int main(int argc, char *argv[])
     /* Set description */
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("rate of spread"));
+    module->label = _("Generates rate of spread raster map layers.");
     module->description =
 	_("Generates three, or four raster map layers showing 1) the base "
 	  "(perpendicular) rate of spread (ROS), 2) the maximum (forward) ROS, "
 	  "3) the direction of the maximum ROS, and optionally 4) the "
 	  "maximum potential spotting distance.");
 
-    parm.model = G_define_option();
+    parm.model = G_define_standard_option(G_OPT_R_INPUT);
     parm.model->key = "model";
-    parm.model->type = TYPE_STRING;
-    parm.model->required = YES;
-    parm.model->gisprompt = "old,cell,raster";
     parm.model->description = _("Name of raster map containing fuel MODELs");
 
-    parm.mois_1h = G_define_option();
+    parm.mois_1h = G_define_standard_option(G_OPT_R_INPUT);
     parm.mois_1h->key = "moisture_1h";
-    parm.mois_1h->type = TYPE_STRING;
-    parm.mois_1h->gisprompt = "old,cell,raster";
+    parm.mois_1h->required = NO;
     parm.mois_1h->description =
 	_("Name of raster map containing the 1-HOUR fuel MOISTURE (%)");
 
-    parm.mois_10h = G_define_option();
+    parm.mois_10h = G_define_standard_option(G_OPT_R_INPUT);
     parm.mois_10h->key = "moisture_10h";
-    parm.mois_10h->type = TYPE_STRING;
-    parm.mois_10h->gisprompt = "old,cell,raster";
+    parm.mois_10h->required = NO;
     parm.mois_10h->description =
 	_("Name of raster map containing the 10-HOUR fuel MOISTURE (%)");
 
-    parm.mois_100h = G_define_option();
+    parm.mois_100h = G_define_standard_option(G_OPT_R_INPUT);
     parm.mois_100h->key = "moisture_100h";
-    parm.mois_100h->type = TYPE_STRING;
-    parm.mois_100h->gisprompt = "old,cell,raster";
+    parm.mois_100h->required = NO;
     parm.mois_100h->description =
 	_("Name of raster map containing the 100-HOUR fuel MOISTURE (%)");
 
-    parm.mois_live = G_define_option();
+    parm.mois_live = G_define_standard_option(G_OPT_R_INPUT);
     parm.mois_live->key = "moisture_live";
-    parm.mois_live->type = TYPE_STRING;
-    parm.mois_live->required = YES;
-    parm.mois_live->gisprompt = "old,cell,raster";
     parm.mois_live->description =
 	_("Name of raster map containing LIVE fuel MOISTURE (%)");
 
-    parm.vel = G_define_option();
+    parm.vel = G_define_standard_option(G_OPT_R_INPUT);
     parm.vel->key = "velocity";
-    parm.vel->type = TYPE_STRING;
-    parm.vel->gisprompt = "old,cell,raster";
+    parm.vel->required = NO;
     parm.vel->description =
 	_("Name of raster map containing midflame wind VELOCITYs (ft/min)");
 
-    parm.dir = G_define_option();
+    parm.dir = G_define_standard_option(G_OPT_R_INPUT);
     parm.dir->key = "direction";
-    parm.dir->type = TYPE_STRING;
-    parm.dir->gisprompt = "old,cell,raster";
+    parm.dir->required = NO;
     parm.dir->description =
 	_("Name of raster map containing wind DIRECTIONs (degree)");
 
-    parm.slope = G_define_option();
+    parm.slope = G_define_standard_option(G_OPT_R_INPUT);
     parm.slope->key = "slope";
-    parm.slope->type = TYPE_STRING;
-    parm.slope->gisprompt = "old,cell,raster";
+    parm.slope->required = NO;
     parm.slope->description =
 	_("Name of raster map containing SLOPE (degree)");
 
-    parm.aspect = G_define_option();
+    parm.aspect = G_define_standard_option(G_OPT_R_INPUT);
     parm.aspect->key = "aspect";
-    parm.aspect->type = TYPE_STRING;
-    parm.aspect->gisprompt = "old,cell,raster";
+    parm.aspect->required = NO;
     parm.aspect->description =
 	_("Name of raster map containing ASPECT (degree, anti-clockwise from E)");
 
-    parm.elev = G_define_option();
-    parm.elev->key = "elevation";
-    parm.elev->type = TYPE_STRING;
-    parm.elev->gisprompt = "old,cell,raster";
+    parm.elev = G_define_standard_option(G_OPT_R_ELEV);
+    parm.elev->required = NO;
     parm.elev->description =
 	_("Name of raster map containing ELEVATION (m) (required w/ -s)");
 
-    parm.output = G_define_option();
-    parm.output->key = "output";
-    parm.output->type = TYPE_STRING;
-    parm.output->required = YES;
-    parm.output->gisprompt = "new,cell,raster";
-    parm.output->description =
-	_("Name of raster map to contain results (several new layers)");
+    parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
+    parm.output->description = _("Name prefix for output raster maps (.base, .max, .maxdir)");
 
-    /* please, remove before GRASS 7 released */
-    flag1 = G_define_flag();
-    flag1->key = 'v';
-    flag1->description = _("Run verbosely");
-
-    flag2 = G_define_flag();
-    flag2->key = 's';
-    flag2->description = _("Also produce maximum SPOTTING distance");
+    flag_s = G_define_flag();
+    flag_s->key = 's';
+    flag_s->description = _("Also produce maximum SPOTTING distance");
 
     /*   Parse command line */
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
-
-    /* please, remove before GRASS 7 released */
-    if (flag1->answer) {
-	putenv("GRASS_VERBOSE=3");
-	G_warning(_("The '-v' flag is superseded and will be removed "
-		    "in future. Please use '--verbose' instead."));
-    }
-
-    spotting = flag2->answer;
+    
+    spotting = flag_s->answer;
 
     /*  Check if input layers exists in data base  */
     if (G_find_cell2(parm.model->answer, "") == NULL)
@@ -325,10 +293,8 @@ int main(int argc, char *argv[])
     if (!
 	(parm.mois_1h->answer || parm.mois_10h->answer ||
 	 parm.mois_100h->answer)) {
-	G_warning
-	    ("no dead fuel moisture is given. At least one of the 1-h, 10-h, 100-h moisture layers is required.");
-	G_usage();
-	exit(EXIT_FAILURE);
+	G_fatal_error(_("No dead fuel moisture is given. "
+			"At least one of the 1-h, 10-h, 100-h moisture layers is required."));
     }
 
     if (parm.mois_1h->answer) {
@@ -351,18 +317,14 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Raster map <%s> not found"), parm.mois_live->answer);
 
     if (parm.vel->answer && !(parm.dir->answer)) {
-	G_warning
-	    ("a wind direction layer should be given if the wind velocity layer--%s-- has been given\n",
-	     parm.vel->answer);
-	G_usage();
-	exit(EXIT_FAILURE);
+	G_fatal_error(_("A wind direction layer should be "
+			"given if the wind velocity layer <%s> has been given"),
+		      parm.vel->answer);
     }
     if (!(parm.vel->answer) && parm.dir->answer) {
-	G_warning
-	    ("a wind velocity layer should be given if the wind direction layer--%s-- has been given\n",
-	     parm.dir->answer);
-	G_usage();
-	exit(EXIT_FAILURE);
+	G_fatal_error(_("A wind velocity layer should be given "
+			"if the wind direction layer <%s> has been given"),
+		      parm.dir->answer);
     }
     if (parm.vel->answer) {
 	if (G_find_cell2(parm.vel->answer, "") == NULL)
@@ -374,18 +336,14 @@ int main(int argc, char *argv[])
     }
 
     if (parm.slope->answer && !(parm.aspect->answer)) {
-	G_warning
-	    ("an aspect layer should be given if the slope layer--%s-- has been given\n",
-	     parm.slope->answer);
-	G_usage();
-	exit(EXIT_FAILURE);
+	G_fatal_error(_("An aspect layer should be given "
+			"if the slope layer <%s> has been given"),
+		      parm.slope->answer);
     }
     if (!(parm.slope->answer) && parm.aspect->answer) {
-	G_warning
-	    ("a slope layer should be given if the aspect layer--%s-- has been given\n",
-	     parm.aspect->answer);
-	G_usage();
-	exit(EXIT_FAILURE);
+	G_fatal_error(_("A slope layer should be given "
+			"if the aspect layer <%s> has been given"),
+		      parm.aspect->answer);
     }
     if (parm.slope->answer) {
 	if (G_find_cell2(parm.slope->answer, "") == NULL)
@@ -399,10 +357,8 @@ int main(int argc, char *argv[])
 
     if (spotting) {
 	if (!(parm.elev->answer)) {
-	    G_warning
-		("an elevation layer should be given if considering spotting\n");
-	    G_usage();
-	    exit(EXIT_FAILURE);
+	    G_fatal_error(_("An elevation layer should be given "
+			    "if considering spotting"));
 	}
 	else {
 	    if (G_find_cell2(parm.elev->answer, "") == NULL)
@@ -417,24 +373,26 @@ int main(int argc, char *argv[])
     sprintf(name_maxdir, "%s.maxdir", parm.output->answer);
 
     /*check if the output layer names EXIST */
-    if (G_find_cell2(name_base, G_mapset()))
-	G_fatal_error(_("Raster map <%s> already exists in mapset <%s>, select another name"),
-		      name_base, G_mapset());
-
-    if (G_find_cell2(name_max, G_mapset()))
-	G_fatal_error(_("Raster map <%s> already exists in mapset <%s>, select another name"),
-		      name_max, G_mapset());
-
-    if (G_find_cell2(name_maxdir, G_mapset()))
-	G_fatal_error(_("Raster map <%s> already exists in mapset <%s>, select another name"),
-		      name_maxdir, G_mapset());
-
-    /*assign a name to output SPOTTING distance layer */
-    if (spotting) {
-	sprintf(name_spotdist, "%s.spotdist", parm.output->answer);
-	if (G_find_cell2(name_spotdist, G_mapset()))
-	    G_fatal_error(_("Raster map <%s> already exists in mapset <%s>, select another name"),
-			  name_spotdist, G_mapset());
+    if (G_check_overwrite(argc, argv) == 0) {
+	if (G_find_cell2(name_base, G_mapset()))
+	    G_fatal_error(_("Raster map <%s> already exists in mapset <%s>"),
+			  name_base, G_mapset());
+	
+	if (G_find_cell2(name_max, G_mapset()))
+	    G_fatal_error(_("Raster map <%s> already exists in mapset <%s>"),
+			  name_max, G_mapset());
+	
+	if (G_find_cell2(name_maxdir, G_mapset()))
+	    G_fatal_error(_("Raster map <%s> already exists in mapset <%s>"),
+			  name_maxdir, G_mapset());
+	
+	/*assign a name to output SPOTTING distance layer */
+	if (spotting) {
+	    sprintf(name_spotdist, "%s.spotdist", parm.output->answer);
+	    if (G_find_cell2(name_spotdist, G_mapset()))
+		G_fatal_error(_("Raster map <%s> already exists in mapset <%s>"),
+			      name_spotdist, G_mapset());
+	}
     }
 
     /*  Get database window parameters  */
@@ -627,41 +585,39 @@ int main(int argc, char *argv[])
     if (spotting)
 	for (row = 0; row < nrows; row++) {
 	    if (Rast_get_c_row(elev_fd, elev, row) < 0)
-		G_fatal_error("cannot get map row!");
+		G_fatal_error(_("Unable to read raster map <%s> row %d"), parm.elev->answer, row);
 	    for (col = 0; col < ncols; col++)
 		DATA(map_elev, row, col) = elev[col];
 	}
 
     /*major computation: compute ROSs one cell a time */
-    G_message(_("Percent Completed ... "));
-
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
 	if (Rast_get_c_row(fuel_fd, fuel, row) < 0)
-	    G_fatal_error("cannot get map row: %d!", row);
+	    G_fatal_error(_("Unable to read raster map <%s> row %d"), parm.model->answer, row);
 	if (parm.mois_1h->answer)
 	    if (Rast_get_c_row(mois_1h_fd, mois_1h, row) < 0)
-		G_fatal_error("cannot get map row: %d!", row);
+		G_fatal_error(_("Unable to read raster map <%s> row %d"), parm.mois_1h->answer, row);
 	if (parm.mois_10h->answer)
 	    if (Rast_get_c_row(mois_10h_fd, mois_10h, row) < 0)
-		G_fatal_error("cannot get map row: %d!", row);
+		G_fatal_error(_("Unable to read raster map <%s> row %d"), parm.mois_10h->answer, row);
 	if (parm.mois_100h->answer)
 	    if (Rast_get_c_row(mois_100h_fd, mois_100h, row) < 0)
-		G_fatal_error("cannot get map row: %d!", row);
+		G_fatal_error(_("Unable to read raster map <%s> row %d"), parm.mois_100h->answer, row);
 	if (Rast_get_c_row(mois_live_fd, mois_live, row) < 0)
-	    G_fatal_error("cannot get map row: %d!", row);
+	    G_fatal_error(_("Unable to read raster map <%s> row %d"), parm.mois_live->answer, row);
 	if (parm.vel->answer)
 	    if (Rast_get_c_row(vel_fd, vel, row) < 0)
-		G_fatal_error("cannot get map row: %d!", row);
+		G_fatal_error(_("Unable to read raster map <%s> row %d"), parm.vel->answer, row);
 	if (parm.dir->answer)
 	    if (Rast_get_c_row(dir_fd, dir, row) < 0)
-		G_fatal_error("cannot get map row: %d!", row);
+		G_fatal_error(_("Unable to read raster map <%s> row %d"), parm.dir->answer, row);
 	if (parm.slope->answer)
 	    if (Rast_get_c_row(slope_fd, slope, row) < 0)
-		G_fatal_error("cannot get map row: %d!", row);
+		G_fatal_error(_("Unable to read raster map <%s> row %d"), parm.slope->answer, row);
 	if (parm.aspect->answer)
 	    if (Rast_get_c_row(aspect_fd, aspect, row) < 0)
-		G_fatal_error("cannot get map row: %d!", row);
+		G_fatal_error(_("Unable to read raster map <%s> row %d"), parm.aspect->answer, row);
 
 	/*initialize cell buffers for output map layers */
 	for (col = 0; col < ncols; col++) {
@@ -920,5 +876,7 @@ int main(int argc, char *argv[])
        } 
      */
 
+    G_done_msg(_("Raster maps <%s>, <%s> and <%s> created."), name_base, name_max, name_maxdir);
+    
     exit(EXIT_SUCCESS);
 }
