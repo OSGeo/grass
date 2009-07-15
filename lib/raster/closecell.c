@@ -195,7 +195,7 @@ static void write_support_files(int fd)
 	   Rast_quant_add_rule(&fcb->quant, dcell_min, dcell_max, 
 	   cell_min, cell_max);
 	   }
-	*/
+	 */
 	Rast_quant_round(&fcb->quant);
 	if (Rast_write_quant(fcb->name, fcb->mapset, &fcb->quant) < 0)
 	    G_warning(_("unable to write quant file!"));
@@ -359,16 +359,17 @@ static int close_new(int fd, int ok)
 	    /* write out the rows stored in memory */
 	    for (row = fcb->min_null_row; row < fcb->null_cur_row; row++)
 		Rast__write_null_bits(null_fd,
-				   fcb->NULL_ROWS[row - fcb->min_null_row],
-				   row, fcb->cellhd.cols, fd);
+				      fcb->NULL_ROWS[row - fcb->min_null_row],
+				      row, fcb->cellhd.cols, fd);
 
 	    /* write missing rows */
 	    if (fcb->null_cur_row < fcb->cellhd.rows) {
-		unsigned char *null_work_buf = Rast__allocate_null_bits(fcb->cellhd.cols);
+		unsigned char *null_work_buf =
+		    Rast__allocate_null_bits(fcb->cellhd.cols);
 		Rast__init_null_bits(null_work_buf, fcb->cellhd.cols);
 		for (row = fcb->null_cur_row; row < fcb->cellhd.rows; row++)
 		    Rast__write_null_bits(null_fd, null_work_buf, row,
-				       fcb->cellhd.cols, fd);
+					  fcb->cellhd.cols, fd);
 		G_free(null_work_buf);
 	    }
 	    close(null_fd);

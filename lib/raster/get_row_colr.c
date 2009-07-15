@@ -38,8 +38,8 @@
  *  \return 0 on success
  */
 int Rast_get_row_colors(int fd, int row, struct Colors *colors,
-			    unsigned char *red, unsigned char *grn,
-			    unsigned char *blu, unsigned char *nul)
+			unsigned char *red, unsigned char *grn,
+			unsigned char *blu, unsigned char *nul)
 {
     int cols = G_window_cols();
     int type = Rast_get_map_type(fd);

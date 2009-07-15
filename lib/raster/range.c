@@ -24,12 +24,12 @@
 #define DEFAULT_CELL_MAX 255
 
 /*!
-  \brief Remove floating-point range
+   \brief Remove floating-point range
 
-  Note: For internal use only.
+   Note: For internal use only.
 
-  \param name map name
-*/
+   \param name map name
+ */
 void Rast__remove_fp_range(const char *name)
 {
     G_remove_misc("cell_misc", "f_range", name);
@@ -69,7 +69,7 @@ void Rast_construct_default_range(struct Range *range)
  * \return -1 on error
  */
 int Rast_read_fp_range(const char *name, const char *mapset,
-		    struct FPRange *drange)
+		       struct FPRange *drange)
 {
     struct Range range;
     int fd;
@@ -100,11 +100,11 @@ int Rast_read_fp_range(const char *name, const char *mapset,
     if (G_find_file2_misc("cell_misc", "f_range", name, mapset)) {
 	fd = G_open_old_misc("cell_misc", "f_range", name, mapset);
 	if (fd < 0) {
-	  G_warning(_("Unable to read fp range file for <%s@%s>"),
-		    name, mapset);
-	  return -1;
+	    G_warning(_("Unable to read fp range file for <%s@%s>"),
+		      name, mapset);
+	    return -1;
 	}
-	
+
 	if (read(fd, xdr_buf, 2 * XDR_DOUBLE_NBYTES) != 2 * XDR_DOUBLE_NBYTES)
 	    return 2;
 
@@ -113,18 +113,18 @@ int Rast_read_fp_range(const char *name, const char *mapset,
 
 	/* if the f_range file exists, but empty */
 	if (!xdr_double(&xdr_str, &dcell1) || !xdr_double(&xdr_str, &dcell2)) {
-	  if (fd) 
-	    close(fd);
-	  G_warning(_("Unable to read fp range file for <%s@%s>"),
-		    name, mapset);
-	  return -1;
+	    if (fd)
+		close(fd);
+	    G_warning(_("Unable to read fp range file for <%s@%s>"),
+		      name, mapset);
+	    return -1;
 	}
 
 	Rast_update_fp_range(dcell1, drange);
 	Rast_update_fp_range(dcell2, drange);
 	close(fd);
     }
-    
+
     return 1;
 }
 
@@ -173,7 +173,7 @@ int Rast_read_range(const char *name, const char *mapset, struct Range *range)
 
 	if (Rast_read_quant(name, mapset, &quant) < 0) {
 	    G_warning(_("Unable to read quant rules for raster map <%s@%s>"),
-		       name, mapset);
+		      name, mapset);
 	    return -1;
 	}
 	if (Rast_quant_is_truncate(&quant) || Rast_quant_is_round(&quant)) {
@@ -213,7 +213,7 @@ int Rast_read_range(const char *name, const char *mapset, struct Range *range)
 		      name, mapset);
 	    return -1;
 	}
-	
+
 	/* if range file exists but empty */
 	if (!fgets(buf, sizeof buf, fd))
 	    return 2;
@@ -225,12 +225,12 @@ int Rast_read_range(const char *name, const char *mapset, struct Range *range)
 	if (count <= 0) {
 	    if (fd)
 		fclose(fd);
-	    
+
 	    G_warning(_("Unable to read range file for <%s@%s>"),
 		      name, mapset);
 	    return -1;
 	}
-	
+
 	for (n = 0; n < count; n++) {
 	    /* if count==4, the range file is old (4.1) and 0's in it
 	       have to be ignored */
@@ -267,16 +267,14 @@ int Rast_write_range(const char *name, const struct Range *range)
 
     if (Rast_map_type(name, G_mapset()) != CELL_TYPE) {
 	G_remove_misc("cell_misc", "range", name);	/* remove the old file with this name */
-	G_warning(_("Unable to write range file for <%s>"),
-		  name);
+	G_warning(_("Unable to write range file for <%s>"), name);
 	return -1;
     }
 
     fd = G_fopen_new_misc("cell_misc", "range", name);
     if (!fd) {
 	G_remove_misc("cell_misc", "range", name);	/* remove the old file with this name */
-	G_warning(_("Unable to write range file for <%s>"),
-		  name);
+	G_warning(_("Unable to write range file for <%s>"), name);
 	return -1;
     }
 
@@ -314,11 +312,10 @@ int Rast_write_fp_range(const char *name, const struct FPRange *range)
     fd = G_open_new_misc("cell_misc", "f_range", name);
     if (fd < 0) {
 	G_remove_misc("cell_misc", "f_range", name);
-	G_warning(_("Unable to write range file for <%s>"),
-		  name);
+	G_warning(_("Unable to write range file for <%s>"), name);
 	return -1;
     }
-    
+
     /* if range hasn't been updated, write empty file meaning Nulls */
     if (range->first_time) {
 	close(fd);
@@ -330,18 +327,16 @@ int Rast_write_fp_range(const char *name, const struct FPRange *range)
 
     if (!xdr_double(&xdr_str, (double *)&(range->min))) {
 	G_remove_misc("cell_misc", "f_range", name);
-	G_warning(_("Unable to write range file for <%s>"),
-		  name);
+	G_warning(_("Unable to write range file for <%s>"), name);
 	return -1;
     }
-    
+
     if (!xdr_double(&xdr_str, (double *)&(range->max))) {
 	G_remove_misc("cell_misc", "f_range", name);
-	G_warning(_("Unable to write range file for <%s>"),
-		  name);
+	G_warning(_("Unable to write range file for <%s>"), name);
 	return -1;
     }
-    
+
     write(fd, xdr_buf, XDR_DOUBLE_NBYTES * 2);
     close(fd);
 
@@ -415,7 +410,7 @@ void Rast_update_fp_range(DCELL val, struct FPRange *range)
  * \param n number of values
  * \param range pointer to Range structure which holds range info
  */
-void Rast_row_update_range(const CELL *cell, int n, struct Range *range)
+void Rast_row_update_range(const CELL * cell, int n, struct Range *range)
 {
     Rast__row_update_range(cell, n, range, 0);
 }
@@ -430,8 +425,8 @@ void Rast_row_update_range(const CELL *cell, int n, struct Range *range)
  * \param range pointer to Range structure which holds range info
  * \param ignore_zeros ignore zeros
  */
-void Rast__row_update_range(const CELL *cell, int n,
-			 struct Range *range, int ignore_zeros)
+void Rast__row_update_range(const CELL * cell, int n,
+			    struct Range *range, int ignore_zeros)
 {
     CELL cat;
 
@@ -465,7 +460,8 @@ void Rast__row_update_range(const CELL *cell, int n,
  * \param data_type raster type (CELL, FCELL, DCELL)
  */
 void Rast_row_update_fp_range(const void *rast, int n,
-			   struct FPRange *range, RASTER_MAP_TYPE data_type)
+			      struct FPRange *range,
+			      RASTER_MAP_TYPE data_type)
 {
     DCELL val = 0L;
 
@@ -583,7 +579,7 @@ void Rast_init_fp_range(struct FPRange *range)
  * \param[out] max maximum value
  */
 void Rast_get_fp_range_min_max(const struct FPRange *range,
-			    DCELL *min, DCELL *max)
+			       DCELL * min, DCELL * max)
 {
     if (range->first_time) {
 	Rast_set_d_null_value(min, 1);

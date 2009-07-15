@@ -1,16 +1,16 @@
 /*!
-  \file raster/raster_metadata.c
+   \file raster/raster_metadata.c
 
-  \brief Raster library - Functions to read and write raster "units"
-  and "vertical datum" meta-data info
+   \brief Raster library - Functions to read and write raster "units"
+   and "vertical datum" meta-data info
 
-  (C) 2007-2009 by Hamish Bowman, and the GRASS Development Team
+   (C) 2007-2009 by Hamish Bowman, and the GRASS Development Team
 
-  This program is free software under the GNU General Public License
-  (>=v2).  Read the file COPYING that comes with GRASS for details.
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
-  \author Hamish Bowman
-*/
+   \author Hamish Bowman
+ */
 
 #include <stdio.h>
 #include <string.h>
@@ -19,10 +19,8 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-static int misc_read_line(const char *, const char *,
-			  const char *, char *);
-static int misc_write_line(const char *, const char *,
-			   const char *);
+static int misc_read_line(const char *, const char *, const char *, char *);
+static int misc_write_line(const char *, const char *, const char *);
 
 /*!
  * \brief Get a raster map's units metadata string
@@ -144,8 +142,7 @@ int misc_read_line(const char *elem, const char *name,
  * \return  0 on success
  * \return -1, EOF (fclose() result) on error
  */
-int misc_write_line(const char *elem, const char *name,
-		    const char *str)
+int misc_write_line(const char *elem, const char *name, const char *str)
 {
     FILE *fd;
 

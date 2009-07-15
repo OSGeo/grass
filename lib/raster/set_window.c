@@ -50,13 +50,14 @@ int Rast_set_window(struct Cell_head *window)
     maskfd = R__.auto_mask > 0 ? R__.mask_fd : -1;
     for (i = 0; i < R__.fileinfo_count; i++) {
 	struct fileinfo *fcb = &R__.fileinfo[i];
+
 	if (fcb->open_mode == OPEN_OLD) {
 	    if (fcb->cellhd.zone == window->zone &&
 		fcb->cellhd.proj == window->proj)
 		continue;
 	    if (i != maskfd) {
 		G_warning(_("Rast_set_window(): projection/zone differs from that of "
-			    "currently open raster maps"));
+			   "currently open raster maps"));
 		return -1;
 	    }
 	}
@@ -92,28 +93,26 @@ int Rast_set_window(struct Cell_head *window)
 	    Rast__create_window_mapping(i);
 	/* code commented 10/1999 due to problems */
 #if 0
-	else
-	{
+	else {
 	    /* opened for writing */
-	    G_free (fcb->data);
-	    fcb->data = (unsigned char *) G_calloc (R__.window.cols,
-						    Rast_cell_size(fcb->map_type));
+	    G_free(fcb->data);
+	    fcb->data = (unsigned char *)G_calloc(R__.window.cols,
+						  Rast_cell_size(fcb->
+								 map_type));
 	}
 
 	/* allocate null bitstream buffers for reading/writing null rows */
-	for (j=0;j< NULL_ROWS_INMEM; j++)
-	{
-	    G_free (fcb->NULL_ROWS[j]);
+	for (j = 0; j < NULL_ROWS_INMEM; j++) {
+	    G_free(fcb->NULL_ROWS[j]);
 	    fcb->NULL_ROWS[j] = (R__.window.cols);
 	}
 
 
 	/* initialize : no NULL rows in memory */
 	fcb->min_null_row = (-1) * NULL_ROWS_INMEM;
-	if(fcb->null_cur_row > 0)
-	{
-	  G_warning(_("Calling Rast_set_window() in the middle of writing map %s"), 
-		    fcb->name);
+	if (fcb->null_cur_row > 0) {
+	    G_warning(_("Calling Rast_set_window() in the middle of writing map %s"),
+		      fcb->name);
 	    fcb->null_cur_row = 0;
 	}
 #endif

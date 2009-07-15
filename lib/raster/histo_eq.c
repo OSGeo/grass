@@ -13,7 +13,7 @@
 #include <grass/raster.h>
 
 void Rast_histogram_eq(const struct Histogram *histo,
-		    unsigned char **map, CELL *min, CELL *max)
+		       unsigned char **map, CELL * min, CELL * max)
 {
     int i;
     int x;

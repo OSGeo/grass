@@ -34,7 +34,8 @@ static void print_history_error(const char *, const char *, FILE *);
  * \return -1 on error
  * \return 0 on success
  */
-int Rast_read_history(const char *name, const char *mapset, struct History *hist)
+int Rast_read_history(const char *name, const char *mapset,
+		      struct History *hist)
 {
     FILE *fd;
 
@@ -106,16 +107,16 @@ int Rast_read_history(const char *name, const char *mapset, struct History *hist
     return 0;
 }
 
-void print_history_error(const char *name, const char *mapset, FILE *fd)
+void print_history_error(const char *name, const char *mapset, FILE * fd)
 {
     if (fd != NULL)
 	fclose(fd);
-    
+
     if (mapset) {
 	G_warning(_("Unable to get history information for <%s@%s>"),
 		  name, mapset);
     }
-    else { /* write */
+    else {			/* write */
 	G_warning(_("Unable to write history information for <%s>"), name);
     }
 }
@@ -148,7 +149,7 @@ int Rast_write_history(const char *name, struct History *hist)
 	print_history_error(name, NULL, fd);
 	return -1;
     }
-    
+
     fprintf(fd, "%s\n", hist->mapid);
     fprintf(fd, "%s\n", hist->title);
     fprintf(fd, "%s\n", hist->mapset);
@@ -162,7 +163,7 @@ int Rast_write_history(const char *name, struct History *hist)
 	fprintf(fd, "%s\n", hist->edhist[i]);
 
     fclose(fd);
-    
+
     return 0;
 }
 
@@ -181,7 +182,8 @@ int Rast_write_history(const char *name, struct History *hist)
  * \param type map type
  * \param hist pointer to History structure which holds history info
  */
-void Rast_short_history(const char *name, const char *type, struct History *hist)
+void Rast_short_history(const char *name, const char *type,
+			struct History *hist)
 {
     strncpy(hist->mapid, G_date(), RECORD_LEN);
     strncpy(hist->title, name, RECORD_LEN);

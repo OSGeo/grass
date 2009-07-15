@@ -53,11 +53,11 @@ void Rast_lookup_c_colors(const CELL * cell,
 
     /* first lookup the fixed colors */
     Rast__lookup_colors((void *)cell, red, grn, blu, set, n, colors, 0, 0,
-		     CELL_TYPE);
+			CELL_TYPE);
 
     /* now lookup unset colors using the modular rules */
     Rast__lookup_colors((void *)cell, red, grn, blu, set, n, colors, 1, 0,
-		     CELL_TYPE);
+			CELL_TYPE);
 }
 
 /*!
@@ -87,10 +87,12 @@ void Rast_lookup_colors(const void *raster,
     G_zero((char *)set, n * sizeof(unsigned char));
 
     /* first lookup the fixed colors */
-    Rast__lookup_colors(raster, red, grn, blu, set, n, colors, 0, 0, map_type);
+    Rast__lookup_colors(raster, red, grn, blu, set, n, colors, 0, 0,
+			map_type);
 
     /* now lookup unset colors using the modular rules */
-    Rast__lookup_colors(raster, red, grn, blu, set, n, colors, 1, 0, map_type);
+    Rast__lookup_colors(raster, red, grn, blu, set, n, colors, 1, 0,
+			map_type);
 }
 
 /*!
@@ -119,11 +121,11 @@ void Rast_lookup_f_colors(const FCELL * fcell, unsigned char *red,
 
     /* first lookup the fixed colors */
     Rast__lookup_colors((void *)fcell, red, grn, blu, set, n, colors, 0, 0,
-		     FCELL_TYPE);
+			FCELL_TYPE);
 
     /* now lookup unset colors using the modular rules */
     Rast__lookup_colors((void *)fcell, red, grn, blu, set, n, colors, 1, 0,
-		     FCELL_TYPE);
+			FCELL_TYPE);
 }
 
 /*!
@@ -152,11 +154,11 @@ void Rast_lookup_d_colors(const DCELL * dcell, unsigned char *red,
 
     /* first lookup the fixed colors */
     Rast__lookup_colors((void *)dcell, red, grn, blu, set, n, colors, 0, 0,
-		     DCELL_TYPE);
+			DCELL_TYPE);
 
     /* now lookup unset colors using the modular rules */
     Rast__lookup_colors((void *)dcell, red, grn, blu, set, n, colors, 1, 0,
-		     DCELL_TYPE);
+			DCELL_TYPE);
 }
 
 
@@ -404,14 +406,14 @@ void Rast__lookup_colors(const void *raster, unsigned char *red,
 }
 
 /*!
-  \brief Interpolate color rules
+   \brief Interpolate color rules
 
-  \param val raster cell value
-  \param[out] red red value
-  \param[out] grn green value
-  \param[out] blu blue value
-  \param rule pointer to _Color_Rule which holds color rules info
-*/
+   \param val raster cell value
+   \param[out] red red value
+   \param[out] grn green value
+   \param[out] blu blue value
+   \param rule pointer to _Color_Rule which holds color rules info
+ */
 void Rast__interpolate_color_rule(DCELL val, unsigned char *red,
 				  unsigned char *grn, unsigned char *blu,
 				  const struct _Color_Rule_ *rule)

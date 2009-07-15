@@ -15,17 +15,17 @@
 #include <grass/glocale.h>
 
 /*!
-  \brief Writes the raster file header.
+   \brief Writes the raster file header.
 
-  Writes the cell file header information associated with map layer "map"
-  into current mapset from the structure "cellhd".
+   Writes the cell file header information associated with map layer "map"
+   into current mapset from the structure "cellhd".
 
-  \param name name of map
-  \param cellhd structure holding cell header info
+   \param name name of map
+   \param cellhd structure holding cell header info
 
-  \return 0 on success
-  \return -1 on failure
-*/
+   \return 0 on success
+   \return -1 on failure
+ */
 int Rast_put_cellhd(const char *name, struct Cell_head *cellhd)
 {
     FILE *fd;

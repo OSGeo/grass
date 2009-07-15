@@ -41,7 +41,7 @@ static int get_reclass_table(FILE *, struct Reclass *);
  * \return -1 if there was a problem reading the raster header
  */
 int Rast_is_reclass(const char *name, const char *mapset, char *rname,
-		 char *rmapset)
+		    char *rmapset)
 {
     FILE *fd;
     int type;
@@ -77,7 +77,7 @@ int Rast_is_reclass(const char *name, const char *mapset, char *rname,
  * \return -1 on error
  */
 int Rast_is_reclassed_to(const char *name, const char *mapset, int *nrmaps,
-		      char ***rmaps)
+			 char ***rmaps)
 {
     FILE *fd;
     int i, j, k, l;
@@ -126,17 +126,17 @@ int Rast_is_reclassed_to(const char *name, const char *mapset, int *nrmaps,
 }
 
 /*!
-  \brief Get reclass
+   \brief Get reclass
 
-  \param name map name
-  \param mapset mapset name
-  \param[out] reclass pointer to Reclass structure
+   \param name map name
+   \param mapset mapset name
+   \param[out] reclass pointer to Reclass structure
 
-  \return -1 on error
-  \return type code
-*/
+   \return -1 on error
+   \return type code
+ */
 int Rast_get_reclass(const char *name, const char *mapset,
-		  struct Reclass *reclass)
+		     struct Reclass *reclass)
 {
     FILE *fd;
     int stat;
@@ -174,10 +174,10 @@ int Rast_get_reclass(const char *name, const char *mapset,
 }
 
 /*!
-  \brief Free Reclass structure
+   \brief Free Reclass structure
 
-  \param reclass pointer to Reclass structure
-*/
+   \param reclass pointer to Reclass structure
+ */
 void Rast_free_reclass(struct Reclass *reclass)
 {
     switch (reclass->type) {
@@ -249,14 +249,14 @@ static FILE *fopen_cellhd_old(const char *name, const char *mapset)
 }
 
 /*!
-  \brief Put reclass
+   \brief Put reclass
 
-  \param name map name
-  \param reclass pointer to Reclass structure
-  
-  \return -1 on error
-  \return 1 on success
-*/
+   \param name map name
+   \param reclass pointer to Reclass structure
+
+   \return -1 on error
+   \return 1 on success
+ */
 int Rast_put_reclass(const char *name, const struct Reclass *reclass)
 {
     FILE *fd;

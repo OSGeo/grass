@@ -19,18 +19,18 @@
 #include <grass/glocale.h>
 
 /*!
-  \brief Writes the quant rules.
+   \brief Writes the quant rules.
 
-  Writes the quant rules which indicate that all floating numbers
-  should be truncated instead of applying any quant rules from
-  floats to integers.
+   Writes the quant rules which indicate that all floating numbers
+   should be truncated instead of applying any quant rules from
+   floats to integers.
 
-  \param name map name
-  \param mapset mapset name
+   \param name map name
+   \param mapset mapset name
 
-  \return -1 on error
-  \return 1 on success
-*/
+   \return -1 on error
+   \return 1 on success
+ */
 int Rast_truncate_fp_map(const char *name, const char *mapset)
 {
     struct Quant quant;
@@ -39,26 +39,25 @@ int Rast_truncate_fp_map(const char *name, const char *mapset)
     Rast_quant_truncate(&quant);
     /* quantize the map */
     if (Rast_write_quant(name, mapset, &quant) < 0) {
-	G_warning(_("Unable to write quant rules for raster map <%s>"),
-		  name);
+	G_warning(_("Unable to write quant rules for raster map <%s>"), name);
 	return -1;
     }
     return 1;
 }
 
 /*!
-  \brief Writes the quant rules.
-  
-  Writes the quant rules which indicate that all floating numbers
-  should be rounded instead of applying any quant rules from
-  floats to integers.
-  
-  \param name map name
-  \param mapset mapset name
+   \brief Writes the quant rules.
 
-  \return -1 on error
-  \return 1 on success
-*/
+   Writes the quant rules which indicate that all floating numbers
+   should be rounded instead of applying any quant rules from
+   floats to integers.
+
+   \param name map name
+   \param mapset mapset name
+
+   \return -1 on error
+   \return 1 on success
+ */
 int Rast_round_fp_map(const char *name, const char *mapset)
 {
     struct Quant quant;
@@ -67,8 +66,7 @@ int Rast_round_fp_map(const char *name, const char *mapset)
     Rast_quant_round(&quant);
     /* round the map */
     if (Rast_write_quant(name, mapset, &quant) < 0) {
-	G_warning(_("Unable to write quant rules for raster map <%s>"),
-		  name);
+	G_warning(_("Unable to write quant rules for raster map <%s>"), name);
 	return -1;
     }
     return 1;
@@ -98,7 +96,7 @@ int Rast_round_fp_map(const char *name, const char *mapset)
  * \return 1 on success
  */
 int Rast_quantize_fp_map(const char *name, const char *mapset,
-		      CELL min, CELL max)
+			 CELL min, CELL max)
 {
     DCELL d_min, d_max;
     struct FPRange fp_range;
@@ -148,7 +146,7 @@ int Rast_quantize_fp_map(const char *name, const char *mapset,
  * \return 1 on success
  */
 int Rast_quantize_fp_map_range(const char *name, const char *mapset,
-			    DCELL d_min, DCELL d_max, CELL min, CELL max)
+			       DCELL d_min, DCELL d_max, CELL min, CELL max)
 {
     struct Quant quant;
 
@@ -156,8 +154,7 @@ int Rast_quantize_fp_map_range(const char *name, const char *mapset,
     Rast_quant_add_rule(&quant, d_min, d_max, min, max);
     /* quantize the map */
     if (Rast_write_quant(name, mapset, &quant) < 0) {
-	G_warning(_("Unable to write quant rules for raster map <%s>"),
-		  name);
+	G_warning(_("Unable to write quant rules for raster map <%s>"), name);
 	return -1;
     }
     return 1;
@@ -182,7 +179,7 @@ int Rast_quantize_fp_map_range(const char *name, const char *mapset,
  * \return 1 on success
  */
 int Rast_write_quant(const char *name, const char *mapset,
-		  const struct Quant *quant)
+		     const struct Quant *quant)
 {
     CELL cell_min, cell_max;
     DCELL d_min, d_max;
@@ -197,8 +194,7 @@ int Rast_write_quant(const char *name, const char *mapset,
 
     /* first actually write the rules */
     if (Rast__quant_export(name, mapset, quant) < 0) {
-	G_warning (_("Unable to write quant rules for raster map <%s>"),
-		   name);
+	G_warning(_("Unable to write quant rules for raster map <%s>"), name);
 	return -1;
     }
 

@@ -44,8 +44,8 @@ enum rule_error
 };
 
 int Rast_parse_color_rule(DCELL min, DCELL max, const char *buf,
-		       DCELL * val, int *r, int *g, int *b,
-		       int *norm, int *nval, int *dflt)
+			  DCELL * val, int *r, int *g, int *b,
+			  int *norm, int *nval, int *dflt)
 {
     char value[80], color[80];
     double x;
@@ -124,8 +124,8 @@ const char *Rast_parse_color_rule_error(int code)
 }
 
 int Rast_read_color_rule(void *closure, DCELL min, DCELL max,
-		      DCELL * val, int *r, int *g, int *b,
-		      int *norm, int *nval, int *dflt)
+			 DCELL * val, int *r, int *g, int *b,
+			 int *norm, int *nval, int *dflt)
 {
     char buf[1024];
     FILE *fp = closure;
@@ -146,7 +146,8 @@ int Rast_read_color_rule(void *closure, DCELL min, DCELL max,
 	    continue;
 
 	ret =
-	    Rast_parse_color_rule(min, max, buf, val, r, g, b, norm, nval, dflt);
+	    Rast_parse_color_rule(min, max, buf, val, r, g, b, norm, nval,
+				  dflt);
 	if (ret == 0)
 	    return 1;
 
@@ -158,7 +159,7 @@ int Rast_read_color_rule(void *closure, DCELL min, DCELL max,
 }
 
 int Rast_read_color_rules(struct Colors *colors, DCELL min, DCELL max,
-		       read_rule_fn * read_rule, void *closure)
+			  read_rule_fn * read_rule, void *closure)
 {
     struct rule *rule = NULL;
     int nrules = 0;
@@ -211,7 +212,7 @@ int Rast_read_color_rules(struct Colors *colors, DCELL min, DCELL max,
 	struct rule *hi = &rule[n];
 
 	Rast_add_d_color_rule(&lo->val, lo->r, lo->g, lo->b,
-				  &hi->val, hi->r, hi->g, hi->b, colors);
+			      &hi->val, hi->r, hi->g, hi->b, colors);
     }
 
     /* null value and default color set up, if rules are set up by user */
@@ -224,7 +225,8 @@ int Rast_read_color_rules(struct Colors *colors, DCELL min, DCELL max,
     return 1;
 }
 
-static int load_rules_file(struct Colors *colors, const char *path, DCELL min, DCELL max)
+static int load_rules_file(struct Colors *colors, const char *path, DCELL min,
+			   DCELL max)
 {
     FILE *fp;
     int ret;
@@ -234,24 +236,29 @@ static int load_rules_file(struct Colors *colors, const char *path, DCELL min, D
     if (!fp)
 	return 0;
 
-    ret = Rast_read_color_rules(colors, min, max, Rast_read_color_rule, (void *)fp);
+    ret =
+	Rast_read_color_rules(colors, min, max, Rast_read_color_rule,
+			      (void *)fp);
 
     fclose(fp);
 
     return ret;
 }
 
-int Rast_load_colors(struct Colors *colors, const char *path, CELL min, CELL max)
+int Rast_load_colors(struct Colors *colors, const char *path, CELL min,
+		     CELL max)
 {
     return load_rules_file(colors, path, (DCELL) min, (DCELL) max);
 }
 
-int Rast_load_fp_colors(struct Colors *colors, const char *path, DCELL min, DCELL max)
+int Rast_load_fp_colors(struct Colors *colors, const char *path, DCELL min,
+			DCELL max)
 {
     return load_rules_file(colors, path, min, max);
 }
 
-static void load_rules_name(struct Colors *colors, const char *name, DCELL min, DCELL max)
+static void load_rules_name(struct Colors *colors, const char *name,
+			    DCELL min, DCELL max)
 {
     char path[GPATH_MAX];
 
@@ -261,12 +268,14 @@ static void load_rules_name(struct Colors *colors, const char *name, DCELL min, 
 	G_fatal_error(_("Unable to load color rules <%s>"), name);
 }
 
-void Rast_make_colors(struct Colors *colors, const char *name, CELL min, CELL max)
+void Rast_make_colors(struct Colors *colors, const char *name, CELL min,
+		      CELL max)
 {
     return load_rules_name(colors, name, (DCELL) min, (DCELL) max);
 }
 
-void Rast_make_fp_colors(struct Colors *colors, const char *name, DCELL min, DCELL max)
+void Rast_make_fp_colors(struct Colors *colors, const char *name, DCELL min,
+			 DCELL max)
 {
     return load_rules_name(colors, name, min, max);
 }

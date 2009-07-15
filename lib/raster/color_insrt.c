@@ -12,8 +12,8 @@
 #define LIMIT(x) if (x < 0) x = 0; else if (x > 255) x = 255;
 
 int Rast__insert_color_into_lookup(CELL cat,
-				int red, int grn, int blu,
-				struct _Color_Info_ *cp)
+				   int red, int grn, int blu,
+				   struct _Color_Info_ *cp)
 {
     long nalloc;
     long i;

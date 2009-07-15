@@ -34,12 +34,12 @@ void Rast_free_colors(struct Colors *colors)
 }
 
 /*!
-  \brief Free color rules structure
+   \brief Free color rules structure
 
-  Note: Only for internal use.
+   Note: Only for internal use.
 
-  \param cp pointer to _Color_Info structure
-*/
+   \param cp pointer to _Color_Info structure
+ */
 void Rast__color_free_rules(struct _Color_Info_ *cp)
 {
     struct _Color_Rule_ *rule, *next;
@@ -52,12 +52,12 @@ void Rast__color_free_rules(struct _Color_Info_ *cp)
 }
 
 /*!
-  \brief Free color rules structure
+   \brief Free color rules structure
 
-  Note: Only for internal use.
+   Note: Only for internal use.
 
-  \param cp pointer to _Color_Info structure
-*/
+   \param cp pointer to _Color_Info structure
+ */
 void Rast__color_free_lookup(struct _Color_Info_ *cp)
 {
     if (cp->lookup.active) {
@@ -70,12 +70,12 @@ void Rast__color_free_lookup(struct _Color_Info_ *cp)
 }
 
 /*!
-  \brief Free color rules structure
+   \brief Free color rules structure
 
-  Note: Only for internal use.
+   Note: Only for internal use.
 
-  \param cp pointer to _Color_Info structure
-*/
+   \param cp pointer to _Color_Info structure
+ */
 void Rast__color_free_fp_lookup(struct _Color_Info_ *cp)
 {
     if (cp->fp_lookup.active) {
@@ -87,14 +87,14 @@ void Rast__color_free_fp_lookup(struct _Color_Info_ *cp)
 }
 
 /*!
-  \brief Reset colors structure
+   \brief Reset colors structure
 
-  Note: Only for internal use.
+   Note: Only for internal use.
 
-  This routine should NOT init the colors.
+   This routine should NOT init the colors.
 
-  \param colors pointer to Colors structure
-*/
+   \param colors pointer to Colors structure
+ */
 void Rast__color_reset(struct Colors *colors)
 {
     Rast__color_free_lookup(&colors->fixed);

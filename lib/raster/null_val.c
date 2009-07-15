@@ -26,13 +26,13 @@
 static void EmbedGivenNulls(void *, char *, RASTER_MAP_TYPE, int);
 
 /*!
-  \brief To insert null values into a map. Needs more.....
+   \brief To insert null values into a map. Needs more.....
 
-  \param cell raster values
-  \param nulls raster null values
-  \param map_type type of raster - CELL, FCELL, DCELL
-  \param ncols number of columns
-*/
+   \param cell raster values
+   \param nulls raster null values
+   \param map_type type of raster - CELL, FCELL, DCELL
+   \param ncols number of columns
+ */
 void EmbedGivenNulls(void *cell, char *nulls, RASTER_MAP_TYPE map_type,
 		     int ncols)
 {
@@ -68,17 +68,17 @@ void EmbedGivenNulls(void *cell, char *nulls, RASTER_MAP_TYPE map_type,
 }
 
 /*!
-  \brief To set one or more raster values to null.
+   \brief To set one or more raster values to null.
 
-  It also sets null to zero if null_is_zero is TRUE.
+   It also sets null to zero if null_is_zero is TRUE.
 
-  \param rast pointer to values to set to null
-  \param numVals number of values to set to null
-  \param null_is_zero flag to indicate if NULL = 0
-  \param data_type type of raster - CELL, FCELL, DCELL
-*/
+   \param rast pointer to values to set to null
+   \param numVals number of values to set to null
+   \param null_is_zero flag to indicate if NULL = 0
+   \param data_type type of raster - CELL, FCELL, DCELL
+ */
 void Rast__set_null_value(void *rast, int numVals, int null_is_zero,
-		       RASTER_MAP_TYPE data_type)
+			  RASTER_MAP_TYPE data_type)
 {
     if (null_is_zero) {
 	G_zero((char *)rast, numVals * Rast_cell_size(data_type));
@@ -89,12 +89,12 @@ void Rast__set_null_value(void *rast, int numVals, int null_is_zero,
 }
 
 /*!
- \brief To set one or more raster values to null.
+   \brief To set one or more raster values to null.
 
- \param buf pointer to values to set to null
- \param numVals number of values to set to null
- \param data_type type of raster - CELL, FCELL, DCELL
-*/
+   \param buf pointer to values to set to null
+   \param numVals number of values to set to null
+   \param data_type type of raster - CELL, FCELL, DCELL
+ */
 void Rast_set_null_value(void *buf, int numVals, RASTER_MAP_TYPE data_type)
 {
     switch (data_type) {
@@ -116,29 +116,30 @@ void Rast_set_null_value(void *buf, int numVals, RASTER_MAP_TYPE data_type)
 }
 
 /*!
-  \brief To set a number of CELL raster values to NULL.
-  
-  \param cellVals pointer to CELL values to set to null
-  \param numVals  number of values to set to null
-*/
-void Rast_set_c_null_value(CELL *cellVals, int numVals)
+   \brief To set a number of CELL raster values to NULL.
+
+   \param cellVals pointer to CELL values to set to null
+   \param numVals  number of values to set to null
+ */
+void Rast_set_c_null_value(CELL * cellVals, int numVals)
 {
     int i;			/* counter */
 
     for (i = 0; i < numVals; i++)
-	cellVals[i] = (int) 0x80000000;
+	cellVals[i] = (int)0x80000000;
 }
 
 /*!
- \brief To set a number of FCELL raster values to NULL.
+   \brief To set a number of FCELL raster values to NULL.
 
- \param fcellVals pointer to FCELL values to set to null
- \param numVals number of values to set to null
-*/
-void Rast_set_f_null_value(FCELL *fcellVals, int numVals)
+   \param fcellVals pointer to FCELL values to set to null
+   \param numVals number of values to set to null
+ */
+void Rast_set_f_null_value(FCELL * fcellVals, int numVals)
 {
     static const unsigned char null_bits[4] = {
-	0xFF, 0xFF, 0xFF, 0xFF};
+	0xFF, 0xFF, 0xFF, 0xFF
+    };
     int i;
 
     for (i = 0; i < numVals; i++)
@@ -146,15 +147,16 @@ void Rast_set_f_null_value(FCELL *fcellVals, int numVals)
 }
 
 /*!
-  \brief To set a number of DCELL raster values to NULL.
-  
-  \param dcellVals pointer to DCELL values to set to null
-  \param numVals number of values to set to null
-*/
-void Rast_set_d_null_value(DCELL *dcellVals, int numVals)
+   \brief To set a number of DCELL raster values to NULL.
+
+   \param dcellVals pointer to DCELL values to set to null
+   \param numVals number of values to set to null
+ */
+void Rast_set_d_null_value(DCELL * dcellVals, int numVals)
 {
     static const unsigned char null_bits[8] = {
-	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
+    };
     int i;
 
     for (i = 0; i < numVals; i++)
@@ -162,17 +164,17 @@ void Rast_set_d_null_value(DCELL *dcellVals, int numVals)
 }
 
 /*!
-  \brief To check if a raster value is set to NULL
+   \brief To check if a raster value is set to NULL
 
-    - If the <em>data_type</em> is CELL_TYPE, calls Rast_is_c_null_value()
-    - If the <em>data_type</em> is FCELL_TYPE, calls Rast_is_f_null_value()
-    - If the <em>data_type</em> is DCELL_TYPE, calls Rast_is_d_null_value()
-  
-  \param rast raster value to check 
-  \param data_type type of raster - CELL, FCELL, DCELL
+   - If the <em>data_type</em> is CELL_TYPE, calls Rast_is_c_null_value()
+   - If the <em>data_type</em> is FCELL_TYPE, calls Rast_is_f_null_value()
+   - If the <em>data_type</em> is DCELL_TYPE, calls Rast_is_d_null_value()
 
-  \return TRUE if raster value is NULL
-  \return FALSE otherwise
+   \param rast raster value to check 
+   \param data_type type of raster - CELL, FCELL, DCELL
+
+   \return TRUE if raster value is NULL
+   \return FALSE otherwise
  */
 int Rast_is_null_value(const void *rast, RASTER_MAP_TYPE data_type)
 {
@@ -193,16 +195,16 @@ int Rast_is_null_value(const void *rast, RASTER_MAP_TYPE data_type)
 }
 
 /*!
-  \brief To check if a CELL raster value is set to NULL
+   \brief To check if a CELL raster value is set to NULL
 
-  Returns 1 if <em>cell</em> is NULL, 0 otherwise. This will test if the
-  value <em>cell</em> is the largest <tt>int</tt>.
+   Returns 1 if <em>cell</em> is NULL, 0 otherwise. This will test if the
+   value <em>cell</em> is the largest <tt>int</tt>.
 
-  \param cellVal CELL raster value to check
+   \param cellVal CELL raster value to check
 
-  \return TRUE if CELL raster value is NULL
-  \return FALSE otherwise
-*/
+   \return TRUE if CELL raster value is NULL
+   \return FALSE otherwise
+ */
 int Rast_is_c_null_value(const CELL * cellVal)
 {
     /* Check if the CELL value matches the null pattern */
@@ -210,123 +212,123 @@ int Rast_is_c_null_value(const CELL * cellVal)
 }
 
 /*!
-  \brief To check if a FCELL raster value is set to NULL
+   \brief To check if a FCELL raster value is set to NULL
 
-  Returns 1 if <em>fcell</em> is NULL, 0 otherwise. This will test if
-  the value <em>fcell</em> is a NaN. It isn't good enough to test for
-  a particular NaN bit pattern since the machine code may change this
-  bit pattern to a different NaN. The test will be
+   Returns 1 if <em>fcell</em> is NULL, 0 otherwise. This will test if
+   the value <em>fcell</em> is a NaN. It isn't good enough to test for
+   a particular NaN bit pattern since the machine code may change this
+   bit pattern to a different NaN. The test will be
 
-  \code
-  if(fcell==0.0) return 0;
-  if(fcell>0.0) return 0;
-  if(fcell<0.0) return 0;
-  return 1;
-  \endcode
- 
-  or (as suggested by Mark Line)
-  \code
-  return (fcell != fcell);
-  \endcode
+   \code
+   if(fcell==0.0) return 0;
+   if(fcell>0.0) return 0;
+   if(fcell<0.0) return 0;
+   return 1;
+   \endcode
 
-  \param fcellVal FCELL raster value to check
+   or (as suggested by Mark Line)
+   \code
+   return (fcell != fcell);
+   \endcode
 
-  \return TRUE if FCELL raster value is NULL
-  \return FALSE otherwise
-*/
+   \param fcellVal FCELL raster value to check
+
+   \return TRUE if FCELL raster value is NULL
+   \return FALSE otherwise
+ */
 int Rast_is_f_null_value(const FCELL * fcellVal)
 {
     return *fcellVal != *fcellVal;
 }
 
 /*!
-  \brief To check if a DCELL raster value is set to NULL
+   \brief To check if a DCELL raster value is set to NULL
 
-  Returns 1 if <em>dcell</em> is NULL, 0 otherwise. This will test if
-  the value <em>dcell</em> is a NaN. Same test as in
-  Rast_is_f_null_value().
+   Returns 1 if <em>dcell</em> is NULL, 0 otherwise. This will test if
+   the value <em>dcell</em> is a NaN. Same test as in
+   Rast_is_f_null_value().
 
-  \param dcellVal DCELL raster value to check
+   \param dcellVal DCELL raster value to check
 
-  \return TRUE if DCELL raster value is NULL
-  \return FALSE otherwise
-*/
+   \return TRUE if DCELL raster value is NULL
+   \return FALSE otherwise
+ */
 int Rast_is_d_null_value(const DCELL * dcellVal)
 {
     return *dcellVal != *dcellVal;
 }
 
 /*!
-  \brief To insert null values into a map.
+   \brief To insert null values into a map.
 
-  - If the <em>data_type</em> is CELL_TYPE, calls Rast_insert_c_null_values()
-  - If the <em>data_type</em> is FCELL_TYPE, calls Rast_insert_f_null_values()
-  - If the <em>data_type</em> is DCELL_TYPE, calls Rast_insert_d_null_values()
-  
-  \param rast pointer raster values
-  \param null_row null row
-  \param ncols number of columns
-  \param data_type type of raster - CELL, FCELL, DCELL
+   - If the <em>data_type</em> is CELL_TYPE, calls Rast_insert_c_null_values()
+   - If the <em>data_type</em> is FCELL_TYPE, calls Rast_insert_f_null_values()
+   - If the <em>data_type</em> is DCELL_TYPE, calls Rast_insert_d_null_values()
+
+   \param rast pointer raster values
+   \param null_row null row
+   \param ncols number of columns
+   \param data_type type of raster - CELL, FCELL, DCELL
  */
 void Rast_insert_null_values(void *rast, char *null_row, int ncols,
-			  RASTER_MAP_TYPE data_type)
+			     RASTER_MAP_TYPE data_type)
 {
     EmbedGivenNulls(rast, null_row, data_type, ncols);
 }
 
 /*!
-  \brief To insert null values into an integer raster map (CELL)
+   \brief To insert null values into an integer raster map (CELL)
 
-  For each of the <em>count</em> <em>flags</em> which is true(!=0),
-  set the corresponding <em>cell</em> to the NULL value.
+   For each of the <em>count</em> <em>flags</em> which is true(!=0),
+   set the corresponding <em>cell</em> to the NULL value.
 
-  \param rast pointer raster values
-  \param null_row null row
-  \param ncols number of columns
-*/
+   \param rast pointer raster values
+   \param null_row null row
+   \param ncols number of columns
+ */
 void Rast_insert_c_null_values(CELL * cellVal, char *null_row, int ncols)
 {
     EmbedGivenNulls((void *)cellVal, null_row, CELL_TYPE, ncols);
 }
 
 /*!
-  \brief To insert null values into an floating-point raster map (FCELL)
+   \brief To insert null values into an floating-point raster map (FCELL)
 
-  \param fcellVal pointer raster values
-  \param null_row null row
-  \param ncols number of columns
-*/
+   \param fcellVal pointer raster values
+   \param null_row null row
+   \param ncols number of columns
+ */
 void Rast_insert_f_null_values(FCELL * fcellVal, char *null_row, int ncols)
 {
     EmbedGivenNulls((void *)fcellVal, null_row, FCELL_TYPE, ncols);
 }
 
 /*!
-  \brief To insert null values into an floating-point raster map (FCELL)
+   \brief To insert null values into an floating-point raster map (FCELL)
 
-  For each for the <em>count</em> <em>flag</em> which is true(!=0), set
-  the corresponding <em>dcell</em> to the NULL value.
+   For each for the <em>count</em> <em>flag</em> which is true(!=0), set
+   the corresponding <em>dcell</em> to the NULL value.
 
-  \param dcellVal pointer raster values
-  \param null_row null row
-  \param ncols number of columns
-*/
+   \param dcellVal pointer raster values
+   \param null_row null row
+   \param ncols number of columns
+ */
 void Rast_insert_d_null_values(DCELL * dcellVal, char *null_row, int ncols)
 {
     EmbedGivenNulls((void *)dcellVal, null_row, DCELL_TYPE, ncols);
 }
 
 /*!
-  \brief Check NULL
+   \brief Check NULL
 
-  Note: Only for internal use.
+   Note: Only for internal use.
 
-  \param flags ?
-  \param bit_num ?
-  \param n ?
+   \param flags ?
+   \param bit_num ?
+   \param n ?
 
-  \return -1 on error
-*/
+   \return -1 on error
+ */
 int Rast__check_null_bit(const unsigned char *flags, int bit_num, int n)
 {
     int ind;
@@ -350,22 +352,22 @@ int Rast__check_null_bit(const unsigned char *flags, int bit_num, int n)
 }
 
 /*!
-  \brief Given array of 0/1 of length n starting from column.
+   \brief Given array of 0/1 of length n starting from column.
 
-  Note: Only for internal use.
-  
-  Given array of 0/1 of length n starting from column set the
-  corresponding bits of flags; total number of bits in flags is ncols.
+   Note: Only for internal use.
 
-  \param zero_ones
-  \param flags
-  \param col
-  \param n
-  \param ncols
+   Given array of 0/1 of length n starting from column set the
+   corresponding bits of flags; total number of bits in flags is ncols.
 
-  \return 0
-  \return 1
-*/
+   \param zero_ones
+   \param flags
+   \param col
+   \param n
+   \param ncols
+
+   \return 0
+   \return 1
+ */
 int G__set_flags_from_01_random(const char *zero_ones, unsigned char *flags,
 				int col, int n, int ncols)
 {
@@ -392,7 +394,8 @@ int G__set_flags_from_01_random(const char *zero_ones, unsigned char *flags,
 	    }
 	    else if (count < ncols) {
 		v = v |
-		    ((unsigned char)Rast__check_null_bit(flags, count, ncols) << k);
+		    ((unsigned char)Rast__check_null_bit(flags, count, ncols)
+		     << k);
 	    }
 
 	    /* otherwise  keep this bit the same as it was */
@@ -406,15 +409,16 @@ int G__set_flags_from_01_random(const char *zero_ones, unsigned char *flags,
 }
 
 /*!
-  \brief ?
+   \brief ?
 
-  Note: Only for internal use.
-  
-  \param zero_ones
-  \param flags
-  \param n
-*/
-void Rast__convert_01_flags(const char *zero_ones, unsigned char *flags, int n)
+   Note: Only for internal use.
+
+   \param zero_ones
+   \param flags
+   \param n
+ */
+void Rast__convert_01_flags(const char *zero_ones, unsigned char *flags,
+			    int n)
 {
     unsigned char *v;
     int count;
@@ -443,15 +447,16 @@ void Rast__convert_01_flags(const char *zero_ones, unsigned char *flags, int n)
 }
 
 /*!
-  \brief ?
+   \brief ?
 
-  Note: Only for internal use.
+   Note: Only for internal use.
 
-  \param zero_ones
-  \param flags
-  \param n
+   \param zero_ones
+   \param flags
+   \param n
  */
-void Rast__convert_flags_01(char *zero_ones, const unsigned char *flags, int n)
+void Rast__convert_flags_01(char *zero_ones, const unsigned char *flags,
+			    int n)
 {
     const unsigned char *v;
     int count;
@@ -477,12 +482,12 @@ void Rast__convert_flags_01(char *zero_ones, const unsigned char *flags, int n)
 }
 
 /*!
-  \brief ?
+   \brief ?
 
-  Note: Only for internal use.
+   Note: Only for internal use.
 
-  \param flags
-  \param cols
+   \param flags
+   \param cols
  */
 void Rast__init_null_bits(unsigned char *flags, int cols)
 {

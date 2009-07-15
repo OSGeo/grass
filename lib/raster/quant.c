@@ -40,10 +40,10 @@ static int double_comp(const void *, const void *);
 			  NO_LEFT_INFINITE_RULE && NO_RIGHT_INFINITE_RULE)
 
 /*!
-  \brief Resets the number of defined rules and number of infinite rules to 0
+   \brief Resets the number of defined rules and number of infinite rules to 0
 
-  \param q pointer to Quant structure to be reset
-*/
+   \param q pointer to Quant structure to be reset
+ */
 void Rast_quant_clear(struct Quant *q)
 {
     q->nofRules = 0;
@@ -51,13 +51,13 @@ void Rast_quant_clear(struct Quant *q)
 }
 
 /*!
-  \brief Resets and frees allocated memory
+   \brief Resets and frees allocated memory
 
-  Resets the number of defined rules to 0 and free's space allocated
-  for rules. Calls Rast_quant_clear().
- 
-  \param q pointer to Quant structure to be reset
-*/
+   Resets the number of defined rules to 0 and free's space allocated
+   for rules. Calls Rast_quant_clear().
+
+   \param q pointer to Quant structure to be reset
+ */
 void Rast_quant_free(struct Quant *q)
 {
     Rast_quant_clear(q);
@@ -187,25 +187,25 @@ void Rast_quant_init(struct Quant *quant)
 }
 
 /*!
-  \brief Returns wether or not quant rules are set to truncate map
+   \brief Returns wether or not quant rules are set to truncate map
 
-  \param quant pointer to Quant structure which holds quant rules info
+   \param quant pointer to Quant structure which holds quant rules info
 
-  \return 1 if truncate is enable
-  \return 0 if not truncated
-*/
+   \return 1 if truncate is enable
+   \return 0 if not truncated
+ */
 int Rast_quant_is_truncate(const struct Quant *quant)
 {
     return quant->truncate_only;
 }
 
 /*!
-  \brief  Returns wether or not quant rules are set to round map
-  \param quant pointer to Quant structure which holds quant rules info
+   \brief  Returns wether or not quant rules are set to round map
+   \param quant pointer to Quant structure which holds quant rules info
 
-  \return 1 is round
-  \return 0 not round
-*/
+   \return 1 is round
+   \return 0 not round
+ */
 int Rast_quant_is_round(const struct Quant *quant)
 {
     return quant->round_only;
@@ -285,7 +285,8 @@ static void quant_update_limits(struct Quant *q,
  * <i>dmax</i>, <i>cmin</i>, and <i>cmax</i> to NULL.
  */
 int Rast_quant_get_limits(const struct Quant *q,
-		       DCELL * dMin, DCELL * dMax, CELL * cMin, CELL * cMax)
+			  DCELL * dMin, DCELL * dMax, CELL * cMin,
+			  CELL * cMax)
 {
     if (NO_EXPLICIT_RULE) {
 	Rast_set_c_null_value(cMin, 1);
@@ -304,36 +305,36 @@ int Rast_quant_get_limits(const struct Quant *q,
 }
 
 /*!
-  \brief Returns the number of quantization rules defined.
+   \brief Returns the number of quantization rules defined.
 
-  This number does not include the 2 infinite intervals.
+   This number does not include the 2 infinite intervals.
 
-  \param q pointer to Quant structure which holds quant rules info
-  
-  \return number of quantization rules
-*/
+   \param q pointer to Quant structure which holds quant rules info
+
+   \return number of quantization rules
+ */
 int Rast_quant_nof_rules(const struct Quant *q)
 {
     return q->nofRules;
 }
 
 /*!
-  \brief Returns the i'th quantization rule.
+   \brief Returns the i'th quantization rule.
 
-  For 0 <= i < Rast_quant_nof_rules(). A larger value for i means that
-  the rule has been added later.
- 
-  \param q pointer to Quant structure which holds quant rules info
-  \param i index
-  \param[out] dLow minimum fp value
-  \param[out] dHigh maximum fp value
-  \param[out] cLow minimum value
-  \param[out] cHigh maximum value
-*/
+   For 0 <= i < Rast_quant_nof_rules(). A larger value for i means that
+   the rule has been added later.
+
+   \param q pointer to Quant structure which holds quant rules info
+   \param i index
+   \param[out] dLow minimum fp value
+   \param[out] dHigh maximum fp value
+   \param[out] cLow minimum value
+   \param[out] cHigh maximum value
+ */
 void Rast_quant_get_ith_rule(const struct Quant *q,
-			  int i,
-			  DCELL * dLow, DCELL * dHigh,
-			  CELL * cLow, CELL * cHigh)
+			     int i,
+			     DCELL * dLow, DCELL * dHigh,
+			     CELL * cLow, CELL * cHigh)
 {
     *dLow = q->table[i].dLow;
     *dHigh = q->table[i].dHigh;
@@ -360,16 +361,16 @@ static void quant_table_increase(struct Quant *q)
 }
 
 /*!
-  \brief Defines a rule for values "dLeft" and smaller.
+   \brief Defines a rule for values "dLeft" and smaller.
 
-  Values in this range are mapped to "c" if none of the "finite"
-  quantization rules applies.
- 
-  \param q pointer to Quant structure which holds quant rules info
+   Values in this range are mapped to "c" if none of the "finite"
+   quantization rules applies.
 
-  \param dLeft fp value
-  \param c value
-*/
+   \param q pointer to Quant structure which holds quant rules info
+
+   \param dLeft fp value
+   \param c value
+ */
 void Rast_quant_set_neg_infinite_rule(struct Quant *q, DCELL dLeft, CELL c)
 {
     q->infiniteDLeft = dLeft;
@@ -385,19 +386,19 @@ void Rast_quant_set_neg_infinite_rule(struct Quant *q, DCELL dLeft, CELL c)
 }
 
 /*!
-  \brief Returns in "dLeft" and "c" the rule values.
+   \brief Returns in "dLeft" and "c" the rule values.
 
-  For the negative infinite interval (see Rast_quant_set_neg_infinite_rule()).
-  
-  \param q pointer to Quant structure which holds quant rules info
-  \param[out] dLeft fp value
-  \param[out] c value
+   For the negative infinite interval (see Rast_quant_set_neg_infinite_rule()).
 
-  \return 0 if this rule is not defined
-  \return 1 otherwise
-*/
+   \param q pointer to Quant structure which holds quant rules info
+   \param[out] dLeft fp value
+   \param[out] c value
+
+   \return 0 if this rule is not defined
+   \return 1 otherwise
+ */
 int Rast_quant_get_neg_infinite_rule(const struct Quant *q,
-				  DCELL * dLeft, CELL * c)
+				     DCELL * dLeft, CELL * c)
 {
     if (q->infiniteLeftSet == 0)
 	return 0;
@@ -409,15 +410,15 @@ int Rast_quant_get_neg_infinite_rule(const struct Quant *q,
 }
 
 /*!
-  \brief Defines a rule for values "dRight" and larger.
+   \brief Defines a rule for values "dRight" and larger.
 
-  Values in this range are mapped to "c" if none of the "finite"
-  quantization rules or the negative infinite rule applies.
+   Values in this range are mapped to "c" if none of the "finite"
+   quantization rules or the negative infinite rule applies.
 
-  \param q pointer to Quant structure which holds quant rules info
-  \param dRight fp value
-  \param c value
-*/
+   \param q pointer to Quant structure which holds quant rules info
+   \param dRight fp value
+   \param c value
+ */
 void Rast_quant_set_pos_infinite_rule(struct Quant *q, DCELL dRight, CELL c)
 {
     q->infiniteDRight = dRight;
@@ -433,19 +434,19 @@ void Rast_quant_set_pos_infinite_rule(struct Quant *q, DCELL dRight, CELL c)
 }
 
 /*!
-  \brief Returns in "dRight" and "c" the rule values.
+   \brief Returns in "dRight" and "c" the rule values.
 
-  For the positive infinite interval (see Rast_quant_set_pos_infinite_rule()).
+   For the positive infinite interval (see Rast_quant_set_pos_infinite_rule()).
 
-  \param q pointer to Quant structure which holds quant rules info
-  \param[out] dRight fp value
-  \param[out] c value
+   \param q pointer to Quant structure which holds quant rules info
+   \param[out] dRight fp value
+   \param[out] c value
 
-  \return 0 if this rule is not defined
-  \return 1 otherwise
-*/
+   \return 0 if this rule is not defined
+   \return 1 otherwise
+ */
 int Rast_quant_get_pos_infinite_rule(const struct Quant *q,
-				  DCELL * dRight, CELL * c)
+				     DCELL * dRight, CELL * c)
 {
     if (q->infiniteRightSet == 0)
 	return 0;
@@ -457,26 +458,26 @@ int Rast_quant_get_pos_infinite_rule(const struct Quant *q,
 }
 
 /*!
- \brief Adds a new rule to the set of quantization rules.
+   \brief Adds a new rule to the set of quantization rules.
 
- If dLow < dHigh the rule will be stored with the low and high values
- interchanged.
- 
- Note: currently no cleanup of rules is performed, i.e. redundant
- rules are not removed. This can't be changed because Categories
- structure HEAVILY depends of quant rules stored in exactly the same
- order they are entered. So if the cleanup or rearrangement is done in
- the future make a flag for add_rule wether or not to do it, then
- quant will not set this flag.
+   If dLow < dHigh the rule will be stored with the low and high values
+   interchanged.
 
- \param q pointer to Quant structure which holds quant rules info
- \param dLow minimum fp value
- \param dHigh maximum fp value
- \param cLow minimum value
- \param cHigh maximum value
-*/
+   Note: currently no cleanup of rules is performed, i.e. redundant
+   rules are not removed. This can't be changed because Categories
+   structure HEAVILY depends of quant rules stored in exactly the same
+   order they are entered. So if the cleanup or rearrangement is done in
+   the future make a flag for add_rule wether or not to do it, then
+   quant will not set this flag.
+
+   \param q pointer to Quant structure which holds quant rules info
+   \param dLow minimum fp value
+   \param dHigh maximum fp value
+   \param cLow minimum value
+   \param cHigh maximum value
+ */
 void Rast_quant_add_rule(struct Quant *q,
-		      DCELL dLow, DCELL dHigh, CELL cLow, CELL cHigh)
+			 DCELL dLow, DCELL dHigh, CELL cLow, CELL cHigh)
 {
     int i;
     struct Quant_table *p;
@@ -513,12 +514,12 @@ void Rast_quant_add_rule(struct Quant *q,
 }
 
 /*!
-  \brief Rreverses the order in which the qunatization rules are stored.
+   \brief Rreverses the order in which the qunatization rules are stored.
 
-  See also Rast_quant_get_ith_rule() and Rast_quant_perform_d()).
+   See also Rast_quant_get_ith_rule() and Rast_quant_perform_d()).
 
-  \param q pointer to Quant rules which holds quant rules info
-*/
+   \param q pointer to Quant rules which holds quant rules info
+ */
 void Rast_quant_reverse_rule_order(struct Quant *q)
 {
     struct Quant_table tmp;
@@ -706,20 +707,20 @@ CELL Rast_quant_get_cell_value(struct Quant * q, DCELL dcellVal)
 }
 
 /*!
-  \brief Returns in "cell" the quantized CELL values.
+   \brief Returns in "cell" the quantized CELL values.
 
-  Returns in "cell" the quantized CELL values corresponding to the
-  DCELL values stored in "dcell". the number of elements quantized
-  is n. quantization is performed by repeated application of 
-  Rast_quant_get_cell_value().
+   Returns in "cell" the quantized CELL values corresponding to the
+   DCELL values stored in "dcell". the number of elements quantized
+   is n. quantization is performed by repeated application of 
+   Rast_quant_get_cell_value().
 
-  \param q pointer to Quant structure which holds quant rules info
-  \param dcell pointer to fp cell values array
-  \param[out] cell pointer cell values array
-  \param n number of cells
-*/
+   \param q pointer to Quant structure which holds quant rules info
+   \param dcell pointer to fp cell values array
+   \param[out] cell pointer cell values array
+   \param n number of cells
+ */
 void Rast_quant_perform_d(struct Quant *q,
-		       const DCELL * dcell, CELL * cell, int n)
+			  const DCELL * dcell, CELL * cell, int n)
 {
     int i;
 
@@ -731,15 +732,15 @@ void Rast_quant_perform_d(struct Quant *q,
 }
 
 /*!
-  \brief Same as Rast_quant_perform_d(), except the type.
+   \brief Same as Rast_quant_perform_d(), except the type.
 
-  \param q pointer to Quant structure which holds quant rules info
-  \param fcell pointer to fp cell values array
-  \param[out] cell pointer cell values array
-  \param n number of cells
-*/
+   \param q pointer to Quant structure which holds quant rules info
+   \param fcell pointer to fp cell values array
+   \param[out] cell pointer cell values array
+   \param n number of cells
+ */
 void Rast_quant_perform_f(struct Quant *q,
-		       const FCELL * fcell, CELL * cell, int n)
+			  const FCELL * fcell, CELL * cell, int n)
 {
     int i;
 
@@ -766,19 +767,19 @@ static int double_comp(const void *xx, const void *yy)
 }
 
 /*!
-  \brief Returns quant rule which will be applied.
+   \brief Returns quant rule which will be applied.
 
-  Returns quant rule which will be applied when looking up the integer
-  quant value for val (used when organizing fp_lookup).
+   Returns quant rule which will be applied when looking up the integer
+   quant value for val (used when organizing fp_lookup).
 
-  \param q pointer to Quant structure which holds quant rules info
-  \param val fp cell value
-  
-  \return pointer to the Quant_table (color rule)
-  \return NULL otherwise
-*/
-struct Quant_table *Rast__quant_get_rule_for_d_raster_val(const struct Quant *q,
-						       DCELL val)
+   \param q pointer to Quant structure which holds quant rules info
+   \param val fp cell value
+
+   \return pointer to the Quant_table (color rule)
+   \return NULL otherwise
+ */
+struct Quant_table *Rast__quant_get_rule_for_d_raster_val(const struct Quant
+							  *q, DCELL val)
 {
     const struct Quant_table *p;
 
