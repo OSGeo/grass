@@ -1,4 +1,4 @@
-"""
+"""!
 @package location_wizard.py
 
 @brief Location wizard - creates a new GRASS Location. User can choose
@@ -1722,8 +1722,8 @@ class LocationWizard(wx.Object):
         # run wizard...
         #
         if self.wizard.RunWizard(self.startpage):
-            success = self.OnWizFinished()
-            if success == True:
+            msg = self.OnWizFinished()
+            if len(msg) < 1:
                 self.wizard.Destroy()
                 self.location = self.startpage.location
                 dlg = wx.MessageDialog(parent=self.parent,
@@ -1739,22 +1739,22 @@ class LocationWizard(wx.Object):
                     defineRegion.Show()
                 else:
                     dlg.Destroy()
-
-            elif success == False:
+            else: # -> error
                 self.wizard.Destroy()
                 wx.MessageBox(parent=self.parent,
                               message="%s" % _("Unable to create new location. "
-                                               "Location <%s> not created.") % self.startpage.location,
+                                               "Location <%(loc)s> not created.\n\n"
+                                               "Details: %(err)s") % \
+                                  { 'loc' : self.startpage.location,
+                                    'err' : msg },
                               caption=_("Location wizard"),
                               style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
-            else: # None
-                pass
         else:
             win = wx.MessageBox(parent=self.parent,
                                 message=_("Location wizard canceled. "
                                           "Location not created."),
                                 caption=_("Location wizard"))
-
+    
     def __readData(self):
         """!Get georeferencing information from tables in $GISBASE/etc"""
         # read projection definitions
@@ -1835,7 +1835,7 @@ class LocationWizard(wx.Object):
         database = self.startpage.grassdatabase
         location = self.startpage.location
         global coordsys
-        success = False
+        msg = '' # error message (empty on success)
         
         # location already exists?
         if os.path.isdir(os.path.join(database,location)):
@@ -1873,31 +1873,29 @@ class LocationWizard(wx.Object):
                           style=wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
             
         if coordsys == "xy":
-            success = self.XYCreate()
-        elif coordsys == "latlong":
-            rows = int(round((float(north) - float(south)) / float(resolution)))
-            cols = int(round((float(east) - float(west)) / float(resolution)))
-            cells = int(rows * cols)
-            success = self.LatlongCreate()
+            msg = self.XYCreate()
         elif coordsys == "proj":
             proj4string = self.CreateProj4String()
-            success = self.Proj4Create(proj4string)
+            msg = self.Proj4Create(proj4string)
         elif coordsys == 'custom':
-            success = self.CustomCreate()
+            msg = self.CustomCreate()
         elif coordsys == "epsg":
-            success = self.EPSGCreate()
+            msg = self.EPSGCreate()
         elif coordsys == "file":
-            success = self.FileCreate()
+            msg = self.FileCreate()
         elif coordsys == "wkt":
-            success = self.WKTCreate()
+            msg = self.WKTCreate()
 
-        return success
+        return msg
 
     def XYCreate(self):
-        """!Create an XY location"""
+        """!Create an XY location
+
+        @return error message (empty string on success)
+        """        
         database = self.startpage.grassdatabase
         location = self.startpage.location
-
+        
         # create location directory and PERMANENT mapset
         try:
             os.mkdir(os.path.join(database, location))
@@ -1927,36 +1925,29 @@ class LocationWizard(wx.Object):
             for param in regioninfo:
                 defwind.write(param + '%s' % os.linesep)
             defwind.close()
-
+            
             shutil.copy(os.path.join(database, location, "PERMANENT", "DEFAULT_WIND"),
                         os.path.join(database, location, "PERMANENT", "WIND"))
-
+            
             # create MYNAME file
             myname = open(os.path.join(database, location, "PERMANENT",
                                        "MYNAME"), 'w')
             myname.write('%s' % os.linesep)
             myname.close()
-
-            return True
-
         except OSError, e:
-            dlg = wx.MessageDialog(parent=self.wizard,
-                                   message="%s: %s" % (_("Unable to create new location"), e),
-                                   caption=_("Error"),
-                                   style=wx.OK | wx.ICON_ERROR)
-            dlg.ShowModal()
-            dlg.Destroy()
-            return False
+            return e
+        
+        return ''
 
     def CreateProj4String(self):
         """!Constract PROJ.4 string"""
         location = self.startpage.location
         proj = self.projpage.proj
         projdesc = self.projpage.projdesc
-
+        
         utmzone = self.projtypepage.utmzone
         utmhemisphere = self.projtypepage.utmhemisphere
-
+        
         datum = self.datumpage.datum
         if self.datumpage.datumdesc:
             datumdesc = self.datumpage.datumdesc +' - ' + self.datumpage.ellipsoid
@@ -1964,11 +1955,11 @@ class LocationWizard(wx.Object):
             datumdesc = ''
         datumparams = self.datumpage.datumparams
         transparams = self.datumpage.transparams
-
+        
         ellipse = self.ellipsepage.ellipse
         ellipsedesc = self.ellipsepage.ellipsedesc
         ellipseparams = self.ellipsepage.ellipseparams
-
+        
         #
         # creating PROJ.4 string
         #
@@ -2003,38 +1994,45 @@ class LocationWizard(wx.Object):
         return '%s %s' % (proj4string, proj4params)
         
     def Proj4Create(self, proj4string):
-        """
-        Create a new location for selected projection
+        """!Create a new location for selected projection
+        
+        @return error message (empty string on success)
         """
         # creating location from PROJ.4 string passed to g.proj
-        ret = gcmd.RunCommand('g.proj',
-                              flags = 'c',
-                              proj4 = proj4string,
-                              location = self.startpage.location)
-
+        ret, msg = gcmd.RunCommand('g.proj',
+                                   flags = 'c',
+                                   proj4 = proj4string,
+                                   location = self.startpage.location,
+                                   getErrorMsg = True)
+        
         if ret == 0:
-            return True
-
-        return False
+            return ''
+        
+        return msg
 
     def CustomCreate(self):
-        """!Create a new location based on given proj4 string"""
+        """!Create a new location based on given proj4 string
+
+        @return error message (empty string on success)
+        """
         proj4string = self.custompage.customstring
         location = self.startpage.location
         
-        ret = gcmd.RunCommand('g.proj',
-                              flags = 'c',
-                              proj4 = proj4string,
-                              location = location)
-
+        ret, msg = gcmd.RunCommand('g.proj',
+                                   flags = 'c',
+                                   proj4 = proj4string,
+                                   location = location,
+                                   getErrorMsg = True)
+        
         if ret == 0:
-            return True
-
-        return False
+            return ''
+        
+        return msg
 
     def EPSGCreate(self):
-        """
-        Create a new location from an EPSG code.
+        """!Create a new location from an EPSG code.
+
+        @return error message (empty string on success)
         """
         epsgcode = self.epsgpage.epsgcode
         epsgdesc = self.epsgpage.epsgdesc
@@ -2042,19 +2040,16 @@ class LocationWizard(wx.Object):
         
         # should not happend
         if epsgcode == '':
-            wx.MessageBox(parent=self,
-                          message="%s: %s" % (_("Unable to create new location"), _("EPSG code missing.")),
-                          caption=_("Error"), style=wx.OK | wx.ICON_ERROR)
-            return False
+            return _('EPSG code missing.')
         
         # creating location
         ret = gcmd.RunCommand('g.proj',
                               read = True,
                               epsg = epsgcode,
                               datumtrans = '-1')
-
+        
         dtoptions = {}
-
+        
         if ret:
             line = ret.splitlines()
             i = 0
@@ -2074,87 +2069,75 @@ class LocationWizard(wx.Object):
             if dlg.ShowModal() == wx.ID_OK:
                 dtrans = dlg.GetDatum()
                 if dtrans == '':
-                    wx.MessageBox(parent=self.parent,
-                                  message=_('Datum transform is required.'),
-                                  caption=_("Error"),
-                                  style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
                     dlg.Destroy()
-                    return False
-                dlg.Destroy()
+                    return 'Datum transform is required.'
             else:
                 dlg.Destroy()
-                return False
-
+                return 'Datum transform is required.'
+            
             datumtrans = dtrans
         else:
             datumtrans = '1'
 
-        ret = gcmd.RunCommand('g.proj',
-                              flags = 'c',
-                              epsg = epsgcode,
-                              location = location,
-                              datumtrans = datumtrans)
+        ret, msg = gcmd.RunCommand('g.proj',
+                                   flags = 'c',
+                                   epsg = epsgcode,
+                                   location = location,
+                                   datumtrans = datumtrans,
+                                   getErrorMsg = True)
         
         if ret == 0:
-            return True
+            return ''
 
-        return False
+        return msg
 
     def FileCreate(self):
-        """
-        Create a new location from a georeferenced file
+        """!Create a new location from a georeferenced file
+
+        @return error message (empty string on success)
         """
         georeffile = self.filepage.georeffile
         location = self.startpage.location
-
+        
         # this should not happen
         if not georeffile or not os.path.isfile(georeffile):
-            dlg = wx.MessageBox(parent=self.wizard,
-                                message="%s: %s ('%s')" % \
-                                    (_("Unable to create new location"),
-                                     _("file not found"),
-                                     georeffile),
-                                caption=("Error"), style=wx.OK | wx.ICON_ERROR)
-            return False
-
+            return _("File not found.")
+        
         # creating location
-        ret = gcmd.RunCommand('g.proj',
-                              flags = 'c',
-                              georef = georeffile,
-                              location = location)
-
+        ret, msg = gcmd.RunCommand('g.proj',
+                                   flags = 'c',
+                                   georef = georeffile,
+                                   location = location,
+                                   getErrorMsg = True)
+        
         if ret == 0:
-            return True
-
-        return False
+            return ''
+        
+        return msg
 
     def WKTCreate(self):
-        """
-        Create a new location from a WKT file
+        """!Create a new location from a WKT file
+        
+        @return error message (empty string on success)
         """
         wktfile = self.wktpage.wktfile
         location = self.startpage.location
         
         # this should not happen
         if not wktfile or not os.path.isfile(wktfile):
-            dlg = wx.MessageBox(parent=self.wizard,
-                                message="%s: %s ('%s')" % \
-                                    (_("Unable to create new location"),
-                                     _("file not found"),
-                                     wktfile),
-                                caption=("Error"), style=wx.OK | wx.ICON_ERROR)
-            return False
-
+            return _("File not found.")
+        
         # creating location
-        ret = gcmd.RunCommand('g.proj',
-                              flags = 'c',
-                              wkt = wktfile,
-                              location = location)
+        ret, msg = gcmd.RunCommand('g.proj',
+                                   flags = 'c',
+                                   wkt = wktfile,
+                                   location = location,
+                                   getErrorMsg = True)
         
         if ret == 0:
-            return True
-
-        return False
+            return ''
+        
+        return msg
 
 class RegionDef(BaseClass, wx.Frame):
     """
