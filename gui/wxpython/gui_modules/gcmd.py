@@ -558,7 +558,7 @@ class CommandThread(Thread):
         self._want_abort = True
     
 def RunCommand(prog, flags = "", overwrite = False, quiet = False, verbose = False,
-               parent = None, read = False, stdin = None, **kwargs):
+               parent = None, read = False, stdin = None, getErrorMsg = False, **kwargs):
     """!Run GRASS command"""
     kwargs['stderr'] = subprocess.PIPE
     
@@ -586,6 +586,12 @@ def RunCommand(prog, flags = "", overwrite = False, quiet = False, verbose = Fal
         e.Show()
 
     if not read:
-        return ret
+        if not getErrorMsg:
+            return ret
+        else:
+            return ret, stderr
 
-    return stdout
+    if not getErrorMsg:
+        return stdout
+    
+    return stdout, stderr
