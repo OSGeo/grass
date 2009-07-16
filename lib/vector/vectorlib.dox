@@ -141,8 +141,7 @@ The following vector objects are defined:
 - kernel: a 3D centroid in a volume;
 - volume: a 3D corpus, the topological composition of faces and kernel.
 
-Note that all lines and boundaries can be polylines (with nodes in
-between).
+Note that all lines and boundaries can consist of multiple segments.
 
 Topology also holds information about isles. Isles are located within an area, not
 touching the boundaries of the outer area. Isles consist of one or more areas
@@ -196,6 +195,7 @@ This directory contains these files:
 
 - <b>coor</b> - binary file, coordinates [former dig/ file]
 - <b>topo</b> - binary file, topology [former dig_plus/ file]
+- <b>sidx</b> - binary file, spatial index 
 - <b>cidx</b> - binary file, category index 
 - <b>head</b> - text file, header information [former part of dig/ file]
 - <b>dbln</b> - text file, link(s) to attribute table(s)
@@ -549,7 +549,7 @@ spatial index without topology.
 
 \section vlib_spidx Vector library spatial index management
 
-Spatial index (based on R-tree) is generated on the fly.
+Spatial index (based on R-tree) is created with topology.
 
 Spatial index occupies a lot of memory but it is necessary for 
 topology building. Also, it takes a long time to release the memory
@@ -562,6 +562,10 @@ By default the memory is not released.
 
 It is possible to call Vect_set_release_support() before Vect_close()
 to enforce memory release, but it takes a long time on large files.
+
+The spatial index is stored in file and not loaded for old vectors that
+are not updated, saving a lot of memory. Spatial queries are done in 
+file.
 
 Currently most of the modules do not release the memory occupied for
 spatial index and work like this (pseudocode):
@@ -594,14 +598,15 @@ int main
 
 but it takes longer. 
 <P>
-It make sense to release the spatial index if it is used only at the beginning
-of a module or in permanently running programs like QGIS.
+It makes sense to release the spatial index if it is used only at the beginning
+of a module or in permanently running programs like QGIS. Note that this
+applies only when creating a new vector or updating an old vector.
 For example:
 
 \code
 int main
 {
-     Vect_open_old();
+     Vect_open_update();
      // select features using spatial index, e.g.  Vect_select_lines_by_box()
      Vect_set_release_support();
      Vect_close();  // memory is released
@@ -961,11 +966,15 @@ programming.
 
  - Vect_get_built()
 
- - Vect_save_spatial_index()
+ - Vect_build_sidx_from_topo()
+
+ - Vect_build_sidx()
+
+ - Vect_save_sidx()
 
  - Vect_save_topo()
 
- - Vect_spatial_index_dump()
+ - Vect_sidx_dump()
 
  - Vect_topo_dump()
 
@@ -1410,7 +1419,7 @@ programming.
 
  - Vect_open_old_head()
 
- - Vect_open_spatial_index()
+ - Vect_open_sidx()
 
  - Vect_open_topo()
 
@@ -1480,7 +1489,7 @@ programming.
  - Vect_rewind()
 
 
-\section select Vector select functions
+\section sindex Vector spatial index functions
 
  - Vect_select_areas_by_box()
 
@@ -1495,11 +1504,7 @@ programming.
  - Vect_select_nodes_by_box()
 
 
-\section sindex Vector spatial index functions
-
- - Vect_build_sidx_from_topo()
-
- - Vect_build_spatial_index()
+\section select custom spatial index functions
 
  - Vect_spatial_index_add_item()
 
