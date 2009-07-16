@@ -600,8 +600,7 @@ static off_t rtree_write_to_sidx(GVFILE * fp, off_t startpos,
 
     /* should be foolproof */
     sidx_nodesize =
-	(int)(2 * sizeof(int) +
-	      MAXCARD * (off_t_size + NUMSIDES * sizeof(double)));
+	(int)(2 * PORT_INT + MAXCARD * (off_t_size + NUMSIDES * PORT_DOUBLE));
 
     /* stack size of t->n_levels + 1 would be enough because of depth first search */
     /* only one node per level on stack at any given time */
