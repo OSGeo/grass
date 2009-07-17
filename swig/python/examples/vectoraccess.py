@@ -11,6 +11,7 @@
 import os, sys
 from grass.lib import grass
 from grass.lib import vector as grassvect
+import grass.script as grassscript
 
 if not os.environ.has_key("GISBASE"):
     print "You must be in GRASS GIS to run this program."
@@ -60,6 +61,35 @@ print 'Vector line 2 in box? ', grassvect.Vect_get_line_box(map, 2, box)
 #print 'Number of lines: ', grassvect.Vect_get_num_primitives(map,GV_LINE)
 #print 'Number of areas:', grassvect.Vect_get_num_primitives(map,GV_AREA)
 print 'Number of areas:', grassvect.Vect_get_num_areas(map)
+
+layer = 1
+tmp = grassscript.tempfile()
+tmpf = file(tmp, 'w')
+
+try:
+    f = grassscript.vector_db(input)[int(layer)]
+except KeyError:
+    grassscript.fatal("There is no table connected to this map. Run v.db.connect or v.db.addtable first.")
+table = f['table']
+database = f['database']
+driver = f['driver']
+
+# call GRASS command
+grassscript.run_command('v.db.select', flags = 'c', map = input,
+                   stdout = tmpf)
+tmpf.close()
+
+# check if result is empty
+tmpf = file(tmp)
+if tmpf.read(1) == '':
+    grassscript.fatal("Table <%s> contains no data.", table)
+
+# print table to stdout
+for line in tmpf:
+    print line
+
+tmpf.close()
+os.remove(tmp)
 
 # close map
 grassvect.Vect_close(map)
