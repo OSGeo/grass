@@ -5,21 +5,20 @@ Run within GRASS session
 Run this before starting python to append module search path:
 
 @code
-export PYTHONPATH=/usr/src/grass70/swig/python
+export PYTHONPATH=$PYTHONPATH:/usr/local/grass-7.0.svn/etc/python/grass/lib
 @endcode
 
 Check with "import sys; sys.path"
 or:
 
 @code
-sys.path.append("/usr/src/grass70/swig/python")
+sys.path.append("/usr/local/grass-7.0.svn/etc/python/grass/lib")
 @endcode
-
-\todo install the grass bindings in $GISBASE/lib/ ?
 """
 
 import os, sys
 from grass.lib import grass
+from grass.raster import grassrast
 
 if not os.environ.has_key("GISBASE"):
     print "You must be in GRASS GIS to run this program."
@@ -37,18 +36,17 @@ grass.G_gisinit('')
 mapset = grass.G_find_cell2(input, '')
 
 # determine the inputmap type (CELL/FCELL/DCELL) */
-data_type = grass.G_raster_map_type(input, mapset)
+data_type = grassrast.Rast_map_type(input, mapset)
 
-infd = grass.G_open_cell_old(input, mapset)
-inrast = grass.G_allocate_raster_buf(data_type)
+infd = grassrast.Rast_open_cell_old(input, mapset)
+inrast = grassrast.Rast_allocate_raster_buf(data_type)
 
 rown = 0
 while True:
-    myrow = grass.G_get_raster_row(infd, inrast, rown, data_type)
+    myrow = grassrast.Rast_get_raster_row(infd, inrast, rown, data_type)
     print rown, myrow[0:10]
     rown += 1
     if rown == 476:
         break
 
-grass.G_close_cell(inrast)
-grass.G_free(cell)
+grassrast.Rast_close_cell(inrast)
