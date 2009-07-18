@@ -5,14 +5,14 @@ Run within GRASS session
 Run this before starting python to append module search path:
 
 @code
-export PYTHONPATH=$PYTHONPATH:/usr/local/grass-7.0.svn/etc/python/grass/lib
+export PYTHONPATH=$PYTHONPATH:/usr/local/grass-7.0.svn/etc/python/
 @endcode
 
 Check with "import sys; sys.path"
 or:
 
 @code
-sys.path.append("/usr/local/grass-7.0.svn/etc/python/grass/lib")
+sys.path.append("/usr/local/grass-7.0.svn/etc/python")
 @endcode
 """
 

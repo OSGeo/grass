@@ -54,11 +54,10 @@ def main():
     #### add your code here ####
 
     # run this before starting python to append module search path:
-    #   export PYTHONPATH=/usr/src/grass70/swig/python
+    #   export PYTHONPATH=$PYTHONPATH:/usr/local/grass-7.0.svn/etc/python
     #   check with "import sys; sys.path"
     # or:
-    sys.path.append("/usr/src/grass70/swig/python")
-    # FIXME: install the g7lib.py bindings in $GISBASE/lib/ ?
+    sys.path.append("/usr/local/grass-7.0.svn/etc/python")
     from grass.lib import grass as g7lib
  
     # for passing pointers
