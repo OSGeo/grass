@@ -2,7 +2,7 @@ MODULE_TOPDIR = ../..
 
 PGM = d.title
 
-LIBES     = $(DISPLAYLIB) $(GISLIB) $(RASTELIB)
+LIBES     = $(DISPLAYLIB) $(GISLIB) $(RASTERLIB)
 DEPENDENCIES= $(DISPLAYDEP) $(GISDEP) $(RASTERDEP)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
