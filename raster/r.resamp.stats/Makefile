@@ -2,8 +2,8 @@ MODULE_TOPDIR = ../..
 
 PGM = r.resamp.stats
 
-LIBES = $(STATSLIB) $(GISLIB)
-DEPENDENCIES = $(STATSDEP) $(GISDEP)
+LIBES = $(STATSLIB) $(GISLIB) $(RASTERLIB)
+DEPENDENCIES = $(STATSDEP) $(GISDEP) $(RASTERDEP)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 
