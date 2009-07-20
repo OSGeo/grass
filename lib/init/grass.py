@@ -414,6 +414,8 @@ def non_interactive(arg):
 	    l = os.path.abspath(l)
 
 	l, mapset = os.path.split(l)
+	if not mapset:
+	    l, mapset = os.path.split(l)
 	l, location_name = os.path.split(l)
 	gisdbase = l
 
