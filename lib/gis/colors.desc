@@ -5,6 +5,7 @@ bgyr: blue through green through yellow to red
 byg: blue through yellow to green
 byr: blue through yellow to red
 celsius: blue to red for degree Celsius temperature
+corine: EU Corine land cover colors
 curvature: for terrain curvatures (from v.surf.rst and r.slope.aspect)
 differences: differences oriented colors
 elevation: maps relative ranges of raster values to elevation color ramp
