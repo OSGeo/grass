@@ -40,10 +40,11 @@ struct rgb_color palette[16] = {
 /* *************************************************************** */
 int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 	  const struct color_rgb *color, const struct color_rgb *fcolor,
-	  int chcat, SYMBOL * Symb, int size, int id_flag,
-	  int table_colors_flag, int cats_color_flag, char *rgb_column,
-	  int default_width, char *width_column, double width_scale,
-	  int z_color_flag, char *style)
+	  int chcat, char *symbol_name, int size, char *size_column,
+	  char *rot_column, int id_flag, int table_colors_flag,
+	  int cats_color_flag, char *rgb_column, int default_width,
+	  char *width_column, double width_scale, int z_color_flag,
+	  char *style)
 {
     int i, ltype, nlines = 0, line, cat = -1;
     double *x, *y;
@@ -53,9 +54,9 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 
     struct field_info *fi = NULL;
     dbDriver *driver = NULL;
-    dbCatValArray cvarr_rgb, cvarr_width;
-    dbCatVal *cv_rgb = NULL, *cv_width = NULL;
-    int nrec_rgb = 0, nrec_width = 0;
+    dbCatValArray cvarr_rgb, cvarr_width, cvarr_size, cvarr_rot;
+    dbCatVal *cv_rgb = NULL, *cv_width = NULL, *cv_size = NULL, *cv_rot = NULL;
+    int nrec_rgb = 0, nrec_width = 0, nrec_size = 0, nrec_rot = 0;
     int nerror_rgb;
     
     int open_db;
@@ -65,9 +66,13 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
     RGBA_Color *line_color, *fill_color, *primary_color;
     unsigned char which;
     int width;
+    SYMBOL *Symb;
+    double var_size, rotation;
 
+    var_size = (double)size;
+    rotation = 0.0;
     nerror_rgb = 0;
-    
+
     line_color = G_malloc(sizeof(RGBA_Color));
     fill_color = G_malloc(sizeof(RGBA_Color));
     primary_color = G_malloc(sizeof(RGBA_Color));
@@ -98,7 +103,7 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
     PPoints = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
-    open_db = table_colors_flag || width_column;
+    open_db = table_colors_flag || width_column || size_column || rot_column;
 
     if (open_db) {
 	fi = Vect_get_field(Map, (Clist->field > 0 ? Clist->field : 1));
@@ -156,22 +161,92 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 
 	if (cvarr_width.ctype != DB_C_TYPE_INT &&
 	    cvarr_width.ctype != DB_C_TYPE_DOUBLE)
-	    G_fatal_error(_("Line width column (%s) not a number."),
+	    G_fatal_error(_("Line width column (%s) is not numeric."),
 			  width_column);
 
 	if (nrec_width < 0)
 	    G_fatal_error(_("Cannot select data (%s) from table"),
 			  width_column);
 
-	G_debug(2, "\n%d records selected from table", nrec_width);
+	G_debug(2, " %d records selected from table", nrec_width);
 
 	for (i = 0; i < cvarr_width.n_values; i++) {
-	    G_debug(4, "cat = %d  %s = %d", cvarr_width.value[i].cat,
+	    G_debug(4, "(width) cat = %d  %s = %d", cvarr_width.value[i].cat,
 		    width_column,
 		    (cvarr_width.ctype ==
 		     DB_C_TYPE_INT ? cvarr_width.value[i].val.
 		     i : (int)cvarr_width.value[i].val.d));
 	}
+    }
+
+    if (size_column) {
+	if (*size_column == '\0')
+	    G_fatal_error(_("Symbol size column not specified."));
+
+	db_CatValArray_init(&cvarr_size);
+
+	nrec_size = db_select_CatValArray(driver, fi->table, fi->key,
+					   size_column, NULL, &cvarr_size);
+
+	G_debug(3, "nrec_size (%s) = %d", size_column, nrec_size);
+
+	if (cvarr_size.ctype != DB_C_TYPE_INT &&
+	    cvarr_size.ctype != DB_C_TYPE_DOUBLE)
+	    G_fatal_error(_("Symbol size column (%s) is not numeric."),
+			  size_column);
+
+	if (nrec_size < 0)
+	    G_fatal_error(_("Cannot select data (%s) from table"),
+			  size_column);
+
+	G_debug(2, " %d records selected from table", nrec_size);
+
+	for (i = 0; i < cvarr_size.n_values; i++) {
+	    G_debug(4, "(size) cat = %d  %s = %d", cvarr_size.value[i].cat,
+		    size_column,
+		    (cvarr_size.ctype ==
+		     DB_C_TYPE_INT ? cvarr_size.value[i].val.
+		     i : (int)cvarr_size.value[i].val.d));
+	}
+    }
+
+    if (rot_column) {
+	if (*rot_column == '\0')
+	    G_fatal_error(_("Symbol rotation column not specified."));
+
+	db_CatValArray_init(&cvarr_rot);
+
+	nrec_rot = db_select_CatValArray(driver, fi->table, fi->key,
+					   rot_column, NULL, &cvarr_rot);
+
+	G_debug(3, "nrec_rot (%s) = %d", rot_column, nrec_rot);
+
+	if (cvarr_rot.ctype != DB_C_TYPE_INT &&
+	    cvarr_rot.ctype != DB_C_TYPE_DOUBLE)
+	    G_fatal_error(_("Symbol rotation column (%s) is not numeric."),
+			  rot_column);
+
+	if (nrec_rot < 0)
+	    G_fatal_error(_("Cannot select data (%s) from table"),
+			  rot_column);
+
+	G_debug(2, " %d records selected from table", nrec_rot);
+
+	for (i = 0; i < cvarr_rot.n_values; i++) {
+	    G_debug(4, "(rot) cat = %d  %s = %d", cvarr_rot.value[i].cat,
+		    rot_column,
+		    (cvarr_rot.ctype ==
+		     DB_C_TYPE_INT ? cvarr_rot.value[i].val.
+		     i : (int)cvarr_rot.value[i].val.d));
+	}
+    }
+
+    if( !(nrec_size || nrec_rot) ) {
+	Symb = S_read(symbol_name);
+	if (Symb == NULL)
+	    G_warning(_("Unable to read symbol, unable to display points"));
+	else
+	    S_stroke(Symb, size, 0.0, 0);
     }
 
     if (open_db)
@@ -353,12 +428,11 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 			 (Clist->field > 0 ? Clist->field :
 			  (Cats->n_cats >
 			   0 ? Cats->field[0] : 1)), &cat);
-	    
+
 	    if (cat >= 0) {
 		G_debug(3, "display element %d, cat %d", line, cat);
 
 		/* Read line width from db for current area # */
-
 		if (db_CatValArray_get_value(&cvarr_width, cat, &cv_width) !=
 		    DB_OK) {
 		    width = default_width;
@@ -375,20 +449,20 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 			width = default_width;
 		    }
 		}
-	    }			/* end if cat */
+	    }		/* end if cat */
 	    else {
 		width = default_width;
 	    }
 
 	    D_line_width(width);
-	}			/* end if nrec_width */
+	}		/* end if nrec_width */
 
 
 	/* enough of the prep work, lets start plotting stuff */
 	x = Points->x;
 	y = Points->y;
 
-	if ((ltype & GV_POINTS) && Symb != NULL) {
+	if ((ltype & GV_POINTS) && (Symb != NULL || (nrec_size || nrec_rot)) ) {
 	    if (!(color || fcolor || custom_rgb))
 		continue;
 
@@ -401,6 +475,81 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 		y0 < D_get_u_south() || y0 > D_get_u_north())
 		continue;
 
+	    /* dynamic symbol size */
+	    if (nrec_size) {
+		/* only first category */
+		Vect_cat_get(Cats,
+			     (Clist->field > 0 ? Clist->field :
+			      (Cats->n_cats > 0 ?
+			       Cats->field[0] : 1)), &cat);
+
+		if (cat >= 0) {
+		    G_debug(3, "display element %d, cat %d", line, cat);
+
+		    /* Read symbol size from db for current symbol # */
+		    if (db_CatValArray_get_value(&cvarr_size, cat, &cv_size) !=
+			DB_OK) {
+			var_size = (double)size;
+		    }
+		    else {
+			var_size =
+			    (cvarr_size.ctype == DB_C_TYPE_INT ?
+			     (double)cv_size->val.i : cv_size->val.d);
+
+			if (var_size < 0.0) {
+			    G_warning(_("Error in symbol size column (%s), element %d "
+					"with cat %d: symbol size [%f]"),
+				      size_column, line, cat, var_size);
+			    var_size = (double)size;
+			}
+		    }
+		}		/* end if cat */
+		else {
+		    var_size = (double)size;
+		}
+	    }		/* end if nrec_size */
+
+	    /* dynamic symbol rotation */
+	    if (nrec_rot) {
+		/* only first category */
+		Vect_cat_get(Cats,
+			     (Clist->field > 0 ? Clist->field :
+			      (Cats->n_cats > 0 ?
+			       Cats->field[0] : 1)), &cat);
+
+		if (cat >= 0) {
+		    G_debug(3, "display element %d, cat %d", line, cat);
+
+		    /* Read symbol rotation from db for current symbol # */
+		    if (db_CatValArray_get_value(&cvarr_rot, cat, &cv_rot) !=
+			DB_OK) {
+			rotation = 0.0;
+		    }
+		    else {
+			rotation =
+			    (cvarr_rot.ctype == DB_C_TYPE_INT ?
+			     (double)cv_rot->val.i : cv_rot->val.d);
+		    }
+		}		/* end if cat */
+		else {
+		    rotation = 0.0;
+		}
+	    }		/* end if nrec_rot */
+
+	    if(nrec_size || nrec_rot) {
+		G_debug(3, ". dynamic symbol: cat=%d  size=%d  rotation=%.2f",
+			cat, (int)(var_size + 0.5), rotation);
+
+		/* symbol stroking is cumulative, so we need to reread it each time */
+		if(Symb) /* unclean free() on first iteration if variables are not init'd to NULL? */
+		    G_free(Symb);
+		Symb = S_read(symbol_name);
+		if (Symb == NULL)
+		    G_warning(_("Unable to read symbol, unable to display points"));
+		else
+		    S_stroke(Symb, (int)(var_size + 0.5), rotation, 0);
+	    }
+
 	    /* use random or RGB column color if given, otherwise reset */
 	    /* centroids always use default color to stand out from underlying area */
 	    if (custom_rgb && (ltype != GV_CENTROID)) {
@@ -412,7 +561,9 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 	    else
 		D_symbol(Symb, x0, y0, line_color, fill_color);
 
-
+	    /* reset to defaults */
+	    var_size = (double)size;
+	    rotation = 0.0;
 	}
 	else if (color || custom_rgb || (z_color_flag && Vect_is_3d(Map))) {
 	    if (!table_colors_flag && !cats_color_flag && !z_color_flag)
