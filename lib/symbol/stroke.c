@@ -144,7 +144,7 @@ int stroke_chain(SYMBPART * part, int ch, double s, double rotation)
  *
  *  tolerance currently not supported
  */
-void S_stroke(SYMBOL * Symb, int size, double rotation, int tolerance)
+void S_stroke(SYMBOL *Symb, int size, double rotation, int tolerance)
 {
     int i, j;
     double s;
