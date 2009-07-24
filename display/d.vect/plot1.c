@@ -66,7 +66,7 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
     RGBA_Color *line_color, *fill_color, *primary_color;
     unsigned char which;
     int width;
-    SYMBOL *Symb;
+    SYMBOL *Symb = NULL;
     double var_size, rotation;
 
     var_size = (double)size;
