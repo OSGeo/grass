@@ -227,13 +227,13 @@ int main(int argc, char **argv)
     size_opt->guisection = _("Symbols");
     size_opt->description = _("Symbol size");
 
-    sizecolumn_opt = G_define_standard_option(G_OPT_COLUMN);
+    sizecolumn_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     sizecolumn_opt->key = "size_column";
     sizecolumn_opt->guisection = _("Symbols");
     sizecolumn_opt->description =
 	_("Name of numeric column containing symbol size");
 
-    rotcolumn_opt = G_define_standard_option(G_OPT_COLUMN);
+    rotcolumn_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     rotcolumn_opt->key = "rot_column";
     rotcolumn_opt->guisection = _("Symbols");
     rotcolumn_opt->label =
