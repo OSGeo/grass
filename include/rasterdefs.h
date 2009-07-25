@@ -503,7 +503,6 @@ DCELL Rast_get_sample(int, const struct Cell_head *, struct Categories *, double
 int Rast_set_window(struct Cell_head *);
 
 /* window_map.c */
-void Rast__init_window(void);
 void Rast__create_window_mapping(int);
 int Rast_row_repeat_nomask(int, int);
 

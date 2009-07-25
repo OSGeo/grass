@@ -8,6 +8,7 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
+#include "../gis/G.h"
 #include "R.h"
 
 #ifndef HAVE_GDAL
@@ -418,8 +419,8 @@ struct GDAL_link *Rast_create_gdal_link(const char *name,
     /* Does driver support GDALCreate ? */
     if ((*pGDALGetMetadataItem) (driver, GDAL_DCAP_CREATE, NULL)) {
 	gdal->data =
-	    (*pGDALCreate) (driver, gdal->filename, R__.window.cols,
-			    R__.window.rows, 1, gdal->type, st->opts.options);
+	    (*pGDALCreate) (driver, gdal->filename, G__.window.cols,
+			    G__.window.rows, 1, gdal->type, st->opts.options);
 	if (!gdal->data)
 	    G_fatal_error(_("Unable to create <%s> dataset using <%s> driver"),
 			  name, st->opts.format);
@@ -438,7 +439,7 @@ struct GDAL_link *Rast_create_gdal_link(const char *name,
 	    G_fatal_error(_("Unable to get in-memory raster driver"));
 
 	gdal->data =
-	    (*pGDALCreate) (mem_driver, "", R__.window.cols, R__.window.rows,
+	    (*pGDALCreate) (mem_driver, "", G__.window.cols, G__.window.rows,
 			    1, gdal->type, st->opts.options);
 	if (!gdal->data)
 	    G_fatal_error(_("Unable to create <%s> dataset using memory driver"),
@@ -453,12 +454,12 @@ struct GDAL_link *Rast_create_gdal_link(const char *name,
     (*pGDALSetRasterNoDataValue) (gdal->band, gdal->null_val);
 
     /* Set Geo Transform  */
-    transform[0] = R__.window.west;
-    transform[1] = R__.window.ew_res;
+    transform[0] = G__.window.west;
+    transform[1] = G__.window.ew_res;
     transform[2] = 0.0;
-    transform[3] = R__.window.north;
+    transform[3] = G__.window.north;
     transform[4] = 0.0;
-    transform[5] = -R__.window.ns_res;
+    transform[5] = -G__.window.ns_res;
 
     if ((*pGDALSetGeoTransform) (gdal->data, transform) >= CE_Failure)
 	G_warning(_("Unable to set geo transform"));
