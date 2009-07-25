@@ -25,6 +25,7 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
+#include "../gis/G.h"
 #include "R.h"
 #define FORMAT_FILE "f_format"
 
@@ -170,9 +171,6 @@ int Rast__open_old(const char *name, const char *mapset)
 
     Rast__init();
 
-    /* make sure window is set    */
-    Rast__init_window();
-
     G__unqualified_name(name, mapset, xname, xmapset);
     name = xname;
     mapset = xmapset;
@@ -224,16 +222,16 @@ int Rast__open_old(const char *name, const char *mapset)
 	}
     }
 
-    if (cellhd.proj != R__.window.proj) {
+    if (cellhd.proj != G__.window.proj) {
 	G_warning(_("Raster map <%s@%s> is in different projection than current region. "
 		   "Found raster map <%s@%s>, should be <%s>."), name, mapset,
 		  name, G__projection_name(cellhd.proj),
-		  G__projection_name(R__.window.proj));
+		  G__projection_name(G__.window.proj));
 	return -1;
     }
-    if (cellhd.zone != R__.window.zone) {
+    if (cellhd.zone != G__.window.zone) {
 	G_warning(_("Raster map <%s@%s> is in different zone (%d) than current region (%d)"),
-		  name, mapset, cellhd.zone, R__.window.zone);
+		  name, mapset, cellhd.zone, G__.window.zone);
 	return -1;
     }
 
@@ -289,7 +287,7 @@ int Rast__open_old(const char *name, const char *mapset)
 
     /* allocate null bitstream buffers for reading null rows */
     for (i = 0; i < NULL_ROWS_INMEM; i++)
-	fcb->NULL_ROWS[i] = Rast__allocate_null_bits(R__.window.cols);
+	fcb->NULL_ROWS[i] = Rast__allocate_null_bits(G__.window.cols);
     /* initialize : no NULL rows in memory */
     fcb->min_null_row = (-1) * NULL_ROWS_INMEM;
 
@@ -512,12 +510,12 @@ static int G__open_raster_new_gdal(char *map, char *mapset,
     if (!fcb->gdal)
 	return -1;
 
-    fcb->cellhd = R__.window;
+    fcb->cellhd = G__.window;
     fcb->cellhd.compressed = 0;
     fcb->nbytes = Rast_cell_size(fcb->map_type);
-    /* for writing fcb->data is allocated to be R__.window.cols * 
+    /* for writing fcb->data is allocated to be G__.window.cols * 
        sizeof(CELL or DCELL or FCELL)  */
-    fcb->data = G_calloc(R__.window.cols, fcb->nbytes);
+    fcb->data = G_calloc(G__.window.cols, fcb->nbytes);
 
     fcb->name = map;
     fcb->mapset = mapset;
@@ -598,9 +596,6 @@ static int G__open_raster_new(const char *name, int open_mode,
 	return -1;
     }
 
-    /* make sure window is set */
-    Rast__init_window();
-
 #ifdef HAVE_GDAL
     if (G_find_file2("", "GDAL", G_mapset()))
 	return G__open_raster_new_gdal(map, mapset, map_type);
@@ -629,9 +624,9 @@ static int G__open_raster_new(const char *name, int open_mode,
     fcb->open_mode = -1;
     fcb->gdal = NULL;
 
-    /* for writing fcb->data is allocated to be R__.window.cols * 
+    /* for writing fcb->data is allocated to be G__.window.cols * 
        sizeof(CELL or DCELL or FCELL)  */
-    fcb->data = (unsigned char *)G_calloc(R__.window.cols,
+    fcb->data = (unsigned char *)G_calloc(G__.window.cols,
 					  Rast_cell_size(fcb->map_type));
 
     /*
@@ -640,7 +635,7 @@ static int G__open_raster_new(const char *name, int open_mode,
      * for compressed writing
      *   allocate space to hold the row address array
      */
-    G_copy((char *)&fcb->cellhd, (char *)&R__.window, sizeof(fcb->cellhd));
+    G_copy((char *)&fcb->cellhd, (char *)&G__.window, sizeof(fcb->cellhd));
 
     if (open_mode == OPEN_NEW_COMPRESSED && fcb->map_type == CELL_TYPE) {
 	fcb->row_ptr = G_calloc(fcb->cellhd.rows + 1, sizeof(off_t));

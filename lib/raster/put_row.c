@@ -26,6 +26,7 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
+#include "../gis/G.h"
 #include "R.h"
 
 static int put_raster_data(int, char *, const void *, int, int, int,
@@ -278,7 +279,7 @@ static int put_fp_data(int fd, char *null_buf, const void *rast,
     if (n <= 0)
 	return 0;
 
-    work_buf = G__alloca(R__.window.cols * fcb->nbytes + 1);
+    work_buf = G__alloca(G__.window.cols * fcb->nbytes + 1);
 
     if (compressed)
 	set_file_pointer(fd, row);
@@ -455,7 +456,7 @@ static int put_data(int fd, char *null_buf, const CELL * cell,
     if (n <= 0)
 	return 0;
 
-    work_buf = G__alloca(R__.window.cols * sizeof(CELL) + 1);
+    work_buf = G__alloca(G__.window.cols * sizeof(CELL) + 1);
     wk = work_buf;
 
     if (compressed)

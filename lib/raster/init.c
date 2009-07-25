@@ -73,6 +73,8 @@ void Rast__init(void)
 
 static int init(void)
 {
+    G__init_window();
+
     /* no histograms */
     R__.want_histogram = 0;
 

@@ -74,9 +74,7 @@ int Rast_set_window(struct Cell_head *window)
     }
 
     /* copy the window to the current window */
-    G_copy((char *)&R__.window, (char *)window, sizeof(*window));
-
-    R__.window_set = 1;
+    G_set_window(window);
 
     /* now for each possible open cell file, recreate the window mapping */
     /*
@@ -98,7 +96,7 @@ int Rast_set_window(struct Cell_head *window)
 	else {
 	    /* opened for writing */
 	    G_free(fcb->data);
-	    fcb->data = (unsigned char *)G_calloc(R__.window.cols,
+	    fcb->data = (unsigned char *)G_calloc(G__.window.cols,
 						  Rast_cell_size(fcb->
 								 map_type));
 	}
@@ -106,7 +104,7 @@ int Rast_set_window(struct Cell_head *window)
 	/* allocate null bitstream buffers for reading/writing null rows */
 	for (j = 0; j < NULL_ROWS_INMEM; j++) {
 	    G_free(fcb->NULL_ROWS[j]);
-	    fcb->NULL_ROWS[j] = (R__.window.cols);
+	    fcb->NULL_ROWS[j] = (G__.window.cols);
 	}
 
 
