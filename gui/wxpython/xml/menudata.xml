@@ -63,6 +63,19 @@
 	    </menuitem>
 	    <separator />
 	    <menuitem>
+	      <label>Link to GDAL</label>
+	      <help>Link GDAL supported raster file to a binary raster map layer.</help>
+	      <keywords>raster,import</keywords>
+              <handler>self.OnMenuCmd</handler>
+	      <command>r.external</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>Multiple link to GDAL</label>
+	      <help>Link GDAL supported raster files to a binary raster map layers.</help>
+              <handler>self.OnLinkGdalLayers</handler>
+	    </menuitem>
+	    <separator />
+	    <menuitem>
 	      <label>Aggregate ASCII xyz import</label>
 	      <help>Create a raster map from an assemblage of many coordinates using univariate statistics.</help>
 	      <keywords>raster,import,LIDAR</keywords>
@@ -155,6 +168,19 @@
 	      <label>Multiple vector data import using OGR</label>
 	      <help>Converts selected OGR layers to GRASS vector maps using v.in.ogr.</help>
 	      <handler>self.OnImportOgrLayers</handler>
+	    </menuitem>
+	    <separator />
+	    <menuitem>
+	      <label>Link to OGR</label>
+	      <help>Creates a new vector as a read-only link to OGR layer.</help>
+	      <keywords>vector</keywords>
+              <handler>self.OnMenuCmd</handler>
+	      <command>v.external</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>Multiple link to OGR</label>
+	      <help>Creates a new vectors as a read-only link to OGR layers.</help>
+              <handler>self.OnLinkOgrLayers</handler>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
@@ -814,19 +840,6 @@
 	      <keywords>raster,statistics</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.support.stats</command>
-	    </menuitem>
-	    <separator />
-	    <menuitem>
-	      <label>Link to GDAL</label>
-	      <help>Link GDAL supported raster file to a binary raster map layer.</help>
-	      <keywords>raster,import</keywords>
-              <handler>self.OnMenuCmd</handler>
-	      <command>r.external</command>
-	    </menuitem>
-	    <menuitem>
-	      <label>Multiple link to GDAL</label>
-	      <help>Link GDAL supported raster files to a binary raster map layers.</help>
-              <handler>self.OnLinkGdalLayers</handler>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
@@ -1731,19 +1744,6 @@
 	      <keywords>vector,geometry,3D</keywords>
               <handler>self.OnMenuCmd</handler>
 	      <command>v.extrude</command>
-	    </menuitem>
-	    <separator />
-	    <menuitem>
-	      <label>Link to OGR</label>
-	      <help>Creates a new vector as a read-only link to OGR layer.</help>
-	      <keywords>vector</keywords>
-              <handler>self.OnMenuCmd</handler>
-	      <command>v.external</command>
-	    </menuitem>
-	    <menuitem>
-	      <label>Multiple link to OGR</label>
-	      <help>Creates a new vectors as a read-only link to OGR layers.</help>
-              <handler>self.OnLinkOgrLayers</handler>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
