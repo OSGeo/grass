@@ -194,11 +194,11 @@ def read_gui():
 	# Check for a reference to the GRASS user interface in the grassrc file
 	if os.access(gisrc, os.R_OK):
 	    kv = read_gisrc()
-	    if 'GRASS_GUI' not in kv:
+	    if not kv.has_key('GRASS_GUI'):
 		# Set the GRASS user interface to the default if needed
 		grass_gui = default_gui
-        else:
-            grass_gui = kv['GRASS_GUI']
+            else:
+                grass_gui = kv['GRASS_GUI']
     
     if not grass_gui:
 	grass_gui = default_gui
