@@ -3,18 +3,14 @@
      by M. Neteler 2/2004
   -->
 
-by GRASS Development Team
-
-http://grass.osgeo.org
+by GRASS Development Team (http://grass.osgeo.org)
 
 \section ogsfintro OGSF Library for OpenGL programming (gsurf) 
 
-<P>
 Author: Bill Brown GMSL/University of Illinois
 
 <b>Overview</b>
 
-<P>
 The OGSF (gsurf)  library, consisting of approximately 27,000 lines of
 C code, contains some 250 public functions and about twice as many
 internal functions for run-time data storage, manipulation, querying,
@@ -34,7 +30,6 @@ gsurf library is not dependent upon any particular interface library,
 and has been used successfully with both Motif and Tcl/Tk. It is used
 for NVIZ visualization tool.
 
-<P>
 The library is designed to provide a unique "handle" or identifier
 number to the calling program for each new geographic object added to
 the model.  The object could be a surface, %vector set, or %point set,
