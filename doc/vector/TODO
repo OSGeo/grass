@@ -56,6 +56,8 @@ decrease the memory occupied by running module (practicaly to
 zero). The speed will decrease a bit but not significantly because
 files are usually cached by system.
 
+* Update: implemented in r38385 (2009/07) by Markus Metz
+
 Temporary vector
 ----------------
 Analytical modules process data in the output vector (for example
@@ -78,6 +80,8 @@ of to append a new line to the end of the file. There is already empty
 structure 'recycle' in 'dig_head' where the list could be imlemented
 (without changing 'dig_head' size, to keep binary compatibility).
 
+* Note: currently wxGUI vector digitizer 'undo' depends on this 'feature'
+
 Vect_rewrite_line
 -----------------
 Implement properly Vect_rewrite_line(). Currently it simply calls
@@ -97,6 +101,8 @@ the necessity to calculate always the box on the fly (when it is not
 stored in the structure) which can be time consuming for example for
 areas or long lines.
 
+* See also http://trac.osgeo.org/grass/ticket/542
+
 Switching to update mode
 ------------------------
 It would be useful to have a possibility to switch to 'update' mode a
@@ -113,6 +119,8 @@ modules. It is necessary to write int Vect_get_layer_by_name ( struct
 Map_info *map, char *name) which will accept both names and numbers
 and use this function in vector modules. This is also important for
 OGR interface improvements (see below).
+
+* Update: implemented in r38548 (2009/07) by Martin Landa
 
 OGR interface
 -------------
@@ -237,4 +245,3 @@ SQLite database.
 
 1/2009: Other suggestions moved to
  http://trac.osgeo.org/grass/
-
