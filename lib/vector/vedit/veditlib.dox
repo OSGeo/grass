@@ -1,8 +1,6 @@
 /*! \page veditlib GRASS Vedit Library
 
-by GRASS Development Team
-
-http://grass.osgeo.org
+by GRASS Development Team (http://grass.osgeo.org)
 
 \section veditIntro Introduction to Vedit Library
 
@@ -10,8 +8,7 @@ This library contains higher level functions for editing %vector
 geometry (see \ref vectorlib). Currently only 2D primitives are
 supported (points, lines, boundaries and centroids).
 
-<p>
-The library is used by v.edit module and wxGUI %vector digitizer.
+The library is used by <tt>v.edit</tt> module and wxGUI %vector digitizer.
 
 \section veditFn Functions
 
@@ -65,7 +62,7 @@ The library is used by v.edit module and wxGUI %vector digitizer.
 
  - Vedit_bulk_labeling()
 
-\section contacts Contacts
+\section authors Authors
 
  Martin Landa <landa.martin gmail.com>
 

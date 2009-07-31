@@ -9,14 +9,39 @@ Specifications:
 - \subpage background
 - \subpage intro
 - \subpage libraries
+ - \subpage vlib
+  - \subpage Directory_structure
+  - \subpage head_file_format
+  - \subpage Map_info
+  - \subpage Plus_head
+  - \subpage dig_head
+- \subpage feature_geom
+ - \subpage ftypes
+ - \subpage coor_file_format
+  - \subpage coor_file_head
+  - \subpage coor_file_body 
 - \subpage vlib_topology_management
+ - \subpage topo_file_format
+  - \subpage topo_file_header
+  - \subpage topo_file_body
+ - \subpage topo_levels
+ - \subpage topo_examples
+ - \subpage vlib_topo_memory
 - \subpage vlib_spidx
+ - \subpage sidx_file_format
 - \subpage vlib_categories_layers
+- \subpage vlib_cidx
+ - \subpage cidx_file_format
+  - \subpage cidx_file_head
+- \subpage vlib_tin
 - \subpage vlib_attributes
-- \subpage vlibtin
+- \subpage ogr_iface
+ - \subpage frmt_file_format
+ - \subpage fidx_file_format
 - \subpage grassdglib
-- \subpage vlibascii
-- \subpage vectmodulesoper
+- \subpage vlib_ascii
+- \subpage vectmodules
+ - \subpage vectmodules_oper
 
 \subpage vlibfunc
 
@@ -67,7 +92,7 @@ Specifications:
 - \subpage delete
 - \subpage write
 
-\subpage contacts
+\subpage authors
 
 \subpage references
 
@@ -82,24 +107,25 @@ lines, and areas. The GRASS vector data model includes the description
 of topology, where besides the coordinates describing the location of
 the primitives (points, lines, boundaries, centroids, faces, and
 kernels), their spatial relations are also stored. In general,
-topological GIS require a data structure where the common boundary
+topological GIS requires a data structure where the common boundary
 between two adjacent areas is stored as a single line, simplifying the
-map maintenance.
+vector data maintenance.
 
 
 \section intro Introduction
 
-The GRASS 6/7 vector format is very similar to old GRASS 4.x (5.0/5.3)
-vector format.
+The GRASS 6/7 vector format is very similar to the previous GRASS 4.x
+(5.0/5.3) vector format.
 
 This description covers the new GRASS 6 vector library architecture.
 This new architecture overcomes the vector limitations of GRASS
 4.x-5.4.x by extending the vector support with attributes stored in
-external relational databases, and by new 3D capabilities. Besides
+the external relational databases, and by new 3D capabilities. Besides
 internal file based storage the geometry may alternatively be stored
-in a PostGIS database. This enables users to maintain large data sets
-with simultaneous write access. External GIS formats such as
-SHAPE-files may be used directly, without requiring format conversion.
+in a PostGIS database (accessible via OGR interface). This enables
+users to maintain large data sets with simultaneous write
+access. External GIS formats such as SHAPE-files may be used directly,
+without requiring format conversion.
 
 The current implementation includes:   
 
@@ -109,28 +135,28 @@ The current implementation includes:
 - multi-format: external data formats supported (SHAPE-file, OGR sources etc.);
 - portability: platform independent internal format, read- and writable on 32bit,
       64bit etc. computer architectures;
-- integrated \ref dglib: support for vector network analysis;
-- spatial index: based on R-tree method for fast vector geometry access (see \ref vlib_spidx).
+- integrated \ref dglib - support for vector network analysis;
+- spatial index: based on R-tree method for fast vector geometry access (see \ref vlib_spidx);
 - multi-attribute: attributes saved in external Relational Database Management 
       System (RDBMS) connected through DBMI library and drivers (\ref vlib_attributes);
 
-GRASS vector maps are stored in an arc-node representation, consisting
-of curves called arcs. An arc is stored as a series of x,y,z
-coordinate pairs. The two endpoints of an arc are called nodes. Two
-consecutive x,y,z pairs define an arc segment. The user specifies the
-type of input to GRASS; GRASS doesn't decide. GRASS allows for the
-line definition which allows for multiple types to co-exist in the
-same map. Centroid are assigned to area it is within/inside
-(geometrically). An area is identified by an x,y,z centroid point
-geometrically inside with a category number (ID). This identifies the
-area. Such centroids are stored in the same binary 'coor' file with
-other primitives. Each element may have none, one or more categories
-(cats). More cats are distinguished by field number (field, called
-"layer" at user level).  Single and multi-category support on modules
-level are implemented. Z-coordinate is optional and both 2D and 3D
-files may be written.
+GRASS vector maps are stored in an <em>arc-node</em> representation,
+consisting of curves called arcs. An arc is stored as a series of
+x,y,z coordinate pairs. The two endpoints of an arc are called
+<em>nodes</em>. Two consecutive x,y,z pairs define an arc segment. The
+user specifies the type of input to GRASS; GRASS doesn't decide. GRASS
+allows for the feature definition which allows for multiple types to
+co-exist in the same map. Centroid are assigned to area it is
+within/inside (geometrically). An area is identified by an x,y,z
+centroid point geometrically inside with a category number (ID). This
+identifies the area. Such centroids are stored in the same binary
+'coor' file with other primitives. Each element may have none, one or
+more categories (cats). More cats are distinguished by field number
+(field, called "layer" at user level).  Single and multi-category
+support on modules level are implemented. Z-coordinate is optional and
+both 2D and 3D files may be written.
 
-The following vector objects are defined:
+The following vector features are defined (see \ref ftypes):
 
 - point: a point;
 - line: a directed sequence of connected vertices with two endpoints called nodes;
@@ -154,7 +180,7 @@ Besides internal library functions there are two main libraries:
 - Vlib (Vector library), see \ref vlib
 - DGLib (Directed Graph Library), see \ref dglib
 
-For historical reasons, there are two internal libraries for vector:
+For historical reasons, there are two internal libraries:
 
 - diglib (with dig_*() functions), GRASS 3.x/4.x
 - Vlib (with V1_*(), V2_*() and Vect_*() functions), GRASS 4.x/5.x (except for the 5.7 interim version)
@@ -187,27 +213,334 @@ references in this document.</i>
 
 Directory structure and file names are changed with respect to
 previous GRASS versions.  All vector files for one vector map are
-stored in one directory:<br>
+stored in one directory:
 
-<b>$MAPSET/vector/vector_name/</b>
+\verbatim
+$MAPSET/vector/vector_name/
+\endverbatim
 
 This directory contains these files:
 
-- <b>coor</b> - binary file, coordinates [former dig/ file]
-- <b>topo</b> - binary file, topology [former dig_plus/ file]
-- <b>sidx</b> - binary file, spatial index 
-- <b>cidx</b> - binary file, category index 
-- <b>head</b> - text file, header information [former part of dig/ file]
+- <b>coor</b> - binary file, coordinates [former dig/ file] (see \ref coor_file_format)
+- <b>topo</b> - binary file, topology [former dig_plus/ file] (see \ref topo_file_format)
+- <b>sidx</b> - binary file, spatial index (see \ref sidx_file_format)
+- <b>cidx</b> - binary file, category index (see \ref cidx_file_format)
+- <b>head</b> - text file, header information [former part of dig/ file] (see \ref head_file_format)
 - <b>dbln</b> - text file, link(s) to attribute table(s)
 - <b>hist</b> - text file, vector map change history
+- <b>frmt</b> - text file, format description (external format only)
+- <b>fidx</b> - binary file, feature index (OGR format only)
 
-\subsubsection coor_file_format_specification Coor file format specification
+\subsubsection head_file_format Head file format
 
--# In the coor file the following is stored: 'line' (element) type,
-   number of attributes and layer number for each category.
--# Coordinates in binary file are stored as double (8 bytes).
+The file is an unordered list of key/value entries. The <i>key</i>
+is a string separated from <i>value</i> by a colon and optional
+whitespace. Key words are:<br>
 
-<b>Head</b>
+\verbatim
+ORGANIZATION
+DIGIT DATE
+DIGIT NAME
+MAP NAME
+MAP DATE
+MAP SCALE
+OTHER INFO
+ZONE
+MAP THRESH
+\endverbatim
+
+\subsubsection Map_info Map_info structure
+
+<tt>Map_info</tt> structure holds basic information about open vector map.
+
+\code
+struct Map_info
+{
+    /* common info for all formats */
+    int format;			/* format (native, ogr) */
+    int temporary;		/* temporary file flag, not yet used */
+
+    struct dblinks *dblnk;	/* info about db links */
+
+    struct Plus_head plus;	/* topo file head info */
+
+    /* graph-related section */
+    int graph_line_type;	/* line type used to build the graph */
+    dglGraph_s graph;		/* graph structure */
+    dglSPCache_s spCache;	/* shortest path cache */
+    double *edge_fcosts;	/* costs used for graph, (dglGetEdge()
+    	   			   is not supported for _DGL_V1) */
+    double *edge_bcosts;
+    double *node_costs;		/* node costs */
+    int cost_multip;		/* edge and node costs
+				   multiplicator */
+
+    /* All of these apply only to runtime, and none get written out
+       to the dig_plus file 
+    */
+    int open;			/* should be 0x5522AA22 if opened correctly
+				   or        0x22AA2255 if closed          
+				   anything else implies that structure has
+				   never been initialized
+				*/
+    int mode;			/* Open mode - read, write, rw */
+    int level;			/* Topology level - 1, 2, (3) */
+    int head_only;		/* only header is opened */
+    int support_updated;	/* support files were updated */
+    plus_t next_line;		/* for level 2 sequential reads */
+
+    char *name;			/* for 4.0  just name, and mapset */
+    char *mapset;               /* mapset name */
+    /* location and gisdbase is usefull if changed (v.proj or external apps) */
+    char *location;		/* location name */
+    char *gisdbase;		/* gisdbase path */
+
+    /* constraints for reading in lines  (not polys yet) */
+    int Constraint_region_flag;
+    int Constraint_type_flag;
+    double Constraint_N;
+    double Constraint_S;
+    double Constraint_E;
+    double Constraint_W;
+    double Constraint_T;
+    double Constraint_B;
+    int Constraint_type;
+    int proj;
+
+    /* format specific */
+    /* native */
+    struct gvfile dig_fp;	/* dig file pointer */
+    struct dig_head head;	/* coor file head */
+
+    /* non native */
+    struct Format_info fInfo;	/* format information */
+
+    /* history file */
+    FILE *hist_fp;
+
+    /* temporary solution for sites */
+    struct site_att *site_att;	/* array of attributes loaded from db */
+    int n_site_att;		/* number of attributes in site_att array */
+    int n_site_dbl;		/* number of double attributes for one site */
+    int n_site_str;		/* number of string attributes for one site */
+};
+\endcode
+
+\subsubsection Plus_head Plus_head structure
+
+<tt>Plus_head</tt> holds basic topology-related information about vector map.
+
+\code
+struct Plus_head
+{
+    int Version_Major;		 /* version codes */
+    int Version_Minor;
+    int Back_Major;		 /* earliest version that can use this data format */
+    int Back_Minor;
+
+    int spidx_Version_Major;	 /* version codes for spatial index */
+    int spidx_Version_Minor;
+    int spidx_Back_Major;	 /* earliest version that can use this data format */
+    int spidx_Back_Minor;
+
+    int cidx_Version_Major;	 /* version codes for category index */
+    int cidx_Version_Minor;
+    int cidx_Back_Major;	 /* earliest version that can use this data format */
+    int cidx_Back_Minor;
+
+    int with_z;                  /* 2D/3D vector data */
+    int spidx_with_z;            /* 2D/3D spatial index */
+
+    int off_t_size;              /* offset size here because Plus_head
+				    is available to all releveant
+				    functions */
+
+    long head_size;		 /* topo header size */
+    long spidx_head_size;	 /* spatial index header size */
+    long cidx_head_size;	 /* category index header size */
+
+    int release_support;	 /* release memory occupied by support
+				    (topo, spatial, category) */
+
+    struct Port_info port;	 /* portability information */
+    struct Port_info spidx_port; /* portability information for
+				    spatial index */
+    struct Port_info cidx_port;	 /* portability information for
+				    category index */
+    int mode;			 /* read, write, RW */
+
+    int built;			 /* the highest level of topology
+				    currently available
+				    (GV_BUILD_*) */
+
+    struct bound_box box;	 /* vector map bounding box */
+
+    /* topology info */
+    struct P_node **Node;	 /* struct P_node array of pointers 
+				    1st item is 1 for  */
+    struct P_line **Line;	 /* struct P_line array of pointers 
+				    all these (not 0) */
+    struct P_area **Area;
+    struct P_isle **Isle;
+                                 /* add here P_FACE, P_VOLUME, P_HOLE */
+
+    plus_t n_nodes;		 /* current number of nodes */
+    plus_t n_edges;		 /* current number of edges */
+    plus_t n_lines;	 	 /* current number of lines */
+    plus_t n_areas;		 /* current number of areas */
+    plus_t n_isles;		 /* current number of isles */
+    plus_t n_faces;		 /* current number of faces */
+    plus_t n_volumes;	         /* current number of volumes */
+    plus_t n_holes;		 /* current number of holes */
+
+    plus_t n_plines;		 /* current number of points */
+    plus_t n_llines;		 /* current number of lines */
+    plus_t n_blines;		 /* current number of boundaries */
+    plus_t n_clines;		 /* current number of centroids */
+    plus_t n_flines;		 /* current number of faces */
+    plus_t n_klines;		 /* current number of kernels*/
+    plus_t n_vfaces;		 /* current number of volumes */
+    plus_t n_hfaces;		 /* current number of hole faces */
+
+    plus_t alloc_nodes;		 /* number of nodes we have alloc'ed
+				    space for i.e. array size - 1 */
+    plus_t alloc_edges;          /* number of edges we have alloc'ed space for */
+    plus_t alloc_lines;		 /* number of lines we have alloc'ed space for */
+    plus_t alloc_areas;		 /* number of areas we have alloc'ed space for */
+    plus_t alloc_isles;		 /* number of isles we have alloc'ed space for */
+    plus_t alloc_faces;		 /* number of faces we have alloc'ed space for */
+    plus_t alloc_volumes;	 /* number of volumes we have alloc'ed space for */
+    plus_t alloc_holes;		 /* number of holes we have alloc'ed space for */
+
+    off_t Node_offset;		 /* offset of array of nodes in topo file */
+    off_t Edge_offset;           /* offset of array of edges in topo file */
+    off_t Line_offset;           /* offset of array of lines in topo file */
+    off_t Area_offset;           /* offset of array of areas in topo file */
+    off_t Isle_offset;           /* offset of array of isles in topo file */
+    off_t Volume_offset;         /* offset of array of volumes in topo file */
+    off_t Hole_offset;           /* offset of array of holes in topo file */
+
+    int Spidx_built;		 /* set to 1 if spatial index is available */
+    int Spidx_new;               /* set to 1 if new spatial index will be generated */
+
+    struct gvfile spidx_fp;	 /* spatial index file pointer */
+    
+    char *spidx_node_fname;      /* node spatial index file name */
+
+    off_t Node_spidx_offset;	 /* offset of nodes in sidx file */
+    off_t Line_spidx_offset;     /* offset of lines in sidx file */
+    off_t Area_spidx_offset;     /* offset of areas in sidx file */
+    off_t Isle_spidx_offset;     /* offset of isles in sidx file */
+    off_t Face_spidx_offset;     /* offset of faces in sidx file */
+    off_t Volume_spidx_offset;   /* offset of volumes in sidx file */
+    off_t Hole_spidx_offset;     /* offset of holes in sidx file */
+
+    struct RTree *Node_spidx;     /* node spatial index */
+    struct RTree *Line_spidx;     /* line spatial index */
+    struct RTree *Area_spidx;     /* area spatial index */
+    struct RTree *Isle_spidx;     /* isle spatial index */
+    struct RTree *Face_spidx;     /* face spatial index */
+    struct RTree *Volume_spidx;   /* volume spatial index */
+    struct RTree *Hole_spidx;     /* hole spatial index */
+
+    /* Category index
+       By default, category index is not updated */
+    int update_cidx;		  /* update category index if vector is modified */
+
+    int n_cidx;			  /* number of cat indexes (one for each field) */
+    int a_cidx;			  /* allocated space for cat indexes */
+    struct Cat_index *cidx;	  /* array of category indexes */
+    int cidx_up_to_date;	  /* set to 1 when cidx is created and reset to 0 whenever any line is changed */
+
+    off_t coor_size;		  /* size of coor file */
+    long coor_mtime;		  /* time of last coor modification */
+
+    /* Level2 update: list of lines and nodes updated (topo info for
+       the line was changed) by last write/rewrite/delete operation.
+       Lines/nodes in the list may be deleted (e.g. delete boundary:
+       first added for delete area and then delete */
+    int do_uplist;		  /* used internaly in diglib to know if list is maintained */
+
+    int *uplines;		  /* array of updated lines */
+    int alloc_uplines;		  /* allocated array */
+    int n_uplines;		  /* number of updated lines */
+    int *upnodes;		  /* array of updated nodes */
+    int alloc_upnodes;		  /* allocated array */
+    int n_upnodes;		  /* number of updated nodes */
+};
+\endcode
+
+\subsubsection dig_head dig_head structure
+
+<tt>dig_head</tt> holds header data of vector map (see \ref Map_info).
+
+\code
+struct dig_head
+{
+    /* elements */
+    char *organization;         /* orgranization name */
+    char *date;                 /* map date */
+    char *your_name;            /* user name */
+    char *map_name;             /* map name */
+    char *source_date;          /* source date */
+    long orig_scale;            /* original scale */
+    char *line_3;               /* comments */
+    int plani_zone;             /* zone */
+    double digit_thresh;        /* threshold for digitization */
+
+    /* Programmers should NOT touch any thing below here */
+    /* Library takes care of everything for you          */
+
+    /* coor elements */
+    int Version_Major;          /* backward compatibility info */
+    int Version_Minor;
+    int Back_Major;
+    int Back_Minor;
+    int with_z;                 /* 2D/3D vector data */
+
+    off_t size;			/* coor file size */
+    long head_size;		/* coor header size */
+
+    struct Port_info port;	/* portability information */
+
+    off_t last_offset;		/* offset of last read line */
+
+    struct recycle *recycle;    /* recycle dead line, not implemented yet */
+
+    struct Map_info *Map;	/* X-ref to Map_info struct (needed?) */
+};
+\endcode
+
+\section feature_geom Vector library feature geometry
+
+\subsection ftypes Feature types
+
+\code
+#define GV_POINT      0x01
+#define GV_LINE	      0x02
+#define GV_BOUNDARY   0x04
+#define GV_CENTROID   0x08
+#define GV_FACE       0x10
+#define GV_KERNEL     0x20
+#define GV_AREA	      0x40
+#define GV_VOLUME     0x80
+
+#define GV_POINTS (GV_POINT | GV_CENTROID )
+#define GV_LINES (GV_LINE | GV_BOUNDARY )
+\endcode
+
+Face and kernel are 3D equivalents of boundary and centroid, but there
+is no support (yet) for 3D topology (volumes). Faces are used in a
+couple of modules including NVIZ to visualize 3D buildings and other
+volumetric figures.
+
+\subsection coor_file_format Coor file format specification
+
+In the coor file the following is stored: 'line' (element) type,
+number of attributes and layer number for each category. Coordinates
+in binary file are stored as double (8 bytes).
+
+\subsubsection coor_file_head Header
 
 <table border="1" style="border-collapse: collapse">
 <tr><td>Name</td><td>Type</td><td>Number</td><td>Description</td></tr>
@@ -230,7 +563,7 @@ This directory contains these files:
 
 </table>
 
-<b>Body</b>
+\subsubsection coor_file_body Body
 
 The body consists of line records:
 
@@ -277,25 +610,6 @@ The body consists of line records:
 <tr><td>C</td><td>Char  </td><td>1</td></tr>
 </table>
 
-
-\subsubsection head_file_format Head file format
-
-The file is an unordered list of key/value entries. The <i>key</i>
-is a string separated from <i>value</i> by a colon and optional
-whitespace. Key words are:<br>
-
-\verbatim
-ORGANIZATION
-DIGIT DATE
-DIGIT NAME
-MAP NAME
-MAP DATE
-MAP SCALE
-OTHER INFO
-ZONE
-MAP THRESH
-\endverbatim
-
 \section vlib_topology_management Vector library topology management
 
 Topology general characteristics:
@@ -308,43 +622,49 @@ Topology general characteristics:
 Topology is written for native format while pseudo-topology is written
 for OGR sources, SHAPE-link.
 
-\subsection topo_file_format Topo file format
+\subsection topo_file_format Topo file format specification
 
-<b>Head</b>
+Topo file is read by Vect_open_topo().
+
+\subsubsection topo_file_header Header
+
+Note: <tt>plus</tt> is instance of <tt>Plus_head</tt> structure.
 
 <table border="1" style="border-collapse: collapse">
 <tr><td>Name</td><td>Type</td><td>Number</td><td>Description</td></tr>
 
-<tr><td>Version_Major </td><td>C</td><td>1</td><td>file version (major)</td></tr>
-<tr><td>Version_Minor </td><td>C</td><td>1</td><td>file version (minor)</td></tr>
-<tr><td>Back_Major</td><td>C</td><td>1</td><td>supported from GRASS version (major)</td></tr>
-<tr><td>Back_Minor</td><td>C</td><td>1</td><td>supported from GRASS version (minor)</td></tr>
+<tr><td>plus->Version_Major </td><td>C</td><td>1</td><td>file version (major)</td></tr>
+<tr><td>plus->Version_Minor </td><td>C</td><td>1</td><td>file version (minor)</td></tr>
+<tr><td>plus->Back_Major</td><td>C</td><td>1</td><td>supported from GRASS version (major)</td></tr>
+<tr><td>plus->Back_Minor</td><td>C</td><td>1</td><td>supported from GRASS version (minor)</td></tr>
 
-<tr><td>byte_order</td><td>C</td><td>1</td><td>little or big endian
+<tr><td>plus->port->byte_order</td><td>C</td><td>1</td><td>little or big endian
                   flag; files are written in machine native order but
                   files in both little and big endian order may be
                   readl; zero for little endian</td></tr>
 
-<tr><td>head_size</td><td>L</td><td>1</td><td>header size</td></tr>
+<tr><td>plus->head_size</td><td>L</td><td>1</td><td>header size</td></tr>
 
-<tr><td>with_z</td><td>C</td><td>1</td><td>2D or 3D flag; zero for 2D</td></tr>
+<tr><td>plus->with_z</td><td>C</td><td>1</td><td>2D or 3D flag; zero for 2D</td></tr>
 
-<tr><td>box</td><td>D</td><td>6</td><td>Bounding box coordinates (N,S,E,W,T,B)</td></tr>
+<tr><td>plus->box</td><td>D</td><td>6</td><td>Bounding box coordinates (N,S,E,W,T,B)</td></tr>
 
-<tr><td>n_nodes, n_lines, etc.</td><td>I</td><td>7</td><td>Number of
+<tr><td>plus->n_nodes, plus->n_lines, etc.</td><td>I</td><td>7</td><td>Number of
 nodes, edges, lines, areas, isles, volumes and holes</td></tr>
 
-<tr><td>n_plines, n_llines, etc.</td><td>I</td><td>7</td><td>Number of
+<tr><td>plus->n_plines, plus->n_llines, etc.</td><td>I</td><td>7</td><td>Number of
 points, lines, boundaries, centroids, faces and kernels</td></tr>
 
-<tr><td>Node_offset, Edge_offset,
+<tr><td>plus->Node_offset, plus->Edge_offset,
 etc.</td><td>L</td><td>7</td><td>Offset value for nodes, edges, lines,
 areas, isles, volumes and holes</td></tr>
 
-<tr><td>coor_size</td><td>L</td><td>1</td><td>File size</td></tr>
+<tr><td>plus->coor_size</td><td>L</td><td>1</td><td>File size</td></tr>
 </table>
 
-<b>Body</b>
+\subsubsection topo_file_body Body (nodes, lines, areas, isles)
+
+<b>Nodes</b>
 
 For each node (n_nodes):
 
@@ -357,6 +677,29 @@ For each node (n_nodes):
 <tr><td>x,y</td><td>D</td><td>2</td><td>Coordinate pair</td></tr>
 <tr><td>z</td><td>D</td><td>1</td><td>Only for with_z</td></tr>
 </table>
+
+\code
+struct P_node
+{
+    double x;			/* X coordinate */
+    double y;			/* Y coordinate */
+    double z;			/* Z coordinate */
+    plus_t alloc_lines;         /* allocated space for lines */
+    plus_t n_lines;		/* number of attached lines (size of
+				   lines, angle). If 0, then is
+				   degenerate node, for snappingi ???
+				*/
+    plus_t *lines;		/* list of connected lines */
+    float *angles;		/* respected angles; angles for
+				   lines/boundaries are in radians
+				   between -PI and PI. Value for
+				   points or lines with identical
+				   points (degenerated) is set to
+				   -9. */
+};
+\endcode
+
+<b>Lines</b>
 
 For each line (n_lines):
 
@@ -373,6 +716,32 @@ For each line (n_lines):
 <tr><td>T,B</td><td>D</td><td>2</td><td>Line bounding box for 3D (only if with_z=1)</td></tr>
 </table>
 
+\code
+struct P_line
+{
+    plus_t N1;			/* start node */
+    plus_t N2;			/* end node   */
+    plus_t left;		/* area/isle number to left, negative
+				   for isle area number for centroid,
+				   negative for duplicate centroid 
+				*/
+    plus_t right;		/* area/isle number to right, negative
+				 * for isle */
+
+    double N;			/* line bounding Box */
+    double S;
+    double E;
+    double W;
+    double T;			/* top */
+    double B;			/* bottom */
+
+    off_t offset;		/* offset in coor file for line */
+    int type;                   /* line type */
+};
+\endcode
+
+<b>Areas</b>
+
 For each area (n_areas):
 
 <table border="1" style="border-collapse: collapse">
@@ -386,6 +755,32 @@ For each area (n_areas):
 <tr><td>T,B</td><td>D</td><td>2</td><td>Area bounding box for 3D (only if with_z=1)</td></tr>
 </table>
 
+\code
+struct P_area
+{
+    double N;			/* area bounding Box */
+    double S;
+    double E;
+    double W;
+    double T;			/* top */
+    double B;			/* bottom */
+    plus_t n_lines;		/* number of boundary lines */
+    plus_t alloc_lines;         /* allocated space */
+    plus_t *lines;		/* list of boundary lines, negative
+				   means direction N2 to N1, lines are
+				   in clockwise order */
+
+    /*********  Above this line is compatible with P_isle **********/
+    plus_t centroid;		/* number of first centroid within area */
+
+    plus_t n_isles;		/* number of islands inside */
+    plus_t alloc_isles;
+    plus_t *isles;		/* 1st generation interior islands */
+};
+\endcode
+
+<b>Isles</b>
+
 For each isle (n_isle):
 
 <table border="1" style="border-collapse: collapse">
@@ -397,55 +792,43 @@ For each isle (n_isle):
 <tr><td>T,B</td><td>D</td><td>2</td><td>Isle bounding box for 3D (only if with_z=1)</td></tr>
 </table>
 
-<b>Feature types:</b>
-
 \code
-/* Vector types used in memory on run time - may change */
-#define GV_POINT      0x01
-#define GV_LINE       0x02
-#define GV_BOUNDARY   0x04
-#define GV_CENTROID   0x08
-#define GV_FACE       0x10
-#define GV_KERNEL     0x20
-#define GV_AREA       0x40
-#define GV_VOLUME     0x80
+struct P_isle
+{
+    double N;			/* isle bounding Box */
+    double S;
+    double E;
+    double W;
+    double T;			/* top */
+    double B;			/* bottom */
+    plus_t n_lines;		/* number of boundary lines */
+    plus_t alloc_lines;
+    plus_t *lines;		/* list of boundary lines, negative
+				   means direction N2 to N1, lines are
+				   in counter clockwise order */
+
+    /*********  Above this line is compatible with P_area **********/
+    plus_t area;		/* area it exists w/in, if any */
+};
 \endcode
 
-\code
-#define GV_POINTS (GV_POINT | GV_CENTROID )
-#define GV_LINES (GV_LINE | GV_BOUNDARY )
-\endcode
-
-Face and kernel are 3D equivalents of boundary and centroid, but there 
-is no support (yet) for 3D topology (volumes). Faces are used in a
-couple of modules including NVIZ to visualize 3D buildings and other
-volumetric figures.
+\subsection topo_levels Topology levels
 
 \code
-/* Topology level details */
 #define GV_BUILD_NONE         0
 #define GV_BUILD_BASE         1
 #define GV_BUILD_AREAS        2
-#define GV_BUILD_ATTACH_ISLES 3  /* Attach islands to areas */
-#define GV_BUILD_CENTROIDS    4 /* Assign centroids to areas */
+#define GV_BUILD_ATTACH_ISLES 3
+#define GV_BUILD_CENTROIDS    4
 #define GV_BUILD_ALL          GV_BUILD_CENTROIDS
 \endcode
 
 GV_BOUNDARY contains geometry and it is used to build areas.
 GV_LINE cannot form an area.
 
-\code
-struct line_cats
-{
-      int *field;	/* pointer to array of fields a.k.a. layer*/
-      int *cat;		/* pointer to array of categories */
-      int n_cats;	/* number of vector categories attached to element */
-      int alloc_cats;	/* allocated space */
-};
-\endcode
+\subsection topo_examples Topology examples
 
-
-\subsection Topology_Example_1 Topology Example 1:
+\subsubsection Topology_Example_1 Topology Example 1
 
 A polygon may be formed by many boundaries (more primitives but connected).
 One boundary is shared by adjacent areas.
@@ -462,7 +845,7 @@ A,B = 2 areas
 \endverbatim
 
 
-\subsection Topology_Example_2 Topology Example 2:
+\subsubsection Topology_Example_2 Topology Example 2
 
 This is handled correctly in GRASS: A can be filled, B filled differently.
 
@@ -476,13 +859,14 @@ This is handled correctly in GRASS: A can be filled, B filled differently.
 +---------+
 \endverbatim
 
-In GRASS, whenever an 'inner' ring touches the boundary of an outside area, even in
-one point, it is no longer an 'inner' ring (Isle in GRASS topology), it is
-simply another area. A, B above can never be exported from GRASS as polygon A
-with inner ring B because there are only 2 areas A and B and no island.
+In GRASS, whenever an 'inner' ring touches the boundary of an outside
+area, even in one point, it is no longer an 'inner' ring (Isle in
+GRASS topology), it is simply another area. A, B above can never be
+exported from GRASS as polygon A with inner ring B because there are
+only 2 areas A and B and no island.
 
 
-\subsection Topology_Example_3 Topology Example 3:
+\subsubsection Topology_Example_3 Topology Example 3
 
 This is handled correctly in GRASS: Areas A1, A2, and A3 can be filled differently.
 
@@ -496,15 +880,16 @@ This is handled correctly in GRASS: Areas A1, A2, and A3 can be filled different
 +---------------------+
 \endverbatim
 
-In GRASS, whenever an 'inner' ring does not touch the boundary of an outside area,
-also not in one point, it is an 'inner' ring (Isle). The areas A2 and A3 form a
-single Isle I1 located within area A1. The size of Isle I1 is substracted from
-the size of Area A1 when calculating the size of Area A1. Any centroids falling
-into Isle I1 are excluded when searching for a centroid that can be attached to
-Area A1. A1 above can be exported from GRASS as polygon A1 with inner ring I1.
+In GRASS, whenever an 'inner' ring does not touch the boundary of an
+outside area, also not in one point, it is an 'inner' ring (Isle). The
+areas A2 and A3 form a single Isle I1 located within area A1. The size
+of Isle I1 is substracted from the size of Area A1 when calculating
+the size of Area A1. Any centroids falling into Isle I1 are excluded
+when searching for a centroid that can be attached to Area A1. A1
+above can be exported from GRASS as polygon A1 with inner ring I1.
 
 
-\subsection Topology_Example_4 Topology Example 4:
+\subsubsection Topology_Example_4 Topology Example 4
 
 v.in.ogr/v.clean can identify dangles and change the type from boundary
 to line (in TIGER data for example). 
@@ -524,8 +909,8 @@ Distinction between line and boundary isn't important only for dangles. Example:
 x     parcel centroid (identifies whole area)
 \endverbatim
 
-Because lines are not used to build areas, we have only one area/centroid,
-instead of 4 which would be necessary in TIGER.
+Because lines are not used to build areas, we have only one
+area/centroid, instead of 4 which would be necessary in TIGER.
 
 
 \subsection vlib_topo_memory Topology memory management
@@ -574,10 +959,10 @@ spatial index and work like this (pseudocode):
 int main
 {
      Vect_open_new();
-     //writing new vector
+     /* writing new vector */
 
      Vect_build();
-     Vect_close();  // memory is not released
+     Vect_close();  /* memory is not released */
 }
 \endcode
 
@@ -588,16 +973,16 @@ such as:
 int main
 {
      Vect_open_new();
-     // writing new vector
+     /* writing new vector */
 
      Vect_build();
      Vect_set_release_support();
-     Vect_close();  // memory is released
+     Vect_close();  /* memory is released */
 }
 \endcode
 
 but it takes longer. 
-<P>
+
 It makes sense to release the spatial index if it is used only at the beginning
 of a module or in permanently running programs like QGIS. Note that this
 applies only when creating a new vector or updating an old vector.
@@ -607,14 +992,96 @@ For example:
 int main
 {
      Vect_open_update();
-     // select features using spatial index, e.g.  Vect_select_lines_by_box()
+     /* select features using spatial index, e.g.  Vect_select_lines_by_box() */
      Vect_set_release_support();
-     Vect_close();  // memory is released
+     Vect_close();  /* memory is released */
 
-     // do some processing which needs memory
+     /* do some processing which needs memory */
 }
 \endcode
 
+\subsection sidx_file_format Sidx file format specification
+
+Spatial index file ('sidx') is read by Vect_open_sidx().
+
+\subsubsection sidx_file_header Header
+
+Note: <tt>plus</tt> is instance of <tt>Plus_head</tt> structure.
+
+<table border="1" style="border-collapse: collapse">
+<tr><td>Name</td><td>Type</td><td>Number</td><td>Description</td></tr>
+
+<tr><td>plus->spidx_Version_Major </td><td>C</td><td>1</td><td>file version (major)</td></tr>
+<tr><td>plus->spidx_Version_Minor </td><td>C</td><td>1</td><td>file version (minor)</td></tr>
+<tr><td>plus->spidx_Back_Major</td><td>C</td><td>1</td><td>supported from GRASS version (major)</td></tr>
+<tr><td>plus->spidx_Back_Minor</td><td>C</td><td>1</td><td>supported from GRASS version (minor)</td></tr>
+
+<tr><td>plus->spidx_port->byte_order</td><td>C</td><td>1</td><td>little or big endian
+                  flag; files are written in machine native order but
+                  files in both little and big endian order may be
+                  readl; zero for little endian</td></tr>
+
+<tr><td>plus->spidx_port.off_t_size</td><td>C</td><td>1</td><td>off_t size (LFS)</td></tr>
+
+<tr><td>plus->spidx_head_size</td><td>L</td><td>1</td><td>header size</td></tr>
+
+<tr><td>plus->spidx_with_z</td><td>C</td><td>1</td><td>2D/3D vector data</td></tr>
+
+<tr><td>ndims</td><td>C</td><td>1</td><td>Number of dimensions</td></tr>
+
+<tr><td>nsides</td><td>C</td><td>1</td><td>Number of sides</td></tr>
+
+<tr><td>nodesize</td><td>I</td><td>1</td><td>Node size</td></tr>
+
+<tr><td>nodecard</td><td>I</td><td>1</td><td>Node card (?)</td></tr>
+
+<tr><td>leafcard</td><td>I</td><td>1</td><td>Leaf card (?)</td></tr>
+
+<tr><td>min_node_fill</td><td>I</td><td>1</td><td>Minimum node fill (?)</td></tr>
+
+<tr><td>min_leaf_fill</td><td>I</td><td>1</td><td>Minimum leaf fill (?)</td></tr>
+
+<tr><td>plus->Node_spidx->n_nodes</td><td>I</td><td>1</td><td>Number of nodes</td></tr>
+
+<tr><td>plus->Node_spidx->n_leafs</td><td>I</td><td>1</td><td>Number of leafs</td></tr>
+
+<tr><td>plus->Node_spidx->n_levels</td><td>I</td><td>1</td><td>Number of levels</td></tr>
+
+<tr><td>plus->Node_spidx_offset</td><td>O</td><td>1</td><td>Node offset</td></tr>
+
+<tr><td>plus->Line_spidx->n_nodes</td><td>I</td><td>1</td><td>Number of nodes</td></tr>
+
+<tr><td>plus->Line_spidx->n_leafs</td><td>I</td><td>1</td><td>Number of leafs</td></tr>
+
+<tr><td>plus->Line_spidx->n_levels</td><td>I</td><td>1</td><td>Number of levels</td></tr>
+
+<tr><td>plus->Line_spidx_offset</td><td>O</td><td>1</td><td>Line offset</td></tr>
+
+<tr><td>plus->Area_spidx->n_nodes</td><td>I</td><td>1</td><td>Number of nodes</td></tr>
+
+<tr><td>plus->Area_spidx->n_leafs</td><td>I</td><td>1</td><td>Number of leafs</td></tr>
+
+<tr><td>plus->Area_spidx->n_levels</td><td>I</td><td>1</td><td>Number of levels</td></tr>
+
+<tr><td>plus->Area_spidx_offset</td><td>O</td><td>1</td><td>Area offset</td></tr>
+
+<tr><td>plus->Isle_spidx->n_nodes</td><td>I</td><td>1</td><td>Number of nodes</td></tr>
+
+<tr><td>plus->Isle_spidx->n_leafs</td><td>I</td><td>1</td><td>Number of leafs</td></tr>
+
+<tr><td>plus->Isle_spidx->n_levels</td><td>I</td><td>1</td><td>Number of levels</td></tr>
+
+<tr><td>plus->Isle_spidx_offset</td><td>O</td><td>1</td><td>Isle offset</td></tr>
+
+<tr><td>plus->Face_spidx_offset</td><td>O</td><td>1</td><td>Face offset</td></tr>
+
+<tr><td>plus->Volume_spidx_offset</td><td>O</td><td>1</td><td>Volume offset</td></tr>
+
+<tr><td>plus->Hole_spidx_offset</td><td>O</td><td>1</td><td>Hole offset</td></tr>
+
+<tr><td>plus->coor_size</td><td>O</td><td>1</td><td>Coor file size</td></tr>
+
+</table>
 
 
 \section vlib_categories_layers Vector library categories and layers
@@ -627,11 +1094,11 @@ used to link geometry to attributes which are stored in one or several
 vector geometry as well as a "cat" column (integer type) in each
 attribute database table. The category number is used to lookup an
 attribute assigned to a vector object. At user level, category numbers
-can be assigned to vector objects with the v.category command.
+can be assigned to vector objects with the <tt>v.category</tt> command.
 
 In order to assign multiple attributes in different tables to vector
 objects, each map can hold multiple category numbers. This is achieved
-by assigning more than one "layer" to the map (v.db.connect
+by assigning more than one "layer" to the map (<tt>v.db.connect</tt>
 command). The layer number determines which table to be used for
 attribute queries. For example, a cadastrial vector area map can be
 assigned on layer 1 to an attribute table containing landuse
@@ -642,10 +1109,12 @@ maintained by department B.
 Each vector feature inside a vector map has zero, one or more
 &lt;layer,category&gt; tuple(s). A user can (but not must) create
 attribute tables which are referenced by the layer, and rows which are
-essentially referenced by the &lt;layer,category&gt; pair.  <P>
-Categories start with 1. Categories do not have to be continuous.
+essentially referenced by the &lt;layer,category&gt; pair.
 
-\section vlib_cidx Vector library category index
+Categories start with 1 (category '0' is allowed for OGR
+layers). Categories do not have to be continuous.
+
+\section vlib_cidx Vector library category index management
 
 The category index (stored in the cidx file) improves the performance of all
 selections by cats/attributes (SQL, e.g. 'd.vect cats=27591', 'v.extract list=20000-21000').
@@ -655,15 +1124,19 @@ Category index is also essential for simple feature representation of GRASS vect
 Category index is created for each field. In memory, it is stored in
 
 \code
-struct Cat_index {
-    int field;     /* field number a.k.a. layer*/
-    int n_cats;    /* number of items in cat array */
-    int a_cats;    /* allocated space in cat array */
-    int (*cat)[3]; /* array of cats (cat,type, lines/area) */
-    int n_ucats;   /* number of unique cats (not updated) */
-    int n_types;   /* number of types in type */
-    int type[7][2];/* number of elements for each type (point, line, boundary, centroid, area, face, kernel) */
-    long offset;   /* offset of the beginning of this index in cidx file */
+struct Cat_index
+{
+    int field;			/* field number */
+    int n_cats;			/* number of items in cat array */
+    int a_cats;			/* allocated space in cat array */
+    int (*cat)[3];		/* array of cats (cat, type, lines/area) */
+    int n_ucats;		/* number of unique cats (not updated) */
+    int n_types;		/* number of types in type */
+    int type[7][2];		/* number of elements for each type
+				 * (point, line, boundary, centroid,
+				 * area, face, kernel) */
+    off_t offset;		/* offset of the beginning of this
+				 * index in cidx file */
 };
 \endcode
 
@@ -679,8 +1152,46 @@ Stored values can be retrieved either by index in 'cat' array
 To create category index, it will be necessary to rebuild topology for all existing vectors.
 This is an opportunity to make (hopefully) last changes in 'topo', 'cidx' formats.
 
+\subsection cidx_file_format Cidx file format specification
 
-\section vlibtin Vector TINs
+Category index file ('cidx') is read by Vect_cidx_open().
+
+\subsubsection cidx_file_head Header
+
+Note: <tt>plus</tt> is instance of <tt>Plus_head</tt> structure.
+
+<table border="1" style="border-collapse: collapse">
+<tr><td>Name</td><td>Type</td><td>Number</td><td>Description</td></tr>
+
+<tr><td>plus->cpidx_Version_Major </td><td>C</td><td>1</td><td>file version (major)</td></tr>
+<tr><td>plus->cpidx_Version_Minor </td><td>C</td><td>1</td><td>file version (minor)</td></tr>
+<tr><td>plus->cpidx_Back_Major</td><td>C</td><td>1</td><td>supported from GRASS version (major)</td></tr>
+<tr><td>plus->cpidx_Back_Minor</td><td>C</td><td>1</td><td>supported from GRASS version (minor)</td></tr>
+
+<tr><td>plus->cidx_port->byte_order</td><td>C</td><td>1</td><td>little or big endian
+                  flag; files are written in machine native order but
+                  files in both little and big endian order may be
+                  readl; zero for little endian</td></tr>
+
+<tr><td>plus->cidx_head_size</td><td>L</td><td>1</td><td>cidx head size</td></tr>
+
+<tr><td>plus->n_cidx</td><td>I</td><td>1</td><td>number of fields</td></tr>
+
+<tr><td>field</td><td>I</td><td>n_cidx</td><td>field number</td></tr>
+
+<tr><td>n_cats</td><td>I</td><td>n_cidx</td><td>number of categories</td></tr>
+
+<tr><td>n_ucats</td><td>I</td><td>n_cidx</td><td>number of unique categories</td></tr>
+
+<tr><td>n_types</td><td>I</td><td>n_cidx</td><td>number of feature types</td></tr>
+
+<tr><td>rtype</td><td>I</td><td>n_cidx * n_types</td><td>Feature type</td></tr>
+
+<tr><td>type[t]</td><td>I</td><td>n_cidx * n_types</td><td>Number of items</td></tr>
+
+</table>
+
+\section vlib_tin Vector TINs
 
 TINs are simply created as 2D/3D vector polygons consisting of 
 3 vertices. See Vect_tin_get_z().
@@ -690,24 +1201,40 @@ TINs are simply created as 2D/3D vector polygons consisting of
 
 The old GRASS 4.x 'dig_cats' files are not used any more and vectors'
 attributes are stored in external database.  Connection with the
-database is done through drivers based on DBMI library (DBF, SQLite,
+database is done through drivers based on \ref dbmilib (DBF, SQLite,
 PostgreSQL, MySQL and ODBC drivers are available at this
 time). Records in a table are linked to vector entities by layer and
 category number. The layer identifies table and the category
 identifies record.  I.e., for any unique combination
-map+mapset+layer+category, there exists one unique combination
+\verbatim
+map+mapset+layer+category,
+\endverbatim
+there exists one unique combination
+\verbatim
 driver+database+table+row.
+\endverbatim
 
-The general DBMI settings are defined in the "MAPSET/VAR" text file
-(maintained with db.connect command at user level).
+Information about database links holds <tt>dblinks</tt> structure.
+
+\code
+struct dblinks
+{
+    struct field_info *field;   /* pointer to the first field_info structure */
+    int alloc_fields;           /* number of allocated slots */
+    int n_fields;               /* number of available fields */
+};
+\endcode
+
+The general DBMI settings are defined in the '$MAPSET/VAR' text file
+(maintained with <tt>db.connect</tt> command at user level).
 
 Each vector maps has its own DBMI settings stored in the
-"MAPSET/vector/vector_name/dbln" text file. For each pair <B>map +
-layer</B>, all of <B>table, key column, database, driver</B> must be
+'$MAPSET/vector/vector_name/dbln' text file. For each pair <b>map +
+layer</b>, all of <b>table, key column, database, driver</b> must be
 defined in a new row. This definition must be written to
-"MAPSET/vector/vector_name/dbln" text file.  Each row in the "dbln"
-file contains names separated by spaces in following order ([] -
-optional): <BR><BR>
+'$MAPSET/vector/vector_name/dbln' text file.  Each row in the 'dbln'
+file contains names separated by spaces in following order ([ ] -
+optional):
 
 \verbatim
 map[@mapset] layer table [key [database [driver]]]
@@ -727,21 +1254,22 @@ in table, key, database and driver names (function
 Vect_subst_var()). Note that $MAPSET is not the current mapset but
 mapset of the map the rule is defined for.
 
-Note that vector features in GRASS vector maps may have attributes
-in different tables or may be without attributes. Boundaries
-form areas but it may happen that some boundaries are not closed
-(such boundaries would not appear in polygon layer).
-Boundaries may have attributes. All types may be mixed in one vector map.
+Note that vector features in GRASS vector maps may have attributes in
+different tables or may be without attributes. Boundaries form areas
+but it may happen that some boundaries are not closed (such boundaries
+would not appear in polygon layer).  Boundaries may have
+attributes. All types may be mixed in one vector map.
 
-The link to the table is permanent and it is stored in 'dbln' file
-in vector directory. Tables are considered to be a part of the vector
-and the command g.remove, for example, deletes linked tables of the vector.
-Attributes must be joined with geometry.
+The link to the table is permanent and it is stored in 'dbln' file in
+vector directory. Tables are considered to be a part of the vector and
+the command <tt>g.remove</tt>, for example, deletes linked tables of
+the vector.  Attributes must be joined with geometry.
 
-<B>Examples:</B>
-Examples are written mostly for the DBF driver, where database is full path to
-the directory with dbf files and table name is the name of dbf file without
-.dbf extension:
+<b>Examples:</b>
+
+Examples are written mostly for the DBF driver, where database is full
+path to the directory with dbf files and table name is the name of dbf
+file without .dbf extension:
 
 \verbatim
 * 1 mytable id $GISDBASE/$LOCATION_NAME/$MAPSET/vector/$MAP dbf
@@ -769,7 +1297,7 @@ trans* 5 rails
 These definitions define more layers (called "field" in the API) for one map 
 i.e. in one map may be more features linked to more tables. Definitions on
 first 2 rows are applied for example on maps water1, water2, ... so that more
-maps may share one table.<BR><BR>
+maps may share one table.
 
 \verbatim
 water@PERMANENT 1 myrivers id /home/guser/mydbf dbf
@@ -780,8 +1308,8 @@ links the water map from PERMANENT mapset to the user's table.
 
 Modules should be written so that connections to databases for each
 vector layer are independent. It should be possible to read attributes
-of an input map from one database and write to some other and even with
-some other driver (should not be a problem). 
+of an input vector map from one database and write to some other and
+even with some other driver (should not be a problem).
 
 There are open questions, however. For one, how does one distinguish when
 new tables should be written and when not? For example, definitions:<BR>
@@ -793,10 +1321,61 @@ river.backup* 1 NONE
 could be used to say that tables should not be copied for backups of
 map river because table is stored in a reliable RDBMS. 
 
+\section ogr_iface OGR interface
+
+\subsection frmt_file_format Frmt file format specification
+
+Frmt is a plain text file which contains basic information about
+external format of linked vector map. Each line contains key, value
+pairs separated by comma.
+
+OGR specific format is described by:
+
+ - FORMAT - ogr
+ - DSN - datasource name
+ - LAYER - OGR layer name
+
+Example:
+
+\verbatim
+FORMAT: ogr
+DSN: /home/martin/src/grass_trunk
+LAYER: p
+\endverbatim
+
+OGR layer can be linked via <tt>v.external</tt> command. When linking
+OGR layer pseudo-topology ('topo') is built including spatial index
+file ('sidx') and category index file ('cidx'). Additionally also
+feature index file (see \ref fidx_file_format) is created.
+
+\subsection fidx_file_format Fidx file format specification
+
+Note: <tt>finfo</tt> is an instance of <tt>Format_info</tt> structure.
+
+<table border="1" style="border-collapse: collapse">
+<tr><td>Name</td><td>Type</td><td>Number</td><td>Description</td></tr>
+
+<tr><td>Version_Major </td><td>C</td><td>1</td><td>file version (major)</td></tr>
+<tr><td>Version_Minor </td><td>C</td><td>1</td><td>file version (minor)</td></tr>
+<tr><td>Back_Major</td><td>C</td><td>1</td><td>supported from GRASS version (major)</td></tr>
+<tr><td>Back_Minor</td><td>C</td><td>1</td><td>supported from GRASS version (minor)</td></tr>
+
+<tr><td>byte_order</td><td>C</td><td>1</td><td>little or big endian
+                  flag; files are written in machine native order but
+                  files in both little and big endian order may be
+                  readl; zero for little endian</td></tr>
+
+<tr><td>length</td><td>L</td><td>1</td><td>header size</td></tr>
+
+<tr><td>fInfo.ogr.offset_num</td><td>I</td><td>1</td><td>number of records</td></tr>
+
+<tr><td>fInfo.ogr.offset</td><td>I</td><td>offset_num</td><td>offsets</td></tr>
+
+</table>
 
 \section grassdglib DGLib (Directed Graph Library)
 
-The Directed Graph Library or DGLib (Micarelli 2002, \ref dglib ,
+<b>The Directed Graph Library</b> or DGLib (Micarelli 2002, \ref dglib ,
 http://grass.osgeo.org/dglib/) provides functionality for vector network
 analysis. This library released under GPL is hosted by the GRASS
 project (within the GRASS source code). As a stand-alone library it
@@ -807,8 +1386,8 @@ lines and/or nodes. That means that costs can be accumulated while traveling
 along polylines. The user can assign individual costs to all lines and/or
 nodes of a vector map and later calculate shortest path connections based on
 the accumulated costs. Applications are transport analysis, connectivity and
-more. Implemented applications cover Shortest path, Traveling salesman (round trip),
-Allocation of sources (creation of subnetworks), Minimum Steiner trees 
+more. Implemented applications cover shortest path, traveling salesman (round trip),
+allocation of sources (creation of subnetworks), minimum Steiner trees 
 (star-like connections), and iso-distances (from centers).
 
 For details, please read Blazek et al. 2002 (see below).
@@ -824,47 +1403,119 @@ Related vector functions are:
  Vect_net_shortest_path_coor().
 
 
-\section vlibascii Vector ASCII Format Specifications
+\section vlib_ascii Vector ASCII Format Specifications
 
-The ASCII format is (currently) explained in the
-manual page of v.in.ascii, which is defined in the file:
+<b>The GRASS ASCII vector map format</b> may contain a mix of primitives
+including points, lines, boundaries, centroids, areas, faces, and
+kernels. The GRASS ASCII vector format may contain a header with
+various metadata (see example below).
 
-vector/v.in.ascii/description.html
+The header is similar as the head file of vector binary format but
+contains bounding box also. Key words are:
+
+\verbatim
+ORGANIZATION
+DIGIT DATE
+DIGIT NAME
+MAP NAME
+MAP DATE
+MAP SCALE
+OTHER INFO
+ZONE
+WEST EDGE
+EAST EDGE
+SOUTH EDGE
+NORTH EDGE
+MAP THRESH
+\endverbatim
+
+The body begins with the row:
+
+\verbatim
+VERTI:
+\endverbatim
+
+followed by records of primitives:
+
+\verbatim
+TYPE NUMBER_OF_COORDINATES [NUMBER_OF_CATEGORIES]
+ X Y [Z]
+....
+ X Y [Z]
+[ LAYER CATEGORY]
+....
+[ LAYER CATEGORY]
+\endverbatim
+
+Everything above in <tt>[]</tt> is optional. 
+
+The primitive codes are as follows:
+
+- 'P': point
+- 'L': line
+- 'B': boundary
+- 'C': centroid
+- 'F': face (3D boundary)
+- 'K': kernel (3D centroid)
+- 'A': area (boundary) - better use 'B'; kept only for backward
+compatibility
+
+The coordinates are listed following the initial line containing the
+primitive code, the total number of vectors in the series, and (optionally)
+the number of categories (1 for a single layer, higher for multiple layers).
+Below that 1 or several lines follow to indicate the layer number and
+the category number (ID).
+
+The order of coordinates is
+\verbatim
+  X Y [Z]
+\endverbatim
 
 \section vectmodules Vector modules and their parameters/flags
 
-See also grass5/documents/parameter_proposal.txt
+A module is a GRASS command invoked by the user.
 
-<I>A module is a GRASS command invoked by the user.</I>
+\subsection vectmodules_oper Modules operation
 
-\subsection vectmodulesoper Modules operation
-
-Each module which modifies and writes data must read from input= and
-write to output= so that data may not be lost. For example v.spag
-works on map= at in grass5.0 but if program (system) crashes or threshold was 
-specified incorrectly and vector was not backuped, data were lost. 
-In this case map= option should be replaced by input= and output=
+Each module which modifies and writes data must read from
+<b>input=</b> and write to <b>output=</b> so that data may not be
+lost. For example <tt>v.spag</tt> works on <b>map=</b> at in GRASS GIS
+5.0 but if program (system) crashes or threshold was specified
+incorrectly and vector was not backuped, data were lost. In this case
+</b>map=</b> option should be replaced by <b>input=</b> and
+<b>output=</b>.
 
 Topology is always built by default if the coor file was modified.
 
-Dimensionality is generally kept. Input 2D vector is written as 2D, 3D as 3D.
-There are a few modules which change the dimension on purpose.
+Dimensionality is generally kept. Input 2D vector is written as 2D, 3D
+as 3D. There are a few modules which change the dimension on purpose.
 
 \subsection vectmodulesopt Modules parameters/flags
 
-<B>-b</B> do not build topo file; by default topo file is written <BR>
-<B>-t</B> create new table, default<BR>
-<B>-u</B> don't create new table<BR>
-<B>-z</B> write 3D vector map (if input was 2D) <BR>
-<BR>
-<B>map=</B> input vector map for modules without output <BR>
-<B>input=</B> input vector map <BR>
-<B>output=</B> output vector map <BR>
-<B>type=</B>  type of elements:  point,line,boundary,centroid,area <BR>
-<B>cat=</B> category or category list (example: 1,5,9-13,35) <BR>
-<B>layer=</B> layer number <BR>
-<B>where=</B> condition of SQL statement for selection of records <BR>
-<B>column=</B> column name (in external table)
+<b>-b</b> do not build topo file; by default topo file is written
+
+<b>-t</b> create new table, default
+
+<b>-u</b> don't create new table
+
+<b>-z</b> write 3D vector map (if input was 2D)
+
+
+<b>map=</b> input vector map for modules without output
+
+<b>input=</b> input vector map
+
+<b>output=</b> output vector map
+
+<b>type=</b>  type of elements:  point,line,boundary,centroid,area
+
+<b>cat=</b> category or category list (example: 1,5,9-13,35)
+
+<b>layer=</b> layer number
+
+<b>where=</b> condition of SQL statement for selection of records
+
+<b>column=</b> column name (in external table)
 
 
 \section vlibfunc List of vector library functions
@@ -1128,6 +1779,8 @@ programming.
  - Vect_get_dblink()
 
  - Vect_get_field()
+
+ - Vect_get_field_by_name()
 
  - Vect_map_add_dblink()
 
@@ -1561,12 +2214,16 @@ Note: The functions are available only if GRASS is compiled with
 
  - Vect_line_to_geos()
 
+ - Vect_get_area_points_geos()
 
-\section contacts Contacts
+ - Vect_get_isle_points_geos()
 
- Radim Blazek (vector architecture) <radim.blazek@gmail.com>
 
- Roberto Micarelli (DGLib) <mi.ro@iol.it>
+\section authors Authors
+
+ Radim Blazek (vector architecture) <radim.blazek gmail.com>
+
+ Roberto Micarelli (DGLib) <mi.ro iol.it>
 
 
 \section references References
