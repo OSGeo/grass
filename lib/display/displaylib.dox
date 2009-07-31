@@ -1,244 +1,276 @@
 /*! \page displaylib GRASS Display Library
 
-\section displayintro Display Library
+by GRASS Development Team (http://grass.osgeo.org)
 
-<P>
-Author: CERL<br>
-Major rewrite: Glynn Clements
+This library provides a wide assortment of higher level graphics
+commands which in turn use the graphics raster library primitives. It
+is highly recommended that this section be used to understand how some
+of the GRASS graphics commands operate. Such modules like
+<tt>d.vect</tt>, <tt>d.graph</tt>, and <tt>d.rast</tt> demonstrate how
+these routines work together.
 
-<P>
-This library provides a wide assortment of higher level graphics commands which in turn use
-the graphics raster library primitives. It is highly recommended that this section be used to
-understand how some of the GRASS graphics commands operate. Such modules like d.vect,
-d.graph, and d.rast demonstrate how these routines work together. The routines fall into four
-basic sets: 1) frame creation and management, 2) coordinate conversion routines, 3) specialized
-efficient raster display routines, and 4) assorted miscellaneous routines like pop-up menus
-and line clipping.
+The routines fall into four basic sets:
+-# frame creation and management;
+-# coordinate conversion routines;
+-# specialized efficient raster display routines, and;
+-# assorted miscellaneous routines like pop-up menus and line clipping.
 
-Note. All routines and global variables in this library, documented or undocumented, start with
-the prex D_. To avoid name conflicts, programmers should not create variables or routines in
+Note: All routines and global variables in this library, documented or
+undocumented, start with the prefix <b>D_</b>. To avoid name
+conflicts, programmers should not create variables or routines in
 their own modules which use this prefix.
 
-TODO: insert ordered function list (see GRASS 5 progman)
+\section ListOfFns List of functions
 
-- int D_add_to_cell_list();
+The library functions are defined in <tt>display.h</tt> header.
 
-- int D_add_to_dig_list();
+\code
+#include <grass/display.h>
+\endcode
 
-- int D_add_to_list();
+TODO: Order the list
 
-- double D_a_to_d_col();
+- D_update_conversions()
 
-- double D_a_to_d_row();
+- D_fit_d_to_u()
 
-- void D_box();
+- D_fit_u_to_d()
 
-- void D_box_clip();
+- D_show_conversions()
 
-- int D_c_color();
+- D_do_conversions()
 
-- void D_cell_draw_end();
+- D_is_lat_lon()
 
-- int D_cell_draw_setup();
+- D_get_d_to_a_xconv()
 
-- int D_check_map_window();
+- D_get_d_to_a_yconv()
 
-- int D_clear_window();
+- D_get_d_to_u_xconv()
 
-- int D_clip_to_map();
+- D_get_d_to_u_yconv()
 
-- void D_clip_to_map();
+- D_get_a_to_u_xconv()
 
-- int D_color();
+- D_get_a_to_u_yconv()
 
-- int D_color_number_to_RGB();
+- D_get_a_to_d_xconv()
 
-- int D_color_of_type();
+- D_get_a_to_d_yconv()
 
-- void D_cont();
+- D_get_u_to_d_xconv()
 
-- int D_cont_abs();
+- D_get_u_to_d_yconv()
 
-- int D_cont_clip();
+- D_get_u_to_a_xconv()
 
-- int D_cont_rel();
+- D_get_u_to_a_yconv()
 
-- int D_d_color();
+- D_get_ns_resolution()
 
-- int D_do_conversions();
+- D_get_ew_resolution()
 
-- int D_draw_cell();
+- D_get_u_west()
 
-- int D_draw_c_raster();
+- D_get_u_east()
 
-- int D_draw_d_raster();
+- D_get_u_north()
 
-- int D_draw_f_raster();
+- D_get_u_south()
 
-- int D_draw_raster();
+- D_get_a_west()
 
-- int D_draw_raster_RGB();
+- D_get_a_east()
 
-- double D_d_to_a_col();
+- D_get_a_north()
 
-- double D_d_to_a_row();
+- D_get_a_south()
 
-- double D_d_to_u_col();
+- D_get_d_west()
 
-- double D_d_to_u_row();
+- D_get_d_east()
 
-- void D_erase();
+- D_get_d_north()
 
-- void D_erase_window();
+- D_get_d_south()
 
-- int D_f_color();
+- D_set_region()
 
-- void D_full_screen();
+- D_set_src()
 
-- int D_get_a();
+- D_get_src()
 
-- void D_get_a();
+- D_set_grid()
 
-- double D_get_a_east();
+- D_get_grid()
 
-- double D_get_a_north();
+- D_set_dst()
 
-- double D_get_a_south();
+- D_get_dst()
 
-- double D_get_a_west();
+- D_get_u()
 
-- int D_get_cell_list();
+- D_get_a()
 
-- int D_get_cell_name();
+- D_get_d()
 
-- int D_get_cur_wind();
+- D_d_to_a_row()
 
-- int D_get_d();
+- D_d_to_a_col()
 
-- void D_get_d();
+- D_d_to_u_row()
 
-- double D_get_d_east();
+- D_d_to_u_col()
 
-- int D_get_dig_list();
+- D_a_to_u_row()
 
-- int D_get_dig_name();
+- D_a_to_u_col()
 
-- double D_get_d_north();
+- D_a_to_d_row()
 
-- double D_get_d_south();
+- D_a_to_d_col()
 
-- double D_get_d_west();
+- D_u_to_d_row()
 
-- int D_get_erase_color();
+- D_u_to_d_col()
 
-- double D_get_ew_resolution();
+- D_u_to_a_row()
 
-- int D_get_list();
+- D_u_to_a_col()
 
-- double D_get_ns_resolution();
+- D_set_clip()
 
-- int D_get_screen_window();
+- D_clip_to_map()
 
-- void D_get_u();
+- D_set_clip_mode()
 
-- double D_get_u_east();
+- D_set_reduction()
 
-- double D_get_u_north();
+- D_line_width()
 
-- double D_get_u_south();
+- D_get_text_box()
 
-- int D_get_u_south();
+- D_pos_abs()
 
-- double D_get_u_to_d_xconv();
+- D_pos_rel()
 
-- double D_get_u_to_d_yconv();
+- D_move_abs()
 
-- double D_get_u_west();
+- D_move_rel()
 
-- int D_is_lat_lon();
+- D_cont_abs()
 
-- void D_line_width();
+- D_cont_rel()
 
-- void D_move();
+- D_line_abs()
 
-- int D_move_abs();
+- D_line_rel()
 
-- void D_move_clip();
+- D_polydots_abs()
 
-- int D_move_rel();
+- D_polydots_rel()
 
-- int D_new_window();
+- D_polyline_abs()
 
-- int D_new_window_percent();
+- D_polyline_rel()
 
-- int D_parse_color();
+- D_polygon_abs()
 
-- void D_polydots();
+- D_polygon_rel()
 
-- void D_polydots_clip();
+- D_box_abs()
 
-- void D_polygon();
+- D_box_rel()
 
-- void D_polygon_clip();
+- D_begin()
 
-- void D_polygon_cull();
+- D_end()
 
-- void D_polyline();
+- D_close()
 
-- void D_polyline_clip();
+- D_stroke()
 
-- void D_polyline_cull();
+- D_fill()
 
-- int D_popup();
+- D_dots()
 
-- int D_raster_use_color();
+- D_plot_icon()
 
-- void D_remove_window();
+- D_draw_raster()
 
-- int D_remove_windows();
+- D_draw_d_raster()
 
-- void D_remove_windows();
+- D_draw_f_raster()
 
-- int D_reset_screen_window();
+- D_draw_c_raster()
 
-- int D_set_cell_name();
+- D_draw_cell()
 
-- int D_set_clip();
+- D_cell_draw_begin()
 
-- void D_set_clip();
+- D_draw_raster_RGB()
 
-- int D_set_clip_window();
+- D_cell_draw_end()
 
-- int D_set_clip_window_to_map_window();
+- D_set_overlay_mode()
 
-- int D_set_clip_window_to_screen_window();
+- D_color()
 
-- int D_set_cur_wind();
+- D_c_color()
 
-- int D_set_dig_name();
+- D_d_color()
 
-- int D_set_erase_color();
+- D_f_color()
 
-- int D_set_overlay_mode();
+- D_color_of_type()
 
-- int D_setup();
+- D_setup()
 
-- int D_show_window();
+- D_setup_unity()
 
-- void D_symbol();
+- D_setup2()
 
-- void D_symbol2();
+- D_symbol()
 
-- int D_timestamp();
+- D_symbol2()
 
-- int D_translate_color();
+- D_translate_color()
 
-- double D_u_to_a_col();
+- D_parse_color()
 
-- double D_u_to_a_row();
+- D_use_color()
 
-- double D_u_to_d_col();
+- D_color_number_to_RGB()
 
-- double D_u_to_d_row();
+- D_RGB_color()
+
+- D_erase()
+
+- D_open_driver()
+
+- D_close_driver()
+
+- D_get_window()
+
+- D__erase()
+
+- D_text_size()
+
+- D_text_rotation()
+
+- D_text()
+
+- D_font()
+
+- D_encoding()
+
+- D_font_list()
+
+- D_font_info()
+
+\section Authors Authors
+
+- Original author CERL
+- Majjor rewrite by Glynn Clements (2008)
 
 */
