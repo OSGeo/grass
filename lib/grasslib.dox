@@ -74,7 +74,7 @@ from GRASS 5 Programmer's manual) or are simply undocumented.</i>
  - btree:	Binary tree library - \ref btree
  - cairodriver: \ref cairodriver
  - cdhc:	Library for testing normality and exponentiality - \ref cdhc 
- - cluster:     Library for cluster analysis (image processing) - \ref cluster
+ - cluster:     \ref clusterlib (image processing)
  - datetime:	DateTime library - \ref datetime
  - db:		\ref dbmilib
  - display:	\ref displaylib
@@ -143,9 +143,10 @@ organized as follows:
   optional timestamp, range of values, quantization rules (for floating %point maps)
   and null (no-data) files; </li>
 
-A GRASS <b>%vector maps</b> are stored in several separate files in a single
-directory. While the attributes are stored in either a DBF file, a SQLite file
-or in an external DBMS (PostgreSQL, MySQL, ODBC), the geometric data are saved
+A GRASS <b>%vector maps</b> are stored in several separate files in a
+single directory (see \ref vectorlib). While the
+attributes are stored in either a DBF file, a SQLite file or in an
+external DBMS (PostgreSQL, MySQL, ODBC), the geometric data are saved
 as follows:
 
  - <b>head</b>: %vector map ASCII header with information about the map creation
