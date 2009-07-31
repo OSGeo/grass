@@ -323,7 +323,7 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 
 	/* z height colors */
 	if (z_color_flag && Vect_is_3d(Map)) {
-	    BOUND_BOX box;
+	    struct bound_box box;
 	    double zval;
 	    struct Colors colors;
 

@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     const char *mapset;
     struct Map_info map_in, map_out;
     struct Cell_head Window;
-    BOUND_BOX Box;
+    struct bound_box Box;
     struct GModule *module;
     struct Flag *reg_flag, *line_flag;
     struct Option *in_opt, *out_opt;

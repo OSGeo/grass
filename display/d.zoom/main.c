@@ -161,7 +161,7 @@ int main(int argc, char **argv)
 
     if (vect) {
 	struct Map_info Map;
-	BOUND_BOX box;
+	struct bound_box box;
 
 	for (i = 0; vect[i]; i++) ;
 	nvects = i;

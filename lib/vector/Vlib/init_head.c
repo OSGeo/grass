@@ -1,8 +1,8 @@
 /*!
-   \file init_head.c
+   \file vector/Vlib/init_head.c
 
-   \brief Vector library - init header of vector map
-
+   \brief Vector library - init header of vector maps
+   
    Higher level functions for reading/writing/manipulating vectors.
 
    Initialize Head structure. To make sure that we are not writing out
@@ -15,6 +15,7 @@
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
    \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
+   \author Various updates by Martin Landa <landa.martin gmail.com>, 2009
 */
 
 #include <grass/config.h>
@@ -23,40 +24,49 @@
 #include <grass/vector.h>
 
 /*!
-   \brief Initialize head structure
+   \brief Initialize Map_info head structure (dig_head)
 
-   \param Map vector map
-
-   \return 0
+   \param[in,out] Map pointer to Map_info structure
  */
-int Vect__init_head(struct Map_info *Map)
+void Vect__init_head(struct Map_info *Map)
 {
     char buf[64];
 
+    /* organization */
     Map->head.organization = NULL;
     Vect_set_organization(Map, "");
+    
+    /* date */
     Map->head.date = NULL;
     Vect_set_date(Map, "");
+
+    /* user name */
     Map->head.your_name = NULL;
     sprintf(buf, "%s", G_whoami());
     Vect_set_person(Map, buf);
+
+    /* map name */
     Map->head.map_name = NULL;
     Vect_set_map_name(Map, "");
+
+    /* source date */
     Map->head.source_date = NULL;
     sprintf(buf, "%s", G_date());
     Vect_set_map_date(Map, buf);
+
+    /* comments */
     Map->head.line_3 = NULL;
     Vect_set_comment(Map, "");
 
+    /* scale, zone, threshold */
     Vect_set_scale(Map, 1);
     Vect_set_zone(Map, 0);
     Vect_set_thresh(Map, 0.0);
 
+    /* support variables */
     Map->plus.Spidx_built = 0;
     Map->plus.release_support = 0;
     Map->plus.update_cidx = 0;
-
-    return 0;
 }
 
 /*!

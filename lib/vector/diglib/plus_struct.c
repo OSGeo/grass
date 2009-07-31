@@ -48,10 +48,10 @@
  *    plus_t is changed to a type that is larger than an int.
  */
 
-int dig_Rd_P_node(struct Plus_head *Plus, int n, GVFILE * fp)
+int dig_Rd_P_node(struct Plus_head *Plus, int n, struct gvfile * fp)
 {
     int cnt, n_edges;
-    P_NODE *ptr;
+    struct P_node *ptr;
 
     G_debug(3, "dig_Rd_P_node()");
 
@@ -102,10 +102,10 @@ int dig_Rd_P_node(struct Plus_head *Plus, int n, GVFILE * fp)
     return (0);
 }
 
-int dig_Wr_P_node(struct Plus_head *Plus, int n, GVFILE * fp)
+int dig_Wr_P_node(struct Plus_head *Plus, int n, struct gvfile * fp)
 {
     int i, n_edges = 0;
-    P_NODE *ptr;
+    struct P_node *ptr;
 
     G_debug(3, "dig_Wr_P_node()");
     ptr = Plus->Node[n];
@@ -147,12 +147,12 @@ int dig_Wr_P_node(struct Plus_head *Plus, int n, GVFILE * fp)
     return (0);
 }
 
-int dig_Rd_P_line(struct Plus_head *Plus, int n, GVFILE * fp)
+int dig_Rd_P_line(struct Plus_head *Plus, int n, struct gvfile * fp)
 {
     int n_edges, vol;
     char tp;
-    P_LINE *ptr;
-    P_NODE *Node;
+    struct P_line *ptr;
+    struct P_node *Node;
 
     G_debug(3, "dig_Rd_P_line()");
 
@@ -251,11 +251,11 @@ int dig_Rd_P_line(struct Plus_head *Plus, int n, GVFILE * fp)
     return (0);
 }
 
-int dig_Wr_P_line(struct Plus_head *Plus, int n, GVFILE * fp)
+int dig_Wr_P_line(struct Plus_head *Plus, int n, struct gvfile * fp)
 {
     int n_edges = 0, vol = 0;
     char ch;
-    P_LINE *ptr;
+    struct P_line *ptr;
 
     G_debug(4, "dig_Wr_P_line() line = %d", n);
 
@@ -339,10 +339,10 @@ int dig_Wr_P_line(struct Plus_head *Plus, int n, GVFILE * fp)
     return (0);
 }
 
-int dig_Rd_P_area(struct Plus_head *Plus, int n, GVFILE * fp)
+int dig_Rd_P_area(struct Plus_head *Plus, int n, struct gvfile * fp)
 {
     int cnt;
-    P_AREA *ptr;
+    struct P_area *ptr;
 
 #ifdef GDEBUG
     G_debug(3, "dig_Rd_P_area(): n = %d", n);
@@ -408,10 +408,10 @@ int dig_Rd_P_area(struct Plus_head *Plus, int n, GVFILE * fp)
     return (0);
 }
 
-int dig_Wr_P_area(struct Plus_head *Plus, int n, GVFILE * fp)
+int dig_Wr_P_area(struct Plus_head *Plus, int n, struct gvfile * fp)
 {
     int i;
-    P_AREA *ptr;
+    struct P_area *ptr;
 
     ptr = Plus->Area[n];
 
@@ -462,10 +462,10 @@ int dig_Wr_P_area(struct Plus_head *Plus, int n, GVFILE * fp)
     return (0);
 }
 
-int dig_Rd_P_isle(struct Plus_head *Plus, int n, GVFILE * fp)
+int dig_Rd_P_isle(struct Plus_head *Plus, int n, struct gvfile * fp)
 {
     int cnt;
-    P_ISLE *ptr;
+    struct P_isle *ptr;
 
 #ifdef GDEBUG
     G_debug(3, "dig_Rd_P_isle()");
@@ -520,10 +520,10 @@ int dig_Rd_P_isle(struct Plus_head *Plus, int n, GVFILE * fp)
     return (0);
 }
 
-int dig_Wr_P_isle(struct Plus_head *Plus, int n, GVFILE * fp)
+int dig_Wr_P_isle(struct Plus_head *Plus, int n, struct gvfile * fp)
 {
     int i;
-    P_ISLE *ptr;
+    struct P_isle *ptr;
 
     ptr = Plus->Isle[n];
 
@@ -566,11 +566,16 @@ int dig_Wr_P_isle(struct Plus_head *Plus, int n, GVFILE * fp)
     return (0);
 }
 
-/*
-   \return -1 error
-   \return  0 OK 
- */
-int dig_Rd_Plus_head(GVFILE * fp, struct Plus_head *ptr)
+/*!
+  \brief Read Plus_head from file
+
+  \param fp pointer to gvfile structure
+  \param[in,out] ptr pointer to Plus_head structure
+
+  \return -1 error
+  \return  0 OK 
+*/
+int dig_Rd_Plus_head(struct gvfile * fp, struct Plus_head *ptr)
 {
     unsigned char buf[5];
     int byte_order;
@@ -614,6 +619,7 @@ int dig_Rd_Plus_head(GVFILE * fp, struct Plus_head *ptr)
 	     ptr->Version_Major, ptr->Version_Minor);
     }
 
+    /* init Port_info structure and set as default */
     dig_init_portable(&(ptr->port), byte_order);
     dig_set_cur_port(&(ptr->port));
 
@@ -714,7 +720,7 @@ int dig_Rd_Plus_head(GVFILE * fp, struct Plus_head *ptr)
     return (0);
 }
 
-int dig_Wr_Plus_head(GVFILE * fp, struct Plus_head *ptr)
+int dig_Wr_Plus_head(struct gvfile * fp, struct Plus_head *ptr)
 {
     unsigned char buf[10];
     long length = 142;

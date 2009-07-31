@@ -71,7 +71,7 @@ Vect_break_lines_list(struct Map_info *Map, struct ilist *List_break,
     int j, k, l, ret, atype, btype, aline, bline, found, iline, nlines;
     int naxlines, nbxlines, nx;
     double *xx = NULL, *yx = NULL, *zx = NULL;
-    BOUND_BOX ABox, BBox;
+    struct bound_box ABox, BBox;
     struct ilist *List;
     int nbreaks;
     int touch1_n = 0, touch1_s = 0, touch1_e = 0, touch1_w = 0;	/* other vertices except node1 touching box */

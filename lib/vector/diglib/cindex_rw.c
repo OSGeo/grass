@@ -21,7 +21,7 @@
 #include <grass/gis.h>
 #include <grass/vector.h>
 
-int dig_write_cidx_head(GVFILE * fp, struct Plus_head *plus)
+int dig_write_cidx_head(struct gvfile * fp, struct Plus_head *plus)
 {
     int i;
     unsigned char buf[5];
@@ -110,8 +110,16 @@ int dig_write_cidx_head(GVFILE * fp, struct Plus_head *plus)
     return (0);
 }
 
-/* return: 0 OK, -1 error */
-int dig_read_cidx_head(GVFILE * fp, struct Plus_head *plus)
+/*!
+  \brief Read header of cidx file
+  
+  \param fp pointer to gvfile structure
+  \param plus pointer to Plus_head strcuture
+
+  \return 0 OK
+  \return -1 error
+*/
+int dig_read_cidx_head(struct gvfile * fp, struct Plus_head *plus)
 {
     unsigned char buf[5];
     int i, byte_order;
@@ -232,7 +240,7 @@ int dig_read_cidx_head(GVFILE * fp, struct Plus_head *plus)
 }
 
 /* Write spatial index */
-int dig_write_cidx(GVFILE * fp, struct Plus_head *plus)
+int dig_write_cidx(struct gvfile * fp, struct Plus_head *plus)
 {
     int i;
 
@@ -266,11 +274,17 @@ int dig_write_cidx(GVFILE * fp, struct Plus_head *plus)
     return 0;
 }
 
-/* Read spatial index file 
- * returns 0 - OK
- *         1 - error
- */
-int dig_read_cidx(GVFILE * fp, struct Plus_head *plus, int head_only)
+/*!
+  \brief Read spatial index file 
+
+  \param fp pointer to gvfile structure
+  \param[in,out] plus pointer to Plus_head structure
+  \param head_only non-zero to read only head
+
+  \return 0 OK
+  \return 1 error
+*/
+int dig_read_cidx(struct gvfile * fp, struct Plus_head *plus, int head_only)
 {
     int i;
 

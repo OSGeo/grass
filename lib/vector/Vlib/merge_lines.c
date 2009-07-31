@@ -51,7 +51,7 @@ int Vect_merge_lines(struct Map_info *Map, int type, int *new_lines,
     struct ilist *List;
     struct line_pnts *MPoints, *Points;
     struct line_cats *MCats, *Cats;
-    P_LINE *Line;
+    struct P_line *Line;
 
     if ((type & GV_BOUNDARY) && (type & GV_LINE)) {
 	G_warning

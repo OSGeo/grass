@@ -40,7 +40,7 @@ int Vect_build_line_area(struct Map_info *Map, int iline, int side)
     static int first = 1;
     off_t offset;
     struct Plus_head *plus;
-    P_LINE *BLine;
+    struct P_line *BLine;
     static struct line_pnts *Points, *APoints;
     plus_t *lines;
     double area_size;
@@ -135,12 +135,12 @@ int Vect_isle_find_area(struct Map_info *Map, int isle)
     int j, line, node, sel_area, first, area, poly;
     static int first_call = 1;
     const struct Plus_head *plus;
-    P_LINE *Line;
-    P_NODE *Node;
-    P_ISLE *Isle;
-    P_AREA *Area;
+    struct P_line *Line;
+    struct P_node *Node;
+    struct P_isle *Isle;
+    struct P_area *Area;
     double size, cur_size;
-    BOUND_BOX box, abox;
+    struct bound_box box, abox;
     static struct ilist *List;
     static struct line_pnts *APoints;
 
@@ -269,7 +269,7 @@ int Vect_isle_find_area(struct Map_info *Map, int isle)
 int Vect_attach_isle(struct Map_info *Map, int isle)
 {
     int sel_area;
-    P_ISLE *Isle;
+    struct P_isle *Isle;
     struct Plus_head *plus;
 
     /* Note!: If topology is not clean and areas overlap, one island may fall to more areas
@@ -303,7 +303,7 @@ int Vect_attach_isle(struct Map_info *Map, int isle)
 
    \return 0
  */
-int Vect_attach_isles(struct Map_info *Map, const BOUND_BOX * box)
+int Vect_attach_isles(struct Map_info *Map, const struct bound_box * box)
 {
     int i, isle;
     static int first = 1;
@@ -337,13 +337,13 @@ int Vect_attach_isles(struct Map_info *Map, const BOUND_BOX * box)
 
    \return 0
  */
-int Vect_attach_centroids(struct Map_info *Map, const BOUND_BOX * box)
+int Vect_attach_centroids(struct Map_info *Map, const struct bound_box * box)
 {
     int i, sel_area, centr;
     static int first = 1;
     static struct ilist *List;
-    P_AREA *Area;
-    P_LINE *Line;
+    struct P_area *Area;
+    struct P_line *Line;
     struct Plus_head *plus;
 
     G_debug(3, "Vect_attach_centroids ()");
@@ -443,9 +443,9 @@ int Vect_build_nat(struct Map_info *Map, int build)
     int side, line, area;
     struct line_pnts *Points, *APoints;
     struct line_cats *Cats;
-    P_LINE *Line;
-    P_AREA *Area;
-    BOUND_BOX box;
+    struct P_line *Line;
+    struct P_area *Area;
+    struct bound_box box;
     struct ilist *List;
 
     G_debug(3, "Vect_build_nat() build = %d", build);

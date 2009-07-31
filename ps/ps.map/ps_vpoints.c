@@ -29,7 +29,7 @@ int PS_vpoints_plot(struct Map_info *P_map, int vec, int type)
     double llx, lly, urx, ury;
     int x_int, y_int, eps_exist;
     SYMBOL *Symb;
-    VARRAY *Varray = NULL;
+    struct varray *Varray = NULL;
 
     /* Attributes if sizecol is used */
     dbCatValArray cvarr_size;

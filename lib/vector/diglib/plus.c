@@ -24,7 +24,7 @@
 #include <grass/glocale.h>
 
 /*!
- * \brief Init head structure
+ * \brief Initialize Plus_head structure
  *
  * \param[in,out] Plus pointer to Plus_head structure
  *
@@ -109,7 +109,7 @@ int dig_init_plus(struct Plus_head *Plus)
 void dig_free_plus_nodes(struct Plus_head *Plus)
 {
     int i;
-    P_NODE *Node;
+    struct P_node *Node;
 
     G_debug(2, "dig_free_plus_nodes()");
 
@@ -137,7 +137,7 @@ void dig_free_plus_nodes(struct Plus_head *Plus)
 void dig_free_plus_lines(struct Plus_head *Plus)
 {
     int i;
-    P_LINE *Line;
+    struct P_line *Line;
 
     G_debug(2, "dig_free_plus_lines()");
 
@@ -173,7 +173,7 @@ void dig_free_plus_lines(struct Plus_head *Plus)
 void dig_free_plus_areas(struct Plus_head *Plus)
 {
     int i;
-    P_AREA *Area;
+    struct P_area *Area;
 
     G_debug(2, "dig_free_plus_areas()");
 
@@ -201,7 +201,7 @@ void dig_free_plus_areas(struct Plus_head *Plus)
 void dig_free_plus_isles(struct Plus_head *Plus)
 {
     int i;
-    P_ISLE *Isle;
+    struct P_isle *Isle;
 
     G_debug(2, "dig_free_plus_isles()");
 
@@ -250,7 +250,7 @@ void dig_free_plus(struct Plus_head *Plus)
  * \return 1 on success
  * \return 0 on error
  */
-int dig_load_plus(struct Plus_head *Plus, GVFILE * plus, int head_only)
+int dig_load_plus(struct Plus_head *Plus, struct gvfile * plus, int head_only)
 {
     int i;
 
@@ -325,7 +325,7 @@ int dig_load_plus(struct Plus_head *Plus, GVFILE * plus, int head_only)
  * \return 0 on success
  * \return -1 on error
  */
-int dig_write_plus_file(GVFILE * fp_plus, struct Plus_head *Plus)
+int dig_write_plus_file(struct gvfile * fp_plus, struct Plus_head *Plus)
 {
 
     dig_set_cur_port(&(Plus->port));
@@ -375,7 +375,7 @@ int dig_write_plus_file(GVFILE * fp_plus, struct Plus_head *Plus)
  * \return 0 on success
  * \return -1 on error
  */
-int dig_write_nodes(GVFILE * plus, struct Plus_head *Plus)
+int dig_write_nodes(struct gvfile * plus, struct Plus_head *Plus)
 {
     int i;
 
@@ -399,7 +399,7 @@ int dig_write_nodes(GVFILE * plus, struct Plus_head *Plus)
  * \return 0 on success
  * \return -1 on error
  */
-int dig_write_lines(GVFILE * plus, struct Plus_head *Plus)
+int dig_write_lines(struct gvfile * plus, struct Plus_head *Plus)
 {
     int i;
 
@@ -424,7 +424,7 @@ int dig_write_lines(GVFILE * plus, struct Plus_head *Plus)
  * \return 0 on success
  * \return -1 on error
  */
-int dig_write_areas(GVFILE * plus, struct Plus_head *Plus)
+int dig_write_areas(struct gvfile * plus, struct Plus_head *Plus)
 {
     int i;
 
@@ -449,7 +449,7 @@ int dig_write_areas(GVFILE * plus, struct Plus_head *Plus)
  * \return 0 on success
  * \return -1 on error
  */
-int dig_write_isles(GVFILE * plus, struct Plus_head *Plus)
+int dig_write_isles(struct gvfile * plus, struct Plus_head *Plus)
 {
     int i;
 

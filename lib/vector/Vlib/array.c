@@ -29,22 +29,22 @@ static int in_array(int *cats, size_t ncats, int cat);
 
 
 /*!
-   \brief Create new VARRAY and allocate space for given number of items.
+   \brief Create new struct varray and allocate space for given number of items.
 
    Space allocated is 'size + 1' so that lines are accessed by line id.
    Array values are set to 0.
 
    \param size size of array
 
-   \return pointer to new VARRAY
+   \return pointer to new struct varray
    \return NULL if failed
  */
 
-VARRAY *Vect_new_varray(int size)
+struct varray *Vect_new_varray(int size)
 {
-    VARRAY *p;
+    struct varray *p;
 
-    p = (VARRAY *) G_malloc(sizeof(VARRAY));
+    p = (struct varray *) G_malloc(sizeof(struct varray));
 
     if (p == NULL)
 	return NULL;
@@ -83,7 +83,7 @@ VARRAY *Vect_new_varray(int size)
 int
 Vect_set_varray_from_cat_string(const struct Map_info *Map, int field,
 				const char *cstring, int type, int value,
-				VARRAY * varray)
+				struct varray * varray)
 {
     int ret;
     struct cat_list *Clist;
@@ -130,7 +130,7 @@ Vect_set_varray_from_cat_string(const struct Map_info *Map, int field,
 int
 Vect_set_varray_from_cat_list(const struct Map_info *Map, int field,
 			      struct cat_list *clist, int type, int value,
-			      VARRAY * varray)
+			      struct varray * varray)
 {
     int i, n, centr, cat;
     int ni = 0;			/* number of items set */
@@ -249,7 +249,7 @@ static int in_array(int *cats, size_t ncats, int cat)
  */
 int
 Vect_set_varray_from_db(const struct Map_info *Map, int field, const char *where,
-			int type, int value, VARRAY * varray)
+			int type, int value, struct varray * varray)
 {
     int i, n, c, centr, cat, *cats;
     int ncats;

@@ -133,8 +133,8 @@ int PS_vareas_plot(struct Map_info *P_map, int vec)
     double llx, lly, urx, ury, sc;
     char pat[50];
     struct line_cats *Cats;
-    BOUND_BOX box;
-    VARRAY *Varray = NULL;
+    struct bound_box box;
+    struct varray *Varray = NULL;
     PSCOLOR color;
     int centroid;
 

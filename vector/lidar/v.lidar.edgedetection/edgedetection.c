@@ -33,7 +33,7 @@
 #include <grass/dbmi.h>
     /* #include <grass/PolimiFunct.h> */
 #include "edgedetection.h"
-int edge_detection(struct Cell_head elaboration_reg, BOUND_BOX Overlap_Box,
+int edge_detection(struct Cell_head elaboration_reg, struct bound_box Overlap_Box,
 		   double *parBilin, double obsX, double obsY,
 		   double *partial, double alpha, double residual,
 		   double gradHigh, double gradLow)
@@ -171,7 +171,7 @@ double *Get_Gradient(struct Cell_head Elaboration, double X, double Y,
 }
 
 void classification(struct Map_info *Out, struct Cell_head Elaboration,
-		    BOUND_BOX General, BOUND_BOX Overlap, double **obs,
+		    struct bound_box General, struct bound_box Overlap, double **obs,
 		    double *parBilin, double *parBicub, double mean,
 		    double alpha, double gradHigh, double gradLow,
 		    double overlap, int *line_num, int num_points,

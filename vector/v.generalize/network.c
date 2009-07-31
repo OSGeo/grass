@@ -28,9 +28,9 @@ typedef struct
     int **edge;			/* edge for each vertex */
     int *degree;		/* degree of vertices */
     int vertices;
-} NGRAPH;
+} NdglGraph_s;
 
-void graph_free(NGRAPH * g)
+void graph_free(NdglGraph_s * g)
 {
     int i;
 
@@ -44,7 +44,7 @@ void graph_free(NGRAPH * g)
     return;
 }
 
-int graph_init(NGRAPH * g, int vertices)
+int graph_init(NdglGraph_s * g, int vertices)
 {
     g->edge = NULL;
     g->degree = NULL;
@@ -76,7 +76,7 @@ int graph_generalization(struct Map_info *In, struct Map_info *Out,
     int i;
     int output = 0;
     dglGraph_s *gr;
-    NGRAPH g;
+    NdglGraph_s g;
     int nnodes;
     struct line_pnts *Points;
     struct line_cats *Cats;

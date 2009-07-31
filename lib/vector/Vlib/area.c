@@ -38,7 +38,7 @@ Vect_get_area_points(const struct Map_info *Map,
 {
     int i, line, aline, dir;
     const struct Plus_head *Plus;
-    P_AREA *Area;
+    struct P_area *Area;
     static int first_time = 1;
     static struct line_pnts *Points;
 
@@ -100,7 +100,7 @@ Vect_get_isle_points(const struct Map_info *Map,
 {
     int i, line, aline, dir;
     const struct Plus_head *Plus;
-    P_ISLE *Isle;
+    struct P_isle *Isle;
     static int first_time = 1;
     static struct line_pnts *Points;
 
@@ -153,7 +153,7 @@ Vect_get_isle_points(const struct Map_info *Map,
 int Vect_get_area_centroid(const struct Map_info *Map, int area)
 {
     const struct Plus_head *Plus;
-    P_AREA *Area;
+    struct P_area *Area;
 
     G_debug(3, "Vect_get_area_centroid(): area = %d", area);
 
@@ -180,7 +180,7 @@ Vect_get_area_boundaries(const struct Map_info *Map, int area, struct ilist *Lis
 {
     int i, line;
     const struct Plus_head *Plus;
-    P_AREA *Area;
+    struct P_area *Area;
 
     G_debug(3, "Vect_get_area_boundaries(): area = %d", area);
 
@@ -214,7 +214,7 @@ Vect_get_isle_boundaries(const struct Map_info *Map, int isle, struct ilist *Lis
 {
     int i, line;
     const struct Plus_head *Plus;
-    P_ISLE *Isle;
+    struct P_isle *Isle;
 
     G_debug(3, "Vect_get_isle_boundaries(): isle = %d", isle);
 
@@ -246,7 +246,7 @@ Vect_get_isle_boundaries(const struct Map_info *Map, int isle, struct ilist *Lis
 int Vect_get_area_num_isles(const struct Map_info *Map, int area)
 {
     const struct Plus_head *Plus;
-    P_AREA *Area;
+    struct P_area *Area;
 
     G_debug(3, "Vect_get_area_num_isles(): area = %d", area);
 
@@ -275,7 +275,7 @@ int Vect_get_area_num_isles(const struct Map_info *Map, int area)
 int Vect_get_area_isle(const struct Map_info *Map, int area, int isle)
 {
     const struct Plus_head *Plus;
-    P_AREA *Area;
+    struct P_area *Area;
 
     G_debug(3, "Vect_get_area_isle(): area = %d isle = %d", area, isle);
 
@@ -302,7 +302,7 @@ int Vect_get_area_isle(const struct Map_info *Map, int area, int isle)
 int Vect_get_isle_area(const struct Map_info *Map, int isle)
 {
     const struct Plus_head *Plus;
-    P_ISLE *Isle;
+    struct P_isle *Isle;
 
     G_debug(3, "Vect_get_isle_area(): isle = %d", isle);
 
@@ -345,7 +345,7 @@ int Vect_point_in_area(const struct Map_info *Map, int area, double x, double y)
 {
     int i, isle;
     const struct Plus_head *Plus;
-    P_AREA *Area;
+    struct P_area *Area;
     int poly;
 
     Plus = &(Map->plus);
@@ -379,7 +379,7 @@ int Vect_point_in_area(const struct Map_info *Map, int area, double x, double y)
 double Vect_get_area_area(const struct Map_info *Map, int area)
 {
     const struct Plus_head *Plus;
-    P_AREA *Area;
+    struct P_area *Area;
     struct line_pnts *Points;
     double size;
     int i;

@@ -23,7 +23,7 @@ int PS_vlines_plot(struct Map_info *P_map, int vec, int type)
     int i, k, np, line, cat, nlines, ret;
     double *xarray, *yarray, tol = 0.1, width;
     struct line_cats *Cats;
-    VARRAY *Varray = NULL;
+    struct varray *Varray = NULL;
 
     /* rgbcol */
     dbCatValArray cvarr_rgb;

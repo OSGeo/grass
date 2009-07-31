@@ -64,7 +64,7 @@ int main(int argc, char **argv)
     dbHandle handle;
     dbCatValArray cvarr;
     struct Cell_head window;
-    BOUND_BOX box;
+    struct bound_box box;
     double overlap, *breakpoints, *data = NULL, class_info = 0.0;
     struct GASTATS stats;
     FILE *fd;

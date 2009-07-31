@@ -503,7 +503,7 @@ double compute_all_net_distances(struct Map_info *In, struct Map_info *Net,
     int nn, kk, nalines, aline;
     double dist;
     struct line_pnts *APoints, *BPoints;
-    BOUND_BOX box;
+    struct bound_box box;
     struct ilist *List;
 
     APoints = Vect_new_line_struct();
@@ -582,7 +582,7 @@ void compute_net_distance(double x, double y, struct Map_info *In,
     int i;
     double dist;
     static struct line_pnts *Points = NULL;
-    BOUND_BOX box;
+    struct bound_box box;
     static struct ilist *List = NULL;
 
     if (!Points)
@@ -639,7 +639,7 @@ void compute_distance(double N, double E, struct Map_info *In,
     double dist;
 
     /* spatial index handling, borrowed from lib/vector/Vlib/find.c */
-    BOUND_BOX box;
+    struct bound_box box;
     static struct ilist *NList = NULL;
     static struct line_pnts *Points = NULL;
 

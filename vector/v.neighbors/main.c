@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
     double radius;
     struct ilist *List;
     struct Cell_head region;
-    BOUND_BOX box;
+    struct bound_box box;
     struct line_pnts *Points;
     struct line_cats *Cats;
 

@@ -506,7 +506,7 @@ int patch(struct Map_info *InMap, struct Map_info *OutMap, int add_cat,
     }
 
     if (BBoxMap) {		/* inspired by v.in.region */
-	BOUND_BOX box;
+	struct bound_box box;
 	double diff_long, mid_long;
 	static int cat;
 

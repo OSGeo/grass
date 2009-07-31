@@ -29,7 +29,7 @@ int split_line(struct Map_info *Map, int otype, struct line_pnts *Points, struct
 
 /* Add categories to centroids inside polygon */
 int
-centroid(OGRGeometryH hGeom, CENTR * Centr, SPATIAL_INDEX * Sindex, int field,
+centroid(OGRGeometryH hGeom, CENTR * Centr, struct spatial_index * Sindex, int field,
 	 int cat, double min_area, int type)
 {
     int i, valid_isles, j, np, nr, ret;
@@ -41,7 +41,7 @@ centroid(OGRGeometryH hGeom, CENTR * Centr, SPATIAL_INDEX * Sindex, int field,
     OGRGeometryH hRing;
     double size;
     static struct ilist *List;
-    BOUND_BOX box;
+    struct bound_box box;
 
     G_debug(3, "centroid() cat = %d", cat);
 

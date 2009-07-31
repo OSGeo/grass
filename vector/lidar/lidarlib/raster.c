@@ -13,7 +13,7 @@
 /*------------------------------------------------------------------------------------------------*/
 void
 P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
-		BOUND_BOX General, BOUND_BOX Overlap, double **obs,
+		struct bound_box General, struct bound_box Overlap, double **obs,
 		double *param, int *line_num, double pe, double pn,
 		double overlap, int nsplx, int nsply, int num_points,
 		int bilin, struct line_cats *categories, dbDriver * driver,
@@ -200,8 +200,8 @@ P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
 
 
 /*------------------------------------------------------------------------------------------------*/
-double **P_Regular_Points(struct Cell_head *Elaboration, BOUND_BOX General,
-			  BOUND_BOX Overlap, double **matrix, double *param,
+double **P_Regular_Points(struct Cell_head *Elaboration, struct bound_box General,
+			  struct bound_box Overlap, double **matrix, double *param,
 			  double passoN, double passoE, double overlap,
 			  double mean, int nsplx, int nsply, int nrows,
 			  int ncols, int bilin)

@@ -46,7 +46,7 @@ dig_node_add_line(struct Plus_head *plus, int nodeid, int lineid,
     register int i, j, nlines;
     float angle;
     int ret;
-    P_NODE *node;
+    struct P_node *node;
 
     G_debug(3, "dig_node_add_line(): node = %d line = %d", nodeid, lineid);
 
@@ -107,7 +107,7 @@ dig_node_add_line(struct Plus_head *plus, int nodeid, int lineid,
 int dig_add_node(struct Plus_head *plus, double x, double y, double z)
 {
     int nnum;
-    P_NODE *node;
+    struct P_node *node;
 
     /* First look if we have space in array of pointers to nodes
      *  and reallocate if necessary */
@@ -155,7 +155,7 @@ int dig_which_node(struct Plus_head *plus, double x, double y, double thresh)
     register int have_match;
     int winner;
     double least_dist, dist;
-    P_NODE *node;
+    struct P_node *node;
 
     first_time = 1;
     have_match = 0;
@@ -203,7 +203,7 @@ int dig_which_node(struct Plus_head *plus, double x, double y, double thresh)
 float dig_node_line_angle(struct Plus_head *plus, int nodeid, int lineid)
 {
     int i, nlines;
-    P_NODE *node;
+    struct P_node *node;
 
     G_debug(3, "dig_node_line_angle: node = %d line = %d", nodeid, lineid);
 

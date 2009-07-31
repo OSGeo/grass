@@ -109,7 +109,7 @@ int main(int argc, char **argv)
     dbDriver *driver;
     dbHandle handle;
     struct Cell_head window;
-    BOUND_BOX box;
+    struct bound_box box;
     double overlap;
 
     /* Initialize the GIS calls */

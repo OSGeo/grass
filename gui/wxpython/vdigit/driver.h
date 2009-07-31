@@ -66,7 +66,7 @@ private:
     
     struct _region {
 	// GRASS region section
-	BOUND_BOX box; // W,E,N,S,T,B
+	struct bound_box box; // W,E,N,S,T,B
 	double ns_res;
 	double ew_res;
 	double center_easting;

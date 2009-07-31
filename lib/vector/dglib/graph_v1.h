@@ -20,8 +20,8 @@
  * best view tabstop=4
  */
 
-#ifndef _DGL_GRAPH_V1_H_
-#define _DGL_GRAPH_V1_H_
+#ifndef _DGL_dglGraph_s_V1_H_
+#define _DGL_dglGraph_s_V1_H_
 
 #ifdef DGL_STATS
 #include <time.h>

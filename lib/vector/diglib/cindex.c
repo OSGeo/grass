@@ -20,12 +20,13 @@
 #include <grass/gis.h>
 #include <grass/vector.h>
 
-/* 
- *  dig_cidx_init ()
- *  initit cat index
+/*! 
+ * \brief Initialize Plus_head structure (cidx)
  *
- *  returns 1 OK
- *          0 on error      
+ * \param Plus pointer to Plus_head structure
+ *
+ * \return 1 OK
+ * \return 0 on error      
  */
 int dig_cidx_init(struct Plus_head *Plus)
 {

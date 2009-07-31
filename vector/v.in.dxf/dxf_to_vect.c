@@ -10,7 +10,7 @@
 
 static void make_head(struct Map_info *);
 
-static BOUND_BOX ext, dxf_ext;
+static struct bound_box ext, dxf_ext;
 
 /* returns 1 on success, otherwise 0 */
 int dxf_to_vect(struct dxf_file *dxf, struct Map_info *Map)

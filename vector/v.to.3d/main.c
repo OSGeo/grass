@@ -27,7 +27,7 @@ int main(int argc, char **argv)
     struct GModule *module;
     struct opts opt;
     struct Map_info In, Out;
-    BOUND_BOX box;
+    struct bound_box box;
     int field, type;
     int ret;
     

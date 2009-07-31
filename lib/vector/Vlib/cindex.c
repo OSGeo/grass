@@ -444,14 +444,14 @@ int Vect_cidx_save(struct Map_info *Map)
 {
     struct Plus_head *plus;
     char fname[1024], buf[1024];
-    GVFILE fp;
+    struct gvfile fp;
 
     G_debug(2, "Vect_cidx_save()");
     check_status(Map);
 
     plus = &(Map->plus);
 
-    sprintf(buf, "%s/%s", GRASS_VECT_DIRECTORY, Map->name);
+    sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
     G__file_name(fname, buf, GV_CIDX_ELEMENT, Map->mapset);
     G_debug(2, "Open cidx: %s", fname);
     dig_file_init(&fp);
@@ -477,8 +477,8 @@ int Vect_cidx_save(struct Map_info *Map)
 /*!
    \brief Read category index from file if exists
 
-   \param Map vector map
-   \param head_only Read only header
+   \param Map pointer to Map_info structure
+   \param head_only read only header
 
    \return 0 on success 
    \return 1 if file does not exist
@@ -488,7 +488,7 @@ int Vect_cidx_open(struct Map_info *Map, int head_only)
 {
     int ret;
     char buf[500], file_path[2000];
-    GVFILE fp;
+    struct gvfile fp;
     struct Plus_head *Plus;
     struct stat info;
 
@@ -497,7 +497,7 @@ int Vect_cidx_open(struct Map_info *Map, int head_only)
 
     Plus = &(Map->plus);
 
-    sprintf(buf, "%s/%s", GRASS_VECT_DIRECTORY, Map->name);
+    sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
     G__file_name(file_path, buf, GV_CIDX_ELEMENT, Map->mapset);
 
     if (stat(file_path, &info) != 0)	/* does not exist */

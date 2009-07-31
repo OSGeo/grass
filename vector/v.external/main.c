@@ -140,8 +140,8 @@ int main(int argc, char *argv[])
     }
 
     /* Create frmt */
-    sprintf(buf, "%s/%s", GRASS_VECT_DIRECTORY, options.output->answer);
-    fd = G_fopen_new(buf, GRASS_VECT_FRMT_ELEMENT);
+    sprintf(buf, "%s/%s", GV_DIRECTORY, options.output->answer);
+    fd = G_fopen_new(buf, GV_FRMT_ELEMENT);
     if (fd == NULL) {
 	Vect_delete(options.output->answer);
 	G_fatal_error("Unable to open file '%s'", buf);

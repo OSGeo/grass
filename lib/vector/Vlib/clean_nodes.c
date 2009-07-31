@@ -66,7 +66,7 @@ Vect_clean_small_angles_at_nodes(struct Map_info *Map, int otype,
 	    G_debug(3, "nlines = %d", nlines);
 
 	    for (i = 0; i < nlines; i++) {
-		P_LINE *Line;
+		struct P_line *Line;
 		int line2;
 		float angle2;
 

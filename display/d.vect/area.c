@@ -132,7 +132,7 @@ int darea(struct Map_info *Map, struct cat_list *Clist,
 
     for (area = 1; area <= num; area++) {
 	int i;
-	BOUND_BOX box;
+	struct bound_box box;
 
 	G_debug(3, "area = %d", area);
 
@@ -231,7 +231,7 @@ int darea(struct Map_info *Map, struct cat_list *Clist,
 
 	/* z height colors */
 	if (z_color_flag && Vect_is_3d(Map)) {
-	    BOUND_BOX box;
+	    struct bound_box box;
 	    double zval;
 	    struct Colors colors;
 

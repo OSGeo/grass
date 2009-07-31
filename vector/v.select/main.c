@@ -141,7 +141,7 @@ int main(int argc, char *argv[])
 	G_message(_("Processing features..."));
 	
 	for (aline = 1; aline <= nalines; aline++) {
-	    BOUND_BOX abox;
+	    struct bound_box abox;
 
 	    G_debug(3, "aline = %d", aline);
 	    G_percent(aline, nalines, 2);	/* must be before any continue */
@@ -272,7 +272,7 @@ int main(int argc, char *argv[])
 	naareas = Vect_get_num_areas(&(In[0]));
 
 	for (aarea = 1; aarea <= naareas; aarea++) {
-	    BOUND_BOX abox;
+	    struct bound_box abox;
 
 	    G_percent(aarea, naareas, 2);	/* must be before any continue */
 

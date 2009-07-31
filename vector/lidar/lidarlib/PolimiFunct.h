@@ -98,8 +98,8 @@ struct element
 void P_zero_dim(struct Reg_dimens * /**/);
 
 int P_set_regions(struct Cell_head *, /**/
-		  BOUND_BOX *, /**/
-		  BOUND_BOX *, /**/ struct Reg_dimens, /**/ int /**/);
+		  struct bound_box *, /**/
+		  struct bound_box *, /**/ struct Reg_dimens, /**/ int /**/);
 
 int P_get_orlo(int, /**/ struct Reg_dimens *, /**/ double, /**/ double /**/);
 
@@ -115,8 +115,8 @@ double P_Mean_Calc(struct Cell_head *, /**/ struct Point *, /**/ int /**/);
 void
 P_Sparse_Points(struct Map_info *, /**/
 		struct Cell_head *, /**/
-		BOUND_BOX, /**/
-		BOUND_BOX, /**/
+		struct bound_box, /**/
+		struct bound_box, /**/
 		double **, /**/
 		double *, /**/
 		int *, /**/
@@ -131,8 +131,8 @@ P_Sparse_Points(struct Map_info *, /**/
 		dbDriver *, /**/ double, /**/ char * /**/);
 
 double **P_Regular_Points(struct Cell_head *, /**/
-			  BOUND_BOX, /**/
-			  BOUND_BOX, /**/
+			  struct bound_box, /**/
+			  struct bound_box, /**/
 			  double **, /**/
 			  double *, /**/
 			  double, /**/

@@ -182,7 +182,7 @@ dig_spidx_add_node(struct Plus_head *Plus, int node,
 
    \return 0
  */
-int dig_spidx_add_line(struct Plus_head *Plus, int line, BOUND_BOX * box)
+int dig_spidx_add_line(struct Plus_head *Plus, int line, struct bound_box * box)
 {
     struct Rect rect;
 
@@ -208,7 +208,7 @@ int dig_spidx_add_line(struct Plus_head *Plus, int line, BOUND_BOX * box)
 
    \return 0
  */
-int dig_spidx_add_area(struct Plus_head *Plus, int area, BOUND_BOX * box)
+int dig_spidx_add_area(struct Plus_head *Plus, int area, struct bound_box * box)
 {
     struct Rect rect;
 
@@ -235,7 +235,7 @@ int dig_spidx_add_area(struct Plus_head *Plus, int area, BOUND_BOX * box)
    \return 0
  */
 
-int dig_spidx_add_isle(struct Plus_head *Plus, int isle, BOUND_BOX * box)
+int dig_spidx_add_isle(struct Plus_head *Plus, int isle, struct bound_box * box)
 {
     struct Rect rect;
 
@@ -265,7 +265,7 @@ int dig_spidx_add_isle(struct Plus_head *Plus, int isle, BOUND_BOX * box)
 int dig_spidx_del_node(struct Plus_head *Plus, int node)
 {
     int ret;
-    P_NODE *Node;
+    struct P_node *Node;
     struct Rect rect;
 
     G_debug(3, "dig_spidx_del_node(): node = %d", node);
@@ -299,7 +299,7 @@ int dig_spidx_del_node(struct Plus_head *Plus, int node)
  */
 int dig_spidx_del_line(struct Plus_head *Plus, int line)
 {
-    P_LINE *Line;
+    struct P_line *Line;
     struct Rect rect;
     int ret;
 
@@ -340,7 +340,7 @@ int dig_spidx_del_line(struct Plus_head *Plus, int line)
 int dig_spidx_del_area(struct Plus_head *Plus, int area)
 {
     int ret;
-    P_AREA *Area;
+    struct P_area *Area;
     struct Rect rect;
 
     G_debug(3, "dig_spidx_del_area(): area = %d", area);
@@ -379,7 +379,7 @@ int dig_spidx_del_area(struct Plus_head *Plus, int area)
 int dig_spidx_del_isle(struct Plus_head *Plus, int isle)
 {
     int ret;
-    P_ISLE *Isle;
+    struct P_isle *Isle;
     struct Rect rect;
 
     G_debug(3, "dig_spidx_del_isle(): isle = %d", isle);
@@ -419,7 +419,7 @@ static int _add_item(int id, struct ilist *list)
    \return -1 on error
  */
 int
-dig_select_nodes(struct Plus_head *Plus, const BOUND_BOX * box,
+dig_select_nodes(struct Plus_head *Plus, const struct bound_box * box,
 		 struct ilist *list)
 {
     struct Rect rect;
@@ -495,7 +495,7 @@ int dig_find_node(struct Plus_head *Plus, double x, double y, double z)
    \return number of selected lines
  */
 int
-dig_select_lines(struct Plus_head *Plus, const BOUND_BOX * box,
+dig_select_lines(struct Plus_head *Plus, const struct bound_box * box,
 		 struct ilist *list)
 {
     struct Rect rect;
@@ -529,7 +529,7 @@ dig_select_lines(struct Plus_head *Plus, const BOUND_BOX * box,
    \return number of selected areas
  */
 int
-dig_select_areas(struct Plus_head *Plus, const BOUND_BOX * box,
+dig_select_areas(struct Plus_head *Plus, const struct bound_box * box,
 		 struct ilist *list)
 {
     struct Rect rect;
@@ -563,7 +563,7 @@ dig_select_areas(struct Plus_head *Plus, const BOUND_BOX * box,
    \return number of selected isles
  */
 int
-dig_select_isles(struct Plus_head *Plus, const BOUND_BOX * box,
+dig_select_isles(struct Plus_head *Plus, const struct bound_box * box,
 		 struct ilist *list)
 {
     struct Rect rect;

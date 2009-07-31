@@ -178,7 +178,7 @@ static int find_offsets(const void *pattern, unsigned char *cnvrt,
 }
 
 /*!
-  \brief Initialize structures
+  \brief Initialize Port_info structures
 */
 void port_init(void)
 {

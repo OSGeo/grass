@@ -68,7 +68,7 @@ V1_read_next_line_nat(struct Map_info *Map,
 {
     int itype;
     off_t offset;
-    BOUND_BOX lbox, mbox;
+    struct bound_box lbox, mbox;
 
     G_debug(3, "V1_read_next_line_nat()");
 
@@ -122,7 +122,7 @@ int
 V2_read_line_nat(struct Map_info *Map,
 		 struct line_pnts *line_p, struct line_cats *line_c, int line)
 {
-    P_LINE *Line;
+    struct P_line *Line;
 
     G_debug(3, "V2_read_line_nat(): line = %d", line);
 
@@ -153,8 +153,8 @@ V2_read_next_line_nat(struct Map_info *Map,
 		      struct line_pnts *line_p, struct line_cats *line_c)
 {
     register int line;
-    register P_LINE *Line;
-    BOUND_BOX lbox, mbox;
+    register struct P_line *Line;
+    struct bound_box lbox, mbox;
 
     G_debug(3, "V2_read_next_line_nat()");
 

@@ -16,6 +16,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <grass/gis.h>
+#include <grass/vect/dig_defines.h>
 #include <grass/glocale.h>
 
 static const char *find_file(
@@ -50,7 +51,7 @@ static const char *find_file(
      */
     if (G_legal_filename(pname) == -1)
 	return NULL;
-
+    
     if (pmapset && *pmapset && G_legal_filename(pmapset) == -1)
 	return NULL;
 

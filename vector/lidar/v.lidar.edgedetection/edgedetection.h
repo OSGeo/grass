@@ -31,7 +31,7 @@
 
 /*---------------------------------------------------------------------------------------*/
 int edge_detection(struct Cell_head, /**/
-		   BOUND_BOX, /**/
+		   struct bound_box, /**/
 		   double *, /**/
 		   double, /**/
 		   double, /**/
@@ -43,8 +43,8 @@ double *Get_Gradient(struct Cell_head, /**/
 
 void classification(struct Map_info *, /**/
 		    struct Cell_head, /**/
-		    BOUND_BOX, /**/
-		    BOUND_BOX, /**/
+		    struct bound_box, /**/
+		    struct bound_box, /**/
 		    double **, /**/
 		    double *, /**/
 		    double *, /**/

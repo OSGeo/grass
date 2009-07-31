@@ -6,9 +6,9 @@
 
 struct Cluster
 {
-    int nbands;
-    int npoints;
-    DCELL **points;
+    int nbands;                 /* number of bands */
+    int npoints;                /* number of points */
+    DCELL **points;             /* array of points */
     int np;
 
     double *band_sum;		/* sum over each band */
@@ -24,10 +24,10 @@ struct Cluster
     double **mean;		/* initial class means */
     struct Signature S;		/* final signature(s) */
 
-    int nclasses;
+    int nclasses;               /* number of classes */
     int merge1, merge2;
-    int iteration;
-    double percent_stable;
+    int iteration;              /* number of iterations */
+    double percent_stable;      /* percentage stable */
 };
 
 /* c_assign.c */

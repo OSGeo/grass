@@ -63,7 +63,7 @@ int main(int argc, char **argv)
     int line, nlines, npoints;
     struct line_pnts *Points;
     struct line_cats *Cats;
-    BOUND_BOX box;
+    struct bound_box box;
 
     /* Attributes */
     int nrecords;

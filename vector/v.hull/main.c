@@ -167,7 +167,7 @@ int loadSiteCoordinates(struct Map_info *Map, struct Point **points, int all,
     int pointIdx = 0;
     struct line_pnts *sites;
     struct line_cats *cats;
-    BOUND_BOX box;
+    struct bound_box box;
     int cat, type;
 
     sites = Vect_new_line_struct();

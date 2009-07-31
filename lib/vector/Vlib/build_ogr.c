@@ -113,7 +113,7 @@ static int add_line(struct Map_info *Map, int type, struct line_pnts *Points,
     int line;
     struct Plus_head *plus;
     long offset;
-    BOUND_BOX box;
+    struct bound_box box;
 
     plus = &(Map->plus);
 
@@ -159,8 +159,8 @@ static int add_geometry(struct Map_info *Map, OGRGeometryH hGeom, int FID,
     int lines[1];
     static struct line_pnts **Points = NULL;
     static int alloc_points = 0;
-    BOUND_BOX box;
-    P_LINE *Line;
+    struct bound_box box;
+    struct P_line *Line;
     double area_size, x, y;
     int eType, nRings, iPart, nParts, nPoints;
     OGRGeometryH hGeom2, hRing;
@@ -254,7 +254,7 @@ static int add_geometry(struct Map_info *Map, OGRGeometryH hGeom, int FID,
 		outer_area = area;
 	    }
 	    else {		/* inner ring */
-		P_ISLE *Isle;
+		struct P_isle *Isle;
 
 		Isle = plus->Isle[isle];
 		Isle->area = outer_area;
@@ -273,7 +273,7 @@ static int add_geometry(struct Map_info *Map, OGRGeometryH hGeom, int FID,
 		      outer_area);
 	}
 	else {
-	    P_AREA *Area;
+	    struct P_area *Area;
 
 	    G_debug(4, "  Centroid: %f, %f", x, y);
 	    Vect_reset_line(Points[0]);

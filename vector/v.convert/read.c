@@ -7,7 +7,7 @@
 #include "conv.h"
 #include "local_proto.h"
 
-int read_line(GVFILE *, struct line_pnts *);
+int read_line(struct gvfile *, struct line_pnts *);
 
 /* read old 3.0 or 4.0 dig file into array 
    returns number of elements read into array
@@ -26,7 +26,7 @@ int read_dig(FILE * Digin, struct Map_info *Mapout,
     double dbuf;
     int ibuf;
     long lbuf;
-    GVFILE gvf;
+    struct gvfile gvf;
 
     dig_file_init(&gvf);
     gvf.file = Digin;
@@ -204,7 +204,7 @@ int read_dig(FILE * Digin, struct Map_info *Mapout,
 /* read_line() reads element from file
    returns element type
  */
-int read_line(GVFILE * Gvf, struct line_pnts *nline)
+int read_line(struct gvfile * Gvf, struct line_pnts *nline)
 {
     int n_points;
     long itype;

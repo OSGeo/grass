@@ -203,7 +203,7 @@ int main(int argc, char *argv[])
 
     if ((name = parm.vect->answer)) {	/* vect= */
 	struct Map_info Map;
-	BOUND_BOX box;
+	struct bound_box box;
 
 	Vect_set_open_level(1);
 	if (Vect_open_old(&Map, name, "") != 1)

@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
 double do_limits(struct Map_info *Map)
 {
     double textsize;
-    BOUND_BOX box;
+    struct bound_box box;
 
     Vect_get_map_box(Map, &box);
 

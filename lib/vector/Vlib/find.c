@@ -40,7 +40,7 @@ Vect_find_node(struct Map_info *Map,
 	       double ux, double uy, double uz, double maxdist, int with_z)
 {
     int i, nnodes, node;
-    BOUND_BOX box;
+    struct bound_box box;
     struct ilist *NList;
     double x, y, z;
     double cur_dist, dist;
@@ -155,7 +155,7 @@ Vect_find_line_list(struct Map_info *map,
     static struct line_pnts *Points;
     static int first_time = 1;
     const struct Plus_head *Plus;
-    BOUND_BOX box;
+    struct bound_box box;
     struct ilist *List;
 
     G_debug(3, "Vect_find_line_list() for %f %f %f type = %d maxdist = %f",
@@ -248,7 +248,7 @@ int Vect_find_area(struct Map_info *Map, double x, double y)
 {
     int i, ret, area;
     static int first = 1;
-    BOUND_BOX box;
+    struct bound_box box;
     static struct ilist *List;
 
     G_debug(3, "Vect_find_area() x = %f y = %f", x, y);
@@ -294,7 +294,7 @@ int Vect_find_island(struct Map_info *Map, double x, double y)
 {
     int i, ret, island, current, current_size, size;
     static int first = 1;
-    BOUND_BOX box;
+    struct bound_box box;
     static struct ilist *List;
     static struct line_pnts *Points;
 

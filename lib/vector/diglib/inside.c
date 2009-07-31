@@ -30,7 +30,7 @@ dig_x_intersect(double beg_x,
     return (a + b * Y);
 }
 
-int dig_in_area_bbox(P_AREA * Area, double x, double y)
+int dig_in_area_bbox(struct P_area * Area, double x, double y)
 {
 #ifdef GDEBUG
     G_debug(3, "BBOX: (x,y) (%lf, %lf)\n", x, y);

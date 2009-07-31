@@ -27,7 +27,7 @@ int PQcount;
 int PQmin;
 
 struct Cell_head Window;
-BOUND_BOX Box;
+struct bound_box Box;
 struct Map_info In, Out;
 int Type;
 int All;

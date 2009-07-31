@@ -38,7 +38,7 @@ int dareatheme(struct Map_info *Map, struct cat_list *Clist,
 
     for (area = 1; area <= num; area++) {
 	int i;
-	BOUND_BOX box;
+	struct bound_box box;
 
 	G_debug(3, "area = %d", area);
 

@@ -45,8 +45,7 @@ int main(int argc, char *argv[])
     struct Option *in_opt, *fieldopt;
     struct Flag *histf, *columns, *gflag, *tflag, *mflag;
     struct Map_info Map;
-    BOUND_BOX box;
-    const char *mapset;
+    struct bound_box box;
     char line[200], buf[1001];
     int i;
     int with_z;
@@ -101,12 +100,7 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    /* open input vector */
-    if ((mapset = G_find_vector2(in_opt->answer, "")) == NULL) {
-	G_fatal_error(_("Vector map <%s> not found"), in_opt->answer);
-    }
-
-    Vect_set_open_level(2);
+    Vect_set_open_level(2); /* topology required */
     Vect_open_old_head(&Map, in_opt->answer, "");
     with_z = Vect_is_3d(&Map);
 
@@ -230,9 +224,9 @@ int main(int argc, char *argv[])
 	}
 	else {
 	    divider('+');
-	    sprintf(line, _("Layer:           %s"), in_opt->answer);
+	    sprintf(line, _("Layer:           %s"), Vect_get_name(&Map));
 	    printline(line);
-	    sprintf(line, _("Mapset:          %s"), mapset);
+	    sprintf(line, _("Mapset:          %s"), Vect_get_mapset(&Map));
 	    printline(line);
 	    sprintf(line, _("Location:        %s"), G_location());
 	    printline(line);

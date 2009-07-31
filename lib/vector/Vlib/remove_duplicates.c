@@ -39,7 +39,7 @@ Vect_remove_duplicates(struct Map_info *Map, int type, struct Map_info *Err)
     struct line_cats *ACats, *BCats, *Cats;
     int i, j, c, atype, btype, bline;
     int nlines, nbcats_orig;
-    BOUND_BOX ABox;
+    struct bound_box ABox;
     struct ilist *List;
     int ndupl;
 
