@@ -1,6 +1,28 @@
+/*!
+  \file cluster/c_assign.c
+  
+  \brief Cluster library - Assign cluster
+  
+  (C) 2001-2009 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Original author CERL
+*/
+
 #include <math.h>
 #include <grass/cluster.h>
 
+/*!
+  \brief Assign cluster
+
+  \param C pointer to Cluster structure
+  \param interrupted ?
+  
+  \return -1 on interrupted
+  \return 0 on success
+*/
 int I_cluster_assign(struct Cluster *C, int *interrupted)
 {
     int p, c;
@@ -8,11 +30,9 @@ int I_cluster_assign(struct Cluster *C, int *interrupted)
     double d, q;
     double dmin;
 
-    /*
-       fprintf (stderr,"I_cluster_assign(npoints=%d,nclasses=%d,nbands=%d)\n",
-       C->npoints, C->nclasses, C->nbands);
-     */
-
+    G_debug("I_cluster_assign(npoints=%d,nclasses=%d,nbands=%d)",
+	    C->npoints, C->nclasses, C->nbands);
+    
     for (p = 0; p < C->npoints; p++) {
 	if (*interrupted)
 	    return -1;

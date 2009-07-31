@@ -1,4 +1,25 @@
+/*!
+  \file cluster/c_sig.c
+  
+  \brief Cluster library - Signatures
+  
+  (C) 2001-2009 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Original author CERL
+*/
+
 #include <grass/cluster.h>
+
+/*!
+  \brief Create signatures
+
+  \param C pointer to Cluster structure
+
+  \return 0
+*/
 int I_cluster_signatures(struct Cluster *C)
 {
     int c, p, band1, band2;

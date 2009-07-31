@@ -1,18 +1,30 @@
+/*!
+  \file cluster/c_begin.c
+  
+  \brief Cluster library - Begin clusterring
+  
+  (C) 2001-2009 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Original author CERL
+*/
+
 #include <stdlib.h>
+#include <grass/glocale.h>
 #include <grass/cluster.h>
 
-/****************************************************************
- * I_cluster_begin (C,nbands)
- *
- * initialize the cluster routines for nbands
- *
- * returns 
- *  0 ok
- * -1 out of memory
- *  1 illegal number of bands
- *
- ***************************************************************/
+/*!
+  \brief Initialize the cluster routines for nbands
 
+  \param C pointer to Cluster structure
+  \param nbands number of bands
+
+  \return 0 ok
+  \return -1 out of memory
+  \return 1 illegal number of bands
+*/
 int I_cluster_begin(struct Cluster *C, int nbands)
 {
     int band;
@@ -42,7 +54,7 @@ int I_cluster_begin(struct Cluster *C, int nbands)
     /* prepare the signatures for nbands */
 
     I_init_signatures(&C->S, nbands);
-    sprintf(C->S.title, "produced by i.cluster");
+    sprintf(C->S.title, _("produced by i.cluster"));
 
     /* allocate the data (points) arrays */
     C->points = (DCELL **) malloc(C->nbands * sizeof(DCELL *));

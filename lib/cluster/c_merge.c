@@ -1,5 +1,25 @@
+/*!
+  \file cluster/c_merge.c
+  
+  \brief Cluster library - Merge
+  
+  (C) 2001-2009 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Original author CERL
+*/
+
 #include <grass/cluster.h>
 
+/*!
+  \brief ?
+  
+  \param pointer to Cluster structure
+
+  \return 0
+*/
 int I_cluster_merge(struct Cluster *C)
 {
     int band, p;
