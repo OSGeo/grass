@@ -1,21 +1,22 @@
 /*!
-   \file field.c
-
-   \brief Vector library - field(layer) related fns.
-
-   Higher level functions for reading/writing/manipulating vectors.
-
-   \todo see Vect_read_dblinks(); activate auto-FID detection once
-   OGR_L_GetFIDColumn() is working or solution found if FID not
-   available
-
-   (C) 2001-2009 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
-
-   \author Original author CERL, probably Dave Gerdes or Mike Higgins.
-   \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
+  \file vector/Vlib/field.c
+  
+  \brief Vector library - field (layer) related fns.
+  
+  Higher level functions for reading/writing/manipulating vectors.
+  
+  \todo see Vect_read_dblinks(); activate auto-FID detection once
+  OGR_L_GetFIDColumn() is working or solution found if FID not
+  available
+  
+  (C) 2001-2009 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Original author CERL, probably Dave Gerdes or Mike Higgins.
+  \author Update to GRASS 5.7 by Radim Blazek and David D. Gray.
+  \author Various updates by Martin Landa <landa.martin gmail.com>, 2009
 */
 
 #include <grass/config.h>
@@ -32,11 +33,9 @@
 #endif	/* HAVE_GDAL */
 
 /*!
-   \brief Create and init new dblinks ctructure
-
-   \param void
-
-   \return pointer to new dblinks structure
+  \brief Create and init new dblinks structure
+  
+  \return pointer to new dblinks structure
  */
 struct dblinks *Vect_new_dblinks_struct(void)
 {
@@ -53,35 +52,32 @@ struct dblinks *Vect_new_dblinks_struct(void)
 }
 
 /*!
-   \brief Reset dblinks structure
+  \brief Reset dblinks structure
 
-   \param p pointer to existing dblinks structure
-
-   \return void
- */
+  \param p pointer to existing dblinks structure
+*/
 void Vect_reset_dblinks(struct dblinks *p)
 {
     p->n_fields = 0;
 }
 
 /*!
-   \brief Add new db connection to Map_info structure
+  \brief Add new db connection to Map_info structure
 
-   \param Map vector map
-   \param number layer number
-   \param name layer name
-   \param table table name
-   \param key key name
-   \param db database name
-   \param driver driver name
+  \param Map pointer to Map_info structure
+  \param number layer number
+  \param name layer name
+  \param table table name
+  \param key key name
+  \param db database name
+  \param driver driver name
 
-   \return 0 OK
-   \return -1 error
- */
-int
-Vect_map_add_dblink(struct Map_info *Map, int number, const char *name,
-		    const char *table, const char *key, const char *db,
-		    const char *driver)
+  \return 0 on success
+  \return -1 on failure
+*/
+int Vect_map_add_dblink(struct Map_info *Map, int number, const char *name,
+			const char *table, const char *key, const char *db,
+			const char *driver)
 {
     int ret;
 
@@ -110,13 +106,13 @@ Vect_map_add_dblink(struct Map_info *Map, int number, const char *name,
 }
 
 /*!
-   \brief Delete db connection from Map_info structure
-
-   \param Map vector map
-   \param field layer number 
-
-   \return 0 deleted
-   \return -1 error
+  \brief Delete db connection from Map_info structure
+  
+  \param Map pointer to Map_info structure
+  \param field layer number
+  
+  \return 0 deleted
+  \return -1 error
  */
 int Vect_map_del_dblink(struct Map_info *Map, int field)
 {
@@ -156,13 +152,13 @@ int Vect_map_del_dblink(struct Map_info *Map, int field)
 }
 
 /*!
-   \brief Check if DB connection exists in dblinks structure
+  \brief Check if DB connection exists in dblinks structure
 
-   \param Map vector map
-   \param field layer number
+  \param Map pointer to Map_info structure
+  \param field layer number
 
-   \return 1 dblink for field exists
-   \return 0 dblink does not exist for field
+  \return 1 dblink for field exists
+  \return 0 dblink does not exist for field
  */
 int Vect_map_check_dblink(const struct Map_info *Map, int field)
 {
@@ -170,13 +166,13 @@ int Vect_map_check_dblink(const struct Map_info *Map, int field)
 }
 
 /*!
-   \brief Check if DB connection exists in dblinks structure
+  \brief Check if DB connection exists in dblinks structure
 
-   \param p pointer to existing dblinks structure
-   \param field layer number
+  \param p pointer to existing dblinks structure
+  \param field layer number
 
-   \return 1 dblink for field exists
-   \return 0 dblink does not exist for field
+  \return 1 dblink for field exists
+  \return 0 dblink does not exist for field
  */
 int Vect_check_dblink(const struct dblinks *p, int field)
 {
@@ -194,22 +190,21 @@ int Vect_check_dblink(const struct dblinks *p, int field)
 
 
 /*!
-   \brief Add new DB connection to dblinks structure
-
-   \param p pointer to existing dblinks structure
-   \param number layer number
-   \param name layer name
-   \param key key name
-   \param db database name
-   \param driver driver name
-
-   \return 0 on success
-   \return -1 error
+  \brief Add new DB connection to dblinks structure
+  
+  \param p pointer to existing dblinks structure
+  \param number layer number
+  \param name layer name
+  \param key key name
+  \param db database name
+  \param driver driver name
+  
+  \return 0 on success
+  \return -1 error
  */
-int
-Vect_add_dblink(struct dblinks *p, int number, const char *name,
-		const char *table, const char *key, const char *db,
-		const char *driver)
+int Vect_add_dblink(struct dblinks *p, int number, const char *name,
+		    const char *table, const char *key, const char *db,
+		    const char *driver)
 {
     int ret;
 
@@ -261,14 +256,14 @@ Vect_add_dblink(struct dblinks *p, int number, const char *name,
 }
 
 /*!
-   \brief Get default information about link to database for new dblink
+  \brief Get default information about link to database for new dblink
+  
+  \param Map pointer to Map_info structure
+  \param field layer number
+  \param field_name layer name
+  \param type how many tables are linked to map: GV_1TABLE / GV_MTABLE 
 
-   \param Map vector map
-   \param field layer number
-   \param field_name layer name
-   \param type how many tables are linked to map: GV_1TABLE / GV_MTABLE 
-
-   \return pointer to new field_info structure
+  \return pointer to new field_info structure
  */
 struct field_info
     *Vect_default_field_info(struct Map_info *Map,
@@ -295,9 +290,9 @@ struct field_info
 	db_set_default_connection();
 	db_get_connection(&connection);
 
-	G_warning(_("Default driver / database set to:\n"
-		    "driver: %s\ndatabase: %s"), connection.driverName,
-		  connection.databaseName);
+	G_important_message(_("Default driver / database set to:\n"
+			      "driver: %s\ndatabase: %s"), connection.driverName,
+			    connection.databaseName);
     }
     /* they must be a matched pair, so if one is set but not the other
        then give up and let the user figure it out */
@@ -347,15 +342,15 @@ struct field_info
 }
 
 /*!
-   \brief Get information about link to database.
+  \brief Get information about link to database.
+  
+  Variables are substituted by values, link is index to array of
+  dblinks.
 
-   Variables are substituted by values, link is index to array of
-   dblinks
+  \param Map pointer to Map_info structure
+  \param link link id
 
-   \param Map vector map
-   \param link link id
-
-   \return pointer to new field_info structure
+  \return pointer to new field_info structure
  */
 struct field_info *Vect_get_dblink(const struct Map_info *Map, int link)
 {
@@ -386,17 +381,17 @@ struct field_info *Vect_get_dblink(const struct Map_info *Map, int link)
 }
 
 /*!
-   \brief Get information about link to database.
-
-   Variables are substituted by values, field is number of requested
-   field
-
-   \param Map vector map
-   \param field layer number
-
-   \return pointer to new field_info structure
-   \return NULL if not found
- */
+  \brief Get information about link to database (by layer number)
+  
+  Variables are substituted by values, field is number of requested
+  field.
+  
+  \param Map pointer to Map_info structure
+  \param field layer number
+  
+  \return pointer to new field_info structure
+  \return NULL if not found
+*/
 struct field_info *Vect_get_field(const struct Map_info *Map, int field)
 {
     int i;
@@ -415,14 +410,40 @@ struct field_info *Vect_get_field(const struct Map_info *Map, int field)
 }
 
 /*!
-   \brief Read dblinks to existing structure.
+  \brief Get information about link to database (by layer name)
+  
+  \param Map pointer to Map_info structure
+  \param field layer name
+  
+  \return pointer to new field_info structure
+  \return NULL if not found
+*/
+struct field_info *Vect_get_field_by_name(const struct Map_info *Map, const char *field)
+{
+    int i;
+    struct field_info *fi = NULL;
 
-   Variables are not substituted by values.
+    G_debug(1, "Vect_get_field_by_name(): field = %s", field);
 
-   \param Map vector map
+    for (i = 0; i < Map->dblnk->n_fields; i++) {
+	if (Map->dblnk->field[i].name == field) {
+	    fi = Vect_get_dblink(Map, i);
+	    break;
+	}
+    }
 
-   \return number of links read
-   \return -1 on error
+    return fi;
+}
+
+/*!
+  \brief Read dblinks to existing structure.
+  
+  Variables are not substituted by values.
+  
+  \param Map pointer to Map_info structure
+
+  \return number of links read
+  \return -1 on error
  */
 int Vect_read_dblinks(struct Map_info *Map)
 {
@@ -446,7 +467,7 @@ int Vect_read_dblinks(struct Map_info *Map)
 
 #ifndef HAVE_GDAL
 	G_fatal_error(_("The support for OGR vector maps wasn't"
-			" compiled in."));
+			" compiled in"));
 #else
 #if GDAL_VERSION_NUM > 1320	/* seems to be fixed after 1320 release */
 	int layer, nLayers;
@@ -464,7 +485,7 @@ int Vect_read_dblinks(struct Map_info *Map)
 	/*Data source handle */
 	Ogr_ds = OGROpen(Map->fInfo.ogr.dsn, FALSE, NULL);
 	if (Ogr_ds == NULL)
-	    G_fatal_error("Cannot open OGR data source '%s'",
+	    G_fatal_error(_("Unable to open OGR data source '%s'"),
 			  Map->fInfo.ogr.dsn);
 	Map->fInfo.ogr.ds = Ogr_ds;
 
@@ -475,25 +496,27 @@ int Vect_read_dblinks(struct Map_info *Map)
 	G_debug(3, "%d layers (maps) found in data source", nLayers);
 
 	G_debug(3, "Trying to open OGR layer: %s", Map->fInfo.ogr.layer_name);
-	Ogr_layer = OGR_DS_GetLayerByName(Ogr_ds, Map->fInfo.ogr.layer_name);
-	if (Ogr_layer == NULL) {
-	    OGR_DS_Destroy(Ogr_ds);
-	    G_fatal_error("Cannot open layer '%s'",
-			  Map->fInfo.ogr.layer_name);
+	if (Map->fInfo.ogr.layer_name) {
+	    Ogr_layer = OGR_DS_GetLayerByName(Ogr_ds, Map->fInfo.ogr.layer_name);
+	    if (Ogr_layer == NULL) {
+		OGR_DS_Destroy(Ogr_ds);
+		G_fatal_error(_("Unable to open OGR layer '%s'"),
+			      Map->fInfo.ogr.layer_name);
+	    }
+	    Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
+	    G_debug(3, "layer %s, FID col name: %s",
+		    OGR_FD_GetName(Ogr_featuredefn),
+		    OGR_L_GetFIDColumn(Ogr_layer));
+	    Map->fInfo.ogr.layer = Ogr_layer;
+	    G_debug(3, "OGR Map->fInfo.ogr.layer %p opened",
+		    Map->fInfo.ogr.layer);
+	    
+	    /* TODO what to do if OGR_L_GetFIDColumn() doesn't return FID name */
+	    sprintf(ogr_fid_col, "%s", OGR_L_GetFIDColumn(Map->fInfo.ogr.layer));
+	    G_debug(3, "Using FID column <%s> in OGR DB", ogr_fid_col);
+	    Vect_add_dblink(dbl, 1, NULL, Map->fInfo.ogr.layer_name, ogr_fid_col,
+			    Map->fInfo.ogr.dsn, "ogr");
 	}
-	Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
-	G_debug(3, "layer %s, FID col name: %s",
-		OGR_FD_GetName(Ogr_featuredefn),
-		OGR_L_GetFIDColumn(Ogr_layer));
-	Map->fInfo.ogr.layer = Ogr_layer;
-	G_debug(3, "OGR Map->fInfo.ogr.layer %p opened",
-		Map->fInfo.ogr.layer);
-
-	/* TODO what to do if OGR_L_GetFIDColumn() doesn't return FID name */
-	sprintf(ogr_fid_col, "%s", OGR_L_GetFIDColumn(Map->fInfo.ogr.layer));
-	G_debug(3, "Using FID column <%s> in OGR DB", ogr_fid_col);
-	Vect_add_dblink(dbl, 1, NULL, Map->fInfo.ogr.layer_name, ogr_fid_col,
-			Map->fInfo.ogr.dsn, "ogr");
 #else
 	dbDriver *driver;
 	dbCursor cursor;
@@ -608,8 +631,8 @@ int Vect_read_dblinks(struct Map_info *Map)
     }
 
     sprintf(file, "%s/%s/%s/%s/%s/%s", Map->gisdbase, Map->location,
-	    Map->mapset, GRASS_VECT_DIRECTORY, Map->name,
-	    GRASS_VECT_DBLN_ELEMENT);
+	    Map->mapset, GV_DIRECTORY, Map->name,
+	    GV_DBLN_ELEMENT);
     G_debug(1, "dbln file: %s", file);
 
     fd = fopen(file, "r");
@@ -662,12 +685,12 @@ int Vect_read_dblinks(struct Map_info *Map)
 }
 
 /*!
-   \brief Write dblinks to file
-
-   \param Map vector map
-
-   \return 0 on success
-   \return -1 on error
+  \brief Write dblinks to file
+  
+  \param Map pointer to Map_info structure
+  
+  \return 0 on success
+  \return -1 on error
  */
 int Vect_write_dblinks(struct Map_info *Map)
 {
@@ -682,8 +705,8 @@ int Vect_write_dblinks(struct Map_info *Map)
     dbl = Map->dblnk;
 
     sprintf(file, "%s/%s/%s/%s/%s/%s", Map->gisdbase, Map->location,
-	    Map->mapset, GRASS_VECT_DIRECTORY, Map->name,
-	    GRASS_VECT_DBLN_ELEMENT);
+	    Map->mapset, GV_DIRECTORY, Map->name,
+	    GV_DBLN_ELEMENT);
     G_debug(1, "dbln file: %s", file);
 
     fd = fopen(file, "w");
@@ -713,13 +736,13 @@ int Vect_write_dblinks(struct Map_info *Map)
 }
 
 /*!
-   \brief Substitute variable in string
-
-   \param in current string
-   \param Map vector map
-
-   \return pointer to new string
- */
+  \brief Substitute variable in string
+  
+  \param in current string
+  \param Map pointer to Map_info structure
+  
+  \return pointer to new string
+*/
 char *Vect_subst_var(const char *in, const struct Map_info *Map)
 {
     char *c;
@@ -763,16 +786,14 @@ char *Vect_subst_var(const char *in, const struct Map_info *Map)
 }
 
 /*!
-   \brief Rewrite 'dbln' file
-
-   Should be used by GRASS modules which update database tables, so
-   that other applications know that tables were changed and can
-   reload data.
-
-   \param Map vector map
-
-   \return void
- */
+  \brief Rewrite 'dbln' file
+  
+  Should be used by GRASS modules which update database tables, so
+  that other applications know that tables were changed and can
+  reload data.
+  
+  \param Map pointer to Map_info structure
+*/
 void Vect_set_db_updated(struct Map_info *Map)
 {
     if (strcmp(Map->mapset, G_mapset()) != 0) {
