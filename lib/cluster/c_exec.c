@@ -12,6 +12,7 @@
 */
 
 #include <grass/cluster.h>
+#include <grass/glocale.h>
 
 /*!
   \param maxclass maximum number of classes
