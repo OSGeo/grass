@@ -340,7 +340,7 @@ int sel_by_bbox(struct Map_info *Map,
 		int type, double x1, double y1, double x2, double y2,
 		struct ilist *List)
 {
-    BOUND_BOX bbox;
+    struct bound_box bbox;
 
     struct ilist *List_tmp;
 

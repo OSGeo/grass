@@ -161,8 +161,8 @@ Vect_copy(const char *in, const char *mapset, const char *out)
     struct field_info *Fi, *Fin;
     char old_path[GPATH_MAX], new_path[GPATH_MAX], buf[GPATH_MAX];
     struct stat info;
-    const char *files[] = { GRASS_VECT_FRMT_ELEMENT, GRASS_VECT_COOR_ELEMENT,
-	GRASS_VECT_HEAD_ELEMENT, GRASS_VECT_HIST_ELEMENT,
+    const char *files[] = { GV_FRMT_ELEMENT, GV_COOR_ELEMENT,
+	GV_HEAD_ELEMENT, GV_HIST_ELEMENT,
 	GV_TOPO_ELEMENT, GV_SIDX_ELEMENT, GV_CIDX_ELEMENT,
 	NULL
     };
@@ -200,16 +200,16 @@ Vect_copy(const char *in, const char *mapset, const char *out)
     }
 
     /* Copy the directory */
-    G__make_mapset_element(GRASS_VECT_DIRECTORY);
-    sprintf(buf, "%s/%s", GRASS_VECT_DIRECTORY, out);
+    G__make_mapset_element(GV_DIRECTORY);
+    sprintf(buf, "%s/%s", GV_DIRECTORY, out);
     G__make_mapset_element(buf);
 
     i = 0;
     while (files[i]) {
 	sprintf(buf, "%s/%s", in, files[i]);
-	G__file_name(old_path, GRASS_VECT_DIRECTORY, buf, mapset);
+	G__file_name(old_path, GV_DIRECTORY, buf, mapset);
 	sprintf(buf, "%s/%s", out, files[i]);
-	G__file_name(new_path, GRASS_VECT_DIRECTORY, buf, G_mapset());
+	G__file_name(new_path, GV_DIRECTORY, buf, G_mapset());
 
 	if (stat(old_path, &info) == 0) {	/* file exists? */
 	    G_debug(2, "copy %s to %s", old_path, new_path);
@@ -221,8 +221,8 @@ Vect_copy(const char *in, const char *mapset, const char *out)
 	i++;
     }
 
-    G__file_name(old_path, GRASS_VECT_DIRECTORY, in, mapset);
-    G__file_name(new_path, GRASS_VECT_DIRECTORY, out, G_mapset());
+    G__file_name(old_path, GV_DIRECTORY, in, mapset);
+    G__file_name(new_path, GV_DIRECTORY, out, G_mapset());
 
     /* Open input */
     Vect_set_open_level(1);
@@ -331,7 +331,7 @@ int Vect_rename(const char *in, const char *out)
     }
 
     /* Move the directory */
-    ret = G_rename(GRASS_VECT_DIRECTORY, in, out);
+    ret = G_rename(GV_DIRECTORY, in, out);
 
     if (ret == 0) {
 	G_warning(_("Vector map <%s> not found"), in);
@@ -462,7 +462,7 @@ int Vect_delete(const char *map)
     }
 
     sprintf(buf, "%s/%s/%s/%s/%s/%s", G_gisdbase(), G_location(),
-	    G_mapset(), GRASS_VECT_DIRECTORY, map, GRASS_VECT_DBLN_ELEMENT);
+	    G_mapset(), GV_DIRECTORY, map, GV_DBLN_ELEMENT);
 
     G_debug(1, "dbln file: %s", buf);
 

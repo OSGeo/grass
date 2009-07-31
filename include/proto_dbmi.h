@@ -53,7 +53,7 @@ int db_convert_value_datetime_into_string(dbValue * value, int sqltype,
 int db_convert_value_to_string(dbValue * value, int sqltype,
 			       dbString * string);
 void db_copy_dbmscap_entry(dbDbmscap * dst, dbDbmscap * src);
-int db_copy_string(dbString * dst, dbString * src);
+int db_copy_string(dbString * dst, const dbString * src);
 int db_table_to_sql(dbTable *, dbString *);
 int db_copy_table(const char *, const char *, const char *, const char *,
 		  const char *, const char *);
@@ -173,7 +173,7 @@ const char *db_get_index_name(dbIndex * index);
 int db_get_index_number_of_columns(dbIndex * index);
 const char *db_get_index_table_name(dbIndex * index);
 int db_get_num_rows(dbCursor * cursor);
-char *db_get_string(dbString * x);
+char *db_get_string(const dbString * x);
 dbColumn *db_get_table_column(dbTable * table, int n);
 int db_get_table_delete_priv(dbTable * table);
 const char *db_get_table_description(dbTable * table);
@@ -398,7 +398,7 @@ int db_gversion(dbDriver * driver, dbString * client_version,
 const char *db_whoami(void);
 void db_zero(void *s, int n);
 void db_zero_string(dbString * x);
-unsigned int db_sizeof_string(dbString * x);
+unsigned int db_sizeof_string(const dbString * x);
 int db_set_login(const char *, const char *, const char *, const char *);
 int db_get_login(const char *, const char *, const char **, const char **);
 

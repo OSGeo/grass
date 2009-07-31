@@ -34,7 +34,7 @@ Vect_tin_get_z(struct Map_info *Map,
 {
     int i, area, n_points;
     struct Plus_head *Plus;
-    P_AREA *Area;
+    struct P_area *Area;
     static struct line_pnts *Points;
     static int first_time = 1;
     double *x, *y, *z;

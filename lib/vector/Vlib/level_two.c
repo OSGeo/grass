@@ -181,7 +181,7 @@ int
 Vect_get_node_coor(const struct Map_info *map, int num, double *x, double *y,
 		   double *z)
 {
-    P_NODE *Node;
+    struct P_node *Node;
 
     Node = map->plus.Node[num];
     *x = Node->x;

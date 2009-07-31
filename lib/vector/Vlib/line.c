@@ -762,7 +762,7 @@ double Vect_points_distance(double x1, double y1, double z1,	/* point 1 */
 
    \return 0
  */
-int Vect_line_box(const struct line_pnts *Points, BOUND_BOX * Box)
+int Vect_line_box(const struct line_pnts *Points, struct bound_box * Box)
 {
     dig_line_box(Points, Box);
     return 0;

@@ -27,7 +27,7 @@
 #ifdef HAVE_OGR
 #include <ogr_api.h>
 
-/**
+/*!
    \brief Open existing vector map
 
    Map->name and Map->mapset must be set before.
@@ -100,10 +100,10 @@ int V1_open_old_ogr(struct Map_info *Map, int update)
     return (0);
 }
 
-/**
+/*!
    \brief Open OGR specific level 2 files (feature index)
 
-   \param[out] Map pointer to vector map
+   \param[out] Map pointer to Map_info structure
 
    \return 0 success
    \return -1 error
@@ -113,15 +113,15 @@ int V2_open_old_ogr(struct Map_info *Map)
     char elem[GPATH_MAX];
     char buf[5];		/* used for format version */
     long length;
-    GVFILE fp;
+    struct gvfile fp;
     struct Port_info port;
     int Version_Major, Version_Minor, Back_Major, Back_Minor, byte_order;
 
     G_debug(3, "V2_open_old_ogr()");
 
-    sprintf(elem, "%s/%s", GRASS_VECT_DIRECTORY, Map->name);
+    sprintf(elem, "%s/%s", GV_DIRECTORY, Map->name);
     dig_file_init(&fp);
-    fp.file = G_fopen_old(elem, "fidx", Map->mapset);
+    fp.file = G_fopen_old(elem, GV_FIDX_ELEMENT, Map->mapset);
     if (fp.file == NULL) {
 	G_warning(_("Unable to open fidx file for vector map <%s@%s>"),
 		  Map->name, Map->mapset);

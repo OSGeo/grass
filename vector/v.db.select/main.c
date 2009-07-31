@@ -44,7 +44,7 @@ int main(int argc, char **argv)
     char query[1024];
     struct ilist *list_lines;
 
-    BOUND_BOX *min_box, *line_box;
+    struct bound_box *min_box, *line_box;
     int i, line, area, init_box, cat;
 
     module = G_define_module();
@@ -101,10 +101,10 @@ int main(int argc, char **argv)
     field = atoi(field_opt->answer);
 
     if (r_flag->answer) {
-	min_box = (BOUND_BOX *) G_malloc(sizeof(BOUND_BOX));
-	G_zero((void *)min_box, sizeof(BOUND_BOX));
+	min_box = (struct bound_box *) G_malloc(sizeof(struct bound_box));
+	G_zero((void *)min_box, sizeof(struct bound_box));
 
-	line_box = (BOUND_BOX *) G_malloc(sizeof(BOUND_BOX));
+	line_box = (struct bound_box *) G_malloc(sizeof(struct bound_box));
 	list_lines = Vect_new_list();
     }
     else {

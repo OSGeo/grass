@@ -34,7 +34,7 @@ int main()
     int err;
     int byte_order;
     struct Port_info port;
-    GVFILE fp;
+    struct gvfile fp;
     int port_off_t;
 
     double db, td[] = { -(PORT_DOUBLE_MAX), -(D_TEST), -(PORT_DOUBLE_MIN),

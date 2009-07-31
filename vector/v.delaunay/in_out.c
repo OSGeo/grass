@@ -161,7 +161,7 @@ void remove_duplicates(struct vertex *list[], unsigned int *size)
 
 /* returns number of sites read */
 int read_sites(int mode3d, int complete_map, struct Map_info map_in,
-	       BOUND_BOX Box)
+	       struct bound_box Box)
 {
     int nlines, line, allocated, nsites;
     struct line_pnts *Points;

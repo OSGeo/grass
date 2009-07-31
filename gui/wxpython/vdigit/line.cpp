@@ -962,7 +962,7 @@ int Digit::BreakLineAtIntersection(int line, struct line_pnts* points_line,
 {
     int ret, type, nlines;
     int lineBreak;
-    BOUND_BOX lineBox;
+    struct bound_box lineBox;
     struct ilist *list, *listBreak, *listRef;
     struct line_pnts *points_check, *points;
 

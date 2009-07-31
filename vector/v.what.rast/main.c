@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
     int outside_cnt;		/* points outside region */
     int nocat_cnt;		/* points inside region but without category */
     int dupl_cnt;		/* duplicate categories */
-    BOUND_BOX box;
+    struct bound_box box;
 
     int *catexst, *cex;
     struct field_info *Fi;

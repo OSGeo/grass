@@ -40,7 +40,7 @@ static int cleanse_string(char *);
 
 static int site_att_cmp(const void *pa, const void *pb)
 {
-    const SITE_ATT *a = pa, *b = pb;
+    const struct site_att *a = pa, *b = pb;
 
     return a->cat - b->cat;
 }
@@ -57,7 +57,7 @@ int G_site_get(struct Map_info *Map, Site * s)
     int i, type, cat;
     static struct line_pnts *Points = NULL;
     static struct line_cats *Cats = NULL;
-    SITE_ATT *sa;
+    struct site_att *sa;
 
     if (Points == NULL)
 	Points = Vect_new_line_struct();
@@ -89,8 +89,8 @@ int G_site_get(struct Map_info *Map, Site * s)
 	/* find att */
 
 	if (Map->n_site_att > 0) {
-	    sa = (SITE_ATT *) bsearch((void *)&cat, (void *)Map->site_att,
-				      Map->n_site_att, sizeof(SITE_ATT),
+	    sa = (struct site_att *) bsearch((void *)&cat, (void *)Map->site_att,
+				      Map->n_site_att, sizeof(struct site_att),
 				      site_att_cmp);
 
 	    if (sa == NULL) {
@@ -283,7 +283,7 @@ struct Map_info *G_sites_open_old(const char *name, const char *mapset)
     struct Map_info *Map;
     struct field_info *fi;
     int more, nrows, row, ncols, col, ndbl, nstr, adbl, astr, ctype;
-    SITE_ATT *sa;
+    struct site_att *sa;
 
     dbDriver *driver;
     dbString stmt;
@@ -332,7 +332,7 @@ struct Map_info *G_sites_open_old(const char *name, const char *mapset)
     nrows = db_get_num_rows(&cursor);
     G_debug(1, "%d rows selected from vector attribute table", nrows);
 
-    Map->site_att = (SITE_ATT *) malloc(nrows * sizeof(SITE_ATT));
+    Map->site_att = (struct site_att *) malloc(nrows * sizeof(struct site_att));
     Map->n_site_att = nrows;
 
     table = db_get_cursor_table(&cursor);
@@ -411,7 +411,7 @@ struct Map_info *G_sites_open_old(const char *name, const char *mapset)
     db_close_database_shutdown_driver(driver);
 
     /* sort attributes */
-    qsort((void *)Map->site_att, Map->n_site_att, sizeof(SITE_ATT),
+    qsort((void *)Map->site_att, Map->n_site_att, sizeof(struct site_att),
 	  site_att_cmp);
 
     return Map;
@@ -1149,12 +1149,12 @@ char *G_site_format(const Site * s, const char *fs, int id)
  */
 
 /*
-   Returns a pointer to the SITE_ATT in Map_info *ptr and with category cat
+   Returns a pointer to the struct site_att in Map_info *ptr and with category cat
  */
-SITE_ATT *G_sites_get_atts(struct Map_info * Map, int *cat)
+struct site_att *G_sites_get_atts(struct Map_info * Map, int *cat)
 {
-    return (SITE_ATT *) bsearch((void *)cat, (void *)Map->site_att,
-				Map->n_site_att, sizeof(SITE_ATT),
+    return (struct site_att *) bsearch((void *)cat, (void *)Map->site_att,
+				Map->n_site_att, sizeof(struct site_att),
 				site_att_cmp);
 }
 

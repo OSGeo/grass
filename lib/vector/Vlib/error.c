@@ -41,7 +41,7 @@ int Vect_set_fatal_error(int err)
 /*!
    \brief Get behaviour for fatal error
 
-   \param 
+   \todo Remove or move to GIS Library?
 
    \return GV_FATAL_EXIT(default): print error message and exit,
    \return GV_FATAL_PRINT: print error message and return error,

@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
 
     struct Cell_head elaboration_reg, original_reg;
     struct Reg_dimens dims;
-    BOUND_BOX general_box, overlap_box;
+    struct bound_box general_box, overlap_box;
 
     struct Point *observ;
 

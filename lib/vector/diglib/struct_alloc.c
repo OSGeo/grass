@@ -37,11 +37,11 @@
  */
 
 /* allocate new node structure */
-P_NODE *dig_alloc_node()
+struct P_node *dig_alloc_node()
 {
-    P_NODE *Node;
+    struct P_node *Node;
 
-    Node = (P_NODE *) G_malloc(sizeof(P_NODE));
+    Node = (struct P_node *) G_malloc(sizeof(struct P_node));
     if (Node == NULL)
         return NULL;
 
@@ -54,7 +54,7 @@ P_NODE *dig_alloc_node()
 }
 
 /* free node structure */
-void dig_free_node(P_NODE *Node)
+void dig_free_node(struct P_node *Node)
 {
     if (Node->alloc_lines > 0) {
         G_free(Node->lines);
@@ -71,7 +71,7 @@ void dig_free_node(P_NODE *Node)
  **  Returns   0 ok    or    -1 on error
  */
 
-int dig_node_alloc_line(P_NODE * node, int add)
+int dig_node_alloc_line(struct P_node * node, int add)
 {
     int num;
     char *p;
@@ -107,22 +107,22 @@ int dig_alloc_nodes(struct Plus_head *Plus, int add)
     char *p;
 
     size = Plus->alloc_nodes + 1 + add;
-    p = G_realloc(Plus->Node, size * sizeof(P_NODE *));
+    p = G_realloc(Plus->Node, size * sizeof(struct P_node *));
     if (p == NULL)
         return -1;
 
-    Plus->Node = (P_NODE **) p;
+    Plus->Node = (struct P_node **) p;
     Plus->alloc_nodes = size - 1;
 
     return (0);
 }
 
 /* allocate new line structure */
-P_LINE *dig_alloc_line()
+struct P_line *dig_alloc_line()
 {
-    P_LINE *Line;
+    struct P_line *Line;
 
-    Line = (P_LINE *) G_malloc(sizeof(P_LINE));
+    Line = (struct P_line *) G_malloc(sizeof(struct P_line));
     if (Line == NULL)
         return NULL;
 
@@ -130,7 +130,7 @@ P_LINE *dig_alloc_line()
 }
 
 /* free line structure */
-void dig_free_line(P_LINE *Line)
+void dig_free_line(struct P_line *Line)
 {
     G_free(Line);
 }
@@ -147,11 +147,11 @@ int dig_alloc_lines(struct Plus_head *Plus, int add)
     char *p;
 
     size = Plus->alloc_lines + 1 + add;
-    p = G_realloc(Plus->Line, size * sizeof(P_LINE *));
+    p = G_realloc(Plus->Line, size * sizeof(struct P_line *));
     if (p == NULL)
         return -1;
 
-    Plus->Line = (P_LINE **) p;
+    Plus->Line = (struct P_line **) p;
     Plus->alloc_lines = size - 1;
 
     return (0);
@@ -169,11 +169,11 @@ int dig_alloc_areas(struct Plus_head *Plus, int add)
     char *p;
 
     size = Plus->alloc_areas + 1 + add;
-    p = G_realloc(Plus->Area, size * sizeof(P_AREA *));
+    p = G_realloc(Plus->Area, size * sizeof(struct P_area *));
     if (p == NULL)
         return -1;
 
-    Plus->Area = (P_AREA **) p;
+    Plus->Area = (struct P_area **) p;
     Plus->alloc_areas = size - 1;
 
     return (0);
@@ -192,22 +192,22 @@ int dig_alloc_isles(struct Plus_head *Plus, int add)
 
     G_debug(3, "dig_alloc_isle():");
     size = Plus->alloc_isles + 1 + add;
-    p = G_realloc(Plus->Isle, size * sizeof(P_ISLE *));
+    p = G_realloc(Plus->Isle, size * sizeof(struct P_isle *));
     if (p == NULL)
         return -1;
 
-    Plus->Isle = (P_ISLE **) p;
+    Plus->Isle = (struct P_isle **) p;
     Plus->alloc_isles = size - 1;
 
     return (0);
 }
 
 /* allocate new area structure */
-P_AREA *dig_alloc_area()
+struct P_area *dig_alloc_area()
 {
-    P_AREA *Area;
+    struct P_area *Area;
 
-    Area = (P_AREA *) G_malloc(sizeof(P_AREA));
+    Area = (struct P_area *) G_malloc(sizeof(struct P_area));
     if (Area == NULL)
         return NULL;
 
@@ -225,7 +225,7 @@ P_AREA *dig_alloc_area()
 }
 
 /* free area structure */
-void dig_free_area(P_AREA *Area)
+void dig_free_area(struct P_area *Area)
 {
     if (Area->alloc_lines > 0)
         free(Area->lines);
@@ -237,11 +237,11 @@ void dig_free_area(P_AREA *Area)
 }
 
 /* alloc new isle structure */
-P_ISLE *dig_alloc_isle()
+struct P_isle *dig_alloc_isle()
 {
-    P_ISLE *Isle;
+    struct P_isle *Isle;
 
-    Isle = (P_ISLE *) G_malloc(sizeof(P_ISLE));
+    Isle = (struct P_isle *) G_malloc(sizeof(struct P_isle));
     if (Isle == NULL)
         return NULL;
 
@@ -255,7 +255,7 @@ P_ISLE *dig_alloc_isle()
 }
 
 /* free isle structure */
-void dig_free_isle(P_ISLE *Isle)
+void dig_free_isle(struct P_isle *Isle)
 {
     if (Isle->alloc_lines > 0)
         G_free(Isle->lines);
@@ -337,7 +337,7 @@ int dig_alloc_cats(struct line_cats *cats, int num)
  **
  **  Returns   0 ok    or    -1 on error
  */
-int dig_area_alloc_line(P_AREA * area, int add)
+int dig_area_alloc_line(struct P_area * area, int add)
 {
     int num;
     char *p;
@@ -359,7 +359,7 @@ int dig_area_alloc_line(P_AREA * area, int add)
  **
  **  Returns   0 ok    or    -1 on error
  */
-int dig_area_alloc_isle(P_AREA * area, int add)
+int dig_area_alloc_isle(struct P_area * area, int add)
 {
     int num;
     char *p;
@@ -382,7 +382,7 @@ int dig_area_alloc_isle(P_AREA * area, int add)
  **  Returns   0 ok    or    -1 on error
  */
 
-int dig_isle_alloc_line(P_ISLE * isle, int add)
+int dig_isle_alloc_line(struct P_isle * isle, int add)
 {
     int num;
     char *p;

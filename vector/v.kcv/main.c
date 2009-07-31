@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *in_opt, *out_opt, *col_opt, *npart_opt;
     struct Flag *drand48_flag, *q_flag;
-    BOUND_BOX box;
+    struct bound_box box;
     double maxdist;
 
     /* Attributes */

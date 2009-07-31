@@ -41,7 +41,7 @@ prune(struct Map_info *Out, int otype, double thresh, struct Map_info *Err)
     int norig;
     struct line_pnts *Points, *TPoints, *BPoints, *Points_orig;
     struct line_cats *Cats;
-    BOUND_BOX box;
+    struct bound_box box;
     struct ilist *List;
 
     Points = Vect_new_line_struct();

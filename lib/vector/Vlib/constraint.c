@@ -75,7 +75,7 @@ Vect_set_constraint_region(struct Map_info *Map,
 
    \return 0
  */
-int Vect_get_constraint_box(const struct Map_info *Map, BOUND_BOX * Box)
+int Vect_get_constraint_box(const struct Map_info *Map, struct bound_box * Box)
 {
     Box->N = Map->Constraint_N;
     Box->S = Map->Constraint_S;

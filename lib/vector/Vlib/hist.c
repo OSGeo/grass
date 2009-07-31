@@ -22,7 +22,7 @@
 /*!
    \brief Write command info to history file
 
-   \param Map vector map
+   \param Map pointer to Map_info structure
 
    \return 0 on success
    \return -1 error
@@ -52,7 +52,7 @@ int Vect_hist_command(struct Map_info *Map)
 /*!
    \brief Write string to history file
 
-   \param Map vector map
+   \param Map pointer to Map_info structure
    \param str string to write
 
    \return the number of characters printed

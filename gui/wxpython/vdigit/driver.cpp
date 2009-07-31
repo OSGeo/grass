@@ -498,7 +498,7 @@ int DisplayDriver::VectorToList(struct ilist *list, const std::vector<int>& vec)
 std::vector<double> DisplayDriver::GetMapBoundingBox()
 {
     std::vector<double> region;
-    BOUND_BOX bbox;
+    struct bound_box bbox;
 
     if (!mapInfo) {
 	return region;

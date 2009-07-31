@@ -5,7 +5,7 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   \todo Vect_graph_free ( GRAPH *graph )
+   \todo Vect_graph_free ( dglGraph_s *graph )
 
    (C) 2001-2009 by the GRASS Development Team
 
@@ -70,7 +70,7 @@ static int clipper(dglGraph_s * pgraph,
 
    \return void
  */
-void Vect_graph_init(GRAPH * graph, int nodes_costs)
+void Vect_graph_init(dglGraph_s * graph, int nodes_costs)
 {
     dglInt32_t opaqueset[16] =
 	{ 360000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -96,7 +96,7 @@ void Vect_graph_init(GRAPH * graph, int nodes_costs)
 
    \return void
  */
-void Vect_graph_build(GRAPH * graph)
+void Vect_graph_build(dglGraph_s * graph)
 {
     int ret;
 
@@ -123,7 +123,7 @@ void Vect_graph_build(GRAPH * graph)
    \return void
  */
 void
-Vect_graph_add_edge(GRAPH * graph, int from, int to, double costs, int id)
+Vect_graph_add_edge(dglGraph_s * graph, int from, int to, double costs, int id)
 {
     int ret;
     dglInt32_t dglcosts;
@@ -153,7 +153,7 @@ Vect_graph_add_edge(GRAPH * graph, int from, int to, double costs, int id)
 
    \return void
  */
-void Vect_graph_set_node_costs(GRAPH * graph, int node, double costs)
+void Vect_graph_set_node_costs(dglGraph_s * graph, int node, double costs)
 {
     dglInt32_t dglcosts;
 
@@ -183,7 +183,7 @@ void Vect_graph_set_node_costs(GRAPH * graph, int node, double costs)
    \return -1 destination unreachable
  */
 int
-Vect_graph_shortest_path(GRAPH * graph, int from, int to, struct ilist *List,
+Vect_graph_shortest_path(dglGraph_s * graph, int from, int to, struct ilist *List,
 			 double *cost)
 {
     int i, line, *pclip, cArc, nRet;

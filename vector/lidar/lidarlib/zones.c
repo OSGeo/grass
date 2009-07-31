@@ -24,8 +24,8 @@ void P_zero_dim(struct Reg_dimens *dim)
 
 /*----------------------------------------------------------------------------------------*/
 int
-P_set_regions(struct Cell_head *Elaboration, BOUND_BOX * General,
-	      BOUND_BOX * Overlap, struct Reg_dimens dim, int type)
+P_set_regions(struct Cell_head *Elaboration, struct bound_box * General,
+	      struct bound_box * Overlap, struct Reg_dimens dim, int type)
 {
     /* Set the Elaborationoration region limits-> Also set the limits of the orlo and overlapping regions->
      * Returns 0 on success; -1 on failure*/
@@ -126,7 +126,7 @@ P_Mean_Calc(struct Cell_head *Elaboration, struct Point *obs, int npoints)
 {
     int i, mean_count = 0;
     double mean = 0.0;
-    BOUND_BOX mean_box;
+    struct bound_box mean_box;
 
     Vect_region_box(Elaboration, &mean_box);
     mean_box.W -= CONTOUR;
@@ -158,7 +158,7 @@ struct Point *P_Read_Vector_Region_Map(struct Map_info *Map,
     struct Point *obs;
     struct line_pnts *points;
     struct line_cats *categories;
-    BOUND_BOX elaboration_box;
+    struct bound_box elaboration_box;
 
     pippo = dim_vect;
     obs = (struct Point *)G_calloc(pippo, sizeof(struct Point));

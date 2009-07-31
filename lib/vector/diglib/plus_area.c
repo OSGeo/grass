@@ -56,7 +56,7 @@ dig_build_area_with_line(struct Plus_head *plus, plus_t first_line, int side,
     char *p;
     static int array_size;	/* 0 on startup */
     int n_lines;
-    P_LINE *Line;
+    struct P_line *Line;
     int node;
     const char *dstr;
     int debug_level;
@@ -175,9 +175,9 @@ int dig_add_area(struct Plus_head *plus, int n_lines, plus_t * lines)
 {
     register int i;
     register int area, line;
-    P_AREA *Area;
-    P_LINE *Line;
-    BOUND_BOX box, abox;
+    struct P_area *Area;
+    struct P_line *Line;
+    struct bound_box box, abox;
 
     G_debug(3, "dig_add_area():");
     /* First look if we have space in array of pointers to areas
@@ -254,7 +254,7 @@ int dig_add_area(struct Plus_head *plus, int n_lines, plus_t * lines)
 int dig_area_add_isle(struct Plus_head *plus, int area, int isle)
 {
     int i;
-    P_AREA *Area;
+    struct P_area *Area;
 
     G_debug(3, "dig_area_add_isle(): area = %d isle = %d", area, isle);
 
@@ -291,7 +291,7 @@ int dig_area_add_isle(struct Plus_head *plus, int area, int isle)
 int dig_area_del_isle(struct Plus_head *plus, int area, int isle)
 {
     int i, mv;
-    P_AREA *Area;
+    struct P_area *Area;
 
     G_debug(3, "dig_area_del_isle(): area = %d isle = %d", area, isle);
 
@@ -344,9 +344,9 @@ int dig_del_area(struct Plus_head *plus, int area)
     int i, line;
 
     /* int    isle, area_out; */
-    P_AREA *Area;
-    P_LINE *Line;
-    P_ISLE *Isle;
+    struct P_area *Area;
+    struct P_line *Line;
+    struct P_isle *Isle;
 
     G_debug(3, "dig_del_area() area =  %d", area);
     Area = plus->Area[area];
@@ -440,9 +440,9 @@ int dig_del_area(struct Plus_head *plus, int area)
  *
  * \return 1
  */
-int dig_area_set_box(struct Plus_head *plus, plus_t area, BOUND_BOX * Box)
+int dig_area_set_box(struct Plus_head *plus, plus_t area, struct bound_box * Box)
 {
-    P_AREA *Area;
+    struct P_area *Area;
 
     Area = plus->Area[area];
 
@@ -480,8 +480,8 @@ dig_angle_next_line(struct Plus_head *plus, plus_t current_line, int side,
     int current;
     int line;
     plus_t node;
-    P_NODE *Node;
-    P_LINE *Line;
+    struct P_node *Node;
+    struct P_line *Line;
     const char *dstr;
     int debug_level;
 
@@ -582,7 +582,7 @@ int dig_node_angle_check(struct Plus_head *plus, plus_t line, int type)
     int next, prev;
     float angle1, angle2;
     plus_t node;
-    P_LINE *Line;
+    struct P_line *Line;
 
     G_debug(3, "dig_node_angle_check: line = %d, type = %d", line, type);
 
@@ -637,9 +637,9 @@ int dig_add_isle(struct Plus_head *plus, int n_lines, plus_t * lines)
 {
     register int i;
     register int isle, line;
-    P_ISLE *Isle;
-    P_LINE *Line;
-    BOUND_BOX box, abox;
+    struct P_isle *Isle;
+    struct P_line *Line;
+    struct bound_box box, abox;
 
     G_debug(3, "dig_add_isle():");
     /* First look if we have space in array of pointers to isles
@@ -719,9 +719,9 @@ int dig_add_isle(struct Plus_head *plus, int n_lines, plus_t * lines)
  *
  * \return 1
  */
-int dig_isle_set_box(struct Plus_head *plus, plus_t isle, BOUND_BOX * Box)
+int dig_isle_set_box(struct Plus_head *plus, plus_t isle, struct bound_box * Box)
 {
-    P_ISLE *Isle;
+    struct P_isle *Isle;
 
     Isle = plus->Isle[isle];
 
@@ -748,8 +748,8 @@ int dig_isle_set_box(struct Plus_head *plus, plus_t isle, BOUND_BOX * Box)
 int dig_del_isle(struct Plus_head *plus, int isle)
 {
     int i, line;
-    P_LINE *Line;
-    P_ISLE *Isle;
+    struct P_line *Line;
+    struct P_isle *Isle;
 
     G_debug(3, "dig_del_isle() isle =  %d", isle);
     Isle = plus->Isle[isle];

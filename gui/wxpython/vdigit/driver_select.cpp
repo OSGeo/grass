@@ -489,7 +489,7 @@ std::vector<double> DisplayDriver::GetRegionSelected()
     
     std::vector<double> region;
 
-    BOUND_BOX region_box, line_box;
+    struct bound_box region_box, line_box;
     struct ilist *list, *list_tmp;
 
     list = list_tmp = NULL;

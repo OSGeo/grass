@@ -30,7 +30,7 @@
 
    \return void
  */
-void Vect_spatial_index_init(SPATIAL_INDEX * si, int with_z)
+void Vect_spatial_index_init(struct spatial_index * si, int with_z)
 {
     G_debug(1, "Vect_spatial_index_init()");
 
@@ -46,7 +46,7 @@ void Vect_spatial_index_init(SPATIAL_INDEX * si, int with_z)
 
    \return void
  */
-void Vect_spatial_index_destroy(SPATIAL_INDEX * si)
+void Vect_spatial_index_destroy(struct spatial_index * si)
 {
     G_debug(1, "Vect_spatial_index_destroy()");
 
@@ -62,8 +62,8 @@ void Vect_spatial_index_destroy(SPATIAL_INDEX * si)
 
    \return void
  */
-void Vect_spatial_index_add_item(SPATIAL_INDEX * si, int id,
-				 const BOUND_BOX * box)
+void Vect_spatial_index_add_item(struct spatial_index * si, int id,
+				 const struct bound_box * box)
 {
     struct Rect rect;
 
@@ -86,8 +86,8 @@ void Vect_spatial_index_add_item(SPATIAL_INDEX * si, int id,
 
    \return void
  */
-void Vect_spatial_index_del_item(SPATIAL_INDEX * si, int id,
-				 const BOUND_BOX * box)
+void Vect_spatial_index_del_item(struct spatial_index * si, int id,
+				 const struct bound_box * box)
 {
     int ret;
     struct Rect rect;
@@ -125,7 +125,7 @@ static int _add_item(int id, struct ilist *list)
    \return number of selected items
  */
 int
-Vect_spatial_index_select(const SPATIAL_INDEX * si, const BOUND_BOX * box,
+Vect_spatial_index_select(const struct spatial_index * si, const struct bound_box * box,
 			  struct ilist *list)
 {
     struct Rect rect;

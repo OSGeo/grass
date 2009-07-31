@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
 	*field_opt;
     struct GModule *module;
     struct Map_info In;
-    BOUND_BOX box;
+    struct bound_box box;
 
     /* vector */
     struct line_pnts *Points;

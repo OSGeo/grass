@@ -32,7 +32,7 @@
 int snakes_displacement(struct Map_info *In, struct Map_info *Out,
 			double threshold, double alpha, double beta,
 			double gama, double delta, int iterations,
-			VARRAY * varray)
+			struct varray * varray)
 {
 
     int n_points;

@@ -10,7 +10,7 @@
 
 void P_Outlier(struct Map_info *Out, struct Map_info *Outlier,
 	       struct Map_info *Qgis, struct Cell_head Elaboration,
-	       BOUND_BOX General, BOUND_BOX Overlap, double **obs,
+	       struct bound_box General, struct bound_box Overlap, double **obs,
 	       double *parBilin, double mean, double overlap, int *line_num,
 	       int num_points, dbDriver * driver)
 {

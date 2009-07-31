@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
     int update_ok, update_err, update_exist, update_notexist, update_dupl,
 	update_notfound;
     struct ilist *List;
-    BOUND_BOX box;
+    struct bound_box box;
     dbCatValArray cvarr;
     dbColumn *column;
 
@@ -322,7 +322,7 @@ int main(int argc, char *argv[])
     /* TODO: add maxdist = -1 to Vect_select_ !!! */
     /* Calc maxdist */
     if (max < 0) {
-	BOUND_BOX fbox, tbox;
+	struct bound_box fbox, tbox;
 	double dx, dy, dz;
 
 	Vect_get_map_box(&From, &fbox);

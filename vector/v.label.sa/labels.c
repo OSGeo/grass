@@ -5,7 +5,7 @@
 */
 #include "labels.h"
 static int label_skyline(FT_Face face, const char *charset, label_t * label);
-static struct line_pnts *box_trans_rot(BOUND_BOX * bb, label_point_t * p,
+static struct line_pnts *box_trans_rot(struct bound_box * bb, label_point_t * p,
 				       double angle);
 static void label_point_candidates(label_t * label);
 static void label_line_candidates(label_t * label);
@@ -18,7 +18,7 @@ static double label_lineover(label_t * label, label_candidate_t * candidate,
 static double min_dist_2_lines(struct line_pnts *skyline,
 			       struct line_pnts *swathline,
 			       label_point_t * p);
-static int box_overlap(BOUND_BOX * a, BOUND_BOX * b);
+static int box_overlap(struct bound_box * a, struct bound_box * b);
 static int box_overlap2(struct line_pnts *a, struct line_pnts *b);
 
 /**
@@ -805,7 +805,7 @@ struct line_pnts *skyline_trans_rot(struct line_pnts *skyline,
  * @return A lint_pnts structure containing the rotated and translated
  * bounding box as a polygon.
  */
-static struct line_pnts *box_trans_rot(BOUND_BOX * bb, label_point_t * p,
+static struct line_pnts *box_trans_rot(struct bound_box * bb, label_point_t * p,
 				       double angle)
 {
     struct line_pnts *Points;
@@ -1157,7 +1157,7 @@ void label_candidate_overlap(label_t * labels, int n_labels)
 
 		    if ((labels[i].candidates[j].rotation == 0) &&
 			(labels[k].candidates[l].rotation == 0)) {
-			BOUND_BOX a, b;
+			struct bound_box a, b;
 
 			a.N =
 			    labels[i].bb.N + labels[i].candidates[j].point.y;
@@ -1230,7 +1230,7 @@ void label_candidate_overlap(label_t * labels, int n_labels)
  * @param b Bounding box B
  * @return REtruns 1 if the two boxes overlap 0 if not.
  */
-static int box_overlap(BOUND_BOX * a, BOUND_BOX * b)
+static int box_overlap(struct bound_box * a, struct bound_box * b)
 {
     int vert = 0, hori = 0;
 

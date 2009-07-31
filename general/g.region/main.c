@@ -496,7 +496,7 @@ int main(int argc, char *argv[])
 	vect_ptr = parm.vect->answers;
 	for (; *vect_ptr != NULL; vect_ptr++) {
 	    struct Map_info Map;
-	    BOUND_BOX box;
+	    struct bound_box box;
 	    char vect_name[GNAME_MAX];
 	    struct Cell_head map_window;
 

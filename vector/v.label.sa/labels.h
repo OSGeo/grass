@@ -46,7 +46,7 @@ struct _label
 
     struct line_pnts *skyline;	/**< The skyline of the text, as an offest
 				  *  from the label point */
-    BOUND_BOX bb;
+    struct bound_box bb;
     double size;
 
     double current_score;	  /**< The current score of the label. */

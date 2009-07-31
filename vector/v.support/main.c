@@ -177,8 +177,8 @@ int main(int argc, char *argv[])
 	char buf[2000];		/* derived from Vect_hist_command() */
 
 	/* Open history file for modification */
-	sprintf(buf, "%s/%s", GRASS_VECT_DIRECTORY, Map.name);
-	Map.hist_fp = G_fopen_modify(buf, GRASS_VECT_HIST_ELEMENT);
+	sprintf(buf, "%s/%s", GV_DIRECTORY, Map.name);
+	Map.hist_fp = G_fopen_modify(buf, GV_HIST_ELEMENT);
 	if (Map.hist_fp == NULL) {
 	    G_warning(_("Unable to open history file for vector map <%s>"),
 		      Vect_get_full_name(&Map));

@@ -4,8 +4,8 @@
 
 #ifdef MAIN
 struct Cell_head Window;
-BOUND_BOX Box;
+struct bound_box Box;
 #else
 extern struct Cell_head Window;
-extern BOUND_BOX Box;
+extern struct bound_box Box;
 #endif

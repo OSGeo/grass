@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
     int n_areas, n_lines;
     double x, y;
     int simplification, mask_type;
-    VARRAY *varray;
+    struct varray *varray;
     char *s;
     int left, right;
 

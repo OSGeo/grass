@@ -206,7 +206,7 @@ int main(int argc, char *argv[])
 	last_column = FALSE;
 
 	while (last_column == FALSE) {	/* For each strip of LATO columns */
-	    BOUND_BOX elaboration_box;
+	    struct bound_box elaboration_box;
 
 	    elaboration_reg.west = elaboration_reg.east;
 	    if (elaboration_reg.west < original_reg.west)	/* First column */

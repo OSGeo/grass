@@ -229,7 +229,7 @@ FILE *G_fopen_old(const char *element, const char *name, const char *mapset)
 
     fd = G__open(element, name, mapset, 0);
     if (fd < 0)
-	return (FILE *) 0;
+	return (FILE *) NULL;
 
     return fdopen(fd, "r");
 }

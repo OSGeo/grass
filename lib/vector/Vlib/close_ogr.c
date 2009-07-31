@@ -71,7 +71,7 @@ int V2_close_ogr(struct Map_info *Map)
     char fname[1000], elem[1000];
     char buf[5];
     long length = 9;
-    GVFILE fp;
+    struct gvfile fp;
     struct Port_info port;
 
     G_debug(3, "V2_close_ogr()");
@@ -81,7 +81,7 @@ int V2_close_ogr(struct Map_info *Map)
 
     if (strcmp(Map->mapset, G_mapset()) == 0 && Map->support_updated &&
 	Map->plus.built == GV_BUILD_ALL) {
-	sprintf(elem, "%s/%s", GRASS_VECT_DIRECTORY, Map->name);
+	sprintf(elem, "%s/%s", GV_DIRECTORY, Map->name);
 	G__file_name(fname, elem, "fidx", Map->mapset);
 	G_debug(4, "Open fidx: %s", fname);
 	dig_file_init(&fp);

@@ -77,21 +77,21 @@ int Vect_write_header(const struct Map_info *Map)
 
    \param Map vector map
 
-   \return GRASS_OK on success
-   \return GRASS_ERR on error
+   \return 0 on success
+   \return -1 on error
  */
 int Vect__write_head(const struct Map_info *Map)
 {
     char buf[GPATH_MAX];
     FILE *head_fp;
 
-    sprintf(buf, "%s/%s", GRASS_VECT_DIRECTORY, Map->name);
+    sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
 
-    head_fp = G_fopen_new(buf, GRASS_VECT_HEAD_ELEMENT);
+    head_fp = G_fopen_new(buf, GV_HEAD_ELEMENT);
     if (head_fp == NULL) {
 	G_warning(_("Unable to open header file of vector <%s>"),
 		  Vect_get_full_name(Map));
-	return (GRASS_ERR);
+	return (-1);
     }
 
     fprintf(head_fp, "ORGANIZATION: %s\n", Vect_get_organization(Map));
@@ -105,16 +105,16 @@ int Vect__write_head(const struct Map_info *Map)
     fprintf(head_fp, "MAP THRESH:   %f\n", Vect_get_thresh(Map));
 
     fclose(head_fp);
-    return (GRASS_OK);
+    return (0);
 }
 
 /*!
-   \brief Reads head information from text file (GRASS_VECT_HEAD_ELEMENT).
+   \brief Reads head information from text file (GV_HEAD_ELEMENT).
 
-   \param Map vector map
+   \param Map pointer to Map_info structure
 
-   \return GRASS_OK on success
-   \return GRASS_ERR on error
+   \return 0 on success
+   \return -1 on error
  */
 int Vect__read_head(struct Map_info *Map)
 {
@@ -134,12 +134,12 @@ int Vect__read_head(struct Map_info *Map)
     Vect_set_thresh(Map, 0.);
 
     G_debug(1, "Vect__read_head(): vector = %s@%s", Map->name, Map->mapset);
-    sprintf(buff, "%s/%s", GRASS_VECT_DIRECTORY, Map->name);
-    head_fp = G_fopen_old(buff, GRASS_VECT_HEAD_ELEMENT, Map->mapset);
+    sprintf(buff, "%s/%s", GV_DIRECTORY, Map->name);
+    head_fp = G_fopen_old(buff, GV_HEAD_ELEMENT, Map->mapset);
     if (head_fp == NULL) {
 	G_warning(_("Unable to open header file of vector <%s>"),
 		  Vect_get_full_name(Map));
-	return (GRASS_ERR);
+	return (-1);
     }
 
     while (G_getl2(buff, 2000, head_fp)) {
@@ -185,7 +185,7 @@ int Vect__read_head(struct Map_info *Map)
     }
 
     fclose(head_fp);
-    return (GRASS_OK);
+    return (0);
 }
 
 /*!

@@ -20,11 +20,15 @@
 #include <grass/vector.h>
 #include <grass/gis.h>
 
-/* Read vector format.
- *
- *  Returns: format number
- *           -1 on error
- */
+/*!
+  \brief Read external vector format file
+ 
+  \param dascii format file (frmt)
+  \param[out] finfo pointer to Format_info structure
+
+  \return format code
+  \return -1 on error
+*/
 int dig_read_frmt_ascii(FILE * dascii, struct Format_info *finfo)
 {
     char buff[20001], buf1[1024];

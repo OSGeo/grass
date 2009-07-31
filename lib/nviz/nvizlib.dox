@@ -1,8 +1,6 @@
 /*! \page nvizlib GRASS Nviz Library
 
-by GRASS Development Team
-
-http://grass.osgeo.org
+by GRASS Development Team (http://grass.osgeo.org)
 
 \section nvizintro Introduction to Nviz Library
 
@@ -100,5 +98,9 @@ wxGUI Nviz extension and CLI-based Nviz module.
  - Nviz_make_current_render_window()
 
  - Nviz_new_render_window()
+
+\section authors Authors
+
+ Martin Landa <landa.martin gmail.com>
 
 */

@@ -32,7 +32,7 @@ int DisplayDriver::DrawMap(bool force)
 	return -1;
 
     int nlines;
-    BOUND_BOX mapBox;
+    struct bound_box mapBox;
     struct ilist *listLines;
 
     // ids.clear();

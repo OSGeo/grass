@@ -141,7 +141,7 @@ V1_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 		      struct line_cats *line_c)
 {
     int itype;
-    BOUND_BOX lbox, mbox;
+    struct bound_box lbox, mbox;
     OGRFeatureH hFeature;
     OGRGeometryH hGeom;
 
@@ -325,8 +325,8 @@ V2_read_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
     int node;
     int offset;
     long FID;
-    P_LINE *Line;
-    P_NODE *Node;
+    struct P_line *Line;
+    struct P_node *Node;
     OGRGeometryH hGeom;
 
     G_debug(4, "V2_read_line_ogr() line = %d", line);

@@ -36,7 +36,7 @@ double Vect_line_geodesic_length(const struct line_pnts *);
 int Vect_line_distance(const struct line_pnts *, double, double, double, int,
 		       double *, double *, double *, double *, double *,
 		       double *);
-int Vect_line_box(const struct line_pnts *, BOUND_BOX *);
+int Vect_line_box(const struct line_pnts *, struct bound_box *);
 void Vect_line_parallel(struct line_pnts *, double, double, int,
 			struct line_pnts *);
 void Vect_line_parallel2(struct line_pnts *, double, double,
@@ -78,13 +78,13 @@ int Vect_cat_in_cat_list(int, const struct cat_list *);
 int Vect_destroy_cat_list(struct cat_list *);
 
 /* Vector array */
-VARRAY *Vect_new_varray(int);
+struct varray *Vect_new_varray(int);
 int Vect_set_varray_from_cat_string(const struct Map_info *, int, const char *, int,
-				    int, VARRAY *);
+				    int, struct varray *);
 int Vect_set_varray_from_cat_list(const struct Map_info *, int, struct cat_list *,
-				  int, int, VARRAY *);
+				  int, int, struct varray *);
 int Vect_set_varray_from_db(const struct Map_info *, int, const char *, int, int,
-			    VARRAY *);
+			    struct varray *);
 
 /* DB connection - field info */
 struct dblinks *Vect_new_dblinks_struct(void);
@@ -103,6 +103,7 @@ struct field_info *Vect_default_field_info(struct Map_info *, int,
 					   const char *, int);
 struct field_info *Vect_get_dblink(const struct Map_info *, int);
 struct field_info *Vect_get_field(const struct Map_info *, int);
+struct field_info *Vect_get_field_by_name(const struct Map_info *, const char *);
 void Vect_set_db_updated(struct Map_info *);
 const char *Vect_get_column_names(const struct Map_info *, int);
 const char *Vect_get_column_types(const struct Map_info *, int);
@@ -119,12 +120,12 @@ int Vect_reset_list(struct ilist *);
 int Vect_destroy_list(struct ilist *);
 
 /* Bounding box (MBR) */
-int Vect_point_in_box(double, double, double, const BOUND_BOX *);
-int Vect_box_overlap(const BOUND_BOX *, const BOUND_BOX *);
-int Vect_box_copy(BOUND_BOX *, const BOUND_BOX *);
-int Vect_box_extend(BOUND_BOX *, const BOUND_BOX *);
-int Vect_box_clip(double *, double *, double *, double *, const BOUND_BOX *);
-int Vect_region_box(const struct Cell_head *, BOUND_BOX *);
+int Vect_point_in_box(double, double, double, const struct bound_box *);
+int Vect_box_overlap(const struct bound_box *, const struct bound_box *);
+int Vect_box_copy(struct bound_box *, const struct bound_box *);
+int Vect_box_extend(struct bound_box *, const struct bound_box *);
+int Vect_box_clip(double *, double *, double *, double *, const struct bound_box *);
+int Vect_region_box(const struct Cell_head *, struct bound_box *);
 
 /* Category index */
 int Vect_cidx_get_num_fields(const struct Map_info *);
@@ -172,7 +173,7 @@ int Vect_get_proj(const struct Map_info *);
 const char *Vect_get_proj_name(const struct Map_info *);
 int Vect_set_thresh(struct Map_info *, double);
 double Vect_get_thresh(const struct Map_info *);
-int Vect_get_constraint_box(const struct Map_info *, BOUND_BOX *);
+int Vect_get_constraint_box(const struct Map_info *, struct bound_box *);
 
 
 /* Get map level 2 informations */
@@ -183,10 +184,10 @@ int Vect_get_num_lines(const struct Map_info *);
 int Vect_get_num_areas(const struct Map_info *);
 int Vect_get_num_faces(const struct Map_info *);
 int Vect_get_num_islands(const struct Map_info *);
-int Vect_get_line_box(const struct Map_info *, int, BOUND_BOX *);
-int Vect_get_area_box(const struct Map_info *, int, BOUND_BOX *);
-int Vect_get_isle_box(const struct Map_info *, int, BOUND_BOX *);
-int Vect_get_map_box(const struct Map_info *, BOUND_BOX *);
+int Vect_get_line_box(const struct Map_info *, int, struct bound_box *);
+int Vect_get_area_box(const struct Map_info *, int, struct bound_box *);
+int Vect_get_isle_box(const struct Map_info *, int, struct bound_box *);
+int Vect_get_map_box(const struct Map_info *, struct bound_box *);
 int V__map_overlap(struct Map_info *, double, double, double, double);
 void Vect_set_release_support(struct Map_info *);
 void Vect_set_category_index_update(struct Map_info *);
@@ -272,11 +273,11 @@ void Vect_hist_rewind(struct Map_info *);
 char *Vect_hist_read(char *, int, const struct Map_info *);
 
 /* Selecting features */
-int Vect_select_lines_by_box(struct Map_info *, const BOUND_BOX *, int,
+int Vect_select_lines_by_box(struct Map_info *, const struct bound_box *, int,
 			     struct ilist *);
-int Vect_select_areas_by_box(struct Map_info *, const BOUND_BOX *, struct ilist *);
-int Vect_select_isles_by_box(struct Map_info *, const BOUND_BOX *, struct ilist *);
-int Vect_select_nodes_by_box(struct Map_info *, const BOUND_BOX *, struct ilist *);
+int Vect_select_areas_by_box(struct Map_info *, const struct bound_box *, struct ilist *);
+int Vect_select_isles_by_box(struct Map_info *, const struct bound_box *, struct ilist *);
+int Vect_select_nodes_by_box(struct Map_info *, const struct bound_box *, struct ilist *);
 int Vect_find_node(struct Map_info *, double, double, double, double, int);
 int Vect_find_line(struct Map_info *, double, double, double, int, double,
 		   int, int);
@@ -338,11 +339,11 @@ int Vect_overlay_and(struct Map_info *, int, struct ilist *,
 		     struct ilist *, struct ilist *, struct Map_info *);
 
 /* Graph */
-void Vect_graph_init(GRAPH *, int);
-void Vect_graph_build(GRAPH *);
-void Vect_graph_add_edge(GRAPH *, int, int, double, int);
-void Vect_graph_set_node_costs(GRAPH *, int, double);
-int Vect_graph_shortest_path(GRAPH *, int, int, struct ilist *, double *);
+void Vect_graph_init(dglGraph_s *, int);
+void Vect_graph_build(dglGraph_s *);
+void Vect_graph_add_edge(dglGraph_s *, int, int, double, int);
+void Vect_graph_set_node_costs(dglGraph_s *, int, double);
+int Vect_graph_shortest_path(dglGraph_s *, int, int, struct ilist *, double *);
 
 /* Network (graph) */
 int Vect_net_build_graph(struct Map_info *, int, int, int, const char *,
@@ -387,17 +388,17 @@ int Vect_line_get_intersections(struct line_pnts *, struct line_pnts *,
 char *Vect_subst_var(const char *, const struct Map_info *);
 
 /* Custom spatial index */
-void Vect_spatial_index_init(SPATIAL_INDEX *, int);
-void Vect_spatial_index_destroy(SPATIAL_INDEX *);
-void Vect_spatial_index_add_item(SPATIAL_INDEX *, int, const BOUND_BOX *);
-void Vect_spatial_index_del_item(SPATIAL_INDEX *, int, const BOUND_BOX *);
-int Vect_spatial_index_select(const SPATIAL_INDEX *, const BOUND_BOX *, struct ilist *);
+void Vect_spatial_index_init(struct spatial_index *, int);
+void Vect_spatial_index_destroy(struct spatial_index *);
+void Vect_spatial_index_add_item(struct spatial_index *, int, const struct bound_box *);
+void Vect_spatial_index_del_item(struct spatial_index *, int, const struct bound_box *);
+int Vect_spatial_index_select(const struct spatial_index *, const struct bound_box *, struct ilist *);
 
 /*
  * Internal functions, MUST NOT be used in modules
  */
 int Vect_print_header(const struct Map_info *);
-int Vect__init_head(struct Map_info *);
+void Vect__init_head(struct Map_info *);
 
 /* Open/close/rewind map */
 int Vect_coor_info(const struct Map_info *, struct Coor_info *);
@@ -466,8 +467,8 @@ int Vect_build_ogr(struct Map_info *, int);
 int Vect_build_line_area(struct Map_info *, int, int);
 int Vect_isle_find_area(struct Map_info *, int);
 int Vect_attach_isle(struct Map_info *, int);
-int Vect_attach_isles(struct Map_info *, const BOUND_BOX *);
-int Vect_attach_centroids(struct Map_info *, const BOUND_BOX *);
+int Vect_attach_isles(struct Map_info *, const struct bound_box *);
+int Vect_attach_centroids(struct Map_info *, const struct bound_box *);
 
     /* GEOS support */
 #ifdef HAVE_GEOS

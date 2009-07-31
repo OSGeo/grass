@@ -22,7 +22,7 @@
  *  dig_line_box ()
  *  set box to points extent
  */
-int dig_line_box(const struct line_pnts *Points, BOUND_BOX * Box)
+int dig_line_box(const struct line_pnts *Points, struct bound_box * Box)
 {
     int i;
 
@@ -67,7 +67,7 @@ int dig_line_box(const struct line_pnts *Points, BOUND_BOX * Box)
  *  dig_box_copy ()
  *  Copy B to A.
  */
-int dig_box_copy(BOUND_BOX * A, BOUND_BOX * B)
+int dig_box_copy(struct bound_box * A, struct bound_box * B)
 {
 
     A->N = B->N;
@@ -84,7 +84,7 @@ int dig_box_copy(BOUND_BOX * A, BOUND_BOX * B)
  * dig_box_extend ()
  * Extend A by B.
  */
-int dig_box_extend(BOUND_BOX * A, BOUND_BOX * B)
+int dig_box_extend(struct bound_box * A, struct bound_box * B)
 {
 
     if (B->N > A->N)

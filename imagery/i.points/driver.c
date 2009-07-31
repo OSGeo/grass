@@ -14,7 +14,7 @@ int driver(void)
 	MENU("PLOT RASTER", plotcell, &use),
 	MENU("ANALYZE", analyze, &use),
 	INFO("  Input method -> ", &from_flag),
-	OPTION("DIGITIZER", 2, &from_digitizer),
+	/*	OPTION("DIGITIZER", 2, &from_digitizer), */
 	OPTION("KEYBOARD", 2, &from_keyboard),
 	OPTION("SCREEN", 2, &from_screen),
 	OTHER(mark, &use),

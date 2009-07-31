@@ -13,7 +13,7 @@ int G_site_c_cmp(const void *a, const void *b);
 int G_site_s_cmp(const void *a, const void *b);
 char *G_site_format(const Site * s, const char *fs, int id);
 
-/* SITE_ATT * G_sites_get_atts (struct Map_info * ptr, int* cat); */
+/* struct site_att * G_sites_get_atts (struct Map_info * ptr, int* cat); */
 int G_sites_get_fields(struct Map_info *ptr, char ***cnames, int **ctypes,
 		       int **ndx);
 void G_sites_free_fields(int ncols, char **cnames, int *ctypes, int *ndx);

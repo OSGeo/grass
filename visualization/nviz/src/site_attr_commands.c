@@ -244,7 +244,7 @@ int attr_eval_color(float xvalue, int n, float *x,
 		    float *mr, float *mg, float *mb);
 
 /* better move to ../../../include/P_site.h */
-SITE_ATT *G_sites_get_atts(struct Map_info *ptr, int *cat);
+struct site_att *G_sites_get_atts(struct Map_info *ptr, int *cat);
 
 /*******************************************************************************/
 
@@ -395,7 +395,7 @@ int Nsite_attr_get_field_values_cmd(data, interp, argc, argv)
     int *ndx;
     int ncols, i, index;
     char buf[9182];
-    SITE_ATT *sa;
+    struct site_att *sa;
 
     if (argc != 3)
 	return (TCL_ERROR);
@@ -447,7 +447,7 @@ int Nsite_attr_get_field_not_emtpy_cats_cmd(data, interp, argc, argv)
     int *ndx;
     int ncols, i, index;
     char buf[9182];
-    SITE_ATT *sa;
+    struct site_att *sa;
 
     if (argc != 3)
 	return (TCL_ERROR);
@@ -500,7 +500,7 @@ int Nsite_attr_get_record_values_cmd(data, interp, argc, argv)
     int *ndx;
     int ncols, i, cat;
     char buf[9182];
-    SITE_ATT *sa;
+    struct site_att *sa;
 
     if (argc != 3)
 	return (TCL_ERROR);
@@ -511,7 +511,7 @@ int Nsite_attr_get_record_values_cmd(data, interp, argc, argv)
     ncols = G_sites_get_fields(Map, &cnames, &ctypes, &ndx);
 
 
-    if ((sa = (SITE_ATT *) G_sites_get_atts(Map, &cat)) == NULL)
+    if ((sa = (struct site_att *) G_sites_get_atts(Map, &cat)) == NULL)
 	return (TCL_ERROR);
 
     for (i = 0; i < ncols; i++) {
@@ -740,7 +740,7 @@ int site_attr_set_color(geosite * gp, int nattr, int index, int n,
 {
     struct Map_info *Map;
     geopoint *gpt;
-    SITE_ATT *sa;
+    struct site_att *sa;
     int *ctypes;
     char **cnames;
     int *ndx;
@@ -769,7 +769,7 @@ int site_attr_set_color(geosite * gp, int nattr, int index, int n,
 	}
 	else if (ctypes[index] == 'd') {
 	    if ((sa =
-		 (SITE_ATT *) G_sites_get_atts(Map, &(gpt->cat))) == NULL)
+		 (struct site_att *) G_sites_get_atts(Map, &(gpt->cat))) == NULL)
 		continue;
 	    else
 		gpt->color[nattr] =
@@ -778,7 +778,7 @@ int site_attr_set_color(geosite * gp, int nattr, int index, int n,
 	}
 	else {
 	    if ((sa =
-		 (SITE_ATT *) G_sites_get_atts(Map, &(gpt->cat))) == NULL)
+		 (struct site_att *) G_sites_get_atts(Map, &(gpt->cat))) == NULL)
 		continue;
 	    else
 		gpt->color[nattr] =
@@ -811,7 +811,7 @@ int site_attr_set_size(geosite * gp, int nattr, int index, int n,
 {
     struct Map_info *Map;
     geopoint *gpt;
-    SITE_ATT *sa;
+    struct site_att *sa;
     int *ctypes;
     char **cnames;
     int *ndx;
@@ -837,7 +837,7 @@ int site_attr_set_size(geosite * gp, int nattr, int index, int n,
 	}
 	else if (ctypes[index] == 'd') {
 	    if ((sa =
-		 (SITE_ATT *) G_sites_get_atts(Map, &(gpt->cat))) == NULL)
+		 (struct site_att *) G_sites_get_atts(Map, &(gpt->cat))) == NULL)
 		continue;
 	    else
 		gpt->size[nattr] =
@@ -845,7 +845,7 @@ int site_attr_set_size(geosite * gp, int nattr, int index, int n,
 	}
 	else {
 	    if ((sa =
-		 (SITE_ATT *) G_sites_get_atts(Map, &(gpt->cat))) == NULL)
+		 (struct site_att *) G_sites_get_atts(Map, &(gpt->cat))) == NULL)
 		continue;
 	    else
 		gpt->size[nattr] =

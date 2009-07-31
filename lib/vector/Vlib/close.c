@@ -74,7 +74,7 @@ int Vect_close(struct Map_info *Map)
 	struct stat info;
 
 	/* Delete old support files if available */
-	sprintf(buf, "%s/%s", GRASS_VECT_DIRECTORY, Map->name);
+	sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
 
 	G__file_name(file_path, buf, GV_TOPO_ELEMENT, G_mapset());
 	if (stat(file_path, &info) == 0)	/* file exists? */

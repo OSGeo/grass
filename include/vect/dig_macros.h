@@ -1,14 +1,8 @@
-/* convert UTM to screen */
-#define XADJ(x)		(int)((x - U_west ) * U_to_D_xconv + D_west)
-#define YADJ(y)		(int)((y - U_south) * U_to_D_yconv + D_south)
+/*!
+  \file include/vect/dig_macros.h
 
-#define _TOGGLE(x) ((x) ? 0 : 1)
-#define TOGGLE(x)  ((x) = _TOGGLE (x))
-#define BEEP	   putchar ('\007')
-#define ON_OFF(x)  ((x) ? "        ON" : "       OFF")
-/*
-   #define ABS(x)          ((x) < 0 ? -(x) : (x))
- */
+  \brief Macros for diglib (part of vector library
+*/
 
 /* ALIVE MACROS take a pointer the the structure in question */
 /*  and return 0 or non-zero */
@@ -22,7 +16,3 @@
 
 #define LESSER(x,y)  ((x) < (y) ? (x) : (y))
 #define GREATER(x,y) ((x) > (y) ? (x) : (y))
-
-
-/* temporary till 3.0 */
-/*#define R_standard_color(x) R_color (x) */

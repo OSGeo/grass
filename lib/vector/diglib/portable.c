@@ -73,12 +73,12 @@ static int buf_alloc(int needed)
 
    \param[out] buf data buffer
    \param cnt number of members
-   \param fp pointer to GVFILE
+   \param fp pointer to struct gvfile
 
    \return 0 error
    \return 1 OK
 */
-int dig__fread_port_D(double *buf, size_t cnt, GVFILE * fp)
+int dig__fread_port_D(double *buf, size_t cnt, struct gvfile * fp)
 {
     unsigned int i, j;
     int ret;
@@ -117,12 +117,12 @@ int dig__fread_port_D(double *buf, size_t cnt, GVFILE * fp)
 
    \param[out] buf data buffer
    \param cnt number of members
-   \param fp pointer to GVFILE
+   \param fp pointer to struct gvfile
 
    \return 0 error
    \return 1 OK
 */
-int dig__fread_port_F(float *buf, size_t cnt, GVFILE * fp)
+int dig__fread_port_F(float *buf, size_t cnt, struct gvfile * fp)
 {
     unsigned int i, j;
     int ret;
@@ -161,12 +161,12 @@ int dig__fread_port_F(float *buf, size_t cnt, GVFILE * fp)
 
    \param[out] buf data buffer
    \param cnt number of members
-   \param fp pointer to GVFILE
+   \param fp pointer to struct gvfile
    \param port_off_t_size offset
    \return 0 error
    \return 1 OK
 */
-int dig__fread_port_O(off_t *buf, size_t cnt, GVFILE * fp, size_t port_off_t_size)
+int dig__fread_port_O(off_t *buf, size_t cnt, struct gvfile * fp, size_t port_off_t_size)
 {
     unsigned int i, j;
     int ret;
@@ -256,12 +256,12 @@ int dig__fread_port_O(off_t *buf, size_t cnt, GVFILE * fp, size_t port_off_t_siz
 
    \param[out] buf data buffer
    \param cnt number of members
-   \param fp pointer to GVFILE
+   \param fp pointer to struct gvfile
 
    \return 0 error
    \return 1 OK
 */
-int dig__fread_port_L(long *buf, size_t cnt, GVFILE * fp)
+int dig__fread_port_L(long *buf, size_t cnt, struct gvfile * fp)
 {
     unsigned int i, j;
     int ret;
@@ -341,12 +341,12 @@ int dig__fread_port_L(long *buf, size_t cnt, GVFILE * fp)
 
    \param[out] buf data buffer
    \param cnt number of members
-   \param fp pointer to GVFILE
+   \param fp pointer to struct gvfile
 
    \return 0 error
    \return 1 OK
 */
-int dig__fread_port_I(int *buf, size_t cnt, GVFILE * fp)
+int dig__fread_port_I(int *buf, size_t cnt, struct gvfile * fp)
 {
     unsigned int i, j;
     int ret;
@@ -426,12 +426,12 @@ int dig__fread_port_I(int *buf, size_t cnt, GVFILE * fp)
 
    \param[out] buf data buffer
    \param cnt number of members
-   \param fp pointer to GVFILE
+   \param fp pointer to struct gvfile
 
    \return 0 error
    \return 1 OK
 */
-int dig__fread_port_S(short *buf, size_t cnt, GVFILE * fp)
+int dig__fread_port_S(short *buf, size_t cnt, struct gvfile * fp)
 {
     unsigned int i, j;
     int ret;
@@ -511,12 +511,12 @@ int dig__fread_port_S(short *buf, size_t cnt, GVFILE * fp)
 
    \param[out] buf data buffer
    \param cnt number of members
-   \param fp pointer to GVFILE
+   \param fp pointer to gvfile structure
 
    \return 0 error
    \return 1 OK
 */
-int dig__fread_port_C(char *buf, size_t cnt, GVFILE * fp)
+int dig__fread_port_C(char *buf, size_t cnt, struct gvfile * fp)
 {
     int ret;
 
@@ -537,12 +537,12 @@ int dig__fread_port_C(char *buf, size_t cnt, GVFILE * fp)
 
    \param[out] buf data buffer
    \param cnt number of members
-   \param fp pointer to GVFILE
+   \param fp pointer to struct gvfile
 
    \return 0 error
    \return 1 OK
 */
-int dig__fread_port_P(plus_t * buf, size_t cnt, GVFILE * fp)
+int dig__fread_port_P(plus_t * buf, size_t cnt, struct gvfile * fp)
 {
     int *ibuf;
 
@@ -559,13 +559,13 @@ int dig__fread_port_P(plus_t * buf, size_t cnt, GVFILE * fp)
 
    \param buf data buffer
    \param cnt number of members
-   \param[in,out] fp pointer to GVFILE
+   \param[in,out] fp pointer to struct gvfile
 
    \return 0 error
    \return 1 OK
 */
 int dig__fwrite_port_D(const double *buf,
-		       size_t cnt, GVFILE * fp)
+		       size_t cnt, struct gvfile * fp)
 {
     unsigned int i, j;
     unsigned char *c1, *c2;
@@ -598,13 +598,13 @@ int dig__fwrite_port_D(const double *buf,
 
    \param buf data buffer
    \param cnt number of members
-   \param[in,out] fp pointer to GVFILE
+   \param[in,out] fp pointer to struct gvfile
 
    \return 0 error
    \return 1 OK
 */
 int dig__fwrite_port_F(const float *buf,
-		       size_t cnt, GVFILE * fp)
+		       size_t cnt, struct gvfile * fp)
 {
     unsigned int i, j;
     unsigned char *c1, *c2;
@@ -637,13 +637,13 @@ int dig__fwrite_port_F(const float *buf,
 
    \param buf data buffer
    \param cnt number of members
-   \param[in,out] fp pointer to GVFILE
+   \param[in,out] fp pointer to struct gvfile
 
    \return 0 error
    \return 1 OK
 */
 int dig__fwrite_port_O(const off_t *buf,
-		       size_t cnt, GVFILE * fp, size_t port_off_t_size)
+		       size_t cnt, struct gvfile * fp, size_t port_off_t_size)
 {
     unsigned int i, j;
     unsigned char *c1, *c2;
@@ -703,13 +703,13 @@ int dig__fwrite_port_O(const off_t *buf,
 
    \param buf data buffer
    \param cnt number of members
-   \param[in,out] fp pointer to GVFILE
+   \param[in,out] fp pointer to struct gvfile
 
    \return 0 error
    \return 1 OK
 */
 int dig__fwrite_port_L(const long *buf,
-		       size_t cnt, GVFILE * fp)
+		       size_t cnt, struct gvfile * fp)
 {
     unsigned int i, j;
     unsigned char *c1, *c2;
@@ -759,13 +759,13 @@ int dig__fwrite_port_L(const long *buf,
 
    \param buf data buffer
    \param cnt number of members
-   \param[in,out] fp pointer to GVFILE
+   \param[in,out] fp pointer to struct gvfile
 
    \return 0 error
    \return 1 OK
 */
 int dig__fwrite_port_I(const int *buf,
-		       size_t cnt, GVFILE * fp)
+		       size_t cnt, struct gvfile * fp)
 {
     unsigned int i, j;
     unsigned char *c1, *c2;
@@ -815,13 +815,13 @@ int dig__fwrite_port_I(const int *buf,
 
    \param buf data buffer
    \param cnt number of members
-   \param[in,out] fp pointer to GVFILE
+   \param[in,out] fp pointer to struct gvfile
 
    \return 0 error
    \return 1 OK
 */
 int dig__fwrite_port_S(const short *buf,
-		       size_t cnt, GVFILE * fp)
+		       size_t cnt, struct gvfile * fp)
 {
     unsigned int i, j;
     unsigned char *c1, *c2;
@@ -872,13 +872,13 @@ int dig__fwrite_port_S(const short *buf,
 
    \param buf data buffer
    \param cnt number of members
-   \param[in,out] fp pointer to GVFILE
+   \param[in,out] fp pointer to struct gvfile
 
    \return 0 error
    \return 1 OK
 */
 int dig__fwrite_port_P(const plus_t * buf,
-		       size_t cnt, GVFILE * fp)
+		       size_t cnt, struct gvfile * fp)
 {
     return (dig__fwrite_port_I((int *)buf, cnt, fp));
 }
@@ -891,13 +891,13 @@ int dig__fwrite_port_P(const plus_t * buf,
 
    \param buf data buffer
    \param cnt number of members
-   \param[in,out] fp pointer to GVFILE
+   \param[in,out] fp pointer to struct gvfile
 
    \return 0 error
    \return 1 OK
 */
 int dig__fwrite_port_C(const char *buf,
-		       size_t cnt, GVFILE * fp)
+		       size_t cnt, struct gvfile * fp)
 {
     if (dig_fwrite(buf, PORT_CHAR, cnt, fp) == cnt)
 	return 1;
@@ -906,9 +906,9 @@ int dig__fwrite_port_C(const char *buf,
 }
 
 /*!
-  \brief Set portable info structure to byte order of file
+  \brief Set Port_info structure to byte order of file
 
-  \param port pointer to Port_info
+  \param port pointer to Port_info structure
   \param byte_order ENDIAN_BIG or ENDIAN_LITTLE
 */
 void dig_init_portable(struct Port_info *port, int byte_order)
@@ -1001,9 +1001,9 @@ void dig_init_portable(struct Port_info *port, int byte_order)
 }
 
 /*!
-  \brief set current portable info
+  \brief Set current Port_info structure
 
-  \param port pointer to Port_info
+  \param port pointer to Port_info structure
 
   \return 0
 */

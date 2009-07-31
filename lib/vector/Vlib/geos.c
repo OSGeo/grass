@@ -1,5 +1,5 @@
 /*!
-  \file geos.c
+  \file lib/vector/Vlib/geos.c
   
   \brief Vector library - GEOS support
   
@@ -46,7 +46,7 @@ static GEOSCoordSequence *read_polygon_points(struct Map_info *, int, int*);
  */
 GEOSGeometry *Vect_read_line_geos(struct Map_info *Map, int line, int *type)
 {
-    P_LINE *Line;
+    struct P_line *Line;
     
     G_debug(3, "Vect_read_line_geos(): line = %d", line);
     
@@ -246,7 +246,7 @@ GEOSGeometry *Vect__read_line_geos(struct Map_info *Map, long offset, int *type)
 GEOSCoordSequence *V2_read_line_geos(struct Map_info *Map, int line)
 {
     int ftype;
-    P_LINE *Line;
+    struct P_line *Line;
     
     G_debug(3, "V2_read_line_geos(): line = %d", line);
     
@@ -373,7 +373,7 @@ GEOSCoordSequence *V1_read_line_geos(struct Map_info *Map, long offset, int *typ
 	    GEOSCoordSeq_setZ(pseq, i, z[i]);
     }
     
-    G_debug(3, "    off = %ld", dig_ftell(&(Map->dig_fp)));
+    G_debug(3, "    off = %ld", (long) dig_ftell(&(Map->dig_fp)));
     
     G_free((void *) x);
     G_free((void *) y);
@@ -400,7 +400,7 @@ GEOSCoordSequence *V1_read_line_geos(struct Map_info *Map, long offset, int *typ
 GEOSCoordSequence *Vect_get_area_points_geos(struct Map_info *Map, int area)
 {
     struct Plus_head *Plus;
-    P_AREA *Area;
+    struct P_area *Area;
     
     G_debug(3, "Vect_get_area_points_geos(): area = %d", area);
     
@@ -431,7 +431,7 @@ GEOSCoordSequence *Vect_get_area_points_geos(struct Map_info *Map, int area)
 GEOSCoordSequence *Vect_get_isle_points_geos(struct Map_info *Map, int isle)
 {
     struct Plus_head *Plus;
-    P_ISLE *Isle;
+    struct P_isle *Isle;
     
     G_debug(3, "Vect_get_isle_points_geos(): isle = %d", isle);
 

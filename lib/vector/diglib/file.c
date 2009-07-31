@@ -29,13 +29,13 @@
 #include <grass/glocale.h>
 
 /*!
-  \brief Get GVFILE position.
+  \brief Get struct gvfile position.
 
-  \param file pointer to GVFILE structure
+  \param file pointer to struct gvfile structure
 
   \return current file position
 */
-off_t dig_ftell(GVFILE *file)
+off_t dig_ftell(struct gvfile *file)
 {
     if (file->loaded) /* using memory */
 	return (file->current - file->start);
@@ -44,7 +44,7 @@ off_t dig_ftell(GVFILE *file)
 }
 
 /*!
-  \brief Set GVFILE position.
+  \brief Set struct gvfile position.
  
   Start positions:
   
@@ -52,14 +52,14 @@ off_t dig_ftell(GVFILE *file)
    - SEEK_CUR (current position)
    - SEEK_END (end)
   
-  \param file pointer to GVFILE structure
+  \param file pointer to struct gvfile structure
   \param offset offset position
   \param whence start position
 
   \return 0 OK
   \return -1 error
 */
-int dig_fseek(GVFILE * file, off_t offset, int whence)
+int dig_fseek(struct gvfile * file, off_t offset, int whence)
 {
     if (file->loaded) {	 /* using memory */
 	switch (whence) {
@@ -82,11 +82,11 @@ int dig_fseek(GVFILE * file, off_t offset, int whence)
 }
 
 /*!
-  \brief Rewind GVFILE position.
+  \brief Rewind file position.
  
-  \param file pointer to GVFILE structure
+  \param file pointer to gvfile structure
 */
-void dig_rewind(GVFILE * file)
+void dig_rewind(struct gvfile * file)
 {
     if (file->loaded) {	/* using memory */
 	file->current = file->start;
@@ -97,13 +97,13 @@ void dig_rewind(GVFILE * file)
 }
 
 /*!
-  \brief Flush GVFILE.
+  \brief Flush struct gvfile.
  
-  \param file pointer to GVFILE structure
+  \param file pointer to struct gvfile structure
 
   \return 0
 */
-int dig_fflush(GVFILE * file)
+int dig_fflush(struct gvfile * file)
 {
     if (file->loaded) {	/* using memory */
 	return 0;
@@ -114,16 +114,16 @@ int dig_fflush(GVFILE * file)
 }
 
 /*!
-  \brief Read GVFILE.
+  \brief Read struct gvfile.
  
   \param[out] ptr data buffer
   \param size buffer size
   \param nmemb number of members
-  \param file pointer to GVFILE structure
+  \param file pointer to struct gvfile structure
 
   \return number of read members
  */
-size_t dig_fread(void *ptr, size_t size, size_t nmemb, GVFILE *file)
+size_t dig_fread(void *ptr, size_t size, size_t nmemb, struct gvfile *file)
 {
     long tot;
     size_t cnt;
@@ -146,16 +146,16 @@ size_t dig_fread(void *ptr, size_t size, size_t nmemb, GVFILE *file)
 }
 
 /*!
-  \brief Write GVFILE.
+  \brief Write struct gvfile.
 
   \param ptr data buffer
   \param size buffer size
   \param nmemb number of members
-  \param[out] file pointer to GVFILE structure
+  \param[out] file pointer to struct gvfile structure
 
   \return number of items written
  */
-size_t dig_fwrite(const void *ptr, size_t size, size_t nmemb, GVFILE *file)
+size_t dig_fwrite(const void *ptr, size_t size, size_t nmemb, struct gvfile *file)
 {
     if (file->loaded) {	/* using memory */
 	G_fatal_error(_("Writing to file loaded to memory not supported"));
@@ -165,11 +165,11 @@ size_t dig_fwrite(const void *ptr, size_t size, size_t nmemb, GVFILE *file)
 }
 
 /*!
-  \brief Initialize GVFILE.
+  \brief Initialize gvfile strcuture
   
-  \param[out] file pointer to GVFILE structure
+  \param[in,out] file pointer to gvfile structure
 */
-void dig_file_init(GVFILE *file)
+void dig_file_init(struct gvfile *file)
 {
     file->file = NULL;
     file->start = NULL;
@@ -181,17 +181,17 @@ void dig_file_init(GVFILE *file)
 }
 
 /*!
-  \brief Load opened GVFILE to memory.
+  \brief Load opened struct gvfile to memory.
  
   Warning: position in file is set to the beginning.
  
-  \param file pointer to GVFILE structure
+  \param file pointer to struct gvfile structure
 
   \return 1 loaded
   \return 0 not loaded
   \return -1 error
 */
-int dig_file_load(GVFILE * file)
+int dig_file_load(struct gvfile * file)
 {
     int ret, mode, load;
     const char *cmode;
@@ -266,11 +266,11 @@ int dig_file_load(GVFILE * file)
 }
 
 /*!
-  \brief Free GVFILE.
+  \brief Free struct gvfile.
 
-  \param file pointer to GVFILE structure
+  \param file pointer to struct gvfile structure
 */
-void dig_file_free(GVFILE * file)
+void dig_file_free(struct gvfile * file)
 {
     if (file->loaded) {
 	G_free(file->start);

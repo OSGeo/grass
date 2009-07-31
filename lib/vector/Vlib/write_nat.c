@@ -39,7 +39,7 @@
 static void delete_area_cats_from_cidx(struct Map_info *Map, int area)
 {
     int i;
-    P_AREA *Area;
+    struct P_area *Area;
     static struct line_cats *Cats = NULL;
 
     G_debug(3, "delete_area_cats_from_cidx() area = %d", area);
@@ -72,7 +72,7 @@ static void delete_area_cats_from_cidx(struct Map_info *Map, int area)
 static void add_area_cats_to_cidx(struct Map_info *Map, int area)
 {
     int i;
-    P_AREA *Area;
+    struct P_area *Area;
     static struct line_cats *Cats = NULL;
 
     G_debug(3, "add_area_cats_to_cidx() area = %d", area);
@@ -134,11 +134,11 @@ static void add_line_to_topo(struct Map_info *Map, int line,
     int type, node, next_line, area, side, sel_area, new_area[2];
 
     struct Plus_head *plus;
-    P_LINE *Line, *NLine;
-    P_NODE *Node;
-    P_AREA *Area;
+    struct P_line *Line, *NLine;
+    struct P_node *Node;
+    struct P_area *Area;
     
-    BOUND_BOX box, abox;
+    struct bound_box box, abox;
     
     plus = &(Map->plus);
     Line = plus->Line[line];
@@ -342,7 +342,7 @@ off_t V2_write_line_nat(struct Map_info *Map,
     int line;
     off_t offset;
     struct Plus_head *plus;
-    BOUND_BOX box;
+    struct bound_box box;
 
     line = 0;
     
@@ -491,7 +491,7 @@ off_t V1__rewrite_line_nat(struct Map_info *Map,
     int i, n_points;
     char rhead, nc;
     short field;
-    GVFILE *dig_fp;
+    struct gvfile *dig_fp;
 
     dig_set_cur_port(&(Map->head.port));
     dig_fp = &(Map->dig_fp);
@@ -583,7 +583,7 @@ off_t V1__rewrite_line_nat(struct Map_info *Map,
 int V1_delete_line_nat(struct Map_info *Map, off_t offset)
 {
     char rhead;
-    GVFILE *dig_fp;
+    struct gvfile *dig_fp;
 
     G_debug(3, "V1_delete_line_nat(), offset = %lu", (unsigned long) offset);
 
@@ -623,10 +623,10 @@ int V1_delete_line_nat(struct Map_info *Map, off_t offset)
 int V2_delete_line_nat(struct Map_info *Map, int line)
 {
     int ret, i, side, type = 0, first = 0, next_line, area;
-    P_LINE *Line = NULL;
-    P_AREA *Area;
+    struct P_line *Line = NULL;
+    struct P_area *Area;
     struct Plus_head *plus;
-    BOUND_BOX box, abox;
+    struct bound_box box, abox;
     int adjacent[4], n_adjacent = 0;
     static struct line_cats *Cats = NULL;
 
@@ -822,7 +822,7 @@ int V2_delete_line_nat(struct Map_info *Map, int line)
 int V1_restore_line_nat(struct Map_info *Map, off_t offset)
 {
     char rhead;
-    GVFILE *dig_fp;
+    struct gvfile *dig_fp;
     
     G_debug(3, "V1_restore_line_nat(), offset = %lu", (unsigned long) offset);
     
@@ -865,9 +865,9 @@ int V1_restore_line_nat(struct Map_info *Map, off_t offset)
 int V2_restore_line_nat(struct Map_info *Map, int line, off_t offset)
 {
     int i, ret, type;
-    P_LINE *Line;
+    struct P_line *Line;
     struct Plus_head *plus;
-    BOUND_BOX box;
+    struct bound_box box;
     
     static struct line_pnts *points = NULL;
     static struct line_cats *cats = NULL;

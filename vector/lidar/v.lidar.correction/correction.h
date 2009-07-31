@@ -12,8 +12,8 @@ P_Sparse_Correction(struct Map_info *, /**/
 		    struct Map_info *, /**/
 		    struct Map_info *, /**/
 		    struct Cell_head *, /**/
-		    BOUND_BOX, /**/
-		    BOUND_BOX, /**/
+		    struct bound_box, /**/
+		    struct bound_box, /**/
 		    double **, /**/
 		    double *, /**/
 		    int *, /**/

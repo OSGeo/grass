@@ -42,7 +42,7 @@ double split_distance;
 
 int geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 	 double min_area, int type, int mk_centr);
-int centroid(OGRGeometryH hGeom, CENTR * Centr, SPATIAL_INDEX * Sindex,
+int centroid(OGRGeometryH hGeom, CENTR * Centr, struct spatial_index * Sindex,
 	     int field, int cat, double min_area, int type);
 
 int main(int argc, char *argv[])
@@ -928,9 +928,9 @@ int main(int argc, char *argv[])
 	Vect_get_num_primitives(&Tmp, GV_BOUNDARY) > 0) {
 	int ret, centr, ncentr, otype, n_overlaps, n_nocat;
 	CENTR *Centr;
-	SPATIAL_INDEX si;
+	struct spatial_index si;
 	double x, y, total_area, overlap_area, nocat_area;
-	BOUND_BOX box;
+	struct bound_box box;
 	struct line_pnts *Points;
 	int nmodif;
 

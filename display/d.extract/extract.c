@@ -25,7 +25,7 @@ int extract(struct Map_info *In, struct Map_info *Out, int type,
     int screen_x, screen_y, cur_screen_x, cur_screen_y;
     double x1, y1, x2, y2;
     struct ilist *List, *CList;
-    BOUND_BOX box;
+    struct bound_box box;
     struct line_pnts *Points;
     struct line_cats *Cats;
 

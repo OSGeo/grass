@@ -30,7 +30,7 @@
 void
 P_Sparse_Correction(struct Map_info *In, struct Map_info *Out,
 		    struct Map_info *Terrain, struct Cell_head *Elaboration,
-		    BOUND_BOX General, BOUND_BOX Overlap, double **obs,
+		    struct bound_box General, struct bound_box Overlap, double **obs,
 		    double *param, int *line_num, double passoN,
 		    double passoE, double overlap, double HighThresh,
 		    double LowThresh, int nsplx, int nsply, int num_points,
@@ -302,7 +302,7 @@ struct Point *P_Read_Vector_Correction(struct Map_info *Map,
     struct Point *obs;
     struct line_pnts *points;
     struct line_cats *categories;
-    BOUND_BOX elaboration_box;
+    struct bound_box elaboration_box;
 
     pippo = dim_vect;
 

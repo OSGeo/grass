@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
     char mon[4], date[40], buf[1000];
     struct Map_info Old, New;
     int day, yr;
-    BOUND_BOX box;
+    struct bound_box box;
 
     double ztozero;
     double trans_params[7];	// xshift, ..., xscale, ..., zrot

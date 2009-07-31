@@ -1,5 +1,5 @@
-#ifndef GRASS_DGRAPH_H
-#define GRASS_DGRAPH_H
+#ifndef GRASS_DdglGraph_s_H
+#define GRASS_DdglGraph_s_H
 
 /* pg comes from "planar graph" */
 /* every edge is directed. Nevertheless, we can visit it on both sides */

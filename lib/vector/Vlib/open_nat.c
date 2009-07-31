@@ -26,7 +26,7 @@
 static char name_buf[GPATH_MAX];
 static int check_coor(struct Map_info *Map);
 
-/**
+/*!
    \brief Open existing vector map
 
    Map->name and Map->mapset must be set before.
@@ -45,13 +45,13 @@ int V1_open_old_nat(struct Map_info *Map, int update)
     G_debug(1, "V1_open_old_nat(): name = %s mapset = %s", Map->name,
 	    Map->mapset);
 
-    sprintf(buf, "%s/%s", GRASS_VECT_DIRECTORY, Map->name);
+    sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
     dig_file_init(&(Map->dig_fp));
     if (update)
-	Map->dig_fp.file = G_fopen_modify(buf, GRASS_VECT_COOR_ELEMENT);
+	Map->dig_fp.file = G_fopen_modify(buf, GV_COOR_ELEMENT);
     else
 	Map->dig_fp.file =
-	    G_fopen_old(buf, GRASS_VECT_COOR_ELEMENT, Map->mapset);
+	    G_fopen_old(buf, GV_COOR_ELEMENT, Map->mapset);
 
     if (Map->dig_fp.file == NULL) {
         G_warning(_("Unable to open coor file for vector map <%s>"), Map->name);
@@ -77,13 +77,12 @@ int V1_open_old_nat(struct Map_info *Map, int update)
     return 0;
 }
 
-/**
-   \brief Open/Create new vector map.
+/*!
+   \brief Open/Create new vector map (level 1)
 
-   \param[out] Map pointer to vector map
+   \param[out] Map pointer to Map_info structure
    \param name map name
    \param with_z 2D or 3D (unused?)
-
 
    \return 0 success
    \return -1 error 
@@ -95,7 +94,7 @@ int V1_open_new_nat(struct Map_info *Map, const char *name, int with_z)
 
     G_debug(1, "V1_open_new_nat(): name = %s", name);
 
-    sprintf(buf, "%s/%s", GRASS_VECT_DIRECTORY, name);
+    sprintf(buf, "%s/%s", GV_DIRECTORY, name);
 
     /* Set the 'coor' file version */
     Map->head.Version_Major = GV_COOR_VER_MAJOR;
@@ -105,13 +104,13 @@ int V1_open_new_nat(struct Map_info *Map, const char *name, int with_z)
 
     /* TODO open better */
     dig_file_init(&(Map->dig_fp));
-    Map->dig_fp.file = G_fopen_new(buf, GRASS_VECT_COOR_ELEMENT);
+    Map->dig_fp.file = G_fopen_new(buf, GV_COOR_ELEMENT);
     if (Map->dig_fp.file == NULL)
 	return (-1);
     fclose(Map->dig_fp.file);
 
     dig_file_init(&(Map->dig_fp));
-    Map->dig_fp.file = G_fopen_modify(buf, GRASS_VECT_COOR_ELEMENT);
+    Map->dig_fp.file = G_fopen_modify(buf, GV_COOR_ELEMENT);
     if (Map->dig_fp.file == NULL)
 	return (-1);
 
@@ -120,7 +119,7 @@ int V1_open_new_nat(struct Map_info *Map, const char *name, int with_z)
     if (stat(name_buf, &info) == 0)	/* file exists? */
 	unlink(name_buf);
 
-    G__file_name(name_buf, buf, GRASS_VECT_COOR_ELEMENT, G_mapset());
+    G__file_name(name_buf, buf, GV_COOR_ELEMENT, G_mapset());
 
     Map->head.size = 0;
     Map->head.head_size = GV_COOR_HEAD_SIZE + 4;

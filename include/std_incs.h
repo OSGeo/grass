@@ -16,7 +16,7 @@ extern char *realloc();
 #include <stdio.h>
 #include <signal.h>
 #include <sys/stat.h>
-#if defined(sparc) || defined (uts) || defined(SVR4) || defined(IGRAPH)
+#if defined(sparc) || defined (uts) || defined(SVR4) || defined(IdglGraph_s)
 #include <dirent.h>
 #else
 #include <sys/dir.h>

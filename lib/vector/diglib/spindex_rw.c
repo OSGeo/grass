@@ -42,13 +42,13 @@ struct FNode			/* node for file based index */
 /*!
    \brief Write spatial index to the file
 
-   \param[in,out] fp pointer to GVFILE
+   \param[in,out] fp pointer to struct gvfile
    \param ptr pointer to Plus_head structure
 
    \return 0 on success
    \return -1 on error
  */
-int dig_Wr_spidx_head(GVFILE * fp, struct Plus_head *ptr)
+int dig_Wr_spidx_head(struct gvfile * fp, struct Plus_head *ptr)
 {
     unsigned char buf[6];
     long length = 81;		/* header length in bytes */
@@ -252,13 +252,13 @@ int dig_Wr_spidx_head(GVFILE * fp, struct Plus_head *ptr)
 /*!
    \brief Read spatial index to the file
 
-   \param fp pointer to GVFILE
+   \param fp pointer to struct gvfile
    \param[in,out] ptr pointer to Plus_head structure
 
    \return 0 on success
    \return -1 on error
  */
-int dig_Rd_spidx_head(GVFILE * fp, struct Plus_head *ptr)
+int dig_Rd_spidx_head(struct gvfile * fp, struct Plus_head *ptr)
 {
     unsigned char buf[6];
     int byte_order;
@@ -574,16 +574,16 @@ int rtree_dump_node(FILE * fp, struct Node *n, int with_z)
    \brief Write RTree body from memory to sidx file
    Must be called when new or updated vector is closed
 
-   \param[out] fp pointer to GVFILE
-   \param startpos offset to GVFILE where to start writing out
+   \param[out] fp pointer to struct gvfile
+   \param startpos offset to struct gvfile where to start writing out
    \param t pointer to RTree
-   \param off_t_size size of off_t used to write GVFILE
+   \param off_t_size size of off_t used to write struct gvfile
 
    \return -1 on error
    \return offset to root node on success
  */
 
-static off_t rtree_write_to_sidx(GVFILE * fp, off_t startpos,
+static off_t rtree_write_to_sidx(struct gvfile * fp, off_t startpos,
 				 struct RTree *t, int off_t_size)
 {
     off_t nextfreepos = startpos;
@@ -666,16 +666,16 @@ static off_t rtree_write_to_sidx(GVFILE * fp, off_t startpos,
    \brief Load RTree body from sidx file to memory
    Must be called when old vector is opened in update mode
 
-   \param fp pointer to GVFILE
+   \param fp pointer to struct gvfile
    \param rootpos position of root node in file
    \param t pointer to RTree
-   \param off_t_size size of off_t used to read GVFILE
+   \param off_t_size size of off_t used to read struct gvfile
 
    \return -1 on error
    \return pointer to root node on success
  */
 
-struct Node *rtree_load_from_sidx(GVFILE * fp, off_t rootpos,
+struct Node *rtree_load_from_sidx(struct gvfile * fp, off_t rootpos,
 				  struct RTree *t, int off_t_size)
 {
     struct Node *newnode = NULL;
@@ -773,12 +773,12 @@ struct Node *rtree_load_from_sidx(GVFILE * fp, off_t rootpos,
 /*!
    \brief Write spatial index to the file
 
-   \param[out] fp pointer to GVFILE
+   \param[out] fp pointer to struct gvfile
    \param Plus pointer to Plus_head structure
 
    \return 0
  */
-int dig_Wr_spidx(GVFILE * fp, struct Plus_head *Plus)
+int dig_Wr_spidx(struct gvfile * fp, struct Plus_head *Plus)
 {
     G_debug(1, "dig_Wr_spidx()");
 
@@ -823,12 +823,12 @@ int dig_Wr_spidx(GVFILE * fp, struct Plus_head *Plus)
    \brief Read spatial index from spidx file
    Only needed when old vector is opened in update mode
 
-   \param fp pointer to GVFILE
+   \param fp pointer to struct gvfile
    \param[in,out] Plus pointer to Plus_head structure
 
    \return 0
  */
-int dig_Rd_spidx(GVFILE * fp, struct Plus_head *Plus)
+int dig_Rd_spidx(struct gvfile * fp, struct Plus_head *Plus)
 {
     G_debug(1, "dig_read_spindx()");
 

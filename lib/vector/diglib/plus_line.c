@@ -23,8 +23,8 @@ static int add_line(struct Plus_head *plus, int lineid, int type, const struct l
 		    off_t offset)
 {
     int node, lp;
-    P_LINE *line;
-    BOUND_BOX box;
+    struct P_line *line;
+    struct bound_box box;
 
     plus->Line[lineid] = dig_alloc_line();
     line = plus->Line[lineid];
@@ -185,8 +185,8 @@ dig_restore_line(struct Plus_head *plus, int lineid,
 int dig_del_line(struct Plus_head *plus, int line)
 {
     int i, mv;
-    P_LINE *Line;
-    P_NODE *Node;
+    struct P_line *Line;
+    struct P_node *Node;
 
     G_debug(3, "dig_del_line() line =  %d", line);
 
@@ -266,7 +266,7 @@ int dig_del_line(struct Plus_head *plus, int line)
  */
 plus_t dig_line_get_area(struct Plus_head * plus, plus_t line, int side)
 {
-    P_LINE *Line;
+    struct P_line *Line;
 
     Line = plus->Line[line];
     if (side == GV_LEFT) {
@@ -299,7 +299,7 @@ plus_t dig_line_get_area(struct Plus_head * plus, plus_t line, int side)
 int
 dig_line_set_area(struct Plus_head *plus, plus_t line, int side, plus_t area)
 {
-    P_LINE *Line;
+    struct P_line *Line;
 
     Line = plus->Line[line];
     if (side == GV_LEFT) {
@@ -321,9 +321,9 @@ dig_line_set_area(struct Plus_head *plus, plus_t line, int side, plus_t area)
  *
  * \return 1
  */
-int dig_line_set_box(struct Plus_head *plus, plus_t line, BOUND_BOX * Box)
+int dig_line_set_box(struct Plus_head *plus, plus_t line, struct bound_box * Box)
 {
-    P_LINE *Line;
+    struct P_line *Line;
 
     Line = plus->Line[line];
 
@@ -346,9 +346,9 @@ int dig_line_set_box(struct Plus_head *plus, plus_t line, BOUND_BOX * Box)
  *
  * \return 1
  */
-int dig_line_get_box(struct Plus_head *plus, plus_t line, BOUND_BOX * Box)
+int dig_line_get_box(struct Plus_head *plus, plus_t line, struct bound_box * Box)
 {
-    P_LINE *Line;
+    struct P_line *Line;
 
     Line = plus->Line[line];
 

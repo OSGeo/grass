@@ -171,7 +171,7 @@ int Vect_build_partial(struct Map_info *Map, int build)
     if (plus->built >= GV_BUILD_AREAS) {
 	int line, nlines, area, nareas, err_boundaries, err_centr_out,
 	    err_centr_dupl, err_nocentr;
-	P_LINE *Line;
+	struct P_line *Line;
 	struct Plus_head *Plus;
 
 	/* Count errors (it does not take much time comparing to build process) */
@@ -243,14 +243,14 @@ int Vect_save_topo(struct Map_info *Map)
 {
     struct Plus_head *plus;
     char fname[GPATH_MAX], buf[GPATH_MAX];
-    GVFILE fp;
+    struct gvfile fp;
 
     G_debug(1, "Vect_save_topo()");
 
     plus = &(Map->plus);
 
     /*  write out all the accumulated info to the plus file  */
-    sprintf(buf, "%s/%s", GRASS_VECT_DIRECTORY, Map->name);
+    sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
     G__file_name(fname, buf, GV_TOPO_ELEMENT, Map->mapset);
     G_debug(1, "Open topo: %s", fname);
     dig_file_init(&fp);
@@ -285,11 +285,11 @@ int Vect_save_topo(struct Map_info *Map)
 int Vect_topo_dump(const struct Map_info *Map, FILE * out)
 {
     int i, j, line, isle;
-    P_NODE *Node;
-    P_LINE *Line;
-    P_AREA *Area;
-    P_ISLE *Isle;
-    BOUND_BOX box;
+    struct P_node *Node;
+    struct P_line *Line;
+    struct P_area *Area;
+    struct P_isle *Isle;
+    struct bound_box box;
     const struct Plus_head *plus;
 
     plus = &(Map->plus);
@@ -417,11 +417,11 @@ int Vect_build_sidx_from_topo(struct Map_info *Map)
 {
     int i, total, done;
     struct Plus_head *plus;
-    BOUND_BOX box;
-    P_LINE *Line;
-    P_NODE *Node;
-    P_AREA *Area;
-    P_ISLE *Isle;
+    struct bound_box box;
+    struct P_line *Line;
+    struct P_node *Node;
+    struct P_area *Area;
+    struct P_isle *Isle;
 
     G_debug(3, "Vect_build_sidx_from_topo()");
 
@@ -532,7 +532,7 @@ int Vect_save_sidx(struct Map_info *Map)
     if (Map->plus.Spidx_new == 1) {
 
 	/*  write out rtrees to sidx file  */
-	sprintf(buf, "%s/%s", GRASS_VECT_DIRECTORY, Map->name);
+	sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
 	G__file_name(fname, buf, GV_SIDX_ELEMENT, Map->mapset);
 	G_debug(1, "Open sidx: %s", fname);
 	dig_file_init(&(Map->plus.spidx_fp));

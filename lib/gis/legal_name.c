@@ -1,17 +1,14 @@
-
-/**
- * \file legal_name.c
+/*!
+ * \file gis/legal_name.c
  *
  * \brief GIS Library - Functions to handle file name legality.
  *
- * (C) 2001-2008 by the GRASS Development Team
+ * (C) 2001-2009 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author GRASS GIS Development Team
- *
- * \date 1999-2006
+ * \author Original author CERL
  */
 
 #include <stdio.h>
@@ -20,51 +17,51 @@
 #include <grass/glocale.h>
 
 
-/**
+/*!
  * \brief Check for legal database file name.
  *
- * Legal file names will <b>not</b> begin with '.' or NULL and must 
- * not contain the characters, ' ' (space), '/', '"'. '\'' (single 
+ * Legal file names will <b>not</b> begin with '.' or NULL and must
+ * not contain the characters, ' ' (space), '/', '"'. '\'' (single
  * quote), '@', ',', '=', '*', and all other non-alphanumeric
  * characters within.
  *
- * \param[in] s file name to check
+ * \param s file name to check
+ *
  * \return 1 success
  * \return -1 failure
  */
-
 int G_legal_filename(const char *s)
 {
+    const char *name = s;
+    
     if (*s == '.' || *s == 0) {
-	fprintf(stderr, _("Illegal filename.  Cannot be '.' or 'NULL'\n"));
+	G_warning(_("Illegal filename <%s>. Cannot be '.' or 'NULL'."), name);
 	return -1;
     }
 
     for (; *s; s++)
 	if (*s == '/' || *s == '"' || *s == '\'' || *s <= ' ' ||
 	    *s == '@' || *s == ',' || *s == '=' || *s == '*' || *s > 0176) {
-	    fprintf(stderr,
-		    _("Illegal filename. Character <%c> not allowed.\n"), *s);
+	    G_warning(_("Illegal filename <%s>. Character <%c> not allowed.\n"), name, *s);
 	    return -1;
 	}
-
+    
     return 1;
 }
 
-
-/**
+/*!
  * \brief Check input and output file names.
  *
- * Check: 1) output is legal map name, 2) if can find input map, and 3) 
- * if input was found in current mapset, check if input != output.
+ * Check: 1) output is legal map name, 2) if can find input map, and
+ * 3) if input was found in current mapset, check if input != output.
  *
- * \param[in] input name
- * \param[out] output name
- * \param[in] error error type: GR_FATAL_EXIT, GR_FATAL_PRINT, GR_FATAL_RETURN
+ * \param input input map name
+ * \param output output map name
+ * \param error error type: GR_FATAL_EXIT, GR_FATAL_PRINT, GR_FATAL_RETURN
+ *
  * \return 0 OK
  * \return 1 error
  */
-
 int G_check_input_output_name(const char *input, const char *output,
 			      int error)
 {

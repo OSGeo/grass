@@ -370,7 +370,7 @@ Vect_find_poly_centroid(const struct line_pnts *points,
    int area,
    double cent_x, double cent_y)
    {
-   P_AREA *Area;
+   struct P_area *Area;
    static struct line_pnts *TPoints;
    static int first_time = 1;
    int isle;
@@ -698,8 +698,8 @@ Vect_point_in_area_outer_ring(double X, double Y, const struct Map_info *Map,
     int i, line;
     static struct line_pnts *Points;
     const struct Plus_head *Plus;
-    P_LINE *Line;
-    P_AREA *Area;
+    struct P_line *Line;
+    struct P_area *Area;
 
     G_debug(3, "Vect_point_in_area_outer_ring(): x = %f y = %f area = %d", X,
 	    Y, area);
@@ -762,8 +762,8 @@ int Vect_point_in_island(double X, double Y, const struct Map_info *Map, int isl
     int i, line;
     static struct line_pnts *Points;
     const struct Plus_head *Plus;
-    P_LINE *Line;
-    P_ISLE *Isle;
+    struct P_line *Line;
+    struct P_isle *Isle;
 
     G_debug(3, "Vect_point_in_island(): x = %f y = %f isle = %d", X, Y, isle);
 

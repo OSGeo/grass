@@ -32,12 +32,12 @@
    \return number of lines
  */
 int
-Vect_select_lines_by_box(struct Map_info *Map, const BOUND_BOX * Box,
+Vect_select_lines_by_box(struct Map_info *Map, const struct bound_box * Box,
 			 int type, struct ilist *list)
 {
     int i, line, nlines;
     struct Plus_head *plus;
-    P_LINE *Line;
+    struct P_line *Line;
     static struct ilist *LocList = NULL;
 
     G_debug(3, "Vect_select_lines_by_box()");
@@ -86,7 +86,7 @@ Vect_select_lines_by_box(struct Map_info *Map, const BOUND_BOX * Box,
    \return number of areas
  */
 int
-Vect_select_areas_by_box(struct Map_info *Map, const BOUND_BOX * Box,
+Vect_select_areas_by_box(struct Map_info *Map, const struct bound_box * Box,
 			 struct ilist *list)
 {
     int i;
@@ -137,7 +137,7 @@ Vect_select_areas_by_box(struct Map_info *Map, const BOUND_BOX * Box,
    \return number of isles
  */
 int
-Vect_select_isles_by_box(struct Map_info *Map, const BOUND_BOX * Box,
+Vect_select_isles_by_box(struct Map_info *Map, const struct bound_box * Box,
 			 struct ilist *list)
 {
     G_debug(3, "Vect_select_isles_by_box()");
@@ -165,7 +165,7 @@ Vect_select_isles_by_box(struct Map_info *Map, const BOUND_BOX * Box,
    \return number of nodes
  */
 int
-Vect_select_nodes_by_box(struct Map_info *Map, const BOUND_BOX * Box,
+Vect_select_nodes_by_box(struct Map_info *Map, const struct bound_box * Box,
 			 struct ilist *list)
 {
     struct Plus_head *plus;
@@ -209,7 +209,7 @@ Vect_select_lines_by_polygon(struct Map_info *Map, struct line_pnts *Polygon,
 			     struct ilist *List)
 {
     int i;
-    BOUND_BOX box;
+    struct bound_box box;
     static struct line_pnts *LPoints = NULL;
     static struct ilist *LocList = NULL;
 
