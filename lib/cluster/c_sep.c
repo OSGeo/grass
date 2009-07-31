@@ -1,8 +1,28 @@
+/*!
+  \file cluster/c_sep.c
+  
+  \brief Cluster library - Separation
+  
+  (C) 2001-2009 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Original author CERL
+*/
+
 #include <math.h>
 #include <grass/cluster.h>
 
 #define FAR ((double) -1.0)
 
+/*!
+  \brief ?
+
+  \param C pointer to Cluster structure
+  \param class1 1st class
+  \param class2 2nd class
+*/
 double I_cluster_separation(struct Cluster *C, int class1, int class2)
 {
     int band;

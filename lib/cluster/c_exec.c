@@ -1,25 +1,31 @@
+/*!
+  \file cluster/c_exec.c
+  
+  \brief Cluster library - Exectute clusterring
+  
+  (C) 2001-2009 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Original author CERL
+*/
 
-/***************************************************************
- *
- * I_cluster_exec (C, maxclass, iterations,
- *               convergence, separation, min_class_size,
- *               checkpoint, interrupted)
- *
- *  maxclass       maximum number of classes
- *  iterations     maximum number of iterations
- *  convergence    percentage of points stable
- *  separation     minimum distance between class centroids
- *  checkpoint     routine to be called at various steps
- *  interrupted    boolean to check for interrupt
- *
- * returns:
- *   0 ok
- *  -1 out of memory
- *  -2 interrupted
- *   1 not enough data points
- *************************************************************/
 #include <grass/cluster.h>
 
+/*!
+  \param maxclass maximum number of classes
+  \param iterations maximum number of iterations
+  \param convergence percentage of points stable
+  \param separation minimum distance between class centroids
+  \param checkpoint routine to be called at various steps
+  \param interrupted boolean to check for interrupt
+
+  \return 0 ok
+  \return -1 out of memory
+  \return -2 interrupted
+  \return 1 not enough data points
+*/
 int I_cluster_exec(struct Cluster *C, int maxclass, int iterations,
 		   double convergence,
 		   double separation, int min_class_size,
@@ -32,7 +38,7 @@ int I_cluster_exec(struct Cluster *C, int maxclass, int iterations,
 
     /* check for valid inputs */
     if (C->npoints < 2) {
-	fprintf(stderr, "cluster: not enough data points (%d)\n", C->npoints);
+	G_warning(_("Not enough data points (%d) in cluster"), C->npoints);
 	return 1;
     }
 

@@ -1,21 +1,15 @@
-
-/****************************************************************
- * I_cluster_point (C,x)
- *     struct Cluster *C;
- *     DCELL *x;
- *
- * adds the point x to the list of data points to be "clustered"
- *
- * returns
- *   0  ok
- *  -1  out of memory, point not added
- *   1  all values are zero, point not added
- *
- * the dimension of x must agree with the number of bands specified
- * in the initializing call to I_cluster_begin()
- *
- * note: if all values in x are zero, the point is rejected
- ***************************************************************/
+/*!
+  \file cluster/c_point.c
+  
+  \brief Cluster library - Add point 
+  
+  (C) 2001-2009 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Original author CERL
+*/
 
 #include <grass/raster.h>
 #include <grass/cluster.h>
@@ -23,6 +17,18 @@
 static int extend(struct Cluster *, int);
 static int all_zero(struct Cluster *, int);
 
+/*!
+  \brief Adds the point x to the list of data points to be "clustered"
+  
+  The dimension of x must agree with the number of bands specified
+  in the initializing call to I_cluster_begin()
+  
+  Note: if all values in x are zero, the point is rejected
+  
+  \return 0 ok
+  \return -1 out of memory, point not added
+  \return 1 all values are null, point not added
+*/
 int I_cluster_point(struct Cluster *C, DCELL * x)
 {
     int band;
@@ -53,11 +59,32 @@ int I_cluster_point(struct Cluster *C, DCELL * x)
     return 0;
 }
 
+/*!
+  \brief Begin point set
+
+  \param C pointer to Cluster structure
+  \param n ?
+
+  \return 0 on success
+  \return -1 on error
+*/
 int I_cluster_begin_point_set(struct Cluster *C, int n)
 {
     return extend(C, n) ? 0 : -1;
 }
 
+/*!
+  \brief ?
+
+  \param C pointer to Cluster structure
+  \param x cell value
+  \param band band number
+  \param n ?
+
+  \return 0 ok
+  \return -1 out of memory, point not added
+  \return 1 all values are null, point not added
+*/  
 int I_cluster_point_part(struct Cluster *C, DCELL x, int band, int n)
 {
     DCELL tmp = x;
@@ -71,6 +98,14 @@ int I_cluster_point_part(struct Cluster *C, DCELL x, int band, int n)
     return 0;
 }
 
+/*!
+  \brief ?
+
+  \param C pointer to Cluster structure
+  \param n ?
+
+  \return number of points
+*/
 int I_cluster_end_point_set(struct Cluster *C, int n)
 {
     int band;
