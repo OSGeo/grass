@@ -663,7 +663,7 @@ int main(int argc, char *argv[])
 		G_debug(3, "Ogr_ftype: %i", Ogr_ftype);	/* look up below */
 
 		if (i < ncnames - 1) {
-		    Ogr_fieldname = strdup(cnames_opt->answers[i + 1]);
+		    Ogr_fieldname = G_strdup(cnames_opt->answers[i + 1]);
 		}
 		else {
 		    /* Change column names to [A-Za-z][A-Za-z0-9_]* */
@@ -679,7 +679,7 @@ int main(int argc, char *argv[])
 		/* avoid that we get the 'cat' column twice */
 		if (strcmp(Ogr_fieldname, "cat") == 0) {
 		    sprintf(namebuf, "%s_", Ogr_fieldname);
-		    Ogr_fieldname = strdup(namebuf);
+		    Ogr_fieldname = G_strdup(namebuf);
 		}
 
 		/* captial column names are a pain in SQL */
