@@ -49,6 +49,7 @@ int main(int argc, char *argv[])
     double minNS, minEW, maxNS, maxEW;
     const char *mapset;
     char buf[1024];
+    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
     int colorBordo, ripieno, conta, lungPunti, lungHull, xi, c1, c2;
     double altPiano;
@@ -121,6 +122,8 @@ int main(int argc, char *argv[])
     /* Open input vector */
     Vect_check_input_output_name(in_opt->answer, out_opt->answer,
 				 GV_FATAL_EXIT);
+    if(G__name_is_fully_qualified(in_opt->answer, xname, xmapset) < 0 ) /* strip off mapset from input for SQL*/
+	G_fatal_error(_("Vector map <%s> not found"), xname);
     if ((mapset = G_find_vector2(in_opt->answer, "")) == NULL) {
 	G_fatal_error(_("Vector map <%s> not found"), in_opt->answer);
     }
@@ -173,11 +176,12 @@ int main(int argc, char *argv[])
     db_zero_string(&sql);
 
     sprintf(buf, "SELECT Interp,ID FROM %s_edge_Interpolation",
-	    in_opt->answer);
+	    xname);
+    G_debug(1,"buf: %s", buf);
     db_append_string(&sql, buf);
 
     if (db_open_select_cursor(driver, &sql, &cursor, DB_SEQUENTIAL) != DB_OK)
-	G_fatal_error(_("Unable to create table <%s_edge_Interpolation>"), in_opt->answer);
+	G_fatal_error(_("Unable to create table <%s_edge_Interpolation>"), xname);
 
     count_obj = 1;
 
@@ -498,6 +502,6 @@ int main(int argc, char *argv[])
 
     db_close_database_shutdown_driver(driver);
 
-    G_done_msg("");
+    G_done_msg(" ");
     exit(EXIT_SUCCESS);
 }
