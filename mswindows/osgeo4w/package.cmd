@@ -1,7 +1,7 @@
 path %PATH%;%OSGEO4W_ROOT%\apps\swig
 set WXWIN=h:\windows\wxPython-src-2.8.9.1
 
-set GRASS_HOME=%OSGEO4W_ROOT%\apps\grass\grass-6.4.0RC3
+set GRASS_HOME=%OSGEO4W_ROOT%\apps\grass\grass-7.0.0
 set GRASS_INC=%GRASS_HOME%\include
 set GRASS_LPATH=%GRASS_HOME%\lib
 
