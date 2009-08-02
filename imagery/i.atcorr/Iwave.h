@@ -93,6 +93,15 @@ c        68  2nd band of liss (IRC 1C)( 0.502-0.620 )                  c
 c        69  3rd      "               ( 0.612-0.700 )                  c
 c        70  4th      "               ( 0.752-0.880 )                  c
 c        71  5th      "               ( 1.452-1.760 )                  c
+c        72  1st band of aster        ( 0.480-0.645 )                  c
+c        73  2nd      "               ( 0.588-0.733 )                  c
+c        74  3N       "               ( 0.723-0.913 )                  c
+c        75  4th      "               ( 1.530-1.750 )                  c
+c        76  5th      "               ( 2.103-2.285 )                  c
+c        77  6th      "               ( 2.105-2.298 )                  c
+c        78  7th      "               ( 2.200-2.393 )                  c
+c        79  8th      "               ( 2.248-2.475 )                  c
+c        80  9th      "               ( 2.295-2.538 )                  c
 c  note: wl has to be in micrometer                                    c
 c**********************************************************************/
 
@@ -128,6 +137,7 @@ private:
 	void polder(int iwa);
 	void etmplus(int iwa);
 	void irs_1c_liss(int iwa);
+	void aster(int iwa);
 
 
 public:
