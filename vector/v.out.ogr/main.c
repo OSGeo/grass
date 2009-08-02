@@ -171,8 +171,14 @@ int main(int argc, char *argv[])
     /* Check output type */
     otype = Vect_option_to_types(type_opt);
 
-    if (!layer_opt->answer)
-	layer_opt->answer = G_store(in_opt->answer);
+    if (!layer_opt->answer) {
+	char xname[GNAME_MAX],	xmapset[GMAPSET_MAX];
+	
+	if (G__name_is_fully_qualified(in_opt->answer, xname, xmapset))
+	    layer_opt->answer = G_store(xname);
+	else
+	    layer_opt->answer = G_store(in_opt->answer);
+    }
 
     if (otype & GV_POINTS)
 	wkbtype = wkbPoint;
@@ -228,7 +234,6 @@ int main(int argc, char *argv[])
     }
 
     /* Open OGR DSN */
-    OGRRegisterAll();
     G_debug(2, "driver count = %d", OGRGetDriverCount());
     drn = -1;
     for (i = 0; i < OGRGetDriverCount(); i++) {
@@ -256,7 +261,7 @@ int main(int argc, char *argv[])
 	i++;
     }
 
-    papszDSCO = dsco->answers;
+    G_debug(1, "Create OGR data source");
     Ogr_ds = OGR_Dr_CreateDataSource(Ogr_driver, dsn_opt->answer, papszDSCO);
     CSLDestroy(papszDSCO);
     if (Ogr_ds == NULL)
@@ -295,6 +300,7 @@ int main(int argc, char *argv[])
 	}
     }
 
+    G_debug(1, "Create OGR layer");
     Ogr_layer =
 	OGR_DS_CreateLayer(Ogr_ds, layer_opt->answer, Ogr_projection, wkbtype,
 			   papszLCO);
@@ -306,6 +312,7 @@ int main(int argc, char *argv[])
 
     /* Vector attributes -> OGR fields */
     if (field > 0) {
+	G_debug(1, "Create attribute table");
 	doatt = 1;		/* do attributes */
 	Fi = Vect_get_field(&In, field);
 	if (Fi == NULL) {
@@ -313,6 +320,7 @@ int main(int argc, char *argv[])
 
 	    Ogr_field = OGR_Fld_Create("cat", OFTInteger);
 	    OGR_L_CreateField(Ogr_layer, Ogr_field, 0);
+	    OGR_Fld_Destroy(Ogr_field);
 
 	    doatt = 0;
 	}
@@ -369,6 +377,7 @@ int main(int argc, char *argv[])
 		Ogr_field =
 		    OGR_Fld_Create(db_get_column_name(Column), ogr_ftype);
 		OGR_L_CreateField(Ogr_layer, Ogr_field, 0);
+		OGR_Fld_Destroy(Ogr_field);
 	    }
 	    if (keycol == -1)
 		G_fatal_error(_("Key column '%s' not found"), Fi->key);
@@ -601,6 +610,8 @@ int main(int argc, char *argv[])
 
 		OGR_G_AddGeometryDirectly(Ogr_geometry, ring);
 
+		OGR_F_SetGeometry(Ogr_feature, Ogr_geometry);
+
 		/* Output one feature for each category */
 		for (j = -1; j < Cats->n_cats; j++) {
 		    if (j == -1) {
@@ -617,8 +628,6 @@ int main(int argc, char *argv[])
 		    mk_att(cat, Fi, Driver, ncol, doatt, Ogr_feature);
 		    OGR_L_CreateFeature(Ogr_layer, Ogr_feature);
 		}
-
-		OGR_F_SetGeometry(Ogr_feature, Ogr_geometry);
 
 		OGR_G_DestroyGeometry(Ogr_geometry);
 	    }			/* if type & GV_FACE */
