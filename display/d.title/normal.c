@@ -7,7 +7,7 @@ void normal(struct Cell_head *window, struct Categories *cats,
 {
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
-    G__unqualified_name(map_name, G_mapset(), xname, xmapset);
+    G_unqualified_name(map_name, G_mapset(), xname, xmapset);
 
     fprintf(fp, ".C %s\n", color);
     fprintf(fp, ".S %f\n", size);

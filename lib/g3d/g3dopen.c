@@ -27,7 +27,7 @@ void *G3d_openCellOldNoHeader(const char *name, const char *mapset)
 	return (void *)NULL;
     }
 
-    G__unqualified_name(name, mapset, xname, xmapset);
+    G_unqualified_name(name, mapset, xname, xmapset);
 
     map->fileName = G_store(xname);
     map->mapset = G_store(xmapset);
@@ -225,7 +225,7 @@ void *G3d_openCellNew(const char *name, int typeIntern, int cache,
 	return (void *)NULL;
     }
 
-    if (G__unqualified_name(name, G_mapset(), xname, xmapset) < 0) {
+    if (G_unqualified_name(name, G_mapset(), xname, xmapset) < 0) {
 	G_warning(_("map <%s> is not in the current mapset"), name);
 	return (void *)NULL;
     }
