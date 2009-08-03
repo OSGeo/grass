@@ -171,7 +171,7 @@ int Rast__open_old(const char *name, const char *mapset)
 
     Rast__init();
 
-    G__unqualified_name(name, mapset, xname, xmapset);
+    G_unqualified_name(name, mapset, xname, xmapset);
     name = xname;
     mapset = xmapset;
 
@@ -584,7 +584,7 @@ static int G__open_raster_new(const char *name, int open_mode,
 	break;
     }
 
-    if (G__unqualified_name(name, G_mapset(), xname, xmapset) < 0)
+    if (G_unqualified_name(name, G_mapset(), xname, xmapset) < 0)
 	G_fatal_error(_("Raster map <%s> is not in the current mapset (%s)"),
 		      name, G_mapset());
     map = G_store(xname);
