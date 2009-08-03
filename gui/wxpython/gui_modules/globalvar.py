@@ -41,7 +41,10 @@ def CheckForWx():
         if map(int, version.split('.')) < minVersion:
             raise ValueError('Your wxPython version is %s.%s.%s.%s' % tuple(version.split('.')))
 
-    except (ImportError, ValueError, wxversion.VersionError), e:
+    except ImportError, e:
+        print >> sys.stderr, 'ERROR: wxGUI requires wxPython. %s' % str(e)
+        sys.exit(1)
+    except (ValueError, wxversion.VersionError), e:
         print >> sys.stderr, 'ERROR: wxGUI requires wxPython >= %d.%d.%d.%d. ' % tuple(minVersion) + \
             '%s. Detailed information in README file.' % (str(e))
         sys.exit(1)
