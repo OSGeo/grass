@@ -29,6 +29,10 @@ import re
 import atexit
 import subprocess
 
+# i18N
+import gettext
+gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'), unicode=True)
+
 # subprocess wrapper that uses shell on Windows
 
 class Popen(subprocess.Popen):
