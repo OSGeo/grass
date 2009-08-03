@@ -97,11 +97,11 @@ def main():
 
     #for -n flag of d.legend
     if not grass.find_file(map)['file']:
-	grass.fatal("Raster map <%s> not found in mapset search path" % map)
+	grass.fatal(_("Raster map <%s> not found in mapset search path") % map)
 
     # for rast=
     if rast and not grass.find_file(rast)['file']:
-	grass.fatal("Raster map <%s> not found in mapset search path" % rast)
+	grass.fatal(_("Raster map <%s> not found in mapset search path") % rast)
 
     s = grass.read_command('d.info', flags = 'f')
     f = tuple([float(x) for x in s.split()[1:5]])

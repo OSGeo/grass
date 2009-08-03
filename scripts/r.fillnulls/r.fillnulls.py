@@ -80,7 +80,7 @@ def main():
 
     #check if input file exists
     if not grass.find_file(input)['file']:
-	grass.fatal("<%s> does not exist." % input)
+	grass.fatal(_("<%s> does not exist.") % input)
 
     mapset = grass.gisenv()['MAPSET']
     unique = str(os.getpid())
@@ -88,7 +88,7 @@ def main():
     # check if a MASK is already present:
     usermask = "usermask_mask." + unique
     if grass.find_file('MASK', mapset = mapset)['file']:
-	grass.message("A user raster mask (MASK) is present. Saving it...")
+	grass.message(_("A user raster mask (MASK) is present. Saving it..."))
 	grass.run_command('g.rename', rast = ('MASK',usermask))
 
     #make a mask of NULL cells
@@ -97,7 +97,7 @@ def main():
     # idea: filter all NULLS and grow that area(s) by 3 pixel, then
     # interpolate from these surrounding 3 pixel edge
 
-    grass.message("Locating and isolating NULL areas...")
+    grass.message(_("Locating and isolating NULL areas..."))
     #creating 0/1 map:
     grass.mapcalc("$tmp1 = if(isnull($input),1,null())",
 		  tmp1 = tmp1, input = input)
@@ -113,65 +113,65 @@ def main():
     res = (float(reg['nsres']) + float(reg['ewres'])) * 3 / 2
 
     if grass.run_command('r.buffer', input = tmp1, distances = res, out = tmp1 + '.buf') != 0:
-	grass.fatal("abandoned. Removing temporary map, restoring user mask if needed:")
+	grass.fatal(_("abandoned. Removing temporary map, restoring user mask if needed:"))
 
     grass.mapcalc("MASK=if($tmp1.buf==2,1,null())", tmp1 = tmp1)
 
     # now we only see the outlines of the NULL areas if looking at INPUT.
     # Use this outline (raster border) for interpolating the fill data:
     vecttmp = "vecttmp_fillnulls_" + unique
-    grass.message("Creating interpolation points...")
+    grass.message(_("Creating interpolation points..."))
     if grass.run_command('r.to.vect', input = input, output = vecttmp, feature = 'point'):
-	grass.fatal("abandoned. Removing temporary maps, restoring user mask if needed:")
+	grass.fatal(_("abandoned. Removing temporary maps, restoring user mask if needed:"))
 
     # count number of points to control segmax parameter for interpolation:
     pointsnumber = grass.vector_info_topo(map = vecttmp)['points']
 
-    grass.message("Interpolating %d points" % pointsnumber)
+    grass.message(_("Interpolating %d points") % pointsnumber)
 
     if pointsnumber < 2:
-	grass.fatal("Not sufficient points to interpolate. Maybe no hole(s) to fill in the current map region?")
+	grass.fatal(_("Not sufficient points to interpolate. Maybe no hole(s) to fill in the current map region?"))
 
-    grass.message("Note: The following warnings may be ignored.")
+    grass.message(_("Note: The following warnings may be ignored."))
 
     # remove internal MASK first -- WHY???? MN 10/2005
     grass.run_command('g.remove', rast = 'MASK')
 
     if grass.find_file(usermask, mapset = mapset)['file']:
-	grass.message("Using user mask while interpolating")
+	grass.message(_("Using user mask while interpolating"))
 	maskmap = usermask
     else:
 	maskmap = None
 
     segmax = 600
     if pointsnumber > segmax:
-	grass.message("Using segmentation for interpolation...")
+	grass.message(_("Using segmentation for interpolation..."))
 	segmax = None
     else:
-	grass.message("Using no segmentation for interpolation as not needed...")
+	grass.message(_("Using no segmentation for interpolation as not needed..."))
 
     grass.run_command('v.surf.rst', input = vecttmp, elev = tmp1 + '_filled',
 		      zcol = 'value', tension = tension, smooth = smooth,
 		      maskmap = maskmap, segmax = segmax)
 
-    grass.message("Note: Above warnings may be ignored.")
+    grass.message(_("Note: Above warnings may be ignored."))
 
     # restoring user's mask, if present:
     if grass.find_file(usermask, mapset = mapset)['file']:
-	grass.message("Restoring user mask (MASK)...")
+	grass.message(_("Restoring user mask (MASK)..."))
 	grass.run_command('g.rename', rast = (usermask, 'MASK'))
 
     # patch orig and fill map
-    grass.message("Patching fill data into NULL areas...")
+    grass.message(_("Patching fill data into NULL areas..."))
     # we can use --o here as g.parser already checks on startup
     grass.run_command('r.patch', input = (input,tmp1 + '_filled'), output = output, overwrite = True)
 
-    grass.message("Filled raster map is: %s" % output)
+    grass.message(_("Filled raster map is: %s") % output)
 
     # write cmd history:
     grass.raster_history(output)
 
-    grass.message("Done.")
+    grass.message(_("Done."))
 
 if __name__ == "__main__":
     options, flags = grass.parser()

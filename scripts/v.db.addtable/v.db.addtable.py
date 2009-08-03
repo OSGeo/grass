@@ -65,20 +65,20 @@ def main():
 
     # does map exist in CURRENT mapset?
     if not grass.find_file(map, element = 'vector', mapset = mapset)['file']:
-	grass.fatal("Vector map <%s> not found in current mapset" % map)
+	grass.fatal(_("Vector map <%s> not found in current mapset") % map)
 
     map_name = map.split('@')[0]
 
     if not table:
 	if layer == '1':
-	    grass.message("Using vector map name as table name: " + map_name)
+	    grass.message(_("Using vector map name as table name: ") + map_name)
 	    table = map_name
 	else:
 	    # to avoid tables with identical names on higher layers
-	    grass.message("Using vector map name extended by layer number as table name: %s_%s" % (map_name, layer))
+	    grass.message(_("Using vector map name extended by layer number as table name: %s_%s") % (map_name, layer))
 	    table = "%s_%s" % (map_name, layer)
     else:
-	grass.message("Using user specified table name: " + table)
+	grass.message(_("Using user specified table name: ") + table)
 
     # check if DB parameters are set, and if not set them.
     grass.run_command('db.connect', flags = 'c')
@@ -92,7 +92,7 @@ def main():
 	driver = f['driver']
     else:
 	# nothing defined
-	grass.message("Creating new DB connection based on default mapset settings...")
+	grass.message(_("Creating new DB connection based on default mapset settings..."))
 	kv = grass.db_connection()
 	database = kv['database']
 	driver = kv['driver']
@@ -100,7 +100,7 @@ def main():
     # maybe there is already a table linked to the selected layer?
     try:
         grass.vector_db(map, stderr = nuldev)[int(layer)]
-	grass.fatal("There is already a table linked to layer <%s>" % layer)
+	grass.fatal(_("There is already a table linked to layer <%s>") % layer)
     except KeyError:
         pass
     
@@ -121,21 +121,21 @@ def main():
 	    column_def.append("cat integer")
 	column_def = ','.join(column_def)
 
-	grass.message("Creating table with columns (%s)" % column_def)
+	grass.message(_("Creating table with columns (%s)") % column_def)
 
 	# take care if the DBF directory is missing (heck, the DBF driver should take care!)
 	if driver == "dbf":
 	    env = grass.gisenv()
 	    path = os.path.join(env['GISDBASE'], env['LOCATION_NAME'], env['MAPSET'], "dbf")
 	    if not os.path.isdir(path):
-		grass.message("Creating missing DBF directory in mapset <%s>" % env['MAPSET'])
+		grass.message(_("Creating missing DBF directory in mapset <%s>") % env['MAPSET'])
 		os.mkdir(path)
 		grass.run_command('db.connect', driver = dbf, database = '$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/')
 
     sql = "CREATE TABLE %s (%s)" % (table, column_def)
 
     if grass.write_command('db.execute', input = '-', database = database, driver = driver, stdin = sql) != 0:
-	grass.fatal("Cannot continue.")
+	grass.fatal(_("Cannot continue."))
 
     # connect the map to the DB:
     grass.run_command('v.db.connect', map = map, database = database, driver = driver,
@@ -147,7 +147,7 @@ def main():
                       option = 'cat', column = 'cat', qlayer = layer)
 
     if grass.verbosity() > 0:
-	grass.message("Current attribute table links:")
+	grass.message(_("Current attribute table links:"))
 	grass.run_command('v.db.connect', flags = 'p', map = map)
 
     # write cmd history:

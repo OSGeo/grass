@@ -104,7 +104,7 @@ def main():
     tmp = str(os.getpid())
 
     if not landsat and not quickbird and not spot:
-	grass.fatal("Please select a flag to specify the satellite sensor")
+	grass.fatal(_("Please select a flag to specify the satellite sensor"))
 
     #get PAN resolution:
     kv = grass.raster_info(map = pan)
@@ -133,7 +133,7 @@ def main():
     # r.mapcalc "brov.blue= 1. * spot.ms.1 / (spot.ms.1 + spot.ms.2 + spot.ms.3) * spot.p"
     # note: for RGB composite then revert brov.red and brov.green!
 
-    grass.message("Calculating %s.{red,green,blue}: ..." % out)
+    grass.message(_("Calculating %s.{red,green,blue}: ...") % out)
     e = '''eval(k = float("$pan") / ("$ms1" + "$ms2" + "$ms3"))
 	   "$out.red"   = "$ms3" * k
 	   "$out.green" = "$ms2" * k
@@ -154,23 +154,23 @@ def main():
 
     if spot:
         #apect table is nice for SPOT:
-	grass.message("Assigning color tables for SPOT...")
+	grass.message(_("Assigning color tables for SPOT..."))
 	for ch in ['red', 'green', 'blue']:
 	    grass.run_command('r.colors', map = "%s.%s" % (out, ch), col = 'aspect')
-	grass.message("Fixing output names...")
+	grass.message(_("Fixing output names..."))
 	for s, d in [('green','tmp'),('red','green'),('tmp','red')]:
 	    src = "%s.%s" % (out, s)
 	    dst = "%s.%s" % (out, d)
 	    grass.run_command('g.rename', rast = (src, dst), quiet = True)
     else:
 	#aspect table is nice for LANDSAT and QuickBird:
-	grass.message("Assigning color tables for LANDSAT or QuickBird...")
+	grass.message(_("Assigning color tables for LANDSAT or QuickBird..."))
 	for ch in ['red', 'green', 'blue']:
 	    grass.run_command('r.colors', map = "%s.%s" % (out, ch), col = 'aspect')
 
-    grass.message("Following pan-sharpened output maps have been generated:")
+    grass.message(_("Following pan-sharpened output maps have been generated:"))
     for ch in ['red', 'green', 'blue']:
-	grass.message("%s.%s" % (out, ch))
+	grass.message(_("%s.%s") % (out, ch))
 
     grass.verbose("To visualize output, run:")
     grass.verbose("g.region -p rast=%s.red" % out)

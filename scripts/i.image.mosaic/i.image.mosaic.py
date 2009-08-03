@@ -78,7 +78,7 @@ def main():
 
     count = len(images)
 
-    grass.warning('Do not forget to set region properly to cover all images.')
+    grass.warning(_('Do not forget to set region properly to cover all images.'))
 
     offset = 0
     offsets = []
@@ -89,7 +89,7 @@ def main():
 	parms['offset%d' % (n + 1)] = offset
 	offset += get_limit(img) + 1
 
-    grass.message("Mosaicing %d images..." % count)
+    grass.message(_("Mosaicing %d images...") % count)
 
     grass.mapcalc("$output = " + make_expression(1, count),
 		  output = output, **parms)
@@ -102,7 +102,7 @@ def main():
     p.stdin.close()
     p.wait()
 
-    grass.message("Ready. File %s created." % output)
+    grass.message(_("Ready. File %s created.") % output)
 
     # write cmd history:
     grass.raster_history(output)

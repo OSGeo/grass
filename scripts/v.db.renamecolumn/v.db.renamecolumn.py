@@ -62,7 +62,7 @@ def main():
     mapset = grass.gisenv()['MAPSET']
 
     if not grass.find_file(map, element = 'vector', mapset = mapset):
-	grass.fatal("Vector map <%s> not found in current mapset" % map)
+	grass.fatal(_("Vector map <%s> not found in current mapset") % map)
 
     f = grass.vector_layer_db(map, layer)
 
@@ -72,7 +72,7 @@ def main():
     driver = f['driver']
 
     if not table:
-	grass.fatal("There is no table connected to the input vector map. Cannot rename any column")
+	grass.fatal(_("There is no table connected to the input vector map. Cannot rename any column"))
 
     cols = column.split(',')
     oldcol = cols[0]
@@ -80,10 +80,10 @@ def main():
 
     if driver == "dbf":
 	if len(newcol) > 10:
-	    grass.fatal("Column name <%s> too long. The DBF driver supports column names not longer than 10 characters" % newcol)
+	    grass.fatal(_("Column name <%s> too long. The DBF driver supports column names not longer than 10 characters") % newcol)
 
     if oldcol == keycol:
-	grass.fatal("Cannot rename column <%s> as it is needed to keep table <%s> connected to the input vector map" % (oldcol, table))
+	grass.fatal(_("Cannot rename column <%s> as it is needed to keep table <%s> connected to the input vector map") % (oldcol, table))
 
     # describe old col
     oldcoltype = None
@@ -95,7 +95,7 @@ def main():
 
     # old col there?
     if not oldcol:
-	grass.fatal("Column <%s> not found in table <%s>" % (coldcol, table))
+	grass.fatal(_("Column <%s> not found in table <%s>") % (coldcol, table))
 
     # some tricks
     if driver in ['sqlite', 'dbf']:

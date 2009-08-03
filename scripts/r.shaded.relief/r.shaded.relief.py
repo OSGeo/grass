@@ -121,10 +121,10 @@ def main():
     units = options['units']
 
     if not grass.find_file(input)['file']:
-	grass.fatal("Map <%s> not found." % input)
+	grass.fatal(_("Map <%s> not found.") % input)
 
     if input == output:
-	grass.fatal("Input elevation map and output relief map must have different names")
+	grass.fatal(_("Input elevation map and output relief map must have different names"))
 
     elev = input
 
@@ -152,7 +152,7 @@ def main():
     #  this seems to be backwards, but in fact it works so leave it.
     az = float(azimuth) - 90
 
-    grass.message("Calculating shading, please stand by.")
+    grass.message(_("Calculating shading, please stand by."))
 
     t = string.Template(
 	r'''eval( \
@@ -173,7 +173,7 @@ def main():
     p.stdin.close()
 
     if p.wait() != 0:
-	grass.fatal("In calculation, script aborted.")
+	grass.fatal(_("In calculation, script aborted."))
 
     grass.run_command('r.colors', map = elevshade, color = 'grey')
 
@@ -187,9 +187,9 @@ def main():
 	grass.run_command('r.support', map = elevshade, history = "  units=%s (adjusted scale=%s)" % (units, scale))
 
     if output:
-	grass.message("Shaded relief map created and named <%s>." % elevshade)
+	grass.message(_("Shaded relief map created and named <%s>.") % elevshade)
     else:
-	grass.message("Shaded relief map created and named <%s>. Consider renaming." % elevshade)
+	grass.message(_("Shaded relief map created and named <%s>. Consider renaming.") % elevshade)
 
     # write cmd history:
     grass.raster_history(elevshade)

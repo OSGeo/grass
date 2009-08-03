@@ -52,12 +52,12 @@ def main():
     # schema needed for PG?
 
     if force:
-	grass.message("Forcing ...")
+	grass.message(_("Forcing ..."))
 
     # check if table exists
     nuldev = file(os.devnull, 'w')
     if not grass.db_describe(table, stdout = nuldev, stderr = nuldev):
-	grass.fatal("Table <%s> not found in current mapset" % table)
+	grass.fatal(_("Table <%s> not found in current mapset") % table)
 
     # check if table is used somewhere (connected to vector map)
     used = []
@@ -70,14 +70,14 @@ def main():
 		used.append(vect)
 		break
     if used:
-	grass.warning("Deleting table <%s> which is attached to following map(s):" % table)
+	grass.warning(_("Deleting table <%s> which is attached to following map(s):") % table)
 	for vect in used:
 	    grass.message(vect)
 
     if not force:
-	grass.message("The table <%s> would be deleted." % table)
+	grass.message(_("The table <%s> would be deleted.") % table)
 	grass.message("")
-	grass.message("You must use the force flag to actually remove it. Exiting.")
+	grass.message(_("You must use the force flag to actually remove it. Exiting."))
 	sys.exit(0)
 
     p = grass.feed_command('db.execute', input = '-', database = database, driver = driver)
@@ -85,7 +85,7 @@ def main():
     p.stdin.close()
     p.wait()
     if p.returncode != 0:
-  	grass.fatal("Cannot continue (problem deleting table).")
+  	grass.fatal(_("Cannot continue (problem deleting table)."))
 
 if __name__ == "__main__":
     options, flags = grass.parser()

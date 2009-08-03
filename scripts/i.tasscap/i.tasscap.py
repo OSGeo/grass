@@ -125,7 +125,7 @@ def calc1(out, bands, k1, k2, k3, k4, k5, k7, k0 = 0):
 
 def calcN(options, i, n):
     outpre = options['outprefix']
-    grass.message("LANDSAT-%d..." % n)
+    grass.message(_("LANDSAT-%d...") % n)
     for j, p in enumerate(parms[i]):
 	out = "%s.%d" % (outpre, j + 1)
 	ord = ordinals[j]
@@ -133,7 +133,7 @@ def calcN(options, i, n):
 	    name = ''
 	else:
 	    name = " (%s)" % names[j]
-	grass.message("Calculating %s TC component %s%s ..." % (ord, out, name))
+	grass.message(_("Calculating %s TC component %s%s ...") % (ord, out, name))
 	calc1(out, options, *p)
 
 def main():
@@ -142,7 +142,7 @@ def main():
     flag7 = flags['7']
 
     if (flag4 and flag5) or (flag4 and flag7) or (flag5 and flag7):
-	grass.fatal("Select only one flag")
+	grass.fatal(_("Select only one flag"))
 
     if flag4:
 	calcN(options, 0, 4)
@@ -151,9 +151,9 @@ def main():
     elif flag7:
 	calcN(options, 2, 7)
     else:
-	grass.fatal("Select LANDSAT satellite by flag!")
+	grass.fatal(_("Select LANDSAT satellite by flag!"))
 
-    grass.message("Tasseled Cap components calculated.")
+    grass.message(_("Tasseled Cap components calculated."))
 
 if __name__ == "__main__":
     options, flags = grass.parser()

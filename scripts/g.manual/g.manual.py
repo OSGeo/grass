@@ -42,20 +42,20 @@ from grass.script import core as grass
 def start_browser(entry):
     path = os.path.join(gisbase, 'docs', 'html', entry + '.html')
     if not os.path.exists(path):
-	grass.fatal("No HTML manual page entry for <%s>." % entry)
+	grass.fatal(_("No HTML manual page entry for <%s>.") % entry)
     verbose = os.getenv("GRASS_VERBOSE")
     if not verbose or int(verbose) > 1:
-	grass.message("Starting browser <%s> for module %s..." % (browser_name, entry))
+	grass.message(_("Starting browser <%s> for module %s...") % (browser_name, entry))
     os.execlp(browser, browser_name, "file://%s/docs/html/%s.html" % (gisbase, entry))
-    grass.fatal("Error starting browser <%s> for HTML file <%s>" % (browser, entry))
+    grass.fatal(_("Error starting browser <%s> for HTML file <%s>") % (browser, entry))
 
 def start_man(entry):
     path = os.path.join(gisbase, 'man', 'man1', entry + '.1')
     for ext in ['', '.gz', '.bz2']:
 	if os.path.exists(path + ext):
 	    os.execlp('man', 'man', path + ext)
-	    grass.fatal("Error starting 'man' for <%s>" % path)
-    grass.fatal("No manual page entry for <%s>." % entry)
+	    grass.fatal(_("Error starting 'man' for <%s>") % path)
+    grass.fatal(_("No manual page entry for <%s>.") % entry)
 
 def main():
     global gisbase, browser, browser_name

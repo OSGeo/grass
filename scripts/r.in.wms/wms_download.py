@@ -27,7 +27,7 @@ class WMSDownload:
         self.options = options
         
     def GetTiles(self, requests):
-        grass.message("Downloading tiles...")
+        grass.message(_("Downloading tiles..."))
         
         i = 0
         for item in requests:
@@ -40,30 +40,30 @@ class WMSDownload:
         
     def GetData(self, idx, server, query, output):
         """Download data"""
-        grass.message("Downloading data (tile %d)..." % idx)
+        grass.message(_("Downloading data (tile %d)...") % idx)
         grass.verbose("Requesting data: %s" % self.options['mapserver'])
 
         if not self.flags['g']: # -> post
             try:
                 urllib.urlretrieve(server, output, data = query)
             except IOError:
-                grass.fatal("Failed while downloading the data")
+                grass.fatal(_("Failed while downloading the data"))
             
             if not os.path.exists(output):
-                grass.fatal("Failed while downloading the data")
+                grass.fatal(_("Failed while downloading the data"))
             
             # work-around for brain-dead ArcIMS servers which want POST-data as part of the GET URL
             #   (this is technically allowed by OGC WMS def v1.3.0 Sec6.3.4)
             if os.path.getsize(output) == 0:
-                grass.warning("Downloaded image file is empty -- trying another method")
+                grass.warning(_("Downloaded image file is empty -- trying another method"))
                 self.flags['g'] = True
             
         if self.flags['g']: # -> get
             try:
                 urllib.urlretrieve(server + '?' + query, output, data = None)
             except IOError:
-                grass.fatal("Failed while downloading the data")
+                grass.fatal(_("Failed while downloading the data"))
             
             if not os.path.exists(output) or os.path.getsize(output) == 0:
-                grass.fatal("Failed while downloading the data")
+                grass.fatal(_("Failed while downloading the data"))
 

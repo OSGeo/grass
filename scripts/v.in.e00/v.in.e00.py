@@ -67,19 +67,19 @@ def main():
 
     #### check for avcimport
     if not grass.find_program('avcimport'):
-	grass.fatal("'avcimport' program not found, install it first" +
+	grass.fatal(_("'avcimport' program not found, install it first") +
 		    "\n" +
 		    "http://avce00.maptools.org")
 
     #### check for e00conv
     if not grass.find_program('e00conv'):
-	grass.fatal("'e00conv' program not found, install it first" +
+	grass.fatal(_("'e00conv' program not found, install it first") +
 		    "\n" +
 		    "http://avce00.maptools.org")
 
     # check that the user didn't use all three, which gets past the parser.
     if type not in ['point','line','area']:
-	grass.fatal('Must specify one of "point", "line", or "area".')
+	grass.fatal(_('Must specify one of "point", "line", or "area".'))
 
     e00name = grass.basename(filename, 'e00')
     # avcimport only accepts 13 chars:
@@ -88,7 +88,7 @@ def main():
     #check if this is a split E00 file (.e01, .e02 ...):
     merging = False
     if os.path.exists(e00name + '.e01') or os.path.exists(e00name + '.E01'):
-	grass.message("Found that E00 file is split into pieces (.e01, ...). Merging...")
+	grass.message(_("Found that E00 file is split into pieces (.e01, ...). Merging..."))
 	merging = True
 
     if vect:
@@ -125,22 +125,22 @@ def main():
 
     nuldev = file(os.devnull, 'w+')
 
-    grass.message("An error may appear next which will be ignored...")
+    grass.message(_("An error may appear next which will be ignored..."))
     if grass.call(['avcimport', filename, e00shortname], stdout = nuldev, stderr = nuldev) == 1:
-	grass.message("E00 ASCII found and converted to Arc Coverage in current directory")
+	grass.message(_("E00 ASCII found and converted to Arc Coverage in current directory"))
     else:
-	grass.message("E00 Compressed ASCII found. Will uncompress first...")
+	grass.message(_("E00 Compressed ASCII found. Will uncompress first..."))
 	grass.try_remove(e00shortname)
 	grass.try_remove(info)
 	grass.call(['e00conv', filename, e00tmp + '.e00'])
-	grass.message("...converted to Arc Coverage in current directory")
+	grass.message(_("...converted to Arc Coverage in current directory"))
 	grass.call(['avcimport', e00tmp + '.e00', e00shortname], stderr = nuldev)
 
     #SQL name fix:
     name = name.replace('-', '_')
 
     ## let's import...
-    grass.message("Importing %ss..." % type)
+    grass.message(_("Importing %ss...") % type)
 
     layer = dict(point = 'LAB', line = 'ARC', area = ['LAB','ARC'])
     itype = dict(point = 'point', line = 'line', area = 'centroid')
@@ -148,9 +148,9 @@ def main():
     if grass.run_command('v.in.ogr', flags = 'o', dsn = e00shortname,
 			 layer = layer[type], type = itype[type],
 			 output = name) != 0:
-	grass.fatal("An error occurred while running v.in.ogr")
+	grass.fatal(_("An error occurred while running v.in.ogr"))
 
-    grass.message("Imported <%s> vector map <%s>." % (type, name))
+    grass.message(_("Imported <%s> vector map <%s>.") % (type, name))
 
     #### clean up the mess
     for root, dirs, files in os.walk('.', False):
@@ -165,7 +165,7 @@ def main():
     os.rmdir(tmpdir)
 	
     #### end
-    grass.message("Done.")
+    grass.message(_("Done."))
 
     # write cmd history:
     grass.vector_history(name)

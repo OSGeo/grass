@@ -62,12 +62,12 @@ def main():
     exists = bool(grass.find_file(map, element = 'vector', mapset = mapset)['file'])
 
     if not exists:
-	grass.fatal("Vector map <%s> not found in current mapset" % map)
+	grass.fatal(_("Vector map <%s> not found in current mapset") % map)
 
     try:
         f = grass.vector_db(map)[int(layer)]
     except KeyError:
-	grass.fatal("There is no table connected to this map. Run v.db.connect or v.db.addtable first.")
+	grass.fatal(_("There is no table connected to this map. Run v.db.connect or v.db.addtable first."))
     table = f['table']
     database = f['database']
     driver = f['driver']
@@ -76,13 +76,13 @@ def main():
 
     for col in columns:
 	if not col:
-	    grass.fatal("There is an empty column. Did you leave a trailing comma?")
+	    grass.fatal(_("There is an empty column. Did you leave a trailing comma?"))
 
 	p = grass.feed_command('db.execute', input = '-', database = database, driver = driver)
 	p.stdin.write("ALTER TABLE %s ADD COLUMN %s" % (table, col))
 	p.stdin.close()
 	if p.wait() != 0:
-	    grass.fatal("Unable to add column <%s>." % col)
+	    grass.fatal(_("Unable to add column <%s>.") % col)
 
     # write cmd history:
     grass.vector_history(map)

@@ -150,7 +150,7 @@ def main():
     else:
 	vect_mapset = vect_mapset[0]
     if not kv['file'] or vect_mapset != mapset:
-	grass.fatal("Vector map <%s> not found in current mapset" % map)
+	grass.fatal(_("Vector map <%s> not found in current mapset") % map)
 
     vector = map_split[0]
 
@@ -160,7 +160,7 @@ def main():
 	if options[opt]:
 	    ctest += 1
     if ctest != 1:
-	grass.fatal("Pick one of color, rules, or raster options")
+	grass.fatal(_("Pick one of color, rules, or raster options"))
 
     if color:
 	#### check the color rule is valid
@@ -171,19 +171,19 @@ def main():
 			("Valid options are: %s" % ' '.join(color_opts)))
     elif raster:
 	if not grass.find_file(raster)['name']:
-	    grass.fatal("Unable to open raster map <%s>" % raster)
+	    grass.fatal(_("Unable to open raster map <%s>") % raster)
     elif rules:
 	if not os.access(rules, os.R_OK):
-	    grass.fatal("Unable to read color rules file <%s>" % rules)
+	    grass.fatal(_("Unable to read color rules file <%s>") % rules)
 
     #### column checks
     # check input data column
     cols = grass.vector_columns(map, layer = layer)
     if column not in cols:
-	grass.fatal("Column <%s> not found" % column)
+	grass.fatal(_("Column <%s> not found") % column)
     ncolumn_type = cols[column]
     if ncolumn_type not in ["INTEGER", "DOUBLE PRECISION"]:
-	grass.fatal("Column <%s> is not numeric" % column)
+	grass.fatal(_("Column <%s> is not numeric") % column)
 
     #g.message "column <$GIS_OPT_COLUMN> is type [$NCOLUMN_TYPE]"
 
@@ -191,17 +191,17 @@ def main():
     table = grass.vector_db(map)[layer]['table']
     if rgb_column not in cols:
         # RGB Column not found, create it
-	grass.message("Creating column <%s> ..." % rgb_column)
+	grass.message(_("Creating column <%s> ...") % rgb_column)
 	if 0 != grass.run_command('v.db.addcol', map = map, layer = layer, column = "%s varchar(11)" % rgb_column):
-	    grass.fatal("Creating color column")
+	    grass.fatal(_("Creating color column"))
     else:
 	column_type = cols[rgb_column]
 	if column_type not in ["CHARACTER", "TEXT"]:
-	    grass.fatal("Column <%s> is not of compatible type (found %s)" % (rgb_column, column_type))
+	    grass.fatal(_("Column <%s> is not of compatible type (found %s)") % (rgb_column, column_type))
 	else:
 	    num_chars = dict([(v[0], int(v[2])) for v in grass.db_describe(table)['cols']])[rgb_column]
 	    if num_chars < 11:
-		grass.fatal("Color column <%s> is not wide enough (needs 11 characters)", rgb_column)
+		grass.fatal(_("Color column <%s> is not wide enough (needs 11 characters)"), rgb_column)
 
     cvals = grass.vector_db_select(map, layer = layer, column = column)['values'].values()
 
@@ -210,15 +210,15 @@ def main():
 	#order doesn't matter
 	vals = range.split(',')
     else:
-	grass.message("Scanning values ...")
+	grass.message(_("Scanning values ..."))
 	vals = [float(x[0]) for x in cvals]
 
     minval = min(vals)
     maxval = max(vals)
 
-    grass.message(" min=[%s]  max=[$%s]" % (minval, maxval))
+    grass.message(_(" min=[%s]  max=[$%s]") % (minval, maxval))
     if not minval or not maxval:
-	grass.fatal("Scanning data range")
+	grass.fatal(_("Scanning data range"))
 
     # setup internal region
     use_temp_region()
@@ -251,7 +251,7 @@ def main():
     tmp = grass.tempfile()
 
     # calculate colors and write SQL command file
-    grass.message("Looking up colors ...")
+    grass.message(_("Looking up colors ..."))
 
     f = open(tmp, 'w')
     p = grass.feed_command('r.what.color', flags = 'i', input = tmp_colr, stdout = f)
@@ -281,18 +281,18 @@ def main():
     fo.close()
     
     if not found:
-	grass.fatal("No values found in color range")
+	grass.fatal(_("No values found in color range"))
 
     # apply SQL commands to update the table with values
-    grass.message("Writing %s colors ..." % found)
+    grass.message(_("Writing %s colors ...") % found)
     # less "$TMP"
     if 0 != grass.run_command('db.execute', input = tmp_vcol):
-	grass.fatal("Processing SQL transaction")
+	grass.fatal(_("Processing SQL transaction"))
 
     if flags['s']:
 	vcolors = "vcolors_%d" % pid
 	grass.run_command('g.rename', rast = (tmp_colr, vcolors))
-	grass.message("Raster map containing color rules saved to <%s>" % vcolors)
+	grass.message(_("Raster map containing color rules saved to <%s>") % vcolors)
 	# TODO save full v.colors command line history
 	grass.run_command('r.support', map = vcolors,
 			  history = "",

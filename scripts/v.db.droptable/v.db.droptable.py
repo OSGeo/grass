@@ -63,39 +63,39 @@ def main():
 	# Removing table name connected to selected layer
 	table = f['table']
 	if not table:
-	    grass.fatal("No table assigned to layer <%s>" % layer)
+	    grass.fatal(_("No table assigned to layer <%s>") % layer)
     else:
 	# Removing user specified table
 	existingtable = f['table']
 	if existingtable != table:
-	    grass.fatal("User selected table <%s> but the table <%s> is linked to layer <%s>"
+	    grass.fatal(_("User selected table <%s> but the table <%s> is linked to layer <%s>")
 			% (table, existingtable, layer))
 
     # we use the DB settings selected layer 
     database = f['database']
     driver = f['driver']
 
-    grass.message("Removing table <%s> linked to layer <%s> of vector map <%s>"
+    grass.message(_("Removing table <%s> linked to layer <%s> of vector map <%s>")
 		  % (table, layer, map)) 
 
     if not force:
-	grass.message("You must use the -f (force) flag to actually remove the table. Exiting.")
-	grass.message("Leaving map/table unchanged.")
+	grass.message(_("You must use the -f (force) flag to actually remove the table. Exiting."))
+	grass.message(_("Leaving map/table unchanged."))
 	sys.exit(0)
 
-    grass.message("Dropping table <%s>..." % table)
+    grass.message(_("Dropping table <%s>...") % table)
 
     if grass.write_command('db.execute', stdin = "DROP TABLE %s" % table, input = '-') != 0:
-	grass.fatal("An error occured while running db.execute")
+	grass.fatal(_("An error occured while running db.execute"))
 
     grass.run_command('v.db.connect', flags = 'd', map = map, layer = layer)
 
-    grass.message("Current attribute table link(s):") 
+    grass.message(_("Current attribute table link(s):")) 
     # silently test first to avoid confusing error messages
     nuldev = file(os.devnull, 'w')
     if grass.run_command('v.db.connect', flags ='p', map = map, quiet = True,
 			 stdout = nuldev, stderr = nuldev) != 0:
-	grass.message("(No database links remaining)")
+	grass.message(_("(No database links remaining)"))
     else:
 	grass.run_command('v.db.connect', flags ='p', map = map)
 

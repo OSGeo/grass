@@ -60,7 +60,7 @@ def main():
 
     for vect in grass.list_grouped('vect')[mapset]:
 	vect = "%s@%s" % (vect, mapset)
-	grass.message("Reconnecting vector <%s>" % vect)
+	grass.message(_("Reconnecting vector <%s>") % vect)
 	for f in grass.vector_db(map, stderr = nuldev).itervalues():
 	    layer = f['layer']
 	    schema_table = f['table']
@@ -80,16 +80,16 @@ def main():
 	    else:
 		new_schema_table = table
 
-	    grass.message("SCHEMA = %s TABLE = %s NEW_SCHEMA_TABLE = %s" % (schema, table, new_schema_table))
+	    grass.message(_("SCHEMA = %s TABLE = %s NEW_SCHEMA_TABLE = %s") % (schema, table, new_schema_table))
 	    if database == old_database and schema == old_schema:
-		grass.message("Reconnecting layer " + layer)
-		grass.message("v.db.connect -o map=%s layer=%s driver=%s database=%s table=%s key=%s" %
+		grass.message(_("Reconnecting layer ") + layer)
+		grass.message(_("v.db.connect -o map=%s layer=%s driver=%s database=%s table=%s key=%s") %
 			      (vect, layer, driver, new_database, new_schema_table, key))
 		grass.run_command('v.db.connect', flags = 'o', map = vect,
 				  layer = layer, driver = driver, database = new_database,
 				  table = new_schema_table, key = key)
 	    else:
-		grass.message("Layer <%s> will not be reconnected, database or schema do not match." % layer)
+		grass.message(_("Layer <%s> will not be reconnected, database or schema do not match.") % layer)
 
 if __name__ == "__main__":
     options, flags = grass.parser()

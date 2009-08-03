@@ -34,14 +34,14 @@ def main():
 	if grass.run_command("v.convert", input = inmap, output = outmap) == 0:
 	    converted += 1
 	else:
-	    grass.warning("Error converting map %s to %s" % (inmap, outmap))
+	    grass.warning(_("Error converting map %s to %s") % (inmap, outmap))
 	    ret = 1
 
 	if converted < 1:
-	    grass.warning("No vector maps converted as no old vector maps present in current mapset.")
+	    grass.warning(_("No vector maps converted as no old vector maps present in current mapset."))
 	else:
-	    grass.message("Total %u vector maps in current mapset converted." % converted)
-	    grass.message("Please verify new vector map(s) before deleting old vector map(s).")
+	    grass.message(_("Total %u vector maps in current mapset converted.") % converted)
+	    grass.message(_("Please verify new vector map(s) before deleting old vector map(s)."))
 
 	sys.exit(ret)
 

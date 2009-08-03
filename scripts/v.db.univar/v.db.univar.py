@@ -74,7 +74,7 @@ def sortfile(infile, outfile):
 	grass.run_command('sort', flags = 'n', stdin = inf, stdout = outf)
     else:
 	# FIXME: we need a large-file sorting function
-	grass.warning("'sort' not found: sorting in memory")
+	grass.warning(_("'sort' not found: sorting in memory"))
 	lines = inf.readlines()
 	for i in range(len(lines)):
 	    lines[i] = float(lines[i].rstrip('\r\n'))
@@ -96,8 +96,8 @@ def main():
     driver = options['driver']
     where = options['where']
 
-    grass.message("Calculation for column <%s> of table <%s>..." % (column, table))
-    grass.message("Reading column values...")
+    grass.message(_("Calculation for column <%s> of table <%s>...") % (column, table))
+    grass.message(_("Reading column values..."))
 
     sql = "SELECT %s FROM %s" % (column, table)
     if where:
@@ -118,11 +118,11 @@ def main():
     # check if result is empty
     tmpf = file(tmp)
     if tmpf.read(1) == '':
-	grass.fatal("Table <%s> contains no data.", table)
+	grass.fatal(_("Table <%s> contains no data."), table)
     tmpf.close()
 
     # calculate statistics
-    grass.message("Calculating statistics...")
+    grass.message(_("Calculating statistics..."))
 
     N = 0
     sum = 0.0
@@ -143,7 +143,7 @@ def main():
     tmpf.close()
 
     if N <= 0:
-	grass.fatal("No non-null values found")
+	grass.fatal(_("No non-null values found"))
 
     print ""
     print "Number of values:", N

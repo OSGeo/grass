@@ -64,9 +64,9 @@ def main():
     output = options['output']
 
     if not grass.find_file(map1)['name']:
-	grass.fatal("Raster map <%s> not found" % map1)
+	grass.fatal(_("Raster map <%s> not found") % map1)
     if not grass.find_file(map2)['name']:
-	grass.fatal("Raster map <%s> not found" % map2)
+	grass.fatal(_("Raster map <%s> not found") % map2)
 
     #calculate regression equation
     if slow:

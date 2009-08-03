@@ -180,7 +180,7 @@ def plot_dgraph():
 
 def plot_eps(psout):
     # EPS output (by M.Neteler and Bruno Caprile, ITC-irst)
-    grass.message("Generating %s ..." % psout)
+    grass.message(_("Generating %s ...") % psout)
 
     outerradius = maxradius
     epsscale = 0.1
@@ -381,7 +381,7 @@ col1                                    %% colAVERAGE-DIRECTION-COLOR
 
     outf.close()
 
-    grass.message("Done.")
+    grass.message(_("Done."))
 
 def main():
     global tmp
@@ -396,11 +396,11 @@ def main():
     tmp = grass.tempfile()
 
     if eps and xgraph:
-	grass.fatal("Please select only one output method")
+	grass.fatal(_("Please select only one output method"))
 
     #### check if we have xgraph (if no EPS output requested)
     if xgraph and not grass.find_program('xgraph'):
-	grass.fatal("xgraph required, please install first (www.xgraph.org)")
+	grass.fatal(_("xgraph required, please install first (www.xgraph.org)"))
 
     #################################
     # this file contains everthing:
@@ -415,7 +415,7 @@ def main():
 	totalnumber += 1
     rawf.close()
 
-    grass.message("Calculating statistics for polar diagram... (be patient)")
+    grass.message(_("Calculating statistics for polar diagram... (be patient)"))
 
     #wipe out NULL data and undef data if defined by user
     # - generate degree binned to integer, eliminate NO DATA (NULL):
@@ -445,7 +445,7 @@ def main():
 
     totalvalidnumber = nvals
     if totalvalidnumber == 0:
-	grass.fatal("No data pixel found")
+	grass.fatal(_("No data pixel found"))
 
     #################################
     # unit vector on raw data converted to radians without no data:
@@ -494,9 +494,9 @@ def main():
     else:
 	plot_dgraph()
 
-    grass.message("Average vector:")
-    grass.message("direction: %.1f degrees CCW from East" % math.degrees(math.atan2(unitvector[1], unitvector[0])))
-    grass.message("magnitude: %.1f percent of fullscale" % (100 * math.hypot(unitvector[0], unitvector[1])))
+    grass.message(_("Average vector:"))
+    grass.message(_("direction: %.1f degrees CCW from East") % math.degrees(math.atan2(unitvector[1], unitvector[0])))
+    grass.message(_("magnitude: %.1f percent of fullscale") % (100 * math.hypot(unitvector[0], unitvector[1])))
 
 if __name__ == "__main__":
     options, flags = grass.parser()

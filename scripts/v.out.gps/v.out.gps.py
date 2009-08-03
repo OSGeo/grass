@@ -146,9 +146,9 @@ def main():
 
     nflags = len(filter(None, [wpt, rte, trk]))
     if nflags > 1:
-	grass.fatal("One feature at a time please.")
+	grass.fatal(_("One feature at a time please."))
     if nflags < 1:
-	grass.fatal("No features requested for export.")
+	grass.fatal(_("No features requested for export."))
 
     # set some reasonable defaults
     if not type:
@@ -160,17 +160,17 @@ def main():
     #### check for gpsbabel
     ### FIXME: may need --help or similar?
     if not grass.find_program("gpsbabel"):
-	grass.fatal("The gpsbabel program was not found, please install it first.\n" +
+	grass.fatal(_("The gpsbabel program was not found, please install it first.\n") +
 		    "http://gpsbabel.sourceforge.net")
 
     #### check for cs2cs
     if not grass.find_program("cs2cs"):
-	grass.fatal("The cs2cs program was not found, please install it first.\n" +
+	grass.fatal(_("The cs2cs program was not found, please install it first.\n") +
 		    "http://proj.osgeo.org")
 
     # check if we will overwrite data
     if os.path.exists(output) and not grass.overwrite():
-	grass.fatal("Output file already exists.")
+	grass.fatal(_("Output file already exists."))
 
     #### set temporary files
     tmp = grass.tempfile()
@@ -183,11 +183,11 @@ def main():
 				output = tmp_extr, type = type, layer = layer,
 				where = where, quiet = True)
 	if ret != 0:
-	    grass.fatal("Error executing SQL query")
+	    grass.fatal(_("Error executing SQL query"))
 
 	kv = grass.vector_info_topo(tmp_extr)
 	if kv['primitives'] == 0:
-	    grass.fatal("SQL query returned an empty map (no %s features?)" % type)
+	    grass.fatal(_("SQL query returned an empty map (no %s features?)") % type)
 
 	inmap = tmp_extr
     else:
@@ -232,7 +232,7 @@ def main():
     p2.wait()
 
     if p1.returncode != 0 or p2.returncode != 0:
-	grass.fatal("Error reprojecting data")
+	grass.fatal(_("Error reprojecting data"))
 
     tmp_vogb = "tmp_vogb_epsg4326_%d" % os.getpid()
     p3 = grass.feed_command('v.in.ascii', out = tmp_vogb, format = 'standard', flags = 'n', quiet = True)
@@ -249,7 +249,7 @@ def main():
     p3.wait()
 
     if p3.returncode != 0:
-	grass.fatal("Error reprojecting data")
+	grass.fatal(_("Error reprojecting data"))
 
     # don't v.db.connect directly as source table will be removed with
     # temporary map in that case. So we make a temp copy of it to work with.
@@ -268,11 +268,11 @@ def main():
 				from_table = db_table,
 				to_table = tmp_vogb)
 	if ret != 0:
-	    grass.fatal("Error copying temporary DB")
+	    grass.fatal(_("Error copying temporary DB"))
 
 	ret = grass.run_command('v.db.connect', map = tmp_vogb, table = tmp_vogb, quiet = True)
 	if ret != 0:
-	    grass.fatal("Error reconnecting temporary DB")
+	    grass.fatal(_("Error reconnecting temporary DB"))
 
     # export as GPX using v.out.ogr
     if trk:
@@ -298,7 +298,7 @@ def main():
 			    type = type, format = 'GPX', lco = linetype,
 			    dsco = "GPX_USE_EXTENSIONS=YES", quiet = True)
     if ret != 0:
-	grass.fatal("Error exporting data")
+	grass.fatal(_("Error exporting data"))
 
     if format == 'gpx':
 	# short circuit, we have what we came for.
@@ -327,7 +327,7 @@ def main():
 		      '-F', output])
 
     if ret != 0:
-	grass.fatal("Error running GpsBabel")
+	grass.fatal(_("Error running GpsBabel"))
 
     grass.verbose("Done.")
 

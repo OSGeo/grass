@@ -41,7 +41,7 @@ def main():
     output = options['output']
 
     if not grass.find_file(input)['file']:
-	grass.fatal("Map <%s> not found." % input)
+	grass.fatal(_("Map <%s> not found.") % input)
 
     if not output:
 	output = input

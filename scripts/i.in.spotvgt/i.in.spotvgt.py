@@ -121,7 +121,7 @@ def main():
 
     #### check for gdalinfo (just to check if installation is complete)
     if not grass.find_program('gdalinfo', ['--version']):
-	grass.fatal("'gdalinfo' not found, install GDAL tools first (http://www.gdal.org)")
+	grass.fatal(_("'gdalinfo' not found, install GDAL tools first (http://www.gdal.org)"))
 
     pid = str(os.getpid())
     tmpfile = grass.tempfile()
@@ -137,17 +137,17 @@ def main():
 	name = spotname
 
     if not grass.overwrite() and grass.find_file(name)['file']:
-	grass.fatal("<%s> already exists. Aborting." % name)
+	grass.fatal(_("<%s> already exists. Aborting.") % name)
 
     # still a ZIP file?  (is this portable?? see the r.in.srtm script for ideas)
     if infile.lower().endswith('.zip'):
-	grass.fatal("Please extract %s before import." % infile)
+	grass.fatal(_("Please extract %s before import.") % infile)
 
     try:
 	p = grass.Popen(['file', '-ib', infile], stdout = grass.PIPE)
 	s = p.communicate()[0]
 	if s == "application/x-zip":
-	    grass.fatal("Please extract %s before import." % infile)
+	    grass.fatal(_("Please extract %s before import.") % infile)
     except:
 	pass
 
@@ -161,11 +161,11 @@ def main():
     create_VRT_file(projfile, vrtfile, infile)
 
     ## let's import the NDVI map...
-    grass.message("Importing SPOT VGT NDVI map...")
+    grass.message(_("Importing SPOT VGT NDVI map..."))
     if grass.run_command('r.in.gdal', input = vrtfile, output = name) != 0:
-	grass.fatal("An error occurred. Stop.")
+	grass.fatal(_("An error occurred. Stop."))
 
-    grass.message("Imported SPOT VEGETATION NDVI map <%s>." % name)
+    grass.message(_("Imported SPOT VEGETATION NDVI map <%s>.") % name)
 
     #################
     ## http://www.vgt.vito.be/faq/FAQS/faq19.html
@@ -182,7 +182,7 @@ def main():
 
     grass.run_command('g.region', rast = name, quiet = True)
 
-    grass.message("Remapping digital numbers to NDVI...")
+    grass.message(_("Remapping digital numbers to NDVI..."))
     tmpname = "%s_%s" % (name, pid)
     grass.mapcalc("$tmpname = 0.004 * $name - 0.1", tmpname = tmpname, name = name)
     grass.run_command('g.remove', rast = name, quiet = True)
@@ -220,7 +220,7 @@ def main():
     # A good map threshold: >= 248
 
     if also:
-	grass.message("Importing SPOT VGT NDVI quality map...")
+	grass.message(_("Importing SPOT VGT NDVI quality map..."))
 	grass.try_remove(vrtfile)
 	qfile = infile.replace('NDV','SM')
 	create_VRT_file(projfile, vrtfile, qfile)
@@ -228,7 +228,7 @@ def main():
     ## let's import the SM quality map...
     smfile = name + '.sm'
     if grass.run_command('r.in.gdal', input = vrtfile, output = smfile) != 0:
-	grass.fatal("An error occurred. Stop.")
+	grass.fatal(_("An error occurred. Stop."))
 
     # some of the possible values:
     rules = [r + '\n' for r in [
@@ -246,23 +246,23 @@ def main():
 	]]
     grass.write_command('r.colors', map = smfile, rules = '-', stdin = rules)
 
-    grass.message("Imported SPOT VEGETATION SM quality map <%s>." % smfile)
-    grass.message("Note: A snow map can be extracted by category 252 (d.rast %s cat=252)" % smfile)
+    grass.message(_("Imported SPOT VEGETATION SM quality map <%s>.") % smfile)
+    grass.message(_("Note: A snow map can be extracted by category 252 (d.rast %s cat=252)") % smfile)
     grass.message("")
-    grass.message("Filtering NDVI map by Status Map quality layer...")
+    grass.message(_("Filtering NDVI map by Status Map quality layer..."))
 
     filtfile = "%s_filt" % name
     grass.mapcalc("$filtfile = if($smfile >= 248, $name, null())",
 		  filtfile = filtfile, smfile = smfile, name = name)
     grass.run_command('r.colors', map = filtfile, color = 'ndvi', quiet = True)
-    grass.message("Filtered SPOT VEGETATION NDVI map <%s>." % filtfile)
+    grass.message(_("Filtered SPOT VEGETATION NDVI map <%s>.") % filtfile)
 
     # write cmd history:
     grass.raster_history(name)
     grass.raster_history(smfile)
     grass.raster_history(filtfile)
 
-    grass.message("Done.")
+    grass.message(_("Done."))
 
 if __name__ == "__main__":
     options, flags = grass.parser()

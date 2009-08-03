@@ -206,23 +206,23 @@ def list_layers():
         else:
             cap_file = urllib.urlopen(url, options['mapserver'] + '?' + qstring)
     except IOError:
-        grass.fatal("Unable to get capabilities of '%s'" % options['mapserver'])
+        grass.fatal(_("Unable to get capabilities of '%s'") % options['mapserver'])
     
     # check DOCTYPE first
     if options['cap_file']:
         if headers['content-type'] != 'application/vnd.ogc.wms_xml':
-            grass.fatal("Unable to get capabilities: %s" % url)
+            grass.fatal(_("Unable to get capabilities: %s") % url)
     else:
         if cap_file.info()['content-type'] != 'application/vnd.ogc.wms_xml':
-            grass.fatal("Unable to get capabilities: %s" % url)
+            grass.fatal(_("Unable to get capabilities: %s") % url)
 
     # parse file with sax
     cap_xml = wms_parse.ProcessCapFile()
     try:
         xml.sax.parse(cap_file, cap_xml)
     except xml.sax.SAXParseException, err:
-        grass.fatal("Reading capabilities failed. "
-                    "Unable to parse XML document: %s" % err)
+        grass.fatal(_("Reading capabilities failed. "
+                      "Unable to parse XML document: %s") % err)
     
     cap_xml.getLayers()
     
@@ -232,10 +232,10 @@ def main():
         list_layers()
         return 0
     elif not options['output']:
-        grass.fatal("No output map specified")
+        grass.fatal(_("No output map specified"))
     
     if options['cap_file'] and not flags['l']:
-        grass.warning("Option <cap_file> ignored. It requires '-l' flag.")
+        grass.warning(_("Option <cap_file> ignored. It requires '-l' flag."))
     
     # set directory for download
     if not options['folder']:
@@ -244,20 +244,20 @@ def main():
     # region settings
     if options['region']:
         if not grass.find_file(name = options['region'], element = 'windows')['name']:
-            grass.fatal("Region <%s> not found" % options['region'])
+            grass.fatal(_("Region <%s> not found") % options['region'])
 
     request = wms_request.WMSRequest(flags, options)    
     if not flags['d']:
         # request data first
         request.GetTiles()
     if not request:
-        grass.fatal("WMS request failed")
+        grass.fatal(_("WMS request failed"))
     
     if flags['a']:
         # use GDAL WMS driver
         ### TODO: use GDAL Python bindings instead
         if not wms_gdal.checkGdalWms():
-            grass.fatal("GDAL WMS driver is not available")
+            grass.fatal(_("GDAL WMS driver is not available"))
 
         # create local service description XML file
         gdalWms = wms_gdal.GdalWms(options, request)

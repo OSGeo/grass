@@ -54,9 +54,9 @@ class GDALWarp:
         for input in self.options['input'].split(','):
             tmptilename = self.options['output'] + '_tile_' + str(tiler)
             if not os.path.exists(input):
-                grass.warning("Missing input '%s'" % input)
+                grass.warning(_("Missing input '%s'") % input)
                 continue
-            grass.info("Importing tile '%s'..." % os.path.basename(input))
+            grass.info(_("Importing tile '%s'...") % os.path.basename(input))
             if self.flags['p']:
                 self.nowarp_import(input, tmptilename)
             else:
@@ -66,7 +66,7 @@ class GDALWarp:
             tiler += 1
         
         if tiler < 1:
-            grass.message("Nothing imported")
+            grass.message(_("Nothing imported"))
             return 0
         
         # if there's more than one tile patch them together, otherwise
@@ -81,14 +81,14 @@ class GDALWarp:
                     if grass.run_command('g.rename',
                                          quiet = True,
                                          rast = ffile + ',' + tfile) != 0:
-                        grass.fatal('g.rename failed')
+                        grass.fatal(_('g.rename failed'))
             else: # single-band, single-tile
                 ffile = self.options['output'] + '_tile_0' # + sfx ?
                 tfile = self.options['output'] # + sfx ?
                 if grass.run_command('g.rename',
                                      quiet = True,
                                      rast = ffile + ',' + tfile) != 0:
-                    grass.fatal('g.rename failed')
+                    grass.fatal(_('g.rename failed'))
         else:
             # patch together each channel
             grass.debug('suffixes: %s' % ','.join(suffixes))
@@ -97,21 +97,21 @@ class GDALWarp:
                 for suffix in suffixes:
                     suffix = suffix.replace('.', '_')
                     # patch these together (using nulls only)
-                    grass.message("Patching '%s' channel..." % suffix)
+                    grass.message(_("Patching '%s' channel...") % suffix)
                     if grass.run_command('r.patch',
                                          quiet = True,
                                          input = patches, # ???
                                          output = self.options['output'] + suffix) != 0:
-                        grass.fatal('r.patch failed')
+                        grass.fatal(_('r.patch failed'))
                         
                     # remove the temporary patches we made
                     if grass.run_command('g.remove',
                                          quiet = True,
                                          rast = patches) != 0:
-                        grass.fatal('g.remove failed')
+                        grass.fatal(_('g.remove failed'))
             else:
                 # single-band data
-                grass.info("Patching tiles (this may take some time)...")
+                grass.info(_("Patching tiles (this may take some time)..."))
                 grass.debug("patch list = %s" % ','.join(maplist))
 
                 # HACK: for 8bit PNG, GIF all the different tiles can have
@@ -128,22 +128,22 @@ class GDALWarp:
                         if grass.run_command('r.mapcalc',
                                              quiet = True,
                                              expression = '%s = %s#%s' % (outmap, color, map)) != 0:
-                            grass.fatal('r.mapcalc failed')
+                            grass.fatal(_('r.mapcalc failed'))
                         if grass.run_command('r.colors',
                                              quiet = True,
                                              map = outmap,
                                              color = 'grey255') != 0:
-                            grass.fatal('r.colors failed')
+                            grass.fatal(_('r.colors failed'))
                         if grass.run_command('r.null',
                                              quiet = True,
                                              map = outmap,
                                              setnull = 255) != 0:
-                            grass.fatal('r.null failed')
+                            grass.fatal(_('r.null failed'))
                 
                         if grass.run_command('r.patch',
                                              input = ','.join(maplist_color),
                                              output = outmap + '_all') != 0:
-                            grass.fatal('r.patch failed')
+                            grass.fatal(_('r.patch failed'))
                 
                 if grass.run_command('r.composite',
                                      quiet = True,
@@ -151,13 +151,13 @@ class GDALWarp:
                                      green = map + '_g_all',
                                      blue = map + '_b_all',
                                      output = self.options['output']) != 0:
-                    grass.fatal('r.composite failed')
+                    grass.fatal(_('r.composite failed'))
 
                 if grass.run_command('g.mremove',
                                      quiet = True,
                                      flags = 'f',
                                      rast = map + '*') != 0:
-                    grass.fatal('g.remove failed')
+                    grass.fatal(_('g.remove failed'))
 
         # there's already a no suffix, can't make colors
         # can only go up from here ;)
@@ -168,14 +168,14 @@ class GDALWarp:
         
         # make a composite image if asked for and colors exist
         if colors == 3 and self.flags['c']:
-            grass.message("Building color image <%s>..." % self.options['output'])
+            grass.message(_("Building color image <%s>...") % self.options['output'])
             if grass.run_command('r.composite',
                                  quiet = True,
                                  red = self.options['output'] + '.red',
                                  green = self.options['output'] + '.green',
                                  blue = self.options['output'] + '.blue',
                                  output = self.options['output']) != 0:
-                grass.fatal('r.composite failed')
+                grass.fatal(_('r.composite failed'))
         
         return 0
     
@@ -189,7 +189,7 @@ class GDALWarp:
                                    quiet = True,
                                    flags = 'jf').rstrip('\n')
         if not t_srs:
-            grass.fatal('g.proj failed')
+            grass.fatal(_('g.proj failed'))
         
         grass.debug("gdalwarp -s_srs '%s' -t_srs '%s' -r %s %s %s %s" % \
                         (self.options['srs'], t_srs,
@@ -213,16 +213,16 @@ class GDALWarp:
         ps.wait()
         if ps.returncode != 0 or \
                 not os.path.exists(warpfile):
-            grass.fatal('gdalwarp failed')
+            grass.fatal(_('gdalwarp failed'))
     
         # import it into a temporary map
-        grass.info('Importing raster map...')
+        grass.info(_('Importing raster map...'))
         if grass.run_command('r.in.gdal',
                              quiet = True,
                              flags = self.gdal_flags,
                              input = warpfile,
                              output = tmpmapname) != 0:
-            grass.fatal('r.in.gdal failed')
+            grass.fatal(_('r.in.gdal failed'))
         
         os.remove(warpfile)
 
@@ -272,20 +272,20 @@ class GDALWarp:
                                      quiet = True,
                                      expression = "%s%s = if(%s, %s%s, null())" % \
                                          (map, sfx, alphalayer, tmpmapname, sfx)) != 0:
-                    grass.fatal('r.mapcalc failed')
+                    grass.fatal(_('r.mapcalc failed'))
             else:
                 if grass.run_command('g.copy',
                                      quiet = True,
                                      rast = "%s%s,%s%s" % \
                                          (tmpmapname, suffix, map, suffix)) != 0:
-                    grass.fatal('g.copy failed')
+                    grass.fatal(_('g.copy failed'))
         
             # copy the color tables
             if grass.run_command('r.colors',
                                  quiet = True,
                                  map = map + suffix,
                                  rast = tmpmapname + suffix) != 0:
-                grass.fatal('g.copy failed')
+                grass.fatal(_('g.copy failed'))
 
             # make patch lists
             suffix = suffix.replace('.', '_')
@@ -302,19 +302,19 @@ class GDALWarp:
                                  quiet = True,
                                  expression = "%s = %s" % \
                                      (map, tmpmapname)) != 0:
-                grass.fatal('r.mapcalc failed')
+                grass.fatal(_('r.mapcalc failed'))
             
             if grass.run_command('r.colors',
                                  quiet = True,
                                  map = map,
                                  rast = tmpmapname) != 0:
-                grass.fatal('r.colors failed')
+                grass.fatal(_('r.colors failed'))
     
         # remove the old channels
         if grass.run_command('g.remove',
                              quiet = True,
                              rast = ','.join(channel_list)) != 0:
-            grass.fatal('g.remove failed')
+            grass.fatal(_('g.remove failed'))
         
     def nowarp_import(self, file, map):
         """Import raster file into GRASS"""
@@ -323,7 +323,7 @@ class GDALWarp:
                              flags = 'o' + self.gdal_flags,
                              input = file,
                              output = map) != 0:
-            grass.fatal('r.in.gdal failed')
+            grass.fatal(_('r.in.gdal failed'))
 
         # get a list of channels:
         pattern = map + '*'

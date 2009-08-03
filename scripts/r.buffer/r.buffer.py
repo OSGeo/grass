@@ -92,7 +92,7 @@ def main():
 
     #check if input file exists
     if not grass.find_file(input)['file']:
-	grass.fatal("<%s> does not exist." % input)
+	grass.fatal(_("<%s> does not exist.") % input)
 
     scale = scales[units]
 
