@@ -64,10 +64,10 @@ int G_rename(const char *element, const char *oldname, const char *newname)
 
     /* name in mapset legal only if mapset is current mapset */
     mapset = G_mapset();
-    if (G__name_is_fully_qualified(oldname, xname, xmapset)
+    if (G_name_is_fully_qualified(oldname, xname, xmapset)
 	&& strcmp(mapset, xmapset))
 	return -1;
-    if (G__name_is_fully_qualified(newname, xname, xmapset)
+    if (G_name_is_fully_qualified(newname, xname, xmapset)
 	&& strcmp(mapset, xmapset))
 	return -1;
 

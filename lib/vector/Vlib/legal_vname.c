@@ -127,7 +127,7 @@ int Vect_check_input_output_name(const char *input, const char *output,
 	const char *in;
 	char nm[GNAME_MAX], ms[GMAPSET_MAX];
 
-	if (G__name_is_fully_qualified(input, nm, ms)) {
+	if (G_name_is_fully_qualified(input, nm, ms)) {
 	    in = nm;
 	}
 	else {

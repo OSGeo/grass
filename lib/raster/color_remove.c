@@ -27,7 +27,7 @@ int Rast_remove_colors(const char *name, const char *mapset)
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
     int stat;
 
-    if (G__name_is_fully_qualified(name, xname, xmapset)) {
+    if (G_name_is_fully_qualified(name, xname, xmapset)) {
 	if (strcmp(xmapset, mapset) != 0)
 	    return -1;
 	name = xname;

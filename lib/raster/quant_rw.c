@@ -213,7 +213,7 @@ int Rast_write_quant(const char *name, const char *mapset,
  *  \param q
  *
  * \return -2 if raster map is of type integer
- * \return -1 if (!G__name_is_fully_qualified())
+ * \return -1 if (!G_name_is_fully_qualified())
  * \return 0 if quantization file does not exist, or the file is empty or has wrong format
  * \return 1 if non-empty quantization file exists
  *

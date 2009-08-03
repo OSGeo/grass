@@ -25,7 +25,7 @@ int do_remove(int n, const char *old)
 
     hold_signals(1);
 
-    if (G__name_is_fully_qualified(old, xname, xmapset)) {
+    if (G_name_is_fully_qualified(old, xname, xmapset)) {
 	if (strcmp(xmapset, G_mapset()) != 0)
 	    G_fatal_error("%s is not in the current mapset (%s)", old,
 			  G_mapset());

@@ -122,7 +122,7 @@ int main(int argc, char *argv[])
     /* Open input vector */
     Vect_check_input_output_name(in_opt->answer, out_opt->answer,
 				 GV_FATAL_EXIT);
-    if(G__name_is_fully_qualified(in_opt->answer, xname, xmapset) < 0 ) /* strip off mapset from input for SQL*/
+    if(G_name_is_fully_qualified(in_opt->answer, xname, xmapset) < 0 ) /* strip off mapset from input for SQL*/
 	G_fatal_error(_("Vector map <%s> not found"), xname);
     if ((mapset = G_find_vector2(in_opt->answer, "")) == NULL) {
 	G_fatal_error(_("Vector map <%s> not found"), in_opt->answer);

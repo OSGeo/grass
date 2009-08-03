@@ -81,7 +81,7 @@ const char *find_ogr(const char *name, const char *mapset)
     const char *pname, *pmapset;
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
     
-    if(G__name_is_fully_qualified(name, xname, xmapset)) {
+    if(G_name_is_fully_qualified(name, xname, xmapset)) {
 	pname = xname;
 	pmapset = xmapset;
     }

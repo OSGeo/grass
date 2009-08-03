@@ -277,7 +277,7 @@ G3d_readRegionMap(const char *name, const char *mapset, G3D_Region * region)
     char fullName[GPATH_MAX];
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
-    if (G__name_is_fully_qualified(name, xname, xmapset))
+    if (G_name_is_fully_qualified(name, xname, xmapset))
 	G3d_filename(fullName, G3D_HEADER_ELEMENT, xname, xmapset);
     else {
 	if (!mapset || !*mapset)

@@ -37,7 +37,7 @@ static const char *find_file(
      * if name is in the fully qualified format, split it into
      * name, mapset (overrides what was in mapset)
      */
-    if (G__name_is_fully_qualified(name, xname, xmapset)) {
+    if (G_name_is_fully_qualified(name, xname, xmapset)) {
 	pname = xname;
 	pmapset = xmapset;
     }
@@ -116,7 +116,7 @@ static const char *find_file1(
     const char *pname, *pmapset;
     const char *mp;
 
-    if (G__name_is_fully_qualified(name, xname, xmapset)) {
+    if (G_name_is_fully_qualified(name, xname, xmapset)) {
 	pname = xname;
 	pmapset = xmapset;
     }

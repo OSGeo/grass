@@ -103,7 +103,7 @@ int G_check_input_output_name(const char *input, const char *output,
 	char nm[1000], ms[1000];
 	const char *in;
 
-	if (G__name_is_fully_qualified(input, nm, ms)) {
+	if (G_name_is_fully_qualified(input, nm, ms)) {
 	    in = nm;
 	}
 	else {

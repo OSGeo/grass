@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
        - abort if not,
        - remove @mapset part if it is
      */
-    if (G__name_is_fully_qualified(group->answer, group_name, mapset_name)) {
+    if (G_name_is_fully_qualified(group->answer, group_name, mapset_name)) {
 	if (strcmp(mapset_name, G_mapset()))
 	    G_fatal_error(_("Group must exist in the current mapset"));
     }

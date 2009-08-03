@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
        - abort if not,
        - remove @mapset part if it is
      */
-    if (G__name_is_fully_qualified(grp->answer, group, mapset)) {
+    if (G_name_is_fully_qualified(grp->answer, group, mapset)) {
 	if (strcmp(mapset, G_mapset()))
 	    G_fatal_error(_("Group must exist in the current mapset"));
     }
@@ -290,7 +290,7 @@ static int remove_group_files(char group[INAME_LEN], char **rasters, int k)
 	    mapset = G_mapset();
 
 	    /* Parse out mapset */
-	    if (G__name_is_fully_qualified(rasters[n], xname, xmapset)) {
+	    if (G_name_is_fully_qualified(rasters[n], xname, xmapset)) {
 		strcpy(tmp_name, xname);
 		mapset = xmapset;
 	    }
@@ -347,7 +347,7 @@ static int remove_subgroup_files(char group[INAME_LEN],
 	    mapset = G_mapset();
 
 	    /* Parse out mapset */
-	    if (G__name_is_fully_qualified(rasters[n], xname, xmapset)) {
+	    if (G_name_is_fully_qualified(rasters[n], xname, xmapset)) {
 		strcpy(tmp_name, xname);
 		mapset = xmapset;
 	    }

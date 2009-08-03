@@ -174,7 +174,7 @@ int main(int argc, char *argv[])
     if (!layer_opt->answer) {
 	char xname[GNAME_MAX],	xmapset[GMAPSET_MAX];
 	
-	if (G__name_is_fully_qualified(in_opt->answer, xname, xmapset))
+	if (G_name_is_fully_qualified(in_opt->answer, xname, xmapset))
 	    layer_opt->answer = G_store(xname);
 	else
 	    layer_opt->answer = G_store(in_opt->answer);
