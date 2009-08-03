@@ -129,10 +129,16 @@ the ascendant node at equator</td>
 <td><b>liss</b> (IRS 1C)</td>
 <td>enter month,day,hh.ddd,long.,lat. *</td>
 </tr>
+
+<tr>
+<td>10</td>
+<td><b>aster</b></td>
+<td>enter month,day,hh.ddd,long.,lat. *</td>
+</tr>
 </table>
 
 <blockquote>
-* NOTE: for hrv, tm, etm+ and liss experiments, longitude and latitude
+* NOTE: for HRV, TM, ETM+, LISS and ASTER experiments, longitude and latitude
 are the coordinates of the scene center. Latitude must be &gt;0 for northern
 hemisphere and &lt;0 for southern. Longitude must be &gt;0 for eastern hemisphere
 and &lt;0 for western.
@@ -485,6 +491,16 @@ micrometer.</td>
 <tr><td>69</td><td>liss (IRC 1C) band 3 (0.612-0.700)</td></tr>
 <tr><td>70</td><td>liss (IRC 1C) band 4 (0.752-0.880)</td></tr>
 <tr><td>71</td><td>liss (IRC 1C) band 5 (1.452-1.760)</td></tr>
+
+<tr><td>72</td><td><b>aster </b> band 1 (0.480-0.645)</td></tr>
+<tr><td>73</td><td>aster band 2 (0.588-0.733)</td></tr>
+<tr><td>74</td><td>aster band 3N (0.723-0.913)</td></tr>
+<tr><td>75</td><td>aster band 4 (1.530-1.750)</td></tr>
+<tr><td>76</td><td>aster band 5 (2.103-2.285)</td></tr>
+<tr><td>77</td><td>aster band 6 (2.105-2.298)</td></tr>
+<tr><td>78</td><td>aster band 7 (2.200-2.393)</td></tr>
+<tr><td>79</td><td>aster band 8 (2.248-2.475)</td></tr>
+<tr><td>80</td><td>aster band 9 (2.295-2.538)</td></tr>
 </table>
 
 <h2>EXAMPLES</h2>
@@ -540,8 +556,11 @@ Note also, that <em>i.atcorr</em> reports solar elevation angle above horizon ra
 <p><em>Code clean-up and port to GRASS 6.3, 15.12.2006:</em>
 <br>Yann Chemin, ychemin(at)gmail.com
 
-<p><em>Documentation clean-up, 5/2009:</em>
-<br>Markus Neteler, FEM
+<p><em>Documentation clean-up + IRS LISS sensor addition 5/2009:</em>
+<br>Markus Neteler, FEM, Italy
+
+<p><em>ASTER sensor addition 7/2009:</em>
+<br>Michael Perdue, Canada
 
 <h2>REFERENCES</h2>
 
