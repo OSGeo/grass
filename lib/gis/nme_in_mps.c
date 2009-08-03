@@ -126,7 +126,7 @@ char *G_fully_qualified_name(const char *name, const char *mapset)
   \return -1 if input mapset invalid
  */
 int G_unqualified_name(const char *name, const char *mapset,
-			char *xname, char *xmapset)
+		       char *xname, char *xmapset)
 {
     if (G__name_is_fully_qualified(name, xname, xmapset)) {
 	if (mapset && *mapset && strcmp(mapset, xmapset) != 0)
