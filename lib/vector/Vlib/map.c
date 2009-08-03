@@ -184,7 +184,7 @@ Vect_copy(const char *in, const char *mapset, const char *out)
     mapset = inmapset;
 
     /* remove mapset from fully qualified name, confuses G__file_name() */
-    if (G__name_is_fully_qualified(in, xname, xmapset)) {
+    if (G_name_is_fully_qualified(in, xname, xmapset)) {
 	in = xname;
     }
 
@@ -326,7 +326,7 @@ int Vect_rename(const char *in, const char *out)
     }
 
     /* remove mapset from fully qualified name */
-    if (G__name_is_fully_qualified(in, xname, xmapset)) {
+    if (G_name_is_fully_qualified(in, xname, xmapset)) {
 	in = xname;
     }
 
@@ -452,7 +452,7 @@ int Vect_delete(const char *map)
     G_debug(3, "Delete vector '%s'", map);
 
     /* remove mapset from fully qualified name */
-    if (G__name_is_fully_qualified(map, xname, xmapset)) {
+    if (G_name_is_fully_qualified(map, xname, xmapset)) {
 	map = xname;
     }
 

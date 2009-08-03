@@ -75,7 +75,7 @@ static void G3d_getFullWindowPath(char *path, const char *windowName)
 	return;
     }
 
-    if (G__name_is_fully_qualified(windowName, xname, xmapset)) {
+    if (G_name_is_fully_qualified(windowName, xname, xmapset)) {
 	G__file_name(path, G3D_WINDOW_DATABASE, xname, xmapset);
 	return;
     }
@@ -103,7 +103,7 @@ static void G3d_getFullWindowPath(char *path, const char *windowName)
    while (*windowName == ' ') windowName++;
 
    if ((*windowName != '/') && (*windowName != '.')) {
-   if (G__name_is_fully_qualified (windowName, xname, xmapset)) 
+   if (G_name_is_fully_qualified (windowName, xname, xmapset)) 
    G__file_name (path, G3D_WINDOW_DATABASE, xname, xmapset);
    else
    G__file_name (path, G3D_WINDOW_DATABASE, windowName, G_mapset ());

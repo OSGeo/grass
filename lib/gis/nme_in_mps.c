@@ -33,7 +33,7 @@
   \return 1 if input map name is fully qualified
   \return 0 if input map name is not fully qualified
  */
-int G__name_is_fully_qualified(const char *fullname, char *name, char *mapset)
+int G_name_is_fully_qualified(const char *fullname, char *name, char *mapset)
 {
     const char *p;
     char *q;
@@ -128,7 +128,7 @@ char *G_fully_qualified_name(const char *name, const char *mapset)
 int G_unqualified_name(const char *name, const char *mapset,
 		       char *xname, char *xmapset)
 {
-    if (G__name_is_fully_qualified(name, xname, xmapset)) {
+    if (G_name_is_fully_qualified(name, xname, xmapset)) {
 	if (mapset && *mapset && strcmp(mapset, xmapset) != 0)
 	    return -1;
 	return 1;

@@ -125,7 +125,7 @@ int main(int argc, char *argv[])
 
     /* parse group name */
     /* only enforce local-mapset-only due to I_get_group_ref() not liking "@mapset" */
-    if (G__name_is_fully_qualified(grp->answer, group.name, xmapset)) {
+    if (G_name_is_fully_qualified(grp->answer, group.name, xmapset)) {
 	if (0 != strcmp(G_mapset(), xmapset))
 	    G_fatal_error(_("[%s] Only local groups may be used"),
 			  grp->answer);

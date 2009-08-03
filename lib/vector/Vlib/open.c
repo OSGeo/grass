@@ -150,7 +150,7 @@ Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
     dig_init_plus(&(Map->plus));
 
     ogr_mapset = 0;
-    if (G__name_is_fully_qualified(name, xname, xmapset)) {
+    if (G_name_is_fully_qualified(name, xname, xmapset)) {
 	if (strcmp(xmapset, "OGR") == 0) {
 	    /* unique OGR mapset detected */
 	    G_debug(1, "OGR mapset detected");
@@ -557,7 +557,7 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
     ferror = Vect_get_fatal_error();
     Vect_set_fatal_error(GV_FATAL_EXIT);
 
-    if (G__name_is_fully_qualified(name, xname, xmapset)) {
+    if (G_name_is_fully_qualified(name, xname, xmapset)) {
 	if (strcmp(xmapset, G_mapset()) != 0) {
 	    sprintf(errmsg, _("%s is not in the current mapset (%s)"), name,
 		    G_mapset());

@@ -43,7 +43,7 @@ char *G__file_name(char *path,
      * must split the name into name, mapset if it is
      * in the name@mapset format
      */
-    if (name && *name && G__name_is_fully_qualified(name, xname, xmapset)) {
+    if (name && *name && G_name_is_fully_qualified(name, xname, xmapset)) {
 	pname = xname;
 	sprintf(path, "%s/%s", location, xmapset);
     }
@@ -82,7 +82,7 @@ char *G__file_name_misc(char *path,
      * must split the name into name, mapset if it is
      * in the name@mapset format
      */
-    if (name && *name && G__name_is_fully_qualified(name, xname, xmapset)) {
+    if (name && *name && G_name_is_fully_qualified(name, xname, xmapset)) {
 	pname = xname;
 	sprintf(path, "%s/%s", location, xmapset);
     }

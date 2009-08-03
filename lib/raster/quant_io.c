@@ -14,7 +14,7 @@
  *  mapset.
  *  
  *  returns: -2 if raster map is of type integer.
- *           -1 if (! G__name_is_fully_qualified ()).
+ *           -1 if (! G_name_is_fully_qualified ()).
  *            0 if quantization file does not exist, or the file is empty, 
  *            1 if non-empty quantization file exists.
  *                 read.
@@ -48,7 +48,7 @@
  *  The rules are written in decreasing order
  *  of priority (i.e. rules added earlier are written later).
  *
- *  returns: -1 if (! G__name_is_fully_qualified) or file could not be
+ *  returns: -1 if (! G_name_is_fully_qualified) or file could not be
  *                 opened.
  *            1 otherwise.
  *
@@ -128,7 +128,7 @@ int Rast__quant_import(const char *name, const char *mapset,
 	return -2;
     }
 
-    if (G__name_is_fully_qualified(name, xname, xmapset)) {
+    if (G_name_is_fully_qualified(name, xname, xmapset)) {
 	if (strcmp(xmapset, mapset) != 0)
 	    return -1;
 	name = xname;
@@ -284,7 +284,7 @@ Rast__quant_export(const char *name, const char *mapset,
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
     FILE *fd;
 
-    if (G__name_is_fully_qualified(name, xname, xmapset)) {
+    if (G_name_is_fully_qualified(name, xname, xmapset)) {
 	if (strcmp(xmapset, mapset) != 0)
 	    return -1;
 	name = xname;

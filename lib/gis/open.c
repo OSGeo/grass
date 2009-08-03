@@ -57,7 +57,7 @@ static int G__open(const char *element,
 
     /* READ */
     if (mode == 0) {
-	if (G__name_is_fully_qualified(name, xname, xmapset)) {
+	if (G_name_is_fully_qualified(name, xname, xmapset)) {
 	    if (*mapset && strcmp(xmapset, mapset) != 0) {
 		G_warning(_("G__open(read): mapset <%s> doesn't match xmapset <%s>"),
 			  mapset, xmapset);
@@ -79,7 +79,7 @@ static int G__open(const char *element,
     /* WRITE */
     if (mode == 1 || mode == 2) {
 	mapset = G_mapset();
-	if (G__name_is_fully_qualified(name, xname, xmapset)) {
+	if (G_name_is_fully_qualified(name, xname, xmapset)) {
 	    if (strcmp(xmapset, mapset) != 0) {
 		G_warning(_("G__open(write): xmapset <%s> != G_mapset() <%s>"),
 			  xmapset, mapset);

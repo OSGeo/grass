@@ -31,7 +31,7 @@ FILE *I_fopen_signature_file_new(const char *group,
     char group_name[GNAME_MAX], group_mapset[GMAPSET_MAX];
     FILE *fd;
 
-    if (!G__name_is_fully_qualified(group, group_name, group_mapset)) {
+    if (!G_name_is_fully_qualified(group, group_name, group_mapset)) {
 	strcpy(group_name, group);
     }
 
@@ -63,7 +63,7 @@ FILE *I_fopen_signature_file_old(const char *group,
     char group_name[GNAME_MAX], group_mapset[GMAPSET_MAX];
     FILE *fd;
 
-    if (!G__name_is_fully_qualified(group, group_name, group_mapset)) {
+    if (!G_name_is_fully_qualified(group, group_name, group_mapset)) {
 	strcpy(group_name, group);
     }
     

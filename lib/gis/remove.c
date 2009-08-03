@@ -77,7 +77,7 @@ static int G__remove(int misc, const char *dir, const char *element,
 
     /* name in mapset legal only if mapset is current mapset */
     mapset = G_mapset();
-    if (G__name_is_fully_qualified(name, xname, xmapset)) {
+    if (G_name_is_fully_qualified(name, xname, xmapset)) {
 	if (strcmp(mapset, xmapset) != 0)
 	    return -1;
 	name = xname;
