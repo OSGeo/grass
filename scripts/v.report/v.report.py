@@ -120,9 +120,9 @@ def main():
 	if len(records1) == 0:
             try:
                 f = grass.vector_db(map = mapname)[int(layer)]
-                grass.fatal(_("There is a table connected to input vector map '%s', but") +
-                            "there are no categories present in the key column '%s'. Consider using" +
-                            "v.to.db to correct this." % (mapname, f['key']))
+                grass.fatal(_("There is a table connected to input vector map '%s', but"
+                              "there are no categories present in the key column '%s'. Consider using"
+                              "v.to.db to correct this.") % (mapname, f['key']))
             except KeyError:
                 pass
 
