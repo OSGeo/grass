@@ -56,8 +56,9 @@
 
 import sys
 import os
-from grass.script import core as grass
 import atexit
+
+import grass.script as grass
 
 def cleanup():
     nuldev = file(os.devnull, 'w')
