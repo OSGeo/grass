@@ -53,7 +53,7 @@
 #% type: string
 #% key_desc: path
 #% description: Prefix where to install extension
-#% answer: $(HOME)/.grass/addons
+#% answer: $(HOME)/.grass7/addons
 #% required: yes
 #%end
 #%option
